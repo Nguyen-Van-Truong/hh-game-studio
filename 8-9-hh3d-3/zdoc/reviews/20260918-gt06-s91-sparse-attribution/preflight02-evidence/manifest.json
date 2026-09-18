@@ -1,0 +1,133 @@
+{
+  "observed_utc": "2026-09-18T13:54:25.129562+00:00",
+  "formal_acceptance": false,
+  "source_runtime_unchanged": true,
+  "scope": "preflight02 changed launcher binding; 51 runtime source bytes remain linked through diagnostic map and preparation packet",
+  "files": [
+    {
+      "source": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-02/benchmark-profile.json",
+      "copy": "raw/benchmark-profile.json",
+      "sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+      "bytes": 718
+    },
+    {
+      "source": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-02/context.json",
+      "copy": "raw/context.json",
+      "sha256": "894149113c5ef00e54c672dab1b690021776ba58a7136b563b323b5169d34ae8",
+      "bytes": 5507
+    },
+    {
+      "source": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-02/diagnostic.json",
+      "copy": "raw/diagnostic.json",
+      "sha256": "90492a87c08fc051f0a42dc69a609436d08e0575092cce8d2cf33ced9d080648",
+      "bytes": 7347
+    },
+    {
+      "source": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-02/import-host/capture.json",
+      "copy": "raw/import-host/capture.json",
+      "sha256": "4a84969977236f625452fdb47494de25fb3264dab107c695e339282abba36b7a",
+      "bytes": 1341
+    },
+    {
+      "source": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-02/import-host/invocation.json",
+      "copy": "raw/import-host/invocation.json",
+      "sha256": "965996df8c496c9b823ea82ce53660d2a24e2620d6f05d2b9be04fe46abec913",
+      "bytes": 8714
+    },
+    {
+      "source": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-02/import-host/process-exit.json",
+      "copy": "raw/import-host/process-exit.json",
+      "sha256": "2f469e2db565dc2c8fcea7da119ec7bbc251396eb80750e6cd17ef9176917418",
+      "bytes": 30
+    },
+    {
+      "source": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-02/import-host/process-start.json",
+      "copy": "raw/import-host/process-start.json",
+      "sha256": "8570596a309c3bed060fb634c2878ac5769ee8e6246e8f1a988d7ff56b5e169f",
+      "bytes": 14
+    },
+    {
+      "source": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-02/import-host/stderr.txt",
+      "copy": "raw/import-host/stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "source": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-02/import-host/stdout.txt",
+      "copy": "raw/import-host/stdout.txt",
+      "sha256": "9b5e37b85c8c4f11090de482aee3734b6c7993ad884a62121b2adcc9dfdd6003",
+      "bytes": 1492
+    },
+    {
+      "source": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-02/native-overlay.json",
+      "copy": "raw/native-overlay.json",
+      "sha256": "68c867c1d566c932982ea2f2cee1711cb28c6aaa6f271862cfba3a5e8f9e714d",
+      "bytes": 591
+    },
+    {
+      "source": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-02/preflight.json",
+      "copy": "raw/preflight.json",
+      "sha256": "a0680ad8097b5e3ac16ce00a6fb23f09b744f590a819e786876e600075091c21",
+      "bytes": 1650
+    },
+    {
+      "source": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-02/project/addons/hh_benchmark/benchmark_native.gd",
+      "copy": "raw/project/addons/hh_benchmark/benchmark_native.gd",
+      "sha256": "a8a287c2b9c4d8c6a3a6030684db74aaaa7ee7f84e4e3fb0e0c6974f207b2efd",
+      "bytes": 60759
+    },
+    {
+      "source": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-02/source/zdoc/reviews/20260918-gt06-s91-sparse-attribution/diagnose_sequence_s91.py",
+      "copy": "raw/source/zdoc/reviews/20260918-gt06-s91-sparse-attribution/diagnose_sequence_s91.py",
+      "sha256": "a7d6087218831527c69066c1519492e038f0c389dac85cd41d1bb2d0e221241a",
+      "bytes": 13398
+    },
+    {
+      "source": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-02/source/zdoc/reviews/20260918-gt06-s91-sparse-attribution/launch_observer.py",
+      "copy": "raw/source/zdoc/reviews/20260918-gt06-s91-sparse-attribution/launch_observer.py",
+      "sha256": "3469d0a4a761aed3f0673a2df8a478d136e6366619a1b0b200916604fd0dc8d2",
+      "bytes": 19290
+    },
+    {
+      "source": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-02/source/zdoc/reviews/20260918-gt06-s91-sparse-attribution/object_probe_s91.gd",
+      "copy": "raw/source/zdoc/reviews/20260918-gt06-s91-sparse-attribution/object_probe_s91.gd",
+      "sha256": "0837a4a6d21715c3706ce376750dc2f28ebae7f4f214f2988b4ea90a71a25281",
+      "bytes": 9114
+    },
+    {
+      "source": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-02/source/zdoc/reviews/20260918-gt06-s91-sparse-attribution/patch_native_s91.py",
+      "copy": "raw/source/zdoc/reviews/20260918-gt06-s91-sparse-attribution/patch_native_s91.py",
+      "sha256": "f4226f40839e40579ae5c489cfd33800e3739bb6e280193c38a54414afaf2bc0",
+      "bytes": 4260
+    },
+    {
+      "source": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-02/source/zdoc/reviews/20260918-gt06-s91-sparse-attribution/register_task.ps1",
+      "copy": "raw/source/zdoc/reviews/20260918-gt06-s91-sparse-attribution/register_task.ps1",
+      "sha256": "aee84c903840840a431c17d2df3b9b617993a55cd6484012907312bcde6cc547",
+      "bytes": 9722
+    },
+    {
+      "source": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-02/source/zdoc/reviews/20260918-gt06-s91-sparse-attribution/test_launch_observer.py",
+      "copy": "raw/source/zdoc/reviews/20260918-gt06-s91-sparse-attribution/test_launch_observer.py",
+      "sha256": "aaa71b0d61e6fbc71982af22a6bc8e494017f5e6886e8455c1e8056ec0c5ac34",
+      "bytes": 3456
+    },
+    {
+      "source": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-02/source-files.json",
+      "copy": "raw/source-files.json",
+      "sha256": "9aeeeb4d5e861d5cadff699493913610ec4c54e11683e03ca1631123d7a94552",
+      "bytes": 5156
+    },
+    {
+      "source": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-02/toolchain.lock.json",
+      "copy": "raw/toolchain.lock.json",
+      "sha256": "28bdce555e9a44ef68193723d512feda02c42a417ceb78faf0b29f52d095dca9",
+      "bytes": 3026
+    }
+  ],
+  "actual_process_exit": {
+    "pid": 35956,
+    "exit_code": 0
+  },
+  "wrapper_exit_code": 0
+}

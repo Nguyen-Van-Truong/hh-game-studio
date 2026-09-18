@@ -70,9 +70,37 @@ From repository root, after readiness checks:
 & 8-9-hh3d-3/zdoc/reviews/20260918-gt06-s91-sparse-attribution/register_task.ps1 -Command status
 ```
 
-The task is `\HHStudio.GT06.gt06-s91-sparse-attribution-01`; launch and observer
-receipts live in this directory's `launch/`. Raw diagnostic data live under
+The task is `\HHStudio.GT06.gt06-s91-sparse-attribution-01`; active launch and observer
+receipts live in this directory's `launch-02/`. Raw diagnostic data live under
 `studio/.local/reviews/gt06-s91-sparse-attribution-01`. Do not launch the long
 supervisor through an exec PTY. Preserve a failure and diagnose it before
 another attempt; completed raw data can support repaired offline metadata
 without rerunning the engine.
+
+Registration attempt 1 stopped before `Run`: COM returned the principal as
+`truon` while the registered task XML stored its SID. The old assertion compared
+those different representations literally. Exact action/owner, ready state,
+zero instances and never-run result 267011 were verified before retiring that
+unrun task; `launch/` retains the XML, request, failure and retirement receipts.
+The corrected comparison resolves the COM account to its SID and independently
+checks XML SID, interactive logon and limited run level. This follows the
+[Principal.UserId/XML relationship](https://learn.microsoft.com/en-us/windows/win32/taskschd/principal-userid).
+No engine or diagnostic output existed for that registration attempt. Updated
+launcher hashes require preflight-02; the passed native helper smoke remains
+applicable because the probe and effective native script did not change.
+
+Preflight-02 passed: actual native PID 35956 exited 0, wrapper exited 0,
+4.594 seconds, empty stderr and Job zero/closed. Twenty exact helper/import
+receipt copies are in `preflight02-evidence/`, manifest SHA256
+`737838f68d00590a8bbc6e06086b17d9a5adb73a9f2ccb6a37cbdf9499d78c7d`.
+The earlier `evidence/` packet and `git-index-proof.json` describe preparation
+checkpoint `e2c1c30f`, including the old launcher bytes; they are not current
+launcher proofs after this correction.
+
+Registration attempt 2 dispatched at 2026-09-18T13:52:58Z. The separate live
+observation at 13:53:59Z recorded scheduler state 4, one instance, live observer
+8536, supervisor 51464, host 54540 and editor 22440 with bound helper ancestry.
+The editor reached batch 0, native cycle 18, and stderr was empty. This is a
+timestamped startup observation, not terminal evidence. The current heartbeat
+is active every 15 minutes in the same task. Initial diagnostic duration is
+estimated at 45-75 minutes from earlier runs; revise using completed batches.

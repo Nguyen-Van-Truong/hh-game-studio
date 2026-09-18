@@ -1,0 +1,52 @@
+{
+  "observed_utc": "2026-09-18T13:53:59.1286346Z",
+  "scheduler": {
+    "task_path": "\\HHStudio.GT06.gt06-s91-sparse-attribution-01",
+    "state": 4,
+    "instances": 1,
+    "last_task_result": 267009,
+    "last_run_time": "2026-09-18T20:52:58",
+    "task_definition_sha256": "8f92aed25d17a0c0c402b4187cfdcdb7193d37f6a50b0b1bdbb7e53c1984737e",
+    "formal_acceptance": false,
+    "status_scope": "Scheduler state only; retained-handle actual exit receipts are required"
+  },
+  "live_processes": [
+    {
+      "pid": 8536,
+      "process": "pythonw",
+      "start_utc": "2026-09-18T13:52:58.6039439Z",
+      "cpu_seconds": 0.734375
+    },
+    {
+      "pid": 51464,
+      "process": "python",
+      "start_utc": "2026-09-18T13:52:59.3558920Z",
+      "cpu_seconds": 3.171875
+    },
+    {
+      "pid": 54540,
+      "process": "python",
+      "start_utc": "2026-09-18T13:53:00.8831811Z",
+      "cpu_seconds": 28.609375
+    },
+    {
+      "pid": 22440,
+      "process": "Godot_v4.7.2-stable_win64",
+      "start_utc": "2026-09-18T13:53:07.8882630Z",
+      "cpu_seconds": 13.25
+    },
+    {
+      "pid": 17164,
+      "process": "python",
+      "start_utc": "2026-09-18T13:53:00.7456983Z",
+      "cpu_seconds": 0.109375
+    },
+    {
+      "pid": 45548,
+      "process": "python",
+      "start_utc": "2026-09-18T13:53:07.8089828Z",
+      "cpu_seconds": 0.0625
+    }
+  ],
+  "formal_acceptance": false
+}

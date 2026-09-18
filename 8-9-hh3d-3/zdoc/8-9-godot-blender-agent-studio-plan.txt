@@ -16,7 +16,7 @@ STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng
 
 CURRENT_VALID_WP=GT-06
 EXECUTION_AUTHORIZATION=OWNER_APPROVED_GATED
-IMPLEMENTATION=GT06_S90_INTERRUPTION_RETAINED_S91_READY
+IMPLEMENTATION=GT06_S91_SPARSE_DIAGNOSTIC_RUNNING
 GT01_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260913
 GT01_PENDING=NONE
 GT01_PIN_DECISION=GODOT_4.7.2_STABLE_OFFICIAL
@@ -54,15 +54,15 @@ GT05_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260917_S64
 GT05_REVIEW_STATUS=TWO_INDEPENDENT_PASS_TICK_YES_S64
 GT05_CHECKPOINT_COMMIT=808d8ba
 GT05_LAST_TESTED_SOURCE_CLOSURE=c141d54b80022ca7fefdf81f83e7e1078d3cc6aa43954831f82bb3178338a135
-GT06_EVIDENCE_STATUS=S86_FAILURE_S88_FAILURE_S90_INTERRUPTION_RETAINED_S91_READY
+GT06_EVIDENCE_STATUS=S86_FAILURE_S88_FAILURE_S90_INTERRUPTION_RETAINED_S91_DIAGNOSTIC_INELIGIBLE
 GT06_WORKING_SOURCE_STATUS=S81_FROZEN_51FILES_FAILURE_RETAINED
 GT06_LAST_TESTED_SOURCE_CLOSURE=e010180a1bf85b7f565e9aa39734f8551caf170a85b36c50598be556b723ce7f
 GT06_CURRENT_SOURCE_CLOSURE=e010180a1bf85b7f565e9aa39734f8551caf170a85b36c50598be556b723ce7f
 GT06_SOURCE_CHECKPOINT=b3862a10
 GT06_BENCHMARK_CAMPAIGN=gt06-s86-campaign-01
 GT06_BENCHMARK_STATUS=S86_FAILURE_RETAINED_OBJECTDB_GROWTH_BATCH17_20260918T120235Z
-GT06_ACTIVE_DIAGNOSTIC=NONE; S90_OBSERVED_ABSENT_20260918T133607Z_NO_TERMINAL_RECEIPTS
-GT06_NEXT_ACTION=Launch verified S91 targeted TreeItem/Node3D attribution through detached scheduler observer; keep source/profile/gates fixed; query actual live state.
+GT06_ACTIVE_DIAGNOSTIC=gt06-s91-sparse-attribution-01; scheduler_attempt2; launch-02; started_20260918T135258Z; live_observed_20260918T135359Z; formal_acceptance=false
+GT06_NEXT_ACTION=Query S91 live task/logs at scheduled follow-up; preserve source/helper/profile; read sparse snapshot at batch4 and first prepublication growth; verify actual exits via independent observer at terminal.
 GT06_S88_SCHEDULER_TASK=OBSERVED_ABSENT_20260918; historic_delete_report_retained_in_chat; durable_delete_receipt_missing
 GT06_S90_DIAGNOSTIC=gt06-s90-lifecycle-attribution-01; preflight=gt06-s90-lifecycle-attribution-preflight-06; five_partial_batches; interrupted_before_batch5_capture; formal_acceptance=false; eligible_for_dataset=false
 GT06_DIAGNOSTIC_EXCLUSION=S81-S90 diagnostic and partial/failure prefixes are excluded from F13/F14 acceptance datasets; see s83-mapping requirements and each packet manifest.
@@ -98,7 +98,17 @@ S91 chuẩn bị probe thu hẹp: chỉ TreeItem/Node3D primitive IDs, trước 
 baseline sample ở batch4, rồi khi same-phase counter tăng. Không giữ refs/
 full census hoặc đổi ngưỡng. Phải import/verify đúng overlay và launch qua
 demand-only scheduler với observer exit ngoài owned Job trước khi chạy dài.
-Chưa launch S91. S90 offline17/17; patch6/6; observer3/3; native smoke02
+S91 launched13:52:58Z, task\HHStudio.GT06.gt06-s91-sparse-attribution-01.
+Lúc13:53:59Z state4/1instance; observer8536/supervisor51464/host54540/
+editor22440 sống, batch0/nativecycle18, stderr trống. Đây là observation có
+thời điểm; phải query mới trước khi báo RUNNING. Receipts launch-02/observer;
+raw studio/.local/reviews/gt06-s91-sparse-attribution-01. Estimate45–75phút
+cho diagnostic theo lịch sử, không ETA toànplan; heartbeat15phút đang ACTIVE.
+Attempt1 chỉ lỗi principal string trướcRun, XMLSID/currentSID match; task
+neverrun267011/zeroinstances đã retire, launch/ giữfailure/XML/receipt.
+Fix canonical SID + XML + limited/interactive guards; preflight02 PASS đúng
+6helper mới. Nativehelper/effective script không đổi, không rerun smoke.
+S90 offline17/17; patch6/6; observer3/3; native smoke02
 hai arm×22checks PASS, actual55068exit0/Jobzero/closed. Import preflight01
 actual6996exit0/clean, review51runtime/6helper/66importsource khớp.
 Smoke01 failed assertion được giữ: một TreeItem một cột có thêm TextParagraph
