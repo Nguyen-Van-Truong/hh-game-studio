@@ -96,8 +96,9 @@ owned focused protocol/replay/service/index lane đạt72/72. Chưa có full cam
 PASS, chưa có critic final và chưa mở GT07.
 Host-retention review tìm command+offset Python index tăng~4.07MB từb4→b34
 so headroomRSS~1.91MB; đây là allocationrisk, chưa phải measured fullrunfailure.
-Đang thiết kế derived disk index, giữ journal/fsync/lock/dedupe; phải xử lý
-cachefailure saufsync thành UNKNOWN/rebuild và close ownership. Chưa tích hợp.
+Derived disk index đã tích hợp trong S78, giữ journal/fsync/lock/dedupe;
+cachefailure saufsync thành UNKNOWN/rebuild và close ownership đã có test focused.
+Full campaign gt06-s78-campaign-01 launch1 đang chạy; chưa có PASS/critic.
 Plan S76 exact archive: reviews/20260918-plan-history-s76/ (AUTHORITY=0),
 SHA25618526f3b0ffd3239640a6588f6505c2a95623b3828707f2e94fba399f8289f3c.
 S76 launch1 import20s và S75 handle/gap failures giữ trong archive/evidence;
