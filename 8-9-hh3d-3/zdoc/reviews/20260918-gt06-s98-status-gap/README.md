@@ -11,3 +11,4 @@ The triggering command was admitted.96: lookup timed out at getresponse after 20
 Derived packet: attribution.json (SHA256 7b9f4f6fe4702c6bd9e2df6f1cb8f85dcef9fa29e01b9e0fa4956935b2ea3ca6).
 
 Terminal reconciliation: terminal-reconciliation.json (SHA256 1bad488b993dd3082ab8fb008a55f1e032cfccb7f9d59122559a9a71bba83dda). Scheduler state 3/result 1 is recorded; missing editor-target and supervisor natural exits remain UNKNOWN, so this is not PASS or natural-exit proof.
+Workstation preflight: workstation-attribution-preflight-01.json (SHA256 28609498f97969d1609b69c50b84c30c60e1cc7c1379ee72cbfa4cc3d880c5eb). It is a read-only post-terminal snapshot with no owned HH3D/Godot workload alive; causal attribution is unavailable and the artifact is not acceptance evidence.

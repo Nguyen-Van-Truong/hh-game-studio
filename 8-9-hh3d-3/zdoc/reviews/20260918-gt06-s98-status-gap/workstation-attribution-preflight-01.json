@@ -1,0 +1,45 @@
+{
+  "schema": "HH-GT06-S98-WORKSTATION-ATTRIBUTION-PREFLIGHT-1",
+  "observed_utc": "2026-09-18T22:52:39.7363212Z",
+  "campaign_id": "gt06-s98-campaign-01",
+  "source_checkpoint": "4293acf2d6281c0206740b47ae520a20c044704c",
+  "formal_closure_sha256": "cfc4b55a5407891bfd54d22d9f1ac45a74b6c744898199a0e4690d6230a6c1d6",
+  "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+  "scope": "read-only post-failure workstation snapshot; no engine, campaign, test, or source mutation",
+  "causal_status": "UNAVAILABLE_POST_TERMINAL_NO_OWNED_WORKLOAD",
+  "acceptance_eligible": false,
+  "note": "Snapshot describes host state after S98 cleanup; it cannot establish why batch17 lookup exceeded 2000 ms and must not be used to claim root cause, no-leak, or PASS.",
+  "scheduler_terminal": {
+    "state": 3,
+    "last_task_result": 1,
+    "instances": 0,
+    "status_scope": "Scheduler state only; not actual process exit or owned-tree proof"
+  },
+  "memory": {
+    "free_physical_kb": 10077568,
+    "total_visible_kb": 33474572,
+    "total_physical_bytes": 34277961728,
+    "committed_bytes_in_use": null,
+    "page_reads_per_sec": 0.9901128322682524,
+    "page_faults_per_sec": 29398.785865995913,
+    "processor_queue_length": 0.0
+  },
+  "pagefiles": [
+    {
+      "name": "C:\\pagefile.sys",
+      "allocated_kb": 14737,
+      "current_kb": 1605,
+      "peak_kb": 5613
+    }
+  ],
+  "matching_processes": [
+    {
+      "pid": 23800,
+      "name": "pythonw",
+      "start_time": "2026-09-18T02:06:01.1450098Z",
+      "working_set_bytes": 10055680,
+      "private_bytes": 16273408
+    }
+  ],
+  "process_identity_note": "No live HH3D/Godot/campaign process was found at observation time; unrelated Python/IDE updater processes are listed only by name/PID and are not owned workload evidence."
+}
