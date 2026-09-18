@@ -1,0 +1,170 @@
+{
+  "schema": "S85_INTERRUPTION_FORENSICS_1",
+  "authority": 0,
+  "formal_acceptance": false,
+  "observed_utc": "2026-09-18T10:36:52.744512+00:00",
+  "run_id": "gt06-s84-attribution-01",
+  "last_completed_capture_index": 9,
+  "last_completed_native_batch": 9,
+  "next_batch_start_marker_present": true,
+  "next_batch_start_mtime_utc": "2026-09-18T10:27:43.5771161Z",
+  "command_10": {
+    "index": 10,
+    "status": "COMPLETE",
+    "started_mono_us": 625372201213,
+    "ended_mono_us": 625473703257,
+    "effect_count_before": 2000,
+    "effect_count_after": 2200,
+    "max_status_gap_ms": 1039.9308,
+    "complete_command_mix": true,
+    "dropped_commands": 0,
+    "dropped_telemetry": 0,
+    "native_acceptance": false
+  },
+  "command_10_cancel": {
+    "command_id": "gt06-s84-attribution-01.b10.cancel",
+    "delay_ms": 1000,
+    "kind": "cancel",
+    "lookup_attempts": [
+      {
+        "code": "CANCELED_BEFORE_APPLY",
+        "command_id": "gt06-s84-attribution-01.b10.cancel",
+        "ended_mono_us": 625424172291,
+        "request_digest": "sha256:e1a714d97f4a54c7d6c6a5c787c3fed5550825c38890b5cbd323a2d4572e452f",
+        "started_mono_us": 625424150909,
+        "status": "CANCELED"
+      }
+    ],
+    "no_effect": true,
+    "receipt_mono_us": 625424150199,
+    "receipt_ms": 63.5577,
+    "request_digest": "sha256:e1a714d97f4a54c7d6c6a5c787c3fed5550825c38890b5cbd323a2d4572e452f",
+    "separate_from_mix": true,
+    "started_mono_us": 625424086642,
+    "status": "CANCELED",
+    "terminal_mono_us": 625424172291,
+    "terminal_ms": 85.6491,
+    "terminal_response": {
+      "code": "CANCELED_BEFORE_APPLY",
+      "command_id": "gt06-s84-attribution-01.b10.cancel",
+      "postconditions": {
+        "no_effect": true,
+        "request_digest": "sha256:e1a714d97f4a54c7d6c6a5c787c3fed5550825c38890b5cbd323a2d4572e452f"
+      },
+      "result_hash": null,
+      "result_revision": null,
+      "status": "CANCELED"
+    },
+    "terminal_status": "CANCELED"
+  },
+  "command_10_has_native_phase": false,
+  "last_editor_heartbeat": {
+    "batch": 10,
+    "cycle": 82,
+    "main_thread": true,
+    "monotonic_us": 1096994462,
+    "phase": "SAVE_WAIT",
+    "pid": 44960,
+    "run_id": "gt06-s84-attribution-01"
+  },
+  "editor_heartbeat_count_in_copied_log": 2184,
+  "last_host_progress": {
+    "run_id": "gt06-s84-attribution-01",
+    "batch": 10,
+    "phase": "native_cycles"
+  },
+  "host_progress_count_in_copied_log": 1096,
+  "file_cutoff": {
+    "host_owner_stdout_mtime_utc": "2026-09-18T10:28:03.3696863Z",
+    "editor_stdout_mtime_utc": "2026-09-18T10:28:03.5476023Z"
+  },
+  "missing_after_cutoff": [
+    "supervisor-return.json",
+    "child-failure.json",
+    "child-terminal-cleanup.json",
+    "host-owner/process-exit.json",
+    "editor-host/process-exit.json",
+    "child-result.json",
+    "joint-10.json",
+    "batch-capture-10.json",
+    "sample-preview-10.json",
+    "project/benchmark/out/batch-10.json",
+    "project/benchmark/input/ack-10.json"
+  ],
+  "present_stale_or_prior": [
+    "project/benchmark/out/ready-10.json (mtime 2026-09-18T10:26:01.8792973Z; prior readiness marker)",
+    "import-host/process-exit.json (mtime 2026-09-18T10:09:45.6764321Z; earlier import stage)"
+  ],
+  "process_absence_receipt": "process-absence.json",
+  "event_window": "event-log-window.json",
+  "event_interpretation": "No matching Godot/Application Error, Windows Error Reporting, resource-exhaustion, shutdown, or TaskScheduler event appeared in the bounded query. The two System records are IsolatedUserMode informational starts; three Application records are Chromium ID 256 with empty messages. This cannot identify the interruption cause.",
+  "risk": "Abrupt evidence cutoff is temporally near the 10:28:03Z stdout mtimes, but no causal attribution is supported. Missing natural exits and cleanup records remain unproven.",
+  "scope_limits": [
+    "Read-only bounded file metadata and selected exact logs/invocations/source maps",
+    "No command-row parsing; command-10 full bytes copied but not interpreted row-by-row",
+    "No full-tree hash or cache crawl",
+    "No relaunch, stop, repair, cleanup, raw mutation, plan edit, commit, or acceptance verdict"
+  ],
+  "copied_files": [
+    {
+      "path": "raw/command-10.json",
+      "bytes": 1141465,
+      "sha256": "4ba366a3db9445939394673860cdaed8e86c612490c6da7f0a0e1d754fccbdc4"
+    },
+    {
+      "path": "raw/context.json",
+      "bytes": 5490,
+      "sha256": "f1382396b5fd6c1664d26112b516b6fc2924dedf365d9c77ad95be6fc8242d64"
+    },
+    {
+      "path": "raw/diagnostic.json",
+      "bytes": 6751,
+      "sha256": "f8d1307d1bf0bf10cdb576896bfb5e7b2b23a811f33e33ba7f0f093fa87fa215"
+    },
+    {
+      "path": "raw/editor-host/invocation.json",
+      "bytes": 8880,
+      "sha256": "c7d2c0e51e81c94e46c57976ab922a3d8c83ed8d9f935991b3000a7ebe05a3d8"
+    },
+    {
+      "path": "raw/editor-host/stdout.txt",
+      "bytes": 377029,
+      "sha256": "5acc3195dbe036b95bc5ae0e6478ec5da4be07d560b67eec690c4c56c029f674"
+    },
+    {
+      "path": "raw/host-owner/invocation.json",
+      "bytes": 7131,
+      "sha256": "486e93c1e19a13c06edc41c2c5f927f11d9b65550b713d06ae036311a9095167"
+    },
+    {
+      "path": "raw/host-owner/stdout.txt",
+      "bytes": 109025,
+      "sha256": "d7cb45fda998e12e8635c1af497e4157cccbd0757f50cfbb292ab5171713365e"
+    },
+    {
+      "path": "raw/import-host/invocation.json",
+      "bytes": 6171,
+      "sha256": "28d438c983db9e61fd4156e099e174c2214c9595934b8d7ba613952bd7e55388"
+    },
+    {
+      "path": "raw/import-host/process-exit.json",
+      "bytes": 30,
+      "sha256": "72b1cd5e9080ce91992626a736cddadd24cb69bbc50b5b0e9fa1e0fa65674bc8"
+    },
+    {
+      "path": "raw/project/benchmark/input/start-10.json",
+      "bytes": 505,
+      "sha256": "0e193f56ff7482936cda29d6f4e8ee62e51997e321095e1587a08a22e2d5db2b"
+    },
+    {
+      "path": "raw/project/benchmark/out/ready-10.json",
+      "bytes": 663,
+      "sha256": "98ecbced03f66e340be60c6ab26c6e89e9e09ee2ef8edcff4552a141855f4806"
+    },
+    {
+      "path": "raw/supervisor-start.json",
+      "bytes": 76,
+      "sha256": "43dfde4195d8e869325ffc1d5276933d5e10a943e1186b0411a7262d64c8e64c"
+    }
+  ]
+}
