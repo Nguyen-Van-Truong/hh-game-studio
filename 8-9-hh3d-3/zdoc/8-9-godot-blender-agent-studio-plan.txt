@@ -60,12 +60,22 @@ GT06_CURRENT_SOURCE_CLOSURE=e010180a1bf85b7f565e9aa39734f8551caf170a85b36c50598b
 GT06_SOURCE_CHECKPOINT=b3862a10
 GT06_BENCHMARK_CAMPAIGN=gt06-s81-campaign-01
 GT06_BENCHMARK_STATUS=S81_LAUNCH1_FAILED_RETAINED_COUNTER_GROWTH_20260918T084856Z
-GT06_ACTIVE_DIAGNOSTIC=S84_COMPACT_SEQUENCE_RUNNING_OBSERVED_20260918T101003Z
+GT06_ACTIVE_DIAGNOSTIC=S85_S84_COMPACT_INTERRUPTED_UNOBSERVED_AFTER_BATCH09_20260918T1028Z
 GT05_LAST_TESTED_SOURCE_CLOSURE=c141d54b80022ca7fefdf81f83e7e1078d3cc6aa43954831f82bb3178338a135
 
 TIẾN ĐỘ HIỆN HÀNH — S84, ngày 18-09-2026
 GT-01–05 ACCEPTED; GT-06 IN_PROGRESS; GT-07–10 chưa mở.
 Runtime giữ nguyên source b3862a10, 51 file e010180a…; profile 0cd5b530…
+
+S84 compact diagnostic bị gián đoạn bên ngoài ở giữa batch10: đã có10
+capture/joint/sample hoàn chỉnh cho batch0–9; ready/start10 tồn tại nhưng chưa
+có batch10/ACK10. Last observed native log là batch10 cycle82 SAVE_WAIT lúc
+khoảng10:28Z. Lúc10:30:21–10:30:38Z supervisor6444, host11904 và editor44960
+đều đã biến mất; không có child-failure, child-terminal-cleanup,
+supervisor-return hay actual process-exit receipt. stderr các lane trống ở phần
+đã ghi. Không suy nguyên nhân, không coi là RSS/timeout/PASS và không chạy lại
+cùng run ID. Giữ nguyên prefix raw để forensic S85; một run mới chỉ được phép
+sau khi kiểm cleanup/Stop/source và ghi rõ interruption.
 
 Nút thắt: S81 campaign thất bại tại batch15, ObjectDB71128→71130.
 Có16 captures (5 warmup+11 measured), không có fullrun PASS. HTTP đủ1000
