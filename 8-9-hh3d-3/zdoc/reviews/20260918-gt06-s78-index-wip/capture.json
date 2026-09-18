@@ -1,0 +1,22 @@
+{
+  "host": {
+    "wrapper_pid": 43944,
+    "started_at": "2026-09-18T05:04:00.200261+00:00",
+    "argv": [
+      "python.exe",
+      "-B",
+      "-c",
+      "import sys,unittest; sys.path.insert(0,'.'); names=['studio.tests.protocol.test_journal','studio.tests.protocol.test_journal_cas','studio.tests.protocol.test_journal_durability','studio.tests.protocol.test_journal_platform','studio.tests.protocol.test_journal_retention','studio.tests.replay.test_benchmark_commands','studio.tests.replay.test_service','studio.tests.replay.test_disk_journal_index']; s=unittest.TestSuite(unittest.defaultTestLoader.loadTestsFromName(n) for n in names); r=unittest.TextTestRunner(verbosity=1).run(s); print('S78_INDEX_FOCUSED '+__import__('json').dumps({'run':r.testsRun,'failures':len(r.failures),'errors':len(r.errors),'skips':len(r.skipped)}),flush=True); sys.exit(not r.wasSuccessful())"
+    ],
+    "exit_code": 1,
+    "target_pid": 18020,
+    "wrapper_exit_code": 0,
+    "timed_out": false,
+    "tree_verified": true,
+    "ownership": "gated_job_kill_on_close",
+    "stdout": "s78-focused-02-stdout.txt",
+    "stderr": "s78-focused-02-stderr.txt",
+    "host": "s78-focused-02-host.json"
+  },
+  "source_unchanged": true
+}

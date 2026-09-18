@@ -1,0 +1,5 @@
+{
+  "code": "import sys,unittest; sys.path.insert(0,'.'); names=['studio.tests.protocol.test_journal','studio.tests.protocol.test_journal_cas','studio.tests.protocol.test_journal_durability','studio.tests.protocol.test_journal_platform','studio.tests.protocol.test_journal_retention','studio.tests.replay.test_benchmark_commands','studio.tests.replay.test_service','studio.tests.replay.test_disk_journal_index']; s=unittest.TestSuite(unittest.defaultTestLoader.loadTestsFromName(n) for n in names); r=unittest.TextTestRunner(verbosity=1).run(s); print('S78_INDEX_FOCUSED '+__import__('json').dumps({'run':r.testsRun,'failures':len(r.failures),'errors':len(r.errors),'skips':len(r.skipped)}),flush=True); sys.exit(not r.wasSuccessful())",
+  "runner_sha256": "ea522450acc46f90be5e2a7b9257e73ce8b619948105b2c9073aac1f881c7328",
+  "source_closure": "649bd0f3e9a6a0a6d2249d952ec63f0dc6e29b2da3f273bd2b3ef8c8d169b18e"
+}
