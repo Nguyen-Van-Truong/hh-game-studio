@@ -1,0 +1,22 @@
+{
+  "wrapper_pid": 49696,
+  "started_at": "2026-09-18T15:39:06.353747+00:00",
+  "argv": [
+    "python.exe",
+    "-B",
+    "-c",
+    "import unittest,sys,json; r=unittest.TextTestRunner(verbosity=2).run(unittest.defaultTestLoader.loadTestsFromName('test_phase_observer')); print('HTTP_PHASE_UNIT_COMPLETE '+json.dumps({'run':r.testsRun,'failures':len(r.failures),'errors':len(r.errors),'skips':len(r.skipped)}),flush=True); sys.exit(not r.wasSuccessful())"
+  ],
+  "exit_code": 0,
+  "target_pid": 47860,
+  "wrapper_exit_code": 0,
+  "timed_out": false,
+  "tree_verified": true,
+  "ownership": "gated_job_kill_on_close",
+  "stdout": "unit-stdout.txt",
+  "stderr": "unit-stderr.txt",
+  "host": "unit-host.json",
+  "formal_acceptance": false,
+  "engine_runs": 0,
+  "source_unchanged": true
+}

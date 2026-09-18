@@ -1,0 +1,11 @@
+test_changed_ack_readback_anchor_fails_closed (test_coupled_phases.AckOverlayTests.test_changed_ack_readback_anchor_fails_closed) ... ok
+test_changed_probe_phase_fails_closed (test_coupled_phases.AckOverlayTests.test_changed_probe_phase_fails_closed) ... ok
+test_only_ack_hook_changes_original_native_bytes (test_coupled_phases.AckOverlayTests.test_only_ack_hook_changes_original_native_bytes) ... ok
+test_s96_ack_identity_and_primitive_collector_are_explicit (test_coupled_phases.AckOverlayTests.test_s96_ack_identity_and_primitive_collector_are_explicit) ... ok
+test_source_difference_is_bounded_paths_without_hashes (test_coupled_phases.DiagnosticSanitizationTests.test_source_difference_is_bounded_paths_without_hashes) ... ok
+test_unexpected_error_retains_class_frames_without_message (test_coupled_phases.DiagnosticSanitizationTests.test_unexpected_error_retains_class_frames_without_message) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.006s
+
+OK

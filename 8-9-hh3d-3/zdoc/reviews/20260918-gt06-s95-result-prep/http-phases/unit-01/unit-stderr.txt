@@ -1,0 +1,16 @@
+test_delegation_preserves_wire_arguments_results_close_and_secret_absence (test_phase_observer.ClientTests.test_delegation_preserves_wire_arguments_results_close_and_secret_absence) ... ok
+test_each_failure_phase_preserves_exception_and_operation_count (test_phase_observer.ClientTests.test_each_failure_phase_preserves_exception_and_operation_count) ... ok
+test_retry_has_distinct_call_and_port_and_freezes_before_metadata_reset (test_phase_observer.ClientTests.test_retry_has_distinct_call_and_port_and_freezes_before_metadata_reset) ... ok
+test_boundaries_delegate_same_arguments_and_join_client_server_ports (test_phase_observer.HostTests.test_boundaries_delegate_same_arguments_and_join_client_server_ports) ... ok
+test_guard_acquisition_body_release_and_suppression_preserve_base_semantics (test_phase_observer.JournalTests.test_guard_acquisition_body_release_and_suppression_preserve_base_semantics) ... ok
+test_method_delegation_and_nested_snapshot (test_phase_observer.JournalTests.test_method_delegation_and_nested_snapshot) ... ok
+test_active_overflow_is_explicit_without_skipping_operation (test_phase_observer.RecorderTests.test_active_overflow_is_explicit_without_skipping_operation) ... ok
+test_failure_copy_and_returned_snapshots_cannot_mutate_retained_state (test_phase_observer.RecorderTests.test_failure_copy_and_returned_snapshots_cannot_mutate_retained_state) ... ok
+test_failure_freezes_unfinished_server_span_from_another_thread (test_phase_observer.RecorderTests.test_failure_freezes_unfinished_server_span_from_another_thread) ... ok
+test_fixed_enums_capacity_guards_and_missing_socket_identity (test_phase_observer.RecorderTests.test_fixed_enums_capacity_guards_and_missing_socket_identity) ... ok
+test_qpc_entries_and_unfinished_span_survive_ring_eviction (test_phase_observer.RecorderTests.test_qpc_entries_and_unfinished_span_survive_ring_eviction) ... ok
+
+----------------------------------------------------------------------
+Ran 11 tests in 0.005s
+
+OK

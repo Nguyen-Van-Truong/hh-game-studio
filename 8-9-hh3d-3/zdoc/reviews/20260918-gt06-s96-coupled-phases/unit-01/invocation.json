@@ -1,0 +1,13 @@
+{
+  "code": "import unittest,sys,json; r=unittest.TextTestRunner(verbosity=2).run(unittest.defaultTestLoader.loadTestsFromName('test_coupled_phases')); print('S96_COMPOSITION_COMPLETE '+json.dumps({'run':r.testsRun,'failures':len(r.failures),'errors':len(r.errors)}),flush=True); sys.exit(not r.wasSuccessful())",
+  "source_files": {
+    "zdoc/reviews/20260918-gt06-s96-coupled-phases/coupled_phases.py": "b1e311144b5beaad3fc0188b4d09e285351a4978502e64c0ac015122d4465ee0",
+    "zdoc/reviews/20260918-gt06-s96-coupled-phases/register_task.ps1": "691ea6b4cf3fffc3859ec5cf2522fad1338f6e43e71b89dbc889ae8f594fa859",
+    "zdoc/reviews/20260918-gt06-s96-coupled-phases/test_coupled_phases.py": "efd3952d4ed479ec863e469f546ebe952dd2e45b50c1d79d3424f59af8d5efd1",
+    "studio/tests/replay/benchmark_native.gd": "52fbd9af5c6191ada5baf1d7195a75685ed5e27a95f4d244af8b4d679f8c00f2",
+    "zdoc/reviews/20260918-gt06-s95-native-isolation/object_probe_s95.gd": "8a1ef457b6d4612fbf61176bc99598ec046d72c081e01c73665bb3237680784e"
+  },
+  "runner_sha256": "ea522450acc46f90be5e2a7b9257e73ce8b619948105b2c9073aac1f881c7328",
+  "timeout_seconds": 60,
+  "formal_acceptance": false
+}

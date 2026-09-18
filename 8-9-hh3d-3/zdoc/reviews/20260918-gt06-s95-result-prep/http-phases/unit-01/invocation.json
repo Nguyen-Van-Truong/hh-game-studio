@@ -1,0 +1,16 @@
+{
+  "argv": [
+    "C:\\Users\\truon\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+    "-B",
+    "-c",
+    "import unittest,sys,json; r=unittest.TextTestRunner(verbosity=2).run(unittest.defaultTestLoader.loadTestsFromName('test_phase_observer')); print('HTTP_PHASE_UNIT_COMPLETE '+json.dumps({'run':r.testsRun,'failures':len(r.failures),'errors':len(r.errors),'skips':len(r.skipped)}),flush=True); sys.exit(not r.wasSuccessful())"
+  ],
+  "source_before": {
+    "zdoc\\reviews\\20260918-gt06-s95-result-prep\\http-phases\\phase_observer.py": "b97dcf72ebe9903412612b19bbabdd1ef627e790ffbe5369644102ec0ae5cc92",
+    "zdoc\\reviews\\20260918-gt06-s95-result-prep\\http-phases\\test_phase_observer.py": "1ef8e49ab52aeffdd9c3b9dd1ea36aab39f6331d5fdd119f56345d88944a120c",
+    "studio\\build\\bootstrap\\run_fixture.py": "ea522450acc46f90be5e2a7b9257e73ce8b619948105b2c9073aac1f881c7328"
+  },
+  "timeout_seconds": 45,
+  "formal_acceptance": false,
+  "engine_runs": 0
+}

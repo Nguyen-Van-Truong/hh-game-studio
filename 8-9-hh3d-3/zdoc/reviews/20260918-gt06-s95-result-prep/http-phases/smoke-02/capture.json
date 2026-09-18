@@ -1,0 +1,27 @@
+{
+  "wrapper_pid": 17632,
+  "started_at": "2026-09-18T15:46:25.926975+00:00",
+  "argv": [
+    "python.exe",
+    "-B",
+    "smoke_http.py",
+    "smoke-02"
+  ],
+  "exit_code": 0,
+  "target_pid": 47412,
+  "wrapper_exit_code": 0,
+  "timed_out": false,
+  "tree_verified": true,
+  "ownership": "gated_job_kill_on_close",
+  "stdout": "http-stdout.txt",
+  "stderr": "http-stderr.txt",
+  "host": "http-host.json",
+  "formal_acceptance": false,
+  "engine_runs": 0,
+  "s93_reproduction": false,
+  "injected_disconnect": true,
+  "current_source_unchanged": true,
+  "frozen_source_unchanged": true,
+  "original_history_unchanged": true,
+  "runner_unchanged": true
+}

@@ -113,3 +113,6 @@ zdoc/reviews/20260918-gt06-s93-sparse-attribution/** -text whitespace=-blank-at-
 
 # S95 failure, unit, HTTP and native diagnostic captures retain exact bytes.
 zdoc/reviews/20260918-gt06-s95-*/** -text whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+
+# S96 composed diagnostic helpers and captures are hash-bound exact bytes.
+zdoc/reviews/20260918-gt06-s96-*/** -text whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol

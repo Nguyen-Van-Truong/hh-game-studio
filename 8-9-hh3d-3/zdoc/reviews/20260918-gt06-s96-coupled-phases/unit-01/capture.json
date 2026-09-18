@@ -1,0 +1,21 @@
+{
+  "wrapper_pid": 53992,
+  "started_at": "2026-09-18T15:47:28.290732+00:00",
+  "argv": [
+    "python.exe",
+    "-B",
+    "-c",
+    "import unittest,sys,json; r=unittest.TextTestRunner(verbosity=2).run(unittest.defaultTestLoader.loadTestsFromName('test_coupled_phases')); print('S96_COMPOSITION_COMPLETE '+json.dumps({'run':r.testsRun,'failures':len(r.failures),'errors':len(r.errors)}),flush=True); sys.exit(not r.wasSuccessful())"
+  ],
+  "exit_code": 0,
+  "target_pid": 53876,
+  "wrapper_exit_code": 0,
+  "timed_out": false,
+  "tree_verified": true,
+  "ownership": "gated_job_kill_on_close",
+  "stdout": "composition-stdout.txt",
+  "stderr": "composition-stderr.txt",
+  "host": "composition-host.json",
+  "source_unchanged": true,
+  "formal_acceptance": false
+}
