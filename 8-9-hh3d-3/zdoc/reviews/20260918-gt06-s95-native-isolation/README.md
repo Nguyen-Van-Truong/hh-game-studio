@@ -158,3 +158,17 @@ Request pins the reused S93 ownership helper; S95 watchdog2160s, scheduler40min.
 Scheduler observes outer owner completion separately. Commands status/delete
 apply only to the fixed S95 task, and start includes hidden HHStudio.GT06 tasks
 when checking for conflicts. Do not dispatch twice or overwrite launch/output.
+
+## Full isolated diagnostic dispatch
+
+The fixed35x100 diagnostic was dispatched2026-09-18T15:16:56Z under
+\HHStudio.GT06.gt06-s95-native-isolation-01. Source/helper pins above are frozen.
+At15:17:59Z Scheduler state4 reported instances0, while independently observed
+outer39352/supervisor21072/child32268/editor11288 were live with bound start
+identities; native log advanced to batch1/cycle78 and stderr was empty. Treat
+this as timestamped startup observation, not perpetual RUNNING or completion.
+Raw: studio/.local/reviews/gt06-s95-native-isolation-01 and sibling -outer.
+Expected15–25minutes initially, watchdog bounds remain as documented.
+Use register_task.ps1 -Command status plus a short fresh tail on heartbeat.
+At terminal validate actual exits and all owned cleanup before interpreting
+sparse identity/count results. Do not start another engine/test while active.

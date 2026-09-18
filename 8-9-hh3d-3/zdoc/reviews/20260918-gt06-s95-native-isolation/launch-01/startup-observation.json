@@ -1,0 +1,43 @@
+{
+  "observed_utc": "2026-09-18T15:17:59.4804594Z",
+  "scheduler": {
+    "task_path": "\\HHStudio.GT06.gt06-s95-native-isolation-01",
+    "run_id": "gt06-s95-native-isolation-01",
+    "state": 4,
+    "instances": 0,
+    "last_task_result": 267009,
+    "last_run_time": "2026-09-18T22:16:56",
+    "formal_acceptance": false,
+    "status_scope": "Scheduler observation only; terminal.json and actual supervisor/helper captures are required"
+  },
+  "processes": [
+    {
+      "name": "pythonw",
+      "start_utc": "2026-09-18T15:16:55.9939849Z",
+      "pid": 39352,
+      "start_filetime": 134342182159939849,
+      "has_exited": false
+    },
+    {
+      "name": "python",
+      "start_utc": "2026-09-18T15:16:56.5779458Z",
+      "pid": 21072,
+      "start_filetime": 134342182165779458,
+      "has_exited": false
+    },
+    {
+      "name": "python",
+      "start_utc": "2026-09-18T15:16:57.5055323Z",
+      "pid": 32268,
+      "start_filetime": 134342182175055323,
+      "has_exited": false
+    },
+    {
+      "name": "Godot_v4.7.2-stable_win64",
+      "start_utc": "2026-09-18T15:17:05.0065412Z",
+      "pid": 11288,
+      "start_filetime": 134342182250065412,
+      "has_exited": false
+    }
+  ]
+}
