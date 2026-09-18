@@ -1,0 +1,72 @@
+{
+  "observed_utc": "2026-09-18T13:57:59.136241+00:00",
+  "run_id": "gt06-s91-sparse-attribution-01",
+  "completed_batch_observations": [
+    {
+      "batch": 0,
+      "elapsed_seconds": 65.92,
+      "editor_objects": 71128,
+      "editor_resources": 6,
+      "editor_handles": 565,
+      "editor_rss_bytes": 752865280,
+      "host_rss_bytes": 38240256
+    },
+    {
+      "batch": 1,
+      "elapsed_seconds": 65.184,
+      "editor_objects": 71128,
+      "editor_resources": 6,
+      "editor_handles": 559,
+      "editor_rss_bytes": 753303552,
+      "host_rss_bytes": 38739968
+    },
+    {
+      "batch": 2,
+      "elapsed_seconds": 73.896,
+      "editor_objects": 71128,
+      "editor_resources": 6,
+      "editor_handles": 557,
+      "editor_rss_bytes": 753684480,
+      "host_rss_bytes": 39878656
+    }
+  ],
+  "completed_batch_count": 3,
+  "remaining_batch_count": 32,
+  "median_observed_seconds_per_batch": 65.92,
+  "terminal_present": false,
+  "logs": {
+    "host-owner/stdout.txt": {
+      "size": 31374,
+      "modified_utc": "2026-09-18T13:57:59.106532+00:00",
+      "tail": [
+        "HH_GT06_CAMPAIGN_PROGRESS {\"run_id\": \"gt06-s91-sparse-attribution-01\", \"batch\": 3, \"phase\": \"native_cycles\"}",
+        "HH_GT06_CAMPAIGN_PROGRESS {\"run_id\": \"gt06-s91-sparse-attribution-01\", \"batch\": 3, \"phase\": \"native_cycles\"}"
+      ]
+    },
+    "editor-host/stdout.txt": {
+      "size": 104509,
+      "modified_utc": "2026-09-18T13:57:58.858937+00:00",
+      "tail": [
+        "HH_GT06_BENCHMARK_HEARTBEAT {\"batch\":3,\"cycle\":66,\"main_thread\":true,\"monotonic_us\":290436254,\"phase\":\"UNDO\",\"pid\":22440,\"run_id\":\"gt06-s91-sparse-attribution-01\"}",
+        "HH_GT06_BENCHMARK_HEARTBEAT {\"batch\":3,\"cycle\":68,\"main_thread\":true,\"monotonic_us\":290939063,\"phase\":\"SAVE_WAIT\",\"pid\":22440,\"run_id\":\"gt06-s91-sparse-attribution-01\"}"
+      ]
+    },
+    "supervisor-stderr.txt": {
+      "size": 0,
+      "modified_utc": "2026-09-18T13:53:00.655176+00:00",
+      "tail": []
+    },
+    "host-owner/stderr.txt": {
+      "size": 0,
+      "modified_utc": "2026-09-18T13:53:00.756540+00:00",
+      "tail": []
+    },
+    "editor-host/stderr.txt": {
+      "size": 0,
+      "modified_utc": "2026-09-18T13:53:07.816352+00:00",
+      "tail": []
+    }
+  },
+  "formal_acceptance": false,
+  "interpretation": "Live progress observation only; HOST_START is the expected editor wait for host commands; not a benchmark PASS or root-cause conclusion."
+}

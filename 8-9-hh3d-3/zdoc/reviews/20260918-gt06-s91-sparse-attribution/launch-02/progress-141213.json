@@ -1,0 +1,132 @@
+{
+  "observed_utc": "2026-09-18T14:12:13.025845+00:00",
+  "run_id": "gt06-s91-sparse-attribution-01",
+  "completed_batch_count": 11,
+  "rows": [
+    {
+      "batch": 0,
+      "duration_s": 65.92,
+      "objects": 71128,
+      "resources": 6,
+      "editor_rss": 752865280,
+      "host_rss": 38240256
+    },
+    {
+      "batch": 1,
+      "duration_s": 65.184,
+      "objects": 71128,
+      "resources": 6,
+      "editor_rss": 753303552,
+      "host_rss": 38739968
+    },
+    {
+      "batch": 2,
+      "duration_s": 73.896,
+      "objects": 71128,
+      "resources": 6,
+      "editor_rss": 753684480,
+      "host_rss": 39878656
+    },
+    {
+      "batch": 3,
+      "duration_s": 84.67,
+      "objects": 71128,
+      "resources": 6,
+      "editor_rss": 753598464,
+      "host_rss": 40595456
+    },
+    {
+      "batch": 4,
+      "duration_s": 92.275,
+      "objects": 71128,
+      "resources": 6,
+      "editor_rss": 693092352,
+      "host_rss": 38010880
+    },
+    {
+      "batch": 5,
+      "duration_s": 91.845,
+      "objects": 71128,
+      "resources": 6,
+      "editor_rss": 593395712,
+      "host_rss": 37552128
+    },
+    {
+      "batch": 6,
+      "duration_s": 99.18,
+      "objects": 71128,
+      "resources": 6,
+      "editor_rss": 507678720,
+      "host_rss": 35430400
+    },
+    {
+      "batch": 7,
+      "duration_s": 109.13,
+      "objects": 71128,
+      "resources": 6,
+      "editor_rss": 405594112,
+      "host_rss": 30883840
+    },
+    {
+      "batch": 8,
+      "duration_s": 104.703,
+      "objects": 71128,
+      "resources": 6,
+      "editor_rss": 335847424,
+      "host_rss": 30019584
+    },
+    {
+      "batch": 9,
+      "duration_s": 119.38,
+      "objects": 71128,
+      "resources": 6,
+      "editor_rss": 287391744,
+      "host_rss": 30011392
+    },
+    {
+      "batch": 10,
+      "duration_s": 118.924,
+      "objects": 71128,
+      "resources": 6,
+      "editor_rss": 251588608,
+      "host_rss": 28844032
+    }
+  ],
+  "recent_three_median_s": 118.924,
+  "terminal_artifacts_present": [],
+  "logs": {
+    "host-owner/stdout.txt": {
+      "size": 121278,
+      "modified_utc": "2026-09-18T14:12:12.231765+00:00",
+      "tail": [
+        "HH_GT06_CAMPAIGN_PROGRESS {\"run_id\": \"gt06-s91-sparse-attribution-01\", \"batch\": 11, \"phase\": \"native_cycles\"}",
+        "HH_GT06_CAMPAIGN_PROGRESS {\"run_id\": \"gt06-s91-sparse-attribution-01\", \"batch\": 11, \"phase\": \"native_cycles\"}"
+      ]
+    },
+    "editor-host/stdout.txt": {
+      "size": 412766,
+      "modified_utc": "2026-09-18T14:12:12.888537+00:00",
+      "tail": [
+        "HH_GT06_BENCHMARK_HEARTBEAT {\"batch\":11,\"cycle\":28,\"main_thread\":true,\"monotonic_us\":1144438676,\"phase\":\"UNDO\",\"pid\":22440,\"run_id\":\"gt06-s91-sparse-attribution-01\"}",
+        "HH_GT06_BENCHMARK_HEARTBEAT {\"batch\":11,\"cycle\":30,\"main_thread\":true,\"monotonic_us\":1144969255,\"phase\":\"UNDO\",\"pid\":22440,\"run_id\":\"gt06-s91-sparse-attribution-01\"}"
+      ]
+    },
+    "supervisor-stderr.txt": {
+      "size": 0,
+      "modified_utc": "2026-09-18T13:53:00.655176+00:00",
+      "tail": []
+    },
+    "host-owner/stderr.txt": {
+      "size": 0,
+      "modified_utc": "2026-09-18T13:53:00.756540+00:00",
+      "tail": []
+    },
+    "editor-host/stderr.txt": {
+      "size": 0,
+      "modified_utc": "2026-09-18T13:53:07.816352+00:00",
+      "tail": []
+    }
+  },
+  "formal_acceptance": false,
+  "interpretation": "Partial observation only; not a hash audit, benchmark PASS, full ObjectDB inventory or root-cause conclusion."
+}

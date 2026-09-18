@@ -104,6 +104,12 @@ editor22440 sống, batch0/nativecycle18, stderr trống. Đây là observation 
 thời điểm; phải query mới trước khi báo RUNNING. Receipts launch-02/observer;
 raw studio/.local/reviews/gt06-s91-sparse-attribution-01. Estimate45–75phút
 cho diagnostic theo lịch sử, không ETA toànplan; heartbeat15phút đang ACTIVE.
+Observation14:12:13Z:11capture/joint hoàn chỉnh (batch0–10), host/editor tiến
+tới batch11/nativecycle30; ba stderr trống, chưa có terminal/failure receipt.
+ACKObjectDB71128/resources6 ở11batch; baseline sparse tạibatch4 khôngselfdrift.
+Ba batch gần nhất median118.924s;24batch còn lại khoảng48phút nếu giữ tốc độ,
+có thể lâu hơn do command duration tăng. Đây chỉ là observation, khôngPASS.
+Receipt: S91launch-02/progress-141213.json; không rerun hoặc đổi source.
 Attempt1 chỉ lỗi principal string trướcRun, XMLSID/currentSID match; task
 neverrun267011/zeroinstances đã retire, launch/ giữfailure/XML/receipt.
 Fix canonical SID + XML + limited/interactive guards; preflight02 PASS đúng
@@ -139,6 +145,11 @@ material/fixed publication. Pipeline rig/clip GT-05 dùng trusted producer,
 không tự cấp API authoring rig/animation. GT-10 không đồng nghĩa game hoàn chỉnh.
 Phân tích ba worker read-only và nguồn Godot/Blender/Khronos/Android:
 reviews/20260918-end-to-end-game-claim-research.md (AUTHORITY=0, không verdict).
+
+Rà tham khảo map Hoan Hao ngày18-09: reviews/20260918-hoanhao-map-reuse-review.md
+(AUTHORITY=0). Đã đối chiếu source frontend/backend và sáu đề xuất; chưa kiểm VPS.
+Giữ GT hiện hành, không thêm game/geo/Web thành gate mới; tái sử dụng dữ liệu
+không đồng nghĩa pipeline thành phố3D đã hoàn chỉnh.
 
 Đã nghiệm thu:
 - GT-01: a0fb247, reviews/20260913-r21-gt01-final; closure
