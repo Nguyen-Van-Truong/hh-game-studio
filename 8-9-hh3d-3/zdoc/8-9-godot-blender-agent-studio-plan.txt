@@ -58,8 +58,8 @@ GT06_WORKING_SOURCE_STATUS=S78_DERIVED_SQLITE_INDEX_WIP_FOCUSED_PASS
 GT06_CURRENT_SOURCE_CLOSURE=649bd0f3e9a6a0a6d2249d952ec63f0dc6e29b2da3f273bd2b3ef8c8d169b18e
 GT06_SOURCE_CHECKPOINT=04b2f4dc_S78_WIP
 GT06_BENCHMARK_CAMPAIGN=gt06-s78-campaign-01
-GT06_BENCHMARK_STATUS=S78_LAUNCH1_ACTIVE
-GT06_ACTIVE_DIAGNOSTIC=S78_FULL_CAMPAIGN_LAUNCH1
+GT06_BENCHMARK_STATUS=S78_LAUNCH1_FAILED_OBJECT_GROWTH_AFTER_BATCH12
+GT06_ACTIVE_DIAGNOSTIC=S78_OBJECT_GROWTH_FOLLOWUP_REQUIRED
 GT05_LAST_TESTED_SOURCE_CLOSURE=c141d54b80022ca7fefdf81f83e7e1078d3cc6aa43954831f82bb3178338a135
 
 TIẾN ĐỘ HIỆN HÀNH — S78, ngày 18-09-2026
@@ -98,7 +98,8 @@ Host-retention review tìm command+offset Python index tăng~4.07MB từb4→b34
 so headroomRSS~1.91MB; đây là allocationrisk, chưa phải measured fullrunfailure.
 Derived disk index đã tích hợp trong S78, giữ journal/fsync/lock/dedupe;
 cachefailure saufsync thành UNKNOWN/rebuild và close ownership đã có test focused.
-Full campaign gt06-s78-campaign-01 launch1 đang chạy; chưa có PASS/critic.
+Full campaign gt06-s78-campaign-01 launch1 đã FAILED sau batch12 với CAMPAIGN_RETAINED_COUNTER_GROWTH; chưa có PASS/critic.
+Raw failure giữ tại studio/.local/reviews/gt06-s78-campaign-01/; bounded summary ở reviews/20260918-gt06-s78-failure/. ObjectDB 71124→71128, resources6, cleanup tree/owner sạch; chưa có root-cause attribution. Không launch3 mù; cần diagnostic bounded trước retry.
 Plan S76 exact archive: reviews/20260918-plan-history-s76/ (AUTHORITY=0),
 SHA25618526f3b0ffd3239640a6588f6505c2a95623b3828707f2e94fba399f8289f3c.
 S76 launch1 import20s và S75 handle/gap failures giữ trong archive/evidence;

@@ -1,0 +1,152 @@
+{
+  "schema": "HH-GT06-S78-FAILURE-SUMMARY-1",
+  "campaign_id": "gt06-s78-campaign-01",
+  "run_id": "gt06-s78-campaign-01.r00.a01",
+  "source_closure_sha256": "649bd0f3e9a6a0a6d2249d952ec63f0dc6e29b2da3f273bd2b3ef8c8d169b18e",
+  "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+  "failed_code": "CAMPAIGN_RETAINED_COUNTER_GROWTH",
+  "completed_batches": 13,
+  "objects_baseline": 71124,
+  "objects_at_failure": 71128,
+  "objects_delta": 4,
+  "resources_baseline": 6,
+  "resources_at_failure": 6,
+  "handles_baseline": 568,
+  "handles_at_failure": 558,
+  "max_status_gap_ms": 783.6,
+  "actual_exits": {
+    "host": 1,
+    "import_host": 0
+  },
+  "cleanup": {
+    "parent_owned_tree_zero": true,
+    "owner_closed": true,
+    "cleanup_error": null
+  },
+  "raw_sha256": {
+    "child-failure.json": "a1b003a796600c38d162e42be28c600f6ceda09a7bae9bb7a88836a38cd7dcff",
+    "parent-failure.json": "d120af396d4f12ee3251f21fa7bf41563c986d960850d2008420f956b6009e26",
+    "joint-12.json": "30ea734a941f4d543dcfe227b104407caf9e73ac91452295646f8f695146d6c4",
+    "batch-capture-12.json": "96a692e8793c6441f7cab9df643a01cd79c99cb367d751eaa0b54b70274df6ea"
+  },
+  "joint_rows": [
+    {
+      "file": "joint-00.json",
+      "index": 0,
+      "objects": 71124,
+      "resources": 6,
+      "handles": 568,
+      "rss_bytes": 752939008,
+      "max_status_gap_ms": 566.194
+    },
+    {
+      "file": "joint-01.json",
+      "index": 1,
+      "objects": 71124,
+      "resources": 6,
+      "handles": 565,
+      "rss_bytes": 753139712,
+      "max_status_gap_ms": 667.735
+    },
+    {
+      "file": "joint-02.json",
+      "index": 2,
+      "objects": 71124,
+      "resources": 6,
+      "handles": 555,
+      "rss_bytes": 753160192,
+      "max_status_gap_ms": 552.803
+    },
+    {
+      "file": "joint-03.json",
+      "index": 3,
+      "objects": 71124,
+      "resources": 6,
+      "handles": 557,
+      "rss_bytes": 753127424,
+      "max_status_gap_ms": 783.6
+    },
+    {
+      "file": "joint-04.json",
+      "index": 4,
+      "objects": 71124,
+      "resources": 6,
+      "handles": 565,
+      "rss_bytes": 707256320,
+      "max_status_gap_ms": 565.956
+    },
+    {
+      "file": "joint-05.json",
+      "index": 5,
+      "objects": 71124,
+      "resources": 6,
+      "handles": 555,
+      "rss_bytes": 596942848,
+      "max_status_gap_ms": 582.762
+    },
+    {
+      "file": "joint-06.json",
+      "index": 6,
+      "objects": 71124,
+      "resources": 6,
+      "handles": 555,
+      "rss_bytes": 472014848,
+      "max_status_gap_ms": 672.693
+    },
+    {
+      "file": "joint-07.json",
+      "index": 7,
+      "objects": 71124,
+      "resources": 6,
+      "handles": 555,
+      "rss_bytes": 371417088,
+      "max_status_gap_ms": 648.009
+    },
+    {
+      "file": "joint-08.json",
+      "index": 8,
+      "objects": 71124,
+      "resources": 6,
+      "handles": 555,
+      "rss_bytes": 293982208,
+      "max_status_gap_ms": 742.35
+    },
+    {
+      "file": "joint-09.json",
+      "index": 9,
+      "objects": 71124,
+      "resources": 6,
+      "handles": 555,
+      "rss_bytes": 230100992,
+      "max_status_gap_ms": 536.271
+    },
+    {
+      "file": "joint-10.json",
+      "index": 10,
+      "objects": 71124,
+      "resources": 6,
+      "handles": 555,
+      "rss_bytes": 185282560,
+      "max_status_gap_ms": 544.703
+    },
+    {
+      "file": "joint-11.json",
+      "index": 11,
+      "objects": 71124,
+      "resources": 6,
+      "handles": 555,
+      "rss_bytes": 171737088,
+      "max_status_gap_ms": 539.763
+    },
+    {
+      "file": "joint-12.json",
+      "index": 12,
+      "objects": 71128,
+      "resources": 6,
+      "handles": 558,
+      "rss_bytes": 221208576,
+      "max_status_gap_ms": 550.192
+    }
+  ],
+  "formal_acceptance": false
+}
