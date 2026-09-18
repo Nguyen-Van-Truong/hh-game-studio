@@ -1,0 +1,111 @@
+{
+  "actual_process_exit": {
+    "exit_code": 0,
+    "pid": 55068
+  },
+  "arms": {
+    "tree_item_and_node": {
+      "artifacts": {
+        "serialization.json": "389e16e16795b35672f1ed7dd91e7d66feb2c44f4f39307b4ed71c1bb886a440",
+        "smoke-status.json": "17798cb79dea59caf61e4b70f5babca09fbc42ce4d1b7269c5674549eb3ef308",
+        "sparse-00.json": "f1b043eb2e19315c457ec6a7e00751f3ebe9a85b7e7910a0a2b8d20ced8eb9d5",
+        "sparse-01.json": "37eefbfab417dc323aa295df7d8698d5c261e48bf0328e50355b3c8adf858194",
+        "sparse-post-00.json": "223294f046b53158fba9f8a7faa1cd406f291b2c79a9ccc0203dfddb4046b73c",
+        "sparse-post-01.json": "3f85e6a08ce80d9680e74df8804d5c4068f5f18d6eb8f4b27d2722fc4ec99d9b"
+      },
+      "controlled_creation": {
+        "after_node3d": 1521,
+        "after_tree_item": 1520,
+        "before": 1518
+      },
+      "exact_id_serialization": true,
+      "expected_growth": {
+        "Node3D": 1,
+        "TextParagraph": 1,
+        "TreeItem": 1,
+        "objects": 3,
+        "target_ids": 2
+      },
+      "native_checks": {
+        "baseline_helper_not_failed": true,
+        "baseline_one_snapshot": true,
+        "baseline_original_counter_delta_zero": true,
+        "baseline_partial_inventory": true,
+        "baseline_self_drift_false": true,
+        "baseline_target_counts": true,
+        "growth_helper_not_failed": true,
+        "growth_node_delta_expected": true,
+        "growth_original_counter_delta_expected": true,
+        "growth_self_drift_false": true,
+        "growth_target_net_count_expected": true,
+        "growth_tree_delta_one": true,
+        "growth_two_snapshots": true,
+        "no_drift_before_controlled_creation": true,
+        "no_third_snapshot_file": true,
+        "node_creation_delta_expected": true,
+        "one_column_tree": true,
+        "serialization_written": true,
+        "sparse-post-00.json_self_drift_false": true,
+        "sparse-post-01.json_self_drift_false": true,
+        "third_snapshot_capped": true,
+        "tree_item_creation_adds_two_objects": true
+      },
+      "passed": true
+    },
+    "tree_item_only": {
+      "artifacts": {
+        "serialization.json": "389e16e16795b35672f1ed7dd91e7d66feb2c44f4f39307b4ed71c1bb886a440",
+        "smoke-status.json": "e1eb1b0956599b72a1223d0de3438a44ddf07b0f038292a9d906bcaea163f710",
+        "sparse-00.json": "a35160f12d0a412c27f394ede76dcc4f7e860be02266c952355156adc434165d",
+        "sparse-01.json": "dc26b92d1ada1e019553ad92c172bee10a238be5112ddc22d2c80aaac41ab5c1",
+        "sparse-post-00.json": "085f8cfe5b17b81155e605650d9943d581d7b985998ad76418af31f25baba6b2",
+        "sparse-post-01.json": "952b1f11f3c2d6891a176289523bdb634857256690f76a145e0d7214d682e9e6"
+      },
+      "controlled_creation": {
+        "after_node3d": 1520,
+        "after_tree_item": 1520,
+        "before": 1518
+      },
+      "exact_id_serialization": true,
+      "expected_growth": {
+        "Node3D": 0,
+        "TextParagraph": 1,
+        "TreeItem": 1,
+        "objects": 2,
+        "target_ids": 1
+      },
+      "native_checks": {
+        "baseline_helper_not_failed": true,
+        "baseline_one_snapshot": true,
+        "baseline_original_counter_delta_zero": true,
+        "baseline_partial_inventory": true,
+        "baseline_self_drift_false": true,
+        "baseline_target_counts": true,
+        "growth_helper_not_failed": true,
+        "growth_node_delta_expected": true,
+        "growth_original_counter_delta_expected": true,
+        "growth_self_drift_false": true,
+        "growth_target_net_count_expected": true,
+        "growth_tree_delta_one": true,
+        "growth_two_snapshots": true,
+        "no_drift_before_controlled_creation": true,
+        "no_third_snapshot_file": true,
+        "node_creation_delta_expected": true,
+        "one_column_tree": true,
+        "serialization_written": true,
+        "sparse-post-00.json_self_drift_false": true,
+        "sparse-post-01.json_self_drift_false": true,
+        "third_snapshot_capped": true,
+        "tree_item_creation_adds_two_objects": true
+      },
+      "passed": true
+    }
+  },
+  "capture_sha256": "ecad22411f3c9bab328a12ea03e09f74f05ec6df6c5fbcae8bbf77fe9bc34ab5",
+  "eligible_for_dataset": false,
+  "formal_acceptance": false,
+  "generated_script_sha256": "acd41a91e4095e7a61296fa6dee03a4ec82edff8afa871186e470be708dcaf70",
+  "helper_sha256": "0837a4a6d21715c3706ce376750dc2f28ebae7f4f214f2988b4ea90a71a25281",
+  "passed": true,
+  "run_id": "gt06-s91-sparse-smoke-02"
+}

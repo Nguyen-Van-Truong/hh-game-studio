@@ -1,0 +1,42 @@
+{
+  "completed": false,
+  "formal_acceptance": false,
+  "public_ack": false,
+  "limits": {
+    "job_memory_bytes": 2147483648,
+    "job_user_time_100ns": 150000000,
+    "active_process_limit": 4,
+    "limit_flags": 8716,
+    "wall_seconds": 20,
+    "workspace_bytes_limit": 33554432,
+    "workspace_limit_is_watchdog": true,
+    "each_log_capture_bytes": 262144,
+    "effective_wall_seconds": 20
+  },
+  "active_at_wrapper_exit": 0,
+  "active_before_cleanup": 0,
+  "natural_tree_exit": true,
+  "final_workspace_bytes": 26990,
+  "failure": "STAGE_NATIVE_EXIT",
+  "wrapper_exit_code": 1,
+  "job": {
+    "configured": true,
+    "assigned": true,
+    "closed": true,
+    "handle_retained": false,
+    "tainted": false,
+    "zero_observed": true,
+    "active_count": 0,
+    "create_uncertain": false,
+    "close_uncertain": false,
+    "failed_operations": [],
+    "native_error": null
+  },
+  "elapsed_seconds": 0.9690000000409782,
+  "artifacts": {
+    "process-start.json": "f0d2c17d17e8b1145434785823600ae0c97cc4f3193eeafe138a80eb79e51a6a",
+    "process-exit.json": "3dd3c34a9a14745f339058e6a2f72c70159054a29f3255a3af27b71b2bbd9b64",
+    "stdout.txt": "9ee02dfbec46e7d02a2ba705e9b183a4bcd945afae0c679d62c80ea6fbfd49b3",
+    "stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

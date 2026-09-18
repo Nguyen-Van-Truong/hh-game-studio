@@ -1,0 +1,43 @@
+{
+  "actual_popen_exit": 2,
+  "formal_acceptance": false,
+  "job": {
+    "active_count": 0,
+    "assigned": true,
+    "close_uncertain": false,
+    "closed": true,
+    "configured": true,
+    "create_uncertain": false,
+    "failed_operations": [],
+    "handle_retained": false,
+    "native_error": null,
+    "tainted": false,
+    "zero_observed": true
+  },
+  "limits": {
+    "diagnostic_only": true,
+    "inner_benchmark_limits_changed": false,
+    "limit_flags": 8200,
+    "process_limit": 7,
+    "wall_enforcement": "observer_watchdog",
+    "wall_seconds": 7530
+  },
+  "mode": "wait",
+  "passed": true,
+  "process": {
+    "actual_exit": {
+      "exit_code_uint32": 2,
+      "exit_filetime": 134342125359433659,
+      "observed_utc": "2026-09-18T13:42:15Z",
+      "source": "retained_handle_GetExitCodeProcess",
+      "wait_result": 0
+    },
+    "executable": "C:\\Users\\truon\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+    "handle_closed": true,
+    "natural_exit_not_inferred": true,
+    "observed_utc": "2026-09-18T13:42:15Z",
+    "parent_pid": 46216,
+    "pid": 27320,
+    "process_start": "windows:134342125359279347"
+  }
+}

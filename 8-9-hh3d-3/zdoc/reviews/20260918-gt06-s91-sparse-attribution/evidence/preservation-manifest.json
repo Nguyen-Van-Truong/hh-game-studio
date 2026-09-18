@@ -1,0 +1,1526 @@
+{
+  "builder": {
+    "file": "preserve_receipts.py",
+    "sha256": "4bae9a26c23b4abf8ead41bd97e59c15cb8969943e7b93b30f0809ff0a7b2210"
+  },
+  "copied_bytes": 1503311,
+  "copy_path_base": "zdoc/reviews/20260918-gt06-s91-sparse-attribution/evidence",
+  "counts_by_group": {
+    "observer-tests-39648": 6,
+    "preflight01": 85,
+    "smoke01": 40,
+    "smoke02": 46
+  },
+  "created_utc": "2026-09-18T13:50:01.403524+00:00",
+  "current_frozen_helpers": [
+    {
+      "copy": "copies/preflight01/source/zdoc/reviews/20260918-gt06-s91-sparse-attribution/diagnose_sequence_s91.py",
+      "original": "zdoc/reviews/20260918-gt06-s91-sparse-attribution/diagnose_sequence_s91.py",
+      "sha256": "195d4d1a77984644e0a906b00dce95f560481b9b9ac8046d55982b72528fcb7e"
+    },
+    {
+      "copy": "copies/preflight01/source/zdoc/reviews/20260918-gt06-s91-sparse-attribution/launch_observer.py",
+      "original": "zdoc/reviews/20260918-gt06-s91-sparse-attribution/launch_observer.py",
+      "sha256": "b86b9d97a9438382b9246ee23a4b1180d52a1aa67d1db3216edaf602fd2c0cd4"
+    },
+    {
+      "copy": "copies/preflight01/source/zdoc/reviews/20260918-gt06-s91-sparse-attribution/object_probe_s91.gd",
+      "original": "zdoc/reviews/20260918-gt06-s91-sparse-attribution/object_probe_s91.gd",
+      "sha256": "0837a4a6d21715c3706ce376750dc2f28ebae7f4f214f2988b4ea90a71a25281"
+    },
+    {
+      "copy": "copies/preflight01/source/zdoc/reviews/20260918-gt06-s91-sparse-attribution/patch_native_s91.py",
+      "original": "zdoc/reviews/20260918-gt06-s91-sparse-attribution/patch_native_s91.py",
+      "sha256": "f4226f40839e40579ae5c489cfd33800e3739bb6e280193c38a54414afaf2bc0"
+    },
+    {
+      "copy": "copies/preflight01/source/zdoc/reviews/20260918-gt06-s91-sparse-attribution/register_task.ps1",
+      "original": "zdoc/reviews/20260918-gt06-s91-sparse-attribution/register_task.ps1",
+      "sha256": "40a4edc3a4bc8c5aa92b86a31b7d6d51340f510d540321b133fb13a49bd7aa57"
+    },
+    {
+      "copy": "copies/preflight01/source/zdoc/reviews/20260918-gt06-s91-sparse-attribution/test_launch_observer.py",
+      "original": "zdoc/reviews/20260918-gt06-s91-sparse-attribution/test_launch_observer.py",
+      "sha256": "aaa71b0d61e6fbc71982af22a6bc8e494017f5e6886e8455c1e8056ec0c5ac34"
+    }
+  ],
+  "eligible_for_dataset": false,
+  "file_count": 177,
+  "files": [
+    {
+      "copy": "copies/observer-tests-39648/success/result.json",
+      "copy_sha256": "c801572cf5531727ea6eee9326e05102bb040acbe7d69e51e6ffb7c21ef69f3f",
+      "group": "observer-tests-39648",
+      "original": "zdoc/reviews/20260918-gt06-s91-sparse-attribution/observer-tests-39648/success/result.json",
+      "original_sha256": "c801572cf5531727ea6eee9326e05102bb040acbe7d69e51e6ffb7c21ef69f3f",
+      "size_bytes": 1181
+    },
+    {
+      "copy": "copies/observer-tests-39648/success/supervisor-console-stderr.txt",
+      "copy_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "group": "observer-tests-39648",
+      "original": "zdoc/reviews/20260918-gt06-s91-sparse-attribution/observer-tests-39648/success/supervisor-console-stderr.txt",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "copy": "copies/observer-tests-39648/success/supervisor-console-stdout.txt",
+      "copy_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "group": "observer-tests-39648",
+      "original": "zdoc/reviews/20260918-gt06-s91-sparse-attribution/observer-tests-39648/success/supervisor-console-stdout.txt",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "copy": "copies/observer-tests-39648/wait/result.json",
+      "copy_sha256": "8c10f0ad84f26f8a454b69048ade9b5b1428ba4f381a467f192867e8d4196e44",
+      "group": "observer-tests-39648",
+      "original": "zdoc/reviews/20260918-gt06-s91-sparse-attribution/observer-tests-39648/wait/result.json",
+      "original_sha256": "8c10f0ad84f26f8a454b69048ade9b5b1428ba4f381a467f192867e8d4196e44",
+      "size_bytes": 1178
+    },
+    {
+      "copy": "copies/observer-tests-39648/wait/supervisor-console-stderr.txt",
+      "copy_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "group": "observer-tests-39648",
+      "original": "zdoc/reviews/20260918-gt06-s91-sparse-attribution/observer-tests-39648/wait/supervisor-console-stderr.txt",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "copy": "copies/observer-tests-39648/wait/supervisor-console-stdout.txt",
+      "copy_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "group": "observer-tests-39648",
+      "original": "zdoc/reviews/20260918-gt06-s91-sparse-attribution/observer-tests-39648/wait/supervisor-console-stdout.txt",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "copy": "copies/preflight01/benchmark-profile.json",
+      "copy_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/benchmark-profile.json",
+      "original_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+      "size_bytes": 718
+    },
+    {
+      "copy": "copies/preflight01/context.json",
+      "copy_sha256": "139ccbd932740a4b55995d0a23505d139668a7f3ee56b3f676ddf379a2a8ace1",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/context.json",
+      "original_sha256": "139ccbd932740a4b55995d0a23505d139668a7f3ee56b3f676ddf379a2a8ace1",
+      "size_bytes": 5507
+    },
+    {
+      "copy": "copies/preflight01/diagnostic.json",
+      "copy_sha256": "e7454612b8759cad8dd76294d37d85792bb290da51acb9637204be6d2084cdcc",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/diagnostic.json",
+      "original_sha256": "e7454612b8759cad8dd76294d37d85792bb290da51acb9637204be6d2084cdcc",
+      "size_bytes": 7347
+    },
+    {
+      "copy": "copies/preflight01/import-host/capture.json",
+      "copy_sha256": "a5fcd5955ab532278fbee6c4b70958235208faa263285a7eba498de2765c4630",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/import-host/capture.json",
+      "original_sha256": "a5fcd5955ab532278fbee6c4b70958235208faa263285a7eba498de2765c4630",
+      "size_bytes": 1340
+    },
+    {
+      "copy": "copies/preflight01/import-host/invocation.json",
+      "copy_sha256": "e050b85fe92c1546b8335c10545444b7684a17dd1066cdb14b587267623db92a",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/import-host/invocation.json",
+      "original_sha256": "e050b85fe92c1546b8335c10545444b7684a17dd1066cdb14b587267623db92a",
+      "size_bytes": 8714
+    },
+    {
+      "copy": "copies/preflight01/import-host/process-exit.json",
+      "copy_sha256": "0298399569514642264e72ab9abedb7e215d715ead9016fbdbceac3ea66eae5e",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/import-host/process-exit.json",
+      "original_sha256": "0298399569514642264e72ab9abedb7e215d715ead9016fbdbceac3ea66eae5e",
+      "size_bytes": 29
+    },
+    {
+      "copy": "copies/preflight01/import-host/process-start.json",
+      "copy_sha256": "67dc8000f520f65780e595e70b0f5a99e136d90bfd6d5536a24dc614940e6775",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/import-host/process-start.json",
+      "original_sha256": "67dc8000f520f65780e595e70b0f5a99e136d90bfd6d5536a24dc614940e6775",
+      "size_bytes": 13
+    },
+    {
+      "copy": "copies/preflight01/import-host/stderr.txt",
+      "copy_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/import-host/stderr.txt",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "copy": "copies/preflight01/import-host/stdout.txt",
+      "copy_sha256": "9b5e37b85c8c4f11090de482aee3734b6c7993ad884a62121b2adcc9dfdd6003",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/import-host/stdout.txt",
+      "original_sha256": "9b5e37b85c8c4f11090de482aee3734b6c7993ad884a62121b2adcc9dfdd6003",
+      "size_bytes": 1492
+    },
+    {
+      "copy": "copies/preflight01/native-overlay.json",
+      "copy_sha256": "68c867c1d566c932982ea2f2cee1711cb28c6aaa6f271862cfba3a5e8f9e714d",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/native-overlay.json",
+      "original_sha256": "68c867c1d566c932982ea2f2cee1711cb28c6aaa6f271862cfba3a5e8f9e714d",
+      "size_bytes": 591
+    },
+    {
+      "copy": "copies/preflight01/preflight.json",
+      "copy_sha256": "3b5b19455dfe75944c8eb192319678ba6b935c2e9e178aed825bcda93767f13a",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/preflight.json",
+      "original_sha256": "3b5b19455dfe75944c8eb192319678ba6b935c2e9e178aed825bcda93767f13a",
+      "size_bytes": 1650
+    },
+    {
+      "copy": "copies/preflight01/project/addons/hh_benchmark/benchmark_native.gd",
+      "copy_sha256": "a8a287c2b9c4d8c6a3a6030684db74aaaa7ee7f84e4e3fb0e0c6974f207b2efd",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/project/addons/hh_benchmark/benchmark_native.gd",
+      "original_sha256": "a8a287c2b9c4d8c6a3a6030684db74aaaa7ee7f84e4e3fb0e0c6974f207b2efd",
+      "size_bytes": 60759
+    },
+    {
+      "copy": "copies/preflight01/project/addons/hh_benchmark/plugin.cfg",
+      "copy_sha256": "648d8821a36d0abc825ef1f380b4917639074302a619cb25a798df987a5a1092",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/project/addons/hh_benchmark/plugin.cfg",
+      "original_sha256": "648d8821a36d0abc825ef1f380b4917639074302a619cb25a798df987a5a1092",
+      "size_bytes": 189
+    },
+    {
+      "copy": "copies/preflight01/project/addons/hh_studio/jcs_godot.gd",
+      "copy_sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/project/addons/hh_studio/jcs_godot.gd",
+      "original_sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5",
+      "size_bytes": 10165
+    },
+    {
+      "copy": "copies/preflight01/project/addons/hh_studio/jcs_godot.gd.uid",
+      "copy_sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/project/addons/hh_studio/jcs_godot.gd.uid",
+      "original_sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b",
+      "size_bytes": 20
+    },
+    {
+      "copy": "copies/preflight01/project/addons/hh_studio/plugin.cfg",
+      "copy_sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/project/addons/hh_studio/plugin.cfg",
+      "original_sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c",
+      "size_bytes": 165
+    },
+    {
+      "copy": "copies/preflight01/project/addons/hh_studio/plugin.gd",
+      "copy_sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/project/addons/hh_studio/plugin.gd",
+      "original_sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036",
+      "size_bytes": 23043
+    },
+    {
+      "copy": "copies/preflight01/project/addons/hh_studio/plugin.gd.uid",
+      "copy_sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/project/addons/hh_studio/plugin.gd.uid",
+      "original_sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d",
+      "size_bytes": 20
+    },
+    {
+      "copy": "copies/preflight01/project/addons/hh_studio/scene_commands.gd",
+      "copy_sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/project/addons/hh_studio/scene_commands.gd",
+      "original_sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069",
+      "size_bytes": 32174
+    },
+    {
+      "copy": "copies/preflight01/project/addons/hh_studio/scene_commands.gd.uid",
+      "copy_sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/project/addons/hh_studio/scene_commands.gd.uid",
+      "original_sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69",
+      "size_bytes": 19
+    },
+    {
+      "copy": "copies/preflight01/project/benchmark/.gdignore",
+      "copy_sha256": "3d078ee3c08af2f64daca29255d23d366dc0a9bdbef8a872442d5642bfb84cf8",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/project/benchmark/.gdignore",
+      "original_sha256": "3d078ee3c08af2f64daca29255d23d366dc0a9bdbef8a872442d5642bfb84cf8",
+      "size_bytes": 53
+    },
+    {
+      "copy": "copies/preflight01/project/benchmark/input.json",
+      "copy_sha256": "7e0a437df85c34a1fec6c77665cc52576ff1fd0807598e8a0f436553d6a08ae3",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/project/benchmark/input.json",
+      "original_sha256": "7e0a437df85c34a1fec6c77665cc52576ff1fd0807598e8a0f436553d6a08ae3",
+      "size_bytes": 380
+    },
+    {
+      "copy": "copies/preflight01/project/project.godot",
+      "copy_sha256": "819b521edff745f02f7c30e96ceffe21c70d8ef4fc32e95b96df37877e817ce1",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/project/project.godot",
+      "original_sha256": "819b521edff745f02f7c30e96ceffe21c70d8ef4fc32e95b96df37877e817ce1",
+      "size_bytes": 838
+    },
+    {
+      "copy": "copies/preflight01/project/scenes/fixture.tscn",
+      "copy_sha256": "51eaa111f832327d74b2031d382eb22ab30c8b725323e26ebcf7a66bbef571cb",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/project/scenes/fixture.tscn",
+      "original_sha256": "51eaa111f832327d74b2031d382eb22ab30c8b725323e26ebcf7a66bbef571cb",
+      "size_bytes": 235
+    },
+    {
+      "copy": "copies/preflight01/project/scripts/fixture_actor.gd",
+      "copy_sha256": "30116960b59778bee92698077689481f7936f41a2d722ddbe23626cbe3fc55cd",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/project/scripts/fixture_actor.gd",
+      "original_sha256": "30116960b59778bee92698077689481f7936f41a2d722ddbe23626cbe3fc55cd",
+      "size_bytes": 50
+    },
+    {
+      "copy": "copies/preflight01/project/scripts/fixture_actor.gd.uid",
+      "copy_sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/project/scripts/fixture_actor.gd.uid",
+      "original_sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142",
+      "size_bytes": 20
+    },
+    {
+      "copy": "copies/preflight01/source/studio/blender-addon/ipc_client.py",
+      "copy_sha256": "ee5d77e52dabb8b746e528be2acddc07b821f6b6724e9de9a36ec18b71cd8da9",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/source/studio/blender-addon/ipc_client.py",
+      "original_sha256": "ee5d77e52dabb8b746e528be2acddc07b821f6b6724e9de9a36ec18b71cd8da9",
+      "size_bytes": 16349
+    },
+    {
+      "copy": "copies/preflight01/source/studio/contracts/perf-collector.schema.json",
+      "copy_sha256": "394d1df03bdfd736ea3fe9f260e9d718d35f3820cde35d1c45ccab65fbc24834",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/source/studio/contracts/perf-collector.schema.json",
+      "original_sha256": "394d1df03bdfd736ea3fe9f260e9d718d35f3820cde35d1c45ccab65fbc24834",
+      "size_bytes": 30060
+    },
+    {
+      "copy": "copies/preflight01/source/studio/godot-addon/addons/hh_studio/plugin.cfg",
+      "copy_sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/source/studio/godot-addon/addons/hh_studio/plugin.cfg",
+      "original_sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c",
+      "size_bytes": 165
+    },
+    {
+      "copy": "copies/preflight01/source/studio/godot-addon/addons/hh_studio/plugin.gd",
+      "copy_sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/source/studio/godot-addon/addons/hh_studio/plugin.gd",
+      "original_sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036",
+      "size_bytes": 23043
+    },
+    {
+      "copy": "copies/preflight01/source/studio/godot-addon/addons/hh_studio/scene_commands.gd",
+      "copy_sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/source/studio/godot-addon/addons/hh_studio/scene_commands.gd",
+      "original_sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069",
+      "size_bytes": 32174
+    },
+    {
+      "copy": "copies/preflight01/source/studio/godot-addon/bundle_staging.py",
+      "copy_sha256": "3d614edbec8e9a7f5ad3caf2b9694d7498df129de95683952268621f91d68e43",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/source/studio/godot-addon/bundle_staging.py",
+      "original_sha256": "3d614edbec8e9a7f5ad3caf2b9694d7498df129de95683952268621f91d68e43",
+      "size_bytes": 15005
+    },
+    {
+      "copy": "copies/preflight01/source/studio/godot-addon/bundle_v2.py",
+      "copy_sha256": "2c5cdc71cdaf80f58bb93ec791e84bab8bd02cd4d9bdbd93d635db13583de62a",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/source/studio/godot-addon/bundle_v2.py",
+      "original_sha256": "2c5cdc71cdaf80f58bb93ec791e84bab8bd02cd4d9bdbd93d635db13583de62a",
+      "size_bytes": 8475
+    },
+    {
+      "copy": "copies/preflight01/source/studio/godot-addon/cli_job.py",
+      "copy_sha256": "5a0f37bc129bde409a2657054fb091d637d838e442d45a69e7adc1f1527d4c88",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/source/studio/godot-addon/cli_job.py",
+      "original_sha256": "5a0f37bc129bde409a2657054fb091d637d838e442d45a69e7adc1f1527d4c88",
+      "size_bytes": 12672
+    },
+    {
+      "copy": "copies/preflight01/source/studio/godot-addon/fixture_profile/addons/hh_studio/jcs_godot.gd.uid",
+      "copy_sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/source/studio/godot-addon/fixture_profile/addons/hh_studio/jcs_godot.gd.uid",
+      "original_sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b",
+      "size_bytes": 20
+    },
+    {
+      "copy": "copies/preflight01/source/studio/godot-addon/fixture_profile/addons/hh_studio/plugin.gd.uid",
+      "copy_sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/source/studio/godot-addon/fixture_profile/addons/hh_studio/plugin.gd.uid",
+      "original_sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d",
+      "size_bytes": 20
+    },
+    {
+      "copy": "copies/preflight01/source/studio/godot-addon/fixture_profile/addons/hh_studio/scene_commands.gd.uid",
+      "copy_sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/source/studio/godot-addon/fixture_profile/addons/hh_studio/scene_commands.gd.uid",
+      "original_sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69",
+      "size_bytes": 19
+    },
+    {
+      "copy": "copies/preflight01/source/studio/godot-addon/fixture_profile/project.godot",
+      "copy_sha256": "2d4fa9c7261fc5ec4292094854ffa79b602249671a03db3c9808ea7521f4fa51",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/source/studio/godot-addon/fixture_profile/project.godot",
+      "original_sha256": "2d4fa9c7261fc5ec4292094854ffa79b602249671a03db3c9808ea7521f4fa51",
+      "size_bytes": 282
+    },
+    {
+      "copy": "copies/preflight01/source/studio/godot-addon/fixture_profile/scripts/fixture_actor.gd.uid",
+      "copy_sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/source/studio/godot-addon/fixture_profile/scripts/fixture_actor.gd.uid",
+      "original_sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142",
+      "size_bytes": 20
+    },
+    {
+      "copy": "copies/preflight01/source/studio/godot-addon/fixture_profile/source-pins.json",
+      "copy_sha256": "c0a40998bd63d4d3dc628e4b9d2e0932fcb5725d1870adc43d0fdc3af2fdeed2",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/source/studio/godot-addon/fixture_profile/source-pins.json",
+      "original_sha256": "c0a40998bd63d4d3dc628e4b9d2e0932fcb5725d1870adc43d0fdc3af2fdeed2",
+      "size_bytes": 1873
+    },
+    {
+      "copy": "copies/preflight01/source/studio/godot-addon/fixture_profile.py",
+      "copy_sha256": "25e1667dd930dcf0746b071fc29ea3460bc18d5fb9f3f83e806c1793028f21ae",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/source/studio/godot-addon/fixture_profile.py",
+      "original_sha256": "25e1667dd930dcf0746b071fc29ea3460bc18d5fb9f3f83e806c1793028f21ae",
+      "size_bytes": 6020
+    },
+    {
+      "copy": "copies/preflight01/source/studio/host/blender/__init__.py",
+      "copy_sha256": "812b123ddad075d7bb1892a38e099fdb48db147f80a27db83101c2b640044a90",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/source/studio/host/blender/__init__.py",
+      "original_sha256": "812b123ddad075d7bb1892a38e099fdb48db147f80a27db83101c2b640044a90",
+      "size_bytes": 69
+    },
+    {
+      "copy": "copies/preflight01/source/studio/host/blender/deadline.py",
+      "copy_sha256": "55fb3f77cadd9edc633186e1d6727bbed06216d659846aa3836e2582eef46926",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/source/studio/host/blender/deadline.py",
+      "original_sha256": "55fb3f77cadd9edc633186e1d6727bbed06216d659846aa3836e2582eef46926",
+      "size_bytes": 1130
+    },
+    {
+      "copy": "copies/preflight01/source/studio/host/blender/export_job.py",
+      "copy_sha256": "8eb0cc4a93361faf8cf09a3f11fd0278ec3fcdb2c9863e4b2ee98852c67ecdfe",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/source/studio/host/blender/export_job.py",
+      "original_sha256": "8eb0cc4a93361faf8cf09a3f11fd0278ec3fcdb2c9863e4b2ee98852c67ecdfe",
+      "size_bytes": 13605
+    },
+    {
+      "copy": "copies/preflight01/source/studio/host/blender/glb_preflight.py",
+      "copy_sha256": "5e4015c77ee3dced056634f89a0ba1fe2f94dd6650250fac8b03317c12d54f62",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/source/studio/host/blender/glb_preflight.py",
+      "original_sha256": "5e4015c77ee3dced056634f89a0ba1fe2f94dd6650250fac8b03317c12d54f62",
+      "size_bytes": 11815
+    },
+    {
+      "copy": "copies/preflight01/source/studio/host/blender/ui_host.py",
+      "copy_sha256": "0fa5afa44046b61b68baafc275b39ade4787a55221074018db588c4c2f71dc35",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/source/studio/host/blender/ui_host.py",
+      "original_sha256": "0fa5afa44046b61b68baafc275b39ade4787a55221074018db588c4c2f71dc35",
+      "size_bytes": 22464
+    },
+    {
+      "copy": "copies/preflight01/source/studio/host/core/journal.py",
+      "copy_sha256": "826bc5e4c60817e3a22dd2e0b6a199eb522a4eb78532cb5300249fe9056c0cc6",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/source/studio/host/core/journal.py",
+      "original_sha256": "826bc5e4c60817e3a22dd2e0b6a199eb522a4eb78532cb5300249fe9056c0cc6",
+      "size_bytes": 29602
+    },
+    {
+      "copy": "copies/preflight01/source/studio/host/core/limits.py",
+      "copy_sha256": "9d01ce56f5976bb034e60e33bf4b7986cdc44b3a8ffad46da738a6ed1b143f3f",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/source/studio/host/core/limits.py",
+      "original_sha256": "9d01ce56f5976bb034e60e33bf4b7986cdc44b3a8ffad46da738a6ed1b143f3f",
+      "size_bytes": 15813
+    },
+    {
+      "copy": "copies/preflight01/source/studio/host/core/private_store.py",
+      "copy_sha256": "c914b5a66a45660c782ecd43fd2321c238702340f3b33062e284feada4d46476",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/source/studio/host/core/private_store.py",
+      "original_sha256": "c914b5a66a45660c782ecd43fd2321c238702340f3b33062e284feada4d46476",
+      "size_bytes": 20476
+    },
+    {
+      "copy": "copies/preflight01/source/studio/host/core/redaction.py",
+      "copy_sha256": "e37d998399f589d4202591a1262a7dc19231e5e4b5236b47d4c8234956275c1f",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/source/studio/host/core/redaction.py",
+      "original_sha256": "e37d998399f589d4202591a1262a7dc19231e5e4b5236b47d4c8234956275c1f",
+      "size_bytes": 10038
+    },
+    {
+      "copy": "copies/preflight01/source/studio/host/core/safe_create.py",
+      "copy_sha256": "681fb7c0f4e74d82597bd8049a6b42cde0ea73941d879ec8ef0ba4df326d0606",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/source/studio/host/core/safe_create.py",
+      "original_sha256": "681fb7c0f4e74d82597bd8049a6b42cde0ea73941d879ec8ef0ba4df326d0606",
+      "size_bytes": 13170
+    },
+    {
+      "copy": "copies/preflight01/source/studio/host/core/safe_open.py",
+      "copy_sha256": "efc083f1c4fa875d3f748602924a05712aa60fed3abcdb46d058672930201535",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/source/studio/host/core/safe_open.py",
+      "original_sha256": "efc083f1c4fa875d3f748602924a05712aa60fed3abcdb46d058672930201535",
+      "size_bytes": 12093
+    },
+    {
+      "copy": "copies/preflight01/source/studio/host/core/transport.py",
+      "copy_sha256": "1ec03356b1cb8c8987e1604bcb164aea6a9934dbe259451c19e12de36398aba0",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/source/studio/host/core/transport.py",
+      "original_sha256": "1ec03356b1cb8c8987e1604bcb164aea6a9934dbe259451c19e12de36398aba0",
+      "size_bytes": 47056
+    },
+    {
+      "copy": "copies/preflight01/source/studio/host/replay/disk_journal_index.py",
+      "copy_sha256": "56beb93119dfb66feec32eb51d389fc089d89911c0a1be199071c17e1801cb28",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/source/studio/host/replay/disk_journal_index.py",
+      "original_sha256": "56beb93119dfb66feec32eb51d389fc089d89911c0a1be199071c17e1801cb28",
+      "size_bytes": 13593
+    },
+    {
+      "copy": "copies/preflight01/source/studio/host/replay/perf.py",
+      "copy_sha256": "7c24c11989420e1600bcb20b8949fea44ea93b381bcab824e471465f5148edc7",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/source/studio/host/replay/perf.py",
+      "original_sha256": "7c24c11989420e1600bcb20b8949fea44ea93b381bcab824e471465f5148edc7",
+      "size_bytes": 19085
+    },
+    {
+      "copy": "copies/preflight01/source/studio/host/replay/process_probe.py",
+      "copy_sha256": "53b6b24813e6ba6dc040dcbb87aee529b7f4e8855a64bcd0689b19c240180500",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/source/studio/host/replay/process_probe.py",
+      "original_sha256": "53b6b24813e6ba6dc040dcbb87aee529b7f4e8855a64bcd0689b19c240180500",
+      "size_bytes": 5485
+    },
+    {
+      "copy": "copies/preflight01/source/studio/host/replay/verified_journal.py",
+      "copy_sha256": "129baa4d9e08c8a1d5acf2ea05c9c89a4fdddb53ca6f3baf2d61311ab98e62ab",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/source/studio/host/replay/verified_journal.py",
+      "original_sha256": "129baa4d9e08c8a1d5acf2ea05c9c89a4fdddb53ca6f3baf2d61311ab98e62ab",
+      "size_bytes": 9155
+    },
+    {
+      "copy": "copies/preflight01/source/studio/pipeline/__init__.py",
+      "copy_sha256": "ffea2c35acdfe30636d61970e16c573e4de68228c4f7e780a6061d7be3fbbc68",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/source/studio/pipeline/__init__.py",
+      "original_sha256": "ffea2c35acdfe30636d61970e16c573e4de68228c4f7e780a6061d7be3fbbc68",
+      "size_bytes": 79
+    },
+    {
+      "copy": "copies/preflight01/source/studio/pipeline/native_job.py",
+      "copy_sha256": "456bb70c315e38cf7a29354b7df51862e1ded4578f6b22d9110bf628547c20ca",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/source/studio/pipeline/native_job.py",
+      "original_sha256": "456bb70c315e38cf7a29354b7df51862e1ded4578f6b22d9110bf628547c20ca",
+      "size_bytes": 12512
+    },
+    {
+      "copy": "copies/preflight01/source/studio/protocol/__init__.py",
+      "copy_sha256": "a906ecde6f60d5fa2febd3f8a4a5fae440d87fea69e7d7e51a750677e03ad09f",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/source/studio/protocol/__init__.py",
+      "original_sha256": "a906ecde6f60d5fa2febd3f8a4a5fae440d87fea69e7d7e51a750677e03ad09f",
+      "size_bytes": 881
+    },
+    {
+      "copy": "copies/preflight01/source/studio/protocol/_rfc8785/__init__.py",
+      "copy_sha256": "49d914da77ba606d535832d97df2e43458a8e51d57cdba6883a0a895ac50484b",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/source/studio/protocol/_rfc8785/__init__.py",
+      "original_sha256": "49d914da77ba606d535832d97df2e43458a8e51d57cdba6883a0a895ac50484b",
+      "size_bytes": 505
+    },
+    {
+      "copy": "copies/preflight01/source/studio/protocol/_rfc8785/_impl.py",
+      "copy_sha256": "c25bc3a046528482d53bee3487b837f31dd9c05f33e8f13288c7aab320932cec",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/source/studio/protocol/_rfc8785/_impl.py",
+      "original_sha256": "c25bc3a046528482d53bee3487b837f31dd9c05f33e8f13288c7aab320932cec",
+      "size_bytes": 7251
+    },
+    {
+      "copy": "copies/preflight01/source/studio/protocol/core.py",
+      "copy_sha256": "e8153f5a4dcf639f4d1cbce2fa74f7866d963a692c68e4e8d1477136889bd93e",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/source/studio/protocol/core.py",
+      "original_sha256": "e8153f5a4dcf639f4d1cbce2fa74f7866d963a692c68e4e8d1477136889bd93e",
+      "size_bytes": 19886
+    },
+    {
+      "copy": "copies/preflight01/source/studio/protocol/jcs_godot.gd",
+      "copy_sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/source/studio/protocol/jcs_godot.gd",
+      "original_sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5",
+      "size_bytes": 10165
+    },
+    {
+      "copy": "copies/preflight01/source/studio/tests/replay/benchmark_assembly.py",
+      "copy_sha256": "7573ca96986eb1c10298b8998b3dbaa3326fd80da2c2696150aeb22165d2911d",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/source/studio/tests/replay/benchmark_assembly.py",
+      "original_sha256": "7573ca96986eb1c10298b8998b3dbaa3326fd80da2c2696150aeb22165d2911d",
+      "size_bytes": 48182
+    },
+    {
+      "copy": "copies/preflight01/source/studio/tests/replay/benchmark_commands.py",
+      "copy_sha256": "707b6f9a9291214d9ee848d77f1e4a3dc2267de5f2aeb5e48fa4365866a842c9",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/source/studio/tests/replay/benchmark_commands.py",
+      "original_sha256": "707b6f9a9291214d9ee848d77f1e4a3dc2267de5f2aeb5e48fa4365866a842c9",
+      "size_bytes": 19779
+    },
+    {
+      "copy": "copies/preflight01/source/studio/tests/replay/benchmark_job.py",
+      "copy_sha256": "be424a6f37ae573ac4bf40954b31017025daee2147699c80b05f9a0ab70e1611",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/source/studio/tests/replay/benchmark_job.py",
+      "original_sha256": "be424a6f37ae573ac4bf40954b31017025daee2147699c80b05f9a0ab70e1611",
+      "size_bytes": 24991
+    },
+    {
+      "copy": "copies/preflight01/source/studio/tests/replay/benchmark_native.gd",
+      "copy_sha256": "52fbd9af5c6191ada5baf1d7195a75685ed5e27a95f4d244af8b4d679f8c00f2",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/source/studio/tests/replay/benchmark_native.gd",
+      "original_sha256": "52fbd9af5c6191ada5baf1d7195a75685ed5e27a95f4d244af8b4d679f8c00f2",
+      "size_bytes": 51618
+    },
+    {
+      "copy": "copies/preflight01/source/studio/tests/replay/benchmark_plugin.cfg",
+      "copy_sha256": "648d8821a36d0abc825ef1f380b4917639074302a619cb25a798df987a5a1092",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/source/studio/tests/replay/benchmark_plugin.cfg",
+      "original_sha256": "648d8821a36d0abc825ef1f380b4917639074302a619cb25a798df987a5a1092",
+      "size_bytes": 189
+    },
+    {
+      "copy": "copies/preflight01/source/studio/tests/replay/benchmark_profile.py",
+      "copy_sha256": "ddbd98583060f791226fca83e275cf01204b37112627383198dcef4ec6f6f233",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/source/studio/tests/replay/benchmark_profile.py",
+      "original_sha256": "ddbd98583060f791226fca83e275cf01204b37112627383198dcef4ec6f6f233",
+      "size_bytes": 19625
+    },
+    {
+      "copy": "copies/preflight01/source/studio/tests/replay/benchmark_readiness.py",
+      "copy_sha256": "842db6244d93384932929544045654f089d67f6f304624b7348b7d5c4583ab68",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/source/studio/tests/replay/benchmark_readiness.py",
+      "original_sha256": "842db6244d93384932929544045654f089d67f6f304624b7348b7d5c4583ab68",
+      "size_bytes": 6746
+    },
+    {
+      "copy": "copies/preflight01/source/studio/tests/replay/benchmark_transport.py",
+      "copy_sha256": "87875809baa4845fcffba8e2c7d82f7a5bce833099c89d4852f2aab931c34df0",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/source/studio/tests/replay/benchmark_transport.py",
+      "original_sha256": "87875809baa4845fcffba8e2c7d82f7a5bce833099c89d4852f2aab931c34df0",
+      "size_bytes": 4451
+    },
+    {
+      "copy": "copies/preflight01/source/studio/tests/replay/campaign_task.ps1",
+      "copy_sha256": "405e2abfa39332b1313871763184fdda0755ff998ec83310e67e10cebfe2ebb9",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/source/studio/tests/replay/campaign_task.ps1",
+      "original_sha256": "405e2abfa39332b1313871763184fdda0755ff998ec83310e67e10cebfe2ebb9",
+      "size_bytes": 18607
+    },
+    {
+      "copy": "copies/preflight01/source/studio/tests/replay/run_benchmark_campaign.py",
+      "copy_sha256": "bb43ecc04c2de4872177a440eb071d533efdaa9e8194f62b4e0907bad8d4b252",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/source/studio/tests/replay/run_benchmark_campaign.py",
+      "original_sha256": "bb43ecc04c2de4872177a440eb071d533efdaa9e8194f62b4e0907bad8d4b252",
+      "size_bytes": 53592
+    },
+    {
+      "copy": "copies/preflight01/source/studio/tests/replay/run_campaign_task.py",
+      "copy_sha256": "f5cb71fa96b8fd2f935ac933dcd5190cef2b3b6821f031bfe72becb2d360a6fd",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/source/studio/tests/replay/run_campaign_task.py",
+      "original_sha256": "f5cb71fa96b8fd2f935ac933dcd5190cef2b3b6821f031bfe72becb2d360a6fd",
+      "size_bytes": 8033
+    },
+    {
+      "copy": "copies/preflight01/source/studio/tests/replay/run_native_benchmark.py",
+      "copy_sha256": "e6b0f8e9711ac881cfa65b4537232c685ff577af0a13778a51cc54999b1c1fc7",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/source/studio/tests/replay/run_native_benchmark.py",
+      "original_sha256": "e6b0f8e9711ac881cfa65b4537232c685ff577af0a13778a51cc54999b1c1fc7",
+      "size_bytes": 26986
+    },
+    {
+      "copy": "copies/preflight01/source/studio/toolchain.lock.json",
+      "copy_sha256": "28bdce555e9a44ef68193723d512feda02c42a417ceb78faf0b29f52d095dca9",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/source/studio/toolchain.lock.json",
+      "original_sha256": "28bdce555e9a44ef68193723d512feda02c42a417ceb78faf0b29f52d095dca9",
+      "size_bytes": 3026
+    },
+    {
+      "copy": "copies/preflight01/source/zdoc/reviews/20260918-gt06-s91-sparse-attribution/diagnose_sequence_s91.py",
+      "copy_sha256": "195d4d1a77984644e0a906b00dce95f560481b9b9ac8046d55982b72528fcb7e",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/source/zdoc/reviews/20260918-gt06-s91-sparse-attribution/diagnose_sequence_s91.py",
+      "original_sha256": "195d4d1a77984644e0a906b00dce95f560481b9b9ac8046d55982b72528fcb7e",
+      "size_bytes": 13398
+    },
+    {
+      "copy": "copies/preflight01/source/zdoc/reviews/20260918-gt06-s91-sparse-attribution/launch_observer.py",
+      "copy_sha256": "b86b9d97a9438382b9246ee23a4b1180d52a1aa67d1db3216edaf602fd2c0cd4",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/source/zdoc/reviews/20260918-gt06-s91-sparse-attribution/launch_observer.py",
+      "original_sha256": "b86b9d97a9438382b9246ee23a4b1180d52a1aa67d1db3216edaf602fd2c0cd4",
+      "size_bytes": 19287
+    },
+    {
+      "copy": "copies/preflight01/source/zdoc/reviews/20260918-gt06-s91-sparse-attribution/object_probe_s91.gd",
+      "copy_sha256": "0837a4a6d21715c3706ce376750dc2f28ebae7f4f214f2988b4ea90a71a25281",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/source/zdoc/reviews/20260918-gt06-s91-sparse-attribution/object_probe_s91.gd",
+      "original_sha256": "0837a4a6d21715c3706ce376750dc2f28ebae7f4f214f2988b4ea90a71a25281",
+      "size_bytes": 9114
+    },
+    {
+      "copy": "copies/preflight01/source/zdoc/reviews/20260918-gt06-s91-sparse-attribution/patch_native_s91.py",
+      "copy_sha256": "f4226f40839e40579ae5c489cfd33800e3739bb6e280193c38a54414afaf2bc0",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/source/zdoc/reviews/20260918-gt06-s91-sparse-attribution/patch_native_s91.py",
+      "original_sha256": "f4226f40839e40579ae5c489cfd33800e3739bb6e280193c38a54414afaf2bc0",
+      "size_bytes": 4260
+    },
+    {
+      "copy": "copies/preflight01/source/zdoc/reviews/20260918-gt06-s91-sparse-attribution/register_task.ps1",
+      "copy_sha256": "40a4edc3a4bc8c5aa92b86a31b7d6d51340f510d540321b133fb13a49bd7aa57",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/source/zdoc/reviews/20260918-gt06-s91-sparse-attribution/register_task.ps1",
+      "original_sha256": "40a4edc3a4bc8c5aa92b86a31b7d6d51340f510d540321b133fb13a49bd7aa57",
+      "size_bytes": 8806
+    },
+    {
+      "copy": "copies/preflight01/source/zdoc/reviews/20260918-gt06-s91-sparse-attribution/test_launch_observer.py",
+      "copy_sha256": "aaa71b0d61e6fbc71982af22a6bc8e494017f5e6886e8455c1e8056ec0c5ac34",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/source/zdoc/reviews/20260918-gt06-s91-sparse-attribution/test_launch_observer.py",
+      "original_sha256": "aaa71b0d61e6fbc71982af22a6bc8e494017f5e6886e8455c1e8056ec0c5ac34",
+      "size_bytes": 3456
+    },
+    {
+      "copy": "copies/preflight01/source-files.json",
+      "copy_sha256": "9aeeeb4d5e861d5cadff699493913610ec4c54e11683e03ca1631123d7a94552",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/source-files.json",
+      "original_sha256": "9aeeeb4d5e861d5cadff699493913610ec4c54e11683e03ca1631123d7a94552",
+      "size_bytes": 5156
+    },
+    {
+      "copy": "copies/preflight01/toolchain.lock.json",
+      "copy_sha256": "28bdce555e9a44ef68193723d512feda02c42a417ceb78faf0b29f52d095dca9",
+      "group": "preflight01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-attribution-preflight-01/toolchain.lock.json",
+      "original_sha256": "28bdce555e9a44ef68193723d512feda02c42a417ceb78faf0b29f52d095dca9",
+      "size_bytes": 3026
+    },
+    {
+      "copy": "copies/smoke01/native-host/appdata/Godot/app_userdata/S91 Controlled Diagnostic/logs/godot.log",
+      "copy_sha256": "cc840d00348a4b1aed9510e45ff0bbc02e4f5683a16f467a02ab08caac8824bc",
+      "group": "smoke01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-01/native-host/appdata/Godot/app_userdata/S91 Controlled Diagnostic/logs/godot.log",
+      "original_sha256": "cc840d00348a4b1aed9510e45ff0bbc02e4f5683a16f467a02ab08caac8824bc",
+      "size_bytes": 1194
+    },
+    {
+      "copy": "copies/smoke01/native-host/capture.json",
+      "copy_sha256": "d7f0d4004dc816e0d4153360c381cfc4e8455c1e73173e07dea2737ece4b23ed",
+      "group": "smoke01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-01/native-host/capture.json",
+      "original_sha256": "d7f0d4004dc816e0d4153360c381cfc4e8455c1e73173e07dea2737ece4b23ed",
+      "size_bytes": 1306
+    },
+    {
+      "copy": "copies/smoke01/native-host/invocation.json",
+      "copy_sha256": "0ba503253d9b7d3022a6df33ebde117447dcfa5ddc3463b3ac47ac2bfdb69494",
+      "group": "smoke01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-01/native-host/invocation.json",
+      "original_sha256": "0ba503253d9b7d3022a6df33ebde117447dcfa5ddc3463b3ac47ac2bfdb69494",
+      "size_bytes": 3206
+    },
+    {
+      "copy": "copies/smoke01/native-host/process-exit.json",
+      "copy_sha256": "3dd3c34a9a14745f339058e6a2f72c70159054a29f3255a3af27b71b2bbd9b64",
+      "group": "smoke01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-01/native-host/process-exit.json",
+      "original_sha256": "3dd3c34a9a14745f339058e6a2f72c70159054a29f3255a3af27b71b2bbd9b64",
+      "size_bytes": 30
+    },
+    {
+      "copy": "copies/smoke01/native-host/process-start.json",
+      "copy_sha256": "f0d2c17d17e8b1145434785823600ae0c97cc4f3193eeafe138a80eb79e51a6a",
+      "group": "smoke01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-01/native-host/process-start.json",
+      "original_sha256": "f0d2c17d17e8b1145434785823600ae0c97cc4f3193eeafe138a80eb79e51a6a",
+      "size_bytes": 14
+    },
+    {
+      "copy": "copies/smoke01/native-host/stderr.txt",
+      "copy_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "group": "smoke01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-01/native-host/stderr.txt",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "copy": "copies/smoke01/native-host/stdout.txt",
+      "copy_sha256": "9ee02dfbec46e7d02a2ba705e9b183a4bcd945afae0c679d62c80ea6fbfd49b3",
+      "group": "smoke01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-01/native-host/stdout.txt",
+      "original_sha256": "9ee02dfbec46e7d02a2ba705e9b183a4bcd945afae0c679d62c80ea6fbfd49b3",
+      "size_bytes": 1197
+    },
+    {
+      "copy": "copies/smoke01/output-manifest.json",
+      "copy_sha256": "2dbae3941c5cc35723577153590fba1267ffa68ce7e6a064ce2cb8980d4bff57",
+      "group": "smoke01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-01/output-manifest.json",
+      "original_sha256": "2dbae3941c5cc35723577153590fba1267ffa68ce7e6a064ce2cb8980d4bff57",
+      "size_bytes": 6604
+    },
+    {
+      "copy": "copies/smoke01/project/out/serialization.json",
+      "copy_sha256": "389e16e16795b35672f1ed7dd91e7d66feb2c44f4f39307b4ed71c1bb886a440",
+      "group": "smoke01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-01/project/out/serialization.json",
+      "original_sha256": "389e16e16795b35672f1ed7dd91e7d66feb2c44f4f39307b4ed71c1bb886a440",
+      "size_bytes": 273
+    },
+    {
+      "copy": "copies/smoke01/project/out/smoke-status.json",
+      "copy_sha256": "b228c85bf9b76b603e2301d8fa7e3a1f72eda70c5697e8c2fdb7f08a525084ac",
+      "group": "smoke01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-01/project/out/smoke-status.json",
+      "original_sha256": "b228c85bf9b76b603e2301d8fa7e3a1f72eda70c5697e8c2fdb7f08a525084ac",
+      "size_bytes": 1097
+    },
+    {
+      "copy": "copies/smoke01/project/out/sparse-00.json",
+      "copy_sha256": "ecafa7f39055bfc08e31a9e812a4916f9193e1b6332342680d8cc9c18cc51040",
+      "group": "smoke01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-01/project/out/sparse-00.json",
+      "original_sha256": "ecafa7f39055bfc08e31a9e812a4916f9193e1b6332342680d8cc9c18cc51040",
+      "size_bytes": 1147
+    },
+    {
+      "copy": "copies/smoke01/project/out/sparse-01.json",
+      "copy_sha256": "25d63a4d4294cc863c0bc0f7af2ca9d800835d9768efce5258ce3a9c7401873a",
+      "group": "smoke01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-01/project/out/sparse-01.json",
+      "original_sha256": "25d63a4d4294cc863c0bc0f7af2ca9d800835d9768efce5258ce3a9c7401873a",
+      "size_bytes": 1324
+    },
+    {
+      "copy": "copies/smoke01/project/out/sparse-post-00.json",
+      "copy_sha256": "71e0b82dafeeac1d8586100b562c127efb003e01571b7f2f7bd3229241f00adb",
+      "group": "smoke01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-01/project/out/sparse-post-00.json",
+      "original_sha256": "71e0b82dafeeac1d8586100b562c127efb003e01571b7f2f7bd3229241f00adb",
+      "size_bytes": 535
+    },
+    {
+      "copy": "copies/smoke01/project/out/sparse-post-01.json",
+      "copy_sha256": "d6226e7c314e5b08ad004b2323dfa7c3db8cb3913ee9ade54a81fcc22a3d3c54",
+      "group": "smoke01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-01/project/out/sparse-post-01.json",
+      "original_sha256": "d6226e7c314e5b08ad004b2323dfa7c3db8cb3913ee9ade54a81fcc22a3d3c54",
+      "size_bytes": 534
+    },
+    {
+      "copy": "copies/smoke01/project/project.godot",
+      "copy_sha256": "494bbeaf1d1b16f598d14e2cf9d0d052afd97026d3e3a624d79e9c2f6f220635",
+      "group": "smoke01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-01/project/project.godot",
+      "original_sha256": "494bbeaf1d1b16f598d14e2cf9d0d052afd97026d3e3a624d79e9c2f6f220635",
+      "size_bytes": 128
+    },
+    {
+      "copy": "copies/smoke01/project/smoke.gd",
+      "copy_sha256": "6f44a575b10ee02e0f2ff44d5a9d8c36acdf62f1c2e4cccbb0fa92352b4ec7d5",
+      "group": "smoke01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-01/project/smoke.gd",
+      "original_sha256": "6f44a575b10ee02e0f2ff44d5a9d8c36acdf62f1c2e4cccbb0fa92352b4ec7d5",
+      "size_bytes": 16311
+    },
+    {
+      "copy": "copies/smoke01/smoke-input.json",
+      "copy_sha256": "a627f51cefc32e155980e7331ae0d05bfb2d6989b3c8a251cb4d993993ce485d",
+      "group": "smoke01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-01/smoke-input.json",
+      "original_sha256": "a627f51cefc32e155980e7331ae0d05bfb2d6989b3c8a251cb4d993993ce485d",
+      "size_bytes": 3391
+    },
+    {
+      "copy": "copies/smoke01/smoke-result.json",
+      "copy_sha256": "ad1c914e5ce65071abbdcbca7b429893f0bea59bdb58c74766839a1618ccf27e",
+      "group": "smoke01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-01/smoke-result.json",
+      "original_sha256": "ad1c914e5ce65071abbdcbca7b429893f0bea59bdb58c74766839a1618ccf27e",
+      "size_bytes": 192
+    },
+    {
+      "copy": "copies/smoke01/source/studio/.local/reviews/gt06-s91-sparse-smoke-01/project/project.godot",
+      "copy_sha256": "494bbeaf1d1b16f598d14e2cf9d0d052afd97026d3e3a624d79e9c2f6f220635",
+      "group": "smoke01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-01/source/studio/.local/reviews/gt06-s91-sparse-smoke-01/project/project.godot",
+      "original_sha256": "494bbeaf1d1b16f598d14e2cf9d0d052afd97026d3e3a624d79e9c2f6f220635",
+      "size_bytes": 128
+    },
+    {
+      "copy": "copies/smoke01/source/studio/.local/reviews/gt06-s91-sparse-smoke-01/project/smoke.gd",
+      "copy_sha256": "6f44a575b10ee02e0f2ff44d5a9d8c36acdf62f1c2e4cccbb0fa92352b4ec7d5",
+      "group": "smoke01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-01/source/studio/.local/reviews/gt06-s91-sparse-smoke-01/project/smoke.gd",
+      "original_sha256": "6f44a575b10ee02e0f2ff44d5a9d8c36acdf62f1c2e4cccbb0fa92352b4ec7d5",
+      "size_bytes": 16311
+    },
+    {
+      "copy": "copies/smoke01/source/studio/blender-addon/ipc_client.py",
+      "copy_sha256": "ee5d77e52dabb8b746e528be2acddc07b821f6b6724e9de9a36ec18b71cd8da9",
+      "group": "smoke01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-01/source/studio/blender-addon/ipc_client.py",
+      "original_sha256": "ee5d77e52dabb8b746e528be2acddc07b821f6b6724e9de9a36ec18b71cd8da9",
+      "size_bytes": 16349
+    },
+    {
+      "copy": "copies/smoke01/source/studio/godot-addon/cli_job.py",
+      "copy_sha256": "5a0f37bc129bde409a2657054fb091d637d838e442d45a69e7adc1f1527d4c88",
+      "group": "smoke01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-01/source/studio/godot-addon/cli_job.py",
+      "original_sha256": "5a0f37bc129bde409a2657054fb091d637d838e442d45a69e7adc1f1527d4c88",
+      "size_bytes": 12672
+    },
+    {
+      "copy": "copies/smoke01/source/studio/host/blender/__init__.py",
+      "copy_sha256": "812b123ddad075d7bb1892a38e099fdb48db147f80a27db83101c2b640044a90",
+      "group": "smoke01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-01/source/studio/host/blender/__init__.py",
+      "original_sha256": "812b123ddad075d7bb1892a38e099fdb48db147f80a27db83101c2b640044a90",
+      "size_bytes": 69
+    },
+    {
+      "copy": "copies/smoke01/source/studio/host/blender/deadline.py",
+      "copy_sha256": "55fb3f77cadd9edc633186e1d6727bbed06216d659846aa3836e2582eef46926",
+      "group": "smoke01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-01/source/studio/host/blender/deadline.py",
+      "original_sha256": "55fb3f77cadd9edc633186e1d6727bbed06216d659846aa3836e2582eef46926",
+      "size_bytes": 1130
+    },
+    {
+      "copy": "copies/smoke01/source/studio/host/blender/export_job.py",
+      "copy_sha256": "8eb0cc4a93361faf8cf09a3f11fd0278ec3fcdb2c9863e4b2ee98852c67ecdfe",
+      "group": "smoke01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-01/source/studio/host/blender/export_job.py",
+      "original_sha256": "8eb0cc4a93361faf8cf09a3f11fd0278ec3fcdb2c9863e4b2ee98852c67ecdfe",
+      "size_bytes": 13605
+    },
+    {
+      "copy": "copies/smoke01/source/studio/host/blender/glb_preflight.py",
+      "copy_sha256": "5e4015c77ee3dced056634f89a0ba1fe2f94dd6650250fac8b03317c12d54f62",
+      "group": "smoke01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-01/source/studio/host/blender/glb_preflight.py",
+      "original_sha256": "5e4015c77ee3dced056634f89a0ba1fe2f94dd6650250fac8b03317c12d54f62",
+      "size_bytes": 11815
+    },
+    {
+      "copy": "copies/smoke01/source/studio/host/blender/ui_host.py",
+      "copy_sha256": "0fa5afa44046b61b68baafc275b39ade4787a55221074018db588c4c2f71dc35",
+      "group": "smoke01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-01/source/studio/host/blender/ui_host.py",
+      "original_sha256": "0fa5afa44046b61b68baafc275b39ade4787a55221074018db588c4c2f71dc35",
+      "size_bytes": 22464
+    },
+    {
+      "copy": "copies/smoke01/source/studio/host/core/limits.py",
+      "copy_sha256": "9d01ce56f5976bb034e60e33bf4b7986cdc44b3a8ffad46da738a6ed1b143f3f",
+      "group": "smoke01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-01/source/studio/host/core/limits.py",
+      "original_sha256": "9d01ce56f5976bb034e60e33bf4b7986cdc44b3a8ffad46da738a6ed1b143f3f",
+      "size_bytes": 15813
+    },
+    {
+      "copy": "copies/smoke01/source/studio/host/core/private_store.py",
+      "copy_sha256": "c914b5a66a45660c782ecd43fd2321c238702340f3b33062e284feada4d46476",
+      "group": "smoke01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-01/source/studio/host/core/private_store.py",
+      "original_sha256": "c914b5a66a45660c782ecd43fd2321c238702340f3b33062e284feada4d46476",
+      "size_bytes": 20476
+    },
+    {
+      "copy": "copies/smoke01/source/studio/host/core/safe_create.py",
+      "copy_sha256": "681fb7c0f4e74d82597bd8049a6b42cde0ea73941d879ec8ef0ba4df326d0606",
+      "group": "smoke01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-01/source/studio/host/core/safe_create.py",
+      "original_sha256": "681fb7c0f4e74d82597bd8049a6b42cde0ea73941d879ec8ef0ba4df326d0606",
+      "size_bytes": 13170
+    },
+    {
+      "copy": "copies/smoke01/source/studio/host/core/safe_open.py",
+      "copy_sha256": "efc083f1c4fa875d3f748602924a05712aa60fed3abcdb46d058672930201535",
+      "group": "smoke01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-01/source/studio/host/core/safe_open.py",
+      "original_sha256": "efc083f1c4fa875d3f748602924a05712aa60fed3abcdb46d058672930201535",
+      "size_bytes": 12093
+    },
+    {
+      "copy": "copies/smoke01/source/studio/pipeline/__init__.py",
+      "copy_sha256": "ffea2c35acdfe30636d61970e16c573e4de68228c4f7e780a6061d7be3fbbc68",
+      "group": "smoke01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-01/source/studio/pipeline/__init__.py",
+      "original_sha256": "ffea2c35acdfe30636d61970e16c573e4de68228c4f7e780a6061d7be3fbbc68",
+      "size_bytes": 79
+    },
+    {
+      "copy": "copies/smoke01/source/studio/pipeline/native_job.py",
+      "copy_sha256": "456bb70c315e38cf7a29354b7df51862e1ded4578f6b22d9110bf628547c20ca",
+      "group": "smoke01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-01/source/studio/pipeline/native_job.py",
+      "original_sha256": "456bb70c315e38cf7a29354b7df51862e1ded4578f6b22d9110bf628547c20ca",
+      "size_bytes": 12512
+    },
+    {
+      "copy": "copies/smoke01/source/studio/protocol/__init__.py",
+      "copy_sha256": "a906ecde6f60d5fa2febd3f8a4a5fae440d87fea69e7d7e51a750677e03ad09f",
+      "group": "smoke01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-01/source/studio/protocol/__init__.py",
+      "original_sha256": "a906ecde6f60d5fa2febd3f8a4a5fae440d87fea69e7d7e51a750677e03ad09f",
+      "size_bytes": 881
+    },
+    {
+      "copy": "copies/smoke01/source/studio/protocol/_rfc8785/__init__.py",
+      "copy_sha256": "49d914da77ba606d535832d97df2e43458a8e51d57cdba6883a0a895ac50484b",
+      "group": "smoke01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-01/source/studio/protocol/_rfc8785/__init__.py",
+      "original_sha256": "49d914da77ba606d535832d97df2e43458a8e51d57cdba6883a0a895ac50484b",
+      "size_bytes": 505
+    },
+    {
+      "copy": "copies/smoke01/source/studio/protocol/_rfc8785/_impl.py",
+      "copy_sha256": "c25bc3a046528482d53bee3487b837f31dd9c05f33e8f13288c7aab320932cec",
+      "group": "smoke01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-01/source/studio/protocol/_rfc8785/_impl.py",
+      "original_sha256": "c25bc3a046528482d53bee3487b837f31dd9c05f33e8f13288c7aab320932cec",
+      "size_bytes": 7251
+    },
+    {
+      "copy": "copies/smoke01/source/studio/protocol/core.py",
+      "copy_sha256": "e8153f5a4dcf639f4d1cbce2fa74f7866d963a692c68e4e8d1477136889bd93e",
+      "group": "smoke01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-01/source/studio/protocol/core.py",
+      "original_sha256": "e8153f5a4dcf639f4d1cbce2fa74f7866d963a692c68e4e8d1477136889bd93e",
+      "size_bytes": 19886
+    },
+    {
+      "copy": "copies/smoke01/source/studio/toolchain.lock.json",
+      "copy_sha256": "28bdce555e9a44ef68193723d512feda02c42a417ceb78faf0b29f52d095dca9",
+      "group": "smoke01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-01/source/studio/toolchain.lock.json",
+      "original_sha256": "28bdce555e9a44ef68193723d512feda02c42a417ceb78faf0b29f52d095dca9",
+      "size_bytes": 3026
+    },
+    {
+      "copy": "copies/smoke01/source/zdoc/reviews/20260918-gt06-s91-sparse-attribution/native_probe_smoke.py",
+      "copy_sha256": "c9a608f95788b3fc7485ce5934f13cf12b725f5de48b4b559a550b7321193c9e",
+      "group": "smoke01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-01/source/zdoc/reviews/20260918-gt06-s91-sparse-attribution/native_probe_smoke.py",
+      "original_sha256": "c9a608f95788b3fc7485ce5934f13cf12b725f5de48b4b559a550b7321193c9e",
+      "size_bytes": 15716
+    },
+    {
+      "copy": "copies/smoke01/source/zdoc/reviews/20260918-gt06-s91-sparse-attribution/object_probe_s91.gd",
+      "copy_sha256": "0837a4a6d21715c3706ce376750dc2f28ebae7f4f214f2988b4ea90a71a25281",
+      "group": "smoke01",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-01/source/zdoc/reviews/20260918-gt06-s91-sparse-attribution/object_probe_s91.gd",
+      "original_sha256": "0837a4a6d21715c3706ce376750dc2f28ebae7f4f214f2988b4ea90a71a25281",
+      "size_bytes": 9114
+    },
+    {
+      "copy": "copies/smoke02/native-host/appdata/Godot/app_userdata/S91 Controlled Diagnostic/logs/godot.log",
+      "copy_sha256": "b5ced250019d1542ba146f207875d4f5e9c3c59e32371265afaef98ed237e1c8",
+      "group": "smoke02",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-02/native-host/appdata/Godot/app_userdata/S91 Controlled Diagnostic/logs/godot.log",
+      "original_sha256": "b5ced250019d1542ba146f207875d4f5e9c3c59e32371265afaef98ed237e1c8",
+      "size_bytes": 3269
+    },
+    {
+      "copy": "copies/smoke02/native-host/capture.json",
+      "copy_sha256": "ecad22411f3c9bab328a12ea03e09f74f05ec6df6c5fbcae8bbf77fe9bc34ab5",
+      "group": "smoke02",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-02/native-host/capture.json",
+      "original_sha256": "ecad22411f3c9bab328a12ea03e09f74f05ec6df6c5fbcae8bbf77fe9bc34ab5",
+      "size_bytes": 1340
+    },
+    {
+      "copy": "copies/smoke02/native-host/invocation.json",
+      "copy_sha256": "38d277afece5dbb45dc369ce63563cd2d1cce36eabfdc65ecc0c182e63e6f76b",
+      "group": "smoke02",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-02/native-host/invocation.json",
+      "original_sha256": "38d277afece5dbb45dc369ce63563cd2d1cce36eabfdc65ecc0c182e63e6f76b",
+      "size_bytes": 3206
+    },
+    {
+      "copy": "copies/smoke02/native-host/process-exit.json",
+      "copy_sha256": "07c862868f5bedb3abff9d492d4422916813b2df21b9dae51884806f4b69fbbf",
+      "group": "smoke02",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-02/native-host/process-exit.json",
+      "original_sha256": "07c862868f5bedb3abff9d492d4422916813b2df21b9dae51884806f4b69fbbf",
+      "size_bytes": 30
+    },
+    {
+      "copy": "copies/smoke02/native-host/process-start.json",
+      "copy_sha256": "fd5b9f01d7065e08066dcb9c2f6a5ebc0349040c8321b01bed03081d69d4b8ad",
+      "group": "smoke02",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-02/native-host/process-start.json",
+      "original_sha256": "fd5b9f01d7065e08066dcb9c2f6a5ebc0349040c8321b01bed03081d69d4b8ad",
+      "size_bytes": 14
+    },
+    {
+      "copy": "copies/smoke02/native-host/stderr.txt",
+      "copy_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "group": "smoke02",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-02/native-host/stderr.txt",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "copy": "copies/smoke02/native-host/stdout.txt",
+      "copy_sha256": "3ebcecd5b7966541daf7a5f2ae8929b41594b3dde26c8b9c6c65c3d829725fe8",
+      "group": "smoke02",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-02/native-host/stdout.txt",
+      "original_sha256": "3ebcecd5b7966541daf7a5f2ae8929b41594b3dde26c8b9c6c65c3d829725fe8",
+      "size_bytes": 3273
+    },
+    {
+      "copy": "copies/smoke02/output-manifest.json",
+      "copy_sha256": "c1ae1e4a50c65aba539e9febc76f85d8dd0d44841467df265f2d1f53e45a404c",
+      "group": "smoke02",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-02/output-manifest.json",
+      "original_sha256": "c1ae1e4a50c65aba539e9febc76f85d8dd0d44841467df265f2d1f53e45a404c",
+      "size_bytes": 7735
+    },
+    {
+      "copy": "copies/smoke02/project/out/tree_item_and_node/serialization.json",
+      "copy_sha256": "389e16e16795b35672f1ed7dd91e7d66feb2c44f4f39307b4ed71c1bb886a440",
+      "group": "smoke02",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-02/project/out/tree_item_and_node/serialization.json",
+      "original_sha256": "389e16e16795b35672f1ed7dd91e7d66feb2c44f4f39307b4ed71c1bb886a440",
+      "size_bytes": 273
+    },
+    {
+      "copy": "copies/smoke02/project/out/tree_item_and_node/smoke-status.json",
+      "copy_sha256": "17798cb79dea59caf61e4b70f5babca09fbc42ce4d1b7269c5674549eb3ef308",
+      "group": "smoke02",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-02/project/out/tree_item_and_node/smoke-status.json",
+      "original_sha256": "17798cb79dea59caf61e4b70f5babca09fbc42ce4d1b7269c5674549eb3ef308",
+      "size_bytes": 1591
+    },
+    {
+      "copy": "copies/smoke02/project/out/tree_item_and_node/sparse-00.json",
+      "copy_sha256": "f1b043eb2e19315c457ec6a7e00751f3ebe9a85b7e7910a0a2b8d20ced8eb9d5",
+      "group": "smoke02",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-02/project/out/tree_item_and_node/sparse-00.json",
+      "original_sha256": "f1b043eb2e19315c457ec6a7e00751f3ebe9a85b7e7910a0a2b8d20ced8eb9d5",
+      "size_bytes": 1147
+    },
+    {
+      "copy": "copies/smoke02/project/out/tree_item_and_node/sparse-01.json",
+      "copy_sha256": "37eefbfab417dc323aa295df7d8698d5c261e48bf0328e50355b3c8adf858194",
+      "group": "smoke02",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-02/project/out/tree_item_and_node/sparse-01.json",
+      "original_sha256": "37eefbfab417dc323aa295df7d8698d5c261e48bf0328e50355b3c8adf858194",
+      "size_bytes": 1324
+    },
+    {
+      "copy": "copies/smoke02/project/out/tree_item_and_node/sparse-post-00.json",
+      "copy_sha256": "223294f046b53158fba9f8a7faa1cd406f291b2c79a9ccc0203dfddb4046b73c",
+      "group": "smoke02",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-02/project/out/tree_item_and_node/sparse-post-00.json",
+      "original_sha256": "223294f046b53158fba9f8a7faa1cd406f291b2c79a9ccc0203dfddb4046b73c",
+      "size_bytes": 534
+    },
+    {
+      "copy": "copies/smoke02/project/out/tree_item_and_node/sparse-post-01.json",
+      "copy_sha256": "3f85e6a08ce80d9680e74df8804d5c4068f5f18d6eb8f4b27d2722fc4ec99d9b",
+      "group": "smoke02",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-02/project/out/tree_item_and_node/sparse-post-01.json",
+      "original_sha256": "3f85e6a08ce80d9680e74df8804d5c4068f5f18d6eb8f4b27d2722fc4ec99d9b",
+      "size_bytes": 534
+    },
+    {
+      "copy": "copies/smoke02/project/out/tree_item_only/serialization.json",
+      "copy_sha256": "389e16e16795b35672f1ed7dd91e7d66feb2c44f4f39307b4ed71c1bb886a440",
+      "group": "smoke02",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-02/project/out/tree_item_only/serialization.json",
+      "original_sha256": "389e16e16795b35672f1ed7dd91e7d66feb2c44f4f39307b4ed71c1bb886a440",
+      "size_bytes": 273
+    },
+    {
+      "copy": "copies/smoke02/project/out/tree_item_only/smoke-status.json",
+      "copy_sha256": "e1eb1b0956599b72a1223d0de3438a44ddf07b0f038292a9d906bcaea163f710",
+      "group": "smoke02",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-02/project/out/tree_item_only/smoke-status.json",
+      "original_sha256": "e1eb1b0956599b72a1223d0de3438a44ddf07b0f038292a9d906bcaea163f710",
+      "size_bytes": 1557
+    },
+    {
+      "copy": "copies/smoke02/project/out/tree_item_only/sparse-00.json",
+      "copy_sha256": "a35160f12d0a412c27f394ede76dcc4f7e860be02266c952355156adc434165d",
+      "group": "smoke02",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-02/project/out/tree_item_only/sparse-00.json",
+      "original_sha256": "a35160f12d0a412c27f394ede76dcc4f7e860be02266c952355156adc434165d",
+      "size_bytes": 1147
+    },
+    {
+      "copy": "copies/smoke02/project/out/tree_item_only/sparse-01.json",
+      "copy_sha256": "dc26b92d1ada1e019553ad92c172bee10a238be5112ddc22d2c80aaac41ab5c1",
+      "group": "smoke02",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-02/project/out/tree_item_only/sparse-01.json",
+      "original_sha256": "dc26b92d1ada1e019553ad92c172bee10a238be5112ddc22d2c80aaac41ab5c1",
+      "size_bytes": 1313
+    },
+    {
+      "copy": "copies/smoke02/project/out/tree_item_only/sparse-post-00.json",
+      "copy_sha256": "085f8cfe5b17b81155e605650d9943d581d7b985998ad76418af31f25baba6b2",
+      "group": "smoke02",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-02/project/out/tree_item_only/sparse-post-00.json",
+      "original_sha256": "085f8cfe5b17b81155e605650d9943d581d7b985998ad76418af31f25baba6b2",
+      "size_bytes": 534
+    },
+    {
+      "copy": "copies/smoke02/project/out/tree_item_only/sparse-post-01.json",
+      "copy_sha256": "952b1f11f3c2d6891a176289523bdb634857256690f76a145e0d7214d682e9e6",
+      "group": "smoke02",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-02/project/out/tree_item_only/sparse-post-01.json",
+      "original_sha256": "952b1f11f3c2d6891a176289523bdb634857256690f76a145e0d7214d682e9e6",
+      "size_bytes": 534
+    },
+    {
+      "copy": "copies/smoke02/project/project.godot",
+      "copy_sha256": "494bbeaf1d1b16f598d14e2cf9d0d052afd97026d3e3a624d79e9c2f6f220635",
+      "group": "smoke02",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-02/project/project.godot",
+      "original_sha256": "494bbeaf1d1b16f598d14e2cf9d0d052afd97026d3e3a624d79e9c2f6f220635",
+      "size_bytes": 128
+    },
+    {
+      "copy": "copies/smoke02/project/smoke.gd",
+      "copy_sha256": "acd41a91e4095e7a61296fa6dee03a4ec82edff8afa871186e470be708dcaf70",
+      "group": "smoke02",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-02/project/smoke.gd",
+      "original_sha256": "acd41a91e4095e7a61296fa6dee03a4ec82edff8afa871186e470be708dcaf70",
+      "size_bytes": 18338
+    },
+    {
+      "copy": "copies/smoke02/smoke-input.json",
+      "copy_sha256": "fb28a176549384b77864512b5735df94ade54c259ed966181f4ca0e25fd2f932",
+      "group": "smoke02",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-02/smoke-input.json",
+      "original_sha256": "fb28a176549384b77864512b5735df94ade54c259ed966181f4ca0e25fd2f932",
+      "size_bytes": 3391
+    },
+    {
+      "copy": "copies/smoke02/smoke-result.json",
+      "copy_sha256": "89d8375800c175f8baf2ab69add378a42675f750b50ebe7b6af665cb50a2b840",
+      "group": "smoke02",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-02/smoke-result.json",
+      "original_sha256": "89d8375800c175f8baf2ab69add378a42675f750b50ebe7b6af665cb50a2b840",
+      "size_bytes": 4481
+    },
+    {
+      "copy": "copies/smoke02/source/studio/.local/reviews/gt06-s91-sparse-smoke-02/project/project.godot",
+      "copy_sha256": "494bbeaf1d1b16f598d14e2cf9d0d052afd97026d3e3a624d79e9c2f6f220635",
+      "group": "smoke02",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-02/source/studio/.local/reviews/gt06-s91-sparse-smoke-02/project/project.godot",
+      "original_sha256": "494bbeaf1d1b16f598d14e2cf9d0d052afd97026d3e3a624d79e9c2f6f220635",
+      "size_bytes": 128
+    },
+    {
+      "copy": "copies/smoke02/source/studio/.local/reviews/gt06-s91-sparse-smoke-02/project/smoke.gd",
+      "copy_sha256": "acd41a91e4095e7a61296fa6dee03a4ec82edff8afa871186e470be708dcaf70",
+      "group": "smoke02",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-02/source/studio/.local/reviews/gt06-s91-sparse-smoke-02/project/smoke.gd",
+      "original_sha256": "acd41a91e4095e7a61296fa6dee03a4ec82edff8afa871186e470be708dcaf70",
+      "size_bytes": 18338
+    },
+    {
+      "copy": "copies/smoke02/source/studio/blender-addon/ipc_client.py",
+      "copy_sha256": "ee5d77e52dabb8b746e528be2acddc07b821f6b6724e9de9a36ec18b71cd8da9",
+      "group": "smoke02",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-02/source/studio/blender-addon/ipc_client.py",
+      "original_sha256": "ee5d77e52dabb8b746e528be2acddc07b821f6b6724e9de9a36ec18b71cd8da9",
+      "size_bytes": 16349
+    },
+    {
+      "copy": "copies/smoke02/source/studio/godot-addon/cli_job.py",
+      "copy_sha256": "5a0f37bc129bde409a2657054fb091d637d838e442d45a69e7adc1f1527d4c88",
+      "group": "smoke02",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-02/source/studio/godot-addon/cli_job.py",
+      "original_sha256": "5a0f37bc129bde409a2657054fb091d637d838e442d45a69e7adc1f1527d4c88",
+      "size_bytes": 12672
+    },
+    {
+      "copy": "copies/smoke02/source/studio/host/blender/__init__.py",
+      "copy_sha256": "812b123ddad075d7bb1892a38e099fdb48db147f80a27db83101c2b640044a90",
+      "group": "smoke02",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-02/source/studio/host/blender/__init__.py",
+      "original_sha256": "812b123ddad075d7bb1892a38e099fdb48db147f80a27db83101c2b640044a90",
+      "size_bytes": 69
+    },
+    {
+      "copy": "copies/smoke02/source/studio/host/blender/deadline.py",
+      "copy_sha256": "55fb3f77cadd9edc633186e1d6727bbed06216d659846aa3836e2582eef46926",
+      "group": "smoke02",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-02/source/studio/host/blender/deadline.py",
+      "original_sha256": "55fb3f77cadd9edc633186e1d6727bbed06216d659846aa3836e2582eef46926",
+      "size_bytes": 1130
+    },
+    {
+      "copy": "copies/smoke02/source/studio/host/blender/export_job.py",
+      "copy_sha256": "8eb0cc4a93361faf8cf09a3f11fd0278ec3fcdb2c9863e4b2ee98852c67ecdfe",
+      "group": "smoke02",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-02/source/studio/host/blender/export_job.py",
+      "original_sha256": "8eb0cc4a93361faf8cf09a3f11fd0278ec3fcdb2c9863e4b2ee98852c67ecdfe",
+      "size_bytes": 13605
+    },
+    {
+      "copy": "copies/smoke02/source/studio/host/blender/glb_preflight.py",
+      "copy_sha256": "5e4015c77ee3dced056634f89a0ba1fe2f94dd6650250fac8b03317c12d54f62",
+      "group": "smoke02",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-02/source/studio/host/blender/glb_preflight.py",
+      "original_sha256": "5e4015c77ee3dced056634f89a0ba1fe2f94dd6650250fac8b03317c12d54f62",
+      "size_bytes": 11815
+    },
+    {
+      "copy": "copies/smoke02/source/studio/host/blender/ui_host.py",
+      "copy_sha256": "0fa5afa44046b61b68baafc275b39ade4787a55221074018db588c4c2f71dc35",
+      "group": "smoke02",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-02/source/studio/host/blender/ui_host.py",
+      "original_sha256": "0fa5afa44046b61b68baafc275b39ade4787a55221074018db588c4c2f71dc35",
+      "size_bytes": 22464
+    },
+    {
+      "copy": "copies/smoke02/source/studio/host/core/limits.py",
+      "copy_sha256": "9d01ce56f5976bb034e60e33bf4b7986cdc44b3a8ffad46da738a6ed1b143f3f",
+      "group": "smoke02",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-02/source/studio/host/core/limits.py",
+      "original_sha256": "9d01ce56f5976bb034e60e33bf4b7986cdc44b3a8ffad46da738a6ed1b143f3f",
+      "size_bytes": 15813
+    },
+    {
+      "copy": "copies/smoke02/source/studio/host/core/private_store.py",
+      "copy_sha256": "c914b5a66a45660c782ecd43fd2321c238702340f3b33062e284feada4d46476",
+      "group": "smoke02",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-02/source/studio/host/core/private_store.py",
+      "original_sha256": "c914b5a66a45660c782ecd43fd2321c238702340f3b33062e284feada4d46476",
+      "size_bytes": 20476
+    },
+    {
+      "copy": "copies/smoke02/source/studio/host/core/safe_create.py",
+      "copy_sha256": "681fb7c0f4e74d82597bd8049a6b42cde0ea73941d879ec8ef0ba4df326d0606",
+      "group": "smoke02",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-02/source/studio/host/core/safe_create.py",
+      "original_sha256": "681fb7c0f4e74d82597bd8049a6b42cde0ea73941d879ec8ef0ba4df326d0606",
+      "size_bytes": 13170
+    },
+    {
+      "copy": "copies/smoke02/source/studio/host/core/safe_open.py",
+      "copy_sha256": "efc083f1c4fa875d3f748602924a05712aa60fed3abcdb46d058672930201535",
+      "group": "smoke02",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-02/source/studio/host/core/safe_open.py",
+      "original_sha256": "efc083f1c4fa875d3f748602924a05712aa60fed3abcdb46d058672930201535",
+      "size_bytes": 12093
+    },
+    {
+      "copy": "copies/smoke02/source/studio/pipeline/__init__.py",
+      "copy_sha256": "ffea2c35acdfe30636d61970e16c573e4de68228c4f7e780a6061d7be3fbbc68",
+      "group": "smoke02",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-02/source/studio/pipeline/__init__.py",
+      "original_sha256": "ffea2c35acdfe30636d61970e16c573e4de68228c4f7e780a6061d7be3fbbc68",
+      "size_bytes": 79
+    },
+    {
+      "copy": "copies/smoke02/source/studio/pipeline/native_job.py",
+      "copy_sha256": "456bb70c315e38cf7a29354b7df51862e1ded4578f6b22d9110bf628547c20ca",
+      "group": "smoke02",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-02/source/studio/pipeline/native_job.py",
+      "original_sha256": "456bb70c315e38cf7a29354b7df51862e1ded4578f6b22d9110bf628547c20ca",
+      "size_bytes": 12512
+    },
+    {
+      "copy": "copies/smoke02/source/studio/protocol/__init__.py",
+      "copy_sha256": "a906ecde6f60d5fa2febd3f8a4a5fae440d87fea69e7d7e51a750677e03ad09f",
+      "group": "smoke02",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-02/source/studio/protocol/__init__.py",
+      "original_sha256": "a906ecde6f60d5fa2febd3f8a4a5fae440d87fea69e7d7e51a750677e03ad09f",
+      "size_bytes": 881
+    },
+    {
+      "copy": "copies/smoke02/source/studio/protocol/_rfc8785/__init__.py",
+      "copy_sha256": "49d914da77ba606d535832d97df2e43458a8e51d57cdba6883a0a895ac50484b",
+      "group": "smoke02",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-02/source/studio/protocol/_rfc8785/__init__.py",
+      "original_sha256": "49d914da77ba606d535832d97df2e43458a8e51d57cdba6883a0a895ac50484b",
+      "size_bytes": 505
+    },
+    {
+      "copy": "copies/smoke02/source/studio/protocol/_rfc8785/_impl.py",
+      "copy_sha256": "c25bc3a046528482d53bee3487b837f31dd9c05f33e8f13288c7aab320932cec",
+      "group": "smoke02",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-02/source/studio/protocol/_rfc8785/_impl.py",
+      "original_sha256": "c25bc3a046528482d53bee3487b837f31dd9c05f33e8f13288c7aab320932cec",
+      "size_bytes": 7251
+    },
+    {
+      "copy": "copies/smoke02/source/studio/protocol/core.py",
+      "copy_sha256": "e8153f5a4dcf639f4d1cbce2fa74f7866d963a692c68e4e8d1477136889bd93e",
+      "group": "smoke02",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-02/source/studio/protocol/core.py",
+      "original_sha256": "e8153f5a4dcf639f4d1cbce2fa74f7866d963a692c68e4e8d1477136889bd93e",
+      "size_bytes": 19886
+    },
+    {
+      "copy": "copies/smoke02/source/studio/toolchain.lock.json",
+      "copy_sha256": "28bdce555e9a44ef68193723d512feda02c42a417ceb78faf0b29f52d095dca9",
+      "group": "smoke02",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-02/source/studio/toolchain.lock.json",
+      "original_sha256": "28bdce555e9a44ef68193723d512feda02c42a417ceb78faf0b29f52d095dca9",
+      "size_bytes": 3026
+    },
+    {
+      "copy": "copies/smoke02/source/zdoc/reviews/20260918-gt06-s91-sparse-attribution/native_probe_smoke.py",
+      "copy_sha256": "f393a73c834e97687cbf129aadde7bed22c588f352238da4d6c2c09e6d4cb82f",
+      "group": "smoke02",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-02/source/zdoc/reviews/20260918-gt06-s91-sparse-attribution/native_probe_smoke.py",
+      "original_sha256": "f393a73c834e97687cbf129aadde7bed22c588f352238da4d6c2c09e6d4cb82f",
+      "size_bytes": 20078
+    },
+    {
+      "copy": "copies/smoke02/source/zdoc/reviews/20260918-gt06-s91-sparse-attribution/object_probe_s91.gd",
+      "copy_sha256": "0837a4a6d21715c3706ce376750dc2f28ebae7f4f214f2988b4ea90a71a25281",
+      "group": "smoke02",
+      "original": "studio/.local/reviews/gt06-s91-sparse-smoke-02/source/zdoc/reviews/20260918-gt06-s91-sparse-attribution/object_probe_s91.gd",
+      "original_sha256": "0837a4a6d21715c3706ce376750dc2f28ebae7f4f214f2988b4ea90a71a25281",
+      "size_bytes": 9114
+    }
+  ],
+  "formal_acceptance": false,
+  "limits": [
+    "Offline preservation only; no new engine or test execution.",
+    "Smoke01 remains failed; smoke02 is a separate controlled smoke, not workload attribution.",
+    "Preflight proves import and closure binding only; observer receipts cover short Python children.",
+    "Caches, editor settings, executable binaries, older observer test runs, and long-run artifacts excluded.",
+    "No claim of full S91 campaign completion, GT06 acceptance, or whole-ObjectDB attribution."
+  ],
+  "original_path_base": "8-9-hh3d-3",
+  "outcomes": {
+    "observer-tests-39648": {
+      "forced_actual_exit": 2,
+      "handles_closed": true,
+      "jobs_zero_and_closed": true,
+      "native_and_popen_exits_match": true,
+      "success_actual_exit": 0
+    },
+    "preflight01": {
+      "actual_exit": {
+        "exit_code": 0,
+        "pid": 6996
+      },
+      "capture_sha256": "a5fcd5955ab532278fbee6c4b70958235208faa263285a7eba498de2765c4630",
+      "completed": true,
+      "job_zero_and_closed": true
+    },
+    "smoke01": {
+      "actual_exit": {
+        "exit_code": 1,
+        "pid": 19452
+      },
+      "capture_sha256": "d7f0d4004dc816e0d4153360c381cfc4e8455c1e73173e07dea2737ece4b23ed",
+      "completed": false,
+      "generated_script_sha256": "6f44a575b10ee02e0f2ff44d5a9d8c36acdf62f1c2e4cccbb0fa92352b4ec7d5",
+      "harness_sha256": "c9a608f95788b3fc7485ce5934f13cf12b725f5de48b4b559a550b7321193c9e",
+      "job_zero_and_closed": true,
+      "original_failure": "STAGE_NATIVE_EXIT",
+      "passed": false,
+      "run_id": "gt06-s91-sparse-smoke-01"
+    },
+    "smoke02": {
+      "actual_exit": {
+        "exit_code": 0,
+        "pid": 55068
+      },
+      "capture_sha256": "ecad22411f3c9bab328a12ea03e09f74f05ec6df6c5fbcae8bbf77fe9bc34ab5",
+      "completed": true,
+      "generated_script_sha256": "acd41a91e4095e7a61296fa6dee03a4ec82edff8afa871186e470be708dcaf70",
+      "harness_sha256": "f393a73c834e97687cbf129aadde7bed22c588f352238da4d6c2c09e6d4cb82f",
+      "job_zero_and_closed": true,
+      "original_failure": null,
+      "passed": true,
+      "run_id": "gt06-s91-sparse-smoke-02"
+    }
+  },
+  "preflight_base_source_count": 51,
+  "preflight_helper_count": 6,
+  "preflight_project_source_count": 15,
+  "schema": "HH-GT06-S91-PRESERVATION-1"
+}

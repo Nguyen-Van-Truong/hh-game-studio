@@ -1,0 +1,18 @@
+{
+  "schema": "HH-GT06-S90-INTERRUPTION-OBSERVATION-1",
+  "observed_utc": "2026-09-18T13:39:51.8582813Z",
+  "expected_pids": [
+    24884,
+    35912,
+    35176,
+    30508
+  ],
+  "observed_processes": [],
+  "s88_task_present": false,
+  "stop_request_present": false,
+  "cause": "UNKNOWN",
+  "actual_exits_proven": false,
+  "job_cleanup_proven": false,
+  "formal_acceptance": false,
+  "scope": "Point-in-time PID/task absence only; not actual exit or cleanup proof"
+}

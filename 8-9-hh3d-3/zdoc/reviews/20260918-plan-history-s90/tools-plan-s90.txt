@@ -1,5 +1,5 @@
 HH STUDIO — PLAN 1/2: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 18-09-2026, Asia/Saigon | Revision S91 | TRIỂN KHAI THEO GATE
+Ngày 18-09-2026, Asia/Saigon | Revision S90 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -16,7 +16,7 @@ STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng
 
 CURRENT_VALID_WP=GT-06
 EXECUTION_AUTHORIZATION=OWNER_APPROVED_GATED
-IMPLEMENTATION=GT06_S90_INTERRUPTION_RETAINED_S91_READY
+IMPLEMENTATION=GT06_DIAGNOSTIC_TERMINAL_REVIEW_REQUIRED
 GT01_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260913
 GT01_PENDING=NONE
 GT01_PIN_DECISION=GODOT_4.7.2_STABLE_OFFICIAL
@@ -25,7 +25,7 @@ RUNTIME_ACCEPTANCE=GT01_GT02_GT03_GT04_GT05_ACCEPTED
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S91
+PLAN_REVISION=S90
 EXECUTION_MODE=COORDINATOR_THREE_ASTRA_XHIGH_OWNER_20260918
 SUBAGENTS_ENABLED=3
 GT02_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260916_S46
@@ -54,73 +54,166 @@ GT05_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260917_S64
 GT05_REVIEW_STATUS=TWO_INDEPENDENT_PASS_TICK_YES_S64
 GT05_CHECKPOINT_COMMIT=808d8ba
 GT05_LAST_TESTED_SOURCE_CLOSURE=c141d54b80022ca7fefdf81f83e7e1078d3cc6aa43954831f82bb3178338a135
-GT06_EVIDENCE_STATUS=S86_FAILURE_S88_FAILURE_S90_INTERRUPTION_RETAINED_S91_READY
+GT06_EVIDENCE_STATUS=S86_FAILURE_RETAINED_S88_DIAGNOSTIC_INELIGIBLE
 GT06_WORKING_SOURCE_STATUS=S81_FROZEN_51FILES_FAILURE_RETAINED
 GT06_LAST_TESTED_SOURCE_CLOSURE=e010180a1bf85b7f565e9aa39734f8551caf170a85b36c50598be556b723ce7f
 GT06_CURRENT_SOURCE_CLOSURE=e010180a1bf85b7f565e9aa39734f8551caf170a85b36c50598be556b723ce7f
 GT06_SOURCE_CHECKPOINT=b3862a10
 GT06_BENCHMARK_CAMPAIGN=gt06-s86-campaign-01
 GT06_BENCHMARK_STATUS=S86_FAILURE_RETAINED_OBJECTDB_GROWTH_BATCH17_20260918T120235Z
-GT06_ACTIVE_DIAGNOSTIC=NONE; S90_OBSERVED_ABSENT_20260918T133607Z_NO_TERMINAL_RECEIPTS
-GT06_NEXT_ACTION=Launch verified S91 targeted TreeItem/Node3D attribution through detached scheduler observer; keep source/profile/gates fixed; query actual live state.
-GT06_S88_SCHEDULER_TASK=OBSERVED_ABSENT_20260918; historic_delete_report_retained_in_chat; durable_delete_receipt_missing
-GT06_S90_DIAGNOSTIC=gt06-s90-lifecycle-attribution-01; preflight=gt06-s90-lifecycle-attribution-preflight-06; five_partial_batches; interrupted_before_batch5_capture; formal_acceptance=false; eligible_for_dataset=false
+GT06_ACTIVE_DIAGNOSTIC=S90_LIFECYCLE_ATTRIBUTION_PREPARED_PREFLIGHT_PASS_20260918T1300Z; S88_TERMINAL_FAILURE_RETAINED_RSS_BATCH5
+GT06_NEXT_ACTION=Run one bounded S90 diagnostic only; preserve S86/S88 and do not change thresholds. Full campaign remains blocked until attribution review, terminal exits/manifest, and the 10x35 DoD are met.
+GT06_S88_SCHEDULER_TASK=DELETED_AFTER_TERMINAL_CLEANUP_20260918; state3_instances0_before_delete; no demand-start remains
+GT06_S90_DIAGNOSTIC=gt06-s90-lifecycle-attribution-01; preflight=gt06-s90-lifecycle-attribution-preflight-06; runtime_not_yet_exercised=true; formal_acceptance=false; eligible_for_dataset=false
 GT06_DIAGNOSTIC_EXCLUSION=S81-S90 diagnostic and partial/failure prefixes are excluded from F13/F14 acceptance datasets; see s83-mapping requirements and each packet manifest.
 
-TIẾN ĐỘ HIỆN HÀNH — S91, ngày 18-09-2026
+TIẾN ĐỘ HIỆN HÀNH — S90, ngày 18-09-2026
 GT-01–05 ACCEPTED; GT-06 IN_PROGRESS; GT-07–10 chưa mở.
 Runtime giữ nguyên source b3862a10, 51 file e010180a…; profile 0cd5b530…
 
-S86 official campaign failed tại batch17: ObjectDB71128→71130; handles/RSS
-không tăng tại failure. +2 đã có trước ACK: batch16 publish71127/ACK71128,
-batch17 publish71129/ACK71130. Packet zdoc/reviews/20260918-gt06-s86-failure/
-manifest cfd671ccc9327a5e3da816267e4f0b9737ee5c050ea044437933acea6ccde1da.
-Không suy leak hoặc root cause từ counter đơn lẻ; 18 partial batch không làPASS.
+S84 compact diagnostic bị gián đoạn bên ngoài ở giữa batch10: đã có10
+capture/joint/sample hoàn chỉnh cho batch0–9; ready/start10 tồn tại nhưng chưa
+có batch10/ACK10. Last observed native log là batch10 cycle82 SAVE_WAIT lúc
+khoảng10:28Z. Lúc10:30:21–10:30:38Z supervisor6444, host11904 và editor44960
+đều đã biến mất; không có child-failure, child-terminal-cleanup,
+supervisor-return hay actual process-exit receipt. Gói forensic S85 đã niêm tại
+`zdoc/reviews/20260918-gt06-s85-interruption-forensics/`, manifest cuối
+`690f6ecc5ece1bec1ddca3df0a18a3fa78378f387a1255ffd80b53bba66fafcd`. Truy vấn
+System/Application/TaskScheduler trong cửa sổ giới hạn không cho thấy crash,
+WER, OOM, shutdown hay lỗi scheduler; đây chỉ là absence evidence, không suy
+nguyên nhân. Không suy nguyên nhân, không coi là RSS/timeout/PASS và không chạy
+lại cùng run ID. Giữ nguyên prefix raw. Sau khi kiểm cleanup/Stop/source, đã
+tạo wrapper riêng và khởi chạy scheduler demand-only với run ID mới
+`gt06-s85-attribution-01` lúc10:54:10Z; task receipt ghi state4, một instance,
+wrapper/helper/pythonw hash và chỉ chứng minh dispatch. Đây là diagnostic
+instrumented, không vào dataset; chỉ kết luận sau khi có supervisor-return,
+actual child exits, Job zero/handles và manifest đầy đủ. Run đã kết thúc đúng
+gate ở batch5/joint_observation với `CAMPAIGN_RETAINED_COUNTER_GROWTH`:
+held_handles 559 (baseline batch4) → 561 (batch5), trong khi ObjectDB giữ
+71128 → 71128 và RSS giảm 398458880 → 383279104 bytes. Job zero, owner đóng,
+handles release sạch; target natural-exit receipt vẫn thiếu nên không suy
+PASS. Failure packet S85 được niêm tại
+`zdoc/reviews/20260918-gt06-s85-failure/`, manifest
+`983a8bb6febd7d435fb686f5f25fa9aa6fcfa10d7d5be2f94eb27f06a811bd98`. Không
+Các lượt trước cho thấy handle counter dao động cả khi giảm ở batch sau; chưa
+có bằng chứng đủ để sửa runtime hoặc nới gate. Sau khi task đã xóa và không
+còn owner/Stop latch, official campaign mới `gt06-s86-campaign-01` được đăng
+ký qua demand-only scheduler lúc11:28Z với source/profile/workstation giữ
+nguyên. Run đã kết thúc lúc12:02:35Z ở batch17/joint_observation với
+`CAMPAIGN_RETAINED_COUNTER_GROWTH`; chỉ có một run và 18/350 batch, nên toàn bộ
+prefix được giữ làm failure evidence và không được đưa vào dataset. ObjectDB
+đổi 71128→71130; editor held handles là568 ở capture đầu và555 ở batch17,
+resource giữ6, RSS giảm753299456→162512896 bytes, status gap batch17 là
+735.9644 ms, dropped commands/telemetry đều0. Host exit1, import exit0,
+helper exit2; editor target và supervisor actual exit chưa có receipt. Job
+zero/owner closed/handles released đã được ghi nhận. Failure packet mới:
+`zdoc/reviews/20260918-gt06-s86-failure/`, manifest
+`cfd671ccc9327a5e3da816267e4f0b9737ee5c050ea044437933acea6ccde1da`.
+Không suy leak/root cause từ +2 ObjectDB, không nới gate và không launch lại
+full campaign mù. S88 preflight đã import/verify thành công trên bản sao private nhưng run đã terminal failure; giữ raw, không coi là acceptance;
+diagnostic `gt06-s88-object-attribution-01` được scheduler dispatch lúc12:28:33Z
+với source/profile/workstation giữ nguyên. Overlay chỉ chụp identity/class và
+Tree/RichText summaries ở baseline batch4 và khi counter tăng; `formal_acceptance`
+false, `eligible_for_dataset` false. Chỉ sau khi diagnostic có terminal actual
+exits/Jobs/handles/manifest và đã đọc raw identity snapshots mới quyết định
+có cần sửa runtime hay remint campaign; không nới ObjectDB gate.
 
-S88 instrumented diagnostic failed tại batch5 (6 partial batches) vì
-CAMPAIGN_RSS_GROWTH. ObjectDB ở snapshot giữ71130; reachable census chỉ
-27401Objects và không bao toàn ObjectDB. Hostexit1/importexit0/helperexit2;
-editor/supervisor actual exit và final manifest thiếu. Task observed absent;
-không coi scheduler/PID absence là bằng chứng cleanup hoặc nghiệm thu.
+Nút thắt: S81 campaign thất bại tại batch15, ObjectDB71128→71130.
+Có16 captures (5 warmup+11 measured), không có fullrun PASS. HTTP đủ1000
+lệnh/batch; native đủ100cycle/batch tới lỗi. Không dùng partial làm sample.
+Host4132 exit1; editor48332 thiếu natural exit, helper22376 exit2; Job zero/
+closed và handles released. Scheduler terminal state3/result1/no instances.
+Raw giữ tại studio/.local/reviews/gt06-s81-campaign-01 và sibling-supervisor.
+Failure packet: reviews/20260918-gt06-s82-failure/,325raw/172exactcopies,
+51source/96artifact refs; seal15990322afe5cfdcf8f95a5274493bbd2b72b7ccca323cf7f7c2b9c2aeef1a48.
+Đây chỉ là bằng chứng lỗi; các receipt còn thiếu được ghi trong packet.
 
-S90 chạy13:24:30Z bằng PTY exec; lúc13:36:07Z supervisor24884, editor30508
-và helpers35912/35176 đều absent. Logs dừng13:32:44Z ở batch5/native settle.
-Có5capture/joint/lifecycle (0–4), command05; không có child-failure,
-child-terminal-cleanup, supervisor-return, editor/host exit hoặc manifest.
-Nguyên nhân gián đoạn UNKNOWN; không tự gán RSS, leak, Stop hoặc lỗi app.
-Giữ raw trong studio/.local/reviews/gt06-s90-lifecycle-attribution-01.
-Năm row cũ đều cho publish=preopen=release=fresh71127, close71128, resource6.
-Điều này giải thích +1 FileAccess tạm trong ACK, KHÔNG giải thích S86 +2 vốn
-đã xuất hiện trước ACK. Không cần chạy lại35batch chỉ để chứng minh +1 này.
-S90 helper/source frozen giữ nguyên; các lỗi preflight cũ giữ tại từng ID.
+Hai probe native riêng đã kết thúc: short6batch/25snapshots, long16batch/
+45snapshots; mỗi batch100cycle rồi120s idle. Object count giữ71129/71127,
+resource6; vẫn có18 added/18 removed giữa các batch (17TreeItem+1Node3D).
+Không có HTTP và thời gian ngắn hơn full sequence, nên không loại trừ leak
+hoặc chứng minh đã sửa +2. Long native11332 exit0 sạch; collector49872 exit1
+vì assertion cũ đòi6 thay vì16batch. Sửa derived metadata từ raw, giữ nguyên
+script/error đã chạy. Không rerun engine để sửa lỗi tổng hợp. Chi tiết/verify:
+reviews/20260918-gt06-s82-diagnosis/ và -diagnosis-long/.
 
-S91 chuẩn bị probe thu hẹp: chỉ TreeItem/Node3D primitive IDs, trước host
-baseline sample ở batch4, rồi khi same-phase counter tăng. Không giữ refs/
-full census hoặc đổi ngưỡng. Phải import/verify đúng overlay và launch qua
-demand-only scheduler với observer exit ngoài owned Job trước khi chạy dài.
-Chưa launch S91. S90 offline17/17; patch6/6; observer3/3; native smoke02
-hai arm×22checks PASS, actual55068exit0/Jobzero/closed. Import preflight01
-actual6996exit0/clean, review51runtime/6helper/66importsource khớp.
-Smoke01 failed assertion được giữ: một TreeItem một cột có thêm TextParagraph
-nên ObjectDB+2; thêm Node3D là+3. Smoke02 chứng minh từng allocation, không
-claim đã tìm rootcause S86. Helper vẫn0837a4a6…, effective nativea8a287c2….
-S91 evidence/README ghi bounded raw và giới hạn. S90 packet183hash/128copy,
-manifest2b13ade7745f540d0b6601edd92de39d40852533040ec6afdebba4c5c38a54aa.
-Ba worker Astra xhigh có scope riêng; đây là implementation, chưa là critic.
+Diagnostic gt06-s82-attribution-01 đã FAILED lúc09:49:50Z, không còn chạy.
+Có6captures; batch5 editorRSS758169600→881020928B(+16.20%), ObjectDB71128
+không tăng. Host command gap2044.2252ms là lỗi riêng; không phải thời gian
+census hay native heartbeat. Host42832 actualexit1; editor32860 naturalexit
+thiếu/helper47556 exit2, supervisor19068 actualexit thiếu. Jobszero/closed,
+handles released; cả3PID đã absent. Không dùng run này làm sample nghiệm thu.
+ACK4 census giữ27401descriptors, residual43727ObjectDB; collection820390us.
+OS RSS baseline được đọc trước census, sample sau đọc sau census, nên cần
+đo riêng overhead của công cụ đo trước khi retry chuỗi dài. Chưa chứng minh
+census là nguyên nhân hostgap hoặc sửa được lỗiObjectDB+2 của campaignS81.
 
-Đường nghiệm thu giữ nguyên: đủ10freshpairs×35batch (5warmup+30measured)
-→final requirement/test/evidence + source/raw/portable manifest
-→hai critic MỚI độc lập cùng hash PASS/TICK=yes →coordinator ACCEPTED.
-Mapping F01–F15: reviews/20260918-gt06-s83-mapping/requirements.md;
-F13/F14 tuyệt đối không dùng partial/failure/diagnostic S86/S88/S90/S91.
-Reuse functional lane chỉ khi đúng dependency, không remint lane không đổi.
-GT07 recovery/concurrency, GT08 CI/export/Android thiết bị thật, GT09
-conformance, GT10 package/install/upgrade/rollback vẫn chưa mở.
-HH World là plan riêng sauGT10. Không có ETA toàn plan đáng tin cậy.
+S84 A/B ngắn đã xong: original census tăngRSS117919744B/static103247732B;
+sham khôngcensus RSS-221184B/static+10952B; compact chỉ+2412544B/static5255684B.
+Giải phóng cache original làm static giảm71693308B nhưng RSS không giảm;
+không gọi giữ working-set là leak. Ba arm đều nativeexit0/Jobs/handles sạch.
+Original collector exit1 vì assertion object count qua nhiều pha quá chặt;
+giữ nguyên lỗi/source/exit, phân tích raw thay vì chạy lại engine vô ích.
+Object count tăng theo startup cả trong sham; không gán tăng đó cho census.
+Compact có7test, native controlledTree/TreeItem thêm→xóa verified, ownercount
+0→1→0, reachable27402→27417→27402; residualObjectDB vẫn chưa giải thích.
+Các số là diagnostic intervention một lượt, không thay benchmark phân phối.
 
-Lịch sử đầy đủ S90 trước rút gọn: reviews/20260918-plan-history-s90/
-tools-plan-s90.txt, AUTHORITY=0, SHA256=c5d51b62e2bc78714f49b6f4727dee1b68fa7d702cf5f4a4365ecd7fcdf16e54.
-S89 archive vẫn giữ các nguồn và failure trước. Không xóa hoặc sửa verdict cũ.
+Diagnostic mới gt06-s84-attribution-01 đã dispatch10:09:35Z, supervisor6444,
+checkpoint02823d8f. Quan sát10:10:03Z: host11904/editor44960 cùngrun,
+batch0commands/stderrtrống; không suy trạng thái hiện tại từ launch. Dùng collector compact, giữ
+đúng HTTP→native→jointACK và gate/source/profile. Preflight native54548 exit0,
+wrapper0/Jobzero/closed, stderr trống. Helper20ed7e62…; runnerdacfc917…;
+effectiveplugin08afdefc…. Kiểm live trước khi suy RUNNING. FirstACK4 dự kiến5–10phút,
+35batch khoảng45–75phút nếu không lỗi; hardlimit7410s, không phải ETAtoànplan.
+Census vẫn có overhead và chỉ bao reachableobjects; fullsequence này không
+đủ điều kiện làm sample nghiệm thu. Original+2ObjectDB và hostgap còn mở.
+Artifacts: reviews/20260918-gt06-s84-probe-cost/, -s84-cost-evidence/,
+-s84-compact-probe/, -s84-attribution/ và -s84-attribution-failure/.
+Cost packet216exactcopies/236files, manifest
+a49799fbc03a90f6ae19876cc42e1c71cb38e3d0fcce5bc7d00b16bd7aa701b7.
+Offline51runtime=204frozencopies,12executedhelpers verified; skipped checks
+của collector original được bổ sung sau, không nói chúng đã chạy trong run.
+Giữ failedraw; không retrymù, đổi outputID hay giảPASS từ nguyên nhân giả định.
+Ba worker S82 và ba lane S83 đã xong. Chuẩn bị S83 nằm ở:
+- reviews/20260918-gt06-s83-analyzer/: đọc census/owner diff và terminal facts;
+  sửa1099signednegativeID bị validator cũ từ chối;10focusedtestsPASS.
+  analysis02 đọc rawthật: diagnostic_failed_without_attributed_growth;
+  không suy noleak hoặc fullsequence nonreproduction. Giữ source/output lỗi cũ.
+- reviews/20260918-gt06-s83-mapping/: đủ F01–F15 với test/artifact/provenance;
+  đã kiểm path tồn tại, chưa rehash/final seal hoặc có critic verdict.
+- reviews/20260918-gt06-s83-android-readiness/: JDK/templates có file; SDK/ADB
+  không thấy trong các path chuẩn đã kiểm. Thiết bị thật và quyền debug còn
+  UNVERIFIED; không suy không có thiết bị từ bộ lọc PnP rỗng. Khi GT08 mở,
+  agent chuẩn bị SDK; kết nối/unlock/chấp nhận debug có thể cần owner.
+Các lane trên là preparation,
+không phải hai critic nghiệm thu và không mở GT07/GT08 trước dependency.
+
+Bài học để tránh làm lại: phân biệt count ổn định với identity không đổi;
+nonreproduction không loại trừ lỗi; metadata sai thì sửa từ raw đủ bằng chứng;
+chỉ tạo campaign mới khi có lý do và giữ failed prefix. Bảo toàn bytes của
+executed helper/log bằng -text và kiểm Git bytes; không tự chuẩn hóa evidence.
+Không blind retry, nới gate hoặc suy native exit từ helper exit. Khi một engine
+lane đang chạy, worker chỉ xử lý tài liệu/raw độc lập, không cạnh tranh phép đo.
+
+Functional/service/GUI của S79/S69/GT05 được reuse theo dependency map exact;
+không remint lane không đổi. S81 có204/204 affected tests, HTTP02 và native
+cleanup probe; các giới hạn/nguồn ở reviews/20260918-gt06-s81-admission/.
+S80/S81 timeout, RSS và object failures vẫn giữ; không suy một lỗi đã được sửa
+chỉ từ một prefix sau đó. Draft seal/matrix ở s80-closeout và s81-next chưa final.
+
+Đường còn lại: xác định/sửa nguyên nhân →10 fresh pairs×35batch hoàn chỉnh
+→final manifest + requirement/test/evidence →hai critic MỚI cùng hash có
+PASS/TICK=yes →GT06 ACCEPTED. Sau đó GT07 recovery/concurrency, GT08 CI/
+export/Android thật, GT09 conformance, GT10 package/install/upgrade/rollback.
+HH World là plan riêng sau GT10. Chưa có ETA toàn plan đáng tin cậy. Lịch
+cũ ti-p-t-c-hh3d-tools-qua-m đã không tồn tại (tool xác nhận); đã tạo lại
+một heartbeat ti-p-t-c-hh3d-tools mỗi10phút cho task này. Không hứa xong trước sáng.
+
+Đã rút gọn lịch sử hiện hành; nguyên văn S82 tại
+reviews/20260918-plan-history-s82/tools-plan-s82.txt, AUTHORITY=0,
+SHA256=d1a7ff65d492c49b925119ead823f81814a2bbd9d77b149c044c4a65cb39f3ae.
+Các archive/failure trước vẫn được liên kết trong bản đó.
 
 Rà phạm vi claim S76: GT-01–05 ACCEPTED theo fixture/catalog đã công bố,
 chưa chứng minh authoring gameplay tổng quát. Godot writer hiện chỉ Node3D/
@@ -215,11 +308,12 @@ Thực thi và tốc độ
 - Tiêu chí/gate hiện phù hợp; ưu tiên đường chức năng, file lease độc lập,
   focused regression và dependency reuse. Không mở thêm vòng audit/helper không
   phục vụ requirement còn thiếu; không chạy lại lanePASS chỉ vì sửa báo cáo.
-- Owner cho phép heartbeat tiếp tục task HH3D; phải query/readback lịch qua
-  app trước khi ghi ACTIVE. Các receipt S76/qua-m là lịch sử. Máy/app phải
-  hoạt động; thay đổi prompt theo run hiện hành, không tạo lịch trùng.
-- Ba worker S91 kiểm raw, bộ phân tích và detached launcher theo lease;
-  chưa có hai critic final GT06.
+- Owner18-09 cho phép heartbeat tiếp tục qua đêm. Lịch hiện có
+  ti-p-t-c-hh3d-tools-qua-m ACTIVE, mỗi15phút; sửa chính lịch này, không tạo trùng.
+  Readback hiện hành nằm trong -s76-handles/overnight-schedule.json. Khi đang đo chỉ xem compact
+  status/tail; terminal mới audit đầy đủ. Máy và app phải hoạt động.
+- Ba worker S79 đang có kết quả độc lập theo lease; lỗi quota các lượt cũ
+  là lịch sử, không phải blocker hiện hành. Chưa có hai critic final GT06.
   Thiết bị/SDK Android phải kiểm thực tế ở
   prerequisite; thiếu PATH không chứng minh thiếu công cụ hoặc không có thiết bị.
 
@@ -248,11 +342,7 @@ KINH NGHIỆM ĐANG ÁP DỤNG
 9. Test negative phải chạm đúng fault, không dùng setup/argv/cache failure làm
    bằng chứng reject. Scope tools dùng runner bounded, không quét checker legacy
    toàn repo hoặc kill process dự án khác. Nghiên cứu API đúng pin từ nguồn gốc.
-10. Diagnostic chỉ chạy khi trả lời giả thuyết cụ thể chưa có bằng chứng;
-    đọc đủ raw trước. Không dùng PTY exec làm bảo đảm lifetime qua các turn.
-    Thiếu terminal receipt thì UNKNOWN; baseline instrumentation phải hoàn tất
-    trước host baseline sample, không subtract overhead để sửa gate.
-11. Windows commandline có cap: Gitproof dùng ítpathprefix rồi lọc trongPython,
+10. Windows commandline có cap: Gitproof dùng ítpathprefix rồi lọc trongPython,
     không truyền823pathargv. Gate shellphụ thuộc phải checkexit trướccommit;
     S76indexprobe lỗi206, đã verify lại823HEADblobs của ccfb27ab. Resolve
     sys.executable trướcpythonw, vì PATH có thể làapp-executionalias.
