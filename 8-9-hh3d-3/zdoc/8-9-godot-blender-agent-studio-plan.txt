@@ -63,7 +63,7 @@ GT06_BENCHMARK_CAMPAIGN=gt06-s86-campaign-01
 GT06_BENCHMARK_STATUS=S86_FAILURE_RETAINED_OBJECTDB_GROWTH_BATCH17_20260918T120235Z
 GT06_ACTIVE_DIAGNOSTIC=S97_COMPLETE_35_BATCHES; DERIVED_EXIT_RECONCILIATION_VERIFIED; NO_ACCEPTANCE
 GT06_FULL_CAMPAIGN=gt06-s98-campaign-01; LAUNCH_1_ACTIVE_20260918T215233Z; SOURCE_IDENTICAL_TO_S97; FRESH_ID_REQUIRED
-GT06_NEXT_ACTION=Register and start source-identical S98 full campaign (10 fresh pairs x35 batches, original profile); preserve S97 diagnostic and derived exit correction, then verify all actual exits/cleanup/dataset before final manifest and two new critics.
+GT06_NEXT_ACTION=Continue monitoring source-identical S98 full campaign (10 fresh pairs x35 batches, original profile); preserve S97 diagnostic and derived exit correction, then verify all actual exits/cleanup/dataset before final manifest and two new critics.
 GT06_S88_SCHEDULER_TASK=OBSERVED_ABSENT_20260918; historic_delete_report_retained_in_chat; durable_delete_receipt_missing
 GT06_S90_DIAGNOSTIC=gt06-s90-lifecycle-attribution-01; preflight=gt06-s90-lifecycle-attribution-preflight-06; five_partial_batches; interrupted_before_batch5_capture; formal_acceptance=false; eligible_for_dataset=false
 GT06_DIAGNOSTIC_EXCLUSION=S81-S90 diagnostic and partial/failure prefixes are excluded from F13/F14 acceptance datasets; see s83-mapping requirements and each packet manifest.
@@ -1315,3 +1315,4 @@ CCU=người online cùng lúc trong game, không số agent phát triển game.
 
 END_OF_TOOLS_PLAN
 DATE=2026-09-17 Asia/Saigon
+
