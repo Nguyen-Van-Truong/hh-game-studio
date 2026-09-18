@@ -1,0 +1,24 @@
+{
+  "observed_utc": "2026-09-18T08:19:21.6320439Z",
+  "scheduler": {
+    "schema": "HH-GT06-TASK-STATUS-1",
+    "task_path": "\\HHStudio.GT06.gt06-s81-campaign-01",
+    "campaign_id": "gt06-s81-campaign-01",
+    "mode": "campaign",
+    "launch_number": 1,
+    "state": 4,
+    "last_run_time": "2026-09-18T15:17:52",
+    "last_task_result": 267009,
+    "instances": [
+      {
+        "instance_guid": "{F2F45615-69D7-4E05-9492-A976F98F186D}",
+        "state": 4,
+        "scheduler_engine_pid": 44524
+      }
+    ],
+    "output_directory": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s81-campaign-01-supervisor",
+    "formal_acceptance": false,
+    "status_scope": "Scheduler state only; not actual process exit or owned-tree proof"
+  },
+  "formal_acceptance": false
+}

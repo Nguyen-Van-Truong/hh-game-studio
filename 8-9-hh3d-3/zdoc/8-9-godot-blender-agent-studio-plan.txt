@@ -54,17 +54,27 @@ GT05_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260917_S64
 GT05_REVIEW_STATUS=TWO_INDEPENDENT_PASS_TICK_YES_S64
 GT05_CHECKPOINT_COMMIT=808d8ba
 GT06_EVIDENCE_STATUS=S79_SERVICE_GUI_REMINT_PASS_FOCUS_MECHANISM_CONFIRMED
-GT06_WORKING_SOURCE_STATUS=S81_BENCHMARK_LOCAL_REPAIR_204_TESTS_HTTP_NATIVE_CLEANUP_VERIFIED
+GT06_WORKING_SOURCE_STATUS=S81_FROZEN_51FILES_CAMPAIGN_RUNNING
 GT06_LAST_TESTED_SOURCE_CLOSURE=e010180a1bf85b7f565e9aa39734f8551caf170a85b36c50598be556b723ce7f
 GT06_CURRENT_SOURCE_CLOSURE=e010180a1bf85b7f565e9aa39734f8551caf170a85b36c50598be556b723ce7f
-GT06_SOURCE_CHECKPOINT=S81_UNCOMMITTED_OVER_f75a5d08
-GT06_BENCHMARK_CAMPAIGN=gt06-s80-campaign-01
-GT06_BENCHMARK_STATUS=S80_LAUNCH1_FAILED_ADMISSION_UNKNOWN_BATCH15
-GT06_ACTIVE_DIAGNOSTIC=S81_PROBES_COMPLETE_CHECKPOINT_PREPARATION
+GT06_SOURCE_CHECKPOINT=b3862a10
+GT06_BENCHMARK_CAMPAIGN=gt06-s81-campaign-01
+GT06_BENCHMARK_STATUS=S81_LAUNCH1_RUNNING_WARMUP_OBSERVED_20260918T082009Z
+GT06_ACTIVE_DIAGNOSTIC=NONE_S81_SUPPLEMENTAL_PROBES_COMPLETE
 GT05_LAST_TESTED_SOURCE_CLOSURE=c141d54b80022ca7fefdf81f83e7e1078d3cc6aa43954831f82bb3178338a135
 
 TIẾN ĐỘ HIỆN HÀNH — S81, ngày 18-09-2026
 GT-01–05 ACCEPTED; GT-06 đang làm; GT-07–10 chưa mở.
+S81 campaign mới khởi chạy18-09 lúc08:17:52Z, launch1, source b3862a10.
+Task \\HHStudio.GT06.gt06-s81-campaign-01; raw studio/.local/reviews/ cùngID
+và sibling-supervisor. Quan sát08:19:21Z: schedulerstate4/mộtinstance;
+08:20:09Z: host4132/editor48332 cùngrun, stderr0, batch0 warmup đã hoàn tất
+62.000410s (HTTP38.391522s), batch1 đang chạy. Đây là quan sát có thời điểm,
+không dùng launchreceipt suy trạng thái sống. Chưa có fullrunPASS/ETAtoànplan.
+Gitindex1302file và51runtime khớp trước commit; HEAD51 khớp trước launch.
+Evidence launch/observation ở s81-admission/campaign-launch/; lịch tiếp tục
+15phút đang ACTIVE. Giữ source/profile cố định, không thêm test/engine cạnh đo.
+
 Campaign S80 đã FAILED sau 1772.640s: batch15 inspect.400 mất phản hồi
 CONNECTION_LOST_LOOKUP sau 2003.389ms; status gap2045.744ms vượt2000ms.
 Đã có15partialbatches (5warmup+10measured), chưa có fullrunPASS.
@@ -95,7 +105,7 @@ Jobzero/closed, wrapperhandles/probes/index/listeners/threads đều đóng;
 primary/cause được giữ, không có batch hoặc hiệu ứng được claim.
 S79/S69/GT05 dependency maps vẫn exact, không chạy lại lane không đổi.
 Chi tiết và giới hạn từng source ở reviews/20260918-gt06-s81-admission/.
-Tiếp: checkpoint source đã kiểm, campaign mới đủ10×35, không dùng partialS80.
+Tiếp: theo dõi campaign mới đủ10×35, không dùng partialS80 hoặc probe làmPASS.
 Ước lượng11giờ trước đã rút lại; chưa có ETA toànplan đáng tin cậy.
 S80 task đã xóa sau xác minh state3/result1/noinstances; receipt bổ sung ở
 s81-admission/scheduler-retirement/, không sửa packet failure đã seal.

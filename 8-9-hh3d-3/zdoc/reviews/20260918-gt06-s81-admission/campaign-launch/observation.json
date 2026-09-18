@@ -1,0 +1,78 @@
+{
+  "observed_utc": "2026-09-18T08:20:09.630571+00:00",
+  "campaign_id": "gt06-s81-campaign-01",
+  "launch_number": 1,
+  "run_id": "gt06-s81-campaign-01.r00.a01",
+  "source_closure_sha256": "e010180a1bf85b7f565e9aa39734f8551caf170a85b36c50598be556b723ce7f",
+  "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+  "launch_refs": {
+    "studio/.local/reviews/gt06-s81-campaign-01/campaign.json": {
+      "sha256": "a216649f3ae0c3da03f449f81a82612ad6254c1194a802d122efc4548301912f",
+      "bytes": 6510,
+      "copy": "copies/campaign/campaign.json"
+    },
+    "studio/.local/reviews/gt06-s81-campaign-01/benchmark-profile.json": {
+      "sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+      "bytes": 718,
+      "copy": "copies/campaign/benchmark-profile.json"
+    },
+    "studio/.local/reviews/gt06-s81-campaign-01-supervisor/request.json": {
+      "sha256": "a94ba43185a5b8e71b3960c5982b3bffde249b936a965e27f46fd6d976e60787",
+      "bytes": 373,
+      "copy": "copies/supervisor/request.json"
+    },
+    "studio/.local/reviews/gt06-s81-campaign-01-supervisor/start.json": {
+      "sha256": "0de2c103062a1eac6855cf2e703de6104cb39876f92acf540778b8f04dcb05ef",
+      "bytes": 501,
+      "copy": "copies/supervisor/start.json"
+    },
+    "studio/.local/reviews/gt06-s81-campaign-01-supervisor/task-start.json": {
+      "sha256": "536ca6259269f3cd3ad06319e43f47eeb5b258b15c1bd603aca25aecf50f8f32",
+      "bytes": 838,
+      "copy": "copies/supervisor/task-start.json"
+    }
+  },
+  "first_completed_batch": {
+    "index": 0,
+    "warmup": true,
+    "joint_seconds": 62.00041,
+    "command_seconds": 38.391522,
+    "joint_max_status_gap_ms": 543.272,
+    "command_max_status_gap_ms": 301.9183,
+    "native_seconds": 23.513928,
+    "native_ref": {
+      "file": "project/benchmark/out/batch-00.json",
+      "sha256": "da282c58c6e744be3e10025c707cb0b809dc9e9d50690b8da5822d6272ea89f5",
+      "size_bytes": 97091
+    },
+    "command_ref": {
+      "file": "command-00.json",
+      "sha256": "777b3fed4d74dbad421c339bb75ce97efcfa92bb807c52da176abb298eaff52f",
+      "size_bytes": 1138748
+    }
+  },
+  "processes": {
+    "editor": {
+      "pid": 48332,
+      "process_start": "windows:134341930791263663"
+    },
+    "host": {
+      "pid": 4132,
+      "process_start": "windows:134341930732663372"
+    }
+  },
+  "observation_scope": "One completed warmup and active next batch; no full run or ETA claim",
+  "formal_acceptance": false,
+  "host-owner_tail": [
+    "HH_GT06_CAMPAIGN_PROGRESS {\"run_id\": \"gt06-s81-campaign-01.r00.a01\", \"batch\": 1, \"phase\": \"native_cycles\"}",
+    "HH_GT06_CAMPAIGN_PROGRESS {\"run_id\": \"gt06-s81-campaign-01.r00.a01\", \"batch\": 1, \"phase\": \"native_cycles\"}",
+    "HH_GT06_CAMPAIGN_PROGRESS {\"run_id\": \"gt06-s81-campaign-01.r00.a01\", \"batch\": 1, \"phase\": \"native_cycles\"}"
+  ],
+  "host-owner_stderr_bytes": 0,
+  "editor-host_tail": [
+    "HH_GT06_BENCHMARK_HEARTBEAT {\"batch\":1,\"cycle\":62,\"main_thread\":true,\"monotonic_us\":129368542,\"phase\":\"SAVE\",\"pid\":48332,\"run_id\":\"gt06-s81-campaign-01.r00.a01\"}",
+    "HH_GT06_BENCHMARK_HEARTBEAT {\"batch\":1,\"cycle\":63,\"main_thread\":true,\"monotonic_us\":129944896,\"phase\":\"SAVE_WAIT\",\"pid\":48332,\"run_id\":\"gt06-s81-campaign-01.r00.a01\"}",
+    "HH_GT06_BENCHMARK_HEARTBEAT {\"batch\":1,\"cycle\":65,\"main_thread\":true,\"monotonic_us\":130468136,\"phase\":\"SAVE_WAIT\",\"pid\":48332,\"run_id\":\"gt06-s81-campaign-01.r00.a01\"}"
+  ],
+  "editor-host_stderr_bytes": 0
+}
