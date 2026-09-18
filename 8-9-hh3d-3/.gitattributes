@@ -82,3 +82,9 @@ zdoc/reviews/20260915-gt02-s30-appcontainer-probe/sid-only-01.stdout.txt whitesp
 zdoc/reviews/20260916-gt02-s44-diagnostics/consumer-03/consumer-stderr.txt whitespace=-blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 # Preserve the failed S46 unittest progress line byte-for-byte.
 zdoc/reviews/20260916-gt02-s46-public/attempt-01/focused-stderr.txt whitespace=-blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+# S79 diagnostic hashes bind exact captured bytes, including CRLF and snapshots.
+zdoc/reviews/20260918-gt06-s79-diagnosis/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+zdoc/reviews/20260918-plan-history-s78/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+zdoc/reviews/20260918-gt06-s79-diagnosis/index-checks-01/source/** whitespace=blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+# Unified diff context lines intentionally contain a single space.
+zdoc/reviews/20260918-gt06-s79-diagnosis/index_fix_draft.patch whitespace=-blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol

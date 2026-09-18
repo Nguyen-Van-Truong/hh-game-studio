@@ -1,0 +1,107 @@
+{
+  "format": "hh-gt02-jcs-golden-v1",
+  "canonicalization": "RFC8785-JCS-vendored",
+  "unicode_normalization": "none (NFC and NFD remain distinct)",
+  "cases": [
+    {
+      "id": "numbers",
+      "input": {
+        "neg_zero": -0.0,
+        "small_exp": 1e-07,
+        "small_fixed": 1e-06,
+        "large_fixed": 1e+20,
+        "large_exp": 1e+21,
+        "integer": 42,
+        "fraction": 1.5
+      },
+      "canonical": "{\"fraction\":1.5,\"integer\":42,\"large_exp\":1e+21,\"large_fixed\":100000000000000000000,\"neg_zero\":0,\"small_exp\":1e-7,\"small_fixed\":0.000001}"
+    },
+    {
+      "id": "unicode_nfc",
+      "input": {
+        "composed": "é",
+        "decomposed": "é",
+        "astral": "😀"
+      },
+      "canonical": "{\"astral\":\"😀\",\"composed\":\"é\",\"decomposed\":\"é\"}"
+    },
+    {
+      "id": "utf16_key_order",
+      "input": {
+        "￿": "max-bmp",
+        "𐀀": "astral",
+        "a": "ascii",
+        "é": "accent"
+      },
+      "canonical": "{\"a\":\"ascii\",\"é\":\"accent\",\"𐀀\":\"astral\",\"￿\":\"max-bmp\"}"
+    },
+    {
+      "id": "string_escapes",
+      "input": {
+        "quote": "\"",
+        "line": "a\nb",
+        "slash": "\\"
+      },
+      "canonical": "{\"line\":\"a\\nb\",\"quote\":\"\\\"\",\"slash\":\"\\\\\"}"
+    },
+    {
+      "id": "request_payload_digest",
+      "input": {
+        "n": 1e-07,
+        "text": "é",
+        "nested": {
+          "b": 2,
+          "a": 1
+        }
+      },
+      "canonical": "{\"n\":1e-7,\"nested\":{\"a\":1,\"b\":2},\"text\":\"é\"}",
+      "payload_sha256": "sha256:214ae6c4ec36e87b9890566417edfcb15de575175d69990a9be5134b70935528",
+      "request_body": {
+        "operation": "fixture.inspect",
+        "target": {
+          "path": "main.tscn"
+        },
+        "payload": {
+          "n": 1e-07,
+          "text": "é",
+          "nested": {
+            "b": 2,
+            "a": 1
+          }
+        },
+        "schema_version": "hh-studio-0.1"
+      },
+      "request_body_canonical": "{\"operation\":\"fixture.inspect\",\"payload\":{\"n\":1e-7,\"nested\":{\"a\":1,\"b\":2},\"text\":\"é\"},\"schema_version\":\"hh-studio-0.1\",\"target\":{\"path\":\"main.tscn\"}}",
+      "request_digest": "sha256:886763623a4b92092ed1e88177d0c51a1056feff05d07635a079ac8bfa80f1bc"
+    },
+    {
+      "id": "all_control_escapes",
+      "input": "\u0000\u0001\u0002\u0003\u0004\u0005\u0006\u0007\b\t\n\u000b\f\r\u000e\u000f\u0010\u0011\u0012\u0013\u0014\u0015\u0016\u0017\u0018\u0019\u001a\u001b\u001c\u001d\u001e\u001f /  ",
+      "canonical": "\"\\u0000\\u0001\\u0002\\u0003\\u0004\\u0005\\u0006\\u0007\\b\\t\\n\\u000b\\f\\r\\u000e\\u000f\\u0010\\u0011\\u0012\\u0013\\u0014\\u0015\\u0016\\u0017\\u0018\\u0019\\u001a\\u001b\\u001c\\u001d\\u001e\\u001f /  \""
+    },
+    {
+      "id": "nested_array_order",
+      "input": [
+        true,
+        null,
+        false,
+        {
+          "😀": 2,
+          "￿": 1
+        },
+        []
+      ],
+      "canonical": "[true,null,false,{\"😀\":2,\"￿\":1},[]]"
+    },
+    {
+      "id": "nul_key_sorting",
+      "input": {
+        "a": "letter",
+        "\u0000a": "prefix",
+        "\u0001": "one",
+        "\u0000": "nul"
+      },
+      "canonical": "{\"\\u0000\":\"nul\",\"\\u0000a\":\"prefix\",\"\\u0001\":\"one\",\"a\":\"letter\"}"
+    }
+  ]
+}

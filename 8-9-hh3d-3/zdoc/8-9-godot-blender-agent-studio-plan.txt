@@ -1,5 +1,5 @@
 HH STUDIO — PLAN 1/2: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 18-09-2026, Asia/Saigon | Revision S78 | TRIỂN KHAI THEO GATE
+Ngày 18-09-2026, Asia/Saigon | Revision S79 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -25,7 +25,7 @@ RUNTIME_ACCEPTANCE=GT01_GT02_GT03_GT04_GT05_ACCEPTED
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S78
+PLAN_REVISION=S79
 EXECUTION_MODE=COORDINATOR_THREE_ASTRA_XHIGH_OWNER_20260918
 SUBAGENTS_ENABLED=3
 GT02_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260916_S46
@@ -53,61 +53,52 @@ GT04_REVIEW_CLOSURE=8ea276e98f3137a5f3623fce00d0760ae0c1fe6d17a77a330e98fa8839a3
 GT05_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260917_S64
 GT05_REVIEW_STATUS=TWO_INDEPENDENT_PASS_TICK_YES_S64
 GT05_CHECKPOINT_COMMIT=808d8ba
-GT06_EVIDENCE_STATUS=S76_LAUNCH2_FAILED_OBJECT_GROWTH_S77_DIAGNOSIS_S78_INDEX_WIP
-GT06_WORKING_SOURCE_STATUS=S78_DERIVED_SQLITE_INDEX_WIP_FOCUSED_PASS
-GT06_CURRENT_SOURCE_CLOSURE=649bd0f3e9a6a0a6d2249d952ec63f0dc6e29b2da3f273bd2b3ef8c8d169b18e
-GT06_SOURCE_CHECKPOINT=04b2f4dc_S78_WIP
+GT06_EVIDENCE_STATUS=S78_FAILED_BATCH12_S79_DIAGNOSIS
+GT06_WORKING_SOURCE_STATUS=S79_INDEX_FAULT_FIX_95_TESTS_PASS_NATIVE_PENDING
+GT06_CURRENT_SOURCE_CLOSURE=22c30ca840fcd38ec75d919dfd80c6eda3e7965035d8a3e22b0b5246a6152107
+GT06_SOURCE_CHECKPOINT=24efe967
 GT06_BENCHMARK_CAMPAIGN=gt06-s78-campaign-01
 GT06_BENCHMARK_STATUS=S78_LAUNCH1_FAILED_OBJECT_GROWTH_AFTER_BATCH12
-GT06_ACTIVE_DIAGNOSTIC=S78_OBJECT_GROWTH_FOLLOWUP_REQUIRED
+GT06_ACTIVE_DIAGNOSTIC=S79_OBJECT03_COMPLETE_FOCUS_HYPOTHESIS_PROBE_DRAFT
 GT05_LAST_TESTED_SOURCE_CLOSURE=c141d54b80022ca7fefdf81f83e7e1078d3cc6aa43954831f82bb3178338a135
 
-TIẾN ĐỘ HIỆN HÀNH — S78, ngày 18-09-2026
-GT-01–05 đã ACCEPTED. GT-06 mở sau hai review độc lập S64 cùng manifest.
-S76 launch2 đã FAILED sau650.625s tại batch5 (measured đầu tiên):
-CAMPAIGN_RETAINED_COUNTER_GROWTH, objects71128→71130 so baseline batch4;
-resources6, handles560→556, host/editor RSS trong10% ở sample này.
-Host40900actual1; scheduler state3/result1/noinstances quan sát00:21:54UTC.
-Có6capture, chưa có fullrunPASS. Native exit/Job/handle proof đọc riêng từ raw;
-scheduler hoặc wrapper exit không thay actual native exit. Không tự launch3.
-S77 diagnostic03 đã dispatch00:48:08UTC qua task riêng,6×100native+60sidle,
-inner540s/outer600s/scheduler720s. Query live trước kết luận; không phải campaign.
-Attempt01 bytecapactual86/cleanup; attempt02 bị ngắt, thiếu exit/Jobreceipt nên
-không PASS. Ba Astra xhigh mới làm analyzer/index design/integration audit;
-coordinator giữ runtime49 cố định trong diagnostic, không phải final critics.
-S76 retention từng objects71125→71127→71125 và idle71127; +2 có thể transient
-nhưng chưa có class/ID attribution. Không suy leak hoặc miễn ngưỡng từ dao động.
-Retention8×100native+60sidle đã hoàn tất: actualnative25368exit0, ownedtreeclean;
-median32.464s/100cycles, nativegap578.721ms. Source04b2f4dc/checkpointdfbed162.
-Evidence mới: reviews/20260918-gt06-s77-object-recovery/; source04b2f4dc giữ nguyên.
-S77 diagnostic03 đã hoàn tất qua task riêng: 6×100native+60sidle, native/import
-actual0, outer wrapper0/tree sạch, Job/handles đóng, 19 điểm hash-bound.
-ObjectDB71123 ổn trong sáu batch; idle cuối tăng71123→71127 và giữ tới điểm cuối.
-Reachable inventory chỉ gán được+2 TreeItem (IDs4918324827579/4917821504835);
-phần còn lại 43724→43726 không truy cập được nên chưa có full ObjectDB/leak
-causation. Filesystem scanning=false, resources6, nodes21482, orphans313;
-RichTextLabel quan sát101paragraph không đổi. Diagnostic là supplemental, không
-miễn benchmark gate.
-S78 đang tích hợp derived SQLite journal index: giữ JSONL làm authority, giảm
-Python command/offset retention, và giữ UNKNOWN/poison/rebuild khi lỗi saufsync.
-Candidate closure mới 49 files là649bd0f3e9a6a0a6d2249d952ec63f0dc6e29b2da3f273bd2b3ef8c8d169b18e.
-Focused replay/index/service tests hiện đạt391 replay + 5 index mới + 16 service;
-owned focused protocol/replay/service/index lane đạt72/72. Chưa có full campaign
-PASS, chưa có critic final và chưa mở GT07.
-Host-retention review tìm command+offset Python index tăng~4.07MB từb4→b34
-so headroomRSS~1.91MB; đây là allocationrisk, chưa phải measured fullrunfailure.
-Derived disk index đã tích hợp trong S78, giữ journal/fsync/lock/dedupe;
-cachefailure saufsync thành UNKNOWN/rebuild và close ownership đã có test focused.
-Full campaign gt06-s78-campaign-01 launch1 đã FAILED sau batch12 với CAMPAIGN_RETAINED_COUNTER_GROWTH; chưa có PASS/critic.
-Raw failure giữ tại studio/.local/reviews/gt06-s78-campaign-01/; bounded summary ở reviews/20260918-gt06-s78-failure/. ObjectDB 71124→71128, resources6, cleanup tree/owner sạch; chưa có root-cause attribution. Không launch3 mù; cần diagnostic bounded trước retry.
-Plan S76 exact archive: reviews/20260918-plan-history-s76/ (AUTHORITY=0),
-SHA25618526f3b0ffd3239640a6588f6505c2a95623b3828707f2e94fba399f8289f3c.
-S76 launch1 import20s và S75 handle/gap failures giữ trong archive/evidence;
-không ghép partial samples hoặc gọi campaign đã terminal là RUNNING.
-Owner đã cho phép lại ba Astra extra high; coordinator tiếp tục từ S68 đã tích hợp.
-Ba Astra xhigh S73 đã điều tra response-loss, đo tối ưu hash và giữ failure;
-không phải critic nghiệm thu. Hai review độc lập trên final closure còn phải làm.
-Native engine/integration lanes chạy tuần tự với process/cache/evidence riêng.
+TIẾN ĐỘ HIỆN HÀNH — S79, ngày 18-09-2026
+GT-01–05 ACCEPTED; GT-06 đang làm, GT-07–10 chưa mở.
+S78 campaign gt06-s78-campaign-01 launch1 FAILED sau1304.844s ở batch12:
+ObjectDB71124→71128 so baseline batch4; chưa có run hoàn chỉnh PASS.
+Hostactual1/importactual0; native editor exit còn thiếu, wrapper2 không thay.
+Cleanup/metrics/source audit mới nằm tại reviews/20260918-gt06-s79-diagnosis/.
+Raw giữ nguyên; không ghép partial, không tự retry trước khi xác định nguyên nhân.
+S78 derived SQLite command/offset index ở a6312a95 giữ JSONL làm authority.
+S79 sửa ba gap tìm qua fault injection: pending durable lỗi index phải halt/
+UNKNOWN; cursor.close phải giữ JournalError uncertainty; constructor thất bại
+phải close hoặc trả cleanup_owner. Owned95/95 đạt, gồm12fault cases và verified
+journal suite; actual0/wrapper0/treeverified, source407file không đổi trong run.
+Không coi source49closure mới là source của campaign S78 đã fail.
+S77 diagnostic03:6×100native+60sidle, actual0/cleanup; hai TreeItem mới và
+hai object chưa định danh. Lần đó thiếu path của Tree chủ nên chưa đủ attribution.
+S79 diagnostic01 lỗi trước spawn: outer720s vượt cap600s của owned runner;
+không có native sample. Giữ receipt/snapshot, task01 đã xóa sau terminal.
+S79 diagnostic02 lỗi instrumentation: băm text rỗng gây Godot ERROR rồi chạm
+log cap; actual editor exit thiếu/wrapper2, outer1, Jobszero/closed/handlesreleased.
+Giữ raw/receipt, không dùng số đo; sửa helper sang String.sha256_text().
+Diagnostic03:6×100native+120sidle, ownerTree/path/parentID/celltext và initial
+Tree descriptors; dispatch06:23:44UTC, task HHStudio.GT06.gt06-s79-object-diagnostic-03.
+Limits540/600/720s. Đã terminal: native30616exit0/import9416exit0;25points,
+120.142sidle, ObjectDB71125 ổn định. Analyzer/cleanup/hash đạt; không tái hiện+4.
+Pinned Godot focus-in tạo rootTreeItem tại2dialog là giả thuyết đang kiểm
+bằng cùngPID/callback/rootitem; không joinObjectID giữa process.
+Năm service và hai GUI lane đang remint tuần tự trên source24efe967.
+Luôn query live; dispatch không phải PASS. Không phải full campaign/HTTP lane.
+Ba Astra xhigh rà object attribution, derived-index faults, failure cleanup;
+không phải hai critic final. Source mới còn cần native service remint và fullcampaign.
+Chỉ chạy engine tuần tự, một writer/file; kiểm cap runner trước khi tăng timeout.
+Bước tiếp: kiểm terminal/source/cleanup, đọc ownerTree để sửa đúng nguyên nhân;
+đóng index fault gaps; chỉ remint dependencies bị đổi, rồi fullbenchmark.
+Nghiệm thu GT06 vẫn cần10freshpairs×35batches và hai critic cùng frozenclosure.
+Plan S78 exact archive: reviews/20260918-plan-history-s78/ (AUTHORITY=0),
+SHA256=08bd0d60123ecf0a1299a1a79315c06b569c9fb9fee491232322ec897464f473.
+Không xóa lịch sử failure; phần hiện hành gọn, chi tiết ở review/archive.
 
 Rà phạm vi claim S76: GT-01–05 ACCEPTED theo fixture/catalog đã công bố,
 chưa chứng minh authoring gameplay tổng quát. Godot writer hiện chỉ Node3D/
@@ -239,8 +230,8 @@ Thực thi và tốc độ
   ti-p-t-c-hh3d-tools-qua-m ACTIVE, mỗi15phút; sửa chính lịch này, không tạo trùng.
   Readback hiện hành nằm trong -s76-handles/overnight-schedule.json. Khi đang đo chỉ xem compact
   status/tail; terminal mới audit đầy đủ. Máy và app phải hoạt động.
-- Hai worker follow-up vừa báo workspace hếtcredit; ba report ban đầu đã giữ.
-  Coordinator tiếp tục local; chưa có critic mới. Không tự nhận hai review thay.
+- Ba worker S79 đang có kết quả độc lập theo lease; lỗi quota các lượt cũ
+  là lịch sử, không phải blocker hiện hành. Chưa có hai critic final GT06.
   Thiết bị/SDK Android phải kiểm thực tế ở
   prerequisite; thiếu PATH không chứng minh thiếu công cụ hoặc không có thiết bị.
 

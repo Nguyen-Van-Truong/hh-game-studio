@@ -1,0 +1,62 @@
+{
+  "formal_acceptance": false,
+  "failure": "BENCHMARK_LOG_LIMIT_OR_IO",
+  "cause": "Empty TreeItem text passed into HashingContext.update; repeated Godot ERROR contaminated diagnostic and exceeded log bound.",
+  "native_actual_exit": null,
+  "native_wrapper_exit": 2,
+  "outer_host_exit": 1,
+  "outer_wrapper_exit": 0,
+  "task_terminal": {
+    "state": 3,
+    "result": 1,
+    "instances": 0,
+    "observed_utc": "2026-09-18T06:20:53.3212288Z"
+  },
+  "raw_artifacts": {
+    "8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s79-object-diagnostic-02\\failure.json": {
+      "sha256": "cfbe1cdf12473c178798e81f64f8378aa94a12534185e77e99eb84793916ddcc",
+      "size_bytes": 92
+    },
+    "8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s79-object-diagnostic-02\\editor-host\\cleanup-001.json": {
+      "sha256": "4911f5ba899962383b51397ce61d54d1c435f3f190e9294e2f9a2e03f81fcc43",
+      "size_bytes": 551
+    },
+    "8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s79-object-diagnostic-02\\editor-host\\process-start.json": {
+      "sha256": "a7f01d33bec953cb5c16b14238a4bb3baab73ab11b9224891c5076e2df17e061",
+      "size_bytes": 14
+    },
+    "8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s79-object-diagnostic-02\\editor-host\\stderr.txt": {
+      "sha256": "a59542ddfa37b7a7a158c7bfdce8771b0ca6b464b0dd45ddf4ddb27856561be9",
+      "size_bytes": 8388608
+    },
+    "8-9-hh3d-3\\zdoc\\reviews\\20260918-gt06-s79-diagnosis\\object-owner-02\\capture.json": {
+      "sha256": "5f03ebe4e3c23de4af1925cec1f7abf818940947df046878f32947931a787d41",
+      "size_bytes": 577
+    }
+  },
+  "cleanup": {
+    "closed": true,
+    "completed": false,
+    "failure_code": "BENCHMARK_LOG_LIMIT_OR_IO",
+    "job": {
+      "active_count": 0,
+      "assigned": true,
+      "close_uncertain": false,
+      "closed": true,
+      "configured": true,
+      "create_uncertain": false,
+      "failed_operations": [],
+      "handle_retained": false,
+      "native_error": null,
+      "tainted": false,
+      "zero_observed": true
+    },
+    "wrapper_exit_code": 2,
+    "wrapper_process_handle": {
+      "close_uncertain": false,
+      "closed": true,
+      "handle_retained": false,
+      "required": true
+    }
+  }
+}
