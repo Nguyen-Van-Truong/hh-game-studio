@@ -1,0 +1,14 @@
+{
+  "observed_utc": "2026-09-18T09:37:08.179996+00:00",
+  "exit_code": 1,
+  "exception_type": "AssertionError",
+  "failed_assertion": [
+    "initial-project-files.json",
+    "scenes/fixture.tscn"
+  ],
+  "script_sha256": "8db683aaad91fc34e5717b57967c7efd91680bcffa8af8e14de00b3a06e5467e",
+  "scope": "Collector diagnostic, not engine/test execution",
+  "raw_modified": false,
+  "raw_copies_or_preservation_reports_created": false,
+  "reason": "S80 collector assumption of immutable initial project bytes is invalid for S81 scene serialization; retain mismatch, do not change raw."
+}

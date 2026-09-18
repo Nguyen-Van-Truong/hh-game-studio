@@ -1,0 +1,21 @@
+{
+  "analysis_sha256": "b55a7ebfb1ed737d3e3bad0ddcc0edf4f331740293c61eb90434bd29e2020dbc",
+  "authority": 0,
+  "cycles_each": 100,
+  "executed_helper_succeeded": true,
+  "formal_acceptance": false,
+  "full_benchmark": false,
+  "idle_seconds": 120,
+  "native_batches": 6,
+  "native_completion_verified": true,
+  "original_native_batches": 6,
+  "original_raw_metadata_preserved": true,
+  "provenance": {
+    "bytes": 6323,
+    "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/diagnostic.json",
+    "sha256": "b6263ef64ad67cd8894a18a52df4227c32dd8a3395c047be29b91acc9faa6ce7"
+  },
+  "reason": "Native index, batch set and COMPLETE marker determine actual batch count; original helper/metadata remain unchanged.",
+  "run_id": "gt06-s82-object-diagnostic-01",
+  "schema": "HH-S82-DERIVED-DIAGNOSTIC-METADATA-1"
+}

@@ -1,21 +1,830 @@
 {
   "authority": 0,
-  "formal_acceptance": false,
-  "raw_files": [
+  "closure_sha256": "94739381ef99b056aad3bb3e63f432ddee50612e950f6fd8234e82582db6f7eb",
+  "coverage": "Every regular file under the complete local raw tree and this review folder, plus the shared verifier and its test receipt; only this manifest excludes itself.",
+  "file_count": 163,
+  "files": [
     {
-      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/diagnostic.json",
       "bytes": 6323,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/diagnostic.json",
       "sha256": "b6263ef64ad67cd8894a18a52df4227c32dd8a3395c047be29b91acc9faa6ce7"
     },
     {
-      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/result.json",
+      "bytes": 17974,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/editor-host/appdata/Godot/editor_settings-4.7.tres",
+      "sha256": "e5899032951cb8816b8d1f6cec6f76c7a4e9020488dbb67fde6e412b41b49630"
+    },
+    {
+      "bytes": 9243,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/editor-host/capture.json",
+      "sha256": "1bacafd3a0cc20244aa69790ec4e3887b0a770a1874ba1bd31ca9bf4c451e07d"
+    },
+    {
+      "bytes": 528,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/editor-host/cleanup-001.json",
+      "sha256": "379d7a25b4032e6cb243e100aa8a5ebcd3d82a94e45b71e0f18e47fe7e569534"
+    },
+    {
+      "bytes": 7820,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/editor-host/invocation.json",
+      "sha256": "005f5b61f18974d1b0ea5095c8a8e618b42a9ddf48f11d563fb69bf74319d939"
+    },
+    {
+      "bytes": 3269807,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/editor-host/localappdata/Godot/editor_doc_cache-4.7.res",
+      "sha256": "1b0b005d7459ab5f2d5bdb3f8071574d00077100a47271a426ae492663ea6b92"
+    },
+    {
+      "bytes": 414,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/editor-host/localappdata/Godot/resthumb-5ae20b3089ed6635a57a205b2fc8719b.png",
+      "sha256": "3be5f43c5f5c1dfa41cc8c26587f6a18613ce89ee346e425b10806dbd8095def"
+    },
+    {
+      "bytes": 54,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/editor-host/localappdata/Godot/resthumb-5ae20b3089ed6635a57a205b2fc8719b.txt",
+      "sha256": "e7dd1e450c723c1f620d9ae2399c7c144b5c0532c78875daa68ac6de2bb8bbb3"
+    },
+    {
+      "bytes": 4078,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/editor-host/localappdata/Godot/resthumb-5fc65e86bbc03611ea913d6c2553c027.png",
+      "sha256": "622f6f4030ce8e1175ca099665e7a24bd9936058955832090b7858f5911275c9"
+    },
+    {
+      "bytes": 54,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/editor-host/localappdata/Godot/resthumb-5fc65e86bbc03611ea913d6c2553c027.txt",
+      "sha256": "1325bcc98c94c6d35bf0f5a9a948e3210f483c488cabade74b8ea96f463de526"
+    },
+    {
+      "bytes": 755,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/editor-host/localappdata/Godot/resthumb-78a6dbc1a552e0670253fe22f0ea6d41.png",
+      "sha256": "bbd1ff19bac55b941b0c00441099621180419d420e80eaf9ac83c2a913fb1d48"
+    },
+    {
+      "bytes": 54,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/editor-host/localappdata/Godot/resthumb-78a6dbc1a552e0670253fe22f0ea6d41.txt",
+      "sha256": "6829448a8f709d26a4e2afef1edefe42877316dc00a6a7124ad1b55e8e71b3a4"
+    },
+    {
+      "bytes": 929,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/editor-host/localappdata/Godot/resthumb-92b1dc29f42b7c03e8eb558a1fefadfe.png",
+      "sha256": "74e4d6e17534aa3f5672f48238a56b5e660183a8dd5a919f27078d0952dcbe10"
+    },
+    {
+      "bytes": 54,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/editor-host/localappdata/Godot/resthumb-92b1dc29f42b7c03e8eb558a1fefadfe.txt",
+      "sha256": "49769b089972946d226c36e04920fc052dfc22a90d352e3cfd83aab15fbcc3c2"
+    },
+    {
+      "bytes": 852,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/editor-host/localappdata/Godot/resthumb-9e2048e0c1da746d747731b394259214.png",
+      "sha256": "26623eb8019be5752051ca407aa87cff0989d8e38ce3ffb8fe2f9980bbc1386f"
+    },
+    {
+      "bytes": 54,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/editor-host/localappdata/Godot/resthumb-9e2048e0c1da746d747731b394259214.txt",
+      "sha256": "da62c6f3e2686a259ba2de1c4deb542c223c66ec3f810c4cc4c9eab0354455b6"
+    },
+    {
+      "bytes": 831,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/editor-host/localappdata/Godot/resthumb-bdff8581f4e1fa4d71bd8c9cc74a3394.png",
+      "sha256": "f4f80b42111aa8d85a33f670f2753c6cda52fd0698e9868183ae652d9a4f6a6b"
+    },
+    {
+      "bytes": 54,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/editor-host/localappdata/Godot/resthumb-bdff8581f4e1fa4d71bd8c9cc74a3394.txt",
+      "sha256": "1847a9f148ba365255650066711f1a4230f83f9c4eeae4ff912f6b1cbd074a6a"
+    },
+    {
+      "bytes": 30,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/editor-host/process-exit.json",
+      "sha256": "b2e55a67e2485c43dd92748e593ac88aea1ac03516f350625b0ed5f0ab1d9f7a"
+    },
+    {
+      "bytes": 14,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/editor-host/process-start.json",
+      "sha256": "5530e2f0629d16a984e521a3940bf9bc142d7757897c2acb83b99177c10bf55f"
+    },
+    {
+      "bytes": 0,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/editor-host/stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 56043,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/editor-host/stdout.txt",
+      "sha256": "c12ebdc08d1397ff9d5833b085d523cd7f317ba610f082a29dea92dd0f2e5006"
+    },
+    {
+      "bytes": 17974,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/import-host/appdata/Godot/editor_settings-4.7.tres",
+      "sha256": "b9486f3458b86aab9f0c0867ca87d38d86fdd7130d6d43701269d5339224649b"
+    },
+    {
+      "bytes": 1341,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/import-host/capture.json",
+      "sha256": "33267100e8a2d764bb154f5ff7c2c6d4ab59df6a563ea286a71369319399f2a8"
+    },
+    {
+      "bytes": 5015,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/import-host/invocation.json",
+      "sha256": "200e0cb2973c6c77cf0b4836b58e974270aa31996cc819fa9334397e318917d0"
+    },
+    {
+      "bytes": 3269733,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/import-host/localappdata/Godot/editor_doc_cache-4.7.res",
+      "sha256": "29cdd07c90b7e879f090d80334394b9afd1b45c01ee8090e5b7876dc1c4ea849"
+    },
+    {
+      "bytes": 30,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/import-host/process-exit.json",
+      "sha256": "3f77dcb45e0c90d16ac32a294808354e1b2cbdcbd85509587c04715c6325ad8a"
+    },
+    {
+      "bytes": 14,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/import-host/process-start.json",
+      "sha256": "d5ff86e4650482397e843826220ba2a3eac4b0863994ae8f7593d0f584e9e653"
+    },
+    {
+      "bytes": 0,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/import-host/stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 1492,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/import-host/stdout.txt",
+      "sha256": "9b5e37b85c8c4f11090de482aee3734b6c7993ad884a62121b2adcc9dfdd6003"
+    },
+    {
+      "bytes": 1,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/project/.godot/.gdignore",
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "bytes": 1436,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/project/.godot/editor/editor_layout.cfg",
+      "sha256": "70dc9392e0db5a0eb260d7e07ea9d4a7ded960dd5592f61470ce37c643328b9b"
+    },
+    {
+      "bytes": 11911,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/project/.godot/editor/editor_script_doc_cache.res",
+      "sha256": "a97cb81c266eb0852d9a01300596c2ed83be85b37262b2db7a788a6077240445"
+    },
+    {
+      "bytes": 49,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/project/.godot/editor/editor_script_doc_cache.res-folding-a7de57390d6e786984ca20c70a831128.cfg",
+      "sha256": "fa44dfbae9b3b64980c44d9922acdad9b34ea46c85cce8a917708577229c27f6"
+    },
+    {
+      "bytes": 915,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/project/.godot/editor/filesystem_cache10",
+      "sha256": "4905969aec4ac21015672a1a01879a62f77731f1f7dd3e4fb530d2218ad47ea2"
+    },
+    {
+      "bytes": 26,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/project/.godot/editor/filesystem_update4",
+      "sha256": "c70b0d9ece2ebc1d5f746284eb135e9a1b5a78b6324ee9dd1daa592ee7af2497"
+    },
+    {
+      "bytes": 4334,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/project/.godot/editor/fixture.tscn-editstate-a95ffd352fa9c4b59083e0b523419988.cfg",
+      "sha256": "324eaafaca9233dac634abc0760b0e716534f2f9b88b0084af3835a0aa688acd"
+    },
+    {
+      "bytes": 136,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/project/.godot/editor/fixture.tscn-folding-a95ffd352fa9c4b59083e0b523419988.cfg",
+      "sha256": "9b34a7fc95b0f9cd640941851bbb0ebc8777e0666f5560e828143047b26c7c93"
+    },
+    {
+      "bytes": 273,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/project/.godot/editor/project_metadata.cfg",
+      "sha256": "0817ad8476545d590bf74763cdb7a6e06d1e4227ade6a9050aabdf38ff86195b"
+    },
+    {
+      "bytes": 0,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/project/.godot/editor/script_editor_cache.cfg",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 8,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/project/.godot/global_script_class_cache.cfg",
+      "sha256": "f61aa7ad3097022d6a9d110ca3f73fa7bb348ec2cf9a6e7c9523574dc75f5a16"
+    },
+    {
+      "bytes": 0,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/project/.godot/scene_groups_cache.cfg",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 51577,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/project/.godot/shader_cache/CanvasShaderGLES3/076cc7f5ca018594656711ce99da014402bbd19aa1eb794136d4aa1fc1916d27/6bb7c9a2fd1c4a8fa77cb96555b9b4a720209981.cache",
+      "sha256": "8cebfb673c85832c073ded991dee56bfec3d1fe48c12e407f923462f9cebbcd0"
+    },
+    {
+      "bytes": 118055,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/project/.godot/shader_cache/CopyShaderGLES3/be890b216e2b3fe916307830870fee480049474f8a9590e668b7db55f4333ca0/6bb7c9a2fd1c4a8fa77cb96555b9b4a720209981.cache",
+      "sha256": "b1ed7af2254b518c8c6275c8b79bfca911ffb46f8894aac39650d1c510402f01"
+    },
+    {
+      "bytes": 26057,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/project/.godot/shader_cache/CubemapFilterShaderGLES3/f2f060f7884cfc963ab277935a694190c41dc5319199dc60ed40febaeed22ca7/6bb7c9a2fd1c4a8fa77cb96555b9b4a720209981.cache",
+      "sha256": "cc257c0bfe6baf3d4b512a3ce2fcace8512730359141f517dfe4df1786e0dcf9"
+    },
+    {
+      "bytes": 8261,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/project/.godot/shader_cache/FeedShaderGLES3/d18a5be4b160faacb02638af5d95197a20d24a8ee2964a921fecdd0450ccfe03/6bb7c9a2fd1c4a8fa77cb96555b9b4a720209981.cache",
+      "sha256": "66df4d359fccc787da5b0acd53ace8e33c5de864c42c31fd209ec7ecfaa78f1c"
+    },
+    {
+      "bytes": 13656,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/project/.godot/shader_cache/PostShaderGLES3/591ad1dc6444d48fbbe21612a2afd78e25aaf929315adddd90df3789fa6e5af1/6bb7c9a2fd1c4a8fa77cb96555b9b4a720209981.cache",
+      "sha256": "1a1725d8da7bb029f62ac39b65ecad4a26eaee0966fbeafc9455774dc8533206"
+    },
+    {
+      "bytes": 800909,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/project/.godot/shader_cache/SceneShaderGLES3/ebd5ef628945fec79c8fb620654e1e6dfffb8249acd83a4803b1a534aadcbced/6bb7c9a2fd1c4a8fa77cb96555b9b4a720209981.cache",
+      "sha256": "d8d4ebe5133936c9bc3718e8a5c5e7d04a8470728dbdb7121d44792aaf298f31"
+    },
+    {
+      "bytes": 920188,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/project/.godot/shader_cache/SceneShaderGLES3/ebd5ef628945fec79c8fb620654e1e6dfffb8249acd83a4803b1a534aadcbced/77047cd41f429f33ceff24e890e174f5465e755e.cache",
+      "sha256": "d004e9ce980426b28a1decf3e7315c762f360629eb81d85c44b72a81cc1f926f"
+    },
+    {
+      "bytes": 738963,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/project/.godot/shader_cache/SceneShaderGLES3/ebd5ef628945fec79c8fb620654e1e6dfffb8249acd83a4803b1a534aadcbced/a38af2d0725c8e99d8492f4c72736f24d6a54cc5.cache",
+      "sha256": "51c38be2321ccf5be6c3b07061797a2df237c82151614f4be6f49d07272058b7"
+    },
+    {
+      "bytes": 729679,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/project/.godot/shader_cache/SceneShaderGLES3/ebd5ef628945fec79c8fb620654e1e6dfffb8249acd83a4803b1a534aadcbced/cafb1506f2db0c3681435e264aa18e216d1a7a40.cache",
+      "sha256": "b8990303f978f5c1f65aae0bba8c8a3f6d48afb229a9bb2827adcf37620a28a0"
+    },
+    {
+      "bytes": 55632,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/project/.godot/shader_cache/SkyShaderGLES3/c1a447880507cb68532c47caeeb2a80984019a797946a43cd3c056a918a45c98/2c82eb5fea9b549e20c9f41e308abf9a4fc5d76f.cache",
+      "sha256": "e7f9759ee8deffac3b499aef68c5eb2724a4d02486e422d0e33becd5cd467728"
+    },
+    {
+      "bytes": 283,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/project/.godot/uid_cache.bin",
+      "sha256": "d482f4580470372c4eb640789e59e3555eb08b8664a73c56f76b1f534e01df1d"
+    },
+    {
+      "bytes": 62067,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/project/addons/hh_benchmark/benchmark_native.gd",
+      "sha256": "489aa8689f96ce3cbdfe7b563991ee12feef51e8abaddca52a547f809a5e33a0"
+    },
+    {
+      "bytes": 20,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/project/addons/hh_benchmark/benchmark_native.gd.uid",
+      "sha256": "0617ea8abd32e42f1177017bdf0c3c7a7f8b5bc1d62e55a9deb4894fd09907b8"
+    },
+    {
+      "bytes": 189,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/project/addons/hh_benchmark/plugin.cfg",
+      "sha256": "648d8821a36d0abc825ef1f380b4917639074302a619cb25a798df987a5a1092"
+    },
+    {
+      "bytes": 10165,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/project/addons/hh_studio/jcs_godot.gd",
+      "sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5"
+    },
+    {
+      "bytes": 20,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/project/addons/hh_studio/jcs_godot.gd.uid",
+      "sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b"
+    },
+    {
+      "bytes": 165,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/project/addons/hh_studio/plugin.cfg",
+      "sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c"
+    },
+    {
+      "bytes": 23043,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/project/addons/hh_studio/plugin.gd",
+      "sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036"
+    },
+    {
+      "bytes": 20,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/project/addons/hh_studio/plugin.gd.uid",
+      "sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d"
+    },
+    {
+      "bytes": 32174,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/project/addons/hh_studio/scene_commands.gd",
+      "sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069"
+    },
+    {
+      "bytes": 19,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/project/addons/hh_studio/scene_commands.gd.uid",
+      "sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69"
+    },
+    {
+      "bytes": 53,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/project/benchmark/.gdignore",
+      "sha256": "3d078ee3c08af2f64daca29255d23d366dc0a9bdbef8a872442d5642bfb84cf8"
+    },
+    {
+      "bytes": 385,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/project/benchmark/input.json",
+      "sha256": "0d3824ba83f367f01d03efefdcb15d4b02ae40a4d4bb4cc97e834c07313b0dce"
+    },
+    {
+      "bytes": 96078,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/project/benchmark/out/batch-00.json",
+      "sha256": "dfbe1c608f10eaad91aa19247c3ba1883659425c4ab0e8bdeb14b00009559903"
+    },
+    {
+      "bytes": 96442,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/project/benchmark/out/batch-01.json",
+      "sha256": "afa31fcfcb6ba37d696dd2e355530ff656d420df818b32a0ad6d4b65735ea37c"
+    },
+    {
+      "bytes": 96446,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/project/benchmark/out/batch-02.json",
+      "sha256": "25f89c13e3c8e89461f00edb0c8fa0b9e9791e493c671aff772bc4da02d7b5fe"
+    },
+    {
+      "bytes": 97040,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/project/benchmark/out/batch-03.json",
+      "sha256": "e50d02cc8a5e67b21e3248791de3fe5ff4211e2d40bd153b348c9ae75063861a"
+    },
+    {
+      "bytes": 97356,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/project/benchmark/out/batch-04.json",
+      "sha256": "60d61dca0545e72e9f8a72fa566b785151dda08cfb6e798e13d51faafde055d0"
+    },
+    {
+      "bytes": 97350,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/project/benchmark/out/batch-05.json",
+      "sha256": "7b20e2341aa74df437d9442a26e284719401429d5a90d14d152f141f83296a12"
+    },
+    {
+      "bytes": 8813,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/project/benchmark/out/index.json",
+      "sha256": "a434bb3e0606269df4ee21d80aef8b3454a8ea2a366defc88e758495f6bdd70a"
+    },
+    {
+      "bytes": 77384,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/project/benchmark/out/object-0000.json",
+      "sha256": "50af6f0e838e66bdbbf3a532c824ff46627e29fa6deea02c80849e0206eec9ff"
+    },
+    {
+      "bytes": 10558,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/project/benchmark/out/object-0001.json",
+      "sha256": "8532130b1bc0cf38e20576d100706b549dea3fedaffc34fa60a6662b8bd9e168"
+    },
+    {
+      "bytes": 31701,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/project/benchmark/out/object-0002.json",
+      "sha256": "ded390bd304000470ac2245d8975e041925ba93afd6b9f11f4e153dde5f03d0a"
+    },
+    {
+      "bytes": 11142,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/project/benchmark/out/object-0003.json",
+      "sha256": "14c39065139c6445c44aacef03f50d8ab422bd4c71da3c8c8a94a178c842b15d"
+    },
+    {
+      "bytes": 32286,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/project/benchmark/out/object-0004.json",
+      "sha256": "9d6c94a9c27828fe548b0bed57aa3d0343c5cd6e994fdfb9aba59866b0caf169"
+    },
+    {
+      "bytes": 11142,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/project/benchmark/out/object-0005.json",
+      "sha256": "621ca8093924988bfec0a902e1213d49e749076ff1cf3fe4a2462a4397a8e4d8"
+    },
+    {
+      "bytes": 32289,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/project/benchmark/out/object-0006.json",
+      "sha256": "845fe9b3f7abbb2968f53655f94cd319b518dbbe0b28de3d1aed1cf017c04a17"
+    },
+    {
+      "bytes": 10560,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/project/benchmark/out/object-0007.json",
+      "sha256": "229ae6b8d60ccdc1c190c952b54d51961c023fc932b8a5974baba6b5591834d0"
+    },
+    {
+      "bytes": 31704,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/project/benchmark/out/object-0008.json",
+      "sha256": "a73907751c1c0d5b684e32e33c312612bfc242b8ae47c83c2f49fa4330257b21"
+    },
+    {
+      "bytes": 11144,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/project/benchmark/out/object-0009.json",
+      "sha256": "3d5cb07b13682a2171176eab0988364207d366df135664f6b3001db3e11f21a1"
+    },
+    {
+      "bytes": 32289,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/project/benchmark/out/object-0010.json",
+      "sha256": "222eacddc3d79e79722f536eafd59f828e95309c3808bafa54ea7b0e4e0bdb7b"
+    },
+    {
+      "bytes": 11145,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/project/benchmark/out/object-0011.json",
+      "sha256": "ad14468b8f5e01793a22909c4fdb32e2dc2e0cc3fde99175806afd7dfc19121c"
+    },
+    {
+      "bytes": 10422,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/project/benchmark/out/object-0012.json",
+      "sha256": "e654e4dca5dbef9b4ed807d553c804693e2680c670e3d800b803004b6586ea64"
+    },
+    {
+      "bytes": 10062,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/project/benchmark/out/object-0013.json",
+      "sha256": "1fa363ad4269586f52a95abcd0a7b48d6dcf1491b3ad583c77194f4f64513945"
+    },
+    {
+      "bytes": 10063,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/project/benchmark/out/object-0014.json",
+      "sha256": "4bb81edf78f0c8d16da598173e1d45ce5c56d54108787227d570886e69a6eeee"
+    },
+    {
+      "bytes": 10063,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/project/benchmark/out/object-0015.json",
+      "sha256": "8b7dcd2cf0e81264438ae9e42b4f0aa3127f75b3162956e7b032647f7c8b6539"
+    },
+    {
+      "bytes": 10062,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/project/benchmark/out/object-0016.json",
+      "sha256": "12abc9a7d500f8576ec0b335bef5250b7641868490bdf2df27c66f2398ff45db"
+    },
+    {
+      "bytes": 10062,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/project/benchmark/out/object-0017.json",
+      "sha256": "2e90ba5c33736c42a6a612461882e2001e34c7d34ae5cd9e12625e2fc9821d0c"
+    },
+    {
+      "bytes": 10063,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/project/benchmark/out/object-0018.json",
+      "sha256": "f6abdb61d2180e1ee01bc2e6d2f855eecc10d8b2e8243c69e45b403848dcba63"
+    },
+    {
+      "bytes": 10062,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/project/benchmark/out/object-0019.json",
+      "sha256": "4a01ef27cf5cf6fbcdbf79b5d9f79764fadecefde27e6786f1c9bddaa5e75a10"
+    },
+    {
+      "bytes": 10063,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/project/benchmark/out/object-0020.json",
+      "sha256": "0ce86c21e07b20615fd942087979bae4d5dfcf056c51a5c2597b9b7b0b228a08"
+    },
+    {
+      "bytes": 10062,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/project/benchmark/out/object-0021.json",
+      "sha256": "1c74e5cf1c3c191de5535e759cccdbe7604ccee400db76a698e5157bd4f7ff11"
+    },
+    {
+      "bytes": 10063,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/project/benchmark/out/object-0022.json",
+      "sha256": "73257bb6a286f1a7665277536a910ddce186e8601d0d9e8078b7befeb0911d65"
+    },
+    {
+      "bytes": 10063,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/project/benchmark/out/object-0023.json",
+      "sha256": "52336f652b335b0af6d6706eee009cdf92a19c68f1e14c9d53001183821fb4da"
+    },
+    {
+      "bytes": 10066,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/project/benchmark/out/object-0024.json",
+      "sha256": "7d5d3f90fc9f742b056bc11559321febac9d7f7f8070b25dd89262298dcc61e1"
+    },
+    {
+      "bytes": 838,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/project/project.godot",
+      "sha256": "819b521edff745f02f7c30e96ceffe21c70d8ef4fc32e95b96df37877e817ce1"
+    },
+    {
+      "bytes": 295,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/project/scenes/fixture.tscn",
+      "sha256": "859c6e1cbb3913aad42d042af895c8b7e8b07d6f4dd99a37800d496f13378650"
+    },
+    {
+      "bytes": 50,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/project/scripts/fixture_actor.gd",
+      "sha256": "30116960b59778bee92698077689481f7936f41a2d722ddbe23626cbe3fc55cd"
+    },
+    {
+      "bytes": 20,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/project/scripts/fixture_actor.gd.uid",
+      "sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142"
+    },
+    {
       "bytes": 2557,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/result.json",
       "sha256": "47ea7eb0ec870cc71e51b7c38f99221988ab40da12b6ae57a93ae35e3e5fd109"
     },
     {
-      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/runtime-source-files.json",
       "bytes": 6332,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/runtime-source-files.json",
       "sha256": "d5fe89af948327a1daac557783804d121fcbc036bbbd876232c4f1ab737cb784"
+    },
+    {
+      "bytes": 16349,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/source/studio/blender-addon/ipc_client.py",
+      "sha256": "ee5d77e52dabb8b746e528be2acddc07b821f6b6724e9de9a36ec18b71cd8da9"
+    },
+    {
+      "bytes": 30060,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/source/studio/contracts/perf-collector.schema.json",
+      "sha256": "394d1df03bdfd736ea3fe9f260e9d718d35f3820cde35d1c45ccab65fbc24834"
+    },
+    {
+      "bytes": 165,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/source/studio/godot-addon/addons/hh_studio/plugin.cfg",
+      "sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c"
+    },
+    {
+      "bytes": 23043,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/source/studio/godot-addon/addons/hh_studio/plugin.gd",
+      "sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036"
+    },
+    {
+      "bytes": 32174,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/source/studio/godot-addon/addons/hh_studio/scene_commands.gd",
+      "sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069"
+    },
+    {
+      "bytes": 15005,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/source/studio/godot-addon/bundle_staging.py",
+      "sha256": "3d614edbec8e9a7f5ad3caf2b9694d7498df129de95683952268621f91d68e43"
+    },
+    {
+      "bytes": 8475,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/source/studio/godot-addon/bundle_v2.py",
+      "sha256": "2c5cdc71cdaf80f58bb93ec791e84bab8bd02cd4d9bdbd93d635db13583de62a"
+    },
+    {
+      "bytes": 12672,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/source/studio/godot-addon/cli_job.py",
+      "sha256": "5a0f37bc129bde409a2657054fb091d637d838e442d45a69e7adc1f1527d4c88"
+    },
+    {
+      "bytes": 6020,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/source/studio/godot-addon/fixture_profile.py",
+      "sha256": "25e1667dd930dcf0746b071fc29ea3460bc18d5fb9f3f83e806c1793028f21ae"
+    },
+    {
+      "bytes": 20,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/source/studio/godot-addon/fixture_profile/addons/hh_studio/jcs_godot.gd.uid",
+      "sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b"
+    },
+    {
+      "bytes": 20,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/source/studio/godot-addon/fixture_profile/addons/hh_studio/plugin.gd.uid",
+      "sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d"
+    },
+    {
+      "bytes": 19,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/source/studio/godot-addon/fixture_profile/addons/hh_studio/scene_commands.gd.uid",
+      "sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69"
+    },
+    {
+      "bytes": 282,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/source/studio/godot-addon/fixture_profile/project.godot",
+      "sha256": "2d4fa9c7261fc5ec4292094854ffa79b602249671a03db3c9808ea7521f4fa51"
+    },
+    {
+      "bytes": 20,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/source/studio/godot-addon/fixture_profile/scripts/fixture_actor.gd.uid",
+      "sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142"
+    },
+    {
+      "bytes": 1873,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/source/studio/godot-addon/fixture_profile/source-pins.json",
+      "sha256": "c0a40998bd63d4d3dc628e4b9d2e0932fcb5725d1870adc43d0fdc3af2fdeed2"
+    },
+    {
+      "bytes": 69,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/source/studio/host/blender/__init__.py",
+      "sha256": "812b123ddad075d7bb1892a38e099fdb48db147f80a27db83101c2b640044a90"
+    },
+    {
+      "bytes": 1130,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/source/studio/host/blender/deadline.py",
+      "sha256": "55fb3f77cadd9edc633186e1d6727bbed06216d659846aa3836e2582eef46926"
+    },
+    {
+      "bytes": 13605,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/source/studio/host/blender/export_job.py",
+      "sha256": "8eb0cc4a93361faf8cf09a3f11fd0278ec3fcdb2c9863e4b2ee98852c67ecdfe"
+    },
+    {
+      "bytes": 11815,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/source/studio/host/blender/glb_preflight.py",
+      "sha256": "5e4015c77ee3dced056634f89a0ba1fe2f94dd6650250fac8b03317c12d54f62"
+    },
+    {
+      "bytes": 22464,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/source/studio/host/blender/ui_host.py",
+      "sha256": "0fa5afa44046b61b68baafc275b39ade4787a55221074018db588c4c2f71dc35"
+    },
+    {
+      "bytes": 15813,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/source/studio/host/core/limits.py",
+      "sha256": "9d01ce56f5976bb034e60e33bf4b7986cdc44b3a8ffad46da738a6ed1b143f3f"
+    },
+    {
+      "bytes": 20476,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/source/studio/host/core/private_store.py",
+      "sha256": "c914b5a66a45660c782ecd43fd2321c238702340f3b33062e284feada4d46476"
+    },
+    {
+      "bytes": 13170,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/source/studio/host/core/safe_create.py",
+      "sha256": "681fb7c0f4e74d82597bd8049a6b42cde0ea73941d879ec8ef0ba4df326d0606"
+    },
+    {
+      "bytes": 12093,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/source/studio/host/core/safe_open.py",
+      "sha256": "efc083f1c4fa875d3f748602924a05712aa60fed3abcdb46d058672930201535"
+    },
+    {
+      "bytes": 19085,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/source/studio/host/replay/perf.py",
+      "sha256": "7c24c11989420e1600bcb20b8949fea44ea93b381bcab824e471465f5148edc7"
+    },
+    {
+      "bytes": 5485,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/source/studio/host/replay/process_probe.py",
+      "sha256": "53b6b24813e6ba6dc040dcbb87aee529b7f4e8855a64bcd0689b19c240180500"
+    },
+    {
+      "bytes": 79,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/source/studio/pipeline/__init__.py",
+      "sha256": "ffea2c35acdfe30636d61970e16c573e4de68228c4f7e780a6061d7be3fbbc68"
+    },
+    {
+      "bytes": 12512,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/source/studio/pipeline/native_job.py",
+      "sha256": "456bb70c315e38cf7a29354b7df51862e1ded4578f6b22d9110bf628547c20ca"
+    },
+    {
+      "bytes": 881,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/source/studio/protocol/__init__.py",
+      "sha256": "a906ecde6f60d5fa2febd3f8a4a5fae440d87fea69e7d7e51a750677e03ad09f"
+    },
+    {
+      "bytes": 505,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/source/studio/protocol/_rfc8785/__init__.py",
+      "sha256": "49d914da77ba606d535832d97df2e43458a8e51d57cdba6883a0a895ac50484b"
+    },
+    {
+      "bytes": 7251,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/source/studio/protocol/_rfc8785/_impl.py",
+      "sha256": "c25bc3a046528482d53bee3487b837f31dd9c05f33e8f13288c7aab320932cec"
+    },
+    {
+      "bytes": 19886,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/source/studio/protocol/core.py",
+      "sha256": "e8153f5a4dcf639f4d1cbce2fa74f7866d963a692c68e4e8d1477136889bd93e"
+    },
+    {
+      "bytes": 10165,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/source/studio/protocol/jcs_godot.gd",
+      "sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5"
+    },
+    {
+      "bytes": 24991,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/source/studio/tests/replay/benchmark_job.py",
+      "sha256": "be424a6f37ae573ac4bf40954b31017025daee2147699c80b05f9a0ab70e1611"
+    },
+    {
+      "bytes": 51618,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/source/studio/tests/replay/benchmark_native.gd",
+      "sha256": "52fbd9af5c6191ada5baf1d7195a75685ed5e27a95f4d244af8b4d679f8c00f2"
+    },
+    {
+      "bytes": 189,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/source/studio/tests/replay/benchmark_plugin.cfg",
+      "sha256": "648d8821a36d0abc825ef1f380b4917639074302a619cb25a798df987a5a1092"
+    },
+    {
+      "bytes": 19625,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/source/studio/tests/replay/benchmark_profile.py",
+      "sha256": "ddbd98583060f791226fca83e275cf01204b37112627383198dcef4ec6f6f233"
+    },
+    {
+      "bytes": 6746,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/source/studio/tests/replay/benchmark_readiness.py",
+      "sha256": "842db6244d93384932929544045654f089d67f6f304624b7348b7d5c4583ab68"
+    },
+    {
+      "bytes": 26986,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/source/studio/tests/replay/run_native_benchmark.py",
+      "sha256": "e6b0f8e9711ac881cfa65b4537232c685ff577af0a13778a51cc54999b1c1fc7"
+    },
+    {
+      "bytes": 3026,
+      "path": "studio/.local/reviews/gt06-s82-object-diagnostic-01/source/studio/toolchain.lock.json",
+      "sha256": "28bdce555e9a44ef68193723d512feda02c42a417ceb78faf0b29f52d095dca9"
+    },
+    {
+      "bytes": 3474,
+      "path": "zdoc/reviews/20260918-gt06-s82-diagnosis/README.md",
+      "sha256": "e231d645757d0ddba8e05c4a6cd2985718e541afe267ab625a8f534b7ca693d9"
+    },
+    {
+      "bytes": 16403,
+      "path": "zdoc/reviews/20260918-gt06-s82-diagnosis/analysis-result.json",
+      "sha256": "b55a7ebfb1ed737d3e3bad0ddcc0edf4f331740293c61eb90434bd29e2020dbc"
+    },
+    {
+      "bytes": 1966,
+      "path": "zdoc/reviews/20260918-gt06-s82-diagnosis/analysis-test-run.json",
+      "sha256": "7c99d0fda4daea6db0b2e783411ed66ced8bc01fc7fe23dafbda848ac41462c7"
+    },
+    {
+      "bytes": 21899,
+      "path": "zdoc/reviews/20260918-gt06-s82-diagnosis/analyze_existing_raw.py",
+      "sha256": "f195a56fdf529eb1e9ac315de06f3e58a911dd4ecb21cf9ace06f8cdf5baeafe"
+    },
+    {
+      "bytes": 8686,
+      "path": "zdoc/reviews/20260918-gt06-s82-diagnosis/diagnose_objects.py",
+      "sha256": "4fdcc8961d6f69f469c09c255bf20f63cd504fa6cd999af67b0ae7357ffa8a36"
+    },
+    {
+      "bytes": 6323,
+      "path": "zdoc/reviews/20260918-gt06-s82-diagnosis/diagnostic-01.json",
+      "sha256": "b6263ef64ad67cd8894a18a52df4227c32dd8a3395c047be29b91acc9faa6ce7"
+    },
+    {
+      "bytes": 820,
+      "path": "zdoc/reviews/20260918-gt06-s82-diagnosis/diagnostic-corrected.json",
+      "sha256": "7744e75e0a77ba1c1b670bda2947cf4c9e451e57f0f8d636351120721c8b6c08"
+    },
+    {
+      "bytes": 10391,
+      "path": "zdoc/reviews/20260918-gt06-s82-diagnosis/object_probe.gd",
+      "sha256": "d43bd09033b50dd4c93ace5ad160513c2f064aa36ff5496135048e474e87f2f8"
+    },
+    {
+      "bytes": 36995,
+      "path": "zdoc/reviews/20260918-gt06-s82-diagnosis/pre-repair-byte-inventory.json",
+      "sha256": "e7e397a63b804654519c9f2d6644071d677a1ff5c48d77b8b11a9bc59f901468"
+    },
+    {
+      "bytes": 2557,
+      "path": "zdoc/reviews/20260918-gt06-s82-diagnosis/result-01.json",
+      "sha256": "47ea7eb0ec870cc71e51b7c38f99221988ab40da12b6ae57a93ae35e3e5fd109"
+    },
+    {
+      "bytes": 577,
+      "path": "zdoc/reviews/20260918-gt06-s82-diagnosis/result-01/capture.json",
+      "sha256": "89966d4e39fea7e08d4a058cb3a6450fb48be1e6651ec57ffde47faa6a584991"
+    },
+    {
+      "bytes": 8686,
+      "path": "zdoc/reviews/20260918-gt06-s82-diagnosis/result-01/diagnose_objects.py",
+      "sha256": "4fdcc8961d6f69f469c09c255bf20f63cd504fa6cd999af67b0ae7357ffa8a36"
+    },
+    {
+      "bytes": 688,
+      "path": "zdoc/reviews/20260918-gt06-s82-diagnosis/result-01/invocation.json",
+      "sha256": "f9acf5762f6b0b8368450060774dd3a5d34f490f22fe4c3e4bf1d76e214bc24b"
+    },
+    {
+      "bytes": 10391,
+      "path": "zdoc/reviews/20260918-gt06-s82-diagnosis/result-01/object_probe.gd",
+      "sha256": "d43bd09033b50dd4c93ace5ad160513c2f064aa36ff5496135048e474e87f2f8"
+    },
+    {
+      "bytes": 87,
+      "path": "zdoc/reviews/20260918-gt06-s82-diagnosis/result-01/probe-host.json",
+      "sha256": "2b33a7b69fd354eb8bc8dc027f2a81fac8a0e03a70a0604c5ddf70612c3d334f"
+    },
+    {
+      "bytes": 0,
+      "path": "zdoc/reviews/20260918-gt06-s82-diagnosis/result-01/probe-stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 0,
+      "path": "zdoc/reviews/20260918-gt06-s82-diagnosis/result-01/probe-stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 1253,
+      "path": "zdoc/reviews/20260918-gt06-s82-diagnosis/superseded-derived/README.md.raw",
+      "sha256": "505b60e8ec9361603765ea54d6474c453c0d25193a377a81c04705757bf8da40"
+    },
+    {
+      "bytes": 705,
+      "path": "zdoc/reviews/20260918-gt06-s82-diagnosis/superseded-derived/artifact-hashes.json.raw",
+      "sha256": "d5662df9cce6e67373f8e91b63fe8a3dd0d25b8a4dbaffc2a2271b32b025a513"
+    },
+    {
+      "bytes": 2679,
+      "path": "zdoc/reviews/20260918-gt06-s82-diagnosis/test_existing_raw_analyzer.py",
+      "sha256": "017501e173658df54c4009c1e2ae9a582bce9d136bb8e72ad766534ba843181c"
     }
-  ]
+  ],
+  "formal_acceptance": false,
+  "hash_domain": "SHA256 of exact filesystem bytes; no Git/EOL normalization",
+  "raw_tree_file_count": 143,
+  "review_file_count_excluding_manifest": 20,
+  "run_id": "gt06-s82-object-diagnostic-01",
+  "schema": "HH-GT06-S82-EXACT-ARTIFACTS-2",
+  "shared_verifier_file_count": 0
 }

@@ -1,0 +1,37 @@
+{
+  "created_utc": "2026-09-18T09:38:03.776770+00:00",
+  "started_utc": "2026-09-18T09:37:49.299171+00:00",
+  "status": "PRESERVATION_VERIFIED",
+  "formal_acceptance": false,
+  "raw_files": 325,
+  "raw_bytes": 49517049,
+  "raw_root_counts": {
+    "campaign": 313,
+    "supervisor": 12
+  },
+  "raw_before_after_equal": true,
+  "exact_copies": 172,
+  "copied_bytes": 22123880,
+  "excluded_copy_files": 153,
+  "supervisor_files_copied": 12,
+  "source_files": 51,
+  "source_closure_sha256": "e010180a1bf85b7f565e9aa39734f8551caf170a85b36c50598be556b723ce7f",
+  "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+  "batch_reference_count": 96,
+  "command_rows": 16000,
+  "native_cycle_rows": 1600,
+  "per_batch_cancel_receipts": 16,
+  "operator_stop_slots": 30,
+  "completed_full_runs": 0,
+  "gaps": [
+    "Editor 48332 natural/native exit is absent; helper 22376 exit 2 is distinct and never substituted.",
+    "Supervisor return.json is a pre-exit returned-code record; no actual supervisor process-exit receipt. Scheduler state3/result1/no instances is separate.",
+    "Import capture has Job zero/closed and actual exit0 but no explicit wrapper_process_handle receipt or helper PID inventory.",
+    "Host wrapper return1 and closed handle are present; durable host helper PID inventory is absent.",
+    "16 batch captures (5 warmup + 11 measured) include the failed retained-counter sample; 0 complete/full PASS runs. 19 measured batches missing from this attempted run; 10 fresh complete runs remain required.",
+    "The +2 ObjectDB retained-counter cause is not established by this forensic packet.",
+    "scenes/fixture.tscn differs from both initial-project and editor-snapshot maps; its actual hash matches all 1600 native cycle saved-file receipts. Exact scene bytes are retained, without an unchanged-project claim.",
+    "Source/cache/project originals excluded from copies are required for full raw replay verification; this is not a standalone portable full raw archive.",
+    "No engine run, test execution, independent acceptance critic or GT-06 acceptance performed by this preservation task."
+  ]
+}

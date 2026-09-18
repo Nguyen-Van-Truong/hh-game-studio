@@ -1,0 +1,22 @@
+{
+  "schema": "HH-S82-STATIC-ANALYZER-TEST-1",
+  "authority": 0,
+  "formal_acceptance": false,
+  "engine_rerun": false,
+  "started_utc": "2026-09-18T09:39:21.718471+00:00",
+  "argv": [
+    "C:\\Users\\truon\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+    "-B",
+    "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260918-gt06-s82-diagnosis\\test_existing_raw_analyzer.py"
+  ],
+  "pid": 19224,
+  "actual_exit_code": 0,
+  "stdout": "",
+  "stderr": "test_original_both_runs (__main__.EvidenceChecks.test_original_both_runs) ... ok\r\ntest_reject_claimed_cleanup_with_retained_handle (__main__.EvidenceChecks.test_reject_claimed_cleanup_with_retained_handle) ... ok\r\ntest_reject_erased_identity_churn (__main__.EvidenceChecks.test_reject_erased_identity_churn) ... ok\r\ntest_reject_erased_original_failure (__main__.EvidenceChecks.test_reject_erased_original_failure) ... ok\r\ntest_reject_helper_failure_relabel (__main__.EvidenceChecks.test_reject_helper_failure_relabel) ... ok\r\ntest_reject_inconsistent_source_digest (__main__.EvidenceChecks.test_reject_inconsistent_source_digest) ... ok\r\ntest_reject_native_batch_count (__main__.EvidenceChecks.test_reject_native_batch_count) ... ok\r\ntest_reject_native_exit_relabel (__main__.EvidenceChecks.test_reject_native_exit_relabel) ... ok\r\ntest_reject_snapshot_counter_change (__main__.EvidenceChecks.test_reject_snapshot_counter_change) ... ok\r\n\r\n----------------------------------------------------------------------\r\nRan 9 tests in 0.790s\r\n\r\nOK\r\n",
+  "source_sha256": {
+    "analyze_existing_raw.py": "f195a56fdf529eb1e9ac315de06f3e58a911dd4ecb21cf9ace06f8cdf5baeafe",
+    "test_existing_raw_analyzer.py": "017501e173658df54c4009c1e2ae9a582bce9d136bb8e72ad766534ba843181c"
+  },
+  "evidence_writes_in_tests": false,
+  "negative_cases": "Decoded in-memory views only; original raw and executed helpers are never changed."
+}

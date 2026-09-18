@@ -98,3 +98,6 @@ zdoc/reviews/20260918-gt06-s80-closeout/** -text whitespace=blank-at-eol,blank-a
 # S81 failed-run diagnostics and S80 history retain exact recorded bytes.
 zdoc/reviews/20260918-gt06-s81-admission/** -text whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
 zdoc/reviews/20260918-plan-history-s80/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+# S82 executed probes and native evidence retain exact mixed-newline bytes.
+zdoc/reviews/20260918-gt06-s82-*/** -text whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+zdoc/reviews/20260918-plan-history-s82/** -text whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol

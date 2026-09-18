@@ -1,0 +1,15 @@
+{
+  "started_utc": "2026-09-18T09:34:03.319131+00:00",
+  "finished_utc": "2026-09-18T09:34:04.135518+00:00",
+  "argv": [
+    "C:\\Users\\truon\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\powershell\\pwsh.exe",
+    "-NoProfile",
+    "-Command",
+    "$items = @(Get-CimInstance Win32_Process | Select-Object ProcessId,ParentProcessId,Name,CreationDate); ConvertTo-Json -InputObject $items -Depth 4"
+  ],
+  "cwd": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3",
+  "returncode": 0,
+  "stdout_sha256": "75f2da20fd854605fe022efc79448390bdb66d722315a90243a7f1cabb72a7bc",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "scope": "Read-only observation; never a native target exit receipt"
+}

@@ -1,0 +1,11 @@
+{
+  "observed_utc": "2026-09-18T09:37:48.559533+00:00",
+  "exit_code": 1,
+  "exception_type": "AssertionError",
+  "failed_assertion": "sample evidence_sha256 incorrectly compared to whole batch-capture file bytes",
+  "script_sha256": "ef0d435c7d8fad1c7b18637138319f74c166484ce05da18d50eb19a9a0030cb9",
+  "scope": "Collector diagnostic, not engine/test execution",
+  "raw_modified": false,
+  "raw_copies_or_preservation_reports_created": false,
+  "reason": "Actual evidence hash covers compact sorted-key JSON binding with source/profile/processes, artifact refs and barrier_receipt; collector must verify that domain separately."
+}

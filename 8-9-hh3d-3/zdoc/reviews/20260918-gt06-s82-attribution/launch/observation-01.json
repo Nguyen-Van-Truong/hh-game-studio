@@ -1,0 +1,26 @@
+{
+  "observed_utc": "2026-09-18T09:42:21.7636033Z",
+  "run_id": "gt06-s82-attribution-01",
+  "supervisor_alive": true,
+  "host_start": {
+    "pid": 42832
+  },
+  "editor_start": {
+    "pid": 32860
+  },
+  "terminal_present": false,
+  "host_tail": [
+    "HH_GT06_CAMPAIGN_PROGRESS {\"run_id\": \"gt06-s82-attribution-01\", \"batch\": 0, \"phase\": \"native_cycles\"}",
+    "HH_GT06_CAMPAIGN_PROGRESS {\"run_id\": \"gt06-s82-attribution-01\", \"batch\": 0, \"phase\": \"native_cycles\"}",
+    "HH_GT06_CAMPAIGN_PROGRESS {\"run_id\": \"gt06-s82-attribution-01\", \"batch\": 0, \"phase\": \"native_cycles\"}"
+  ],
+  "native_tail": [
+    "HH_GT06_BENCHMARK_HEARTBEAT {\"batch\":0,\"cycle\":44,\"main_thread\":true,\"monotonic_us\":55827663,\"phase\":\"SAVE_WAIT\",\"pid\":32860,\"run_id\":\"gt06-s82-attribution-01\"}",
+    "HH_GT06_BENCHMARK_HEARTBEAT {\"batch\":0,\"cycle\":46,\"main_thread\":true,\"monotonic_us\":56367008,\"phase\":\"SAVE_WAIT\",\"pid\":32860,\"run_id\":\"gt06-s82-attribution-01\"}",
+    "HH_GT06_BENCHMARK_HEARTBEAT {\"batch\":0,\"cycle\":48,\"main_thread\":true,\"monotonic_us\":56905379,\"phase\":\"SAVE_WAIT\",\"pid\":32860,\"run_id\":\"gt06-s82-attribution-01\"}"
+  ],
+  "host_stderr_bytes": 0,
+  "editor_stderr_bytes": 0,
+  "batch_captures": 0,
+  "formal_acceptance": false
+}

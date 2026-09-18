@@ -1,0 +1,7 @@
+# S82 long native-only diagnosis
+
+`AUTHORITY=0`; this is diagnostic evidence, not GT-06 PASS. The fixture completed 16 batches × 100 native cycles (1,600 cycles) and every object snapshot kept the same ObjectDB count, with no additions or removals. ResourceCache remained constant. The native editor process exited 0 with empty stderr; the owned Job reached zero and wrapper handles closed.
+
+The outer helper returned 1 because the copied diagnostic helper still asserted `len(batches)==6` after the intentional 16-batch extension. The raw native capture is authoritative for the actual process exit; `long-result.json` records this harness defect explicitly. No runtime source, profile, threshold, or transport was changed.
+
+This rules out a persistent native-only create/undo/save/reload growth over the same 16-batch duration, but it does not reproduce the full host-command lane. Therefore it does not justify relaxing the counter gate or claiming GT-06.

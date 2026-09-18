@@ -1,0 +1,1663 @@
+{
+  "created_utc": "2026-09-18T09:38:03.772769+00:00",
+  "formal_acceptance": false,
+  "scope": "Failure-prefix integrity and retained-counter/status screens only; no benchmark PASS or latency acceptance",
+  "captured_batch_indexes": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15
+  ],
+  "warmup_batches": 5,
+  "measured_captures_including_failed_batch": 11,
+  "completed_full_runs": 0,
+  "required_full_runs": 10,
+  "missing_measured_batches_this_attempt": 19,
+  "baseline_batch": 4,
+  "failure_batch": 15,
+  "samples": [
+    {
+      "index": 0,
+      "warmup": true,
+      "memory": {
+        "editor": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 565
+          },
+          "objects": {
+            "unavailable_reason": null,
+            "value": 71128
+          },
+          "resources": {
+            "unavailable_reason": null,
+            "value": 6
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 753295360
+          }
+        },
+        "host": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 198
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 40304640
+          }
+        },
+        "phase": "post_batch_quiescent"
+      },
+      "max_status_gap_ms": 543.272,
+      "stop_receipt_ms": 39.9148,
+      "screen_breaches": []
+    },
+    {
+      "index": 1,
+      "warmup": true,
+      "memory": {
+        "editor": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 557
+          },
+          "objects": {
+            "unavailable_reason": null,
+            "value": 71128
+          },
+          "resources": {
+            "unavailable_reason": null,
+            "value": 6
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 755642368
+          }
+        },
+        "host": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 198
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 40919040
+          }
+        },
+        "phase": "post_batch_quiescent"
+      },
+      "max_status_gap_ms": 576.354,
+      "stop_receipt_ms": 33.086,
+      "screen_breaches": []
+    },
+    {
+      "index": 2,
+      "warmup": true,
+      "memory": {
+        "editor": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 559
+          },
+          "objects": {
+            "unavailable_reason": null,
+            "value": 71128
+          },
+          "resources": {
+            "unavailable_reason": null,
+            "value": 6
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 755818496
+          }
+        },
+        "host": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 198
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 41254912
+          }
+        },
+        "phase": "post_batch_quiescent"
+      },
+      "max_status_gap_ms": 546.221,
+      "stop_receipt_ms": 52.7049,
+      "screen_breaches": []
+    },
+    {
+      "index": 3,
+      "warmup": true,
+      "memory": {
+        "editor": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 559
+          },
+          "objects": {
+            "unavailable_reason": null,
+            "value": 71128
+          },
+          "resources": {
+            "unavailable_reason": null,
+            "value": 6
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 755208192
+          }
+        },
+        "host": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 198
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 41553920
+          }
+        },
+        "phase": "post_batch_quiescent"
+      },
+      "max_status_gap_ms": 727.996,
+      "stop_receipt_ms": 61.9163,
+      "screen_breaches": []
+    },
+    {
+      "index": 4,
+      "warmup": true,
+      "memory": {
+        "editor": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 565
+          },
+          "objects": {
+            "unavailable_reason": null,
+            "value": 71128
+          },
+          "resources": {
+            "unavailable_reason": null,
+            "value": 6
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 746893312
+          }
+        },
+        "host": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 198
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 41230336
+          }
+        },
+        "phase": "post_batch_quiescent"
+      },
+      "max_status_gap_ms": 601.734,
+      "stop_receipt_ms": 85.762,
+      "screen_breaches": []
+    },
+    {
+      "index": 5,
+      "warmup": false,
+      "memory": {
+        "editor": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 555
+          },
+          "objects": {
+            "unavailable_reason": null,
+            "value": 71128
+          },
+          "resources": {
+            "unavailable_reason": null,
+            "value": 6
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 677900288
+          }
+        },
+        "host": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 198
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 39571456
+          }
+        },
+        "phase": "post_batch_quiescent"
+      },
+      "max_status_gap_ms": 688.211,
+      "stop_receipt_ms": 49.6195,
+      "screen_breaches": []
+    },
+    {
+      "index": 6,
+      "warmup": false,
+      "memory": {
+        "editor": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 555
+          },
+          "objects": {
+            "unavailable_reason": null,
+            "value": 71128
+          },
+          "resources": {
+            "unavailable_reason": null,
+            "value": 6
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 576315392
+          }
+        },
+        "host": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 198
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 38412288
+          }
+        },
+        "phase": "post_batch_quiescent"
+      },
+      "max_status_gap_ms": 814.326,
+      "stop_receipt_ms": 50.2051,
+      "screen_breaches": []
+    },
+    {
+      "index": 7,
+      "warmup": false,
+      "memory": {
+        "editor": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 557
+          },
+          "objects": {
+            "unavailable_reason": null,
+            "value": 71128
+          },
+          "resources": {
+            "unavailable_reason": null,
+            "value": 6
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 467668992
+          }
+        },
+        "host": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 198
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 32202752
+          }
+        },
+        "phase": "post_batch_quiescent"
+      },
+      "max_status_gap_ms": 674.495,
+      "stop_receipt_ms": 55.5786,
+      "screen_breaches": []
+    },
+    {
+      "index": 8,
+      "warmup": false,
+      "memory": {
+        "editor": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 557
+          },
+          "objects": {
+            "unavailable_reason": null,
+            "value": 71128
+          },
+          "resources": {
+            "unavailable_reason": null,
+            "value": 6
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 388894720
+          }
+        },
+        "host": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 198
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 29192192
+          }
+        },
+        "phase": "post_batch_quiescent"
+      },
+      "max_status_gap_ms": 982.363,
+      "stop_receipt_ms": 60.916,
+      "screen_breaches": []
+    },
+    {
+      "index": 9,
+      "warmup": false,
+      "memory": {
+        "editor": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 557
+          },
+          "objects": {
+            "unavailable_reason": null,
+            "value": 71128
+          },
+          "resources": {
+            "unavailable_reason": null,
+            "value": 6
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 324558848
+          }
+        },
+        "host": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 198
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 28893184
+          }
+        },
+        "phase": "post_batch_quiescent"
+      },
+      "max_status_gap_ms": 1003.807,
+      "stop_receipt_ms": 73.3906,
+      "screen_breaches": []
+    },
+    {
+      "index": 10,
+      "warmup": false,
+      "memory": {
+        "editor": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 557
+          },
+          "objects": {
+            "unavailable_reason": null,
+            "value": 71128
+          },
+          "resources": {
+            "unavailable_reason": null,
+            "value": 6
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 296865792
+          }
+        },
+        "host": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 198
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 28372992
+          }
+        },
+        "phase": "post_batch_quiescent"
+      },
+      "max_status_gap_ms": 1755.3484,
+      "stop_receipt_ms": 73.7396,
+      "screen_breaches": []
+    },
+    {
+      "index": 11,
+      "warmup": false,
+      "memory": {
+        "editor": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 555
+          },
+          "objects": {
+            "unavailable_reason": null,
+            "value": 71128
+          },
+          "resources": {
+            "unavailable_reason": null,
+            "value": 6
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 259756032
+          }
+        },
+        "host": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 198
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 28463104
+          }
+        },
+        "phase": "post_batch_quiescent"
+      },
+      "max_status_gap_ms": 979.9087,
+      "stop_receipt_ms": 62.9567,
+      "screen_breaches": []
+    },
+    {
+      "index": 12,
+      "warmup": false,
+      "memory": {
+        "editor": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 557
+          },
+          "objects": {
+            "unavailable_reason": null,
+            "value": 71128
+          },
+          "resources": {
+            "unavailable_reason": null,
+            "value": 6
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 252022784
+          }
+        },
+        "host": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 198
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 27971584
+          }
+        },
+        "phase": "post_batch_quiescent"
+      },
+      "max_status_gap_ms": 1479.9269,
+      "stop_receipt_ms": 68.1645,
+      "screen_breaches": []
+    },
+    {
+      "index": 13,
+      "warmup": false,
+      "memory": {
+        "editor": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 555
+          },
+          "objects": {
+            "unavailable_reason": null,
+            "value": 71128
+          },
+          "resources": {
+            "unavailable_reason": null,
+            "value": 6
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 234668032
+          }
+        },
+        "host": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 198
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 27893760
+          }
+        },
+        "phase": "post_batch_quiescent"
+      },
+      "max_status_gap_ms": 573.082,
+      "stop_receipt_ms": 85.1217,
+      "screen_breaches": []
+    },
+    {
+      "index": 14,
+      "warmup": false,
+      "memory": {
+        "editor": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 555
+          },
+          "objects": {
+            "unavailable_reason": null,
+            "value": 71128
+          },
+          "resources": {
+            "unavailable_reason": null,
+            "value": 6
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 187691008
+          }
+        },
+        "host": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 198
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 27820032
+          }
+        },
+        "phase": "post_batch_quiescent"
+      },
+      "max_status_gap_ms": 1523.329,
+      "stop_receipt_ms": 77.8673,
+      "screen_breaches": []
+    },
+    {
+      "index": 15,
+      "warmup": false,
+      "memory": {
+        "editor": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 555
+          },
+          "objects": {
+            "unavailable_reason": null,
+            "value": 71130
+          },
+          "resources": {
+            "unavailable_reason": null,
+            "value": 6
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 207638528
+          }
+        },
+        "host": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 198
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 28102656
+          }
+        },
+        "phase": "post_batch_quiescent"
+      },
+      "max_status_gap_ms": 1305.9847,
+      "stop_receipt_ms": 77.9078,
+      "screen_breaches": [
+        {
+          "role": "editor",
+          "metric": "objects",
+          "value": 71130,
+          "baseline": 71128
+        }
+      ]
+    }
+  ],
+  "prefix_records": [
+    {
+      "index": 0,
+      "commands": 1000,
+      "command_mix": {
+        "inspect": 500,
+        "rejected": 300,
+        "admitted": 200
+      },
+      "native_cycles": 100,
+      "stop_target": "gt06-s81-campaign-01.r00.a01.b0.cancel",
+      "cancel_status": "CANCELED",
+      "no_effect": true
+    },
+    {
+      "index": 1,
+      "commands": 1000,
+      "command_mix": {
+        "inspect": 500,
+        "rejected": 300,
+        "admitted": 200
+      },
+      "native_cycles": 100,
+      "stop_target": "gt06-s81-campaign-01.r00.a01.b1.cancel",
+      "cancel_status": "CANCELED",
+      "no_effect": true
+    },
+    {
+      "index": 2,
+      "commands": 1000,
+      "command_mix": {
+        "inspect": 500,
+        "rejected": 300,
+        "admitted": 200
+      },
+      "native_cycles": 100,
+      "stop_target": "gt06-s81-campaign-01.r00.a01.b2.cancel",
+      "cancel_status": "CANCELED",
+      "no_effect": true
+    },
+    {
+      "index": 3,
+      "commands": 1000,
+      "command_mix": {
+        "inspect": 500,
+        "rejected": 300,
+        "admitted": 200
+      },
+      "native_cycles": 100,
+      "stop_target": "gt06-s81-campaign-01.r00.a01.b3.cancel",
+      "cancel_status": "CANCELED",
+      "no_effect": true
+    },
+    {
+      "index": 4,
+      "commands": 1000,
+      "command_mix": {
+        "inspect": 500,
+        "rejected": 300,
+        "admitted": 200
+      },
+      "native_cycles": 100,
+      "stop_target": "gt06-s81-campaign-01.r00.a01.b4.cancel",
+      "cancel_status": "CANCELED",
+      "no_effect": true
+    },
+    {
+      "index": 5,
+      "commands": 1000,
+      "command_mix": {
+        "inspect": 500,
+        "rejected": 300,
+        "admitted": 200
+      },
+      "native_cycles": 100,
+      "stop_target": "gt06-s81-campaign-01.r00.a01.b5.cancel",
+      "cancel_status": "CANCELED",
+      "no_effect": true
+    },
+    {
+      "index": 6,
+      "commands": 1000,
+      "command_mix": {
+        "inspect": 500,
+        "rejected": 300,
+        "admitted": 200
+      },
+      "native_cycles": 100,
+      "stop_target": "gt06-s81-campaign-01.r00.a01.b6.cancel",
+      "cancel_status": "CANCELED",
+      "no_effect": true
+    },
+    {
+      "index": 7,
+      "commands": 1000,
+      "command_mix": {
+        "inspect": 500,
+        "rejected": 300,
+        "admitted": 200
+      },
+      "native_cycles": 100,
+      "stop_target": "gt06-s81-campaign-01.r00.a01.b7.cancel",
+      "cancel_status": "CANCELED",
+      "no_effect": true
+    },
+    {
+      "index": 8,
+      "commands": 1000,
+      "command_mix": {
+        "inspect": 500,
+        "rejected": 300,
+        "admitted": 200
+      },
+      "native_cycles": 100,
+      "stop_target": "gt06-s81-campaign-01.r00.a01.b8.cancel",
+      "cancel_status": "CANCELED",
+      "no_effect": true
+    },
+    {
+      "index": 9,
+      "commands": 1000,
+      "command_mix": {
+        "inspect": 500,
+        "rejected": 300,
+        "admitted": 200
+      },
+      "native_cycles": 100,
+      "stop_target": "gt06-s81-campaign-01.r00.a01.b9.cancel",
+      "cancel_status": "CANCELED",
+      "no_effect": true
+    },
+    {
+      "index": 10,
+      "commands": 1000,
+      "command_mix": {
+        "inspect": 500,
+        "rejected": 300,
+        "admitted": 200
+      },
+      "native_cycles": 100,
+      "stop_target": "gt06-s81-campaign-01.r00.a01.b10.cancel",
+      "cancel_status": "CANCELED",
+      "no_effect": true
+    },
+    {
+      "index": 11,
+      "commands": 1000,
+      "command_mix": {
+        "inspect": 500,
+        "rejected": 300,
+        "admitted": 200
+      },
+      "native_cycles": 100,
+      "stop_target": "gt06-s81-campaign-01.r00.a01.b11.cancel",
+      "cancel_status": "CANCELED",
+      "no_effect": true
+    },
+    {
+      "index": 12,
+      "commands": 1000,
+      "command_mix": {
+        "inspect": 500,
+        "rejected": 300,
+        "admitted": 200
+      },
+      "native_cycles": 100,
+      "stop_target": "gt06-s81-campaign-01.r00.a01.b12.cancel",
+      "cancel_status": "CANCELED",
+      "no_effect": true
+    },
+    {
+      "index": 13,
+      "commands": 1000,
+      "command_mix": {
+        "inspect": 500,
+        "rejected": 300,
+        "admitted": 200
+      },
+      "native_cycles": 100,
+      "stop_target": "gt06-s81-campaign-01.r00.a01.b13.cancel",
+      "cancel_status": "CANCELED",
+      "no_effect": true
+    },
+    {
+      "index": 14,
+      "commands": 1000,
+      "command_mix": {
+        "inspect": 500,
+        "rejected": 300,
+        "admitted": 200
+      },
+      "native_cycles": 100,
+      "stop_target": "gt06-s81-campaign-01.r00.a01.b14.cancel",
+      "cancel_status": "CANCELED",
+      "no_effect": true
+    },
+    {
+      "index": 15,
+      "commands": 1000,
+      "command_mix": {
+        "inspect": 500,
+        "rejected": 300,
+        "admitted": 200
+      },
+      "native_cycles": 100,
+      "stop_target": "gt06-s81-campaign-01.r00.a01.b15.cancel",
+      "cancel_status": "CANCELED",
+      "no_effect": true
+    }
+  ],
+  "batch_references": [
+    {
+      "batch": 0,
+      "kind": "ack",
+      "file": "project/benchmark/input/ack-00.json",
+      "sha256": "d95ce6c9dc0a131cdc591d7b8f086b7b67ae8edc2a37b5f5239b06d02d9584f9",
+      "size_bytes": 422
+    },
+    {
+      "batch": 0,
+      "kind": "command",
+      "file": "command-00.json",
+      "sha256": "777b3fed4d74dbad421c339bb75ce97efcfa92bb807c52da176abb298eaff52f",
+      "size_bytes": 1138748
+    },
+    {
+      "batch": 0,
+      "kind": "joint",
+      "file": "joint-00.json",
+      "sha256": "f09562db13348fe9d05ff159781b003697ac40ea40b2f443cfe8a4606523e7c8",
+      "size_bytes": 2282
+    },
+    {
+      "batch": 0,
+      "kind": "native",
+      "file": "project/benchmark/out/batch-00.json",
+      "sha256": "da282c58c6e744be3e10025c707cb0b809dc9e9d50690b8da5822d6272ea89f5",
+      "size_bytes": 97091
+    },
+    {
+      "batch": 0,
+      "kind": "ready",
+      "file": "project/benchmark/out/ready-00.json",
+      "sha256": "4b0fcdee7c7179507047d6b88dd81df687be0ed7b0fd6ffb245bf6cc94fadbe1",
+      "size_bytes": 658
+    },
+    {
+      "batch": 0,
+      "kind": "start",
+      "file": "project/benchmark/input/start-00.json",
+      "sha256": "459afc901e1d4b702aceb023b3116e005b627abb83659f351beed6a43d827127",
+      "size_bytes": 508
+    },
+    {
+      "batch": 1,
+      "kind": "ack",
+      "file": "project/benchmark/input/ack-01.json",
+      "sha256": "856a4ec028d5bd81e20313ea9181497aac7194e8cb059e79360cc1e09d15b284",
+      "size_bytes": 423
+    },
+    {
+      "batch": 1,
+      "kind": "command",
+      "file": "command-01.json",
+      "sha256": "941f28ed6380fc914557fb708e163e9410f73ed0a0baf1cd4247466d48b70300",
+      "size_bytes": 1142423
+    },
+    {
+      "batch": 1,
+      "kind": "joint",
+      "file": "joint-01.json",
+      "sha256": "b41e62a71c030f5799bf58418becf679444f6ed845b5c4f10bc106e9625d837f",
+      "size_bytes": 2288
+    },
+    {
+      "batch": 1,
+      "kind": "native",
+      "file": "project/benchmark/out/batch-01.json",
+      "sha256": "08c6db256242a899ad521721e719f28fd224eb62b717c152c17a65c1b231bffc",
+      "size_bytes": 98325
+    },
+    {
+      "batch": 1,
+      "kind": "ready",
+      "file": "project/benchmark/out/ready-01.json",
+      "sha256": "da86f34f82450a0068be63990c17a6a32847ddecb8ca831f9b62636058f15a77",
+      "size_bytes": 662
+    },
+    {
+      "batch": 1,
+      "kind": "start",
+      "file": "project/benchmark/input/start-01.json",
+      "sha256": "f4c6916fb106ebbd6d77635503829ed22c333c46ea0c9ee92f6fdaa5dc7c9f76",
+      "size_bytes": 508
+    },
+    {
+      "batch": 2,
+      "kind": "ack",
+      "file": "project/benchmark/input/ack-02.json",
+      "sha256": "fd7f3a44c1590ca5caf8c59de45de8ad4148a3c35cdb19ba875fba4938f839c7",
+      "size_bytes": 423
+    },
+    {
+      "batch": 2,
+      "kind": "command",
+      "file": "command-02.json",
+      "sha256": "8d35a55c31dd3e4394423083fb89ef6aac3f2240449f1212bbc52e0583c5e771",
+      "size_bytes": 1142550
+    },
+    {
+      "batch": 2,
+      "kind": "joint",
+      "file": "joint-02.json",
+      "sha256": "b6f108de22e00fcb26637077374e0719ea518ee8738b803222311c4a2d579a64",
+      "size_bytes": 2288
+    },
+    {
+      "batch": 2,
+      "kind": "native",
+      "file": "project/benchmark/out/batch-02.json",
+      "sha256": "96bd74a39cd7e703e3c388ffd4c7c4031a4aecc3b30e819519f5b225e793bdc4",
+      "size_bytes": 98315
+    },
+    {
+      "batch": 2,
+      "kind": "ready",
+      "file": "project/benchmark/out/ready-02.json",
+      "sha256": "0fe825cd304d12c7dbc6bf1b20c3b7b39ab13e95bedabf9f2dff47d149965d37",
+      "size_bytes": 664
+    },
+    {
+      "batch": 2,
+      "kind": "start",
+      "file": "project/benchmark/input/start-02.json",
+      "sha256": "4521d15ddf34f5ff14c6afa9c3813ecf6b5c26f5bbfdd7817d0c1c6710ee65cb",
+      "size_bytes": 508
+    },
+    {
+      "batch": 3,
+      "kind": "ack",
+      "file": "project/benchmark/input/ack-03.json",
+      "sha256": "7e57788bbd1ebb9a53424e4ad377940eb27f12d5ba5454db5337242bf7dfc230",
+      "size_bytes": 423
+    },
+    {
+      "batch": 3,
+      "kind": "command",
+      "file": "command-03.json",
+      "sha256": "8351c4aa0c31dbb51f70ee930e55f08225a72649c66ff45fcd76e1a5681e0ee1",
+      "size_bytes": 1142527
+    },
+    {
+      "batch": 3,
+      "kind": "joint",
+      "file": "joint-03.json",
+      "sha256": "8aec461adc582161c4b5c51ef0ff1a9b082a551409becb3c43bf5eb5d48f57bd",
+      "size_bytes": 2288
+    },
+    {
+      "batch": 3,
+      "kind": "native",
+      "file": "project/benchmark/out/batch-03.json",
+      "sha256": "306d34a38930d2a08f97e71e0317c6b512de422f4a1787e3d84a9847a4cc97cf",
+      "size_bytes": 98322
+    },
+    {
+      "batch": 3,
+      "kind": "ready",
+      "file": "project/benchmark/out/ready-03.json",
+      "sha256": "d8d23ddfeaf52a5b1427fd90b188dd85f304acdbfde3f50bb9b082efd9d84301",
+      "size_bytes": 664
+    },
+    {
+      "batch": 3,
+      "kind": "start",
+      "file": "project/benchmark/input/start-03.json",
+      "sha256": "4ff937a9f87f8752b729b7fdcf81c2762bea73292d4ae0fd4865cd5403dffad9",
+      "size_bytes": 508
+    },
+    {
+      "batch": 4,
+      "kind": "ack",
+      "file": "project/benchmark/input/ack-04.json",
+      "sha256": "b374bbf074f43a994c3d9e95b9d24130a9cbf15785b127e0bdc5caa6ffb7e92a",
+      "size_bytes": 423
+    },
+    {
+      "batch": 4,
+      "kind": "command",
+      "file": "command-04.json",
+      "sha256": "c40d6330826861b881a5f48828ad1c0cc100747c413f79645204b91336fd2a4c",
+      "size_bytes": 1143199
+    },
+    {
+      "batch": 4,
+      "kind": "joint",
+      "file": "joint-04.json",
+      "sha256": "736eef99dd2dfbdce6675c79e911296fb5a245f2cd7209613de90ae8c6541a5d",
+      "size_bytes": 2289
+    },
+    {
+      "batch": 4,
+      "kind": "native",
+      "file": "project/benchmark/out/batch-04.json",
+      "sha256": "9575a56450c95c1a43a5b50b5cdba38d9e7ac7961ed77b4a01ef8f0eb82330ad",
+      "size_bytes": 98319
+    },
+    {
+      "batch": 4,
+      "kind": "ready",
+      "file": "project/benchmark/out/ready-04.json",
+      "sha256": "18e5f170f2214707aaf7c644b2b2f14063210bdf774766356667905dabf86534",
+      "size_bytes": 664
+    },
+    {
+      "batch": 4,
+      "kind": "start",
+      "file": "project/benchmark/input/start-04.json",
+      "sha256": "7be13bdfff454f0282cddfd3787aa59031c8df90a8492dda16cecb575bf7ff7d",
+      "size_bytes": 508
+    },
+    {
+      "batch": 5,
+      "kind": "ack",
+      "file": "project/benchmark/input/ack-05.json",
+      "sha256": "84c6225a4fa7ba910cd6b7673acbac0cb1936e1fe520ee128322b0b8f60624b0",
+      "size_bytes": 423
+    },
+    {
+      "batch": 5,
+      "kind": "command",
+      "file": "command-05.json",
+      "sha256": "b1d189d17ca610c6ded74158c128659e9e4e23ea9d410bc3061a3ad20ce5d487",
+      "size_bytes": 1149993
+    },
+    {
+      "batch": 5,
+      "kind": "joint",
+      "file": "joint-05.json",
+      "sha256": "99d16114d21f1afb0288d0d1d33bfeb115e241537a7530ffe839236b299c662a",
+      "size_bytes": 2289
+    },
+    {
+      "batch": 5,
+      "kind": "native",
+      "file": "project/benchmark/out/batch-05.json",
+      "sha256": "0aa30ec87abad1b441e0cff8bcc34d3fc9e1b221c2c04f4350bee34f2527b716",
+      "size_bytes": 98322
+    },
+    {
+      "batch": 5,
+      "kind": "ready",
+      "file": "project/benchmark/out/ready-05.json",
+      "sha256": "39ee70e346cde274fb117d96679188ade32d5d377bd33a76adbfc59d47155cb1",
+      "size_bytes": 664
+    },
+    {
+      "batch": 5,
+      "kind": "start",
+      "file": "project/benchmark/input/start-05.json",
+      "sha256": "5bb47c924a3a79d046e33812b9e1ef8ee51bb225c943151a031a3ad823683317",
+      "size_bytes": 508
+    },
+    {
+      "batch": 6,
+      "kind": "ack",
+      "file": "project/benchmark/input/ack-06.json",
+      "sha256": "31b5141287499fd07f44bc6b87a7a363d302708e7cb9a1d0754242cf272dd9fc",
+      "size_bytes": 423
+    },
+    {
+      "batch": 6,
+      "kind": "command",
+      "file": "command-06.json",
+      "sha256": "9e9bebe66eb74dbf5a527751c9974ae2982e08404a833837d63cc38b45b54254",
+      "size_bytes": 1150069
+    },
+    {
+      "batch": 6,
+      "kind": "joint",
+      "file": "joint-06.json",
+      "sha256": "9d7e699b1d0690e41958a88ff9b38d6865dc8e3b5f18408b8a144265c77303af",
+      "size_bytes": 2289
+    },
+    {
+      "batch": 6,
+      "kind": "native",
+      "file": "project/benchmark/out/batch-06.json",
+      "sha256": "b35f68b381a8bab9171f1902125533f2d65c6fd6e491b5f1e0fdf8cb464513cf",
+      "size_bytes": 98239
+    },
+    {
+      "batch": 6,
+      "kind": "ready",
+      "file": "project/benchmark/out/ready-06.json",
+      "sha256": "46126da4323c2e2ad27001c1135894a75e7dc4953d2a930f66985f6961390206",
+      "size_bytes": 665
+    },
+    {
+      "batch": 6,
+      "kind": "start",
+      "file": "project/benchmark/input/start-06.json",
+      "sha256": "a0e32ef7fb4cf76e5a276f4d6c05fe8423a4b0910450d7acb68953dafc419b60",
+      "size_bytes": 509
+    },
+    {
+      "batch": 7,
+      "kind": "ack",
+      "file": "project/benchmark/input/ack-07.json",
+      "sha256": "be61d8970a7a7259c50ddfa0f777906c3f1df2f699d3c8c281a50eaba03bcafc",
+      "size_bytes": 423
+    },
+    {
+      "batch": 7,
+      "kind": "command",
+      "file": "command-07.json",
+      "sha256": "65d1f8078f4ef1cb3df3247ced1385faf2036866888fdc8ea6e9502b2236a33d",
+      "size_bytes": 1150545
+    },
+    {
+      "batch": 7,
+      "kind": "joint",
+      "file": "joint-07.json",
+      "sha256": "0511fe62e0f018df81929b3f55bd5d77a92a6c584ca0e8748f0d96a1d91fdeae",
+      "size_bytes": 2289
+    },
+    {
+      "batch": 7,
+      "kind": "native",
+      "file": "project/benchmark/out/batch-07.json",
+      "sha256": "d3061c5b3159f0ef8e3d4ba4bb1dcf7e4246b0106157c69894801da09cd3b8d5",
+      "size_bytes": 98240
+    },
+    {
+      "batch": 7,
+      "kind": "ready",
+      "file": "project/benchmark/out/ready-07.json",
+      "sha256": "83363aff7137bef0b9df9d10e275d58bcc9a9b3826610e60abafbd56cfefab1a",
+      "size_bytes": 665
+    },
+    {
+      "batch": 7,
+      "kind": "start",
+      "file": "project/benchmark/input/start-07.json",
+      "sha256": "94d9dd98884616ffd8a5ee92440779f03b866e6f65de5b81eee1e6d1b5f6240e",
+      "size_bytes": 509
+    },
+    {
+      "batch": 8,
+      "kind": "ack",
+      "file": "project/benchmark/input/ack-08.json",
+      "sha256": "7dd0a165d978dfba387762bdf8dbeed63dcc5d76dd3e19e7298a4e248fd53ca4",
+      "size_bytes": 423
+    },
+    {
+      "batch": 8,
+      "kind": "command",
+      "file": "command-08.json",
+      "sha256": "11139fc14d4ed7952ff13f50d084b63a7ab2bcf6243b599030a343d2081db672",
+      "size_bytes": 1150530
+    },
+    {
+      "batch": 8,
+      "kind": "joint",
+      "file": "joint-08.json",
+      "sha256": "4b7048e43208388b4e9a953d24887d428737e32ab74fd1ebfa363bfc7939ca6c",
+      "size_bytes": 2289
+    },
+    {
+      "batch": 8,
+      "kind": "native",
+      "file": "project/benchmark/out/batch-08.json",
+      "sha256": "4cd52009958c8b21610d02d3ab68a4447ac5d8bf847b74ee5b5ea9f6924fcbe9",
+      "size_bytes": 98270
+    },
+    {
+      "batch": 8,
+      "kind": "ready",
+      "file": "project/benchmark/out/ready-08.json",
+      "sha256": "9f3871eda67d728b30bb98463e13aa5ce0901cfd410941782d3f4efdf925ef49",
+      "size_bytes": 665
+    },
+    {
+      "batch": 8,
+      "kind": "start",
+      "file": "project/benchmark/input/start-08.json",
+      "sha256": "e94f1e37b8ffd2a63a7418de827cdb2feb31548c0d31c383113b8bf8978f60ad",
+      "size_bytes": 509
+    },
+    {
+      "batch": 9,
+      "kind": "ack",
+      "file": "project/benchmark/input/ack-09.json",
+      "sha256": "2e4d87b3031c35042e244eeee58218ec7c805a236b7c308dbfb54aa0cb918720",
+      "size_bytes": 423
+    },
+    {
+      "batch": 9,
+      "kind": "command",
+      "file": "command-09.json",
+      "sha256": "78278152a4365bf252fd220406691aed7e14c337bda8a9ce13003d861ec92927",
+      "size_bytes": 1151012
+    },
+    {
+      "batch": 9,
+      "kind": "joint",
+      "file": "joint-09.json",
+      "sha256": "e7ac0a9caed806bbd1346b402eac8634acb828c24dda399e1194d56d6d13ea83",
+      "size_bytes": 2292
+    },
+    {
+      "batch": 9,
+      "kind": "native",
+      "file": "project/benchmark/out/batch-09.json",
+      "sha256": "e232d97dcf7ba03ef000ad5bf0ca4eeece49247bed6d6b465120f6c2ffc604ad",
+      "size_bytes": 98342
+    },
+    {
+      "batch": 9,
+      "kind": "ready",
+      "file": "project/benchmark/out/ready-09.json",
+      "sha256": "3aa0272bbb869484689ce9e33f179d5a0ad6a0ac00eb3cf47e7121bb80f89621",
+      "size_bytes": 665
+    },
+    {
+      "batch": 9,
+      "kind": "start",
+      "file": "project/benchmark/input/start-09.json",
+      "sha256": "491a2b81132cd30ff982fb74613ef8445513cc4dccf7913d3ceb3816a17ff6fa",
+      "size_bytes": 509
+    },
+    {
+      "batch": 10,
+      "kind": "ack",
+      "file": "project/benchmark/input/ack-10.json",
+      "sha256": "4b8aefa9628d767c25775a6f652ddaab3b692fc48b6f172d600f5d0cb9677ace",
+      "size_bytes": 425
+    },
+    {
+      "batch": 10,
+      "kind": "command",
+      "file": "command-10.json",
+      "sha256": "ae95654e974ebd19ec2e8bc04fda8d9845d4334387786aa4cb81a29135cfe7b1",
+      "size_bytes": 1153757
+    },
+    {
+      "batch": 10,
+      "kind": "joint",
+      "file": "joint-10.json",
+      "sha256": "e02c62ea6dad460cc7cc7c89ae435e644ddf7de61ae204c2367a6322ce763d18",
+      "size_bytes": 2298
+    },
+    {
+      "batch": 10,
+      "kind": "native",
+      "file": "project/benchmark/out/batch-10.json",
+      "sha256": "3c98d71bb2bdc2e657cc9f01b06172cea89f680f81383559cc19e4ff47203da1",
+      "size_bytes": 99483
+    },
+    {
+      "batch": 10,
+      "kind": "ready",
+      "file": "project/benchmark/out/ready-10.json",
+      "sha256": "2b9c683c9b00038e6edc8a5850e25292b731c4d25c8f32b979820b7869b48c1a",
+      "size_bytes": 668
+    },
+    {
+      "batch": 10,
+      "kind": "start",
+      "file": "project/benchmark/input/start-10.json",
+      "sha256": "dff05a8d39e7e08de9caee44764841ef1c1e33d430212bd0e5a7f83eaaa6e514",
+      "size_bytes": 510
+    },
+    {
+      "batch": 11,
+      "kind": "ack",
+      "file": "project/benchmark/input/ack-11.json",
+      "sha256": "94c530d0a9265639c1a9db9fa7e7c286986a01c89be8e5c26bed8e623a7b9643",
+      "size_bytes": 425
+    },
+    {
+      "batch": 11,
+      "kind": "command",
+      "file": "command-11.json",
+      "sha256": "53d5c8c0dcc96381b7790ca1308b9c51a6d5ce3e81afec4075a92557d0bcab19",
+      "size_bytes": 1153785
+    },
+    {
+      "batch": 11,
+      "kind": "joint",
+      "file": "joint-11.json",
+      "sha256": "076266f9264cba649195d65f9b9929ed1da2de424f3740c27bcac4efedf52526",
+      "size_bytes": 2299
+    },
+    {
+      "batch": 11,
+      "kind": "native",
+      "file": "project/benchmark/out/batch-11.json",
+      "sha256": "5ad8bbef448b27f729301ea86dda4798007e4799c99296434952982a810af53a",
+      "size_bytes": 99648
+    },
+    {
+      "batch": 11,
+      "kind": "ready",
+      "file": "project/benchmark/out/ready-11.json",
+      "sha256": "f3f22776d3120a2c6cc1bc2fb639f5bbfc2a77aabe3c1861cff9aee935321e16",
+      "size_bytes": 669
+    },
+    {
+      "batch": 11,
+      "kind": "start",
+      "file": "project/benchmark/input/start-11.json",
+      "sha256": "78fc13e27a023bd91231975563c59dbdc7f7083625f8d470982b02056483925b",
+      "size_bytes": 510
+    },
+    {
+      "batch": 12,
+      "kind": "ack",
+      "file": "project/benchmark/input/ack-12.json",
+      "sha256": "f2fb6b9f96b068970f7358356c4c0342d852a089d26fdca1f988caf0bded3f95",
+      "size_bytes": 425
+    },
+    {
+      "batch": 12,
+      "kind": "command",
+      "file": "command-12.json",
+      "sha256": "b7d715f8a1c1a7fdcf89e4cdcf3399d82b5f1ff08ce77bd71ac9ad25d949787c",
+      "size_bytes": 1154144
+    },
+    {
+      "batch": 12,
+      "kind": "joint",
+      "file": "joint-12.json",
+      "sha256": "f682187e8a9341996994d8e3f23dc79f95a2ff0798c3f531199501bbfc0746d9",
+      "size_bytes": 2299
+    },
+    {
+      "batch": 12,
+      "kind": "native",
+      "file": "project/benchmark/out/batch-12.json",
+      "sha256": "b1b0d6702a5e5ffbe02044f6e235bc90c5e237b62988d55604e70abd66cdf3d4",
+      "size_bytes": 99668
+    },
+    {
+      "batch": 12,
+      "kind": "ready",
+      "file": "project/benchmark/out/ready-12.json",
+      "sha256": "22a99a352bf262c4c28c0d7e799090735a6f5251963be6f8ed21653a019c3d0e",
+      "size_bytes": 670
+    },
+    {
+      "batch": 12,
+      "kind": "start",
+      "file": "project/benchmark/input/start-12.json",
+      "sha256": "6120dac268ebd3ee13adb6917f281479376aa432f0491e599ffc7e61e4490b69",
+      "size_bytes": 510
+    },
+    {
+      "batch": 13,
+      "kind": "ack",
+      "file": "project/benchmark/input/ack-13.json",
+      "sha256": "f7fe862f6e0c1b82a8590b3d7da5da70487e46222c099d5728bd9ff441c5dfab",
+      "size_bytes": 425
+    },
+    {
+      "batch": 13,
+      "kind": "command",
+      "file": "command-13.json",
+      "sha256": "c1490d4fa8c165f903d4eacd8c1d55dcb98e4b94cb57dedba44dbde7cab5fe89",
+      "size_bytes": 1154162
+    },
+    {
+      "batch": 13,
+      "kind": "joint",
+      "file": "joint-13.json",
+      "sha256": "d885ecfb8b23497fac5281abb4f82d6beb2eee1c7b8ca9da3128721155995eb5",
+      "size_bytes": 2299
+    },
+    {
+      "batch": 13,
+      "kind": "native",
+      "file": "project/benchmark/out/batch-13.json",
+      "sha256": "12b01edce1a66b03a1dd7cfd65beb2f173ed4fd510199abb768918391e44f176",
+      "size_bytes": 99655
+    },
+    {
+      "batch": 13,
+      "kind": "ready",
+      "file": "project/benchmark/out/ready-13.json",
+      "sha256": "7868b1bebb5cd82dc74cddeed144d5c01a6a5a40fcc253bb7fc1eafa00e98354",
+      "size_bytes": 670
+    },
+    {
+      "batch": 13,
+      "kind": "start",
+      "file": "project/benchmark/input/start-13.json",
+      "sha256": "701644b6714b0eb1bf72e9ee4db62a83086d530985584de483326c4957a81617",
+      "size_bytes": 510
+    },
+    {
+      "batch": 14,
+      "kind": "ack",
+      "file": "project/benchmark/input/ack-14.json",
+      "sha256": "31276395627f64907e9da0751d4e7e8d182981172a03f75c5f623269b3cf746c",
+      "size_bytes": 425
+    },
+    {
+      "batch": 14,
+      "kind": "command",
+      "file": "command-14.json",
+      "sha256": "8b3fc96e88346114d864b71e72d542462c72f6e5ae087132435013899f7e3a25",
+      "size_bytes": 1154520
+    },
+    {
+      "batch": 14,
+      "kind": "joint",
+      "file": "joint-14.json",
+      "sha256": "477b742ac84fbed910bbfee4d3e92fbb78357640e5b833e452457670b5567946",
+      "size_bytes": 2300
+    },
+    {
+      "batch": 14,
+      "kind": "native",
+      "file": "project/benchmark/out/batch-14.json",
+      "sha256": "9b5aa1e199530c05e4424ee66fce7f97b7a712a925400b3f824850a8d7e7a8e6",
+      "size_bytes": 99853
+    },
+    {
+      "batch": 14,
+      "kind": "ready",
+      "file": "project/benchmark/out/ready-14.json",
+      "sha256": "1bbcb8d93c4ae7d28814268c21b47d184ee3dbf42777010f21a423a475ef5d3d",
+      "size_bytes": 670
+    },
+    {
+      "batch": 14,
+      "kind": "start",
+      "file": "project/benchmark/input/start-14.json",
+      "sha256": "ea62273c27b1a6100070a3f2d0f1b2d6d97842f884f51e50b59ebee0a16e7fc0",
+      "size_bytes": 510
+    },
+    {
+      "batch": 15,
+      "kind": "ack",
+      "file": "project/benchmark/input/ack-15.json",
+      "sha256": "3a75f4f4b13339c24757d53f9b66e77ef99d47385079a9cf6b005376fc6b6b4b",
+      "size_bytes": 425
+    },
+    {
+      "batch": 15,
+      "kind": "command",
+      "file": "command-15.json",
+      "sha256": "e3e6eec9a620e6243bd77e1ef3ffef51271e6a215b1508472f9e2dbfa73e6f4d",
+      "size_bytes": 1154023
+    },
+    {
+      "batch": 15,
+      "kind": "joint",
+      "file": "joint-15.json",
+      "sha256": "ec6454f2d0e0f78bc18161c43c25a806915053deff9075564cec69c87f7c55cc",
+      "size_bytes": 2298
+    },
+    {
+      "batch": 15,
+      "kind": "native",
+      "file": "project/benchmark/out/batch-15.json",
+      "sha256": "a54cd04cbe4c45b6f5523912f5312682157e7bf2703ed430463252494708df75",
+      "size_bytes": 99643
+    },
+    {
+      "batch": 15,
+      "kind": "ready",
+      "file": "project/benchmark/out/ready-15.json",
+      "sha256": "decb92942526ef4a08858173940dfd088b7bdf2a55182053e99f8261802c1d1e",
+      "size_bytes": 670
+    },
+    {
+      "batch": 15,
+      "kind": "start",
+      "file": "project/benchmark/input/start-15.json",
+      "sha256": "167d13fdf2f3eec4c99caa62daeed47e708025815c5002774c335213c8bcb52e",
+      "size_bytes": 510
+    }
+  ],
+  "operator_stop_slots_checked": 30,
+  "operator_stop_latches_present": 0,
+  "sample_evidence_hashes_verified": 16,
+  "sample_evidence_hash_domain": "SHA256(UTF8(json.dumps(evidence, sort_keys=True, separators=(comma,colon), allow_nan=False))); evidence binds source/profile/run/index/processes, all six exact artifact refs and barrier_receipt; distinct from raw batch-capture file hash"
+}

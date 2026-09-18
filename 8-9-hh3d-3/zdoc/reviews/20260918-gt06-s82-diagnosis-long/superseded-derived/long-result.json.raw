@@ -1,0 +1,632 @@
+{
+  "schema": "HH-GT06-S82-NATIVE-OBJECT-DIAGNOSTIC-1",
+  "authority": 0,
+  "formal_acceptance": false,
+  "full_benchmark": false,
+  "run_id": "gt06-s82-object-diagnostic-long-01",
+  "source_closure": "ebed9418490379bb902d2049e4a2f98a96e3378d09b369aef02684e16214c74e",
+  "native_batches": 16,
+  "total_native_cycles": 1600,
+  "batch_indexes": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15
+  ],
+  "all_cycles_100": true,
+  "object_points": 45,
+  "object_values": [
+    [
+      71127,
+      71127
+    ]
+  ],
+  "all_object_deltas_zero": false,
+  "resources_values": [
+    6
+  ],
+  "editor_actual_exit": {
+    "exit_code": 0,
+    "pid": 11332
+  },
+  "editor_stderr_empty": true,
+  "owned_tree_zero": true,
+  "wrapper_handles_closed": true,
+  "source_unchanged": true,
+  "wrapper_runner_exit": 1,
+  "wrapper_failure_reason": "stale helper assertion len(batches)==6; native produced 16 batches and exited 0",
+  "batches": [
+    {
+      "file": "batch-00.json",
+      "index": 0,
+      "cycles": 100,
+      "objects": 71127,
+      "resources": 6,
+      "sha256": "af67670679aa1a91dd01cdfa2e763ba8e37017befe246c4d10233514fc522a18"
+    },
+    {
+      "file": "batch-01.json",
+      "index": 1,
+      "cycles": 100,
+      "objects": 71127,
+      "resources": 6,
+      "sha256": "5529fb44e3d078b82d1632034cc5f633a974c7a66ceb5209b7b99a66fc8e2817"
+    },
+    {
+      "file": "batch-02.json",
+      "index": 2,
+      "cycles": 100,
+      "objects": 71127,
+      "resources": 6,
+      "sha256": "58bebe29f1eecddadca63d9902568b634d4cddee72c03002ef1f350cb1eeed49"
+    },
+    {
+      "file": "batch-03.json",
+      "index": 3,
+      "cycles": 100,
+      "objects": 71127,
+      "resources": 6,
+      "sha256": "fe38fa69788a7cb8fdb4cb2011abe882b27bc30520b86953e4d9678cd94a9c4a"
+    },
+    {
+      "file": "batch-04.json",
+      "index": 4,
+      "cycles": 100,
+      "objects": 71127,
+      "resources": 6,
+      "sha256": "7a618e91808c836fc4dec215a727cdbaa4565cd006d2c823fa153007cc21386d"
+    },
+    {
+      "file": "batch-05.json",
+      "index": 5,
+      "cycles": 100,
+      "objects": 71127,
+      "resources": 6,
+      "sha256": "f774875934d7d74bfcedef9833e231ecf687a2a1ae9ba416cc5214c2cf5777c5"
+    },
+    {
+      "file": "batch-06.json",
+      "index": 6,
+      "cycles": 100,
+      "objects": 71127,
+      "resources": 6,
+      "sha256": "42e43ae2f506c7f1af3d7c1d610a961bc9003f8986c0b440f49a0094f926b7d9"
+    },
+    {
+      "file": "batch-07.json",
+      "index": 7,
+      "cycles": 100,
+      "objects": 71127,
+      "resources": 6,
+      "sha256": "0d9100be45dee652c78c679914f0e4e3bc45e91071c7fdc0ddff8906f918df71"
+    },
+    {
+      "file": "batch-08.json",
+      "index": 8,
+      "cycles": 100,
+      "objects": 71127,
+      "resources": 6,
+      "sha256": "3c65354a386724649c4f08b9da4c6d57a010a2214ff861363c26fa14ffa48ab8"
+    },
+    {
+      "file": "batch-09.json",
+      "index": 9,
+      "cycles": 100,
+      "objects": 71127,
+      "resources": 6,
+      "sha256": "5ae7cb4619e125bc7343612bdd37ca6dae5f84d4d860ad44461b538ad7e2306f"
+    },
+    {
+      "file": "batch-10.json",
+      "index": 10,
+      "cycles": 100,
+      "objects": 71127,
+      "resources": 6,
+      "sha256": "e0218a5d6ae7d579cf9aa69100c9b70f51f858c56606f39dc0425102fcd3c0bc"
+    },
+    {
+      "file": "batch-11.json",
+      "index": 11,
+      "cycles": 100,
+      "objects": 71127,
+      "resources": 6,
+      "sha256": "8e696d9ccce0bc285ded5383e5664ad699a3998c2d5912451ac844139d998e52"
+    },
+    {
+      "file": "batch-12.json",
+      "index": 12,
+      "cycles": 100,
+      "objects": 71127,
+      "resources": 6,
+      "sha256": "2dcf3268cb692673feadd091518647ff9982bcb58e9a77c80a383b2a4b76d169"
+    },
+    {
+      "file": "batch-13.json",
+      "index": 13,
+      "cycles": 100,
+      "objects": 71127,
+      "resources": 6,
+      "sha256": "dbbb91e05ec5b34203c14082e16d7b620837b699e96da9823403083f03eeeb86"
+    },
+    {
+      "file": "batch-14.json",
+      "index": 14,
+      "cycles": 100,
+      "objects": 71127,
+      "resources": 6,
+      "sha256": "82548d0c9aa3f286f1b6b5aad48e5179bc6f9c4270ab72810d95bddf0e47b814"
+    },
+    {
+      "file": "batch-15.json",
+      "index": 15,
+      "cycles": 100,
+      "objects": 71127,
+      "resources": 6,
+      "sha256": "7ba2597dc7da6eb973779bc53619661c7715a60dcb25fa57e303a07576689383"
+    }
+  ],
+  "points": [
+    {
+      "file": "object-0000.json",
+      "label": "settle",
+      "batch": 0,
+      "objects_before": 71127,
+      "objects_after": 71127,
+      "added_count": 146,
+      "removed_count": 0,
+      "sha256": "3a592a56c5ea2dfdbf592a9db50848cdb2e0e462a2823b981bc514e89bea615a"
+    },
+    {
+      "file": "object-0001.json",
+      "label": "after_batch",
+      "batch": 0,
+      "objects_before": 71127,
+      "objects_after": 71127,
+      "added_count": 0,
+      "removed_count": 0,
+      "sha256": "9238d75c1baa544b75278f6cda1103d8bb8bce11d4a79b535a6ac318533e9cc0"
+    },
+    {
+      "file": "object-0002.json",
+      "label": "settle",
+      "batch": 1,
+      "objects_before": 71127,
+      "objects_after": 71127,
+      "added_count": 18,
+      "removed_count": 18,
+      "sha256": "e2a966fb118d015f3915c8cb85cedbb72c1119d398f42e158228bd8c09ef2f33"
+    },
+    {
+      "file": "object-0003.json",
+      "label": "after_batch",
+      "batch": 1,
+      "objects_before": 71127,
+      "objects_after": 71127,
+      "added_count": 0,
+      "removed_count": 0,
+      "sha256": "c1e52983a97c7a2c02ea3dc03173e3dd33fde2a31100dc40fadec83b1af95bbf"
+    },
+    {
+      "file": "object-0004.json",
+      "label": "settle",
+      "batch": 2,
+      "objects_before": 71127,
+      "objects_after": 71127,
+      "added_count": 18,
+      "removed_count": 18,
+      "sha256": "be5b55b5f44dfa3c9cda76d51548877024ce49e2e0880c76e6fc833458c19f5d"
+    },
+    {
+      "file": "object-0005.json",
+      "label": "after_batch",
+      "batch": 2,
+      "objects_before": 71127,
+      "objects_after": 71127,
+      "added_count": 0,
+      "removed_count": 0,
+      "sha256": "07e6ca6519c78b823ee3f4add0cf8bbdb43f906d9316b0452b9edbb47dd63d6d"
+    },
+    {
+      "file": "object-0006.json",
+      "label": "settle",
+      "batch": 3,
+      "objects_before": 71127,
+      "objects_after": 71127,
+      "added_count": 18,
+      "removed_count": 18,
+      "sha256": "fbeb12cee167f4440889f5872ac1d7f527065b1ba11839280de162f7ebdbac36"
+    },
+    {
+      "file": "object-0007.json",
+      "label": "after_batch",
+      "batch": 3,
+      "objects_before": 71127,
+      "objects_after": 71127,
+      "added_count": 0,
+      "removed_count": 0,
+      "sha256": "bd09843d76b5c7ac647092d16e8d2a070f193172183e1da963725f2081e4045c"
+    },
+    {
+      "file": "object-0008.json",
+      "label": "settle",
+      "batch": 4,
+      "objects_before": 71127,
+      "objects_after": 71127,
+      "added_count": 18,
+      "removed_count": 18,
+      "sha256": "a849be288ac907a2210262cbf9d744fa51bfb72941e2f4131a087501d7582422"
+    },
+    {
+      "file": "object-0009.json",
+      "label": "after_batch",
+      "batch": 4,
+      "objects_before": 71127,
+      "objects_after": 71127,
+      "added_count": 0,
+      "removed_count": 0,
+      "sha256": "5d6e47b671de1787fe7ba329ca44727d24dcba6aab9869a136745bd51abd72fe"
+    },
+    {
+      "file": "object-0010.json",
+      "label": "settle",
+      "batch": 5,
+      "objects_before": 71127,
+      "objects_after": 71127,
+      "added_count": 18,
+      "removed_count": 18,
+      "sha256": "567b78a96b76390a3b8cf6af03b3ac50916f11a2ff965d3f26eb90df825b72fe"
+    },
+    {
+      "file": "object-0011.json",
+      "label": "after_batch",
+      "batch": 5,
+      "objects_before": 71127,
+      "objects_after": 71127,
+      "added_count": 0,
+      "removed_count": 0,
+      "sha256": "64ca453ba451267a261edfef4ace8656e6f4585376aa9318a31a92a911ac7a9c"
+    },
+    {
+      "file": "object-0012.json",
+      "label": "settle",
+      "batch": 6,
+      "objects_before": 71127,
+      "objects_after": 71127,
+      "added_count": 18,
+      "removed_count": 18,
+      "sha256": "d719b31385a88fd8093652927e6c7ad57fb32cf737b76970cd457857c5f57412"
+    },
+    {
+      "file": "object-0013.json",
+      "label": "after_batch",
+      "batch": 6,
+      "objects_before": 71127,
+      "objects_after": 71127,
+      "added_count": 0,
+      "removed_count": 0,
+      "sha256": "69a78d0a2743fd6377ebe6bcc26b004b9442f157512c3e6c6aa63a5c27117342"
+    },
+    {
+      "file": "object-0014.json",
+      "label": "settle",
+      "batch": 7,
+      "objects_before": 71127,
+      "objects_after": 71127,
+      "added_count": 18,
+      "removed_count": 18,
+      "sha256": "099634bdc4400727501a5406c976dea211353fb7907fe64979902a6cae85090d"
+    },
+    {
+      "file": "object-0015.json",
+      "label": "after_batch",
+      "batch": 7,
+      "objects_before": 71127,
+      "objects_after": 71127,
+      "added_count": 0,
+      "removed_count": 0,
+      "sha256": "2332e3fc45778c35f09b99012adf200106a9909c7db0110ac814adba35ef2d5a"
+    },
+    {
+      "file": "object-0016.json",
+      "label": "settle",
+      "batch": 8,
+      "objects_before": 71127,
+      "objects_after": 71127,
+      "added_count": 18,
+      "removed_count": 18,
+      "sha256": "0cdcac1cbdff9ae412eb5c763d110ab6b85d08c70e6dc4fc19aa1b9df0638099"
+    },
+    {
+      "file": "object-0017.json",
+      "label": "after_batch",
+      "batch": 8,
+      "objects_before": 71127,
+      "objects_after": 71127,
+      "added_count": 0,
+      "removed_count": 0,
+      "sha256": "32c5f72a05ad387ad8cb43244c8fbb92fbdced012e9a30e4b70b3d36094394a2"
+    },
+    {
+      "file": "object-0018.json",
+      "label": "settle",
+      "batch": 9,
+      "objects_before": 71127,
+      "objects_after": 71127,
+      "added_count": 18,
+      "removed_count": 18,
+      "sha256": "b99c352d30b0db56776349e002995b8782123ee690eebd0f05bc44684ab21dd8"
+    },
+    {
+      "file": "object-0019.json",
+      "label": "after_batch",
+      "batch": 9,
+      "objects_before": 71127,
+      "objects_after": 71127,
+      "added_count": 0,
+      "removed_count": 0,
+      "sha256": "7ecf998995c349c3a8a7e9581a92fc358c951cea9667dbd2114124d64d790a58"
+    },
+    {
+      "file": "object-0020.json",
+      "label": "settle",
+      "batch": 10,
+      "objects_before": 71127,
+      "objects_after": 71127,
+      "added_count": 18,
+      "removed_count": 18,
+      "sha256": "37e9a8d9cae3b8bc3627c8ca77a424916ea891f5d234f182f9aeff98a4dceee1"
+    },
+    {
+      "file": "object-0021.json",
+      "label": "after_batch",
+      "batch": 10,
+      "objects_before": 71127,
+      "objects_after": 71127,
+      "added_count": 0,
+      "removed_count": 0,
+      "sha256": "e6f99f1408323d6b822d6226b397d329952cd2eb702898de57dcc60b71d82b97"
+    },
+    {
+      "file": "object-0022.json",
+      "label": "settle",
+      "batch": 11,
+      "objects_before": 71127,
+      "objects_after": 71127,
+      "added_count": 18,
+      "removed_count": 18,
+      "sha256": "3f38a225d814d485a1ef2274f5dfaeb2dc52b7451c55ce10aaad385625c25e21"
+    },
+    {
+      "file": "object-0023.json",
+      "label": "after_batch",
+      "batch": 11,
+      "objects_before": 71127,
+      "objects_after": 71127,
+      "added_count": 0,
+      "removed_count": 0,
+      "sha256": "580fed9a8d66c4858e0f4617cee0d3d0a2dbfb903aac943f9acf17e44aeb9869"
+    },
+    {
+      "file": "object-0024.json",
+      "label": "settle",
+      "batch": 12,
+      "objects_before": 71127,
+      "objects_after": 71127,
+      "added_count": 18,
+      "removed_count": 18,
+      "sha256": "99244a5bd135965a9c93fb9fb8c8abceb61ed533108f076c18f1b4a7bea289f8"
+    },
+    {
+      "file": "object-0025.json",
+      "label": "after_batch",
+      "batch": 12,
+      "objects_before": 71127,
+      "objects_after": 71127,
+      "added_count": 0,
+      "removed_count": 0,
+      "sha256": "4590fc6d72eb78e97b5c7a805238727f2151bd4887d26848df68482256c57b0f"
+    },
+    {
+      "file": "object-0026.json",
+      "label": "settle",
+      "batch": 13,
+      "objects_before": 71127,
+      "objects_after": 71127,
+      "added_count": 18,
+      "removed_count": 18,
+      "sha256": "a3b131ca820673db3f8c6f5b6edebaa9b0915581c853dd01d63edd123260cea4"
+    },
+    {
+      "file": "object-0027.json",
+      "label": "after_batch",
+      "batch": 13,
+      "objects_before": 71127,
+      "objects_after": 71127,
+      "added_count": 0,
+      "removed_count": 0,
+      "sha256": "480f16e77f59f0995b592f379b7a83c95f9c648f834bf4903c6a3446291cb444"
+    },
+    {
+      "file": "object-0028.json",
+      "label": "settle",
+      "batch": 14,
+      "objects_before": 71127,
+      "objects_after": 71127,
+      "added_count": 18,
+      "removed_count": 18,
+      "sha256": "9ea2d4d0472cf124eb58cb70429e585d7a43c091ceb4fcf1d1e9511a79c418fd"
+    },
+    {
+      "file": "object-0029.json",
+      "label": "after_batch",
+      "batch": 14,
+      "objects_before": 71127,
+      "objects_after": 71127,
+      "added_count": 0,
+      "removed_count": 0,
+      "sha256": "a97886a2d1e23103c28175fd94e833f9ff884e44275a4cb91b155a770557c4a0"
+    },
+    {
+      "file": "object-0030.json",
+      "label": "settle",
+      "batch": 15,
+      "objects_before": 71127,
+      "objects_after": 71127,
+      "added_count": 18,
+      "removed_count": 18,
+      "sha256": "06af7b6f673e1bf73386b73a6ef1174d3dfa7fd6c880eb5532907b196e426541"
+    },
+    {
+      "file": "object-0031.json",
+      "label": "after_batch",
+      "batch": 15,
+      "objects_before": 71127,
+      "objects_after": 71127,
+      "added_count": 0,
+      "removed_count": 0,
+      "sha256": "ce49d40a329182ef1a159560c9d96725d622cd72c9bb872a988f861bb6bb0df2"
+    },
+    {
+      "file": "object-0032.json",
+      "label": "idle",
+      "batch": 15,
+      "objects_before": 71127,
+      "objects_after": 71127,
+      "added_count": 0,
+      "removed_count": 0,
+      "sha256": "ce993786a7db9ef4493054ccd0b4f12ac1b9fe2eb5a04dc9dad89d4dbe7adf83"
+    },
+    {
+      "file": "object-0033.json",
+      "label": "idle",
+      "batch": 15,
+      "objects_before": 71127,
+      "objects_after": 71127,
+      "added_count": 0,
+      "removed_count": 0,
+      "sha256": "b80001b5ca150ee670c26d6a0e1b281a6c208471fa67a289652e15b72361b703"
+    },
+    {
+      "file": "object-0034.json",
+      "label": "idle",
+      "batch": 15,
+      "objects_before": 71127,
+      "objects_after": 71127,
+      "added_count": 0,
+      "removed_count": 0,
+      "sha256": "0f1d6d946ed215fe6da3f6f30b7b654cdcad55297d5e1b98f492062c68facdc9"
+    },
+    {
+      "file": "object-0035.json",
+      "label": "idle",
+      "batch": 15,
+      "objects_before": 71127,
+      "objects_after": 71127,
+      "added_count": 0,
+      "removed_count": 0,
+      "sha256": "c4bd67c266159ba311382ca905f47a6315382afeefa7abb9f91f32b15a4f36af"
+    },
+    {
+      "file": "object-0036.json",
+      "label": "idle",
+      "batch": 15,
+      "objects_before": 71127,
+      "objects_after": 71127,
+      "added_count": 0,
+      "removed_count": 0,
+      "sha256": "78b61d8c233af49e9008bfc5a550b84a1e617ab61f59cc58a6b3103312a7ee6e"
+    },
+    {
+      "file": "object-0037.json",
+      "label": "idle",
+      "batch": 15,
+      "objects_before": 71127,
+      "objects_after": 71127,
+      "added_count": 0,
+      "removed_count": 0,
+      "sha256": "f1889fc533b4de902c714880ced2cb0581782a70eec8a6a81bfb66116a51139e"
+    },
+    {
+      "file": "object-0038.json",
+      "label": "idle",
+      "batch": 15,
+      "objects_before": 71127,
+      "objects_after": 71127,
+      "added_count": 0,
+      "removed_count": 0,
+      "sha256": "f4d208e3ece49c9bb17a31c2543384a724135de22c23b3737c9e5fdf206578bd"
+    },
+    {
+      "file": "object-0039.json",
+      "label": "idle",
+      "batch": 15,
+      "objects_before": 71127,
+      "objects_after": 71127,
+      "added_count": 0,
+      "removed_count": 0,
+      "sha256": "83e0faa3f5bb580344b7d3b9e00e1344c2662b26b01162b92abc497ec883189c"
+    },
+    {
+      "file": "object-0040.json",
+      "label": "idle",
+      "batch": 15,
+      "objects_before": 71127,
+      "objects_after": 71127,
+      "added_count": 0,
+      "removed_count": 0,
+      "sha256": "3ee6720ff33b681f78e350c5c5263eda614d6531f703b92f6612cd9a0be8547a"
+    },
+    {
+      "file": "object-0041.json",
+      "label": "idle",
+      "batch": 15,
+      "objects_before": 71127,
+      "objects_after": 71127,
+      "added_count": 0,
+      "removed_count": 0,
+      "sha256": "ae962d757f61528676f7d84775992e24bc58d819583457e7b7c8f124a9755e2b"
+    },
+    {
+      "file": "object-0042.json",
+      "label": "idle",
+      "batch": 15,
+      "objects_before": 71127,
+      "objects_after": 71127,
+      "added_count": 0,
+      "removed_count": 0,
+      "sha256": "f287b47f49720da9354999d1de42757de1c236fbae43953ce5f0351f0ffff8fa"
+    },
+    {
+      "file": "object-0043.json",
+      "label": "idle",
+      "batch": 15,
+      "objects_before": 71127,
+      "objects_after": 71127,
+      "added_count": 0,
+      "removed_count": 0,
+      "sha256": "ecd29202e4a09d307057d26d6d96d14f3788f3838b6d5c5ed1df26600c797831"
+    },
+    {
+      "file": "object-0044.json",
+      "label": "idle_end",
+      "batch": 15,
+      "objects_before": 71127,
+      "objects_after": 71127,
+      "added_count": 0,
+      "removed_count": 0,
+      "sha256": "4292a34e6d6c3b8c1662a980a11700cbe97c195472b755d03376b87183b6f135"
+    }
+  ]
+}
