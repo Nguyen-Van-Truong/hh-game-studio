@@ -1,0 +1,46 @@
+{
+  "schema_id": "hh-studio.gt06.s98.terminal-reconciliation",
+  "schema_version": "1.0.0",
+  "campaign_id": "gt06-s98-campaign-01",
+  "run_id": "gt06-s98-campaign-01.r00.a01",
+  "source_closure_sha256": "cfc4b55a5407891bfd54d22d9f1ac45a74b6c744898199a0e4690d6230a6c1d6",
+  "formal_acceptance": false,
+  "eligible_for_dataset": false,
+  "scheduler": {
+    "state": 3,
+    "last_task_result": 1,
+    "instances": [],
+    "status_scope": "Scheduler state only; not actual process exit or owned-tree proof"
+  },
+  "actual_exits": {
+    "host_wrapper": {
+      "exit_code": 1,
+      "file": "run-00-attempt-01/host-owner/process-exit.json"
+    },
+    "editor_wrapper": {
+      "exit_code": 2,
+      "file": "run-00-attempt-01/editor-host/cleanup-001.json"
+    },
+    "editor_target": {
+      "value": null,
+      "missing_reason": "TARGET_EXIT_NOT_RECORDED"
+    },
+    "import_target": {
+      "exit_code": 0,
+      "file": "run-00-attempt-01/import-host/process-exit.json"
+    },
+    "supervisor": {
+      "value": null,
+      "missing_reason": "SUPERVISOR_ACTUAL_EXIT_NOT_OBSERVED"
+    }
+  },
+  "cleanup": {
+    "owned_tree_zero": true,
+    "owner_closed": true,
+    "jobs_zero_and_closed": true,
+    "handles_released": true,
+    "heartbeat_alive": false,
+    "native_error": null
+  },
+  "interpretation": "Scheduler and wrapper terminal failure are reconciled; missing editor-target and supervisor natural exits remain explicit unknowns. Do not infer PASS or natural self-exit. This packet is a retry gate input only."
+}\n

@@ -9,3 +9,5 @@ This packet is derived from immutable raw files. It is diagnostic only, not PASS
 The triggering command was admitted.96: lookup timed out at getresponse after 2002.5627 ms, then its retry recovered READBACK_CONFIRMED. This identifies the gate trigger, not the OS/server/lock root cause.
 
 Derived packet: attribution.json (SHA256 7b9f4f6fe4702c6bd9e2df6f1cb8f85dcef9fa29e01b9e0fa4956935b2ea3ca6).
+
+Terminal reconciliation: terminal-reconciliation.json (SHA256 1bad488b993dd3082ab8fb008a55f1e032cfccb7f9d59122559a9a71bba83dda). Scheduler state 3/result 1 is recorded; missing editor-target and supervisor natural exits remain UNKNOWN, so this is not PASS or natural-exit proof.
