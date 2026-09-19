@@ -1,5 +1,5 @@
 HH STUDIO — PLAN 1/3: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 19-09-2026, Asia/Saigon | Revision S121 | TRIỂN KHAI THEO GATE
+Ngày 19-09-2026, Asia/Saigon | Revision S120 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -16,7 +16,7 @@ STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng
 
 CURRENT_VALID_WP=GT-06
 EXECUTION_AUTHORIZATION=OWNER_APPROVED_GATED
-IMPLEMENTATION=GT06_S121_OFFLINE_BOUNDARY_REVIEW_S119_READER_V2_PORTABLE_SEAL_V2
+IMPLEMENTATION=GT06_S120_FORMAL_RETRY_PREP_S119_LOOKUP_BOUNDARY_TERMINAL_S117_INTERRUPTED_S118_IMPORT_COMPLETE
 GT01_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260913
 GT01_PENDING=NONE
 GT01_PIN_DECISION=GODOT_4.7.2_STABLE_OFFICIAL
@@ -25,7 +25,7 @@ RUNTIME_ACCEPTANCE=GT01_GT02_GT03_GT04_GT05_ACCEPTED
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S121
+PLAN_REVISION=S120
 EXECUTION_MODE=COORDINATOR_SOLO_OWNER_LATEST_20260919
 SUBAGENTS_ENABLED=0; FINAL_GATE_STILL_REQUIRES_TWO_INDEPENDENT_CRITICS
 GT02_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260916_S46
@@ -63,13 +63,13 @@ GT06_PROFILE_SHA256=0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf
 GT06_BENCHMARK_CAMPAIGN=gt06-s116-formal-01
 GT06_BENCHMARK_STATUS=S116_FAILED_BATCH10_JOINT_OBSERVATION_STATUS_GAP_2041.7971MS; ZERO_ACCEPTED_FULL_RUNS
 GT06_ACTIVE_DIAGNOSTIC=gt06-s119-lookup-boundary-01_TERMINAL_ORIGINAL_FAILURE_BATCH8_ADMISSION_UNKNOWN; S117-03 interrupted after 3 batches without terminal record and sealed AUTHORITY0; S118 import-only completed11.359s/target656exit0; S117-01/02 terminal preserved
-GT06_NEXT_ACTION=Keep formal retry closed. Retain S119 raw, corrected offline reader v2 and complete portable seal v3; use the exact lifecycle boundary only to design a narrow, reviewable repair. Do not change source/profile/workstation, timeout, gates, baseline, priority or RSS policy; run a new bounded diagnostic only after a static repair decision identifies a distinguishing check.
+GT06_NEXT_ACTION=Seal S119 raw and derived reader output, retain observed overlap as correlation-only, delete its demand task after terminal verification, then prepare one fresh formal GT06 campaign only with unchanged source/profile/workstation and original gates; no repair or threshold change.
 GT06_S109_DIFFERENTIAL_REVIEW=AUTHORITY0; S102 native outlier lacks save_scene return timestamp. S108-03 did not reproduce it under the same base closure/profile/workstation, but its timed runtime is an instrumented overlay (not byte-identical stock benchmark_native.gd). S110 then failed on an independent stock command-lane admission timeout at batch5; this does not establish engine causation or authorize a retry. See zdoc/reviews/20260919-gt06-s108-coordinator/s109-differential-review.json and zdoc/reviews/20260919-gt06-s110-admission-timeout/failure-analysis.json. Next useful work is static/read-only attribution of the timeout boundary, followed by one bounded fresh diagnostic only if it can distinguish the boundary; preserve original gates and timed runtime.
 GT06_S111_STATIC_ATTRIBUTION=AUTHORITY0; base Journal probe 9a63579f45f8cd6e7ce3dee223480945d29ce3d000c71a81743eecfc70d03b9b is historical/offline. It reparses history and cannot explain the live VerifiedJournal path. S112 corrects this interpretation. Current extended test-results23337327a3af7f7c1faf44ae1994612c0e667609bd6596cecdc290eb9bde21b1;68actual cases. Temporary probe drivers lacked frozen execution closures; no formal acceptance.
 GT06_S112_VERIFIED_PATH_ATTRIBUTION=AUTHORITY0; exact VerifiedJournal probe is in zdoc/reviews/20260919-gt06-s111-attribution/verified-journal-probe.json (probe hash a792145018d63f5916a8832d4e2136d2248e97ace7559a5d570ebb9ad8b19420). It shows unchanged service-path lookup under 22ms after initialization; the earlier base Journal timing cannot be applied to ReplayService. Extended static test-results hash 23337327a3af7f7c1faf44ae1994612c0e667609bd6596cecdc290eb9bde21b1 (68 cases); no engine run.
 GT06_DIAGNOSTIC_EXCLUSION=All instrumented/static/supplemental and failed partial runs S70–S119 excluded from F13/F14. S113 reused ID/output twice; first result and initial harness failure lost, remaining result has provenance gaps. Do not reconstruct missing raw or claim PASS/no-leak/rootcause.
 
-TIẾN ĐỘ HIỆN HÀNH — S121, ngày 19-09-2026 (timestamps UTC)
+TIẾN ĐỘ HIỆN HÀNH — S120, ngày 19-09-2026 (timestamps UTC)
 GT01–05 ACCEPTED; GT06 IN_PROGRESS; GT07–10 chưa mở; zero accepted full runs.
 S116 formal FAILED batch10 statusgap2041.7971ms, lookupgetresponse2004.7701ms;
 lookup cùngID sau đó COMMITTED, nativeACK780.821ms. Raw254copies manifest
@@ -90,7 +90,7 @@ không chứng minh deadlock/RAM/diskcause. Giữ44copies và2localcache exclusi
 S118 import-only --verbose đã hoàn tất11.359s, target656/supervisor51464exit0;
 Jobzero/closed, source/execution nguyên; không tái hiện importwalllimit. Giữ note
 verbose1unclaimedStringName và nativewrapperCloseHandleUNKNOWN; khôngno-leak.
-S117-03 đã bị gián đoạn sau 3 batch, không có result/timing/target-exit nên không suy nguyên nhân; packet AUTHORITY=0 giữ 69 file và 41 loại trừ cục bộ. Probe launcher S119 không chạy engine đã exit thật 0, task instances=0. S119-01 terminal ở batch8 với 8 gate rows, ADMISSION_UNKNOWN, lookup timeout2006.271ms và max status gap5208.0547ms; Job zero/closed, handles released, source/execution unchanged, editor target exit UNKNOWN và import-wrapper CloseHandle UNKNOWN. Reader v2 qua 5 offline controls, ràng buộc lifecycle đầy đủ, containment theo thời gian, port pair, PID và source/profile; báo boundary dispatch của lookup và bốn timing span còn giữ. Đây vẫn chỉ là tương quan/suy luận tĩnh, chưa phải root cause, repair hay acceptance.
+S117-03 đã bị gián đoạn sau 3 batch, không có result/timing/target-exit nên không suy nguyên nhân; packet AUTHORITY=0 giữ 69 file và 41 loại trừ cục bộ. Probe launcher S119 không chạy engine đã exit thật 0, task instances=0. S119-01 đã terminal ở batch8 với 8 gate rows, ADMISSION_UNKNOWN, lookup timeout2006.271ms và max status gap5208.0547ms; Job zero/closed, handles released, source/execution unchanged, editor target exit UNKNOWN. Reader đã qua 3 negative tests và ghép được overlap với reload/snapshot_true/append/sqlite_commit; đây chỉ là tương quan quan sát, không phải root cause hay repair.
 Source53 closure7635a470cef554c1a60e1d9427f59998737d3bb829c3a1f134e426cdf9275467
 và profile0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85 nguyên.
 Không dùng lại ID/output; lần lỗi giữ nguyên. Collector sai sửa metadata/raw đã
@@ -99,7 +99,7 @@ Không engine/test/heavyhash cạnh phép đo. Root tự làm; 2critic độc l�
 gate khi đủDoD. GT06 vẫn10freshpairs×35batch với đủdataset/exits/Jobs/handles/
 hashes/allattempts; GT07→GT10 tuần tự, Android thật ởGT08; chưa ETA toànplan.
 Lịch ti-p-t-c-hh3d-tools đã tạo lại ACTIVE10phút sau tool báo lịch cũ không tồn tại.
-S117-03 dispatch12:49:16Z, supervisor40172/host22976/editor42060; raw bị gián đoạn lúc batch3, không có terminal receipt. S119 probe chứng minh wrapper chờ và ghi exit thật. S119 diagnostic supervisor36240 exit1, target22720 exit1, import14052 exit0, editor target exit UNKNOWN; task instances0. Original seal manifest2fc45bc6bf7ccad1a49d86993f5bc1386ac2738583dc05af6b1917f471293fae được giữ như metadata dẫn xuất lịch sử. Portable seal v2 sai root được giữ để audit; complete portable seal v3 ở zdoc/reviews/20260919-gt06-s119-launch-recovery/s119-seal-v3/ có external manifest hash dad2f9cbaab6d5df50f6e55e53843906be9f1e42a7bf207a67b37c9817810b31; 195 file copy được kiểm byte/hash và 38 cache/journal mục loại trừ vẫn được liệt kê. No formal PASS.
+S117-03 dispatch12:49:16Z, supervisor40172/host22976/editor42060; raw bị gián đoạn lúc batch3, không có terminal receipt. S119 probe chứng minh wrapper chờ và ghi exit thật. S119 diagnostic supervisor36240 exit1, target22720 exit1, import14052 exit0, editor target exit UNKNOWN; task instances0. Seal manifest2fc45bc6bf7ccad1a49d86993f5bc1386ac2738583dc05af6b1917f471293fae giữ120 raw/portable files và38 exclusions. No formal PASS.
 Metadata scripts luôn UTF-8; lỗi đọc cp1252 đã sửa, không rerun engine/raw.
 ArchiveS117 exactbytes/AUTHORITY0: reviews/20260919-gt06-s118-import-boundary/archive/.
 
@@ -1276,5 +1276,3 @@ CCU=người online cùng lúc trong game, không số agent phát triển game.
 END_OF_TOOLS_PLAN
 DATE=2026-09-17 Asia/Saigon
 \n
-
-S121 static boundary note: transport._dispatch holds the host lock before lookup; S119 retained server.dispatch had not entered server.lookup when the client lookup timed out, while host.finish held its journal guard through reload/snapshot and append. This is a pinned-code and lifecycle boundary, not proof of disk, OS, scheduler or leak cause. Keep formal GT06 retry closed until a narrow repair and distinguishing bounded diagnostic are reviewed.

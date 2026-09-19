@@ -1,0 +1,102 @@
+{
+  "schema": "hh-studio.s119-portable-seal.2",
+  "AUTHORITY": 0,
+  "formal_acceptance": false,
+  "eligible_for_dataset": false,
+  "run_id": "gt06-s119-lookup-boundary-01",
+  "disposition": "ORIGINAL_FAILURE_ADMISSION_UNKNOWN_BATCH8",
+  "source_closure": "7635a470cef554c1a60e1d9427f59998737d3bb829c3a1f134e426cdf9275467",
+  "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+  "native_sha256": "13e65360cd0bc0033d0ad414fb3238e216b0d6dcc08e57dc7026ec4fc9eb8b95",
+  "completed_batches": 8,
+  "gates_passed": 8,
+  "failure": {
+    "code": "ADMISSION_UNKNOWN",
+    "lookup_timeout_ms": 2006.271,
+    "max_status_gap_ms": 5208.0547,
+    "first_failure_route": "lookup",
+    "command_route_failure": "commands"
+  },
+  "cleanup": {
+    "source_unchanged": true,
+    "execution_unchanged": true,
+    "job_zero_closed": true,
+    "handles_retained": false,
+    "editor_target_exit": "UNKNOWN",
+    "import_exit": 0,
+    "supervisor_exit": 1,
+    "import_wrapper_close_handle": "UNKNOWN"
+  },
+  "correlation": {
+    "status": "OBSERVED_BOUNDARY",
+    "reader": "read_terminal_v2.py",
+    "claim_limit": "Correlation and containment only; lock wait is static inference, no root cause, leak, repair or PASS."
+  },
+  "files": {
+    "launcher/dispatch-claim.json": {
+      "source": "8-9-hh3d-3/zdoc/reviews/20260919-gt06-s119-launch-recovery/task-diagnostic/dispatch-claim.json",
+      "portable": "launcher/dispatch-claim.json",
+      "sha256": "b3040c86a2650022d332b016573baf117cb4dd16a2e79f61ef0ec90bb6840fc4",
+      "bytes": 145
+    },
+    "launcher/dispatch.json": {
+      "source": "8-9-hh3d-3/zdoc/reviews/20260919-gt06-s119-launch-recovery/task-diagnostic/dispatch.json",
+      "portable": "launcher/dispatch.json",
+      "sha256": "2bd362c9d5d9fb5ba14e00796d8bfd5f6893689da306a8765fb55a1dfdc54e2f",
+      "bytes": 261
+    },
+    "launcher/registered.json": {
+      "source": "8-9-hh3d-3/zdoc/reviews/20260919-gt06-s119-launch-recovery/task-diagnostic/registered.json",
+      "portable": "launcher/registered.json",
+      "sha256": "23ccc3c4534ae12607fd795bf5220a7de508289c0ea8b310927145cae704190f",
+      "bytes": 2039
+    },
+    "launcher/request.json": {
+      "source": "8-9-hh3d-3/zdoc/reviews/20260919-gt06-s119-launch-recovery/task-diagnostic/request.json",
+      "portable": "launcher/request.json",
+      "sha256": "e7c13fca49cae3536ce7a3a39e690516064866dd34d7aa5a61e74f425d9886d3",
+      "bytes": 2079
+    },
+    "launcher/source-check.json": {
+      "source": "8-9-hh3d-3/zdoc/reviews/20260919-gt06-s119-launch-recovery/task-diagnostic/source-check.json",
+      "portable": "launcher/source-check.json",
+      "sha256": "13cef18ed8ff36d5b54bc0e9f0b9cbeff755fc3593337ebc780a66a983586c30",
+      "bytes": 321
+    },
+    "launcher/stderr.txt": {
+      "source": "8-9-hh3d-3/zdoc/reviews/20260919-gt06-s119-launch-recovery/task-diagnostic/stderr.txt",
+      "portable": "launcher/stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "launcher/stdout.txt": {
+      "source": "8-9-hh3d-3/zdoc/reviews/20260919-gt06-s119-launch-recovery/task-diagnostic/stdout.txt",
+      "portable": "launcher/stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "launcher/supervisor-exit.json": {
+      "source": "8-9-hh3d-3/zdoc/reviews/20260919-gt06-s119-launch-recovery/task-diagnostic/supervisor-exit.json",
+      "portable": "launcher/supervisor-exit.json",
+      "sha256": "c0261737ac32a68b4fd2d32f78323d5e8f05107d4f448be1feea9c07484e6d30",
+      "bytes": 278
+    },
+    "launcher/supervisor-start.json": {
+      "source": "8-9-hh3d-3/zdoc/reviews/20260919-gt06-s119-launch-recovery/task-diagnostic/supervisor-start.json",
+      "portable": "launcher/supervisor-start.json",
+      "sha256": "1ca35500b1284dc8a356dfd57e606a1036da7183498334d4281578a183f35165",
+      "bytes": 253
+    },
+    "launcher/wrapper-start.json": {
+      "source": "8-9-hh3d-3/zdoc/reviews/20260919-gt06-s119-launch-recovery/task-diagnostic/wrapper-start.json",
+      "portable": "launcher/wrapper-start.json",
+      "sha256": "1c420da25f31a4b3e0aa7db7b176b923c94d89f816741505076c07f88e20494f",
+      "bytes": 103
+    }
+  },
+  "local_excluded": {},
+  "gaps": [
+    "editor target natural exit receipt missing",
+    "import wrapper native CloseHandle is UNKNOWN"
+  ]
+}
