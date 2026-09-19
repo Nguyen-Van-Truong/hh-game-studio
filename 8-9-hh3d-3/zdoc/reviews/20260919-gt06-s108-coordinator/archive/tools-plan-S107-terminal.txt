@@ -1,5 +1,5 @@
 HH STUDIO — PLAN 1/3: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 19-09-2026, Asia/Saigon | Revision S108 | TRIỂN KHAI THEO GATE
+Ngày 19-09-2026, Asia/Saigon | Revision S107 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -16,7 +16,7 @@ STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng
 
 CURRENT_VALID_WP=GT-06
 EXECUTION_AUTHORIZATION=OWNER_APPROVED_GATED
-IMPLEMENTATION=GT06_S108_OWNED_GUI_THREAD_ATTRIBUTION_STATIC_VERIFIED
+IMPLEMENTATION=GT06_S107_PREVIEW_COST_OBSERVED_S102_ROOT_CAUSE_UNRESOLVED
 GT01_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260913
 GT01_PENDING=NONE
 GT01_PIN_DECISION=GODOT_4.7.2_STABLE_OFFICIAL
@@ -25,7 +25,7 @@ RUNTIME_ACCEPTANCE=GT01_GT02_GT03_GT04_GT05_ACCEPTED
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S108
+PLAN_REVISION=S107
 EXECUTION_MODE=COORDINATOR_THREE_ASTRA_ULTRA_OWNER_20260918
 SUBAGENTS_ENABLED=3
 GT02_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260916_S46
@@ -62,67 +62,76 @@ GT06_SOURCE_CHECKPOINT=56bfd448e83aa2512c0c2561e8e1a29f12134360
 GT06_PROFILE_SHA256=0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85
 GT06_BENCHMARK_CAMPAIGN=gt06-s102-campaign-01
 GT06_BENCHMARK_STATUS=FAILED_20260919T011926Z_NATIVE_GAP2109.351MS; TASK_RETIRED_012534Z; ZERO_FULL_RUNS
-GT06_ACTIVE_DIAGNOSTIC=NONE; S107_COMPLETED; S108_STATIC_VERIFIED_NOT_LAUNCHED
-GT06_NEXT_ACTION=S108 static51/51 and exact53source pins verified. Launch at most one original-stock/full-mix diagnostic through b6,1200s,stop at original first failure. No repeated PSS/ABBA or formal retry without proven repair.
-GT06_DIAGNOSTIC_EXCLUSION=All instrumented diagnostics and failed/partial prefixes S70-S108 are excluded from F13/F14; no PASS/no-leak/root-cause inference.
+GT06_ACTIVE_DIAGNOSTIC=NONE; S107_COMPLETED_20260919T060841Z; ALL_ACTUAL_TARGET_HELPER_OUTER_EXITS_0
+GT06_NEXT_ACTION=Close S107 contrast; investigate owned native CPU/wait attribution and missing stock-save call-return at actual batch6 boundary. Preserve formal source/profile/coverage. No repeated PSS/ABBA or formal retry without proven repair.
+GT06_DIAGNOSTIC_EXCLUSION=All instrumented diagnostics and failed/partial prefixes S70-S107 are excluded from F13/F14; no PASS/no-leak/root-cause inference.
 
-TIẾN ĐỘ HIỆN HÀNH — S108, ngày 19-09-2026 (run timestamps UTC)
-GT01–05 ACCEPTED; GT06 IN_PROGRESS; GT07–10 chưa mở. Zero accepted fullruns.
-Runtime53/profile giữ S102. Checkpoint S107helperf95fb8cc/result5916c693.
-Không engine đang chạy sau S107terminal06:08:41Z. S108 static đã đạt, chưa launch.
-S108: 51/51 tests (native8, thread18, clock7, runner18); --check exit0.
-Đã sửa việc mất metadata lỗi đóng handle lần đầu khi retry đóng thành công.
-Hai worker bị model-at-capacity; root tiếp tục từ file đã lưu, không viết lại.
-Preflight review không là final critic; receipt ở s108-coordinator/static-validation.json.
+TIẾN ĐỘ HIỆN HÀNH — S107, ngày 19-09-2026 (run timestamps UTC)
+GT01–05 ACCEPTED; GT06 IN_PROGRESS; GT07–10 chưa mở. Chưa có full benchmark PASS.
+S106 prefix01 đã kết thúc05:50:12Z, không còn engine chạy khi kiểm06:00:40Z.
+Đủ6batch0–5,6000HTTP+600native; planned S106_PREFIX_BOUNDARY, không lỗi mới.
+Hai PSS gắn đúng gate/sample: editor563→555 (-8), Event118→114, Thread47→44,
+IoCompletion12→11;192unavailable mỗi snapshot. Count không là object identity.
+ObjectDB71128/resources6 ổn định; HTTPmax905.7962ms/native714.183ms, transport0.
+PSS4/5:8.4505/10.0524ms, targetbefore/after khớp, observer204, allreleased/errors0.
+Kết luận NON_REPRODUCED; đóng nhánh lặp identicalprefix, không no-leak/repair.
+Outer22376actual0; host46864actual1/helper1 do boundary; import53260actual0/helper0;
+editor23356naturalUNKNOWN/helper2. Recorded Jobs/probes/threads sạch. Import native
+wrapper-close UNKNOWN; outermanagedDispose không thay nativeCloseBOOL; chưa liveStop.
+Raw studio/.local/reviews/gt06-s106-handles-prefix-01 và sibling -outer giữ nguyên.
+Packet reviews/20260919-gt06-s106-prefix-result/:95exactcopies,84refs/60unique,
+manifest53cd7e5c44e13ca8febda965aa8d70f6294ead96985b7f536a70446862a2ee0d.
 
-S108: tối đa một diagnostic b0–6 (7batches), original1000HTTP+100native/batch,
-stocksave_scene/heartbeat/deadline/baseline/gates không đổi, outer1200s. Dừngngay
-originalfirstfailure hoặc b6boundary. Không PSS, pressure, fullformalretry.
-Thêm observedcallreturn (reuseS103) và threadCPU khi nativeb5/b6; khôngbỏ outlier.
-Godot OS.get_thread_caller_id làlogicalID, KHÔNG WindowsTID. BindMAINWINDOWHWND,
-GetWindowThreadProcessId+ownedPID/uniqueGUIthread, retainedquerythreadhandle,
-threadcreation/processstart/executable; ambiguous làUNKNOWN. Handle mởREADY0,
-khôngtạo observerthread/handle mới ởb5 khiến baseline thiếuobserver; polltick50ms,
-cap8000records, APIcostretained, khôngsubtract. CloseHandleBOOL/endedthread riêng.
-Host/native clockjoin dùng BEFOREpublishACK→nativeobservation→afterreceipthost,
-không dùng publishreturn làm lowerbound. CPUdelta thuộc enclosing samples,
-khôngexactcallCPU/waitcause; thiếuanchors/boundaries làUNKNOWN, khôngsuy disk/GPU.
-Ba Astraultra: nativeoverlay+identity, retainedthreadsampler, coupledrunner+cleanup;
-rootclockreader/observer/plan. Static/integration trướcengine; mộtwriter/file.
-Nếu khôngreproduce usefulinterval thì đóngattempt, khônglặp/đẻ fullretry tựđộng.
+S107 gt06-s107-preview-01 chạy06:08:11Z→06:08:41Z, CAPTURED đủ40cycles/10ABBA.
+A stocksave_scene() mean108.95045ms/median106.576/p95123.049/max138.095;
+B save_scene_as(SCENE,false) mean30.4063/median29.7685/p9534.116/max38.803ms.
+Cả10nhóm A−B đều dương70.8865–94.8215ms. Có preview-path cost trong viđo này;
+không tái hiệnS1022.109s, chưa rootcause hoặc publicsaveoptimization. Đóng nhánhABBA,
+không lặp/nới số vòng/chuyển formalworkload. Productionpublication ResourceSaver
+khác stockbenchmarksave; formalpreview vẫn giữ nguyên. KhôngHTTP/PSS trong viđo.
 
-S107 gt06-s107-preview-01 chạy06:08:11Z→06:08:41Z,40cycles/10ABBA,noHTTP/PSS.
-Apreview callmean108.95045ms,p95123.049,max138.095; Bwithoutpreviewmean30.4063,
-p9534.116,max38.803. All10groups A−B70.8865..94.8215ms. Previewcostviđo đã thấy,
-S1022.109s chưa táihiện/rootcause. Formalstocksavecoverage giữ nguyên; publication
-ResourceSaver/staging làđườngkhác. ĐóngnhánhABBA, khônglặp hoặcđổi acceptance.
-Native4768/import35964/child33532/helpers/outer49464allactual0; recordedJobs/
-probes/host+editorwrapper/importobserverclean. ImportwrappernativeCloseUNKNOWN,
-managedDisposekhôngnativeBOOL; chưa liveStop. Native maxstatusgap568.226ms.
-Packet s107-result66exactcopies/48rawrefs/10helpers,manifest
-0cbad6e2ec833680910189bc8227bafa53bee7460173f9e0d82f7ffbecc6ed53.
-Independentimplementationaudit verified raw/portablebytes,53sources,40rows/index/
-semantic/timings/lifecycle/stats. Khôngfinalcritic. FalseGitfilterfinding đãrút:
-phải dùngrepo-relativeforwardslash vàactualbytes/stagedblob, khôngescapedrepr.
+Native editor4768/import35964/child33532 đều actual0/helper0; outer49464actual0.
+Jobszero/closed, editor+hostwrapper/probe/importobserver clean; importwrapper
+nativeCloseUNKNOWN, managedDisposekhôngnativeBOOL, liveStopchưaexercise.
+Source53/profile nguyênS102. Helperpreparationcheckpointf95fb8cc; overlay
+ d4de3e1a16b57cf7b3095a489b60aa417e609b06a140d328224dedee18432cc5;
+recipeba8cf9a2646accf7e62e0b66053dbe24381311825574478beb28142607211619.
+Raw studio/.local/reviews/gt06-s107-preview-01 và sibling-outer giữ nguyên.
+Packet reviews/20260919-gt06-s107-result/:66exactcopies/48rawrefs/10frozenhelpers,
+manifest0cbad6e2ec833680910189bc8227bafa53bee7460173f9e0d82f7ffbecc6ed53.
+Packet-onlyreader kiểm40rows, report/index/context+source/actualPID+exits,
+raw/portablehashdomains riêng; khôngengineimport khiverify. All40outliers/firstA
+serializationnormalization retained, scene/script/semanticundo+reload verified.
 
-S106prefix01terminal05:50:12Z,6batches6000HTTP+600native, plannedboundary.
-PSS563→555 (-4Event,-3Thread,-1IoCompletion),192unavailable; NON_REPRODUCED,
-đóngnhánhPSSlặp. Counts khôngidentity/noleak. Packet95copiesmanifest
-53cd7e5c44e13ca8febda965aa8d70f6294ead96985b7f536a70446862a2ee0d.
-S102nativegap2109.351ms b6/c74 vẫnunresolved,host1936.8697/HTTPfailure0riêngbiệt;
-scene_savedkhôngcallreturn. S103handles555→561 chưa leakproof. GiữfailureS70–S107,
-S104reader/framecorrection và S105collectorfailures. Collectorreader lỗi sauengine
-hoàntất thì sửa derivedmetadata từraw, khôngrerunvôích/khôngtạosnapshot hồi tố.
+34static tests passed trướcactualimport/run; khôngbịa BvoidreturnOK. Rootintegrated
+captureallowlist loại cache/temp/localappdata, nativebatch/row exactbinding.
+Ba Astraultra đã giao nativehelper/runner/S106packet; supplementalreview gặp
+workspacecrediterror nên không có finalcriticverdict. Coordinatorreview không
+thay finalcritics. Đọc s107-preview-cost/README.md và s106-latency-next.md.
+Tiếp theo chỉ nghiên cứu boundary originalstocksave tới b6 với CPU/wait attribution
+của đúng ownededitor. Không dùng GodotlogicalthreadID làm WindowsTID; cần identity
+native kiểm chứng. Chưa dispatch diagnostictiếp, không formalretrymù.
 
-Khôngnới heartbeat/timeout/counter/RSSbaseline, subtractoverhead, trim/pinRAM,
-priority hoặc processkhác. Khôngengine/tests/heavyhashaudit cạnh phépđo.
-Nghiệmthu10freshpairs×35batch(5warmup+30measured),1000HTTP+100native/batch,7410s/run;
-dataset/hashes/actualtarget+helperexits/ownedtree/Jobs/handles/Stop/allattempts.
-Reusefunctional exactdependency; đủDoD mớifreezefinalmanifest+requirementsmap,
-hai criticMỚI độclập samehashPASS/TICK=yes, coordinatorACCEPT rồiGT07→GT10.
-GT08Androidmáythật hardgate. HHWorld/Superagent riêngsauGT10;tools khônglàgame.
-Lịchduynhất ti-p-t-c-hh3d-tools; máy/appcầnhoạtđộng, khônghứaETAtoànplan/trướcsáng.
-ArchiveS107exact/hash/AUTHORITY0: reviews/20260919-gt06-s108-coordinator/archive/.
+S102 nativegap2109.351ms b6/c74 SAVE→SAVE_WAIT vẫn unresolved; host1936.8697ms,
+HTTPfailure0 là boundary riêng. scene_saved không phải callreturn. S103 handle
+555→561 chưa chứng minh leak. S104 đọc lại100/600rows trên raw đúng frameorder;
+Engine processframe có thể tăng trong synchronous save. S105 collector failures
+và packet264copies/manifestc08d33e4bd99678a29ff28fcf0ffed2135c0e70c1155198d1aba7b514622cbe4
+giữ nguyên. S106 sửa collector,30static và actual1batch preflight; packet50copies
+manifest383c832ae411d1b31596a1228152b0a6608bc81e665b1097f99a077812d0c7e0.
+Giữ failure S70–S106; collector lỗi thì sửa derivedmetadata trên raw đủ bằng chứng,
+không rerun engine vô ích; snapshot chưa ghi không thể tạo hồi tố. No Stop bypass.
+
+Không đổi heartbeat/timeout/counter/RSSbaseline, subtractoverhead, trim/pinRAM,
+priority hoặc process khác. Không engine/test/hash audit nặng cạnh phép đo.
+Nghiệm thu giữ10freshpairs×35batch (5warmup+30measured),1000HTTP+100native/batch,
+7410s/run; dataset/hash/actualtarget+helperexits/ownedtree/Jobs/handles/Stop/allattempts.
+Reusefunctional chỉ exactdependency. ĐủDoD mới freezefinalmanifest+requirement→test→
+evidence, hai critic MỚI cùnghash PASS/TICK=yes, coordinatorACCEPT rồi GT07→GT10.
+GT08 cần Androidmáythật. HH World/Superagent riêng sauGT10; tools không là game.
+Lịch duy nhất ti-p-t-c-hh3d-tools theo trạng thái mới; máy/app cần hoạt động.
+Chưa ETA toànplan/không hứa xong trước sáng. S106progress exactarchive/hash/AUTHORITY0
+ở reviews/20260919-gt06-s107-coordinator/archive/; lịch sử cũ tiếp tục giữ nguyên.
 
 Rà phạm vi claim S76: GT-01–05 ACCEPTED theo fixture/catalog đã công bố,
 chưa chứng minh authoring gameplay tổng quát. Godot writer hiện chỉ Node3D/
