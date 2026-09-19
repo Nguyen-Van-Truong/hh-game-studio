@@ -161,6 +161,7 @@ class ThreadProbe:
         self.clock_ns, self.api = clock_ns, api if api is not None else WinAPI()
         self.handle, self.close_uncertain, self.closed = None, False, False
         self.records, self.errors, self.identity, self.close_receipt = [], [], {}, None
+        self.window_rows = []
         self._last_start, self._last_cpu, self._last_batch = None, None, None
         self._failure = None
         need(all(callable(getattr(self.api, name, None)) for name in (
@@ -191,7 +192,13 @@ class ThreadProbe:
                          for row in windows), 'S108_WINDOW_ENUMERATION')
             need(len({row['hwnd'] for row in windows}) == len(windows)
                  and self.hwnd in {row['hwnd'] for row in windows}, 'S108_ANNOUNCED_WINDOW_MISSING')
-            need({row['tid'] for row in windows} == {tid}, 'S108_AMBIGUOUS_GUI_THREAD')
+            self.window_rows = [{'hwnd': row['hwnd'], 'pid': row['pid'], 'tid': row['tid']}
+                                for row in windows]
+            if {row['tid'] for row in windows} != {tid}:
+                error = ThreadProbeError('S108_AMBIGUOUS_GUI_THREAD')
+                error.announced_tid = tid
+                error.owned_window_rows = list(self.window_rows)
+                raise error
             self.tid = tid
             self.handle = self.api.open_thread(tid)
             need(self.handle, 'S108_OPEN_THREAD')

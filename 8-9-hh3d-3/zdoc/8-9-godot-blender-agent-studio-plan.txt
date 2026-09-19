@@ -16,7 +16,7 @@ STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng
 
 CURRENT_VALID_WP=GT-06
 EXECUTION_AUTHORIZATION=OWNER_APPROVED_GATED
-IMPLEMENTATION=GT06_S108_OWNED_GUI_THREAD_ATTRIBUTION_STATIC_VERIFIED
+IMPLEMENTATION=GT06_S108_OWNED_GUI_THREAD_ATTRIBUTION_READY_FOR_BOUNDED_RETRY
 GT01_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260913
 GT01_PENDING=NONE
 GT01_PIN_DECISION=GODOT_4.7.2_STABLE_OFFICIAL
@@ -62,14 +62,16 @@ GT06_SOURCE_CHECKPOINT=56bfd448e83aa2512c0c2561e8e1a29f12134360
 GT06_PROFILE_SHA256=0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85
 GT06_BENCHMARK_CAMPAIGN=gt06-s102-campaign-01
 GT06_BENCHMARK_STATUS=FAILED_20260919T011926Z_NATIVE_GAP2109.351MS; TASK_RETIRED_012534Z; ZERO_FULL_RUNS
-GT06_ACTIVE_DIAGNOSTIC=NONE; S107_COMPLETED; S108_STATIC_VERIFIED_NOT_LAUNCHED
-GT06_NEXT_ACTION=S108 static51/51 and exact53source pins verified. Launch at most one original-stock/full-mix diagnostic through b6,1200s,stop at original first failure. No repeated PSS/ABBA or formal retry without proven repair.
+GT06_ACTIVE_DIAGNOSTIC=NONE; S107_COMPLETED; S108_01_STOPPED_READY0_AMBIGUOUS_GUI_THREAD; S108_02_NOT_LAUNCHED
+GT06_NEXT_ACTION=S108 static51/51 and exact53source pins verified. S108-01 stopped at READY0 before batch0 because the collector required one GUI TID but did not retain the owned-window rows. This is an instrumentation evidence gap, not a benchmark failure. A fresh S108 ID may run once after bounded row-retention, then preserve raw and decide; no automatic repetition.
 GT06_DIAGNOSTIC_EXCLUSION=All instrumented diagnostics and failed/partial prefixes S70-S108 are excluded from F13/F14; no PASS/no-leak/root-cause inference.
 
 TIẾN ĐỘ HIỆN HÀNH — S108, ngày 19-09-2026 (run timestamps UTC)
 GT01–05 ACCEPTED; GT06 IN_PROGRESS; GT07–10 chưa mở. Zero accepted fullruns.
 Runtime53/profile giữ S102. Checkpoint S107helperf95fb8cc/result5916c693.
-Không engine đang chạy sau S107terminal06:08:41Z. S108 static đã đạt, chưa launch.
+Không engine đang chạy sau S108-01 terminal06:34:04Z. S108 static đã đạt;
+S108-01 dừng ở READY0 trước batch0 với S108_AMBIGUOUS_GUI_THREAD; raw/cleanup
+đã giữ, nhưng bản ghi cũ thiếu owned-window rows nên không suy GUI topology.
 S108: 51/51 tests (native8, thread18, clock7, runner18); --check exit0.
 Đã sửa việc mất metadata lỗi đóng handle lần đầu khi retry đóng thành công.
 Hai worker bị model-at-capacity; root tiếp tục từ file đã lưu, không viết lại.

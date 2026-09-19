@@ -18,7 +18,7 @@ CORE_ORIGINAL = 'zdoc/reviews/20260919-gt06-s106-handle-boundary/owned_handles.p
 CORE_SHA256 = '956a1c56d215693fb5828e04b74db04fba45a57bfb0bde12bf76a11c21dcc1a0'
 LOCAL_PINS = {
     'native_probe.py': '25282d0d302ba43c3d94fc653d0084a849dad5530b255f66e0f2a89ceb4b873a',
-    'thread_probe.py': '8d31839b238c087eb59477d8031868c0df3b5fb34293152fbdc005be4a95a2c8',
+    'thread_probe.py': '23034b1a9285208feb823f44eb3c155271f892f3d0f16f1f35d86204ca63beb1',
     'clock_join.py': 'c59263b51a32045926d5f8e29df0d163b3429a79aef387631dabd9a9af6c5f85',
 }
 RUN_ID = re.compile(r'gt06-s108-save-[a-z0-9][a-z0-9-]{0,30}\Z')
@@ -68,6 +68,15 @@ def diagnostic_error_record(error):
             if type(observed) is int and 0 <= observed < 2**32:
                 detail[key] = observed
         value['first_cleanup_error'] = detail
+    announced_tid = getattr(error, 'announced_tid', None)
+    rows = getattr(error, 'owned_window_rows', None)
+    if type(announced_tid) is int and announced_tid > 0:
+        value['announced_tid'] = announced_tid
+    if type(rows) is list and len(rows) <= 256 and all(
+            type(row) is dict and set(row) == {'hwnd', 'pid', 'tid'}
+            and all(type(row[key]) is int and row[key] > 0 for key in ('hwnd', 'pid', 'tid'))
+            for row in rows):
+        value['owned_window_rows'] = list(rows)
     return value
 
 
