@@ -1,0 +1,60 @@
+{
+  "completed_batches": 0,
+  "context": {
+    "file": "context.json",
+    "sha256": "059fa0829448d6dd14794e3bebb2d1a16f36c947dfea77da18967965078583d3",
+    "size_bytes": 5496
+  },
+  "errors": [],
+  "formal_acceptance": false,
+  "host_actual_exit": null,
+  "observations": {
+    "editor_owner": {
+      "present": false
+    },
+    "editor_probe": {
+      "present": false
+    },
+    "editor_target": {
+      "actual_target_exit": null,
+      "exit": null,
+      "missing_reason": "TARGET_EXIT_NOT_RECORDED",
+      "natural_exit_not_inferred": true,
+      "start": null
+    },
+    "heartbeat_alive": false,
+    "import_target": {
+      "actual_target_exit": null,
+      "exit": null,
+      "missing_reason": "TARGET_EXIT_NOT_RECORDED",
+      "natural_exit_not_inferred": true,
+      "start": {
+        "file": "import-host/process-start.json",
+        "sha256": "ed26cdac7637a3c61e66b8d3377a346b994cd3664a0049f05bffb4fa3df3e508",
+        "size_bytes": 14
+      }
+    },
+    "producer": {
+      "present": false
+    }
+  },
+  "observed_mono_us": 675543003365,
+  "observed_utc": "2026-09-19T00:22:12Z",
+  "phase": {
+    "batch": -1,
+    "phase": "import"
+  },
+  "primary_error": {
+    "code": null,
+    "stage": "body",
+    "type": "StageFailed"
+  },
+  "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+  "run_id": "gt06-s100-campaign-01.r00.a01",
+  "schema_id": "hh-studio.benchmark-child-terminal-cleanup",
+  "schema_version": "1.0.0",
+  "scope": "Post-finally cleanup observations; no benchmark acceptance or natural-exit inference",
+  "self_exit_missing_reason": "NOT_OBSERVABLE_BY_CHILD_TERMINAL_RECORD",
+  "source_closure_sha256": "cfc4b55a5407891bfd54d22d9f1ac45a74b6c744898199a0e4690d6230a6c1d6",
+  "supervisor_actual_exit": null
+}

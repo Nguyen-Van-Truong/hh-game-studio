@@ -1,0 +1,14 @@
+Traceback (most recent call last):
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\replay\run_benchmark_campaign.py", line 962, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\replay\run_benchmark_campaign.py", line 955, in main
+    run_child(root / f'run-{args.child_index:02d}-attempt-{args.attempt:02d}')
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\replay\run_benchmark_campaign.py", line 780, in run_child
+    imported = native_job.run_trusted_stage(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\pipeline\native_job.py", line 267, in run_trusted_stage
+    raise failure
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\pipeline\native_job.py", line 196, in run_trusted_stage
+    raise StageFailed('STAGE_WALL_LIMIT')
+studio.pipeline.native_job.StageFailed: STAGE_WALL_LIMIT

@@ -1,0 +1,777 @@
+{
+  "authority": 0,
+  "completed_batches": 0,
+  "eligible_for_dataset": false,
+  "files": {
+    "raw/benchmark-profile.json": {
+      "sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+      "size_bytes": 718,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/benchmark-profile.json"
+    },
+    "raw/campaign.json": {
+      "sha256": "2148b23ae5c03f72729f5dd9fa083331869a9003295e6699297565389b004e66",
+      "size_bytes": 6511,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/campaign.json"
+    },
+    "raw/run-00-attempt-01/benchmark-profile.json": {
+      "sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+      "size_bytes": 718,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/benchmark-profile.json"
+    },
+    "raw/run-00-attempt-01/child-failure.json": {
+      "sha256": "68072ecf7d0d9d87b959e1cd23b99b6a5d1f9bdfc05615bb38e82f0ca6247f27",
+      "size_bytes": 191,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/child-failure.json"
+    },
+    "raw/run-00-attempt-01/child-terminal-cleanup.json": {
+      "sha256": "3fabd33345de31b826a7ef83e6fd887a50a9aad64fe3e391a49e4a040fd3fcce",
+      "size_bytes": 1772,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/child-terminal-cleanup.json"
+    },
+    "raw/run-00-attempt-01/context.json": {
+      "sha256": "059fa0829448d6dd14794e3bebb2d1a16f36c947dfea77da18967965078583d3",
+      "size_bytes": 5496,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/context.json"
+    },
+    "raw/run-00-attempt-01/host-owner/cleanup-001.json": {
+      "sha256": "31f58e29075f8f16bb2df0bb72471bfcd0df794b729d6497022554d84959cfc8",
+      "size_bytes": 548,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/host-owner/cleanup-001.json"
+    },
+    "raw/run-00-attempt-01/host-owner/invocation.json": {
+      "sha256": "f935399a600b425e8a09c87bc09dad1479957afc6bdc9977bd880cae7dc902cb",
+      "size_bytes": 6593,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/host-owner/invocation.json"
+    },
+    "raw/run-00-attempt-01/host-owner/process-exit.json": {
+      "sha256": "58142d1cf8b671ded13bf558a05756d534009d24c6727f56d71cd94c7eda685d",
+      "size_bytes": 29,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/host-owner/process-exit.json"
+    },
+    "raw/run-00-attempt-01/host-owner/process-start.json": {
+      "sha256": "fe9287b185e8912621fa02d44564930c0da77fff8a9d35ee66a00a4670dcab03",
+      "size_bytes": 13,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/host-owner/process-start.json"
+    },
+    "raw/run-00-attempt-01/host-owner/stderr.txt": {
+      "sha256": "3b06aa19da3817897072ccf7c12fbb7481f31e908f081a78ea3e3d678b02dfc8",
+      "size_bytes": 1180,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/host-owner/stderr.txt"
+    },
+    "raw/run-00-attempt-01/host-owner/stdout.txt": {
+      "sha256": "bf3d30bd7e483b683a51093e584700c7517c787519ac84f4a4f4549e4413c846",
+      "size_bytes": 2472,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/host-owner/stdout.txt"
+    },
+    "raw/run-00-attempt-01/import-host/capture.json": {
+      "sha256": "2c25e3dbd037e235fb97c3e458f8c1813c6bb600f68228edf0b3f6b9b1775b0b",
+      "size_bytes": 1087,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/import-host/capture.json"
+    },
+    "raw/run-00-attempt-01/import-host/invocation.json": {
+      "sha256": "8ae70ce822ead56a7e29954ce14c3e78ae5dc4ac36aefb1bd703d4ccd8b42721",
+      "size_bytes": 6205,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/import-host/invocation.json"
+    },
+    "raw/run-00-attempt-01/import-host/process-start.json": {
+      "sha256": "ed26cdac7637a3c61e66b8d3377a346b994cd3664a0049f05bffb4fa3df3e508",
+      "size_bytes": 14,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/import-host/process-start.json"
+    },
+    "raw/run-00-attempt-01/import-host/stderr.txt": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/import-host/stderr.txt"
+    },
+    "raw/run-00-attempt-01/import-host/stdout.txt": {
+      "sha256": "83cf0b082206af2aa236c83064fbcfa76be1e00a4aa3558574b2f65965d9481c",
+      "size_bytes": 75,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/import-host/stdout.txt"
+    },
+    "raw/run-00-attempt-01/initial-project-files.json": {
+      "sha256": "e9e2f445aa99655d754b4bfcc8dfb5de9b7fbff533dd167b057f720f7b8b4645",
+      "size_bytes": 1461,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/initial-project-files.json"
+    },
+    "raw/run-00-attempt-01/parent-failure.json": {
+      "sha256": "9c2279c601960d4e2acbec10ce8c6dabdece7627c7cca8bd32cef3950a8ae923",
+      "size_bytes": 183,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/parent-failure.json"
+    },
+    "raw/run-00-attempt-01/project/.godot/.gdignore": {
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+      "size_bytes": 1,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/project/.godot/.gdignore"
+    },
+    "raw/run-00-attempt-01/project/addons/hh_benchmark/benchmark_native.gd": {
+      "sha256": "13e65360cd0bc0033d0ad414fb3238e216b0d6dcc08e57dc7026ec4fc9eb8b95",
+      "size_bytes": 54580,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/project/addons/hh_benchmark/benchmark_native.gd"
+    },
+    "raw/run-00-attempt-01/project/addons/hh_benchmark/plugin.cfg": {
+      "sha256": "648d8821a36d0abc825ef1f380b4917639074302a619cb25a798df987a5a1092",
+      "size_bytes": 189,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/project/addons/hh_benchmark/plugin.cfg"
+    },
+    "raw/run-00-attempt-01/project/addons/hh_studio/jcs_godot.gd": {
+      "sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5",
+      "size_bytes": 10165,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/project/addons/hh_studio/jcs_godot.gd"
+    },
+    "raw/run-00-attempt-01/project/addons/hh_studio/jcs_godot.gd.uid": {
+      "sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b",
+      "size_bytes": 20,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/project/addons/hh_studio/jcs_godot.gd.uid"
+    },
+    "raw/run-00-attempt-01/project/addons/hh_studio/plugin.cfg": {
+      "sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c",
+      "size_bytes": 165,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/project/addons/hh_studio/plugin.cfg"
+    },
+    "raw/run-00-attempt-01/project/addons/hh_studio/plugin.gd": {
+      "sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036",
+      "size_bytes": 23043,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/project/addons/hh_studio/plugin.gd"
+    },
+    "raw/run-00-attempt-01/project/addons/hh_studio/plugin.gd.uid": {
+      "sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d",
+      "size_bytes": 20,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/project/addons/hh_studio/plugin.gd.uid"
+    },
+    "raw/run-00-attempt-01/project/addons/hh_studio/scene_commands.gd": {
+      "sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069",
+      "size_bytes": 32174,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/project/addons/hh_studio/scene_commands.gd"
+    },
+    "raw/run-00-attempt-01/project/addons/hh_studio/scene_commands.gd.uid": {
+      "sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69",
+      "size_bytes": 19,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/project/addons/hh_studio/scene_commands.gd.uid"
+    },
+    "raw/run-00-attempt-01/project/benchmark/.gdignore": {
+      "sha256": "3d078ee3c08af2f64daca29255d23d366dc0a9bdbef8a872442d5642bfb84cf8",
+      "size_bytes": 53,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/project/benchmark/.gdignore"
+    },
+    "raw/run-00-attempt-01/project/benchmark/input.json": {
+      "sha256": "920b58a0bd97cba4908e1d9f56702660631f87af08f4d059ba9b7539d5e2da1f",
+      "size_bytes": 369,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/project/benchmark/input.json"
+    },
+    "raw/run-00-attempt-01/project/project.godot": {
+      "sha256": "819b521edff745f02f7c30e96ceffe21c70d8ef4fc32e95b96df37877e817ce1",
+      "size_bytes": 838,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/project/project.godot"
+    },
+    "raw/run-00-attempt-01/project/scenes/fixture.tscn": {
+      "sha256": "51eaa111f832327d74b2031d382eb22ab30c8b725323e26ebcf7a66bbef571cb",
+      "size_bytes": 235,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/project/scenes/fixture.tscn"
+    },
+    "raw/run-00-attempt-01/project/scripts/fixture_actor.gd": {
+      "sha256": "30116960b59778bee92698077689481f7936f41a2d722ddbe23626cbe3fc55cd",
+      "size_bytes": 50,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/project/scripts/fixture_actor.gd"
+    },
+    "raw/run-00-attempt-01/project/scripts/fixture_actor.gd.uid": {
+      "sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142",
+      "size_bytes": 20,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/project/scripts/fixture_actor.gd.uid"
+    },
+    "raw/run-00-attempt-01/source-files.json": {
+      "sha256": "982c58924d26fd601aa9c4f7741e1c95ecc55e0cf896f1088e02f6b1431bcb72",
+      "size_bytes": 5156,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/source-files.json"
+    },
+    "raw/run-00-attempt-01/source/studio/blender-addon/ipc_client.py": {
+      "sha256": "ee5d77e52dabb8b746e528be2acddc07b821f6b6724e9de9a36ec18b71cd8da9",
+      "size_bytes": 16349,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/source/studio/blender-addon/ipc_client.py"
+    },
+    "raw/run-00-attempt-01/source/studio/contracts/perf-collector.schema.json": {
+      "sha256": "394d1df03bdfd736ea3fe9f260e9d718d35f3820cde35d1c45ccab65fbc24834",
+      "size_bytes": 30060,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/source/studio/contracts/perf-collector.schema.json"
+    },
+    "raw/run-00-attempt-01/source/studio/godot-addon/addons/hh_studio/plugin.cfg": {
+      "sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c",
+      "size_bytes": 165,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/source/studio/godot-addon/addons/hh_studio/plugin.cfg"
+    },
+    "raw/run-00-attempt-01/source/studio/godot-addon/addons/hh_studio/plugin.gd": {
+      "sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036",
+      "size_bytes": 23043,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/source/studio/godot-addon/addons/hh_studio/plugin.gd"
+    },
+    "raw/run-00-attempt-01/source/studio/godot-addon/addons/hh_studio/scene_commands.gd": {
+      "sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069",
+      "size_bytes": 32174,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/source/studio/godot-addon/addons/hh_studio/scene_commands.gd"
+    },
+    "raw/run-00-attempt-01/source/studio/godot-addon/bundle_staging.py": {
+      "sha256": "3d614edbec8e9a7f5ad3caf2b9694d7498df129de95683952268621f91d68e43",
+      "size_bytes": 15005,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/source/studio/godot-addon/bundle_staging.py"
+    },
+    "raw/run-00-attempt-01/source/studio/godot-addon/bundle_v2.py": {
+      "sha256": "2c5cdc71cdaf80f58bb93ec791e84bab8bd02cd4d9bdbd93d635db13583de62a",
+      "size_bytes": 8475,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/source/studio/godot-addon/bundle_v2.py"
+    },
+    "raw/run-00-attempt-01/source/studio/godot-addon/cli_job.py": {
+      "sha256": "5a0f37bc129bde409a2657054fb091d637d838e442d45a69e7adc1f1527d4c88",
+      "size_bytes": 12672,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/source/studio/godot-addon/cli_job.py"
+    },
+    "raw/run-00-attempt-01/source/studio/godot-addon/fixture_profile.py": {
+      "sha256": "25e1667dd930dcf0746b071fc29ea3460bc18d5fb9f3f83e806c1793028f21ae",
+      "size_bytes": 6020,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/source/studio/godot-addon/fixture_profile.py"
+    },
+    "raw/run-00-attempt-01/source/studio/godot-addon/fixture_profile/addons/hh_studio/jcs_godot.gd.uid": {
+      "sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b",
+      "size_bytes": 20,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/source/studio/godot-addon/fixture_profile/addons/hh_studio/jcs_godot.gd.uid"
+    },
+    "raw/run-00-attempt-01/source/studio/godot-addon/fixture_profile/addons/hh_studio/plugin.gd.uid": {
+      "sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d",
+      "size_bytes": 20,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/source/studio/godot-addon/fixture_profile/addons/hh_studio/plugin.gd.uid"
+    },
+    "raw/run-00-attempt-01/source/studio/godot-addon/fixture_profile/addons/hh_studio/scene_commands.gd.uid": {
+      "sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69",
+      "size_bytes": 19,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/source/studio/godot-addon/fixture_profile/addons/hh_studio/scene_commands.gd.uid"
+    },
+    "raw/run-00-attempt-01/source/studio/godot-addon/fixture_profile/project.godot": {
+      "sha256": "2d4fa9c7261fc5ec4292094854ffa79b602249671a03db3c9808ea7521f4fa51",
+      "size_bytes": 282,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/source/studio/godot-addon/fixture_profile/project.godot"
+    },
+    "raw/run-00-attempt-01/source/studio/godot-addon/fixture_profile/scripts/fixture_actor.gd.uid": {
+      "sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142",
+      "size_bytes": 20,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/source/studio/godot-addon/fixture_profile/scripts/fixture_actor.gd.uid"
+    },
+    "raw/run-00-attempt-01/source/studio/godot-addon/fixture_profile/source-pins.json": {
+      "sha256": "c0a40998bd63d4d3dc628e4b9d2e0932fcb5725d1870adc43d0fdc3af2fdeed2",
+      "size_bytes": 1873,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/source/studio/godot-addon/fixture_profile/source-pins.json"
+    },
+    "raw/run-00-attempt-01/source/studio/host/blender/__init__.py": {
+      "sha256": "812b123ddad075d7bb1892a38e099fdb48db147f80a27db83101c2b640044a90",
+      "size_bytes": 69,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/source/studio/host/blender/__init__.py"
+    },
+    "raw/run-00-attempt-01/source/studio/host/blender/deadline.py": {
+      "sha256": "55fb3f77cadd9edc633186e1d6727bbed06216d659846aa3836e2582eef46926",
+      "size_bytes": 1130,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/source/studio/host/blender/deadline.py"
+    },
+    "raw/run-00-attempt-01/source/studio/host/blender/export_job.py": {
+      "sha256": "8eb0cc4a93361faf8cf09a3f11fd0278ec3fcdb2c9863e4b2ee98852c67ecdfe",
+      "size_bytes": 13605,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/source/studio/host/blender/export_job.py"
+    },
+    "raw/run-00-attempt-01/source/studio/host/blender/glb_preflight.py": {
+      "sha256": "5e4015c77ee3dced056634f89a0ba1fe2f94dd6650250fac8b03317c12d54f62",
+      "size_bytes": 11815,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/source/studio/host/blender/glb_preflight.py"
+    },
+    "raw/run-00-attempt-01/source/studio/host/blender/ui_host.py": {
+      "sha256": "0fa5afa44046b61b68baafc275b39ade4787a55221074018db588c4c2f71dc35",
+      "size_bytes": 22464,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/source/studio/host/blender/ui_host.py"
+    },
+    "raw/run-00-attempt-01/source/studio/host/core/journal.py": {
+      "sha256": "826bc5e4c60817e3a22dd2e0b6a199eb522a4eb78532cb5300249fe9056c0cc6",
+      "size_bytes": 29602,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/source/studio/host/core/journal.py"
+    },
+    "raw/run-00-attempt-01/source/studio/host/core/limits.py": {
+      "sha256": "9d01ce56f5976bb034e60e33bf4b7986cdc44b3a8ffad46da738a6ed1b143f3f",
+      "size_bytes": 15813,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/source/studio/host/core/limits.py"
+    },
+    "raw/run-00-attempt-01/source/studio/host/core/private_store.py": {
+      "sha256": "c914b5a66a45660c782ecd43fd2321c238702340f3b33062e284feada4d46476",
+      "size_bytes": 20476,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/source/studio/host/core/private_store.py"
+    },
+    "raw/run-00-attempt-01/source/studio/host/core/redaction.py": {
+      "sha256": "e37d998399f589d4202591a1262a7dc19231e5e4b5236b47d4c8234956275c1f",
+      "size_bytes": 10038,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/source/studio/host/core/redaction.py"
+    },
+    "raw/run-00-attempt-01/source/studio/host/core/safe_create.py": {
+      "sha256": "681fb7c0f4e74d82597bd8049a6b42cde0ea73941d879ec8ef0ba4df326d0606",
+      "size_bytes": 13170,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/source/studio/host/core/safe_create.py"
+    },
+    "raw/run-00-attempt-01/source/studio/host/core/safe_open.py": {
+      "sha256": "efc083f1c4fa875d3f748602924a05712aa60fed3abcdb46d058672930201535",
+      "size_bytes": 12093,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/source/studio/host/core/safe_open.py"
+    },
+    "raw/run-00-attempt-01/source/studio/host/core/transport.py": {
+      "sha256": "1ec03356b1cb8c8987e1604bcb164aea6a9934dbe259451c19e12de36398aba0",
+      "size_bytes": 47056,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/source/studio/host/core/transport.py"
+    },
+    "raw/run-00-attempt-01/source/studio/host/replay/disk_journal_index.py": {
+      "sha256": "56beb93119dfb66feec32eb51d389fc089d89911c0a1be199071c17e1801cb28",
+      "size_bytes": 13593,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/source/studio/host/replay/disk_journal_index.py"
+    },
+    "raw/run-00-attempt-01/source/studio/host/replay/perf.py": {
+      "sha256": "7c24c11989420e1600bcb20b8949fea44ea93b381bcab824e471465f5148edc7",
+      "size_bytes": 19085,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/source/studio/host/replay/perf.py"
+    },
+    "raw/run-00-attempt-01/source/studio/host/replay/process_probe.py": {
+      "sha256": "53b6b24813e6ba6dc040dcbb87aee529b7f4e8855a64bcd0689b19c240180500",
+      "size_bytes": 5485,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/source/studio/host/replay/process_probe.py"
+    },
+    "raw/run-00-attempt-01/source/studio/host/replay/verified_journal.py": {
+      "sha256": "129baa4d9e08c8a1d5acf2ea05c9c89a4fdddb53ca6f3baf2d61311ab98e62ab",
+      "size_bytes": 9155,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/source/studio/host/replay/verified_journal.py"
+    },
+    "raw/run-00-attempt-01/source/studio/pipeline/__init__.py": {
+      "sha256": "ffea2c35acdfe30636d61970e16c573e4de68228c4f7e780a6061d7be3fbbc68",
+      "size_bytes": 79,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/source/studio/pipeline/__init__.py"
+    },
+    "raw/run-00-attempt-01/source/studio/pipeline/native_job.py": {
+      "sha256": "456bb70c315e38cf7a29354b7df51862e1ded4578f6b22d9110bf628547c20ca",
+      "size_bytes": 12512,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/source/studio/pipeline/native_job.py"
+    },
+    "raw/run-00-attempt-01/source/studio/protocol/__init__.py": {
+      "sha256": "a906ecde6f60d5fa2febd3f8a4a5fae440d87fea69e7d7e51a750677e03ad09f",
+      "size_bytes": 881,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/source/studio/protocol/__init__.py"
+    },
+    "raw/run-00-attempt-01/source/studio/protocol/_rfc8785/__init__.py": {
+      "sha256": "49d914da77ba606d535832d97df2e43458a8e51d57cdba6883a0a895ac50484b",
+      "size_bytes": 505,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/source/studio/protocol/_rfc8785/__init__.py"
+    },
+    "raw/run-00-attempt-01/source/studio/protocol/_rfc8785/_impl.py": {
+      "sha256": "c25bc3a046528482d53bee3487b837f31dd9c05f33e8f13288c7aab320932cec",
+      "size_bytes": 7251,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/source/studio/protocol/_rfc8785/_impl.py"
+    },
+    "raw/run-00-attempt-01/source/studio/protocol/core.py": {
+      "sha256": "e8153f5a4dcf639f4d1cbce2fa74f7866d963a692c68e4e8d1477136889bd93e",
+      "size_bytes": 19886,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/source/studio/protocol/core.py"
+    },
+    "raw/run-00-attempt-01/source/studio/protocol/jcs_godot.gd": {
+      "sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5",
+      "size_bytes": 10165,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/source/studio/protocol/jcs_godot.gd"
+    },
+    "raw/run-00-attempt-01/source/studio/tests/replay/benchmark_assembly.py": {
+      "sha256": "19c684d72995327e65458422ab66384e4d586705cad31f3ab3fd8615934f2a22",
+      "size_bytes": 50798,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/source/studio/tests/replay/benchmark_assembly.py"
+    },
+    "raw/run-00-attempt-01/source/studio/tests/replay/benchmark_commands.py": {
+      "sha256": "29ab59c799855e6695f5c0db18b21ed4ee3f7cd70fb42dcc3b9784e8960d6ca0",
+      "size_bytes": 21010,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/source/studio/tests/replay/benchmark_commands.py"
+    },
+    "raw/run-00-attempt-01/source/studio/tests/replay/benchmark_job.py": {
+      "sha256": "be424a6f37ae573ac4bf40954b31017025daee2147699c80b05f9a0ab70e1611",
+      "size_bytes": 24991,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/source/studio/tests/replay/benchmark_job.py"
+    },
+    "raw/run-00-attempt-01/source/studio/tests/replay/benchmark_native.gd": {
+      "sha256": "13e65360cd0bc0033d0ad414fb3238e216b0d6dcc08e57dc7026ec4fc9eb8b95",
+      "size_bytes": 54580,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/source/studio/tests/replay/benchmark_native.gd"
+    },
+    "raw/run-00-attempt-01/source/studio/tests/replay/benchmark_plugin.cfg": {
+      "sha256": "648d8821a36d0abc825ef1f380b4917639074302a619cb25a798df987a5a1092",
+      "size_bytes": 189,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/source/studio/tests/replay/benchmark_plugin.cfg"
+    },
+    "raw/run-00-attempt-01/source/studio/tests/replay/benchmark_profile.py": {
+      "sha256": "ddbd98583060f791226fca83e275cf01204b37112627383198dcef4ec6f6f233",
+      "size_bytes": 19625,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/source/studio/tests/replay/benchmark_profile.py"
+    },
+    "raw/run-00-attempt-01/source/studio/tests/replay/benchmark_readiness.py": {
+      "sha256": "842db6244d93384932929544045654f089d67f6f304624b7348b7d5c4583ab68",
+      "size_bytes": 6746,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/source/studio/tests/replay/benchmark_readiness.py"
+    },
+    "raw/run-00-attempt-01/source/studio/tests/replay/benchmark_transport.py": {
+      "sha256": "3b789fc025c5d217d8567ee1a3cd97ccf4c2e01214c974417643c080622848df",
+      "size_bytes": 4687,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/source/studio/tests/replay/benchmark_transport.py"
+    },
+    "raw/run-00-attempt-01/source/studio/tests/replay/campaign_task.ps1": {
+      "sha256": "405e2abfa39332b1313871763184fdda0755ff998ec83310e67e10cebfe2ebb9",
+      "size_bytes": 18607,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/source/studio/tests/replay/campaign_task.ps1"
+    },
+    "raw/run-00-attempt-01/source/studio/tests/replay/run_benchmark_campaign.py": {
+      "sha256": "bb43ecc04c2de4872177a440eb071d533efdaa9e8194f62b4e0907bad8d4b252",
+      "size_bytes": 53592,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/source/studio/tests/replay/run_benchmark_campaign.py"
+    },
+    "raw/run-00-attempt-01/source/studio/tests/replay/run_campaign_task.py": {
+      "sha256": "f5cb71fa96b8fd2f935ac933dcd5190cef2b3b6821f031bfe72becb2d360a6fd",
+      "size_bytes": 8033,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/source/studio/tests/replay/run_campaign_task.py"
+    },
+    "raw/run-00-attempt-01/source/studio/tests/replay/run_native_benchmark.py": {
+      "sha256": "e6b0f8e9711ac881cfa65b4537232c685ff577af0a13778a51cc54999b1c1fc7",
+      "size_bytes": 26986,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/source/studio/tests/replay/run_native_benchmark.py"
+    },
+    "raw/run-00-attempt-01/source/studio/toolchain.lock.json": {
+      "sha256": "28bdce555e9a44ef68193723d512feda02c42a417ceb78faf0b29f52d095dca9",
+      "size_bytes": 3026,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/source/studio/toolchain.lock.json"
+    },
+    "raw/run-00-attempt-01/toolchain.lock.json": {
+      "sha256": "28bdce555e9a44ef68193723d512feda02c42a417ceb78faf0b29f52d095dca9",
+      "size_bytes": 3026,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/run-00-attempt-01/toolchain.lock.json"
+    },
+    "raw/source/studio/blender-addon/ipc_client.py": {
+      "sha256": "ee5d77e52dabb8b746e528be2acddc07b821f6b6724e9de9a36ec18b71cd8da9",
+      "size_bytes": 16349,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/source/studio/blender-addon/ipc_client.py"
+    },
+    "raw/source/studio/contracts/perf-collector.schema.json": {
+      "sha256": "394d1df03bdfd736ea3fe9f260e9d718d35f3820cde35d1c45ccab65fbc24834",
+      "size_bytes": 30060,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/source/studio/contracts/perf-collector.schema.json"
+    },
+    "raw/source/studio/godot-addon/addons/hh_studio/plugin.cfg": {
+      "sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c",
+      "size_bytes": 165,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/source/studio/godot-addon/addons/hh_studio/plugin.cfg"
+    },
+    "raw/source/studio/godot-addon/addons/hh_studio/plugin.gd": {
+      "sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036",
+      "size_bytes": 23043,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/source/studio/godot-addon/addons/hh_studio/plugin.gd"
+    },
+    "raw/source/studio/godot-addon/addons/hh_studio/scene_commands.gd": {
+      "sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069",
+      "size_bytes": 32174,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/source/studio/godot-addon/addons/hh_studio/scene_commands.gd"
+    },
+    "raw/source/studio/godot-addon/bundle_staging.py": {
+      "sha256": "3d614edbec8e9a7f5ad3caf2b9694d7498df129de95683952268621f91d68e43",
+      "size_bytes": 15005,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/source/studio/godot-addon/bundle_staging.py"
+    },
+    "raw/source/studio/godot-addon/bundle_v2.py": {
+      "sha256": "2c5cdc71cdaf80f58bb93ec791e84bab8bd02cd4d9bdbd93d635db13583de62a",
+      "size_bytes": 8475,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/source/studio/godot-addon/bundle_v2.py"
+    },
+    "raw/source/studio/godot-addon/cli_job.py": {
+      "sha256": "5a0f37bc129bde409a2657054fb091d637d838e442d45a69e7adc1f1527d4c88",
+      "size_bytes": 12672,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/source/studio/godot-addon/cli_job.py"
+    },
+    "raw/source/studio/godot-addon/fixture_profile.py": {
+      "sha256": "25e1667dd930dcf0746b071fc29ea3460bc18d5fb9f3f83e806c1793028f21ae",
+      "size_bytes": 6020,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/source/studio/godot-addon/fixture_profile.py"
+    },
+    "raw/source/studio/godot-addon/fixture_profile/addons/hh_studio/jcs_godot.gd.uid": {
+      "sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b",
+      "size_bytes": 20,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/source/studio/godot-addon/fixture_profile/addons/hh_studio/jcs_godot.gd.uid"
+    },
+    "raw/source/studio/godot-addon/fixture_profile/addons/hh_studio/plugin.gd.uid": {
+      "sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d",
+      "size_bytes": 20,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/source/studio/godot-addon/fixture_profile/addons/hh_studio/plugin.gd.uid"
+    },
+    "raw/source/studio/godot-addon/fixture_profile/addons/hh_studio/scene_commands.gd.uid": {
+      "sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69",
+      "size_bytes": 19,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/source/studio/godot-addon/fixture_profile/addons/hh_studio/scene_commands.gd.uid"
+    },
+    "raw/source/studio/godot-addon/fixture_profile/project.godot": {
+      "sha256": "2d4fa9c7261fc5ec4292094854ffa79b602249671a03db3c9808ea7521f4fa51",
+      "size_bytes": 282,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/source/studio/godot-addon/fixture_profile/project.godot"
+    },
+    "raw/source/studio/godot-addon/fixture_profile/scripts/fixture_actor.gd.uid": {
+      "sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142",
+      "size_bytes": 20,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/source/studio/godot-addon/fixture_profile/scripts/fixture_actor.gd.uid"
+    },
+    "raw/source/studio/godot-addon/fixture_profile/source-pins.json": {
+      "sha256": "c0a40998bd63d4d3dc628e4b9d2e0932fcb5725d1870adc43d0fdc3af2fdeed2",
+      "size_bytes": 1873,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/source/studio/godot-addon/fixture_profile/source-pins.json"
+    },
+    "raw/source/studio/host/blender/__init__.py": {
+      "sha256": "812b123ddad075d7bb1892a38e099fdb48db147f80a27db83101c2b640044a90",
+      "size_bytes": 69,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/source/studio/host/blender/__init__.py"
+    },
+    "raw/source/studio/host/blender/deadline.py": {
+      "sha256": "55fb3f77cadd9edc633186e1d6727bbed06216d659846aa3836e2582eef46926",
+      "size_bytes": 1130,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/source/studio/host/blender/deadline.py"
+    },
+    "raw/source/studio/host/blender/export_job.py": {
+      "sha256": "8eb0cc4a93361faf8cf09a3f11fd0278ec3fcdb2c9863e4b2ee98852c67ecdfe",
+      "size_bytes": 13605,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/source/studio/host/blender/export_job.py"
+    },
+    "raw/source/studio/host/blender/glb_preflight.py": {
+      "sha256": "5e4015c77ee3dced056634f89a0ba1fe2f94dd6650250fac8b03317c12d54f62",
+      "size_bytes": 11815,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/source/studio/host/blender/glb_preflight.py"
+    },
+    "raw/source/studio/host/blender/ui_host.py": {
+      "sha256": "0fa5afa44046b61b68baafc275b39ade4787a55221074018db588c4c2f71dc35",
+      "size_bytes": 22464,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/source/studio/host/blender/ui_host.py"
+    },
+    "raw/source/studio/host/core/journal.py": {
+      "sha256": "826bc5e4c60817e3a22dd2e0b6a199eb522a4eb78532cb5300249fe9056c0cc6",
+      "size_bytes": 29602,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/source/studio/host/core/journal.py"
+    },
+    "raw/source/studio/host/core/limits.py": {
+      "sha256": "9d01ce56f5976bb034e60e33bf4b7986cdc44b3a8ffad46da738a6ed1b143f3f",
+      "size_bytes": 15813,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/source/studio/host/core/limits.py"
+    },
+    "raw/source/studio/host/core/private_store.py": {
+      "sha256": "c914b5a66a45660c782ecd43fd2321c238702340f3b33062e284feada4d46476",
+      "size_bytes": 20476,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/source/studio/host/core/private_store.py"
+    },
+    "raw/source/studio/host/core/redaction.py": {
+      "sha256": "e37d998399f589d4202591a1262a7dc19231e5e4b5236b47d4c8234956275c1f",
+      "size_bytes": 10038,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/source/studio/host/core/redaction.py"
+    },
+    "raw/source/studio/host/core/safe_create.py": {
+      "sha256": "681fb7c0f4e74d82597bd8049a6b42cde0ea73941d879ec8ef0ba4df326d0606",
+      "size_bytes": 13170,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/source/studio/host/core/safe_create.py"
+    },
+    "raw/source/studio/host/core/safe_open.py": {
+      "sha256": "efc083f1c4fa875d3f748602924a05712aa60fed3abcdb46d058672930201535",
+      "size_bytes": 12093,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/source/studio/host/core/safe_open.py"
+    },
+    "raw/source/studio/host/core/transport.py": {
+      "sha256": "1ec03356b1cb8c8987e1604bcb164aea6a9934dbe259451c19e12de36398aba0",
+      "size_bytes": 47056,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/source/studio/host/core/transport.py"
+    },
+    "raw/source/studio/host/replay/disk_journal_index.py": {
+      "sha256": "56beb93119dfb66feec32eb51d389fc089d89911c0a1be199071c17e1801cb28",
+      "size_bytes": 13593,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/source/studio/host/replay/disk_journal_index.py"
+    },
+    "raw/source/studio/host/replay/perf.py": {
+      "sha256": "7c24c11989420e1600bcb20b8949fea44ea93b381bcab824e471465f5148edc7",
+      "size_bytes": 19085,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/source/studio/host/replay/perf.py"
+    },
+    "raw/source/studio/host/replay/process_probe.py": {
+      "sha256": "53b6b24813e6ba6dc040dcbb87aee529b7f4e8855a64bcd0689b19c240180500",
+      "size_bytes": 5485,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/source/studio/host/replay/process_probe.py"
+    },
+    "raw/source/studio/host/replay/verified_journal.py": {
+      "sha256": "129baa4d9e08c8a1d5acf2ea05c9c89a4fdddb53ca6f3baf2d61311ab98e62ab",
+      "size_bytes": 9155,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/source/studio/host/replay/verified_journal.py"
+    },
+    "raw/source/studio/pipeline/__init__.py": {
+      "sha256": "ffea2c35acdfe30636d61970e16c573e4de68228c4f7e780a6061d7be3fbbc68",
+      "size_bytes": 79,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/source/studio/pipeline/__init__.py"
+    },
+    "raw/source/studio/pipeline/native_job.py": {
+      "sha256": "456bb70c315e38cf7a29354b7df51862e1ded4578f6b22d9110bf628547c20ca",
+      "size_bytes": 12512,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/source/studio/pipeline/native_job.py"
+    },
+    "raw/source/studio/protocol/__init__.py": {
+      "sha256": "a906ecde6f60d5fa2febd3f8a4a5fae440d87fea69e7d7e51a750677e03ad09f",
+      "size_bytes": 881,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/source/studio/protocol/__init__.py"
+    },
+    "raw/source/studio/protocol/_rfc8785/__init__.py": {
+      "sha256": "49d914da77ba606d535832d97df2e43458a8e51d57cdba6883a0a895ac50484b",
+      "size_bytes": 505,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/source/studio/protocol/_rfc8785/__init__.py"
+    },
+    "raw/source/studio/protocol/_rfc8785/_impl.py": {
+      "sha256": "c25bc3a046528482d53bee3487b837f31dd9c05f33e8f13288c7aab320932cec",
+      "size_bytes": 7251,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/source/studio/protocol/_rfc8785/_impl.py"
+    },
+    "raw/source/studio/protocol/core.py": {
+      "sha256": "e8153f5a4dcf639f4d1cbce2fa74f7866d963a692c68e4e8d1477136889bd93e",
+      "size_bytes": 19886,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/source/studio/protocol/core.py"
+    },
+    "raw/source/studio/protocol/jcs_godot.gd": {
+      "sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5",
+      "size_bytes": 10165,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/source/studio/protocol/jcs_godot.gd"
+    },
+    "raw/source/studio/tests/replay/benchmark_assembly.py": {
+      "sha256": "19c684d72995327e65458422ab66384e4d586705cad31f3ab3fd8615934f2a22",
+      "size_bytes": 50798,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/source/studio/tests/replay/benchmark_assembly.py"
+    },
+    "raw/source/studio/tests/replay/benchmark_commands.py": {
+      "sha256": "29ab59c799855e6695f5c0db18b21ed4ee3f7cd70fb42dcc3b9784e8960d6ca0",
+      "size_bytes": 21010,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/source/studio/tests/replay/benchmark_commands.py"
+    },
+    "raw/source/studio/tests/replay/benchmark_job.py": {
+      "sha256": "be424a6f37ae573ac4bf40954b31017025daee2147699c80b05f9a0ab70e1611",
+      "size_bytes": 24991,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/source/studio/tests/replay/benchmark_job.py"
+    },
+    "raw/source/studio/tests/replay/benchmark_native.gd": {
+      "sha256": "13e65360cd0bc0033d0ad414fb3238e216b0d6dcc08e57dc7026ec4fc9eb8b95",
+      "size_bytes": 54580,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/source/studio/tests/replay/benchmark_native.gd"
+    },
+    "raw/source/studio/tests/replay/benchmark_plugin.cfg": {
+      "sha256": "648d8821a36d0abc825ef1f380b4917639074302a619cb25a798df987a5a1092",
+      "size_bytes": 189,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/source/studio/tests/replay/benchmark_plugin.cfg"
+    },
+    "raw/source/studio/tests/replay/benchmark_profile.py": {
+      "sha256": "ddbd98583060f791226fca83e275cf01204b37112627383198dcef4ec6f6f233",
+      "size_bytes": 19625,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/source/studio/tests/replay/benchmark_profile.py"
+    },
+    "raw/source/studio/tests/replay/benchmark_readiness.py": {
+      "sha256": "842db6244d93384932929544045654f089d67f6f304624b7348b7d5c4583ab68",
+      "size_bytes": 6746,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/source/studio/tests/replay/benchmark_readiness.py"
+    },
+    "raw/source/studio/tests/replay/benchmark_transport.py": {
+      "sha256": "3b789fc025c5d217d8567ee1a3cd97ccf4c2e01214c974417643c080622848df",
+      "size_bytes": 4687,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/source/studio/tests/replay/benchmark_transport.py"
+    },
+    "raw/source/studio/tests/replay/campaign_task.ps1": {
+      "sha256": "405e2abfa39332b1313871763184fdda0755ff998ec83310e67e10cebfe2ebb9",
+      "size_bytes": 18607,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/source/studio/tests/replay/campaign_task.ps1"
+    },
+    "raw/source/studio/tests/replay/run_benchmark_campaign.py": {
+      "sha256": "bb43ecc04c2de4872177a440eb071d533efdaa9e8194f62b4e0907bad8d4b252",
+      "size_bytes": 53592,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/source/studio/tests/replay/run_benchmark_campaign.py"
+    },
+    "raw/source/studio/tests/replay/run_campaign_task.py": {
+      "sha256": "f5cb71fa96b8fd2f935ac933dcd5190cef2b3b6821f031bfe72becb2d360a6fd",
+      "size_bytes": 8033,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/source/studio/tests/replay/run_campaign_task.py"
+    },
+    "raw/source/studio/tests/replay/run_native_benchmark.py": {
+      "sha256": "e6b0f8e9711ac881cfa65b4537232c685ff577af0a13778a51cc54999b1c1fc7",
+      "size_bytes": 26986,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/source/studio/tests/replay/run_native_benchmark.py"
+    },
+    "raw/source/studio/toolchain.lock.json": {
+      "sha256": "28bdce555e9a44ef68193723d512feda02c42a417ceb78faf0b29f52d095dca9",
+      "size_bytes": 3026,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01/source/studio/toolchain.lock.json"
+    },
+    "supervisor/claim": {
+      "sha256": "a55ff796f4fb95def5b44d1599752d3ac9b1b5ecd3c1f840db980e6edda79b4c",
+      "size_bytes": 24,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01-supervisor/claim"
+    },
+    "supervisor/failure.json": {
+      "sha256": "374420879944eea47d635dc134d498db01d36d4527cbfcdb6d36a3a95f4f196f",
+      "size_bytes": 73,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01-supervisor/failure.json"
+    },
+    "supervisor/request.json": {
+      "sha256": "8f51eac443008dc6575d50f0d803d3673f06178f158f34bc719bd22fc81927e4",
+      "size_bytes": 392,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01-supervisor/request.json"
+    },
+    "supervisor/return.json": {
+      "sha256": "f0e20f40498461c61d0382bf58c9b9c46d225fc8f10e1de19a65047011b29818",
+      "size_bytes": 198,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01-supervisor/return.json"
+    },
+    "supervisor/start.json": {
+      "sha256": "626a692d007b591c2b141cae724fcc0e6c780d7681f0552cdaa74310bf4001d3",
+      "size_bytes": 502,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01-supervisor/start.json"
+    },
+    "supervisor/stderr.txt": {
+      "sha256": "58c6711fb3c459be0de4c140de52575fd9588bafc3fa03bd7cbcbdc9c019eb82",
+      "size_bytes": 1651,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01-supervisor/stderr.txt"
+    },
+    "supervisor/stdout.txt": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01-supervisor/stdout.txt"
+    },
+    "supervisor/task-definition.expected.xml": {
+      "sha256": "ed58a7daeaad33a58807faf34e8dc2ed63c0d27eff17c6ceb314bef9848e2c37",
+      "size_bytes": 2008,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01-supervisor/task-definition.expected.xml"
+    },
+    "supervisor/task-definition.sha256": {
+      "sha256": "2e2ec109d1ee905c47ac5ea0452b137d4beefb4df4da0949d52c12bb2ee121b0",
+      "size_bytes": 65,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01-supervisor/task-definition.sha256"
+    },
+    "supervisor/task-definition.xml": {
+      "sha256": "4fe0fc35ae424676b0f164217afb29a6ef3c4f7f8785242f3a4bc6316c5bf3c9",
+      "size_bytes": 1663,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01-supervisor/task-definition.xml"
+    },
+    "supervisor/task-registration.json": {
+      "sha256": "fa89311728589c49eefde3576e09e919ee1abf13f03666ea4fa9fa6c6524a81c",
+      "size_bytes": 920,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01-supervisor/task-registration.json"
+    },
+    "supervisor/task-start.json": {
+      "sha256": "99cc682feb1181a0025600dd3b8271a76078e364e2ca2a891e966dc6b1a77c5c",
+      "size_bytes": 883,
+      "source": "studio/.local/reviews/gt06-s100-campaign-01-supervisor/task-start.json"
+    }
+  },
+  "formal_acceptance": false,
+  "host_actual_exit": {
+    "exit_code": 1,
+    "pid": 7588
+  },
+  "import_elapsed_seconds": 20.20299999997951,
+  "import_failure": "STAGE_WALL_LIMIT",
+  "import_helper_exit": 2,
+  "import_natural_exit": null,
+  "import_wall_limit_seconds": 20,
+  "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+  "schema": "HH-GT06-S100-IMPORT-FAILURE-1",
+  "scope": "Exact S100 failed import raw and supervisor copies, including cache; no PASS inference.",
+  "source_closure_sha256": "cfc4b55a5407891bfd54d22d9f1ac45a74b6c744898199a0e4690d6230a6c1d6",
+  "source_current_bytes_verified": true
+}

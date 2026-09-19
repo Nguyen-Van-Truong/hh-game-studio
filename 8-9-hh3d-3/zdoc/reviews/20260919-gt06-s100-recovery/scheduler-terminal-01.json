@@ -1,0 +1,26 @@
+{
+  "schema": "HH-GT06-S100-TERMINAL-SUPPLEMENT-1",
+  "observed_utc": "2026-09-19T00:44:06.4970080Z",
+  "formal_acceptance": false,
+  "scheduler": {
+    "schema": "HH-GT06-TASK-STATUS-1",
+    "task_path": "\\HHStudio.GT06.gt06-s100-campaign-01",
+    "campaign_id": "gt06-s100-campaign-01",
+    "mode": "campaign",
+    "launch_number": 1,
+    "state": 3,
+    "last_run_time": "2026-09-19T07:21:09",
+    "last_task_result": 1,
+    "instances": [],
+    "output_directory": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s100-campaign-01-supervisor",
+    "formal_acceptance": false,
+    "status_scope": "Scheduler state only; not actual process exit or owned-tree proof"
+  },
+  "queried_pids": [
+    12452,
+    7588,
+    54424
+  ],
+  "matching_live_processes": [],
+  "scope": "Post-terminal fixed owned PID query only; absence does not recover missing natural exit codes"
+}

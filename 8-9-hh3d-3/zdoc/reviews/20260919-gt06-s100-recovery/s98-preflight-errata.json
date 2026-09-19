@@ -1,0 +1,14 @@
+{
+  "authority": 0,
+  "causality": "Post-terminal snapshot cannot attribute S98 timeout; no new live measurement supplied.",
+  "corrections": {
+    "memory.committed_bytes_in_use": "null remains unavailable; do not infer zero or reconstruct a past counter value.",
+    "pagefiles.allocated_kb": "Original14737 is megabytes, not kilobytes; source Win32_PageFileUsage.AllocatedBaseSize.",
+    "pagefiles.current_kb": "Original1605 is megabytes, not kilobytes; source Win32_PageFileUsage.CurrentUsage.",
+    "pagefiles.peak_kb": "Original5613 is megabytes, not kilobytes; source Win32_PageFileUsage.PeakUsage."
+  },
+  "original_modified": false,
+  "original_sha256": "28609498f97969d1609b69c50b84c30c60e1cc7c1379ee72cbfa4cc3d880c5eb",
+  "reference": "https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-pagefileusage",
+  "schema": "HH-GT06-S98-PREFLIGHT-ERRATA-1"
+}
