@@ -1,0 +1,65 @@
+{
+  "child_report_sha256": "e582eca9637c9355a350f07616ca156fe2710765222e0cdd3f83a8e47fb7b7fe",
+  "completed": true,
+  "elapsed_seconds": 84.75,
+  "eligible_for_dataset": false,
+  "ended_utc": "2026-09-19T10:31:13.435018+00:00",
+  "engine_runs": 0,
+  "errors": [],
+  "execution_map_sha256": "be1d490bbacd38692cbc3001bf57d6c7b4fe99960f73a65fc14f2ae0842a2d0c",
+  "formal_acceptance": false,
+  "observations": {
+    "execution_unchanged": true,
+    "original_history_unchanged": true,
+    "owner": {
+      "closed": true,
+      "drain_threads_alive": [
+        false,
+        false
+      ],
+      "helper_exit_code": 0,
+      "helper_pid": 1868,
+      "job": {
+        "active_count": 0,
+        "assigned": true,
+        "close_uncertain": false,
+        "closed": true,
+        "configured": true,
+        "create_uncertain": false,
+        "failed_operations": [],
+        "handle_retained": false,
+        "native_error": null,
+        "tainted": false,
+        "zero_observed": true
+      },
+      "present": true,
+      "wrapper_process_handle": {
+        "close_uncertain": false,
+        "closed": true,
+        "handle_retained": false,
+        "required": true
+      }
+    },
+    "source_unchanged": true,
+    "target": {
+      "actual_target_exit": {
+        "exit_code": 0,
+        "pid": 6720
+      },
+      "exit": {
+        "file": "owned/process-exit.json",
+        "sha256": "3043e714aa42bf688816681943b200d12e29be93cfbca77195d5e98b8f6ad324",
+        "size_bytes": 29
+      },
+      "missing_reason": null,
+      "natural_exit_not_inferred": true,
+      "start": {
+        "file": "owned/process-start.json",
+        "sha256": "37ac86e359e041e0aa4df7745f7bada965a3a14a595179587120f5178058fcda",
+        "size_bytes": 13
+      }
+    }
+  },
+  "run_id": "gt06-s114-history-01",
+  "schema": "s114.history-replay.result.1"
+}

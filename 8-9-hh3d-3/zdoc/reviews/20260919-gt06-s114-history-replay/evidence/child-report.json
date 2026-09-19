@@ -1,0 +1,267 @@
+{
+  "batch_status": "COMPLETE",
+  "commands": 1000,
+  "completed": true,
+  "eligible_for_dataset": false,
+  "engine_runs": 0,
+  "errors": [],
+  "formal_acceptance": false,
+  "max_status_gap_ms": 508.7594,
+  "pid": 6720,
+  "run_id": "gt06-s114-history-01",
+  "schema": "s114.history-replay.child.1",
+  "states": {
+    "history_prefix_unchanged": true,
+    "history_size_after": 6755435,
+    "producer": {
+      "closed": true,
+      "failed": true,
+      "host": {
+        "closing": true,
+        "control_socket_closed": true,
+        "main_socket_closed": true,
+        "stopped": true,
+        "threads_alive": [
+          false,
+          false,
+          false
+        ]
+      },
+      "journal": {
+        "cache_closed": true,
+        "database_retained": false,
+        "directory_retained": false,
+        "index_retained": false
+      },
+      "observer_probe": {
+        "close_uncertain": false,
+        "handle_retained": false,
+        "present": true
+      },
+      "present": true
+    },
+    "records_appended": 1403,
+    "source_unchanged": true
+  },
+  "target_exit": null,
+  "target_exit_reason": "OBSERVED_BY_PARENT_AFTER_CHILD_EXIT",
+  "timing_limitations": "Nested spans overlap; non-CPU time includes I/O, lock wait, GIL and scheduling. No subtraction or root-cause inference.",
+  "timings": {
+    "http_batch.append": {
+      "count": 1403,
+      "cpu_sum_ms": 6218.75,
+      "slowest": [
+        {
+          "enclosing_scope": "none",
+          "end_ns": 712038347152600,
+          "start_ns": 712037888427800,
+          "thread_cpu_ms": 15.625,
+          "thread_id": 25504,
+          "wall_ms": 458.7248
+        },
+        {
+          "enclosing_scope": "none",
+          "end_ns": 712065280335000,
+          "start_ns": 712064839375300,
+          "thread_cpu_ms": 0.0,
+          "thread_id": 32276,
+          "wall_ms": 440.9597
+        },
+        {
+          "enclosing_scope": "none",
+          "end_ns": 712032702769400,
+          "start_ns": 712032263008200,
+          "thread_cpu_ms": 15.625,
+          "thread_id": 25504,
+          "wall_ms": 439.7612
+        }
+      ],
+      "wall_max_ms": 458.7248,
+      "wall_sum_ms": 19072.181200000003
+    },
+    "http_batch.fsync_append": {
+      "count": 1403,
+      "cpu_sum_ms": 1375.0,
+      "slowest": [
+        {
+          "enclosing_scope": "append",
+          "end_ns": 712080831526600,
+          "start_ns": 712080529486100,
+          "thread_cpu_ms": 0.0,
+          "thread_id": 25504,
+          "wall_ms": 302.0405
+        },
+        {
+          "enclosing_scope": "append",
+          "end_ns": 712055146429800,
+          "start_ns": 712054847442600,
+          "thread_cpu_ms": 0.0,
+          "thread_id": 25504,
+          "wall_ms": 298.9872
+        },
+        {
+          "enclosing_scope": "append",
+          "end_ns": 712026969384500,
+          "start_ns": 712026690462000,
+          "thread_cpu_ms": 0.0,
+          "thread_id": 25504,
+          "wall_ms": 278.9225
+        }
+      ],
+      "wall_max_ms": 302.0405,
+      "wall_sum_ms": 2628.065599999996
+    },
+    "http_batch.fsync_snapshot_true": {
+      "count": 3209,
+      "cpu_sum_ms": 2812.5,
+      "slowest": [
+        {
+          "enclosing_scope": "snapshot_true",
+          "end_ns": 712060172628500,
+          "start_ns": 712059912792100,
+          "thread_cpu_ms": 0.0,
+          "thread_id": 4780,
+          "wall_ms": 259.8364
+        },
+        {
+          "enclosing_scope": "snapshot_true",
+          "end_ns": 712074785021500,
+          "start_ns": 712074553225600,
+          "thread_cpu_ms": 0.0,
+          "thread_id": 52056,
+          "wall_ms": 231.7959
+        },
+        {
+          "enclosing_scope": "snapshot_true",
+          "end_ns": 712021672062700,
+          "start_ns": 712021633635500,
+          "thread_cpu_ms": 0.0,
+          "thread_id": 25504,
+          "wall_ms": 38.4272
+        }
+      ],
+      "wall_max_ms": 259.8364,
+      "wall_sum_ms": 1935.993699999999
+    },
+    "http_batch.reload": {
+      "count": 3209,
+      "cpu_sum_ms": 38406.25,
+      "slowest": [
+        {
+          "enclosing_scope": "none",
+          "end_ns": 712060172763000,
+          "start_ns": 712059902076100,
+          "thread_cpu_ms": 15.625,
+          "thread_id": 4780,
+          "wall_ms": 270.6869
+        },
+        {
+          "enclosing_scope": "none",
+          "end_ns": 712074785134800,
+          "start_ns": 712074542378400,
+          "thread_cpu_ms": 15.625,
+          "thread_id": 52056,
+          "wall_ms": 242.7564
+        },
+        {
+          "enclosing_scope": "none",
+          "end_ns": 712016614059900,
+          "start_ns": 712016521436300,
+          "thread_cpu_ms": 15.625,
+          "thread_id": 25504,
+          "wall_ms": 92.6236
+        }
+      ],
+      "wall_max_ms": 270.6869,
+      "wall_sum_ms": 44493.01639999997
+    },
+    "http_batch.snapshot_true": {
+      "count": 3209,
+      "cpu_sum_ms": 38343.75,
+      "slowest": [
+        {
+          "enclosing_scope": "reload",
+          "end_ns": 712060172725200,
+          "start_ns": 712059902086300,
+          "thread_cpu_ms": 15.625,
+          "thread_id": 4780,
+          "wall_ms": 270.6389
+        },
+        {
+          "enclosing_scope": "reload",
+          "end_ns": 712074785098400,
+          "start_ns": 712074542390300,
+          "thread_cpu_ms": 15.625,
+          "thread_id": 52056,
+          "wall_ms": 242.7081
+        },
+        {
+          "enclosing_scope": "reload",
+          "end_ns": 712016614010300,
+          "start_ns": 712016521454800,
+          "thread_cpu_ms": 15.625,
+          "thread_id": 25504,
+          "wall_ms": 92.5555
+        }
+      ],
+      "wall_max_ms": 270.6389,
+      "wall_sum_ms": 44331.71620000004
+    },
+    "initialize.fsync_load": {
+      "count": 1,
+      "cpu_sum_ms": 0.0,
+      "slowest": [
+        {
+          "enclosing_scope": "load",
+          "end_ns": 712005218510900,
+          "start_ns": 712005217944900,
+          "thread_cpu_ms": 0.0,
+          "thread_id": 48392,
+          "wall_ms": 0.566
+        }
+      ],
+      "wall_max_ms": 0.566,
+      "wall_sum_ms": 0.566
+    },
+    "initialize.load": {
+      "count": 1,
+      "cpu_sum_ms": 4046.875,
+      "slowest": [
+        {
+          "enclosing_scope": "none",
+          "end_ns": 712005232404900,
+          "start_ns": 712001045995800,
+          "thread_cpu_ms": 4046.875,
+          "thread_id": 48392,
+          "wall_ms": 4186.4091
+        }
+      ],
+      "wall_max_ms": 4186.4091,
+      "wall_sum_ms": 4186.4091
+    },
+    "initialize.snapshot_false": {
+      "count": 2,
+      "cpu_sum_ms": 0.0,
+      "slowest": [
+        {
+          "enclosing_scope": "load",
+          "end_ns": 712001078998200,
+          "start_ns": 712001068645600,
+          "thread_cpu_ms": 0.0,
+          "thread_id": 48392,
+          "wall_ms": 10.3526
+        },
+        {
+          "enclosing_scope": "load",
+          "end_ns": 712005232272500,
+          "start_ns": 712005222825000,
+          "thread_cpu_ms": 0.0,
+          "thread_id": 48392,
+          "wall_ms": 9.4475
+        }
+      ],
+      "wall_max_ms": 10.3526,
+      "wall_sum_ms": 19.8001
+    }
+  }
+}

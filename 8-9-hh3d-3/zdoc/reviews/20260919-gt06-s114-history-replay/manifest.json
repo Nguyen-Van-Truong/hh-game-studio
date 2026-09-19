@@ -1,0 +1,421 @@
+{
+  "AUTHORITY": 0,
+  "formal_acceptance": false,
+  "portable": [
+    {
+      "bytes": 13481,
+      "path": "freeze.json",
+      "sha256": "79a88d6e56ed3f3ff575ca0c704255f708f52c0a71f59f2dfc659609022ea1c5"
+    },
+    {
+      "bytes": 6681,
+      "path": "execution-source-files.json",
+      "sha256": "be1d490bbacd38692cbc3001bf57d6c7b4fe99960f73a65fc14f2ae0842a2d0c"
+    },
+    {
+      "bytes": 1833,
+      "path": "result.json",
+      "sha256": "db9bd69c206eb832152a7bbc46fc4221c8f9703fbc531020466798fe9e33dda3"
+    },
+    {
+      "bytes": 7108,
+      "path": "child-report.json",
+      "sha256": "e582eca9637c9355a350f07616ca156fe2710765222e0cdd3f83a8e47fb7b7fe"
+    },
+    {
+      "bytes": 9477,
+      "path": "owned/capture.json",
+      "sha256": "b4573e3383f383effcd4cf111b72eb0c4a4f6b042e540ec83caf9689ed67406f"
+    },
+    {
+      "bytes": 13,
+      "path": "owned/process-start.json",
+      "sha256": "37ac86e359e041e0aa4df7745f7bada965a3a14a595179587120f5178058fcda"
+    },
+    {
+      "bytes": 29,
+      "path": "owned/process-exit.json",
+      "sha256": "3043e714aa42bf688816681943b200d12e29be93cfbca77195d5e98b8f6ad324"
+    },
+    {
+      "bytes": 528,
+      "path": "owned/cleanup-001.json",
+      "sha256": "379d7a25b4032e6cb243e100aa8a5ebcd3d82a94e45b71e0f18e47fe7e569534"
+    },
+    {
+      "bytes": 291,
+      "path": "owned/stdout.txt",
+      "sha256": "fe4a4ece929e2a55d4efae87da61658f7d187088ac61bf38019eb024e333a8fd"
+    },
+    {
+      "bytes": 0,
+      "path": "owned/stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 8056,
+      "path": "owned/invocation.json",
+      "sha256": "b51a0c4c19ba42e12e13c3c23bf744c04e3af3071b55b1e77b33e59fd51690b4"
+    }
+  ],
+  "portable_domain": "evidence relative paths; exact copies",
+  "raw": [
+    {
+      "bytes": 7108,
+      "path": "child-report.json",
+      "sha256": "e582eca9637c9355a350f07616ca156fe2710765222e0cdd3f83a8e47fb7b7fe"
+    },
+    {
+      "bytes": 1528859,
+      "path": "command-batch.json",
+      "sha256": "a059379bc37fe68198cb04c6e8939b7ee872d50f3364fafb3f80d7392d288d33"
+    },
+    {
+      "bytes": 6755435,
+      "path": "commands/commands.jsonl",
+      "sha256": "6801bca1e7c523f0bb446560a1881c8b5b2175b651807bc0ecf411636f1fc5da"
+    },
+    {
+      "bytes": 0,
+      "path": "commands/commands.jsonl.guard",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 6681,
+      "path": "execution-source-files.json",
+      "sha256": "be1d490bbacd38692cbc3001bf57d6c7b4fe99960f73a65fc14f2ae0842a2d0c"
+    },
+    {
+      "bytes": 13481,
+      "path": "freeze.json",
+      "sha256": "79a88d6e56ed3f3ff575ca0c704255f708f52c0a71f59f2dfc659609022ea1c5"
+    },
+    {
+      "bytes": 5797257,
+      "path": "history-seed.jsonl",
+      "sha256": "8bc2e17e06b11051cb2cba9f5110c6afb268bce87c6be990c0c20b80506ce4f7"
+    },
+    {
+      "bytes": 15717,
+      "path": "history_replay.py",
+      "sha256": "5c14e57ffabe0a204117cdf08f5edf34c79730af25bb4f9e485fdf3c492132d8"
+    },
+    {
+      "bytes": 3076402,
+      "path": "http-phases-final.json",
+      "sha256": "1b367cceb45bbbf22659607fe82e7934004be53c6aa003d3331fbac25b67f909"
+    },
+    {
+      "bytes": 9477,
+      "path": "owned/capture.json",
+      "sha256": "b4573e3383f383effcd4cf111b72eb0c4a4f6b042e540ec83caf9689ed67406f"
+    },
+    {
+      "bytes": 528,
+      "path": "owned/cleanup-001.json",
+      "sha256": "379d7a25b4032e6cb243e100aa8a5ebcd3d82a94e45b71e0f18e47fe7e569534"
+    },
+    {
+      "bytes": 8056,
+      "path": "owned/invocation.json",
+      "sha256": "b51a0c4c19ba42e12e13c3c23bf744c04e3af3071b55b1e77b33e59fd51690b4"
+    },
+    {
+      "bytes": 29,
+      "path": "owned/process-exit.json",
+      "sha256": "3043e714aa42bf688816681943b200d12e29be93cfbca77195d5e98b8f6ad324"
+    },
+    {
+      "bytes": 13,
+      "path": "owned/process-start.json",
+      "sha256": "37ac86e359e041e0aa4df7745f7bada965a3a14a595179587120f5178058fcda"
+    },
+    {
+      "bytes": 0,
+      "path": "owned/stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 291,
+      "path": "owned/stdout.txt",
+      "sha256": "fe4a4ece929e2a55d4efae87da61658f7d187088ac61bf38019eb024e333a8fd"
+    },
+    {
+      "bytes": 1833,
+      "path": "result.json",
+      "sha256": "db9bd69c206eb832152a7bbc46fc4221c8f9703fbc531020466798fe9e33dda3"
+    },
+    {
+      "bytes": 16349,
+      "path": "source/studio/blender-addon/ipc_client.py",
+      "sha256": "ee5d77e52dabb8b746e528be2acddc07b821f6b6724e9de9a36ec18b71cd8da9"
+    },
+    {
+      "bytes": 30060,
+      "path": "source/studio/contracts/perf-collector.schema.json",
+      "sha256": "394d1df03bdfd736ea3fe9f260e9d718d35f3820cde35d1c45ccab65fbc24834"
+    },
+    {
+      "bytes": 165,
+      "path": "source/studio/godot-addon/addons/hh_studio/plugin.cfg",
+      "sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c"
+    },
+    {
+      "bytes": 23043,
+      "path": "source/studio/godot-addon/addons/hh_studio/plugin.gd",
+      "sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036"
+    },
+    {
+      "bytes": 32174,
+      "path": "source/studio/godot-addon/addons/hh_studio/scene_commands.gd",
+      "sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069"
+    },
+    {
+      "bytes": 15005,
+      "path": "source/studio/godot-addon/bundle_staging.py",
+      "sha256": "3d614edbec8e9a7f5ad3caf2b9694d7498df129de95683952268621f91d68e43"
+    },
+    {
+      "bytes": 8475,
+      "path": "source/studio/godot-addon/bundle_v2.py",
+      "sha256": "2c5cdc71cdaf80f58bb93ec791e84bab8bd02cd4d9bdbd93d635db13583de62a"
+    },
+    {
+      "bytes": 12672,
+      "path": "source/studio/godot-addon/cli_job.py",
+      "sha256": "5a0f37bc129bde409a2657054fb091d637d838e442d45a69e7adc1f1527d4c88"
+    },
+    {
+      "bytes": 20,
+      "path": "source/studio/godot-addon/fixture_profile/addons/hh_studio/jcs_godot.gd.uid",
+      "sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b"
+    },
+    {
+      "bytes": 20,
+      "path": "source/studio/godot-addon/fixture_profile/addons/hh_studio/plugin.gd.uid",
+      "sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d"
+    },
+    {
+      "bytes": 19,
+      "path": "source/studio/godot-addon/fixture_profile/addons/hh_studio/scene_commands.gd.uid",
+      "sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69"
+    },
+    {
+      "bytes": 282,
+      "path": "source/studio/godot-addon/fixture_profile/project.godot",
+      "sha256": "2d4fa9c7261fc5ec4292094854ffa79b602249671a03db3c9808ea7521f4fa51"
+    },
+    {
+      "bytes": 20,
+      "path": "source/studio/godot-addon/fixture_profile/scripts/fixture_actor.gd.uid",
+      "sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142"
+    },
+    {
+      "bytes": 1873,
+      "path": "source/studio/godot-addon/fixture_profile/source-pins.json",
+      "sha256": "c0a40998bd63d4d3dc628e4b9d2e0932fcb5725d1870adc43d0fdc3af2fdeed2"
+    },
+    {
+      "bytes": 6020,
+      "path": "source/studio/godot-addon/fixture_profile.py",
+      "sha256": "25e1667dd930dcf0746b071fc29ea3460bc18d5fb9f3f83e806c1793028f21ae"
+    },
+    {
+      "bytes": 69,
+      "path": "source/studio/host/blender/__init__.py",
+      "sha256": "812b123ddad075d7bb1892a38e099fdb48db147f80a27db83101c2b640044a90"
+    },
+    {
+      "bytes": 1130,
+      "path": "source/studio/host/blender/deadline.py",
+      "sha256": "55fb3f77cadd9edc633186e1d6727bbed06216d659846aa3836e2582eef46926"
+    },
+    {
+      "bytes": 13605,
+      "path": "source/studio/host/blender/export_job.py",
+      "sha256": "8eb0cc4a93361faf8cf09a3f11fd0278ec3fcdb2c9863e4b2ee98852c67ecdfe"
+    },
+    {
+      "bytes": 11815,
+      "path": "source/studio/host/blender/glb_preflight.py",
+      "sha256": "5e4015c77ee3dced056634f89a0ba1fe2f94dd6650250fac8b03317c12d54f62"
+    },
+    {
+      "bytes": 22464,
+      "path": "source/studio/host/blender/ui_host.py",
+      "sha256": "0fa5afa44046b61b68baafc275b39ade4787a55221074018db588c4c2f71dc35"
+    },
+    {
+      "bytes": 29602,
+      "path": "source/studio/host/core/journal.py",
+      "sha256": "826bc5e4c60817e3a22dd2e0b6a199eb522a4eb78532cb5300249fe9056c0cc6"
+    },
+    {
+      "bytes": 15813,
+      "path": "source/studio/host/core/limits.py",
+      "sha256": "9d01ce56f5976bb034e60e33bf4b7986cdc44b3a8ffad46da738a6ed1b143f3f"
+    },
+    {
+      "bytes": 20476,
+      "path": "source/studio/host/core/private_store.py",
+      "sha256": "c914b5a66a45660c782ecd43fd2321c238702340f3b33062e284feada4d46476"
+    },
+    {
+      "bytes": 10038,
+      "path": "source/studio/host/core/redaction.py",
+      "sha256": "e37d998399f589d4202591a1262a7dc19231e5e4b5236b47d4c8234956275c1f"
+    },
+    {
+      "bytes": 13170,
+      "path": "source/studio/host/core/safe_create.py",
+      "sha256": "681fb7c0f4e74d82597bd8049a6b42cde0ea73941d879ec8ef0ba4df326d0606"
+    },
+    {
+      "bytes": 12093,
+      "path": "source/studio/host/core/safe_open.py",
+      "sha256": "efc083f1c4fa875d3f748602924a05712aa60fed3abcdb46d058672930201535"
+    },
+    {
+      "bytes": 47056,
+      "path": "source/studio/host/core/transport.py",
+      "sha256": "1ec03356b1cb8c8987e1604bcb164aea6a9934dbe259451c19e12de36398aba0"
+    },
+    {
+      "bytes": 13593,
+      "path": "source/studio/host/replay/disk_journal_index.py",
+      "sha256": "56beb93119dfb66feec32eb51d389fc089d89911c0a1be199071c17e1801cb28"
+    },
+    {
+      "bytes": 19085,
+      "path": "source/studio/host/replay/perf.py",
+      "sha256": "7c24c11989420e1600bcb20b8949fea44ea93b381bcab824e471465f5148edc7"
+    },
+    {
+      "bytes": 5485,
+      "path": "source/studio/host/replay/process_probe.py",
+      "sha256": "53b6b24813e6ba6dc040dcbb87aee529b7f4e8855a64bcd0689b19c240180500"
+    },
+    {
+      "bytes": 9155,
+      "path": "source/studio/host/replay/verified_journal.py",
+      "sha256": "129baa4d9e08c8a1d5acf2ea05c9c89a4fdddb53ca6f3baf2d61311ab98e62ab"
+    },
+    {
+      "bytes": 79,
+      "path": "source/studio/pipeline/__init__.py",
+      "sha256": "ffea2c35acdfe30636d61970e16c573e4de68228c4f7e780a6061d7be3fbbc68"
+    },
+    {
+      "bytes": 12512,
+      "path": "source/studio/pipeline/native_job.py",
+      "sha256": "456bb70c315e38cf7a29354b7df51862e1ded4578f6b22d9110bf628547c20ca"
+    },
+    {
+      "bytes": 881,
+      "path": "source/studio/protocol/__init__.py",
+      "sha256": "a906ecde6f60d5fa2febd3f8a4a5fae440d87fea69e7d7e51a750677e03ad09f"
+    },
+    {
+      "bytes": 505,
+      "path": "source/studio/protocol/_rfc8785/__init__.py",
+      "sha256": "49d914da77ba606d535832d97df2e43458a8e51d57cdba6883a0a895ac50484b"
+    },
+    {
+      "bytes": 7251,
+      "path": "source/studio/protocol/_rfc8785/_impl.py",
+      "sha256": "c25bc3a046528482d53bee3487b837f31dd9c05f33e8f13288c7aab320932cec"
+    },
+    {
+      "bytes": 19886,
+      "path": "source/studio/protocol/core.py",
+      "sha256": "e8153f5a4dcf639f4d1cbce2fa74f7866d963a692c68e4e8d1477136889bd93e"
+    },
+    {
+      "bytes": 10165,
+      "path": "source/studio/protocol/jcs_godot.gd",
+      "sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5"
+    },
+    {
+      "bytes": 50798,
+      "path": "source/studio/tests/replay/benchmark_assembly.py",
+      "sha256": "19c684d72995327e65458422ab66384e4d586705cad31f3ab3fd8615934f2a22"
+    },
+    {
+      "bytes": 22204,
+      "path": "source/studio/tests/replay/benchmark_commands.py",
+      "sha256": "ac1e57cac9e4a06c96f5b1638910d5e9f7576851770f716d03b7d4d52e413a68"
+    },
+    {
+      "bytes": 17620,
+      "path": "source/studio/tests/replay/benchmark_http_phases.py",
+      "sha256": "f160b2d6725b25eef97119724b8ffb2e606fb448c70825aeed663c4aa7a31360"
+    },
+    {
+      "bytes": 17324,
+      "path": "source/studio/tests/replay/benchmark_import_observer.py",
+      "sha256": "32a952ee0cc65325a65cddca24869584ca009b5d9d2e1c64ced22ad65b78adfb"
+    },
+    {
+      "bytes": 24991,
+      "path": "source/studio/tests/replay/benchmark_job.py",
+      "sha256": "be424a6f37ae573ac4bf40954b31017025daee2147699c80b05f9a0ab70e1611"
+    },
+    {
+      "bytes": 54580,
+      "path": "source/studio/tests/replay/benchmark_native.gd",
+      "sha256": "13e65360cd0bc0033d0ad414fb3238e216b0d6dcc08e57dc7026ec4fc9eb8b95"
+    },
+    {
+      "bytes": 189,
+      "path": "source/studio/tests/replay/benchmark_plugin.cfg",
+      "sha256": "648d8821a36d0abc825ef1f380b4917639074302a619cb25a798df987a5a1092"
+    },
+    {
+      "bytes": 19625,
+      "path": "source/studio/tests/replay/benchmark_profile.py",
+      "sha256": "ddbd98583060f791226fca83e275cf01204b37112627383198dcef4ec6f6f233"
+    },
+    {
+      "bytes": 6746,
+      "path": "source/studio/tests/replay/benchmark_readiness.py",
+      "sha256": "842db6244d93384932929544045654f089d67f6f304624b7348b7d5c4583ab68"
+    },
+    {
+      "bytes": 4853,
+      "path": "source/studio/tests/replay/benchmark_transport.py",
+      "sha256": "1fb178451bb22a0dd3e059333ff6e01c6fd5d324f04e47c1be64cb7212f26f2d"
+    },
+    {
+      "bytes": 18607,
+      "path": "source/studio/tests/replay/campaign_task.ps1",
+      "sha256": "405e2abfa39332b1313871763184fdda0755ff998ec83310e67e10cebfe2ebb9"
+    },
+    {
+      "bytes": 59120,
+      "path": "source/studio/tests/replay/run_benchmark_campaign.py",
+      "sha256": "2073fbbb9abb7a46c902a56ad251543932534519be07c844dca0858d2364dac6"
+    },
+    {
+      "bytes": 8033,
+      "path": "source/studio/tests/replay/run_campaign_task.py",
+      "sha256": "f5cb71fa96b8fd2f935ac933dcd5190cef2b3b6821f031bfe72becb2d360a6fd"
+    },
+    {
+      "bytes": 26986,
+      "path": "source/studio/tests/replay/run_native_benchmark.py",
+      "sha256": "e6b0f8e9711ac881cfa65b4537232c685ff577af0a13778a51cc54999b1c1fc7"
+    },
+    {
+      "bytes": 3026,
+      "path": "source/studio/toolchain.lock.json",
+      "sha256": "28bdce555e9a44ef68193723d512feda02c42a417ceb78faf0b29f52d095dca9"
+    },
+    {
+      "bytes": 19698,
+      "path": "support.py",
+      "sha256": "ad4e2d15cbcb3f890f22a7d2be339aee6b726c62a9c339dfac4478fdaf21e998"
+    }
+  ],
+  "raw_domain": "run-01 relative paths; bytes retained locally",
+  "schema": "s114.supplemental.packet.1"
+}

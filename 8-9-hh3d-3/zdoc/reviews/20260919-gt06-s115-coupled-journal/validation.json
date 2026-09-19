@@ -1,0 +1,27 @@
+{
+  "AUTHORITY": 0,
+  "checks": [
+    {
+      "command": "python -B coupled_journal.py --check",
+      "exit_code": 0,
+      "source_count": 53,
+      "tool_chunk": "86183d"
+    },
+    {
+      "cases": 4,
+      "command": "python -B test_coupled_journal.py -v",
+      "exit_code": 0,
+      "tool_chunk": "6b2a31"
+    }
+  ],
+  "helpers": {
+    "coupled_journal.py": "e0bdb74d78418ba5ff8108ffe7fbe98098b7a4d0c62f96d8afddb99de19d210d",
+    "test_coupled_journal.py": "e49d77d1fa1bcf5c150ac7bd0b7dc87748f097d62de7ed507f620411cd23017e"
+  },
+  "native_sha256": "13e65360cd0bc0033d0ad414fb3238e216b0d6dcc08e57dc7026ec4fc9eb8b95",
+  "observed_utc": "2026-09-19T10:37:38.290555+00:00",
+  "receipt_scope": "Coordinator transcription of actual tool results, not raw captured subprocess output",
+  "schema": "s115.coordinator-preflight.1",
+  "source_closure": "7635a470cef554c1a60e1d9427f59998737d3bb829c3a1f134e426cdf9275467",
+  "status": "READY_NOT_LAUNCHED"
+}

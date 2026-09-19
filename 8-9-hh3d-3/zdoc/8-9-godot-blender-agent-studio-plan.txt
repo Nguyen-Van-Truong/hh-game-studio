@@ -1,5 +1,5 @@
 HH STUDIO — PLAN 1/3: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 19-09-2026, Asia/Saigon | Revision S112 | TRIỂN KHAI THEO GATE
+Ngày 19-09-2026, Asia/Saigon | Revision S115 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -16,7 +16,7 @@ STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng
 
 CURRENT_VALID_WP=GT-06
 EXECUTION_AUTHORIZATION=OWNER_APPROVED_GATED
-IMPLEMENTATION=GT06_S111_STATIC_ATTRIBUTION_COMPLETE_JOURNAL_RELOAD_BOUNDARY_REVIEW_PENDING
+IMPLEMENTATION=GT06_S114_SEEDED_HOST_COMPLETE_S115_COUPLED_ATTRIBUTION_READY
 GT01_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260913
 GT01_PENDING=NONE
 GT01_PIN_DECISION=GODOT_4.7.2_STABLE_OFFICIAL
@@ -25,9 +25,9 @@ RUNTIME_ACCEPTANCE=GT01_GT02_GT03_GT04_GT05_ACCEPTED
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S112
-EXECUTION_MODE=COORDINATOR_THREE_ASTRA_ULTRA_OWNER_20260918
-SUBAGENTS_ENABLED=3
+PLAN_REVISION=S115
+EXECUTION_MODE=COORDINATOR_SOLO_OWNER_LATEST_20260919
+SUBAGENTS_ENABLED=0; FINAL_GATE_STILL_REQUIRES_TWO_INDEPENDENT_CRITICS
 GT02_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260916_S46
 GT02_REVIEW_STATUS=TWO_INDEPENDENT_PASS_TICK_YES_S46
 GT02_LAST_TESTED_SOURCE_CLOSURE=f28056d8ff705a60d48a54f9dee80f16554494fa976bd0bfabee84bb51fecbbf
@@ -54,7 +54,7 @@ GT05_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260917_S64
 GT05_REVIEW_STATUS=TWO_INDEPENDENT_PASS_TICK_YES_S64
 GT05_CHECKPOINT_COMMIT=808d8ba
 GT05_LAST_TESTED_SOURCE_CLOSURE=c141d54b80022ca7fefdf81f83e7e1078d3cc6aa43954831f82bb3178338a135
-GT06_EVIDENCE_STATUS=S102_FORMAL_FAILED; S106_PREFIX_NON_REPRODUCED; S107_PREVIEW_COST_OBSERVED; S108_03_BOUNDARY_CAPTURED_NO_REPRODUCTION; S110_FORMAL_FAILED_ADMISSION_UNKNOWN; S111_STATIC_ATTRIBUTION_COMPLETE; ZERO_ACCEPTED_FULL_RUNS
+GT06_EVIDENCE_STATUS=S102_FORMAL_FAILED; S106_PREFIX_NON_REPRODUCED; S107_PREVIEW_COST_OBSERVED; S108_03_BOUNDARY_CAPTURED_NO_REPRODUCTION; S110_FORMAL_FAILED_ADMISSION_UNKNOWN; S111_STATIC_ATTRIBUTION_COMPLETE; S112_VERIFIED_PATH_ATTRIBUTION_COMPLETE; ZERO_ACCEPTED_FULL_RUNS
 GT06_WORKING_SOURCE_STATUS=S102_FROZEN_53_RUNTIME_FILES_UNCHANGED
 GT06_LAST_TESTED_SOURCE_CLOSURE=7635a470cef554c1a60e1d9427f59998737d3bb829c3a1f134e426cdf9275467
 GT06_CURRENT_SOURCE_CLOSURE=7635a470cef554c1a60e1d9427f59998737d3bb829c3a1f134e426cdf9275467
@@ -62,74 +62,42 @@ GT06_SOURCE_CHECKPOINT=56bfd448e83aa2512c0c2561e8e1e29f12134360
 GT06_PROFILE_SHA256=0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85
 GT06_BENCHMARK_CAMPAIGN=gt06-s110-formal-01
 GT06_BENCHMARK_STATUS=FAILED_20260919T081223Z_ADMISSION_UNKNOWN; S110_FRESH_STOCK_SOURCE_TERMINAL_FAILURE; ZERO_ACCEPTED_FULL_RUNS
-GT06_ACTIVE_DIAGNOSTIC=NONE; S107_COMPLETED; S108_01_STOPPED_READY0_MISSING_GUI_TOPOLOGY; S108_02_STOPPED_READY0_SECONDARY_GUI_TIDS; S108_03_COMPLETED_BOUNDARY_CAPTURED; S110_TERMINAL_FAILED_PRESERVED; S111_STATIC_ATTRIBUTION_COMPLETE; S112_REPAIR_BOUNDARY_REVIEW_PENDING
-GT06_NEXT_ACTION=S111 offline sidecar is recorded at zdoc/reviews/20260919-gt06-s111-attribution. On an immutable S110 journal copy (5797257 bytes, 8292 lines), five Journal._reload calls took 2764.194–3117.428ms (median 2830.921ms) and five lookup calls 2855.873–2982.168ms (median 2901.917ms), crossing the unchanged 2s transport boundary; this is static local evidence supporting a journal reload/serialization boundary hypothesis, not engine root cause, leak, PASS, or formal data. Journal-index 14/14, disk-index 5/5 and transport 13/13 tests pass. Keep S110 raw/manifest immutable; review a narrow repair candidate preserving lock/fsync/dedupe/receipt semantics before any fresh bounded diagnostic. Do not alter timeout, gates, baseline, profile, source, priority, or RSS policy; no formal retry.
+GT06_ACTIVE_DIAGNOSTIC=NONE; S114_HOST_ONLY_TERMINAL_NON_REPRODUCED; S115_COUPLED_READY_NOT_LAUNCHED
+GT06_NEXT_ACTION=Launch one S115 bounded coupled prefix after checked helper/source pins: zdoc/reviews/20260919-gt06-s115-coupled-journal/coupled_journal.py --launch. Stock native53 unchanged, original1000HTTP+100native perbatch; additive host snapshot/fsync/load/append wall+threadCPU instrumentation; no seed/timeout/gate/baseline change. First original failure or after batch6 original gate, outer1230s. S114 exact-history HTTP1000 completed84.75s with no transport failures, gap508.7594ms, no index rebuild during batch; snapshotmax270.6389ms, no rootcause/fix inference. No formal retry yet. Observe actual exits/cleanup and classify the boundary before further work.
 GT06_S109_DIFFERENTIAL_REVIEW=AUTHORITY0; S102 native outlier lacks save_scene return timestamp. S108-03 did not reproduce it under the same base closure/profile/workstation, but its timed runtime is an instrumented overlay (not byte-identical stock benchmark_native.gd). S110 then failed on an independent stock command-lane admission timeout at batch5; this does not establish engine causation or authorize a retry. See zdoc/reviews/20260919-gt06-s108-coordinator/s109-differential-review.json and zdoc/reviews/20260919-gt06-s110-admission-timeout/failure-analysis.json. Next useful work is static/read-only attribution of the timeout boundary, followed by one bounded fresh diagnostic only if it can distinguish the boundary; preserve original gates and timed runtime.
-GT06_S111_STATIC_ATTRIBUTION=AUTHORITY0; offline copy-only Journal reload/lookup probe and protocol tests are recorded in zdoc/reviews/20260919-gt06-s111-attribution (probe 9a63579f45f8cd6e7ce3dee223480945d29ce3d000c71a81743eecfc70d03b9b; tests 2888fcc1624078af23a01b380d1348a2f6de25e83a7b65ff64041bb6c3ec9bd6). It supports a local reload/fsync cost crossing 2s but cannot establish universal S110 causation or acceptance. A repair boundary review is pending.
-GT06_DIAGNOSTIC_EXCLUSION=All instrumented diagnostics, static sidecars and failed/partial prefixes S70-S111 are excluded from F13/F14; no PASS/no-leak/root-cause inference.
+GT06_S111_STATIC_ATTRIBUTION=AUTHORITY0; base Journal probe 9a63579f45f8cd6e7ce3dee223480945d29ce3d000c71a81743eecfc70d03b9b is historical/offline. It reparses history and cannot explain the live VerifiedJournal path. S112 corrects this interpretation. Current extended test-results23337327a3af7f7c1faf44ae1994612c0e667609bd6596cecdc290eb9bde21b1;68actual cases. Temporary probe drivers lacked frozen execution closures; no formal acceptance.
+GT06_S112_VERIFIED_PATH_ATTRIBUTION=AUTHORITY0; exact VerifiedJournal probe is in zdoc/reviews/20260919-gt06-s111-attribution/verified-journal-probe.json (probe hash a792145018d63f5916a8832d4e2136d2248e97ace7559a5d570ebb9ad8b19420). It shows unchanged service-path lookup under 22ms after initialization; the earlier base Journal timing cannot be applied to ReplayService. Extended static test-results hash 23337327a3af7f7c1faf44ae1994612c0e667609bd6596cecdc290eb9bde21b1 (68 cases); no engine run.
+GT06_DIAGNOSTIC_EXCLUSION=All instrumented/static/supplemental and failed partial runs S70–S115 excluded from F13/F14. S113 reused ID/output twice; first result and initial harness failure lost, remaining empty-history/synthetic-observer result has provenance gaps. Do not reconstruct missing raw or claim PASS/no-leak/rootcause.
 
-TIẾN ĐỘ HIỆN HÀNH — S112, ngày 19-09-2026 (run timestamps UTC)
-GT01–05 ACCEPTED; GT06 IN_PROGRESS; GT07–10 chưa mở. Zero accepted fullruns.
-Runtime53/profile giữ S102. Checkpoint S107helperf95fb8cc/result5916c693; S110 fresh stock campaign dispatch 07:58:51Z and terminal failure at 08:12:23Z. Failure packet manifest=ea96eca041ecbd9e67ae06c198324dea486843fa743689b8297ff2c5a635fcb5; analysis=9f0a11087aeb9e3ad0f75713ba88d9abbd3c954508a940d6cf4fe56e581424ae.
-S111 static attribution is derived only: `journal-reload-probe.json` SHA256 9a63579f45f8cd6e7ce3dee223480945d29ce3d000c71a81743eecfc70d03b9b; `test-results.json` SHA256 2888fcc1624078af23a01b380d1348a2f6de25e83a7b65ff64041bb6c3ec9bd6; README SHA256 c643e089199cb4ae6ed3f950614049e375c5eb4d3f8e96865608acbc15e85d39. The sidecar did not run Godot or a benchmark and is excluded from F13/F14.
-S110 is terminal FAILED (scheduler state3/result1, instances empty); receipt/state is scheduler evidence only. Raw and supervisor evidence are preserved; no S110 process remains. The failure is a command-lane transport timeout, not proof of engine root cause. Do not run another engine/test/hash audit beside attribution work.
-S108-01 dừng ở READY0 trước batch0 với S108_AMBIGUOUS_GUI_THREAD; S108-02 giữ topology
-(main TID8840, secondary TID15316); S108-03 đã bind HWND chính và hoàn tất b0–6.
-S108-03 không tái hiện S102 native gap 2109.351ms: ACK max 830.656ms, save call max 303.372ms,
-objects=71130/resources=6 ổn định. Đây là diagnostic-only, editor actual exit UNKNOWN, không suy root cause/no-leak.
-S108: 52/52 pure tests (native8, thread19, clock7, runner18); --check exit0.
-Đã sửa việc mất metadata lỗi đóng handle lần đầu khi retry đóng thành công.
-Hai worker bị model-at-capacity; root tiếp tục từ file đã lưu, không viết lại.
-Preflight review không là final critic; receipt ở s108-coordinator/static-validation.json.
+TIẾN ĐỘ HIỆN HÀNH — S115, ngày 19-09-2026 (run timestamps UTC)
+GT01–05 ACCEPTED; GT06 IN_PROGRESS; GT07–10 chưa mở. Zero accepted full runs.
+Source53/profile vẫn S102. S110 FAILED admission UNKNOWN ở batch5; raw immutable.
+S111 base Journal timing không đại diện service; S112 VerifiedJournal dưới22ms
+trên bản sao không đổi. S114 bổ sung owned HTTP1000 trên exact S110 history5.8MB:
+84.75s, gap508.7594ms, zero transport failures, no batch index rebuild. Target6720/
+helper1868 exit0, Jobzero/closed, probe/socket/thread/index/wrapperhandles released.
+Snapshotmax270.64ms; fsyncappendmax302.04ms. Chưa tái hiện S1102s, chưa fix/acceptance.
+Packet: reviews/20260919-gt06-s114-history-replay/manifest.json và summary.json.
+S113 remaining result thiếu provenance do output/ID bị dùng lại; không acceptance.
 
-S108-03 đã hoàn tất diagnostic b0–6 (7 batches), original1000HTTP+100native/batch,
-stock save_scene/heartbeat/deadline/baseline/gates không đổi; packet-only hash verification không lỗi.
-Không PSS, pressure, full formal retry; không nhập S108 vào F13/F14.
-Thêm observedcallreturn (reuseS103) và threadCPU khi nativeb5/b6; khôngbỏ outlier.
-Godot OS.get_thread_caller_id làlogicalID, KHÔNG WindowsTID. BindMAINWINDOWHWND,
-GetWindowThreadProcessId+ownedPID/uniqueGUIthread, retainedquerythreadhandle,
-threadcreation/processstart/executable; ambiguous làUNKNOWN. Handle mởREADY0,
-khôngtạo observerthread/handle mới ởb5 khiến baseline thiếuobserver; polltick50ms,
-cap8000records, APIcostretained, khôngsubtract. CloseHandleBOOL/endedthread riêng.
-Host/native clockjoin dùng BEFOREpublishACK→nativeobservation→afterreceipthost,
-không dùng publishreturn làm lowerbound. CPUdelta thuộc enclosing samples,
-khôngexactcallCPU/waitcause; thiếuanchors/boundaries làUNKNOWN, khôngsuy disk/GPU.
-Ba Astraultra: nativeoverlay+identity, retainedthreadsampler, coupledrunner+cleanup;
-rootclockreader/observer/plan. Static/integration trướcengine; mộtwriter/file.
-Nếu khôngreproduce usefulinterval thì đóngattempt, khônglặp/đẻ fullretry tựđộng.
+S115 ready: một coupled diagnostic7batch, stock native không overlay; thêm host
+snapshot/load/append/fsync wall+threadCPU. Source/profile/gates nguyên bản; original
+rejection luôn ưu tiên, boundary chỉ sau gate6. 4/4 boundary/cleanup tests và
+53-file/native/profile check passed. Chưa launch tại thời điểm ghi phần này.
+Ước lượng10–20phút cho diagnostic, max1230s+ownedcleanup. Không ETA toàn plan.
+Root tự làm theo lệnh owner mới, không dispatch worker. Hai critic gate cuối vẫn
+độc lập/cùng finalhash, không thay bằng self-review hoặc implementation audit.
 
-S107 gt06-s107-preview-01 chạy06:08:11Z→06:08:41Z,40cycles/10ABBA,noHTTP/PSS.
-Apreview callmean108.95045ms,p95123.049,max138.095; Bwithoutpreviewmean30.4063,
-p9534.116,max38.803. All10groups A−B70.8865..94.8215ms. Previewcostviđo đã thấy,
-S1022.109s chưa táihiện/rootcause. Formalstocksavecoverage giữ nguyên; publication
-ResourceSaver/staging làđườngkhác. ĐóngnhánhABBA, khônglặp hoặcđổi acceptance.
-Native4768/import35964/child33532/helpers/outer49464allactual0; recordedJobs/
-probes/host+editorwrapper/importobserverclean. ImportwrappernativeCloseUNKNOWN,
-managedDisposekhôngnativeBOOL; chưa liveStop. Native maxstatusgap568.226ms.
-Packet s107-result66exactcopies/48rawrefs/10helpers,manifest
-0cbad6e2ec833680910189bc8227bafa53bee7460173f9e0d82f7ffbecc6ed53.
-Independentimplementationaudit verified raw/portablebytes,53sources,40rows/index/
-semantic/timings/lifecycle/stats. Khôngfinalcritic. FalseGitfilterfinding đãrút:
-phải dùngrepo-relativeforwardslash vàactualbytes/stagedblob, khôngescapedrepr.
-
-S106prefix01terminal05:50:12Z,6batches6000HTTP+600native, plannedboundary.
-PSS563→555 (-4Event,-3Thread,-1IoCompletion),192unavailable; NON_REPRODUCED,
-đóngnhánhPSSlặp. Counts khôngidentity/noleak. Packet95copiesmanifest
-53cd7e5c44e13ca8febda965aa8d70f6294ead96985b7f536a70446862a2ee0d.
-S102nativegap2109.351ms b6/c74 vẫnunresolved,host1936.8697/HTTPfailure0riêngbiệt;
-scene_savedkhôngcallreturn. S103handles555→561 chưa leakproof. GiữfailureS70–S107,
-S104reader/framecorrection và S105collectorfailures. Collectorreader lỗi sauengine
-hoàntất thì sửa derivedmetadata từraw, khôngrerunvôích/khôngtạosnapshot hồi tố.
-
-Khôngnới heartbeat/timeout/counter/RSSbaseline, subtractoverhead, trim/pinRAM,
-priority hoặc processkhác. Khôngengine/tests/heavyhashaudit cạnh phépđo.
-Nghiệmthu10freshpairs×35batch(5warmup+30measured),1000HTTP+100native/batch,7410s/run;
-dataset/hashes/actualtarget+helperexits/ownedtree/Jobs/handles/Stop/allattempts.
-Reusefunctional exactdependency; đủDoD mớifreezefinalmanifest+requirementsmap,
-hai criticMỚI độclập samehashPASS/TICK=yes, coordinatorACCEPT rồiGT07→GT10.
-GT08Androidmáythật hardgate. HHWorld/Superagent riêngsauGT10;tools khônglàgame.
-Lịchduynhất ti-p-t-c-hh3d-tools; máy/appcầnhoạtđộng, khônghứaETAtoànplan/trướcsáng.
-ArchiveS107exact/hash/AUTHORITY0: reviews/20260919-gt06-s108-coordinator/archive/.
+Không nới timeout/heartbeat/counters/RSS/baseline, đổi priority, trim/pinRAM hoặc
+điều khiển process khác. Không engine/tests/heavy audit cạnh phép đo. Không rerun
+ID/output; collector lỗi thì sửa derived metadata từ raw, không dựng raw hồi tố.
+Giữ mọi failure và naturalexitUNKNOWN riêng helperexit. Không ghép partialsamples.
+GT06 cần10freshpairs×35batch(5warmup+30measured),1000HTTP+100native/batch; đầy đủ
+actualexits/tree/Jobs/handles/Stop/dataset/hash/allattempts rồi finalfreeze+2critics.
+GT07→GT10 tuần tự; GT08 Android thật hardgate. Tools không đồng nghĩa game hoàn chỉnh.
+Lịch ti-p-t-c-hh3d-tools được tạo lại sau tool xác nhận lịch cũ đã bị xóa;10phút.
+Máy/app phải hoạt động. Không hứa hoàn tất toànplan trước sáng.
+Lịch sử S113 exactbytes/hash/AUTHORITY0: reviews/20260919-gt06-s115-coupled-journal/archive/.
 
 Rà phạm vi claim S76: GT-01–05 ACCEPTED theo fixture/catalog đã công bố,
 chưa chứng minh authoring gameplay tổng quát. Godot writer hiện chỉ Node3D/

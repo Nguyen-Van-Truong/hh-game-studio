@@ -1,0 +1,55 @@
+{
+  "schema": "s112.verified_journal_probe.v1",
+  "source": "S110 preserved copy; no engine",
+  "journal_bytes": 5797257,
+  "journal_lines": 8292,
+  "journal_sha256": "8bc2e17e06b11051cb2cba9f5110c6afb268bce87c6be990c0c20b80506ce4f7",
+  "project_id": "benchmark.commands",
+  "command_id": "gt06-s110-formal-01.r00.a01.b5.admitted.181",
+  "init_ms": 4364.3106,
+  "snapshot": {
+    "min_ms": 12.1359,
+    "max_ms": 19.5921,
+    "median_ms": 16.4988,
+    "samples_ms": [
+      19.5921,
+      16.8686,
+      16.4988,
+      12.1359,
+      13.8519
+    ]
+  },
+  "reload": {
+    "min_ms": 10.9709,
+    "max_ms": 16.1852,
+    "median_ms": 14.3511,
+    "samples_ms": [
+      10.9709,
+      15.3029,
+      11.8068,
+      16.1852,
+      14.3511
+    ]
+  },
+  "lookup": {
+    "min_ms": 16.1092,
+    "max_ms": 21.3591,
+    "median_ms": 17.0213,
+    "samples_ms": [
+      21.0909,
+      16.866,
+      17.0213,
+      16.1092,
+      21.3591
+    ]
+  },
+  "errors": [
+    "lookup:JournalError:RETRY_HORIZON_EXPIRED",
+    "lookup:JournalError:RETRY_HORIZON_EXPIRED",
+    "lookup:JournalError:RETRY_HORIZON_EXPIRED",
+    "lookup:JournalError:RETRY_HORIZON_EXPIRED",
+    "lookup:JournalError:RETRY_HORIZON_EXPIRED"
+  ],
+  "fresh_copy_only": true,
+  "formal_acceptance": false
+}

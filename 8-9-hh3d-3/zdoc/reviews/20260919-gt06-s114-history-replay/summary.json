@@ -1,0 +1,37 @@
+{
+  "AUTHORITY": 0,
+  "actual_target_exit": {
+    "exit_code": 0,
+    "pid": 6720
+  },
+  "append_max_ms": 458.7248,
+  "batch_rebuild_count": 0,
+  "commands": 1000,
+  "duration_seconds": 84.75,
+  "engine_runs": 0,
+  "formal_acceptance": false,
+  "fsync_append_max_ms": 302.0405,
+  "fsync_snapshot_max_ms": 259.8364,
+  "helper_exit": 0,
+  "limits": [
+    "No native workload",
+    "One batch on final S110 history/fresh project, not failed-interleaving reconstruction",
+    "No PASS/no-leak/root-cause/repair claim",
+    "Producer.failed=true after close is the existing shutdown latch, not a failed batch"
+  ],
+  "raw_manifest_sha256": "12be08815d27c5e68dced6cfd94d7e930eb890cd554e56c8773327460ee1cd85",
+  "snapshot_max_ms": 270.6389,
+  "snapshot_mean_ms": 13.814807167341863,
+  "status": "NON_REPRODUCED_HOST_ONLY",
+  "status_gap_ms": 508.7594,
+  "transport_failures_by_route": {
+    "archive": 0,
+    "cancel": 0,
+    "commands": 0,
+    "discovery": 0,
+    "lease": 0,
+    "lookup": 0,
+    "other": 0,
+    "stop": 0
+  }
+}
