@@ -64,7 +64,7 @@ GT06_BENCHMARK_STATUS=FAILED_20260919T011926Z_NATIVE_GAP2109.351MS; TASK_RETIRED
 GT06_ACTIVE_DIAGNOSTIC=S103_PREFIX_FAILED_BATCH5; NO_FORMAL_CAMPAIGN_RUNNING
 GT06_FULL_CAMPAIGN=gt06-s102-campaign-01; LAUNCH1_FAILED; ZERO_FULL_RUNS; SOURCE53_UNCHANGED
 GT06_S98_CLEANUP_STATUS=DIAGNOSTIC_ZERO_JOBS_HANDLES_RELEASED_BUT_EDITOR_TARGET_EXIT_MISSING_SUPERVISOR_EXIT_MISSING_SCHEDULER_STATE3_RESULT1
-GT06_NEXT_ACTION=Freeze S103 bounded diagnostic evidence and review retained-counter boundary; no formal launch2 until a narrow repair is proven. Preserve original gates/source/profile; no blind campaign retry.
+GT06_NEXT_ACTION=Use S103 handle-attribution design for a two-snapshot supplemental probe only if needed; no formal launch2 until a narrow repair is proven. Preserve original gates/source/profile; no blind campaign retry.
 GT06_S98_WORKSTATION_PREFLIGHT=workstation-attribution-preflight-01; SHA256=28609498f97969d1609b69c50b84c30c60e1cc7c1379ee72cbfa4cc3d880c5eb; READ_ONLY_POST_TERMINAL_NO_OWNED_WORKLOAD; CAUSALITY_UNAVAILABLE; NO_ACCEPTANCE
 GT06_S99_COMMAND_DIAGNOSTIC=gt06-s99-command-residency-01; COMMAND_ONLY_35_BATCH; COMPLETED_35_OF_35; MAX_GAP_OBSERVED=1591.3252MS_BATCH25; OWNER_WRAPPER_EXIT0; CLEANUP_VERIFIED; FORMAL_ACCEPTANCE=FALSE; ELIGIBLE_FOR_DATASET=FALSE; SUMMARY_SHA256=96714640aa7a4f4de326bbe62a02c83bf271768c9d72856da98b9872345d06c5
 GT06_S88_SCHEDULER_TASK=OBSERVED_ABSENT_20260918; historic_delete_report_retained_in_chat; durable_delete_receipt_missing
@@ -124,6 +124,10 @@ giữ 71128/6, host handles202, max status gap642.433ms và HTTP failures0. Dãy
 đơn điệu, chưa có identity/type hoặc post-idle samples, nên chỉ chứng minh counter
 excursion chứ chưa chứng minh leak/root cause. Nếu cần tiếp, chỉ làm attribution probe
 hẹp sau quiescence; không nới gate/baseline và không formal retry mù.
+Thiết kế probe được lưu tại `reviews/20260919-gt06-s103-status-gap/handle-attribution-design.md`;
+PSS chỉ là supplemental vì có thể tạo observer overhead/quiescence. Probe tương lai
+phải dùng fresh diagnostic ID, snapshot baseline batch4 và failure batch5 sau khi
+gate gốc đã ghi, không đưa thời gian capture vào status gap.
 Không trộn partial rows vào F13/F14. Các root `preflight-06`, `prefix-01` và
 collector-failure `01`–`05` được giữ nguyên, raw/portable hash domains tách riêng.
 Không formal launch2 cho đến khi review boundary chứng minh sửa hẹp; không dùng

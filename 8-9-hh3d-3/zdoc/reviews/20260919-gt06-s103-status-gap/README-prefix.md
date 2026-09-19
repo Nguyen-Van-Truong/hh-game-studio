@@ -53,3 +53,8 @@ python -B 8-9-hh3d-3/zdoc/reviews/20260919-gt06-s103-status-gap/test_read_native
 The diagnostic is evidence for attribution only. A later formal retry needs a
 fresh campaign ID and source/profile/workstation verification after a narrow
 repair is proven; it must not reuse either S102 or this diagnostic prefix.
+
+The proposed two-snapshot PSS attribution design, including access/identity
+limits and observer-overhead rules, is in
+[`handle-attribution-design.md`](handle-attribution-design.md). It is a design
+only; no PSS snapshot or new engine run has been started.
