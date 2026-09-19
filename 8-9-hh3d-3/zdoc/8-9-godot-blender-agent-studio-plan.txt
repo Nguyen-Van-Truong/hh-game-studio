@@ -16,7 +16,7 @@ STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng
 
 CURRENT_VALID_WP=GT-06
 EXECUTION_AUTHORIZATION=OWNER_APPROVED_GATED
-IMPLEMENTATION=GT06_S106_PREFIX_NON_REPRODUCED_AND_S107_PREVIEW_COST_DIAGNOSTIC_PREPARATION
+IMPLEMENTATION=GT06_S107_PREVIEW_COST_OBSERVED_S102_ROOT_CAUSE_UNRESOLVED
 GT01_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260913
 GT01_PENDING=NONE
 GT01_PIN_DECISION=GODOT_4.7.2_STABLE_OFFICIAL
@@ -54,7 +54,7 @@ GT05_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260917_S64
 GT05_REVIEW_STATUS=TWO_INDEPENDENT_PASS_TICK_YES_S64
 GT05_CHECKPOINT_COMMIT=808d8ba
 GT05_LAST_TESTED_SOURCE_CLOSURE=c141d54b80022ca7fefdf81f83e7e1078d3cc6aa43954831f82bb3178338a135
-GT06_EVIDENCE_STATUS=S102_FORMAL_FAILED; S106_PREFIX_NON_REPRODUCED; S107_PREPARATION_ONLY; ZERO_ACCEPTED_FULL_RUNS
+GT06_EVIDENCE_STATUS=S102_FORMAL_FAILED; S106_PREFIX_NON_REPRODUCED; S107_PREVIEW_COST_OBSERVED; ZERO_ACCEPTED_FULL_RUNS
 GT06_WORKING_SOURCE_STATUS=S102_FROZEN_53_RUNTIME_FILES_UNCHANGED
 GT06_LAST_TESTED_SOURCE_CLOSURE=7635a470cef554c1a60e1d9427f59998737d3bb829c3a1f134e426cdf9275467
 GT06_CURRENT_SOURCE_CLOSURE=7635a470cef554c1a60e1d9427f59998737d3bb829c3a1f134e426cdf9275467
@@ -62,8 +62,8 @@ GT06_SOURCE_CHECKPOINT=56bfd448e83aa2512c0c2561e8e1a29f12134360
 GT06_PROFILE_SHA256=0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85
 GT06_BENCHMARK_CAMPAIGN=gt06-s102-campaign-01
 GT06_BENCHMARK_STATUS=FAILED_20260919T011926Z_NATIVE_GAP2109.351MS; TASK_RETIRED_012534Z; ZERO_FULL_RUNS
-GT06_ACTIVE_DIAGNOSTIC=NONE; S106_PREFIX_TERMINAL_20260919T055012Z; S107_NOT_LAUNCHED
-GT06_NEXT_ACTION=Validate generated-only S107 ABBA40 native preview-cost diagnostic and one owned bounded run; preserve full formal save coverage. No repeated identical prefix or formal retry without proven narrow repair.
+GT06_ACTIVE_DIAGNOSTIC=NONE; S107_COMPLETED_20260919T060841Z; ALL_ACTUAL_TARGET_HELPER_OUTER_EXITS_0
+GT06_NEXT_ACTION=Close S107 contrast; investigate owned native CPU/wait attribution and missing stock-save call-return at actual batch6 boundary. Preserve formal source/profile/coverage. No repeated PSS/ABBA or formal retry without proven repair.
 GT06_DIAGNOSTIC_EXCLUSION=All instrumented diagnostics and failed/partial prefixes S70-S107 are excluded from F13/F14; no PASS/no-leak/root-cause inference.
 
 TIẾN ĐỘ HIỆN HÀNH — S107, ngày 19-09-2026 (run timestamps UTC)
@@ -82,22 +82,35 @@ Raw studio/.local/reviews/gt06-s106-handles-prefix-01 và sibling -outer giữ n
 Packet reviews/20260919-gt06-s106-prefix-result/:95exactcopies,84refs/60unique,
 manifest53cd7e5c44e13ca8febda965aa8d70f6294ead96985b7f536a70446862a2ee0d.
 
-S107 đang chuẩn bị, CHƯA dispatch: một editor diagnostic40cycles,10nhóm ABBA,
-A=stock save_scene(), B=save_scene_as(SCENE,false), hard180s; không HTTP/PSS.
-Generated-only overlay exactbase13e65360cd0bc0033d0ad414fb3238e216b0d6dcc08e57dc7026ec4fc9eb8b95;
-runtime53/profile giữ S102. Không sửa formal save path hay bịa B returnError=0:
-B trả void và ghi null; signal/file/script/semantic undo+reload mới chứng minh hiệu lực.
-Giữ tất cả40rows và outliers; firstA serialization normalization được ghi rõ,
-các bytes scene sau save/reload phải khớp, script nguồn không đổi. Ghi callentry/
-return/signal/phase+frame/nextdispatch; originalheartbeat/deadline không chuyển.
-Nativehelper, runner+ownedcleanup, packetaudit chia ba Astraultra; root giữ reader/
-observer/plan. Static+integration trước engine; một writer/file. Không finalcritic.
-Đọc reviews/20260919-gt06-s106-latency-next.md và s107-preview-cost/README.md.
-Stock preview có viewport readback/PNG/progressUI; source-backed mechanism, chưa
-chứng minh nguyên nhân S102. Production publication dùng ResourceSaver/staging,
-khác stock benchmark save. Không đổi workload nghiệm thu theo kết quả vi đo này.
-Nếu phép so sánh không phân biệt được hoặc thiếu boundary, đóng nhánh với
-NO_DISCRIMINATING_RESULT/UNKNOWN; không tự tăng số vòng hoặc retry cùng phép đo.
+S107 gt06-s107-preview-01 chạy06:08:11Z→06:08:41Z, CAPTURED đủ40cycles/10ABBA.
+A stocksave_scene() mean108.95045ms/median106.576/p95123.049/max138.095;
+B save_scene_as(SCENE,false) mean30.4063/median29.7685/p9534.116/max38.803ms.
+Cả10nhóm A−B đều dương70.8865–94.8215ms. Có preview-path cost trong viđo này;
+không tái hiệnS1022.109s, chưa rootcause hoặc publicsaveoptimization. Đóng nhánhABBA,
+không lặp/nới số vòng/chuyển formalworkload. Productionpublication ResourceSaver
+khác stockbenchmarksave; formalpreview vẫn giữ nguyên. KhôngHTTP/PSS trong viđo.
+
+Native editor4768/import35964/child33532 đều actual0/helper0; outer49464actual0.
+Jobszero/closed, editor+hostwrapper/probe/importobserver clean; importwrapper
+nativeCloseUNKNOWN, managedDisposekhôngnativeBOOL, liveStopchưaexercise.
+Source53/profile nguyênS102. Helperpreparationcheckpointf95fb8cc; overlay
+ d4de3e1a16b57cf7b3095a489b60aa417e609b06a140d328224dedee18432cc5;
+recipeba8cf9a2646accf7e62e0b66053dbe24381311825574478beb28142607211619.
+Raw studio/.local/reviews/gt06-s107-preview-01 và sibling-outer giữ nguyên.
+Packet reviews/20260919-gt06-s107-result/:66exactcopies/48rawrefs/10frozenhelpers,
+manifest0cbad6e2ec833680910189bc8227bafa53bee7460173f9e0d82f7ffbecc6ed53.
+Packet-onlyreader kiểm40rows, report/index/context+source/actualPID+exits,
+raw/portablehashdomains riêng; khôngengineimport khiverify. All40outliers/firstA
+serializationnormalization retained, scene/script/semanticundo+reload verified.
+
+34static tests passed trướcactualimport/run; khôngbịa BvoidreturnOK. Rootintegrated
+captureallowlist loại cache/temp/localappdata, nativebatch/row exactbinding.
+Ba Astraultra đã giao nativehelper/runner/S106packet; supplementalreview gặp
+workspacecrediterror nên không có finalcriticverdict. Coordinatorreview không
+thay finalcritics. Đọc s107-preview-cost/README.md và s106-latency-next.md.
+Tiếp theo chỉ nghiên cứu boundary originalstocksave tới b6 với CPU/wait attribution
+của đúng ownededitor. Không dùng GodotlogicalthreadID làm WindowsTID; cần identity
+native kiểm chứng. Chưa dispatch diagnostictiếp, không formalretrymù.
 
 S102 nativegap2109.351ms b6/c74 SAVE→SAVE_WAIT vẫn unresolved; host1936.8697ms,
 HTTPfailure0 là boundary riêng. scene_saved không phải callreturn. S103 handle
