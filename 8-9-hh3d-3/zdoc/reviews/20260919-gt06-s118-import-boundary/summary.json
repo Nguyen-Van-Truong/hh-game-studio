@@ -1,0 +1,19 @@
+{
+  "AUTHORITY": 0,
+  "formal_acceptance": false,
+  "run_id": "gt06-s118-import-01",
+  "import_completed": true,
+  "elapsed_seconds": 11.359,
+  "target_pid": 656,
+  "target_exit": 0,
+  "supervisor_pid": 51464,
+  "supervisor_exit": 0,
+  "job_zero_closed": true,
+  "observer_closed": true,
+  "source_execution_unchanged": true,
+  "stderr_bytes": 0,
+  "verbose_exit_note": "StringName: 1 unclaimed string names at exit. Diagnostic log note retained; do not infer no-leak or ignore for acceptance.",
+  "import_wrapper_close": "UNKNOWN_UNRECORDED",
+  "conclusion": "S117 import wall-limit not reproduced with additive verbose logging. No rootcause or repair proof.",
+  "next": "S117-03 resumes unexecuted 11-batch lookup experiment with fresh ID and original stock import arguments; no formal campaign retry."
+}

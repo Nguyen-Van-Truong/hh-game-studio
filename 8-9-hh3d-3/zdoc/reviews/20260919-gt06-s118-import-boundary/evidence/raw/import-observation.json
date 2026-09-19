@@ -1,0 +1,2671 @@
+{
+  "api_gaps": [],
+  "clock": "perf_counter_ns",
+  "closed": true,
+  "error_count": 0,
+  "errors": [],
+  "formal_acceptance": false,
+  "global_held_probe_count": 0,
+  "handle_close_uncertain": false,
+  "handle_retained": false,
+  "limitations": [
+    "Polling timestamps bound observation, not exact gate release or file creation.",
+    "Native stage logs are buffered; file byte counts do not timestamp first engine output.",
+    "Actual target exit may be forced by stage cleanup; natural exit needs the stage receipt.",
+    "No thread wait-chain or global system trace is collected; low CPU alone identifies no cause."
+  ],
+  "natural_target_exit_status": "UNKNOWN",
+  "probe_handles_released": true,
+  "sample_count": 115,
+  "sample_interval_seconds": 0.1,
+  "sample_limit": 256,
+  "samples": [
+    {
+      "milestones_observed": [],
+      "mono_ns": 720205077254300,
+      "stderr_file_bytes": null,
+      "stdout_file_bytes": null,
+      "target": null
+    },
+    {
+      "milestones_observed": [],
+      "mono_ns": 720205182463300,
+      "stderr_file_bytes": null,
+      "stdout_file_bytes": null,
+      "target": null
+    },
+    {
+      "milestones_observed": [],
+      "mono_ns": 720205286879800,
+      "stderr_file_bytes": null,
+      "stdout_file_bytes": null,
+      "target": null
+    },
+    {
+      "milestones_observed": [],
+      "mono_ns": 720205394768600,
+      "stderr_file_bytes": null,
+      "stdout_file_bytes": null,
+      "target": null
+    },
+    {
+      "milestones_observed": [],
+      "mono_ns": 720205502566700,
+      "stderr_file_bytes": null,
+      "stdout_file_bytes": null,
+      "target": null
+    },
+    {
+      "milestones_observed": [],
+      "mono_ns": 720205612012800,
+      "stderr_file_bytes": null,
+      "stdout_file_bytes": null,
+      "target": null
+    },
+    {
+      "milestones_observed": [],
+      "mono_ns": 720205718471400,
+      "stderr_file_bytes": null,
+      "stdout_file_bytes": null,
+      "target": null
+    },
+    {
+      "milestones_observed": [],
+      "mono_ns": 720205837931900,
+      "stderr_file_bytes": null,
+      "stdout_file_bytes": null,
+      "target": null
+    },
+    {
+      "milestones_observed": [],
+      "mono_ns": 720205956423900,
+      "stderr_file_bytes": null,
+      "stdout_file_bytes": null,
+      "target": null
+    },
+    {
+      "milestones_observed": [],
+      "mono_ns": 720206070791900,
+      "stderr_file_bytes": null,
+      "stdout_file_bytes": null,
+      "target": null
+    },
+    {
+      "milestones_observed": [],
+      "mono_ns": 720206178703800,
+      "stderr_file_bytes": null,
+      "stdout_file_bytes": null,
+      "target": null
+    },
+    {
+      "milestones_observed": [],
+      "mono_ns": 720206285677500,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 0,
+      "target": null
+    },
+    {
+      "milestones_observed": [],
+      "mono_ns": 720206392751800,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 0,
+      "target": null
+    },
+    {
+      "milestones_observed": [],
+      "mono_ns": 720206501419700,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 0,
+      "target": null
+    },
+    {
+      "milestones_observed": [],
+      "mono_ns": 720206634356700,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 0,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 2524,
+          "other_ops": 184,
+          "read_bytes": 0,
+          "read_ops": 0,
+          "write_bytes": 0,
+          "write_ops": 0
+        },
+        "kernel_100ns": 312500,
+        "page_faults": 2929,
+        "priority_class": 32,
+        "private_commit_bytes": 5890048,
+        "user_100ns": 0,
+        "working_set_bytes": 11313152
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720206748558500,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 0,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 5518,
+          "other_ops": 589,
+          "read_bytes": 16202,
+          "read_ops": 20,
+          "write_bytes": 162,
+          "write_ops": 4
+        },
+        "kernel_100ns": 937500,
+        "page_faults": 9327,
+        "priority_class": 32,
+        "private_commit_bytes": 14807040,
+        "user_100ns": 156250,
+        "working_set_bytes": 37392384
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720206855076800,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 0,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 5518,
+          "other_ops": 593,
+          "read_bytes": 16202,
+          "read_ops": 20,
+          "write_bytes": 349,
+          "write_ops": 8
+        },
+        "kernel_100ns": 1250000,
+        "page_faults": 15446,
+        "priority_class": 32,
+        "private_commit_bytes": 26906624,
+        "user_100ns": 625000,
+        "working_set_bytes": 60506112
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720206960182100,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 0,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 5624,
+          "other_ops": 601,
+          "read_bytes": 16202,
+          "read_ops": 20,
+          "write_bytes": 349,
+          "write_ops": 8
+        },
+        "kernel_100ns": 1406250,
+        "page_faults": 21501,
+        "priority_class": 32,
+        "private_commit_bytes": 39706624,
+        "user_100ns": 1406250,
+        "working_set_bytes": 85278720
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720207077495900,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 0,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 10134,
+          "other_ops": 779,
+          "read_bytes": 12466866,
+          "read_ops": 22,
+          "write_bytes": 581,
+          "write_ops": 14
+        },
+        "kernel_100ns": 1718750,
+        "page_faults": 28723,
+        "priority_class": 32,
+        "private_commit_bytes": 62185472,
+        "user_100ns": 1718750,
+        "working_set_bytes": 112304128
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720207191824000,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 0,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 10134,
+          "other_ops": 780,
+          "read_bytes": 12466866,
+          "read_ops": 22,
+          "write_bytes": 618,
+          "write_ops": 15
+        },
+        "kernel_100ns": 2031250,
+        "page_faults": 32683,
+        "priority_class": 32,
+        "private_commit_bytes": 72425472,
+        "user_100ns": 2656250,
+        "working_set_bytes": 122781696
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720207296898900,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 0,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 10252,
+          "other_ops": 805,
+          "read_bytes": 12466866,
+          "read_ops": 22,
+          "write_bytes": 618,
+          "write_ops": 15
+        },
+        "kernel_100ns": 2187500,
+        "page_faults": 35859,
+        "priority_class": 32,
+        "private_commit_bytes": 77615104,
+        "user_100ns": 3593750,
+        "working_set_bytes": 133787648
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720207408052300,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 0,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 10488,
+          "other_ops": 853,
+          "read_bytes": 12466866,
+          "read_ops": 22,
+          "write_bytes": 618,
+          "write_ops": 15
+        },
+        "kernel_100ns": 2187500,
+        "page_faults": 39828,
+        "priority_class": 32,
+        "private_commit_bytes": 93462528,
+        "user_100ns": 4375000,
+        "working_set_bytes": 150011904
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720207513114700,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 0,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 10488,
+          "other_ops": 909,
+          "read_bytes": 12466866,
+          "read_ops": 22,
+          "write_bytes": 618,
+          "write_ops": 15
+        },
+        "kernel_100ns": 2187500,
+        "page_faults": 45211,
+        "priority_class": 32,
+        "private_commit_bytes": 115470336,
+        "user_100ns": 4687500,
+        "working_set_bytes": 172015616
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720207622237200,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 0,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 11296,
+          "other_ops": 947,
+          "read_bytes": 13441366,
+          "read_ops": 24,
+          "write_bytes": 618,
+          "write_ops": 15
+        },
+        "kernel_100ns": 2343750,
+        "page_faults": 50545,
+        "priority_class": 32,
+        "private_commit_bytes": 136900608,
+        "user_100ns": 5625000,
+        "working_set_bytes": 193818624
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720207728214200,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 0,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 11768,
+          "other_ops": 1060,
+          "read_bytes": 13441366,
+          "read_ops": 24,
+          "write_bytes": 618,
+          "write_ops": 15
+        },
+        "kernel_100ns": 2500000,
+        "page_faults": 55119,
+        "priority_class": 32,
+        "private_commit_bytes": 155713536,
+        "user_100ns": 6406250,
+        "working_set_bytes": 212516864
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720207836781400,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 0,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 12240,
+          "other_ops": 1160,
+          "read_bytes": 13441366,
+          "read_ops": 24,
+          "write_bytes": 618,
+          "write_ops": 15
+        },
+        "kernel_100ns": 2656250,
+        "page_faults": 61519,
+        "priority_class": 32,
+        "private_commit_bytes": 181985280,
+        "user_100ns": 7343750,
+        "working_set_bytes": 238665728
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720207948956600,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 0,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 12240,
+          "other_ops": 1192,
+          "read_bytes": 13441366,
+          "read_ops": 24,
+          "write_bytes": 618,
+          "write_ops": 15
+        },
+        "kernel_100ns": 2812500,
+        "page_faults": 66711,
+        "priority_class": 32,
+        "private_commit_bytes": 203055104,
+        "user_100ns": 7968750,
+        "working_set_bytes": 259891200
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720208053411100,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 0,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 12240,
+          "other_ops": 1222,
+          "read_bytes": 13441366,
+          "read_ops": 24,
+          "write_bytes": 618,
+          "write_ops": 15
+        },
+        "kernel_100ns": 2968750,
+        "page_faults": 72360,
+        "priority_class": 32,
+        "private_commit_bytes": 226021376,
+        "user_100ns": 8906250,
+        "working_set_bytes": 282976256
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720208161724400,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 0,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 12594,
+          "other_ops": 1330,
+          "read_bytes": 13441366,
+          "read_ops": 24,
+          "write_bytes": 618,
+          "write_ops": 15
+        },
+        "kernel_100ns": 3125000,
+        "page_faults": 77601,
+        "priority_class": 32,
+        "private_commit_bytes": 247672832,
+        "user_100ns": 9687500,
+        "working_set_bytes": 304402432
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720208268432500,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 0,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 12594,
+          "other_ops": 1338,
+          "read_bytes": 13441366,
+          "read_ops": 24,
+          "write_bytes": 618,
+          "write_ops": 15
+        },
+        "kernel_100ns": 3125000,
+        "page_faults": 82791,
+        "priority_class": 32,
+        "private_commit_bytes": 268402688,
+        "user_100ns": 10468750,
+        "working_set_bytes": 325619712
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720208372885500,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 0,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 12806,
+          "other_ops": 1381,
+          "read_bytes": 13441366,
+          "read_ops": 24,
+          "write_bytes": 618,
+          "write_ops": 15
+        },
+        "kernel_100ns": 3125000,
+        "page_faults": 87028,
+        "priority_class": 32,
+        "private_commit_bytes": 285396992,
+        "user_100ns": 11093750,
+        "working_set_bytes": 342937600
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720208481354000,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 0,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 12924,
+          "other_ops": 1429,
+          "read_bytes": 13441366,
+          "read_ops": 24,
+          "write_bytes": 618,
+          "write_ops": 15
+        },
+        "kernel_100ns": 3281250,
+        "page_faults": 92517,
+        "priority_class": 32,
+        "private_commit_bytes": 307671040,
+        "user_100ns": 12031250,
+        "working_set_bytes": 365375488
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720208589523400,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 0,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 12924,
+          "other_ops": 1477,
+          "read_bytes": 13441366,
+          "read_ops": 24,
+          "write_bytes": 618,
+          "write_ops": 15
+        },
+        "kernel_100ns": 3437500,
+        "page_faults": 97895,
+        "priority_class": 32,
+        "private_commit_bytes": 329330688,
+        "user_100ns": 12500000,
+        "working_set_bytes": 387362816
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720208695213200,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 0,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 12924,
+          "other_ops": 1517,
+          "read_bytes": 13441366,
+          "read_ops": 24,
+          "write_bytes": 618,
+          "write_ops": 15
+        },
+        "kernel_100ns": 3593750,
+        "page_faults": 102581,
+        "priority_class": 32,
+        "private_commit_bytes": 348483584,
+        "user_100ns": 13437500,
+        "working_set_bytes": 406519808
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720208802853300,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 0,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 12924,
+          "other_ops": 1549,
+          "read_bytes": 13441366,
+          "read_ops": 24,
+          "write_bytes": 618,
+          "write_ops": 15
+        },
+        "kernel_100ns": 3593750,
+        "page_faults": 107186,
+        "priority_class": 32,
+        "private_commit_bytes": 367165440,
+        "user_100ns": 14218750,
+        "working_set_bytes": 425340928
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720208911114000,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 0,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 13042,
+          "other_ops": 1589,
+          "read_bytes": 13441366,
+          "read_ops": 24,
+          "write_bytes": 618,
+          "write_ops": 15
+        },
+        "kernel_100ns": 3593750,
+        "page_faults": 112673,
+        "priority_class": 32,
+        "private_commit_bytes": 389218304,
+        "user_100ns": 15000000,
+        "working_set_bytes": 447766528
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720209018150400,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 0,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 13042,
+          "other_ops": 1630,
+          "read_bytes": 13441366,
+          "read_ops": 24,
+          "write_bytes": 3045,
+          "write_ops": 55
+        },
+        "kernel_100ns": 3593750,
+        "page_faults": 115400,
+        "priority_class": 32,
+        "private_commit_bytes": 397815808,
+        "user_100ns": 16093750,
+        "working_set_bytes": 458915840
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720209126352800,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 0,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 13042,
+          "other_ops": 1727,
+          "read_bytes": 13441366,
+          "read_ops": 24,
+          "write_bytes": 7035,
+          "write_ops": 125
+        },
+        "kernel_100ns": 3750000,
+        "page_faults": 116209,
+        "priority_class": 32,
+        "private_commit_bytes": 400273408,
+        "user_100ns": 17031250,
+        "working_set_bytes": 462225408
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720209232998900,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 8138,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 13042,
+          "other_ops": 1869,
+          "read_bytes": 13441366,
+          "read_ops": 24,
+          "write_bytes": 14623,
+          "write_ops": 251
+        },
+        "kernel_100ns": 3906250,
+        "page_faults": 117059,
+        "priority_class": 32,
+        "private_commit_bytes": 403398656,
+        "user_100ns": 17812500,
+        "working_set_bytes": 465702912
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720209341162500,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 16284,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 13042,
+          "other_ops": 1931,
+          "read_bytes": 13441366,
+          "read_ops": 24,
+          "write_bytes": 18284,
+          "write_ops": 313
+        },
+        "kernel_100ns": 3906250,
+        "page_faults": 117926,
+        "priority_class": 32,
+        "private_commit_bytes": 406519808,
+        "user_100ns": 18750000,
+        "working_set_bytes": 469245952
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720209448566900,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 16284,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 13042,
+          "other_ops": 1991,
+          "read_bytes": 13441366,
+          "read_ops": 24,
+          "write_bytes": 21216,
+          "write_ops": 365
+        },
+        "kernel_100ns": 4218750,
+        "page_faults": 119319,
+        "priority_class": 32,
+        "private_commit_bytes": 411779072,
+        "user_100ns": 19375000,
+        "working_set_bytes": 474943488
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720209558754600,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 24459,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 13042,
+          "other_ops": 2056,
+          "read_bytes": 13441366,
+          "read_ops": 24,
+          "write_bytes": 24929,
+          "write_ops": 430
+        },
+        "kernel_100ns": 4375000,
+        "page_faults": 119807,
+        "priority_class": 32,
+        "private_commit_bytes": 412938240,
+        "user_100ns": 20156250,
+        "working_set_bytes": 476938240
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720209666825400,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 24459,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 14102,
+          "other_ops": 2089,
+          "read_bytes": 13441366,
+          "read_ops": 24,
+          "write_bytes": 25033,
+          "write_ops": 432
+        },
+        "kernel_100ns": 4687500,
+        "page_faults": 121149,
+        "priority_class": 32,
+        "private_commit_bytes": 424247296,
+        "user_100ns": 20781250,
+        "working_set_bytes": 482406400
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720209771495000,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 24459,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 14102,
+          "other_ops": 2095,
+          "read_bytes": 13441366,
+          "read_ops": 24,
+          "write_bytes": 25064,
+          "write_ops": 433
+        },
+        "kernel_100ns": 4843750,
+        "page_faults": 129669,
+        "priority_class": 32,
+        "private_commit_bytes": 451072000,
+        "user_100ns": 22031250,
+        "working_set_bytes": 517144576
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720209880907600,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 24459,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 14102,
+          "other_ops": 2095,
+          "read_bytes": 13441366,
+          "read_ops": 24,
+          "write_bytes": 25064,
+          "write_ops": 433
+        },
+        "kernel_100ns": 5000000,
+        "page_faults": 134884,
+        "priority_class": 32,
+        "private_commit_bytes": 471072768,
+        "user_100ns": 23593750,
+        "working_set_bytes": 535584768
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720209986036200,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 24459,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 14102,
+          "other_ops": 2095,
+          "read_bytes": 13441366,
+          "read_ops": 24,
+          "write_bytes": 25064,
+          "write_ops": 433
+        },
+        "kernel_100ns": 5000000,
+        "page_faults": 137943,
+        "priority_class": 32,
+        "private_commit_bytes": 478302208,
+        "user_100ns": 24531250,
+        "working_set_bytes": 544329728
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720210094732100,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 24459,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 14102,
+          "other_ops": 2095,
+          "read_bytes": 13441366,
+          "read_ops": 24,
+          "write_bytes": 25064,
+          "write_ops": 433
+        },
+        "kernel_100ns": 5000000,
+        "page_faults": 141592,
+        "priority_class": 32,
+        "private_commit_bytes": 493428736,
+        "user_100ns": 26250000,
+        "working_set_bytes": 559247360
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720210203280600,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 24459,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 14102,
+          "other_ops": 2095,
+          "read_bytes": 13441366,
+          "read_ops": 24,
+          "write_bytes": 25064,
+          "write_ops": 433
+        },
+        "kernel_100ns": 5468750,
+        "page_faults": 148471,
+        "priority_class": 32,
+        "private_commit_bytes": 503410688,
+        "user_100ns": 27656250,
+        "working_set_bytes": 568602624
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720210314211900,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 24459,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 14102,
+          "other_ops": 2112,
+          "read_bytes": 13441366,
+          "read_ops": 24,
+          "write_bytes": 25064,
+          "write_ops": 433
+        },
+        "kernel_100ns": 5781250,
+        "page_faults": 156870,
+        "priority_class": 32,
+        "private_commit_bytes": 538652672,
+        "user_100ns": 28750000,
+        "working_set_bytes": 602931200
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720210416380400,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 24459,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 14184,
+          "other_ops": 2122,
+          "read_bytes": 13441366,
+          "read_ops": 24,
+          "write_bytes": 25064,
+          "write_ops": 433
+        },
+        "kernel_100ns": 6250000,
+        "page_faults": 161331,
+        "priority_class": 32,
+        "private_commit_bytes": 553189376,
+        "user_100ns": 29843750,
+        "working_set_bytes": 613785600
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720210524357300,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 24459,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 14184,
+          "other_ops": 2122,
+          "read_bytes": 13441366,
+          "read_ops": 24,
+          "write_bytes": 94696,
+          "write_ops": 450
+        },
+        "kernel_100ns": 6562500,
+        "page_faults": 166126,
+        "priority_class": 32,
+        "private_commit_bytes": 565645312,
+        "user_100ns": 31093750,
+        "working_set_bytes": 624996352
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720210631195800,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 24459,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 14184,
+          "other_ops": 2122,
+          "read_bytes": 13441366,
+          "read_ops": 24,
+          "write_bytes": 2281960,
+          "write_ops": 984
+        },
+        "kernel_100ns": 6718750,
+        "page_faults": 166370,
+        "priority_class": 32,
+        "private_commit_bytes": 566636544,
+        "user_100ns": 32343750,
+        "working_set_bytes": 625995776
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720210738422800,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 24459,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 14232,
+          "other_ops": 2136,
+          "read_bytes": 13441366,
+          "read_ops": 24,
+          "write_bytes": 3306060,
+          "write_ops": 1236
+        },
+        "kernel_100ns": 6875000,
+        "page_faults": 166582,
+        "priority_class": 32,
+        "private_commit_bytes": 517963776,
+        "user_100ns": 33437500,
+        "working_set_bytes": 582737920
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720210847732900,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 24459,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 14232,
+          "other_ops": 2136,
+          "read_bytes": 13441366,
+          "read_ops": 24,
+          "write_bytes": 3306060,
+          "write_ops": 1236
+        },
+        "kernel_100ns": 6875000,
+        "page_faults": 166601,
+        "priority_class": 32,
+        "private_commit_bytes": 506531840,
+        "user_100ns": 33906250,
+        "working_set_bytes": 570753024
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720210950993200,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 24459,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 14232,
+          "other_ops": 2136,
+          "read_bytes": 13441366,
+          "read_ops": 24,
+          "write_bytes": 3306060,
+          "write_ops": 1236
+        },
+        "kernel_100ns": 6875000,
+        "page_faults": 166630,
+        "priority_class": 32,
+        "private_commit_bytes": 506531840,
+        "user_100ns": 34218750,
+        "working_set_bytes": 570871808
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720211056695700,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 24459,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 14232,
+          "other_ops": 2136,
+          "read_bytes": 13441366,
+          "read_ops": 24,
+          "write_bytes": 3306060,
+          "write_ops": 1236
+        },
+        "kernel_100ns": 6875000,
+        "page_faults": 166643,
+        "priority_class": 32,
+        "private_commit_bytes": 506531840,
+        "user_100ns": 34687500,
+        "working_set_bytes": 570925056
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720211165519500,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 24459,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 14232,
+          "other_ops": 2136,
+          "read_bytes": 13441366,
+          "read_ops": 24,
+          "write_bytes": 3306060,
+          "write_ops": 1236
+        },
+        "kernel_100ns": 6875000,
+        "page_faults": 167195,
+        "priority_class": 32,
+        "private_commit_bytes": 507641856,
+        "user_100ns": 35625000,
+        "working_set_bytes": 572129280
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720211272114700,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 24459,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 14232,
+          "other_ops": 2136,
+          "read_bytes": 13441366,
+          "read_ops": 24,
+          "write_bytes": 3306060,
+          "write_ops": 1236
+        },
+        "kernel_100ns": 7031250,
+        "page_faults": 167225,
+        "priority_class": 32,
+        "private_commit_bytes": 507744256,
+        "user_100ns": 35781250,
+        "working_set_bytes": 572252160
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720211381291300,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 24459,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 14232,
+          "other_ops": 2136,
+          "read_bytes": 13441366,
+          "read_ops": 24,
+          "write_bytes": 3306060,
+          "write_ops": 1236
+        },
+        "kernel_100ns": 7031250,
+        "page_faults": 167231,
+        "priority_class": 32,
+        "private_commit_bytes": 507748352,
+        "user_100ns": 36562500,
+        "working_set_bytes": 572276736
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720211489174900,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 24459,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 14232,
+          "other_ops": 2136,
+          "read_bytes": 13441366,
+          "read_ops": 24,
+          "write_bytes": 3306060,
+          "write_ops": 1236
+        },
+        "kernel_100ns": 7031250,
+        "page_faults": 167286,
+        "priority_class": 32,
+        "private_commit_bytes": 508006400,
+        "user_100ns": 36718750,
+        "working_set_bytes": 572493824
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720211598301500,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 24459,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 14232,
+          "other_ops": 2136,
+          "read_bytes": 13441366,
+          "read_ops": 24,
+          "write_bytes": 3306060,
+          "write_ops": 1236
+        },
+        "kernel_100ns": 7187500,
+        "page_faults": 167553,
+        "priority_class": 32,
+        "private_commit_bytes": 509071360,
+        "user_100ns": 36875000,
+        "working_set_bytes": 573583360
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720211706159400,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 24459,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 14232,
+          "other_ops": 2136,
+          "read_bytes": 13441366,
+          "read_ops": 24,
+          "write_bytes": 3306060,
+          "write_ops": 1236
+        },
+        "kernel_100ns": 7500000,
+        "page_faults": 167903,
+        "priority_class": 32,
+        "private_commit_bytes": 510275584,
+        "user_100ns": 37187500,
+        "working_set_bytes": 575008768
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720211819095500,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 24459,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 14232,
+          "other_ops": 2136,
+          "read_bytes": 13441366,
+          "read_ops": 24,
+          "write_bytes": 3306060,
+          "write_ops": 1236
+        },
+        "kernel_100ns": 7500000,
+        "page_faults": 168206,
+        "priority_class": 32,
+        "private_commit_bytes": 511741952,
+        "user_100ns": 37968750,
+        "working_set_bytes": 576245760
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720211923304800,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 24459,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 14232,
+          "other_ops": 2136,
+          "read_bytes": 13441366,
+          "read_ops": 24,
+          "write_bytes": 3306060,
+          "write_ops": 1236
+        },
+        "kernel_100ns": 7500000,
+        "page_faults": 168388,
+        "priority_class": 32,
+        "private_commit_bytes": 512684032,
+        "user_100ns": 38281250,
+        "working_set_bytes": 576991232
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720212032127200,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 24459,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 14232,
+          "other_ops": 2136,
+          "read_bytes": 13441366,
+          "read_ops": 24,
+          "write_bytes": 3306060,
+          "write_ops": 1236
+        },
+        "kernel_100ns": 7500000,
+        "page_faults": 168586,
+        "priority_class": 32,
+        "private_commit_bytes": 513486848,
+        "user_100ns": 38437500,
+        "working_set_bytes": 577802240
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720212137689600,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 24459,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 14232,
+          "other_ops": 2136,
+          "read_bytes": 13441366,
+          "read_ops": 24,
+          "write_bytes": 3306060,
+          "write_ops": 1236
+        },
+        "kernel_100ns": 7656250,
+        "page_faults": 168832,
+        "priority_class": 32,
+        "private_commit_bytes": 514428928,
+        "user_100ns": 38906250,
+        "working_set_bytes": 578797568
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720212246850400,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 24459,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 14232,
+          "other_ops": 2136,
+          "read_bytes": 13441366,
+          "read_ops": 24,
+          "write_bytes": 3306060,
+          "write_ops": 1236
+        },
+        "kernel_100ns": 7968750,
+        "page_faults": 169528,
+        "priority_class": 32,
+        "private_commit_bytes": 517443584,
+        "user_100ns": 39531250,
+        "working_set_bytes": 581640192
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720212355216500,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 24459,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 14232,
+          "other_ops": 2136,
+          "read_bytes": 13441366,
+          "read_ops": 24,
+          "write_bytes": 3306060,
+          "write_ops": 1236
+        },
+        "kernel_100ns": 8125000,
+        "page_faults": 172550,
+        "priority_class": 32,
+        "private_commit_bytes": 529281024,
+        "user_100ns": 40468750,
+        "working_set_bytes": 593969152
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720212464340400,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 24459,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 14232,
+          "other_ops": 2136,
+          "read_bytes": 13441366,
+          "read_ops": 24,
+          "write_bytes": 3306060,
+          "write_ops": 1236
+        },
+        "kernel_100ns": 8125000,
+        "page_faults": 172794,
+        "priority_class": 32,
+        "private_commit_bytes": 530366464,
+        "user_100ns": 41562500,
+        "working_set_bytes": 594968576
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720212573171200,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 24459,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 14232,
+          "other_ops": 2136,
+          "read_bytes": 13441366,
+          "read_ops": 24,
+          "write_bytes": 3306060,
+          "write_ops": 1236
+        },
+        "kernel_100ns": 8125000,
+        "page_faults": 174465,
+        "priority_class": 32,
+        "private_commit_bytes": 536662016,
+        "user_100ns": 42656250,
+        "working_set_bytes": 601812992
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720212684054500,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 24459,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 14232,
+          "other_ops": 2136,
+          "read_bytes": 13441366,
+          "read_ops": 24,
+          "write_bytes": 3306060,
+          "write_ops": 1236
+        },
+        "kernel_100ns": 8125000,
+        "page_faults": 174877,
+        "priority_class": 32,
+        "private_commit_bytes": 538484736,
+        "user_100ns": 43125000,
+        "working_set_bytes": 603500544
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720212787121800,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 24459,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 14232,
+          "other_ops": 2136,
+          "read_bytes": 13441366,
+          "read_ops": 24,
+          "write_bytes": 3306060,
+          "write_ops": 1236
+        },
+        "kernel_100ns": 8281250,
+        "page_faults": 175418,
+        "priority_class": 32,
+        "private_commit_bytes": 540643328,
+        "user_100ns": 44062500,
+        "working_set_bytes": 605716480
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720212895118100,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 24459,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 14232,
+          "other_ops": 2136,
+          "read_bytes": 13441366,
+          "read_ops": 24,
+          "write_bytes": 3306060,
+          "write_ops": 1236
+        },
+        "kernel_100ns": 8437500,
+        "page_faults": 175857,
+        "priority_class": 32,
+        "private_commit_bytes": 542396416,
+        "user_100ns": 44687500,
+        "working_set_bytes": 607514624
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720213001886000,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 24459,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 14232,
+          "other_ops": 2136,
+          "read_bytes": 13441366,
+          "read_ops": 24,
+          "write_bytes": 3306060,
+          "write_ops": 1236
+        },
+        "kernel_100ns": 8593750,
+        "page_faults": 176610,
+        "priority_class": 32,
+        "private_commit_bytes": 545607680,
+        "user_100ns": 45625000,
+        "working_set_bytes": 610594816
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720213109395500,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 24459,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 14232,
+          "other_ops": 2136,
+          "read_bytes": 13441366,
+          "read_ops": 24,
+          "write_bytes": 3306060,
+          "write_ops": 1236
+        },
+        "kernel_100ns": 8593750,
+        "page_faults": 177333,
+        "priority_class": 32,
+        "private_commit_bytes": 548630528,
+        "user_100ns": 46250000,
+        "working_set_bytes": 613552128
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720213216512700,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 24459,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 14282,
+          "other_ops": 2146,
+          "read_bytes": 13441366,
+          "read_ops": 24,
+          "write_bytes": 3306060,
+          "write_ops": 1236
+        },
+        "kernel_100ns": 8906250,
+        "page_faults": 178468,
+        "priority_class": 32,
+        "private_commit_bytes": 553230336,
+        "user_100ns": 46875000,
+        "working_set_bytes": 618188800
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720213322968800,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 24459,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 14476,
+          "other_ops": 2181,
+          "read_bytes": 13441366,
+          "read_ops": 24,
+          "write_bytes": 3306060,
+          "write_ops": 1236
+        },
+        "kernel_100ns": 9062500,
+        "page_faults": 179052,
+        "priority_class": 32,
+        "private_commit_bytes": 555466752,
+        "user_100ns": 47500000,
+        "working_set_bytes": 620576768
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720213431085300,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 24459,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 14476,
+          "other_ops": 2181,
+          "read_bytes": 13441366,
+          "read_ops": 24,
+          "write_bytes": 3306060,
+          "write_ops": 1236
+        },
+        "kernel_100ns": 9062500,
+        "page_faults": 179549,
+        "priority_class": 32,
+        "private_commit_bytes": 557256704,
+        "user_100ns": 48437500,
+        "working_set_bytes": 622600192
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720213539916200,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 24459,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 14476,
+          "other_ops": 2198,
+          "read_bytes": 13441366,
+          "read_ops": 24,
+          "write_bytes": 3306060,
+          "write_ops": 1236
+        },
+        "kernel_100ns": 9218750,
+        "page_faults": 179681,
+        "priority_class": 32,
+        "private_commit_bytes": 557531136,
+        "user_100ns": 49218750,
+        "working_set_bytes": 623140864
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720213647371300,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 24459,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 14476,
+          "other_ops": 2198,
+          "read_bytes": 13441366,
+          "read_ops": 24,
+          "write_bytes": 3306060,
+          "write_ops": 1236
+        },
+        "kernel_100ns": 9218750,
+        "page_faults": 179831,
+        "priority_class": 32,
+        "private_commit_bytes": 558100480,
+        "user_100ns": 50156250,
+        "working_set_bytes": 623751168
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720213755006000,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 24459,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 14476,
+          "other_ops": 2198,
+          "read_bytes": 13441366,
+          "read_ops": 24,
+          "write_bytes": 3306060,
+          "write_ops": 1236
+        },
+        "kernel_100ns": 9531250,
+        "page_faults": 180088,
+        "priority_class": 32,
+        "private_commit_bytes": 559136768,
+        "user_100ns": 50781250,
+        "working_set_bytes": 624803840
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720213862291400,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 24459,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 14476,
+          "other_ops": 2198,
+          "read_bytes": 13441366,
+          "read_ops": 24,
+          "write_bytes": 3306060,
+          "write_ops": 1236
+        },
+        "kernel_100ns": 9531250,
+        "page_faults": 180459,
+        "priority_class": 32,
+        "private_commit_bytes": 560553984,
+        "user_100ns": 51718750,
+        "working_set_bytes": 626319360
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720213970005500,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 24459,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 14476,
+          "other_ops": 2198,
+          "read_bytes": 13441366,
+          "read_ops": 24,
+          "write_bytes": 3306060,
+          "write_ops": 1236
+        },
+        "kernel_100ns": 9531250,
+        "page_faults": 180665,
+        "priority_class": 32,
+        "private_commit_bytes": 561389568,
+        "user_100ns": 52812500,
+        "working_set_bytes": 627163136
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720214078055600,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 24459,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 14476,
+          "other_ops": 2198,
+          "read_bytes": 13441366,
+          "read_ops": 24,
+          "write_bytes": 3306060,
+          "write_ops": 1236
+        },
+        "kernel_100ns": 9531250,
+        "page_faults": 181100,
+        "priority_class": 32,
+        "private_commit_bytes": 563195904,
+        "user_100ns": 53750000,
+        "working_set_bytes": 628940800
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720214185228400,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 24459,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 14476,
+          "other_ops": 2198,
+          "read_bytes": 13441366,
+          "read_ops": 24,
+          "write_bytes": 3306060,
+          "write_ops": 1236
+        },
+        "kernel_100ns": 9687500,
+        "page_faults": 181356,
+        "priority_class": 32,
+        "private_commit_bytes": 564318208,
+        "user_100ns": 54062500,
+        "working_set_bytes": 629981184
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720214292592200,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 24459,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 14476,
+          "other_ops": 2198,
+          "read_bytes": 13441366,
+          "read_ops": 24,
+          "write_bytes": 3306060,
+          "write_ops": 1236
+        },
+        "kernel_100ns": 9687500,
+        "page_faults": 182313,
+        "priority_class": 32,
+        "private_commit_bytes": 568283136,
+        "user_100ns": 55156250,
+        "working_set_bytes": 633888768
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720214398816400,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 24459,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 14476,
+          "other_ops": 2198,
+          "read_bytes": 13441366,
+          "read_ops": 24,
+          "write_bytes": 3306060,
+          "write_ops": 1236
+        },
+        "kernel_100ns": 9687500,
+        "page_faults": 182316,
+        "priority_class": 32,
+        "private_commit_bytes": 568283136,
+        "user_100ns": 56250000,
+        "working_set_bytes": 633901056
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720214507157400,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 24459,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 14476,
+          "other_ops": 2198,
+          "read_bytes": 13441366,
+          "read_ops": 24,
+          "write_bytes": 3306060,
+          "write_ops": 1236
+        },
+        "kernel_100ns": 9687500,
+        "page_faults": 182330,
+        "priority_class": 32,
+        "private_commit_bytes": 568352768,
+        "user_100ns": 57343750,
+        "working_set_bytes": 633958400
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720214616937600,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 24459,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 14670,
+          "other_ops": 2213,
+          "read_bytes": 13441366,
+          "read_ops": 24,
+          "write_bytes": 3306060,
+          "write_ops": 1236
+        },
+        "kernel_100ns": 9687500,
+        "page_faults": 182950,
+        "priority_class": 32,
+        "private_commit_bytes": 570961920,
+        "user_100ns": 58437500,
+        "working_set_bytes": 636493824
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720214724262300,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 24459,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 14670,
+          "other_ops": 2213,
+          "read_bytes": 13441366,
+          "read_ops": 24,
+          "write_bytes": 3306060,
+          "write_ops": 1236
+        },
+        "kernel_100ns": 9687500,
+        "page_faults": 183036,
+        "priority_class": 32,
+        "private_commit_bytes": 571236352,
+        "user_100ns": 59375000,
+        "working_set_bytes": 636846080
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720214830867200,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 24459,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 14670,
+          "other_ops": 2213,
+          "read_bytes": 13441366,
+          "read_ops": 24,
+          "write_bytes": 3306060,
+          "write_ops": 1236
+        },
+        "kernel_100ns": 9687500,
+        "page_faults": 183208,
+        "priority_class": 32,
+        "private_commit_bytes": 571928576,
+        "user_100ns": 60468750,
+        "working_set_bytes": 637550592
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720214938364900,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 24459,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 14670,
+          "other_ops": 2230,
+          "read_bytes": 13441366,
+          "read_ops": 24,
+          "write_bytes": 3306060,
+          "write_ops": 1236
+        },
+        "kernel_100ns": 9687500,
+        "page_faults": 183665,
+        "priority_class": 32,
+        "private_commit_bytes": 573579264,
+        "user_100ns": 61562500,
+        "working_set_bytes": 639418368
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720215046600600,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 24459,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 26326,
+          "other_ops": 2676,
+          "read_bytes": 13700699,
+          "read_ops": 52,
+          "write_bytes": 3306674,
+          "write_ops": 1243
+        },
+        "kernel_100ns": 9843750,
+        "page_faults": 184889,
+        "priority_class": 32,
+        "private_commit_bytes": 577495040,
+        "user_100ns": 62343750,
+        "working_set_bytes": 644423680
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720215247855100,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 24459,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 28772,
+          "other_ops": 2780,
+          "read_bytes": 13733317,
+          "read_ops": 59,
+          "write_bytes": 3306674,
+          "write_ops": 1243
+        },
+        "kernel_100ns": 10468750,
+        "page_faults": 186507,
+        "priority_class": 32,
+        "private_commit_bytes": 583647232,
+        "user_100ns": 62812500,
+        "working_set_bytes": 651038720
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720215357978300,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 24459,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 32772,
+          "other_ops": 2962,
+          "read_bytes": 13882093,
+          "read_ops": 72,
+          "write_bytes": 3306908,
+          "write_ops": 1245
+        },
+        "kernel_100ns": 10625000,
+        "page_faults": 186645,
+        "priority_class": 32,
+        "private_commit_bytes": 584089600,
+        "user_100ns": 63750000,
+        "working_set_bytes": 651603968
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore"
+      ],
+      "mono_ns": 720215465461100,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 24459,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 52744,
+          "other_ops": 3916,
+          "read_bytes": 14210132,
+          "read_ops": 107,
+          "write_bytes": 3307203,
+          "write_ops": 1249
+        },
+        "kernel_100ns": 10781250,
+        "page_faults": 186781,
+        "priority_class": 32,
+        "private_commit_bytes": 584364032,
+        "user_100ns": 64687500,
+        "working_set_bytes": 652156928
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore",
+        ".godot/global_script_class_cache.cfg"
+      ],
+      "mono_ns": 720215574231500,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 24459,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 56528,
+          "other_ops": 4176,
+          "read_bytes": 14211292,
+          "read_ops": 116,
+          "write_bytes": 3307670,
+          "write_ops": 1257
+        },
+        "kernel_100ns": 10781250,
+        "page_faults": 186790,
+        "priority_class": 32,
+        "private_commit_bytes": 584298496,
+        "user_100ns": 65000000,
+        "working_set_bytes": 652144640
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore",
+        ".godot/global_script_class_cache.cfg",
+        ".godot/editor/filesystem_cache10"
+      ],
+      "mono_ns": 720215681517200,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 24459,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 59510,
+          "other_ops": 4464,
+          "read_bytes": 14212197,
+          "read_ops": 125,
+          "write_bytes": 3309757,
+          "write_ops": 1270
+        },
+        "kernel_100ns": 10937500,
+        "page_faults": 186991,
+        "priority_class": 32,
+        "private_commit_bytes": 584298496,
+        "user_100ns": 65468750,
+        "working_set_bytes": 652967936
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore",
+        ".godot/global_script_class_cache.cfg",
+        ".godot/editor/filesystem_cache10"
+      ],
+      "mono_ns": 720215788933200,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 24459,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 59510,
+          "other_ops": 4464,
+          "read_bytes": 14212197,
+          "read_ops": 125,
+          "write_bytes": 3309757,
+          "write_ops": 1270
+        },
+        "kernel_100ns": 11250000,
+        "page_faults": 186999,
+        "priority_class": 32,
+        "private_commit_bytes": 584298496,
+        "user_100ns": 66093750,
+        "working_set_bytes": 653000704
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore",
+        ".godot/global_script_class_cache.cfg",
+        ".godot/editor/filesystem_cache10"
+      ],
+      "mono_ns": 720215897174300,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 24459,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 59510,
+          "other_ops": 4464,
+          "read_bytes": 14212197,
+          "read_ops": 125,
+          "write_bytes": 3309757,
+          "write_ops": 1270
+        },
+        "kernel_100ns": 11406250,
+        "page_faults": 187000,
+        "priority_class": 32,
+        "private_commit_bytes": 584298496,
+        "user_100ns": 66718750,
+        "working_set_bytes": 653004800
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore",
+        ".godot/global_script_class_cache.cfg",
+        ".godot/editor/filesystem_cache10"
+      ],
+      "mono_ns": 720216004837300,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 24459,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 59510,
+          "other_ops": 4464,
+          "read_bytes": 14212197,
+          "read_ops": 125,
+          "write_bytes": 3309757,
+          "write_ops": 1270
+        },
+        "kernel_100ns": 11406250,
+        "page_faults": 187000,
+        "priority_class": 32,
+        "private_commit_bytes": 584298496,
+        "user_100ns": 67500000,
+        "working_set_bytes": 653004800
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore",
+        ".godot/global_script_class_cache.cfg",
+        ".godot/editor/filesystem_cache10"
+      ],
+      "mono_ns": 720216114087100,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 24459,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 59584,
+          "other_ops": 4478,
+          "read_bytes": 14212197,
+          "read_ops": 125,
+          "write_bytes": 3310116,
+          "write_ops": 1272
+        },
+        "kernel_100ns": 11406250,
+        "page_faults": 187145,
+        "priority_class": 32,
+        "private_commit_bytes": 584900608,
+        "user_100ns": 67656250,
+        "working_set_bytes": 653594624
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore",
+        ".godot/global_script_class_cache.cfg",
+        ".godot/editor/filesystem_cache10"
+      ],
+      "mono_ns": 720216220562800,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 24459,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 59592,
+          "other_ops": 4487,
+          "read_bytes": 14212197,
+          "read_ops": 125,
+          "write_bytes": 3310116,
+          "write_ops": 1272
+        },
+        "kernel_100ns": 11406250,
+        "page_faults": 187150,
+        "priority_class": 32,
+        "private_commit_bytes": 584900608,
+        "user_100ns": 68593750,
+        "working_set_bytes": 653615104
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore",
+        ".godot/global_script_class_cache.cfg",
+        ".godot/editor/filesystem_cache10"
+      ],
+      "mono_ns": 720216330882500,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 24459,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 59592,
+          "other_ops": 4487,
+          "read_bytes": 14212197,
+          "read_ops": 125,
+          "write_bytes": 3310116,
+          "write_ops": 1272
+        },
+        "kernel_100ns": 11406250,
+        "page_faults": 187155,
+        "priority_class": 32,
+        "private_commit_bytes": 584900608,
+        "user_100ns": 69375000,
+        "working_set_bytes": 653635584
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore",
+        ".godot/global_script_class_cache.cfg",
+        ".godot/editor/filesystem_cache10"
+      ],
+      "mono_ns": 720216437748400,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 24459,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 59592,
+          "other_ops": 4487,
+          "read_bytes": 14212197,
+          "read_ops": 125,
+          "write_bytes": 3310116,
+          "write_ops": 1272
+        },
+        "kernel_100ns": 11406250,
+        "page_faults": 187163,
+        "priority_class": 32,
+        "private_commit_bytes": 551952384,
+        "user_100ns": 70312500,
+        "working_set_bytes": 618954752
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore",
+        ".godot/global_script_class_cache.cfg",
+        ".godot/editor/filesystem_cache10"
+      ],
+      "mono_ns": 720216547747000,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 24459,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 59592,
+          "other_ops": 4487,
+          "read_bytes": 14212197,
+          "read_ops": 125,
+          "write_bytes": 3310116,
+          "write_ops": 1272
+        },
+        "kernel_100ns": 11562500,
+        "page_faults": 187170,
+        "priority_class": 32,
+        "private_commit_bytes": 519434240,
+        "user_100ns": 70937500,
+        "working_set_bytes": 588464128
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore",
+        ".godot/global_script_class_cache.cfg",
+        ".godot/editor/filesystem_cache10"
+      ],
+      "mono_ns": 720216655725000,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 24459,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 59592,
+          "other_ops": 4487,
+          "read_bytes": 14212197,
+          "read_ops": 125,
+          "write_bytes": 3310116,
+          "write_ops": 1272
+        },
+        "kernel_100ns": 11718750,
+        "page_faults": 187186,
+        "priority_class": 32,
+        "private_commit_bytes": 490283008,
+        "user_100ns": 71562500,
+        "working_set_bytes": 559706112
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore",
+        ".godot/global_script_class_cache.cfg",
+        ".godot/editor/filesystem_cache10"
+      ],
+      "mono_ns": 720216765447200,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 24459,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 59592,
+          "other_ops": 4487,
+          "read_bytes": 14212197,
+          "read_ops": 125,
+          "write_bytes": 3310116,
+          "write_ops": 1272
+        },
+        "kernel_100ns": 11718750,
+        "page_faults": 187205,
+        "priority_class": 32,
+        "private_commit_bytes": 462548992,
+        "user_100ns": 72656250,
+        "working_set_bytes": 532492288
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore",
+        ".godot/global_script_class_cache.cfg",
+        ".godot/editor/filesystem_cache10"
+      ],
+      "mono_ns": 720216868733500,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 24459,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 59592,
+          "other_ops": 4487,
+          "read_bytes": 14212197,
+          "read_ops": 125,
+          "write_bytes": 3310116,
+          "write_ops": 1272
+        },
+        "kernel_100ns": 11875000,
+        "page_faults": 187221,
+        "priority_class": 32,
+        "private_commit_bytes": 448868352,
+        "user_100ns": 73281250,
+        "working_set_bytes": 505946112
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore",
+        ".godot/global_script_class_cache.cfg",
+        ".godot/editor/filesystem_cache10"
+      ],
+      "mono_ns": 720216977891600,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 24459,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 59684,
+          "other_ops": 4512,
+          "read_bytes": 14212197,
+          "read_ops": 125,
+          "write_bytes": 3328096,
+          "write_ops": 1278
+        },
+        "kernel_100ns": 11875000,
+        "page_faults": 187243,
+        "priority_class": 32,
+        "private_commit_bytes": 354131968,
+        "user_100ns": 74218750,
+        "working_set_bytes": 418308096
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore",
+        ".godot/global_script_class_cache.cfg",
+        ".godot/editor/filesystem_cache10"
+      ],
+      "mono_ns": 720217086876200,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 24459,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 59684,
+          "other_ops": 4517,
+          "read_bytes": 14212197,
+          "read_ops": 125,
+          "write_bytes": 3328096,
+          "write_ops": 1278
+        },
+        "kernel_100ns": 11875000,
+        "page_faults": 187292,
+        "priority_class": 32,
+        "private_commit_bytes": 249491456,
+        "user_100ns": 74531250,
+        "working_set_bytes": 318648320
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore",
+        ".godot/global_script_class_cache.cfg",
+        ".godot/editor/filesystem_cache10"
+      ],
+      "mono_ns": 720217195149600,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 24459,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 59684,
+          "other_ops": 4517,
+          "read_bytes": 14212197,
+          "read_ops": 125,
+          "write_bytes": 3328096,
+          "write_ops": 1278
+        },
+        "kernel_100ns": 11875000,
+        "page_faults": 187316,
+        "priority_class": 32,
+        "private_commit_bytes": 219357184,
+        "user_100ns": 74531250,
+        "working_set_bytes": 291213312
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore",
+        ".godot/global_script_class_cache.cfg",
+        ".godot/editor/filesystem_cache10"
+      ],
+      "mono_ns": 720217301644500,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 24459,
+      "target": {
+        "exited": false,
+        "io": {
+          "other_bytes": 59684,
+          "other_ops": 4517,
+          "read_bytes": 14212197,
+          "read_ops": 125,
+          "write_bytes": 3328096,
+          "write_ops": 1278
+        },
+        "kernel_100ns": 12343750,
+        "page_faults": 187544,
+        "priority_class": 32,
+        "private_commit_bytes": 44081152,
+        "user_100ns": 75000000,
+        "working_set_bytes": 122593280
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore",
+        ".godot/global_script_class_cache.cfg",
+        ".godot/editor/filesystem_cache10"
+      ],
+      "mono_ns": 720217408965900,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 24459,
+      "target": {
+        "exit_code": 0,
+        "exited": true
+      }
+    },
+    {
+      "milestones_observed": [
+        ".godot/.gdignore",
+        ".godot/global_script_class_cache.cfg",
+        ".godot/editor/filesystem_cache10"
+      ],
+      "mono_ns": 720217516193100,
+      "stderr_file_bytes": 0,
+      "stdout_file_bytes": 27744,
+      "target": {
+        "exit_code": 0,
+        "exited": true
+      }
+    }
+  ],
+  "schema": "HH-GT06-IMPORT-OBSERVATION-1",
+  "started_ns": 720205075275900,
+  "target_exit_observed": {
+    "exit_code": 0,
+    "observed_ns": 720217408965900,
+    "pid": 656,
+    "process_start": "windows:134342955952832644"
+  },
+  "target_identity": {
+    "handle_bound_ns": 720206634352900,
+    "pid": 656,
+    "process_start": "windows:134342955952832644",
+    "receipt_observed_ns": 720206631948700
+  },
+  "thread_alive": false
+}

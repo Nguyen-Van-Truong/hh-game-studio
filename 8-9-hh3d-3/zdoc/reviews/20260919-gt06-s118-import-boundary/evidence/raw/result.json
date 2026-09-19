@@ -1,0 +1,40 @@
+{
+  "actual_target": {
+    "actual_target_exit": {
+      "exit_code": 0,
+      "pid": 656
+    },
+    "exit": {
+      "file": "import-host/process-exit.json",
+      "sha256": "f60c6b3bc7c81597226d9f6caf4a3e57367225f9d15830a945409118a0df786c",
+      "size_bytes": 28
+    },
+    "missing_reason": null,
+    "natural_exit_not_inferred": true,
+    "start": {
+      "file": "import-host/process-start.json",
+      "sha256": "1b1acb1a877b16a4f68f5493ee8b78a7b216f3430b43f3aa7e02d3613c6a2d6a",
+      "size_bytes": 12
+    }
+  },
+  "completed_import": true,
+  "eligible_for_dataset": false,
+  "ended_utc": "2026-09-19T12:46:46.650728+00:00",
+  "errors": [],
+  "execution_unchanged": true,
+  "formal_acceptance": false,
+  "import_wrapper_native_close": "UNKNOWN_UNRECORDED_BY_NATIVE_STAGE",
+  "limits": "No coupled batches, status-gap repair, no-leak or acceptance claim.",
+  "observer_cleanup": {
+    "closed": true,
+    "error_count": 0,
+    "global_held_probe_count": 0,
+    "handle_close_uncertain": false,
+    "handle_retained": false,
+    "present": true,
+    "probe_handles_released": true,
+    "thread_alive": false
+  },
+  "run_id": "gt06-s118-import-01",
+  "source_unchanged": true
+}
