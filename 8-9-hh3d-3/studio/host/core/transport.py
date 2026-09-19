@@ -623,7 +623,11 @@ class LoopbackFixtureHost:
 
     def _existing(self, command_id: str, digest: str) -> Response | None:
         try:
-            existing = self._lookup(command_id, fast_pending=False)
+            # The pending snapshot is published only after the durable journal
+            # admission succeeds, so the normal lookup path is safe here too.
+            # Keep the one-argument override contract used by the phase
+            # recorder and other host subclasses.
+            existing = self._lookup(command_id)
         except JournalError as exc:
             if exc.code == "COMMAND_NOT_FOUND":
                 return None
