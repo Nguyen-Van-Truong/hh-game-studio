@@ -1,5 +1,5 @@
 HH STUDIO — PLAN 1/3: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 19-09-2026, Asia/Saigon | Revision S99 | TRIỂN KHAI THEO GATE
+Ngày 19-09-2026, Asia/Saigon | Revision S100 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -16,7 +16,7 @@ STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng
 
 CURRENT_VALID_WP=GT-06
 EXECUTION_AUTHORIZATION=OWNER_APPROVED_GATED
-IMPLEMENTATION=GT06_S97_ACK_READER_VALIDATED_COUPLED_DIAGNOSTIC_ACTIVE
+IMPLEMENTATION=GT06_S99_COMMAND_RESIDENCY_COMPLETE_COUPLED_CAMPAIGN_PENDING
 GT01_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260913
 GT01_PENDING=NONE
 GT01_PIN_DECISION=GODOT_4.7.2_STABLE_OFFICIAL
@@ -25,7 +25,7 @@ RUNTIME_ACCEPTANCE=GT01_GT02_GT03_GT04_GT05_ACCEPTED
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S99
+PLAN_REVISION=S100
 EXECUTION_MODE=COORDINATOR_THREE_ASTRA_ULTRA_OWNER_20260918
 SUBAGENTS_ENABLED=3
 GT02_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260916_S46
@@ -61,17 +61,17 @@ GT06_CURRENT_SOURCE_CLOSURE=cfc4b55a5407891bfd54d22d9f1ac45a74b6c744898199a0e469
 GT06_SOURCE_CHECKPOINT=4293acf2d628
 GT06_BENCHMARK_CAMPAIGN=gt06-s98-campaign-01
 GT06_BENCHMARK_STATUS=S98_FAILURE_RETAINED_STATUS_GAP_BATCH17_2043_7348MS_20260918T222817Z
-GT06_ACTIVE_DIAGNOSTIC=S98_TERMINAL_FAILURE_ATTRIBUTION_WRITTEN; S97_DIAGNOSTIC_PRESERVED; NO_ACCEPTANCE
+GT06_ACTIVE_DIAGNOSTIC=S99_COMMAND_RESIDENCY_COMPLETE; S98_TERMINAL_FAILURE_ATTRIBUTION_PRESERVED; NO_ACCEPTANCE
 GT06_FULL_CAMPAIGN=gt06-s98-campaign-01; LAUNCH_1_FAILED_BATCH17_AFTER_18_BATCHES; SOURCE_IDENTICAL_TO_S97; FRESH_ID_REQUIRED
 GT06_S98_CLEANUP_STATUS=DIAGNOSTIC_ZERO_JOBS_HANDLES_RELEASED_BUT_EDITOR_TARGET_EXIT_MISSING_SUPERVISOR_EXIT_MISSING_SCHEDULER_STATE3_RESULT1
-GT06_NEXT_ACTION=Reconcile S98 scheduler/outer exits and preserve attribution packet; diagnose owned-workload/environment cause of status gap before any fresh campaign; only then use a new source-identical campaign ID if retry gates pass, followed by full 10-pair dataset and final critics.
+GT06_NEXT_ACTION=S99 command-only diagnostic completed below gate but does not clear coupled cause; source/profile/workstation and S98 cleanup gate are verified, so use a fresh source-identical campaign ID with full terminal/telemetry evidence, never resume/overwrite S98; only promote a later full 10-pair dataset after all gates and critics.
 GT06_S98_WORKSTATION_PREFLIGHT=workstation-attribution-preflight-01; SHA256=28609498f97969d1609b69c50b84c30c60e1cc7c1379ee72cbfa4cc3d880c5eb; READ_ONLY_POST_TERMINAL_NO_OWNED_WORKLOAD; CAUSALITY_UNAVAILABLE; NO_ACCEPTANCE
-GT06_S99_COMMAND_DIAGNOSTIC=gt06-s99-command-residency-01; COMMAND_ONLY_35_BATCH; COMPLETED_PREFIX_14; MAX_GAP_OBSERVED=934.3129MS; FORMAL_ACCEPTANCE=FALSE; RESULT_PENDING
+GT06_S99_COMMAND_DIAGNOSTIC=gt06-s99-command-residency-01; COMMAND_ONLY_35_BATCH; COMPLETED_35_OF_35; MAX_GAP_OBSERVED=1591.3252MS_BATCH25; OWNER_WRAPPER_EXIT0; CLEANUP_VERIFIED; FORMAL_ACCEPTANCE=FALSE; ELIGIBLE_FOR_DATASET=FALSE; SUMMARY_SHA256=96714640aa7a4f4de326bbe62a02c83bf271768c9d72856da98b9872345d06c5
 GT06_S88_SCHEDULER_TASK=OBSERVED_ABSENT_20260918; historic_delete_report_retained_in_chat; durable_delete_receipt_missing
 GT06_S90_DIAGNOSTIC=gt06-s90-lifecycle-attribution-01; preflight=gt06-s90-lifecycle-attribution-preflight-06; five_partial_batches; interrupted_before_batch5_capture; formal_acceptance=false; eligible_for_dataset=false
 GT06_DIAGNOSTIC_EXCLUSION=S81-S90 diagnostic and partial/failure prefixes are excluded from F13/F14 acceptance datasets; see s83-mapping requirements and each packet manifest.
 
-TIẾN ĐỘ HIỆN HÀNH — S99, ngày 19-09-2026 (mốc run ghi UTC)
+TIẾN ĐỘ HIỆN HÀNH — S100, ngày 19-09-2026 (mốc run ghi UTC)
 GT-01–05 ACCEPTED; GT-06 IN_PROGRESS; GT-07–10 chưa mở.
 Source checkpoint4293acf2d628; formal51closure ở marker trên. Profile giữ nguyên
 0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85.
@@ -106,6 +106,9 @@ Child record để trống host/supervisor exit theo thiết kế self-observati
 `s97-terminal-exit-reconciliation.json`, không sửa raw, không suy natural self-exit.
 S97 vẫn diagnostic-only, formal_acceptance=false, eligible_for_dataset=false;
 không no-leak/PASS và không nhập F13/F14.
+
+
+S99 command-only residency diagnostic đã hoàn tất 35/35 batch với source không đổi; host command max gap 1591.3252ms ở batch25, owner/wrapper exit0, jobs/handles/tree sạch, stderr rỗng. Packet dẫn xuất zdoc/reviews/20260918-gt06-s99-command-residency/result-summary.json, SHA256 96714640aa7a4f4de326bbe62a02c83bf271768c9d72856da98b9872345d06c5. Đây chỉ là host-only diagnostic: không có Godot/editor/native/ACK, không chứng minh root cause/no-leak và không nhập F13/F14.
 
 LƯỢT S98 ĐÃ KẾT THÚC BẰNG FAILURE: gt06-s98-campaign-01 launch1, task \\HHStudio.GT06.gt06-s98-campaign-01. Source/profile/workstation không đổi. Run r00.a01 đã hoàn tất 18 batch của cặp đầu rồi FAILED ở batch17 khi host command stream có max_status_gap_ms=2043.7348, do lookup admitted.96 timeout 2002.5627ms rồi retry phục hồi; vượt gate khóa 2000ms. Joint/native ACK cùng batch vẫn hợp lệ (native gap594.998ms, ObjectDB71128, resources6); 18 hàng partial được giữ nguyên và không nhập F13/F14.
 Failure raw ở `studio/.local/reviews/gt06-s98-campaign-01/run-00-attempt-01`; host wrapper exit1, editor wrapper exit2, cleanup Jobs zero/closed, handles released, owned tree zero, native_error null. `child-failure.json` và `parent-failure.json` giữ verdict failure; không suy target natural exit từ child record. Attribution dẫn xuất ở `zdoc/reviews/20260918-gt06-s98-status-gap/attribution.json`, SHA256 `7b9f4f6fe4702c6bd9e2df6f1cb8f85dcef9fa29e01b9e0fa4956935b2ea3ca6`; diagnostic-only, chưa chứng minh root cause, không sửa raw.
