@@ -1,0 +1,66 @@
+{
+  "schema": "gt06-s108-failure-inventory-v1",
+  "authority": 0,
+  "run_id": "gt06-s108-save-02",
+  "formal_acceptance": false,
+  "eligible_for_dataset": false,
+  "engine_batches_completed": 0,
+  "primary_code": "S108_AMBIGUOUS_GUI_THREAD",
+  "phase": "READY0",
+  "actual_exits": {
+    "outer": 3,
+    "host_owner": 1,
+    "import_host": 0,
+    "editor": "UNKNOWN"
+  },
+  "observed_topology": [
+    {
+      "hwnd": 24317860,
+      "pid": 29880,
+      "tid": 8840
+    },
+    {
+      "hwnd": 22808558,
+      "pid": 29880,
+      "tid": 15316
+    },
+    {
+      "hwnd": 4197522,
+      "pid": 29880,
+      "tid": 8840
+    },
+    {
+      "hwnd": 21171242,
+      "pid": 29880,
+      "tid": 8840
+    },
+    {
+      "hwnd": 5180582,
+      "pid": 29880,
+      "tid": 15316
+    }
+  ],
+  "announced_tid": 8840,
+  "raw": {
+    "path": "studio/.local/reviews/gt06-s108-save-02/attribution-raw.json",
+    "sha256": "5fd87585a21c6f5ec11f43615a29f19ad5af8b08923fb3e781f3e04b020d6da2",
+    "bytes": 2615
+  },
+  "derived": {
+    "path": "studio/.local/reviews/gt06-s108-save-02/diagnostic-result.json",
+    "sha256": "dafe901beb163e32176e5c7694b42da2faeafb79b9890d52a4aad9c0ab892bb5",
+    "bytes": 2449
+  },
+  "terminal_cleanup": {
+    "path": "studio/.local/reviews/gt06-s108-save-02/child-terminal-cleanup.json",
+    "sha256": "f3dfb63bdf84b43b3349109bd802bdc4f49c8d3c2f77cb946cf478e7426d6247",
+    "bytes": 3709
+  },
+  "outer_process_exit": {
+    "path": "studio/.local/reviews/gt06-s108-save-02-outer/process-exit.json",
+    "sha256": "ab86aafe27ebdfdbc17d6cc0c88a50709dbeadb0ba2e4ba5e7a784252d7fe4a3",
+    "bytes": 302
+  },
+  "finding": "The announced main HWND resolves to one exact TID, while secondary owned windows use another TID. The prior all-owned-windows-equal-TID check stopped before batch0 and cannot be treated as a benchmark failure.",
+  "repair": "Keep the complete bounded window topology in identity and sample the TID returned for the announced main HWND; retain PID/process-start/executable/race checks."
+}

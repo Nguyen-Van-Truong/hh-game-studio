@@ -16,9 +16,13 @@ CPU accounting of the owned editor's native GUI thread during native batches
 
 The generated native startup record identifies the main window HWND. Godot's
 logical thread ID is not a Windows thread ID. The host independently checks
-the window's PID and native thread, unique GUI thread membership, process start
-time and executable, and retained thread identity/creation time. The query
-handle is opened at READY 0, before the original batch-4 baseline. Sampling
+the announced window's PID and native thread, process start time and
+executable, and retained thread identity/creation time. S108-02 showed the
+announced main HWND on TID 8840 and two secondary owned windows on TID 15316.
+The main HWND's PID/TID remains the binding anchor; the complete bounded
+topology is retained in the identity record, so secondary GUI threads do not
+make the announced main thread ambiguous. The query handle is opened at READY
+0, before the original batch-4 baseline. Sampling
 uses the existing polling loop; it creates no observer thread at batch 5.
 
 CPU samples have 50 ms minimum spacing, a maximum of 8000 records, and query

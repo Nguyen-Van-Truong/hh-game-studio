@@ -18,7 +18,7 @@ CORE_ORIGINAL = 'zdoc/reviews/20260919-gt06-s106-handle-boundary/owned_handles.p
 CORE_SHA256 = '956a1c56d215693fb5828e04b74db04fba45a57bfb0bde12bf76a11c21dcc1a0'
 LOCAL_PINS = {
     'native_probe.py': '25282d0d302ba43c3d94fc653d0084a849dad5530b255f66e0f2a89ceb4b873a',
-    'thread_probe.py': '23034b1a9285208feb823f44eb3c155271f892f3d0f16f1f35d86204ca63beb1',
+    'thread_probe.py': 'a03992ee785bb3fc3c0a12f5f7b699f3bde3d03df2706f0559d65e56679d642e',
     'clock_join.py': 'c59263b51a32045926d5f8e29df0d163b3429a79aef387631dabd9a9af6c5f85',
 }
 RUN_ID = re.compile(r'gt06-s108-save-[a-z0-9][a-z0-9-]{0,30}\Z')

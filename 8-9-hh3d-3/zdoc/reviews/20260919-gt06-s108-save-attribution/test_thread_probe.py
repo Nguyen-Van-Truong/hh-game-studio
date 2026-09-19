@@ -120,6 +120,7 @@ class Tests(unittest.TestCase):
         self.assertEqual(probe.identity['tid'], 456)
         self.assertEqual(probe.identity['thread_created_100ns'], 101)
         self.assertEqual(probe.identity['owned_window_handles'], [555, 556])
+        self.assertEqual(probe.identity['owned_window_threads'], self.api.windows)
         self.assertEqual(probe.identity['query_access'], 0x100800)
         row = probe.sample(5)
         self.assertEqual(row['index'], 0)
@@ -155,10 +156,16 @@ class Tests(unittest.TestCase):
         self.api.windows = [{'hwnd': 556, 'pid': 123, 'tid': 456}]
         self.fails('S108_ANNOUNCED_WINDOW_MISSING', self.make)
         self.api.windows.append({'hwnd': 555, 'pid': 123, 'tid': 457})
-        error = self.fails('S108_AMBIGUOUS_GUI_THREAD', self.make)
-        self.assertEqual(error.announced_tid, 456)
-        self.assertEqual(error.owned_window_rows, self.api.windows)
+        self.fails('S108_MAIN_WINDOW_THREAD_RACE', self.make)
         self.assertEqual(self.api.opened, [])
+
+    def test_secondary_gui_thread_is_retained_without_ambiguity(self):
+        self.api.windows = [{'hwnd': 555, 'pid': 123, 'tid': 456},
+                            {'hwnd': 556, 'pid': 123, 'tid': 457}]
+        probe = self.make()
+        self.assertEqual(probe.tid, 456)
+        self.assertEqual(probe.identity['owned_window_threads'], self.api.windows)
+        probe.close()
 
     def test_open_thread_identity_and_window_races_close_owned_handle(self):
         for field, value, code in [('thread', (124, 456), 'S108_THREAD_IDENTITY'),

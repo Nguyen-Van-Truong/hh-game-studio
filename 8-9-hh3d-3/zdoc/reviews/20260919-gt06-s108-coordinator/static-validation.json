@@ -7,10 +7,10 @@
   "engine_started": false,
   "tests": {
     "command": "python -B -m unittest discover -s 8-9-hh3d-3/zdoc/reviews/20260919-gt06-s108-save-attribution -p test_*.py -v",
-    "passed": 51,
+    "passed": 52,
     "failed": 0,
     "actual_shell_exit": 0,
-    "duration_seconds": 2.693,
+    "duration_seconds": 2.917,
     "evidence_kind": "coordinator transcription of tool output c64b1d"
   },
   "pins_check": {
@@ -26,14 +26,19 @@
     "clock_join.py": "c59263b51a32045926d5f8e29df0d163b3429a79aef387631dabd9a9af6c5f85",
     "native_probe.py": "25282d0d302ba43c3d94fc653d0084a849dad5530b255f66e0f2a89ceb4b873a",
     "README.md": "526b5e6e1d8ff18fd5b90462b5cb07e39a6a5139674235f722e42ce0b256957a",
-    "run_probe.py": "d81a6c6c384b718cb2907c413839d2057591a16152b69d74a225e9bca61c311f",
+    "run_probe.py": "a70b13863661691de70d7045b351a9d876c9fed263c5ba6a49a32f6ae5049707",
     "test_clock_join.py": "cad9e5a9a46003372132685b6fb34c2c8c14a9cc23f83b46311094d8ee651e52",
     "test_native_probe.py": "b28b6274c589a91972c67800ee618d047eecd528d2c3f96e218aa7cf9d787d99",
     "test_run_probe.py": "0e076b6ec6e190764451aadb25ae990bccc4343a9d087b53df0db3bf89a930ad",
     "test_thread_probe.py": "c32dc28abec9975905f7258fabc1550deca24a9a762260d283f350d477bcaabd",
-    "thread_probe.py": "8d31839b238c087eb59477d8031868c0df3b5fb34293152fbdc005be4a95a2c8"
+    "thread_probe.py": "a03992ee785bb3fc3c0a12f5f7b699f3bde3d03df2706f0559d65e56679d642e"
   },
   "observer_sha256": "db392c3ed1ba800975bc4db7120e6d76adef7274971c8046a20d2db5f2ad56cc",
   "review_scope": "implementation only; no final critics",
-  "finding_fixed": "Initial constructor native and cleanup error scalars retained before successful cleanup retry; arbitrary exception text excluded."
+  "finding_fixed": "Initial constructor native and cleanup error scalars retained before successful cleanup retry; arbitrary exception text excluded.",
+  "bounded_retry_preparation": {
+    "s108_01": "READY0_NO_TOPOLOGY_RETENTION",
+    "s108_02": "READY0_MAIN_TID8840_SECONDARY_TID15316",
+    "repair": "Bind announced main HWND TID; retain all bounded window rows; 52 pure tests."
+  }
 }

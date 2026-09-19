@@ -194,11 +194,12 @@ class ThreadProbe:
                  and self.hwnd in {row['hwnd'] for row in windows}, 'S108_ANNOUNCED_WINDOW_MISSING')
             self.window_rows = [{'hwnd': row['hwnd'], 'pid': row['pid'], 'tid': row['tid']}
                                 for row in windows]
-            if {row['tid'] for row in windows} != {tid}:
-                error = ThreadProbeError('S108_AMBIGUOUS_GUI_THREAD')
-                error.announced_tid = tid
-                error.owned_window_rows = list(self.window_rows)
-                raise error
+            # The announced main HWND is the identity anchor. Secondary owned
+            # windows may use another GUI thread; retain that topology rather
+            # than mistaking it for ambiguity about the main window's TID.
+            need(sum(row['hwnd'] == self.hwnd for row in windows) == 1
+                 and next(row['tid'] for row in windows if row['hwnd'] == self.hwnd) == tid,
+                 'S108_MAIN_WINDOW_THREAD_RACE')
             self.tid = tid
             self.handle = self.api.open_thread(tid)
             need(self.handle, 'S108_OPEN_THREAD')
@@ -211,7 +212,8 @@ class ThreadProbe:
             self._check_process()
             self.identity = {**self.expected, 'executable': path_key(self.expected['executable']),
                 'hwnd': self.hwnd, 'tid': tid, 'thread_created_100ns': times['created_100ns'],
-                'query_access': QUERY_ACCESS, 'owned_window_handles': sorted(row['hwnd'] for row in windows)}
+                'query_access': QUERY_ACCESS, 'owned_window_handles': sorted(row['hwnd'] for row in windows),
+                'owned_window_threads': list(self.window_rows)}
             self._last_cpu = times
         except BaseException as error:
             error.cleanup_owner = self if self.handle is not None else None
