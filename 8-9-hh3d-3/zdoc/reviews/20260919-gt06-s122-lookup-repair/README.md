@@ -12,7 +12,7 @@ The candidate repair separates the local disconnect-test mutex from host
 state, allows the read-only lookup route to validate before taking the host
 lock, and uses an expiring pending snapshot only after durable admission. It
 does not alter the native benchmark, profile, original gates, timeouts,
-baseline, priority or RSS policy. Duplicate admission remains durable-first.
+baseline, priority or RSS policy. The pending snapshot is published only after durable admission, so duplicate lookup preserves the durable request digest.
 
 The copied helper runs the stock campaign child and measures the existing
 host/journal/SQLite timing seams. It stops at the first original gate failure
