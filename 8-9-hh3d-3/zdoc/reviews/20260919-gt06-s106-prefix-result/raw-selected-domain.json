@@ -1,0 +1,513 @@
+{
+  "authority": 0,
+  "bounded_exclusions": [
+    {
+      "reason": "LOCAL_JOURNAL_COMMAND_STORE_GUARDS",
+      "scope": "commands/**"
+    },
+    {
+      "reason": "GENERAL_PROJECT_SOURCE_AND_GENERATED_CACHES",
+      "scope": "project/** except benchmark input.json,input/{ack,start}-NN.json,out/{batch,ready}-NN.json"
+    },
+    {
+      "reason": "PRIVATE_ENVIRONMENT_AND_CACHE",
+      "scope": "{host-owner,editor-host,import-host}/{appdata,localappdata,temp,blender-user}/**"
+    },
+    {
+      "reason": "NO_RECURSIVE_RAW_INVENTORY_OR_EXCLUDED_HASH_SWEEP",
+      "scope": "All raw files not selected by explicit file-name allowlists"
+    },
+    {
+      "reason": "HASH_AUDIT_ONLY_NO_BINARY_OR_FULL_RUNTIME_DUPLICATION",
+      "scope": "Runtime source closure and executables except two supporting Python sources"
+    },
+    {
+      "reason": "NOT_RETAINED; SELECTED_TEXT_HAS_BOUNDED_HIGH_CONFIDENCE_PATTERN_SCREEN",
+      "scope": "Secret-bearing material"
+    }
+  ],
+  "complete_raw_roots_inventory": false,
+  "files": {
+    "studio/.local/reviews/gt06-s106-handles-prefix-01-outer/observer-close.json": {
+      "portable_path": "outer/observer-close.json",
+      "sha256": "db31851ea75997fe91343960acf539e2edc5bb092b41658de8ed1b9a4f470b37",
+      "size_bytes": 156
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01-outer/process-exit.json": {
+      "portable_path": "outer/process-exit.json",
+      "sha256": "9632a9d94d1ef1b4097f0c45c887c352e40e4b524c3104c0785b6359e6758ddb",
+      "size_bytes": 291
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01-outer/process-start.json": {
+      "portable_path": "outer/process-start.json",
+      "sha256": "89e6e585605ced04f31912b0bd9b70810f48bdb70b0741ad79993aeb46641e52",
+      "size_bytes": 235
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01-outer/request.json": {
+      "portable_path": "outer/request.json",
+      "sha256": "ce70dcd7fb46cbf7e3a72860da673bd0ce997c83d38c8de69b7b0a33efbd1b36",
+      "size_bytes": 541
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01-outer/stderr.txt": {
+      "portable_path": "outer/stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01-outer/stdout.txt": {
+      "portable_path": "outer/stdout.txt",
+      "sha256": "1777721b566e63b4961835888f966525321eb33e1da2883ab3e77c9d1cee97f7",
+      "size_bytes": 6924
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/batch-capture-00.json": {
+      "portable_path": "raw/batch-capture-00.json",
+      "sha256": "6b7d0b3dc4aea49f965fb2b0b0d71e681485ce90413d8ecf6e464e68f9679d04",
+      "size_bytes": 868
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/batch-capture-01.json": {
+      "portable_path": "raw/batch-capture-01.json",
+      "sha256": "5d50e6fb5e2bb993b6e7193f540b7faaa2d51a4ab98fff8979387643883f7674",
+      "size_bytes": 868
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/batch-capture-02.json": {
+      "portable_path": "raw/batch-capture-02.json",
+      "sha256": "452744caa3429fb656f4ba0595dd4326188575926d9c9e230a8dbea373232aab",
+      "size_bytes": 868
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/batch-capture-03.json": {
+      "portable_path": "raw/batch-capture-03.json",
+      "sha256": "4631c722e5ea2732786a716e7d4afde548f002b7306c5e2a89e54d45e68dd521",
+      "size_bytes": 868
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/batch-capture-04.json": {
+      "portable_path": "raw/batch-capture-04.json",
+      "sha256": "caf4c83e73ae1f3023a31cc2718119393c667c38f06988ff96e6462f1af94b7e",
+      "size_bytes": 868
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/batch-capture-05.json": {
+      "portable_path": "raw/batch-capture-05.json",
+      "sha256": "41fd66447ebe6ad5c1008fd0449396ede200419d19a834afcb8bdbd786ab66ef",
+      "size_bytes": 868
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/child-failure.json": {
+      "portable_path": "raw/child-failure.json",
+      "sha256": "1bc6b43c4ab84841c42d634797ac39f6e290543974a22216b6b18cfbef865b4e",
+      "size_bytes": 208
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/child-terminal-cleanup.json": {
+      "portable_path": "raw/child-terminal-cleanup.json",
+      "sha256": "e3d9038d9eccea21c7d30815ce2c243bfdfa18144e20eb0ee1e57d05b06e501d",
+      "size_bytes": 3724
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/command-00.json": {
+      "portable_path": "raw/command-00.json",
+      "sha256": "2c2c4bafd7f03b9d44bbdc175d7dc5c68c059f092374b82f52723974ee6559b5",
+      "size_bytes": 1154506
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/command-01.json": {
+      "portable_path": "raw/command-01.json",
+      "sha256": "468e4cf20c64fe1ccac4c427185b8229c18594202225bda81f3c77b1a3c88db8",
+      "size_bytes": 1158267
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/command-02.json": {
+      "portable_path": "raw/command-02.json",
+      "sha256": "ba70d0b29ee34c5eff83f9d940b2929a1e5c0af2bfb89ba6e1a25dc7bd30a737",
+      "size_bytes": 1159002
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/command-03.json": {
+      "portable_path": "raw/command-03.json",
+      "sha256": "0d1b90922d831be4d4244b824532ba859444456b93271aec9d060eb173501754",
+      "size_bytes": 1157872
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/command-04.json": {
+      "portable_path": "raw/command-04.json",
+      "sha256": "88e0ff615fbd5a567a03e0fc366f18f1372b2af7b70456f20f0c6ebc78d2b726",
+      "size_bytes": 1158625
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/command-05.json": {
+      "portable_path": "raw/command-05.json",
+      "sha256": "6fe62df4123f835dc5e7e0223d0be869a74ad51c727fb222a47dfe6a6a9674bc",
+      "size_bytes": 1165242
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/context.json": {
+      "portable_path": "raw/context.json",
+      "sha256": "1fc16615e775053afa130c6ba0e35856f307f9795afb1af287b0f3b9aa0bc84f",
+      "size_bytes": 8661
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/diagnostic-result.json": {
+      "portable_path": "raw/diagnostic-result.json",
+      "sha256": "458e8807320fab0e82da4d9312bb1dfd9b16287a8ba4857bb820661de72d7393",
+      "size_bytes": 6537
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/editor-host/cleanup-001.json": {
+      "portable_path": "raw/editor-host/cleanup-001.json",
+      "sha256": "9ff26d2260e6188703654517521ac75e80f618c4e517723042f5f4babc109ee1",
+      "size_bytes": 556
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/editor-host/invocation.json": {
+      "portable_path": "raw/editor-host/invocation.json",
+      "sha256": "e8c794411c07ef55ec66f8b5b37a7a07ffba73b5c4784f28837970fa58287eeb",
+      "size_bytes": 9178
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/editor-host/process-start.json": {
+      "portable_path": "raw/editor-host/process-start.json",
+      "sha256": "b2b7763eb4cb2dc28b9012cad87857ccb963383908b8d7a328c922245a7f9a78",
+      "size_bytes": 14
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/editor-host/stderr.txt": {
+      "portable_path": "raw/editor-host/stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/editor-host/stdout.txt": {
+      "portable_path": "raw/editor-host/stdout.txt",
+      "sha256": "059b4089c5b3ae873bcbccaa54c8c1ffea83a4f0c6da699b4809d21c591e6d83",
+      "size_bytes": 1139072
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/editor-snapshot.json": {
+      "portable_path": "raw/editor-snapshot.json",
+      "sha256": "a6a4f942f578bcf8e1e517b82b147434d081fa76a75cf63631a74d40d4bae022",
+      "size_bytes": 1574
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/gates/batch-04.json": {
+      "portable_path": "raw/gates/batch-04.json",
+      "sha256": "989f52a28fc90c30e3a7bd258ae01734cca0325ccec2dac010a1a1a3a3af2756",
+      "size_bytes": 492
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/gates/batch-05.json": {
+      "portable_path": "raw/gates/batch-05.json",
+      "sha256": "d9eca0097ac559e805ba155555c9928d2a9e39349625d62a4ac3ffd48fec1272",
+      "size_bytes": 616
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/host-owner/cleanup-001.json": {
+      "portable_path": "raw/host-owner/cleanup-001.json",
+      "sha256": "d048dac1e8ad6725792dd7325366bb05a87fe34ab5554d9a70880ad4fcc10867",
+      "size_bytes": 556
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/host-owner/invocation.json": {
+      "portable_path": "raw/host-owner/invocation.json",
+      "sha256": "70249e3098eaa15afeb10b0e076e99c614903ccd93a142f8f31ecdf2f9dcf2a3",
+      "size_bytes": 8455
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/host-owner/process-exit.json": {
+      "portable_path": "raw/host-owner/process-exit.json",
+      "sha256": "7cb5c39bb0c45aede08912e347e0e82e91fff3e60f8911efc693313906edccdd",
+      "size_bytes": 30
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/host-owner/process-start.json": {
+      "portable_path": "raw/host-owner/process-start.json",
+      "sha256": "051a0293c6127747d340ac54f9640e6bb8e4597c45101a639f7a81343bd10af5",
+      "size_bytes": 14
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/host-owner/stderr.txt": {
+      "portable_path": "raw/host-owner/stderr.txt",
+      "sha256": "ddc0f9e24091343502d9226c07bc197edfe6a2856017b1e5e2e986abe15c5dd2",
+      "size_bytes": 1298
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/host-owner/stdout.txt": {
+      "portable_path": "raw/host-owner/stdout.txt",
+      "sha256": "87875f3cb6d186ea2d8d49a5ff978afcaa3c9748dfd934d47f0c82f988739743",
+      "size_bytes": 55792
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/http-phases-final.json": {
+      "portable_path": "raw/http-phases-final.json",
+      "sha256": "3f15eaa1ef2da812f7b4a696efc2b2fbf6bdb6ef5d08bc52c722e9ee4078cdad",
+      "size_bytes": 2174578
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/import-host/capture.json": {
+      "portable_path": "raw/import-host/capture.json",
+      "sha256": "7d25c869173a0cea1d3697c93b4d372170e9193a499c763cbd32946ec261375b",
+      "size_bytes": 1341
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/import-host/invocation.json": {
+      "portable_path": "raw/import-host/invocation.json",
+      "sha256": "21c68f725acaaadf00bd160bdff3540426be872bdd921a8bd438c02f84ba157a",
+      "size_bytes": 6409
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/import-host/process-exit.json": {
+      "portable_path": "raw/import-host/process-exit.json",
+      "sha256": "2266116b5d0ffa87545ffa376707ea023446f7958c6ebaebfe9b1d6616a07347",
+      "size_bytes": 30
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/import-host/process-start.json": {
+      "portable_path": "raw/import-host/process-start.json",
+      "sha256": "b2fb9dc8f19c9601fef92ca445b42b114dc1c5255f4dea5f8fed192adc944da9",
+      "size_bytes": 14
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/import-host/stderr.txt": {
+      "portable_path": "raw/import-host/stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/import-host/stdout.txt": {
+      "portable_path": "raw/import-host/stdout.txt",
+      "sha256": "9b5e37b85c8c4f11090de482aee3734b6c7993ad884a62121b2adcc9dfdd6003",
+      "size_bytes": 1492
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/import-observation.json": {
+      "portable_path": "raw/import-observation.json",
+      "sha256": "a7ed9a89bb86fe5853eb5829f53df1d96174b1b97897f3bdc53bcb17940d9e00",
+      "size_bytes": 38329
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/initial-project-files.json": {
+      "portable_path": "raw/initial-project-files.json",
+      "sha256": "5db5bc618180edd32407ae2dd642e642c8a5ab22f34dbacaf187ca5300ea797b",
+      "size_bytes": 1461
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/joint-00.json": {
+      "portable_path": "raw/joint-00.json",
+      "sha256": "91e940fd0ce6513ac3be400b972ddd60541a6c686b4f2e4c55aae46bf782b423",
+      "size_bytes": 2284
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/joint-01.json": {
+      "portable_path": "raw/joint-01.json",
+      "sha256": "5f0fd50def0726ddd426d5f194ef71d0afe33753d1cee4af79f749b832bbb426",
+      "size_bytes": 2289
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/joint-02.json": {
+      "portable_path": "raw/joint-02.json",
+      "sha256": "cf4522927a7973078e95ddb9d5d61369c6ddfd7edfa8acd104f783a88a8102b9",
+      "size_bytes": 2289
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/joint-03.json": {
+      "portable_path": "raw/joint-03.json",
+      "sha256": "7463734f1e6f164265be14673fdf3261d7f7bf06ac70ba310f996df3922dad3b",
+      "size_bytes": 2289
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/joint-04.json": {
+      "portable_path": "raw/joint-04.json",
+      "sha256": "5166f9d3218dda0e2a4b61ca53dadb0b6ec88509d8daf37679d12392ee5812c0",
+      "size_bytes": 2290
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/joint-05.json": {
+      "portable_path": "raw/joint-05.json",
+      "sha256": "1972707138a55d7ed92965f71b64235148626c592be0079656920cc5486ccb3e",
+      "size_bytes": 2290
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/project/benchmark/input.json": {
+      "portable_path": "raw/project/benchmark/input.json",
+      "sha256": "bac105c4b26cbfa87a8452af8073ca484ac3b91023fa06b4d3a8640bd573193f",
+      "size_bytes": 367
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/project/benchmark/input/ack-00.json": {
+      "portable_path": "raw/project/benchmark/input/ack-00.json",
+      "sha256": "e402378e420aeb3d4104ff444957793b7edbfdba7e5e36a4f5e7aefc29a86b08",
+      "size_bytes": 422
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/project/benchmark/input/ack-01.json": {
+      "portable_path": "raw/project/benchmark/input/ack-01.json",
+      "sha256": "f79d7b16959628ffc5e2c29306ddfabf660b7c4a5772eb6902f2a50bfb282839",
+      "size_bytes": 422
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/project/benchmark/input/ack-02.json": {
+      "portable_path": "raw/project/benchmark/input/ack-02.json",
+      "sha256": "ef1ca7ae95ee27fbf6ae1e7173712d7ac058471986b4930a917bd776787cba4c",
+      "size_bytes": 422
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/project/benchmark/input/ack-03.json": {
+      "portable_path": "raw/project/benchmark/input/ack-03.json",
+      "sha256": "c297b647961788e18a0762d27361c8a4b912340cb4e95c3e0756c93fa1f66178",
+      "size_bytes": 422
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/project/benchmark/input/ack-04.json": {
+      "portable_path": "raw/project/benchmark/input/ack-04.json",
+      "sha256": "610a18bb34286d845651222dbb66263c16d3beb1e58ccba241c974e83fb58b9d",
+      "size_bytes": 422
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/project/benchmark/input/ack-05.json": {
+      "portable_path": "raw/project/benchmark/input/ack-05.json",
+      "sha256": "63ec87a0b2b510e6690f37f9a77ee6a985af67ae7c7219eb390e997ff7ef47e0",
+      "size_bytes": 422
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/project/benchmark/input/start-00.json": {
+      "portable_path": "raw/project/benchmark/input/start-00.json",
+      "sha256": "e1f35bf07fe5ffb6427010144e4e028095f5aa255c0cd987af982323bc59d80e",
+      "size_bytes": 507
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/project/benchmark/input/start-01.json": {
+      "portable_path": "raw/project/benchmark/input/start-01.json",
+      "sha256": "e5e9ffee880e1fcd90b777c61c23618b1b278a8dc241b62ef616d0d8d4178398",
+      "size_bytes": 507
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/project/benchmark/input/start-02.json": {
+      "portable_path": "raw/project/benchmark/input/start-02.json",
+      "sha256": "d2314efc3142495d2fc361136bdfb6456f0b1c9661db4e334d7a0a5125444678",
+      "size_bytes": 507
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/project/benchmark/input/start-03.json": {
+      "portable_path": "raw/project/benchmark/input/start-03.json",
+      "sha256": "fff103fe0c859d9da18b67b648b827d1f008b61629c315db918b734c7ed05246",
+      "size_bytes": 507
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/project/benchmark/input/start-04.json": {
+      "portable_path": "raw/project/benchmark/input/start-04.json",
+      "sha256": "0dc7f5d4fdb0b533f7390f85f4c5da6b5d0d9f9997780c3a0041bba084bd0527",
+      "size_bytes": 507
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/project/benchmark/input/start-05.json": {
+      "portable_path": "raw/project/benchmark/input/start-05.json",
+      "sha256": "daca89bf08242395a50f847270db37915b408e07efa5555a2fed38ffede7166d",
+      "size_bytes": 508
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/project/benchmark/out/batch-00.json": {
+      "portable_path": "raw/project/benchmark/out/batch-00.json",
+      "sha256": "77054007820a484332a95fcf31bed89f8c7202ea9a9f481073aa6a16c0304891",
+      "size_bytes": 97087
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/project/benchmark/out/batch-01.json": {
+      "portable_path": "raw/project/benchmark/out/batch-01.json",
+      "sha256": "824897803154b036923bc75a54b3df1b8367323a8be0158a2f80ab86d9e19d10",
+      "size_bytes": 98312
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/project/benchmark/out/batch-02.json": {
+      "portable_path": "raw/project/benchmark/out/batch-02.json",
+      "sha256": "a1c336dafc5bfd59c6e50b0ab3bf5867572d81f9ec6d341c02d5a6661c0b20b2",
+      "size_bytes": 98322
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/project/benchmark/out/batch-03.json": {
+      "portable_path": "raw/project/benchmark/out/batch-03.json",
+      "sha256": "7f95cf94fad67914a4dcbe19ba6827d2a0738b6ac8cd6715bfe5cb61f802b59c",
+      "size_bytes": 98312
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/project/benchmark/out/batch-04.json": {
+      "portable_path": "raw/project/benchmark/out/batch-04.json",
+      "sha256": "44ea60d0aae55cf8cbe06872522175b45b1a2ed2dab4e543d4139a68f6e70986",
+      "size_bytes": 98324
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/project/benchmark/out/batch-05.json": {
+      "portable_path": "raw/project/benchmark/out/batch-05.json",
+      "sha256": "684ca3d45ec6a77edf8160d5722a74eb7d12a4b0c4e5e71aaf77eb3475e97844",
+      "size_bytes": 98327
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/project/benchmark/out/ready-00.json": {
+      "portable_path": "raw/project/benchmark/out/ready-00.json",
+      "sha256": "25d3cfeadfd248f90e3b6885d22eb988f3507784afdf20ee4fdef6174202f9bd",
+      "size_bytes": 657
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/project/benchmark/out/ready-01.json": {
+      "portable_path": "raw/project/benchmark/out/ready-01.json",
+      "sha256": "4666ac7c71ff56091ac01a294ed36c16c457d12d187c7897a2d3c1c211f3558a",
+      "size_bytes": 661
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/project/benchmark/out/ready-02.json": {
+      "portable_path": "raw/project/benchmark/out/ready-02.json",
+      "sha256": "bf170252095098e8dd6a9521275413e850f0003da783416fa4c35a1339513aac",
+      "size_bytes": 663
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/project/benchmark/out/ready-03.json": {
+      "portable_path": "raw/project/benchmark/out/ready-03.json",
+      "sha256": "3cf47e978337e4c145c3c56b5685c97e7fcf7ed5e196427d65c4ff4b740a26e7",
+      "size_bytes": 663
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/project/benchmark/out/ready-04.json": {
+      "portable_path": "raw/project/benchmark/out/ready-04.json",
+      "sha256": "b06092031547798aca2dc150bcbfb21b9bf5d59a5cde92baf15b4e11bf4d54f3",
+      "size_bytes": 663
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/project/benchmark/out/ready-05.json": {
+      "portable_path": "raw/project/benchmark/out/ready-05.json",
+      "sha256": "47e202773ecc3a70ee9ae7c15c64e80a10541f33100d0789a36b3b188086bd0a",
+      "size_bytes": 664
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/project/benchmark/out/ready-06.json": {
+      "portable_path": "raw/project/benchmark/out/ready-06.json",
+      "sha256": "1d05a1e1120ce7b9635e045cfa4f6f905f3df2c091ba39f17980076c35d63062",
+      "size_bytes": 664
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/pss/batch-04.json": {
+      "portable_path": "raw/pss/batch-04.json",
+      "sha256": "cbe076fcd728a05191eed5b9407b4cf53ea54e84b60d15d25205af0b3a508b47",
+      "size_bytes": 137573
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/pss/batch-05.json": {
+      "portable_path": "raw/pss/batch-05.json",
+      "sha256": "ad11d6c64402242104d1a689976eba26075b401fe33a4bb3e72675fef9af2561",
+      "size_bytes": 135635
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/sample-preview-00.json": {
+      "portable_path": "raw/sample-preview-00.json",
+      "sha256": "fa61607c001ca210657ec39f20679ce7ead067dad9e442a28bfb17476155574f",
+      "size_bytes": 72737
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/sample-preview-01.json": {
+      "portable_path": "raw/sample-preview-01.json",
+      "sha256": "d36687cd10f93b0245d0e968121a4e5d1bbad5df1a4fe53710508e4928e53eb6",
+      "size_bytes": 72731
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/sample-preview-02.json": {
+      "portable_path": "raw/sample-preview-02.json",
+      "sha256": "d2e4d427c10660f08b0f9ce437b8d88c89b98a8c8694dd0b8c2d53b4e7606fd9",
+      "size_bytes": 72781
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/sample-preview-03.json": {
+      "portable_path": "raw/sample-preview-03.json",
+      "sha256": "459566357ab9b02b7c3fb7863758ff3d057ec8c63d806bcc3ad775157eef2aca",
+      "size_bytes": 72778
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/sample-preview-04.json": {
+      "portable_path": "raw/sample-preview-04.json",
+      "sha256": "ae5caa3e1d3d1201173c0a863ec19428428d812f12cf3ecd0ae1d7f3c85258f6",
+      "size_bytes": 72828
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/sample-preview-05.json": {
+      "portable_path": "raw/sample-preview-05.json",
+      "sha256": "5cd37670551d01849f42ef219c0c438a9ccd7a198ce6d751e61508364604cf9a",
+      "size_bytes": 72818
+    },
+    "studio/.local/reviews/gt06-s106-handles-prefix-01/source-files.json": {
+      "portable_path": "raw/source-files.json",
+      "sha256": "c0365dafc7f724d7ff88ece7786685f105cae112111cfd7c123832563856cf35",
+      "size_bytes": 5374
+    },
+    "studio/tests/replay/benchmark_profile.py": {
+      "portable_path": "supporting-source/benchmark_profile.py",
+      "sha256": "ddbd98583060f791226fca83e275cf01204b37112627383198dcef4ec6f6f233",
+      "size_bytes": 19625
+    },
+    "studio/tests/replay/run_benchmark_campaign.py": {
+      "portable_path": "supporting-source/run_benchmark_campaign.py",
+      "sha256": "2073fbbb9abb7a46c902a56ad251543932534519be07c844dca0858d2364dac6",
+      "size_bytes": 59120
+    },
+    "zdoc/reviews/20260919-gt06-s106-coordinator/observe_runner.ps1": {
+      "portable_path": "observer/observe_runner.ps1",
+      "sha256": "182dfafd4fb1695028ec4c6fc221e3c38171a17b44767879fe6ccf7b4bef7ac6",
+      "size_bytes": 3589
+    },
+    "zdoc/reviews/20260919-gt06-s106-handle-boundary/owned/gt06-s106-handles-prefix-01/native_probe.py": {
+      "portable_path": "frozen/native_probe.py",
+      "sha256": "47dd4957deb2f1dc7995b0a30aecf424ef7ebe6c55d239f437fa9865d9583855",
+      "size_bytes": 6394
+    },
+    "zdoc/reviews/20260919-gt06-s106-handle-boundary/owned/gt06-s106-handles-prefix-01/overlay.gd": {
+      "portable_path": "frozen/overlay.gd",
+      "sha256": "bb137f32f1fae3730cc139f03fc6902813b3742d5a08d437e957e291cfe0ec46",
+      "size_bytes": 58679
+    },
+    "zdoc/reviews/20260919-gt06-s106-handle-boundary/owned/gt06-s106-handles-prefix-01/owned_handles.py": {
+      "portable_path": "frozen/owned_handles.py",
+      "sha256": "956a1c56d215693fb5828e04b74db04fba45a57bfb0bde12bf76a11c21dcc1a0",
+      "size_bytes": 34786
+    },
+    "zdoc/reviews/20260919-gt06-s106-handle-boundary/owned/gt06-s106-handles-prefix-01/owned_prefix.py": {
+      "portable_path": "frozen/owned_prefix.py",
+      "sha256": "19b85ac8abfb22e68184322da2baeff17be3843550e3607471fcff0078734899",
+      "size_bytes": 19284
+    },
+    "zdoc/reviews/20260919-gt06-s106-handle-boundary/owned/gt06-s106-handles-prefix-01/preflight.py": {
+      "portable_path": "frozen/preflight.py",
+      "sha256": "ad4e2d15cbcb3f890f22a7d2be339aee6b726c62a9c339dfac4478fdaf21e998",
+      "size_bytes": 19698
+    },
+    "zdoc/reviews/20260919-gt06-s106-handle-boundary/owned/gt06-s106-handles-prefix-01/pss_adapter.py": {
+      "portable_path": "frozen/pss_adapter.py",
+      "sha256": "797398a54cac5f7c772df7ec9c5ad988fe9e54c26c3c10e172a768e39dc25c76",
+      "size_bytes": 19589
+    }
+  },
+  "schema": "gt06-s106-prefix-selected-original-domain-v1",
+  "scope": "Prefix raw and outer evidence, six frozen diagnostics, exact observer, two supporting runtime sources.",
+  "selected_bytes": 11996311,
+  "selected_domain_sha256": "588e03dceec03cb2d5004b96df0e914802c987617a9252bdec29335cead9d7f2",
+  "selected_files": 95,
+  "selection_only": true
+}

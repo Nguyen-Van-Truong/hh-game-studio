@@ -1,0 +1,37 @@
+{
+  "observed_utc": "2026-09-19T05:41:45.9800854Z",
+  "run_id": "gt06-s106-handles-prefix-01",
+  "rows": [
+    {
+      "present": true,
+      "created_utc": "2026-09-19T05:41:03.4757460Z",
+      "creation_after_outer": false,
+      "role": "outer",
+      "matching_executable": true,
+      "pid": 22376,
+      "executable": "C:\\Users\\truon\\AppData\\Local\\Programs\\Python\\Python311\\python.exe"
+    },
+    {
+      "present": true,
+      "created_utc": "2026-09-19T05:41:05.6566240Z",
+      "creation_after_outer": true,
+      "role": "host-owner",
+      "matching_executable": true,
+      "pid": 46864,
+      "executable": "C:\\Users\\truon\\AppData\\Local\\Programs\\Python\\Python311\\python.exe"
+    },
+    {
+      "present": true,
+      "created_utc": "2026-09-19T05:41:18.4994340Z",
+      "creation_after_outer": true,
+      "role": "editor-host",
+      "matching_executable": true,
+      "pid": 23356,
+      "executable": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\tooling\\godot-4.7.2-stable\\Godot_v4.7.2-stable_win64.exe"
+    }
+  ],
+  "schema": "gt06-s106-prefix-startup-observation-v1",
+  "diagnostic_closure_sha256": "3c73aeca6eb953eb8579a3df06484d28f8fd0f930c47d279bbaafa8bae1aa083",
+  "source_closure_sha256": "7635a470cef554c1a60e1d9427f59998737d3bb829c3a1f134e426cdf9275467",
+  "formal_acceptance": false
+}

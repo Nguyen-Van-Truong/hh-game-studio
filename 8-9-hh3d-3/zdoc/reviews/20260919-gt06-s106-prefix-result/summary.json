@@ -1,0 +1,548 @@
+{
+  "all_exact_reference_occurrences": 84,
+  "authority": 0,
+  "batch5_original_counter_comparisons": [
+    {
+      "batch4": 204,
+      "batch5": 204,
+      "delta": 0,
+      "metric": "held_handles",
+      "passed": true,
+      "role": "host",
+      "unchanged_gate": "no_growth"
+    },
+    {
+      "batch4": 45830144,
+      "batch5": 46313472,
+      "delta": 483328,
+      "metric": "rss_bytes",
+      "passed": true,
+      "role": "host",
+      "unchanged_gate": "max_10_percent_growth"
+    },
+    {
+      "batch4": 563,
+      "batch5": 555,
+      "delta": -8,
+      "metric": "held_handles",
+      "passed": true,
+      "role": "editor",
+      "unchanged_gate": "no_growth"
+    },
+    {
+      "batch4": 71128,
+      "batch5": 71128,
+      "delta": 0,
+      "metric": "objects",
+      "passed": true,
+      "role": "editor",
+      "unchanged_gate": "no_growth"
+    },
+    {
+      "batch4": 6,
+      "batch5": 6,
+      "delta": 0,
+      "metric": "resources",
+      "passed": true,
+      "role": "editor",
+      "unchanged_gate": "no_growth"
+    },
+    {
+      "batch4": 752181248,
+      "batch5": 752885760,
+      "delta": 704512,
+      "metric": "rss_bytes",
+      "passed": true,
+      "role": "editor",
+      "unchanged_gate": "max_10_percent_growth"
+    }
+  ],
+  "batch5_status_gate_passed": true,
+  "batch_capture_references_verified": 36,
+  "batches": [
+    {
+      "combined_status_gap_ms": 547.443,
+      "editor": {
+        "held_handles": 563,
+        "objects": 71128,
+        "resources": 6,
+        "rss_bytes": 750391296
+      },
+      "host": {
+        "held_handles": 203,
+        "objects": null,
+        "resources": null,
+        "rss_bytes": 44691456
+      },
+      "http_status_gap_ms": 371.795,
+      "index": 0,
+      "native_status_gap_ms": 547.443,
+      "warmup": true
+    },
+    {
+      "combined_status_gap_ms": 623.163,
+      "editor": {
+        "held_handles": 557,
+        "objects": 71128,
+        "resources": 6,
+        "rss_bytes": 750583808
+      },
+      "host": {
+        "held_handles": 203,
+        "objects": null,
+        "resources": null,
+        "rss_bytes": 44945408
+      },
+      "http_status_gap_ms": 397.9484,
+      "index": 1,
+      "native_status_gap_ms": 623.163,
+      "warmup": true
+    },
+    {
+      "combined_status_gap_ms": 905.7962,
+      "editor": {
+        "held_handles": 557,
+        "objects": 71128,
+        "resources": 6,
+        "rss_bytes": 751005696
+      },
+      "host": {
+        "held_handles": 204,
+        "objects": null,
+        "resources": null,
+        "rss_bytes": 45023232
+      },
+      "http_status_gap_ms": 905.7962,
+      "index": 2,
+      "native_status_gap_ms": 660.523,
+      "warmup": true
+    },
+    {
+      "combined_status_gap_ms": 710.462,
+      "editor": {
+        "held_handles": 555,
+        "objects": 71128,
+        "resources": 6,
+        "rss_bytes": 751661056
+      },
+      "host": {
+        "held_handles": 204,
+        "objects": null,
+        "resources": null,
+        "rss_bytes": 45887488
+      },
+      "http_status_gap_ms": 421.9501,
+      "index": 3,
+      "native_status_gap_ms": 710.462,
+      "warmup": true
+    },
+    {
+      "combined_status_gap_ms": 847.5845,
+      "editor": {
+        "held_handles": 563,
+        "objects": 71128,
+        "resources": 6,
+        "rss_bytes": 752181248
+      },
+      "host": {
+        "held_handles": 204,
+        "objects": null,
+        "resources": null,
+        "rss_bytes": 45830144
+      },
+      "http_status_gap_ms": 847.5845,
+      "index": 4,
+      "native_status_gap_ms": 604.279,
+      "warmup": true
+    },
+    {
+      "combined_status_gap_ms": 714.183,
+      "editor": {
+        "held_handles": 555,
+        "objects": 71128,
+        "resources": 6,
+        "rss_bytes": 752885760
+      },
+      "host": {
+        "held_handles": 204,
+        "objects": null,
+        "resources": null,
+        "rss_bytes": 46313472
+      },
+      "http_status_gap_ms": 416.5178,
+      "index": 5,
+      "native_status_gap_ms": 714.183,
+      "warmup": false
+    }
+  ],
+  "campaign_sha256": "80073f6d08cfe322690e918a165c3b39cc4571bc57c6b35e78bc492a63554f4a",
+  "changed_type_count_deltas": [
+    {
+      "batch4": 118,
+      "batch5": 114,
+      "delta": -4,
+      "type": "Event"
+    },
+    {
+      "batch4": 12,
+      "batch5": 11,
+      "delta": -1,
+      "type": "IoCompletion"
+    },
+    {
+      "batch4": 47,
+      "batch5": 44,
+      "delta": -3,
+      "type": "Thread"
+    }
+  ],
+  "classification": "NON_REPRODUCED",
+  "cleanup": "RECORDED_JOBS_PROBES_THREADS_RELEASED",
+  "completed_batches": 6,
+  "diagnostic_closure_sha256": "3c73aeca6eb953eb8579a3df06484d28f8fd0f930c47d279bbaafa8bae1aa083",
+  "eligible_for_dataset": false,
+  "final_critic": false,
+  "formal_acceptance": false,
+  "frozen_diagnostic_files_verified": 6,
+  "http_commands": 6000,
+  "http_transport_failures": 0,
+  "identical_prefix_branch": "CLOSED_NO_IDENTICAL_RETRY",
+  "lifecycle": {
+    "editor-host": {
+      "actual_exit": null,
+      "helper_exit": 2,
+      "job_zero_closed": true,
+      "native_wrapper_handle_close": "RECORDED_RELEASE",
+      "pid": 23356
+    },
+    "host-owner": {
+      "actual_exit": 1,
+      "helper_exit": 1,
+      "job_zero_closed": true,
+      "native_wrapper_handle_close": "RECORDED_RELEASE",
+      "pid": 46864
+    },
+    "import-host": {
+      "actual_exit": 0,
+      "helper_exit": 0,
+      "job_zero_closed": true,
+      "native_wrapper_handle_close": "UNKNOWN",
+      "pid": 53260
+    }
+  },
+  "limitations": [
+    "COUNTS_AND_TYPES_ARE_NOT_PERSISTENT_OBJECT_IDENTITIES",
+    "192_UNAVAILABLE_TYPE_ENTRIES_IN_EACH_SNAPSHOT",
+    "PSS_OBSERVER_EFFECT_UNKNOWN_NO_TIMING_SUBTRACTION",
+    "NO_POST_IDLE_SERIES",
+    "EDITOR_ACTUAL_NATURAL_EXIT_UNKNOWN",
+    "IMPORT_WRAPPER_NATIVE_HANDLE_CLOSE_UNKNOWN",
+    "OUTER_MANAGED_DISPOSE_NOT_NATIVE_CLOSE_RETURN",
+    "NO_F13_F14_OR_FULL_CAMPAIGN_PASS",
+    "S102_NATIVE_LATENCY_CAUSE_REMAINS_UNRESOLVED"
+  ],
+  "max_http_gap_ms": 905.7962,
+  "max_native_gap_ms": 714.183,
+  "native_cycles": 600,
+  "net_pss_handle_count_delta": -8,
+  "object_identity_delta_available": false,
+  "original_result_status": "BOUNDARY_CAPTURED",
+  "outer_actual_exit": {
+    "exit_code": 0,
+    "forced_by_outer_observer": false,
+    "observed_utc": "2026-09-19T05:50:12.5091162Z",
+    "pid": 22376,
+    "run_id": "gt06-s106-handles-prefix-01",
+    "source": "retained System.Diagnostics.Process after WaitForExit",
+    "start_utc": "2026-09-19T05:41:03.4757464Z"
+  },
+  "outer_native_close_return_observed": false,
+  "processes": {
+    "editor": {
+      "pid": 23356,
+      "process_start": "windows:134342700784994347"
+    },
+    "host": {
+      "pid": 46864,
+      "process_start": "windows:134342700656566240"
+    }
+  },
+  "profile_literal_hash_verified": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+  "root_cause_established": false,
+  "run_id": "gt06-s106-handles-prefix-01",
+  "runtime_repair_justified": false,
+  "schema": "gt06-s106-prefix-comparison-v1",
+  "snapshots": [
+    {
+      "capture_started_perf_ns": 695117533370800,
+      "cleanup": {
+        "all_released": true,
+        "held_resources": [],
+        "marker": {
+          "attempted": true,
+          "native_code": 0,
+          "outcome": "RELEASED",
+          "success": true
+        },
+        "process_handle": {
+          "attempted": true,
+          "native_code": 0,
+          "outcome": "RELEASED",
+          "success": true
+        },
+        "snapshot": {
+          "attempted": true,
+          "native_code": 0,
+          "outcome": "RELEASED",
+          "success": true
+        }
+      },
+      "errors": [],
+      "gate_recorded_perf_ns": 695117522161800,
+      "handles_captured": 563,
+      "identity": {
+        "executable": "d:\\datadiskd\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\tooling\\godot-4.7.2-stable\\godot_v4.7.2-stable_win64.exe",
+        "pid": 23356,
+        "process_start": "windows:134342700784994347"
+      },
+      "index": 4,
+      "limitations": [
+        "SUPPLEMENTAL_OBSERVER_EFFECT_UNKNOWN",
+        "NUMERIC_HANDLES_AND_ATTRIBUTE_MATCHES_ARE_NOT_OBJECT_IDENTITY",
+        "NO_LEAK_OR_ROOT_CAUSE_CLAIM"
+      ],
+      "observer_after": 204,
+      "observer_before": 204,
+      "status": "OBSERVED",
+      "target_after": 563,
+      "target_before": 563,
+      "timing": {
+        "capture_ms": 2.8353,
+        "ended_perf_ns": 695117541823800,
+        "ended_utc": "2026-09-19T05:48:26.291268+00:00",
+        "started_perf_ns": 695117533373300,
+        "started_utc": "2026-09-19T05:48:26.283429+00:00",
+        "total_ms": 8.4505,
+        "walk_ms": 4.5066
+      },
+      "type_counts": {
+        "<unavailable>": 192,
+        "ALPC Port": 17,
+        "Desktop": 1,
+        "Directory": 2,
+        "Event": 118,
+        "File": 26,
+        "IRTimer": 12,
+        "IoCompletion": 12,
+        "IoCompletionReserve": 2,
+        "Key": 37,
+        "Mutant": 16,
+        "SchedulerSharedData": 1,
+        "Section": 15,
+        "Semaphore": 29,
+        "Thread": 47,
+        "TpWorkerFactory": 6,
+        "WaitCompletionPacket": 28,
+        "WindowStation": 2
+      }
+    },
+    {
+      "capture_started_perf_ns": 695221907725400,
+      "cleanup": {
+        "all_released": true,
+        "held_resources": [],
+        "marker": {
+          "attempted": true,
+          "native_code": 0,
+          "outcome": "RELEASED",
+          "success": true
+        },
+        "process_handle": {
+          "attempted": true,
+          "native_code": 0,
+          "outcome": "RELEASED",
+          "success": true
+        },
+        "snapshot": {
+          "attempted": true,
+          "native_code": 0,
+          "outcome": "RELEASED",
+          "success": true
+        }
+      },
+      "errors": [],
+      "gate_recorded_perf_ns": 695221891432800,
+      "handles_captured": 555,
+      "identity": {
+        "executable": "d:\\datadiskd\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\tooling\\godot-4.7.2-stable\\godot_v4.7.2-stable_win64.exe",
+        "pid": 23356,
+        "process_start": "windows:134342700784994347"
+      },
+      "index": 5,
+      "limitations": [
+        "SUPPLEMENTAL_OBSERVER_EFFECT_UNKNOWN",
+        "NUMERIC_HANDLES_AND_ATTRIBUTE_MATCHES_ARE_NOT_OBJECT_IDENTITY",
+        "NO_LEAK_OR_ROOT_CAUSE_CLAIM"
+      ],
+      "observer_after": 204,
+      "observer_before": 204,
+      "status": "OBSERVED",
+      "target_after": 555,
+      "target_before": 555,
+      "timing": {
+        "capture_ms": 3.607,
+        "ended_perf_ns": 695221917782500,
+        "ended_utc": "2026-09-19T05:50:10.668141+00:00",
+        "started_perf_ns": 695221907730100,
+        "started_utc": "2026-09-19T05:50:10.657966+00:00",
+        "total_ms": 10.0524,
+        "walk_ms": 5.1781
+      },
+      "type_counts": {
+        "<unavailable>": 192,
+        "ALPC Port": 17,
+        "Desktop": 1,
+        "Directory": 2,
+        "Event": 114,
+        "File": 26,
+        "IRTimer": 12,
+        "IoCompletion": 11,
+        "IoCompletionReserve": 2,
+        "Key": 37,
+        "Mutant": 16,
+        "SchedulerSharedData": 1,
+        "Section": 15,
+        "Semaphore": 29,
+        "Thread": 44,
+        "TpWorkerFactory": 6,
+        "WaitCompletionPacket": 28,
+        "WindowStation": 2
+      }
+    }
+  ],
+  "source_closure_sha256": "7635a470cef554c1a60e1d9427f59998737d3bb829c3a1f134e426cdf9275467",
+  "source_files_audited": 53,
+  "stop": {
+    "binding": {
+      "campaign_sha256": "80073f6d08cfe322690e918a165c3b39cc4571bc57c6b35e78bc492a63554f4a",
+      "reason": "OPERATOR_STOP",
+      "run_id": "gt06-s106-handles-prefix-01",
+      "schema": "HH-GT06-CAMPAIGN-STOP-1",
+      "source_closure_sha256": "7635a470cef554c1a60e1d9427f59998737d3bb829c3a1f134e426cdf9275467"
+    },
+    "request_present": false,
+    "runtime_stop_exercised": false,
+    "static_path": "Frozen own_run/wait_owner check before launch, each tick and after exit; original stop_requested enforces exact binding."
+  },
+  "type_count_deltas": [
+    {
+      "batch4": 192,
+      "batch5": 192,
+      "delta": 0,
+      "type": "<unavailable>"
+    },
+    {
+      "batch4": 17,
+      "batch5": 17,
+      "delta": 0,
+      "type": "ALPC Port"
+    },
+    {
+      "batch4": 1,
+      "batch5": 1,
+      "delta": 0,
+      "type": "Desktop"
+    },
+    {
+      "batch4": 2,
+      "batch5": 2,
+      "delta": 0,
+      "type": "Directory"
+    },
+    {
+      "batch4": 118,
+      "batch5": 114,
+      "delta": -4,
+      "type": "Event"
+    },
+    {
+      "batch4": 26,
+      "batch5": 26,
+      "delta": 0,
+      "type": "File"
+    },
+    {
+      "batch4": 12,
+      "batch5": 12,
+      "delta": 0,
+      "type": "IRTimer"
+    },
+    {
+      "batch4": 12,
+      "batch5": 11,
+      "delta": -1,
+      "type": "IoCompletion"
+    },
+    {
+      "batch4": 2,
+      "batch5": 2,
+      "delta": 0,
+      "type": "IoCompletionReserve"
+    },
+    {
+      "batch4": 37,
+      "batch5": 37,
+      "delta": 0,
+      "type": "Key"
+    },
+    {
+      "batch4": 16,
+      "batch5": 16,
+      "delta": 0,
+      "type": "Mutant"
+    },
+    {
+      "batch4": 1,
+      "batch5": 1,
+      "delta": 0,
+      "type": "SchedulerSharedData"
+    },
+    {
+      "batch4": 15,
+      "batch5": 15,
+      "delta": 0,
+      "type": "Section"
+    },
+    {
+      "batch4": 29,
+      "batch5": 29,
+      "delta": 0,
+      "type": "Semaphore"
+    },
+    {
+      "batch4": 47,
+      "batch5": 44,
+      "delta": -3,
+      "type": "Thread"
+    },
+    {
+      "batch4": 6,
+      "batch5": 6,
+      "delta": 0,
+      "type": "TpWorkerFactory"
+    },
+    {
+      "batch4": 28,
+      "batch5": 28,
+      "delta": 0,
+      "type": "WaitCompletionPacket"
+    },
+    {
+      "batch4": 2,
+      "batch5": 2,
+      "delta": 0,
+      "type": "WindowStation"
+    }
+  ],
+  "unique_exact_reference_files": 60
+}

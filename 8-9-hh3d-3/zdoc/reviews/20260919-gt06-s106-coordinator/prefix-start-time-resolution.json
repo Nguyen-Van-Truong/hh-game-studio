@@ -1,0 +1,10 @@
+{
+  "matches_at_cim_microsecond_resolution": true,
+  "outer_receipt_sha256": "89e6e585605ced04f31912b0bd9b70810f48bdb70b0741ad79993aeb46641e52",
+  "outer_pid": 22376,
+  "original_observation_sha256": "8df442a10c4da07eb096e54026557557cc77a82baa28832a97bba1ca0b399bf5",
+  "delta_100ns_ticks": 4,
+  "schema": "gt06-s106-start-time-resolution-note-v1",
+  "note": "CIM CreationDate exposes microseconds; retained Process.StartTime has 100ns precision. creation_after_outer was inapplicable as an exact self-identity test. Original observation preserved. This is observer metadata only, not a process failure.",
+  "authority": 0
+}
