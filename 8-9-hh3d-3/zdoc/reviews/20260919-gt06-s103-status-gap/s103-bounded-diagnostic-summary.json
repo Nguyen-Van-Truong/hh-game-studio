@@ -1,0 +1,160 @@
+{
+  "formal_retry_authorized": false,
+  "generated_overlay_sha256": "bb137f32f1fae3730cc139f03fc6902813b3742d5a08d437e957e291cfe0ec46",
+  "notes": [
+    "Preflight completed one 1000-HTTP/100-native batch with clean owned cleanup.",
+    "Prefix completed batches 0-5 and stopped at original CAMPAIGN_RETAINED_COUNTER_GROWTH; editor handles 555 to 561 at batch 5.",
+    "No prefix row is an acceptance sample; no leak or root cause is claimed."
+  ],
+  "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+  "result": "DIAGNOSTIC_ONLY_PREFIX_FAILED_OR_BOUNDARY_REACHED",
+  "runs": [
+    {
+      "batch_00": {
+        "max_status_gap_ms": 639.124,
+        "native_cycles": 100,
+        "raw_timings": 100,
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d"
+      },
+      "cleanup": {
+        "cleanup_sha256": "8cd6b9b60d772c9e9a379ff91df9d1821df3e711b9b0bf03bbd7211765ab8298",
+        "editor_actual_exit": null,
+        "editor_handles_released": true,
+        "editor_job_closed": true,
+        "editor_job_zero": true,
+        "errors": [],
+        "import_exit_code": 0,
+        "producer_closed": true,
+        "threads_stopped": true
+      },
+      "command_00": {
+        "commands": 1000,
+        "complete_command_mix": true,
+        "sha256": "ae4862f86135f3b836e244372100ed89c4b06741c7148146ba805257ca33f146",
+        "transport_failures": 0
+      },
+      "diagnostic_result": {
+        "bytes": 5139,
+        "sha256": "c07dac0bf15db07939187c045d1d54d1e8c159f12cec874898b087153cf62bc4"
+      },
+      "editor_handle_observations": [
+        {
+          "batch": 0,
+          "editor_handles": 565,
+          "max_status_gap_ms": 639.124,
+          "warmup": true
+        }
+      ],
+      "eligible_for_dataset": false,
+      "failure": {
+        "code": "DIAGNOSTIC_PREFIX_COMPLETE",
+        "completed_batches": 1,
+        "phase": {
+          "batch": 0,
+          "phase": "joint_observation"
+        },
+        "sha256": "c15568b0c60eef2519d6d2c42bd5b8f7b1e89b78bec3aace25fa733e3281b00a"
+      },
+      "formal_acceptance": false,
+      "limit_batches": 1,
+      "natural_exit_proven": false,
+      "owner_process_exit": {
+        "exit_code": 1,
+        "pid": 19164
+      },
+      "root_relative": ".local/reviews/gt06-s103-prefix-preflight-06",
+      "run_id": "gt06-s103-prefix-preflight-06"
+    },
+    {
+      "batch_00": {
+        "max_status_gap_ms": 541.47,
+        "native_cycles": 100,
+        "raw_timings": 100,
+        "sha256": "82727ae79534a50347435bb90086f26051cea73bb0fac1f14da89766a0ed8854"
+      },
+      "cleanup": {
+        "cleanup_sha256": "6195df950b678cfc664c981598b2dd35c3b02827b3eca4ffd8529c03e51f9a73",
+        "editor_actual_exit": null,
+        "editor_handles_released": true,
+        "editor_job_closed": true,
+        "editor_job_zero": true,
+        "errors": [],
+        "import_exit_code": 0,
+        "producer_closed": true,
+        "threads_stopped": true
+      },
+      "command_00": {
+        "commands": 1000,
+        "complete_command_mix": true,
+        "sha256": "b084a3fd40922669a17069c4b35e5f59d37675064dff3f79ac30279ace968c5b",
+        "transport_failures": 0
+      },
+      "diagnostic_result": {
+        "bytes": 5127,
+        "sha256": "b9eb304b3d4f98e80bf4ed9e27e98622d7f1be4e911eede432c43c26e89dece6"
+      },
+      "editor_handle_observations": [
+        {
+          "batch": 0,
+          "editor_handles": 565,
+          "max_status_gap_ms": 541.47,
+          "warmup": true
+        },
+        {
+          "batch": 1,
+          "editor_handles": 563,
+          "max_status_gap_ms": 728.622,
+          "warmup": true
+        },
+        {
+          "batch": 2,
+          "editor_handles": 559,
+          "max_status_gap_ms": 652.332,
+          "warmup": true
+        },
+        {
+          "batch": 3,
+          "editor_handles": 555,
+          "max_status_gap_ms": 631.712,
+          "warmup": true
+        },
+        {
+          "batch": 4,
+          "editor_handles": 555,
+          "max_status_gap_ms": 549.06,
+          "warmup": true
+        },
+        {
+          "batch": 5,
+          "editor_handles": 561,
+          "max_status_gap_ms": 642.433,
+          "warmup": false
+        }
+      ],
+      "eligible_for_dataset": false,
+      "failure": {
+        "code": "CAMPAIGN_RETAINED_COUNTER_GROWTH",
+        "completed_batches": 6,
+        "phase": {
+          "batch": 5,
+          "phase": "joint_observation"
+        },
+        "sha256": "7554063405a69b837915d07267d9f92462c8087c0eb0c36df7b0963715cc0a95"
+      },
+      "formal_acceptance": false,
+      "limit_batches": 7,
+      "natural_exit_proven": false,
+      "owner_process_exit": {
+        "exit_code": 1,
+        "pid": 26036
+      },
+      "root_relative": ".local/reviews/gt06-s103-prefix-01",
+      "run_id": "gt06-s103-prefix-01"
+    }
+  ],
+  "schema_id": "hh-studio.gt06-s103-bounded-diagnostic-summary",
+  "schema_version": "1.0.0",
+  "source_checkpoint": "56bfd448e83aa2512c0c2561e8e1a29f12134360",
+  "source_closure_sha256": "7635a470cef554c1a60e1d9427f59998737d3bb829c3a1f134e426cdf9275467",
+  "source_file_count": 53
+}
