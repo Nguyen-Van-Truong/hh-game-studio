@@ -1,5 +1,5 @@
 HH STUDIO — PLAN 1/3: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 19-09-2026, Asia/Saigon | Revision S111 | TRIỂN KHAI THEO GATE
+Ngày 19-09-2026, Asia/Saigon | Revision S112 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -16,7 +16,7 @@ STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng
 
 CURRENT_VALID_WP=GT-06
 EXECUTION_AUTHORIZATION=OWNER_APPROVED_GATED
-IMPLEMENTATION=GT06_S108_OWNED_GUI_THREAD_ATTRIBUTION_DIAGNOSTIC_COMPLETE_NO_REPRODUCTION
+IMPLEMENTATION=GT06_S111_STATIC_ATTRIBUTION_COMPLETE_JOURNAL_RELOAD_BOUNDARY_REVIEW_PENDING
 GT01_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260913
 GT01_PENDING=NONE
 GT01_PIN_DECISION=GODOT_4.7.2_STABLE_OFFICIAL
@@ -25,7 +25,7 @@ RUNTIME_ACCEPTANCE=GT01_GT02_GT03_GT04_GT05_ACCEPTED
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S111
+PLAN_REVISION=S112
 EXECUTION_MODE=COORDINATOR_THREE_ASTRA_ULTRA_OWNER_20260918
 SUBAGENTS_ENABLED=3
 GT02_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260916_S46
@@ -54,7 +54,7 @@ GT05_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260917_S64
 GT05_REVIEW_STATUS=TWO_INDEPENDENT_PASS_TICK_YES_S64
 GT05_CHECKPOINT_COMMIT=808d8ba
 GT05_LAST_TESTED_SOURCE_CLOSURE=c141d54b80022ca7fefdf81f83e7e1078d3cc6aa43954831f82bb3178338a135
-GT06_EVIDENCE_STATUS=S102_FORMAL_FAILED; S106_PREFIX_NON_REPRODUCED; S107_PREVIEW_COST_OBSERVED; S108_03_BOUNDARY_CAPTURED_NO_REPRODUCTION; S110_FORMAL_FAILED_ADMISSION_UNKNOWN; ZERO_ACCEPTED_FULL_RUNS
+GT06_EVIDENCE_STATUS=S102_FORMAL_FAILED; S106_PREFIX_NON_REPRODUCED; S107_PREVIEW_COST_OBSERVED; S108_03_BOUNDARY_CAPTURED_NO_REPRODUCTION; S110_FORMAL_FAILED_ADMISSION_UNKNOWN; S111_STATIC_ATTRIBUTION_COMPLETE; ZERO_ACCEPTED_FULL_RUNS
 GT06_WORKING_SOURCE_STATUS=S102_FROZEN_53_RUNTIME_FILES_UNCHANGED
 GT06_LAST_TESTED_SOURCE_CLOSURE=7635a470cef554c1a60e1d9427f59998737d3bb829c3a1f134e426cdf9275467
 GT06_CURRENT_SOURCE_CLOSURE=7635a470cef554c1a60e1d9427f59998737d3bb829c3a1f134e426cdf9275467
@@ -62,14 +62,16 @@ GT06_SOURCE_CHECKPOINT=56bfd448e83aa2512c0c2561e8e1e29f12134360
 GT06_PROFILE_SHA256=0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85
 GT06_BENCHMARK_CAMPAIGN=gt06-s110-formal-01
 GT06_BENCHMARK_STATUS=FAILED_20260919T081223Z_ADMISSION_UNKNOWN; S110_FRESH_STOCK_SOURCE_TERMINAL_FAILURE; ZERO_ACCEPTED_FULL_RUNS
-GT06_ACTIVE_DIAGNOSTIC=NONE; S107_COMPLETED; S108_01_STOPPED_READY0_MISSING_GUI_TOPOLOGY; S108_02_STOPPED_READY0_SECONDARY_GUI_TIDS; S108_03_COMPLETED_BOUNDARY_CAPTURED; S110_TERMINAL_FAILED_PRESERVED; S111_ATTRIBUTION_PENDING
-GT06_NEXT_ACTION=S110 raw is sealed under zdoc/reviews/20260919-gt06-s110-admission-timeout. It failed at batch5 command inspect.455 with ADMISSION_UNKNOWN after an unchanged 2s /v1/commands getresponse timeout (2085.5802ms); batches0–4 completed but there is no accepted full run. Host/Job/handles cleanup is recorded, editor target exit remains UNKNOWN. Keep S102/S108/S110 evidence separate; do not claim PASS, no-leak, root cause, or retry formal GT06 until a static attribution or bounded diagnostic distinguishes the command-lane boundary. Do not change timeout, gates, baseline, profile, source, priority, or RSS policy.
+GT06_ACTIVE_DIAGNOSTIC=NONE; S107_COMPLETED; S108_01_STOPPED_READY0_MISSING_GUI_TOPOLOGY; S108_02_STOPPED_READY0_SECONDARY_GUI_TIDS; S108_03_COMPLETED_BOUNDARY_CAPTURED; S110_TERMINAL_FAILED_PRESERVED; S111_STATIC_ATTRIBUTION_COMPLETE; S112_REPAIR_BOUNDARY_REVIEW_PENDING
+GT06_NEXT_ACTION=S111 offline sidecar is recorded at zdoc/reviews/20260919-gt06-s111-attribution. On an immutable S110 journal copy (5797257 bytes, 8292 lines), five Journal._reload calls took 2764.194–3117.428ms (median 2830.921ms) and five lookup calls 2855.873–2982.168ms (median 2901.917ms), crossing the unchanged 2s transport boundary; this is static local evidence supporting a journal reload/serialization boundary hypothesis, not engine root cause, leak, PASS, or formal data. Journal-index 14/14, disk-index 5/5 and transport 13/13 tests pass. Keep S110 raw/manifest immutable; review a narrow repair candidate preserving lock/fsync/dedupe/receipt semantics before any fresh bounded diagnostic. Do not alter timeout, gates, baseline, profile, source, priority, or RSS policy; no formal retry.
 GT06_S109_DIFFERENTIAL_REVIEW=AUTHORITY0; S102 native outlier lacks save_scene return timestamp. S108-03 did not reproduce it under the same base closure/profile/workstation, but its timed runtime is an instrumented overlay (not byte-identical stock benchmark_native.gd). S110 then failed on an independent stock command-lane admission timeout at batch5; this does not establish engine causation or authorize a retry. See zdoc/reviews/20260919-gt06-s108-coordinator/s109-differential-review.json and zdoc/reviews/20260919-gt06-s110-admission-timeout/failure-analysis.json. Next useful work is static/read-only attribution of the timeout boundary, followed by one bounded fresh diagnostic only if it can distinguish the boundary; preserve original gates and timed runtime.
-GT06_DIAGNOSTIC_EXCLUSION=All instrumented diagnostics and failed/partial prefixes S70-S108 are excluded from F13/F14; no PASS/no-leak/root-cause inference.
+GT06_S111_STATIC_ATTRIBUTION=AUTHORITY0; offline copy-only Journal reload/lookup probe and protocol tests are recorded in zdoc/reviews/20260919-gt06-s111-attribution (probe 9a63579f45f8cd6e7ce3dee223480945d29ce3d000c71a81743eecfc70d03b9b; tests 2888fcc1624078af23a01b380d1348a2f6de25e83a7b65ff64041bb6c3ec9bd6). It supports a local reload/fsync cost crossing 2s but cannot establish universal S110 causation or acceptance. A repair boundary review is pending.
+GT06_DIAGNOSTIC_EXCLUSION=All instrumented diagnostics, static sidecars and failed/partial prefixes S70-S111 are excluded from F13/F14; no PASS/no-leak/root-cause inference.
 
-TIẾN ĐỘ HIỆN HÀNH — S111, ngày 19-09-2026 (run timestamps UTC)
+TIẾN ĐỘ HIỆN HÀNH — S112, ngày 19-09-2026 (run timestamps UTC)
 GT01–05 ACCEPTED; GT06 IN_PROGRESS; GT07–10 chưa mở. Zero accepted fullruns.
-Runtime53/profile giữ S102. Checkpoint S107helperf95fb8cc/result5916c693; S110 fresh stock campaign dispatch 07:58:51Z and terminal failure at 08:12:23Z. Failure packet manifest=9517e94379b521e4451c43066388ad0e74ca0e7f397a3e82d45df1ff208ba0b7; analysis=d8a3d95704e3ac066d63cde967905395fb59ab8da47a6d1567e28ee316792ea6.
+Runtime53/profile giữ S102. Checkpoint S107helperf95fb8cc/result5916c693; S110 fresh stock campaign dispatch 07:58:51Z and terminal failure at 08:12:23Z. Failure packet manifest=ea96eca041ecbd9e67ae06c198324dea486843fa743689b8297ff2c5a635fcb5; analysis=9f0a11087aeb9e3ad0f75713ba88d9abbd3c954508a940d6cf4fe56e581424ae.
+S111 static attribution is derived only: `journal-reload-probe.json` SHA256 9a63579f45f8cd6e7ce3dee223480945d29ce3d000c71a81743eecfc70d03b9b; `test-results.json` SHA256 2888fcc1624078af23a01b380d1348a2f6de25e83a7b65ff64041bb6c3ec9bd6; README SHA256 c643e089199cb4ae6ed3f950614049e375c5eb4d3f8e96865608acbc15e85d39. The sidecar did not run Godot or a benchmark and is excluded from F13/F14.
 S110 is terminal FAILED (scheduler state3/result1, instances empty); receipt/state is scheduler evidence only. Raw and supervisor evidence are preserved; no S110 process remains. The failure is a command-lane transport timeout, not proof of engine root cause. Do not run another engine/test/hash audit beside attribution work.
 S108-01 dừng ở READY0 trước batch0 với S108_AMBIGUOUS_GUI_THREAD; S108-02 giữ topology
 (main TID8840, secondary TID15316); S108-03 đã bind HWND chính và hoàn tất b0–6.

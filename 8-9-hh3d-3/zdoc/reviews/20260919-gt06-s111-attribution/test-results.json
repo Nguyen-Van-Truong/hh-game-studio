@@ -1,0 +1,24 @@
+{
+  "schema": "s111.attribution.test-results.v1",
+  "source_closure": "7635a470cef554c1a60e1d9427f59998737d3bb829c3a1f134e426cdf9275467",
+  "tests": [
+    {
+      "exit_code": 0,
+      "cases": 14,
+      "command": "python -m unittest discover -s 8-9-hh3d-3/studio/tests/replay -p test_journal_index.py -v"
+    },
+    {
+      "exit_code": 0,
+      "cases": 5,
+      "command": "python -m unittest discover -s 8-9-hh3d-3/studio/tests/replay -p test_disk_journal_index.py -v"
+    },
+    {
+      "exit_code": 0,
+      "cases": 13,
+      "command": "python -m unittest discover -s 8-9-hh3d-3/studio/tests/replay -p test_transport.py -v"
+    }
+  ],
+  "engine_run": false,
+  "formal_acceptance": false,
+  "note": "Static protocol tests only; no Godot engine or benchmark campaign."
+}
