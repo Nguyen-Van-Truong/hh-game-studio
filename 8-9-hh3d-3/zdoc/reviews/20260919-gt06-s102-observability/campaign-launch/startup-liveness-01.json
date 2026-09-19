@@ -1,0 +1,50 @@
+{
+  "observed_utc": "2026-09-19T01:08:23.2353046Z",
+  "formal_acceptance": false,
+  "campaign_id": "gt06-s102-campaign-01",
+  "source_checkpoint": "56bfd448e83aa2512c0c2561e8e1a29f12134360",
+  "source_closure_sha256": "7635a470cef554c1a60e1d9427f59998737d3bb829c3a1f134e426cdf9275467",
+  "task_status": {
+    "schema": "HH-GT06-TASK-STATUS-1",
+    "task_path": "\\HHStudio.GT06.gt06-s102-campaign-01",
+    "campaign_id": "gt06-s102-campaign-01",
+    "mode": "campaign",
+    "launch_number": 1,
+    "state": 4,
+    "last_run_time": "2026-09-19T08:07:43",
+    "last_task_result": 267009,
+    "instances": [
+      {
+        "instance_guid": "{AC637B9E-F4F1-4F2E-936A-0EDB0E2A4B7E}",
+        "state": 4,
+        "scheduler_engine_pid": 37044
+      }
+    ],
+    "output_directory": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s102-campaign-01-supervisor",
+    "formal_acceptance": false,
+    "status_scope": "Scheduler state only; not actual process exit or owned-tree proof"
+  },
+  "live_processes": [
+    {
+      "pid": 37044,
+      "live": true,
+      "executable": "C:\\Users\\truon\\AppData\\Local\\Programs\\Python\\Python311\\pythonw.exe",
+      "start_utc": "2026-09-19T01:07:43.1741011Z",
+      "process_start": "windows:134342536631741011"
+    },
+    {
+      "pid": 32404,
+      "live": true,
+      "executable": "C:\\Users\\truon\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+      "start_utc": "2026-09-19T01:07:45.0056822Z",
+      "process_start": "windows:134342536650056822"
+    },
+    {
+      "pid": 14312,
+      "live": true,
+      "executable": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\tooling\\godot-4.7.2-stable\\Godot_v4.7.2-stable_win64.exe",
+      "start_utc": "2026-09-19T01:07:52.2446194Z",
+      "process_start": "windows:134342536722446194"
+    }
+  ]
+}

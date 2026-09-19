@@ -16,7 +16,7 @@ STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng
 
 CURRENT_VALID_WP=GT-06
 EXECUTION_AUTHORIZATION=OWNER_APPROVED_GATED
-IMPLEMENTATION=GT06_S102_OBSERVABILITY_VALIDATED_READY_FOR_FRESH_CAMPAIGN
+IMPLEMENTATION=GT06_S102_FORMAL_CAMPAIGN_WITH_BOUNDED_OBSERVABILITY_RUNNING
 GT01_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260913
 GT01_PENDING=NONE
 GT01_PIN_DECISION=GODOT_4.7.2_STABLE_OFFICIAL
@@ -54,62 +54,78 @@ GT05_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260917_S64
 GT05_REVIEW_STATUS=TWO_INDEPENDENT_PASS_TICK_YES_S64
 GT05_CHECKPOINT_COMMIT=808d8ba
 GT05_LAST_TESTED_SOURCE_CLOSURE=c141d54b80022ca7fefdf81f83e7e1078d3cc6aa43954831f82bb3178338a135
-GT06_EVIDENCE_STATUS=S100_IMPORT_WALL_LIMIT_20S_ZERO_BATCHES_NO_ACCEPTANCE
-GT06_WORKING_SOURCE_STATUS=S102_SOURCE53_TESTED130_PREFLIGHT_ACTUAL_EXIT0_READY_TO_CHECKPOINT
-GT06_LAST_TESTED_SOURCE_CLOSURE=cfc4b55a5407891bfd54d22d9f1ac45a74b6c744898199a0e4690d6230a6c1d6
+GT06_EVIDENCE_STATUS=S102_130_TESTS_AND_OWNED_PREFLIGHT_PASS_FULL_CAMPAIGN_PENDING_NO_ACCEPTANCE
+GT06_WORKING_SOURCE_STATUS=S102_FROZEN_53_RUNTIME_FILES_CAMPAIGN_ACTIVE
+GT06_LAST_TESTED_SOURCE_CLOSURE=7635a470cef554c1a60e1d9427f59998737d3bb829c3a1f134e426cdf9275467
 GT06_CURRENT_SOURCE_CLOSURE=7635a470cef554c1a60e1d9427f59998737d3bb829c3a1f134e426cdf9275467
-GT06_SOURCE_CHECKPOINT=PENDING_S102_CHECKPOINT; PRIOR_RUNTIME4293acf2d628
-GT06_BENCHMARK_CAMPAIGN=gt06-s100-campaign-01
-GT06_BENCHMARK_STATUS=TERMINAL_FAILED_IMPORT_20_203S_NO_ACTIVE_BENCHMARK
-GT06_ACTIVE_DIAGNOSTIC=NONE_RUNNING; S102_OWNED_PREFLIGHT_COMPLETED_20HTTP_IMPORT_EXIT0_CLEAN
-GT06_FULL_CAMPAIGN=gt06-s100-campaign-01; LAUNCH1_FAILED_IMPORT; ZERO_BATCHES; FRESH_ID_REQUIRED_IF_SOURCE_CHANGES
+GT06_SOURCE_CHECKPOINT=56bfd448e83aa2512c0c2561e8e1a29f12134360
+GT06_BENCHMARK_CAMPAIGN=gt06-s102-campaign-01
+GT06_BENCHMARK_STATUS=LAUNCH1_DISPATCH_20260919T010743Z; LIVE_CHECK_010823Z_CONFIRMED_SUPERVISOR_HOST_EDITOR; CURRENT_STATUS_REQUERY_REQUIRED
+GT06_ACTIVE_DIAGNOSTIC=NONE; S102_FORMAL_CAMPAIGN_ACTIVE
+GT06_FULL_CAMPAIGN=gt06-s102-campaign-01; LAUNCH1; SOURCE53_7635a470cef554c1a60e1d9427f59998737d3bb829c3a1f134e426cdf9275467
 GT06_S98_CLEANUP_STATUS=DIAGNOSTIC_ZERO_JOBS_HANDLES_RELEASED_BUT_EDITOR_TARGET_EXIT_MISSING_SUPERVISOR_EXIT_MISSING_SCHEDULER_STATE3_RESULT1
-GT06_NEXT_ACTION=Checkpoint frozen source53 then launch fresh gt06-s102-campaign-01 with original profile and all gates. Bounded HTTP/import attribution is now part of the runner; no latency/rootcause fix is claimed.
+GT06_NEXT_ACTION=Query live scheduler/process identity and short logs for S102; keep source/profile/workstation fixed. Healthy: wait by heartbeat. Terminal: preserve and verify original dataset/gates plus HTTP/import sidecars before attribution, retry or two final critics.
 GT06_S98_WORKSTATION_PREFLIGHT=workstation-attribution-preflight-01; SHA256=28609498f97969d1609b69c50b84c30c60e1cc7c1379ee72cbfa4cc3d880c5eb; READ_ONLY_POST_TERMINAL_NO_OWNED_WORKLOAD; CAUSALITY_UNAVAILABLE; NO_ACCEPTANCE
 GT06_S99_COMMAND_DIAGNOSTIC=gt06-s99-command-residency-01; COMMAND_ONLY_35_BATCH; COMPLETED_35_OF_35; MAX_GAP_OBSERVED=1591.3252MS_BATCH25; OWNER_WRAPPER_EXIT0; CLEANUP_VERIFIED; FORMAL_ACCEPTANCE=FALSE; ELIGIBLE_FOR_DATASET=FALSE; SUMMARY_SHA256=96714640aa7a4f4de326bbe62a02c83bf271768c9d72856da98b9872345d06c5
 GT06_S88_SCHEDULER_TASK=OBSERVED_ABSENT_20260918; historic_delete_report_retained_in_chat; durable_delete_receipt_missing
 GT06_S90_DIAGNOSTIC=gt06-s90-lifecycle-attribution-01; preflight=gt06-s90-lifecycle-attribution-preflight-06; five_partial_batches; interrupted_before_batch5_capture; formal_acceptance=false; eligible_for_dataset=false
 GT06_DIAGNOSTIC_EXCLUSION=S81-S90 diagnostic and partial/failure prefixes are excluded from F13/F14 acceptance datasets; see s83-mapping requirements and each packet manifest.
 
-TIẾN ĐỘ HIỆN HÀNH — S102, ngày 19-09-2026 (mốc run ghi UTC)
+TIẾN ĐỘ HIỆN HÀNH — S102, ngày19-09-2026 (mốc run ghi UTC)
 GT01–05 ACCEPTED; GT06 IN_PROGRESS; GT07–10 chưa mở. Chưa đủ10freshpairs.
-Không có engine/benchmark đang chạy tại thời điểm hoàn tất preflight. S100 đã giữ
-151exactrawfiles, terminalFAILED/cleanupverified/taskretired; không batchPASS.
+Source checkpoint56bfd448,53runtimeclosure7635a470cef554c1a60e1d9427f59998737d3bb829c3a1f134e426cdf9275467;
+profile giữ nguyên0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85.
 
-Ba probe S100 đã xong: HTTP200commands maxgap446.3703ms/lookup382.548ms,
-target/helperexit0/treeclean; import5.235s/45samples/exits0/cleanupclean;
-streaming-read thay đổi chỉ tiết kiệm khoảng2.3ms trên warmcachehash, nên giữ
-journal. Không tái hiện hay chứng minh nguyên nhân S98lookup2s/S100import20s.
-Raw/kết quả ở reviews/20260919-gt06-s100-recovery; không dataset nghiệm thu.
+HIỆN HÀNH gt06-s102-campaign-01 launch1, Windows task
+\HHStudio.GT06.gt06-s102-campaign-01; dispatch2026-09-19T01:07:43Z.
+Raw studio/.local/reviews/gt06-s102-campaign-01 và sibling-supervisor.
+Query01:08:23Z: state4/mộtinstance; supervisor37044/host32404/editor14312
+sống, start/executable đúng, hostbatch0commands/nativeHOST_START, stderr0.
+Warmupbatch0 đã hoàn chỉnh73.598s,100native, maxjointgap862.096ms; ObjectDB
+71128/resources6. Host đangbatch1 lúc tail; prefixkhôngPASS/no-leak/ETAtổng.
+Đây là quan sát lịch sử, phải query sống mới trước khi kết luận. Receipt ở
+reviews/20260919-gt06-s102-observability/campaign-launch. Không source/helper/
+profile/workstation changes, không engine/test/heavyhash cạnh phép đo.
 
-Đã tích hợp bounded phase/startup observation trực tiếp vào formal runner,
-để lần lỗi tiếp theo có attribution cùng workload thay vì lặp diagnostic dài.
-Đây là sửa thiếu evidence, không claim sửa latency/rootcause. HTTP8192events/
-64active và firstlookupwindow; import100ms/max256samples, đóng trước baseline.
-Mọi overhead vẫn tính trong time/RSS; không nới profile/gate/20simport/baseline.
-Hai module mới làm closure53files;130/130testpass và ownedpreflight đãxong.
-Import5.016s/52samples target30408/helperexit0;20HTTP maxgap54.4386ms;
-host24852/helper23568exit0/Jobszero+closed/handlesreleased/pinsunchanged.
-Chưa launch campaign; source đang chốt checkpoint.
-Ba worker implementation/preflight không là final critics. Chi tiết quyết định,
-cleanup/error preservation và lessons ở reviews/20260919-gt06-s102-observability.
+Đã xong130/130affectedtests, PID26092actual0/13.032s/sourceunchanged.
+Ownedpreflight run01: importPID30408/nativehelperexit0,5.016s/52samples;
+host24852/helper23568exit0;20HTTP maxgap54.4386ms/effects2→4. Jobszero/closed,
+handles/probes/threads/listeners/index sạch, stderr0, source/helper/binary pins
+khớp.119selectedfiles và53runtimeindex kiểm byteexact trước commit56bfd448.
+Đây là supplemental, không fullbatch/nativecycle/memorybenchmark acceptance.
 
-Tiếp: targeted tests →owned import+20HTTPpreflight →freeze/checkpoint53source
-→fresh gt06-s102-campaign-01 với nguyên10pairs×35batch,5warmup+30measured,
-1000HTTP+100native/batch. Không sửa source giữa phép đo. Failure mới phải giữ
-raw/sidecars/actualexits/Jobs/handles/Stop/source trước khi chẩn đoán; không retry
-mù. Sidecar lỗi sau engine xong thì repair derived trên raw đủ bằng chứng.
+S102 giữ bounded HTTP8192events/64active/firstLOOKUPfailure và import100ms/
+max256samples đóng trước baseline, sidecars bindrun/source/profile/context/PID.
+Mọi overhead nằm trong time/RSS; không nới20simport/workload/gate/baseline.
+Chỉ đổi benchmarkPython3files+2modules; core/journal/native/profile không đổi.
+Sửa thiếu attribution cùngworkload, KHÔNG chứng minh đã sửa nguyên nhân2s/
+startup20s. Raw snapshot được giữ trước khi validator từ chối; primaryerror/cause
+và cleanupsecondaryerrors giữ nguyên, terminal ghi importobserver postretry.
+Ba implementationworkers đã xong; không thay hai finalcritics.
 
-Giữ mọi failed evidence S70–S100, S97reader24nativecases và S99command35batch
-chỉ supplemental. Không trộn partialsamples hoặc tự suy no-leak từ no-growth.
-Reuse functional đúng dependency; đủ dataset/hashes/actualtarget+helperexits/
-trees/handles mới freeze finalmanifest+requirement→evidence; hai critic MỚI
-samehash PASS/TICK=yes rồi coordinator ACCEPT. Sau đó GT07→GT10 tuần tự;
-GT08Androidmáythật hardgate. HHWorldS23/SuperagentSA2 riêng sauGT10.
+S1003shortprobes xong: HTTP200 maxgap446.3703ms/lookup382.548ms/exits0/clean;
+import5.235s/45samples/exits0/clean; hashreader chỉ tiết kiệm2.3ms warmcache,
+nên giữ journal.198rawfilehash/68portable ởS100short-probes-inventory,
+SHA25609ec651e5fd9bd29f3a627c1e18779656a5f8690a0b7b32495dd10e46f056a4f.
+S100fullcampaignFAILEDimport20.203s/trướcbatch0/nativeexitUNKNOWN/helper2,
+cleanupverified/taskretired;151rawfailuremanifest4b645aa18585f0878ac9ac868215c5bf3b9ba00b1043767a2dfe62ed32c64e51.
+Giữ mọi failures S70–S100; S97reader24nativecases/S99command35batch supplemental.
+Không trộn partialsamples, không suy no-leak từno-growth, không retry mù.
 
-Lịch duy nhất ti-p-t-c-hh3d-tools sẽ theo trạng thái mới, không tạo trùng.
-Chưa có ETA toànplan; không hứa xong trước sáng. ArchiveS101 giữ nguyên bytes,
-AUTHORITY=0: reviews/20260919-gt06-s102-observability/tools-plan-s101.txt,
+Tiếp:10freshpairs×35batch,5warmup+30measured,1000HTTP+100native/batch.
+Healthy thì yield theo lịch10phút, ETA từ completebatch và command/native riêng.
+Dựa S99command78.5phút cộngnative, dự toán trướcmeasurement khoảng90–120phút/
+cặp và15–20giờ cho10cặp nếu không lỗi; không phải cam kết và chưa gồmGT07–10.
+Terminal phải kiểm dataset/hashes/sidecars/actualtarget+helperexits/trees/Jobs/
+handles/allattempts/Stop. Collector lỗi sauenginexong: sửa derived từraw đủchứngcứ.
+Reuse functional exactdependency; đủDoD mới freeze finalmanifest+requirement→
+evidence, hai critic MỚI độc lập samehash PASS/TICK=yes rồi coordinatorACCEPT.
+GT07→GT10tuầntự;GT08Androidmáythật hardgate;HHWorld/Superagent riêngsauGT10.
+
+Lịch duy nhất ti-p-t-c-hh3d-tools theo S102, không tạo trùng. Máy/app phảihoạtđộng;
+chưa ETAtoànplan, khônghứa xong trước sáng. Lessons/decision/coordinatorvalidation
+ởreviews/20260919-gt06-s102-observability. ArchiveS101 byteexact/AUTHORITY0:
+reviews/20260919-gt06-s102-observability/tools-plan-s101.txt,
 SHA256=638e2eb6a79ddd32b188696e4726cf94bbf58e10df6bbbc8d89d03e87e88c928.
 
 Rà phạm vi claim S76: GT-01–05 ACCEPTED theo fixture/catalog đã công bố,

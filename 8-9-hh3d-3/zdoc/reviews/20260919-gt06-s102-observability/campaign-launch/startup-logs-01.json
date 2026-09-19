@@ -1,0 +1,44 @@
+{
+  "formal_acceptance": false,
+  "historical_observation": true,
+  "logs": {
+    "host": {
+      "stdout.txt": {
+        "bytes_observed": 9059,
+        "last_lines": [
+          "HH_GT06_CAMPAIGN_PROGRESS {\"run_id\": \"gt06-s102-campaign-01.r00.a01\", \"batch\": 0, \"phase\": \"native_cycles\"}",
+          "HH_GT06_CAMPAIGN_PROGRESS {\"run_id\": \"gt06-s102-campaign-01.r00.a01\", \"batch\": 0, \"phase\": \"native_cycles\"}",
+          "HH_GT06_CAMPAIGN_PROGRESS {\"run_id\": \"gt06-s102-campaign-01.r00.a01\", \"batch\": 0, \"phase\": \"native_cycles\"}"
+        ]
+      },
+      "stderr.txt": {
+        "bytes_observed": 0,
+        "last_lines": []
+      }
+    },
+    "editor": {
+      "stdout.txt": {
+        "bytes_observed": 26261,
+        "last_lines": [
+          "HH_GT06_BENCHMARK_HEARTBEAT {\"batch\":0,\"cycle\":97,\"main_thread\":true,\"monotonic_us\":79280320,\"phase\":\"UNDO\",\"pid\":14312,\"run_id\":\"gt06-s102-campaign-01.r00.a01\"}",
+          "HH_GT06_BENCHMARK_HEARTBEAT {\"batch\":0,\"cycle\":98,\"main_thread\":true,\"monotonic_us\":79805004,\"phase\":\"SAVE\",\"pid\":14312,\"run_id\":\"gt06-s102-campaign-01.r00.a01\"}",
+          "HH_GT06_BENCHMARK_HEARTBEAT {\"batch\":0,\"cycle\":99,\"main_thread\":true,\"monotonic_us\":80321559,\"phase\":\"RELOAD_WAIT\",\"pid\":14312,\"run_id\":\"gt06-s102-campaign-01.r00.a01\"}"
+        ]
+      },
+      "stderr.txt": {
+        "bytes_observed": 0,
+        "last_lines": []
+      }
+    },
+    "supervisor": {
+      "stdout.txt": {
+        "bytes_observed": 0,
+        "last_lines": []
+      },
+      "stderr.txt": {
+        "bytes_observed": 0,
+        "last_lines": []
+      }
+    }
+  }
+}
