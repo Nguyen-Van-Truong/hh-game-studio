@@ -16,7 +16,7 @@ STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng
 
 CURRENT_VALID_WP=GT-06
 EXECUTION_AUTHORIZATION=OWNER_APPROVED_GATED
-IMPLEMENTATION=GT06_S121_OFFLINE_BOUNDARY_REVIEW_S119_READER_V2_PORTABLE_SEAL_V2
+IMPLEMENTATION=GT06_S121_OFFLINE_BOUNDARY_REVIEW_S119_READER_V2_PORTABLE_SEAL_V3_REPAIR_REJECTED
 GT01_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260913
 GT01_PENDING=NONE
 GT01_PIN_DECISION=GODOT_4.7.2_STABLE_OFFICIAL
@@ -1278,3 +1278,5 @@ DATE=2026-09-17 Asia/Saigon
 \n
 
 S121 static boundary note: transport._dispatch holds the host lock before lookup; S119 retained server.dispatch had not entered server.lookup when the client lookup timed out, while host.finish held its journal guard through reload/snapshot and append. This is a pinned-code and lifecycle boundary, not proof of disk, OS, scheduler or leak cause. Keep formal GT06 retry closed until a narrow repair and distinguishing bounded diagnostic are reviewed.
+
+S121 candidate repair review: a source-local change moved read-only lookup/archive dispatch outside the host lock and reconciled in-memory state after the durable read. It was rejected and restored before commit because the focused recovery suite produced three regressions: two pending-command socket cuts returned UNKNOWN instead of COMMITTED, and one stop socket cut returned RECOVERY_REQUIRED instead of STOPPED. Fixture-pipe and verified-journal suites stayed green. The negative result is retained at `zdoc/reviews/20260919-gt06-s121-boundary-repair-review.md`; it is AUTHORITY=0, diagnostic-only, and does not justify a formal retry or any gate change.
