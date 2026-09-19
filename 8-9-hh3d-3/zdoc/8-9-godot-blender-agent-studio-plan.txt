@@ -61,7 +61,7 @@ GT06_CURRENT_SOURCE_CLOSURE=7635a470cef554c1a60e1d9427f59998737d3bb829c3a1f134e4
 GT06_SOURCE_CHECKPOINT=56bfd448e83aa2512c0c2561e8e1a29f12134360
 GT06_BENCHMARK_CAMPAIGN=gt06-s102-campaign-01
 GT06_BENCHMARK_STATUS=FAILED_20260919T011926Z_NATIVE_GAP2109.351MS; TASK_RETIRED_012534Z
-GT06_ACTIVE_DIAGNOSTIC=NONE; S103_SAVE_BOUNDARY_PREFIX_HELPERS_IN_PREPARATION
+GT06_ACTIVE_DIAGNOSTIC=S103_STATIC_ONLY; NO_ENGINE_RUNNING; BOUNDED_CHILD_REQUIRED_BEFORE_LAUNCH
 GT06_FULL_CAMPAIGN=gt06-s102-campaign-01; LAUNCH1_FAILED; ZERO_FULL_RUNS; SOURCE53_UNCHANGED
 GT06_S98_CLEANUP_STATUS=DIAGNOSTIC_ZERO_JOBS_HANDLES_RELEASED_BUT_EDITOR_TARGET_EXIT_MISSING_SUPERVISOR_EXIT_MISSING_SCHEDULER_STATE3_RESULT1
 GT06_NEXT_ACTION=Review/freeze S103 additive save-boundary helper; run owned one-batch preflight, then one bounded seven-batch diagnostic prefix if valid. Preserve original gates/source/profile; no blind campaign retry.
@@ -103,13 +103,18 @@ Manifest28a1f859a062001f0624de01a791e231864a46b92a1bfa4e06c4435b5abfef38.
 immutable, scheduler retirement là supplement ngoài packet. Chi tiết: batch-summary,
 code-cause-review, http-attribution và cleanup-review; các review này không critic.
 
-Ba Astra ultra worker đang làm helper độc lập: overlay native, owned prefix harness,
-và bộ đọc boundary. Không sửa formalruntime. Overlay exact-basehash, chỉ instrument
+Ba Astra ultra worker đã tạo helper độc lập: overlay native, reader boundary và
+prefix pin checker. Không sửa formalruntime. Overlay exact-basehash, chỉ instrument
 generated plugin: call entry/return, scene_saved, save frame và process kế tiếp.
-Bounded records; original heartbeat/deadline/gate/workload giữ nguyên. Hiện CHƯA launch.
-Sau static review: một owned preflight1000HTTP+100native, rồi một diagnostic7batch
-0–6 tối đa1200s nếu preflight đủ. Dừng ở original failure hoặc ranh giới prefix;
-forced diagnostic stop không native exit0, không F13/F14, không benchmark PASS.
+Bounded records; original heartbeat/deadline/gate/workload giữ nguyên. Static checks
+đã đạt (reader6/6, overlay8/8, prefix source53/hash check). Chưa launch engine.
+Owned prefix planner kiểm pin và trả BLOCKED_STATIC_ONLY: runner formal hiện chỉ có
+child35batch nên không được gọi trực tiếp cho prefix0–6. Cần bounded child tương
+đương có Stop, actual target/helper exit và zero-tree cleanup trước khi chạy preflight
+1000HTTP+100native hoặc prefix7batch. Không dùng scheduler0/returned exit thay actual.
+Khi runner đủ an toàn, preflight và prefix là diagnostic-only; dừng ở original
+failure hoặc ranh giới prefix, forced diagnostic stop không native exit0, không F13/F14,
+không benchmark PASS.
 Complete boundary records vẫn phân tích được khi termination sau đó là diagnostic;
 record thiếu boundary là UNKNOWN, lifecycle claim giữ riêng. Không đánh heartbeat
 trong scene_saved để che thời gian chậm. Không đổi journal để chữa native gap.
