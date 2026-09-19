@@ -1,0 +1,64 @@
+{
+  "AUTHORITY": 0,
+  "commands_per_batch": 1000,
+  "completed_original_gates": 7,
+  "eligible_for_dataset": false,
+  "engine_runs": 1,
+  "formal_acceptance": false,
+  "limitations": [
+    "No F13/F14",
+    "No repair/no-leak/rootcause claim",
+    "S115 boundary exception intentionally stopped after batch6; this is diagnostic-only",
+    "S110 exact admission interleaving not recreated"
+  ],
+  "native_cycles_per_batch": 100,
+  "owned_cleanup": "child-terminal-cleanup.json records editor owner/job/handles clean; helper exit0; preserve natural-exit scope separately",
+  "schema": "s115.coupled.summary.1",
+  "status": "BOUNDARY_CAPTURED",
+  "status_gap_max_ms": 682.941,
+  "timings": {
+    "coupled.append": {
+      "count": 9821,
+      "thread_cpu_mean_ms": 4.629747479890032,
+      "wall_max_ms": 586.2538,
+      "wall_mean_ms": 13.578895407799614
+    },
+    "coupled.fsync_append": {
+      "count": 9821,
+      "thread_cpu_mean_ms": 0.9036757967620406,
+      "wall_max_ms": 431.7878,
+      "wall_mean_ms": 1.7772297423887693
+    },
+    "coupled.fsync_snapshot_true": {
+      "count": 22455,
+      "thread_cpu_mean_ms": 0.7528946782453797,
+      "wall_max_ms": 333.203,
+      "wall_mean_ms": 0.7076939612558419
+    },
+    "coupled.load": {
+      "count": 1,
+      "thread_cpu_mean_ms": 0.0,
+      "wall_max_ms": 19.8126,
+      "wall_mean_ms": 19.8126
+    },
+    "coupled.reload": {
+      "count": 22456,
+      "thread_cpu_mean_ms": 7.1146074545778415,
+      "wall_max_ms": 343.9318,
+      "wall_mean_ms": 9.025022421624499
+    },
+    "coupled.snapshot_false": {
+      "count": 2,
+      "thread_cpu_mean_ms": 0.0,
+      "wall_max_ms": 0.0827,
+      "wall_mean_ms": 0.06415
+    },
+    "coupled.snapshot_true": {
+      "count": 22456,
+      "thread_cpu_mean_ms": 7.103474572497328,
+      "wall_max_ms": 343.8789,
+      "wall_mean_ms": 8.973668970431
+    }
+  },
+  "transport_failures": 0
+}

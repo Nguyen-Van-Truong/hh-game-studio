@@ -1,0 +1,133 @@
+{
+  "completed_batches": 7,
+  "context": {
+    "file": "context.json",
+    "sha256": "50f7f59e43b05b6e082e5b162e76d2e6f23989e310d7d6da86df401df7b36b39",
+    "size_bytes": 6126
+  },
+  "errors": [],
+  "formal_acceptance": false,
+  "host_actual_exit": null,
+  "observations": {
+    "editor_owner": {
+      "closed": true,
+      "drain_threads_alive": [
+        false,
+        false
+      ],
+      "helper_exit_code": 2,
+      "helper_pid": 40132,
+      "job": {
+        "active_count": 0,
+        "assigned": true,
+        "close_uncertain": false,
+        "closed": true,
+        "configured": true,
+        "create_uncertain": false,
+        "failed_operations": [],
+        "handle_retained": false,
+        "native_error": null,
+        "tainted": false,
+        "zero_observed": true
+      },
+      "present": true,
+      "wrapper_process_handle": {
+        "close_uncertain": false,
+        "closed": true,
+        "handle_retained": false,
+        "required": true
+      }
+    },
+    "editor_probe": {
+      "close_uncertain": false,
+      "handle_retained": false,
+      "present": true
+    },
+    "editor_target": {
+      "actual_target_exit": null,
+      "exit": null,
+      "missing_reason": "TARGET_EXIT_NOT_RECORDED",
+      "natural_exit_not_inferred": true,
+      "start": {
+        "file": "editor-host/process-start.json",
+        "sha256": "5f6137db1b580894c1974102b555797af8c26ec4f8f66eb744c339f915791016",
+        "size_bytes": 14
+      }
+    },
+    "heartbeat_alive": false,
+    "import_observer": {
+      "closed": true,
+      "error_count": 0,
+      "global_held_probe_count": 0,
+      "handle_close_uncertain": false,
+      "handle_retained": false,
+      "present": true,
+      "probe_handles_released": true,
+      "thread_alive": false
+    },
+    "import_target": {
+      "actual_target_exit": {
+        "exit_code": 0,
+        "pid": 17740
+      },
+      "exit": {
+        "file": "import-host/process-exit.json",
+        "sha256": "dd9812a812ef1b08c9aa47ce06aff2e6908d6018b309374b0c00f1d6f9074a22",
+        "size_bytes": 30
+      },
+      "missing_reason": null,
+      "natural_exit_not_inferred": true,
+      "start": {
+        "file": "import-host/process-start.json",
+        "sha256": "ce772ff267c4b5827c4849ddd9377892190658610f5c1cb01983320d15002b8f",
+        "size_bytes": 14
+      }
+    },
+    "producer": {
+      "closed": true,
+      "failed": true,
+      "host": {
+        "closing": true,
+        "control_socket_closed": true,
+        "main_socket_closed": true,
+        "stopped": true,
+        "threads_alive": [
+          false,
+          false,
+          false
+        ]
+      },
+      "journal": {
+        "cache_closed": true,
+        "database_retained": false,
+        "directory_retained": false,
+        "index_retained": false
+      },
+      "observer_probe": {
+        "close_uncertain": false,
+        "handle_retained": false,
+        "present": true
+      },
+      "present": true
+    }
+  },
+  "observed_mono_us": 713621703682,
+  "observed_utc": "2026-09-19T10:56:50Z",
+  "phase": {
+    "batch": 6,
+    "phase": "joint_observation"
+  },
+  "primary_error": {
+    "code": "S115_BOUNDARY_CAPTURED",
+    "stage": "body",
+    "type": "Boundary"
+  },
+  "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+  "run_id": "gt06-s115-coupled-02.r00.a01",
+  "schema_id": "hh-studio.benchmark-child-terminal-cleanup",
+  "schema_version": "1.0.0",
+  "scope": "Post-finally cleanup observations; no benchmark acceptance or natural-exit inference",
+  "self_exit_missing_reason": "NOT_OBSERVABLE_BY_CHILD_TERMINAL_RECORD",
+  "source_closure_sha256": "7635a470cef554c1a60e1d9427f59998737d3bb829c3a1f134e426cdf9275467",
+  "supervisor_actual_exit": null
+}

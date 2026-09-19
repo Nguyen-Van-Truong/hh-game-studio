@@ -1,0 +1,244 @@
+{
+  "disposition": "BOUNDARY_CAPTURED",
+  "eligible_for_dataset": false,
+  "errors": [],
+  "exit_scope": "Outer child may exit0 for captured planned boundary; editor natural exit can be UNKNOWN after owned boundary cleanup.",
+  "formal_acceptance": false,
+  "gates": [
+    {
+      "index": 0,
+      "original_gate": "PASSED"
+    },
+    {
+      "index": 1,
+      "original_gate": "PASSED"
+    },
+    {
+      "index": 2,
+      "original_gate": "PASSED"
+    },
+    {
+      "index": 3,
+      "original_gate": "PASSED"
+    },
+    {
+      "index": 4,
+      "original_gate": "PASSED"
+    },
+    {
+      "index": 5,
+      "original_gate": "PASSED"
+    },
+    {
+      "index": 6,
+      "original_gate": "PASSED"
+    }
+  ],
+  "limits": "Nested wall/CPU spans overlap; Python fsync excludes SQLite internal sync. No I/O/rootcause/no-leak claim.",
+  "pid": 49184,
+  "run_id": "gt06-s115-coupled-02",
+  "schema": "s115.coupled-journal.timings.1",
+  "source_unchanged": true,
+  "timings": {
+    "coupled.append": {
+      "count": 9821,
+      "cpu_sum_ms": 45468.75,
+      "slowest": [
+        {
+          "enclosing_scope": "none",
+          "end_ns": 713129125449000,
+          "start_ns": 713128539195200,
+          "thread_cpu_ms": 15.625,
+          "thread_id": 50068,
+          "wall_ms": 586.2538
+        },
+        {
+          "enclosing_scope": "none",
+          "end_ns": 713016650705800,
+          "start_ns": 713016078525000,
+          "thread_cpu_ms": 15.625,
+          "thread_id": 14488,
+          "wall_ms": 572.1808
+        },
+        {
+          "enclosing_scope": "none",
+          "end_ns": 713236361049800,
+          "start_ns": 713235799506200,
+          "thread_cpu_ms": 15.625,
+          "thread_id": 52632,
+          "wall_ms": 561.5436
+        }
+      ],
+      "wall_max_ms": 586.2538,
+      "wall_sum_ms": 133358.3318
+    },
+    "coupled.fsync_append": {
+      "count": 9821,
+      "cpu_sum_ms": 8875.0,
+      "slowest": [
+        {
+          "enclosing_scope": "append",
+          "end_ns": 713161345303000,
+          "start_ns": 713160913515200,
+          "thread_cpu_ms": 0.0,
+          "thread_id": 50068,
+          "wall_ms": 431.7878
+        },
+        {
+          "enclosing_scope": "append",
+          "end_ns": 713032759721600,
+          "start_ns": 713032381729800,
+          "thread_cpu_ms": 0.0,
+          "thread_id": 50068,
+          "wall_ms": 377.9918
+        },
+        {
+          "enclosing_scope": "append",
+          "end_ns": 713342431444500,
+          "start_ns": 713342112332800,
+          "thread_cpu_ms": 0.0,
+          "thread_id": 29428,
+          "wall_ms": 319.1117
+        }
+      ],
+      "wall_max_ms": 431.7878,
+      "wall_sum_ms": 17454.173300000104
+    },
+    "coupled.fsync_snapshot_true": {
+      "count": 22455,
+      "cpu_sum_ms": 16906.25,
+      "slowest": [
+        {
+          "enclosing_scope": "snapshot_true",
+          "end_ns": 713207139622700,
+          "start_ns": 713206806419700,
+          "thread_cpu_ms": 0.0,
+          "thread_id": 50068,
+          "wall_ms": 333.203
+        },
+        {
+          "enclosing_scope": "snapshot_true",
+          "end_ns": 713337392737300,
+          "start_ns": 713337099069900,
+          "thread_cpu_ms": 0.0,
+          "thread_id": 32460,
+          "wall_ms": 293.6674
+        },
+        {
+          "enclosing_scope": "snapshot_true",
+          "end_ns": 713332309634600,
+          "start_ns": 713332036105000,
+          "thread_cpu_ms": 0.0,
+          "thread_id": 20436,
+          "wall_ms": 273.5296
+        }
+      ],
+      "wall_max_ms": 333.203,
+      "wall_sum_ms": 15891.267899999932
+    },
+    "coupled.load": {
+      "count": 1,
+      "cpu_sum_ms": 0.0,
+      "slowest": [
+        {
+          "enclosing_scope": "none",
+          "end_ns": 712999727273200,
+          "start_ns": 712999707460600,
+          "thread_cpu_ms": 0.0,
+          "thread_id": 45504,
+          "wall_ms": 19.8126
+        }
+      ],
+      "wall_max_ms": 19.8126,
+      "wall_sum_ms": 19.8126
+    },
+    "coupled.reload": {
+      "count": 22456,
+      "cpu_sum_ms": 159765.625,
+      "slowest": [
+        {
+          "enclosing_scope": "none",
+          "end_ns": 713207139766300,
+          "start_ns": 713206795834500,
+          "thread_cpu_ms": 0.0,
+          "thread_id": 50068,
+          "wall_ms": 343.9318
+        },
+        {
+          "enclosing_scope": "none",
+          "end_ns": 713337392865800,
+          "start_ns": 713337087973900,
+          "thread_cpu_ms": 15.625,
+          "thread_id": 32460,
+          "wall_ms": 304.8919
+        },
+        {
+          "enclosing_scope": "none",
+          "end_ns": 713108406580200,
+          "start_ns": 713108122309500,
+          "thread_cpu_ms": 0.0,
+          "thread_id": 50068,
+          "wall_ms": 284.2707
+        }
+      ],
+      "wall_max_ms": 343.9318,
+      "wall_sum_ms": 202665.90349999975
+    },
+    "coupled.snapshot_false": {
+      "count": 2,
+      "cpu_sum_ms": 0.0,
+      "slowest": [
+        {
+          "enclosing_scope": "load",
+          "end_ns": 712999726729300,
+          "start_ns": 712999726646600,
+          "thread_cpu_ms": 0.0,
+          "thread_id": 45504,
+          "wall_ms": 0.0827
+        },
+        {
+          "enclosing_scope": "load",
+          "end_ns": 712999726936700,
+          "start_ns": 712999726891100,
+          "thread_cpu_ms": 0.0,
+          "thread_id": 45504,
+          "wall_ms": 0.0456
+        }
+      ],
+      "wall_max_ms": 0.0827,
+      "wall_sum_ms": 0.1283
+    },
+    "coupled.snapshot_true": {
+      "count": 22456,
+      "cpu_sum_ms": 159515.625,
+      "slowest": [
+        {
+          "enclosing_scope": "reload",
+          "end_ns": 713207139723600,
+          "start_ns": 713206795844700,
+          "thread_cpu_ms": 0.0,
+          "thread_id": 50068,
+          "wall_ms": 343.8789
+        },
+        {
+          "enclosing_scope": "reload",
+          "end_ns": 713337392826000,
+          "start_ns": 713337087987100,
+          "thread_cpu_ms": 15.625,
+          "thread_id": 32460,
+          "wall_ms": 304.8389
+        },
+        {
+          "enclosing_scope": "reload",
+          "end_ns": 713108406535200,
+          "start_ns": 713108122328600,
+          "thread_cpu_ms": 0.0,
+          "thread_id": 50068,
+          "wall_ms": 284.2066
+        }
+      ],
+      "wall_max_ms": 343.8789,
+      "wall_sum_ms": 201512.71039999853
+    }
+  }
+}

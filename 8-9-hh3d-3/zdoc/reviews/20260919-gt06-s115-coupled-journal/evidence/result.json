@@ -1,0 +1,61 @@
+{
+  "elapsed_seconds": 630.219000000041,
+  "eligible_for_dataset": false,
+  "ended_utc": "2026-09-19T10:56:51.532152+00:00",
+  "errors": [],
+  "formal_acceptance": false,
+  "observations": {
+    "execution_unchanged": true,
+    "owner": {
+      "closed": true,
+      "drain_threads_alive": [
+        false,
+        false
+      ],
+      "helper_exit_code": 0,
+      "helper_pid": 21124,
+      "job": {
+        "active_count": 0,
+        "assigned": true,
+        "close_uncertain": false,
+        "closed": true,
+        "configured": true,
+        "create_uncertain": false,
+        "failed_operations": [],
+        "handle_retained": false,
+        "native_error": null,
+        "tainted": false,
+        "zero_observed": true
+      },
+      "present": true,
+      "wrapper_process_handle": {
+        "close_uncertain": false,
+        "closed": true,
+        "handle_retained": false,
+        "required": true
+      }
+    },
+    "source_unchanged": true,
+    "target": {
+      "actual_target_exit": {
+        "exit_code": 0,
+        "pid": 49184
+      },
+      "exit": {
+        "file": "owned/process-exit.json",
+        "sha256": "f97370dc421a5b33e5918b0440b3c9f96b2613212855a9a46c3576ab4bedc47e",
+        "size_bytes": 30
+      },
+      "missing_reason": null,
+      "natural_exit_not_inferred": true,
+      "start": {
+        "file": "owned/process-start.json",
+        "sha256": "a6996482ede294685a0413fbd27c6ba47d91aea7e472cd18da18caefab61a62d",
+        "size_bytes": 14
+      }
+    }
+  },
+  "owned_child_natural_exit0": true,
+  "run_id": "gt06-s115-coupled-02",
+  "schema": "s115.coupled-journal.result.1"
+}
