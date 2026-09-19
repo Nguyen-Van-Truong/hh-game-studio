@@ -1,5 +1,5 @@
 HH STUDIO — PLAN 1/3: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 19-09-2026, Asia/Saigon | Revision S123 | TRIỂN KHAI THEO GATE
+Ngày 19-09-2026, Asia/Saigon | Revision S124 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -16,7 +16,7 @@ STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng
 
 CURRENT_VALID_WP=GT-06
 EXECUTION_AUTHORIZATION=OWNER_APPROVED_GATED
-IMPLEMENTATION=GT06_S123_LOOKUP_REPAIR_COMPATIBILITY_FIXED_RETAINED_COUNTER_BOUNDARY_UNRESOLVED
+IMPLEMENTATION=GT06_S124_LOOKUP_REPAIR_COMPATIBILITY_FIXED_RETAINED_COUNTER_NOT_REPRODUCED
 GT01_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260913
 GT01_PENDING=NONE
 GT01_PIN_DECISION=GODOT_4.7.2_STABLE_OFFICIAL
@@ -25,7 +25,7 @@ RUNTIME_ACCEPTANCE=GT01_GT02_GT03_GT04_GT05_ACCEPTED
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S123
+PLAN_REVISION=S124
 EXECUTION_MODE=COORDINATOR_SOLO_OWNER_LATEST_20260919
 SUBAGENTS_ENABLED=0; FINAL_GATE_STILL_REQUIRES_TWO_INDEPENDENT_CRITICS
 GT02_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260916_S46
@@ -54,7 +54,7 @@ GT05_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260917_S64
 GT05_REVIEW_STATUS=TWO_INDEPENDENT_PASS_TICK_YES_S64
 GT05_CHECKPOINT_COMMIT=808d8ba
 GT05_LAST_TESTED_SOURCE_CLOSURE=c141d54b80022ca7fefdf81f83e7e1078d3cc6aa43954831f82bb3178338a135
-GT06_EVIDENCE_STATUS=S116_FORMAL_FAILED_HOST_STATUS_GAP; S117_01_JOB_READBACK_FAILED_BEFORE_ENGINE; S117_02_IMPORT_WALL_LIMIT_ZERO_BATCHES; S118_IMPORT_VERBOSE_COMPLETED; S117_03_INTERRUPTED_WITHOUT_TERMINAL_RECORD; S119_LOOKUP_BOUNDARY_FAILED_BATCH8; S122_BATCH0_HOST_DIAGNOSTICS_HARNESS_FAILURE; S123_BATCH5_RETAINED_COUNTER_GROWTH; ZERO_ACCEPTED_FULL_RUNS
+GT06_EVIDENCE_STATUS=S116_FORMAL_FAILED_HOST_STATUS_GAP; S117_01_JOB_READBACK_FAILED_BEFORE_ENGINE; S117_02_IMPORT_WALL_LIMIT_ZERO_BATCHES; S118_IMPORT_VERBOSE_COMPLETED; S117_03_INTERRUPTED_WITHOUT_TERMINAL_RECORD; S119_LOOKUP_BOUNDARY_FAILED_BATCH8; S122_BATCH0_HOST_DIAGNOSTICS_HARNESS_FAILURE; S123_BATCH5_RETAINED_COUNTER_GROWTH; S124_BATCH0_6_COUNTER_BOUNDARY_NOT_REPRODUCED; ZERO_ACCEPTED_FULL_RUNS
 GT06_WORKING_SOURCE_STATUS=S122_REPAIR_CANDIDATE_LOCAL_TESTED_NOT_FORMAL
 GT06_LAST_TESTED_SOURCE_CLOSURE=739447bd1d812b7e4e76754d7c6659a2ba9c1bc53e9045f1cfc2f2b6379dbf08
 GT06_CURRENT_SOURCE_CLOSURE=739447bd1d812b7e4e76754d7c6659a2ba9c1bc53e9045f1cfc2f2b6379dbf08
@@ -63,17 +63,17 @@ GT06_SOURCE_FILE_COUNT=53
 GT06_PROFILE_SHA256=0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85
 GT06_BENCHMARK_CAMPAIGN=gt06-s116-formal-01
 GT06_BENCHMARK_STATUS=S116_FAILED_BATCH10_JOINT_OBSERVATION_STATUS_GAP_2041.7971MS; ZERO_ACCEPTED_FULL_RUNS
-GT06_ACTIVE_DIAGNOSTIC=S123_STATIC_CHECK_PASSED; fresh bounded diagnostic `gt06-s122-lookup-repair-01` failed at batch0 HOST_DIAGNOSTICS due recorder-subclass signature incompatibility; fresh `gt06-s123-lookup-repair-01` completed batches0-4 then failed original CAMPAIGN_RETAINED_COUNTER_GROWTH at batch5 (editor handles555->560, ObjectDB71130/resources6, HTTP failures0); raw/cleanup preserved and diagnostics excluded from F13/F14
-GT06_NEXT_ACTION=Analyze the S123 retained-editor-counter boundary with read-only evidence and only make a narrow repair if it distinguishes the failing resource. Do not start formal retry, change timeout, gates, baseline, priority or RSS policy; preserve every failed/partial run and exclude diagnostics from F13/F14.
-GT06_S122_S123_BOUNDARY_STATUS=AUTHORITY0; S122 batch0 was a harness compatibility failure (`TRANSPORT_FAILED` from observed_host_type._lookup signature) with command gap13.171ms and HTTP failures0; corrected source passed93 focused tests and one local bounded batch. S123 fresh diagnostic then passed original gates0-4 and failed at batch5 `CAMPAIGN_RETAINED_COUNTER_GROWTH` with editor handles555→560, ObjectDB71130/resources6, max status gap727.273ms, HTTP failures0, cleanup recorded. See zdoc/reviews/20260919-gt06-s122-lookup-repair/failure-analysis.md and zdoc/reviews/20260919-gt06-s123-lookup-repair/README.md. No leak/rootcause/PASS claim.
+GT06_ACTIVE_DIAGNOSTIC=S124_STATIC_CHECK_AND_12_TESTS_PASSED; fresh `gt06-s122-lookup-repair-01` failed at batch0 HOST_DIAGNOSTICS due recorder-subclass signature incompatibility; fresh `gt06-s123-lookup-repair-01` completed batches0-4 then failed original CAMPAIGN_RETAINED_COUNTER_GROWTH at batch5 (editor handles555->560, ObjectDB71130/resources6, HTTP failures0); fresh `gt06-s124-handle-decay-01` completed batches0-6 with all original gates passed (handles565,557,560,559,555,555,555; ObjectDB71128/resources6; HTTP failures0), then stopped at the planned diagnostic boundary; raw/cleanup preserved and diagnostics excluded from F13/F14
+GT06_NEXT_ACTION=Preserve S123/S124 and retain GT06 IN_PROGRESS; no further engine or formal retry without new discriminating evidence. Do not change timeout, gates, baseline, priority or RSS policy; preserve every failed/partial run and exclude diagnostics from F13/F14.
+GT06_S122_S123_S124_BOUNDARY_STATUS=AUTHORITY0; S122 batch0 was a harness compatibility failure (`TRANSPORT_FAILED` from observed_host_type._lookup signature) with command gap13.171ms and HTTP failures0; corrected source passed93 focused tests and one local bounded batch. S123 fresh diagnostic then passed original gates0-4 and failed at batch5 `CAMPAIGN_RETAINED_COUNTER_GROWTH` with editor handles555→560, ObjectDB71130/resources6, max status gap727.273ms, HTTP failures0, cleanup recorded. S124 same candidate source completed original gates0-6 with editor handles565,557,560,559,555,555,555, ObjectDB71128/resources6, HTTP failures0, cleanup/jobs recorded; no gate failure or post-failure capture occurred. The intermittent series does not prove leak/root cause or authorize a threshold/baseline change. See zdoc/reviews/20260919-gt06-s122-lookup-repair/failure-analysis.md, zdoc/reviews/20260919-gt06-s123-lookup-repair/README.md and zdoc/reviews/20260919-gt06-s124-handle-decay/analysis.md.
 GT06_S109_DIFFERENTIAL_REVIEW=AUTHORITY0; S102 native outlier lacks save_scene return timestamp. S108-03 did not reproduce it under the same base closure/profile/workstation, but its timed runtime is an instrumented overlay (not byte-identical stock benchmark_native.gd). S110 then failed on an independent stock command-lane admission timeout at batch5; this does not establish engine causation or authorize a retry. See zdoc/reviews/20260919-gt06-s108-coordinator/s109-differential-review.json and zdoc/reviews/20260919-gt06-s110-admission-timeout/failure-analysis.json. Next useful work is static/read-only attribution of the timeout boundary, followed by one bounded fresh diagnostic only if it can distinguish the boundary; preserve original gates and timed runtime.
 GT06_S111_STATIC_ATTRIBUTION=AUTHORITY0; base Journal probe 9a63579f45f8cd6e7ce3dee223480945d29ce3d000c71a81743eecfc70d03b9b is historical/offline. It reparses history and cannot explain the live VerifiedJournal path. S112 corrects this interpretation. Current extended test-results23337327a3af7f7c1faf44ae1994612c0e667609bd6596cecdc290eb9bde21b1;68actual cases. Temporary probe drivers lacked frozen execution closures; no formal acceptance.
 GT06_S112_VERIFIED_PATH_ATTRIBUTION=AUTHORITY0; exact VerifiedJournal probe is in zdoc/reviews/20260919-gt06-s111-attribution/verified-journal-probe.json (probe hash a792145018d63f5916a8832d4e2136d2248e97ace7559a5d570ebb9ad8b19420). It shows unchanged service-path lookup under 22ms after initialization; the earlier base Journal timing cannot be applied to ReplayService. Extended static test-results hash 23337327a3af7f7c1faf44ae1994612c0e667609bd6596cecdc290eb9bde21b1 (68 cases); no engine run.
 GT06_DIAGNOSTIC_EXCLUSION=All instrumented/static/supplemental and failed partial runs S70–S119 excluded from F13/F14. S113 reused ID/output twice; first result and initial harness failure lost, remaining result has provenance gaps. Do not reconstruct missing raw or claim PASS/no-leak/rootcause.
 
-TIẾN ĐỘ HIỆN HÀNH — S123, ngày 19-09-2026 (timestamps UTC)
+TIẾN ĐỘ HIỆN HÀNH — S124, ngày 19-09-2026 (timestamps UTC)
 GT01–05 ACCEPTED; GT06 IN_PROGRESS; GT07–10 chưa mở; zero accepted full runs.
-S123 source is checkpoint c4ae9cb2 with 53-file closure 739447bd1d812b7e4e76754d7c6659a2ba9c1bc53e9045f1cfc2f2b6379dbf08; profile and native hashes remain pinned. The S122 candidate compatibility fault is fixed and committed; 93 focused tests plus a local one-batch diagnostic passed. Fresh diagnostic `gt06-s123-lookup-repair-01` then completed batches0–4 and failed the original retained-counter gate at batch5: editor handles555→560, ObjectDB71130/resources6, HTTP failures0, max status gap727.273ms. Cleanup/jobs/handles were recorded; editor target natural exit is UNKNOWN. This is diagnostic-only, excludes F13/F14, and proves neither leak nor root cause.
+S123/S124 use candidate checkpoint c4ae9cb2 with 53-file closure 739447bd1d812b7e4e76754d7c6659a2ba9c1bc53e9045f1cfc2f2b6379dbf08; profile and native hashes remain pinned. The S122 candidate compatibility fault is fixed and committed; 93 focused tests plus a local one-batch diagnostic passed. S123 completed batches0–4 and failed the original retained-counter gate at batch5: editor handles555→560, ObjectDB71130/resources6, HTTP failures0, max status gap727.273ms. Fresh S124 then completed batches0–6 with all original gates passed: editor handles565,557,560,559,555,555,555, ObjectDB71128/resources6, HTTP failures0. Cleanup/jobs/source pins were recorded; S124 host target/helper exited0/0 while bounded editor natural exit remains an explicit gap. Both are diagnostic-only, exclude F13/F14, and prove neither leak nor root cause.
 S116 formal FAILED batch10 statusgap2041.7971ms, lookupgetresponse2004.7701ms;
 lookup cùngID sau đó COMMITTED, nativeACK780.821ms. Raw254copies manifest
 60c927c0df43932ecc950d993509f8e5a79b5f0a309b50e572a9d7f6cf428312 ở

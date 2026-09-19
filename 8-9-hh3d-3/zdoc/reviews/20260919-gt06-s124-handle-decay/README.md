@@ -25,3 +25,16 @@ python -B test_post_failure.py
 If launched, preserve all raw attempts, process identities, actual exits,
 cleanup and Stop records. The candidate's source remains the S122 transport
 repair; the observation files are outside the runtime closure.
+
+## Terminal result
+
+`gt06-s124-handle-decay-01` completed the planned seven-batch bounded prefix
+with all original gate rows recorded as `PASSED`, then stopped at the diagnostic
+boundary. The editor counter series was `565,557,560,559,555,555,555`; the
+S123 transition `555 -> 560` did not occur at its former batch-5 position.
+ObjectDB/resources stayed `71128/6`, HTTP transport failures were zero, and
+the timing summary recorded source pins unchanged. Host target/helper exited
+`0/0`; the editor target's natural exit remains an explicit evidence gap under
+the bounded teardown contract. No post-failure files were expected because no
+original gate failed. The prefix is retained as non-acceptance evidence and
+does not establish no leak, object identity, root cause, or a formal GT06 PASS.
