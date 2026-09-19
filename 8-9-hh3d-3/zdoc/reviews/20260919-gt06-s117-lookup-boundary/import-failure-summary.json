@@ -1,0 +1,29 @@
+{
+  "AUTHORITY": 0,
+  "run_id": "gt06-s117-lookup-boundary-02",
+  "formal_acceptance": false,
+  "eligible_for_dataset": false,
+  "failure": "STAGE_WALL_LIMIT",
+  "gates": 0,
+  "import_target": 6600,
+  "import_natural_exit": null,
+  "import_wrapper_exit": 2,
+  "host_target": 712,
+  "host_exit": 1,
+  "supervisor": 49672,
+  "supervisor_exit": 1,
+  "samples": 142,
+  "target_observed_seconds": 19.9980436,
+  "target_cpu_delta_seconds": 4.828125,
+  "page_fault_delta": 164766,
+  "final_private_commit_bytes": 523206656,
+  "last_milestones": [
+    ".godot/.gdignore"
+  ],
+  "job_zero_closed": true,
+  "probe_handles_released": true,
+  "import_wrapper_native_close": "UNKNOWN_UNRECORDED",
+  "source_unchanged": true,
+  "limits": "CPU progressed until limit; no proof of deadlock, disk or memory causation; faults do not distinguish hard/soft. No runtime repair.",
+  "next": "One fresh import-only verbose diagnostic with original20s/15sCPU/2GiB limits to locate import phase; no coupled/formal retry."
+}

@@ -1,0 +1,89 @@
+{
+  "elapsed_seconds": 29.17200000002049,
+  "eligible_for_dataset": false,
+  "ended_utc": "2026-09-19T12:40:12.397489+00:00",
+  "errors": [
+    {
+      "chain": [
+        {
+          "code": "BENCHMARK_WRAPPER_EXIT",
+          "exception_class": "BenchmarkJobError",
+          "frames": [
+            {
+              "file": "lookup_boundary.py",
+              "line": 129
+            },
+            {
+              "file": "benchmark_job.py",
+              "line": 346
+            },
+            {
+              "file": "benchmark_job.py",
+              "line": 354
+            },
+            {
+              "file": "benchmark_job.py",
+              "line": 46
+            }
+          ]
+        }
+      ],
+      "stage": "parent"
+    }
+  ],
+  "formal_acceptance": false,
+  "observations": {
+    "execution_unchanged": true,
+    "owner": {
+      "closed": true,
+      "drain_threads_alive": [
+        false,
+        false
+      ],
+      "helper_exit_code": 1,
+      "helper_pid": 12352,
+      "job": {
+        "active_count": 0,
+        "assigned": true,
+        "close_uncertain": false,
+        "closed": true,
+        "configured": true,
+        "create_uncertain": false,
+        "failed_operations": [],
+        "handle_retained": false,
+        "native_error": null,
+        "tainted": false,
+        "zero_observed": true
+      },
+      "present": true,
+      "wrapper_process_handle": {
+        "close_uncertain": false,
+        "closed": true,
+        "handle_retained": false,
+        "required": true
+      }
+    },
+    "source_unchanged": true,
+    "target": {
+      "actual_target_exit": {
+        "exit_code": 1,
+        "pid": 712
+      },
+      "exit": {
+        "file": "owned/process-exit.json",
+        "sha256": "33597b59507aeafe7d32e79010ae7e83fcf511f6e44b1d5b6355d64db7732f6e",
+        "size_bytes": 28
+      },
+      "missing_reason": null,
+      "natural_exit_not_inferred": true,
+      "start": {
+        "file": "owned/process-start.json",
+        "sha256": "306217624c101256c3cf5a76d331c1b640eff8d56b2b0f4d0896490b1f6cd655",
+        "size_bytes": 12
+      }
+    }
+  },
+  "owned_child_natural_exit0": false,
+  "run_id": "gt06-s117-lookup-boundary-02",
+  "schema": "S117.coupled-journal.result.1"
+}

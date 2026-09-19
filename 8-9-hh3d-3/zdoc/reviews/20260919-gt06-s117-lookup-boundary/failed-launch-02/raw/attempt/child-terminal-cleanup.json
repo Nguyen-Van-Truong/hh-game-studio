@@ -1,0 +1,70 @@
+{
+  "completed_batches": 0,
+  "context": {
+    "file": "context.json",
+    "sha256": "d45f13fe4468a9f07538ab1e938dc20f2956f3bc0d2cd4ac2081d7426ffd30e2",
+    "size_bytes": 6134
+  },
+  "errors": [],
+  "formal_acceptance": false,
+  "host_actual_exit": null,
+  "observations": {
+    "editor_owner": {
+      "present": false
+    },
+    "editor_probe": {
+      "present": false
+    },
+    "editor_target": {
+      "actual_target_exit": null,
+      "exit": null,
+      "missing_reason": "TARGET_EXIT_NOT_RECORDED",
+      "natural_exit_not_inferred": true,
+      "start": null
+    },
+    "heartbeat_alive": false,
+    "import_observer": {
+      "closed": true,
+      "error_count": 0,
+      "global_held_probe_count": 0,
+      "handle_close_uncertain": false,
+      "handle_retained": false,
+      "present": true,
+      "probe_handles_released": true,
+      "thread_alive": false
+    },
+    "import_target": {
+      "actual_target_exit": null,
+      "exit": null,
+      "missing_reason": "TARGET_EXIT_NOT_RECORDED",
+      "natural_exit_not_inferred": true,
+      "start": {
+        "file": "import-host/process-start.json",
+        "sha256": "58c977d8902030edf5db8a1373f6d582c41c96c1cdb540e6aa6629e582f87cac",
+        "size_bytes": 13
+      }
+    },
+    "producer": {
+      "present": false
+    }
+  },
+  "observed_mono_us": 719820550014,
+  "observed_utc": "2026-09-19T12:40:09Z",
+  "phase": {
+    "batch": -1,
+    "phase": "import"
+  },
+  "primary_error": {
+    "code": null,
+    "stage": "body",
+    "type": "StageFailed"
+  },
+  "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+  "run_id": "gt06-s117-lookup-boundary-02.r00.a01",
+  "schema_id": "hh-studio.benchmark-child-terminal-cleanup",
+  "schema_version": "1.0.0",
+  "scope": "Post-finally cleanup observations; no benchmark acceptance or natural-exit inference",
+  "self_exit_missing_reason": "NOT_OBSERVABLE_BY_CHILD_TERMINAL_RECORD",
+  "source_closure_sha256": "7635a470cef554c1a60e1d9427f59998737d3bb829c3a1f134e426cdf9275467",
+  "supervisor_actual_exit": null
+}

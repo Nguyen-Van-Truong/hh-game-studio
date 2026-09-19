@@ -1,0 +1,46 @@
+{
+  "disposition": "ORIGINAL_FAILURE",
+  "eligible_for_dataset": false,
+  "errors": [
+    {
+      "chain": [
+        {
+          "code": "STAGE_WALL_LIMIT",
+          "exception_class": "StageFailed",
+          "frames": [
+            {
+              "file": "coupled_journal.py",
+              "line": 233
+            },
+            {
+              "file": "run_benchmark_campaign.py",
+              "line": 879
+            },
+            {
+              "file": "run_benchmark_campaign.py",
+              "line": 618
+            },
+            {
+              "file": "native_job.py",
+              "line": 267
+            },
+            {
+              "file": "native_job.py",
+              "line": 196
+            }
+          ]
+        }
+      ],
+      "stage": "campaign"
+    }
+  ],
+  "exit_scope": "Outer child may exit0 for captured planned boundary; editor natural exit can be UNKNOWN after owned boundary cleanup.",
+  "formal_acceptance": false,
+  "gates": [],
+  "limits": "Nested wall/CPU spans overlap; fixed SQLite transaction controls timed separately; Python fsync excludes SQLite internal sync. No I/O/rootcause/no-leak claim.",
+  "pid": 712,
+  "run_id": "gt06-s117-lookup-boundary-02",
+  "schema": "S117.coupled-journal.timings.1",
+  "source_unchanged": true,
+  "timings": {}
+}
