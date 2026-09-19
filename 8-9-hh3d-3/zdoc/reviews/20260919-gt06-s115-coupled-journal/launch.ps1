@@ -1,5 +1,5 @@
 $ErrorActionPreference = 'Stop'
-$s115Launch = Join-Path $PSScriptRoot 'launch-01'
+$s115Launch = Join-Path $PSScriptRoot 'launch-02'
 if (Test-Path -LiteralPath $s115Launch) { throw 'S115_LAUNCH_ALREADY_EXISTS' }
 [void][System.IO.Directory]::CreateDirectory($s115Launch)
 $s115Python = (Get-Command python -ErrorAction Stop).Source

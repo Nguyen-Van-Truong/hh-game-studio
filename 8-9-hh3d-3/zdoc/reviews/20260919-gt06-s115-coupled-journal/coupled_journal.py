@@ -21,7 +21,7 @@ from unittest.mock import patch
 sys.dont_write_bytecode = True
 BASE = Path(__file__).resolve().parent
 ROOT = BASE.parents[2]
-RUN_ID = 'gt06-s115-coupled-01'
+RUN_ID = 'gt06-s115-coupled-02'
 CLOSURE = '7635a470cef554c1a60e1d9427f59998737d3bb829c3a1f134e426cdf9275467'
 NATIVE_HASH = '13e65360cd0bc0033d0ad414fb3238e216b0d6dcc08e57dc7026ec4fc9eb8b95'
 PREFIX_BATCHES = 7
@@ -41,6 +41,13 @@ class Boundary(RuntimeError):
 
 def retained_cleanup_errors(error):
     return [('retained_cleanup', item) for item in getattr(error, 'cleanup_errors', ())]
+
+
+def helper_layout(root, base, run_id):
+    owned = (base / 'owned' / run_id).resolve()
+    if owned.is_relative_to((root / 'studio').resolve()):
+        raise RuntimeError('S115_HELPER_INSIDE_RUNTIME_SCOPE')
+    return owned
 
 
 def boundary_screen(original, sample, baseline, gate_rows):
@@ -67,34 +74,44 @@ def check(root=ROOT):
 def launch():
     util, campaign, sources, support_path, timing_path = check()
     run = ROOT / 'studio/.local/reviews' / RUN_ID
+    owned_helpers = helper_layout(ROOT, BASE, RUN_ID)
+    util.need(not run.exists() and not owned_helpers.exists(), 'S115_FRESH_ID_REQUIRED')
     run.mkdir(exist_ok=False)
     (run / 'attempt').mkdir()
+    owned_helpers.mkdir(parents=True, exist_ok=False)
     execution = {'studio/' + name: digest for name, digest in sources.items()}
     for name, path in (('coupled_journal.py', Path(__file__)), ('support.py', support_path),
                        ('timings.py', timing_path)):
-        target = run / name
+        target = owned_helpers / name
         shutil.copyfile(path, target)
         execution[target.relative_to(ROOT).as_posix()] = util.sha(target)
     freeze = {'schema': 's115.coupled-journal.freeze.1', 'run_id': RUN_ID,
         'source_files': sources, 'source_closure': CLOSURE,
         'native_sha256': NATIVE_HASH, 'profile_sha256': campaign.profile.PROFILE_SHA256,
-        'original_root': str(ROOT), 'prefix_batches': PREFIX_BATCHES,
+        'original_root': str(ROOT), 'helper_root': str(owned_helpers), 'prefix_batches': PREFIX_BATCHES,
         'outer_seconds': OUTER_SECONDS, 'python_sha256': util.sha(Path(sys.executable)),
         'execution_files': execution, 'formal_acceptance': False, 'eligible_for_dataset': False,
         'started_utc': datetime.now(timezone.utc).isoformat(),
         'scope': 'Original campaign prefix, unmodified native, additive host timings; stop at original rejection or after batch6 gate'}
     util.write(run / 'freeze.json', freeze)
-    context = {'run_id': RUN_ID, 'index': 0, 'source_files': sources,
+    campaign_doc = {'schema_id': 'hh-studio.benchmark-campaign-diagnostic', 'schema_version': '1.0.0',
+        'campaign_id': RUN_ID, 'source_files': sources, 'source_closure_sha256': CLOSURE,
+        'profile_sha256': campaign.profile.PROFILE_SHA256, 'formal_acceptance': False,
+        'eligible_for_dataset': False, 'prefix_batches': PREFIX_BATCHES}
+    util.write(run / 'campaign.json', campaign_doc)
+    campaign_sha = util.sha(run / 'campaign.json')
+    context = {'run_id': f'{RUN_ID}.r00.a01', 'index': 0, 'attempt': 1,
+        'source_files': sources,
         'source_closure_sha256': CLOSURE, 'profile_sha256': campaign.profile.PROFILE_SHA256,
-        'formal_acceptance': False, 'eligible_for_dataset': False}
+        'campaign_sha256': campaign_sha, 'formal_acceptance': False, 'eligible_for_dataset': False}
     util.write(run / 'attempt/context.json', context)
-    for name in ('freeze.json', 'attempt/context.json'):
+    for name in ('freeze.json', 'campaign.json', 'attempt/context.json'):
         execution[(run / name).relative_to(ROOT).as_posix()] = util.sha(run / name)
     util.write(run / 'execution-source-files.json', execution)
     owner, capture, errors = None, None, []
     started = time.monotonic()
     try:
-        owner = campaign.BenchmarkProcess([sys.executable, '-B', str(run / 'coupled_journal.py'),
+        owner = campaign.BenchmarkProcess([sys.executable, '-B', str(owned_helpers / 'coupled_journal.py'),
             '--child', str(run)], cwd=run, output=run / 'owned', source_root=ROOT,
             source_files=execution, binary_sha256=freeze['python_sha256'], campaign_host=True)
         while owner.tick() is None:
@@ -139,11 +156,13 @@ def launch():
 
 def child(run):
     run = Path(run).resolve()
-    util = load(run / 'support.py', 's115_support')
-    timing_module = load(run / 'timings.py', 's115_timings')
     freeze = json.loads((run / 'freeze.json').read_bytes())
+    helpers = Path(freeze['helper_root'])
+    util = load(helpers / 'support.py', 's115_support')
+    timing_module = load(helpers / 'timings.py', 's115_timings')
     root = Path(freeze['original_root'])
-    util.need(Path(__file__).resolve() == run / 'coupled_journal.py', 'S115_COPIED_CHILD_REQUIRED')
+    util.need(Path(__file__).resolve() == helpers / 'coupled_journal.py', 'S115_COPIED_CHILD_REQUIRED')
+    util.need(not helpers.resolve().is_relative_to((root / 'studio').resolve()), 'S115_HELPER_INSIDE_RUNTIME_SCOPE')
     execution = json.loads((run / 'execution-source-files.json').read_bytes())
     util.need(all(util.sha(root / p) == h for p, h in execution.items()), 'S115_EXECUTION_DRIFT')
     campaign, _, _, sources = util.load_campaign(root)

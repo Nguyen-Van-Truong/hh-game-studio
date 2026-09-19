@@ -9,6 +9,13 @@ spec.loader.exec_module(probe)
 
 
 class Controls(unittest.TestCase):
+    def test_executable_helper_is_outside_imported_runtime_scope(self):
+        root = Path.cwd()
+        result = probe.helper_layout(root, root / 'zdoc/reviews/probe', 'test')
+        self.assertFalse(result.is_relative_to(root / 'studio'))
+        with self.assertRaisesRegex(RuntimeError, 'S115_HELPER_INSIDE_RUNTIME_SCOPE'):
+            probe.helper_layout(root, root / 'studio/.local/reviews', 'test')
+
     def test_boundary_keeps_original_cleanup_failure(self):
         boundary = probe.Boundary()
         failure = OSError('CLOSE_FAILED')
