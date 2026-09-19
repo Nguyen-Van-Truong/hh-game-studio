@@ -62,13 +62,22 @@ GT06_SOURCE_CHECKPOINT=56bfd448e83aa2512c0c2561e8e1a29f12134360
 GT06_PROFILE_SHA256=0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85
 GT06_BENCHMARK_CAMPAIGN=gt06-s102-campaign-01
 GT06_BENCHMARK_STATUS=FAILED_20260919T011926Z_NATIVE_GAP2109.351MS; TASK_RETIRED_012534Z; ZERO_FULL_RUNS
-GT06_ACTIVE_DIAGNOSTIC=NONE_RUNNING; S106_HELPER_STATIC_PREPARATION
-GT06_NEXT_ACTION=Seal S105 truthful derived evidence; repair collector only in fresh S106 helper with meaningful static tests, helper pins and Stop. One owned one-batch PSS preflight before at most one six-batch comparison. No repeated identical prefixes or formal retry without proven narrow repair. Read separate S106 latency-path research; original gates/profile unchanged.
+GT06_ACTIVE_DIAGNOSTIC=S106_PREFLIGHT01_COMPLETED_20260919T053817Z; NEXT_ONE_BOUNDED_PREFIX
+GT06_NEXT_ACTION=One fresh S106 six-batch two-snapshot prefix after verified preflight; keep runtime/profile/helper fixed. No identical-prefix retry or formal retry without proven narrow repair. Preserve all raw; use source-backed latency research only for a separate justified experiment.
 GT06_DIAGNOSTIC_EXCLUSION=All instrumented diagnostics and failed/partial prefixes S70-S106 are excluded from F13/F14; no PASS/no-leak/root-cause inference.
 
 TIẾN ĐỘ HIỆN HÀNH — S106, ngày 19-09-2026 (run timestamps UTC)
 GT01–05 ACCEPTED; GT06 IN_PROGRESS; GT07–10 chưa mở. Chưa có full benchmark PASS.
-Không Godot/Blender chạy lúc kiểm12:26 local; receipt lịch sử không chứng minh liveness.
+S106 preflight01 đã hoàn tất05:38:17Z:1batch1000HTTP+100native, maxgap628.327ms,
+HTTPfailures0; PSS565entries/target565trước+sau/observer203,11.6259ms/allreleased.
+Outer52460actual0, host51124actual1/helper1 do boundary, import36568actual0,
+editor47496naturalUNKNOWN/helper2; recordedJobs/probes/threads sạch. Import native
+wrapper-close UNKNOWN; outermanagedDispose không thay nativeCloseBOOL. Raw ở
+studio/.local/reviews/gt06-s106-handles-preflight-01 và sibling -outer. Packet50copies
+manifest383c832ae411d1b31596a1228152b0a6608bc81e665b1097f99a077812d0c7e0.
+Independent preflight review xác nhận31refs/18files, source53/frozen6/helper4pins,
+Stop binding, durable gate trướcPSS; không finalcritic, không liveStop exercise.
+Đủ điều kiện cho đúng một prefix6batch, chưa benchmarkPASS/không dataset.
 
 S105 đã kết thúc; runtime/profile giữ nguyên. Năm raw roots được giữ:
 - handles-preflight-01: thiếu import os, chết trước engine; engine_started=true sai.
@@ -100,7 +109,10 @@ classification. Bắt buộc static integration dùng sample/context thật, pre
 một batch có capture, rồi tối đa một prefix sáu batch với baseline4 + terminal5
 kể cả gate5 thành công. Collector UNKNOWN phải giữ lỗi gốc và dừng. Nếu không
 excess/type delta hữu ích, ghi NON_REPRODUCED/UNKNOWN; không tự lặp cùng phép đo.
-Helper mới: reviews/20260919-gt06-s106-handle-boundary/; đang chuẩn bị, chưa chạy.
+Helper mới: reviews/20260919-gt06-s106-handle-boundary/,30/30static tests và
+source53/profile/overlay pins đạt; helperSHA956a1c56d215693fb5828e04b74db04fba45a57bfb0bde12bf76a11c21dcc1a0.
+Preflight đã kiểm thực; chuẩn bị đúng một prefix. Outer observer giữ process handle
+và actual exit, không thêm Job; managedDispose không thay nativeCloseBOOL.
 Ba Astra ultra độc lập: packet S105, collector S106+static tests, native save path
 research. Đây là implementation/preflight, không thay critic nghiệm thu.
 

@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260919-gt06-s106-handle-boundary\owned\gt06-s106-handles-preflight-01\owned_handles.py", line 644, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260919-gt06-s106-handle-boundary\owned\gt06-s106-handles-preflight-01\owned_handles.py", line 625, in main
+    child(args.child)
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260919-gt06-s106-handle-boundary\owned\gt06-s106-handles-preflight-01\owned_handles.py", line 321, in child
+    campaign.run_child(root)
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\replay\run_benchmark_campaign.py", line 965, in run_child
+    screen_sample(sample, baseline_memory)
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260919-gt06-s106-handle-boundary\owned\gt06-s106-handles-preflight-01\owned_handles.py", line 285, in __call__
+    raise DiagnosticError('S106_PREFIX_BOUNDARY')
+DiagnosticError: S106_PREFIX_BOUNDARY
