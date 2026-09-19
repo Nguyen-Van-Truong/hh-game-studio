@@ -16,7 +16,7 @@ STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng
 
 CURRENT_VALID_WP=GT-06
 EXECUTION_AUTHORIZATION=OWNER_APPROVED_GATED
-IMPLEMENTATION=GT06_S108_OWNED_GUI_THREAD_ATTRIBUTION_READY_FOR_FINAL_BOUNDED_DIAGNOSTIC
+IMPLEMENTATION=GT06_S108_OWNED_GUI_THREAD_ATTRIBUTION_DIAGNOSTIC_COMPLETE_NO_REPRODUCTION
 GT01_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260913
 GT01_PENDING=NONE
 GT01_PIN_DECISION=GODOT_4.7.2_STABLE_OFFICIAL
@@ -54,7 +54,7 @@ GT05_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260917_S64
 GT05_REVIEW_STATUS=TWO_INDEPENDENT_PASS_TICK_YES_S64
 GT05_CHECKPOINT_COMMIT=808d8ba
 GT05_LAST_TESTED_SOURCE_CLOSURE=c141d54b80022ca7fefdf81f83e7e1078d3cc6aa43954831f82bb3178338a135
-GT06_EVIDENCE_STATUS=S102_FORMAL_FAILED; S106_PREFIX_NON_REPRODUCED; S107_PREVIEW_COST_OBSERVED; ZERO_ACCEPTED_FULL_RUNS
+GT06_EVIDENCE_STATUS=S102_FORMAL_FAILED; S106_PREFIX_NON_REPRODUCED; S107_PREVIEW_COST_OBSERVED; S108_03_BOUNDARY_CAPTURED_NO_REPRODUCTION; ZERO_ACCEPTED_FULL_RUNS
 GT06_WORKING_SOURCE_STATUS=S102_FROZEN_53_RUNTIME_FILES_UNCHANGED
 GT06_LAST_TESTED_SOURCE_CLOSURE=7635a470cef554c1a60e1d9427f59998737d3bb829c3a1f134e426cdf9275467
 GT06_CURRENT_SOURCE_CLOSURE=7635a470cef554c1a60e1d9427f59998737d3bb829c3a1f134e426cdf9275467
@@ -62,26 +62,26 @@ GT06_SOURCE_CHECKPOINT=56bfd448e83aa2512c0c2561e8e1a29f12134360
 GT06_PROFILE_SHA256=0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85
 GT06_BENCHMARK_CAMPAIGN=gt06-s102-campaign-01
 GT06_BENCHMARK_STATUS=FAILED_20260919T011926Z_NATIVE_GAP2109.351MS; TASK_RETIRED_012534Z; ZERO_FULL_RUNS
-GT06_ACTIVE_DIAGNOSTIC=NONE; S107_COMPLETED; S108_01_STOPPED_READY0_MISSING_GUI_TOPOLOGY; S108_02_STOPPED_READY0_SECONDARY_GUI_TIDS; S108_03_NOT_LAUNCHED
-GT06_NEXT_ACTION=S108 static51/51 and exact53source pins verified. S108-01 lacked GUI topology in its error. S108-02 showed the announced main HWND has one exact TID (8840) while secondary owned windows use TID 15316; it stopped before batch0, so this is not a benchmark failure. The narrow repair binds the announced HWND TID and retains all bounded window rows. Run one fresh S108 diagnostic to b6; then preserve raw and decide, with no automatic repetition.
+GT06_ACTIVE_DIAGNOSTIC=NONE; S107_COMPLETED; S108_01_STOPPED_READY0_MISSING_GUI_TOPOLOGY; S108_02_STOPPED_READY0_SECONDARY_GUI_TIDS; S108_03_COMPLETED_BOUNDARY_CAPTURED
+GT06_NEXT_ACTION=S108-03 packet verified: 7 batches/7000 HTTP/700 native, all original diagnostic gates passed, save/status gap not reproduced (max ACK gap 830.656ms; save call max 303.372ms), exact main HWND TID binding held, and cleanup receipts/process/Job/owned-handle checks were recorded clean (import-wrapper native CloseHandle remains UNKNOWN). Preserve raw and derived summary; do not claim PASS, no-leak, or root cause. No formal retry without new evidence; GT06 still requires the unchanged 10x35 acceptance campaign.
 GT06_DIAGNOSTIC_EXCLUSION=All instrumented diagnostics and failed/partial prefixes S70-S108 are excluded from F13/F14; no PASS/no-leak/root-cause inference.
 
 TIẾN ĐỘ HIỆN HÀNH — S108, ngày 19-09-2026 (run timestamps UTC)
 GT01–05 ACCEPTED; GT06 IN_PROGRESS; GT07–10 chưa mở. Zero accepted fullruns.
 Runtime53/profile giữ S102. Checkpoint S107helperf95fb8cc/result5916c693.
-Không engine đang chạy sau S108-01 terminal06:34:04Z. S108 static đã đạt;
-S108-01 dừng ở READY0 trước batch0 với S108_AMBIGUOUS_GUI_THREAD; S108-02
-đã giữ topology (main TID8840, secondary TID15316) nhưng cũng chưa chạy batch.
-S108-03 sẽ bind HWND chính, giữ các cửa sổ phụ trong identity và kiểm tra CPU của TID chính; không đổi
-profile, gate, deadline hoặc baseline.
+Không engine đang chạy sau S108-03 terminal06:52:27Z; process/Job/handle check sạch.
+S108-01 dừng ở READY0 trước batch0 với S108_AMBIGUOUS_GUI_THREAD; S108-02 giữ topology
+(main TID8840, secondary TID15316); S108-03 đã bind HWND chính và hoàn tất b0–6.
+S108-03 không tái hiện S102 native gap 2109.351ms: ACK max 830.656ms, save call max 303.372ms,
+objects=71130/resources=6 ổn định. Đây là diagnostic-only, editor actual exit UNKNOWN, không suy root cause/no-leak.
 S108: 52/52 pure tests (native8, thread19, clock7, runner18); --check exit0.
 Đã sửa việc mất metadata lỗi đóng handle lần đầu khi retry đóng thành công.
 Hai worker bị model-at-capacity; root tiếp tục từ file đã lưu, không viết lại.
 Preflight review không là final critic; receipt ở s108-coordinator/static-validation.json.
 
-S108: tối đa một diagnostic b0–6 (7batches), original1000HTTP+100native/batch,
-stocksave_scene/heartbeat/deadline/baseline/gates không đổi, outer1200s. Dừngngay
-originalfirstfailure hoặc b6boundary. Không PSS, pressure, fullformalretry.
+S108-03 đã hoàn tất diagnostic b0–6 (7 batches), original1000HTTP+100native/batch,
+stock save_scene/heartbeat/deadline/baseline/gates không đổi; packet-only hash verification không lỗi.
+Không PSS, pressure, full formal retry; không nhập S108 vào F13/F14.
 Thêm observedcallreturn (reuseS103) và threadCPU khi nativeb5/b6; khôngbỏ outlier.
 Godot OS.get_thread_caller_id làlogicalID, KHÔNG WindowsTID. BindMAINWINDOWHWND,
 GetWindowThreadProcessId+ownedPID/uniqueGUIthread, retainedquerythreadhandle,

@@ -57,3 +57,28 @@ the engine workload.
 
 The S107 terminal plan was archived byte-for-byte with a hash and AUTHORITY=0
 under archive/. The current tools plan remains the sole progress authority.
+
+## S108-03 terminal result (diagnostic only)
+
+S108-03 completed a single bounded b0–6 diagnostic under the unchanged
+source/profile/workstation and original gates. The packet is recorded in
+`s108-03-attribution-summary.json` and `s108-03-packet-verification.json`.
+All seven original gate rows returned PASSED; the packet remains diagnostic-only. 7,000 HTTP requests and 700 native cycles
+were captured. The original 2,109.351 ms S102 native gap was not reproduced:
+the largest ACK status gap was 830.656 ms and the largest observed save
+call-entry→call-return interval was 303.372 ms. Objects/resources stayed
+71130/6. The exact main HWND/TID binding held while secondary owned windows
+were retained in the identity record.
+
+The child stopped at `S108_PREFIX_BOUNDARY` after batch 6. Host exit 1 is
+the expected bounded boundary, import exit 0, the editor target exit is
+UNKNOWN, and the passive outer observer exit is 0. The editor-owner Job reached zero/closed; editor/probe handle releases,
+probe threads, and the owned thread close were recorded clean. The import-wrapper
+native CloseHandle remains UNKNOWN because it is not in the import capture. The packet
+has 100 listed files with no missing files or hash mismatches.
+
+This remains `AUTHORITY=0` diagnostic evidence only: it is excluded from
+F13/F14, is not a formal PASS or dataset, and proves neither no-leak nor
+root cause. Preserve the raw packet and do not repeat automatically without
+new discriminating evidence; formal GT-06 still requires the unchanged
+10×35 acceptance campaign.

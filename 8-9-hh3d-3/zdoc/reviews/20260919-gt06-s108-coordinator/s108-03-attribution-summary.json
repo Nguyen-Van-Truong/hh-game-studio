@@ -1,0 +1,247 @@
+{
+  "schema": "hh-studio.gt06-s108-attribution-summary-v1",
+  "run_id": "gt06-s108-save-03",
+  "observed_utc": "2026-09-19T06:52:27.7762243Z",
+  "source_checkpoint": "56bfd448e83aa2512c0c2561e8e1e29f12134360",
+  "source_closure_sha256": "7635a470cef554c1a60e1d9427f59998737d3bb829c3a1f134e426cdf9275467",
+  "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+  "base_native_sha256": "13e65360cd0bc0033d0ad414fb3238e216b0d6dcc08e57dc7026ec4fc9eb8b95",
+  "diagnostic_closure_sha256": "8deda69d31d141531d1405814c79fd98a72958cee2462d8123b71123370682d9",
+  "status": "BOUNDARY_CAPTURED",
+  "capture_status": "COMPLETE",
+  "completed_batches": 7,
+  "http_requests": 7000,
+  "native_cycles": 700,
+  "original_gates": [
+    "PASSED",
+    "PASSED",
+    "PASSED",
+    "PASSED",
+    "PASSED",
+    "PASSED",
+    "PASSED"
+  ],
+  "primary_boundary": {
+    "code": "S108_PREFIX_BOUNDARY",
+    "batch": 6,
+    "phase": "joint_observation"
+  },
+  "formal_acceptance": false,
+  "eligible_for_dataset": false,
+  "actual_exits": {
+    "outer_observer": {
+      "exit_code": 0,
+      "start_utc": "2026-09-19T06:40:42.5525772Z",
+      "observed_utc": "2026-09-19T06:52:27.7762243Z",
+      "source": "retained System.Diagnostics.Process after WaitForExit",
+      "pid": 27736,
+      "forced_by_outer_observer": false,
+      "run_id": "gt06-s108-save-03"
+    },
+    "host_owner": {
+      "exit_code": 1,
+      "path": "host-owner/process-exit.json"
+    },
+    "import_host": {
+      "exit_code": 0,
+      "path": "import-host/process-exit.json"
+    },
+    "editor_target": {
+      "status": "UNKNOWN",
+      "path": null
+    }
+  },
+  "cleanup": {
+    "status": "RECORDED_JOB_PROBE_THREAD_RELEASES_VERIFIED",
+    "jobs_zero_observed": true,
+    "jobs_closed": true,
+    "handle_retained": false,
+    "wrapper_handle_retained": false,
+    "import_handles_released": true,
+    "thread_close": {
+      "ended_perf_ns": 698957432742700,
+      "native_close_result": true,
+      "started_perf_ns": 698957432618900,
+      "status": "CLOSED"
+    },
+    "active_process_check": "no matching Godot/pythonw/observer process after terminal check",
+    "import_wrapper_process_handle_status": "UNKNOWN",
+    "import_wrapper_process_handle_reason": "NOT_IN_IMPORT_CAPTURE",
+    "cleanup_scope_note": "editor owner Job/handles, import observer probe handles, thread close and process check recorded clean; import wrapper native CloseHandle remains UNKNOWN"
+  },
+  "thread_identity": {
+    "pid": 46552,
+    "process_start": "windows:134342736535567675",
+    "hwnd": 12256276,
+    "tid": 19088,
+    "owned_window_handles": [
+      4589498,
+      9372160,
+      10293098,
+      12256276,
+      18353196
+    ],
+    "owned_window_threads": [
+      {
+        "hwnd": 12256276,
+        "pid": 46552,
+        "tid": 19088
+      },
+      {
+        "hwnd": 18353196,
+        "pid": 46552,
+        "tid": 2588
+      },
+      {
+        "hwnd": 9372160,
+        "pid": 46552,
+        "tid": 19088
+      },
+      {
+        "hwnd": 10293098,
+        "pid": 46552,
+        "tid": 19088
+      },
+      {
+        "hwnd": 4589498,
+        "pid": 46552,
+        "tid": 2588
+      }
+    ]
+  },
+  "ack_max_status_gap_ms": [
+    {
+      "batch": 0,
+      "max_status_gap_ms": 830.656,
+      "objects": 71130,
+      "resources": 6
+    },
+    {
+      "batch": 1,
+      "max_status_gap_ms": 803.223,
+      "objects": 71130,
+      "resources": 6
+    },
+    {
+      "batch": 2,
+      "max_status_gap_ms": 704.698,
+      "objects": 71130,
+      "resources": 6
+    },
+    {
+      "batch": 3,
+      "max_status_gap_ms": 713.578,
+      "objects": 71130,
+      "resources": 6
+    },
+    {
+      "batch": 4,
+      "max_status_gap_ms": 625.163,
+      "objects": 71130,
+      "resources": 6
+    },
+    {
+      "batch": 5,
+      "max_status_gap_ms": 629.205,
+      "objects": 71130,
+      "resources": 6
+    },
+    {
+      "batch": 6,
+      "max_status_gap_ms": 785.383,
+      "objects": 71130,
+      "resources": 6
+    }
+  ],
+  "ack_objects_resources_stable": true,
+  "save_metrics_batch_5_6": {
+    "5": {
+      "cycles": 100,
+      "call_entry_to_call_return_ms": {
+        "count": 100,
+        "min_ms": 65.633,
+        "p95_ms": 124.8143,
+        "max_ms": 303.372,
+        "mean_ms": 86.38786
+      },
+      "entry_event_to_call_return_ms": {
+        "count": 100,
+        "min_ms": 65.836,
+        "p95_ms": 124.96454999999999,
+        "max_ms": 303.684,
+        "mean_ms": 86.56569999999999
+      },
+      "call_entry_to_signal_ms": {
+        "count": 100,
+        "min_ms": 56.704,
+        "p95_ms": 115.1455,
+        "max_ms": 291.852,
+        "mean_ms": 76.90165
+      },
+      "call_return_to_next_process_entry_ms": {
+        "count": 100,
+        "min_ms": 4.407,
+        "p95_ms": 32.28225,
+        "max_ms": 78.626,
+        "mean_ms": 12.24892
+      },
+      "call_return_to_readback_end_ms": {
+        "count": 100,
+        "min_ms": 7.615,
+        "p95_ms": 36.587799999999994,
+        "max_ms": 84.402,
+        "mean_ms": 16.56457
+      },
+      "worst_cycle_by_call_ms": 96
+    },
+    "6": {
+      "cycles": 100,
+      "call_entry_to_call_return_ms": {
+        "count": 100,
+        "min_ms": 88.207,
+        "p95_ms": 116.85575,
+        "max_ms": 143.501,
+        "mean_ms": 100.07983
+      },
+      "entry_event_to_call_return_ms": {
+        "count": 100,
+        "min_ms": 88.346,
+        "p95_ms": 117.0304,
+        "max_ms": 143.659,
+        "mean_ms": 100.24453
+      },
+      "call_entry_to_signal_ms": {
+        "count": 100,
+        "min_ms": 82.026,
+        "p95_ms": 106.88155,
+        "max_ms": 135.712,
+        "mean_ms": 92.56363999999999
+      },
+      "call_return_to_next_process_entry_ms": {
+        "count": 100,
+        "min_ms": 4.005,
+        "p95_ms": 23.717449999999996,
+        "max_ms": 27.661,
+        "mean_ms": 8.96957
+      },
+      "call_return_to_readback_end_ms": {
+        "count": 100,
+        "min_ms": 6.858,
+        "p95_ms": 27.279749999999996,
+        "max_ms": 31.397,
+        "mean_ms": 12.47768
+      },
+      "worst_cycle_by_call_ms": 95
+    }
+  },
+  "limitations": [
+    "diagnostic only; original profile and gates retained",
+    "no formal dataset or PASS",
+    "CPU samples are enclosing thread samples, not exact save-call CPU or wait cause",
+    "editor actual exit was not recorded; do not infer natural exit",
+    "no root-cause or no-leak conclusion"
+  ],
+  "raw_sha256": "c8683bce426e0248add2d5db32680e1e9c3dda433b15b094bcd8a9c3d9534fc5",
+  "diagnostic_result_sha256": "be5493a7a08fbe9668c1752e8c746da020bff9705cbff01ce8f0639433439f75",
+  "capture_manifest_sha256": "7ccb4704287b78898375df0ef888ee9d56bb694f9bf9a291c7117533cf7aaa95"
+}
