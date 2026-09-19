@@ -1,0 +1,52 @@
+{
+  "schema": "hh-studio.gt06-s109-differential-review-v1",
+  "authority": 0,
+  "reviewed_utc": "2026-09-19T07:20:00Z",
+  "decision": "NO_NARROW_REPAIR_OR_FORMAL_RETRY_AUTHORIZED",
+  "reason": "S102 failure lacks save_scene return timestamp; S108-03 did not reproduce the status gap and provides no causal boundary to change runtime.",
+  "common_pins": {
+    "source_closure_sha256": "7635a470cef554c1a60e1d9427f59998737d3bb829c3a1f134e426cdf9275467",
+    "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+    "s108_source_closure_sha256": "7635a470cef554c1a60e1d9427f59998737d3bb829c3a1f134e426cdf9275467",
+    "s108_profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+    "same_source_profile": true,
+    "base_native_sha256": "13e65360cd0bc0033d0ad414fb3238e216b0d6dcc08e57dc7026ec4fc9eb8b95",
+    "s108_timed_runtime_overlay_sha256": "a4b94ccf6d04e2d12b80e01c90592a0da923a66a331359ad98f23db61e83d84c",
+    "timed_runtime_byte_identical": false,
+    "comparability_limit": "S108 preserves the base source closure and profile but adds generated save/return/signal/thread instrumentation; its non-reproduction cannot establish stock-runtime PASS or authorize a source repair."
+  },
+  "s102_failure": {
+    "run_id": "gt06-s102-campaign-01.r00.a01",
+    "batch": 6,
+    "phase": "post_batch_quiescent",
+    "child_failure": "CAMPAIGN_STATUS_GAP",
+    "max_status_gap_ms": 2109.351,
+    "objects": 71128,
+    "resources": 6,
+    "editor_handles": 555,
+    "host_command_gap_ms": 1936.8697,
+    "missing_attribution": "save_scene return timestamp; cannot separate call duration from frame/heartbeat delay",
+    "evidence_sha256": "b5d86b91c87eb88999cee6d66da7f5ff40d42ca9c2dc44b18bc7954446be1a19"
+  },
+  "s108_diagnostic": {
+    "run_id": "gt06-s108-save-03",
+    "status": "BOUNDARY_CAPTURED",
+    "completed_batches": 7,
+    "http_requests": 7000,
+    "native_cycles": 700,
+    "max_ack_status_gap_ms": 830.656,
+    "save_call_max_ms": 303.372,
+    "objects_resources_stable": true,
+    "editor_exit": "UNKNOWN",
+    "packet_missing_files": 0,
+    "packet_hash_mismatches": 0,
+    "evidence_sha256": "cac09a7b441ca3da01424de0ce872b29decb4853a0ef6308332b3e068beab428"
+  },
+  "conclusion": [
+    "S108 exact main HWND/TID binding and bounded CPU/save instrumentation completed without reproducing S102 gap.",
+    "S108 timed runtime is an instrumented overlay rather than byte-identical stock benchmark_native.gd; no source/runtime threshold/baseline/timeout/priority/RSS change is supported by the evidence.",
+    "All S108 data remains diagnostic-only and excluded from F13/F14.",
+    "Formal GT06 remains blocked until an unchanged 10x35 campaign produces complete accepted evidence; do not run it blindly."
+  ],
+  "next_action": "Keep heartbeat active; only launch a new diagnostic or formal campaign after a new discriminating observation or owner-approved environment change, preserving all raw attempts."
+}
