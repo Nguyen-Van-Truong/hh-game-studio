@@ -1,0 +1,22 @@
+{
+  "schema": "s117.static-validation.1",
+  "authority": 0,
+  "formal_acceptance": false,
+  "executed_utc": "2026-09-19T12:28:30.680052+00:00",
+  "command": [
+    "C:\\Users\\truon\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+    "-B",
+    "-m",
+    "unittest",
+    "-v",
+    "test_lookup_boundary.py"
+  ],
+  "exit_code": 0,
+  "tests": 7,
+  "test_output_sha256": "f53f4e62c3b374db91daf243bd1257ea25901e55bfac3df958eb620daf963cd4",
+  "sources": {
+    "lookup_boundary.py": "d55959a7392d7c659e62757dda41a6d3f3aca68ca93a733acecd2e505c5abda5",
+    "test_lookup_boundary.py": "683a8467e2ecc0d9ff3e3ce1b4327965d8adcb4a65ecb37e22b067c447334916",
+    "launch.ps1": "4e0681c7a9ad572d2659a3877029de77ddac0732f9bf0c31bc7179397a1d03ef"
+  }
+}
