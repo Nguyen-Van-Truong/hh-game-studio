@@ -16,7 +16,7 @@ STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng
 
 CURRENT_VALID_WP=GT-06
 EXECUTION_AUTHORIZATION=OWNER_APPROVED_GATED
-IMPLEMENTATION=GT06_S117_IMPORT_WALL_LIMIT_S118_IMPORT_BOUNDARY_READY
+IMPLEMENTATION=GT06_S117_LOOKUP_03_RUNNING_S118_IMPORT_COMPLETE
 GT01_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260913
 GT01_PENDING=NONE
 GT01_PIN_DECISION=GODOT_4.7.2_STABLE_OFFICIAL
@@ -54,7 +54,7 @@ GT05_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260917_S64
 GT05_REVIEW_STATUS=TWO_INDEPENDENT_PASS_TICK_YES_S64
 GT05_CHECKPOINT_COMMIT=808d8ba
 GT05_LAST_TESTED_SOURCE_CLOSURE=c141d54b80022ca7fefdf81f83e7e1078d3cc6aa43954831f82bb3178338a135
-GT06_EVIDENCE_STATUS=S116_FORMAL_FAILED_HOST_STATUS_GAP; S117_01_JOB_READBACK_FAILED_BEFORE_ENGINE; S117_02_IMPORT_WALL_LIMIT_ZERO_BATCHES; S118_IMPORT_VERBOSE_READY; ZERO_ACCEPTED_FULL_RUNS
+GT06_EVIDENCE_STATUS=S116_FORMAL_FAILED_HOST_STATUS_GAP; S117_01_JOB_READBACK_FAILED_BEFORE_ENGINE; S117_02_IMPORT_WALL_LIMIT_ZERO_BATCHES; S118_IMPORT_VERBOSE_COMPLETED; S117_03_DIAGNOSTIC_RUNNING; ZERO_ACCEPTED_FULL_RUNS
 GT06_WORKING_SOURCE_STATUS=S102_FROZEN_53_RUNTIME_FILES_UNCHANGED
 GT06_LAST_TESTED_SOURCE_CLOSURE=7635a470cef554c1a60e1d9427f59998737d3bb829c3a1f134e426cdf9275467
 GT06_CURRENT_SOURCE_CLOSURE=7635a470cef554c1a60e1d9427f59998737d3bb829c3a1f134e426cdf9275467
@@ -62,8 +62,8 @@ GT06_SOURCE_CHECKPOINT=56bfd448e83aa2512c0c2561e8e1e29f12134360
 GT06_PROFILE_SHA256=0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85
 GT06_BENCHMARK_CAMPAIGN=gt06-s116-formal-01
 GT06_BENCHMARK_STATUS=S116_FAILED_BATCH10_JOINT_OBSERVATION_STATUS_GAP_2041.7971MS; ZERO_ACCEPTED_FULL_RUNS
-GT06_ACTIVE_DIAGNOSTIC=NONE_RUNNING; S117-01/02 terminal failures; S118 import-only verbose20s ready
-GT06_NEXT_ACTION=One S118 import-only verbose diagnostic under original20s/15CPU/2GiB stage limits, fresh ID gt06-s118-import-01, original runtime53/profile/project recipe. Read verbose phase/observer/capture/actual exits. No coupled or formal retry yet; no workload/threshold/source changes.
+GT06_ACTIVE_DIAGNOSTIC=gt06-s117-lookup-boundary-03_RUNNING_OBSERVED; S118 import-only completed11.359s/target656exit0; S117-01/02 terminal preserved
+GT06_NEXT_ACTION=Observe gt06-s117-lookup-boundary-03 via launch-03 receipts/live identity/shorttail then terminaltimings/HTTPfirstfailure/exits/Jobs/handles/pins/Stop. This resumes unexecuted lookup experiment with fresh ID and stocknonverbose import after S118import success; original11batch boundary/max1230s, no formalcampaign.
 GT06_S109_DIFFERENTIAL_REVIEW=AUTHORITY0; S102 native outlier lacks save_scene return timestamp. S108-03 did not reproduce it under the same base closure/profile/workstation, but its timed runtime is an instrumented overlay (not byte-identical stock benchmark_native.gd). S110 then failed on an independent stock command-lane admission timeout at batch5; this does not establish engine causation or authorize a retry. See zdoc/reviews/20260919-gt06-s108-coordinator/s109-differential-review.json and zdoc/reviews/20260919-gt06-s110-admission-timeout/failure-analysis.json. Next useful work is static/read-only attribution of the timeout boundary, followed by one bounded fresh diagnostic only if it can distinguish the boundary; preserve original gates and timed runtime.
 GT06_S111_STATIC_ATTRIBUTION=AUTHORITY0; base Journal probe 9a63579f45f8cd6e7ce3dee223480945d29ce3d000c71a81743eecfc70d03b9b is historical/offline. It reparses history and cannot explain the live VerifiedJournal path. S112 corrects this interpretation. Current extended test-results23337327a3af7f7c1faf44ae1994612c0e667609bd6596cecdc290eb9bde21b1;68actual cases. Temporary probe drivers lacked frozen execution closures; no formal acceptance.
 GT06_S112_VERIFIED_PATH_ATTRIBUTION=AUTHORITY0; exact VerifiedJournal probe is in zdoc/reviews/20260919-gt06-s111-attribution/verified-journal-probe.json (probe hash a792145018d63f5916a8832d4e2136d2248e97ace7559a5d570ebb9ad8b19420). It shows unchanged service-path lookup under 22ms after initialization; the earlier base Journal timing cannot be applied to ReplayService. Extended static test-results hash 23337327a3af7f7c1faf44ae1994612c0e667609bd6596cecdc290eb9bde21b1 (68 cases); no engine run.
@@ -87,8 +87,11 @@ exit1, import6600naturalexitUNKNOWN/helper2; Jobzero/closed, observer sạch.
 không chứng minh deadlock/RAM/diskcause. Giữ44copies và2localcache exclusions
 ở s117-lookup-boundary/failed-launch-02/; import-wrapper CloseHandle UNKNOWN.
 
-S118 chuẩn bị một import-only probe thêm --verbose để xác định phase đang chậm;
-không mởHTTP/editorbatch. Giữ stage20s/15CPU/2GiB và originalprojectrecipe.
+S118 import-only --verbose đã hoàn tất11.359s, target656/supervisor51464exit0;
+Jobzero/closed, source/execution nguyên; không tái hiện importwalllimit. Giữ note
+verbose1unclaimedStringName và nativewrapperCloseHandleUNKNOWN; khôngno-leak.
+S117-03 tiếp tục lookup experiment chưa có batch, stocknonverbose import/freshID.
+Giữ stage20s/15CPU/2GiB và originalprojectrecipe;11batch/originalgates/max1230s.
 Source53 closure7635a470cef554c1a60e1d9427f59998737d3bb829c3a1f134e426cdf9275467
 và profile0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85 nguyên.
 Không dùng lại ID/output; lần lỗi giữ nguyên. Collector sai sửa metadata/raw đã
@@ -96,7 +99,10 @@ có, không dựng bằng chứng hồi tố; không đổi ngưỡng/baseline/p
 Không engine/test/heavyhash cạnh phép đo. Root tự làm; 2critic độc lập chỉ cuối
 gate khi đủDoD. GT06 vẫn10freshpairs×35batch với đủdataset/exits/Jobs/handles/
 hashes/allattempts; GT07→GT10 tuần tự, Android thật ởGT08; chưa ETA toànplan.
-Lịch duy nhất ti-p-t-c-hh3d-tools; cập nhật theo current plan, không duplicate.
+Lịch ti-p-t-c-hh3d-tools đã tạo lại ACTIVE10phút sau tool báo lịch cũ không tồn tại.
+S117-03 dispatch12:49:16Z, supervisor40172/host22976/editor42060; query mới trước
+kết luận. Readerdraft và next.md ở s118-import-boundary chờ terminal mới kiểm.
+Metadata scripts luôn UTF-8; lỗi đọc cp1252 đã sửa, không rerun engine/raw.
 ArchiveS117 exactbytes/AUTHORITY0: reviews/20260919-gt06-s118-import-boundary/archive/.
 
 Rà phạm vi claim S76: GT-01–05 ACCEPTED theo fixture/catalog đã công bố,
