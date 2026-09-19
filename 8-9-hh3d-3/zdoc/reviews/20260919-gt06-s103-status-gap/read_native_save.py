@@ -210,11 +210,15 @@ def lifecycle_state(path, pid, evidence):
     else:
         # An explicit owner-close receipt is a diagnostic stop. Scheduler
         # absence, a returned code, or PID polling alone is not one.
-        forced = (capture.get("completed") is False
-                  and type(capture.get("failure_code")) is str
-                  and bool(capture.get("failure_code"))
-                  and capture.get("job", {}).get("closed") is True
-                  and capture.get("wrapper_process_handle", {}).get("closed") is True)
+        explicit_forced = (capture.get("diagnostic_forced_stop") is True
+                           or capture.get("forced_stop") is True
+                           or capture.get("termination") == "forced")
+        forced = (explicit_forced or
+                  (capture.get("completed") is False
+                   and type(capture.get("failure_code")) is str
+                   and bool(capture.get("failure_code"))
+                   and capture.get("job", {}).get("closed") is True
+                   and capture.get("wrapper_process_handle", {}).get("closed") is True))
         if forced:
             state, reason, claim = ("DIAGNOSTIC_FORCED_STOP_RECORDED",
                                     "DIAGNOSTIC_OWNER_CLOSE_WITHOUT_TARGET_EXIT",

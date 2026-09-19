@@ -1,0 +1,18 @@
+Traceback (most recent call last):
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\replay\run_campaign_task.py", line 149, in main
+    code = execute(args.campaign_id, args.mode, output, sha(request), launch_number=args.launch_number)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\replay\run_campaign_task.py", line 82, in execute
+    return campaign.run_campaign(campaign_id, STUDIO / '.local/reviews' / campaign_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\replay\run_benchmark_campaign.py", line 468, in run_campaign
+    host = owner.finish()
+           ^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\replay\benchmark_job.py", line 346, in finish
+    return self._finish_success()
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\replay\benchmark_job.py", line 354, in _finish_success
+    require(self.tick() == 0, 'BENCHMARK_WRAPPER_EXIT')
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\replay\benchmark_job.py", line 46, in require
+    raise BenchmarkJobError(code)
+studio.tests.replay.benchmark_job.BenchmarkJobError: BENCHMARK_WRAPPER_EXIT
