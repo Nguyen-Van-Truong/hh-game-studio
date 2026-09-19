@@ -25,7 +25,7 @@ RUNTIME_ACCEPTANCE=GT01_GT02_GT03_GT04_GT05_ACCEPTED
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S108
+PLAN_REVISION=S110
 EXECUTION_MODE=COORDINATOR_THREE_ASTRA_ULTRA_OWNER_20260918
 SUBAGENTS_ENABLED=3
 GT02_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260916_S46
@@ -60,17 +60,17 @@ GT06_LAST_TESTED_SOURCE_CLOSURE=7635a470cef554c1a60e1d9427f59998737d3bb829c3a1f1
 GT06_CURRENT_SOURCE_CLOSURE=7635a470cef554c1a60e1d9427f59998737d3bb829c3a1f134e426cdf9275467
 GT06_SOURCE_CHECKPOINT=56bfd448e83aa2512c0c2561e8e1a29f12134360
 GT06_PROFILE_SHA256=0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85
-GT06_BENCHMARK_CAMPAIGN=gt06-s102-campaign-01
-GT06_BENCHMARK_STATUS=FAILED_20260919T011926Z_NATIVE_GAP2109.351MS; TASK_RETIRED_012534Z; ZERO_FULL_RUNS
-GT06_ACTIVE_DIAGNOSTIC=NONE; S107_COMPLETED; S108_01_STOPPED_READY0_MISSING_GUI_TOPOLOGY; S108_02_STOPPED_READY0_SECONDARY_GUI_TIDS; S108_03_COMPLETED_BOUNDARY_CAPTURED
-GT06_NEXT_ACTION=S108-03 packet verified: 7 batches/7000 HTTP/700 native, all original diagnostic gates passed, save/status gap not reproduced (max ACK gap 830.656ms; save call max 303.372ms), exact main HWND TID binding held, and cleanup receipts/process/Job/owned-handle checks were recorded clean (import-wrapper native CloseHandle remains UNKNOWN). Preserve raw and derived summary; do not claim PASS, no-leak, or root cause. No formal retry without new evidence; GT06 still requires the unchanged 10x35 acceptance campaign.
+GT06_BENCHMARK_CAMPAIGN=gt06-s110-formal-01
+GT06_BENCHMARK_STATUS=RUNNING_20260919T075851Z; FRESH_STOCK_SOURCE_CAMPAIGN; ZERO_ACCEPTED_FULL_RUNS_UNTIL_TERMINAL_VERIFICATION
+GT06_ACTIVE_DIAGNOSTIC=NONE; S107_COMPLETED; S108_01_STOPPED_READY0_MISSING_GUI_TOPOLOGY; S108_02_STOPPED_READY0_SECONDARY_GUI_TIDS; S108_03_COMPLETED_BOUNDARY_CAPTURED; S110_FORMAL_RUNNING
+GT06_NEXT_ACTION=S108-03 packet verified and S109 comparability review committed. Because S108 used a non-byte-identical diagnostic overlay and the owner explicitly continued GT06, S110 is a fresh stock-source campaign with unchanged profile/workstation and original gates. Preserve S102/S108 raw separately; do not claim PASS, no-leak, or root cause from them. S110 must complete the unchanged 10x35 acceptance campaign before closure; no second engine launch while S110 is live.
 GT06_S109_DIFFERENTIAL_REVIEW=AUTHORITY0; S102 native outlier lacks save_scene return timestamp. S108-03 did not reproduce it under the same base closure/profile/workstation, but its timed runtime is an instrumented overlay (not byte-identical stock benchmark_native.gd). Therefore no evidence-backed runtime repair or automatic formal retry is authorized; see zdoc/reviews/20260919-gt06-s108-coordinator/s109-differential-review.json. Next useful observation is one passive watcher around an owner-approved stock run, only if a fresh stock run is authorized; it must preserve SAVE→SAVE_WAIT, process/thread/IO/RSS envelopes and actual exits without modifying the timed runtime or gates.
 GT06_DIAGNOSTIC_EXCLUSION=All instrumented diagnostics and failed/partial prefixes S70-S108 are excluded from F13/F14; no PASS/no-leak/root-cause inference.
 
-TIẾN ĐỘ HIỆN HÀNH — S108, ngày 19-09-2026 (run timestamps UTC)
+TIẾN ĐỘ HIỆN HÀNH — S110, ngày 19-09-2026 (run timestamps UTC)
 GT01–05 ACCEPTED; GT06 IN_PROGRESS; GT07–10 chưa mở. Zero accepted fullruns.
-Runtime53/profile giữ S102. Checkpoint S107helperf95fb8cc/result5916c693.
-Không engine đang chạy sau S108-03 terminal06:52:27Z; process/Job/handle check sạch.
+Runtime53/profile giữ S102. Checkpoint S107helperf95fb8cc/result5916c693; fresh stock campaign S110 dispatch 07:58:51Z.
+S110 is currently running under the scheduler; receipt/state is dispatch evidence only, not PASS. Query live identity and tail before conclusions; do not run another engine/test/hash audit beside it.
 S108-01 dừng ở READY0 trước batch0 với S108_AMBIGUOUS_GUI_THREAD; S108-02 giữ topology
 (main TID8840, secondary TID15316); S108-03 đã bind HWND chính và hoàn tất b0–6.
 S108-03 không tái hiện S102 native gap 2109.351ms: ACK max 830.656ms, save call max 303.372ms,
