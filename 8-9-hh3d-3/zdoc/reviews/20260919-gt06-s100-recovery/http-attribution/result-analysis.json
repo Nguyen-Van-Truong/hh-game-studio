@@ -1,0 +1,532 @@
+{
+  "analysis_scope": "Derived solely from retained copied-history HTTP probe; no new runtime/test execution",
+  "analyzer_sha256": "3eb67526f16e93cd390602f2fb56cff33129e17154906a4ea7d33fb8f5c21604",
+  "cleanup": {
+    "helper_exit": 0,
+    "helper_pid": 36872,
+    "host": {
+      "closing": true,
+      "control_socket_closed": true,
+      "main_socket_closed": true,
+      "stopped": true
+    },
+    "journal": {
+      "cache_closed": true,
+      "index_retained": false
+    },
+    "limitation": "run_fixture owned Job/actual-exit evidence; no independent retained-process-handle observer",
+    "observer": {
+      "close_uncertain": false,
+      "handle_retained": false
+    },
+    "owned_tree_verified_zero": true,
+    "producer_closed": true,
+    "stderr_bytes": 0,
+    "stdout_bytes": 0,
+    "target_exit": 0,
+    "target_pid": 37560,
+    "threads_alive": [
+      false,
+      false,
+      false
+    ],
+    "timed_out": false
+  },
+  "duration": {
+    "http_group_envelope_ms": 37351.543,
+    "http_group_sum_ms": 37318.641,
+    "initial_load_ms": 12668.8604,
+    "scope": "Initialization excluded from HTTP response windows; no invented process-wall duration"
+  },
+  "eligible_for_dataset": false,
+  "engine_runs": 0,
+  "formal_acceptance": false,
+  "history": {
+    "bytes": 17761123,
+    "kind": "Exact S98 postterminal journal; not pre-failure batch17 or restored residency",
+    "original_and_copy_unchanged": true,
+    "sha256": "91e593b3df4fae95efceebf47ff9e629004a4a6f9e21aed459b3cf48cff9ca19"
+  },
+  "input_hashes": {
+    "child/command-00.json": "27a1560f16581442bd251d1c94f705d65244fac82ce4f873833df7e3094c93b8",
+    "child/command-01.json": "70243158b2ff091ae8e49aaf442759b31f53b1627162f0098e8341fdc4a665db",
+    "child/command-02.json": "c4f6e7d64d09026e83a634b4485b047c4964a50da3ef407c740a372aa8c9180b",
+    "child/command-03.json": "f338d91d253d55b090969b52e3774b1d03bd8ee5e2e94a0b9eefa081daed85e3",
+    "child/command-04.json": "08422bb821e4ae8b25df43927b369785d650c35be3adf67a2f2fb064e7b28cea",
+    "child/command-05.json": "ec3308fb3aa7358e089859d539b96f607f7001639d38bbbc2b610e56f748d73e",
+    "child/command-06.json": "a14765e8bed778887cb5666e7fa7609283fad95849b5dc286cfc1201e29e174c",
+    "child/command-07.json": "b3127c668616114d4093f8aad00428caf35ffe977ded5e4514c8026cb7051c3c",
+    "child/command-08.json": "b7c7e9b5d9269248b06c2f2ab7c5c9d5007c1d7b2576fe818a7f4cc35b83c31e",
+    "child/command-09.json": "270b41aee42222ec44aabaf2b8a8e9d9c658f7124c516bb8a123bdee2125090f",
+    "child/command-10.json": "4260dd2f428fc64c0c7839e3e95ef1e1b783dbab108d72710387eb05e29269f8",
+    "child/command-11.json": "3226fbb8fab971df2a70036400f9d3a00f533b0382e65b2f1b0dac3c42f3a984",
+    "child/command-12.json": "b6d8715208fda369215faf35ab7ef86065447b07a28c5d0dda63de952df78fb1",
+    "child/command-13.json": "567149caa14de09a8a6c1f387519717967e91fba9a262b2b299818b12f047283",
+    "child/command-14.json": "bed790736a1f2d250e6484431d9f746140903766d90fab3cffb554d639950ed2",
+    "child/command-15.json": "9be7a3016ba9793b0190bf29f964dcd7173f7e7fad1977a63eddcea77658459c",
+    "child/command-16.json": "bf471b6f04cae2402e994c93ab6efe4d9b7923d879af1956b6bdb6b08be6882e",
+    "child/command-17.json": "d0cd04ec30b058435c540c17996b1762a735c2c3a334b1da745c63b6906da7ce",
+    "child/command-18.json": "782e5197f3609fd1907fa46a44314c6b2a697daa227540427139d8da7486b85b",
+    "child/command-19.json": "5aeb64ffea4188f9d791ef6ca44d59e480a369ffd8b662baaa6b29acc037ee39",
+    "child/phases.json": "90b9eca67efc8e5beec7ffd4e77f09dc45be7a6ad3e8607568e9a47b166f9764",
+    "child/report.json": "8d164ef5af0cf5c86126a3b603f4478d814c0a550f0dec98c6c9b90d924c5acd",
+    "freeze.json": "edd2c93c4a2b33b187615488ec7c42356a7a85559adf7590476fb36460a505c0",
+    "owned/capture.json": "e0b4a3fc907335057c261a883f7ca7482b350ce3a16b3266063616c3d3a55ff6",
+    "owned/http-host.json": "6e1be779d89d87782a6654b41996b2c59db0c6dfdf87f6e90b6b4341aac17d9e",
+    "owned/http-stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "owned/http-stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "largest_gap_retained_span_chain": {
+    "command_ordinal": 9,
+    "group": 12,
+    "interpretation": "Same socket pair and nested spans locate a 297.7172ms append inside 366.8098ms guard-held/444.0249ms commands dispatch. Append internal cost remains unsplit; this is not the S98 lookup timeout.",
+    "kind": "admitted",
+    "largest_overlapping_spans": [
+      {
+        "client_port": 61540,
+        "elapsed_ms": 446.0673,
+        "outcome": "returned",
+        "parent_id": null,
+        "phase": "client.call",
+        "root_id": 5050,
+        "route": "commands",
+        "server_port": 53341,
+        "span_id": 5050,
+        "started_ns": 677153803093000,
+        "thread_id": 46944,
+        "timestamp_ns": 677154249160300
+      },
+      {
+        "client_port": 61540,
+        "elapsed_ms": 444.8296,
+        "outcome": "returned",
+        "parent_id": null,
+        "phase": "server.handle",
+        "root_id": 5054,
+        "route": "other",
+        "server_port": 53341,
+        "span_id": 5054,
+        "started_ns": 677153804249400,
+        "thread_id": 53516,
+        "timestamp_ns": 677154249079000
+      },
+      {
+        "client_port": 61540,
+        "elapsed_ms": 444.7904,
+        "outcome": "returned",
+        "parent_id": 5050,
+        "phase": "client.headers",
+        "root_id": 5050,
+        "route": "commands",
+        "server_port": 53341,
+        "span_id": 5053,
+        "started_ns": 677153804170400,
+        "thread_id": 46944,
+        "timestamp_ns": 677154248960800
+      },
+      {
+        "client_port": 61540,
+        "elapsed_ms": 444.0249,
+        "outcome": "returned",
+        "parent_id": 5054,
+        "phase": "server.dispatch",
+        "root_id": 5054,
+        "route": "commands",
+        "server_port": 53341,
+        "span_id": 5056,
+        "started_ns": 677153804451500,
+        "thread_id": 53516,
+        "timestamp_ns": 677154248476400
+      },
+      {
+        "client_port": 61540,
+        "elapsed_ms": 366.8098,
+        "outcome": "returned",
+        "parent_id": 5056,
+        "phase": "journal.guard_held",
+        "root_id": 5054,
+        "route": "commands",
+        "server_port": 53341,
+        "span_id": 5067,
+        "started_ns": 677153881603100,
+        "thread_id": 53516,
+        "timestamp_ns": 677154248412900
+      },
+      {
+        "client_port": 61540,
+        "elapsed_ms": 297.7172,
+        "outcome": "returned",
+        "parent_id": 5067,
+        "phase": "journal.append",
+        "root_id": 5054,
+        "route": "commands",
+        "server_port": 53341,
+        "span_id": 5070,
+        "started_ns": 677153950618800,
+        "thread_id": 53516,
+        "timestamp_ns": 677154248336000
+      },
+      {
+        "client_port": 61540,
+        "elapsed_ms": 68.8346,
+        "outcome": "returned",
+        "parent_id": 5067,
+        "phase": "journal.reload",
+        "root_id": 5054,
+        "route": "commands",
+        "server_port": 53341,
+        "span_id": 5068,
+        "started_ns": 677153881613000,
+        "thread_id": 53516,
+        "timestamp_ns": 677153950447600
+      },
+      {
+        "client_port": 61540,
+        "elapsed_ms": 68.7875,
+        "outcome": "returned",
+        "parent_id": 5068,
+        "phase": "journal.snapshot",
+        "root_id": 5054,
+        "route": "commands",
+        "server_port": 53341,
+        "span_id": 5069,
+        "started_ns": 677153881620100,
+        "thread_id": 53516,
+        "timestamp_ns": 677153950407600
+      },
+      {
+        "client_port": 61540,
+        "elapsed_ms": 39.2239,
+        "outcome": "raised",
+        "parent_id": 5056,
+        "phase": "server.lookup",
+        "root_id": 5054,
+        "route": "commands",
+        "server_port": 53341,
+        "span_id": 5057,
+        "started_ns": 677153804763200,
+        "thread_id": 53516,
+        "timestamp_ns": 677153843987100
+      },
+      {
+        "client_port": 61540,
+        "elapsed_ms": 36.8998,
+        "outcome": "raised",
+        "parent_id": 5057,
+        "phase": "journal.guard_held",
+        "root_id": 5054,
+        "route": "commands",
+        "server_port": 53341,
+        "span_id": 5059,
+        "started_ns": 677153807071900,
+        "thread_id": 53516,
+        "timestamp_ns": 677153843971700
+      },
+      {
+        "client_port": 61540,
+        "elapsed_ms": 36.719,
+        "outcome": "returned",
+        "parent_id": 5059,
+        "phase": "journal.reload",
+        "root_id": 5054,
+        "route": "commands",
+        "server_port": 53341,
+        "span_id": 5060,
+        "started_ns": 677153807080600,
+        "thread_id": 53516,
+        "timestamp_ns": 677153843799600
+      },
+      {
+        "client_port": 61540,
+        "elapsed_ms": 36.6902,
+        "outcome": "returned",
+        "parent_id": 5060,
+        "phase": "journal.snapshot",
+        "root_id": 5054,
+        "route": "commands",
+        "server_port": 53341,
+        "span_id": 5061,
+        "started_ns": 677153807087400,
+        "thread_id": 53516,
+        "timestamp_ns": 677153843777600
+      },
+      {
+        "client_port": 61540,
+        "elapsed_ms": 31.9242,
+        "outcome": "returned",
+        "parent_id": 5056,
+        "phase": "journal.guard_held",
+        "root_id": 5054,
+        "route": "commands",
+        "server_port": 53341,
+        "span_id": 5063,
+        "started_ns": 677153847148100,
+        "thread_id": 53516,
+        "timestamp_ns": 677153879072300
+      },
+      {
+        "client_port": 61540,
+        "elapsed_ms": 31.8428,
+        "outcome": "returned",
+        "parent_id": 5063,
+        "phase": "journal.reload",
+        "root_id": 5054,
+        "route": "commands",
+        "server_port": 53341,
+        "span_id": 5064,
+        "started_ns": 677153847166800,
+        "thread_id": 53516,
+        "timestamp_ns": 677153879009600
+      },
+      {
+        "client_port": 61540,
+        "elapsed_ms": 31.8038,
+        "outcome": "returned",
+        "parent_id": 5064,
+        "phase": "journal.snapshot",
+        "root_id": 5054,
+        "route": "commands",
+        "server_port": 53341,
+        "span_id": 5065,
+        "started_ns": 677153847181000,
+        "thread_id": 53516,
+        "timestamp_ns": 677153878984800
+      },
+      {
+        "client_port": null,
+        "elapsed_ms": 3.0643,
+        "outcome": "returned",
+        "parent_id": null,
+        "phase": "journal.guard_wait",
+        "root_id": 5072,
+        "route": "other",
+        "server_port": null,
+        "span_id": 5072,
+        "started_ns": 677154248700000,
+        "thread_id": 35588,
+        "timestamp_ns": 677154251764300
+      },
+      {
+        "client_port": 61540,
+        "elapsed_ms": 2.8042,
+        "outcome": "returned",
+        "parent_id": 5056,
+        "phase": "journal.guard_wait",
+        "root_id": 5054,
+        "route": "commands",
+        "server_port": 53341,
+        "span_id": 5062,
+        "started_ns": 677153844305500,
+        "thread_id": 53516,
+        "timestamp_ns": 677153847109700
+      },
+      {
+        "client_port": 61540,
+        "elapsed_ms": 2.2837,
+        "outcome": "returned",
+        "parent_id": 5057,
+        "phase": "journal.guard_wait",
+        "root_id": 5054,
+        "route": "commands",
+        "server_port": 53341,
+        "span_id": 5058,
+        "started_ns": 677153804776300,
+        "thread_id": 53516,
+        "timestamp_ns": 677153807060000
+      }
+    ],
+    "raw_interval_mono_us": [
+      677153802830,
+      677154249200
+    ]
+  },
+  "limitations": [
+    "No 2000ms gap occurred; absence in this short copied-history run neither clears nor diagnoses S98.",
+    "9418 older events were evicted; zero dropped active spans does not mean a complete lifetime trace.",
+    "Read/hash/fsync times are wall-clock call durations and can include descheduling; hash share is not CPU utilization.",
+    "Expected rejected/missing-command control paths unwind wrappers; returned_count is not a wire failure count.",
+    "No native/editor/ACK/residency/no-leak/F13/F14 evidence is produced.",
+    "Fake wrapper overhead check is not representative of I/O/concurrency and was not subtracted."
+  ],
+  "longest_lookup": {
+    "elapsed_ms": 382.548,
+    "group": 4,
+    "ordinal": 4,
+    "status": "COMMITTED",
+    "transport_failure": null
+  },
+  "max_status_gap_group": 12,
+  "max_status_gap_ms": 446.3703,
+  "operation_timings": {
+    "host.archive": {
+      "count": 0,
+      "max_ns": 0,
+      "returned_count": 0,
+      "total_ns": 0
+    },
+    "host.cancel": {
+      "count": 20,
+      "max_ns": 119651900,
+      "returned_count": 20,
+      "total_ns": 1944836300
+    },
+    "host.commands": {
+      "count": 220,
+      "max_ns": 444036700,
+      "returned_count": 160,
+      "total_ns": 16162501900
+    },
+    "host.discovery": {
+      "count": 20,
+      "max_ns": 320600,
+      "returned_count": 20,
+      "total_ns": 4226500
+    },
+    "host.lease": {
+      "count": 20,
+      "max_ns": 53525100,
+      "returned_count": 20,
+      "total_ns": 862657600
+    },
+    "host.lookup": {
+      "count": 160,
+      "max_ns": 380326400,
+      "returned_count": 160,
+      "total_ns": 16452056300
+    },
+    "host.other": {
+      "count": 0,
+      "max_ns": 0,
+      "returned_count": 0,
+      "total_ns": 0
+    },
+    "host.stop": {
+      "count": 0,
+      "max_ns": 0,
+      "returned_count": 0,
+      "total_ns": 0
+    },
+    "journal.append": {
+      "count": 340,
+      "max_ns": 297740300,
+      "returned_count": 340,
+      "total_ns": 4390996800
+    },
+    "journal.load": {
+      "count": 1,
+      "max_ns": 12668860400,
+      "returned_count": 1,
+      "total_ns": 12668860400
+    },
+    "journal.reload": {
+      "count": 780,
+      "max_ns": 73173300,
+      "returned_count": 780,
+      "total_ns": 28811638900
+    },
+    "journal.snapshot": {
+      "count": 782,
+      "max_ns": 73139300,
+      "returned_count": 782,
+      "total_ns": 28869297800
+    },
+    "journal.writer_held": {
+      "count": 781,
+      "max_ns": 12668979700,
+      "returned_count": 621,
+      "total_ns": 46184261900
+    },
+    "journal.writer_wait": {
+      "count": 781,
+      "max_ns": 8215400,
+      "returned_count": 781,
+      "total_ns": 2176728700
+    }
+  },
+  "root_cause_established": false,
+  "schema": "HH-S100-HTTP-RESULT-ANALYSIS-1",
+  "snapshot_composition": {
+    "denominator": "Sum of 780 measured HTTP _snapshot context durations only",
+    "fsync_scope": "Snapshot durability barrier only; append/parser/SQLite/fsync internals unmeasured",
+    "http_snapshots": {
+      "bytes": 0,
+      "calls": 780,
+      "max_ns": 73056900,
+      "returned": 780,
+      "total_ns": 28752540200
+    },
+    "operations": {
+      "fsync": {
+        "bytes": 0,
+        "calls": 780,
+        "max_ns": 37488800,
+        "percent_of_http_snapshot_duration": 1.4016337241743948,
+        "returned": 780,
+        "total_ms": 403.0053,
+        "total_ns": 403005300
+      },
+      "hash": {
+        "bytes": 13943550521,
+        "calls": 213174,
+        "max_ns": 24478800,
+        "percent_of_http_snapshot_duration": 70.50748858704317,
+        "returned": 213174,
+        "total_ms": 20272.694,
+        "total_ns": 20272694000
+      },
+      "read": {
+        "bytes": 13943550521,
+        "calls": 213954,
+        "max_ns": 4812100,
+        "percent_of_http_snapshot_duration": 17.6873701058246,
+        "returned": 213954,
+        "total_ms": 5085.5682,
+        "total_ns": 5085568200
+      }
+    },
+    "residual_ns": 2991272700,
+    "residual_percent": 10.403507582957836,
+    "residual_scope": "Other snapshot operations, scheduling and observer overhead; no isolated overhead attribution",
+    "validity": "The three delegated suboperations are sequential inside each snapshot. Their composition is not an end-to-end HTTP share or CPU profile. Outer snapshot/reload/guard/dispatch spans overlap."
+  },
+  "source_and_helpers_unchanged": true,
+  "source_closure_sha256": "cfc4b55a5407891bfd54d22d9f1ac45a74b6c744898199a0e4690d6230a6c1d6",
+  "source_count": 51,
+  "trace": {
+    "active_capacity": 64,
+    "event_capacity": 8192,
+    "events_evicted": 9418,
+    "first_failure": null,
+    "identity_missing": 0,
+    "spans_dropped": 0,
+    "transport_failures_by_route": {
+      "archive": 0,
+      "cancel": 0,
+      "commands": 0,
+      "discovery": 0,
+      "lease": 0,
+      "lookup": 0,
+      "other": 0,
+      "stop": 0
+    },
+    "transport_failures_observed": 0,
+    "unfinished": []
+  },
+  "workload": {
+    "cancel_commands": 20,
+    "cancel_no_effect": true,
+    "commands": 200,
+    "effects": 40,
+    "groups": 20,
+    "lookup_attempts": 160,
+    "lookup_statuses": {
+      "CANCELED": 20,
+      "COMMITTED": 140
+    },
+    "mix": {
+      "admitted": 40,
+      "inspect": 100,
+      "rejected": 60
+    }
+  }
+}

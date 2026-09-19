@@ -79,6 +79,9 @@ class InertProducer(CommandProducer):
         self.journal = SimpleNamespace(_cache_closed=False,
             _index_store=SimpleNamespace(_db=object(), _dir=object()))
 
+    def phase_snapshot(self):
+        return {'pid': self.identity['pid'], 'unfinished': []}
+
     def close(self):
         self.events.append('producer_close')
         self.failed = True
@@ -90,6 +93,23 @@ class InertProducer(CommandProducer):
         self.observer.probe.close()
         self.journal._cache_closed, self.journal._index_store = True, None
         self.closed = True
+
+
+class InertImportObserver:
+    def __init__(self, *_):
+        self.closed = False
+
+    def start(self):
+        pass
+
+    def close(self):
+        self.closed = True
+
+    def snapshot(self):
+        from studio.tests.replay.benchmark_import_observer import ImportObserver
+        observer = ImportObserver(Path('.'), Path('.'), Path('.'))
+        observer._started_ns, observer._closed = 1, self.closed
+        return observer.snapshot()
 
 
 class TerminalCleanupTests(unittest.TestCase):
@@ -178,6 +198,7 @@ class TerminalCleanupTests(unittest.TestCase):
         for name, value in [('STUDIO', self.studio), ('load_fixture', lambda: (None, {})),
                             ('verify_sources', lambda _: None), ('prepare', prepare),
                             ('project_files', lambda _: {}), ('BenchmarkProcess', EditorOwner),
+                            ('ImportObserver', InertImportObserver),
                             ('CampaignProducer', Producer), ('open_probe', lambda *_: self.probe),
                             ('NativeLog', lambda _: SimpleNamespace(wait=ready)), ('write', writer)]:
             stack.enter_context(patch.object(campaign, name, value))
@@ -214,6 +235,71 @@ class TerminalCleanupTests(unittest.TestCase):
         self.assertEqual(record['errors'], [])
         self.assertEqual(json.loads((self.root / 'child-failure.json').read_bytes())['code'], 'ADMISSION_UNKNOWN')
         self.assertFalse((self.root / 'child-result.json').exists())
+        phases = json.loads((self.root / 'http-phases-final.json').read_bytes())
+        self.assertTrue(phases['available'])
+        self.assertEqual(phases['observation']['pid'], 123)
+        self.assertEqual(phases['context'], campaign.reference(self.root, self.root / 'context.json'))
+
+    def test_import_primary_survives_observer_close_and_receipt_failures(self):
+        primary = campaign.native_job.StageFailed('STAGE_WALL_LIMIT')
+        cause = RuntimeError('original')
+        primary.__cause__ = cause
+        close_error, write_error = RuntimeError('close'), OSError('receipt')
+        observer = SimpleNamespace(start=lambda: None,
+            close=lambda: (_ for _ in ()).throw(close_error), snapshot=lambda: {})
+        errors = []
+        with patch.object(campaign.native_job, 'run_trusted_stage', side_effect=primary), \
+                patch.object(campaign, '_write_observation', side_effect=write_error):
+            with self.assertRaises(campaign.native_job.StageFailed) as caught:
+                campaign._observed_import(self.root, self.context, self.root / 'project',
+                    self.root / 'never.exe', 'a' * 64, observer, errors)
+        self.assertIs(caught.exception, primary)
+        self.assertIs(primary.__cause__, cause)
+        self.assertEqual([error for _, error in errors], [close_error, write_error])
+
+    def test_successful_import_cannot_hide_observer_cleanup_failure(self):
+        observer = InertImportObserver()
+        errors = []
+        with patch.object(observer, 'close', side_effect=OSError('held handle')), \
+                patch.object(campaign.native_job, 'run_trusted_stage', return_value={}):
+            with self.assertRaisesRegex(BenchmarkJobError, 'CAMPAIGN_IMPORT_OBSERVATION_INCOMPLETE'):
+                campaign._observed_import(self.root, self.context, self.root / 'project',
+                    self.root / 'never.exe', 'a' * 64, observer, errors)
+        self.assertEqual(errors[0][0], 'import_observer_close')
+
+    def test_http_observation_failure_does_not_suppress_other_cleanup(self):
+        primary = CommandError('ADMISSION_UNKNOWN')
+        with patch.object(self.producer, 'phase_snapshot', side_effect=OSError('snapshot failed')):
+            self.finish(primary=primary)
+        self.assertTrue(self.owner.closed)
+        self.assertTrue(self.producer.closed)
+        self.assertEqual(self.terminal()['errors'][-1]['stage'], 'http_observation_receipt')
+
+    def test_import_internal_observer_error_stops_before_producer_setup(self):
+        observer = InertImportObserver()
+        snapshot = observer.snapshot()
+        snapshot.update(closed=True, error_count=1,
+                        errors=[{'phase': 'poll', 'exception_class': 'OSError', 'mono_ns': 2}])
+        errors = []
+        with patch.object(observer, 'snapshot', return_value=snapshot), \
+                patch.object(campaign.native_job, 'run_trusted_stage', return_value={}):
+            with self.assertRaisesRegex(BenchmarkJobError, 'CAMPAIGN_IMPORT_OBSERVATION_INCOMPLETE'):
+                campaign._observed_import(self.root, self.context, self.root / 'project',
+                    self.root / 'never.exe', 'a' * 64, observer, errors)
+        self.assertTrue((self.root / 'import-observation.json').is_file())
+        self.assertEqual(errors[0][0], 'import_observation_receipt')
+
+    def test_final_import_cleanup_state_preserves_prior_failure(self):
+        observer = InertImportObserver()
+        prior = OSError('first close failed')
+        primary = campaign.native_job.StageFailed('STAGE_WALL_LIMIT')
+        self.finish(primary=primary, import_observer=observer,
+                    errors=[('import_observer_close', prior)])
+        record = self.terminal()
+        self.assertTrue(record['observations']['import_observer']['closed'])
+        self.assertFalse(record['observations']['import_observer']['handle_retained'])
+        self.assertEqual(record['errors'][0]['stage'], 'import_observer_close')
+        self.assertIn(prior, primary.cleanup_errors)
 
     def test_join_and_multiple_close_failures_do_not_skip_owner_or_mask_primary(self):
         join = RuntimeError('join failed')

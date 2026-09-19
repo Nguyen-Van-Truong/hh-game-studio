@@ -1,0 +1,455 @@
+{
+  "schema_id": "hh-studio.hash-reader-diagnostic",
+  "schema_version": "1.0.0",
+  "utc": "2026-09-19T00:44:26.453134+00:00",
+  "diagnostic_only": true,
+  "formal_acceptance": false,
+  "eligible_for_dataset": false,
+  "scope": "single-process warm-OS-cache copied-history reader microbenchmark; no engine, transport, lock contention, acceptance or root-cause claim",
+  "method": "5 arms x 5 interleaved Latin-square rotations; exact full-file SHA-512 verified per arm; no byte cache/full-file loading/mmap; flush+fsync each sample timed separately",
+  "python": "3.11.9 (tags/v3.11.9:de54cf5, Apr  2 2024, 10:12:12) [MSC v.1938 64 bit (AMD64)]",
+  "executable": "C:\\Users\\truon\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+  "platform": "Windows-10-10.0.26200-SP0",
+  "source": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s98-campaign-01\\run-00-attempt-01\\commands\\commands.jsonl",
+  "copy": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260919-gt06-s100-recovery\\hash-reader-probe\\commands.copy.jsonl",
+  "original_before": {
+    "size": 17761123,
+    "sha256": "91e593b3df4fae95efceebf47ff9e629004a4a6f9e21aed459b3cf48cff9ca19",
+    "sha512": "4223747f026bdcab520a633908025b58b4e9f10d41c8bcef36a4f315abd42b191b9b29512c93106c1bef10e6c3605e8ebfd89f3fe3a6cbec2d8b0d8c2ea018da"
+  },
+  "original_after": {
+    "size": 17761123,
+    "sha256": "91e593b3df4fae95efceebf47ff9e629004a4a6f9e21aed459b3cf48cff9ca19",
+    "sha512": "4223747f026bdcab520a633908025b58b4e9f10d41c8bcef36a4f315abd42b191b9b29512c93106c1bef10e6c3605e8ebfd89f3fe3a6cbec2d8b0d8c2ea018da"
+  },
+  "copy_before": {
+    "size": 17761123,
+    "sha256": "91e593b3df4fae95efceebf47ff9e629004a4a6f9e21aed459b3cf48cff9ca19",
+    "sha512": "4223747f026bdcab520a633908025b58b4e9f10d41c8bcef36a4f315abd42b191b9b29512c93106c1bef10e6c3605e8ebfd89f3fe3a6cbec2d8b0d8c2ea018da"
+  },
+  "copy_after": {
+    "size": 17761123,
+    "sha256": "91e593b3df4fae95efceebf47ff9e629004a4a6f9e21aed459b3cf48cff9ca19",
+    "sha512": "4223747f026bdcab520a633908025b58b4e9f10d41c8bcef36a4f315abd42b191b9b29512c93106c1bef10e6c3605e8ebfd89f3fe3a6cbec2d8b0d8c2ea018da"
+  },
+  "duration_seconds": 1.4154173999559134,
+  "summaries": {
+    "read64k": {
+      "method": "read",
+      "buffer_bytes": 65536,
+      "samples": 5,
+      "hash_read_ms": {
+        "median_ms": 29.3483,
+        "p95_nearest_rank_ms": 30.3498,
+        "max_ms": 30.3498,
+        "min_ms": 28.1542
+      },
+      "flush_fsync_ms": {
+        "median_ms": 0.1719,
+        "p95_nearest_rank_ms": 1.1468,
+        "max_ms": 1.1468,
+        "min_ms": 0.1039
+      },
+      "total_ms": {
+        "median_ms": 30.3229,
+        "p95_nearest_rank_ms": 30.5758,
+        "max_ms": 30.5758,
+        "min_ms": 28.3397
+      }
+    },
+    "read256k": {
+      "method": "read",
+      "buffer_bytes": 262144,
+      "samples": 5,
+      "hash_read_ms": {
+        "median_ms": 33.0581,
+        "p95_nearest_rank_ms": 34.6258,
+        "max_ms": 34.6258,
+        "min_ms": 27.0258
+      },
+      "flush_fsync_ms": {
+        "median_ms": 0.1244,
+        "p95_nearest_rank_ms": 0.1945,
+        "max_ms": 0.1945,
+        "min_ms": 0.0691
+      },
+      "total_ms": {
+        "median_ms": 33.2296,
+        "p95_nearest_rank_ms": 34.8391,
+        "max_ms": 34.8391,
+        "min_ms": 27.181
+      }
+    },
+    "read1m": {
+      "method": "read",
+      "buffer_bytes": 1048576,
+      "samples": 5,
+      "hash_read_ms": {
+        "median_ms": 32.2736,
+        "p95_nearest_rank_ms": 33.7671,
+        "max_ms": 33.7671,
+        "min_ms": 31.5368
+      },
+      "flush_fsync_ms": {
+        "median_ms": 0.0883,
+        "p95_nearest_rank_ms": 0.1096,
+        "max_ms": 0.1096,
+        "min_ms": 0.0748
+      },
+      "total_ms": {
+        "median_ms": 32.4134,
+        "p95_nearest_rank_ms": 33.8993,
+        "max_ms": 33.8993,
+        "min_ms": 31.7181
+      }
+    },
+    "readinto256k": {
+      "method": "readinto",
+      "buffer_bytes": 262144,
+      "samples": 5,
+      "hash_read_ms": {
+        "median_ms": 27.744,
+        "p95_nearest_rank_ms": 35.3496,
+        "max_ms": 35.3496,
+        "min_ms": 26.8298
+      },
+      "flush_fsync_ms": {
+        "median_ms": 0.119,
+        "p95_nearest_rank_ms": 0.1269,
+        "max_ms": 0.1269,
+        "min_ms": 0.0932
+      },
+      "total_ms": {
+        "median_ms": 27.8923,
+        "p95_nearest_rank_ms": 35.5091,
+        "max_ms": 35.5091,
+        "min_ms": 27.0121
+      }
+    },
+    "readinto1m": {
+      "method": "readinto",
+      "buffer_bytes": 1048576,
+      "samples": 5,
+      "hash_read_ms": {
+        "median_ms": 27.2058,
+        "p95_nearest_rank_ms": 28.3514,
+        "max_ms": 28.3514,
+        "min_ms": 26.7248
+      },
+      "flush_fsync_ms": {
+        "median_ms": 0.1191,
+        "p95_nearest_rank_ms": 0.415,
+        "max_ms": 0.415,
+        "min_ms": 0.0919
+      },
+      "total_ms": {
+        "median_ms": 27.5253,
+        "p95_nearest_rank_ms": 28.9075,
+        "max_ms": 28.9075,
+        "min_ms": 26.8997
+      }
+    }
+  },
+  "rows": [
+    {
+      "arm": "read64k",
+      "repetition": 0,
+      "ordinal": 0,
+      "buffer_bytes": 65536,
+      "bytes": 17761123,
+      "chunks": 272,
+      "sha512": "4223747f026bdcab520a633908025b58b4e9f10d41c8bcef36a4f315abd42b191b9b29512c93106c1bef10e6c3605e8ebfd89f3fe3a6cbec2d8b0d8c2ea018da",
+      "hash_read_ms": 29.1013,
+      "flush_fsync_ms": 1.1468,
+      "total_ms": 30.3229
+    },
+    {
+      "arm": "read256k",
+      "repetition": 0,
+      "ordinal": 1,
+      "buffer_bytes": 262144,
+      "bytes": 17761123,
+      "chunks": 68,
+      "sha512": "4223747f026bdcab520a633908025b58b4e9f10d41c8bcef36a4f315abd42b191b9b29512c93106c1bef10e6c3605e8ebfd89f3fe3a6cbec2d8b0d8c2ea018da",
+      "hash_read_ms": 31.6971,
+      "flush_fsync_ms": 0.1945,
+      "total_ms": 31.9463
+    },
+    {
+      "arm": "read1m",
+      "repetition": 0,
+      "ordinal": 2,
+      "buffer_bytes": 1048576,
+      "bytes": 17761123,
+      "chunks": 17,
+      "sha512": "4223747f026bdcab520a633908025b58b4e9f10d41c8bcef36a4f315abd42b191b9b29512c93106c1bef10e6c3605e8ebfd89f3fe3a6cbec2d8b0d8c2ea018da",
+      "hash_read_ms": 31.7945,
+      "flush_fsync_ms": 0.0748,
+      "total_ms": 31.9157
+    },
+    {
+      "arm": "readinto256k",
+      "repetition": 0,
+      "ordinal": 3,
+      "buffer_bytes": 262144,
+      "bytes": 17761123,
+      "chunks": 68,
+      "sha512": "4223747f026bdcab520a633908025b58b4e9f10d41c8bcef36a4f315abd42b191b9b29512c93106c1bef10e6c3605e8ebfd89f3fe3a6cbec2d8b0d8c2ea018da",
+      "hash_read_ms": 27.744,
+      "flush_fsync_ms": 0.0932,
+      "total_ms": 27.8875
+    },
+    {
+      "arm": "readinto1m",
+      "repetition": 0,
+      "ordinal": 4,
+      "buffer_bytes": 1048576,
+      "bytes": 17761123,
+      "chunks": 17,
+      "sha512": "4223747f026bdcab520a633908025b58b4e9f10d41c8bcef36a4f315abd42b191b9b29512c93106c1bef10e6c3605e8ebfd89f3fe3a6cbec2d8b0d8c2ea018da",
+      "hash_read_ms": 27.2058,
+      "flush_fsync_ms": 0.2291,
+      "total_ms": 27.5253
+    },
+    {
+      "arm": "read256k",
+      "repetition": 1,
+      "ordinal": 5,
+      "buffer_bytes": 262144,
+      "bytes": 17761123,
+      "chunks": 68,
+      "sha512": "4223747f026bdcab520a633908025b58b4e9f10d41c8bcef36a4f315abd42b191b9b29512c93106c1bef10e6c3605e8ebfd89f3fe3a6cbec2d8b0d8c2ea018da",
+      "hash_read_ms": 34.6258,
+      "flush_fsync_ms": 0.1569,
+      "total_ms": 34.8391
+    },
+    {
+      "arm": "read1m",
+      "repetition": 1,
+      "ordinal": 6,
+      "buffer_bytes": 1048576,
+      "bytes": 17761123,
+      "chunks": 17,
+      "sha512": "4223747f026bdcab520a633908025b58b4e9f10d41c8bcef36a4f315abd42b191b9b29512c93106c1bef10e6c3605e8ebfd89f3fe3a6cbec2d8b0d8c2ea018da",
+      "hash_read_ms": 33.7671,
+      "flush_fsync_ms": 0.0772,
+      "total_ms": 33.8993
+    },
+    {
+      "arm": "readinto256k",
+      "repetition": 1,
+      "ordinal": 7,
+      "buffer_bytes": 262144,
+      "bytes": 17761123,
+      "chunks": 68,
+      "sha512": "4223747f026bdcab520a633908025b58b4e9f10d41c8bcef36a4f315abd42b191b9b29512c93106c1bef10e6c3605e8ebfd89f3fe3a6cbec2d8b0d8c2ea018da",
+      "hash_read_ms": 26.8298,
+      "flush_fsync_ms": 0.1269,
+      "total_ms": 27.0121
+    },
+    {
+      "arm": "readinto1m",
+      "repetition": 1,
+      "ordinal": 8,
+      "buffer_bytes": 1048576,
+      "bytes": 17761123,
+      "chunks": 17,
+      "sha512": "4223747f026bdcab520a633908025b58b4e9f10d41c8bcef36a4f315abd42b191b9b29512c93106c1bef10e6c3605e8ebfd89f3fe3a6cbec2d8b0d8c2ea018da",
+      "hash_read_ms": 26.7248,
+      "flush_fsync_ms": 0.1191,
+      "total_ms": 26.8997
+    },
+    {
+      "arm": "read64k",
+      "repetition": 1,
+      "ordinal": 9,
+      "buffer_bytes": 65536,
+      "bytes": 17761123,
+      "chunks": 272,
+      "sha512": "4223747f026bdcab520a633908025b58b4e9f10d41c8bcef36a4f315abd42b191b9b29512c93106c1bef10e6c3605e8ebfd89f3fe3a6cbec2d8b0d8c2ea018da",
+      "hash_read_ms": 30.0259,
+      "flush_fsync_ms": 0.3971,
+      "total_ms": 30.4793
+    },
+    {
+      "arm": "read1m",
+      "repetition": 2,
+      "ordinal": 10,
+      "buffer_bytes": 1048576,
+      "bytes": 17761123,
+      "chunks": 17,
+      "sha512": "4223747f026bdcab520a633908025b58b4e9f10d41c8bcef36a4f315abd42b191b9b29512c93106c1bef10e6c3605e8ebfd89f3fe3a6cbec2d8b0d8c2ea018da",
+      "hash_read_ms": 31.5368,
+      "flush_fsync_ms": 0.1096,
+      "total_ms": 31.7181
+    },
+    {
+      "arm": "readinto256k",
+      "repetition": 2,
+      "ordinal": 11,
+      "buffer_bytes": 262144,
+      "bytes": 17761123,
+      "chunks": 68,
+      "sha512": "4223747f026bdcab520a633908025b58b4e9f10d41c8bcef36a4f315abd42b191b9b29512c93106c1bef10e6c3605e8ebfd89f3fe3a6cbec2d8b0d8c2ea018da",
+      "hash_read_ms": 35.3496,
+      "flush_fsync_ms": 0.1073,
+      "total_ms": 35.5091
+    },
+    {
+      "arm": "readinto1m",
+      "repetition": 2,
+      "ordinal": 12,
+      "buffer_bytes": 1048576,
+      "bytes": 17761123,
+      "chunks": 17,
+      "sha512": "4223747f026bdcab520a633908025b58b4e9f10d41c8bcef36a4f315abd42b191b9b29512c93106c1bef10e6c3605e8ebfd89f3fe3a6cbec2d8b0d8c2ea018da",
+      "hash_read_ms": 28.2163,
+      "flush_fsync_ms": 0.415,
+      "total_ms": 28.9075
+    },
+    {
+      "arm": "read64k",
+      "repetition": 2,
+      "ordinal": 13,
+      "buffer_bytes": 65536,
+      "bytes": 17761123,
+      "chunks": 272,
+      "sha512": "4223747f026bdcab520a633908025b58b4e9f10d41c8bcef36a4f315abd42b191b9b29512c93106c1bef10e6c3605e8ebfd89f3fe3a6cbec2d8b0d8c2ea018da",
+      "hash_read_ms": 30.3498,
+      "flush_fsync_ms": 0.1719,
+      "total_ms": 30.5758
+    },
+    {
+      "arm": "read256k",
+      "repetition": 2,
+      "ordinal": 14,
+      "buffer_bytes": 262144,
+      "bytes": 17761123,
+      "chunks": 68,
+      "sha512": "4223747f026bdcab520a633908025b58b4e9f10d41c8bcef36a4f315abd42b191b9b29512c93106c1bef10e6c3605e8ebfd89f3fe3a6cbec2d8b0d8c2ea018da",
+      "hash_read_ms": 33.0581,
+      "flush_fsync_ms": 0.1244,
+      "total_ms": 33.2296
+    },
+    {
+      "arm": "readinto256k",
+      "repetition": 3,
+      "ordinal": 15,
+      "buffer_bytes": 262144,
+      "bytes": 17761123,
+      "chunks": 68,
+      "sha512": "4223747f026bdcab520a633908025b58b4e9f10d41c8bcef36a4f315abd42b191b9b29512c93106c1bef10e6c3605e8ebfd89f3fe3a6cbec2d8b0d8c2ea018da",
+      "hash_read_ms": 28.2507,
+      "flush_fsync_ms": 0.1213,
+      "total_ms": 28.4268
+    },
+    {
+      "arm": "readinto1m",
+      "repetition": 3,
+      "ordinal": 16,
+      "buffer_bytes": 1048576,
+      "bytes": 17761123,
+      "chunks": 17,
+      "sha512": "4223747f026bdcab520a633908025b58b4e9f10d41c8bcef36a4f315abd42b191b9b29512c93106c1bef10e6c3605e8ebfd89f3fe3a6cbec2d8b0d8c2ea018da",
+      "hash_read_ms": 26.7326,
+      "flush_fsync_ms": 0.1129,
+      "total_ms": 26.9026
+    },
+    {
+      "arm": "read64k",
+      "repetition": 3,
+      "ordinal": 17,
+      "buffer_bytes": 65536,
+      "bytes": 17761123,
+      "chunks": 272,
+      "sha512": "4223747f026bdcab520a633908025b58b4e9f10d41c8bcef36a4f315abd42b191b9b29512c93106c1bef10e6c3605e8ebfd89f3fe3a6cbec2d8b0d8c2ea018da",
+      "hash_read_ms": 28.1542,
+      "flush_fsync_ms": 0.1307,
+      "total_ms": 28.3397
+    },
+    {
+      "arm": "read256k",
+      "repetition": 3,
+      "ordinal": 18,
+      "buffer_bytes": 262144,
+      "bytes": 17761123,
+      "chunks": 68,
+      "sha512": "4223747f026bdcab520a633908025b58b4e9f10d41c8bcef36a4f315abd42b191b9b29512c93106c1bef10e6c3605e8ebfd89f3fe3a6cbec2d8b0d8c2ea018da",
+      "hash_read_ms": 27.0258,
+      "flush_fsync_ms": 0.0691,
+      "total_ms": 27.181
+    },
+    {
+      "arm": "read1m",
+      "repetition": 3,
+      "ordinal": 19,
+      "buffer_bytes": 1048576,
+      "bytes": 17761123,
+      "chunks": 17,
+      "sha512": "4223747f026bdcab520a633908025b58b4e9f10d41c8bcef36a4f315abd42b191b9b29512c93106c1bef10e6c3605e8ebfd89f3fe3a6cbec2d8b0d8c2ea018da",
+      "hash_read_ms": 32.3262,
+      "flush_fsync_ms": 0.0907,
+      "total_ms": 32.4685
+    },
+    {
+      "arm": "readinto1m",
+      "repetition": 4,
+      "ordinal": 20,
+      "buffer_bytes": 1048576,
+      "bytes": 17761123,
+      "chunks": 17,
+      "sha512": "4223747f026bdcab520a633908025b58b4e9f10d41c8bcef36a4f315abd42b191b9b29512c93106c1bef10e6c3605e8ebfd89f3fe3a6cbec2d8b0d8c2ea018da",
+      "hash_read_ms": 28.3514,
+      "flush_fsync_ms": 0.0919,
+      "total_ms": 28.4927
+    },
+    {
+      "arm": "read64k",
+      "repetition": 4,
+      "ordinal": 21,
+      "buffer_bytes": 65536,
+      "bytes": 17761123,
+      "chunks": 272,
+      "sha512": "4223747f026bdcab520a633908025b58b4e9f10d41c8bcef36a4f315abd42b191b9b29512c93106c1bef10e6c3605e8ebfd89f3fe3a6cbec2d8b0d8c2ea018da",
+      "hash_read_ms": 29.3483,
+      "flush_fsync_ms": 0.1039,
+      "total_ms": 29.514
+    },
+    {
+      "arm": "read256k",
+      "repetition": 4,
+      "ordinal": 22,
+      "buffer_bytes": 262144,
+      "bytes": 17761123,
+      "chunks": 68,
+      "sha512": "4223747f026bdcab520a633908025b58b4e9f10d41c8bcef36a4f315abd42b191b9b29512c93106c1bef10e6c3605e8ebfd89f3fe3a6cbec2d8b0d8c2ea018da",
+      "hash_read_ms": 33.17,
+      "flush_fsync_ms": 0.1186,
+      "total_ms": 33.3347
+    },
+    {
+      "arm": "read1m",
+      "repetition": 4,
+      "ordinal": 23,
+      "buffer_bytes": 1048576,
+      "bytes": 17761123,
+      "chunks": 17,
+      "sha512": "4223747f026bdcab520a633908025b58b4e9f10d41c8bcef36a4f315abd42b191b9b29512c93106c1bef10e6c3605e8ebfd89f3fe3a6cbec2d8b0d8c2ea018da",
+      "hash_read_ms": 32.2736,
+      "flush_fsync_ms": 0.0883,
+      "total_ms": 32.4134
+    },
+    {
+      "arm": "readinto256k",
+      "repetition": 4,
+      "ordinal": 24,
+      "buffer_bytes": 262144,
+      "bytes": 17761123,
+      "chunks": 68,
+      "sha512": "4223747f026bdcab520a633908025b58b4e9f10d41c8bcef36a4f315abd42b191b9b29512c93106c1bef10e6c3605e8ebfd89f3fe3a6cbec2d8b0d8c2ea018da",
+      "hash_read_ms": 27.7147,
+      "flush_fsync_ms": 0.119,
+      "total_ms": 27.8923
+    }
+  ]
+}

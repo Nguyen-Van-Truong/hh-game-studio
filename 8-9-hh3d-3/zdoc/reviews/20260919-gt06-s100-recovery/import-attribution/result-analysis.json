@@ -1,0 +1,164 @@
+{
+  "authority": 0,
+  "binary_sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424",
+  "cleanup_errors": [],
+  "conclusion": "One cold import completed; S100 20-second failure did not recur. This does not identify the historical timeout cause or clear the separate S98 status-gap failure.",
+  "driver_sha256": "afcf7ecab14f5e079d768c02e3ed34615bd70f976ceb3321fc3c39879f368174",
+  "eligible_for_dataset": false,
+  "events_dropped": 0,
+  "formal_acceptance": false,
+  "import_elapsed_seconds": 5.23499999998603,
+  "import_helper": {
+    "exit_code": 0,
+    "pid": 21920
+  },
+  "import_helper_handle_released": true,
+  "import_job": {
+    "active_count": 0,
+    "assigned": true,
+    "close_uncertain": false,
+    "closed": true,
+    "configured": true,
+    "create_uncertain": false,
+    "failed_operations": [],
+    "handle_retained": false,
+    "native_error": null,
+    "tainted": false,
+    "zero_observed": true
+  },
+  "import_limits": {
+    "active_process_limit": 4,
+    "each_log_capture_bytes": 262144,
+    "effective_wall_seconds": 20,
+    "job_memory_bytes": 2147483648,
+    "job_user_time_100ns": 150000000,
+    "limit_flags": 8716,
+    "wall_seconds": 20,
+    "workspace_bytes_limit": 33554432,
+    "workspace_limit_is_watchdog": true
+  },
+  "import_natural_tree_exit": true,
+  "import_target_exit": {
+    "exit_code": 0,
+    "pid": 10424
+  },
+  "limits": [
+    "Observed polling and pipe-read timestamps are not exact target instruction times.",
+    "100ms polling misses activity between samples; page faults include soft faults.",
+    "Aggregate CPU can exceed wall time across threads.",
+    "A successful diagnostic does not prove runtime acceptance or resource plateau.",
+    "No launcher self-exit is inferred from its own result file."
+  ],
+  "observer_errors": [],
+  "outer_elapsed_seconds": 6.672000000020489,
+  "outer_helper": {
+    "exit_code": 0,
+    "pid": null,
+    "pid_missing_reason": "NOT_PERSISTED_BY_BENCHMARKPROCESS"
+  },
+  "outer_host_watchdog_seconds": 90,
+  "outer_job": {
+    "active_count": 0,
+    "assigned": true,
+    "close_uncertain": false,
+    "closed": true,
+    "configured": true,
+    "create_uncertain": false,
+    "failed_operations": [],
+    "handle_retained": false,
+    "native_error": null,
+    "tainted": false,
+    "zero_observed": true
+  },
+  "outer_process_handle": {
+    "close_uncertain": false,
+    "closed": true,
+    "handle_retained": false,
+    "required": true
+  },
+  "outer_target_exit": {
+    "exit_code": 0,
+    "pid": 51304
+  },
+  "probe_handle_released": true,
+  "raw_files": {
+    "run-01/attribution.json": {
+      "bytes": 31360,
+      "sha256": "e9a0c7b4fd05971582f62ec3a607dcec94ef0a95d5e794f5ec26439bd5b868d7"
+    },
+    "run-01/driver.py": {
+      "bytes": 20214,
+      "sha256": "afcf7ecab14f5e079d768c02e3ed34615bd70f976ceb3321fc3c39879f368174"
+    },
+    "run-01/freeze.json": {
+      "bytes": 7839,
+      "sha256": "5f1e9b2841c51f8671420e5bc8c5feb25bdabcd59ae10da59719cade7be080d0"
+    },
+    "run-01/host-owner/capture.json": {
+      "bytes": 9081,
+      "sha256": "7014cc175699f379a89980ce278c8b8713f644ea5016979b7c58d8bb5d83bbe8"
+    },
+    "run-01/host-owner/cleanup-001.json": {
+      "bytes": 528,
+      "sha256": "379d7a25b4032e6cb243e100aa8a5ebcd3d82a94e45b71e0f18e47fe7e569534"
+    },
+    "run-01/host-owner/process-exit.json": {
+      "bytes": 30,
+      "sha256": "20cb9da0aa6a83a56fef31e5dae50656812a2975db329157c8c09e319428b1c7"
+    },
+    "run-01/host-owner/process-start.json": {
+      "bytes": 14,
+      "sha256": "2fb35266eba31753d086f7a9358f46de2631445c0e88bac340cc2e82cd4ce291"
+    },
+    "run-01/import-host/capture.json": {
+      "bytes": 1340,
+      "sha256": "24834bc191de28d516e01f9931d8604d03711d1fe8dd02063d9dd2f6d0d24ced"
+    },
+    "run-01/import-host/process-exit.json": {
+      "bytes": 30,
+      "sha256": "0a9c3a658f61536355214f506650f011b43351b29319d916d55dc81953bf85ba"
+    },
+    "run-01/import-host/process-start.json": {
+      "bytes": 14,
+      "sha256": "e2d96f09c3990f314b46b42a876c13fca50c47be2949d4f256194d387cde7607"
+    },
+    "run-01/import-host/stderr.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "run-01/import-host/stdout.txt": {
+      "bytes": 1492,
+      "sha256": "9b5e37b85c8c4f11090de482aee3734b6c7993ad884a62121b2adcc9dfdd6003"
+    },
+    "run-01/outer-result.json": {
+      "bytes": 609,
+      "sha256": "56ce723faf39f0617e4f90f0b75a7bcdfc83d3a70849c183d417f83d9bf0dcc1"
+    }
+  },
+  "sample_count": 45,
+  "sample_deltas": {
+    "elapsed_ms": 4755.055,
+    "kernel_cpu_ms": 1093.75,
+    "page_faults": 186375,
+    "peak_observed_private_commit_bytes": 582295552,
+    "peak_observed_working_set_bytes": 650022912,
+    "read_bytes": 14212197,
+    "user_cpu_ms": 4093.75,
+    "write_bytes": 3302094
+  },
+  "sample_interval_ms": {
+    "configured": 100,
+    "maximum_observed": 110.0884,
+    "minimum_observed": 105.9522
+  },
+  "schema": "HH-S100-IMPORT-RESULT-ANALYSIS-1",
+  "source_closure_sha256": "cfc4b55a5407891bfd54d22d9f1ac45a74b6c744898199a0e4690d6230a6c1d6",
+  "source_unchanged": true,
+  "startup_intervals_ms": {
+    "first_output_read_to_first_scan_read": 3521.2003,
+    "helper_create_to_stdin_closed": 25.1587,
+    "stage_entry_to_helper_create": 495.6727,
+    "stdin_closed_to_first_output_read": 438.8666,
+    "stdin_closed_to_target_receipt_observed": 247.0329
+  }
+}

@@ -1,0 +1,1179 @@
+{
+  "cleanup_errors": [],
+  "clock": "perf_counter_ns",
+  "eligible_for_dataset": false,
+  "events": [
+    {
+      "mono_ns": 677215192885800,
+      "phase": "stage_call_begin"
+    },
+    {
+      "mono_ns": 677215688558500,
+      "phase": "helper_create_begin"
+    },
+    {
+      "mono_ns": 677215697740800,
+      "phase": "helper_created",
+      "pid": 21920
+    },
+    {
+      "mono_ns": 677215698068000,
+      "phase": "job_assigned_limits_begin"
+    },
+    {
+      "mono_ns": 677215698137400,
+      "phase": "job_limits_verified"
+    },
+    {
+      "bytes": 3,
+      "mono_ns": 677215713693500,
+      "phase": "gate_write_begin"
+    },
+    {
+      "bytes": 3,
+      "mono_ns": 677215713699300,
+      "phase": "gate_write_returned"
+    },
+    {
+      "mono_ns": 677215713717200,
+      "phase": "stdin_pipe_closed"
+    },
+    {
+      "mono_ns": 677215960750100,
+      "phase": "target_start_receipt_observed",
+      "pid": 10424
+    },
+    {
+      "mono_ns": 677216089469900,
+      "phase": "target_identity_bound",
+      "pid": 10424,
+      "process_start": "windows:134342526056383800"
+    },
+    {
+      "bytes": 73,
+      "first_scan": false,
+      "mono_ns": 677216152583800,
+      "phase": "stdout_read",
+      "sha256": "2d853da735d660669568558a6cae955967b83e5ab764d3da37f8ddc29ef34897"
+    },
+    {
+      "file": ".godot/.gdignore",
+      "mono_ns": 677216198933600,
+      "phase": "project_milestone_observed"
+    },
+    {
+      "bytes": 2,
+      "first_scan": false,
+      "mono_ns": 677216204068000,
+      "phase": "stdout_read",
+      "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6"
+    },
+    {
+      "bytes": 98,
+      "first_scan": true,
+      "mono_ns": 677219673784100,
+      "phase": "stdout_read",
+      "sha256": "9d6a51b7b69c127777674545f9806004c586cc110b110a04fd841abe40fe62b6"
+    },
+    {
+      "bytes": 84,
+      "first_scan": true,
+      "mono_ns": 677219673896300,
+      "phase": "stdout_read",
+      "sha256": "200b1dc0c53da7cec306f95c51d18cb869e1d73e8c184d29a7052cf2512fc8c1"
+    },
+    {
+      "bytes": 87,
+      "first_scan": true,
+      "mono_ns": 677219676748600,
+      "phase": "stdout_read",
+      "sha256": "8f2187dbd3e247c31f4d13de3181fd6baa6b655757ebe55ca73d2efc94ddbef7"
+    },
+    {
+      "bytes": 83,
+      "first_scan": true,
+      "mono_ns": 677219743021400,
+      "phase": "stdout_read",
+      "sha256": "58efd1a3889ad50748408aec414e36a849eb1b70ebd4b24cd95054170b8914bc"
+    },
+    {
+      "bytes": 86,
+      "first_scan": true,
+      "mono_ns": 677219743088200,
+      "phase": "stdout_read",
+      "sha256": "651ef07c7bdca338deae31337b5f2f0b1890b4fe80bbd7d80fc0669de4a901e5"
+    },
+    {
+      "bytes": 81,
+      "first_scan": true,
+      "mono_ns": 677219743109700,
+      "phase": "stdout_read",
+      "sha256": "15bf7c0f654a0fa9851948b181d8d0d24f2403ac81657ad0ceb405df4cc5f031"
+    },
+    {
+      "bytes": 79,
+      "first_scan": true,
+      "mono_ns": 677219899441100,
+      "phase": "stdout_read",
+      "sha256": "59b9a4d29e76d69010655704103b0717bb870e159dc60ef853bf4302fc0b7ae6"
+    },
+    {
+      "bytes": 57,
+      "first_scan": true,
+      "mono_ns": 677219899560900,
+      "phase": "stdout_read",
+      "sha256": "2b0cfce550fced06be522a112bc74bf9ea1fdeba558d5207ecec326b4ac211f8"
+    },
+    {
+      "bytes": 106,
+      "first_scan": false,
+      "mono_ns": 677219965461500,
+      "phase": "stdout_read",
+      "sha256": "a290a11d5588d1c17baac86f019a3f2b67534d9d7ba5b6916855a4700e315277"
+    },
+    {
+      "bytes": 59,
+      "first_scan": false,
+      "mono_ns": 677219965506800,
+      "phase": "stdout_read",
+      "sha256": "6cc6d0c2aff2bf0f30b2785dc786cc3332e450cf2fb109eb736a98e7a4becefe"
+    },
+    {
+      "bytes": 59,
+      "first_scan": false,
+      "mono_ns": 677219965535000,
+      "phase": "stdout_read",
+      "sha256": "abb8b1ae3f1130e029c34ee465e7362781245c21e3c951bca15120fb5f30165a"
+    },
+    {
+      "bytes": 59,
+      "first_scan": false,
+      "mono_ns": 677219965561200,
+      "phase": "stdout_read",
+      "sha256": "4c52aed19057aa3730a10aac8b75ea745d1258cc5d17068807e4bc8011872137"
+    },
+    {
+      "bytes": 59,
+      "first_scan": false,
+      "mono_ns": 677219965586400,
+      "phase": "stdout_read",
+      "sha256": "8452942a4723d88d0440d4987afe7d03c224ec98381a3b9ea36341ec96877509"
+    },
+    {
+      "bytes": 59,
+      "first_scan": false,
+      "mono_ns": 677219965621200,
+      "phase": "stdout_read",
+      "sha256": "3ea2d1aa25195a402acf1531011b420c513ff18eac8b163bd12a6ae5e04a3273"
+    },
+    {
+      "bytes": 58,
+      "first_scan": false,
+      "mono_ns": 677219965645600,
+      "phase": "stdout_read",
+      "sha256": "9f673a237b9f6e15ed0af761ba5d9d0ac99a6ef6b687fb5e7ea165e005305c87"
+    },
+    {
+      "bytes": 90,
+      "first_scan": false,
+      "mono_ns": 677219972369100,
+      "phase": "stdout_read",
+      "sha256": "48099f372eaf44122b2d5383d2a42fa8ddac820b7bfcfdd2d6f31d94961fecae"
+    },
+    {
+      "bytes": 82,
+      "first_scan": false,
+      "mono_ns": 677219972397900,
+      "phase": "stdout_read",
+      "sha256": "6f14a985fdf5625c0de19bd7e6128f30f1a9ab1c035eccb13a32803e6db809ab"
+    },
+    {
+      "bytes": 74,
+      "first_scan": false,
+      "mono_ns": 677219972722600,
+      "phase": "stdout_read",
+      "sha256": "990cb325e3ae695e3cdda9fe84dbe0171efdcb3f969e2e670fd458f4d9dfe2c9"
+    },
+    {
+      "bytes": 57,
+      "first_scan": false,
+      "mono_ns": 677219972759200,
+      "phase": "stdout_read",
+      "sha256": "f2c0399939032caa58cd01ed176a59ac67d867b130afca6e832a5725ae6f0bcc"
+    },
+    {
+      "file": ".godot/global_script_class_cache.cfg",
+      "mono_ns": 677219982915100,
+      "phase": "project_milestone_observed"
+    },
+    {
+      "file": ".godot/editor/filesystem_cache10",
+      "mono_ns": 677219983002400,
+      "phase": "project_milestone_observed"
+    },
+    {
+      "bytes": 0,
+      "first_scan": false,
+      "mono_ns": 677220855289800,
+      "phase": "stdout_read",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 0,
+      "first_scan": false,
+      "mono_ns": 677220855335800,
+      "phase": "stderr_read",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "mono_ns": 677220855426800,
+      "phase": "stderr_pipe_closed"
+    },
+    {
+      "mono_ns": 677220855599500,
+      "phase": "stdout_pipe_closed"
+    },
+    {
+      "mono_ns": 677220924513900,
+      "phase": "stage_call_returned"
+    },
+    {
+      "exit_code": 0,
+      "mono_ns": 677220924783700,
+      "phase": "target_exit_observed"
+    }
+  ],
+  "events_dropped": 0,
+  "formal_acceptance": false,
+  "helper_handle_closed": true,
+  "helper_target_exit_receipt": {
+    "exit_code": 0,
+    "pid": 10424
+  },
+  "limitations": [
+    "Observer overhead remains inside the unchanged deadline.",
+    "File milestones are observation times, not filesystem creation timestamps.",
+    "CPU and IO deltas distinguish progress; low deltas do not identify a wait cause.",
+    "Private commit is PROCESS_MEMORY_COUNTERS.PagefileUsage; page faults include soft faults.",
+    "A forced target exit code never establishes natural import completion."
+  ],
+  "natural_target_exit_receipt": {
+    "exit_code": 0,
+    "pid": 10424
+  },
+  "natural_target_exit_status": "RECORDED",
+  "observer_errors": [],
+  "probe_handles_released": true,
+  "sample_interval_seconds": 0.1,
+  "samples": [
+    {
+      "io": {
+        "other_bytes": 30,
+        "other_ops": 5,
+        "read_bytes": 63370,
+        "read_ops": 1,
+        "write_bytes": 0,
+        "write_ops": 0
+      },
+      "kernel_100ns": 0,
+      "mono_ns": 677216089797100,
+      "page_faults": 650,
+      "pid": 10424,
+      "priority_class": 32,
+      "private_commit_bytes": 3854336,
+      "user_100ns": 0,
+      "wait_state": "running_or_waiting",
+      "working_set_bytes": 2199552
+    },
+    {
+      "io": {
+        "other_bytes": 6004,
+        "other_ops": 605,
+        "read_bytes": 79572,
+        "read_ops": 21,
+        "write_bytes": 74,
+        "write_ops": 2
+      },
+      "kernel_100ns": 781250,
+      "mono_ns": 677216199114900,
+      "page_faults": 11410,
+      "pid": 10424,
+      "priority_class": 32,
+      "private_commit_bytes": 18575360,
+      "user_100ns": 312500,
+      "wait_state": "running_or_waiting",
+      "working_set_bytes": 45912064
+    },
+    {
+      "io": {
+        "other_bytes": 6004,
+        "other_ops": 606,
+        "read_bytes": 79572,
+        "read_ops": 21,
+        "write_bytes": 76,
+        "write_ops": 3
+      },
+      "kernel_100ns": 1093750,
+      "mono_ns": 677216307914300,
+      "page_faults": 20878,
+      "pid": 10424,
+      "priority_class": 32,
+      "private_commit_bytes": 37826560,
+      "user_100ns": 1093750,
+      "wait_state": "running_or_waiting",
+      "working_set_bytes": 82722816
+    },
+    {
+      "io": {
+        "other_bytes": 10742,
+        "other_ops": 790,
+        "read_bytes": 12530236,
+        "read_ops": 23,
+        "write_bytes": 76,
+        "write_ops": 3
+      },
+      "kernel_100ns": 1562500,
+      "mono_ns": 677216415077700,
+      "page_faults": 32558,
+      "pid": 10424,
+      "priority_class": 32,
+      "private_commit_bytes": 73269248,
+      "user_100ns": 1562500,
+      "wait_state": "running_or_waiting",
+      "working_set_bytes": 123957248
+    },
+    {
+      "io": {
+        "other_bytes": 11096,
+        "other_ops": 879,
+        "read_bytes": 12530236,
+        "read_ops": 23,
+        "write_bytes": 76,
+        "write_ops": 3
+      },
+      "kernel_100ns": 1562500,
+      "mono_ns": 677216523679600,
+      "page_faults": 42080,
+      "pid": 10424,
+      "priority_class": 32,
+      "private_commit_bytes": 101392384,
+      "user_100ns": 2656250,
+      "wait_state": "running_or_waiting",
+      "working_set_bytes": 157564928
+    },
+    {
+      "io": {
+        "other_bytes": 12144,
+        "other_ops": 993,
+        "read_bytes": 13504736,
+        "read_ops": 25,
+        "write_bytes": 76,
+        "write_ops": 3
+      },
+      "kernel_100ns": 2031250,
+      "mono_ns": 677216630474400,
+      "page_faults": 53974,
+      "pid": 10424,
+      "priority_class": 32,
+      "private_commit_bytes": 149143552,
+      "user_100ns": 3281250,
+      "wait_state": "running_or_waiting",
+      "working_set_bytes": 205803520
+    },
+    {
+      "io": {
+        "other_bytes": 12970,
+        "other_ops": 1198,
+        "read_bytes": 13504736,
+        "read_ops": 25,
+        "write_bytes": 76,
+        "write_ops": 3
+      },
+      "kernel_100ns": 2343750,
+      "mono_ns": 677216738460700,
+      "page_faults": 65937,
+      "pid": 10424,
+      "priority_class": 32,
+      "private_commit_bytes": 198033408,
+      "user_100ns": 4062500,
+      "wait_state": "running_or_waiting",
+      "working_set_bytes": 254693376
+    },
+    {
+      "io": {
+        "other_bytes": 13324,
+        "other_ops": 1336,
+        "read_bytes": 13504736,
+        "read_ops": 25,
+        "write_bytes": 76,
+        "write_ops": 3
+      },
+      "kernel_100ns": 2500000,
+      "mono_ns": 677216847176400,
+      "page_faults": 76625,
+      "pid": 10424,
+      "priority_class": 32,
+      "private_commit_bytes": 241811456,
+      "user_100ns": 5000000,
+      "wait_state": "running_or_waiting",
+      "working_set_bytes": 298377216
+    },
+    {
+      "io": {
+        "other_bytes": 13536,
+        "other_ops": 1387,
+        "read_bytes": 13504736,
+        "read_ops": 25,
+        "write_bytes": 76,
+        "write_ops": 3
+      },
+      "kernel_100ns": 2812500,
+      "mono_ns": 677216955449800,
+      "page_faults": 85803,
+      "pid": 10424,
+      "priority_class": 32,
+      "private_commit_bytes": 278941696,
+      "user_100ns": 5625000,
+      "wait_state": "running_or_waiting",
+      "working_set_bytes": 335896576
+    },
+    {
+      "io": {
+        "other_bytes": 13654,
+        "other_ops": 1475,
+        "read_bytes": 13504736,
+        "read_ops": 25,
+        "write_bytes": 76,
+        "write_ops": 3
+      },
+      "kernel_100ns": 2812500,
+      "mono_ns": 677217063336600,
+      "page_faults": 96798,
+      "pid": 10424,
+      "priority_class": 32,
+      "private_commit_bytes": 322998272,
+      "user_100ns": 6718750,
+      "wait_state": "running_or_waiting",
+      "working_set_bytes": 380846080
+    },
+    {
+      "io": {
+        "other_bytes": 13654,
+        "other_ops": 1563,
+        "read_bytes": 13504736,
+        "read_ops": 25,
+        "write_bytes": 76,
+        "write_ops": 3
+      },
+      "kernel_100ns": 2968750,
+      "mono_ns": 677217172088600,
+      "page_faults": 107333,
+      "pid": 10424,
+      "priority_class": 32,
+      "private_commit_bytes": 365973504,
+      "user_100ns": 7500000,
+      "wait_state": "running_or_waiting",
+      "working_set_bytes": 423915520
+    },
+    {
+      "io": {
+        "other_bytes": 13772,
+        "other_ops": 1604,
+        "read_bytes": 13504736,
+        "read_ops": 25,
+        "write_bytes": 76,
+        "write_ops": 3
+      },
+      "kernel_100ns": 2968750,
+      "mono_ns": 677217279696100,
+      "page_faults": 115567,
+      "pid": 10424,
+      "priority_class": 32,
+      "private_commit_bytes": 397049856,
+      "user_100ns": 8593750,
+      "wait_state": "running_or_waiting",
+      "working_set_bytes": 457572352
+    },
+    {
+      "io": {
+        "other_bytes": 13772,
+        "other_ops": 1647,
+        "read_bytes": 13504736,
+        "read_ops": 25,
+        "write_bytes": 76,
+        "write_ops": 3
+      },
+      "kernel_100ns": 2968750,
+      "mono_ns": 677217387246100,
+      "page_faults": 117465,
+      "pid": 10424,
+      "priority_class": 32,
+      "private_commit_bytes": 403275776,
+      "user_100ns": 9687500,
+      "wait_state": "running_or_waiting",
+      "working_set_bytes": 465334272
+    },
+    {
+      "io": {
+        "other_bytes": 13772,
+        "other_ops": 1647,
+        "read_bytes": 13504736,
+        "read_ops": 25,
+        "write_bytes": 76,
+        "write_ops": 3
+      },
+      "kernel_100ns": 3437500,
+      "mono_ns": 677217496448300,
+      "page_faults": 118531,
+      "pid": 10424,
+      "priority_class": 32,
+      "private_commit_bytes": 406798336,
+      "user_100ns": 10312500,
+      "wait_state": "running_or_waiting",
+      "working_set_bytes": 469696512
+    },
+    {
+      "io": {
+        "other_bytes": 13772,
+        "other_ops": 1655,
+        "read_bytes": 13504736,
+        "read_ops": 25,
+        "write_bytes": 76,
+        "write_ops": 3
+      },
+      "kernel_100ns": 3437500,
+      "mono_ns": 677217604606100,
+      "page_faults": 120347,
+      "pid": 10424,
+      "priority_class": 32,
+      "private_commit_bytes": 413626368,
+      "user_100ns": 11406250,
+      "wait_state": "running_or_waiting",
+      "working_set_bytes": 477118464
+    },
+    {
+      "io": {
+        "other_bytes": 14832,
+        "other_ops": 1686,
+        "read_bytes": 13504736,
+        "read_ops": 25,
+        "write_bytes": 76,
+        "write_ops": 3
+      },
+      "kernel_100ns": 3750000,
+      "mono_ns": 677217713905500,
+      "page_faults": 128274,
+      "pid": 10424,
+      "priority_class": 32,
+      "private_commit_bytes": 443060224,
+      "user_100ns": 12500000,
+      "wait_state": "running_or_waiting",
+      "working_set_bytes": 509423616
+    },
+    {
+      "io": {
+        "other_bytes": 14832,
+        "other_ops": 1691,
+        "read_bytes": 13504736,
+        "read_ops": 25,
+        "write_bytes": 76,
+        "write_ops": 3
+      },
+      "kernel_100ns": 4218750,
+      "mono_ns": 677217822695800,
+      "page_faults": 139518,
+      "pid": 10424,
+      "priority_class": 32,
+      "private_commit_bytes": 482631680,
+      "user_100ns": 14218750,
+      "wait_state": "running_or_waiting",
+      "working_set_bytes": 548765696
+    },
+    {
+      "io": {
+        "other_bytes": 14832,
+        "other_ops": 1708,
+        "read_bytes": 13504736,
+        "read_ops": 25,
+        "write_bytes": 76,
+        "write_ops": 3
+      },
+      "kernel_100ns": 4687500,
+      "mono_ns": 677217930473800,
+      "page_faults": 148357,
+      "pid": 10424,
+      "priority_class": 32,
+      "private_commit_bytes": 500539392,
+      "user_100ns": 15937500,
+      "wait_state": "running_or_waiting",
+      "working_set_bytes": 566124544
+    },
+    {
+      "io": {
+        "other_bytes": 14914,
+        "other_ops": 1718,
+        "read_bytes": 13504736,
+        "read_ops": 25,
+        "write_bytes": 76,
+        "write_ops": 3
+      },
+      "kernel_100ns": 5468750,
+      "mono_ns": 677218037232200,
+      "page_faults": 161876,
+      "pid": 10424,
+      "priority_class": 32,
+      "private_commit_bytes": 555192320,
+      "user_100ns": 17343750,
+      "wait_state": "running_or_waiting",
+      "working_set_bytes": 618205184
+    },
+    {
+      "io": {
+        "other_bytes": 14914,
+        "other_ops": 1718,
+        "read_bytes": 13504736,
+        "read_ops": 25,
+        "write_bytes": 958540,
+        "write_ops": 237
+      },
+      "kernel_100ns": 5937500,
+      "mono_ns": 677218145646400,
+      "page_faults": 169039,
+      "pid": 10424,
+      "priority_class": 32,
+      "private_commit_bytes": 575303680,
+      "user_100ns": 19062500,
+      "wait_state": "running_or_waiting",
+      "working_set_bytes": 634896384
+    },
+    {
+      "io": {
+        "other_bytes": 14962,
+        "other_ops": 1732,
+        "read_bytes": 13504736,
+        "read_ops": 25,
+        "write_bytes": 3281074,
+        "write_ops": 806
+      },
+      "kernel_100ns": 6718750,
+      "mono_ns": 677218252699800,
+      "page_faults": 170419,
+      "pid": 10424,
+      "priority_class": 32,
+      "private_commit_bytes": 521064448,
+      "user_100ns": 20468750,
+      "wait_state": "running_or_waiting",
+      "working_set_bytes": 585928704
+    },
+    {
+      "io": {
+        "other_bytes": 14962,
+        "other_ops": 1732,
+        "read_bytes": 13504736,
+        "read_ops": 25,
+        "write_bytes": 3281074,
+        "write_ops": 806
+      },
+      "kernel_100ns": 7031250,
+      "mono_ns": 677218362788200,
+      "page_faults": 171482,
+      "pid": 10424,
+      "priority_class": 32,
+      "private_commit_bytes": 526077952,
+      "user_100ns": 21250000,
+      "wait_state": "running_or_waiting",
+      "working_set_bytes": 590233600
+    },
+    {
+      "io": {
+        "other_bytes": 14962,
+        "other_ops": 1732,
+        "read_bytes": 13504736,
+        "read_ops": 25,
+        "write_bytes": 3281074,
+        "write_ops": 806
+      },
+      "kernel_100ns": 7343750,
+      "mono_ns": 677218471027200,
+      "page_faults": 174231,
+      "pid": 10424,
+      "priority_class": 32,
+      "private_commit_bytes": 537055232,
+      "user_100ns": 22031250,
+      "wait_state": "running_or_waiting",
+      "working_set_bytes": 601460736
+    },
+    {
+      "io": {
+        "other_bytes": 14962,
+        "other_ops": 1732,
+        "read_bytes": 13504736,
+        "read_ops": 25,
+        "write_bytes": 3281074,
+        "write_ops": 806
+      },
+      "kernel_100ns": 7343750,
+      "mono_ns": 677218580001600,
+      "page_faults": 175098,
+      "pid": 10424,
+      "priority_class": 32,
+      "private_commit_bytes": 539840512,
+      "user_100ns": 23125000,
+      "wait_state": "running_or_waiting",
+      "working_set_bytes": 604983296
+    },
+    {
+      "io": {
+        "other_bytes": 14962,
+        "other_ops": 1732,
+        "read_bytes": 13504736,
+        "read_ops": 25,
+        "write_bytes": 3281074,
+        "write_ops": 806
+      },
+      "kernel_100ns": 7500000,
+      "mono_ns": 677218687771800,
+      "page_faults": 176624,
+      "pid": 10424,
+      "priority_class": 32,
+      "private_commit_bytes": 546856960,
+      "user_100ns": 24062500,
+      "wait_state": "running_or_waiting",
+      "working_set_bytes": 611213312
+    },
+    {
+      "io": {
+        "other_bytes": 15206,
+        "other_ops": 1777,
+        "read_bytes": 13504736,
+        "read_ops": 25,
+        "write_bytes": 3281074,
+        "write_ops": 806
+      },
+      "kernel_100ns": 7656250,
+      "mono_ns": 677218795501000,
+      "page_faults": 178209,
+      "pid": 10424,
+      "priority_class": 32,
+      "private_commit_bytes": 552910848,
+      "user_100ns": 24843750,
+      "wait_state": "running_or_waiting",
+      "working_set_bytes": 617697280
+    },
+    {
+      "io": {
+        "other_bytes": 15206,
+        "other_ops": 1794,
+        "read_bytes": 13504736,
+        "read_ops": 25,
+        "write_bytes": 3281074,
+        "write_ops": 806
+      },
+      "kernel_100ns": 7656250,
+      "mono_ns": 677218902378600,
+      "page_faults": 178807,
+      "pid": 10424,
+      "priority_class": 32,
+      "private_commit_bytes": 554868736,
+      "user_100ns": 25781250,
+      "wait_state": "running_or_waiting",
+      "working_set_bytes": 620138496
+    },
+    {
+      "io": {
+        "other_bytes": 15206,
+        "other_ops": 1794,
+        "read_bytes": 13504736,
+        "read_ops": 25,
+        "write_bytes": 3281074,
+        "write_ops": 806
+      },
+      "kernel_100ns": 7812500,
+      "mono_ns": 677219010564000,
+      "page_faults": 179283,
+      "pid": 10424,
+      "priority_class": 32,
+      "private_commit_bytes": 556703744,
+      "user_100ns": 26718750,
+      "wait_state": "running_or_waiting",
+      "working_set_bytes": 622088192
+    },
+    {
+      "io": {
+        "other_bytes": 15206,
+        "other_ops": 1794,
+        "read_bytes": 13504736,
+        "read_ops": 25,
+        "write_bytes": 3281074,
+        "write_ops": 806
+      },
+      "kernel_100ns": 7812500,
+      "mono_ns": 677219118280900,
+      "page_faults": 179925,
+      "pid": 10424,
+      "priority_class": 32,
+      "private_commit_bytes": 559337472,
+      "user_100ns": 27812500,
+      "wait_state": "running_or_waiting",
+      "working_set_bytes": 624717824
+    },
+    {
+      "io": {
+        "other_bytes": 15206,
+        "other_ops": 1794,
+        "read_bytes": 13504736,
+        "read_ops": 25,
+        "write_bytes": 3281074,
+        "write_ops": 806
+      },
+      "kernel_100ns": 7812500,
+      "mono_ns": 677219227953700,
+      "page_faults": 180639,
+      "pid": 10424,
+      "priority_class": 32,
+      "private_commit_bytes": 562323456,
+      "user_100ns": 28906250,
+      "wait_state": "running_or_waiting",
+      "working_set_bytes": 627642368
+    },
+    {
+      "io": {
+        "other_bytes": 15206,
+        "other_ops": 1794,
+        "read_bytes": 13504736,
+        "read_ops": 25,
+        "write_bytes": 3281074,
+        "write_ops": 806
+      },
+      "kernel_100ns": 7968750,
+      "mono_ns": 677219335756100,
+      "page_faults": 181204,
+      "pid": 10424,
+      "priority_class": 32,
+      "private_commit_bytes": 564776960,
+      "user_100ns": 29687500,
+      "wait_state": "running_or_waiting",
+      "working_set_bytes": 629952512
+    },
+    {
+      "io": {
+        "other_bytes": 15400,
+        "other_ops": 1809,
+        "read_bytes": 13504736,
+        "read_ops": 25,
+        "write_bytes": 3281074,
+        "write_ops": 806
+      },
+      "kernel_100ns": 8281250,
+      "mono_ns": 677219443306900,
+      "page_faults": 181679,
+      "pid": 10424,
+      "priority_class": 32,
+      "private_commit_bytes": 567115776,
+      "user_100ns": 30468750,
+      "wait_state": "running_or_waiting",
+      "working_set_bytes": 631894016
+    },
+    {
+      "io": {
+        "other_bytes": 15400,
+        "other_ops": 1809,
+        "read_bytes": 13504736,
+        "read_ops": 25,
+        "write_bytes": 3281074,
+        "write_ops": 806
+      },
+      "kernel_100ns": 8437500,
+      "mono_ns": 677219552806500,
+      "page_faults": 182187,
+      "pid": 10424,
+      "priority_class": 32,
+      "private_commit_bytes": 569192448,
+      "user_100ns": 31406250,
+      "wait_state": "running_or_waiting",
+      "working_set_bytes": 633970688
+    },
+    {
+      "io": {
+        "other_bytes": 15400,
+        "other_ops": 1826,
+        "read_bytes": 13504736,
+        "read_ops": 25,
+        "write_bytes": 3281074,
+        "write_ops": 806
+      },
+      "kernel_100ns": 8437500,
+      "mono_ns": 677219661494000,
+      "page_faults": 182695,
+      "pid": 10424,
+      "priority_class": 32,
+      "private_commit_bytes": 570978304,
+      "user_100ns": 32500000,
+      "wait_state": "running_or_waiting",
+      "working_set_bytes": 636047360
+    },
+    {
+      "io": {
+        "other_bytes": 27416,
+        "other_ops": 2270,
+        "read_bytes": 13764069,
+        "read_ops": 53,
+        "write_bytes": 3281593,
+        "write_ops": 812
+      },
+      "kernel_100ns": 8437500,
+      "mono_ns": 677219768371300,
+      "page_faults": 183903,
+      "pid": 10424,
+      "priority_class": 32,
+      "private_commit_bytes": 574820352,
+      "user_100ns": 32968750,
+      "wait_state": "running_or_waiting",
+      "working_set_bytes": 640991232
+    },
+    {
+      "io": {
+        "other_bytes": 33374,
+        "other_ops": 2530,
+        "read_bytes": 13941367,
+        "read_ops": 72,
+        "write_bytes": 3281593,
+        "write_ops": 812
+      },
+      "kernel_100ns": 8750000,
+      "mono_ns": 677219877053400,
+      "page_faults": 185634,
+      "pid": 10424,
+      "priority_class": 32,
+      "private_commit_bytes": 581488640,
+      "user_100ns": 33750000,
+      "wait_state": "running_or_waiting",
+      "working_set_bytes": 648065024
+    },
+    {
+      "io": {
+        "other_bytes": 60928,
+        "other_ops": 4042,
+        "read_bytes": 14275567,
+        "read_ops": 126,
+        "write_bytes": 3283816,
+        "write_ops": 830
+      },
+      "kernel_100ns": 9218750,
+      "mono_ns": 677219983005600,
+      "page_faults": 185899,
+      "pid": 10424,
+      "priority_class": 32,
+      "private_commit_bytes": 581492736,
+      "user_100ns": 34375000,
+      "wait_state": "running_or_waiting",
+      "working_set_bytes": 649097216
+    },
+    {
+      "io": {
+        "other_bytes": 60928,
+        "other_ops": 4044,
+        "read_bytes": 14275567,
+        "read_ops": 126,
+        "write_bytes": 3283816,
+        "write_ops": 830
+      },
+      "kernel_100ns": 9375000,
+      "mono_ns": 677220090323900,
+      "page_faults": 185911,
+      "pid": 10424,
+      "priority_class": 32,
+      "private_commit_bytes": 581492736,
+      "user_100ns": 35312500,
+      "wait_state": "running_or_waiting",
+      "working_set_bytes": 649146368
+    },
+    {
+      "io": {
+        "other_bytes": 60928,
+        "other_ops": 4044,
+        "read_bytes": 14275567,
+        "read_ops": 126,
+        "write_bytes": 3283816,
+        "write_ops": 830
+      },
+      "kernel_100ns": 9375000,
+      "mono_ns": 677220197417900,
+      "page_faults": 185972,
+      "pid": 10424,
+      "priority_class": 32,
+      "private_commit_bytes": 581697536,
+      "user_100ns": 36406250,
+      "wait_state": "running_or_waiting",
+      "working_set_bytes": 649396224
+    },
+    {
+      "io": {
+        "other_bytes": 61010,
+        "other_ops": 4066,
+        "read_bytes": 14275567,
+        "read_ops": 126,
+        "write_bytes": 3284089,
+        "write_ops": 831
+      },
+      "kernel_100ns": 9531250,
+      "mono_ns": 677220304274600,
+      "page_faults": 186125,
+      "pid": 10424,
+      "priority_class": 32,
+      "private_commit_bytes": 582295552,
+      "user_100ns": 37343750,
+      "wait_state": "running_or_waiting",
+      "working_set_bytes": 650022912
+    },
+    {
+      "io": {
+        "other_bytes": 61010,
+        "other_ops": 4066,
+        "read_bytes": 14275567,
+        "read_ops": 126,
+        "write_bytes": 3284089,
+        "write_ops": 831
+      },
+      "kernel_100ns": 9531250,
+      "mono_ns": 677220410754300,
+      "page_faults": 186141,
+      "pid": 10424,
+      "priority_class": 32,
+      "private_commit_bytes": 545374208,
+      "user_100ns": 38437500,
+      "wait_state": "running_or_waiting",
+      "working_set_bytes": 611143680
+    },
+    {
+      "io": {
+        "other_bytes": 61010,
+        "other_ops": 4066,
+        "read_bytes": 14275567,
+        "read_ops": 126,
+        "write_bytes": 3284089,
+        "write_ops": 831
+      },
+      "kernel_100ns": 10000000,
+      "mono_ns": 677220520543500,
+      "page_faults": 186177,
+      "pid": 10424,
+      "priority_class": 32,
+      "private_commit_bytes": 460431360,
+      "user_100ns": 39062500,
+      "wait_state": "running_or_waiting",
+      "working_set_bytes": 529395712
+    },
+    {
+      "io": {
+        "other_bytes": 61092,
+        "other_ops": 4076,
+        "read_bytes": 14275567,
+        "read_ops": 126,
+        "write_bytes": 3292281,
+        "write_ops": 833
+      },
+      "kernel_100ns": 10156250,
+      "mono_ns": 677220627981600,
+      "page_faults": 186204,
+      "pid": 10424,
+      "priority_class": 32,
+      "private_commit_bytes": 381710336,
+      "user_100ns": 40000000,
+      "wait_state": "running_or_waiting",
+      "working_set_bytes": 437121024
+    },
+    {
+      "io": {
+        "other_bytes": 61100,
+        "other_ops": 4095,
+        "read_bytes": 14275567,
+        "read_ops": 126,
+        "write_bytes": 3302094,
+        "write_ops": 836
+      },
+      "kernel_100ns": 10468750,
+      "mono_ns": 677220736374700,
+      "page_faults": 186283,
+      "pid": 10424,
+      "priority_class": 32,
+      "private_commit_bytes": 234557440,
+      "user_100ns": 40312500,
+      "wait_state": "running_or_waiting",
+      "working_set_bytes": 295510016
+    },
+    {
+      "io": {
+        "other_bytes": 62298,
+        "other_ops": 4236,
+        "read_bytes": 14275567,
+        "read_ops": 126,
+        "write_bytes": 3302094,
+        "write_ops": 836
+      },
+      "kernel_100ns": 10937500,
+      "mono_ns": 677220844852100,
+      "page_faults": 187025,
+      "pid": 10424,
+      "priority_class": 32,
+      "private_commit_bytes": 1626112,
+      "user_100ns": 40937500,
+      "wait_state": "running_or_waiting",
+      "working_set_bytes": 15200256
+    }
+  ],
+  "schema": "HH-S100-COLD-IMPORT-ATTRIBUTION-1",
+  "source_unchanged": true,
+  "stage_capture": {
+    "active_at_wrapper_exit": 0,
+    "active_before_cleanup": 0,
+    "actual_process_exit": {
+      "exit_code": 0,
+      "pid": 10424
+    },
+    "artifacts": {
+      "process-exit.json": "0a9c3a658f61536355214f506650f011b43351b29319d916d55dc81953bf85ba",
+      "process-start.json": "e2d96f09c3990f314b46b42a876c13fca50c47be2949d4f256194d387cde7607",
+      "stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout.txt": "9b5e37b85c8c4f11090de482aee3734b6c7993ad884a62121b2adcc9dfdd6003"
+    },
+    "completed": true,
+    "elapsed_seconds": 5.23499999998603,
+    "final_workspace_bytes": 3419029,
+    "formal_acceptance": false,
+    "job": {
+      "active_count": 0,
+      "assigned": true,
+      "close_uncertain": false,
+      "closed": true,
+      "configured": true,
+      "create_uncertain": false,
+      "failed_operations": [],
+      "handle_retained": false,
+      "native_error": null,
+      "tainted": false,
+      "zero_observed": true
+    },
+    "limits": {
+      "active_process_limit": 4,
+      "each_log_capture_bytes": 262144,
+      "effective_wall_seconds": 20,
+      "job_memory_bytes": 2147483648,
+      "job_user_time_100ns": 150000000,
+      "limit_flags": 8716,
+      "wall_seconds": 20,
+      "workspace_bytes_limit": 33554432,
+      "workspace_limit_is_watchdog": true
+    },
+    "natural_tree_exit": true,
+    "public_ack": false,
+    "wrapper_exit_code": 0
+  },
+  "stage_error": null,
+  "target_exit_from_retained_handle": {
+    "exit_code": 0,
+    "observed_mono_ns": 677220924749200,
+    "pid": 10424,
+    "process_start": "windows:134342526056383800"
+  }
+}

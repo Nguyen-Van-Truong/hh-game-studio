@@ -20,6 +20,9 @@ observation before a later retry clears it. This is diagnostic metadata, not
 an additional response/status sample or a change to reconciliation policy.
 Each returned batch is a separate intermediate artifact, not the combined
 benchmark_profile dataset. Persist it before releasing the caller's reference.
+Every producer installs bounded HTTP/journal phase observation before startup
+and its first memory sample. phase_snapshot() exposes a separate artifact after
+cleanup; it never changes the command schema, workload, receipts or thresholds.
 """
 from __future__ import annotations
 
@@ -40,6 +43,9 @@ from studio.host.replay.verified_journal import VerifiedJournal as Journal
 from studio.host.core.transport import epoch_ms
 from studio.tests.replay.benchmark_transport import (
     BenchmarkFixtureClient as FixtureClient, BenchmarkFixtureHost as LoopbackFixtureHost,
+)
+from studio.tests.replay.benchmark_http_phases import (
+    PhaseRecorder, observed_client_type, observed_host_type, observed_journal_type,
 )
 from studio.host.replay.process_probe import ProcessProbe
 from studio.protocol.core import Status, canonical_bytes
@@ -107,14 +113,20 @@ class CommandProducer:
         self.effects, self.revision = 0, 'rev-0'
         self._status_ns = []
         self._setup_responses = []
+        # One fixed recorder and wrapper set before any host work or baseline.
+        # The bounded rolling window remains part of measured host RSS/time.
+        self._phase_recorder = PhaseRecorder(event_capacity=8192, active_capacity=64)
+        journal_type = observed_journal_type(Journal, self._phase_recorder)
+        host_type = observed_host_type(LoopbackFixtureHost, self._phase_recorder)
+        self._client_type = observed_client_type(FixtureClient, self._phase_recorder)
         self.root.mkdir(parents=False, exist_ok=False)
         try:
             self.observer = self.observer or NativeObserver()
             _need(self.observer.kind in ('native_windows_process_probe', 'synthetic_test_observer'), 'OBSERVER_KIND')
             self.identity = dict(self.observer.identity)
             _need(self.identity['pid'] == os.getpid(), 'HOST_PROCESS_IDENTITY')
-            self.journal = Journal(self.root / 'commands.jsonl')
-            self.host = LoopbackFixtureHost('benchmark.commands', self.root, self.journal)
+            self.journal = journal_type(self.root / 'commands.jsonl')
+            self.host = host_type('benchmark.commands', self.root, self.journal)
             self.host.start()
             self.initial_memory = self._observe()
         except Exception as error:
@@ -139,7 +151,7 @@ class CommandProducer:
             self.credential = self.host.sessions.rotate(self.credential, ttl_ms=900_000)
         else:
             self.credential = self.host.sessions.issue(scopes=_SCOPES, ttl_ms=900_000)
-        self.client = FixtureClient(self.host.port, self.host.control_port, self.credential)
+        self.client = self._client_type(self.host.port, self.host.control_port, self.credential)
         started = _clock()
         discovery = self.client.discover()
         received = self._received()
@@ -360,6 +372,14 @@ class CommandProducer:
         except Exception as error:
             raise CommandError('CLEANUP_HELD', cleanup_owner=self) from error
         self.closed = True
+
+    def phase_snapshot(self):
+        """Snapshot only; the driver binds source/profile and persists outside work.
+
+        Available after successful or held cleanup. A held owner remains held;
+        observing it cannot manufacture closure or a target process exit.
+        """
+        return self._phase_recorder.snapshot()
 
     def __enter__(self):
         return self

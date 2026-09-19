@@ -1,0 +1,96 @@
+{
+  "completed": true,
+  "eligible_for_dataset": false,
+  "errors": [],
+  "formal_acceptance": false,
+  "groups": [
+    {
+      "effect_count_after": 2,
+      "index": 0,
+      "max_status_gap_ms": 41.9596,
+      "sha256": "0b910016d6167006c99790fb5748a096683e4192a7762c872678a920983be319"
+    },
+    {
+      "effect_count_after": 4,
+      "index": 1,
+      "max_status_gap_ms": 54.4386,
+      "sha256": "91fbd503c57c00e38a3bda21065b30b72a0c5f1720ad5e315a65899ca2f84501"
+    }
+  ],
+  "groups_completed": 2,
+  "groups_requested": 2,
+  "host_actual_exit": null,
+  "host_exit_missing_reason": "PARENT_OBSERVES_EXIT_AFTER_THIS_REPORT",
+  "native_benchmark_cycles": 0,
+  "processes": {
+    "host": {
+      "pid": 24852,
+      "process_start": "windows:134342534462416809"
+    }
+  },
+  "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+  "run_id": "gt06.s102.observability-preflight.01",
+  "schema_id": "hh-studio.observability-preflight-child",
+  "schema_version": "1.0.0",
+  "source_closure_sha256": "7635a470cef554c1a60e1d9427f59998737d3bb829c3a1f134e426cdf9275467",
+  "states": {
+    "copied_source_unchanged": true,
+    "import_observer": {
+      "closed": true,
+      "error_count": 0,
+      "global_held_probe_count": 0,
+      "handle_close_uncertain": false,
+      "handle_retained": false,
+      "present": true,
+      "probe_handles_released": true,
+      "thread_alive": false
+    },
+    "import_target": {
+      "actual_target_exit": {
+        "exit_code": 0,
+        "pid": 30408
+      },
+      "exit": {
+        "file": "import-host/process-exit.json",
+        "sha256": "55fd6b238f1aadcbf4305a74318005056c51660a504a9c31d8b0d5a8fa5060ef",
+        "size_bytes": 30
+      },
+      "missing_reason": null,
+      "natural_exit_not_inferred": true,
+      "start": {
+        "file": "import-host/process-start.json",
+        "sha256": "52ca3eba54b043cb73f06f0211c5d4d70146e2a78b9fca427177dcd739623982",
+        "size_bytes": 14
+      }
+    },
+    "observations_verified": true,
+    "producer": {
+      "closed": true,
+      "failed": true,
+      "host": {
+        "closing": true,
+        "control_socket_closed": true,
+        "main_socket_closed": true,
+        "stopped": true,
+        "threads_alive": [
+          false,
+          false,
+          false
+        ]
+      },
+      "journal": {
+        "cache_closed": true,
+        "database_retained": false,
+        "directory_retained": false,
+        "index_retained": false
+      },
+      "observer_probe": {
+        "close_uncertain": false,
+        "handle_retained": false,
+        "present": true
+      },
+      "present": true
+    },
+    "source_unchanged": true
+  }
+}

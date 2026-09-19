@@ -1,0 +1,36 @@
+{
+  "checked_subprocess_members": [
+    "Popen",
+    "PIPE",
+    "CREATE_NO_WINDOW"
+  ],
+  "driver_sha256": "afcf7ecab14f5e079d768c02e3ed34615bd70f976ceb3321fc3c39879f368174",
+  "engine_launches": 0,
+  "handle_count_after": 156,
+  "handle_count_before": 156,
+  "io_counter_bytes": 48,
+  "observer_thread_started": false,
+  "probe_handle_released": true,
+  "sample": {
+    "io": {
+      "other_bytes": 188444,
+      "other_ops": 3703,
+      "read_bytes": 1119942,
+      "read_ops": 106,
+      "write_bytes": 0,
+      "write_ops": 0
+    },
+    "kernel_100ns": 937500,
+    "mono_ns": 677194443512100,
+    "page_faults": 4859,
+    "pid": 29168,
+    "priority_class": 32,
+    "private_commit_bytes": 11608064,
+    "user_100ns": 468750,
+    "wait_state": "running_or_waiting",
+    "working_set_bytes": 19382272
+  },
+  "sample_count": 1,
+  "selfcheck": "PASS",
+  "subprocess_launches": 0
+}

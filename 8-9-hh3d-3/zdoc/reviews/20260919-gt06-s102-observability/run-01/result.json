@@ -1,0 +1,73 @@
+{
+  "child_budget_seconds": 75,
+  "child_report_sha256": "d37db00af98c5ace4058d14484fb6fef6fda80459dd37d63a23f8c504425208d",
+  "completed": true,
+  "elapsed_seconds": 10.655999999959022,
+  "eligible_for_dataset": false,
+  "errors": [],
+  "execution_source_sha256": "c04808e3ad27580678ef9566f6ca721415ef1b9626710aae1f535edf49f13061",
+  "formal_acceptance": false,
+  "freeze_sha256": "8c9b2cde834113fc03f584818ec37e494a501f3f57afb09f02cb31bb1f486d3f",
+  "observations": {
+    "execution_copy_unchanged": true,
+    "godot_binary_unchanged": true,
+    "helper_original_unchanged": true,
+    "observations_verified_against_actual_host_exit": true,
+    "owner": {
+      "closed": true,
+      "drain_threads_alive": [
+        false,
+        false
+      ],
+      "helper_exit_code": 0,
+      "helper_pid": 23568,
+      "job": {
+        "active_count": 0,
+        "assigned": true,
+        "close_uncertain": false,
+        "closed": true,
+        "configured": true,
+        "create_uncertain": false,
+        "failed_operations": [],
+        "handle_retained": false,
+        "native_error": null,
+        "tainted": false,
+        "zero_observed": true
+      },
+      "present": true,
+      "wrapper_process_handle": {
+        "close_uncertain": false,
+        "closed": true,
+        "handle_retained": false,
+        "required": true
+      }
+    },
+    "source_unchanged": true,
+    "target": {
+      "actual_target_exit": {
+        "exit_code": 0,
+        "pid": 24852
+      },
+      "exit": {
+        "file": "owned/process-exit.json",
+        "sha256": "bf9f88a0f4776b1668554418d9c20186ef054e7fb48827778d91e9f7c4e6e15e",
+        "size_bytes": 30
+      },
+      "missing_reason": null,
+      "natural_exit_not_inferred": true,
+      "start": {
+        "file": "owned/process-start.json",
+        "sha256": "0cfc7219e22ef4012099fd389973b2fbb136969c5cf75032c0fefd67b31260d2",
+        "size_bytes": 14
+      }
+    }
+  },
+  "outer_capture_sha256": "624e38f9aa8bbf34aea634ccab8d045e0c807df65b974b10ec80d7892923c92a",
+  "outer_target_seconds": 90,
+  "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+  "run_id": "gt06.s102.observability-preflight.01",
+  "schema_id": "hh-studio.observability-preflight-result",
+  "schema_version": "1.0.0",
+  "scope": "One unchanged 20s import and two ten-command HTTP diagnostic groups on frozen source; no native benchmark cycles or acceptance samples",
+  "source_closure_sha256": "7635a470cef554c1a60e1d9427f59998737d3bb829c3a1f134e426cdf9275467"
+}

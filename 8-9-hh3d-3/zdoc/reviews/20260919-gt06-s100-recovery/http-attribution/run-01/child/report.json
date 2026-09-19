@@ -1,0 +1,1821 @@
+{
+  "batches": [
+    {
+      "commands": 10,
+      "effect_count_after": 2,
+      "index": 0,
+      "max_status_gap_ms": 130.6835
+    },
+    {
+      "commands": 10,
+      "effect_count_after": 4,
+      "index": 1,
+      "max_status_gap_ms": 133.4433
+    },
+    {
+      "commands": 10,
+      "effect_count_after": 6,
+      "index": 2,
+      "max_status_gap_ms": 132.8066
+    },
+    {
+      "commands": 10,
+      "effect_count_after": 8,
+      "index": 3,
+      "max_status_gap_ms": 144.2757
+    },
+    {
+      "commands": 10,
+      "effect_count_after": 10,
+      "index": 4,
+      "max_status_gap_ms": 382.7729
+    },
+    {
+      "commands": 10,
+      "effect_count_after": 12,
+      "index": 5,
+      "max_status_gap_ms": 136.3882
+    },
+    {
+      "commands": 10,
+      "effect_count_after": 14,
+      "index": 6,
+      "max_status_gap_ms": 146.117
+    },
+    {
+      "commands": 10,
+      "effect_count_after": 16,
+      "index": 7,
+      "max_status_gap_ms": 183.3847
+    },
+    {
+      "commands": 10,
+      "effect_count_after": 18,
+      "index": 8,
+      "max_status_gap_ms": 140.8573
+    },
+    {
+      "commands": 10,
+      "effect_count_after": 20,
+      "index": 9,
+      "max_status_gap_ms": 126.5569
+    },
+    {
+      "commands": 10,
+      "effect_count_after": 22,
+      "index": 10,
+      "max_status_gap_ms": 130.9909
+    },
+    {
+      "commands": 10,
+      "effect_count_after": 24,
+      "index": 11,
+      "max_status_gap_ms": 143.6011
+    },
+    {
+      "commands": 10,
+      "effect_count_after": 26,
+      "index": 12,
+      "max_status_gap_ms": 446.3703
+    },
+    {
+      "commands": 10,
+      "effect_count_after": 28,
+      "index": 13,
+      "max_status_gap_ms": 230.7637
+    },
+    {
+      "commands": 10,
+      "effect_count_after": 30,
+      "index": 14,
+      "max_status_gap_ms": 151.5632
+    },
+    {
+      "commands": 10,
+      "effect_count_after": 32,
+      "index": 15,
+      "max_status_gap_ms": 141.2726
+    },
+    {
+      "commands": 10,
+      "effect_count_after": 34,
+      "index": 16,
+      "max_status_gap_ms": 143.0707
+    },
+    {
+      "commands": 10,
+      "effect_count_after": 36,
+      "index": 17,
+      "max_status_gap_ms": 158.899
+    },
+    {
+      "commands": 10,
+      "effect_count_after": 38,
+      "index": 18,
+      "max_status_gap_ms": 205.2008
+    },
+    {
+      "commands": 10,
+      "effect_count_after": 40,
+      "index": 19,
+      "max_status_gap_ms": 138.0613
+    }
+  ],
+  "closed": true,
+  "completed": true,
+  "current_source_closure_sha256": "cfc4b55a5407891bfd54d22d9f1ac45a74b6c744898199a0e4690d6230a6c1d6",
+  "eligible_for_dataset": false,
+  "engine_runs": 0,
+  "formal_acceptance": false,
+  "groups_completed": 20,
+  "groups_requested": 20,
+  "helpers_unchanged": true,
+  "history_after_sha256": "91e593b3df4fae95efceebf47ff9e629004a4a6f9e21aed459b3cf48cff9ca19",
+  "history_before_sha256": "91e593b3df4fae95efceebf47ff9e629004a4a6f9e21aed459b3cf48cff9ca19",
+  "history_unchanged": true,
+  "host_cleanup": {
+    "closing": true,
+    "control_socket_closed": true,
+    "main_socket_closed": true,
+    "stopped": true
+  },
+  "instrumentation": {
+    "policy_changed": false,
+    "slow_cap_per_operation": 16,
+    "slow_selection": "largest observed spans",
+    "slow_threshold_ns": 50000000,
+    "spans_overlap": true,
+    "timeout_retry_fsync_lock_unchanged": true,
+    "writer_held": "original acquired guard through release, including nested instrumentation",
+    "writer_wait": "entry through original mutex and OS writer guard acquisition"
+  },
+  "journal_cleanup": {
+    "cache_closed": true,
+    "index_retained": false
+  },
+  "loaded_modules": {
+    "studio.host.core.journal": {
+      "path": "studio/host/core/journal.py",
+      "sha256": "826bc5e4c60817e3a22dd2e0b6a199eb522a4eb78532cb5300249fe9056c0cc6"
+    },
+    "studio.host.core.limits": {
+      "path": "studio/host/core/limits.py",
+      "sha256": "9d01ce56f5976bb034e60e33bf4b7986cdc44b3a8ffad46da738a6ed1b143f3f"
+    },
+    "studio.host.core.redaction": {
+      "path": "studio/host/core/redaction.py",
+      "sha256": "e37d998399f589d4202591a1262a7dc19231e5e4b5236b47d4c8234956275c1f"
+    },
+    "studio.host.core.transport": {
+      "path": "studio/host/core/transport.py",
+      "sha256": "1ec03356b1cb8c8987e1604bcb164aea6a9934dbe259451c19e12de36398aba0"
+    },
+    "studio.host.replay.disk_journal_index": {
+      "path": "studio/host/replay/disk_journal_index.py",
+      "sha256": "56beb93119dfb66feec32eb51d389fc089d89911c0a1be199071c17e1801cb28"
+    },
+    "studio.host.replay.process_probe": {
+      "path": "studio/host/replay/process_probe.py",
+      "sha256": "53b6b24813e6ba6dc040dcbb87aee529b7f4e8855a64bcd0689b19c240180500"
+    },
+    "studio.host.replay.verified_journal": {
+      "path": "studio/host/replay/verified_journal.py",
+      "sha256": "129baa4d9e08c8a1d5acf2ea05c9c89a4fdddb53ca6f3baf2d61311ab98e62ab"
+    },
+    "studio.protocol": {
+      "path": "studio/protocol/__init__.py",
+      "sha256": "a906ecde6f60d5fa2febd3f8a4a5fae440d87fea69e7d7e51a750677e03ad09f"
+    },
+    "studio.protocol._rfc8785": {
+      "path": "studio/protocol/_rfc8785/__init__.py",
+      "sha256": "49d914da77ba606d535832d97df2e43458a8e51d57cdba6883a0a895ac50484b"
+    },
+    "studio.protocol._rfc8785._impl": {
+      "path": "studio/protocol/_rfc8785/_impl.py",
+      "sha256": "c25bc3a046528482d53bee3487b837f31dd9c05f33e8f13288c7aab320932cec"
+    },
+    "studio.protocol.core": {
+      "path": "studio/protocol/core.py",
+      "sha256": "e8153f5a4dcf639f4d1cbce2fa74f7866d963a692c68e4e8d1477136889bd93e"
+    },
+    "studio.tests.replay.benchmark_commands": {
+      "path": "studio/tests/replay/benchmark_commands.py",
+      "sha256": "29ab59c799855e6695f5c0db18b21ed4ee3f7cd70fb42dcc3b9784e8960d6ca0"
+    },
+    "studio.tests.replay.benchmark_transport": {
+      "path": "studio/tests/replay/benchmark_transport.py",
+      "sha256": "3b789fc025c5d217d8567ee1a3cd97ccf4c2e01214c974417643c080622848df"
+    }
+  },
+  "loaded_source_matches_freeze": true,
+  "observer_cleanup": {
+    "close_uncertain": false,
+    "handle_retained": false
+  },
+  "producer_history_sha256": "9ed7e7872044b7937b3811ab2cc472f814abd1680fac10b4d328e454278e7693",
+  "schema": "HH-GT06-S100-HTTP-ATTRIBUTION-1",
+  "scope": "New project and producer over exact postterminal S98 history; up to twenty ten-command HTTP diagnostics, not an S98 replay or benchmark",
+  "snapshot_subphases": {
+    "ast_proof": {
+      "original_ast_sha256": "709724ef69cf05ece409b06640719d44bef0389a7ef521b40bddfb40d5ef6ab4",
+      "original_method_source_sha256": "70ba922fdb74c2e64fe35586f986ce584c5d675f09e60bb478897f88f66b22e0",
+      "stripped_ast_identical": true,
+      "transformed_ast_sha256": "5b10817acfe06aa0f320b70fea90af1712bb69321944fc9f58f50dcab2a5bff4",
+      "wrapped_calls": {
+        "digest.update": 1,
+        "os.fsync": 1,
+        "stream.read": 1
+      }
+    },
+    "captured_ns": 677168608507900,
+    "clock": "perf_counter_ns",
+    "largest_slow_snapshots": [
+      {
+        "active_operation": null,
+        "elapsed_ns": 73056900,
+        "ended_ns": 677144320968900,
+        "operation_started_ns": null,
+        "operations": {
+          "fsync": {
+            "bytes": 0,
+            "calls": 1,
+            "max_ns": 420900,
+            "returned": 1,
+            "total_ns": 420900
+          },
+          "hash": {
+            "bytes": 17847352,
+            "calls": 273,
+            "max_ns": 24478800,
+            "returned": 273,
+            "total_ns": 60070300
+          },
+          "read": {
+            "bytes": 17847352,
+            "calls": 274,
+            "max_ns": 394800,
+            "returned": 274,
+            "total_ns": 9530000
+          }
+        },
+        "phase": "http",
+        "returned": true,
+        "snapshot_id": 292,
+        "started_ns": 677144247912000,
+        "synchronize": true,
+        "thread_id": 17028
+      },
+      {
+        "active_operation": null,
+        "elapsed_ns": 72397400,
+        "ended_ns": 677138896059100,
+        "operation_started_ns": null,
+        "operations": {
+          "fsync": {
+            "bytes": 0,
+            "calls": 1,
+            "max_ns": 31334600,
+            "returned": 1,
+            "total_ns": 31334600
+          },
+          "hash": {
+            "bytes": 17813535,
+            "calls": 272,
+            "max_ns": 305800,
+            "returned": 272,
+            "total_ns": 24520400
+          },
+          "read": {
+            "bytes": 17813535,
+            "calls": 273,
+            "max_ns": 105600,
+            "returned": 273,
+            "total_ns": 5975400
+          }
+        },
+        "phase": "http",
+        "returned": true,
+        "snapshot_id": 178,
+        "started_ns": 677138823661700,
+        "synchronize": true,
+        "thread_id": 35588
+      },
+      {
+        "active_operation": null,
+        "elapsed_ns": 71603200,
+        "ended_ns": 677144638878700,
+        "operation_started_ns": null,
+        "operations": {
+          "fsync": {
+            "bytes": 0,
+            "calls": 1,
+            "max_ns": 323200,
+            "returned": 1,
+            "total_ns": 323200
+          },
+          "hash": {
+            "bytes": 17848769,
+            "calls": 273,
+            "max_ns": 2367200,
+            "returned": 273,
+            "total_ns": 49979400
+          },
+          "read": {
+            "bytes": 17848769,
+            "calls": 274,
+            "max_ns": 1851700,
+            "returned": 274,
+            "total_ns": 14071700
+          }
+        },
+        "phase": "http",
+        "returned": true,
+        "snapshot_id": 298,
+        "started_ns": 677144567275500,
+        "synchronize": true,
+        "thread_id": 45892
+      },
+      {
+        "active_operation": null,
+        "elapsed_ns": 71295900,
+        "ended_ns": 677164564107200,
+        "operation_started_ns": null,
+        "operations": {
+          "fsync": {
+            "bytes": 0,
+            "calls": 1,
+            "max_ns": 36657100,
+            "returned": 1,
+            "total_ns": 36657100
+          },
+          "hash": {
+            "bytes": 17968329,
+            "calls": 275,
+            "max_ns": 193400,
+            "returned": 275,
+            "total_ns": 26061200
+          },
+          "read": {
+            "bytes": 17968329,
+            "calls": 276,
+            "max_ns": 120800,
+            "returned": 276,
+            "total_ns": 6690800
+          }
+        },
+        "phase": "http",
+        "returned": true,
+        "snapshot_id": 707,
+        "started_ns": 677164492811300,
+        "synchronize": true,
+        "thread_id": 45768
+      },
+      {
+        "active_operation": null,
+        "elapsed_ns": 69101700,
+        "ended_ns": 677152753214800,
+        "operation_started_ns": null,
+        "operations": {
+          "fsync": {
+            "bytes": 0,
+            "calls": 1,
+            "max_ns": 12359000,
+            "returned": 1,
+            "total_ns": 12359000
+          },
+          "hash": {
+            "bytes": 17901262,
+            "calls": 274,
+            "max_ns": 494600,
+            "returned": 274,
+            "total_ns": 33330000
+          },
+          "read": {
+            "bytes": 17901262,
+            "calls": 275,
+            "max_ns": 213700,
+            "returned": 275,
+            "total_ns": 9544100
+          }
+        },
+        "phase": "http",
+        "returned": true,
+        "snapshot_id": 478,
+        "started_ns": 677152684113100,
+        "synchronize": true,
+        "thread_id": 35588
+      },
+      {
+        "active_operation": null,
+        "elapsed_ns": 68714400,
+        "ended_ns": 677153950339500,
+        "operation_started_ns": null,
+        "operations": {
+          "fsync": {
+            "bytes": 0,
+            "calls": 1,
+            "max_ns": 37488800,
+            "returned": 1,
+            "total_ns": 37488800
+          },
+          "hash": {
+            "bytes": 17907727,
+            "calls": 274,
+            "max_ns": 148200,
+            "returned": 274,
+            "total_ns": 23756600
+          },
+          "read": {
+            "bytes": 17907727,
+            "calls": 275,
+            "max_ns": 176400,
+            "returned": 275,
+            "total_ns": 5907600
+          }
+        },
+        "phase": "http",
+        "returned": true,
+        "snapshot_id": 500,
+        "started_ns": 677153881625100,
+        "synchronize": true,
+        "thread_id": 53516
+      },
+      {
+        "active_operation": null,
+        "elapsed_ns": 68028200,
+        "ended_ns": 677156040631400,
+        "operation_started_ns": null,
+        "operations": {
+          "fsync": {
+            "bytes": 0,
+            "calls": 1,
+            "max_ns": 451800,
+            "returned": 1,
+            "total_ns": 451800
+          },
+          "hash": {
+            "bytes": 17919249,
+            "calls": 274,
+            "max_ns": 1360100,
+            "returned": 274,
+            "total_ns": 44720700
+          },
+          "read": {
+            "bytes": 17919249,
+            "calls": 275,
+            "max_ns": 4064400,
+            "returned": 275,
+            "total_ns": 18691700
+          }
+        },
+        "phase": "http",
+        "returned": true,
+        "snapshot_id": 536,
+        "started_ns": 677155972603200,
+        "synchronize": true,
+        "thread_id": 19580
+      },
+      {
+        "active_operation": null,
+        "elapsed_ns": 67575200,
+        "ended_ns": 677166162358600,
+        "operation_started_ns": null,
+        "operations": {
+          "fsync": {
+            "bytes": 0,
+            "calls": 1,
+            "max_ns": 970600,
+            "returned": 1,
+            "total_ns": 970600
+          },
+          "hash": {
+            "bytes": 17977505,
+            "calls": 275,
+            "max_ns": 1017700,
+            "returned": 275,
+            "total_ns": 46197900
+          },
+          "read": {
+            "bytes": 17977505,
+            "calls": 276,
+            "max_ns": 4812100,
+            "returned": 276,
+            "total_ns": 16460600
+          }
+        },
+        "phase": "http",
+        "returned": true,
+        "snapshot_id": 736,
+        "started_ns": 677166094783400,
+        "synchronize": true,
+        "thread_id": 35588
+      },
+      {
+        "active_operation": null,
+        "elapsed_ns": 67500400,
+        "ended_ns": 677156119840400,
+        "operation_started_ns": null,
+        "operations": {
+          "fsync": {
+            "bytes": 0,
+            "calls": 1,
+            "max_ns": 158600,
+            "returned": 1,
+            "total_ns": 158600
+          },
+          "hash": {
+            "bytes": 17919249,
+            "calls": 274,
+            "max_ns": 1582200,
+            "returned": 274,
+            "total_ns": 44469300
+          },
+          "read": {
+            "bytes": 17919249,
+            "calls": 275,
+            "max_ns": 1197300,
+            "returned": 275,
+            "total_ns": 17266500
+          }
+        },
+        "phase": "http",
+        "returned": true,
+        "snapshot_id": 537,
+        "started_ns": 677156052340000,
+        "synchronize": true,
+        "thread_id": 48596
+      },
+      {
+        "active_operation": null,
+        "elapsed_ns": 63647900,
+        "ended_ns": 677156312497300,
+        "operation_started_ns": null,
+        "operations": {
+          "fsync": {
+            "bytes": 0,
+            "calls": 1,
+            "max_ns": 471600,
+            "returned": 1,
+            "total_ns": 471600
+          },
+          "hash": {
+            "bytes": 17919895,
+            "calls": 274,
+            "max_ns": 293600,
+            "returned": 274,
+            "total_ns": 35852900
+          },
+          "read": {
+            "bytes": 17919895,
+            "calls": 275,
+            "max_ns": 296700,
+            "returned": 275,
+            "total_ns": 10895900
+          }
+        },
+        "phase": "http",
+        "returned": true,
+        "snapshot_id": 540,
+        "started_ns": 677156248849400,
+        "synchronize": true,
+        "thread_id": 35588
+      },
+      {
+        "active_operation": null,
+        "elapsed_ns": 62257000,
+        "ended_ns": 677153710894500,
+        "operation_started_ns": null,
+        "operations": {
+          "fsync": {
+            "bytes": 0,
+            "calls": 1,
+            "max_ns": 91300,
+            "returned": 1,
+            "total_ns": 91300
+          },
+          "hash": {
+            "bytes": 17906948,
+            "calls": 274,
+            "max_ns": 296800,
+            "returned": 274,
+            "total_ns": 34436000
+          },
+          "read": {
+            "bytes": 17906948,
+            "calls": 275,
+            "max_ns": 149600,
+            "returned": 275,
+            "total_ns": 9225900
+          }
+        },
+        "phase": "http",
+        "returned": true,
+        "snapshot_id": 495,
+        "started_ns": 677153648637500,
+        "synchronize": true,
+        "thread_id": 35588
+      },
+      {
+        "active_operation": null,
+        "elapsed_ns": 62094900,
+        "ended_ns": 677155882788200,
+        "operation_started_ns": null,
+        "operations": {
+          "fsync": {
+            "bytes": 0,
+            "calls": 1,
+            "max_ns": 463100,
+            "returned": 1,
+            "total_ns": 463100
+          },
+          "hash": {
+            "bytes": 17918470,
+            "calls": 274,
+            "max_ns": 525400,
+            "returned": 274,
+            "total_ns": 34522600
+          },
+          "read": {
+            "bytes": 17918470,
+            "calls": 275,
+            "max_ns": 221600,
+            "returned": 275,
+            "total_ns": 11456800
+          }
+        },
+        "phase": "http",
+        "returned": true,
+        "snapshot_id": 534,
+        "started_ns": 677155820693300,
+        "synchronize": true,
+        "thread_id": 35588
+      },
+      {
+        "active_operation": null,
+        "elapsed_ns": 61454800,
+        "ended_ns": 677165504236600,
+        "operation_started_ns": null,
+        "operations": {
+          "fsync": {
+            "bytes": 0,
+            "calls": 1,
+            "max_ns": 920100,
+            "returned": 1,
+            "total_ns": 920100
+          },
+          "hash": {
+            "bytes": 17974657,
+            "calls": 275,
+            "max_ns": 324300,
+            "returned": 275,
+            "total_ns": 33954800
+          },
+          "read": {
+            "bytes": 17974657,
+            "calls": 276,
+            "max_ns": 264300,
+            "returned": 276,
+            "total_ns": 10517800
+          }
+        },
+        "phase": "http",
+        "returned": true,
+        "snapshot_id": 724,
+        "started_ns": 677165442781800,
+        "synchronize": true,
+        "thread_id": 35588
+      },
+      {
+        "active_operation": null,
+        "elapsed_ns": 60877300,
+        "ended_ns": 677153219279800,
+        "operation_started_ns": null,
+        "operations": {
+          "fsync": {
+            "bytes": 0,
+            "calls": 1,
+            "max_ns": 111300,
+            "returned": 1,
+            "total_ns": 111300
+          },
+          "hash": {
+            "bytes": 17904104,
+            "calls": 274,
+            "max_ns": 375100,
+            "returned": 274,
+            "total_ns": 35133500
+          },
+          "read": {
+            "bytes": 17904104,
+            "calls": 275,
+            "max_ns": 202000,
+            "returned": 275,
+            "total_ns": 10607000
+          }
+        },
+        "phase": "http",
+        "returned": true,
+        "snapshot_id": 486,
+        "started_ns": 677153158402500,
+        "synchronize": true,
+        "thread_id": 35588
+      },
+      {
+        "active_operation": null,
+        "elapsed_ns": 60349300,
+        "ended_ns": 677152972462100,
+        "operation_started_ns": null,
+        "operations": {
+          "fsync": {
+            "bytes": 0,
+            "calls": 1,
+            "max_ns": 449200,
+            "returned": 1,
+            "total_ns": 449200
+          },
+          "hash": {
+            "bytes": 17902683,
+            "calls": 274,
+            "max_ns": 447000,
+            "returned": 274,
+            "total_ns": 36088600
+          },
+          "read": {
+            "bytes": 17902683,
+            "calls": 275,
+            "max_ns": 158400,
+            "returned": 275,
+            "total_ns": 9516600
+          }
+        },
+        "phase": "http",
+        "returned": true,
+        "snapshot_id": 482,
+        "started_ns": 677152912112800,
+        "synchronize": true,
+        "thread_id": 35588
+      },
+      {
+        "active_operation": null,
+        "elapsed_ns": 59694000,
+        "ended_ns": 677163300275400,
+        "operation_started_ns": null,
+        "operations": {
+          "fsync": {
+            "bytes": 0,
+            "calls": 1,
+            "max_ns": 634800,
+            "returned": 1,
+            "total_ns": 634800
+          },
+          "hash": {
+            "bytes": 17961714,
+            "calls": 275,
+            "max_ns": 844500,
+            "returned": 275,
+            "total_ns": 36523000
+          },
+          "read": {
+            "bytes": 17961714,
+            "calls": 276,
+            "max_ns": 122100,
+            "returned": 276,
+            "total_ns": 9079600
+          }
+        },
+        "phase": "http",
+        "returned": true,
+        "snapshot_id": 681,
+        "started_ns": 677163240581400,
+        "synchronize": true,
+        "thread_id": 35588
+      }
+    ],
+    "limits": "read/hash/fsync inside original _snapshot only; open/fstat/flush/close and scheduling remain residual; append/parser/SQLite not split",
+    "observer_overhead": "two QPC reads and two recorder mutex sections per inner call, included in snapshot duration; no per-chunk ring events; no subtraction",
+    "rows": {
+      "http": {
+        "operations": {
+          "fsync": {
+            "bytes": 0,
+            "calls": 780,
+            "max_ns": 37488800,
+            "returned": 780,
+            "total_ns": 403005300
+          },
+          "hash": {
+            "bytes": 13943550521,
+            "calls": 213174,
+            "max_ns": 24478800,
+            "returned": 213174,
+            "total_ns": 20272694000
+          },
+          "read": {
+            "bytes": 13943550521,
+            "calls": 213954,
+            "max_ns": 4812100,
+            "returned": 213954,
+            "total_ns": 5085568200
+          }
+        },
+        "snapshots": {
+          "bytes": 0,
+          "calls": 780,
+          "max_ns": 73056900,
+          "returned": 780,
+          "total_ns": 28752540200
+        }
+      },
+      "initialize": {
+        "operations": {
+          "fsync": {
+            "bytes": 0,
+            "calls": 0,
+            "max_ns": 0,
+            "returned": 0,
+            "total_ns": 0
+          },
+          "hash": {
+            "bytes": 35522246,
+            "calls": 544,
+            "max_ns": 379400,
+            "returned": 544,
+            "total_ns": 59327100
+          },
+          "read": {
+            "bytes": 35522246,
+            "calls": 546,
+            "max_ns": 275400,
+            "returned": 546,
+            "total_ns": 14387000
+          }
+        },
+        "snapshots": {
+          "bytes": 0,
+          "calls": 2,
+          "max_ns": 40710400,
+          "returned": 2,
+          "total_ns": 78425800
+        }
+      }
+    },
+    "schema": "HH-S100-SNAPSHOT-SUBPHASES-1",
+    "unfinished": []
+  },
+  "source_after": {
+    "studio/blender-addon/ipc_client.py": "ee5d77e52dabb8b746e528be2acddc07b821f6b6724e9de9a36ec18b71cd8da9",
+    "studio/contracts/perf-collector.schema.json": "394d1df03bdfd736ea3fe9f260e9d718d35f3820cde35d1c45ccab65fbc24834",
+    "studio/godot-addon/addons/hh_studio/plugin.cfg": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c",
+    "studio/godot-addon/addons/hh_studio/plugin.gd": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036",
+    "studio/godot-addon/addons/hh_studio/scene_commands.gd": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069",
+    "studio/godot-addon/bundle_staging.py": "3d614edbec8e9a7f5ad3caf2b9694d7498df129de95683952268621f91d68e43",
+    "studio/godot-addon/bundle_v2.py": "2c5cdc71cdaf80f58bb93ec791e84bab8bd02cd4d9bdbd93d635db13583de62a",
+    "studio/godot-addon/cli_job.py": "5a0f37bc129bde409a2657054fb091d637d838e442d45a69e7adc1f1527d4c88",
+    "studio/godot-addon/fixture_profile.py": "25e1667dd930dcf0746b071fc29ea3460bc18d5fb9f3f83e806c1793028f21ae",
+    "studio/godot-addon/fixture_profile/addons/hh_studio/jcs_godot.gd.uid": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b",
+    "studio/godot-addon/fixture_profile/addons/hh_studio/plugin.gd.uid": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d",
+    "studio/godot-addon/fixture_profile/addons/hh_studio/scene_commands.gd.uid": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69",
+    "studio/godot-addon/fixture_profile/project.godot": "2d4fa9c7261fc5ec4292094854ffa79b602249671a03db3c9808ea7521f4fa51",
+    "studio/godot-addon/fixture_profile/scripts/fixture_actor.gd.uid": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142",
+    "studio/godot-addon/fixture_profile/source-pins.json": "c0a40998bd63d4d3dc628e4b9d2e0932fcb5725d1870adc43d0fdc3af2fdeed2",
+    "studio/host/blender/__init__.py": "812b123ddad075d7bb1892a38e099fdb48db147f80a27db83101c2b640044a90",
+    "studio/host/blender/deadline.py": "55fb3f77cadd9edc633186e1d6727bbed06216d659846aa3836e2582eef46926",
+    "studio/host/blender/export_job.py": "8eb0cc4a93361faf8cf09a3f11fd0278ec3fcdb2c9863e4b2ee98852c67ecdfe",
+    "studio/host/blender/glb_preflight.py": "5e4015c77ee3dced056634f89a0ba1fe2f94dd6650250fac8b03317c12d54f62",
+    "studio/host/blender/ui_host.py": "0fa5afa44046b61b68baafc275b39ade4787a55221074018db588c4c2f71dc35",
+    "studio/host/core/journal.py": "826bc5e4c60817e3a22dd2e0b6a199eb522a4eb78532cb5300249fe9056c0cc6",
+    "studio/host/core/limits.py": "9d01ce56f5976bb034e60e33bf4b7986cdc44b3a8ffad46da738a6ed1b143f3f",
+    "studio/host/core/private_store.py": "c914b5a66a45660c782ecd43fd2321c238702340f3b33062e284feada4d46476",
+    "studio/host/core/redaction.py": "e37d998399f589d4202591a1262a7dc19231e5e4b5236b47d4c8234956275c1f",
+    "studio/host/core/safe_create.py": "681fb7c0f4e74d82597bd8049a6b42cde0ea73941d879ec8ef0ba4df326d0606",
+    "studio/host/core/safe_open.py": "efc083f1c4fa875d3f748602924a05712aa60fed3abcdb46d058672930201535",
+    "studio/host/core/transport.py": "1ec03356b1cb8c8987e1604bcb164aea6a9934dbe259451c19e12de36398aba0",
+    "studio/host/replay/disk_journal_index.py": "56beb93119dfb66feec32eb51d389fc089d89911c0a1be199071c17e1801cb28",
+    "studio/host/replay/perf.py": "7c24c11989420e1600bcb20b8949fea44ea93b381bcab824e471465f5148edc7",
+    "studio/host/replay/process_probe.py": "53b6b24813e6ba6dc040dcbb87aee529b7f4e8855a64bcd0689b19c240180500",
+    "studio/host/replay/verified_journal.py": "129baa4d9e08c8a1d5acf2ea05c9c89a4fdddb53ca6f3baf2d61311ab98e62ab",
+    "studio/pipeline/__init__.py": "ffea2c35acdfe30636d61970e16c573e4de68228c4f7e780a6061d7be3fbbc68",
+    "studio/pipeline/native_job.py": "456bb70c315e38cf7a29354b7df51862e1ded4578f6b22d9110bf628547c20ca",
+    "studio/protocol/__init__.py": "a906ecde6f60d5fa2febd3f8a4a5fae440d87fea69e7d7e51a750677e03ad09f",
+    "studio/protocol/_rfc8785/__init__.py": "49d914da77ba606d535832d97df2e43458a8e51d57cdba6883a0a895ac50484b",
+    "studio/protocol/_rfc8785/_impl.py": "c25bc3a046528482d53bee3487b837f31dd9c05f33e8f13288c7aab320932cec",
+    "studio/protocol/core.py": "e8153f5a4dcf639f4d1cbce2fa74f7866d963a692c68e4e8d1477136889bd93e",
+    "studio/protocol/jcs_godot.gd": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5",
+    "studio/tests/replay/benchmark_assembly.py": "19c684d72995327e65458422ab66384e4d586705cad31f3ab3fd8615934f2a22",
+    "studio/tests/replay/benchmark_commands.py": "29ab59c799855e6695f5c0db18b21ed4ee3f7cd70fb42dcc3b9784e8960d6ca0",
+    "studio/tests/replay/benchmark_job.py": "be424a6f37ae573ac4bf40954b31017025daee2147699c80b05f9a0ab70e1611",
+    "studio/tests/replay/benchmark_native.gd": "13e65360cd0bc0033d0ad414fb3238e216b0d6dcc08e57dc7026ec4fc9eb8b95",
+    "studio/tests/replay/benchmark_plugin.cfg": "648d8821a36d0abc825ef1f380b4917639074302a619cb25a798df987a5a1092",
+    "studio/tests/replay/benchmark_profile.py": "ddbd98583060f791226fca83e275cf01204b37112627383198dcef4ec6f6f233",
+    "studio/tests/replay/benchmark_readiness.py": "842db6244d93384932929544045654f089d67f6f304624b7348b7d5c4583ab68",
+    "studio/tests/replay/benchmark_transport.py": "3b789fc025c5d217d8567ee1a3cd97ccf4c2e01214c974417643c080622848df",
+    "studio/tests/replay/campaign_task.ps1": "405e2abfa39332b1313871763184fdda0755ff998ec83310e67e10cebfe2ebb9",
+    "studio/tests/replay/run_benchmark_campaign.py": "bb43ecc04c2de4872177a440eb071d533efdaa9e8194f62b4e0907bad8d4b252",
+    "studio/tests/replay/run_campaign_task.py": "f5cb71fa96b8fd2f935ac933dcd5190cef2b3b6821f031bfe72becb2d360a6fd",
+    "studio/tests/replay/run_native_benchmark.py": "e6b0f8e9711ac881cfa65b4537232c685ff577af0a13778a51cc54999b1c1fc7",
+    "studio/toolchain.lock.json": "28bdce555e9a44ef68193723d512feda02c42a417ceb78faf0b29f52d095dca9"
+  },
+  "source_before": {
+    "studio/blender-addon/ipc_client.py": "ee5d77e52dabb8b746e528be2acddc07b821f6b6724e9de9a36ec18b71cd8da9",
+    "studio/contracts/perf-collector.schema.json": "394d1df03bdfd736ea3fe9f260e9d718d35f3820cde35d1c45ccab65fbc24834",
+    "studio/godot-addon/addons/hh_studio/plugin.cfg": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c",
+    "studio/godot-addon/addons/hh_studio/plugin.gd": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036",
+    "studio/godot-addon/addons/hh_studio/scene_commands.gd": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069",
+    "studio/godot-addon/bundle_staging.py": "3d614edbec8e9a7f5ad3caf2b9694d7498df129de95683952268621f91d68e43",
+    "studio/godot-addon/bundle_v2.py": "2c5cdc71cdaf80f58bb93ec791e84bab8bd02cd4d9bdbd93d635db13583de62a",
+    "studio/godot-addon/cli_job.py": "5a0f37bc129bde409a2657054fb091d637d838e442d45a69e7adc1f1527d4c88",
+    "studio/godot-addon/fixture_profile.py": "25e1667dd930dcf0746b071fc29ea3460bc18d5fb9f3f83e806c1793028f21ae",
+    "studio/godot-addon/fixture_profile/addons/hh_studio/jcs_godot.gd.uid": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b",
+    "studio/godot-addon/fixture_profile/addons/hh_studio/plugin.gd.uid": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d",
+    "studio/godot-addon/fixture_profile/addons/hh_studio/scene_commands.gd.uid": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69",
+    "studio/godot-addon/fixture_profile/project.godot": "2d4fa9c7261fc5ec4292094854ffa79b602249671a03db3c9808ea7521f4fa51",
+    "studio/godot-addon/fixture_profile/scripts/fixture_actor.gd.uid": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142",
+    "studio/godot-addon/fixture_profile/source-pins.json": "c0a40998bd63d4d3dc628e4b9d2e0932fcb5725d1870adc43d0fdc3af2fdeed2",
+    "studio/host/blender/__init__.py": "812b123ddad075d7bb1892a38e099fdb48db147f80a27db83101c2b640044a90",
+    "studio/host/blender/deadline.py": "55fb3f77cadd9edc633186e1d6727bbed06216d659846aa3836e2582eef46926",
+    "studio/host/blender/export_job.py": "8eb0cc4a93361faf8cf09a3f11fd0278ec3fcdb2c9863e4b2ee98852c67ecdfe",
+    "studio/host/blender/glb_preflight.py": "5e4015c77ee3dced056634f89a0ba1fe2f94dd6650250fac8b03317c12d54f62",
+    "studio/host/blender/ui_host.py": "0fa5afa44046b61b68baafc275b39ade4787a55221074018db588c4c2f71dc35",
+    "studio/host/core/journal.py": "826bc5e4c60817e3a22dd2e0b6a199eb522a4eb78532cb5300249fe9056c0cc6",
+    "studio/host/core/limits.py": "9d01ce56f5976bb034e60e33bf4b7986cdc44b3a8ffad46da738a6ed1b143f3f",
+    "studio/host/core/private_store.py": "c914b5a66a45660c782ecd43fd2321c238702340f3b33062e284feada4d46476",
+    "studio/host/core/redaction.py": "e37d998399f589d4202591a1262a7dc19231e5e4b5236b47d4c8234956275c1f",
+    "studio/host/core/safe_create.py": "681fb7c0f4e74d82597bd8049a6b42cde0ea73941d879ec8ef0ba4df326d0606",
+    "studio/host/core/safe_open.py": "efc083f1c4fa875d3f748602924a05712aa60fed3abcdb46d058672930201535",
+    "studio/host/core/transport.py": "1ec03356b1cb8c8987e1604bcb164aea6a9934dbe259451c19e12de36398aba0",
+    "studio/host/replay/disk_journal_index.py": "56beb93119dfb66feec32eb51d389fc089d89911c0a1be199071c17e1801cb28",
+    "studio/host/replay/perf.py": "7c24c11989420e1600bcb20b8949fea44ea93b381bcab824e471465f5148edc7",
+    "studio/host/replay/process_probe.py": "53b6b24813e6ba6dc040dcbb87aee529b7f4e8855a64bcd0689b19c240180500",
+    "studio/host/replay/verified_journal.py": "129baa4d9e08c8a1d5acf2ea05c9c89a4fdddb53ca6f3baf2d61311ab98e62ab",
+    "studio/pipeline/__init__.py": "ffea2c35acdfe30636d61970e16c573e4de68228c4f7e780a6061d7be3fbbc68",
+    "studio/pipeline/native_job.py": "456bb70c315e38cf7a29354b7df51862e1ded4578f6b22d9110bf628547c20ca",
+    "studio/protocol/__init__.py": "a906ecde6f60d5fa2febd3f8a4a5fae440d87fea69e7d7e51a750677e03ad09f",
+    "studio/protocol/_rfc8785/__init__.py": "49d914da77ba606d535832d97df2e43458a8e51d57cdba6883a0a895ac50484b",
+    "studio/protocol/_rfc8785/_impl.py": "c25bc3a046528482d53bee3487b837f31dd9c05f33e8f13288c7aab320932cec",
+    "studio/protocol/core.py": "e8153f5a4dcf639f4d1cbce2fa74f7866d963a692c68e4e8d1477136889bd93e",
+    "studio/protocol/jcs_godot.gd": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5",
+    "studio/tests/replay/benchmark_assembly.py": "19c684d72995327e65458422ab66384e4d586705cad31f3ab3fd8615934f2a22",
+    "studio/tests/replay/benchmark_commands.py": "29ab59c799855e6695f5c0db18b21ed4ee3f7cd70fb42dcc3b9784e8960d6ca0",
+    "studio/tests/replay/benchmark_job.py": "be424a6f37ae573ac4bf40954b31017025daee2147699c80b05f9a0ab70e1611",
+    "studio/tests/replay/benchmark_native.gd": "13e65360cd0bc0033d0ad414fb3238e216b0d6dcc08e57dc7026ec4fc9eb8b95",
+    "studio/tests/replay/benchmark_plugin.cfg": "648d8821a36d0abc825ef1f380b4917639074302a619cb25a798df987a5a1092",
+    "studio/tests/replay/benchmark_profile.py": "ddbd98583060f791226fca83e275cf01204b37112627383198dcef4ec6f6f233",
+    "studio/tests/replay/benchmark_readiness.py": "842db6244d93384932929544045654f089d67f6f304624b7348b7d5c4583ab68",
+    "studio/tests/replay/benchmark_transport.py": "3b789fc025c5d217d8567ee1a3cd97ccf4c2e01214c974417643c080622848df",
+    "studio/tests/replay/campaign_task.ps1": "405e2abfa39332b1313871763184fdda0755ff998ec83310e67e10cebfe2ebb9",
+    "studio/tests/replay/run_benchmark_campaign.py": "bb43ecc04c2de4872177a440eb071d533efdaa9e8194f62b4e0907bad8d4b252",
+    "studio/tests/replay/run_campaign_task.py": "f5cb71fa96b8fd2f935ac933dcd5190cef2b3b6821f031bfe72becb2d360a6fd",
+    "studio/tests/replay/run_native_benchmark.py": "e6b0f8e9711ac881cfa65b4537232c685ff577af0a13778a51cc54999b1c1fc7",
+    "studio/toolchain.lock.json": "28bdce555e9a44ef68193723d512feda02c42a417ceb78faf0b29f52d095dca9"
+  },
+  "source_unchanged": true,
+  "threads_alive": [
+    false,
+    false,
+    false
+  ],
+  "timings": {
+    "host.archive": {
+      "count": 0,
+      "max_ns": 0,
+      "returned_count": 0,
+      "slow_count": 0,
+      "slow_samples": [],
+      "total_ns": 0
+    },
+    "host.cancel": {
+      "count": 20,
+      "max_ns": 119651900,
+      "returned_count": 20,
+      "slow_count": 20,
+      "slow_samples": [
+        {
+          "elapsed_ns": 119651900,
+          "ended_mono_ns": 677160549780900,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677160430129000
+        },
+        {
+          "elapsed_ns": 108091900,
+          "ended_mono_ns": 677156689464200,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677156581372300
+        },
+        {
+          "elapsed_ns": 102149300,
+          "ended_mono_ns": 677166454844500,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677166352695200
+        },
+        {
+          "elapsed_ns": 101111600,
+          "ended_mono_ns": 677141692619100,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677141591507500
+        },
+        {
+          "elapsed_ns": 101018800,
+          "ended_mono_ns": 677162399721400,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677162298702600
+        },
+        {
+          "elapsed_ns": 99781600,
+          "ended_mono_ns": 677134493858500,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677134394076900
+        },
+        {
+          "elapsed_ns": 99536600,
+          "ended_mono_ns": 677132736191300,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677132636654700
+        },
+        {
+          "elapsed_ns": 98425800,
+          "ended_mono_ns": 677139896825100,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677139798399300
+        },
+        {
+          "elapsed_ns": 97489300,
+          "ended_mono_ns": 677164327918600,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677164230429300
+        },
+        {
+          "elapsed_ns": 97347000,
+          "ended_mono_ns": 677158553571900,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677158456224900
+        },
+        {
+          "elapsed_ns": 97267600,
+          "ended_mono_ns": 677137898399200,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677137801131600
+        },
+        {
+          "elapsed_ns": 94303300,
+          "ended_mono_ns": 677147028181000,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677146933877700
+        },
+        {
+          "elapsed_ns": 93794100,
+          "ended_mono_ns": 677150488016700,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677150394222600
+        },
+        {
+          "elapsed_ns": 92780500,
+          "ended_mono_ns": 677152303908200,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677152211127700
+        },
+        {
+          "elapsed_ns": 91320100,
+          "ended_mono_ns": 677154591345000,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677154500024900
+        },
+        {
+          "elapsed_ns": 90828100,
+          "ended_mono_ns": 677136149804800,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677136058976700
+        }
+      ],
+      "total_ns": 1944836300
+    },
+    "host.commands": {
+      "count": 220,
+      "max_ns": 444036700,
+      "returned_count": 160,
+      "slow_count": 160,
+      "slow_samples": [
+        {
+          "elapsed_ns": 444036700,
+          "ended_mono_ns": 677154248482300,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677153804445600
+        },
+        {
+          "elapsed_ns": 200520200,
+          "ended_mono_ns": 677164643190500,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677164442670300
+        },
+        {
+          "elapsed_ns": 193271500,
+          "ended_mono_ns": 677156240674600,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677156047403100
+        },
+        {
+          "elapsed_ns": 180430600,
+          "ended_mono_ns": 677144704291400,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677144523860800
+        },
+        {
+          "elapsed_ns": 162520400,
+          "ended_mono_ns": 677155812121600,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677155649601200
+        },
+        {
+          "elapsed_ns": 153191500,
+          "ended_mono_ns": 677153637409000,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677153484217500
+        },
+        {
+          "elapsed_ns": 143720400,
+          "ended_mono_ns": 677143313259900,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677143169539500
+        },
+        {
+          "elapsed_ns": 140523800,
+          "ended_mono_ns": 677166031774600,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677165891250800
+        },
+        {
+          "elapsed_ns": 138795100,
+          "ended_mono_ns": 677156578228800,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677156439433700
+        },
+        {
+          "elapsed_ns": 137879900,
+          "ended_mono_ns": 677146931310600,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677146793430700
+        },
+        {
+          "elapsed_ns": 137099500,
+          "ended_mono_ns": 677159630429900,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677159493330400
+        },
+        {
+          "elapsed_ns": 135900500,
+          "ended_mono_ns": 677165732288600,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677165596388100
+        },
+        {
+          "elapsed_ns": 134339900,
+          "ended_mono_ns": 677143997809900,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677143863470000
+        },
+        {
+          "elapsed_ns": 131464300,
+          "ended_mono_ns": 677160153629100,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677160022164800
+        },
+        {
+          "elapsed_ns": 130864000,
+          "ended_mono_ns": 677160426899300,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677160296035300
+        },
+        {
+          "elapsed_ns": 127773400,
+          "ended_mono_ns": 677149017963800,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677148890190400
+        }
+      ],
+      "total_ns": 16162501900
+    },
+    "host.discovery": {
+      "count": 20,
+      "max_ns": 320600,
+      "returned_count": 20,
+      "slow_count": 0,
+      "slow_samples": [],
+      "total_ns": 4226500
+    },
+    "host.lease": {
+      "count": 20,
+      "max_ns": 53525100,
+      "returned_count": 20,
+      "slow_count": 3,
+      "slow_samples": [
+        {
+          "elapsed_ns": 53525100,
+          "ended_mono_ns": 677131073902500,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677131020377400
+        },
+        {
+          "elapsed_ns": 53156000,
+          "ended_mono_ns": 677138006363700,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677137953207700
+        },
+        {
+          "elapsed_ns": 50167400,
+          "ended_mono_ns": 677166574323500,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677166524156100
+        }
+      ],
+      "total_ns": 862657600
+    },
+    "host.lookup": {
+      "count": 160,
+      "max_ns": 380326400,
+      "returned_count": 160,
+      "slow_count": 141,
+      "slow_samples": [
+        {
+          "elapsed_ns": 380326400,
+          "ended_mono_ns": 677139202812200,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677138822485800
+        },
+        {
+          "elapsed_ns": 226377900,
+          "ended_mono_ns": 677156043059800,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677155816681900
+        },
+        {
+          "elapsed_ns": 198984200,
+          "ended_mono_ns": 677166234899400,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677166035915200
+        },
+        {
+          "elapsed_ns": 190489600,
+          "ended_mono_ns": 677156436420100,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677156245930500
+        },
+        {
+          "elapsed_ns": 154891900,
+          "ended_mono_ns": 677163825871700,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677163670979800
+        },
+        {
+          "elapsed_ns": 152749100,
+          "ended_mono_ns": 677165888027700,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677165735278600
+        },
+        {
+          "elapsed_ns": 150215000,
+          "ended_mono_ns": 677153802061800,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677153651846800
+        },
+        {
+          "elapsed_ns": 148224300,
+          "ended_mono_ns": 677158063109000,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677157914884700
+        },
+        {
+          "elapsed_ns": 141596300,
+          "ended_mono_ns": 677137448264200,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677137306667900
+        },
+        {
+          "elapsed_ns": 141229700,
+          "ended_mono_ns": 677144848729200,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677144707499500
+        },
+        {
+          "elapsed_ns": 140915300,
+          "ended_mono_ns": 677151829562200,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677151688646900
+        },
+        {
+          "elapsed_ns": 140159300,
+          "ended_mono_ns": 677161927902100,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677161787742800
+        },
+        {
+          "elapsed_ns": 138826200,
+          "ended_mono_ns": 677160019331400,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677159880505200
+        },
+        {
+          "elapsed_ns": 138396700,
+          "ended_mono_ns": 677164090374100,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677163951977400
+        },
+        {
+          "elapsed_ns": 137012000,
+          "ended_mono_ns": 677146790330800,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677146653318800
+        },
+        {
+          "elapsed_ns": 136058600,
+          "ended_mono_ns": 677165576711000,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677165440652400
+        }
+      ],
+      "total_ns": 16452056300
+    },
+    "host.other": {
+      "count": 0,
+      "max_ns": 0,
+      "returned_count": 0,
+      "slow_count": 0,
+      "slow_samples": [],
+      "total_ns": 0
+    },
+    "host.stop": {
+      "count": 0,
+      "max_ns": 0,
+      "returned_count": 0,
+      "slow_count": 0,
+      "slow_samples": [],
+      "total_ns": 0
+    },
+    "journal.append": {
+      "count": 340,
+      "max_ns": 297740300,
+      "returned_count": 340,
+      "slow_count": 3,
+      "slow_samples": [
+        {
+          "elapsed_ns": 297740300,
+          "ended_mono_ns": 677154248348500,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677153950608200
+        },
+        {
+          "elapsed_ns": 261647500,
+          "ended_mono_ns": 677139158338400,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677138896690900
+        },
+        {
+          "elapsed_ns": 78681500,
+          "ended_mono_ns": 677164643042600,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677164564361100
+        }
+      ],
+      "total_ns": 4390996800
+    },
+    "journal.load": {
+      "count": 1,
+      "max_ns": 12668860400,
+      "returned_count": 1,
+      "slow_count": 1,
+      "slow_samples": [
+        {
+          "elapsed_ns": 12668860400,
+          "ended_mono_ns": 677130995325000,
+          "phase": "initialize",
+          "returned": true,
+          "started_mono_ns": 677118326464600
+        }
+      ],
+      "total_ns": 12668860400
+    },
+    "journal.reload": {
+      "count": 780,
+      "max_ns": 73173300,
+      "returned_count": 780,
+      "slow_count": 37,
+      "slow_samples": [
+        {
+          "elapsed_ns": 73173300,
+          "ended_mono_ns": 677144321052900,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677144247879600
+        },
+        {
+          "elapsed_ns": 72505200,
+          "ended_mono_ns": 677138896151600,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677138823646400
+        },
+        {
+          "elapsed_ns": 71807300,
+          "ended_mono_ns": 677144639060000,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677144567252700
+        },
+        {
+          "elapsed_ns": 71422600,
+          "ended_mono_ns": 677164564219800,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677164492797200
+        },
+        {
+          "elapsed_ns": 69266000,
+          "ended_mono_ns": 677152753363500,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677152684097500
+        },
+        {
+          "elapsed_ns": 68841500,
+          "ended_mono_ns": 677153950451400,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677153881609900
+        },
+        {
+          "elapsed_ns": 68168000,
+          "ended_mono_ns": 677156040743600,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677155972575600
+        },
+        {
+          "elapsed_ns": 67822000,
+          "ended_mono_ns": 677166162574600,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677166094752600
+        },
+        {
+          "elapsed_ns": 67690800,
+          "ended_mono_ns": 677156119991300,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677156052300500
+        },
+        {
+          "elapsed_ns": 63826600,
+          "ended_mono_ns": 677156312650100,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677156248823500
+        },
+        {
+          "elapsed_ns": 62376200,
+          "ended_mono_ns": 677153710986600,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677153648610400
+        },
+        {
+          "elapsed_ns": 62242900,
+          "ended_mono_ns": 677155882918600,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677155820675700
+        },
+        {
+          "elapsed_ns": 61583400,
+          "ended_mono_ns": 677165504339400,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677165442756000
+        },
+        {
+          "elapsed_ns": 61042700,
+          "ended_mono_ns": 677153219417700,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677153158375000
+        },
+        {
+          "elapsed_ns": 60467500,
+          "ended_mono_ns": 677152972553900,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677152912086400
+        },
+        {
+          "elapsed_ns": 59851100,
+          "ended_mono_ns": 677163300408600,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677163240557500
+        }
+      ],
+      "total_ns": 28811638900
+    },
+    "journal.snapshot": {
+      "count": 782,
+      "max_ns": 73139300,
+      "returned_count": 782,
+      "slow_count": 37,
+      "slow_samples": [
+        {
+          "elapsed_ns": 73139300,
+          "ended_mono_ns": 677144321034300,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677144247895000
+        },
+        {
+          "elapsed_ns": 72473400,
+          "ended_mono_ns": 677138896127100,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677138823653700
+        },
+        {
+          "elapsed_ns": 71764400,
+          "ended_mono_ns": 677144639029900,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677144567265500
+        },
+        {
+          "elapsed_ns": 71382400,
+          "ended_mono_ns": 677164564187200,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677164492804800
+        },
+        {
+          "elapsed_ns": 69220500,
+          "ended_mono_ns": 677152753325600,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677152684105100
+        },
+        {
+          "elapsed_ns": 68801800,
+          "ended_mono_ns": 677153950419100,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677153881617300
+        },
+        {
+          "elapsed_ns": 68125600,
+          "ended_mono_ns": 677156040714500,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677155972588900
+        },
+        {
+          "elapsed_ns": 67763100,
+          "ended_mono_ns": 677166162532300,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677166094769200
+        },
+        {
+          "elapsed_ns": 67636900,
+          "ended_mono_ns": 677156119959200,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677156052322300
+        },
+        {
+          "elapsed_ns": 63771300,
+          "ended_mono_ns": 677156312608500,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677156248837200
+        },
+        {
+          "elapsed_ns": 62339800,
+          "ended_mono_ns": 677153710965000,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677153648625200
+        },
+        {
+          "elapsed_ns": 62195100,
+          "ended_mono_ns": 677155882879600,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677155820684500
+        },
+        {
+          "elapsed_ns": 61544700,
+          "ended_mono_ns": 677165504313200,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677165442768500
+        },
+        {
+          "elapsed_ns": 60993300,
+          "ended_mono_ns": 677153219382900,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677153158389600
+        },
+        {
+          "elapsed_ns": 60434500,
+          "ended_mono_ns": 677152972533600,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677152912099100
+        },
+        {
+          "elapsed_ns": 59798300,
+          "ended_mono_ns": 677163300368500,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677163240570200
+        }
+      ],
+      "total_ns": 28869297800
+    },
+    "journal.writer_held": {
+      "count": 781,
+      "max_ns": 12668979700,
+      "returned_count": 621,
+      "slow_count": 158,
+      "slow_samples": [
+        {
+          "elapsed_ns": 12668979700,
+          "ended_mono_ns": 677130995439900,
+          "phase": "initialize",
+          "returned": true,
+          "started_mono_ns": 677118326460200
+        },
+        {
+          "elapsed_ns": 366815100,
+          "ended_mono_ns": 677154248422700,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677153881607600
+        },
+        {
+          "elapsed_ns": 334774300,
+          "ended_mono_ns": 677139158418500,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677138823644200
+        },
+        {
+          "elapsed_ns": 150328500,
+          "ended_mono_ns": 677164643123700,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677164492795200
+        },
+        {
+          "elapsed_ns": 92803700,
+          "ended_mono_ns": 677166187552200,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677166094748500
+        },
+        {
+          "elapsed_ns": 86575400,
+          "ended_mono_ns": 677152770670500,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677152684095100
+        },
+        {
+          "elapsed_ns": 82468000,
+          "ended_mono_ns": 677165525219400,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677165442751400
+        },
+        {
+          "elapsed_ns": 82446600,
+          "ended_mono_ns": 677143997764500,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677143915317900
+        },
+        {
+          "elapsed_ns": 81566900,
+          "ended_mono_ns": 677153239937600,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677153158370700
+        },
+        {
+          "elapsed_ns": 81340100,
+          "ended_mono_ns": 677163321894100,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677163240554000
+        },
+        {
+          "elapsed_ns": 81170000,
+          "ended_mono_ns": 677155967925900,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677155886755900
+        },
+        {
+          "elapsed_ns": 80169900,
+          "ended_mono_ns": 677159630373500,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677159550203600
+        },
+        {
+          "elapsed_ns": 80134400,
+          "ended_mono_ns": 677151517508500,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677151437374100
+        },
+        {
+          "elapsed_ns": 78708700,
+          "ended_mono_ns": 677149017914700,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677148939206000
+        },
+        {
+          "elapsed_ns": 78406300,
+          "ended_mono_ns": 677152990489300,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677152912083000
+        },
+        {
+          "elapsed_ns": 73809800,
+          "ended_mono_ns": 677144321685200,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 677144247875400
+        }
+      ],
+      "total_ns": 46184261900
+    },
+    "journal.writer_wait": {
+      "count": 781,
+      "max_ns": 8215400,
+      "returned_count": 781,
+      "slow_count": 0,
+      "slow_samples": [],
+      "total_ns": 2176728700
+    }
+  }
+}

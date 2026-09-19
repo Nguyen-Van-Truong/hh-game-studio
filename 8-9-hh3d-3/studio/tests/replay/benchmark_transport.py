@@ -56,6 +56,10 @@ class BenchmarkFixtureClient(FixtureClient):
     def last_transport_failure(self) -> dict[str, str | float] | None:
         return None if self._last_transport_failure is None else dict(self._last_transport_failure)
 
+    def _connection(self, port: int):
+        """Local observation seam; the default constructor and timeout are unchanged."""
+        return http.client.HTTPConnection("127.0.0.1", port, timeout=self.timeout)
+
     def _call(self, path: str, body: Mapping[str, Any], *, control: bool = False) -> dict[str, Any]:
         # Deliberate small copy of accepted FixtureClient._call so the accepted
         # source stays pinned. Differential tests protect all wire/error paths.
@@ -66,7 +70,7 @@ class BenchmarkFixtureClient(FixtureClient):
         started_ns = time.perf_counter_ns()
         stage = "request"
         port = self.control_port if control else self.port
-        connection = http.client.HTTPConnection("127.0.0.1", port, timeout=self.timeout)
+        connection = self._connection(port)
         try:
             connection.request("POST", path, canonical_bytes(dict(body)), {
                 "Authorization": "Bearer " + self._credential.bearer, "Content-Type": "application/json"})

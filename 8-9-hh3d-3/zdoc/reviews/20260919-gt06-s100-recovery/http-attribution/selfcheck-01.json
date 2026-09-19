@@ -1,0 +1,23 @@
+{
+  "actual_snapshot_ast_proof": {
+    "original_ast_sha256": "709724ef69cf05ece409b06640719d44bef0389a7ef521b40bddfb40d5ef6ab4",
+    "original_method_source_sha256": "70ba922fdb74c2e64fe35586f986ce584c5d675f09e60bb478897f88f66b22e0",
+    "stripped_ast_identical": true,
+    "transformed_ast_sha256": "5b10817acfe06aa0f320b70fea90af1712bb69321944fc9f58f50dcab2a5bff4",
+    "wrapped_calls": {
+      "digest.update": 1,
+      "os.fsync": 1,
+      "stream.read": 1
+    }
+  },
+  "extra_ns_per_fake_snapshot": 11335.05,
+  "formal_acceptance": false,
+  "loops": 2000,
+  "overhead_limit": "fake same-thread operations only; does not establish I/O/thread contention overhead or permit subtraction",
+  "plain_fake_total_ns": 892400,
+  "prepared_manifest_sha256": "fc0455d005b0d802917466a45b0b21631c0c3a4027a6907263bbc376252ce397",
+  "schema": "HH-S100-HTTP-SELFCHECK-1",
+  "scope": "compile, exact AST stripping, fake call/return/exception/order, first failure retention; no HTTP/engine/Journal construction",
+  "status": "PASS",
+  "wrapped_fake_total_ns": 23562500
+}

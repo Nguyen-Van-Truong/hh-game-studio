@@ -31,6 +31,8 @@ from studio.tests.replay.benchmark_job import (
     BenchmarkJobError, BenchmarkProcess, require, verify_capture, write as write_cleanup,
 )
 from studio.tests.replay.benchmark_readiness import validate_startup_readiness
+from studio.tests.replay.benchmark_import_observer import ImportObserver, validate_import_snapshot
+from studio.tests.replay.benchmark_http_phases import validate_phase_snapshot
 from studio.tests.replay import benchmark_profile as profile
 from studio.tests.replay.benchmark_assembly import read_artifact, assemble_sample, assemble_run, assemble_dataset
 from studio.tests.replay.run_native_benchmark import (
@@ -346,6 +348,7 @@ def verify_run_capture(root, captured, source_digest, *, campaign_id, index, att
                 and all(part not in ('', '.', '..') for part in relative.split('/')), 'CAMPAIGN_ARTIFACT_PATH')
         require(sha(artifact_bytes(root / relative)) == digest, 'CAMPAIGN_RESUME_ARTIFACT_CHANGED')
     require({'context.json', 'child-result.json', 'child-terminal-cleanup.json',
+             'http-phases-final.json', 'import-observation.json',
              'host-owner/capture.json', 'editor-host/capture.json',
              'host-owner/process-start.json', 'host-owner/process-exit.json', 'host-owner/stdout.txt',
              'host-owner/stderr.txt', 'editor-host/process-start.json', 'editor-host/process-exit.json',
@@ -367,6 +370,7 @@ def verify_run_capture(root, captured, source_digest, *, campaign_id, index, att
                 'CAMPAIGN_RESUME_OWNERSHIP')
     require(len(child['batches']) == 35, 'CAMPAIGN_RESUME_BATCH_COUNT')
     verify_child_terminal_cleanup(root, context, child)
+    verify_observations(root, context, child)
     verify_owner_captures(root, context)
     return child
 
@@ -563,11 +567,91 @@ def _cleanup_error(stage, error):
             'code': code if type(code) is str and re.fullmatch(r'[A-Z][A-Z0-9_]{0,63}', code) else None}
 
 
+def _write_observation(root, context, kind, observation):
+    """A separate exact artifact; command/sample schemas and gates stay fixed."""
+    names = {'http': 'http-phases-final.json', 'import': 'import-observation.json'}
+    require(kind in names, 'CAMPAIGN_OBSERVATION_KIND')
+    write(root / names[kind], {
+        'schema_id': 'hh-studio.benchmark-observation', 'schema_version': '1.0.0',
+        'kind': kind, 'run_id': context['run_id'],
+        'source_closure_sha256': context['source_closure_sha256'],
+        'profile_sha256': context['profile_sha256'],
+        'context': reference(root, root / 'context.json'),
+        'available': observation is not None, 'observation': observation,
+        'missing_reason': 'PRODUCER_NOT_CREATED' if observation is None else None,
+        'formal_acceptance': False,
+        'scope': 'Always-on bounded observation; no timing/overhead subtraction or acceptance override'})
+
+
+def verify_observations(root, context, child):
+    """Bind the new observation artifacts without treating telemetry as PASS."""
+    for kind, name in [('http', 'http-phases-final.json'), ('import', 'import-observation.json')]:
+        value = json.loads(read_regular(root / name))
+        require(value.get('schema_id') == 'hh-studio.benchmark-observation'
+                and value.get('schema_version') == '1.0.0' and value.get('kind') == kind
+                and value.get('run_id') == context['run_id']
+                and value.get('source_closure_sha256') == context['source_closure_sha256']
+                and value.get('profile_sha256') == context['profile_sha256']
+                and value.get('context') == reference(root, root / 'context.json')
+                and value.get('available') is True and value.get('missing_reason') is None
+                and type(value.get('observation')) is dict and value.get('formal_acceptance') is False,
+                'CAMPAIGN_OBSERVATION_BINDING')
+        if kind == 'http':
+            require(value['observation'].get('pid') == child['processes']['host']['pid'],
+                    'CAMPAIGN_OBSERVATION_HOST_IDENTITY')
+            validate_phase_snapshot(value['observation'], child['processes']['host']['pid'])
+        else:
+            validate_import_snapshot(value['observation'])
+            identity = value['observation']['target_identity']
+            if identity is not None:
+                target = _target_exit_state(root, 'import-host')['actual_target_exit']
+                require(target is not None and target['pid'] == identity['pid'],
+                        'CAMPAIGN_OBSERVATION_IMPORT_IDENTITY')
+
+
+def _observed_import(root, context, project, executable, binary_hash, observer, errors):
+    """Never let observer cleanup or persistence erase the import's failure."""
+    primary = None
+    local_errors = []
+    try:
+        observer.start()
+        return native_job.run_trusted_stage(
+            [str(executable), '--headless', '--editor', '--path', str(project), '--import'],
+            cwd=project, output=root / 'import-host', source_files=context['source_files'], source_root=STUDIO,
+            binary_sha256=binary_hash)
+    except BaseException as error:
+        primary = error
+        raise
+    finally:
+        try:
+            observer.close()
+        except BaseException as error:
+            local_errors.append(('import_observer_close', error))
+        try:
+            snapshot = observer.snapshot()
+            _write_observation(root, context, 'import', snapshot)
+            validate_import_snapshot(snapshot)
+        except BaseException as error:
+            local_errors.append(('import_observation_receipt', error))
+        errors.extend(local_errors)
+        if local_errors and primary is None:
+            raise BenchmarkJobError('CAMPAIGN_IMPORT_OBSERVATION_INCOMPLETE') from local_errors[0][1]
+
+
 def _probe_cleanup_state(probe):
     if probe is None:
         return {'present': False}
     return {'present': True, 'handle_retained': probe.handle is not None,
             'close_uncertain': probe.close_uncertain}
+
+
+def _import_cleanup_state(observer):
+    if observer is None:
+        return {'present': False}
+    snapshot = observer.snapshot()
+    fields = ('closed', 'thread_alive', 'handle_retained', 'handle_close_uncertain',
+              'probe_handles_released', 'global_held_probe_count', 'error_count')
+    return dict(present=True, **{field: snapshot[field] for field in fields})
 
 
 def _producer_cleanup_state(producer):
@@ -627,13 +711,15 @@ def _target_exit_state(root, role):
 
 
 def _finish_child_cleanup(root, context, progress, batches, *, producer, probe, owner,
-                          retained, done, thread, primary, errors):
+                          retained, done, thread, primary, errors, import_observer=None):
     """Observe every independent role after all closes, even on body failure.
 
     Only live checked state and exact target receipts are recorded. This is not
     a successful-run cleanup receipt or a claim about the child's own exit.
     """
     owners = [('producer', producer), ('editor_probe', probe), ('editor_owner', owner)]
+    if import_observer is not None:
+        owners.append(('import_observer', import_observer))
     if retained is not None and all(retained is not value for _, value in owners):
         owners.append(('constructor_owner', retained))
     for stage, action in [('heartbeat_stop', done.set),
@@ -659,9 +745,10 @@ def _finish_child_cleanup(root, context, progress, batches, *, producer, probe, 
                ('producer', lambda: _producer_cleanup_state(producer)),
                ('editor_probe', lambda: _probe_cleanup_state(probe)),
                ('editor_owner', lambda: _editor_cleanup_state(owner)),
+               ('import_observer', lambda: _import_cleanup_state(import_observer)),
                ('editor_target', lambda: _target_exit_state(root, 'editor-host')),
                ('import_target', lambda: _target_exit_state(root, 'import-host'))]
-    if len(owners) == 4:
+    if any(role == 'constructor_owner' for role, _ in owners):
         getters.append(('constructor_owner', lambda: {'present': True,
             'job': retained.snapshot()} if isinstance(retained, native_job.cli_job.Owner)
             else {'present': True, 'state_unavailable': True}))
@@ -673,6 +760,10 @@ def _finish_child_cleanup(root, context, progress, batches, *, producer, probe, 
             errors.append((name + '_observe', error))
     if observations.get('heartbeat_alive') is True:
         errors.append(('heartbeat_alive', BenchmarkJobError('CAMPAIGN_CLEANUP_HELD')))
+    try:
+        _write_observation(root, context, 'http', producer.phase_snapshot() if producer is not None else None)
+    except BaseException as error:
+        errors.append(('http_observation_receipt', error))
     try:
         context_ref = reference(root, root / 'context.json')
         write_cleanup(root / 'child-terminal-cleanup.json', {
@@ -713,6 +804,13 @@ def verify_child_terminal_cleanup(root, context, child):
     observed = record['observations']
     require(observed['heartbeat_alive'] is False and 'constructor_owner' not in observed,
             'CAMPAIGN_TERMINAL_HELD')
+    expected_import = {'present': True, 'closed': True, 'thread_alive': False,
+        'handle_retained': False, 'handle_close_uncertain': False,
+        'probe_handles_released': True, 'global_held_probe_count': 0, 'error_count': 0}
+    imported = observed.get('import_observer')
+    require(type(imported) is dict and imported.keys() == expected_import.keys()
+            and all(type(imported[key]) is type(value) and imported[key] == value
+                    for key, value in expected_import.items()), 'CAMPAIGN_TERMINAL_IMPORT_OBSERVER_HELD')
     producer, editor = observed['producer'], observed['editor_owner']
     for probe in (observed['editor_probe'], producer['observer_probe']):
         expected_probe = {'present': True, 'handle_retained': False, 'close_uncertain': False}
@@ -762,7 +860,7 @@ def run_child(root):
     initial = prepare(project, factory, trusted, binding)
     (project / 'benchmark/input').mkdir()
     write(root / 'initial-project-files.json', initial)
-    owner = producer = probe = None
+    owner = producer = probe = import_observer = None
     done = threading.Event()
     progress = {'batch': -1, 'phase': 'import'}
 
@@ -777,10 +875,9 @@ def run_child(root):
     cleanup_errors = []
     try:
         thread.start()
-        imported = native_job.run_trusted_stage(
-            [str(executable), '--headless', '--editor', '--path', str(project), '--import'],
-            cwd=project, output=root / 'import-host', source_files=before, source_root=STUDIO,
-            binary_sha256=lock['gui_sha256'])
+        import_observer = ImportObserver(root / 'import-host', project, executable)
+        imported = _observed_import(root, context, project, executable, lock['gui_sha256'],
+                                    import_observer, cleanup_errors)
         native_job.verify_captured_stage(root / 'import-host', sha(read_regular(root / 'import-host/capture.json')))
         require(not list((project / 'benchmark/out').iterdir()), 'CAMPAIGN_IMPORT_ACTIVATED')
         snapshot = project_files(project)
@@ -938,7 +1035,8 @@ def run_child(root):
         raise
     finally:
         _finish_child_cleanup(root, context, progress, batches, producer=producer, probe=probe,
-            owner=owner, retained=retained, done=done, thread=thread, primary=primary, errors=cleanup_errors)
+            owner=owner, retained=retained, done=done, thread=thread, primary=primary, errors=cleanup_errors,
+            import_observer=import_observer)
 
 
 def main():

@@ -15,6 +15,8 @@ STUDIO = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(STUDIO.parent))
 from studio.tests.replay import run_benchmark_campaign as campaign
 from studio.tests.replay.benchmark_job import BenchmarkJobError
+from studio.tests.replay.benchmark_http_phases import PhaseRecorder
+from studio.tests.replay.benchmark_import_observer import ImportObserver
 
 
 class CampaignResumeTests(unittest.TestCase):
@@ -81,6 +83,15 @@ class CampaignResumeTests(unittest.TestCase):
                 'editor_owner': {'present': True, 'closed': True, 'helper_pid': 102, 'helper_exit_code': 0,
                     'drain_threads_alive': [False, False], 'job': editor['job'],
                     'wrapper_process_handle': editor['wrapper_process_handle']}, **targets}}
+        self.put('child-terminal-cleanup.json', self.terminal)
+        context = json.loads((self.root / 'context.json').read_bytes())
+        recorder = PhaseRecorder(event_capacity=8192, active_capacity=64)
+        recorder._pid = 100
+        campaign._write_observation(self.root, context, 'http', recorder.snapshot())
+        imported = ImportObserver(self.root, self.root, self.root)
+        imported._started_ns, imported._closed = 1, True
+        campaign._write_observation(self.root, context, 'import', imported.snapshot())
+        self.terminal['observations']['import_observer'] = campaign._import_cleanup_state(imported)
         self.put('child-terminal-cleanup.json', self.terminal)
         self.put('commands/journal.guard', b'')
         self.captured = {'schema_id': 'hh-studio.benchmark-owned-run', 'schema_version': '1.0.0',
@@ -153,10 +164,51 @@ class CampaignResumeTests(unittest.TestCase):
         with self.assertRaisesRegex(BenchmarkJobError, 'CAMPAIGN_RESUME_MISSING_ARTIFACTS'):
             self.verify()
 
+    def test_observation_cannot_be_omitted_from_manifest(self):
+        for name in ('http-phases-final.json', 'import-observation.json'):
+            with self.subTest(name=name):
+                self.rebind_artifacts()
+                del self.captured['artifacts'][name]
+                with self.assertRaisesRegex(BenchmarkJobError, 'CAMPAIGN_RESUME_MISSING_ARTIFACTS'):
+                    self.verify()
+
+    def test_rehashed_observation_from_other_run_is_rejected(self):
+        name = 'http-phases-final.json'
+        value = json.loads((self.root / name).read_bytes())
+        value['run_id'] += '.other'
+        self.put(name, value)
+        self.rebind_artifacts()
+        with self.assertRaisesRegex(BenchmarkJobError, 'CAMPAIGN_OBSERVATION_BINDING'):
+            self.verify()
+
+    def test_rehashed_observation_from_other_host_is_rejected(self):
+        name = 'http-phases-final.json'
+        value = json.loads((self.root / name).read_bytes())
+        value['observation']['pid'] = 999
+        self.put(name, value)
+        self.rebind_artifacts()
+        with self.assertRaisesRegex(BenchmarkJobError, 'CAMPAIGN_OBSERVATION_HOST_IDENTITY'):
+            self.verify()
+
     def test_missing_terminal_receipt_is_not_legacy_success(self):
         (self.root / 'child-terminal-cleanup.json').unlink()
         self.rebind_artifacts()
         with self.assertRaisesRegex(BenchmarkJobError, 'CAMPAIGN_RESUME_MISSING_ARTIFACTS'):
+            self.verify()
+
+    def test_rehashed_import_observation_cannot_hide_internal_error(self):
+        value = json.loads((self.root / 'import-observation.json').read_bytes())
+        value['observation']['error_count'] = 1
+        self.put('import-observation.json', value)
+        self.rebind_artifacts()
+        with self.assertRaisesRegex(ValueError, 'INVALID_IMPORT_OBSERVATION'):
+            self.verify()
+
+    def test_rehashed_import_cleanup_cannot_hide_retained_handle(self):
+        self.terminal['observations']['import_observer']['handle_retained'] = True
+        self.put('child-terminal-cleanup.json', self.terminal)
+        self.rebind_artifacts()
+        with self.assertRaisesRegex(BenchmarkJobError, 'CAMPAIGN_TERMINAL_IMPORT_OBSERVER_HELD'):
             self.verify()
 
     def test_terminal_bytes_and_current_context_are_bound(self):
