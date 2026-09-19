@@ -29,3 +29,5 @@ only; missing target exit remains UNKNOWN and must not be inferred.
 The additional transaction controls preserve original arguments, return values, exceptions and SQL execution. No SQL parameters/results are recorded. Wall time includes scheduler/I/O wait and cannot identify the device cause. Nested timing spans overlap.
 
 Static validation: 7 controls cover original-gate precedence, cleanup errors, helper layout and SQLite call/exception passthrough. Source53/native/profile pins verified before launch.
+
+Recovery -02: -01 failed in original Job limit readback before releasing its target. It produced no engine workload and remains in failed-launch-01/. Values causing mismatch were not retained. The direct no-engine Job probe subsequently passed the same limits; no cause is asserted. The repaired launcher uses fresh ID -02 and records fixed configure readback fields on future failure without bypassing it. Original validation.json applies to -01; validation-02.json applies to -02. The earlier ad hoc console probe passed an integer instead of Owner and has no acceptance value.

@@ -21,7 +21,7 @@ from unittest.mock import patch
 sys.dont_write_bytecode = True
 BASE = Path(__file__).resolve().parent
 ROOT = BASE.parents[2]
-RUN_ID = 'gt06-s117-lookup-boundary-01'
+RUN_ID = 'gt06-s117-lookup-boundary-02'
 CLOSURE = '7635a470cef554c1a60e1d9427f59998737d3bb829c3a1f134e426cdf9275467'
 NATIVE_HASH = '13e65360cd0bc0033d0ad414fb3238e216b0d6dcc08e57dc7026ec4fc9eb8b95'
 PREFIX_BATCHES = 11
@@ -132,6 +132,19 @@ def launch():
             expected_binary_sha256=freeze['python_sha256'], expected_campaign_host=True)
     except BaseException as error:
         errors.append(('parent', error))
+        trace = error.__traceback__
+        while trace is not None:
+            local = trace.tb_frame.f_locals
+            if (trace.tb_frame.f_code.co_name == 'configure'
+                    and Path(trace.tb_frame.f_code.co_filename).name == 'benchmark_job.py'
+                    and all(key in local for key in ('limits', 'observed', 'size'))):
+                def fixed_fields(value):
+                    return {'flags': int(value.basic.flags), 'active_limit': int(value.basic.active_limit),
+                            'job_time': int(value.basic.job_time), 'job_memory': int(value.job_memory)}
+                util.write(run / 'job-configure-readback.json', {'requested': fixed_fields(local['limits']),
+                    'observed': fixed_fields(local['observed']), 'returned_size': local['size'].value,
+                    'formal_acceptance': False})
+            trace = trace.tb_next
         if owner is None:
             owner = getattr(error, 'cleanup_owner', None)
     finally:
@@ -248,5 +261,3 @@ if __name__ == '__main__':
         raise SystemExit(child(sys.argv[2]))
     else:
         raise SystemExit('Use --check, --launch, or --child <run>')
-
-

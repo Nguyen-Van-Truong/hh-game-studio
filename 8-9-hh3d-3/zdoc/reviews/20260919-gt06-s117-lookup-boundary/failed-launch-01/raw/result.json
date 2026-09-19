@@ -1,0 +1,75 @@
+{
+  "elapsed_seconds": 0.2029999999795109,
+  "eligible_for_dataset": false,
+  "ended_utc": "2026-09-19T12:28:59.363612+00:00",
+  "errors": [
+    {
+      "chain": [
+        {
+          "code": "BENCHMARK_JOB_LIMIT_MISMATCH",
+          "exception_class": "BenchmarkJobError",
+          "frames": [
+            {
+              "file": "lookup_boundary.py",
+              "line": 123
+            },
+            {
+              "file": "benchmark_job.py",
+              "line": 256
+            },
+            {
+              "file": "benchmark_job.py",
+              "line": 99
+            },
+            {
+              "file": "benchmark_job.py",
+              "line": 46
+            }
+          ]
+        }
+      ],
+      "stage": "parent"
+    }
+  ],
+  "formal_acceptance": false,
+  "observations": {
+    "execution_unchanged": true,
+    "owner": {
+      "closed": true,
+      "drain_threads_alive": [],
+      "helper_exit_code": 2,
+      "helper_pid": 50772,
+      "job": {
+        "active_count": 0,
+        "assigned": true,
+        "close_uncertain": false,
+        "closed": true,
+        "configured": true,
+        "create_uncertain": false,
+        "failed_operations": [],
+        "handle_retained": false,
+        "native_error": null,
+        "tainted": false,
+        "zero_observed": true
+      },
+      "present": true,
+      "wrapper_process_handle": {
+        "close_uncertain": false,
+        "closed": true,
+        "handle_retained": false,
+        "required": true
+      }
+    },
+    "source_unchanged": true,
+    "target": {
+      "actual_target_exit": null,
+      "exit": null,
+      "missing_reason": "TARGET_EXIT_NOT_RECORDED",
+      "natural_exit_not_inferred": true,
+      "start": null
+    }
+  },
+  "owned_child_natural_exit0": false,
+  "run_id": "gt06-s117-lookup-boundary-01",
+  "schema": "S117.coupled-journal.result.1"
+}

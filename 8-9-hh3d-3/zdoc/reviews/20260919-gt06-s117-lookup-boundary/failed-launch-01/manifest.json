@@ -1,0 +1,59 @@
+{
+  "AUTHORITY": 0,
+  "formal_acceptance": false,
+  "engine_launched": false,
+  "failure": "BENCHMARK_JOB_LIMIT_MISMATCH",
+  "configure_observed_values": "UNKNOWN_NOT_RETAINED",
+  "files": {
+    "raw/attempt/context.json": {
+      "source": "8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s117-lookup-boundary-01\\attempt\\context.json",
+      "sha256": "b79b8767e878f84695ea68a3ac3d952b669f3f1ca1853e26495890c3bbd5647b",
+      "bytes": 6134
+    },
+    "raw/campaign.json": {
+      "source": "8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s117-lookup-boundary-01\\campaign.json",
+      "sha256": "0ea50f3610e5af38998a49824e9885bfc87448430f754df1423a79527b32ed6a",
+      "bytes": 6123
+    },
+    "raw/execution-source-files.json": {
+      "source": "8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s117-lookup-boundary-01\\execution-source-files.json",
+      "sha256": "c78bf4c22f7f4c21093c43a02fb3ff264a3cbb4bd6276334e757c7b910d4565b",
+      "bytes": 6886
+    },
+    "raw/freeze.json": {
+      "source": "8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s117-lookup-boundary-01\\freeze.json",
+      "sha256": "a862c7093ae65dc8c4dcb897a64035b313fef6b25f09ba3d3b384598573a551a",
+      "bytes": 13363
+    },
+    "raw/owned/cleanup-001.json": {
+      "source": "8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s117-lookup-boundary-01\\owned\\cleanup-001.json",
+      "sha256": "1efd0f3cef6d707258e5e962ebb235a8302b74e6bbf26f5cdf55144fa47f28a0",
+      "bytes": 554
+    },
+    "raw/owned/invocation.json": {
+      "source": "8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s117-lookup-boundary-01\\owned\\invocation.json",
+      "sha256": "b68805e7b4f75ca8eabc80b939e12257c7881378d811c66eef09e16200e4acd6",
+      "bytes": 8232
+    },
+    "raw/result.json": {
+      "source": "8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s117-lookup-boundary-01\\result.json",
+      "sha256": "bb115e3d649ec0ff88a200afb8ea83cd2f0be362eb3503dbefd71a07a70562c7",
+      "bytes": 1850
+    },
+    "helper/coupled_journal.py": {
+      "source": "8-9-hh3d-3\\zdoc\\reviews\\20260919-gt06-s117-lookup-boundary\\owned\\gt06-s117-lookup-boundary-01\\coupled_journal.py",
+      "sha256": "d55959a7392d7c659e62757dda41a6d3f3aca68ca93a733acecd2e505c5abda5",
+      "bytes": 12560
+    },
+    "helper/support.py": {
+      "source": "8-9-hh3d-3\\zdoc\\reviews\\20260919-gt06-s117-lookup-boundary\\owned\\gt06-s117-lookup-boundary-01\\support.py",
+      "sha256": "ad4e2d15cbcb3f890f22a7d2be339aee6b726c62a9c339dfac4478fdaf21e998",
+      "bytes": 19698
+    },
+    "helper/timings.py": {
+      "source": "8-9-hh3d-3\\zdoc\\reviews\\20260919-gt06-s117-lookup-boundary\\owned\\gt06-s117-lookup-boundary-01\\timings.py",
+      "sha256": "5c14e57ffabe0a204117cdf08f5edf34c79730af25bb4f9e485fdf3c492132d8",
+      "bytes": 15717
+    }
+  }
+}
