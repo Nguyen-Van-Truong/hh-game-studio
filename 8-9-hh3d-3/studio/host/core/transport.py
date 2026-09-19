@@ -295,9 +295,16 @@ class LoopbackFixtureHost:
         self.sessions = SessionAuthority(project_id, self.project_root, limits)
         self.fixture, self.faults = fixture or FixtureState(), faults or FixtureFaults()
         self._lock = threading.RLock()
+        # Fault controls are local test seams. They must not serialize a
+        # read-only transport request behind host state or journal work.
+        self._disconnect_lock = threading.Lock()
         self._wake, self._closing, self._stopped = threading.Event(), threading.Event(), threading.Event()
         self._queue: deque[_Job] = deque()
         self._jobs: dict[str, _Job] = {}
+        # Published only by the host lock and never mutated in place. Lookup
+        # can read this immutable-by-convention snapshot without waiting for
+        # a worker that is finishing a durable terminal record.
+        self._pending_snapshot: dict[str, tuple[Response, int]] = {}
         self._leases: dict[str, Lease] = {}
         self._stop_commands: dict[str, str] = {}
         self._diagnostics: deque[bytes] = deque(maxlen=limits.max_diagnostics)
@@ -466,7 +473,7 @@ class LoopbackFixtureHost:
         The peer sees EOF before a reply, or a complete reply when the cut is
         after sendall. No wire field can arm this probe or grant an operation.
         """
-        with self._lock:
+        with self._disconnect_lock:
             if self.faults.disconnect_once != (path, phase):
                 return False
             self.faults.disconnect_once = None
@@ -548,8 +555,18 @@ class LoopbackFixtureHost:
             raise SafetyViolation("UNSUPPORTED_ROUTE")
         if not isinstance(body, dict) or body.get("project_id") != self.project_id:
             raise SafetyViolation("PROJECT_MISMATCH")
+        # Read-only lookup can answer a known pending admission from the
+        # published snapshot without waiting behind worker journal I/O.
+        self.sessions.check_current(session)
+        if path == "/v1/lookup":
+            self._shape(body, {"project_id", "command_id"})
+            command_id = body["command_id"]
+            if not isinstance(command_id, str) or not _IDENTIFIER.fullmatch(command_id):
+                raise SafetyViolation("INVALID_COMMAND_ID")
+            self.sessions.validate_public_identifier(command_id)
+            self._scope(session, "fixture.read")
+            return self._lookup(command_id)
         with self._lock:
-            self.sessions.check_current(session)
             if path == "/v1/discovery":
                 self._shape(body, {"project_id", "protocol_version"})
                 if body["protocol_version"] != PROTOCOL_VERSION:
@@ -574,9 +591,9 @@ class LoopbackFixtureHost:
                 if not isinstance(command_id, str) or not _IDENTIFIER.fullmatch(command_id):
                     raise SafetyViolation("INVALID_COMMAND_ID")
                 self.sessions.validate_public_identifier(command_id)
-                if path in {"/v1/lookup", "/v1/archive"}:
+                if path == "/v1/archive":
                     self._scope(session, "fixture.read")
-                    return self._lookup(command_id) if path == "/v1/lookup" else self._archive(command_id)
+                    return self._archive(command_id)
                 self._scope(session, "control.stop" if path == "/v1/stop" else "control.cancel")
                 return self._stop(command_id) if path == "/v1/stop" else self._cancel(command_id)
             return self._submit(body, session)
@@ -586,18 +603,27 @@ class LoopbackFixtureHost:
         if scope not in session.credential.scopes:
             raise SafetyViolation("SCOPE_DENIED")
 
-    def _lookup(self, command_id: str) -> Response:
+    def _lookup(self, command_id: str, *, fast_pending: bool = True) -> Response:
+        if fast_pending:
+            pending = self._pending_snapshot.get(command_id)
+            if pending is not None and epoch_ms() <= pending[1]:
+                return pending[0]
         receipt = self.journal.lookup(project_id=self.project_id, command_id=command_id, now_ms=epoch_ms())["receipt"]
         result = Response.from_dict(receipt)
-        if (result.status is Status.ACCEPTED_PENDING and command_id not in self._jobs
-                and command_id not in self._stop_commands):
+        if result.status is Status.ACCEPTED_PENDING:
+            # Admission may have been durably written just before its
+            # snapshot publication. Recheck the published view before
+            # classifying a record as an orphan.
+            pending = self._pending_snapshot.get(command_id)
+            if (fast_pending and pending is not None and epoch_ms() <= pending[1]):
+                return pending[0]
             return _response(Status.UNKNOWN, "RECOVERY_REQUIRED", command_id,
                              request_digest=result.postconditions.get("request_digest"), next_action="lookup.reconcile")
         return result
 
     def _existing(self, command_id: str, digest: str) -> Response | None:
         try:
-            existing = self._lookup(command_id)
+            existing = self._lookup(command_id, fast_pending=False)
         except JournalError as exc:
             if exc.code == "COMMAND_NOT_FOUND":
                 return None
@@ -649,8 +675,11 @@ class LoopbackFixtureHost:
             self.journal.check_revision(expected_revision=request.expected_revision,
                                         current_revision=self.fixture.snapshot()["revision"])
         pending = _response(Status.ACCEPTED_PENDING, "QUEUED", request.command_id, request_digest=request.digest)
+        admitted_ms = epoch_ms()
         self.journal.append_command(project_id=self.project_id, command_id=request.command_id,
-            digest=request.digest, receipt=self.sessions.redact_output(pending.as_dict()), now_ms=epoch_ms(), pending=True)
+            digest=request.digest, receipt=self.sessions.redact_output(pending.as_dict()), now_ms=admitted_ms, pending=True)
+        self._pending_snapshot = {**self._pending_snapshot, request.command_id:
+                                  (pending, admitted_ms + self.journal.limits.retry_horizon_ms)}
         job = _Job(request, lease, session)
         self._jobs[request.command_id] = job
         self._queue.append(job)
@@ -677,13 +706,16 @@ class LoopbackFixtureHost:
         # UNKNOWN explicitly avoids claiming a durable Stop receipt.
         self._stopped.set()
         self._wake.set()
+        admitted_ms = epoch_ms()
         try:
             self.journal.append_command(project_id=self.project_id, command_id=command_id,
-                digest=digest, receipt=self.sessions.redact_output(pending.as_dict()), now_ms=epoch_ms(), pending=True)
+                digest=digest, receipt=self.sessions.redact_output(pending.as_dict()), now_ms=admitted_ms, pending=True)
         except JournalError:
             self._diagnostic("STOP_DURABILITY_UNKNOWN")
             return _response(Status.UNKNOWN, "STOP_DURABILITY_UNKNOWN", command_id,
                              accepting_work=False, stopped_in_memory=True, next_action="lookup.reconcile")
+        self._pending_snapshot = {**self._pending_snapshot, command_id:
+                                  (pending, admitted_ms + self.journal.limits.retry_horizon_ms)}
         self._stop_commands[command_id] = digest
         return pending
 
@@ -708,6 +740,9 @@ class LoopbackFixtureHost:
             status=response.status.value, receipt=self.sessions.redact_output(response.as_dict()), now_ms=epoch_ms())
         job.phase = "TERMINAL"
         self._jobs.pop(job.request.command_id, None)
+        pending = dict(self._pending_snapshot)
+        pending.pop(job.request.command_id, None)
+        self._pending_snapshot = pending
 
     def _worker(self) -> None:
         while True:
@@ -723,6 +758,9 @@ class LoopbackFixtureHost:
                     # becomes UNKNOWN; reconnect must reconcile, never reapply.
                     with self._lock:
                         self._jobs.pop(job.request.command_id, None)
+                        pending = dict(self._pending_snapshot)
+                        pending.pop(job.request.command_id, None)
+                        self._pending_snapshot = pending
                         self._stopped.set()
                     self._diagnostic("FIXTURE_RECOVERY_REQUIRED")
                 self._wake.set()
@@ -739,6 +777,9 @@ class LoopbackFixtureHost:
                         except Exception:
                             self._diagnostic("STOP_RECOVERY_REQUIRED")
                         del self._stop_commands[command_id]
+                        pending = dict(self._pending_snapshot)
+                        pending.pop(command_id, None)
+                        self._pending_snapshot = pending
             if self._closing.is_set():
                 return
 
