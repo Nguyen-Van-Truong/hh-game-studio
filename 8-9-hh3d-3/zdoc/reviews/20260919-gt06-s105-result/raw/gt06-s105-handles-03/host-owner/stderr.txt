@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260919-gt06-s105-handles\owned\gt06-s105-handles-03.py", line 84, in <module>
+    campaign.run_child(root)
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\replay\run_benchmark_campaign.py", line 965, in run_child
+    screen_sample(sample, baseline_memory)
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260919-gt06-s105-handles\owned\gt06-s105-handles-03.py", line 82, in diagnostic_screen
+    raise error
+RuntimeError: S105_PREFIX_BOUNDARY

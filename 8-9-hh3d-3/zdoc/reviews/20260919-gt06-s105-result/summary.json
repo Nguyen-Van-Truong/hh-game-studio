@@ -1,0 +1,514 @@
+{
+  "authority": 0,
+  "captured_batches_total": 17,
+  "eligible_for_dataset": false,
+  "final_critic": false,
+  "formal_acceptance": false,
+  "http_commands_total": 17000,
+  "native_cycles_total": 1700,
+  "root_cause_established": false,
+  "runs": [
+    {
+      "captured_batches": 0,
+      "classification": "COLLECTOR_PREPARE_FAILED_BEFORE_ENGINE",
+      "editor_actual_exit": null,
+      "editor_handles": [],
+      "editor_helper_exit": null,
+      "editor_job_zero_closed": null,
+      "editor_objects": [],
+      "editor_resources": [],
+      "editor_rss_bytes": [],
+      "engine_start_observed": false,
+      "failure": null,
+      "gaps": [
+        "OUTER_RUNNER_ACTUAL_EXIT_NOT_IN_PACKET",
+        "CHILD_FAILURE_AND_TERMINAL_MISSING_PREPARE_EXCEPTION",
+        "ORIGINAL_ENGINE_STARTED_TRUE_IS_UNSUPPORTED"
+      ],
+      "generated_child_sha256_verified": "7f94e5211293ebc04fe96b179ad8eeae3e41866182e46806f33b56c652dcb023",
+      "generated_overlay_sha256": "bb137f32f1fae3730cc139f03fc6902813b3742d5a08d437e957e291cfe0ec46",
+      "host_actual_exit": {
+        "exit_code": 1,
+        "pid": 48132
+      },
+      "host_handles": [],
+      "host_helper_exit": 1,
+      "host_job_zero_closed": true,
+      "host_rss_bytes": [],
+      "http_commands": 0,
+      "http_first_failure": null,
+      "http_transport_failures": null,
+      "import_actual_exit": null,
+      "import_helper_exit": null,
+      "import_job_zero_closed": null,
+      "max_combined_status_gap_ms": null,
+      "max_http_status_gap_ms": null,
+      "max_native_status_gap_ms": null,
+      "native_cycles": 0,
+      "original_engine_started": true,
+      "original_summary_is_acceptance": false,
+      "original_summary_status": "INCOMPLETE",
+      "outer_runner_actual_exit": null,
+      "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+      "pss": [],
+      "run_id": "gt06-s105-handles-preflight-01",
+      "source_closure_sha256": "7635a470cef554c1a60e1d9427f59998737d3bb829c3a1f134e426cdf9275467",
+      "terminal_errors": null,
+      "terminal_utc": null
+    },
+    {
+      "captured_batches": 1,
+      "classification": "DIAGNOSTIC_BOUNDARY_ONE_BATCH",
+      "editor_actual_exit": null,
+      "editor_handles": [
+        565
+      ],
+      "editor_helper_exit": 2,
+      "editor_job_zero_closed": true,
+      "editor_objects": [
+        71128
+      ],
+      "editor_resources": [
+        6
+      ],
+      "editor_rss_bytes": [
+        745848832
+      ],
+      "engine_start_observed": true,
+      "failure": {
+        "code": "S105_PREFIX_BOUNDARY",
+        "completed": false,
+        "completed_batches": 1,
+        "formal_acceptance": false,
+        "partial_command": null,
+        "phase": {
+          "batch": 0,
+          "phase": "joint_observation"
+        },
+        "run_id": "gt06-s105-handles-preflight-02"
+      },
+      "gaps": [
+        "OUTER_RUNNER_ACTUAL_EXIT_NOT_IN_PACKET",
+        "EDITOR_TARGET_ACTUAL_EXIT_UNKNOWN",
+        "IMPORT_WRAPPER_PROCESS_HANDLE_CLOSE_NOT_EXPLICIT"
+      ],
+      "generated_child_sha256_verified": "a19683ef98e32e041dd97092e3899771a412bd986aac37ba0e9860a81875be4d",
+      "generated_overlay_sha256": "bb137f32f1fae3730cc139f03fc6902813b3742d5a08d437e957e291cfe0ec46",
+      "host_actual_exit": {
+        "exit_code": 1,
+        "pid": 41856
+      },
+      "host_handles": [
+        203
+      ],
+      "host_helper_exit": 1,
+      "host_job_zero_closed": true,
+      "host_rss_bytes": [
+        42156032
+      ],
+      "http_commands": 1000,
+      "http_first_failure": null,
+      "http_transport_failures": 0,
+      "import_actual_exit": {
+        "exit_code": 0,
+        "pid": 21492
+      },
+      "import_helper_exit": 0,
+      "import_job_zero_closed": true,
+      "max_combined_status_gap_ms": 623.821,
+      "max_http_status_gap_ms": 496.3064,
+      "max_native_status_gap_ms": 623.821,
+      "native_cycles": 100,
+      "original_engine_started": true,
+      "original_summary_is_acceptance": false,
+      "original_summary_status": "GATE_RECORDED",
+      "outer_runner_actual_exit": null,
+      "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+      "pss": [],
+      "run_id": "gt06-s105-handles-preflight-02",
+      "source_closure_sha256": "7635a470cef554c1a60e1d9427f59998737d3bb829c3a1f134e426cdf9275467",
+      "terminal_errors": [],
+      "terminal_utc": "2026-09-19T04:41:36Z"
+    },
+    {
+      "captured_batches": 5,
+      "classification": "COLLECTOR_KEYERROR_AT_BASELINE",
+      "editor_actual_exit": null,
+      "editor_handles": [
+        565,
+        557,
+        559,
+        559,
+        559
+      ],
+      "editor_helper_exit": 2,
+      "editor_job_zero_closed": true,
+      "editor_objects": [
+        71130,
+        71130,
+        71130,
+        71130,
+        71130
+      ],
+      "editor_resources": [
+        6,
+        6,
+        6,
+        6,
+        6
+      ],
+      "editor_rss_bytes": [
+        752963584,
+        757284864,
+        757690368,
+        758005760,
+        758153216
+      ],
+      "engine_start_observed": true,
+      "failure": {
+        "code": "KeyError",
+        "completed": false,
+        "completed_batches": 5,
+        "formal_acceptance": false,
+        "partial_command": null,
+        "phase": {
+          "batch": 4,
+          "phase": "joint_observation"
+        },
+        "run_id": "gt06-s105-handles-01"
+      },
+      "gaps": [
+        "OUTER_RUNNER_ACTUAL_EXIT_NOT_IN_PACKET",
+        "EDITOR_TARGET_ACTUAL_EXIT_UNKNOWN",
+        "IMPORT_WRAPPER_PROCESS_HANDLE_CLOSE_NOT_EXPLICIT"
+      ],
+      "generated_child_sha256_verified": "8a838c4555d4b4da62078546ae969a01d81f969064b7b29ae86b442f2fd78b09",
+      "generated_overlay_sha256": "bb137f32f1fae3730cc139f03fc6902813b3742d5a08d437e957e291cfe0ec46",
+      "host_actual_exit": {
+        "exit_code": 1,
+        "pid": 10072
+      },
+      "host_handles": [
+        203,
+        203,
+        203,
+        203,
+        203
+      ],
+      "host_helper_exit": 1,
+      "host_job_zero_closed": true,
+      "host_rss_bytes": [
+        42053632,
+        43700224,
+        43888640,
+        44474368,
+        44351488
+      ],
+      "http_commands": 5000,
+      "http_first_failure": null,
+      "http_transport_failures": 0,
+      "import_actual_exit": {
+        "exit_code": 0,
+        "pid": 15300
+      },
+      "import_helper_exit": 0,
+      "import_job_zero_closed": true,
+      "max_combined_status_gap_ms": 650.25,
+      "max_http_status_gap_ms": 529.8975,
+      "max_native_status_gap_ms": 650.25,
+      "native_cycles": 500,
+      "original_engine_started": true,
+      "original_summary_is_acceptance": false,
+      "original_summary_status": "GATE_RECORDED",
+      "outer_runner_actual_exit": null,
+      "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+      "pss": [],
+      "run_id": "gt06-s105-handles-01",
+      "source_closure_sha256": "7635a470cef554c1a60e1d9427f59998737d3bb829c3a1f134e426cdf9275467",
+      "terminal_errors": [],
+      "terminal_utc": "2026-09-19T04:49:06Z"
+    },
+    {
+      "captured_batches": 5,
+      "classification": "COLLECTOR_NAMEERROR_AFTER_CAPTURE_BEFORE_PERSIST",
+      "editor_actual_exit": null,
+      "editor_handles": [
+        565,
+        557,
+        557,
+        557,
+        559
+      ],
+      "editor_helper_exit": 2,
+      "editor_job_zero_closed": true,
+      "editor_objects": [
+        71130,
+        71130,
+        71130,
+        71130,
+        71130
+      ],
+      "editor_resources": [
+        6,
+        6,
+        6,
+        6,
+        6
+      ],
+      "editor_rss_bytes": [
+        759099392,
+        759177216,
+        759840768,
+        760324096,
+        760422400
+      ],
+      "engine_start_observed": true,
+      "failure": {
+        "code": "NameError",
+        "completed": false,
+        "completed_batches": 5,
+        "formal_acceptance": false,
+        "partial_command": null,
+        "phase": {
+          "batch": 4,
+          "phase": "joint_observation"
+        },
+        "run_id": "gt06-s105-handles-02"
+      },
+      "gaps": [
+        "OUTER_RUNNER_ACTUAL_EXIT_NOT_IN_PACKET",
+        "EDITOR_TARGET_ACTUAL_EXIT_UNKNOWN",
+        "IMPORT_WRAPPER_PROCESS_HANDLE_CLOSE_NOT_EXPLICIT"
+      ],
+      "generated_child_sha256_verified": "c84d5088494b3e7a59cda15133e09e68bd181b5f173002659a38d563e27b44f2",
+      "generated_overlay_sha256": "bb137f32f1fae3730cc139f03fc6902813b3742d5a08d437e957e291cfe0ec46",
+      "host_actual_exit": {
+        "exit_code": 1,
+        "pid": 48888
+      },
+      "host_handles": [
+        203,
+        203,
+        203,
+        203,
+        203
+      ],
+      "host_helper_exit": 1,
+      "host_job_zero_closed": true,
+      "host_rss_bytes": [
+        41824256,
+        43655168,
+        43700224,
+        43839488,
+        43974656
+      ],
+      "http_commands": 5000,
+      "http_first_failure": null,
+      "http_transport_failures": 0,
+      "import_actual_exit": {
+        "exit_code": 0,
+        "pid": 10496
+      },
+      "import_helper_exit": 0,
+      "import_job_zero_closed": true,
+      "max_combined_status_gap_ms": 1965.7287,
+      "max_http_status_gap_ms": 1965.7287,
+      "max_native_status_gap_ms": 746.408,
+      "native_cycles": 500,
+      "original_engine_started": true,
+      "original_summary_is_acceptance": false,
+      "original_summary_status": "GATE_RECORDED",
+      "outer_runner_actual_exit": null,
+      "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+      "pss": [],
+      "run_id": "gt06-s105-handles-02",
+      "source_closure_sha256": "7635a470cef554c1a60e1d9427f59998737d3bb829c3a1f134e426cdf9275467",
+      "terminal_errors": [],
+      "terminal_utc": "2026-09-19T04:57:00Z"
+    },
+    {
+      "captured_batches": 6,
+      "classification": "DIAGNOSTIC_BOUNDARY_SIX_BATCHES_PSS_BASELINE_ONLY",
+      "editor_actual_exit": null,
+      "editor_handles": [
+        565,
+        559,
+        555,
+        555,
+        559,
+        555
+      ],
+      "editor_helper_exit": 2,
+      "editor_job_zero_closed": true,
+      "editor_objects": [
+        71130,
+        71130,
+        71130,
+        71130,
+        71130,
+        71130
+      ],
+      "editor_resources": [
+        6,
+        6,
+        6,
+        6,
+        6,
+        6
+      ],
+      "editor_rss_bytes": [
+        751755264,
+        752377856,
+        752619520,
+        753160192,
+        753618944,
+        754130944
+      ],
+      "engine_start_observed": true,
+      "failure": {
+        "code": "S105_PREFIX_BOUNDARY",
+        "completed": false,
+        "completed_batches": 6,
+        "formal_acceptance": false,
+        "partial_command": null,
+        "phase": {
+          "batch": 5,
+          "phase": "joint_observation"
+        },
+        "run_id": "gt06-s105-handles-03"
+      },
+      "gaps": [
+        "OUTER_RUNNER_ACTUAL_EXIT_NOT_IN_PACKET",
+        "EDITOR_TARGET_ACTUAL_EXIT_UNKNOWN",
+        "IMPORT_WRAPPER_PROCESS_HANDLE_CLOSE_NOT_EXPLICIT",
+        "NO_FAILURE_SNAPSHOT_NO_PSS_DELTA_NO_CAUSAL_ATTRIBUTION"
+      ],
+      "generated_child_sha256_verified": "6a51dd426b5a3da8207bd34b4e996954d82bba5e59f982933f1aa05e3a48ed3f",
+      "generated_overlay_sha256": "bb137f32f1fae3730cc139f03fc6902813b3742d5a08d437e957e291cfe0ec46",
+      "host_actual_exit": {
+        "exit_code": 1,
+        "pid": 27188
+      },
+      "host_handles": [
+        203,
+        203,
+        203,
+        203,
+        203,
+        203
+      ],
+      "host_helper_exit": 1,
+      "host_job_zero_closed": true,
+      "host_rss_bytes": [
+        42094592,
+        43859968,
+        43638784,
+        44232704,
+        44150784,
+        45518848
+      ],
+      "http_commands": 6000,
+      "http_first_failure": null,
+      "http_transport_failures": 0,
+      "import_actual_exit": {
+        "exit_code": 0,
+        "pid": 21576
+      },
+      "import_helper_exit": 0,
+      "import_job_zero_closed": true,
+      "max_combined_status_gap_ms": 779.422,
+      "max_http_status_gap_ms": 481.3738,
+      "max_native_status_gap_ms": 779.422,
+      "native_cycles": 600,
+      "original_engine_started": true,
+      "original_summary_is_acceptance": false,
+      "original_summary_status": "GATE_RECORDED",
+      "outer_runner_actual_exit": null,
+      "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+      "pss": [
+        {
+          "binding_verified": true,
+          "cleanup": {
+            "all_released": true,
+            "held_resources": [],
+            "marker": {
+              "attempted": true,
+              "native_code": 0,
+              "outcome": "RELEASED",
+              "success": true
+            },
+            "process_handle": {
+              "attempted": true,
+              "native_code": 0,
+              "outcome": "RELEASED",
+              "success": true
+            },
+            "snapshot": {
+              "attempted": true,
+              "native_code": 0,
+              "outcome": "RELEASED",
+              "success": true
+            }
+          },
+          "errors": [],
+          "file": "pss/batch-04-after-gate.json",
+          "handles_captured": 559,
+          "identity": {
+            "executable": "d:\\datadiskd\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\tooling\\godot-4.7.2-stable\\godot_v4.7.2-stable_win64.exe",
+            "pid": 7460,
+            "process_start": "windows:134342674563357377"
+          },
+          "index": 4,
+          "limitations": [
+            "SUPPLEMENTAL_OBSERVER_EFFECT_UNKNOWN",
+            "NUMERIC_HANDLES_AND_ATTRIBUTE_MATCHES_ARE_NOT_OBJECT_IDENTITY",
+            "NO_LEAK_OR_ROOT_CAUSE_CLAIM"
+          ],
+          "observer_count_after": 203,
+          "observer_count_before": 203,
+          "original_gate_error": null,
+          "sample_sha256": "0788cf4098259485d486c6dcb2d240eb0fa6d19da6f7fbf1d873a1da6e0f1a15",
+          "status": "OBSERVED",
+          "target_count_after": 559,
+          "target_count_before": 559,
+          "timing": {
+            "capture_ms": 4.2137,
+            "ended_perf_ns": 692498578105900,
+            "ended_utc": "2026-09-19T05:04:47.327984+00:00",
+            "started_perf_ns": 692498565275400,
+            "started_utc": "2026-09-19T05:04:47.315381+00:00",
+            "total_ms": 12.8305,
+            "walk_ms": 7.3971
+          },
+          "type_counts": {
+            "<unavailable>": 192,
+            "ALPC Port": 17,
+            "Desktop": 1,
+            "Directory": 2,
+            "Event": 116,
+            "File": 26,
+            "IRTimer": 12,
+            "IoCompletion": 12,
+            "IoCompletionReserve": 2,
+            "Key": 37,
+            "Mutant": 16,
+            "SchedulerSharedData": 1,
+            "Section": 15,
+            "Semaphore": 29,
+            "Thread": 45,
+            "TpWorkerFactory": 6,
+            "WaitCompletionPacket": 28,
+            "WindowStation": 2
+          }
+        }
+      ],
+      "run_id": "gt06-s105-handles-03",
+      "source_closure_sha256": "7635a470cef554c1a60e1d9427f59998737d3bb829c3a1f134e426cdf9275467",
+      "terminal_errors": [],
+      "terminal_utc": "2026-09-19T05:06:38Z"
+    }
+  ],
+  "runtime_repair_justified": false,
+  "schema": "gt06-s105-derived-results-v1",
+  "verified_capture_references": 102
+}

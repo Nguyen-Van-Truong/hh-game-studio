@@ -1,0 +1,20 @@
+{
+  "child_failure_present": true,
+  "child_terminal_cleanup_present": true,
+  "child_wrapper_exit": 1,
+  "eligible_for_dataset": false,
+  "engine_started": true,
+  "formal_acceptance": false,
+  "limit_batches": 6,
+  "owner_process_exit_present": true,
+  "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+  "pss_snapshots": [
+    "pss/batch-04-after-gate.json"
+  ],
+  "run_id": "gt06-s105-handles-03",
+  "schema": "gt06-s105-owned-handles-result-v1",
+  "source_closure_sha256": "7635a470cef554c1a60e1d9427f59998737d3bb829c3a1f134e426cdf9275467",
+  "status": "GATE_RECORDED",
+  "terminal_errors": [],
+  "timed_out": false
+}

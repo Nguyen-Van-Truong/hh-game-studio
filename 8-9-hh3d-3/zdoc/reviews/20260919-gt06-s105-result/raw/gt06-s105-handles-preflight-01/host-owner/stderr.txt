@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260919-gt06-s105-handles\owned\gt06-s105-handles-preflight-01.py", line 83, in <module>
+    campaign.run_child(root)
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\replay\run_benchmark_campaign.py", line 860, in run_child
+    initial = prepare(project, factory, trusted, binding)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260919-gt06-s105-handles\owned\gt06-s105-handles-preflight-01.py", line 31, in diagnostic_prepare
+    stream.write(overlay); stream.flush(); os.fsync(stream.fileno())
+                                           ^^
+NameError: name 'os' is not defined

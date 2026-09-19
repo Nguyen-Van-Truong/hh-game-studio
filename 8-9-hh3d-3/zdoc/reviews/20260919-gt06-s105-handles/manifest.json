@@ -1,0 +1,51 @@
+{
+  "schema": "gt06-s105-owned-handles-manifest-v1",
+  "authority": 0,
+  "formal_acceptance": false,
+  "eligible_for_dataset": false,
+  "source_checkpoint": "56bfd448e83aa2512c0c2561e8e1e29f12134360",
+  "source_closure_sha256": "7635a470cef554c1a60e1d9427f59998737d3bb829c3a1f134e426cdf9275467",
+  "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+  "files": [
+    {
+      "path": ".gitattributes",
+      "sha256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da",
+      "size_bytes": 8
+    },
+    {
+      "path": "pss-adapter-selfcheck.json",
+      "sha256": "fa36d135bb0741766046240a34bc961144b7def72188c39d0bca7427adf26f07",
+      "size_bytes": 1434
+    },
+    {
+      "path": "pss-selfcheck-output.json",
+      "sha256": "885383d250cfd3fcfe94536f7ade5eeeb96e8fe86c6d72a6a58cce65f3d5798e",
+      "size_bytes": 20308
+    },
+    {
+      "path": "pss_adapter.py",
+      "sha256": "797398a54cac5f7c772df7ec9c5ad988fe9e54c26c3c10e172a768e39dc25c76",
+      "size_bytes": 19589
+    },
+    {
+      "path": "pss_adapter_selfcheck.py",
+      "sha256": "a1dd3747dd7d4687f2440fc6d003057168dfe83fec34114a211bd136c56b579e",
+      "size_bytes": 2306
+    },
+    {
+      "path": "README.md",
+      "sha256": "7fa96a91006e46d9125c152f09cf0750e93fc264533646d41a4d728919822f6d",
+      "size_bytes": 2330
+    },
+    {
+      "path": "test_pss_adapter.py",
+      "sha256": "418015e3e8a412a18b598655cf636d877a66d6dd9784b45be5400d096535b37e",
+      "size_bytes": 5286
+    },
+    {
+      "path": "test_reader_v104.py",
+      "sha256": "9567f81cbea281494ab10972acd16b92abe03c7c15363279118195a2bcadd970",
+      "size_bytes": 2518
+    }
+  ]
+}\n

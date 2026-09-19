@@ -1,0 +1,56 @@
+{
+  "schema": "gt06-s105-pss-adapter-selfcheck-v1",
+  "actual_exit": 0,
+  "python_pid": 4696,
+  "python_executable": "C:\\Users\\truon\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+  "adapter_sha256": "797398a54cac5f7c772df7ec9c5ad988fe9e54c26c3c10e172a768e39dc25c76",
+  "probe_sha256": "53b6b24813e6ba6dc040dcbb87aee529b7f4e8855a64bcd0689b19c240180500",
+  "status": "OBSERVED",
+  "formal_acceptance": false,
+  "eligible_for_dataset": false,
+  "binding_verified": true,
+  "handles_captured": 155,
+  "entry_count": 155,
+  "type_counts": {
+    "<unavailable>": 45,
+    "ALPC Port": 1,
+    "Desktop": 1,
+    "Directory": 2,
+    "Event": 22,
+    "File": 24,
+    "IRTimer": 4,
+    "IoCompletion": 3,
+    "Key": 9,
+    "Mutant": 1,
+    "Process": 2,
+    "SchedulerSharedData": 1,
+    "Section": 7,
+    "Semaphore": 23,
+    "TpWorkerFactory": 2,
+    "WaitCompletionPacket": 6,
+    "WindowStation": 2
+  },
+  "cleanup": {
+    "marker": {
+      "attempted": true,
+      "native_code": 0,
+      "success": true,
+      "outcome": "RELEASED"
+    },
+    "snapshot": {
+      "attempted": true,
+      "native_code": 0,
+      "success": true,
+      "outcome": "RELEASED"
+    },
+    "process_handle": {
+      "attempted": true,
+      "native_code": 0,
+      "success": true,
+      "outcome": "RELEASED"
+    },
+    "all_released": true,
+    "held_resources": []
+  },
+  "errors": []
+}
