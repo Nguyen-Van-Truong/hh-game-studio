@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260919-gt06-s103-status-gap\owned\gt06-s103-prefix-preflight-06.py", line 44, in <module>
+    campaign.run_child(root)
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\replay\run_benchmark_campaign.py", line 965, in run_child
+    screen_sample(sample, baseline_memory)
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260919-gt06-s103-status-gap\owned\gt06-s103-prefix-preflight-06.py", line 32, in diagnostic_screen
+    raise error
+RuntimeError: DIAGNOSTIC_PREFIX_COMPLETE

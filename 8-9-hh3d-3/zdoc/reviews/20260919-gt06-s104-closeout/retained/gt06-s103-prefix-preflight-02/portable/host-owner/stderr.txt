@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\.local\reviews\gt06-s103-prefix-preflight-02\diagnostic-child.py", line 27, in <module>
+    campaign.run_child(root)
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\replay\run_benchmark_campaign.py", line 853, in run_child
+    verify_sources(before)
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\replay\run_benchmark_campaign.py", line 200, in verify_sources
+    require(source_files() == files, 'CAMPAIGN_SOURCE_CHANGED')
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\replay\benchmark_job.py", line 46, in require
+    raise BenchmarkJobError(code)
+studio.tests.replay.benchmark_job.BenchmarkJobError: CAMPAIGN_SOURCE_CHANGED

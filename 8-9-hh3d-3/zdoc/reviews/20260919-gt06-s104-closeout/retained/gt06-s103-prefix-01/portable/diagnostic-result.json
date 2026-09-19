@@ -1,0 +1,168 @@
+{
+  "child_failure": {
+    "code": "CAMPAIGN_RETAINED_COUNTER_GROWTH",
+    "completed": false,
+    "completed_batches": 6,
+    "formal_acceptance": false,
+    "partial_command": null,
+    "phase": {
+      "batch": 5,
+      "phase": "joint_observation"
+    },
+    "run_id": "gt06-s103-prefix-01"
+  },
+  "child_failure_present": true,
+  "child_terminal_cleanup_present": true,
+  "child_wrapper_exit": 1,
+  "eligible_for_dataset": false,
+  "engine_started": true,
+  "formal_acceptance": false,
+  "formal_acceptance_claim": false,
+  "generated_overlay_sha256": "bb137f32f1fae3730cc139f03fc6902813b3742d5a08d437e957e291cfe0ec46",
+  "limit_batches": 7,
+  "natural_exit_proven": false,
+  "owner_process_exit": {
+    "exit_code": 1,
+    "pid": 26036
+  },
+  "owner_process_exit_present": true,
+  "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+  "run_id": "gt06-s103-prefix-01",
+  "schema_id": "hh-studio.gt06-s103-owned-diagnostic-result",
+  "schema_version": "1.0.0",
+  "source_closure_sha256": "7635a470cef554c1a60e1d9427f59998737d3bb829c3a1f134e426cdf9275467",
+  "terminal": {
+    "completed_batches": 6,
+    "context": {
+      "file": "context.json",
+      "sha256": "1415209d61092e7393d081373e5b21819b1ef00e88322f2226262929775d3b10",
+      "size_bytes": 6433
+    },
+    "errors": [],
+    "formal_acceptance": false,
+    "host_actual_exit": null,
+    "observations": {
+      "editor_owner": {
+        "closed": true,
+        "drain_threads_alive": [
+          false,
+          false
+        ],
+        "helper_exit_code": 2,
+        "helper_pid": 12076,
+        "job": {
+          "active_count": 0,
+          "assigned": true,
+          "close_uncertain": false,
+          "closed": true,
+          "configured": true,
+          "create_uncertain": false,
+          "failed_operations": [],
+          "handle_retained": false,
+          "native_error": null,
+          "tainted": false,
+          "zero_observed": true
+        },
+        "present": true,
+        "wrapper_process_handle": {
+          "close_uncertain": false,
+          "closed": true,
+          "handle_retained": false,
+          "required": true
+        }
+      },
+      "editor_probe": {
+        "close_uncertain": false,
+        "handle_retained": false,
+        "present": true
+      },
+      "editor_target": {
+        "actual_target_exit": null,
+        "exit": null,
+        "missing_reason": "TARGET_EXIT_NOT_RECORDED",
+        "natural_exit_not_inferred": true,
+        "start": {
+          "file": "editor-host/process-start.json",
+          "sha256": "fd2611d73e266a0a28adef3b452ae56167c7c18fe2a70364d8802610aff7d921",
+          "size_bytes": 13
+        }
+      },
+      "heartbeat_alive": false,
+      "import_observer": {
+        "closed": true,
+        "error_count": 0,
+        "global_held_probe_count": 0,
+        "handle_close_uncertain": false,
+        "handle_retained": false,
+        "present": true,
+        "probe_handles_released": true,
+        "thread_alive": false
+      },
+      "import_target": {
+        "actual_target_exit": {
+          "exit_code": 0,
+          "pid": 46912
+        },
+        "exit": {
+          "file": "import-host/process-exit.json",
+          "sha256": "b8cb7f2f3999c66cca8485ade4df63fffb160029a2cfd6befc55f79f369b7f52",
+          "size_bytes": 30
+        },
+        "missing_reason": null,
+        "natural_exit_not_inferred": true,
+        "start": {
+          "file": "import-host/process-start.json",
+          "sha256": "75f3833b41b9e4ad96265a783df32545b3cbfc453cbd6e23953c1a0c13038fcd",
+          "size_bytes": 14
+        }
+      },
+      "producer": {
+        "closed": true,
+        "failed": true,
+        "host": {
+          "closing": true,
+          "control_socket_closed": true,
+          "main_socket_closed": true,
+          "stopped": true,
+          "threads_alive": [
+            false,
+            false,
+            false
+          ]
+        },
+        "journal": {
+          "cache_closed": true,
+          "database_retained": false,
+          "directory_retained": false,
+          "index_retained": false
+        },
+        "observer_probe": {
+          "close_uncertain": false,
+          "handle_retained": false,
+          "present": true
+        },
+        "present": true
+      }
+    },
+    "observed_mono_us": 684937705191,
+    "observed_utc": "2026-09-19T02:58:47Z",
+    "phase": {
+      "batch": 5,
+      "phase": "joint_observation"
+    },
+    "primary_error": {
+      "code": "CAMPAIGN_RETAINED_COUNTER_GROWTH",
+      "stage": "body",
+      "type": "BenchmarkJobError"
+    },
+    "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+    "run_id": "gt06-s103-prefix-01",
+    "schema_id": "hh-studio.benchmark-child-terminal-cleanup",
+    "schema_version": "1.0.0",
+    "scope": "Post-finally cleanup observations; no benchmark acceptance or natural-exit inference",
+    "self_exit_missing_reason": "NOT_OBSERVABLE_BY_CHILD_TERMINAL_RECORD",
+    "source_closure_sha256": "7635a470cef554c1a60e1d9427f59998737d3bb829c3a1f134e426cdf9275467",
+    "supervisor_actual_exit": null
+  },
+  "timed_out": false
+}

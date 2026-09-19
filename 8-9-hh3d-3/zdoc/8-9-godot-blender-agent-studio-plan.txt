@@ -1,5 +1,5 @@
 HH STUDIO — PLAN 1/3: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 19-09-2026, Asia/Saigon | Revision S103 | TRIỂN KHAI THEO GATE
+Ngày 19-09-2026, Asia/Saigon | Revision S104 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -16,7 +16,7 @@ STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng
 
 CURRENT_VALID_WP=GT-06
 EXECUTION_AUTHORIZATION=OWNER_APPROVED_GATED
-IMPLEMENTATION=GT06_S103_NATIVE_STATUS_GAP_BOUNDED_DIAGNOSTIC_COMPLETE_NO_FORMAL_RUNNING
+IMPLEMENTATION=GT06_S104_READER_REVALIDATION_COMPLETE_NO_FORMAL_RUNNING
 GT01_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260913
 GT01_PENDING=NONE
 GT01_PIN_DECISION=GODOT_4.7.2_STABLE_OFFICIAL
@@ -25,7 +25,7 @@ RUNTIME_ACCEPTANCE=GT01_GT02_GT03_GT04_GT05_ACCEPTED
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S103
+PLAN_REVISION=S104
 EXECUTION_MODE=COORDINATOR_THREE_ASTRA_ULTRA_OWNER_20260918
 SUBAGENTS_ENABLED=3
 GT02_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260916_S46
@@ -54,24 +54,24 @@ GT05_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260917_S64
 GT05_REVIEW_STATUS=TWO_INDEPENDENT_PASS_TICK_YES_S64
 GT05_CHECKPOINT_COMMIT=808d8ba
 GT05_LAST_TESTED_SOURCE_CLOSURE=c141d54b80022ca7fefdf81f83e7e1078d3cc6aa43954831f82bb3178338a135
-GT06_EVIDENCE_STATUS=S102_FAILED_NATIVE_STATUS_GAP_BATCH6_NO_FULL_RUN; S103_BOUNDED_PREFLIGHT_AND_PREFIX_DIAGNOSTIC_COMPLETE_NO_PASS
+GT06_EVIDENCE_STATUS=S102_FAILED_NATIVE_STATUS_GAP_BATCH6_NO_FULL_RUN; S103_BOUNDED_PREFLIGHT_AND_PREFIX_DIAGNOSTIC_COMPLETE_NO_PASS; S104_READER_REVALIDATION_COMPLETE_NO_PASS
 GT06_WORKING_SOURCE_STATUS=S102_FROZEN_53_RUNTIME_FILES_UNCHANGED; NO_ACTIVE_FORMAL_CAMPAIGN
 GT06_LAST_TESTED_SOURCE_CLOSURE=7635a470cef554c1a60e1d9427f59998737d3bb829c3a1f134e426cdf9275467
 GT06_CURRENT_SOURCE_CLOSURE=7635a470cef554c1a60e1d9427f59998737d3bb829c3a1f134e426cdf9275467
 GT06_SOURCE_CHECKPOINT=56bfd448e83aa2512c0c2561e8e1a29f12134360
 GT06_BENCHMARK_CAMPAIGN=gt06-s102-campaign-01
 GT06_BENCHMARK_STATUS=FAILED_20260919T011926Z_NATIVE_GAP2109.351MS; TASK_RETIRED_012534Z
-GT06_ACTIVE_DIAGNOSTIC=S103_PREFIX_FAILED_BATCH5; NO_FORMAL_CAMPAIGN_RUNNING
+GT06_ACTIVE_DIAGNOSTIC=S103_PREFIX_FAILED_BATCH5; S104_READER_V104_READ_ONLY_COMPLETE; NO_FORMAL_CAMPAIGN_RUNNING
 GT06_FULL_CAMPAIGN=gt06-s102-campaign-01; LAUNCH1_FAILED; ZERO_FULL_RUNS; SOURCE53_UNCHANGED
 GT06_S98_CLEANUP_STATUS=DIAGNOSTIC_ZERO_JOBS_HANDLES_RELEASED_BUT_EDITOR_TARGET_EXIT_MISSING_SUPERVISOR_EXIT_MISSING_SCHEDULER_STATE3_RESULT1
-GT06_NEXT_ACTION=Use S103 handle-attribution design for a two-snapshot supplemental probe only if needed; no formal launch2 until a narrow repair is proven. Preserve original gates/source/profile; no blind campaign retry.
+GT06_NEXT_ACTION=Keep S104 reader-v104 correction as derived evidence; use the S103 handle-attribution design for a two-snapshot supplemental probe only if needed; no formal launch2 until a narrow runtime repair is proven. Preserve original gates/source/profile; no blind campaign retry.
 GT06_S98_WORKSTATION_PREFLIGHT=workstation-attribution-preflight-01; SHA256=28609498f97969d1609b69c50b84c30c60e1cc7c1379ee72cbfa4cc3d880c5eb; READ_ONLY_POST_TERMINAL_NO_OWNED_WORKLOAD; CAUSALITY_UNAVAILABLE; NO_ACCEPTANCE
 GT06_S99_COMMAND_DIAGNOSTIC=gt06-s99-command-residency-01; COMMAND_ONLY_35_BATCH; COMPLETED_35_OF_35; MAX_GAP_OBSERVED=1591.3252MS_BATCH25; OWNER_WRAPPER_EXIT0; CLEANUP_VERIFIED; FORMAL_ACCEPTANCE=FALSE; ELIGIBLE_FOR_DATASET=FALSE; SUMMARY_SHA256=96714640aa7a4f4de326bbe62a02c83bf271768c9d72856da98b9872345d06c5
 GT06_S88_SCHEDULER_TASK=OBSERVED_ABSENT_20260918; historic_delete_report_retained_in_chat; durable_delete_receipt_missing
 GT06_S90_DIAGNOSTIC=gt06-s90-lifecycle-attribution-01; preflight=gt06-s90-lifecycle-attribution-preflight-06; five_partial_batches; interrupted_before_batch5_capture; formal_acceptance=false; eligible_for_dataset=false
 GT06_DIAGNOSTIC_EXCLUSION=S81-S90 diagnostic and partial/failure prefixes are excluded from F13/F14 acceptance datasets; see s83-mapping requirements and each packet manifest.
 
-TIẾN ĐỘ HIỆN HÀNH — S103, ngày 19-09-2026 (mốc run ghi UTC)
+TIẾN ĐỘ HIỆN HÀNH — S104, ngày 19-09-2026 (mốc run ghi UTC)
 GT01–05 ACCEPTED; GT06 IN_PROGRESS; GT07–10 chưa mở. Chưa có full run PASS.
 Runtime giữ source checkpoint56bfd448 và53file closure
 7635a470cef554c1a60e1d9427f59998737d3bb829c3a1f134e426cdf9275467;
@@ -118,6 +118,15 @@ có HTTP transport failure hoặc status gap >2000ms; child failure, owner exit 
 cleanup receipts đều được giữ. Đây là diagnostic failure, không dataset/không chứng
 minh leak hay root cause.
 Summary bất biến của hai run: `reviews/20260919-gt06-s103-status-gap/s103-bounded-diagnostic-summary.json`, SHA256 `75a7991c2b00667711ebf09279990bc9a1d4813d3757f09746fbb2412ece779f`.
+S104 đã sửa theo phiên bản reader, chỉ trên raw hash cố định: reader cũ bắt sai
+`process_entry_frame == save_process_exit_frame`, còn marker hợp lệ cho phép frame
+tiến trong save dispatch. `read_native_save_v104.py` giữ nguyên binding/hash,
+chấp nhận thứ tự đơn điệu `entry <= save_exit < next_entry == next_exit`, và đã
+revalidate 100/100 preflight cùng 600/600 prefix; cả hai `OBSERVED_NATIVE_INTERVALS`,
+không crossing 2s. Kết quả vẫn `formal_acceptance=false`,
+`eligible_for_dataset=false`, lifecycle chỉ là diagnostic forced stop; không PASS,
+không no-leak/root-cause claim. Báo cáo và exact output hashes ở
+`reviews/20260919-gt06-s104-closeout/save-boundary/READER-V104-REPORT.md`.
 Read-only boundary review xác nhận gate hợp lệ: `screen_sample` so batch5 với exact
 batch4 baseline, dãy editor handles là 565,563,559,555,555,561; ObjectDB/resources
 giữ 71128/6, host handles202, max status gap642.433ms và HTTP failures0. Dãy không

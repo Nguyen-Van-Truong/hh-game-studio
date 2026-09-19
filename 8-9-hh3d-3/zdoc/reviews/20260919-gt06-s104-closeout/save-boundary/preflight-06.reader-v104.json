@@ -1,0 +1,4269 @@
+{
+  "classification": "OBSERVED_NATIVE_INTERVALS",
+  "cycle_count": 100,
+  "cycles": [
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 0,
+      "frame_bounds": {
+        "next_process_entry_frame": 5645,
+        "next_process_exit_frame": 5645,
+        "process_entry_frame": 5639,
+        "save_process_exit_frame": 5644,
+        "signal_frame": 5644
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 7,
+        "between_process_dispatches": 12677,
+        "call_entry_to_next_process": 88387,
+        "call_entry_to_signal": 69623,
+        "entry_marker_to_call": 135,
+        "next_process_dispatch": 2983,
+        "save_call": 75703,
+        "save_dispatch_outside_call": 170,
+        "save_to_readback": 91500,
+        "signal_to_call_return_signed": 6080
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 44890943,
+        "signal_us": 44869213,
+        "start_us": 44799443
+      },
+      "line_numbers": {
+        "save_complete": 88,
+        "save_enter": 87
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 1,
+      "frame_bounds": {
+        "next_process_entry_frame": 5658,
+        "next_process_exit_frame": 5658,
+        "process_entry_frame": 5652,
+        "save_process_exit_frame": 5657,
+        "signal_frame": 5657
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 8,
+        "between_process_dispatches": 5177,
+        "call_entry_to_next_process": 72636,
+        "call_entry_to_signal": 58769,
+        "entry_marker_to_call": 109,
+        "next_process_dispatch": 3938,
+        "save_call": 67451,
+        "save_dispatch_outside_call": 141,
+        "save_to_readback": 76669,
+        "signal_to_call_return_signed": 8682
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 45092057,
+        "signal_us": 45074277,
+        "start_us": 45015388
+      },
+      "line_numbers": {
+        "save_complete": 90,
+        "save_enter": 89
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 2,
+      "frame_bounds": {
+        "next_process_entry_frame": 5671,
+        "next_process_exit_frame": 5671,
+        "process_entry_frame": 5665,
+        "save_process_exit_frame": 5670,
+        "signal_frame": 5670
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 8,
+        "between_process_dispatches": 18708,
+        "call_entry_to_next_process": 77985,
+        "call_entry_to_signal": 52985,
+        "entry_marker_to_call": 94,
+        "next_process_dispatch": 3958,
+        "save_call": 59269,
+        "save_dispatch_outside_call": 124,
+        "save_to_readback": 82022,
+        "signal_to_call_return_signed": 6284
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 45296066,
+        "signal_us": 45267133,
+        "start_us": 45214044
+      },
+      "line_numbers": {
+        "save_complete": 93,
+        "save_enter": 92
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 3,
+      "frame_bounds": {
+        "next_process_entry_frame": 5684,
+        "next_process_exit_frame": 5684,
+        "process_entry_frame": 5678,
+        "save_process_exit_frame": 5683,
+        "signal_frame": 5683
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 7,
+        "between_process_dispatches": 5525,
+        "call_entry_to_next_process": 66876,
+        "call_entry_to_signal": 55328,
+        "entry_marker_to_call": 93,
+        "next_process_dispatch": 3850,
+        "save_call": 61344,
+        "save_dispatch_outside_call": 123,
+        "save_to_readback": 70813,
+        "signal_to_call_return_signed": 6016
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 45477386,
+        "signal_us": 45462005,
+        "start_us": 45406573
+      },
+      "line_numbers": {
+        "save_complete": 95,
+        "save_enter": 94
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 4,
+      "frame_bounds": {
+        "next_process_entry_frame": 5697,
+        "next_process_exit_frame": 5697,
+        "process_entry_frame": 5691,
+        "save_process_exit_frame": 5696,
+        "signal_frame": 5696
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 7,
+        "between_process_dispatches": 4175,
+        "call_entry_to_next_process": 61954,
+        "call_entry_to_signal": 51929,
+        "entry_marker_to_call": 164,
+        "next_process_dispatch": 3121,
+        "save_call": 57772,
+        "save_dispatch_outside_call": 190,
+        "save_to_readback": 65225,
+        "signal_to_call_return_signed": 5843
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 45672134,
+        "signal_us": 45659011,
+        "start_us": 45606909
+      },
+      "line_numbers": {
+        "save_complete": 98,
+        "save_enter": 96
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 5,
+      "frame_bounds": {
+        "next_process_entry_frame": 5710,
+        "next_process_exit_frame": 5710,
+        "process_entry_frame": 5704,
+        "save_process_exit_frame": 5709,
+        "signal_frame": 5709
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 8,
+        "between_process_dispatches": 3975,
+        "call_entry_to_next_process": 60646,
+        "call_entry_to_signal": 51144,
+        "entry_marker_to_call": 127,
+        "next_process_dispatch": 2898,
+        "save_call": 56663,
+        "save_dispatch_outside_call": 155,
+        "save_to_readback": 63665,
+        "signal_to_call_return_signed": 5519
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 45844484,
+        "signal_us": 45832099,
+        "start_us": 45780819
+      },
+      "line_numbers": {
+        "save_complete": 100,
+        "save_enter": 99
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 6,
+      "frame_bounds": {
+        "next_process_entry_frame": 5723,
+        "next_process_exit_frame": 5723,
+        "process_entry_frame": 5717,
+        "save_process_exit_frame": 5722,
+        "signal_frame": 5722
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 7,
+        "between_process_dispatches": 4148,
+        "call_entry_to_next_process": 62046,
+        "call_entry_to_signal": 51970,
+        "entry_marker_to_call": 132,
+        "next_process_dispatch": 3107,
+        "save_call": 57891,
+        "save_dispatch_outside_call": 160,
+        "save_to_readback": 65278,
+        "signal_to_call_return_signed": 5921
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 46021801,
+        "signal_us": 46008634,
+        "start_us": 45956523
+      },
+      "line_numbers": {
+        "save_complete": 102,
+        "save_enter": 101
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 7,
+      "frame_bounds": {
+        "next_process_entry_frame": 5736,
+        "next_process_exit_frame": 5736,
+        "process_entry_frame": 5730,
+        "save_process_exit_frame": 5735,
+        "signal_frame": 5735
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 6,
+        "between_process_dispatches": 17682,
+        "call_entry_to_next_process": 78341,
+        "call_entry_to_signal": 53716,
+        "entry_marker_to_call": 128,
+        "next_process_dispatch": 3005,
+        "save_call": 60653,
+        "save_dispatch_outside_call": 156,
+        "save_to_readback": 81469,
+        "signal_to_call_return_signed": 6937
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 46216423,
+        "signal_us": 46188807,
+        "start_us": 46134954
+      },
+      "line_numbers": {
+        "save_complete": 105,
+        "save_enter": 103
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 8,
+      "frame_bounds": {
+        "next_process_entry_frame": 5749,
+        "next_process_exit_frame": 5749,
+        "process_entry_frame": 5743,
+        "save_process_exit_frame": 5748,
+        "signal_frame": 5748
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 8,
+        "between_process_dispatches": 4038,
+        "call_entry_to_next_process": 65064,
+        "call_entry_to_signal": 55397,
+        "entry_marker_to_call": 138,
+        "next_process_dispatch": 2892,
+        "save_call": 61018,
+        "save_dispatch_outside_call": 169,
+        "save_to_readback": 68091,
+        "signal_to_call_return_signed": 5621
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 46396184,
+        "signal_us": 46383639,
+        "start_us": 46328093
+      },
+      "line_numbers": {
+        "save_complete": 107,
+        "save_enter": 106
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 9,
+      "frame_bounds": {
+        "next_process_entry_frame": 5762,
+        "next_process_exit_frame": 5762,
+        "process_entry_frame": 5756,
+        "save_process_exit_frame": 5761,
+        "signal_frame": 5761
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 9,
+        "between_process_dispatches": 4159,
+        "call_entry_to_next_process": 66245,
+        "call_entry_to_signal": 55341,
+        "entry_marker_to_call": 129,
+        "next_process_dispatch": 2949,
+        "save_call": 62077,
+        "save_dispatch_outside_call": 160,
+        "save_to_readback": 69317,
+        "signal_to_call_return_signed": 6736
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 46579125,
+        "signal_us": 46565288,
+        "start_us": 46509808
+      },
+      "line_numbers": {
+        "save_complete": 109,
+        "save_enter": 108
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 10,
+      "frame_bounds": {
+        "next_process_entry_frame": 5775,
+        "next_process_exit_frame": 5775,
+        "process_entry_frame": 5769,
+        "save_process_exit_frame": 5774,
+        "signal_frame": 5774
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 8,
+        "between_process_dispatches": 4044,
+        "call_entry_to_next_process": 61008,
+        "call_entry_to_signal": 51374,
+        "entry_marker_to_call": 89,
+        "next_process_dispatch": 2850,
+        "save_call": 56956,
+        "save_dispatch_outside_call": 241,
+        "save_to_readback": 63941,
+        "signal_to_call_return_signed": 5582
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 46753408,
+        "signal_us": 46740938,
+        "start_us": 46689467
+      },
+      "line_numbers": {
+        "save_complete": 112,
+        "save_enter": 111
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 11,
+      "frame_bounds": {
+        "next_process_entry_frame": 5788,
+        "next_process_exit_frame": 5788,
+        "process_entry_frame": 5782,
+        "save_process_exit_frame": 5787,
+        "signal_frame": 5787
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 7,
+        "between_process_dispatches": 4054,
+        "call_entry_to_next_process": 60732,
+        "call_entry_to_signal": 51091,
+        "entry_marker_to_call": 153,
+        "next_process_dispatch": 2936,
+        "save_call": 56671,
+        "save_dispatch_outside_call": 183,
+        "save_to_readback": 63817,
+        "signal_to_call_return_signed": 5580
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 46924645,
+        "signal_us": 46912082,
+        "start_us": 46860828
+      },
+      "line_numbers": {
+        "save_complete": 114,
+        "save_enter": 113
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 12,
+      "frame_bounds": {
+        "next_process_entry_frame": 5801,
+        "next_process_exit_frame": 5801,
+        "process_entry_frame": 5795,
+        "save_process_exit_frame": 5800,
+        "signal_frame": 5800
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 7,
+        "between_process_dispatches": 17602,
+        "call_entry_to_next_process": 75185,
+        "call_entry_to_signal": 51762,
+        "entry_marker_to_call": 154,
+        "next_process_dispatch": 3054,
+        "save_call": 57576,
+        "save_dispatch_outside_call": 190,
+        "save_to_readback": 78388,
+        "signal_to_call_return_signed": 5814
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 47113753,
+        "signal_us": 47087294,
+        "start_us": 47035365
+      },
+      "line_numbers": {
+        "save_complete": 116,
+        "save_enter": 115
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 13,
+      "frame_bounds": {
+        "next_process_entry_frame": 5814,
+        "next_process_exit_frame": 5814,
+        "process_entry_frame": 5808,
+        "save_process_exit_frame": 5813,
+        "signal_frame": 5813
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 9,
+        "between_process_dispatches": 4559,
+        "call_entry_to_next_process": 66050,
+        "call_entry_to_signal": 54573,
+        "entry_marker_to_call": 85,
+        "next_process_dispatch": 3029,
+        "save_call": 61482,
+        "save_dispatch_outside_call": 233,
+        "save_to_readback": 69155,
+        "signal_to_call_return_signed": 6909
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 47298136,
+        "signal_us": 47283647,
+        "start_us": 47228981
+      },
+      "line_numbers": {
+        "save_complete": 119,
+        "save_enter": 118
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 14,
+      "frame_bounds": {
+        "next_process_entry_frame": 5827,
+        "next_process_exit_frame": 5827,
+        "process_entry_frame": 5821,
+        "save_process_exit_frame": 5826,
+        "signal_frame": 5826
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 9,
+        "between_process_dispatches": 5598,
+        "call_entry_to_next_process": 76357,
+        "call_entry_to_signal": 62484,
+        "entry_marker_to_call": 146,
+        "next_process_dispatch": 5116,
+        "save_call": 70750,
+        "save_dispatch_outside_call": 183,
+        "save_to_readback": 81607,
+        "signal_to_call_return_signed": 8266
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 47515983,
+        "signal_us": 47497019,
+        "start_us": 47434376
+      },
+      "line_numbers": {
+        "save_complete": 121,
+        "save_enter": 120
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 15,
+      "frame_bounds": {
+        "next_process_entry_frame": 5840,
+        "next_process_exit_frame": 5840,
+        "process_entry_frame": 5834,
+        "save_process_exit_frame": 5839,
+        "signal_frame": 5839
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 8,
+        "between_process_dispatches": 4546,
+        "call_entry_to_next_process": 70704,
+        "call_entry_to_signal": 58662,
+        "entry_marker_to_call": 146,
+        "next_process_dispatch": 3222,
+        "save_call": 66150,
+        "save_dispatch_outside_call": 179,
+        "save_to_readback": 74064,
+        "signal_to_call_return_signed": 7488
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 47730826,
+        "signal_us": 47715582,
+        "start_us": 47656762
+      },
+      "line_numbers": {
+        "save_complete": 123,
+        "save_enter": 122
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 16,
+      "frame_bounds": {
+        "next_process_entry_frame": 5853,
+        "next_process_exit_frame": 5853,
+        "process_entry_frame": 5847,
+        "save_process_exit_frame": 5852,
+        "signal_frame": 5852
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 7,
+        "between_process_dispatches": 5614,
+        "call_entry_to_next_process": 76413,
+        "call_entry_to_signal": 64114,
+        "entry_marker_to_call": 141,
+        "next_process_dispatch": 3747,
+        "save_call": 70792,
+        "save_dispatch_outside_call": 173,
+        "save_to_readback": 80295,
+        "signal_to_call_return_signed": 6678
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 47945793,
+        "signal_us": 47929765,
+        "start_us": 47865498
+      },
+      "line_numbers": {
+        "save_complete": 126,
+        "save_enter": 125
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 17,
+      "frame_bounds": {
+        "next_process_entry_frame": 5866,
+        "next_process_exit_frame": 5866,
+        "process_entry_frame": 5860,
+        "save_process_exit_frame": 5865,
+        "signal_frame": 5865
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 11,
+        "between_process_dispatches": 23407,
+        "call_entry_to_next_process": 95171,
+        "call_entry_to_signal": 60402,
+        "entry_marker_to_call": 144,
+        "next_process_dispatch": 3578,
+        "save_call": 71753,
+        "save_dispatch_outside_call": 180,
+        "save_to_readback": 98885,
+        "signal_to_call_return_signed": 11351
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 48172421,
+        "signal_us": 48134094,
+        "start_us": 48073536
+      },
+      "line_numbers": {
+        "save_complete": 128,
+        "save_enter": 127
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 18,
+      "frame_bounds": {
+        "next_process_entry_frame": 5879,
+        "next_process_exit_frame": 5879,
+        "process_entry_frame": 5873,
+        "save_process_exit_frame": 5878,
+        "signal_frame": 5878
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 6,
+        "between_process_dispatches": 4245,
+        "call_entry_to_next_process": 65944,
+        "call_entry_to_signal": 55762,
+        "entry_marker_to_call": 162,
+        "next_process_dispatch": 3547,
+        "save_call": 61693,
+        "save_dispatch_outside_call": 193,
+        "save_to_readback": 69646,
+        "signal_to_call_return_signed": 5931
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 48372535,
+        "signal_us": 48358824,
+        "start_us": 48302889
+      },
+      "line_numbers": {
+        "save_complete": 131,
+        "save_enter": 130
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 19,
+      "frame_bounds": {
+        "next_process_entry_frame": 5892,
+        "next_process_exit_frame": 5892,
+        "process_entry_frame": 5886,
+        "save_process_exit_frame": 5891,
+        "signal_frame": 5891
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 8,
+        "between_process_dispatches": 6432,
+        "call_entry_to_next_process": 66273,
+        "call_entry_to_signal": 52592,
+        "entry_marker_to_call": 140,
+        "next_process_dispatch": 3740,
+        "save_call": 59833,
+        "save_dispatch_outside_call": 172,
+        "save_to_readback": 70142,
+        "signal_to_call_return_signed": 7241
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 48559111,
+        "signal_us": 48541712,
+        "start_us": 48488969
+      },
+      "line_numbers": {
+        "save_complete": 133,
+        "save_enter": 132
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 20,
+      "frame_bounds": {
+        "next_process_entry_frame": 5905,
+        "next_process_exit_frame": 5905,
+        "process_entry_frame": 5899,
+        "save_process_exit_frame": 5904,
+        "signal_frame": 5904
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 7,
+        "between_process_dispatches": 3943,
+        "call_entry_to_next_process": 61860,
+        "call_entry_to_signal": 52058,
+        "entry_marker_to_call": 135,
+        "next_process_dispatch": 2859,
+        "save_call": 57910,
+        "save_dispatch_outside_call": 164,
+        "save_to_readback": 64851,
+        "signal_to_call_return_signed": 5852
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 48740604,
+        "signal_us": 48727956,
+        "start_us": 48675753
+      },
+      "line_numbers": {
+        "save_complete": 135,
+        "save_enter": 134
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 21,
+      "frame_bounds": {
+        "next_process_entry_frame": 5918,
+        "next_process_exit_frame": 5918,
+        "process_entry_frame": 5912,
+        "save_process_exit_frame": 5917,
+        "signal_frame": 5917
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 7,
+        "between_process_dispatches": 4257,
+        "call_entry_to_next_process": 59949,
+        "call_entry_to_signal": 50001,
+        "entry_marker_to_call": 134,
+        "next_process_dispatch": 2952,
+        "save_call": 55685,
+        "save_dispatch_outside_call": 165,
+        "save_to_readback": 63031,
+        "signal_to_call_return_signed": 5684
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 48917702,
+        "signal_us": 48904817,
+        "start_us": 48854671
+      },
+      "line_numbers": {
+        "save_complete": 138,
+        "save_enter": 137
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 22,
+      "frame_bounds": {
+        "next_process_entry_frame": 5931,
+        "next_process_exit_frame": 5931,
+        "process_entry_frame": 5925,
+        "save_process_exit_frame": 5930,
+        "signal_frame": 5930
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 7,
+        "between_process_dispatches": 16988,
+        "call_entry_to_next_process": 76340,
+        "call_entry_to_signal": 52895,
+        "entry_marker_to_call": 124,
+        "next_process_dispatch": 2893,
+        "save_call": 59345,
+        "save_dispatch_outside_call": 153,
+        "save_to_readback": 79354,
+        "signal_to_call_return_signed": 6450
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 49108288,
+        "signal_us": 49081963,
+        "start_us": 49028934
+      },
+      "line_numbers": {
+        "save_complete": 140,
+        "save_enter": 139
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 23,
+      "frame_bounds": {
+        "next_process_entry_frame": 5944,
+        "next_process_exit_frame": 5944,
+        "process_entry_frame": 5938,
+        "save_process_exit_frame": 5943,
+        "signal_frame": 5943
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 7,
+        "between_process_dispatches": 4095,
+        "call_entry_to_next_process": 67462,
+        "call_entry_to_signal": 57644,
+        "entry_marker_to_call": 138,
+        "next_process_dispatch": 2966,
+        "save_call": 63360,
+        "save_dispatch_outside_call": 167,
+        "save_to_readback": 70561,
+        "signal_to_call_return_signed": 5716
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 49291661,
+        "signal_us": 49278892,
+        "start_us": 49221100
+      },
+      "line_numbers": {
+        "save_complete": 143,
+        "save_enter": 141
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 24,
+      "frame_bounds": {
+        "next_process_entry_frame": 5957,
+        "next_process_exit_frame": 5957,
+        "process_entry_frame": 5951,
+        "save_process_exit_frame": 5956,
+        "signal_frame": 5956
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 8,
+        "between_process_dispatches": 4008,
+        "call_entry_to_next_process": 69832,
+        "call_entry_to_signal": 60108,
+        "entry_marker_to_call": 131,
+        "next_process_dispatch": 3137,
+        "save_call": 65816,
+        "save_dispatch_outside_call": 163,
+        "save_to_readback": 73093,
+        "signal_to_call_return_signed": 5708
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 49479286,
+        "signal_us": 49466442,
+        "start_us": 49406193
+      },
+      "line_numbers": {
+        "save_complete": 145,
+        "save_enter": 144
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 25,
+      "frame_bounds": {
+        "next_process_entry_frame": 5970,
+        "next_process_exit_frame": 5970,
+        "process_entry_frame": 5964,
+        "save_process_exit_frame": 5969,
+        "signal_frame": 5969
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 8,
+        "between_process_dispatches": 4558,
+        "call_entry_to_next_process": 67605,
+        "call_entry_to_signal": 57072,
+        "entry_marker_to_call": 124,
+        "next_process_dispatch": 2937,
+        "save_call": 63039,
+        "save_dispatch_outside_call": 151,
+        "save_to_readback": 70662,
+        "signal_to_call_return_signed": 5967
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 49667984,
+        "signal_us": 49654527,
+        "start_us": 49597322
+      },
+      "line_numbers": {
+        "save_complete": 147,
+        "save_enter": 146
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 26,
+      "frame_bounds": {
+        "next_process_entry_frame": 5983,
+        "next_process_exit_frame": 5983,
+        "process_entry_frame": 5977,
+        "save_process_exit_frame": 5982,
+        "signal_frame": 5982
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 8,
+        "between_process_dispatches": 4310,
+        "call_entry_to_next_process": 63969,
+        "call_entry_to_signal": 52989,
+        "entry_marker_to_call": 83,
+        "next_process_dispatch": 3681,
+        "save_call": 59651,
+        "save_dispatch_outside_call": 232,
+        "save_to_readback": 67718,
+        "signal_to_call_return_signed": 6662
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 49851133,
+        "signal_us": 49836496,
+        "start_us": 49783415
+      },
+      "line_numbers": {
+        "save_complete": 150,
+        "save_enter": 149
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 27,
+      "frame_bounds": {
+        "next_process_entry_frame": 5996,
+        "next_process_exit_frame": 5996,
+        "process_entry_frame": 5990,
+        "save_process_exit_frame": 5995,
+        "signal_frame": 5995
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 9,
+        "between_process_dispatches": 5265,
+        "call_entry_to_next_process": 62694,
+        "call_entry_to_signal": 51057,
+        "entry_marker_to_call": 130,
+        "next_process_dispatch": 3440,
+        "save_call": 57420,
+        "save_dispatch_outside_call": 162,
+        "save_to_readback": 66256,
+        "signal_to_call_return_signed": 6363
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 50032209,
+        "signal_us": 50017151,
+        "start_us": 49965953
+      },
+      "line_numbers": {
+        "save_complete": 152,
+        "save_enter": 151
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 28,
+      "frame_bounds": {
+        "next_process_entry_frame": 6009,
+        "next_process_exit_frame": 6009,
+        "process_entry_frame": 6003,
+        "save_process_exit_frame": 6008,
+        "signal_frame": 6008
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 7,
+        "between_process_dispatches": 18701,
+        "call_entry_to_next_process": 79415,
+        "call_entry_to_signal": 54485,
+        "entry_marker_to_call": 144,
+        "next_process_dispatch": 3135,
+        "save_call": 60707,
+        "save_dispatch_outside_call": 175,
+        "save_to_readback": 82686,
+        "signal_to_call_return_signed": 6222
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 50230989,
+        "signal_us": 50202943,
+        "start_us": 50148303
+      },
+      "line_numbers": {
+        "save_complete": 154,
+        "save_enter": 153
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 29,
+      "frame_bounds": {
+        "next_process_entry_frame": 6022,
+        "next_process_exit_frame": 6022,
+        "process_entry_frame": 6016,
+        "save_process_exit_frame": 6021,
+        "signal_frame": 6021
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 7,
+        "between_process_dispatches": 3969,
+        "call_entry_to_next_process": 63479,
+        "call_entry_to_signal": 54012,
+        "entry_marker_to_call": 155,
+        "next_process_dispatch": 3111,
+        "save_call": 59503,
+        "save_dispatch_outside_call": 188,
+        "save_to_readback": 66739,
+        "signal_to_call_return_signed": 5491
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 50408380,
+        "signal_us": 50395819,
+        "start_us": 50341641
+      },
+      "line_numbers": {
+        "save_complete": 157,
+        "save_enter": 156
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 30,
+      "frame_bounds": {
+        "next_process_entry_frame": 6035,
+        "next_process_exit_frame": 6035,
+        "process_entry_frame": 6029,
+        "save_process_exit_frame": 6034,
+        "signal_frame": 6034
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 7,
+        "between_process_dispatches": 4851,
+        "call_entry_to_next_process": 63293,
+        "call_entry_to_signal": 52518,
+        "entry_marker_to_call": 137,
+        "next_process_dispatch": 2981,
+        "save_call": 58435,
+        "save_dispatch_outside_call": 165,
+        "save_to_readback": 66406,
+        "signal_to_call_return_signed": 5917
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 50587870,
+        "signal_us": 50574128,
+        "start_us": 50521464
+      },
+      "line_numbers": {
+        "save_complete": 159,
+        "save_enter": 158
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 31,
+      "frame_bounds": {
+        "next_process_entry_frame": 6048,
+        "next_process_exit_frame": 6048,
+        "process_entry_frame": 6042,
+        "save_process_exit_frame": 6047,
+        "signal_frame": 6047
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 10,
+        "between_process_dispatches": 5931,
+        "call_entry_to_next_process": 86444,
+        "call_entry_to_signal": 70493,
+        "entry_marker_to_call": 195,
+        "next_process_dispatch": 4667,
+        "save_call": 80503,
+        "save_dispatch_outside_call": 241,
+        "save_to_readback": 91294,
+        "signal_to_call_return_signed": 10010
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 50855133,
+        "signal_us": 50834542,
+        "start_us": 50763839
+      },
+      "line_numbers": {
+        "save_complete": 162,
+        "save_enter": 160
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 32,
+      "frame_bounds": {
+        "next_process_entry_frame": 6061,
+        "next_process_exit_frame": 6061,
+        "process_entry_frame": 6055,
+        "save_process_exit_frame": 6060,
+        "signal_frame": 6060
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 11,
+        "between_process_dispatches": 25514,
+        "call_entry_to_next_process": 101279,
+        "call_entry_to_signal": 67245,
+        "entry_marker_to_call": 221,
+        "next_process_dispatch": 4711,
+        "save_call": 75754,
+        "save_dispatch_outside_call": 270,
+        "save_to_readback": 106201,
+        "signal_to_call_return_signed": 8509
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 51132819,
+        "signal_us": 51094102,
+        "start_us": 51026618
+      },
+      "line_numbers": {
+        "save_complete": 164,
+        "save_enter": 163
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 33,
+      "frame_bounds": {
+        "next_process_entry_frame": 6074,
+        "next_process_exit_frame": 6074,
+        "process_entry_frame": 6068,
+        "save_process_exit_frame": 6073,
+        "signal_frame": 6073
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 7,
+        "between_process_dispatches": 4034,
+        "call_entry_to_next_process": 60626,
+        "call_entry_to_signal": 50594,
+        "entry_marker_to_call": 160,
+        "next_process_dispatch": 2926,
+        "save_call": 56585,
+        "save_dispatch_outside_call": 191,
+        "save_to_readback": 63711,
+        "signal_to_call_return_signed": 5991
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 51315419,
+        "signal_us": 51302473,
+        "start_us": 51251708
+      },
+      "line_numbers": {
+        "save_complete": 167,
+        "save_enter": 165
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 34,
+      "frame_bounds": {
+        "next_process_entry_frame": 6087,
+        "next_process_exit_frame": 6087,
+        "process_entry_frame": 6081,
+        "save_process_exit_frame": 6086,
+        "signal_frame": 6086
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 8,
+        "between_process_dispatches": 4137,
+        "call_entry_to_next_process": 60411,
+        "call_entry_to_signal": 50918,
+        "entry_marker_to_call": 158,
+        "next_process_dispatch": 2984,
+        "save_call": 56266,
+        "save_dispatch_outside_call": 192,
+        "save_to_readback": 63547,
+        "signal_to_call_return_signed": 5348
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 51490946,
+        "signal_us": 51478486,
+        "start_us": 51427399
+      },
+      "line_numbers": {
+        "save_complete": 169,
+        "save_enter": 168
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 35,
+      "frame_bounds": {
+        "next_process_entry_frame": 6100,
+        "next_process_exit_frame": 6100,
+        "process_entry_frame": 6094,
+        "save_process_exit_frame": 6099,
+        "signal_frame": 6099
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 7,
+        "between_process_dispatches": 4404,
+        "call_entry_to_next_process": 370027,
+        "call_entry_to_signal": 359902,
+        "entry_marker_to_call": 132,
+        "next_process_dispatch": 3547,
+        "save_call": 365616,
+        "save_dispatch_outside_call": 162,
+        "save_to_readback": 373702,
+        "signal_to_call_return_signed": 5714
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 51983858,
+        "signal_us": 51970201,
+        "start_us": 51610156
+      },
+      "line_numbers": {
+        "save_complete": 172,
+        "save_enter": 170
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 36,
+      "frame_bounds": {
+        "next_process_entry_frame": 6113,
+        "next_process_exit_frame": 6113,
+        "process_entry_frame": 6107,
+        "save_process_exit_frame": 6112,
+        "signal_frame": 6112
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 11,
+        "between_process_dispatches": 18865,
+        "call_entry_to_next_process": 82274,
+        "call_entry_to_signal": 55909,
+        "entry_marker_to_call": 130,
+        "next_process_dispatch": 3661,
+        "save_call": 63398,
+        "save_dispatch_outside_call": 163,
+        "save_to_readback": 86054,
+        "signal_to_call_return_signed": 7489
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 52184690,
+        "signal_us": 52154685,
+        "start_us": 52098636
+      },
+      "line_numbers": {
+        "save_complete": 174,
+        "save_enter": 173
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 37,
+      "frame_bounds": {
+        "next_process_entry_frame": 6126,
+        "next_process_exit_frame": 6126,
+        "process_entry_frame": 6120,
+        "save_process_exit_frame": 6125,
+        "signal_frame": 6125
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 7,
+        "between_process_dispatches": 4322,
+        "call_entry_to_next_process": 70690,
+        "call_entry_to_signal": 59639,
+        "entry_marker_to_call": 137,
+        "next_process_dispatch": 3000,
+        "save_call": 66361,
+        "save_dispatch_outside_call": 167,
+        "save_to_readback": 73823,
+        "signal_to_call_return_signed": 6722
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 52374473,
+        "signal_us": 52360437,
+        "start_us": 52300650
+      },
+      "line_numbers": {
+        "save_complete": 176,
+        "save_enter": 175
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 38,
+      "frame_bounds": {
+        "next_process_entry_frame": 6139,
+        "next_process_exit_frame": 6139,
+        "process_entry_frame": 6133,
+        "save_process_exit_frame": 6138,
+        "signal_frame": 6138
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 7,
+        "between_process_dispatches": 4970,
+        "call_entry_to_next_process": 62564,
+        "call_entry_to_signal": 52109,
+        "entry_marker_to_call": 163,
+        "next_process_dispatch": 3322,
+        "save_call": 57587,
+        "save_dispatch_outside_call": 197,
+        "save_to_readback": 66001,
+        "signal_to_call_return_signed": 5478
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 52563023,
+        "signal_us": 52549306,
+        "start_us": 52497022
+      },
+      "line_numbers": {
+        "save_complete": 179,
+        "save_enter": 178
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 39,
+      "frame_bounds": {
+        "next_process_entry_frame": 6152,
+        "next_process_exit_frame": 6152,
+        "process_entry_frame": 6146,
+        "save_process_exit_frame": 6151,
+        "signal_frame": 6151
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 7,
+        "between_process_dispatches": 4116,
+        "call_entry_to_next_process": 63644,
+        "call_entry_to_signal": 52930,
+        "entry_marker_to_call": 129,
+        "next_process_dispatch": 3333,
+        "save_call": 59521,
+        "save_dispatch_outside_call": 156,
+        "save_to_readback": 67099,
+        "signal_to_call_return_signed": 6591
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 52743365,
+        "signal_us": 52729334,
+        "start_us": 52676266
+      },
+      "line_numbers": {
+        "save_complete": 181,
+        "save_enter": 180
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 40,
+      "frame_bounds": {
+        "next_process_entry_frame": 6165,
+        "next_process_exit_frame": 6165,
+        "process_entry_frame": 6159,
+        "save_process_exit_frame": 6164,
+        "signal_frame": 6164
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 7,
+        "between_process_dispatches": 4825,
+        "call_entry_to_next_process": 61993,
+        "call_entry_to_signal": 51474,
+        "entry_marker_to_call": 143,
+        "next_process_dispatch": 3739,
+        "save_call": 57161,
+        "save_dispatch_outside_call": 174,
+        "save_to_readback": 65869,
+        "signal_to_call_return_signed": 5687
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 52917299,
+        "signal_us": 52903059,
+        "start_us": 52851430
+      },
+      "line_numbers": {
+        "save_complete": 183,
+        "save_enter": 182
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 41,
+      "frame_bounds": {
+        "next_process_entry_frame": 6178,
+        "next_process_exit_frame": 6178,
+        "process_entry_frame": 6172,
+        "save_process_exit_frame": 6177,
+        "signal_frame": 6177
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 7,
+        "between_process_dispatches": 17176,
+        "call_entry_to_next_process": 71371,
+        "call_entry_to_signal": 47788,
+        "entry_marker_to_call": 125,
+        "next_process_dispatch": 2924,
+        "save_call": 54188,
+        "save_dispatch_outside_call": 152,
+        "save_to_readback": 74415,
+        "signal_to_call_return_signed": 6400
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 53107600,
+        "signal_us": 53081107,
+        "start_us": 53033185
+      },
+      "line_numbers": {
+        "save_complete": 186,
+        "save_enter": 185
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 42,
+      "frame_bounds": {
+        "next_process_entry_frame": 6191,
+        "next_process_exit_frame": 6191,
+        "process_entry_frame": 6185,
+        "save_process_exit_frame": 6190,
+        "signal_frame": 6190
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 8,
+        "between_process_dispatches": 4123,
+        "call_entry_to_next_process": 55148,
+        "call_entry_to_signal": 45383,
+        "entry_marker_to_call": 132,
+        "next_process_dispatch": 2895,
+        "save_call": 51017,
+        "save_dispatch_outside_call": 161,
+        "save_to_readback": 58171,
+        "signal_to_call_return_signed": 5634
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 53276052,
+        "signal_us": 53263405,
+        "start_us": 53217881
+      },
+      "line_numbers": {
+        "save_complete": 188,
+        "save_enter": 187
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 43,
+      "frame_bounds": {
+        "next_process_entry_frame": 6204,
+        "next_process_exit_frame": 6204,
+        "process_entry_frame": 6198,
+        "save_process_exit_frame": 6203,
+        "signal_frame": 6203
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 9,
+        "between_process_dispatches": 4958,
+        "call_entry_to_next_process": 57566,
+        "call_entry_to_signal": 46163,
+        "entry_marker_to_call": 127,
+        "next_process_dispatch": 3373,
+        "save_call": 52599,
+        "save_dispatch_outside_call": 158,
+        "save_to_readback": 61056,
+        "signal_to_call_return_signed": 6436
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 53448793,
+        "signal_us": 53434037,
+        "start_us": 53387737
+      },
+      "line_numbers": {
+        "save_complete": 190,
+        "save_enter": 189
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 44,
+      "frame_bounds": {
+        "next_process_entry_frame": 6217,
+        "next_process_exit_frame": 6217,
+        "process_entry_frame": 6211,
+        "save_process_exit_frame": 6216,
+        "signal_frame": 6216
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 8,
+        "between_process_dispatches": 4098,
+        "call_entry_to_next_process": 55702,
+        "call_entry_to_signal": 45936,
+        "entry_marker_to_call": 132,
+        "next_process_dispatch": 2980,
+        "save_call": 51596,
+        "save_dispatch_outside_call": 161,
+        "save_to_readback": 58812,
+        "signal_to_call_return_signed": 5660
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 53616958,
+        "signal_us": 53604224,
+        "start_us": 53558146
+      },
+      "line_numbers": {
+        "save_complete": 193,
+        "save_enter": 192
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 45,
+      "frame_bounds": {
+        "next_process_entry_frame": 6230,
+        "next_process_exit_frame": 6230,
+        "process_entry_frame": 6224,
+        "save_process_exit_frame": 6229,
+        "signal_frame": 6229
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 7,
+        "between_process_dispatches": 4207,
+        "call_entry_to_next_process": 58669,
+        "call_entry_to_signal": 48323,
+        "entry_marker_to_call": 153,
+        "next_process_dispatch": 2979,
+        "save_call": 54455,
+        "save_dispatch_outside_call": 183,
+        "save_to_readback": 61796,
+        "signal_to_call_return_signed": 6132
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 53789943,
+        "signal_us": 53776633,
+        "start_us": 53728147
+      },
+      "line_numbers": {
+        "save_complete": 195,
+        "save_enter": 194
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 46,
+      "frame_bounds": {
+        "next_process_entry_frame": 6243,
+        "next_process_exit_frame": 6243,
+        "process_entry_frame": 6237,
+        "save_process_exit_frame": 6242,
+        "signal_frame": 6242
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 8,
+        "between_process_dispatches": 4242,
+        "call_entry_to_next_process": 58452,
+        "call_entry_to_signal": 47793,
+        "entry_marker_to_call": 133,
+        "next_process_dispatch": 3002,
+        "save_call": 54202,
+        "save_dispatch_outside_call": 162,
+        "save_to_readback": 61581,
+        "signal_to_call_return_signed": 6409
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 53960510,
+        "signal_us": 53946864,
+        "start_us": 53898929
+      },
+      "line_numbers": {
+        "save_complete": 197,
+        "save_enter": 196
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 47,
+      "frame_bounds": {
+        "next_process_entry_frame": 6256,
+        "next_process_exit_frame": 6256,
+        "process_entry_frame": 6250,
+        "save_process_exit_frame": 6255,
+        "signal_frame": 6255
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 8,
+        "between_process_dispatches": 20081,
+        "call_entry_to_next_process": 75603,
+        "call_entry_to_signal": 49637,
+        "entry_marker_to_call": 138,
+        "next_process_dispatch": 3103,
+        "save_call": 55514,
+        "save_dispatch_outside_call": 170,
+        "save_to_readback": 78839,
+        "signal_to_call_return_signed": 5877
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 54147421,
+        "signal_us": 54118368,
+        "start_us": 54068582
+      },
+      "line_numbers": {
+        "save_complete": 200,
+        "save_enter": 199
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 48,
+      "frame_bounds": {
+        "next_process_entry_frame": 6269,
+        "next_process_exit_frame": 6269,
+        "process_entry_frame": 6263,
+        "save_process_exit_frame": 6268,
+        "signal_frame": 6268
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 6,
+        "between_process_dispatches": 4026,
+        "call_entry_to_next_process": 55777,
+        "call_entry_to_signal": 46186,
+        "entry_marker_to_call": 138,
+        "next_process_dispatch": 2956,
+        "save_call": 51745,
+        "save_dispatch_outside_call": 167,
+        "save_to_readback": 58865,
+        "signal_to_call_return_signed": 5559
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 54317463,
+        "signal_us": 54304933,
+        "start_us": 54258598
+      },
+      "line_numbers": {
+        "save_complete": 202,
+        "save_enter": 201
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 49,
+      "frame_bounds": {
+        "next_process_entry_frame": 6282,
+        "next_process_exit_frame": 6282,
+        "process_entry_frame": 6276,
+        "save_process_exit_frame": 6281,
+        "signal_frame": 6281
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 7,
+        "between_process_dispatches": 4040,
+        "call_entry_to_next_process": 58094,
+        "call_entry_to_signal": 48060,
+        "entry_marker_to_call": 133,
+        "next_process_dispatch": 2904,
+        "save_call": 54047,
+        "save_dispatch_outside_call": 162,
+        "save_to_readback": 61127,
+        "signal_to_call_return_signed": 5987
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 54486443,
+        "signal_us": 54473518,
+        "start_us": 54425316
+      },
+      "line_numbers": {
+        "save_complete": 204,
+        "save_enter": 203
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 50,
+      "frame_bounds": {
+        "next_process_entry_frame": 6295,
+        "next_process_exit_frame": 6295,
+        "process_entry_frame": 6289,
+        "save_process_exit_frame": 6294,
+        "signal_frame": 6294
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 7,
+        "between_process_dispatches": 4143,
+        "call_entry_to_next_process": 55785,
+        "call_entry_to_signal": 45771,
+        "entry_marker_to_call": 125,
+        "next_process_dispatch": 3259,
+        "save_call": 51635,
+        "save_dispatch_outside_call": 160,
+        "save_to_readback": 59173,
+        "signal_to_call_return_signed": 5864
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 54659578,
+        "signal_us": 54646318,
+        "start_us": 54600405
+      },
+      "line_numbers": {
+        "save_complete": 207,
+        "save_enter": 206
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 51,
+      "frame_bounds": {
+        "next_process_entry_frame": 6308,
+        "next_process_exit_frame": 6308,
+        "process_entry_frame": 6302,
+        "save_process_exit_frame": 6307,
+        "signal_frame": 6307
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 9,
+        "between_process_dispatches": 4562,
+        "call_entry_to_next_process": 58963,
+        "call_entry_to_signal": 47451,
+        "entry_marker_to_call": 160,
+        "next_process_dispatch": 3232,
+        "save_call": 54392,
+        "save_dispatch_outside_call": 194,
+        "save_to_readback": 62351,
+        "signal_to_call_return_signed": 6941
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 54832043,
+        "signal_us": 54817314,
+        "start_us": 54769692
+      },
+      "line_numbers": {
+        "save_complete": 209,
+        "save_enter": 208
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 52,
+      "frame_bounds": {
+        "next_process_entry_frame": 6321,
+        "next_process_exit_frame": 6321,
+        "process_entry_frame": 6315,
+        "save_process_exit_frame": 6320,
+        "signal_frame": 6320
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 9,
+        "between_process_dispatches": 4558,
+        "call_entry_to_next_process": 57427,
+        "call_entry_to_signal": 47209,
+        "entry_marker_to_call": 133,
+        "next_process_dispatch": 3129,
+        "save_call": 52860,
+        "save_dispatch_outside_call": 165,
+        "save_to_readback": 60686,
+        "signal_to_call_return_signed": 5651
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 55003715,
+        "signal_us": 54990382,
+        "start_us": 54943029
+      },
+      "line_numbers": {
+        "save_complete": 211,
+        "save_enter": 210
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 53,
+      "frame_bounds": {
+        "next_process_entry_frame": 6334,
+        "next_process_exit_frame": 6334,
+        "process_entry_frame": 6328,
+        "save_process_exit_frame": 6333,
+        "signal_frame": 6333
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 8,
+        "between_process_dispatches": 18856,
+        "call_entry_to_next_process": 70974,
+        "call_entry_to_signal": 45776,
+        "entry_marker_to_call": 129,
+        "next_process_dispatch": 2896,
+        "save_call": 52110,
+        "save_dispatch_outside_call": 160,
+        "save_to_readback": 73995,
+        "signal_to_call_return_signed": 6334
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 55194097,
+        "signal_us": 55166017,
+        "start_us": 55120102
+      },
+      "line_numbers": {
+        "save_complete": 214,
+        "save_enter": 213
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 54,
+      "frame_bounds": {
+        "next_process_entry_frame": 6347,
+        "next_process_exit_frame": 6347,
+        "process_entry_frame": 6341,
+        "save_process_exit_frame": 6346,
+        "signal_frame": 6346
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 8,
+        "between_process_dispatches": 4338,
+        "call_entry_to_next_process": 55993,
+        "call_entry_to_signal": 45919,
+        "entry_marker_to_call": 139,
+        "next_process_dispatch": 2898,
+        "save_call": 51647,
+        "save_dispatch_outside_call": 170,
+        "save_to_readback": 59028,
+        "signal_to_call_return_signed": 5728
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 55364841,
+        "signal_us": 55351882,
+        "start_us": 55305813
+      },
+      "line_numbers": {
+        "save_complete": 216,
+        "save_enter": 215
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 55,
+      "frame_bounds": {
+        "next_process_entry_frame": 6360,
+        "next_process_exit_frame": 6360,
+        "process_entry_frame": 6354,
+        "save_process_exit_frame": 6359,
+        "signal_frame": 6359
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 7,
+        "between_process_dispatches": 4325,
+        "call_entry_to_next_process": 57519,
+        "call_entry_to_signal": 46824,
+        "entry_marker_to_call": 180,
+        "next_process_dispatch": 3077,
+        "save_call": 53187,
+        "save_dispatch_outside_call": 208,
+        "save_to_readback": 60772,
+        "signal_to_call_return_signed": 6363
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 55534450,
+        "signal_us": 55520692,
+        "start_us": 55473678
+      },
+      "line_numbers": {
+        "save_complete": 218,
+        "save_enter": 217
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 56,
+      "frame_bounds": {
+        "next_process_entry_frame": 6373,
+        "next_process_exit_frame": 6373,
+        "process_entry_frame": 6367,
+        "save_process_exit_frame": 6372,
+        "signal_frame": 6372
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 7,
+        "between_process_dispatches": 4312,
+        "call_entry_to_next_process": 54916,
+        "call_entry_to_signal": 45038,
+        "entry_marker_to_call": 130,
+        "next_process_dispatch": 3363,
+        "save_call": 50597,
+        "save_dispatch_outside_call": 158,
+        "save_to_readback": 58402,
+        "signal_to_call_return_signed": 5559
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 55703941,
+        "signal_us": 55690716,
+        "start_us": 55645539
+      },
+      "line_numbers": {
+        "save_complete": 221,
+        "save_enter": 220
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 57,
+      "frame_bounds": {
+        "next_process_entry_frame": 6386,
+        "next_process_exit_frame": 6386,
+        "process_entry_frame": 6380,
+        "save_process_exit_frame": 6385,
+        "signal_frame": 6385
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 8,
+        "between_process_dispatches": 5387,
+        "call_entry_to_next_process": 59658,
+        "call_entry_to_signal": 47747,
+        "entry_marker_to_call": 125,
+        "next_process_dispatch": 3143,
+        "save_call": 54263,
+        "save_dispatch_outside_call": 153,
+        "save_to_readback": 62920,
+        "signal_to_call_return_signed": 6516
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 55875689,
+        "signal_us": 55860650,
+        "start_us": 55812769
+      },
+      "line_numbers": {
+        "save_complete": 223,
+        "save_enter": 222
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 58,
+      "frame_bounds": {
+        "next_process_entry_frame": 6399,
+        "next_process_exit_frame": 6399,
+        "process_entry_frame": 6393,
+        "save_process_exit_frame": 6398,
+        "signal_frame": 6398
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 7,
+        "between_process_dispatches": 4157,
+        "call_entry_to_next_process": 54822,
+        "call_entry_to_signal": 44888,
+        "entry_marker_to_call": 161,
+        "next_process_dispatch": 2947,
+        "save_call": 50658,
+        "save_dispatch_outside_call": 194,
+        "save_to_readback": 57929,
+        "signal_to_call_return_signed": 5770
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 56050580,
+        "signal_us": 56037713,
+        "start_us": 55992651
+      },
+      "line_numbers": {
+        "save_complete": 225,
+        "save_enter": 224
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 59,
+      "frame_bounds": {
+        "next_process_entry_frame": 6412,
+        "next_process_exit_frame": 6412,
+        "process_entry_frame": 6406,
+        "save_process_exit_frame": 6411,
+        "signal_frame": 6411
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 8,
+        "between_process_dispatches": 17994,
+        "call_entry_to_next_process": 75032,
+        "call_entry_to_signal": 49473,
+        "entry_marker_to_call": 125,
+        "next_process_dispatch": 2999,
+        "save_call": 57030,
+        "save_dispatch_outside_call": 153,
+        "save_to_readback": 78152,
+        "signal_to_call_return_signed": 7557
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 56238468,
+        "signal_us": 56209923,
+        "start_us": 56160316
+      },
+      "line_numbers": {
+        "save_complete": 228,
+        "save_enter": 227
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 60,
+      "frame_bounds": {
+        "next_process_entry_frame": 6425,
+        "next_process_exit_frame": 6425,
+        "process_entry_frame": 6419,
+        "save_process_exit_frame": 6424,
+        "signal_frame": 6424
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 7,
+        "between_process_dispatches": 4384,
+        "call_entry_to_next_process": 58393,
+        "call_entry_to_signal": 48468,
+        "entry_marker_to_call": 128,
+        "next_process_dispatch": 3639,
+        "save_call": 54002,
+        "save_dispatch_outside_call": 154,
+        "save_to_readback": 62154,
+        "signal_to_call_return_signed": 5534
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 56420506,
+        "signal_us": 56406956,
+        "start_us": 56358352
+      },
+      "line_numbers": {
+        "save_complete": 230,
+        "save_enter": 229
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 61,
+      "frame_bounds": {
+        "next_process_entry_frame": 6438,
+        "next_process_exit_frame": 6438,
+        "process_entry_frame": 6432,
+        "save_process_exit_frame": 6437,
+        "signal_frame": 6437
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 7,
+        "between_process_dispatches": 4091,
+        "call_entry_to_next_process": 56270,
+        "call_entry_to_signal": 46418,
+        "entry_marker_to_call": 128,
+        "next_process_dispatch": 2973,
+        "save_call": 52172,
+        "save_dispatch_outside_call": 154,
+        "save_to_readback": 59366,
+        "signal_to_call_return_signed": 5754
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 56592859,
+        "signal_us": 56580048,
+        "start_us": 56533493
+      },
+      "line_numbers": {
+        "save_complete": 232,
+        "save_enter": 231
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 62,
+      "frame_bounds": {
+        "next_process_entry_frame": 6451,
+        "next_process_exit_frame": 6451,
+        "process_entry_frame": 6445,
+        "save_process_exit_frame": 6450,
+        "signal_frame": 6450
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 7,
+        "between_process_dispatches": 4010,
+        "call_entry_to_next_process": 56400,
+        "call_entry_to_signal": 46801,
+        "entry_marker_to_call": 122,
+        "next_process_dispatch": 2860,
+        "save_call": 52383,
+        "save_dispatch_outside_call": 148,
+        "save_to_readback": 59377,
+        "signal_to_call_return_signed": 5582
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 56763489,
+        "signal_us": 56751043,
+        "start_us": 56704112
+      },
+      "line_numbers": {
+        "save_complete": 235,
+        "save_enter": 234
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 63,
+      "frame_bounds": {
+        "next_process_entry_frame": 6464,
+        "next_process_exit_frame": 6464,
+        "process_entry_frame": 6458,
+        "save_process_exit_frame": 6463,
+        "signal_frame": 6463
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 7,
+        "between_process_dispatches": 4065,
+        "call_entry_to_next_process": 57083,
+        "call_entry_to_signal": 45957,
+        "entry_marker_to_call": 226,
+        "next_process_dispatch": 3007,
+        "save_call": 53011,
+        "save_dispatch_outside_call": 260,
+        "save_to_readback": 60315,
+        "signal_to_call_return_signed": 7054
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 56941521,
+        "signal_us": 56927402,
+        "start_us": 56881206
+      },
+      "line_numbers": {
+        "save_complete": 237,
+        "save_enter": 236
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 64,
+      "frame_bounds": {
+        "next_process_entry_frame": 6477,
+        "next_process_exit_frame": 6477,
+        "process_entry_frame": 6471,
+        "save_process_exit_frame": 6476,
+        "signal_frame": 6476
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 7,
+        "between_process_dispatches": 18026,
+        "call_entry_to_next_process": 70422,
+        "call_entry_to_signal": 46446,
+        "entry_marker_to_call": 159,
+        "next_process_dispatch": 3111,
+        "save_call": 52389,
+        "save_dispatch_outside_call": 193,
+        "save_to_readback": 73691,
+        "signal_to_call_return_signed": 5943
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 57126544,
+        "signal_us": 57099470,
+        "start_us": 57052853
+      },
+      "line_numbers": {
+        "save_complete": 240,
+        "save_enter": 238
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 65,
+      "frame_bounds": {
+        "next_process_entry_frame": 6490,
+        "next_process_exit_frame": 6490,
+        "process_entry_frame": 6484,
+        "save_process_exit_frame": 6489,
+        "signal_frame": 6489
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 7,
+        "between_process_dispatches": 4139,
+        "call_entry_to_next_process": 79812,
+        "call_entry_to_signal": 69775,
+        "entry_marker_to_call": 133,
+        "next_process_dispatch": 2921,
+        "save_call": 75666,
+        "save_dispatch_outside_call": 164,
+        "save_to_readback": 82864,
+        "signal_to_call_return_signed": 5891
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 57319564,
+        "signal_us": 57306619,
+        "start_us": 57236700
+      },
+      "line_numbers": {
+        "save_complete": 242,
+        "save_enter": 241
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 66,
+      "frame_bounds": {
+        "next_process_entry_frame": 6503,
+        "next_process_exit_frame": 6503,
+        "process_entry_frame": 6497,
+        "save_process_exit_frame": 6502,
+        "signal_frame": 6502
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 7,
+        "between_process_dispatches": 4785,
+        "call_entry_to_next_process": 57460,
+        "call_entry_to_signal": 46332,
+        "entry_marker_to_call": 125,
+        "next_process_dispatch": 3616,
+        "save_call": 52668,
+        "save_dispatch_outside_call": 152,
+        "save_to_readback": 61188,
+        "signal_to_call_return_signed": 6336
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 57493808,
+        "signal_us": 57479086,
+        "start_us": 57432620
+      },
+      "line_numbers": {
+        "save_complete": 244,
+        "save_enter": 243
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 67,
+      "frame_bounds": {
+        "next_process_entry_frame": 6516,
+        "next_process_exit_frame": 6516,
+        "process_entry_frame": 6510,
+        "save_process_exit_frame": 6515,
+        "signal_frame": 6515
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 8,
+        "between_process_dispatches": 4852,
+        "call_entry_to_next_process": 59238,
+        "call_entry_to_signal": 48308,
+        "entry_marker_to_call": 124,
+        "next_process_dispatch": 3753,
+        "save_call": 54378,
+        "save_dispatch_outside_call": 153,
+        "save_to_readback": 63107,
+        "signal_to_call_return_signed": 6070
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 57675971,
+        "signal_us": 57661305,
+        "start_us": 57612864
+      },
+      "line_numbers": {
+        "save_complete": 247,
+        "save_enter": 245
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 68,
+      "frame_bounds": {
+        "next_process_entry_frame": 6529,
+        "next_process_exit_frame": 6529,
+        "process_entry_frame": 6523,
+        "save_process_exit_frame": 6528,
+        "signal_frame": 6528
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 7,
+        "between_process_dispatches": 4061,
+        "call_entry_to_next_process": 56336,
+        "call_entry_to_signal": 45000,
+        "entry_marker_to_call": 125,
+        "next_process_dispatch": 3036,
+        "save_call": 52268,
+        "save_dispatch_outside_call": 152,
+        "save_to_readback": 59488,
+        "signal_to_call_return_signed": 7268
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 57844967,
+        "signal_us": 57830612,
+        "start_us": 57785479
+      },
+      "line_numbers": {
+        "save_complete": 249,
+        "save_enter": 248
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 69,
+      "frame_bounds": {
+        "next_process_entry_frame": 6542,
+        "next_process_exit_frame": 6542,
+        "process_entry_frame": 6536,
+        "save_process_exit_frame": 6541,
+        "signal_frame": 6541
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 7,
+        "between_process_dispatches": 3964,
+        "call_entry_to_next_process": 55292,
+        "call_entry_to_signal": 45375,
+        "entry_marker_to_call": 189,
+        "next_process_dispatch": 2900,
+        "save_call": 51321,
+        "save_dispatch_outside_call": 221,
+        "save_to_readback": 58378,
+        "signal_to_call_return_signed": 5946
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 58011760,
+        "signal_us": 57998957,
+        "start_us": 57953382
+      },
+      "line_numbers": {
+        "save_complete": 251,
+        "save_enter": 250
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 70,
+      "frame_bounds": {
+        "next_process_entry_frame": 6555,
+        "next_process_exit_frame": 6555,
+        "process_entry_frame": 6549,
+        "save_process_exit_frame": 6554,
+        "signal_frame": 6554
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 11,
+        "between_process_dispatches": 18928,
+        "call_entry_to_next_process": 72676,
+        "call_entry_to_signal": 47255,
+        "entry_marker_to_call": 129,
+        "next_process_dispatch": 2917,
+        "save_call": 53737,
+        "save_dispatch_outside_call": 162,
+        "save_to_readback": 75718,
+        "signal_to_call_return_signed": 6482
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 58197372,
+        "signal_us": 58169047,
+        "start_us": 58121654
+      },
+      "line_numbers": {
+        "save_complete": 254,
+        "save_enter": 252
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 71,
+      "frame_bounds": {
+        "next_process_entry_frame": 6568,
+        "next_process_exit_frame": 6568,
+        "process_entry_frame": 6562,
+        "save_process_exit_frame": 6567,
+        "signal_frame": 6567
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 7,
+        "between_process_dispatches": 4147,
+        "call_entry_to_next_process": 56016,
+        "call_entry_to_signal": 45402,
+        "entry_marker_to_call": 127,
+        "next_process_dispatch": 2874,
+        "save_call": 51862,
+        "save_dispatch_outside_call": 154,
+        "save_to_readback": 59014,
+        "signal_to_call_return_signed": 6460
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 58366869,
+        "signal_us": 58353393,
+        "start_us": 58307855
+      },
+      "line_numbers": {
+        "save_complete": 256,
+        "save_enter": 255
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 72,
+      "frame_bounds": {
+        "next_process_entry_frame": 6581,
+        "next_process_exit_frame": 6581,
+        "process_entry_frame": 6575,
+        "save_process_exit_frame": 6580,
+        "signal_frame": 6580
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 8,
+        "between_process_dispatches": 4146,
+        "call_entry_to_next_process": 54731,
+        "call_entry_to_signal": 45039,
+        "entry_marker_to_call": 127,
+        "next_process_dispatch": 2922,
+        "save_call": 50577,
+        "save_dispatch_outside_call": 156,
+        "save_to_readback": 57775,
+        "signal_to_call_return_signed": 5538
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 58534257,
+        "signal_us": 58521657,
+        "start_us": 58476482
+      },
+      "line_numbers": {
+        "save_complete": 258,
+        "save_enter": 257
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 73,
+      "frame_bounds": {
+        "next_process_entry_frame": 6594,
+        "next_process_exit_frame": 6594,
+        "process_entry_frame": 6588,
+        "save_process_exit_frame": 6593,
+        "signal_frame": 6593
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 7,
+        "between_process_dispatches": 4089,
+        "call_entry_to_next_process": 57771,
+        "call_entry_to_signal": 47954,
+        "entry_marker_to_call": 77,
+        "next_process_dispatch": 2866,
+        "save_call": 53675,
+        "save_dispatch_outside_call": 206,
+        "save_to_readback": 60710,
+        "signal_to_call_return_signed": 5721
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 58704892,
+        "signal_us": 58692221,
+        "start_us": 58644182
+      },
+      "line_numbers": {
+        "save_complete": 261,
+        "save_enter": 260
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 74,
+      "frame_bounds": {
+        "next_process_entry_frame": 6607,
+        "next_process_exit_frame": 6607,
+        "process_entry_frame": 6601,
+        "save_process_exit_frame": 6606,
+        "signal_frame": 6606
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 10,
+        "between_process_dispatches": 5694,
+        "call_entry_to_next_process": 61067,
+        "call_entry_to_signal": 47771,
+        "entry_marker_to_call": 127,
+        "next_process_dispatch": 3123,
+        "save_call": 55363,
+        "save_dispatch_outside_call": 157,
+        "save_to_readback": 64307,
+        "signal_to_call_return_signed": 7592
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 58877394,
+        "signal_us": 58860993,
+        "start_us": 58813087
+      },
+      "line_numbers": {
+        "save_complete": 263,
+        "save_enter": 262
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 75,
+      "frame_bounds": {
+        "next_process_entry_frame": 6620,
+        "next_process_exit_frame": 6620,
+        "process_entry_frame": 6614,
+        "save_process_exit_frame": 6619,
+        "signal_frame": 6619
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 9,
+        "between_process_dispatches": 5496,
+        "call_entry_to_next_process": 63410,
+        "call_entry_to_signal": 50646,
+        "entry_marker_to_call": 149,
+        "next_process_dispatch": 3346,
+        "save_call": 57905,
+        "save_dispatch_outside_call": 184,
+        "save_to_readback": 66899,
+        "signal_to_call_return_signed": 7259
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 59061391,
+        "signal_us": 59045299,
+        "start_us": 58994492
+      },
+      "line_numbers": {
+        "save_complete": 265,
+        "save_enter": 264
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 76,
+      "frame_bounds": {
+        "next_process_entry_frame": 6633,
+        "next_process_exit_frame": 6633,
+        "process_entry_frame": 6627,
+        "save_process_exit_frame": 6632,
+        "signal_frame": 6632
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 10,
+        "between_process_dispatches": 18202,
+        "call_entry_to_next_process": 76969,
+        "call_entry_to_signal": 51385,
+        "entry_marker_to_call": 80,
+        "next_process_dispatch": 3284,
+        "save_call": 58757,
+        "save_dispatch_outside_call": 224,
+        "save_to_readback": 80321,
+        "signal_to_call_return_signed": 7372
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 59269678,
+        "signal_us": 59240830,
+        "start_us": 59189357
+      },
+      "line_numbers": {
+        "save_complete": 268,
+        "save_enter": 267
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 77,
+      "frame_bounds": {
+        "next_process_entry_frame": 6646,
+        "next_process_exit_frame": 6646,
+        "process_entry_frame": 6640,
+        "save_process_exit_frame": 6645,
+        "signal_frame": 6645
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 7,
+        "between_process_dispatches": 4635,
+        "call_entry_to_next_process": 63364,
+        "call_entry_to_signal": 51982,
+        "entry_marker_to_call": 177,
+        "next_process_dispatch": 3046,
+        "save_call": 58722,
+        "save_dispatch_outside_call": 218,
+        "save_to_readback": 66580,
+        "signal_to_call_return_signed": 6740
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 59465028,
+        "signal_us": 59450622,
+        "start_us": 59398448
+      },
+      "line_numbers": {
+        "save_complete": 270,
+        "save_enter": 269
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 78,
+      "frame_bounds": {
+        "next_process_entry_frame": 6659,
+        "next_process_exit_frame": 6659,
+        "process_entry_frame": 6653,
+        "save_process_exit_frame": 6658,
+        "signal_frame": 6658
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 8,
+        "between_process_dispatches": 5765,
+        "call_entry_to_next_process": 67067,
+        "call_entry_to_signal": 54271,
+        "entry_marker_to_call": 196,
+        "next_process_dispatch": 3024,
+        "save_call": 61294,
+        "save_dispatch_outside_call": 236,
+        "save_to_readback": 70283,
+        "signal_to_call_return_signed": 7023
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 59669109,
+        "signal_us": 59653307,
+        "start_us": 59598826
+      },
+      "line_numbers": {
+        "save_complete": 272,
+        "save_enter": 271
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 79,
+      "frame_bounds": {
+        "next_process_entry_frame": 6672,
+        "next_process_exit_frame": 6672,
+        "process_entry_frame": 6666,
+        "save_process_exit_frame": 6671,
+        "signal_frame": 6671
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 8,
+        "between_process_dispatches": 4213,
+        "call_entry_to_next_process": 58490,
+        "call_entry_to_signal": 47623,
+        "entry_marker_to_call": 178,
+        "next_process_dispatch": 3369,
+        "save_call": 54269,
+        "save_dispatch_outside_call": 214,
+        "save_to_readback": 62035,
+        "signal_to_call_return_signed": 6646
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 59855899,
+        "signal_us": 59841678,
+        "start_us": 59793864
+      },
+      "line_numbers": {
+        "save_complete": 275,
+        "save_enter": 274
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 80,
+      "frame_bounds": {
+        "next_process_entry_frame": 6685,
+        "next_process_exit_frame": 6685,
+        "process_entry_frame": 6679,
+        "save_process_exit_frame": 6684,
+        "signal_frame": 6684
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 12,
+        "between_process_dispatches": 6698,
+        "call_entry_to_next_process": 63519,
+        "call_entry_to_signal": 49465,
+        "entry_marker_to_call": 178,
+        "next_process_dispatch": 3485,
+        "save_call": 56809,
+        "save_dispatch_outside_call": 217,
+        "save_to_readback": 67169,
+        "signal_to_call_return_signed": 7344
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 60061885,
+        "signal_us": 60044371,
+        "start_us": 59994716
+      },
+      "line_numbers": {
+        "save_complete": 277,
+        "save_enter": 276
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 81,
+      "frame_bounds": {
+        "next_process_entry_frame": 6698,
+        "next_process_exit_frame": 6698,
+        "process_entry_frame": 6692,
+        "save_process_exit_frame": 6697,
+        "signal_frame": 6697
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 7,
+        "between_process_dispatches": 17736,
+        "call_entry_to_next_process": 75831,
+        "call_entry_to_signal": 52372,
+        "entry_marker_to_call": 173,
+        "next_process_dispatch": 3197,
+        "save_call": 58088,
+        "save_dispatch_outside_call": 207,
+        "save_to_readback": 79198,
+        "signal_to_call_return_signed": 5716
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 60268068,
+        "signal_us": 60241427,
+        "start_us": 60188870
+      },
+      "line_numbers": {
+        "save_complete": 280,
+        "save_enter": 278
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 82,
+      "frame_bounds": {
+        "next_process_entry_frame": 6711,
+        "next_process_exit_frame": 6711,
+        "process_entry_frame": 6705,
+        "save_process_exit_frame": 6710,
+        "signal_frame": 6710
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 7,
+        "between_process_dispatches": 4092,
+        "call_entry_to_next_process": 56730,
+        "call_entry_to_signal": 46783,
+        "entry_marker_to_call": 136,
+        "next_process_dispatch": 2979,
+        "save_call": 52631,
+        "save_dispatch_outside_call": 166,
+        "save_to_readback": 59840,
+        "signal_to_call_return_signed": 5848
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 60442718,
+        "signal_us": 60429807,
+        "start_us": 60382878
+      },
+      "line_numbers": {
+        "save_complete": 282,
+        "save_enter": 281
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 83,
+      "frame_bounds": {
+        "next_process_entry_frame": 6724,
+        "next_process_exit_frame": 6724,
+        "process_entry_frame": 6718,
+        "save_process_exit_frame": 6723,
+        "signal_frame": 6723
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 8,
+        "between_process_dispatches": 5021,
+        "call_entry_to_next_process": 62295,
+        "call_entry_to_signal": 50011,
+        "entry_marker_to_call": 145,
+        "next_process_dispatch": 3555,
+        "save_call": 57266,
+        "save_dispatch_outside_call": 175,
+        "save_to_readback": 65990,
+        "signal_to_call_return_signed": 7255
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 60631878,
+        "signal_us": 60616054,
+        "start_us": 60565888
+      },
+      "line_numbers": {
+        "save_complete": 284,
+        "save_enter": 283
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 84,
+      "frame_bounds": {
+        "next_process_entry_frame": 6737,
+        "next_process_exit_frame": 6737,
+        "process_entry_frame": 6731,
+        "save_process_exit_frame": 6736,
+        "signal_frame": 6736
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 8,
+        "between_process_dispatches": 4084,
+        "call_entry_to_next_process": 58163,
+        "call_entry_to_signal": 46348,
+        "entry_marker_to_call": 138,
+        "next_process_dispatch": 3031,
+        "save_call": 54071,
+        "save_dispatch_outside_call": 170,
+        "save_to_readback": 61325,
+        "signal_to_call_return_signed": 7723
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 60807473,
+        "signal_us": 60792645,
+        "start_us": 60746148
+      },
+      "line_numbers": {
+        "save_complete": 287,
+        "save_enter": 286
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 85,
+      "frame_bounds": {
+        "next_process_entry_frame": 6750,
+        "next_process_exit_frame": 6750,
+        "process_entry_frame": 6744,
+        "save_process_exit_frame": 6749,
+        "signal_frame": 6749
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 9,
+        "between_process_dispatches": 4414,
+        "call_entry_to_next_process": 58498,
+        "call_entry_to_signal": 47373,
+        "entry_marker_to_call": 133,
+        "next_process_dispatch": 2987,
+        "save_call": 54075,
+        "save_dispatch_outside_call": 165,
+        "save_to_readback": 61614,
+        "signal_to_call_return_signed": 6702
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 60979855,
+        "signal_us": 60965757,
+        "start_us": 60918241
+      },
+      "line_numbers": {
+        "save_complete": 289,
+        "save_enter": 288
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 86,
+      "frame_bounds": {
+        "next_process_entry_frame": 6763,
+        "next_process_exit_frame": 6763,
+        "process_entry_frame": 6757,
+        "save_process_exit_frame": 6762,
+        "signal_frame": 6762
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 8,
+        "between_process_dispatches": 17648,
+        "call_entry_to_next_process": 69598,
+        "call_entry_to_signal": 46134,
+        "entry_marker_to_call": 129,
+        "next_process_dispatch": 2940,
+        "save_call": 51942,
+        "save_dispatch_outside_call": 158,
+        "save_to_readback": 72663,
+        "signal_to_call_return_signed": 5808
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 61175931,
+        "signal_us": 61149540,
+        "start_us": 61103268
+      },
+      "line_numbers": {
+        "save_complete": 291,
+        "save_enter": 290
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 87,
+      "frame_bounds": {
+        "next_process_entry_frame": 6776,
+        "next_process_exit_frame": 6776,
+        "process_entry_frame": 6770,
+        "save_process_exit_frame": 6775,
+        "signal_frame": 6775
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 8,
+        "between_process_dispatches": 5394,
+        "call_entry_to_next_process": 58432,
+        "call_entry_to_signal": 47153,
+        "entry_marker_to_call": 153,
+        "next_process_dispatch": 3293,
+        "save_call": 53030,
+        "save_dispatch_outside_call": 185,
+        "save_to_readback": 61873,
+        "signal_to_call_return_signed": 5877
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 61356886,
+        "signal_us": 61342329,
+        "start_us": 61295013
+      },
+      "line_numbers": {
+        "save_complete": 294,
+        "save_enter": 293
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 88,
+      "frame_bounds": {
+        "next_process_entry_frame": 6789,
+        "next_process_exit_frame": 6789,
+        "process_entry_frame": 6783,
+        "save_process_exit_frame": 6788,
+        "signal_frame": 6788
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 7,
+        "between_process_dispatches": 4035,
+        "call_entry_to_next_process": 57875,
+        "call_entry_to_signal": 48202,
+        "entry_marker_to_call": 128,
+        "next_process_dispatch": 2962,
+        "save_call": 53833,
+        "save_dispatch_outside_call": 156,
+        "save_to_readback": 60962,
+        "signal_to_call_return_signed": 5631
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 61530761,
+        "signal_us": 61518139,
+        "start_us": 61469799
+      },
+      "line_numbers": {
+        "save_complete": 296,
+        "save_enter": 295
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 89,
+      "frame_bounds": {
+        "next_process_entry_frame": 6802,
+        "next_process_exit_frame": 6802,
+        "process_entry_frame": 6796,
+        "save_process_exit_frame": 6801,
+        "signal_frame": 6801
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 7,
+        "between_process_dispatches": 4040,
+        "call_entry_to_next_process": 60624,
+        "call_entry_to_signal": 50173,
+        "entry_marker_to_call": 154,
+        "next_process_dispatch": 3372,
+        "save_call": 56577,
+        "save_dispatch_outside_call": 189,
+        "save_to_readback": 64149,
+        "signal_to_call_return_signed": 6404
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 61709060,
+        "signal_us": 61695251,
+        "start_us": 61644911
+      },
+      "line_numbers": {
+        "save_complete": 299,
+        "save_enter": 297
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 90,
+      "frame_bounds": {
+        "next_process_entry_frame": 6815,
+        "next_process_exit_frame": 6815,
+        "process_entry_frame": 6809,
+        "save_process_exit_frame": 6814,
+        "signal_frame": 6814
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 7,
+        "between_process_dispatches": 4950,
+        "call_entry_to_next_process": 56352,
+        "call_entry_to_signal": 45714,
+        "entry_marker_to_call": 133,
+        "next_process_dispatch": 4591,
+        "save_call": 51395,
+        "save_dispatch_outside_call": 161,
+        "save_to_readback": 61069,
+        "signal_to_call_return_signed": 5681
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 61880822,
+        "signal_us": 61865609,
+        "start_us": 61819753
+      },
+      "line_numbers": {
+        "save_complete": 301,
+        "save_enter": 300
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 91,
+      "frame_bounds": {
+        "next_process_entry_frame": 6828,
+        "next_process_exit_frame": 6828,
+        "process_entry_frame": 6822,
+        "save_process_exit_frame": 6827,
+        "signal_frame": 6827
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 7,
+        "between_process_dispatches": 4118,
+        "call_entry_to_next_process": 54216,
+        "call_entry_to_signal": 44636,
+        "entry_marker_to_call": 127,
+        "next_process_dispatch": 3021,
+        "save_call": 50091,
+        "save_dispatch_outside_call": 155,
+        "save_to_readback": 57362,
+        "signal_to_call_return_signed": 5455
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 62051894,
+        "signal_us": 62039305,
+        "start_us": 61994532
+      },
+      "line_numbers": {
+        "save_complete": 303,
+        "save_enter": 302
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 92,
+      "frame_bounds": {
+        "next_process_entry_frame": 6841,
+        "next_process_exit_frame": 6841,
+        "process_entry_frame": 6835,
+        "save_process_exit_frame": 6840,
+        "signal_frame": 6840
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 12,
+        "between_process_dispatches": 17541,
+        "call_entry_to_next_process": 70976,
+        "call_entry_to_signal": 47244,
+        "entry_marker_to_call": 191,
+        "next_process_dispatch": 3336,
+        "save_call": 53423,
+        "save_dispatch_outside_call": 235,
+        "save_to_readback": 74501,
+        "signal_to_call_return_signed": 6179
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 62238253,
+        "signal_us": 62211200,
+        "start_us": 62163752
+      },
+      "line_numbers": {
+        "save_complete": 306,
+        "save_enter": 304
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 93,
+      "frame_bounds": {
+        "next_process_entry_frame": 6854,
+        "next_process_exit_frame": 6854,
+        "process_entry_frame": 6848,
+        "save_process_exit_frame": 6853,
+        "signal_frame": 6853
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 7,
+        "between_process_dispatches": 4288,
+        "call_entry_to_next_process": 55063,
+        "call_entry_to_signal": 45340,
+        "entry_marker_to_call": 131,
+        "next_process_dispatch": 3037,
+        "save_call": 50768,
+        "save_dispatch_outside_call": 159,
+        "save_to_readback": 58226,
+        "signal_to_call_return_signed": 5428
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 62411929,
+        "signal_us": 62399183,
+        "start_us": 62353703
+      },
+      "line_numbers": {
+        "save_complete": 308,
+        "save_enter": 307
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 94,
+      "frame_bounds": {
+        "next_process_entry_frame": 6867,
+        "next_process_exit_frame": 6867,
+        "process_entry_frame": 6861,
+        "save_process_exit_frame": 6866,
+        "signal_frame": 6866
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 9,
+        "between_process_dispatches": 5293,
+        "call_entry_to_next_process": 59913,
+        "call_entry_to_signal": 47410,
+        "entry_marker_to_call": 127,
+        "next_process_dispatch": 3622,
+        "save_call": 54611,
+        "save_dispatch_outside_call": 164,
+        "save_to_readback": 63654,
+        "signal_to_call_return_signed": 7201
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 62591816,
+        "signal_us": 62575708,
+        "start_us": 62528162
+      },
+      "line_numbers": {
+        "save_complete": 310,
+        "save_enter": 309
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 95,
+      "frame_bounds": {
+        "next_process_entry_frame": 6880,
+        "next_process_exit_frame": 6880,
+        "process_entry_frame": 6874,
+        "save_process_exit_frame": 6879,
+        "signal_frame": 6879
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 7,
+        "between_process_dispatches": 4201,
+        "call_entry_to_next_process": 59145,
+        "call_entry_to_signal": 48533,
+        "entry_marker_to_call": 135,
+        "next_process_dispatch": 3100,
+        "save_call": 54937,
+        "save_dispatch_outside_call": 165,
+        "save_to_readback": 62371,
+        "signal_to_call_return_signed": 6404
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 62764491,
+        "signal_us": 62750799,
+        "start_us": 62702120
+      },
+      "line_numbers": {
+        "save_complete": 313,
+        "save_enter": 311
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 96,
+      "frame_bounds": {
+        "next_process_entry_frame": 6893,
+        "next_process_exit_frame": 6893,
+        "process_entry_frame": 6887,
+        "save_process_exit_frame": 6892,
+        "signal_frame": 6892
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 10,
+        "between_process_dispatches": 4298,
+        "call_entry_to_next_process": 57536,
+        "call_entry_to_signal": 45791,
+        "entry_marker_to_call": 129,
+        "next_process_dispatch": 2983,
+        "save_call": 53228,
+        "save_dispatch_outside_call": 159,
+        "save_to_readback": 60641,
+        "signal_to_call_return_signed": 7437
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 62945135,
+        "signal_us": 62930423,
+        "start_us": 62884494
+      },
+      "line_numbers": {
+        "save_complete": 315,
+        "save_enter": 314
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 97,
+      "frame_bounds": {
+        "next_process_entry_frame": 6906,
+        "next_process_exit_frame": 6906,
+        "process_entry_frame": 6900,
+        "save_process_exit_frame": 6905,
+        "signal_frame": 6905
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 7,
+        "between_process_dispatches": 17979,
+        "call_entry_to_next_process": 70520,
+        "call_entry_to_signal": 46011,
+        "entry_marker_to_call": 138,
+        "next_process_dispatch": 2903,
+        "save_call": 52534,
+        "save_dispatch_outside_call": 169,
+        "save_to_readback": 73558,
+        "signal_to_call_return_signed": 6523
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 63132869,
+        "signal_us": 63105471,
+        "start_us": 63059311
+      },
+      "line_numbers": {
+        "save_complete": 317,
+        "save_enter": 316
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 98,
+      "frame_bounds": {
+        "next_process_entry_frame": 6919,
+        "next_process_exit_frame": 6919,
+        "process_entry_frame": 6913,
+        "save_process_exit_frame": 6918,
+        "signal_frame": 6918
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 8,
+        "between_process_dispatches": 4413,
+        "call_entry_to_next_process": 58610,
+        "call_entry_to_signal": 47629,
+        "entry_marker_to_call": 145,
+        "next_process_dispatch": 3324,
+        "save_call": 54189,
+        "save_dispatch_outside_call": 182,
+        "save_to_readback": 62068,
+        "signal_to_call_return_signed": 6560
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 63306912,
+        "signal_us": 63292630,
+        "start_us": 63244844
+      },
+      "line_numbers": {
+        "save_complete": 320,
+        "save_enter": 318
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    },
+    {
+      "batch": 0,
+      "classification": "NO_OBSERVED_INTERVAL_OVER_THRESHOLD",
+      "cycle": 99,
+      "frame_bounds": {
+        "next_process_entry_frame": 6932,
+        "next_process_exit_frame": 6932,
+        "process_entry_frame": 6926,
+        "save_process_exit_frame": 6931,
+        "signal_frame": 6931
+      },
+      "intervals_us": {
+        "after_call_in_save_dispatch": 8,
+        "between_process_dispatches": 4459,
+        "call_entry_to_next_process": 57613,
+        "call_entry_to_signal": 46667,
+        "entry_marker_to_call": 143,
+        "next_process_dispatch": 3290,
+        "save_call": 53146,
+        "save_dispatch_outside_call": 176,
+        "save_to_readback": 61037,
+        "signal_to_call_return_signed": 6479
+      },
+      "legacy_save_observation": {
+        "readback_end_us": 63479060,
+        "signal_us": 63464844,
+        "start_us": 63418023
+      },
+      "line_numbers": {
+        "save_complete": 322,
+        "save_enter": 321
+      },
+      "raw_timing_evidence": {
+        "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+        "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+        "size_bytes": 97002
+      },
+      "raw_timing_matched": true,
+      "reasons": [],
+      "signal_relation": "INSIDE_SAVE_CALL",
+      "threshold_crossings": []
+    }
+  ],
+  "eligible_for_dataset": false,
+  "evidence": [
+    {
+      "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\editor-host\\stdout.txt",
+      "sha256": "7986a86370911930f6e14ba90a7f096cfaf3c939d2c3c4d20e6db9a2e87ec57b",
+      "size_bytes": 180262
+    },
+    {
+      "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\tests\\replay\\benchmark_native.gd",
+      "sha256": "13e65360cd0bc0033d0ad414fb3238e216b0d6dcc08e57dc7026ec4fc9eb8b95",
+      "size_bytes": 54580
+    },
+    {
+      "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\project\\benchmark\\out\\batch-00.json",
+      "sha256": "f8ad60803f6cce4b93357660285db464b9938629f0bda347f66cbd05f16ef38d",
+      "size_bytes": 97002
+    },
+    {
+      "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\context.json",
+      "sha256": "ae81776f00304483e61164ece47f098f535874368b38dba38df172db08fbc1f0",
+      "size_bytes": 6443
+    },
+    {
+      "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\editor-host\\cleanup-001.json",
+      "sha256": "9ff26d2260e6188703654517521ac75e80f618c4e517723042f5f4babc109ee1",
+      "size_bytes": 556
+    }
+  ],
+  "formal_acceptance": false,
+  "lifecycle": {
+    "claim": "DIAGNOSTIC_FORCED_STOP",
+    "evidence": {
+      "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\editor-host\\cleanup-001.json",
+      "sha256": "9ff26d2260e6188703654517521ac75e80f618c4e517723042f5f4babc109ee1",
+      "size_bytes": 556
+    },
+    "reason": "DIAGNOSTIC_OWNER_CLOSE_WITHOUT_TARGET_EXIT",
+    "state": "DIAGNOSTIC_FORCED_STOP_RECORDED"
+  },
+  "limitations": [
+    "Observed intervals do not establish disk, scheduler, renderer, or engine-internal causation.",
+    "Entry-marker printing precedes call_entry; an entry marker alone does not prove save_scene began.",
+    "Unchanged legacy save/signal/readback or heartbeat data cannot supply an absent call-return timestamp.",
+    "No timing subtraction, acceptance override, benchmark PASS, or unobserved natural exit is inferred."
+  ],
+  "native_source": {
+    "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\tests\\replay\\benchmark_native.gd",
+    "sha256": "13e65360cd0bc0033d0ad414fb3238e216b0d6dcc08e57dc7026ec4fc9eb8b95",
+    "size_bytes": 54580
+  },
+  "native_stdout": {
+    "file": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s103-prefix-preflight-06\\editor-host\\stdout.txt",
+    "sha256": "7986a86370911930f6e14ba90a7f096cfaf3c939d2c3c4d20e6db9a2e87ec57b",
+    "size_bytes": 180262
+  },
+  "pid": 36732,
+  "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+  "reader_version": "s104-frame-order-v1",
+  "run_id": "gt06-s103-prefix-preflight-06",
+  "schema_id": "hh-studio.s103-native-save-reading",
+  "schema_version": "1.0.0",
+  "source_closure_sha256": "7635a470cef554c1a60e1d9427f59998737d3bb829c3a1f134e426cdf9275467",
+  "threshold_us": 2000000
+}
