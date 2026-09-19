@@ -1,0 +1,62 @@
+{
+  "schema": "gt06-s106-retained-process-api-check-v1",
+  "observed_utc": "2026-09-19T05:35:01.3055905Z",
+  "observer_sha256": "182dfafd4fb1695028ec4c6fc221e3c38171a17b44767879fe6ccf7b4bef7ac6",
+  "syntax_errors": [],
+  "python_candidates": [
+    "C:\\Users\\truon\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+    "C:\\Users\\truon\\AppData\\Local\\Microsoft\\WindowsApps\\python.exe"
+  ],
+  "python": "C:\\Users\\truon\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+  "python_sha256": "5f7b89a612c9b8af1d6456cdfcd1dbe5ca630849e79aebced9bee9a6694952ec",
+  "api_sequence": [
+    "Start-Process -WindowStyle Hidden -PassThru",
+    "Process.Handle",
+    "Process.StartTime",
+    "Process.WaitForExit()",
+    "Process.Refresh()",
+    "Process.ExitCode",
+    "Process.Dispose()"
+  ],
+  "child": "python -B -c \"import time; time.sleep(.2); raise SystemExit(7)\"",
+  "pid": 33632,
+  "start_utc": "2026-09-19T05:35:00.9662461Z",
+  "retained_nonzero_handle": true,
+  "actual_exit": 7,
+  "expected_exit": 7,
+  "managed_process_disposed": true,
+  "native_close_bool_observed": false,
+  "error_type": null,
+  "status": "API_OBSERVED",
+  "limitations": [
+    "API_ONLY_NO_ENGINE_OR_REAL_RUNNER",
+    "SCALAR_PYTHON_RESOLVED_EXPLICITLY_FOR_CHECK; ORIGINAL_WRAPPER_RESOLUTION_RETURNS_TWO_PATHS",
+    "STDOUT_STDERR_REDIRECTION_NOT_EXERCISED_TO_AVOID_EXTRA_FILES",
+    "NO_EXTRA_JOB_CREATED",
+    "MANAGED_DISPOSE_IS_NOT_NATIVE_CLOSE_RETURN_OBSERVATION"
+  ],
+  "formal_acceptance": false,
+  "eligible_for_dataset": false,
+  "final_critic": false,
+  "updated_wrapper_static_review": {
+    "observer_sha256": "182dfafd4fb1695028ec4c6fc221e3c38171a17b44767879fe6ccf7b4bef7ac6",
+    "observed_utc": "2026-09-19T05:35:33.5056792Z",
+    "scalar_resolution_matches_api_checked_python": true,
+    "syntax_errors": [],
+    "hh3d_root_correct": true,
+    "hidden_launch_present": true,
+    "retained_process_api_unchanged": true,
+    "extra_job_created": false,
+    "output_directory_reuse_rejected": true,
+    "receipts_use_create_new": true,
+    "helper_freeze_rejects_reused_raw_or_owned_roots": true,
+    "remaining_launch_blockers": [],
+    "limitations": [
+      "PASSIVE_OBSERVER_HAS_NO_INDEPENDENT_WALL_TIMEOUT",
+      "RUNNER_OWNER_DEADLINE_STARTS_AFTER_PIN_CHECKS_AND_FREEZE",
+      "OBSERVER_WRITE_OR_DISPOSE_FAILURE_CAN_LEAVE_LATER_RECEIPTS_MISSING; DO_NOT_INFER_EXIT_OR_CLOSE",
+      "RECEIPTS_HAVE_NO_EXPLICIT_SCHEMA_VERSION; INTERPRET_WITH_EXACT_OBSERVER_HASH",
+      "JSON_API_CHECK_COVERS_PROCESS_API_ONLY; NOT_FULL_WRAPPER_OR_ENGINE_INTEGRATION"
+    ]
+  }
+}

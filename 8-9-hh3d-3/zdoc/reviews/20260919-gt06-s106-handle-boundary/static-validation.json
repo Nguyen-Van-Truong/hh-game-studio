@@ -1,0 +1,44 @@
+{
+  "schema": "gt06-s106-static-validation-v1",
+  "recorded_utc": "2026-09-19T05:35:02.579233Z",
+  "authority": 0,
+  "formal_acceptance": false,
+  "eligible_for_dataset": false,
+  "critic_verdict": false,
+  "engine_launches": 0,
+  "commit_performed": false,
+  "tests": {
+    "command": "python -B zdoc/reviews/20260919-gt06-s106-handle-boundary/test_owned_handles.py",
+    "count": 30,
+    "reported_seconds": 5.208,
+    "host_observed_exit_code": 0,
+    "observation_source": "exec_command result chunk c42712",
+    "result": "OK",
+    "scope": "Fake ownership/PSS, relocated frozen-child hooks, existing S105 raw batch reconstruction, original screen/Stop functions; no native API or engine launch"
+  },
+  "pin_check": {
+    "command": "python -B zdoc/reviews/20260919-gt06-s106-handle-boundary/owned_handles.py --check --run-id gt06-s106-handles-check-01",
+    "host_observed_exit_code": 0,
+    "observation_source": "exec_command result chunk 089d90",
+    "status": "STATIC_PINS_VERIFIED",
+    "engine_started": false,
+    "source_file_count": 53,
+    "source_closure_sha256": "7635a470cef554c1a60e1d9427f59998737d3bb829c3a1f134e426cdf9275467",
+    "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+    "generated_overlay_sha256": "bb137f32f1fae3730cc139f03fc6902813b3742d5a08d437e957e291cfe0ec46"
+  },
+  "files": {
+    ".gitattributes": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da",
+    "owned_handles.py": "956a1c56d215693fb5828e04b74db04fba45a57bfb0bde12bf76a11c21dcc1a0",
+    "test_owned_handles.py": "bd8894af5ce84666161200052ad3f9458eadc68510d0fae457af23a8229c9dbf",
+    "README.md": "bfae62eb86eeb4bc60f0496bc4c3052dd36fa2d2c1c9801a13e5e02f2c4ae8d8"
+  },
+  "pending_runtime_evidence": [
+    "No S106 engine preflight or prefix has been run by this implementer",
+    "PSS can perturb the next READY/status-gap interval",
+    "Existing teardown may leave actual editor exit UNKNOWN",
+    "Unchanged import capture does not record native wrapper-process-handle closure",
+    "Outer runner actual exit requires a separate passive observer",
+    "No safe post-idle series without changing the existing workload/teardown"
+  ]
+}
