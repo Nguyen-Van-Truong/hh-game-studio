@@ -1,0 +1,28 @@
+{
+  "actual_exit": 0,
+  "command": [
+    "C:\\Users\\truon\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+    "-B",
+    "-W",
+    "default",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\tests\\blender",
+    "-p",
+    "test_export_cleanup.py",
+    "-v"
+  ],
+  "ended_utc": "2026-09-20T09:13:42.356763+00:00",
+  "engine_launched": false,
+  "formal_acceptance": false,
+  "skipped_count": 0,
+  "started_utc": "2026-09-20T09:13:41.510070+00:00",
+  "streams": {
+    "stderr.txt": "68017707dc7cb6e052de70cf10f19ce6c43193a7d56bb0ad7a4ca905a62edb03",
+    "stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "tests_run": 6,
+  "timed_out": false
+}

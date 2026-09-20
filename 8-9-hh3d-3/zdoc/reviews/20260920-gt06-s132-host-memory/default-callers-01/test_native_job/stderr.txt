@@ -1,0 +1,14 @@
+test_actual_short_deadline_kills_only_owned_job (test_native_job.NativeJobTests.test_actual_short_deadline_kills_only_owned_job) ... ok
+test_disk_budget_combines_sibling_roots_without_double_count (test_native_job.NativeJobTests.test_disk_budget_combines_sibling_roots_without_double_count) ... ok
+test_disk_watchdog_tolerates_deleted_owned_scratch_only (test_native_job.NativeJobTests.test_disk_watchdog_tolerates_deleted_owned_scratch_only) ... ok
+test_nonzero_child_is_not_promoted_to_success (test_native_job.NativeJobTests.test_nonzero_child_is_not_promoted_to_success) ... ok
+test_pre_stopped_gate_never_starts_target (test_native_job.NativeJobTests.test_pre_stopped_gate_never_starts_target) ... ok
+test_source_drift_blocks_before_launch (test_native_job.NativeJobTests.test_source_drift_blocks_before_launch) ... ok
+test_stream_overflow_preserved_and_rejected (test_native_job.NativeJobTests.test_stream_overflow_preserved_and_rejected) ... ok
+test_success_has_actual_pid_exit_and_queried_zero_job (test_native_job.NativeJobTests.test_success_has_actual_pid_exit_and_queried_zero_job) ... ok
+test_successful_parent_with_live_child_is_rejected_before_cleanup (test_native_job.NativeJobTests.test_successful_parent_with_live_child_is_rejected_before_cleanup) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 3.346s
+
+OK

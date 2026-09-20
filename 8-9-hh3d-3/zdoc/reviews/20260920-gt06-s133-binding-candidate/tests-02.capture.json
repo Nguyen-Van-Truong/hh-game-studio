@@ -1,0 +1,36 @@
+{
+  "schema": "HH-GT06-BINDING-CANDIDATE-TEST-1",
+  "attempt": "tests-02",
+  "started_utc": "2026-09-20T09:19:23.6190071Z",
+  "ended_utc": "2026-09-20T09:19:29.6243398Z",
+  "executable": "C:\\Users\\truon\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+  "argv": [
+    "-B",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260920-gt06-s133-binding-candidate",
+    "-p",
+    "test_*candidate.py",
+    "-v"
+  ],
+  "actual_process_exit": 0,
+  "source_before": {
+    "binding_candidate.py": "7999c9e21b2f82a385e40dcfcad6d7e34cb7e46143b96423fa0ac4cd18d5c872",
+    "test_binding_candidate.py": "72ddbfc3baf50ffbd4a6d5660498e8291d49dfa5cc1b038e191b59ab4addbde6",
+    "installed_candidate.py": "ce4639456146ea0afba6eefd5a07fd87dfdf66da036b3891ecae0b225e0fb1e3",
+    "test_installed_candidate.py": "2ccd9a70db08606e7fd78794952a8ba76c4607bedbbbd87c9dc6a12f43f5c200"
+  },
+  "source_after": {
+    "binding_candidate.py": "7999c9e21b2f82a385e40dcfcad6d7e34cb7e46143b96423fa0ac4cd18d5c872",
+    "test_binding_candidate.py": "72ddbfc3baf50ffbd4a6d5660498e8291d49dfa5cc1b038e191b59ab4addbde6",
+    "installed_candidate.py": "ce4639456146ea0afba6eefd5a07fd87dfdf66da036b3891ecae0b225e0fb1e3",
+    "test_installed_candidate.py": "2ccd9a70db08606e7fd78794952a8ba76c4607bedbbbd87c9dc6a12f43f5c200"
+  },
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stderr_sha256": "5a58715f1432c787843f3ac965ac091b10f2a5d46622bd98fe0e12faeaa8a7ce",
+  "engines_launched": false,
+  "runtime_installed": false,
+  "formal_acceptance": false
+}

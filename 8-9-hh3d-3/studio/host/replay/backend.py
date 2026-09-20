@@ -50,13 +50,6 @@ class PreparedPlay:
         owner._closed = False
         inputs, owner.accepted = native.accepted_inputs()
         owner.source = native.sources(owner.accepted)
-        # The installed host release is trusted; every new runtime dependency
-        # belongs to this preparation. Tests and generated state are excluded.
-        for path in (native.STUDIO / 'host/replay').glob('*.py'):
-            owner.source[path.relative_to(native.STUDIO).as_posix()] = native.sha(native.read_regular(path))
-        for relative in ('contracts/perf-collector.schema.json',):
-            owner.source[relative] = native.sha(native.read_regular(native.STUDIO / relative))
-        owner.source = dict(sorted(owner.source.items()))
         owner.trace = default_trace(seed)
         owner.root = native.STUDIO / '.local/reviews' / run_id
         owner.root.mkdir(exist_ok=False)

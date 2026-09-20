@@ -19,6 +19,10 @@ import time
 
 STUDIO = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(STUDIO.parent))
+from studio.host.replay import execution_installed
+# One installed generation per interpreter. Changing the release requires a
+# fresh owned interpreter; imported Python code must not acquire newer labels.
+_IMPORT_EXECUTION_SELECTION = execution_installed.selection_identity(STUDIO)
 from studio.pipeline.native_job import run_trusted_stage, verify_captured_stage
 from studio.pipeline.godot import consumer
 from studio.host.replay.process_probe import ProcessProbe
@@ -80,23 +84,12 @@ def accepted_inputs():
 
 
 def sources(manifest):
-    result = {}
-    prefix = '8-9-hh3d-3/studio/'
-    for name, digest in manifest['source_files'].items():
-        need(name.startswith(prefix), 'REPLAY_SOURCE_DOMAIN')
-        relative = name[len(prefix):]
-        need(sha(read_regular(STUDIO / relative)) == digest, 'REPLAY_REUSE_SOURCE_CHANGED')
-        result[relative] = digest
-    # Initial native diagnostics bind their execution dependencies. Unrelated
-    # perf/observation authors may continue writing while the engine runs.
-    for directory in ('godot-addon/observe', 'fixtures/play-observe'):
-        for path in (STUDIO / directory).rglob('*'):
-            if path.is_file() and path.suffix in ('.gd', '.uid', '.godot', '.tscn', '.tres'):
-                result[path.relative_to(STUDIO).as_posix()] = sha(read_regular(path))
-    for name in ('godot-addon/script_profile.py', 'host/replay/native_runner.py',
-                 'host/replay/process_probe.py', 'host/replay/trace.py', 'host/replay/profile.json'):
-        result[name] = sha(read_regular(STUDIO / name))
-    return dict(sorted(result.items()))
+    need(execution_installed.selection_identity(STUDIO) == _IMPORT_EXECUTION_SELECTION,
+         'REPLAY_IMPORTED_GENERATION_CHANGED')
+    result = execution_installed.load_installed(STUDIO, manifest['source_files'])
+    need({name: result[name] for name in execution_installed.METADATA_PATHS}
+         == _IMPORT_EXECUTION_SELECTION, 'REPLAY_IMPORTED_GENERATION_CHANGED')
+    return result
 
 
 def configuration(speed):

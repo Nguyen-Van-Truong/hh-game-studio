@@ -1,0 +1,11 @@
+test_active_run_cannot_be_cleaned_from_another_caller (test_export_cleanup.CleanupTests.test_active_run_cannot_be_cleaned_from_another_caller) ... ok
+test_actual_handle_before_close_failure_and_exact_retry (test_export_cleanup.CleanupTests.test_actual_handle_before_close_failure_and_exact_retry) ... ok
+test_cleanup_record_write_failure_retains_retry_owner (test_export_cleanup.CleanupTests.test_cleanup_record_write_failure_retains_retry_owner) ... ok
+test_export_cannot_restart_same_instance (test_export_cleanup.CleanupTests.test_export_cannot_restart_same_instance) ... ok
+test_failed_result_write_still_signals_done (test_export_cleanup.CleanupTests.test_failed_result_write_still_signals_done) ... ok
+test_failure_retains_exact_owner_and_retry_is_idempotent (test_export_cleanup.CleanupTests.test_failure_retains_exact_owner_and_retry_is_idempotent) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.075s
+
+OK

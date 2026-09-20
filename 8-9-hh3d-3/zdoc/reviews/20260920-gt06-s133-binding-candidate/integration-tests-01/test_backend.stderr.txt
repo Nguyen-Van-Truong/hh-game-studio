@@ -1,0 +1,33 @@
+test_bad_marker_pid_rejects_completion (test_backend.PreparedPlayTests.test_bad_marker_pid_rejects_completion) ... ok
+test_bad_marker_rejects_completion (test_backend.PreparedPlayTests.test_bad_marker_rejects_completion) ... ok
+test_cleanup_failure_retains_owner_and_retry_releases (test_backend.PreparedPlayTests.test_cleanup_failure_retains_owner_and_retry_releases) ... ok
+test_completed_is_separate_from_stopped_after_completion (test_backend.PreparedPlayTests.test_completed_is_separate_from_stopped_after_completion) ... ok
+test_failed_observation_never_creates_completion_capture (test_backend.PreparedPlayTests.test_failed_observation_never_creates_completion_capture) ... ok
+test_log_error_rejects_even_with_clean_captured_exit (test_backend.PreparedPlayTests.test_log_error_rejects_even_with_clean_captured_exit) ... ok
+test_native_stage_stop_is_not_claimed_as_completed (test_backend.PreparedPlayTests.test_native_stage_stop_is_not_claimed_as_completed) ... ok
+test_prepare_cleanup_owner_can_close_before_binding_exists (test_backend.PreparedPlayTests.test_prepare_cleanup_owner_can_close_before_binding_exists) ... ok
+test_prepare_has_detached_binding_and_fixed_runtime_configuration (test_backend.PreparedPlayTests.test_prepare_has_detached_binding_and_fixed_runtime_configuration) ... FAIL
+test_runtime_exit_pid_must_match_sampler_identity (test_backend.PreparedPlayTests.test_runtime_exit_pid_must_match_sampler_identity) ... ok
+test_sampler_cleanup_error_cannot_discard_retained_native_job (test_backend.PreparedPlayTests.test_sampler_cleanup_error_cannot_discard_retained_native_job) ... ok
+test_sampler_construction_failure_latches_stop_and_retains_owner (test_backend.PreparedPlayTests.test_sampler_construction_failure_latches_stop_and_retains_owner) ... ok
+test_sampler_thread_start_failure_attempts_sampler_cleanup (test_backend.PreparedPlayTests.test_sampler_thread_start_failure_attempts_sampler_cleanup) ... ok
+test_second_start_does_not_launch_again (test_backend.PreparedPlayTests.test_second_start_does_not_launch_again) ... ok
+test_source_drift_rejects_completion (test_backend.PreparedPlayTests.test_source_drift_rejects_completion) ... ok
+test_start_timeout_retains_owner_until_actual_drain (test_backend.PreparedPlayTests.test_start_timeout_retains_owner_until_actual_drain) ... ok
+test_stderr_rejects_even_with_clean_captured_exit (test_backend.PreparedPlayTests.test_stderr_rejects_even_with_clean_captured_exit) ... ok
+test_stop_before_start_prevents_runtime_launch (test_backend.PreparedPlayTests.test_stop_before_start_prevents_runtime_launch) ... ok
+test_stop_racing_completed_readback_preserves_history_without_inspection (test_backend.PreparedPlayTests.test_stop_racing_completed_readback_preserves_history_without_inspection) ... ok
+test_worker_start_uncertain_latches_stop_and_returns_cleanup_owner (test_backend.PreparedPlayTests.test_worker_start_uncertain_latches_stop_and_returns_cleanup_owner) ... ok
+
+======================================================================
+FAIL: test_prepare_has_detached_binding_and_fixed_runtime_configuration (test_backend.PreparedPlayTests.test_prepare_has_detached_binding_and_fixed_runtime_configuration)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\replay\test_backend.py", line 197, in test_prepare_has_detached_binding_and_fixed_runtime_configuration
+    self.assertIn('contracts/perf-collector.schema.json', owner.source)
+AssertionError: 'contracts/perf-collector.schema.json' not found in {'toolchain.lock.json': '16b841137ca2325c7c866b4dd68f794d086b048b4722168f6c91966527766493', 'host/replay/synthetic.py': '577f4fa55fafe738e287781b2ef8a9aa496c5dfa967d39a00ff8f546537bea45'}
+
+----------------------------------------------------------------------
+Ran 20 tests in 2.635s
+
+FAILED (failures=1)

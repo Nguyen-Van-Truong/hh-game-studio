@@ -1,0 +1,287 @@
+{
+  "cleanup": {
+    "cleanup_error": null,
+    "journal_closed": true,
+    "probe_released": true,
+    "producer_closed": true,
+    "source_unchanged": true,
+    "threads_alive": []
+  },
+  "completed_batches": 7,
+  "disposition": "SEVEN_HOST_BATCHES_COMPLETED",
+  "eligible_for_dataset": false,
+  "formal_acceptance": false,
+  "helper_exit": 0,
+  "limits": [
+    "Host only; no native/ACK/idle/assembly",
+    "Observation boundaries differ from formal campaign",
+    "No leak/no-leak or original failure root-cause proof",
+    "Observer own process exit not held by itself"
+  ],
+  "metrics": [
+    {
+      "batch": 0,
+      "gap_ms": 441.0775,
+      "handles": 174,
+      "phases": {
+        "after_write_report_held": {
+          "allocated_python_blocks": 205999,
+          "page_faults": 75481,
+          "private_commit": 36859904,
+          "working_set": 48136192
+        },
+        "released": {
+          "allocated_python_blocks": 132937,
+          "page_faults": 75481,
+          "private_commit": 35344384,
+          "working_set": 46632960
+        },
+        "report_live": {
+          "allocated_python_blocks": 205960,
+          "page_faults": 64875,
+          "private_commit": 32751616,
+          "working_set": 43843584
+        },
+        "start": {
+          "allocated_python_blocks": 90947,
+          "page_faults": 10735,
+          "private_commit": 21225472,
+          "working_set": 32411648
+        }
+      },
+      "rss_gate": 46632960
+    },
+    {
+      "batch": 1,
+      "gap_ms": 482.3918,
+      "handles": 174,
+      "phases": {
+        "after_write_report_held": {
+          "allocated_python_blocks": 250827,
+          "page_faults": 141555,
+          "private_commit": 46206976,
+          "working_set": 57655296
+        },
+        "released": {
+          "allocated_python_blocks": 173338,
+          "page_faults": 141555,
+          "private_commit": 43048960,
+          "working_set": 54509568
+        },
+        "report_live": {
+          "allocated_python_blocks": 250787,
+          "page_faults": 130106,
+          "private_commit": 38977536,
+          "working_set": 49909760
+        },
+        "start": {
+          "allocated_python_blocks": 133021,
+          "page_faults": 75483,
+          "private_commit": 35348480,
+          "working_set": 46641152
+        }
+      },
+      "rss_gate": 54509568
+    },
+    {
+      "batch": 2,
+      "gap_ms": 369.6965,
+      "handles": 174,
+      "phases": {
+        "after_write_report_held": {
+          "allocated_python_blocks": 252810,
+          "page_faults": 210581,
+          "private_commit": 40394752,
+          "working_set": 51744768
+        },
+        "released": {
+          "allocated_python_blocks": 173486,
+          "page_faults": 210581,
+          "private_commit": 39452672,
+          "working_set": 50696192
+        },
+        "report_live": {
+          "allocated_python_blocks": 252737,
+          "page_faults": 198913,
+          "private_commit": 39645184,
+          "working_set": 50974720
+        },
+        "start": {
+          "allocated_python_blocks": 173422,
+          "page_faults": 141555,
+          "private_commit": 41996288,
+          "working_set": 53460992
+        }
+      },
+      "rss_gate": 50696192
+    },
+    {
+      "batch": 3,
+      "gap_ms": 408.4748,
+      "handles": 174,
+      "phases": {
+        "after_write_report_held": {
+          "allocated_python_blocks": 259177,
+          "page_faults": 285613,
+          "private_commit": 43892736,
+          "working_set": 52543488
+        },
+        "released": {
+          "allocated_python_blocks": 173445,
+          "page_faults": 285613,
+          "private_commit": 40841216,
+          "working_set": 49397760
+        },
+        "report_live": {
+          "allocated_python_blocks": 259139,
+          "page_faults": 272682,
+          "private_commit": 41066496,
+          "working_set": 49414144
+        },
+        "start": {
+          "allocated_python_blocks": 173566,
+          "page_faults": 210581,
+          "private_commit": 39452672,
+          "working_set": 50696192
+        }
+      },
+      "rss_gate": 51494912
+    },
+    {
+      "batch": 4,
+      "gap_ms": 891.8813,
+      "handles": 174,
+      "phases": {
+        "after_write_report_held": {
+          "allocated_python_blocks": 268560,
+          "page_faults": 369693,
+          "private_commit": 42586112,
+          "working_set": 49033216
+        },
+        "released": {
+          "allocated_python_blocks": 173632,
+          "page_faults": 369693,
+          "private_commit": 41533440,
+          "working_set": 47984640
+        },
+        "report_live": {
+          "allocated_python_blocks": 268518,
+          "page_faults": 355694,
+          "private_commit": 40706048,
+          "working_set": 47128576
+        },
+        "start": {
+          "allocated_python_blocks": 173528,
+          "page_faults": 285613,
+          "private_commit": 40841216,
+          "working_set": 49397760
+        }
+      },
+      "rss_gate": 47984640
+    },
+    {
+      "batch": 5,
+      "gap_ms": 457.8087,
+      "handles": 174,
+      "phases": {
+        "after_write_report_held": {
+          "allocated_python_blocks": 272933,
+          "page_faults": 458629,
+          "private_commit": 46202880,
+          "working_set": 47566848
+        },
+        "released": {
+          "allocated_python_blocks": 173598,
+          "page_faults": 458629,
+          "private_commit": 42668032,
+          "working_set": 44343296
+        },
+        "report_live": {
+          "allocated_python_blocks": 272892,
+          "page_faults": 443671,
+          "private_commit": 43212800,
+          "working_set": 44474368
+        },
+        "start": {
+          "allocated_python_blocks": 173714,
+          "page_faults": 369693,
+          "private_commit": 41533440,
+          "working_set": 47984640
+        }
+      },
+      "rss_gate": 44343296
+    },
+    {
+      "batch": 6,
+      "gap_ms": 664.5384,
+      "handles": 174,
+      "phases": {
+        "after_write_report_held": {
+          "allocated_python_blocks": 276380,
+          "page_faults": 550532,
+          "private_commit": 41689088,
+          "working_set": 39698432
+        },
+        "released": {
+          "allocated_python_blocks": 173760,
+          "page_faults": 550532,
+          "private_commit": 41717760,
+          "working_set": 39698432
+        },
+        "report_live": {
+          "allocated_python_blocks": 276340,
+          "page_faults": 535097,
+          "private_commit": 41754624,
+          "working_set": 39890944
+        },
+        "start": {
+          "allocated_python_blocks": 173678,
+          "page_faults": 458629,
+          "private_commit": 42668032,
+          "working_set": 44343296
+        }
+      },
+      "rss_gate": 39698432
+    }
+  ],
+  "observed_utc": "2026-09-20T09:13:18.239055+00:00",
+  "observer_terminal": {
+    "actual_exit": {
+      "exit_code_uint32": 0,
+      "exit_filetime": 134343691095087488,
+      "natural_exit_inferred": false,
+      "observed_utc": "2026-09-20T09:11:49.527788+00:00",
+      "source": "retained_handle_GetExitCodeProcess",
+      "wait_result": 0
+    },
+    "child_cleanup_not_inferred": true,
+    "elapsed_seconds": 875.8279999999795,
+    "eligible_for_dataset": false,
+    "errors": [],
+    "formal_acceptance": false,
+    "handle_close": {
+      "native_close_bool_observed": true,
+      "native_close_succeeded": true,
+      "observed_utc": "2026-09-20T09:11:49.965466+00:00",
+      "process_handle_closed": true
+    },
+    "identity": {
+      "executable": "C:\\Users\\truon\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+      "pid": 8956,
+      "process_start": "windows:134343682341423203"
+    },
+    "no_poweroff_coverage": true,
+    "observed_utc": "2026-09-20T09:11:49.978857+00:00",
+    "observer_actual_exit_not_yet_observed": true,
+    "observer_lost_or_receipt_missing_means_unknown": true,
+    "run_id": "gt06-s129-host-memory-01",
+    "schema": "HH-S129-PASSIVE-TERMINAL-1",
+    "status": "EXIT_OBSERVED"
+  },
+  "run_id": "gt06-s129-host-memory-01",
+  "schema": "S132.host-result-analysis.1",
+  "target_exit": {
+    "exit_code": 0,
+    "pid": 13828
+  }
+}

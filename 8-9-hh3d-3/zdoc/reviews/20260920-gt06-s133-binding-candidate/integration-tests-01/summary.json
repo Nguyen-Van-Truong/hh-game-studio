@@ -1,0 +1,55 @@
+{
+  "rows": [
+    {
+      "pattern": "test_execution_*.py",
+      "argv": [
+        "C:\\Users\\truon\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+        "-B",
+        "-W",
+        "default",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\tests\\replay",
+        "-p",
+        "test_execution_*.py",
+        "-v"
+      ],
+      "actual_exit": 0,
+      "start": "2026-09-20T09:20:59.282516+00:00",
+      "end": "2026-09-20T09:21:06.830559+00:00"
+    },
+    {
+      "pattern": "test_backend.py",
+      "argv": [
+        "C:\\Users\\truon\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+        "-B",
+        "-W",
+        "default",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\tests\\replay",
+        "-p",
+        "test_backend.py",
+        "-v"
+      ],
+      "actual_exit": 1,
+      "start": "2026-09-20T09:21:06.830559+00:00",
+      "end": "2026-09-20T09:21:10.396685+00:00"
+    }
+  ],
+  "source_files": {
+    "host/replay/native_runner.py": "08ad9f82ecbaf26cb37cad970599b51032860cc7241af838d6b9ac335f4ff72f",
+    "host/replay/backend.py": "f7d22a7b3ff001f6fca175c11b5a94c7d75933ac8d3173be3323849af39f8169",
+    "host/replay/repair.py": "e03f28bf95f8d5fd0f742ba0738bcc772bc18e040589b8b6b4e8b56c1ea57e05",
+    "host/replay/execution_binding.py": "37df9c65e9614aa846332b62a0cc28baa2c75a634bed77d0149053aa5c1e4b7d",
+    "host/replay/execution_installed.py": "31ad8b878c188538470c278da591929f14e8925c2adea42f93b447839183716f",
+    "host/replay/execution-current.json": "3ab605c17243a88536b9acbb2c161d8ac2caf5422ffe23ba6968786cae7c1f52",
+    "host/replay/execution-source.json": "b0ec25dc6ed1d757f468375052db5170b0305c134ffcc8d5b4740d6eccf3286f"
+  },
+  "source_unchanged": true,
+  "formal_acceptance": false
+}

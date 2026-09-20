@@ -1,0 +1,178 @@
+{
+  "complete": true,
+  "engine_launched": false,
+  "formal_acceptance": false,
+  "lanes": [
+    {
+      "actual_exit": 0,
+      "command": [
+        "C:\\Users\\truon\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+        "-B",
+        "-W",
+        "default",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\tests\\godot",
+        "-p",
+        "test_linux_cli_cleanup.py",
+        "-v"
+      ],
+      "ended_utc": "2026-09-20T09:13:33.206108+00:00",
+      "engine_launched": false,
+      "formal_acceptance": false,
+      "skipped_count": 0,
+      "started_utc": "2026-09-20T09:13:32.107852+00:00",
+      "streams": {
+        "stderr.txt": "a3b3f48d810db685f24590697d59ac0700e6aea32bcb1b0d3076f1f6227a40b6",
+        "stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "tests_run": 14,
+      "timed_out": false
+    },
+    {
+      "actual_exit": 0,
+      "command": [
+        "C:\\Users\\truon\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+        "-B",
+        "-W",
+        "default",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\tests\\godot",
+        "-p",
+        "test_validation_binding.py",
+        "-v"
+      ],
+      "ended_utc": "2026-09-20T09:13:40.421859+00:00",
+      "engine_launched": false,
+      "formal_acceptance": false,
+      "skipped_count": 0,
+      "started_utc": "2026-09-20T09:13:33.210883+00:00",
+      "streams": {
+        "stderr.txt": "0fb5eea077a525231598e13d606a41d8472640e8222eaf97fde907360a339f38",
+        "stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "tests_run": 5,
+      "timed_out": false
+    },
+    {
+      "actual_exit": 0,
+      "command": [
+        "C:\\Users\\truon\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+        "-B",
+        "-W",
+        "default",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\tests\\godot",
+        "-p",
+        "test_editor_owner.py",
+        "-v"
+      ],
+      "ended_utc": "2026-09-20T09:13:41.506530+00:00",
+      "engine_launched": false,
+      "formal_acceptance": false,
+      "skipped_count": 0,
+      "started_utc": "2026-09-20T09:13:40.427580+00:00",
+      "streams": {
+        "stderr.txt": "e36cb1e8402cba43f9c10eb2575842598382958583ad9a67012c6b964589caa0",
+        "stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "tests_run": 29,
+      "timed_out": false
+    },
+    {
+      "actual_exit": 0,
+      "command": [
+        "C:\\Users\\truon\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+        "-B",
+        "-W",
+        "default",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\tests\\blender",
+        "-p",
+        "test_export_cleanup.py",
+        "-v"
+      ],
+      "ended_utc": "2026-09-20T09:13:42.356763+00:00",
+      "engine_launched": false,
+      "formal_acceptance": false,
+      "skipped_count": 0,
+      "started_utc": "2026-09-20T09:13:41.510070+00:00",
+      "streams": {
+        "stderr.txt": "68017707dc7cb6e052de70cf10f19ce6c43193a7d56bb0ad7a4ca905a62edb03",
+        "stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "tests_run": 6,
+      "timed_out": false
+    },
+    {
+      "actual_exit": 0,
+      "command": [
+        "C:\\Users\\truon\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+        "-B",
+        "-W",
+        "default",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\tests\\blender",
+        "-p",
+        "test_publication_deadline.py",
+        "-v"
+      ],
+      "ended_utc": "2026-09-20T09:13:43.674881+00:00",
+      "engine_launched": false,
+      "formal_acceptance": false,
+      "skipped_count": 0,
+      "started_utc": "2026-09-20T09:13:42.361521+00:00",
+      "streams": {
+        "stderr.txt": "c2d568b6afd36ad918a61bf7dfaf6a4c6408bd589e242145876d0317ebe1586a",
+        "stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "tests_run": 33,
+      "timed_out": false
+    },
+    {
+      "actual_exit": 0,
+      "command": [
+        "C:\\Users\\truon\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+        "-B",
+        "-W",
+        "default",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\tests\\pipeline",
+        "-p",
+        "test_native_job.py",
+        "-v"
+      ],
+      "ended_utc": "2026-09-20T09:13:47.875268+00:00",
+      "engine_launched": false,
+      "formal_acceptance": false,
+      "skipped_count": 0,
+      "started_utc": "2026-09-20T09:13:43.676936+00:00",
+      "streams": {
+        "stderr.txt": "71a068b0ce6285af87b7291dc0df744d6752294be0619276799b112d4881e19a",
+        "stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "tests_run": 9,
+      "timed_out": false
+    }
+  ],
+  "python_sha256": "5f7b89a612c9b8af1d6456cdfcd1dbe5ca630849e79aebced9bee9a6694952ec",
+  "source_files_sha256": "2ccb32aa080af8887afa79e98ae7945c0102131f02dc4bb11cf3ec7e526c008c",
+  "source_unchanged": true
+}

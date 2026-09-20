@@ -1,0 +1,34 @@
+test_changed_registered_projection_rejected (test_editor_owner.EditorEditPureTests.test_changed_registered_projection_rejected) ... ok
+test_checkpoint_digest_mismatch_rejected_before_ipc (test_editor_owner.EditorEditPureTests.test_checkpoint_digest_mismatch_rejected_before_ipc) ... ok
+test_copied_or_mutated_intent_is_not_authority (test_editor_owner.EditorEditPureTests.test_copied_or_mutated_intent_is_not_authority) ... ok
+test_expired_or_stopped_edit_has_no_send (test_editor_owner.EditorEditPureTests.test_expired_or_stopped_edit_has_no_send) ... ok
+test_missing_effect_reply_is_unknown_and_single_use (test_editor_owner.EditorEditPureTests.test_missing_effect_reply_is_unknown_and_single_use) ... ok
+test_preparation_copies_projection_bytes (test_editor_owner.EditorEditPureTests.test_preparation_copies_projection_bytes) ... ok
+test_prepare_reply_context_failure_holds_owner_and_claim (test_editor_owner.EditorEditPureTests.test_prepare_reply_context_failure_holds_owner_and_claim) ... ok
+test_projection_mismatch_rejected_before_ipc (test_editor_owner.EditorEditPureTests.test_projection_mismatch_rejected_before_ipc) ... ok
+test_stale_scene_or_root_or_working_files_rejected (test_editor_owner.EditorEditPureTests.test_stale_scene_or_root_or_working_files_rejected) ... ok
+test_verified_transition_records_in_memory_semantics (test_editor_owner.EditorEditPureTests.test_verified_transition_records_in_memory_semantics) ... ok
+test_adoption_same_semantics_still_requires_registered_root_generation_and_files (test_editor_owner.EditorOwnerPureTests.test_adoption_same_semantics_still_requires_registered_root_generation_and_files) ... ok
+test_bad_admission_has_no_ipc (test_editor_owner.EditorOwnerPureTests.test_bad_admission_has_no_ipc) ... ok
+test_copied_intent_rejected_before_effect (test_editor_owner.EditorOwnerPureTests.test_copied_intent_rejected_before_effect) ... ok
+test_copied_receipt_cannot_be_registered (test_editor_owner.EditorOwnerPureTests.test_copied_receipt_cannot_be_registered) ... ok
+test_copied_retirement_is_not_authority_to_start_successor (test_editor_owner.EditorOwnerPureTests.test_copied_retirement_is_not_authority_to_start_successor) ... ok
+test_expired_intent_rejected_before_send (test_editor_owner.EditorOwnerPureTests.test_expired_intent_rejected_before_send) ... ok
+test_generation_seed_rejected_before_any_native_resource (test_editor_owner.EditorOwnerPureTests.test_generation_seed_rejected_before_any_native_resource) ... ok
+test_intent_scratch_is_fixed_generated_name (test_editor_owner.EditorOwnerPureTests.test_intent_scratch_is_fixed_generated_name) ... ok
+test_interrupt_after_capture_send_retains_unknown_owner (test_editor_owner.EditorOwnerPureTests.test_interrupt_after_capture_send_retains_unknown_owner) ... ok
+test_live_previous_owner_cannot_prove_retirement (test_editor_owner.EditorOwnerPureTests.test_live_previous_owner_cannot_prove_retirement) ... ok
+test_native_close_proof_requires_exact_exit_and_checked_job (test_editor_owner.EditorOwnerPureTests.test_native_close_proof_requires_exact_exit_and_checked_job) ... ok
+test_retirement_generation_overflow_has_no_ipc_or_close (test_editor_owner.EditorOwnerPureTests.test_retirement_generation_overflow_has_no_ipc_or_close) ... ok
+test_semantic_hash_and_complete_count (test_editor_owner.EditorOwnerPureTests.test_semantic_hash_and_complete_count) ... ok
+test_unregistered_receipt_rejected (test_editor_owner.EditorOwnerPureTests.test_unregistered_receipt_rejected) ... ok
+test_concurrent_reservation_has_exactly_one_winner (test_editor_owner.EditorSuccessorGuardTests.test_concurrent_reservation_has_exactly_one_winner) ... ok
+test_exact_receipt_reservation_is_single_use (test_editor_owner.EditorSuccessorGuardTests.test_exact_receipt_reservation_is_single_use) ... ok
+test_foreign_receipt_does_not_consume_reservation (test_editor_owner.EditorSuccessorGuardTests.test_foreign_receipt_does_not_consume_reservation) ... ok
+test_invalid_preflight_does_not_consume_reservation_or_launch (test_editor_owner.EditorSuccessorGuardTests.test_invalid_preflight_does_not_consume_reservation_or_launch) ... ok
+test_native_launch_attempt_failure_cannot_implicitly_retry (test_editor_owner.EditorSuccessorGuardTests.test_native_launch_attempt_failure_cannot_implicitly_retry) ... ok
+
+----------------------------------------------------------------------
+Ran 29 tests in 0.169s
+
+OK

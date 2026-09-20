@@ -67,7 +67,10 @@ class NativeFixture:
         self.write(self.studio / 'contracts/perf-collector.schema.json', b'{}\n')
         self.write(self.studio / 'toolchain.lock.json', {'godot': {
             'gui_executable': 'synthetic-never-executed.exe', 'gui_sha256': 'b' * 64}})
-        self.originals = ('toolchain.lock.json', 'host/replay/synthetic.py')
+        # sources() now supplies the complete verified installed map; the
+        # backend may not silently append freshly computed dependency hashes.
+        self.originals = ('toolchain.lock.json', 'host/replay/synthetic.py',
+                          'contracts/perf-collector.schema.json')
 
     @staticmethod
     def write(path, data):

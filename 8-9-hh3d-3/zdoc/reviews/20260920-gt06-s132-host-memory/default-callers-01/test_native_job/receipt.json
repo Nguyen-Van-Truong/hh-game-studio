@@ -1,0 +1,28 @@
+{
+  "actual_exit": 0,
+  "command": [
+    "C:\\Users\\truon\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+    "-B",
+    "-W",
+    "default",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\tests\\pipeline",
+    "-p",
+    "test_native_job.py",
+    "-v"
+  ],
+  "ended_utc": "2026-09-20T09:13:47.875268+00:00",
+  "engine_launched": false,
+  "formal_acceptance": false,
+  "skipped_count": 0,
+  "started_utc": "2026-09-20T09:13:43.676936+00:00",
+  "streams": {
+    "stderr.txt": "71a068b0ce6285af87b7291dc0df744d6752294be0619276799b112d4881e19a",
+    "stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "tests_run": 9,
+  "timed_out": false
+}

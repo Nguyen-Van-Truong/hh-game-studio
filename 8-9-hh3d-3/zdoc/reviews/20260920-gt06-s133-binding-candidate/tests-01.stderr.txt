@@ -1,0 +1,22 @@
+test_additional_current_dependency_cannot_be_omitted (__main__.ExecutionBindingTests.test_additional_current_dependency_cannot_be_omitted) ... ok
+test_bad_source_digest_missing_source_and_directory_rejected (__main__.ExecutionBindingTests.test_bad_source_digest_missing_source_and_directory_rejected) ... ok
+test_binding_change_during_source_read_rejected (__main__.ExecutionBindingTests.test_binding_change_during_source_read_rejected) ... ok
+test_both_inherited_and_explicit_current_dependencies_are_mandatory (__main__.ExecutionBindingTests.test_both_inherited_and_explicit_current_dependencies_are_mandatory) ... ok
+test_case_alias_rejected_in_binding_and_required_set (__main__.ExecutionBindingTests.test_case_alias_rejected_in_binding_and_required_set) ... ok
+test_current_source_mismatch_keeps_original_guard_code (__main__.ExecutionBindingTests.test_current_source_mismatch_keeps_original_guard_code) ... ok
+test_duplicate_json_keys_rejected_at_top_and_source_level (__main__.ExecutionBindingTests.test_duplicate_json_keys_rejected_at_top_and_source_level) ... ok
+test_empty_source_is_allowed_only_with_its_exact_hash (__main__.ExecutionBindingTests.test_empty_source_is_allowed_only_with_its_exact_hash) ... ok
+test_exact_current_map_retains_historical_input_and_returns_detached_sorted_map (__main__.ExecutionBindingTests.test_exact_current_map_retains_historical_input_and_returns_detached_sorted_map) ... ok
+test_historical_source_domain_and_required_set_are_not_optional (__main__.ExecutionBindingTests.test_historical_source_domain_and_required_set_are_not_optional) ... ok
+test_nonfinite_utf16_and_nonobject_json_rejected (__main__.ExecutionBindingTests.test_nonfinite_utf16_and_nonobject_json_rejected) ... ok
+test_original_gt05_anchor_is_fixed (__main__.ExecutionBindingTests.test_original_gt05_anchor_is_fixed) ... ok
+test_path_traversal_absolute_windows_alias_and_generated_entries_rejected (__main__.ExecutionBindingTests.test_path_traversal_absolute_windows_alias_and_generated_entries_rejected) ... ok
+test_raw_hash_is_external_and_exact (__main__.ExecutionBindingTests.test_raw_hash_is_external_and_exact) ... ok
+test_reparse_flag_rejected_on_leaf_parent_and_binding_file (__main__.ExecutionBindingTests.test_reparse_flag_rejected_on_leaf_parent_and_binding_file) ... ok
+test_schema_is_exact_and_unknown_keys_are_rejected (__main__.ExecutionBindingTests.test_schema_is_exact_and_unknown_keys_are_rejected) ... ok
+test_symbolic_link_mode_rejected_without_platform_privileges (__main__.ExecutionBindingTests.test_symbolic_link_mode_rejected_without_platform_privileges) ... ok
+
+----------------------------------------------------------------------
+Ran 17 tests in 0.695s
+
+OK

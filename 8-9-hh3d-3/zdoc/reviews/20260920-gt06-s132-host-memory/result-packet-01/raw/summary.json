@@ -1,0 +1,618 @@
+{
+  "completed_batches": 7,
+  "disposition": "SEVEN_HOST_BATCHES_COMPLETED",
+  "elapsed_seconds": 871.75,
+  "eligible_for_dataset": false,
+  "ended_utc": "2026-09-20T09:11:48.985549+00:00",
+  "engine_launched": false,
+  "error_code": null,
+  "formal_acceptance": false,
+  "limits": "Host-only, no native/ACK/idle/assembly; supplementary metrics do not replace RSS gate",
+  "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+  "rows": [
+    {
+      "after_write_report_held": {
+        "allocated_python_blocks": 205999,
+        "monotonic_ns": 792930422881100,
+        "page_faults": 75481,
+        "pid": 13828,
+        "private_commit": 36859904,
+        "process_start": "windows:134343682360343380",
+        "system_available_physical": 7244623872,
+        "system_commit_available": 6445076480,
+        "system_commit_limit": 56549306368,
+        "system_memory_load_percent": 78,
+        "working_set": 48136192
+      },
+      "batch": 0,
+      "cardinality": {
+        "recorder_active": 0,
+        "recorder_events": 8192
+      },
+      "lookup_attempts": 5851,
+      "max_status_gap_ms": 441.0775,
+      "original_host_observation": {
+        "counters": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 174
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 46632960
+          }
+        },
+        "monotonic_us": 792930435914,
+        "process": {
+          "pid": 13828,
+          "process_start": "windows:134343682360343380"
+        }
+      },
+      "released": {
+        "allocated_python_blocks": 132937,
+        "monotonic_ns": 792930435970400,
+        "page_faults": 75481,
+        "pid": 13828,
+        "private_commit": 35344384,
+        "process_start": "windows:134343682360343380",
+        "system_available_physical": 7241900032,
+        "system_commit_available": 6448889856,
+        "system_commit_limit": 56549306368,
+        "system_memory_load_percent": 78,
+        "working_set": 46632960
+      },
+      "report_live": {
+        "allocated_python_blocks": 205960,
+        "monotonic_ns": 792930119160800,
+        "page_faults": 64875,
+        "pid": 13828,
+        "private_commit": 32751616,
+        "process_start": "windows:134343682360343380",
+        "system_available_physical": 7260975104,
+        "system_commit_available": 6487171072,
+        "system_commit_limit": 56549306368,
+        "system_memory_load_percent": 78,
+        "working_set": 43843584
+      },
+      "start": {
+        "allocated_python_blocks": 90947,
+        "monotonic_ns": 792851387712800,
+        "page_faults": 10735,
+        "pid": 13828,
+        "private_commit": 21225472,
+        "process_start": "windows:134343682360343380",
+        "system_available_physical": 4982276096,
+        "system_commit_available": 4018552832,
+        "system_commit_limit": 56549306368,
+        "system_memory_load_percent": 85,
+        "working_set": 32411648
+      }
+    },
+    {
+      "after_write_report_held": {
+        "allocated_python_blocks": 250827,
+        "monotonic_ns": 793025238966800,
+        "page_faults": 141555,
+        "pid": 13828,
+        "private_commit": 46206976,
+        "process_start": "windows:134343682360343380",
+        "system_available_physical": 6759641088,
+        "system_commit_available": 6416961536,
+        "system_commit_limit": 56549306368,
+        "system_memory_load_percent": 80,
+        "working_set": 57655296
+      },
+      "batch": 1,
+      "cardinality": {
+        "recorder_active": 0,
+        "recorder_events": 8192
+      },
+      "lookup_attempts": 6115,
+      "max_status_gap_ms": 482.3918,
+      "original_host_observation": {
+        "counters": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 174
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 54509568
+          }
+        },
+        "monotonic_us": 793025260721,
+        "process": {
+          "pid": 13828,
+          "process_start": "windows:134343682360343380"
+        }
+      },
+      "released": {
+        "allocated_python_blocks": 173338,
+        "monotonic_ns": 793025260807600,
+        "page_faults": 141555,
+        "pid": 13828,
+        "private_commit": 43048960,
+        "process_start": "windows:134343682360343380",
+        "system_available_physical": 6761566208,
+        "system_commit_available": 6418718720,
+        "system_commit_limit": 56549306368,
+        "system_memory_load_percent": 80,
+        "working_set": 54509568
+      },
+      "report_live": {
+        "allocated_python_blocks": 250787,
+        "monotonic_ns": 793024452278600,
+        "page_faults": 130106,
+        "pid": 13828,
+        "private_commit": 38977536,
+        "process_start": "windows:134343682360343380",
+        "system_available_physical": 6758887424,
+        "system_commit_available": 6402228224,
+        "system_commit_limit": 56549306368,
+        "system_memory_load_percent": 80,
+        "working_set": 49909760
+      },
+      "start": {
+        "allocated_python_blocks": 133021,
+        "monotonic_ns": 792930447110100,
+        "page_faults": 75483,
+        "pid": 13828,
+        "private_commit": 35348480,
+        "process_start": "windows:134343682360343380",
+        "system_available_physical": 7241936896,
+        "system_commit_available": 6450020352,
+        "system_commit_limit": 56549306368,
+        "system_memory_load_percent": 78,
+        "working_set": 46641152
+      }
+    },
+    {
+      "after_write_report_held": {
+        "allocated_python_blocks": 252810,
+        "monotonic_ns": 793120991330100,
+        "page_faults": 210581,
+        "pid": 13828,
+        "private_commit": 40394752,
+        "process_start": "windows:134343682360343380",
+        "system_available_physical": 7395581952,
+        "system_commit_available": 6900445184,
+        "system_commit_limit": 56549306368,
+        "system_memory_load_percent": 78,
+        "working_set": 51744768
+      },
+      "batch": 2,
+      "cardinality": {
+        "recorder_active": 0,
+        "recorder_events": 8192
+      },
+      "lookup_attempts": 6702,
+      "max_status_gap_ms": 369.6965,
+      "original_host_observation": {
+        "counters": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 174
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 50696192
+          }
+        },
+        "monotonic_us": 793121009957,
+        "process": {
+          "pid": 13828,
+          "process_start": "windows:134343682360343380"
+        }
+      },
+      "released": {
+        "allocated_python_blocks": 173486,
+        "monotonic_ns": 793121010024400,
+        "page_faults": 210581,
+        "pid": 13828,
+        "private_commit": 39452672,
+        "process_start": "windows:134343682360343380",
+        "system_available_physical": 7394222080,
+        "system_commit_available": 6897795072,
+        "system_commit_limit": 56549306368,
+        "system_memory_load_percent": 78,
+        "working_set": 50696192
+      },
+      "report_live": {
+        "allocated_python_blocks": 252737,
+        "monotonic_ns": 793120673441200,
+        "page_faults": 198913,
+        "pid": 13828,
+        "private_commit": 39645184,
+        "process_start": "windows:134343682360343380",
+        "system_available_physical": 7440257024,
+        "system_commit_available": 6933446656,
+        "system_commit_limit": 56549306368,
+        "system_memory_load_percent": 78,
+        "working_set": 50974720
+      },
+      "start": {
+        "allocated_python_blocks": 173422,
+        "monotonic_ns": 793025275163500,
+        "page_faults": 141555,
+        "pid": 13828,
+        "private_commit": 41996288,
+        "process_start": "windows:134343682360343380",
+        "system_available_physical": 6764924928,
+        "system_commit_available": 6423666688,
+        "system_commit_limit": 56549306368,
+        "system_memory_load_percent": 80,
+        "working_set": 53460992
+      }
+    },
+    {
+      "after_write_report_held": {
+        "allocated_python_blocks": 259177,
+        "monotonic_ns": 793249256204400,
+        "page_faults": 285613,
+        "pid": 13828,
+        "private_commit": 43892736,
+        "process_start": "windows:134343682360343380",
+        "system_available_physical": 5011963904,
+        "system_commit_available": 5166125056,
+        "system_commit_limit": 56549306368,
+        "system_memory_load_percent": 85,
+        "working_set": 52543488
+      },
+      "batch": 3,
+      "cardinality": {
+        "recorder_active": 0,
+        "recorder_events": 8192
+      },
+      "lookup_attempts": 7378,
+      "max_status_gap_ms": 408.4748,
+      "original_host_observation": {
+        "counters": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 174
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 51494912
+          }
+        },
+        "monotonic_us": 793249273891,
+        "process": {
+          "pid": 13828,
+          "process_start": "windows:134343682360343380"
+        }
+      },
+      "released": {
+        "allocated_python_blocks": 173445,
+        "monotonic_ns": 793249273962200,
+        "page_faults": 285613,
+        "pid": 13828,
+        "private_commit": 40841216,
+        "process_start": "windows:134343682360343380",
+        "system_available_physical": 5013536768,
+        "system_commit_available": 5166014464,
+        "system_commit_limit": 56549306368,
+        "system_memory_load_percent": 85,
+        "working_set": 49397760
+      },
+      "report_live": {
+        "allocated_python_blocks": 259139,
+        "monotonic_ns": 793248820886500,
+        "page_faults": 272682,
+        "pid": 13828,
+        "private_commit": 41066496,
+        "process_start": "windows:134343682360343380",
+        "system_available_physical": 5031612416,
+        "system_commit_available": 5167628288,
+        "system_commit_limit": 56549306368,
+        "system_memory_load_percent": 85,
+        "working_set": 49414144
+      },
+      "start": {
+        "allocated_python_blocks": 173566,
+        "monotonic_ns": 793121028399600,
+        "page_faults": 210581,
+        "pid": 13828,
+        "private_commit": 39452672,
+        "process_start": "windows:134343682360343380",
+        "system_available_physical": 7388336128,
+        "system_commit_available": 6895644672,
+        "system_commit_limit": 56549306368,
+        "system_memory_load_percent": 78,
+        "working_set": 50696192
+      }
+    },
+    {
+      "after_write_report_held": {
+        "allocated_python_blocks": 268560,
+        "monotonic_ns": 793401706111400,
+        "page_faults": 369693,
+        "pid": 13828,
+        "private_commit": 42586112,
+        "process_start": "windows:134343682360343380",
+        "system_available_physical": 5848981504,
+        "system_commit_available": 5330067456,
+        "system_commit_limit": 56549306368,
+        "system_memory_load_percent": 82,
+        "working_set": 49033216
+      },
+      "batch": 4,
+      "cardinality": {
+        "recorder_active": 0,
+        "recorder_events": 8192
+      },
+      "lookup_attempts": 8505,
+      "max_status_gap_ms": 891.8813,
+      "original_host_observation": {
+        "counters": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 174
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 47984640
+          }
+        },
+        "monotonic_us": 793401725719,
+        "process": {
+          "pid": 13828,
+          "process_start": "windows:134343682360343380"
+        }
+      },
+      "released": {
+        "allocated_python_blocks": 173632,
+        "monotonic_ns": 793401725803700,
+        "page_faults": 369693,
+        "pid": 13828,
+        "private_commit": 41533440,
+        "process_start": "windows:134343682360343380",
+        "system_available_physical": 5851987968,
+        "system_commit_available": 5333245952,
+        "system_commit_limit": 56549306368,
+        "system_memory_load_percent": 82,
+        "working_set": 47984640
+      },
+      "report_live": {
+        "allocated_python_blocks": 268518,
+        "monotonic_ns": 793401275061600,
+        "page_faults": 355694,
+        "pid": 13828,
+        "private_commit": 40706048,
+        "process_start": "windows:134343682360343380",
+        "system_available_physical": 5832667136,
+        "system_commit_available": 5308469248,
+        "system_commit_limit": 56549306368,
+        "system_memory_load_percent": 82,
+        "working_set": 47128576
+      },
+      "start": {
+        "allocated_python_blocks": 173528,
+        "monotonic_ns": 793249291690800,
+        "page_faults": 285613,
+        "pid": 13828,
+        "private_commit": 40841216,
+        "process_start": "windows:134343682360343380",
+        "system_available_physical": 5013753856,
+        "system_commit_available": 5160960000,
+        "system_commit_limit": 56549306368,
+        "system_memory_load_percent": 85,
+        "working_set": 49397760
+      }
+    },
+    {
+      "after_write_report_held": {
+        "allocated_python_blocks": 272933,
+        "monotonic_ns": 793527297766900,
+        "page_faults": 458629,
+        "pid": 13828,
+        "private_commit": 46202880,
+        "process_start": "windows:134343682360343380",
+        "system_available_physical": 5873369088,
+        "system_commit_available": 5091364864,
+        "system_commit_limit": 56549306368,
+        "system_memory_load_percent": 82,
+        "working_set": 47566848
+      },
+      "batch": 5,
+      "cardinality": {
+        "recorder_active": 0,
+        "recorder_events": 8192
+      },
+      "lookup_attempts": 9031,
+      "max_status_gap_ms": 457.8087,
+      "original_host_observation": {
+        "counters": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 174
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 44343296
+          }
+        },
+        "monotonic_us": 793527315136,
+        "process": {
+          "pid": 13828,
+          "process_start": "windows:134343682360343380"
+        }
+      },
+      "released": {
+        "allocated_python_blocks": 173598,
+        "monotonic_ns": 793527315217000,
+        "page_faults": 458629,
+        "pid": 13828,
+        "private_commit": 42668032,
+        "process_start": "windows:134343682360343380",
+        "system_available_physical": 5875163136,
+        "system_commit_available": 5098971136,
+        "system_commit_limit": 56549306368,
+        "system_memory_load_percent": 82,
+        "working_set": 44343296
+      },
+      "report_live": {
+        "allocated_python_blocks": 272892,
+        "monotonic_ns": 793526624139200,
+        "page_faults": 443671,
+        "pid": 13828,
+        "private_commit": 43212800,
+        "process_start": "windows:134343682360343380",
+        "system_available_physical": 5959696384,
+        "system_commit_available": 5159137280,
+        "system_commit_limit": 56549306368,
+        "system_memory_load_percent": 82,
+        "working_set": 44474368
+      },
+      "start": {
+        "allocated_python_blocks": 173714,
+        "monotonic_ns": 793401992335300,
+        "page_faults": 369693,
+        "pid": 13828,
+        "private_commit": 41533440,
+        "process_start": "windows:134343682360343380",
+        "system_available_physical": 5924151296,
+        "system_commit_available": 5406097408,
+        "system_commit_limit": 56549306368,
+        "system_memory_load_percent": 82,
+        "working_set": 47984640
+      }
+    },
+    {
+      "after_write_report_held": {
+        "allocated_python_blocks": 276380,
+        "monotonic_ns": 793722060018700,
+        "page_faults": 550532,
+        "pid": 13828,
+        "private_commit": 41689088,
+        "process_start": "windows:134343682360343380",
+        "system_available_physical": 7485440000,
+        "system_commit_available": 8469602304,
+        "system_commit_limit": 56549306368,
+        "system_memory_load_percent": 78,
+        "working_set": 39698432
+      },
+      "batch": 6,
+      "cardinality": {
+        "recorder_active": 0,
+        "recorder_events": 8192
+      },
+      "lookup_attempts": 9460,
+      "max_status_gap_ms": 664.5384,
+      "original_host_observation": {
+        "counters": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 174
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 39698432
+          }
+        },
+        "monotonic_us": 793722074746,
+        "process": {
+          "pid": 13828,
+          "process_start": "windows:134343682360343380"
+        }
+      },
+      "released": {
+        "allocated_python_blocks": 173760,
+        "monotonic_ns": 793722074811800,
+        "page_faults": 550532,
+        "pid": 13828,
+        "private_commit": 41717760,
+        "process_start": "windows:134343682360343380",
+        "system_available_physical": 7481511936,
+        "system_commit_available": 8471355392,
+        "system_commit_limit": 56549306368,
+        "system_memory_load_percent": 78,
+        "working_set": 39698432
+      },
+      "report_live": {
+        "allocated_python_blocks": 276340,
+        "monotonic_ns": 793721684171500,
+        "page_faults": 535097,
+        "pid": 13828,
+        "private_commit": 41754624,
+        "process_start": "windows:134343682360343380",
+        "system_available_physical": 7503314944,
+        "system_commit_available": 8468549632,
+        "system_commit_limit": 56549306368,
+        "system_memory_load_percent": 78,
+        "working_set": 39890944
+      },
+      "start": {
+        "allocated_python_blocks": 173678,
+        "monotonic_ns": 793527328920300,
+        "page_faults": 458629,
+        "pid": 13828,
+        "private_commit": 42668032,
+        "process_start": "windows:134343682360343380",
+        "system_available_physical": 5873868800,
+        "system_commit_available": 5097816064,
+        "system_commit_limit": 56549306368,
+        "system_memory_load_percent": 82,
+        "working_set": 44343296
+      }
+    }
+  ],
+  "schema": "S132.host-memory.1",
+  "source_closure": "763191109cd7c7f63de499680291c6b99d77a501dad869078e6d77384ecb20b4"
+}

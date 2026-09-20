@@ -210,10 +210,6 @@ def main():
     output.mkdir(exist_ok=False)
     _, accepted = native.accepted_inputs()
     before = native.sources(accepted)
-    for name in ('repair.py', 'observation.py'):
-        relative = 'host/replay/' + name
-        before[relative] = native.sha(native.read_regular(STUDIO / relative))
-    before = dict(sorted(before.items()))
     digest = native.closure(before)
     native.write(output / 'source-files.json', before)
     for index, name in enumerate(before):
