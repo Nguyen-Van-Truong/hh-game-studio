@@ -52,6 +52,8 @@ def synthetic_capture(root):
         "response_sha256": sha(encoded(response)), "selected_project_revision": "sha256:"+"2"*64,
         "source_closure_sha256": closure}
     files = {"repair.json": report, "selected-config.gd": config,
+        "repair-terminal-cleanup.json": {"schema": "HH-GT06-REPAIR-CLEANUP-1", "primary": None,
+            "cleanup_clean": True, "owner_closed": True, "transport_closed": True, "cleanup_errors": 0},
         "selected-manifest.json": {"synthetic_unit_fixture": True},
         "native-readback.json": {"script": {"source_sha256": sha(config), "disk_sha256": sha(config),
             "defaults": {"move_speed": {"value": 3.0}}}},
@@ -84,6 +86,20 @@ class RepairAdmissionTests(unittest.TestCase):
 
     def read(self, name):
         return json.loads((self.root/name).read_bytes())
+
+    def test_rehashed_cleanup_failure_rejects_completed_capture(self):
+        cleanup = self.read('repair-terminal-cleanup.json')
+        cleanup['cleanup_clean'] = False
+        self.reseal('repair-terminal-cleanup.json', cleanup)
+        with self.assertRaisesRegex(ValueError, 'REPLAY_REPAIR_CLEANUP'):
+            replay.verified_repair(self.root, self.anchor)
+
+    def test_missing_cleanup_cannot_be_omitted_from_artifact_map(self):
+        capture = self.read('capture.json')
+        del capture['artifacts']['repair-terminal-cleanup.json']
+        self.set_capture(capture)
+        with self.assertRaisesRegex(ValueError, 'REPLAY_REPAIR_ARTIFACT_SET'):
+            replay.verified_repair(self.root, self.anchor)
 
     def reseal(self, name, value):
         """Rebind the altered artifact to a new capture anchor, without excuses."""

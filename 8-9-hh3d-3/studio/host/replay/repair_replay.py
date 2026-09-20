@@ -34,9 +34,15 @@ def verified_repair(root: Path, expected_hash: str):
         native.need(native.sha(native.read_regular(root / name)) == digest, 'REPLAY_REPAIR_ARTIFACT_HASH')
     needed = {'repair.json', 'selected-config.gd', 'selected-manifest.json', 'native-readback.json',
         'response-wire.json', 'request.json', 'events.json', 'before-script.json', 'after.json',
-        'editor-close-0.json', 'editor-close-1.json', 'repair-host.json', 'source-files.json', 'repair-stdout.txt'}
+        'editor-close-0.json', 'editor-close-1.json', 'repair-host.json', 'source-files.json', 'repair-stdout.txt',
+        'repair-terminal-cleanup.json'}
     native.need(needed <= set(capture['artifacts']), 'REPLAY_REPAIR_ARTIFACT_SET')
     report = json.loads(native.read_regular(root / 'repair.json'))
+    cleanup = json.loads(native.read_regular(root / 'repair-terminal-cleanup.json'))
+    native.need(cleanup['schema'] == 'HH-GT06-REPAIR-CLEANUP-1'
+                and cleanup['primary'] is None and cleanup['cleanup_clean'] is True
+                and cleanup['owner_closed'] is True and cleanup['transport_closed'] is True
+                and cleanup['cleanup_errors'] == 0, 'REPLAY_REPAIR_CLEANUP')
     # Empty stderr is normal, so the producer's nonempty-artifact map omits it.
     # Still read and check the actual file, including reparse protection.
     stderr_path = root / 'repair-stderr.txt'

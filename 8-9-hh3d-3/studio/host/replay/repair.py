@@ -25,6 +25,105 @@ from studio.protocol.core import Request, canonical_bytes, parse_json
 from studio.host.core.transport import epoch_ms
 
 
+def _finish_cleanup(primary, failures):
+    """Preserve the operation outcome while retaining cleanup failure context.
+
+    A drain/close failure is safety evidence, but it must not replace an
+    already raised command timeout or rejection. Callers record the cleanup
+    codes separately; this helper only chooses the exception to propagate.
+    """
+    if not failures:
+        return
+    if primary is not None:
+        # The finally block resumes the original exception, including its
+        # original cause/traceback. Secondary failures are retained in the
+        # structured terminal record, never substituted for that exception.
+        return
+    raise failures[0]
+
+
+def _cleanup_code(error):
+    if error is None:
+        return None
+    code = getattr(error, 'code', None)
+    return {'type': type(error).__name__, 'code': code if type(code) is str
+            and re.fullmatch(r'[A-Z][A-Z0-9_]{0,63}', code) else None}
+
+
+def _cleanup(output, owner, server, editors, check_closed, primary):
+    """Halt/drain before editor access; retain independent outcome/cleanup facts.
+
+    A failed owner drain forbids direct editor teardown because an effect may
+    still own it. The existing outer Job remains the final bounded tree owner.
+    Only a successful transport drain permits one more owner cleanup attempt.
+    """
+    failures, attempts, closed_editors = [], [], []
+
+    def close_resource(resource, role):
+        if resource is None:
+            return True
+        try:
+            resource.close()
+        except BaseException as error:
+            failures.append(error)
+            attempts.append({'role': role, 'closed': False, 'error': _cleanup_code(error)})
+            return False
+        attempts.append({'role': role, 'closed': True, 'error': None})
+        return True
+
+    owner_closed = close_resource(owner, 'owner')
+    server_closed = close_resource(server, 'transport')
+    if not owner_closed and server_closed:
+        owner_closed = close_resource(owner, 'owner_after_transport_drain')
+    # Known editors are already closed by a successfully drained owner.
+    # Read their idempotent close facts only then; never race an active effect.
+    if owner_closed:
+        for index, (editor, identity) in enumerate(editors):
+            try:
+                closed = editor.close()
+                check_closed(closed, identity['pid'])
+                native.write(output / ('editor-close-' + str(index) + '.json'), closed)
+                closed_editors.append({'index': index, 'identity': identity, 'cleanup': closed})
+            except BaseException as error:
+                failures.append(error)
+                attempts.append({'role': 'editor-' + str(index), 'closed': False,
+                                 'error': _cleanup_code(error)})
+    # Collect receipts emitted by EditorOwner itself, including a successor
+    # created before a timed-out HTTP call could register it in `editors`.
+    # Missing natural exit stays null. These files do not create an exit fact.
+    receipts = []
+    parent = getattr(owner, '_editor_parent', None)
+    if owner_closed and parent is not None:
+        try:
+            for directory in sorted(parent.iterdir()):
+                native.need(re.fullmatch(r'editor-[0-9a-f]{32}', directory.name)
+                            and directory.is_dir() and not directory.is_symlink(),
+                            'REPAIR_EDITOR_RECEIPT_PATH')
+                path = directory / 'close.json'
+                raw = native.read_regular(path) if path.exists() else None
+                receipts.append({'directory': directory.name,
+                    'close_sha256': native.sha(raw) if raw is not None else None,
+                    'cleanup': parse_json(raw) if raw is not None else None})
+                native.need(raw is not None, 'REPAIR_EDITOR_CLOSE_MISSING')
+        except BaseException as error:
+            failures.append(error)
+            attempts.append({'role': 'editor_receipts', 'closed': False,
+                             'error': _cleanup_code(error)})
+    record = {'schema': 'HH-GT06-REPAIR-CLEANUP-1', 'primary': _cleanup_code(primary),
+        'attempts': attempts, 'owner_closed': owner_closed, 'transport_closed': server_closed,
+        'known_editors': closed_editors, 'owner_editor_receipts': receipts,
+        'editor_receipts_deferred': not owner_closed, 'cleanup_errors': len(failures),
+        'cleanup_clean': owner_closed and server_closed and not failures,
+        'formal_acceptance': False}
+    try:
+        native.write(output / 'repair-terminal-cleanup.json', record)
+    except BaseException as error:
+        failures.append(error)
+        # A missing terminal record fails success; the primary error still wins.
+    _finish_cleanup(primary, failures)
+    return record
+
+
 def load(name, path):
     spec = importlib.util.spec_from_file_location(name, path)
     module = importlib.util.module_from_spec(spec)
@@ -168,24 +267,9 @@ def execute(output: Path, fault_root: Path, fault_hash: str, binary: Path, sourc
             'response_sha256': native.sha(wire), 'selected_project_revision': selected.project_revision,
             'source_closure_sha256': source_closure}
     finally:
-        # Preserve all owners on any failed drain; the outer bounded process
-        # owns the complete tree, while each EditorOwner checks its own identity.
-        failures = []
-        for resource in (server, owner):
-            if resource is not None:
-                try:
-                    resource.close()
-                except BaseException as exc:
-                    failures.append(exc)
-        for index, (editor, identity) in enumerate(editors):
-            try:
-                closed = editor.close()
-                model._load('editor_owner').EditorOwner._clean_closed(closed, identity['pid'])
-                native.write(output / ('editor-close-' + str(index) + '.json'), closed)
-            except BaseException as exc:
-                failures.append(exc)
-        if failures:
-            raise failures[0]
+        primary = sys.exc_info()[1]
+        _cleanup(output, owner, server, editors,
+                 lambda closed, pid: model._load('editor_owner').EditorOwner._clean_closed(closed, pid), primary)
     native.write(output / 'repair.json', result)
     print('HH_GT06_REPAIR_COMPLETE ' + json.dumps(result), flush=True)
 
@@ -231,9 +315,14 @@ def main():
         stdout = (output / 'repair-stdout.txt').read_bytes()
         stderr = (output / 'repair-stderr.txt').read_bytes()
         report = json.loads(native.read_regular(output / 'repair.json'))
+        cleanup = json.loads(native.read_regular(output / 'repair-terminal-cleanup.json'))
         markers = [json.loads(row.split(' ', 1)[1]) for row in stdout.decode('utf-8').splitlines()
             if row.startswith('HH_GT06_REPAIR_COMPLETE ')]
-        passed = (not stderr and not re.search(rb'\b(?:WARNING|ERROR)\b|\bError:', stdout)
+        passed = (cleanup['schema'] == 'HH-GT06-REPAIR-CLEANUP-1'
+                  and cleanup['primary'] is None and cleanup['cleanup_clean'] is True
+                  and cleanup['owner_closed'] is True and cleanup['transport_closed'] is True
+                  and cleanup['cleanup_errors'] == 0
+                  and not stderr and not re.search(rb'\b(?:WARNING|ERROR)\b|\bError:', stdout)
                   and len(markers) == 1 and markers[0] == report)
     artifacts = {p.name: native.sha(native.read_regular(p)) for p in output.iterdir()
         if p.is_file() and p.name not in ('capture.json',) and p.stat().st_size > 0}

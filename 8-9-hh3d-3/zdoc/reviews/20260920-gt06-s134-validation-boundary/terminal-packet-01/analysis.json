@@ -1,0 +1,162 @@
+{
+  "accepted_full_runs": 0,
+  "authority": 0,
+  "command_deadline_ms": 1789900986496,
+  "execution_source_closure": "1a2b2b392a39afc7dc0052b66a96f751c2b41261b38f6d0bedc9346913f8db16",
+  "formal_acceptance": false,
+  "generation_after_deadline_ms": 1257,
+  "generation_observed_ms": 1789900987753,
+  "generation_receipt": "owned/editor/editor-6b587f42bdb84e97b82171535ccbc1c3/generation-0e32650f852f48178d9064845bd011e2.json",
+  "host": {
+    "argv": [
+      "python.exe",
+      "-B",
+      "$SNAPSHOT/host/replay/repair.py",
+      "--child",
+      "--run-id",
+      "gt06-s134-managed-repair-01",
+      "--fault-run",
+      "gt06-s65-native-04",
+      "--fault-capture-sha256",
+      "d3469bee92f7decad37d1f937631cff467548c8751f03ca99eac029c7547b7a1",
+      "--binary",
+      "$SNAPSHOT/.local/tooling/godot-4.7.2-stable/Godot_v4.7.2-stable_win64.exe",
+      "--closure",
+      "1a2b2b392a39afc7dc0052b66a96f751c2b41261b38f6d0bedc9346913f8db16"
+    ],
+    "exit_code": 1,
+    "host": "repair-host.json",
+    "ownership": "gated_job_kill_on_close",
+    "started_at": "2026-09-20T10:40:47.089620+00:00",
+    "stderr": "repair-stderr.txt",
+    "stdout": "repair-stdout.txt",
+    "target_pid": 26188,
+    "timed_out": false,
+    "tree_verified": true,
+    "wrapper_exit_code": 0,
+    "wrapper_pid": 46824
+  },
+  "journal_kinds": [
+    "GENESIS",
+    "BOOTSTRAP_PREPARED",
+    "BOOTSTRAP_SELECTING",
+    "BOOTSTRAP_SELECTED",
+    "CONFIG",
+    "CAPTURE_PREPARED",
+    "CAPTURED",
+    "PREPARED",
+    "STAGED",
+    "VALIDATED",
+    "RETIRE_PREPARED",
+    "RETIRED",
+    "ACTIVATING",
+    "SELECTED",
+    "UNKNOWN"
+  ],
+  "journal_timeline": [
+    {
+      "kind": "CONFIG",
+      "observed_ms": 1789900891427,
+      "utc": "2026-09-20T10:41:31.427000+00:00"
+    },
+    {
+      "kind": "CAPTURE_PREPARED",
+      "observed_ms": 1789900898918,
+      "utc": "2026-09-20T10:41:38.918000+00:00"
+    },
+    {
+      "kind": "CAPTURED",
+      "observed_ms": 1789900902710,
+      "utc": "2026-09-20T10:41:42.710000+00:00"
+    },
+    {
+      "kind": "PREPARED",
+      "observed_ms": 1789900932572,
+      "utc": "2026-09-20T10:42:12.572000+00:00"
+    },
+    {
+      "kind": "STAGED",
+      "observed_ms": 1789900939418,
+      "utc": "2026-09-20T10:42:19.418000+00:00"
+    },
+    {
+      "kind": "VALIDATED",
+      "observed_ms": 1789900943429,
+      "utc": "2026-09-20T10:42:23.429000+00:00"
+    },
+    {
+      "kind": "RETIRE_PREPARED",
+      "observed_ms": 1789900951732,
+      "utc": "2026-09-20T10:42:31.732000+00:00"
+    },
+    {
+      "kind": "RETIRED",
+      "observed_ms": 1789900958600,
+      "utc": "2026-09-20T10:42:38.600000+00:00"
+    },
+    {
+      "kind": "ACTIVATING",
+      "observed_ms": 1789900965478,
+      "utc": "2026-09-20T10:42:45.478000+00:00"
+    },
+    {
+      "kind": "SELECTED",
+      "observed_ms": 1789900973712,
+      "utc": "2026-09-20T10:42:53.712000+00:00"
+    },
+    {
+      "kind": "UNKNOWN",
+      "observed_ms": 1789900989260,
+      "utc": "2026-09-20T10:43:09.260000+00:00"
+    }
+  ],
+  "limits": [
+    "Frame chain integrity is not registry custody verification.",
+    "Event observed_ms is not method completion time.",
+    "Generation effect receipt is not public ACK or durable commit.",
+    "Outer tree_verified does not supply missing successor exit/handle records.",
+    "Validation container StartedAt/FinishedAt establish chronology, not directory order."
+  ],
+  "outcome": "FAILED_UNKNOWN_COMMAND",
+  "primary": "HTTP_GETRESPONSE_TIMEOUT",
+  "root_cause": "UNKNOWN",
+  "schema": "HH-S134-TERMINAL-ANALYSIS-1",
+  "secondary": "GODOT_TRANSPORT_DRAIN_REQUIRED",
+  "source_unchanged": true,
+  "successor_close": "MISSING",
+  "successor_natural_exit": "UNKNOWN",
+  "validation_container_states": [
+    {
+      "path": "owned/validation/validate-2dab02c669cc4bc98b78e0d2df940e4e/executor/after-command-inspect-stdout.txt",
+      "state": {
+        "Dead": false,
+        "Error": "",
+        "ExitCode": 0,
+        "FinishedAt": "2026-09-20T10:41:18.084151631Z",
+        "OOMKilled": false,
+        "Paused": false,
+        "Pid": 0,
+        "Restarting": false,
+        "Running": false,
+        "StartedAt": "2026-09-20T10:41:01.27266322Z",
+        "Status": "exited"
+      }
+    },
+    {
+      "path": "owned/validation/validate-41cfdf8beacd49dea98c63ccf16c91f0/executor/after-command-inspect-stdout.txt",
+      "state": {
+        "Dead": false,
+        "Error": "",
+        "ExitCode": 0,
+        "FinishedAt": "2026-09-20T10:42:07.452756692Z",
+        "OOMKilled": false,
+        "Paused": false,
+        "Pid": 0,
+        "Restarting": false,
+        "Running": false,
+        "StartedAt": "2026-09-20T10:41:51.903597401Z",
+        "Status": "exited"
+      }
+    }
+  ]
+}
