@@ -23,6 +23,13 @@ eligible for the dataset. The full diagnostic helper remains here for a later
 fresh ID only after that attribution; it uses the stock workload and captures
 handles/PSS only after an original gate failure.
 
+The five-row `job-readback-probe.json` is that offline attribution: four rows
+returned the exact requested value and one returned `+156250`; every row had
+matching flags, active limit and memory, and closed its owner cleanly. The
+probe launched only short-lived Python sleepers, never Godot or the native
+fixture. The equality gate therefore remains strict, while a fresh diagnostic
+ID is justified to see whether the same boundary is transient at launch.
+
 Selected raw artifacts are copied byte-for-byte beside this file. `manifest.json`
 records their hashes and excludes the large local runtime tree, caches,
 journals and secrets. `README-seed.md` is historical scaffolding and is not

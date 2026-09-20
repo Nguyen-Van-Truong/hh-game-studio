@@ -63,8 +63,8 @@ GT06_SOURCE_FILE_COUNT=53
 GT06_PROFILE_SHA256=0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85
 GT06_BENCHMARK_CAMPAIGN=gt06-s116-formal-01
 GT06_BENCHMARK_STATUS=S116_FAILED_BATCH10_JOINT_OBSERVATION_STATUS_GAP_2041.7971MS; ZERO_ACCEPTED_FULL_RUNS
-GT06_ACTIVE_DIAGNOSTIC=S126_POST_FAILURE_FULL_LAUNCH_FAILED_JOB_READBACK_BEFORE_ENGINE; NO_ENGINE_RUNNING
-GT06_NEXT_ACTION=Attribute the 156250-unit Windows Job user-time readback boundary offline against the existing strict gate and S117 evidence; do not weaken equality or retry engine blindly. Only after discriminating evidence, use a fresh ID for one full35 stock diagnostic with post-failure-only handle observation. No diagnostic dataset; preserve original gates and all failures.
+GT06_ACTIVE_DIAGNOSTIC=S126_JOB_READBACK_PROBE_4_OF_5_EXACT_1_OF_5_PLUS156250; NO_ENGINE_RUNNING
+GT06_NEXT_ACTION=Launch one fresh S127 full35 stock diagnostic after the offline Job API attribution; keep strict equality, original gates, profile and native source. If Job readback fails again, preserve it as an environment boundary; if it passes, capture handles/PSS only after an original retained-counter gate. No diagnostic dataset; preserve original gates and all failures.
 GT06_DIAGNOSTIC_EXCLUSION=All failed partial/instrumented/supplemental runs through S126 excluded from F13/F14; preserve their raw, missing-evidence gaps and lessons. History in S124/S125 archives and referenced review packets.
 
 TIẾN ĐỘ HIỆN HÀNH — S126, ngày 20-09-2026 (timestamps UTC)
@@ -84,6 +84,8 @@ Flags/active limit/memory khớp; Job đóng sạch, wrapper exit2, target chưa
 Đây là pre-engine environment boundary, không phải lookup/status gap, handle
 leak hay gameplay. Evidence chọn lọc ở reviews/20260920-gt06-s126-post-failure-full/;
 raw `.local` giữ nguyên và không nhập dataset.
+Probe tĩnh năm process Python trong cùng Job API trả đúng 4 lần và lệch +156250
+1 lần, tất cả owner đóng sạch; bằng chứng này nằm trong cùng packet S126.
 
 S116 formal thất bại status gap2041.7971ms. S123 candidate đạt batch0–4 rồi
 trượt handles555→560 ở batch5; S124 cùng source chạy0–6, handles trở về555 tại
@@ -91,12 +93,10 @@ trượt handles555→560 ở batch5; S124 cùng source chạy0–6, handles tr�
 phía host. Không kết luận leak/no-leak/root cause hoặc nới gate từ bộ đếm này.
 Mọi failure S70–S124 và khoảng trống exit/cleanup cũ được giữ nguyên.
 
-Bước tiếp theo không phải chạy lại: đối chiếu tĩnh readback 156250 với S117 và
-Windows Job API/ctypes layout; giữ strict equality, không nới thời gian hay
-baseline. Chỉ nếu phân biệt được đó là biểu diễn OS không ảnh hưởng giới hạn
-hiệu lực mới tạo ID mới cho diagnostic đủ35 batch stock, chụp handle sau gate
-gốc thất bại. Nếu không tái hiện, kết quả chỉ là diagnostic, không biến thành
-formal.
+Bước tiếp theo là S127, một ID mới cho diagnostic đủ35 batch stock, giữ strict
+equality và chụp handle sau gate gốc thất bại. Nếu readback lại lệch, giữ như
+environment boundary và không lặp engine; nếu qua, để workload chạy tự nhiên.
+Kết quả vẫn diagnostic, không biến thành formal.
 GT06 formal vẫn10freshpairs×35batch (5warmup+30measured), fulldataset/exits/
 Jobs/handles/source hashes/allattempts, hai critic độc lập cùng finalclosure.
 GT07→GT10 tuần tự; GT08 cần Android thật. Chưa có ETA đáng tin cho toànplan.
