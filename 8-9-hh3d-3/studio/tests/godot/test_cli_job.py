@@ -168,6 +168,47 @@ class FaultTests(unittest.TestCase):
         self.assertIsNone(jobs.owner_for_process(object()))
         owner.close();self.assertIsNone(jobs.owner_for_process(process))
 
+    def test_before_assign_callback_runs_after_base_config_and_before_assignment(self):
+        native=FakeNative(); calls=[]
+        def callback(owner):
+            calls.append((owner.configured, list(native.calls)))
+            return {'limit': 'exact'}
+        with patch.object(jobs,'_native',return_value=native):
+            owner=jobs.create(object(), before_assign=callback)
+        self.assertEqual(calls, [(False, ['create','configure'])])
+        self.assertEqual(native.calls, ['create','configure','assign'])
+        owner.close()
+
+    def test_callback_failure_never_assigns_and_retains_failed_cleanup(self):
+        for cleanup_fails in (False, True):
+            native=FakeNative()
+            if cleanup_fails: native.fail.add('close')
+            initiating=ValueError('injected configure rejection')
+            def callback(owner):
+                self.assertIs(jobs.owner_for_process(owner._process),owner)
+                raise initiating
+            with patch.object(jobs,'_native',return_value=native):
+                with self.assertRaises(jobs.JobError) as caught:
+                    jobs.create(object(),before_assign=callback)
+            self.assertIs(caught.exception.__cause__,initiating)
+            self.assertNotIn('assign',native.calls)
+            if cleanup_fails:
+                self.assertIsNotNone(caught.exception.cleanup_owner)
+                with self.assertRaises(jobs.JobError): jobs.require_no_holds()
+                native.fail.clear();self.assertTrue(jobs.retry_cleanup()[0]['closed'])
+            else:
+                self.assertIsNone(caught.exception.cleanup_owner)
+
+    def test_callback_cancellation_preserves_signal_and_never_assigns(self):
+        native=FakeNative();signal=KeyboardInterrupt('cancel empty configuration')
+        def callback(owner): raise signal
+        with patch.object(jobs,'_native',return_value=native):
+            with self.assertRaises(KeyboardInterrupt) as caught:
+                jobs.create(object(),before_assign=callback)
+        self.assertIs(caught.exception,signal)
+        self.assertNotIn('assign',native.calls)
+        self.assertIsNone(signal.cleanup_owner)
+
 
 @unittest.skipUnless(os.name=='nt','Windows native Job proof')
 class NativeTests(unittest.TestCase):

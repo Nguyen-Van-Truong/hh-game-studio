@@ -229,8 +229,13 @@ class Owner:
                     'failed_operations': sorted(self.failed_operations), 'native_error': self.last_native_error}
 
 
-def create(process) -> Owner:
-    """The caller must keep the helper behind its GO gate until this succeeds."""
+def create(process, *, before_assign=None) -> Owner:
+    """Own the Job, optionally configure it empty, then assign the gated helper.
+
+    The caller must keep its helper behind GO until this returns. The optional
+    trusted callback uses the same constructor cleanup and cancellation path;
+    existing callers keep the default KILL_ON_CLOSE configuration.
+    """
     with _REGISTRY_LOCK:
         require_no_holds()
         if len(_LIVE) >= MAX_OWNERS:
@@ -246,6 +251,8 @@ def create(process) -> Owner:
             raise OSError('native create returned no handle')
         operation = 'CONFIGURE'
         owner._native.configure(owner._handle)
+        if before_assign is not None:
+            before_assign(owner)
         owner.configured = True
         operation = 'ASSIGN'
         owner._native.assign(owner._handle, process)

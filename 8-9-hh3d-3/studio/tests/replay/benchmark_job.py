@@ -82,6 +82,9 @@ def owner_profile(campaign_host):
 
 def configure(job, *, campaign_host=False):
     profile = owner_profile(campaign_host)
+    # JOB_TIME is relative to the user CPU already accumulated by members.
+    # Configure only the empty owned Job so exact readback is an absolute cap.
+    require(job.assigned is False and job.active_count() == 0, 'BENCHMARK_JOB_NOT_EMPTY')
     limits = job._native.ExtendedLimit()
     limits.basic.flags = 0x2000 | 0x200 | 0x8 | 0x4
     limits.basic.active_limit = profile['process_limit']
@@ -252,8 +255,12 @@ class BenchmarkProcess:
             self.process = subprocess.Popen([sys.executable, '-B', '-c', HELPER, str(self.output / 'process'), *argv],
                 stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=self.cwd,
                 env=isolated_env(self.output), creationflags=subprocess.CREATE_NO_WINDOW)
-            self.job = cli_job.create(self.process)
-            self.limits = configure(self.job, campaign_host=campaign_host)
+            def before_assign(job):
+                # Retain ownership before configuration can fail or cancel.
+                self.job = job
+                self.limits = configure(job, campaign_host=campaign_host)
+            self.job = cli_job.create(self.process, before_assign=before_assign)
+            require(self.limits is not None, 'BENCHMARK_JOB_LIMITS_MISSING')
             for name, pipe in (('stdout', self.process.stdout), ('stderr', self.process.stderr)):
                 thread = threading.Thread(target=self._drain, args=(name, pipe), daemon=True)
                 self.threads.append(thread)
@@ -443,11 +450,25 @@ class BenchmarkProcess:
                     'BENCHMARK_PROCESS_HANDLE_CLOSE_UNCERTAIN')
             if self.job is None and self.process is not None:
                 self.job = cli_job.owner_for_process(self.process)
-            if self.job is not None:
-                self.job.close()
-            elif self.process is not None and self.process.poll() is None:
+            # A callback/configure failure leaves this exact helper gated and
+            # unassigned. Stop it before attempting Job close so a checked
+            # close failure cannot strand a live helper outside the retained
+            # owner. The owner/Job error is still propagated below; this is
+            # cleanup, never a success or an automatic retry.
+            unassigned_live = (self.process is not None and self.process.poll() is None
+                               and (self.job is None or self.job.assigned is False))
+            if unassigned_live:
                 require(not self.released, 'BENCHMARK_UNOWNED_RELEASED_PROCESS')
-                self.process.kill()  # unreleased helper; target never launched
+                self.process.kill()
+            try:
+                if self.job is not None:
+                    self.job.close()
+            except BaseException:
+                # Preserve the Job close uncertainty, but still wait for the
+                # exact helper that was already terminated above.
+                if self.process is not None:
+                    self.process.wait(timeout=3)
+                raise
             if self.process is not None:
                 self.process.wait(timeout=3)
             for thread in self.threads:

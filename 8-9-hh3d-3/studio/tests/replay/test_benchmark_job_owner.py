@@ -143,6 +143,18 @@ class OwnerCloseTests(unittest.TestCase):
         self.assertEqual(handle.automatic_close_calls, [])
         self.assertFalse(list(self.output.glob('cleanup-*.json')))
 
+    def test_unassigned_helper_is_waited_when_job_close_fails(self):
+        value = self.make_owner()
+        value.job.assigned = False
+        value.process.poll = Mock(side_effect=[None, 0])
+        value.process.kill = Mock()
+        value.job.close.side_effect = OSError('job close uncertain')
+        with self.assertRaisesRegex(owner.BenchmarkJobError, 'BENCHMARK_CLEANUP_HELD'):
+            value.close()
+        value.process.kill.assert_called_once_with()
+        value.process.wait.assert_called_once_with(timeout=3)
+        self.assertIn(value, owner.HELD_OWNERS)
+
     def test_cleanup_evidence_failure_after_native_close_does_not_double_close(self):
         value = self.make_owner()
         actual_write = owner.write
@@ -201,7 +213,11 @@ class ConstructorProofTests(unittest.TestCase):
             evidence = stack.enter_context(patch.object(owner, 'write'))
             stack.enter_context(patch.object(owner, 'isolated_env', return_value={}))
             launch = stack.enter_context(patch.object(owner.subprocess, 'Popen', return_value=process))
-            stack.enter_context(patch.object(owner.cli_job, 'create', return_value=job))
+            def create_gated(process_arg, *, before_assign):
+                self.assertIs(process_arg, process)
+                before_assign(job)
+                return job
+            stack.enter_context(patch.object(owner.cli_job, 'create', side_effect=create_gated))
             stack.enter_context(patch.object(owner, 'configure', side_effect=original))
             native = stack.enter_context(patch.object(owner, 'close_process_handle_native', side_effect=close_results))
             # The installed Windows runtime supplies CREATE_NO_WINDOW. Every
