@@ -1,0 +1,267 @@
+{
+  "schema": "S131.job-order-probe.1",
+  "authority": 0,
+  "observed_utc": "2026-09-20T07:31:35.250330+00:00",
+  "clean": true,
+  "source_sha256": "25de95f8e5a7fe8c2fb94ed2bdf432fae892d7338749e9d9d26ab20836db317c",
+  "engine_launched": false,
+  "formal_acceptance": false,
+  "rows": [
+    {
+      "lane": "after-editor",
+      "authority": 0,
+      "engine_launched": false,
+      "formal_acceptance": false,
+      "events": [
+        {
+          "stage": "assigned_ready_before_set",
+          "job_time": 0,
+          "requested_job_time": 72000000000,
+          "delta": -72000000000,
+          "job_user_time": 937500,
+          "job_kernel_time": 1093750,
+          "active": 1,
+          "flags": 8192,
+          "active_limit": 0,
+          "memory": 0
+        },
+        {
+          "stage": "set_after_assignment_0",
+          "job_time": 72000937500,
+          "requested_job_time": 72000000000,
+          "delta": 937500,
+          "job_user_time": 937500,
+          "job_kernel_time": 1093750,
+          "active": 1,
+          "flags": 8716,
+          "active_limit": 4,
+          "memory": 2147483648
+        },
+        {
+          "stage": "set_after_assignment_1",
+          "job_time": 72000937500,
+          "requested_job_time": 72000000000,
+          "delta": 937500,
+          "job_user_time": 937500,
+          "job_kernel_time": 1093750,
+          "active": 1,
+          "flags": 8716,
+          "active_limit": 4,
+          "memory": 2147483648
+        },
+        {
+          "stage": "set_after_assignment_2",
+          "job_time": 72000937500,
+          "requested_job_time": 72000000000,
+          "delta": 937500,
+          "job_user_time": 937500,
+          "job_kernel_time": 1093750,
+          "active": 1,
+          "flags": 8716,
+          "active_limit": 4,
+          "memory": 2147483648
+        },
+        {
+          "stage": "after_natural_exit",
+          "job_time": 72000937500,
+          "requested_job_time": 72000000000,
+          "delta": 937500,
+          "job_user_time": 937500,
+          "job_kernel_time": 1093750,
+          "active": 0,
+          "flags": 8716,
+          "active_limit": 4,
+          "memory": 2147483648
+        }
+      ],
+      "cleanup": {
+        "job_active": 0,
+        "native_job_close": true,
+        "actual_exit": 0,
+        "native_process_close": true
+      },
+      "pid": 23628,
+      "actual_exit": 0
+    },
+    {
+      "lane": "before-editor",
+      "authority": 0,
+      "engine_launched": false,
+      "formal_acceptance": false,
+      "events": [
+        {
+          "stage": "configured_empty",
+          "job_time": 72000000000,
+          "requested_job_time": 72000000000,
+          "delta": 0,
+          "job_user_time": 0,
+          "job_kernel_time": 0,
+          "active": 0,
+          "flags": 8716,
+          "active_limit": 4,
+          "memory": 2147483648
+        },
+        {
+          "stage": "assigned_ready",
+          "job_time": 72000000000,
+          "requested_job_time": 72000000000,
+          "delta": 0,
+          "job_user_time": 1093750,
+          "job_kernel_time": 781250,
+          "active": 1,
+          "flags": 8716,
+          "active_limit": 4,
+          "memory": 2147483648
+        },
+        {
+          "stage": "after_natural_exit",
+          "job_time": 72000000000,
+          "requested_job_time": 72000000000,
+          "delta": 0,
+          "job_user_time": 1093750,
+          "job_kernel_time": 781250,
+          "active": 0,
+          "flags": 8716,
+          "active_limit": 4,
+          "memory": 2147483648
+        }
+      ],
+      "cleanup": {
+        "job_active": 0,
+        "native_job_close": true,
+        "actual_exit": 0,
+        "native_process_close": true
+      },
+      "pid": 24284,
+      "actual_exit": 0
+    },
+    {
+      "lane": "after-host",
+      "authority": 0,
+      "engine_launched": false,
+      "formal_acceptance": false,
+      "events": [
+        {
+          "stage": "assigned_ready_before_set",
+          "job_time": 0,
+          "requested_job_time": 72000000000,
+          "delta": -72000000000,
+          "job_user_time": 625000,
+          "job_kernel_time": 1250000,
+          "active": 1,
+          "flags": 8192,
+          "active_limit": 0,
+          "memory": 0
+        },
+        {
+          "stage": "set_after_assignment_0",
+          "job_time": 72000625000,
+          "requested_job_time": 72000000000,
+          "delta": 625000,
+          "job_user_time": 625000,
+          "job_kernel_time": 1250000,
+          "active": 1,
+          "flags": 8716,
+          "active_limit": 6,
+          "memory": 2147483648
+        },
+        {
+          "stage": "set_after_assignment_1",
+          "job_time": 72000625000,
+          "requested_job_time": 72000000000,
+          "delta": 625000,
+          "job_user_time": 625000,
+          "job_kernel_time": 1250000,
+          "active": 1,
+          "flags": 8716,
+          "active_limit": 6,
+          "memory": 2147483648
+        },
+        {
+          "stage": "set_after_assignment_2",
+          "job_time": 72000625000,
+          "requested_job_time": 72000000000,
+          "delta": 625000,
+          "job_user_time": 625000,
+          "job_kernel_time": 1250000,
+          "active": 1,
+          "flags": 8716,
+          "active_limit": 6,
+          "memory": 2147483648
+        },
+        {
+          "stage": "after_natural_exit",
+          "job_time": 72000625000,
+          "requested_job_time": 72000000000,
+          "delta": 625000,
+          "job_user_time": 625000,
+          "job_kernel_time": 1250000,
+          "active": 0,
+          "flags": 8716,
+          "active_limit": 6,
+          "memory": 2147483648
+        }
+      ],
+      "cleanup": {
+        "job_active": 0,
+        "native_job_close": true,
+        "actual_exit": 0,
+        "native_process_close": true
+      },
+      "pid": 40192,
+      "actual_exit": 0
+    },
+    {
+      "lane": "before-host",
+      "authority": 0,
+      "engine_launched": false,
+      "formal_acceptance": false,
+      "events": [
+        {
+          "stage": "configured_empty",
+          "job_time": 72000000000,
+          "requested_job_time": 72000000000,
+          "delta": 0,
+          "job_user_time": 0,
+          "job_kernel_time": 0,
+          "active": 0,
+          "flags": 8716,
+          "active_limit": 6,
+          "memory": 2147483648
+        },
+        {
+          "stage": "assigned_ready",
+          "job_time": 72000000000,
+          "requested_job_time": 72000000000,
+          "delta": 0,
+          "job_user_time": 1093750,
+          "job_kernel_time": 1093750,
+          "active": 1,
+          "flags": 8716,
+          "active_limit": 6,
+          "memory": 2147483648
+        },
+        {
+          "stage": "after_natural_exit",
+          "job_time": 72000000000,
+          "requested_job_time": 72000000000,
+          "delta": 0,
+          "job_user_time": 1093750,
+          "job_kernel_time": 1093750,
+          "active": 0,
+          "flags": 8716,
+          "active_limit": 6,
+          "memory": 2147483648
+        }
+      ],
+      "cleanup": {
+        "job_active": 0,
+        "native_job_close": true,
+        "actual_exit": 0,
+        "native_process_close": true
+      },
+      "pid": 26528,
+      "actual_exit": 0
+    }
+  ]
+}

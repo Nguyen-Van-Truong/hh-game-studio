@@ -1,0 +1,76 @@
+{
+  "lane": "after-host",
+  "authority": 0,
+  "engine_launched": false,
+  "formal_acceptance": false,
+  "events": [
+    {
+      "stage": "assigned_ready_before_set",
+      "job_time": 0,
+      "requested_job_time": 72000000000,
+      "delta": -72000000000,
+      "job_user_time": 625000,
+      "job_kernel_time": 1250000,
+      "active": 1,
+      "flags": 8192,
+      "active_limit": 0,
+      "memory": 0
+    },
+    {
+      "stage": "set_after_assignment_0",
+      "job_time": 72000625000,
+      "requested_job_time": 72000000000,
+      "delta": 625000,
+      "job_user_time": 625000,
+      "job_kernel_time": 1250000,
+      "active": 1,
+      "flags": 8716,
+      "active_limit": 6,
+      "memory": 2147483648
+    },
+    {
+      "stage": "set_after_assignment_1",
+      "job_time": 72000625000,
+      "requested_job_time": 72000000000,
+      "delta": 625000,
+      "job_user_time": 625000,
+      "job_kernel_time": 1250000,
+      "active": 1,
+      "flags": 8716,
+      "active_limit": 6,
+      "memory": 2147483648
+    },
+    {
+      "stage": "set_after_assignment_2",
+      "job_time": 72000625000,
+      "requested_job_time": 72000000000,
+      "delta": 625000,
+      "job_user_time": 625000,
+      "job_kernel_time": 1250000,
+      "active": 1,
+      "flags": 8716,
+      "active_limit": 6,
+      "memory": 2147483648
+    },
+    {
+      "stage": "after_natural_exit",
+      "job_time": 72000625000,
+      "requested_job_time": 72000000000,
+      "delta": 625000,
+      "job_user_time": 625000,
+      "job_kernel_time": 1250000,
+      "active": 0,
+      "flags": 8716,
+      "active_limit": 6,
+      "memory": 2147483648
+    }
+  ],
+  "cleanup": {
+    "job_active": 0,
+    "native_job_close": true,
+    "actual_exit": 0,
+    "native_process_close": true
+  },
+  "pid": 40192,
+  "actual_exit": 0
+}

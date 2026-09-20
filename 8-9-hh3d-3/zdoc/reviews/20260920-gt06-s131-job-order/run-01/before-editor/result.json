@@ -1,0 +1,52 @@
+{
+  "lane": "before-editor",
+  "authority": 0,
+  "engine_launched": false,
+  "formal_acceptance": false,
+  "events": [
+    {
+      "stage": "configured_empty",
+      "job_time": 72000000000,
+      "requested_job_time": 72000000000,
+      "delta": 0,
+      "job_user_time": 0,
+      "job_kernel_time": 0,
+      "active": 0,
+      "flags": 8716,
+      "active_limit": 4,
+      "memory": 2147483648
+    },
+    {
+      "stage": "assigned_ready",
+      "job_time": 72000000000,
+      "requested_job_time": 72000000000,
+      "delta": 0,
+      "job_user_time": 1093750,
+      "job_kernel_time": 781250,
+      "active": 1,
+      "flags": 8716,
+      "active_limit": 4,
+      "memory": 2147483648
+    },
+    {
+      "stage": "after_natural_exit",
+      "job_time": 72000000000,
+      "requested_job_time": 72000000000,
+      "delta": 0,
+      "job_user_time": 1093750,
+      "job_kernel_time": 781250,
+      "active": 0,
+      "flags": 8716,
+      "active_limit": 4,
+      "memory": 2147483648
+    }
+  ],
+  "cleanup": {
+    "job_active": 0,
+    "native_job_close": true,
+    "actual_exit": 0,
+    "native_process_close": true
+  },
+  "pid": 24284,
+  "actual_exit": 0
+}
