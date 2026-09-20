@@ -1,0 +1,45 @@
+{
+  "disposition": "ORIGINAL_FAILURE",
+  "eligible_for_dataset": false,
+  "errors": [
+    {
+      "chain": [
+        {
+          "code": "BENCHMARK_JOB_LIMIT_MISMATCH",
+          "exception_class": "BenchmarkJobError",
+          "frames": [
+            {
+              "file": "coupled_journal.py",
+              "line": 265
+            },
+            {
+              "file": "run_benchmark_campaign.py",
+              "line": 889
+            },
+            {
+              "file": "benchmark_job.py",
+              "line": 256
+            },
+            {
+              "file": "benchmark_job.py",
+              "line": 99
+            },
+            {
+              "file": "benchmark_job.py",
+              "line": 46
+            }
+          ]
+        }
+      ],
+      "stage": "campaign"
+    }
+  ],
+  "exit_scope": "Natural full completion must drain original child; failure may leave editor natural exit UNKNOWN. External observer supplies launcher actual exit.",
+  "formal_acceptance": false,
+  "gates": [],
+  "limits": "Diagnostic only; PSS after original rejection cannot alter the gate. No root-cause, no-leak or formal PASS claim.",
+  "pid": 17024,
+  "run_id": "gt06-s129-host-attribution-02",
+  "schema": "S129.post-failure-diagnostic.1",
+  "source_unchanged": true
+}

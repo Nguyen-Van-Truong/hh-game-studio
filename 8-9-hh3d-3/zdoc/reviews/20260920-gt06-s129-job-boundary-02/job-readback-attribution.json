@@ -1,0 +1,22 @@
+{
+  "schema": "S130.job-readback-attribution.1",
+  "authority": 0,
+  "run_id": "gt06-s129-host-attribution-02",
+  "engine_started": false,
+  "formal_acceptance": false,
+  "eligible_for_dataset": false,
+  "requested_job_time_100ns": 72000000000,
+  "observed_job_time_100ns": 72000156250,
+  "delta_job_time_100ns": 156250,
+  "observed_flags_match": true,
+  "observed_active_limit_match": true,
+  "observed_memory_match": true,
+  "s126_probe_rows": 5,
+  "s126_exact_rows": 4,
+  "s126_plus_156250_rows": 1,
+  "s126_other_deltas": [],
+  "conclusion": "The strict equality gate rejected the fresh run before engine launch; the retained five-row probe shows the same single +156250 readback boundary. This is an OS/job-representation attribution boundary only; it does not establish a GT06 root cause, leak, transport fault or PASS.",
+  "source_closure": "aa67729efc7ce45a5c94843f01ad1c7f823f51987574b80e15cfaf8c66a4d65b",
+  "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+  "created_utc": "2026-09-20T06:49:06.958850+00:00"
+}

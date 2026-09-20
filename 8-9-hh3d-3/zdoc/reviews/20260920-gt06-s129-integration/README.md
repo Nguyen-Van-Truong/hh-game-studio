@@ -12,7 +12,7 @@ persistent or transient host/editor kernel-object identities after rejection,
 with corrected production PSS schema and independently retained launcher exit.
 S128 cannot be resumed: its host/editor ended without terminal receipts and its
 helper contract was defective. All S128 raw and its UNKNOWN disposition remain.
-No partial data are imported; the new ID is gt06-s129-host-attribution-01.
+No partial data are imported; the new ID is gt06-s129-host-attribution-02.
 
 post_failure_full.py retains the stock35 batches and original screen_sample,
 allows natural full drain, and observes identities only after an original gate

@@ -1,0 +1,89 @@
+{
+  "elapsed_seconds": 8.21799999999348,
+  "eligible_for_dataset": false,
+  "ended_utc": "2026-09-20T06:34:55.775037+00:00",
+  "errors": [
+    {
+      "chain": [
+        {
+          "code": "BENCHMARK_WRAPPER_EXIT",
+          "exception_class": "BenchmarkJobError",
+          "frames": [
+            {
+              "file": "post_failure_full.py",
+              "line": 130
+            },
+            {
+              "file": "benchmark_job.py",
+              "line": 346
+            },
+            {
+              "file": "benchmark_job.py",
+              "line": 354
+            },
+            {
+              "file": "benchmark_job.py",
+              "line": 46
+            }
+          ]
+        }
+      ],
+      "stage": "parent"
+    }
+  ],
+  "formal_acceptance": false,
+  "observations": {
+    "execution_unchanged": true,
+    "owner": {
+      "closed": true,
+      "drain_threads_alive": [
+        false,
+        false
+      ],
+      "helper_exit_code": 1,
+      "helper_pid": 37976,
+      "job": {
+        "active_count": 0,
+        "assigned": true,
+        "close_uncertain": false,
+        "closed": true,
+        "configured": true,
+        "create_uncertain": false,
+        "failed_operations": [],
+        "handle_retained": false,
+        "native_error": null,
+        "tainted": false,
+        "zero_observed": true
+      },
+      "present": true,
+      "wrapper_process_handle": {
+        "close_uncertain": false,
+        "closed": true,
+        "handle_retained": false,
+        "required": true
+      }
+    },
+    "source_unchanged": true,
+    "target": {
+      "actual_target_exit": {
+        "exit_code": 1,
+        "pid": 17024
+      },
+      "exit": {
+        "file": "owned/process-exit.json",
+        "sha256": "2d5f5d0568201af911f3c2e1083658adeea730bdf9216df9522df7dc21e4db84",
+        "size_bytes": 30
+      },
+      "missing_reason": null,
+      "natural_exit_not_inferred": true,
+      "start": {
+        "file": "owned/process-start.json",
+        "sha256": "d847da91117d1e1f6bc1af985702d04f9e1a99d20e6da969249986fa7f7e5239",
+        "size_bytes": 14
+      }
+    }
+  },
+  "owned_child_natural_exit0": false,
+  "run_id": "gt06-s129-host-attribution-02",
+  "schema": "S129.post-failure.result.1"
+}

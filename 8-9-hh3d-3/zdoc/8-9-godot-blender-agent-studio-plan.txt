@@ -1,5 +1,5 @@
 HH STUDIO — PLAN 1/3: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 20-09-2026, Asia/Saigon | Revision S129 | TRIỂN KHAI THEO GATE
+Ngày 20-09-2026, Asia/Saigon | Revision S130 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -16,7 +16,7 @@ STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng
 
 CURRENT_VALID_WP=GT-06
 EXECUTION_AUTHORIZATION=OWNER_APPROVED_GATED
-IMPLEMENTATION=GT06_S129_DIAGNOSTIC_READY_CANDIDATE; FORMAL_GT06_STILL_PENDING
+IMPLEMENTATION=GT06_S130_PRE_ENGINE_JOB_LIMIT_BOUNDARY; FORMAL_GT06_STILL_PENDING
 GT01_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260913
 GT01_PENDING=NONE
 GT01_PIN_DECISION=GODOT_4.7.2_STABLE_OFFICIAL
@@ -25,9 +25,9 @@ RUNTIME_ACCEPTANCE=GT01_GT02_GT03_GT04_GT05_ACCEPTED
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S129
-EXECUTION_MODE=COORDINATOR_WITH_THREE_INDEPENDENT_ASTRA_XHIGH_WORKERS_OWNER_20260920
-SUBAGENTS_ENABLED=3; ONE_WRITER_PER_FILE; FINAL_GATE_STILL_REQUIRES_TWO_NEW_INDEPENDENT_CRITICS
+PLAN_REVISION=S130
+EXECUTION_MODE=COORDINATOR_SOLO_OWNER_20260920
+SUBAGENTS_ENABLED=0; ONE_WRITER_PER_FILE; FINAL_GATE_STILL_REQUIRES_TWO_NEW_INDEPENDENT_CRITICS
 GT02_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260916_S46
 GT02_REVIEW_STATUS=TWO_INDEPENDENT_PASS_TICK_YES_S46
 GT02_LAST_TESTED_SOURCE_CLOSURE=f28056d8ff705a60d48a54f9dee80f16554494fa976bd0bfabee84bb51fecbbf
@@ -54,7 +54,7 @@ GT05_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260917_S64
 GT05_REVIEW_STATUS=TWO_INDEPENDENT_PASS_TICK_YES_S64
 GT05_CHECKPOINT_COMMIT=808d8ba
 GT05_LAST_TESTED_SOURCE_CLOSURE=c141d54b80022ca7fefdf81f83e7e1078d3cc6aa43954831f82bb3178338a135
-GT06_EVIDENCE_STATUS=ZERO_ACCEPTED_FULL_RUNS; S116_FORMAL_FAILED; S123_RETAINED_COUNTER_FAILED; S124_SEVEN_BATCH_DIAGNOSTIC_COMPLETED; S125_AUTH_RACE_REPRODUCED_AND_REPAIRED; S126_JOB_READBACK_FAILED_PRE_ENGINE; S127_STOCK_DIAGNOSTIC_FAILED_BATCH18_HOST_COUNTER; S128_HOST_ATTRIBUTION_INCOMPLETE_UNKNOWN_BATCH5_NO_TERMINAL_RECEIPTS
+GT06_EVIDENCE_STATUS=ZERO_ACCEPTED_FULL_RUNS; S116_FORMAL_FAILED; S123_RETAINED_COUNTER_FAILED; S124_SEVEN_BATCH_DIAGNOSTIC_COMPLETED; S125_AUTH_RACE_REPRODUCED_AND_REPAIRED; S126_JOB_READBACK_FAILED_PRE_ENGINE; S127_STOCK_DIAGNOSTIC_FAILED_BATCH18_HOST_COUNTER; S128_HOST_ATTRIBUTION_INCOMPLETE_UNKNOWN_BATCH5_NO_TERMINAL_RECEIPTS; S129_PRE_ENGINE_JOB_LIMIT_MISMATCH_NO_BATCH
 GT06_WORKING_SOURCE_STATUS=S125_CANDIDATE_TRANSPORT53_AND_BENCHMARK166_TESTS_PASS; NOT_FORMAL
 GT06_LAST_TESTED_SOURCE_CLOSURE=739447bd1d812b7e4e76754d7c6659a2ba9c1bc53e9045f1cfc2f2b6379dbf08
 GT06_CURRENT_SOURCE_CLOSURE=aa67729efc7ce45a5c94843f01ad1c7f823f51987574b80e15cfaf8c66a4d65b
@@ -62,12 +62,12 @@ GT06_SOURCE_CHECKPOINT=d97960f3; PREVIOUS_RUNTIME=5dde7ffb80ed720a50ba8f68dcdc0a
 GT06_SOURCE_FILE_COUNT=53
 GT06_PROFILE_SHA256=0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85
 GT06_BENCHMARK_CAMPAIGN=gt06-s116-formal-01
-GT06_BENCHMARK_STATUS=S116_FAILED_BATCH10_JOINT_OBSERVATION_STATUS_GAP_2041.7971MS; ZERO_ACCEPTED_FULL_RUNS
-GT06_ACTIVE_DIAGNOSTIC=S129_READY_NEW_ID_gt06-s129-host-attribution-01; NO_ENGINE_RUNNING
-GT06_NEXT_ACTION=Run only fresh diagnostic ID gt06-s129-host-attribution-01 after S129 transport/helper/supervision candidate closure is frozen; preserve original gates, profile, native source and strict equality. Read actual target/helper exits, Job/handles/Stop/source pins and all attempts. No formal retry or dataset until terminal proof. S129 candidate checks: transport 61/61, affected benchmark 166/166, helper 26/26, launcher 2/2, passive scheduler probe exit0; none is GT06 PASS. Do not infer S127 root cause from shutdown evidence.
-GT06_DIAGNOSTIC_EXCLUSION=All failed partial/instrumented/supplemental runs through S128 excluded from F13/F14; preserve their raw, missing-evidence gaps and lessons. History in S124/S125/S126/S127 archives and referenced review packets.
+GT06_BENCHMARK_STATUS=S116_FAILED_BATCH10_JOINT_OBSERVATION_STATUS_GAP_2041.7971MS; S129_HOST_ATTRIBUTION_02_FAILED_PRE_ENGINE_JOB_LIMIT_MISMATCH; ZERO_ACCEPTED_FULL_RUNS
+GT06_ACTIVE_DIAGNOSTIC=S130_PRE_ENGINE_JOB_LIMIT_BOUNDARY_gt06-s129-host-attribution-02; NO_ENGINE_RUNNING
+GT06_NEXT_ACTION=Preserve S130 pre-engine Job mismatch and perform read-only attribution of requested/observed Windows Job ExtendedLimitInformation against S126 five-row probe; keep strict equality, gates, profile, source and workstation fixed. Do not rerun formal or diagnostic blindly; no dataset. S129 candidate checks remain transport 61/61, affected benchmark 166/166, helper 26/26, launcher 2/2, passive scheduler probe exit0; none is GT06 PASS.
+GT06_DIAGNOSTIC_EXCLUSION=All failed partial/instrumented/supplemental runs through S130 excluded from F13/F14; preserve their raw, missing-evidence gaps and lessons. History in S124/S125/S126/S127 archives and referenced review packets.
 
-TIẾN ĐỘ HIỆN HÀNH — S129, ngày 20-09-2026 (timestamps UTC)
+TIẾN ĐỘ HIỆN HÀNH — S130, ngày 20-09-2026 (timestamps UTC)
 GT01–05 ACCEPTED; GT06 IN_PROGRESS; GT07–10 chưa mở; zero accepted full runs.
 S129 repaired one concrete independent transport lifecycle defect: accepted request
 threads could outlive `LoopbackFixtureHost.close()`. Weak registration before start,
@@ -85,9 +85,25 @@ Its focused tests are 26/26 exit0; integration launcher tests are 2/2 exit0.
 Passive supervision validation attempt04 covered actual controller exit0/7/47,
 a still-live timeout and four pin rejections. A separate demand-only scheduler
 probe exited0 with checked native handle close; it is no-engine evidence only.
-The candidate diagnostic is prepared but not launched: source/profile/workstation
-must stay fixed, raw failures S70–S128 stay immutable, and helper/launcher hashes
-must be frozen before dispatch. No diagnostic or partial data is F13/F14.
+Before S130 dispatch, the candidate diagnostic had its source/profile/workstation
+pins and helper/launcher hashes frozen; raw failures S70–S128 remain immutable.
+Its candidate checks are diagnostics only and no partial data is F13/F14.
+
+S130 fresh diagnostic `gt06-s129-host-attribution-02` was dispatched with the
+S129 source/profile/workstation pins and stopped before batch 0 at the original
+Windows Job readback gate. `BENCHMARK_JOB_LIMIT_MISMATCH` reported requested
+`job_time=72000000000` and observed `72000156250` (+156250); flags, active limit
+and memory matched. No Godot/editor/native benchmark started and there are no
+samples. The launcher actual exit was 1; import target exited 0, child helper 2
+and outer helper 1; owner Job was closed with zero active processes and the
+passive observer closed its retained handle successfully. This is a pre-engine
+environment boundary, not a status-gap, leak, transport or root-cause finding.
+S126's five-row read-only probe remains the attribution reference (four exact,
+one +156250). Packet `reviews/20260920-gt06-s129-job-boundary-02/` preserves
+selected byte-exact receipts and excludes local raw/cache/journal/secret files.
+The strict equality gate is unchanged; no formal retry or new diagnostic is
+allowed until this read-only attribution is recorded.
+
 
 S125 tái hiện bốn trường hợp lease/Stop chờ host lock rồi session bị rotate/hết
 hạn nhưng vẫn được nhận. Sửa hẹp: check_current lại ngay sau khi lấy host lock;
