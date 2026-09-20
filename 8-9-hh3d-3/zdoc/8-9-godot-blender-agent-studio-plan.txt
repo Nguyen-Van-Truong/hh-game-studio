@@ -64,7 +64,7 @@ GT06_PROFILE_SHA256=0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf
 GT06_BENCHMARK_CAMPAIGN=gt06-s116-formal-01
 GT06_BENCHMARK_STATUS=S116_FAILED_BATCH10_JOINT_OBSERVATION_STATUS_GAP_2041.7971MS; ZERO_ACCEPTED_FULL_RUNS
 GT06_ACTIVE_DIAGNOSTIC=S127_STOCK_FULL_DIAGNOSTIC_FAILED_BATCH18_HOST_HANDLES_209_TO_210; NO_ENGINE_RUNNING
-GT06_NEXT_ACTION=Preserve S127 host-counter failure and run only static/read-only observer attribution next; host observer selfcheck and --check pass. Do not launch formal retry or another long engine diagnostic until a distinct question is justified. If host attribution is still required, use a fresh diagnostic ID with the repaired host observer; keep strict equality, original gates, profile and native source. No diagnostic dataset; preserve original gates and all failures.
+GT06_NEXT_ACTION=Preserve S127 host-counter failure; the read-only 19-row attribution and repaired host observer selfcheck/--check pass. Do not launch formal retry or another long engine diagnostic until a distinct question is justified. If host attribution is still required, use a fresh diagnostic ID with the repaired host observer; keep strict equality, original gates, profile and native source. No diagnostic dataset; preserve original gates and all failures.
 GT06_DIAGNOSTIC_EXCLUSION=All failed partial/instrumented/supplemental runs through S127 excluded from F13/F14; preserve their raw, missing-evidence gaps and lessons. History in S124/S125/S126 archives and referenced review packets.
 
 TIẾN ĐỘ HIỆN HÀNH — S127, ngày 20-09-2026 (timestamps UTC)
@@ -108,6 +108,11 @@ Helper S127 cũ chỉ theo dõi editor nên không sinh snapshot bổ sung cho l
 và kiểm tra tĩnh `host_observer_selfcheck.py` PASS; `post_failure_full.py
 --check` PASS, chưa rerun engine sau failure. Chỉ tạo diagnostic ID mới nếu cần
 phân biệt host attribution; không nới gate hoặc lặp formal mù.
+
+Phân tích read-only từ 19 sample cho thấy host handles giữ 209 từ batch5 đến
+17 và chỉ thành210 ở batch18; host RSS vẫn trong giới hạn, editor handles thấp
+hơn baseline. Đây chỉ là boundary attribution, không nhận diện kernel object,
+leak hay root cause; JSON/Markdown và hash nằm trong packet S127.
 
 Bước tiếp theo là đọc attribution S127 và giữ nguyên failure, không launch engine
 thêm khi chưa có câu hỏi phân biệt. Khi có lý do độc lập, một ID mới có thể dùng

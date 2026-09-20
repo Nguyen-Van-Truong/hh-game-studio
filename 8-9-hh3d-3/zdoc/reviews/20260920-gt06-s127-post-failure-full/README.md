@@ -37,6 +37,12 @@ rerun after the failure. A future fresh diagnostic may use this helper only if
 host attribution is still needed; do not weaken the original gate or merge
 this partial run into F13/F14.
 
+The derived `host-counter-attribution.json`/`.md` report reads only the 19
+preserved sample files. It shows the host counter stayed at 209 through batch
+17 and changed to 210 only at batch 18; host RSS stayed within the original
+limit, while the editor counter was lower than baseline. This narrows the
+boundary but does not identify a kernel object or a leak.
+
 Selected raw artifacts are copied byte-for-byte beside this README. The
 manifest covers only this review packet and excludes the large local runtime
 tree, caches, journals and secrets. `s126-plan.snapshot` is the byte-exact
