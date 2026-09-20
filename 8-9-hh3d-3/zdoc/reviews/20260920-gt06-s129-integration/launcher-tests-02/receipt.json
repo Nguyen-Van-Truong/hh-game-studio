@@ -1,0 +1,24 @@
+{
+  "schema": "S129.focused-tests.3",
+  "command": [
+    "C:\\Users\\truon\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+    "-B",
+    "8-9-hh3d-3\\zdoc\\reviews\\20260920-gt06-s129-integration\\test_launcher_cleanup.py"
+  ],
+  "started_utc": "2026-09-20T06:17:59.094460+00:00",
+  "ended_utc": "2026-09-20T06:17:59.539413+00:00",
+  "actual_child_exit": 0,
+  "tests_run": 2,
+  "raw_streams": true,
+  "source_files": {
+    "test_launcher_cleanup.py": "68e7a76dd3ea9cb16e3b98ac89f11f481b4285e963eddc59c7ec26bff485dfad",
+    "post_failure_full.py": "a955c3526de8693cbbc2178ddd83b7daeac92562da7543dcd967bfd140fcd027"
+  },
+  "stream_sha256": {
+    "stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr.txt": "38ad1ea08f38a9fe0936abb3c987b456e3b01bbc872704f86ee21008b4613ebf"
+  },
+  "engine_launched": false,
+  "formal_acceptance": false,
+  "eligible_for_dataset": false
+}

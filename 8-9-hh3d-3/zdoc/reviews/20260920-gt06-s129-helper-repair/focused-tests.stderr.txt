@@ -1,0 +1,23 @@
+test_executable_normalization_and_mismatch (__main__.BindingTests.test_executable_normalization_and_mismatch) ... ok
+test_pure_binding_validates_host_and_editor_independently_without_mutation (__main__.BindingTests.test_pure_binding_validates_host_and_editor_independently_without_mutation) ... ok
+test_binding_receipt_probe_and_observer_failures_preserve_primary (__main__.GateTests.test_binding_receipt_probe_and_observer_failures_preserve_primary) ... ok
+test_boundary_flag_requires_explicit_boolean (__main__.GateTests.test_boundary_flag_requires_explicit_boolean) ... ok
+test_joint_host_mismatch_blocks_all_supplemental_observations (__main__.GateTests.test_joint_host_mismatch_blocks_all_supplemental_observations) ... ok
+test_original_failure_wins_at_boundary_and_dispatches_only_growing_roles (__main__.GateTests.test_original_failure_wins_at_boundary_and_dispatches_only_growing_roles) ... ok
+test_original_receipt_is_written_before_binding_or_supplemental_work (__main__.GateTests.test_original_receipt_is_written_before_binding_or_supplemental_work) ... ok
+test_other_primary_codes_do_not_trigger_counter_observers (__main__.GateTests.test_other_primary_codes_do_not_trigger_counter_observers) ... ok
+test_stop_false_returns_naturally_through_full_35_row_boundary (__main__.GateTests.test_stop_false_returns_naturally_through_full_35_row_boundary) ... ok
+test_stop_true_raises_boundary_only_after_original_gate_passes (__main__.GateTests.test_stop_true_raises_boundary_only_after_original_gate_passes) ... ok
+test_completion_receipt_write_failure_cannot_return_success (__main__.ObservationTests.test_completion_receipt_write_failure_cannot_return_success) ... ok
+test_failed_pss_status_binding_cleanup_or_errors_never_publish_row (__main__.ObservationTests.test_failed_pss_status_binding_cleanup_or_errors_never_publish_row) ... ok
+test_host_counter_sample_must_match_retained_identity (__main__.ObservationTests.test_host_counter_sample_must_match_retained_identity) ... ok
+test_packet_rejects_missing_receipt_stale_schema_and_tampered_rows (__main__.ObservationTests.test_packet_rejects_missing_receipt_stale_schema_and_tampered_rows) ... ok
+test_post_capture_stop_and_wall_limit_precede_successful_write (__main__.ObservationTests.test_post_capture_stop_and_wall_limit_precede_successful_write) ... ok
+test_pss_identity_mismatches_never_publish_a_completed_row (__main__.ObservationTests.test_pss_identity_mismatches_never_publish_a_completed_row) ... ok
+test_real_copied_adapter_identity_and_capture_contract_for_both_roles (__main__.ObservationTests.test_real_copied_adapter_identity_and_capture_contract_for_both_roles) ... ok
+test_second_capture_executable_drift_keeps_partial_sequence_incomplete (__main__.ObservationTests.test_second_capture_executable_drift_keeps_partial_sequence_incomplete) ... ok
+
+----------------------------------------------------------------------
+Ran 18 tests in 0.018s
+
+OK

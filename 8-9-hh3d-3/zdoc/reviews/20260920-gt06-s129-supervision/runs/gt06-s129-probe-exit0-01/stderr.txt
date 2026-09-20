@@ -1,0 +1,15 @@
+Traceback (most recent call last):
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260920-gt06-s129-supervision\controller_probe.py", line 43, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260920-gt06-s129-supervision\controller_probe.py", line 37, in main
+    observer.observe_exit(int(process._handle), child), 'popen_exit': code,
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260920-gt06-s129-supervision\passive_observer.py", line 101, in observe_exit
+    need(identity(handle, expected['pid']) == expected, 'S129_EXIT_IDENTITY')
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260920-gt06-s129-supervision\passive_observer.py", line 90, in identity
+    need(k.QueryFullProcessImageNameW(handle, 0, image, ctypes.byref(size)), 'S129_PROCESS_IMAGE')
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260920-gt06-s129-supervision\passive_observer.py", line 30, in need
+    raise RuntimeError(code)
+RuntimeError: S129_PROCESS_IMAGE

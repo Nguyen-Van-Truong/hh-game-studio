@@ -1,0 +1,32 @@
+{
+  "actual_exit": 0,
+  "command": [
+    "C:\\Users\\truon\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+    "-B",
+    "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260920-gt06-s129-integration\\test_launcher_cleanup.py"
+  ],
+  "elapsed_seconds": 0.592031899956055,
+  "eligible_for_dataset": false,
+  "ended_utc": "2026-09-20T06:05:13.988672+00:00",
+  "engine_launched": false,
+  "formal_acceptance": false,
+  "native_process_ownership_calls": "injected synthetic fixtures; subprocess.Popen forbidden inside launcher test",
+  "schema": "S129.launcher-cleanup-regression.1",
+  "source_files_after": {
+    "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260919-gt06-s123-lookup-repair\\support.py": "ad4e2d15cbcb3f890f22a7d2be339aee6b726c62a9c339dfac4478fdaf21e998",
+    "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260920-gt06-s129-integration\\post_failure_full.py": "d4881a552055e9d2b162f57c09d200a19c6ef1c5a17c1b118fb845f8ec073e4e",
+    "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260920-gt06-s129-integration\\test_launcher_cleanup.py": "68e7a76dd3ea9cb16e3b98ac89f11f481b4285e963eddc59c7ec26bff485dfad"
+  },
+  "source_files_before": {
+    "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260919-gt06-s123-lookup-repair\\support.py": "ad4e2d15cbcb3f890f22a7d2be339aee6b726c62a9c339dfac4478fdaf21e998",
+    "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260920-gt06-s129-integration\\post_failure_full.py": "d4881a552055e9d2b162f57c09d200a19c6ef1c5a17c1b118fb845f8ec073e4e",
+    "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260920-gt06-s129-integration\\test_launcher_cleanup.py": "68e7a76dd3ea9cb16e3b98ac89f11f481b4285e963eddc59c7ec26bff485dfad"
+  },
+  "source_unchanged": true,
+  "started_utc": "2026-09-20T06:05:13.396590+00:00",
+  "streams": {
+    "stderr.txt": "03c4eebd4c7717c2b0c7b84188cced0a7d016b87fa1edbdaac45f95e1726c108",
+    "stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "tests_run": 2
+}
