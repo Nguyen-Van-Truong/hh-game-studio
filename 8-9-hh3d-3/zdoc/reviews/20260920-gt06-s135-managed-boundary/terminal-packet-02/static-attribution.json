@@ -1,0 +1,37 @@
+{
+  "schema": "HH-GT06-S135-STATIC-ATTRIBUTION-1",
+  "created_utc": "2026-09-20T14:07:14.691474+00:00",
+  "validation_owner_contract": {
+    "expected_order": [
+      "HH_PROFILE_PHASE_BEGIN parse",
+      "HH_PROFILE_PHASE_END parse 0",
+      "HH_PROFILE_PHASE_BEGIN import",
+      "HH_PROFILE_PHASE_END import 0",
+      "HH_PROFILE_PHASE_BEGIN readback",
+      "HH_PROFILE_READBACK <one marker>",
+      "HH_PROFILE_PHASE_END readback 0"
+    ],
+    "source_contains_phase_order_guard": true,
+    "failure_class": "derived validation rejection when import ends -9 before readback; not a runtime command-lane failure"
+  },
+  "observed_s135": {
+    "managed": "pre-command VALIDATION_PHASE_ORDER",
+    "profile_03": "import -9 / host exit45",
+    "profile_04": "import -9 / host exit45",
+    "binary_input_and_snapshot_unchanged": true,
+    "oom_killed": false,
+    "docker_job_zero_closed": true
+  },
+  "backend_contract": {
+    "source_contains_native_stage": true,
+    "runtime_workload_not_entered": true,
+    "narrow_repair_justified": false
+  },
+  "conclusion": "The evidence separates a profile/import boundary from the previously observed command-lane failures. It does not identify root cause and does not justify changing timeout, gate, baseline, or retrying an identical preflight.",
+  "source_hashes": {
+    "8-9-hh3d-3/studio/godot-addon/validation_owner.py": "de221348093c3f9749ebb6891c50151d6a9ff48bf8276451019ce823b2d45461",
+    "8-9-hh3d-3/studio/host/replay/backend.py": "f7d22a7b3ff001f6fca175c11b5a94c7d75933ac8d3173be3323849af39f8169",
+    "8-9-hh3d-3/zdoc/reviews/20260920-gt06-s135-managed-boundary/terminal-packet-02/analysis.json": "e2c66c8fc395c56d40583d89152e0851260df5af844cac8f86705c07358c34b7",
+    "8-9-hh3d-3/zdoc/reviews/20260920-gt06-s135-managed-boundary/terminal-packet-02/manifest.json": "896cb1031928b9eec2bdbf13dcceae704a98f0a7375feeff745f163a45852023"
+  }
+}

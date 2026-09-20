@@ -1,0 +1,55 @@
+{
+  "schema": "HH-GT06-S135-BOUNDARY-PACKET-1",
+  "created_utc": "2026-09-20T14:03:45.327388+00:00",
+  "formal_acceptance": false,
+  "accepted_full_runs": 0,
+  "diagnostic_only": true,
+  "source_closure_sha256": "f1d35fbd304862c2ef6daa248edce7ea1a84f3db6443f2bde7f452f9699c8d8b",
+  "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+  "managed_attempt": {
+    "run_id": "gt06-s135-managed-repair-01",
+    "lane": "repair",
+    "reached_command_lane": false,
+    "primary": {
+      "type": "ValidationOwnerError",
+      "code": "VALIDATION_PHASE_ORDER"
+    },
+    "outer_derived_verifier": {
+      "type": "ReplayError",
+      "code": "MANAGED_OUTER_EXIT_TREE"
+    },
+    "cleanup": {
+      "owner_closed": true,
+      "transport_closed": true,
+      "cleanup_clean": true
+    },
+    "retry": "do_not_retry_same_id_or_same_preflight_boundary"
+  },
+  "profile_probes": [
+    {
+      "run_id": "gt06-s135-profile-boundary-03",
+      "exit_code": 45,
+      "elapsed_seconds": 18.344,
+      "failed_phase": "import",
+      "engine_marker": "HH_PROFILE_PHASE_END import -9"
+    },
+    {
+      "run_id": "gt06-s135-profile-boundary-04",
+      "exit_code": 45,
+      "elapsed_seconds": 18.141,
+      "failed_phase": "import",
+      "engine_marker": "HH_PROFILE_PHASE_END import -9"
+    }
+  ],
+  "observed": {
+    "binary_unchanged": true,
+    "input_unchanged": true,
+    "oom_killed": false,
+    "docker_job_zero_closed": true,
+    "root_cause": "unknown",
+    "no_leak_claim": true,
+    "no_pass_claim": true
+  },
+  "next_action": "static environment/phase attribution only; do not launch formal or coupled retry until a clean bounded preflight proves the boundary changed",
+  "missing_evidence": []
+}
