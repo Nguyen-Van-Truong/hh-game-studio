@@ -16,12 +16,9 @@ also show variable series (S105 `565,559,555,555,559,555`; S106
 variation, not a source-attributed leak. Numeric `GetProcessHandleCount`
 values and bounded PSS type counts do not identify persistent kernel objects.
 
-S124 had host-side instrumentation and a bounded prefix. Its native
-`benchmark_native.gd` bytes were stock; the complete execution was diagnostic.
+S124 was intentionally instrumented and stopped at a bounded prefix, so it is
+not byte-identical to stock formal `benchmark_native.gd` acceptance execution.
 It is excluded from F13/F14 and cannot justify a threshold, baseline, timeout,
 priority, RSS, or formal-source change. The correct next state is to preserve
 S123/S124 and retain GT06 `IN_PROGRESS`; a blind formal retry or a counter-gate
 relaxation has no evidence basis.
-
-S125 metadata correction: host/native instrumentation scope clarified; prior
-bytes retained in ../20260920-gt06-s125-session-boundary/archive/. Raw unchanged.

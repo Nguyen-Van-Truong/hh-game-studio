@@ -1,0 +1,9 @@
+test_admission_failure_does_not_publish_pending_snapshot (test_transport_pending_lookup.PendingLookupTests.test_admission_failure_does_not_publish_pending_snapshot) ... ok
+test_expired_pending_and_orphan_keep_durable_authority (test_transport_pending_lookup.PendingLookupTests.test_expired_pending_and_orphan_keep_durable_authority) ... ok
+test_pending_lookup_responds_while_terminal_persistence_is_blocked (test_transport_pending_lookup.PendingLookupTests.test_pending_lookup_responds_while_terminal_persistence_is_blocked) ... ok
+test_queued_lease_and_stop_recheck_rotated_or_expired_session (test_transport_pending_lookup.PendingLookupTests.test_queued_lease_and_stop_recheck_rotated_or_expired_session) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.304s
+
+OK

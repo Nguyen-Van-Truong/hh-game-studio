@@ -1,0 +1,45 @@
+test_admission_failure_does_not_publish_pending_snapshot (test_transport_pending_lookup.PendingLookupTests.test_admission_failure_does_not_publish_pending_snapshot) ... ok
+test_expired_pending_and_orphan_keep_durable_authority (test_transport_pending_lookup.PendingLookupTests.test_expired_pending_and_orphan_keep_durable_authority) ... ok
+test_pending_lookup_responds_while_terminal_persistence_is_blocked (test_transport_pending_lookup.PendingLookupTests.test_pending_lookup_responds_while_terminal_persistence_is_blocked) ... ok
+test_queued_lease_and_stop_recheck_rotated_or_expired_session (test_transport_pending_lookup.PendingLookupTests.test_queued_lease_and_stop_recheck_rotated_or_expired_session) ... 
+  test_queued_lease_and_stop_recheck_rotated_or_expired_session (test_transport_pending_lookup.PendingLookupTests.test_queued_lease_and_stop_recheck_rotated_or_expired_session) (path='/v1/lease', invalidation='rotate') ... FAIL
+  test_queued_lease_and_stop_recheck_rotated_or_expired_session (test_transport_pending_lookup.PendingLookupTests.test_queued_lease_and_stop_recheck_rotated_or_expired_session) (path='/v1/lease', invalidation='expire') ... FAIL
+  test_queued_lease_and_stop_recheck_rotated_or_expired_session (test_transport_pending_lookup.PendingLookupTests.test_queued_lease_and_stop_recheck_rotated_or_expired_session) (path='/v1/stop', invalidation='rotate') ... FAIL
+  test_queued_lease_and_stop_recheck_rotated_or_expired_session (test_transport_pending_lookup.PendingLookupTests.test_queued_lease_and_stop_recheck_rotated_or_expired_session) (path='/v1/stop', invalidation='expire') ... FAIL
+
+======================================================================
+FAIL: test_queued_lease_and_stop_recheck_rotated_or_expired_session (test_transport_pending_lookup.PendingLookupTests.test_queued_lease_and_stop_recheck_rotated_or_expired_session) (path='/v1/lease', invalidation='rotate')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\protocol\test_transport_pending_lookup.py", line 83, in test_queued_lease_and_stop_recheck_rotated_or_expired_session
+    self.assertIsInstance(results[0], SafetyViolation)
+AssertionError: {'lease_id': 'session.6c4ea93c7e82bdb0515735d95d4c34b0', 'fencing_epoch': 1, 'expires_ms': 1789856580444, 'revision': 'rev-0'} is not an instance of <class 'studio.host.core.limits.SafetyViolation'>
+
+======================================================================
+FAIL: test_queued_lease_and_stop_recheck_rotated_or_expired_session (test_transport_pending_lookup.PendingLookupTests.test_queued_lease_and_stop_recheck_rotated_or_expired_session) (path='/v1/lease', invalidation='expire')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\protocol\test_transport_pending_lookup.py", line 83, in test_queued_lease_and_stop_recheck_rotated_or_expired_session
+    self.assertIsInstance(results[0], SafetyViolation)
+AssertionError: {'lease_id': 'session.8ccd71d87ecf0a5d6a3a152e4aab721e', 'fencing_epoch': 1, 'expires_ms': 1789856640475, 'revision': 'rev-0'} is not an instance of <class 'studio.host.core.limits.SafetyViolation'>
+
+======================================================================
+FAIL: test_queued_lease_and_stop_recheck_rotated_or_expired_session (test_transport_pending_lookup.PendingLookupTests.test_queued_lease_and_stop_recheck_rotated_or_expired_session) (path='/v1/stop', invalidation='rotate')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\protocol\test_transport_pending_lookup.py", line 83, in test_queued_lease_and_stop_recheck_rotated_or_expired_session
+    self.assertIsInstance(results[0], SafetyViolation)
+AssertionError: Response(status=<Status.ACCEPTED_PENDING: 'ACCEPTED_PENDING'>, code='STOP_DRAINING', command_id='stop.revoked', result_revision=None, result_hash=None, postconditions={'request_digest': 'sha256:39e94514e43ebdf672bbd53cf02def89d1a670087d4bfe29ddf9cfd16001bb85', 'accepting_work': False}, retry_after_ms=None) is not an instance of <class 'studio.host.core.limits.SafetyViolation'>
+
+======================================================================
+FAIL: test_queued_lease_and_stop_recheck_rotated_or_expired_session (test_transport_pending_lookup.PendingLookupTests.test_queued_lease_and_stop_recheck_rotated_or_expired_session) (path='/v1/stop', invalidation='expire')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\protocol\test_transport_pending_lookup.py", line 83, in test_queued_lease_and_stop_recheck_rotated_or_expired_session
+    self.assertIsInstance(results[0], SafetyViolation)
+AssertionError: Response(status=<Status.ACCEPTED_PENDING: 'ACCEPTED_PENDING'>, code='STOP_DRAINING', command_id='stop.revoked', result_revision=None, result_hash=None, postconditions={'request_digest': 'sha256:39e94514e43ebdf672bbd53cf02def89d1a670087d4bfe29ddf9cfd16001bb85', 'accepting_work': False}, retry_after_ms=None) is not an instance of <class 'studio.host.core.limits.SafetyViolation'>
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.607s
+
+FAILED (failures=4)

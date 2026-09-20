@@ -1,0 +1,26 @@
+{
+  "authority": 0,
+  "command": [
+    "C:\\Users\\truon\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+    "-B",
+    "-W",
+    "default",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "studio/tests/protocol",
+    "-p",
+    "test_transport*.py",
+    "-v"
+  ],
+  "cwd": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3",
+  "started": "2026-09-19T22:23:38.146308+00:00",
+  "ended": "2026-09-19T22:23:54.054790+00:00",
+  "actual_exit": 0,
+  "files": {
+    "stderr.txt": "ade268358fe3287d8b7922067eaeaa58221933cfc569fb651c944e4e44b01776",
+    "stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "transport_sha256": "614780e19b182c13b07cfd644e46219a6012804a9852e2a679d36c24002b9487"
+}

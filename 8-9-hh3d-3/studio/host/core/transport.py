@@ -567,6 +567,9 @@ class LoopbackFixtureHost:
             self._scope(session, "fixture.read")
             return self._lookup(command_id)
         with self._lock:
+            # A session can expire or be revoked while dispatch waits for
+            # the host lock. Revalidate before any locked route takes effect.
+            self.sessions.check_current(session)
             if path == "/v1/discovery":
                 self._shape(body, {"project_id", "protocol_version"})
                 if body["protocol_version"] != PROTOCOL_VERSION:
