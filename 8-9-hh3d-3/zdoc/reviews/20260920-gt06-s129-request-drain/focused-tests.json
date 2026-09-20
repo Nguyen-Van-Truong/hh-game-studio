@@ -1,0 +1,25 @@
+{
+  "started_utc": "2026-09-20T05:56:21.049486+00:00",
+  "ended_utc": "2026-09-20T05:56:40.628727+00:00",
+  "command": [
+    "C:\\Users\\truon\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+    "-B",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "8-9-hh3d-3/studio/tests/protocol",
+    "-p",
+    "test_transport*.py",
+    "-v"
+  ],
+  "actual_exit": 0,
+  "tests_run": 61,
+  "files": {
+    "8-9-hh3d-3/studio/host/core/transport.py": "ce431eb3035dde8fe7a65d26f2795d7f7861b652a77edc1348b00ccde9795a03",
+    "8-9-hh3d-3/studio/tests/protocol/test_transport_request_drain.py": "f2ef1e528e4e3eb50873ae866a59ed529b3ffdf31d40aefef66722465a5387d7"
+  },
+  "engine_started": false,
+  "benchmark_run": false,
+  "formal_acceptance": false
+}

@@ -29,7 +29,6 @@ import socketserver
 import threading
 import time
 from typing import Any, Mapping
-import weakref
 
 from ...protocol.core import (Capability, Discovery, PROTOCOL_VERSION,
                               Request, Response, SCHEMA_VERSION, Status,
@@ -241,10 +240,6 @@ class _Listener(socketserver.ThreadingMixIn, socketserver.TCPServer):
         self.owner, self.control = owner, control
         self.slots = threading.BoundedSemaphore(owner.limits.max_control_connections
                                                if control else owner.limits.max_connections)
-        # threading owns live requests. Weak references let completed Thread
-        # objects (and their native resources) disappear without a later sample.
-        self._request_threads: weakref.WeakSet[threading.Thread] = weakref.WeakSet()
-        self._request_threads_lock = threading.Lock()
         super().__init__(("127.0.0.1", 0), _Handler)
 
     def process_request(self, request: socket.socket, client_address: Any) -> None:
@@ -256,20 +251,9 @@ class _Listener(socketserver.ThreadingMixIn, socketserver.TCPServer):
                 pass
             self.shutdown_request(request)
             return
-        thread = None
         try:
-            # Match ThreadingMixIn's Thread lifecycle, registering before start
-            # so shutdown cannot miss a request that has already been accepted.
-            thread = threading.Thread(target=self.process_request_thread,
-                                      args=(request, client_address))
-            thread.daemon = self.daemon_threads
-            with self._request_threads_lock:
-                self._request_threads.add(thread)
-            thread.start()
+            super().process_request(request, client_address)
         except BaseException:
-            if thread is not None:
-                with self._request_threads_lock:
-                    self._request_threads.discard(thread)
             self.slots.release()
             raise
 
@@ -281,25 +265,6 @@ class _Listener(socketserver.ThreadingMixIn, socketserver.TCPServer):
 
     def handle_error(self, request: socket.socket, client_address: Any) -> None:
         self.owner._diagnostic("TRANSPORT_HANDLER_FAILED")
-
-    def drain_requests(self, timeout: float) -> None:
-        """Called after both accept loops stop; retain live ownership on failure."""
-        deadline = time.monotonic() + timeout
-        with self._request_threads_lock:
-            threads = list(self._request_threads)
-        errors = []
-        for thread in threads:
-            try:
-                thread.join(max(0, deadline - time.monotonic()))
-            except BaseException as error:
-                errors.append(error)
-        if any(thread.is_alive() for thread in threads):
-            errors.append(SafetyViolation("HOST_DRAIN_TIMEOUT"))
-        # A retained cleanup exception must not retain this completed snapshot.
-        threads.clear()
-        thread = None
-        if errors:
-            raise errors[0]
 
 
 class _Handler(socketserver.BaseRequestHandler):
@@ -383,41 +348,15 @@ class LoopbackFixtureHost:
         self._stopped.set()
         self._closing.set()
         self._wake.set()
-        listeners = (self._main, self._control)
-        errors = []
-        # Stop BOTH accept loops before taking any request-thread snapshot.
-        # An unstarted listener must not call BaseServer.shutdown (it waits for
-        # serve_forever); this also permits cleanup after a partial start.
-        for listener, thread in zip(listeners, self._threads):
-            if thread.is_alive():
-                try:
-                    listener.shutdown()
-                except BaseException as error:
-                    errors.append(error)
-        for listener in listeners:
-            try:
-                listener.server_close()
-            except BaseException as error:
-                errors.append(error)
-        deadline = time.monotonic() + self.limits.readback_timeout_ms / 1000 + 2
-        for listener in listeners:
-            try:
-                listener.drain_requests(max(0, deadline - time.monotonic()))
-            except BaseException as error:
-                errors.append(error)
+        if self._threads:
+            self._main.shutdown()
+            self._control.shutdown()
+        self._main.server_close()
+        self._control.server_close()
         for thread in self._threads:
-            if thread.ident is not None:
-                try:
-                    thread.join(max(0, deadline - time.monotonic()))
-                except BaseException as error:
-                    errors.append(error)
+            thread.join(self.limits.readback_timeout_ms / 1000 + 2)
         if any(thread.is_alive() for thread in self._threads):
-            errors.append(SafetyViolation("HOST_DRAIN_TIMEOUT"))
-        if errors:
-            # Local cleanup ownership only; never serialize these exceptions.
-            errors[0].cleanup_owner = self
-            errors[0].cleanup_errors = tuple(errors[1:])
-            raise errors[0]
+            raise SafetyViolation("HOST_DRAIN_TIMEOUT")
 
     def __enter__(self) -> "LoopbackFixtureHost":
         return self.start()

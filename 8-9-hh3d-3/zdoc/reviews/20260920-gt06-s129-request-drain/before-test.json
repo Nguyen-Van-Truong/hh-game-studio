@@ -1,0 +1,15 @@
+{
+  "started_utc": "2026-09-20T05:54:19.240649+00:00",
+  "ended_utc": "2026-09-20T05:54:19.765833+00:00",
+  "command": [
+    "C:\\Users\\truon\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+    "-B",
+    "8-9-hh3d-3/studio/tests/protocol/test_transport_request_drain.py",
+    "RequestDrainTests.test_close_waits_for_partial_unauthenticated_requests_on_both_listeners"
+  ],
+  "actual_exit": 1,
+  "source_sha256": "614780e19b182c13b07cfd644e46219a6012804a9852e2a679d36c24002b9487",
+  "test_sha256": "91859ca8fec55ae76225fafb8dbedf997c02b155ad45683fa400ec6701b0c698",
+  "engine_started": false,
+  "formal_acceptance": false
+}

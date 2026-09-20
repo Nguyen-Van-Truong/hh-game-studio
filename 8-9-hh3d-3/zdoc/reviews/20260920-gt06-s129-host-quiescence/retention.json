@@ -1,0 +1,210 @@
+{
+  "schema": "S129.host-probe-retention.1",
+  "original_local_manifest_sha256": "350a82d523bf7a90320e48e5de2c46ba1bf3454c8cce8e1b627a144d291ee703",
+  "committed_exact_files": [
+    {
+      "path": "audit.json",
+      "sha256": "ed105c69213c50be95c7f1f80cdbb0e70e750aa7ca491de241f58e6b42ca5a74",
+      "size": 728
+    },
+    {
+      "path": "audit_evidence.py",
+      "sha256": "1aee97e5519c5beac9a5b13828ea7c42df6c2fc4a9d4e76dc686c87b1e901d95",
+      "size": 4541
+    },
+    {
+      "path": "host_quiescence.py",
+      "sha256": "d2352c9586de173a17402065b1b79a6006fefc07b7c6227552e6b2119e477a4e",
+      "size": 14288
+    },
+    {
+      "path": "README.md",
+      "sha256": "23b5851be19ef6041c967de84362126ed43d0e0c08edfaf0fe750419b89afc53",
+      "size": 8262
+    },
+    {
+      "path": "run-01/host_quiescence.execution.py",
+      "sha256": "74f894926eb28b3ddff810d87aa7566c5f0281673136775f220923faa00e4629",
+      "size": 13386
+    },
+    {
+      "path": "run-01/result.json",
+      "sha256": "e289eaebfc0800c27158b514e19d1d5ed4c90fd0846b1ac033fff32bb68e96a9",
+      "size": 166037
+    },
+    {
+      "path": "run-01/source-after.json",
+      "sha256": "f9f01712dccfc3beceee78750dd36e1d08fb3c400ba644f06149fa638e4bc8ad",
+      "size": 3431
+    },
+    {
+      "path": "run-01/source-before.json",
+      "sha256": "f9f01712dccfc3beceee78750dd36e1d08fb3c400ba644f06149fa638e4bc8ad",
+      "size": 3431
+    },
+    {
+      "path": "run-01/stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "run-01/stdout.txt",
+      "sha256": "b49741260dbf473578fe2a539cb469a9cc22b48dd08583a2814993e10b787d6c",
+      "size": 134
+    },
+    {
+      "path": "run-01/supervisor.json",
+      "sha256": "c833df93841dd250578aec07515f782b1f3161662db6222c78140f38990e7b9d",
+      "size": 1061
+    },
+    {
+      "path": "run-02/result.json",
+      "sha256": "e98ec4bc34e1d22bdc2734f427de93a432375e29e55146461a41ae2cde9d9afe",
+      "size": 169159
+    },
+    {
+      "path": "run-02/source-after.json",
+      "sha256": "bd2e820010152e2622a1b51707e1d78426414d85a2c16d3b89c1e41b8bc9e88f",
+      "size": 3431
+    },
+    {
+      "path": "run-02/source-before.json",
+      "sha256": "bd2e820010152e2622a1b51707e1d78426414d85a2c16d3b89c1e41b8bc9e88f",
+      "size": 3431
+    },
+    {
+      "path": "run-02/stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "run-02/stdout.txt",
+      "sha256": "a71390b4a21a3ea366b38049efa1d977ccb778ddc3b6d1971e6155872a6c815f",
+      "size": 134
+    },
+    {
+      "path": "run-02/supervisor.json",
+      "sha256": "3d52b5a30925c786c6e408d8ecd6969ab4540b05c996a3124e45be7df7129286",
+      "size": 1060
+    },
+    {
+      "path": "source-snapshot/00-socketserver.py",
+      "sha256": "bd2044c1aaf4356c2514dc28f283491901c216681374e22075cce2c46ef9f57d",
+      "size": 28438
+    },
+    {
+      "path": "source-snapshot/01-journal.py",
+      "sha256": "826bc5e4c60817e3a22dd2e0b6a199eb522a4eb78532cb5300249fe9056c0cc6",
+      "size": 29602
+    },
+    {
+      "path": "source-snapshot/02-limits.py",
+      "sha256": "9d01ce56f5976bb034e60e33bf4b7986cdc44b3a8ffad46da738a6ed1b143f3f",
+      "size": 15813
+    },
+    {
+      "path": "source-snapshot/03-redaction.py",
+      "sha256": "e37d998399f589d4202591a1262a7dc19231e5e4b5236b47d4c8234956275c1f",
+      "size": 10038
+    },
+    {
+      "path": "source-snapshot/04-transport.py",
+      "sha256": "614780e19b182c13b07cfd644e46219a6012804a9852e2a679d36c24002b9487",
+      "size": 49946
+    },
+    {
+      "path": "source-snapshot/05-disk_journal_index.py",
+      "sha256": "56beb93119dfb66feec32eb51d389fc089d89911c0a1be199071c17e1801cb28",
+      "size": 13593
+    },
+    {
+      "path": "source-snapshot/06-process_probe.py",
+      "sha256": "53b6b24813e6ba6dc040dcbb87aee529b7f4e8855a64bcd0689b19c240180500",
+      "size": 5485
+    },
+    {
+      "path": "source-snapshot/07-verified_journal.py",
+      "sha256": "129baa4d9e08c8a1d5acf2ea05c9c89a4fdddb53ca6f3baf2d61311ab98e62ab",
+      "size": 9155
+    },
+    {
+      "path": "source-snapshot/08-__init__.py",
+      "sha256": "a906ecde6f60d5fa2febd3f8a4a5fae440d87fea69e7d7e51a750677e03ad09f",
+      "size": 881
+    },
+    {
+      "path": "source-snapshot/09-__init__.py",
+      "sha256": "49d914da77ba606d535832d97df2e43458a8e51d57cdba6883a0a895ac50484b",
+      "size": 505
+    },
+    {
+      "path": "source-snapshot/10-_impl.py",
+      "sha256": "c25bc3a046528482d53bee3487b837f31dd9c05f33e8f13288c7aab320932cec",
+      "size": 7251
+    },
+    {
+      "path": "source-snapshot/11-core.py",
+      "sha256": "e8153f5a4dcf639f4d1cbce2fa74f7866d963a692c68e4e8d1477136889bd93e",
+      "size": 19886
+    },
+    {
+      "path": "source-snapshot/12-benchmark_commands.py",
+      "sha256": "ac1e57cac9e4a06c96f5b1638910d5e9f7576851770f716d03b7d4d52e413a68",
+      "size": 22204
+    },
+    {
+      "path": "source-snapshot/13-benchmark_http_phases.py",
+      "sha256": "f160b2d6725b25eef97119724b8ffb2e606fb448c70825aeed663c4aa7a31360",
+      "size": 17620
+    },
+    {
+      "path": "source-snapshot/14-benchmark_transport.py",
+      "sha256": "1fb178451bb22a0dd3e059333ff6e01c6fd5d324f04e47c1be64cb7212f26f2d",
+      "size": 4853
+    },
+    {
+      "path": "source-snapshot/15-test_benchmark_commands.py",
+      "sha256": "32d79b823d74d989ad52842e8766d7d5d6ae17dd2c108cc04dadc648493c7f94",
+      "size": 25664
+    },
+    {
+      "path": "source-snapshot.json",
+      "sha256": "75297f2328f220eeed266d429ceefe8d4c969aade0db714cb30efad122fa7c54",
+      "size": 4433
+    }
+  ],
+  "local_only_hash_references": [
+    {
+      "path": "run-01/normal-work/commands.jsonl",
+      "sha256": "126864fb707fe9ca8e03e7075f94b1d0fdc47c7bdca48052817493c43ec844d2",
+      "size": 33054
+    },
+    {
+      "path": "run-01/normal-work/commands.jsonl.guard",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "run-01/partial-work/commands.jsonl.guard",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "run-02/normal-work/commands.jsonl",
+      "sha256": "35e80d43904a9161598b5a4a471bdbeebf3da56c9316ec0ac78ad611478fdf95",
+      "size": 33054
+    },
+    {
+      "path": "run-02/normal-work/commands.jsonl.guard",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "run-02/partial-work/commands.jsonl.guard",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    }
+  ],
+  "reason": "Fixture journals/guard files remain local, never added to Git. Original local manifest remains immutable; packet structural observations and source/exit/stream files are committed byte exact.",
+  "formal_acceptance": false
+}

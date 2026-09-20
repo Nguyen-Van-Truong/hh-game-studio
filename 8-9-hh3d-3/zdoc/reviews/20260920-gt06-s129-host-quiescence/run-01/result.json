@@ -1,0 +1,6817 @@
+{
+  "active_requests_final": 0,
+  "actual_counter": "GetProcessHandleCount, prebound, current-process pseudo-handle",
+  "batches": [
+    {
+      "cancel_no_effect": true,
+      "cancel_status": "CANCELED",
+      "commands_by_kind": {
+        "admitted": 2,
+        "inspect": 5,
+        "rejected": 3
+      },
+      "complete_command_mix": false,
+      "effect_count_after": 2,
+      "effect_count_before": 0,
+      "index": 0,
+      "mode": "diagnostic",
+      "producer_held_handles_SYNTHETIC": 10,
+      "producer_observation_kind": "synthetic_test_observer",
+      "status": "DIAGNOSTIC"
+    },
+    {
+      "cancel_no_effect": true,
+      "cancel_status": "CANCELED",
+      "commands_by_kind": {
+        "admitted": 2,
+        "inspect": 5,
+        "rejected": 3
+      },
+      "complete_command_mix": false,
+      "effect_count_after": 4,
+      "effect_count_before": 2,
+      "index": 1,
+      "mode": "diagnostic",
+      "producer_held_handles_SYNTHETIC": 10,
+      "producer_observation_kind": "synthetic_test_observer",
+      "status": "DIAGNOSTIC"
+    },
+    {
+      "cancel_no_effect": true,
+      "cancel_status": "CANCELED",
+      "commands_by_kind": {
+        "admitted": 2,
+        "inspect": 5,
+        "rejected": 3
+      },
+      "complete_command_mix": false,
+      "effect_count_after": 6,
+      "effect_count_before": 4,
+      "index": 2,
+      "mode": "diagnostic",
+      "producer_held_handles_SYNTHETIC": 10,
+      "producer_observation_kind": "synthetic_test_observer",
+      "status": "DIAGNOSTIC"
+    }
+  ],
+  "benchmark_dataset": false,
+  "elapsed_seconds": 2.848903900012374,
+  "engine_started": false,
+  "error_type": null,
+  "extra_threads_final": [],
+  "fixed_threads_alive_final": 0,
+  "formal_acceptance": false,
+  "normal_close_ms": 92.2775,
+  "own_client_socket_closed": true,
+  "partial_close_ms": 56.2053,
+  "partial_request_outlived_close": true,
+  "pid": 29200,
+  "producer_observer": "existing SyntheticObserver: RSS=1000000, held_handles=10; not actual counters",
+  "python": "3.11.9 (tags/v3.11.9:de54cf5, Apr  2 2024, 10:12:12) [MSC v.1938 64 bit (AMD64)]",
+  "request_events": [
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 832,
+      "kind": "process_request_start",
+      "mono_ns": 781462374208600,
+      "phase": "normal_group_0",
+      "seq": 1
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 832,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781462374679500,
+      "phase": "normal_group_0",
+      "seq": 1
+    },
+    {
+      "active_count": 0,
+      "control": false,
+      "fd": 832,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781462377061500,
+      "outcome": "returned",
+      "phase": "normal_group_0",
+      "seq": 1
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 856,
+      "kind": "process_request_start",
+      "mono_ns": 781462378063600,
+      "phase": "normal_group_0",
+      "seq": 2
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 856,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781462378269500,
+      "phase": "normal_group_0",
+      "seq": 2
+    },
+    {
+      "active_count": 0,
+      "control": false,
+      "fd": 856,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781462619375400,
+      "outcome": "returned",
+      "phase": "normal_group_0",
+      "seq": 2
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 592,
+      "kind": "process_request_start",
+      "mono_ns": 781462619976000,
+      "phase": "normal_group_0",
+      "seq": 3
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 592,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781462620217300,
+      "phase": "normal_group_0",
+      "seq": 3
+    },
+    {
+      "active_count": 0,
+      "control": false,
+      "fd": 592,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781462641673900,
+      "outcome": "returned",
+      "phase": "normal_group_0",
+      "seq": 3
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 912,
+      "kind": "process_request_start",
+      "mono_ns": 781462642513900,
+      "phase": "normal_group_0",
+      "seq": 4
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 912,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781462642843200,
+      "phase": "normal_group_0",
+      "seq": 4
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 912,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781462644149400,
+      "outcome": "returned",
+      "phase": "normal_group_0",
+      "seq": 4
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 672,
+      "kind": "process_request_start",
+      "mono_ns": 781462645904300,
+      "phase": "normal_group_0",
+      "seq": 5
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 672,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781462646169300,
+      "phase": "normal_group_0",
+      "seq": 5
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 672,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781462646974500,
+      "outcome": "returned",
+      "phase": "normal_group_0",
+      "seq": 5
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 844,
+      "kind": "process_request_start",
+      "mono_ns": 781462649340900,
+      "phase": "normal_group_0",
+      "seq": 6
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 844,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781462649589700,
+      "phase": "normal_group_0",
+      "seq": 6
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 844,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781462650443400,
+      "outcome": "returned",
+      "phase": "normal_group_0",
+      "seq": 6
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 684,
+      "kind": "process_request_start",
+      "mono_ns": 781462653279800,
+      "phase": "normal_group_0",
+      "seq": 7
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 684,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781462653522100,
+      "phase": "normal_group_0",
+      "seq": 7
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 684,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781462655652400,
+      "outcome": "returned",
+      "phase": "normal_group_0",
+      "seq": 7
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 876,
+      "kind": "process_request_start",
+      "mono_ns": 781462657926300,
+      "phase": "normal_group_0",
+      "seq": 8
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 876,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781462658273800,
+      "phase": "normal_group_0",
+      "seq": 8
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 876,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781462659344500,
+      "outcome": "returned",
+      "phase": "normal_group_0",
+      "seq": 8
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 696,
+      "kind": "process_request_start",
+      "mono_ns": 781462661125600,
+      "phase": "normal_group_0",
+      "seq": 9
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 696,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781462661374500,
+      "phase": "normal_group_0",
+      "seq": 9
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 696,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781462662223400,
+      "outcome": "returned",
+      "phase": "normal_group_0",
+      "seq": 9
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 844,
+      "kind": "process_request_start",
+      "mono_ns": 781462664455800,
+      "phase": "normal_group_0",
+      "seq": 10
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 844,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781462664745900,
+      "phase": "normal_group_0",
+      "seq": 10
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 844,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781462665563700,
+      "outcome": "returned",
+      "phase": "normal_group_0",
+      "seq": 10
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 876,
+      "kind": "process_request_start",
+      "mono_ns": 781462668356000,
+      "phase": "normal_group_0",
+      "seq": 11
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 876,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781462668612600,
+      "phase": "normal_group_0",
+      "seq": 11
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 876,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781462673484900,
+      "outcome": "returned",
+      "phase": "normal_group_0",
+      "seq": 11
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 752,
+      "kind": "process_request_start",
+      "mono_ns": 781462674383400,
+      "phase": "normal_group_0",
+      "seq": 12
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 752,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781462674621600,
+      "phase": "normal_group_0",
+      "seq": 12
+    },
+    {
+      "active_count": 0,
+      "control": false,
+      "fd": 752,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781462687479100,
+      "outcome": "returned",
+      "phase": "normal_group_0",
+      "seq": 12
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 608,
+      "kind": "process_request_start",
+      "mono_ns": 781462688896800,
+      "phase": "normal_group_0",
+      "seq": 13
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 608,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781462689317100,
+      "phase": "normal_group_0",
+      "seq": 13
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 608,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781462691411000,
+      "outcome": "returned",
+      "phase": "normal_group_0",
+      "seq": 13
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 664,
+      "kind": "process_request_start",
+      "mono_ns": 781462694149700,
+      "phase": "normal_group_0",
+      "seq": 14
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 664,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781462694422400,
+      "phase": "normal_group_0",
+      "seq": 14
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 664,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781462695320000,
+      "outcome": "returned",
+      "phase": "normal_group_0",
+      "seq": 14
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 968,
+      "kind": "process_request_start",
+      "mono_ns": 781462697858400,
+      "phase": "normal_group_0",
+      "seq": 15
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 968,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781462698113000,
+      "phase": "normal_group_0",
+      "seq": 15
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 968,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781462698927700,
+      "outcome": "returned",
+      "phase": "normal_group_0",
+      "seq": 15
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 984,
+      "kind": "process_request_start",
+      "mono_ns": 781462702460500,
+      "phase": "normal_group_0",
+      "seq": 16
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 984,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781462702747600,
+      "phase": "normal_group_0",
+      "seq": 16
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 984,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781462703513700,
+      "outcome": "returned",
+      "phase": "normal_group_0",
+      "seq": 16
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 964,
+      "kind": "process_request_start",
+      "mono_ns": 781462707375600,
+      "phase": "normal_group_0",
+      "seq": 17
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 964,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781462707810300,
+      "phase": "normal_group_0",
+      "seq": 17
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 964,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781462709200100,
+      "outcome": "returned",
+      "phase": "normal_group_0",
+      "seq": 17
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 992,
+      "kind": "process_request_start",
+      "mono_ns": 781462711700900,
+      "phase": "normal_group_0",
+      "seq": 18
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 992,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781462711985500,
+      "phase": "normal_group_0",
+      "seq": 18
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 992,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781462712865600,
+      "outcome": "returned",
+      "phase": "normal_group_0",
+      "seq": 18
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 980,
+      "kind": "process_request_start",
+      "mono_ns": 781462715162700,
+      "phase": "normal_group_0",
+      "seq": 19
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 980,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781462715475600,
+      "phase": "normal_group_0",
+      "seq": 19
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 980,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781462716302800,
+      "outcome": "returned",
+      "phase": "normal_group_0",
+      "seq": 19
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 980,
+      "kind": "process_request_start",
+      "mono_ns": 781462718289700,
+      "phase": "normal_group_0",
+      "seq": 20
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 980,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781462718568500,
+      "phase": "normal_group_0",
+      "seq": 20
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 980,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781462724543000,
+      "outcome": "returned",
+      "phase": "normal_group_0",
+      "seq": 20
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 952,
+      "kind": "process_request_start",
+      "mono_ns": 781462725260800,
+      "phase": "normal_group_0",
+      "seq": 21
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 952,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781462725527900,
+      "phase": "normal_group_0",
+      "seq": 21
+    },
+    {
+      "active_count": 0,
+      "control": false,
+      "fd": 952,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781462738898700,
+      "outcome": "returned",
+      "phase": "normal_group_0",
+      "seq": 21
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 892,
+      "kind": "process_request_start",
+      "mono_ns": 781462739916400,
+      "phase": "normal_group_0",
+      "seq": 22
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 892,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781462740171300,
+      "phase": "normal_group_0",
+      "seq": 22
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 892,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781462741056700,
+      "outcome": "returned",
+      "phase": "normal_group_0",
+      "seq": 22
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1012,
+      "kind": "process_request_start",
+      "mono_ns": 781462743658200,
+      "phase": "normal_group_0",
+      "seq": 23
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1012,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781462743964800,
+      "phase": "normal_group_0",
+      "seq": 23
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1012,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781462745106100,
+      "outcome": "returned",
+      "phase": "normal_group_0",
+      "seq": 23
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 888,
+      "kind": "process_request_start",
+      "mono_ns": 781462747461200,
+      "phase": "normal_group_0",
+      "seq": 24
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 888,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781462747737900,
+      "phase": "normal_group_0",
+      "seq": 24
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 888,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781462749075400,
+      "outcome": "returned",
+      "phase": "normal_group_0",
+      "seq": 24
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 892,
+      "kind": "process_request_start",
+      "mono_ns": 781462752103200,
+      "phase": "normal_group_0",
+      "seq": 25
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 892,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781462752499900,
+      "phase": "normal_group_0",
+      "seq": 25
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 892,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781462754505800,
+      "outcome": "returned",
+      "phase": "normal_group_0",
+      "seq": 25
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 592,
+      "kind": "process_request_start",
+      "mono_ns": 781462756515100,
+      "phase": "normal_group_0",
+      "seq": 26
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 592,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781462756847500,
+      "phase": "normal_group_0",
+      "seq": 26
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 592,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781462757610600,
+      "outcome": "returned",
+      "phase": "normal_group_0",
+      "seq": 26
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 596,
+      "kind": "process_request_start",
+      "mono_ns": 781462759538500,
+      "phase": "normal_group_0",
+      "seq": 27
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 596,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781462759803200,
+      "phase": "normal_group_0",
+      "seq": 27
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 596,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781462760633800,
+      "outcome": "returned",
+      "phase": "normal_group_0",
+      "seq": 27
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 596,
+      "kind": "process_request_start",
+      "mono_ns": 781462762755200,
+      "phase": "normal_group_0",
+      "seq": 28
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 596,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781462762981100,
+      "phase": "normal_group_0",
+      "seq": 28
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 596,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781462787603600,
+      "outcome": "returned",
+      "phase": "normal_group_0",
+      "seq": 28
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 896,
+      "kind": "process_request_start",
+      "mono_ns": 781462789188700,
+      "phase": "normal_group_0",
+      "seq": 29
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 896,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781462789593100,
+      "phase": "normal_group_0",
+      "seq": 29
+    },
+    {
+      "active_count": 0,
+      "control": false,
+      "fd": 896,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781462806244100,
+      "outcome": "returned",
+      "phase": "normal_group_0",
+      "seq": 29
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 852,
+      "kind": "process_request_start",
+      "mono_ns": 781462806950200,
+      "phase": "normal_group_0",
+      "seq": 30
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 852,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781462807176600,
+      "phase": "normal_group_0",
+      "seq": 30
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 852,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781462808139200,
+      "outcome": "returned",
+      "phase": "normal_group_0",
+      "seq": 30
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 832,
+      "kind": "process_request_start",
+      "mono_ns": 781462810229600,
+      "phase": "normal_group_0",
+      "seq": 31
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 832,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781462810482300,
+      "phase": "normal_group_0",
+      "seq": 31
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 832,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781462829584200,
+      "outcome": "returned",
+      "phase": "normal_group_0",
+      "seq": 31
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 596,
+      "kind": "process_request_start",
+      "mono_ns": 781462832030900,
+      "phase": "normal_group_0",
+      "seq": 32
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 596,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781462832893200,
+      "phase": "normal_group_0",
+      "seq": 32
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 596,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781462834704300,
+      "outcome": "returned",
+      "phase": "normal_group_0",
+      "seq": 32
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1000,
+      "kind": "process_request_start",
+      "mono_ns": 781462837086500,
+      "phase": "normal_group_0",
+      "seq": 33
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1000,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781462837342100,
+      "phase": "normal_group_0",
+      "seq": 33
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1000,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781462863373400,
+      "outcome": "returned",
+      "phase": "normal_group_0",
+      "seq": 33
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 596,
+      "kind": "process_request_start",
+      "mono_ns": 781462864095700,
+      "phase": "normal_group_0",
+      "seq": 34
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 596,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781462864374700,
+      "phase": "normal_group_0",
+      "seq": 34
+    },
+    {
+      "active_count": 0,
+      "control": false,
+      "fd": 596,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781462878079600,
+      "outcome": "returned",
+      "phase": "normal_group_0",
+      "seq": 34
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 924,
+      "kind": "process_request_start",
+      "mono_ns": 781462879274200,
+      "phase": "normal_group_0",
+      "seq": 35
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 924,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781462879578500,
+      "phase": "normal_group_0",
+      "seq": 35
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 924,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781462880616200,
+      "outcome": "returned",
+      "phase": "normal_group_0",
+      "seq": 35
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 636,
+      "kind": "process_request_start",
+      "mono_ns": 781462882550900,
+      "phase": "normal_group_0",
+      "seq": 36
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 636,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781462882847900,
+      "phase": "normal_group_0",
+      "seq": 36
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 636,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781462883609800,
+      "outcome": "returned",
+      "phase": "normal_group_0",
+      "seq": 36
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 588,
+      "kind": "process_request_start",
+      "mono_ns": 781462885706500,
+      "phase": "normal_group_0",
+      "seq": 37
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 588,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781462886060100,
+      "phase": "normal_group_0",
+      "seq": 37
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 588,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781462886802200,
+      "outcome": "returned",
+      "phase": "normal_group_0",
+      "seq": 37
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1000,
+      "kind": "process_request_start",
+      "mono_ns": 781462889155800,
+      "phase": "normal_group_0",
+      "seq": 38
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1000,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781462889473500,
+      "phase": "normal_group_0",
+      "seq": 38
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1000,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781462890658500,
+      "outcome": "returned",
+      "phase": "normal_group_0",
+      "seq": 38
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1040,
+      "kind": "process_request_start",
+      "mono_ns": 781462893337000,
+      "phase": "normal_group_0",
+      "seq": 39
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1040,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781462893627400,
+      "phase": "normal_group_0",
+      "seq": 39
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1040,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781462894775300,
+      "outcome": "returned",
+      "phase": "normal_group_0",
+      "seq": 39
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1028,
+      "kind": "process_request_start",
+      "mono_ns": 781462897172300,
+      "phase": "normal_group_0",
+      "seq": 40
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1028,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781462897395300,
+      "phase": "normal_group_0",
+      "seq": 40
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1028,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781462898248000,
+      "outcome": "returned",
+      "phase": "normal_group_0",
+      "seq": 40
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1000,
+      "kind": "process_request_start",
+      "mono_ns": 781462900014700,
+      "phase": "normal_group_0",
+      "seq": 41
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1000,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781462900242900,
+      "phase": "normal_group_0",
+      "seq": 41
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1000,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781462901059600,
+      "outcome": "returned",
+      "phase": "normal_group_0",
+      "seq": 41
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1068,
+      "kind": "process_request_start",
+      "mono_ns": 781462903156200,
+      "phase": "normal_group_0",
+      "seq": 42
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1068,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781462903397400,
+      "phase": "normal_group_0",
+      "seq": 42
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1068,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781462904513600,
+      "outcome": "returned",
+      "phase": "normal_group_0",
+      "seq": 42
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1032,
+      "kind": "process_request_start",
+      "mono_ns": 781462907037300,
+      "phase": "normal_group_0",
+      "seq": 43
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1032,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781462907254200,
+      "phase": "normal_group_0",
+      "seq": 43
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1032,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781462911714100,
+      "outcome": "returned",
+      "phase": "normal_group_0",
+      "seq": 43
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 1068,
+      "kind": "process_request_start",
+      "mono_ns": 781462912788300,
+      "phase": "normal_group_0",
+      "seq": 44
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 1068,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781462913008600,
+      "phase": "normal_group_0",
+      "seq": 44
+    },
+    {
+      "active_count": 0,
+      "control": false,
+      "fd": 1068,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781462914497300,
+      "outcome": "returned",
+      "phase": "normal_group_0",
+      "seq": 44
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 1032,
+      "kind": "process_request_start",
+      "mono_ns": 781462914978600,
+      "phase": "normal_group_0",
+      "seq": 45
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 1032,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781462915145800,
+      "phase": "normal_group_0",
+      "seq": 45
+    },
+    {
+      "active_count": 0,
+      "control": false,
+      "fd": 1032,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781462916726500,
+      "outcome": "returned",
+      "phase": "normal_group_0",
+      "seq": 45
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 1064,
+      "kind": "process_request_start",
+      "mono_ns": 781462917436000,
+      "phase": "normal_group_0",
+      "seq": 46
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 1064,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781462917640200,
+      "phase": "normal_group_0",
+      "seq": 46
+    },
+    {
+      "active_count": 0,
+      "control": false,
+      "fd": 1064,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781462919457900,
+      "outcome": "returned",
+      "phase": "normal_group_0",
+      "seq": 46
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 1064,
+      "kind": "process_request_start",
+      "mono_ns": 781462920585700,
+      "phase": "normal_group_0",
+      "seq": 47
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 1064,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781462920948900,
+      "phase": "normal_group_0",
+      "seq": 47
+    },
+    {
+      "active_count": 0,
+      "control": false,
+      "fd": 1064,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781462939834400,
+      "outcome": "returned",
+      "phase": "normal_group_0",
+      "seq": 47
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1144,
+      "kind": "process_request_start",
+      "mono_ns": 781462940885600,
+      "phase": "normal_group_0",
+      "seq": 48
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1144,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781462941233400,
+      "phase": "normal_group_0",
+      "seq": 48
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1144,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781462942679300,
+      "outcome": "returned",
+      "phase": "normal_group_0",
+      "seq": 48
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1144,
+      "kind": "process_request_start",
+      "mono_ns": 781462945039200,
+      "phase": "normal_group_0",
+      "seq": 49
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1144,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781462945399300,
+      "phase": "normal_group_0",
+      "seq": 49
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1144,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781462946559000,
+      "outcome": "returned",
+      "phase": "normal_group_0",
+      "seq": 49
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1116,
+      "kind": "process_request_start",
+      "mono_ns": 781462948692500,
+      "phase": "normal_group_0",
+      "seq": 50
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1116,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781462949034200,
+      "phase": "normal_group_0",
+      "seq": 50
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1116,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781462950279400,
+      "outcome": "returned",
+      "phase": "normal_group_0",
+      "seq": 50
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1208,
+      "kind": "process_request_start",
+      "mono_ns": 781462952913000,
+      "phase": "normal_group_0",
+      "seq": 51
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1208,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781462953186100,
+      "phase": "normal_group_0",
+      "seq": 51
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1208,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781462956044100,
+      "outcome": "returned",
+      "phase": "normal_group_0",
+      "seq": 51
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1204,
+      "kind": "process_request_start",
+      "mono_ns": 781462958479200,
+      "phase": "normal_group_0",
+      "seq": 52
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1204,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781462958894800,
+      "phase": "normal_group_0",
+      "seq": 52
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1204,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781462959937700,
+      "outcome": "returned",
+      "phase": "normal_group_0",
+      "seq": 52
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1248,
+      "kind": "process_request_start",
+      "mono_ns": 781462962662700,
+      "phase": "normal_group_0",
+      "seq": 53
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1248,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781462962903400,
+      "phase": "normal_group_0",
+      "seq": 53
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1248,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781462964029400,
+      "outcome": "returned",
+      "phase": "normal_group_0",
+      "seq": 53
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1264,
+      "kind": "process_request_start",
+      "mono_ns": 781462966380600,
+      "phase": "normal_group_0",
+      "seq": 54
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1264,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781462966659000,
+      "phase": "normal_group_0",
+      "seq": 54
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1264,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781462967327200,
+      "outcome": "returned",
+      "phase": "normal_group_0",
+      "seq": 54
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1272,
+      "kind": "process_request_start",
+      "mono_ns": 781462969376000,
+      "phase": "normal_group_0",
+      "seq": 55
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1272,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781462969676000,
+      "phase": "normal_group_0",
+      "seq": 55
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1272,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781462970536600,
+      "outcome": "returned",
+      "phase": "normal_group_0",
+      "seq": 55
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1152,
+      "kind": "process_request_start",
+      "mono_ns": 781462973171900,
+      "phase": "normal_group_0",
+      "seq": 56
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1152,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781462973482700,
+      "phase": "normal_group_0",
+      "seq": 56
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1152,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781462974687100,
+      "outcome": "returned",
+      "phase": "normal_group_0",
+      "seq": 56
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1248,
+      "kind": "process_request_start",
+      "mono_ns": 781462976584000,
+      "phase": "normal_group_0",
+      "seq": 57
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1248,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781462976859300,
+      "phase": "normal_group_0",
+      "seq": 57
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1248,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781462977686300,
+      "outcome": "returned",
+      "phase": "normal_group_0",
+      "seq": 57
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1244,
+      "kind": "process_request_start",
+      "mono_ns": 781462980170800,
+      "phase": "normal_group_0",
+      "seq": 58
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1244,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781462980412100,
+      "phase": "normal_group_0",
+      "seq": 58
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1244,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781462984799800,
+      "outcome": "returned",
+      "phase": "normal_group_0",
+      "seq": 58
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 1260,
+      "kind": "process_request_start",
+      "mono_ns": 781462986071000,
+      "phase": "normal_group_0",
+      "seq": 59
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 1260,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781462986337300,
+      "phase": "normal_group_0",
+      "seq": 59
+    },
+    {
+      "active_count": 0,
+      "control": false,
+      "fd": 1260,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463003572300,
+      "outcome": "returned",
+      "phase": "normal_group_0",
+      "seq": 59
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1144,
+      "kind": "process_request_start",
+      "mono_ns": 781463005074800,
+      "phase": "normal_group_0",
+      "seq": 60
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1144,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463005367700,
+      "phase": "normal_group_0",
+      "seq": 60
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1144,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463006426100,
+      "outcome": "returned",
+      "phase": "normal_group_0",
+      "seq": 60
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1184,
+      "kind": "process_request_start",
+      "mono_ns": 781463008713000,
+      "phase": "normal_group_0",
+      "seq": 61
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1184,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463009000000,
+      "phase": "normal_group_0",
+      "seq": 61
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1184,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463009958700,
+      "outcome": "returned",
+      "phase": "normal_group_0",
+      "seq": 61
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1104,
+      "kind": "process_request_start",
+      "mono_ns": 781463012721200,
+      "phase": "normal_group_0",
+      "seq": 62
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1104,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463013017500,
+      "phase": "normal_group_0",
+      "seq": 62
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1104,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463013977000,
+      "outcome": "returned",
+      "phase": "normal_group_0",
+      "seq": 62
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1116,
+      "kind": "process_request_start",
+      "mono_ns": 781463016544400,
+      "phase": "normal_group_0",
+      "seq": 63
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1116,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463016868600,
+      "phase": "normal_group_0",
+      "seq": 63
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1116,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463017893300,
+      "outcome": "returned",
+      "phase": "normal_group_0",
+      "seq": 63
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1228,
+      "kind": "process_request_start",
+      "mono_ns": 781463020615400,
+      "phase": "normal_group_0",
+      "seq": 64
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1228,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463020913400,
+      "phase": "normal_group_0",
+      "seq": 64
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1228,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463022179200,
+      "outcome": "returned",
+      "phase": "normal_group_0",
+      "seq": 64
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1304,
+      "kind": "process_request_start",
+      "mono_ns": 781463025112800,
+      "phase": "normal_group_0",
+      "seq": 65
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1304,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463025396500,
+      "phase": "normal_group_0",
+      "seq": 65
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1304,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463026403800,
+      "outcome": "returned",
+      "phase": "normal_group_0",
+      "seq": 65
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1132,
+      "kind": "process_request_start",
+      "mono_ns": 781463029591400,
+      "phase": "normal_group_0",
+      "seq": 66
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1132,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463029892200,
+      "phase": "normal_group_0",
+      "seq": 66
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1132,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463030614100,
+      "outcome": "returned",
+      "phase": "normal_group_0",
+      "seq": 66
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1312,
+      "kind": "process_request_start",
+      "mono_ns": 781463032838600,
+      "phase": "normal_group_0",
+      "seq": 67
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1312,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463033109200,
+      "phase": "normal_group_0",
+      "seq": 67
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1312,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463033903700,
+      "outcome": "returned",
+      "phase": "normal_group_0",
+      "seq": 67
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1264,
+      "kind": "process_request_start",
+      "mono_ns": 781463036601900,
+      "phase": "normal_group_0",
+      "seq": 68
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1264,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463036848100,
+      "phase": "normal_group_0",
+      "seq": 68
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1264,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463037785800,
+      "outcome": "returned",
+      "phase": "normal_group_0",
+      "seq": 68
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1340,
+      "kind": "process_request_start",
+      "mono_ns": 781463040062300,
+      "phase": "normal_group_0",
+      "seq": 69
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1340,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463040336000,
+      "phase": "normal_group_0",
+      "seq": 69
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1340,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463047235400,
+      "outcome": "returned",
+      "phase": "normal_group_0",
+      "seq": 69
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 1320,
+      "kind": "process_request_start",
+      "mono_ns": 781463048017100,
+      "phase": "normal_group_0",
+      "seq": 70
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 1320,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463048288200,
+      "phase": "normal_group_0",
+      "seq": 70
+    },
+    {
+      "active_count": 0,
+      "control": false,
+      "fd": 1320,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463065621200,
+      "outcome": "returned",
+      "phase": "normal_group_0",
+      "seq": 70
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1364,
+      "kind": "process_request_start",
+      "mono_ns": 781463066567300,
+      "phase": "normal_group_0",
+      "seq": 71
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1364,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463066781500,
+      "phase": "normal_group_0",
+      "seq": 71
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1364,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463091741800,
+      "outcome": "returned",
+      "phase": "normal_group_0",
+      "seq": 71
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1100,
+      "kind": "process_request_start",
+      "mono_ns": 781463093334500,
+      "phase": "normal_group_0",
+      "seq": 72
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1100,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463093599000,
+      "phase": "normal_group_0",
+      "seq": 72
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1100,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463098080400,
+      "outcome": "returned",
+      "phase": "normal_group_0",
+      "seq": 72
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 1284,
+      "kind": "process_request_start",
+      "mono_ns": 781463304732800,
+      "phase": "normal_group_1",
+      "seq": 73
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 1284,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463305002700,
+      "phase": "normal_group_1",
+      "seq": 73
+    },
+    {
+      "active_count": 0,
+      "control": false,
+      "fd": 1284,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463306507000,
+      "outcome": "returned",
+      "phase": "normal_group_1",
+      "seq": 73
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 1296,
+      "kind": "process_request_start",
+      "mono_ns": 781463307121300,
+      "phase": "normal_group_1",
+      "seq": 74
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 1296,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463307331300,
+      "phase": "normal_group_1",
+      "seq": 74
+    },
+    {
+      "active_count": 0,
+      "control": false,
+      "fd": 1296,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463315733900,
+      "outcome": "returned",
+      "phase": "normal_group_1",
+      "seq": 74
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 1296,
+      "kind": "process_request_start",
+      "mono_ns": 781463316307200,
+      "phase": "normal_group_1",
+      "seq": 75
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 1296,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463316547800,
+      "phase": "normal_group_1",
+      "seq": 75
+    },
+    {
+      "active_count": 0,
+      "control": false,
+      "fd": 1296,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463337357400,
+      "outcome": "returned",
+      "phase": "normal_group_1",
+      "seq": 75
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1360,
+      "kind": "process_request_start",
+      "mono_ns": 781463338541700,
+      "phase": "normal_group_1",
+      "seq": 76
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1360,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463339215100,
+      "phase": "normal_group_1",
+      "seq": 76
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1360,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463340481000,
+      "outcome": "returned",
+      "phase": "normal_group_1",
+      "seq": 76
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1320,
+      "kind": "process_request_start",
+      "mono_ns": 781463342892400,
+      "phase": "normal_group_1",
+      "seq": 77
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1320,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463343145700,
+      "phase": "normal_group_1",
+      "seq": 77
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1320,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463344283100,
+      "outcome": "returned",
+      "phase": "normal_group_1",
+      "seq": 77
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1288,
+      "kind": "process_request_start",
+      "mono_ns": 781463346314600,
+      "phase": "normal_group_1",
+      "seq": 78
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1288,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463346650100,
+      "phase": "normal_group_1",
+      "seq": 78
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1288,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463347986400,
+      "outcome": "returned",
+      "phase": "normal_group_1",
+      "seq": 78
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1392,
+      "kind": "process_request_start",
+      "mono_ns": 781463350435300,
+      "phase": "normal_group_1",
+      "seq": 79
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1392,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463350825000,
+      "phase": "normal_group_1",
+      "seq": 79
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1392,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463351925900,
+      "outcome": "returned",
+      "phase": "normal_group_1",
+      "seq": 79
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1384,
+      "kind": "process_request_start",
+      "mono_ns": 781463355770900,
+      "phase": "normal_group_1",
+      "seq": 80
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1384,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463356009100,
+      "phase": "normal_group_1",
+      "seq": 80
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1384,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463357330600,
+      "outcome": "returned",
+      "phase": "normal_group_1",
+      "seq": 80
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1128,
+      "kind": "process_request_start",
+      "mono_ns": 781463359769900,
+      "phase": "normal_group_1",
+      "seq": 81
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1128,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463360180100,
+      "phase": "normal_group_1",
+      "seq": 81
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1128,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463361406100,
+      "outcome": "returned",
+      "phase": "normal_group_1",
+      "seq": 81
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1120,
+      "kind": "process_request_start",
+      "mono_ns": 781463363864200,
+      "phase": "normal_group_1",
+      "seq": 82
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1120,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463364139700,
+      "phase": "normal_group_1",
+      "seq": 82
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1120,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463365880300,
+      "outcome": "returned",
+      "phase": "normal_group_1",
+      "seq": 82
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1324,
+      "kind": "process_request_start",
+      "mono_ns": 781463368004300,
+      "phase": "normal_group_1",
+      "seq": 83
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1324,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463368272800,
+      "phase": "normal_group_1",
+      "seq": 83
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1324,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463369334200,
+      "outcome": "returned",
+      "phase": "normal_group_1",
+      "seq": 83
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1300,
+      "kind": "process_request_start",
+      "mono_ns": 781463371968200,
+      "phase": "normal_group_1",
+      "seq": 84
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1300,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463372369900,
+      "phase": "normal_group_1",
+      "seq": 84
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1300,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463378326400,
+      "outcome": "returned",
+      "phase": "normal_group_1",
+      "seq": 84
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 1100,
+      "kind": "process_request_start",
+      "mono_ns": 781463379091800,
+      "phase": "normal_group_1",
+      "seq": 85
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 1100,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463379338200,
+      "phase": "normal_group_1",
+      "seq": 85
+    },
+    {
+      "active_count": 0,
+      "control": false,
+      "fd": 1100,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463392652900,
+      "outcome": "returned",
+      "phase": "normal_group_1",
+      "seq": 85
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1084,
+      "kind": "process_request_start",
+      "mono_ns": 781463393464400,
+      "phase": "normal_group_1",
+      "seq": 86
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1084,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463393709900,
+      "phase": "normal_group_1",
+      "seq": 86
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1084,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463394902400,
+      "outcome": "returned",
+      "phase": "normal_group_1",
+      "seq": 86
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1376,
+      "kind": "process_request_start",
+      "mono_ns": 781463396576900,
+      "phase": "normal_group_1",
+      "seq": 87
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1376,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463396834600,
+      "phase": "normal_group_1",
+      "seq": 87
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1376,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463398008800,
+      "outcome": "returned",
+      "phase": "normal_group_1",
+      "seq": 87
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1196,
+      "kind": "process_request_start",
+      "mono_ns": 781463399657700,
+      "phase": "normal_group_1",
+      "seq": 88
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1196,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463399869500,
+      "phase": "normal_group_1",
+      "seq": 88
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1196,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463400728400,
+      "outcome": "returned",
+      "phase": "normal_group_1",
+      "seq": 88
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1424,
+      "kind": "process_request_start",
+      "mono_ns": 781463402477500,
+      "phase": "normal_group_1",
+      "seq": 89
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1424,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463402779100,
+      "phase": "normal_group_1",
+      "seq": 89
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1424,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463403563300,
+      "outcome": "returned",
+      "phase": "normal_group_1",
+      "seq": 89
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1120,
+      "kind": "process_request_start",
+      "mono_ns": 781463406562500,
+      "phase": "normal_group_1",
+      "seq": 90
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1120,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463406875300,
+      "phase": "normal_group_1",
+      "seq": 90
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1120,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463407818400,
+      "outcome": "returned",
+      "phase": "normal_group_1",
+      "seq": 90
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1064,
+      "kind": "process_request_start",
+      "mono_ns": 781463410639000,
+      "phase": "normal_group_1",
+      "seq": 91
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1064,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463410860400,
+      "phase": "normal_group_1",
+      "seq": 91
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1064,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463411746200,
+      "outcome": "returned",
+      "phase": "normal_group_1",
+      "seq": 91
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1220,
+      "kind": "process_request_start",
+      "mono_ns": 781463413548800,
+      "phase": "normal_group_1",
+      "seq": 92
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1220,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463413853000,
+      "phase": "normal_group_1",
+      "seq": 92
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1220,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463414524100,
+      "outcome": "returned",
+      "phase": "normal_group_1",
+      "seq": 92
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1320,
+      "kind": "process_request_start",
+      "mono_ns": 781463416544100,
+      "phase": "normal_group_1",
+      "seq": 93
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1320,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463416788600,
+      "phase": "normal_group_1",
+      "seq": 93
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1320,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463417679000,
+      "outcome": "returned",
+      "phase": "normal_group_1",
+      "seq": 93
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1240,
+      "kind": "process_request_start",
+      "mono_ns": 781463419903800,
+      "phase": "normal_group_1",
+      "seq": 94
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1240,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463420131400,
+      "phase": "normal_group_1",
+      "seq": 94
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1240,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463424600000,
+      "outcome": "returned",
+      "phase": "normal_group_1",
+      "seq": 94
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 1092,
+      "kind": "process_request_start",
+      "mono_ns": 781463426167300,
+      "phase": "normal_group_1",
+      "seq": 95
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 1092,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463426536200,
+      "phase": "normal_group_1",
+      "seq": 95
+    },
+    {
+      "active_count": 0,
+      "control": false,
+      "fd": 1092,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463441646200,
+      "outcome": "returned",
+      "phase": "normal_group_1",
+      "seq": 95
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1160,
+      "kind": "process_request_start",
+      "mono_ns": 781463442606800,
+      "phase": "normal_group_1",
+      "seq": 96
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1160,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463442975800,
+      "phase": "normal_group_1",
+      "seq": 96
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1160,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463444504600,
+      "outcome": "returned",
+      "phase": "normal_group_1",
+      "seq": 96
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1092,
+      "kind": "process_request_start",
+      "mono_ns": 781463446797300,
+      "phase": "normal_group_1",
+      "seq": 97
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1092,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463447163500,
+      "phase": "normal_group_1",
+      "seq": 97
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1092,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463447892300,
+      "outcome": "returned",
+      "phase": "normal_group_1",
+      "seq": 97
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1052,
+      "kind": "process_request_start",
+      "mono_ns": 781463450383200,
+      "phase": "normal_group_1",
+      "seq": 98
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1052,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463450614000,
+      "phase": "normal_group_1",
+      "seq": 98
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1052,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463451276700,
+      "outcome": "returned",
+      "phase": "normal_group_1",
+      "seq": 98
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1256,
+      "kind": "process_request_start",
+      "mono_ns": 781463454354400,
+      "phase": "normal_group_1",
+      "seq": 99
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1256,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463454632800,
+      "phase": "normal_group_1",
+      "seq": 99
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1256,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463455820600,
+      "outcome": "returned",
+      "phase": "normal_group_1",
+      "seq": 99
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1160,
+      "kind": "process_request_start",
+      "mono_ns": 781463458032800,
+      "phase": "normal_group_1",
+      "seq": 100
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1160,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463458340400,
+      "phase": "normal_group_1",
+      "seq": 100
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1160,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463459100400,
+      "outcome": "returned",
+      "phase": "normal_group_1",
+      "seq": 100
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1444,
+      "kind": "process_request_start",
+      "mono_ns": 781463461414800,
+      "phase": "normal_group_1",
+      "seq": 101
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1444,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463461654500,
+      "phase": "normal_group_1",
+      "seq": 101
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1444,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463462804900,
+      "outcome": "returned",
+      "phase": "normal_group_1",
+      "seq": 101
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1256,
+      "kind": "process_request_start",
+      "mono_ns": 781463464808800,
+      "phase": "normal_group_1",
+      "seq": 102
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1256,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463465033600,
+      "phase": "normal_group_1",
+      "seq": 102
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1256,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463466067900,
+      "outcome": "returned",
+      "phase": "normal_group_1",
+      "seq": 102
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1092,
+      "kind": "process_request_start",
+      "mono_ns": 781463468401600,
+      "phase": "normal_group_1",
+      "seq": 103
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1092,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463468686900,
+      "phase": "normal_group_1",
+      "seq": 103
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1092,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463469786800,
+      "outcome": "returned",
+      "phase": "normal_group_1",
+      "seq": 103
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1052,
+      "kind": "process_request_start",
+      "mono_ns": 781463472080400,
+      "phase": "normal_group_1",
+      "seq": 104
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1052,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463472348100,
+      "phase": "normal_group_1",
+      "seq": 104
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1052,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463476721300,
+      "outcome": "returned",
+      "phase": "normal_group_1",
+      "seq": 104
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 888,
+      "kind": "process_request_start",
+      "mono_ns": 781463477785400,
+      "phase": "normal_group_1",
+      "seq": 105
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 888,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463478033600,
+      "phase": "normal_group_1",
+      "seq": 105
+    },
+    {
+      "active_count": 0,
+      "control": false,
+      "fd": 888,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463491688900,
+      "outcome": "returned",
+      "phase": "normal_group_1",
+      "seq": 105
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 988,
+      "kind": "process_request_start",
+      "mono_ns": 781463492595800,
+      "phase": "normal_group_1",
+      "seq": 106
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 988,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463492838800,
+      "phase": "normal_group_1",
+      "seq": 106
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 988,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463494074200,
+      "outcome": "returned",
+      "phase": "normal_group_1",
+      "seq": 106
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 976,
+      "kind": "process_request_start",
+      "mono_ns": 781463496687100,
+      "phase": "normal_group_1",
+      "seq": 107
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 976,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463496939100,
+      "phase": "normal_group_1",
+      "seq": 107
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 976,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463497680700,
+      "outcome": "returned",
+      "phase": "normal_group_1",
+      "seq": 107
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 748,
+      "kind": "process_request_start",
+      "mono_ns": 781463499805900,
+      "phase": "normal_group_1",
+      "seq": 108
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 748,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463500030500,
+      "phase": "normal_group_1",
+      "seq": 108
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 748,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463500723200,
+      "outcome": "returned",
+      "phase": "normal_group_1",
+      "seq": 108
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 976,
+      "kind": "process_request_start",
+      "mono_ns": 781463503149700,
+      "phase": "normal_group_1",
+      "seq": 109
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 976,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463503388800,
+      "phase": "normal_group_1",
+      "seq": 109
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 976,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463523525900,
+      "outcome": "returned",
+      "phase": "normal_group_1",
+      "seq": 109
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 820,
+      "kind": "process_request_start",
+      "mono_ns": 781463524597700,
+      "phase": "normal_group_1",
+      "seq": 110
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 820,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463524828800,
+      "phase": "normal_group_1",
+      "seq": 110
+    },
+    {
+      "active_count": 0,
+      "control": false,
+      "fd": 820,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463537367900,
+      "outcome": "returned",
+      "phase": "normal_group_1",
+      "seq": 110
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 872,
+      "kind": "process_request_start",
+      "mono_ns": 781463538024400,
+      "phase": "normal_group_1",
+      "seq": 111
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 872,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463538336900,
+      "phase": "normal_group_1",
+      "seq": 111
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 872,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463539228000,
+      "outcome": "returned",
+      "phase": "normal_group_1",
+      "seq": 111
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 872,
+      "kind": "process_request_start",
+      "mono_ns": 781463541686500,
+      "phase": "normal_group_1",
+      "seq": 112
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 872,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463541990300,
+      "phase": "normal_group_1",
+      "seq": 112
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 872,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463542847800,
+      "outcome": "returned",
+      "phase": "normal_group_1",
+      "seq": 112
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1348,
+      "kind": "process_request_start",
+      "mono_ns": 781463545021600,
+      "phase": "normal_group_1",
+      "seq": 113
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1348,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463545266700,
+      "phase": "normal_group_1",
+      "seq": 113
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1348,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463545972500,
+      "outcome": "returned",
+      "phase": "normal_group_1",
+      "seq": 113
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 872,
+      "kind": "process_request_start",
+      "mono_ns": 781463548751100,
+      "phase": "normal_group_1",
+      "seq": 114
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 872,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463589974200,
+      "phase": "normal_group_1",
+      "seq": 114
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 872,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463596991700,
+      "outcome": "returned",
+      "phase": "normal_group_1",
+      "seq": 114
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 900,
+      "kind": "process_request_start",
+      "mono_ns": 781463597969000,
+      "phase": "normal_group_1",
+      "seq": 115
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 900,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463599151000,
+      "phase": "normal_group_1",
+      "seq": 115
+    },
+    {
+      "active_count": 0,
+      "control": false,
+      "fd": 900,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463601549400,
+      "outcome": "returned",
+      "phase": "normal_group_1",
+      "seq": 115
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 1320,
+      "kind": "process_request_start",
+      "mono_ns": 781463602372600,
+      "phase": "normal_group_1",
+      "seq": 116
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 1320,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463602713800,
+      "phase": "normal_group_1",
+      "seq": 116
+    },
+    {
+      "active_count": 0,
+      "control": false,
+      "fd": 1320,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463604154900,
+      "outcome": "returned",
+      "phase": "normal_group_1",
+      "seq": 116
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 1200,
+      "kind": "process_request_start",
+      "mono_ns": 781463605933500,
+      "phase": "normal_group_1",
+      "seq": 117
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 1200,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463606262000,
+      "phase": "normal_group_1",
+      "seq": 117
+    },
+    {
+      "active_count": 0,
+      "control": false,
+      "fd": 1200,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463607769500,
+      "outcome": "returned",
+      "phase": "normal_group_1",
+      "seq": 117
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 1168,
+      "kind": "process_request_start",
+      "mono_ns": 781463609039600,
+      "phase": "normal_group_1",
+      "seq": 118
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 1168,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463609321500,
+      "phase": "normal_group_1",
+      "seq": 118
+    },
+    {
+      "active_count": 0,
+      "control": false,
+      "fd": 1168,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463625590600,
+      "outcome": "returned",
+      "phase": "normal_group_1",
+      "seq": 118
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1092,
+      "kind": "process_request_start",
+      "mono_ns": 781463626879100,
+      "phase": "normal_group_1",
+      "seq": 119
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1092,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463627232800,
+      "phase": "normal_group_1",
+      "seq": 119
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1092,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463628423600,
+      "outcome": "returned",
+      "phase": "normal_group_1",
+      "seq": 119
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1008,
+      "kind": "process_request_start",
+      "mono_ns": 781463631525500,
+      "phase": "normal_group_1",
+      "seq": 120
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1008,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463631824300,
+      "phase": "normal_group_1",
+      "seq": 120
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1008,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463632520300,
+      "outcome": "returned",
+      "phase": "normal_group_1",
+      "seq": 120
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 988,
+      "kind": "process_request_start",
+      "mono_ns": 781463634636700,
+      "phase": "normal_group_1",
+      "seq": 121
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 988,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463634875300,
+      "phase": "normal_group_1",
+      "seq": 121
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 988,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463635639400,
+      "outcome": "returned",
+      "phase": "normal_group_1",
+      "seq": 121
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1484,
+      "kind": "process_request_start",
+      "mono_ns": 781463638256700,
+      "phase": "normal_group_1",
+      "seq": 122
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1484,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463638584600,
+      "phase": "normal_group_1",
+      "seq": 122
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1484,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463639329300,
+      "outcome": "returned",
+      "phase": "normal_group_1",
+      "seq": 122
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 900,
+      "kind": "process_request_start",
+      "mono_ns": 781463641786600,
+      "phase": "normal_group_1",
+      "seq": 123
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 900,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463642888800,
+      "phase": "normal_group_1",
+      "seq": 123
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 900,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463644073100,
+      "outcome": "returned",
+      "phase": "normal_group_1",
+      "seq": 123
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1468,
+      "kind": "process_request_start",
+      "mono_ns": 781463645993200,
+      "phase": "normal_group_1",
+      "seq": 124
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1468,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463646212100,
+      "phase": "normal_group_1",
+      "seq": 124
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1468,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463647003300,
+      "outcome": "returned",
+      "phase": "normal_group_1",
+      "seq": 124
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1472,
+      "kind": "process_request_start",
+      "mono_ns": 781463649554600,
+      "phase": "normal_group_1",
+      "seq": 125
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1472,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463649782100,
+      "phase": "normal_group_1",
+      "seq": 125
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1472,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463650446200,
+      "outcome": "returned",
+      "phase": "normal_group_1",
+      "seq": 125
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1200,
+      "kind": "process_request_start",
+      "mono_ns": 781463652458200,
+      "phase": "normal_group_1",
+      "seq": 126
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1200,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463652710200,
+      "phase": "normal_group_1",
+      "seq": 126
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1200,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463653571800,
+      "outcome": "returned",
+      "phase": "normal_group_1",
+      "seq": 126
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1512,
+      "kind": "process_request_start",
+      "mono_ns": 781463656220100,
+      "phase": "normal_group_1",
+      "seq": 127
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1512,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463656515500,
+      "phase": "normal_group_1",
+      "seq": 127
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1512,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463662083300,
+      "outcome": "returned",
+      "phase": "normal_group_1",
+      "seq": 127
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 960,
+      "kind": "process_request_start",
+      "mono_ns": 781463663214000,
+      "phase": "normal_group_1",
+      "seq": 128
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 960,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463663469200,
+      "phase": "normal_group_1",
+      "seq": 128
+    },
+    {
+      "active_count": 0,
+      "control": false,
+      "fd": 960,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463679501100,
+      "outcome": "returned",
+      "phase": "normal_group_1",
+      "seq": 128
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 900,
+      "kind": "process_request_start",
+      "mono_ns": 781463680286700,
+      "phase": "normal_group_1",
+      "seq": 129
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 900,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463680504500,
+      "phase": "normal_group_1",
+      "seq": 129
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 900,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463681303400,
+      "outcome": "returned",
+      "phase": "normal_group_1",
+      "seq": 129
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1500,
+      "kind": "process_request_start",
+      "mono_ns": 781463683330800,
+      "phase": "normal_group_1",
+      "seq": 130
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1500,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463683616500,
+      "phase": "normal_group_1",
+      "seq": 130
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1500,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463684457600,
+      "outcome": "returned",
+      "phase": "normal_group_1",
+      "seq": 130
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1520,
+      "kind": "process_request_start",
+      "mono_ns": 781463686550700,
+      "phase": "normal_group_1",
+      "seq": 131
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1520,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463686838300,
+      "phase": "normal_group_1",
+      "seq": 131
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1520,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463687996400,
+      "outcome": "returned",
+      "phase": "normal_group_1",
+      "seq": 131
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1532,
+      "kind": "process_request_start",
+      "mono_ns": 781463690520800,
+      "phase": "normal_group_1",
+      "seq": 132
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1532,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463690840600,
+      "phase": "normal_group_1",
+      "seq": 132
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1532,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463692097200,
+      "outcome": "returned",
+      "phase": "normal_group_1",
+      "seq": 132
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 900,
+      "kind": "process_request_start",
+      "mono_ns": 781463694413100,
+      "phase": "normal_group_1",
+      "seq": 133
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 900,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463694669100,
+      "phase": "normal_group_1",
+      "seq": 133
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 900,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463695744600,
+      "outcome": "returned",
+      "phase": "normal_group_1",
+      "seq": 133
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1564,
+      "kind": "process_request_start",
+      "mono_ns": 781463699237300,
+      "phase": "normal_group_1",
+      "seq": 134
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1564,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463699512600,
+      "phase": "normal_group_1",
+      "seq": 134
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1564,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463700526800,
+      "outcome": "returned",
+      "phase": "normal_group_1",
+      "seq": 134
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1576,
+      "kind": "process_request_start",
+      "mono_ns": 781463702889300,
+      "phase": "normal_group_1",
+      "seq": 135
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1576,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463703188600,
+      "phase": "normal_group_1",
+      "seq": 135
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1576,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463703958600,
+      "outcome": "returned",
+      "phase": "normal_group_1",
+      "seq": 135
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1592,
+      "kind": "process_request_start",
+      "mono_ns": 781463706539300,
+      "phase": "normal_group_1",
+      "seq": 136
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1592,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463706786300,
+      "phase": "normal_group_1",
+      "seq": 136
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1592,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463707441200,
+      "outcome": "returned",
+      "phase": "normal_group_1",
+      "seq": 136
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1600,
+      "kind": "process_request_start",
+      "mono_ns": 781463709930100,
+      "phase": "normal_group_1",
+      "seq": 137
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1600,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463710255500,
+      "phase": "normal_group_1",
+      "seq": 137
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1600,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463711295300,
+      "outcome": "returned",
+      "phase": "normal_group_1",
+      "seq": 137
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1608,
+      "kind": "process_request_start",
+      "mono_ns": 781463714273500,
+      "phase": "normal_group_1",
+      "seq": 138
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1608,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463714587800,
+      "phase": "normal_group_1",
+      "seq": 138
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1608,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463720394500,
+      "outcome": "returned",
+      "phase": "normal_group_1",
+      "seq": 138
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 1620,
+      "kind": "process_request_start",
+      "mono_ns": 781463722232500,
+      "phase": "normal_group_1",
+      "seq": 139
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 1620,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463722687300,
+      "phase": "normal_group_1",
+      "seq": 139
+    },
+    {
+      "active_count": 0,
+      "control": false,
+      "fd": 1620,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463739312400,
+      "outcome": "returned",
+      "phase": "normal_group_1",
+      "seq": 139
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1656,
+      "kind": "process_request_start",
+      "mono_ns": 781463740554500,
+      "phase": "normal_group_1",
+      "seq": 140
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1656,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463740833700,
+      "phase": "normal_group_1",
+      "seq": 140
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1656,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463772620300,
+      "outcome": "returned",
+      "phase": "normal_group_1",
+      "seq": 140
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1632,
+      "kind": "process_request_start",
+      "mono_ns": 781463774252000,
+      "phase": "normal_group_1",
+      "seq": 141
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1632,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463774605800,
+      "phase": "normal_group_1",
+      "seq": 141
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1632,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463778999800,
+      "outcome": "returned",
+      "phase": "normal_group_1",
+      "seq": 141
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 1576,
+      "kind": "process_request_start",
+      "mono_ns": 781463983547200,
+      "phase": "normal_group_2",
+      "seq": 142
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 1576,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463983792700,
+      "phase": "normal_group_2",
+      "seq": 142
+    },
+    {
+      "active_count": 0,
+      "control": false,
+      "fd": 1576,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463984908700,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 142
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 1656,
+      "kind": "process_request_start",
+      "mono_ns": 781463985778900,
+      "phase": "normal_group_2",
+      "seq": 143
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 1656,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463985982500,
+      "phase": "normal_group_2",
+      "seq": 143
+    },
+    {
+      "active_count": 0,
+      "control": false,
+      "fd": 1656,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781463994524300,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 143
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 1596,
+      "kind": "process_request_start",
+      "mono_ns": 781463995222200,
+      "phase": "normal_group_2",
+      "seq": 144
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 1596,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781463995478900,
+      "phase": "normal_group_2",
+      "seq": 144
+    },
+    {
+      "active_count": 0,
+      "control": false,
+      "fd": 1596,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464016337900,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 144
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1504,
+      "kind": "process_request_start",
+      "mono_ns": 781464017040400,
+      "phase": "normal_group_2",
+      "seq": 145
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1504,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464017339700,
+      "phase": "normal_group_2",
+      "seq": 145
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1504,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464018367600,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 145
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1500,
+      "kind": "process_request_start",
+      "mono_ns": 781464020401400,
+      "phase": "normal_group_2",
+      "seq": 146
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1500,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464020648500,
+      "phase": "normal_group_2",
+      "seq": 146
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1500,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464021727400,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 146
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1500,
+      "kind": "process_request_start",
+      "mono_ns": 781464023658800,
+      "phase": "normal_group_2",
+      "seq": 147
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1500,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464023944000,
+      "phase": "normal_group_2",
+      "seq": 147
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1500,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464025096300,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 147
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1560,
+      "kind": "process_request_start",
+      "mono_ns": 781464027116300,
+      "phase": "normal_group_2",
+      "seq": 148
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1560,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464027981400,
+      "phase": "normal_group_2",
+      "seq": 148
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1560,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464030196300,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 148
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1620,
+      "kind": "process_request_start",
+      "mono_ns": 781464032038200,
+      "phase": "normal_group_2",
+      "seq": 149
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1620,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464032354800,
+      "phase": "normal_group_2",
+      "seq": 149
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1620,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464033097200,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 149
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1520,
+      "kind": "process_request_start",
+      "mono_ns": 781464035214200,
+      "phase": "normal_group_2",
+      "seq": 150
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1520,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464035463900,
+      "phase": "normal_group_2",
+      "seq": 150
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1520,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464036132300,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 150
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1600,
+      "kind": "process_request_start",
+      "mono_ns": 781464038595400,
+      "phase": "normal_group_2",
+      "seq": 151
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1600,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464038918000,
+      "phase": "normal_group_2",
+      "seq": 151
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1600,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464039636200,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 151
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1720,
+      "kind": "process_request_start",
+      "mono_ns": 781464041900400,
+      "phase": "normal_group_2",
+      "seq": 152
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1720,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464042214300,
+      "phase": "normal_group_2",
+      "seq": 152
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1720,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464042966000,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 152
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1744,
+      "kind": "process_request_start",
+      "mono_ns": 781464045266300,
+      "phase": "normal_group_2",
+      "seq": 153
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1744,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464045576700,
+      "phase": "normal_group_2",
+      "seq": 153
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1744,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464050360600,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 153
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 1792,
+      "kind": "process_request_start",
+      "mono_ns": 781464051576900,
+      "phase": "normal_group_2",
+      "seq": 154
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 1792,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464051778200,
+      "phase": "normal_group_2",
+      "seq": 154
+    },
+    {
+      "active_count": 0,
+      "control": false,
+      "fd": 1792,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464064523900,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 154
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1776,
+      "kind": "process_request_start",
+      "mono_ns": 781464065135400,
+      "phase": "normal_group_2",
+      "seq": 155
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1776,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464065412300,
+      "phase": "normal_group_2",
+      "seq": 155
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1776,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464066282800,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 155
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1744,
+      "kind": "process_request_start",
+      "mono_ns": 781464068585900,
+      "phase": "normal_group_2",
+      "seq": 156
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1744,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464068833000,
+      "phase": "normal_group_2",
+      "seq": 156
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1744,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464069473500,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 156
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1816,
+      "kind": "process_request_start",
+      "mono_ns": 781464071515000,
+      "phase": "normal_group_2",
+      "seq": 157
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1816,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464071804200,
+      "phase": "normal_group_2",
+      "seq": 157
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1816,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464072634900,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 157
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1828,
+      "kind": "process_request_start",
+      "mono_ns": 781464074481700,
+      "phase": "normal_group_2",
+      "seq": 158
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1828,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464074789500,
+      "phase": "normal_group_2",
+      "seq": 158
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1828,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464075759600,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 158
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1824,
+      "kind": "process_request_start",
+      "mono_ns": 781464077824800,
+      "phase": "normal_group_2",
+      "seq": 159
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1824,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464078017800,
+      "phase": "normal_group_2",
+      "seq": 159
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1824,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464078908100,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 159
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1724,
+      "kind": "process_request_start",
+      "mono_ns": 781464081050200,
+      "phase": "normal_group_2",
+      "seq": 160
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1724,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464081300400,
+      "phase": "normal_group_2",
+      "seq": 160
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1724,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464082230400,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 160
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1816,
+      "kind": "process_request_start",
+      "mono_ns": 781464084389100,
+      "phase": "normal_group_2",
+      "seq": 161
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1816,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464084701900,
+      "phase": "normal_group_2",
+      "seq": 161
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1816,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464085443400,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 161
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1848,
+      "kind": "process_request_start",
+      "mono_ns": 781464088055100,
+      "phase": "normal_group_2",
+      "seq": 162
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1848,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464088337100,
+      "phase": "normal_group_2",
+      "seq": 162
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1848,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464089438500,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 162
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1792,
+      "kind": "process_request_start",
+      "mono_ns": 781464092176300,
+      "phase": "normal_group_2",
+      "seq": 163
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1792,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464092917900,
+      "phase": "normal_group_2",
+      "seq": 163
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1792,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464098713500,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 163
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 1684,
+      "kind": "process_request_start",
+      "mono_ns": 781464099921500,
+      "phase": "normal_group_2",
+      "seq": 164
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 1684,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464100163300,
+      "phase": "normal_group_2",
+      "seq": 164
+    },
+    {
+      "active_count": 0,
+      "control": false,
+      "fd": 1684,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464116535200,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 164
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1804,
+      "kind": "process_request_start",
+      "mono_ns": 781464117540700,
+      "phase": "normal_group_2",
+      "seq": 165
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1804,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464117832400,
+      "phase": "normal_group_2",
+      "seq": 165
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1804,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464119060600,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 165
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1692,
+      "kind": "process_request_start",
+      "mono_ns": 781464122181000,
+      "phase": "normal_group_2",
+      "seq": 166
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1692,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464122526700,
+      "phase": "normal_group_2",
+      "seq": 166
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1692,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464123207800,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 166
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1872,
+      "kind": "process_request_start",
+      "mono_ns": 781464125193800,
+      "phase": "normal_group_2",
+      "seq": 167
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1872,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464125429100,
+      "phase": "normal_group_2",
+      "seq": 167
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1872,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464126362500,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 167
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1872,
+      "kind": "process_request_start",
+      "mono_ns": 781464128409300,
+      "phase": "normal_group_2",
+      "seq": 168
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1872,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464128761500,
+      "phase": "normal_group_2",
+      "seq": 168
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1872,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464129793900,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 168
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1884,
+      "kind": "process_request_start",
+      "mono_ns": 781464133063200,
+      "phase": "normal_group_2",
+      "seq": 169
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1884,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464133309300,
+      "phase": "normal_group_2",
+      "seq": 169
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1884,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464134469200,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 169
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1644,
+      "kind": "process_request_start",
+      "mono_ns": 781464136858500,
+      "phase": "normal_group_2",
+      "seq": 170
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1644,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464137193400,
+      "phase": "normal_group_2",
+      "seq": 170
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1644,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464138089100,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 170
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1504,
+      "kind": "process_request_start",
+      "mono_ns": 781464140421000,
+      "phase": "normal_group_2",
+      "seq": 171
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1504,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464140673900,
+      "phase": "normal_group_2",
+      "seq": 171
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1504,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464141556500,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 171
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1744,
+      "kind": "process_request_start",
+      "mono_ns": 781464143487500,
+      "phase": "normal_group_2",
+      "seq": 172
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1744,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464143865200,
+      "phase": "normal_group_2",
+      "seq": 172
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1744,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464144774600,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 172
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1888,
+      "kind": "process_request_start",
+      "mono_ns": 781464147199100,
+      "phase": "normal_group_2",
+      "seq": 173
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1888,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464147484600,
+      "phase": "normal_group_2",
+      "seq": 173
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1888,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464153407000,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 173
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 1656,
+      "kind": "process_request_start",
+      "mono_ns": 781464154516300,
+      "phase": "normal_group_2",
+      "seq": 174
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 1656,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464154915300,
+      "phase": "normal_group_2",
+      "seq": 174
+    },
+    {
+      "active_count": 0,
+      "control": false,
+      "fd": 1656,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464168952500,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 174
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1684,
+      "kind": "process_request_start",
+      "mono_ns": 781464170362500,
+      "phase": "normal_group_2",
+      "seq": 175
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1684,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464170728700,
+      "phase": "normal_group_2",
+      "seq": 175
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1684,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464172719300,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 175
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1884,
+      "kind": "process_request_start",
+      "mono_ns": 781464174771900,
+      "phase": "normal_group_2",
+      "seq": 176
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1884,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464175024700,
+      "phase": "normal_group_2",
+      "seq": 176
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1884,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464175844800,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 176
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1900,
+      "kind": "process_request_start",
+      "mono_ns": 781464177932300,
+      "phase": "normal_group_2",
+      "seq": 177
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1900,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464178228300,
+      "phase": "normal_group_2",
+      "seq": 177
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1900,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464178939300,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 177
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1908,
+      "kind": "process_request_start",
+      "mono_ns": 781464181350800,
+      "phase": "normal_group_2",
+      "seq": 178
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1908,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464181605200,
+      "phase": "normal_group_2",
+      "seq": 178
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1908,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464183399800,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 178
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1008,
+      "kind": "process_request_start",
+      "mono_ns": 781464185239700,
+      "phase": "normal_group_2",
+      "seq": 179
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1008,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464185485200,
+      "phase": "normal_group_2",
+      "seq": 179
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1008,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464186588100,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 179
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1656,
+      "kind": "process_request_start",
+      "mono_ns": 781464188557600,
+      "phase": "normal_group_2",
+      "seq": 180
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1656,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464188914500,
+      "phase": "normal_group_2",
+      "seq": 180
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1656,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464190022900,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 180
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1932,
+      "kind": "process_request_start",
+      "mono_ns": 781464192445800,
+      "phase": "normal_group_2",
+      "seq": 181
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1932,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464192736700,
+      "phase": "normal_group_2",
+      "seq": 181
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1932,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464193488500,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 181
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1520,
+      "kind": "process_request_start",
+      "mono_ns": 781464196194200,
+      "phase": "normal_group_2",
+      "seq": 182
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1520,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464196492100,
+      "phase": "normal_group_2",
+      "seq": 182
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1520,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464197713200,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 182
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1972,
+      "kind": "process_request_start",
+      "mono_ns": 781464199621800,
+      "phase": "normal_group_2",
+      "seq": 183
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1972,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464199954400,
+      "phase": "normal_group_2",
+      "seq": 183
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1972,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464201047500,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 183
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1992,
+      "kind": "process_request_start",
+      "mono_ns": 781464202996800,
+      "phase": "normal_group_2",
+      "seq": 184
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1992,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464203273400,
+      "phase": "normal_group_2",
+      "seq": 184
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1992,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464208182800,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 184
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 1944,
+      "kind": "process_request_start",
+      "mono_ns": 781464209277800,
+      "phase": "normal_group_2",
+      "seq": 185
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 1944,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464209546200,
+      "phase": "normal_group_2",
+      "seq": 185
+    },
+    {
+      "active_count": 0,
+      "control": false,
+      "fd": 1944,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464223892200,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 185
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1980,
+      "kind": "process_request_start",
+      "mono_ns": 781464225211100,
+      "phase": "normal_group_2",
+      "seq": 186
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1980,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464225517300,
+      "phase": "normal_group_2",
+      "seq": 186
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1980,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464226600300,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 186
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1980,
+      "kind": "process_request_start",
+      "mono_ns": 781464228983400,
+      "phase": "normal_group_2",
+      "seq": 187
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1980,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464229267800,
+      "phase": "normal_group_2",
+      "seq": 187
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1980,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464229967500,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 187
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1936,
+      "kind": "process_request_start",
+      "mono_ns": 781464232435100,
+      "phase": "normal_group_2",
+      "seq": 188
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1936,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464232746100,
+      "phase": "normal_group_2",
+      "seq": 188
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1936,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464233860900,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 188
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1984,
+      "kind": "process_request_start",
+      "mono_ns": 781464236032000,
+      "phase": "normal_group_2",
+      "seq": 189
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1984,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464236391100,
+      "phase": "normal_group_2",
+      "seq": 189
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1984,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464237573400,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 189
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1592,
+      "kind": "process_request_start",
+      "mono_ns": 781464240414600,
+      "phase": "normal_group_2",
+      "seq": 190
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1592,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464240687300,
+      "phase": "normal_group_2",
+      "seq": 190
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1592,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464241663200,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 190
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1948,
+      "kind": "process_request_start",
+      "mono_ns": 781464244325400,
+      "phase": "normal_group_2",
+      "seq": 191
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1948,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464244598300,
+      "phase": "normal_group_2",
+      "seq": 191
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1948,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464245298000,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 191
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1972,
+      "kind": "process_request_start",
+      "mono_ns": 781464247797700,
+      "phase": "normal_group_2",
+      "seq": 192
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1972,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464248085200,
+      "phase": "normal_group_2",
+      "seq": 192
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1972,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464248949900,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 192
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1648,
+      "kind": "process_request_start",
+      "mono_ns": 781464251806500,
+      "phase": "normal_group_2",
+      "seq": 193
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1648,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464252098800,
+      "phase": "normal_group_2",
+      "seq": 193
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1648,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464253358500,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 193
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1908,
+      "kind": "process_request_start",
+      "mono_ns": 781464256009600,
+      "phase": "normal_group_2",
+      "seq": 194
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1908,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464256322800,
+      "phase": "normal_group_2",
+      "seq": 194
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1908,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464262184500,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 194
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 1588,
+      "kind": "process_request_start",
+      "mono_ns": 781464263663200,
+      "phase": "normal_group_2",
+      "seq": 195
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 1588,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464263978300,
+      "phase": "normal_group_2",
+      "seq": 195
+    },
+    {
+      "active_count": 0,
+      "control": false,
+      "fd": 1588,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464265082800,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 195
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 1636,
+      "kind": "process_request_start",
+      "mono_ns": 781464266844800,
+      "phase": "normal_group_2",
+      "seq": 196
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 1636,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464267206700,
+      "phase": "normal_group_2",
+      "seq": 196
+    },
+    {
+      "active_count": 0,
+      "control": false,
+      "fd": 1636,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464268812800,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 196
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 1960,
+      "kind": "process_request_start",
+      "mono_ns": 781464270032400,
+      "phase": "normal_group_2",
+      "seq": 197
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 1960,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464270329800,
+      "phase": "normal_group_2",
+      "seq": 197
+    },
+    {
+      "active_count": 0,
+      "control": false,
+      "fd": 1960,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464272548600,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 197
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 976,
+      "kind": "process_request_start",
+      "mono_ns": 781464273272000,
+      "phase": "normal_group_2",
+      "seq": 198
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 976,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464273633400,
+      "phase": "normal_group_2",
+      "seq": 198
+    },
+    {
+      "active_count": 0,
+      "control": false,
+      "fd": 976,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464291769900,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 198
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1612,
+      "kind": "process_request_start",
+      "mono_ns": 781464292815500,
+      "phase": "normal_group_2",
+      "seq": 199
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1612,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464293153300,
+      "phase": "normal_group_2",
+      "seq": 199
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1612,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464294361900,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 199
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1972,
+      "kind": "process_request_start",
+      "mono_ns": 781464296727200,
+      "phase": "normal_group_2",
+      "seq": 200
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1972,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464297048900,
+      "phase": "normal_group_2",
+      "seq": 200
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1972,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464297863900,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 200
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1648,
+      "kind": "process_request_start",
+      "mono_ns": 781464300733600,
+      "phase": "normal_group_2",
+      "seq": 201
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1648,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464301118400,
+      "phase": "normal_group_2",
+      "seq": 201
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1648,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464302105400,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 201
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 988,
+      "kind": "process_request_start",
+      "mono_ns": 781464305377000,
+      "phase": "normal_group_2",
+      "seq": 202
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 988,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464305712900,
+      "phase": "normal_group_2",
+      "seq": 202
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 988,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464307194800,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 202
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1732,
+      "kind": "process_request_start",
+      "mono_ns": 781464309324600,
+      "phase": "normal_group_2",
+      "seq": 203
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1732,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464309565300,
+      "phase": "normal_group_2",
+      "seq": 203
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1732,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464310360600,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 203
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1960,
+      "kind": "process_request_start",
+      "mono_ns": 781464313458800,
+      "phase": "normal_group_2",
+      "seq": 204
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1960,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464313745200,
+      "phase": "normal_group_2",
+      "seq": 204
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1960,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464314565200,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 204
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 976,
+      "kind": "process_request_start",
+      "mono_ns": 781464317013600,
+      "phase": "normal_group_2",
+      "seq": 205
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 976,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464317291800,
+      "phase": "normal_group_2",
+      "seq": 205
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 976,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464318051200,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 205
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1008,
+      "kind": "process_request_start",
+      "mono_ns": 781464321157900,
+      "phase": "normal_group_2",
+      "seq": 206
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1008,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464321706600,
+      "phase": "normal_group_2",
+      "seq": 206
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1008,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464323252500,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 206
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1960,
+      "kind": "process_request_start",
+      "mono_ns": 781464325624900,
+      "phase": "normal_group_2",
+      "seq": 207
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1960,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464325901300,
+      "phase": "normal_group_2",
+      "seq": 207
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1960,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464326855800,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 207
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 872,
+      "kind": "process_request_start",
+      "mono_ns": 781464328910500,
+      "phase": "normal_group_2",
+      "seq": 208
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 872,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464329166700,
+      "phase": "normal_group_2",
+      "seq": 208
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 872,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464334134800,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 208
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 1528,
+      "kind": "process_request_start",
+      "mono_ns": 781464334840200,
+      "phase": "normal_group_2",
+      "seq": 209
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 1528,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464335096800,
+      "phase": "normal_group_2",
+      "seq": 209
+    },
+    {
+      "active_count": 0,
+      "control": false,
+      "fd": 1528,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464352733300,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 209
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 872,
+      "kind": "process_request_start",
+      "mono_ns": 781464354654500,
+      "phase": "normal_group_2",
+      "seq": 210
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 872,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464355041400,
+      "phase": "normal_group_2",
+      "seq": 210
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 872,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464356670500,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 210
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1372,
+      "kind": "process_request_start",
+      "mono_ns": 781464359064000,
+      "phase": "normal_group_2",
+      "seq": 211
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1372,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464359444900,
+      "phase": "normal_group_2",
+      "seq": 211
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1372,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464360734800,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 211
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1528,
+      "kind": "process_request_start",
+      "mono_ns": 781464363042100,
+      "phase": "normal_group_2",
+      "seq": 212
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1528,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464363318600,
+      "phase": "normal_group_2",
+      "seq": 212
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1528,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464364042100,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 212
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1936,
+      "kind": "process_request_start",
+      "mono_ns": 781464366972900,
+      "phase": "normal_group_2",
+      "seq": 213
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1936,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464367245700,
+      "phase": "normal_group_2",
+      "seq": 213
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1936,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464368355000,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 213
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1960,
+      "kind": "process_request_start",
+      "mono_ns": 781464371676200,
+      "phase": "normal_group_2",
+      "seq": 214
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1960,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464371995400,
+      "phase": "normal_group_2",
+      "seq": 214
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1960,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464373094300,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 214
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1000,
+      "kind": "process_request_start",
+      "mono_ns": 781464376154900,
+      "phase": "normal_group_2",
+      "seq": 215
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1000,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464376396800,
+      "phase": "normal_group_2",
+      "seq": 215
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1000,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464378159500,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 215
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 2040,
+      "kind": "process_request_start",
+      "mono_ns": 781464380270000,
+      "phase": "normal_group_2",
+      "seq": 216
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 2040,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464380525400,
+      "phase": "normal_group_2",
+      "seq": 216
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 2040,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464381175400,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 216
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 940,
+      "kind": "process_request_start",
+      "mono_ns": 781464383869500,
+      "phase": "normal_group_2",
+      "seq": 217
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 940,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464384572300,
+      "phase": "normal_group_2",
+      "seq": 217
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 940,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464385534900,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 217
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 820,
+      "kind": "process_request_start",
+      "mono_ns": 781464387990400,
+      "phase": "normal_group_2",
+      "seq": 218
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 820,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464388326000,
+      "phase": "normal_group_2",
+      "seq": 218
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 820,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464389594700,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 218
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1204,
+      "kind": "process_request_start",
+      "mono_ns": 781464391304000,
+      "phase": "normal_group_2",
+      "seq": 219
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1204,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464391576200,
+      "phase": "normal_group_2",
+      "seq": 219
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1204,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464392510400,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 219
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1732,
+      "kind": "process_request_start",
+      "mono_ns": 781464395289600,
+      "phase": "normal_group_2",
+      "seq": 220
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1732,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464395816500,
+      "phase": "normal_group_2",
+      "seq": 220
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1732,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464403013600,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 220
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 1144,
+      "kind": "process_request_start",
+      "mono_ns": 781464404987200,
+      "phase": "normal_group_2",
+      "seq": 221
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 1144,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464405335000,
+      "phase": "normal_group_2",
+      "seq": 221
+    },
+    {
+      "active_count": 0,
+      "control": false,
+      "fd": 1144,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464425489200,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 221
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 2040,
+      "kind": "process_request_start",
+      "mono_ns": 781464426277000,
+      "phase": "normal_group_2",
+      "seq": 222
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 2040,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464426564700,
+      "phase": "normal_group_2",
+      "seq": 222
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 2040,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464460699300,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 222
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1388,
+      "kind": "process_request_start",
+      "mono_ns": 781464461635600,
+      "phase": "normal_group_2",
+      "seq": 223
+    },
+    {
+      "active_count": 1,
+      "control": true,
+      "fd": 1388,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464516831600,
+      "phase": "normal_group_2",
+      "seq": 223
+    },
+    {
+      "active_count": 0,
+      "control": true,
+      "fd": 1388,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464523929700,
+      "outcome": "returned",
+      "phase": "normal_group_2",
+      "seq": 223
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 872,
+      "kind": "process_request_start",
+      "mono_ns": 781464899994600,
+      "phase": "partial_request_injected",
+      "seq": 224
+    },
+    {
+      "active_count": 1,
+      "control": false,
+      "fd": 872,
+      "kind": "process_request_thread_enter",
+      "mono_ns": 781464900688900,
+      "phase": "partial_request_injected",
+      "seq": 224
+    },
+    {
+      "active_count": 0,
+      "control": false,
+      "fd": 872,
+      "fd_after": -1,
+      "kind": "process_request_thread_return",
+      "mono_ns": 781464958634600,
+      "outcome": "returned",
+      "phase": "partial_request_injected",
+      "seq": 224
+    }
+  ],
+  "request_lifetime_wrappers": true,
+  "request_threads_created": 224,
+  "request_threads_joined": 224,
+  "samples": [
+    {
+      "active_count": 0,
+      "active_sequences": [],
+      "actual_held_handles": 143,
+      "fixed_host_threads_alive": null,
+      "label": "pre_host",
+      "mono_ns": 781462317236500,
+      "phase": "baseline",
+      "request_threads_alive": 0
+    },
+    {
+      "active_count": 0,
+      "active_sequences": [],
+      "actual_held_handles": 172,
+      "fixed_host_threads_alive": 3,
+      "label": "normal_host_started",
+      "mono_ns": 781462359271200,
+      "phase": "normal_setup",
+      "request_threads_alive": 0
+    },
+    {
+      "active_count": 0,
+      "active_sequences": [],
+      "actual_held_handles": 319,
+      "fixed_host_threads_alive": 3,
+      "label": "group_immediate",
+      "mono_ns": 781463098187500,
+      "phase": "normal_group_0",
+      "request_threads_alive": 0
+    },
+    {
+      "active_count": 0,
+      "active_sequences": [],
+      "actual_held_handles": 247,
+      "fixed_host_threads_alive": 3,
+      "label": "group_active_zero",
+      "mono_ns": 781463098393200,
+      "phase": "normal_group_0",
+      "request_threads_alive": 0
+    },
+    {
+      "active_count": 0,
+      "active_sequences": [],
+      "actual_held_handles": 247,
+      "fixed_host_threads_alive": 3,
+      "label": "group_settle_50ms",
+      "mono_ns": 781463148772800,
+      "phase": "normal_group_0",
+      "request_threads_alive": 0
+    },
+    {
+      "active_count": 0,
+      "active_sequences": [],
+      "actual_held_handles": 247,
+      "fixed_host_threads_alive": 3,
+      "label": "group_settle_200ms",
+      "mono_ns": 781463299384400,
+      "phase": "normal_group_0",
+      "request_threads_alive": 0
+    },
+    {
+      "active_count": 0,
+      "active_sequences": [],
+      "actual_held_handles": 385,
+      "fixed_host_threads_alive": 3,
+      "label": "group_immediate",
+      "mono_ns": 781463779375700,
+      "phase": "normal_group_1",
+      "request_threads_alive": 0
+    },
+    {
+      "active_count": 0,
+      "active_sequences": [],
+      "actual_held_handles": 316,
+      "fixed_host_threads_alive": 3,
+      "label": "group_active_zero",
+      "mono_ns": 781463779552800,
+      "phase": "normal_group_1",
+      "request_threads_alive": 0
+    },
+    {
+      "active_count": 0,
+      "active_sequences": [],
+      "actual_held_handles": 316,
+      "fixed_host_threads_alive": 3,
+      "label": "group_settle_50ms",
+      "mono_ns": 781463829652800,
+      "phase": "normal_group_1",
+      "request_threads_alive": 0
+    },
+    {
+      "active_count": 0,
+      "active_sequences": [],
+      "actual_held_handles": 316,
+      "fixed_host_threads_alive": 3,
+      "label": "group_settle_200ms",
+      "mono_ns": 781463979818700,
+      "phase": "normal_group_1",
+      "request_threads_alive": 0
+    },
+    {
+      "active_count": 0,
+      "active_sequences": [],
+      "actual_held_handles": 480,
+      "fixed_host_threads_alive": 3,
+      "label": "group_immediate",
+      "mono_ns": 781464524478800,
+      "phase": "normal_group_2",
+      "request_threads_alive": 0
+    },
+    {
+      "active_count": 0,
+      "active_sequences": [],
+      "actual_held_handles": 398,
+      "fixed_host_threads_alive": 3,
+      "label": "group_active_zero",
+      "mono_ns": 781464524799900,
+      "phase": "normal_group_2",
+      "request_threads_alive": 0
+    },
+    {
+      "active_count": 0,
+      "active_sequences": [],
+      "actual_held_handles": 398,
+      "fixed_host_threads_alive": 3,
+      "label": "group_settle_50ms",
+      "mono_ns": 781464575230900,
+      "phase": "normal_group_2",
+      "request_threads_alive": 0
+    },
+    {
+      "active_count": 0,
+      "active_sequences": [],
+      "actual_held_handles": 398,
+      "fixed_host_threads_alive": 3,
+      "label": "group_settle_200ms",
+      "mono_ns": 781464725592300,
+      "phase": "normal_group_2",
+      "request_threads_alive": 0
+    },
+    {
+      "active_count": 0,
+      "active_sequences": [],
+      "actual_held_handles": 386,
+      "fixed_host_threads_alive": 0,
+      "label": "normal_close_returned",
+      "mono_ns": 781464818036000,
+      "phase": "normal_close",
+      "request_threads_alive": 0
+    },
+    {
+      "active_count": 0,
+      "active_sequences": [],
+      "actual_held_handles": 386,
+      "fixed_host_threads_alive": 0,
+      "label": "normal_joined",
+      "mono_ns": 781464818303400,
+      "phase": "normal_close",
+      "request_threads_alive": 0
+    },
+    {
+      "active_count": 0,
+      "active_sequences": [],
+      "actual_held_handles": 415,
+      "fixed_host_threads_alive": 3,
+      "label": "partial_host_started",
+      "mono_ns": 781464898752900,
+      "phase": "partial_setup",
+      "request_threads_alive": 0
+    },
+    {
+      "active_count": 1,
+      "active_sequences": [
+        224
+      ],
+      "actual_held_handles": 419,
+      "fixed_host_threads_alive": 3,
+      "label": "partial_active_before_close",
+      "mono_ns": 781464900183600,
+      "phase": "partial_request_injected",
+      "request_threads_alive": 0
+    },
+    {
+      "active_count": 1,
+      "active_sequences": [
+        224
+      ],
+      "actual_held_handles": 409,
+      "fixed_host_threads_alive": 0,
+      "label": "partial_close_returned_client_open",
+      "mono_ns": 781464956530900,
+      "phase": "partial_close",
+      "request_threads_alive": 1
+    },
+    {
+      "active_count": 1,
+      "active_sequences": [
+        224
+      ],
+      "actual_held_handles": 408,
+      "fixed_host_threads_alive": 0,
+      "label": "partial_client_closed",
+      "mono_ns": 781464958274300,
+      "phase": "partial_close",
+      "request_threads_alive": 1
+    },
+    {
+      "active_count": 0,
+      "active_sequences": [],
+      "actual_held_handles": 405,
+      "fixed_host_threads_alive": 0,
+      "label": "partial_active_zero",
+      "mono_ns": 781464959789800,
+      "phase": "partial_close",
+      "request_threads_alive": 0
+    },
+    {
+      "active_count": 0,
+      "active_sequences": [],
+      "actual_held_handles": 404,
+      "fixed_host_threads_alive": 0,
+      "label": "partial_joined",
+      "mono_ns": 781464960240300,
+      "phase": "partial_close",
+      "request_threads_alive": 0
+    },
+    {
+      "active_count": 0,
+      "active_sequences": [],
+      "actual_held_handles": 404,
+      "fixed_host_threads_alive": 0,
+      "label": "partial_postclose_settle_200ms",
+      "mono_ns": 781465160582200,
+      "phase": "partial_close",
+      "request_threads_alive": 0
+    }
+  ],
+  "schema": "hh3d.s129.host-quiescence.diagnostic.v1",
+  "source_after_sha256": "f9f01712dccfc3beceee78750dd36e1d08fb3c400ba644f06149fa638e4bc8ad",
+  "source_before_sha256": "f9f01712dccfc3beceee78750dd36e1d08fb3c400ba644f06149fa638e4bc8ad",
+  "source_file_count": 17,
+  "source_stable": true,
+  "status": "COMPLETED_DIAGNOSTIC",
+  "utc": "2026-09-20T05:47:31.233642+00:00"
+}

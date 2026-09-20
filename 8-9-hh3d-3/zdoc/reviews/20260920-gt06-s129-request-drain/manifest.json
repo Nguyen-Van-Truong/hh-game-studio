@@ -1,0 +1,19 @@
+{
+  "schema": "S129.request-drain-evidence.1",
+  "created_utc": "2026-09-20T05:58:04.179976+00:00",
+  "formal_acceptance": false,
+  "benchmark_dataset": false,
+  "files": {
+    "before-source.json": "70ea6cbe4aac6505511193cb6f9b30598c5fbafb945e8edb3d4257f8795947f0",
+    "before-test.json": "c6750b24ee1c1ae32d506ce00159346b5b75d462eff1fdc472b1d617ccac9722",
+    "before.stderr.txt": "2954bdfb77490f6c11b88c52307145d919c799524d037df79b2066cd18fb8206",
+    "before.stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "focused-tests.json": "9c3436ece9db4e3e6fe1ac1220f89dafa266a25b5e150716c70ea6d775421504",
+    "focused.stderr.txt": "cb2e69620f437667ccb4b68ec62ab00a71b07602e840de15a918eaa9547a89b4",
+    "focused.stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "README.md": "2906f33fb1fadc62b2223bf9270c98cf90fac195dc198db2ffe1550f422d7036",
+    "test.before.py.txt": "91859ca8fec55ae76225fafb8dbedf997c02b155ad45683fa400ec6701b0c698",
+    "transport.before.py.txt": "614780e19b182c13b07cfd644e46219a6012804a9852e2a679d36c24002b9487",
+    "transport.patch": "9461ed366ee4fd8a057909d345ba8612a16d45ae1523e36203336b7c0712ed8e"
+  }
+}

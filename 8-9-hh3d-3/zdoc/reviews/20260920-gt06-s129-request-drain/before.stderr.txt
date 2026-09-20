@@ -1,0 +1,16 @@
+test_close_waits_for_partial_unauthenticated_requests_on_both_listeners (__main__.RequestDrainTests.test_close_waits_for_partial_unauthenticated_requests_on_both_listeners) ... FAIL
+
+======================================================================
+FAIL: test_close_waits_for_partial_unauthenticated_requests_on_both_listeners (__main__.RequestDrainTests.test_close_waits_for_partial_unauthenticated_requests_on_both_listeners)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\protocol\test_transport_request_drain.py", line 64, in test_close_waits_for_partial_unauthenticated_requests_on_both_listeners
+    self.assertEqual({role: thread.is_alive() for role, thread in threads.items()},
+AssertionError: {False: True, True: True} != {False: False, True: False}
+- {False: True, True: True}
++ {False: False, True: False}
+
+----------------------------------------------------------------------
+Ran 1 test in 0.140s
+
+FAILED (failures=1)

@@ -1,0 +1,23 @@
+{
+  "formal_acceptance": false,
+  "runs": [
+    {
+      "actual_exit_code": 0,
+      "close_return_precedes_partial_request_return_ms": 2.1037,
+      "counter_interpretation": "CONTAMINATED_BY_RETAINED_THREAD_OBJECTS",
+      "name": "run-01",
+      "request_lifecycles_complete": 224,
+      "source_hashes_match": true,
+      "supervisor_elapsed_seconds": 3.6399901000550017
+    },
+    {
+      "actual_exit_code": 0,
+      "close_return_precedes_partial_request_return_ms": 0.892,
+      "counter_interpretation": "NUMERIC_ONLY_RECORDER",
+      "name": "run-02",
+      "request_lifecycles_complete": 229,
+      "source_hashes_match": true,
+      "supervisor_elapsed_seconds": 3.008958399994299
+    }
+  ]
+}
