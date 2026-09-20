@@ -1,0 +1,89 @@
+{
+  "elapsed_seconds": 2632.796999999904,
+  "eligible_for_dataset": false,
+  "ended_utc": "2026-09-20T04:00:04.465569+00:00",
+  "errors": [
+    {
+      "chain": [
+        {
+          "code": "BENCHMARK_WRAPPER_EXIT",
+          "exception_class": "BenchmarkJobError",
+          "frames": [
+            {
+              "file": "post_failure_full.py",
+              "line": 141
+            },
+            {
+              "file": "benchmark_job.py",
+              "line": 346
+            },
+            {
+              "file": "benchmark_job.py",
+              "line": 354
+            },
+            {
+              "file": "benchmark_job.py",
+              "line": 46
+            }
+          ]
+        }
+      ],
+      "stage": "parent"
+    }
+  ],
+  "formal_acceptance": false,
+  "observations": {
+    "execution_unchanged": true,
+    "owner": {
+      "closed": true,
+      "drain_threads_alive": [
+        false,
+        false
+      ],
+      "helper_exit_code": 1,
+      "helper_pid": 17200,
+      "job": {
+        "active_count": 0,
+        "assigned": true,
+        "close_uncertain": false,
+        "closed": true,
+        "configured": true,
+        "create_uncertain": false,
+        "failed_operations": [],
+        "handle_retained": false,
+        "native_error": null,
+        "tainted": false,
+        "zero_observed": true
+      },
+      "present": true,
+      "wrapper_process_handle": {
+        "close_uncertain": false,
+        "closed": true,
+        "handle_retained": false,
+        "required": true
+      }
+    },
+    "source_unchanged": true,
+    "target": {
+      "actual_target_exit": {
+        "exit_code": 1,
+        "pid": 29116
+      },
+      "exit": {
+        "file": "owned/process-exit.json",
+        "sha256": "27beb152e549207f75c96658c461824c5c389c582a478bfb397a2f2c1b0bb4b8",
+        "size_bytes": 30
+      },
+      "missing_reason": null,
+      "natural_exit_not_inferred": true,
+      "start": {
+        "file": "owned/process-start.json",
+        "sha256": "b86f888d47ad3f662a4b1f67d87d96d2e80cea0f02199086cfb0c3e47f890be2",
+        "size_bytes": 14
+      }
+    }
+  },
+  "owned_child_natural_exit0": false,
+  "run_id": "gt06-s127-post-failure-full-01",
+  "schema": "S126.coupled-journal.result.1"
+}

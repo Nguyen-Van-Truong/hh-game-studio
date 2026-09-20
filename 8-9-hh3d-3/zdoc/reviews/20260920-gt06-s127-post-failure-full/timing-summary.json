@@ -1,0 +1,123 @@
+{
+  "disposition": "ORIGINAL_FAILURE",
+  "eligible_for_dataset": false,
+  "errors": [
+    {
+      "chain": [
+        {
+          "code": "CAMPAIGN_RETAINED_COUNTER_GROWTH",
+          "exception_class": "BenchmarkJobError",
+          "frames": [
+            {
+              "file": "coupled_journal.py",
+              "line": 284
+            },
+            {
+              "file": "run_benchmark_campaign.py",
+              "line": 965
+            },
+            {
+              "file": "coupled_journal.py",
+              "line": 272
+            },
+            {
+              "file": "post_failure_handles.py",
+              "line": 65
+            },
+            {
+              "file": "run_benchmark_campaign.py",
+              "line": 272
+            },
+            {
+              "file": "benchmark_job.py",
+              "line": 46
+            }
+          ]
+        }
+      ],
+      "stage": "campaign"
+    }
+  ],
+  "exit_scope": "Outer child may exit0 for captured planned boundary; editor natural exit can be UNKNOWN after owned boundary cleanup.",
+  "formal_acceptance": false,
+  "gates": [
+    {
+      "index": 0,
+      "original_gate": "PASSED"
+    },
+    {
+      "index": 1,
+      "original_gate": "PASSED"
+    },
+    {
+      "index": 2,
+      "original_gate": "PASSED"
+    },
+    {
+      "index": 3,
+      "original_gate": "PASSED"
+    },
+    {
+      "index": 4,
+      "original_gate": "PASSED"
+    },
+    {
+      "index": 5,
+      "original_gate": "PASSED"
+    },
+    {
+      "index": 6,
+      "original_gate": "PASSED"
+    },
+    {
+      "index": 7,
+      "original_gate": "PASSED"
+    },
+    {
+      "index": 8,
+      "original_gate": "PASSED"
+    },
+    {
+      "index": 9,
+      "original_gate": "PASSED"
+    },
+    {
+      "index": 10,
+      "original_gate": "PASSED"
+    },
+    {
+      "index": 11,
+      "original_gate": "PASSED"
+    },
+    {
+      "index": 12,
+      "original_gate": "PASSED"
+    },
+    {
+      "index": 13,
+      "original_gate": "PASSED"
+    },
+    {
+      "index": 14,
+      "original_gate": "PASSED"
+    },
+    {
+      "index": 15,
+      "original_gate": "PASSED"
+    },
+    {
+      "index": 16,
+      "original_gate": "PASSED"
+    },
+    {
+      "index": 17,
+      "original_gate": "PASSED"
+    }
+  ],
+  "limits": "Nested wall/CPU spans overlap; fixed SQLite transaction controls timed separately; Python fsync excludes SQLite internal sync. No I/O/rootcause/no-leak claim.",
+  "pid": 29116,
+  "run_id": "gt06-s127-post-failure-full-01",
+  "schema": "S126.coupled-journal.timings.1",
+  "source_unchanged": true,
+  "timings": {}
+}

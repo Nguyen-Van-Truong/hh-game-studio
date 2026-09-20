@@ -1,0 +1,135 @@
+{
+  "authority": 0,
+  "run_id": "gt06-s127-post-failure-full-01",
+  "formal_acceptance": false,
+  "eligible_for_dataset": false,
+  "partial_batches": 19,
+  "failure_code": "CAMPAIGN_RETAINED_COUNTER_GROWTH",
+  "failure_batch": 18,
+  "files": {
+    ".gitattributes": {
+      "sha256": "6eabf2e06fe9a1051649e6d3ac14c4be612addacbbaa26d4b04ffcb59c57f566",
+      "size": 75
+    },
+    "attempt/batch-capture-18.json": {
+      "sha256": "1bd10a97bf15bf5f468d9a70e475c02d38fa958bbcaa177f6c003573c5ca3c79",
+      "size": 869
+    },
+    "attempt/child-failure.json": {
+      "sha256": "809cf07aa94936190eeada8a68ac311d9ec97fa72db8cffe5f46dd010aceeefe",
+      "size": 233
+    },
+    "attempt/child-terminal-cleanup.json": {
+      "sha256": "9703104000c76c0813f1273c02de70a4cca29d8f6911827111da848bb53fca32",
+      "size": 3752
+    },
+    "attempt/context.json": {
+      "sha256": "d4e6d236699a43f83c0b1c31ee4630d5789e5954fdee4e02f199ab885f8ab122",
+      "size": 6136
+    },
+    "attempt/editor-host/process-start.json": {
+      "sha256": "3bd206b8713b3b6e013713a8579f79bba60ce6b30495188d08066e456913f531",
+      "size": 14
+    },
+    "attempt/import-host/process-exit.json": {
+      "sha256": "c18cac2bee49b719c9015f878294429e5812893f2d3d34c32776fcdb66c1a393",
+      "size": 30
+    },
+    "attempt/import-host/process-start.json": {
+      "sha256": "f16ea68b0687e5e8134acc1bfb5c9d4060ebfdd5f78a2e7a317e2a37ee0405c7",
+      "size": 14
+    },
+    "attempt/joint-18.json": {
+      "sha256": "09393f543c83416962b0acd01107b1b7f4bfe650b4496ab3a59a801219af7ad2",
+      "size": 2310
+    },
+    "attempt/sample-preview-04.json": {
+      "sha256": "bb84a526105302619861329ccb483ce4361a3c6376eac421eafc60b27255282c",
+      "size": 72872
+    },
+    "attempt/sample-preview-18.json": {
+      "sha256": "0b3ece4c1eec05dd5f3f9030ab62ab7fefc321b2fb6ae42162762d405bfb08de",
+      "size": 73594
+    },
+    "execution-source-files.json": {
+      "sha256": "f5fa0ec13da9749ca65a331408e0e16ad254bbea0c79454904b2f28305d83c68",
+      "size": 7263
+    },
+    "host_observer_selfcheck.py": {
+      "sha256": "015ea641e38fb7cd4d2a5ad8b7fa3504afd088c41a54fdb7fa73db22b0e4b36c",
+      "size": 2256
+    },
+    "launcher.stderr.txt": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "launcher.stdout.txt": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "original-gate-failure.json": {
+      "sha256": "88203972af9d68faa970d9e0afbff73be8b41914264c66f08b63c4c2c921850c",
+      "size": 110538
+    },
+    "owned/cleanup-001.json": {
+      "sha256": "31f58e29075f8f16bb2df0bb72471bfcd0df794b729d6497022554d84959cfc8",
+      "size": 548
+    },
+    "owned/gt06-s127-post-failure-full-01/coupled_journal.py": {
+      "sha256": "02875ae75a1c0d0670fe2dded3e840faa654a4208f90b9f01ec79b3cb63da549",
+      "size": 16118
+    },
+    "owned/gt06-s127-post-failure-full-01/post_failure_handles.py": {
+      "sha256": "62733e727733b86eba458e6f18a568905d5cd4313f7620d4a1a93279e6a63d97",
+      "size": 3968
+    },
+    "owned/gt06-s127-post-failure-full-01/pss_adapter.py": {
+      "sha256": "797398a54cac5f7c772df7ec9c5ad988fe9e54c26c3c10e172a768e39dc25c76",
+      "size": 19589
+    },
+    "owned/gt06-s127-post-failure-full-01/support.py": {
+      "sha256": "ad4e2d15cbcb3f890f22a7d2be339aee6b726c62a9c339dfac4478fdaf21e998",
+      "size": 19698
+    },
+    "owned/gt06-s127-post-failure-full-01/timings.py": {
+      "sha256": "5c14e57ffabe0a204117cdf08f5edf34c79730af25bb4f9e485fdf3c492132d8",
+      "size": 15717
+    },
+    "owned/invocation.json": {
+      "sha256": "6f4a20cabbbc34efcc6841c93d2f1b62b29fe106ebdf71d6dfb399501c81576e",
+      "size": 8621
+    },
+    "owned/process-exit.json": {
+      "sha256": "27beb152e549207f75c96658c461824c5c389c582a478bfb397a2f2c1b0bb4b8",
+      "size": 30
+    },
+    "owned/process-start.json": {
+      "sha256": "b86f888d47ad3f662a4b1f67d87d96d2e80cea0f02199086cfb0c3e47f890be2",
+      "size": 14
+    },
+    "post_failure_full.py": {
+      "sha256": "6d64ff81001848ff96a5639f6ebd8ee2a1b039a1d7b0cf8ec44b170e807e6551",
+      "size": 16896
+    },
+    "post_failure_handles.py": {
+      "sha256": "589d8382d2fd7601d5fa8945373e36d57a70cecd6619763a5854d4b17e220ae5",
+      "size": 6479
+    },
+    "README.md": {
+      "sha256": "87b14bd33516b7283aa8f595fd3dd4fdf7194771e9ac44814949e50d8140790d",
+      "size": 2829
+    },
+    "result.json": {
+      "sha256": "731fa306a87c30dc2abf099ab91cafde49c7bd130500af12b0fd5d09a0d8ed1c",
+      "size": 2231
+    },
+    "s126-plan.snapshot": {
+      "sha256": "b6baae8b14b5a010749ba01e660f1d54cc9c7da1f01f7c9d0c915fad94ba2c93",
+      "size": 96980
+    },
+    "timing-summary.json": {
+      "sha256": "acf046d73b291a73e20326e41d94281464780abd991d9a247bd50b65d822a634",
+      "size": 2575
+    }
+  }
+}
