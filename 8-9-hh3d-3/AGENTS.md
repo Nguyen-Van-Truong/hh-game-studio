@@ -1,8 +1,9 @@
 # HH3D-3 — routing hiện hành
 
-Owner steering mới nhất 19-09-2026: coordinator tự làm, không tạo thêm worker.
-Quyền ba Codex Astra ultra ngày18-09 là lịch sử; giữ hai critic độc lập ở gate
-cuối khi đủ điều kiện. Model/effort theo lệnh owner mới nhất, không giả cờ fast.
+Owner steering mới nhất 20-09-2026: cho phép ba Codex Astra extra-high worker
+cho các việc độc lập, scope/file rõ ràng. Chế độ solo ngày19-09 là lịch sử.
+Giữ hai critic độc lập ở gate cuối khi đủ điều kiện; worker sửa/test không thay
+critic nghiệm thu. Model/effort theo lệnh owner mới nhất, không giả cờ fast.
 Đọc WP và tiến độ mới nhất ở đầu plan; không lấy tên worker hoặc trạng thái
 trong báo cáo lịch sử làm dispatch hiện hành. Coordinator giữ một writer/file,
 tích hợp kết quả và tuần tự hóa các lượt chạy engine; không thêm engine/test

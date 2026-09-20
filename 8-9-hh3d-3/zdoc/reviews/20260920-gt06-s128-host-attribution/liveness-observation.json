@@ -1,0 +1,27 @@
+{
+  "schema": "S128.scoped-liveness.1",
+  "authority": 0,
+  "observed_utc": "2026-09-20T05:45:02.0435206Z",
+  "roles": [
+    {
+      "role": "host",
+      "expected_pid": 2324,
+      "expected_process_start": "windows:134343522074820166",
+      "state": "PID_NOT_PRESENT",
+      "matching_identity_live": false
+    },
+    {
+      "role": "editor",
+      "expected_pid": 46908,
+      "expected_process_start": "windows:134343522152609203",
+      "state": "PID_NOT_PRESENT",
+      "matching_identity_live": false
+    }
+  ],
+  "limitations": [
+    "NO_EXIT_CODE_INFERENCE",
+    "NO_CLEANUP_INFERENCE",
+    "NO_ROOT_CAUSE_INFERENCE"
+  ],
+  "formal_acceptance": false
+}

@@ -1,0 +1,139 @@
+{
+  "authority": 0,
+  "run_id": "gt06-s128-host-attribution-01",
+  "formal_acceptance": false,
+  "eligible_for_dataset": false,
+  "status": "INCOMPLETE_UNKNOWN",
+  "completed_samples": [
+    {
+      "file": "attempt/sample-preview-00.json",
+      "index": 0,
+      "warmup": true,
+      "max_status_gap_ms": 732.705,
+      "host_held_handles": {
+        "unavailable_reason": null,
+        "value": 209
+      },
+      "editor_held_handles": {
+        "unavailable_reason": null,
+        "value": 565
+      },
+      "editor_objects": {
+        "unavailable_reason": null,
+        "value": 71128
+      },
+      "editor_resources": {
+        "unavailable_reason": null,
+        "value": 6
+      },
+      "phase": "post_batch_quiescent",
+      "evidence_sha256": "6e183dd3e6a24754e8f8f7e6e5427eca001bbbc64eaa3b3669118930aaf658bf"
+    },
+    {
+      "file": "attempt/sample-preview-01.json",
+      "index": 1,
+      "warmup": true,
+      "max_status_gap_ms": 1904.3962,
+      "host_held_handles": {
+        "unavailable_reason": null,
+        "value": 209
+      },
+      "editor_held_handles": {
+        "unavailable_reason": null,
+        "value": 559
+      },
+      "editor_objects": {
+        "unavailable_reason": null,
+        "value": 71128
+      },
+      "editor_resources": {
+        "unavailable_reason": null,
+        "value": 6
+      },
+      "phase": "post_batch_quiescent",
+      "evidence_sha256": "0350bdf41a0d416015b4371590152f297cc95aea63ae87196c7c9beb9fe6daf4"
+    },
+    {
+      "file": "attempt/sample-preview-02.json",
+      "index": 2,
+      "warmup": true,
+      "max_status_gap_ms": 973.687,
+      "host_held_handles": {
+        "unavailable_reason": null,
+        "value": 209
+      },
+      "editor_held_handles": {
+        "unavailable_reason": null,
+        "value": 567
+      },
+      "editor_objects": {
+        "unavailable_reason": null,
+        "value": 71128
+      },
+      "editor_resources": {
+        "unavailable_reason": null,
+        "value": 6
+      },
+      "phase": "post_batch_quiescent",
+      "evidence_sha256": "fc7552a95ba9f884229439b529f99eec07d4296fa2949f5c866bd9082bd0ab54"
+    },
+    {
+      "file": "attempt/sample-preview-03.json",
+      "index": 3,
+      "warmup": true,
+      "max_status_gap_ms": 732.0012,
+      "host_held_handles": {
+        "unavailable_reason": null,
+        "value": 209
+      },
+      "editor_held_handles": {
+        "unavailable_reason": null,
+        "value": 559
+      },
+      "editor_objects": {
+        "unavailable_reason": null,
+        "value": 71128
+      },
+      "editor_resources": {
+        "unavailable_reason": null,
+        "value": 6
+      },
+      "phase": "post_batch_quiescent",
+      "evidence_sha256": "bc5d54677cce9d3c49fcc05af4fb19fd585bfd334ba7d0c1be00ba8bf347188a"
+    },
+    {
+      "file": "attempt/sample-preview-04.json",
+      "index": 4,
+      "warmup": true,
+      "max_status_gap_ms": 621.258,
+      "host_held_handles": {
+        "unavailable_reason": null,
+        "value": 209
+      },
+      "editor_held_handles": {
+        "unavailable_reason": null,
+        "value": 559
+      },
+      "editor_objects": {
+        "unavailable_reason": null,
+        "value": 71128
+      },
+      "editor_resources": {
+        "unavailable_reason": null,
+        "value": 6
+      },
+      "phase": "post_batch_quiescent",
+      "evidence_sha256": "4b6107bb4f73f97571e4b6dd528f2c70355b8e27d4d9f704782956870f086c1e"
+    }
+  ],
+  "completed_sample_count": 5,
+  "last_observed_phase": "batch_5_commands",
+  "terminal_evidence_present": false,
+  "terminal_receipts": [],
+  "limitations": [
+    "NO_RESULT_OR_TARGET_EXIT_RECEIPT",
+    "NO_HOST_POST_FAILURE_SNAPSHOT",
+    "HELPER_IDENTITY_SCHEMA_GAP",
+    "HELPER_BOUNDARY_FLAG_GAP"
+  ]
+}

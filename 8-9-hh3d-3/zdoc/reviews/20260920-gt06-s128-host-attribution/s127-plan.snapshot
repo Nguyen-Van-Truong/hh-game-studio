@@ -1,5 +1,5 @@
 HH STUDIO — PLAN 1/3: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 20-09-2026, Asia/Saigon | Revision S128 | TRIỂN KHAI THEO GATE
+Ngày 20-09-2026, Asia/Saigon | Revision S127 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -16,7 +16,7 @@ STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng
 
 CURRENT_VALID_WP=GT-06
 EXECUTION_AUTHORIZATION=OWNER_APPROVED_GATED
-IMPLEMENTATION=GT06_S128_INCOMPLETE_UNKNOWN; S129_HELPER_HOST_AND_SUPERVISION_REPAIR_IN_PROGRESS
+IMPLEMENTATION=GT06_S127_FULL_DIAGNOSTIC_HOST_RETAINED_COUNTER_BOUNDARY_AFTER_S126_JOB_ATTRIBUTION
 GT01_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260913
 GT01_PENDING=NONE
 GT01_PIN_DECISION=GODOT_4.7.2_STABLE_OFFICIAL
@@ -25,9 +25,9 @@ RUNTIME_ACCEPTANCE=GT01_GT02_GT03_GT04_GT05_ACCEPTED
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S128
-EXECUTION_MODE=COORDINATOR_WITH_THREE_INDEPENDENT_ASTRA_XHIGH_WORKERS_OWNER_20260920
-SUBAGENTS_ENABLED=3; ONE_WRITER_PER_FILE; FINAL_GATE_STILL_REQUIRES_TWO_NEW_INDEPENDENT_CRITICS
+PLAN_REVISION=S127
+EXECUTION_MODE=COORDINATOR_SOLO_OWNER_LATEST_20260919
+SUBAGENTS_ENABLED=0; FINAL_GATE_STILL_REQUIRES_TWO_INDEPENDENT_CRITICS
 GT02_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260916_S46
 GT02_REVIEW_STATUS=TWO_INDEPENDENT_PASS_TICK_YES_S46
 GT02_LAST_TESTED_SOURCE_CLOSURE=f28056d8ff705a60d48a54f9dee80f16554494fa976bd0bfabee84bb51fecbbf
@@ -54,20 +54,20 @@ GT05_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260917_S64
 GT05_REVIEW_STATUS=TWO_INDEPENDENT_PASS_TICK_YES_S64
 GT05_CHECKPOINT_COMMIT=808d8ba
 GT05_LAST_TESTED_SOURCE_CLOSURE=c141d54b80022ca7fefdf81f83e7e1078d3cc6aa43954831f82bb3178338a135
-GT06_EVIDENCE_STATUS=ZERO_ACCEPTED_FULL_RUNS; S116_FORMAL_FAILED; S123_RETAINED_COUNTER_FAILED; S124_SEVEN_BATCH_DIAGNOSTIC_COMPLETED; S125_AUTH_RACE_REPRODUCED_AND_REPAIRED; S126_JOB_READBACK_FAILED_PRE_ENGINE; S127_STOCK_DIAGNOSTIC_FAILED_BATCH18_HOST_COUNTER; S128_HOST_ATTRIBUTION_INCOMPLETE_UNKNOWN_BATCH5_NO_TERMINAL_RECEIPTS
+GT06_EVIDENCE_STATUS=ZERO_ACCEPTED_FULL_RUNS; S116_FORMAL_FAILED; S123_RETAINED_COUNTER_FAILED; S124_SEVEN_BATCH_DIAGNOSTIC_COMPLETED; S125_AUTH_RACE_REPRODUCED_AND_REPAIRED; S126_JOB_READBACK_FAILED_PRE_ENGINE; S127_STOCK_DIAGNOSTIC_FAILED_BATCH18_HOST_COUNTER
 GT06_WORKING_SOURCE_STATUS=S125_CANDIDATE_TRANSPORT53_AND_BENCHMARK166_TESTS_PASS; NOT_FORMAL
 GT06_LAST_TESTED_SOURCE_CLOSURE=739447bd1d812b7e4e76754d7c6659a2ba9c1bc53e9045f1cfc2f2b6379dbf08
 GT06_CURRENT_SOURCE_CLOSURE=6d580e30e6d9368a5118749687589e4893fc5b88bcaf6b0af4414ce15ce91fc2
-GT06_SOURCE_CHECKPOINT=5dde7ffb80ed720a50ba8f68dcdc0a5bf1290ca1; PREVIOUS_RUNTIME=c4ae9cb2
+GT06_SOURCE_CHECKPOINT=S125_PENDING_CHECKPOINT; PREVIOUS_RUNTIME=c4ae9cb2
 GT06_SOURCE_FILE_COUNT=53
 GT06_PROFILE_SHA256=0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85
 GT06_BENCHMARK_CAMPAIGN=gt06-s116-formal-01
 GT06_BENCHMARK_STATUS=S116_FAILED_BATCH10_JOINT_OBSERVATION_STATUS_GAP_2041.7971MS; ZERO_ACCEPTED_FULL_RUNS
-GT06_ACTIVE_DIAGNOSTIC=S128_HOST_ATTRIBUTION_INCOMPLETE_BATCH5_NO_TERMINAL_RECEIPTS; NO_ENGINE_RUNNING
-GT06_NEXT_ACTION=Preserve S128 incomplete/UNKNOWN packet and its helper/lifetime coverage gaps; do not infer exit, crash, root cause or PASS from missing receipts. Do not launch formal retry or another engine diagnostic until a distinct launch-supervision question is defined and the copied helper schema/boundary/binding checks are repaired and statically covered. Keep strict equality, original gates, profile and native source. No diagnostic dataset; preserve original gates and all failures.
-GT06_DIAGNOSTIC_EXCLUSION=All failed partial/instrumented/supplemental runs through S128 excluded from F13/F14; preserve their raw, missing-evidence gaps and lessons. History in S124/S125/S126/S127 archives and referenced review packets.
+GT06_ACTIVE_DIAGNOSTIC=S127_STOCK_FULL_DIAGNOSTIC_FAILED_BATCH18_HOST_HANDLES_209_TO_210; NO_ENGINE_RUNNING
+GT06_NEXT_ACTION=Preserve S127 host-counter failure; the read-only 19-row attribution and repaired host observer selfcheck/--check pass. Do not launch formal retry or another long engine diagnostic until a distinct question is justified. If host attribution is still required, use a fresh diagnostic ID with the repaired host observer; keep strict equality, original gates, profile and native source. No diagnostic dataset; preserve original gates and all failures.
+GT06_DIAGNOSTIC_EXCLUSION=All failed partial/instrumented/supplemental runs through S127 excluded from F13/F14; preserve their raw, missing-evidence gaps and lessons. History in S124/S125/S126 archives and referenced review packets.
 
-TIẾN ĐỘ HIỆN HÀNH — S128, ngày 20-09-2026 (timestamps UTC)
+TIẾN ĐỘ HIỆN HÀNH — S127, ngày 20-09-2026 (timestamps UTC)
 GT01–05 ACCEPTED; GT06 IN_PROGRESS; GT07–10 chưa mở; zero accepted full runs.
 S125 tái hiện bốn trường hợp lease/Stop chờ host lock rồi session bị rotate/hết
 hạn nhưng vẫn được nhận. Sửa hẹp: check_current lại ngay sau khi lấy host lock;
@@ -103,34 +103,20 @@ exit1; child giữ editor natural exit UNKNOWN, Job/owned cleanup zero/closed.
 Evidence chọn lọc và manifest ở reviews/20260920-gt06-s127-post-failure-full/;
 raw đầy đủ giữ ở studio/.local/reviews/gt06-s127-post-failure-full-01.
 
-S128 dùng một diagnostic ID mới để quan sát host sau boundary S127, với source,
-profile, workstation và strict gates không đổi. Preflight tĩnh đạt; 5 sample
-files (batches0–4, chỉ warmup) hoàn tất, child output dừng ở batch5/commands.
-Query mới không tìm thấy host/editor identity; không có result,
-child-terminal-cleanup hoặc host/editor/supervisor exit receipt. Import riêng
-exit0; không suy exit/cleanup toàn lượt từ PID vắng mặt. Packet
-`reviews/20260920-gt06-s128-host-attribution/` ghi rõ
-`INCOMPLETE_UNKNOWN`; không được suy crash, engine failure, root cause, PASS,
-no-leak hoặc dataset. Raw `.local` vẫn giữ nguyên. Rà helper chỉ đọc phát hiện
-schema PSS, STOP_AT_BOUNDARY, host-binding, provenance cũ, row chưa validate và
-giám sát launcher còn thiếu. Phải sửa/kiểm tĩnh các nhánh này trước diagnostic
-engine mới. Packet S128 và `s127-plan.snapshot` được giữ nguyên.
-
 Helper S127 cũ chỉ theo dõi editor nên không sinh snapshot bổ sung cho lỗi host.
-Đây là diagnostic coverage gap, không phải PASS. Helper thêm observer host đã
-qua selfcheck/--check cũ, nhưng S128 review phát hiện fake identity khác schema
-adapter thật; kết quả kiểm đó không đủ bảo đảm nhánh PSS. S129 sửa trong helper
-mới, không sửa lại helper/source/raw của lượt S128.
+Đây là diagnostic coverage gap, không phải PASS. Bản helper đã thêm observer host
+và kiểm tra tĩnh `host_observer_selfcheck.py` PASS; `post_failure_full.py
+--check` PASS, chưa rerun engine sau failure. Chỉ tạo diagnostic ID mới nếu cần
+phân biệt host attribution; không nới gate hoặc lặp formal mù.
 
 Phân tích read-only từ 19 sample cho thấy host handles giữ 209 từ batch5 đến
 17 và chỉ thành210 ở batch18; host RSS vẫn trong giới hạn, editor handles thấp
 hơn baseline. Đây chỉ là boundary attribution, không nhận diện kernel object,
 leak hay root cause; JSON/Markdown và hash nằm trong packet S127.
 
-Bước tiếp theo là giữ attribution S127 và S128, đóng các helper/supervision gaps
-theo một câu hỏi phân biệt cụ thể, rồi mới cân nhắc một ID diagnostic mới. Không
-launch engine thêm khi chưa có câu hỏi đó; mọi kết quả vẫn diagnostic, không biến
-thành formal.
+Bước tiếp theo là đọc attribution S127 và giữ nguyên failure, không launch engine
+thêm khi chưa có câu hỏi phân biệt. Khi có lý do độc lập, một ID mới có thể dùng
+host observer đã kiểm tra; kết quả vẫn diagnostic, không biến thành formal.
 GT06 formal vẫn10freshpairs×35batch (5warmup+30measured), fulldataset/exits/
 Jobs/handles/source hashes/allattempts, hai critic độc lập cùng finalclosure.
 GT07→GT10 tuần tự; GT08 cần Android thật. Chưa có ETA đáng tin cho toànplan.
