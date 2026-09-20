@@ -1,5 +1,5 @@
 HH STUDIO — PLAN 1/3: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 20-09-2026, Asia/Saigon | Revision S131 | TRIỂN KHAI THEO GATE
+Ngày 20-09-2026, Asia/Saigon | Revision S132 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -16,7 +16,7 @@ STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng
 
 CURRENT_VALID_WP=GT-06
 EXECUTION_AUTHORIZATION=OWNER_APPROVED_GATED
-IMPLEMENTATION=GT06_S131_EMPTY_JOB_REPAIR_VERIFIED_RSS_FAILURE_UNRESOLVED; FORMAL_GT06_PENDING
+IMPLEMENTATION=GT06_S131_JOB_REPAIR_VERIFIED_S132_HOST_ONLY_MEMORY_DIAGNOSTIC; FORMAL_GT06_PENDING
 GT01_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260913
 GT01_PENDING=NONE
 GT01_PIN_DECISION=GODOT_4.7.2_STABLE_OFFICIAL
@@ -25,9 +25,9 @@ RUNTIME_ACCEPTANCE=GT01_GT02_GT03_GT04_GT05_ACCEPTED
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S131
-EXECUTION_MODE=COORDINATOR_AND_THREE_READ_ONLY_ASTRA_XHIGH_REVIEWS_OWNER_20260920
-SUBAGENTS_ENABLED=3_BOUNDED_REVIEWS_COMPLETED; ONE_WRITER_PER_FILE; FINAL_CRITICS_NOT_YET_ELIGIBLE
+PLAN_REVISION=S132
+EXECUTION_MODE=COORDINATOR_WITH_SCOPED_READ_ONLY_ASTRA_REVIEWS_OWNER_20260920
+SUBAGENTS_ENABLED=3_XHIGH_REVIEWS_AND_2_ULTRA_FOLLOWUPS_COMPLETED; ONE_WRITER_PER_FILE; FINAL_CRITICS_NOT_YET_ELIGIBLE
 GT02_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260916_S46
 GT02_REVIEW_STATUS=TWO_INDEPENDENT_PASS_TICK_YES_S46
 GT02_LAST_TESTED_SOURCE_CLOSURE=f28056d8ff705a60d48a54f9dee80f16554494fa976bd0bfabee84bb51fecbbf
@@ -63,13 +63,53 @@ GT06_SOURCE_FILE_COUNT=53
 GT06_PROFILE_SHA256=0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85
 GT06_BENCHMARK_CAMPAIGN=gt06-s116-formal-01; LAST_FORMAL_FAILED
 GT06_BENCHMARK_STATUS=ZERO_ACCEPTED_FULL_RUNS; S131_DIAGNOSTIC_NOT_DATASET
-GT06_ACTIVE_DIAGNOSTIC=NONE_ENGINE; LAST_gt06-s129-host-attribution-03_TERMINAL_20260920T082144Z
-GT06_NEXT_ACTION=Analyze sealed S131 RSS failure with no-engine allocation replay; preserve original gates. Do not repeat full coupled/formal run without a distinguishing question. Offline helper memory-replay-01 is diagnostic only; read its actual exits/summary before next work.
+GT06_ACTIVE_DIAGNOSTIC=gt06-s129-host-memory-01; S132_HTTP_ONLY_NO_ENGINE; DISPATCH_20260920T085713Z
+GT06_NEXT_ACTION=Observe S132 owned host-only diagnostic, preserve terminal raw/exits/cleanup, compare report-live/write-held/released RSS and private commit. While live prepare static dependency mapping only. Do not rerun coupled/formal without a distinguishing question.
+GT06_READY_AFTER_TERMINAL=reviews/20260920-gt06-s132-host-memory/validate_default_callers.py (6 fixed unit/default-owner modules, prepared syntax only); functional-queue.md and dependency-binding-design.md; no engine or current-source binding bypass.
 GT06_DIAGNOSTIC_EXCLUSION=All failed/partial/instrumented runs through S131 remain outside F13/F14; original raw and gaps preserved.
 GT06_ATTRIBUTION_STATUS=JOB_ORDERING_MECHANISM_CONTROLLED_PROOF; S129_NUMERIC_READBACK_UNKNOWN; S131_HOST_RSS_40861696_TO_45395968; ROOT_CAUSE_UNKNOWN
 
-TIẾN ĐỘ HIỆN HÀNH — S131, ngày 20-09-2026 (timestamps UTC)
+TIẾN ĐỘ HIỆN HÀNH — S132, ngày 20-09-2026 (timestamps UTC)
 GT01–05 ACCEPTED; GT06 IN_PROGRESS; GT07–10 chưa mở; zero accepted full runs.
+
+S132 host-only gt06-s129-host-memory-01 dispatch08:57:13Z, kiểm08:57:20Z
+launcher8956/host13828/observer15248 sống đúng exe/start/argv; stderr trống.
+Đây là quan sát lịch sử; query mới trước kết luận. Helper ở
+reviews/20260920-gt06-s132-host-memory/, raw studio/.local/reviews/<run-id>.
+Tối đa7×1000HTTP, không Godot/Blender; child1200s/outer1230s, observer1340s,
+task1380s. Ước lượng8–18phút từ HTTP cũ, chưa là ETA toàn plan. Helper hash
+579dd62d08b60fe8d62cbe68ab4451f7d989a702876b77fd6e2329ea60ac1ad1;
+request55pins/preflight3failure tests+native metric API sạch; checkpoint92ac8563.
+Giữ nguồn/profile/workstation, không engine/test/hash audit nặng cạnh phép đo.
+
+Câu hỏi mới: sau report write/drop/gc, private commit/Python block count có tăng
+qua batch4→5→6 cùng RSS không? Ghi before/report-live/after-write-held/released,
+pagefault và bounded recorder cardinality. Có5warmups, giữ host subset RSS10%,
+handles và status2s. Boundary này khác coupled native-wait/read/parse; không
+phải gate reproduction đầy đủ, dataset/F13/F14/PASS hoặc bằng chứng no-leak.
+Giữ actual target/helper/launcher exits, Job/handle cleanup và HTTP phase window.
+
+Offline replay đã xong3×6sample exact, cả hai target/helperexit0/cleanup sạch.
+Untraced released RSS cuối từng pass38.089→38.506→38.539MB, private commit
+28.930→29.004→29.069MB. Traced còn65,843B allocations, bao gồm metric rows;
+không suy toàn bộ live host/journal/thread từ transient assembly riêng.
+Báo cáo memory-analysis.json trong -s131-job-order/, checkpoint9a851db3 giữ
+source script byteexact sau phát hiện Git line-ending mismatch; không rerun.
+
+Ba worker read-only xhigh xong scope riêng; review-notes.md giữ phát hiện/sửa.
+Hai follow-up Astra ultra đã xong dependency-binding-design.md/static-lifetimes.md;
+slot thứ ba bị giới hạn thread, coordinator tự chuẩn bị functional-queue.md.
+Đây là preparation/review, không chữ ký critic hoặc proof đã chạy.
+Shared cli_job/core transport đã khác maps GT03/S55, GT04/S60, GT05/S64,
+GT06 S79/S69. Acceptance cũ giữ scope lịch sử; không chuyển chữ ký sang nguồn
+mới. Native runner giữ REPLAY_REUSE_SOURCE_CHANGED; cần binding/dependency
+mới được kiểm và remint đúng functional lane trước final GT06, không bypass
+hay sửa manifest cũ. Các lane hẹp không đổi chỉ reuse khi exact dependency.
+
+Lịch ti-p-t-c-hh3d-tools đã chuyển sang S132, mỗi10phút; im lặng nếu healthy,
+báo thay đổi quan trọng/failure/owner action. Không lịch trùng hoặc hứa xong sáng.
+
+Kết quả S131 đã lưu (không chạy lại):
 
 Đã sửa lỗi thứ tự cấu hình Job: trước đây gán helper rồi mới đặt CPU limit;
 Win32 cộng user CPU đã tích lũy của thành viên vào giới hạn, làm exact readback
@@ -107,15 +147,10 @@ trong -s131-rss-failure/s130-corrigendum/. Không còn yêu cầu reboot/đổi 
 trường vô căn cứ. Lịch sử S130 và S131 prelaunch được giữ byteexact/AUTHORITY0
 ở -s131-job-order/archive/history.json với SHA256 từng bản.
 
-Tiếp theo: kiểm vòng đời allocation từ retained artifacts trước, không engine.
-Nếu cần đo live host, phải ghi riêng RSS/private commit/live allocations để
-phân biệt residency và retention; không thay metric/ngưỡng/baseline nghiệm thu,
-trim/pinRAM, đổi priority, dừng app khác hoặc ghép partials. Mọi phép đo bổ sung
-đều diagnostic; muốn nghiệm thu vẫn10freshpairs×35batch, full hash/exits/Jobs/
-handles/allattempts, final closure + hai critic MỚI cùng hash PASS/TICK=yes.
-Core transport S125/S129 và cli_job S131 đã đổi dependency: remint đúng lane
-bị ảnh hưởng trước final review; không chuyển chữ ký GT02/GT03/GT04/GT05 cũ.
-GT07→GT10 tuần tự; GT08 Android thật. Chưa có ETA đáng tin cho toàn plan.
+Giữ toàn bộ failure/partial ngoài dataset. Không thay metric/ngưỡng/baseline,
+trim/pinRAM, đổi priority, dừng app khác hoặc ghép partials. Nghiệm thu vẫn
+10freshpairs×35batch, full hash/exits/Jobs/handles/allattempts, final closure
+và hai critic MỚI cùng hash PASS/TICK=yes. GT08 Android thật vẫn hard gate.
 
 Rà phạm vi claim S76: GT-01–05 ACCEPTED theo fixture/catalog đã công bố,
 chưa chứng minh authoring gameplay tổng quát. Godot writer hiện chỉ Node3D/
