@@ -63,9 +63,10 @@ GT06_SOURCE_FILE_COUNT=53
 GT06_PROFILE_SHA256=0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85
 GT06_BENCHMARK_CAMPAIGN=gt06-s116-formal-01
 GT06_BENCHMARK_STATUS=S116_FAILED_BATCH10_JOINT_OBSERVATION_STATUS_GAP_2041.7971MS; S129_HOST_ATTRIBUTION_02_FAILED_PRE_ENGINE_JOB_LIMIT_MISMATCH; ZERO_ACCEPTED_FULL_RUNS
-GT06_ACTIVE_DIAGNOSTIC=S130_PRE_ENGINE_JOB_LIMIT_BOUNDARY_gt06-s129-host-attribution-02; NO_ENGINE_RUNNING
-GT06_NEXT_ACTION=Preserve S130 pre-engine Job mismatch and perform read-only attribution of requested/observed Windows Job ExtendedLimitInformation against S126 five-row probe; keep strict equality, gates, profile, source and workstation fixed. Do not rerun formal or diagnostic blindly; no dataset. S129 candidate checks remain transport 61/61, affected benchmark 166/166, helper 26/26, launcher 2/2, passive scheduler probe exit0; none is GT06 PASS.
+GT06_ACTIVE_DIAGNOSTIC=S130_PRE_ENGINE_JOB_LIMIT_BOUNDARY_gt06-s129-host-attribution-02; TERMINAL_NO_ENGINE_RUNNING
+GT06_NEXT_ACTION=S130 read-only attribution is complete: retain the strict requested/observed Windows Job equality gate and do not rerun formal or diagnostic blindly. A fresh ID is allowed only after a verified environment change that can distinguish the +156250 readback boundary; no dataset until then. Keep source/profile/workstation/gates fixed and preserve S129 candidate checks (transport 61/61, affected benchmark 166/166, helper 26/26, launcher 2/2, passive scheduler probe exit0) as non-GT06 evidence.
 GT06_DIAGNOSTIC_EXCLUSION=All failed partial/instrumented/supplemental runs through S130 excluded from F13/F14; preserve their raw, missing-evidence gaps and lessons. History in S124/S125/S126/S127 archives and referenced review packets.
+GT06_ATTRIBUTION_STATUS=S130_READ_ONLY_COMPLETE; REQUESTED_JOB_TIME_72000000000_OBSERVED_72000156250; S126_PROBE_4_EXACT_1_PLUS156250; NO_FORMAL_RETRY
 
 TIẾN ĐỘ HIỆN HÀNH — S130, ngày 20-09-2026 (timestamps UTC)
 GT01–05 ACCEPTED; GT06 IN_PROGRESS; GT07–10 chưa mở; zero accepted full runs.
