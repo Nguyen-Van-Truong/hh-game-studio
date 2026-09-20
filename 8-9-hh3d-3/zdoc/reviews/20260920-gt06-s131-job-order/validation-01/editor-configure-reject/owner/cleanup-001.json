@@ -1,0 +1,27 @@
+{
+  "closed": true,
+  "completed": false,
+  "failure_code": "CLI_JOB_CONFIGURE_UNCERTAIN",
+  "job": {
+    "active_count": 0,
+    "assigned": false,
+    "close_uncertain": false,
+    "closed": true,
+    "configured": false,
+    "create_uncertain": false,
+    "failed_operations": [
+      "CONFIGURE"
+    ],
+    "handle_retained": false,
+    "native_error": null,
+    "tainted": true,
+    "zero_observed": true
+  },
+  "wrapper_exit_code": 1,
+  "wrapper_process_handle": {
+    "close_uncertain": false,
+    "closed": true,
+    "handle_retained": false,
+    "required": true
+  }
+}

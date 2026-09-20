@@ -1,0 +1,31 @@
+{
+  "cause_code": "S131_INJECTED_CONFIGURE_REJECT",
+  "engine_launched": false,
+  "exception_code": "CLI_JOB_CONFIGURE_UNCERTAIN",
+  "helper_exit": 1,
+  "helper_pid": 22164,
+  "injected_configure_rejection": true,
+  "job": {
+    "active_count": 0,
+    "assigned": false,
+    "close_uncertain": false,
+    "closed": true,
+    "configured": false,
+    "create_uncertain": false,
+    "failed_operations": [
+      "CONFIGURE"
+    ],
+    "handle_retained": false,
+    "native_error": null,
+    "tainted": true,
+    "zero_observed": true
+  },
+  "process_handle": {
+    "close_uncertain": false,
+    "closed": true,
+    "handle_retained": false,
+    "required": true
+  },
+  "role": "host",
+  "target_started": false
+}

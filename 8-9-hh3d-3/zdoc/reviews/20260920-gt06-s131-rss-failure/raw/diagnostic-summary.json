@@ -1,0 +1,70 @@
+{
+  "disposition": "ORIGINAL_FAILURE",
+  "eligible_for_dataset": false,
+  "errors": [
+    {
+      "chain": [
+        {
+          "code": "CAMPAIGN_RSS_GROWTH",
+          "exception_class": "BenchmarkJobError",
+          "frames": [
+            {
+              "file": "coupled_journal.py",
+              "line": 265
+            },
+            {
+              "file": "run_benchmark_campaign.py",
+              "line": 965
+            },
+            {
+              "file": "coupled_journal.py",
+              "line": 256
+            },
+            {
+              "file": "post_failure_handles.py",
+              "line": 279
+            },
+            {
+              "file": "run_benchmark_campaign.py",
+              "line": 272
+            },
+            {
+              "file": "benchmark_job.py",
+              "line": 46
+            }
+          ]
+        }
+      ],
+      "stage": "campaign"
+    }
+  ],
+  "exit_scope": "Natural full completion must drain original child; failure may leave editor natural exit UNKNOWN. External observer supplies launcher actual exit.",
+  "formal_acceptance": false,
+  "gates": [
+    {
+      "index": 0,
+      "original_gate": "PASSED"
+    },
+    {
+      "index": 1,
+      "original_gate": "PASSED"
+    },
+    {
+      "index": 2,
+      "original_gate": "PASSED"
+    },
+    {
+      "index": 3,
+      "original_gate": "PASSED"
+    },
+    {
+      "index": 4,
+      "original_gate": "PASSED"
+    }
+  ],
+  "limits": "Diagnostic only; PSS after original rejection cannot alter the gate. No root-cause, no-leak or formal PASS claim.",
+  "pid": 47176,
+  "run_id": "gt06-s129-host-attribution-03",
+  "schema": "S129.post-failure-diagnostic.1",
+  "source_unchanged": true
+}

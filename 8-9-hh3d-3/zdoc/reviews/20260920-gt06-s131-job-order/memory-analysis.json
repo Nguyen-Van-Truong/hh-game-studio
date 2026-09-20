@@ -1,0 +1,464 @@
+{
+  "formal_acceptance": false,
+  "scope": "offline assembly only; no original host attribution",
+  "arms": {
+    "memory-replay-01": {
+      "first": {
+        "batch": -1,
+        "monotonic_ns": 792106955902100,
+        "page_faults": 9802,
+        "pass_index": -1,
+        "phase": "initial",
+        "private_commit": 20733952,
+        "traced_current": 320,
+        "traced_peak": 504,
+        "working_set": 30085120
+      },
+      "last": {
+        "batch": 5,
+        "monotonic_ns": 792130416178800,
+        "page_faults": 296158,
+        "pass_index": 2,
+        "phase": "released",
+        "private_commit": 35557376,
+        "traced_current": 65843,
+        "traced_peak": 14438330,
+        "working_set": 44617728
+      },
+      "released": [
+        {
+          "batch": 0,
+          "monotonic_ns": 792108161185800,
+          "page_faults": 27103,
+          "pass_index": 0,
+          "phase": "released",
+          "private_commit": 24727552,
+          "traced_current": 18612,
+          "traced_peak": 10824680,
+          "working_set": 33312768
+        },
+        {
+          "batch": 1,
+          "monotonic_ns": 792109339459100,
+          "page_faults": 43984,
+          "pass_index": 0,
+          "phase": "released",
+          "private_commit": 27496448,
+          "traced_current": 22049,
+          "traced_peak": 11583136,
+          "working_set": 35815424
+        },
+        {
+          "batch": 2,
+          "monotonic_ns": 792110719729100,
+          "page_faults": 60769,
+          "pass_index": 0,
+          "phase": "released",
+          "private_commit": 27869184,
+          "traced_current": 25236,
+          "traced_peak": 12939158,
+          "working_set": 37486592
+        },
+        {
+          "batch": 3,
+          "monotonic_ns": 792112212711500,
+          "page_faults": 77379,
+          "pass_index": 0,
+          "phase": "released",
+          "private_commit": 31330304,
+          "traced_current": 28405,
+          "traced_peak": 13710799,
+          "working_set": 39915520
+        },
+        {
+          "batch": 4,
+          "monotonic_ns": 792113609283000,
+          "page_faults": 93772,
+          "pass_index": 0,
+          "phase": "released",
+          "private_commit": 32235520,
+          "traced_current": 31284,
+          "traced_peak": 14176820,
+          "working_set": 40968192
+        },
+        {
+          "batch": 5,
+          "monotonic_ns": 792114964288600,
+          "page_faults": 109938,
+          "pass_index": 0,
+          "phase": "released",
+          "private_commit": 33271808,
+          "traced_current": 34044,
+          "traced_peak": 14406460,
+          "working_set": 41422848
+        },
+        {
+          "batch": 0,
+          "monotonic_ns": 792116089619100,
+          "page_faults": 125249,
+          "pass_index": 1,
+          "phase": "released",
+          "private_commit": 31449088,
+          "traced_current": 36922,
+          "traced_peak": 10857019,
+          "working_set": 41050112
+        },
+        {
+          "batch": 1,
+          "monotonic_ns": 792117309111200,
+          "page_faults": 140862,
+          "pass_index": 1,
+          "phase": "released",
+          "private_commit": 32395264,
+          "traced_current": 39899,
+          "traced_peak": 11600377,
+          "working_set": 41590784
+        },
+        {
+          "batch": 2,
+          "monotonic_ns": 792118500599600,
+          "page_faults": 156608,
+          "pass_index": 1,
+          "phase": "released",
+          "private_commit": 32399360,
+          "traced_current": 42480,
+          "traced_peak": 12956392,
+          "working_set": 41840640
+        },
+        {
+          "batch": 3,
+          "monotonic_ns": 792119728103400,
+          "page_faults": 172446,
+          "pass_index": 1,
+          "phase": "released",
+          "private_commit": 33214464,
+          "traced_current": 45231,
+          "traced_peak": 13727969,
+          "working_set": 42352640
+        },
+        {
+          "batch": 4,
+          "monotonic_ns": 792121030821900,
+          "page_faults": 188286,
+          "pass_index": 1,
+          "phase": "released",
+          "private_commit": 33509376,
+          "traced_current": 47867,
+          "traced_peak": 14193612,
+          "working_set": 42471424
+        },
+        {
+          "batch": 5,
+          "monotonic_ns": 792122427623800,
+          "page_faults": 204168,
+          "pass_index": 1,
+          "phase": "released",
+          "private_commit": 34234368,
+          "traced_current": 50677,
+          "traced_peak": 14423043,
+          "working_set": 43421696
+        },
+        {
+          "batch": 0,
+          "monotonic_ns": 792123726528700,
+          "page_faults": 219096,
+          "pass_index": 2,
+          "phase": "released",
+          "private_commit": 34332672,
+          "traced_current": 53089,
+          "traced_peak": 10873701,
+          "working_set": 43319296
+        },
+        {
+          "batch": 1,
+          "monotonic_ns": 792125287190800,
+          "page_faults": 234475,
+          "pass_index": 2,
+          "phase": "released",
+          "private_commit": 34725888,
+          "traced_current": 55690,
+          "traced_peak": 11616343,
+          "working_set": 43679744
+        },
+        {
+          "batch": 2,
+          "monotonic_ns": 792126676436100,
+          "page_faults": 249737,
+          "pass_index": 2,
+          "phase": "released",
+          "private_commit": 34410496,
+          "traced_current": 58514,
+          "traced_peak": 12972245,
+          "working_set": 43679744
+        },
+        {
+          "batch": 3,
+          "monotonic_ns": 792127896547400,
+          "page_faults": 265153,
+          "pass_index": 2,
+          "phase": "released",
+          "private_commit": 34619392,
+          "traced_current": 60691,
+          "traced_peak": 13743465,
+          "working_set": 43974656
+        },
+        {
+          "batch": 4,
+          "monotonic_ns": 792129125616300,
+          "page_faults": 280621,
+          "pass_index": 2,
+          "phase": "released",
+          "private_commit": 34541568,
+          "traced_current": 63345,
+          "traced_peak": 14208807,
+          "working_set": 44007424
+        },
+        {
+          "batch": 5,
+          "monotonic_ns": 792130416178800,
+          "page_faults": 296158,
+          "pass_index": 2,
+          "phase": "released",
+          "private_commit": 35557376,
+          "traced_current": 65843,
+          "traced_peak": 14438330,
+          "working_set": 44617728
+        }
+      ],
+      "cleanup": {
+        "close_uncertain": false,
+        "elapsed_seconds": 23.5,
+        "handle_released": true
+      }
+    },
+    "memory-replay-untraced-01": {
+      "first": {
+        "batch": -1,
+        "monotonic_ns": 792230850855100,
+        "page_faults": 9970,
+        "pass_index": -1,
+        "phase": "initial",
+        "private_commit": 21086208,
+        "traced_current": null,
+        "traced_peak": null,
+        "working_set": 30126080
+      },
+      "last": {
+        "batch": 5,
+        "monotonic_ns": 792236529310400,
+        "page_faults": 253024,
+        "pass_index": 2,
+        "phase": "released",
+        "private_commit": 29069312,
+        "traced_current": null,
+        "traced_peak": null,
+        "working_set": 38539264
+      },
+      "released": [
+        {
+          "batch": 0,
+          "monotonic_ns": 792231151922200,
+          "page_faults": 24543,
+          "pass_index": 0,
+          "phase": "released",
+          "private_commit": 23965696,
+          "traced_current": null,
+          "traced_peak": null,
+          "working_set": 32956416
+        },
+        {
+          "batch": 1,
+          "monotonic_ns": 792231413601300,
+          "page_faults": 38695,
+          "pass_index": 0,
+          "phase": "released",
+          "private_commit": 24584192,
+          "traced_current": null,
+          "traced_peak": null,
+          "working_set": 34086912
+        },
+        {
+          "batch": 2,
+          "monotonic_ns": 792231702510600,
+          "page_faults": 52735,
+          "pass_index": 0,
+          "phase": "released",
+          "private_commit": 25968640,
+          "traced_current": null,
+          "traced_peak": null,
+          "working_set": 35299328
+        },
+        {
+          "batch": 3,
+          "monotonic_ns": 792231983235300,
+          "page_faults": 66630,
+          "pass_index": 0,
+          "phase": "released",
+          "private_commit": 27774976,
+          "traced_current": null,
+          "traced_peak": null,
+          "working_set": 36605952
+        },
+        {
+          "batch": 4,
+          "monotonic_ns": 792232277906500,
+          "page_faults": 80305,
+          "pass_index": 0,
+          "phase": "released",
+          "private_commit": 27955200,
+          "traced_current": null,
+          "traced_peak": null,
+          "working_set": 37023744
+        },
+        {
+          "batch": 5,
+          "monotonic_ns": 792232583567100,
+          "page_faults": 93921,
+          "pass_index": 0,
+          "phase": "released",
+          "private_commit": 28930048,
+          "traced_current": null,
+          "traced_peak": null,
+          "working_set": 38088704
+        },
+        {
+          "batch": 0,
+          "monotonic_ns": 792232838431300,
+          "page_faults": 107167,
+          "pass_index": 1,
+          "phase": "released",
+          "private_commit": 29089792,
+          "traced_current": null,
+          "traced_peak": null,
+          "working_set": 38637568
+        },
+        {
+          "batch": 1,
+          "monotonic_ns": 792233110147500,
+          "page_faults": 120344,
+          "pass_index": 1,
+          "phase": "released",
+          "private_commit": 29102080,
+          "traced_current": null,
+          "traced_peak": null,
+          "working_set": 38481920
+        },
+        {
+          "batch": 2,
+          "monotonic_ns": 792233399187000,
+          "page_faults": 133621,
+          "pass_index": 1,
+          "phase": "released",
+          "private_commit": 28999680,
+          "traced_current": null,
+          "traced_peak": null,
+          "working_set": 38612992
+        },
+        {
+          "batch": 3,
+          "monotonic_ns": 792233686396100,
+          "page_faults": 146885,
+          "pass_index": 1,
+          "phase": "released",
+          "private_commit": 28971008,
+          "traced_current": null,
+          "traced_peak": null,
+          "working_set": 38481920
+        },
+        {
+          "batch": 4,
+          "monotonic_ns": 792233983607600,
+          "page_faults": 160228,
+          "pass_index": 1,
+          "phase": "released",
+          "private_commit": 29966336,
+          "traced_current": null,
+          "traced_peak": null,
+          "working_set": 38686720
+        },
+        {
+          "batch": 5,
+          "monotonic_ns": 792234270705900,
+          "page_faults": 173524,
+          "pass_index": 1,
+          "phase": "released",
+          "private_commit": 29003776,
+          "traced_current": null,
+          "traced_peak": null,
+          "working_set": 38506496
+        },
+        {
+          "batch": 0,
+          "monotonic_ns": 792234525974900,
+          "page_faults": 186661,
+          "pass_index": 2,
+          "phase": "released",
+          "private_commit": 29110272,
+          "traced_current": null,
+          "traced_peak": null,
+          "working_set": 38682624
+        },
+        {
+          "batch": 1,
+          "monotonic_ns": 792234908626400,
+          "page_faults": 199832,
+          "pass_index": 2,
+          "phase": "released",
+          "private_commit": 29061120,
+          "traced_current": null,
+          "traced_peak": null,
+          "working_set": 38555648
+        },
+        {
+          "batch": 2,
+          "monotonic_ns": 792235600035800,
+          "page_faults": 213079,
+          "pass_index": 2,
+          "phase": "released",
+          "private_commit": 29106176,
+          "traced_current": null,
+          "traced_peak": null,
+          "working_set": 38690816
+        },
+        {
+          "batch": 3,
+          "monotonic_ns": 792235916771300,
+          "page_faults": 226350,
+          "pass_index": 2,
+          "phase": "released",
+          "private_commit": 29106176,
+          "traced_current": null,
+          "traced_peak": null,
+          "working_set": 38518784
+        },
+        {
+          "batch": 4,
+          "monotonic_ns": 792236207096800,
+          "page_faults": 239704,
+          "pass_index": 2,
+          "phase": "released",
+          "private_commit": 29003776,
+          "traced_current": null,
+          "traced_peak": null,
+          "working_set": 38666240
+        },
+        {
+          "batch": 5,
+          "monotonic_ns": 792236529310400,
+          "page_faults": 253024,
+          "pass_index": 2,
+          "phase": "released",
+          "private_commit": 29069312,
+          "traced_current": null,
+          "traced_peak": null,
+          "working_set": 38539264
+        }
+      ],
+      "cleanup": {
+        "close_uncertain": false,
+        "elapsed_seconds": 5.702999999979511,
+        "handle_released": true
+      }
+    }
+  }
+}
