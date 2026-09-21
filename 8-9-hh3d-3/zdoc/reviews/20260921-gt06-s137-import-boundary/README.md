@@ -23,3 +23,11 @@ classifies the boundary as `IMPORT_CHILD_OR_LIMIT_UNKNOWN` and does not infer a
 sender. `metadata-correction.json` records the packet-custody, stale/circular
 digest, phase, and cleanup-scope corrections without rewriting the preserved
 packets.
+
+The bounded D1 exact-profile observer then completed parse/import/readback with
+exit 0, no timeout/OOM, clean owned job teardown and unchanged input. The D2
+inert control initially failed before process start because its read-only bind
+was missing the stock `.godot` mountpoint; that raw attempt is preserved. Fresh
+D2-02 then emitted both sentinels, exited 0, waited 0, removed 0 and inspected
+as exited without OOM or kill events. `d1-d2-summary.json` records both runs;
+neither is a formal GT06 sample or an attribution of the earlier `import -9`.

@@ -1,0 +1,45 @@
+{
+  "schema": "HH-GT06-S137-D1-D2-SUMMARY-1",
+  "authority": 0,
+  "formal_acceptance": false,
+  "source_profile_workstation_unchanged": true,
+  "d1": {
+    "run_id": "gt06-s137-d1-observer-01",
+    "probe_sha256": "c37530bd4530bf2e481f6f568bd9c527396412000ebfbb95a19b930ab0be8510",
+    "event_log_sha256": "e463769cd34a122697a58be9608c46f0fea6d5ea65f28f879a0670c787a1f5bb",
+    "profile_exit": 0,
+    "elapsed_seconds": 18.281,
+    "timed_out": false,
+    "oom_killed": false,
+    "diagnostic_process_clean": true,
+    "job_zero_closed": true,
+    "input_unchanged": true,
+    "phase": "parse/import/readback completed",
+    "observer_events": [
+      "create",
+      "attach"
+    ]
+  },
+  "d2": {
+    "run_id": "gt06-s137-d2-inert-control-02",
+    "probe_sha256": "b7c66f1bad610c4a0dea0e1aa8cd231f0b3211b2c02e042704dab2200e60f337",
+    "event_log_sha256": "0dcd7c839ec3729d46468d873885b140863a53592cfbf042505e9b409bbfc899",
+    "start_exit": 0,
+    "wait_exit": 0,
+    "remove_exit": 0,
+    "sentinels": [
+      "HH_S137_D2_START",
+      "HH_S137_D2_END"
+    ],
+    "inspect_status": "exited",
+    "inspect_exit": 0,
+    "oom_killed": false,
+    "observer_events": [
+      "create",
+      "attach",
+      "start"
+    ]
+  },
+  "interpretation": "D1 exact profile succeeded once and D2 inert envelope control succeeded once; no Docker kill/OOM event observed. This does not explain prior import -9, prove no-leak, or satisfy GT06.",
+  "disposition": "Authority-0 diagnostic only; preserve S135 failure and do not promote to F13/F14."
+}

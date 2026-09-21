@@ -162,6 +162,16 @@ Kết luận chung: RLIMIT_CPU=10
 là giả thuyết có thể kiểm chứng, chưa phải root cause; nếu chạy diagnostic mới
 phải giữ wall/memory/quota/gate/source/profile nguyên vẹn, ghi raw host/container
 exit, Docker event/inspect và owned cleanup, fail closed khi thiếu bằng chứng.
+D1 observer profile mới `gt06-s137-d1-observer-01` đã chạy đủ
+parse/import/readback, exit0, timeout=false, OOMKilled=false, Job zero/closed,
+input unchanged và diagnostic_process_clean=true. D2 inert control sửa harness
+mountpoint bằng run ID mới `gt06-s137-d2-inert-control-02`: sentinel start/end,
+start/wait/remove đều0, inspect exited0, OOMKilled=false; không có kill/OOM event.
+Summary authority-0 ở d1-d2-summary.json (SHA256
+158fdb596332be6a5749c261faf648131d78942fcdd3ea631a563b19bf1a5b9b). D1/D2
+chỉ cho thấy hai lượt bounded này hoạt động; không giải thích S135 import -9,
+không chứng minh no-leak và không nhập F13/F14. D2 lần-01 fail trước process vì
+control snapshot thiếu `.godot`; raw giữ nguyên, không overwrite.
 
 Lịch ti-p-t-c-hh3d-tools mỗi10phút, trạng tháidisk ưu tiên; không tạo lịch trùng.
 GT06 vẫn10freshpairs×35batch(5warmup30measured), đủdataset/hashes/exits/Jobs/
