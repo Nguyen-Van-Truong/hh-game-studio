@@ -55,7 +55,7 @@ GT05_REVIEW_STATUS=TWO_INDEPENDENT_PASS_TICK_YES_S64
 GT05_CHECKPOINT_COMMIT=808d8ba
 GT05_LAST_TESTED_SOURCE_CLOSURE=c141d54b80022ca7fefdf81f83e7e1078d3cc6aa43954831f82bb3178338a135
 GT06_EVIDENCE_STATUS=ZERO_ACCEPTED_FULL_RUNS; S141_FORMAL_FAILED; S143_DIAGNOSTIC_HANDLE_GROWTH; S144_STOCK_CONTROL_BOUNDARY; S145_PREFLIGHT_COMPLETED
-GT06_WORKING_SOURCE_STATUS=S145_64K_JOURNAL_CANDIDATE; COUPLED_PROOF_RUNNING
+GT06_WORKING_SOURCE_STATUS=S145_64K_JOURNAL_CANDIDATE; COUPLED_DIAGNOSTIC_TERMINAL
 GT06_LAST_TESTED_SOURCE_CLOSURE=763191109cd7c7f63de499680291c6b99d77a501dad869078e6d77384ecb20b4
 GT06_CURRENT_SOURCE_CLOSURE=fce149cd3a62e102aaba225794b9a5078cd84d7647cb359f6bbcacb8895ddcde
 GT06_SOURCE_CHECKPOINT=S143=cc7634c0; S145_64K_DELTA_PENDING_SCOPED_CHECKPOINT
@@ -63,8 +63,8 @@ GT06_SOURCE_FILE_COUNT=53
 GT06_PROFILE_SHA256=0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85
 GT06_BENCHMARK_CAMPAIGN=gt06-s141-formal-01; FAILED_20260921T074609Z_TASK_RETIRED_091722Z
 GT06_BENCHMARK_STATUS=ZERO_ACCEPTED_FULL_RUNS; S141_FOUR_WARMUP_BATCHES_ONLY; NO_ACTIVE_FORMAL_CAMPAIGN
-GT06_ACTIVE_DIAGNOSTIC=gt06-s145-coupled-64k-candidate-01; DISPATCH_20260921T113029Z; QUERY_FRESH_IDENTITY_BEFORE_LIVENESS_CLAIM
-GT06_NEXT_ACTION=Preserve S145 seven-batch result and actual exits/cleanup/pins; compare against S143 and S144. No blind formal retry; refresh affected installed binding only after diagnostic evaluation.
+GT06_ACTIVE_DIAGNOSTIC=NONE; S145_TERMINAL_BOUNDARY_CAPTURED_20260921T114222Z; PACKET_VERIFIED
+GT06_NEXT_ACTION=S145 packet sealed/verified; compare raw S143/S144/S145 before any narrow repair. No blind formal retry; refresh affected installed binding only if a concrete dependency delta is proven.
 GT06_READY_AFTER_TERMINAL=S133 seven service/reviewer lanes verified; S134 packet1020 verified as self-contained exact-copy payload with provenance refs; S137 D1/D2 diagnostic limits retained; S138 managed repair+replay completed; S139 source projections/input binding verified, RSS/formal freeze/dataset still open.
 GT06_EXECUTION217_LAST_TESTED_CLOSURE=f1d35fbd304862c2ef6daa248edce7ea1a84f3db6443f2bde7f452f9699c8d8b
 GT06_DIAGNOSTIC_EXCLUSION=All failed/partial/diagnostic runs through S145 remain outside F13/F14; raw and UNKNOWN gaps preserved.
@@ -146,14 +146,16 @@ journal/index/durability/CAS/transport tests đạt lại sau thay đổi. Prefl
 import+20HTTP hoàn tất11.735s; host30316/helper27508 exit0, Jobs/handles clean.
 Closure53 fce149cd3a62e102aaba225794b9a5078cd84d7647cb359f6bbcacb8895ddcde.
 Diagnostic gt06-s145-coupled-64k-candidate-01 dispatch11:30:29Z, task
-HHStudio.GT06.gt06-s129-s145-64k-candidate-supervisor. 7 original batches,
-1000HTTP+100native/batch; native/profile/gates không đổi, không instrumentation.
-Parent1230s/passive1350s/task1500s; không F13/F14/PASS. Status bằng
-reviews/20260920-gt06-s129-supervision/prepare_task.ps1 -Command status
--RunId gt06-s129-s145-64k-candidate-supervisor; query PID/start/executable mới.
-Giữ source/helper/profile/workstation; không engine/test/hash audit nặng cạnh đo.
-Raw: studio/.local/reviews/gt06-s145-coupled-64k-candidate-01.
-Helper/receipts: reviews/20260921-gt06-s145-coupled-64k-candidate.
+HHStudio.GT06.gt06-s129-s145-64k-candidate-supervisor, đã terminal11:42:22Z
+ở BOUNDARY_CAPTURED sau7 original batches (1000HTTP+100native/batch).
+Host handles209 ở cả7; RSS giảm49.3MB→43.2MB; editor handles565/559/555/555/561/555/555;
+ObjectDB/resources71128/6; max status gap611.159ms. Source/execution unchanged,
+child/host/helper exits0 và Jobs/handles clean. Native/profile/gates không đổi,
+không instrumentation; không F13/F14/PASS/rootcause/no-leak claim.
+Packet manifest aab6b5956b928565d9281430f994693cbeb513b7fb3380e9299e6d48eff34844,
+verification0 missing/0 mismatch; raw studio/.local/reviews/gt06-s145-coupled-64k-candidate-01.
+Không retry formal mù; so sánh raw S143/S144/S145 và chỉ refresh installed binding
+khi chứng minh được delta. Helper/receipts: reviews/20260921-gt06-s145-coupled-64k-candidate.
 
 Bài học: đọc trạng thái process mới, receipt không chứng minh đang chạy; collector
 sai thì sửa derived metadata từ raw đủ; không chạy lại engine chỉ để sửa báo cáo.
