@@ -1,0 +1,134 @@
+{
+  "accepted_full_runs": 0,
+  "attempt_id": "gt06-s147-formal-01.r00.a01",
+  "authority": 0,
+  "campaign_id": "gt06-s147-formal-01",
+  "completed_batches": 11,
+  "engine_runs": 1,
+  "exclusions": [
+    "F13",
+    "F14",
+    "no_leak",
+    "root_cause",
+    "natural_exit_inference"
+  ],
+  "failure": {
+    "code": "CAMPAIGN_RETAINED_COUNTER_GROWTH",
+    "phase": {
+      "batch": 10,
+      "phase": "joint_observation"
+    },
+    "stage": "body"
+  },
+  "files": [
+    {
+      "path": "attribution-01.json",
+      "sha256": "79c3a6b73e826ff9019a7a96334bebc77593adf4ce5699a117151b3adadec641",
+      "size_bytes": 8591,
+      "source_path": "8-9-hh3d-3/studio/.local/reviews/gt06-s147-formal-01/run-00-attempt-01/command-00..10+joint-00..10.json (derived read-only)"
+    },
+    {
+      "path": "raw/batch-capture-10.json",
+      "sha256": "24bddfce44862741cd7240dc3cc1a594ab1d0c8991f6ccf0e4ce8933a14335d1",
+      "size_bytes": 869,
+      "source_path": "8-9-hh3d-3/studio/.local/reviews/gt06-s147-formal-01/run-00-attempt-01/batch-capture-10.json"
+    },
+    {
+      "path": "raw/benchmark-profile.json",
+      "sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+      "size_bytes": 718,
+      "source_path": "8-9-hh3d-3/studio/.local/reviews/gt06-s147-formal-01/run-00-attempt-01/benchmark-profile.json"
+    },
+    {
+      "path": "raw/child-failure.json",
+      "sha256": "f35e276385058e525add1a0340521ff89bd189084066acab6e3da807aaade7f8",
+      "size_bytes": 222,
+      "source_path": "8-9-hh3d-3/studio/.local/reviews/gt06-s147-formal-01/run-00-attempt-01/child-failure.json"
+    },
+    {
+      "path": "raw/child-terminal-cleanup.json",
+      "sha256": "cc49fc1d7324c581dfc4add4f311e2301b3463e7a9e93fb405adfcd46e1d829d",
+      "size_bytes": 3741,
+      "source_path": "8-9-hh3d-3/studio/.local/reviews/gt06-s147-formal-01/run-00-attempt-01/child-terminal-cleanup.json"
+    },
+    {
+      "path": "raw/command-10.json",
+      "sha256": "fe9efdd20df7cac43a2d0d7d09fb925ce83be238ae415633f1a361efcf8e8273",
+      "size_bytes": 3456565,
+      "source_path": "8-9-hh3d-3/studio/.local/reviews/gt06-s147-formal-01/run-00-attempt-01/command-10.json"
+    },
+    {
+      "path": "raw/context.json",
+      "sha256": "06a2198834748978fceee2850af474ce5a195828751b9a310acd32d05382aa30",
+      "size_bytes": 5712,
+      "source_path": "8-9-hh3d-3/studio/.local/reviews/gt06-s147-formal-01/run-00-attempt-01/context.json"
+    },
+    {
+      "path": "raw/editor-host/cleanup-001.json",
+      "sha256": "9ff26d2260e6188703654517521ac75e80f618c4e517723042f5f4babc109ee1",
+      "size_bytes": 556,
+      "source_path": "8-9-hh3d-3/studio/.local/reviews/gt06-s147-formal-01/run-00-attempt-01/editor-host/cleanup-001.json"
+    },
+    {
+      "path": "raw/host-owner/cleanup-001.json",
+      "sha256": "31f58e29075f8f16bb2df0bb72471bfcd0df794b729d6497022554d84959cfc8",
+      "size_bytes": 548,
+      "source_path": "8-9-hh3d-3/studio/.local/reviews/gt06-s147-formal-01/run-00-attempt-01/host-owner/cleanup-001.json"
+    },
+    {
+      "path": "raw/host-owner/process-exit.json",
+      "sha256": "6afc912664b69b3a88b984904c970ee3f839648de16471b28f740e98d0e9d69c",
+      "size_bytes": 30,
+      "source_path": "8-9-hh3d-3/studio/.local/reviews/gt06-s147-formal-01/run-00-attempt-01/host-owner/process-exit.json"
+    },
+    {
+      "path": "raw/http-phases-final.json",
+      "sha256": "cfdfbb65d9494251ecbe3d21dc5c9dd049f7c74997c8c1520d595e026ebe06d4",
+      "size_bytes": 2168725,
+      "source_path": "8-9-hh3d-3/studio/.local/reviews/gt06-s147-formal-01/run-00-attempt-01/http-phases-final.json"
+    },
+    {
+      "path": "raw/import-host/process-exit.json",
+      "sha256": "dcfe4f5c8ef41948d0addc53e74c0f4e889de66a44469edf7c64637f131bfd38",
+      "size_bytes": 30,
+      "source_path": "8-9-hh3d-3/studio/.local/reviews/gt06-s147-formal-01/run-00-attempt-01/import-host/process-exit.json"
+    },
+    {
+      "path": "raw/joint-10.json",
+      "sha256": "091b8d6275b6e496c48e85dcc4673a4ebfe4e10a932925d3dd66a15c031930ba",
+      "size_bytes": 2301,
+      "source_path": "8-9-hh3d-3/studio/.local/reviews/gt06-s147-formal-01/run-00-attempt-01/joint-10.json"
+    },
+    {
+      "path": "raw/parent-failure.json",
+      "sha256": "a106a98ae0e1fd6dbca81599679bf32b504213956b0e16c08b6835e949ca8735",
+      "size_bytes": 181,
+      "source_path": "8-9-hh3d-3/studio/.local/reviews/gt06-s147-formal-01/run-00-attempt-01/parent-failure.json"
+    },
+    {
+      "path": "supervision/handle-close.json",
+      "sha256": "f6ffb528fa9fc376cabd18f3fe881691a2b85a9818a3f318ac4fd122f3eccb58",
+      "size_bytes": 145,
+      "source_path": "8-9-hh3d-3/zdoc/reviews/20260921-gt06-s147-supervision/runs/gt06-s129-s147-formal-supervisor/handle-close.json"
+    },
+    {
+      "path": "supervision/launcher-exit.json",
+      "sha256": "898278b3d1619ca4fd5165a63753c14910b78eccdb6f1a6894ae5d36600fa858",
+      "size_bytes": 488,
+      "source_path": "8-9-hh3d-3/zdoc/reviews/20260921-gt06-s147-supervision/runs/gt06-s129-s147-formal-supervisor/launcher-exit.json"
+    },
+    {
+      "path": "supervision/terminal.json",
+      "sha256": "0f95d87934882975439423e669689d78d9197bc9a96935644187d224b766dc82",
+      "size_bytes": 956,
+      "source_path": "8-9-hh3d-3/zdoc/reviews/20260921-gt06-s147-supervision/runs/gt06-s129-s147-formal-supervisor/terminal.json"
+    }
+  ],
+  "formal_acceptance": false,
+  "installed_execution_closure_sha256": "78ffef60682f596313aac8aca69a06e0a23808c546202effdebc481bdb845b58",
+  "observed_utc": "2026-09-21T13:38:11Z",
+  "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+  "schema_id": "hh-studio.gt06-s147-terminal-packet",
+  "schema_version": "1.0.0",
+  "source_closure_sha256": "fce149cd3a62e102aaba225794b9a5078cd84d7647cb359f6bbcacb8895ddcde"
+}

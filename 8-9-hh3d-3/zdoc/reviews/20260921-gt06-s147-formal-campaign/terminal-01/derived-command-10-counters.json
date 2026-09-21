@@ -1,0 +1,62 @@
+{
+  "batch_index": 10,
+  "max_status_gap_ms": 742.7797,
+  "memory_after": {
+    "counters": {
+      "held_handles": {
+        "unavailable_reason": null,
+        "value": 205
+      },
+      "objects": {
+        "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+        "value": null
+      },
+      "resources": {
+        "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+        "value": null
+      },
+      "rss_bytes": {
+        "unavailable_reason": null,
+        "value": 37265408
+      }
+    },
+    "monotonic_us": 896083359158,
+    "process": {
+      "pid": 34156,
+      "process_start": "windows:134344702446252599"
+    }
+  },
+  "memory_before": {
+    "counters": {
+      "held_handles": {
+        "unavailable_reason": null,
+        "value": 204
+      },
+      "objects": {
+        "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+        "value": null
+      },
+      "resources": {
+        "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+        "value": null
+      },
+      "rss_bytes": {
+        "unavailable_reason": null,
+        "value": 37777408
+      }
+    },
+    "monotonic_us": 895937091682,
+    "process": {
+      "pid": 34156,
+      "process_start": "windows:134344702446252599"
+    }
+  },
+  "mode": "benchmark",
+  "native_acceptance": false,
+  "observation_kind": "native_windows_process_probe",
+  "profile_sha256": null,
+  "run_id": "gt06-s147-formal-01.r00.a01",
+  "source_closure_sha256": null,
+  "source_command_sha256": "fe9efdd20df7cac43a2d0d7d09fb925ce83be238ae415633f1a361efcf8e8273",
+  "status": "COMPLETE"
+}

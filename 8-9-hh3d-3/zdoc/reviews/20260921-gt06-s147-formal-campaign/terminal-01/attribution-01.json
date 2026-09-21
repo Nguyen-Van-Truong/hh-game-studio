@@ -1,0 +1,233 @@
+{
+  "authority": 0,
+  "baseline_reference": "batch4 post_batch_quiescent sample, matching original campaign screen_sample baseline",
+  "campaign_id": "gt06-s147-formal-01",
+  "decision": "PRESERVE_FAILURE_NO_SOURCE_REPAIR_NO_BLIND_RETRY",
+  "eligible_for_dataset": false,
+  "failure": {
+    "batch": 10,
+    "code": "CAMPAIGN_RETAINED_COUNTER_GROWTH",
+    "phase": "joint_observation"
+  },
+  "formal_acceptance": false,
+  "limitations": [
+    "GetProcessHandleCount supplies only a process-level count, not descriptor types or ownership.",
+    "The failed host process is closed; no retained owned process handle is available for safe PSS follow-up.",
+    "S143/S144/S145 are separate diagnostic processes/workloads and cannot establish causality for S147.",
+    "No leak, root cause, F13/F14 PASS, or formal acceptance claim."
+  ],
+  "observations": {
+    "editor_growth_batches": [
+      0
+    ],
+    "editor_rss_batch4_to_batch10": [
+      615227392,
+      209940480
+    ],
+    "host_growth_batches": [
+      10
+    ],
+    "host_handle_sequence": [
+      204,
+      204,
+      204,
+      204,
+      204,
+      204,
+      204,
+      204,
+      204,
+      204,
+      205
+    ],
+    "host_rss_batch4_to_batch10": [
+      44666880,
+      37265408
+    ],
+    "max_barrier_status_gap_ms": 756.017,
+    "max_command_status_gap_ms": 868.0207,
+    "object_resource_pairs": [
+      [
+        71128,
+        6
+      ]
+    ]
+  },
+  "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+  "raw_references": [
+    "studio/.local/reviews/gt06-s147-formal-01/run-00-attempt-01/command-00.json..command-10.json",
+    "studio/.local/reviews/gt06-s147-formal-01/run-00-attempt-01/joint-00.json..joint-10.json",
+    "studio/.local/reviews/gt06-s147-formal-01/run-00-attempt-01/child-terminal-cleanup.json"
+  ],
+  "rows": [
+    {
+      "barrier_max_status_gap_ms": 553.255,
+      "batch": 0,
+      "command_max_status_gap_ms": 273.192,
+      "command_sha256": "96b4dddb88ff12f0daf4f76ad2e27462779afa7a5fcdbd2a3bd6e3bb331c44d9",
+      "editor_held_handles": 565,
+      "editor_objects": 71128,
+      "editor_resources": 6,
+      "editor_rss": 759873536,
+      "host_held_handles_after": 204,
+      "host_held_handles_before": 204,
+      "host_rss_after": 47095808,
+      "host_rss_before": 36163584,
+      "joint_sha256": "0cf28ff387580a68f746baddf7d3f248e672dd136cdc014159512b89d3f377fb"
+    },
+    {
+      "barrier_max_status_gap_ms": 624.554,
+      "batch": 1,
+      "command_max_status_gap_ms": 281.336,
+      "command_sha256": "d0b537c0c2bb685bc45c99cedea5948924eb877f1c6ac50e2a2aeec3b53dee48",
+      "editor_held_handles": 559,
+      "editor_objects": 71128,
+      "editor_resources": 6,
+      "editor_rss": 760020992,
+      "host_held_handles_after": 204,
+      "host_held_handles_before": 204,
+      "host_rss_after": 47575040,
+      "host_rss_before": 48590848,
+      "joint_sha256": "842e53dd0a556088783cdd7f8153e77d14c766bee271a9e8e9ce4f170cd7b55b"
+    },
+    {
+      "barrier_max_status_gap_ms": 559.15,
+      "batch": 2,
+      "command_max_status_gap_ms": 360.6137,
+      "command_sha256": "a3326785f4f491605452e3618e7183205e01dd32395094f9a145d8158771bb2c",
+      "editor_held_handles": 559,
+      "editor_objects": 71128,
+      "editor_resources": 6,
+      "editor_rss": 764346368,
+      "host_held_handles_after": 204,
+      "host_held_handles_before": 204,
+      "host_rss_after": 48623616,
+      "host_rss_before": 49164288,
+      "joint_sha256": "0cad03083f03baea6987bb0c04c35780c1b25566e5d5a43f3bfe94c24ebd0696"
+    },
+    {
+      "barrier_max_status_gap_ms": 546.706,
+      "batch": 3,
+      "command_max_status_gap_ms": 402.8234,
+      "command_sha256": "a3c64bdafa913d8fe918031db5f59e1432755a19d36023ef273ceb185fad87fa",
+      "editor_held_handles": 555,
+      "editor_objects": 71128,
+      "editor_resources": 6,
+      "editor_rss": 761909248,
+      "host_held_handles_after": 204,
+      "host_held_handles_before": 204,
+      "host_rss_after": 49287168,
+      "host_rss_before": 49332224,
+      "joint_sha256": "c75c30d45ce6945996ec3cbe7a8a748624c3fc8448656708cba1e4ea1c53da5a"
+    },
+    {
+      "barrier_max_status_gap_ms": 688.743,
+      "batch": 4,
+      "command_max_status_gap_ms": 408.1024,
+      "command_sha256": "539f4ce0d15aa44ded1df8bbf00f8e674ae6b2da20e4376521680779bd5f080a",
+      "editor_held_handles": 561,
+      "editor_objects": 71128,
+      "editor_resources": 6,
+      "editor_rss": 615227392,
+      "host_held_handles_after": 204,
+      "host_held_handles_before": 204,
+      "host_rss_after": 44666880,
+      "host_rss_before": 48664576,
+      "joint_sha256": "d073e4cb8cc8f49263d3777a5687ea4548900a3ffac07819ebd092b4b3e6b288"
+    },
+    {
+      "barrier_max_status_gap_ms": 753.44,
+      "batch": 5,
+      "command_max_status_gap_ms": 429.5162,
+      "command_sha256": "a8e23bd5d8be3b91105a58dead34d9c58d1e9c6086f97b6a36c05793511cad19",
+      "editor_held_handles": 555,
+      "editor_objects": 71128,
+      "editor_resources": 6,
+      "editor_rss": 511561728,
+      "host_held_handles_after": 204,
+      "host_held_handles_before": 204,
+      "host_rss_after": 44498944,
+      "host_rss_before": 45191168,
+      "joint_sha256": "923c00442218b056998f38518ca5baad8e40965d56d8d7c4ca4b3b563e2353c8"
+    },
+    {
+      "barrier_max_status_gap_ms": 540.386,
+      "batch": 6,
+      "command_max_status_gap_ms": 497.4275,
+      "command_sha256": "24f604a98dc5867128734affab3f4a831101b3afcdd5947d30404914b2a88122",
+      "editor_held_handles": 555,
+      "editor_objects": 71128,
+      "editor_resources": 6,
+      "editor_rss": 417333248,
+      "host_held_handles_after": 204,
+      "host_held_handles_before": 204,
+      "host_rss_after": 43270144,
+      "host_rss_before": 46321664,
+      "joint_sha256": "e6fef83752579974465d33218eecaed6a5ac22272f9639407a98c93a6fe5cbcf"
+    },
+    {
+      "barrier_max_status_gap_ms": 756.017,
+      "batch": 7,
+      "command_max_status_gap_ms": 506.4361,
+      "command_sha256": "ede41d4d3fc1ecd7d0ca7f9149622972e084a1548b627169a9e0edb84dd155b0",
+      "editor_held_handles": 555,
+      "editor_objects": 71128,
+      "editor_resources": 6,
+      "editor_rss": 335048704,
+      "host_held_handles_after": 204,
+      "host_held_handles_before": 204,
+      "host_rss_after": 37470208,
+      "host_rss_before": 42778624,
+      "joint_sha256": "bc995af8d7317f60b08c55c97fb2421b913a530f1153ed67a0e8d35a780f6457"
+    },
+    {
+      "barrier_max_status_gap_ms": 572.78,
+      "batch": 8,
+      "command_max_status_gap_ms": 868.0207,
+      "command_sha256": "524ea22caae1021c1f431ce4ba141cc1900bf38bc2359479570fb6aa808d9695",
+      "editor_held_handles": 555,
+      "editor_objects": 71128,
+      "editor_resources": 6,
+      "editor_rss": 276393984,
+      "host_held_handles_after": 204,
+      "host_held_handles_before": 204,
+      "host_rss_after": 36421632,
+      "host_rss_before": 37462016,
+      "joint_sha256": "8ccc7579d26ecf42c76b61517f818324a2076d06063ed6a7ad87bcc9824ee40b"
+    },
+    {
+      "barrier_max_status_gap_ms": 732.643,
+      "batch": 9,
+      "command_max_status_gap_ms": 450.5077,
+      "command_sha256": "d331bf012ba2003f5b8c17359df4bdf863d0361d1f099a160512518c06fc3fcc",
+      "editor_held_handles": 555,
+      "editor_objects": 71128,
+      "editor_resources": 6,
+      "editor_rss": 243032064,
+      "host_held_handles_after": 204,
+      "host_held_handles_before": 204,
+      "host_rss_after": 37036032,
+      "host_rss_before": 37244928,
+      "joint_sha256": "13c6087683ae6d6e79ef18c816525d6265e8b61172fe513f4a10d3f72af22e09"
+    },
+    {
+      "barrier_max_status_gap_ms": 706.985,
+      "batch": 10,
+      "command_max_status_gap_ms": 742.7797,
+      "command_sha256": "fe9efdd20df7cac43a2d0d7d09fb925ce83be238ae415633f1a361efcf8e8273",
+      "editor_held_handles": 557,
+      "editor_objects": 71128,
+      "editor_resources": 6,
+      "editor_rss": 209940480,
+      "host_held_handles_after": 205,
+      "host_held_handles_before": 204,
+      "host_rss_after": 37265408,
+      "host_rss_before": 37777408,
+      "joint_sha256": "091b8d6275b6e496c48e85dcc4673a4ebfe4e10a932925d3dd66a15c031930ba"
+    }
+  ],
+  "run_id": "gt06-s147-formal-01.r00.a01",
+  "schema_id": "hh-studio.gt06-s147-read-only-attribution",
+  "schema_version": "1.0.0",
+  "source_closure_sha256": "fce149cd3a62e102aaba225794b9a5078cd84d7647cb359f6bbcacb8895ddcde"
+}
