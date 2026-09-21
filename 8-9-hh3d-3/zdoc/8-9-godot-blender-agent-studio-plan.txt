@@ -156,7 +156,9 @@ control có thể phân biệt boundary và preflight sạch.
 
 S137 independent reviews đã hoàn tất tại
 reviews/20260921-gt06-s137-import-boundary/: import-static-review.md,
-evidence-audit.md và next-diagnostic-design.md. Kết luận chung: RLIMIT_CPU=10
+evidence-audit.md, next-diagnostic-design.md và static-diff.json
+(SHA256 4af78fc0c1fd84bd4ec01bbb77fd0f9e2d4239ff7f9e8b9b92b729eac1abba01).
+Kết luận chung: RLIMIT_CPU=10
 là giả thuyết có thể kiểm chứng, chưa phải root cause; nếu chạy diagnostic mới
 phải giữ wall/memory/quota/gate/source/profile nguyên vẹn, ghi raw host/container
 exit, Docker event/inspect và owned cleanup, fail closed khi thiếu bằng chứng.

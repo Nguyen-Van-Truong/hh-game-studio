@@ -1,0 +1,42 @@
+{
+  "schema": "HH-GT06-S137-STATIC-DIFF-1",
+  "authority": 0,
+  "formal_acceptance": false,
+  "decision": "IMPORT_CHILD_OR_LIMIT_UNKNOWN",
+  "pair": {
+    "deadline_equal": true,
+    "input_unchanged_a": true,
+    "run_a": "gt06-s135-profile-boundary-03",
+    "run_b": "gt06-s135-profile-boundary-04",
+    "bundle_manifest_equal": true,
+    "source_closure_equal": true,
+    "binary_unchanged_b": true,
+    "profile_harness_equal": true,
+    "binary_unchanged_a": true,
+    "input_unchanged_b": true
+  },
+  "observations": [
+    {
+      "diagnostic_process_clean": false,
+      "import_marker": "HH_PROFILE_PHASE_END import -9",
+      "oom_killed": false,
+      "exit_code": 45,
+      "run_id": "gt06-s135-profile-boundary-03",
+      "elapsed_seconds": 18.344,
+      "docker_wait_exit": 45,
+      "timed_out": false
+    },
+    {
+      "diagnostic_process_clean": false,
+      "import_marker": "HH_PROFILE_PHASE_END import -9",
+      "oom_killed": false,
+      "exit_code": 45,
+      "run_id": "gt06-s135-profile-boundary-04",
+      "elapsed_seconds": 18.141,
+      "docker_wait_exit": 45,
+      "timed_out": false
+    }
+  ],
+  "interpretation": "Same source/profile/bundle and fixed envelope reproduced the import child -9 boundary; no sender/root cause is proven. Do not retry identical profile or call PASS/no-leak.",
+  "next": "Only a fresh observer/control diagnostic may proceed after scope review; preserve original gates, timeout, baseline, source, profile and workstation."
+}

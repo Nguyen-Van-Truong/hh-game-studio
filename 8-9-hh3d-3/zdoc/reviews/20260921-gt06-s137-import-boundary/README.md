@@ -18,5 +18,8 @@ the exact source/profile/workstation and original gates. It must capture actual
 host/container exits, Docker events and owned cleanup, and fail closed when any
 required evidence is missing. It cannot become F13/F14 or a formal GT06 pass.
 
-`metadata-correction.json` records the packet-custody, stale/circular digest,
-phase, and cleanup-scope corrections without rewriting the preserved packets.
+`static-diff.json` is the derived D0 comparison of the two S135 probes; it
+classifies the boundary as `IMPORT_CHILD_OR_LIMIT_UNKNOWN` and does not infer a
+sender. `metadata-correction.json` records the packet-custody, stale/circular
+digest, phase, and cleanup-scope corrections without rewriting the preserved
+packets.
