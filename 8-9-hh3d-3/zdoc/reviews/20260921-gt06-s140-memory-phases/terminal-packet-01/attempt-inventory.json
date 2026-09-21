@@ -1,0 +1,41 @@
+{
+  "attempts": [
+    {
+      "eligible_for_dataset": false,
+      "formal_acceptance": false,
+      "missing_terminal_receipts": [
+        "result.json",
+        "attempt/child-terminal-cleanup.json",
+        "owned/process-exit.json"
+      ],
+      "run": "gt06-s140-memory-phase-p01"
+    },
+    {
+      "eligible_for_dataset": false,
+      "formal_acceptance": false,
+      "missing_terminal_receipts": [],
+      "run": "gt06-s140-memory-phase-p02"
+    },
+    {
+      "eligible_for_dataset": false,
+      "formal_acceptance": false,
+      "missing_terminal_receipts": [
+        "diagnostic-summary.json",
+        "phase-memory.json",
+        "result.json",
+        "attempt/child-terminal-cleanup.json",
+        "owned/process-exit.json"
+      ],
+      "run": "gt06-s140-memory-phase-p03"
+    },
+    {
+      "eligible_for_dataset": false,
+      "formal_acceptance": false,
+      "missing_terminal_receipts": [],
+      "run": "gt06-s140-memory-phase-p04"
+    }
+  ],
+  "authority": 0,
+  "p01_classification": "HELPER_COMPOSITION_FAILURE_BEFORE_ENGINE",
+  "p03_classification": "INCOMPLETE_UNKNOWN_NO_TERMINAL_EXIT_OR_CLEANUP_PROOF"
+}

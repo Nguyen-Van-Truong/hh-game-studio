@@ -1,0 +1,62 @@
+{
+  "elapsed_seconds": 716.109999999986,
+  "eligible_for_dataset": false,
+  "ended_utc": "2026-09-21T06:52:12.984257+00:00",
+  "errors": [],
+  "formal_acceptance": false,
+  "helper_exit_before_close": 1,
+  "observations": {
+    "execution_unchanged": true,
+    "owner": {
+      "closed": true,
+      "drain_threads_alive": [
+        false,
+        false
+      ],
+      "helper_exit_code": 1,
+      "helper_pid": 49348,
+      "job": {
+        "active_count": 0,
+        "assigned": true,
+        "close_uncertain": false,
+        "closed": true,
+        "configured": true,
+        "create_uncertain": false,
+        "failed_operations": [],
+        "handle_retained": false,
+        "native_error": null,
+        "tainted": false,
+        "zero_observed": true
+      },
+      "present": true,
+      "wrapper_process_handle": {
+        "close_uncertain": false,
+        "closed": true,
+        "handle_retained": false,
+        "required": true
+      }
+    },
+    "source_unchanged": true,
+    "stop_requested": false,
+    "target": {
+      "actual_target_exit": {
+        "exit_code": 1,
+        "pid": 27552
+      },
+      "exit": {
+        "file": "owned/process-exit.json",
+        "sha256": "e21e678fc0d610bb52a9c48eef274cb6a90de580f6535a93163eae2dd6470374",
+        "size_bytes": 30
+      },
+      "missing_reason": null,
+      "natural_exit_not_inferred": true,
+      "start": {
+        "file": "owned/process-start.json",
+        "sha256": "77d3c3f5ee5da752f981c1a07c867854b540ae643c7348d29ea666ac6d6e28b9",
+        "size_bytes": 14
+      }
+    }
+  },
+  "run_id": "gt06-s140-memory-phase-p04",
+  "schema": "HH-GT06-S140-owner-result-2"
+}

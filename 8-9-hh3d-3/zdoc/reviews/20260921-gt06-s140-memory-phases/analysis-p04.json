@@ -1,0 +1,915 @@
+{
+  "authority": 0,
+  "batch5_minus_batch4": {
+    "ack_received": {
+      "allocated_blocks": 234,
+      "page_fault_count": 2495188,
+      "private_commit_bytes": 225280,
+      "working_set_bytes": -376832
+    },
+    "assembly_after": {
+      "allocated_blocks": 236,
+      "page_fault_count": 2495252,
+      "private_commit_bytes": 188416,
+      "working_set_bytes": -184320
+    },
+    "assembly_before": {
+      "allocated_blocks": 233,
+      "page_fault_count": 2495188,
+      "private_commit_bytes": 462848,
+      "working_set_bytes": -163840
+    },
+    "assembly_released_gc": {
+      "allocated_blocks": 202,
+      "page_fault_count": 2495263,
+      "private_commit_bytes": 323584,
+      "working_set_bytes": -352256
+    },
+    "command_completed": {
+      "allocated_blocks": 2962,
+      "page_fault_count": 2482885,
+      "private_commit_bytes": 172032,
+      "working_set_bytes": -184320
+    },
+    "command_released_gc": {
+      "allocated_blocks": 233,
+      "page_fault_count": 2482595,
+      "private_commit_bytes": 40960,
+      "working_set_bytes": -536576
+    },
+    "editor_sample": {
+      "allocated_blocks": 234,
+      "page_fault_count": 2495188,
+      "private_commit_bytes": 225280,
+      "working_set_bytes": -376832
+    },
+    "native_batch_marker": {
+      "allocated_blocks": 233,
+      "page_fault_count": 2495188,
+      "private_commit_bytes": 40960,
+      "working_set_bytes": -376832
+    },
+    "native_validated_before_editor": {
+      "allocated_blocks": 234,
+      "page_fault_count": 2495188,
+      "private_commit_bytes": 225280,
+      "working_set_bytes": -376832
+    },
+    "screen_sample": {
+      "allocated_blocks": 236,
+      "page_fault_count": 2495263,
+      "private_commit_bytes": 536576,
+      "working_set_bytes": -139264
+    }
+  },
+  "batches": [
+    {
+      "artifact_binding_interval": {
+        "allocated_blocks": 108,
+        "page_fault_count": 12321,
+        "private_commit_bytes": 2699264,
+        "working_set_bytes": 2613248
+      },
+      "assembly_interval": {
+        "allocated_blocks": 3044,
+        "page_fault_count": 946,
+        "private_commit_bytes": 540672,
+        "working_set_bytes": 73728
+      },
+      "effect_count": 200,
+      "gate_rejected": false,
+      "index": 0,
+      "joint_host_rss": 46292992,
+      "native_interval": {
+        "allocated_blocks": 189,
+        "page_fault_count": 261357,
+        "private_commit_bytes": -106496,
+        "working_set_bytes": -57344
+      },
+      "native_validation_interval": {
+        "allocated_blocks": 3841,
+        "page_fault_count": 34,
+        "private_commit_bytes": 98304,
+        "working_set_bytes": 139264
+      },
+      "phase_host_memory": {
+        "ack_received": {
+          "allocated_blocks": 140537,
+          "page_fault_count": 2195941,
+          "private_commit_bytes": 34705408,
+          "unavailable_reason": null,
+          "working_set_bytes": 46301184
+        },
+        "assembly_after": {
+          "allocated_blocks": 143689,
+          "page_fault_count": 2209208,
+          "private_commit_bytes": 37945344,
+          "unavailable_reason": null,
+          "working_set_bytes": 48988160
+        },
+        "assembly_before": {
+          "allocated_blocks": 140645,
+          "page_fault_count": 2208262,
+          "private_commit_bytes": 37404672,
+          "unavailable_reason": null,
+          "working_set_bytes": 48914432
+        },
+        "assembly_released_gc": {
+          "allocated_blocks": 136721,
+          "page_fault_count": 2209300,
+          "private_commit_bytes": 36368384,
+          "unavailable_reason": null,
+          "working_set_bytes": 46764032
+        },
+        "command_completed": {
+          "allocated_blocks": 202690,
+          "page_fault_count": 1928589,
+          "private_commit_bytes": 33824768,
+          "unavailable_reason": null,
+          "working_set_bytes": 45727744
+        },
+        "command_released_gc": {
+          "allocated_blocks": 136396,
+          "page_fault_count": 1934032,
+          "private_commit_bytes": 34713600,
+          "unavailable_reason": null,
+          "working_set_bytes": 46211072
+        },
+        "editor_sample": {
+          "allocated_blocks": 140457,
+          "page_fault_count": 2195425,
+          "private_commit_bytes": 34705408,
+          "unavailable_reason": null,
+          "working_set_bytes": 46301184
+        },
+        "native_batch_marker": {
+          "allocated_blocks": 136585,
+          "page_fault_count": 2195389,
+          "private_commit_bytes": 34607104,
+          "unavailable_reason": null,
+          "working_set_bytes": 46153728
+        },
+        "native_validated_before_editor": {
+          "allocated_blocks": 140426,
+          "page_fault_count": 2195423,
+          "private_commit_bytes": 34705408,
+          "unavailable_reason": null,
+          "working_set_bytes": 46292992
+        },
+        "screen_sample": {
+          "allocated_blocks": 143696,
+          "page_fault_count": 2209300,
+          "private_commit_bytes": 39067648,
+          "unavailable_reason": null,
+          "working_set_bytes": 49364992
+        }
+      },
+      "raw_refs": {
+        "command": {
+          "file": "attempt\\command-00.json",
+          "sha256": "4a6c9c41f02c1b4a00a811d8b756a30abd594506f8bc4890f7a6c98b93f92856"
+        },
+        "joint": {
+          "file": "attempt\\joint-00.json",
+          "sha256": "2851d465f7af3c7b92ce4c817f5172a58617e5810db36dcefeadc8e3aa5d37a2"
+        }
+      },
+      "released_end_minus_command_gc": {
+        "allocated_blocks": 325,
+        "page_fault_count": 275268,
+        "private_commit_bytes": 1654784,
+        "working_set_bytes": 552960
+      }
+    },
+    {
+      "artifact_binding_interval": {
+        "allocated_blocks": 104,
+        "page_fault_count": 12318,
+        "private_commit_bytes": 2859008,
+        "working_set_bytes": 2760704
+      },
+      "assembly_interval": {
+        "allocated_blocks": 3042,
+        "page_fault_count": 816,
+        "private_commit_bytes": -1028096,
+        "working_set_bytes": -327680
+      },
+      "effect_count": 400,
+      "gate_rejected": false,
+      "index": 1,
+      "joint_host_rss": 48496640,
+      "native_interval": {
+        "allocated_blocks": 181,
+        "page_fault_count": 271159,
+        "private_commit_bytes": 0,
+        "working_set_bytes": 4096
+      },
+      "native_validation_interval": {
+        "allocated_blocks": 3785,
+        "page_fault_count": 48,
+        "private_commit_bytes": 708608,
+        "working_set_bytes": 196608
+      },
+      "phase_host_memory": {
+        "ack_received": {
+          "allocated_blocks": 140753,
+          "page_fault_count": 4234633,
+          "private_commit_bytes": 37470208,
+          "unavailable_reason": null,
+          "working_set_bytes": 48496640
+        },
+        "assembly_after": {
+          "allocated_blocks": 143899,
+          "page_fault_count": 4247767,
+          "private_commit_bytes": 39301120,
+          "unavailable_reason": null,
+          "working_set_bytes": 50929664
+        },
+        "assembly_before": {
+          "allocated_blocks": 140857,
+          "page_fault_count": 4246951,
+          "private_commit_bytes": 40329216,
+          "unavailable_reason": null,
+          "working_set_bytes": 51257344
+        },
+        "assembly_released_gc": {
+          "allocated_blocks": 136927,
+          "page_fault_count": 4247863,
+          "private_commit_bytes": 37609472,
+          "unavailable_reason": null,
+          "working_set_bytes": 48562176
+        },
+        "command_completed": {
+          "allocated_blocks": 209865,
+          "page_fault_count": 3957515,
+          "private_commit_bytes": 36384768,
+          "unavailable_reason": null,
+          "working_set_bytes": 46882816
+        },
+        "command_released_gc": {
+          "allocated_blocks": 136698,
+          "page_fault_count": 3962910,
+          "private_commit_bytes": 36761600,
+          "unavailable_reason": null,
+          "working_set_bytes": 48295936
+        },
+        "editor_sample": {
+          "allocated_blocks": 140687,
+          "page_fault_count": 4234117,
+          "private_commit_bytes": 37470208,
+          "unavailable_reason": null,
+          "working_set_bytes": 48496640
+        },
+        "native_batch_marker": {
+          "allocated_blocks": 136879,
+          "page_fault_count": 4234069,
+          "private_commit_bytes": 36761600,
+          "unavailable_reason": null,
+          "working_set_bytes": 48300032
+        },
+        "native_validated_before_editor": {
+          "allocated_blocks": 140664,
+          "page_fault_count": 4234117,
+          "private_commit_bytes": 37470208,
+          "unavailable_reason": null,
+          "working_set_bytes": 48496640
+        },
+        "screen_sample": {
+          "allocated_blocks": 143905,
+          "page_fault_count": 4247863,
+          "private_commit_bytes": 40468480,
+          "unavailable_reason": null,
+          "working_set_bytes": 51322880
+        }
+      },
+      "raw_refs": {
+        "command": {
+          "file": "attempt\\command-01.json",
+          "sha256": "17a6d6f992a68bae4f78da7c50f3498fca287181532409149a00b64f7e0e6f5d"
+        },
+        "joint": {
+          "file": "attempt\\joint-01.json",
+          "sha256": "a48510d40c23845565c6d8a0ea6184b3d617c6d411ab5d05f4352d6ab021161c"
+        }
+      },
+      "released_end_minus_command_gc": {
+        "allocated_blocks": 229,
+        "page_fault_count": 284953,
+        "private_commit_bytes": 847872,
+        "working_set_bytes": 266240
+      }
+    },
+    {
+      "artifact_binding_interval": {
+        "allocated_blocks": 105,
+        "page_fault_count": 12319,
+        "private_commit_bytes": 3080192,
+        "working_set_bytes": 2981888
+      },
+      "assembly_interval": {
+        "allocated_blocks": 3041,
+        "page_fault_count": 905,
+        "private_commit_bytes": -1150976,
+        "working_set_bytes": -266240
+      },
+      "effect_count": 600,
+      "gate_rejected": false,
+      "index": 2,
+      "joint_host_rss": 48082944,
+      "native_interval": {
+        "allocated_blocks": 181,
+        "page_fault_count": 265482,
+        "private_commit_bytes": 4096,
+        "working_set_bytes": 4096
+      },
+      "native_validation_interval": {
+        "allocated_blocks": 3875,
+        "page_fault_count": 48,
+        "private_commit_bytes": 798720,
+        "working_set_bytes": 196608
+      },
+      "phase_host_memory": {
+        "ack_received": {
+          "allocated_blocks": 141216,
+          "page_fault_count": 6463302,
+          "private_commit_bytes": 37638144,
+          "unavailable_reason": null,
+          "working_set_bytes": 48082944
+        },
+        "assembly_after": {
+          "allocated_blocks": 144362,
+          "page_fault_count": 6476526,
+          "private_commit_bytes": 39567360,
+          "unavailable_reason": null,
+          "working_set_bytes": 50798592
+        },
+        "assembly_before": {
+          "allocated_blocks": 141321,
+          "page_fault_count": 6475621,
+          "private_commit_bytes": 40718336,
+          "unavailable_reason": null,
+          "working_set_bytes": 51064832
+        },
+        "assembly_released_gc": {
+          "allocated_blocks": 137303,
+          "page_fault_count": 6476620,
+          "private_commit_bytes": 37715968,
+          "unavailable_reason": null,
+          "working_set_bytes": 48201728
+        },
+        "command_completed": {
+          "allocated_blocks": 216636,
+          "page_fault_count": 6191989,
+          "private_commit_bytes": 37625856,
+          "unavailable_reason": null,
+          "working_set_bytes": 48484352
+        },
+        "command_released_gc": {
+          "allocated_blocks": 137071,
+          "page_fault_count": 6197258,
+          "private_commit_bytes": 36835328,
+          "unavailable_reason": null,
+          "working_set_bytes": 47882240
+        },
+        "editor_sample": {
+          "allocated_blocks": 141150,
+          "page_fault_count": 6462788,
+          "private_commit_bytes": 37638144,
+          "unavailable_reason": null,
+          "working_set_bytes": 48082944
+        },
+        "native_batch_marker": {
+          "allocated_blocks": 137252,
+          "page_fault_count": 6462740,
+          "private_commit_bytes": 36839424,
+          "unavailable_reason": null,
+          "working_set_bytes": 47886336
+        },
+        "native_validated_before_editor": {
+          "allocated_blocks": 141127,
+          "page_fault_count": 6462788,
+          "private_commit_bytes": 37638144,
+          "unavailable_reason": null,
+          "working_set_bytes": 48082944
+        },
+        "screen_sample": {
+          "allocated_blocks": 144369,
+          "page_fault_count": 6476620,
+          "private_commit_bytes": 40796160,
+          "unavailable_reason": null,
+          "working_set_bytes": 51183616
+        }
+      },
+      "raw_refs": {
+        "command": {
+          "file": "attempt\\command-02.json",
+          "sha256": "90a4c0000d0dabc19b686b9ee5316f298b9bc02cda1280aa5363624ee806d24f"
+        },
+        "joint": {
+          "file": "attempt\\joint-02.json",
+          "sha256": "189e7667d9ed0448bb174c701741a408148dd313dc5de340c16869a96307da9f"
+        }
+      },
+      "released_end_minus_command_gc": {
+        "allocated_blocks": 232,
+        "page_fault_count": 279362,
+        "private_commit_bytes": 880640,
+        "working_set_bytes": 319488
+      }
+    },
+    {
+      "artifact_binding_interval": {
+        "allocated_blocks": 104,
+        "page_fault_count": 12318,
+        "private_commit_bytes": 3084288,
+        "working_set_bytes": 2985984
+      },
+      "assembly_interval": {
+        "allocated_blocks": 3042,
+        "page_fault_count": 917,
+        "private_commit_bytes": -618496,
+        "working_set_bytes": -376832
+      },
+      "effect_count": 800,
+      "gate_rejected": false,
+      "index": 3,
+      "joint_host_rss": 49000448,
+      "native_interval": {
+        "allocated_blocks": 182,
+        "page_fault_count": 268822,
+        "private_commit_bytes": 0,
+        "working_set_bytes": -286720
+      },
+      "native_validation_interval": {
+        "allocated_blocks": 3986,
+        "page_fault_count": 49,
+        "private_commit_bytes": 204800,
+        "working_set_bytes": 200704
+      },
+      "phase_host_memory": {
+        "ack_received": {
+          "allocated_blocks": 141517,
+          "page_fault_count": 8691843,
+          "private_commit_bytes": 38281216,
+          "unavailable_reason": null,
+          "working_set_bytes": 49000448
+        },
+        "assembly_after": {
+          "allocated_blocks": 144663,
+          "page_fault_count": 8705078,
+          "private_commit_bytes": 40747008,
+          "unavailable_reason": null,
+          "working_set_bytes": 51609600
+        },
+        "assembly_before": {
+          "allocated_blocks": 141621,
+          "page_fault_count": 8704161,
+          "private_commit_bytes": 41365504,
+          "unavailable_reason": null,
+          "working_set_bytes": 51986432
+        },
+        "assembly_released_gc": {
+          "allocated_blocks": 137492,
+          "page_fault_count": 8705182,
+          "private_commit_bytes": 38952960,
+          "unavailable_reason": null,
+          "working_set_bytes": 49049600
+        },
+        "command_completed": {
+          "allocated_blocks": 217065,
+          "page_fault_count": 8417700,
+          "private_commit_bytes": 37261312,
+          "unavailable_reason": null,
+          "working_set_bytes": 47411200
+        },
+        "command_released_gc": {
+          "allocated_blocks": 137260,
+          "page_fault_count": 8422458,
+          "private_commit_bytes": 38076416,
+          "unavailable_reason": null,
+          "working_set_bytes": 49086464
+        },
+        "editor_sample": {
+          "allocated_blocks": 141451,
+          "page_fault_count": 8691329,
+          "private_commit_bytes": 38281216,
+          "unavailable_reason": null,
+          "working_set_bytes": 49000448
+        },
+        "native_batch_marker": {
+          "allocated_blocks": 137442,
+          "page_fault_count": 8691280,
+          "private_commit_bytes": 38076416,
+          "unavailable_reason": null,
+          "working_set_bytes": 48799744
+        },
+        "native_validated_before_editor": {
+          "allocated_blocks": 141428,
+          "page_fault_count": 8691329,
+          "private_commit_bytes": 38281216,
+          "unavailable_reason": null,
+          "working_set_bytes": 49000448
+        },
+        "screen_sample": {
+          "allocated_blocks": 144670,
+          "page_fault_count": 8705182,
+          "private_commit_bytes": 42037248,
+          "unavailable_reason": null,
+          "working_set_bytes": 52035584
+        }
+      },
+      "raw_refs": {
+        "command": {
+          "file": "attempt\\command-03.json",
+          "sha256": "da03fec76cfe39abc0846eb1f6dd36cfcef8fe7af9e3c6898a23025f21c6baec"
+        },
+        "joint": {
+          "file": "attempt\\joint-03.json",
+          "sha256": "1277bcf12eb347f79c0eb5800388ea8b9ad10f554af3e00d88e28ecb591015fe"
+        }
+      },
+      "released_end_minus_command_gc": {
+        "allocated_blocks": 232,
+        "page_fault_count": 282724,
+        "private_commit_bytes": 876544,
+        "working_set_bytes": -36864
+      }
+    },
+    {
+      "artifact_binding_interval": {
+        "allocated_blocks": 105,
+        "page_fault_count": 12318,
+        "private_commit_bytes": 3174400,
+        "working_set_bytes": 3076096
+      },
+      "assembly_interval": {
+        "allocated_blocks": 3041,
+        "page_fault_count": 878,
+        "private_commit_bytes": -995328,
+        "working_set_bytes": -323584
+      },
+      "effect_count": 1000,
+      "gate_rejected": false,
+      "index": 4,
+      "joint_host_rss": 47546368,
+      "native_interval": {
+        "allocated_blocks": 183,
+        "page_fault_count": 263168,
+        "private_commit_bytes": 0,
+        "working_set_bytes": -200704
+      },
+      "native_validation_interval": {
+        "allocated_blocks": 3985,
+        "page_fault_count": 48,
+        "private_commit_bytes": 892928,
+        "working_set_bytes": 196608
+      },
+      "phase_host_memory": {
+        "ack_received": {
+          "allocated_blocks": 141881,
+          "page_fault_count": 10993573,
+          "private_commit_bytes": 38887424,
+          "unavailable_reason": null,
+          "working_set_bytes": 47546368
+        },
+        "assembly_after": {
+          "allocated_blocks": 145027,
+          "page_fault_count": 11006769,
+          "private_commit_bytes": 41066496,
+          "unavailable_reason": null,
+          "working_set_bytes": 50298880
+        },
+        "assembly_before": {
+          "allocated_blocks": 141986,
+          "page_fault_count": 11005891,
+          "private_commit_bytes": 42061824,
+          "unavailable_reason": null,
+          "working_set_bytes": 50622464
+        },
+        "assembly_released_gc": {
+          "allocated_blocks": 137890,
+          "page_fault_count": 11006867,
+          "private_commit_bytes": 39002112,
+          "unavailable_reason": null,
+          "working_set_bytes": 47624192
+        },
+        "command_completed": {
+          "allocated_blocks": 219543,
+          "page_fault_count": 10724879,
+          "private_commit_bytes": 38961152,
+          "unavailable_reason": null,
+          "working_set_bytes": 47853568
+        },
+        "command_released_gc": {
+          "allocated_blocks": 137624,
+          "page_fault_count": 10729843,
+          "private_commit_bytes": 37994496,
+          "unavailable_reason": null,
+          "working_set_bytes": 47550464
+        },
+        "editor_sample": {
+          "allocated_blocks": 141815,
+          "page_fault_count": 10993059,
+          "private_commit_bytes": 38887424,
+          "unavailable_reason": null,
+          "working_set_bytes": 47546368
+        },
+        "native_batch_marker": {
+          "allocated_blocks": 137807,
+          "page_fault_count": 10993011,
+          "private_commit_bytes": 37994496,
+          "unavailable_reason": null,
+          "working_set_bytes": 47349760
+        },
+        "native_validated_before_editor": {
+          "allocated_blocks": 141792,
+          "page_fault_count": 10993059,
+          "private_commit_bytes": 38887424,
+          "unavailable_reason": null,
+          "working_set_bytes": 47546368
+        },
+        "screen_sample": {
+          "allocated_blocks": 145034,
+          "page_fault_count": 11006867,
+          "private_commit_bytes": 42176512,
+          "unavailable_reason": null,
+          "working_set_bytes": 50700288
+        }
+      },
+      "raw_refs": {
+        "command": {
+          "file": "attempt\\command-04.json",
+          "sha256": "0b618ad030f2de7dd30825737fec6e828b4993550d8601e793a2cece075066f3"
+        },
+        "joint": {
+          "file": "attempt\\joint-04.json",
+          "sha256": "fdb2f6e2fd252ac148b978dcc53287777b346ef40c2139c47b453b05f8041dd3"
+        }
+      },
+      "released_end_minus_command_gc": {
+        "allocated_blocks": 266,
+        "page_fault_count": 277024,
+        "private_commit_bytes": 1007616,
+        "working_set_bytes": 73728
+      }
+    },
+    {
+      "artifact_binding_interval": {
+        "allocated_blocks": 104,
+        "page_fault_count": 12318,
+        "private_commit_bytes": 3411968,
+        "working_set_bytes": 3289088
+      },
+      "assembly_interval": {
+        "allocated_blocks": 3044,
+        "page_fault_count": 942,
+        "private_commit_bytes": -1269760,
+        "working_set_bytes": -344064
+      },
+      "effect_count": 1200,
+      "gate_rejected": false,
+      "index": 5,
+      "joint_host_rss": 47169536,
+      "native_interval": {
+        "allocated_blocks": 183,
+        "page_fault_count": 275761,
+        "private_commit_bytes": 0,
+        "working_set_bytes": -40960
+      },
+      "native_validation_interval": {
+        "allocated_blocks": 3986,
+        "page_fault_count": 48,
+        "private_commit_bytes": 1077248,
+        "working_set_bytes": 196608
+      },
+      "phase_host_memory": {
+        "ack_received": {
+          "allocated_blocks": 142115,
+          "page_fault_count": 13488761,
+          "private_commit_bytes": 39112704,
+          "unavailable_reason": null,
+          "working_set_bytes": 47169536
+        },
+        "assembly_after": {
+          "allocated_blocks": 145263,
+          "page_fault_count": 13502021,
+          "private_commit_bytes": 41254912,
+          "unavailable_reason": null,
+          "working_set_bytes": 50114560
+        },
+        "assembly_before": {
+          "allocated_blocks": 142219,
+          "page_fault_count": 13501079,
+          "private_commit_bytes": 42524672,
+          "unavailable_reason": null,
+          "working_set_bytes": 50458624
+        },
+        "assembly_released_gc": {
+          "allocated_blocks": 138092,
+          "page_fault_count": 13502130,
+          "private_commit_bytes": 39325696,
+          "unavailable_reason": null,
+          "working_set_bytes": 47271936
+        },
+        "command_completed": {
+          "allocated_blocks": 222505,
+          "page_fault_count": 13207764,
+          "private_commit_bytes": 39133184,
+          "unavailable_reason": null,
+          "working_set_bytes": 47669248
+        },
+        "command_released_gc": {
+          "allocated_blocks": 137857,
+          "page_fault_count": 13212438,
+          "private_commit_bytes": 38035456,
+          "unavailable_reason": null,
+          "working_set_bytes": 47013888
+        },
+        "editor_sample": {
+          "allocated_blocks": 142049,
+          "page_fault_count": 13488247,
+          "private_commit_bytes": 39112704,
+          "unavailable_reason": null,
+          "working_set_bytes": 47169536
+        },
+        "native_batch_marker": {
+          "allocated_blocks": 138040,
+          "page_fault_count": 13488199,
+          "private_commit_bytes": 38035456,
+          "unavailable_reason": null,
+          "working_set_bytes": 46972928
+        },
+        "native_validated_before_editor": {
+          "allocated_blocks": 142026,
+          "page_fault_count": 13488247,
+          "private_commit_bytes": 39112704,
+          "unavailable_reason": null,
+          "working_set_bytes": 47169536
+        },
+        "screen_sample": {
+          "allocated_blocks": 145270,
+          "page_fault_count": 13502130,
+          "private_commit_bytes": 42713088,
+          "unavailable_reason": null,
+          "working_set_bytes": 50561024
+        }
+      },
+      "raw_refs": {
+        "command": {
+          "file": "attempt\\command-05.json",
+          "sha256": "dd8fe8e054304c530225528bc7575b754f60b276d7dc51363ae1ba2f9996706d"
+        },
+        "joint": {
+          "file": "attempt\\joint-05.json",
+          "sha256": "c124a20630b4e184a7b920f06327c036fbffaec40704f3106c52e56f219e2f45"
+        }
+      },
+      "released_end_minus_command_gc": {
+        "allocated_blocks": 235,
+        "page_fault_count": 289692,
+        "private_commit_bytes": 1290240,
+        "working_set_bytes": 258048
+      }
+    },
+    {
+      "artifact_binding_interval": {
+        "allocated_blocks": 103,
+        "page_fault_count": 12322,
+        "private_commit_bytes": 3346432,
+        "working_set_bytes": 3264512
+      },
+      "assembly_interval": {
+        "allocated_blocks": 3039,
+        "page_fault_count": 997,
+        "private_commit_bytes": -581632,
+        "working_set_bytes": -405504
+      },
+      "effect_count": 1400,
+      "gate_rejected": false,
+      "index": 6,
+      "joint_host_rss": 40288256,
+      "native_interval": {
+        "allocated_blocks": 182,
+        "page_fault_count": 287587,
+        "private_commit_bytes": 20480,
+        "working_set_bytes": -1052672
+      },
+      "native_validation_interval": {
+        "allocated_blocks": 3985,
+        "page_fault_count": 32,
+        "private_commit_bytes": 126976,
+        "working_set_bytes": 131072
+      },
+      "phase_host_memory": {
+        "ack_received": {
+          "allocated_blocks": 142498,
+          "page_fault_count": 15960699,
+          "private_commit_bytes": 38203392,
+          "unavailable_reason": null,
+          "working_set_bytes": 40288256
+        },
+        "assembly_after": {
+          "allocated_blocks": 145640,
+          "page_fault_count": 15974018,
+          "private_commit_bytes": 40968192,
+          "unavailable_reason": null,
+          "working_set_bytes": 43147264
+        },
+        "assembly_before": {
+          "allocated_blocks": 142601,
+          "page_fault_count": 15973021,
+          "private_commit_bytes": 41549824,
+          "unavailable_reason": null,
+          "working_set_bytes": 43552768
+        },
+        "assembly_released_gc": {
+          "allocated_blocks": 138476,
+          "page_fault_count": 15974123,
+          "private_commit_bytes": 39153664,
+          "unavailable_reason": null,
+          "working_set_bytes": 40329216
+        },
+        "command_completed": {
+          "allocated_blocks": 221526,
+          "page_fault_count": 15667641,
+          "private_commit_bytes": 38363136,
+          "unavailable_reason": null,
+          "working_set_bytes": 41365504
+        },
+        "command_released_gc": {
+          "allocated_blocks": 138238,
+          "page_fault_count": 15672823,
+          "private_commit_bytes": 38055936,
+          "unavailable_reason": null,
+          "working_set_bytes": 41209856
+        },
+        "editor_sample": {
+          "allocated_blocks": 142428,
+          "page_fault_count": 15960442,
+          "private_commit_bytes": 38203392,
+          "unavailable_reason": null,
+          "working_set_bytes": 40288256
+        },
+        "native_batch_marker": {
+          "allocated_blocks": 138420,
+          "page_fault_count": 15960410,
+          "private_commit_bytes": 38076416,
+          "unavailable_reason": null,
+          "working_set_bytes": 40157184
+        },
+        "native_validated_before_editor": {
+          "allocated_blocks": 142405,
+          "page_fault_count": 15960442,
+          "private_commit_bytes": 38203392,
+          "unavailable_reason": null,
+          "working_set_bytes": 40288256
+        },
+        "screen_sample": {
+          "allocated_blocks": 145646,
+          "page_fault_count": 15974123,
+          "private_commit_bytes": 42500096,
+          "unavailable_reason": null,
+          "working_set_bytes": 43577344
+        }
+      },
+      "raw_refs": {
+        "command": {
+          "file": "attempt\\command-06.json",
+          "sha256": "330083d2680eadb53f73d2e67dd01e0dc8408a0cc259cbbd25575a7497fd89e1"
+        },
+        "joint": {
+          "file": "attempt\\joint-06.json",
+          "sha256": "1bf83f3e37aed8dcdcf1ca8b0f419ad91351f6bcb9bc616bd37d492a80e51c51"
+        }
+      },
+      "released_end_minus_command_gc": {
+        "allocated_blocks": 238,
+        "page_fault_count": 301300,
+        "private_commit_bytes": 1097728,
+        "working_set_bytes": -880640
+      }
+    }
+  ],
+  "completed_batches": 7,
+  "eligible_for_dataset": false,
+  "execution_unchanged": true,
+  "formal_acceptance": false,
+  "limits": [
+    "Instrumented process; no overhead subtraction.",
+    "Phase intervals include stock work between hooks, not per-function attribution.",
+    "Private commit, working set and allocated blocks are distinct metrics.",
+    "No leak/root-cause or formal PASS inference; terminal lifecycle must be reviewed separately."
+  ],
+  "max_measurement_overhead_us": 1428,
+  "primary_error": null,
+  "receipts": {
+    "attempt/child-terminal-cleanup.json": "ba45244a591fad7a8d129ebd7e8e5105f3e0b459378e5316ad09d5b8370a11bf",
+    "diagnostic-summary.json": "575b77cb09c341b399c27e233ceb5fdcf93080e8fe9a254adc33aac85444573c",
+    "phase-memory.json": "9da8c1ae0b16cfe415f479dca7de12b9c5d9461d384106c6f5e3e21f210ecee2",
+    "result.json": "4987267990bb2402e02f77a52c17088430a7325d45c0560881a37b22191cab98"
+  },
+  "run_id": "gt06-s140-memory-phase-p04",
+  "schema": "HH-GT06-S140-phase-analysis-1",
+  "source_unchanged": true,
+  "status": "BOUNDARY_CAPTURED"
+}

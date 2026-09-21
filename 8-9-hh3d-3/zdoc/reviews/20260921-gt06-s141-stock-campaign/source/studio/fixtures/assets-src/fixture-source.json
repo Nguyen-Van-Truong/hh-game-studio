@@ -1,0 +1,14 @@
+{
+  "schema": "HH-ORIGINAL-ASSET-SOURCE-1",
+  "source_id": "gt05_original_fixture_v1",
+  "license": "original-fixture",
+  "authorship": "Original geometric and procedural pixel descriptions authored for HH Studio",
+  "external_inputs": [],
+  "generator": "pipeline/producer/run_blender.py",
+  "geometry_definition": "pipeline/producer/contract.py",
+  "variants": {
+    "baseline": {"crate_width_m": 0.6},
+    "edited": {"crate_width_m": 0.8}
+  },
+  "scope": "Tool fixture only; no game art, third-party assets, scripts or libraries are loaded"
+}

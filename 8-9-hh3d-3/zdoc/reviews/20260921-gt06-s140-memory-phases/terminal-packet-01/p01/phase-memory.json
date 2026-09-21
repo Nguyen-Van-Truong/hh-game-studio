@@ -1,0 +1,31 @@
+{
+  "authority": 0,
+  "diagnostic_only": true,
+  "error_code": "AttributeError",
+  "formal_acceptance": false,
+  "identities": {
+    "editor": null,
+    "host": null
+  },
+  "max_rows": 200,
+  "phase_order": [
+    "command_completed",
+    "released_gc",
+    "native_batch_marker",
+    "native_parse",
+    "editor_sample",
+    "ack_received",
+    "assembly_before",
+    "assembly_after",
+    "screen_sample"
+  ],
+  "prefix_batches": 1,
+  "row_count": 0,
+  "rows": [],
+  "rows_dropped": 0,
+  "rows_seen": 0,
+  "run_id": "gt06-s140-memory-phase-p01.r00.a01",
+  "schema_id": "HH-GT06-S140-PHASE-MEMORY-1",
+  "schema_version": "1.0.0",
+  "status": "ORIGINAL_GATE_FAILURE"
+}

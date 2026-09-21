@@ -1,0 +1,42 @@
+{
+  "disposition": "ORIGINAL_FAILURE",
+  "eligible_for_dataset": false,
+  "errors": [
+    {
+      "chain": [
+        {
+          "exception_class": "AttributeError",
+          "frames": [
+            {
+              "file": "coupled_journal.py",
+              "line": 270
+            },
+            {
+              "file": "contextlib.py",
+              "line": 137
+            },
+            {
+              "file": "memory_phases.py",
+              "line": 272
+            }
+          ]
+        }
+      ],
+      "stage": "campaign"
+    }
+  ],
+  "exit_scope": "Natural full completion must drain original child; failure may leave editor natural exit UNKNOWN. External observer supplies launcher actual exit.",
+  "formal_acceptance": false,
+  "gates": [],
+  "limits": "Diagnostic only; PSS after original rejection cannot alter the gate. No root-cause, no-leak or formal PASS claim.",
+  "phase_memory": {
+    "file": "phase-memory.json",
+    "rows": 0,
+    "sha256": "e31876361f46f55a1e273040b5875e36583ca81a0c3b885e7e7614efc924ecff",
+    "status": "ORIGINAL_GATE_FAILURE"
+  },
+  "pid": 17316,
+  "run_id": "gt06-s140-memory-phase-p01",
+  "schema": "S129.post-failure-diagnostic.1",
+  "source_unchanged": true
+}

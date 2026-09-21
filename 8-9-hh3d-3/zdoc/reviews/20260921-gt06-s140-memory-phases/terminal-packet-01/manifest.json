@@ -1,0 +1,1058 @@
+{
+  "authority": 0,
+  "created_utc": "2026-09-21T07:13:50.626327+00:00",
+  "eligible_for_dataset": false,
+  "exclusions": [
+    "Command journals, caches, generated source/assets remain at original raw paths.",
+    "Selected payload closure only; not a self-contained final GT06 acceptance packet.",
+    "Missing target exits are UNKNOWN; owner cleanup cannot supply them."
+  ],
+  "files": [
+    {
+      "file": "p01/attempt/context.json",
+      "sha256": "51061c4d47c80a726254935fd7789b5b2bdfdb7d696b08de01290da2c742b57a",
+      "size_bytes": 6197,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p01/attempt/context.json"
+    },
+    {
+      "file": "p01/campaign.json",
+      "sha256": "4216c5dd0f9903605c31fddb4416f516cff0ae65dc5facfb439ef899e0d80c96",
+      "size_bytes": 6145,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p01/campaign.json"
+    },
+    {
+      "file": "p01/diagnostic-summary.json",
+      "sha256": "5c75cb123562de1ff2ab00fe7fc5d2a854ce0e3daf6551760a99d8a611883965",
+      "size_bytes": 1211,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p01/diagnostic-summary.json"
+    },
+    {
+      "file": "p01/execution-source-files.json",
+      "sha256": "5cb5a58ba524cefff76f842348f13dcc9bf28a298fca5d9ef3b228684fb91d99",
+      "size_bytes": 7280,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p01/execution-source-files.json"
+    },
+    {
+      "file": "p01/freeze.json",
+      "sha256": "2be6edacd0d653da2e5a86bb1cca7ec99138e5f999a1e217c01732bb7f52c26a",
+      "size_bytes": 13805,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p01/freeze.json"
+    },
+    {
+      "file": "p01/phase-memory.json",
+      "sha256": "e31876361f46f55a1e273040b5875e36583ca81a0c3b885e7e7614efc924ecff",
+      "size_bytes": 668,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p01/phase-memory.json"
+    },
+    {
+      "file": "p01/s140-launch.json",
+      "sha256": "0ce7c3256c43b6f6286a7385c8c4d79b652cb14d843c973e5161a4e65e9b46a1",
+      "size_bytes": 837,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p01/s140-launch.json"
+    },
+    {
+      "file": "p02/attempt/batch-capture-00.json",
+      "sha256": "2e445aecb960ec891614a37b1d0cd427229500c1852040ed92de81000a94b03b",
+      "size_bytes": 868,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p02/attempt/batch-capture-00.json"
+    },
+    {
+      "file": "p02/attempt/child-failure.json",
+      "sha256": "858b7894264b30e32065d364131117979697c27857099f7f91ff11fc47dd7a9a",
+      "size_bytes": 214,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p02/attempt/child-failure.json"
+    },
+    {
+      "file": "p02/attempt/child-terminal-cleanup.json",
+      "sha256": "4ca57e64efabb656eaec22a36b433f7f6ef063bcb3df3405cdbe72aa6edc4676",
+      "size_bytes": 3731,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p02/attempt/child-terminal-cleanup.json"
+    },
+    {
+      "file": "p02/attempt/command-00.json",
+      "sha256": "b1b60a368954b9827f6b39413ef0fe1afe60b832ceecdfadd17195f1309a4dc3",
+      "size_bytes": 2497980,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p02/attempt/command-00.json"
+    },
+    {
+      "file": "p02/attempt/context.json",
+      "sha256": "bae27ff75cd53eda3a462e042fb45fc931834159df5df3bd850ce9302f0b3871",
+      "size_bytes": 6132,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p02/attempt/context.json"
+    },
+    {
+      "file": "p02/attempt/editor-host/cleanup-001.json",
+      "sha256": "9ff26d2260e6188703654517521ac75e80f618c4e517723042f5f4babc109ee1",
+      "size_bytes": 556,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p02/attempt/editor-host/cleanup-001.json"
+    },
+    {
+      "file": "p02/attempt/editor-host/invocation.json",
+      "sha256": "7addf7c15b87a93eda7f06dd633f1c95cf56c04c190283c7a8bb90c53ac0c14c",
+      "size_bytes": 9299,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p02/attempt/editor-host/invocation.json"
+    },
+    {
+      "file": "p02/attempt/editor-host/process-start.json",
+      "sha256": "bd7271d464fe774481e6e3399c57149097d677cd59fe0acdfa6b50c31e2661f9",
+      "size_bytes": 14,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p02/attempt/editor-host/process-start.json"
+    },
+    {
+      "file": "p02/attempt/editor-host/stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p02/attempt/editor-host/stderr.txt"
+    },
+    {
+      "file": "p02/attempt/editor-host/stdout.txt",
+      "sha256": "d78f43ed7f6b773f8489ffbe62475a7a76409d661cfa6464285a357a1f33dcd6",
+      "size_bytes": 28302,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p02/attempt/editor-host/stdout.txt"
+    },
+    {
+      "file": "p02/attempt/editor-snapshot.json",
+      "sha256": "427217c5fb58161dc09783a6672080b832a86ca81fae0147756469af88cc042d",
+      "size_bytes": 1574,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p02/attempt/editor-snapshot.json"
+    },
+    {
+      "file": "p02/attempt/http-phases-final.json",
+      "sha256": "c6e0a3e6fcf5b56e9e909893f8bbb672f9d2c36ae4ff02f5f5bb243a9c9dce11",
+      "size_bytes": 2141043,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p02/attempt/http-phases-final.json"
+    },
+    {
+      "file": "p02/attempt/import-host/capture.json",
+      "sha256": "5ca886770ff28220095c2933d2e4daa498d651d2a5968259e1db7c82843bd117",
+      "size_bytes": 1341,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p02/attempt/import-host/capture.json"
+    },
+    {
+      "file": "p02/attempt/import-host/invocation.json",
+      "sha256": "fde34b418012c4baf4654ba5c4fbbed5c336ab78acee8e63097d3fb972aa744a",
+      "size_bytes": 6425,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p02/attempt/import-host/invocation.json"
+    },
+    {
+      "file": "p02/attempt/import-host/process-exit.json",
+      "sha256": "c5341540eb156bfd7771bf9fa023cfe8831fdf9b76bf6cd48122f980dec0eab3",
+      "size_bytes": 30,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p02/attempt/import-host/process-exit.json"
+    },
+    {
+      "file": "p02/attempt/import-host/process-start.json",
+      "sha256": "9e084c124a2e9160d806548860ef0a7d894d430d1e0675ccdf6a2d5a5c0069e0",
+      "size_bytes": 14,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p02/attempt/import-host/process-start.json"
+    },
+    {
+      "file": "p02/attempt/import-host/stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p02/attempt/import-host/stderr.txt"
+    },
+    {
+      "file": "p02/attempt/import-host/stdout.txt",
+      "sha256": "9b5e37b85c8c4f11090de482aee3734b6c7993ad884a62121b2adcc9dfdd6003",
+      "size_bytes": 1492,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p02/attempt/import-host/stdout.txt"
+    },
+    {
+      "file": "p02/attempt/import-observation.json",
+      "sha256": "327ec4e2d9463ee98f3393e992284d3ecffa1ec6e2801e61e760828599362496",
+      "size_bytes": 28219,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p02/attempt/import-observation.json"
+    },
+    {
+      "file": "p02/attempt/initial-project-files.json",
+      "sha256": "17408c354d732373b1b35e302556457b13582d0574ced9492b99798b016302f4",
+      "size_bytes": 1461,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p02/attempt/initial-project-files.json"
+    },
+    {
+      "file": "p02/attempt/joint-00.json",
+      "sha256": "8fc8499da0d954560b40f7cd3d616f66a9e7d989e20683b31888b51f5e12c65c",
+      "size_bytes": 2291,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p02/attempt/joint-00.json"
+    },
+    {
+      "file": "p02/attempt/project/benchmark/input/ack-00.json",
+      "sha256": "597aca056ce70799b8677182e93cc8258f5aaaca2af5abd786ee4596757c34fe",
+      "size_bytes": 429,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p02/attempt/project/benchmark/input/ack-00.json"
+    },
+    {
+      "file": "p02/attempt/project/benchmark/input/start-00.json",
+      "sha256": "338d04f3a6af2befb7a52bbe3cf82b483564ca7dd73b107bc7f5ac2ef17f3a39",
+      "size_bytes": 514,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p02/attempt/project/benchmark/input/start-00.json"
+    },
+    {
+      "file": "p02/attempt/project/benchmark/out/batch-00.json",
+      "sha256": "4d3cf596d484b3de59412f4d1ee4c82038f3fb828c5c7ae0c99d8dc1f4470942",
+      "size_bytes": 97010,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p02/attempt/project/benchmark/out/batch-00.json"
+    },
+    {
+      "file": "p02/attempt/project/benchmark/out/ready-00.json",
+      "sha256": "8bbc285285ae3a8e0fb21494c84539b398ab8193bc1578263e1fb50f186c1ac1",
+      "size_bytes": 664,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p02/attempt/project/benchmark/out/ready-00.json"
+    },
+    {
+      "file": "p02/attempt/project/benchmark/out/ready-01.json",
+      "sha256": "46840589f483a481ca007804a224b0766a72666c3869d65568a71a3cda50f364",
+      "size_bytes": 668,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p02/attempt/project/benchmark/out/ready-01.json"
+    },
+    {
+      "file": "p02/attempt/sample-preview-00.json",
+      "sha256": "397f6a486755d0e5b102c62c8169b65b83e9a2254f8bb0aaf1e9362d6efc8ed9",
+      "size_bytes": 72657,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p02/attempt/sample-preview-00.json"
+    },
+    {
+      "file": "p02/campaign.json",
+      "sha256": "646530644dd4f05724bf8f0aa47343f8bf7e9eca90c536aca079ed005a62f70b",
+      "size_bytes": 6086,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p02/campaign.json"
+    },
+    {
+      "file": "p02/diagnostic-summary.json",
+      "sha256": "7f490ce1b60452a4e350c9ce6a31e923b229abea15edf0c11c4eeb787776d28e",
+      "size_bytes": 520,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p02/diagnostic-summary.json"
+    },
+    {
+      "file": "p02/dispatch-once.json",
+      "sha256": "97740fd439c492e32c61acf418b17ef4f158bc199dfb3ce0d856cac38f07a4c4",
+      "size_bytes": 75,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p02/dispatch-once.json"
+    },
+    {
+      "file": "p02/execution-source-files.json",
+      "sha256": "c903f04930bd22dd73d92082b0f3e5761af9071102b0772adb82a1a9620eec55",
+      "size_bytes": 26510,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p02/execution-source-files.json"
+    },
+    {
+      "file": "p02/freeze.json",
+      "sha256": "433e21d0c623c9c5a444256f500221607f82d1e4459297cecf1601fcf55dd842",
+      "size_bytes": 6712,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p02/freeze.json"
+    },
+    {
+      "file": "p02/owned/cleanup-001.json",
+      "sha256": "d048dac1e8ad6725792dd7325366bb05a87fe34ab5554d9a70880ad4fcc10867",
+      "size_bytes": 556,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p02/owned/cleanup-001.json"
+    },
+    {
+      "file": "p02/owned/invocation.json",
+      "sha256": "973298b74edf55507c35eeba855107c485735e505719f9ea613fd41a02fb235a",
+      "size_bytes": 28199,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p02/owned/invocation.json"
+    },
+    {
+      "file": "p02/owned/process-exit.json",
+      "sha256": "bea957cc2913d9bbaa73d3d427f76b6afc492d5337f3126422f5e1792686c653",
+      "size_bytes": 30,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p02/owned/process-exit.json"
+    },
+    {
+      "file": "p02/owned/process-start.json",
+      "sha256": "a8f50bb605fcd5f7021b1d068675d809e9b5a689a74df02268e95ba2496f9369",
+      "size_bytes": 14,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p02/owned/process-start.json"
+    },
+    {
+      "file": "p02/owned/stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p02/owned/stderr.txt"
+    },
+    {
+      "file": "p02/owned/stdout.txt",
+      "sha256": "4f581d6c0917d0620707f95f829170e45c8e2e03b5b868f6bcab8e61bb712399",
+      "size_bytes": 9464,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p02/owned/stdout.txt"
+    },
+    {
+      "file": "p02/phase-memory.json",
+      "sha256": "b362c3cfaa3179864bd1ac3fe90561d17de6c5240b81bdb073592b9c86ca1213",
+      "size_bytes": 8244,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p02/phase-memory.json"
+    },
+    {
+      "file": "p02/result.json",
+      "sha256": "3af4264e5bf0c0e1afb045b799c034474b76bc34450db7c12a54c7436e188636",
+      "size_bytes": 1645,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p02/result.json"
+    },
+    {
+      "file": "p03/attempt/context.json",
+      "sha256": "b2b74662d098fc115a1e3d80d4c1e659ec828e1b1d6b13c4bd74bcecc2263595",
+      "size_bytes": 6132,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p03/attempt/context.json"
+    },
+    {
+      "file": "p03/attempt/editor-host/invocation.json",
+      "sha256": "46d28072daca560fd4a8ac8dcdc91b1110969572f9a9d6f0774dcd89259984e1",
+      "size_bytes": 9299,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p03/attempt/editor-host/invocation.json"
+    },
+    {
+      "file": "p03/attempt/editor-host/process-start.json",
+      "sha256": "9282818fadd66823f0e59caaf91b95e4b9ff296eb21917ddada5f29ec4cadeb4",
+      "size_bytes": 14,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p03/attempt/editor-host/process-start.json"
+    },
+    {
+      "file": "p03/attempt/editor-host/stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p03/attempt/editor-host/stderr.txt"
+    },
+    {
+      "file": "p03/attempt/editor-host/stdout.txt",
+      "sha256": "0909dafd5eaff1caf376bbb81011e688dea1a1bb638d8430d8d63743f37dff61",
+      "size_bytes": 13063,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p03/attempt/editor-host/stdout.txt"
+    },
+    {
+      "file": "p03/attempt/editor-snapshot.json",
+      "sha256": "e717843845f8d84b79435d1dca61e89360b4b68a68c2566a7969a342d981a679",
+      "size_bytes": 1574,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p03/attempt/editor-snapshot.json"
+    },
+    {
+      "file": "p03/attempt/import-host/capture.json",
+      "sha256": "4a5f0e3dbbc11e8842c2621dea7b40b98afafcaf983ec9cba95e2aa01fde4afa",
+      "size_bytes": 1341,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p03/attempt/import-host/capture.json"
+    },
+    {
+      "file": "p03/attempt/import-host/invocation.json",
+      "sha256": "2eada143bf023fda1939c4dfeda26b8e0f81cf04459430b512635653db08e1ac",
+      "size_bytes": 6425,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p03/attempt/import-host/invocation.json"
+    },
+    {
+      "file": "p03/attempt/import-host/process-exit.json",
+      "sha256": "a06b948eebbf1fa23ef03d3adadfff8a2c5a0c8f285d7bfd97915029ceceeb96",
+      "size_bytes": 30,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p03/attempt/import-host/process-exit.json"
+    },
+    {
+      "file": "p03/attempt/import-host/process-start.json",
+      "sha256": "d9bcdf0ff76029778cd344838532a0d766066775f20bb46443230d9f7f219f7c",
+      "size_bytes": 14,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p03/attempt/import-host/process-start.json"
+    },
+    {
+      "file": "p03/attempt/import-host/stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p03/attempt/import-host/stderr.txt"
+    },
+    {
+      "file": "p03/attempt/import-host/stdout.txt",
+      "sha256": "9b5e37b85c8c4f11090de482aee3734b6c7993ad884a62121b2adcc9dfdd6003",
+      "size_bytes": 1492,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p03/attempt/import-host/stdout.txt"
+    },
+    {
+      "file": "p03/attempt/import-observation.json",
+      "sha256": "1e5ec02b3bd88db0063ea37cdd77e820d6b70aba79da94786321b29564dddfb8",
+      "size_bytes": 21533,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p03/attempt/import-observation.json"
+    },
+    {
+      "file": "p03/attempt/initial-project-files.json",
+      "sha256": "96c98e6beeaea72dc7bcc48c690beb6438b44ce79bb30816bd6bd635e0016ea5",
+      "size_bytes": 1461,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p03/attempt/initial-project-files.json"
+    },
+    {
+      "file": "p03/attempt/project/benchmark/out/ready-00.json",
+      "sha256": "df6cfacaaf51017a5914619e1859d951f49fd00157dc15006185097acf81f4c6",
+      "size_bytes": 664,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p03/attempt/project/benchmark/out/ready-00.json"
+    },
+    {
+      "file": "p03/campaign.json",
+      "sha256": "1d21968aa15ea1bc21b2e6de69685d164f7a4563a5812a0c1c99ee24b4a99572",
+      "size_bytes": 6086,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p03/campaign.json"
+    },
+    {
+      "file": "p03/dispatch-once.json",
+      "sha256": "08bc410905cb1c39c78c4c4ea72cf8d3294595a3134cbd8f2b0b062f5e3d7b50",
+      "size_bytes": 75,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p03/dispatch-once.json"
+    },
+    {
+      "file": "p03/execution-source-files.json",
+      "sha256": "8926d3bd7219fe2ddacd6bd57a5e07ee882d23dd2594516fddff14d2f039a180",
+      "size_bytes": 26510,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p03/execution-source-files.json"
+    },
+    {
+      "file": "p03/freeze.json",
+      "sha256": "cc09c9bd6d8864149cc85ed5f71aebf458999c3f356a9ae4f75d3403d1d698e0",
+      "size_bytes": 6713,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p03/freeze.json"
+    },
+    {
+      "file": "p03/owned/invocation.json",
+      "sha256": "728035c2f1993fb75474bd1e1693ad11529b63233920622161afc0f28df7da0f",
+      "size_bytes": 28199,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p03/owned/invocation.json"
+    },
+    {
+      "file": "p03/owned/process-start.json",
+      "sha256": "7011d306b8d7acd48df4c7d79af57e05e79d30ca8bd0b59dedc512fd9c4bdae4",
+      "size_bytes": 14,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p03/owned/process-start.json"
+    },
+    {
+      "file": "p03/owned/stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p03/owned/stderr.txt"
+    },
+    {
+      "file": "p03/owned/stdout.txt",
+      "sha256": "6491e8c86bcc9563912dba490aa4ae43f31956a2fceb5bc4c03914f4f54b232e",
+      "size_bytes": 5202,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p03/owned/stdout.txt"
+    },
+    {
+      "file": "p04/attempt/batch-capture-00.json",
+      "sha256": "6e96982d40c93ebe71fcd11fc54caab0b9d33ab089a0192940b3f8a93fd61128",
+      "size_bytes": 868,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/batch-capture-00.json"
+    },
+    {
+      "file": "p04/attempt/batch-capture-01.json",
+      "sha256": "b747fc4f2192a4ff50df68f9da73ac89d619ef89ae3357b28dac1a5581766cad",
+      "size_bytes": 868,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/batch-capture-01.json"
+    },
+    {
+      "file": "p04/attempt/batch-capture-02.json",
+      "sha256": "cfd15b2334482e158728aa5aa38f5a1ec9ced0bb183cb20d3dc562af99642767",
+      "size_bytes": 868,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/batch-capture-02.json"
+    },
+    {
+      "file": "p04/attempt/batch-capture-03.json",
+      "sha256": "fc462e2595ebc9f0b02669d2633a1f33aecb914f1ee25493953b720cb5d5696c",
+      "size_bytes": 868,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/batch-capture-03.json"
+    },
+    {
+      "file": "p04/attempt/batch-capture-04.json",
+      "sha256": "b528d6cedab316094adace53ee75619c88b69bff9c1b056288b37f097515f297",
+      "size_bytes": 868,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/batch-capture-04.json"
+    },
+    {
+      "file": "p04/attempt/batch-capture-05.json",
+      "sha256": "2b6dfb71c3184f73673b253ab632967f680f991a3475c12541cfb3bc63704ffa",
+      "size_bytes": 868,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/batch-capture-05.json"
+    },
+    {
+      "file": "p04/attempt/batch-capture-06.json",
+      "sha256": "4597a8c58deeb64f45d6aef0786b1b8e7ddc194463d3f6dadb38776234a6f726",
+      "size_bytes": 868,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/batch-capture-06.json"
+    },
+    {
+      "file": "p04/attempt/child-failure.json",
+      "sha256": "8c437c60d3ecd6bd0156adb19e45c51111388635d50403c581257a3e4f69fe86",
+      "size_bytes": 214,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/child-failure.json"
+    },
+    {
+      "file": "p04/attempt/child-terminal-cleanup.json",
+      "sha256": "ba45244a591fad7a8d129ebd7e8e5105f3e0b459378e5316ad09d5b8370a11bf",
+      "size_bytes": 3731,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/child-terminal-cleanup.json"
+    },
+    {
+      "file": "p04/attempt/command-00.json",
+      "sha256": "4a6c9c41f02c1b4a00a811d8b756a30abd594506f8bc4890f7a6c98b93f92856",
+      "size_bytes": 2482627,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/command-00.json"
+    },
+    {
+      "file": "p04/attempt/command-01.json",
+      "sha256": "17a6d6f992a68bae4f78da7c50f3498fca287181532409149a00b64f7e0e6f5d",
+      "size_bytes": 2638218,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/command-01.json"
+    },
+    {
+      "file": "p04/attempt/command-02.json",
+      "sha256": "90a4c0000d0dabc19b686b9ee5316f298b9bc02cda1280aa5363624ee806d24f",
+      "size_bytes": 2860797,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/command-02.json"
+    },
+    {
+      "file": "p04/attempt/command-03.json",
+      "sha256": "da03fec76cfe39abc0846eb1f6dd36cfcef8fe7af9e3c6898a23025f21c6baec",
+      "size_bytes": 2865373,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/command-03.json"
+    },
+    {
+      "file": "p04/attempt/command-04.json",
+      "sha256": "0b618ad030f2de7dd30825737fec6e828b4993550d8601e793a2cece075066f3",
+      "size_bytes": 2955115,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/command-04.json"
+    },
+    {
+      "file": "p04/attempt/command-05.json",
+      "sha256": "dd8fe8e054304c530225528bc7575b754f60b276d7dc51363ae1ba2f9996706d",
+      "size_bytes": 3167809,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/command-05.json"
+    },
+    {
+      "file": "p04/attempt/command-06.json",
+      "sha256": "330083d2680eadb53f73d2e67dd01e0dc8408a0cc259cbbd25575a7497fd89e1",
+      "size_bytes": 3127961,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/command-06.json"
+    },
+    {
+      "file": "p04/attempt/context.json",
+      "sha256": "f0f113826f63db8be921a61ff4d09c44da2e7e4ffa3e849282f354400de97e9c",
+      "size_bytes": 6132,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/context.json"
+    },
+    {
+      "file": "p04/attempt/editor-host/cleanup-001.json",
+      "sha256": "9ff26d2260e6188703654517521ac75e80f618c4e517723042f5f4babc109ee1",
+      "size_bytes": 556,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/editor-host/cleanup-001.json"
+    },
+    {
+      "file": "p04/attempt/editor-host/invocation.json",
+      "sha256": "ddc2d146cb2160ea8bb40cc4dc166a672a46973dcbe6b510f9e9b9b9f8dce55c",
+      "size_bytes": 9299,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/editor-host/invocation.json"
+    },
+    {
+      "file": "p04/attempt/editor-host/process-start.json",
+      "sha256": "a6cddd837c3d64313d1448157600ed0426e56bfd1ab557d6b45e0f820fca29c3",
+      "size_bytes": 14,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/editor-host/process-start.json"
+    },
+    {
+      "file": "p04/attempt/editor-host/stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/editor-host/stderr.txt"
+    },
+    {
+      "file": "p04/attempt/editor-host/stdout.txt",
+      "sha256": "dcb3fa8f21fafa2ec45de7a3151958bc2b0a457deb3beafb1c987cc5122cb732",
+      "size_bytes": 258400,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/editor-host/stdout.txt"
+    },
+    {
+      "file": "p04/attempt/editor-snapshot.json",
+      "sha256": "91c90648c0f7a297dce1def9815c525a01b87441e2686ba264344523070dd8e4",
+      "size_bytes": 1574,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/editor-snapshot.json"
+    },
+    {
+      "file": "p04/attempt/http-phases-final.json",
+      "sha256": "cc756afa52090543eabf35f1b76ce6aac160e98a9548d66985852a51cd7d960c",
+      "size_bytes": 2166618,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/http-phases-final.json"
+    },
+    {
+      "file": "p04/attempt/import-host/capture.json",
+      "sha256": "f59f183ea7a5fdfc8b3f2c02aed247a4d45dcfd05921488d6453fcd6e279a988",
+      "size_bytes": 1341,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/import-host/capture.json"
+    },
+    {
+      "file": "p04/attempt/import-host/invocation.json",
+      "sha256": "7c1201aa9a3c63d51d897acb5cf736332ceb652dc47456e515e3699d8a09fd62",
+      "size_bytes": 6425,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/import-host/invocation.json"
+    },
+    {
+      "file": "p04/attempt/import-host/process-exit.json",
+      "sha256": "5a690ea414cd1154dfaedba3134902323a26c93bc6ca5bfc22fa353fd6edbb5f",
+      "size_bytes": 30,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/import-host/process-exit.json"
+    },
+    {
+      "file": "p04/attempt/import-host/process-start.json",
+      "sha256": "928abb7e873a7db6113fed84e8e68e06020784fb4426cec574c05557494327f3",
+      "size_bytes": 14,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/import-host/process-start.json"
+    },
+    {
+      "file": "p04/attempt/import-host/stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/import-host/stderr.txt"
+    },
+    {
+      "file": "p04/attempt/import-host/stdout.txt",
+      "sha256": "9b5e37b85c8c4f11090de482aee3734b6c7993ad884a62121b2adcc9dfdd6003",
+      "size_bytes": 1492,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/import-host/stdout.txt"
+    },
+    {
+      "file": "p04/attempt/import-observation.json",
+      "sha256": "566b1566933d401f2e88af68aad03a69ef62c84488f7af486782a87541d7aaec",
+      "size_bytes": 22161,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/import-observation.json"
+    },
+    {
+      "file": "p04/attempt/initial-project-files.json",
+      "sha256": "410011e16892eb57f217c85d608c8cc0160254450322e941c3bba74c457e4496",
+      "size_bytes": 1461,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/initial-project-files.json"
+    },
+    {
+      "file": "p04/attempt/joint-00.json",
+      "sha256": "2851d465f7af3c7b92ce4c817f5172a58617e5810db36dcefeadc8e3aa5d37a2",
+      "size_bytes": 2290,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/joint-00.json"
+    },
+    {
+      "file": "p04/attempt/joint-01.json",
+      "sha256": "a48510d40c23845565c6d8a0ea6184b3d617c6d411ab5d05f4352d6ab021161c",
+      "size_bytes": 2295,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/joint-01.json"
+    },
+    {
+      "file": "p04/attempt/joint-02.json",
+      "sha256": "189e7667d9ed0448bb174c701741a408148dd313dc5de340c16869a96307da9f",
+      "size_bytes": 2295,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/joint-02.json"
+    },
+    {
+      "file": "p04/attempt/joint-03.json",
+      "sha256": "1277bcf12eb347f79c0eb5800388ea8b9ad10f554af3e00d88e28ecb591015fe",
+      "size_bytes": 2294,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/joint-03.json"
+    },
+    {
+      "file": "p04/attempt/joint-04.json",
+      "sha256": "fdb2f6e2fd252ac148b978dcc53287777b346ef40c2139c47b453b05f8041dd3",
+      "size_bytes": 2296,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/joint-04.json"
+    },
+    {
+      "file": "p04/attempt/joint-05.json",
+      "sha256": "c124a20630b4e184a7b920f06327c036fbffaec40704f3106c52e56f219e2f45",
+      "size_bytes": 2296,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/joint-05.json"
+    },
+    {
+      "file": "p04/attempt/joint-06.json",
+      "sha256": "1bf83f3e37aed8dcdcf1ca8b0f419ad91351f6bcb9bc616bd37d492a80e51c51",
+      "size_bytes": 2296,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/joint-06.json"
+    },
+    {
+      "file": "p04/attempt/project/benchmark/input/ack-00.json",
+      "sha256": "d498eeb83b1cb16c8ddc22710972713f0d75041eef132b75e3703535ec59926c",
+      "size_bytes": 429,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/project/benchmark/input/ack-00.json"
+    },
+    {
+      "file": "p04/attempt/project/benchmark/input/ack-01.json",
+      "sha256": "a6f5e486bce952bd9bda836b696f952e9709b9e4118f8987542edcf5634f078b",
+      "size_bytes": 429,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/project/benchmark/input/ack-01.json"
+    },
+    {
+      "file": "p04/attempt/project/benchmark/input/ack-02.json",
+      "sha256": "bcec9e4b942580efbe59eaca1f1ebcb180ba63ba54ff5c527216ac3676937ea7",
+      "size_bytes": 429,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/project/benchmark/input/ack-02.json"
+    },
+    {
+      "file": "p04/attempt/project/benchmark/input/ack-03.json",
+      "sha256": "ea55b48c2c3dce5d6615819b38b27d77d969a413d9400a893adf8afe8fa05f9f",
+      "size_bytes": 429,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/project/benchmark/input/ack-03.json"
+    },
+    {
+      "file": "p04/attempt/project/benchmark/input/ack-04.json",
+      "sha256": "1949c390fcd3a8031a41128842dcde00ed31d15b229b6cd38b153d124d0a9ebb",
+      "size_bytes": 429,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/project/benchmark/input/ack-04.json"
+    },
+    {
+      "file": "p04/attempt/project/benchmark/input/ack-05.json",
+      "sha256": "4388b2bab1c3666b62c3c520086287dcdbcdcae20fc01654000264351f0bf2bf",
+      "size_bytes": 429,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/project/benchmark/input/ack-05.json"
+    },
+    {
+      "file": "p04/attempt/project/benchmark/input/ack-06.json",
+      "sha256": "bf51ba82c1c1c4d25c04bac1e7ca763162c661c45160b944bf1d642b4be8ed0c",
+      "size_bytes": 429,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/project/benchmark/input/ack-06.json"
+    },
+    {
+      "file": "p04/attempt/project/benchmark/input/start-00.json",
+      "sha256": "3b10f1897f1f4ce6d25077d6496a8e4748dc62e4f247675d514e74d9fbc4108a",
+      "size_bytes": 514,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/project/benchmark/input/start-00.json"
+    },
+    {
+      "file": "p04/attempt/project/benchmark/input/start-01.json",
+      "sha256": "0597ffbf98ed127b4fb02efbbf64a686e803f7cd72582e52cbac833ab3bd8809",
+      "size_bytes": 514,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/project/benchmark/input/start-01.json"
+    },
+    {
+      "file": "p04/attempt/project/benchmark/input/start-02.json",
+      "sha256": "6c0824ddb274fbec5ed57e45126825b1b698c55c81917201ec2af064fa13a2ba",
+      "size_bytes": 514,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/project/benchmark/input/start-02.json"
+    },
+    {
+      "file": "p04/attempt/project/benchmark/input/start-03.json",
+      "sha256": "fb241a34ab447318ae440c87561bff8d7aa5ba845df9328cabd14b73397a8363",
+      "size_bytes": 514,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/project/benchmark/input/start-03.json"
+    },
+    {
+      "file": "p04/attempt/project/benchmark/input/start-04.json",
+      "sha256": "1b8033fc06341ce62553d07be660fe9b7238b3d998f202ee76a5cb2bc89d17d9",
+      "size_bytes": 514,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/project/benchmark/input/start-04.json"
+    },
+    {
+      "file": "p04/attempt/project/benchmark/input/start-05.json",
+      "sha256": "a45a844127cd231f82e5d69a6e4e309c0245cbc1f8908babcc77080a7bb73d0c",
+      "size_bytes": 515,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/project/benchmark/input/start-05.json"
+    },
+    {
+      "file": "p04/attempt/project/benchmark/input/start-06.json",
+      "sha256": "df01b7d7f3a0a3358262fe4b0b50f00ec9c67e8905eef3bdecdf4313d312e1f4",
+      "size_bytes": 515,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/project/benchmark/input/start-06.json"
+    },
+    {
+      "file": "p04/attempt/project/benchmark/out/batch-00.json",
+      "sha256": "8fccb93d6d5c0f2fbdb3cb18906e129a813f62b3f78238b1d2e100bef3a3a5dc",
+      "size_bytes": 97038,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/project/benchmark/out/batch-00.json"
+    },
+    {
+      "file": "p04/attempt/project/benchmark/out/batch-01.json",
+      "sha256": "c4c75b0653dbfd921a1e247e4ed8bdf732e610188e003349b96f1813da15d7bf",
+      "size_bytes": 98251,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/project/benchmark/out/batch-01.json"
+    },
+    {
+      "file": "p04/attempt/project/benchmark/out/batch-02.json",
+      "sha256": "039122ad9166e75d712d455e10c7f04979780f8de5f95967a8542a604e9d67de",
+      "size_bytes": 98265,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/project/benchmark/out/batch-02.json"
+    },
+    {
+      "file": "p04/attempt/project/benchmark/out/batch-03.json",
+      "sha256": "6872279495f605c8018bbb29e5e99de9bc9ecd107a67ed251b3f93e62b61c573",
+      "size_bytes": 98275,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/project/benchmark/out/batch-03.json"
+    },
+    {
+      "file": "p04/attempt/project/benchmark/out/batch-04.json",
+      "sha256": "ba2b719910d371f8be48b79a9950bccbac93671c699e3fb598372788c70f2971",
+      "size_bytes": 98252,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/project/benchmark/out/batch-04.json"
+    },
+    {
+      "file": "p04/attempt/project/benchmark/out/batch-05.json",
+      "sha256": "8aaaad93fffe4f03d4926c9e774b8262b55134fb8aac0eea7fd4c8d107eb1645",
+      "size_bytes": 98275,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/project/benchmark/out/batch-05.json"
+    },
+    {
+      "file": "p04/attempt/project/benchmark/out/batch-06.json",
+      "sha256": "998e0ce82c6ad36d03b6d5efddfe8dbb90d53ac6f4ce8a62f2b511b673a72d99",
+      "size_bytes": 98274,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/project/benchmark/out/batch-06.json"
+    },
+    {
+      "file": "p04/attempt/project/benchmark/out/ready-00.json",
+      "sha256": "bd3d0e7a5643c9019524b2aacb718cb4d350008c148479e4504f4cfb3c3b5fe4",
+      "size_bytes": 664,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/project/benchmark/out/ready-00.json"
+    },
+    {
+      "file": "p04/attempt/project/benchmark/out/ready-01.json",
+      "sha256": "eab4ca8993a1a06ba9b98a127500f8bbe5bd8d73f2d073fc95e23458c2669db6",
+      "size_bytes": 668,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/project/benchmark/out/ready-01.json"
+    },
+    {
+      "file": "p04/attempt/project/benchmark/out/ready-02.json",
+      "sha256": "de76d713217b46dd45389bab4ab3b924994a1705b17e7f59de297d636885a907",
+      "size_bytes": 670,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/project/benchmark/out/ready-02.json"
+    },
+    {
+      "file": "p04/attempt/project/benchmark/out/ready-03.json",
+      "sha256": "3200ef9b445106e0e4f7862ea1c6f0a92dd5c9af7c23a9f64f2a930ce01451ce",
+      "size_bytes": 670,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/project/benchmark/out/ready-03.json"
+    },
+    {
+      "file": "p04/attempt/project/benchmark/out/ready-04.json",
+      "sha256": "64c4f7a9b47b5917fc8c625a30c48b289c94082bffd14c1d89ea2f1a2ebf19f3",
+      "size_bytes": 670,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/project/benchmark/out/ready-04.json"
+    },
+    {
+      "file": "p04/attempt/project/benchmark/out/ready-05.json",
+      "sha256": "51f251596385023fd544329f695ed7cbd93ffa5b4c41d219530aec585964a4c5",
+      "size_bytes": 671,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/project/benchmark/out/ready-05.json"
+    },
+    {
+      "file": "p04/attempt/project/benchmark/out/ready-06.json",
+      "sha256": "a558ad28919d9169c024f14025c314d44e98dc2d9d05f4ef66a00c1a70485da1",
+      "size_bytes": 671,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/project/benchmark/out/ready-06.json"
+    },
+    {
+      "file": "p04/attempt/project/benchmark/out/ready-07.json",
+      "sha256": "5c3315f74ffb5769184d6a8f19b1ca231b8b8ec30a760ae15c9bacade190b312",
+      "size_bytes": 671,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/project/benchmark/out/ready-07.json"
+    },
+    {
+      "file": "p04/attempt/sample-preview-00.json",
+      "sha256": "64e63bd4ee8474fbf5cc1090d565e24ed36fa60142e045ea585b73570b718c23",
+      "size_bytes": 72692,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/sample-preview-00.json"
+    },
+    {
+      "file": "p04/attempt/sample-preview-01.json",
+      "sha256": "a292adb0e55eea7aabc6b2c76a5759babd69185a5484c7564f59eddca9ee00fc",
+      "size_bytes": 72743,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/sample-preview-01.json"
+    },
+    {
+      "file": "p04/attempt/sample-preview-02.json",
+      "sha256": "170732ab0b805bec46ea705be8996af77f46b38ec47ca9f5cc4adc9691b4af79",
+      "size_bytes": 72867,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/sample-preview-02.json"
+    },
+    {
+      "file": "p04/attempt/sample-preview-03.json",
+      "sha256": "f6e78fcdbc13bf21f0c323197555f58bac205d237fc5207003dbf93e205a4ac0",
+      "size_bytes": 72807,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/sample-preview-03.json"
+    },
+    {
+      "file": "p04/attempt/sample-preview-04.json",
+      "sha256": "7c3b8886e6a68ae2a1523103bbc2deb36deba00f28818aa44c3f36712ee7576a",
+      "size_bytes": 72872,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/sample-preview-04.json"
+    },
+    {
+      "file": "p04/attempt/sample-preview-05.json",
+      "sha256": "781db295c2959ac8b78f7cd80e7f58fcea0dcbb21b35e7c5846f784afbd2457d",
+      "size_bytes": 72958,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/sample-preview-05.json"
+    },
+    {
+      "file": "p04/attempt/sample-preview-06.json",
+      "sha256": "02ecc461c375f2583e773b277912a5436df0129eb4b8b8340e1ebdfd8caca55d",
+      "size_bytes": 73020,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/attempt/sample-preview-06.json"
+    },
+    {
+      "file": "p04/campaign.json",
+      "sha256": "060f163fddff4ac072e679191bc01b02ba1336211bd1cfc2b75d5d8b1a5a5e65",
+      "size_bytes": 6086,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/campaign.json"
+    },
+    {
+      "file": "p04/diagnostic-summary.json",
+      "sha256": "575b77cb09c341b399c27e233ceb5fdcf93080e8fe9a254adc33aac85444573c",
+      "size_bytes": 520,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/diagnostic-summary.json"
+    },
+    {
+      "file": "p04/dispatch-once.json",
+      "sha256": "0febb25e15e66d69d6e86edeb3281677f863e15060df0326bdba7ba6773f5557",
+      "size_bytes": 74,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/dispatch-once.json"
+    },
+    {
+      "file": "p04/execution-source-files.json",
+      "sha256": "af0ed2a4f7b19e5b454ea193cd7c60b0952ece657560b309c39c257a5acaffe6",
+      "size_bytes": 26510,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/execution-source-files.json"
+    },
+    {
+      "file": "p04/freeze.json",
+      "sha256": "c4332227bf17ca8e9caa5235afc94308e196c5aea12436e3c191eebfd2862b19",
+      "size_bytes": 6713,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/freeze.json"
+    },
+    {
+      "file": "p04/owned/cleanup-001.json",
+      "sha256": "d048dac1e8ad6725792dd7325366bb05a87fe34ab5554d9a70880ad4fcc10867",
+      "size_bytes": 556,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/owned/cleanup-001.json"
+    },
+    {
+      "file": "p04/owned/invocation.json",
+      "sha256": "d077c047d288d8caf2150306a8dce60683c1520de598fdb42db946c1526c0668",
+      "size_bytes": 28199,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/owned/invocation.json"
+    },
+    {
+      "file": "p04/owned/process-exit.json",
+      "sha256": "e21e678fc0d610bb52a9c48eef274cb6a90de580f6535a93163eae2dd6470374",
+      "size_bytes": 30,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/owned/process-exit.json"
+    },
+    {
+      "file": "p04/owned/process-start.json",
+      "sha256": "77d3c3f5ee5da752f981c1a07c867854b540ae643c7348d29ea666ac6d6e28b9",
+      "size_bytes": 14,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/owned/process-start.json"
+    },
+    {
+      "file": "p04/owned/stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/owned/stderr.txt"
+    },
+    {
+      "file": "p04/owned/stdout.txt",
+      "sha256": "2c7741361fe8f907fee9f90f12ef761f987464ffc86b8938615ad85663ab9d80",
+      "size_bytes": 77956,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/owned/stdout.txt"
+    },
+    {
+      "file": "p04/phase-memory.json",
+      "sha256": "9da8c1ae0b16cfe415f479dca7de12b9c5d9461d384106c6f5e3e21f210ecee2",
+      "size_bytes": 57564,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/phase-memory.json"
+    },
+    {
+      "file": "p04/result.json",
+      "sha256": "4987267990bb2402e02f77a52c17088430a7325d45c0560881a37b22191cab98",
+      "size_bytes": 1645,
+      "source": "studio/.local/reviews/gt06-s140-memory-phase-p04/result.json"
+    },
+    {
+      "file": "supervision/runs/handle-close.json",
+      "sha256": "f29a59f75aefbcccd68b3d591b078826ed1a71863cfa07ba35e054bce3f04ae9",
+      "size_bytes": 145,
+      "source": "zdoc/reviews/20260920-gt06-s129-supervision/runs/gt06-s129-s140-memory-p04-supervisor/handle-close.json"
+    },
+    {
+      "file": "supervision/runs/launcher-exit.json",
+      "sha256": "9e646f1db0715a0745b87934afecb10ad5bcaebb57779836b38afd2c967bb6be",
+      "size_bytes": 488,
+      "source": "zdoc/reviews/20260920-gt06-s129-supervision/runs/gt06-s129-s140-memory-p04-supervisor/launcher-exit.json"
+    },
+    {
+      "file": "supervision/runs/launcher-start.json",
+      "sha256": "2c362b813b90996f9af92092da7bead08c7046d568de2d4021e90426ddef3342",
+      "size_bytes": 418,
+      "source": "zdoc/reviews/20260920-gt06-s129-supervision/runs/gt06-s129-s140-memory-p04-supervisor/launcher-start.json"
+    },
+    {
+      "file": "supervision/runs/request.json",
+      "sha256": "ad57457b8813661198f2b527099b2301cfea87e1c7aed060f7ffab414e24edc1",
+      "size_bytes": 48759,
+      "source": "zdoc/reviews/20260920-gt06-s129-supervision/runs/gt06-s129-s140-memory-p04-supervisor/request.json"
+    },
+    {
+      "file": "supervision/runs/stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0,
+      "source": "zdoc/reviews/20260920-gt06-s129-supervision/runs/gt06-s129-s140-memory-p04-supervisor/stderr.txt"
+    },
+    {
+      "file": "supervision/runs/stdout.txt",
+      "sha256": "dc7a0ac8ea24bbf1843a45efe8dab1a715a1f808d2addc4a579c8558f290b723",
+      "size_bytes": 191,
+      "source": "zdoc/reviews/20260920-gt06-s129-supervision/runs/gt06-s129-s140-memory-p04-supervisor/stdout.txt"
+    },
+    {
+      "file": "supervision/runs/terminal.json",
+      "sha256": "d21e1d9fe41d785c1a9188cd599265e098a7ac3f3af22322cd19a24e98d431f3",
+      "size_bytes": 958,
+      "source": "zdoc/reviews/20260920-gt06-s129-supervision/runs/gt06-s129-s140-memory-p04-supervisor/terminal.json"
+    },
+    {
+      "file": "supervision/tasks/dispatch-claim.json",
+      "sha256": "3ff7e013bc1404f06af67aee52814ed1d8eedfa4ae768cbe5377aa44137c6ce2",
+      "size_bytes": 247,
+      "source": "zdoc/reviews/20260920-gt06-s129-supervision/tasks/gt06-s129-s140-memory-p04-supervisor/dispatch-claim.json"
+    },
+    {
+      "file": "supervision/tasks/dispatch.json",
+      "sha256": "fdf1fc3839431f9359863cee580f023f1e3a32a52baa5ba5eec8e296e5eca98e",
+      "size_bytes": 274,
+      "source": "zdoc/reviews/20260920-gt06-s129-supervision/tasks/gt06-s129-s140-memory-p04-supervisor/dispatch.json"
+    },
+    {
+      "file": "supervision/tasks/expected.xml",
+      "sha256": "3d5d7aecda3fdfc1ae9abf055e44eb0db055dda7603c9affa10eebfee39d2014",
+      "size_bytes": 2176,
+      "source": "zdoc/reviews/20260920-gt06-s129-supervision/tasks/gt06-s129-s140-memory-p04-supervisor/expected.xml"
+    },
+    {
+      "file": "supervision/tasks/prepared.json",
+      "sha256": "a60fe0ae6fd18c118cea99b3de7c9675c6481a0cf26e33dc22f3d0955d9dadac",
+      "size_bytes": 489,
+      "source": "zdoc/reviews/20260920-gt06-s129-supervision/tasks/gt06-s129-s140-memory-p04-supervisor/prepared.json"
+    },
+    {
+      "file": "supervision/tasks/registered.json",
+      "sha256": "46a94a4c773de67d3bfd881007b3d8c71fb891731972e1938917d7176d2e6025",
+      "size_bytes": 259,
+      "source": "zdoc/reviews/20260920-gt06-s129-supervision/tasks/gt06-s129-s140-memory-p04-supervisor/registered.json"
+    },
+    {
+      "file": "supervision/tasks/registered.xml",
+      "sha256": "925f796060bbe4de89dca0198e01da82249f62a99bdde574430ab7c7b8ad6570",
+      "size_bytes": 1876,
+      "source": "zdoc/reviews/20260920-gt06-s129-supervision/tasks/gt06-s129-s140-memory-p04-supervisor/registered.xml"
+    },
+    {
+      "file": "analysis-p02.json",
+      "sha256": "ab401b79c18f5a42fad76e3cbcf5260fbb1247bd2454abf64f749c51beaa6613",
+      "size_bytes": 5154,
+      "source": "zdoc/reviews/20260921-gt06-s140-memory-phases/analysis-p02.json"
+    },
+    {
+      "file": "analysis-p04.json",
+      "sha256": "92f72a1b38bb988e65b75db3a7901f1e19a212606245c5e58682930fa9303909",
+      "size_bytes": 30859,
+      "source": "zdoc/reviews/20260921-gt06-s140-memory-phases/analysis-p04.json"
+    },
+    {
+      "file": "attempt-inventory.json",
+      "sha256": "de8d64103f6207b8837b9aebbaae2b9eb62b4c97e7dc94db24cf81313ebbc0a8",
+      "size_bytes": 1176,
+      "source": "derived"
+    }
+  ],
+  "formal_acceptance": false,
+  "schema": "HH-S140-SELECTED-EXACT-COPY-1"
+}

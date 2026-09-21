@@ -1,0 +1,146 @@
+{
+  "authority": 0,
+  "batch5_minus_batch4": {},
+  "batches": [
+    {
+      "artifact_binding_interval": {
+        "allocated_blocks": 108,
+        "page_fault_count": 12321,
+        "private_commit_bytes": 2711552,
+        "working_set_bytes": 2625536
+      },
+      "assembly_interval": {
+        "allocated_blocks": 3047,
+        "page_fault_count": 912,
+        "private_commit_bytes": 286720,
+        "working_set_bytes": 434176
+      },
+      "effect_count": 200,
+      "gate_rejected": false,
+      "index": 0,
+      "joint_host_rss": 46186496,
+      "native_interval": {
+        "allocated_blocks": 190,
+        "page_fault_count": 258003,
+        "private_commit_bytes": 49152,
+        "working_set_bytes": 12288
+      },
+      "native_validation_interval": {
+        "allocated_blocks": 3841,
+        "page_fault_count": 49,
+        "private_commit_bytes": 860160,
+        "working_set_bytes": 200704
+      },
+      "phase_host_memory": {
+        "ack_received": {
+          "allocated_blocks": 140903,
+          "page_fault_count": 2204683,
+          "private_commit_bytes": 35319808,
+          "unavailable_reason": null,
+          "working_set_bytes": 46194688
+        },
+        "assembly_after": {
+          "allocated_blocks": 144058,
+          "page_fault_count": 2217916,
+          "private_commit_bytes": 38318080,
+          "unavailable_reason": null,
+          "working_set_bytes": 49254400
+        },
+        "assembly_before": {
+          "allocated_blocks": 141011,
+          "page_fault_count": 2217004,
+          "private_commit_bytes": 38031360,
+          "unavailable_reason": null,
+          "working_set_bytes": 48820224
+        },
+        "assembly_released_gc": {
+          "allocated_blocks": 137089,
+          "page_fault_count": 2217982,
+          "private_commit_bytes": 36470784,
+          "unavailable_reason": null,
+          "working_set_bytes": 46911488
+        },
+        "command_completed": {
+          "allocated_blocks": 203892,
+          "page_fault_count": 1940304,
+          "private_commit_bytes": 34824192,
+          "unavailable_reason": null,
+          "working_set_bytes": 45600768
+        },
+        "command_released_gc": {
+          "allocated_blocks": 136760,
+          "page_fault_count": 1946114,
+          "private_commit_bytes": 34410496,
+          "unavailable_reason": null,
+          "working_set_bytes": 45977600
+        },
+        "editor_sample": {
+          "allocated_blocks": 140822,
+          "page_fault_count": 2204167,
+          "private_commit_bytes": 35319808,
+          "unavailable_reason": null,
+          "working_set_bytes": 46194688
+        },
+        "native_batch_marker": {
+          "allocated_blocks": 136950,
+          "page_fault_count": 2204117,
+          "private_commit_bytes": 34459648,
+          "unavailable_reason": null,
+          "working_set_bytes": 45989888
+        },
+        "native_validated_before_editor": {
+          "allocated_blocks": 140791,
+          "page_fault_count": 2204166,
+          "private_commit_bytes": 35319808,
+          "unavailable_reason": null,
+          "working_set_bytes": 46190592
+        },
+        "screen_sample": {
+          "allocated_blocks": 144064,
+          "page_fault_count": 2217982,
+          "private_commit_bytes": 39129088,
+          "unavailable_reason": null,
+          "working_set_bytes": 49524736
+        }
+      },
+      "raw_refs": {
+        "command": {
+          "file": "attempt\\command-00.json",
+          "sha256": "b1b60a368954b9827f6b39413ef0fe1afe60b832ceecdfadd17195f1309a4dc3"
+        },
+        "joint": {
+          "file": "attempt\\joint-00.json",
+          "sha256": "8fc8499da0d954560b40f7cd3d616f66a9e7d989e20683b31888b51f5e12c65c"
+        }
+      },
+      "released_end_minus_command_gc": {
+        "allocated_blocks": 329,
+        "page_fault_count": 271868,
+        "private_commit_bytes": 2060288,
+        "working_set_bytes": 933888
+      }
+    }
+  ],
+  "completed_batches": 1,
+  "eligible_for_dataset": false,
+  "execution_unchanged": true,
+  "formal_acceptance": false,
+  "limits": [
+    "Instrumented process; no overhead subtraction.",
+    "Phase intervals include stock work between hooks, not per-function attribution.",
+    "Private commit, working set and allocated blocks are distinct metrics.",
+    "No leak/root-cause or formal PASS inference; terminal lifecycle must be reviewed separately."
+  ],
+  "max_measurement_overhead_us": 221,
+  "primary_error": null,
+  "receipts": {
+    "attempt/child-terminal-cleanup.json": "4ca57e64efabb656eaec22a36b433f7f6ef063bcb3df3405cdbe72aa6edc4676",
+    "diagnostic-summary.json": "7f490ce1b60452a4e350c9ce6a31e923b229abea15edf0c11c4eeb787776d28e",
+    "phase-memory.json": "b362c3cfaa3179864bd1ac3fe90561d17de6c5240b81bdb073592b9c86ca1213",
+    "result.json": "3af4264e5bf0c0e1afb045b799c034474b76bc34450db7c12a54c7436e188636"
+  },
+  "run_id": "gt06-s140-memory-phase-p02",
+  "schema": "HH-GT06-S140-phase-analysis-1",
+  "source_unchanged": true,
+  "status": "BOUNDARY_CAPTURED"
+}

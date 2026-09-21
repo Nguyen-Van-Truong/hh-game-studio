@@ -1,0 +1,2042 @@
+{
+  "authority": 0,
+  "diagnostic_only": true,
+  "error_code": null,
+  "formal_acceptance": false,
+  "identities": {
+    "editor": {
+      "pid": 41584,
+      "process_start": "windows:134344464248690834"
+    },
+    "host": {
+      "pid": 27552,
+      "process_start": "windows:134344464174859661"
+    }
+  },
+  "max_rows": 200,
+  "phase_order": [
+    "command_completed",
+    "command_released_gc",
+    "native_batch_marker",
+    "native_validated_before_editor",
+    "editor_sample",
+    "ack_received",
+    "assembly_before",
+    "assembly_after",
+    "screen_sample",
+    "assembly_released_gc"
+  ],
+  "prefix_batches": 7,
+  "row_count": 70,
+  "rows": [
+    {
+      "editor_identity": null,
+      "editor_memory": null,
+      "host_identity": {
+        "pid": 27552,
+        "process_start": "windows:134344464174859661"
+      },
+      "host_memory": {
+        "allocated_blocks": 202690,
+        "page_fault_count": 1928589,
+        "private_commit_bytes": 33824768,
+        "unavailable_reason": null,
+        "working_set_bytes": 45727744
+      },
+      "index": 0,
+      "measurement_overhead_us": 1428,
+      "mono_us": 871094532794,
+      "phase": "command_completed",
+      "sequence": 0
+    },
+    {
+      "editor_identity": null,
+      "editor_memory": null,
+      "host_identity": {
+        "pid": 27552,
+        "process_start": "windows:134344464174859661"
+      },
+      "host_memory": {
+        "allocated_blocks": 136396,
+        "page_fault_count": 1934032,
+        "private_commit_bytes": 34713600,
+        "unavailable_reason": null,
+        "working_set_bytes": 46211072
+      },
+      "index": 0,
+      "measurement_overhead_us": 38,
+      "mono_us": 871094594587,
+      "phase": "command_released_gc",
+      "sequence": 1
+    },
+    {
+      "editor_identity": null,
+      "editor_memory": null,
+      "host_identity": {
+        "pid": 27552,
+        "process_start": "windows:134344464174859661"
+      },
+      "host_memory": {
+        "allocated_blocks": 136585,
+        "page_fault_count": 2195389,
+        "private_commit_bytes": 34607104,
+        "unavailable_reason": null,
+        "working_set_bytes": 46153728
+      },
+      "index": 0,
+      "measurement_overhead_us": 120,
+      "mono_us": 871119942180,
+      "phase": "native_batch_marker",
+      "sequence": 2
+    },
+    {
+      "editor_identity": {
+        "pid": 41584,
+        "process_start": "windows:134344464248690834"
+      },
+      "editor_memory": {
+        "allocated_blocks": null,
+        "page_fault_count": 337697,
+        "private_commit_bytes": 890310656,
+        "unavailable_reason": null,
+        "working_set_bytes": 757313536
+      },
+      "host_identity": {
+        "pid": 27552,
+        "process_start": "windows:134344464174859661"
+      },
+      "host_memory": {
+        "allocated_blocks": 140426,
+        "page_fault_count": 2195423,
+        "private_commit_bytes": 34705408,
+        "unavailable_reason": null,
+        "working_set_bytes": 46292992
+      },
+      "index": 0,
+      "measurement_overhead_us": 74,
+      "mono_us": 871119961202,
+      "phase": "native_validated_before_editor",
+      "sequence": 3
+    },
+    {
+      "editor_identity": {
+        "pid": 41584,
+        "process_start": "windows:134344464248690834"
+      },
+      "editor_memory": {
+        "allocated_blocks": null,
+        "page_fault_count": 337697,
+        "private_commit_bytes": 890310656,
+        "unavailable_reason": null,
+        "working_set_bytes": 757313536
+      },
+      "host_identity": {
+        "pid": 27552,
+        "process_start": "windows:134344464174859661"
+      },
+      "host_memory": {
+        "allocated_blocks": 140457,
+        "page_fault_count": 2195425,
+        "private_commit_bytes": 34705408,
+        "unavailable_reason": null,
+        "working_set_bytes": 46301184
+      },
+      "index": 0,
+      "measurement_overhead_us": 56,
+      "mono_us": 871119962712,
+      "phase": "editor_sample",
+      "sequence": 4
+    },
+    {
+      "editor_identity": {
+        "pid": 41584,
+        "process_start": "windows:134344464248690834"
+      },
+      "editor_memory": {
+        "allocated_blocks": null,
+        "page_fault_count": 337697,
+        "private_commit_bytes": 890310656,
+        "unavailable_reason": null,
+        "working_set_bytes": 757313536
+      },
+      "host_identity": {
+        "pid": 27552,
+        "process_start": "windows:134344464174859661"
+      },
+      "host_memory": {
+        "allocated_blocks": 140537,
+        "page_fault_count": 2195941,
+        "private_commit_bytes": 34705408,
+        "unavailable_reason": null,
+        "working_set_bytes": 46301184
+      },
+      "index": 0,
+      "measurement_overhead_us": 86,
+      "mono_us": 871120015727,
+      "phase": "ack_received",
+      "sequence": 5
+    },
+    {
+      "editor_identity": {
+        "pid": 41584,
+        "process_start": "windows:134344464248690834"
+      },
+      "editor_memory": {
+        "allocated_blocks": null,
+        "page_fault_count": 337697,
+        "private_commit_bytes": 890310656,
+        "unavailable_reason": null,
+        "working_set_bytes": 757313536
+      },
+      "host_identity": {
+        "pid": 27552,
+        "process_start": "windows:134344464174859661"
+      },
+      "host_memory": {
+        "allocated_blocks": 140645,
+        "page_fault_count": 2208262,
+        "private_commit_bytes": 37404672,
+        "unavailable_reason": null,
+        "working_set_bytes": 48914432
+      },
+      "index": 0,
+      "measurement_overhead_us": 259,
+      "mono_us": 871120064938,
+      "phase": "assembly_before",
+      "sequence": 6
+    },
+    {
+      "editor_identity": {
+        "pid": 41584,
+        "process_start": "windows:134344464248690834"
+      },
+      "editor_memory": {
+        "allocated_blocks": null,
+        "page_fault_count": 337697,
+        "private_commit_bytes": 890310656,
+        "unavailable_reason": null,
+        "working_set_bytes": 757313536
+      },
+      "host_identity": {
+        "pid": 27552,
+        "process_start": "windows:134344464174859661"
+      },
+      "host_memory": {
+        "allocated_blocks": 143689,
+        "page_fault_count": 2209208,
+        "private_commit_bytes": 37945344,
+        "unavailable_reason": null,
+        "working_set_bytes": 48988160
+      },
+      "index": 0,
+      "measurement_overhead_us": 73,
+      "mono_us": 871120263409,
+      "phase": "assembly_after",
+      "sequence": 7
+    },
+    {
+      "editor_identity": {
+        "pid": 41584,
+        "process_start": "windows:134344464248690834"
+      },
+      "editor_memory": {
+        "allocated_blocks": null,
+        "page_fault_count": 337697,
+        "private_commit_bytes": 890310656,
+        "unavailable_reason": null,
+        "working_set_bytes": 757313536
+      },
+      "host_identity": {
+        "pid": 27552,
+        "process_start": "windows:134344464174859661"
+      },
+      "host_memory": {
+        "allocated_blocks": 143696,
+        "page_fault_count": 2209300,
+        "private_commit_bytes": 39067648,
+        "unavailable_reason": null,
+        "working_set_bytes": 49364992
+      },
+      "index": 0,
+      "measurement_overhead_us": 92,
+      "mono_us": 871120266856,
+      "phase": "screen_sample",
+      "sequence": 8
+    },
+    {
+      "editor_identity": {
+        "pid": 41584,
+        "process_start": "windows:134344464248690834"
+      },
+      "editor_memory": {
+        "allocated_blocks": null,
+        "page_fault_count": 337697,
+        "private_commit_bytes": 890310656,
+        "unavailable_reason": null,
+        "working_set_bytes": 757313536
+      },
+      "host_identity": {
+        "pid": 27552,
+        "process_start": "windows:134344464174859661"
+      },
+      "host_memory": {
+        "allocated_blocks": 136721,
+        "page_fault_count": 2209300,
+        "private_commit_bytes": 36368384,
+        "unavailable_reason": null,
+        "working_set_bytes": 46764032
+      },
+      "index": 0,
+      "measurement_overhead_us": 55,
+      "mono_us": 871120274231,
+      "phase": "assembly_released_gc",
+      "sequence": 9
+    },
+    {
+      "editor_identity": {
+        "pid": 41584,
+        "process_start": "windows:134344464248690834"
+      },
+      "editor_memory": {
+        "allocated_blocks": null,
+        "page_fault_count": 337698,
+        "private_commit_bytes": 817901568,
+        "unavailable_reason": null,
+        "working_set_bytes": 757207040
+      },
+      "host_identity": {
+        "pid": 27552,
+        "process_start": "windows:134344464174859661"
+      },
+      "host_memory": {
+        "allocated_blocks": 209865,
+        "page_fault_count": 3957515,
+        "private_commit_bytes": 36384768,
+        "unavailable_reason": null,
+        "working_set_bytes": 46882816
+      },
+      "index": 1,
+      "measurement_overhead_us": 79,
+      "mono_us": 871180598979,
+      "phase": "command_completed",
+      "sequence": 10
+    },
+    {
+      "editor_identity": {
+        "pid": 41584,
+        "process_start": "windows:134344464248690834"
+      },
+      "editor_memory": {
+        "allocated_blocks": null,
+        "page_fault_count": 337698,
+        "private_commit_bytes": 817901568,
+        "unavailable_reason": null,
+        "working_set_bytes": 757207040
+      },
+      "host_identity": {
+        "pid": 27552,
+        "process_start": "windows:134344464174859661"
+      },
+      "host_memory": {
+        "allocated_blocks": 136698,
+        "page_fault_count": 3962910,
+        "private_commit_bytes": 36761600,
+        "unavailable_reason": null,
+        "working_set_bytes": 48295936
+      },
+      "index": 1,
+      "measurement_overhead_us": 52,
+      "mono_us": 871180665097,
+      "phase": "command_released_gc",
+      "sequence": 11
+    },
+    {
+      "editor_identity": {
+        "pid": 41584,
+        "process_start": "windows:134344464248690834"
+      },
+      "editor_memory": {
+        "allocated_blocks": null,
+        "page_fault_count": 449827,
+        "private_commit_bytes": 817901568,
+        "unavailable_reason": null,
+        "working_set_bytes": 757252096
+      },
+      "host_identity": {
+        "pid": 27552,
+        "process_start": "windows:134344464174859661"
+      },
+      "host_memory": {
+        "allocated_blocks": 136879,
+        "page_fault_count": 4234069,
+        "private_commit_bytes": 36761600,
+        "unavailable_reason": null,
+        "working_set_bytes": 48300032
+      },
+      "index": 1,
+      "measurement_overhead_us": 103,
+      "mono_us": 871206927902,
+      "phase": "native_batch_marker",
+      "sequence": 12
+    },
+    {
+      "editor_identity": {
+        "pid": 41584,
+        "process_start": "windows:134344464248690834"
+      },
+      "editor_memory": {
+        "allocated_blocks": null,
+        "page_fault_count": 449827,
+        "private_commit_bytes": 817901568,
+        "unavailable_reason": null,
+        "working_set_bytes": 757252096
+      },
+      "host_identity": {
+        "pid": 27552,
+        "process_start": "windows:134344464174859661"
+      },
+      "host_memory": {
+        "allocated_blocks": 140664,
+        "page_fault_count": 4234117,
+        "private_commit_bytes": 37470208,
+        "unavailable_reason": null,
+        "working_set_bytes": 48496640
+      },
+      "index": 1,
+      "measurement_overhead_us": 64,
+      "mono_us": 871206936583,
+      "phase": "native_validated_before_editor",
+      "sequence": 13
+    },
+    {
+      "editor_identity": {
+        "pid": 41584,
+        "process_start": "windows:134344464248690834"
+      },
+      "editor_memory": {
+        "allocated_blocks": null,
+        "page_fault_count": 449827,
+        "private_commit_bytes": 817901568,
+        "unavailable_reason": null,
+        "working_set_bytes": 757252096
+      },
+      "host_identity": {
+        "pid": 27552,
+        "process_start": "windows:134344464174859661"
+      },
+      "host_memory": {
+        "allocated_blocks": 140687,
+        "page_fault_count": 4234117,
+        "private_commit_bytes": 37470208,
+        "unavailable_reason": null,
+        "working_set_bytes": 48496640
+      },
+      "index": 1,
+      "measurement_overhead_us": 72,
+      "mono_us": 871206937898,
+      "phase": "editor_sample",
+      "sequence": 14
+    },
+    {
+      "editor_identity": {
+        "pid": 41584,
+        "process_start": "windows:134344464248690834"
+      },
+      "editor_memory": {
+        "allocated_blocks": null,
+        "page_fault_count": 449827,
+        "private_commit_bytes": 817901568,
+        "unavailable_reason": null,
+        "working_set_bytes": 757252096
+      },
+      "host_identity": {
+        "pid": 27552,
+        "process_start": "windows:134344464174859661"
+      },
+      "host_memory": {
+        "allocated_blocks": 140753,
+        "page_fault_count": 4234633,
+        "private_commit_bytes": 37470208,
+        "unavailable_reason": null,
+        "working_set_bytes": 48496640
+      },
+      "index": 1,
+      "measurement_overhead_us": 70,
+      "mono_us": 871206983044,
+      "phase": "ack_received",
+      "sequence": 15
+    },
+    {
+      "editor_identity": {
+        "pid": 41584,
+        "process_start": "windows:134344464248690834"
+      },
+      "editor_memory": {
+        "allocated_blocks": null,
+        "page_fault_count": 449827,
+        "private_commit_bytes": 817901568,
+        "unavailable_reason": null,
+        "working_set_bytes": 757252096
+      },
+      "host_identity": {
+        "pid": 27552,
+        "process_start": "windows:134344464174859661"
+      },
+      "host_memory": {
+        "allocated_blocks": 140857,
+        "page_fault_count": 4246951,
+        "private_commit_bytes": 40329216,
+        "unavailable_reason": null,
+        "working_set_bytes": 51257344
+      },
+      "index": 1,
+      "measurement_overhead_us": 140,
+      "mono_us": 871207032758,
+      "phase": "assembly_before",
+      "sequence": 16
+    },
+    {
+      "editor_identity": {
+        "pid": 41584,
+        "process_start": "windows:134344464248690834"
+      },
+      "editor_memory": {
+        "allocated_blocks": null,
+        "page_fault_count": 449827,
+        "private_commit_bytes": 817901568,
+        "unavailable_reason": null,
+        "working_set_bytes": 757252096
+      },
+      "host_identity": {
+        "pid": 27552,
+        "process_start": "windows:134344464174859661"
+      },
+      "host_memory": {
+        "allocated_blocks": 143899,
+        "page_fault_count": 4247767,
+        "private_commit_bytes": 39301120,
+        "unavailable_reason": null,
+        "working_set_bytes": 50929664
+      },
+      "index": 1,
+      "measurement_overhead_us": 86,
+      "mono_us": 871207228905,
+      "phase": "assembly_after",
+      "sequence": 17
+    },
+    {
+      "editor_identity": {
+        "pid": 41584,
+        "process_start": "windows:134344464248690834"
+      },
+      "editor_memory": {
+        "allocated_blocks": null,
+        "page_fault_count": 449827,
+        "private_commit_bytes": 817901568,
+        "unavailable_reason": null,
+        "working_set_bytes": 757252096
+      },
+      "host_identity": {
+        "pid": 27552,
+        "process_start": "windows:134344464174859661"
+      },
+      "host_memory": {
+        "allocated_blocks": 143905,
+        "page_fault_count": 4247863,
+        "private_commit_bytes": 40468480,
+        "unavailable_reason": null,
+        "working_set_bytes": 51322880
+      },
+      "index": 1,
+      "measurement_overhead_us": 61,
+      "mono_us": 871207232630,
+      "phase": "screen_sample",
+      "sequence": 18
+    },
+    {
+      "editor_identity": {
+        "pid": 41584,
+        "process_start": "windows:134344464248690834"
+      },
+      "editor_memory": {
+        "allocated_blocks": null,
+        "page_fault_count": 449827,
+        "private_commit_bytes": 817901568,
+        "unavailable_reason": null,
+        "working_set_bytes": 757252096
+      },
+      "host_identity": {
+        "pid": 27552,
+        "process_start": "windows:134344464174859661"
+      },
+      "host_memory": {
+        "allocated_blocks": 136927,
+        "page_fault_count": 4247863,
+        "private_commit_bytes": 37609472,
+        "unavailable_reason": null,
+        "working_set_bytes": 48562176
+      },
+      "index": 1,
+      "measurement_overhead_us": 85,
+      "mono_us": 871207240269,
+      "phase": "assembly_released_gc",
+      "sequence": 19
+    },
+    {
+      "editor_identity": {
+        "pid": 41584,
+        "process_start": "windows:134344464248690834"
+      },
+      "editor_memory": {
+        "allocated_blocks": null,
+        "page_fault_count": 449827,
+        "private_commit_bytes": 817901568,
+        "unavailable_reason": null,
+        "working_set_bytes": 757252096
+      },
+      "host_identity": {
+        "pid": 27552,
+        "process_start": "windows:134344464174859661"
+      },
+      "host_memory": {
+        "allocated_blocks": 216636,
+        "page_fault_count": 6191989,
+        "private_commit_bytes": 37625856,
+        "unavailable_reason": null,
+        "working_set_bytes": 48484352
+      },
+      "index": 2,
+      "measurement_overhead_us": 75,
+      "mono_us": 871287205475,
+      "phase": "command_completed",
+      "sequence": 20
+    },
+    {
+      "editor_identity": {
+        "pid": 41584,
+        "process_start": "windows:134344464248690834"
+      },
+      "editor_memory": {
+        "allocated_blocks": null,
+        "page_fault_count": 449827,
+        "private_commit_bytes": 817901568,
+        "unavailable_reason": null,
+        "working_set_bytes": 757252096
+      },
+      "host_identity": {
+        "pid": 27552,
+        "process_start": "windows:134344464174859661"
+      },
+      "host_memory": {
+        "allocated_blocks": 137071,
+        "page_fault_count": 6197258,
+        "private_commit_bytes": 36835328,
+        "unavailable_reason": null,
+        "working_set_bytes": 47882240
+      },
+      "index": 2,
+      "measurement_overhead_us": 49,
+      "mono_us": 871287286935,
+      "phase": "command_released_gc",
+      "sequence": 21
+    },
+    {
+      "editor_identity": {
+        "pid": 41584,
+        "process_start": "windows:134344464248690834"
+      },
+      "editor_memory": {
+        "allocated_blocks": null,
+        "page_fault_count": 562018,
+        "private_commit_bytes": 817934336,
+        "unavailable_reason": null,
+        "working_set_bytes": 757346304
+      },
+      "host_identity": {
+        "pid": 27552,
+        "process_start": "windows:134344464174859661"
+      },
+      "host_memory": {
+        "allocated_blocks": 137252,
+        "page_fault_count": 6462740,
+        "private_commit_bytes": 36839424,
+        "unavailable_reason": null,
+        "working_set_bytes": 47886336
+      },
+      "index": 2,
+      "measurement_overhead_us": 169,
+      "mono_us": 871313187117,
+      "phase": "native_batch_marker",
+      "sequence": 22
+    },
+    {
+      "editor_identity": {
+        "pid": 41584,
+        "process_start": "windows:134344464248690834"
+      },
+      "editor_memory": {
+        "allocated_blocks": null,
+        "page_fault_count": 562018,
+        "private_commit_bytes": 817934336,
+        "unavailable_reason": null,
+        "working_set_bytes": 757346304
+      },
+      "host_identity": {
+        "pid": 27552,
+        "process_start": "windows:134344464174859661"
+      },
+      "host_memory": {
+        "allocated_blocks": 141127,
+        "page_fault_count": 6462788,
+        "private_commit_bytes": 37638144,
+        "unavailable_reason": null,
+        "working_set_bytes": 48082944
+      },
+      "index": 2,
+      "measurement_overhead_us": 42,
+      "mono_us": 871313193706,
+      "phase": "native_validated_before_editor",
+      "sequence": 23
+    },
+    {
+      "editor_identity": {
+        "pid": 41584,
+        "process_start": "windows:134344464248690834"
+      },
+      "editor_memory": {
+        "allocated_blocks": null,
+        "page_fault_count": 562018,
+        "private_commit_bytes": 817934336,
+        "unavailable_reason": null,
+        "working_set_bytes": 757346304
+      },
+      "host_identity": {
+        "pid": 27552,
+        "process_start": "windows:134344464174859661"
+      },
+      "host_memory": {
+        "allocated_blocks": 141150,
+        "page_fault_count": 6462788,
+        "private_commit_bytes": 37638144,
+        "unavailable_reason": null,
+        "working_set_bytes": 48082944
+      },
+      "index": 2,
+      "measurement_overhead_us": 37,
+      "mono_us": 871313194535,
+      "phase": "editor_sample",
+      "sequence": 24
+    },
+    {
+      "editor_identity": {
+        "pid": 41584,
+        "process_start": "windows:134344464248690834"
+      },
+      "editor_memory": {
+        "allocated_blocks": null,
+        "page_fault_count": 562018,
+        "private_commit_bytes": 817934336,
+        "unavailable_reason": null,
+        "working_set_bytes": 757346304
+      },
+      "host_identity": {
+        "pid": 27552,
+        "process_start": "windows:134344464174859661"
+      },
+      "host_memory": {
+        "allocated_blocks": 141216,
+        "page_fault_count": 6463302,
+        "private_commit_bytes": 37638144,
+        "unavailable_reason": null,
+        "working_set_bytes": 48082944
+      },
+      "index": 2,
+      "measurement_overhead_us": 111,
+      "mono_us": 871313236231,
+      "phase": "ack_received",
+      "sequence": 25
+    },
+    {
+      "editor_identity": {
+        "pid": 41584,
+        "process_start": "windows:134344464248690834"
+      },
+      "editor_memory": {
+        "allocated_blocks": null,
+        "page_fault_count": 562018,
+        "private_commit_bytes": 817934336,
+        "unavailable_reason": null,
+        "working_set_bytes": 757346304
+      },
+      "host_identity": {
+        "pid": 27552,
+        "process_start": "windows:134344464174859661"
+      },
+      "host_memory": {
+        "allocated_blocks": 141321,
+        "page_fault_count": 6475621,
+        "private_commit_bytes": 40718336,
+        "unavailable_reason": null,
+        "working_set_bytes": 51064832
+      },
+      "index": 2,
+      "measurement_overhead_us": 76,
+      "mono_us": 871313283968,
+      "phase": "assembly_before",
+      "sequence": 26
+    },
+    {
+      "editor_identity": {
+        "pid": 41584,
+        "process_start": "windows:134344464248690834"
+      },
+      "editor_memory": {
+        "allocated_blocks": null,
+        "page_fault_count": 562018,
+        "private_commit_bytes": 817934336,
+        "unavailable_reason": null,
+        "working_set_bytes": 757346304
+      },
+      "host_identity": {
+        "pid": 27552,
+        "process_start": "windows:134344464174859661"
+      },
+      "host_memory": {
+        "allocated_blocks": 144362,
+        "page_fault_count": 6476526,
+        "private_commit_bytes": 39567360,
+        "unavailable_reason": null,
+        "working_set_bytes": 50798592
+      },
+      "index": 2,
+      "measurement_overhead_us": 56,
+      "mono_us": 871313456401,
+      "phase": "assembly_after",
+      "sequence": 27
+    },
+    {
+      "editor_identity": {
+        "pid": 41584,
+        "process_start": "windows:134344464248690834"
+      },
+      "editor_memory": {
+        "allocated_blocks": null,
+        "page_fault_count": 562018,
+        "private_commit_bytes": 817934336,
+        "unavailable_reason": null,
+        "working_set_bytes": 757346304
+      },
+      "host_identity": {
+        "pid": 27552,
+        "process_start": "windows:134344464174859661"
+      },
+      "host_memory": {
+        "allocated_blocks": 144369,
+        "page_fault_count": 6476620,
+        "private_commit_bytes": 40796160,
+        "unavailable_reason": null,
+        "working_set_bytes": 51183616
+      },
+      "index": 2,
+      "measurement_overhead_us": 66,
+      "mono_us": 871313458578,
+      "phase": "screen_sample",
+      "sequence": 28
+    },
+    {
+      "editor_identity": {
+        "pid": 41584,
+        "process_start": "windows:134344464248690834"
+      },
+      "editor_memory": {
+        "allocated_blocks": null,
+        "page_fault_count": 562018,
+        "private_commit_bytes": 817934336,
+        "unavailable_reason": null,
+        "working_set_bytes": 757346304
+      },
+      "host_identity": {
+        "pid": 27552,
+        "process_start": "windows:134344464174859661"
+      },
+      "host_memory": {
+        "allocated_blocks": 137303,
+        "page_fault_count": 6476620,
+        "private_commit_bytes": 37715968,
+        "unavailable_reason": null,
+        "working_set_bytes": 48201728
+      },
+      "index": 2,
+      "measurement_overhead_us": 55,
+      "mono_us": 871313463371,
+      "phase": "assembly_released_gc",
+      "sequence": 29
+    },
+    {
+      "editor_identity": {
+        "pid": 41584,
+        "process_start": "windows:134344464248690834"
+      },
+      "editor_memory": {
+        "allocated_blocks": null,
+        "page_fault_count": 562087,
+        "private_commit_bytes": 818008064,
+        "unavailable_reason": null,
+        "working_set_bytes": 748736512
+      },
+      "host_identity": {
+        "pid": 27552,
+        "process_start": "windows:134344464174859661"
+      },
+      "host_memory": {
+        "allocated_blocks": 217065,
+        "page_fault_count": 8417700,
+        "private_commit_bytes": 37261312,
+        "unavailable_reason": null,
+        "working_set_bytes": 47411200
+      },
+      "index": 3,
+      "measurement_overhead_us": 42,
+      "mono_us": 871385402791,
+      "phase": "command_completed",
+      "sequence": 30
+    },
+    {
+      "editor_identity": {
+        "pid": 41584,
+        "process_start": "windows:134344464248690834"
+      },
+      "editor_memory": {
+        "allocated_blocks": null,
+        "page_fault_count": 562087,
+        "private_commit_bytes": 818008064,
+        "unavailable_reason": null,
+        "working_set_bytes": 748736512
+      },
+      "host_identity": {
+        "pid": 27552,
+        "process_start": "windows:134344464174859661"
+      },
+      "host_memory": {
+        "allocated_blocks": 137260,
+        "page_fault_count": 8422458,
+        "private_commit_bytes": 38076416,
+        "unavailable_reason": null,
+        "working_set_bytes": 49086464
+      },
+      "index": 3,
+      "measurement_overhead_us": 51,
+      "mono_us": 871385467924,
+      "phase": "command_released_gc",
+      "sequence": 31
+    },
+    {
+      "editor_identity": {
+        "pid": 41584,
+        "process_start": "windows:134344464248690834"
+      },
+      "editor_memory": {
+        "allocated_blocks": null,
+        "page_fault_count": 674316,
+        "private_commit_bytes": 818118656,
+        "unavailable_reason": null,
+        "working_set_bytes": 708853760
+      },
+      "host_identity": {
+        "pid": 27552,
+        "process_start": "windows:134344464174859661"
+      },
+      "host_memory": {
+        "allocated_blocks": 137442,
+        "page_fault_count": 8691280,
+        "private_commit_bytes": 38076416,
+        "unavailable_reason": null,
+        "working_set_bytes": 48799744
+      },
+      "index": 3,
+      "measurement_overhead_us": 106,
+      "mono_us": 871411820057,
+      "phase": "native_batch_marker",
+      "sequence": 32
+    },
+    {
+      "editor_identity": {
+        "pid": 41584,
+        "process_start": "windows:134344464248690834"
+      },
+      "editor_memory": {
+        "allocated_blocks": null,
+        "page_fault_count": 674316,
+        "private_commit_bytes": 818118656,
+        "unavailable_reason": null,
+        "working_set_bytes": 708853760
+      },
+      "host_identity": {
+        "pid": 27552,
+        "process_start": "windows:134344464174859661"
+      },
+      "host_memory": {
+        "allocated_blocks": 141428,
+        "page_fault_count": 8691329,
+        "private_commit_bytes": 38281216,
+        "unavailable_reason": null,
+        "working_set_bytes": 49000448
+      },
+      "index": 3,
+      "measurement_overhead_us": 45,
+      "mono_us": 871411825185,
+      "phase": "native_validated_before_editor",
+      "sequence": 33
+    },
+    {
+      "editor_identity": {
+        "pid": 41584,
+        "process_start": "windows:134344464248690834"
+      },
+      "editor_memory": {
+        "allocated_blocks": null,
+        "page_fault_count": 674316,
+        "private_commit_bytes": 818118656,
+        "unavailable_reason": null,
+        "working_set_bytes": 708853760
+      },
+      "host_identity": {
+        "pid": 27552,
+        "process_start": "windows:134344464174859661"
+      },
+      "host_memory": {
+        "allocated_blocks": 141451,
+        "page_fault_count": 8691329,
+        "private_commit_bytes": 38281216,
+        "unavailable_reason": null,
+        "working_set_bytes": 49000448
+      },
+      "index": 3,
+      "measurement_overhead_us": 32,
+      "mono_us": 871411825829,
+      "phase": "editor_sample",
+      "sequence": 34
+    },
+    {
+      "editor_identity": {
+        "pid": 41584,
+        "process_start": "windows:134344464248690834"
+      },
+      "editor_memory": {
+        "allocated_blocks": null,
+        "page_fault_count": 674316,
+        "private_commit_bytes": 818118656,
+        "unavailable_reason": null,
+        "working_set_bytes": 708853760
+      },
+      "host_identity": {
+        "pid": 27552,
+        "process_start": "windows:134344464174859661"
+      },
+      "host_memory": {
+        "allocated_blocks": 141517,
+        "page_fault_count": 8691843,
+        "private_commit_bytes": 38281216,
+        "unavailable_reason": null,
+        "working_set_bytes": 49000448
+      },
+      "index": 3,
+      "measurement_overhead_us": 75,
+      "mono_us": 871411865118,
+      "phase": "ack_received",
+      "sequence": 35
+    },
+    {
+      "editor_identity": {
+        "pid": 41584,
+        "process_start": "windows:134344464248690834"
+      },
+      "editor_memory": {
+        "allocated_blocks": null,
+        "page_fault_count": 674316,
+        "private_commit_bytes": 818118656,
+        "unavailable_reason": null,
+        "working_set_bytes": 708853760
+      },
+      "host_identity": {
+        "pid": 27552,
+        "process_start": "windows:134344464174859661"
+      },
+      "host_memory": {
+        "allocated_blocks": 141621,
+        "page_fault_count": 8704161,
+        "private_commit_bytes": 41365504,
+        "unavailable_reason": null,
+        "working_set_bytes": 51986432
+      },
+      "index": 3,
+      "measurement_overhead_us": 46,
+      "mono_us": 871411902985,
+      "phase": "assembly_before",
+      "sequence": 36
+    },
+    {
+      "editor_identity": {
+        "pid": 41584,
+        "process_start": "windows:134344464248690834"
+      },
+      "editor_memory": {
+        "allocated_blocks": null,
+        "page_fault_count": 674316,
+        "private_commit_bytes": 818118656,
+        "unavailable_reason": null,
+        "working_set_bytes": 708853760
+      },
+      "host_identity": {
+        "pid": 27552,
+        "process_start": "windows:134344464174859661"
+      },
+      "host_memory": {
+        "allocated_blocks": 144663,
+        "page_fault_count": 8705078,
+        "private_commit_bytes": 40747008,
+        "unavailable_reason": null,
+        "working_set_bytes": 51609600
+      },
+      "index": 3,
+      "measurement_overhead_us": 84,
+      "mono_us": 871412056500,
+      "phase": "assembly_after",
+      "sequence": 37
+    },
+    {
+      "editor_identity": {
+        "pid": 41584,
+        "process_start": "windows:134344464248690834"
+      },
+      "editor_memory": {
+        "allocated_blocks": null,
+        "page_fault_count": 674316,
+        "private_commit_bytes": 818118656,
+        "unavailable_reason": null,
+        "working_set_bytes": 708853760
+      },
+      "host_identity": {
+        "pid": 27552,
+        "process_start": "windows:134344464174859661"
+      },
+      "host_memory": {
+        "allocated_blocks": 144670,
+        "page_fault_count": 8705182,
+        "private_commit_bytes": 42037248,
+        "unavailable_reason": null,
+        "working_set_bytes": 52035584
+      },
+      "index": 3,
+      "measurement_overhead_us": 62,
+      "mono_us": 871412058763,
+      "phase": "screen_sample",
+      "sequence": 38
+    },
+    {
+      "editor_identity": {
+        "pid": 41584,
+        "process_start": "windows:134344464248690834"
+      },
+      "editor_memory": {
+        "allocated_blocks": null,
+        "page_fault_count": 674316,
+        "private_commit_bytes": 818118656,
+        "unavailable_reason": null,
+        "working_set_bytes": 708853760
+      },
+      "host_identity": {
+        "pid": 27552,
+        "process_start": "windows:134344464174859661"
+      },
+      "host_memory": {
+        "allocated_blocks": 137492,
+        "page_fault_count": 8705182,
+        "private_commit_bytes": 38952960,
+        "unavailable_reason": null,
+        "working_set_bytes": 49049600
+      },
+      "index": 3,
+      "measurement_overhead_us": 52,
+      "mono_us": 871412064927,
+      "phase": "assembly_released_gc",
+      "sequence": 39
+    },
+    {
+      "editor_identity": {
+        "pid": 41584,
+        "process_start": "windows:134344464248690834"
+      },
+      "editor_memory": {
+        "allocated_blocks": null,
+        "page_fault_count": 676445,
+        "private_commit_bytes": 844525568,
+        "unavailable_reason": null,
+        "working_set_bytes": 592457728
+      },
+      "host_identity": {
+        "pid": 27552,
+        "process_start": "windows:134344464174859661"
+      },
+      "host_memory": {
+        "allocated_blocks": 219543,
+        "page_fault_count": 10724879,
+        "private_commit_bytes": 38961152,
+        "unavailable_reason": null,
+        "working_set_bytes": 47853568
+      },
+      "index": 4,
+      "measurement_overhead_us": 183,
+      "mono_us": 871494576670,
+      "phase": "command_completed",
+      "sequence": 40
+    },
+    {
+      "editor_identity": {
+        "pid": 41584,
+        "process_start": "windows:134344464248690834"
+      },
+      "editor_memory": {
+        "allocated_blocks": null,
+        "page_fault_count": 676445,
+        "private_commit_bytes": 844525568,
+        "unavailable_reason": null,
+        "working_set_bytes": 592457728
+      },
+      "host_identity": {
+        "pid": 27552,
+        "process_start": "windows:134344464174859661"
+      },
+      "host_memory": {
+        "allocated_blocks": 137624,
+        "page_fault_count": 10729843,
+        "private_commit_bytes": 37994496,
+        "unavailable_reason": null,
+        "working_set_bytes": 47550464
+      },
+      "index": 4,
+      "measurement_overhead_us": 77,
+      "mono_us": 871494652095,
+      "phase": "command_released_gc",
+      "sequence": 41
+    },
+    {
+      "editor_identity": {
+        "pid": 41584,
+        "process_start": "windows:134344464248690834"
+      },
+      "editor_memory": {
+        "allocated_blocks": null,
+        "page_fault_count": 788693,
+        "private_commit_bytes": 818036736,
+        "unavailable_reason": null,
+        "working_set_bytes": 566095872
+      },
+      "host_identity": {
+        "pid": 27552,
+        "process_start": "windows:134344464174859661"
+      },
+      "host_memory": {
+        "allocated_blocks": 137807,
+        "page_fault_count": 10993011,
+        "private_commit_bytes": 37994496,
+        "unavailable_reason": null,
+        "working_set_bytes": 47349760
+      },
+      "index": 4,
+      "measurement_overhead_us": 85,
+      "mono_us": 871519400421,
+      "phase": "native_batch_marker",
+      "sequence": 42
+    },
+    {
+      "editor_identity": {
+        "pid": 41584,
+        "process_start": "windows:134344464248690834"
+      },
+      "editor_memory": {
+        "allocated_blocks": null,
+        "page_fault_count": 788693,
+        "private_commit_bytes": 818036736,
+        "unavailable_reason": null,
+        "working_set_bytes": 566095872
+      },
+      "host_identity": {
+        "pid": 27552,
+        "process_start": "windows:134344464174859661"
+      },
+      "host_memory": {
+        "allocated_blocks": 141792,
+        "page_fault_count": 10993059,
+        "private_commit_bytes": 38887424,
+        "unavailable_reason": null,
+        "working_set_bytes": 47546368
+      },
+      "index": 4,
+      "measurement_overhead_us": 41,
+      "mono_us": 871519405096,
+      "phase": "native_validated_before_editor",
+      "sequence": 43
+    },
+    {
+      "editor_identity": {
+        "pid": 41584,
+        "process_start": "windows:134344464248690834"
+      },
+      "editor_memory": {
+        "allocated_blocks": null,
+        "page_fault_count": 788693,
+        "private_commit_bytes": 818036736,
+        "unavailable_reason": null,
+        "working_set_bytes": 566095872
+      },
+      "host_identity": {
+        "pid": 27552,
+        "process_start": "windows:134344464174859661"
+      },
+      "host_memory": {
+        "allocated_blocks": 141815,
+        "page_fault_count": 10993059,
+        "private_commit_bytes": 38887424,
+        "unavailable_reason": null,
+        "working_set_bytes": 47546368
+      },
+      "index": 4,
+      "measurement_overhead_us": 33,
+      "mono_us": 871519405932,
+      "phase": "editor_sample",
+      "sequence": 44
+    },
+    {
+      "editor_identity": {
+        "pid": 41584,
+        "process_start": "windows:134344464248690834"
+      },
+      "editor_memory": {
+        "allocated_blocks": null,
+        "page_fault_count": 788693,
+        "private_commit_bytes": 818036736,
+        "unavailable_reason": null,
+        "working_set_bytes": 566095872
+      },
+      "host_identity": {
+        "pid": 27552,
+        "process_start": "windows:134344464174859661"
+      },
+      "host_memory": {
+        "allocated_blocks": 141881,
+        "page_fault_count": 10993573,
+        "private_commit_bytes": 38887424,
+        "unavailable_reason": null,
+        "working_set_bytes": 47546368
+      },
+      "index": 4,
+      "measurement_overhead_us": 56,
+      "mono_us": 871519445858,
+      "phase": "ack_received",
+      "sequence": 45
+    },
+    {
+      "editor_identity": {
+        "pid": 41584,
+        "process_start": "windows:134344464248690834"
+      },
+      "editor_memory": {
+        "allocated_blocks": null,
+        "page_fault_count": 788693,
+        "private_commit_bytes": 818036736,
+        "unavailable_reason": null,
+        "working_set_bytes": 566095872
+      },
+      "host_identity": {
+        "pid": 27552,
+        "process_start": "windows:134344464174859661"
+      },
+      "host_memory": {
+        "allocated_blocks": 141986,
+        "page_fault_count": 11005891,
+        "private_commit_bytes": 42061824,
+        "unavailable_reason": null,
+        "working_set_bytes": 50622464
+      },
+      "index": 4,
+      "measurement_overhead_us": 71,
+      "mono_us": 871519525601,
+      "phase": "assembly_before",
+      "sequence": 46
+    },
+    {
+      "editor_identity": {
+        "pid": 41584,
+        "process_start": "windows:134344464248690834"
+      },
+      "editor_memory": {
+        "allocated_blocks": null,
+        "page_fault_count": 788693,
+        "private_commit_bytes": 818036736,
+        "unavailable_reason": null,
+        "working_set_bytes": 566095872
+      },
+      "host_identity": {
+        "pid": 27552,
+        "process_start": "windows:134344464174859661"
+      },
+      "host_memory": {
+        "allocated_blocks": 145027,
+        "page_fault_count": 11006769,
+        "private_commit_bytes": 41066496,
+        "unavailable_reason": null,
+        "working_set_bytes": 50298880
+      },
+      "index": 4,
+      "measurement_overhead_us": 108,
+      "mono_us": 871519726981,
+      "phase": "assembly_after",
+      "sequence": 47
+    },
+    {
+      "editor_identity": {
+        "pid": 41584,
+        "process_start": "windows:134344464248690834"
+      },
+      "editor_memory": {
+        "allocated_blocks": null,
+        "page_fault_count": 788693,
+        "private_commit_bytes": 818036736,
+        "unavailable_reason": null,
+        "working_set_bytes": 566095872
+      },
+      "host_identity": {
+        "pid": 27552,
+        "process_start": "windows:134344464174859661"
+      },
+      "host_memory": {
+        "allocated_blocks": 145034,
+        "page_fault_count": 11006867,
+        "private_commit_bytes": 42176512,
+        "unavailable_reason": null,
+        "working_set_bytes": 50700288
+      },
+      "index": 4,
+      "measurement_overhead_us": 98,
+      "mono_us": 871519731309,
+      "phase": "screen_sample",
+      "sequence": 48
+    },
+    {
+      "editor_identity": {
+        "pid": 41584,
+        "process_start": "windows:134344464248690834"
+      },
+      "editor_memory": {
+        "allocated_blocks": null,
+        "page_fault_count": 788693,
+        "private_commit_bytes": 818036736,
+        "unavailable_reason": null,
+        "working_set_bytes": 566095872
+      },
+      "host_identity": {
+        "pid": 27552,
+        "process_start": "windows:134344464174859661"
+      },
+      "host_memory": {
+        "allocated_blocks": 137890,
+        "page_fault_count": 11006867,
+        "private_commit_bytes": 39002112,
+        "unavailable_reason": null,
+        "working_set_bytes": 47624192
+      },
+      "index": 4,
+      "measurement_overhead_us": 84,
+      "mono_us": 871519741663,
+      "phase": "assembly_released_gc",
+      "sequence": 49
+    },
+    {
+      "editor_identity": {
+        "pid": 41584,
+        "process_start": "windows:134344464248690834"
+      },
+      "editor_memory": {
+        "allocated_blocks": null,
+        "page_fault_count": 788694,
+        "private_commit_bytes": 817967104,
+        "unavailable_reason": null,
+        "working_set_bytes": 479809536
+      },
+      "host_identity": {
+        "pid": 27552,
+        "process_start": "windows:134344464174859661"
+      },
+      "host_memory": {
+        "allocated_blocks": 222505,
+        "page_fault_count": 13207764,
+        "private_commit_bytes": 39133184,
+        "unavailable_reason": null,
+        "working_set_bytes": 47669248
+      },
+      "index": 5,
+      "measurement_overhead_us": 82,
+      "mono_us": 871606141230,
+      "phase": "command_completed",
+      "sequence": 50
+    },
+    {
+      "editor_identity": {
+        "pid": 41584,
+        "process_start": "windows:134344464248690834"
+      },
+      "editor_memory": {
+        "allocated_blocks": null,
+        "page_fault_count": 788694,
+        "private_commit_bytes": 817967104,
+        "unavailable_reason": null,
+        "working_set_bytes": 479809536
+      },
+      "host_identity": {
+        "pid": 27552,
+        "process_start": "windows:134344464174859661"
+      },
+      "host_memory": {
+        "allocated_blocks": 137857,
+        "page_fault_count": 13212438,
+        "private_commit_bytes": 38035456,
+        "unavailable_reason": null,
+        "working_set_bytes": 47013888
+      },
+      "index": 5,
+      "measurement_overhead_us": 52,
+      "mono_us": 871606209770,
+      "phase": "command_released_gc",
+      "sequence": 51
+    },
+    {
+      "editor_identity": {
+        "pid": 41584,
+        "process_start": "windows:134344464248690834"
+      },
+      "editor_memory": {
+        "allocated_blocks": null,
+        "page_fault_count": 900874,
+        "private_commit_bytes": 818003968,
+        "unavailable_reason": null,
+        "working_set_bytes": 450617344
+      },
+      "host_identity": {
+        "pid": 27552,
+        "process_start": "windows:134344464174859661"
+      },
+      "host_memory": {
+        "allocated_blocks": 138040,
+        "page_fault_count": 13488199,
+        "private_commit_bytes": 38035456,
+        "unavailable_reason": null,
+        "working_set_bytes": 46972928
+      },
+      "index": 5,
+      "measurement_overhead_us": 106,
+      "mono_us": 871632709753,
+      "phase": "native_batch_marker",
+      "sequence": 52
+    },
+    {
+      "editor_identity": {
+        "pid": 41584,
+        "process_start": "windows:134344464248690834"
+      },
+      "editor_memory": {
+        "allocated_blocks": null,
+        "page_fault_count": 900874,
+        "private_commit_bytes": 818003968,
+        "unavailable_reason": null,
+        "working_set_bytes": 450617344
+      },
+      "host_identity": {
+        "pid": 27552,
+        "process_start": "windows:134344464174859661"
+      },
+      "host_memory": {
+        "allocated_blocks": 142026,
+        "page_fault_count": 13488247,
+        "private_commit_bytes": 39112704,
+        "unavailable_reason": null,
+        "working_set_bytes": 47169536
+      },
+      "index": 5,
+      "measurement_overhead_us": 60,
+      "mono_us": 871632715898,
+      "phase": "native_validated_before_editor",
+      "sequence": 53
+    },
+    {
+      "editor_identity": {
+        "pid": 41584,
+        "process_start": "windows:134344464248690834"
+      },
+      "editor_memory": {
+        "allocated_blocks": null,
+        "page_fault_count": 900874,
+        "private_commit_bytes": 818003968,
+        "unavailable_reason": null,
+        "working_set_bytes": 450617344
+      },
+      "host_identity": {
+        "pid": 27552,
+        "process_start": "windows:134344464174859661"
+      },
+      "host_memory": {
+        "allocated_blocks": 142049,
+        "page_fault_count": 13488247,
+        "private_commit_bytes": 39112704,
+        "unavailable_reason": null,
+        "working_set_bytes": 47169536
+      },
+      "index": 5,
+      "measurement_overhead_us": 52,
+      "mono_us": 871632717069,
+      "phase": "editor_sample",
+      "sequence": 54
+    },
+    {
+      "editor_identity": {
+        "pid": 41584,
+        "process_start": "windows:134344464248690834"
+      },
+      "editor_memory": {
+        "allocated_blocks": null,
+        "page_fault_count": 900874,
+        "private_commit_bytes": 818003968,
+        "unavailable_reason": null,
+        "working_set_bytes": 450617344
+      },
+      "host_identity": {
+        "pid": 27552,
+        "process_start": "windows:134344464174859661"
+      },
+      "host_memory": {
+        "allocated_blocks": 142115,
+        "page_fault_count": 13488761,
+        "private_commit_bytes": 39112704,
+        "unavailable_reason": null,
+        "working_set_bytes": 47169536
+      },
+      "index": 5,
+      "measurement_overhead_us": 60,
+      "mono_us": 871632758097,
+      "phase": "ack_received",
+      "sequence": 55
+    },
+    {
+      "editor_identity": {
+        "pid": 41584,
+        "process_start": "windows:134344464248690834"
+      },
+      "editor_memory": {
+        "allocated_blocks": null,
+        "page_fault_count": 900874,
+        "private_commit_bytes": 818003968,
+        "unavailable_reason": null,
+        "working_set_bytes": 450617344
+      },
+      "host_identity": {
+        "pid": 27552,
+        "process_start": "windows:134344464174859661"
+      },
+      "host_memory": {
+        "allocated_blocks": 142219,
+        "page_fault_count": 13501079,
+        "private_commit_bytes": 42524672,
+        "unavailable_reason": null,
+        "working_set_bytes": 50458624
+      },
+      "index": 5,
+      "measurement_overhead_us": 50,
+      "mono_us": 871632800637,
+      "phase": "assembly_before",
+      "sequence": 56
+    },
+    {
+      "editor_identity": {
+        "pid": 41584,
+        "process_start": "windows:134344464248690834"
+      },
+      "editor_memory": {
+        "allocated_blocks": null,
+        "page_fault_count": 900874,
+        "private_commit_bytes": 818003968,
+        "unavailable_reason": null,
+        "working_set_bytes": 450617344
+      },
+      "host_identity": {
+        "pid": 27552,
+        "process_start": "windows:134344464174859661"
+      },
+      "host_memory": {
+        "allocated_blocks": 145263,
+        "page_fault_count": 13502021,
+        "private_commit_bytes": 41254912,
+        "unavailable_reason": null,
+        "working_set_bytes": 50114560
+      },
+      "index": 5,
+      "measurement_overhead_us": 72,
+      "mono_us": 871632989911,
+      "phase": "assembly_after",
+      "sequence": 57
+    },
+    {
+      "editor_identity": {
+        "pid": 41584,
+        "process_start": "windows:134344464248690834"
+      },
+      "editor_memory": {
+        "allocated_blocks": null,
+        "page_fault_count": 900874,
+        "private_commit_bytes": 818003968,
+        "unavailable_reason": null,
+        "working_set_bytes": 450617344
+      },
+      "host_identity": {
+        "pid": 27552,
+        "process_start": "windows:134344464174859661"
+      },
+      "host_memory": {
+        "allocated_blocks": 145270,
+        "page_fault_count": 13502130,
+        "private_commit_bytes": 42713088,
+        "unavailable_reason": null,
+        "working_set_bytes": 50561024
+      },
+      "index": 5,
+      "measurement_overhead_us": 64,
+      "mono_us": 871632992753,
+      "phase": "screen_sample",
+      "sequence": 58
+    },
+    {
+      "editor_identity": {
+        "pid": 41584,
+        "process_start": "windows:134344464248690834"
+      },
+      "editor_memory": {
+        "allocated_blocks": null,
+        "page_fault_count": 900874,
+        "private_commit_bytes": 818003968,
+        "unavailable_reason": null,
+        "working_set_bytes": 450617344
+      },
+      "host_identity": {
+        "pid": 27552,
+        "process_start": "windows:134344464174859661"
+      },
+      "host_memory": {
+        "allocated_blocks": 138092,
+        "page_fault_count": 13502130,
+        "private_commit_bytes": 39325696,
+        "unavailable_reason": null,
+        "working_set_bytes": 47271936
+      },
+      "index": 5,
+      "measurement_overhead_us": 57,
+      "mono_us": 871632999681,
+      "phase": "assembly_released_gc",
+      "sequence": 59
+    },
+    {
+      "editor_identity": {
+        "pid": 41584,
+        "process_start": "windows:134344464248690834"
+      },
+      "editor_memory": {
+        "allocated_blocks": null,
+        "page_fault_count": 900891,
+        "private_commit_bytes": 817999872,
+        "unavailable_reason": null,
+        "working_set_bytes": 364720128
+      },
+      "host_identity": {
+        "pid": 27552,
+        "process_start": "windows:134344464174859661"
+      },
+      "host_memory": {
+        "allocated_blocks": 221526,
+        "page_fault_count": 15667641,
+        "private_commit_bytes": 38363136,
+        "unavailable_reason": null,
+        "working_set_bytes": 41365504
+      },
+      "index": 6,
+      "measurement_overhead_us": 43,
+      "mono_us": 871720267741,
+      "phase": "command_completed",
+      "sequence": 60
+    },
+    {
+      "editor_identity": {
+        "pid": 41584,
+        "process_start": "windows:134344464248690834"
+      },
+      "editor_memory": {
+        "allocated_blocks": null,
+        "page_fault_count": 900891,
+        "private_commit_bytes": 817999872,
+        "unavailable_reason": null,
+        "working_set_bytes": 364720128
+      },
+      "host_identity": {
+        "pid": 27552,
+        "process_start": "windows:134344464174859661"
+      },
+      "host_memory": {
+        "allocated_blocks": 138238,
+        "page_fault_count": 15672823,
+        "private_commit_bytes": 38055936,
+        "unavailable_reason": null,
+        "working_set_bytes": 41209856
+      },
+      "index": 6,
+      "measurement_overhead_us": 49,
+      "mono_us": 871720335307,
+      "phase": "command_released_gc",
+      "sequence": 61
+    },
+    {
+      "editor_identity": {
+        "pid": 41584,
+        "process_start": "windows:134344464248690834"
+      },
+      "editor_memory": {
+        "allocated_blocks": null,
+        "page_fault_count": 1014342,
+        "private_commit_bytes": 821706752,
+        "unavailable_reason": null,
+        "working_set_bytes": 350851072
+      },
+      "host_identity": {
+        "pid": 27552,
+        "process_start": "windows:134344464174859661"
+      },
+      "host_memory": {
+        "allocated_blocks": 138420,
+        "page_fault_count": 15960410,
+        "private_commit_bytes": 38076416,
+        "unavailable_reason": null,
+        "working_set_bytes": 40157184
+      },
+      "index": 6,
+      "measurement_overhead_us": 88,
+      "mono_us": 871749058409,
+      "phase": "native_batch_marker",
+      "sequence": 62
+    },
+    {
+      "editor_identity": {
+        "pid": 41584,
+        "process_start": "windows:134344464248690834"
+      },
+      "editor_memory": {
+        "allocated_blocks": null,
+        "page_fault_count": 1014342,
+        "private_commit_bytes": 821706752,
+        "unavailable_reason": null,
+        "working_set_bytes": 350851072
+      },
+      "host_identity": {
+        "pid": 27552,
+        "process_start": "windows:134344464174859661"
+      },
+      "host_memory": {
+        "allocated_blocks": 142405,
+        "page_fault_count": 15960442,
+        "private_commit_bytes": 38203392,
+        "unavailable_reason": null,
+        "working_set_bytes": 40288256
+      },
+      "index": 6,
+      "measurement_overhead_us": 84,
+      "mono_us": 871749066943,
+      "phase": "native_validated_before_editor",
+      "sequence": 63
+    },
+    {
+      "editor_identity": {
+        "pid": 41584,
+        "process_start": "windows:134344464248690834"
+      },
+      "editor_memory": {
+        "allocated_blocks": null,
+        "page_fault_count": 1014342,
+        "private_commit_bytes": 821706752,
+        "unavailable_reason": null,
+        "working_set_bytes": 350851072
+      },
+      "host_identity": {
+        "pid": 27552,
+        "process_start": "windows:134344464174859661"
+      },
+      "host_memory": {
+        "allocated_blocks": 142428,
+        "page_fault_count": 15960442,
+        "private_commit_bytes": 38203392,
+        "unavailable_reason": null,
+        "working_set_bytes": 40288256
+      },
+      "index": 6,
+      "measurement_overhead_us": 73,
+      "mono_us": 871749070937,
+      "phase": "editor_sample",
+      "sequence": 64
+    },
+    {
+      "editor_identity": {
+        "pid": 41584,
+        "process_start": "windows:134344464248690834"
+      },
+      "editor_memory": {
+        "allocated_blocks": null,
+        "page_fault_count": 1014342,
+        "private_commit_bytes": 821706752,
+        "unavailable_reason": null,
+        "working_set_bytes": 350027776
+      },
+      "host_identity": {
+        "pid": 27552,
+        "process_start": "windows:134344464174859661"
+      },
+      "host_memory": {
+        "allocated_blocks": 142498,
+        "page_fault_count": 15960699,
+        "private_commit_bytes": 38203392,
+        "unavailable_reason": null,
+        "working_set_bytes": 40288256
+      },
+      "index": 6,
+      "measurement_overhead_us": 79,
+      "mono_us": 871749128737,
+      "phase": "ack_received",
+      "sequence": 65
+    },
+    {
+      "editor_identity": {
+        "pid": 41584,
+        "process_start": "windows:134344464248690834"
+      },
+      "editor_memory": {
+        "allocated_blocks": null,
+        "page_fault_count": 1014342,
+        "private_commit_bytes": 821706752,
+        "unavailable_reason": null,
+        "working_set_bytes": 350027776
+      },
+      "host_identity": {
+        "pid": 27552,
+        "process_start": "windows:134344464174859661"
+      },
+      "host_memory": {
+        "allocated_blocks": 142601,
+        "page_fault_count": 15973021,
+        "private_commit_bytes": 41549824,
+        "unavailable_reason": null,
+        "working_set_bytes": 43552768
+      },
+      "index": 6,
+      "measurement_overhead_us": 70,
+      "mono_us": 871749178376,
+      "phase": "assembly_before",
+      "sequence": 66
+    },
+    {
+      "editor_identity": {
+        "pid": 41584,
+        "process_start": "windows:134344464248690834"
+      },
+      "editor_memory": {
+        "allocated_blocks": null,
+        "page_fault_count": 1014342,
+        "private_commit_bytes": 821706752,
+        "unavailable_reason": null,
+        "working_set_bytes": 350027776
+      },
+      "host_identity": {
+        "pid": 27552,
+        "process_start": "windows:134344464174859661"
+      },
+      "host_memory": {
+        "allocated_blocks": 145640,
+        "page_fault_count": 15974018,
+        "private_commit_bytes": 40968192,
+        "unavailable_reason": null,
+        "working_set_bytes": 43147264
+      },
+      "index": 6,
+      "measurement_overhead_us": 90,
+      "mono_us": 871749448392,
+      "phase": "assembly_after",
+      "sequence": 67
+    },
+    {
+      "editor_identity": {
+        "pid": 41584,
+        "process_start": "windows:134344464248690834"
+      },
+      "editor_memory": {
+        "allocated_blocks": null,
+        "page_fault_count": 1014342,
+        "private_commit_bytes": 821706752,
+        "unavailable_reason": null,
+        "working_set_bytes": 350027776
+      },
+      "host_identity": {
+        "pid": 27552,
+        "process_start": "windows:134344464174859661"
+      },
+      "host_memory": {
+        "allocated_blocks": 145646,
+        "page_fault_count": 15974123,
+        "private_commit_bytes": 42500096,
+        "unavailable_reason": null,
+        "working_set_bytes": 43577344
+      },
+      "index": 6,
+      "measurement_overhead_us": 806,
+      "mono_us": 871749451778,
+      "phase": "screen_sample",
+      "sequence": 68
+    },
+    {
+      "editor_identity": {
+        "pid": 41584,
+        "process_start": "windows:134344464248690834"
+      },
+      "editor_memory": {
+        "allocated_blocks": null,
+        "page_fault_count": 1014342,
+        "private_commit_bytes": 821706752,
+        "unavailable_reason": null,
+        "working_set_bytes": 350027776
+      },
+      "host_identity": {
+        "pid": 27552,
+        "process_start": "windows:134344464174859661"
+      },
+      "host_memory": {
+        "allocated_blocks": 138476,
+        "page_fault_count": 15974123,
+        "private_commit_bytes": 39153664,
+        "unavailable_reason": null,
+        "working_set_bytes": 40329216
+      },
+      "index": 6,
+      "measurement_overhead_us": 180,
+      "mono_us": 871749475063,
+      "phase": "assembly_released_gc",
+      "sequence": 69
+    }
+  ],
+  "rows_dropped": 0,
+  "rows_seen": 70,
+  "run_id": "gt06-s140-memory-phase-p04.r00.a01",
+  "schema_id": "HH-GT06-S140-PHASE-MEMORY-1",
+  "schema_version": "1.0.0",
+  "status": "BOUNDARY_CAPTURED"
+}

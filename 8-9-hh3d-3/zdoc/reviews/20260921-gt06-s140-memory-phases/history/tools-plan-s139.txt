@@ -1,5 +1,5 @@
 HH STUDIO — PLAN 1/3: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 21-09-2026, Asia/Saigon | Revision S140 | TRIỂN KHAI THEO GATE
+Ngày 21-09-2026, Asia/Saigon | Revision S139 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -25,9 +25,9 @@ RUNTIME_ACCEPTANCE=GT01_GT02_GT03_GT04_GT05_ACCEPTED
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S140
-EXECUTION_MODE=COORDINATOR_SEQUENTIAL_OWNER_20260921_S140
-SUBAGENTS_ENABLED=S140_ASTRA_XHIGH_REQUESTED_CAPACITY_ERRORS_COORDINATOR_CONTINUES; FINAL_CRITICS_NOT_YET_ELIGIBLE
+PLAN_REVISION=S139
+EXECUTION_MODE=COORDINATOR_SEQUENTIAL_OWNER_20260921_LATEST
+SUBAGENTS_ENABLED=S139_READONLY_WORKERS_3; FINAL_CRITIC_GATE_RETAINED_NOT_YET_ELIGIBLE
 GT02_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260916_S46
 GT02_REVIEW_STATUS=TWO_INDEPENDENT_PASS_TICK_YES_S46
 GT02_LAST_TESTED_SOURCE_CLOSURE=f28056d8ff705a60d48a54f9dee80f16554494fa976bd0bfabee84bb51fecbbf
@@ -63,75 +63,147 @@ GT06_SOURCE_FILE_COUNT=53
 GT06_PROFILE_SHA256=0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85
 GT06_BENCHMARK_CAMPAIGN=gt06-s116-formal-01; LAST_FORMAL_FAILED
 GT06_BENCHMARK_STATUS=ZERO_ACCEPTED_FULL_RUNS; S131_DIAGNOSTIC_NOT_DATASET
-GT06_ACTIVE_DIAGNOSTIC=NONE; S140_P04_BOUNDARY_CAPTURED_7_BATCHES_20260921T065212Z
-GT06_NEXT_ACTION=Freeze S141 stock campaign dependency/input/driver map; collect full 10x35 with original gates. S140 phase diagnostic complete; no evidence-backed runtime repair identified; preserve S131 unresolved and halt first formal failure.
-GT06_READY_AFTER_TERMINAL=S133 seven service/reviewer lanes verified; S134 packet1020 verified as self-contained exact-copy payload with provenance refs; S137 D1/D2 diagnostic limits retained; S138 managed repair+replay completed; S139 source projections/input binding verified, RSS/formal freeze/dataset still open.
+GT06_ACTIVE_DIAGNOSTIC=NONE; S135_BOUNDARY_CAPTURED_PROFILE_IMPORT_SIGKILL; S137_STATIC_ATTRIBUTION_REVIEWED; NO_CURRENT_ENGINE
+GT06_NEXT_ACTION=S139 source freeze verified (53 benchmark +217 installed, union231, GT05 inputs bound); resolve the retained S131 RSS/effect gap and run the locked preflight before any formal campaign. No identical formal/coupled retry; GT06 remains pending until the unchanged 10x35 DoD is met.
+GT06_READY_AFTER_TERMINAL=S133 seven service/reviewer lanes verified; S134 packet1020 verified as self-contained exact-copy payload with provenance refs; S137 D1/D2 diagnostic limits retained; S138 managed repair+replay completed, RSS/formal freeze/dataset still open.
 GT06_EXECUTION217_LAST_TESTED_CLOSURE=f1d35fbd304862c2ef6daa248edce7ea1a84f3db6443f2bde7f452f9699c8d8b
-GT06_DIAGNOSTIC_EXCLUSION=All failed/partial/instrumented runs through S140 remain outside F13/F14; raw and UNKNOWN gaps preserved.
-GT06_ATTRIBUTION_STATUS=JOB_ORDERING_MECHANISM_CONTROLLED_DIAGNOSTIC; S129_NUMERIC_READBACK_UNKNOWN; S131_HOST_RSS_40861696_TO_45395968; ROOT_CAUSE_UNKNOWN
+GT06_DIAGNOSTIC_EXCLUSION=All failed/partial/instrumented runs through S134 remain outside F13/F14; original raw and gaps preserved.
+GT06_ATTRIBUTION_STATUS=JOB_ORDERING_MECHANISM_CONTROLLED_PROOF; S129_NUMERIC_READBACK_UNKNOWN; S131_HOST_RSS_40861696_TO_45395968; ROOT_CAUSE_UNKNOWN
 GT06_SOURCE_FREEZE_S139=source-freeze-s139.json; BENCHMARK53=763191109cd7c7f63de499680291c6b99d77a501dad869078e6d77384ecb20b4; INSTALLED217=f1d35fbd304862c2ef6daa248edce7ea1a84f3db6443f2bde7f452f9699c8d8b; UNION231=656ce63fbb6f7e60e1c27944f2caa99561b31116ab40d1387f62c7de628b4520; GT05_INPUTS_BOUND=YES
 
-TIẾN ĐỘ HIỆN HÀNH — S140, ngày 21-09-2026 (timestamps UTC)
+TIẾN ĐỘ HIỆN HÀNH — S135, ngày 20-09-2026 (timestamps UTC)
 GT01–05 ACCEPTED theo source lịch sử; GT06 IN_PROGRESS/zero accepted full runs;
-GT07–10 chưa mở. Chưa đủ DoD để gọi hai critic cuối.
+GT07–10 chưa mở. Coordinator làm solo theo owner mới nhất. Không có worker
+đang chạy. Không có Godot/benchmark hiện hành tại quan sát mới nhất; query
+PID/start/executable mới trước mỗi launch. Hai critic cuối vẫn chưa đủ điều kiện.
 
-Đã hoàn tất, không chạy lại khi dependency không đổi:
-- S133: bảy service/reviewer lanes,164HTTPchecks; owner/helper exits,14nativeJobs
-  zero/closed. Bốn nativeexit0; ba Stop naturalexitUNKNOWN được giữ.
-- S135: sửa cleanup giữ primary failure và thu successor receipt độc lập;
-  installed217 closuref1d35f...;96 fresh-interpreter tests đạt.
-- S138: managed repair có public readback/ACK; managed replay có natural
-  import/runtime exits0, Jobszero/closed và replay postconditions. Cả hai là
-  functional evidence, không F13/F14. Raw, receipts và summary ở s138-coordinator.
-- S139: benchmark53 và installed217 là hai projection có chủ ý, overlap39,
-  union231; source-freeze-s139.json ràng buộc GT05 inputs. Final formal freeze
-  vẫn phải bổ sung generatedruntime/artifacts, driver/verifier và đủ dataset.
+Đã xong và giữ lại:
+- S132 host-only 7×1000HTTP, host/helper/launcher actual exit0 và cleanup recorded;
+  không native/ACK/idle, không F13/F14/no-leak/rootcause. Packet40 manifest
+  16d851e037353416e72f65eecfdedc95f5ec1bea3dc4dfe700959a7e0c19c134; task retired.
+- S133 checkpoint2af5808f: 215dependency+2metadata=217execution files, closure
+  1a2b2b392a39afc7dc0052b66a96f751c2b41261b38f6d0bedc9346913f8db16. Đây là
+  execution map rộng, không phải benchmark53 map. GT05 assets/manifest giữ nguyên.
+  36 binding +20backend +20repair tests; default callers96tests đã đạt.
+- Seven service/reviewer lanes VERIFIED:164HTTPchecks/GUIflags, outertargets/
+  helpers exit0,14nativeJobszero/closed;4nativeexit0,3StopnaturalexitUNKNOWN.
+  reviews/20260920-gt06-s133-functional/service-refresh-01/verificationSHA
+  fe41a3cfe6fe3d45db1cb2d1295eab79769abe620a24afe2ba1aae2e36365a8a.
+  Các lane đã kết thúc, không còn chạy và không chạy lại vô ích.
 
-Điểm nghẽn còn mở: S131 hostRSS40,861,696→45,395,968B(+11.0966%) ở batch5.
-S132 host-only7batch không giải thích native/ACK/assembly. S139 phân tích raw
-cho thấy command-after4→5 tăng3,514,368B, joint tăng4,534,272B; rootcauseUNKNOWN.
-Không nới gate, trừ overhead, đổi baseline/timeout/priority hoặc trim/pinRAM.
+S133 managed repair failed validation. S134 profile-boundary02 cold import
+Exit45/engine-9;03 warm Exit0 khoảng17.718s. Script-lane-probe01 failed trước
+command tại VALIDATION_PHASE_ORDER/Exit45. Giữ mọi raw/ID, không retry cùngID.
 
-S140 đang đo từng pha với nguyên workload1000HTTP+100native/batch:
-- p01: helper composition AttributeError trước Godot; raw giữ nguyên.
-- Helper đã sửa factory/class hook, API privatecommitEX, identitybinding và
-  dừng sau original postassemblyGC.9unit gồm actual selfprobe+sourcecheck đạt.
-- p02:1batch/10phase rows,BOUNDARY_CAPTURED; host/helper actual1,import0,
-  editor naturalexitUNKNOWN, ownerJobszero/closed, handles/probes/threads clean.
-  privatecommit34,824,192→39,129,088→36,470,784B(command/screen/postGC).
-  Một warmup không chứng minh leak/rootcause/no-leak hoặc full benchmarkPASS.
-- p03: gián đoạn khi batch0commands; process không còn nhưng thiếu terminal/
-  phase/cleanup/exit receipts. INCOMPLETE/UNKNOWN; không retry cùngID.
-- p04: terminal06:52:12Z,716.11s,7batch/70rows; original screens đều qua,
-  dừng sau originalGC; noF13/F14. Host27552/helper49348exit1,import54836exit0;
-  editor naturalexitUNKNOWN/helper5544exit2; Jobszero/closed,probes/threads sạch.
-  Passive observer bắt launcher3884actualexit0/nativeCloseHandletrue; task retired.
-- Batch4→5 jointRSS47,546,368→47,169,536B; ACKprivate+225,280B,
-  postGCprivate+323,584B/allocatedblocks+202. Không tái hiện jumpS131;
-  chưa chứng minh rootcause/no-leak. Không có boundary đủ để sửa runtime hẹp.
-- Packet174 exactcopies verified0missing/0mismatch; manifestd286c517e401b040
-  80689d5c64b3f2cddeb4fcae3d4372b6871a9378ec5f3a72. Raw p01–p04 giữ nguyên.
-  Handoff/decision: reviews/20260921-gt06-s140-memory-phases/coordinator-terminal.md.
+S134 managed repair gt06-s134-managed-repair-01 TERMINAL FAILED:
+- Hai validation Linux exit0; bootstrap10:41:01–10:41:18Z, candidate10:41:51–
+  10:42:07Z. Cả hai xảy ra trước retirement, sửa câu sai trong worker timeline.
+- Old editor retirement actualexit0. Journal SELECTED và successor hello/
+  generation receipt tồn tại, move_speed=3. Effect completed10:43:07.753Z,
+  muộn1,257ms so với request deadline10:43:06.496Z. Journal ends UNKNOWN.
+- HTTP getresponse timeout95s; secondary cleanup GODOT_TRANSPORT_DRAIN_REQUIRED.
+  Không publicACK/COMMITTED; successorclose/naturalexit chưa chứng minh.
+  Outer target26188exit1/helper46824exit0/treeverified, sourceunchanged.
+- Packet terminal-packet-01 trong reviews/20260920-gt06-s134-validation-boundary/
+  là manifest kèm payload exact-copy: 1019 bản ghi raw + 1 analysis, verify 1020
+  entries. Mỗi row có file trong packet, hash/size và source provenance; source
+  refs vẫn ở ngoài packet và không tự tạo formal acceptance. Manifest
+  57ac533993f50d19799c1bc8136a8504d1d72ac16dd83ff870813d3b2d2b63f0.
+  Framechain được decode read-only; không thay custodyverify hay claimdurability.
 
-Diagnostic phân biệt đã xong; không lặp prefix vô ích. Chuẩn bị fresh stock
-campaign S141 với uniondependency/input/driverfreeze; giữ runtime/profile/gates,
-không claim đã sửa S131. Dừng ngay failure đầu, giữ raw rồi phân tích tiếp.
-S140 instrumented không thể thay fullbenchmark; collector sửa metadata từ raw
-đủ bằng chứng, không rerun engine mù. Bài học p03: longrun phải detachedowner.
+Tiếp theo: sửa cleanup che lỗi gốc và thiếu ownership evidence bằng inert tests;
+đo hẹp từng phase chỉ khi giải quyết được boundary chưa biết. Không thay timeout,
+gate/baseline/priority/RSS; không chạy lại formal/coupled mù. Managed repair→replay
+chưa hoàn tất. S131 coupled hostRSS40,861,696→45,395,968(+11.0966%) còn unresolved;
+packet101manifest2bab12d6417a1b9cbf404f0fb786bacd2d0817e306b4d7fbb47a595d8c2d9ead.
+Không suy rootcause/leak hoặc benchmarkPASS từ host-only/profile probe.
 
-Worker: một readiness audit S140 trước đã xong; ba Astra xhigh mới đều capacity
-error. Coordinator tiếp quản; không ghi giả ba worker hoàn thành/criticPASS.
-Lịch cũ ti-p-t-c-hh3d-tools không còn khi update; đã tạo lại đúng một heartbeat
-cùng ID, ACTIVE mỗi10phút. Disk ưu tiên,quiet khi healthy/unchanged. Máy/app cần
-hoạt động; chỉ xóa khi toànplan accepted; không hứa hoàn tất trước sáng.
+S135 source repair is now installed under a fresh exact execution binding. The
+repair finally path halts owner before transport, keeps successor receipt
+collection separate, records `repair-terminal-cleanup.json`, and preserves a
+primary command timeout instead of replacing it with a cleanup exception.
+S135 installed closure is `f1d35fbd304862c2ef6daa248edce7ea1a84f3db6443f2bde7f452f9699c8d8b`;
+only `host/replay/repair.py` and `repair_replay.py` changed from S133. Fresh
+interpreter tests passed 96/96 (binding, repair/replay, cleanup, publication
+owner and transport). This is source/test evidence only; no native acceptance.
 
-GT06 vẫn10freshpairs×35batch(5warmup30measured), full dataset/hash/actualexits/
-trees/Jobs/handles/allattempts. Finalfreeze+requirement evidence và hai critic
-MỚI cùnghashPASS/TICK=yes mới ACCEPT→GT07–GT10;GT08 vẫn Android thật.
-Lịch sử chi tiết S132–S139 đã archive byteexact ở s140-memory-phases/history/
-tools-plan-s139.txt, manifest cóSHA256/AUTHORITY0. S134 packet1020 là payload
-exact-copy có provenance refs, không external-only. S137 D1/D2 vẫn diagnostic
-incomplete vì event observer thiếu terminaldrain; giữ tất cả failures/lessons.
+Tổng hợp worker và correction: reviews/20260920-gt06-s135-managed-boundary/
+subagent-rollup.md. S135 worker cleanup bị modelcapacity; cost/timeline không
+có deliverable xác minh; coordinator tiếp quản, không giả review/đợi vô hạn.
+S133plan.snapshot byteexact và s133-history.json(AUTHORITY0) trong thư mụcS134;
+giữ priorarchives/failures/lessons. Phần hiện hành gọn, lịch sử không bị xóa.
+
+S135 bounded terminal packet đã được niêm phong tại
+reviews/20260920-gt06-s135-managed-boundary/terminal-packet-02/:
+manifest 9a9a06331cf51afe3ace62f22ff4649ad951836693f1b2ababd1d7fc7f11f27d,
+analysis e2c66c8fc395c56d40583d89152e0851260df5af844cac8f86705c07358c34b7;
+static-attribution e6203e920f80bc6d0618c7e44cdf0a7596911848a94d4e14447040d1c9e95d6f.
+Managed repair gt06-s135-managed-repair-01 dừng trước command lane với
+VALIDATION_PHASE_ORDER; cleanup raw ghi owner/transport đã đóng và
+cleanup_clean=true. Đây là cleanup của managed pre-command lane, không phải
+chứng minh editor/engine natural exit. Hai profile probe độc lập -03 và -04
+đều exit45 trong 18.344s/18.141s tại import, stdout kết thúc HH_PROFILE_PHASE_END
+import -9; Godot process đã chạy qua parse/import nhưng chưa tới readback/command.
+Binary/input/execution closure không đổi, Docker job zero/closed, OOMKilled=false,
+nhưng diagnostic_process_clean=false vẫn phải giữ nguyên. Static attribution
+chỉ xác nhận VALIDATION_PHASE_ORDER là guard đòi đủ chuỗi parse/import/readback;
+không xác định nguồn SIGKILL. Vì vậy chưa có repair hẹp nào được chứng minh.
+Đây là boundary chẩn đoán, không phải PASS/no-leak/root cause và không nhập
+F13/F14. Packet custody/digest corrections ở
+reviews/20260921-gt06-s137-import-boundary/metadata-correction.json (Authority 0)
+ghi nhận digest S135 stale/cycle; không rewrite raw packet. Custody review S139
+đã sửa diễn giải S134: packet có byte copies tự chứa, còn source refs chỉ là
+provenance. Không retry cùng ID hoặc lặp boundary y hệt; bước hữu ích tiếp theo
+là đóng source-freeze/RSS gap sau khi managed repair/replay S138 đã có bằng chứng.
+
+S137 independent reviews đã hoàn tất tại
+reviews/20260921-gt06-s137-import-boundary/: import-static-review.md,
+evidence-audit.md, next-diagnostic-design.md và static-diff.json
+(SHA256 4af78fc0c1fd84bd4ec01bbb77fd0f9e2d4239ff7f9e8b9b92b729eac1abba01).
+Kết luận chung: RLIMIT_CPU=10
+là giả thuyết có thể kiểm chứng, chưa phải root cause; nếu chạy diagnostic mới
+phải giữ wall/memory/quota/gate/source/profile nguyên vẹn, ghi raw host/container
+exit, Docker event/inspect và owned cleanup, fail closed khi thiếu bằng chứng.
+D1 observer profile mới `gt06-s137-d1-observer-01` đã chạy đủ
+parse/import/readback, exit0, timeout=false, OOMKilled=false, Job zero/closed,
+input unchanged và diagnostic_process_clean=true. D2 inert control sửa harness
+mountpoint bằng run ID mới `gt06-s137-d2-inert-control-02`: sentinel start/end,
+start/wait/remove đều0, inspect exited0, OOMKilled=false. Event stream chỉ có
+create/attach/start (D1 chỉ create/attach) vì observer dừng trước terminal drain;
+do đó phải ghi `DIAGNOSTIC_INCOMPLETE`, không suy ra vắng kill/OOM event.
+Summary authority-0 ở d1-d2-summary.json (SHA256
+158fdb596332be6a5749c261faf648131d78942fcdd3ea631a563b19bf1a5b9b). D1/D2
+chỉ cho thấy hai lượt bounded này hoạt động; không giải thích S135 import -9,
+không chứng minh no-leak và không nhập F13/F14. D2 lần-01 fail trước process vì
+control snapshot thiếu `.godot`; raw giữ nguyên, không overwrite.
+
+S138 managed repair/replay fresh IDs đã hoàn tất tại
+reviews/20260921-gt06-s138-coordinator/: `gt06-s138-managed-repair-01` có
+public readback/ACK, source unchanged, owner/transport/editor Job zero/closed
+và actual target/helper exits 0; `gt06-s138-managed-replay-01` có import/runtime
+actual exits 0, natural tree exits, Job zero/closed, quit drain và all replay
+postconditions, movement 1.500000238 m so với expected 1.5 m. Raw vẫn ở
+studio/.local/reviews/ và cả hai lane đều `formal_acceptance=false`; đây là G1
+managed evidence, không phải F13/F14 hay GT06 benchmark PASS.
+
+S139 read-only source inventory xác nhận 53-file benchmark projection và
+217-file installed execution projection là hai scope có chủ ý (39 tên giao nhau,
+14 benchmark-only; union hiện thời 231 entries), không phải 53 thiếu 164
+dependency. G2 còn thiếu một final freeze liên kết cả hai projection với
+generated input/runtime artifacts, profile, toolchain, driver và verifier.
+S139 RSS review xác nhận S132 host-only released batches ổn định ở private
+commit/handles, nhưng không phân biệt được phần native/ACK/assembly làm S131
+host RSS tăng 11.0966%; không chạy thêm host-only hoặc lặp RSS campaign mù.
+Phân tích phase read-only mới ở `rss-phase-analysis-s139.json` ràng buộc batch
+4→5: command-after tăng 3,514,368 B, joint tăng 4,534,272 B, native JSON chỉ
+thêm 10 B và effect count thêm 200; root cause/leak vẫn UNKNOWN. Bước hẹp tiếp
+theo là private-commit/page-fault/working-set ở command-after, native parse,
+ACK/joint và post-assembly/GC, diagnostic-only.
+
+Lịch ti-p-t-c-hh3d-tools mỗi10phút, trạng tháidisk ưu tiên; không tạo lịch trùng.
+GT06 vẫn10freshpairs×35batch(5warmup30measured), đủdataset/hashes/exits/Jobs/
+handles/allattempts, finalfreeze+2criticMỚI samehashPASS/TICK=yes. Chưa có ETA
+đáng tin cho toànplan; GT08 vẫn cần Android thật. Không hứa xong trước sáng.
 
 Rà phạm vi claim S76: GT-01–05 ACCEPTED theo fixture/catalog đã công bố,
 chưa chứng minh authoring gameplay tổng quát. Godot writer hiện chỉ Node3D/
