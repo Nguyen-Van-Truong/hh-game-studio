@@ -1,0 +1,77 @@
+{
+  "authority": 0,
+  "formal_acceptance": false,
+  "eligible_for_dataset": false,
+  "run_id": "gt06-s149-host-handles-02",
+  "disposition": "FAILED_DIAGNOSTIC_BOUNDARY",
+  "completed_batches": 10,
+  "first_failure": "CAMPAIGN_RETAINED_COUNTER_GROWTH",
+  "failure_batch": 9,
+  "baseline": {
+    "batch": 4,
+    "handles": 173,
+    "rss_bytes": 45772800,
+    "pss_target_handles": 173,
+    "pss_status": "OBSERVED"
+  },
+  "boundary": {
+    "batch": 9,
+    "handles": 174,
+    "rss_bytes": 40046592,
+    "status_gap_ms": 1518.2795,
+    "pss_target_handles": 174,
+    "pss_status": "OBSERVED",
+    "type_delta": {
+      "Event": 1
+    },
+    "object_identity": "UNKNOWN",
+    "name_state": "UNAVAILABLE"
+  },
+  "cleanup": {
+    "target_exit": {
+      "exit_code": 1,
+      "pid": 41448
+    },
+    "helper_exit": 1,
+    "job": {
+      "active_count": 0,
+      "assigned": true,
+      "close_uncertain": false,
+      "closed": true,
+      "configured": true,
+      "create_uncertain": false,
+      "failed_operations": [],
+      "handle_retained": false,
+      "native_error": null,
+      "tainted": false,
+      "zero_observed": true
+    },
+    "probe_released": true,
+    "wrapper_handle": {
+      "close_uncertain": false,
+      "closed": true,
+      "handle_retained": false,
+      "required": true
+    },
+    "raw_child_cleanup": {
+      "errors": [],
+      "journal_closed": true,
+      "probe_released": true,
+      "producer_closed": true,
+      "source_unchanged": true,
+      "threads_alive": []
+    }
+  },
+  "interpretation": "Only the Event count increased in the external census; object identity/name is unavailable. This distinguishes a synchronization/event descriptor boundary but does not establish leak, ownership, persistence after quiescence, or root cause. RSS decreased and original command gap gate passed. Run a fresh bounded quiescence follow-up before any source repair or formal retry.",
+  "raw_sha256": {
+    "summary.json": "dfec15d2bba6efe2666ae0b01c2c32b8e83097a622627563d1b2f8ecbf4483e6",
+    "result.json": "b2add3f22bc2aeca6d161e7281e2960689507a33e76de1dae1ed69d174cb6110",
+    "sample-04.json": "ecb1343b8b1435b4b05fc45ba9e364b432d1a2448d831d4b854a95a6761ddd5c",
+    "sample-09.json": "3e7c8d5137da3d500b52ad0b1f9d8678650f3c2e9ea3e7a5e1a5d83ad6ebd621",
+    "command-09.json": "a8f7bc37b22743831e1f454c81ecab493601167e15ced05214d0d189ab46a70c",
+    "census-04.json": "ecfaeba785ea1a234374bcf1b2167fefe049d465a177a655aa10f0bd7aa59c7a",
+    "census-09.json": "e9e1f372d949a2d48c933dfed03fe3bf850cd4b0848091cec6dd888fe8c68c68",
+    "child-cleanup.json": "9e90bb534b6e069e9f343d649b0b70c1f023a107045d3938d961afb7f2e21116",
+    "http-phases-final.json": "401857e350a00ae0cece5cb20855d2875ac96bd368a06928043e2ceaf5f57cf2"
+  }
+}
