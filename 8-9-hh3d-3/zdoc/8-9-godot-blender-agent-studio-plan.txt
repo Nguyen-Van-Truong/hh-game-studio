@@ -1,5 +1,5 @@
 HH STUDIO — PLAN 1/3: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 21-09-2026, Asia/Saigon | Revision S140 | TRIỂN KHAI THEO GATE
+Ngày 21-09-2026, Asia/Saigon | Revision S141 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -25,8 +25,8 @@ RUNTIME_ACCEPTANCE=GT01_GT02_GT03_GT04_GT05_ACCEPTED
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S140
-EXECUTION_MODE=COORDINATOR_SEQUENTIAL_OWNER_20260921_S140
+PLAN_REVISION=S141
+EXECUTION_MODE=COORDINATOR_SEQUENTIAL_OWNER_20260921_S141
 SUBAGENTS_ENABLED=S140_ASTRA_XHIGH_REQUESTED_CAPACITY_ERRORS_COORDINATOR_CONTINUES; FINAL_CRITICS_NOT_YET_ELIGIBLE
 GT02_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260916_S46
 GT02_REVIEW_STATUS=TWO_INDEPENDENT_PASS_TICK_YES_S46
@@ -61,17 +61,17 @@ GT06_CURRENT_SOURCE_CLOSURE=763191109cd7c7f63de499680291c6b99d77a501dad869078e6d
 GT06_SOURCE_CHECKPOINT=b8687415; PREVIOUS_RUNTIME=d97960f3
 GT06_SOURCE_FILE_COUNT=53
 GT06_PROFILE_SHA256=0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85
-GT06_BENCHMARK_CAMPAIGN=gt06-s116-formal-01; LAST_FORMAL_FAILED
+GT06_BENCHMARK_CAMPAIGN=gt06-s141-formal-01; STOCK_DISPATCHED_20260921T073850Z_QUERY_CURRENT_LIVENESS
 GT06_BENCHMARK_STATUS=ZERO_ACCEPTED_FULL_RUNS; S131_DIAGNOSTIC_NOT_DATASET
 GT06_ACTIVE_DIAGNOSTIC=NONE; S140_P04_BOUNDARY_CAPTURED_7_BATCHES_20260921T065212Z
-GT06_NEXT_ACTION=Freeze S141 stock campaign dependency/input/driver map; collect full 10x35 with original gates. S140 phase diagnostic complete; no evidence-backed runtime repair identified; preserve S131 unresolved and halt first formal failure.
+GT06_NEXT_ACTION=Observe existing S141 stock campaign; keep source/helper/profile/workstation frozen, no engine/test/heavy audit alongside. On first failure preserve raw and diagnose; never retry blindly. On full dataset verify 10x35/actual exits then final closure/critics.
 GT06_READY_AFTER_TERMINAL=S133 seven service/reviewer lanes verified; S134 packet1020 verified as self-contained exact-copy payload with provenance refs; S137 D1/D2 diagnostic limits retained; S138 managed repair+replay completed; S139 source projections/input binding verified, RSS/formal freeze/dataset still open.
 GT06_EXECUTION217_LAST_TESTED_CLOSURE=f1d35fbd304862c2ef6daa248edce7ea1a84f3db6443f2bde7f452f9699c8d8b
 GT06_DIAGNOSTIC_EXCLUSION=All failed/partial/instrumented runs through S140 remain outside F13/F14; raw and UNKNOWN gaps preserved.
 GT06_ATTRIBUTION_STATUS=JOB_ORDERING_MECHANISM_CONTROLLED_DIAGNOSTIC; S129_NUMERIC_READBACK_UNKNOWN; S131_HOST_RSS_40861696_TO_45395968; ROOT_CAUSE_UNKNOWN
 GT06_SOURCE_FREEZE_S139=source-freeze-s139.json; BENCHMARK53=763191109cd7c7f63de499680291c6b99d77a501dad869078e6d77384ecb20b4; INSTALLED217=f1d35fbd304862c2ef6daa248edce7ea1a84f3db6443f2bde7f452f9699c8d8b; UNION231=656ce63fbb6f7e60e1c27944f2caa99561b31116ab40d1387f62c7de628b4520; GT05_INPUTS_BOUND=YES
 
-TIẾN ĐỘ HIỆN HÀNH — S140, ngày 21-09-2026 (timestamps UTC)
+TIẾN ĐỘ HIỆN HÀNH — S141, ngày 21-09-2026 (timestamps UTC)
 GT01–05 ACCEPTED theo source lịch sử; GT06 IN_PROGRESS/zero accepted full runs;
 GT07–10 chưa mở. Chưa đủ DoD để gọi hai critic cuối.
 
@@ -113,11 +113,22 @@ S140 đang đo từng pha với nguyên workload1000HTTP+100native/batch:
   80689d5c64b3f2cddeb4fcae3d4372b6871a9378ec5f3a72. Raw p01–p04 giữ nguyên.
   Handoff/decision: reviews/20260921-gt06-s140-memory-phases/coordinator-terminal.md.
 
-Diagnostic phân biệt đã xong; không lặp prefix vô ích. Chuẩn bị fresh stock
-campaign S141 với uniondependency/input/driverfreeze; giữ runtime/profile/gates,
-không claim đã sửa S131. Dừng ngay failure đầu, giữ raw rồi phân tích tiếp.
-S140 instrumented không thể thay fullbenchmark; collector sửa metadata từ raw
-đủ bằng chứng, không rerun engine mù. Bài học p03: longrun phải detachedowner.
+S141 STOCK đang chạy gt06-s141-formal-01 từ07:38:50Z, checkpoint2b2fcca9.
+Task HHStudio.GT06.gt06-s129-s141-formal-supervisor; query bằng S129
+prepare_task.ps1 -Command status -RunId gt06-s129-s141-formal-supervisor.
+Raw studio/.local/reviews/gt06-s141-formal-01; driver/freeze/handoff tại
+reviews/20260921-gt06-s141-stock-campaign. Launcher44044,host30300,editor38332
+đã thấy sống/batch0commands; đây là lịch sử, queryidentity mới trước kết luận.
+Freeze236files/237requestpins gồm union231+3GT05inputs+launcher+S139map;
+freezeSHA0bc44be54f24a655e41c80fdfc69344d474dafcfb79e26d40bd22e365201b7a6.
+S141 gọi stockrun_campaign trực tiếp, không overlay/patch/cache/timingchange.
+Perpair7410s không đổi; passive85800s/task24h bao10pairs, không ETAtoànplan.
+Run tuần tự10freshpairs×35batch và haltfirstfailure; zeroacceptedfullruns hiện tại.
+Giữ source/helper/profile/workstation; không engine/test/hashheavy cạnh đo.
+S140 diagnostic không thay dataset, S131 rootcauseUNKNOWN vẫn giữ. Collector sai
+sửa metadata từ raw đủ, không rerunengine; không xóaStop/reuseID/retrymù.
+Prelaunch01 tuple/listworkstation JSON mismatch đã giữ; chuẩn hóa bằng đúng
+stockcanonicalserialization rồi inertcheckpass, không engine nào bị chạy lại.
 
 Worker: một readiness audit S140 trước đã xong; ba Astra xhigh mới đều capacity
 error. Coordinator tiếp quản; không ghi giả ba worker hoàn thành/criticPASS.
