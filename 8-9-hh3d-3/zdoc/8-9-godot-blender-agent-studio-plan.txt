@@ -1,5 +1,5 @@
 HH STUDIO — PLAN 1/3: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 21-09-2026, Asia/Saigon | Revision S143 | TRIỂN KHAI THEO GATE
+Ngày 21-09-2026, Asia/Saigon | Revision S145 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -25,8 +25,8 @@ RUNTIME_ACCEPTANCE=GT01_GT02_GT03_GT04_GT05_ACCEPTED
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S143
-EXECUTION_MODE=COORDINATOR_SOLO_OWNER_20260921_S143
+PLAN_REVISION=S145
+EXECUTION_MODE=COORDINATOR_SOLO_OWNER_20260921_S145
 SUBAGENTS_ENABLED=NO_OWNER_REQUEST; PRIOR_WORK_INTEGRATED; RECENT_ASTRA_CAPACITY_ERRORS_NOT_COMPLETED; FINAL_CRITICS_NOT_ELIGIBLE
 GT02_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260916_S46
 GT02_REVIEW_STATUS=TWO_INDEPENDENT_PASS_TICK_YES_S46
@@ -54,24 +54,24 @@ GT05_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260917_S64
 GT05_REVIEW_STATUS=TWO_INDEPENDENT_PASS_TICK_YES_S64
 GT05_CHECKPOINT_COMMIT=808d8ba
 GT05_LAST_TESTED_SOURCE_CLOSURE=c141d54b80022ca7fefdf81f83e7e1078d3cc6aa43954831f82bb3178338a135
-GT06_EVIDENCE_STATUS=ZERO_ACCEPTED_FULL_RUNS; S141_FORMAL_FAILED_ADMISSION_UNKNOWN; S142_CANDIDATE_45_TESTS_PASS; S143_PREFLIGHT_COMPLETED
-GT06_WORKING_SOURCE_STATUS=S142_JOURNAL_SNAPSHOT_CANDIDATE; FULL_COUPLED_RSS_AND_LATENCY_NOT_YET_VERIFIED
+GT06_EVIDENCE_STATUS=ZERO_ACCEPTED_FULL_RUNS; S141_FORMAL_FAILED; S143_DIAGNOSTIC_HANDLE_GROWTH; S144_STOCK_CONTROL_BOUNDARY; S145_PREFLIGHT_COMPLETED
+GT06_WORKING_SOURCE_STATUS=S145_64K_JOURNAL_CANDIDATE; COUPLED_PROOF_RUNNING
 GT06_LAST_TESTED_SOURCE_CLOSURE=763191109cd7c7f63de499680291c6b99d77a501dad869078e6d77384ecb20b4
-GT06_CURRENT_SOURCE_CLOSURE=4bd7972b803a877777166ece82d85b6f841755d82bcec42ed78c28ae78c78a01
-GT06_SOURCE_CHECKPOINT=S142_CANDIDATE_PENDING_SCOPED_CHECKPOINT; PREVIOUS_RUNTIME=b8687415
+GT06_CURRENT_SOURCE_CLOSURE=fce149cd3a62e102aaba225794b9a5078cd84d7647cb359f6bbcacb8895ddcde
+GT06_SOURCE_CHECKPOINT=S143=cc7634c0; S145_64K_DELTA_PENDING_SCOPED_CHECKPOINT
 GT06_SOURCE_FILE_COUNT=53
 GT06_PROFILE_SHA256=0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85
 GT06_BENCHMARK_CAMPAIGN=gt06-s141-formal-01; FAILED_20260921T074609Z_TASK_RETIRED_091722Z
 GT06_BENCHMARK_STATUS=ZERO_ACCEPTED_FULL_RUNS; S141_FOUR_WARMUP_BATCHES_ONLY; NO_ACTIVE_FORMAL_CAMPAIGN
-GT06_ACTIVE_DIAGNOSTIC=NONE; S143_SEVEN_BATCH_CANDIDATE_PREPARATION
-GT06_NEXT_ACTION=Checkpoint S141 failure/S142 candidate/S143 preflight; one bounded seven-batch coupled candidate with original stock native/workload/gates. Stop on original rejection; preserve raw before attribution. No blind formal retry.
+GT06_ACTIVE_DIAGNOSTIC=gt06-s145-coupled-64k-candidate-01; DISPATCH_20260921T113029Z; QUERY_FRESH_IDENTITY_BEFORE_LIVENESS_CLAIM
+GT06_NEXT_ACTION=Preserve S145 seven-batch result and actual exits/cleanup/pins; compare against S143 and S144. No blind formal retry; refresh affected installed binding only after diagnostic evaluation.
 GT06_READY_AFTER_TERMINAL=S133 seven service/reviewer lanes verified; S134 packet1020 verified as self-contained exact-copy payload with provenance refs; S137 D1/D2 diagnostic limits retained; S138 managed repair+replay completed; S139 source projections/input binding verified, RSS/formal freeze/dataset still open.
 GT06_EXECUTION217_LAST_TESTED_CLOSURE=f1d35fbd304862c2ef6daa248edce7ea1a84f3db6443f2bde7f452f9699c8d8b
-GT06_DIAGNOSTIC_EXCLUSION=All failed/partial/instrumented runs through S143 remain outside F13/F14; raw and UNKNOWN gaps preserved.
-GT06_ATTRIBUTION_STATUS=S141_TIMEOUT_INSIDE_SECOND_JOURNAL_SNAPSHOT; S142_CONTROLLED_CONTENTION_MECHANISM_ONLY; S131_RSS_AND_ORIGINAL_ROOT_CAUSES_UNRESOLVED
+GT06_DIAGNOSTIC_EXCLUSION=All failed/partial/diagnostic runs through S145 remain outside F13/F14; raw and UNKNOWN gaps preserved.
+GT06_ATTRIBUTION_STATUS=S141_TIMEOUT_INSIDE_SECOND_JOURNAL_SNAPSHOT; S143_HOST_HANDLES_209_TO_210; S144_STOCK_CONTROL_209_STABLE; COMPARISON_NOT_CAUSAL_PROOF; S131_RSS_UNRESOLVED
 GT06_SOURCE_FREEZE_S139=source-freeze-s139.json; BENCHMARK53=763191109cd7c7f63de499680291c6b99d77a501dad869078e6d77384ecb20b4; INSTALLED217=f1d35fbd304862c2ef6daa248edce7ea1a84f3db6443f2bde7f452f9699c8d8b; UNION231=656ce63fbb6f7e60e1c27944f2caa99561b31116ab40d1387f62c7de628b4520; GT05_INPUTS_BOUND=YES
 
-TIẾN ĐỘ HIỆN HÀNH — S143, ngày 21-09-2026 (timestamps UTC)
+TIẾN ĐỘ HIỆN HÀNH — S145, ngày 21-09-2026 (timestamps UTC)
 GT01–05 ACCEPTED theo source lịch sử; GT06 IN_PROGRESS/zero accepted full runs;
 GT07–10 chưa mở. Coordinator làm SOLO theo lệnh mới nhất; không thêm worker.
 
@@ -127,10 +127,33 @@ S143 preflight02 đã hoàn tất14.390s, host33612/helper50076 exit0, Jobs/prob
 threads clean, errors[]. Chỉ import và20HTTPcommands, chưa1000HTTP+100native.
 Preflight01 wrapper runpy dùng namespace copy sai: FileExistsError trước engine;
 không overwrite oldID. Giữ failure01, dùng helper directcopy với freshID02.
-Next: một coupled candidate tối đa7 original batches (1000HTTP+100native mỗi
-batch), original stock native/gates; outer1230s. Kiểm RAM của buffer1MiB và
-latency cùng workload, dừng ở gate đầu lỗi hoặc boundary7. Không F13/F14/PASS.
-Không engine/test/hash audit nặng cạnh phép đo; giữ source/helper/profile/workstation.
+S143 coupled candidate (1MiB) đã terminal ORIGINAL_FAILURE tại batch6:
+7 joint rows, original gate qua0–5 rồi host handles209→210; RSS giảm,
+ObjectDB/resources71128/6 ổn định. Giữ packet106; không gọi handle leak
+hay chứng minh candidate gây tăng handle. Cleanup đã giữ; editor exit UNKNOWN.
+
+S144 stock control đã hoàn tất7 batch, host handles209 ở cả7, original gates
+qua; max native status gap719.268ms. Stock _snapshot được áp dụng riêng trong
+child; đây là diagnostic overlay, không runtime stock byte-identical/F13/F14.
+Packet99 exact copies; manifest a9889a805119ab9725cc82d224ff73327537e705665de0f877b2cb74438b5379.
+Hai standalone probes candidate/stock đều chỉ tăng3 handles ở group đầu rồi
+ổn định, không tái hiện host+1 cuối lượt. So sánh một lượt mỗi loại chưa đủ
+quy nguyên nhân; không kết luận buffer1MiB gây leak.
+
+S145 candidate giảm đọc1MiB xuống64KiB để giới hạn allocation mỗi lần đọc,
+giữ hash2047B/full-file SHA512/bounds/identity/fsync/fallback. 45 affected
+journal/index/durability/CAS/transport tests đạt lại sau thay đổi. Preflight
+import+20HTTP hoàn tất11.735s; host30316/helper27508 exit0, Jobs/handles clean.
+Closure53 fce149cd3a62e102aaba225794b9a5078cd84d7647cb359f6bbcacb8895ddcde.
+Diagnostic gt06-s145-coupled-64k-candidate-01 dispatch11:30:29Z, task
+HHStudio.GT06.gt06-s129-s145-64k-candidate-supervisor. 7 original batches,
+1000HTTP+100native/batch; native/profile/gates không đổi, không instrumentation.
+Parent1230s/passive1350s/task1500s; không F13/F14/PASS. Status bằng
+reviews/20260920-gt06-s129-supervision/prepare_task.ps1 -Command status
+-RunId gt06-s129-s145-64k-candidate-supervisor; query PID/start/executable mới.
+Giữ source/helper/profile/workstation; không engine/test/hash audit nặng cạnh đo.
+Raw: studio/.local/reviews/gt06-s145-coupled-64k-candidate-01.
+Helper/receipts: reviews/20260921-gt06-s145-coupled-64k-candidate.
 
 Bài học: đọc trạng thái process mới, receipt không chứng minh đang chạy; collector
 sai thì sửa derived metadata từ raw đủ; không chạy lại engine chỉ để sửa báo cáo.

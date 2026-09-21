@@ -1,0 +1,82 @@
+{
+  "authority": 0,
+  "arm": "stock",
+  "rows": [
+    {
+      "phase": "start",
+      "handles": 195,
+      "rss": 28778496
+    },
+    {
+      "index": 0,
+      "before_handles": 195,
+      "after_handles": 198,
+      "delta": 3,
+      "rss_after": 31043584,
+      "journal_bytes": 10666,
+      "status": "DIAGNOSTIC"
+    },
+    {
+      "index": 1,
+      "before_handles": 198,
+      "after_handles": 198,
+      "delta": 0,
+      "rss_after": 32587776,
+      "journal_bytes": 21332,
+      "status": "DIAGNOSTIC"
+    },
+    {
+      "index": 2,
+      "before_handles": 198,
+      "after_handles": 198,
+      "delta": 0,
+      "rss_after": 34070528,
+      "journal_bytes": 31998,
+      "status": "DIAGNOSTIC"
+    },
+    {
+      "index": 3,
+      "before_handles": 198,
+      "after_handles": 198,
+      "delta": 0,
+      "rss_after": 35078144,
+      "journal_bytes": 42664,
+      "status": "DIAGNOSTIC"
+    },
+    {
+      "index": 4,
+      "before_handles": 198,
+      "after_handles": 198,
+      "delta": 0,
+      "rss_after": 35127296,
+      "journal_bytes": 53334,
+      "status": "DIAGNOSTIC"
+    },
+    {
+      "index": 5,
+      "before_handles": 198,
+      "after_handles": 198,
+      "delta": 0,
+      "rss_after": 35155968,
+      "journal_bytes": 64028,
+      "status": "DIAGNOSTIC"
+    },
+    {
+      "index": 6,
+      "before_handles": 198,
+      "after_handles": 198,
+      "delta": 0,
+      "rss_after": 35201024,
+      "journal_bytes": 74722,
+      "status": "DIAGNOSTIC"
+    },
+    {
+      "phase": "closed",
+      "handles": 185
+    }
+  ],
+  "errors": [],
+  "runs": 7,
+  "formal_acceptance": false,
+  "eligible_for_dataset": false
+}

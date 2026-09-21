@@ -1,0 +1,82 @@
+{
+  "authority": 0,
+  "arm": "candidate",
+  "rows": [
+    {
+      "phase": "start",
+      "handles": 192,
+      "rss": 28561408
+    },
+    {
+      "index": 0,
+      "before_handles": 192,
+      "after_handles": 195,
+      "delta": 3,
+      "rss_after": 30859264,
+      "journal_bytes": 10794,
+      "status": "DIAGNOSTIC"
+    },
+    {
+      "index": 1,
+      "before_handles": 195,
+      "after_handles": 195,
+      "delta": 0,
+      "rss_after": 32468992,
+      "journal_bytes": 21588,
+      "status": "DIAGNOSTIC"
+    },
+    {
+      "index": 2,
+      "before_handles": 195,
+      "after_handles": 195,
+      "delta": 0,
+      "rss_after": 33730560,
+      "journal_bytes": 32382,
+      "status": "DIAGNOSTIC"
+    },
+    {
+      "index": 3,
+      "before_handles": 195,
+      "after_handles": 195,
+      "delta": 0,
+      "rss_after": 34656256,
+      "journal_bytes": 43176,
+      "status": "DIAGNOSTIC"
+    },
+    {
+      "index": 4,
+      "before_handles": 195,
+      "after_handles": 195,
+      "delta": 0,
+      "rss_after": 34725888,
+      "journal_bytes": 53974,
+      "status": "DIAGNOSTIC"
+    },
+    {
+      "index": 5,
+      "before_handles": 195,
+      "after_handles": 195,
+      "delta": 0,
+      "rss_after": 34865152,
+      "journal_bytes": 64796,
+      "status": "DIAGNOSTIC"
+    },
+    {
+      "index": 6,
+      "before_handles": 195,
+      "after_handles": 195,
+      "delta": 0,
+      "rss_after": 34889728,
+      "journal_bytes": 75618,
+      "status": "DIAGNOSTIC"
+    },
+    {
+      "phase": "closed",
+      "handles": 182
+    }
+  ],
+  "errors": [],
+  "runs": 7,
+  "formal_acceptance": false,
+  "eligible_for_dataset": false
+}

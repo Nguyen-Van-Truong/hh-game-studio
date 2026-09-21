@@ -1,0 +1,42 @@
+{
+  "disposition": "BOUNDARY_CAPTURED",
+  "eligible_for_dataset": false,
+  "errors": [],
+  "exit_scope": "Outer child may exit0 for captured planned boundary; editor natural exit can be UNKNOWN after owned boundary cleanup.",
+  "formal_acceptance": false,
+  "gates": [
+    {
+      "index": 0,
+      "original_gate": "PASSED"
+    },
+    {
+      "index": 1,
+      "original_gate": "PASSED"
+    },
+    {
+      "index": 2,
+      "original_gate": "PASSED"
+    },
+    {
+      "index": 3,
+      "original_gate": "PASSED"
+    },
+    {
+      "index": 4,
+      "original_gate": "PASSED"
+    },
+    {
+      "index": 5,
+      "original_gate": "PASSED"
+    },
+    {
+      "index": 6,
+      "original_gate": "PASSED"
+    }
+  ],
+  "limits": "Bounded diagnostic, no native overlay/timing instrumentation. No formal PASS/rootcause/no-leak claim.",
+  "pid": 2044,
+  "run_id": "gt06-s145-coupled-64k-candidate-01",
+  "schema": "S145.coupled-candidate.summary.1",
+  "source_unchanged": true
+}
