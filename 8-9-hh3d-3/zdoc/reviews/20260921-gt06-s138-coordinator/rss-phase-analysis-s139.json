@@ -1,0 +1,53 @@
+{
+  "authority": 0,
+  "deltas_b5_minus_b4": {
+    "command_after_host_rss": 3514368,
+    "command_json_bytes": 55228,
+    "effect_count": 200,
+    "joint_host_rss": 4534272,
+    "journal_bytes": 1011581,
+    "native_json_bytes": 10
+  },
+  "formal_acceptance": false,
+  "interpretation": {
+    "command_to_joint_b4_bytes": 937984,
+    "command_to_joint_b5_bytes": 1957888,
+    "http_only_reproduction": false,
+    "leak_proven": false,
+    "next_diagnostic": "Phase-resolved private-commit/page-fault/working-set samples around command-after, native parse, ACK/joint, post-assembly and GC; diagnostic-only.",
+    "root_cause": "UNKNOWN"
+  },
+  "rows": [
+    {
+      "batch": 4,
+      "batch_capture_sha256": "8d002c5a647b5bf5142872113ca152ae66a501b67c02a030f75f4aec344c0088",
+      "command_after_host_rss": 39923712,
+      "command_json_bytes": 3071065,
+      "command_sha256": "686b4c308d4a3a45a4e1dcc7c206eea19e80f9fde07ee9bad5990b725f7a5337",
+      "effect_count": 1000,
+      "joint_editor_rss": 231145472,
+      "joint_host_rss": 40861696,
+      "joint_sha256": "247729e7df14fed7c13cafdc15c5f8aa747fc0fa0c470e38d3a931d321428a16",
+      "journal_bytes": 5042377,
+      "max_status_gap_ms": 1093.9076,
+      "native_json_bytes": 98314
+    },
+    {
+      "batch": 5,
+      "batch_capture_sha256": "0db180481b911eb8b20133ba80eb6e566587f480e945cdccfae500282b957302",
+      "command_after_host_rss": 43438080,
+      "command_json_bytes": 3126293,
+      "command_sha256": "21c2725c3d31b7f11874c6df0c32abfb9071b8a00fa68574b65b49877588a7a2",
+      "effect_count": 1200,
+      "joint_editor_rss": 159653888,
+      "joint_host_rss": 45395968,
+      "joint_sha256": "586f067241ea86ece2de3abdce94ac7ae62b15fabe85b235ceb6a2a8049b733f",
+      "journal_bytes": 6053958,
+      "max_status_gap_ms": 359.8794,
+      "native_json_bytes": 98324
+    }
+  ],
+  "schema": "HH-GT06-S139-RSS-PHASE-ANALYSIS-1",
+  "source_closure_sha256": "763191109cd7c7f63de499680291c6b99d77a501dad869078e6d77384ecb20b4",
+  "source_run": "gt06-s129-host-attribution-03"
+}

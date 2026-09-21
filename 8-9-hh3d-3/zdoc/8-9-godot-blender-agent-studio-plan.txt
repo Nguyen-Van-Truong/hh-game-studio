@@ -194,6 +194,11 @@ generated input/runtime artifacts, profile, toolchain, driver và verifier.
 S139 RSS review xác nhận S132 host-only released batches ổn định ở private
 commit/handles, nhưng không phân biệt được phần native/ACK/assembly làm S131
 host RSS tăng 11.0966%; không chạy thêm host-only hoặc lặp RSS campaign mù.
+Phân tích phase read-only mới ở `rss-phase-analysis-s139.json` ràng buộc batch
+4→5: command-after tăng 3,514,368 B, joint tăng 4,534,272 B, native JSON chỉ
+thêm 10 B và effect count thêm 200; root cause/leak vẫn UNKNOWN. Bước hẹp tiếp
+theo là private-commit/page-fault/working-set ở command-after, native parse,
+ACK/joint và post-assembly/GC, diagnostic-only.
 
 Lịch ti-p-t-c-hh3d-tools mỗi10phút, trạng tháidisk ưu tiên; không tạo lịch trùng.
 GT06 vẫn10freshpairs×35batch(5warmup30measured), đủdataset/hashes/exits/Jobs/
