@@ -1,7 +1,12 @@
 {
-  "accepted_gt05_manifest_sha256": "fd0b4a984c7bee261c083c07d461baf55325e936d66df2eeab897b422ee0a02b",
-  "schema": "HH-GT06-EXECUTION-BINDING-1",
-  "source_files": {
+  "authority": 0,
+  "delta": [
+    "host/replay/verified_journal.py"
+  ],
+  "engine_runs": 0,
+  "execution217_canonical_closure": "78ffef60682f596313aac8aca69a06e0a23808c546202effdebc481bdb845b58",
+  "execution_count": 217,
+  "execution_files": {
     "blender-addon/MATERIAL_PROFILE.md": "34eb1f4fdb72438ac4133a23a87caa508673ebf1097d9f776f1c7d5c85a5f7bd",
     "blender-addon/PUBLICATION.md": "ddb678683d4966ba9cb4f94f1538dd3472b587fce9f62c791b43637ad1405f2e",
     "blender-addon/README.md": "e908b138d2d87b34d5745e821b6fd5c5dd7cbf34f972696a3c662208ab756900",
@@ -133,6 +138,8 @@
     "host/replay/backend.py": "f7d22a7b3ff001f6fca175c11b5a94c7d75933ac8d3173be3323849af39f8169",
     "host/replay/contract.py": "1df6a84cf58398b3dd438eed6c65ffe3660c5522c53842775d6b24baec676d6c",
     "host/replay/disk_journal_index.py": "56beb93119dfb66feec32eb51d389fc089d89911c0a1be199071c17e1801cb28",
+    "host/replay/execution-current.json": "a02dc3c2c206bd795050d7b9584e7467fa97b8266c70a1a7dd67b0fe3c23c958",
+    "host/replay/execution-source.json": "e411731830eddd9bcb4ec65baccd49d94ba5674d7edbd354795d3bbafb18c3e0",
     "host/replay/execution_binding.py": "37df9c65e9614aa846332b62a0cc28baa2c75a634bed77d0149053aa5c1e4b7d",
     "host/replay/execution_installed.py": "31ad8b878c188538470c278da591929f14e8925c2adea42f93b447839183716f",
     "host/replay/inspector.py": "5fb20f0ba295a57c6694b388cec3c2496ed89c96afa00151c34a50f7e60d87f5",
@@ -217,5 +224,22 @@
     "tests/pipeline/test_snapshot_state.py": "f75896bed668397aac7cf3b196672ed26f90c8073be77312a1e5cd8a879fc23c",
     "tests/pipeline/test_verify_run.py": "41f9fbc6424065684613a930a63b55d330e7df064ae49b860c5af373ece4611d",
     "toolchain.lock.json": "28bdce555e9a44ef68193723d512feda02c42a417ceb78faf0b29f52d095dca9"
-  }
+  },
+  "formal_acceptance": false,
+  "gt05_inputs_sha256": {
+    "fixture.glb": "e85e536137208ba84adbc875b6fb647b5a4e49156344e03e2e8947a7ae91e377",
+    "manifest.json": "1dfb3a3897c7471a0f1be22fde78d1bdc751823a5f6b9268c38d3e28c166665a",
+    "producer-report.json": "13a0416950aa2f6e4589442e1fa917c023bfe8395af717f803d1a1362fce8eee"
+  },
+  "metadata": {
+    "host/replay/execution-current.json": "a02dc3c2c206bd795050d7b9584e7467fa97b8266c70a1a7dd67b0fe3c23c958",
+    "host/replay/execution-source.json": "e411731830eddd9bcb4ec65baccd49d94ba5674d7edbd354795d3bbafb18c3e0"
+  },
+  "observed_utc": "2026-09-21T12:40:43.266168+00:00",
+  "operation": "READ_ONLY_POSTCHECK",
+  "pid": 10928,
+  "python": "C:\\Users\\truon\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+  "receipt_source_closure_domain": "sha256(pretty JSON source map + newline), not native.closure",
+  "source215_canonical_closure": "51505c2e1f20d03c33ad21c7fbaaafde7ed63f372446dc735f48e1106226bf93",
+  "source_count": 215
 }

@@ -1,5 +1,5 @@
 HH STUDIO — PLAN 1/3: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 21-09-2026, Asia/Saigon | Revision S145 | TRIỂN KHAI THEO GATE
+Ngày 21-09-2026, Asia/Saigon | Revision S147 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -25,8 +25,8 @@ RUNTIME_ACCEPTANCE=GT01_GT02_GT03_GT04_GT05_ACCEPTED
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S145
-EXECUTION_MODE=COORDINATOR_SOLO_OWNER_20260921_S145
+PLAN_REVISION=S147
+EXECUTION_MODE=COORDINATOR_SOLO_OWNER_20260921_S147
 SUBAGENTS_ENABLED=NO_OWNER_REQUEST; PRIOR_WORK_INTEGRATED; RECENT_ASTRA_CAPACITY_ERRORS_NOT_COMPLETED; FINAL_CRITICS_NOT_ELIGIBLE
 GT02_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260916_S46
 GT02_REVIEW_STATUS=TWO_INDEPENDENT_PASS_TICK_YES_S46
@@ -54,24 +54,25 @@ GT05_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260917_S64
 GT05_REVIEW_STATUS=TWO_INDEPENDENT_PASS_TICK_YES_S64
 GT05_CHECKPOINT_COMMIT=808d8ba
 GT05_LAST_TESTED_SOURCE_CLOSURE=c141d54b80022ca7fefdf81f83e7e1078d3cc6aa43954831f82bb3178338a135
-GT06_EVIDENCE_STATUS=ZERO_ACCEPTED_FULL_RUNS; S141_FORMAL_FAILED; S143_DIAGNOSTIC_HANDLE_GROWTH; S144_STOCK_CONTROL_BOUNDARY; S145_PREFLIGHT_COMPLETED
-GT06_WORKING_SOURCE_STATUS=S145_64K_JOURNAL_CANDIDATE; COUPLED_DIAGNOSTIC_TERMINAL
+GT06_EVIDENCE_STATUS=ZERO_ACCEPTED_FULL_RUNS; S141_FORMAL_FAILED; S143_DIAGNOSTIC_HANDLE_GROWTH; S144_STOCK_CONTROL_BOUNDARY; S145_DIAGNOSTIC_TERMINAL; S146_BINDING_REFRESHED; S147_FORMAL_RUNNING
+GT06_WORKING_SOURCE_STATUS=S145_64K_JOURNAL_CANDIDATE; S145_SOURCE_INSTALLED_VIA_S146_BINDING_REFRESH; S147_STOCK_FORMAL_ACTIVE
 GT06_LAST_TESTED_SOURCE_CLOSURE=763191109cd7c7f63de499680291c6b99d77a501dad869078e6d77384ecb20b4
 GT06_CURRENT_SOURCE_CLOSURE=fce149cd3a62e102aaba225794b9a5078cd84d7647cb359f6bbcacb8895ddcde
-GT06_SOURCE_CHECKPOINT=S143=cc7634c0; S145_64K_DELTA_PENDING_SCOPED_CHECKPOINT
+GT06_SOURCE_CHECKPOINT=S143=cc7634c0; S145_64K_DELTA_INSTALLED_S146_ATOMIC_REFRESH
 GT06_SOURCE_FILE_COUNT=53
 GT06_PROFILE_SHA256=0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85
-GT06_BENCHMARK_CAMPAIGN=gt06-s141-formal-01; FAILED_20260921T074609Z_TASK_RETIRED_091722Z
-GT06_BENCHMARK_STATUS=ZERO_ACCEPTED_FULL_RUNS; S141_FOUR_WARMUP_BATCHES_ONLY; NO_ACTIVE_FORMAL_CAMPAIGN
+GT06_BENCHMARK_CAMPAIGN=gt06-s147-formal-01; S141_FORMAL_FAILED_20260921T074609Z; S147_ACTIVE_20260921T131720Z
+GT06_BENCHMARK_STATUS=ZERO_ACCEPTED_FULL_RUNS; S147_NEW_FORMAL_CAMPAIGN_RUNNING; S141_FAILURE_PRESERVED
 GT06_ACTIVE_DIAGNOSTIC=NONE; S145_TERMINAL_BOUNDARY_CAPTURED_20260921T114222Z; PACKET_VERIFIED
-GT06_NEXT_ACTION=S145 packet sealed/verified; compare raw S143/S144/S145 before any narrow repair. No blind formal retry; refresh affected installed binding only if a concrete dependency delta is proven.
+GT06_NEXT_ACTION=S147 stock formal is active under updated binding; query fresh process identity/short tail only. On terminal, seal raw before analysis; preserve partial/failure outside F13/F14 and verify actual exits/Jobs/handles/Stop/source pins.
 GT06_READY_AFTER_TERMINAL=S133 seven service/reviewer lanes verified; S134 packet1020 verified as self-contained exact-copy payload with provenance refs; S137 D1/D2 diagnostic limits retained; S138 managed repair+replay completed; S139 source projections/input binding verified, RSS/formal freeze/dataset still open.
-GT06_EXECUTION217_LAST_TESTED_CLOSURE=f1d35fbd304862c2ef6daa248edce7ea1a84f3db6443f2bde7f452f9699c8d8b
+GT06_EXECUTION217_LAST_TESTED_CLOSURE=78ffef60682f596313aac8aca69a06e0a23808c546202effdebc481bdb845b58
+GT06_EXECUTION217_CURRENT_BINDING_CLOSURE=78ffef60682f596313aac8aca69a06e0a23808c546202effdebc481bdb845b58; S146_BINDING_ONLY; CURRENT_NATIVE_FUNCTIONAL_REUSE_PENDING_DEPENDENCY_AUDIT
 GT06_DIAGNOSTIC_EXCLUSION=All failed/partial/diagnostic runs through S145 remain outside F13/F14; raw and UNKNOWN gaps preserved.
-GT06_ATTRIBUTION_STATUS=S141_TIMEOUT_INSIDE_SECOND_JOURNAL_SNAPSHOT; S143_HOST_HANDLES_209_TO_210; S144_STOCK_CONTROL_209_STABLE; COMPARISON_NOT_CAUSAL_PROOF; S131_RSS_UNRESOLVED
+GT06_ATTRIBUTION_STATUS=S141_TIMEOUT_INSIDE_SECOND_JOURNAL_SNAPSHOT; S143_HOST_HANDLES_209_TO_210; S144_STOCK_CONTROL_209_STABLE; S145_HOST_HANDLES_209_STABLE; COMPARISON_NOT_CAUSAL_PROOF; S131_RSS_UNRESOLVED
 GT06_SOURCE_FREEZE_S139=source-freeze-s139.json; BENCHMARK53=763191109cd7c7f63de499680291c6b99d77a501dad869078e6d77384ecb20b4; INSTALLED217=f1d35fbd304862c2ef6daa248edce7ea1a84f3db6443f2bde7f452f9699c8d8b; UNION231=656ce63fbb6f7e60e1c27944f2caa99561b31116ab40d1387f62c7de628b4520; GT05_INPUTS_BOUND=YES
 
-TIẾN ĐỘ HIỆN HÀNH — S145, ngày 21-09-2026 (timestamps UTC)
+TIẾN ĐỘ HIỆN HÀNH — S147, ngày 21-09-2026 (timestamps UTC)
 GT01–05 ACCEPTED theo source lịch sử; GT06 IN_PROGRESS/zero accepted full runs;
 GT07–10 chưa mở. Coordinator làm SOLO theo lệnh mới nhất; không thêm worker.
 
@@ -156,6 +157,56 @@ Packet manifest aab6b5956b928565d9281430f994693cbeb513b7fb3380e9299e6d48eff34844
 verification0 missing/0 mismatch; raw studio/.local/reviews/gt06-s145-coupled-64k-candidate-01.
 Không retry formal mù; so sánh raw S143/S144/S145 và chỉ refresh installed binding
 khi chứng minh được delta. Helper/receipts: reviews/20260921-gt06-s145-coupled-64k-candidate.
+
+S146 đã hoàn tất refresh binding cài đặt theo đúng delta đã chứng minh, không chạy
+engine và không thay GT05 manifest:
+- Kiểm tra trước refresh cho thấy execution-source cũ có 215 file, chỉ lệch
+  `host/replay/verified_journal.py` (old `129baa4d9e08…`, current
+  `b24e48864222…`); 214 file còn lại khớp, không có file thiếu.
+- Script coordinator một-use ở
+  `reviews/20260921-gt06-s146-binding-refresh/refresh_installed_binding.py`
+  giữ byte/hash metadata cũ, tạo source map mới từ GT05 anchor + inventory bắt
+  buộc, ghi temp rồi `os.replace` từng file và tự rollback nếu verify thất bại.
+- Refresh exit0; `load_installed()` bằng interpreter mới xác minh 215 source và
+  217 execution files. Binding mới
+  `e411731830eddd9bcb4ec65baccd49d94ba5674d7edbd354795d3bbafb18c3e0`, selector
+  mới `a02dc3c2c206bd795050d7b9584e7467fa97b8266c70a1a7dd67b0fe3c23c958`;
+  journal hash `b24e488642222bcff7242850da3f3b2e0d4de4473fa254ca1ff113cfdbdeb000`;
+  canonical 217-file execution closure
+  `78ffef60682f596313aac8aca69a06e0a23808c546202effdebc481bdb845b58`.
+- Receipt/hash backup/new metadata ở
+  `reviews/20260921-gt06-s146-binding-refresh/`, packet chỉ AUTHORITY=0,
+  `formal_acceptance=false`, `engine_runs=0`; không phải benchmark PASS.
+- Fresh binding suite 17/17 + installed suite 16/16 đều exit0 sau refresh.
+  Đây là checkpoint dependency, không biến các diagnostic S141–S145 thành
+  F13/F14 và không giải quyết root cause S141/S131.
+
+S147 formal stock campaign đã được chuẩn bị, preflight và dispatch bằng ID mới:
+- `gt06-s147-formal-01` dùng nguyên `run_campaign` và gate gốc, source closure
+  S145 `fce149cd3a62e102aaba225794b9a5078cd84d7647cb359f6bbcacb8895ddcde`,
+  installed closure S146 `78ffef60682f596313aac8aca69a06e0a23808c546202effdebc481bdb845b58`,
+  profile và Godot/Python binary giữ nguyên. Freeze 240 file, supervisor request
+  241 file; mọi source copy/hash đã kiểm trước đăng ký.
+- Các lỗi metadata khi chuẩn bị (script guard, alias path Windows, đặt observer
+  sai depth và launcher hash cũ) đều xảy ra trước engine/scheduler; request lỗi
+  được giữ ở `preparation-01`/`invalid-01`, sau đó finalize bằng
+  `observer.make_request` và kiểm `S129_CLOSURE_PIN`/`S129_SOURCE_PIN` thành công.
+- Supervisor `\HHStudio.GT06.gt06-s129-s147-formal-supervisor` được prepare và
+  register, dispatch lúc 2026-09-21T13:17:20Z UTC. Liveness đầu tiên thấy
+  pythonw observer PID39208 và launcher PID7696, start/executable khớp; scheduler
+  state4, instances0 chỉ là snapshot lịch sử và không dùng làm PASS.
+- Campaign hiện còn ACTIVE; không chạy engine thứ hai, không chạy test/hash audit
+  nặng cạnh phép đo. Khi terminal phải giữ raw, child result/failure, cleanup,
+  actual exits, Jobs/handles/Stop/source pins rồi mới phân tích; S147 partial hay
+  failure vẫn ngoài F13/F14. Authority=0, formal acceptance chưa có.
+- Quan sát 13:34:46Z: 9 joint rows0–8, đang HTTP batch9; launcher7696/host34156/
+  editor30644 sống, start/executable khớp; stderr cả3 rỗng. Batch8 host handles204,
+  editor555, ObjectDB/resources71128/6; native status max của prefix756.017ms.
+  `liveness-01.json` chỉ là prefix. Lúc cập nhật đã có10 joint rows0–9;
+  recent5batch trung bình125.31s, ngoại suy còn khoảng52phút cho pair đầu nếu
+  tốc độ giữ nguyên, chưa gồm slowdown/cleanup; không ETA toàn10pairs/toànplan.
+  Các bản helper đặt sai depth/cache được giữ ngoài commit sử dụng vì thao tác
+  dọn bị automatic approval review từ chối `blocked by policy`; không retry dọn.
 
 Bài học: đọc trạng thái process mới, receipt không chứng minh đang chạy; collector
 sai thì sửa derived metadata từ raw đủ; không chạy lại engine chỉ để sửa báo cáo.

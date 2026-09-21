@@ -1,0 +1,23 @@
+{
+  "accepted_gt05_manifest_sha256": "fd0b4a984c7bee261c083c07d461baf55325e936d66df2eeab897b422ee0a02b",
+  "atomic_replace": true,
+  "authority": 0,
+  "engine_runs": 0,
+  "formal_acceptance": false,
+  "new_metadata_sha256": {
+    "host/replay/execution-current.json": "a02dc3c2c206bd795050d7b9584e7467fa97b8266c70a1a7dd67b0fe3c23c958",
+    "host/replay/execution-source.json": "e411731830eddd9bcb4ec65baccd49d94ba5674d7edbd354795d3bbafb18c3e0"
+  },
+  "old_metadata_sha256": {
+    "host/replay/execution-current.json": "a3c316375432d2a7ff0f17e0f4e46979ff844bfe4827a877cc100f8fe76134e7",
+    "host/replay/execution-source.json": "73ba1322a116cd053b70625ec6b458e579c46b9d0cdff1500ffbb3439602dbe9"
+  },
+  "operation": "S146_INSTALLED_BINDING_REFRESH",
+  "rollback_available": true,
+  "source_closure_sha256": "9e5d736f91c223bac2d343d43a5cdee79e590a0a23f0206fae6e3ae6f9de68e8",
+  "source_count": 215,
+  "source_delta": [
+    "host/replay/verified_journal.py"
+  ],
+  "verified_execution_files": 217
+}
