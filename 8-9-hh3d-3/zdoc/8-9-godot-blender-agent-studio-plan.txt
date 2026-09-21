@@ -64,11 +64,12 @@ GT06_PROFILE_SHA256=0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf
 GT06_BENCHMARK_CAMPAIGN=gt06-s116-formal-01; LAST_FORMAL_FAILED
 GT06_BENCHMARK_STATUS=ZERO_ACCEPTED_FULL_RUNS; S131_DIAGNOSTIC_NOT_DATASET
 GT06_ACTIVE_DIAGNOSTIC=NONE; S135_BOUNDARY_CAPTURED_PROFILE_IMPORT_SIGKILL; S137_STATIC_ATTRIBUTION_REVIEWED; NO_CURRENT_ENGINE
-GT06_NEXT_ACTION=S138 managed repair/replay verified with fresh IDs; freeze the two source projections and generated inputs, then resolve the retained S131 RSS gap before any formal campaign. No identical formal/coupled retry; GT06 remains pending until the unchanged 10x35 DoD is met.
+GT06_NEXT_ACTION=S139 source freeze verified (53 benchmark +217 installed, union231, GT05 inputs bound); resolve the retained S131 RSS/effect gap and run the locked preflight before any formal campaign. No identical formal/coupled retry; GT06 remains pending until the unchanged 10x35 DoD is met.
 GT06_READY_AFTER_TERMINAL=S133 seven service/reviewer lanes verified; S134 packet1020 verified as self-contained exact-copy payload with provenance refs; S137 D1/D2 diagnostic limits retained; S138 managed repair+replay completed, RSS/formal freeze/dataset still open.
 GT06_EXECUTION217_LAST_TESTED_CLOSURE=f1d35fbd304862c2ef6daa248edce7ea1a84f3db6443f2bde7f452f9699c8d8b
 GT06_DIAGNOSTIC_EXCLUSION=All failed/partial/instrumented runs through S134 remain outside F13/F14; original raw and gaps preserved.
 GT06_ATTRIBUTION_STATUS=JOB_ORDERING_MECHANISM_CONTROLLED_PROOF; S129_NUMERIC_READBACK_UNKNOWN; S131_HOST_RSS_40861696_TO_45395968; ROOT_CAUSE_UNKNOWN
+GT06_SOURCE_FREEZE_S139=source-freeze-s139.json; BENCHMARK53=763191109cd7c7f63de499680291c6b99d77a501dad869078e6d77384ecb20b4; INSTALLED217=f1d35fbd304862c2ef6daa248edce7ea1a84f3db6443f2bde7f452f9699c8d8b; UNION231=656ce63fbb6f7e60e1c27944f2caa99561b31116ab40d1387f62c7de628b4520; GT05_INPUTS_BOUND=YES
 
 TIẾN ĐỘ HIỆN HÀNH — S135, ngày 20-09-2026 (timestamps UTC)
 GT01–05 ACCEPTED theo source lịch sử; GT06 IN_PROGRESS/zero accepted full runs;
