@@ -1,0 +1,9 @@
+{
+  "authority": 0,
+  "engine_runs": 0,
+  "error": "FileExistsError",
+  "stage": "launch mkdir before owned process",
+  "cause": "runpy returns globals copy; rebinding returned dict does not rebind function globals",
+  "old_s102_run_overwritten": false,
+  "repair": "fresh copied helper S143-02 with direct RUN_ID edit, all driver checks retained"
+}

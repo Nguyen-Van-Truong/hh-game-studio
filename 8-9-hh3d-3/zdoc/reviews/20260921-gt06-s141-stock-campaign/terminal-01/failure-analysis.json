@@ -1,0 +1,247 @@
+{
+  "authority": 0,
+  "client_root": 399474,
+  "client_server_ports": [
+    60036,
+    65194
+  ],
+  "clock": "perf_counter_ns",
+  "completed_batches": 4,
+  "eligible_for_dataset": false,
+  "failed_command": {
+    "command_id": "gt06-s141-formal-01.r00.a01.b4.inspect.364",
+    "group": 72,
+    "kind": "inspect",
+    "lookup_attempts": [],
+    "ordinal": 724,
+    "receipt_code": "CONNECTION_LOST_LOOKUP",
+    "receipt_mono_us": 874983128296,
+    "receipt_ms": 2007.4973,
+    "receipt_status": "UNKNOWN",
+    "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+    "started_mono_us": 874981120799
+  },
+  "failures_by_route": {
+    "archive": 0,
+    "cancel": 0,
+    "commands": 1,
+    "discovery": 0,
+    "lease": 0,
+    "lookup": 0,
+    "other": 0,
+    "stop": 0
+  },
+  "first_lookup_failure": null,
+  "formal_acceptance": false,
+  "journal_records": [
+    {
+      "line": 6632,
+      "receipt": {
+        "code": "QUEUED",
+        "command_id": "gt06-s141-formal-01.r00.a01.b4.inspect.364",
+        "postconditions": {
+          "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b"
+        },
+        "result_hash": null,
+        "result_revision": null,
+        "status": "ACCEPTED_PENDING"
+      },
+      "status": "ACCEPTED_PENDING"
+    },
+    {
+      "line": 6633,
+      "receipt": {
+        "code": "CANCELED_BEFORE_APPLY",
+        "command_id": "gt06-s141-formal-01.r00.a01.b4.inspect.364",
+        "postconditions": {
+          "no_effect": true,
+          "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b"
+        },
+        "result_hash": null,
+        "result_revision": null,
+        "status": "CANCELED"
+      },
+      "status": "CANCELED"
+    }
+  ],
+  "journal_sha256": "70d05e1d011f196a058aebabef12e4a7ed2b99579b20937c440f2a9499855717",
+  "limits": [
+    "Client admission remains UNKNOWN; later server admission is not a timely client receipt.",
+    "Server send returning does not establish that the client consumed the response.",
+    "Snapshot includes read/hash/metadata/fsync; this trace cannot distinguish them.",
+    "Editor target natural exit UNKNOWN; import wrapper cleanup receipt absent."
+  ],
+  "pid": 30300,
+  "server_root": 399478,
+  "spans": [
+    {
+      "end_ns": 874983128238500,
+      "outcome": "returned",
+      "phase": "client.call",
+      "root_id": 399474,
+      "span_id": 399474,
+      "start_ns": 874981120913600,
+      "wall_ms": 2007.3249
+    },
+    {
+      "end_ns": 874981124361600,
+      "outcome": "returned",
+      "phase": "client.request",
+      "root_id": 399474,
+      "span_id": 399475,
+      "start_ns": 874981121143200,
+      "wall_ms": 3.2184
+    },
+    {
+      "end_ns": 874981123966400,
+      "outcome": "returned",
+      "phase": "client.connect",
+      "root_id": 399474,
+      "span_id": 399476,
+      "start_ns": 874981121216300,
+      "wall_ms": 2.7501
+    },
+    {
+      "end_ns": 874983128006800,
+      "outcome": "raised",
+      "phase": "client.headers",
+      "root_id": 399474,
+      "span_id": 399477,
+      "start_ns": 874981124390200,
+      "wall_ms": 2003.6166
+    },
+    {
+      "end_ns": 874983611746300,
+      "outcome": "returned",
+      "phase": "server.handle",
+      "root_id": 399478,
+      "span_id": 399478,
+      "start_ns": 874981124874800,
+      "wall_ms": 2486.8715
+    },
+    {
+      "end_ns": 874981125137800,
+      "outcome": "returned",
+      "phase": "server.read_request",
+      "root_id": 399478,
+      "span_id": 399479,
+      "start_ns": 874981124977700,
+      "wall_ms": 0.1601
+    },
+    {
+      "end_ns": 874983608385700,
+      "outcome": "returned",
+      "phase": "server.dispatch",
+      "root_id": 399478,
+      "span_id": 399480,
+      "start_ns": 874981125454200,
+      "wall_ms": 2482.9315
+    },
+    {
+      "end_ns": 874981868399900,
+      "outcome": "raised",
+      "phase": "server.lookup",
+      "root_id": 399478,
+      "span_id": 399481,
+      "start_ns": 874981126050500,
+      "wall_ms": 742.3494
+    },
+    {
+      "end_ns": 874981134197700,
+      "outcome": "returned",
+      "phase": "journal.guard_wait",
+      "root_id": 399478,
+      "span_id": 399482,
+      "start_ns": 874981126077600,
+      "wall_ms": 8.1201
+    },
+    {
+      "end_ns": 874981868362500,
+      "outcome": "raised",
+      "phase": "journal.guard_held",
+      "root_id": 399478,
+      "span_id": 399483,
+      "start_ns": 874981134228100,
+      "wall_ms": 734.1344
+    },
+    {
+      "end_ns": 874981868011300,
+      "outcome": "returned",
+      "phase": "journal.reload",
+      "root_id": 399478,
+      "span_id": 399484,
+      "start_ns": 874981134240300,
+      "wall_ms": 733.771
+    },
+    {
+      "end_ns": 874981867966000,
+      "outcome": "returned",
+      "phase": "journal.snapshot",
+      "root_id": 399478,
+      "span_id": 399485,
+      "start_ns": 874981134252500,
+      "wall_ms": 733.7135
+    },
+    {
+      "end_ns": 874981882538500,
+      "outcome": "returned",
+      "phase": "journal.guard_wait",
+      "root_id": 399478,
+      "span_id": 399486,
+      "start_ns": 874981870234700,
+      "wall_ms": 12.3038
+    },
+    {
+      "end_ns": 874983608191400,
+      "outcome": "returned",
+      "phase": "journal.guard_held",
+      "root_id": 399478,
+      "span_id": 399487,
+      "start_ns": 874981882574400,
+      "wall_ms": 1725.617
+    },
+    {
+      "end_ns": 874983557253100,
+      "outcome": "returned",
+      "phase": "journal.reload",
+      "root_id": 399478,
+      "span_id": 399488,
+      "start_ns": 874981882691400,
+      "wall_ms": 1674.5617
+    },
+    {
+      "end_ns": 874983557155700,
+      "outcome": "returned",
+      "phase": "journal.snapshot",
+      "root_id": 399478,
+      "span_id": 399489,
+      "start_ns": 874981882716800,
+      "wall_ms": 1674.4389
+    },
+    {
+      "end_ns": 874983608015000,
+      "outcome": "returned",
+      "phase": "journal.append",
+      "root_id": 399478,
+      "span_id": 399490,
+      "start_ns": 874983558364200,
+      "wall_ms": 49.6508
+    },
+    {
+      "end_ns": 874983611699700,
+      "outcome": "returned",
+      "phase": "server.send",
+      "root_id": 399478,
+      "span_id": 399491,
+      "start_ns": 874983608416400,
+      "wall_ms": 3.2833
+    }
+  ],
+  "status_gap_ms": 2048.0477,
+  "transport_failure": {
+    "category": "timeout",
+    "elapsed_ms": 2007.1129,
+    "endpoint": "commands",
+    "stage": "getresponse"
+  }
+}

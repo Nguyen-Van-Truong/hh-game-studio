@@ -1,0 +1,392 @@
+{
+  "authority": 0,
+  "ended_utc": "2026-09-21T10:09:16.752274+00:00",
+  "engine_runs": 0,
+  "formal_acceptance": false,
+  "helper_sha256": "d1cf10fef9ba5fe52bd69ac06578f2684b4c2680bcea932229463c03072dc856",
+  "history_sha256": "70d05e1d011f196a058aebabef12e4a7ed2b99579b20937c440f2a9499855717",
+  "history_unchanged": true,
+  "journal_closed": true,
+  "limits": "Synthetic contention and profiled copied history. Not S141 replay, full workload or acceptance. No timing subtraction.",
+  "owned_threads_stopped": true,
+  "profile_helper_sha256": "7143d7370b9cc6cfbdba503ff7c903abf062251a503a25e3b0ca9ac59b9a80a7",
+  "rows": [
+    {
+      "bounded_hash": false,
+      "calls": {
+        "flush": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0039,
+          "wall_ms": 0.0039
+        },
+        "fstat": {
+          "count": 2,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0194,
+          "wall_ms": 0.0382
+        },
+        "fsync": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.6005,
+          "wall_ms": 0.6005
+        },
+        "open": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.1281,
+          "wall_ms": 0.1281
+        },
+        "read": {
+          "count": 72,
+          "cpu_ms": 0.0,
+          "max_ms": 0.095,
+          "wall_ms": 1.6129999999999995
+        },
+        "update": {
+          "count": 71,
+          "cpu_ms": 15.625,
+          "max_ms": 0.1655,
+          "wall_ms": 6.515800000000003
+        }
+      },
+      "competitor_progress": 0,
+      "cpu_ms": 15.625,
+      "matched": true,
+      "synthetic_contention": false,
+      "trial": 0,
+      "wall_ms": 10.5479
+    },
+    {
+      "bounded_hash": true,
+      "calls": {
+        "flush": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0081,
+          "wall_ms": 0.0081
+        },
+        "fstat": {
+          "count": 2,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0187,
+          "wall_ms": 0.0353
+        },
+        "fsync": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0838,
+          "wall_ms": 0.0838
+        },
+        "open": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.1091,
+          "wall_ms": 0.1091
+        },
+        "read": {
+          "count": 72,
+          "cpu_ms": 0.0,
+          "max_ms": 0.109,
+          "wall_ms": 2.1151999999999997
+        },
+        "update": {
+          "count": 2334,
+          "cpu_ms": 15.625,
+          "max_ms": 0.02,
+          "wall_ms": 11.346599999999743
+        }
+      },
+      "competitor_progress": 0,
+      "cpu_ms": 15.625,
+      "matched": true,
+      "synthetic_contention": false,
+      "trial": 0,
+      "wall_ms": 20.4343
+    },
+    {
+      "bounded_hash": true,
+      "calls": {
+        "flush": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0033,
+          "wall_ms": 0.0033
+        },
+        "fstat": {
+          "count": 2,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0474,
+          "wall_ms": 0.0581
+        },
+        "fsync": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0836,
+          "wall_ms": 0.0836
+        },
+        "open": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0756,
+          "wall_ms": 0.0756
+        },
+        "read": {
+          "count": 72,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0656,
+          "wall_ms": 1.7367
+        },
+        "update": {
+          "count": 2334,
+          "cpu_ms": 15.625,
+          "max_ms": 0.0283,
+          "wall_ms": 9.741099999999625
+        }
+      },
+      "competitor_progress": 0,
+      "cpu_ms": 15.625,
+      "matched": true,
+      "synthetic_contention": false,
+      "trial": 1,
+      "wall_ms": 17.1172
+    },
+    {
+      "bounded_hash": false,
+      "calls": {
+        "flush": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0038,
+          "wall_ms": 0.0038
+        },
+        "fstat": {
+          "count": 2,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0183,
+          "wall_ms": 0.0318
+        },
+        "fsync": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.1233,
+          "wall_ms": 0.1233
+        },
+        "open": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.1099,
+          "wall_ms": 0.1099
+        },
+        "read": {
+          "count": 72,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0928,
+          "wall_ms": 1.7821000000000005
+        },
+        "update": {
+          "count": 71,
+          "cpu_ms": 0.0,
+          "max_ms": 0.1511,
+          "wall_ms": 6.739799999999999
+        }
+      },
+      "competitor_progress": 0,
+      "cpu_ms": 0.0,
+      "matched": true,
+      "synthetic_contention": false,
+      "trial": 1,
+      "wall_ms": 9.5606
+    },
+    {
+      "bounded_hash": false,
+      "calls": {
+        "flush": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0157,
+          "wall_ms": 0.0157
+        },
+        "fstat": {
+          "count": 2,
+          "cpu_ms": 0.0,
+          "max_ms": 16.0281,
+          "wall_ms": 31.298299999999998
+        },
+        "fsync": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 14.6139,
+          "wall_ms": 14.6139
+        },
+        "open": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 61.2662,
+          "wall_ms": 61.2662
+        },
+        "read": {
+          "count": 72,
+          "cpu_ms": 0.0,
+          "max_ms": 34.6708,
+          "wall_ms": 1193.8278000000003
+        },
+        "update": {
+          "count": 71,
+          "cpu_ms": 15.625,
+          "max_ms": 16.1566,
+          "wall_ms": 1005.3060000000003
+        }
+      },
+      "competitor_progress": 61245000,
+      "cpu_ms": 15.625,
+      "matched": true,
+      "synthetic_contention": true,
+      "trial": 0,
+      "wall_ms": 2326.1714
+    },
+    {
+      "bounded_hash": true,
+      "calls": {
+        "flush": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 15.2003,
+          "wall_ms": 15.2003
+        },
+        "fstat": {
+          "count": 2,
+          "cpu_ms": 0.0,
+          "max_ms": 15.6568,
+          "wall_ms": 15.683900000000001
+        },
+        "fsync": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 15.9252,
+          "wall_ms": 15.9252
+        },
+        "open": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 31.0418,
+          "wall_ms": 31.0418
+        },
+        "read": {
+          "count": 72,
+          "cpu_ms": 0.0,
+          "max_ms": 30.9949,
+          "wall_ms": 1088.1005
+        },
+        "update": {
+          "count": 2334,
+          "cpu_ms": 0.0,
+          "max_ms": 0.3958,
+          "wall_ms": 17.60039999999997
+        }
+      },
+      "competitor_progress": 94674000,
+      "cpu_ms": 0.0,
+      "matched": true,
+      "synthetic_contention": true,
+      "trial": 0,
+      "wall_ms": 1213.3438
+    },
+    {
+      "bounded_hash": true,
+      "calls": {
+        "flush": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0185,
+          "wall_ms": 0.0185
+        },
+        "fstat": {
+          "count": 2,
+          "cpu_ms": 0.0,
+          "max_ms": 15.7583,
+          "wall_ms": 31.128999999999998
+        },
+        "fsync": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 15.2825,
+          "wall_ms": 15.2825
+        },
+        "open": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 46.398,
+          "wall_ms": 46.398
+        },
+        "read": {
+          "count": 72,
+          "cpu_ms": 62.5,
+          "max_ms": 31.1132,
+          "wall_ms": 1148.3355
+        },
+        "update": {
+          "count": 2334,
+          "cpu_ms": 0.0,
+          "max_ms": 0.3089,
+          "wall_ms": 15.530399999999986
+        }
+      },
+      "competitor_progress": 134367000,
+      "cpu_ms": 62.5,
+      "matched": true,
+      "synthetic_contention": true,
+      "trial": 1,
+      "wall_ms": 1284.0951
+    },
+    {
+      "bounded_hash": false,
+      "calls": {
+        "flush": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0109,
+          "wall_ms": 0.0109
+        },
+        "fstat": {
+          "count": 2,
+          "cpu_ms": 0.0,
+          "max_ms": 15.64,
+          "wall_ms": 31.2301
+        },
+        "fsync": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 16.0124,
+          "wall_ms": 16.0124
+        },
+        "open": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 31.7168,
+          "wall_ms": 31.7168
+        },
+        "read": {
+          "count": 72,
+          "cpu_ms": 15.625,
+          "max_ms": 32.0457,
+          "wall_ms": 1426.3321
+        },
+        "update": {
+          "count": 71,
+          "cpu_ms": 0.0,
+          "max_ms": 16.4369,
+          "wall_ms": 1101.3847
+        }
+      },
+      "competitor_progress": 214853000,
+      "cpu_ms": 15.625,
+      "matched": true,
+      "synthetic_contention": true,
+      "trial": 1,
+      "wall_ms": 2626.9825
+    }
+  ],
+  "source_unchanged": true
+}

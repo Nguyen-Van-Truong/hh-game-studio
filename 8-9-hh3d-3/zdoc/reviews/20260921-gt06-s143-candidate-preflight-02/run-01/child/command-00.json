@@ -1,0 +1,1146 @@
+{
+  "cancel": {
+    "command_id": "gt06-s143-candidate-preflight-02.b0.cancel",
+    "delay_ms": 1000,
+    "kind": "cancel",
+    "lookup_attempts": [
+      {
+        "code": "CANCELED_BEFORE_APPLY",
+        "command_id": "gt06-s143-candidate-preflight-02.b0.cancel",
+        "ended_mono_us": 884037585955,
+        "request_digest": "sha256:e1a714d97f4a54c7d6c6a5c787c3fed5550825c38890b5cbd323a2d4572e452f",
+        "started_mono_us": 884037579826,
+        "status": "CANCELED",
+        "transport_failure": null
+      }
+    ],
+    "no_effect": true,
+    "queued_mono_us": 884037550648,
+    "receipt_mono_us": 884037579601,
+    "receipt_ms": 28.8154,
+    "request_digest": "sha256:e1a714d97f4a54c7d6c6a5c787c3fed5550825c38890b5cbd323a2d4572e452f",
+    "separate_from_mix": true,
+    "started_mono_us": 884037550786,
+    "status": "CANCELED",
+    "terminal_mono_us": 884037585955,
+    "terminal_ms": 35.1694,
+    "terminal_response": {
+      "code": "CANCELED_BEFORE_APPLY",
+      "command_id": "gt06-s143-candidate-preflight-02.b0.cancel",
+      "postconditions": {
+        "no_effect": true,
+        "request_digest": "sha256:e1a714d97f4a54c7d6c6a5c787c3fed5550825c38890b5cbd323a2d4572e452f"
+      },
+      "result_hash": null,
+      "result_revision": null,
+      "status": "CANCELED"
+    },
+    "terminal_status": "CANCELED"
+  },
+  "commands": [
+    {
+      "command_id": "gt06-s143-candidate-preflight-02.b0.inspect.0",
+      "effect_count_after": 0,
+      "effect_count_before": 0,
+      "group": 0,
+      "kind": "inspect",
+      "latency_ms": 71.7747,
+      "lookup_attempts": [
+        {
+          "code": "QUEUED",
+          "command_id": "gt06-s143-candidate-preflight-02.b0.inspect.0",
+          "ended_mono_us": 884037004455,
+          "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+          "started_mono_us": 884037001646,
+          "status": "ACCEPTED_PENDING",
+          "transport_failure": null
+        },
+        {
+          "code": "QUEUED",
+          "command_id": "gt06-s143-candidate-preflight-02.b0.inspect.0",
+          "ended_mono_us": 884037009523,
+          "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+          "started_mono_us": 884037006117,
+          "status": "ACCEPTED_PENDING",
+          "transport_failure": null
+        },
+        {
+          "code": "QUEUED",
+          "command_id": "gt06-s143-candidate-preflight-02.b0.inspect.0",
+          "ended_mono_us": 884037014097,
+          "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+          "started_mono_us": 884037010889,
+          "status": "ACCEPTED_PENDING",
+          "transport_failure": null
+        },
+        {
+          "code": "QUEUED",
+          "command_id": "gt06-s143-candidate-preflight-02.b0.inspect.0",
+          "ended_mono_us": 884037019487,
+          "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+          "started_mono_us": 884037015147,
+          "status": "ACCEPTED_PENDING",
+          "transport_failure": null
+        },
+        {
+          "code": "QUEUED",
+          "command_id": "gt06-s143-candidate-preflight-02.b0.inspect.0",
+          "ended_mono_us": 884037024092,
+          "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+          "started_mono_us": 884037020752,
+          "status": "ACCEPTED_PENDING",
+          "transport_failure": null
+        },
+        {
+          "code": "QUEUED",
+          "command_id": "gt06-s143-candidate-preflight-02.b0.inspect.0",
+          "ended_mono_us": 884037027893,
+          "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+          "started_mono_us": 884037025176,
+          "status": "ACCEPTED_PENDING",
+          "transport_failure": null
+        },
+        {
+          "code": "QUEUED",
+          "command_id": "gt06-s143-candidate-preflight-02.b0.inspect.0",
+          "ended_mono_us": 884037031976,
+          "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+          "started_mono_us": 884037028963,
+          "status": "ACCEPTED_PENDING",
+          "transport_failure": null
+        },
+        {
+          "code": "QUEUED",
+          "command_id": "gt06-s143-candidate-preflight-02.b0.inspect.0",
+          "ended_mono_us": 884037035675,
+          "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+          "started_mono_us": 884037033532,
+          "status": "ACCEPTED_PENDING",
+          "transport_failure": null
+        },
+        {
+          "code": "READBACK_CONFIRMED",
+          "command_id": "gt06-s143-candidate-preflight-02.b0.inspect.0",
+          "ended_mono_us": 884037045087,
+          "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+          "started_mono_us": 884037037386,
+          "status": "COMMITTED",
+          "transport_failure": null
+        }
+      ],
+      "ordinal": 0,
+      "receipt_code": "QUEUED",
+      "receipt_mono_us": 884037001403,
+      "receipt_ms": 28.0904,
+      "receipt_status": "ACCEPTED_PENDING",
+      "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+      "result_hash": "sha256:38d861ba3b44f197a1e1bd13860d7b47e47ee7d4c4fab0bcde4a21c3458d8ebe",
+      "snapshot": {
+        "effect_count": 0,
+        "revision": "rev-0",
+        "value": 0
+      },
+      "started_mono_us": 884036973313,
+      "terminal_code": "READBACK_CONFIRMED",
+      "terminal_mono_us": 884037045087,
+      "terminal_ms": 71.7747,
+      "terminal_response": {
+        "code": "READBACK_CONFIRMED",
+        "command_id": "gt06-s143-candidate-preflight-02.b0.inspect.0",
+        "postconditions": {
+          "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+          "snapshot": {
+            "effect_count": 0,
+            "revision": "rev-0",
+            "value": 0
+          }
+        },
+        "result_hash": "sha256:38d861ba3b44f197a1e1bd13860d7b47e47ee7d4c4fab0bcde4a21c3458d8ebe",
+        "result_revision": "rev-0",
+        "status": "COMMITTED"
+      },
+      "terminal_status": "COMMITTED"
+    },
+    {
+      "command_id": "gt06-s143-candidate-preflight-02.b0.inspect.1",
+      "effect_count_after": 0,
+      "effect_count_before": 0,
+      "group": 0,
+      "kind": "inspect",
+      "latency_ms": 65.1719,
+      "lookup_attempts": [
+        {
+          "code": "QUEUED",
+          "command_id": "gt06-s143-candidate-preflight-02.b0.inspect.1",
+          "ended_mono_us": 884037070429,
+          "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+          "started_mono_us": 884037066480,
+          "status": "ACCEPTED_PENDING",
+          "transport_failure": null
+        },
+        {
+          "code": "QUEUED",
+          "command_id": "gt06-s143-candidate-preflight-02.b0.inspect.1",
+          "ended_mono_us": 884037074624,
+          "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+          "started_mono_us": 884037071574,
+          "status": "ACCEPTED_PENDING",
+          "transport_failure": null
+        },
+        {
+          "code": "QUEUED",
+          "command_id": "gt06-s143-candidate-preflight-02.b0.inspect.1",
+          "ended_mono_us": 884037079329,
+          "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+          "started_mono_us": 884037075831,
+          "status": "ACCEPTED_PENDING",
+          "transport_failure": null
+        },
+        {
+          "code": "QUEUED",
+          "command_id": "gt06-s143-candidate-preflight-02.b0.inspect.1",
+          "ended_mono_us": 884037083112,
+          "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+          "started_mono_us": 884037080428,
+          "status": "ACCEPTED_PENDING",
+          "transport_failure": null
+        },
+        {
+          "code": "QUEUED",
+          "command_id": "gt06-s143-candidate-preflight-02.b0.inspect.1",
+          "ended_mono_us": 884037089175,
+          "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+          "started_mono_us": 884037085615,
+          "status": "ACCEPTED_PENDING",
+          "transport_failure": null
+        },
+        {
+          "code": "QUEUED",
+          "command_id": "gt06-s143-candidate-preflight-02.b0.inspect.1",
+          "ended_mono_us": 884037093113,
+          "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+          "started_mono_us": 884037090444,
+          "status": "ACCEPTED_PENDING",
+          "transport_failure": null
+        },
+        {
+          "code": "QUEUED",
+          "command_id": "gt06-s143-candidate-preflight-02.b0.inspect.1",
+          "ended_mono_us": 884037097280,
+          "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+          "started_mono_us": 884037094656,
+          "status": "ACCEPTED_PENDING",
+          "transport_failure": null
+        },
+        {
+          "code": "QUEUED",
+          "command_id": "gt06-s143-candidate-preflight-02.b0.inspect.1",
+          "ended_mono_us": 884037102395,
+          "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+          "started_mono_us": 884037098959,
+          "status": "ACCEPTED_PENDING",
+          "transport_failure": null
+        },
+        {
+          "code": "READBACK_CONFIRMED",
+          "command_id": "gt06-s143-candidate-preflight-02.b0.inspect.1",
+          "ended_mono_us": 884037110433,
+          "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+          "started_mono_us": 884037103719,
+          "status": "COMMITTED",
+          "transport_failure": null
+        }
+      ],
+      "ordinal": 1,
+      "receipt_code": "QUEUED",
+      "receipt_mono_us": 884037066267,
+      "receipt_ms": 21.0056,
+      "receipt_status": "ACCEPTED_PENDING",
+      "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+      "result_hash": "sha256:38d861ba3b44f197a1e1bd13860d7b47e47ee7d4c4fab0bcde4a21c3458d8ebe",
+      "snapshot": {
+        "effect_count": 0,
+        "revision": "rev-0",
+        "value": 0
+      },
+      "started_mono_us": 884037045261,
+      "terminal_code": "READBACK_CONFIRMED",
+      "terminal_mono_us": 884037110433,
+      "terminal_ms": 65.1719,
+      "terminal_response": {
+        "code": "READBACK_CONFIRMED",
+        "command_id": "gt06-s143-candidate-preflight-02.b0.inspect.1",
+        "postconditions": {
+          "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+          "snapshot": {
+            "effect_count": 0,
+            "revision": "rev-0",
+            "value": 0
+          }
+        },
+        "result_hash": "sha256:38d861ba3b44f197a1e1bd13860d7b47e47ee7d4c4fab0bcde4a21c3458d8ebe",
+        "result_revision": "rev-0",
+        "status": "COMMITTED"
+      },
+      "terminal_status": "COMMITTED"
+    },
+    {
+      "command_id": "gt06-s143-candidate-preflight-02.b0.inspect.2",
+      "effect_count_after": 0,
+      "effect_count_before": 0,
+      "group": 0,
+      "kind": "inspect",
+      "latency_ms": 57.3105,
+      "lookup_attempts": [
+        {
+          "code": "QUEUED",
+          "command_id": "gt06-s143-candidate-preflight-02.b0.inspect.2",
+          "ended_mono_us": 884037132032,
+          "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+          "started_mono_us": 884037129108,
+          "status": "ACCEPTED_PENDING",
+          "transport_failure": null
+        },
+        {
+          "code": "QUEUED",
+          "command_id": "gt06-s143-candidate-preflight-02.b0.inspect.2",
+          "ended_mono_us": 884037135915,
+          "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+          "started_mono_us": 884037133532,
+          "status": "ACCEPTED_PENDING",
+          "transport_failure": null
+        },
+        {
+          "code": "QUEUED",
+          "command_id": "gt06-s143-candidate-preflight-02.b0.inspect.2",
+          "ended_mono_us": 884037139841,
+          "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+          "started_mono_us": 884037137252,
+          "status": "ACCEPTED_PENDING",
+          "transport_failure": null
+        },
+        {
+          "code": "QUEUED",
+          "command_id": "gt06-s143-candidate-preflight-02.b0.inspect.2",
+          "ended_mono_us": 884037143488,
+          "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+          "started_mono_us": 884037141009,
+          "status": "ACCEPTED_PENDING",
+          "transport_failure": null
+        },
+        {
+          "code": "QUEUED",
+          "command_id": "gt06-s143-candidate-preflight-02.b0.inspect.2",
+          "ended_mono_us": 884037148612,
+          "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+          "started_mono_us": 884037144721,
+          "status": "ACCEPTED_PENDING",
+          "transport_failure": null
+        },
+        {
+          "code": "QUEUED",
+          "command_id": "gt06-s143-candidate-preflight-02.b0.inspect.2",
+          "ended_mono_us": 884037152318,
+          "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+          "started_mono_us": 884037149709,
+          "status": "ACCEPTED_PENDING",
+          "transport_failure": null
+        },
+        {
+          "code": "QUEUED",
+          "command_id": "gt06-s143-candidate-preflight-02.b0.inspect.2",
+          "ended_mono_us": 884037155297,
+          "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+          "started_mono_us": 884037153365,
+          "status": "ACCEPTED_PENDING",
+          "transport_failure": null
+        },
+        {
+          "code": "QUEUED",
+          "command_id": "gt06-s143-candidate-preflight-02.b0.inspect.2",
+          "ended_mono_us": 884037159040,
+          "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+          "started_mono_us": 884037156558,
+          "status": "ACCEPTED_PENDING",
+          "transport_failure": null
+        },
+        {
+          "code": "READBACK_CONFIRMED",
+          "command_id": "gt06-s143-candidate-preflight-02.b0.inspect.2",
+          "ended_mono_us": 884037167847,
+          "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+          "started_mono_us": 884037160565,
+          "status": "COMMITTED",
+          "transport_failure": null
+        }
+      ],
+      "ordinal": 2,
+      "receipt_code": "QUEUED",
+      "receipt_mono_us": 884037128965,
+      "receipt_ms": 18.4285,
+      "receipt_status": "ACCEPTED_PENDING",
+      "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+      "result_hash": "sha256:38d861ba3b44f197a1e1bd13860d7b47e47ee7d4c4fab0bcde4a21c3458d8ebe",
+      "snapshot": {
+        "effect_count": 0,
+        "revision": "rev-0",
+        "value": 0
+      },
+      "started_mono_us": 884037110537,
+      "terminal_code": "READBACK_CONFIRMED",
+      "terminal_mono_us": 884037167847,
+      "terminal_ms": 57.3105,
+      "terminal_response": {
+        "code": "READBACK_CONFIRMED",
+        "command_id": "gt06-s143-candidate-preflight-02.b0.inspect.2",
+        "postconditions": {
+          "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+          "snapshot": {
+            "effect_count": 0,
+            "revision": "rev-0",
+            "value": 0
+          }
+        },
+        "result_hash": "sha256:38d861ba3b44f197a1e1bd13860d7b47e47ee7d4c4fab0bcde4a21c3458d8ebe",
+        "result_revision": "rev-0",
+        "status": "COMMITTED"
+      },
+      "terminal_status": "COMMITTED"
+    },
+    {
+      "command_id": "gt06-s143-candidate-preflight-02.b0.inspect.3",
+      "effect_count_after": 0,
+      "effect_count_before": 0,
+      "group": 0,
+      "kind": "inspect",
+      "latency_ms": 66.9622,
+      "lookup_attempts": [
+        {
+          "code": "QUEUED",
+          "command_id": "gt06-s143-candidate-preflight-02.b0.inspect.3",
+          "ended_mono_us": 884037191115,
+          "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+          "started_mono_us": 884037188592,
+          "status": "ACCEPTED_PENDING",
+          "transport_failure": null
+        },
+        {
+          "code": "QUEUED",
+          "command_id": "gt06-s143-candidate-preflight-02.b0.inspect.3",
+          "ended_mono_us": 884037194941,
+          "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+          "started_mono_us": 884037192228,
+          "status": "ACCEPTED_PENDING",
+          "transport_failure": null
+        },
+        {
+          "code": "QUEUED",
+          "command_id": "gt06-s143-candidate-preflight-02.b0.inspect.3",
+          "ended_mono_us": 884037199018,
+          "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+          "started_mono_us": 884037196503,
+          "status": "ACCEPTED_PENDING",
+          "transport_failure": null
+        },
+        {
+          "code": "QUEUED",
+          "command_id": "gt06-s143-candidate-preflight-02.b0.inspect.3",
+          "ended_mono_us": 884037203032,
+          "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+          "started_mono_us": 884037200485,
+          "status": "ACCEPTED_PENDING",
+          "transport_failure": null
+        },
+        {
+          "code": "QUEUED",
+          "command_id": "gt06-s143-candidate-preflight-02.b0.inspect.3",
+          "ended_mono_us": 884037209058,
+          "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+          "started_mono_us": 884037204144,
+          "status": "ACCEPTED_PENDING",
+          "transport_failure": null
+        },
+        {
+          "code": "QUEUED",
+          "command_id": "gt06-s143-candidate-preflight-02.b0.inspect.3",
+          "ended_mono_us": 884037212930,
+          "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+          "started_mono_us": 884037210160,
+          "status": "ACCEPTED_PENDING",
+          "transport_failure": null
+        },
+        {
+          "code": "QUEUED",
+          "command_id": "gt06-s143-candidate-preflight-02.b0.inspect.3",
+          "ended_mono_us": 884037216861,
+          "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+          "started_mono_us": 884037214207,
+          "status": "ACCEPTED_PENDING",
+          "transport_failure": null
+        },
+        {
+          "code": "QUEUED",
+          "command_id": "gt06-s143-candidate-preflight-02.b0.inspect.3",
+          "ended_mono_us": 884037221593,
+          "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+          "started_mono_us": 884037218420,
+          "status": "ACCEPTED_PENDING",
+          "transport_failure": null
+        },
+        {
+          "code": "QUEUED",
+          "command_id": "gt06-s143-candidate-preflight-02.b0.inspect.3",
+          "ended_mono_us": 884037225342,
+          "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+          "started_mono_us": 884037222785,
+          "status": "ACCEPTED_PENDING",
+          "transport_failure": null
+        },
+        {
+          "code": "READBACK_CONFIRMED",
+          "command_id": "gt06-s143-candidate-preflight-02.b0.inspect.3",
+          "ended_mono_us": 884037234909,
+          "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+          "started_mono_us": 884037226817,
+          "status": "COMMITTED",
+          "transport_failure": null
+        }
+      ],
+      "ordinal": 3,
+      "receipt_code": "QUEUED",
+      "receipt_mono_us": 884037188354,
+      "receipt_ms": 20.4066,
+      "receipt_status": "ACCEPTED_PENDING",
+      "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+      "result_hash": "sha256:38d861ba3b44f197a1e1bd13860d7b47e47ee7d4c4fab0bcde4a21c3458d8ebe",
+      "snapshot": {
+        "effect_count": 0,
+        "revision": "rev-0",
+        "value": 0
+      },
+      "started_mono_us": 884037167947,
+      "terminal_code": "READBACK_CONFIRMED",
+      "terminal_mono_us": 884037234909,
+      "terminal_ms": 66.9622,
+      "terminal_response": {
+        "code": "READBACK_CONFIRMED",
+        "command_id": "gt06-s143-candidate-preflight-02.b0.inspect.3",
+        "postconditions": {
+          "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+          "snapshot": {
+            "effect_count": 0,
+            "revision": "rev-0",
+            "value": 0
+          }
+        },
+        "result_hash": "sha256:38d861ba3b44f197a1e1bd13860d7b47e47ee7d4c4fab0bcde4a21c3458d8ebe",
+        "result_revision": "rev-0",
+        "status": "COMMITTED"
+      },
+      "terminal_status": "COMMITTED"
+    },
+    {
+      "command_id": "gt06-s143-candidate-preflight-02.b0.inspect.4",
+      "effect_count_after": 0,
+      "effect_count_before": 0,
+      "group": 0,
+      "kind": "inspect",
+      "latency_ms": 65.4334,
+      "lookup_attempts": [
+        {
+          "code": "QUEUED",
+          "command_id": "gt06-s143-candidate-preflight-02.b0.inspect.4",
+          "ended_mono_us": 884037259591,
+          "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+          "started_mono_us": 884037255484,
+          "status": "ACCEPTED_PENDING",
+          "transport_failure": null
+        },
+        {
+          "code": "QUEUED",
+          "command_id": "gt06-s143-candidate-preflight-02.b0.inspect.4",
+          "ended_mono_us": 884037284327,
+          "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+          "started_mono_us": 884037261009,
+          "status": "ACCEPTED_PENDING",
+          "transport_failure": null
+        },
+        {
+          "code": "QUEUED",
+          "command_id": "gt06-s143-candidate-preflight-02.b0.inspect.4",
+          "ended_mono_us": 884037289239,
+          "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+          "started_mono_us": 884037285880,
+          "status": "ACCEPTED_PENDING",
+          "transport_failure": null
+        },
+        {
+          "code": "READBACK_CONFIRMED",
+          "command_id": "gt06-s143-candidate-preflight-02.b0.inspect.4",
+          "ended_mono_us": 884037300502,
+          "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+          "started_mono_us": 884037290685,
+          "status": "COMMITTED",
+          "transport_failure": null
+        }
+      ],
+      "ordinal": 4,
+      "receipt_code": "QUEUED",
+      "receipt_mono_us": 884037255244,
+      "receipt_ms": 20.1752,
+      "receipt_status": "ACCEPTED_PENDING",
+      "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+      "result_hash": "sha256:38d861ba3b44f197a1e1bd13860d7b47e47ee7d4c4fab0bcde4a21c3458d8ebe",
+      "snapshot": {
+        "effect_count": 0,
+        "revision": "rev-0",
+        "value": 0
+      },
+      "started_mono_us": 884037235069,
+      "terminal_code": "READBACK_CONFIRMED",
+      "terminal_mono_us": 884037300502,
+      "terminal_ms": 65.4334,
+      "terminal_response": {
+        "code": "READBACK_CONFIRMED",
+        "command_id": "gt06-s143-candidate-preflight-02.b0.inspect.4",
+        "postconditions": {
+          "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+          "snapshot": {
+            "effect_count": 0,
+            "revision": "rev-0",
+            "value": 0
+          }
+        },
+        "result_hash": "sha256:38d861ba3b44f197a1e1bd13860d7b47e47ee7d4c4fab0bcde4a21c3458d8ebe",
+        "result_revision": "rev-0",
+        "status": "COMMITTED"
+      },
+      "terminal_status": "COMMITTED"
+    },
+    {
+      "command_id": "gt06-s143-candidate-preflight-02.b0.rejected.0",
+      "effect_count_after": 0,
+      "effect_count_before": 0,
+      "group": 0,
+      "kind": "rejected",
+      "latency_ms": 2.7593,
+      "lookup_attempts": [],
+      "ordinal": 5,
+      "receipt_code": "INVALID_FIXTURE_PAYLOAD",
+      "receipt_mono_us": 884037303415,
+      "receipt_ms": 2.7593,
+      "receipt_status": "REJECTED",
+      "request_digest": "sha256:edbec0e4931c9e3bbed7a3ff9dbd0252ba1d25e8e8211c0276b99f55a84f8767",
+      "started_mono_us": 884037300655,
+      "terminal_status": "REJECTED"
+    },
+    {
+      "command_id": "gt06-s143-candidate-preflight-02.b0.rejected.1",
+      "effect_count_after": 0,
+      "effect_count_before": 0,
+      "group": 0,
+      "kind": "rejected",
+      "latency_ms": 2.4767,
+      "lookup_attempts": [],
+      "ordinal": 6,
+      "receipt_code": "INVALID_FIXTURE_PAYLOAD",
+      "receipt_mono_us": 884037306066,
+      "receipt_ms": 2.4767,
+      "receipt_status": "REJECTED",
+      "request_digest": "sha256:edbec0e4931c9e3bbed7a3ff9dbd0252ba1d25e8e8211c0276b99f55a84f8767",
+      "started_mono_us": 884037303590,
+      "terminal_status": "REJECTED"
+    },
+    {
+      "command_id": "gt06-s143-candidate-preflight-02.b0.rejected.2",
+      "effect_count_after": 0,
+      "effect_count_before": 0,
+      "group": 0,
+      "kind": "rejected",
+      "latency_ms": 2.4155,
+      "lookup_attempts": [],
+      "ordinal": 7,
+      "receipt_code": "INVALID_FIXTURE_PAYLOAD",
+      "receipt_mono_us": 884037308660,
+      "receipt_ms": 2.4155,
+      "receipt_status": "REJECTED",
+      "request_digest": "sha256:edbec0e4931c9e3bbed7a3ff9dbd0252ba1d25e8e8211c0276b99f55a84f8767",
+      "started_mono_us": 884037306244,
+      "terminal_status": "REJECTED"
+    },
+    {
+      "command_id": "gt06-s143-candidate-preflight-02.b0.admitted.0",
+      "effect_count_after": 1,
+      "effect_count_before": 0,
+      "group": 0,
+      "kind": "admitted",
+      "latency_ms": 25.045,
+      "lookup_attempts": [
+        {
+          "code": "QUEUED",
+          "command_id": "gt06-s143-candidate-preflight-02.b0.admitted.0",
+          "ended_mono_us": 884037338573,
+          "request_digest": "sha256:39a97c75383ef1d27e5d100ea66f9caefe8a65d32a5809b4421ec039f75689fc",
+          "started_mono_us": 884037334266,
+          "status": "ACCEPTED_PENDING",
+          "transport_failure": null
+        },
+        {
+          "code": "QUEUED",
+          "command_id": "gt06-s143-candidate-preflight-02.b0.admitted.0",
+          "ended_mono_us": 884037342437,
+          "request_digest": "sha256:39a97c75383ef1d27e5d100ea66f9caefe8a65d32a5809b4421ec039f75689fc",
+          "started_mono_us": 884037339757,
+          "status": "ACCEPTED_PENDING",
+          "transport_failure": null
+        },
+        {
+          "code": "QUEUED",
+          "command_id": "gt06-s143-candidate-preflight-02.b0.admitted.0",
+          "ended_mono_us": 884037349404,
+          "request_digest": "sha256:39a97c75383ef1d27e5d100ea66f9caefe8a65d32a5809b4421ec039f75689fc",
+          "started_mono_us": 884037343587,
+          "status": "ACCEPTED_PENDING",
+          "transport_failure": null
+        },
+        {
+          "code": "QUEUED",
+          "command_id": "gt06-s143-candidate-preflight-02.b0.admitted.0",
+          "ended_mono_us": 884037354688,
+          "request_digest": "sha256:39a97c75383ef1d27e5d100ea66f9caefe8a65d32a5809b4421ec039f75689fc",
+          "started_mono_us": 884037350547,
+          "status": "ACCEPTED_PENDING",
+          "transport_failure": null
+        },
+        {
+          "code": "QUEUED",
+          "command_id": "gt06-s143-candidate-preflight-02.b0.admitted.0",
+          "ended_mono_us": 884037358922,
+          "request_digest": "sha256:39a97c75383ef1d27e5d100ea66f9caefe8a65d32a5809b4421ec039f75689fc",
+          "started_mono_us": 884037355807,
+          "status": "ACCEPTED_PENDING",
+          "transport_failure": null
+        },
+        {
+          "code": "QUEUED",
+          "command_id": "gt06-s143-candidate-preflight-02.b0.admitted.0",
+          "ended_mono_us": 884037366746,
+          "request_digest": "sha256:39a97c75383ef1d27e5d100ea66f9caefe8a65d32a5809b4421ec039f75689fc",
+          "started_mono_us": 884037360299,
+          "status": "ACCEPTED_PENDING",
+          "transport_failure": null
+        },
+        {
+          "code": "QUEUED",
+          "command_id": "gt06-s143-candidate-preflight-02.b0.admitted.0",
+          "ended_mono_us": 884037370583,
+          "request_digest": "sha256:39a97c75383ef1d27e5d100ea66f9caefe8a65d32a5809b4421ec039f75689fc",
+          "started_mono_us": 884037367833,
+          "status": "ACCEPTED_PENDING",
+          "transport_failure": null
+        },
+        {
+          "code": "QUEUED",
+          "command_id": "gt06-s143-candidate-preflight-02.b0.admitted.0",
+          "ended_mono_us": 884037374775,
+          "request_digest": "sha256:39a97c75383ef1d27e5d100ea66f9caefe8a65d32a5809b4421ec039f75689fc",
+          "started_mono_us": 884037371866,
+          "status": "ACCEPTED_PENDING",
+          "transport_failure": null
+        },
+        {
+          "code": "QUEUED",
+          "command_id": "gt06-s143-candidate-preflight-02.b0.admitted.0",
+          "ended_mono_us": 884037380146,
+          "request_digest": "sha256:39a97c75383ef1d27e5d100ea66f9caefe8a65d32a5809b4421ec039f75689fc",
+          "started_mono_us": 884037376142,
+          "status": "ACCEPTED_PENDING",
+          "transport_failure": null
+        },
+        {
+          "code": "QUEUED",
+          "command_id": "gt06-s143-candidate-preflight-02.b0.admitted.0",
+          "ended_mono_us": 884037384328,
+          "request_digest": "sha256:39a97c75383ef1d27e5d100ea66f9caefe8a65d32a5809b4421ec039f75689fc",
+          "started_mono_us": 884037381236,
+          "status": "ACCEPTED_PENDING",
+          "transport_failure": null
+        },
+        {
+          "code": "READBACK_CONFIRMED",
+          "command_id": "gt06-s143-candidate-preflight-02.b0.admitted.0",
+          "ended_mono_us": 884037394294,
+          "request_digest": "sha256:39a97c75383ef1d27e5d100ea66f9caefe8a65d32a5809b4421ec039f75689fc",
+          "started_mono_us": 884037385418,
+          "status": "COMMITTED",
+          "transport_failure": null
+        }
+      ],
+      "ordinal": 8,
+      "receipt_code": "QUEUED",
+      "receipt_mono_us": 884037333869,
+      "receipt_ms": 25.045,
+      "receipt_status": "ACCEPTED_PENDING",
+      "request_digest": "sha256:39a97c75383ef1d27e5d100ea66f9caefe8a65d32a5809b4421ec039f75689fc",
+      "result_hash": "sha256:3941b1d6e1201262df92fb41ce71e60f43e88e4d3fc25a777f7e6ebac931f541",
+      "snapshot": {
+        "effect_count": 1,
+        "revision": "rev-1",
+        "value": 1
+      },
+      "started_mono_us": 884037308824,
+      "terminal_code": "READBACK_CONFIRMED",
+      "terminal_mono_us": 884037394294,
+      "terminal_ms": 85.4701,
+      "terminal_response": {
+        "code": "READBACK_CONFIRMED",
+        "command_id": "gt06-s143-candidate-preflight-02.b0.admitted.0",
+        "postconditions": {
+          "request_digest": "sha256:39a97c75383ef1d27e5d100ea66f9caefe8a65d32a5809b4421ec039f75689fc",
+          "snapshot": {
+            "effect_count": 1,
+            "revision": "rev-1",
+            "value": 1
+          }
+        },
+        "result_hash": "sha256:3941b1d6e1201262df92fb41ce71e60f43e88e4d3fc25a777f7e6ebac931f541",
+        "result_revision": "rev-1",
+        "status": "COMMITTED"
+      },
+      "terminal_status": "COMMITTED"
+    },
+    {
+      "command_id": "gt06-s143-candidate-preflight-02.b0.admitted.1",
+      "effect_count_after": 2,
+      "effect_count_before": 1,
+      "group": 0,
+      "kind": "admitted",
+      "latency_ms": 23.1135,
+      "lookup_attempts": [
+        {
+          "code": "QUEUED",
+          "command_id": "gt06-s143-candidate-preflight-02.b0.admitted.1",
+          "ended_mono_us": 884037420339,
+          "request_digest": "sha256:e298098f9b8815d5265c62bc9d7c9830080f6a2c5a2dd19199d6ee4163df22ad",
+          "started_mono_us": 884037417841,
+          "status": "ACCEPTED_PENDING",
+          "transport_failure": null
+        },
+        {
+          "code": "QUEUED",
+          "command_id": "gt06-s143-candidate-preflight-02.b0.admitted.1",
+          "ended_mono_us": 884037424785,
+          "request_digest": "sha256:e298098f9b8815d5265c62bc9d7c9830080f6a2c5a2dd19199d6ee4163df22ad",
+          "started_mono_us": 884037421650,
+          "status": "ACCEPTED_PENDING",
+          "transport_failure": null
+        },
+        {
+          "code": "QUEUED",
+          "command_id": "gt06-s143-candidate-preflight-02.b0.admitted.1",
+          "ended_mono_us": 884037430952,
+          "request_digest": "sha256:e298098f9b8815d5265c62bc9d7c9830080f6a2c5a2dd19199d6ee4163df22ad",
+          "started_mono_us": 884037426395,
+          "status": "ACCEPTED_PENDING",
+          "transport_failure": null
+        },
+        {
+          "code": "QUEUED",
+          "command_id": "gt06-s143-candidate-preflight-02.b0.admitted.1",
+          "ended_mono_us": 884037461142,
+          "request_digest": "sha256:e298098f9b8815d5265c62bc9d7c9830080f6a2c5a2dd19199d6ee4163df22ad",
+          "started_mono_us": 884037432407,
+          "status": "ACCEPTED_PENDING",
+          "transport_failure": null
+        },
+        {
+          "code": "QUEUED",
+          "command_id": "gt06-s143-candidate-preflight-02.b0.admitted.1",
+          "ended_mono_us": 884037468797,
+          "request_digest": "sha256:e298098f9b8815d5265c62bc9d7c9830080f6a2c5a2dd19199d6ee4163df22ad",
+          "started_mono_us": 884037462578,
+          "status": "ACCEPTED_PENDING",
+          "transport_failure": null
+        },
+        {
+          "code": "QUEUED",
+          "command_id": "gt06-s143-candidate-preflight-02.b0.admitted.1",
+          "ended_mono_us": 884037495186,
+          "request_digest": "sha256:e298098f9b8815d5265c62bc9d7c9830080f6a2c5a2dd19199d6ee4163df22ad",
+          "started_mono_us": 884037469946,
+          "status": "ACCEPTED_PENDING",
+          "transport_failure": null
+        },
+        {
+          "code": "QUEUED",
+          "command_id": "gt06-s143-candidate-preflight-02.b0.admitted.1",
+          "ended_mono_us": 884037507917,
+          "request_digest": "sha256:e298098f9b8815d5265c62bc9d7c9830080f6a2c5a2dd19199d6ee4163df22ad",
+          "started_mono_us": 884037497099,
+          "status": "ACCEPTED_PENDING",
+          "transport_failure": null
+        },
+        {
+          "code": "QUEUED",
+          "command_id": "gt06-s143-candidate-preflight-02.b0.admitted.1",
+          "ended_mono_us": 884037512485,
+          "request_digest": "sha256:e298098f9b8815d5265c62bc9d7c9830080f6a2c5a2dd19199d6ee4163df22ad",
+          "started_mono_us": 884037509043,
+          "status": "ACCEPTED_PENDING",
+          "transport_failure": null
+        },
+        {
+          "code": "QUEUED",
+          "command_id": "gt06-s143-candidate-preflight-02.b0.admitted.1",
+          "ended_mono_us": 884037516014,
+          "request_digest": "sha256:e298098f9b8815d5265c62bc9d7c9830080f6a2c5a2dd19199d6ee4163df22ad",
+          "started_mono_us": 884037513930,
+          "status": "ACCEPTED_PENDING",
+          "transport_failure": null
+        },
+        {
+          "code": "QUEUED",
+          "command_id": "gt06-s143-candidate-preflight-02.b0.admitted.1",
+          "ended_mono_us": 884037519647,
+          "request_digest": "sha256:e298098f9b8815d5265c62bc9d7c9830080f6a2c5a2dd19199d6ee4163df22ad",
+          "started_mono_us": 884037517084,
+          "status": "ACCEPTED_PENDING",
+          "transport_failure": null
+        },
+        {
+          "code": "READBACK_CONFIRMED",
+          "command_id": "gt06-s143-candidate-preflight-02.b0.admitted.1",
+          "ended_mono_us": 884037528797,
+          "request_digest": "sha256:e298098f9b8815d5265c62bc9d7c9830080f6a2c5a2dd19199d6ee4163df22ad",
+          "started_mono_us": 884037520779,
+          "status": "COMMITTED",
+          "transport_failure": null
+        }
+      ],
+      "ordinal": 9,
+      "receipt_code": "QUEUED",
+      "receipt_mono_us": 884037417648,
+      "receipt_ms": 23.1135,
+      "receipt_status": "ACCEPTED_PENDING",
+      "request_digest": "sha256:e298098f9b8815d5265c62bc9d7c9830080f6a2c5a2dd19199d6ee4163df22ad",
+      "result_hash": "sha256:44dbadbb19f4a1cd430c90bef5827b6152787014d1e65c0e24294d6202b45d38",
+      "snapshot": {
+        "effect_count": 2,
+        "revision": "rev-2",
+        "value": 2
+      },
+      "started_mono_us": 884037394534,
+      "terminal_code": "READBACK_CONFIRMED",
+      "terminal_mono_us": 884037528797,
+      "terminal_ms": 134.2628,
+      "terminal_response": {
+        "code": "READBACK_CONFIRMED",
+        "command_id": "gt06-s143-candidate-preflight-02.b0.admitted.1",
+        "postconditions": {
+          "request_digest": "sha256:e298098f9b8815d5265c62bc9d7c9830080f6a2c5a2dd19199d6ee4163df22ad",
+          "snapshot": {
+            "effect_count": 2,
+            "revision": "rev-2",
+            "value": 2
+          }
+        },
+        "result_hash": "sha256:44dbadbb19f4a1cd430c90bef5827b6152787014d1e65c0e24294d6202b45d38",
+        "result_revision": "rev-2",
+        "status": "COMMITTED"
+      },
+      "terminal_status": "COMMITTED"
+    }
+  ],
+  "complete_command_mix": false,
+  "diagnostic_retention": "bounded host ring; every expected rejection retained in command rows; unexpected codes fail at each response",
+  "dropped_commands": 0,
+  "dropped_telemetry": 0,
+  "effect_count_after": 2,
+  "effect_count_before": 0,
+  "effects_kind": "in_process_mock_fixture",
+  "effects_per_admission": [
+    1,
+    1
+  ],
+  "ended_mono_us": 884037586882,
+  "host_process": {
+    "pid": 33612,
+    "process_start": "windows:134344594101606958"
+  },
+  "host_response_mono_us": [
+    884036943900,
+    884036961310,
+    884036972296,
+    884037001403,
+    884037004455,
+    884037009523,
+    884037014097,
+    884037019487,
+    884037024092,
+    884037027893,
+    884037031976,
+    884037035675,
+    884037045087,
+    884037066267,
+    884037070429,
+    884037074624,
+    884037079329,
+    884037083112,
+    884037089175,
+    884037093113,
+    884037097280,
+    884037102395,
+    884037110433,
+    884037128965,
+    884037132032,
+    884037135915,
+    884037139841,
+    884037143488,
+    884037148612,
+    884037152318,
+    884037155297,
+    884037159040,
+    884037167847,
+    884037188354,
+    884037191115,
+    884037194941,
+    884037199018,
+    884037203032,
+    884037209058,
+    884037212930,
+    884037216861,
+    884037221593,
+    884037225342,
+    884037234909,
+    884037255244,
+    884037259591,
+    884037284327,
+    884037289239,
+    884037300502,
+    884037303415,
+    884037306066,
+    884037308660,
+    884037333869,
+    884037338573,
+    884037342437,
+    884037349404,
+    884037354688,
+    884037358922,
+    884037366746,
+    884037370583,
+    884037374775,
+    884037380146,
+    884037384328,
+    884037394294,
+    884037417648,
+    884037420339,
+    884037424785,
+    884037430952,
+    884037461142,
+    884037468797,
+    884037495186,
+    884037507917,
+    884037512485,
+    884037516014,
+    884037519647,
+    884037528797,
+    884037550648,
+    884037579601,
+    884037585955,
+    884037586882
+  ],
+  "index": 0,
+  "journal_bytes": 11370,
+  "latency_ms": {
+    "admitted": [
+      25.045,
+      23.1135
+    ],
+    "inspect": [
+      71.7747,
+      65.1719,
+      57.3105,
+      66.9622,
+      65.4334
+    ],
+    "rejected": [
+      2.7593,
+      2.4767,
+      2.4155
+    ]
+  },
+  "max_status_gap_ms": 30.1894,
+  "memory_after": {
+    "counters": {
+      "held_handles": {
+        "unavailable_reason": null,
+        "value": 180
+      },
+      "objects": {
+        "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+        "value": null
+      },
+      "resources": {
+        "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+        "value": null
+      },
+      "rss_bytes": {
+        "unavailable_reason": null,
+        "value": 35450880
+      }
+    },
+    "monotonic_us": 884037586759,
+    "process": {
+      "pid": 33612,
+      "process_start": "windows:134344594101606958"
+    }
+  },
+  "memory_before": {
+    "counters": {
+      "held_handles": {
+        "unavailable_reason": null,
+        "value": 180
+      },
+      "objects": {
+        "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+        "value": null
+      },
+      "resources": {
+        "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+        "value": null
+      },
+      "rss_bytes": {
+        "unavailable_reason": null,
+        "value": 34230272
+      }
+    },
+    "monotonic_us": 884036973168,
+    "process": {
+      "pid": 33612,
+      "process_start": "windows:134344594101606958"
+    }
+  },
+  "mode": "diagnostic",
+  "native_acceptance": false,
+  "observation_kind": "native_windows_process_probe",
+  "run_id": "gt06-s143-candidate-preflight-02",
+  "schema_id": "hh-studio.benchmark-command-batch",
+  "schema_version": "1.3.0",
+  "setup_responses": [
+    {
+      "kind": "discovery",
+      "receipt_mono_us": 884036961310,
+      "started_mono_us": 884036946975
+    },
+    {
+      "kind": "lease",
+      "receipt_mono_us": 884036972296,
+      "started_mono_us": 884036961320
+    }
+  ],
+  "started_mono_us": 884036943900,
+  "status": "DIAGNOSTIC",
+  "status_gap_scope": "host command-lane response progress; not editor UI heartbeat",
+  "transport_kind": "accepted_loopback_fixture_http",
+  "warmup": true
+}

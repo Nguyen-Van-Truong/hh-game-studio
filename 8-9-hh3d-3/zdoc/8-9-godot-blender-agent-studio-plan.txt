@@ -1,5 +1,5 @@
 HH STUDIO — PLAN 1/3: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 21-09-2026, Asia/Saigon | Revision S141 | TRIỂN KHAI THEO GATE
+Ngày 21-09-2026, Asia/Saigon | Revision S143 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -25,9 +25,9 @@ RUNTIME_ACCEPTANCE=GT01_GT02_GT03_GT04_GT05_ACCEPTED
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S141
-EXECUTION_MODE=COORDINATOR_SEQUENTIAL_OWNER_20260921_S141
-SUBAGENTS_ENABLED=S140_ASTRA_XHIGH_REQUESTED_CAPACITY_ERRORS_COORDINATOR_CONTINUES; FINAL_CRITICS_NOT_YET_ELIGIBLE
+PLAN_REVISION=S143
+EXECUTION_MODE=COORDINATOR_SOLO_OWNER_20260921_S143
+SUBAGENTS_ENABLED=NO_OWNER_REQUEST; PRIOR_WORK_INTEGRATED; RECENT_ASTRA_CAPACITY_ERRORS_NOT_COMPLETED; FINAL_CRITICS_NOT_ELIGIBLE
 GT02_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260916_S46
 GT02_REVIEW_STATUS=TWO_INDEPENDENT_PASS_TICK_YES_S46
 GT02_LAST_TESTED_SOURCE_CLOSURE=f28056d8ff705a60d48a54f9dee80f16554494fa976bd0bfabee84bb51fecbbf
@@ -54,95 +54,95 @@ GT05_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260917_S64
 GT05_REVIEW_STATUS=TWO_INDEPENDENT_PASS_TICK_YES_S64
 GT05_CHECKPOINT_COMMIT=808d8ba
 GT05_LAST_TESTED_SOURCE_CLOSURE=c141d54b80022ca7fefdf81f83e7e1078d3cc6aa43954831f82bb3178338a135
-GT06_EVIDENCE_STATUS=ZERO_ACCEPTED_FULL_RUNS; S116_FORMAL_FAILED; S127_HOST_COUNTER_FAILED; S128_INCOMPLETE_UNKNOWN; S129_IMPORT_EXIT0_PRE_WORKLOAD_JOB_MISMATCH; S131_BATCH5_HOST_RSS_FAILED
-GT06_WORKING_SOURCE_STATUS=S131_JOB22_BENCHMARK170_AND_FOUR_NATIVE_PYTHON_LANES_EXIT0_OR_EXPECTED_REJECTION; DIAGNOSTIC_RSS_FAILURE
+GT06_EVIDENCE_STATUS=ZERO_ACCEPTED_FULL_RUNS; S141_FORMAL_FAILED_ADMISSION_UNKNOWN; S142_CANDIDATE_45_TESTS_PASS; S143_PREFLIGHT_COMPLETED
+GT06_WORKING_SOURCE_STATUS=S142_JOURNAL_SNAPSHOT_CANDIDATE; FULL_COUPLED_RSS_AND_LATENCY_NOT_YET_VERIFIED
 GT06_LAST_TESTED_SOURCE_CLOSURE=763191109cd7c7f63de499680291c6b99d77a501dad869078e6d77384ecb20b4
-GT06_CURRENT_SOURCE_CLOSURE=763191109cd7c7f63de499680291c6b99d77a501dad869078e6d77384ecb20b4
-GT06_SOURCE_CHECKPOINT=b8687415; PREVIOUS_RUNTIME=d97960f3
+GT06_CURRENT_SOURCE_CLOSURE=4bd7972b803a877777166ece82d85b6f841755d82bcec42ed78c28ae78c78a01
+GT06_SOURCE_CHECKPOINT=S142_CANDIDATE_PENDING_SCOPED_CHECKPOINT; PREVIOUS_RUNTIME=b8687415
 GT06_SOURCE_FILE_COUNT=53
 GT06_PROFILE_SHA256=0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85
-GT06_BENCHMARK_CAMPAIGN=gt06-s141-formal-01; STOCK_DISPATCHED_20260921T073850Z_QUERY_CURRENT_LIVENESS
-GT06_BENCHMARK_STATUS=ZERO_ACCEPTED_FULL_RUNS; S131_DIAGNOSTIC_NOT_DATASET
-GT06_ACTIVE_DIAGNOSTIC=NONE; S140_P04_BOUNDARY_CAPTURED_7_BATCHES_20260921T065212Z
-GT06_NEXT_ACTION=Observe existing S141 stock campaign; keep source/helper/profile/workstation frozen, no engine/test/heavy audit alongside. On first failure preserve raw and diagnose; never retry blindly. On full dataset verify 10x35/actual exits then final closure/critics.
+GT06_BENCHMARK_CAMPAIGN=gt06-s141-formal-01; FAILED_20260921T074609Z_TASK_RETIRED_091722Z
+GT06_BENCHMARK_STATUS=ZERO_ACCEPTED_FULL_RUNS; S141_FOUR_WARMUP_BATCHES_ONLY; NO_ACTIVE_FORMAL_CAMPAIGN
+GT06_ACTIVE_DIAGNOSTIC=NONE; S143_SEVEN_BATCH_CANDIDATE_PREPARATION
+GT06_NEXT_ACTION=Checkpoint S141 failure/S142 candidate/S143 preflight; one bounded seven-batch coupled candidate with original stock native/workload/gates. Stop on original rejection; preserve raw before attribution. No blind formal retry.
 GT06_READY_AFTER_TERMINAL=S133 seven service/reviewer lanes verified; S134 packet1020 verified as self-contained exact-copy payload with provenance refs; S137 D1/D2 diagnostic limits retained; S138 managed repair+replay completed; S139 source projections/input binding verified, RSS/formal freeze/dataset still open.
 GT06_EXECUTION217_LAST_TESTED_CLOSURE=f1d35fbd304862c2ef6daa248edce7ea1a84f3db6443f2bde7f452f9699c8d8b
-GT06_DIAGNOSTIC_EXCLUSION=All failed/partial/instrumented runs through S140 remain outside F13/F14; raw and UNKNOWN gaps preserved.
-GT06_ATTRIBUTION_STATUS=JOB_ORDERING_MECHANISM_CONTROLLED_DIAGNOSTIC; S129_NUMERIC_READBACK_UNKNOWN; S131_HOST_RSS_40861696_TO_45395968; ROOT_CAUSE_UNKNOWN
+GT06_DIAGNOSTIC_EXCLUSION=All failed/partial/instrumented runs through S143 remain outside F13/F14; raw and UNKNOWN gaps preserved.
+GT06_ATTRIBUTION_STATUS=S141_TIMEOUT_INSIDE_SECOND_JOURNAL_SNAPSHOT; S142_CONTROLLED_CONTENTION_MECHANISM_ONLY; S131_RSS_AND_ORIGINAL_ROOT_CAUSES_UNRESOLVED
 GT06_SOURCE_FREEZE_S139=source-freeze-s139.json; BENCHMARK53=763191109cd7c7f63de499680291c6b99d77a501dad869078e6d77384ecb20b4; INSTALLED217=f1d35fbd304862c2ef6daa248edce7ea1a84f3db6443f2bde7f452f9699c8d8b; UNION231=656ce63fbb6f7e60e1c27944f2caa99561b31116ab40d1387f62c7de628b4520; GT05_INPUTS_BOUND=YES
 
-TIẾN ĐỘ HIỆN HÀNH — S141, ngày 21-09-2026 (timestamps UTC)
+TIẾN ĐỘ HIỆN HÀNH — S143, ngày 21-09-2026 (timestamps UTC)
 GT01–05 ACCEPTED theo source lịch sử; GT06 IN_PROGRESS/zero accepted full runs;
-GT07–10 chưa mở. Chưa đủ DoD để gọi hai critic cuối.
+GT07–10 chưa mở. Coordinator làm SOLO theo lệnh mới nhất; không thêm worker.
 
-Đã hoàn tất, không chạy lại khi dependency không đổi:
-- S133: bảy service/reviewer lanes,164HTTPchecks; owner/helper exits,14nativeJobs
-  zero/closed. Bốn nativeexit0; ba Stop naturalexitUNKNOWN được giữ.
-- S135: sửa cleanup giữ primary failure và thu successor receipt độc lập;
-  installed217 closuref1d35f...;96 fresh-interpreter tests đạt.
+Tổng hợp phần worker/coordinator đã tích hợp, không chạy lại nếu dependency không đổi:
+- S133: bảy service/reviewer lanes, 164 HTTP checks; owner/helper exits và
+  14 native Jobs zero/closed. Bốn native exit0; ba Stop natural exit UNKNOWN.
+- S135: cleanup giữ primary failure và thu successor receipt độc lập;
+  96 fresh-interpreter tests đạt. Installed217 f1d35f... là LAST TESTED lịch sử.
 - S138: managed repair có public readback/ACK; managed replay có natural
-  import/runtime exits0, Jobszero/closed và replay postconditions. Cả hai là
-  functional evidence, không F13/F14. Raw, receipts và summary ở s138-coordinator.
-- S139: benchmark53 và installed217 là hai projection có chủ ý, overlap39,
-  union231; source-freeze-s139.json ràng buộc GT05 inputs. Final formal freeze
-  vẫn phải bổ sung generatedruntime/artifacts, driver/verifier và đủ dataset.
+  import/runtime exits0, Jobs zero/closed và replay postconditions.
+- S139: benchmark53 và installed217 là hai projection, overlap39/union231;
+  source-freeze-s139.json ràng buộc GT05 inputs. S142 đổi verified_journal.py:
+  binding217/source map phải refresh đúng delta trước claim execution mới;
+  không lấy các lane cũ làm bằng chứng cho source mới.
+- Readiness audit S140 trước đã xong. Ba worker Astra xhigh mới bị capacity;
+  chỉ có nhận xét attribution sơ bộ, coordinator tự kiểm raw. Không có ba
+  review hoàn chỉnh hay critic PASS để gộp vào nghiệm thu.
 
-Điểm nghẽn còn mở: S131 hostRSS40,861,696→45,395,968B(+11.0966%) ở batch5.
-S132 host-only7batch không giải thích native/ACK/assembly. S139 phân tích raw
-cho thấy command-after4→5 tăng3,514,368B, joint tăng4,534,272B; rootcauseUNKNOWN.
-Không nới gate, trừ overhead, đổi baseline/timeout/priority hoặc trim/pinRAM.
+S140 p04 đã terminal 7 batch/70 phase rows; gates nguyên bản qua, không tái hiện
+RSS jump S131. Packet174 exact copies verified. Đây là diagnostic, không F13/F14.
+S131 hostRSS40,861,696→45,395,968B (+11.0966%) batch5 vẫn unresolved.
+Handoff: reviews/20260921-gt06-s140-memory-phases/coordinator-terminal.md.
 
-S140 đang đo từng pha với nguyên workload1000HTTP+100native/batch:
-- p01: helper composition AttributeError trước Godot; raw giữ nguyên.
-- Helper đã sửa factory/class hook, API privatecommitEX, identitybinding và
-  dừng sau original postassemblyGC.9unit gồm actual selfprobe+sourcecheck đạt.
-- p02:1batch/10phase rows,BOUNDARY_CAPTURED; host/helper actual1,import0,
-  editor naturalexitUNKNOWN, ownerJobszero/closed, handles/probes/threads clean.
-  privatecommit34,824,192→39,129,088→36,470,784B(command/screen/postGC).
-  Một warmup không chứng minh leak/rootcause/no-leak hoặc full benchmarkPASS.
-- p03: gián đoạn khi batch0commands; process không còn nhưng thiếu terminal/
-  phase/cleanup/exit receipts. INCOMPLETE/UNKNOWN; không retry cùngID.
-- p04: terminal06:52:12Z,716.11s,7batch/70rows; original screens đều qua,
-  dừng sau originalGC; noF13/F14. Host27552/helper49348exit1,import54836exit0;
-  editor naturalexitUNKNOWN/helper5544exit2; Jobszero/closed,probes/threads sạch.
-  Passive observer bắt launcher3884actualexit0/nativeCloseHandletrue; task retired.
-- Batch4→5 jointRSS47,546,368→47,169,536B; ACKprivate+225,280B,
-  postGCprivate+323,584B/allocatedblocks+202. Không tái hiện jumpS131;
-  chưa chứng minh rootcause/no-leak. Không có boundary đủ để sửa runtime hẹp.
-- Packet174 exactcopies verified0missing/0mismatch; manifestd286c517e401b040
-  80689d5c64b3f2cddeb4fcae3d4372b6871a9378ec5f3a72. Raw p01–p04 giữ nguyên.
-  Handoff/decision: reviews/20260921-gt06-s140-memory-phases/coordinator-terminal.md.
+S141 formal gt06-s141-formal-01 FAILED 07:46:09Z, KHÔNG còn chạy:
+- 4 completed warmup batches0–3; batch4 inspect.364 /commands getresponse
+  timeout2007.1129ms; command-response gap2048.0477ms. ADMISSION_UNKNOWN,
+  không phải lookup timeout. Zero accepted full runs.
+- Join QPC/root/port xác định timeout nằm trong snapshot thứ hai1674.4389ms;
+  snapshot đầu733.7135ms, append49.6508ms. Journal sau đó QUEUED rồi
+  CANCELED_BEFORE_APPLY/no_effect; không hồi tố ACK client hay claim rootcause.
+- Host30300 actual1/helper1, launcher44044 actual1 qua retained handle;
+  editor natural UNKNOWN/helper2, import9664 exit0. Jobs/probes/threads cleanup
+  đã giữ; import-wrapper cleanup artifact thiếu vẫn UNKNOWN. Task retired09:17:22Z.
+- terminal-01/packet:82 exact files, verified0missing/0mismatch; manifest
+  073def236c0abebb02a7f95fba24e38b29500928226d2db9018c26f3f0f96fcb.
+  Raw journal giữ local, hash/domain/exclusions rõ; không commit journal/cache.
+  Seal + analysis: reviews/20260921-gt06-s141-stock-campaign/terminal-01.
 
-S141 STOCK đang chạy gt06-s141-formal-01 từ07:38:50Z, checkpoint2b2fcca9.
-Task HHStudio.GT06.gt06-s129-s141-formal-supervisor; query bằng S129
-prepare_task.ps1 -Command status -RunId gt06-s129-s141-formal-supervisor.
-Raw studio/.local/reviews/gt06-s141-formal-01; driver/freeze/handoff tại
-reviews/20260921-gt06-s141-stock-campaign. Launcher44044,host30300,editor38332
-đã thấy sống/batch0commands; đây là lịch sử, queryidentity mới trước kết luận.
-Freeze236files/237requestpins gồm union231+3GT05inputs+launcher+S139map;
-freezeSHA0bc44be54f24a655e41c80fdfc69344d474dafcfb79e26d40bd22e365201b7a6.
-S141 gọi stockrun_campaign trực tiếp, không overlay/patch/cache/timingchange.
-Perpair7410s không đổi; passive85800s/task24h bao10pairs, không ETAtoànplan.
-Run tuần tự10freshpairs×35batch và haltfirstfailure; zeroacceptedfullruns hiện tại.
-Giữ source/helper/profile/workstation; không engine/test/hashheavy cạnh đo.
-S140 diagnostic không thay dataset, S131 rootcauseUNKNOWN vẫn giữ. Collector sai
-sửa metadata từ raw đủ, không rerunengine; không xóaStop/reuseID/retrymù.
-Prelaunch01 tuple/listworkstation JSON mismatch đã giữ; chuẩn hóa bằng đúng
-stockcanonicalserialization rồi inertcheckpass, không engine nào bị chạy lại.
+S142 sửa hẹp candidate verified_journal._snapshot:
+- Cùng full-file SHA512, bounds/identity/parser/fallback/fsync. Đọc tối đa1MiB/lần,
+  hash từng phần2047B để tránh mỗi update nhả GIL rồi phải giành lại trong CPython.
+  Không cache shortcut, đổi timeout/ngưỡng/baseline hay bỏ kiểm corruption.
+- Controlled contention trên bản sao journal: stock724.8–2924.3ms,
+  candidate186.0–260.1ms; uncontended stock9.3–10.3ms/candidate12.0–12.3ms.
+  Hash/identity/size bằng nhau. Chỉ chứng minh cơ chế trong probe tổng hợp;
+  không chứng minh rootcause S141 hay latency/RSS toàn workload đã sửa.
+- 45 affected journal/index/durability/CAS/transport tests PASS, actual exit0;
+  thêm full-buffer-boundary hash test. Native/profile không đổi.
+  Candidate benchmark53=4bd7972b803a877777166ece82d85b6f841755d82bcec42ed78c28ae78c78a01.
+  Chi tiết, results và limits: reviews/20260921-gt06-s142-snapshot-boundary/README.md.
 
-Worker: một readiness audit S140 trước đã xong; ba Astra xhigh mới đều capacity
-error. Coordinator tiếp quản; không ghi giả ba worker hoàn thành/criticPASS.
-Lịch cũ ti-p-t-c-hh3d-tools không còn khi update; đã tạo lại đúng một heartbeat
-cùng ID, ACTIVE mỗi10phút. Disk ưu tiên,quiet khi healthy/unchanged. Máy/app cần
-hoạt động; chỉ xóa khi toànplan accepted; không hứa hoàn tất trước sáng.
+S143 preflight02 đã hoàn tất14.390s, host33612/helper50076 exit0, Jobs/probes/
+threads clean, errors[]. Chỉ import và20HTTPcommands, chưa1000HTTP+100native.
+Preflight01 wrapper runpy dùng namespace copy sai: FileExistsError trước engine;
+không overwrite oldID. Giữ failure01, dùng helper directcopy với freshID02.
+Next: một coupled candidate tối đa7 original batches (1000HTTP+100native mỗi
+batch), original stock native/gates; outer1230s. Kiểm RAM của buffer1MiB và
+latency cùng workload, dừng ở gate đầu lỗi hoặc boundary7. Không F13/F14/PASS.
+Không engine/test/hash audit nặng cạnh phép đo; giữ source/helper/profile/workstation.
 
-GT06 vẫn10freshpairs×35batch(5warmup30measured), full dataset/hash/actualexits/
+Bài học: đọc trạng thái process mới, receipt không chứng minh đang chạy; collector
+sai thì sửa derived metadata từ raw đủ; không chạy lại engine chỉ để sửa báo cáo.
+Không xóa Stop, reuseID, nới gate/baseline/timeout/priority hoặc trim/pin RAM.
+Lịch ti-p-t-c-hh3d-tools giữ một heartbeat10phút, quiet healthy/unchanged; update
+prompt theo disk. Máy/app cần hoạt động; không hứa ETA toàn plan hay xong sáng.
+
+GT06 vẫn10freshpairs×35batch (5warmup30measured), full dataset/hash/actual exits/
 trees/Jobs/handles/allattempts. Finalfreeze+requirement evidence và hai critic
-MỚI cùnghashPASS/TICK=yes mới ACCEPT→GT07–GT10;GT08 vẫn Android thật.
-Lịch sử chi tiết S132–S139 đã archive byteexact ở s140-memory-phases/history/
-tools-plan-s139.txt, manifest cóSHA256/AUTHORITY0. S134 packet1020 là payload
-exact-copy có provenance refs, không external-only. S137 D1/D2 vẫn diagnostic
-incomplete vì event observer thiếu terminaldrain; giữ tất cả failures/lessons.
+MỚI cùnghashPASS/TICK=yes mới ACCEPT→GT07–10; GT08 vẫn Android thật.
+S141 plan cũ lưu exact ở s142-snapshot-boundary/history/tools-plan-s141.txt,
+manifest SHA256/AUTHORITY0. Failures, gaps và bài học S70–S141 không bị xóa.
 
 Rà phạm vi claim S76: GT-01–05 ACCEPTED theo fixture/catalog đã công bố,
 chưa chứng minh authoring gameplay tổng quát. Godot writer hiện chỉ Node3D/

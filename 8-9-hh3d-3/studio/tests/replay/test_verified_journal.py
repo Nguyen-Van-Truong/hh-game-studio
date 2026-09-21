@@ -1,5 +1,6 @@
 """The optional index cache must preserve the accepted journal boundaries."""
 from pathlib import Path
+import hashlib
 import os
 import json
 import subprocess
@@ -35,6 +36,26 @@ class VerifiedJournalTests(unittest.TestCase):
             self.append('c2')
             self.assertEqual(self.lookup('c2')['receipt'], {'value': 'c2'})
             self.assertEqual(load.call_count, 0)
+
+    def test_snapshot_hash_covers_full_buffer_boundaries_and_tail(self):
+        # Exercise the byte verifier independently of the JSONL parser. An
+        # altered byte beyond the first read and a short tail must affect it.
+        raw = bytes(range(256)) * 8200 + b'last-tail'
+        self.path.write_bytes(raw)
+        with self.journal._writer_lock():
+            digest, size, identity = self.journal._snapshot(synchronize=False)
+        self.assertEqual(size, len(raw))
+        self.assertEqual(digest.digest(), hashlib.sha512(raw).digest())
+        self.assertIsNotNone(identity)
+        changed = bytearray(raw)
+        changed[1_048_576 + 3] ^= 0xFF
+        self.path.write_bytes(changed)
+        with self.journal._writer_lock():
+            new_digest, new_size, new_identity = self.journal._snapshot(synchronize=False)
+        self.assertEqual(new_size, size)
+        self.assertEqual(new_identity, identity)
+        self.assertEqual(new_digest.digest(), hashlib.sha512(changed).digest())
+        self.assertNotEqual(new_digest.digest(), digest.digest())
 
     def test_other_writer_append_refreshes_dedupe_and_lease(self):
         self.append()

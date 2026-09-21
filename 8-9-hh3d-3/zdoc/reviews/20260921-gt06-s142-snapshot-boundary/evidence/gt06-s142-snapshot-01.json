@@ -1,0 +1,898 @@
+{
+  "authority": 0,
+  "closed": true,
+  "elapsed_seconds": 3.60561680002138,
+  "ended_utc": "2026-09-21T09:19:40.128049+00:00",
+  "engine_runs": 0,
+  "formal_acceptance": false,
+  "history_unchanged": true,
+  "initialization_seconds": 3.315776100032963,
+  "limits": [
+    "No HTTP/native workload, OS pressure or original interleaving reproduced.",
+    "Profiler overhead is present, never subtracted; thread CPU clock may be coarse.",
+    "No performance gate, root cause, no-leak or formal acceptance inference."
+  ],
+  "rows": [
+    {
+      "bytes_verified": 4634619,
+      "calls": {
+        "flush": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0032,
+          "wall_ms": 0.0032
+        },
+        "fstat": {
+          "count": 2,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0172,
+          "wall_ms": 0.030600000000000002
+        },
+        "fsync": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.4979,
+          "wall_ms": 0.4979
+        },
+        "open": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.118,
+          "wall_ms": 0.118
+        },
+        "read": {
+          "count": 72,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0818,
+          "wall_ms": 1.6075
+        },
+        "update": {
+          "count": 71,
+          "cpu_ms": 15.625,
+          "max_ms": 0.1287,
+          "wall_ms": 6.219600000000002
+        }
+      },
+      "cpu_ms": 15.625,
+      "index": 0,
+      "wall_ms": 10.63
+    },
+    {
+      "bytes_verified": 4634619,
+      "calls": {
+        "flush": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0033,
+          "wall_ms": 0.0033
+        },
+        "fstat": {
+          "count": 2,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0187,
+          "wall_ms": 0.028700000000000003
+        },
+        "fsync": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.1267,
+          "wall_ms": 0.1267
+        },
+        "open": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0849,
+          "wall_ms": 0.0849
+        },
+        "read": {
+          "count": 72,
+          "cpu_ms": 0.0,
+          "max_ms": 0.1155,
+          "wall_ms": 1.5278000000000005
+        },
+        "update": {
+          "count": 71,
+          "cpu_ms": 15.625,
+          "max_ms": 0.1152,
+          "wall_ms": 6.116700000000002
+        }
+      },
+      "cpu_ms": 15.625,
+      "index": 1,
+      "wall_ms": 8.4769
+    },
+    {
+      "bytes_verified": 4634619,
+      "calls": {
+        "flush": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0035,
+          "wall_ms": 0.0035
+        },
+        "fstat": {
+          "count": 2,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0171,
+          "wall_ms": 0.0314
+        },
+        "fsync": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0812,
+          "wall_ms": 0.0812
+        },
+        "open": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0992,
+          "wall_ms": 0.0992
+        },
+        "read": {
+          "count": 72,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0938,
+          "wall_ms": 1.6164000000000003
+        },
+        "update": {
+          "count": 71,
+          "cpu_ms": 0.0,
+          "max_ms": 0.5453,
+          "wall_ms": 6.6566000000000045
+        }
+      },
+      "cpu_ms": 0.0,
+      "index": 2,
+      "wall_ms": 9.2277
+    },
+    {
+      "bytes_verified": 4634619,
+      "calls": {
+        "flush": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0032,
+          "wall_ms": 0.0032
+        },
+        "fstat": {
+          "count": 2,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0175,
+          "wall_ms": 0.0279
+        },
+        "fsync": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.1153,
+          "wall_ms": 0.1153
+        },
+        "open": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0695,
+          "wall_ms": 0.0695
+        },
+        "read": {
+          "count": 72,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0674,
+          "wall_ms": 1.4975000000000005
+        },
+        "update": {
+          "count": 71,
+          "cpu_ms": 15.625,
+          "max_ms": 0.1015,
+          "wall_ms": 6.0507000000000035
+        }
+      },
+      "cpu_ms": 15.625,
+      "index": 3,
+      "wall_ms": 8.3238
+    },
+    {
+      "bytes_verified": 4634619,
+      "calls": {
+        "flush": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0033,
+          "wall_ms": 0.0033
+        },
+        "fstat": {
+          "count": 2,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0189,
+          "wall_ms": 0.028999999999999998
+        },
+        "fsync": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.1576,
+          "wall_ms": 0.1576
+        },
+        "open": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0723,
+          "wall_ms": 0.0723
+        },
+        "read": {
+          "count": 72,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0709,
+          "wall_ms": 1.6954
+        },
+        "update": {
+          "count": 71,
+          "cpu_ms": 15.625,
+          "max_ms": 0.1824,
+          "wall_ms": 6.417500000000002
+        }
+      },
+      "cpu_ms": 15.625,
+      "index": 4,
+      "wall_ms": 9.0274
+    },
+    {
+      "bytes_verified": 4634619,
+      "calls": {
+        "flush": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0035,
+          "wall_ms": 0.0035
+        },
+        "fstat": {
+          "count": 2,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0227,
+          "wall_ms": 0.0348
+        },
+        "fsync": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.1572,
+          "wall_ms": 0.1572
+        },
+        "open": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0809,
+          "wall_ms": 0.0809
+        },
+        "read": {
+          "count": 72,
+          "cpu_ms": 0.0,
+          "max_ms": 0.1248,
+          "wall_ms": 1.6190999999999998
+        },
+        "update": {
+          "count": 71,
+          "cpu_ms": 0.0,
+          "max_ms": 0.1166,
+          "wall_ms": 6.204500000000004
+        }
+      },
+      "cpu_ms": 0.0,
+      "index": 5,
+      "wall_ms": 8.7264
+    },
+    {
+      "bytes_verified": 4634619,
+      "calls": {
+        "flush": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0033,
+          "wall_ms": 0.0033
+        },
+        "fstat": {
+          "count": 2,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0163,
+          "wall_ms": 0.026999999999999996
+        },
+        "fsync": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.1205,
+          "wall_ms": 0.1205
+        },
+        "open": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0698,
+          "wall_ms": 0.0698
+        },
+        "read": {
+          "count": 72,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0687,
+          "wall_ms": 1.4599000000000002
+        },
+        "update": {
+          "count": 71,
+          "cpu_ms": 15.625,
+          "max_ms": 0.0928,
+          "wall_ms": 6.029600000000003
+        }
+      },
+      "cpu_ms": 15.625,
+      "index": 6,
+      "wall_ms": 8.2885
+    },
+    {
+      "bytes_verified": 4634619,
+      "calls": {
+        "flush": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0034,
+          "wall_ms": 0.0034
+        },
+        "fstat": {
+          "count": 2,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0189,
+          "wall_ms": 0.0292
+        },
+        "fsync": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.1299,
+          "wall_ms": 0.1299
+        },
+        "open": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0707,
+          "wall_ms": 0.0707
+        },
+        "read": {
+          "count": 72,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0778,
+          "wall_ms": 1.655100000000001
+        },
+        "update": {
+          "count": 71,
+          "cpu_ms": 0.0,
+          "max_ms": 0.1745,
+          "wall_ms": 6.298200000000003
+        }
+      },
+      "cpu_ms": 15.625,
+      "index": 7,
+      "wall_ms": 8.8245
+    },
+    {
+      "bytes_verified": 4634619,
+      "calls": {
+        "flush": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0034,
+          "wall_ms": 0.0034
+        },
+        "fstat": {
+          "count": 2,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0191,
+          "wall_ms": 0.029199999999999997
+        },
+        "fsync": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.1246,
+          "wall_ms": 0.1246
+        },
+        "open": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0697,
+          "wall_ms": 0.0697
+        },
+        "read": {
+          "count": 72,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0985,
+          "wall_ms": 1.6793000000000002
+        },
+        "update": {
+          "count": 71,
+          "cpu_ms": 0.0,
+          "max_ms": 0.1293,
+          "wall_ms": 6.193900000000003
+        }
+      },
+      "cpu_ms": 0.0,
+      "index": 8,
+      "wall_ms": 8.7404
+    },
+    {
+      "bytes_verified": 4634619,
+      "calls": {
+        "flush": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0032,
+          "wall_ms": 0.0032
+        },
+        "fstat": {
+          "count": 2,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0159,
+          "wall_ms": 0.0262
+        },
+        "fsync": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0982,
+          "wall_ms": 0.0982
+        },
+        "open": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0687,
+          "wall_ms": 0.0687
+        },
+        "read": {
+          "count": 72,
+          "cpu_ms": 15.625,
+          "max_ms": 0.0694,
+          "wall_ms": 1.4308999999999998
+        },
+        "update": {
+          "count": 71,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0971,
+          "wall_ms": 6.030200000000003
+        }
+      },
+      "cpu_ms": 15.625,
+      "index": 9,
+      "wall_ms": 8.2151
+    },
+    {
+      "bytes_verified": 4634619,
+      "calls": {
+        "flush": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0031,
+          "wall_ms": 0.0031
+        },
+        "fstat": {
+          "count": 2,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0175,
+          "wall_ms": 0.027800000000000002
+        },
+        "fsync": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0825,
+          "wall_ms": 0.0825
+        },
+        "open": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0701,
+          "wall_ms": 0.0701
+        },
+        "read": {
+          "count": 72,
+          "cpu_ms": 0.0,
+          "max_ms": 0.1059,
+          "wall_ms": 1.5431000000000001
+        },
+        "update": {
+          "count": 71,
+          "cpu_ms": 15.625,
+          "max_ms": 0.1461,
+          "wall_ms": 6.150600000000002
+        }
+      },
+      "cpu_ms": 15.625,
+      "index": 10,
+      "wall_ms": 8.4488
+    },
+    {
+      "bytes_verified": 4634619,
+      "calls": {
+        "flush": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0035,
+          "wall_ms": 0.0035
+        },
+        "fstat": {
+          "count": 2,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0195,
+          "wall_ms": 0.0298
+        },
+        "fsync": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.2361,
+          "wall_ms": 0.2361
+        },
+        "open": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0682,
+          "wall_ms": 0.0682
+        },
+        "read": {
+          "count": 72,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0768,
+          "wall_ms": 1.9442000000000002
+        },
+        "update": {
+          "count": 71,
+          "cpu_ms": 0.0,
+          "max_ms": 0.2227,
+          "wall_ms": 6.841400000000002
+        }
+      },
+      "cpu_ms": 0.0,
+      "index": 11,
+      "wall_ms": 9.9007
+    },
+    {
+      "bytes_verified": 4634619,
+      "calls": {
+        "flush": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0042,
+          "wall_ms": 0.0042
+        },
+        "fstat": {
+          "count": 2,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0229,
+          "wall_ms": 0.0349
+        },
+        "fsync": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.5611,
+          "wall_ms": 0.5611
+        },
+        "open": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0786,
+          "wall_ms": 0.0786
+        },
+        "read": {
+          "count": 72,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0777,
+          "wall_ms": 1.7495000000000003
+        },
+        "update": {
+          "count": 71,
+          "cpu_ms": 0.0,
+          "max_ms": 0.1328,
+          "wall_ms": 6.472400000000004
+        }
+      },
+      "cpu_ms": 0.0,
+      "index": 12,
+      "wall_ms": 9.5926
+    },
+    {
+      "bytes_verified": 4634619,
+      "calls": {
+        "flush": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0036,
+          "wall_ms": 0.0036
+        },
+        "fstat": {
+          "count": 2,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0261,
+          "wall_ms": 0.036000000000000004
+        },
+        "fsync": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.1373,
+          "wall_ms": 0.1373
+        },
+        "open": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0728,
+          "wall_ms": 0.0728
+        },
+        "read": {
+          "count": 72,
+          "cpu_ms": 15.625,
+          "max_ms": 0.0905,
+          "wall_ms": 1.6031000000000006
+        },
+        "update": {
+          "count": 71,
+          "cpu_ms": 0.0,
+          "max_ms": 0.1048,
+          "wall_ms": 6.111600000000002
+        }
+      },
+      "cpu_ms": 15.625,
+      "index": 13,
+      "wall_ms": 8.5818
+    },
+    {
+      "bytes_verified": 4634619,
+      "calls": {
+        "flush": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0047,
+          "wall_ms": 0.0047
+        },
+        "fstat": {
+          "count": 2,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0269,
+          "wall_ms": 0.0375
+        },
+        "fsync": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.1399,
+          "wall_ms": 0.1399
+        },
+        "open": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0717,
+          "wall_ms": 0.0717
+        },
+        "read": {
+          "count": 72,
+          "cpu_ms": 0.0,
+          "max_ms": 0.1743,
+          "wall_ms": 2.3682
+        },
+        "update": {
+          "count": 71,
+          "cpu_ms": 15.625,
+          "max_ms": 0.2795,
+          "wall_ms": 9.715
+        }
+      },
+      "cpu_ms": 15.625,
+      "index": 14,
+      "wall_ms": 13.3083
+    },
+    {
+      "bytes_verified": 4634619,
+      "calls": {
+        "flush": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0034,
+          "wall_ms": 0.0034
+        },
+        "fstat": {
+          "count": 2,
+          "cpu_ms": 0.0,
+          "max_ms": 0.022,
+          "wall_ms": 0.0365
+        },
+        "fsync": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0905,
+          "wall_ms": 0.0905
+        },
+        "open": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.094,
+          "wall_ms": 0.094
+        },
+        "read": {
+          "count": 72,
+          "cpu_ms": 0.0,
+          "max_ms": 0.1014,
+          "wall_ms": 2.0079
+        },
+        "update": {
+          "count": 71,
+          "cpu_ms": 15.625,
+          "max_ms": 0.1938,
+          "wall_ms": 7.035000000000004
+        }
+      },
+      "cpu_ms": 15.625,
+      "index": 15,
+      "wall_ms": 10.0004
+    },
+    {
+      "bytes_verified": 4634619,
+      "calls": {
+        "flush": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0036,
+          "wall_ms": 0.0036
+        },
+        "fstat": {
+          "count": 2,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0209,
+          "wall_ms": 0.031299999999999994
+        },
+        "fsync": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.148,
+          "wall_ms": 0.148
+        },
+        "open": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0708,
+          "wall_ms": 0.0708
+        },
+        "read": {
+          "count": 72,
+          "cpu_ms": 0.0,
+          "max_ms": 0.1418,
+          "wall_ms": 2.1769000000000003
+        },
+        "update": {
+          "count": 71,
+          "cpu_ms": 0.0,
+          "max_ms": 0.1593,
+          "wall_ms": 6.907500000000001
+        }
+      },
+      "cpu_ms": 0.0,
+      "index": 16,
+      "wall_ms": 10.1189
+    },
+    {
+      "bytes_verified": 4634619,
+      "calls": {
+        "flush": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.008,
+          "wall_ms": 0.008
+        },
+        "fstat": {
+          "count": 2,
+          "cpu_ms": 0.0,
+          "max_ms": 0.1448,
+          "wall_ms": 0.15680000000000002
+        },
+        "fsync": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.1071,
+          "wall_ms": 0.1071
+        },
+        "open": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0868,
+          "wall_ms": 0.0868
+        },
+        "read": {
+          "count": 72,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0704,
+          "wall_ms": 1.5947999999999998
+        },
+        "update": {
+          "count": 71,
+          "cpu_ms": 15.625,
+          "max_ms": 0.1332,
+          "wall_ms": 6.150800000000005
+        }
+      },
+      "cpu_ms": 15.625,
+      "index": 17,
+      "wall_ms": 8.751
+    },
+    {
+      "bytes_verified": 4634619,
+      "calls": {
+        "flush": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0031,
+          "wall_ms": 0.0031
+        },
+        "fstat": {
+          "count": 2,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0185,
+          "wall_ms": 0.029199999999999997
+        },
+        "fsync": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.1131,
+          "wall_ms": 0.1131
+        },
+        "open": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0704,
+          "wall_ms": 0.0704
+        },
+        "read": {
+          "count": 72,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0697,
+          "wall_ms": 1.4736000000000002
+        },
+        "update": {
+          "count": 71,
+          "cpu_ms": 15.625,
+          "max_ms": 0.0955,
+          "wall_ms": 6.033300000000001
+        }
+      },
+      "cpu_ms": 15.625,
+      "index": 18,
+      "wall_ms": 8.2718
+    },
+    {
+      "bytes_verified": 4634619,
+      "calls": {
+        "flush": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0054,
+          "wall_ms": 0.0054
+        },
+        "fstat": {
+          "count": 2,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0276,
+          "wall_ms": 0.0374
+        },
+        "fsync": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.1124,
+          "wall_ms": 0.1124
+        },
+        "open": {
+          "count": 1,
+          "cpu_ms": 0.0,
+          "max_ms": 0.0686,
+          "wall_ms": 0.0686
+        },
+        "read": {
+          "count": 72,
+          "cpu_ms": 0.0,
+          "max_ms": 0.1034,
+          "wall_ms": 2.0041999999999995
+        },
+        "update": {
+          "count": 71,
+          "cpu_ms": 0.0,
+          "max_ms": 0.1922,
+          "wall_ms": 7.257
+        }
+      },
+      "cpu_ms": 0.0,
+      "index": 19,
+      "wall_ms": 10.2606
+    }
+  ],
+  "source_unchanged": true
+}
