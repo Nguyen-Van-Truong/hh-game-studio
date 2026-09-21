@@ -1,5 +1,5 @@
 HH STUDIO — PLAN 1/3: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 21-09-2026, Asia/Saigon | Revision S138 | TRIỂN KHAI THEO GATE
+Ngày 21-09-2026, Asia/Saigon | Revision S139 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -16,7 +16,7 @@ STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng
 
 CURRENT_VALID_WP=GT-06
 EXECUTION_AUTHORIZATION=OWNER_APPROVED_GATED
-IMPLEMENTATION=GT06_S133_FUNCTIONAL_REFRESH_S134_TERMINAL_S135_CLEANUP_REPAIR_S137_IMPORT_BOUNDARY_D1_D2; FORMAL_GT06_PENDING
+IMPLEMENTATION=GT06_S133_FUNCTIONAL_REFRESH_S134_TERMINAL_S135_CLEANUP_REPAIR_S137_IMPORT_BOUNDARY_D1_D2_S138_MANAGED_REPAIR_REPLAY; FORMAL_GT06_PENDING
 GT01_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260913
 GT01_PENDING=NONE
 GT01_PIN_DECISION=GODOT_4.7.2_STABLE_OFFICIAL
@@ -25,9 +25,9 @@ RUNTIME_ACCEPTANCE=GT01_GT02_GT03_GT04_GT05_ACCEPTED
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S136
-EXECUTION_MODE=COORDINATOR_SOLO_OWNER_20260920_LATEST
-SUBAGENTS_ENABLED=NO_NEW_WORKERS; FINAL_CRITIC_GATE_RETAINED_NOT_YET_ELIGIBLE
+PLAN_REVISION=S139
+EXECUTION_MODE=COORDINATOR_SEQUENTIAL_OWNER_20260921_LATEST
+SUBAGENTS_ENABLED=S139_READONLY_WORKERS_3; FINAL_CRITIC_GATE_RETAINED_NOT_YET_ELIGIBLE
 GT02_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260916_S46
 GT02_REVIEW_STATUS=TWO_INDEPENDENT_PASS_TICK_YES_S46
 GT02_LAST_TESTED_SOURCE_CLOSURE=f28056d8ff705a60d48a54f9dee80f16554494fa976bd0bfabee84bb51fecbbf
@@ -64,8 +64,8 @@ GT06_PROFILE_SHA256=0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf
 GT06_BENCHMARK_CAMPAIGN=gt06-s116-formal-01; LAST_FORMAL_FAILED
 GT06_BENCHMARK_STATUS=ZERO_ACCEPTED_FULL_RUNS; S131_DIAGNOSTIC_NOT_DATASET
 GT06_ACTIVE_DIAGNOSTIC=NONE; S135_BOUNDARY_CAPTURED_PROFILE_IMPORT_SIGKILL; S137_STATIC_ATTRIBUTION_REVIEWED; NO_CURRENT_ENGINE
-GT06_NEXT_ACTION=S137 D0/D1/D2 diagnostic evidence sealed; no identical formal/coupled retry. Review bounded results and preserve S135 failure; formal GT06 remains pending until a justified fresh campaign can meet the unchanged 10x35 DoD.
-GT06_READY_AFTER_TERMINAL=S133 seven service/reviewer lanes verified; S134 packet1020 verified; S137 D1 exact-profile and D2 inert control completed; managed repair and replay not complete.
+GT06_NEXT_ACTION=S138 managed repair/replay verified with fresh IDs; freeze the two source projections and generated inputs, then resolve the retained S131 RSS gap before any formal campaign. No identical formal/coupled retry; GT06 remains pending until the unchanged 10x35 DoD is met.
+GT06_READY_AFTER_TERMINAL=S133 seven service/reviewer lanes verified; S134 packet1020 verified as self-contained exact-copy payload with provenance refs; S137 D1/D2 diagnostic limits retained; S138 managed repair+replay completed, RSS/formal freeze/dataset still open.
 GT06_EXECUTION217_LAST_TESTED_CLOSURE=f1d35fbd304862c2ef6daa248edce7ea1a84f3db6443f2bde7f452f9699c8d8b
 GT06_DIAGNOSTIC_EXCLUSION=All failed/partial/instrumented runs through S134 remain outside F13/F14; original raw and gaps preserved.
 GT06_ATTRIBUTION_STATUS=JOB_ORDERING_MECHANISM_CONTROLLED_PROOF; S129_NUMERIC_READBACK_UNKNOWN; S131_HOST_RSS_40861696_TO_45395968; ROOT_CAUSE_UNKNOWN
@@ -104,9 +104,10 @@ S134 managed repair gt06-s134-managed-repair-01 TERMINAL FAILED:
   Không publicACK/COMMITTED; successorclose/naturalexit chưa chứng minh.
   Outer target26188exit1/helper46824exit0/treeverified, sourceunchanged.
 - Packet terminal-packet-01 trong reviews/20260920-gt06-s134-validation-boundary/
-  là manifest/index tới raw ngoài packet: 1019 indexed raw records + 1 derived
-  analysis, verify 1020 entries; không có exact-copy payload tự chứa trong thư mục
-  packet. Manifest 57ac533993f50d19799c1bc8136a8504d1d72ac16dd83ff870813d3b2d2b63f0.
+  là manifest kèm payload exact-copy: 1019 bản ghi raw + 1 analysis, verify 1020
+  entries. Mỗi row có file trong packet, hash/size và source provenance; source
+  refs vẫn ở ngoài packet và không tự tạo formal acceptance. Manifest
+  57ac533993f50d19799c1bc8136a8504d1d72ac16dd83ff870813d3b2d2b63f0.
   Framechain được decode read-only; không thay custodyverify hay claimdurability.
 
 Tiếp theo: sửa cleanup che lỗi gốc và thiếu ownership evidence bằng inert tests;
@@ -149,10 +150,10 @@ không xác định nguồn SIGKILL. Vì vậy chưa có repair hẹp nào đư�
 Đây là boundary chẩn đoán, không phải PASS/no-leak/root cause và không nhập
 F13/F14. Packet custody/digest corrections ở
 reviews/20260921-gt06-s137-import-boundary/metadata-correction.json (Authority 0)
-ghi rõ S134 là index tới raw ngoài packet và S135 có digest stale/cycle; không
-rewrite raw packet. Không retry cùng ID hoặc lặp boundary y hệt; bước hữu ích
-còn lại là D0 static đã hoàn tất, rồi chỉ tạo bounded run ID mới khi observer/
-control có thể phân biệt boundary và preflight sạch.
+ghi nhận digest S135 stale/cycle; không rewrite raw packet. Custody review S139
+đã sửa diễn giải S134: packet có byte copies tự chứa, còn source refs chỉ là
+provenance. Không retry cùng ID hoặc lặp boundary y hệt; bước hữu ích tiếp theo
+là đóng source-freeze/RSS gap sau khi managed repair/replay S138 đã có bằng chứng.
 
 S137 independent reviews đã hoàn tất tại
 reviews/20260921-gt06-s137-import-boundary/: import-static-review.md,
@@ -166,12 +167,32 @@ D1 observer profile mới `gt06-s137-d1-observer-01` đã chạy đủ
 parse/import/readback, exit0, timeout=false, OOMKilled=false, Job zero/closed,
 input unchanged và diagnostic_process_clean=true. D2 inert control sửa harness
 mountpoint bằng run ID mới `gt06-s137-d2-inert-control-02`: sentinel start/end,
-start/wait/remove đều0, inspect exited0, OOMKilled=false; không có kill/OOM event.
+start/wait/remove đều0, inspect exited0, OOMKilled=false. Event stream chỉ có
+create/attach/start (D1 chỉ create/attach) vì observer dừng trước terminal drain;
+do đó phải ghi `DIAGNOSTIC_INCOMPLETE`, không suy ra vắng kill/OOM event.
 Summary authority-0 ở d1-d2-summary.json (SHA256
 158fdb596332be6a5749c261faf648131d78942fcdd3ea631a563b19bf1a5b9b). D1/D2
 chỉ cho thấy hai lượt bounded này hoạt động; không giải thích S135 import -9,
 không chứng minh no-leak và không nhập F13/F14. D2 lần-01 fail trước process vì
 control snapshot thiếu `.godot`; raw giữ nguyên, không overwrite.
+
+S138 managed repair/replay fresh IDs đã hoàn tất tại
+reviews/20260921-gt06-s138-coordinator/: `gt06-s138-managed-repair-01` có
+public readback/ACK, source unchanged, owner/transport/editor Job zero/closed
+và actual target/helper exits 0; `gt06-s138-managed-replay-01` có import/runtime
+actual exits 0, natural tree exits, Job zero/closed, quit drain và all replay
+postconditions, movement 1.500000238 m so với expected 1.5 m. Raw vẫn ở
+studio/.local/reviews/ và cả hai lane đều `formal_acceptance=false`; đây là G1
+managed evidence, không phải F13/F14 hay GT06 benchmark PASS.
+
+S139 read-only source inventory xác nhận 53-file benchmark projection và
+217-file installed execution projection là hai scope có chủ ý (39 tên giao nhau,
+14 benchmark-only; union hiện thời 231 entries), không phải 53 thiếu 164
+dependency. G2 còn thiếu một final freeze liên kết cả hai projection với
+generated input/runtime artifacts, profile, toolchain, driver và verifier.
+S139 RSS review xác nhận S132 host-only released batches ổn định ở private
+commit/handles, nhưng không phân biệt được phần native/ACK/assembly làm S131
+host RSS tăng 11.0966%; không chạy thêm host-only hoặc lặp RSS campaign mù.
 
 Lịch ti-p-t-c-hh3d-tools mỗi10phút, trạng tháidisk ưu tiên; không tạo lịch trùng.
 GT06 vẫn10freshpairs×35batch(5warmup30measured), đủdataset/hashes/exits/Jobs/
