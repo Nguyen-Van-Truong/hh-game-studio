@@ -1,5 +1,5 @@
 HH STUDIO — PLAN 1/3: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 20-09-2026, Asia/Saigon | Revision S136 | TRIỂN KHAI THEO GATE
+Ngày 21-09-2026, Asia/Saigon | Revision S137 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -16,7 +16,7 @@ STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng
 
 CURRENT_VALID_WP=GT-06
 EXECUTION_AUTHORIZATION=OWNER_APPROVED_GATED
-IMPLEMENTATION=GT06_S133_FUNCTIONAL_REFRESH_S134_TERMINAL_S135_CLEANUP_REPAIR; FORMAL_GT06_PENDING
+IMPLEMENTATION=GT06_S133_FUNCTIONAL_REFRESH_S134_TERMINAL_S135_CLEANUP_REPAIR_S137_IMPORT_BOUNDARY_REVIEW; FORMAL_GT06_PENDING
 GT01_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260913
 GT01_PENDING=NONE
 GT01_PIN_DECISION=GODOT_4.7.2_STABLE_OFFICIAL
@@ -63,8 +63,8 @@ GT06_SOURCE_FILE_COUNT=53
 GT06_PROFILE_SHA256=0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85
 GT06_BENCHMARK_CAMPAIGN=gt06-s116-formal-01; LAST_FORMAL_FAILED
 GT06_BENCHMARK_STATUS=ZERO_ACCEPTED_FULL_RUNS; S131_DIAGNOSTIC_NOT_DATASET
-GT06_ACTIVE_DIAGNOSTIC=NONE; S135_BOUNDARY_CAPTURED_PROFILE_IMPORT_SIGKILL; NO_ENGINE_OBSERVED_20260920T1350Z
-GT06_NEXT_ACTION=Static phase/environment attribution after S135 boundary; no identical preflight/formal/coupled retry until a changed boundary is demonstrated.
+GT06_ACTIVE_DIAGNOSTIC=NONE; S135_BOUNDARY_CAPTURED_PROFILE_IMPORT_SIGKILL; S137_STATIC_ATTRIBUTION_REVIEWED; NO_CURRENT_ENGINE
+GT06_NEXT_ACTION=S137 D0 static comparison reviewed; no identical retry. Only if a changed boundary is justified may one fresh authority-0 observer/control diagnostic run, preserving source/profile/workstation and original gates.
 GT06_READY_AFTER_TERMINAL=S133 seven service/reviewer lanes verified; S134 packet1020 verified; managed repair and replay not complete.
 GT06_EXECUTION217_LAST_TESTED_CLOSURE=f1d35fbd304862c2ef6daa248edce7ea1a84f3db6443f2bde7f452f9699c8d8b
 GT06_DIAGNOSTIC_EXCLUSION=All failed/partial/instrumented runs through S134 remain outside F13/F14; original raw and gaps preserved.
@@ -104,8 +104,9 @@ S134 managed repair gt06-s134-managed-repair-01 TERMINAL FAILED:
   Không publicACK/COMMITTED; successorclose/naturalexit chưa chứng minh.
   Outer target26188exit1/helper46824exit0/treeverified, sourceunchanged.
 - Packet terminal-packet-01 trong reviews/20260920-gt06-s134-validation-boundary/
-  gồm1019exactcopies+1derivedanalysis, đãverify1020entries; manifest
-  57ac533993f50d19799c1bc8136a8504d1d72ac16dd83ff870813d3b2d2b63f0.
+  là manifest/index tới raw ngoài packet: 1019 indexed raw records + 1 derived
+  analysis, verify 1020 entries; không có exact-copy payload tự chứa trong thư mục
+  packet. Manifest 57ac533993f50d19799c1bc8136a8504d1d72ac16dd83ff870813d3b2d2b63f0.
   Framechain được decode read-only; không thay custodyverify hay claimdurability.
 
 Tiếp theo: sửa cleanup che lỗi gốc và thiếu ownership evidence bằng inert tests;
@@ -137,16 +138,28 @@ analysis e2c66c8fc395c56d40583d89152e0851260df5af844cac8f86705c07358c34b7;
 static-attribution e6203e920f80bc6d0618c7e44cdf0a7596911848a94d4e14447040d1c9e95d6f.
 Managed repair gt06-s135-managed-repair-01 dừng trước command lane với
 VALIDATION_PHASE_ORDER; cleanup raw ghi owner/transport đã đóng và
-cleanup_clean=true. Hai profile probe độc lập -03 và -04 đều exit45 trong
-18.344s/18.141s tại import, stdout kết thúc HH_PROFILE_PHASE_END import -9;
-binary/input/execution closure không đổi, Docker job zero/closed, OOMKilled=false.
-Static attribution xác nhận VALIDATION_PHASE_ORDER chỉ là guard đòi đủ chuỗi
-parse/import/readback; S135 bị SIGKILL trong import trước command/readback. Vì
-vậy chưa có repair hẹp nào được chứng minh. Đây là boundary chẩn đoán, không
-phải engine run, không phải PASS/no-leak/root cause và không nhập F13/F14. Không
-retry cùng ID hoặc lặp boundary y hệt; bước
-hữu ích còn lại là static phase/environment attribution, sau đó chỉ tạo bounded
-run ID mới khi boundary đã thay đổi và preflight sạch.
+cleanup_clean=true. Đây là cleanup của managed pre-command lane, không phải
+chứng minh editor/engine natural exit. Hai profile probe độc lập -03 và -04
+đều exit45 trong 18.344s/18.141s tại import, stdout kết thúc HH_PROFILE_PHASE_END
+import -9; Godot process đã chạy qua parse/import nhưng chưa tới readback/command.
+Binary/input/execution closure không đổi, Docker job zero/closed, OOMKilled=false,
+nhưng diagnostic_process_clean=false vẫn phải giữ nguyên. Static attribution
+chỉ xác nhận VALIDATION_PHASE_ORDER là guard đòi đủ chuỗi parse/import/readback;
+không xác định nguồn SIGKILL. Vì vậy chưa có repair hẹp nào được chứng minh.
+Đây là boundary chẩn đoán, không phải PASS/no-leak/root cause và không nhập
+F13/F14. Packet custody/digest corrections ở
+reviews/20260921-gt06-s137-import-boundary/metadata-correction.json (Authority 0)
+ghi rõ S134 là index tới raw ngoài packet và S135 có digest stale/cycle; không
+rewrite raw packet. Không retry cùng ID hoặc lặp boundary y hệt; bước hữu ích
+còn lại là D0 static đã hoàn tất, rồi chỉ tạo bounded run ID mới khi observer/
+control có thể phân biệt boundary và preflight sạch.
+
+S137 independent reviews đã hoàn tất tại
+reviews/20260921-gt06-s137-import-boundary/: import-static-review.md,
+evidence-audit.md và next-diagnostic-design.md. Kết luận chung: RLIMIT_CPU=10
+là giả thuyết có thể kiểm chứng, chưa phải root cause; nếu chạy diagnostic mới
+phải giữ wall/memory/quota/gate/source/profile nguyên vẹn, ghi raw host/container
+exit, Docker event/inspect và owned cleanup, fail closed khi thiếu bằng chứng.
 
 Lịch ti-p-t-c-hh3d-tools mỗi10phút, trạng tháidisk ưu tiên; không tạo lịch trùng.
 GT06 vẫn10freshpairs×35batch(5warmup30measured), đủdataset/hashes/exits/Jobs/

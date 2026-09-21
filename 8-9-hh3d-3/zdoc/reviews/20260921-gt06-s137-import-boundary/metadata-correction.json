@@ -1,0 +1,27 @@
+{
+  "schema": "HH-GT06-S137-METADATA-CORRECTION-1",
+  "authority": 0,
+  "formal_acceptance": false,
+  "source": "S137 read-only audit of S134/S135/S136",
+  "corrections": {
+    "s134_packet_kind": "manifest_plus_external_raw_refs",
+    "s134_payload_mode": "external_source_refs_only",
+    "s134_materialized_exact_copy_count": 0,
+    "s134_indexed_external_record_count": 1020,
+    "s135_manifest_sha256_current": "9a9a06331cf51afe3ace62f22ff4649ad951836693f1b2ababd1d7fc7f11f27d",
+    "s135_static_attribution_stale_manifest_sha256": "896cb1031928b9eec2bdbf13dcceae704a98f0a7375feeff745f163a45852023",
+    "s135_hash_cycle": true,
+    "s135_engine_process_observed": true,
+    "s135_engine_phase_reached": "import",
+    "s135_readback_reached": false,
+    "s135_command_lane_reached": false,
+    "s135_formal_acceptance": false,
+    "s135_managed_precommand_validation_rejection": true,
+    "s135_owner_transport_cleanup_clean": true,
+    "s135_diagnostic_process_clean": false,
+    "s135_successor_exit_known": false,
+    "same_bundle_boundary_reproduced": true,
+    "environment_root_cause_proven": false
+  },
+  "disposition": "Derived metadata correction only; raw S134/S135 packets are immutable and no source, profile, gate, timeout or baseline changed."
+}
