@@ -1,5 +1,5 @@
 HH STUDIO — PLAN 1/3: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 21-09-2026, Asia/Saigon | Revision S148 | TRIỂN KHAI THEO GATE
+Ngày 22-09-2026, Asia/Saigon | Revision S149 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -16,7 +16,7 @@ STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng
 
 CURRENT_VALID_WP=GT-06
 EXECUTION_AUTHORIZATION=OWNER_APPROVED_GATED
-IMPLEMENTATION=GT06_S133_FUNCTIONAL_REFRESH_S134_TERMINAL_S135_CLEANUP_REPAIR_S137_IMPORT_BOUNDARY_D1_D2_S138_MANAGED_REPAIR_REPLAY; FORMAL_GT06_PENDING
+IMPLEMENTATION=GT06_S133_FUNCTIONAL_REFRESH_S134_TERMINAL_S135_CLEANUP_REPAIR_S137_IMPORT_BOUNDARY_D1_D2_S138_MANAGED_REPAIR_REPLAY_S149_HOST_HANDLE_CENSUS; FORMAL_GT06_PENDING
 GT01_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260913
 GT01_PENDING=NONE
 GT01_PIN_DECISION=GODOT_4.7.2_STABLE_OFFICIAL
@@ -25,9 +25,9 @@ RUNTIME_ACCEPTANCE=GT01_GT02_GT03_GT04_GT05_ACCEPTED
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S148
-EXECUTION_MODE=COORDINATOR_SOLO_OWNER_20260921_S148
-SUBAGENTS_ENABLED=NO_OWNER_REQUEST; PRIOR_WORK_INTEGRATED; RECENT_ASTRA_CAPACITY_ERRORS_NOT_COMPLETED; FINAL_CRITICS_NOT_ELIGIBLE
+PLAN_REVISION=S149
+EXECUTION_MODE=COORDINATOR_WITH_THREE_ASTRA_XHIGH_WORKERS_OWNER_20260922_S149
+SUBAGENTS_ENABLED=OWNER_REQUEST_20260922_THREE_INDEPENDENT_WORKERS; COORDINATOR_SINGLE_WRITER; FINAL_CRITICS_NOT_ELIGIBLE
 GT02_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260916_S46
 GT02_REVIEW_STATUS=TWO_INDEPENDENT_PASS_TICK_YES_S46
 GT02_LAST_TESTED_SOURCE_CLOSURE=f28056d8ff705a60d48a54f9dee80f16554494fa976bd0bfabee84bb51fecbbf
@@ -63,9 +63,9 @@ GT06_SOURCE_FILE_COUNT=53
 GT06_PROFILE_SHA256=0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85
 GT06_BENCHMARK_CAMPAIGN=gt06-s147-formal-01; S141_FORMAL_FAILED_20260921T074609Z; S147_FORMAL_FAILED_20260921T133811Z
 GT06_BENCHMARK_STATUS=ZERO_ACCEPTED_FULL_RUNS; S147_FORMAL_FAILED_BATCH10; S141_FAILURE_PRESERVED
-GT06_ACTIVE_DIAGNOSTIC=NONE; S145_TERMINAL_BOUNDARY_CAPTURED_20260921T114222Z; S147_TERMINAL_PACKET_VERIFIED
-GT06_NEXT_ACTION=S148 read-only attribution is complete; retain S147 failure and do not launch a new diagnostic/formal run until a separately evidenced boundary or repair hypothesis exists. Preserve partial/failure outside F13/F14 and retain actual exits/Jobs/handles/Stop/source pins.
-GT06_READY_AFTER_TERMINAL=S133 seven service/reviewer lanes verified; S134 packet1020 verified as self-contained exact-copy payload with provenance refs; S137 D1/D2 diagnostic limits retained; S138 managed repair+replay completed; S139 source projections/input binding verified; S147 terminal packet and S148 read-only attribution verified; no source repair justified; RSS/formal freeze/dataset still open.
+GT06_ACTIVE_DIAGNOSTIC=S149_HOST_HANDLE_CENSUS_02; S145_TERMINAL_BOUNDARY_CAPTURED_20260921T114222Z; S147_TERMINAL_PACKET_VERIFIED; S149_SMOKE02_VERIFIED
+GT06_NEXT_ACTION=S149 host-only differentiating diagnostic is active under fresh ID gt06-s129-s149-host-handles; finish or preserve its raw 11-batch prefix, classify descriptor type only from bound PSS samples, then decide whether a narrow repair is justified. S149 is AUTHORITY=0, outside F13/F14 and cannot be PASS. Do not start formal GT06 retry until this evidence is sealed and any repair has focused regressions.
+GT06_READY_AFTER_TERMINAL=S133 seven service/reviewer lanes verified; S134 packet1020 verified as self-contained exact-copy payload with provenance refs; S137 D1/D2 diagnostic limits retained; S138 managed repair+replay completed; S139 source projections/input binding verified; S147 terminal packet and S148 read-only attribution verified; S149-02 observer-neutral smoke verified with source pins/exit0/Jobs clean; formal RSS/freeze/dataset still open.
 GT06_EXECUTION217_LAST_TESTED_CLOSURE=78ffef60682f596313aac8aca69a06e0a23808c546202effdebc481bdb845b58
 GT06_EXECUTION217_CURRENT_BINDING_CLOSURE=78ffef60682f596313aac8aca69a06e0a23808c546202effdebc481bdb845b58; S146_BINDING_ONLY; CURRENT_NATIVE_FUNCTIONAL_REUSE_PENDING_DEPENDENCY_AUDIT
 GT06_DIAGNOSTIC_EXCLUSION=All failed/partial/diagnostic runs through S147 remain outside F13/F14; raw and UNKNOWN gaps preserved.
@@ -235,6 +235,34 @@ trees/Jobs/handles/allattempts. Finalfreeze+requirement evidence và hai critic
 MỚI cùnghashPASS/TICK=yes mới ACCEPT→GT07–10; GT08 vẫn Android thật.
 S141 plan cũ lưu exact ở s142-snapshot-boundary/history/tools-plan-s141.txt,
 manifest SHA256/AUTHORITY0. Failures, gaps và bài học S70–S141 không bị xóa.
+
+S149 host-handle census được mở chỉ sau khi S148 hoàn tất attribution và xác định
+được câu hỏi phân biệt: S147 tăng một host handle trong HTTP batch10 nhưng các
+counter editor/ObjectDB/RSS không tăng, còn S144/S145 chưa chạy đủ cardinality
+1000-command batches. Driver `zdoc/reviews/20260921-gt06-s149-host-handles-02/host_handles.py`
+giữ nguyên `CommandProducer.run_batch`, counter/gap gate và source/profile/
+workstation; chỉ thêm PSS census bên ngoài cửa sổ command tại baseline batch4 và
+boundary. Nó không có native/ACK/idle/assembly nên không thể được tính F13/F14
+hay formal PASS.
+
+S149-01 smoke giữ nguyên làm evidence bất biến: sample nội bộ 173 handles nhưng
+PSS census thấy174 trong lúc child dùng `time.sleep(.05)` chờ ACK, nên không dùng
+sample đó để phân loại descriptor. Không sửa raw. S149-02 là bản driver fresh ID
+với zero-duration scheduler yield trong ACK wait; static10/10 pass, check-only
+244 source pins pass, smoke `gt06-s149-handles-smoke-02` exit0, target/helper
+exit0, PSS status OBSERVED, sample/census đều173 handles, source_unchanged=true,
+Jobs zero/closed, probe/wrapper released, threads sạch. Đây chỉ là preflight,
+không phải warmup của diagnostic chính.
+
+Diagnostic `gt06-s129-s149-host-handles` đã được prepare/register/dispatch bằng
+passive supervisor request mới với observation1290s/scheduler1320s. Query scheduler
+chỉ là state (instances0/last_result cũ không chứng minh liveness); tại lần kiểm
+đầu, PID/start/executable của observer, owned helper và child khớp, child chưa
+đến checkpoint đầu và vẫn chạy. Khi terminal phải seal raw trước, đọc census/type
+counts, actual target/helper exits, Jobs/handles/Stop/source pins; UNKNOWN hoặc
+cleanup lỗi dừng diễn giải. Không chạy lại mù, không overwrite ID, không thay gate,
+timeout, baseline, priority hoặc RSS. Ba worker Astra chỉ làm review độc lập
+read-only; coordinator giữ một writer và tích hợp kết quả.
 
 Rà phạm vi claim S76: GT-01–05 ACCEPTED theo fixture/catalog đã công bố,
 chưa chứng minh authoring gameplay tổng quát. Godot writer hiện chỉ Node3D/
