@@ -1,0 +1,24 @@
+{
+  "schema": "vertical-slice-blender-verification-v1",
+  "run_id": "vertical-slice-s173-blender-direct-01",
+  "command_id": "cmd.vertical-slice.s173.blender.direct.1",
+  "run_namespace": "vertical-slice",
+  "authority": 0,
+  "source_commit": "034d20be1d27218285457202ec80d1020865403b",
+  "blender": {
+    "path": "8-9-hh3d-3/studio/.local/tooling/blender-5.2.1-windows-x64/blender.exe",
+    "version": "5.2.1 LTS",
+    "sha256": "8f7a131ad8bc148edc218b334f07d92a57f5a357fa66d913b290537fd8353c06"
+  },
+  "commands": {
+    "author": {"args": ["--background", "--factory-startup", "--python", "vertical-slice/blender/generate_asset.py"], "exit": 0, "stderr_bytes": 0, "marker": "BLENDER_ASSET_PASS"},
+    "reopen_export": {"args": ["--background", "--factory-startup", "--python", "vertical-slice/blender/reopen_export_asset.py"], "exit": 0, "stderr_bytes": 0, "marker": "BLENDER_REOPEN_EXPORT_PASS"}
+  },
+  "artifacts": {
+    "blend_sha256": "3cff3e668ed3ebd9f08ee29b6c5fe4c64aafc9cc3a306e0c5cd31ebff38a0882",
+    "glb_sha256": "1ec4d9e00909f68e11afa3617cb72d6fef11b3be9a6dc10729bbc5cc27672588"
+  },
+  "leftover_processes": 0,
+  "wrapper_observation": "verify_blender.ps1_plain_python_missing_bpy",
+  "exclusions": ["GT06_DATASET", "F13", "F14", "GT06_ACCEPTANCE", "LEAK", "ROOT_CAUSE", "FORMAL_RETRY"]
+}
