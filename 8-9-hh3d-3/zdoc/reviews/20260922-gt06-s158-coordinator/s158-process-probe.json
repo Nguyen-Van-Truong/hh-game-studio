@@ -1,0 +1,7 @@
+{
+  "schema": "HH-S158-process-probe-1",
+  "utc": "2026-09-22T06:51:30.2456620Z",
+  "command": "Get-Process -Name godot,godot4,blender,python,agent",
+  "matched_processes": [],
+  "note": "Cursor GUI processes may remain, but no matching engine/helper process was returned."
+}

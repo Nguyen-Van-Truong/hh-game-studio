@@ -1,0 +1,94 @@
+{
+  "schema": "HH-S158-coordinator-review-1",
+  "authority": 0,
+  "formal_acceptance": false,
+  "eligible_for_dataset": false,
+  "source_closure": "fce149cd3a62e102aaba225794b9a5078cd84d7647cb359f6bbcacb8895ddcde",
+  "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+  "execution_closure": "78ffef60682f596313aac8aca69a06e0a23808c546202effdebc481bdb845b58",
+  "cursor_lanes_terminal": true,
+  "cursor_retained_files": 15,
+  "cursor_report_hashes": [],
+  "astra_lanes_requested": 3,
+  "astra_lanes_started": 0,
+  "astra_capacity_errors": 3,
+  "static_tests": [
+    {
+      "lane": "launcher",
+      "exit_code": 0,
+      "output_sha256": "204498f16c4ed08fa5a45743eb1ad2df1a0241d4695466941cb48d13b60a2d04",
+      "output_bytes": 4714
+    },
+    {
+      "lane": "attribution",
+      "exit_code": 0,
+      "output_sha256": "4bdc41a3750b9c3908597093b1c359c24398deca26c3670f793a70ee9266da45",
+      "output_bytes": 892
+    },
+    {
+      "lane": "schema",
+      "exit_code": 0,
+      "output_sha256": "0dd0ffdc7fa4633eeab04604811cd5fe75b3793d617fcdba9f7f61aa18af186c",
+      "output_bytes": 2771
+    }
+  ],
+  "hardening_guard": {
+    "attribution": {
+      "eligible_to_dispatch": false,
+      "reason": "Microsoft documents PSS_HANDLE_ENTRY CreationTime, GrantedAccess, HandleCount, PointerCount, PagedPoolCharge and NonPagedPoolCharge as reserved for OS use; they cannot support temporal attribution.",
+      "reserved_fields": [
+        "creation_time_filetime",
+        "granted_access",
+        "handle_count",
+        "nonpaged_pool_charge",
+        "paged_pool_charge",
+        "pointer_count"
+      ],
+      "source": "8-9-hh3d-3\\zdoc\\reviews\\20260922-gt06-s157-attribution\\diagnostic-spec.json"
+    },
+    "authority": 0,
+    "eligible_for_dataset": false,
+    "engine_execution": "FORBIDDEN",
+    "formal_acceptance": false,
+    "launcher": {
+      "eligible_to_dispatch": false,
+      "findings": [
+        {
+          "code": "HELPER_NOT_PINNED",
+          "evidence": "authenticate validates execution map entries but does not bind helper_root/CHILD_SCRIPT bytes",
+          "severity": "BLOCKER"
+        },
+        {
+          "code": "SUMMARY_PREFIX_PID_NOT_BOUND",
+          "evidence": "_summary_matches does not bind screened_batches or summary pid to the target receipt",
+          "severity": "BLOCKER"
+        },
+        {
+          "code": "BOUNDARY_PREFIX_NOT_REQUIRED",
+          "evidence": "_boundary_code can classify a synthetic boundary without a non-empty original-gate prefix",
+          "severity": "BLOCKER"
+        }
+      ],
+      "source": "8-9-hh3d-3\\zdoc\\reviews\\20260922-gt06-s157-launcher\\diagnostic_launcher_s157.py"
+    },
+    "next_action": "Do not dispatch S157 candidate. Build a fresh helper with pinned helper bytes, prefix/target-PID bindings, and attribution fields limited to documented PSS data.",
+    "schema": "HH-S158-hardening-review-1",
+    "test": {
+      "exit_code": 0,
+      "output_sha256": "899dd2fd4852951cc9619887cc0bc8cddd38d7d11b4e4c031b3e6eafb6c2acab"
+    }
+  },
+  "primary_source": "https://learn.microsoft.com/en-us/windows/win32/api/processsnapshot/ns-processsnapshot-pss_handle_entry",
+  "decision": "HOLD_NO_ENGINE",
+  "next_action": "Keep S157 immutable. Build a fresh diagnostic helper only after helper bytes, prefix rows, target PID, and documented PSS fields are strictly bound. Formal GT06 remains open and requires 10 fresh pairs x 35 batches plus final critics.",
+  "hardened_contract_test": {
+    "exit_code": 0,
+    "output_sha256": "29e718fb17660bd2975cba4a1b410145fc1877e5d2513a410b198157d6f3cbaa",
+    "output_bytes": 547
+  },
+  "process_probe": {
+    "matched_count": 0,
+    "artifact": "s158-process-probe.json",
+    "no_engine_or_helper": true
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "attribution": {
+    "eligible_to_dispatch": false,
+    "reason": "Microsoft documents PSS_HANDLE_ENTRY CreationTime, GrantedAccess, HandleCount, PointerCount, PagedPoolCharge and NonPagedPoolCharge as reserved for OS use; they cannot support temporal attribution.",
+    "reserved_fields": [
+      "creation_time_filetime",
+      "granted_access",
+      "handle_count",
+      "nonpaged_pool_charge",
+      "paged_pool_charge",
+      "pointer_count"
+    ],
+    "source": "8-9-hh3d-3\\zdoc\\reviews\\20260922-gt06-s157-attribution\\diagnostic-spec.json"
+  },
+  "authority": 0,
+  "eligible_for_dataset": false,
+  "engine_execution": "FORBIDDEN",
+  "formal_acceptance": false,
+  "launcher": {
+    "eligible_to_dispatch": false,
+    "findings": [
+      {
+        "code": "HELPER_NOT_PINNED",
+        "evidence": "authenticate validates execution map entries but does not bind helper_root/CHILD_SCRIPT bytes",
+        "severity": "BLOCKER"
+      },
+      {
+        "code": "SUMMARY_PREFIX_PID_NOT_BOUND",
+        "evidence": "_summary_matches does not bind screened_batches or summary pid to the target receipt",
+        "severity": "BLOCKER"
+      },
+      {
+        "code": "BOUNDARY_PREFIX_NOT_REQUIRED",
+        "evidence": "_boundary_code can classify a synthetic boundary without a non-empty original-gate prefix",
+        "severity": "BLOCKER"
+      }
+    ],
+    "source": "8-9-hh3d-3\\zdoc\\reviews\\20260922-gt06-s157-launcher\\diagnostic_launcher_s157.py"
+  },
+  "next_action": "Do not dispatch S157 candidate. Build a fresh helper with pinned helper bytes, prefix/target-PID bindings, and attribution fields limited to documented PSS data.",
+  "schema": "HH-S158-hardening-review-1",
+  "test": {
+    "exit_code": 0,
+    "output_sha256": "899dd2fd4852951cc9619887cc0bc8cddd38d7d11b4e4c031b3e6eafb6c2acab"
+  }
+}

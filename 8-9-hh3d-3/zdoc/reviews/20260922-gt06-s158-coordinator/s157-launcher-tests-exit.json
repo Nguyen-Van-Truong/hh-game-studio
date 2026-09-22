@@ -1,0 +1,8 @@
+{
+  "schema": "HH-S158-test-exit-1",
+  "lane": "launcher",
+  "command": "python -B -m unittest discover -s 8-9-hh3d-3/zdoc/reviews/20260922-gt06-s157-launcher -p test_diagnostic_launcher_s157.py -v",
+  "exit_code": 0,
+  "output_sha256": "204498f16c4ed08fa5a45743eb1ad2df1a0241d4695466941cb48d13b60a2d04",
+  "output_bytes": 4714
+}
