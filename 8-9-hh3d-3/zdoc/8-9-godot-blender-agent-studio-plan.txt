@@ -92,12 +92,14 @@ s159-coordinator-status.json đã nhầm với S158; giữ báo cáo cũ như l�
 
 S160 đã giao ba Astra xhigh độc lập: launcher integration (đã hoàn tất code
 và 8 test process-free exit0), Windows handle attribution (đã hoàn tất memo
-read-only), và Godot source ownership (lỗi capacity, không có deliverable).
+read-only), và Godot source ownership (worker lỗi capacity; coordinator đã
+ghi memo read-only từ source hiện hành).
 Memo attribution kết luận chưa có cấu hình ETW kernel-handle theo PID được tài
 liệu hóa đủ để dùng; `!htrace` chỉ là fallback có điều kiện, overhead chưa đo,
 không phải gate. Review launcher được giữ tại
 `zdoc/reviews/20260922-gt06-s160-launcher-integration/REPORT.md` và manifest
-`6917a57eb254d0c0e71c1aff219d6acc96d5aa26ba5eb85d035a36eaecf1954b`;
+`6917a57eb254d0c0e71c1aff219d6acc96d5aa26ba5eb85d035a36eaecf1954b`; source
+ownership memo tại `zdoc/reviews/20260922-gt06-s160-source-ownership/MEMO.md`;
 chỉ AUTHORITY=0, fake/raw tests, không engine. Coordinator giữ plan/integration
 review. Không worker nào
 được chạy engine hay sửa frozen S156/S157/runtime/profile/gates.
