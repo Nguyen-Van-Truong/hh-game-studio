@@ -206,6 +206,29 @@ class S160Tests(unittest.TestCase):
         self.assertEqual(freeze['helper_closure_sha256'], launcher.closure(freeze['helper_files']))
         self.assertFalse(result['launched'])
 
+    def test_campaign_relative_source_map_is_bound_under_studio(self):
+        # run_benchmark_campaign.source_files() is relative to STUDIO, while
+        # the predecessor freeze inventory is relative to HH3D-3.  The
+        # launcher must bind both coordinate systems without changing the
+        # campaign document or weakening the predecessor inventory.
+        self.fx.services.fixture.source_files = {
+            'pin.txt': launcher.digest(self.fx.root / 'studio/pin.txt')}
+        result = self.fx.prepare('gt06-s160-diag-relative')
+        self.assertTrue(result['freeze_sha256'])
+        self.assertEqual(self.fx.auth['freeze']['source_files'], {'pin.txt': launcher.digest(self.fx.root / 'studio/pin.txt')})
+
+    def test_mixed_source_map_coordinate_system_fails_closed(self):
+        self.fx.prepare()
+        frozen = json.loads((self.fx.run / 'freeze.json').read_bytes())
+        frozen['source_files'] = {
+            'studio/pin.txt': launcher.digest(self.fx.root / 'studio/pin.txt'),
+            'pin.txt': launcher.digest(self.fx.root / 'studio/pin.txt')}
+        (self.fx.run / 'freeze.json').write_bytes(launcher.encoded(frozen))
+        with self.assertRaises(launcher.IntegrationError) as error:
+            launcher.authenticate(self.fx.run, self.services,
+                                  freeze_sha256=launcher.digest(self.fx.run / 'freeze.json'))
+        self.assertEqual(error.exception.code, 'S160_SOURCE_MAP_COORDINATE')
+
     def test_helper_extra_file_and_child_pin_fail_closed(self):
         self.fx.prepare()
         (self.fx.run / 'helpers/extra.txt').write_bytes(b'drift')

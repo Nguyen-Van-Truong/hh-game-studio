@@ -129,6 +129,30 @@ def file_map(root, files):
         need(digest(under(root, name)) == expected, 'S160_FILE_DRIFT')
 
 
+def canonical_source_map(root, files):
+    """Validate the campaign-relative source map against the HH3D root.
+
+    The campaign reports paths relative to ``studio`` while predecessor
+    freezes report paths relative to the HH3D root (and therefore include the
+    ``studio/`` prefix).  Keep the campaign document byte-for-byte unchanged,
+    but canonicalize only for the root-relative execution-set comparison.
+    Mixed coordinate systems are rejected instead of guessed.
+    """
+    need(type(files) is dict and bool(files), 'S160_SOURCE_FILE_MAP')
+    names = list(files)
+    need(all(type(name) is str and safe_relative(name) for name in names),
+         'S160_SOURCE_FILE_MAP')
+    root_relative = [name.startswith('studio/') for name in names]
+    need(all(root_relative) or not any(root_relative), 'S160_SOURCE_MAP_COORDINATE')
+    if all(root_relative):
+        canonical = dict(files)
+    else:
+        canonical = {Path('studio', name).as_posix(): expected
+                     for name, expected in files.items()}
+    file_map(root, canonical)
+    return canonical
+
+
 def helper_map(root):
     checked_path(root, directory=True)
     result = {}
@@ -183,7 +207,7 @@ def authenticate(run, services, *, freeze_sha256):
     need(frozen.get('source_closure') == SOURCE and frozen.get('profile_sha256') == PROFILE,
          'S160_RUNTIME_PIN')
     source = frozen.get('source_files')
-    file_map(root, source)
+    source_rooted = canonical_source_map(root, source)
     observed = services.observed_source()
     need(observed == {'closure': SOURCE, 'count': len(source), 'profile_sha256': PROFILE,
                       'files': source}, 'S160_SOURCE_PIN')
@@ -207,7 +231,7 @@ def authenticate(run, services, *, freeze_sha256):
     execution = read(run / 'execution-source-files.json')
     # Exact union, not a caller-selected subset. All predecessor files are retained.
     expected_execution = dict(predecessor['files'])
-    for name, expected in source.items():
+    for name, expected in source_rooted.items():
         need(expected_execution.get(name) == expected, 'S160_SOURCE_OUTSIDE_PREDECESSOR')
     for name, expected in expected_helpers.items():
         expected_execution[(helpers / name).relative_to(root).as_posix()] = expected
