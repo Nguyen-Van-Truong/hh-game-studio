@@ -85,6 +85,15 @@ attempt riêng. Chỉ fake/read-only tests được phép; không formal retry, 
 đổi gate/profile/timeout/baseline/RSS. Reports phải có exit, hash, limitations
 và completion marker trước coordinator review.
 
+S157 watcher checkpoint (2026-09-22): transport-only watcher da duoc chay
+voi manifest studio/.local/orchestration/s157-cursor/watcher-targets-01.json.
+Script/test o zdoc/reviews/20260922-gt06-s157-watcher/; 10 gate tests PASS.
+Watcher dung registry Grok 4.7 xhigh, khong goi AI, khong retry va khong tu
+claim acceptance. Attribution va schema da terminal voi report/hash/exit hop le
+(NEEDS_REVIEW); launcher van LIVE. Popup/am thanh chi la request, khong
+duoc coi la user da thay/nghe. User gui Tiep tuc S157, doc ket qua watcher
+khi watcher bao tat ca terminal; coordinator van phai review doc lap.
+
 S157 resume checkpoint 05:04Z: attempt-01 của ba lane đã mất process, không
 có report/exit, stdout/stderr rỗng; actual exit UNKNOWN, không tính hoàn tất.
 Đã tìm session trong Cursor metadata đúng workspace và resume cùng session

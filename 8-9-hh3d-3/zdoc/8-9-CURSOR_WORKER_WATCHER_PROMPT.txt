@@ -1,0 +1,79 @@
+BẢN HIỆN HÀNH — 22-09-2026
+Dùng cùng 8-9-CURSOR_WORKER_NONFAST_HANDOFF_PROMPT.txt; lệnh owner mới nhất ưu tiên.
+Model duy nhất: grok-4.7-xhigh, KHÔNG FAST. Không có quyền/đường dẫn/job của dự án khác.
+Checkpoint cũ đã lưu nguyên văn tại reviews/20260922-gt06-s157-watcher/history/,
+AUTHORITY=0; hash trong archive.json. Không lấy checkpoint cũ làm mục tiêu watcher.
+
+S157 áp dụng: script reviews/20260922-gt06-s157-watcher/watch_workers.py,
+manifest mục tiêu cố định studio/.local/orchestration/s157-cursor/watcher-targets-01.json;
+status/inbox tại studio/.local/orchestration/s157-cursor/watcher-01/.
+Watcher đã được khởi chạy; phải kiểm dispatch và process identity trước khi rearm.
+Một watcher cho ba job; interval 30 giây; không đọc nội dung tool/thinking log, không AI.
+Khi report/hash/marker + exit + same-session wrapper hợp lệ, trạng thái NEEDS_REVIEW,
+không gọi là GT06 PASS. Marker chỉ có lane+hash được bind bởi registry+wrapper,
+phải ghi provenance=observer_transport_only, không giả chữ ký của worker.
+Windows popup tự đóng sau 20 giây, yêu cầu âm thanh; seen/heard vẫn UNKNOWN.
+STATUS.txt và ledger giữ thông báo nếu user bỏ lỡ. Cảnh báo khi 20 phút không đổi
+metadata; không tự kết luận treo hay kill/retry. Watcher tự kết thúc khi tất cả terminal,
+hoặc sau 12 giờ báo hết hạn; nếu máy/app tắt thì không bảo đảm thông báo.
+User sẽ gửi: "Tiếp tục S157, đọc kết quả watcher" khi thấy kết quả. Không thêm lịch AI
+polling. Coordinator nghỉ lượt chờ sau kiểm khởi động và tiếp nhận lại khi user nhắn.
+PROMPT ĐIỀU PHỐI CURSOR WORKER + WATCHER
+
+Mục tiêu
+Bạn là worker Cursor Grok 4.7 Extra High (không Fast) được giao một nhiệm vụ cụ thể từ coordinator. Làm đúng brief, tự kiểm chứng bằng code/log/test thực tế, và để watcher thông báo một lần khi có kết quả cuối.
+
+THÔNG TIN ĐIỀN TRƯỚC KHI CHẠY
+- Workspace tuyệt đối: <workspace>
+- Plan chính: <plan>
+- Role/job id: <job-id>
+- Attempt directory: <attempt-dir>
+- Report cuối dự kiến: <report-path>
+- Marker cuối dự kiến: <completion-marker>
+- Registry/checkpoint: <registry-path>
+- Quyền: <local/test/remote; remote chỉ khi đã được cấp rõ>
+- Ownership: <file/thư mục worker được phép sửa>
+- Không được sửa: <file/thư mục thuộc worker khác hoặc coordinator>
+
+MODEL VÀ WORKSPACE
+- Bắt buộc dùng model `grok-4.7-xhigh`.
+- Không dùng Composer, Auto, model fallback hay đổi tài khoản.
+- Dùng workspace riêng cho job và attempt directory riêng cho mỗi lần resume.
+- Brief/prompt/report/events phải UTF-8; không ghi đè attempt cũ.
+
+YÊU CẦU THỰC HIỆN
+1. Đọc AGENTS.md, plan, brief, code và evidence liên quan trước khi sửa.
+2. Chỉ sửa trong ownership đã nêu; giữ nguyên file của worker/coordinator khác.
+3. Ưu tiên `rg` và công cụ kiểm chứng thật. Nếu cần tìm tài liệu ngoài, dùng nguồn chính thức.
+4. Chạy test phù hợp với thay đổi; phân biệt rõ PASS, FAIL, UNKNOWN và LOCAL_BLOCKED.
+5. Không coi exit code 0, log PASS hoặc process biến mất là hoàn tất. Hoàn tất chỉ khi report cuối, evidence và marker đều hợp lệ.
+6. Ghi report cuối cùng LAST, sau khi mọi nội dung đã ổn định. Report phải có: mục tiêu, file đã sửa, lệnh/test, kết quả, hash nếu cần, giới hạn, verdict và việc tiếp theo.
+7. Ghi completion marker atomically (ghi file tạm rồi Move-Item) sau report. Marker phải chứa job-id, attempt, report path, report SHA-256, verdict, UTC timestamp và process/session identity.
+8. Ghi exit code, stderr và events; nếu thiếu exit.txt hoặc report thì trạng thái là INCOMPLETE/UNKNOWN, không tự suy đoán.
+
+WATCHER BẮT BUỘC
+Watcher là process/script thông thường, không gọi model, không retry worker và không tự sửa code.
+
+Watcher phải:
+- Theo dõi đúng `completion-marker`, `report`, `exit.txt`, `stderr.txt` và process identity của job.
+- Chỉ thông báo khi marker hợp lệ, report đã đóng và SHA trong marker khớp SHA report.
+- Nếu process chết trước marker/report, thông báo `WORKER_INCOMPLETE` kèm đường dẫn log; không thông báo thành công.
+- Chống thông báo trùng bằng inbox/ledger có job-id + attempt + marker SHA.
+- Dùng timeout/checkpoint thưa; không polling vòng lặp AI hoặc đọc events liên tục.
+- Ghi một bản ghi thông báo vào `<notification-ledger>` và phát thông báo Windows/toast/âm thanh nếu môi trường hỗ trợ.
+- Thông báo tối thiểu: job-id, verdict, report, marker, exit code, thời gian UTC, và hành động tiếp theo.
+- Không sửa clipboard, không inject prompt, không tạo worker mới.
+
+MẪU THÔNG BÁO
+SUCCESS: <job-id> / <attempt> đã hoàn tất. Verdict=<verdict>. Report=<path>. Marker SHA=<sha>. Coordinator có thể review.
+INCOMPLETE: <job-id> / <attempt> dừng hoặc lỗi trước khi có marker hợp lệ. Report/log=<path>. Không được coi là xong; cần resume cùng session/workspace.
+UNKNOWN: Không đủ bằng chứng để kết luận (thiếu marker/report/identity). Giữ nguyên evidence và chờ coordinator review.
+
+RESUME VÀ QUOTA
+- Khi resume, dùng đúng session đã xác minh và cùng workspace; tạo attempt/log mới.
+- Không dùng `--continue` mơ hồ và không tạo job mới nếu job cũ chỉ thiếu report.
+- Nếu quota/auth/model lỗi, ghi nguyên văn lỗi và dừng ở checkpoint; không đổi model hay retry vô hạn.
+- Chỉ resume khi coordinator hoặc user yêu cầu/điều kiện đã thay đổi.
+
+BÀN GIAO CHO COORDINATOR
+Khi watcher báo xong, coordinator phải đọc report, kiểm tra marker/hash/evidence và thay đổi thực tế trước khi cập nhật plan. Worker không tự tuyên bố release hoàn tất và không thực hiện remote/deploy nếu brief không cấp quyền.

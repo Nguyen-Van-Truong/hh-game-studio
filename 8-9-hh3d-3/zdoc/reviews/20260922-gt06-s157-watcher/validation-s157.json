@@ -1,0 +1,19 @@
+{
+  "schema": "HH-S157-watcher-validation-1",
+  "utc": "2026-09-22T05:25:15.7159947Z",
+  "model": "grok-4.7-xhigh",
+  "model_init": "Grok 4.7 256K Extra High",
+  "watcher_script": "8-9-hh3d-3/zdoc/reviews/20260922-gt06-s157-watcher/watch_workers.py",
+  "watcher_uses_ai": false,
+  "watcher_interval_seconds": 30,
+  "tests": "python -B -m unittest discover -s 8-9-hh3d-3/zdoc/reviews/20260922-gt06-s157-watcher -p test_watcher.py -v",
+  "test_count": 10,
+  "test_exit": 0,
+  "manifest": "8-9-hh3d-3/studio/.local/orchestration/s157-cursor/watcher-targets-01.json",
+  "manifest_sha256": "c5b2a693d33962f96c4d0e405d31cf0676a63b30d28cb2b85d4ec81b3b23f51b",
+  "dispatch": "8-9-hh3d-3/studio/.local/orchestration/s157-cursor/watcher-01/dispatch.json",
+  "status": "2 terminal NEEDS_REVIEW, 1 LIVE; formal_acceptance=false",
+  "provenance": "observer_transport_only",
+  "popup": "REQUESTED_NOT_CONFIRMED_SEEN",
+  "formal_acceptance": false
+}
