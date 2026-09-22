@@ -1,0 +1,17 @@
+{
+  "schema": "gt06-coordinator-handoff-manifest-v1",
+  "run_id": "NONE_FOR_HANDOFF",
+  "command_id": "NONE_FOR_HANDOFF",
+  "authority": 0,
+  "plan_hash": "4115c12d87da422a79a118e20fb8cfccd0998d0db4bb5b758573226abf0150ad",
+  "source_hash": "fce149cd3a62e102aaba225794b9a5078cd84d7647cb359f6bbcacb8895ddcde",
+  "files": [
+    {
+      "path": "handoff.md",
+      "size": 2283,
+      "sha256": "35a3e721aa9c14a0879a82a4b0bd15d64db48e74d79de96cbb950412c7a6337c"
+    }
+  ],
+  "status": "WAITING_EXTERNAL_INPUT",
+  "exclusions": ["GT06_DATASET", "F13", "F14", "GT06_ACCEPTANCE", "LEAK", "ROOT_CAUSE"]
+}
