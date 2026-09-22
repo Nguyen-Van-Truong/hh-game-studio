@@ -1,0 +1,46 @@
+{
+  "schema": "HH-S160-retry-wave-status-1",
+  "authority": 0,
+  "formal_acceptance": false,
+  "observed_at_utc": "2026-09-22T10:56:28.037355Z",
+  "model": "gpt-6-astra",
+  "reasoning_effort": "xhigh",
+  "engine_started": false,
+  "formal_retry": false,
+  "lanes": [
+    {
+      "name": "s160_debugger_lane",
+      "status": "CAPACITY_ERROR",
+      "worktree": "none",
+      "scope": "read-only debugger fixture review"
+    },
+    {
+      "name": "s160_sdk_lane",
+      "status": "CAPACITY_ERROR",
+      "worktree": "none",
+      "scope": "read-only SDK boundary review"
+    },
+    {
+      "name": "s160_closure_lane",
+      "status": "COMPLETED",
+      "worktree": "none",
+      "scope": "read-only S160 hash/status audit",
+      "finding": "plan/report/fixture hashes consistent; GT06 remains HOLD"
+    },
+    {
+      "name": "s160_debugger_retry",
+      "status": "CAPACITY_ERROR",
+      "worktree": "none",
+      "scope": "one bounded retry of debugger review"
+    }
+  ],
+  "completed_count": 1,
+  "capacity_error_count": 3,
+  "active_count": 0,
+  "next_action": "Coordinator continues with S161 ready-before-open fixture; do not retry workers or installer indefinitely.",
+  "limitations": [
+    "worker result is not GT06 acceptance",
+    "no engine/native HH3D campaign process",
+    "two fresh final critics still pending"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "schema": "HH-S161-ready-fixture-manifest-1",
+  "authority": 0,
+  "formal_acceptance": false,
+  "eligible_for_dataset": false,
+  "engine_started": false,
+  "debugger_attached": false,
+  "attribution_proven": false,
+  "fixture_id": "gt06-s161-native-fixture-ready-01",
+  "actual_exit": 0,
+  "files": {
+    "native_fixture_s161.cs": {
+      "sha256": "d0ec6ce49b80ae89b15573c647de34f090fc2758058461f9f315751819de8cac",
+      "size_bytes": 5364
+    },
+    "README.md": {
+      "sha256": "bdb2b3ba58bb7306e719adf4222be5680e88a2e10e712be69d7ddca5567445e8",
+      "size_bytes": 992
+    },
+    "s161-native-fixture-run.json": {
+      "sha256": "b590e0bd11ae90459dbd40f8c32eb3f85eb1d22fa57b4eb367aef3fc99073234",
+      "size_bytes": 2189
+    },
+    "s161-native-fixture-source.sha256": {
+      "sha256": "5006805bd138e75d51ed7df6ad7d2bdbb3ad4f1be39e9eec88401b8f0c705430",
+      "size_bytes": 90
+    },
+    "test_fixture_s161.py": {
+      "sha256": "56c53617e0d7e01626509df3d801b6c3c645ee62b5b161a2c17afab3ee4a2a92",
+      "size_bytes": 1078
+    }
+  },
+  "limitations": [
+    "no debugger installed or attached",
+    "no creator/TID attribution",
+    "lifecycle-only",
+    "excluded F13/F14 and GT06 dataset"
+  ],
+  "executable_sha256": "3ce0703c40e621d6da6b45dc897bde9c3abb7777554b1a4a925278304406c4ce"
+}

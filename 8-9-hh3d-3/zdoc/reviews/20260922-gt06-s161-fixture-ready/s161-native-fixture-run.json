@@ -1,0 +1,36 @@
+{
+  "schema": "HH-S161-ready-fixture-run-1",
+  "authority": 0,
+  "formal_acceptance": false,
+  "eligible_for_dataset": false,
+  "engine_started": false,
+  "debugger_attached": false,
+  "attribution_proven": false,
+  "fixture_id": "gt06-s161-native-fixture-ready-01",
+  "compile_exit": 0,
+  "actual_exit": 0,
+  "timeout": false,
+  "elapsed_seconds": 0.065519,
+  "source_sha256": "d0ec6ce49b80ae89b15573c647de34f090fc2758058461f9f315751819de8cac",
+  "stdout_sha256": "d677970a41d2374ef3cdde2789af73e865d10f97c94489abcfb9d3b25935bdf7",
+  "commands": [
+    "snapshot",
+    "open",
+    "snapshot",
+    "churn 16",
+    "close_event",
+    "close_iocp",
+    "exit"
+  ],
+  "stdout": "{\"kind\":\"start\",\"pid\":17096,\"fixture\":\"s161-native-handle-ready\",\"handles_opened\":false}\n{\"kind\":\"ready\",\"pid\":17096,\"observer_attach_before_open\":true}\n{\"kind\":\"snapshot\",\"event_open\":false,\"iocp_open\":false,\"opened\":false}\n{\"kind\":\"open\",\"type\":\"Event\",\"handle\":\"0x2EC\"}\n{\"kind\":\"open\",\"type\":\"IoCompletion\",\"handle\":\"0x2F0\"}\n{\"kind\":\"open_result\",\"opened\":true}\n{\"kind\":\"snapshot\",\"event_open\":true,\"iocp_open\":true,\"opened\":true}\n{\"kind\":\"churn\",\"requested\":16,\"closed\":16}\n{\"kind\":\"close\",\"type\":\"Event\",\"handle\":\"0x2EC\",\"ok\":true,\"win32_error\":0}\n{\"kind\":\"close\",\"type\":\"IoCompletion\",\"handle\":\"0x2F0\",\"ok\":true,\"win32_error\":0}\n{\"kind\":\"close\",\"type\":\"Event\",\"state\":\"already_closed\"}\n{\"kind\":\"close\",\"type\":\"IoCompletion\",\"state\":\"already_closed\"}\n{\"kind\":\"exit\",\"ok\":true,\"reason\":\"command\"}\n",
+  "stderr": "",
+  "notes": [
+    "ready emitted before any target handle exists",
+    "external debugger was not attached",
+    "lifecycle-only; excluded F13/F14 and GT06 dataset"
+  ],
+  "pid_observed": 17096,
+  "executable_path": "C:\\Users\\truon\\AppData\\Local\\Temp\\hh3d-s161-native-fixture.exe",
+  "executable_sha256": "3ce0703c40e621d6da6b45dc897bde9c3abb7777554b1a4a925278304406c4ce",
+  "identity_binding": "PID parsed from fixture start line; executable path is owned temp output; no debugger attachment"
+}
