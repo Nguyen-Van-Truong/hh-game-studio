@@ -1,0 +1,36 @@
+{
+  "schema": "HH-S160-native-fixture-run-1",
+  "authority": 0,
+  "formal_acceptance": false,
+  "fixture_id": "gt06-s160-native-fixture-01",
+  "fixture_kind": "managed_host_win32_native_handle_lifecycle",
+  "source_sha256": "db078763f2781dac11697fd73e8c200422a69094bd0819697e369742e256817c",
+  "executable_sha256": "de0bd91f42685e7b354bac839a8bc0cf7e8e8dad2ef914b505d81e01dab86b23",
+  "compile_exit": 0,
+  "target": {
+    "pid": 32004,
+    "start_utc": "2026-09-22T10:11:00.892554Z",
+    "executable": "C:\\Users\\truon\\AppData\\Local\\Temp\\hh3d-s160-native-fixture-01.exe",
+    "wait_timeout_ms": 5000,
+    "timed_out": false,
+    "actual_exit": 0
+  },
+  "commands": [
+    "snapshot",
+    "churn 64",
+    "snapshot",
+    "close_event",
+    "close_iocp",
+    "exit"
+  ],
+  "stdout": "{\"kind\":\"start\",\"pid\":32004,\"fixture\":\"s160-native-handle-lifecycle\"}\n{\"kind\":\"open\",\"type\":\"Event\",\"label\":\"primary\",\"handle\":\"0x23C\"}\n{\"kind\":\"open\",\"type\":\"IoCompletion\",\"label\":\"primary\",\"handle\":\"0x240\"}\n{\"kind\":\"snapshot\",\"event_open\":true,\"iocp_open\":true}\n{\"kind\":\"churn\",\"requested\":64,\"closed\":64}\n{\"kind\":\"snapshot\",\"event_open\":true,\"iocp_open\":true}\n{\"kind\":\"close\",\"type\":\"Event\",\"handle\":\"0x23C\",\"ok\":true,\"win32_error\":0}\n{\"kind\":\"close\",\"type\":\"IoCompletion\",\"handle\":\"0x240\",\"ok\":true,\"win32_error\":0}\n{\"kind\":\"close\",\"type\":\"Event\",\"state\":\"already_closed\"}\n{\"kind\":\"close\",\"type\":\"IoCompletion\",\"state\":\"already_closed\"}\n{\"kind\":\"exit\",\"ok\":true}\n",
+  "stderr": "",
+  "engine_started": false,
+  "debugger_attached": false,
+  "attribution_proven": false,
+  "notes": [
+    "Creates real Win32 Event and IoCompletion handles via P/Invoke.",
+    "Lifecycle and actual exit are observed; debugger OPEN/CLOSE attribution and htrace overflow are not tested.",
+    "Diagnostic-only; excluded from F13/F14 and GT06 dataset."
+  ]
+}

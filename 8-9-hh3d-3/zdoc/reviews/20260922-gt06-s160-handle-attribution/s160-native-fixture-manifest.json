@@ -1,0 +1,18 @@
+{
+  "schema": "HH-S160-native-fixture-manifest-1",
+  "authority": 0,
+  "formal_acceptance": false,
+  "engine_started": false,
+  "debugger_attached": false,
+  "attribution_proven": false,
+  "files": {
+    "native_fixture_s160.cs": "db078763f2781dac11697fd73e8c200422a69094bd0819697e369742e256817c",
+    "s160-native-fixture-run.json": "5bbd6fcb03426b1955f7ea65179d5a0b4b9af93d4df32350139cfba5c337b9f8"
+  },
+  "receipt_target_actual_exit": 0,
+  "notes": [
+    "Win32 lifecycle fixture only; no Godot/Blender engine.",
+    "Debugger OPEN/CLOSE attribution and htrace overflow remain untested.",
+    "Excluded from F13/F14 and GT06 dataset."
+  ]
+}
