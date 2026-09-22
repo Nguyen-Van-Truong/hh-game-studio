@@ -35,6 +35,11 @@ Godot_v4.7.1-stable_win64_console.exe --headless --path vertical-slice --smoke-t
 Godot_v4.7.1-stable_win64_console.exe --headless --path vertical-slice --deterministic-test
 Godot_v4.7.1-stable_win64_console.exe --headless --path vertical-slice --integration-test
 blender.exe --background --python vertical-slice/blender/generate_asset.py
-# bounded headless fallback used on this workstation:
-python vertical-slice/blender/generate_asset.py
+# bounded wrapper (the executable must provide bpy):
+pwsh -File vertical-slice/verify_blender.ps1 -Blender <blender.exe> -Project vertical-slice/project.godot
 ```
+
+`verify_blender.ps1 -Python ...` is retained only for compatibility and first
+probes `import bpy`; a plain Python installation is rejected with an explicit
+error. The supported path is the native Blender executable in background mode,
+which runs a fresh Blender process for authoring and for reopen/export.
