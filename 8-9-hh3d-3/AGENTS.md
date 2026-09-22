@@ -6,6 +6,9 @@ S157 đã terminal cả ba lane, exact outputs đã giữ để review/tiếp t�
 Mỗi worker một scope/file ownership; không spawn agent con hoặc đổi model.
 Coordinator giữ plan, tích hợp và kiểm báo cáo/evidence. Các chỉ đạo
 SOLO/Cursor trước là lịch sử; không tạo thêm Cursor session.
+Lượt S158 đã thử đúng ba lane Astra xhigh nhưng cả ba bị từ chối trước khi
+chạy vì capacity; không chờ hoặc retry vô hạn, coordinator tiếp quản phần
+static review và giữ bằng chứng lỗi capacity trong S158.
 Resume đúng session/workspace khi gián đoạn; đọc report khi terminal và
 poll thưa theo thời lượng công việc, không lặp AI polling liên tục.
 Giữ hai critic độc lập ở gate cuối khi đủ điều kiện; worker sửa/test không thay
