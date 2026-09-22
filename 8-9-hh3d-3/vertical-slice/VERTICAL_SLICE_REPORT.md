@@ -8,11 +8,11 @@ replace any GT01–GT10 gate.
 |---|---|
 | `RUN_ID` | `gt06-vertical-slice-godot-01` |
 | `COMMAND_ID` | `cmd.vertical-slice.verify.1` |
-| `TIMESTAMP_UTC` | `2026-09-22T15:41:22Z` |
+| `TIMESTAMP_UTC` | `2026-09-22T15:52:34Z` |
 | `PLAN_HASH` | `7203d567ce822974d21364b6cd083ed64d30247e809533a78b021bbe154eb899` |
 | `TOOLING_SOURCE_HASH` | `fce149cd3a62e102aaba225794b9a5078cd84d7647cb359f6bbcacb8895ddcde` |
 | `SLICE_SOURCE_CLOSURE_SHA256` | `e2e570efa33a7efe7cc5757c7e7044ac01afdc286dd8e42a658ceb351abb14d5` |
-| `CLOSURE_ALGORITHM` | `sorted-path-NUL-sha256-LF-utf8; report excluded to avoid circularity` |
+| `CLOSURE_ALGORITHM` | `sorted repo-relative path (including 8-9-hh3d-3/vertical-slice/) + NUL + file SHA-256 + LF, UTF-8; report excluded to avoid circularity` |
 | `GODOT_SHA256` | `35dab11e04ece16a2b93035e65204f4a944a3e00b020d43e54409193379d5eef` |
 | `BLENDER_RUNTIME` | `bpy 4.5.10 LTS`, build `6dc0b208d1b5` |
 | `BLENDER_ZIP_SHA256` | `ef6d846b8015f47ade6df3f9322ce17419080a5d922fa562b6c966064fe30dce` |
