@@ -1,0 +1,31 @@
+{
+  "schema": "HH-S159-coordinator-status-1",
+  "authority": 0,
+  "formal_acceptance": false,
+  "eligible_for_dataset": false,
+  "gt06": "IN_PROGRESS",
+  "accepted_full_runs": 0,
+  "plan_revision": "S159",
+  "plan_sha256": "8a5ae1c46196211b93f5f5b895d26926934619cba21a8cfbbb318bd2dc5489e6",
+  "source_closure": "fce149cd3a62e102aaba225794b9a5078cd84d7647cb359f6bbcacb8895ddcde",
+  "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+  "cursor_state": "TERMINAL_RETAINED",
+  "astra_requested": 3,
+  "astra_started": 0,
+  "astra_capacity_blocked": 3,
+  "engine_processes": 0,
+  "static_reviews": [
+    {
+      "lane": "helper-contract",
+      "exit_code": 0,
+      "output_sha256": "62afbdc59abc7235b34d77b8d0b1111acc9df7125610c2e789c50f93d2b280c1"
+    },
+    {
+      "lane": "documented-pss-schema",
+      "exit_code": 0,
+      "output_sha256": "a1e06463a34692b3474076597de4ecafa6a03d743adc7cbf9cb2b47c1943c7c9"
+    }
+  ],
+  "next_action": "Review integration binding; then at most one bounded diagnostic with a fresh ID if it can distinguish a mechanism. No formal retry.",
+  "formal_gate": "10 fresh pairs x 35 batches, all dataset/hashes/actual exits/trees/jobs/handles, then two NEW same-hash critics."
+}
