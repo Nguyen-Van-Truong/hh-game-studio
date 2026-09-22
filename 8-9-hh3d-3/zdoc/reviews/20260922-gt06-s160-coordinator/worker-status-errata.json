@@ -1,0 +1,30 @@
+{
+  "schema": "HH-S160-worker-status-errata-1",
+  "authority": 0,
+  "formal_acceptance": false,
+  "utc": "2026-09-22T07:43:12.207325+00:00",
+  "supersedes_worker_counts_only": {
+    "path": "8-9-hh3d-3\\zdoc\\reviews\\20260922-gt06-s159-coordinator\\s159-coordinator-status.json",
+    "sha256": "a90125b22c63ff6adfbd3fb7a25623c706001ddabb30f13cc744a5006bc4f10f"
+  },
+  "s158": {
+    "requested": 3,
+    "completed": 0,
+    "capacity_errors": 3
+  },
+  "s159": {
+    "requested": 3,
+    "completed": 1,
+    "capacity_errors": 2,
+    "active": 0,
+    "completed_lane": "s159_plan_audit",
+    "report_sha256": "7d04c2f734eafccb0bfe9bf47d6670a55374ff35ff900bae11fb5e8ccbcc3547"
+  },
+  "reason": "Previous S159 status incorrectly reused S158 counts; original status/report bytes retained. S159 helpers were coordinator implementations, not outputs of the two failed workers.",
+  "s160_dispatched": [
+    "s160_launcher_integration",
+    "s160_handle_attribution",
+    "s160_source_ownership"
+  ],
+  "note": "Dispatch is not completion; current worker states must be queried."
+}

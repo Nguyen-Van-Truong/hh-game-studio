@@ -1,0 +1,50 @@
+# S160 handle-attribution decision — 2026-09-22
+
+`AUTHORITY=0; FORMAL_ACCEPTANCE=false; TRACE_STARTED=false; ENGINE_STARTED=false`
+
+Decision: **do not start WPR Handle or claim a supported process-only kernel ETW recipe.** The reviewed Microsoft interfaces do not establish the required collection-time PID boundary for kernel handle events. A documented alternative, user-mode debugger `!htrace`, can attribute the owned process's handle history to allocation stacks. It is a conditional diagnostic candidate, not an established low-overhead substitute or currently executable campaign.
+
+Scope: read-only research plus this memo only. No engine, debugger attachment, trace, test, installation, registry mutation, runtime/launcher edit, or plan edit occurred. No subagent was spawned. Baseline HEAD: `d13140cd558439a256a4aed6ff523fa4c1137f47`. The worktree was already dirty; tracked HH3D status showed the tools plan modified. Scoped Godot/Blender process lookup returned none.
+
+## Why another PSS field will not supply the answer
+
+S159 keeps GT-06 open with zero accepted full runs and prohibits engine execution pending runner-wiring review. S156 has editor handles 555→557 and Event +1/IoCompletion +1; S153 grew 555→559 without that census. These observations neither identify a creator nor prove the two runs share a cause. Microsoft's `PSS_HANDLE_ENTRY` documentation marks CreationTime, GrantedAccess, HandleCount, PointerCount, and pool charges reserved. CaptureTime is observation time, not creation time. Thread information describes a referenced Thread object, not the creator of an Event or IoCompletion. Do not revive the S157 creation-time discriminator. [PSS_HANDLE_ENTRY](https://learn.microsoft.com/en-us/windows/win32/api/processsnapshot/ns-processsnapshot-pss_handle_entry)
+
+## Exact WPR/API limitation
+
+Read-only local command `wpr -profiledetails Handle` exited 0. Installed profile `Handle.Verbose.Memory` specifies:
+
+- System collector: 1024-KB buffers, 1634 buffers; keywords `CpuConfig`, `Handle`, `Loader`, `ProcessThread`; stacks `HandleCreate`, `HandleClose`, `HandleDuplicate`.
+- Event collector: 1024-KB buffers, 20 buffers; includes JScript, BrokerInfrastructure, DotNETRuntime, Kernel-EventTracing, Performance-Recorder-Control, ProcessStateManager, and another GUID provider; also capture-on-save JScript/.NET providers.
+
+That is a system collection profile, not an owned-PID boundary. Buffer configuration alone totals approximately 1.615 GiB; this is configured capacity, not a measured allocation or overhead claim. Filtering an ETL afterward with tracerpt/WPA cannot undo collection of other processes. A custom profile could reduce providers/buffers but would not by itself solve scope. The documented WPR `SystemProvider` exposes keywords, stacks, capture-state settings and pool tags; `ProcessExeFilter` belongs to the user-mode `EventProvider` schema, and an image-name filter is also weaker than the campaign's PID/start/executable identity. [SystemProvider](https://learn.microsoft.com/en-us/windows-hardware/test/wpt/systemprovider), [EventProvider](https://learn.microsoft.com/en-us/windows-hardware/test/wpt/eventprovider)
+
+Microsoft documents System Object Provider GUID `{febd7460-3d1d-47eb-af49-c9eeb1e146f2}` and keyword `SYSTEM_OBJECT_KW_HANDLE`; the installed SDK defines its value as `0x2`. Enabling it requires `EVENT_TRACE_SYSTEM_LOGGER_MODE`. The newer EnableTraceEx2 entry point does not convert it into a provider inside Godot. [System Providers](https://learn.microsoft.com/en-us/windows/win32/etw/system-providers)
+
+`EVENT_FILTER_TYPE_PID` documentation explicitly limits its provider enablement to user-mode processes and excludes kernel-driver registrations. It therefore cannot be presented as a documented guarantee for System Object Provider handle filtering. The inspected public `TRACE_QUERY_INFO_CLASS` and SDK header provide stack-event and group-mask configuration, but no documented owned-PID handle filter. `TraceSystemTraceEnableFlagsInfo` accepts `PERFINFO_GROUPMASK`, not a PID list. This is a finding of **unsupported by the reviewed public contract**, not proof that no internal Windows mechanism exists. No undocumented NtTraceControl/NtSetInformationProcess recipe is proposed. [EVENT_FILTER_DESCRIPTOR](https://learn.microsoft.com/en-us/windows/win32/api/evntprov/ns-evntprov-event_filter_descriptor), [TRACE_QUERY_INFO_CLASS](https://learn.microsoft.com/en-us/windows/win32/api/evntrace/ne-evntrace-trace_query_info_class)
+
+## Fallback and admissibility
+
+`!htrace` in a user-mode debugger uses the current target process and records open/close/invalid-reference stacks. `-enable`, `-snapshot`, `-diff`, per-handle inspection, and `-disable` are documented. It needs no global ETW session. However, Microsoft warns that some traces can originate in a different process context. Thus it meets a **target handle-table** boundary, but cannot promise that every recorded stack originated inside Godot. If “only owned process data” forbids even a foreign-context operation on the owned handle table, this fallback is **not admissible** under that strict interpretation. [!htrace](https://learn.microsoft.com/en-us/windows-hardware/drivers/debuggercmds/-htrace)
+
+It also adds stack-capture cost, trace storage, debugger attach/break effects, and timing changes. No numeric overhead bound was found or measured. Missing/overwritten history is UNKNOWN; a missing OPEN record does not prove pre-existing ownership. The reviewed documentation supports stack attribution; require an actual recorded TID before claiming thread attribution. Application Verifier is less suitable: configuration persists by executable name and applies on future launches, potentially including other same-name instances. Do not enable its broad Basics preset or image-wide Handles settings for this one-PID question. [Debugging Application Verifier Stops](https://learn.microsoft.com/en-us/windows-hardware/drivers/devtest/application-verifier-debugging-application-verifier-stops), [Application Verifier configuration](https://learn.microsoft.com/en-us/windows-hardware/drivers/devtest/application-verifier-testing-applications)
+
+Local feasibility: Windows registry reports build `26200.8875`, display version `25H2`. WPR is `10.0.26100.8875`, tracerpt `10.0.26100.1`; SDK headers `10.0.26100.0` exist. `appverif.exe` and `dbgeng.dll` exist in System32. CDB/WinDbg/GFlags/xperf/WPA were not found on PATH; SDK Debuggers/WPT directories and checked WinDbg app aliases were absent. No runnable debugger plus htrace extension was established. A DLL's presence alone is not a usable supported debugger installation. [Debugging Tools installation](https://learn.microsoft.com/en-us/windows-hardware/drivers/debugger/debugger-download-tools)
+
+## Conditional bounded discriminator, not a dispatch
+
+After coordinator review of instrumentation/runner ownership and debugger prerequisites, a separate new diagnostic ID could test the target-handle-table interpretation above. Use only the retained owned Godot PID after PID/start-time/executable/hash verification; never attach by image name, follow children, start a kernel debugger, or enumerate other processes' handles.
+
+Supported command template, **not executed**:
+
+```text
+cdb -p <owned-decimal-PID> -pd -nosqm -netsyms no -logo <new-absolute-log-path>
+```
+
+At the initial debugger stop, run `!htrace -enable`, confirm success, and `g`. At the agreed quiet baseline boundary run `!htrace -snapshot`, then `g`. At the first retained-count failure, stop the owned target before cleanup and inspect `!htrace -diff`; for candidate residual handles use `!htrace <handle>` and `!handle <handle> 1` (type only, no names). Finish `!htrace -disable`, `.detach`, then `q`. Do not treat an optional Max_Traces argument as a proven memory cap. CDB's `-p` binds one PID, `-pd` avoids killing the target at debugger exit, and omission of `-o` avoids child debugging. [CDB options](https://learn.microsoft.com/en-us/windows-hardware/drivers/debugger/cdb-command-line-options), [!handle](https://learn.microsoft.com/en-us/windows-hardware/drivers/debuggercmds/-handle), [.detach](https://learn.microsoft.com/en-us/windows-hardware/drivers/debuggercmds/-detach--detach-from-process-)
+
+Bound the future experiment to one existing prefix (at most batches 0–7 / existing 1500-second outer deadline), stop on the first failure, and never retry the same ID. The runner must explicitly coordinate debugger stops without silently relaxing the existing gates. If this cannot be integrated within the original deadline, stop as inconclusive rather than extend it. Keep all timing/counter outputs diagnostic and outside F13/F14.
+
+The discriminating result is a still-open Event/IoCompletion with an observed OPEN history and resolved caller module/offset, preferably an explicit recorded TID. A shared higher-level caller stack supports one subsystem hypothesis; different callers support separate mechanisms. Generic NtCreateEvent/NtCreateIoCompletion frames alone, foreign process context, unavailable symbols, incomplete history, or no reproduction leave ownership UNKNOWN. Retain raw addresses and exact module identity; do not invent Godot source lines without matching symbols. Never forcibly close a target handle. Capture actual exits and cleanup separately. Even successful attribution is not leak proof, a repair authorization, or GT-06 acceptance.
+
+Read inputs: nested AGENTS SHA256 `2fbb4a617ca036a602ad42490c69701f4014e5c1a343d4c3a79f8a195970281f`; S159 tools plan SHA256 at read `bfc88698816a10c11198a734d4bcb23380993f4adb71066d8eb6d902e0d2056a`; S156 static receipt `f4c81d9cf31fe144dd5a6e2890131374e155418899b929195b494627b7653a13`; installed evntrace.h `40d80842618b587a45ca4e15b50e8df718917727c2f154424e28e81e84300b5d`. Microsoft pages reviewed 2026-09-22. No commit: this is an independently owned review deliverable for coordinator integration.
