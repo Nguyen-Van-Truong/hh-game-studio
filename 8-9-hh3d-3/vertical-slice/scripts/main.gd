@@ -11,6 +11,7 @@ const JUMP_SPEED := -520.0
 const PLAYER_SIZE := Vector2(28.0, 44.0)
 const SAVE_PATH := "user://hh3d_vertical_slice_save.json"
 const TEST_SAVE_PATH := "user://hh3d_vertical_slice_test_save.json"
+const SAVE_BACKUP_SUFFIX := ".bak"
 const PLATFORM_RECTS: Array[Rect2] = [
 	Rect2(65.0, FLOOR_Y - 148.0, 180.0, 12.0),
 	Rect2(355.0, FLOOR_Y - 92.0, 250.0, 12.0),
@@ -36,6 +37,7 @@ var asset_container: SubViewportContainer
 var asset_viewport: SubViewport
 var asset_model: Node3D
 var active_save_path := SAVE_PATH
+var runtime_tick := 0
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -50,7 +52,7 @@ func _ready() -> void:
 		_run_asset_test()
 		return
 	if _has_arg("--gameplay-test"):
-		_run_gameplay_test()
+		await _run_gameplay_test()
 		return
 	if _has_arg("--integration-test"):
 		_run_integration_test()
@@ -60,6 +62,7 @@ func _ready() -> void:
 	queue_redraw()
 
 func _physics_process(delta: float) -> void:
+	runtime_tick += 1
 	if smoke_time >= 0.0:
 		smoke_time -= delta
 		if smoke_time <= 0.0:
@@ -215,7 +218,37 @@ func _apply_command(command: String) -> void:
 			message = "RESTARTED"
 			message_time = 1.5
 
+func _recover_save_transaction() -> bool:
+	var save_absolute := ProjectSettings.globalize_path(active_save_path)
+	var backup_absolute := save_absolute + SAVE_BACKUP_SUFFIX
+	var temp_absolute := save_absolute + ".tmp"
+	if not FileAccess.file_exists(save_absolute) and FileAccess.file_exists(backup_absolute):
+		if DirAccess.rename_absolute(backup_absolute, save_absolute) != OK:
+			return false
+	if FileAccess.file_exists(save_absolute) and FileAccess.file_exists(backup_absolute):
+		DirAccess.remove_absolute(backup_absolute)
+	if FileAccess.file_exists(save_absolute) and FileAccess.file_exists(temp_absolute):
+		DirAccess.remove_absolute(temp_absolute)
+	return true
+
+func _replace_save_transaction(temp_absolute: String, save_absolute: String) -> bool:
+	var backup_absolute := save_absolute + SAVE_BACKUP_SUFFIX
+	var had_save := FileAccess.file_exists(save_absolute)
+	if had_save and DirAccess.rename_absolute(save_absolute, backup_absolute) != OK:
+		return false
+	if DirAccess.rename_absolute(temp_absolute, save_absolute) == OK:
+		if had_save and FileAccess.file_exists(backup_absolute):
+			DirAccess.remove_absolute(backup_absolute)
+		return true
+	if had_save and not FileAccess.file_exists(save_absolute):
+		DirAccess.rename_absolute(backup_absolute, save_absolute)
+	return false
+
 func save_game() -> bool:
+	if not _recover_save_transaction():
+		message = "SAVE FAILED"
+		message_time = 1.5
+		return false
 	var temp_path := active_save_path + ".tmp"
 	var file := FileAccess.open(temp_path, FileAccess.WRITE)
 	if file == null:
@@ -232,12 +265,11 @@ func save_game() -> bool:
 		"pickup_collected": pickup_collected,
 		"game_state": game_state,
 	}))
+	file.flush()
 	file.close()
 	var temp_absolute := ProjectSettings.globalize_path(temp_path)
 	var save_absolute := ProjectSettings.globalize_path(active_save_path)
-	if FileAccess.file_exists(active_save_path):
-		DirAccess.remove_absolute(save_absolute)
-	if DirAccess.rename_absolute(temp_absolute, save_absolute) != OK:
+	if not _replace_save_transaction(temp_absolute, save_absolute):
 		message = "SAVE FAILED"
 		message_time = 1.5
 		return false
@@ -246,6 +278,8 @@ func save_game() -> bool:
 	return true
 
 func load_game() -> bool:
+	if not _recover_save_transaction():
+		return false
 	if not FileAccess.file_exists(active_save_path):
 		message = "NO SAVE"
 		message_time = 1.5
@@ -379,10 +413,13 @@ func _run_gameplay_test() -> void:
 
 	reset_game()
 	var before_pause := player_position
+	var before_pause_velocity := player_velocity
 	_send_key(KEY_P)
-	if not paused and game_state == "playing":
-		_step_gameplay(1.0 / 60.0, 1.0, false, false)
-	var pause_frozen: bool = paused and player_position == before_pause
+	var tick_before_pause := runtime_tick
+	for _frame in range(4):
+		await get_tree().physics_frame
+	var runtime_advanced: bool = runtime_tick > tick_before_pause
+	var pause_frozen: bool = paused and runtime_advanced and player_position == before_pause and player_velocity == before_pause_velocity
 	_send_key(KEY_P)
 
 	reset_game()
@@ -411,7 +448,7 @@ func _run_gameplay_test() -> void:
 		print("GAMEPLAY_FAIL platform=%s pickup=%s pause=%s won_restart=%s lost_restart=%s" % [platform_landed, pickup_collected_ok, pause_frozen, won_restart, lost_restart])
 		get_tree().quit(1)
 		return
-	print("GAMEPLAY_PASS platform_landed=%s pickup=%s pause_frozen=%s won_restart=%s lost_restart=%s" % [platform_landed, pickup_collected_ok, pause_frozen, won_restart, lost_restart])
+	print("GAMEPLAY_PASS platform_landed=%s pickup=%s pause_frozen=%s runtime_advanced=%s won_restart=%s lost_restart=%s" % [platform_landed, pickup_collected_ok, pause_frozen, runtime_advanced, won_restart, lost_restart])
 	get_tree().quit(0)
 
 func _run_integration_test() -> void:
@@ -435,7 +472,8 @@ func _run_integration_test() -> void:
 	malformed.store_string("{malformed")
 	malformed.close()
 	var malformed_rejected := not load_game()
-	DirAccess.remove_absolute(ProjectSettings.globalize_path(active_save_path))
+	for suffix in ["", ".tmp", SAVE_BACKUP_SUFFIX]:
+		DirAccess.remove_absolute(ProjectSettings.globalize_path(active_save_path + suffix))
 	if not malformed_rejected:
 		print("SAVE_LOAD_FAIL malformed_save_accepted")
 		get_tree().quit(1)

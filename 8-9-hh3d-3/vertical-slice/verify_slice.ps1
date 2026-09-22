@@ -10,6 +10,11 @@ $projectDir = Split-Path -Parent $Project
 if (-not (Test-Path -LiteralPath $Godot)) { throw "Godot executable missing: $Godot" }
 $godotHash = (Get-FileHash -Algorithm SHA256 -LiteralPath $Godot).Hash.ToLower()
 if ($TimeoutSeconds -lt 1) { throw "TimeoutSeconds must be positive" }
+$Only = @($Only | ForEach-Object { $_ -split "," } | ForEach-Object { $_.Trim() } | Where-Object { $_ })
+$knownTests = @("smoke", "deterministic", "save_load", "gameplay", "asset_readback")
+$unknownTests = @($Only | Where-Object { $knownTests -notcontains $_ })
+if ($unknownTests.Count -gt 0) { throw "Unknown -Only test selection: $($unknownTests -join ', ')" }
+$script:hh3dRanTests = @()
 $verifyDir = Join-Path $env:TEMP ("hh3d-vertical-slice-" + [guid]::NewGuid().ToString("N"))
 New-Item -ItemType Directory -Path $verifyDir | Out-Null
 function Should-Run([string]$name) {
@@ -17,6 +22,7 @@ function Should-Run([string]$name) {
 }
 function Invoke-Check([string]$name, [string]$arg) {
     if (-not (Should-Run $name)) { return }
+    $script:hh3dRanTests += $name
     $stdout = Join-Path $verifyDir "$name.stdout.log"
     $stderr = Join-Path $verifyDir "$name.stderr.log"
     $proc = Start-Process -FilePath $Godot -ArgumentList @("--headless", "--path", $projectDir, $arg) -RedirectStandardOutput $stdout -RedirectStandardError $stderr -PassThru -WindowStyle Hidden
@@ -48,6 +54,10 @@ if (Test-Path (Join-Path $projectDir "assets/pickup_original.glb")) {
 } elseif (Should-Run "asset_readback") {
     Write-Output "asset_readback BLOCKED_EXTERNAL blender_output_missing"
     exit 2
+}
+if ($Only.Count -gt 0) {
+    $missingTests = @($Only | Where-Object { $script:hh3dRanTests -notcontains $_ })
+    if ($missingTests.Count -gt 0) { throw "Requested test was skipped: $($missingTests -join ', ')" }
 }
 Write-Output "GODOT_SHA256=$godotHash"
 Write-Output "PROJECT=$projectDir"
