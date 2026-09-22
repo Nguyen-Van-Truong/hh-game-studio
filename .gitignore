@@ -105,3 +105,18 @@ testnewcodex/
 # in hh-3d/demo/evidence/ (overview-1280x720.png, play-walk.png, RUN-*.md)
 # stay commitable. Keep capture-running-app.mjs tracked.
 hh-3d/demo/evidence/stale-20260831/
+# HH3D review runtime payloads are reproducible locally but are not source/evidence receipts.
+# Keep hand-authored README/REPORT/manifest/receipt/source files at each review root.
+8-9-hh3d-3/zdoc/reviews/**/owned/
+8-9-hh3d-3/zdoc/reviews/**/source/
+8-9-hh3d-3/zdoc/reviews/**/project/
+8-9-hh3d-3/zdoc/reviews/**/runs/
+8-9-hh3d-3/zdoc/reviews/**/tasks/
+8-9-hh3d-3/zdoc/reviews/**/scratch/
+8-9-hh3d-3/zdoc/reviews/**/__pycache__/
+
+# Local archive from an older sibling project; never publish it with HH Game Studio.
+old-data-from21-9-2026/
+# Diagnostic binaries and raw logs are not review source or bounded receipts.
+8-9-hh3d-3/zdoc/reviews/**/*.exe
+8-9-hh3d-3/zdoc/reviews/**/*.log
