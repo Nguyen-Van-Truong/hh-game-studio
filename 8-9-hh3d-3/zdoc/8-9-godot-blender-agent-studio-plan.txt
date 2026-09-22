@@ -84,6 +84,10 @@ launched=false) and the 11 editor-handle unit tests passed. No matching
 Godot/Python/Blender campaign process remains. This validates only the
 diagnostic harness and packet binding; S156 remains FAILURE/AUTHORITY=0,
 outside F13/F14, with editor target exit UNKNOWN. No formal retry is open.
+Derived receipt `zdoc/reviews/20260922-gt06-s156-editor-handles/
+static-attribution-s156.json` binds result/summary/cleanup hashes and records
+the original-gate-before-census test; it is metadata only and carries no PASS,
+leak, or root-cause claim.
 
 S154 chuyển giao, không restart benchmark:
 - Cursor formal-resume-02 terminal CLI exit0 lúc02:13:13Z; đã dispatch stock
