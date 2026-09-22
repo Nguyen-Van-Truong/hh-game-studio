@@ -1,0 +1,14 @@
+VERIFY_CLEAN_EXIT=0
+godot_import PASS exit=0
+smoke PASS exit=0
+SMOKE_PASS score=0 health=3
+deterministic PASS exit=0
+DETERMINISTIC_PASS digest=44a33feadaa955fe738d8d0e840a141bacd85801f2a827fa71086f2c7f7fdeb9
+save_load PASS exit=0
+SAVE_LOAD_PASS position=(333.0, 443.0) score=75 health=2 malformed_rejected=true backup_recovered=true
+gameplay PASS exit=0
+GAMEPLAY_PASS platform_landed=true pickup=true pause_frozen=true runtime_advanced=true won_restart=true lost_restart=true
+asset_readback PASS exit=0
+ASSET_RUNTIME_PASS mesh_count=2
+GODOT_SHA256=c8f0a6bc45a19b33541501e57f6f7cd972ab18453743266339d495cbbe846643
+PROJECT=C:\Users\truon\AppData\Local\Temp\hh3d-vs-clean-s172

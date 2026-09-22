@@ -1,0 +1,27 @@
+{
+  "schema": "vertical-slice-verification-v1",
+  "run_id": "gt06-s172-vertical-slice-clean-01",
+  "command_id": "cmd.gt06.s172.vertical-slice.clean.1",
+  "authority": 0,
+  "track": "VERTICAL_SLICE",
+  "source_commit": "034d20be1d27218285457202ec80d1020865403b",
+  "godot_sha256": "c8f0a6bc45a19b33541501e57f6f7cd972ab18453743266339d495cbbe846643",
+  "wrapper": "8-9-hh3d-3/vertical-slice/verify_slice.ps1",
+  "wrapper_interpreter": "bundled_pwsh",
+  "wrapper_exit": 0,
+  "tests": {
+    "godot_import": {"exit": 0, "status": "PASS"},
+    "smoke": {"exit": 0, "status": "PASS", "score": 0, "health": 3},
+    "deterministic": {"exit": 0, "status": "PASS", "digest": "44a33feadaa955fe738d8d0e840a141bacd85801f2a827fa71086f2c7f7fdeb9"},
+    "save_load": {"exit": 0, "status": "PASS", "malformed_rejected": true, "backup_recovered": true},
+    "gameplay": {"exit": 0, "status": "PASS", "pause_frozen": true, "runtime_advanced": true, "won_restart": true, "lost_restart": true},
+    "asset_readback": {"exit": 0, "status": "PASS", "mesh_count": 2}
+  },
+  "environment_observations": {
+    "existing_checkout_import": "TIMEOUT_30S_LOADING_EDITOR_LAYOUT",
+    "clean_copy_import": "EXIT_0",
+    "system_powershell": "HARNESS_MISSING_GET_FILE_HASH",
+    "leftover_processes_after_run": 0
+  },
+  "exclusions": ["GT06_DATASET", "F13", "F14", "GT06_ACCEPTANCE", "LEAK", "ROOT_CAUSE"]
+}
