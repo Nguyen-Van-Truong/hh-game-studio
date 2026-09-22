@@ -8,10 +8,10 @@ replace any GT01–GT10 gate.
 |---|---|
 | `RUN_ID` | `gt06-vertical-slice-godot-01` |
 | `COMMAND_ID` | `cmd.vertical-slice.verify.1` |
-| `TIMESTAMP_UTC` | `2026-09-22T15:34:10Z` |
+| `TIMESTAMP_UTC` | `2026-09-22T15:37:19Z` |
 | `PLAN_HASH` | `7203d567ce822974d21364b6cd083ed64d30247e809533a78b021bbe154eb899` |
 | `TOOLING_SOURCE_HASH` | `fce149cd3a62e102aaba225794b9a5078cd84d7647cb359f6bbcacb8895ddcde` |
-| `SLICE_SOURCE_CLOSURE_SHA256` | `93ce1f0595f907ddac5e7768a214b8a471056aa431981ef2a112b675a4119d3d` |
+| `SLICE_SOURCE_CLOSURE_SHA256` | `e2e570efa33a7efe7cc5757c7e7044ac01afdc286dd8e42a658ceb351abb14d5` |
 | `CLOSURE_ALGORITHM` | `sorted-path-NUL-sha256-LF-utf8; report excluded to avoid circularity` |
 | `GODOT_SHA256` | `35dab11e04ece16a2b93035e65204f4a944a3e00b020d43e54409193379d5eef` |
 | `BLENDER_RUNTIME` | `bpy 4.5.10 LTS`, build `6dc0b208d1b5` |
@@ -37,7 +37,7 @@ commands below.
 | `blender/reopen_export_asset.py` | `1773ab8c05b8a136cf6ac03810072afffa9bfdf2dce8ce23a1e616ae83288b33` |
 | `main.tscn` | `c03bdf8a22b9dda5f1d36585c8d8eefc6dee2f1e4751342c24185a511a63092e` |
 | `project.godot` | `cfed6b5cc8c0b914cd3570a5688730b0d1e3bb4bff0d182f8fec5c231d6d70af` |
-| `scripts/main.gd` | `6ef0c24d367fe068bdd5e276970c3d13f7a270f3de3809f734880ffb0bef8c3e` |
+| `scripts/main.gd` | `4faffe419b573ae645f62e96eef814861cf6f01976e8d7600bbb511b4ce438da` |
 | `verify_blender.ps1` | `206157d23f4e523547aa7fd34b17e1b6c43d8ba6fe616020a4f721e0af9a3d38` |
 | `verify_slice.ps1` | `7c02e3ea222f5dad1d9a09a76dab5ec6cdaf8f79fe1e7a2bccbf8813bfdd3593` |
 
@@ -47,7 +47,7 @@ commands below.
 
 - smoke: `SMOKE_PASS score=0 health=3`
 - deterministic fixed-input replay: `DETERMINISTIC_PASS digest=44a33feadaa955fe738d8d0e840a141bacd85801f2a827fa71086f2c7f7fdeb9`
-- save/load: `SAVE_LOAD_PASS position=(333.0, 443.0) score=75 health=2 malformed_rejected=true` (isolated test path, transactional temp/backup/rename recovery; no OS-level atomicity claim)
+- save/load: `SAVE_LOAD_PASS position=(333.0, 443.0) score=75 health=2 malformed_rejected=true backup_recovered=true` (isolated test path, transactional temp/backup/rename recovery; no OS-level atomicity claim)
 - gameplay contract: `GAMEPLAY_PASS platform_landed=true pickup=true pause_frozen=true runtime_advanced=true won_restart=true lost_restart=true`
 - Blender authoring: `author PASS exit=0`; fresh reopen/export: `reopen_export PASS exit=0`
 - Godot runtime asset instance: `ASSET_RUNTIME_PASS mesh_count=2`

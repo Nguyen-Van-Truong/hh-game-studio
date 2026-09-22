@@ -468,6 +468,17 @@ func _run_integration_test() -> void:
 		print("SAVE_LOAD_FAIL")
 		get_tree().quit(1)
 		return
+	var save_absolute := ProjectSettings.globalize_path(active_save_path)
+	var backup_absolute := save_absolute + SAVE_BACKUP_SUFFIX
+	if DirAccess.rename_absolute(save_absolute, backup_absolute) != OK:
+		print("SAVE_LOAD_FAIL backup_prepare")
+		get_tree().quit(1)
+		return
+	var recovered_from_backup := load_game()
+	if not recovered_from_backup or player_position != Vector2(333.0, FLOOR_Y - PLAYER_SIZE.y * 0.5) or score != 75 or health != 2 or not pickup_collected:
+		print("SAVE_LOAD_FAIL backup_recovery")
+		get_tree().quit(1)
+		return
 	var malformed := FileAccess.open(active_save_path, FileAccess.WRITE)
 	malformed.store_string("{malformed")
 	malformed.close()
@@ -478,7 +489,7 @@ func _run_integration_test() -> void:
 		print("SAVE_LOAD_FAIL malformed_save_accepted")
 		get_tree().quit(1)
 		return
-	print("SAVE_LOAD_PASS position=%s score=%d health=%d malformed_rejected=%s" % [player_position, score, health, malformed_rejected])
+	print("SAVE_LOAD_PASS position=%s score=%d health=%d malformed_rejected=%s backup_recovered=%s" % [player_position, score, health, malformed_rejected, recovered_from_backup])
 	get_tree().quit(0)
 
 func _has_arg(value: String) -> bool:
