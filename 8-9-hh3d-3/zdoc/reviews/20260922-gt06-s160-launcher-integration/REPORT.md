@@ -46,7 +46,7 @@ Result: 10 tests, exit 0 (`s160-tests.txt`, `s160-tests-exit.txt`). Tests use
 temporary files, fake retained owners, and raw JSON receipts only. They do not
 start Godot, Blender, a benchmark worker, or any native process.
 
-Source hashes for the reviewed scope are recorded in `s160-tests-exit.txt`.
+Source hashes for the reviewed scope are recorded in `manifest.json`.
 The run remains diagnostic and has no independent creator attribution: the
 S156 PSS adapter is a pinned, replaceable integration component and is not
 executed by these tests.
