@@ -98,7 +98,7 @@ Memo attribution kết luận chưa có cấu hình ETW kernel-handle theo PID �
 liệu hóa đủ để dùng; `!htrace` chỉ là fallback có điều kiện, overhead chưa đo,
 không phải gate. Review launcher được giữ tại
 `zdoc/reviews/20260922-gt06-s160-launcher-integration/REPORT.md` và manifest
-`25a1c6929f6815411b646e995dd843143ca2a9fc7dae1d5d9c09a1147150c48f`; các
+`b6f4b02d6d3946190ba1c954cc4992b909a206c566cc0cb75f4cee86cb23997e`; các
 metadata prepare là `s160-prepare-preflight.json` và `s160-prepare-retest.json`; source
 ownership memo tại `zdoc/reviews/20260922-gt06-s160-source-ownership/MEMO.md`;
 chỉ AUTHORITY=0, fake/raw tests, không engine. Coordinator giữ plan/integration
