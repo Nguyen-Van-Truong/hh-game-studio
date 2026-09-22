@@ -1,0 +1,32 @@
+{
+  "schema": "HH3D-vertical-slice-clean-repro-1",
+  "authority": 0,
+  "run_id": "gt06-vertical-slice-clean-repro-01",
+  "command_id": "cmd.vertical-slice.clean-repro.1",
+  "utc": "2026-09-22T20:58:42Z",
+  "plan_hash": "7203d567ce822974d21364b6cd083ed64d30247e809533a78b021bbe154eb899",
+  "source_closure_sha256": "83184751ddbe16590bba6374953ec86483f9b3fc2ac606a00061743ea6c7f467",
+  "path_shape": "temporary checkout path contained spaces",
+  "tracked_source_file_count": 11,
+  "blender_wrapper": {
+    "actual_exit": 0,
+    "author_exit": 0,
+    "reopen_export_exit": 0,
+    "glb_sha256": "201913890337f056defbce7764dea8f8851d0ea698ab34579fade4ebba93502f"
+  },
+  "godot_wrapper": {
+    "import_exit": 0,
+    "actual_exit": 0,
+    "tests": ["smoke", "deterministic", "save_load", "gameplay", "asset_readback"],
+    "postconditions": ["SMOKE_PASS", "DETERMINISTIC_PASS", "SAVE_LOAD_PASS", "GAMEPLAY_PASS", "ASSET_RUNTIME_PASS"],
+    "godot_sha256": "35dab11e04ece16a2b93035e65204f4a944a3e00b020d43e54409193379d5eef"
+  },
+  "cleanup": {
+    "blend_source_restored": true,
+    "leftover_godot_process": false,
+    "leftover_blender_process": false
+  },
+  "status": "PASS_TRACK_B_ONLY",
+  "exclusions": ["GT06_ACCEPTANCE", "F13", "F14", "GT07_GT10"],
+  "next_action": "Reuse this clean-reproduction evidence; do not use it as formal GT06 acceptance."
+}

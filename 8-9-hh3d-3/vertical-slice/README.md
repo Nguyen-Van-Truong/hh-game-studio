@@ -16,6 +16,13 @@ verified headless route uses that official runtime package. The generated
 `.blend` and `.glb` are ignored build outputs; Godot imports the GLB and the
 verification wrapper performs a readback test when it is present.
 
+The verification wrappers quote script/project paths for checkouts containing
+spaces. `verify_slice.ps1` performs a bounded headless Godot import before
+runtime tests and temporarily moves generated `.blend`/`.blend1` authoring
+files out of the project so Godot reads the GLB without requiring a GUI
+Blender installation; the authoring files are restored after success or
+failure.
+
 Save writes use a closed temporary file, a backup rename and recovery before
 replacement. This preserves the previous save if the replacement rename fails;
 it is a transactional recovery protocol, not a claim of OS-level atomic

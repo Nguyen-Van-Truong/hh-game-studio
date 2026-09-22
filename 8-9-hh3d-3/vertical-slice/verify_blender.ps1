@@ -12,7 +12,9 @@ New-Item -ItemType Directory -Path $verifyDir | Out-Null
 function Invoke-BlenderStep([string]$name, [string]$script) {
     $stdout = Join-Path $verifyDir "$name.stdout.log"
     $stderr = Join-Path $verifyDir "$name.stderr.log"
-    $proc = Start-Process -FilePath $Python -ArgumentList @($script) -WorkingDirectory $projectDir -RedirectStandardOutput $stdout -RedirectStandardError $stderr -PassThru -WindowStyle Hidden
+    # Start-Process joins ArgumentList into one command line; quote the
+    # script path so a checkout under a directory containing spaces survives.
+    $proc = Start-Process -FilePath $Python -ArgumentList @('"' + $script + '"') -WorkingDirectory $projectDir -RedirectStandardOutput $stdout -RedirectStandardError $stderr -PassThru -WindowStyle Hidden
     if (-not $proc.WaitForExit($TimeoutSeconds * 1000)) {
         Stop-Process -Id $proc.Id -Force -ErrorAction SilentlyContinue
         throw "$name TIMEOUT after ${TimeoutSeconds}s"
