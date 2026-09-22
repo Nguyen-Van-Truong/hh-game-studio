@@ -1,0 +1,31 @@
+{
+  "schema": "gt07-gt10-static-gap-inventory-manifest-v1",
+  "run_id": "gt07-10-readonly-gap-inventory-01",
+  "command_id": "cmd.gt07-10.readonly-gap-inventory.1",
+  "authority": 0,
+  "status": "PREPARATION_ONLY",
+  "plan_hash": "743ea5e003de81f75ad41c1938b6d1b7c51fb09d06009652f262a5e906e6f0b6",
+  "source_hash": "fce149cd3a62e102aaba225794b9a5078cd84d7647cb359f6bbcacb8895ddcde",
+  "files": [
+    {
+      "path": "gap-inventory-s175.json",
+      "sha256": "52317a8b6247241ba396afaa626a4c7d6b20327554a9fd527c58642c0bcb390f",
+      "size": 1387
+    },
+    {
+      "path": "README.md",
+      "sha256": "2ea6464c13aa4dfd2f81e5c8d2cf4c6fe8fdf11e2357af279af8cf2019cf17cf",
+      "size": 1342
+    }
+  ],
+  "exclusions": [
+    "GT07_ACCEPTANCE",
+    "GT08_ACCEPTANCE",
+    "GT09_ACCEPTANCE",
+    "GT10_ACCEPTANCE",
+    "GT06_ACCEPTANCE",
+    "ENGINE_RUN",
+    "INSTALLER_RUN",
+    "CRITIC_VERDICT"
+  ]
+}
