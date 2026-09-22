@@ -64,7 +64,7 @@ GT06_PROFILE_SHA256=0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf
 GT06_BENCHMARK_CAMPAIGN=gt06-s153-formal-01; DISPATCH_20260922T020802Z; S141_S147_FORMAL_FAILURES_PRESERVED; S157_CURSOR_LANES_PREPARING
 GT06_BENCHMARK_STATUS=ZERO_ACCEPTED_FULL_RUNS; S153_FORMAL_FAILED_BATCH7_RETAINED_COUNTER_GROWTH; S141_S147_FAILURES_PRESERVED
 GT06_ACTIVE_DIAGNOSTIC=S156_EDITOR_HANDLE_CENSUS_TERMINAL_FAILURE_BATCH6; S150_TERMINAL; S153_FORMAL_TERMINAL_20260922T022413Z
-GT06_NEXT_ACTION=S156 terminal FAILURE at batch6/CAMPAIGN_RETAINED_COUNTER_GROWTH is preserved as AUTHORITY=0 outside F13/F14. Keep source/profile/gates unchanged; do read-only attribution and derived-metadata verification only. Do not retry S153/S156 blindly or claim leak/root cause. Any future diagnostic requires a fresh ID and a distinguishing hypothesis. Full10x35 plus final evidence and two NEW same-hash critics remain required.
+GT06_NEXT_ACTION=Review S157 Cursor launcher candidate, attribution experiment and schema coverage in private worktrees after terminal reports. Main runtime/profile/gates and S156 frozen helpers remain unchanged; no engine dispatch until findings and a distinguishing hypothesis are reviewed. S153/S156 failures remain AUTHORITY=0 outside F13/F14. Full10x35 plus final evidence and two NEW same-hash critics remain required.
 GT06_ATTRIBUTION_S156=READ_ONLY_REVIEWED; S156_PSS_EDITOR_555_TO_557; HOST_HANDLES_205_STABLE; SAMPLE_EDITOR_568_559_559_567_555_555_557; OBJECTDB_71130_RESOURCES_6; SOURCE_EXECUTION_UNCHANGED; JOB_ZERO_CLOSED; TARGET_EXIT1; EDITOR_TARGET_EXIT_UNKNOWN; OBJECT_IDENTITY_UNKNOWN; NO_REPAIR_JUSTIFIED_YET
 GT06_READY_AFTER_TERMINAL=S133 seven service/reviewer lanes verified; S134 packet1020 verified as self-contained exact-copy payload with provenance refs; S137 D1/D2 diagnostic limits retained; S138 managed repair+replay completed; S139 source projections/input binding verified; S147 terminal packet and S148 read-only attribution verified; S149 terminal PSS Event delta and clean cleanup preserved; S150 terminal boundary summary and worker review preserved; formal RSS/freeze/dataset still open.
 GT06_EXECUTION217_LAST_TESTED_CLOSURE=78ffef60682f596313aac8aca69a06e0a23808c546202effdebc481bdb845b58
@@ -84,6 +84,29 @@ S157 dispatch (2026-09-22): launcher, attribution và schema-coverage lanes đã
 attempt riêng. Chỉ fake/read-only tests được phép; không formal retry, không
 đổi gate/profile/timeout/baseline/RSS. Reports phải có exit, hash, limitations
 và completion marker trước coordinator review.
+
+S157 resume checkpoint 05:04Z: attempt-01 của ba lane đã mất process, không
+có report/exit, stdout/stderr rỗng; actual exit UNKNOWN, không tính hoàn tất.
+Đã tìm session trong Cursor metadata đúng workspace và resume cùng session
+sang attempt-02, không chạy lại benchmark. Launcher tách bằng CIM, prompt
+đọc UTF-8 thành một argument; finally lưu CLI exit/terminal. Startup init
+ghi Grok 4.7 256K Extra High; PID/start/executable đúng ở cả ba lane.
+Registry local: studio/.local/orchestration/s157-cursor/registry.json.
+Mỗi lane giữ output tại private worktree s157-launcher/s157-attribution/
+s157-schema, trong zdoc/reviews/20260922-gt06-s157-<lane>/REPORT.md.
+Ước lượng phần worker20–40phút từ05:03Z; check tiếp sau05:24Z hoặc terminal,
+không đọc tool stream/poll dày. Đây không phải ETA nghiệm thu toàn plan.
+
+Tổng hợp Codex trước chuyển giao: collector test lane đã thêm11 fake-only
+tests đạt; dependency/evidence lanes xác nhận source pins, terminal và PSS
+Event+1/IoCompletion+1 tại editor, chưa có kernel-object/subsystem ownership.
+Launcher review nêu vấn đề exit/status, input binding và Stop/publication;
+các finding này chưa được11 census tests kiểm hết và chuyển cho Cursor sửa.
+Plan-marker lane chỉ đề xuất cập nhật metadata; coordinator đã tích hợp.
+Next-step lane bị model capacity hai lần, không có deliverable; không ghi
+nhận ba implementation hoàn chỉnh hoặc critic PASS. Không còn Codex worker.
+Lỗi observation S157 string-vs-DateTime gây false mismatch đã sửa bằng UTC
+ticks; receipt02 chứng minh cùng process sống, không restart vì lỗi collector.
 
 S156 terminal/read-only closure (2026-09-22): static pin check passed
 (`run_diagnostic.py --check`, source_count=53, closure fce149cd…5ddcde,

@@ -1,8 +1,12 @@
 # HH3D-3 — routing hiện hành
 
-Owner steering mới nhất 21-09-2026: coordinator tiếp tục SOLO, không thêm
-worker/subagent; tổng hợp và tiếp nhận công việc trước đã có bằng chứng.
-Quyền dùng ba worker ngày20-09 là lịch sử, không phải dispatch hiện hành.
+Owner steering mới nhất 22-09-2026: không dùng subagent Codex; coordinator
+điều phối worker Cursor CLI `grok-4.7-xhigh` (không Fast) trong private
+worktree, theo zdoc/8-9-CURSOR_WORKER_NONFAST_HANDOFF_PROMPT.txt. Một worker
+một scope; không spawn agent con hoặc đổi model. Coordinator giữ plan,
+tích hợp và kiểm báo cáo/evidence. Quyết định SOLO/Codex trước là lịch sử.
+Resume đúng session/workspace khi gián đoạn; đọc report khi terminal và
+poll thưa theo thời lượng công việc, không lặp AI polling liên tục.
 Giữ hai critic độc lập ở gate cuối khi đủ điều kiện; worker sửa/test không thay
 critic nghiệm thu. Model/effort theo lệnh owner mới nhất, không giả cờ fast.
 Đọc WP và tiến độ mới nhất ở đầu plan; không lấy tên worker hoặc trạng thái
