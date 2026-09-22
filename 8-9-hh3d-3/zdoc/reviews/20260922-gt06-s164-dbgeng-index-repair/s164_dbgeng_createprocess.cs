@@ -1,0 +1,127 @@
+using System;
+using System.IO;
+using System.Runtime.InteropServices;
+
+// Bounded diagnostic harness only. The IDebugControl indices below are the
+// COM vtable positions from Windows SDK 10.0.26100.0 DbgEng.h, including the
+// three IUnknown entries. S163 used 93/66 for WaitForEvent/Execute; those are
+// outside the declared IDebugControl methods and produced 0x8000FFFF.
+internal static class S164DbgEngIndexRepair
+{
+    private static readonly Guid IID_IDebugClient = new Guid("27fe5639-8407-4f47-8364-ee118fb08ac8");
+    private static readonly Guid IID_IDebugControl = new Guid("5182e668-105e-416e-ad92-24ef800424ba");
+    private static readonly Guid IID_IDebugSystemObjects = new Guid("6b86fe2c-2c4f-4f0c-9da2-174311acc327");
+    private const uint DEBUG_PROCESS = 1;
+    private const uint DEBUG_WAIT_DEFAULT = 0;
+    private const uint DEBUG_EXECUTE_DEFAULT = 0;
+
+    [DllImport("dbgeng.dll", CallingConvention = CallingConvention.StdCall)]
+    private static extern int DebugCreate(ref Guid iid, out IntPtr output);
+    [DllImport("ole32.dll")] private static extern int CoInitializeEx(IntPtr reserved, uint coInit);
+    [DllImport("ole32.dll")] private static extern void CoUninitialize();
+
+    [UnmanagedFunctionPointer(CallingConvention.StdCall)] private delegate int QueryInterfaceDelegate(IntPtr self, ref Guid iid, out IntPtr result);
+    [UnmanagedFunctionPointer(CallingConvention.StdCall)] private delegate int CreateProcessDelegate(IntPtr self, ulong server, IntPtr commandLine, uint flags);
+    [UnmanagedFunctionPointer(CallingConvention.StdCall)] private delegate int OpenLogFileDelegate(IntPtr self, [MarshalAs(UnmanagedType.LPStr)] string file, int append);
+    [UnmanagedFunctionPointer(CallingConvention.StdCall)] private delegate int ExecuteDelegate(IntPtr self, uint outputControl, [MarshalAs(UnmanagedType.LPStr)] string command, uint flags);
+    [UnmanagedFunctionPointer(CallingConvention.StdCall)] private delegate int WaitForEventDelegate(IntPtr self, uint flags, uint timeout);
+    [UnmanagedFunctionPointer(CallingConvention.StdCall)] private delegate int GetCurrentProcessSystemIdDelegate(IntPtr self, out uint id);
+    [UnmanagedFunctionPointer(CallingConvention.StdCall)] private delegate int GetExitCodeDelegate(IntPtr self, out uint code);
+    [UnmanagedFunctionPointer(CallingConvention.StdCall)] private delegate int EndSessionDelegate(IntPtr self, uint flags);
+    [UnmanagedFunctionPointer(CallingConvention.StdCall)] private delegate int ReleaseDelegate(IntPtr self);
+
+    private static IntPtr V(IntPtr obj, int index)
+    {
+        return Marshal.ReadIntPtr(Marshal.ReadIntPtr(obj), index * IntPtr.Size);
+    }
+    private static T M<T>(IntPtr obj, int index) where T : class
+    {
+        return Marshal.GetDelegateForFunctionPointer(V(obj, index), typeof(T)) as T;
+    }
+    private static string Hr(int hr) { return "0x" + ((uint)hr).ToString("X8"); }
+    private static void Need(string op, int hr) { if (hr < 0) throw new InvalidOperationException(op + " failed " + Hr(hr)); }
+
+    public static int Main(string[] args)
+    {
+        if (args.Length != 3) throw new ArgumentException("fixture.exe output_dir command_file");
+        string fixture = Path.GetFullPath(args[0]);
+        string dir = Path.GetFullPath(args[1]);
+        string commands = Path.GetFullPath(args[2]);
+        Directory.CreateDirectory(dir);
+        string log = Path.Combine(dir, "dbgeng-output.log");
+        string summary = Path.Combine(dir, "run-summary.txt");
+        string output = Path.Combine(dir, "fixture-output.jsonl");
+        string gate = Path.Combine(dir, "debugger-gate.txt");
+        File.Delete(gate);
+        File.WriteAllText(commands, "open\nchurn 16\nclose\nexit\n");
+
+        IntPtr client = IntPtr.Zero, control = IntPtr.Zero, systems = IntPtr.Zero, commandPtr = IntPtr.Zero;
+        bool com = false;
+        int createHr = -1, waitHr = -1, runHr = -1, finalWaitHr = -1, exitHr = -1;
+        uint pid = 0, exitCode = uint.MaxValue;
+        try
+        {
+            int comHr = CoInitializeEx(IntPtr.Zero, 0);
+            if (comHr < 0 && comHr != unchecked((int)0x80010106)) Need("CoInitializeEx", comHr);
+            com = true;
+            Guid ciid = IID_IDebugClient;
+            Need("DebugCreate", DebugCreate(ref ciid, out client));
+            string cmd = "\"" + fixture + "\" \"" + output + "\" \"" + commands + "\" \"" + gate + "\"";
+            commandPtr = Marshal.StringToHGlobalAnsi(cmd);
+            // IDebugClient::CreateProcess is vtable index 13.
+            createHr = M<CreateProcessDelegate>(client, 13)(client, 0, commandPtr, DEBUG_PROCESS);
+            Need("CreateProcess", createHr);
+            Guid ctlid = IID_IDebugControl;
+            Need("QueryInterface(control)", M<QueryInterfaceDelegate>(client, 0)(client, ref ctlid, out control));
+            // IDebugControl::OpenLogFile is index 8, WaitForEvent is index 90,
+            // and Execute is index 63 in the SDK interface.
+            Need("OpenLogFile", M<OpenLogFileDelegate>(control, 8)(control, log, 0));
+            waitHr = M<WaitForEventDelegate>(control, 90)(control, DEBUG_WAIT_DEFAULT, 10000);
+            Need("WaitForEvent(initial)", waitHr);
+            Guid siid = IID_IDebugSystemObjects;
+            Need("QueryInterface(system)", M<QueryInterfaceDelegate>(client, 0)(client, ref siid, out systems));
+            Need("GetCurrentProcessSystemId", M<GetCurrentProcessSystemIdDelegate>(systems, 27)(systems, out pid));
+            var execute = M<ExecuteDelegate>(control, 63);
+            Need("reload", execute(control, 0, ".reload /f kernelbase.dll", DEBUG_EXECUTE_DEFAULT));
+            Need("bp CreateEventW", execute(control, 0, "bp kernelbase!CreateEventW \".echo S164_CREATE_EVENT_ENTRY; gu; .echo S164_CREATE_EVENT_RETURN; ? @rax; g\"", DEBUG_EXECUTE_DEFAULT));
+            Need("bp CreateIoCompletionPort", execute(control, 0, "bp kernelbase!CreateIoCompletionPort \".echo S164_CREATE_IOCP_ENTRY; gu; .echo S164_CREATE_IOCP_RETURN; ? @rax; g\"", DEBUG_EXECUTE_DEFAULT));
+            Need("bp CloseHandle", execute(control, 0, "bp kernelbase!CloseHandle \".echo S164_CLOSE_ENTRY; ? @rcx; gu; .echo S164_CLOSE_RETURN; ? @rax; g\"", DEBUG_EXECUTE_DEFAULT));
+            File.WriteAllText(gate, "go\n");
+            runHr = execute(control, 0, "g", DEBUG_EXECUTE_DEFAULT);
+            for (int i = 0; i < 15; i++)
+            {
+                finalWaitHr = M<WaitForEventDelegate>(control, 90)(control, DEBUG_WAIT_DEFAULT, 1000);
+                if (finalWaitHr < 0) break;
+            }
+            exitHr = M<GetExitCodeDelegate>(client, 27)(client, out exitCode);
+            File.WriteAllText(summary,
+                "create_hr=" + Hr(createHr) + Environment.NewLine +
+                "wait_hr=" + Hr(waitHr) + Environment.NewLine +
+                "run_hr=" + Hr(runHr) + Environment.NewLine +
+                "final_wait_hr=" + Hr(finalWaitHr) + Environment.NewLine +
+                "exit_hr=" + Hr(exitHr) + Environment.NewLine +
+                "pid=" + pid + Environment.NewLine +
+                "debugger_exit_code=" + exitCode + Environment.NewLine);
+            return 0;
+        }
+        catch (Exception ex)
+        {
+            File.WriteAllText(summary,
+                "exception=" + ex.GetType().FullName + Environment.NewLine +
+                "message=" + ex.Message + Environment.NewLine +
+                "create_hr=" + Hr(createHr) + Environment.NewLine +
+                "wait_hr=" + Hr(waitHr) + Environment.NewLine +
+                "pid=" + pid + Environment.NewLine);
+            return 1;
+        }
+        finally
+        {
+            try { if (client != IntPtr.Zero) M<EndSessionDelegate>(client, 26)(client, 0); } catch { }
+            try { if (systems != IntPtr.Zero) M<ReleaseDelegate>(systems, 2)(systems); } catch { }
+            try { if (control != IntPtr.Zero) M<ReleaseDelegate>(control, 2)(control); } catch { }
+            try { if (client != IntPtr.Zero) M<ReleaseDelegate>(client, 2)(client); } catch { }
+            if (commandPtr != IntPtr.Zero) Marshal.FreeHGlobal(commandPtr);
+            if (com) CoUninitialize();
+        }
+    }
+}

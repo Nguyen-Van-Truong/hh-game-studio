@@ -1,0 +1,30 @@
+{
+  "schema": "HH-S165-dbgeng-process-selection-attempt-1",
+  "authority": 0,
+  "formal_acceptance": false,
+  "eligible_for_dataset": false,
+  "engine_started": false,
+  "debugger_attached": false,
+  "attribution_proven": false,
+  "fixture_id": "gt06-s165-dbgeng-process-selection-01",
+  "operation": "bounded DbgEng process enumeration after invalid index repair",
+  "harness_compile_exit": 0,
+  "harness_actual_exit": 1,
+  "fixture_source_sha256": "c15e839f21d833abe809f15888de97e37b434f0631a9fc29968210278e9b9f53",
+  "harness_source_sha256": "31e9115a47557481462f6dc9eabdba2ade2227549eef24d0bb6d82b9a8b13339",
+  "wait_for_event_index_used": 90,
+  "execute_index_used": 63,
+  "authoritative_wait_for_event_index": 93,
+  "authoritative_execute_index": 66,
+  "create_hr": "0x00000000",
+  "wait_hr": "0x00000000",
+  "process_count": 0,
+  "failure_code": "INVALID_INDEX_REPAIR_NO_DEBUGGEE_PROCESS_LIST",
+  "fixture_output_created": false,
+  "limitations": [
+    "invalid index hypothesis was retained and rejected",
+    "no breakpoint placement or OPEN/CLOSE attribution",
+    "excluded from F13/F14 and GT06 dataset"
+  ],
+  "auto_retry": false
+}

@@ -1,0 +1,30 @@
+{
+  "schema": "HH-S164-dbgeng-index-repair-attempt-1",
+  "authority": 0,
+  "formal_acceptance": false,
+  "eligible_for_dataset": false,
+  "engine_started": false,
+  "debugger_attached": false,
+  "attribution_proven": false,
+  "fixture_id": "gt06-s164-dbgeng-index-repair-01",
+  "operation": "bounded DbgEng CreateProcess index repair attempt",
+  "harness_compile_exit": 0,
+  "harness_actual_exit": 1,
+  "fixture_source_sha256": "c15e839f21d833abe809f15888de97e37b434f0631a9fc29968210278e9b9f53",
+  "harness_source_sha256": "6c6437fef40f1f814dc0a0d51f374a31071375a2a23e8e26a38693e15d2dd925",
+  "wait_for_event_index_used": 90,
+  "execute_index_used": 63,
+  "authoritative_wait_for_event_index": 93,
+  "authoritative_execute_index": 66,
+  "create_hr": "0x00000000",
+  "wait_hr": "0x00000000",
+  "failure_code": "INVALID_INDEX_REPAIR_NO_CURRENT_PROCESS",
+  "failure_detail": "GetCurrentProcessSystemId failed 0x8000FFFF",
+  "fixture_output_created": false,
+  "limitations": [
+    "STDMETHODV entries were omitted by the first static count",
+    "no breakpoint placement or OPEN/CLOSE attribution",
+    "excluded from F13/F14 and GT06 dataset"
+  ],
+  "auto_retry": false
+}
