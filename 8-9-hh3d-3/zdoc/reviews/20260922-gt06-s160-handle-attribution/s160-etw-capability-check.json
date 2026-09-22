@@ -1,0 +1,46 @@
+{
+  "schema": "HH-S160-etw-capability-check-1",
+  "authority": 0,
+  "formal_acceptance": false,
+  "trace_started": false,
+  "engine_started": false,
+  "observed_at_utc": "2026-09-22T09:19:45Z",
+  "scope": "read-only host capability and public-contract review",
+  "source_closure": "fce149cd3a62e102aaba225794b9a5078cd84d7647cb359f6bbcacb8895ddcde",
+  "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+  "tools": {
+    "wpr": {
+      "path": "C:\\Windows\\System32\\wpr.exe",
+      "available": true,
+      "profile_query": "wpr -profiledetails Handle",
+      "profile_query_exit": 0,
+      "owned_pid_filter_established": false
+    },
+    "tracerpt": {
+      "path": "C:\\Windows\\System32\\tracerpt.exe",
+      "available": true
+    },
+    "appverif": {
+      "path": "C:\\Windows\\System32\\appverif.exe",
+      "available": true,
+      "used": false
+    },
+    "debugger": {
+      "cdb_or_windbg_available": false,
+      "htrace_integration_verified": false
+    }
+  },
+  "public_contract_review": {
+    "system_object_provider_reviewed": true,
+    "ob_handle_event_creator_pid_tid_documented": false,
+    "event_filter_type_pid_owned_kernel_boundary_documented": false,
+    "references": [
+      "https://learn.microsoft.com/en-us/windows/win32/etw/obhandleevent",
+      "https://learn.microsoft.com/en-us/windows/win32/api/evntprov/ns-evntprov-event_filter_descriptor",
+      "https://learn.microsoft.com/en-us/windows-hardware/test/wpt/systemprovider"
+    ]
+  },
+  "decision": "HOLD_ENGINE",
+  "reason": "The reviewed public contracts do not establish a documented per-owned-PID kernel handle attribution boundary. WPR/tracerpt presence alone is insufficient; !htrace remains a conditional debugger fallback and is not executable or overhead-bounded on this host.",
+  "next_gate": "Only after a bounded owned native fixture proves debugger integration, OPEN/CLOSE attribution, history overflow handling, detach, and actual exit may a fresh diagnostic ID be considered. Do not alter source, profile, timeout, baseline, gate, priority, or RSS policy."
+}
