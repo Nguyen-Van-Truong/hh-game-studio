@@ -1,0 +1,27 @@
+; Original Godot + Blender vertical slice. This scope is independent of GT06 acceptance.
+config_version=5
+
+[application]
+config/name="HH3D Vertical Slice"
+run/main_scene="res://main.tscn"
+
+[display]
+window/size/viewport_width=960
+window/size/viewport_height=540
+window/size/window_width_override=960
+window/size/window_height_override=540
+
+[rendering]
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+textures/default_filters/use_nearest_mipmap_filter=false
+
+[input]
+move_left={"deadzone":0.5,"events":[Object(InputEventKey,"physical_keycode":65)]}
+move_right={"deadzone":0.5,"events":[Object(InputEventKey,"physical_keycode":68)]}
+jump={"deadzone":0.5,"events":[Object(InputEventKey,"physical_keycode":32)]}
+fire={"deadzone":0.5,"events":[Object(InputEventKey,"physical_keycode":70)]}
+pause={"deadzone":0.5,"events":[Object(InputEventKey,"physical_keycode":80)]}
+restart={"deadzone":0.5,"events":[Object(InputEventKey,"physical_keycode":82)]}
+save_game={"deadzone":0.5,"events":[Object(InputEventKey,"physical_keycode":83)]}
+load_game={"deadzone":0.5,"events":[Object(InputEventKey,"physical_keycode":76)]}
