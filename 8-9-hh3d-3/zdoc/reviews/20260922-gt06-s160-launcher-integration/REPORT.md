@@ -1,6 +1,6 @@
 # S160 launcher integration (diagnostic, AUTHORITY=0)
 
-This scope adds a real owner/child integration around the existing S157 launcher
+This scope adds an owner/child path implementation around the existing S157 launcher
 publication and campaign services. `prepare` makes a fresh helper directory;
 the freeze contains an exact child script pin, helper inventory and closure,
 predecessor/source/binary/workstation pins, and an exact execution file map.
@@ -28,9 +28,11 @@ reused. The failure metadata and the eight-file raw inventory are recorded in
 `s160-prepare-preflight.json`; the raw run remains under
 `studio/.local/reviews/gt06-s160-diag-prep01`.
 
-After that repair, a fresh prepare-only ID (`gt06-s160-diag-prep02`) completed
-with exit 0 and a subsequent `--authenticate` completed with exit 0. Its
-freeze is `6ddcc5cc9c156ead8fd1f635baa6f625ae1223bfc4cf52fea78520071e5bc8c1`;
+After that repair, a fresh prepare-only ID (`gt06-s160-diag-prep02`) recorded
+successful preparation and a subsequent `--authenticate` recorded successful
+binding. The launcher result does not contain an independently captured host
+process exit field; its default return value is not exit evidence. Its freeze
+is `6ddcc5cc9c156ead8fd1f635baa6f625ae1223bfc4cf52fea78520071e5bc8c1`;
 the eight-file inventory and bindings are recorded in
 `s160-prepare-retest.json`. This proves launcher preparation and exact
 readback only. It did not spawn the campaign, Godot, Blender, or a native
