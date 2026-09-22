@@ -8,7 +8,10 @@ gate, dataset, attribution requirement, or critic review.
 
 - `run_id`: `gt06-s172-vertical-slice-clean-01`
 - `command_id`: `cmd.gt06.s172.vertical-slice.clean.1`
+- `run_namespace`: `vertical-slice` (the historical `gt06-` prefix is retained
+  for traceability and does not make this GT06 evidence)
 - source commit: `034d20be1d27218285457202ec80d1020865403b`
+- evidence commit: `9953d076bcec6135bc748541cb2a4ed90c9e4dc9`
 - wrapper: `8-9-hh3d-3/vertical-slice/verify_slice.ps1`
 - interpreter: bundled `pwsh.exe` (the system Windows PowerShell lacked
   `Get-FileHash` in its execution environment)
