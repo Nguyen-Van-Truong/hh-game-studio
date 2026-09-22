@@ -1,0 +1,9 @@
+{"kind":"start","pid":44460,"fixture":"s169-cdb-htrace"}
+{"kind":"ready","pid":44460,"break_before_open":true}
+{"kind":"open","type":"Event","handle":"0x30C"}
+{"kind":"open","type":"IoCompletion","handle":"0x310"}
+{"kind":"open_result","event_open":true,"iocp_open":true,"churn_closed":16}
+{"kind":"close","type":"Event","handle":"0x30C","ok":true,"win32_error":0}
+{"kind":"close","type":"IoCompletion","handle":"0x310","ok":true,"win32_error":0}
+{"kind":"close_result","clean":true}
+{"kind":"exit","ok":true,"reason":"cdb_htrace"}

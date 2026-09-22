@@ -1,0 +1,143 @@
+Opened log file 'D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260923-gt06-s169-windbg-attribution\cdb.logo.txt'
+
+************* Preparing the environment for Debugger Extensions Gallery repositories **************
+   ExtensionRepository : Implicit
+   UseExperimentalFeatureForNugetShare : true
+   AllowNugetExeUpdate : true
+   NonInteractiveNuget : true
+   AllowNugetMSCredentialProviderInstall : true
+   AllowParallelInitializationOfLocalRepositories : true
+
+   -- Configuring repositories
+      ----> Repository : LocalInstalled, Enabled: true
+      ----> Repository : UserExtensions, Enabled: true
+
+>>>>>>>>>>>>> Preparing the environment for Debugger Extensions Gallery repositories completed, duration 0.000 seconds
+
+************* Waiting for Debugger Extensions Gallery to Initialize **************
+
+>>>>>>>>>>>>> Waiting for Debugger Extensions Gallery to Initialize completed, duration 0.016 seconds
+   ----> Repository : UserExtensions, Enabled: true, Packages count: 0
+   ----> Repository : LocalInstalled, Enabled: true, Packages count: 46
+
+Microsoft (R) Windows Debugger Version 10.0.29617.1000 AMD64
+Copyright (c) Microsoft Corporation. All rights reserved.
+
+*** wait with pending attach
+NatVis script successfully loaded from 'C:\Program Files\WindowsApps\Microsoft.WinDbg_1.2606.22001.0_x64__8wekyb3d8bbwe\amd64\Visualizers\atlmfc.natvis'
+NatVis script successfully loaded from 'C:\Program Files\WindowsApps\Microsoft.WinDbg_1.2606.22001.0_x64__8wekyb3d8bbwe\amd64\Visualizers\concurrency.natvis'
+NatVis script successfully loaded from 'C:\Program Files\WindowsApps\Microsoft.WinDbg_1.2606.22001.0_x64__8wekyb3d8bbwe\amd64\Visualizers\cpp_rest.natvis'
+NatVis script successfully loaded from 'C:\Program Files\WindowsApps\Microsoft.WinDbg_1.2606.22001.0_x64__8wekyb3d8bbwe\amd64\Visualizers\ObjectiveC.natvis'
+NatVis script successfully loaded from 'C:\Program Files\WindowsApps\Microsoft.WinDbg_1.2606.22001.0_x64__8wekyb3d8bbwe\amd64\Visualizers\stl.natvis'
+NatVis script successfully loaded from 'C:\Program Files\WindowsApps\Microsoft.WinDbg_1.2606.22001.0_x64__8wekyb3d8bbwe\amd64\Visualizers\Windows.Data.Json.natvis'
+NatVis script successfully loaded from 'C:\Program Files\WindowsApps\Microsoft.WinDbg_1.2606.22001.0_x64__8wekyb3d8bbwe\amd64\Visualizers\Windows.Devices.Geolocation.natvis'
+NatVis script successfully loaded from 'C:\Program Files\WindowsApps\Microsoft.WinDbg_1.2606.22001.0_x64__8wekyb3d8bbwe\amd64\Visualizers\Windows.Devices.Sensors.natvis'
+NatVis script successfully loaded from 'C:\Program Files\WindowsApps\Microsoft.WinDbg_1.2606.22001.0_x64__8wekyb3d8bbwe\amd64\Visualizers\Windows.Media.natvis'
+NatVis script successfully loaded from 'C:\Program Files\WindowsApps\Microsoft.WinDbg_1.2606.22001.0_x64__8wekyb3d8bbwe\amd64\Visualizers\windows.natvis'
+NatVis script successfully loaded from 'C:\Program Files\WindowsApps\Microsoft.WinDbg_1.2606.22001.0_x64__8wekyb3d8bbwe\amd64\Visualizers\winrt.natvis'
+
+************* Path validation summary **************
+Response                         Time (ms)     Location
+Deferred                                       srv*
+Symbol search path is: srv*
+Executable search path is: 
+ModLoad: 00000000`008c0000 00000000`008c8000   C:\Users\truon\AppData\Local\Temp\hh3d-s169-20260922-213512.exe
+ModLoad: 00007fff`5f540000 00007fff`5f7a6000   C:\WINDOWS\SYSTEM32\ntdll.dll
+CLR providers have been placed in the service container
+ModLoad: 00007fff`3ec50000 00007fff`3ecbd000   C:\WINDOWS\SYSTEM32\MSCOREE.DLL
+ModLoad: 00007fff`5d930000 00007fff`5d9f9000   C:\WINDOWS\System32\KERNEL32.dll
+ModLoad: 00007fff`5cc60000 00007fff`5d05e000   C:\WINDOWS\System32\KERNELBASE.dll
+ModLoad: 00007fff`595d0000 00007fff`59670000   C:\WINDOWS\SYSTEM32\apphelp.dll
+ModLoad: 00007fff`5d5e0000 00007fff`5d697000   C:\WINDOWS\System32\ADVAPI32.dll
+ModLoad: 00007fff`5d4a0000 00007fff`5d549000   C:\WINDOWS\System32\msvcrt.dll
+ModLoad: 00007fff`5e520000 00007fff`5e5ca000   C:\WINDOWS\System32\sechost.dll
+ModLoad: 00007fff`5e400000 00007fff`5e518000   C:\WINDOWS\System32\RPCRT4.dll
+ModLoad: 00007fff`3dea0000 00007fff`3df3b000   C:\Windows\Microsoft.NET\Framework64\v4.0.30319\mscoreei.dll
+ModLoad: 00007fff`5f190000 00007fff`5f1f7000   C:\WINDOWS\System32\SHLWAPI.dll
+ModLoad: 00007fff`5c820000 00007fff`5c96c000   C:\WINDOWS\System32\ucrtbase.dll
+ModLoad: 00007fff`5b400000 00007fff`5b41b000   C:\WINDOWS\SYSTEM32\kernel.appcore.dll
+ModLoad: 00007fff`55aa0000 00007fff`55aab000   C:\WINDOWS\SYSTEM32\VERSION.dll
+ModLoad: 00007fff`3ba90000 00007fff`3c434000   C:\Windows\Microsoft.NET\Framework64\v4.0.30319\clr.dll
+ModLoad: 00007fff`5d2d0000 00007fff`5d497000   C:\WINDOWS\System32\USER32.dll
+ModLoad: 00007fff`5cab0000 00007fff`5cad7000   C:\WINDOWS\System32\win32u.dll
+ModLoad: 00007fff`3ae10000 00007fff`3ae1c000   C:\WINDOWS\SYSTEM32\VCRUNTIME140_1_CLR0400.dll
+ModLoad: 00007fff`3ae20000 00007fff`3ae3b000   C:\WINDOWS\SYSTEM32\VCRUNTIME140_CLR0400.dll
+ModLoad: 00007fff`3aaf0000 00007fff`3abbe000   C:\WINDOWS\SYSTEM32\ucrtbase_clr0400.dll
+ModLoad: 00007fff`5d270000 00007fff`5d29b000   C:\WINDOWS\System32\GDI32.dll
+ModLoad: 00007fff`5c980000 00007fff`5caaa000   C:\WINDOWS\System32\gdi32full.dll
+ModLoad: 00007fff`5d130000 00007fff`5d1d3000   C:\WINDOWS\System32\msvcp_win.dll
+ModLoad: 00007fff`5d810000 00007fff`5d842000   C:\WINDOWS\System32\IMM32.DLL
+ModLoad: 00007fff`36040000 00007fff`3764f000   C:\WINDOWS\assembly\NativeImages_v4.0.30319_64\mscorlib\3452d280cf55ae309a9ffbe81ea33a15\mscorlib.ni.dll
+ModLoad: 00007fff`5ee40000 00007fff`5efd9000   C:\WINDOWS\System32\ole32.dll
+ModLoad: 00007fff`5df90000 00007fff`5e313000   C:\WINDOWS\System32\combase.dll
+ModLoad: 00007fff`5c760000 00007fff`5c80c000   C:\WINDOWS\System32\bcryptPrimitives.dll
+ModLoad: 00007fff`33580000 00007fff`336af000   C:\Windows\Microsoft.NET\Framework64\v4.0.30319\clrjit.dll
+(adac.c708): Break instruction exception - code 80000003 (first chance)
+ntdll!DbgBreakPoint:
+00007fff`5f65ed10 cc              int     3
+0:006> !htrace -enable
+Handle tracing enabled.
+Handle tracing information snapshot successfully taken.
+0:006> .echo CDB_ATTACHED
+CDB_ATTACHED
+0:006> g
+(adac.8940): Break instruction exception - code 80000003 (first chance)
+KERNELBASE!wil::details::DebugBreak+0x2:
+00007fff`5cd73062 cc              int     3
+0:000> .echo READY_BREAK
+READY_BREAK
+0:000> !htrace -snapshot
+Handle tracing information snapshot successfully taken.
+0:000> g
+(adac.8940): Break instruction exception - code 80000003 (first chance)
+KERNELBASE!wil::details::DebugBreak+0x2:
+00007fff`5cd73062 cc              int     3
+0:000> .echo OPEN_BREAK
+OPEN_BREAK
+0:000> !htrace -diff
+Handle tracing information snapshot successfully taken.
+0x22 new stack traces since the previous snapshot.
+Ignoring handles that were already closed...
+Outstanding handles opened since the previous snapshot:
+--------------------------------------
+Handle = 0x0000000000000310 - OPEN
+Thread ID = 0x0000000000008940, Process ID = 0x000000000000adac
+
+--------------------------------------
+Handle = 0x000000000000030c - OPEN
+Thread ID = 0x0000000000008940, Process ID = 0x000000000000adac
+
+--------------------------------------
+Displayed 0x2 stack traces for outstanding handles opened since the previous snapshot.
+0:000> !htrace -snapshot
+Handle tracing information snapshot successfully taken.
+0:000> g
+(adac.8940): Break instruction exception - code 80000003 (first chance)
+KERNELBASE!wil::details::DebugBreak+0x2:
+00007fff`5cd73062 cc              int     3
+0:000> .echo CLOSE_BREAK
+CLOSE_BREAK
+0:000> !htrace -diff
+Handle tracing information snapshot successfully taken.
+0x2 new stack traces since the previous snapshot.
+Ignoring handles that were already closed...
+--------------------------------------
+No outstanding handles opened since the previous snapshot were detected.
+0:000> !htrace -disable
+Handle tracing disabled.
+0:000> g
+ntdll!NtTerminateProcess+0x14:
+00007fff`5f6a05e4 c3              ret
+0:000> q
+quit:
+NatVis script unloaded from 'C:\Program Files\WindowsApps\Microsoft.WinDbg_1.2606.22001.0_x64__8wekyb3d8bbwe\amd64\Visualizers\atlmfc.natvis'
+NatVis script unloaded from 'C:\Program Files\WindowsApps\Microsoft.WinDbg_1.2606.22001.0_x64__8wekyb3d8bbwe\amd64\Visualizers\concurrency.natvis'
+NatVis script unloaded from 'C:\Program Files\WindowsApps\Microsoft.WinDbg_1.2606.22001.0_x64__8wekyb3d8bbwe\amd64\Visualizers\cpp_rest.natvis'
+NatVis script unloaded from 'C:\Program Files\WindowsApps\Microsoft.WinDbg_1.2606.22001.0_x64__8wekyb3d8bbwe\amd64\Visualizers\ObjectiveC.natvis'
+NatVis script unloaded from 'C:\Program Files\WindowsApps\Microsoft.WinDbg_1.2606.22001.0_x64__8wekyb3d8bbwe\amd64\Visualizers\stl.natvis'
+NatVis script unloaded from 'C:\Program Files\WindowsApps\Microsoft.WinDbg_1.2606.22001.0_x64__8wekyb3d8bbwe\amd64\Visualizers\Windows.Data.Json.natvis'
+NatVis script unloaded from 'C:\Program Files\WindowsApps\Microsoft.WinDbg_1.2606.22001.0_x64__8wekyb3d8bbwe\amd64\Visualizers\Windows.Devices.Geolocation.natvis'
+NatVis script unloaded from 'C:\Program Files\WindowsApps\Microsoft.WinDbg_1.2606.22001.0_x64__8wekyb3d8bbwe\amd64\Visualizers\Windows.Devices.Sensors.natvis'
+NatVis script unloaded from 'C:\Program Files\WindowsApps\Microsoft.WinDbg_1.2606.22001.0_x64__8wekyb3d8bbwe\amd64\Visualizers\Windows.Media.natvis'
+NatVis script unloaded from 'C:\Program Files\WindowsApps\Microsoft.WinDbg_1.2606.22001.0_x64__8wekyb3d8bbwe\amd64\Visualizers\windows.natvis'
+NatVis script unloaded from 'C:\Program Files\WindowsApps\Microsoft.WinDbg_1.2606.22001.0_x64__8wekyb3d8bbwe\amd64\Visualizers\winrt.natvis'

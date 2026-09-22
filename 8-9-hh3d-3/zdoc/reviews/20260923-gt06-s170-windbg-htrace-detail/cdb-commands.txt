@@ -1,0 +1,22 @@
+!htrace -enable
+.echo CDB_ATTACHED
+g
+.echo READY_BREAK
+!htrace -snapshot
+g
+.echo OPEN_BREAK
+!htrace -diff
+!htrace
+!htrace 30c
+!htrace 310
+!handle 30c 1
+!handle 310 1
+!htrace -snapshot
+g
+.echo CLOSE_BREAK
+!htrace -diff
+!htrace 30c
+!htrace 310
+!htrace -disable
+g
+q

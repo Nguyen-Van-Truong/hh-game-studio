@@ -1,0 +1,57 @@
+{
+  "schema": "gt06-s170-windbg-htrace-detail-v1",
+  "run_id": "gt06-s170-windbg-htrace-detail-01",
+  "command_id": "cmd.gt06.s170.windbg-htrace-detail.1",
+  "authority": 0,
+  "diagnostic_only": true,
+  "source_closure": "fce149cd3a62e102aaba225794b9a5078cd84d7647cb359f6bbcacb8895ddcde",
+  "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+  "debugger": {
+    "path": "C:\\Program Files\\WindowsApps\\Microsoft.WinDbg_1.2606.22001.0_x64__8wekyb3d8bbwe\\amd64\\cdb.exe",
+    "version": "cdb version 10.0.29617.1000",
+    "sha256": "5f54abafca3ae5638bbf807d402fabb350a64575c1dfa9fbfc7f5732df5bee67",
+    "attached_marker": true,
+    "cdb_exit": 0
+  },
+  "target": {
+    "pid": 46764,
+    "target_exit": 0,
+    "executable": "C:\\Users\\truon\\AppData\\Local\\Temp\\hh3d-s170-20260922-214014.exe"
+  },
+  "markers": {
+    "htrace_enable": true,
+    "open_break": true,
+    "close_break": true,
+    "caller_module_offset_resolved": false,
+    "per_handle_query_resolved": false,
+    "target_pid_tid_observed": true,
+    "open_close_history_observed": true,
+    "attribution": "UNKNOWN"
+  },
+  "target_markers": {
+    "start": true,
+    "ready": true,
+    "open": true,
+    "close": true,
+    "exit": true
+  },
+  "forced_cleanup": {
+    "debugger": false,
+    "target": false
+  },
+  "status": "DIAGNOSTIC_RETAINED_AUTHORITY_0",
+  "exclusions": [
+    "F13",
+    "F14",
+    "GT06_DATASET",
+    "LEAK_PROOF",
+    "ROOT_CAUSE",
+    "REPAIR_AUTHORIZATION",
+    "GT06_ACCEPTANCE"
+  ],
+  "stderr": {
+    "debugger": "",
+    "target": ""
+  },
+  "interpretation_errata": true
+}

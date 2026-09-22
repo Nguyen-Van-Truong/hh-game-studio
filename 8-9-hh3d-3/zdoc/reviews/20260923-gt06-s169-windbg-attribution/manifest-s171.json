@@ -1,0 +1,105 @@
+{
+  "schema": "gt06-s171-diagnostic-manifest-v1",
+  "created_utc": "2026-09-22T21:45:43Z",
+  "run_id": "gt06-s169-windbg-attribution-01",
+  "command_id": "cmd.gt06.s169.windbg-htrace.1",
+  "source_closure": "fce149cd3a62e102aaba225794b9a5078cd84d7647cb359f6bbcacb8895ddcde",
+  "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+  "authority": 0,
+  "diagnostic_only": true,
+  "status": "DIAGNOSTIC_RETAINED_AUTHORITY_0",
+  "engine_started": false,
+  "formal_acceptance": false,
+  "receipt_sha256": "40f7e47ab7d5ff32904f753b8dbb54354c6e5f5ccdb19f52a32710a04a8674a5",
+  "debugger": {
+    "path": "C:\\Program Files\\WindowsApps\\Microsoft.WinDbg_1.2606.22001.0_x64__8wekyb3d8bbwe\\amd64\\cdb.exe",
+    "version": "cdb version 10.0.29617.1000",
+    "sha256": "5f54abafca3ae5638bbf807d402fabb350a64575c1dfa9fbfc7f5732df5bee67"
+  },
+  "provenance": {
+    "provenance_partial": true,
+    "attempt_collision": true,
+    "final_attempt_only_attributable": true
+  },
+  "exclusions": [
+    "F13",
+    "F14",
+    "GT06_DATASET",
+    "LEAK_PROOF",
+    "ROOT_CAUSE",
+    "REPAIR_AUTHORIZATION",
+    "GT06_ACCEPTANCE"
+  ],
+  "files": [
+    {
+      "path": "cdb-commands.txt",
+      "size": 179,
+      "sha256": "42442aa4fc107e300983aefec0a68599cc4fd38acd66095468334c3d34208226"
+    },
+    {
+      "path": "cdb.logo.txt",
+      "size": 9756,
+      "sha256": "c7bfa583ffef9fe2fa18682d5ae30a3d03a6a73b7628fd4d22f7efe181d9a467"
+    },
+    {
+      "path": "cdb.stderr.txt",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "cdb.stdout.txt",
+      "size": 7941,
+      "sha256": "9e36bcaa7a4001dcfe1f0d59c0971c8bddf9af7cb81818fc39b828d51fe219ca"
+    },
+    {
+      "path": "compile.stderr.txt",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "compile.stdout.txt",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "native_fixture_s169.cs",
+      "size": 4354,
+      "sha256": "2bb3c02bb95641448aea2c1ea3081ef98749987e337f858dba0d020519c37072"
+    },
+    {
+      "path": "PROVENANCE_ERRATA.md",
+      "size": 1013,
+      "sha256": "e05ae25aa750bb78370de08ed0e67a0673f5fe857c371b9da7f75564547b8076"
+    },
+    {
+      "path": "README.md",
+      "size": 1253,
+      "sha256": "46f6200551a9de70f665ef615b0d52a2bf27f846ac63dea4b0e50cf9f3f24330"
+    },
+    {
+      "path": "run_s169.ps1",
+      "size": 6948,
+      "sha256": "7fdabcfde6e3de95a4c89623fefd85aaa69a2fe0d111cb07f7200fbc5b291ce3"
+    },
+    {
+      "path": "run_s169.py",
+      "size": 8795,
+      "sha256": "53b228fd267f632160591347a0bee678ab88e843c9307c16cac5c3cceeafd135"
+    },
+    {
+      "path": "s169-attribution-result.json",
+      "size": 1468,
+      "sha256": "40f7e47ab7d5ff32904f753b8dbb54354c6e5f5ccdb19f52a32710a04a8674a5"
+    },
+    {
+      "path": "target.stderr.txt",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "target.stdout.jsonl",
+      "size": 541,
+      "sha256": "4c932405ee9495886e56de0234a7605f4bb83be01b99fe15556ac462a95f47f2"
+    }
+  ]
+}
