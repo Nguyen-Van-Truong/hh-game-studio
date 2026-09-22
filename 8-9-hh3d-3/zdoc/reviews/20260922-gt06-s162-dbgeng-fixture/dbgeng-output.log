@@ -1,0 +1,48 @@
+Opened log file 'D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260922-gt06-s162-dbgeng-fixture\dbgeng-output.log'
+*** wait with pending attach
+Unable to add extension DLL: ntsdexts
+Unable to add extension DLL: uext
+Unable to add extension DLL: exts
+
+************* Path validation summary **************
+Response                         Time (ms)     Location
+Deferred                                       srv*
+Symbol search path is: srv*
+Executable search path is:
+ModLoad: 00000000`00310000 00000000`00318000   C:\Users\truon\AppData\Local\Temp\hh3d-s161-fixture-s162.exe
+ModLoad: 00007fff`5f540000 00007fff`5f7a6000   C:\WINDOWS\SYSTEM32\ntdll.dll
+ModLoad: 00007fff`3ec50000 00007fff`3ecbd000   C:\WINDOWS\SYSTEM32\MSCOREE.DLL
+ModLoad: 00007fff`5d930000 00007fff`5d9f9000   C:\WINDOWS\System32\KERNEL32.dll
+ModLoad: 00007fff`5cc60000 00007fff`5d05e000   C:\WINDOWS\System32\KERNELBASE.dll
+ModLoad: 00007fff`5d5e0000 00007fff`5d697000   C:\WINDOWS\System32\ADVAPI32.dll
+ModLoad: 00007fff`5d4a0000 00007fff`5d549000   C:\WINDOWS\System32\msvcrt.dll
+ModLoad: 00007fff`5e520000 00007fff`5e5ca000   C:\WINDOWS\System32\sechost.dll
+ModLoad: 00007fff`5e400000 00007fff`5e518000   C:\WINDOWS\System32\RPCRT4.dll
+ModLoad: 00007fff`3dea0000 00007fff`3df3b000   C:\Windows\Microsoft.NET\Framework64\v4.0.30319\mscoreei.dll
+ModLoad: 00007fff`5f190000 00007fff`5f1f7000   C:\WINDOWS\System32\SHLWAPI.dll
+ModLoad: 00007fff`5c820000 00007fff`5c96c000   C:\WINDOWS\System32\ucrtbase.dll
+ModLoad: 00007fff`5b400000 00007fff`5b41b000   C:\WINDOWS\SYSTEM32\kernel.appcore.dll
+ModLoad: 00007fff`55aa0000 00007fff`55aab000   C:\WINDOWS\SYSTEM32\VERSION.dll
+ModLoad: 00007fff`3ba90000 00007fff`3c434000   C:\Windows\Microsoft.NET\Framework64\v4.0.30319\clr.dll
+ModLoad: 00007fff`5d2d0000 00007fff`5d497000   C:\WINDOWS\System32\USER32.dll
+ModLoad: 00007fff`5cab0000 00007fff`5cad7000   C:\WINDOWS\System32\win32u.dll
+ModLoad: 00007fff`3ae10000 00007fff`3ae1c000   C:\WINDOWS\SYSTEM32\VCRUNTIME140_1_CLR0400.dll
+ModLoad: 00007fff`5d270000 00007fff`5d29b000   C:\WINDOWS\System32\GDI32.dll
+ModLoad: 00007fff`3aaf0000 00007fff`3abbe000   C:\WINDOWS\SYSTEM32\ucrtbase_clr0400.dll
+ModLoad: 00007fff`5c980000 00007fff`5caaa000   C:\WINDOWS\System32\gdi32full.dll
+ModLoad: 00007fff`3ae20000 00007fff`3ae3b000   C:\WINDOWS\SYSTEM32\VCRUNTIME140_CLR0400.dll
+ModLoad: 00007fff`5d130000 00007fff`5d1d3000   C:\WINDOWS\System32\msvcp_win.dll
+ModLoad: 00007fff`5d810000 00007fff`5d842000   C:\WINDOWS\System32\IMM32.DLL
+ModLoad: 00007fff`36040000 00007fff`3764f000   C:\WINDOWS\assembly\NativeImages_v4.0.30319_64\mscorlib\3452d280cf55ae309a9ffbe81ea33a15\mscorlib.ni.dll
+ModLoad: 00007fff`5ee40000 00007fff`5efd9000   C:\WINDOWS\System32\ole32.dll
+ModLoad: 00007fff`5df90000 00007fff`5e313000   C:\WINDOWS\System32\combase.dll
+ModLoad: 00007fff`5c760000 00007fff`5c80c000   C:\WINDOWS\System32\bcryptPrimitives.dll
+ModLoad: 00007fff`33580000 00007fff`336af000   C:\Windows\Microsoft.NET\Framework64\v4.0.30319\clrjit.dll
+.reload /f kernelbase.dll
+WARNING: The debugger does not have a current process or thread
+WARNING: Many commands will not work
+ERROR: Reload failure, partially initialized target
+bp kernelbase!CreateEventW ".echo S162_CREATE_EVENT_ENTRY; gu; .echo S162_CREATE_EVENT_RETURN; ? @rax; g"
+WARNING: The debugger does not have a current process or thread
+WARNING: Many commands will not work
+         ^ Illegal thread error in 'bp kernelbase!CreateEventW ".echo S162_CREATE_EVENT_ENTRY; gu; .echo S162_CREATE_EVENT_RETURN; ? @rax; g"'

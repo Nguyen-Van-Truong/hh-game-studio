@@ -1,0 +1,28 @@
+{
+  "cleanup": "no matching harness or fixture process remains",
+  "formal_acceptance": false,
+  "attach_result": "UNKNOWN_AFTER_PENDING_ATTACH",
+  "debugger_api": "dbgeng.dll",
+  "schema": "HH-S162-dbgeng-fixture-attempt-1",
+  "cdb_or_windbg_installed": false,
+  "limitation": "DbgEng attach emitted pending attach and loaded modules but did not expose a current process/thread for breakpoint placement; no further automatic retry",
+  "failure_code": "DBGENG_NO_CURRENT_PROCESS_AFTER_ATTACH_PENDING",
+  "authority": 0,
+  "source_sha256": "5a6c32d7b4bc7d09750eaceb3c2c1560d088e0f24b126a70d6c80c10174b798b",
+  "harness_actual_exit": -532462766,
+  "engine_started": false,
+  "eligible_for_dataset": false,
+  "debugger_attached": false,
+  "target_actual_exit": "UNKNOWN_FORCED_CLEANUP",
+  "attribution_proven": false,
+  "fixture_id": "gt06-s162-dbgeng-fixture-01",
+  "log_sha256": "15bd2d297b57720708ed1cfffd9d2ec41318f95377a22e40baee0f58249a649c",
+  "dbgeng_present": true,
+  "observed_utc": "2026-09-22T11:28:24Z",
+  "exclusions": [
+    "no Godot/Blender/benchmark engine run",
+    "no formal GT06 acceptance",
+    "no F13/F14 dataset",
+    "no leak/root-cause/creator attribution claim"
+  ]
+}
