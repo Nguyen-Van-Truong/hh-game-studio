@@ -1,0 +1,27 @@
+{
+  "schema": "gt06-official-symbol-boundary-manifest-v1",
+  "run_id": "gt06-s175-official-symbol-boundary-01",
+  "command_id": "cmd.gt06.s175.official-symbols.1",
+  "authority": 0,
+  "files": [
+    {
+      "path": "official-symbol-boundary-s175.json",
+      "sha256": "a2402ef99dffd2ad5d616b4da3a194161b7716087fe00c86dcae2f1e59d4168b",
+      "size": 1682
+    },
+    {
+      "path": "README.md",
+      "sha256": "d1446c6f481c82ee2e37eca8b50b55d801c536946d7604c60e09148a238377bf",
+      "size": 1752
+    }
+  ],
+  "exclusions": [
+    "GT06_DATASET",
+    "F13",
+    "F14",
+    "LEAK",
+    "ROOT_CAUSE",
+    "GT06_ACCEPTANCE",
+    "FORMAL_RETRY"
+  ]
+}
