@@ -8,7 +8,7 @@ replace any GT01–GT10 gate.
 |---|---|
 | `RUN_ID` | `gt06-vertical-slice-godot-01` |
 | `COMMAND_ID` | `cmd.vertical-slice.verify.1` |
-| `TIMESTAMP_UTC` | `2026-09-22T15:37:19Z` |
+| `TIMESTAMP_UTC` | `2026-09-22T15:41:22Z` |
 | `PLAN_HASH` | `7203d567ce822974d21364b6cd083ed64d30247e809533a78b021bbe154eb899` |
 | `TOOLING_SOURCE_HASH` | `fce149cd3a62e102aaba225794b9a5078cd84d7647cb359f6bbcacb8895ddcde` |
 | `SLICE_SOURCE_CLOSURE_SHA256` | `e2e570efa33a7efe7cc5757c7e7044ac01afdc286dd8e42a658ceb351abb14d5` |
@@ -19,7 +19,7 @@ replace any GT01–GT10 gate.
 | `BLENDER_HEADLESS_STATUS` | `PASS` |
 | `BLENDER_GUI_STATUS` | `EXTERNAL_BLOCKED_SXS_blender.crt` |
 | `GLB_SHA256` | `201913890337f056defbce7764dea8f8851d0ea698ab34579fade4ebba93502f` |
-| `VERTICAL_SLICE_COMMIT` | `recorded by repository HEAD` |
+| `VERTICAL_SLICE_COMMIT` | `034d20be` |
 | `AUTHORITY` | `0` |
 
 ## Frozen source manifest
