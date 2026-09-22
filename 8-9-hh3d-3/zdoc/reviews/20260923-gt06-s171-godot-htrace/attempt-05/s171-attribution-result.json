@@ -1,0 +1,56 @@
+{
+  "schema": "gt06-s171-godot-htrace-v1",
+  "run_id": "gt06-s171-godot-htrace-05",
+  "command_id": "cmd.gt06.s171.godot-htrace.5",
+  "authority": 0,
+  "diagnostic_only": true,
+  "source_closure": "fce149cd3a62e102aaba225794b9a5078cd84d7647cb359f6bbcacb8895ddcde",
+  "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+  "godot": {
+    "path": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\tooling\\godot-4.7.2-stable\\Godot_v4.7.2-stable_win64_console.exe",
+    "sha256": "c8f0a6bc45a19b33541501e57f6f7cd972ab18453743266339d495cbbe846643",
+    "pid": 53716,
+    "target_exit": 0
+  },
+  "debugger": {
+    "path": "C:\\Program Files\\WindowsApps\\Microsoft.WinDbg_1.2606.22001.0_x64__8wekyb3d8bbwe\\amd64\\cdb.exe",
+    "version": "cdb version 10.0.29617.1000",
+    "sha256": "5f54abafca3ae5638bbf807d402fabb350a64575c1dfa9fbfc7f5732df5bee67",
+    "pid": 15992,
+    "cdb_exit": 2147942430
+  },
+  "markers": {
+    "cdb_attached": true,
+    "htrace_enable": true,
+    "nt_create_break": true,
+    "create2_break": true,
+    "close_break": true,
+    "htrace_diff": true,
+    "module_offset_resolved": false,
+    "attribution": "UNKNOWN"
+  },
+  "target_markers": {
+    "ready": true,
+    "open": true,
+    "close": true,
+    "exit": true
+  },
+  "forced_cleanup": {
+    "target": false,
+    "debugger": false
+  },
+  "status": "DIAGNOSTIC_RETAINED_AUTHORITY_0",
+  "exclusions": [
+    "F13",
+    "F14",
+    "GT06_DATASET",
+    "LEAK_PROOF",
+    "ROOT_CAUSE",
+    "REPAIR_AUTHORIZATION",
+    "GT06_ACCEPTANCE"
+  ],
+  "stderr": {
+    "debugger": "",
+    "target": ""
+  }
+}

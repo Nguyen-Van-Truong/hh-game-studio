@@ -1,0 +1,103 @@
+Opened log file 'D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260923-gt06-s171-godot-htrace\attempt-02\cdb.logo.txt'
+
+************* Preparing the environment for Debugger Extensions Gallery repositories **************
+   ExtensionRepository : Implicit
+   UseExperimentalFeatureForNugetShare : true
+   AllowNugetExeUpdate : true
+   NonInteractiveNuget : true
+   AllowNugetMSCredentialProviderInstall : true
+   AllowParallelInitializationOfLocalRepositories : true
+
+   -- Configuring repositories
+      ----> Repository : LocalInstalled, Enabled: true
+      ----> Repository : UserExtensions, Enabled: true
+
+>>>>>>>>>>>>> Preparing the environment for Debugger Extensions Gallery repositories completed, duration 0.000 seconds
+
+************* Waiting for Debugger Extensions Gallery to Initialize **************
+
+>>>>>>>>>>>>> Waiting for Debugger Extensions Gallery to Initialize completed, duration 0.016 seconds
+   ----> Repository : UserExtensions, Enabled: true, Packages count: 0
+   ----> Repository : LocalInstalled, Enabled: true, Packages count: 46
+
+Microsoft (R) Windows Debugger Version 10.0.29617.1000 AMD64
+Copyright (c) Microsoft Corporation. All rights reserved.
+
+*** wait with pending attach
+NatVis script successfully loaded from 'C:\Program Files\WindowsApps\Microsoft.WinDbg_1.2606.22001.0_x64__8wekyb3d8bbwe\amd64\Visualizers\atlmfc.natvis'
+NatVis script successfully loaded from 'C:\Program Files\WindowsApps\Microsoft.WinDbg_1.2606.22001.0_x64__8wekyb3d8bbwe\amd64\Visualizers\concurrency.natvis'
+NatVis script successfully loaded from 'C:\Program Files\WindowsApps\Microsoft.WinDbg_1.2606.22001.0_x64__8wekyb3d8bbwe\amd64\Visualizers\cpp_rest.natvis'
+NatVis script successfully loaded from 'C:\Program Files\WindowsApps\Microsoft.WinDbg_1.2606.22001.0_x64__8wekyb3d8bbwe\amd64\Visualizers\ObjectiveC.natvis'
+NatVis script successfully loaded from 'C:\Program Files\WindowsApps\Microsoft.WinDbg_1.2606.22001.0_x64__8wekyb3d8bbwe\amd64\Visualizers\stl.natvis'
+NatVis script successfully loaded from 'C:\Program Files\WindowsApps\Microsoft.WinDbg_1.2606.22001.0_x64__8wekyb3d8bbwe\amd64\Visualizers\Windows.Data.Json.natvis'
+NatVis script successfully loaded from 'C:\Program Files\WindowsApps\Microsoft.WinDbg_1.2606.22001.0_x64__8wekyb3d8bbwe\amd64\Visualizers\Windows.Devices.Geolocation.natvis'
+NatVis script successfully loaded from 'C:\Program Files\WindowsApps\Microsoft.WinDbg_1.2606.22001.0_x64__8wekyb3d8bbwe\amd64\Visualizers\Windows.Devices.Sensors.natvis'
+NatVis script successfully loaded from 'C:\Program Files\WindowsApps\Microsoft.WinDbg_1.2606.22001.0_x64__8wekyb3d8bbwe\amd64\Visualizers\Windows.Media.natvis'
+NatVis script successfully loaded from 'C:\Program Files\WindowsApps\Microsoft.WinDbg_1.2606.22001.0_x64__8wekyb3d8bbwe\amd64\Visualizers\windows.natvis'
+NatVis script successfully loaded from 'C:\Program Files\WindowsApps\Microsoft.WinDbg_1.2606.22001.0_x64__8wekyb3d8bbwe\amd64\Visualizers\winrt.natvis'
+
+************* Path validation summary **************
+Response                         Time (ms)     Location
+Deferred                                       srv*
+Symbol search path is: srv*
+Executable search path is: 
+ModLoad: 00007ff6`c5f50000 00007ff6`c5f85000   D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\.local\tooling\godot-4.7.2-stable\Godot_v4.7.2-stable_win64_console.exe
+ModLoad: 00007fff`5f540000 00007fff`5f7a6000   C:\WINDOWS\SYSTEM32\ntdll.dll
+ModLoad: 00007fff`5d930000 00007fff`5d9f9000   C:\WINDOWS\System32\KERNEL32.DLL
+ModLoad: 00007fff`5cc60000 00007fff`5d05e000   C:\WINDOWS\System32\KERNELBASE.dll
+ModLoad: 00007fff`5d4a0000 00007fff`5d549000   C:\WINDOWS\System32\msvcrt.dll
+ModLoad: 00007fff`5e6a0000 00007fff`5ee32000   C:\WINDOWS\System32\SHELL32.dll
+ModLoad: 00007fff`5d130000 00007fff`5d1d3000   C:\WINDOWS\System32\msvcp_win.dll
+ModLoad: 00007fff`5c820000 00007fff`5c96c000   C:\WINDOWS\System32\ucrtbase.dll
+ModLoad: 00007fff`5d2d0000 00007fff`5d497000   C:\WINDOWS\System32\USER32.dll
+ModLoad: 00007fff`5cab0000 00007fff`5cad7000   C:\WINDOWS\System32\win32u.dll
+ModLoad: 00007fff`5d270000 00007fff`5d29b000   C:\WINDOWS\System32\GDI32.dll
+ModLoad: 00007fff`5c980000 00007fff`5caaa000   C:\WINDOWS\System32\gdi32full.dll
+ModLoad: 00007fff`5f190000 00007fff`5f1f7000   C:\WINDOWS\System32\SHLWAPI.dll
+ModLoad: 00007fff`5d810000 00007fff`5d842000   C:\WINDOWS\System32\IMM32.DLL
+ModLoad: 00007fff`5e520000 00007fff`5e5ca000   C:\WINDOWS\System32\sechost.dll
+(571c.c9c4): Break instruction exception - code 80000003 (first chance)
+ntdll!DbgBreakPoint:
+00007fff`5f65ed10 cc              int     3
+0:004> .reload /f
+Reloading current modules
+...
+
+Press ctrl-c (cdb, kd, ntsd) or ctrl-break (windbg) to abort symbol loads that take too long.
+Run !sym noisy before .reload to track down problems loading symbols.
+
+............
+
+************* Symbol Loading Error Summary **************
+Module name            Error
+Godot_v4.7.2-stable_wi The system cannot find the file specified
+
+You can troubleshoot most symbol related issues by turning on symbol loading diagnostics (!sym noisy) and repeating the command that caused symbols to be loaded.
+You should also verify that your symbol search path (.sympath) is correct.
+0:004> !htrace -enable
+Handle tracing enabled.
+Handle tracing information snapshot successfully taken.
+0:004> .echo CDB_ATTACHED
+CDB_ATTACHED
+0:004> bp kernelbase!CreateFileW ".echo CREATE_BREAK; !htrace -snapshot; gc"
+0:004> bp kernelbase!CloseHandle ".echo CLOSE_BREAK; !htrace -diff; gc"
+0:004> g
+CLOSE_BREAK
+Handle tracing information snapshot successfully taken.
+0x0 new stack traces since the previous snapshot.
+--------------------------------------
+No outstanding handles opened since the previous snapshot were detected.
+CLOSE_BREAK
+Handle tracing information snapshot successfully taken.
+0x1 new stack traces since the previous snapshot.
+Ignoring handles that were already closed...
+--------------------------------------
+No outstanding handles opened since the previous snapshot were detected.
+CLOSE_BREAK
+Handle tracing information snapshot successfully taken.
+0x2 new stack traces since the previous snapshot.
+Ignoring handles that were already closed...
+--------------------------------------
+No outstanding handles opened since the previous snapshot were detected.
+ntdll!NtTerminateProcess+0x14:
+00007fff`5f6a05e4 c3              ret

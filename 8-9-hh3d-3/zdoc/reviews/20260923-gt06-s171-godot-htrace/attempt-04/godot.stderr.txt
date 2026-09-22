@@ -1,0 +1,6 @@
+ERROR: Attempt to open script 'res://main.gd' resulted in error 'File not found'.
+   at: load_source_code (modules/gdscript/gdscript.cpp:1139)
+ERROR: Failed loading resource: res://main.gd.
+   at: _load (core/io/resource_loader.cpp:317)
+ERROR: Can't load script: res://main.gd
+   at: start (main/main.cpp:4370)

@@ -1,0 +1,6 @@
+!htrace -enable
+.echo CDB_ATTACHED
+bp ntdll!NtCreateFile ".echo NT_CREATE_BREAK; !htrace -snapshot; gc"
+bp kernelbase!CreateFile2 ".echo CREATE2_BREAK; !htrace -snapshot; gc"
+bp kernelbase!CloseHandle ".echo CLOSE_BREAK; !htrace -diff; gc"
+g
