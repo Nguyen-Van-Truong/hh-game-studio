@@ -30,7 +30,7 @@ EXECUTION_MODE=COORDINATOR_STATIC_REVIEW_ONLY_OWNER_20260922_GOAL_ACTIVE
 SUBAGENTS_ENABLED=CODEX_GPT_6_ASTRA_XHIGH_REQUESTED; ASTRA_REQUESTED=3; ASTRA_STARTED=0; ASTRA_CAPACITY_BLOCKED=3; CURSOR_WORKERS_STOPPED; EXCLUSIVE_FILE_OWNERSHIP; FINAL_CRITICS_NOT_ELIGIBLE; GOAL_ACTIVE
 DISPATCH_STATE=COORDINATOR_STATIC_REVIEW_ONLY
 CURSOR_STATE=TERMINAL_RETAINED; ACTIVE=0
-ENGINE_EXECUTION=FORBIDDEN_UNTIL_S159_CONTRACT_REVIEWED
+ENGINE_EXECUTION=FORBIDDEN_UNTIL_S159_CONTRACT_INTEGRATION_REVIEWED
 GT02_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260916_S46
 GT02_REVIEW_STATUS=TWO_INDEPENDENT_PASS_TICK_YES_S46
 GT02_LAST_TESTED_SOURCE_CLOSURE=f28056d8ff705a60d48a54f9dee80f16554494fa976bd0bfabee84bb51fecbbf
@@ -67,7 +67,7 @@ GT06_PROFILE_SHA256=0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf
 GT06_BENCHMARK_CAMPAIGN=gt06-s153-formal-01; DISPATCH_20260922T020802Z; S141_S147_FORMAL_FAILURES_PRESERVED; S157_CURSOR_LANES_TERMINAL_S158_REVIEW
 GT06_BENCHMARK_STATUS=ZERO_ACCEPTED_FULL_RUNS; S153_FORMAL_FAILED_BATCH7_RETAINED_COUNTER_GROWTH; S141_S147_FAILURES_PRESERVED
 GT06_ACTIVE_DIAGNOSTIC=S156_EDITOR_HANDLE_CENSUS_TERMINAL_FAILURE_BATCH6; S150_TERMINAL; S153_FORMAL_TERMINAL_20260922T022413Z; S158_STATIC_REVIEW_ONLY
-GT06_NEXT_ACTION=Review fresh S159 helper contract and documented PSS-field schema; only then consider one bounded diagnostic with a new ID. Main runtime/profile/gates and S156 frozen helpers remain unchanged. S153/S156 failures remain AUTHORITY=0 outside F13/F14. Full10x35 plus final evidence and two NEW same-hash critics remain required.
+GT06_NEXT_ACTION=S159 helper-contract and documented-PSS schema static tests pass; review integration bindings, then consider one bounded diagnostic with a new ID. Main runtime/profile/gates and S156 frozen helpers remain unchanged. S153/S156 failures remain AUTHORITY=0 outside F13/F14. Full10x35 plus final evidence and two NEW same-hash critics remain required.
 GT06_ATTRIBUTION_S156=READ_ONLY_REVIEWED; S156_PSS_EDITOR_555_TO_557; HOST_HANDLES_205_STABLE; SAMPLE_EDITOR_568_559_559_567_555_555_557; OBJECTDB_71130_RESOURCES_6; SOURCE_EXECUTION_UNCHANGED; JOB_ZERO_CLOSED; TARGET_EXIT1; EDITOR_TARGET_EXIT_UNKNOWN; OBJECT_IDENTITY_UNKNOWN; NO_REPAIR_JUSTIFIED_YET
 GT06_READY_AFTER_TERMINAL=S133 seven service/reviewer lanes verified; S134 packet1020 verified as self-contained exact-copy payload with provenance refs; S137 D1/D2 diagnostic limits retained; S138 managed repair+replay completed; S139 source projections/input binding verified; S147 terminal packet and S148 read-only attribution verified; S149 terminal PSS Event delta and clean cleanup preserved; S150 terminal boundary summary and worker review preserved; formal RSS/freeze/dataset still open.
 GT06_EXECUTION217_LAST_TESTED_CLOSURE=78ffef60682f596313aac8aca69a06e0a23808c546202effdebc481bdb845b58
@@ -85,10 +85,12 @@ Cursor worker đã dừng, không còn engine chạy. Ba Codex GPT-6 Astra xhigh
 REPORT/completion nào từ các lane đó và không được ghi nhận là hoàn tất. Root
 coordinator đang static review/test có giới hạn; không engine, không formal
 retry, không sửa chung file. S158 hardening guard và contract đã pass fake-only;
-S159 audit chỉ ra helper chưa được pin đầy đủ trong execution map, summary
-boundary chưa bắt buộc prefix/actual PID, và PSS CreationTime là trường
-Microsoft đánh dấu Reserved nên không được dùng để suy luận thời gian tạo object.
-Contract kế tiếp phải được review trước khi mở diagnostic mới.
+S159 helper-contract và documented-PSS schema tests cũng pass fake-only nhưng
+integration binding chưa được nghiệm thu. S159 audit chỉ ra helper chưa được
+pin đầy đủ trong execution map, summary boundary chưa bắt buộc prefix/actual
+PID, và PSS CreationTime là trường Microsoft đánh dấu Reserved nên không được
+dùng để suy luận thời gian tạo object. Chỉ sau khi review integration binding
+mới được cân nhắc diagnostic mới.
 
 S158 coordinator review (2026-09-22, AUTHORITY=0): exact Cursor retention,
 31 launcher + 6 attribution + 15 schema + 3 hardening-contract tests exit 0;
@@ -100,6 +102,14 @@ S159 plan audit (2026-09-22, read-only): report
 zdoc/reviews/20260922-gt06-s159-plan-audit/REPORT.md xác nhận GT06 DoD và hai
 critic vẫn mở; metadata đã được compact ở block đầu này. Không đổi source,
 profile, timeout, baseline, gate hoặc checkbox.
+
+S159 helper/PSS static review (2026-09-22, AUTHORITY=0): helper contract yêu
+cầu helper closure hash, child script, path/symlink safety, contiguous prefix
+và target PID; documented-PSS schema từ chối các trường Reserved và giữ object
+identity UNKNOWN. Ba helper-contract và ba PSS-schema fake tests exit 0 tại
+zdoc/reviews/20260922-gt06-s159-helper-contract/ và
+zdoc/reviews/20260922-gt06-s159-attribution-schema/. Đây chưa phải integration
+run, diagnostic PASS hay formal GT06 evidence.
 
 TIẾN ĐỘ HIỆN HÀNH — S157, ngày 22-09-2026 (timestamps UTC)
 GT01–05 ACCEPTED theo source lịch sử; GT06 IN_PROGRESS/zero accepted full runs;
