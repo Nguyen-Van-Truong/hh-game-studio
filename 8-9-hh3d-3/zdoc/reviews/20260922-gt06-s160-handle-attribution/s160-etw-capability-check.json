@@ -27,7 +27,17 @@
     },
     "debugger": {
       "cdb_or_windbg_available": false,
-      "htrace_integration_verified": false
+      "htrace_integration_verified": false,
+      "installer_attempt": {
+        "package": "Microsoft.WinDbg",
+        "source": "winget",
+        "attempted": true,
+        "process_ids": [5724, 2432],
+        "status": "TERMINATED_AFTER_INSTALL_HANG",
+        "actual_exit": "UNKNOWN",
+        "package_visible_after_attempt": false,
+        "automatic_retry": false
+      }
     }
   },
   "public_contract_review": {
@@ -42,5 +52,5 @@
   },
   "decision": "HOLD_ENGINE",
   "reason": "The reviewed public contracts do not establish a documented per-owned-PID kernel handle attribution boundary. WPR/tracerpt presence alone is insufficient; !htrace remains a conditional debugger fallback and is not executable or overhead-bounded on this host.",
-  "next_gate": "Only after a bounded owned native fixture proves debugger integration, OPEN/CLOSE attribution, history overflow handling, detach, and actual exit may a fresh diagnostic ID be considered. Do not alter source, profile, timeout, baseline, gate, priority, or RSS policy."
+  "next_gate": "Only after a bounded owned native fixture proves debugger integration, OPEN/CLOSE attribution, history overflow handling, detach, and actual exit may a fresh diagnostic ID be considered. Do not alter source, profile, timeout, baseline, gate, priority, or RSS policy. Do not retry the hung debugger installer automatically."
 }
