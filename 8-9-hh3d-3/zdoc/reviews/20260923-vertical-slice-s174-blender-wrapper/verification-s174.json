@@ -1,0 +1,17 @@
+{
+  "schema": "vertical-slice-blender-wrapper-verification-v1",
+  "run_id": "vertical-slice-s174-blender-wrapper-01",
+  "command_id": "cmd.vertical-slice.s174.blender.wrapper.1",
+  "run_namespace": "vertical-slice",
+  "authority": 0,
+  "source_commit": "57e5b54e4e5fa6623614a23b8aa313d409a25123",
+  "wrapper_sha256": "49e13cb362d25b561ae89a951b0954964d0fc2821e3ab445028ad8b6aa36ce56",
+  "blender_sha256": "8f7a131ad8bc148edc218b334f07d92a57f5a357fa66d913b290537fd8353c06",
+  "wrapper_interpreter": "bundled_pwsh",
+  "wrapper_exit": 0,
+  "author": {"exit": 0, "stderr_bytes": 0, "marker": "BLENDER_ASSET_PASS"},
+  "reopen_export": {"exit": 0, "stderr_bytes": 0, "marker": "BLENDER_REOPEN_EXPORT_PASS"},
+  "glb_sha256": "1ec4d9e00909f68e11afa3617cb72d6fef11b3be9a6dc10729bbc5cc27672588",
+  "leftover_processes": 0,
+  "exclusions": ["GT06_DATASET", "F13", "F14", "GT06_ACCEPTANCE", "LEAK", "ROOT_CAUSE", "FORMAL_RETRY"]
+}
