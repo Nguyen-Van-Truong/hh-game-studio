@@ -1,0 +1,82 @@
+{
+  "schema": "HH-GT06-S150-EVENT-QUIESCENCE-TERMINAL-1",
+  "authority": 0,
+  "formal_acceptance": false,
+  "eligible_for_dataset": false,
+  "run_id": "gt06-s150-event-quiescence-01",
+  "status": "BOUNDARY_CAPTURED",
+  "decision": "NO_NEW_GROWTH_IN_S150;_QUIET_PSS_STABLE",
+  "source_unchanged": true,
+  "original_gates_unchanged": true,
+  "baseline_pss": {
+    "label": "04",
+    "handles": 173,
+    "event_count": 23,
+    "file_count": 14,
+    "thread_count": 3,
+    "semaphore_count": 48,
+    "rss_bytes": 49004544
+  },
+  "batch9_child_sample": {
+    "label": "09",
+    "handles": 173,
+    "rss_bytes": 42508288
+  },
+  "batch9_quiet_pss": {
+    "label": "09-quiet",
+    "handles": 173,
+    "event_count": 23,
+    "file_count": 14,
+    "thread_count": 3,
+    "semaphore_count": 48
+  },
+  "terminal_pss": {
+    "label": "10",
+    "handles": 173,
+    "event_count": 23,
+    "file_count": 14,
+    "thread_count": 3,
+    "semaphore_count": 48,
+    "rss_bytes": 43249664
+  },
+  "deltas": {
+    "baseline_pss_to_quiet_pss_handles": 0,
+    "baseline_pss_to_quiet_pss_event": 0,
+    "baseline_sample_to_quiet_sample_rss": -6496256,
+    "quiet_to_terminal_pss_handles": 0,
+    "quiet_to_terminal_pss_event": 0
+  },
+  "cleanup": {
+    "job_closed": true,
+    "job_active_count": 0,
+    "job_zero_observed": true,
+    "probe_released": true,
+    "wrapper_closed": true,
+    "wrapper_handle_retained": false,
+    "child_cleanup_completed": false,
+    "cleanup_failure_code": "BENCHMARK_CLOSED_BEFORE_FINISH",
+    "wrapper_exit_code": 2
+  },
+  "exits": {
+    "launcher": 1,
+    "helper": 2,
+    "child": null,
+    "observer_terminal": "EXIT_OBSERVED"
+  },
+  "limits": [
+    "Diagnostic-only; not F13/F14",
+    "No leak/root-cause/ownership claim",
+    "No strict same-batch immediate PSS census at batch9; quiet PSS is compared with baseline and child sample",
+    "S149_OUTER_LIMIT is bounded diagnostic termination, not engine acceptance failure",
+    "Event type identity remains UNKNOWN",
+    "No target process exit, child cleanup, or derived result summary was published"
+  ],
+  "evidence_sha256": {
+    "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s150-event-quiescence-01\\result.json": "26d00a708353cd773057636751262a7628c8cadaedb72c21f23a0786b7177367",
+    "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s150-event-quiescence-01\\owner\\cleanup-001.json": "9ff26d2260e6188703654517521ac75e80f618c4e517723042f5f4babc109ee1",
+    "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s150-event-quiescence-01\\census-04.json": "71b00011d49766a29db1f36b5d7d223f03fab115cc7ac5c2742b02c495fb5ba3",
+    "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s150-event-quiescence-01\\census-09-quiet.json": "3346015c63b6dfb08172e32881519e7d0057002375db3813e16e9d5d744a0565",
+    "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s150-event-quiescence-01\\census-10.json": "db1f8802473b04680742b287137fd5b588759bdf2623f5fc247e415c177e7e88",
+    "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260921-gt06-s147-supervision\\runs\\gt06-s129-s150-event-quiescence\\terminal.json": "3dfed349990de960bf329d23ab8b666177ceb47e2a524427d693cf9c9a129ebe"
+  }
+}
