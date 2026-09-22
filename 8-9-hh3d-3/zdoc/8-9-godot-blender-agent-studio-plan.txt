@@ -78,6 +78,13 @@ GT01–05 ACCEPTED theo source lịch sử; GT06 IN_PROGRESS/zero accepted full 
 GT07–10 chưa mở. Owner mới yêu cầu dừng Cursor, chuyển sang ba worker Codex
 Astra xhigh. Một writer/file; coordinator giữ plan và quyền điều khiển run.
 
+S156 terminal/read-only closure (2026-09-22): static pin check passed
+(`run_diagnostic.py --check`, source_count=53, closure fce149cd…5ddcde,
+launched=false) and the 11 editor-handle unit tests passed. No matching
+Godot/Python/Blender campaign process remains. This validates only the
+diagnostic harness and packet binding; S156 remains FAILURE/AUTHORITY=0,
+outside F13/F14, with editor target exit UNKNOWN. No formal retry is open.
+
 S154 chuyển giao, không restart benchmark:
 - Cursor formal-resume-02 terminal CLI exit0 lúc02:13:13Z; đã dispatch stock
   gt06-s153-formal-01 lúc02:08:02Z. Không còn scoped Cursor worker lúc02:20:27Z.
