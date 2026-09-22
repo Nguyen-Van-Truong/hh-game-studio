@@ -90,5 +90,11 @@
     "matched_count": 0,
     "artifact": "s158-process-probe.json",
     "no_engine_or_helper": true
+  },
+  "next_contract": {
+    "artifact": "s158-next-diagnostic-contract.json",
+    "engine_execution": "FORBIDDEN_UNTIL_CONTRACT_REVIEWED",
+    "authority": 0,
+    "formal_acceptance": false
   }
 }
