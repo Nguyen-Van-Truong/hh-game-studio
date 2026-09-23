@@ -1,0 +1,25 @@
+{
+  "schema": "hh-studio.gt06-s207-source-closure-correction",
+  "schema_version": "1.0.0",
+  "authority": 0,
+  "campaign_id": "gt06-s205-formal-01",
+  "incomplete_preflight": {
+    "source_files": 50,
+    "source_closure_sha256": "8aca87d44e3a1cbbf0feb558403948da5a71bec6f5761174729a6dc24e8d3b1b",
+    "cause": "source_files called before load_fixture dynamic imports"
+  },
+  "actual_campaign_binding": {
+    "source_files": 53,
+    "source_closure_sha256": "c7ced0ef818fd816a9fddc83841d1a6c06b5b1dec39bf4e69de4a28663f91de7",
+    "evidence": "studio/.local/reviews/gt06-s205-formal-01/campaign.json"
+  },
+  "omitted_dynamic_dependencies": [
+    "godot-addon/bundle_staging.py",
+    "godot-addon/bundle_v2.py",
+    "godot-addon/fixture_profile.py"
+  ],
+  "content_drift": false,
+  "formal_acceptance": false,
+  "engine_rerun": false,
+  "gate_change": false
+}
