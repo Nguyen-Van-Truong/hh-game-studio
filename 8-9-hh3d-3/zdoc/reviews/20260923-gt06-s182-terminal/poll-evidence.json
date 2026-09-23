@@ -1,0 +1,17 @@
+{
+  "authority": 0,
+  "formal_acceptance": false,
+  "files": [
+    {
+      "file": "poll-result.json",
+      "source": "8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s182-poll-contention-01\\result.json",
+      "sha256": "2f92fc5ee2fde9d4003a5b224fd3ede93818729fe1685ad7a44de2b37fe555ab"
+    },
+    {
+      "file": "poll-process-exit.json",
+      "source": "8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s182-poll-contention-01\\process-exit.json",
+      "sha256": "a7ae9fe0050e896753c26f34c106a8231953aaa373fc4c81e9b121e90f79dc94"
+    }
+  ],
+  "conclusion": "1ms polling overhead observed, but second-scale S181 snapshot delay not reproduced. No production or cadence change justified by this probe alone."
+}

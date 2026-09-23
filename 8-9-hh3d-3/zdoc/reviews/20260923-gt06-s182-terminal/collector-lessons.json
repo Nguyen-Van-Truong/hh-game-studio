@@ -1,0 +1,11 @@
+{
+  "authority": 0,
+  "engine_restarted": false,
+  "seal_attempt_01": {
+    "exit": 1,
+    "stage": "scheduler status through Python subprocess",
+    "error": "Windows PowerShell Get-FileHash cmdlet unavailable with inherited module path",
+    "archive_created": false
+  },
+  "recovery": "Status captured through owning PowerShell session, then original raw sealed and verified without rerunning engine. Python 3.11 link check uses lstat reparse attributes instead of Path.is_junction."
+}

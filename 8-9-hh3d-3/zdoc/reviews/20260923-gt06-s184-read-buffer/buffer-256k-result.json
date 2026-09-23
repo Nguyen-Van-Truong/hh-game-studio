@@ -1,0 +1,138 @@
+{
+  "authority": 0,
+  "copy_unchanged": true,
+  "engine_started": false,
+  "formal_acceptance": false,
+  "host_threads_alive_after_close": [
+    false,
+    false,
+    false
+  ],
+  "journal_closed": true,
+  "rows": [
+    {
+      "poll_failures": [],
+      "poll_sleep_seconds": null,
+      "polls": 0,
+      "samples": [
+        {
+          "thread_cpu_ms": 78.125,
+          "wall_ms": 74.0903
+        },
+        {
+          "thread_cpu_ms": 62.5,
+          "wall_ms": 68.1487
+        },
+        {
+          "thread_cpu_ms": 78.125,
+          "wall_ms": 74.5403
+        }
+      ],
+      "worker_alive_after_join": false
+    },
+    {
+      "poll_failures": [],
+      "poll_sleep_seconds": 0.001,
+      "polls": 26,
+      "samples": [
+        {
+          "thread_cpu_ms": 62.5,
+          "wall_ms": 84.3379
+        },
+        {
+          "thread_cpu_ms": 93.75,
+          "wall_ms": 86.5998
+        },
+        {
+          "thread_cpu_ms": 46.875,
+          "wall_ms": 87.5156
+        }
+      ],
+      "worker_alive_after_join": false
+    },
+    {
+      "poll_failures": [],
+      "poll_sleep_seconds": 0.01,
+      "polls": 13,
+      "samples": [
+        {
+          "thread_cpu_ms": 62.5,
+          "wall_ms": 67.361
+        },
+        {
+          "thread_cpu_ms": 46.875,
+          "wall_ms": 60.4431
+        },
+        {
+          "thread_cpu_ms": 62.5,
+          "wall_ms": 82.2491
+        }
+      ],
+      "worker_alive_after_join": false
+    },
+    {
+      "poll_failures": [],
+      "poll_sleep_seconds": 0.01,
+      "polls": 13,
+      "samples": [
+        {
+          "thread_cpu_ms": 31.25,
+          "wall_ms": 66.9908
+        },
+        {
+          "thread_cpu_ms": 78.125,
+          "wall_ms": 70.356
+        },
+        {
+          "thread_cpu_ms": 78.125,
+          "wall_ms": 74.2664
+        }
+      ],
+      "worker_alive_after_join": false
+    },
+    {
+      "poll_failures": [],
+      "poll_sleep_seconds": 0.001,
+      "polls": 30,
+      "samples": [
+        {
+          "thread_cpu_ms": 62.5,
+          "wall_ms": 88.9106
+        },
+        {
+          "thread_cpu_ms": 78.125,
+          "wall_ms": 91.8851
+        },
+        {
+          "thread_cpu_ms": 78.125,
+          "wall_ms": 87.8999
+        }
+      ],
+      "worker_alive_after_join": false
+    },
+    {
+      "poll_failures": [],
+      "poll_sleep_seconds": null,
+      "polls": 0,
+      "samples": [
+        {
+          "thread_cpu_ms": 46.875,
+          "wall_ms": 70.3684
+        },
+        {
+          "thread_cpu_ms": 78.125,
+          "wall_ms": 70.3779
+        },
+        {
+          "thread_cpu_ms": 62.5,
+          "wall_ms": 67.6751
+        }
+      ],
+      "worker_alive_after_join": false
+    }
+  ],
+  "run_id": "gt06-s184-buffer-256k",
+  "source_sha256": "723f36f7ab38c49dc85f4ec73c8e276a3099d2805d4521cddb739ef5f5adbc06",
+  "source_unchanged": true,
+  "synthetic_pending_response": true
+}

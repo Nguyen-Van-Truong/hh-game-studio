@@ -1,0 +1,1964 @@
+{
+  "accepted_full_runs": 0,
+  "archive": "studio/.local/archives/gt06-s181-formal-01-s182-terminal.zip",
+  "archive_sha256": "7387151c2ff0e5b7f6836e3360fed5e885e410df2c22f34864f2a5654d90103b",
+  "archive_size": 16001110,
+  "authority": 0,
+  "captured_utc": "2026-09-23T13:29:42.788347+00:00",
+  "exclusions": [
+    "F13",
+    "F14",
+    "PASS",
+    "no_leak",
+    "root_cause",
+    "inferred_natural_exit"
+  ],
+  "formal_acceptance": false,
+  "hash_mismatches": 0,
+  "missing_members": 0,
+  "originals_rechecked": true,
+  "plan_before_sha256": "233632dd71751e66a8a7585ce87a717c21bd1333a156d1fb512eda6074c013e1",
+  "rows": [
+    {
+      "member": "gt06-s181-formal-01/benchmark-profile.json",
+      "sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+      "size": 718
+    },
+    {
+      "member": "gt06-s181-formal-01/campaign.json",
+      "sha256": "6ea0facfdf0b1871964f2f52340ce0f975256b73f3141fd19459a0ac2c707133",
+      "size": 6727
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/batch-capture-00.json",
+      "sha256": "0073954796785b650e6461155c2a7362b6bb53a901f035e39761f3d43a63d2eb",
+      "size": 868
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/batch-capture-01.json",
+      "sha256": "3fef13f57a71ed31873d63d70c79395f7d681fb06f959c9c269a009f45b59428",
+      "size": 868
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/batch-capture-02.json",
+      "sha256": "ce0139aa599269f3f3e3e67493d6c108793adf58580af61817d42b17f2d32932",
+      "size": 868
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/batch-capture-03.json",
+      "sha256": "864613f7210f4e1448985afe4c4c954b0d14e4e0aca362294b59aabe68b1fe57",
+      "size": 868
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/batch-capture-04.json",
+      "sha256": "4aae960f56e7c9b97a6867a3b267f8579ab73ea1c0ac86da817ebc7d1e1dd09d",
+      "size": 868
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/batch-capture-05.json",
+      "sha256": "23886976aa6c8de053cda8b9739a36cb61ea9f1dc328e9526698fe3fb8ae5ad3",
+      "size": 868
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/batch-capture-06.json",
+      "sha256": "2a9b316671ddfe3a35de5b0ecf23f1427365010fe225d51b93dbe35b748ade85",
+      "size": 868
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/batch-capture-07.json",
+      "sha256": "d373362850eb7ddeda20b884ecad474e70ff02c61cc73719f8c631d43db80793",
+      "size": 868
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/batch-capture-08.json",
+      "sha256": "e187beb4b34bccf2144d483b06957729cdaf5ddb1353facfb22c4b1d88b3557c",
+      "size": 868
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/batch-capture-09.json",
+      "sha256": "561aba55da44dfb74c48a7ba6b44bd86bec9d770ba2bc0bc00e2df372d9738c4",
+      "size": 868
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/batch-capture-10.json",
+      "sha256": "ed5d428e956e1ac6bb71d2e92393b74baf556a7eb1abed592ab04778f7e10590",
+      "size": 869
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/batch-capture-11.json",
+      "sha256": "2ec0f9841953215cee55f3e7c85f9071c52d19fb99bfccf1d1a46c9b54387e08",
+      "size": 869
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/batch-capture-12.json",
+      "sha256": "369cf9d53fce4a898765d2a403bf72210beccc04a39e198889533d67f68590a0",
+      "size": 869
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/batch-capture-13.json",
+      "sha256": "e719a4d25b7100e8040d495a3b189797f786396128cb0f25bdbd0f13bc0cfa92",
+      "size": 869
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/batch-capture-14.json",
+      "sha256": "2efb612e2fcf5afd47292b27c09ecb2fe10318165dcc52265a8e2d67f8ea6f65",
+      "size": 869
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/batch-capture-15.json",
+      "sha256": "a1961539de31cbf3fd3c566f29b3800cc1a404f3dbb6aae050cfefe1168c4546",
+      "size": 869
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/batch-capture-16.json",
+      "sha256": "39ba06157cd6a34f8c1ac8ecd6092522905b4ab10e34892cf36fd173a55287a7",
+      "size": 869
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/batch-capture-17.json",
+      "sha256": "1ad9e4788a56cbd20b175c6eb7c5490dbf9f980a8a7ddc0bfe5323ab3a3012b6",
+      "size": 869
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/batch-capture-18.json",
+      "sha256": "a2046b0e6f3c1e2accb9fc1279d0060af80b0192a43c6a0f1ea4e81a07dae76a",
+      "size": 869
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/batch-capture-19.json",
+      "sha256": "5b26dfebfb1c6ca3e9e5d0eaa73152c9b72299dc5d06690de24197fbbe3666cb",
+      "size": 869
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/batch-capture-20.json",
+      "sha256": "bab2149ccfb416ed1eb6bd0b11e8d2125bd4515da6d14608ff8b7d2379169fb0",
+      "size": 869
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/batch-capture-21.json",
+      "sha256": "6b0d518b9539071d75b407b62774e46f4910710f54ea269f7b9c98a344c244de",
+      "size": 869
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/benchmark-profile.json",
+      "sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+      "size": 718
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/child-failure.json",
+      "sha256": "6d37403b9378746622773437795ae2360ae45c3077e640b661569bacd188ed9e",
+      "size": 4340847
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/child-terminal-cleanup.json",
+      "sha256": "413fb2be62675cc252cbf3f190daf155c40e82ca02ca658a4f64508233a12e4f",
+      "size": 3712
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/command-00.json",
+      "sha256": "f8f7755eef8945e560f47c0a50af12063cbc8be2b443320ff5dd4e55a368540c",
+      "size": 2575092
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/command-01.json",
+      "sha256": "253fd532b74185e8495abe6d0ee1b49c5a8c755fb150d253a21b220897db18ae",
+      "size": 2621548
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/command-02.json",
+      "sha256": "9b2173d6cac0e3fb80d690cd0111c8c917ddffde0c0efa594fe806ac4bb22b69",
+      "size": 2706749
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/command-03.json",
+      "sha256": "860f17b65aeac7feb7629a1706b963f8788442ac2a9e9b9b7a0baec7d7cf063e",
+      "size": 2750280
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/command-04.json",
+      "sha256": "9af3f9b6e0decf0e7af4e96aba590c62fc3dafec6fb565d72676e40bc6b1ca41",
+      "size": 2745602
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/command-05.json",
+      "sha256": "1a3acd8ede8be7a64bba7a228de323333aee1bdd6c1ec16e9006f9c45dd0de5a",
+      "size": 2909988
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/command-06.json",
+      "sha256": "6c737fa803ffaa21acde6ccb9694ab82dff77b919ec719ace69ad7a81deb1941",
+      "size": 2970211
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/command-07.json",
+      "sha256": "a8d7dcee0b04e549a3410ec3a210030fcce45e60fff1a7215f3abf019046501f",
+      "size": 3086616
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/command-08.json",
+      "sha256": "6131efd81d202536fb1bb5f7d19657fd7f8a93f27baa56311c90dea3b039be2c",
+      "size": 3111162
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/command-09.json",
+      "sha256": "bc31a20e96530b9dcc815751027c527c988212d9676fe85e1089aa23cbb5e48b",
+      "size": 3361310
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/command-10.json",
+      "sha256": "26e5d1bc6a8fa56beeeb50273d0035e51c0ac9a9f9b4cc31a2131b3b0ec167c8",
+      "size": 3380796
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/command-11.json",
+      "sha256": "1b1547cb6a527d8e2d4bea68dbe614260b411ed6ce3136215daecd19f9b9ca34",
+      "size": 3613952
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/command-12.json",
+      "sha256": "3388ee7654e6a9be37ebbf08448d24d448256f5edf0092f2908d3e762735703a",
+      "size": 3520633
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/command-13.json",
+      "sha256": "0fb23694d6f14d82062fe4f566ad8fd5882a2d070ff4d15912d9789e3d1ad70f",
+      "size": 3772124
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/command-14.json",
+      "sha256": "9105f3e740685649463f2c61f393fd04bcd61130258a301ccb6c8ab4c00cb13b",
+      "size": 4010737
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/command-15.json",
+      "sha256": "b0b94e1a84e8f6389e18fb5006f4b41aecd3ce56e05c258062be7fc5fd729606",
+      "size": 3941695
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/command-16.json",
+      "sha256": "1f42928108f0361b4099e87ce2a4d57ff08fdec241136291073ed30b9017b315",
+      "size": 3998302
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/command-17.json",
+      "sha256": "4344efed585f53c6c4778b4b6d4fa11fe9bbb8d7b1fb31b09f6ea89361fb52b8",
+      "size": 4016381
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/command-18.json",
+      "sha256": "b544507075d9b0e8488c3621307648cd1b8332ccb9321e0f68f56d9156274db2",
+      "size": 4104128
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/command-19.json",
+      "sha256": "5c592b91d357e116ee502fd4bfec93592679ceaf783e5f4c81e673565160c82d",
+      "size": 4084846
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/command-20.json",
+      "sha256": "710301f62f1e60e649d0fa9f48460ee6d809537064e2fe3b85e76176caa529f3",
+      "size": 4287828
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/command-21.json",
+      "sha256": "a4a882393565a6d49832ca2e234830bdc1b40744aaa9e05db0c319f5779bb0de",
+      "size": 4896270
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/commands/commands.jsonl",
+      "sha256": "723f36f7ab38c49dc85f4ec73c8e276a3099d2805d4521cddb739ef5f5adbc06",
+      "size": 22512829
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/commands/commands.jsonl.guard",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/context.json",
+      "sha256": "f5eb29c1544d38cc873ca652548e3accb2d310665da128cfaf51ff450b0bb66c",
+      "size": 5712
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/editor-host/cleanup-001.json",
+      "sha256": "9ff26d2260e6188703654517521ac75e80f618c4e517723042f5f4babc109ee1",
+      "size": 556
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/editor-host/invocation.json",
+      "sha256": "127cfc511b9d357f08734aeac7456b14fdf6a1d85da5cbf953e69fed9f3b6ada",
+      "size": 9350
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/editor-host/localappdata/Godot/editor_doc_cache-4.7.res",
+      "sha256": "50a81f629db272139e587474f4091cc5cf3ee9a83aa0f7f019cb51edfea273df",
+      "size": 3269807
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/editor-host/localappdata/Godot/resthumb-007b16227abfccc0727fdb94bf8b1ed5.png",
+      "sha256": "3be5f43c5f5c1dfa41cc8c26587f6a18613ce89ee346e425b10806dbd8095def",
+      "size": 414
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/editor-host/localappdata/Godot/resthumb-007b16227abfccc0727fdb94bf8b1ed5.txt",
+      "sha256": "a588d4cef7f995c37ca8edb039908c9e5cc606fe2ed496c0ee3a4470fa01d011",
+      "size": 54
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/editor-host/localappdata/Godot/resthumb-4cbd8964a4d863a60ead8cd75f538991.png",
+      "sha256": "622f6f4030ce8e1175ca099665e7a24bd9936058955832090b7858f5911275c9",
+      "size": 4078
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/editor-host/localappdata/Godot/resthumb-4cbd8964a4d863a60ead8cd75f538991.txt",
+      "sha256": "4ecc3e5550366bcc738b691c844d568a97d36d305b61eefe40a3dfeb8fe81e22",
+      "size": 54
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/editor-host/localappdata/Godot/resthumb-509e7c510c5bcf695f6717c78321dfea.png",
+      "sha256": "bbd1ff19bac55b941b0c00441099621180419d420e80eaf9ac83c2a913fb1d48",
+      "size": 755
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/editor-host/localappdata/Godot/resthumb-509e7c510c5bcf695f6717c78321dfea.txt",
+      "sha256": "1f94ca19731be3ea9c97d0cc98f1cd7d5ae03c03a7349a5a38f7d1fc4903c65f",
+      "size": 54
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/editor-host/localappdata/Godot/resthumb-50e63822a6ebb9c2160b2286282761ee.png",
+      "sha256": "f4f80b42111aa8d85a33f670f2753c6cda52fd0698e9868183ae652d9a4f6a6b",
+      "size": 831
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/editor-host/localappdata/Godot/resthumb-50e63822a6ebb9c2160b2286282761ee.txt",
+      "sha256": "4ed99430e346c3998251c79ef56d1218a2d305afa8b8cda78d48202a68adc996",
+      "size": 54
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/editor-host/localappdata/Godot/resthumb-bce72adee822fef9ca813c7371ac9040.png",
+      "sha256": "26623eb8019be5752051ca407aa87cff0989d8e38ce3ffb8fe2f9980bbc1386f",
+      "size": 852
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/editor-host/localappdata/Godot/resthumb-bce72adee822fef9ca813c7371ac9040.txt",
+      "sha256": "fab6df5465e01bed033ee27979d7ff6ed6782898d278917b3036bef86a16ef77",
+      "size": 54
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/editor-host/localappdata/Godot/resthumb-f1e4eab6412cccbe1fb2bc7b607dd72e.png",
+      "sha256": "74e4d6e17534aa3f5672f48238a56b5e660183a8dd5a919f27078d0952dcbe10",
+      "size": 929
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/editor-host/localappdata/Godot/resthumb-f1e4eab6412cccbe1fb2bc7b607dd72e.txt",
+      "sha256": "e0f383e808b6932d2d99cd9122fb074b3c2574010136313afea939fb0a201a4a",
+      "size": 54
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/editor-host/process-start.json",
+      "sha256": "ac523793570d2fff0243660ab0dbe27234699fa27688965ef87645d69d063317",
+      "size": 14
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/editor-host/stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/editor-host/stdout.txt",
+      "sha256": "87d4fb68c8e800bdeecb52d78dff37bafc6350718b15cc81b0857b56d376e523",
+      "size": 1304934
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/editor-snapshot.json",
+      "sha256": "3900afa5399c1896e3dc9ef1ca4affb48c408a1c188d8c938714e5dc1bf53edf",
+      "size": 1574
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/host-owner/cleanup-001.json",
+      "sha256": "31f58e29075f8f16bb2df0bb72471bfcd0df794b729d6497022554d84959cfc8",
+      "size": 548
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/host-owner/invocation.json",
+      "sha256": "866897bd8db7437616dd8072fca5a096ec669c3c6aa0934532bd71904e1507fa",
+      "size": 6819
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/host-owner/process-exit.json",
+      "sha256": "42f30ef413a241371a62c7e301628f89ddd2aaf9c72cf5e575d90cb94b101a71",
+      "size": 30
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/host-owner/process-start.json",
+      "sha256": "3c314808d29d85012be29f93f3f2e59f55f7abe2ccef898c7b70df27ed12ed4d",
+      "size": 14
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/host-owner/stderr.txt",
+      "sha256": "15947f9045919513b5c55367a986f5cdbb83c793030fff2b5efccbfdc6085f20",
+      "size": 2427
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/host-owner/stdout.txt",
+      "sha256": "8de2a97ea0da5cd6ed1807889c721bfd78bf3d4bc9daebcdd29a5b4d2339581b",
+      "size": 385609
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/http-phases-final.json",
+      "sha256": "9682da4d8b3afb34fe32c0e833002e7574cf9686552dc0a3f79e55c834f0b6eb",
+      "size": 4383407
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/import-host/appdata/Godot/editor_settings-4.7.tres",
+      "sha256": "9fe6ac898b64a3ece75a84c577e84a3c05e6e3c473abab0420db8bf0f523013b",
+      "size": 17991
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/import-host/capture.json",
+      "sha256": "9e4de4c8821a460f417d3aa87a6718b3bae4a8294d39409939eefd79803936fe",
+      "size": 1341
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/import-host/invocation.json",
+      "sha256": "1b39a15327c4166d24ba1c1245b458c08b6f64d95160313cc0c02bee7f084519",
+      "size": 6431
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/import-host/localappdata/Godot/editor_doc_cache-4.7.res",
+      "sha256": "27f588cbf4094308e7117b069b07a0da6c186e9f19fee2e83d6a1aafc456cc17",
+      "size": 3269733
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/import-host/process-exit.json",
+      "sha256": "246425955903491479e64fe423dfbb3ffa99ed5a69cf7b6992a89d57a685cd13",
+      "size": 30
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/import-host/process-start.json",
+      "sha256": "79e4f17ff132e92e464d3cf676519ab73f1fdccca66cf09626e682f9a4773625",
+      "size": 14
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/import-host/stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/import-host/stdout.txt",
+      "sha256": "9b5e37b85c8c4f11090de482aee3734b6c7993ad884a62121b2adcc9dfdd6003",
+      "size": 1492
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/import-observation.json",
+      "sha256": "f52281ea34d86995d0d75f691aa94c29659dc6f1138e2a65e7f07808eafa0b71",
+      "size": 20065
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/initial-project-files.json",
+      "sha256": "22daec5412f42e5eabb74b0dc3a8aa49801d77ef8977d6b7443e8cbfcbe43e2d",
+      "size": 1461
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/joint-00.json",
+      "sha256": "5b56602726a319fb9bf7adfb71166a0e94ceba729f58739de547c619e5786b3c",
+      "size": 2288
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/joint-01.json",
+      "sha256": "216da82719a5ed61c1340b9b521786165e2307d42f0b4adcb93f9f65f837961a",
+      "size": 2294
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/joint-02.json",
+      "sha256": "71e10f3e1643bf9d4c1a9ad3c916c877e934238ee0e0ba5178401f316d596d47",
+      "size": 2294
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/joint-03.json",
+      "sha256": "6f44f23a7bbf1bf93af89a92db35b7037f7d45285bd7354bddb85fa98c0c1b86",
+      "size": 2294
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/joint-04.json",
+      "sha256": "3f565290603cce0092ae82cabf612e4c477b42dc0601402192ee4df41784cb28",
+      "size": 2295
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/joint-05.json",
+      "sha256": "808cda6a484e025018ee4b395f5b21fd0638af251bc130b567857a19bb23ec33",
+      "size": 2295
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/joint-06.json",
+      "sha256": "568e6ef3e6f2d1a6a698dd805c30f60e81ead16e0b63ebad14f5468044d93e04",
+      "size": 2295
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/joint-07.json",
+      "sha256": "46ab5132e456e997f58438396ff6773922a3bf4f550f757ffe9806dc4dbfe806",
+      "size": 2297
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/joint-08.json",
+      "sha256": "e75e984dd798c0e0f70d62f3acf6c95e6b433ba597290305d2c51ca4c9a2f911",
+      "size": 2297
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/joint-09.json",
+      "sha256": "1c0f8d4173e5156838a8020863778d75d2e55ff0250f9595711ce8010305a650",
+      "size": 2302
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/joint-10.json",
+      "sha256": "c8e84adb37105c39f38641e5633d0991610398995dbd1eab937ef122c50c5f9e",
+      "size": 2305
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/joint-11.json",
+      "sha256": "4679085d57143e517b7acb94cc2eea414720c40b4bf5f7a2adfd0faad8f1066d",
+      "size": 2305
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/joint-12.json",
+      "sha256": "b92b8a9ec21b5029f7a5b8225f6297733c9008b7020d34f8576e7a29a2a0cb69",
+      "size": 2305
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/joint-13.json",
+      "sha256": "2e04ab8f2dfa157941153a472195771291c26015a45c282067e4dd142a323e4c",
+      "size": 2305
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/joint-14.json",
+      "sha256": "99daebbf23c2955ccb9341354c160a78e239d55482ba58c7658eeef5ea7ff765",
+      "size": 2305
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/joint-15.json",
+      "sha256": "97912f72e990d963a6fef28c3860171764e3cb976bb149563d18eb9ad2f89945",
+      "size": 2305
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/joint-16.json",
+      "sha256": "732867aad1bad60e68e581ef9cb0cea9ecfe866fdaaef7b3771715d37a12a177",
+      "size": 2305
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/joint-17.json",
+      "sha256": "e7c1d5eeb48ae43b2e418d2d5381e90f3c2d367d154644abeb39db8ac2746c9d",
+      "size": 2305
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/joint-18.json",
+      "sha256": "85cd9c7f89167d79a827f1bf52a1bea5ab2ba30f4ec67b8aa599c3d00fcd49da",
+      "size": 2304
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/joint-19.json",
+      "sha256": "7c453f9bc5b002d9a40d8a4b93017c305d1ebfae96fe6b6aacde955e655c6dd6",
+      "size": 2304
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/joint-20.json",
+      "sha256": "3f79f20bb9f41e4c04403100360ed4f6eeef128c7664ec51bddd6f22fe84101f",
+      "size": 2304
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/joint-21.json",
+      "sha256": "e26cf142c802d0be9e41f9c3809fb4bff714ab407ce6d370be13b1f97d1aaa68",
+      "size": 2304
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/parent-failure.json",
+      "sha256": "163faeea0bfdea032613de48c939d5e2255f3872e819281c6cad4649419db4e2",
+      "size": 181
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/.godot/.gdignore",
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+      "size": 1
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/.godot/editor/editor_layout.cfg",
+      "sha256": "70dc9392e0db5a0eb260d7e07ea9d4a7ded960dd5592f61470ce37c643328b9b",
+      "size": 1436
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/.godot/editor/filesystem_cache10",
+      "sha256": "115dc61a58625070e85a070796696115c84652f95365b7a07483d23bb63c63fd",
+      "size": 915
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/.godot/editor/filesystem_update4",
+      "sha256": "c70b0d9ece2ebc1d5f746284eb135e9a1b5a78b6324ee9dd1daa592ee7af2497",
+      "size": 26
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/.godot/editor/fixture.tscn-editstate-a95ffd352fa9c4b59083e0b523419988.cfg",
+      "sha256": "324eaafaca9233dac634abc0760b0e716534f2f9b88b0084af3835a0aa688acd",
+      "size": 4334
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/.godot/editor/fixture.tscn-folding-a95ffd352fa9c4b59083e0b523419988.cfg",
+      "sha256": "9b34a7fc95b0f9cd640941851bbb0ebc8777e0666f5560e828143047b26c7c93",
+      "size": 136
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/.godot/editor/project_metadata.cfg",
+      "sha256": "0817ad8476545d590bf74763cdb7a6e06d1e4227ade6a9050aabdf38ff86195b",
+      "size": 273
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/.godot/editor/script_editor_cache.cfg",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/.godot/global_script_class_cache.cfg",
+      "sha256": "f61aa7ad3097022d6a9d110ca3f73fa7bb348ec2cf9a6e7c9523574dc75f5a16",
+      "size": 8
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/.godot/scene_groups_cache.cfg",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/.godot/shader_cache/CanvasShaderGLES3/076cc7f5ca018594656711ce99da014402bbd19aa1eb794136d4aa1fc1916d27/6bb7c9a2fd1c4a8fa77cb96555b9b4a720209981.cache",
+      "sha256": "116751fcfc674701d75058d7858ddf00241391304b60acc00eff4870643422f1",
+      "size": 51577
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/.godot/shader_cache/CopyShaderGLES3/be890b216e2b3fe916307830870fee480049474f8a9590e668b7db55f4333ca0/6bb7c9a2fd1c4a8fa77cb96555b9b4a720209981.cache",
+      "sha256": "90437ff0cdabb9d0f98e37c08dd49536491356ac45c5f4e11e86d8c5f48cf3a9",
+      "size": 118055
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/.godot/shader_cache/CubemapFilterShaderGLES3/f2f060f7884cfc963ab277935a694190c41dc5319199dc60ed40febaeed22ca7/6bb7c9a2fd1c4a8fa77cb96555b9b4a720209981.cache",
+      "sha256": "50f94f78fa187ee5167837e9511fa3d90ed8378412b1db9f911a504118b21dd2",
+      "size": 26057
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/.godot/shader_cache/FeedShaderGLES3/d18a5be4b160faacb02638af5d95197a20d24a8ee2964a921fecdd0450ccfe03/6bb7c9a2fd1c4a8fa77cb96555b9b4a720209981.cache",
+      "sha256": "07bd99da5e6a4f9e75ed436ae726a713fe9bf794b805561a759ed47583c056b7",
+      "size": 8261
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/.godot/shader_cache/PostShaderGLES3/591ad1dc6444d48fbbe21612a2afd78e25aaf929315adddd90df3789fa6e5af1/6bb7c9a2fd1c4a8fa77cb96555b9b4a720209981.cache",
+      "sha256": "d4f4390e721858b137662501db85b3d13332a43962c6257e1ca8e42e98cc3e50",
+      "size": 13656
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/.godot/shader_cache/SceneShaderGLES3/ebd5ef628945fec79c8fb620654e1e6dfffb8249acd83a4803b1a534aadcbced/6bb7c9a2fd1c4a8fa77cb96555b9b4a720209981.cache",
+      "sha256": "4b2ffeea12ea18597780c60d910186e8f5f0d0993269573ff30203f3e8c52af6",
+      "size": 800909
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/.godot/shader_cache/SceneShaderGLES3/ebd5ef628945fec79c8fb620654e1e6dfffb8249acd83a4803b1a534aadcbced/77047cd41f429f33ceff24e890e174f5465e755e.cache",
+      "sha256": "608895fd5db2cc08208908319de2df898d5b5ddb92681c24ab943e5dc5ad8503",
+      "size": 920188
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/.godot/shader_cache/SceneShaderGLES3/ebd5ef628945fec79c8fb620654e1e6dfffb8249acd83a4803b1a534aadcbced/a38af2d0725c8e99d8492f4c72736f24d6a54cc5.cache",
+      "sha256": "dabc220423136a126940c3c72367f35e78c60de9f5797e2d925c23fbafb4acfb",
+      "size": 738963
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/.godot/shader_cache/SceneShaderGLES3/ebd5ef628945fec79c8fb620654e1e6dfffb8249acd83a4803b1a534aadcbced/cafb1506f2db0c3681435e264aa18e216d1a7a40.cache",
+      "sha256": "6f85ef8b8889c459fd87b592950285d118db37982927043d2f953475a076d22c",
+      "size": 729679
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/.godot/shader_cache/SkyShaderGLES3/c1a447880507cb68532c47caeeb2a80984019a797946a43cd3c056a918a45c98/2c82eb5fea9b549e20c9f41e308abf9a4fc5d76f.cache",
+      "sha256": "0399ae40ec9d0195c5ce92ed69dd357aa78f86546dc9081c99eed18755ac0bf0",
+      "size": 55632
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/.godot/uid_cache.bin",
+      "sha256": "5a09f44210cc375bb3bb0d2df67d570e766fd485097ca0920f678c435e11ec99",
+      "size": 283
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/addons/hh_benchmark/benchmark_native.gd",
+      "sha256": "13e65360cd0bc0033d0ad414fb3238e216b0d6dcc08e57dc7026ec4fc9eb8b95",
+      "size": 54580
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/addons/hh_benchmark/benchmark_native.gd.uid",
+      "sha256": "a3276526a45b0947965883d5c27469e09370a4591f9cee7ad868d23ba6dcde7a",
+      "size": 20
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/addons/hh_benchmark/plugin.cfg",
+      "sha256": "648d8821a36d0abc825ef1f380b4917639074302a619cb25a798df987a5a1092",
+      "size": 189
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/addons/hh_studio/jcs_godot.gd",
+      "sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5",
+      "size": 10165
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/addons/hh_studio/jcs_godot.gd.uid",
+      "sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b",
+      "size": 20
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/addons/hh_studio/plugin.cfg",
+      "sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c",
+      "size": 165
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/addons/hh_studio/plugin.gd",
+      "sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036",
+      "size": 23043
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/addons/hh_studio/plugin.gd.uid",
+      "sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d",
+      "size": 20
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/addons/hh_studio/scene_commands.gd",
+      "sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069",
+      "size": 32174
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/addons/hh_studio/scene_commands.gd.uid",
+      "sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69",
+      "size": 19
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/.gdignore",
+      "sha256": "3d078ee3c08af2f64daca29255d23d366dc0a9bdbef8a872442d5642bfb84cf8",
+      "size": 53
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/input/ack-00.json",
+      "sha256": "bfa8bb5347a0a1e0f2ef9cc39289dd3a2c66c8492ff3e1e585933475a689d354",
+      "size": 422
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/input/ack-01.json",
+      "sha256": "28573ddecb14a20b8c4a90f6eab570f340a4440ad2e0fb44803d5f4c583ee4ce",
+      "size": 422
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/input/ack-02.json",
+      "sha256": "7645f148cf14eb28a8ac10f7b278ba28c73f07abb1cbcfa6ea32854d436aedda",
+      "size": 422
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/input/ack-03.json",
+      "sha256": "132c414bc98d795445dabe8901066c91cdfb4bbd792a2a896b973da6b51cef06",
+      "size": 422
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/input/ack-04.json",
+      "sha256": "6a0df0aa91013cabdb9908cf5b649e3ef02c812ebdddd94f9eba63c4d57b46bd",
+      "size": 422
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/input/ack-05.json",
+      "sha256": "e7d3f5dce457f884c4a16b8f09a21fc4c1d1f1aba8d8860387ac7c1f1b00516b",
+      "size": 422
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/input/ack-06.json",
+      "sha256": "e585aa6f9701be20a147e6cc34f83d6f9107a558461ecd4059200b8f2bbcda65",
+      "size": 422
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/input/ack-07.json",
+      "sha256": "b53ac1be7d8a678f19f5023013b751ee630e62a67d681b5b245936d17e4c8d4f",
+      "size": 422
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/input/ack-08.json",
+      "sha256": "c33e9acd23d5e99cc4208c7633188b181902ee3e53cacefd64fa19895c5673f0",
+      "size": 422
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/input/ack-09.json",
+      "sha256": "4177c0a479f08ec88465b5a1555504fa1664e06ca888a84a9dca10044d793265",
+      "size": 423
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/input/ack-10.json",
+      "sha256": "910a60954d38d69729f140b69aaadd8273537761649e7fd0b00872fc265527bd",
+      "size": 424
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/input/ack-11.json",
+      "sha256": "31082c46951fa4a09f382f5c99082c0b65961af4028714053a8dfd7fb1b39078",
+      "size": 424
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/input/ack-12.json",
+      "sha256": "c83b8b0e4cf7f3582fdf88d84612b78a0970bff8fcf6117e95566b3ef8792ec5",
+      "size": 424
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/input/ack-13.json",
+      "sha256": "f3cd8448065bb0eed1faed709ddfa77140cbdcd0b2178b4a41046bf2bd3aeccf",
+      "size": 424
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/input/ack-14.json",
+      "sha256": "a9019882ea770c308613018a760285efa497a8b7a0e7ac8e49e2c5a87d9c0ff7",
+      "size": 424
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/input/ack-15.json",
+      "sha256": "47fcb552535c2ebc1b1e1e2ecc0d90d26ccda6169cd4b4cd48d13bf452f19067",
+      "size": 424
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/input/ack-16.json",
+      "sha256": "e00fc275b682e0655a61c0dc6c6e62ef0fe0deb7c78cd43fb282aaaa69b83d58",
+      "size": 424
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/input/ack-17.json",
+      "sha256": "9028ff65f49de760ffb883d925212f52aa4d3578209b7d92361bc50f09fad353",
+      "size": 424
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/input/ack-18.json",
+      "sha256": "0e1fdb8f8349a2de5ce8838d2c9fd4a297f7f5898630c40b8d6413d1e57b7846",
+      "size": 424
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/input/ack-19.json",
+      "sha256": "8909f76327b174266b069b280760cae710684ac83bd5bd00a396db25a12b3db6",
+      "size": 424
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/input/ack-20.json",
+      "sha256": "19ba022e0c61e2dcdfd8c8e1f671348f5d8522cf4b1bef521f3a71a0315f8ff8",
+      "size": 424
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/input/ack-21.json",
+      "sha256": "92fb1f54638356b8a4da1dbce073fd056ad5616bbc33bc87a774868817d54ff7",
+      "size": 424
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/input/start-00.json",
+      "sha256": "8b57856c59d602e5f401994ad769747cdef0da7a81fd6a06c26e9e562693c892",
+      "size": 507
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/input/start-01.json",
+      "sha256": "159b1b30810930a5f754d00c71256e9c7687b534f309fe5187bfe85e914a9b46",
+      "size": 507
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/input/start-02.json",
+      "sha256": "529f1a1e95f4ded2de076b693d4c9481504a37c379d1c4054197ed0bc77fd1ff",
+      "size": 507
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/input/start-03.json",
+      "sha256": "4798b088e0b19e9659439fa28f345baa64e0c6472789d1e2f9461e0861156b9f",
+      "size": 507
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/input/start-04.json",
+      "sha256": "22730ad7beda731972ca6d2f5fe23bcd0019ef6e550bdfb9ac741a7b8ba5e0c2",
+      "size": 507
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/input/start-05.json",
+      "sha256": "e86a44e79c7e6108b3b627506fe298fd4512bf68d03b7d51c9c204c52296d3fa",
+      "size": 508
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/input/start-06.json",
+      "sha256": "ed8a1ddd4e6b7bffbabb0522719464fdea7a865440110a9d22631b471e43e971",
+      "size": 508
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/input/start-07.json",
+      "sha256": "2de849e1a9e7ab72fcccf7891bb9f06fba2d675b960cfab21601607f05d99b06",
+      "size": 508
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/input/start-08.json",
+      "sha256": "eb495a352465015a0ed550aaffe078022733ad784f5cc6846f9a36044b986665",
+      "size": 508
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/input/start-09.json",
+      "sha256": "5cef03fd929b42ca1ffbd23c906ca7f74d9c33a462a2d46fc6c5377f64509ad5",
+      "size": 508
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/input/start-10.json",
+      "sha256": "2a29cec33d2cf1cda4eeef318ba273be8ab2d59a72260e826aa9cde73d5d8899",
+      "size": 509
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/input/start-11.json",
+      "sha256": "dec96d5a8579e57a7447f559676b081d5789dc68e1d8db16d02d69a60ac1ca9c",
+      "size": 509
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/input/start-12.json",
+      "sha256": "1e06c3c50c1ff2d3befdb5c41f1ebd82a9b0cdbb490cf943329970b97748ceb7",
+      "size": 509
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/input/start-13.json",
+      "sha256": "ebb4240a12264f138a27871a0c1ced6ef69010a968a13463e4983f667952cb8c",
+      "size": 509
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/input/start-14.json",
+      "sha256": "7b70926422949b37ac216d25d42d066b3cc156ab2baa94d8b9612fab7c789fb8",
+      "size": 509
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/input/start-15.json",
+      "sha256": "df8d306126696e758394b36a7ff2157578c84c96d23e072be7d6e3f9e19a6839",
+      "size": 509
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/input/start-16.json",
+      "sha256": "945ca4bdaac02eff443af44130e5e7160ed126666dc24ca6967185f07a882c79",
+      "size": 509
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/input/start-17.json",
+      "sha256": "0289ce6046d4792f7661ee57b6f0a4f36867d70a6a25d491bb6717c6d59bf425",
+      "size": 509
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/input/start-18.json",
+      "sha256": "226d311d5615c2a516eb7b7044285d7db54f77f3c351e239082f2ff1f03be860",
+      "size": 509
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/input/start-19.json",
+      "sha256": "a8e31ccdc2bc96896683696ddb772794ae086aecb30a61183cf0d62f0521b37f",
+      "size": 509
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/input/start-20.json",
+      "sha256": "de55b432260667930160ef9c10c37ac0ada6ab8cdbb032b1ee34cfec7a032f81",
+      "size": 509
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/input/start-21.json",
+      "sha256": "9918298dcd384974e5494ef3bebbfe2079ca36b15a933b45c23625dc005eb151",
+      "size": 509
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/input.json",
+      "sha256": "5afeebf0c6ac4df496c2d96ee6cce3d0ead960065e479c6dd36a0bdb0f6e43fd",
+      "size": 367
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/out/batch-00.json",
+      "sha256": "f5b9e1ee2594819799b926c4deb8ea8e4cebddc35c29c8c042aecdd8c79d3db3",
+      "size": 97101
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/out/batch-01.json",
+      "sha256": "82eb6dcf2cde82c2fa08eaa8580aefd26c72b1455f38e4adbe697a31427067bf",
+      "size": 98249
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/out/batch-02.json",
+      "sha256": "4990bb8f40b5102ab77e0e262e4070ffb9dd25ba26522e2b6bcaaa598c215eb4",
+      "size": 98260
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/out/batch-03.json",
+      "sha256": "6a9bbddf3ea44b98f44014a2990710e504d58c520b5fd3ebbf38787815a601e9",
+      "size": 98225
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/out/batch-04.json",
+      "sha256": "0acbe86dabd2bb2e69acb8ad8ae89a9ad24956b0a71c5b6b15f6332e0f7226ac",
+      "size": 98229
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/out/batch-05.json",
+      "sha256": "c8a17d1aff834add696de67d82e3f111c0c6eade95ad9a183118c2c834b7be4b",
+      "size": 98220
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/out/batch-06.json",
+      "sha256": "82cf6fe8dba0e8dec3a1d6353104719f829c7f0d9a88d77f71e16f51e2c0431f",
+      "size": 98234
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/out/batch-07.json",
+      "sha256": "edb45fcd5045c0136fe8abf15d0c1501cdd432e09b4ac15808e4761353f7ea38",
+      "size": 98303
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/out/batch-08.json",
+      "sha256": "3a442d657196d32962504761a1f855a2ddbc06d672ccd8332f4f9861f0366631",
+      "size": 98325
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/out/batch-09.json",
+      "sha256": "95d4c38fb43b0bf755e5ff13f7569978d6f48c76be0b01e82425eadc44bfdb0b",
+      "size": 99256
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/out/batch-10.json",
+      "sha256": "592fe94b6d4867cc0c6ab95231af64831360c06fe3734e072d5bf2f52c0226ae",
+      "size": 99498
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/out/batch-11.json",
+      "sha256": "94b6cbd7ee96c4ea4982f5f49edc768ae245410bfeaf0db83d0870a7929d6cbb",
+      "size": 99650
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/out/batch-12.json",
+      "sha256": "4790565532bf635df2c1ce3e5db255782557782ff2dd3c6928c707d0cb0d93dc",
+      "size": 99634
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/out/batch-13.json",
+      "sha256": "f1b21fa127b63c8d4dd69baa054ae95cd911cf0c508db30ec2593e328fa2efba",
+      "size": 99707
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/out/batch-14.json",
+      "sha256": "5a45cf57b7869a72be05777cde255b0d5a5dbeab138affbc7520b03dfadb54f6",
+      "size": 99667
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/out/batch-15.json",
+      "sha256": "f4351be197e6c71493e85264c4d01939df38446f2ae4b368dbf601d68b24913c",
+      "size": 99664
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/out/batch-16.json",
+      "sha256": "33926470bc3a6cd06bcedbb15808c63698b68359de55e491886577034f9e104b",
+      "size": 99679
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/out/batch-17.json",
+      "sha256": "5a06506273539183e7c5225ae9e54510c95c1a54b52d61f8d44ad08f2a165bc0",
+      "size": 99656
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/out/batch-18.json",
+      "sha256": "12ad6e0fdbb9eba1dbd4e6a04af4435f6da605e7b63e812d400f40cea0574ce4",
+      "size": 99665
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/out/batch-19.json",
+      "sha256": "44ab5e675561839f7a8e79e3249e6353eb3c0a2e96fefac6ec6ea58193ceb588",
+      "size": 99684
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/out/batch-20.json",
+      "sha256": "acdebf515f0474ca21555e1b327c2e57a7c5f0c52cae7682ed18ff15b94d4b65",
+      "size": 99691
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/out/batch-21.json",
+      "sha256": "298cbfc0c84cdd1ea2d6a920d077c0d541716606c6b3162ff4a0ed7983f92941",
+      "size": 99698
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/out/ready-00.json",
+      "sha256": "5444e45780dd0d998ace757ac81564c541e7e103fdffb8b6fee54498372a7b5f",
+      "size": 657
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/out/ready-01.json",
+      "sha256": "d179aa406cd0c701b3e151b10e765bae19d8a25425b294f39dc3df7ee3e6ce3a",
+      "size": 661
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/out/ready-02.json",
+      "sha256": "a5f60b20a9e52738d1684abb24aa29ff0b16f65d42e53a7bd5f75959ea139d90",
+      "size": 663
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/out/ready-03.json",
+      "sha256": "89977b821b21186cc6ccca6a1f76cf94b551a2cd131e1241ab13499e7b8d8839",
+      "size": 663
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/out/ready-04.json",
+      "sha256": "59af5686e9d133a78dae5aa5a4cd09244c8d3fa7fd8d0c25164133b00d9d9a0f",
+      "size": 663
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/out/ready-05.json",
+      "sha256": "dbb4f2ece4226816c72916f758a33bfe8ca11104566de4f91bbb10f78d9fa964",
+      "size": 664
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/out/ready-06.json",
+      "sha256": "8f3e13c95d4293367ae5c4fdd20a98ac91560fa8be9b26b2cc01572b35a06ffe",
+      "size": 664
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/out/ready-07.json",
+      "sha256": "e230ada03ddf3a9110e1ac3308af9ade1fd33d0530d3edab9a2c464295ffc024",
+      "size": 664
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/out/ready-08.json",
+      "sha256": "1bbdfc55e58b10782a39ebc9cf176af5e01b839c8b9ba69a754c7bd2bc3ce6eb",
+      "size": 665
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/out/ready-09.json",
+      "sha256": "ebaa92951b1cb7f84670863e37176452a9c49da47ea84a3ba43a6882a92f0292",
+      "size": 665
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/out/ready-10.json",
+      "sha256": "28e1fa02d5a0aa310996f626d4f0ad32f6da6ff43f9eeae9e5ce27921bb461e6",
+      "size": 668
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/out/ready-11.json",
+      "sha256": "27d053180c9bfaf5e8ef1a9b09a0ad6d4bddb3653c03daa76d317e009e61ca50",
+      "size": 669
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/out/ready-12.json",
+      "sha256": "e940e79647cfd573337d3e70b3d3c1475f180a4745f1084d80ac965d88f32d3d",
+      "size": 669
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/out/ready-13.json",
+      "sha256": "112a68f654c15644240777dbba6097c71defe36a90688aa6c80f9019c1fe9a6a",
+      "size": 669
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/out/ready-14.json",
+      "sha256": "ec2716b26a77c494cbd775059fa03beefad1a66dbbe11f4645fdce07bdb0bd80",
+      "size": 669
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/out/ready-15.json",
+      "sha256": "a54c6d1534c469b1686a6445739b279338f079c88f1d01ad2e24a48f51925afa",
+      "size": 669
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/out/ready-16.json",
+      "sha256": "ed08b8c9507518785c122bdaa39e3dbb853c4ec53a9f932ec27f1db918ccca13",
+      "size": 669
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/out/ready-17.json",
+      "sha256": "5328cda184d8b3960c408193301293e384cc340daff8e6f163772a098708ef6b",
+      "size": 669
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/out/ready-18.json",
+      "sha256": "8956828c4e4f27ab6f0e4e42ee79a709dafd049b219e57acaaf4af3a3ce3a02e",
+      "size": 669
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/out/ready-19.json",
+      "sha256": "414d1a1a1c799d46a590cdd029624c60a273e22951eb82d070d84db3cee95d66",
+      "size": 669
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/out/ready-20.json",
+      "sha256": "74a3724a9ef104f3002dd9ba64e3d88d18e7f7c8011a15a47d3348181635678b",
+      "size": 669
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/out/ready-21.json",
+      "sha256": "b85c3ca82d5dc1ab8f5011565e8010ce2d973901f562ba12a5ef583bd69e2011",
+      "size": 669
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/benchmark/out/ready-22.json",
+      "sha256": "d69f2112a79bbe7c305741b7805c65a0840ac73d5e5a661ffb065a8f96a82006",
+      "size": 669
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/project.godot",
+      "sha256": "819b521edff745f02f7c30e96ceffe21c70d8ef4fc32e95b96df37877e817ce1",
+      "size": 838
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/scenes/fixture.tscn",
+      "sha256": "d5d58f18b6dec1597720bd49346fec6399f87f9298ff09a4fce1285866d9f387",
+      "size": 295
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/scripts/fixture_actor.gd",
+      "sha256": "30116960b59778bee92698077689481f7936f41a2d722ddbe23626cbe3fc55cd",
+      "size": 50
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/project/scripts/fixture_actor.gd.uid",
+      "sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142",
+      "size": 20
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/sample-preview-00.json",
+      "sha256": "0317063e177b64f0fa449ce0004db79fcb246cee231dd10f390a8252026c28f4",
+      "size": 72790
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/sample-preview-01.json",
+      "sha256": "25068dd606bbd3dc299a6620cf4511fa958139f5796d798e710d3ac48eaf90f8",
+      "size": 72729
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/sample-preview-02.json",
+      "sha256": "b18290f3a7a070da78b452cb377910feecde668219c7aa866d7e3a9517fdbce2",
+      "size": 72743
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/sample-preview-03.json",
+      "sha256": "df281ec378840c79e0db1e99a4e063bb837ee566032d85bf97e835b5123d9481",
+      "size": 72744
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/sample-preview-04.json",
+      "sha256": "0b0efda3aecee27f08826177d0ab4872ae2cddc0bb766dc0d6d99861580ea97c",
+      "size": 72784
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/sample-preview-05.json",
+      "sha256": "dd39b8fb6ed6d527145c44028c293a546dec0198990b7396872ca78dab0282fa",
+      "size": 72868
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/sample-preview-06.json",
+      "sha256": "07e751bb17f3c5e6d44d9789a0ebead7237b552008d6e6ab367fa665e6e1a159",
+      "size": 73034
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/sample-preview-07.json",
+      "sha256": "cb0e5b329d283042f523116b84cd5b52965004f08cb24d4c4770310548ed218b",
+      "size": 73188
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/sample-preview-08.json",
+      "sha256": "5b6a0bf15e1d2a75274064e8727735db8ecf8a1fda628926bda88e78543baa9f",
+      "size": 73195
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/sample-preview-09.json",
+      "sha256": "c2e8f7cbc020a204252a2328d471960354d10e79e66ac483683b2271e2abcffc",
+      "size": 73225
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/sample-preview-10.json",
+      "sha256": "c3c83a6081560b6bbe721c2558a29f8135d8bd98914b4289b3d9422e2e63a832",
+      "size": 73235
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/sample-preview-11.json",
+      "sha256": "ab2794df41add5c36ecbe47abd0462952cbf38ad0016621d9bb6e48bb7610cd2",
+      "size": 73415
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/sample-preview-12.json",
+      "sha256": "d2ff0c18e6a81b05fb9f93edfad5564a081044dcb776c604628c374f9b64e613",
+      "size": 73400
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/sample-preview-13.json",
+      "sha256": "2de554c3c532454d8ededa2d7957ad70e85030f93fd0326c0d1fe08551157d35",
+      "size": 73505
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/sample-preview-14.json",
+      "sha256": "81621afc4f77a4fb937085aa570b0a4de1816a494448f9d79f3fddeeee436321",
+      "size": 73637
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/sample-preview-15.json",
+      "sha256": "939f4531ae9969f7c2fbfb3ed65d735c6feb0b01ac322917a823f734a0a6d061",
+      "size": 73585
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/sample-preview-16.json",
+      "sha256": "b8a578e18ca2be3010761269299ea08d02d3175700bd46698abb306dea12163b",
+      "size": 73613
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/sample-preview-17.json",
+      "sha256": "cc57a9cdb8dc45f621f0e64715b9aaaf851934230d0c78e87880ee1916415a3e",
+      "size": 73611
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/sample-preview-18.json",
+      "sha256": "85e8a87d1aeb0ae84b52e6d6d30b9097b5179b63120e3c1be802d429fe16dc70",
+      "size": 73610
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/sample-preview-19.json",
+      "sha256": "a8c9e341c47a6186ef7069a9fbaa5563b20641b8910c4f8100bf5fb0b4c5ff7a",
+      "size": 73607
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/sample-preview-20.json",
+      "sha256": "0c84bbc65fac91bf86dac1f1bdcd0b235ed317c7eb651979aa4a6118018465c5",
+      "size": 73625
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/sample-preview-21.json",
+      "sha256": "20115bb6de9a93fff15e41b6738c28647731b4ef07c58a0f256ca459e6555bf3",
+      "size": 73650
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/source/studio/blender-addon/ipc_client.py",
+      "sha256": "ee5d77e52dabb8b746e528be2acddc07b821f6b6724e9de9a36ec18b71cd8da9",
+      "size": 16349
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/source/studio/contracts/perf-collector.schema.json",
+      "sha256": "394d1df03bdfd736ea3fe9f260e9d718d35f3820cde35d1c45ccab65fbc24834",
+      "size": 30060
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/source/studio/godot-addon/addons/hh_studio/plugin.cfg",
+      "sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c",
+      "size": 165
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/source/studio/godot-addon/addons/hh_studio/plugin.gd",
+      "sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036",
+      "size": 23043
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/source/studio/godot-addon/addons/hh_studio/scene_commands.gd",
+      "sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069",
+      "size": 32174
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/source/studio/godot-addon/bundle_staging.py",
+      "sha256": "3d614edbec8e9a7f5ad3caf2b9694d7498df129de95683952268621f91d68e43",
+      "size": 15005
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/source/studio/godot-addon/bundle_v2.py",
+      "sha256": "2c5cdc71cdaf80f58bb93ec791e84bab8bd02cd4d9bdbd93d635db13583de62a",
+      "size": 8475
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/source/studio/godot-addon/cli_job.py",
+      "sha256": "82aa26afefe480c672aa4cb67d38d45f1ec48651252463314f535a1719c26ea0",
+      "size": 12998
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/source/studio/godot-addon/fixture_profile/addons/hh_studio/jcs_godot.gd.uid",
+      "sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b",
+      "size": 20
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/source/studio/godot-addon/fixture_profile/addons/hh_studio/plugin.gd.uid",
+      "sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d",
+      "size": 20
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/source/studio/godot-addon/fixture_profile/addons/hh_studio/scene_commands.gd.uid",
+      "sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69",
+      "size": 19
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/source/studio/godot-addon/fixture_profile/project.godot",
+      "sha256": "2d4fa9c7261fc5ec4292094854ffa79b602249671a03db3c9808ea7521f4fa51",
+      "size": 282
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/source/studio/godot-addon/fixture_profile/scripts/fixture_actor.gd.uid",
+      "sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142",
+      "size": 20
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/source/studio/godot-addon/fixture_profile/source-pins.json",
+      "sha256": "c0a40998bd63d4d3dc628e4b9d2e0932fcb5725d1870adc43d0fdc3af2fdeed2",
+      "size": 1873
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/source/studio/godot-addon/fixture_profile.py",
+      "sha256": "25e1667dd930dcf0746b071fc29ea3460bc18d5fb9f3f83e806c1793028f21ae",
+      "size": 6020
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/source/studio/host/blender/__init__.py",
+      "sha256": "812b123ddad075d7bb1892a38e099fdb48db147f80a27db83101c2b640044a90",
+      "size": 69
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/source/studio/host/blender/deadline.py",
+      "sha256": "55fb3f77cadd9edc633186e1d6727bbed06216d659846aa3836e2582eef46926",
+      "size": 1130
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/source/studio/host/blender/export_job.py",
+      "sha256": "8eb0cc4a93361faf8cf09a3f11fd0278ec3fcdb2c9863e4b2ee98852c67ecdfe",
+      "size": 13605
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/source/studio/host/blender/glb_preflight.py",
+      "sha256": "5e4015c77ee3dced056634f89a0ba1fe2f94dd6650250fac8b03317c12d54f62",
+      "size": 11815
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/source/studio/host/blender/ui_host.py",
+      "sha256": "0fa5afa44046b61b68baafc275b39ade4787a55221074018db588c4c2f71dc35",
+      "size": 22464
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/source/studio/host/core/journal.py",
+      "sha256": "826bc5e4c60817e3a22dd2e0b6a199eb522a4eb78532cb5300249fe9056c0cc6",
+      "size": 29602
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/source/studio/host/core/limits.py",
+      "sha256": "9d01ce56f5976bb034e60e33bf4b7986cdc44b3a8ffad46da738a6ed1b143f3f",
+      "size": 15813
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/source/studio/host/core/private_store.py",
+      "sha256": "c914b5a66a45660c782ecd43fd2321c238702340f3b33062e284feada4d46476",
+      "size": 20476
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/source/studio/host/core/redaction.py",
+      "sha256": "e37d998399f589d4202591a1262a7dc19231e5e4b5236b47d4c8234956275c1f",
+      "size": 10038
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/source/studio/host/core/safe_create.py",
+      "sha256": "681fb7c0f4e74d82597bd8049a6b42cde0ea73941d879ec8ef0ba4df326d0606",
+      "size": 13170
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/source/studio/host/core/safe_open.py",
+      "sha256": "efc083f1c4fa875d3f748602924a05712aa60fed3abcdb46d058672930201535",
+      "size": 12093
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/source/studio/host/core/transport.py",
+      "sha256": "ce431eb3035dde8fe7a65d26f2795d7f7861b652a77edc1348b00ccde9795a03",
+      "size": 52844
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/source/studio/host/replay/disk_journal_index.py",
+      "sha256": "56beb93119dfb66feec32eb51d389fc089d89911c0a1be199071c17e1801cb28",
+      "size": 13593
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/source/studio/host/replay/perf.py",
+      "sha256": "7c24c11989420e1600bcb20b8949fea44ea93b381bcab824e471465f5148edc7",
+      "size": 19085
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/source/studio/host/replay/process_probe.py",
+      "sha256": "53b6b24813e6ba6dc040dcbb87aee529b7f4e8855a64bcd0689b19c240180500",
+      "size": 5485
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/source/studio/host/replay/verified_journal.py",
+      "sha256": "b24e488642222bcff7242850da3f3b2e0d4de4473fa254ca1ff113cfdbdeb000",
+      "size": 10054
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/source/studio/pipeline/__init__.py",
+      "sha256": "ffea2c35acdfe30636d61970e16c573e4de68228c4f7e780a6061d7be3fbbc68",
+      "size": 79
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/source/studio/pipeline/native_job.py",
+      "sha256": "456bb70c315e38cf7a29354b7df51862e1ded4578f6b22d9110bf628547c20ca",
+      "size": 12512
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/source/studio/protocol/__init__.py",
+      "sha256": "a906ecde6f60d5fa2febd3f8a4a5fae440d87fea69e7d7e51a750677e03ad09f",
+      "size": 881
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/source/studio/protocol/_rfc8785/__init__.py",
+      "sha256": "49d914da77ba606d535832d97df2e43458a8e51d57cdba6883a0a895ac50484b",
+      "size": 505
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/source/studio/protocol/_rfc8785/_impl.py",
+      "sha256": "c25bc3a046528482d53bee3487b837f31dd9c05f33e8f13288c7aab320932cec",
+      "size": 7251
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/source/studio/protocol/core.py",
+      "sha256": "e8153f5a4dcf639f4d1cbce2fa74f7866d963a692c68e4e8d1477136889bd93e",
+      "size": 19886
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/source/studio/protocol/jcs_godot.gd",
+      "sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5",
+      "size": 10165
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/source/studio/tests/replay/benchmark_assembly.py",
+      "sha256": "19c684d72995327e65458422ab66384e4d586705cad31f3ab3fd8615934f2a22",
+      "size": 50798
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/source/studio/tests/replay/benchmark_commands.py",
+      "sha256": "ac1e57cac9e4a06c96f5b1638910d5e9f7576851770f716d03b7d4d52e413a68",
+      "size": 22204
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/source/studio/tests/replay/benchmark_http_phases.py",
+      "sha256": "f160b2d6725b25eef97119724b8ffb2e606fb448c70825aeed663c4aa7a31360",
+      "size": 17620
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/source/studio/tests/replay/benchmark_import_observer.py",
+      "sha256": "32a952ee0cc65325a65cddca24869584ca009b5d9d2e1c64ced22ad65b78adfb",
+      "size": 17324
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/source/studio/tests/replay/benchmark_job.py",
+      "sha256": "8e87d0328dacf67756640b6ee213dfb40c47f86e065dba57dbac0dbb6bbf7773",
+      "size": 26255
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/source/studio/tests/replay/benchmark_native.gd",
+      "sha256": "13e65360cd0bc0033d0ad414fb3238e216b0d6dcc08e57dc7026ec4fc9eb8b95",
+      "size": 54580
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/source/studio/tests/replay/benchmark_plugin.cfg",
+      "sha256": "648d8821a36d0abc825ef1f380b4917639074302a619cb25a798df987a5a1092",
+      "size": 189
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/source/studio/tests/replay/benchmark_profile.py",
+      "sha256": "ddbd98583060f791226fca83e275cf01204b37112627383198dcef4ec6f6f233",
+      "size": 19625
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/source/studio/tests/replay/benchmark_readiness.py",
+      "sha256": "842db6244d93384932929544045654f089d67f6f304624b7348b7d5c4583ab68",
+      "size": 6746
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/source/studio/tests/replay/benchmark_transport.py",
+      "sha256": "1fb178451bb22a0dd3e059333ff6e01c6fd5d324f04e47c1be64cb7212f26f2d",
+      "size": 4853
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/source/studio/tests/replay/campaign_task.ps1",
+      "sha256": "405e2abfa39332b1313871763184fdda0755ff998ec83310e67e10cebfe2ebb9",
+      "size": 18607
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/source/studio/tests/replay/run_benchmark_campaign.py",
+      "sha256": "2073fbbb9abb7a46c902a56ad251543932534519be07c844dca0858d2364dac6",
+      "size": 59120
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/source/studio/tests/replay/run_campaign_task.py",
+      "sha256": "f5cb71fa96b8fd2f935ac933dcd5190cef2b3b6821f031bfe72becb2d360a6fd",
+      "size": 8033
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/source/studio/tests/replay/run_native_benchmark.py",
+      "sha256": "e6b0f8e9711ac881cfa65b4537232c685ff577af0a13778a51cc54999b1c1fc7",
+      "size": 26986
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/source/studio/toolchain.lock.json",
+      "sha256": "28bdce555e9a44ef68193723d512feda02c42a417ceb78faf0b29f52d095dca9",
+      "size": 3026
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/source-files.json",
+      "sha256": "9ccaeaeaa501e34962d1ac957521c7465e7ea4db7c56825e48c10a437a7b1bb2",
+      "size": 5374
+    },
+    {
+      "member": "gt06-s181-formal-01/run-00-attempt-01/toolchain.lock.json",
+      "sha256": "28bdce555e9a44ef68193723d512feda02c42a417ceb78faf0b29f52d095dca9",
+      "size": 3026
+    },
+    {
+      "member": "gt06-s181-formal-01/source/studio/blender-addon/ipc_client.py",
+      "sha256": "ee5d77e52dabb8b746e528be2acddc07b821f6b6724e9de9a36ec18b71cd8da9",
+      "size": 16349
+    },
+    {
+      "member": "gt06-s181-formal-01/source/studio/contracts/perf-collector.schema.json",
+      "sha256": "394d1df03bdfd736ea3fe9f260e9d718d35f3820cde35d1c45ccab65fbc24834",
+      "size": 30060
+    },
+    {
+      "member": "gt06-s181-formal-01/source/studio/godot-addon/addons/hh_studio/plugin.cfg",
+      "sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c",
+      "size": 165
+    },
+    {
+      "member": "gt06-s181-formal-01/source/studio/godot-addon/addons/hh_studio/plugin.gd",
+      "sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036",
+      "size": 23043
+    },
+    {
+      "member": "gt06-s181-formal-01/source/studio/godot-addon/addons/hh_studio/scene_commands.gd",
+      "sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069",
+      "size": 32174
+    },
+    {
+      "member": "gt06-s181-formal-01/source/studio/godot-addon/bundle_staging.py",
+      "sha256": "3d614edbec8e9a7f5ad3caf2b9694d7498df129de95683952268621f91d68e43",
+      "size": 15005
+    },
+    {
+      "member": "gt06-s181-formal-01/source/studio/godot-addon/bundle_v2.py",
+      "sha256": "2c5cdc71cdaf80f58bb93ec791e84bab8bd02cd4d9bdbd93d635db13583de62a",
+      "size": 8475
+    },
+    {
+      "member": "gt06-s181-formal-01/source/studio/godot-addon/cli_job.py",
+      "sha256": "82aa26afefe480c672aa4cb67d38d45f1ec48651252463314f535a1719c26ea0",
+      "size": 12998
+    },
+    {
+      "member": "gt06-s181-formal-01/source/studio/godot-addon/fixture_profile/addons/hh_studio/jcs_godot.gd.uid",
+      "sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b",
+      "size": 20
+    },
+    {
+      "member": "gt06-s181-formal-01/source/studio/godot-addon/fixture_profile/addons/hh_studio/plugin.gd.uid",
+      "sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d",
+      "size": 20
+    },
+    {
+      "member": "gt06-s181-formal-01/source/studio/godot-addon/fixture_profile/addons/hh_studio/scene_commands.gd.uid",
+      "sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69",
+      "size": 19
+    },
+    {
+      "member": "gt06-s181-formal-01/source/studio/godot-addon/fixture_profile/project.godot",
+      "sha256": "2d4fa9c7261fc5ec4292094854ffa79b602249671a03db3c9808ea7521f4fa51",
+      "size": 282
+    },
+    {
+      "member": "gt06-s181-formal-01/source/studio/godot-addon/fixture_profile/scripts/fixture_actor.gd.uid",
+      "sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142",
+      "size": 20
+    },
+    {
+      "member": "gt06-s181-formal-01/source/studio/godot-addon/fixture_profile/source-pins.json",
+      "sha256": "c0a40998bd63d4d3dc628e4b9d2e0932fcb5725d1870adc43d0fdc3af2fdeed2",
+      "size": 1873
+    },
+    {
+      "member": "gt06-s181-formal-01/source/studio/godot-addon/fixture_profile.py",
+      "sha256": "25e1667dd930dcf0746b071fc29ea3460bc18d5fb9f3f83e806c1793028f21ae",
+      "size": 6020
+    },
+    {
+      "member": "gt06-s181-formal-01/source/studio/host/blender/__init__.py",
+      "sha256": "812b123ddad075d7bb1892a38e099fdb48db147f80a27db83101c2b640044a90",
+      "size": 69
+    },
+    {
+      "member": "gt06-s181-formal-01/source/studio/host/blender/deadline.py",
+      "sha256": "55fb3f77cadd9edc633186e1d6727bbed06216d659846aa3836e2582eef46926",
+      "size": 1130
+    },
+    {
+      "member": "gt06-s181-formal-01/source/studio/host/blender/export_job.py",
+      "sha256": "8eb0cc4a93361faf8cf09a3f11fd0278ec3fcdb2c9863e4b2ee98852c67ecdfe",
+      "size": 13605
+    },
+    {
+      "member": "gt06-s181-formal-01/source/studio/host/blender/glb_preflight.py",
+      "sha256": "5e4015c77ee3dced056634f89a0ba1fe2f94dd6650250fac8b03317c12d54f62",
+      "size": 11815
+    },
+    {
+      "member": "gt06-s181-formal-01/source/studio/host/blender/ui_host.py",
+      "sha256": "0fa5afa44046b61b68baafc275b39ade4787a55221074018db588c4c2f71dc35",
+      "size": 22464
+    },
+    {
+      "member": "gt06-s181-formal-01/source/studio/host/core/journal.py",
+      "sha256": "826bc5e4c60817e3a22dd2e0b6a199eb522a4eb78532cb5300249fe9056c0cc6",
+      "size": 29602
+    },
+    {
+      "member": "gt06-s181-formal-01/source/studio/host/core/limits.py",
+      "sha256": "9d01ce56f5976bb034e60e33bf4b7986cdc44b3a8ffad46da738a6ed1b143f3f",
+      "size": 15813
+    },
+    {
+      "member": "gt06-s181-formal-01/source/studio/host/core/private_store.py",
+      "sha256": "c914b5a66a45660c782ecd43fd2321c238702340f3b33062e284feada4d46476",
+      "size": 20476
+    },
+    {
+      "member": "gt06-s181-formal-01/source/studio/host/core/redaction.py",
+      "sha256": "e37d998399f589d4202591a1262a7dc19231e5e4b5236b47d4c8234956275c1f",
+      "size": 10038
+    },
+    {
+      "member": "gt06-s181-formal-01/source/studio/host/core/safe_create.py",
+      "sha256": "681fb7c0f4e74d82597bd8049a6b42cde0ea73941d879ec8ef0ba4df326d0606",
+      "size": 13170
+    },
+    {
+      "member": "gt06-s181-formal-01/source/studio/host/core/safe_open.py",
+      "sha256": "efc083f1c4fa875d3f748602924a05712aa60fed3abcdb46d058672930201535",
+      "size": 12093
+    },
+    {
+      "member": "gt06-s181-formal-01/source/studio/host/core/transport.py",
+      "sha256": "ce431eb3035dde8fe7a65d26f2795d7f7861b652a77edc1348b00ccde9795a03",
+      "size": 52844
+    },
+    {
+      "member": "gt06-s181-formal-01/source/studio/host/replay/disk_journal_index.py",
+      "sha256": "56beb93119dfb66feec32eb51d389fc089d89911c0a1be199071c17e1801cb28",
+      "size": 13593
+    },
+    {
+      "member": "gt06-s181-formal-01/source/studio/host/replay/perf.py",
+      "sha256": "7c24c11989420e1600bcb20b8949fea44ea93b381bcab824e471465f5148edc7",
+      "size": 19085
+    },
+    {
+      "member": "gt06-s181-formal-01/source/studio/host/replay/process_probe.py",
+      "sha256": "53b6b24813e6ba6dc040dcbb87aee529b7f4e8855a64bcd0689b19c240180500",
+      "size": 5485
+    },
+    {
+      "member": "gt06-s181-formal-01/source/studio/host/replay/verified_journal.py",
+      "sha256": "b24e488642222bcff7242850da3f3b2e0d4de4473fa254ca1ff113cfdbdeb000",
+      "size": 10054
+    },
+    {
+      "member": "gt06-s181-formal-01/source/studio/pipeline/__init__.py",
+      "sha256": "ffea2c35acdfe30636d61970e16c573e4de68228c4f7e780a6061d7be3fbbc68",
+      "size": 79
+    },
+    {
+      "member": "gt06-s181-formal-01/source/studio/pipeline/native_job.py",
+      "sha256": "456bb70c315e38cf7a29354b7df51862e1ded4578f6b22d9110bf628547c20ca",
+      "size": 12512
+    },
+    {
+      "member": "gt06-s181-formal-01/source/studio/protocol/__init__.py",
+      "sha256": "a906ecde6f60d5fa2febd3f8a4a5fae440d87fea69e7d7e51a750677e03ad09f",
+      "size": 881
+    },
+    {
+      "member": "gt06-s181-formal-01/source/studio/protocol/_rfc8785/__init__.py",
+      "sha256": "49d914da77ba606d535832d97df2e43458a8e51d57cdba6883a0a895ac50484b",
+      "size": 505
+    },
+    {
+      "member": "gt06-s181-formal-01/source/studio/protocol/_rfc8785/_impl.py",
+      "sha256": "c25bc3a046528482d53bee3487b837f31dd9c05f33e8f13288c7aab320932cec",
+      "size": 7251
+    },
+    {
+      "member": "gt06-s181-formal-01/source/studio/protocol/core.py",
+      "sha256": "e8153f5a4dcf639f4d1cbce2fa74f7866d963a692c68e4e8d1477136889bd93e",
+      "size": 19886
+    },
+    {
+      "member": "gt06-s181-formal-01/source/studio/protocol/jcs_godot.gd",
+      "sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5",
+      "size": 10165
+    },
+    {
+      "member": "gt06-s181-formal-01/source/studio/tests/replay/benchmark_assembly.py",
+      "sha256": "19c684d72995327e65458422ab66384e4d586705cad31f3ab3fd8615934f2a22",
+      "size": 50798
+    },
+    {
+      "member": "gt06-s181-formal-01/source/studio/tests/replay/benchmark_commands.py",
+      "sha256": "ac1e57cac9e4a06c96f5b1638910d5e9f7576851770f716d03b7d4d52e413a68",
+      "size": 22204
+    },
+    {
+      "member": "gt06-s181-formal-01/source/studio/tests/replay/benchmark_http_phases.py",
+      "sha256": "f160b2d6725b25eef97119724b8ffb2e606fb448c70825aeed663c4aa7a31360",
+      "size": 17620
+    },
+    {
+      "member": "gt06-s181-formal-01/source/studio/tests/replay/benchmark_import_observer.py",
+      "sha256": "32a952ee0cc65325a65cddca24869584ca009b5d9d2e1c64ced22ad65b78adfb",
+      "size": 17324
+    },
+    {
+      "member": "gt06-s181-formal-01/source/studio/tests/replay/benchmark_job.py",
+      "sha256": "8e87d0328dacf67756640b6ee213dfb40c47f86e065dba57dbac0dbb6bbf7773",
+      "size": 26255
+    },
+    {
+      "member": "gt06-s181-formal-01/source/studio/tests/replay/benchmark_native.gd",
+      "sha256": "13e65360cd0bc0033d0ad414fb3238e216b0d6dcc08e57dc7026ec4fc9eb8b95",
+      "size": 54580
+    },
+    {
+      "member": "gt06-s181-formal-01/source/studio/tests/replay/benchmark_plugin.cfg",
+      "sha256": "648d8821a36d0abc825ef1f380b4917639074302a619cb25a798df987a5a1092",
+      "size": 189
+    },
+    {
+      "member": "gt06-s181-formal-01/source/studio/tests/replay/benchmark_profile.py",
+      "sha256": "ddbd98583060f791226fca83e275cf01204b37112627383198dcef4ec6f6f233",
+      "size": 19625
+    },
+    {
+      "member": "gt06-s181-formal-01/source/studio/tests/replay/benchmark_readiness.py",
+      "sha256": "842db6244d93384932929544045654f089d67f6f304624b7348b7d5c4583ab68",
+      "size": 6746
+    },
+    {
+      "member": "gt06-s181-formal-01/source/studio/tests/replay/benchmark_transport.py",
+      "sha256": "1fb178451bb22a0dd3e059333ff6e01c6fd5d324f04e47c1be64cb7212f26f2d",
+      "size": 4853
+    },
+    {
+      "member": "gt06-s181-formal-01/source/studio/tests/replay/campaign_task.ps1",
+      "sha256": "405e2abfa39332b1313871763184fdda0755ff998ec83310e67e10cebfe2ebb9",
+      "size": 18607
+    },
+    {
+      "member": "gt06-s181-formal-01/source/studio/tests/replay/run_benchmark_campaign.py",
+      "sha256": "2073fbbb9abb7a46c902a56ad251543932534519be07c844dca0858d2364dac6",
+      "size": 59120
+    },
+    {
+      "member": "gt06-s181-formal-01/source/studio/tests/replay/run_campaign_task.py",
+      "sha256": "f5cb71fa96b8fd2f935ac933dcd5190cef2b3b6821f031bfe72becb2d360a6fd",
+      "size": 8033
+    },
+    {
+      "member": "gt06-s181-formal-01/source/studio/tests/replay/run_native_benchmark.py",
+      "sha256": "e6b0f8e9711ac881cfa65b4537232c685ff577af0a13778a51cc54999b1c1fc7",
+      "size": 26986
+    },
+    {
+      "member": "gt06-s181-formal-01/source/studio/toolchain.lock.json",
+      "sha256": "28bdce555e9a44ef68193723d512feda02c42a417ceb78faf0b29f52d095dca9",
+      "size": 3026
+    },
+    {
+      "member": "gt06-s181-formal-01-supervisor/claim",
+      "sha256": "a55ff796f4fb95def5b44d1599752d3ac9b1b5ecd3c1f840db980e6edda79b4c",
+      "size": 24
+    },
+    {
+      "member": "gt06-s181-formal-01-supervisor/failure.json",
+      "sha256": "374420879944eea47d635dc134d498db01d36d4527cbfcdb6d36a3a95f4f196f",
+      "size": 73
+    },
+    {
+      "member": "gt06-s181-formal-01-supervisor/request.json",
+      "sha256": "c4ce070284d07f5f95ffb01c9adb0a4c9fc314fbe7a346f4fc8552791fc7e93d",
+      "size": 390
+    },
+    {
+      "member": "gt06-s181-formal-01-supervisor/return.json",
+      "sha256": "7ae0ea926b5405cca121400bb4e99efdd2cc9ec18c2d0d03f8d1842b24953171",
+      "size": 198
+    },
+    {
+      "member": "gt06-s181-formal-01-supervisor/start.json",
+      "sha256": "6b6575da82ef0ce7dec212d73d490fba624082b7b3e87c7c4820a3dc2cb7cd3f",
+      "size": 500
+    },
+    {
+      "member": "gt06-s181-formal-01-supervisor/stderr.txt",
+      "sha256": "536af3cfd4c6a6e500e2458bcd1887c5eb429fe3d9dc19878aec250696c37f2c",
+      "size": 1651
+    },
+    {
+      "member": "gt06-s181-formal-01-supervisor/stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "member": "gt06-s181-formal-01-supervisor/task-definition.expected.xml",
+      "sha256": "0783217dbeb44a9f9adaa12dca0fb751bdbdc3483adf5c37490f93d5579f84f0",
+      "size": 2004
+    },
+    {
+      "member": "gt06-s181-formal-01-supervisor/task-definition.sha256",
+      "sha256": "82aa65eda644ce817919d7cc94bedfd819ca3009d4189e4f3a89761dd42b47de",
+      "size": 65
+    },
+    {
+      "member": "gt06-s181-formal-01-supervisor/task-definition.xml",
+      "sha256": "44dfdfab1671892114b91ae8413af72a03d0ce76d4389b87c295a5acc76c4262",
+      "size": 1657
+    },
+    {
+      "member": "gt06-s181-formal-01-supervisor/task-registration.json",
+      "sha256": "14dd2bc3ead3b81367545dff85c080c33f51582b5d7bc08e1b4d69e403e934b1",
+      "size": 916
+    },
+    {
+      "member": "gt06-s181-formal-01-supervisor/task-start.json",
+      "sha256": "a74c26cf3539bbc5806288b9d10a2662849d38037461af5e94805e55726a2e9c",
+      "size": 877
+    }
+  ],
+  "run_id": "gt06-s181-formal-01",
+  "selected_copies": [
+    {
+      "file": "receipts/child-terminal-cleanup.json",
+      "sha256": "413fb2be62675cc252cbf3f190daf155c40e82ca02ca658a4f64508233a12e4f",
+      "size": 3712,
+      "source_member": "gt06-s181-formal-01/run-00-attempt-01/child-terminal-cleanup.json"
+    },
+    {
+      "file": "receipts/parent-failure.json",
+      "sha256": "163faeea0bfdea032613de48c939d5e2255f3872e819281c6cad4649419db4e2",
+      "size": 181,
+      "source_member": "gt06-s181-formal-01/run-00-attempt-01/parent-failure.json"
+    },
+    {
+      "file": "receipts/benchmark-profile.json",
+      "sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+      "size": 718,
+      "source_member": "gt06-s181-formal-01/run-00-attempt-01/benchmark-profile.json"
+    },
+    {
+      "file": "receipts/host-owner/process-exit.json",
+      "sha256": "42f30ef413a241371a62c7e301628f89ddd2aaf9c72cf5e575d90cb94b101a71",
+      "size": 30,
+      "source_member": "gt06-s181-formal-01/run-00-attempt-01/host-owner/process-exit.json"
+    },
+    {
+      "file": "receipts/host-owner/cleanup-001.json",
+      "sha256": "31f58e29075f8f16bb2df0bb72471bfcd0df794b729d6497022554d84959cfc8",
+      "size": 548,
+      "source_member": "gt06-s181-formal-01/run-00-attempt-01/host-owner/cleanup-001.json"
+    },
+    {
+      "file": "receipts/editor-host/cleanup-001.json",
+      "sha256": "9ff26d2260e6188703654517521ac75e80f618c4e517723042f5f4babc109ee1",
+      "size": 556,
+      "source_member": "gt06-s181-formal-01/run-00-attempt-01/editor-host/cleanup-001.json"
+    },
+    {
+      "file": "receipts/import-host/process-exit.json",
+      "sha256": "246425955903491479e64fe423dfbb3ffa99ed5a69cf7b6992a89d57a685cd13",
+      "size": 30,
+      "source_member": "gt06-s181-formal-01/run-00-attempt-01/import-host/process-exit.json"
+    }
+  ],
+  "verified_members": 379
+}

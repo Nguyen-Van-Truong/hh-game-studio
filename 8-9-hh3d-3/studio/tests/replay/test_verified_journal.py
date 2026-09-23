@@ -1,6 +1,7 @@
 """The optional index cache must preserve the accepted journal boundaries."""
 from pathlib import Path
 import hashlib
+import io
 import os
 import json
 import subprocess
@@ -11,7 +12,7 @@ import unittest
 from unittest.mock import patch
 
 from studio.host.core.journal import Journal, JournalError, JournalLimits
-from studio.host.replay.verified_journal import VerifiedJournal
+from studio.host.replay.verified_journal import VerifiedJournal, _read_verified_bytes
 
 
 class VerifiedJournalTests(unittest.TestCase):
@@ -190,6 +191,60 @@ print('DONE',flush=True)
                 process.wait(timeout=max(.001, cleanup_deadline - time.monotonic()))
                 for stream in (process.stdin, process.stdout, process.stderr):
                     stream.close()
+
+
+class VerifiedStreamTests(unittest.TestCase):
+    def test_short_reads_cover_entire_history(self):
+        class ShortRead(io.BytesIO):
+            def readinto(self, target):
+                return super().readinto(target[:7])
+        raw = b'short read coverage' * 200
+        digest = hashlib.sha512()
+        self.assertEqual(_read_verified_bytes(ShortRead(raw), digest, len(raw)), len(raw))
+        self.assertEqual(digest.digest(), hashlib.sha512(raw).digest())
+
+    def test_overflow_never_reads_beyond_one_extra_byte(self):
+        stream = io.BytesIO(b'x' * 100)
+        with self.assertRaisesRegex(JournalError, 'JOURNAL_FULL'):
+            _read_verified_bytes(stream, hashlib.sha512(), 31)
+        self.assertEqual(stream.tell(), 32)
+
+    def test_empty_file_at_zero_cap(self):
+        self.assertEqual(_read_verified_bytes(io.BytesIO(), hashlib.sha512(), 0), 0)
+        with self.assertRaisesRegex(JournalError, 'JOURNAL_FULL'):
+            _read_verified_bytes(io.BytesIO(b'x'), hashlib.sha512(), 0)
+
+    def test_invalid_read_result_is_not_eof(self):
+        for value in (None, -1, True, 200):
+            with self.subTest(value=value):
+                class BadStream:
+                    def readinto(self, target):
+                        return value
+                with self.assertRaisesRegex(JournalError, 'JOURNAL_UNREADABLE'):
+                    _read_verified_bytes(BadStream(), hashlib.sha512(), 100)
+
+    def test_one_bounded_buffer_and_small_hash_updates(self):
+        class TrackedStream(io.BytesIO):
+            calls = 0
+            owners = set()
+            capacities = []
+            def readinto(self, target):
+                self.calls += 1
+                self.owners.add(id(target.obj))
+                self.capacities.append(len(target))
+                return super().readinto(target)
+        class Digest:
+            sizes = []
+            def update(self, value):
+                self.sizes.append(len(value))
+        raw = b'x' * (2 * 1_048_576 + 17)
+        stream, digest = TrackedStream(raw), Digest()
+        self.assertEqual(_read_verified_bytes(stream, digest, len(raw)), len(raw))
+        self.assertEqual(sum(digest.sizes), len(raw))
+        self.assertLessEqual(max(digest.sizes), 2047)
+        self.assertEqual(stream.calls, 4)  # Three data reads plus EOF.
+        self.assertEqual(len(stream.owners), 1)
+        self.assertLessEqual(max(stream.capacities), 1_048_576)
 
 
 if __name__ == '__main__':

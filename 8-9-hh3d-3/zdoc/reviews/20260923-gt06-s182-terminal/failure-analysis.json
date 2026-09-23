@@ -1,0 +1,302 @@
+{
+  "accepted_full_runs": 0,
+  "admission_to_last_response_ms": 5239.4411,
+  "audit_id": "gt06-s182-terminal-attribution-01",
+  "authority": 0,
+  "cleanup_errors": [],
+  "completed_batches": 22,
+  "conclusion": "Terminal journal work returned after last queued lookup; late durable COMMITTED is not an in-deadline ACK.",
+  "deadline_note": "5s terminal budget starts in _terminal, after admission; admission-to-response is not the budget",
+  "durable_rows": [
+    {
+      "checksum": "c82bd4f5c8ddc9a0d093ffc6e42f764302adb9fd093da1e022f96ac9413d9775",
+      "record": {
+        "command_id": "gt06-s181-formal-01.r00.a01.b22.admitted.172",
+        "created_ms": 1790169577149,
+        "digest": "sha256:233e9fde5820ef2dacf34e44296c0618e68fff1833c03f3b84d830847ba9f0c1",
+        "expires_ms": 1790255977149,
+        "kind": "command",
+        "project_id": "benchmark.commands",
+        "receipt": {
+          "code": "QUEUED",
+          "command_id": "gt06-s181-formal-01.r00.a01.b22.admitted.172",
+          "postconditions": {
+            "request_digest": "sha256:233e9fde5820ef2dacf34e44296c0618e68fff1833c03f3b84d830847ba9f0c1"
+          },
+          "result_hash": null,
+          "result_revision": null,
+          "status": "ACCEPTED_PENDING"
+        },
+        "status": "ACCEPTED_PENDING"
+      }
+    },
+    {
+      "checksum": "41ac4411816fb51fd55a8e91070e7f6bbc69800ac10beb5c698c350ecf7273da",
+      "record": {
+        "command_id": "gt06-s181-formal-01.r00.a01.b22.admitted.172",
+        "created_ms": 1790169577149,
+        "digest": "sha256:233e9fde5820ef2dacf34e44296c0618e68fff1833c03f3b84d830847ba9f0c1",
+        "expires_ms": 1790255977149,
+        "kind": "command",
+        "project_id": "benchmark.commands",
+        "receipt": {
+          "code": "READBACK_CONFIRMED",
+          "command_id": "gt06-s181-formal-01.r00.a01.b22.admitted.172",
+          "postconditions": {
+            "request_digest": "sha256:233e9fde5820ef2dacf34e44296c0618e68fff1833c03f3b84d830847ba9f0c1",
+            "snapshot": {
+              "effect_count": 4573,
+              "revision": "rev-4573",
+              "value": 4573
+            }
+          },
+          "result_hash": "sha256:b02e7743349b36b1c46236b0033ec5f3004aac43f0fd59940c680af28c8cf311",
+          "result_revision": "rev-4573",
+          "status": "COMMITTED"
+        },
+        "status": "COMMITTED"
+      }
+    }
+  ],
+  "editor_actual_exit": null,
+  "editor_helper_exit": 2,
+  "failed_command_id": "gt06-s181-formal-01.r00.a01.b22.admitted.172",
+  "failure_code": "TERMINAL_TIMEOUT",
+  "first_transport_failure_before_last_admission_ms": 3449274.5531,
+  "formal_acceptance": false,
+  "generated_utc": "2026-09-23T13:31:42.219588+00:00",
+  "host_actual_exit": {
+    "exit_code": 1,
+    "pid": 50716
+  },
+  "import_actual_exit": {
+    "exit_code": 0,
+    "pid": 34572
+  },
+  "inputs": {
+    "child-failure.json": "6d37403b9378746622773437795ae2360ae45c3077e640b661569bacd188ed9e",
+    "child-terminal-cleanup.json": "413fb2be62675cc252cbf3f190daf155c40e82ca02ca658a4f64508233a12e4f",
+    "commands/commands.jsonl": "723f36f7ab38c49dc85f4ec73c8e276a3099d2805d4521cddb739ef5f5adbc06",
+    "http-phases-final.json": "9682da4d8b3afb34fe32c0e833002e7574cf9686552dc0a3f79e55c834f0b6eb",
+    "source-files.json": "9ccaeaeaa501e34962d1ac957521c7465e7ea4db7c56825e48c10a437a7b1bb2"
+  },
+  "last_lookup_code": "QUEUED",
+  "last_lookup_status": "ACCEPTED_PENDING",
+  "lookup_attempts": 47,
+  "lookup_transport_failures": 0,
+  "lookup_window_ms": 4837.797,
+  "next_hypothesis": "Bounded Python-only differential: retained-history verifier with and without concurrent pending HTTP polling.",
+  "partial_command_count": 869,
+  "partial_max_status_gap_ms": 1856.9451,
+  "phase": {
+    "batch": 22,
+    "phase": "commands"
+  },
+  "phase_spans": [
+    {
+      "duration_ms": 2.3713,
+      "outcome": "returned",
+      "phase": "journal.guard_wait",
+      "root_id": 2544168,
+      "start_relative_ms": 2.0961,
+      "thread_id": 27084
+    },
+    {
+      "duration_ms": 42.6544,
+      "outcome": "returned",
+      "phase": "journal.snapshot",
+      "root_id": 2544168,
+      "start_relative_ms": 4.4988,
+      "thread_id": 27084
+    },
+    {
+      "duration_ms": 42.7037,
+      "outcome": "returned",
+      "phase": "journal.reload",
+      "root_id": 2544168,
+      "start_relative_ms": 4.4916,
+      "thread_id": 27084
+    },
+    {
+      "duration_ms": 42.9523,
+      "outcome": "raised",
+      "phase": "journal.guard_held",
+      "root_id": 2544168,
+      "start_relative_ms": 4.484,
+      "thread_id": 27084
+    },
+    {
+      "duration_ms": 2.6314,
+      "outcome": "returned",
+      "phase": "journal.guard_wait",
+      "root_id": 2544168,
+      "start_relative_ms": 48.0157,
+      "thread_id": 27084
+    },
+    {
+      "duration_ms": 41.5147,
+      "outcome": "returned",
+      "phase": "journal.snapshot",
+      "root_id": 2544168,
+      "start_relative_ms": 50.6843,
+      "thread_id": 27084
+    },
+    {
+      "duration_ms": 41.5425,
+      "outcome": "returned",
+      "phase": "journal.reload",
+      "root_id": 2544168,
+      "start_relative_ms": 50.6782,
+      "thread_id": 27084
+    },
+    {
+      "duration_ms": 41.6086,
+      "outcome": "returned",
+      "phase": "journal.guard_held",
+      "root_id": 2544168,
+      "start_relative_ms": 50.6681,
+      "thread_id": 27084
+    },
+    {
+      "duration_ms": 2.1749,
+      "outcome": "returned",
+      "phase": "journal.guard_wait",
+      "root_id": 2544168,
+      "start_relative_ms": 92.5668,
+      "thread_id": 27084
+    },
+    {
+      "duration_ms": 42.7452,
+      "outcome": "returned",
+      "phase": "journal.snapshot",
+      "root_id": 2544168,
+      "start_relative_ms": 94.7679,
+      "thread_id": 27084
+    },
+    {
+      "duration_ms": 42.7728,
+      "outcome": "returned",
+      "phase": "journal.reload",
+      "root_id": 2544168,
+      "start_relative_ms": 94.7621,
+      "thread_id": 27084
+    },
+    {
+      "duration_ms": 182.4053,
+      "outcome": "returned",
+      "phase": "journal.append",
+      "root_id": 2544168,
+      "start_relative_ms": 137.6844,
+      "thread_id": 27084
+    },
+    {
+      "duration_ms": 225.4769,
+      "outcome": "returned",
+      "phase": "journal.guard_held",
+      "root_id": 2544168,
+      "start_relative_ms": 94.7548,
+      "thread_id": 27084
+    },
+    {
+      "duration_ms": 18.6482,
+      "outcome": "returned",
+      "phase": "journal.guard_wait",
+      "root_id": 2544187,
+      "start_relative_ms": 322.7345,
+      "thread_id": 50380
+    },
+    {
+      "duration_ms": 1410.9245,
+      "outcome": "returned",
+      "phase": "journal.snapshot",
+      "root_id": 2544189,
+      "start_relative_ms": 341.438,
+      "thread_id": 50380
+    },
+    {
+      "duration_ms": 1410.9749,
+      "outcome": "returned",
+      "phase": "journal.reload",
+      "root_id": 2544189,
+      "start_relative_ms": 341.4267,
+      "thread_id": 50380
+    },
+    {
+      "duration_ms": 1411.0964,
+      "outcome": "returned",
+      "phase": "journal.guard_held",
+      "root_id": 2544189,
+      "start_relative_ms": 341.4112,
+      "thread_id": 50380
+    },
+    {
+      "duration_ms": 97.7323,
+      "outcome": "returned",
+      "phase": "journal.guard_wait",
+      "root_id": 2544432,
+      "start_relative_ms": 1770.4915,
+      "thread_id": 50380
+    },
+    {
+      "duration_ms": 1281.4652,
+      "outcome": "returned",
+      "phase": "journal.snapshot",
+      "root_id": 2544432,
+      "start_relative_ms": 1868.2803,
+      "thread_id": 50380
+    },
+    {
+      "duration_ms": 1281.5213,
+      "outcome": "returned",
+      "phase": "journal.reload",
+      "root_id": 2544432,
+      "start_relative_ms": 1868.2688,
+      "thread_id": 50380
+    },
+    {
+      "duration_ms": 2292.94,
+      "outcome": "returned",
+      "phase": "journal.append",
+      "root_id": 2544432,
+      "start_relative_ms": 3152.5822,
+      "thread_id": 50380
+    },
+    {
+      "duration_ms": 3577.4298,
+      "outcome": "returned",
+      "phase": "journal.guard_held",
+      "root_id": 2544432,
+      "start_relative_ms": 1868.2537,
+      "thread_id": 50380
+    },
+    {
+      "duration_ms": 3678.1853,
+      "outcome": "returned",
+      "phase": "host.finish",
+      "root_id": 2544432,
+      "start_relative_ms": 1767.5247,
+      "thread_id": 50380
+    }
+  ],
+  "run_id": "gt06-s181-formal-01",
+  "source_drift": [],
+  "source_pins_checked": 53,
+  "supervisor_actual_exit": null,
+  "total_transport_failures": 1,
+  "transport_failures_by_route": {
+    "archive": 0,
+    "cancel": 0,
+    "commands": 0,
+    "discovery": 0,
+    "lease": 0,
+    "lookup": 1,
+    "other": 0,
+    "stop": 0
+  },
+  "unproven": [
+    "Cause of long snapshot/append wall time",
+    "CPU scheduling versus I/O wait",
+    "Leak or handle ownership",
+    "Full GT06 acceptance"
+  ]
+}

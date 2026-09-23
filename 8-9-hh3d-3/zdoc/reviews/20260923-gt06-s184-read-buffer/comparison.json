@@ -1,0 +1,76 @@
+{
+  "authority": 0,
+  "formal_acceptance": false,
+  "engine_started": false,
+  "source_changed_during_comparison": false,
+  "input_history_sha256": "723f36f7ab38c49dc85f4ec73c8e276a3099d2805d4521cddb739ef5f5adbc06",
+  "results": [
+    {
+      "variant": "stock-before",
+      "medians_ms": {
+        "None": 44.0698,
+        "0.001": 65.43975,
+        "0.01": 53.878
+      },
+      "sha256": "cb94c0fa267822c70dd34e6df22e2c4bc84e63b615f78ff8d06861e7a8562045"
+    },
+    {
+      "variant": "buffer-256k",
+      "medians_ms": {
+        "None": 70.37315,
+        "0.001": 87.70775,
+        "0.01": 68.85849999999999
+      },
+      "sha256": "eed059f9b790a277de371eae3407df536b289df5f8dbd39eb87665840f54a4b5"
+    },
+    {
+      "variant": "buffer-1m",
+      "medians_ms": {
+        "None": 42.274100000000004,
+        "0.001": 47.6008,
+        "0.01": 45.769549999999995
+      },
+      "sha256": "fe9cb698dc529e991b9d216732a6e74f37d67c1da50a4ae1a10b97fc062fe073"
+    },
+    {
+      "variant": "stock-after",
+      "medians_ms": {
+        "None": 42.883449999999996,
+        "0.001": 60.99655,
+        "0.01": 47.78905
+      },
+      "sha256": "d40bb5ceae4ca5b198da672d16bab85473c27964d8eef9b8f6cb73eb2118822c"
+    }
+  ],
+  "exits": [
+    {
+      "label": "stock-before",
+      "buffer_bytes": 0,
+      "pid": 53060,
+      "actual_exit": 0,
+      "timeout": false
+    },
+    {
+      "label": "buffer-256k",
+      "buffer_bytes": 262144,
+      "pid": 5312,
+      "actual_exit": 0,
+      "timeout": false
+    },
+    {
+      "label": "buffer-1m",
+      "buffer_bytes": 1048576,
+      "pid": 10520,
+      "actual_exit": 0,
+      "timeout": false
+    },
+    {
+      "label": "stock-after",
+      "buffer_bytes": 0,
+      "pid": 32756,
+      "actual_exit": 0,
+      "timeout": false
+    }
+  ],
+  "decision": "Select 1MiB reusable scratch as performance candidate; each snapshot allocates/releases it, no persistent buffer or baseline padding. 256KiB variant rejected on observed slower timings. No S181 root-cause or formal memory acceptance claim."
+}

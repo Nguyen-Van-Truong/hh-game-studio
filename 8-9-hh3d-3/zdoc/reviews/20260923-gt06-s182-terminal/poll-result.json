@@ -1,0 +1,138 @@
+{
+  "authority": 0,
+  "copy_unchanged": true,
+  "engine_started": false,
+  "formal_acceptance": false,
+  "host_threads_alive_after_close": [
+    false,
+    false,
+    false
+  ],
+  "journal_closed": true,
+  "rows": [
+    {
+      "poll_failures": [],
+      "poll_sleep_seconds": null,
+      "polls": 0,
+      "samples": [
+        {
+          "thread_cpu_ms": 46.875,
+          "wall_ms": 44.408
+        },
+        {
+          "thread_cpu_ms": 46.875,
+          "wall_ms": 42.4592
+        },
+        {
+          "thread_cpu_ms": 46.875,
+          "wall_ms": 43.5458
+        }
+      ],
+      "worker_alive_after_join": false
+    },
+    {
+      "poll_failures": [],
+      "poll_sleep_seconds": 0.001,
+      "polls": 41,
+      "samples": [
+        {
+          "thread_cpu_ms": 46.875,
+          "wall_ms": 62.9856
+        },
+        {
+          "thread_cpu_ms": 31.25,
+          "wall_ms": 59.2966
+        },
+        {
+          "thread_cpu_ms": 46.875,
+          "wall_ms": 57.6455
+        }
+      ],
+      "worker_alive_after_join": false
+    },
+    {
+      "poll_failures": [],
+      "poll_sleep_seconds": 0.01,
+      "polls": 12,
+      "samples": [
+        {
+          "thread_cpu_ms": 46.875,
+          "wall_ms": 49.2181
+        },
+        {
+          "thread_cpu_ms": 46.875,
+          "wall_ms": 52.1023
+        },
+        {
+          "thread_cpu_ms": 46.875,
+          "wall_ms": 48.6709
+        }
+      ],
+      "worker_alive_after_join": false
+    },
+    {
+      "poll_failures": [],
+      "poll_sleep_seconds": 0.01,
+      "polls": 11,
+      "samples": [
+        {
+          "thread_cpu_ms": 46.875,
+          "wall_ms": 48.8243
+        },
+        {
+          "thread_cpu_ms": 46.875,
+          "wall_ms": 49.0095
+        },
+        {
+          "thread_cpu_ms": 46.875,
+          "wall_ms": 46.4139
+        }
+      ],
+      "worker_alive_after_join": false
+    },
+    {
+      "poll_failures": [],
+      "poll_sleep_seconds": 0.001,
+      "polls": 47,
+      "samples": [
+        {
+          "thread_cpu_ms": 46.875,
+          "wall_ms": 67.4285
+        },
+        {
+          "thread_cpu_ms": 46.875,
+          "wall_ms": 62.0178
+        },
+        {
+          "thread_cpu_ms": 62.5,
+          "wall_ms": 63.1989
+        }
+      ],
+      "worker_alive_after_join": false
+    },
+    {
+      "poll_failures": [],
+      "poll_sleep_seconds": null,
+      "polls": 0,
+      "samples": [
+        {
+          "thread_cpu_ms": 46.875,
+          "wall_ms": 48.2115
+        },
+        {
+          "thread_cpu_ms": 46.875,
+          "wall_ms": 47.1275
+        },
+        {
+          "thread_cpu_ms": 62.5,
+          "wall_ms": 49.9815
+        }
+      ],
+      "worker_alive_after_join": false
+    }
+  ],
+  "run_id": "gt06-s182-poll-contention-01",
+  "source_sha256": "723f36f7ab38c49dc85f4ec73c8e276a3099d2805d4521cddb739ef5f5adbc06",
+  "source_unchanged": true,
+  "synthetic_pending_response": true
+}

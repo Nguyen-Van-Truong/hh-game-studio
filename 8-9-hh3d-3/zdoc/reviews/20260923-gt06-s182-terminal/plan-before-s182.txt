@@ -1,49 +1,35 @@
 HH STUDIO — PLAN 1/3: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 23-09-2026, Asia/Saigon | Revision S184 | TRIỂN KHAI THEO GATE
+Ngày 23-09-2026, Asia/Saigon | Revision S181 | TRIỂN KHAI THEO GATE
 
-HIỆN HÀNH S184 — ỨNG VIÊN GIẢM CHI PHÍ ĐỌC JOURNAL; 97 REGRESSION ĐẠT, CHƯA FORMAL PASS
+HIỆN HÀNH S181 — FORMAL GT06 ĐANG CHẠY THEO GATE ĐÓNG BĂNG; CHƯA NGHIỆM THU
 CURRENT_VALID_WP=GT-06
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S184
+PLAN_REVISION=S181
 EXECUTION_AUTHORIZATION=OWNER_APPROVED_GATED
 EXECUTION_MODE=COORDINATOR_CONTINUES_AFTER_WORKER_CAPACITY_AND_REVOKED_REFRESH_TOKEN
-GOAL_STATE=ACTIVE; INDEPENDENT_CONSUMER_PILOT_AUTHORIZED; NO_GAME_PLAN_OPENED; GT06_LANE_ACTIVE_TERMINAL_ANALYSIS_AND_BOUNDED_DIAGNOSTIC
+GOAL_STATE=ACTIVE; INDEPENDENT_CONSUMER_PILOT_AUTHORIZED; NO_GAME_PLAN_OPENED; GT06_LANE_ACTIVE_FORMAL_ELIGIBLE_WITH_FROZEN_GATE
 OVERALL_PLAN_STATUS=INCOMPLETE; GT01_GT05_ACCEPTED; GT06_IN_PROGRESS; GT07_GT10_PLANNED_UNOPENED
 CONSUMER_PILOT_STATUS=REVALIDATED_PROVISIONAL_AUTHORITY0; NOT_GT06_ACCEPTANCE; NOT_COMPLETE_GAME_CLAIM
 GT06_STATUS=IN_PROGRESS; ZERO_ACCEPTED_FULL_RUNS; HISTORICAL_ACCEPTANCE_GT01_GT05_UNCHANGED
 GT06_GATE_POLICY=10_FRESH_PAIRS_X_35_BATCHES_5_WARMUP_30_MEASURED; FULL_DATASET_HASH_ACTUAL_EXITS_TREES_JOBS_HANDLES_AND_TWO_NEW_SAME_HASH_CRITICS
 GT06_ATTRIBUTION_POLICY=DIAGNOSTIC_ONLY_UNLESS_OWNER_ADR_ADDS_ACCEPTANCE_REQUIREMENT; UNKNOWN_IS_NOT_LEAK_ROOT_CAUSE_OR_PASS
 HISTORICAL_PREP_CLARIFICATION=S175_GT07_GT10_READONLY_PREP_AND_GAP_INVENTORY_PLAN_HASH_743EA5_IS_STALE; ANY_WORDING_REQUESTING_ATTRIBUTION_AUTHORITY_DOES_NOT_OVERRIDE_THIS_LIVE_DIAGNOSTIC_ONLY_POLICY; PACKAGES_REMAIN_AUTHORITY0_PREPARATION_ONLY_AND_RAW_IMMUTABLE
-GT06_CURRENT_DIAGNOSTIC=S184_READ_BUFFER_COMPARISON_COMPLETE_CANDIDATE_INSTALLED; S183_RETAINED_HISTORY_HTTP_TERMINAL_EXIT0; S181_FORMAL_FAILED_BATCH22_COMMANDS; S182_TERMINAL_SEALED_AND_POLL_DIFFERENTIAL_COMPLETE; ALL_PRIOR_FAILURES_RETAINED
-GT06_NEXT_ACTION=FREEZE_S184_CANDIDATE_AND_VALIDATE_FRESH_FORMAL_WITH_ORIGINAL_GATES; KEEP_HISTORICAL_PARTIALS_EXCLUDED; NO_BLIND_FORMAL_RETRY; ATTRIBUTION_REMAINS_DIAGNOSTIC_ONLY; KEEP_GATE_TIMEOUT_BASELINE_PROFILE_RSS_UNCHANGED
+GT06_CURRENT_DIAGNOSTIC=S181_FORMAL_ACTIVE; S180_WPR_CAPABILITY_PREFLIGHT_TERMINAL; S179_CHILD_HTRACE_TERMINAL; S153_S156_FAILURES_AND_S169_S178_BOUNDARIES_RETAINED
+GT06_NEXT_ACTION=RUN_FROZEN_FORMAL_GATE_OR_REPAIR_PROVEN_SOURCE_BOUNDARY; ATTRIBUTION_IS_DIAGNOSTIC_ONLY_AND_DOES_NOT_BLOCK_FORMAL; NO_UNCHANGED_DEBUGGER_RETRY; KEEP_GATE_TIMEOUT_BASELINE_PROFILE_RSS_AND_SOURCE_FROZEN
 S180_WPR_PREFLIGHT=zdoc/reviews/20260923-gt06-s180-wpr-capability; RUN_ID=gt06-s180-wpr-capability-01; COMMAND_ID=cmd.gt06.s180.wpr-capability.1; MANIFEST_SHA256=e492473cb3da1040a3b5a6218c9730fe877ee81a9552442eaa5904f6398ab65e; WPR_HANDLE_PROFILE_PRESENT_BUT_CREATOR_STACK_BINDING_UNPROVEN; APPVERIF_PROBE_BLOCKED_BY_ELEVATION_IN_SESSION; ENGINE_STARTED=false; AUTHORITY=0
 S180_DECISION=NO_ENGINE_RUN; NO_S181_SAME_OR_UNSUPPORTED_HYPOTHESIS; FORMAL_GT06_IS_ELIGIBLE_WITH_FROZEN_GATE; NO_GATE_TIMEOUT_BASELINE_PROFILE_PRIORITY_RAM_OR_RSS_CHANGE; DEBUGGER_ATTRIBUTION_REMAINS_DIAGNOSTIC_ONLY
-GT06_SOURCE_POLICY=S184_SINGLE_DEPENDENCY_CANDIDATE; PROFILE_TIMEOUT_BASELINE_COUNTER_RSS_GATES_UNCHANGED; FREEZE_NEW_SOURCE_BEFORE_RUN; NO_PRIORITY_RAM_OR_OTHER_APP_INTERVENTION
-GT06_CURRENT_SOURCE_CLOSURE=fc46cfd2e80e8d78024b6a31c6c72be64f33d83aab4fe1abebaf899907f0e205
-GT06_BENCHMARK53_CLOSURE=fc46cfd2e80e8d78024b6a31c6c72be64f33d83aab4fe1abebaf899907f0e205
-GT06_EXECUTION217_CLOSURE=493a7ccce3e42993399910b0fe977f25448f411b863e4cca7b57904348ac374e
+GT06_SOURCE_POLICY=FROZEN_SOURCE_PROFILE_TIMEOUT_BASELINE_COUNTER_RSS_GATES_UNCHANGED; NO_PRIORITY_RAM_OR_OTHER_APP_INTERVENTION
+GT06_CURRENT_SOURCE_CLOSURE=fce149cd3a62e102aaba225794b9a5078cd84d7647cb359f6bbcacb8895ddcde
+GT06_BENCHMARK53_CLOSURE=763191109cd7c7f63de499680291c6b99d77a501dad869078e6d77384ecb20b4
+GT06_EXECUTION217_CLOSURE=78ffef60682f596313aac8aca69a06e0a23808c546202effdebc481bdb845b58
 GT06_PROFILE_SHA256=0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85
 COUNTER_PROPOSAL=PLUS64_PLUS4_PLUS8_AND_2X35_NOT_APPROVED; SHORT_RUNS_DIAGNOSTIC_ONLY; ADR_AND_VERIFIER_REVIEW_BEFORE_ANY_ACCEPTANCE_CHANGE
 PREFLIGHT_POLICY=BINARY_VERSION_PATH_HASH_SYMBOL_DEVICE_MEMORY_AND_REPRO_CAPABILITY_BEFORE_NEW_DIAGNOSTIC; RECORD_ONCE_WHEN_UNCHANGED
 WORKER_POLICY=BOUNDED_ATTEMPTS; NO_MODEL_FALLBACK_OR_INFINITE_RETRY; CURRENT_REFRESH_TOKEN_REVOKED; COORDINATOR_HAS_USEFUL_WORK
 ACTIVE_QUEUE_POLICY=GT06_FORMAL_OR_SOURCE_REPAIR_FIRST; WHILE_FORMAL_IS_RUNNING_PREPARE_CAPABILITY_CATALOG_AND_GT07_GT10_READONLY_MATERIAL; A_DEBUGGER_BLOCKER_STOPS_ONLY_ATTRIBUTION_DIAGNOSTIC; NEVER_STOP_OVERALL_GOAL_WHILE_A_VALID_FROZEN-GATE_LANE_OR_INDEPENDENT_STATIC_LANE_REMAINS
 FORMAL_DISPATCH_RULE=USE_FRESH_CAMPAIGN_ID_ONLY; VERIFY_SOURCE_PROFILE_WORKSTATION_AND_STOP_LATCH_BEFORE_START; PRESERVE_RAW_ON_FAILURE; REPAIR_ONLY_PROVEN_SOURCE_OR_HARNESS_BOUNDARY; NEVER_TICK_FROM_BANNER_OR_PARTIAL_PREFIX
-S181_FORMAL_DISPATCH=CAMPAIGN_ID=gt06-s181-formal-01; TASK=HHStudio.GT06.gt06-s181-formal-01; START_UTC=2026-09-23T12:17:01.5257829Z; SUPERVISOR_PID=19776; TASK_START_INSTANCE={26F41807-C70B-4FF4-B7F5-6BC588187700}; REQUEST_SHA256=c4ce070284d07f5f95ffb01c9adb0a4c9fc314fbe7a346f4fc8552791fc7e93d; FORMAL_ACCEPTANCE=false; TERMINAL_FAILED; HOST_ACTUAL_EXIT1; EDITOR_TARGET_EXIT_UNKNOWN_HELPER2; SUPERVISOR_ACTUAL_EXIT_UNKNOWN; TASK_RETIRED_AFTER_SEAL
-
-
-S182_TERMINAL_PACKAGE=zdoc/reviews/20260923-gt06-s182-terminal; RAW_ARCHIVE=studio/.local/archives/gt06-s181-formal-01-s182-terminal.zip; VERIFIED379_FILES; RAW_MANIFEST_SHA256=80e1b4ec8377339318b54eb0a796ab7e1e6182ab8a6128afa169f69d3833dcad; AUTHORITY=0
-S181_FAILURE=22_COMPLETED_BATCHES_0_TO_21; BATCH22_COMMANDS_869_ROWS; TERMINAL_TIMEOUT; ZERO_ACCEPTED_FULL_RUNS; NO_F13_F14
-S182_BOUNDARY=ADMITTED172_RECEIPT_QUEUED; 47_LOOKUPS_NO_TRANSPORT_FAILURE_IN_THIS_COMMAND; LATE_DURABLE_COMMITTED_SAME_DIGEST; SNAPSHOTS1410.925_AND1281.465_MS_APPEND2292.940_MS; WALL_TIME_NOT_ROOT_CAUSE
-S182_CLEANUP=HOST_ACTUAL1_IMPORT_ACTUAL0_EDITOR_TARGET_UNKNOWN_HELPER2_SUPERVISOR_ACTUAL_UNKNOWN; JOBS_ZERO_CLOSED_PROBES_RELEASED_THREADS_STOPPED; SOURCE53_PINS_MATCH; SCHEDULER3_RESULT1_NOT_EXIT_PROOF
-S182_POLL_DIFFERENTIAL=gt06-s182-poll-contention-01; PYTHON_ONLY_ACTUAL_EXIT0; 18_FULL_HISTORY_CHECKS; BASE42_TO50MS_POLL1MS_58_TO67MS_POLL10MS_46_TO52MS; DOES_NOT_REPRODUCE_SECOND_SCALE_DELAY; NO_CADENCE_OR_RUNTIME_CHANGE
-S183_RUN=gt06-s183-retained-http-01; ONE_STOCK_1000HTTP_BATCH_ON_COPIED_S181_HISTORY; NO_NATIVE_ENGINE; WALL_THREADCPU_FSYNC_SQLITE_GC_OBSERVATION; OUTER300S; ACTUAL_EXIT0; COMPLETE1000HTTP; GAP_MAX846.6948MS; THREADS_STOPPED_PROBE_RELEASED_INDEX_CLOSED; DIAGNOSTIC_ONLY_NOT_FORMAL_CONTINUATION; COORDINATOR_OWNS
-S182_LESSONS=LOOK_IN_ATTEMPT_CHILD_FAILURE_AND_SIBLING_SUPERVISOR_NOT_ONLY_CAMPAIGN_ROOT; LATE_DURABLE_COMMIT_DOES_NOT_MEET_ACK_DEADLINE; KEEP_ADMISSION_LATENCY_SEPARATE_FROM_TERMINAL_BUDGET; PYTHON_WINDOWS_POWERSHELL_MODULE_PATH_ERROR_IS_COLLECTOR_ONLY; NO_ENGINE_RERUN_FOR_METADATA
-
-S184_CANDIDATE=ONE_LOCAL_REUSABLE1MIB_READINTO_BUFFER_RELEASED_BEFORE_SNAPSHOT_RETURN; ALL_BYTES_HASHED_UPDATE_LE2047_FSYNC_LOCK_IDENTITY_UNCHANGED; NO_PERSISTENT_BASELINE_BUFFER
-S184_VALIDATION=6_CANDIDATE_STREAM_TESTS_AND41_FOCUSED_REGRESSIONS_AND56_BINDING_BACKEND_TESTS_EXIT0; FOUR_COMPARISON_PROCESSES_EXIT0; 72_HISTORY_CHECKS; MEDIAN1MS_POLL_STOCK61_TO65MS_CANDIDATE47.601MS; NOT_S181_ROOT_CAUSE_OR_MEMORY_ACCEPTANCE
-S184_BINDING=215_DEPENDENCIES_217_EXECUTION_FILES; ONLY_VERIFIED_JOURNAL_DELTA; BINDING190970dcbf62c5cad19b11a8d31971e77dbbfcb0bfb46993d91b10268df67237; SELECTOR58a8bce5decfa6301b756de55df5dda9a69ad95c663f620feb0a9b3dcb2b7dfa; GT05_INPUTS_UNCHANGED
-S184_PACKAGE=zdoc/reviews/20260923-gt06-s184-read-buffer; AUTHORITY=0; OLD_S143_1MIB_FAILURE_PRESERVED; NO_COUNTER_THRESHOLD_CHANGE
+S181_FORMAL_DISPATCH=CAMPAIGN_ID=gt06-s181-formal-01; TASK=HHStudio.GT06.gt06-s181-formal-01; START_UTC=2026-09-23T12:17:01.5257829Z; SUPERVISOR_PID=19776; TASK_START_INSTANCE={26F41807-C70B-4FF4-B7F5-6BC588187700}; REQUEST_SHA256=c4ce070284d07f5f95ffb01c9adb0a4c9fc314fbe7a346f4fc8552791fc7e93d; FORMAL_ACCEPTANCE=false; ACTUAL_EXIT_PENDING; RAW_STUDIO_LOCAL_REVIEWS_ONLY_UNTIL_TERMINAL
 
 S177_PILOT_SCOPE=consumer-pilot/; AUTHORITY=0; NOT_GT06_F13_F14_OR_GAME_ACCEPTANCE
 S177_GT03=AUTHENTICATED_SCENE_NODE_CREATE_X3_SAVE_READBACK_DURABLE_STOP; SELECTED_RUN=consumer-pilot-s177-gt03-04; EDITOR_ACTUAL_EXIT0_HELPER0_JOB_ZERO_CLOSED
@@ -113,9 +99,407 @@ GT05_REVIEW_STATUS=TWO_INDEPENDENT_PASS_TICK_YES_S64
 GT05_CHECKPOINT_COMMIT=808d8ba
 GT05_LAST_TESTED_SOURCE_CLOSURE=c141d54b80022ca7fefdf81f83e7e1078d3cc6aa43954831f82bb3178338a135
 
-HISTORY_AUTHORITY=0; lịch sử S70–S181 và các next-action cũ đã được rút khỏi phần hiện hành.
-ARCHIVE_S182=zdoc/reviews/20260923-gt06-s182-terminal/plan-before-s182.txt; SHA256=233632dd71751e66a8a7585ce87a717c21bd1333a156d1fb512eda6074c013e1; AUTHORITY=0
-Raw failures, helper/review và bài học cũ giữ nguyên tại các path trong archive; không xóa hoặc đổi gate.
+HISTORY_AUTHORITY=0; Các trạng thái và next-action cũ bên dưới không ghi đè đầu plan S179.
+
+LỊCH SỬ — S160, ngày 22-09-2026 (timestamps UTC; không phải trạng thái hiện hành)
+Tại thời điểm S160, GT01–05 đã accepted; GT06 chưa có full run nghiệm thu;
+GT07–10 chưa mở. Process probe của S160 không thấy Godot/Blender/Python/agent
+benchmark. S156 terminal
+failure vẫn giữ nguyên; Event+1/IoCompletion+1 chưa biết chủ sở hữu hay nguyên
+nhân. S153 stock cũng tăng handle khi không có census; không cần chạy lại để
+chỉ chứng minh hiện tượng đó. Tiếp theo phải phân biệt cơ chế tạo/giữ handle.
+
+S157 Cursor: ba lane terminal CLI exit0, 15 output được giữ exact để review;
+không tạo thêm Cursor worker. S158 Codex: ba lane lỗi capacity, không report.
+S159 Codex: plan-audit hoàn tất; helper-contract và attribution-docs lỗi
+capacity, không deliverable. Thống kê cũ 0 hoàn tất/3 capacity ở block S159 và
+s159-coordinator-status.json đã nhầm với S158; giữ báo cáo cũ như lịch sử và
+đính chính tại reviews/20260922-gt06-s160-coordinator/worker-status-errata.json.
+
+S160 đã giao ba Astra xhigh độc lập: launcher integration (đã hoàn tất code
+và 10 test process-free exit0; fresh prepare/auth chỉ có trạng thái launcher
+được ghi nhận, chưa có host-exit receipt độc lập), Windows handle attribution
+(đã hoàn tất memo read-only), và Godot source ownership (trạng thái worker không
+được chứng minh độc lập; coordinator đã ghi memo read-only từ source hiện hành).
+Memo attribution kết luận chưa có cấu hình ETW kernel-handle theo PID được tài
+liệu hóa đủ để dùng; `!htrace` chỉ là fallback có điều kiện, overhead chưa đo,
+không phải gate. Review launcher được giữ tại
+`zdoc/reviews/20260922-gt06-s160-launcher-integration/REPORT.md` và manifest
+`5e4f2ef94031c83549a41c664b128495402f0ce6bf178ae11322b88c10577335`; các
+metadata prepare là `s160-prepare-preflight.json` và `s160-prepare-retest.json`; source
+ownership memo tại `zdoc/reviews/20260922-gt06-s160-source-ownership/MEMO.md`;
+chỉ AUTHORITY=0, fake/raw tests, không engine. Coordinator giữ plan/integration
+review. Không worker nào
+được chạy engine hay sửa frozen S156/S157/runtime/profile/gates.
+
+S158 coordinator review (2026-09-22, AUTHORITY=0): exact Cursor retention,
+31 launcher + 6 attribution + 15 schema + 3 hardening-contract tests exit 0;
+process probe không có Godot/Blender/Python/agent. Review manifest và guard giữ
+tại zdoc/reviews/20260922-gt06-s158-coordinator/; đây là static evidence,
+không PASS/no-leak/root-cause.
+
+S159 plan audit (2026-09-22, read-only): report
+zdoc/reviews/20260922-gt06-s159-plan-audit/REPORT.md xác nhận GT06 DoD và hai
+critic vẫn mở; metadata đã được compact ở block đầu này. Không đổi source,
+profile, timeout, baseline, gate hoặc checkbox.
+
+S159 helper/PSS static review (2026-09-22, AUTHORITY=0): ba helper-contract và
+ba PSS-schema fake tests exit 0 tại
+zdoc/reviews/20260922-gt06-s159-helper-contract/ và
+zdoc/reviews/20260922-gt06-s159-attribution-schema/. Đây chưa phải integration
+run, diagnostic PASS hay formal GT06 evidence. Review tiếp phát hiện checks
+chưa đủ: reparse parent sau resolve, kiểu bool/int, exact expected prefix và
+raw binding chưa được bảo vệ; schema PSS chưa khớp field flags của adapter và
+chưa kiểm nested reserved fields. Không dùng prototype này làm gate dispatch.
+PSS CreationTime/GrantedAccess/HandleCount/PointerCount và pool charges được
+Microsoft đánh dấu Reserved, không được dùng suy thời gian tạo/ownership.
+
+LỊCH SỬ — S157, ngày 22-09-2026 (AUTHORITY=0; không dùng làm dispatch hiện tại)
+GT01–05 ACCEPTED theo source lịch sử; GT06 IN_PROGRESS/zero accepted full runs;
+GT07–10 chưa mở. S157 Cursor là lịch sử đã terminal, không còn lane hiện hành;
+coordinator giữ plan và quyền điều khiển run. Không có engine/final benchmark
+đang chạy.
+
+S157 dispatch (2026-09-22, lịch sử): launcher, attribution và schema-coverage lanes đã
+được giao với model `grok-4.7-xhigh` (không Fast), mỗi lane một worktree và
+attempt riêng. Chỉ fake/read-only tests được phép; không formal retry, không
+đổi gate/profile/timeout/baseline/RSS. Reports phải có exit, hash, limitations
+và completion marker trước coordinator review.
+
+S157 watcher checkpoint (2026-09-22): transport-only watcher da duoc chay
+voi manifest studio/.local/orchestration/s157-cursor/watcher-targets-01.json.
+Script/test o zdoc/reviews/20260922-gt06-s157-watcher/; 10 gate tests PASS.
+Watcher dung registry Grok 4.7 xhigh, khong goi AI, khong retry va khong tu
+claim acceptance. Attribution va schema da terminal voi report/hash/exit hop le
+(NEEDS_REVIEW); launcher đã terminal. Popup/am thanh chi la request, khong
+duoc coi la user da thay/nghe. User gui Tiep tuc S157, doc ket qua watcher
+khi watcher bao tat ca terminal; coordinator van phai review doc lap.
+
+S157 resume checkpoint 05:04Z: attempt-01 của ba lane đã mất process, không
+có report/exit, stdout/stderr rỗng; actual exit UNKNOWN, không tính hoàn tất.
+Đã tìm session trong Cursor metadata đúng workspace và resume cùng session
+sang attempt-02, không chạy lại benchmark. Launcher tách bằng CIM, prompt
+đọc UTF-8 thành một argument; finally lưu CLI exit/terminal. Startup init
+ghi Grok 4.7 256K Extra High; PID/start/executable đúng ở cả ba lane.
+Registry local: studio/.local/orchestration/s157-cursor/registry.json.
+Mỗi lane giữ output tại private worktree s157-launcher/s157-attribution/
+s157-schema, trong zdoc/reviews/20260922-gt06-s157-<lane>/REPORT.md.
+Ước lượng phần worker20–40phút từ05:03Z; check tiếp sau05:24Z hoặc terminal,
+không đọc tool stream/poll dày. Đây không phải ETA nghiệm thu toàn plan.
+
+Tổng hợp Codex trước chuyển giao: collector test lane đã thêm11 fake-only
+tests đạt; dependency/evidence lanes xác nhận source pins, terminal và PSS
+Event+1/IoCompletion+1 tại editor, chưa có kernel-object/subsystem ownership.
+Launcher review nêu vấn đề exit/status, input binding và Stop/publication;
+các finding này chưa được11 census tests kiểm hết và chuyển cho Cursor sửa.
+Plan-marker lane chỉ đề xuất cập nhật metadata; coordinator đã tích hợp.
+Next-step lane bị model capacity hai lần, không có deliverable; không ghi
+nhận ba implementation hoàn chỉnh hoặc critic PASS. Không còn Codex worker.
+Lỗi observation S157 string-vs-DateTime gây false mismatch đã sửa bằng UTC
+ticks; receipt02 chứng minh cùng process sống, không restart vì lỗi collector.
+
+S156 terminal/read-only closure (2026-09-22): static pin check passed
+(`run_diagnostic.py --check`, source_count=53, closure fce149cd…5ddcde,
+launched=false) and the 11 editor-handle unit tests passed. No matching
+Godot/Python/Blender campaign process remains. This validates only the
+diagnostic harness and packet binding; S156 remains FAILURE/AUTHORITY=0,
+outside F13/F14, with editor target exit UNKNOWN. No formal retry is open.
+Derived receipt `zdoc/reviews/20260922-gt06-s156-editor-handles/
+static-attribution-s156.json` binds result/summary/cleanup hashes and records
+the original-gate-before-census test; it is metadata only and carries no PASS,
+leak, or root-cause claim.
+
+S154 chuyển giao, không restart benchmark:
+- Cursor formal-resume-02 terminal CLI exit0 lúc02:13:13Z; đã dispatch stock
+  gt06-s153-formal-01 lúc02:08:02Z. Không còn scoped Cursor worker lúc02:20:27Z.
+- Fresh identity check khớp supervisor38012, launcher45912, host helper50708/
+  host42068 và editor helper12928/editor43776; start FILETIME/executable khớp.
+  Có batch0–5; batch5 được ghi lúc02:18:50Z. Partial prefix không phải PASS.
+  Receipt: reviews/20260922-gt06-s154-codex-handoff/takeover-observation-01.json.
+- Ba Codex Astra xhigh đã được giao terminal collection, functional dependency
+  reuse và remaining-plan readiness. Hai lượt trả model capacity; không phải
+  lỗi repo, không đổi model hay chờ vô hạn. Coordinator tiếp quản phần chưa xong.
+- S153 source/helper/profile/workstation và gate10x35 giữ nguyên; không launch
+  engine/test/hash audit nặng cạnh đo. Báo cáo Cursor và raw cũ được giữ nguyên.
+- Bản plan S153 trước chuyển giao lưu exact tại reviews/20260922-codex-handoff/
+  s154-coordinator/plan-s153-before-codex.txt, archive.json có hash/AUTHORITY0.
+- S153 formal đã terminal FAILED lúc02:24:14Z sau8 partial batches (0–7),
+  failure code CAMPAIGN_RETAINED_COUNTER_GROWTH ở batch7/joint_observation.
+  Host handles giữ204; editor held handles tăng555→559; ObjectDB71128 và
+  resources6 giữ nguyên. Launcher actual exit1 qua retained handle; helper/
+  parent failure BENCHMARK_WRAPPER_EXIT; Jobs/owned tree cleanup sạch theo
+  parent failure. Editor target/child exit chưa có và giữ UNKNOWN; đây là
+  failure evidence ngoài F13/F14, không phải root-cause/no-leak/PASS.
+  Raw: studio/.local/reviews/gt06-s153-formal-01; terminal:
+  zdoc/reviews/20260921-gt06-s147-supervision/runs/
+  gt06-s129-s153-formal-supervisor. Không xóa Stop hay reuse ID.
+- Hai Codex Astra xhigh lane đã bị capacity từ chối; lane plan-readiness còn
+  đang hoàn tất. Coordinator giữ quyền tiếp nhận, không đổi model/fallback,
+  không retry vô hạn. Cursor workers đã dừng/không còn process.
+
+S152–S153 — công việc Cursor đã tiếp nhận (lịch sử):
+- plan-resume-01 đã kết thúc 01:31:12Z, CLI exit0, báo cáo PARTIAL/read-only.
+  Source53, execution217 và profile khớp pins hiện hành; chưa đủ DoD GT06.
+  Report: reviews/20260922-cursor-handoff/plan-resume-01/REPORT.md.
+- Sửa phần tóm tắt S150: bốn checkpoint đều handles173; chỉ ba PSS census
+  có Event23/File14/Thread3/Semaphore48. Batch9 child sample chỉ có count/RSS;
+  quiet PSS không có RSS. RSS baseline49,004,544B, child9 42,508,288B,
+  terminal43,249,664B. Số49.0/43.2 trong review cũ là MB, không phải MiB.
+  Launcher exit1/helper2 đã biết; child exit/child cleanup vẫn UNKNOWN.
+- S150 không có same-batch immediate-vs-quiet PSS pair; không chứng minh
+  nguyên nhân Event, no-leak hay PASS. Giữ raw/summary/review cũ; dòng này
+  là errata cho cách diễn đạt, không sửa bytes evidence lịch sử.
+- launcher-boundary-01 đã terminal01:55:29Z, CLI exit0; báo cáo COMPLETE,
+  readiness READY cho launcher. Không chứng minh lỗi helper; không sửa code.
+  Formal normal-success phải thu target exit0; gate failure/Stop/outer-limit
+  có thể giữ editor target UNKNOWN riêng helper exit. S147 vẫn là FAIL.
+  Report: reviews/20260922-cursor-handoff/launcher-boundary-01/REPORT.md.
+- gt06-formal-dispatch-01 bị ngắt trước khi có terminal/report; exit UNKNOWN.
+  Quan sát02:00Z không thấy worker/session process hay raw S153. Không suy
+  đây là benchmark FAIL và không chạy lại audit đã hoàn tất.
+- gt06-formal-resume-02 resume cùng session lúc02:01:33Z bằng hidden detached
+  launcher. Cursor kiểm fresh-ID/Stop/process/source, rồi mới được dispatch
+  stock gt06-s153-formal-01. Chưa xác nhận engine chạy; chuẩn bị không phải PASS.
+  Attempt: reviews/20260922-cursor-handoff/gt06-formal-resume-02.
+  Model requested=grok-4.7-xhigh; actual-model attestation=UNKNOWN_TEXT_MODE.
+- Lịch ti-p-t-c-hh3d-tools ACTIVE đã tạo lại sau khi app xác nhận ID cũ không
+  tồn tại; khoảng30phút, một snapshot/turn, im lặng nếu chưa có thay đổi.
+  Tiếp tục từ terminal/REPORT; không đánh thức AI liên tục hoặc tạo run trùng.
+- Bài học: resume session đã biết, không restart bài audit; exit0 của CLI
+  không phải nghiệm thu. Sparse checkout thiếu file không đồng nghĩa repo lỗi.
+  campaign.load_fixture() phải trước source_files() để tránh closure50 giả.
+  Check marker kết thúc một lần, đọc REPORT, không AI-poll stream liên tục.
+- Bản S151 trước sửa lưu exact tại reviews/20260922-cursor-handoff/
+  s152-coordinator/plan-s151-before.txt, hash trong archive.json, AUTHORITY=0.
+
+Tổng hợp phần worker/coordinator đã tích hợp, không chạy lại nếu dependency không đổi:
+- S133: bảy service/reviewer lanes, 164 HTTP checks; owner/helper exits và
+  14 native Jobs zero/closed. Bốn native exit0; ba Stop natural exit UNKNOWN.
+- S135: cleanup giữ primary failure và thu successor receipt độc lập;
+  96 fresh-interpreter tests đạt. Installed217 f1d35f... là LAST TESTED lịch sử.
+- S138: managed repair có public readback/ACK; managed replay có natural
+  import/runtime exits0, Jobs zero/closed và replay postconditions.
+- S139: benchmark53 và installed217 là hai projection, overlap39/union231;
+  source-freeze-s139.json ràng buộc GT05 inputs. S142 đổi verified_journal.py:
+  binding217/source map phải refresh đúng delta trước claim execution mới;
+  không lấy các lane cũ làm bằng chứng cho source mới.
+- Readiness audit S140 trước đã xong. Ba worker Astra xhigh mới bị capacity;
+  chỉ có nhận xét attribution sơ bộ, coordinator tự kiểm raw. Không có ba
+  review hoàn chỉnh hay critic PASS để gộp vào nghiệm thu.
+
+S140 p04 đã terminal 7 batch/70 phase rows; gates nguyên bản qua, không tái hiện
+RSS jump S131. Packet174 exact copies verified. Đây là diagnostic, không F13/F14.
+S131 hostRSS40,861,696→45,395,968B (+11.0966%) batch5 vẫn unresolved.
+Handoff: reviews/20260921-gt06-s140-memory-phases/coordinator-terminal.md.
+
+S141 formal gt06-s141-formal-01 FAILED 07:46:09Z, KHÔNG còn chạy:
+- 4 completed warmup batches0–3; batch4 inspect.364 /commands getresponse
+  timeout2007.1129ms; command-response gap2048.0477ms. ADMISSION_UNKNOWN,
+  không phải lookup timeout. Zero accepted full runs.
+- Join QPC/root/port xác định timeout nằm trong snapshot thứ hai1674.4389ms;
+  snapshot đầu733.7135ms, append49.6508ms. Journal sau đó QUEUED rồi
+  CANCELED_BEFORE_APPLY/no_effect; không hồi tố ACK client hay claim rootcause.
+- Host30300 actual1/helper1, launcher44044 actual1 qua retained handle;
+  editor natural UNKNOWN/helper2, import9664 exit0. Jobs/probes/threads cleanup
+  đã giữ; import-wrapper cleanup artifact thiếu vẫn UNKNOWN. Task retired09:17:22Z.
+- terminal-01/packet:82 exact files, verified0missing/0mismatch; manifest
+  073def236c0abebb02a7f95fba24e38b29500928226d2db9018c26f3f0f96fcb.
+  Raw journal giữ local, hash/domain/exclusions rõ; không commit journal/cache.
+  Seal + analysis: reviews/20260921-gt06-s141-stock-campaign/terminal-01.
+
+S142 sửa hẹp candidate verified_journal._snapshot:
+- Cùng full-file SHA512, bounds/identity/parser/fallback/fsync. Đọc tối đa1MiB/lần,
+  hash từng phần2047B để tránh mỗi update nhả GIL rồi phải giành lại trong CPython.
+  Không cache shortcut, đổi timeout/ngưỡng/baseline hay bỏ kiểm corruption.
+- Controlled contention trên bản sao journal: stock724.8–2924.3ms,
+  candidate186.0–260.1ms; uncontended stock9.3–10.3ms/candidate12.0–12.3ms.
+  Hash/identity/size bằng nhau. Chỉ chứng minh cơ chế trong probe tổng hợp;
+  không chứng minh rootcause S141 hay latency/RSS toàn workload đã sửa.
+- 45 affected journal/index/durability/CAS/transport tests PASS, actual exit0;
+  thêm full-buffer-boundary hash test. Native/profile không đổi.
+  Candidate benchmark53=4bd7972b803a877777166ece82d85b6f841755d82bcec42ed78c28ae78c78a01.
+  Chi tiết, results và limits: reviews/20260921-gt06-s142-snapshot-boundary/README.md.
+
+S143 preflight02 đã hoàn tất14.390s, host33612/helper50076 exit0, Jobs/probes/
+threads clean, errors[]. Chỉ import và20HTTPcommands, chưa1000HTTP+100native.
+Preflight01 wrapper runpy dùng namespace copy sai: FileExistsError trước engine;
+không overwrite oldID. Giữ failure01, dùng helper directcopy với freshID02.
+S143 coupled candidate (1MiB) đã terminal ORIGINAL_FAILURE tại batch6:
+7 joint rows, original gate qua0–5 rồi host handles209→210; RSS giảm,
+ObjectDB/resources71128/6 ổn định. Giữ packet106; không gọi handle leak
+hay chứng minh candidate gây tăng handle. Cleanup đã giữ; editor exit UNKNOWN.
+
+S144 stock control đã hoàn tất7 batch, host handles209 ở cả7, original gates
+qua; max native status gap719.268ms. Stock _snapshot được áp dụng riêng trong
+child; đây là diagnostic overlay, không runtime stock byte-identical/F13/F14.
+Packet99 exact copies; manifest a9889a805119ab9725cc82d224ff73327537e705665de0f877b2cb74438b5379.
+Hai standalone probes candidate/stock đều chỉ tăng3 handles ở group đầu rồi
+ổn định, không tái hiện host+1 cuối lượt. So sánh một lượt mỗi loại chưa đủ
+quy nguyên nhân; không kết luận buffer1MiB gây leak.
+
+S145 candidate giảm đọc1MiB xuống64KiB để giới hạn allocation mỗi lần đọc,
+giữ hash2047B/full-file SHA512/bounds/identity/fsync/fallback. 45 affected
+journal/index/durability/CAS/transport tests đạt lại sau thay đổi. Preflight
+import+20HTTP hoàn tất11.735s; host30316/helper27508 exit0, Jobs/handles clean.
+Closure53 fce149cd3a62e102aaba225794b9a5078cd84d7647cb359f6bbcacb8895ddcde.
+Diagnostic gt06-s145-coupled-64k-candidate-01 dispatch11:30:29Z, task
+HHStudio.GT06.gt06-s129-s145-64k-candidate-supervisor, đã terminal11:42:22Z
+ở BOUNDARY_CAPTURED sau7 original batches (1000HTTP+100native/batch).
+Host handles209 ở cả7; RSS giảm49.3MB→43.2MB; editor handles565/559/555/555/561/555/555;
+ObjectDB/resources71128/6; max status gap611.159ms. Source/execution unchanged,
+child/host/helper exits0 và Jobs/handles clean. Native/profile/gates không đổi,
+không instrumentation; không F13/F14/PASS/rootcause/no-leak claim.
+Packet manifest aab6b5956b928565d9281430f994693cbeb513b7fb3380e9299e6d48eff34844,
+verification0 missing/0 mismatch; raw studio/.local/reviews/gt06-s145-coupled-64k-candidate-01.
+Không retry formal mù; so sánh raw S143/S144/S145 và chỉ refresh installed binding
+khi chứng minh được delta. Helper/receipts: reviews/20260921-gt06-s145-coupled-64k-candidate.
+
+S146 đã hoàn tất refresh binding cài đặt theo đúng delta đã chứng minh, không chạy
+engine và không thay GT05 manifest:
+- Kiểm tra trước refresh cho thấy execution-source cũ có 215 file, chỉ lệch
+  `host/replay/verified_journal.py` (old `129baa4d9e08…`, current
+  `b24e48864222…`); 214 file còn lại khớp, không có file thiếu.
+- Script coordinator một-use ở
+  `reviews/20260921-gt06-s146-binding-refresh/refresh_installed_binding.py`
+  giữ byte/hash metadata cũ, tạo source map mới từ GT05 anchor + inventory bắt
+  buộc, ghi temp rồi `os.replace` từng file và tự rollback nếu verify thất bại.
+- Refresh exit0; `load_installed()` bằng interpreter mới xác minh 215 source và
+  217 execution files. Binding mới
+  `e411731830eddd9bcb4ec65baccd49d94ba5674d7edbd354795d3bbafb18c3e0`, selector
+  mới `a02dc3c2c206bd795050d7b9584e7467fa97b8266c70a1a7dd67b0fe3c23c958`;
+  journal hash `b24e488642222bcff7242850da3f3b2e0d4de4473fa254ca1ff113cfdbdeb000`;
+  canonical 217-file execution closure
+  `78ffef60682f596313aac8aca69a06e0a23808c546202effdebc481bdb845b58`.
+- Receipt/hash backup/new metadata ở
+  `reviews/20260921-gt06-s146-binding-refresh/`, packet chỉ AUTHORITY=0,
+  `formal_acceptance=false`, `engine_runs=0`; không phải benchmark PASS.
+- Fresh binding suite 17/17 + installed suite 16/16 đều exit0 sau refresh.
+  Đây là checkpoint dependency, không biến các diagnostic S141–S145 thành
+  F13/F14 và không giải quyết root cause S141/S131.
+
+S147 formal stock campaign đã được chuẩn bị, preflight và dispatch bằng ID mới:
+- `gt06-s147-formal-01` dùng nguyên `run_campaign` và gate gốc, source closure
+  S145 `fce149cd3a62e102aaba225794b9a5078cd84d7647cb359f6bbcacb8895ddcde`,
+  installed closure S146 `78ffef60682f596313aac8aca69a06e0a23808c546202effdebc481bdb845b58`,
+  profile và Godot/Python binary giữ nguyên. Freeze 240 file, supervisor request
+  241 file; mọi source copy/hash đã kiểm trước đăng ký.
+- Các lỗi metadata khi chuẩn bị (script guard, alias path Windows, đặt observer
+  sai depth và launcher hash cũ) đều xảy ra trước engine/scheduler; request lỗi
+  được giữ ở `preparation-01`/`invalid-01`, sau đó finalize bằng
+  `observer.make_request` và kiểm `S129_CLOSURE_PIN`/`S129_SOURCE_PIN` thành công.
+- Supervisor `\HHStudio.GT06.gt06-s129-s147-formal-supervisor` được prepare và
+  register, dispatch lúc 2026-09-21T13:17:20Z UTC. Terminal receipt ghi launcher
+  exit1; scheduler state3/instances0/last_result1 phù hợp với lượt đã kết thúc,
+  nhưng scheduler không được dùng làm bằng chứng nghiệm thu.
+- S147 dừng tại batch10 trong `joint_observation` với
+  `CAMPAIGN_RETAINED_COUNTER_GROWTH`; có 11 batch partial, 0 full run được chấp
+  nhận. Raw exact và packet 16 file đã niêm ở
+  `reviews/20260921-gt06-s147-formal-campaign/terminal-01/`, manifest đã verify.
+  `command-10.json` ghi host held handles `204→205`; editor ghi held handles
+  `557`, ObjectDB `71128`, resources `6`, RSS `209940480`. Cleanup ghi Job
+  editor đóng/zero observed, không còn wrapper handle, producer threads dừng và
+  journal/cache/directory/index không retained. Editor target exit UNKNOWN vì
+  thiếu record; import exit0. Đây là failure evidence AUTHORITY=0, ngoài F13/F14,
+  không chứng minh leak/root cause và không cho phép retry formal mù.
+- Liveness prefix `liveness-01.json` (batch0–8, native max gap756.017ms) chỉ là
+  lịch sử; không dùng để phủ nhận failure batch10. Các helper đặt sai depth/cache
+  vẫn giữ làm preparation history vì automatic approval review đã chặn cleanup;
+  không retry thao tác dọn.
+
+Read-only attribution S148 sau terminal không tìm thấy căn cứ cho một sửa runtime
+hẹp. Chuỗi host `held_handles` của 11 partial batches là
+`204,204,204,204,204,204,204,204,204,204,205`; chỉ batch10 vượt baseline
+batch4 `204`. Editor là `565,559,559,555,561,555,555,555,555,555,557`, nên
+không vượt baseline editor batch4 `561`; ObjectDB/resources giữ `71128/6`.
+Host RSS batch4→10 là `45051904→37789696` bytes và editor RSS
+`615227392→209940480`, đều giảm; command max gap lớn nhất `868.021ms` và
+barrier max gap `756.017ms`, dưới gate 2s. `GetProcessHandleCount` chỉ cho biết
+số handle của process host hiện tại, không cho biết loại descriptor; sau terminal
+không còn retained process handle để chạy PSS an toàn. S143/S144/S145 là các
+process/workload diagnostic khác, không đủ để gán causal cho S147. Kết luận được
+niêm ở `reviews/20260921-gt06-s147-formal-campaign/terminal-01/attribution-01.json`:
+giữ failure, chưa sửa source và chưa retry formal/diagnostic.
+
+Bài học: đọc trạng thái process mới, receipt không chứng minh đang chạy; collector
+sai thì sửa derived metadata từ raw đủ; không chạy lại engine chỉ để sửa báo cáo.
+Không xóa Stop, reuseID, nới gate/baseline/timeout/priority hoặc trim/pin RAM.
+Lịch ti-p-t-c-hh3d-tools giữ một heartbeat10phút, quiet healthy/unchanged; update
+prompt theo disk. Máy/app cần hoạt động; không hứa ETA toàn plan hay xong sáng.
+
+GT06 vẫn10freshpairs×35batch (5warmup30measured), full dataset/hash/actual exits/
+trees/Jobs/handles/allattempts. Finalfreeze+requirement evidence và hai critic
+MỚI cùnghashPASS/TICK=yes mới ACCEPT→GT07–10; GT08 vẫn Android thật.
+S141 plan cũ lưu exact ở s142-snapshot-boundary/history/tools-plan-s141.txt,
+manifest SHA256/AUTHORITY0. Failures, gaps và bài học S70–S141 không bị xóa.
+
+S149 host-handle census được mở chỉ sau khi S148 hoàn tất attribution và xác định
+được câu hỏi phân biệt: S147 tăng một host handle trong HTTP batch10 nhưng các
+counter editor/ObjectDB/RSS không tăng, còn S144/S145 chưa chạy đủ cardinality
+1000-command batches. Driver `zdoc/reviews/20260921-gt06-s149-host-handles-02/host_handles.py`
+giữ nguyên `CommandProducer.run_batch`, counter/gap gate và source/profile/
+workstation; chỉ thêm PSS census bên ngoài cửa sổ command tại baseline batch4 và
+boundary. Nó không có native/ACK/idle/assembly nên không thể được tính F13/F14
+hay formal PASS.
+
+S149-01 smoke giữ nguyên làm evidence bất biến: sample nội bộ 173 handles nhưng
+PSS census thấy174 trong lúc child dùng `time.sleep(.05)` chờ ACK, nên không dùng
+sample đó để phân loại descriptor. Không sửa raw. S149-02 là bản driver fresh ID
+với zero-duration scheduler yield trong ACK wait; static10/10 pass, check-only
+244 source pins pass, smoke `gt06-s149-handles-smoke-02` exit0, target/helper
+exit0, PSS status OBSERVED, sample/census đều173 handles, source_unchanged=true,
+Jobs zero/closed, probe/wrapper released, threads sạch. Đây chỉ là preflight,
+không phải warmup của diagnostic chính.
+
+Diagnostic `gt06-s129-s149-host-handles` đã được prepare/register/dispatch bằng
+passive supervisor request mới với observation1290s/scheduler1320s. Query scheduler
+chỉ là state (instances0/last_result cũ không chứng minh liveness); tại lần kiểm
+đầu, PID/start/executable của observer, owned helper và child khớp, child chưa
+đến checkpoint đầu và vẫn chạy. Khi terminal phải seal raw trước, đọc census/type
+counts, actual target/helper exits, Jobs/handles/Stop/source pins; UNKNOWN hoặc
+cleanup lỗi dừng diễn giải. Không chạy lại mù, không overwrite ID, không thay gate,
+timeout, baseline, priority hoặc RSS. Ba worker Astra chỉ làm review độc lập
+read-only; coordinator giữ một writer và tích hợp kết quả.
+
+
+S149-02 đã terminal và được niêm metadata từ raw. Sau10 partial batches (0–9),
+host gate dừng ở batch9 với `CAMPAIGN_RETAINED_COUNTER_GROWTH`: child sample
+`173→174` handles, RSS `45772800→40046592`, status gap `1518.2795ms` dưới2s.
+PSS census cùng PID/start ghi `173→173` tại baseline batch4 và `174→174` tại
+batch9; type delta duy nhất là `Event 23→24`, còn File/Semaphore/loại khác giữ
+nguyên. Numeric handle churn và `object_identity/name` đều UNKNOWN, vì vậy chỉ
+đã phân loại được lớp descriptor quan sát, chưa chứng minh ownership, persistence,
+leak hay root cause. Target/helper exit1 là primary diagnostic failure; Job
+zero/closed, wrapper/probe released, child cleanup/source_unchanged đều sạch.
+`terminal-summary-s149-02.json`, `observer-review.md`,
+`derived-metadata-audit.md` và `final-gate-checklist.md` là derived/read-only;
+raw `.local` giữ nguyên ngoài F13/F14.
+
+S150 là follow-up hẹp có bằng chứng, không phải retry mù: cùng CommandProducer và
+gate nguyên bản, nhưng tại batch9 ghi census tức thời rồi yield250ms bằng
+zero-duration scheduler yield và ghi census `09-quiet`. Smoke fresh ID exit0,
+static10/10 và 244 source pins pass. Request passive mới đã prepare/register/
+dispatch; task S149 cũ đã retire sau khi giữ XML/state/terminal receipt. Khi S150
+terminal, nếu Event biến mất sau quiescence thì ghi deferred thread/sync cleanup
+và không sửa source; nếu còn, chỉ khi có thêm ownership evidence mới chuẩn bị
+candidate repair + focused tests. Không formal GT06 retry trước quyết định này.
+
+S150 đã terminal và được niêm ở
+`reviews/20260922-gt06-s150-event-quiescence/terminal-summary-s150.json`.
+Lượt diagnostic đi đủ batch0–10; baseline PSS batch4, child sample batch9,
+PSS `09-quiet` sau bounded250ms yield và terminal PSS batch10 đều ghi 173
+handles. Type counts tại baseline/quiet/terminal giữ Event23, File14, Thread3,
+Semaphore48; RSS child sample giảm từ 49,004,544B ở baseline xuống 42,508,288B
+ở batch9 và terminal là 43,249,664B. Điều này không tái hiện S149 Event23→24
+nhưng không chứng minh ownership hoặc root cause; batch9 không có một cặp PSS
+immediate/quiet cùng thời điểm nên không được diễn giải mạnh hơn dữ liệu.
+Launcher exit1 và helper exit2 do `S149_OUTER_LIMIT`/`BENCHMARK_CLOSED_BEFORE_FINISH`;
+Job zero/closed, probe/wrapper release thành công, nhưng child exit và child
+cleanup không được publish nên giữ UNKNOWN. Đây là diagnostic AUTHORITY=0,
+ngoài F13/F14, không phải PASS/no-leak. Review độc lập của worker nằm ở
+`reviews/20260922-gt06-s150-event-quiescence/event-quiescence-review.md` và
+`post-s150-checklist.md`. Không có Event-focused source repair được cấp phép;
+formal GT06 chỉ mở lại bằng ID mới sau khi kiểm tra launcher exit publication,
+source/binding freeze và giữ nguyên gate 10x35.
 
 Rà phạm vi claim S76: GT-01–05 ACCEPTED theo fixture/catalog đã công bố,
 chưa chứng minh authoring gameplay tổng quát. Godot writer hiện chỉ Node3D/

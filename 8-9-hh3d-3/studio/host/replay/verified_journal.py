@@ -22,6 +22,31 @@ from studio.host.core.journal import Journal, JournalError
 from studio.host.replay.disk_journal_index import DiskJournalIndex, DiskIndexError
 
 
+def _read_verified_bytes(stream, digest, max_bytes):
+    """Hash every byte using one temporary bounded buffer, then release it.
+
+    Fewer read calls reduce I/O/GIL scheduling boundaries on large histories.
+    The buffer is local to this operation, never retained or preallocated to
+    affect baseline memory. Hash updates keep the existing 2047-byte bound.
+    """
+    size = 0
+    scratch = bytearray(min(1_048_576, max_bytes + 1))
+    with memoryview(scratch) as view:
+        while True:
+            capacity = min(len(view), max_bytes - size + 1)
+            with view[:capacity] as destination:
+                count = stream.readinto(destination)
+            if type(count) is not int or not 0 <= count <= capacity:
+                raise JournalError('JOURNAL_UNREADABLE')
+            if not count:
+                return size
+            size += count
+            if size > max_bytes:
+                raise JournalError('JOURNAL_FULL')
+            for offset in range(0, count, 2047):
+                digest.update(view[offset:min(offset + 2047, count)])
+
+
 class VerifiedJournal(Journal):
     def __init__(self, *args, **kwargs):
         self._cache_mutex = threading.RLock()
@@ -109,24 +134,7 @@ class VerifiedJournal(Journal):
                     raise JournalError('JOURNAL_PATH_UNSAFE')
                 if info.st_size > self.limits.max_bytes:
                     raise JournalError('JOURNAL_FULL')
-                # Batch disk reads without retaining history. Large hashlib
-                # updates release the GIL on each call; under concurrent host
-                # work that can turn a short hash into repeated scheduling
-                # waits. Small updates preserve the exact digest while normal
-                # Python scheduling still allows other threads to progress.
-                # Keep each disk read bounded so the host does not hold a large
-                # temporary buffer across a coupled editor/native observation.
-                # Hash updates remain <=2047 bytes, preserving the GIL-yield
-                # avoidance proven by S142 while reducing transient pressure.
-                while chunk := stream.read(min(65_536, self.limits.max_bytes - size + 1)):
-                    size += len(chunk)
-                    if size > self.limits.max_bytes:
-                        raise JournalError('JOURNAL_FULL')
-                    view = memoryview(chunk)
-                    for offset in range(0, len(view), 2047):
-                        digest.update(view[offset:offset + 2047])
-                    view.release()
-                    del view, chunk
+                size = _read_verified_bytes(stream, digest, self.limits.max_bytes)
                 final = os.fstat(stream.fileno())
                 if (size != info.st_size or final.st_size != size
                         or (info.st_dev, info.st_ino) != (final.st_dev, final.st_ino)):

@@ -1,0 +1,196 @@
+{
+  "actual_exit": {
+    "actual_exit": 0,
+    "formal_acceptance": false,
+    "pid": 32788,
+    "timeout": false
+  },
+  "archive": "studio\\.local\\archives\\gt06-s183-retained-http-01.zip",
+  "archive_sha256": "bdda7ba4e7f3421e66b08d0fd712eec231c6bb3558bbfd7eb95174aceb4b75dd",
+  "authority": 0,
+  "cancel_no_effect": true,
+  "cleanup": {
+    "closed": true,
+    "engine_started": false,
+    "formal_acceptance": false,
+    "journal_closed": true,
+    "journal_index_retained": false,
+    "probe_handle_retained": false,
+    "source_history_unchanged": true,
+    "threads_alive": [
+      false,
+      false,
+      false
+    ]
+  },
+  "commands": 1000,
+  "conclusion": "Complete HTTP-only diagnostic; second-scale S181 timeout not reproduced. Slow snapshots spend more wall time than thread CPU; exact scheduling/I/O cause remains unproven.",
+  "counts": {
+    "fsync": 4609,
+    "journal.append": 1403,
+    "journal.reload": 3206,
+    "journal.snapshot": 3206,
+    "sqlite.BEGIN IMMEDIATE": 1403,
+    "sqlite.COMMIT": 1403
+  },
+  "elapsed_batch_seconds": 252.006472,
+  "engine_started": false,
+  "formal_acceptance": false,
+  "full_formal_runs": 0,
+  "gc_max_in_retained_tail_ms": 0.5976,
+  "max_status_gap_ms": 846.6948,
+  "max_terminal_ms": 1348.4496,
+  "mix": {
+    "admitted": 200,
+    "inspect": 500,
+    "rejected": 300
+  },
+  "phase_tail_statistics": {
+    "fsync": {
+      "max_ms": 325.2754,
+      "median_ms": 0.5569,
+      "retained_count": 1239
+    },
+    "journal.append": {
+      "max_ms": 451.6901,
+      "median_ms": 15.07055,
+      "retained_count": 378
+    },
+    "journal.reload": {
+      "max_ms": 580.1006,
+      "median_ms": 70.7364,
+      "retained_count": 862
+    },
+    "journal.snapshot": {
+      "max_ms": 579.9987,
+      "median_ms": 70.68860000000001,
+      "retained_count": 862
+    },
+    "sqlite.BEGIN IMMEDIATE": {
+      "max_ms": 8.7533,
+      "median_ms": 0.1225,
+      "retained_count": 377
+    },
+    "sqlite.COMMIT": {
+      "max_ms": 86.2193,
+      "median_ms": 2.7977999999999996,
+      "retained_count": 378
+    }
+  },
+  "rows": [
+    {
+      "file": "cleanup.json",
+      "sha256": "fe85a937164ad924e11a6cae8a191822d92b3e0c9fb981e8532b629b71267e36",
+      "size": 281
+    },
+    {
+      "file": "command-batch.json",
+      "sha256": "8b29731462b7140f79715d33461337b447c39d6279e7e605028dc15bf6e98903",
+      "size": 8906548
+    },
+    {
+      "file": "commands/commands.jsonl",
+      "sha256": "e08e72f4aba1929a12441e912440f7c16af5fd9d9181a6951c0f320685a0a051",
+      "size": 23489235
+    },
+    {
+      "file": "commands/commands.jsonl.guard",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "file": "context.json",
+      "sha256": "ef7d99b1fc0877bc757518acb7b1aebd81793f8de7939680a6eb5106b1bdf26f",
+      "size": 6353
+    },
+    {
+      "file": "dispatch.json",
+      "sha256": "a1f6f635aab676c363de6e01d6196f352f545123ff4892148432403248c6faab",
+      "size": 240
+    },
+    {
+      "file": "http-phases-final.json",
+      "sha256": "85175c97e0556379363903cbe266b2e9b0612e931df9cdb484756485be9ce278",
+      "size": 6680025
+    },
+    {
+      "file": "process-exit.json",
+      "sha256": "6bf71fe4b2867057b511b902bf1a7855177509d5e27c25ba9dc74e8bc38a0d55",
+      "size": 95
+    },
+    {
+      "file": "stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "file": "stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "file": "timing.json",
+      "sha256": "ae1039c55f6e7b291ea4f338c7a1322d14803df6d72e4778c890180a03aadad7",
+      "size": 980997
+    }
+  ],
+  "run_id": "gt06-s183-retained-http-01",
+  "slow_events_over_500ms": [
+    {
+      "ended_ns": 1068930156664900,
+      "outcome": "returned",
+      "phase": "journal.snapshot",
+      "started_ns": 1068929596534800,
+      "thread_cpu_ms": 109.375,
+      "thread_id": 17940,
+      "wall_ms": 560.1301
+    },
+    {
+      "ended_ns": 1068930156701600,
+      "outcome": "returned",
+      "phase": "journal.reload",
+      "started_ns": 1068929596516600,
+      "thread_cpu_ms": 109.375,
+      "thread_id": 17940,
+      "wall_ms": 560.185
+    },
+    {
+      "ended_ns": 1068933165492600,
+      "outcome": "returned",
+      "phase": "journal.snapshot",
+      "started_ns": 1068932658715300,
+      "thread_cpu_ms": 62.5,
+      "thread_id": 18044,
+      "wall_ms": 506.7773
+    },
+    {
+      "ended_ns": 1068933165671600,
+      "outcome": "returned",
+      "phase": "journal.reload",
+      "started_ns": 1068932658523200,
+      "thread_cpu_ms": 62.5,
+      "thread_id": 18044,
+      "wall_ms": 507.1484
+    },
+    {
+      "ended_ns": 1068943675264500,
+      "outcome": "returned",
+      "phase": "journal.snapshot",
+      "started_ns": 1068943095265800,
+      "thread_cpu_ms": 46.875,
+      "thread_id": 18044,
+      "wall_ms": 579.9987
+    },
+    {
+      "ended_ns": 1068943675311300,
+      "outcome": "returned",
+      "phase": "journal.reload",
+      "started_ns": 1068943095210700,
+      "thread_cpu_ms": 46.875,
+      "thread_id": 18044,
+      "wall_ms": 580.1006
+    }
+  ],
+  "statistics_scope": "4096-entry retained phase tail; slow ring64 events >=500ms, not full per-phase population",
+  "verified_files": 11
+}
