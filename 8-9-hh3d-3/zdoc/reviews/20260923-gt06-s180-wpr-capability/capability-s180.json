@@ -13,14 +13,21 @@
       "version": "10.0.26100.8875",
       "sha256": "baf7ca49d71027ca87add81d7a126d1fa5245bc26ccd4f7f4246914375e99b12",
       "status": "WPR is not recording",
-      "profiles": ["Handle", "Heap", "HeapSnapshot"],
-      "handle_creator_stack_binding": false
+      "profiles": [
+        "Handle",
+        "Heap",
+        "HeapSnapshot"
+      ],
+      "handle_creator_stack_binding": false,
+      "status_exit_code": 0,
+      "profile_query_exit_code": 0,
+      "receipt_outputs": "probe-receipts.json + wpr-status/profiles stdout/stderr files"
     },
     "appverif": {
       "path": "C:/Windows/System32/appverif.exe",
       "version": "10.0.26100.7705",
       "sha256": "9d0992e6371523118cbf69e087117488e193b5d3ed1df379a4c67430a59fab18",
-      "help_probe": "requires elevation",
+      "help_probe": "blocked_with_windows_elevation_error_740_in_this_session",
       "usable_without_external_elevation": false
     },
     "other": {
@@ -39,7 +46,16 @@
   },
   "limitations": [
     "WPR profile availability alone does not prove per-handle creator or API return stacks.",
-    "Application Verifier could not be queried without elevation.",
+    "Application Verifier help probe returned WinError 740 (elevation required) in this session; this is an observed session boundary, not a machine-wide absence claim.",
     "No engine, benchmark, trace session, or process mutation was performed."
-  ]
+  ],
+  "observed_at_utc": "2026-09-23T11:40:40.149929+00:00",
+  "probe_receipts": "probe-receipts.json",
+  "trace_started": false,
+  "diagnostic_only": true,
+  "formal_retry": "disabled",
+  "auto_retry": "disabled",
+  "gate_changed": false,
+  "eligible_for_dataset": false,
+  "excluded_from_f13_f14_and_gt06_dataset": true
 }

@@ -1,0 +1,46 @@
+{
+  "schema": "HH-GT06-S180-PROBE-RECEIPTS-1",
+  "observed_at_utc": "2026-09-23T11:40:40.149929+00:00",
+  "cwd": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio",
+  "probes": [
+    {
+      "name": "wpr-status",
+      "argv": [
+        "C:\\Windows\\System32\\wpr.exe",
+        "-status"
+      ],
+      "exit_code": 0,
+      "exception": null,
+      "stdout_sha256": "11aec49c08f15b8ff509d0214d6b259f56b3ba5b74134ea4f1a51c2bd87211cf",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_bytes": 157,
+      "stderr_bytes": 0
+    },
+    {
+      "name": "wpr-profiles",
+      "argv": [
+        "C:\\Windows\\System32\\wpr.exe",
+        "-profiles"
+      ],
+      "exit_code": 0,
+      "exception": null,
+      "stdout_sha256": "81838fbe8277579e202264c57a7bf59df2901ddcd1a9c610e60b7306dc00106c",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_bytes": 1626,
+      "stderr_bytes": 0
+    },
+    {
+      "name": "appverif-help",
+      "argv": [
+        "C:\\Windows\\System32\\appverif.exe",
+        "/?"
+      ],
+      "exit_code": null,
+      "exception": "OSError: [WinError 740] The requested operation requires elevation",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_bytes": 0,
+      "stderr_bytes": 0
+    }
+  ]
+}
