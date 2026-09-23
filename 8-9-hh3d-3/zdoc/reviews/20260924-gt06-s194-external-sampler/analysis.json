@@ -1,0 +1,42 @@
+{
+  "archive_sha256": "9dcc6d4e5d409aae5f6f5e55b67fe0a830531bc98fe942b3b0f937df828b4d23",
+  "authority": 0,
+  "conclusion": "Distinct sampler route completed successfully and reported non-monotonic variation after startup; this does not prove leak, ownership, root cause, or GT06 acceptance. Keep formal gate and counter verifier unchanged.",
+  "editor_plugin": {
+    "filesystem_changes_max": 1,
+    "objects_max": 71115,
+    "objects_min": 70990,
+    "resources_max": 6,
+    "resources_min": 5,
+    "rows": 91
+  },
+  "external_sampler": {
+    "decreases": 10,
+    "first": 305,
+    "increases": 11,
+    "last": 498,
+    "max": 578,
+    "mean": 568.0568475452196,
+    "median": 573,
+    "min": 305,
+    "sample_count": 387,
+    "steady_after_60s": {
+      "decreases": 2,
+      "first": 565,
+      "increases": 0,
+      "last": 498,
+      "max": 565,
+      "min": 498,
+      "sample_count": 147,
+      "unique": 3
+    },
+    "target_pid": 11444,
+    "target_process_start": "windows:134346578558317968",
+    "unique": 18
+  },
+  "formal_acceptance": false,
+  "hypothesis": "An independent observer process opens the target PID and samples GetProcessHandleCount, separating sampler-handle ownership from the retained ProcessProbe route.",
+  "raw_manifest_sha256": "33c67538baa7b4bbc27f693010dd0f949d29618e153ac8f6312eb6b1bb7f2fbf",
+  "run_id": "gt06-s194-external-sampler-01",
+  "schema": "HH-GT06-S194-ANALYSIS-1"
+}
