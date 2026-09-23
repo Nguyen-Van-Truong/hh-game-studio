@@ -236,7 +236,12 @@ def _lookup_trace(row, *, canceled=False):
         if first_start is None:
             first_start = attempt['started_mono_us']
         _integer(attempt['ended_mono_us'], attempt['started_mono_us'], first_start + 5000000)
-        _need(attempt['command_id'] == row['command_id'], 'LOOKUP_IDENTITY')
+        control_busy = (attempt['status'] == 'REJECTED'
+                        and attempt['code'] == 'CONNECTION_LIMIT'
+                        and attempt['command_id'] == 'transport.request'
+                        and attempt['request_digest'] is None
+                        and attempt['transport_failure'] is None)
+        _need(control_busy or attempt['command_id'] == row['command_id'], 'LOOKUP_IDENTITY')
         _need(type(attempt['code']) is str and 1 <= len(attempt['code']) <= 160, 'LOOKUP_CODE')
         uncertain = attempt['status'] == 'UNKNOWN' and attempt['code'] == 'CONNECTION_LOST_LOOKUP'
         failure = attempt['transport_failure']
@@ -255,12 +260,12 @@ def _lookup_trace(row, *, canceled=False):
         else:
             _need(failure is None, 'LOOKUP_TRANSPORT_UNEXPECTED')
         _need(attempt['request_digest'] == row['request_digest']
-              or (uncertain and attempt['request_digest'] is None), 'LOOKUP_DIGEST')
+              or ((uncertain or control_busy) and attempt['request_digest'] is None), 'LOOKUP_DIGEST')
         if index == len(attempts) - 1:
             _need(attempt['status'] == response['status'] and attempt['code'] == response['code']
                   and attempt['ended_mono_us'] == row['terminal_mono_us'], 'LOOKUP_TERMINAL')
         else:
-            _need(uncertain or attempt['status'] == 'ACCEPTED_PENDING', 'LOOKUP_RETRY_SCOPE')
+            _need(uncertain or control_busy or attempt['status'] == 'ACCEPTED_PENDING', 'LOOKUP_RETRY_SCOPE')
         previous = attempt['ended_mono_us']
         ends.append(previous)
     return ends

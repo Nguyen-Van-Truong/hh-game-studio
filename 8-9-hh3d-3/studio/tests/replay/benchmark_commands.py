@@ -216,7 +216,21 @@ class CommandProducer:
             row['terminal_mono_us'] = ended // 1000
             row['terminal_ms'] = (ended - started_ns) / 1_000_000
             _need(ended <= deadline, 'TERMINAL_TIMEOUT')
-            _need(result.command_id == command_id, 'TERMINAL_IDENTITY')
+            # When the bounded control listener is saturated it rejects
+            # before parsing the request, so it can only return the
+            # transport sentinel identity.  This is retryable capacity
+            # feedback, not a terminal receipt for the command.  Keep the
+            # raw response in the attempt and retry within the existing
+            # five-second terminal budget; every other identity mismatch
+            # remains fail-closed.
+            control_busy = (result.status is Status.REJECTED
+                            and result.code == 'CONNECTION_LIMIT'
+                            and result.command_id == 'transport.request'
+                            and result.postconditions == {})
+            _need(control_busy or result.command_id == command_id, 'TERMINAL_IDENTITY')
+            if control_busy:
+                time.sleep(min(0.01, max(0.0, remaining)))
+                continue
             uncertain = result.status is Status.UNKNOWN and result.code == 'CONNECTION_LOST_LOOKUP'
             digest = result.postconditions.get('request_digest')
             _need(digest == request_digest or uncertain and digest is None, 'TERMINAL_IDENTITY')

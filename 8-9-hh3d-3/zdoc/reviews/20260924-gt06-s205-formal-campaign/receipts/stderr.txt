@@ -1,0 +1,29 @@
+Traceback (most recent call last):
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\replay\benchmark_commands.py", line 327, in _run
+    self._command(kind, command_id, lease, row)
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\replay\benchmark_commands.py", line 260, in _command
+    terminal, ended = self._terminal(command_id, request.digest, row, started_ns=start)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\replay\benchmark_commands.py", line 219, in _terminal
+    _need(result.command_id == command_id, 'TERMINAL_IDENTITY')
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\replay\benchmark_commands.py", line 69, in _need
+    raise CommandError(code)
+studio.tests.replay.benchmark_commands.CommandError: TERMINAL_IDENTITY
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\replay\run_benchmark_campaign.py", line 1059, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\replay\run_benchmark_campaign.py", line 1052, in main
+    run_child(root / f'run-{args.child_index:02d}-attempt-{args.attempt:02d}')
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\replay\run_benchmark_campaign.py", line 908, in run_child
+    report = producer.run_batch(index)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\replay\benchmark_commands.py", line 295, in run_batch
+    return self._run(index, GROUPS, 'benchmark')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\replay\benchmark_commands.py", line 350, in _run
+    raise CommandError(report['failure_code'], report=report, cleanup_owner=self) from error
+studio.tests.replay.benchmark_commands.CommandError: TERMINAL_IDENTITY

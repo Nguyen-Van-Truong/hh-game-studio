@@ -388,6 +388,28 @@ class CommandProducerTests(unittest.TestCase):
                 self.assertEqual(calls, ['same.command'])
                 self.assertEqual(row['terminal_response'], response.as_dict())
 
+    def test_control_connection_limit_is_retryable_transport_capacity(self):
+        calls = []
+        responses = [
+            Response(Status.REJECTED, 'CONNECTION_LIMIT', 'transport.request'),
+            Response(Status.COMMITTED, 'READBACK_CONFIRMED', 'same.command',
+                     result_revision='rev-1', result_hash='sha256:' + 'a' * 64,
+                     postconditions={'request_digest': 'sha256:' + 'a' * 64,
+                                     'snapshot': {'effect_count': 1, 'revision': 'rev-1', 'value': 1}}),
+        ]
+        def lookup(command_id):
+            calls.append(command_id)
+            return responses.pop(0)
+        self.producer.client = SimpleNamespace(timeout=2.0, lookup=lookup)
+        row = {'lookup_attempts': []}
+        with patch.object(benchmark.time, 'sleep'):
+            result, ended = self.producer._terminal('same.command', 'sha256:' + 'a' * 64, row)
+        self.assertEqual(calls, ['same.command', 'same.command'])
+        self.assertEqual(result.command_id, 'same.command')
+        self.assertEqual(row['lookup_attempts'][0]['command_id'], 'transport.request')
+        self.assertEqual(row['lookup_attempts'][0]['request_digest'], None)
+        self.assertEqual(row['lookup_attempts'][1]['command_id'], 'same.command')
+
     def test_cancel_terminal_failure_retains_partial_response(self):
         actual_lookup = FixtureClient.lookup
         cancel_lookups = []

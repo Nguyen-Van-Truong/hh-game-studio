@@ -462,6 +462,23 @@ class AssemblyTests(unittest.TestCase):
         with self.assertRaisesRegex(assembly.AssemblyError, 'STATUS_LOOKUP_MISSING'):
             assembly.validate_command_batch(value, run_id=RUN, index=0, host_identity=PROCESSES['host'])
 
+    def test_control_connection_limit_attempt_is_bounded_retry(self):
+        value = command_fixture()
+        row = value['commands'][0]
+        successful = row['lookup_attempts'][0]
+        busy_end = row['receipt_mono_us'] + 50
+        row['lookup_attempts'].insert(0, {
+            'status': 'REJECTED', 'code': 'CONNECTION_LIMIT',
+            'command_id': 'transport.request', 'request_digest': None,
+            'started_mono_us': row['receipt_mono_us'] + 1,
+            'ended_mono_us': busy_end, 'transport_failure': None})
+        successful['started_mono_us'] = busy_end + 1
+        value['host_response_mono_us'].append(busy_end)
+        value['host_response_mono_us'].sort()
+        stamps = value['host_response_mono_us']
+        value['max_status_gap_ms'] = max(b - a for a, b in zip(stamps, stamps[1:])) / 1000
+        assembly.validate_command_batch(value, run_id=RUN, index=0, host_identity=PROCESSES['host'])
+
     def test_lookup_budget_legacy_schema_and_forged_cancel_counter_rejected(self):
         value = self.values['command'].value
         add_lookup_recovery(value, extra_us=5000001)
