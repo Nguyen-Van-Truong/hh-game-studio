@@ -11,7 +11,7 @@ Raw runs remain under the local review archive and are referenced by hashes in `
 
 ## Frozen provenance
 
-- `SOURCE_CHECKPOINT=b3dc952d`
+- `SOURCE_CHECKPOINT=bec7aef5`
 - `PLAN_SHA256=35781d3e121f96798ad28c12f89faaf386bf4a636d20420460b6408fe9ab262f`
 - `SUMMARY=../20260923-consumer-pilot-s177-derived/S177-SUMMARY.json`
 - `RAW_ARCHIVE=local-only; hash-bound; no rerun required for this handoff`
