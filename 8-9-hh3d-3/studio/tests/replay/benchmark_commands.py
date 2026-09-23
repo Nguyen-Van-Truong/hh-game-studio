@@ -8,8 +8,9 @@ validation rejection is the actual INVALID_FIXTURE_PAYLOAD wire response.
 Auxiliary discovery, lease, lookup and Cancel calls are outside the 1000 mix.
 One delayed mock job is canceled after group 49 through the control listener.
 No native effects, engine launches, public cap increases or journal clearing.
-Only explicit connection-loss uncertainty during lookup is reconciled by
-another lookup of the same ID, within the original five-second terminal budget.
+Only explicit connection-loss uncertainty during admission or lookup is
+reconciled by another lookup of the same ID, within the original five-second
+terminal budget.
 This covers a known uncertainty path; it does not establish the cause of any
 older failure whose lookup response was not captured.
 
@@ -269,8 +270,20 @@ class CommandProducer:
             row.update(latency_ms=row['receipt_ms'], terminal_status=result.status.value,
                        effect_count_before=expected, effect_count_after=expected)
             return
-        _need(result.status is Status.ACCEPTED_PENDING, 'ADMISSION_' + result.status.value)
-        _need(result.postconditions.get('request_digest') == request.digest, 'RECEIPT_DIGEST')
+        # A response can be lost after the host durably admits the command.
+        # The client returns this one exact, identity-bound sentinel; never
+        # resubmit it. Reconcile through the existing bounded terminal lookup
+        # so the journal/readback remains authoritative and every other
+        # UNKNOWN or malformed response still fails closed.
+        admission_uncertain = (
+            result.status is Status.UNKNOWN
+            and result.code == 'CONNECTION_LOST_LOOKUP'
+            and result.command_id == command_id
+            and result.postconditions == {'next_action': 'lookup'}
+        )
+        if not admission_uncertain:
+            _need(result.status is Status.ACCEPTED_PENDING, 'ADMISSION_' + result.status.value)
+            _need(result.postconditions.get('request_digest') == request.digest, 'RECEIPT_DIGEST')
         terminal, ended = self._terminal(command_id, request.digest, row, started_ns=start)
         snapshot = self._readback(terminal, expected + (kind == 'admitted'), value if kind == 'admitted' else None)
         row.update(terminal_mono_us=ended // 1000, terminal_ms=(ended - start) / 1_000_000,

@@ -330,8 +330,13 @@ def validate_command_batch(value, *, run_id, index, host_identity):
             previous = row['receipt_mono_us']
             expected_latency = row['receipt_ms']
         else:
-            _need(row['receipt_status'] == 'ACCEPTED_PENDING' and row['receipt_code'] == 'QUEUED'
-                  and row['terminal_status'] == 'COMMITTED' and row['terminal_code'] == 'READBACK_CONFIRMED', 'COMMAND_TERMINAL')
+            normal_admission = (row['receipt_status'] == 'ACCEPTED_PENDING'
+                                and row['receipt_code'] == 'QUEUED')
+            recovered_admission = (row['receipt_status'] == 'UNKNOWN'
+                                   and row['receipt_code'] == 'CONNECTION_LOST_LOOKUP')
+            _need((normal_admission or recovered_admission)
+                  and row['terminal_status'] == 'COMMITTED'
+                  and row['terminal_code'] == 'READBACK_CONFIRMED', 'COMMAND_TERMINAL')
             _timing(row['started_mono_us'], row['terminal_mono_us'], row['terminal_ms'], host=True)
             _need(row['terminal_mono_us'] >= row['receipt_mono_us'], 'COMMAND_CLOCK_ORDER')
             count += int(kind == 'admitted')

@@ -125,28 +125,51 @@ class CommandProducerTests(unittest.TestCase):
             connection.close()
         self.assertEqual(self.producer.host.fixture.effect_count, 0)
 
-    def test_failure_keeps_partial_row_and_latches_no_retry(self):
-        self.producer.host.faults.drop_submit_response_once = True
-        with self.assertRaises(benchmark.CommandError) as caught:
-            self.producer.run_diagnostic()
-        error = caught.exception
-        self.assertIs(error.cleanup_owner, self.producer)
-        self.assertEqual(error.report['status'], 'FAILED')
-        self.assertFalse(error.report['complete_command_mix'])
-        self.assertEqual(len(error.report['commands']), 1)
-        self.assertEqual(error.report['commands'][0]['receipt_status'], 'UNKNOWN')
-        failure = error.report['transport_failure']
-        self.assertEqual(failure['stage'], 'getresponse')
-        self.assertGreaterEqual(failure['elapsed_ms'], 0)
-        self.assertNotIn(self.producer.credential.bearer, json.dumps(error.report))
-        # Later calls may clear the client's observation; the failed batch keeps
-        # its own copy and never becomes a measured success through reconciliation.
-        saved = dict(failure)
-        self.producer.client.discover()
-        self.assertIsNone(self.producer.client.last_transport_failure)
-        self.assertEqual(failure, saved)
-        with self.assertRaisesRegex(benchmark.CommandError, 'PRODUCER_CLOSED_OR_HELD'):
-            self.producer.run_diagnostic()
+    def test_lost_admission_response_reconciles_without_resubmit_or_duplicate_effect(self):
+        submits = []
+        lost = False
+        actual_submit = FixtureClient.submit
+
+        def submit(client, request):
+            nonlocal lost
+            submits.append(request.command_id)
+            result = actual_submit(client, request)
+            if request.command_id.endswith('.admitted.0') and not lost:
+                lost = True
+                return Response(Status.UNKNOWN, 'CONNECTION_LOST_LOOKUP', request.command_id,
+                                postconditions={'next_action': 'lookup'})
+            return result
+
+        with patch.object(FixtureClient, 'submit', submit):
+            report = self.producer.run_diagnostic()
+        self.assertEqual(report['status'], 'DIAGNOSTIC')
+        self.assertTrue(lost)
+        self.assertEqual(len(submits), 11)
+        self.assertEqual(len(set(submits)), 11)
+        self.assertEqual(self.producer.host.fixture.effect_count, 2)
+        recovered = report['commands'][8]
+        self.assertEqual((recovered['receipt_status'], recovered['receipt_code']),
+                         ('UNKNOWN', 'CONNECTION_LOST_LOOKUP'))
+        self.assertEqual((recovered['terminal_status'], recovered['terminal_code']),
+                         ('COMMITTED', 'READBACK_CONFIRMED'))
+        self.assertEqual(recovered['lookup_attempts'][-1]['request_digest'], recovered['request_digest'])
+        self.assertNotIn(self.producer.credential.bearer, json.dumps(report))
+
+    def test_admission_unknown_with_wrong_sentinel_fails_closed(self):
+        actual_submit = FixtureClient.submit
+
+        def submit(client, request):
+            result = actual_submit(client, request)
+            if request.command_id.endswith('.admitted.0'):
+                self.assertIs(result.status, Status.ACCEPTED_PENDING)
+                return Response(Status.UNKNOWN, 'CONNECTION_LOST_LOOKUP', request.command_id,
+                                postconditions={'next_action': 'other'})
+            return result
+
+        with patch.object(FixtureClient, 'submit', submit):
+            with self.assertRaisesRegex(benchmark.CommandError, 'ADMISSION_UNKNOWN'):
+                self.producer.run_diagnostic()
+        self.assertEqual(self.producer.host.fixture.effect_count, 0)
 
     def test_process_drift_and_bad_batch_order_fail_before_claim(self):
         with self.assertRaisesRegex(benchmark.CommandError, 'BATCH_ORDER'):

@@ -363,6 +363,24 @@ class AssemblyTests(unittest.TestCase):
         self.assertEqual(validated['effect_count_after'], 200)
         self.assertEqual(validated['effects_per_admission'], [1] * 200)
 
+    def test_admission_response_loss_is_valid_only_with_same_id_terminal_readback(self):
+        value = command_fixture()
+        row = value['commands'][8]  # first admitted command in the fixed 5/3/2 mix
+        row['receipt_status'] = 'UNKNOWN'
+        row['receipt_code'] = 'CONNECTION_LOST_LOOKUP'
+        validated = assembly.validate_command_batch(value, run_id=RUN, index=0,
+                                                     host_identity=PROCESSES['host'])
+        self.assertEqual(validated['commands'][8]['terminal_status'], 'COMMITTED')
+        self.assertEqual(validated['commands'][8]['lookup_attempts'][-1]['request_digest'],
+                         validated['commands'][8]['request_digest'])
+
+        value = command_fixture()
+        value['commands'][8]['receipt_status'] = 'UNKNOWN'
+        value['commands'][8]['receipt_code'] = 'OTHER_UNKNOWN'
+        with self.assertRaisesRegex(assembly.AssemblyError, 'COMMAND_TERMINAL'):
+            assembly.validate_command_batch(value, run_id=RUN, index=0,
+                                             host_identity=PROCESSES['host'])
+
     def test_lookup_transport_failure_metadata_preserves_timing_and_status_gap(self):
         for canceled in (False, True):
             for category in ('timeout', 'connection', 'http', 'os'):
