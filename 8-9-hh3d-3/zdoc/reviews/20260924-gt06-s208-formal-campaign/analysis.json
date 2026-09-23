@@ -1,0 +1,57 @@
+{
+  "schema": "HH-GT06-S212-TERMINAL-ANALYSIS-1",
+  "authority": 0,
+  "formal_acceptance": false,
+  "campaign_id": "gt06-s208-formal-01",
+  "source_closure_sha256": "b4eff563fc51c2cd6fc21488ec097d5d2b9d4a033be524a0847d5089e011e37a",
+  "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+  "terminal_run": {
+    "run_id": "gt06-s208-formal-01.r01.a01",
+    "completed_batches_0_through_19": true,
+    "failed_batch": 20,
+    "completed_batches": 20,
+    "failure_code": "ADMISSION_UNKNOWN",
+    "stage": "body",
+    "transport_failure": {
+      "endpoint": "commands",
+      "stage": "getresponse",
+      "category": "timeout",
+      "elapsed_ms": 2018.8525
+    }
+  },
+  "response_loss_proof": {
+    "command_id": "gt06-s208-formal-01.r01.a01.b20.admitted.55",
+    "request_digest": "sha256:7eb76b8f9966b6a4476bcbd0c21f75cf08d79554e51f54b6947220648c11b975",
+    "client_observation": "UNKNOWN/CONNECTION_LOST_LOOKUP after commands getresponse timeout",
+    "raw_journal_sequence": [
+      "ACCEPTED_PENDING/QUEUED",
+      "COMMITTED/READBACK_CONFIRMED"
+    ],
+    "committed_effect_count": 4056,
+    "duplicate_submit_observed": false,
+    "root_cause_claim": false
+  },
+  "cleanup": {
+    "host_wrapper_exit": 1,
+    "import_actual_exit": 0,
+    "editor_target_exit": null,
+    "editor_helper_exit": 2,
+    "owned_tree_zero": true,
+    "owner_closed": true,
+    "jobs_zero_closed": true,
+    "handles_released": true,
+    "supervisor_actual_exit": null,
+    "scheduler_or_absence_not_exit_proof": true
+  },
+  "run00_context": {
+    "completed_batches": 35,
+    "formal_acceptance": false,
+    "not_merged_into_pass": true
+  },
+  "decision": "PRESERVE_FAILURE; NO_PARTIAL_MERGE; NO_ID_REUSE; REPAIR_ONLY_RESPONSE_LOSS_ADMISSION_RECONCILIATION_BOUNDARY_THEN_FRESH_CAMPAIGN",
+  "gate_changed": false,
+  "timeout_baseline_profile_counter_rss_changed": false,
+  "runtime_source_mutated": false,
+  "raw_manifest_sha256": "befd07222eb3b7117db17a6f00b14a6f116d9faeb88aca1604db3f38b1e3cfce",
+  "archive_sha256": "57e239257121a037e312192f1edfddd11b62e9eb8e09e0c1b8781cab9a725e1a"
+}

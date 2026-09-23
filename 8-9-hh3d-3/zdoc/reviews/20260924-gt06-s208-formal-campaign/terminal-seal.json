@@ -1,0 +1,32 @@
+{
+  "schema": "HH-GT06-TERMINAL-SEAL-1",
+  "authority": 0,
+  "formal_acceptance": false,
+  "campaign_id": "gt06-s208-formal-01",
+  "terminal_revision": "S212",
+  "raw_root": "studio/.local/reviews/gt06-s208-formal-01",
+  "supervisor_root": "studio/.local/reviews/gt06-s208-formal-01-supervisor",
+  "raw_manifest": "studio/.local/reviews/gt06-s208-formal-01/raw-manifest.json",
+  "raw_manifest_sha256": "befd07222eb3b7117db17a6f00b14a6f116d9faeb88aca1604db3f38b1e3cfce",
+  "archive": "studio/.local/archives/gt06-s208-formal-01-s212-terminal.zip",
+  "archive_sha256": "57e239257121a037e312192f1edfddd11b62e9eb8e09e0c1b8781cab9a725e1a",
+  "verified_entries": 788,
+  "failure_code": "ADMISSION_UNKNOWN",
+  "failed_batch": 20,
+  "source_closure_sha256": "b4eff563fc51c2cd6fc21488ec097d5d2b9d4a033be524a0847d5089e011e37a",
+  "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+  "cleanup": {
+    "host_wrapper_exit": 1,
+    "import_actual_exit": 0,
+    "editor_target_exit": null,
+    "editor_helper_exit": 2,
+    "owned_tree_zero": true,
+    "owner_closed": true,
+    "jobs_zero_closed": true,
+    "handles_released": true,
+    "supervisor_actual_exit": null,
+    "scheduler_or_absence_not_exit_proof": true
+  },
+  "runtime_source_mutated": false,
+  "gate_changed": false
+}

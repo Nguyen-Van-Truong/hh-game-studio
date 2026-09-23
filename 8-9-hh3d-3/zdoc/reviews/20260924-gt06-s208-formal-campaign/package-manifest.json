@@ -1,0 +1,27 @@
+{
+  "schema": "HH-GT06-S212-PACKET-MANIFEST-1",
+  "authority": 0,
+  "formal_acceptance": false,
+  "campaign_id": "gt06-s208-formal-01",
+  "raw_manifest_sha256": "befd07222eb3b7117db17a6f00b14a6f116d9faeb88aca1604db3f38b1e3cfce",
+  "archive_sha256": "57e239257121a037e312192f1edfddd11b62e9eb8e09e0c1b8781cab9a725e1a",
+  "runtime_source_mutated": false,
+  "gate_changed": false,
+  "files": [
+    {
+      "path": "analysis.json",
+      "size_bytes": 2106,
+      "sha256": "4e55def911bf3a90b2594d39920860a691b967ecb0246c6981f568456bff6132"
+    },
+    {
+      "path": "README.md",
+      "size_bytes": 893,
+      "sha256": "b9e5a72c07b0eafaf690f0995f23ba968af8c8715b808bb7bd21589867bc2c69"
+    },
+    {
+      "path": "terminal-seal.json",
+      "size_bytes": 1304,
+      "sha256": "e23e004f0dcd638ed153ad18caee75e2faaae8ce6bb95b4fbfce0e6cd9d2a56c"
+    }
+  ]
+}
