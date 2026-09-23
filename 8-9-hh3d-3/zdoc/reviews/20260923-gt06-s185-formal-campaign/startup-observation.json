@@ -1,0 +1,45 @@
+{
+  "schema": "HH-GT06-S185-STARTUP-OBSERVATION-1",
+  "observed_utc": "2026-09-23T15:11:01.5788183Z",
+  "run_id": "gt06-s185-formal-01",
+  "authority": 0,
+  "formal_acceptance": false,
+  "scope": "Startup liveness only; not future liveness, exit, cleanup, or full-run proof",
+  "processes": [
+    {
+      "pid": 8884,
+      "parent_pid": 1836,
+      "started_utc": "2026-09-23T15:02:40.7559330Z",
+      "process_start": "windows:134346493607559330",
+      "executable": "C:\\Users\\truon\\AppData\\Local\\Programs\\Python\\Python311\\pythonw.exe"
+    },
+    {
+      "pid": 2028,
+      "parent_pid": 8884,
+      "started_utc": "2026-09-23T15:02:43.3438630Z",
+      "process_start": "windows:134346493633438630",
+      "executable": "C:\\Users\\truon\\AppData\\Local\\Programs\\Python\\Python311\\python.exe"
+    },
+    {
+      "pid": 27496,
+      "parent_pid": 2028,
+      "started_utc": "2026-09-23T15:02:43.5565590Z",
+      "process_start": "windows:134346493635565590",
+      "executable": "C:\\Users\\truon\\AppData\\Local\\Programs\\Python\\Python311\\python.exe"
+    },
+    {
+      "pid": 53008,
+      "parent_pid": 27496,
+      "started_utc": "2026-09-23T15:03:00.4690070Z",
+      "process_start": "windows:134346493804690070",
+      "executable": "C:\\Users\\truon\\AppData\\Local\\Programs\\Python\\Python311\\python.exe"
+    },
+    {
+      "pid": 47532,
+      "parent_pid": 53008,
+      "started_utc": "2026-09-23T15:03:00.6139430Z",
+      "process_start": "windows:134346493806139430",
+      "executable": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\tooling\\godot-4.7.2-stable\\Godot_v4.7.2-stable_win64.exe"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "schema": "HH-GT06-S185-FAILURE-ANALYSIS-1",
+  "authority": 0,
+  "attribution": "diagnostic only; no leak/root-cause claim",
+  "finding": "S184 read-buffer candidate did not pass the original counter gate: the stock formal stopped at batch 5 joint_observation with retained counter growth. This is failure evidence, not proof that the candidate caused a leak.",
+  "preserved": "All raw and supervisor files are archived with hashes; prior S181/S182/S183/S184 evidence remains separate.",
+  "next": "Read batch 0-5 counter deltas, attempt-child failure and cleanup records from the sealed raw. Repair only a proven source or harness boundary. Do not rerun the same source/hypothesis blindly and do not change gate/timeout/baseline/profile/RSS.",
+  "scheduling": "GT06 remains IN_PROGRESS with zero accepted full runs; GT07-GT10 unopened."
+}

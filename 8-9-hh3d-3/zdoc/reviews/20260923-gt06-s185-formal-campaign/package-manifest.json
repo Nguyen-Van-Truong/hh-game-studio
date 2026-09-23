@@ -1,0 +1,60 @@
+{
+  "schema": "HH-GT06-S185-TERMINAL-PACKET-1",
+  "authority": 0,
+  "formal_acceptance": false,
+  "source_commit": "f0e669f8",
+  "raw_manifest_sha256": "140ea36429512a1457d6a05f2f2a36c952620199690ed77e9b0bf6ffb15a45cf",
+  "archive_sha256": "ea1a0a99a0835277568be78050cc5ad2da0a65ed13c468f874e482c234c9b028",
+  "files": [
+    {
+      "path": ".gitattributes",
+      "sha256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da",
+      "size_bytes": 8
+    },
+    {
+      "path": "editor-process-start.json",
+      "sha256": "d95ea842b17cfc047828a12b0ed1df278ab81d4e2ed56ad00acaa1b40d45f238",
+      "size_bytes": 14
+    },
+    {
+      "path": "failure-analysis.json",
+      "sha256": "0d4842b26b10caf0afe767ce2fd3525e52a02e42f6045fedd676716a8f07de9e",
+      "size_bytes": 853
+    },
+    {
+      "path": "import-process-exit.json",
+      "sha256": "0c57c10cb5f6aa88cc23cc27ebdb423ea93af78d3b297dbed5c455f78fb975ac",
+      "size_bytes": 30
+    },
+    {
+      "path": "joint-00.json",
+      "sha256": "0b2df91f379712d86b81dee1b19741a8bd7f0ef88aecd43ca797ae4a13236b29",
+      "size_bytes": 2294
+    },
+    {
+      "path": "README.md",
+      "sha256": "385b70ae55343e743dcb12937f4462014fbb2ebea28604b4068f58ec485ebfbe",
+      "size_bytes": 1522
+    },
+    {
+      "path": "startup-observation.json",
+      "sha256": "7a55c5e3901366af4338917452369ce011c611d169ab94161a14e84a50397add",
+      "size_bytes": 1740
+    },
+    {
+      "path": "supervisor-start.json",
+      "sha256": "3c168fcd835fb1f8d2d60478f35a2845a9818e5ba951e4a4a736467686d993f5",
+      "size_bytes": 499
+    },
+    {
+      "path": "task-start.json",
+      "sha256": "7bca1213589f7ed469129497ce7d1973d3130e1d9db5bbf3d17d2241db453fc0",
+      "size_bytes": 876
+    },
+    {
+      "path": "terminal-seal.json",
+      "sha256": "c81e68d96fad6501d9a39fdb99627e4626f734f4c185d5a0a1e8cb0169a25a9e",
+      "size_bytes": 1108
+    }
+  ]
+}

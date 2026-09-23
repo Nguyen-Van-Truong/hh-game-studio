@@ -1,0 +1,29 @@
+{
+  "schema": "HH-GT06-S185-TERMINAL-SEAL-1",
+  "campaign_id": "gt06-s185-formal-01",
+  "authority": 0,
+  "formal_acceptance": false,
+  "source_commit": "f0e669f8",
+  "source_closure": "fc46cfd2e80e8d78024b6a31c6c72be64f33d83aab4fe1abebaf899907f0e205",
+  "execution_closure": "493a7ccce3e42993399910b0fe977f25448f411b863e4cca7b57904348ac374e",
+  "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+  "raw_manifest_sha256": "140ea36429512a1457d6a05f2f2a36c952620199690ed77e9b0bf6ffb15a45cf",
+  "archive_sha256": "ea1a0a99a0835277568be78050cc5ad2da0a65ed13c468f874e482c234c9b028",
+  "archive_entry_count": 252,
+  "failure_code": "CAMPAIGN_RETAINED_COUNTER_GROWTH",
+  "failure_phase": {
+    "batch": 5,
+    "phase": "joint_observation"
+  },
+  "completed_batches": "0-4",
+  "partial_batch": 5,
+  "parent_failure": "BENCHMARK_WRAPPER_EXIT",
+  "cleanup_proof": {
+    "owned_tree_zero": true,
+    "owner_closed": true,
+    "cleanup_error": null
+  },
+  "actual_engine_runs": 1,
+  "accepted_full_runs": 0,
+  "decision": "RETAIN_FAILURE_NO_BLIND_RETRY"
+}
