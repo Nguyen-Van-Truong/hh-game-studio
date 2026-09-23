@@ -1,0 +1,76 @@
+{
+  "schema": "HH-S186-PACKET-2",
+  "authority": 0,
+  "formal_acceptance": false,
+  "supersedes": "package-manifest.json",
+  "files": {
+    ".gitattributes": {
+      "sha256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da",
+      "size_bytes": 8
+    },
+    "counter-attribution.json": {
+      "sha256": "a5070116c001fe7845ad191a7d9aae5b127cf48e6ed68c398e6584b20748343f",
+      "size_bytes": 3264
+    },
+    "editor-process-start.json": {
+      "sha256": "d95ea842b17cfc047828a12b0ed1df278ab81d4e2ed56ad00acaa1b40d45f238",
+      "size_bytes": 14
+    },
+    "failure-analysis.json": {
+      "sha256": "95714d0800b45f12a0b4bc7db8ec05e8296474452f0205746ef5dfa148c44a7a",
+      "size_bytes": 1194
+    },
+    "import-process-exit.json": {
+      "sha256": "0c57c10cb5f6aa88cc23cc27ebdb423ea93af78d3b297dbed5c455f78fb975ac",
+      "size_bytes": 30
+    },
+    "joint-00.json": {
+      "sha256": "0b2df91f379712d86b81dee1b19741a8bd7f0ef88aecd43ca797ae4a13236b29",
+      "size_bytes": 2294
+    },
+    "package-manifest.json": {
+      "sha256": "2d7a4a34a9b15c34fd460f1cade43d2f4779b89b3302f998a13ef37df6aa613f",
+      "size_bytes": 1960
+    },
+    "raw-manifest.json": {
+      "sha256": "140ea36429512a1457d6a05f2f2a36c952620199690ed77e9b0bf6ffb15a45cf",
+      "size_bytes": 52162
+    },
+    "README.md": {
+      "sha256": "9e2a8cdac29de1e576fb3815693fc9c99c284f015fde66d1de4686d0c9870ce0",
+      "size_bytes": 1897
+    },
+    "s186-runner-scope-correction.json": {
+      "sha256": "1f870f5c593b3ef01e7678462d690f94ff227faca723961da8045fcee3991426",
+      "size_bytes": 1460
+    },
+    "scheduler-terminal.json": {
+      "sha256": "f56515c7441cf7a8b62dd0836e4a270f22112136edc979370059fdff9964a532",
+      "size_bytes": 646
+    },
+    "startup-observation.json": {
+      "sha256": "7a55c5e3901366af4338917452369ce011c611d169ab94161a14e84a50397add",
+      "size_bytes": 1740
+    },
+    "supervisor-start.json": {
+      "sha256": "3c168fcd835fb1f8d2d60478f35a2845a9818e5ba951e4a4a736467686d993f5",
+      "size_bytes": 499
+    },
+    "task-retired.json": {
+      "sha256": "1674c50ab3ca4e119ce840015b7fb7eec7626b833343feb95169d0bb8dd10475",
+      "size_bytes": 362
+    },
+    "task-start.json": {
+      "sha256": "7bca1213589f7ed469129497ce7d1973d3130e1d9db5bbf3d17d2241db453fc0",
+      "size_bytes": 876
+    },
+    "terminal-seal.json": {
+      "sha256": "c81e68d96fad6501d9a39fdb99627e4626f734f4c185d5a0a1e8cb0169a25a9e",
+      "size_bytes": 1108
+    },
+    "verification-v2.json": {
+      "sha256": "f14e810ce8a62b53731d2f67b933d7454f2c612cc39efdcca1994d80c283c287",
+      "size_bytes": 2276
+    }
+  }
+}

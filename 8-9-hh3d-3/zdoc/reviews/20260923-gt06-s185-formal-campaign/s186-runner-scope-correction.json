@@ -1,0 +1,49 @@
+{
+  "schema": "HH-S186-RUNNER-SCOPE-CORRECTION-1",
+  "authority": 0,
+  "run_id": "gt06-s186-idle-editor-handles-01",
+  "intended": "Idle editor handles control",
+  "actual": "one GUI editor, one direct-semantic cycle; no full campaign or host/API mix",
+  "handle_samples_present": false,
+  "sample_count": 340,
+  "actual_exits": {
+    "editor": {
+      "exit_code": 0,
+      "pid": 26072
+    },
+    "import": {
+      "exit_code": 0,
+      "pid": 38052
+    }
+  },
+  "jobs": {
+    "editor": {
+      "active_count": 0,
+      "assigned": true,
+      "close_uncertain": false,
+      "closed": true,
+      "configured": true,
+      "create_uncertain": false,
+      "failed_operations": [],
+      "handle_retained": false,
+      "native_error": null,
+      "tainted": false,
+      "zero_observed": true
+    },
+    "import": {
+      "active_count": 0,
+      "assigned": true,
+      "close_uncertain": false,
+      "closed": true,
+      "configured": true,
+      "create_uncertain": false,
+      "failed_operations": [],
+      "handle_retained": false,
+      "native_error": null,
+      "tainted": false,
+      "zero_observed": true
+    }
+  },
+  "raw_capture_sha256": "a2f323f46228399a46d1abddcd40940304adbd1b3e12fe66375c52dde5bd8787",
+  "decision": "Excluded from idle attribution and formal acceptance. Wrong runner selected; next run requires static confirmation of workload and actual handle field before launch."
+}

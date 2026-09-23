@@ -1,0 +1,64 @@
+{
+  "schema": "HH-S186-VERIFICATION-2",
+  "verified_utc": "2026-09-23T15:34:26.909467+00:00",
+  "authority": 0,
+  "formal_acceptance": false,
+  "archive_entries_verified": 252,
+  "original_raw_and_supervisor_entries": 251,
+  "collector_authored_supplemental_entries": [
+    "raw/s186-terminal-capture.json"
+  ],
+  "archive_sha256": "ea1a0a99a0835277568be78050cc5ad2da0a65ed13c468f874e482c234c9b028",
+  "raw_manifest_sha256": "140ea36429512a1457d6a05f2f2a36c952620199690ed77e9b0bf6ffb15a45cf",
+  "source_files_verified": 53,
+  "source_closure_sha256": "fc46cfd2e80e8d78024b6a31c6c72be64f33d83aab4fe1abebaf899907f0e205",
+  "raw_reported_completed_batches": 6,
+  "captured_batches": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "gate_passed_batches": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "gate_failed_batch": 5,
+  "accepted_full_runs": 0,
+  "actual_exits": {
+    "host": {
+      "pid": 27496,
+      "exit_code": 1
+    },
+    "host_helper": 1,
+    "import": {
+      "exit_code": 0,
+      "pid": 23304
+    },
+    "editor_target": null,
+    "editor_helper": 2,
+    "supervisor": null
+  },
+  "cleanup": {
+    "host_and_editor_jobs_zero_closed": true,
+    "wrapper_handles_released": true,
+    "probe_handles_released": true,
+    "heartbeat_stopped": true,
+    "producer_threads_stopped": true,
+    "import_observer_stopped": true,
+    "journal_index_closed": true
+  },
+  "corrections": [
+    "Plan heading still said S184 after revision update; corrected in place.",
+    "Batch5 completed HTTP/native/capture and failed screening; raw completed_batches=6. Only batches0-4 passed screening.",
+    "The original terminal-seal actual_engine_runs=1 means one campaign attempt; two Godot processes were launched (import, editor).",
+    "The S186 collector supplemental incorrectly said task retired; status was terminal, task is retired separately after verification. Preserve supplemental verbatim.",
+    "v1 package-manifest became stale after failure-analysis edit and addition of counter-attribution; v2 supersedes it, v1 retained as history.",
+    "CIM timestamp assertion failed by 100ns precision; later native OpenProcess found process already terminal. Do not claim exact native liveness receipt."
+  ]
+}
