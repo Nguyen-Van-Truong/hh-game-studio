@@ -1,0 +1,63 @@
+{
+  "schema_id": "hh-studio.gt07-10-readonly-prep",
+  "schema_version": "1.0.0",
+  "status": "PREPARATION_ONLY",
+  "authority": 0,
+  "formal_acceptance": false,
+  "source_closure_sha256": "fc46cfd2e80e8d78024b6a31c6c72be64f33d83aab4fe1abebaf899907f0e205",
+  "gt06_dependency": {
+    "status": "IN_PROGRESS",
+    "accepted_full_runs": 0,
+    "required": "10 fresh pairs x 35 batches + full evidence + two critics"
+  },
+  "gt07": {
+    "status": "PLANNED_UNOPENED",
+    "dependency": "GT06",
+    "scope": "scheduling/concurrency/recovery/cross-app activation",
+    "allowed_files": "studio/host/leases/jobs/activation and adapter transaction tests"
+  },
+  "gt08": {
+    "status": "PLANNED_UNOPENED",
+    "dependency": "GT07",
+    "hard_gate": "physical Android device plus Windows/Linux headless matrix",
+    "current_preflight": {
+      "adb_command": {
+        "exit": 255,
+        "stdout": "",
+        "stderr": "'Get-Command' is not recognized as an internal or external command,\noperable program or batch file."
+      },
+      "adb_devices": {
+        "exit": 1,
+        "stdout": "",
+        "stderr": "'adb' is not recognized as an internal or external command,\noperable program or batch file."
+      }
+    },
+    "interpretation": "adb unavailable in current PATH is an environment gap only; it does not prove SDK/device absence."
+  },
+  "gt09": {
+    "status": "PLANNED_UNOPENED",
+    "dependency": "GT08",
+    "scope": "pinned client/model/host conformance on isolated fixture; MCP spike measured only"
+  },
+  "gt10": {
+    "status": "PLANNED_UNOPENED",
+    "dependency": "GT09",
+    "scope": "package/install/upgrade/rollback/uninstall/handoff; monetization OFF"
+  },
+  "observed_scaffolding": {
+    "build_files": [
+      "bootstrap/README.md",
+      "bootstrap/__pycache__/install_toolchain.cpython-311.pyc",
+      "bootstrap/__pycache__/lifecycle_probe.cpython-311.pyc",
+      "bootstrap/__pycache__/run_fixture.cpython-311.pyc",
+      "bootstrap/__pycache__/verify_archive.cpython-311.pyc",
+      "bootstrap/install_toolchain.py",
+      "bootstrap/lifecycle_probe.py",
+      "bootstrap/run_fixture.py",
+      "bootstrap/verify_archive.py"
+    ],
+    "conformance_files": [],
+    "package_files": []
+  },
+  "decision": "Preparation is recorded only. Do not open, tick, or dispatch GT07-GT10 before dependencies. Do not treat missing adb on PATH as a definitive device failure. Keep GT06 gate and current source unchanged."
+}
