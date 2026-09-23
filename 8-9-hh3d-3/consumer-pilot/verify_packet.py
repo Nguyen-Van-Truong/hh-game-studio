@@ -16,7 +16,8 @@ from run_runtime import verify_report
 ROOT = Path(__file__).resolve().parents[2]
 SCOPE = '8-9-hh3d-3/'
 PACKET = SCOPE + 'zdoc/reviews/20260923-consumer-pilot-s177/'
-MANIFEST = PACKET + 'manifest-s177-v2.json'
+MANIFEST = PACKET + 'manifest-s177-v3.json'
+LIVE_PLAN = SCOPE + 'zdoc/8-9-godot-blender-agent-studio-plan.txt'
 
 
 def digest(data):
@@ -45,13 +46,19 @@ class Reader:
 
 def verify(read, manifest_path=MANIFEST):
     manifest = json.loads(read(manifest_path))
-    need(manifest['schema'] == 'HH-CONSUMER-PILOT-S177-MANIFEST-2'
+    need(manifest['schema'] in ('HH-CONSUMER-PILOT-S177-MANIFEST-2', 'HH-CONSUMER-PILOT-S177-MANIFEST-3')
          and manifest['authority'] == 0 and manifest['gt06_acceptance'] is False
          and manifest['pilot_acceptance'] is False, 'packet scope/schema')
     need(manifest_path not in manifest['files'], 'manifest cannot hash itself')
     for path, row in manifest['files'].items():
         data = read(path)
         need(digest(data) == row['sha256'] and len(data) == row['bytes'], 'packet drift: ' + path)
+    if manifest['schema'].endswith('-3'):
+        snapshot = manifest['plan_snapshot']
+        need(snapshot == PACKET + 'plan-s179-snapshot.txt' and snapshot in manifest['files']
+             and LIVE_PLAN not in manifest['files'], 'immutable plan snapshot required')
+        need(manifest['files'][snapshot]['sha256'] == manifest['plan_at_execution_sha256'],
+             'execution plan binding')
     unchecked_read = read
     def read(path):
         need(path == manifest_path or path in manifest['files'], 'unhashed evidence: ' + path)
@@ -99,10 +106,11 @@ def verify_archive(read, root=ROOT):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--ref', help='Read exact Git blobs, e.g. HEAD; omit for current disk bytes')
+    parser.add_argument('--manifest', default=MANIFEST, help='Exact packet manifest; use v2 with its historical --ref')
     parser.add_argument('--with-archive', action='store_true', help='Also hash the local raw archive; no engine')
     args = parser.parse_args()
     reader = Reader(ref=args.ref)
-    result = verify(reader)
+    result = verify(reader, args.manifest)
     if args.with_archive:
         result.update(verify_archive(reader))
     print(json.dumps(result))

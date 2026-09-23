@@ -1,0 +1,163 @@
+{
+  "schema": "HH-CONSUMER-PILOT-S177-MANIFEST-3",
+  "authority": 0,
+  "gt06_acceptance": false,
+  "pilot_acceptance": false,
+  "status": "IMPLEMENTED_PROVISIONAL_REVIEW_OPEN_S179_STATE",
+  "audit_base_commit": "6a5f75f1",
+  "plan_snapshot": "8-9-hh3d-3/zdoc/reviews/20260923-consumer-pilot-s177/plan-s179-snapshot.txt",
+  "plan_at_execution_sha256": "a26d3981981b68137a3241f34de50fdd895e1ce26c16d24e48648db24672e782",
+  "files": {
+    "8-9-hh3d-3/consumer-pilot/.gitattributes": {
+      "sha256": "9374d6d622fb93e24313132dc038053e9d254083dd3c4ccb79473ef94eeccc81",
+      "bytes": 123
+    },
+    "8-9-hh3d-3/consumer-pilot/.gitignore": {
+      "sha256": "b2dd7bb46c4ed14a70d19dd121f7041f2551b9b4c68ab75b4bfbebf03865824c",
+      "bytes": 34
+    },
+    "8-9-hh3d-3/consumer-pilot/authoring.py": {
+      "sha256": "83dfdd8632aaa52612b68e16a07475804240cd71f1a1f58be39df441b0c0ab6d",
+      "bytes": 11407
+    },
+    "8-9-hh3d-3/consumer-pilot/blender_author.py": {
+      "sha256": "461c590c591adb37c13ddce3e49f354433474c131adce811607b4758b88ac83a",
+      "bytes": 5854
+    },
+    "8-9-hh3d-3/consumer-pilot/CAPABILITIES.md": {
+      "sha256": "e9f6f45abaccb9a062cdc411b5d4665c50623a2d1384618278677127dad25ef6",
+      "bytes": 2509
+    },
+    "8-9-hh3d-3/consumer-pilot/collect_existing.py": {
+      "sha256": "0fe7fb2aeab0c67e28cc7c3134325361fdc7aadbe7fe21c70b39340f701cf661",
+      "bytes": 8372
+    },
+    "8-9-hh3d-3/consumer-pilot/input/map.json": {
+      "sha256": "1750040d6ce64b8b77eb2e7518dbf919c4f46cff37080790fa09c199b8804dd6",
+      "bytes": 1502
+    },
+    "8-9-hh3d-3/consumer-pilot/input/pickup.glb": {
+      "sha256": "a70d4ca6d5ad1780ee4df1a9f4dd30a198987b700d253731b73e488cf85f4818",
+      "bytes": 1752
+    },
+    "8-9-hh3d-3/consumer-pilot/main.tscn": {
+      "sha256": "091851003e79d2b7695ae7f13716fa6cd59908acf83edabec8ea5b2f0c86f457",
+      "bytes": 194
+    },
+    "8-9-hh3d-3/consumer-pilot/project.godot": {
+      "sha256": "691ef22e68de081523008daf72a03b7a81d02c4971a3e7b60991fb8195a15249",
+      "bytes": 1074
+    },
+    "8-9-hh3d-3/consumer-pilot/README.md": {
+      "sha256": "42481335cb1cfbfdba85bdb77a7a70faf7b54d2fd71c5bf9dd0116057b469662",
+      "bytes": 1155
+    },
+    "8-9-hh3d-3/consumer-pilot/run_runtime.py": {
+      "sha256": "1fc46435e7cc1a225175fd95be883de7f71763a286bb7735bb93ea3b5a883807",
+      "bytes": 9515
+    },
+    "8-9-hh3d-3/consumer-pilot/scripts/pilot_runtime.gd": {
+      "sha256": "a71bb589fa02e9cd5ea260cc19f664299ceee71c41e6fd15cc2ff1684842adcb",
+      "bytes": 11879
+    },
+    "8-9-hh3d-3/consumer-pilot/test_evidence.py": {
+      "sha256": "d02a5c7ce0d3ca0ed923c06ca298c505bc256a0cf8c35d372184472853a45a76",
+      "bytes": 6654
+    },
+    "8-9-hh3d-3/consumer-pilot/test_packet.py": {
+      "sha256": "340f5b7f8a742e8617e586b76d7a0335b76ad62150600d7bc3ffd29ec74423d6",
+      "bytes": 3291
+    },
+    "8-9-hh3d-3/consumer-pilot/verify_packet.py": {
+      "sha256": "6a21aedd4853bb24cabed2de464b1d8ac295ebb415023258364bc2dd2cd78b41",
+      "bytes": 6115
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260923-consumer-pilot-s177/.gitattributes": {
+      "sha256": "730a35ae3d558080083c3103d9ac8100c3f6561678092abe341701dfa331eb1d",
+      "bytes": 29
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260923-consumer-pilot-s177/catalog-source-pins.json": {
+      "sha256": "d03b7cdc586d04b46f980d6bb9483edfab89d76db92b1f7affee5b9cbd22693e",
+      "bytes": 298
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260923-consumer-pilot-s177/handoff.md": {
+      "sha256": "264740f2802d0014c8906f135d1688cf832616e3b909a3c316048621afe64902",
+      "bytes": 2394
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260923-consumer-pilot-s177/integrity-errata.json": {
+      "sha256": "bed795b9ddb6b36a061d81ca1f4634c197dfafbf7e6e15eedb6f8932cc746b8e",
+      "bytes": 1137
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260923-consumer-pilot-s177/manifest-s177.json": {
+      "sha256": "445bbb9e3ba0c8d15b304f38d9edc8497dfb0b0acfa7c3e3f543916490cfc221",
+      "bytes": 2443
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260923-consumer-pilot-s177/plan-s177-snapshot.txt": {
+      "sha256": "0652aa0eb2fd2eda9a0a16d03d2bfd4a77ed900e18978756980d759af086d8a0",
+      "bytes": 125805
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260923-consumer-pilot-s177/raw-archive.json": {
+      "sha256": "ffd6d70619311948248b2abd1175c9832c429ff7eaf66e6450e76f2cb61a4d62",
+      "bytes": 385
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260923-consumer-pilot-s177/runtime/executed-driver.py": {
+      "sha256": "99c03db2534726a633a424df7870fb3611bdd6e1277306f4f838442274e43952",
+      "bytes": 7472
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260923-consumer-pilot-s177/runtime/godot.log": {
+      "sha256": "b835727a887668671c0c6bbce1317476d8234153bc3e677ad864eed13c2efa3b",
+      "bytes": 96
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260923-consumer-pilot-s177/runtime/manifest.json": {
+      "sha256": "30c134e39f93c48c52bcc597b5f89d03896f26c6a288ce0bfba879083a4b7300",
+      "bytes": 2090
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260923-consumer-pilot-s177/runtime/parse-host.json": {
+      "sha256": "6a28b9e95bb11920826d99d7957434c2f2c907fd4e9560c696de3bea0dfd2895",
+      "bytes": 87
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260923-consumer-pilot-s177/runtime/parse-stderr.txt": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260923-consumer-pilot-s177/runtime/report.json": {
+      "sha256": "856d76a4b045ce586db5afddc4f22050f59df062d79f725d333185956bae7504",
+      "bytes": 2330
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260923-consumer-pilot-s177/runtime/result.json": {
+      "sha256": "3e1670159291bb35e8ec4a93c3a916ef2e335f3ab49cf1626750744c2cb8ac25",
+      "bytes": 1546
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260923-consumer-pilot-s177/runtime/runtime-host.json": {
+      "sha256": "f2104b4af2f46a697cc0b404d340f3c78f2785ae3c253067ecdb5223c4e24894",
+      "bytes": 86
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260923-consumer-pilot-s177/runtime/runtime-stderr.txt": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260923-consumer-pilot-s177-derived/.gitattributes": {
+      "sha256": "730a35ae3d558080083c3103d9ac8100c3f6561678092abe341701dfa331eb1d",
+      "bytes": 29
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260923-consumer-pilot-s177-derived/author-binding-01.json": {
+      "sha256": "441a74135aa9903387692755b93ab5e49eacd80e0872f97cc6d4c47998a9dc21",
+      "bytes": 63027
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260923-consumer-pilot-s177-derived/runtime-validation-01.json": {
+      "sha256": "b2f1d561647c5173bb9a74c4a60fca4ed96c9c0bba628643690dc0d502b6dde1",
+      "bytes": 720
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260923-consumer-pilot-s177-derived/S177-SUMMARY.json": {
+      "sha256": "045c792a9d33375f025b4a42a5ecc74dd3f6acb2f5da315cede08723d0492263",
+      "bytes": 3946
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260923-consumer-pilot-s177/plan-s179-snapshot.txt": {
+      "sha256": "a26d3981981b68137a3241f34de50fdd895e1ce26c16d24e48648db24672e782",
+      "bytes": 126840
+    }
+  },
+  "raw_archive_reference": "8-9-hh3d-3/zdoc/reviews/20260923-consumer-pilot-s177/raw-archive.json",
+  "review_status": "NO_INDEPENDENT_VERDICT; S179 diagnostic retained authority0",
+  "gates_changed": false
+}

@@ -1,0 +1,23 @@
+{
+  "debugger_exit": 2147942430,
+  "result_sha256": "f256be6ec4fc0fbf3bf818d63eea37f05e4442b108508b006b4245c94d399777",
+  "source_closure": "fce149cd3a62e102aaba225794b9a5078cd84d7647cb359f6bbcacb8895ddcde",
+  "child_actual_exit": "UNKNOWN_NOT_INDEPENDENTLY_RETAINED",
+  "schema": "HH-S179-DERIVED-1",
+  "exclusions": [
+    "F13",
+    "F14",
+    "GT06_DATASET",
+    "LEAK_PROOF",
+    "ROOT_CAUSE",
+    "REPAIR_AUTHORIZATION",
+    "GT06_ACCEPTANCE"
+  ],
+  "wrapper_stdout_sha256": "f7846c4317d92c740e25ab1ef4960a8f785d8415bc3f47c693443729bef01ffc",
+  "run_id": "gt06-s179-child-htrace-01",
+  "authority_status": "ATTRIBUTION_UNKNOWN",
+  "validator_tests": "5/5 passed",
+  "authority": 0,
+  "cdb_stdout_sha256": "83ebadefe3bd0460d35e8b43a70dc6e174e87ebf6ca519338f276ecaa6dedec4",
+  "command_id": "cmd.gt06.s179.child-htrace.1"
+}

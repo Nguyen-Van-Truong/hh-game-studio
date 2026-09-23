@@ -1,0 +1,108 @@
+from __future__ import annotations
+import hashlib, json, os, subprocess, threading, time
+from pathlib import Path
+
+RUN = Path(__file__).parent.resolve()
+ROOT = RUN.parents[2]
+WRAPPER = ROOT / "studio/.local/tooling/godot-4.7.2-stable/Godot_v4.7.2-stable_win64_console.exe"
+CHILD_EXE = ROOT / "studio/.local/tooling/godot-4.7.2-stable/Godot_v4.7.2-stable_win64.exe"
+STORE = Path(subprocess.check_output(["powershell.exe","-NoProfile","-Command",
+    "(Get-AppxPackage -Name Microsoft.WinDbg).InstallLocation"], text=True, timeout=10).strip())
+CDB = STORE / "amd64/cdb.exe"
+RUN_ID = "gt06-s179-child-htrace-01"
+COMMAND_ID = "cmd.gt06.s179.child-htrace.1"
+SOURCE = "fce149cd3a62e102aaba225794b9a5078cd84d7647cb359f6bbcacb8895ddcde"
+PROFILE = "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85"
+FILES = {n: RUN/n for n in ("wrapper.stdout.txt","wrapper.stderr.txt","cdb.stdout.txt","cdb.stderr.txt","cdb.logo.txt","child-identity.json")}
+for p in FILES.values(): p.unlink(missing_ok=True)
+
+def pump(stream, path, rows):
+    with path.open("w", encoding="utf-8", errors="replace") as out:
+        for line in iter(stream.readline, ""):
+            rows.append(line.rstrip("\r\n")); out.write(line); out.flush()
+
+def children(parent):
+    cmd = ('$p=Get-CimInstance Win32_Process -Filter "ParentProcessId=%d" | '
+           'Select-Object ProcessId,ParentProcessId,ExecutablePath; '
+           '$p | ConvertTo-Json -Compress') % parent
+    raw = subprocess.check_output(["powershell.exe","-NoProfile","-Command",cmd], text=True, timeout=5).strip()
+    if not raw: return []
+    value = json.loads(raw); return value if isinstance(value, list) else [value]
+
+def find_child(parent):
+    expected = os.path.normcase(str(CHILD_EXE))
+    for row in children(parent):
+        if row.get("ExecutablePath") and os.path.normcase(row["ExecutablePath"]) == expected:
+            return {"pid": int(row["ProcessId"]), "parent_pid": int(row["ParentProcessId"]),
+                    "executable": row["ExecutablePath"],
+                    "sha256": hashlib.sha256(CHILD_EXE.read_bytes()).hexdigest()}
+    return None
+
+def owned(pid, executable):
+    try:
+        value = subprocess.check_output(["powershell.exe","-NoProfile","-Command",
+            '(Get-CimInstance Win32_Process -Filter "ProcessId=%d").ExecutablePath' % pid],
+            text=True, timeout=5).strip()
+    except Exception: return False
+    return os.path.normcase(value) == os.path.normcase(str(executable))
+
+if not all(p.is_file() for p in (WRAPPER, CHILD_EXE, CDB)):
+    print(json.dumps({"wrapper": str(WRAPPER), "wrapper_exists": WRAPPER.is_file(),
+        "child": str(CHILD_EXE), "child_exists": CHILD_EXE.is_file(),
+        "cdb": str(CDB), "cdb_exists": CDB.is_file()}))
+    raise SystemExit("S179_CAPABILITY_PATH_MISSING")
+started = time.monotonic()
+wrap, werr, dbg, derr = [], [], [], []
+wrapper = subprocess.Popen([str(WRAPPER),"--headless","--path",str(RUN),"--script","res://main.gd"],
+    cwd=str(RUN), stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, bufsize=1)
+threads = [threading.Thread(target=pump, args=(wrapper.stdout, FILES["wrapper.stdout.txt"], wrap), daemon=True),
+           threading.Thread(target=pump, args=(wrapper.stderr, FILES["wrapper.stderr.txt"], werr), daemon=True)]
+for t in threads: t.start()
+child = cdb = None; cdb_threads = []; deadline = started + 60
+while time.monotonic() < deadline and "S171_READY" not in wrap:
+    if wrapper.poll() is not None: break
+    time.sleep(.05)
+if "S171_READY" in wrap:
+    for _ in range(100):
+        child = find_child(wrapper.pid)
+        if child: break
+        time.sleep(.05)
+if child:
+    FILES["child-identity.json"].write_text(json.dumps(child, indent=2)+"\n", encoding="utf-8")
+    cdb = subprocess.Popen([str(CDB),"-p",str(child["pid"]),"-pd","-nosqm",
+        "-logo",str(RUN/"cdb.logo.txt"),"-cf",str(RUN/"cdb-commands.txt")],
+        cwd=str(RUN), stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, bufsize=1)
+    cdb_threads = [threading.Thread(target=pump, args=(cdb.stdout, FILES["cdb.stdout.txt"], dbg), daemon=True),
+                   threading.Thread(target=pump, args=(cdb.stderr, FILES["cdb.stderr.txt"], derr), daemon=True)]
+    for t in cdb_threads: t.start()
+while time.monotonic() < deadline and (wrapper.poll() is None or (cdb and cdb.poll() is None)):
+    time.sleep(.1)
+if wrapper.poll() is None and owned(wrapper.pid, WRAPPER): wrapper.kill()
+if cdb and cdb.poll() is None and owned(cdb.pid, CDB): cdb.kill()
+for t in threads+cdb_threads: t.join(3)
+for p in (wrapper,cdb):
+    if p: p.wait(timeout=5)
+combined = "\n".join(dbg)
+result = {"schema":"gt06-s179-child-htrace-v1","run_id":RUN_ID,"command_id":COMMAND_ID,
+ "authority":0,"diagnostic_only":True,"source_closure":SOURCE,"profile_sha256":PROFILE,
+ "wrapper":{"pid":wrapper.pid,"exit":wrapper.returncode,"path":str(WRAPPER),
+            "sha256":hashlib.sha256(WRAPPER.read_bytes()).hexdigest()},
+ "child":child,
+ "debugger":{"path":str(CDB),"sha256":hashlib.sha256(CDB.read_bytes()).hexdigest(),
+    "version":subprocess.check_output([str(CDB),"-version"],text=True,stderr=subprocess.STDOUT,timeout=15).strip(),
+    "attached_pid":child["pid"] if child else None,"exit":cdb.returncode if cdb else None},
+ "markers":{"wrapper_ready":"S171_READY" in wrap,"cdb_attached_child":"CDB_ATTACHED_CHILD" in combined,
+    "create_break":("CREATE2_BREAK" in combined or "NT_CREATE_BREAK" in combined),
+    "close_break":"CLOSE_BREAK" in combined,
+    "htrace_diff":("No outstanding handles opened" in combined or "Outstanding handles opened" in combined),
+    "module_offset_resolved":"Godot_v4.7.2-stable_win64.exe+" in combined,"attribution":"UNKNOWN"},
+ "target_markers":{k:any(("S171_"+k.upper()) in r for r in wrap) for k in ("ready","open","close","exit")},
+ "cleanup":{"wrapper_alive_owned":owned(wrapper.pid,WRAPPER),
+    "child_alive_owned":bool(child and owned(child["pid"],CHILD_EXE)),
+    "cdb_alive_owned":bool(cdb and owned(cdb.pid,CDB))},
+ "status":"DIAGNOSTIC_RETAINED_AUTHORITY_0",
+ "exclusions":["F13","F14","GT06_DATASET","LEAK_PROOF","ROOT_CAUSE","REPAIR_AUTHORIZATION","GT06_ACCEPTANCE"],
+ "stderr":{"cdb":"\n".join(derr),"wrapper":"\n".join(werr)}}
+(RUN/"s179-child-attribution-result.json").write_text(json.dumps(result,indent=2)+"\n", encoding="utf-8")
+print(json.dumps(result, indent=2))
+

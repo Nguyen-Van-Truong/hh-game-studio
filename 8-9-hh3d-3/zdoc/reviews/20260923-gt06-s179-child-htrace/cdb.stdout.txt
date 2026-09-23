@@ -1,0 +1,732 @@
+Opened log file 'D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260923-gt06-s179-child-htrace\cdb.logo.txt'
+
+************* Preparing the environment for Debugger Extensions Gallery repositories **************
+   ExtensionRepository : Implicit
+   UseExperimentalFeatureForNugetShare : true
+   AllowNugetExeUpdate : true
+   NonInteractiveNuget : true
+   AllowNugetMSCredentialProviderInstall : true
+   AllowParallelInitializationOfLocalRepositories : true
+
+   -- Configuring repositories
+      ----> Repository : LocalInstalled, Enabled: true
+      ----> Repository : UserExtensions, Enabled: true
+
+>>>>>>>>>>>>> Preparing the environment for Debugger Extensions Gallery repositories completed, duration 0.015 seconds
+
+************* Waiting for Debugger Extensions Gallery to Initialize **************
+
+>>>>>>>>>>>>> Waiting for Debugger Extensions Gallery to Initialize completed, duration 0.047 seconds
+   ----> Repository : UserExtensions, Enabled: true, Packages count: 0
+   ----> Repository : LocalInstalled, Enabled: true, Packages count: 46
+
+Microsoft (R) Windows Debugger Version 10.0.29617.1000 AMD64
+Copyright (c) Microsoft Corporation. All rights reserved.
+
+*** wait with pending attach
+
+************* Path validation summary **************
+Response                         Time (ms)     Location
+Deferred                                       srv*
+Symbol search path is: srv*
+Executable search path is: 
+ModLoad: 00007ff6`80110000 00007ff6`8af69000   D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\.local\tooling\godot-4.7.2-stable\Godot_v4.7.2-stable_win64.exe
+ModLoad: 00007fff`5f540000 00007fff`5f7a6000   C:\WINDOWS\SYSTEM32\ntdll.dll
+ModLoad: 00007fff`5d930000 00007fff`5d9f9000   C:\WINDOWS\System32\KERNEL32.DLL
+ModLoad: 00007fff`5cc60000 00007fff`5d05e000   C:\WINDOWS\System32\KERNELBASE.dll
+ModLoad: 00007fff`5e320000 00007fff`5e3f9000   C:\WINDOWS\System32\oleaut32.dll
+ModLoad: 00007fff`5d130000 00007fff`5d1d3000   C:\WINDOWS\System32\msvcp_win.dll
+ModLoad: 00007fff`5c820000 00007fff`5c96c000   C:\WINDOWS\System32\ucrtbase.dll
+ModLoad: 00007fff`5df90000 00007fff`5e313000   C:\WINDOWS\System32\combase.dll
+ModLoad: 00007fff`5e400000 00007fff`5e518000   C:\WINDOWS\System32\RPCRT4.dll
+ModLoad: 00007fff`5d2d0000 00007fff`5d497000   C:\WINDOWS\System32\user32.dll
+ModLoad: 00007fff`5cab0000 00007fff`5cad7000   C:\WINDOWS\System32\win32u.dll
+ModLoad: 00007fff`3a6c0000 00007fff`3aadf000   C:\WINDOWS\SYSTEM32\uiautomationcore.dll
+ModLoad: 00007fff`5d270000 00007fff`5d29b000   C:\WINDOWS\System32\GDI32.dll
+ModLoad: 00007fff`5c980000 00007fff`5caaa000   C:\WINDOWS\System32\gdi32full.dll
+ModLoad: 00007fff`5d5e0000 00007fff`5d697000   C:\WINDOWS\System32\ADVAPI32.dll
+ModLoad: 00007fff`5d4a0000 00007fff`5d549000   C:\WINDOWS\System32\msvcrt.dll
+ModLoad: 00007fff`5e520000 00007fff`5e5ca000   C:\WINDOWS\System32\sechost.dll
+ModLoad: 00007fff`5cae0000 00007fff`5cc58000   C:\WINDOWS\System32\CRYPT32.dll
+ModLoad: 00007fff`5d810000 00007fff`5d842000   C:\WINDOWS\System32\IMM32.dll
+ModLoad: 00007fff`5c650000 00007fff`5c67a000   C:\WINDOWS\SYSTEM32\bcrypt.dll
+ModLoad: 00007fff`56a90000 00007fff`56a9b000   C:\WINDOWS\SYSTEM32\AVRT.dll
+ModLoad: 00007fff`5ee40000 00007fff`5efd9000   C:\WINDOWS\System32\ole32.dll
+ModLoad: 00007fff`46830000 00007fff`46a72000   C:\WINDOWS\SYSTEM32\dbghelp.dll
+ModLoad: 00007fff`5f000000 00007fff`5f0f7000   C:\WINDOWS\System32\SHCORE.dll
+ModLoad: 00007fff`59b10000 00007fff`59b3f000   C:\WINDOWS\SYSTEM32\dwmapi.dll
+ModLoad: 00007fff`57fa0000 00007fff`58207000   C:\WINDOWS\SYSTEM32\DWrite.dll
+ModLoad: 00007fff`5e6a0000 00007fff`5ee32000   C:\WINDOWS\System32\SHELL32.dll
+ModLoad: 00007fff`59950000 00007fff`59a8e000   C:\WINDOWS\SYSTEM32\dxgi.dll
+ModLoad: 00007fff`5f190000 00007fff`5f1f7000   C:\WINDOWS\System32\SHLWAPI.dll
+ModLoad: 00007fff`5aa80000 00007fff`5aa8f000   C:\WINDOWS\SYSTEM32\HID.DLL
+ModLoad: 00007fff`5adb0000 00007fff`5ade3000   C:\WINDOWS\SYSTEM32\IPHLPAPI.DLL
+ModLoad: 00007fff`5f290000 00007fff`5f310000   C:\WINDOWS\System32\WS2_32.dll
+ModLoad: 00007fff`5c510000 00007fff`5c56e000   C:\WINDOWS\SYSTEM32\powrprof.dll
+ModLoad: 00007fff`50530000 00007fff`50566000   C:\WINDOWS\SYSTEM32\WINMM.dll
+ModLoad: 00007fff`57430000 00007fff`5743a000   C:\WINDOWS\SYSTEM32\WSOCK32.dll
+ModLoad: 00007fff`5c760000 00007fff`5c80c000   C:\WINDOWS\System32\bcryptPrimitives.dll
+ModLoad: 00007fff`5c4f0000 00007fff`5c504000   C:\WINDOWS\SYSTEM32\UMPDC.dll
+ModLoad: 00007fff`11100000 00007fff`1114b000   C:\WINDOWS\SYSTEM32\dinput8.dll
+ModLoad: 00007fff`35040000 00007fff`35224000   C:\WINDOWS\SYSTEM32\inputhost.dll
+ModLoad: 00007fff`591f0000 00007fff`59315000   C:\WINDOWS\SYSTEM32\CoreMessaging.dll
+ModLoad: 00007fff`5b400000 00007fff`5b41b000   C:\WINDOWS\SYSTEM32\kernel.appcore.dll
+ModLoad: 00007fff`59830000 00007fff`598d9000   C:\WINDOWS\system32\uxtheme.dll
+ModLoad: 00007fff`5bc00000 00007fff`5bc0c000   C:\WINDOWS\SYSTEM32\CRYPTBASE.DLL
+ModLoad: 00007fff`5be30000 00007fff`5be43000   C:\WINDOWS\SYSTEM32\MSASN1.dll
+(7948.d474): Break instruction exception - code 80000003 (first chance)
+ntdll!DbgBreakPoint:
+00007fff`5f65ed10 cc              int     3
+0:022> .sympath cache*
+Symbol search path is: cache*
+Expanded Symbol search path is: cache*
+
+************* Path validation summary **************
+Response                         Time (ms)     Location
+Deferred                                       cache*
+0:022> .reload /f
+Reloading current modules
+............................................
+
+************* Symbol Loading Error Summary **************
+Module name            Error
+Godot_v4.7.2-stable_wi The system cannot find the file specified
+dinput8                The system cannot find the file specified
+inputhost              The system cannot find the file specified
+uiautomationcore       The system cannot find the file specified
+dbghelp                The system cannot find the file specified
+WINMM                  The system cannot find the file specified
+AVRT                   The system cannot find the file specified
+WSOCK32                The system cannot find the file specified
+DWrite                 The system cannot find the file specified
+CoreMessaging          The system cannot find the file specified
+uxtheme                The system cannot find the file specified
+dxgi                   The system cannot find the file specified
+dwmapi                 The system cannot find the file specified
+HID                    The system cannot find the file specified
+IPHLPAPI               The system cannot find the file specified
+kernel.appcore         The system cannot find the file specified
+CRYPTBASE              The system cannot find the file specified
+MSASN1                 The system cannot find the file specified
+UMPDC                  The system cannot find the file specified
+powrprof               The system cannot find the file specified
+bcrypt                 The system cannot find the file specified
+bcryptPrimitives       The system cannot find the file specified
+CRYPT32                The system cannot find the file specified
+ADVAPI32               The system cannot find the file specified
+combase                The system cannot find the file specified
+oleaut32               The system cannot find the file specified
+RPCRT4                 The system cannot find the file specified
+ole32                  The system cannot find the file specified
+SHCORE                 The system cannot find the file specified
+WS2_32                 The system cannot find the file specified
+
+You can troubleshoot most symbol related issues by turning on symbol loading diagnostics (!sym noisy) and repeating the command that caused symbols to be loaded.
+You should also verify that your symbol search path (.sympath) is correct.
+0:022> !htrace -enable
+Handle tracing enabled.
+Handle tracing information snapshot successfully taken.
+0:022> .echo CDB_ATTACHED_CHILD
+CDB_ATTACHED_CHILD
+0:022> bp ntdll!NtCreateFile ".echo NT_CREATE_BREAK; !htrace -snapshot; gc"
+0:022> bp kernelbase!CreateFile2 ".echo CREATE2_BREAK; !htrace -snapshot; gc"
+0:022> bp kernelbase!CloseHandle ".echo CLOSE_BREAK; !htrace -diff; gc"
+0:022> g
+NT_CREATE_BREAK
+Handle tracing information snapshot successfully taken.
+CLOSE_BREAK
+Handle tracing information snapshot successfully taken.
+0x1 new stack traces since the previous snapshot.
+Ignoring handles that were already closed...
+Outstanding handles opened since the previous snapshot:
+--------------------------------------
+Handle = 0x0000000000000464 - OPEN
+Thread ID = 0x0000000000002844, Process ID = 0x0000000000007948
+
+--------------------------------------
+Displayed 0x1 stack traces for outstanding handles opened since the previous snapshot.
+CLOSE_BREAK
+Handle tracing information snapshot successfully taken.
+0x6 new stack traces since the previous snapshot.
+Ignoring handles that were already closed...
+Outstanding handles opened since the previous snapshot:
+--------------------------------------
+Handle = 0x00000000000003f8 - OPEN
+Thread ID = 0x0000000000002844, Process ID = 0x0000000000007948
+
+--------------------------------------
+Displayed 0x1 stack traces for outstanding handles opened since the previous snapshot.
+CLOSE_BREAK
+Handle tracing information snapshot successfully taken.
+0x7 new stack traces since the previous snapshot.
+Ignoring handles that were already closed...
+Outstanding handles opened since the previous snapshot:
+--------------------------------------
+Handle = 0x00000000000003f8 - OPEN
+Thread ID = 0x0000000000002844, Process ID = 0x0000000000007948
+
+--------------------------------------
+Displayed 0x1 stack traces for outstanding handles opened since the previous snapshot.
+CLOSE_BREAK
+Handle tracing information snapshot successfully taken.
+0x8 new stack traces since the previous snapshot.
+Ignoring handles that were already closed...
+Outstanding handles opened since the previous snapshot:
+--------------------------------------
+Handle = 0x00000000000003f8 - OPEN
+Thread ID = 0x0000000000002844, Process ID = 0x0000000000007948
+
+--------------------------------------
+Displayed 0x1 stack traces for outstanding handles opened since the previous snapshot.
+CLOSE_BREAK
+Handle tracing information snapshot successfully taken.
+0x9 new stack traces since the previous snapshot.
+Ignoring handles that were already closed...
+Outstanding handles opened since the previous snapshot:
+--------------------------------------
+Handle = 0x00000000000003f8 - OPEN
+Thread ID = 0x0000000000002844, Process ID = 0x0000000000007948
+
+--------------------------------------
+Displayed 0x1 stack traces for outstanding handles opened since the previous snapshot.
+CLOSE_BREAK
+Handle tracing information snapshot successfully taken.
+0xa new stack traces since the previous snapshot.
+Ignoring handles that were already closed...
+Outstanding handles opened since the previous snapshot:
+--------------------------------------
+Handle = 0x00000000000003f8 - OPEN
+Thread ID = 0x0000000000002844, Process ID = 0x0000000000007948
+
+--------------------------------------
+Displayed 0x1 stack traces for outstanding handles opened since the previous snapshot.
+CLOSE_BREAK
+Handle tracing information snapshot successfully taken.
+0xb new stack traces since the previous snapshot.
+Ignoring handles that were already closed...
+Outstanding handles opened since the previous snapshot:
+--------------------------------------
+Handle = 0x00000000000003f8 - OPEN
+Thread ID = 0x0000000000002844, Process ID = 0x0000000000007948
+
+--------------------------------------
+Displayed 0x1 stack traces for outstanding handles opened since the previous snapshot.
+CLOSE_BREAK
+Handle tracing information snapshot successfully taken.
+0xc new stack traces since the previous snapshot.
+Ignoring handles that were already closed...
+Outstanding handles opened since the previous snapshot:
+--------------------------------------
+Handle = 0x00000000000003f8 - OPEN
+Thread ID = 0x0000000000002844, Process ID = 0x0000000000007948
+
+--------------------------------------
+Displayed 0x1 stack traces for outstanding handles opened since the previous snapshot.
+CLOSE_BREAK
+Handle tracing information snapshot successfully taken.
+0xd new stack traces since the previous snapshot.
+Ignoring handles that were already closed...
+Outstanding handles opened since the previous snapshot:
+--------------------------------------
+Handle = 0x00000000000003f8 - OPEN
+Thread ID = 0x0000000000002844, Process ID = 0x0000000000007948
+
+--------------------------------------
+Displayed 0x1 stack traces for outstanding handles opened since the previous snapshot.
+CLOSE_BREAK
+Handle tracing information snapshot successfully taken.
+0xe new stack traces since the previous snapshot.
+Ignoring handles that were already closed...
+Outstanding handles opened since the previous snapshot:
+--------------------------------------
+Handle = 0x00000000000003f8 - OPEN
+Thread ID = 0x0000000000002844, Process ID = 0x0000000000007948
+
+--------------------------------------
+Displayed 0x1 stack traces for outstanding handles opened since the previous snapshot.
+CLOSE_BREAK
+Handle tracing information snapshot successfully taken.
+0xf new stack traces since the previous snapshot.
+Ignoring handles that were already closed...
+Outstanding handles opened since the previous snapshot:
+--------------------------------------
+Handle = 0x00000000000003f8 - OPEN
+Thread ID = 0x0000000000002844, Process ID = 0x0000000000007948
+
+--------------------------------------
+Displayed 0x1 stack traces for outstanding handles opened since the previous snapshot.
+CLOSE_BREAK
+Handle tracing information snapshot successfully taken.
+0x10 new stack traces since the previous snapshot.
+Ignoring handles that were already closed...
+Outstanding handles opened since the previous snapshot:
+--------------------------------------
+Handle = 0x00000000000003f8 - OPEN
+Thread ID = 0x0000000000002844, Process ID = 0x0000000000007948
+
+--------------------------------------
+Displayed 0x1 stack traces for outstanding handles opened since the previous snapshot.
+CLOSE_BREAK
+Handle tracing information snapshot successfully taken.
+0x12 new stack traces since the previous snapshot.
+Ignoring handles that were already closed...
+Outstanding handles opened since the previous snapshot:
+--------------------------------------
+Handle = 0x00000000000003f8 - OPEN
+Thread ID = 0x0000000000002844, Process ID = 0x0000000000007948
+
+--------------------------------------
+Displayed 0x1 stack traces for outstanding handles opened since the previous snapshot.
+CLOSE_BREAK
+Handle tracing information snapshot successfully taken.
+0x14 new stack traces since the previous snapshot.
+Ignoring handles that were already closed...
+Outstanding handles opened since the previous snapshot:
+--------------------------------------
+Handle = 0x00000000000003f8 - OPEN
+Thread ID = 0x0000000000002844, Process ID = 0x0000000000007948
+
+--------------------------------------
+Displayed 0x1 stack traces for outstanding handles opened since the previous snapshot.
+CLOSE_BREAK
+Handle tracing information snapshot successfully taken.
+0x15 new stack traces since the previous snapshot.
+Ignoring handles that were already closed...
+Outstanding handles opened since the previous snapshot:
+--------------------------------------
+Handle = 0x00000000000003f8 - OPEN
+Thread ID = 0x0000000000002844, Process ID = 0x0000000000007948
+
+--------------------------------------
+Displayed 0x1 stack traces for outstanding handles opened since the previous snapshot.
+CLOSE_BREAK
+Handle tracing information snapshot successfully taken.
+0x16 new stack traces since the previous snapshot.
+Ignoring handles that were already closed...
+Outstanding handles opened since the previous snapshot:
+--------------------------------------
+Handle = 0x00000000000003f8 - OPEN
+Thread ID = 0x0000000000002844, Process ID = 0x0000000000007948
+
+--------------------------------------
+Displayed 0x1 stack traces for outstanding handles opened since the previous snapshot.
+CLOSE_BREAK
+Handle tracing information snapshot successfully taken.
+0x18 new stack traces since the previous snapshot.
+Ignoring handles that were already closed...
+Outstanding handles opened since the previous snapshot:
+--------------------------------------
+Handle = 0x00000000000003f8 - OPEN
+Thread ID = 0x0000000000002844, Process ID = 0x0000000000007948
+
+--------------------------------------
+Displayed 0x1 stack traces for outstanding handles opened since the previous snapshot.
+CLOSE_BREAK
+Handle tracing information snapshot successfully taken.
+0x1a new stack traces since the previous snapshot.
+Ignoring handles that were already closed...
+Outstanding handles opened since the previous snapshot:
+--------------------------------------
+Handle = 0x00000000000003f8 - OPEN
+Thread ID = 0x0000000000002844, Process ID = 0x0000000000007948
+
+--------------------------------------
+Displayed 0x1 stack traces for outstanding handles opened since the previous snapshot.
+CLOSE_BREAK
+Handle tracing information snapshot successfully taken.
+0x1b new stack traces since the previous snapshot.
+Ignoring handles that were already closed...
+Outstanding handles opened since the previous snapshot:
+--------------------------------------
+Handle = 0x00000000000003f8 - OPEN
+Thread ID = 0x0000000000002844, Process ID = 0x0000000000007948
+
+--------------------------------------
+Displayed 0x1 stack traces for outstanding handles opened since the previous snapshot.
+CLOSE_BREAK
+Handle tracing information snapshot successfully taken.
+0x1c new stack traces since the previous snapshot.
+Ignoring handles that were already closed...
+Outstanding handles opened since the previous snapshot:
+--------------------------------------
+Handle = 0x00000000000003f8 - OPEN
+Thread ID = 0x0000000000002844, Process ID = 0x0000000000007948
+
+--------------------------------------
+Displayed 0x1 stack traces for outstanding handles opened since the previous snapshot.
+CLOSE_BREAK
+Handle tracing information snapshot successfully taken.
+0x1e new stack traces since the previous snapshot.
+Ignoring handles that were already closed...
+Outstanding handles opened since the previous snapshot:
+--------------------------------------
+Handle = 0x00000000000003f8 - OPEN
+Thread ID = 0x0000000000002844, Process ID = 0x0000000000007948
+
+--------------------------------------
+Displayed 0x1 stack traces for outstanding handles opened since the previous snapshot.
+CLOSE_BREAK
+Handle tracing information snapshot successfully taken.
+0x1f new stack traces since the previous snapshot.
+Ignoring handles that were already closed...
+Outstanding handles opened since the previous snapshot:
+--------------------------------------
+Handle = 0x00000000000003f8 - OPEN
+Thread ID = 0x0000000000002844, Process ID = 0x0000000000007948
+
+--------------------------------------
+Displayed 0x1 stack traces for outstanding handles opened since the previous snapshot.
+CLOSE_BREAK
+Handle tracing information snapshot successfully taken.
+0x21 new stack traces since the previous snapshot.
+Ignoring handles that were already closed...
+Outstanding handles opened since the previous snapshot:
+--------------------------------------
+Handle = 0x00000000000003f8 - OPEN
+Thread ID = 0x0000000000002844, Process ID = 0x0000000000007948
+
+--------------------------------------
+Displayed 0x1 stack traces for outstanding handles opened since the previous snapshot.
+CLOSE_BREAK
+Handle tracing information snapshot successfully taken.
+0x23 new stack traces since the previous snapshot.
+Ignoring handles that were already closed...
+Outstanding handles opened since the previous snapshot:
+--------------------------------------
+Handle = 0x00000000000003f8 - OPEN
+Thread ID = 0x0000000000002844, Process ID = 0x0000000000007948
+
+--------------------------------------
+Displayed 0x1 stack traces for outstanding handles opened since the previous snapshot.
+CLOSE_BREAK
+Handle tracing information snapshot successfully taken.
+0x24 new stack traces since the previous snapshot.
+Ignoring handles that were already closed...
+Outstanding handles opened since the previous snapshot:
+--------------------------------------
+Handle = 0x00000000000003f8 - OPEN
+Thread ID = 0x0000000000002844, Process ID = 0x0000000000007948
+
+--------------------------------------
+Displayed 0x1 stack traces for outstanding handles opened since the previous snapshot.
+CLOSE_BREAK
+Handle tracing information snapshot successfully taken.
+0x25 new stack traces since the previous snapshot.
+Ignoring handles that were already closed...
+Outstanding handles opened since the previous snapshot:
+--------------------------------------
+Handle = 0x00000000000003f8 - OPEN
+Thread ID = 0x0000000000002844, Process ID = 0x0000000000007948
+
+--------------------------------------
+Displayed 0x1 stack traces for outstanding handles opened since the previous snapshot.
+CLOSE_BREAK
+Handle tracing information snapshot successfully taken.
+0x27 new stack traces since the previous snapshot.
+Ignoring handles that were already closed...
+Outstanding handles opened since the previous snapshot:
+--------------------------------------
+Handle = 0x00000000000003f8 - OPEN
+Thread ID = 0x0000000000002844, Process ID = 0x0000000000007948
+
+--------------------------------------
+Displayed 0x1 stack traces for outstanding handles opened since the previous snapshot.
+CLOSE_BREAK
+Handle tracing information snapshot successfully taken.
+0x28 new stack traces since the previous snapshot.
+Ignoring handles that were already closed...
+Outstanding handles opened since the previous snapshot:
+--------------------------------------
+Handle = 0x00000000000003f8 - OPEN
+Thread ID = 0x0000000000002844, Process ID = 0x0000000000007948
+
+--------------------------------------
+Displayed 0x1 stack traces for outstanding handles opened since the previous snapshot.
+CLOSE_BREAK
+Handle tracing information snapshot successfully taken.
+0x2a new stack traces since the previous snapshot.
+Ignoring handles that were already closed...
+Outstanding handles opened since the previous snapshot:
+--------------------------------------
+Handle = 0x00000000000003f8 - OPEN
+Thread ID = 0x0000000000002844, Process ID = 0x0000000000007948
+
+--------------------------------------
+Displayed 0x1 stack traces for outstanding handles opened since the previous snapshot.
+CLOSE_BREAK
+Handle tracing information snapshot successfully taken.
+0x2b new stack traces since the previous snapshot.
+Ignoring handles that were already closed...
+Outstanding handles opened since the previous snapshot:
+--------------------------------------
+Handle = 0x00000000000003f8 - OPEN
+Thread ID = 0x0000000000002844, Process ID = 0x0000000000007948
+
+--------------------------------------
+Displayed 0x1 stack traces for outstanding handles opened since the previous snapshot.
+CLOSE_BREAK
+Handle tracing information snapshot successfully taken.
+0x2c new stack traces since the previous snapshot.
+Ignoring handles that were already closed...
+Outstanding handles opened since the previous snapshot:
+--------------------------------------
+Handle = 0x00000000000003f8 - OPEN
+Thread ID = 0x0000000000002844, Process ID = 0x0000000000007948
+
+--------------------------------------
+Displayed 0x1 stack traces for outstanding handles opened since the previous snapshot.
+CLOSE_BREAK
+Handle tracing information snapshot successfully taken.
+0x2d new stack traces since the previous snapshot.
+Ignoring handles that were already closed...
+Outstanding handles opened since the previous snapshot:
+--------------------------------------
+Handle = 0x00000000000003f8 - OPEN
+Thread ID = 0x0000000000002844, Process ID = 0x0000000000007948
+
+--------------------------------------
+Displayed 0x1 stack traces for outstanding handles opened since the previous snapshot.
+CLOSE_BREAK
+Handle tracing information snapshot successfully taken.
+0x2f new stack traces since the previous snapshot.
+Ignoring handles that were already closed...
+Outstanding handles opened since the previous snapshot:
+--------------------------------------
+Handle = 0x00000000000003f8 - OPEN
+Thread ID = 0x0000000000002844, Process ID = 0x0000000000007948
+
+--------------------------------------
+Displayed 0x1 stack traces for outstanding handles opened since the previous snapshot.
+CLOSE_BREAK
+Handle tracing information snapshot successfully taken.
+0x30 new stack traces since the previous snapshot.
+Ignoring handles that were already closed...
+Outstanding handles opened since the previous snapshot:
+--------------------------------------
+Handle = 0x00000000000003f8 - OPEN
+Thread ID = 0x0000000000002844, Process ID = 0x0000000000007948
+
+--------------------------------------
+Displayed 0x1 stack traces for outstanding handles opened since the previous snapshot.
+CLOSE_BREAK
+Handle tracing information snapshot successfully taken.
+0x31 new stack traces since the previous snapshot.
+Ignoring handles that were already closed...
+Outstanding handles opened since the previous snapshot:
+--------------------------------------
+Handle = 0x00000000000003f8 - OPEN
+Thread ID = 0x0000000000002844, Process ID = 0x0000000000007948
+
+--------------------------------------
+Displayed 0x1 stack traces for outstanding handles opened since the previous snapshot.
+CLOSE_BREAK
+Handle tracing information snapshot successfully taken.
+0x32 new stack traces since the previous snapshot.
+Ignoring handles that were already closed...
+Outstanding handles opened since the previous snapshot:
+--------------------------------------
+Handle = 0x00000000000003f8 - OPEN
+Thread ID = 0x0000000000002844, Process ID = 0x0000000000007948
+
+--------------------------------------
+Displayed 0x1 stack traces for outstanding handles opened since the previous snapshot.
+CLOSE_BREAK
+Handle tracing information snapshot successfully taken.
+0x33 new stack traces since the previous snapshot.
+Ignoring handles that were already closed...
+Outstanding handles opened since the previous snapshot:
+--------------------------------------
+Handle = 0x00000000000003f8 - OPEN
+Thread ID = 0x0000000000002844, Process ID = 0x0000000000007948
+
+--------------------------------------
+Displayed 0x1 stack traces for outstanding handles opened since the previous snapshot.
+CLOSE_BREAK
+Handle tracing information snapshot successfully taken.
+0x35 new stack traces since the previous snapshot.
+Ignoring handles that were already closed...
+Outstanding handles opened since the previous snapshot:
+--------------------------------------
+Handle = 0x00000000000003f8 - OPEN
+Thread ID = 0x0000000000002844, Process ID = 0x0000000000007948
+
+--------------------------------------
+Displayed 0x1 stack traces for outstanding handles opened since the previous snapshot.
+CLOSE_BREAK
+Handle tracing information snapshot successfully taken.
+0x37 new stack traces since the previous snapshot.
+Ignoring handles that were already closed...
+Outstanding handles opened since the previous snapshot:
+--------------------------------------
+Handle = 0x00000000000003f8 - OPEN
+Thread ID = 0x0000000000002844, Process ID = 0x0000000000007948
+
+--------------------------------------
+Displayed 0x1 stack traces for outstanding handles opened since the previous snapshot.
+CLOSE_BREAK
+Handle tracing information snapshot successfully taken.
+0x38 new stack traces since the previous snapshot.
+Ignoring handles that were already closed...
+Outstanding handles opened since the previous snapshot:
+--------------------------------------
+Handle = 0x00000000000003f8 - OPEN
+Thread ID = 0x0000000000002844, Process ID = 0x0000000000007948
+
+--------------------------------------
+Displayed 0x1 stack traces for outstanding handles opened since the previous snapshot.
+CLOSE_BREAK
+Handle tracing information snapshot successfully taken.
+0x39 new stack traces since the previous snapshot.
+Ignoring handles that were already closed...
+Outstanding handles opened since the previous snapshot:
+--------------------------------------
+Handle = 0x00000000000003f8 - OPEN
+Thread ID = 0x0000000000002844, Process ID = 0x0000000000007948
+
+--------------------------------------
+Displayed 0x1 stack traces for outstanding handles opened since the previous snapshot.
+CLOSE_BREAK
+Handle tracing information snapshot successfully taken.
+0x3a new stack traces since the previous snapshot.
+Ignoring handles that were already closed...
+Outstanding handles opened since the previous snapshot:
+--------------------------------------
+Handle = 0x00000000000003f8 - OPEN
+Thread ID = 0x0000000000002844, Process ID = 0x0000000000007948
+
+--------------------------------------
+Displayed 0x1 stack traces for outstanding handles opened since the previous snapshot.
+CLOSE_BREAK
+Handle tracing information snapshot successfully taken.
+0x3b new stack traces since the previous snapshot.
+Ignoring handles that were already closed...
+Outstanding handles opened since the previous snapshot:
+--------------------------------------
+Handle = 0x00000000000003f8 - OPEN
+Thread ID = 0x0000000000002844, Process ID = 0x0000000000007948
+
+--------------------------------------
+Displayed 0x1 stack traces for outstanding handles opened since the previous snapshot.
+CLOSE_BREAK
+Handle tracing information snapshot successfully taken.
+0x3c new stack traces since the previous snapshot.
+Ignoring handles that were already closed...
+Outstanding handles opened since the previous snapshot:
+--------------------------------------
+Handle = 0x00000000000003f8 - OPEN
+Thread ID = 0x0000000000002844, Process ID = 0x0000000000007948
+
+--------------------------------------
+Displayed 0x1 stack traces for outstanding handles opened since the previous snapshot.
+CLOSE_BREAK
+Handle tracing information snapshot successfully taken.
+0x44 new stack traces since the previous snapshot.
+Ignoring handles that were already closed...
+Outstanding handles opened since the previous snapshot:
+--------------------------------------
+Handle = 0x00000000000003f8 - OPEN
+Thread ID = 0x0000000000002844, Process ID = 0x0000000000007948
+
+--------------------------------------
+Displayed 0x1 stack traces for outstanding handles opened since the previous snapshot.
+CLOSE_BREAK
+Handle tracing information snapshot successfully taken.
+0x46 new stack traces since the previous snapshot.
+Ignoring handles that were already closed...
+Outstanding handles opened since the previous snapshot:
+--------------------------------------
+Handle = 0x00000000000003f8 - OPEN
+Thread ID = 0x0000000000002844, Process ID = 0x0000000000007948
+
+--------------------------------------
+Displayed 0x1 stack traces for outstanding handles opened since the previous snapshot.
+CLOSE_BREAK
+Handle tracing information snapshot successfully taken.
+0x47 new stack traces since the previous snapshot.
+Ignoring handles that were already closed...
+Outstanding handles opened since the previous snapshot:
+--------------------------------------
+Handle = 0x00000000000003f8 - OPEN
+Thread ID = 0x0000000000002844, Process ID = 0x0000000000007948
+
+--------------------------------------
+Displayed 0x1 stack traces for outstanding handles opened since the previous snapshot.
+CLOSE_BREAK
+Handle tracing information snapshot successfully taken.
+0x48 new stack traces since the previous snapshot.
+Ignoring handles that were already closed...
+Outstanding handles opened since the previous snapshot:
+--------------------------------------
+Handle = 0x00000000000003f8 - OPEN
+Thread ID = 0x0000000000002844, Process ID = 0x0000000000007948
+
+--------------------------------------
+Displayed 0x1 stack traces for outstanding handles opened since the previous snapshot.
+CLOSE_BREAK
+Handle tracing information snapshot successfully taken.
+0x4f new stack traces since the previous snapshot.
+Ignoring handles that were already closed...
+Outstanding handles opened since the previous snapshot:
+--------------------------------------
+Handle = 0x00000000000003f8 - OPEN
+Thread ID = 0x0000000000002844, Process ID = 0x0000000000007948
+
+--------------------------------------
+Displayed 0x1 stack traces for outstanding handles opened since the previous snapshot.
+CLOSE_BREAK
+Handle tracing information snapshot successfully taken.
+0x6a new stack traces since the previous snapshot.
+Ignoring handles that were already closed...
+Outstanding handles opened since the previous snapshot:
+--------------------------------------
+Handle = 0x00000000000003f8 - OPEN
+Thread ID = 0x0000000000002844, Process ID = 0x0000000000007948
+
+--------------------------------------
+Displayed 0x1 stack traces for outstanding handles opened since the previous snapshot.
+CLOSE_BREAK
+Handle tracing information snapshot successfully taken.
+0x6e new stack traces since the previous snapshot.
+Ignoring handles that were already closed...
+Outstanding handles opened since the previous snapshot:
+--------------------------------------
+Handle = 0x00000000000003f8 - OPEN
+Thread ID = 0x0000000000002844, Process ID = 0x0000000000007948
+
+--------------------------------------
+Displayed 0x1 stack traces for outstanding handles opened since the previous snapshot.
+CLOSE_BREAK
+Handle tracing information snapshot successfully taken.
+0x8b new stack traces since the previous snapshot.
+Ignoring handles that were already closed...
+Outstanding handles opened since the previous snapshot:
+--------------------------------------
+Handle = 0x00000000000003f8 - OPEN
+Thread ID = 0x0000000000002844, Process ID = 0x0000000000007948
+
+--------------------------------------
+Displayed 0x1 stack traces for outstanding handles opened since the previous snapshot.
+CLOSE_BREAK
+Handle tracing information snapshot successfully taken.
+0x8e new stack traces since the previous snapshot.
+Ignoring handles that were already closed...
+Outstanding handles opened since the previous snapshot:
+--------------------------------------
+Handle = 0x00000000000003f8 - OPEN
+Thread ID = 0x0000000000002844, Process ID = 0x0000000000007948
+
+--------------------------------------
+Displayed 0x1 stack traces for outstanding handles opened since the previous snapshot.
+ntdll!NtTerminateProcess+0x14:
+00007fff`5f6a05e4 c3              ret
+0:000> NatVis script unloaded from 'C:\Program Files\WindowsApps\Microsoft.WinDbg_1.2606.22001.0_x64__8wekyb3d8bbwe\amd64\Visualizers\atlmfc.natvis'
+NatVis script unloaded from 'C:\Program Files\WindowsApps\Microsoft.WinDbg_1.2606.22001.0_x64__8wekyb3d8bbwe\amd64\Visualizers\concurrency.natvis'
+NatVis script unloaded from 'C:\Program Files\WindowsApps\Microsoft.WinDbg_1.2606.22001.0_x64__8wekyb3d8bbwe\amd64\Visualizers\cpp_rest.natvis'
+NatVis script unloaded from 'C:\Program Files\WindowsApps\Microsoft.WinDbg_1.2606.22001.0_x64__8wekyb3d8bbwe\amd64\Visualizers\ObjectiveC.natvis'
+NatVis script unloaded from 'C:\Program Files\WindowsApps\Microsoft.WinDbg_1.2606.22001.0_x64__8wekyb3d8bbwe\amd64\Visualizers\stl.natvis'
+NatVis script unloaded from 'C:\Program Files\WindowsApps\Microsoft.WinDbg_1.2606.22001.0_x64__8wekyb3d8bbwe\amd64\Visualizers\Windows.Data.Json.natvis'
+NatVis script unloaded from 'C:\Program Files\WindowsApps\Microsoft.WinDbg_1.2606.22001.0_x64__8wekyb3d8bbwe\amd64\Visualizers\Windows.Devices.Geolocation.natvis'
+NatVis script unloaded from 'C:\Program Files\WindowsApps\Microsoft.WinDbg_1.2606.22001.0_x64__8wekyb3d8bbwe\amd64\Visualizers\Windows.Devices.Sensors.natvis'
+NatVis script unloaded from 'C:\Program Files\WindowsApps\Microsoft.WinDbg_1.2606.22001.0_x64__8wekyb3d8bbwe\amd64\Visualizers\Windows.Media.natvis'
+NatVis script unloaded from 'C:\Program Files\WindowsApps\Microsoft.WinDbg_1.2606.22001.0_x64__8wekyb3d8bbwe\amd64\Visualizers\windows.natvis'
+NatVis script unloaded from 'C:\Program Files\WindowsApps\Microsoft.WinDbg_1.2606.22001.0_x64__8wekyb3d8bbwe\amd64\Visualizers\winrt.natvis'

@@ -2,7 +2,7 @@
 import json
 import unittest
 
-from verify_packet import MANIFEST, PACKET, Reader, digest, verify
+from verify_packet import LIVE_PLAN, MANIFEST, PACKET, Reader, digest, verify
 
 
 class PacketTests(unittest.TestCase):
@@ -23,6 +23,25 @@ class PacketTests(unittest.TestCase):
 
     def test_current_packet(self):
         self.assertTrue(verify(self.read)['integrity_verified'])
+
+    def test_live_status_plan_can_advance_without_changing_execution_evidence(self):
+        def read(path):
+            if path == LIVE_PLAN:
+                raise AssertionError('live plan must not be read as historical execution evidence')
+            return self.read(path)
+        self.assertTrue(verify(read)['integrity_verified'])
+
+    def test_cannot_replace_execution_snapshot_with_live_plan(self):
+        manifest = json.loads(self.read(MANIFEST))
+        manifest['plan_snapshot'] = LIVE_PLAN
+        read = lambda path: json.dumps(manifest).encode() if path == MANIFEST else self.read(path)
+        with self.assertRaisesRegex(ValueError, 'immutable plan snapshot required'):
+            verify(read)
+
+    def test_snapshot_rehash_cannot_change_execution_plan_binding(self):
+        path = PACKET + 'plan-s179-snapshot.txt'
+        with self.assertRaisesRegex(ValueError, 'execution plan binding'):
+            verify(self.override(path, self.read(path) + b'changed\n', rehash=True))
 
     def test_newline_conversion_is_not_exact_evidence(self):
         path = '8-9-hh3d-3/zdoc/reviews/20260923-consumer-pilot-s177-derived/author-binding-01.json'
