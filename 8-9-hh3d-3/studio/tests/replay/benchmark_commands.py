@@ -10,7 +10,8 @@ One delayed mock job is canceled after group 49 through the control listener.
 No native effects, engine launches, public cap increases or journal clearing.
 Only explicit connection-loss uncertainty during admission or lookup is
 reconciled by another lookup of the same ID, within the original five-second
-terminal budget.
+terminal budget. A lease response loss is retried only as bounded setup
+reconciliation for the same session; no mutation command is resubmitted.
 This covers a known uncertainty path; it does not establish the cause of any
 older failure whose lookup response was not captured.
 
@@ -41,6 +42,7 @@ STUDIO = Path(__file__).resolve().parents[2]
 if __name__ == '__main__':
     sys.path.insert(0, str(STUDIO.parent))
 from studio.host.replay.verified_journal import VerifiedJournal as Journal
+from studio.host.core.limits import SafetyViolation
 from studio.host.core.transport import epoch_ms
 from studio.tests.replay.benchmark_transport import (
     BenchmarkFixtureClient as FixtureClient, BenchmarkFixtureHost as LoopbackFixtureHost,
@@ -160,7 +162,29 @@ class CommandProducer:
             'started_mono_us': started // 1000, 'receipt_mono_us': received // 1000})
         _need(discovery.supports('fixture.inspect') and discovery.supports('fixture.set'), 'CATALOG')
         started = _clock()
-        lease = self.client.lease(ttl_ms=900_000)
+        # A lease response can be lost after acquire_lease has committed.
+        # Reissuing the lease for this same session is setup reconciliation: it
+        # advances the fencing epoch and invalidates the unseen lease, but never
+        # resubmits a fixture mutation. Only the exact transport sentinel from
+        # the lease endpoint is retryable, and the existing five-second bounded
+        # setup budget prevents an infinite retry.
+        deadline = started + TERMINAL_TIMEOUT_SECONDS * 1_000_000_000
+        while True:
+            try:
+                lease = self.client.lease(ttl_ms=900_000)
+                break
+            except SafetyViolation as error:
+                failure = getattr(self.client, 'last_transport_failure', None)
+                retryable = (getattr(error, 'code', None) == 'CONNECTION_LOST_LOOKUP'
+                             and type(failure) is dict
+                             and failure.get('endpoint') == 'lease'
+                             and failure.get('stage') in {'request', 'getresponse', 'read'}
+                             and failure.get('category') in {'timeout', 'connection', 'http', 'os'})
+                error_code = getattr(error, 'code', str(error))
+                _need(retryable, 'LEASE_' + str(error_code))
+                remaining = (deadline - _clock()) / 1_000_000_000
+                _need(remaining > 0, 'LEASE_RECONCILE_TIMEOUT')
+                time.sleep(min(0.01, remaining))
         received = self._received()
         self._setup_responses.append({'kind': 'lease',
             'started_mono_us': started // 1000, 'receipt_mono_us': received // 1000})

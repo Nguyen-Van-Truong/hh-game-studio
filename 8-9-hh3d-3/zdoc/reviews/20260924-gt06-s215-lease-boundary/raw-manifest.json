@@ -1,0 +1,1264 @@
+{
+  "authority": 0,
+  "campaign_id": "gt06-s215-formal-01",
+  "file_count": 251,
+  "files": [
+    {
+      "path": "raw/benchmark-profile.json",
+      "sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+      "size": 718
+    },
+    {
+      "path": "raw/campaign.json",
+      "sha256": "f048c79d487c32e5bfb0a30917acd4d3701a76011943832bdc2371cb8263718f",
+      "size": 6727
+    },
+    {
+      "path": "raw/run-00-attempt-01/batch-capture-00.json",
+      "sha256": "ddec0b80f8f03c0119d89f252aee20b66edaa5a25743a472e83c47efa6a0dc96",
+      "size": 868
+    },
+    {
+      "path": "raw/run-00-attempt-01/batch-capture-01.json",
+      "sha256": "e87ef50d5ea09e03587a6ae09c0b282673be00ea2676c5fa0fbd7a8d8c44c1ad",
+      "size": 868
+    },
+    {
+      "path": "raw/run-00-attempt-01/batch-capture-02.json",
+      "sha256": "34d4ca12f2f02375cd71c28eb8bef042809ba8510a583c69d46c14fa1e7f7da3",
+      "size": 868
+    },
+    {
+      "path": "raw/run-00-attempt-01/batch-capture-03.json",
+      "sha256": "055a1bfbdc290d3ce8e24c82de5ac3dc93e9ea05a5bbd10da9e30c43e881405d",
+      "size": 868
+    },
+    {
+      "path": "raw/run-00-attempt-01/batch-capture-04.json",
+      "sha256": "d830baa60464b0442d3c105e3546c79e1eab43738c7efe8953050d43a45fe59e",
+      "size": 868
+    },
+    {
+      "path": "raw/run-00-attempt-01/batch-capture-05.json",
+      "sha256": "cd370101aa991d938bf91538d3ec3fe0e43d26fb3db60d75f4c63f3ed8bf405f",
+      "size": 868
+    },
+    {
+      "path": "raw/run-00-attempt-01/benchmark-profile.json",
+      "sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+      "size": 718
+    },
+    {
+      "path": "raw/run-00-attempt-01/child-failure.json",
+      "sha256": "7deea238a0942ae5440eaecc33f471887071107d7f73afea299c0e62a4346cb6",
+      "size": 1246
+    },
+    {
+      "path": "raw/run-00-attempt-01/child-terminal-cleanup.json",
+      "sha256": "65284904d89731375be4c59d859e3c709d71f5b281107dd8c05342e4721a24ee",
+      "size": 3716
+    },
+    {
+      "path": "raw/run-00-attempt-01/command-00.json",
+      "sha256": "a51e340496af092faa84335cf2808883fe9a47e6a7ab3c79f9e929ae09e739c4",
+      "size": 2380259
+    },
+    {
+      "path": "raw/run-00-attempt-01/command-01.json",
+      "sha256": "e6437b7489db4958af85d836629bb25337f3de643b0426b419e1b9957c3d55a5",
+      "size": 2397283
+    },
+    {
+      "path": "raw/run-00-attempt-01/command-02.json",
+      "sha256": "6a8974999bb05dc63c31c0694c5a6e1ecfdf0571095b2a64503f90b6daa292fa",
+      "size": 2484982
+    },
+    {
+      "path": "raw/run-00-attempt-01/command-03.json",
+      "sha256": "490fe5b4ab0f0f0dde3545a3ede3b6d130f1f54bdcd986228c9a79e6942d4576",
+      "size": 2480311
+    },
+    {
+      "path": "raw/run-00-attempt-01/command-04.json",
+      "sha256": "f4b4a8ef4c87ba129a742f88c42db3fa8d35ab3e3f17deef973267b07809b2d9",
+      "size": 2482254
+    },
+    {
+      "path": "raw/run-00-attempt-01/command-05.json",
+      "sha256": "efab76ec4c06ec75551d64398bbfeaf6ffcea3613aff5733ef095924351a70ae",
+      "size": 2673280
+    },
+    {
+      "path": "raw/run-00-attempt-01/commands/commands.jsonl",
+      "sha256": "931f8959f970f1d8aec87abd8e753ac33c734dc9222827d5fda3edad8ad7f214",
+      "size": 5885981
+    },
+    {
+      "path": "raw/run-00-attempt-01/commands/commands.jsonl.guard",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "raw/run-00-attempt-01/context.json",
+      "sha256": "4b4927867776f580ad5780d1504581c396aee9b90baddf6cf238619b9b869608",
+      "size": 5712
+    },
+    {
+      "path": "raw/run-00-attempt-01/editor-host/cleanup-001.json",
+      "sha256": "9ff26d2260e6188703654517521ac75e80f618c4e517723042f5f4babc109ee1",
+      "size": 556
+    },
+    {
+      "path": "raw/run-00-attempt-01/editor-host/invocation.json",
+      "sha256": "476c1db1a97ac9b3cda808702d3bab39b59cc9c66871674941459b66ebd01787",
+      "size": 9350
+    },
+    {
+      "path": "raw/run-00-attempt-01/editor-host/localappdata/Godot/editor_doc_cache-4.7.res",
+      "sha256": "60ee2575635bf14ea08101d9ce03e412f3e42998b7e3c0e18dc3898c085a3911",
+      "size": 3269805
+    },
+    {
+      "path": "raw/run-00-attempt-01/editor-host/localappdata/Godot/resthumb-0203995a415b30223fa0def7689e5059.png",
+      "sha256": "622f6f4030ce8e1175ca099665e7a24bd9936058955832090b7858f5911275c9",
+      "size": 4078
+    },
+    {
+      "path": "raw/run-00-attempt-01/editor-host/localappdata/Godot/resthumb-0203995a415b30223fa0def7689e5059.txt",
+      "sha256": "fed11ffaefca66b3e30945eea003caebf1ff7147508e25fb408b1512bc02bd4d",
+      "size": 54
+    },
+    {
+      "path": "raw/run-00-attempt-01/editor-host/localappdata/Godot/resthumb-583eb62ba8410b6b20f57e88700e00bc.png",
+      "sha256": "3be5f43c5f5c1dfa41cc8c26587f6a18613ce89ee346e425b10806dbd8095def",
+      "size": 414
+    },
+    {
+      "path": "raw/run-00-attempt-01/editor-host/localappdata/Godot/resthumb-583eb62ba8410b6b20f57e88700e00bc.txt",
+      "sha256": "4ebb19c193b35d7a5aa2c0629761af9c8bfbe0b692ff5f367d426885ee505f07",
+      "size": 54
+    },
+    {
+      "path": "raw/run-00-attempt-01/editor-host/localappdata/Godot/resthumb-7a6c02881e6d95ddd4e08e0bde66091d.png",
+      "sha256": "f4f80b42111aa8d85a33f670f2753c6cda52fd0698e9868183ae652d9a4f6a6b",
+      "size": 831
+    },
+    {
+      "path": "raw/run-00-attempt-01/editor-host/localappdata/Godot/resthumb-7a6c02881e6d95ddd4e08e0bde66091d.txt",
+      "sha256": "1c98b1dcd0ac3987f3e52c040decb84739f0da51b9b14697aad3a2a10f6f619b",
+      "size": 54
+    },
+    {
+      "path": "raw/run-00-attempt-01/editor-host/localappdata/Godot/resthumb-8eb693b710147f2e76c237cbcffb5dd3.png",
+      "sha256": "74e4d6e17534aa3f5672f48238a56b5e660183a8dd5a919f27078d0952dcbe10",
+      "size": 929
+    },
+    {
+      "path": "raw/run-00-attempt-01/editor-host/localappdata/Godot/resthumb-8eb693b710147f2e76c237cbcffb5dd3.txt",
+      "sha256": "d17de639ecd42d6647f56c325ba36620fef54f68537a30bd8c5bb4b6c2ea5f11",
+      "size": 54
+    },
+    {
+      "path": "raw/run-00-attempt-01/editor-host/localappdata/Godot/resthumb-cdc75af7c83da66eb92a1c15a3757183.png",
+      "sha256": "bbd1ff19bac55b941b0c00441099621180419d420e80eaf9ac83c2a913fb1d48",
+      "size": 755
+    },
+    {
+      "path": "raw/run-00-attempt-01/editor-host/localappdata/Godot/resthumb-cdc75af7c83da66eb92a1c15a3757183.txt",
+      "sha256": "c511423cbbd298a9ef9cc8f31e9e3d8db8c558891ae72e85f886121dfaac0d68",
+      "size": 54
+    },
+    {
+      "path": "raw/run-00-attempt-01/editor-host/localappdata/Godot/resthumb-d83d7a7c8952913bb860f103cba8068e.png",
+      "sha256": "26623eb8019be5752051ca407aa87cff0989d8e38ce3ffb8fe2f9980bbc1386f",
+      "size": 852
+    },
+    {
+      "path": "raw/run-00-attempt-01/editor-host/localappdata/Godot/resthumb-d83d7a7c8952913bb860f103cba8068e.txt",
+      "sha256": "3ece8bbdd10279f5e5d1724ec3a071eee90c63e47d4fef761c8e37d56a6c5b6f",
+      "size": 54
+    },
+    {
+      "path": "raw/run-00-attempt-01/editor-host/process-start.json",
+      "sha256": "813b243f6b5ccab0bf31e4471d528e19c15b8468722e32fbc75c062f6c5dc380",
+      "size": 14
+    },
+    {
+      "path": "raw/run-00-attempt-01/editor-host/stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "raw/run-00-attempt-01/editor-host/stdout.txt",
+      "sha256": "bd468625df172fc0c81a2e4b0cb22c2854d176e5c22b6dc414a29541ee1a2b9d",
+      "size": 212111
+    },
+    {
+      "path": "raw/run-00-attempt-01/editor-snapshot.json",
+      "sha256": "2821f2b97bcff8f9c5ba7362e7904cded1b311c3b0e7fd304c453495e50c772b",
+      "size": 1574
+    },
+    {
+      "path": "raw/run-00-attempt-01/host-owner/cleanup-001.json",
+      "sha256": "31f58e29075f8f16bb2df0bb72471bfcd0df794b729d6497022554d84959cfc8",
+      "size": 548
+    },
+    {
+      "path": "raw/run-00-attempt-01/host-owner/invocation.json",
+      "sha256": "e04176cf9dc15d4ee33eb5abed44d6a9ea5577ca6fba106def3f963cda810b2d",
+      "size": 6819
+    },
+    {
+      "path": "raw/run-00-attempt-01/host-owner/process-exit.json",
+      "sha256": "4fdc94f6081b771dcf1f195bf916cdd3eacdb742fcd2412f4da6c06cd4388a4e",
+      "size": 29
+    },
+    {
+      "path": "raw/run-00-attempt-01/host-owner/process-start.json",
+      "sha256": "635dcfe4e389829b3168a4b711768919abd626752edbb6a44951d4159d90e071",
+      "size": 13
+    },
+    {
+      "path": "raw/run-00-attempt-01/host-owner/stderr.txt",
+      "sha256": "9f5641eb78777973dcc22a1fd9a96f15b841eee85240be0ad1e898b2522b6cbd",
+      "size": 2198
+    },
+    {
+      "path": "raw/run-00-attempt-01/host-owner/stdout.txt",
+      "sha256": "240e8d43f1c4f82e522df19e3f2a2a1e4cd21261384bb8cb445e202eb2de614b",
+      "size": 62893
+    },
+    {
+      "path": "raw/run-00-attempt-01/http-phases-final.json",
+      "sha256": "94a82d1847e8efd3ce07d96e666ee130baa1866efef0e2f1e168f881ff9aae03",
+      "size": 2188268
+    },
+    {
+      "path": "raw/run-00-attempt-01/import-host/appdata/Godot/editor_settings-4.7.tres",
+      "sha256": "5d041aa12f6188659829c3df01ec00938d4ae84643e8a63b7e638255ee747d71",
+      "size": 17991
+    },
+    {
+      "path": "raw/run-00-attempt-01/import-host/capture.json",
+      "sha256": "8840ea1b7948a8404f6fb89a5bbb437f6724751751fcf99c36aebd5df2394c65",
+      "size": 1341
+    },
+    {
+      "path": "raw/run-00-attempt-01/import-host/invocation.json",
+      "sha256": "e4820b410feaae4aa7b14b288f98a79e18d20e919d7ee9ac8a64ae7edb79328f",
+      "size": 6431
+    },
+    {
+      "path": "raw/run-00-attempt-01/import-host/localappdata/Godot/editor_doc_cache-4.7.res",
+      "sha256": "189c1cc26f47f04486e2e98249eae8c801db737e8be9b19043b969a5c58ab968",
+      "size": 3269732
+    },
+    {
+      "path": "raw/run-00-attempt-01/import-host/process-exit.json",
+      "sha256": "78c331a4a56c0b491a9c506bfcdea46412424d6445cfe6d4871ffc603c49258b",
+      "size": 30
+    },
+    {
+      "path": "raw/run-00-attempt-01/import-host/process-start.json",
+      "sha256": "e03a6bb9132be33febd5c02ff26128c42b28f0ce7c96883fc9e43ca0dfc69fc8",
+      "size": 14
+    },
+    {
+      "path": "raw/run-00-attempt-01/import-host/stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "raw/run-00-attempt-01/import-host/stdout.txt",
+      "sha256": "9b5e37b85c8c4f11090de482aee3734b6c7993ad884a62121b2adcc9dfdd6003",
+      "size": 1492
+    },
+    {
+      "path": "raw/run-00-attempt-01/import-observation.json",
+      "sha256": "469d2873428259c6e0c3196a37c946451b4b881b901514afffe4bcc44f82bf7b",
+      "size": 23248
+    },
+    {
+      "path": "raw/run-00-attempt-01/initial-project-files.json",
+      "sha256": "b9aa16d3f9cb096db58771cd39437d2a647a9693ad1275c61252d5a2c2bd3f0a",
+      "size": 1461
+    },
+    {
+      "path": "raw/run-00-attempt-01/joint-00.json",
+      "sha256": "5016b831b35d9ecee17babd1ff9a7410f2270b4e8feb29ed32cce738f50181c0",
+      "size": 2319
+    },
+    {
+      "path": "raw/run-00-attempt-01/joint-01.json",
+      "sha256": "01a501fc8404a7ddc4d7a8ba3b32a9d5de150b406c15510787c82bf4f0da7c95",
+      "size": 2323
+    },
+    {
+      "path": "raw/run-00-attempt-01/joint-02.json",
+      "sha256": "ef652df0c8b2fce0a0055fa298aec2c984ddecf012a1e6a277de1f861c49053a",
+      "size": 2324
+    },
+    {
+      "path": "raw/run-00-attempt-01/joint-03.json",
+      "sha256": "dce27658a841589c0b3c203f356ada49c3c8b8fe5c6525d1eb32a69c59912708",
+      "size": 2324
+    },
+    {
+      "path": "raw/run-00-attempt-01/joint-04.json",
+      "sha256": "a3987968174d2dfbd3b4fe9ab4cd91112f0c5cf67c7d495132abcec03bbdac94",
+      "size": 2325
+    },
+    {
+      "path": "raw/run-00-attempt-01/joint-05.json",
+      "sha256": "5f520b2e7e6ea83e635eef77e169cca8185cc98cf3fac1900354ae9a509b31e8",
+      "size": 2326
+    },
+    {
+      "path": "raw/run-00-attempt-01/parent-failure.json",
+      "sha256": "175b9f9904e7eb53de418d5378352806790aacba88414e61a9a35bf1927c377b",
+      "size": 181
+    },
+    {
+      "path": "raw/run-00-attempt-01/project/.godot/.gdignore",
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+      "size": 1
+    },
+    {
+      "path": "raw/run-00-attempt-01/project/.godot/editor/editor_layout.cfg",
+      "sha256": "70dc9392e0db5a0eb260d7e07ea9d4a7ded960dd5592f61470ce37c643328b9b",
+      "size": 1436
+    },
+    {
+      "path": "raw/run-00-attempt-01/project/.godot/editor/filesystem_cache10",
+      "sha256": "d451aeee4ee05bcc41dcc2f5ee17b4ed00342e7e1186bf28c84ea7c159f36865",
+      "size": 915
+    },
+    {
+      "path": "raw/run-00-attempt-01/project/.godot/editor/filesystem_update4",
+      "sha256": "c70b0d9ece2ebc1d5f746284eb135e9a1b5a78b6324ee9dd1daa592ee7af2497",
+      "size": 26
+    },
+    {
+      "path": "raw/run-00-attempt-01/project/.godot/editor/fixture.tscn-editstate-a95ffd352fa9c4b59083e0b523419988.cfg",
+      "sha256": "324eaafaca9233dac634abc0760b0e716534f2f9b88b0084af3835a0aa688acd",
+      "size": 4334
+    },
+    {
+      "path": "raw/run-00-attempt-01/project/.godot/editor/fixture.tscn-folding-a95ffd352fa9c4b59083e0b523419988.cfg",
+      "sha256": "9b34a7fc95b0f9cd640941851bbb0ebc8777e0666f5560e828143047b26c7c93",
+      "size": 136
+    },
+    {
+      "path": "raw/run-00-attempt-01/project/.godot/editor/project_metadata.cfg",
+      "sha256": "0817ad8476545d590bf74763cdb7a6e06d1e4227ade6a9050aabdf38ff86195b",
+      "size": 273
+    },
+    {
+      "path": "raw/run-00-attempt-01/project/.godot/editor/script_editor_cache.cfg",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "raw/run-00-attempt-01/project/.godot/global_script_class_cache.cfg",
+      "sha256": "f61aa7ad3097022d6a9d110ca3f73fa7bb348ec2cf9a6e7c9523574dc75f5a16",
+      "size": 8
+    },
+    {
+      "path": "raw/run-00-attempt-01/project/.godot/scene_groups_cache.cfg",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "raw/run-00-attempt-01/project/.godot/shader_cache/CanvasShaderGLES3/076cc7f5ca018594656711ce99da014402bbd19aa1eb794136d4aa1fc1916d27/6bb7c9a2fd1c4a8fa77cb96555b9b4a720209981.cache",
+      "sha256": "64380c43e36185061338fddf4c419ae182b3e8d964694d942477522475472969",
+      "size": 51577
+    },
+    {
+      "path": "raw/run-00-attempt-01/project/.godot/shader_cache/CopyShaderGLES3/be890b216e2b3fe916307830870fee480049474f8a9590e668b7db55f4333ca0/6bb7c9a2fd1c4a8fa77cb96555b9b4a720209981.cache",
+      "sha256": "3048d6a5ff3b6f1f3928f1757f95575cdaac31345c5c988c76b29b192451eaac",
+      "size": 118055
+    },
+    {
+      "path": "raw/run-00-attempt-01/project/.godot/shader_cache/CubemapFilterShaderGLES3/f2f060f7884cfc963ab277935a694190c41dc5319199dc60ed40febaeed22ca7/6bb7c9a2fd1c4a8fa77cb96555b9b4a720209981.cache",
+      "sha256": "d9fdcbae9028b1461cff9283ecb830d07de009872dcad836fd6c3bcbf311a326",
+      "size": 26057
+    },
+    {
+      "path": "raw/run-00-attempt-01/project/.godot/shader_cache/FeedShaderGLES3/d18a5be4b160faacb02638af5d95197a20d24a8ee2964a921fecdd0450ccfe03/6bb7c9a2fd1c4a8fa77cb96555b9b4a720209981.cache",
+      "sha256": "2a5e7afe13ac912113b5ae0a83c07a02276e432e6d3a775d75b81f9f4fda1cf7",
+      "size": 8261
+    },
+    {
+      "path": "raw/run-00-attempt-01/project/.godot/shader_cache/PostShaderGLES3/591ad1dc6444d48fbbe21612a2afd78e25aaf929315adddd90df3789fa6e5af1/6bb7c9a2fd1c4a8fa77cb96555b9b4a720209981.cache",
+      "sha256": "325e7e2480e6d9eecb67ba31979f1d2b02e24b4dfd5417bba778ca92aeda9944",
+      "size": 13656
+    },
+    {
+      "path": "raw/run-00-attempt-01/project/.godot/shader_cache/SceneShaderGLES3/ebd5ef628945fec79c8fb620654e1e6dfffb8249acd83a4803b1a534aadcbced/6bb7c9a2fd1c4a8fa77cb96555b9b4a720209981.cache",
+      "sha256": "0f44ecc571184016915cd17c958bf5a740be210dac4ca7fcc477470a96b58d69",
+      "size": 800909
+    },
+    {
+      "path": "raw/run-00-attempt-01/project/.godot/shader_cache/SceneShaderGLES3/ebd5ef628945fec79c8fb620654e1e6dfffb8249acd83a4803b1a534aadcbced/77047cd41f429f33ceff24e890e174f5465e755e.cache",
+      "sha256": "4ee97cbead634ccceac9d83bdab3c1396dad3c2496783380125d5f0aff5ff520",
+      "size": 920188
+    },
+    {
+      "path": "raw/run-00-attempt-01/project/.godot/shader_cache/SceneShaderGLES3/ebd5ef628945fec79c8fb620654e1e6dfffb8249acd83a4803b1a534aadcbced/a38af2d0725c8e99d8492f4c72736f24d6a54cc5.cache",
+      "sha256": "150456b8b48f171f3a385438c75aead18720b465a7d6fc2d8a55e6a3d5480d6d",
+      "size": 738963
+    },
+    {
+      "path": "raw/run-00-attempt-01/project/.godot/shader_cache/SceneShaderGLES3/ebd5ef628945fec79c8fb620654e1e6dfffb8249acd83a4803b1a534aadcbced/cafb1506f2db0c3681435e264aa18e216d1a7a40.cache",
+      "sha256": "539e4fe2db6088f2f78c59c041734c8759a4fc739e80600e1f07e3e8a5c26e11",
+      "size": 729679
+    },
+    {
+      "path": "raw/run-00-attempt-01/project/.godot/shader_cache/SkyShaderGLES3/c1a447880507cb68532c47caeeb2a80984019a797946a43cd3c056a918a45c98/2c82eb5fea9b549e20c9f41e308abf9a4fc5d76f.cache",
+      "sha256": "82d8ee23f05ca0840d1b10cee22b49399df43d8931cb39096d987de104720144",
+      "size": 55632
+    },
+    {
+      "path": "raw/run-00-attempt-01/project/.godot/uid_cache.bin",
+      "sha256": "5a09f44210cc375bb3bb0d2df67d570e766fd485097ca0920f678c435e11ec99",
+      "size": 283
+    },
+    {
+      "path": "raw/run-00-attempt-01/project/addons/hh_benchmark/benchmark_native.gd",
+      "sha256": "13e65360cd0bc0033d0ad414fb3238e216b0d6dcc08e57dc7026ec4fc9eb8b95",
+      "size": 54580
+    },
+    {
+      "path": "raw/run-00-attempt-01/project/addons/hh_benchmark/benchmark_native.gd.uid",
+      "sha256": "a3276526a45b0947965883d5c27469e09370a4591f9cee7ad868d23ba6dcde7a",
+      "size": 20
+    },
+    {
+      "path": "raw/run-00-attempt-01/project/addons/hh_benchmark/plugin.cfg",
+      "sha256": "648d8821a36d0abc825ef1f380b4917639074302a619cb25a798df987a5a1092",
+      "size": 189
+    },
+    {
+      "path": "raw/run-00-attempt-01/project/addons/hh_studio/jcs_godot.gd",
+      "sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5",
+      "size": 10165
+    },
+    {
+      "path": "raw/run-00-attempt-01/project/addons/hh_studio/jcs_godot.gd.uid",
+      "sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b",
+      "size": 20
+    },
+    {
+      "path": "raw/run-00-attempt-01/project/addons/hh_studio/plugin.cfg",
+      "sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c",
+      "size": 165
+    },
+    {
+      "path": "raw/run-00-attempt-01/project/addons/hh_studio/plugin.gd",
+      "sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036",
+      "size": 23043
+    },
+    {
+      "path": "raw/run-00-attempt-01/project/addons/hh_studio/plugin.gd.uid",
+      "sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d",
+      "size": 20
+    },
+    {
+      "path": "raw/run-00-attempt-01/project/addons/hh_studio/scene_commands.gd",
+      "sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069",
+      "size": 32174
+    },
+    {
+      "path": "raw/run-00-attempt-01/project/addons/hh_studio/scene_commands.gd.uid",
+      "sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69",
+      "size": 19
+    },
+    {
+      "path": "raw/run-00-attempt-01/project/benchmark/.gdignore",
+      "sha256": "3d078ee3c08af2f64daca29255d23d366dc0a9bdbef8a872442d5642bfb84cf8",
+      "size": 53
+    },
+    {
+      "path": "raw/run-00-attempt-01/project/benchmark/input/ack-00.json",
+      "sha256": "33d1a5c4f918230c5db56d8d6a1f03a7a4e039cc43adaefd5834e44504008626",
+      "size": 422
+    },
+    {
+      "path": "raw/run-00-attempt-01/project/benchmark/input/ack-01.json",
+      "sha256": "dc1aa9cf5fc4eedbdf069e023133f8d9e1ecb3ea2bba89b553e19957c793ff83",
+      "size": 422
+    },
+    {
+      "path": "raw/run-00-attempt-01/project/benchmark/input/ack-02.json",
+      "sha256": "8f38405e8242c6eede4d335e5cc78a8308c9f0782e88b3cef35186f03dfcb19e",
+      "size": 422
+    },
+    {
+      "path": "raw/run-00-attempt-01/project/benchmark/input/ack-03.json",
+      "sha256": "71ed05ac537e71da2da62cf548908927ddde3af0380b54df3d0a9550930d4d15",
+      "size": 422
+    },
+    {
+      "path": "raw/run-00-attempt-01/project/benchmark/input/ack-04.json",
+      "sha256": "b2fe15c8a7a3643f416fe92df3020dfd6b7128f6019a67bf3c73e1415c307875",
+      "size": 422
+    },
+    {
+      "path": "raw/run-00-attempt-01/project/benchmark/input/ack-05.json",
+      "sha256": "ec56a73674b814ce2f6553279ef5340fbaa976caed9b50f9c1475d0e6ec30a95",
+      "size": 422
+    },
+    {
+      "path": "raw/run-00-attempt-01/project/benchmark/input/start-00.json",
+      "sha256": "f2449f33ac990c9e311ec215a296244a5edd9fe2287377fce2d001aa0b737b86",
+      "size": 507
+    },
+    {
+      "path": "raw/run-00-attempt-01/project/benchmark/input/start-01.json",
+      "sha256": "717e7c9a45881443dd2960f2387299d865e2a3dc97d864f5962da4a4183d222e",
+      "size": 507
+    },
+    {
+      "path": "raw/run-00-attempt-01/project/benchmark/input/start-02.json",
+      "sha256": "b5bb7ef7e9c7f17be3a09c659bf4c0c5df67294d4802a8e13c434c0e12b966af",
+      "size": 507
+    },
+    {
+      "path": "raw/run-00-attempt-01/project/benchmark/input/start-03.json",
+      "sha256": "3771cac4271d813af194ea9be0f609acb60b0972e657fcd877df2b9990c8ede6",
+      "size": 507
+    },
+    {
+      "path": "raw/run-00-attempt-01/project/benchmark/input/start-04.json",
+      "sha256": "9b09ab09e70700bd2ea5e2d6475d35d52201bd96cf92abb96320edde04938a3a",
+      "size": 507
+    },
+    {
+      "path": "raw/run-00-attempt-01/project/benchmark/input/start-05.json",
+      "sha256": "ccc5a1a5c6d96416d06cd03fb6610a90107c934b416c4ae0cec7007a4b552f78",
+      "size": 508
+    },
+    {
+      "path": "raw/run-00-attempt-01/project/benchmark/input.json",
+      "sha256": "0a52439f5142968fe4ecab0406d8fa594b8b7eb0d8c55141c57980a6dfa92a21",
+      "size": 367
+    },
+    {
+      "path": "raw/run-00-attempt-01/project/benchmark/out/batch-00.json",
+      "sha256": "37e21cb602e1eb9fcd139b719dd446b3e7ed21101a094b43672de781cba88f18",
+      "size": 97072
+    },
+    {
+      "path": "raw/run-00-attempt-01/project/benchmark/out/batch-01.json",
+      "sha256": "11e3f376ac765038773d4210f0b9232ada67be2e4cd2b71c7ddb3adfe5502f42",
+      "size": 98223
+    },
+    {
+      "path": "raw/run-00-attempt-01/project/benchmark/out/batch-02.json",
+      "sha256": "9aa8cee3119c2555c94544d8ba5f21adf5edf94b546f52a376369741745a266d",
+      "size": 98250
+    },
+    {
+      "path": "raw/run-00-attempt-01/project/benchmark/out/batch-03.json",
+      "sha256": "c08ae9c7fb4b3f512555db7f88e3fb428e1beef497f3cad870c374dd452e2e1a",
+      "size": 98251
+    },
+    {
+      "path": "raw/run-00-attempt-01/project/benchmark/out/batch-04.json",
+      "sha256": "50c496a45a4a76d8839c7485b70d1c0317674a7f1a3603759eab3d32e0c85e93",
+      "size": 98229
+    },
+    {
+      "path": "raw/run-00-attempt-01/project/benchmark/out/batch-05.json",
+      "sha256": "5707fff6b5bc9f1021d04be64f83997b7ed3396939b42a5bed1bce576bda7342",
+      "size": 98447
+    },
+    {
+      "path": "raw/run-00-attempt-01/project/benchmark/out/ready-00.json",
+      "sha256": "eb737869351b6477ff81d0a845695a983f09ac61019fc8caacf19976d31fbac5",
+      "size": 657
+    },
+    {
+      "path": "raw/run-00-attempt-01/project/benchmark/out/ready-01.json",
+      "sha256": "67902cd2434c309a174c644df90f84001f82f2440b4448cf899df0919e41a51a",
+      "size": 661
+    },
+    {
+      "path": "raw/run-00-attempt-01/project/benchmark/out/ready-02.json",
+      "sha256": "a30bd15685d8c75cfc61677ee6e2ddfdf767a93b19c20051d50f021a9c0a2631",
+      "size": 663
+    },
+    {
+      "path": "raw/run-00-attempt-01/project/benchmark/out/ready-03.json",
+      "sha256": "f9ac05916b0f8150c75ad75e2a4fd40d4e0a19e8ba2ace3d1bab9f5081ce2aba",
+      "size": 663
+    },
+    {
+      "path": "raw/run-00-attempt-01/project/benchmark/out/ready-04.json",
+      "sha256": "cce5819b6ccad0d65bc56c5e3d5e618a7e6750363f281cd9e5eab195eb1bb319",
+      "size": 663
+    },
+    {
+      "path": "raw/run-00-attempt-01/project/benchmark/out/ready-05.json",
+      "sha256": "a7a658e54815c22191921c42ad5f31cfc5fd2a55719489862b52fc4f268b19eb",
+      "size": 664
+    },
+    {
+      "path": "raw/run-00-attempt-01/project/benchmark/out/ready-06.json",
+      "sha256": "17982c543bc4980e5bd94928b383b575c08ce346b0a3c003a9b3d02f415cfcc5",
+      "size": 664
+    },
+    {
+      "path": "raw/run-00-attempt-01/project/project.godot",
+      "sha256": "819b521edff745f02f7c30e96ceffe21c70d8ef4fc32e95b96df37877e817ce1",
+      "size": 838
+    },
+    {
+      "path": "raw/run-00-attempt-01/project/scenes/fixture.tscn",
+      "sha256": "57dc6139a23da3b66bb81c3f4eec996b5c304f8b5b10351628d58d88b2536bb2",
+      "size": 295
+    },
+    {
+      "path": "raw/run-00-attempt-01/project/scripts/fixture_actor.gd",
+      "sha256": "30116960b59778bee92698077689481f7936f41a2d722ddbe23626cbe3fc55cd",
+      "size": 50
+    },
+    {
+      "path": "raw/run-00-attempt-01/project/scripts/fixture_actor.gd.uid",
+      "sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142",
+      "size": 20
+    },
+    {
+      "path": "raw/run-00-attempt-01/sample-preview-00.json",
+      "sha256": "c3b064c047fc0b7d4ab29c71455b872689f0c8b33082f0b783b52ff8bc29677d",
+      "size": 72780
+    },
+    {
+      "path": "raw/run-00-attempt-01/sample-preview-01.json",
+      "sha256": "c68bd646ea7bfac645ed91b76516a0763c0742fefa7fe16e64b511a3981d5441",
+      "size": 72678
+    },
+    {
+      "path": "raw/run-00-attempt-01/sample-preview-02.json",
+      "sha256": "e15a83a917a63941d13ab2eaa72770f79aab5a522d936c432e386295f3b42bc5",
+      "size": 72787
+    },
+    {
+      "path": "raw/run-00-attempt-01/sample-preview-03.json",
+      "sha256": "aee5b89b78311d554aeb2701ab48a7722f75c786f309c61529e375da17ae7589",
+      "size": 72796
+    },
+    {
+      "path": "raw/run-00-attempt-01/sample-preview-04.json",
+      "sha256": "e1523dc211c942c7c918170718ea21da50ba19c188b76e57582c78620491e75b",
+      "size": 72817
+    },
+    {
+      "path": "raw/run-00-attempt-01/sample-preview-05.json",
+      "sha256": "104cc7fb3709066758495a8f544226b4cb167e5c2b898f4cb6650a1a9c06f8b3",
+      "size": 73051
+    },
+    {
+      "path": "raw/run-00-attempt-01/source/studio/blender-addon/ipc_client.py",
+      "sha256": "ee5d77e52dabb8b746e528be2acddc07b821f6b6724e9de9a36ec18b71cd8da9",
+      "size": 16349
+    },
+    {
+      "path": "raw/run-00-attempt-01/source/studio/contracts/perf-collector.schema.json",
+      "sha256": "394d1df03bdfd736ea3fe9f260e9d718d35f3820cde35d1c45ccab65fbc24834",
+      "size": 30060
+    },
+    {
+      "path": "raw/run-00-attempt-01/source/studio/godot-addon/addons/hh_studio/plugin.cfg",
+      "sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c",
+      "size": 165
+    },
+    {
+      "path": "raw/run-00-attempt-01/source/studio/godot-addon/addons/hh_studio/plugin.gd",
+      "sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036",
+      "size": 23043
+    },
+    {
+      "path": "raw/run-00-attempt-01/source/studio/godot-addon/addons/hh_studio/scene_commands.gd",
+      "sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069",
+      "size": 32174
+    },
+    {
+      "path": "raw/run-00-attempt-01/source/studio/godot-addon/bundle_staging.py",
+      "sha256": "3d614edbec8e9a7f5ad3caf2b9694d7498df129de95683952268621f91d68e43",
+      "size": 15005
+    },
+    {
+      "path": "raw/run-00-attempt-01/source/studio/godot-addon/bundle_v2.py",
+      "sha256": "2c5cdc71cdaf80f58bb93ec791e84bab8bd02cd4d9bdbd93d635db13583de62a",
+      "size": 8475
+    },
+    {
+      "path": "raw/run-00-attempt-01/source/studio/godot-addon/cli_job.py",
+      "sha256": "82aa26afefe480c672aa4cb67d38d45f1ec48651252463314f535a1719c26ea0",
+      "size": 12998
+    },
+    {
+      "path": "raw/run-00-attempt-01/source/studio/godot-addon/fixture_profile/addons/hh_studio/jcs_godot.gd.uid",
+      "sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b",
+      "size": 20
+    },
+    {
+      "path": "raw/run-00-attempt-01/source/studio/godot-addon/fixture_profile/addons/hh_studio/plugin.gd.uid",
+      "sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d",
+      "size": 20
+    },
+    {
+      "path": "raw/run-00-attempt-01/source/studio/godot-addon/fixture_profile/addons/hh_studio/scene_commands.gd.uid",
+      "sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69",
+      "size": 19
+    },
+    {
+      "path": "raw/run-00-attempt-01/source/studio/godot-addon/fixture_profile/project.godot",
+      "sha256": "2d4fa9c7261fc5ec4292094854ffa79b602249671a03db3c9808ea7521f4fa51",
+      "size": 282
+    },
+    {
+      "path": "raw/run-00-attempt-01/source/studio/godot-addon/fixture_profile/scripts/fixture_actor.gd.uid",
+      "sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142",
+      "size": 20
+    },
+    {
+      "path": "raw/run-00-attempt-01/source/studio/godot-addon/fixture_profile/source-pins.json",
+      "sha256": "c0a40998bd63d4d3dc628e4b9d2e0932fcb5725d1870adc43d0fdc3af2fdeed2",
+      "size": 1873
+    },
+    {
+      "path": "raw/run-00-attempt-01/source/studio/godot-addon/fixture_profile.py",
+      "sha256": "25e1667dd930dcf0746b071fc29ea3460bc18d5fb9f3f83e806c1793028f21ae",
+      "size": 6020
+    },
+    {
+      "path": "raw/run-00-attempt-01/source/studio/host/blender/__init__.py",
+      "sha256": "812b123ddad075d7bb1892a38e099fdb48db147f80a27db83101c2b640044a90",
+      "size": 69
+    },
+    {
+      "path": "raw/run-00-attempt-01/source/studio/host/blender/deadline.py",
+      "sha256": "55fb3f77cadd9edc633186e1d6727bbed06216d659846aa3836e2582eef46926",
+      "size": 1130
+    },
+    {
+      "path": "raw/run-00-attempt-01/source/studio/host/blender/export_job.py",
+      "sha256": "8eb0cc4a93361faf8cf09a3f11fd0278ec3fcdb2c9863e4b2ee98852c67ecdfe",
+      "size": 13605
+    },
+    {
+      "path": "raw/run-00-attempt-01/source/studio/host/blender/glb_preflight.py",
+      "sha256": "5e4015c77ee3dced056634f89a0ba1fe2f94dd6650250fac8b03317c12d54f62",
+      "size": 11815
+    },
+    {
+      "path": "raw/run-00-attempt-01/source/studio/host/blender/ui_host.py",
+      "sha256": "0fa5afa44046b61b68baafc275b39ade4787a55221074018db588c4c2f71dc35",
+      "size": 22464
+    },
+    {
+      "path": "raw/run-00-attempt-01/source/studio/host/core/journal.py",
+      "sha256": "826bc5e4c60817e3a22dd2e0b6a199eb522a4eb78532cb5300249fe9056c0cc6",
+      "size": 29602
+    },
+    {
+      "path": "raw/run-00-attempt-01/source/studio/host/core/limits.py",
+      "sha256": "9d01ce56f5976bb034e60e33bf4b7986cdc44b3a8ffad46da738a6ed1b143f3f",
+      "size": 15813
+    },
+    {
+      "path": "raw/run-00-attempt-01/source/studio/host/core/private_store.py",
+      "sha256": "c914b5a66a45660c782ecd43fd2321c238702340f3b33062e284feada4d46476",
+      "size": 20476
+    },
+    {
+      "path": "raw/run-00-attempt-01/source/studio/host/core/redaction.py",
+      "sha256": "e37d998399f589d4202591a1262a7dc19231e5e4b5236b47d4c8234956275c1f",
+      "size": 10038
+    },
+    {
+      "path": "raw/run-00-attempt-01/source/studio/host/core/safe_create.py",
+      "sha256": "681fb7c0f4e74d82597bd8049a6b42cde0ea73941d879ec8ef0ba4df326d0606",
+      "size": 13170
+    },
+    {
+      "path": "raw/run-00-attempt-01/source/studio/host/core/safe_open.py",
+      "sha256": "efc083f1c4fa875d3f748602924a05712aa60fed3abcdb46d058672930201535",
+      "size": 12093
+    },
+    {
+      "path": "raw/run-00-attempt-01/source/studio/host/core/transport.py",
+      "sha256": "ce431eb3035dde8fe7a65d26f2795d7f7861b652a77edc1348b00ccde9795a03",
+      "size": 52844
+    },
+    {
+      "path": "raw/run-00-attempt-01/source/studio/host/replay/disk_journal_index.py",
+      "sha256": "56beb93119dfb66feec32eb51d389fc089d89911c0a1be199071c17e1801cb28",
+      "size": 13593
+    },
+    {
+      "path": "raw/run-00-attempt-01/source/studio/host/replay/perf.py",
+      "sha256": "7c24c11989420e1600bcb20b8949fea44ea93b381bcab824e471465f5148edc7",
+      "size": 19085
+    },
+    {
+      "path": "raw/run-00-attempt-01/source/studio/host/replay/process_probe.py",
+      "sha256": "a2e852fee618b5a58def0b33542b8a4ad509c4d207e957d3c91de4b7b905ff76",
+      "size": 6478
+    },
+    {
+      "path": "raw/run-00-attempt-01/source/studio/host/replay/verified_journal.py",
+      "sha256": "d737a0125ab49482d6579abddc6f179f419fc956d329b2679ee53ee9e3dbd967",
+      "size": 10023
+    },
+    {
+      "path": "raw/run-00-attempt-01/source/studio/pipeline/__init__.py",
+      "sha256": "ffea2c35acdfe30636d61970e16c573e4de68228c4f7e780a6061d7be3fbbc68",
+      "size": 79
+    },
+    {
+      "path": "raw/run-00-attempt-01/source/studio/pipeline/native_job.py",
+      "sha256": "456bb70c315e38cf7a29354b7df51862e1ded4578f6b22d9110bf628547c20ca",
+      "size": 12512
+    },
+    {
+      "path": "raw/run-00-attempt-01/source/studio/protocol/__init__.py",
+      "sha256": "a906ecde6f60d5fa2febd3f8a4a5fae440d87fea69e7d7e51a750677e03ad09f",
+      "size": 881
+    },
+    {
+      "path": "raw/run-00-attempt-01/source/studio/protocol/_rfc8785/__init__.py",
+      "sha256": "49d914da77ba606d535832d97df2e43458a8e51d57cdba6883a0a895ac50484b",
+      "size": 505
+    },
+    {
+      "path": "raw/run-00-attempt-01/source/studio/protocol/_rfc8785/_impl.py",
+      "sha256": "c25bc3a046528482d53bee3487b837f31dd9c05f33e8f13288c7aab320932cec",
+      "size": 7251
+    },
+    {
+      "path": "raw/run-00-attempt-01/source/studio/protocol/core.py",
+      "sha256": "e8153f5a4dcf639f4d1cbce2fa74f7866d963a692c68e4e8d1477136889bd93e",
+      "size": 19886
+    },
+    {
+      "path": "raw/run-00-attempt-01/source/studio/protocol/jcs_godot.gd",
+      "sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5",
+      "size": 10165
+    },
+    {
+      "path": "raw/run-00-attempt-01/source/studio/tests/replay/benchmark_assembly.py",
+      "sha256": "b3541fe2753c2f578bcae894b044d2071364951579acff6ad805cfc3cd3026fe",
+      "size": 51563
+    },
+    {
+      "path": "raw/run-00-attempt-01/source/studio/tests/replay/benchmark_commands.py",
+      "sha256": "84e2f98eff43c5a6a2fef640c7bb676e6a7ed3e9397ccf5c95e0df5f65c94413",
+      "size": 23735
+    },
+    {
+      "path": "raw/run-00-attempt-01/source/studio/tests/replay/benchmark_http_phases.py",
+      "sha256": "f160b2d6725b25eef97119724b8ffb2e606fb448c70825aeed663c4aa7a31360",
+      "size": 17620
+    },
+    {
+      "path": "raw/run-00-attempt-01/source/studio/tests/replay/benchmark_import_observer.py",
+      "sha256": "32a952ee0cc65325a65cddca24869584ca009b5d9d2e1c64ced22ad65b78adfb",
+      "size": 17324
+    },
+    {
+      "path": "raw/run-00-attempt-01/source/studio/tests/replay/benchmark_job.py",
+      "sha256": "8e87d0328dacf67756640b6ee213dfb40c47f86e065dba57dbac0dbb6bbf7773",
+      "size": 26255
+    },
+    {
+      "path": "raw/run-00-attempt-01/source/studio/tests/replay/benchmark_native.gd",
+      "sha256": "13e65360cd0bc0033d0ad414fb3238e216b0d6dcc08e57dc7026ec4fc9eb8b95",
+      "size": 54580
+    },
+    {
+      "path": "raw/run-00-attempt-01/source/studio/tests/replay/benchmark_plugin.cfg",
+      "sha256": "648d8821a36d0abc825ef1f380b4917639074302a619cb25a798df987a5a1092",
+      "size": 189
+    },
+    {
+      "path": "raw/run-00-attempt-01/source/studio/tests/replay/benchmark_profile.py",
+      "sha256": "ddbd98583060f791226fca83e275cf01204b37112627383198dcef4ec6f6f233",
+      "size": 19625
+    },
+    {
+      "path": "raw/run-00-attempt-01/source/studio/tests/replay/benchmark_readiness.py",
+      "sha256": "842db6244d93384932929544045654f089d67f6f304624b7348b7d5c4583ab68",
+      "size": 6746
+    },
+    {
+      "path": "raw/run-00-attempt-01/source/studio/tests/replay/benchmark_transport.py",
+      "sha256": "1fb178451bb22a0dd3e059333ff6e01c6fd5d324f04e47c1be64cb7212f26f2d",
+      "size": 4853
+    },
+    {
+      "path": "raw/run-00-attempt-01/source/studio/tests/replay/campaign_task.ps1",
+      "sha256": "405e2abfa39332b1313871763184fdda0755ff998ec83310e67e10cebfe2ebb9",
+      "size": 18607
+    },
+    {
+      "path": "raw/run-00-attempt-01/source/studio/tests/replay/run_benchmark_campaign.py",
+      "sha256": "71a3d19cf0b435baf598d6caad13daeb910799457f89a282366ee2fefa5223fd",
+      "size": 59097
+    },
+    {
+      "path": "raw/run-00-attempt-01/source/studio/tests/replay/run_campaign_task.py",
+      "sha256": "f5cb71fa96b8fd2f935ac933dcd5190cef2b3b6821f031bfe72becb2d360a6fd",
+      "size": 8033
+    },
+    {
+      "path": "raw/run-00-attempt-01/source/studio/tests/replay/run_native_benchmark.py",
+      "sha256": "e6b0f8e9711ac881cfa65b4537232c685ff577af0a13778a51cc54999b1c1fc7",
+      "size": 26986
+    },
+    {
+      "path": "raw/run-00-attempt-01/source/studio/toolchain.lock.json",
+      "sha256": "28bdce555e9a44ef68193723d512feda02c42a417ceb78faf0b29f52d095dca9",
+      "size": 3026
+    },
+    {
+      "path": "raw/run-00-attempt-01/source-files.json",
+      "sha256": "3617dccb6e426e2aa73c45cd9fdff443dec11f3f7e8110ecd25afcbaf9a788d0",
+      "size": 5374
+    },
+    {
+      "path": "raw/run-00-attempt-01/toolchain.lock.json",
+      "sha256": "28bdce555e9a44ef68193723d512feda02c42a417ceb78faf0b29f52d095dca9",
+      "size": 3026
+    },
+    {
+      "path": "raw/source/studio/blender-addon/ipc_client.py",
+      "sha256": "ee5d77e52dabb8b746e528be2acddc07b821f6b6724e9de9a36ec18b71cd8da9",
+      "size": 16349
+    },
+    {
+      "path": "raw/source/studio/contracts/perf-collector.schema.json",
+      "sha256": "394d1df03bdfd736ea3fe9f260e9d718d35f3820cde35d1c45ccab65fbc24834",
+      "size": 30060
+    },
+    {
+      "path": "raw/source/studio/godot-addon/addons/hh_studio/plugin.cfg",
+      "sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c",
+      "size": 165
+    },
+    {
+      "path": "raw/source/studio/godot-addon/addons/hh_studio/plugin.gd",
+      "sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036",
+      "size": 23043
+    },
+    {
+      "path": "raw/source/studio/godot-addon/addons/hh_studio/scene_commands.gd",
+      "sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069",
+      "size": 32174
+    },
+    {
+      "path": "raw/source/studio/godot-addon/bundle_staging.py",
+      "sha256": "3d614edbec8e9a7f5ad3caf2b9694d7498df129de95683952268621f91d68e43",
+      "size": 15005
+    },
+    {
+      "path": "raw/source/studio/godot-addon/bundle_v2.py",
+      "sha256": "2c5cdc71cdaf80f58bb93ec791e84bab8bd02cd4d9bdbd93d635db13583de62a",
+      "size": 8475
+    },
+    {
+      "path": "raw/source/studio/godot-addon/cli_job.py",
+      "sha256": "82aa26afefe480c672aa4cb67d38d45f1ec48651252463314f535a1719c26ea0",
+      "size": 12998
+    },
+    {
+      "path": "raw/source/studio/godot-addon/fixture_profile/addons/hh_studio/jcs_godot.gd.uid",
+      "sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b",
+      "size": 20
+    },
+    {
+      "path": "raw/source/studio/godot-addon/fixture_profile/addons/hh_studio/plugin.gd.uid",
+      "sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d",
+      "size": 20
+    },
+    {
+      "path": "raw/source/studio/godot-addon/fixture_profile/addons/hh_studio/scene_commands.gd.uid",
+      "sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69",
+      "size": 19
+    },
+    {
+      "path": "raw/source/studio/godot-addon/fixture_profile/project.godot",
+      "sha256": "2d4fa9c7261fc5ec4292094854ffa79b602249671a03db3c9808ea7521f4fa51",
+      "size": 282
+    },
+    {
+      "path": "raw/source/studio/godot-addon/fixture_profile/scripts/fixture_actor.gd.uid",
+      "sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142",
+      "size": 20
+    },
+    {
+      "path": "raw/source/studio/godot-addon/fixture_profile/source-pins.json",
+      "sha256": "c0a40998bd63d4d3dc628e4b9d2e0932fcb5725d1870adc43d0fdc3af2fdeed2",
+      "size": 1873
+    },
+    {
+      "path": "raw/source/studio/godot-addon/fixture_profile.py",
+      "sha256": "25e1667dd930dcf0746b071fc29ea3460bc18d5fb9f3f83e806c1793028f21ae",
+      "size": 6020
+    },
+    {
+      "path": "raw/source/studio/host/blender/__init__.py",
+      "sha256": "812b123ddad075d7bb1892a38e099fdb48db147f80a27db83101c2b640044a90",
+      "size": 69
+    },
+    {
+      "path": "raw/source/studio/host/blender/deadline.py",
+      "sha256": "55fb3f77cadd9edc633186e1d6727bbed06216d659846aa3836e2582eef46926",
+      "size": 1130
+    },
+    {
+      "path": "raw/source/studio/host/blender/export_job.py",
+      "sha256": "8eb0cc4a93361faf8cf09a3f11fd0278ec3fcdb2c9863e4b2ee98852c67ecdfe",
+      "size": 13605
+    },
+    {
+      "path": "raw/source/studio/host/blender/glb_preflight.py",
+      "sha256": "5e4015c77ee3dced056634f89a0ba1fe2f94dd6650250fac8b03317c12d54f62",
+      "size": 11815
+    },
+    {
+      "path": "raw/source/studio/host/blender/ui_host.py",
+      "sha256": "0fa5afa44046b61b68baafc275b39ade4787a55221074018db588c4c2f71dc35",
+      "size": 22464
+    },
+    {
+      "path": "raw/source/studio/host/core/journal.py",
+      "sha256": "826bc5e4c60817e3a22dd2e0b6a199eb522a4eb78532cb5300249fe9056c0cc6",
+      "size": 29602
+    },
+    {
+      "path": "raw/source/studio/host/core/limits.py",
+      "sha256": "9d01ce56f5976bb034e60e33bf4b7986cdc44b3a8ffad46da738a6ed1b143f3f",
+      "size": 15813
+    },
+    {
+      "path": "raw/source/studio/host/core/private_store.py",
+      "sha256": "c914b5a66a45660c782ecd43fd2321c238702340f3b33062e284feada4d46476",
+      "size": 20476
+    },
+    {
+      "path": "raw/source/studio/host/core/redaction.py",
+      "sha256": "e37d998399f589d4202591a1262a7dc19231e5e4b5236b47d4c8234956275c1f",
+      "size": 10038
+    },
+    {
+      "path": "raw/source/studio/host/core/safe_create.py",
+      "sha256": "681fb7c0f4e74d82597bd8049a6b42cde0ea73941d879ec8ef0ba4df326d0606",
+      "size": 13170
+    },
+    {
+      "path": "raw/source/studio/host/core/safe_open.py",
+      "sha256": "efc083f1c4fa875d3f748602924a05712aa60fed3abcdb46d058672930201535",
+      "size": 12093
+    },
+    {
+      "path": "raw/source/studio/host/core/transport.py",
+      "sha256": "ce431eb3035dde8fe7a65d26f2795d7f7861b652a77edc1348b00ccde9795a03",
+      "size": 52844
+    },
+    {
+      "path": "raw/source/studio/host/replay/disk_journal_index.py",
+      "sha256": "56beb93119dfb66feec32eb51d389fc089d89911c0a1be199071c17e1801cb28",
+      "size": 13593
+    },
+    {
+      "path": "raw/source/studio/host/replay/perf.py",
+      "sha256": "7c24c11989420e1600bcb20b8949fea44ea93b381bcab824e471465f5148edc7",
+      "size": 19085
+    },
+    {
+      "path": "raw/source/studio/host/replay/process_probe.py",
+      "sha256": "a2e852fee618b5a58def0b33542b8a4ad509c4d207e957d3c91de4b7b905ff76",
+      "size": 6478
+    },
+    {
+      "path": "raw/source/studio/host/replay/verified_journal.py",
+      "sha256": "d737a0125ab49482d6579abddc6f179f419fc956d329b2679ee53ee9e3dbd967",
+      "size": 10023
+    },
+    {
+      "path": "raw/source/studio/pipeline/__init__.py",
+      "sha256": "ffea2c35acdfe30636d61970e16c573e4de68228c4f7e780a6061d7be3fbbc68",
+      "size": 79
+    },
+    {
+      "path": "raw/source/studio/pipeline/native_job.py",
+      "sha256": "456bb70c315e38cf7a29354b7df51862e1ded4578f6b22d9110bf628547c20ca",
+      "size": 12512
+    },
+    {
+      "path": "raw/source/studio/protocol/__init__.py",
+      "sha256": "a906ecde6f60d5fa2febd3f8a4a5fae440d87fea69e7d7e51a750677e03ad09f",
+      "size": 881
+    },
+    {
+      "path": "raw/source/studio/protocol/_rfc8785/__init__.py",
+      "sha256": "49d914da77ba606d535832d97df2e43458a8e51d57cdba6883a0a895ac50484b",
+      "size": 505
+    },
+    {
+      "path": "raw/source/studio/protocol/_rfc8785/_impl.py",
+      "sha256": "c25bc3a046528482d53bee3487b837f31dd9c05f33e8f13288c7aab320932cec",
+      "size": 7251
+    },
+    {
+      "path": "raw/source/studio/protocol/core.py",
+      "sha256": "e8153f5a4dcf639f4d1cbce2fa74f7866d963a692c68e4e8d1477136889bd93e",
+      "size": 19886
+    },
+    {
+      "path": "raw/source/studio/protocol/jcs_godot.gd",
+      "sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5",
+      "size": 10165
+    },
+    {
+      "path": "raw/source/studio/tests/replay/benchmark_assembly.py",
+      "sha256": "b3541fe2753c2f578bcae894b044d2071364951579acff6ad805cfc3cd3026fe",
+      "size": 51563
+    },
+    {
+      "path": "raw/source/studio/tests/replay/benchmark_commands.py",
+      "sha256": "84e2f98eff43c5a6a2fef640c7bb676e6a7ed3e9397ccf5c95e0df5f65c94413",
+      "size": 23735
+    },
+    {
+      "path": "raw/source/studio/tests/replay/benchmark_http_phases.py",
+      "sha256": "f160b2d6725b25eef97119724b8ffb2e606fb448c70825aeed663c4aa7a31360",
+      "size": 17620
+    },
+    {
+      "path": "raw/source/studio/tests/replay/benchmark_import_observer.py",
+      "sha256": "32a952ee0cc65325a65cddca24869584ca009b5d9d2e1c64ced22ad65b78adfb",
+      "size": 17324
+    },
+    {
+      "path": "raw/source/studio/tests/replay/benchmark_job.py",
+      "sha256": "8e87d0328dacf67756640b6ee213dfb40c47f86e065dba57dbac0dbb6bbf7773",
+      "size": 26255
+    },
+    {
+      "path": "raw/source/studio/tests/replay/benchmark_native.gd",
+      "sha256": "13e65360cd0bc0033d0ad414fb3238e216b0d6dcc08e57dc7026ec4fc9eb8b95",
+      "size": 54580
+    },
+    {
+      "path": "raw/source/studio/tests/replay/benchmark_plugin.cfg",
+      "sha256": "648d8821a36d0abc825ef1f380b4917639074302a619cb25a798df987a5a1092",
+      "size": 189
+    },
+    {
+      "path": "raw/source/studio/tests/replay/benchmark_profile.py",
+      "sha256": "ddbd98583060f791226fca83e275cf01204b37112627383198dcef4ec6f6f233",
+      "size": 19625
+    },
+    {
+      "path": "raw/source/studio/tests/replay/benchmark_readiness.py",
+      "sha256": "842db6244d93384932929544045654f089d67f6f304624b7348b7d5c4583ab68",
+      "size": 6746
+    },
+    {
+      "path": "raw/source/studio/tests/replay/benchmark_transport.py",
+      "sha256": "1fb178451bb22a0dd3e059333ff6e01c6fd5d324f04e47c1be64cb7212f26f2d",
+      "size": 4853
+    },
+    {
+      "path": "raw/source/studio/tests/replay/campaign_task.ps1",
+      "sha256": "405e2abfa39332b1313871763184fdda0755ff998ec83310e67e10cebfe2ebb9",
+      "size": 18607
+    },
+    {
+      "path": "raw/source/studio/tests/replay/run_benchmark_campaign.py",
+      "sha256": "71a3d19cf0b435baf598d6caad13daeb910799457f89a282366ee2fefa5223fd",
+      "size": 59097
+    },
+    {
+      "path": "raw/source/studio/tests/replay/run_campaign_task.py",
+      "sha256": "f5cb71fa96b8fd2f935ac933dcd5190cef2b3b6821f031bfe72becb2d360a6fd",
+      "size": 8033
+    },
+    {
+      "path": "raw/source/studio/tests/replay/run_native_benchmark.py",
+      "sha256": "e6b0f8e9711ac881cfa65b4537232c685ff577af0a13778a51cc54999b1c1fc7",
+      "size": 26986
+    },
+    {
+      "path": "raw/source/studio/toolchain.lock.json",
+      "sha256": "28bdce555e9a44ef68193723d512feda02c42a417ceb78faf0b29f52d095dca9",
+      "size": 3026
+    },
+    {
+      "path": "supervisor/claim",
+      "sha256": "a55ff796f4fb95def5b44d1599752d3ac9b1b5ecd3c1f840db980e6edda79b4c",
+      "size": 24
+    },
+    {
+      "path": "supervisor/failure.json",
+      "sha256": "374420879944eea47d635dc134d498db01d36d4527cbfcdb6d36a3a95f4f196f",
+      "size": 73
+    },
+    {
+      "path": "supervisor/request.json",
+      "sha256": "a5bf4ba9ead223e4de61dbc52f75ac5217472a46f467da0a1c8ea32fd8174590",
+      "size": 372
+    },
+    {
+      "path": "supervisor/return.json",
+      "sha256": "da395db13a723a6cdbeedd2af3a614512f3915c13f47685b57e7444f944b0c62",
+      "size": 198
+    },
+    {
+      "path": "supervisor/start.json",
+      "sha256": "627ca6eef448944da23b39119a90b92932de05ed9b471ec34b3b961aff7ae54a",
+      "size": 500
+    },
+    {
+      "path": "supervisor/stderr.txt",
+      "sha256": "fd48be34ad65e6073a488e8f0ed4622e5c3e789d654791e2f50407db9f860e69",
+      "size": 1651
+    },
+    {
+      "path": "supervisor/stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "supervisor/task-definition.expected.xml",
+      "sha256": "74fc0cd145cf11c9516b86eb49d7f09c6103c9eb780f7b683d009c14a39502a9",
+      "size": 2004
+    },
+    {
+      "path": "supervisor/task-definition.sha256",
+      "sha256": "4137002d35df00c5c77b03e7db072bbaf75c3d9b87adc0a5cd42c9e0c3829da5",
+      "size": 65
+    },
+    {
+      "path": "supervisor/task-definition.xml",
+      "sha256": "53cfd7d1894c97fe759fef63ccb6f7bcb98d2f6a3e0e4b74febdaaade44c9c19",
+      "size": 1657
+    },
+    {
+      "path": "supervisor/task-registration.json",
+      "sha256": "c91731d0886037298eefdf53ae748a35dcafaad1318583ddfd898795440224bf",
+      "size": 877
+    },
+    {
+      "path": "supervisor/task-start.json",
+      "sha256": "78fd32ad5f22bf2bd1af04f0a38005c50baee0dfa38e532a84f471b51b18d1d1",
+      "size": 835
+    }
+  ],
+  "schema_id": "hh-studio.gt06-terminal-raw-manifest",
+  "schema_version": "1.0.0"
+}

@@ -1,0 +1,22 @@
+{
+  "authority": 0,
+  "campaign_id": "gt06-s215-formal-01",
+  "cleanup_error": null,
+  "completed_batches": "0_to_5",
+  "decision": "retain Authority0; repair bounded lease-response uncertainty by retrying lease for the same session within an existing bounded setup budget; no command resubmit and no gate/timeout/profile/counter/RSS change",
+  "editor_target_exit": "UNKNOWN",
+  "failure": "BENCHMARK_WRAPPER_EXIT",
+  "failure_code": "CONNECTION_LOST_LOOKUP",
+  "failure_endpoint": "lease",
+  "failure_stage": "getresponse",
+  "host_owner_actual_exit": 1,
+  "import_actual_exit": 0,
+  "jobs_zero_closed": true,
+  "owned_tree_zero": true,
+  "owner_closed": true,
+  "partial_batch": 6,
+  "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+  "schema_id": "hh-studio.gt06-s218-lease-boundary-analysis",
+  "schema_version": "1.0.0",
+  "source_closure_sha256": "6f6c96d4014f4bf1509052c50013dcadd1a27e3671728b80de19f2e3c5bf8127"
+}

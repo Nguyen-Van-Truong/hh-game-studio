@@ -16,6 +16,7 @@ sys.path.insert(0, str(STUDIO.parent))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import benchmark_commands as benchmark
 from studio.host.core.transport import FixtureClient, TransportLimits
+from studio.host.core.limits import SafetyViolation
 from studio.protocol.core import Response, Status
 
 
@@ -211,6 +212,52 @@ class CommandProducerTests(unittest.TestCase):
         tampered = replace(result, result_hash='sha256:' + 'f' * 64)
         with self.assertRaisesRegex(benchmark.CommandError, 'READBACK_HASH'):
             self.producer._readback(tampered, 0)
+
+    def test_lease_response_loss_reconciles_setup_without_resubmitting_mutation(self):
+        # The host acquires the first lease, then cuts only its response.
+        # Reissuing setup lease for the same session must recover before any
+        # command is submitted; this is distinct from command admission lookup.
+        self.producer.host.arm_disconnect('/v1/lease', 'before_reply')
+        report = self.producer.run_diagnostic()
+        self.assertEqual(report['status'], 'DIAGNOSTIC')
+        self.assertEqual([row['kind'] for row in report['setup_responses']], ['discovery', 'lease'])
+        self.assertEqual(report['effect_count_before'], 0)
+        self.assertEqual(report['effect_count_after'], 2)
+        self.assertTrue(self.producer.host.faults.disconnect_observed.is_set())
+        self.assertIsNone(self.producer.client.last_transport_failure)
+
+    def test_lease_retry_uses_machine_code_even_when_error_has_detail(self):
+        actual_lease = benchmark.FixtureClient.lease
+        seen = False
+
+        def lease(client, *, ttl_ms=60_000):
+            nonlocal seen
+            if not seen:
+                seen = True
+                client._last_transport_failure = {
+                    'endpoint': 'lease', 'stage': 'getresponse', 'category': 'timeout',
+                }
+                raise SafetyViolation('CONNECTION_LOST_LOOKUP', 'response detail')
+            return actual_lease(client, ttl_ms=ttl_ms)
+
+        with patch.object(benchmark.FixtureClient, 'lease', lease):
+            report = self.producer.run_diagnostic()
+        self.assertTrue(seen)
+        self.assertEqual(report['status'], 'DIAGNOSTIC')
+        self.assertEqual(self.producer.host.fixture.effect_count, 2)
+
+    def test_persistent_lease_response_loss_times_out_before_any_mutation(self):
+        def lease(client, *, ttl_ms=60_000):
+            client._last_transport_failure = {
+                'endpoint': 'lease', 'stage': 'getresponse', 'category': 'timeout',
+            }
+            raise SafetyViolation('CONNECTION_LOST_LOOKUP', 'persistent response loss')
+
+        with patch.object(benchmark.FixtureClient, 'lease', lease):
+            with self.assertRaisesRegex(benchmark.CommandError, 'LEASE_RECONCILE_TIMEOUT') as caught:
+                self.producer.run_diagnostic()
+        self.assertEqual(caught.exception.report['commands'], [])
+        self.assertEqual(self.producer.host.fixture.effect_count, 0)
 
     def test_setup_records_real_http_returns_without_excluding_startup(self):
         report = self.producer.run_diagnostic()
