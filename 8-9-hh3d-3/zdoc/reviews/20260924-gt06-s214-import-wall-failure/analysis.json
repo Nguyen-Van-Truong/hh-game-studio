@@ -1,0 +1,38 @@
+{
+  "authority": 0,
+  "child_failure_code": "StageFailed",
+  "cleanup": {
+    "cleanup_error": null,
+    "editor_target_exit": null,
+    "handles_released": true,
+    "host_wrapper_exit": 1,
+    "import_actual_exit": null,
+    "jobs_zero_closed": true,
+    "natural_exit_inferred": false,
+    "owned_tree_zero": true,
+    "owner_closed": true
+  },
+  "completed_batches": 0,
+  "effective_wall_seconds": 20,
+  "elapsed_seconds": 20.29700000002049,
+  "failure_code": "BENCHMARK_WRAPPER_EXIT",
+  "formal_acceptance": false,
+  "interpretation": "Godot import did not produce an independently recorded target exit before the existing 20-second stage wall limit. This is a bounded environment/stage failure only; it is not a GT06 run, leak, ownership, or root-cause claim.",
+  "next_action": "Review import-stage timing/provenance and repair only a proven boundary; do not change wall limit/profile/gate or merge partial data; use a fresh campaign ID.",
+  "observed_import": {
+    "handle_close_uncertain": false,
+    "probe_handles_released": true,
+    "sample_count": 185,
+    "target_exit": null,
+    "thread_alive": false
+  },
+  "partial_merge": false,
+  "phase": {
+    "batch": -1,
+    "phase": "import"
+  },
+  "run_id": "gt06-s213-formal-01",
+  "schema_id": "hh-studio.gt06-s214-import-wall-failure",
+  "schema_version": "1.0.0",
+  "stage_failure": "STAGE_WALL_LIMIT"
+}

@@ -1,0 +1,19 @@
+{
+  "authority": 0,
+  "decision": "retain import-stage wall-limit failure; review proven boundary before fresh formal",
+  "files": {
+    "README.md": "7fa32839fad8cf1ee523826cadc32e365268f52d109ce59d2f4a21d62fac586e",
+    "analysis.json": "b4a399944d64ba0d7bea06f0c17fd90bd08ea9190007e025e0438239aee5c55a",
+    "archive_sha256": "0e0c175990cced29f6193b2c8486877a78e26558ba12bc9d763f6ff9404f9b79",
+    "raw_manifest_sha256": "688567105932d961c0dffaaf6d05734ecc85d28ae4479e008625b7a31c37dbb4",
+    "terminal-seal.json": "b3a34c2d6a842f886fbd0d5d9a6a66b9ea4f0f48d4df2688152c5235aba51807"
+  },
+  "formal_acceptance": false,
+  "gate_policy": "10 fresh pairs x 35 batches; unchanged",
+  "packet": "zdoc/reviews/20260924-gt06-s214-import-wall-failure",
+  "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+  "run_id": "gt06-s213-formal-01",
+  "schema_id": "hh-studio.gt06-s214-package-manifest",
+  "schema_version": "1.0.0",
+  "source_closure_sha256": "6f6c96d4014f4bf1509052c50013dcadd1a27e3671728b80de19f2e3c5bf8127"
+}
