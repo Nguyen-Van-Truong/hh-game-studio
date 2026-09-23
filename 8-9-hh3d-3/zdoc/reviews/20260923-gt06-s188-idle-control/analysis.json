@@ -1,0 +1,275 @@
+{
+  "actual_target_exit": {
+    "exit_code": 0,
+    "pid": 13524
+  },
+  "authority": 0,
+  "cleanup": {
+    "active_count": 0,
+    "assigned": true,
+    "close_uncertain": false,
+    "closed": true,
+    "configured": true,
+    "create_uncertain": false,
+    "failed_operations": [],
+    "handle_retained": false,
+    "native_error": null,
+    "tainted": false,
+    "zero_observed": true
+  },
+  "driver_exit": {
+    "exit_code": 0,
+    "pid": 48596,
+    "timed_out": false
+  },
+  "engine_started": true,
+  "formal_acceptance": false,
+  "handle_transitions": [
+    {
+      "held_handles": 141,
+      "host_mono_us": 1077085544680,
+      "sample": 0
+    },
+    {
+      "held_handles": 345,
+      "host_mono_us": 1077085796176,
+      "sample": 1
+    },
+    {
+      "held_handles": 405,
+      "host_mono_us": 1077086047235,
+      "sample": 2
+    },
+    {
+      "held_handles": 456,
+      "host_mono_us": 1077086298699,
+      "sample": 3
+    },
+    {
+      "held_handles": 519,
+      "host_mono_us": 1077086566405,
+      "sample": 4
+    },
+    {
+      "held_handles": 542,
+      "host_mono_us": 1077086817501,
+      "sample": 5
+    },
+    {
+      "held_handles": 548,
+      "host_mono_us": 1077087589846,
+      "sample": 8
+    },
+    {
+      "held_handles": 545,
+      "host_mono_us": 1077088612345,
+      "sample": 12
+    },
+    {
+      "held_handles": 548,
+      "host_mono_us": 1077088863306,
+      "sample": 13
+    },
+    {
+      "held_handles": 575,
+      "host_mono_us": 1077089367202,
+      "sample": 15
+    },
+    {
+      "held_handles": 576,
+      "host_mono_us": 1077089635902,
+      "sample": 16
+    },
+    {
+      "held_handles": 573,
+      "host_mono_us": 1077089888851,
+      "sample": 17
+    },
+    {
+      "held_handles": 575,
+      "host_mono_us": 1077090911891,
+      "sample": 21
+    },
+    {
+      "held_handles": 574,
+      "host_mono_us": 1077091678770,
+      "sample": 24
+    },
+    {
+      "held_handles": 576,
+      "host_mono_us": 1077092181273,
+      "sample": 26
+    },
+    {
+      "held_handles": 573,
+      "host_mono_us": 1077116676624,
+      "sample": 115
+    },
+    {
+      "held_handles": 565,
+      "host_mono_us": 1077145821001,
+      "sample": 214
+    },
+    {
+      "held_handles": 567,
+      "host_mono_us": 1077191046421,
+      "sample": 384
+    },
+    {
+      "held_handles": 565,
+      "host_mono_us": 1077209160616,
+      "sample": 455
+    },
+    {
+      "held_handles": 559,
+      "host_mono_us": 1077219653066,
+      "sample": 496
+    },
+    {
+      "held_handles": 555,
+      "host_mono_us": 1077353795217,
+      "sample": 1021
+    },
+    {
+      "held_handles": 559,
+      "host_mono_us": 1077447408053,
+      "sample": 1387
+    },
+    {
+      "held_handles": 561,
+      "host_mono_us": 1077551112473,
+      "sample": 1793
+    },
+    {
+      "held_handles": 557,
+      "host_mono_us": 1077554676570,
+      "sample": 1807
+    },
+    {
+      "held_handles": 555,
+      "host_mono_us": 1077621819179,
+      "sample": 2013
+    },
+    {
+      "held_handles": 553,
+      "host_mono_us": 1077812807386,
+      "sample": 2741
+    },
+    {
+      "held_handles": 552,
+      "host_mono_us": 1077813328956,
+      "sample": 2743
+    },
+    {
+      "held_handles": 480,
+      "host_mono_us": 1077813581725,
+      "sample": 2744
+    }
+  ],
+  "interpretation": "Idle editor handle count rises during startup then remains bounded/non-monotonic within observed window; this does not prove ownership, leak absence, or GT06 acceptance. S185 batch-row delta remains unexplained at kernel-object level.",
+  "native_completion": [
+    {
+      "elapsed_us": 720659905,
+      "formal_acceptance": false,
+      "pid": 13524,
+      "sample_count": 720
+    }
+  ],
+  "next_action": "Keep formal gate unchanged; only pursue a new supported attribution boundary or source repair; do not retry formal unchanged.",
+  "run_id": "gt06-s188-idle-editor-01",
+  "samples": {
+    "filesystem_changes": [
+      0,
+      1
+    ],
+    "filesystem_importing_true": 0,
+    "filesystem_scanning_true": 1,
+    "native_handle_counter": {
+      "count": 2745,
+      "delta_last_first": 339,
+      "first": 141,
+      "last": 480,
+      "max": 576,
+      "min": 141,
+      "unique": 21
+    },
+    "plugin_idle_rows": 720,
+    "plugin_objects": {
+      "count": 720,
+      "delta_last_first": 131,
+      "first": 70993,
+      "last": 71124,
+      "max": 71124,
+      "min": 70993,
+      "unique": 97
+    },
+    "plugin_resources": {
+      "count": 720,
+      "delta_last_first": 1,
+      "first": 5,
+      "last": 6,
+      "max": 6,
+      "min": 5,
+      "unique": 2
+    },
+    "plugin_sequence": {
+      "count": 720,
+      "delta_last_first": 719,
+      "first": 0,
+      "last": 719,
+      "max": 719,
+      "min": 0,
+      "unique": 720
+    },
+    "rss": {
+      "count": 2745,
+      "delta_last_first": 178397184,
+      "first": 8929280,
+      "last": 187326464,
+      "max": 746782720,
+      "min": 8929280,
+      "unique": 57
+    }
+  },
+  "sampling_integrity": {
+    "editor_stdout_sha256": "70c02558ed2afac7af59b6a6d9668a7b2aa6748504d22ab708fee499299f12a9",
+    "handles_sha256": "5400ef89677e26361bfb8ea98ff6054ab3c2f7843f90b3b52f6976f88761cd16",
+    "plugin_rows": 720,
+    "sample_count": 2745
+  },
+  "sampling_start": {
+    "executable": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\tooling\\godot-4.7.2-stable\\Godot_v4.7.2-stable_win64.exe",
+    "formal_acceptance": false,
+    "helper_pid": 32656,
+    "initial_handles": 103,
+    "observer_pid": 48596,
+    "pid": 13524,
+    "process_start": "windows:134346524655209593",
+    "sampler": "GetProcessHandleCount(retained ProcessProbe handle)"
+  },
+  "schema": "hh-studio.gt06-s188-idle-analysis",
+  "schema_version": "1.0.0",
+  "scope": "12-minute editor idle control; no HTTP/native mutation cycles",
+  "source_closure": "0b6738bd34c60f6fd6599a29e3a15985b2b3058673a70d885ef66ecb588a7601",
+  "steady_window_after_60s": {
+    "interpretation": "startup variation excluded from this descriptive window; no monotonic increase observed",
+    "native_handle_counter": {
+      "count": 2685,
+      "delta_last_first": -96,
+      "first": 576,
+      "last": 480,
+      "max": 576,
+      "min": 480,
+      "unique": 11
+    },
+    "rss": {
+      "count": 2685,
+      "delta_last_first": -558862336,
+      "first": 746188800,
+      "last": 187326464,
+      "max": 746782720,
+      "min": 187326464,
+      "unique": 29
+    }
+  }
+}

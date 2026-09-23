@@ -1,0 +1,42 @@
+{
+  "analysis_sha256": "0aa15e83022007614a77d5384731dab9acd05db2186b66f55c0fe45c45c728ff",
+  "archive": "studio/.local/archives/gt06-s188-idle-editor-01-s189-terminal.zip",
+  "archive_sha256": "5da26148c555c8483f7589852cbc65487da8697dcc490fb9b5e6d1552722968d",
+  "authority": 0,
+  "excluded_from_gt06": true,
+  "files": {
+    "README.md": {
+      "sha256": "26d7e7ab3d0939e05c872fb711c7c03aa0495651d3375b4a94350b499069931f",
+      "size": 1051
+    },
+    "analysis.json": {
+      "sha256": "0aa15e83022007614a77d5384731dab9acd05db2186b66f55c0fe45c45c728ff",
+      "size": 6434
+    },
+    "idle.gd": {
+      "sha256": "e9ceecea05b11f388b514a633c42b90f8760e54cd688bd6d95eafaf69dea219b",
+      "size": 1876
+    },
+    "preflight.json": {
+      "sha256": "1fcdfddb0419511f022290689f6a11cab31e6933286168ca52478af41cde449b",
+      "size": 6023
+    },
+    "run_idle.py": {
+      "sha256": "de626234e56831aa7a915c644ee669c94c1693cd3837e197379a18ee89e0565e",
+      "size": 10491
+    },
+    "terminal-seal.json": {
+      "sha256": "63a5cf5f81b5acb869d778fc0e2b8e746642d625551f6372e69eae80c855df53",
+      "size": 886
+    }
+  },
+  "formal_acceptance": false,
+  "raw_entry_count": 79,
+  "raw_handles_sha256": "5400ef89677e26361bfb8ea98ff6054ab3c2f7843f90b3b52f6976f88761cd16",
+  "raw_root": "studio/.local/reviews/gt06-s188-idle-editor-01",
+  "run_id": "gt06-s188-idle-editor-01",
+  "schema": "hh-studio.gt06-s188-package",
+  "schema_version": "1.0.0",
+  "source_closure": "0b6738bd34c60f6fd6599a29e3a15985b2b3058673a70d885ef66ecb588a7601",
+  "terminal_seal_sha256": "63a5cf5f81b5acb869d778fc0e2b8e746642d625551f6372e69eae80c855df53"
+}

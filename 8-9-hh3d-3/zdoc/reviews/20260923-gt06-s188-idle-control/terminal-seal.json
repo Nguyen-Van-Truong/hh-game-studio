@@ -1,0 +1,33 @@
+{
+  "archive": "studio/.local/archives/gt06-s188-idle-editor-01-s189-terminal.zip",
+  "archive_sha256": "5da26148c555c8483f7589852cbc65487da8697dcc490fb9b5e6d1552722968d",
+  "authority": 0,
+  "cleanup": {
+    "active_count": 0,
+    "assigned": true,
+    "close_uncertain": false,
+    "closed": true,
+    "configured": true,
+    "create_uncertain": false,
+    "failed_operations": [],
+    "handle_retained": false,
+    "native_error": null,
+    "tainted": false,
+    "zero_observed": true
+  },
+  "driver_exit": {
+    "exit_code": 0,
+    "pid": 48596,
+    "timed_out": false
+  },
+  "formal_acceptance": false,
+  "no_processes_after": true,
+  "notes": "Bounded idle diagnostic only; not formal GT06 acceptance.",
+  "raw_entry_count": 79,
+  "run_id": "gt06-s188-idle-editor-01",
+  "schema": "hh-studio.gt06-s188-terminal-seal",
+  "target_exit": {
+    "exit_code": 0,
+    "pid": 13524
+  }
+}
