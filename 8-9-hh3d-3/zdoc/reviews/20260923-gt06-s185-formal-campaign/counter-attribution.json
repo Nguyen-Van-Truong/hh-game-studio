@@ -1,0 +1,94 @@
+{
+  "schema": "HH-GT06-S185-COUNTER-ATTRIBUTION-1",
+  "authority": 0,
+  "observed_utc": "2026-09-23T15:29:48.033424+00:00",
+  "run_id": "gt06-s185-formal-01.r00.a01",
+  "source_closure_sha256": "fc46cfd2e80e8d78024b6a31c6c72be64f33d83aab4fe1abebaf899907f0e205",
+  "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+  "baseline_batch": 4,
+  "failure_batch": 5,
+  "baseline": {
+    "batch": 4,
+    "host_held_handles": 204,
+    "editor_held_handles": 555,
+    "editor_objects": 71128,
+    "editor_resources": 6,
+    "host_rss_bytes": 45879296,
+    "editor_rss_bytes": 516624384,
+    "max_status_gap_ms": 576.632
+  },
+  "failure": {
+    "batch": 5,
+    "host_held_handles": 204,
+    "editor_held_handles": 564,
+    "editor_objects": 71128,
+    "editor_resources": 6,
+    "host_rss_bytes": 39632896,
+    "editor_rss_bytes": 430931968,
+    "max_status_gap_ms": 631.7884
+  },
+  "delta_from_batch4": {
+    "batch": 1,
+    "host_held_handles": 0,
+    "editor_held_handles": 9,
+    "editor_objects": 0,
+    "editor_resources": 0,
+    "host_rss_bytes": -6246400,
+    "editor_rss_bytes": -85692416,
+    "max_status_gap_ms": 55.156400000000076
+  },
+  "warmup_rows": [
+    {
+      "batch": 0,
+      "host_held_handles": 204,
+      "editor_held_handles": 559,
+      "editor_objects": 71128,
+      "editor_resources": 6,
+      "host_rss_bytes": 48078848,
+      "editor_rss_bytes": 765140992,
+      "max_status_gap_ms": 940.415
+    },
+    {
+      "batch": 1,
+      "host_held_handles": 204,
+      "editor_held_handles": 559,
+      "editor_objects": 71128,
+      "editor_resources": 6,
+      "host_rss_bytes": 49684480,
+      "editor_rss_bytes": 765435904,
+      "max_status_gap_ms": 877.1108
+    },
+    {
+      "batch": 2,
+      "host_held_handles": 204,
+      "editor_held_handles": 559,
+      "editor_objects": 71128,
+      "editor_resources": 6,
+      "host_rss_bytes": 49504256,
+      "editor_rss_bytes": 759021568,
+      "max_status_gap_ms": 603.486
+    },
+    {
+      "batch": 3,
+      "host_held_handles": 204,
+      "editor_held_handles": 569,
+      "editor_objects": 71128,
+      "editor_resources": 6,
+      "host_rss_bytes": 46702592,
+      "editor_rss_bytes": 627023872,
+      "max_status_gap_ms": 615.861
+    },
+    {
+      "batch": 4,
+      "host_held_handles": 204,
+      "editor_held_handles": 555,
+      "editor_objects": 71128,
+      "editor_resources": 6,
+      "host_rss_bytes": 45879296,
+      "editor_rss_bytes": 516624384,
+      "max_status_gap_ms": 576.632
+    }
+  ],
+  "finding": "The original screen_sample counter gate failed because editor held_handles rose from 555 at warmup batch 4 to 564 at batch 5 (+9). Host held_handles stayed 204; editor objects/resources stayed 71128/6; both RSS values decreased from batch 4; status gap remained below 2000 ms. This attributes the gate row only, not the owner/cause of the retained handles and not a leak/root-cause verdict. Batch 3 warmup also observed editor handles 569, so the series is non-monotonic and needs a distinct supported attribution route before a source repair or retry.",
+  "decision": "Keep raw and gate unchanged; no retry S185 unchanged source/hypothesis."
+}
