@@ -1,0 +1,21 @@
+{
+  "schema": "HH-GT06-S176-CONSUMER-PILOT-READINESS-1",
+  "run_id": "gt06-s176-consumer-pilot-readiness-01",
+  "command_id": "cmd.gt06.s176.consumer-pilot-readiness.1",
+  "authority": 0,
+  "engine_started": false,
+  "status": "PREPARATION_ONLY_REAL_GT03_GT04_PATH_MISSING",
+  "run_consumer_calls_authenticated_gt03_commands": false,
+  "blender_probe_proves_gt04_ui_ipc_handoff": false,
+  "source_files": {
+    "pipeline/run_consumer.py": "275e22d0a4274f13d44e907a13d6bf36e7644c70864165d0a27e83dc90603c9c",
+    "pipeline/godot/consumer.py": "db1e77c9e371092fd86f1f4fd46e89242494370f705f7f51c1efc0dff1c2c476",
+    "host/replay/transport.py": "8534a617318c1aa9bad4fe1f2c5a3d1d74f8155bdd3ef3ff69b5cd4f8ab34ccd",
+    "host/replay/service.py": "d8d046ea2144ade026cce7e63a53b52885a28b213193fed19f932a773a9758a5",
+    "godot-addon/addons/hh_studio/plugin.gd": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036",
+    "tests/blender/run_blender_ipc_probe.py": "ae60c072f0bce18d5dbbca6bddae015c29d938618ae2a0966db8bc6f3a9ce43c"
+  },
+  "next": "Implement or identify one bounded authenticated GT03/GT04 command-path pilot before running any engine; keep GT06 10x35 and all pins unchanged",
+  "formal_acceptance": false,
+  "public_ack": false
+}

@@ -1,0 +1,24 @@
+{
+  "revision": "S176",
+  "run_id": "gt06-s176-audit-and-policy-01",
+  "command_id": "cmd.gt06.s176.audit-policy.1",
+  "authority": 0,
+  "engine_started": false,
+  "status": "POLICY_RECORDED_NO_ACCEPTANCE_CHANGE",
+  "accepted": [
+    "capability-preflight-before-diagnostic",
+    "separate-independent-consumer-pilot",
+    "bounded-worker-capacity",
+    "hash-preserved-evidence-retention",
+    "capability-catalog-as-owner-adr"
+  ],
+  "not_adopted": [
+    "counter-plus-64-formal-gate",
+    "two-by-thirty-five-formal-substitute",
+    "attribution-unknown-as-pass",
+    "vertical-slice-as-gt06-proof",
+    "opening-gt07-gt10-before-gt06"
+  ],
+  "source_profile_gates_changed": false,
+  "plan_hash": "b799c7c2ed28568c408de1003cea248781028cef96b6ecf7b684f2b2ae2d307c"
+}
