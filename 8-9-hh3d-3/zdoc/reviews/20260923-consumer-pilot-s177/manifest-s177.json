@@ -1,0 +1,80 @@
+{
+  "schema": "HH-CONSUMER-PILOT-S177-MANIFEST-1",
+  "run_id": "consumer-pilot-s177",
+  "authority": 0,
+  "formal_acceptance": false,
+  "gt06_acceptance": false,
+  "plan_revision": "S177",
+  "plan_sha256": "1eedf9bc9be7aefbeca2c8d481b19baa285fbe73df84d998a4ecb5cc94307466",
+  "summary_sha256": "045c792a9d33375f025b4a42a5ecc74dd3f6acb2f5da315cede08723d0492263",
+  "handoff_sha256": "2c7d34325ed1d19a74c431bd2a0589acce5a9c5c505ae6ca85f166ab9c5e61b5",
+  "selected_source_files": [
+    [
+      "consumer-pilot/authoring.py",
+      "83dfdd8632aaa52612b68e16a07475804240cd71f1a1f58be39df441b0c0ab6d",
+      11407
+    ],
+    [
+      "consumer-pilot/blender_author.py",
+      "461c590c591adb37c13ddce3e49f354433474c131adce811607b4758b88ac83a",
+      5854
+    ],
+    [
+      "consumer-pilot/collect_existing.py",
+      "0fe7fb2aeab0c67e28cc7c3134325361fdc7aadbe7fe21c70b39340f701cf661",
+      8372
+    ],
+    [
+      "consumer-pilot/input/map.json",
+      "1750040d6ce64b8b77eb2e7518dbf919c4f46cff37080790fa09c199b8804dd6",
+      1502
+    ],
+    [
+      "consumer-pilot/input/pickup.glb",
+      "a70d4ca6d5ad1780ee4df1a9f4dd30a198987b700d253731b73e488cf85f4818",
+      1752
+    ],
+    [
+      "consumer-pilot/main.tscn",
+      "091851003e79d2b7695ae7f13716fa6cd59908acf83edabec8ea5b2f0c86f457",
+      194
+    ],
+    [
+      "consumer-pilot/project.godot",
+      "691ef22e68de081523008daf72a03b7a81d02c4971a3e7b60991fb8195a15249",
+      1074
+    ],
+    [
+      "consumer-pilot/README.md",
+      "42481335cb1cfbfdba85bdb77a7a70faf7b54d2fd71c5bf9dd0116057b469662",
+      1155
+    ],
+    [
+      "consumer-pilot/run_runtime.py",
+      "1fc46435e7cc1a225175fd95be883de7f71763a286bb7735bb93ea3b5a883807",
+      9515
+    ],
+    [
+      "consumer-pilot/scripts/pilot_runtime.gd",
+      "a71bb589fa02e9cd5ea260cc19f664299ceee71c41e6fd15cc2ff1684842adcb",
+      11879
+    ],
+    [
+      "consumer-pilot/test_evidence.py",
+      "d02a5c7ce0d3ca0ed923c06ca298c505bc256a0cf8c35d372184472853a45a76",
+      6654
+    ]
+  ],
+  "raw_refs": {
+    "gt03": "zdoc/reviews/20260923-consumer-pilot-s177-gt03-04",
+    "gt04": "zdoc/reviews/20260923-consumer-pilot-s177-gt04-01",
+    "runtime": "consumer-pilot/.local/runs/consumer-pilot-s177-runtime-01"
+  },
+  "exclusions": [
+    "GT06 F13/F14",
+    "formal 10x35",
+    "GT07-GT10",
+    "game acceptance",
+    "unreviewed parent receipts"
+  ]
+}

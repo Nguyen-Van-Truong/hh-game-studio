@@ -1,0 +1,14 @@
+{
+  "run_id": "consumer-pilot-s177-runtime-01",
+  "authority": 0,
+  "engine_started": false,
+  "runtime_checks_passed": true,
+  "pilot_acceptance": false,
+  "gt06_acceptance": false,
+  "original_result_sha256": "3e1670159291bb35e8ec4a93c3a916ef2e335f3ab49cf1626750744c2cb8ac25",
+  "original_failure": "unique completion marker",
+  "manifest_sha256": "30c134e39f93c48c52bcc597b5f89d03896f26c6a288ce0bfba879083a4b7300",
+  "report_sha256": "856d76a4b045ce586db5afddc4f22050f59df062d79f725d333185956bae7504",
+  "engine_log_sha256": "b835727a887668671c0c6bbce1317476d8234153bc3e677ad864eed13c2efa3b",
+  "reason": "Read actual GUI engine log; preserve original stdout collector failure and all upstream gaps."
+}

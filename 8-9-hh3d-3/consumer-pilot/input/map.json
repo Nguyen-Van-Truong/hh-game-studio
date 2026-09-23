@@ -1,0 +1,83 @@
+{
+  "schema": 1,
+  "source": {
+    "run_id": "consumer-pilot-s177-gt03-04",
+    "source_closure_sha256": "2b3e6bfa59f1feb7b2039bb43e4a9356d9b46b2efb2b3797346bbd6bb7946542",
+    "editor_revision": "sha256:7b8b41a9ad9f640f63e2554e9e166c788c8fece8972623a7582d40e85c4ef3b1",
+    "save_command_id": "pilot.map.save"
+  },
+  "nodes": [
+    {
+      "stable_id": "floor",
+      "name": "Floor",
+      "position": [
+        0.0,
+        -0.5,
+        0.0
+      ],
+      "rotation_degrees": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "box_size": [
+        12.0,
+        1.0,
+        12.0
+      ]
+    },
+    {
+      "stable_id": "player",
+      "name": "Player",
+      "position": [
+        0.0,
+        0.5,
+        0.0
+      ],
+      "rotation_degrees": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "box_size": [
+        0.800000011920929,
+        1.0,
+        0.800000011920929
+      ]
+    },
+    {
+      "stable_id": "pickup",
+      "name": "Pickup",
+      "position": [
+        2.0,
+        0.5,
+        0.0
+      ],
+      "rotation_degrees": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "box_size": [
+        0.699999988079071,
+        0.699999988079071,
+        0.699999988079071
+      ]
+    }
+  ]
+}

@@ -1,0 +1,88 @@
+{
+  "schema": "HH-CONSUMER-PILOT-S177-SUMMARY-1",
+  "run_id": "consumer-pilot-s177",
+  "authority": 0,
+  "formal_acceptance": false,
+  "gt06_acceptance": false,
+  "source_scope": "8-9-hh3d-3/consumer-pilot only; GT06 frozen",
+  "pins": {
+    "godot_gui_sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424",
+    "blender_executable_sha256": "8f7a131ad8bc148edc218b334f07d92a57f5a357fa66d913b290537fd8353c06"
+  },
+  "gt03": {
+    "run_id": "consumer-pilot-s177-gt03-04",
+    "raw": "zdoc/reviews/20260923-consumer-pilot-s177-gt03-04",
+    "authenticated_commands": 3,
+    "save": "COMMITTED",
+    "editor_actual_exit": 0,
+    "job_zero_closed": true,
+    "native_artifact_binding": true,
+    "gaps": [
+      "author parent exit was observed by exec session but has no retained host receipt"
+    ]
+  },
+  "gt04": {
+    "run_id": "consumer-pilot-s177-gt04-01",
+    "raw": "zdoc/reviews/20260923-consumer-pilot-s177-gt04-01",
+    "native_actual_exit": 0,
+    "export_actual_exit": 0,
+    "cleanup_verified": true,
+    "scene_glb_sha256": "a70d4ca6d5ad1780ee4df1a9f4dd30a198987b700d253731b73e488cf85f4818",
+    "checkpoint_blend_sha256": "1c6ae10e482eee2c28d0a473ff388c887f768fe6b28bb8cfdb4b19cca706c6b9",
+    "gaps": [
+      "outer collector result was not serialized; retained inner/native receipts verify the export"
+    ]
+  },
+  "runtime": {
+    "run_id": "consumer-pilot-s177-runtime-01",
+    "raw": "consumer-pilot/.local/runs/consumer-pilot-s177-runtime-01",
+    "parse_exit": 0,
+    "runtime_exit": 0,
+    "tree_verified": true,
+    "runtime_checks": "11/11",
+    "report_sha256": "856d76a4b045ce586db5afddc4f22050f59df062d79f725d333185956bae7504",
+    "engine_log_sha256": "b835727a887668671c0c6bbce1317476d8234153bc3e677ad864eed13c2efa3b",
+    "collector_repair": "read-only verification from Godot GUI log; original stdout marker failure retained",
+    "coverage": [
+      "movement",
+      "pickup_ui",
+      "pause_12_frames",
+      "resume",
+      "save_load",
+      "corrupt_latest_recovery",
+      "deterministic_60_frame_replay"
+    ]
+  },
+  "negative_tests": {
+    "command": "python -B 8-9-hh3d-3/consumer-pilot/test_evidence.py -v",
+    "passed": 9,
+    "failed": 0
+  },
+  "limitations": [
+    "primitive map and GLB authoring only",
+    "consumer gameplay/UI/input/save/replay code is pilot code, not proof of general GT03/GT04 capability",
+    "no full OS keyboard/render capture proof",
+    "no general 2D physics/audio/animation/Android claim"
+  ],
+  "exclusions": [
+    "not GT06 F13/F14",
+    "not a full benchmark pair",
+    "not game acceptance",
+    "not a replacement for two critics or GT06 10x35"
+  ],
+  "pilot_source_hashes": {
+    ".gitattributes": "8b9c3028d6467ff3be7c793141927841d70f47f52d0590677438f488ca154992",
+    ".gitignore": "b2dd7bb46c4ed14a70d19dd121f7041f2551b9b4c68ab75b4bfbebf03865824c",
+    "authoring.py": "83dfdd8632aaa52612b68e16a07475804240cd71f1a1f58be39df441b0c0ab6d",
+    "blender_author.py": "461c590c591adb37c13ddce3e49f354433474c131adce811607b4758b88ac83a",
+    "collect_existing.py": "0fe7fb2aeab0c67e28cc7c3134325361fdc7aadbe7fe21c70b39340f701cf661",
+    "input/map.json": "1750040d6ce64b8b77eb2e7518dbf919c4f46cff37080790fa09c199b8804dd6",
+    "input/pickup.glb": "a70d4ca6d5ad1780ee4df1a9f4dd30a198987b700d253731b73e488cf85f4818",
+    "main.tscn": "091851003e79d2b7695ae7f13716fa6cd59908acf83edabec8ea5b2f0c86f457",
+    "project.godot": "691ef22e68de081523008daf72a03b7a81d02c4971a3e7b60991fb8195a15249",
+    "README.md": "42481335cb1cfbfdba85bdb77a7a70faf7b54d2fd71c5bf9dd0116057b469662",
+    "run_runtime.py": "1fc46435e7cc1a225175fd95be883de7f71763a286bb7735bb93ea3b5a883807",
+    "scripts/pilot_runtime.gd": "a71bb589fa02e9cd5ea260cc19f664299ceee71c41e6fd15cc2ff1684842adcb",
+    "test_evidence.py": "d02a5c7ce0d3ca0ed923c06ca298c505bc256a0cf8c35d372184472853a45a76"
+  }
+}
