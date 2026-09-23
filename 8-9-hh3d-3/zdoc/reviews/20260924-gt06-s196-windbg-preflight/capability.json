@@ -1,0 +1,32 @@
+{
+  "schema": "HH-GT06-S196-WINDBG-PREFLIGHT-1",
+  "run_id": "gt06-s196-windbg-preflight-01",
+  "authority": 0,
+  "formal_acceptance": false,
+  "package": {
+    "name": "Microsoft.WinDbg",
+    "id": "Microsoft.WinDbg",
+    "version": "1.2606.22001.0",
+    "status": "Ok",
+    "source": "winget"
+  },
+  "cdb": {
+    "architecture": "amd64",
+    "path": "C:\\Program Files\\WindowsApps\\Microsoft.WinDbg_1.2606.22001.0_x64__8wekyb3d8bbwe\\amd64\\cdb.exe",
+    "file_version": "10.0.29617.1000 (WinBuild.160101.0800)",
+    "sha256": "5f54abafca3ae5638bbf807d402fabb350a64575c1dfa9fbfc7f5732df5bee67",
+    "version_command": "cdb -version",
+    "version_exit": 0,
+    "version_stdout": "cdb version 10.0.29617.1000"
+  },
+  "dbgeng": {
+    "path": "C:\\Program Files\\WindowsApps\\Microsoft.WinDbg_1.2606.22001.0_x64__8wekyb3d8bbwe\\amd64\\dbgeng.dll",
+    "file_version": "10.0.29617.1000 (WinBuild.160101.0800)",
+    "sha256": "4352756685e7325288e54abb3281e768637987517be8575ec4450e4b4421842f"
+  },
+  "wpr": {
+    "path": "C:\\Windows\\system32\\wpr.exe",
+    "status": "not_recording"
+  },
+  "decision": "supported debugger boundary is available for a fresh bounded snapshot; no engine run in this preflight; GT06 gate unchanged"
+}

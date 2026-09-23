@@ -1,0 +1,19 @@
+{
+  "archive_sha256": "3364a5348901eaf6b8de837274e63eaf0f6115a7647d5a69827bdef6cae06cf4",
+  "authority": 0,
+  "cdb_attached": true,
+  "cdb_exit": "UNKNOWN_AFTER_DRIVER_DEADLINE",
+  "decision": "CDB attach/snapshot capability proven; terminal command requires explicit detach/continue boundary; no attribution/root-cause or GT06 acceptance claim",
+  "driver_exit": 1,
+  "failure": "S197_EDITOR_DEADLINE_CDB_REMAINED_AT_NTTERMINATEPROCESS_BOUNDARY",
+  "formal_acceptance": false,
+  "handle_snapshot": true,
+  "handle_table_summary": true,
+  "htrace_enabled": true,
+  "raw_manifest_sha256": "bc035e726f90af3660fc11759ede08d1fd0b32f381514a76771bc60a070a5015",
+  "run_id": "gt06-s197-cdb-handle-snapshot-01",
+  "schema": "HH-GT06-S197-ANALYSIS-1",
+  "target_complete": true,
+  "target_ready": true,
+  "target_terminal_exit": "UNKNOWN"
+}

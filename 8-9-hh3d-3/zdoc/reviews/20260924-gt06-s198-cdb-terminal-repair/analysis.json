@@ -1,0 +1,34 @@
+{
+  "archive_sha256": "a690fff151114ef8e7270b544be233f687c466ac63364c1828f807d27385a96b",
+  "authority": 0,
+  "cdb_exit": 0,
+  "cdb_markers": {
+    "attached": true,
+    "handle_lines": 514,
+    "handle_snapshot": true,
+    "htrace_enabled": true
+  },
+  "conclusion": "Supported CDB attached to the verified Godot target, captured the handle table and enabled htrace; explicit qd after the termination stop produced complete target/CDB cleanup. This is a distinct diagnostic boundary, not GT06 acceptance and not proof of leak ownership or root cause.",
+  "formal_acceptance": false,
+  "helper_exit": 0,
+  "job": {
+    "active_count": 0,
+    "assigned": true,
+    "close_uncertain": false,
+    "closed": true,
+    "configured": true,
+    "create_uncertain": false,
+    "failed_operations": [],
+    "handle_retained": false,
+    "native_error": null,
+    "tainted": false,
+    "zero_observed": true
+  },
+  "raw_manifest_sha256": "245a4d5597129727c1e645fb2f6404d61d6c7f6eb0b88ad74fb1ba7589a4841b",
+  "run_id": "gt06-s198-cdb-handle-snapshot-01",
+  "schema": "HH-GT06-S198-ANALYSIS-1",
+  "target_actual_exit": {
+    "exit_code": 0,
+    "pid": 53000
+  }
+}

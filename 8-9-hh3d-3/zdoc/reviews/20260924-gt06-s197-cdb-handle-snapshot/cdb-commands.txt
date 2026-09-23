@@ -1,0 +1,8 @@
+.sympath cache*
+.reload /f
+.echo S197_CDB_ATTACHED
+!handle 0 7
+.echo S197_HANDLE_SNAPSHOT_DONE
+!htrace -enable
+.echo S197_HTRACE_ENABLED
+g
