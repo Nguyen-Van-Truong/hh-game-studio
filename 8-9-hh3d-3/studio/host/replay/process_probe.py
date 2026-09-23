@@ -36,6 +36,8 @@ class ProcessProbe:
         k.QueryFullProcessImageNameW.argtypes = [w.HANDLE, w.DWORD, w.LPWSTR, ctypes.POINTER(w.DWORD)]
         k.QueryFullProcessImageNameW.restype = w.BOOL
         k.WaitForSingleObject.argtypes, k.WaitForSingleObject.restype = [w.HANDLE, w.DWORD], w.DWORD
+        k.GetProcessHandleCount.argtypes = [w.HANDLE, ctypes.POINTER(w.DWORD)]
+        k.GetProcessHandleCount.restype = w.BOOL
         class Memory(ctypes.Structure):
             _fields_ = [('cb', w.DWORD), ('page_faults', w.DWORD),
                         ('peak_working_set', ctypes.c_size_t), ('working_set', ctypes.c_size_t),
@@ -93,6 +95,25 @@ class ProcessProbe:
         self._need(self.u.EnumWindows(callback, 0), 'PROBE_WINDOWS')
         return {'host_mono_us': time.perf_counter_ns() // 1000,
                 'rss_bytes': int(memory.working_set), 'visible_window_handles': sorted(windows)}
+
+    def sample_with_handle_count(self):
+        """Return the normal observation plus a timestamped target handle count.
+
+        The count is read through the same retained, identity-checked process
+        handle as the memory/window observation.  Keep its timestamp separate:
+        ``sample()`` timestamps the RSS/window read, while this method records
+        the clock immediately after ``GetProcessHandleCount`` succeeds.
+        """
+        observed = self.sample()
+        if observed is None:
+            return None
+        from ctypes import wintypes as w
+        count = w.DWORD()
+        self._need(self.k.GetProcessHandleCount(self.handle, ctypes.byref(count)),
+                   'PROBE_HANDLES')
+        observed.update(handle_mono_us=time.perf_counter_ns() // 1000,
+                        held_handles=int(count.value))
+        return observed
 
     def close(self):
         if self.handle is not None:

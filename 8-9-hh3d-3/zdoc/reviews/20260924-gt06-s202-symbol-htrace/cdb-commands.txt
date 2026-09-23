@@ -1,0 +1,12 @@
+.sympath srv*8-9-hh3d-3/studio/.local/symbols/s202*https://msdl.microsoft.com/download/symbols
+.reload /f ntdll.dll kernel32.dll KERNELBASE.dll
+.echo S202_CDB_ATTACHED
+!handle 0 7
+.echo S202_HANDLE_SNAPSHOT_DONE
+!htrace -enable
+.echo S202_HTRACE_ENABLED
+g
+.echo S202_AFTER_G
+!htrace -diff
+.echo S202_HTRACE_DIFF_DONE
+qd

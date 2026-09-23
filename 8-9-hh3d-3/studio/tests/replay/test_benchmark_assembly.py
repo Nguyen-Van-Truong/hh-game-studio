@@ -205,14 +205,15 @@ def fixture(index=0, source=SOURCE, scene_hash='c' * 64, *, native_offset=0, fra
         'root_instance_id': root_base + 100, 'generation': generation_base + 100, 'semantic_sha256': 'a' * 64,
         'max_status_gap_ms': 501.0, 'process_frame': frame_base + 1005, 'objects': counter(501), 'resources': counter(6)}
     host_end = command_value['ended_mono_us']
-    joint_value = {'schema_id': 'hh-studio.benchmark-joint-observation', 'schema_version': '1.0.0',
+    joint_value = {'schema_id': 'hh-studio.benchmark-joint-observation', 'schema_version': '1.1.0',
         'run_id': RUN, 'index': index, 'profile_sha256': profile.PROFILE_SHA256, 'source_closure_sha256': source,
         'native_batch_sha256': native.sha256, 'command_batch_sha256': command.sha256,
         'processes': copy.deepcopy(PROCESSES), 'phase': 'post_batch_quiescent',
         'host_window': {'started_mono_us': command_value['started_mono_us'] - 100,
                         'ended_mono_us': host_end + 2000, 'ack_written_mono_us': host_end + 1000},
         'host': {'monotonic_us': host_end + 100, 'counters': host_counters()},
-        'editor': {'host_mono_us': host_end + 200, 'rss_bytes': counter(10000000), 'held_handles': counter(30),
+        'editor': {'host_mono_us': host_end + 200, 'handle_mono_us': host_end + 300,
+            'rss_bytes': counter(10000000), 'held_handles': counter(30),
             'visible_window_handles': ['1234'], 'native_observation': {'source': 'native_ack',
             'native_mono_us': receipt['ack_observed_mono_us'], 'process_frame': frame_base + 1005,
             'objects': counter(501), 'resources': counter(6)}}, 'host_effect_count': (index + 1) * 200,
@@ -498,7 +499,9 @@ class AssemblyTests(unittest.TestCase):
             lambda value: value['processes']['editor'].update(process_start='windows:99999'),
             lambda value: value.update(native_batch_sha256='0' * 64),
             lambda value: value['host'].update(monotonic_us=100),
-            lambda value: value['editor'].update(host_mono_us=value['host_window']['ack_written_mono_us'] + 1))
+            lambda value: value['editor'].update(host_mono_us=value['host_window']['ack_written_mono_us'] + 1),
+            lambda value: value['editor'].update(handle_mono_us=value['editor']['host_mono_us'] - 1),
+            lambda value: value['editor'].update(handle_mono_us=value['host_window']['ack_written_mono_us'] + 1))
         for change in changes:
             self.values = fixture()
             self.mutate('joint', change)

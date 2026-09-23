@@ -536,7 +536,7 @@ def assemble_sample(native, command, joint, *, run_id, index, processes,
     _number(receipt['max_status_gap_ms'], .000000001)
     _need(receipt['max_status_gap_ms'] >= n['max_status_gap_ms'], 'ACK_STATUS_GAP')
     _shape(j, 'schema_id schema_version run_id index profile_sha256 source_closure_sha256 native_batch_sha256 command_batch_sha256 processes phase host_window host editor host_effect_count barrier_receipt ack_ref')
-    _need(j['schema_id'] == 'hh-studio.benchmark-joint-observation' and j['schema_version'] == '1.0.0'
+    _need(j['schema_id'] == 'hh-studio.benchmark-joint-observation' and j['schema_version'] == '1.1.0'
           and j['run_id'] == run_id and j['profile_sha256'] == profile.PROFILE_SHA256
           and j['source_closure_sha256'] == source_closure_sha256 and j['native_batch_sha256'] == native.sha256
           and j['command_batch_sha256'] == command.sha256 and j['processes'] == processes
@@ -553,8 +553,9 @@ def assemble_sample(native, command, joint, *, run_id, index, processes,
     _host_observation({'process': processes['host'], **j['host']}, processes['host'])
     _integer(j['host']['monotonic_us'], c['ended_mono_us'], window['ack_written_mono_us'])
     editor = j['editor']
-    _shape(editor, 'host_mono_us rss_bytes held_handles visible_window_handles native_observation')
+    _shape(editor, 'host_mono_us handle_mono_us rss_bytes held_handles visible_window_handles native_observation')
     _integer(editor['host_mono_us'], c['ended_mono_us'], window['ack_written_mono_us'])
+    _integer(editor['handle_mono_us'], editor['host_mono_us'], window['ack_written_mono_us'])
     _counter(editor['rss_bytes'], positive=True)
     _counter(editor['held_handles'])
     handles = editor['visible_window_handles']

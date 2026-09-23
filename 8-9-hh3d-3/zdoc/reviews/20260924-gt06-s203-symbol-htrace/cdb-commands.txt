@@ -1,0 +1,14 @@
+.symfix D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\.local\symbols\s203
+.reload /f ntdll.dll
+.reload /f kernel32.dll
+.reload /f KERNELBASE.dll
+.echo S203_CDB_ATTACHED
+!handle 0 7
+.echo S203_HANDLE_SNAPSHOT_DONE
+!htrace -enable
+.echo S203_HTRACE_ENABLED
+g
+.echo S203_AFTER_G
+!htrace -diff
+.echo S203_HTRACE_DIFF_DONE
+qd

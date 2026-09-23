@@ -54,6 +54,20 @@ class ProbeTests(unittest.TestCase):
         self.assertEqual(1, owner.k.calls)
         self.assertIn(owner, HELD_PROBES)
 
+    def test_sample_with_handle_count_timestamps_the_handle_read(self):
+        owner = self.fake([])
+        owner.sample = lambda: {
+            'host_mono_us': 100, 'rss_bytes': 4096,
+            'visible_window_handles': ['101']}
+        def count_handles(_handle, pointer):
+            pointer._obj.value = 17
+            return True
+        owner.k.GetProcessHandleCount = count_handles
+        row = owner.sample_with_handle_count()
+        self.assertEqual(row['held_handles'], 17)
+        self.assertIs(type(row['handle_mono_us']), int)
+        self.assertGreaterEqual(row['handle_mono_us'], row['host_mono_us'])
+
     def test_held_cleanup_blocks_new_probe(self):
         owner = self.fake([False, True])
         with self.assertRaises(ProbeError):

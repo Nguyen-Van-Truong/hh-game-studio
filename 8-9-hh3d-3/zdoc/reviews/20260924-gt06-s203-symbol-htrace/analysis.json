@@ -1,0 +1,44 @@
+{
+  "archive_sha256": "eaa260d5299e18ead511e7a232ce5c4034420a11eccc5edfd39ab02923975d1a",
+  "authority": 0,
+  "cdb_exit": 0,
+  "cdb_markers": {
+    "attached": true,
+    "handle_lines": 582,
+    "handle_snapshot": true,
+    "htrace_enabled": true
+  },
+  "conclusion": "S203 repaired the proven relative symbol-store and reload-command boundaries and fixed the completion marker collector. The target/helper/CDB completed with Job cleanup, but htrace still contains header-only PID/TID records and zero creator frame-address lines. This establishes no ownership, leak or root cause and cannot satisfy GT06 acceptance.",
+  "formal_acceptance": false,
+  "helper_exit": 0,
+  "htrace_creator_frame_lines": 0,
+  "htrace_displayed_outstanding_traces": 105,
+  "htrace_new_stack_traces": 7645,
+  "htrace_open_headers": 105,
+  "job": {
+    "active_count": 0,
+    "assigned": true,
+    "close_uncertain": false,
+    "closed": true,
+    "configured": true,
+    "create_uncertain": false,
+    "failed_operations": [],
+    "handle_retained": false,
+    "native_error": null,
+    "tainted": false,
+    "zero_observed": true
+  },
+  "raw_manifest_sha256": "4f111a7a515be2a8db58b3e2272f5fd7c03fc379ff0aa28bd6acd84779f90522",
+  "run_id": "gt06-s203-cdb-handle-snapshot-01",
+  "schema": "HH-GT06-S203-ANALYSIS-1",
+  "symbol_route": {
+    "absolute_cache": true,
+    "godot_pdb_or_module_offset_resolved": false,
+    "invalid_store_error_seen": false,
+    "split_reload_commands": true
+  },
+  "target_actual_exit": {
+    "exit_code": 0,
+    "pid": 54860
+  }
+}

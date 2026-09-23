@@ -169,16 +169,15 @@ class CampaignProducer(CommandProducer):
 
 
 def sample_editor(probe):
-    from ctypes import wintypes as w
-    observed = probe.sample()
+    observed = probe.sample_with_handle_count()
     require(observed is not None and observed['visible_window_handles'], 'CAMPAIGN_EDITOR_UNOBSERVED')
-    count = w.DWORD()
-    method = probe.k.GetProcessHandleCount
-    method.argtypes, method.restype = [w.HANDLE, ctypes.POINTER(w.DWORD)], w.BOOL
-    require(method(probe.handle, ctypes.byref(count)), 'CAMPAIGN_EDITOR_HANDLES')
+    require(type(observed.get('handle_mono_us')) is int
+            and type(observed.get('held_handles')) is int,
+            'CAMPAIGN_EDITOR_HANDLES')
     return {'host_mono_us': observed['host_mono_us'],
+            'handle_mono_us': observed['handle_mono_us'],
             'rss_bytes': {'value': observed['rss_bytes'], 'unavailable_reason': None},
-            'held_handles': {'value': count.value, 'unavailable_reason': None},
+            'held_handles': {'value': observed['held_handles'], 'unavailable_reason': None},
             'visible_window_handles': observed['visible_window_handles']}
 
 
@@ -943,7 +942,7 @@ def run_child(root):
                 'native_mono_us': receipt['ack_observed_mono_us'], 'process_frame': receipt['process_frame'],
                 'objects': receipt['objects'], 'resources': receipt['resources']}
             joint_path = root / f'joint-{index:02d}.json'
-            joint = {'schema_id': 'hh-studio.benchmark-joint-observation', 'schema_version': '1.0.0',
+            joint = {'schema_id': 'hh-studio.benchmark-joint-observation', 'schema_version': '1.1.0',
                 'run_id': run_id, 'index': index, 'profile_sha256': profile.PROFILE_SHA256,
                 'source_closure_sha256': closure(before), 'native_batch_sha256': sha(native_raw),
                 'command_batch_sha256': command_ref['sha256'], 'processes': processes,

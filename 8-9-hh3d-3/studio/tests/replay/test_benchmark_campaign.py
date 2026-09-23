@@ -359,16 +359,22 @@ class CampaignOwnershipTests(unittest.TestCase):
             retained.close.assert_called_once()
 
     def test_editor_observation_uses_the_assembly_counter_contract(self):
-        def count_handles(_handle, pointer):
-            pointer._obj.value = 17
-            return True
-        probe = SimpleNamespace(handle=object(), k=SimpleNamespace(GetProcessHandleCount=Mock(side_effect=count_handles)),
-            sample=lambda: {'host_mono_us': 12345, 'rss_bytes': 4096, 'visible_window_handles': ['101']})
+        probe = SimpleNamespace(sample_with_handle_count=lambda: {
+            'host_mono_us': 12345, 'handle_mono_us': 12350, 'rss_bytes': 4096,
+            'held_handles': 17, 'visible_window_handles': ['101']})
         result = campaign.sample_editor(probe)
         self.assertEqual(result['rss_bytes'], {'value': 4096, 'unavailable_reason': None})
         self.assertEqual(result['held_handles'], {'value': 17, 'unavailable_reason': None})
         self.assertEqual(result['host_mono_us'], 12345)
+        self.assertEqual(result['handle_mono_us'], 12350)
         self.assertEqual(result['visible_window_handles'], ['101'])
+
+    def test_editor_observation_rejects_untimestamped_handle_count(self):
+        probe = SimpleNamespace(sample_with_handle_count=lambda: {
+            'host_mono_us': 12345, 'rss_bytes': 4096, 'held_handles': 17,
+            'visible_window_handles': ['101']})
+        with self.assertRaisesRegex(campaign.BenchmarkJobError, 'CAMPAIGN_EDITOR_HANDLES'):
+            campaign.sample_editor(probe)
 
 
 class CampaignScreenTests(unittest.TestCase):

@@ -1,0 +1,28 @@
+{
+  "schema": "hh-studio.gt06-current-source-f01-f15-matrix",
+  "schema_version": "1.0.0",
+  "authority": 0,
+  "current_source_closure_sha256": "8aca87d44e3a1cbbf0feb558403948da5a71bec6f5761174729a6dc24e8d3b1b",
+  "historical_matrix": "zdoc/reviews/20260918-gt06-s70-resume/requirements-final-draft.md",
+  "disposition_rule": "Historical evidence is reusable only after exact source/profile/input binding. A different closure is stale and cannot be promoted by metadata.",
+  "rows": [
+    {"id":"F01","requirement":"GT06 vertical slice and accepted dependency linkage","historical_evidence":"E05/E65/E69R","historical_status":"AVAILABLE_DIAGNOSTIC","current_status":"STALE_SOURCE_REBIND_REQUIRED"},
+    {"id":"F02","requirement":"Fixed 60 Hz seeded input and real menu callbacks","historical_evidence":"E68GUI/E69R","historical_status":"AVAILABLE_DIAGNOSTIC","current_status":"STALE_SOURCE_REBIND_REQUIRED"},
+    {"id":"F03","requirement":"Movement, outfit/emote/prop, pause/resume/quit","historical_evidence":"E68GUI/E69R","historical_status":"AVAILABLE_DIAGNOSTIC","current_status":"STALE_SOURCE_REBIND_REQUIRED"},
+    {"id":"F04","requirement":"Bounded inspector and historical runtime state","historical_evidence":"E68GUI/U69","historical_status":"AVAILABLE_DIAGNOSTIC","current_status":"STALE_SOURCE_REBIND_REQUIRED"},
+    {"id":"F05","requirement":"Fresh camera/bookmark/capture bound to PID/source/time","historical_evidence":"E68GUI/E69A","historical_status":"AVAILABLE_DIAGNOSTIC","current_status":"STALE_SOURCE_REBIND_REQUIRED"},
+    {"id":"F06","requirement":"Seeded fault, typed repair, and causal replay","historical_evidence":"E65/E69R","historical_status":"AVAILABLE_DIAGNOSTIC","current_status":"STALE_SOURCE_REBIND_REQUIRED"},
+    {"id":"F07","requirement":"Performance schema, raw frames, quantiles, and counters","historical_evidence":"E65/native exports","historical_status":"AVAILABLE_DIAGNOSTIC","current_status":"STALE_SOURCE_REBIND_REQUIRED"},
+    {"id":"F08","requirement":"Admission, ACK/readback, dedupe, and UNKNOWN semantics","historical_evidence":"E68GUI/E69A/U69","historical_status":"AVAILABLE_DIAGNOSTIC","current_status":"STALE_SOURCE_REBIND_REQUIRED"},
+    {"id":"F09","requirement":"Reviewer UX, keyboard/error/UNKNOWN actions, no hidden resume","historical_evidence":"E68GUI/U69","historical_status":"AVAILABLE_DIAGNOSTIC","current_status":"STALE_SOURCE_REBIND_REQUIRED"},
+    {"id":"F10","requirement":"Stale identity/context rejection and save/reload","historical_evidence":"E68GUI/E70","historical_status":"AVAILABLE_DIAGNOSTIC","current_status":"STALE_SOURCE_REBIND_REQUIRED"},
+    {"id":"F11","requirement":"Timeout/Stop/PID ownership and cleanup","historical_evidence":"E69A/E69OWNER/E70/U70","historical_status":"AVAILABLE_DIAGNOSTIC","current_status":"STALE_SOURCE_REBIND_REQUIRED"},
+    {"id":"F12","requirement":"Quota/congestion/fairness/retention/Stop priority","historical_evidence":"E69A/E68GUI/U69","historical_status":"AVAILABLE_DIAGNOSTIC","current_status":"STALE_SOURCE_REBIND_REQUIRED"},
+    {"id":"F13","requirement":"Formal benchmark counts, latency/heartbeat/memory/effect limits","historical_evidence":"EBENCH","historical_status":"PENDING","current_status":"OPEN_FORMAL_10X35"},
+    {"id":"F14","requirement":"Sustained execution and stop-safe final publication","historical_evidence":"E70/U70","historical_status":"AVAILABLE_DIAGNOSTIC","current_status":"OPEN_FORMAL_TERMINAL_PROOF"},
+    {"id":"F15","requirement":"Final closure, clean logs, and two same-hash critics","historical_evidence":"final manifest/critics","historical_status":"PENDING","current_status":"OPEN_FINAL_REVIEW"}
+  ],
+  "formal_acceptance": false,
+  "gt06_status": "IN_PROGRESS_ZERO_ACCEPTED_FULL_RUNS",
+  "gt07_gt10": "UNOPENED_BY_DEPENDENCY"
+}

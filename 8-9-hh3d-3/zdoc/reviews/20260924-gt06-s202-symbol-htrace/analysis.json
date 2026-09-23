@@ -1,0 +1,43 @@
+{
+  "actual_native_completion_marker": true,
+  "archive_sha256": "1c0b588f69f7f916e109a45827746ec533dcf0740bb98601869d186d41c6edfc",
+  "authority": 0,
+  "cdb_exit": 0,
+  "cdb_markers": {
+    "attached": true,
+    "handle_lines": 587,
+    "handle_snapshot": true,
+    "htrace_enabled": true
+  },
+  "collector_native_completion_rows": 0,
+  "conclusion": "S202 attached CDB, captured a handle snapshot and completed htrace, but its symbol-store path and completion-marker collector were invalid. Raw target exit and cleanup remain preserved; no creator stack, ownership, root cause or GT06 acceptance claim is made. A single bounded repair may fix only these proven harness boundaries.",
+  "formal_acceptance": false,
+  "harness_failures": [
+    "relative symbol-store path was rejected by dbghelp",
+    "copied runner expected HH_S202_COMPLETE while fixture emitted HH_S200_COMPLETE, so derived native_completion was empty"
+  ],
+  "helper_exit": 0,
+  "htrace_displayed_outstanding_traces": 108,
+  "htrace_new_stack_traces": 7785,
+  "job": {
+    "active_count": 0,
+    "assigned": true,
+    "close_uncertain": false,
+    "closed": true,
+    "configured": true,
+    "create_uncertain": false,
+    "failed_operations": [],
+    "handle_retained": false,
+    "native_error": null,
+    "tainted": false,
+    "zero_observed": true
+  },
+  "raw_manifest_sha256": "02b331a649e624dcc9ecabac8f10303c0db3a1cf6fee44169926f4bccfdd6d5a",
+  "run_id": "gt06-s202-cdb-handle-snapshot-01",
+  "schema": "HH-GT06-S202-ANALYSIS-1",
+  "symbol_path_rejected": true,
+  "target_actual_exit": {
+    "exit_code": 0,
+    "pid": 47208
+  }
+}
