@@ -1,0 +1,31 @@
+{
+  "schema": 1,
+  "authority": 0,
+  "audited_commit": "6a5f75f1",
+  "findings": [
+    {
+      "files": [
+        "consumer-pilot/main.tscn",
+        "consumer-pilot/project.godot"
+      ],
+      "problem": "trailing-newline trimming after runtime changed source bytes without updating source inventory",
+      "repair": "restored exact executed source bytes; no engine rerun"
+    },
+    {
+      "files": [
+        "S177-SUMMARY.json",
+        "author-binding-01.json",
+        "runtime-validation-01.json"
+      ],
+      "problem": "core.autocrlf normalized Git blobs while local hashes described CRLF bytes",
+      "repair": "scoped -text attributes preserve exact evidence bytes; verify disk and Git blobs"
+    },
+    {
+      "problem": "v1 handoff/source-checkpoint edits did not validate the full closure",
+      "repair": "v2 verifier hashes all selected files and cross-binds actual runtime receipts; stable historical checkpoint references"
+    }
+  ],
+  "original_engine_runs_repeated": false,
+  "raw_deleted": false,
+  "v1_manifest_and_summary": "historical; superseded by manifest-s177-v2.json; raw runtime failure retained"
+}

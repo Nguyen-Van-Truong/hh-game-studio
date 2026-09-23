@@ -1,0 +1,42 @@
+{
+  "schema": 1,
+  "run_id": "consumer-pilot-s177-runtime-01",
+  "authority": 0,
+  "formal_acceptance": false,
+  "runtime_sources": {
+    "project.godot": "691ef22e68de081523008daf72a03b7a81d02c4971a3e7b60991fb8195a15249",
+    "main.tscn": "091851003e79d2b7695ae7f13716fa6cd59908acf83edabec8ea5b2f0c86f457",
+    "scripts/pilot_runtime.gd": "a71bb589fa02e9cd5ea260cc19f664299ceee71c41e6fd15cc2ff1684842adcb"
+  },
+  "driver_sha256": "99c03db2534726a633a424df7870fb3611bdd6e1277306f4f838442274e43952",
+  "runner_sha256": "ea522450acc46f90be5e2a7b9257e73ce8b619948105b2c9073aac1f881c7328",
+  "binding_sha256": "441a74135aa9903387692755b93ab5e49eacd80e0872f97cc6d4c47998a9dc21",
+  "inputs": {
+    "map.json": {
+      "path": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260923-consumer-pilot-s177-gt03-04\\map.json",
+      "sha256": "1750040d6ce64b8b77eb2e7518dbf919c4f46cff37080790fa09c199b8804dd6"
+    },
+    "pickup.glb": {
+      "path": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260923-consumer-pilot-s177-gt04-01\\gt04\\hh-files-598c12c4104a429282a429ebb3ac1562\\scene.glb",
+      "sha256": "a70d4ca6d5ad1780ee4df1a9f4dd30a198987b700d253731b73e488cf85f4818"
+    }
+  },
+  "binary": {
+    "path": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\tooling\\godot-4.7.2-stable\\Godot_v4.7.2-stable_win64.exe",
+    "sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424"
+  },
+  "limits_seconds": {
+    "parse": 30,
+    "runtime": 60
+  },
+  "source_scope": "consumer-pilot only; frozen GT06 unchanged",
+  "upstream_gaps": {
+    "godot": [
+      "author parent exit was observed by exec session but has no retained host receipt",
+      "raw author-result cleanup is null; derived receipt reads post-close artifact"
+    ],
+    "blender": [
+      "outer collector failed after native success; outer wrapper/job result was not serialized"
+    ]
+  }
+}

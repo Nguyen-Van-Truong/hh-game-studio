@@ -1,0 +1,56 @@
+{
+  "run_id": "consumer-pilot-s177-runtime-01",
+  "authority": 0,
+  "gt06_acceptance": false,
+  "pilot_acceptance": false,
+  "hosts": {
+    "parse": {
+      "wrapper_pid": 26208,
+      "started_at": "2026-09-23T06:41:10.624773+00:00",
+      "argv": [
+        "Godot_v4.7.2-stable_win64.exe",
+        "--headless",
+        "--path",
+        "$SNAPSHOT/.",
+        "--check-only",
+        "--script",
+        "res://scripts/pilot_runtime.gd"
+      ],
+      "exit_code": 0,
+      "target_pid": 47164,
+      "wrapper_exit_code": 0,
+      "timed_out": false,
+      "tree_verified": true,
+      "ownership": "gated_job_kill_on_close",
+      "stdout": "parse-stdout.txt",
+      "stderr": "parse-stderr.txt",
+      "host": "parse-host.json"
+    },
+    "runtime": {
+      "wrapper_pid": 23176,
+      "started_at": "2026-09-23T06:41:11.327028+00:00",
+      "argv": [
+        "Godot_v4.7.2-stable_win64.exe",
+        "--headless",
+        "--path",
+        "$SNAPSHOT/.",
+        "--",
+        "--pilot-test",
+        "--run-id=consumer-pilot-s177-runtime-01"
+      ],
+      "exit_code": 0,
+      "target_pid": 1652,
+      "wrapper_exit_code": 0,
+      "timed_out": false,
+      "tree_verified": true,
+      "ownership": "gated_job_kill_on_close",
+      "stdout": "runtime-stdout.txt",
+      "stderr": "runtime-stderr.txt",
+      "host": "runtime-host.json"
+    }
+  },
+  "runtime_checks_passed": false,
+  "failure": "unique completion marker",
+  "source_unchanged": true,
+  "inputs_unchanged": true
+}

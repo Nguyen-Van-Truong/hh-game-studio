@@ -1,0 +1,95 @@
+{
+  "authority": 0,
+  "checks": {
+    "authored_map_loaded": true,
+    "blender_asset_instantiated": true,
+    "changed_since_save": true,
+    "corrupt_latest_recovers_prior": true,
+    "deterministic_replay_live_frames": true,
+    "load_restores_runtime": true,
+    "movement_live_frames": true,
+    "pause_live_frames": true,
+    "pickup_and_ui": true,
+    "resume_live_frames": true,
+    "save_via_input": true
+  },
+  "godot_version": "4.7.2-stable (official)",
+  "gt06_acceptance": false,
+  "map_sha256": "1750040d6ce64b8b77eb2e7518dbf919c4f46cff37080790fa09c199b8804dd6",
+  "observations": {
+    "asset_consumer_transform": "mesh local identity; root scale 0.25 at GT03 pickup location",
+    "asset_meshes": 1,
+    "pause": {
+      "after": {
+        "collected": false,
+        "position": [
+          0.583333373069763,
+          0.5,
+          0.0
+        ],
+        "schema": 1,
+        "tick": 15
+      },
+      "before": {
+        "collected": false,
+        "position": [
+          0.583333373069763,
+          0.5,
+          0.0
+        ],
+        "schema": 1,
+        "tick": 15
+      },
+      "frames_advanced": 12
+    },
+    "replays": [
+      {
+        "final": {
+          "collected": true,
+          "position": [
+            1.75000071525574,
+            0.5,
+            0.0
+          ],
+          "schema": 1,
+          "tick": 60
+        },
+        "frames": 60,
+        "sha256": "e0a66a60b678d36f08839ee78d1c7a3b0fb2982b54569908ffbd5874d5b04d33"
+      },
+      {
+        "final": {
+          "collected": true,
+          "position": [
+            1.75000071525574,
+            0.5,
+            0.0
+          ],
+          "schema": 1,
+          "tick": 60
+        },
+        "frames": 60,
+        "sha256": "e0a66a60b678d36f08839ee78d1c7a3b0fb2982b54569908ffbd5874d5b04d33"
+      },
+      {
+        "final": {
+          "collected": true,
+          "position": [
+            1.16666674613953,
+            0.5,
+            0.0
+          ],
+          "schema": 1,
+          "tick": 60
+        },
+        "frames": 60,
+        "sha256": "8ccba32537a4e6160642f8543c91f2afd437d7af6f2dd18583296a2fd0758f17"
+      }
+    ]
+  },
+  "passed": true,
+  "pickup_glb_sha256": "a70d4ca6d5ad1780ee4df1a9f4dd30a198987b700d253731b73e488cf85f4818",
+  "pid": 1652,
+  "run_id": "consumer-pilot-s177-runtime-01",
+  "schema": 2
+}
