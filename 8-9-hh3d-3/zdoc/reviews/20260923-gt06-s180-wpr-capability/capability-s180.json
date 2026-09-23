@@ -1,0 +1,45 @@
+{
+  "schema": "HH-GT06-S180-WPR-CAPABILITY-1",
+  "authority": 0,
+  "run_id": "gt06-s180-wpr-capability-01",
+  "command_id": "cmd.gt06.s180.wpr-capability.1",
+  "engine_started": false,
+  "target_processes": [],
+  "source_closure_sha256": "fce149cd3a62e102aaba225794b9a5078cd84d7647cb359f6bbcacb8895ddcde",
+  "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+  "checks": {
+    "wpr": {
+      "path": "C:/Windows/System32/wpr.exe",
+      "version": "10.0.26100.8875",
+      "sha256": "baf7ca49d71027ca87add81d7a126d1fa5245bc26ccd4f7f4246914375e99b12",
+      "status": "WPR is not recording",
+      "profiles": ["Handle", "Heap", "HeapSnapshot"],
+      "handle_creator_stack_binding": false
+    },
+    "appverif": {
+      "path": "C:/Windows/System32/appverif.exe",
+      "version": "10.0.26100.7705",
+      "sha256": "9d0992e6371523118cbf69e087117488e193b5d3ed1df379a4c67430a59fab18",
+      "help_probe": "requires elevation",
+      "usable_without_external_elevation": false
+    },
+    "other": {
+      "tracerpt_present": true,
+      "logman_present": true,
+      "cdb_present": true,
+      "godot_pdb_present": false,
+      "adb_present": false
+    }
+  },
+  "result": {
+    "supported_creator_owner_attribution": false,
+    "formal_acceptance": false,
+    "status": "CAPABILITY_BOUNDARY_AUTHORITY0",
+    "decision": "NO_ENGINE_RUN_NO_FORMAL_RETRY_NO_GATE_CHANGE"
+  },
+  "limitations": [
+    "WPR profile availability alone does not prove per-handle creator or API return stacks.",
+    "Application Verifier could not be queried without elevation.",
+    "No engine, benchmark, trace session, or process mutation was performed."
+  ]
+}
