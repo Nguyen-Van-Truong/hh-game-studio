@@ -1,0 +1,40 @@
+{
+  "authority": 0,
+  "binary_sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424",
+  "decision": "bounded import differential passed; justify fresh formal dispatch without changing timeout, baseline, profile, counter, RSS, or gate; no acceptance claim",
+  "editor": {
+    "actual_exit": 0,
+    "elapsed_seconds": 11.046000000089407,
+    "handle_retained": false,
+    "job_zero_closed": true,
+    "natural_tree_exit": true,
+    "wrapper_exit": 0
+  },
+  "formal_acceptance": false,
+  "full_benchmark": false,
+  "import": {
+    "actual_exit": 0,
+    "elapsed_seconds": 6.452999999979511,
+    "handle_retained": false,
+    "job_zero_closed": true,
+    "natural_tree_exit": true,
+    "wrapper_exit": 0
+  },
+  "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+  "raw_manifest_sha256": "6e3395811085d8964c647c811a72d4761c9d09fe9b266f2c45688a6f6f39bfdc",
+  "run_id": "gt06-s214-import-diagnostic-01",
+  "schema_id": "hh-studio.gt06-s214-import-diagnostic-analysis",
+  "schema_version": "1.0.0",
+  "scope": "one GUI editor and one direct semantic cycle; no formal host/API campaign",
+  "source_domains": {
+    "decision": "keep the 53-file formal closure for any GT06 campaign; diagnostic closure is retained only for its bounded route",
+    "diagnostic_run_native_benchmark": {
+      "closure_sha256": "6cabd778bed85bcb0b14bfdd942fd7c6d22e30df9f5f94b1a17e7cb8ea306577",
+      "files": 39
+    },
+    "formal_run_benchmark_campaign": {
+      "closure_sha256": "6f6c96d4014f4bf1509052c50013dcadd1a27e3671728b80de19f2e3c5bf8127",
+      "files": 53
+    }
+  }
+}
