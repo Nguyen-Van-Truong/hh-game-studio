@@ -35,3 +35,20 @@ static presence as PASS. When GT06 is accepted, begin with GT07 using fresh
 run and command IDs, then advance sequentially. If a required device or
 dependency is unavailable, preserve the preparation and wait for that external
 state rather than retrying an unchanged lane.
+
+## Bounded static verification
+
+These suites were run sequentially on 2026-09-23 with no Godot, Blender,
+debugger, or benchmark process active. They are pure Python tests and do not
+constitute gate acceptance:
+
+```text
+python -m unittest discover -s 8-9-hh3d-3/studio/tests/protocol -p test_transport_recovery.py -v  -> 17 passed
+python -m unittest discover -s 8-9-hh3d-3/studio/tests/blender -p test_export_cleanup.py -v       -> 6 passed
+python -m unittest discover -s 8-9-hh3d-3/studio/tests/reviewer -p test_client_adversarial.py -v -> 13 passed
+```
+
+Total: 36/36 static tests passed. The result confirms the existing recovery,
+export-cleanup, and adversarial-client foundations are runnable; it does not
+prove live cross-process behavior, physical Android compatibility, or any
+GT06/GT07–GT10 acceptance row.
