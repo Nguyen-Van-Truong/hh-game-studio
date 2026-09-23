@@ -1,0 +1,1632 @@
+{
+  "schema_id": "hh-studio.gt06-s191-failure-attribution",
+  "schema_version": "1.0.0",
+  "campaign_id": "gt06-s190-formal-01",
+  "run_id": "gt06-s190-formal-01.r00.a01",
+  "source_closure_sha256": "fc46cfd2e80e8d78024b6a31c6c72be64f33d83aab4fe1abebaf899907f0e205",
+  "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+  "formal_acceptance": false,
+  "status": "FAILED_TERMINAL_ANALYSIS",
+  "failure": {
+    "code": "CAMPAIGN_RETAINED_COUNTER_GROWTH",
+    "completed_batches": 11,
+    "phase": {
+      "batch": 10,
+      "phase": "joint_observation"
+    },
+    "screen_boundary": "batch_10_joint_observation",
+    "full_run": false
+  },
+  "samples": [
+    {
+      "index": 0,
+      "warmup": true,
+      "editor_held_handles": 559,
+      "editor_rss_bytes": 587632640,
+      "editor_objects": 71128,
+      "editor_resources": 6,
+      "host_held_handles": 204,
+      "max_status_gap_ms": 1289.9655,
+      "cycles": 100,
+      "dropped_commands": 0,
+      "dropped_telemetry": 0
+    },
+    {
+      "index": 1,
+      "warmup": true,
+      "editor_held_handles": 555,
+      "editor_rss_bytes": 305299456,
+      "editor_objects": 71128,
+      "editor_resources": 6,
+      "host_held_handles": 204,
+      "max_status_gap_ms": 921.0556,
+      "cycles": 100,
+      "dropped_commands": 0,
+      "dropped_telemetry": 0
+    },
+    {
+      "index": 2,
+      "warmup": true,
+      "editor_held_handles": 561,
+      "editor_rss_bytes": 212008960,
+      "editor_objects": 71128,
+      "editor_resources": 6,
+      "host_held_handles": 204,
+      "max_status_gap_ms": 1743.3024,
+      "cycles": 100,
+      "dropped_commands": 0,
+      "dropped_telemetry": 0
+    },
+    {
+      "index": 3,
+      "warmup": true,
+      "editor_held_handles": 555,
+      "editor_rss_bytes": 148221952,
+      "editor_objects": 71128,
+      "editor_resources": 6,
+      "host_held_handles": 204,
+      "max_status_gap_ms": 1824.934,
+      "cycles": 100,
+      "dropped_commands": 0,
+      "dropped_telemetry": 0
+    },
+    {
+      "index": 4,
+      "warmup": true,
+      "editor_held_handles": 555,
+      "editor_rss_bytes": 130785280,
+      "editor_objects": 71128,
+      "editor_resources": 6,
+      "host_held_handles": 204,
+      "max_status_gap_ms": 640.374,
+      "cycles": 100,
+      "dropped_commands": 0,
+      "dropped_telemetry": 0
+    },
+    {
+      "index": 5,
+      "warmup": false,
+      "editor_held_handles": 555,
+      "editor_rss_bytes": 121520128,
+      "editor_objects": 71128,
+      "editor_resources": 6,
+      "host_held_handles": 204,
+      "max_status_gap_ms": 924.174,
+      "cycles": 100,
+      "dropped_commands": 0,
+      "dropped_telemetry": 0
+    },
+    {
+      "index": 6,
+      "warmup": false,
+      "editor_held_handles": 555,
+      "editor_rss_bytes": 113360896,
+      "editor_objects": 71128,
+      "editor_resources": 6,
+      "host_held_handles": 204,
+      "max_status_gap_ms": 683.772,
+      "cycles": 100,
+      "dropped_commands": 0,
+      "dropped_telemetry": 0
+    },
+    {
+      "index": 7,
+      "warmup": false,
+      "editor_held_handles": 555,
+      "editor_rss_bytes": 114368512,
+      "editor_objects": 71128,
+      "editor_resources": 6,
+      "host_held_handles": 204,
+      "max_status_gap_ms": 716.794,
+      "cycles": 100,
+      "dropped_commands": 0,
+      "dropped_telemetry": 0
+    },
+    {
+      "index": 8,
+      "warmup": false,
+      "editor_held_handles": 555,
+      "editor_rss_bytes": 111525888,
+      "editor_objects": 71128,
+      "editor_resources": 6,
+      "host_held_handles": 204,
+      "max_status_gap_ms": 664.4203,
+      "cycles": 100,
+      "dropped_commands": 0,
+      "dropped_telemetry": 0
+    },
+    {
+      "index": 9,
+      "warmup": false,
+      "editor_held_handles": 555,
+      "editor_rss_bytes": 112640000,
+      "editor_objects": 71128,
+      "editor_resources": 6,
+      "host_held_handles": 204,
+      "max_status_gap_ms": 623.957,
+      "cycles": 100,
+      "dropped_commands": 0,
+      "dropped_telemetry": 0
+    },
+    {
+      "index": 10,
+      "warmup": false,
+      "editor_held_handles": 557,
+      "editor_rss_bytes": 111886336,
+      "editor_objects": 71128,
+      "editor_resources": 6,
+      "host_held_handles": 204,
+      "max_status_gap_ms": 838.5832,
+      "cycles": 100,
+      "dropped_commands": 0,
+      "dropped_telemetry": 0
+    }
+  ],
+  "attribution": {
+    "baseline_after_batch": 4,
+    "editor_handles_baseline": 555,
+    "editor_handles_at_failure": 557,
+    "editor_handle_delta": 2,
+    "host_handles_baseline": 204,
+    "host_handles_at_failure": 204,
+    "editor_objects_stable": true,
+    "editor_resources_stable": true,
+    "editor_rss_decreased_from_baseline": true,
+    "transport_failures_observed": 0,
+    "root_cause_or_leak_proven": false,
+    "authority": 0
+  },
+  "cleanup": {
+    "host_actual_exit": {
+      "pid": 11260,
+      "exit_code": 1
+    },
+    "import_actual_exit": {
+      "pid": 50220,
+      "exit_code": 0
+    },
+    "editor_target_exit": null,
+    "editor_target_exit_status": "UNKNOWN_TARGET_EXIT_NOT_RECORDED",
+    "editor_cleanup": {
+      "closed": true,
+      "completed": false,
+      "failure_code": "BENCHMARK_CLOSED_BEFORE_FINISH",
+      "job": {
+        "active_count": 0,
+        "assigned": true,
+        "close_uncertain": false,
+        "closed": true,
+        "configured": true,
+        "create_uncertain": false,
+        "failed_operations": [],
+        "handle_retained": false,
+        "native_error": null,
+        "tainted": false,
+        "zero_observed": true
+      },
+      "wrapper_exit_code": 2,
+      "wrapper_process_handle": {
+        "close_uncertain": false,
+        "closed": true,
+        "handle_retained": false,
+        "required": true
+      }
+    },
+    "owned_tree_zero": true,
+    "wrapper_handle_retained": false,
+    "producer_closed": true,
+    "threads_stopped": [
+      false,
+      false,
+      false
+    ],
+    "scheduler_status_scope": "state=3,last_task_result=1,instances=[]; scheduler only, not target exit proof"
+  },
+  "decision": "Retain raw and seal. Do not accept GT06, do not claim leak/root cause, do not retry S190 ID, do not change gate/timeout/baseline/profile/counter/RSS. Read the counter boundary and repair only a proven collector/harness boundary before any fresh campaign.",
+  "archive": {
+    "path": "studio/.local/archives/gt06-s190-formal-01-s191-terminal.zip",
+    "sha256": "c6e8c7e2fa9018c9b9980cfbe969327585ae4ce594df9efdc2f7116b8ddb5cd1",
+    "size_bytes": 11044310
+  },
+  "raw_manifest": {
+    "file_count": 279,
+    "total_bytes": 59090454,
+    "files": [
+      {
+        "path": "benchmark-profile.json",
+        "size_bytes": 718,
+        "sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85"
+      },
+      {
+        "path": "campaign.json",
+        "size_bytes": 6727,
+        "sha256": "66feed774f52be04ae83d06deb07f82d267ab216757daa1cadb250423985e54a"
+      },
+      {
+        "path": "run-00-attempt-01/batch-capture-00.json",
+        "size_bytes": 868,
+        "sha256": "0eb5ca8acf311908adeeedb0bd876f5fffac0b1b76cc68e69cf25eef0c9eb7c7"
+      },
+      {
+        "path": "run-00-attempt-01/batch-capture-01.json",
+        "size_bytes": 868,
+        "sha256": "5d520110926bb2f50d1e7eb4762e5fa6187f77ba3db05198d82f1d3f274be119"
+      },
+      {
+        "path": "run-00-attempt-01/batch-capture-02.json",
+        "size_bytes": 868,
+        "sha256": "f67489d2955394152d82103b4b2ff8c4d1ca3988001ea9901cbdb52e38a7639a"
+      },
+      {
+        "path": "run-00-attempt-01/batch-capture-03.json",
+        "size_bytes": 868,
+        "sha256": "59f75dc9d444d674649dc7a2dfe5b56d8438f8810ab4ed0395b0c4f97cb50194"
+      },
+      {
+        "path": "run-00-attempt-01/batch-capture-04.json",
+        "size_bytes": 868,
+        "sha256": "d60bac0349ace979fd236add2c092723f77232e8d778a15d69b285149b5e38f6"
+      },
+      {
+        "path": "run-00-attempt-01/batch-capture-05.json",
+        "size_bytes": 868,
+        "sha256": "feb51a066cef455f6cebfd739cc9db69b6f30b40a0f9d0b4c85cce679f34f7ae"
+      },
+      {
+        "path": "run-00-attempt-01/batch-capture-06.json",
+        "size_bytes": 868,
+        "sha256": "102da397efd907b3fa290b9df5729d2e0a1dcce2ac6d69e6945361913a5424df"
+      },
+      {
+        "path": "run-00-attempt-01/batch-capture-07.json",
+        "size_bytes": 868,
+        "sha256": "a29f1f21a0dfe32042beb7baa40b24c1f766e6f9ea07d49baf80c9e67f0a495c"
+      },
+      {
+        "path": "run-00-attempt-01/batch-capture-08.json",
+        "size_bytes": 868,
+        "sha256": "a734e2529d5da7a189011325f1e3bfef0cc6d22ccc110f3b7b5e8d5c7997f577"
+      },
+      {
+        "path": "run-00-attempt-01/batch-capture-09.json",
+        "size_bytes": 868,
+        "sha256": "149efbee0876b27f414cfd5c1fcca87ce871126ee82eca568e6ec514c4daa25f"
+      },
+      {
+        "path": "run-00-attempt-01/batch-capture-10.json",
+        "size_bytes": 869,
+        "sha256": "4a41856c3f9dd8366500e2325d017d6a905db4b3097f9fa29a95e322a648acf8"
+      },
+      {
+        "path": "run-00-attempt-01/benchmark-profile.json",
+        "size_bytes": 718,
+        "sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85"
+      },
+      {
+        "path": "run-00-attempt-01/child-failure.json",
+        "size_bytes": 222,
+        "sha256": "dca3806bbd4130505165db5a04d61b9acdd765c5fc32e01f3db8cd145348071e"
+      },
+      {
+        "path": "run-00-attempt-01/child-terminal-cleanup.json",
+        "size_bytes": 3741,
+        "sha256": "353efb4021d3518bf49ee988f0a0085925b4e51fde467c9d898b5b25385bca4a"
+      },
+      {
+        "path": "run-00-attempt-01/command-00.json",
+        "size_bytes": 4197277,
+        "sha256": "fdf0aaaacf9a6113dee168ab6aeebc33d5c8e47aca39066cbcf7041e38ca0e29"
+      },
+      {
+        "path": "run-00-attempt-01/command-01.json",
+        "size_bytes": 2870012,
+        "sha256": "02fb42b38ed2159fcb74ba6cab51ad7b251537eb4084dcf5220a58c3583c8083"
+      },
+      {
+        "path": "run-00-attempt-01/command-02.json",
+        "size_bytes": 3306532,
+        "sha256": "3c7522f2eb68a31ebaeb3d71178ac586bb011dfa7639bef5b1cae3bbc1ea4aa1"
+      },
+      {
+        "path": "run-00-attempt-01/command-03.json",
+        "size_bytes": 2715569,
+        "sha256": "aa5a38b79505b2e10d67c6c7b70aaef5403b7389ecea80feb8b9baf9c431c68b"
+      },
+      {
+        "path": "run-00-attempt-01/command-04.json",
+        "size_bytes": 2672360,
+        "sha256": "4e232bf6272894f90a5211c352152914539032c76367b5d6171eaeb192b7364a"
+      },
+      {
+        "path": "run-00-attempt-01/command-05.json",
+        "size_bytes": 2609566,
+        "sha256": "ba3c9214648f1cb8c6a8c7f511097340f27455ab13e7c73c168b904610d2ad65"
+      },
+      {
+        "path": "run-00-attempt-01/command-06.json",
+        "size_bytes": 2629712,
+        "sha256": "4dddae31a30fccd09cbeac4cabe668cf900b6fb5d781c222ee9a677c4a000d2b"
+      },
+      {
+        "path": "run-00-attempt-01/command-07.json",
+        "size_bytes": 2719319,
+        "sha256": "9880ced0acecc575c3f90ec3188ac688098d66cd277c67af1eac1f0dd3dfbf90"
+      },
+      {
+        "path": "run-00-attempt-01/command-08.json",
+        "size_bytes": 2583138,
+        "sha256": "79a9808371f75dfcd7f0133055599e460f9d651b5583734e89965c3eeae062d8"
+      },
+      {
+        "path": "run-00-attempt-01/command-09.json",
+        "size_bytes": 2724539,
+        "sha256": "0588bd008ba8e9f70a7c6ffa7c22c7d2d9f15fd7d4b383d4aa0098b937bdcc88"
+      },
+      {
+        "path": "run-00-attempt-01/command-10.json",
+        "size_bytes": 2641182,
+        "sha256": "f4bec1a1b462e9d9e621bf960363bb8adc37504343c9909faa81dce088571b84"
+      },
+      {
+        "path": "run-00-attempt-01/commands/commands.jsonl",
+        "size_bytes": 10806229,
+        "sha256": "ad8092c6d6cd328da4ab3ac2983e7937f5bf5c151d0475a1dd598f5fcddeb845"
+      },
+      {
+        "path": "run-00-attempt-01/commands/commands.jsonl.guard",
+        "size_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "run-00-attempt-01/context.json",
+        "size_bytes": 5712,
+        "sha256": "76e601b6486799a6423d8868fbbbb33cdd39b6a036f7fa2db6b1aad3fd0f2d3d"
+      },
+      {
+        "path": "run-00-attempt-01/editor-host/cleanup-001.json",
+        "size_bytes": 556,
+        "sha256": "9ff26d2260e6188703654517521ac75e80f618c4e517723042f5f4babc109ee1"
+      },
+      {
+        "path": "run-00-attempt-01/editor-host/invocation.json",
+        "size_bytes": 9350,
+        "sha256": "13c15cb050c4b706d7fdcce0b800993dc1fe18f9b49982e497e9ca2c5d2c6691"
+      },
+      {
+        "path": "run-00-attempt-01/editor-host/localappdata/Godot/editor_doc_cache-4.7.res",
+        "size_bytes": 3269805,
+        "sha256": "7e2eab960d538c3d1af86736f6d8992f28fbebff6d84cb5a88011fb04c29f57b"
+      },
+      {
+        "path": "run-00-attempt-01/editor-host/localappdata/Godot/resthumb-12b764c4725d1fa55f1c13451cc4979a.png",
+        "size_bytes": 414,
+        "sha256": "3be5f43c5f5c1dfa41cc8c26587f6a18613ce89ee346e425b10806dbd8095def"
+      },
+      {
+        "path": "run-00-attempt-01/editor-host/localappdata/Godot/resthumb-12b764c4725d1fa55f1c13451cc4979a.txt",
+        "size_bytes": 54,
+        "sha256": "6b98e47744fb41a179530e4349960bb8b5cb93022d21137cf57509addd6abac9"
+      },
+      {
+        "path": "run-00-attempt-01/editor-host/localappdata/Godot/resthumb-5faf5735b67273b83f39db80b79896f2.png",
+        "size_bytes": 4078,
+        "sha256": "622f6f4030ce8e1175ca099665e7a24bd9936058955832090b7858f5911275c9"
+      },
+      {
+        "path": "run-00-attempt-01/editor-host/localappdata/Godot/resthumb-5faf5735b67273b83f39db80b79896f2.txt",
+        "size_bytes": 54,
+        "sha256": "0c64e63da37f4a41a6f9ff0a0dac4bf86a04d559cddc80ca904251af23c15b74"
+      },
+      {
+        "path": "run-00-attempt-01/editor-host/localappdata/Godot/resthumb-82bdcac469231a7065decfbc04e30e78.png",
+        "size_bytes": 831,
+        "sha256": "f4f80b42111aa8d85a33f670f2753c6cda52fd0698e9868183ae652d9a4f6a6b"
+      },
+      {
+        "path": "run-00-attempt-01/editor-host/localappdata/Godot/resthumb-82bdcac469231a7065decfbc04e30e78.txt",
+        "size_bytes": 54,
+        "sha256": "900e7c7ad96b70b29aaa7645f679fcfd4dba405bb0675bd19af811019de8e503"
+      },
+      {
+        "path": "run-00-attempt-01/editor-host/localappdata/Godot/resthumb-8dcdff5e3ea13ade8aec5b40797aa8e0.png",
+        "size_bytes": 929,
+        "sha256": "74e4d6e17534aa3f5672f48238a56b5e660183a8dd5a919f27078d0952dcbe10"
+      },
+      {
+        "path": "run-00-attempt-01/editor-host/localappdata/Godot/resthumb-8dcdff5e3ea13ade8aec5b40797aa8e0.txt",
+        "size_bytes": 54,
+        "sha256": "7a3f33f5ca22b987c526f3c26f2c3f6411253a8959a906bca907c8f3c63edc0d"
+      },
+      {
+        "path": "run-00-attempt-01/editor-host/localappdata/Godot/resthumb-be05ba3c6e9cb56d628b4146a4598631.png",
+        "size_bytes": 755,
+        "sha256": "bbd1ff19bac55b941b0c00441099621180419d420e80eaf9ac83c2a913fb1d48"
+      },
+      {
+        "path": "run-00-attempt-01/editor-host/localappdata/Godot/resthumb-be05ba3c6e9cb56d628b4146a4598631.txt",
+        "size_bytes": 54,
+        "sha256": "8d5e5c6e8b99d8e0c1b6d8f62835e232f1bcc858530ab3f71192def3345a5dab"
+      },
+      {
+        "path": "run-00-attempt-01/editor-host/localappdata/Godot/resthumb-ee5bfbf04a95e5fb2b2188528af458f9.png",
+        "size_bytes": 852,
+        "sha256": "26623eb8019be5752051ca407aa87cff0989d8e38ce3ffb8fe2f9980bbc1386f"
+      },
+      {
+        "path": "run-00-attempt-01/editor-host/localappdata/Godot/resthumb-ee5bfbf04a95e5fb2b2188528af458f9.txt",
+        "size_bytes": 54,
+        "sha256": "5ecdd9dbc033b21ff181920b701023bb84c5ed27a75e5cf6ce4a46c9d45ff728"
+      },
+      {
+        "path": "run-00-attempt-01/editor-host/process-start.json",
+        "size_bytes": 14,
+        "sha256": "f8dd1707be5f67b7bd853328067cfe749e0f695cef6a031cfd8d3164dc0a85c9"
+      },
+      {
+        "path": "run-00-attempt-01/editor-host/stderr.txt",
+        "size_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "run-00-attempt-01/editor-host/stdout.txt",
+        "size_bytes": 517954,
+        "sha256": "1e2b7d3a669c73648f0abc2f1f528c1b26f3402c38f7c5c42e51dd28f44fd987"
+      },
+      {
+        "path": "run-00-attempt-01/editor-snapshot.json",
+        "size_bytes": 1574,
+        "sha256": "7f794983eec7dbcd188c8e935a248fec32fe8cde86bb2a20d9c4629ad9d67c5c"
+      },
+      {
+        "path": "run-00-attempt-01/host-owner/cleanup-001.json",
+        "size_bytes": 548,
+        "sha256": "31f58e29075f8f16bb2df0bb72471bfcd0df794b729d6497022554d84959cfc8"
+      },
+      {
+        "path": "run-00-attempt-01/host-owner/invocation.json",
+        "size_bytes": 6819,
+        "sha256": "dff276efbd7b699153890ee5af2875bdb5f69ae2826f680be0ba746207e2cf39"
+      },
+      {
+        "path": "run-00-attempt-01/host-owner/process-exit.json",
+        "size_bytes": 30,
+        "sha256": "3c81268c88c5e848b2715a80ce1d9926cd6bbfd310900f71b735502fbda936fc"
+      },
+      {
+        "path": "run-00-attempt-01/host-owner/process-start.json",
+        "size_bytes": 14,
+        "sha256": "403c1de7a5677a1d70a52f9319b4b9e7495a79fa1448bfea4dc9bfb14962fb08"
+      },
+      {
+        "path": "run-00-attempt-01/host-owner/stderr.txt",
+        "size_bytes": 1248,
+        "sha256": "c06965fe32c0907a8062cc5d625a2021dbf0cfecff192162c63dc9440bb8a5a0"
+      },
+      {
+        "path": "run-00-attempt-01/host-owner/stdout.txt",
+        "size_bytes": 154510,
+        "sha256": "042608fd0b801bb19cadedd8a9f2f1cd33c35e2ca5422afe6567613785738062"
+      },
+      {
+        "path": "run-00-attempt-01/http-phases-final.json",
+        "size_bytes": 2188287,
+        "sha256": "e2ec45bd2ba2f42beaf5c429a89848e0bf9ac5b7cca85041104fd5ea25177782"
+      },
+      {
+        "path": "run-00-attempt-01/import-host/appdata/Godot/editor_settings-4.7.tres",
+        "size_bytes": 17991,
+        "sha256": "23e1a60f6d66bef130dd45be3ce906f97a3851824852b317e7dfcc8780aadedf"
+      },
+      {
+        "path": "run-00-attempt-01/import-host/capture.json",
+        "size_bytes": 1341,
+        "sha256": "732ecbe4b3d41264bb94b31e45205a84e94907a7430a6bfdf444f716e01c8642"
+      },
+      {
+        "path": "run-00-attempt-01/import-host/invocation.json",
+        "size_bytes": 6431,
+        "sha256": "6bc9fdf9c6a9b5ded02b429fbdfa5e2e841df4fe542d06c6cc4dec68ef7416ff"
+      },
+      {
+        "path": "run-00-attempt-01/import-host/localappdata/Godot/editor_doc_cache-4.7.res",
+        "size_bytes": 3269733,
+        "sha256": "2c87c35d55ed0695b1bd966dbbf5c6142448982a56a781b29431815b57983232"
+      },
+      {
+        "path": "run-00-attempt-01/import-host/process-exit.json",
+        "size_bytes": 30,
+        "sha256": "096b9874b2b6ceb210147e859050653c4951f0eb62a8445d65ff0beb16d1491f"
+      },
+      {
+        "path": "run-00-attempt-01/import-host/process-start.json",
+        "size_bytes": 14,
+        "sha256": "e68bb79ae53954af994ae0b977d45a2f927a3a126208a33311123f21db5bb0ca"
+      },
+      {
+        "path": "run-00-attempt-01/import-host/stderr.txt",
+        "size_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "run-00-attempt-01/import-host/stdout.txt",
+        "size_bytes": 1492,
+        "sha256": "9b5e37b85c8c4f11090de482aee3734b6c7993ad884a62121b2adcc9dfdd6003"
+      },
+      {
+        "path": "run-00-attempt-01/import-observation.json",
+        "size_bytes": 26510,
+        "sha256": "343dcf5eef42e81f91ec9a0cf073584695ae9e09eaf40596e3f75b2d090c6a17"
+      },
+      {
+        "path": "run-00-attempt-01/initial-project-files.json",
+        "size_bytes": 1461,
+        "sha256": "a1783fc0c36663c7d750604e0974a244eb3aae857723733499484a5e171b4c8d"
+      },
+      {
+        "path": "run-00-attempt-01/joint-00.json",
+        "size_bytes": 2294,
+        "sha256": "76ab3ba285298d4100e14503dbf7d4d3fefb9edaaee3a17f0714d438aaad3abd"
+      },
+      {
+        "path": "run-00-attempt-01/joint-01.json",
+        "size_bytes": 2294,
+        "sha256": "ab8f12d587688d5e86fd768387f14a2dd745ca38332e266d32ef53afe83c0006"
+      },
+      {
+        "path": "run-00-attempt-01/joint-02.json",
+        "size_bytes": 2294,
+        "sha256": "a038ad151c177549d71fbdb9cf6ce4efcbd330378cd4718b49081aab9b05087f"
+      },
+      {
+        "path": "run-00-attempt-01/joint-03.json",
+        "size_bytes": 2294,
+        "sha256": "f76f0e0386f95e314223dee18a0e516e6bd92c3a9af0f4f4d8d1a5b05e3a9d57"
+      },
+      {
+        "path": "run-00-attempt-01/joint-04.json",
+        "size_bytes": 2295,
+        "sha256": "363ef7597f9126b47513bc062a7782fa1421cb9504149a85f09e3befcb840e26"
+      },
+      {
+        "path": "run-00-attempt-01/joint-05.json",
+        "size_bytes": 2295,
+        "sha256": "df60767851c55a641c3ff4d4520944fbaf15e8db472958e6095cc9e372f04d14"
+      },
+      {
+        "path": "run-00-attempt-01/joint-06.json",
+        "size_bytes": 2297,
+        "sha256": "9c07417419c4edcd24bd07598e1b4c4ad9596ab16752096c46069e1da3aed530"
+      },
+      {
+        "path": "run-00-attempt-01/joint-07.json",
+        "size_bytes": 2301,
+        "sha256": "3f04e82862e6ab1bb1d9536ddb26699511cae89efee92f2e6508a806bceec4bd"
+      },
+      {
+        "path": "run-00-attempt-01/joint-08.json",
+        "size_bytes": 2301,
+        "sha256": "06dc4d07b8a7a9c2b001d1ffb903c5fbec0ed7526fd222627d3d7ede9cf6cb78"
+      },
+      {
+        "path": "run-00-attempt-01/joint-09.json",
+        "size_bytes": 2302,
+        "sha256": "e19b196479fe199176c72585d31dfa27be0ff7a49d420c03db70dd56f767e63b"
+      },
+      {
+        "path": "run-00-attempt-01/joint-10.json",
+        "size_bytes": 2304,
+        "sha256": "bfb3b7d98451881726822a28f372702df99278f6cca97729885310716296fe4a"
+      },
+      {
+        "path": "run-00-attempt-01/parent-failure.json",
+        "size_bytes": 181,
+        "sha256": "47030c0e5593451a438b743d3fce958b7119e67bc80472057923a2baaffe1f25"
+      },
+      {
+        "path": "run-00-attempt-01/project/.godot/.gdignore",
+        "size_bytes": 1,
+        "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+      },
+      {
+        "path": "run-00-attempt-01/project/.godot/editor/editor_layout.cfg",
+        "size_bytes": 1436,
+        "sha256": "70dc9392e0db5a0eb260d7e07ea9d4a7ded960dd5592f61470ce37c643328b9b"
+      },
+      {
+        "path": "run-00-attempt-01/project/.godot/editor/filesystem_cache10",
+        "size_bytes": 915,
+        "sha256": "43dabcfa8dc5befe2d0909ac6a9f07a4b14c27de8074241d839b1d3145c5798a"
+      },
+      {
+        "path": "run-00-attempt-01/project/.godot/editor/filesystem_update4",
+        "size_bytes": 26,
+        "sha256": "c70b0d9ece2ebc1d5f746284eb135e9a1b5a78b6324ee9dd1daa592ee7af2497"
+      },
+      {
+        "path": "run-00-attempt-01/project/.godot/editor/fixture.tscn-editstate-a95ffd352fa9c4b59083e0b523419988.cfg",
+        "size_bytes": 4334,
+        "sha256": "324eaafaca9233dac634abc0760b0e716534f2f9b88b0084af3835a0aa688acd"
+      },
+      {
+        "path": "run-00-attempt-01/project/.godot/editor/fixture.tscn-folding-a95ffd352fa9c4b59083e0b523419988.cfg",
+        "size_bytes": 136,
+        "sha256": "9b34a7fc95b0f9cd640941851bbb0ebc8777e0666f5560e828143047b26c7c93"
+      },
+      {
+        "path": "run-00-attempt-01/project/.godot/editor/project_metadata.cfg",
+        "size_bytes": 273,
+        "sha256": "0817ad8476545d590bf74763cdb7a6e06d1e4227ade6a9050aabdf38ff86195b"
+      },
+      {
+        "path": "run-00-attempt-01/project/.godot/editor/script_editor_cache.cfg",
+        "size_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "run-00-attempt-01/project/.godot/global_script_class_cache.cfg",
+        "size_bytes": 8,
+        "sha256": "f61aa7ad3097022d6a9d110ca3f73fa7bb348ec2cf9a6e7c9523574dc75f5a16"
+      },
+      {
+        "path": "run-00-attempt-01/project/.godot/scene_groups_cache.cfg",
+        "size_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "run-00-attempt-01/project/.godot/shader_cache/CanvasShaderGLES3/076cc7f5ca018594656711ce99da014402bbd19aa1eb794136d4aa1fc1916d27/6bb7c9a2fd1c4a8fa77cb96555b9b4a720209981.cache",
+        "size_bytes": 51577,
+        "sha256": "6cec45f2eda0558e68dc8ad64d0a1eb947499f8654e7375cad9b90effc879139"
+      },
+      {
+        "path": "run-00-attempt-01/project/.godot/shader_cache/CopyShaderGLES3/be890b216e2b3fe916307830870fee480049474f8a9590e668b7db55f4333ca0/6bb7c9a2fd1c4a8fa77cb96555b9b4a720209981.cache",
+        "size_bytes": 118055,
+        "sha256": "ebf0913a9ce415e4875548336ed40b5fc6097eba9347f1d5adf725933e32d856"
+      },
+      {
+        "path": "run-00-attempt-01/project/.godot/shader_cache/CubemapFilterShaderGLES3/f2f060f7884cfc963ab277935a694190c41dc5319199dc60ed40febaeed22ca7/6bb7c9a2fd1c4a8fa77cb96555b9b4a720209981.cache",
+        "size_bytes": 26057,
+        "sha256": "435c8f850c1bd94abd4d3e894f5ba711a789f0086ae6026581e73f3b9a11e824"
+      },
+      {
+        "path": "run-00-attempt-01/project/.godot/shader_cache/FeedShaderGLES3/d18a5be4b160faacb02638af5d95197a20d24a8ee2964a921fecdd0450ccfe03/6bb7c9a2fd1c4a8fa77cb96555b9b4a720209981.cache",
+        "size_bytes": 8261,
+        "sha256": "b6df602f53d5024a25010db7aff3f1b67af74065740e244d55c0b41a8cc79c51"
+      },
+      {
+        "path": "run-00-attempt-01/project/.godot/shader_cache/PostShaderGLES3/591ad1dc6444d48fbbe21612a2afd78e25aaf929315adddd90df3789fa6e5af1/6bb7c9a2fd1c4a8fa77cb96555b9b4a720209981.cache",
+        "size_bytes": 13656,
+        "sha256": "3af7f8995c441228a8b080d8f5fe4daacb9db3985b379c55f60716267277fdf5"
+      },
+      {
+        "path": "run-00-attempt-01/project/.godot/shader_cache/SceneShaderGLES3/ebd5ef628945fec79c8fb620654e1e6dfffb8249acd83a4803b1a534aadcbced/6bb7c9a2fd1c4a8fa77cb96555b9b4a720209981.cache",
+        "size_bytes": 800909,
+        "sha256": "09806172f49f52f95fc1e6f65aab0af2ef67d196651202afaf5687f44795a4e8"
+      },
+      {
+        "path": "run-00-attempt-01/project/.godot/shader_cache/SceneShaderGLES3/ebd5ef628945fec79c8fb620654e1e6dfffb8249acd83a4803b1a534aadcbced/77047cd41f429f33ceff24e890e174f5465e755e.cache",
+        "size_bytes": 920188,
+        "sha256": "1935a26ee16cd02a7c7690ef60ec4ca06259238ba9b08f52e802c3a44b8e27db"
+      },
+      {
+        "path": "run-00-attempt-01/project/.godot/shader_cache/SceneShaderGLES3/ebd5ef628945fec79c8fb620654e1e6dfffb8249acd83a4803b1a534aadcbced/a38af2d0725c8e99d8492f4c72736f24d6a54cc5.cache",
+        "size_bytes": 738963,
+        "sha256": "75d41cb83832ab66d24c4c078b9da108749ae4394b3983f39c47c9e7dab4b535"
+      },
+      {
+        "path": "run-00-attempt-01/project/.godot/shader_cache/SceneShaderGLES3/ebd5ef628945fec79c8fb620654e1e6dfffb8249acd83a4803b1a534aadcbced/cafb1506f2db0c3681435e264aa18e216d1a7a40.cache",
+        "size_bytes": 729679,
+        "sha256": "b0ddaf6143b423306e009cc0751608313a5dae8f02f4b05e9b740b1f4ef31c37"
+      },
+      {
+        "path": "run-00-attempt-01/project/.godot/shader_cache/SkyShaderGLES3/c1a447880507cb68532c47caeeb2a80984019a797946a43cd3c056a918a45c98/2c82eb5fea9b549e20c9f41e308abf9a4fc5d76f.cache",
+        "size_bytes": 55632,
+        "sha256": "85325723c2dd7c57bf61465813f1f3dedde38446460f4b7aaf09002a523c080d"
+      },
+      {
+        "path": "run-00-attempt-01/project/.godot/uid_cache.bin",
+        "size_bytes": 283,
+        "sha256": "5a09f44210cc375bb3bb0d2df67d570e766fd485097ca0920f678c435e11ec99"
+      },
+      {
+        "path": "run-00-attempt-01/project/addons/hh_benchmark/benchmark_native.gd",
+        "size_bytes": 54580,
+        "sha256": "13e65360cd0bc0033d0ad414fb3238e216b0d6dcc08e57dc7026ec4fc9eb8b95"
+      },
+      {
+        "path": "run-00-attempt-01/project/addons/hh_benchmark/benchmark_native.gd.uid",
+        "size_bytes": 20,
+        "sha256": "a3276526a45b0947965883d5c27469e09370a4591f9cee7ad868d23ba6dcde7a"
+      },
+      {
+        "path": "run-00-attempt-01/project/addons/hh_benchmark/plugin.cfg",
+        "size_bytes": 189,
+        "sha256": "648d8821a36d0abc825ef1f380b4917639074302a619cb25a798df987a5a1092"
+      },
+      {
+        "path": "run-00-attempt-01/project/addons/hh_studio/jcs_godot.gd",
+        "size_bytes": 10165,
+        "sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5"
+      },
+      {
+        "path": "run-00-attempt-01/project/addons/hh_studio/jcs_godot.gd.uid",
+        "size_bytes": 20,
+        "sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b"
+      },
+      {
+        "path": "run-00-attempt-01/project/addons/hh_studio/plugin.cfg",
+        "size_bytes": 165,
+        "sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c"
+      },
+      {
+        "path": "run-00-attempt-01/project/addons/hh_studio/plugin.gd",
+        "size_bytes": 23043,
+        "sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036"
+      },
+      {
+        "path": "run-00-attempt-01/project/addons/hh_studio/plugin.gd.uid",
+        "size_bytes": 20,
+        "sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d"
+      },
+      {
+        "path": "run-00-attempt-01/project/addons/hh_studio/scene_commands.gd",
+        "size_bytes": 32174,
+        "sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069"
+      },
+      {
+        "path": "run-00-attempt-01/project/addons/hh_studio/scene_commands.gd.uid",
+        "size_bytes": 19,
+        "sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69"
+      },
+      {
+        "path": "run-00-attempt-01/project/benchmark/.gdignore",
+        "size_bytes": 53,
+        "sha256": "3d078ee3c08af2f64daca29255d23d366dc0a9bdbef8a872442d5642bfb84cf8"
+      },
+      {
+        "path": "run-00-attempt-01/project/benchmark/input/ack-00.json",
+        "size_bytes": 422,
+        "sha256": "694deb45f8c0f2ed9d2363505bfe7e76918d83a780c9b3290ea927b96e3b0552"
+      },
+      {
+        "path": "run-00-attempt-01/project/benchmark/input/ack-01.json",
+        "size_bytes": 422,
+        "sha256": "dd172596dae767ffac4e33d2760c12f1c02ade72c549c7e65957e3efbfd722e6"
+      },
+      {
+        "path": "run-00-attempt-01/project/benchmark/input/ack-02.json",
+        "size_bytes": 422,
+        "sha256": "43587b46c4d27b5bab89cd7d1b566a95cc5c0417369a3adf0b2b66f2422265fc"
+      },
+      {
+        "path": "run-00-attempt-01/project/benchmark/input/ack-03.json",
+        "size_bytes": 422,
+        "sha256": "94fcdc4a4be210d239848b31601e40014c241ea5bdb5856b4ffb19d1def1177f"
+      },
+      {
+        "path": "run-00-attempt-01/project/benchmark/input/ack-04.json",
+        "size_bytes": 422,
+        "sha256": "c7ad2ff7c20eb1aa94f296d0ee36786a0939532c1bec99ab987203577d4b33c5"
+      },
+      {
+        "path": "run-00-attempt-01/project/benchmark/input/ack-05.json",
+        "size_bytes": 422,
+        "sha256": "e33c88680cbc105bc93d3905cf72a987788b0a2f549e4e8bd61ace7b91b01551"
+      },
+      {
+        "path": "run-00-attempt-01/project/benchmark/input/ack-06.json",
+        "size_bytes": 422,
+        "sha256": "4a5687a8dcc031a52b9501d2475e79afa4cb95001730f8331faa538f78fb0980"
+      },
+      {
+        "path": "run-00-attempt-01/project/benchmark/input/ack-07.json",
+        "size_bytes": 423,
+        "sha256": "8e6367aabe3ebec4af5e2a64d0459d29d264e641379979149c8a3256794b31cc"
+      },
+      {
+        "path": "run-00-attempt-01/project/benchmark/input/ack-08.json",
+        "size_bytes": 423,
+        "sha256": "663b0d5258f6d04f93e48f2bda7abce16a79905abcf2282e7e924c329672c7b0"
+      },
+      {
+        "path": "run-00-attempt-01/project/benchmark/input/ack-09.json",
+        "size_bytes": 423,
+        "sha256": "f4fe1ce714a26c868d1b7cc606c97b913ac11bb0b257dae72e07ed07f1b44eaf"
+      },
+      {
+        "path": "run-00-attempt-01/project/benchmark/input/ack-10.json",
+        "size_bytes": 424,
+        "sha256": "5a945e52050210c6bb11b2eebeb9e189b5ad7491cae14134da29b583ba42583f"
+      },
+      {
+        "path": "run-00-attempt-01/project/benchmark/input/start-00.json",
+        "size_bytes": 507,
+        "sha256": "321471f0b0b201ca4bfbb09b6722395074c9bedde8bb5a9322d4703874f69632"
+      },
+      {
+        "path": "run-00-attempt-01/project/benchmark/input/start-01.json",
+        "size_bytes": 507,
+        "sha256": "042011d28a47780fb245d4926566407d532c06391a869886e39aa97379d2b831"
+      },
+      {
+        "path": "run-00-attempt-01/project/benchmark/input/start-02.json",
+        "size_bytes": 507,
+        "sha256": "2348401ba0282f1e356eb3c9f35216f4ec5082addd360532cd473cfeeb900da1"
+      },
+      {
+        "path": "run-00-attempt-01/project/benchmark/input/start-03.json",
+        "size_bytes": 508,
+        "sha256": "242e8c75e122b5ef07b91780ada0252a9bd64c24a17d0b4458d99f95fc4c7b14"
+      },
+      {
+        "path": "run-00-attempt-01/project/benchmark/input/start-04.json",
+        "size_bytes": 508,
+        "sha256": "1bd93a32bd8afcbc5aaaa2c69059c338728c99a11cf4f4985e6073a5926d4eda"
+      },
+      {
+        "path": "run-00-attempt-01/project/benchmark/input/start-05.json",
+        "size_bytes": 508,
+        "sha256": "1905f9f5f6151676efb9b4b2544f806a8ac4e9be7d3722f953c1961d4ce2700d"
+      },
+      {
+        "path": "run-00-attempt-01/project/benchmark/input/start-06.json",
+        "size_bytes": 508,
+        "sha256": "46c8310dd0cf3085a3c36ef1e12985aa96e042ecc721fbe13160a8982f03d2da"
+      },
+      {
+        "path": "run-00-attempt-01/project/benchmark/input/start-07.json",
+        "size_bytes": 508,
+        "sha256": "190a17397fc699177dbe5dd33e20c1e6288b28f88d947f27def4db479741c18c"
+      },
+      {
+        "path": "run-00-attempt-01/project/benchmark/input/start-08.json",
+        "size_bytes": 508,
+        "sha256": "34ca54e175be590982f6583906b0d6b341d9159d30c5de274bc783d65d83fbe4"
+      },
+      {
+        "path": "run-00-attempt-01/project/benchmark/input/start-09.json",
+        "size_bytes": 508,
+        "sha256": "a923ca829e1a1212655cbd99f40efea7945a7f0e4f41bde1e4efd5c044d54996"
+      },
+      {
+        "path": "run-00-attempt-01/project/benchmark/input/start-10.json",
+        "size_bytes": 509,
+        "sha256": "b5cafcbc5139113789be085342fad6461e697182a2e28d2d64da561c660dc7ed"
+      },
+      {
+        "path": "run-00-attempt-01/project/benchmark/input.json",
+        "size_bytes": 367,
+        "sha256": "394d381efa726d788d65ec85f27796d1cdfbe61b2b9cbd38935a7a508c0f9add"
+      },
+      {
+        "path": "run-00-attempt-01/project/benchmark/out/batch-00.json",
+        "size_bytes": 98092,
+        "sha256": "33940d689f6fda31cb10e229e9ddbb5ac783d501c541d74198eb91c73df56843"
+      },
+      {
+        "path": "run-00-attempt-01/project/benchmark/out/batch-01.json",
+        "size_bytes": 98317,
+        "sha256": "d220c7c31e4268c459f002372586347e876951db4d958a8fdc262fbb38bec817"
+      },
+      {
+        "path": "run-00-attempt-01/project/benchmark/out/batch-02.json",
+        "size_bytes": 98301,
+        "sha256": "b77835131e4b61f0b7fa28df60fbb147875b6cb2269969f8cb2ace59964c30d6"
+      },
+      {
+        "path": "run-00-attempt-01/project/benchmark/out/batch-03.json",
+        "size_bytes": 98283,
+        "sha256": "354b13c104a1c231d12530dc8118a3c7cca3531fbfacdd446829e693193587d6"
+      },
+      {
+        "path": "run-00-attempt-01/project/benchmark/out/batch-04.json",
+        "size_bytes": 98283,
+        "sha256": "8c4375a42f1b02c7c3dcb78007e81bdad22608e63da9623fd1caec72cb863f29"
+      },
+      {
+        "path": "run-00-attempt-01/project/benchmark/out/batch-05.json",
+        "size_bytes": 98327,
+        "sha256": "8da41de2326664b6bda5ce25c80b091b3ae225bd90e974c68f3590cf4c6506a2"
+      },
+      {
+        "path": "run-00-attempt-01/project/benchmark/out/batch-06.json",
+        "size_bytes": 98405,
+        "sha256": "348f29a418e7114c8d19ab63431d03741c965b27a5886f944ff71da829c48591"
+      },
+      {
+        "path": "run-00-attempt-01/project/benchmark/out/batch-07.json",
+        "size_bytes": 99288,
+        "sha256": "aad36e3845469560248a98724c0ef45ff8fb8490e413445a5897819b59e3e7eb"
+      },
+      {
+        "path": "run-00-attempt-01/project/benchmark/out/batch-08.json",
+        "size_bytes": 99294,
+        "sha256": "aa139018ccdf7cf51ee805c616724b3f9ffb29a2f3fc0ae77b95de9816132ba4"
+      },
+      {
+        "path": "run-00-attempt-01/project/benchmark/out/batch-09.json",
+        "size_bytes": 99319,
+        "sha256": "70f5169960a47462326b982f24bae1403fe1a8b53edd7a6e4a06f94bafabd143"
+      },
+      {
+        "path": "run-00-attempt-01/project/benchmark/out/batch-10.json",
+        "size_bytes": 99701,
+        "sha256": "2c5f0031812f49fc5479e0f1c1f0a162ba75330a42e34b97230ec6b759731d3e"
+      },
+      {
+        "path": "run-00-attempt-01/project/benchmark/out/ready-00.json",
+        "size_bytes": 658,
+        "sha256": "da57fb7d869fcdca3c8f8b51ad581d8e2ca6176ade9aa36f70973d08152fd737"
+      },
+      {
+        "path": "run-00-attempt-01/project/benchmark/out/ready-01.json",
+        "size_bytes": 663,
+        "sha256": "4a4888bd2d293d1ea9117d2a79fbc8f9be421f152854ff86343adc1130b1b781"
+      },
+      {
+        "path": "run-00-attempt-01/project/benchmark/out/ready-02.json",
+        "size_bytes": 663,
+        "sha256": "6c3243c3619fb1d47f7425258262e63ff396e439475d21f5d4dd22cc4bce063d"
+      },
+      {
+        "path": "run-00-attempt-01/project/benchmark/out/ready-03.json",
+        "size_bytes": 664,
+        "sha256": "010bba54aa2cdc38e235ea6b8eae1279925d93d3b5fd5deb5de5a293958df7e4"
+      },
+      {
+        "path": "run-00-attempt-01/project/benchmark/out/ready-04.json",
+        "size_bytes": 664,
+        "sha256": "7d01e986ff68796c04881fcff9ca7457d567eda41fd9d474ece086b9c21748d3"
+      },
+      {
+        "path": "run-00-attempt-01/project/benchmark/out/ready-05.json",
+        "size_bytes": 664,
+        "sha256": "87cb937d2a5ee6b23561c65eedb5c4a25ed4ce32b1dbe66d3a853f6a1cc3ff4b"
+      },
+      {
+        "path": "run-00-attempt-01/project/benchmark/out/ready-06.json",
+        "size_bytes": 664,
+        "sha256": "31ff7dfda2e94eb23aac8bfd868dbb2d9960dfccb764efe2f5df4fc8170bc51e"
+      },
+      {
+        "path": "run-00-attempt-01/project/benchmark/out/ready-07.json",
+        "size_bytes": 665,
+        "sha256": "18a31ff6b988509466905410621bd1b0a728edd36ec06f284c5be3667c359390"
+      },
+      {
+        "path": "run-00-attempt-01/project/benchmark/out/ready-08.json",
+        "size_bytes": 666,
+        "sha256": "4643a3894bfcf0eba4175c0548cbbaea149c952aa483fb4629a6957a6af22b8c"
+      },
+      {
+        "path": "run-00-attempt-01/project/benchmark/out/ready-09.json",
+        "size_bytes": 666,
+        "sha256": "c789a0d6f9ae7493b8afeb1504ea1eabdc81b185f825f67e863b1a36a0078331"
+      },
+      {
+        "path": "run-00-attempt-01/project/benchmark/out/ready-10.json",
+        "size_bytes": 668,
+        "sha256": "0c29730ae8644b1edee42ebe8cda1090cbfed99f955d0fda5c21321417887c48"
+      },
+      {
+        "path": "run-00-attempt-01/project/benchmark/out/ready-11.json",
+        "size_bytes": 669,
+        "sha256": "4db12a78aab34a7556f0116c0936c46ea853b872b9de8875cf707f3e2ad83dc6"
+      },
+      {
+        "path": "run-00-attempt-01/project/project.godot",
+        "size_bytes": 838,
+        "sha256": "819b521edff745f02f7c30e96ceffe21c70d8ef4fc32e95b96df37877e817ce1"
+      },
+      {
+        "path": "run-00-attempt-01/project/scenes/fixture.tscn",
+        "size_bytes": 294,
+        "sha256": "645556490ab2d47dc88f29f190cb3e7a1834532195e6c0a5243b7dab251421ce"
+      },
+      {
+        "path": "run-00-attempt-01/project/scripts/fixture_actor.gd",
+        "size_bytes": 50,
+        "sha256": "30116960b59778bee92698077689481f7936f41a2d722ddbe23626cbe3fc55cd"
+      },
+      {
+        "path": "run-00-attempt-01/project/scripts/fixture_actor.gd.uid",
+        "size_bytes": 20,
+        "sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142"
+      },
+      {
+        "path": "run-00-attempt-01/sample-preview-00.json",
+        "size_bytes": 72896,
+        "sha256": "c64159fea4993f8f95f4da51ed30f738c0e97e226ed2cc7f89199ee70fec20a5"
+      },
+      {
+        "path": "run-00-attempt-01/sample-preview-01.json",
+        "size_bytes": 72828,
+        "sha256": "242caf654fbff78ca72fc0318a3220ecf476dba11eef5d8e268f3fb055f07f0e"
+      },
+      {
+        "path": "run-00-attempt-01/sample-preview-02.json",
+        "size_bytes": 72822,
+        "sha256": "ea3fee25a47427c4e6bb24078b5b0a89b0786817092e46809bb7479e197ae092"
+      },
+      {
+        "path": "run-00-attempt-01/sample-preview-03.json",
+        "size_bytes": 72810,
+        "sha256": "c4c7ad1eb52baa2d743efe8f6b7d60b0e54c3f5acfc03a027635fe86aa943d3e"
+      },
+      {
+        "path": "run-00-attempt-01/sample-preview-04.json",
+        "size_bytes": 72827,
+        "sha256": "c742a016be9139d71cdf80d02b2922478960054bd26336a5ca604fbc61e13b1e"
+      },
+      {
+        "path": "run-00-attempt-01/sample-preview-05.json",
+        "size_bytes": 72998,
+        "sha256": "345d8356ca9b43f4205f1f833ba3336d593abe673c1e1d5eb2de4091f9401d18"
+      },
+      {
+        "path": "run-00-attempt-01/sample-preview-06.json",
+        "size_bytes": 73127,
+        "sha256": "102a3268b810fdb800758fcc1f9d22be898a16800756d3b478940dd122e1e64c"
+      },
+      {
+        "path": "run-00-attempt-01/sample-preview-07.json",
+        "size_bytes": 73231,
+        "sha256": "47b4bbe316d2c0a6f238de23baa3574bf19f7adc319a07dd352d61073876a1a9"
+      },
+      {
+        "path": "run-00-attempt-01/sample-preview-08.json",
+        "size_bytes": 73253,
+        "sha256": "f6d8c9b6d721bdc8ae8cb006932fda3c5375e66704aff819197c873c1a039986"
+      },
+      {
+        "path": "run-00-attempt-01/sample-preview-09.json",
+        "size_bytes": 73248,
+        "sha256": "4a34ea6a41027b75e559102a1146e8169711438208b52e34a143e68e5844b70b"
+      },
+      {
+        "path": "run-00-attempt-01/sample-preview-10.json",
+        "size_bytes": 73476,
+        "sha256": "c2181ff4c9ec290cddfa38d67e3562d5844df4af049341e7dd0c3b41a8afba4e"
+      },
+      {
+        "path": "run-00-attempt-01/source/studio/blender-addon/ipc_client.py",
+        "size_bytes": 16349,
+        "sha256": "ee5d77e52dabb8b746e528be2acddc07b821f6b6724e9de9a36ec18b71cd8da9"
+      },
+      {
+        "path": "run-00-attempt-01/source/studio/contracts/perf-collector.schema.json",
+        "size_bytes": 30060,
+        "sha256": "394d1df03bdfd736ea3fe9f260e9d718d35f3820cde35d1c45ccab65fbc24834"
+      },
+      {
+        "path": "run-00-attempt-01/source/studio/godot-addon/addons/hh_studio/plugin.cfg",
+        "size_bytes": 165,
+        "sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c"
+      },
+      {
+        "path": "run-00-attempt-01/source/studio/godot-addon/addons/hh_studio/plugin.gd",
+        "size_bytes": 23043,
+        "sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036"
+      },
+      {
+        "path": "run-00-attempt-01/source/studio/godot-addon/addons/hh_studio/scene_commands.gd",
+        "size_bytes": 32174,
+        "sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069"
+      },
+      {
+        "path": "run-00-attempt-01/source/studio/godot-addon/bundle_staging.py",
+        "size_bytes": 15005,
+        "sha256": "3d614edbec8e9a7f5ad3caf2b9694d7498df129de95683952268621f91d68e43"
+      },
+      {
+        "path": "run-00-attempt-01/source/studio/godot-addon/bundle_v2.py",
+        "size_bytes": 8475,
+        "sha256": "2c5cdc71cdaf80f58bb93ec791e84bab8bd02cd4d9bdbd93d635db13583de62a"
+      },
+      {
+        "path": "run-00-attempt-01/source/studio/godot-addon/cli_job.py",
+        "size_bytes": 12998,
+        "sha256": "82aa26afefe480c672aa4cb67d38d45f1ec48651252463314f535a1719c26ea0"
+      },
+      {
+        "path": "run-00-attempt-01/source/studio/godot-addon/fixture_profile/addons/hh_studio/jcs_godot.gd.uid",
+        "size_bytes": 20,
+        "sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b"
+      },
+      {
+        "path": "run-00-attempt-01/source/studio/godot-addon/fixture_profile/addons/hh_studio/plugin.gd.uid",
+        "size_bytes": 20,
+        "sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d"
+      },
+      {
+        "path": "run-00-attempt-01/source/studio/godot-addon/fixture_profile/addons/hh_studio/scene_commands.gd.uid",
+        "size_bytes": 19,
+        "sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69"
+      },
+      {
+        "path": "run-00-attempt-01/source/studio/godot-addon/fixture_profile/project.godot",
+        "size_bytes": 282,
+        "sha256": "2d4fa9c7261fc5ec4292094854ffa79b602249671a03db3c9808ea7521f4fa51"
+      },
+      {
+        "path": "run-00-attempt-01/source/studio/godot-addon/fixture_profile/scripts/fixture_actor.gd.uid",
+        "size_bytes": 20,
+        "sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142"
+      },
+      {
+        "path": "run-00-attempt-01/source/studio/godot-addon/fixture_profile/source-pins.json",
+        "size_bytes": 1873,
+        "sha256": "c0a40998bd63d4d3dc628e4b9d2e0932fcb5725d1870adc43d0fdc3af2fdeed2"
+      },
+      {
+        "path": "run-00-attempt-01/source/studio/godot-addon/fixture_profile.py",
+        "size_bytes": 6020,
+        "sha256": "25e1667dd930dcf0746b071fc29ea3460bc18d5fb9f3f83e806c1793028f21ae"
+      },
+      {
+        "path": "run-00-attempt-01/source/studio/host/blender/__init__.py",
+        "size_bytes": 69,
+        "sha256": "812b123ddad075d7bb1892a38e099fdb48db147f80a27db83101c2b640044a90"
+      },
+      {
+        "path": "run-00-attempt-01/source/studio/host/blender/deadline.py",
+        "size_bytes": 1130,
+        "sha256": "55fb3f77cadd9edc633186e1d6727bbed06216d659846aa3836e2582eef46926"
+      },
+      {
+        "path": "run-00-attempt-01/source/studio/host/blender/export_job.py",
+        "size_bytes": 13605,
+        "sha256": "8eb0cc4a93361faf8cf09a3f11fd0278ec3fcdb2c9863e4b2ee98852c67ecdfe"
+      },
+      {
+        "path": "run-00-attempt-01/source/studio/host/blender/glb_preflight.py",
+        "size_bytes": 11815,
+        "sha256": "5e4015c77ee3dced056634f89a0ba1fe2f94dd6650250fac8b03317c12d54f62"
+      },
+      {
+        "path": "run-00-attempt-01/source/studio/host/blender/ui_host.py",
+        "size_bytes": 22464,
+        "sha256": "0fa5afa44046b61b68baafc275b39ade4787a55221074018db588c4c2f71dc35"
+      },
+      {
+        "path": "run-00-attempt-01/source/studio/host/core/journal.py",
+        "size_bytes": 29602,
+        "sha256": "826bc5e4c60817e3a22dd2e0b6a199eb522a4eb78532cb5300249fe9056c0cc6"
+      },
+      {
+        "path": "run-00-attempt-01/source/studio/host/core/limits.py",
+        "size_bytes": 15813,
+        "sha256": "9d01ce56f5976bb034e60e33bf4b7986cdc44b3a8ffad46da738a6ed1b143f3f"
+      },
+      {
+        "path": "run-00-attempt-01/source/studio/host/core/private_store.py",
+        "size_bytes": 20476,
+        "sha256": "c914b5a66a45660c782ecd43fd2321c238702340f3b33062e284feada4d46476"
+      },
+      {
+        "path": "run-00-attempt-01/source/studio/host/core/redaction.py",
+        "size_bytes": 10038,
+        "sha256": "e37d998399f589d4202591a1262a7dc19231e5e4b5236b47d4c8234956275c1f"
+      },
+      {
+        "path": "run-00-attempt-01/source/studio/host/core/safe_create.py",
+        "size_bytes": 13170,
+        "sha256": "681fb7c0f4e74d82597bd8049a6b42cde0ea73941d879ec8ef0ba4df326d0606"
+      },
+      {
+        "path": "run-00-attempt-01/source/studio/host/core/safe_open.py",
+        "size_bytes": 12093,
+        "sha256": "efc083f1c4fa875d3f748602924a05712aa60fed3abcdb46d058672930201535"
+      },
+      {
+        "path": "run-00-attempt-01/source/studio/host/core/transport.py",
+        "size_bytes": 52844,
+        "sha256": "ce431eb3035dde8fe7a65d26f2795d7f7861b652a77edc1348b00ccde9795a03"
+      },
+      {
+        "path": "run-00-attempt-01/source/studio/host/replay/disk_journal_index.py",
+        "size_bytes": 13593,
+        "sha256": "56beb93119dfb66feec32eb51d389fc089d89911c0a1be199071c17e1801cb28"
+      },
+      {
+        "path": "run-00-attempt-01/source/studio/host/replay/perf.py",
+        "size_bytes": 19085,
+        "sha256": "7c24c11989420e1600bcb20b8949fea44ea93b381bcab824e471465f5148edc7"
+      },
+      {
+        "path": "run-00-attempt-01/source/studio/host/replay/process_probe.py",
+        "size_bytes": 5485,
+        "sha256": "53b6b24813e6ba6dc040dcbb87aee529b7f4e8855a64bcd0689b19c240180500"
+      },
+      {
+        "path": "run-00-attempt-01/source/studio/host/replay/verified_journal.py",
+        "size_bytes": 10023,
+        "sha256": "d737a0125ab49482d6579abddc6f179f419fc956d329b2679ee53ee9e3dbd967"
+      },
+      {
+        "path": "run-00-attempt-01/source/studio/pipeline/__init__.py",
+        "size_bytes": 79,
+        "sha256": "ffea2c35acdfe30636d61970e16c573e4de68228c4f7e780a6061d7be3fbbc68"
+      },
+      {
+        "path": "run-00-attempt-01/source/studio/pipeline/native_job.py",
+        "size_bytes": 12512,
+        "sha256": "456bb70c315e38cf7a29354b7df51862e1ded4578f6b22d9110bf628547c20ca"
+      },
+      {
+        "path": "run-00-attempt-01/source/studio/protocol/__init__.py",
+        "size_bytes": 881,
+        "sha256": "a906ecde6f60d5fa2febd3f8a4a5fae440d87fea69e7d7e51a750677e03ad09f"
+      },
+      {
+        "path": "run-00-attempt-01/source/studio/protocol/_rfc8785/__init__.py",
+        "size_bytes": 505,
+        "sha256": "49d914da77ba606d535832d97df2e43458a8e51d57cdba6883a0a895ac50484b"
+      },
+      {
+        "path": "run-00-attempt-01/source/studio/protocol/_rfc8785/_impl.py",
+        "size_bytes": 7251,
+        "sha256": "c25bc3a046528482d53bee3487b837f31dd9c05f33e8f13288c7aab320932cec"
+      },
+      {
+        "path": "run-00-attempt-01/source/studio/protocol/core.py",
+        "size_bytes": 19886,
+        "sha256": "e8153f5a4dcf639f4d1cbce2fa74f7866d963a692c68e4e8d1477136889bd93e"
+      },
+      {
+        "path": "run-00-attempt-01/source/studio/protocol/jcs_godot.gd",
+        "size_bytes": 10165,
+        "sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5"
+      },
+      {
+        "path": "run-00-attempt-01/source/studio/tests/replay/benchmark_assembly.py",
+        "size_bytes": 50798,
+        "sha256": "19c684d72995327e65458422ab66384e4d586705cad31f3ab3fd8615934f2a22"
+      },
+      {
+        "path": "run-00-attempt-01/source/studio/tests/replay/benchmark_commands.py",
+        "size_bytes": 22204,
+        "sha256": "ac1e57cac9e4a06c96f5b1638910d5e9f7576851770f716d03b7d4d52e413a68"
+      },
+      {
+        "path": "run-00-attempt-01/source/studio/tests/replay/benchmark_http_phases.py",
+        "size_bytes": 17620,
+        "sha256": "f160b2d6725b25eef97119724b8ffb2e606fb448c70825aeed663c4aa7a31360"
+      },
+      {
+        "path": "run-00-attempt-01/source/studio/tests/replay/benchmark_import_observer.py",
+        "size_bytes": 17324,
+        "sha256": "32a952ee0cc65325a65cddca24869584ca009b5d9d2e1c64ced22ad65b78adfb"
+      },
+      {
+        "path": "run-00-attempt-01/source/studio/tests/replay/benchmark_job.py",
+        "size_bytes": 26255,
+        "sha256": "8e87d0328dacf67756640b6ee213dfb40c47f86e065dba57dbac0dbb6bbf7773"
+      },
+      {
+        "path": "run-00-attempt-01/source/studio/tests/replay/benchmark_native.gd",
+        "size_bytes": 54580,
+        "sha256": "13e65360cd0bc0033d0ad414fb3238e216b0d6dcc08e57dc7026ec4fc9eb8b95"
+      },
+      {
+        "path": "run-00-attempt-01/source/studio/tests/replay/benchmark_plugin.cfg",
+        "size_bytes": 189,
+        "sha256": "648d8821a36d0abc825ef1f380b4917639074302a619cb25a798df987a5a1092"
+      },
+      {
+        "path": "run-00-attempt-01/source/studio/tests/replay/benchmark_profile.py",
+        "size_bytes": 19625,
+        "sha256": "ddbd98583060f791226fca83e275cf01204b37112627383198dcef4ec6f6f233"
+      },
+      {
+        "path": "run-00-attempt-01/source/studio/tests/replay/benchmark_readiness.py",
+        "size_bytes": 6746,
+        "sha256": "842db6244d93384932929544045654f089d67f6f304624b7348b7d5c4583ab68"
+      },
+      {
+        "path": "run-00-attempt-01/source/studio/tests/replay/benchmark_transport.py",
+        "size_bytes": 4853,
+        "sha256": "1fb178451bb22a0dd3e059333ff6e01c6fd5d324f04e47c1be64cb7212f26f2d"
+      },
+      {
+        "path": "run-00-attempt-01/source/studio/tests/replay/campaign_task.ps1",
+        "size_bytes": 18607,
+        "sha256": "405e2abfa39332b1313871763184fdda0755ff998ec83310e67e10cebfe2ebb9"
+      },
+      {
+        "path": "run-00-attempt-01/source/studio/tests/replay/run_benchmark_campaign.py",
+        "size_bytes": 59120,
+        "sha256": "2073fbbb9abb7a46c902a56ad251543932534519be07c844dca0858d2364dac6"
+      },
+      {
+        "path": "run-00-attempt-01/source/studio/tests/replay/run_campaign_task.py",
+        "size_bytes": 8033,
+        "sha256": "f5cb71fa96b8fd2f935ac933dcd5190cef2b3b6821f031bfe72becb2d360a6fd"
+      },
+      {
+        "path": "run-00-attempt-01/source/studio/tests/replay/run_native_benchmark.py",
+        "size_bytes": 26986,
+        "sha256": "e6b0f8e9711ac881cfa65b4537232c685ff577af0a13778a51cc54999b1c1fc7"
+      },
+      {
+        "path": "run-00-attempt-01/source/studio/toolchain.lock.json",
+        "size_bytes": 3026,
+        "sha256": "28bdce555e9a44ef68193723d512feda02c42a417ceb78faf0b29f52d095dca9"
+      },
+      {
+        "path": "run-00-attempt-01/source-files.json",
+        "size_bytes": 5374,
+        "sha256": "25c0de8bcf07ebce61f00ead08c0ce5a6ea33e4ebbae49191e4793d402c54460"
+      },
+      {
+        "path": "run-00-attempt-01/toolchain.lock.json",
+        "size_bytes": 3026,
+        "sha256": "28bdce555e9a44ef68193723d512feda02c42a417ceb78faf0b29f52d095dca9"
+      },
+      {
+        "path": "source/studio/blender-addon/ipc_client.py",
+        "size_bytes": 16349,
+        "sha256": "ee5d77e52dabb8b746e528be2acddc07b821f6b6724e9de9a36ec18b71cd8da9"
+      },
+      {
+        "path": "source/studio/contracts/perf-collector.schema.json",
+        "size_bytes": 30060,
+        "sha256": "394d1df03bdfd736ea3fe9f260e9d718d35f3820cde35d1c45ccab65fbc24834"
+      },
+      {
+        "path": "source/studio/godot-addon/addons/hh_studio/plugin.cfg",
+        "size_bytes": 165,
+        "sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c"
+      },
+      {
+        "path": "source/studio/godot-addon/addons/hh_studio/plugin.gd",
+        "size_bytes": 23043,
+        "sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036"
+      },
+      {
+        "path": "source/studio/godot-addon/addons/hh_studio/scene_commands.gd",
+        "size_bytes": 32174,
+        "sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069"
+      },
+      {
+        "path": "source/studio/godot-addon/bundle_staging.py",
+        "size_bytes": 15005,
+        "sha256": "3d614edbec8e9a7f5ad3caf2b9694d7498df129de95683952268621f91d68e43"
+      },
+      {
+        "path": "source/studio/godot-addon/bundle_v2.py",
+        "size_bytes": 8475,
+        "sha256": "2c5cdc71cdaf80f58bb93ec791e84bab8bd02cd4d9bdbd93d635db13583de62a"
+      },
+      {
+        "path": "source/studio/godot-addon/cli_job.py",
+        "size_bytes": 12998,
+        "sha256": "82aa26afefe480c672aa4cb67d38d45f1ec48651252463314f535a1719c26ea0"
+      },
+      {
+        "path": "source/studio/godot-addon/fixture_profile/addons/hh_studio/jcs_godot.gd.uid",
+        "size_bytes": 20,
+        "sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b"
+      },
+      {
+        "path": "source/studio/godot-addon/fixture_profile/addons/hh_studio/plugin.gd.uid",
+        "size_bytes": 20,
+        "sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d"
+      },
+      {
+        "path": "source/studio/godot-addon/fixture_profile/addons/hh_studio/scene_commands.gd.uid",
+        "size_bytes": 19,
+        "sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69"
+      },
+      {
+        "path": "source/studio/godot-addon/fixture_profile/project.godot",
+        "size_bytes": 282,
+        "sha256": "2d4fa9c7261fc5ec4292094854ffa79b602249671a03db3c9808ea7521f4fa51"
+      },
+      {
+        "path": "source/studio/godot-addon/fixture_profile/scripts/fixture_actor.gd.uid",
+        "size_bytes": 20,
+        "sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142"
+      },
+      {
+        "path": "source/studio/godot-addon/fixture_profile/source-pins.json",
+        "size_bytes": 1873,
+        "sha256": "c0a40998bd63d4d3dc628e4b9d2e0932fcb5725d1870adc43d0fdc3af2fdeed2"
+      },
+      {
+        "path": "source/studio/godot-addon/fixture_profile.py",
+        "size_bytes": 6020,
+        "sha256": "25e1667dd930dcf0746b071fc29ea3460bc18d5fb9f3f83e806c1793028f21ae"
+      },
+      {
+        "path": "source/studio/host/blender/__init__.py",
+        "size_bytes": 69,
+        "sha256": "812b123ddad075d7bb1892a38e099fdb48db147f80a27db83101c2b640044a90"
+      },
+      {
+        "path": "source/studio/host/blender/deadline.py",
+        "size_bytes": 1130,
+        "sha256": "55fb3f77cadd9edc633186e1d6727bbed06216d659846aa3836e2582eef46926"
+      },
+      {
+        "path": "source/studio/host/blender/export_job.py",
+        "size_bytes": 13605,
+        "sha256": "8eb0cc4a93361faf8cf09a3f11fd0278ec3fcdb2c9863e4b2ee98852c67ecdfe"
+      },
+      {
+        "path": "source/studio/host/blender/glb_preflight.py",
+        "size_bytes": 11815,
+        "sha256": "5e4015c77ee3dced056634f89a0ba1fe2f94dd6650250fac8b03317c12d54f62"
+      },
+      {
+        "path": "source/studio/host/blender/ui_host.py",
+        "size_bytes": 22464,
+        "sha256": "0fa5afa44046b61b68baafc275b39ade4787a55221074018db588c4c2f71dc35"
+      },
+      {
+        "path": "source/studio/host/core/journal.py",
+        "size_bytes": 29602,
+        "sha256": "826bc5e4c60817e3a22dd2e0b6a199eb522a4eb78532cb5300249fe9056c0cc6"
+      },
+      {
+        "path": "source/studio/host/core/limits.py",
+        "size_bytes": 15813,
+        "sha256": "9d01ce56f5976bb034e60e33bf4b7986cdc44b3a8ffad46da738a6ed1b143f3f"
+      },
+      {
+        "path": "source/studio/host/core/private_store.py",
+        "size_bytes": 20476,
+        "sha256": "c914b5a66a45660c782ecd43fd2321c238702340f3b33062e284feada4d46476"
+      },
+      {
+        "path": "source/studio/host/core/redaction.py",
+        "size_bytes": 10038,
+        "sha256": "e37d998399f589d4202591a1262a7dc19231e5e4b5236b47d4c8234956275c1f"
+      },
+      {
+        "path": "source/studio/host/core/safe_create.py",
+        "size_bytes": 13170,
+        "sha256": "681fb7c0f4e74d82597bd8049a6b42cde0ea73941d879ec8ef0ba4df326d0606"
+      },
+      {
+        "path": "source/studio/host/core/safe_open.py",
+        "size_bytes": 12093,
+        "sha256": "efc083f1c4fa875d3f748602924a05712aa60fed3abcdb46d058672930201535"
+      },
+      {
+        "path": "source/studio/host/core/transport.py",
+        "size_bytes": 52844,
+        "sha256": "ce431eb3035dde8fe7a65d26f2795d7f7861b652a77edc1348b00ccde9795a03"
+      },
+      {
+        "path": "source/studio/host/replay/disk_journal_index.py",
+        "size_bytes": 13593,
+        "sha256": "56beb93119dfb66feec32eb51d389fc089d89911c0a1be199071c17e1801cb28"
+      },
+      {
+        "path": "source/studio/host/replay/perf.py",
+        "size_bytes": 19085,
+        "sha256": "7c24c11989420e1600bcb20b8949fea44ea93b381bcab824e471465f5148edc7"
+      },
+      {
+        "path": "source/studio/host/replay/process_probe.py",
+        "size_bytes": 5485,
+        "sha256": "53b6b24813e6ba6dc040dcbb87aee529b7f4e8855a64bcd0689b19c240180500"
+      },
+      {
+        "path": "source/studio/host/replay/verified_journal.py",
+        "size_bytes": 10023,
+        "sha256": "d737a0125ab49482d6579abddc6f179f419fc956d329b2679ee53ee9e3dbd967"
+      },
+      {
+        "path": "source/studio/pipeline/__init__.py",
+        "size_bytes": 79,
+        "sha256": "ffea2c35acdfe30636d61970e16c573e4de68228c4f7e780a6061d7be3fbbc68"
+      },
+      {
+        "path": "source/studio/pipeline/native_job.py",
+        "size_bytes": 12512,
+        "sha256": "456bb70c315e38cf7a29354b7df51862e1ded4578f6b22d9110bf628547c20ca"
+      },
+      {
+        "path": "source/studio/protocol/__init__.py",
+        "size_bytes": 881,
+        "sha256": "a906ecde6f60d5fa2febd3f8a4a5fae440d87fea69e7d7e51a750677e03ad09f"
+      },
+      {
+        "path": "source/studio/protocol/_rfc8785/__init__.py",
+        "size_bytes": 505,
+        "sha256": "49d914da77ba606d535832d97df2e43458a8e51d57cdba6883a0a895ac50484b"
+      },
+      {
+        "path": "source/studio/protocol/_rfc8785/_impl.py",
+        "size_bytes": 7251,
+        "sha256": "c25bc3a046528482d53bee3487b837f31dd9c05f33e8f13288c7aab320932cec"
+      },
+      {
+        "path": "source/studio/protocol/core.py",
+        "size_bytes": 19886,
+        "sha256": "e8153f5a4dcf639f4d1cbce2fa74f7866d963a692c68e4e8d1477136889bd93e"
+      },
+      {
+        "path": "source/studio/protocol/jcs_godot.gd",
+        "size_bytes": 10165,
+        "sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5"
+      },
+      {
+        "path": "source/studio/tests/replay/benchmark_assembly.py",
+        "size_bytes": 50798,
+        "sha256": "19c684d72995327e65458422ab66384e4d586705cad31f3ab3fd8615934f2a22"
+      },
+      {
+        "path": "source/studio/tests/replay/benchmark_commands.py",
+        "size_bytes": 22204,
+        "sha256": "ac1e57cac9e4a06c96f5b1638910d5e9f7576851770f716d03b7d4d52e413a68"
+      },
+      {
+        "path": "source/studio/tests/replay/benchmark_http_phases.py",
+        "size_bytes": 17620,
+        "sha256": "f160b2d6725b25eef97119724b8ffb2e606fb448c70825aeed663c4aa7a31360"
+      },
+      {
+        "path": "source/studio/tests/replay/benchmark_import_observer.py",
+        "size_bytes": 17324,
+        "sha256": "32a952ee0cc65325a65cddca24869584ca009b5d9d2e1c64ced22ad65b78adfb"
+      },
+      {
+        "path": "source/studio/tests/replay/benchmark_job.py",
+        "size_bytes": 26255,
+        "sha256": "8e87d0328dacf67756640b6ee213dfb40c47f86e065dba57dbac0dbb6bbf7773"
+      },
+      {
+        "path": "source/studio/tests/replay/benchmark_native.gd",
+        "size_bytes": 54580,
+        "sha256": "13e65360cd0bc0033d0ad414fb3238e216b0d6dcc08e57dc7026ec4fc9eb8b95"
+      },
+      {
+        "path": "source/studio/tests/replay/benchmark_plugin.cfg",
+        "size_bytes": 189,
+        "sha256": "648d8821a36d0abc825ef1f380b4917639074302a619cb25a798df987a5a1092"
+      },
+      {
+        "path": "source/studio/tests/replay/benchmark_profile.py",
+        "size_bytes": 19625,
+        "sha256": "ddbd98583060f791226fca83e275cf01204b37112627383198dcef4ec6f6f233"
+      },
+      {
+        "path": "source/studio/tests/replay/benchmark_readiness.py",
+        "size_bytes": 6746,
+        "sha256": "842db6244d93384932929544045654f089d67f6f304624b7348b7d5c4583ab68"
+      },
+      {
+        "path": "source/studio/tests/replay/benchmark_transport.py",
+        "size_bytes": 4853,
+        "sha256": "1fb178451bb22a0dd3e059333ff6e01c6fd5d324f04e47c1be64cb7212f26f2d"
+      },
+      {
+        "path": "source/studio/tests/replay/campaign_task.ps1",
+        "size_bytes": 18607,
+        "sha256": "405e2abfa39332b1313871763184fdda0755ff998ec83310e67e10cebfe2ebb9"
+      },
+      {
+        "path": "source/studio/tests/replay/run_benchmark_campaign.py",
+        "size_bytes": 59120,
+        "sha256": "2073fbbb9abb7a46c902a56ad251543932534519be07c844dca0858d2364dac6"
+      },
+      {
+        "path": "source/studio/tests/replay/run_campaign_task.py",
+        "size_bytes": 8033,
+        "sha256": "f5cb71fa96b8fd2f935ac933dcd5190cef2b3b6821f031bfe72becb2d360a6fd"
+      },
+      {
+        "path": "source/studio/tests/replay/run_native_benchmark.py",
+        "size_bytes": 26986,
+        "sha256": "e6b0f8e9711ac881cfa65b4537232c685ff577af0a13778a51cc54999b1c1fc7"
+      },
+      {
+        "path": "source/studio/toolchain.lock.json",
+        "size_bytes": 3026,
+        "sha256": "28bdce555e9a44ef68193723d512feda02c42a417ceb78faf0b29f52d095dca9"
+      }
+    ]
+  }
+}

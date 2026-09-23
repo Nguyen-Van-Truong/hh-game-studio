@@ -1,0 +1,70 @@
+{
+  "schema_id": "hh-studio.gt06-terminal-seal",
+  "schema_version": "1.0.0",
+  "campaign_id": "gt06-s190-formal-01",
+  "packet": "zdoc/reviews/20260923-gt06-s190-formal-campaign",
+  "raw_archive": {
+    "path": "studio/.local/archives/gt06-s190-formal-01-s191-terminal.zip",
+    "sha256": "c6e8c7e2fa9018c9b9980cfbe969327585ae4ce594df9efdc2f7116b8ddb5cd1",
+    "size_bytes": 11044310
+  },
+  "raw_manifest_sha256": "936bee293850c808aacbec0419ef7f1ac4a93c014e77811532e60e796e3075c2",
+  "verified_files": 279,
+  "authority": 0,
+  "formal_acceptance": false,
+  "actual_exits": {
+    "host_actual_exit": {
+      "pid": 11260,
+      "exit_code": 1
+    },
+    "import_actual_exit": {
+      "pid": 50220,
+      "exit_code": 0
+    },
+    "editor_target_exit": null,
+    "editor_target_exit_status": "UNKNOWN_TARGET_EXIT_NOT_RECORDED",
+    "editor_cleanup": {
+      "closed": true,
+      "completed": false,
+      "failure_code": "BENCHMARK_CLOSED_BEFORE_FINISH",
+      "job": {
+        "active_count": 0,
+        "assigned": true,
+        "close_uncertain": false,
+        "closed": true,
+        "configured": true,
+        "create_uncertain": false,
+        "failed_operations": [],
+        "handle_retained": false,
+        "native_error": null,
+        "tainted": false,
+        "zero_observed": true
+      },
+      "wrapper_exit_code": 2,
+      "wrapper_process_handle": {
+        "close_uncertain": false,
+        "closed": true,
+        "handle_retained": false,
+        "required": true
+      }
+    },
+    "owned_tree_zero": true,
+    "wrapper_handle_retained": false,
+    "producer_closed": true,
+    "threads_stopped": [
+      false,
+      false,
+      false
+    ],
+    "scheduler_status_scope": "state=3,last_task_result=1,instances=[]; scheduler only, not target exit proof"
+  },
+  "failure_code": "CAMPAIGN_RETAINED_COUNTER_GROWTH",
+  "terminal_observed_utc": "2026-09-23T16:39:44Z",
+  "task_retirement": {
+    "status": "DELETED_AFTER_SEAL",
+    "receipt": "task-deleted.json",
+    "receipt_sha256": "9eaae251a18ced26f844392c11f0f5f0765b5b323aad4835bddaf526919ee26a",
+    "deleted_utc": "2026-09-23T16:59:39.8354281Z"
+  },
+  "raw_manifest": "raw-manifest.json"
+}
