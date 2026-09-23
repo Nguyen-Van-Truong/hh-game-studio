@@ -1,0 +1,17 @@
+{
+  "schema": "hh-studio.gt06-s187-runner-failure",
+  "run_id": "gt06-s187-idle-editor-01",
+  "authority": 0,
+  "formal_acceptance": false,
+  "engine_started": false,
+  "helper_boundary_failure": "S187_PREEXISTING_PREFLIGHT_OUTPUT",
+  "driver_exit": {
+    "pid": 18484,
+    "exit_code": 1,
+    "timed_out": false
+  },
+  "stderr_sha256": "3cc0bee8c81886100a421b19117008afdc1281a6803e59c5045e7b1ed7a0be2e",
+  "stderr_tail": "Traceback (most recent call last):\n  File \"D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260923-gt06-s187-idle-control\\run_idle.py\", line 199, in <module>\n    run()\n  File \"D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260923-gt06-s187-idle-control\\run_idle.py\", line 102, in run\n    run_trusted_stage([exe, *args], cwd=PROJECT, output=out, source_root=ROOT,\n  File \"D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\pipeline\\native_job.py\", line 146, in run_trusted_stage\n    output.mkdir(exist_ok=False)\n  File \"C:\\Users\\truon\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\pathlib.py\", line 1116, in mkdir\n    os.mkdir(self, mode)\nFileExistsError: [WinError 183] Cannot create a file when that file already exists: 'D:\\\\dataDiskD\\\\intellji\\\\hoanhaosocial\\\\hoanhaonew-20-6-2025\\\\hh-game-studio\\\\8-9-hh3d-3\\\\studio\\\\.local\\\\reviews\\\\gt06-s187-idle-editor-01\\\\parse-host'\n",
+  "preservation": "Raw prepare, parse-host and import-host retained; no engine/editor launched; no process cleanup required. Do not reuse this ID after source/helper change.",
+  "next_action": "Fresh S188 helper with bounded preflight reuse semantics."
+}
