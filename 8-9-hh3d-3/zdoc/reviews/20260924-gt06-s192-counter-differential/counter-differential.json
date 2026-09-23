@@ -1,0 +1,55 @@
+{
+  "schema_id": "hh-studio.gt06-s192-counter-differential",
+  "schema_version": "1.0.0",
+  "status": "READ_ONLY_COMPLETE",
+  "authority": 0,
+  "formal_acceptance": false,
+  "source_runs": [
+    {
+      "run_id": "gt06-s190-formal-01.r00.a01",
+      "packet": "zdoc/reviews/20260923-gt06-s190-formal-campaign",
+      "source_closure": "fc46cfd2e80e8d78024b6a31c6c72be64f33d83aab4fe1abebaf899907f0e205"
+    },
+    {
+      "run_id": "gt06-s188-idle-editor-01",
+      "packet": "zdoc/reviews/20260923-gt06-s188-idle-control",
+      "source_closure": "0b6738bd34c60f6fd6599a29e3a15985b2b3058673a70d885ef66ecb588a7601"
+    }
+  ],
+  "s190_boundary": {
+    "baseline_batch": 4,
+    "baseline_editor_handles": 555,
+    "failure_batch": 10,
+    "failure_editor_handles": 557,
+    "delta": 2,
+    "host_handles_baseline": 204,
+    "host_handles_failure": 204,
+    "editor_objects": 71128,
+    "editor_resources": 6,
+    "rss_baseline": 130785280,
+    "rss_failure": 111886336,
+    "http_transport_failures": 0,
+    "failure_code": "CAMPAIGN_RETAINED_COUNTER_GROWTH"
+  },
+  "s188_idle_control": {
+    "sample_count": 2745,
+    "steady_sample_count": 2685,
+    "steady_first": 576,
+    "steady_last": 480,
+    "steady_min": 480,
+    "steady_max": 576,
+    "steady_unique": 11,
+    "steady_delta_last_first": -96,
+    "sampler": "GetProcessHandleCount(retained ProcessProbe handle)"
+  },
+  "verifier_check": {
+    "command": "python -m unittest studio.tests.replay.test_benchmark_campaign.CampaignScreenTests.test_each_applicable_retained_counter_cannot_grow_after_warmup",
+    "result": "PASS",
+    "interpretation": "The frozen verifier intentionally rejects any post-warmup retained-counter value above batch-4 baseline, including +1; no threshold was changed."
+  },
+  "conclusion": {
+    "supported": "S190 failure boundary is accurately captured; S188 demonstrates non-monotonic runtime handle variation under the same Windows sampler family.",
+    "not_proven": "No collector error, ownership, leak, or root cause is proven. S190 remains a failed partial attempt and cannot be joined into GT06 acceptance.",
+    "decision": "Do not retry unchanged. Keep GT06 gate, timeout, baseline, profile, counter and RSS policy unchanged. A new formal run requires a supported distinct measurement/attribution route or an owner-approved ADR; static GT07-GT10 preparation may proceed without opening their gates."
+  }
+}
