@@ -1,0 +1,13 @@
+.sympath cache*
+.reload /f
+.echo S200_CDB_ATTACHED
+!handle 0 7
+.echo S200_HANDLE_SNAPSHOT_DONE
+!htrace -enable
+.echo S200_HTRACE_ENABLED
+g
+.echo S200_AFTER_G
+!htrace -diff
+.echo S200_HTRACE_DIFF_DONE
+qd
+

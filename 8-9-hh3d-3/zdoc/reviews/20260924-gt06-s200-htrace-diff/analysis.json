@@ -1,0 +1,43 @@
+{
+  "archive_sha256": "5367ff04e18ece4a063e27c061b8f66db94e481f09e7d031e09715144edeb93d",
+  "authority": 0,
+  "cdb_exit": 0,
+  "cdb_markers": {
+    "attached": true,
+    "handle_lines": 585,
+    "handle_snapshot": true,
+    "htrace_enabled": true
+  },
+  "conclusion": "A fresh CDB run attached to the verified Godot target, captured the handle snapshot, enabled htrace, and completed an htrace differential before qd. The differential recorded new and outstanding handle stack-trace entries, but the captured output has no resolved creator stack frame or module offset. This is diagnostic-only; it proves neither leak ownership nor root cause and cannot satisfy GT06 acceptance.",
+  "formal_acceptance": false,
+  "helper_exit": 0,
+  "htrace_displayed_outstanding_traces": 106,
+  "htrace_new_stack_traces": 7693,
+  "job": {
+    "active_count": 0,
+    "assigned": true,
+    "close_uncertain": false,
+    "closed": true,
+    "configured": true,
+    "create_uncertain": false,
+    "failed_operations": [],
+    "handle_retained": false,
+    "native_error": null,
+    "tainted": false,
+    "zero_observed": true
+  },
+  "raw_manifest_sha256": "8918996bac8ed53feedec658ee55029e68658c7118dd6f184f9b685fce22ea64",
+  "run_id": "gt06-s200-cdb-handle-snapshot-01",
+  "schema": "HH-GT06-S200-ANALYSIS-1",
+  "stack_provenance": {
+    "godot_module_name_seen": true,
+    "godot_module_stack_frame_seen": false,
+    "note": "The htrace diff reports outstanding handles but no resolved creator stack frames in the captured text; module load and symbol errors remain. This does not establish ownership or root cause.",
+    "pdb_or_module_offset_resolved": false,
+    "resolved_stack_frame_seen": true
+  },
+  "target_actual_exit": {
+    "exit_code": 0,
+    "pid": 36772
+  }
+}
