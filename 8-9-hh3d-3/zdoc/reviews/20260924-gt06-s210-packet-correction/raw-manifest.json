@@ -1,0 +1,1611 @@
+{
+  "schema_id": "hh-studio.gt06-s208-raw-manifest",
+  "schema_version": "1.0.0",
+  "authority": 0,
+  "formal_acceptance": false,
+  "accepted_full_runs": 0,
+  "campaign_id": "gt06-s205-formal-01",
+  "run_id": "gt06-s205-formal-01.r00.a01",
+  "captured_utc": "2026-09-23T19:26:30.131059+00:00",
+  "archive": "8-9-hh3d-3/studio/.local/archives/gt06-s205-formal-01-s208-terminal.zip",
+  "archive_sha256": "8471f646258ab0596488902da4dc2605091f19b9a05261e1bddf833688e212f0",
+  "archive_size_bytes": 11914776,
+  "verified_members": 315,
+  "originals_rechecked": true,
+  "missing_members": 0,
+  "hash_mismatches": 0,
+  "plan_before_sha256": "67f0e3414a77f1ee38bef533b9907eac5a0eccb5fae2420e12f6e888068db27a",
+  "source_closure_sha256": "c7ced0ef818fd816a9fddc83841d1a6c06b5b1dec39bf4e69de4a28663f91de7",
+  "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+  "terminal": "harness_boundary_terminal_identity",
+  "failure_code": "TERMINAL_IDENTITY",
+  "completed_batches": 14,
+  "failed_batch": 14,
+  "failed_phase": "commands",
+  "exclusions": [
+    "F13",
+    "F14",
+    "GT06_ACCEPTANCE",
+    "LEAK",
+    "OWNERSHIP",
+    "ROOT_CAUSE",
+    "NATURAL_EXIT_INFERENCE"
+  ],
+  "rows": [
+    {
+      "member": "gt06-s205-formal-01/benchmark-profile.json",
+      "size_bytes": 718,
+      "sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85"
+    },
+    {
+      "member": "gt06-s205-formal-01/campaign.json",
+      "size_bytes": 6727,
+      "sha256": "86fddb9e8bba6732eb065fab7e9bf248e92c9c998bfe140111fd3909d2e6f1c9"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/batch-capture-00.json",
+      "size_bytes": 868,
+      "sha256": "7c09800e0dd51ea6318c6b7d69309f23f08c6790fa3f76c9af29b915a086addd"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/batch-capture-01.json",
+      "size_bytes": 868,
+      "sha256": "29fdab87c75ee906e40abe3fe480333fc8f631b5ba5c8fac2c91834a4abd22a5"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/batch-capture-02.json",
+      "size_bytes": 868,
+      "sha256": "e31bbf9b5a4d119d8e3cfc165843904ff5bcdec3e99e7a1f103bf6739ea42d19"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/batch-capture-03.json",
+      "size_bytes": 868,
+      "sha256": "7969f035af75f24ce5926ed62411f611f956df01112b1f26913c1fe9f4facbc7"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/batch-capture-04.json",
+      "size_bytes": 868,
+      "sha256": "ac10b5b89b71d2088d11106c66f40e5c9b8b62d7aa9bc57cf94e946c089e992c"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/batch-capture-05.json",
+      "size_bytes": 868,
+      "sha256": "55b78586b843aa49b565329e26583e1eac58a5da2e651d8f3f3aee9c5e0e44c2"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/batch-capture-06.json",
+      "size_bytes": 868,
+      "sha256": "a7e462aad2b6c138537661c508a44c03506d1ddcd09669cd4ec1158a8beb48c0"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/batch-capture-07.json",
+      "size_bytes": 868,
+      "sha256": "18c93e7565fbaa9ad975d5932acd5aa2490780884af0ef539f82d44160e0f2fa"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/batch-capture-08.json",
+      "size_bytes": 868,
+      "sha256": "93a8896bd422bae2724f93c83e3a433fa2d7f20bddae4b4618136ad25d7041bb"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/batch-capture-09.json",
+      "size_bytes": 868,
+      "sha256": "48333459c32584e1e7162cf4803ad9c68d6222b54779f95db549bf28c059214d"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/batch-capture-10.json",
+      "size_bytes": 869,
+      "sha256": "9faf1dfdbccbb068c75d1a3d8bb65d7139e1085bf41c4bb1ca622df879554ba1"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/batch-capture-11.json",
+      "size_bytes": 869,
+      "sha256": "8cb7c7e88262c113f71d15613fa33705a8990fb2dfdb4796e6691dc1d188e9af"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/batch-capture-12.json",
+      "size_bytes": 869,
+      "sha256": "151dc57defa60aa94dc09b4f1d32604719c93343a8b2269619b31b0ddc225a67"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/batch-capture-13.json",
+      "size_bytes": 869,
+      "sha256": "6d231d18e4987a82626bd625fced26c6de6dab8d4e7c62a00417aadb86562ac5"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/benchmark-profile.json",
+      "size_bytes": 718,
+      "sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/child-failure.json",
+      "size_bytes": 1705924,
+      "sha256": "165f747dc30b3f20590b1b426461c3a55b5aebb8925a720b44e9e60febd3fc20"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/child-terminal-cleanup.json",
+      "size_bytes": 3713,
+      "sha256": "3eb56a3f28a3efa97e4934643c871ed774e55944d13fea4052079e86ec42d3ba"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/command-00.json",
+      "size_bytes": 2365057,
+      "sha256": "18a64fbda06d4268387bf287ac521b7fb411ce4555585ae1df6621496b8524b7"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/command-01.json",
+      "size_bytes": 2338142,
+      "sha256": "0c7e5c4d5354cb6a2ba755f0ed0b5689b235379d7bb78ba9eccaffbc5f92f020"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/command-02.json",
+      "size_bytes": 2388792,
+      "sha256": "604b6127fe6d1fef25dd413007932b9472b3b62fed002123def242ce7e0507ba"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/command-03.json",
+      "size_bytes": 2450049,
+      "sha256": "61b2f575199ecd851de5902be1ca20f275dd7075162a52c4fa3af55be96f6b8d"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/command-04.json",
+      "size_bytes": 2456347,
+      "sha256": "86bc89ec6c47aeb03775bb9f55e07c4e1912248ff22f8506dc9c328af486502e"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/command-05.json",
+      "size_bytes": 2609601,
+      "sha256": "322d53d05639e3cce544c8efe0adf78e59fa4a03197139f54c51a6a7a0a74dff"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/command-06.json",
+      "size_bytes": 2479990,
+      "sha256": "3dd6839d98a757e38b6edc65ba1ed8e17d6e64e85d768f0e067deb48f9e22f97"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/command-07.json",
+      "size_bytes": 2481145,
+      "sha256": "f38655fccc81591df60470d283f1ed09d6c059d5b655d9ef10a2106ef6912122"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/command-08.json",
+      "size_bytes": 2464148,
+      "sha256": "43d45fee72b39777434cf25523458b47c780e08d1c90b6b3313b6f3cc27a378c"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/command-09.json",
+      "size_bytes": 2535014,
+      "sha256": "f7c3bd9f27c7571b9076b1c656d61d45ef489aa3fefbbb83d0dd708e329b136b"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/command-10.json",
+      "size_bytes": 2522837,
+      "sha256": "f89de1d27b57edba4e498ace4c69acace89816ac99e69dc4606f76049fa48b88"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/command-11.json",
+      "size_bytes": 2838140,
+      "sha256": "5a5fcccf80bfe4a65669bce0dd825c308ea733ee9a701b8f7de10dd86cec642a"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/command-12.json",
+      "size_bytes": 2602240,
+      "sha256": "b81913bf55997fa1766d35a43e4dff21286a33d15a8456e2207f5faec545a24e"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/command-13.json",
+      "size_bytes": 2639177,
+      "sha256": "f06436ea2841d53ea00e14e1e00219a512e09512f4548caad3031e1a2150a593"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/commands/commands.jsonl",
+      "size_bytes": 14343247,
+      "sha256": "91df7beb95a26da54b1456be4957fe72fb72141235b3d40da6b2393ff4fa2210"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/commands/commands.jsonl.guard",
+      "size_bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/context.json",
+      "size_bytes": 5712,
+      "sha256": "177e5e814ee7b9e348d5c48547c895d883dde17efe11aa5d885d75b6765b9591"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/editor-host/cleanup-001.json",
+      "size_bytes": 556,
+      "sha256": "9ff26d2260e6188703654517521ac75e80f618c4e517723042f5f4babc109ee1"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/editor-host/invocation.json",
+      "size_bytes": 9350,
+      "sha256": "e1f3bb2154866af577a1829fcce15779ee503eee267fc080c10c681d65228c58"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/editor-host/localappdata/Godot/editor_doc_cache-4.7.res",
+      "size_bytes": 3269805,
+      "sha256": "b983970fb58841449b67f3918d9c55d7c27e1f5792f885ace07c1ca0281cec21"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/editor-host/localappdata/Godot/resthumb-20f2dd2ecd142995e952ad0e252a72ab.png",
+      "size_bytes": 929,
+      "sha256": "74e4d6e17534aa3f5672f48238a56b5e660183a8dd5a919f27078d0952dcbe10"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/editor-host/localappdata/Godot/resthumb-20f2dd2ecd142995e952ad0e252a72ab.txt",
+      "size_bytes": 54,
+      "sha256": "d9e1213d058be9baac7e2059cc64e7913d251cbb7ceb7bd1046a429c2a010252"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/editor-host/localappdata/Godot/resthumb-6ed82ea468120ddd09fa1b23ae6b11c7.png",
+      "size_bytes": 4078,
+      "sha256": "622f6f4030ce8e1175ca099665e7a24bd9936058955832090b7858f5911275c9"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/editor-host/localappdata/Godot/resthumb-6ed82ea468120ddd09fa1b23ae6b11c7.txt",
+      "size_bytes": 54,
+      "sha256": "81cf14d1d065600e0bd1a02c2a657e72c9767ea1db433ddeb78d37972cd4aa31"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/editor-host/localappdata/Godot/resthumb-9a3ec5dbd3759760eb1e5eaaa9dba26e.png",
+      "size_bytes": 852,
+      "sha256": "26623eb8019be5752051ca407aa87cff0989d8e38ce3ffb8fe2f9980bbc1386f"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/editor-host/localappdata/Godot/resthumb-9a3ec5dbd3759760eb1e5eaaa9dba26e.txt",
+      "size_bytes": 54,
+      "sha256": "a3ae512ee9aa3386d4472d77202604835c96f8105440957b7ff928d1a4ac0980"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/editor-host/localappdata/Godot/resthumb-b4ac9e3cdf715bd826eb7353c464f45c.png",
+      "size_bytes": 414,
+      "sha256": "3be5f43c5f5c1dfa41cc8c26587f6a18613ce89ee346e425b10806dbd8095def"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/editor-host/localappdata/Godot/resthumb-b4ac9e3cdf715bd826eb7353c464f45c.txt",
+      "size_bytes": 54,
+      "sha256": "b6c234fee4a308f8189b9997b35dc79648d0a3f02c76085c4ac4288efb396f4d"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/editor-host/localappdata/Godot/resthumb-c8ccdc13ba91ab5590ed02cd82bf97ce.png",
+      "size_bytes": 831,
+      "sha256": "f4f80b42111aa8d85a33f670f2753c6cda52fd0698e9868183ae652d9a4f6a6b"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/editor-host/localappdata/Godot/resthumb-c8ccdc13ba91ab5590ed02cd82bf97ce.txt",
+      "size_bytes": 54,
+      "sha256": "89b32af5037743c6767a42f119b654b5410c0cd42abf753e49d8fea73e2c9e3c"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/editor-host/localappdata/Godot/resthumb-d05ecac88742bbdc4ae6299e32fcc9ac.png",
+      "size_bytes": 755,
+      "sha256": "bbd1ff19bac55b941b0c00441099621180419d420e80eaf9ac83c2a913fb1d48"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/editor-host/localappdata/Godot/resthumb-d05ecac88742bbdc4ae6299e32fcc9ac.txt",
+      "size_bytes": 54,
+      "sha256": "222ceeaf288708b850e383daee3fda784f153946b252a427dc95b0b5a11c93e7"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/editor-host/process-start.json",
+      "size_bytes": 14,
+      "sha256": "4122c73ad1daf5b9c4111776395ebb52b9b40240be0a5dd2624b278cbd0d3aa7"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/editor-host/stderr.txt",
+      "size_bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/editor-host/stdout.txt",
+      "size_bytes": 583060,
+      "sha256": "0544963c8cab5e1fc115f1963a519f9437f2ece38ca19040057d6d3befdf7317"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/editor-snapshot.json",
+      "size_bytes": 1574,
+      "sha256": "30bba153e1d5a4e8943df92ed73df510c0ad3c5d67c3af70d6fc6ad1fa13716e"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/host-owner/cleanup-001.json",
+      "size_bytes": 548,
+      "sha256": "31f58e29075f8f16bb2df0bb72471bfcd0df794b729d6497022554d84959cfc8"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/host-owner/invocation.json",
+      "size_bytes": 6819,
+      "sha256": "60185e3020f97317036d4b3d4be6ebbb7045fd3a42e133141fefc31a12d4d7cb"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/host-owner/process-exit.json",
+      "size_bytes": 30,
+      "sha256": "96e2c112537332896de40401bb68575685ae61e87f2e1428f90adadd8667817b"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/host-owner/process-start.json",
+      "size_bytes": 14,
+      "sha256": "c6b57b3b2e9669718c17ce50051cf4dfd947affad8c74c49b8bdb6a52f319e44"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/host-owner/stderr.txt",
+      "size_bytes": 2448,
+      "sha256": "023e96e24dc452cc7a349c28cb1af127eb8b8035230dcdee55e4a33d14a3d01d"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/host-owner/stdout.txt",
+      "size_bytes": 169636,
+      "sha256": "05250af4e673b4afec020e569cb6ea515a249d8b5310955ebb86a006caee0271"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/http-phases-final.json",
+      "size_bytes": 2210895,
+      "sha256": "021de61d412ff7438e04abf891cbe3ad076f65f02bb2dd2ee42cea71bad4f23f"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/import-host/appdata/Godot/editor_settings-4.7.tres",
+      "size_bytes": 17991,
+      "sha256": "3203d9e7f88bab99d9eb309dd0eb496146699889fe92d6dc2e73812d62db2855"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/import-host/capture.json",
+      "size_bytes": 1342,
+      "sha256": "d49b995e06f14f6b0d33c6f68908fc386af9ea1090823df7e326671b837c1029"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/import-host/invocation.json",
+      "size_bytes": 6431,
+      "sha256": "5958875b4a365675b5ac6d73e6e26230913abbfdc10bcb6b988644dcf6a25795"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/import-host/localappdata/Godot/editor_doc_cache-4.7.res",
+      "size_bytes": 3269732,
+      "sha256": "f5fccbaca3eed0ff2ee37aec507c794b67e7d93a575e15adbfbb03198addcf1b"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/import-host/process-exit.json",
+      "size_bytes": 30,
+      "sha256": "fd8b8ac29b4100fff432c766ebedf0771e842f224954fb60024fd4f9b30a22c4"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/import-host/process-start.json",
+      "size_bytes": 14,
+      "sha256": "649dab1063ebba3c7a20dd051fcf31492043a972d49b80dc65f5f76f34b96e5e"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/import-host/stderr.txt",
+      "size_bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/import-host/stdout.txt",
+      "size_bytes": 1492,
+      "sha256": "9b5e37b85c8c4f11090de482aee3734b6c7993ad884a62121b2adcc9dfdd6003"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/import-observation.json",
+      "size_bytes": 20446,
+      "sha256": "f1a095b9ac4d174c88bf97b5c8d93deda956e277e3dd30c32f3dbb5ce4f9fa6d"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/initial-project-files.json",
+      "size_bytes": 1461,
+      "sha256": "f4c1654296212625030a99d79840ba524f41af32bb0beb96d81ac20e9346cbc4"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/joint-00.json",
+      "size_bytes": 2320,
+      "sha256": "4d9ebe2693b9adfb5582431075941cd29788ffe46df075423494d15d86e4886a"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/joint-01.json",
+      "size_bytes": 2324,
+      "sha256": "ebab4b0a06dcbf8a55e373cb39b338fab5e3437e246b6f930e3a39b02296f132"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/joint-02.json",
+      "size_bytes": 2325,
+      "sha256": "9032c30a2af484192a45d2682abb7a21ea979850349463a772c188d74c156946"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/joint-03.json",
+      "size_bytes": 2325,
+      "sha256": "4476962fab421fbe79b713e2929361cc09953e94cafb47b5cad90167ba535a00"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/joint-04.json",
+      "size_bytes": 2326,
+      "sha256": "c482e8a62ae6c8945da7b6d2d64bd65ff4805ec51849778c7f22c2883754b295"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/joint-05.json",
+      "size_bytes": 2326,
+      "sha256": "e1187c9979c5f2714ef3db99564ff2df119ab956880dc9f38f562738693af579"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/joint-06.json",
+      "size_bytes": 2326,
+      "sha256": "0a024c5c62af47b87128aa33c9e4968fce93d0a794a84515310da9ed01bb44a9"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/joint-07.json",
+      "size_bytes": 2326,
+      "sha256": "8364b72f91663b2fba2b7cd90fdd1a77f1e395d431398cc47435b4b77f0b5ce0"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/joint-08.json",
+      "size_bytes": 2328,
+      "sha256": "7f0533b3f494efbd269f68f70967ec9423bba44f2b75a5d9b89f9808b94137e0"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/joint-09.json",
+      "size_bytes": 2330,
+      "sha256": "0536e60a0c485bbbaa1fa2e2375cfd769a2c0d88ccb65ce1608b0e7dc5054cca"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/joint-10.json",
+      "size_bytes": 2335,
+      "sha256": "b3b38017ffe3c380ad1e31015b80c06a57444158778a03802aedbc1cb1ec121d"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/joint-11.json",
+      "size_bytes": 2336,
+      "sha256": "d15fdb8a10db739d0a606fa2194d2d3e944f6a07c14af77ded21a404a0b85680"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/joint-12.json",
+      "size_bytes": 2336,
+      "sha256": "399655f31024ef1207fc6c3eb62f01594120f7e9e9e5b4333d92f1865b6aae04"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/joint-13.json",
+      "size_bytes": 2336,
+      "sha256": "a86a27e38fd83ed3842ffe7e16a9b09d41e8f7293fcf8bad9c6aa9cae5c3f749"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/parent-failure.json",
+      "size_bytes": 181,
+      "sha256": "bb20b91a14af762d8525194490d1685ab48862a1fd8084a9736562603d8e214a"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/.godot/.gdignore",
+      "size_bytes": 1,
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/.godot/editor/editor_layout.cfg",
+      "size_bytes": 1436,
+      "sha256": "70dc9392e0db5a0eb260d7e07ea9d4a7ded960dd5592f61470ce37c643328b9b"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/.godot/editor/filesystem_cache10",
+      "size_bytes": 915,
+      "sha256": "b1bb71ce6f85b452f0942542f83d146f044a89720e5672cecd545194f4f2eab1"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/.godot/editor/filesystem_update4",
+      "size_bytes": 26,
+      "sha256": "c70b0d9ece2ebc1d5f746284eb135e9a1b5a78b6324ee9dd1daa592ee7af2497"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/.godot/editor/fixture.tscn-editstate-a95ffd352fa9c4b59083e0b523419988.cfg",
+      "size_bytes": 4334,
+      "sha256": "324eaafaca9233dac634abc0760b0e716534f2f9b88b0084af3835a0aa688acd"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/.godot/editor/fixture.tscn-folding-a95ffd352fa9c4b59083e0b523419988.cfg",
+      "size_bytes": 136,
+      "sha256": "9b34a7fc95b0f9cd640941851bbb0ebc8777e0666f5560e828143047b26c7c93"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/.godot/editor/project_metadata.cfg",
+      "size_bytes": 273,
+      "sha256": "0817ad8476545d590bf74763cdb7a6e06d1e4227ade6a9050aabdf38ff86195b"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/.godot/editor/script_editor_cache.cfg",
+      "size_bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/.godot/global_script_class_cache.cfg",
+      "size_bytes": 8,
+      "sha256": "f61aa7ad3097022d6a9d110ca3f73fa7bb348ec2cf9a6e7c9523574dc75f5a16"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/.godot/scene_groups_cache.cfg",
+      "size_bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/.godot/shader_cache/CanvasShaderGLES3/076cc7f5ca018594656711ce99da014402bbd19aa1eb794136d4aa1fc1916d27/6bb7c9a2fd1c4a8fa77cb96555b9b4a720209981.cache",
+      "size_bytes": 51577,
+      "sha256": "019dd76101b80cc07860c200ce842e04749c6cc53b0fbe9c1d91727c13d0c4d1"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/.godot/shader_cache/CopyShaderGLES3/be890b216e2b3fe916307830870fee480049474f8a9590e668b7db55f4333ca0/6bb7c9a2fd1c4a8fa77cb96555b9b4a720209981.cache",
+      "size_bytes": 118055,
+      "sha256": "dceec40ed5b07c1bcf6e50a1c583cc6e28d114d1845f57cfaa21698faca1befa"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/.godot/shader_cache/CubemapFilterShaderGLES3/f2f060f7884cfc963ab277935a694190c41dc5319199dc60ed40febaeed22ca7/6bb7c9a2fd1c4a8fa77cb96555b9b4a720209981.cache",
+      "size_bytes": 26057,
+      "sha256": "09af4edcd901966cf7771105ef99432f3effe4bd83d4db5095594be9f9f3f1ba"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/.godot/shader_cache/FeedShaderGLES3/d18a5be4b160faacb02638af5d95197a20d24a8ee2964a921fecdd0450ccfe03/6bb7c9a2fd1c4a8fa77cb96555b9b4a720209981.cache",
+      "size_bytes": 8261,
+      "sha256": "8c35f0b5fabccb6abc07a84e140457154e40cc2871e6d4ff57dcebfc06794a76"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/.godot/shader_cache/PostShaderGLES3/591ad1dc6444d48fbbe21612a2afd78e25aaf929315adddd90df3789fa6e5af1/6bb7c9a2fd1c4a8fa77cb96555b9b4a720209981.cache",
+      "size_bytes": 13656,
+      "sha256": "c51830ea6db8cb2dbc034436a7af560ffe2a9ff487bec56c0b0346b380a75923"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/.godot/shader_cache/SceneShaderGLES3/ebd5ef628945fec79c8fb620654e1e6dfffb8249acd83a4803b1a534aadcbced/6bb7c9a2fd1c4a8fa77cb96555b9b4a720209981.cache",
+      "size_bytes": 800909,
+      "sha256": "517c7112739fd6055ed2ddc4f8f11fc36d010d8344e468bfe54c39bc4174c396"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/.godot/shader_cache/SceneShaderGLES3/ebd5ef628945fec79c8fb620654e1e6dfffb8249acd83a4803b1a534aadcbced/77047cd41f429f33ceff24e890e174f5465e755e.cache",
+      "size_bytes": 920188,
+      "sha256": "a240771fc51c6c6f74d9156ec68b039fef0bced5d8bf684827f6c4159f65a362"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/.godot/shader_cache/SceneShaderGLES3/ebd5ef628945fec79c8fb620654e1e6dfffb8249acd83a4803b1a534aadcbced/a38af2d0725c8e99d8492f4c72736f24d6a54cc5.cache",
+      "size_bytes": 738963,
+      "sha256": "3c99a6868bed0f2478b62b3520dfd5144a5b6cfc52656e86bc827e7367ee54e9"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/.godot/shader_cache/SceneShaderGLES3/ebd5ef628945fec79c8fb620654e1e6dfffb8249acd83a4803b1a534aadcbced/cafb1506f2db0c3681435e264aa18e216d1a7a40.cache",
+      "size_bytes": 729679,
+      "sha256": "b027d2c52c3744182c02b90a0ed3b20d1ae98645e59976f640d656170bfdeda1"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/.godot/shader_cache/SkyShaderGLES3/c1a447880507cb68532c47caeeb2a80984019a797946a43cd3c056a918a45c98/2c82eb5fea9b549e20c9f41e308abf9a4fc5d76f.cache",
+      "size_bytes": 55632,
+      "sha256": "9b3972ccd0c4d9242fa369f838c22b591aea7d3baf67d726fec6cbd04ded375d"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/.godot/uid_cache.bin",
+      "size_bytes": 283,
+      "sha256": "5a09f44210cc375bb3bb0d2df67d570e766fd485097ca0920f678c435e11ec99"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/addons/hh_benchmark/benchmark_native.gd",
+      "size_bytes": 54580,
+      "sha256": "13e65360cd0bc0033d0ad414fb3238e216b0d6dcc08e57dc7026ec4fc9eb8b95"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/addons/hh_benchmark/benchmark_native.gd.uid",
+      "size_bytes": 20,
+      "sha256": "a3276526a45b0947965883d5c27469e09370a4591f9cee7ad868d23ba6dcde7a"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/addons/hh_benchmark/plugin.cfg",
+      "size_bytes": 189,
+      "sha256": "648d8821a36d0abc825ef1f380b4917639074302a619cb25a798df987a5a1092"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/addons/hh_studio/jcs_godot.gd",
+      "size_bytes": 10165,
+      "sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/addons/hh_studio/jcs_godot.gd.uid",
+      "size_bytes": 20,
+      "sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/addons/hh_studio/plugin.cfg",
+      "size_bytes": 165,
+      "sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/addons/hh_studio/plugin.gd",
+      "size_bytes": 23043,
+      "sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/addons/hh_studio/plugin.gd.uid",
+      "size_bytes": 20,
+      "sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/addons/hh_studio/scene_commands.gd",
+      "size_bytes": 32174,
+      "sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/addons/hh_studio/scene_commands.gd.uid",
+      "size_bytes": 19,
+      "sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/benchmark/.gdignore",
+      "size_bytes": 53,
+      "sha256": "3d078ee3c08af2f64daca29255d23d366dc0a9bdbef8a872442d5642bfb84cf8"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/benchmark/input/ack-00.json",
+      "size_bytes": 422,
+      "sha256": "75bbb73d6ff7900fce4deb166c9bcda652274c816b4463e6afe198e6784c8eb3"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/benchmark/input/ack-01.json",
+      "size_bytes": 422,
+      "sha256": "daaf33d0329d9035a14a9b58f8407bc336973d62af314ac7e75eee09a88c2864"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/benchmark/input/ack-02.json",
+      "size_bytes": 422,
+      "sha256": "dc3c212d9342ced60be78b31e02bab92d7899b7ebdb571ff9d3af244b4302f90"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/benchmark/input/ack-03.json",
+      "size_bytes": 422,
+      "sha256": "be0b3d78066c50bcf2d695e75bef1bc8aa1e68e2ba1829f6ea72ab8248bfbb77"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/benchmark/input/ack-04.json",
+      "size_bytes": 422,
+      "sha256": "1d47ec3ad5fbdc373501d119405fc5dc0944981511dabb0b549a4ff853d41382"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/benchmark/input/ack-05.json",
+      "size_bytes": 422,
+      "sha256": "44b5c34ff377531e982eb67a5babd46b32715b43cb2ca145f4a6899a27fcbe0d"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/benchmark/input/ack-06.json",
+      "size_bytes": 422,
+      "sha256": "083b206c64701b06b081d39f0b3a76b10a05820ed9075eabf9f57221acedaf0a"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/benchmark/input/ack-07.json",
+      "size_bytes": 422,
+      "sha256": "41c5b2b4f8a29c2340c943f5d77d72b806754483e4e6b3a8c5772a8f3f8efc7a"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/benchmark/input/ack-08.json",
+      "size_bytes": 422,
+      "sha256": "a88c96f39d574db60c478b22b3152624b1caf0fd0d08cece0326abcadc08c3a1"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/benchmark/input/ack-09.json",
+      "size_bytes": 423,
+      "sha256": "1fbe0b23109ee8393136b075a6d3cec92a188ea8437e02797f9bff5eba8ee7b3"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/benchmark/input/ack-10.json",
+      "size_bytes": 424,
+      "sha256": "f2d90cb61e038af967268780ba6d4c064c87d13acd4c3a092a3d6ee1549b61fb"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/benchmark/input/ack-11.json",
+      "size_bytes": 424,
+      "sha256": "477ea0f40b46b57ddc82805565bb7685480e1990b73b712fd0b2736e6f713572"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/benchmark/input/ack-12.json",
+      "size_bytes": 424,
+      "sha256": "888c44cc805cd23aeaf4e573b551b52104b680115ae283cdf3ba52e8e6053ebe"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/benchmark/input/ack-13.json",
+      "size_bytes": 424,
+      "sha256": "10cdea467e46173892432baefb3d4c036a4a6150317a47816d9913ec6b773936"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/benchmark/input/start-00.json",
+      "size_bytes": 507,
+      "sha256": "dec4e543b096cae29bd5d510150fef3ef59de2d8dbf02076e67d4e0fc4c6862a"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/benchmark/input/start-01.json",
+      "size_bytes": 507,
+      "sha256": "8d2e9772ca886f7c8d536625651506c65bbb5cc80bbc5fa028c5e9659ada28eb"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/benchmark/input/start-02.json",
+      "size_bytes": 507,
+      "sha256": "04ce93f8d4095289a07eb09a8edb5c2922e4193f79aee4b54b5152a56383d2d7"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/benchmark/input/start-03.json",
+      "size_bytes": 507,
+      "sha256": "645746036be72909b440b46c93b0c89654275bce660785766783f2486edff5f1"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/benchmark/input/start-04.json",
+      "size_bytes": 507,
+      "sha256": "42fbdcbb317b2bc92491d5fdbe177043edd1775377809c3ebf4a2250bad40501"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/benchmark/input/start-05.json",
+      "size_bytes": 508,
+      "sha256": "95a9c413e54ab133095b345495c29a1e34330869737b384f9953f2d995f81e5c"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/benchmark/input/start-06.json",
+      "size_bytes": 508,
+      "sha256": "529abc09aed9572e95fbd4a52977ccc0f63dc2e4d9d4559c904a48d052564148"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/benchmark/input/start-07.json",
+      "size_bytes": 508,
+      "sha256": "45a8100b75155a707c062efcf4fe08241edc72757f225f03b31a464fe7f99acf"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/benchmark/input/start-08.json",
+      "size_bytes": 508,
+      "sha256": "87997d78a790a89770617d5975a3b4253021d66ab3ae3c3549d51eb3689b2859"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/benchmark/input/start-09.json",
+      "size_bytes": 508,
+      "sha256": "03f0be098fef09afcc4fb94bdbcf4efd3868b8ee1439316ec48cb2f534f386bf"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/benchmark/input/start-10.json",
+      "size_bytes": 509,
+      "sha256": "bfe5f21bf80eb6e412005ddb9571c0e2f2358bb8e86c55ac5b13e26052a5e7f3"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/benchmark/input/start-11.json",
+      "size_bytes": 509,
+      "sha256": "3a250de2c0a21024beb0b045c6a5ec01e9c0611a43343807fbd0f9f1014d722a"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/benchmark/input/start-12.json",
+      "size_bytes": 509,
+      "sha256": "17f9580948c1f2acb5a6722662e0e86f42e9ffa8c97b4a3e7ddd1e840c236674"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/benchmark/input/start-13.json",
+      "size_bytes": 509,
+      "sha256": "2655e1a5530784b772daf9cbe70796782b4a980227819bcbed226ca06f91a596"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/benchmark/input.json",
+      "size_bytes": 367,
+      "sha256": "a6fd5d2581aceed7feb5561ef8f3bc78908cd5e9d790aee6184ddbe466076440"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/benchmark/out/batch-00.json",
+      "size_bytes": 97011,
+      "sha256": "d84f553a9be1d632d7295b3133ef23e45ef4f083df6151940877d65e176b7581"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/benchmark/out/batch-01.json",
+      "size_bytes": 98234,
+      "sha256": "9ec66abc1bea0393926b58e750aaa076a2b16285d50d7b969300962f4f7ca1b7"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/benchmark/out/batch-02.json",
+      "size_bytes": 98250,
+      "sha256": "287d962cb77df06b52e7271166b39fc643a6f760a3d153e6f26eff5502143dcb"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/benchmark/out/batch-03.json",
+      "size_bytes": 98248,
+      "sha256": "441d47afc9b9cebce6f90a8860c037277d92118d57fe8d5c1b6484f6c514632e"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/benchmark/out/batch-04.json",
+      "size_bytes": 98245,
+      "sha256": "e041ab2b3da51a587804e225904c14932317445e13c96aba61cd5b71a3e4d152"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/benchmark/out/batch-05.json",
+      "size_bytes": 98233,
+      "sha256": "3780261a816a4ae2ac901bbe63559f39477fff6fe113ebdba0605cf292654963"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/benchmark/out/batch-06.json",
+      "size_bytes": 98233,
+      "sha256": "cc0f3cd58c85c6362659ec75f2f39873ef8c743e14bdf09e74c8622043c0e2b4"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/benchmark/out/batch-07.json",
+      "size_bytes": 98243,
+      "sha256": "9e3144908585f895230787e34ee080f24411a4eee47f1ab815b1852d3d66d03c"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/benchmark/out/batch-08.json",
+      "size_bytes": 98339,
+      "sha256": "aedbf4eed935fcc7f0876746e1c065ec416afe678cbed7a92d8e01cdf45507ee"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/benchmark/out/batch-09.json",
+      "size_bytes": 98331,
+      "sha256": "dbc74ab276beadb19ef5e74788adb2c54d8ed8ab50928e3571b169c92b9da710"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/benchmark/out/batch-10.json",
+      "size_bytes": 99442,
+      "sha256": "0b21c4f97105de62c74b97706ac3cd178c25196a4af7825f00d19cf6e566e7ad"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/benchmark/out/batch-11.json",
+      "size_bytes": 99648,
+      "sha256": "d62204c4e8b5e5f8f852ca8ccfbef9e45fb227b00030c9853850d5338774eb7a"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/benchmark/out/batch-12.json",
+      "size_bytes": 99646,
+      "sha256": "551ed30e0fc0746ed4cf511e1c63186d243085aa7156a1eaa6e3626577c57efc"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/benchmark/out/batch-13.json",
+      "size_bytes": 99643,
+      "sha256": "de43db94d1390cc9a25533d55da191867134b8f80baf52054d067ef155a2afe8"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/benchmark/out/ready-00.json",
+      "size_bytes": 657,
+      "sha256": "cd3e9d983cec64574ec45a0b166f8ea3b9ef53bb25f0050a486493bbd333e022"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/benchmark/out/ready-01.json",
+      "size_bytes": 661,
+      "sha256": "890f749a7b7a901d687515a4c57cd606d177d44cc7a46edc5f8b15318ca87b66"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/benchmark/out/ready-02.json",
+      "size_bytes": 663,
+      "sha256": "3e98ede6a0449e5507913bb781fa1162ab291c579e685f3ec82449a8a1325685"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/benchmark/out/ready-03.json",
+      "size_bytes": 663,
+      "sha256": "c42c4fcff686a146705f7e118d900287dfd0fe8fe14e64dbaf441e6ac408ba39"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/benchmark/out/ready-04.json",
+      "size_bytes": 663,
+      "sha256": "0940bd7e9848c141da7b0da3c479cfd5ce24563e9f5bab1e35a1130617e9d552"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/benchmark/out/ready-05.json",
+      "size_bytes": 664,
+      "sha256": "b39a620624597ba0505ce12a5aa75ee3a610171a1552c5ed1b6c1fb013d32584"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/benchmark/out/ready-06.json",
+      "size_bytes": 664,
+      "sha256": "272947d598916bdea01a959b3a7685ca67c810454ffbeed2b37c63be8563419d"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/benchmark/out/ready-07.json",
+      "size_bytes": 664,
+      "sha256": "c4648cd153f94a56f21718227e82ba0fbecd292ac643b0355aab793d4188593f"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/benchmark/out/ready-08.json",
+      "size_bytes": 664,
+      "sha256": "1fa51ec8129d872ce515b72f166850dff2716aa206d78acd5b32b7b899b66600"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/benchmark/out/ready-09.json",
+      "size_bytes": 665,
+      "sha256": "b42dccd07181a15f4134bb5a4b5388253094f6195fc954d218d3e73867919384"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/benchmark/out/ready-10.json",
+      "size_bytes": 667,
+      "sha256": "49fe1e3f2c67ac1bf8fae2b27847bf352795acde5e3985634539973d064176e8"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/benchmark/out/ready-11.json",
+      "size_bytes": 668,
+      "sha256": "2ef5455b2bb4a63197f6fe0aef6352eb268a845d786ab32546f5a53bb9100272"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/benchmark/out/ready-12.json",
+      "size_bytes": 669,
+      "sha256": "d64d809852e291d86eedced62ea9b5a06707e7340205b649a369d158db1a3c0f"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/benchmark/out/ready-13.json",
+      "size_bytes": 669,
+      "sha256": "36c5e705f2cf88e5c74a6bdc605a7ade70dc6d2ac14a30bc9d91b6d0cbefc6c6"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/benchmark/out/ready-14.json",
+      "size_bytes": 669,
+      "sha256": "c452c14060c04a8d5353ad9f74bed2665770f1e0d302f3a324db6d6fb835f96e"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/project.godot",
+      "size_bytes": 838,
+      "sha256": "819b521edff745f02f7c30e96ceffe21c70d8ef4fc32e95b96df37877e817ce1"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/scenes/fixture.tscn",
+      "size_bytes": 295,
+      "sha256": "6885999526cacd040c8b49c8f1aab48c045e55194a31814662bc173e2e155b38"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/scripts/fixture_actor.gd",
+      "size_bytes": 50,
+      "sha256": "30116960b59778bee92698077689481f7936f41a2d722ddbe23626cbe3fc55cd"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/project/scripts/fixture_actor.gd.uid",
+      "size_bytes": 20,
+      "sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/sample-preview-00.json",
+      "size_bytes": 72688,
+      "sha256": "b2b71a22a368ee576d4ce3e99c3acfe7b766302fd7d9f495dd88941915b0de1b"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/sample-preview-01.json",
+      "size_bytes": 72696,
+      "sha256": "69d6f6860a95b6dd204627a13b9c4ac5c400b52ff8eeb052aaaa4205b3146764"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/sample-preview-02.json",
+      "size_bytes": 72709,
+      "sha256": "d88e19c4bb197e332c580e5c491a5c87bcce2bff1d1b1c0d363074e47dd5b553"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/sample-preview-03.json",
+      "size_bytes": 72757,
+      "sha256": "0bc6d49f4f11d61fd8f3f6bf254da65754f9d04666924ffa99903680ce874628"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/sample-preview-04.json",
+      "size_bytes": 72783,
+      "sha256": "903071e695029b7d86a30faca5443ba7268b0ffa0bd4530797c924eaae524d50"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/sample-preview-05.json",
+      "size_bytes": 72951,
+      "sha256": "b81f513cb6468e8fea9b5bc0793178a937843eb4de5a867df2906511818f3b44"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/sample-preview-06.json",
+      "size_bytes": 72987,
+      "sha256": "4d8d66714b16025a2d5af42190d629ce05a4866330de5854fbb24d7bcd651eb3"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/sample-preview-07.json",
+      "size_bytes": 73141,
+      "sha256": "cadce86194d3681cf12cc1a9c1a9778e514516748cfd4e3bec99b36c77413ac3"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/sample-preview-08.json",
+      "size_bytes": 73198,
+      "sha256": "3fc924a5dc3e6e6975371f70fcf49949ba51f7e8a521f42b88942c129ffcd2d6"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/sample-preview-09.json",
+      "size_bytes": 73190,
+      "sha256": "6376122c47d5299d714b989adfcd7dd9a6e16ee066fee880a9a1a2ed579898b0"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/sample-preview-10.json",
+      "size_bytes": 73213,
+      "sha256": "6dcd7f55c03a3b2aa112dd6ece81ddf0f8636dae11eaf355693e791a6ad4040f"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/sample-preview-11.json",
+      "size_bytes": 73424,
+      "sha256": "b735345b3388b32150764a52113775265491db61f699210e8792481a0a67da32"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/sample-preview-12.json",
+      "size_bytes": 73438,
+      "sha256": "fce0b5cd59a94302170c0befa640c4f2df197062b8db519d05012bfba135a61b"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/sample-preview-13.json",
+      "size_bytes": 73455,
+      "sha256": "12cf28514dacbd08dd7f0809f6c3ebdbef64843e79f3ef4631142d57ab3d514d"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/source/studio/blender-addon/ipc_client.py",
+      "size_bytes": 16349,
+      "sha256": "ee5d77e52dabb8b746e528be2acddc07b821f6b6724e9de9a36ec18b71cd8da9"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/source/studio/contracts/perf-collector.schema.json",
+      "size_bytes": 30060,
+      "sha256": "394d1df03bdfd736ea3fe9f260e9d718d35f3820cde35d1c45ccab65fbc24834"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/source/studio/godot-addon/addons/hh_studio/plugin.cfg",
+      "size_bytes": 165,
+      "sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/source/studio/godot-addon/addons/hh_studio/plugin.gd",
+      "size_bytes": 23043,
+      "sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/source/studio/godot-addon/addons/hh_studio/scene_commands.gd",
+      "size_bytes": 32174,
+      "sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/source/studio/godot-addon/bundle_staging.py",
+      "size_bytes": 15005,
+      "sha256": "3d614edbec8e9a7f5ad3caf2b9694d7498df129de95683952268621f91d68e43"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/source/studio/godot-addon/bundle_v2.py",
+      "size_bytes": 8475,
+      "sha256": "2c5cdc71cdaf80f58bb93ec791e84bab8bd02cd4d9bdbd93d635db13583de62a"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/source/studio/godot-addon/cli_job.py",
+      "size_bytes": 12998,
+      "sha256": "82aa26afefe480c672aa4cb67d38d45f1ec48651252463314f535a1719c26ea0"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/source/studio/godot-addon/fixture_profile/addons/hh_studio/jcs_godot.gd.uid",
+      "size_bytes": 20,
+      "sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/source/studio/godot-addon/fixture_profile/addons/hh_studio/plugin.gd.uid",
+      "size_bytes": 20,
+      "sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/source/studio/godot-addon/fixture_profile/addons/hh_studio/scene_commands.gd.uid",
+      "size_bytes": 19,
+      "sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/source/studio/godot-addon/fixture_profile/project.godot",
+      "size_bytes": 282,
+      "sha256": "2d4fa9c7261fc5ec4292094854ffa79b602249671a03db3c9808ea7521f4fa51"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/source/studio/godot-addon/fixture_profile/scripts/fixture_actor.gd.uid",
+      "size_bytes": 20,
+      "sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/source/studio/godot-addon/fixture_profile/source-pins.json",
+      "size_bytes": 1873,
+      "sha256": "c0a40998bd63d4d3dc628e4b9d2e0932fcb5725d1870adc43d0fdc3af2fdeed2"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/source/studio/godot-addon/fixture_profile.py",
+      "size_bytes": 6020,
+      "sha256": "25e1667dd930dcf0746b071fc29ea3460bc18d5fb9f3f83e806c1793028f21ae"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/source/studio/host/blender/__init__.py",
+      "size_bytes": 69,
+      "sha256": "812b123ddad075d7bb1892a38e099fdb48db147f80a27db83101c2b640044a90"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/source/studio/host/blender/deadline.py",
+      "size_bytes": 1130,
+      "sha256": "55fb3f77cadd9edc633186e1d6727bbed06216d659846aa3836e2582eef46926"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/source/studio/host/blender/export_job.py",
+      "size_bytes": 13605,
+      "sha256": "8eb0cc4a93361faf8cf09a3f11fd0278ec3fcdb2c9863e4b2ee98852c67ecdfe"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/source/studio/host/blender/glb_preflight.py",
+      "size_bytes": 11815,
+      "sha256": "5e4015c77ee3dced056634f89a0ba1fe2f94dd6650250fac8b03317c12d54f62"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/source/studio/host/blender/ui_host.py",
+      "size_bytes": 22464,
+      "sha256": "0fa5afa44046b61b68baafc275b39ade4787a55221074018db588c4c2f71dc35"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/source/studio/host/core/journal.py",
+      "size_bytes": 29602,
+      "sha256": "826bc5e4c60817e3a22dd2e0b6a199eb522a4eb78532cb5300249fe9056c0cc6"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/source/studio/host/core/limits.py",
+      "size_bytes": 15813,
+      "sha256": "9d01ce56f5976bb034e60e33bf4b7986cdc44b3a8ffad46da738a6ed1b143f3f"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/source/studio/host/core/private_store.py",
+      "size_bytes": 20476,
+      "sha256": "c914b5a66a45660c782ecd43fd2321c238702340f3b33062e284feada4d46476"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/source/studio/host/core/redaction.py",
+      "size_bytes": 10038,
+      "sha256": "e37d998399f589d4202591a1262a7dc19231e5e4b5236b47d4c8234956275c1f"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/source/studio/host/core/safe_create.py",
+      "size_bytes": 13170,
+      "sha256": "681fb7c0f4e74d82597bd8049a6b42cde0ea73941d879ec8ef0ba4df326d0606"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/source/studio/host/core/safe_open.py",
+      "size_bytes": 12093,
+      "sha256": "efc083f1c4fa875d3f748602924a05712aa60fed3abcdb46d058672930201535"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/source/studio/host/core/transport.py",
+      "size_bytes": 52844,
+      "sha256": "ce431eb3035dde8fe7a65d26f2795d7f7861b652a77edc1348b00ccde9795a03"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/source/studio/host/replay/disk_journal_index.py",
+      "size_bytes": 13593,
+      "sha256": "56beb93119dfb66feec32eb51d389fc089d89911c0a1be199071c17e1801cb28"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/source/studio/host/replay/perf.py",
+      "size_bytes": 19085,
+      "sha256": "7c24c11989420e1600bcb20b8949fea44ea93b381bcab824e471465f5148edc7"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/source/studio/host/replay/process_probe.py",
+      "size_bytes": 6478,
+      "sha256": "a2e852fee618b5a58def0b33542b8a4ad509c4d207e957d3c91de4b7b905ff76"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/source/studio/host/replay/verified_journal.py",
+      "size_bytes": 10023,
+      "sha256": "d737a0125ab49482d6579abddc6f179f419fc956d329b2679ee53ee9e3dbd967"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/source/studio/pipeline/__init__.py",
+      "size_bytes": 79,
+      "sha256": "ffea2c35acdfe30636d61970e16c573e4de68228c4f7e780a6061d7be3fbbc68"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/source/studio/pipeline/native_job.py",
+      "size_bytes": 12512,
+      "sha256": "456bb70c315e38cf7a29354b7df51862e1ded4578f6b22d9110bf628547c20ca"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/source/studio/protocol/__init__.py",
+      "size_bytes": 881,
+      "sha256": "a906ecde6f60d5fa2febd3f8a4a5fae440d87fea69e7d7e51a750677e03ad09f"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/source/studio/protocol/_rfc8785/__init__.py",
+      "size_bytes": 505,
+      "sha256": "49d914da77ba606d535832d97df2e43458a8e51d57cdba6883a0a895ac50484b"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/source/studio/protocol/_rfc8785/_impl.py",
+      "size_bytes": 7251,
+      "sha256": "c25bc3a046528482d53bee3487b837f31dd9c05f33e8f13288c7aab320932cec"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/source/studio/protocol/core.py",
+      "size_bytes": 19886,
+      "sha256": "e8153f5a4dcf639f4d1cbce2fa74f7866d963a692c68e4e8d1477136889bd93e"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/source/studio/protocol/jcs_godot.gd",
+      "size_bytes": 10165,
+      "sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/source/studio/tests/replay/benchmark_assembly.py",
+      "size_bytes": 50907,
+      "sha256": "8aa6256119c419305bd46745e29aa2c38decaaf43fe93bec1cc4890e97a5a58d"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/source/studio/tests/replay/benchmark_commands.py",
+      "size_bytes": 22204,
+      "sha256": "ac1e57cac9e4a06c96f5b1638910d5e9f7576851770f716d03b7d4d52e413a68"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/source/studio/tests/replay/benchmark_http_phases.py",
+      "size_bytes": 17620,
+      "sha256": "f160b2d6725b25eef97119724b8ffb2e606fb448c70825aeed663c4aa7a31360"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/source/studio/tests/replay/benchmark_import_observer.py",
+      "size_bytes": 17324,
+      "sha256": "32a952ee0cc65325a65cddca24869584ca009b5d9d2e1c64ced22ad65b78adfb"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/source/studio/tests/replay/benchmark_job.py",
+      "size_bytes": 26255,
+      "sha256": "8e87d0328dacf67756640b6ee213dfb40c47f86e065dba57dbac0dbb6bbf7773"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/source/studio/tests/replay/benchmark_native.gd",
+      "size_bytes": 54580,
+      "sha256": "13e65360cd0bc0033d0ad414fb3238e216b0d6dcc08e57dc7026ec4fc9eb8b95"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/source/studio/tests/replay/benchmark_plugin.cfg",
+      "size_bytes": 189,
+      "sha256": "648d8821a36d0abc825ef1f380b4917639074302a619cb25a798df987a5a1092"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/source/studio/tests/replay/benchmark_profile.py",
+      "size_bytes": 19625,
+      "sha256": "ddbd98583060f791226fca83e275cf01204b37112627383198dcef4ec6f6f233"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/source/studio/tests/replay/benchmark_readiness.py",
+      "size_bytes": 6746,
+      "sha256": "842db6244d93384932929544045654f089d67f6f304624b7348b7d5c4583ab68"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/source/studio/tests/replay/benchmark_transport.py",
+      "size_bytes": 4853,
+      "sha256": "1fb178451bb22a0dd3e059333ff6e01c6fd5d324f04e47c1be64cb7212f26f2d"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/source/studio/tests/replay/campaign_task.ps1",
+      "size_bytes": 18607,
+      "sha256": "405e2abfa39332b1313871763184fdda0755ff998ec83310e67e10cebfe2ebb9"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/source/studio/tests/replay/run_benchmark_campaign.py",
+      "size_bytes": 59097,
+      "sha256": "71a3d19cf0b435baf598d6caad13daeb910799457f89a282366ee2fefa5223fd"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/source/studio/tests/replay/run_campaign_task.py",
+      "size_bytes": 8033,
+      "sha256": "f5cb71fa96b8fd2f935ac933dcd5190cef2b3b6821f031bfe72becb2d360a6fd"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/source/studio/tests/replay/run_native_benchmark.py",
+      "size_bytes": 26986,
+      "sha256": "e6b0f8e9711ac881cfa65b4537232c685ff577af0a13778a51cc54999b1c1fc7"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/source/studio/toolchain.lock.json",
+      "size_bytes": 3026,
+      "sha256": "28bdce555e9a44ef68193723d512feda02c42a417ceb78faf0b29f52d095dca9"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/source-files.json",
+      "size_bytes": 5374,
+      "sha256": "bca6e0aaa76e0be1574b6a045da559a469222a989ea06dc372bd36af60c4d66e"
+    },
+    {
+      "member": "gt06-s205-formal-01/run-00-attempt-01/toolchain.lock.json",
+      "size_bytes": 3026,
+      "sha256": "28bdce555e9a44ef68193723d512feda02c42a417ceb78faf0b29f52d095dca9"
+    },
+    {
+      "member": "gt06-s205-formal-01/source/studio/blender-addon/ipc_client.py",
+      "size_bytes": 16349,
+      "sha256": "ee5d77e52dabb8b746e528be2acddc07b821f6b6724e9de9a36ec18b71cd8da9"
+    },
+    {
+      "member": "gt06-s205-formal-01/source/studio/contracts/perf-collector.schema.json",
+      "size_bytes": 30060,
+      "sha256": "394d1df03bdfd736ea3fe9f260e9d718d35f3820cde35d1c45ccab65fbc24834"
+    },
+    {
+      "member": "gt06-s205-formal-01/source/studio/godot-addon/addons/hh_studio/plugin.cfg",
+      "size_bytes": 165,
+      "sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c"
+    },
+    {
+      "member": "gt06-s205-formal-01/source/studio/godot-addon/addons/hh_studio/plugin.gd",
+      "size_bytes": 23043,
+      "sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036"
+    },
+    {
+      "member": "gt06-s205-formal-01/source/studio/godot-addon/addons/hh_studio/scene_commands.gd",
+      "size_bytes": 32174,
+      "sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069"
+    },
+    {
+      "member": "gt06-s205-formal-01/source/studio/godot-addon/bundle_staging.py",
+      "size_bytes": 15005,
+      "sha256": "3d614edbec8e9a7f5ad3caf2b9694d7498df129de95683952268621f91d68e43"
+    },
+    {
+      "member": "gt06-s205-formal-01/source/studio/godot-addon/bundle_v2.py",
+      "size_bytes": 8475,
+      "sha256": "2c5cdc71cdaf80f58bb93ec791e84bab8bd02cd4d9bdbd93d635db13583de62a"
+    },
+    {
+      "member": "gt06-s205-formal-01/source/studio/godot-addon/cli_job.py",
+      "size_bytes": 12998,
+      "sha256": "82aa26afefe480c672aa4cb67d38d45f1ec48651252463314f535a1719c26ea0"
+    },
+    {
+      "member": "gt06-s205-formal-01/source/studio/godot-addon/fixture_profile/addons/hh_studio/jcs_godot.gd.uid",
+      "size_bytes": 20,
+      "sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b"
+    },
+    {
+      "member": "gt06-s205-formal-01/source/studio/godot-addon/fixture_profile/addons/hh_studio/plugin.gd.uid",
+      "size_bytes": 20,
+      "sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d"
+    },
+    {
+      "member": "gt06-s205-formal-01/source/studio/godot-addon/fixture_profile/addons/hh_studio/scene_commands.gd.uid",
+      "size_bytes": 19,
+      "sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69"
+    },
+    {
+      "member": "gt06-s205-formal-01/source/studio/godot-addon/fixture_profile/project.godot",
+      "size_bytes": 282,
+      "sha256": "2d4fa9c7261fc5ec4292094854ffa79b602249671a03db3c9808ea7521f4fa51"
+    },
+    {
+      "member": "gt06-s205-formal-01/source/studio/godot-addon/fixture_profile/scripts/fixture_actor.gd.uid",
+      "size_bytes": 20,
+      "sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142"
+    },
+    {
+      "member": "gt06-s205-formal-01/source/studio/godot-addon/fixture_profile/source-pins.json",
+      "size_bytes": 1873,
+      "sha256": "c0a40998bd63d4d3dc628e4b9d2e0932fcb5725d1870adc43d0fdc3af2fdeed2"
+    },
+    {
+      "member": "gt06-s205-formal-01/source/studio/godot-addon/fixture_profile.py",
+      "size_bytes": 6020,
+      "sha256": "25e1667dd930dcf0746b071fc29ea3460bc18d5fb9f3f83e806c1793028f21ae"
+    },
+    {
+      "member": "gt06-s205-formal-01/source/studio/host/blender/__init__.py",
+      "size_bytes": 69,
+      "sha256": "812b123ddad075d7bb1892a38e099fdb48db147f80a27db83101c2b640044a90"
+    },
+    {
+      "member": "gt06-s205-formal-01/source/studio/host/blender/deadline.py",
+      "size_bytes": 1130,
+      "sha256": "55fb3f77cadd9edc633186e1d6727bbed06216d659846aa3836e2582eef46926"
+    },
+    {
+      "member": "gt06-s205-formal-01/source/studio/host/blender/export_job.py",
+      "size_bytes": 13605,
+      "sha256": "8eb0cc4a93361faf8cf09a3f11fd0278ec3fcdb2c9863e4b2ee98852c67ecdfe"
+    },
+    {
+      "member": "gt06-s205-formal-01/source/studio/host/blender/glb_preflight.py",
+      "size_bytes": 11815,
+      "sha256": "5e4015c77ee3dced056634f89a0ba1fe2f94dd6650250fac8b03317c12d54f62"
+    },
+    {
+      "member": "gt06-s205-formal-01/source/studio/host/blender/ui_host.py",
+      "size_bytes": 22464,
+      "sha256": "0fa5afa44046b61b68baafc275b39ade4787a55221074018db588c4c2f71dc35"
+    },
+    {
+      "member": "gt06-s205-formal-01/source/studio/host/core/journal.py",
+      "size_bytes": 29602,
+      "sha256": "826bc5e4c60817e3a22dd2e0b6a199eb522a4eb78532cb5300249fe9056c0cc6"
+    },
+    {
+      "member": "gt06-s205-formal-01/source/studio/host/core/limits.py",
+      "size_bytes": 15813,
+      "sha256": "9d01ce56f5976bb034e60e33bf4b7986cdc44b3a8ffad46da738a6ed1b143f3f"
+    },
+    {
+      "member": "gt06-s205-formal-01/source/studio/host/core/private_store.py",
+      "size_bytes": 20476,
+      "sha256": "c914b5a66a45660c782ecd43fd2321c238702340f3b33062e284feada4d46476"
+    },
+    {
+      "member": "gt06-s205-formal-01/source/studio/host/core/redaction.py",
+      "size_bytes": 10038,
+      "sha256": "e37d998399f589d4202591a1262a7dc19231e5e4b5236b47d4c8234956275c1f"
+    },
+    {
+      "member": "gt06-s205-formal-01/source/studio/host/core/safe_create.py",
+      "size_bytes": 13170,
+      "sha256": "681fb7c0f4e74d82597bd8049a6b42cde0ea73941d879ec8ef0ba4df326d0606"
+    },
+    {
+      "member": "gt06-s205-formal-01/source/studio/host/core/safe_open.py",
+      "size_bytes": 12093,
+      "sha256": "efc083f1c4fa875d3f748602924a05712aa60fed3abcdb46d058672930201535"
+    },
+    {
+      "member": "gt06-s205-formal-01/source/studio/host/core/transport.py",
+      "size_bytes": 52844,
+      "sha256": "ce431eb3035dde8fe7a65d26f2795d7f7861b652a77edc1348b00ccde9795a03"
+    },
+    {
+      "member": "gt06-s205-formal-01/source/studio/host/replay/disk_journal_index.py",
+      "size_bytes": 13593,
+      "sha256": "56beb93119dfb66feec32eb51d389fc089d89911c0a1be199071c17e1801cb28"
+    },
+    {
+      "member": "gt06-s205-formal-01/source/studio/host/replay/perf.py",
+      "size_bytes": 19085,
+      "sha256": "7c24c11989420e1600bcb20b8949fea44ea93b381bcab824e471465f5148edc7"
+    },
+    {
+      "member": "gt06-s205-formal-01/source/studio/host/replay/process_probe.py",
+      "size_bytes": 6478,
+      "sha256": "a2e852fee618b5a58def0b33542b8a4ad509c4d207e957d3c91de4b7b905ff76"
+    },
+    {
+      "member": "gt06-s205-formal-01/source/studio/host/replay/verified_journal.py",
+      "size_bytes": 10023,
+      "sha256": "d737a0125ab49482d6579abddc6f179f419fc956d329b2679ee53ee9e3dbd967"
+    },
+    {
+      "member": "gt06-s205-formal-01/source/studio/pipeline/__init__.py",
+      "size_bytes": 79,
+      "sha256": "ffea2c35acdfe30636d61970e16c573e4de68228c4f7e780a6061d7be3fbbc68"
+    },
+    {
+      "member": "gt06-s205-formal-01/source/studio/pipeline/native_job.py",
+      "size_bytes": 12512,
+      "sha256": "456bb70c315e38cf7a29354b7df51862e1ded4578f6b22d9110bf628547c20ca"
+    },
+    {
+      "member": "gt06-s205-formal-01/source/studio/protocol/__init__.py",
+      "size_bytes": 881,
+      "sha256": "a906ecde6f60d5fa2febd3f8a4a5fae440d87fea69e7d7e51a750677e03ad09f"
+    },
+    {
+      "member": "gt06-s205-formal-01/source/studio/protocol/_rfc8785/__init__.py",
+      "size_bytes": 505,
+      "sha256": "49d914da77ba606d535832d97df2e43458a8e51d57cdba6883a0a895ac50484b"
+    },
+    {
+      "member": "gt06-s205-formal-01/source/studio/protocol/_rfc8785/_impl.py",
+      "size_bytes": 7251,
+      "sha256": "c25bc3a046528482d53bee3487b837f31dd9c05f33e8f13288c7aab320932cec"
+    },
+    {
+      "member": "gt06-s205-formal-01/source/studio/protocol/core.py",
+      "size_bytes": 19886,
+      "sha256": "e8153f5a4dcf639f4d1cbce2fa74f7866d963a692c68e4e8d1477136889bd93e"
+    },
+    {
+      "member": "gt06-s205-formal-01/source/studio/protocol/jcs_godot.gd",
+      "size_bytes": 10165,
+      "sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5"
+    },
+    {
+      "member": "gt06-s205-formal-01/source/studio/tests/replay/benchmark_assembly.py",
+      "size_bytes": 50907,
+      "sha256": "8aa6256119c419305bd46745e29aa2c38decaaf43fe93bec1cc4890e97a5a58d"
+    },
+    {
+      "member": "gt06-s205-formal-01/source/studio/tests/replay/benchmark_commands.py",
+      "size_bytes": 22204,
+      "sha256": "ac1e57cac9e4a06c96f5b1638910d5e9f7576851770f716d03b7d4d52e413a68"
+    },
+    {
+      "member": "gt06-s205-formal-01/source/studio/tests/replay/benchmark_http_phases.py",
+      "size_bytes": 17620,
+      "sha256": "f160b2d6725b25eef97119724b8ffb2e606fb448c70825aeed663c4aa7a31360"
+    },
+    {
+      "member": "gt06-s205-formal-01/source/studio/tests/replay/benchmark_import_observer.py",
+      "size_bytes": 17324,
+      "sha256": "32a952ee0cc65325a65cddca24869584ca009b5d9d2e1c64ced22ad65b78adfb"
+    },
+    {
+      "member": "gt06-s205-formal-01/source/studio/tests/replay/benchmark_job.py",
+      "size_bytes": 26255,
+      "sha256": "8e87d0328dacf67756640b6ee213dfb40c47f86e065dba57dbac0dbb6bbf7773"
+    },
+    {
+      "member": "gt06-s205-formal-01/source/studio/tests/replay/benchmark_native.gd",
+      "size_bytes": 54580,
+      "sha256": "13e65360cd0bc0033d0ad414fb3238e216b0d6dcc08e57dc7026ec4fc9eb8b95"
+    },
+    {
+      "member": "gt06-s205-formal-01/source/studio/tests/replay/benchmark_plugin.cfg",
+      "size_bytes": 189,
+      "sha256": "648d8821a36d0abc825ef1f380b4917639074302a619cb25a798df987a5a1092"
+    },
+    {
+      "member": "gt06-s205-formal-01/source/studio/tests/replay/benchmark_profile.py",
+      "size_bytes": 19625,
+      "sha256": "ddbd98583060f791226fca83e275cf01204b37112627383198dcef4ec6f6f233"
+    },
+    {
+      "member": "gt06-s205-formal-01/source/studio/tests/replay/benchmark_readiness.py",
+      "size_bytes": 6746,
+      "sha256": "842db6244d93384932929544045654f089d67f6f304624b7348b7d5c4583ab68"
+    },
+    {
+      "member": "gt06-s205-formal-01/source/studio/tests/replay/benchmark_transport.py",
+      "size_bytes": 4853,
+      "sha256": "1fb178451bb22a0dd3e059333ff6e01c6fd5d324f04e47c1be64cb7212f26f2d"
+    },
+    {
+      "member": "gt06-s205-formal-01/source/studio/tests/replay/campaign_task.ps1",
+      "size_bytes": 18607,
+      "sha256": "405e2abfa39332b1313871763184fdda0755ff998ec83310e67e10cebfe2ebb9"
+    },
+    {
+      "member": "gt06-s205-formal-01/source/studio/tests/replay/run_benchmark_campaign.py",
+      "size_bytes": 59097,
+      "sha256": "71a3d19cf0b435baf598d6caad13daeb910799457f89a282366ee2fefa5223fd"
+    },
+    {
+      "member": "gt06-s205-formal-01/source/studio/tests/replay/run_campaign_task.py",
+      "size_bytes": 8033,
+      "sha256": "f5cb71fa96b8fd2f935ac933dcd5190cef2b3b6821f031bfe72becb2d360a6fd"
+    },
+    {
+      "member": "gt06-s205-formal-01/source/studio/tests/replay/run_native_benchmark.py",
+      "size_bytes": 26986,
+      "sha256": "e6b0f8e9711ac881cfa65b4537232c685ff577af0a13778a51cc54999b1c1fc7"
+    },
+    {
+      "member": "gt06-s205-formal-01/source/studio/toolchain.lock.json",
+      "size_bytes": 3026,
+      "sha256": "28bdce555e9a44ef68193723d512feda02c42a417ceb78faf0b29f52d095dca9"
+    },
+    {
+      "member": "gt06-s205-formal-01-supervisor/claim",
+      "size_bytes": 24,
+      "sha256": "a55ff796f4fb95def5b44d1599752d3ac9b1b5ecd3c1f840db980e6edda79b4c"
+    },
+    {
+      "member": "gt06-s205-formal-01-supervisor/failure.json",
+      "size_bytes": 73,
+      "sha256": "374420879944eea47d635dc134d498db01d36d4527cbfcdb6d36a3a95f4f196f"
+    },
+    {
+      "member": "gt06-s205-formal-01-supervisor/request.json",
+      "size_bytes": 372,
+      "sha256": "cc8fcf9097d2f33a4c6a836d2e5bd981a28c4c0a8b7457a453e4da3596a44a17"
+    },
+    {
+      "member": "gt06-s205-formal-01-supervisor/return.json",
+      "size_bytes": 199,
+      "sha256": "e452d88be9b2569a18fd6175bed089d86017c0ff7cdb89cd1beb3a882ba3b451"
+    },
+    {
+      "member": "gt06-s205-formal-01-supervisor/start.json",
+      "size_bytes": 500,
+      "sha256": "f4f319f315dedd1f146fcc8182ab3f3cb4555efd1a7b8ffe909e8077f3316a77"
+    },
+    {
+      "member": "gt06-s205-formal-01-supervisor/stderr.txt",
+      "size_bytes": 1651,
+      "sha256": "fd48be34ad65e6073a488e8f0ed4622e5c3e789d654791e2f50407db9f860e69"
+    },
+    {
+      "member": "gt06-s205-formal-01-supervisor/stdout.txt",
+      "size_bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "member": "gt06-s205-formal-01-supervisor/task-definition.expected.xml",
+      "size_bytes": 2004,
+      "sha256": "16b95b1a2be2d32aeb835bf87ecc4a325c0f693a3e1296767f56734c8ae96877"
+    },
+    {
+      "member": "gt06-s205-formal-01-supervisor/task-definition.sha256",
+      "size_bytes": 65,
+      "sha256": "85bbe37ce929d19f4d67240802d20e9863c4b4dc69cbb6c0136b5732a6562f00"
+    },
+    {
+      "member": "gt06-s205-formal-01-supervisor/task-definition.xml",
+      "size_bytes": 1657,
+      "sha256": "0651f77362b49432ba405fc426f628c4847f2c42a0a34f859bcf6dcb405c801f"
+    },
+    {
+      "member": "gt06-s205-formal-01-supervisor/task-registration.json",
+      "size_bytes": 877,
+      "sha256": "762f3001a955eb99eaaaffba1606a6fa404cf8a952266a8c39ef33f7660d9771"
+    },
+    {
+      "member": "gt06-s205-formal-01-supervisor/task-start.json",
+      "size_bytes": 835,
+      "sha256": "c196f8313f6b8a5289908137301be5fb85f2951991b3223a9a70cd7af4062557"
+    }
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "schema": "HH-GT06-S210-PACKET-CORRECTION-1",
+  "authority": 0,
+  "formal_acceptance": false,
+  "campaign_id": "gt06-s205-formal-01",
+  "base_commit": "950d9b4c",
+  "issues": [
+    {
+      "issue": "flattened_receipt_collision",
+      "previous": "receipts/process-exit.json",
+      "actual_role": "import-host",
+      "missing_role": "host-owner",
+      "repair": "Preserve original copy; add role-specific copies checked against sealed raw manifest."
+    },
+    {
+      "issue": "flattened_receipt_collision",
+      "previous": "receipts/cleanup-001.json",
+      "actual_role": "editor-host",
+      "missing_role": "host-owner",
+      "repair": "Preserve original copy; add role-specific copies checked against sealed raw manifest."
+    },
+    {
+      "issue": "git_newline_normalization",
+      "path": "receipts/stderr.txt",
+      "historical_git_bytes": 2419,
+      "raw_bytes": 2448,
+      "repair": "Add local -text attributes and stage original raw bytes; old Git commit and original package manifest remain available."
+    }
+  ],
+  "selected_role_copies": [
+    {
+      "path": "receipts/host-owner/process-exit.json",
+      "source_member": "gt06-s205-formal-01/run-00-attempt-01/host-owner/process-exit.json",
+      "sha256": "96e2c112537332896de40401bb68575685ae61e87f2e1428f90adadd8667817b",
+      "size_bytes": 30
+    },
+    {
+      "path": "receipts/host-owner/cleanup-001.json",
+      "source_member": "gt06-s205-formal-01/run-00-attempt-01/host-owner/cleanup-001.json",
+      "sha256": "31f58e29075f8f16bb2df0bb72471bfcd0df794b729d6497022554d84959cfc8",
+      "size_bytes": 548
+    },
+    {
+      "path": "receipts/editor-host/cleanup-001.json",
+      "source_member": "gt06-s205-formal-01/run-00-attempt-01/editor-host/cleanup-001.json",
+      "sha256": "9ff26d2260e6188703654517521ac75e80f618c4e517723042f5f4babc109ee1",
+      "size_bytes": 556
+    },
+    {
+      "path": "receipts/import-host/process-exit.json",
+      "source_member": "gt06-s205-formal-01/run-00-attempt-01/import-host/process-exit.json",
+      "sha256": "fd8b8ac29b4100fff432c766ebedf0771e842f224954fb60024fd4f9b30a22c4",
+      "size_bytes": 30
+    }
+  ],
+  "raw_manifest_sha256": "9aa3f68af60d679e1c7dfe5db8596bbf8031ba4632d2d5de57691a816cc5f44d",
+  "archive_sha256": "8471f646258ab0596488902da4dc2605091f19b9a05261e1bddf833688e212f0",
+  "verification_scope": "Small selected receipts and packet only. No full archive reread or engine/test workload alongside active gt06-s208-formal-01.",
+  "raw_mutated": false,
+  "runtime_source_mutated": false,
+  "gate_changed": false,
+  "current_campaign": "gt06-s208-formal-01",
+  "source_closure_unchanged": "b4eff563fc51c2cd6fc21488ec097d5d2b9d4a033be524a0847d5089e011e37a",
+  "exit_scope": {
+    "host_actual_exit": 1,
+    "import_actual_exit": 0,
+    "editor_helper_exit": 2,
+    "editor_actual_exit": null,
+    "supervisor_actual_exit": null
+  }
+}

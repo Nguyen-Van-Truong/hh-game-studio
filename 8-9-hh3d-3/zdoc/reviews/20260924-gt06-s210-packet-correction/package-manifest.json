@@ -1,0 +1,52 @@
+{
+  "schema": "HH-GT06-S210-PACKET-MANIFEST-1",
+  "authority": 0,
+  "formal_acceptance": false,
+  "campaign_id": "gt06-s205-formal-01",
+  "source_raw_manifest_sha256": "9aa3f68af60d679e1c7dfe5db8596bbf8031ba4632d2d5de57691a816cc5f44d",
+  "source_archive_sha256": "8471f646258ab0596488902da4dc2605091f19b9a05261e1bddf833688e212f0",
+  "runtime_source_mutated": false,
+  "gate_changed": false,
+  "files": [
+    {
+      "path": ".gitattributes",
+      "size_bytes": 8,
+      "sha256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
+    },
+    {
+      "path": "raw-manifest.json",
+      "size_bytes": 69296,
+      "sha256": "9aa3f68af60d679e1c7dfe5db8596bbf8031ba4632d2d5de57691a816cc5f44d"
+    },
+    {
+      "path": "README.md",
+      "size_bytes": 773,
+      "sha256": "a5d921b7a508f1d5d3f607605af23c3d9a34c77617b28d6f3e92e1e72df52f01"
+    },
+    {
+      "path": "receipts/editor-host/cleanup-001.json",
+      "size_bytes": 556,
+      "sha256": "9ff26d2260e6188703654517521ac75e80f618c4e517723042f5f4babc109ee1"
+    },
+    {
+      "path": "receipts/host-owner/cleanup-001.json",
+      "size_bytes": 548,
+      "sha256": "31f58e29075f8f16bb2df0bb72471bfcd0df794b729d6497022554d84959cfc8"
+    },
+    {
+      "path": "receipts/host-owner/process-exit.json",
+      "size_bytes": 30,
+      "sha256": "96e2c112537332896de40401bb68575685ae61e87f2e1428f90adadd8667817b"
+    },
+    {
+      "path": "receipts/import-host/process-exit.json",
+      "size_bytes": 30,
+      "sha256": "fd8b8ac29b4100fff432c766ebedf0771e842f224954fb60024fd4f9b30a22c4"
+    },
+    {
+      "path": "s210-correction.json",
+      "size_bytes": 2886,
+      "sha256": "b469a7935fd483d9f75b3edecd6cafea6134131282816f4658be8358a07c0ae1"
+    }
+  ]
+}
