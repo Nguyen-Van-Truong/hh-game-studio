@@ -36,6 +36,8 @@ class ProcessProbe:
         k.QueryFullProcessImageNameW.argtypes = [w.HANDLE, w.DWORD, w.LPWSTR, ctypes.POINTER(w.DWORD)]
         k.QueryFullProcessImageNameW.restype = w.BOOL
         k.WaitForSingleObject.argtypes, k.WaitForSingleObject.restype = [w.HANDLE, w.DWORD], w.DWORD
+        k.GetExitCodeProcess.argtypes = [w.HANDLE, ctypes.POINTER(w.DWORD)]
+        k.GetExitCodeProcess.restype = w.BOOL
         k.GetProcessHandleCount.argtypes = [w.HANDLE, ctypes.POINTER(w.DWORD)]
         k.GetProcessHandleCount.restype = w.BOOL
         class Memory(ctypes.Structure):
@@ -114,6 +116,26 @@ class ProcessProbe:
         observed.update(handle_mono_us=time.perf_counter_ns() // 1000,
                         held_handles=int(count.value))
         return observed
+
+    def exit_observation(self):
+        """Observe termination on the retained identity handle, without waiting.
+
+        A signaled handle is required before reading the exit code. Code 259
+        alone cannot distinguish a running process from an actual exit(259).
+        Cleanup may have killed the target; this never proves natural success.
+        """
+        from ctypes import wintypes as w
+        self._need(self.handle is not None and not self.close_uncertain, 'PROBE_CLOSED_OR_UNCERTAIN')
+        wait = self.k.WaitForSingleObject(self.handle, 0)
+        if wait == 258:
+            return None
+        self._need(wait == 0, 'PROBE_EXIT_WAIT')
+        code = w.DWORD()
+        self._need(self.k.GetExitCodeProcess(self.handle, ctypes.byref(code)), 'PROBE_EXIT_CODE')
+        return {'pid': self.pid, 'process_start': self.process_start,
+                'exit_code': int(code.value), 'observed_mono_us': time.perf_counter_ns() // 1000,
+                'provider': 'WaitForSingleObject+GetExitCodeProcess',
+                'natural_exit_not_inferred': True}
 
     def close(self):
         if self.handle is not None:

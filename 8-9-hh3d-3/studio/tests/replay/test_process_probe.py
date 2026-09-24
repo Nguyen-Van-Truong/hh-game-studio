@@ -3,6 +3,7 @@ import os
 from pathlib import Path
 import sys
 import unittest
+from unittest.mock import Mock
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[3]))
 from studio.host.replay.process_probe import ProcessProbe, ProbeError, HELD_PROBES
@@ -76,6 +77,49 @@ class ProbeTests(unittest.TestCase):
             ProcessProbe(os.getpid(), Path(sys.executable))
         owner.close()
 
+    def test_exit_requires_signaled_retained_handle_and_keeps_identity(self):
+        owner = self.fake([])
+        owner.pid, owner.process_start = 42, 'windows:123456'
+        owner.k.WaitForSingleObject = Mock(return_value=258)
+        owner.k.GetExitCodeProcess = Mock()
+        self.assertIsNone(owner.exit_observation())
+        owner.k.GetExitCodeProcess.assert_not_called()
+        owner.k.WaitForSingleObject.return_value = 0
+        for code in (0, 1, 259, 0xffffffff):
+            def get_exit(handle, pointer):
+                self.assertEqual(handle, 123)
+                pointer._obj.value = code
+                return True
+            owner.k.GetExitCodeProcess.side_effect = get_exit
+            result = owner.exit_observation()
+            self.assertEqual(result['pid'], 42)
+            self.assertEqual(result['process_start'], 'windows:123456')
+            self.assertEqual(result['exit_code'], code)
+            self.assertTrue(result['natural_exit_not_inferred'])
+            self.assertGreater(result['observed_mono_us'], 0)
+        self.assertEqual(owner.handle, 123)
+        self.assertEqual(owner.k.calls, 0)
+        self.assertTrue(all(call.args == (123, 0) for call in owner.k.WaitForSingleObject.call_args_list))
+
+    def test_exit_query_failures_do_not_become_exit_or_release_handle(self):
+        owner = self.fake([])
+        owner.pid, owner.process_start = 42, 'windows:123456'
+        owner.k.WaitForSingleObject = Mock(return_value=0xffffffff)
+        owner.k.GetExitCodeProcess = Mock(return_value=False)
+        with self.assertRaisesRegex(ProbeError, 'PROBE_EXIT_WAIT'):
+            owner.exit_observation()
+        owner.k.GetExitCodeProcess.assert_not_called()
+        owner.k.WaitForSingleObject.return_value = 0
+        with self.assertRaisesRegex(ProbeError, 'PROBE_EXIT_CODE'):
+            owner.exit_observation()
+        self.assertEqual(owner.handle, 123)
+        for handle, uncertain in [(None, False), (123, True)]:
+            owner.handle, owner.close_uncertain = handle, uncertain
+            owner.k.WaitForSingleObject.reset_mock()
+            with self.assertRaisesRegex(ProbeError, 'PROBE_CLOSED_OR_UNCERTAIN'):
+                owner.exit_observation()
+            owner.k.WaitForSingleObject.assert_not_called()
+
     def test_invalid_pid_never_opens(self):
         for pid in (False, 0, -1, 2**32, '1'):
             with self.subTest(pid=pid), self.assertRaises(ProbeError):
@@ -89,6 +133,7 @@ class ProbeTests(unittest.TestCase):
             self.assertGreater(first['rss_bytes'], 0)
             self.assertGreater(second['host_mono_us'], first['host_mono_us'])
             self.assertEqual(os.getpid(), owner.pid)
+            self.assertIsNone(owner.exit_observation())
         self.assertIsNone(owner.handle)
 
     @unittest.skipUnless(os.name == 'nt', 'Windows process API')

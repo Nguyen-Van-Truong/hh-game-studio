@@ -38,6 +38,12 @@ class InertProbe(ProcessProbe):
         self.handle, self.close_uncertain = object(), False
         self.pid, self.process_start = 5900, 'windows:5900'
 
+    def exit_observation(self):
+        self.events.append(self.role + '_exit_observe')
+        return {'pid': self.pid, 'process_start': self.process_start, 'exit_code': 86,
+                'observed_mono_us': 1234, 'provider': 'WaitForSingleObject+GetExitCodeProcess',
+                'natural_exit_not_inferred': True}
+
     def close(self):
         self.events.append(self.role + '_close')
         if self.error is not None:
@@ -217,7 +223,7 @@ class TerminalCleanupTests(unittest.TestCase):
         self.assertIs(caught.exception, primary)
         self.assertIs(primary.__cause__, cause)
         self.assertEqual(self.events, ['heartbeat_join', 'producer_close', 'host_probe_close',
-                                      'editor_probe_close', 'editor_owner_close'])
+                                      'editor_owner_close', 'editor_probe_exit_observe', 'editor_probe_close'])
         record = self.terminal()
         observed = record['observations']
         self.assertTrue(observed['producer']['closed'])
@@ -228,6 +234,10 @@ class TerminalCleanupTests(unittest.TestCase):
         self.assertEqual(observed['editor_owner']['helper_exit_code'], 2)
         self.assertIsNone(observed['editor_target']['actual_target_exit'])
         self.assertEqual(observed['editor_target']['missing_reason'], 'TARGET_EXIT_NOT_RECORDED')
+        self.assertEqual(observed['editor_exit_after_cleanup']['exit_code'], 86)
+        self.assertEqual(observed['editor_exit_after_cleanup']['process_start'], 'windows:5900')
+        self.assertTrue(observed['editor_exit_after_cleanup']['natural_exit_not_inferred'])
+        self.assertFalse((self.root / 'editor-host/process-exit.json').exists())
         self.assertIsNone(record['host_actual_exit'])
         self.assertIsNone(record['supervisor_actual_exit'])
         self.assertFalse(record['formal_acceptance'])
@@ -274,6 +284,35 @@ class TerminalCleanupTests(unittest.TestCase):
         self.assertTrue(self.owner.closed)
         self.assertTrue(self.producer.closed)
         self.assertEqual(self.terminal()['errors'][-1]['stage'], 'http_observation_receipt')
+
+    def test_exit_observation_failure_does_not_skip_probe_close_or_mask_primary(self):
+        original = CommandError('ADMISSION_UNKNOWN')
+        error = ProbeError('PROBE_EXIT_CODE')
+        with patch.object(self.probe, 'exit_observation', side_effect=error):
+            self.finish(primary=original)
+        self.assertTrue(self.owner.closed)
+        self.assertIsNone(self.probe.handle)
+        self.assertIsNone(self.terminal()['observations']['editor_exit_after_cleanup'])
+        self.assertIn(error, original.cleanup_errors)
+        self.assertEqual(self.terminal()['errors'][0]['stage'], 'editor_exit_observe')
+
+    def test_running_target_stays_unknown_after_failed_owner_cleanup(self):
+        original = CommandError('ADMISSION_UNKNOWN')
+        self.owner.error = BenchmarkJobError('BENCHMARK_CLEANUP_HELD')
+        with patch.object(self.probe, 'exit_observation', return_value=None):
+            self.finish(primary=original)
+        self.assertFalse(self.owner.closed)
+        self.assertIsNone(self.probe.handle)
+        self.assertIsNone(self.terminal()['observations']['editor_exit_after_cleanup'])
+        self.assertIsNone(self.terminal()['observations']['editor_target']['actual_target_exit'])
+
+    def test_success_path_never_queries_released_probe_or_adds_exit_authority(self):
+        self.probe.handle = None
+        with patch.object(self.probe, 'exit_observation', side_effect=AssertionError('released handle')) as observe:
+            self.finish()
+        observe.assert_not_called()
+        self.assertIsNone(self.terminal()['observations']['editor_exit_after_cleanup'])
+        self.assertFalse(self.terminal()['formal_acceptance'])
 
     def test_import_internal_observer_error_stops_before_producer_setup(self):
         observer = InertImportObserver()

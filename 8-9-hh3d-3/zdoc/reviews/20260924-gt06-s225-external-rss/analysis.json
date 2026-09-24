@@ -1,0 +1,77 @@
+{
+  "actual_target_exit": {
+    "exit_code": 0,
+    "pid": 32348
+  },
+  "archive_sha256": "a96b4a0c852112484602b540598bf0de78df254e0ab9c7fa12d253aa790c900b",
+  "authority": 0,
+  "engine_started": true,
+  "formal_acceptance": false,
+  "interpretation": {
+    "distinct_supported_rss_sampler": true,
+    "formal_gate_changed": false,
+    "formal_gt06_acceptance": false,
+    "idle_output_object_accumulation_consistent": true,
+    "leak_or_owner_rootcause_proven": false,
+    "measurement_provider_defect_proven": false,
+    "next_action": "RETAIN_DIAGNOSTIC; DO_NOT_RETRY_FORMAL_UNCHANGED; REQUIRE_OWNER_ADR_OR_PHASE_CORRELATED_SUPPORTED_ROUTE"
+  },
+  "job_cleanup": {
+    "active_count": 0,
+    "assigned": true,
+    "close_uncertain": false,
+    "closed": true,
+    "configured": true,
+    "create_uncertain": false,
+    "failed_operations": [],
+    "handle_retained": false,
+    "native_error": null,
+    "tainted": false,
+    "zero_observed": true
+  },
+  "native_idle": {
+    "filesystem_changes_max": 1,
+    "importing_rows": 0,
+    "objects_first": 70990,
+    "objects_last": 71115,
+    "resources_first": 5,
+    "resources_last": 6,
+    "rows": 91,
+    "scanning_rows": 1,
+    "stdout_rows_printed": 91
+  },
+  "observer": {
+    "handle_provider": "GetProcessHandleCount",
+    "held_handles": {
+      "decreases": 6,
+      "first": 405,
+      "increases": 9,
+      "last": 562,
+      "max": 573,
+      "min": 405,
+      "unique": 11
+    },
+    "provider": "GetProcessMemoryInfo.WorkingSetSize",
+    "rss_bytes": {
+      "decreases": 9,
+      "first": 91926528,
+      "increases": 27,
+      "last": 746864640,
+      "max": 747745280,
+      "min": 88567808,
+      "unique": 37
+    },
+    "sample_count": 360,
+    "target_pid": 32348,
+    "target_process_start": "windows:134346890342942912"
+  },
+  "raw_files": 73,
+  "raw_manifest_sha256": "775309d9eabf689cf5d0b42db254af5b0234334cdee2355e9706094d63691910",
+  "run_id": "gt06-s225-external-rss-01",
+  "sampler_process_exit": {
+    "actual_exit": 0,
+    "pid": 32436
+  },
+  "schema_id": "hh-studio.gt06-s225-analysis",
+  "schema_version": "1.0.0"
+}

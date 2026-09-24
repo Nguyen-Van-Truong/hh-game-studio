@@ -743,7 +743,11 @@ def _finish_child_cleanup(root, context, progress, batches, *, producer, probe, 
     Only live checked state and exact target receipts are recorded. This is not
     a successful-run cleanup receipt or a claim about the child's own exit.
     """
-    owners = [('producer', producer), ('editor_probe', probe), ('editor_owner', owner)]
+    # Keep the existing identity handle until the editor Job is drained. The
+    # helper may be killed with its target and never write process-exit.json.
+    # A separate failure-only observation preserves that exit without inventing
+    # a helper receipt or changing successful-run acceptance.
+    owners = [('producer', producer), ('editor_owner', owner), ('editor_probe', probe)]
     if import_observer is not None:
         owners.append(('import_observer', import_observer))
     if retained is not None and all(retained is not value for _, value in owners):
@@ -755,10 +759,16 @@ def _finish_child_cleanup(root, context, progress, batches, *, producer, probe, 
         except BaseException as error:
             errors.append((stage, error))
     seen = set()
+    editor_exit_observation = None
     for role, owned in owners:
         if owned is None or id(owned) in seen:
             continue
         seen.add(id(owned))
+        if role == 'editor_probe' and primary is not None and owned.handle is not None:
+            try:
+                editor_exit_observation = owned.exit_observation()
+            except BaseException as error:
+                errors.append(('editor_exit_observe', error))
         try:
             owned.close()
         except BaseException as error:
@@ -766,7 +776,7 @@ def _finish_child_cleanup(root, context, progress, batches, *, producer, probe, 
 
     # No close or native probe operation occurs below this point. A failed
     # snapshot cannot skip another role or erase a retained exception owner.
-    observations = {}
+    observations = {'editor_exit_after_cleanup': editor_exit_observation}
     getters = [('heartbeat_alive', thread.is_alive),
                ('producer', lambda: _producer_cleanup_state(producer)),
                ('editor_probe', lambda: _probe_cleanup_state(probe)),
