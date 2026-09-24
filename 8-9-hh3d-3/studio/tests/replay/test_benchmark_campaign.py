@@ -402,8 +402,14 @@ class CampaignScreenTests(unittest.TestCase):
                     sample['memory'][role]['rss_bytes']['value'] = limit
                     campaign.screen_sample(sample, baseline)
                     sample['memory'][role]['rss_bytes']['value'] = limit + 1
-                    with self.assertRaisesRegex(BenchmarkJobError, 'CAMPAIGN_RSS_GROWTH'):
+                    with self.assertRaisesRegex(BenchmarkJobError, 'CAMPAIGN_RSS_GROWTH') as raised:
                         campaign.screen_sample(sample, baseline)
+                    observation = raised.exception.screen_observation
+                    self.assertEqual(observation['role'], role)
+                    self.assertEqual(observation['counter'], 'rss_bytes')
+                    self.assertEqual(observation['baseline_value'], original)
+                    self.assertEqual(observation['observed_value'], limit + 1)
+                    self.assertEqual(observation['maximum_inclusive'], limit)
 
     def test_each_applicable_retained_counter_cannot_grow_after_warmup(self):
         for role, name in (('host', 'held_handles'), ('editor', 'held_handles'),
@@ -415,8 +421,51 @@ class CampaignScreenTests(unittest.TestCase):
                 sample['memory'][role][name]['value'] -= 1
                 campaign.screen_sample(sample, baseline)
                 sample['memory'][role][name]['value'] = baseline[role][name]['value'] + 1
-                with self.assertRaisesRegex(BenchmarkJobError, 'CAMPAIGN_RETAINED_COUNTER_GROWTH'):
+                with self.assertRaisesRegex(BenchmarkJobError, 'CAMPAIGN_RETAINED_COUNTER_GROWTH') as raised:
                     campaign.screen_sample(sample, baseline)
+                observation = raised.exception.screen_observation
+                self.assertEqual((observation['role'], observation['counter']), (role, name))
+                self.assertEqual(observation['maximum_inclusive'], baseline[role][name]['value'])
+
+    def test_simultaneous_rss_failures_retain_first_host_row_through_receipt(self):
+        # Synthetic control: both roles fail. The first gate hit must not be
+        # misreported as an editor-only failure, or inferred from a generic code.
+        baseline = self.memory()
+        sample = self.sample()
+        sample['memory']['host']['rss_bytes']['value'] = 1200
+        sample['memory']['editor']['rss_bytes']['value'] = 2600
+        before = deepcopy((sample, baseline))
+        with self.assertRaises(campaign.CampaignScreenError) as raised:
+            campaign.screen_sample(sample, baseline)
+        self.assertEqual((sample, baseline), before)
+        with tempfile.TemporaryDirectory(prefix='gt06-screen-receipt-') as directory:
+            root = Path(directory)
+            campaign.write_child_failure(root, run_id='synthetic.r00.a01', batches=[None] * 6,
+                progress={'batch': 5, 'phase': 'joint_observation'}, error=raised.exception)
+            receipt = json.loads((root / 'child-failure.json').read_bytes())
+        self.assertEqual(receipt['code'], 'CAMPAIGN_RSS_GROWTH')
+        self.assertEqual(receipt['completed_batches'], 6)
+        self.assertIsNone(receipt['partial_command'])
+        self.assertFalse(receipt['formal_acceptance'])
+        self.assertEqual(receipt['screen_observation'], {
+            'schema_id': 'hh-studio.benchmark-screen-failure', 'schema_version': '1.0.0',
+            'batch_index': 5, 'baseline_batch_index': 4, 'role': 'host', 'counter': 'rss_bytes',
+            'baseline_value': 1000, 'observed_value': 1200, 'maximum_inclusive': 1100,
+            'root_cause_claim': False,
+        })
+
+    def test_non_screen_failure_preserves_partial_command_without_gate_claim(self):
+        error = BenchmarkJobError('TERMINAL_TIMEOUT')
+        error.report = {'commands': [], 'synthetic': True}
+        with tempfile.TemporaryDirectory(prefix='gt06-command-receipt-') as directory:
+            root = Path(directory)
+            campaign.write_child_failure(root, run_id='synthetic.r00.a01', batches=[],
+                progress={'batch': 0, 'phase': 'commands'}, error=error)
+            receipt = json.loads((root / 'child-failure.json').read_bytes())
+        self.assertEqual(receipt['partial_command'], error.report)
+        self.assertNotIn('screen_observation', receipt)
+        self.assertEqual(receipt['code'], 'TERMINAL_TIMEOUT')
+        self.assertFalse(receipt['formal_acceptance'])
 
     def test_warmup_does_not_apply_growth_or_status_gap_limits_before_baseline(self):
         for index in range(5):

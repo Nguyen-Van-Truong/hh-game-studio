@@ -257,6 +257,20 @@ def wait_owned_run(owner, output, *, run_id, source_closure_sha256, campaign_sha
         time.sleep(.05)
 
 
+class CampaignScreenError(BenchmarkJobError):
+    """A failed gate row, without inferring leak ownership or root cause."""
+    def __init__(self, code, *, index, role, counter, baseline, observed, maximum):
+        super().__init__(code)
+        # Only selected numeric fields and fixed role/counter labels are retained.
+        # Construct this after failure, never resample or retain a successful row.
+        self.screen_observation = {
+            'schema_id': 'hh-studio.benchmark-screen-failure', 'schema_version': '1.0.0',
+            'batch_index': index, 'baseline_batch_index': 4, 'role': role,
+            'counter': counter, 'baseline_value': baseline, 'observed_value': observed,
+            'maximum_inclusive': maximum, 'root_cause_claim': False,
+        }
+
+
 def screen_sample(sample, baseline):
     """Stop an already-failing prefix; only all ten complete runs can pass."""
     for role in ('host', 'editor'):
@@ -268,10 +282,23 @@ def screen_sample(sample, baseline):
             if sample['index'] < 5:
                 continue
             reference_value = baseline[role][name]['value']
-            require(value * 100 <= reference_value * 110 if name == 'rss_bytes' else value <= reference_value,
-                    'CAMPAIGN_RSS_GROWTH' if name == 'rss_bytes' else 'CAMPAIGN_RETAINED_COUNTER_GROWTH')
+            if not (value * 100 <= reference_value * 110 if name == 'rss_bytes' else value <= reference_value):
+                raise CampaignScreenError(
+                    'CAMPAIGN_RSS_GROWTH' if name == 'rss_bytes' else 'CAMPAIGN_RETAINED_COUNTER_GROWTH',
+                    index=sample['index'], role=role, counter=name, baseline=reference_value,
+                    observed=value, maximum=reference_value * 110 // 100 if name == 'rss_bytes' else reference_value)
     if sample['index'] >= 5:
         require(sample['max_status_gap_ms'] <= 2000, 'CAMPAIGN_STATUS_GAP')
+
+
+def write_child_failure(root, *, run_id, batches, progress, error):
+    record = {'completed': False, 'formal_acceptance': False,
+        'run_id': run_id, 'completed_batches': len(batches), 'phase': progress,
+        'code': getattr(error, 'code', type(error).__name__),
+        'partial_command': getattr(error, 'report', None)}
+    if isinstance(error, CampaignScreenError):
+        record['screen_observation'] = error.screen_observation
+    write(root / 'child-failure.json', record)
 
 
 def workstation_profile():
@@ -1026,9 +1053,7 @@ def run_child(root):
         elif probe is None and isinstance(retained, ProcessProbe):
             probe = retained
         try:
-            write(root / 'child-failure.json', {'completed': False, 'formal_acceptance': False,
-                'run_id': run_id, 'completed_batches': len(batches), 'phase': progress,
-                'code': getattr(error, 'code', type(error).__name__), 'partial_command': getattr(error, 'report', None)})
+            write_child_failure(root, run_id=run_id, batches=batches, progress=progress, error=error)
         except BaseException as receipt_error:
             cleanup_errors.append(('failure_receipt', receipt_error))
         raise
