@@ -1,0 +1,37 @@
+{
+  "schema_id": "hh-studio.gt06-owner-resume-adr",
+  "schema_version": "1.0.0",
+  "adr_id": "gt06-s239-owner-resume-01",
+  "authority": 0,
+  "formal_acceptance": false,
+  "owner_authorization": "ACTIVE_TASK_OWNER_SCOPE",
+  "basis": {
+    "prior_failure": "S232 retained counter growth at batch8 (editor handles 552 to 554) with post-ACK cadence probe in executed source",
+    "distinct_boundary": "S236 sampled the same identity-checked editor process handle before ACK, immediately after ACK, and during terminal idle; it issued no next start permit",
+    "observed_result": "pre-ACK and post-ACK sequences matched; terminal idle stayed 552 for 20 samples; S232 plus2 did not reproduce",
+    "limits": "No leak, owner, root cause, or measurement defect is claimed"
+  },
+  "authorization": {
+    "action": "DISPATCH_ONE_FRESH_GT06_FORMAL_CAMPAIGN",
+    "campaign_id": "gt06-s239-formal-01",
+    "source_closure_sha256": "d7c78724ed827c8182af62c3f7bc1489d8dd35d29abe1f70216736a896e66bb3",
+    "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+    "gate": "10 fresh pairs x 35 batches (5 warmup + 30 measured) with full exits/trees/jobs/handles/dataset and two critics",
+    "changes_forbidden": [
+      "timeout",
+      "baseline",
+      "counter threshold",
+      "RSS threshold",
+      "profile",
+      "source semantics",
+      "partial merge",
+      "ID reuse"
+    ],
+    "stop_conditions": [
+      "first terminal failure preserves raw and seals before repair",
+      "scheduler state is never exit proof",
+      "no GT07-GT10 open before GT06 accepted"
+    ]
+  },
+  "decision": "OWNER_AUTHORIZED_BOUNDED_RESUME; ONE_FRESH_ID_ONLY; FORMAL_GATE_UNCHANGED; NO_ACCEPTANCE_FROM_PARTIAL; GT07_GT10_REMAIN_PLANNED_UNOPENED"
+}
