@@ -1,0 +1,38 @@
+{
+  "schema_id": "hh-studio.gt06-rss-boundary-review",
+  "schema_version": "1.0.0",
+  "revision": "S222",
+  "authority": 0,
+  "formal_acceptance": false,
+  "source_closure_sha256": "f72dcfaf1a2cdb18ba05136058082c4abab9330fc1b4a990cb4862354fd277db",
+  "source_files": {
+    "8-9-hh3d-3/studio/host/replay/process_probe.py": "a2e852fee618b5a58def0b33542b8a4ad509c4d207e957d3c91de4b7b905ff76",
+    "8-9-hh3d-3/studio/tests/replay/run_benchmark_campaign.py": "71a3d19cf0b435baf598d6caad13daeb910799457f89a282366ee2fefa5223fd",
+    "8-9-hh3d-3/studio/tests/replay/benchmark_profile.py": "ddbd98583060f791226fca83e275cf01204b37112627383198dcef4ec6f6f233"
+  },
+  "raw_failure": "zdoc/reviews/20260924-gt06-s218-rss-failure",
+  "observed": {
+    "run_id": "gt06-s218-formal-01",
+    "baseline_index": 4,
+    "failed_index": 5,
+    "editor_rss_baseline_bytes": 105934848,
+    "editor_rss_failed_bytes": 161259520,
+    "editor_rss_growth_percent": 52.215,
+    "editor_objects_baseline": 71128,
+    "editor_objects_failed": 71128,
+    "editor_resources_baseline": 6,
+    "editor_resources_failed": 6,
+    "editor_held_handles_baseline": 555,
+    "editor_held_handles_failed": 555,
+    "host_held_handles_baseline": 204,
+    "host_held_handles_failed": 204
+  },
+  "checks": [
+    "process_probe retains one identity-checked process handle and reads WorkingSetSize through GetProcessMemoryInfo",
+    "screen_sample establishes the frozen baseline from captured batch index 4 and applies the existing strict +10 percent RSS gate from index 5 onward",
+    "profile/perf contracts require the Windows provider GetProcessMemoryInfo.WorkingSetSize",
+    "S218 raw cleanup proves owned tree zero, jobs zero/closed, owner closed and handles released; it does not prove leak ownership or cause"
+  ],
+  "decision": "No proven measurement or collector boundary defect was found in this read-only review. Keep the RSS gate, timeout, baseline, profile and counter policy unchanged. Do not fresh-retry S218 on the same hypothesis. A fresh campaign requires either an owner-approved ADR or a distinct supported measurement boundary that preserves the current acceptance metric.",
+  "next_action": "WAIT_FOR_DISTINCT_SUPPORTED_RSS_BOUNDARY_OR_OWNER_ADR"
+}
