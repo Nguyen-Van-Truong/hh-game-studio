@@ -1,0 +1,96 @@
+{
+  "schema_id": "hh-studio.gt07-10-preflight",
+  "schema_version": "1.0.0",
+  "revision": "S223",
+  "authority": 0,
+  "formal_acceptance": false,
+  "status": "PREPARATION_ONLY",
+  "gt06_dependency": {
+    "status": "IN_PROGRESS",
+    "accepted_full_runs": 0
+  },
+  "source_closure_sha256": "f72dcfaf1a2cdb18ba05136058082c4abab9330fc1b4a990cb4862354fd277db",
+  "commands": [
+    {
+      "shell": "PowerShell",
+      "command": "Get-Command adb -ErrorAction SilentlyContinue",
+      "result": "NOT_FOUND",
+      "exit": 0
+    },
+    {
+      "shell": "PowerShell",
+      "command": "Get-Command java -ErrorAction SilentlyContinue",
+      "result": "FOUND",
+      "exit": 0
+    },
+    {
+      "shell": "PowerShell",
+      "command": "Get-Command wsl -ErrorAction SilentlyContinue",
+      "result": "FOUND",
+      "exit": 0
+    },
+    {
+      "shell": "PowerShell",
+      "command": "Test-Path <candidate> and Test-Path <candidate>\\platform-tools\\adb.exe",
+      "result": "all listed candidates false",
+      "exit": 0
+    }
+  ],
+  "tools": {
+    "adb": {
+      "status": "NOT_FOUND",
+      "source": null,
+      "version": null
+    },
+    "java": {
+      "status": "FOUND",
+      "source": "C:\\Program Files\\Common Files\\Oracle\\Java\\javapath\\java.exe",
+      "version": "java 25.0.1 2025-10-21 LTS"
+    },
+    "wsl": {
+      "status": "FOUND",
+      "source": "C:\\WINDOWS\\system32\\wsl.exe",
+      "version": "WSL version 2.6.1.0"
+    }
+  },
+  "sdk_candidates": [
+    {
+      "path": "C:\\Users\\truon\\AppData\\Local\\Android\\Sdk",
+      "exists": false,
+      "adb": false
+    },
+    {
+      "path": "C:\\Android\\Sdk",
+      "exists": false,
+      "adb": false
+    },
+    {
+      "path": "D:\\Android\\Sdk",
+      "exists": false,
+      "adb": false
+    },
+    {
+      "path": "C:\\Program Files\\Android\\Sdk",
+      "exists": false,
+      "adb": false
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Android\\Sdk",
+      "exists": false,
+      "adb": false
+    },
+    {
+      "path": "C:\\Program Files (x86)\\Android\\android-sdk",
+      "exists": false,
+      "adb": false
+    },
+    {
+      "path": "C:\\Microsoft\\AndroidSDK",
+      "exists": false,
+      "adb": false
+    }
+  ],
+  "interpretation": "adb is not on PATH and no adb.exe was found in the explicitly checked standard candidate paths. This is an environment gap only; it does not prove a physical Android device is absent.",
+  "decision": "Keep GT08 physical-device hard gate and GT07-GT10 PLANNED_UNOPENED. Do not install, dispatch engine, or tick any WP from this packet. Resume with a fresh device/SDK inventory when external state changes.",
+  "next_action": "WAIT_FOR_GT06_ACCEPTANCE_AND_ANDROID_DEVICE_SDK_INVENTORY"
+}
