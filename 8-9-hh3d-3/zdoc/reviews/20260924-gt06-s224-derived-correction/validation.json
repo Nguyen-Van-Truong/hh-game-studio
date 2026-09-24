@@ -1,0 +1,47 @@
+{
+  "authority": 0,
+  "engine_started": false,
+  "tests": [
+    {
+      "command": "python -B studio/tests/replay/test_benchmark_campaign.py",
+      "exit_code": 0,
+      "tests": 34
+    },
+    {
+      "command": "python -B studio/tests/replay/test_benchmark_assembly.py",
+      "exit_code": 0,
+      "tests": 35
+    },
+    {
+      "command": "python -B studio/tests/replay/test_benchmark_profile.py",
+      "exit_code": 0,
+      "tests": 19
+    }
+  ],
+  "replay_verify_actual_exit": 0,
+  "source_commit": "94fe4962",
+  "result": "88/88 unit tests and sealed-raw replay pass; not a formal run",
+  "worker_attempts": [
+    {
+      "name": "s224_raw_audit",
+      "model": "gpt-6-astra",
+      "effort": "xhigh",
+      "result": "Selected model is at capacity. Please try a different model.",
+      "contribution": false
+    },
+    {
+      "name": "s224_static_closure",
+      "model": "gpt-6-astra",
+      "effort": "xhigh",
+      "result": "Selected model is at capacity. Please try a different model.",
+      "contribution": false
+    },
+    {
+      "name": "s224_plan_sanity",
+      "model": "gpt-6-astra",
+      "effort": "xhigh",
+      "result": "Selected model is at capacity. Please try a different model.",
+      "contribution": false
+    }
+  ]
+}
