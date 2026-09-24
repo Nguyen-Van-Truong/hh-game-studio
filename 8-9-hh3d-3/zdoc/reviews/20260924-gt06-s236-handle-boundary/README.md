@@ -19,6 +19,7 @@ child exited through the intentional diagnostic bound; this is not a natural
 benchmark success. The run remains Authority 0 and cannot tick GT06 or change
 any timeout, baseline, profile, counter, RSS, or gate. A future formal campaign
 still requires a fresh source closure and the unchanged 10×35 acceptance.
+This diagnostic does not authorize a formal retry by itself; a new campaign requires a distinct supported boundary or an owner-approved ADR.
 
 Raw evidence is sealed at
 `studio/.local/reviews/gt06-s236-handle-boundary-01` and

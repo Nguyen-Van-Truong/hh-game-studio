@@ -1,0 +1,406 @@
+{
+  "schema_id": "hh-studio.gt07-10-capability-catalog",
+  "schema_version": "1.0.0",
+  "run_id": "gt07-10-s238-capability-catalog-01",
+  "authority": 0,
+  "formal_acceptance": false,
+  "plan_revision": "S238",
+  "gt06_dependency": {
+    "status": "IN_PROGRESS",
+    "accepted_full_runs": 0,
+    "gate_unchanged": true
+  },
+  "status": {
+    "GT07": "PLANNED_UNOPENED",
+    "GT08": "PLANNED_UNOPENED",
+    "GT09": "PLANNED_UNOPENED",
+    "GT10": "PLANNED_UNOPENED"
+  },
+  "observed_capabilities": {
+    "GT07": {
+      "present": [
+        "replay lease/fence validation",
+        "benchmark assembly/journal boundaries",
+        "custody/owner lifecycle records",
+        "Blender client ledger recovery notes"
+      ],
+      "not_proven": [
+        "GT07 acceptance",
+        "multi-agent scheduler conformance",
+        "cross-app activation",
+        "recovery gate on a post-GT06 source"
+      ]
+    },
+    "GT08": {
+      "present": [
+        "Godot toolchain lock",
+        "bootstrap/install lifecycle tests",
+        "build directory scaffolding"
+      ],
+      "hard_gate": "physical Android device plus clean Windows/Linux matrix",
+      "not_proven": [
+        "adb/device availability in this catalog",
+        "clean target export acceptance",
+        "GT08 acceptance"
+      ]
+    },
+    "GT09": {
+      "present": [
+        "typed protocol and protocol tests",
+        "MCP preflight research path if present"
+      ],
+      "not_proven": [
+        "client/model/host conformance",
+        "measured MCP compatibility spike",
+        "GT09 acceptance"
+      ]
+    },
+    "GT10": {
+      "present": [
+        "bootstrap install/rollback test scaffolding",
+        "package directory if present"
+      ],
+      "not_proven": [
+        "signed v0.1 package",
+        "upgrade/uninstall/handoff acceptance",
+        "GT10 acceptance"
+      ]
+    }
+  },
+  "source_observations": {
+    "GT07": [
+      {
+        "path": "8-9-hh3d-3/studio/host/replay/contract.py",
+        "sha256": "1df6a84cf58398b3dd438eed6c65ffe3660c5522c53842775d6b24baec676d6c",
+        "bytes": 14397
+      },
+      {
+        "path": "8-9-hh3d-3/studio/tests/replay/benchmark_assembly.py",
+        "sha256": "b3541fe2753c2f578bcae894b044d2071364951579acff6ad805cfc3cd3026fe",
+        "bytes": 51563
+      },
+      {
+        "path": "8-9-hh3d-3/studio/tests/replay/benchmark_commands.py",
+        "sha256": "091fee04b6229acc34386600fffcc95cd2b8152ec3d99ad2be36b9140a908c91",
+        "bytes": 25788
+      },
+      {
+        "path": "8-9-hh3d-3/studio/host/core/custody.py",
+        "sha256": "aa4320faeccb3b729d0eebf29ac3e962d2590bca1e3aba14b0aef620b021fbc9",
+        "bytes": 9468
+      },
+      {
+        "path": "8-9-hh3d-3/studio/host/blender/client_ledger.py",
+        "sha256": "67cd3704ab9e5a3f36707f5002b1e728c879d13503a671354cde4b0927bc40de",
+        "bytes": 23321
+      }
+    ],
+    "GT08": [
+      {
+        "path": "8-9-hh3d-3/studio/toolchain.lock.json",
+        "sha256": "28bdce555e9a44ef68193723d512feda02c42a417ceb78faf0b29f52d095dca9",
+        "bytes": 3026
+      },
+      {
+        "path": "8-9-hh3d-3/studio/tests/bootstrap/test_archive_and_install.py",
+        "sha256": "094cc24a87f4413354b3d4a91cdba8ea65333d985e08ea2241e5feecba6fed4f",
+        "bytes": 8474
+      },
+      {
+        "path": "8-9-hh3d-3/studio/build/bootstrap/install_toolchain.py",
+        "sha256": "77d66093b1ffea33c19d9f955df63ccde8341c889d05d9946fdc271a045e51fd",
+        "bytes": 21762
+      },
+      {
+        "path": "8-9-hh3d-3/studio/build/bootstrap/lifecycle_probe.py",
+        "sha256": "3e924419046b5a299e133dc80fb838b8a9e0f18e2f0749f8dcb6cfa8f1942d99",
+        "bytes": 23426
+      },
+      {
+        "path": "8-9-hh3d-3/studio/build/bootstrap/README.md",
+        "sha256": "d919042f99bd86b1cc8c426b674e4724bda3905430fbd0c6df0dd218f5aca241",
+        "bytes": 986
+      },
+      {
+        "path": "8-9-hh3d-3/studio/build/bootstrap/run_fixture.py",
+        "sha256": "ea522450acc46f90be5e2a7b9257e73ce8b619948105b2c9073aac1f881c7328",
+        "bytes": 34632
+      },
+      {
+        "path": "8-9-hh3d-3/studio/build/bootstrap/verify_archive.py",
+        "sha256": "754a5d9998055252de982e4f24b7bd581841755821c5f32f2776160152592f8b",
+        "bytes": 9891
+      }
+    ],
+    "GT09": [
+      {
+        "path": "8-9-hh3d-3/studio/protocol/__init__.py",
+        "sha256": "a906ecde6f60d5fa2febd3f8a4a5fae440d87fea69e7d7e51a750677e03ad09f",
+        "bytes": 881
+      },
+      {
+        "path": "8-9-hh3d-3/studio/protocol/_rfc8785/__init__.py",
+        "sha256": "49d914da77ba606d535832d97df2e43458a8e51d57cdba6883a0a895ac50484b",
+        "bytes": 505
+      },
+      {
+        "path": "8-9-hh3d-3/studio/protocol/_rfc8785/_impl.py",
+        "sha256": "c25bc3a046528482d53bee3487b837f31dd9c05f33e8f13288c7aab320932cec",
+        "bytes": 7251
+      },
+      {
+        "path": "8-9-hh3d-3/studio/protocol/_rfc8785/LICENSE-APACHE-2.0",
+        "sha256": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594",
+        "bytes": 10174
+      },
+      {
+        "path": "8-9-hh3d-3/studio/protocol/core.py",
+        "sha256": "e8153f5a4dcf639f4d1cbce2fa74f7866d963a692c68e4e8d1477136889bd93e",
+        "bytes": 19886
+      },
+      {
+        "path": "8-9-hh3d-3/studio/protocol/ERRORS.md",
+        "sha256": "14e58b1bd8e07f96d6a72c994b5057f4ba43d13481e25ec6780f55883813fdae",
+        "bytes": 17032
+      },
+      {
+        "path": "8-9-hh3d-3/studio/protocol/errors.py",
+        "sha256": "71bfdc042101185fd284adcd51017bd71934ec5b95ec23c8a280acf565bfd652",
+        "bytes": 16168
+      },
+      {
+        "path": "8-9-hh3d-3/studio/protocol/golden_consumer.gd",
+        "sha256": "908d8c56feb23b4a8fca8ffc2d75bba788a16c1167b2baf8cf189263f54e0968",
+        "bytes": 2498
+      },
+      {
+        "path": "8-9-hh3d-3/studio/protocol/jcs_godot.gd",
+        "sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5",
+        "bytes": 10165
+      },
+      {
+        "path": "8-9-hh3d-3/studio/protocol/JCS_GODOT.md",
+        "sha256": "49f74172a9cded5e770b7a10985fdfaca30493bcf8234c917639770bb6add819",
+        "bytes": 3455
+      },
+      {
+        "path": "8-9-hh3d-3/studio/protocol/names.py",
+        "sha256": "507ccd5a3a67446bb7ebfd943698358bd193cfa65ef91bee5dc083c76adabe30",
+        "bytes": 2022
+      },
+      {
+        "path": "8-9-hh3d-3/studio/protocol/vectors/jcs-binary64-vectors.json",
+        "sha256": "aa9e4e41f73a0c22e67942c033c8a8b1715d0373c782e93baa4db9ea508ac9fa",
+        "bytes": 1810
+      },
+      {
+        "path": "8-9-hh3d-3/studio/protocol/vectors/jcs-vectors.json",
+        "sha256": "0a2e83db83d1f518a3bc1fb5067ce4fa1d7a5e72cc418fb483fe0cff248dcb8c",
+        "bytes": 3320
+      },
+      {
+        "path": "8-9-hh3d-3/studio/tests/protocol/run_gt02_candidate.py",
+        "sha256": "ccc1ffa89f3a04cb3e2a0698f12d27518e86261ca69c9842f585d733d40e1739",
+        "bytes": 10758
+      },
+      {
+        "path": "8-9-hh3d-3/studio/tests/protocol/test_candidate_evidence.py",
+        "sha256": "15399759c84f2f71c0b83a72007862398708082cdc91ed6933e4fce109d804bf",
+        "bytes": 1797
+      },
+      {
+        "path": "8-9-hh3d-3/studio/tests/protocol/test_core.py",
+        "sha256": "1a90e3d67c2760da2a71f255af9d7fa42a554d65b289135b295188fa01593d67",
+        "bytes": 4441
+      },
+      {
+        "path": "8-9-hh3d-3/studio/tests/protocol/test_custody_registry.py",
+        "sha256": "7b014244f5808a8aed4a51ccc592d6c14d72fe624f82da45135ae984b107f72e",
+        "bytes": 19429
+      },
+      {
+        "path": "8-9-hh3d-3/studio/tests/protocol/test_domain_contract.py",
+        "sha256": "576cbfd650bf86fc51689d3368752f1f15769f1183fd847e3097744b0d31bed0",
+        "bytes": 6850
+      },
+      {
+        "path": "8-9-hh3d-3/studio/tests/protocol/test_file_consumer.py",
+        "sha256": "e5a337b184d979ce38f7403bf563959a0c3b977ded0d2fb2415ff8816211d6f8",
+        "bytes": 23085
+      },
+      {
+        "path": "8-9-hh3d-3/studio/tests/protocol/test_fixture_pipe.py",
+        "sha256": "704f59fb5721c3e251ece76b2727586ab2b7bced65385cf0a1a87fae48b20620",
+        "bytes": 6961
+      },
+      {
+        "path": "8-9-hh3d-3/studio/tests/protocol/test_fixture_release.py",
+        "sha256": "2646f28f115142e379ff7e429eae42dff0427a7bce03be3b8b1b3d8b536f8ce0",
+        "bytes": 11586
+      },
+      {
+        "path": "8-9-hh3d-3/studio/tests/protocol/test_fixture_selector.py",
+        "sha256": "b1b708dab40918ce567db1ad18a89ae5e4885e5f427cf5f70b9e1801b3e2bf4f",
+        "bytes": 33222
+      },
+      {
+        "path": "8-9-hh3d-3/studio/tests/protocol/test_golden_vectors.py",
+        "sha256": "4cb34d8279e1ea9b5b20764f7c2ed12e01bdf66ec0eee9241f44f262b2a69176",
+        "bytes": 15221
+      },
+      {
+        "path": "8-9-hh3d-3/studio/tests/protocol/test_integration.py",
+        "sha256": "4ff42a75e5bb9c77765f41cd845aea8ead34b663484b0c251cd2551938934caa",
+        "bytes": 4422
+      },
+      {
+        "path": "8-9-hh3d-3/studio/tests/protocol/test_journal.py",
+        "sha256": "cb8849a5dab8e6a5c2b905f87d6ce41bd8bed395da0d58a96fb047835ebdadcb",
+        "bytes": 5736
+      },
+      {
+        "path": "8-9-hh3d-3/studio/tests/protocol/test_journal_cas.py",
+        "sha256": "3060bb1e39b4c24509554c3b93a84b4f7246ee29c3758743c5f5609ab60814cc",
+        "bytes": 8561
+      },
+      {
+        "path": "8-9-hh3d-3/studio/tests/protocol/test_journal_durability.py",
+        "sha256": "ce6d69aba0ef8c13d123678e1fd73b1559db966a153f0fd2a236a3208953b567",
+        "bytes": 10191
+      },
+      {
+        "path": "8-9-hh3d-3/studio/tests/protocol/test_journal_platform.py",
+        "sha256": "e9ae24b8c7f564046f5d7b9ff6f3dbca7c93681832737b8fcecbc21785879b33",
+        "bytes": 10120
+      },
+      {
+        "path": "8-9-hh3d-3/studio/tests/protocol/test_journal_retention.py",
+        "sha256": "43ada799eadb67c6a0d799b5468e9d7626f115c229a5ac13bde331176839932f",
+        "bytes": 6734
+      },
+      {
+        "path": "8-9-hh3d-3/studio/tests/protocol/test_limits.py",
+        "sha256": "26016773e44a902f66272f00bf09d009f42455c0e9b21480cb0b7da03e19c82c",
+        "bytes": 4020
+      },
+      {
+        "path": "8-9-hh3d-3/studio/tests/protocol/test_managed_fixture.py",
+        "sha256": "532207e058159777310797f3e0a66010648cf2d899d082986e2a8d7699674f80",
+        "bytes": 13016
+      },
+      {
+        "path": "8-9-hh3d-3/studio/tests/protocol/test_managed_service.py",
+        "sha256": "bb34231a606a31850c799888ef7bdd22ad4dd759a13fb27213ec36f86e4b7d40",
+        "bytes": 17750
+      },
+      {
+        "path": "8-9-hh3d-3/studio/tests/protocol/test_pipe_endpoint.py",
+        "sha256": "bf4a89907757c4e40ee19cc16b8283998a1b4c92673f24e392e85f4f393de536",
+        "bytes": 7795
+      },
+      {
+        "path": "8-9-hh3d-3/studio/tests/protocol/test_pipe_io.py",
+        "sha256": "7bc7c0f4799e95c1f446bcd326b5414239504a7469dd3d4226e7a5f740bc644e",
+        "bytes": 16441
+      },
+      {
+        "path": "8-9-hh3d-3/studio/tests/protocol/test_private_events.py",
+        "sha256": "ee5354f0c5d4a8a8d5bd555ebf5dd495029eaa7f42df2c8581b21800d1bb0382",
+        "bytes": 40054
+      },
+      {
+        "path": "8-9-hh3d-3/studio/tests/protocol/test_private_store.py",
+        "sha256": "87790b8aef8af4027ef453130679deca061d0f8b55c62b243e7a20bb1f0119b3",
+        "bytes": 19968
+      },
+      {
+        "path": "8-9-hh3d-3/studio/tests/protocol/test_redaction.py",
+        "sha256": "a9a803fc456f50a0a989bb2e6d03c6b809692f69faf1cb2f740647195a8740f6",
+        "bytes": 7214
+      },
+      {
+        "path": "8-9-hh3d-3/studio/tests/protocol/test_rejection_matrix.py",
+        "sha256": "f7db8f55003e505f910fe02d58538e02bb3e6eda90eef509e25138b2f37a3bd6",
+        "bytes": 11177
+      },
+      {
+        "path": "8-9-hh3d-3/studio/tests/protocol/test_safe_create.py",
+        "sha256": "6ebde9e9b1042eb41e0983abb7457d4c9cd4a08372a68876c24588dc5f66d0c8",
+        "bytes": 11605
+      },
+      {
+        "path": "8-9-hh3d-3/studio/tests/protocol/test_safe_open.py",
+        "sha256": "f10869164a7e95f4372160dbd9f466e451a5ba9421ee7e4ebb4dcfe88d7cf8ab",
+        "bytes": 17371
+      },
+      {
+        "path": "8-9-hh3d-3/studio/tests/protocol/test_safe_replace.py",
+        "sha256": "95a0cd3d0b17af8cb81ecd0c1f43e49e5e0eb764a70460d507a911b1c2d05b60",
+        "bytes": 18991
+      },
+      {
+        "path": "8-9-hh3d-3/studio/tests/protocol/test_security_vectors.py",
+        "sha256": "ea3c2b51f3412a6597abb665e34e4c20555df9621c79ebd8481b3ea1f70fbbd7",
+        "bytes": 7076
+      },
+      {
+        "path": "8-9-hh3d-3/studio/tests/protocol/test_selector_client.py",
+        "sha256": "9a513790081731c60922e592cb6380c8bd392dbf706112da154c97407080da52",
+        "bytes": 23762
+      },
+      {
+        "path": "8-9-hh3d-3/studio/tests/protocol/test_selector_pipe.py",
+        "sha256": "0f1d727e792b8a19268b0e75152728a85971f961dc1edc22da2df85f3962bb3e",
+        "bytes": 15358
+      },
+      {
+        "path": "8-9-hh3d-3/studio/tests/protocol/test_selector_public.py",
+        "sha256": "0bc50b1640846320f3d0edd07f14fb99d1d5d3815a7ebe9b1f5ddb576f26024e",
+        "bytes": 17122
+      },
+      {
+        "path": "8-9-hh3d-3/studio/tests/protocol/test_transport.py",
+        "sha256": "c3d691b939d8896d15912080aa2dd6b504016d941000bd76c5af4766e45420db",
+        "bytes": 23798
+      },
+      {
+        "path": "8-9-hh3d-3/studio/tests/protocol/test_transport_fault_lock.py",
+        "sha256": "4292473f77c47253ad35f058ce50c9297b76539a4e5e5e113a75cba894367d86",
+        "bytes": 10080
+      },
+      {
+        "path": "8-9-hh3d-3/studio/tests/protocol/test_transport_observation.py",
+        "sha256": "e21afbf01c846b4b67a3eb1b955554afb524446e33b2ed810abd97abab752ec0",
+        "bytes": 11474
+      },
+      {
+        "path": "8-9-hh3d-3/studio/tests/protocol/test_transport_pending_lookup.py",
+        "sha256": "7a8cca0b0e53ecd8916cb3c7e42096bc16da1971919248c6225b0f0855c364fb",
+        "bytes": 7202
+      },
+      {
+        "path": "8-9-hh3d-3/studio/tests/protocol/test_transport_recovery.py",
+        "sha256": "09e8e958fa437ad05d3169ffd60b12ffe5cf7d40802178e3e1e214a125194941",
+        "bytes": 29206
+      },
+      {
+        "path": "8-9-hh3d-3/studio/tests/protocol/test_transport_request_drain.py",
+        "sha256": "f2ef1e528e4e3eb50873ae866a59ed529b3ffdf31d40aefef66722465a5387d7",
+        "bytes": 11509
+      },
+      {
+        "path": "8-9-hh3d-3/zdoc/reviews/20260917-mcp-adapter-preflight/README.md",
+        "sha256": "7b7e97e6f6ac73c4fe016a91014e261b541585d155b2e9f2e86b9570c6545ecd",
+        "bytes": 2480
+      }
+    ],
+    "GT10": [
+      {
+        "path": "8-9-hh3d-3/studio/tests/bootstrap/test_archive_and_install.py",
+        "sha256": "094cc24a87f4413354b3d4a91cdba8ea65333d985e08ea2241e5feecba6fed4f",
+        "bytes": 8474
+      }
+    ]
+  },
+  "decision": "READONLY_PREPARATION_ONLY; DO_NOT_OPEN_OR_TICK_GT07_GT10; DO_NOT_USE_CATALOG_AS_GT06_EVIDENCE; KEEP_GT06_TIMEOUT_BASELINE_PROFILE_COUNTER_RSS_GATE_UNCHANGED"
+}
