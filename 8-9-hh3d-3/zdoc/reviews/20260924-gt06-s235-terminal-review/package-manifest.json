@@ -1,0 +1,32 @@
+{
+  "schema_id": "hh-studio.review-package-manifest",
+  "schema_version": "1.0.0",
+  "package_id": "gt06-s235-terminal-review",
+  "authority": 0,
+  "formal_acceptance": false,
+  "raw_archive": "studio/.local/archives/gt06-s232-formal-01-s235-terminal.zip",
+  "raw_manifest_sha256": "9c169eb4e569fbddea17404024237aef4edebd26cce2398c70e4fb6ecf621c83",
+  "archive_sha256": "c16795594067a9caf39ab5dec53fbfb7e26989ac1657913fda832e77f242ff86",
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "a7c189899013c13acbce3f12cdda3e6288a9e19223182578ea9297e2937b8dd7",
+      "size_bytes": 1889
+    },
+    {
+      "path": "analysis.json",
+      "sha256": "91faef0cf3b4f3dba6c8317668b4cff56058f7c56cd8044f983ed263327614d6",
+      "size_bytes": 1202
+    },
+    {
+      "path": "verify.py",
+      "sha256": "0e8462664056ed3ddcab0f5997fec85d2ca09a4594fc36d68e79b1a57a436bc4",
+      "size_bytes": 3964
+    },
+    {
+      "path": "task-deleted.json",
+      "sha256": "2451e982e4494550e8b9de6c22a998bf24c1abfc7c763a4fada9e98e21ad414f",
+      "size_bytes": 340
+    }
+  ]
+}

@@ -3,7 +3,7 @@
   "formal_acceptance": false,
   "run_id": "gt06-s232-counter-probe-syntax-02",
   "source_closure_sha256": "3d5beb5b459dc12f15a3a02f758ee23558d3e34d50568afbe7716549bcd6d020",
-  "source_files": 53,
+  "source_files": 39,
   "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
   "binary_sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424",
   "raw_manifest_sha256": "b0eaf7b0b0e3bea91a7e03bc0be1dfac23d479d73b900e97cef6e09f4c79f6c8",
@@ -14,10 +14,10 @@
   "import_actual_exit": 0,
   "editor_job_zero_closed": true,
   "import_job_zero_closed": true,
-  "editor_handles_released": true,
-  "import_handles_released": true,
+  "editor_job_handle_released": true,
+  "import_job_handle_released": true,
   "completed_diagnostic": true,
   "host_integrated": false,
   "post_ack_probe_exercised": false,
-  "decision": "SOURCE_PREFLIGHT_ONLY; FORMAL_GATE_UNCHANGED; FRESH_ID_ALLOWED_AFTER_SOURCE_PREFLIGHT"
+  "decision": "DIAGNOSTIC_TERMINAL_ONLY; POST_ACK_NOT_EXERCISED; NO_REPAIRED_BOUNDARY_PROVEN; NO_FORMAL_RETRY_AUTHORIZATION; FORMAL_GATE_UNCHANGED"
 }

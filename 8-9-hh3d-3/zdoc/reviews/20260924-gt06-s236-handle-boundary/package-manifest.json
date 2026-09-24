@@ -1,0 +1,27 @@
+{
+  "schema_id": "hh-studio.review-package-manifest",
+  "schema_version": "1.0.0",
+  "package_id": "gt06-s236-handle-boundary",
+  "authority": 0,
+  "formal_acceptance": false,
+  "source_closure_sha256": "8fd43c2d72ea881d616e40daef03accaae469822848f44aa961938a6b10c92f5",
+  "raw_manifest_sha256": "91eb3a9e1cf1f3e701db4af0393bcbb4b20e204d6205ec6a15868c1259de467b",
+  "archive_sha256": "c72226459bcb9a6e6fda419fb590fa51a58190f4edbb2223c501fcda12e85ff",
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "b221357f1689c52e233c5c4f7e1a380719e8a6a2e47884dc1cc22871cdfc1329",
+      "size_bytes": 1614
+    },
+    {
+      "path": "analysis.json",
+      "sha256": "e1d5018d06b53bddece262b07662c050a5f0f5a772035bf469607344a035c32c",
+      "size_bytes": 1586
+    },
+    {
+      "path": "verify.py",
+      "sha256": "b93c67ee5d884a115dc71bf12af69e7ac424ab8cf271e91e9db1b444144cb596",
+      "size_bytes": 3403
+    }
+  ]
+}
