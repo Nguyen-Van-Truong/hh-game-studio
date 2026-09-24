@@ -1,0 +1,22 @@
+{
+  "archive_sha256": "391f0e6347f1fd1112366144b00622ac5d895ba669ad81a718e6918a4e29c92b",
+  "authority": 0,
+  "files": {
+    "README.md": "33bf0f1566df00909f26e4ff97e3464d1b8c9fca8c1d6a8f8355c2281032b090",
+    "analysis.json": "4a6e322434a907a47b4946c3f236c595e69bc29b2a30ff1701a6f4d1d3ad3269",
+    "seal_s230.py": "53009461137088e354db78c28faa7574936a4d1f42b804b361e381b4b51b65f5",
+    "terminal-seal.json": "8819816be86e18a335e71cebe3f079eeb45d2948ab0c3799e1c3f0c275d34a5c",
+    "verify.py": "e75b723f6e15716a4799afdb944488ef855bfe8e6673e5a238bc29918792bbe8"
+  },
+  "formal_acceptance": false,
+  "gate_policy": "10 fresh pairs x 35 batches; unchanged",
+  "packet": "zdoc/reviews/20260924-gt06-s229-formal-campaign",
+  "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+  "raw_file_count": 339,
+  "raw_manifest_sha256": "30f0bba3ba413754d8055db62ecf1de36e1c6b43b547a99a8bb31ab393df949f",
+  "run_id": "gt06-s229-formal-01",
+  "schema_id": "hh-studio.gt06-s229-package-manifest",
+  "schema_version": "1.0.0",
+  "source_closure_sha256": "d7c78724ed827c8182af62c3f7bc1489d8dd35d29abe1f70216736a896e66bb3",
+  "terminal": "CAMPAIGN_RETAINED_COUNTER_GROWTH"
+}
