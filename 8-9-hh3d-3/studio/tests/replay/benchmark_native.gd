@@ -70,7 +70,8 @@ const SOURCE_PATHS: Array[String] = ["res://addons/hh_studio/plugin.gd",
     "res://project.godot", INPUT, EVIDENCE_IGNORE]
 
 enum Phase { INACTIVE, INITIALIZE, HOST_START, CYCLE_BEGIN, CREATE, UNDO, SAVE, SAVE_WAIT,
-    RELOAD, RELOAD_WAIT, CYCLE_SETTLE, BATCH_SETTLE, BATCH_WRITE, HOST_BARRIER, FINISHED }
+    RELOAD, RELOAD_WAIT, CYCLE_SETTLE, BATCH_SETTLE, BATCH_WRITE, HOST_BARRIER,
+    POST_ACK_PROBE, FINISHED }
 
 var _phase: Phase = Phase.INACTIVE
 var _phase_started_us: int = 0
@@ -126,6 +127,11 @@ var _host_open_first_error: int = OK
 var _host_open_first_us: int = 0
 var _host_open_first_frame: int = 0
 var _host_open_recovered: bool = false
+var _post_ack_probe_start_us: int = 0
+var _post_ack_probe_start_frame: int = 0
+var _post_ack_probe_ack_us: int = 0
+var _post_ack_probe_objects: int = 0
+var _post_ack_probe_resources: int = 0
 
 
 func _notification(what: int) -> void:
@@ -315,6 +321,8 @@ func _process(_delta: float) -> void:
             _write_batch()
         Phase.HOST_BARRIER:
             _wait_host_ack()
+        Phase.POST_ACK_PROBE:
+            _post_ack_probe()
 
 
 func _initialize() -> void:
@@ -905,6 +913,36 @@ func _wait_host_ack() -> void:
         "resources": {"value": int(resources), "unavailable_reason": null},
         "max_status_gap_ms": float(_batch_status_gap_us) / 1000.0})
     print("HH_GT06_BENCHMARK_ACK " + JSON.stringify(_barrier_receipts[-1]))
+    _post_ack_probe_start_us = Time.get_ticks_usec()
+    _post_ack_probe_start_frame = Engine.get_process_frames()
+    _post_ack_probe_ack_us = observed
+    _post_ack_probe_objects = int(objects)
+    _post_ack_probe_resources = int(resources)
+    _set_phase(Phase.POST_ACK_PROBE)
+
+
+func _post_ack_probe() -> void:
+    if Engine.get_process_frames() < _post_ack_probe_start_frame + SETTLE_FRAMES:
+        return
+    if Time.get_ticks_usec() - _post_ack_probe_start_us < SETTLE_US:
+        return
+    var objects: float = Performance.get_monitor(Performance.OBJECT_COUNT)
+    var resources: float = Performance.get_monitor(Performance.OBJECT_RESOURCE_COUNT)
+    if not is_finite(objects) or not is_finite(resources) or objects < 1.0 or resources < 0.0 or objects != floor(objects) or resources != floor(resources):
+        _fail("BENCHMARK_COUNTER_PROBE_READBACK")
+        return
+    # Supplemental diagnostic only. The formal joint receipt remains bound to
+    # the ACK sample above; this artifact tests whether that value settles after
+    # an additional idle window and is ignored by the acceptance schema.
+    _write_new("counter-probe-%02d.json" % _batch, {"schema_id": "hh-studio.native-counter-probe",
+        "schema_version": "1.0.0", "run_id": _input.run_id, "batch_index": _batch,
+        "ack_sample": {"objects": _post_ack_probe_objects, "resources": _post_ack_probe_resources},
+        "settled_sample": {"objects": int(objects), "resources": int(resources)},
+        "ack_sample_mono_us": _post_ack_probe_ack_us,
+        "probe_start_mono_us": _post_ack_probe_start_us,
+        "settled_sample_mono_us": Time.get_ticks_usec(),
+        "settle_frames": Engine.get_process_frames() - _post_ack_probe_start_frame,
+        "settle_us": Time.get_ticks_usec() - _post_ack_probe_start_us})
     _advance_batch()
 
 

@@ -1,0 +1,25 @@
+{
+  "schema_id": "hh-studio.review-package-manifest",
+  "schema_version": "1.0.0",
+  "package_id": "gt06-s232-counter-probe-diagnostic",
+  "authority": 0,
+  "formal_acceptance": false,
+  "source_closure_sha256": "3d5beb5b459dc12f15a3a02f758ee23558d3e34d50568afbe7716549bcd6d020",
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "f889fb91b71bfa8909d08b07c707d5952783ef248d5b46de327d6207a8963fae",
+      "size_bytes": 1440
+    },
+    {
+      "path": "analysis.json",
+      "sha256": "89c0cf56601f2fe4a4861d44e16c988e2e8efe5e856b8bf8ba1251d0a55b7272",
+      "size_bytes": 1016
+    },
+    {
+      "path": "verify.py",
+      "sha256": "9cca4e833e850d200a43e3222bc4f99eb7b051392ee9840678b8cd0b53f413d2",
+      "size_bytes": 1610
+    }
+  ]
+}
