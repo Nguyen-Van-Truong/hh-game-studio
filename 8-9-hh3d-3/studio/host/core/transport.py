@@ -792,7 +792,7 @@ class LoopbackFixtureHost:
         job = self._jobs.get(command_id)
         if job is None:
             return existing
-        if job.phase == "APPLIED":
+        if job.phase in {"APPLIED", "FINALIZING"}:
             return _response(Status.UNKNOWN, "CANCEL_TOO_LATE_LOOKUP", command_id, next_action="lookup")
         job.cancel.set()
         canceled = _response(Status.CANCELED, "CANCELED_BEFORE_APPLY", command_id,
@@ -811,6 +811,24 @@ class LoopbackFixtureHost:
         pending = dict(self._pending_snapshot)
         pending.pop(job.request.command_id, None)
         self._pending_snapshot = pending
+
+    def _finish_after_unlock(self, job: _Job, response: Response) -> None:
+        """Persist a terminal receipt without holding the host state lock.
+
+        The worker marks the job FINALIZING before calling this method.  The
+        pending snapshot remains authoritative while the journal write is in
+        flight, and cancel therefore returns the existing bounded
+        CANCEL_TOO_LATE_LOOKUP result.  Only the short in-memory publication
+        runs under ``self._lock`` after durable persistence succeeds.
+        """
+        self.journal.finish_command(project_id=self.project_id, command_id=job.request.command_id,
+            status=response.status.value, receipt=self.sessions.redact_output(response.as_dict()), now_ms=epoch_ms())
+        with self._lock:
+            job.phase = "TERMINAL"
+            self._jobs.pop(job.request.command_id, None)
+            pending = dict(self._pending_snapshot)
+            pending.pop(job.request.command_id, None)
+            self._pending_snapshot = pending
 
     def _worker(self) -> None:
         while True:
@@ -916,7 +934,8 @@ class LoopbackFixtureHost:
             committed = Response(Status.COMMITTED, "READBACK_CONFIRMED", request.command_id,
                 snapshot["revision"], "sha256:" + hashlib.sha256(canonical_bytes(snapshot)).hexdigest(),
                 {"request_digest": request.digest, "snapshot": snapshot})
-            self._finish(job, committed)
+            job.phase = "FINALIZING"
+        self._finish_after_unlock(job, committed)
 
 
 @dataclass(frozen=True)

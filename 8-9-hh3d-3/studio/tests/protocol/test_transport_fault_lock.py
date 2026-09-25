@@ -104,6 +104,38 @@ class TransportFaultLockTests(unittest.TestCase):
                     self.assertEqual(client.submit(request), committed)
                     self.assertEqual(host.fixture.effect_count, int(write))
 
+    def test_next_admission_ack_is_not_serialized_behind_terminal_persistence(self):
+        with fixture() as (host, client, _):
+            first = client.request("inspect.first")
+            second = client.request("inspect.second")
+            terminal_entered, release_terminal = threading.Event(), threading.Event()
+            finish = host.journal.finish_command
+
+            def gated_finish(**kwargs):
+                if kwargs["command_id"] == first.command_id:
+                    terminal_entered.set()
+                    if not release_terminal.wait(5):
+                        raise AssertionError("test terminal gate was not released")
+                return finish(**kwargs)
+
+            with mock.patch.object(host.journal, "finish_command", gated_finish):
+                first_thread, first_done, first_result = self.start_submit(client, first)
+                self.assertTrue(terminal_entered.wait(3))
+                second_thread, second_done, second_result = self.start_submit(client, second)
+                try:
+                    self.assertTrue(second_done.wait(1), "new admission waited on terminal journal persistence")
+                    self.assertIs(self.response(second_result).status, Status.ACCEPTED_PENDING)
+                finally:
+                    release_terminal.set()
+                    first_thread.join(3)
+                    second_thread.join(3)
+                self.assertFalse(first_thread.is_alive())
+                self.assertFalse(second_thread.is_alive())
+                self.assertIs(self.response(first_result).status, Status.ACCEPTED_PENDING)
+            self.assertIs(self.terminal(client, first.command_id).status, Status.COMMITTED)
+            self.assertIs(self.terminal(client, second.command_id).status, Status.COMMITTED)
+            self.assertEqual(host.fixture.effect_count, 0)
+
     def test_concurrent_matching_responses_consume_disconnect_only_once(self):
         with fixture() as (host, client, credential):
             requests = [client.request("race." + str(index)) for index in range(2)]
