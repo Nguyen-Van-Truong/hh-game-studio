@@ -1,0 +1,71 @@
+{
+  "completed_batches": 0,
+  "context": {
+    "file": "context.json",
+    "sha256": "3ab50c6815f16cbbaee7fee7610304048339b6f9ab98168189e7ca0d9917f5d7",
+    "size_bytes": 5712
+  },
+  "errors": [],
+  "formal_acceptance": false,
+  "host_actual_exit": null,
+  "observations": {
+    "editor_exit_after_cleanup": null,
+    "editor_owner": {
+      "present": false
+    },
+    "editor_probe": {
+      "present": false
+    },
+    "editor_target": {
+      "actual_target_exit": null,
+      "exit": null,
+      "missing_reason": "TARGET_EXIT_NOT_RECORDED",
+      "natural_exit_not_inferred": true,
+      "start": null
+    },
+    "heartbeat_alive": false,
+    "import_observer": {
+      "closed": true,
+      "error_count": 0,
+      "global_held_probe_count": 0,
+      "handle_close_uncertain": false,
+      "handle_retained": false,
+      "present": true,
+      "probe_handles_released": true,
+      "thread_alive": false
+    },
+    "import_target": {
+      "actual_target_exit": null,
+      "exit": null,
+      "missing_reason": "TARGET_EXIT_NOT_RECORDED",
+      "natural_exit_not_inferred": true,
+      "start": {
+        "file": "import-host/process-start.json",
+        "sha256": "a441826e78612029ca7c598b1df0141d080f03a6ffd1723c4aebd4dcbefd2d7a",
+        "size_bytes": 14
+      }
+    },
+    "producer": {
+      "present": false
+    }
+  },
+  "observed_mono_us": 12540918871,
+  "observed_utc": "2026-09-25T07:43:29Z",
+  "phase": {
+    "batch": -1,
+    "phase": "import"
+  },
+  "primary_error": {
+    "code": null,
+    "stage": "body",
+    "type": "StageFailed"
+  },
+  "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+  "run_id": "gt06-s243-formal-01.r00.a01",
+  "schema_id": "hh-studio.benchmark-child-terminal-cleanup",
+  "schema_version": "1.0.0",
+  "scope": "Post-finally cleanup observations; no benchmark acceptance or natural-exit inference",
+  "self_exit_missing_reason": "NOT_OBSERVABLE_BY_CHILD_TERMINAL_RECORD",
+  "source_closure_sha256": "1f6b7da7f48085b417e5d6d7f3388c75c0a8beadad3659b14057a2a6e71df625",
+  "supervisor_actual_exit": null
+}
