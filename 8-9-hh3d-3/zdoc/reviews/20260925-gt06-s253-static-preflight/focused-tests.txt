@@ -1,0 +1,14 @@
+run_id=gt06-s253-static-preflight-01
+authority=0
+engine_run=false
+device_run=false
+
+Command 1 (cwd=8-9-hh3d-3):
+python -m unittest studio.tests.replay.test_campaign_task studio.tests.replay.test_benchmark_campaign
+Result: 41 tests, OK, 3.104s
+
+Command 2 (cwd=repository root; PYTHONPATH=8-9-hh3d-3/studio/tests/godot;8-9-hh3d-3):
+python -m unittest discover -s 8-9-hh3d-3/studio/tests/godot -p test_contract.py
+Result: 24 tests, OK, 0.769s
+
+The first attempted contract invocation from 8-9-hh3d-3 omitted the godot test directory from PYTHONPATH and named a nonexistent test module; its import errors are runner misuse, not implementation evidence.
