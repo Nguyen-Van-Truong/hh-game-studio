@@ -1,0 +1,548 @@
+{
+  "authority": 0,
+  "decision": {
+    "counter_variation_observed": true,
+    "next_action": "Require a genuinely distinct supported measurement boundary or owner ADR; retain frozen GT06 gate.",
+    "objects_resources_stable_within_each_run": true,
+    "rss_not_monotonic_and_not_leak_proof": true,
+    "supported_new_formal_boundary_found": false
+  },
+  "engine_run": false,
+  "formal_acceptance": false,
+  "gate_change": false,
+  "purpose": "Read-only comparison of retained joint observations after S246 counter failure.",
+  "root_cause_claim": false,
+  "rows": {
+    "s185": [
+      {
+        "file": "joint-00.json",
+        "held_handles": 559,
+        "index": 0,
+        "max_status_gap_ms": 940.415,
+        "objects": 71128,
+        "phase": "post_batch_quiescent",
+        "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+        "resources": 6,
+        "rss_bytes": 765140992,
+        "source_closure_sha256": "fc46cfd2e80e8d78024b6a31c6c72be64f33d83aab4fe1abebaf899907f0e205"
+      },
+      {
+        "file": "joint-01.json",
+        "held_handles": 559,
+        "index": 1,
+        "max_status_gap_ms": 606.299,
+        "objects": 71128,
+        "phase": "post_batch_quiescent",
+        "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+        "resources": 6,
+        "rss_bytes": 765435904,
+        "source_closure_sha256": "fc46cfd2e80e8d78024b6a31c6c72be64f33d83aab4fe1abebaf899907f0e205"
+      },
+      {
+        "file": "joint-02.json",
+        "held_handles": 559,
+        "index": 2,
+        "max_status_gap_ms": 603.486,
+        "objects": 71128,
+        "phase": "post_batch_quiescent",
+        "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+        "resources": 6,
+        "rss_bytes": 759021568,
+        "source_closure_sha256": "fc46cfd2e80e8d78024b6a31c6c72be64f33d83aab4fe1abebaf899907f0e205"
+      },
+      {
+        "file": "joint-03.json",
+        "held_handles": 569,
+        "index": 3,
+        "max_status_gap_ms": 615.861,
+        "objects": 71128,
+        "phase": "post_batch_quiescent",
+        "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+        "resources": 6,
+        "rss_bytes": 627023872,
+        "source_closure_sha256": "fc46cfd2e80e8d78024b6a31c6c72be64f33d83aab4fe1abebaf899907f0e205"
+      },
+      {
+        "file": "joint-04.json",
+        "held_handles": 555,
+        "index": 4,
+        "max_status_gap_ms": 576.632,
+        "objects": 71128,
+        "phase": "post_batch_quiescent",
+        "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+        "resources": 6,
+        "rss_bytes": 516624384,
+        "source_closure_sha256": "fc46cfd2e80e8d78024b6a31c6c72be64f33d83aab4fe1abebaf899907f0e205"
+      },
+      {
+        "file": "joint-05.json",
+        "held_handles": 564,
+        "index": 5,
+        "max_status_gap_ms": 583.235,
+        "objects": 71128,
+        "phase": "post_batch_quiescent",
+        "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+        "resources": 6,
+        "rss_bytes": 430931968,
+        "source_closure_sha256": "fc46cfd2e80e8d78024b6a31c6c72be64f33d83aab4fe1abebaf899907f0e205"
+      }
+    ],
+    "s190": [
+      {
+        "file": "joint-00.json",
+        "held_handles": 559,
+        "index": 0,
+        "max_status_gap_ms": 692.091,
+        "objects": 71128,
+        "phase": "post_batch_quiescent",
+        "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+        "resources": 6,
+        "rss_bytes": 587632640,
+        "source_closure_sha256": "fc46cfd2e80e8d78024b6a31c6c72be64f33d83aab4fe1abebaf899907f0e205"
+      },
+      {
+        "file": "joint-01.json",
+        "held_handles": 555,
+        "index": 1,
+        "max_status_gap_ms": 732.536,
+        "objects": 71128,
+        "phase": "post_batch_quiescent",
+        "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+        "resources": 6,
+        "rss_bytes": 305299456,
+        "source_closure_sha256": "fc46cfd2e80e8d78024b6a31c6c72be64f33d83aab4fe1abebaf899907f0e205"
+      },
+      {
+        "file": "joint-02.json",
+        "held_handles": 561,
+        "index": 2,
+        "max_status_gap_ms": 683.602,
+        "objects": 71128,
+        "phase": "post_batch_quiescent",
+        "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+        "resources": 6,
+        "rss_bytes": 212008960,
+        "source_closure_sha256": "fc46cfd2e80e8d78024b6a31c6c72be64f33d83aab4fe1abebaf899907f0e205"
+      },
+      {
+        "file": "joint-03.json",
+        "held_handles": 555,
+        "index": 3,
+        "max_status_gap_ms": 613.969,
+        "objects": 71128,
+        "phase": "post_batch_quiescent",
+        "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+        "resources": 6,
+        "rss_bytes": 148221952,
+        "source_closure_sha256": "fc46cfd2e80e8d78024b6a31c6c72be64f33d83aab4fe1abebaf899907f0e205"
+      },
+      {
+        "file": "joint-04.json",
+        "held_handles": 555,
+        "index": 4,
+        "max_status_gap_ms": 640.374,
+        "objects": 71128,
+        "phase": "post_batch_quiescent",
+        "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+        "resources": 6,
+        "rss_bytes": 130785280,
+        "source_closure_sha256": "fc46cfd2e80e8d78024b6a31c6c72be64f33d83aab4fe1abebaf899907f0e205"
+      },
+      {
+        "file": "joint-05.json",
+        "held_handles": 555,
+        "index": 5,
+        "max_status_gap_ms": 924.174,
+        "objects": 71128,
+        "phase": "post_batch_quiescent",
+        "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+        "resources": 6,
+        "rss_bytes": 121520128,
+        "source_closure_sha256": "fc46cfd2e80e8d78024b6a31c6c72be64f33d83aab4fe1abebaf899907f0e205"
+      },
+      {
+        "file": "joint-06.json",
+        "held_handles": 555,
+        "index": 6,
+        "max_status_gap_ms": 683.772,
+        "objects": 71128,
+        "phase": "post_batch_quiescent",
+        "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+        "resources": 6,
+        "rss_bytes": 113360896,
+        "source_closure_sha256": "fc46cfd2e80e8d78024b6a31c6c72be64f33d83aab4fe1abebaf899907f0e205"
+      },
+      {
+        "file": "joint-07.json",
+        "held_handles": 555,
+        "index": 7,
+        "max_status_gap_ms": 716.794,
+        "objects": 71128,
+        "phase": "post_batch_quiescent",
+        "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+        "resources": 6,
+        "rss_bytes": 114368512,
+        "source_closure_sha256": "fc46cfd2e80e8d78024b6a31c6c72be64f33d83aab4fe1abebaf899907f0e205"
+      },
+      {
+        "file": "joint-08.json",
+        "held_handles": 555,
+        "index": 8,
+        "max_status_gap_ms": 635.021,
+        "objects": 71128,
+        "phase": "post_batch_quiescent",
+        "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+        "resources": 6,
+        "rss_bytes": 111525888,
+        "source_closure_sha256": "fc46cfd2e80e8d78024b6a31c6c72be64f33d83aab4fe1abebaf899907f0e205"
+      },
+      {
+        "file": "joint-09.json",
+        "held_handles": 555,
+        "index": 9,
+        "max_status_gap_ms": 623.957,
+        "objects": 71128,
+        "phase": "post_batch_quiescent",
+        "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+        "resources": 6,
+        "rss_bytes": 112640000,
+        "source_closure_sha256": "fc46cfd2e80e8d78024b6a31c6c72be64f33d83aab4fe1abebaf899907f0e205"
+      },
+      {
+        "file": "joint-10.json",
+        "held_handles": 557,
+        "index": 10,
+        "max_status_gap_ms": 612.27,
+        "objects": 71128,
+        "phase": "post_batch_quiescent",
+        "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+        "resources": 6,
+        "rss_bytes": 111886336,
+        "source_closure_sha256": "fc46cfd2e80e8d78024b6a31c6c72be64f33d83aab4fe1abebaf899907f0e205"
+      }
+    ],
+    "s236": [
+      {
+        "file": "joint-00.json",
+        "held_handles": 562,
+        "index": 0,
+        "max_status_gap_ms": 539.511,
+        "objects": 71130,
+        "phase": "post_batch_quiescent",
+        "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+        "resources": 6,
+        "rss_bytes": 752459776,
+        "source_closure_sha256": "8fd43c2d72ea881d616e40daef03accaae469822848f44aa961938a6b10c92f5"
+      },
+      {
+        "file": "joint-01.json",
+        "held_handles": 556,
+        "index": 1,
+        "max_status_gap_ms": 549.708,
+        "objects": 71130,
+        "phase": "post_batch_quiescent",
+        "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+        "resources": 6,
+        "rss_bytes": 752922624,
+        "source_closure_sha256": "8fd43c2d72ea881d616e40daef03accaae469822848f44aa961938a6b10c92f5"
+      },
+      {
+        "file": "joint-02.json",
+        "held_handles": 556,
+        "index": 2,
+        "max_status_gap_ms": 549.429,
+        "objects": 71130,
+        "phase": "post_batch_quiescent",
+        "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+        "resources": 6,
+        "rss_bytes": 753336320,
+        "source_closure_sha256": "8fd43c2d72ea881d616e40daef03accaae469822848f44aa961938a6b10c92f5"
+      },
+      {
+        "file": "joint-03.json",
+        "held_handles": 552,
+        "index": 3,
+        "max_status_gap_ms": 574.129,
+        "objects": 71130,
+        "phase": "post_batch_quiescent",
+        "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+        "resources": 6,
+        "rss_bytes": 752975872,
+        "source_closure_sha256": "8fd43c2d72ea881d616e40daef03accaae469822848f44aa961938a6b10c92f5"
+      },
+      {
+        "file": "joint-04.json",
+        "held_handles": 556,
+        "index": 4,
+        "max_status_gap_ms": 640.795,
+        "objects": 71130,
+        "phase": "post_batch_quiescent",
+        "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+        "resources": 6,
+        "rss_bytes": 753070080,
+        "source_closure_sha256": "8fd43c2d72ea881d616e40daef03accaae469822848f44aa961938a6b10c92f5"
+      },
+      {
+        "file": "joint-05.json",
+        "held_handles": 552,
+        "index": 5,
+        "max_status_gap_ms": 578.454,
+        "objects": 71130,
+        "phase": "post_batch_quiescent",
+        "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+        "resources": 6,
+        "rss_bytes": 753082368,
+        "source_closure_sha256": "8fd43c2d72ea881d616e40daef03accaae469822848f44aa961938a6b10c92f5"
+      },
+      {
+        "file": "joint-06.json",
+        "held_handles": 552,
+        "index": 6,
+        "max_status_gap_ms": 540.213,
+        "objects": 71130,
+        "phase": "post_batch_quiescent",
+        "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+        "resources": 6,
+        "rss_bytes": 753217536,
+        "source_closure_sha256": "8fd43c2d72ea881d616e40daef03accaae469822848f44aa961938a6b10c92f5"
+      },
+      {
+        "file": "joint-07.json",
+        "held_handles": 552,
+        "index": 7,
+        "max_status_gap_ms": 616.481,
+        "objects": 71130,
+        "phase": "post_batch_quiescent",
+        "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+        "resources": 6,
+        "rss_bytes": 753246208,
+        "source_closure_sha256": "8fd43c2d72ea881d616e40daef03accaae469822848f44aa961938a6b10c92f5"
+      },
+      {
+        "file": "joint-08.json",
+        "held_handles": 552,
+        "index": 8,
+        "max_status_gap_ms": 701.18,
+        "objects": 71130,
+        "phase": "post_batch_quiescent",
+        "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+        "resources": 6,
+        "rss_bytes": 753643520,
+        "source_closure_sha256": "8fd43c2d72ea881d616e40daef03accaae469822848f44aa961938a6b10c92f5"
+      }
+    ],
+    "s246": [
+      {
+        "file": "joint-00.json",
+        "held_handles": 564,
+        "index": 0,
+        "max_status_gap_ms": 672.367,
+        "objects": 71160,
+        "phase": "post_batch_quiescent",
+        "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+        "resources": 6,
+        "rss_bytes": 759189504,
+        "source_closure_sha256": "1f6b7da7f48085b417e5d6d7f3388c75c0a8beadad3659b14057a2a6e71df625"
+      },
+      {
+        "file": "joint-01.json",
+        "held_handles": 558,
+        "index": 1,
+        "max_status_gap_ms": 572.006,
+        "objects": 71160,
+        "phase": "post_batch_quiescent",
+        "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+        "resources": 6,
+        "rss_bytes": 744394752,
+        "source_closure_sha256": "1f6b7da7f48085b417e5d6d7f3388c75c0a8beadad3659b14057a2a6e71df625"
+      },
+      {
+        "file": "joint-02.json",
+        "held_handles": 558,
+        "index": 2,
+        "max_status_gap_ms": 1079.406,
+        "objects": 71160,
+        "phase": "post_batch_quiescent",
+        "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+        "resources": 6,
+        "rss_bytes": 375828480,
+        "source_closure_sha256": "1f6b7da7f48085b417e5d6d7f3388c75c0a8beadad3659b14057a2a6e71df625"
+      },
+      {
+        "file": "joint-03.json",
+        "held_handles": 558,
+        "index": 3,
+        "max_status_gap_ms": 611.591,
+        "objects": 71160,
+        "phase": "post_batch_quiescent",
+        "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+        "resources": 6,
+        "rss_bytes": 220106752,
+        "source_closure_sha256": "1f6b7da7f48085b417e5d6d7f3388c75c0a8beadad3659b14057a2a6e71df625"
+      },
+      {
+        "file": "joint-04.json",
+        "held_handles": 558,
+        "index": 4,
+        "max_status_gap_ms": 813.856,
+        "objects": 71160,
+        "phase": "post_batch_quiescent",
+        "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+        "resources": 6,
+        "rss_bytes": 193941504,
+        "source_closure_sha256": "1f6b7da7f48085b417e5d6d7f3388c75c0a8beadad3659b14057a2a6e71df625"
+      },
+      {
+        "file": "joint-05.json",
+        "held_handles": 558,
+        "index": 5,
+        "max_status_gap_ms": 676.122,
+        "objects": 71160,
+        "phase": "post_batch_quiescent",
+        "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+        "resources": 6,
+        "rss_bytes": 185352192,
+        "source_closure_sha256": "1f6b7da7f48085b417e5d6d7f3388c75c0a8beadad3659b14057a2a6e71df625"
+      },
+      {
+        "file": "joint-06.json",
+        "held_handles": 556,
+        "index": 6,
+        "max_status_gap_ms": 752.047,
+        "objects": 71160,
+        "phase": "post_batch_quiescent",
+        "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+        "resources": 6,
+        "rss_bytes": 155807744,
+        "source_closure_sha256": "1f6b7da7f48085b417e5d6d7f3388c75c0a8beadad3659b14057a2a6e71df625"
+      },
+      {
+        "file": "joint-07.json",
+        "held_handles": 559,
+        "index": 7,
+        "max_status_gap_ms": 570.212,
+        "objects": 71160,
+        "phase": "post_batch_quiescent",
+        "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+        "resources": 6,
+        "rss_bytes": 204177408,
+        "source_closure_sha256": "1f6b7da7f48085b417e5d6d7f3388c75c0a8beadad3659b14057a2a6e71df625"
+      }
+    ]
+  },
+  "run_id": "gt06-s248-counter-series-review-01",
+  "schema_id": "hh-studio.gt06-counter-series-review",
+  "schema_version": "1.0.0",
+  "sources": {
+    "s185": {
+      "held_handles": [
+        559,
+        559,
+        559,
+        569,
+        555,
+        564
+      ],
+      "held_max": 569,
+      "held_min": 555,
+      "joint_rows": 6,
+      "max_status_gap_ms": 940.415,
+      "objects_unique": [
+        71128
+      ],
+      "resources_unique": [
+        6
+      ],
+      "rss_max": 765435904,
+      "rss_min": 430931968,
+      "source_closures": [
+        "fc46cfd2e80e8d78024b6a31c6c72be64f33d83aab4fe1abebaf899907f0e205"
+      ]
+    },
+    "s190": {
+      "held_handles": [
+        559,
+        555,
+        561,
+        555,
+        555,
+        555,
+        555,
+        555,
+        555,
+        555,
+        557
+      ],
+      "held_max": 561,
+      "held_min": 555,
+      "joint_rows": 11,
+      "max_status_gap_ms": 924.174,
+      "objects_unique": [
+        71128
+      ],
+      "resources_unique": [
+        6
+      ],
+      "rss_max": 587632640,
+      "rss_min": 111525888,
+      "source_closures": [
+        "fc46cfd2e80e8d78024b6a31c6c72be64f33d83aab4fe1abebaf899907f0e205"
+      ]
+    },
+    "s236": {
+      "held_handles": [
+        562,
+        556,
+        556,
+        552,
+        556,
+        552,
+        552,
+        552,
+        552
+      ],
+      "held_max": 562,
+      "held_min": 552,
+      "joint_rows": 9,
+      "max_status_gap_ms": 701.18,
+      "objects_unique": [
+        71130
+      ],
+      "resources_unique": [
+        6
+      ],
+      "rss_max": 753643520,
+      "rss_min": 752459776,
+      "source_closures": [
+        "8fd43c2d72ea881d616e40daef03accaae469822848f44aa961938a6b10c92f5"
+      ]
+    },
+    "s246": {
+      "held_handles": [
+        564,
+        558,
+        558,
+        558,
+        558,
+        558,
+        556,
+        559
+      ],
+      "held_max": 564,
+      "held_min": 556,
+      "joint_rows": 8,
+      "max_status_gap_ms": 1079.406,
+      "objects_unique": [
+        71160
+      ],
+      "resources_unique": [
+        6
+      ],
+      "rss_max": 759189504,
+      "rss_min": 155807744,
+      "source_closures": [
+        "1f6b7da7f48085b417e5d6d7f3388c75c0a8beadad3659b14057a2a6e71df625"
+      ]
+    }
+  }
+}
