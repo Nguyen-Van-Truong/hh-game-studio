@@ -1,0 +1,31 @@
+{
+  "archive_sha256": "258e947bba2c3eab6e0cb22f6abd3ba9b1084b5cc9faa0a35f10ff7a4b8444b1",
+  "authority": 0,
+  "files": [
+    {
+      "path": "analysis.json",
+      "sha256": "080da54b377ea6c8239e2f58058f7e9fde681fade25fe1f3c3f6183b405080c3",
+      "size_bytes": 1013
+    },
+    {
+      "path": "README.md",
+      "sha256": "5ffb4de748a4a79806bc2eec4f9ff348ed402dd08458d3dc4ed0f351933f1e1a",
+      "size_bytes": 891
+    },
+    {
+      "path": "verify.py",
+      "sha256": "36e4ae9413c3414f902df759cdbd45f034837b6939f4b55e6764cd373f0b85f1",
+      "size_bytes": 2056
+    }
+  ],
+  "formal_acceptance": false,
+  "gate_policy": "10 fresh pairs x 35 batches; unchanged",
+  "package_id": "gt06-s245-import-diagnostic",
+  "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+  "raw_file_count": 119,
+  "raw_manifest_sha256": "2d5748a85c4a6fc37a6020a2d06715815f2a16fbc88f0775deea364cbdaa7900",
+  "run_id": "gt06-s245-import-diagnostic-01",
+  "schema_id": "hh-studio.gt06-s246-package-manifest",
+  "schema_version": "1.0.0",
+  "source_closure_sha256": "d31598b55ec947137b8ec10fb2090dea56134a24b22750de6b4146db12b96c61"
+}
