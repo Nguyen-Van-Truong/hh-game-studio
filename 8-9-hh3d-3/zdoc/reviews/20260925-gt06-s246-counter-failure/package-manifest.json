@@ -1,0 +1,32 @@
+{
+  "archive_sha256": "8c11df0104dd6da3bb404117cb2e01da672cc9d4e85db624726e88a8f5c02635",
+  "authority": 0,
+  "files": [
+    {
+      "path": "analysis.json",
+      "sha256": "29353f62d22af628b2f9fd9809fe4a4666ea3f7600d198f880fa2724c348540a",
+      "size_bytes": 1004
+    },
+    {
+      "path": "README.md",
+      "sha256": "89e3c9083a478511d7819546826ed6b9e1e47c19bb4f67f204fae50f8e890a13",
+      "size_bytes": 1187
+    },
+    {
+      "path": "verify.py",
+      "sha256": "d68cf73d87fa7bc133288dd48a83ab0c61bb39419e2a230b8a92cfa2930383e1",
+      "size_bytes": 2173
+    }
+  ],
+  "formal_acceptance": false,
+  "gate_policy": "10 fresh pairs x 35 batches; unchanged",
+  "package_id": "gt06-s246-counter-failure",
+  "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+  "raw_file_count": 267,
+  "raw_manifest_sha256": "e3e4be50cde3e0fcbe43958efa9ed462eae6984999e06f2e7b71e4dca733ecbe",
+  "run_id": "gt06-s246-formal-01",
+  "schema_id": "hh-studio.gt06-s247-package-manifest",
+  "schema_version": "1.0.0",
+  "source_closure_sha256": "1f6b7da7f48085b417e5d6d7f3388c75c0a8beadad3659b14057a2a6e71df625",
+  "terminal_reason": "CAMPAIGN_RETAINED_COUNTER_GROWTH"
+}
