@@ -1,0 +1,22 @@
+{
+  "authority": 0,
+  "changed_files": [
+    {
+      "new_bytes": 11975,
+      "new_sha256": "76c1ea134ac377fb495b3abfe9f42d44c2daf7632d33db27e726c3e8e9b02591",
+      "old_bytes": 10080,
+      "old_sha256": "4292473f77c47253ad35f058ce50c9297b76539a4e5e5e113a75cba894367d86",
+      "path": "8-9-hh3d-3/studio/tests/protocol/test_transport_fault_lock.py"
+    }
+  ],
+  "decision": "S238 remains immutable historical evidence; use this correction for current source drift only; do not use either catalog as GT06 acceptance evidence.",
+  "engine_run": false,
+  "formal_acceptance": false,
+  "gt06_dependency": "IN_PROGRESS_ZERO_ACCEPTED_FULL_RUNS",
+  "gt07_gt10": "PLANNED_UNOPENED",
+  "reason": "S238 catalog verifier no longer matches a source file after the S243 transport repair; refresh the observation without changing any gate or opening GT07-GT10.",
+  "run_id": "gt07-10-s249-catalog-correction-01",
+  "schema_id": "hh-studio.gt07-10-catalog-correction",
+  "schema_version": "1.0.0",
+  "status": "READONLY_PREPARATION_ONLY"
+}
