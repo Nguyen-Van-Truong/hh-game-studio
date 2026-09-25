@@ -1,0 +1,22 @@
+{
+  "schema": "HH-GT06-S240-VERIFY-1",
+  "authority": 0,
+  "checked_utc": "2026-09-25T05:08:33.9897922Z",
+  "campaign": "gt06-s239-formal-01",
+  "source_files_declared": 53,
+  "source_missing": 0,
+  "source_bad_sha256": 0,
+  "source_context_closure": "d7c78724ed827c8182af62c3f7bc1489d8dd35d29abe1f70216736a896e66bb3",
+  "source_campaign_closure": "d7c78724ed827c8182af62c3f7bc1489d8dd35d29abe1f70216736a896e66bb3",
+  "git_head": "fce90581fdacc6b5e41fabc49bc932f40f775a57",
+  "git_status_before_packet_edit": "CLEAN_CONFIRMED",
+  "git_status_after_packet_edit": "PACKET_UNCOMMITTED_EXPECTED",
+  "raw_files": 159,
+  "checks": [
+    "S239 source-files.json exists",
+    "53/53 source hashes match",
+    "campaign/context closure agree",
+    "Git was clean before S240 packet edit",
+    "no Godot/Blender/CDB/WinDbg process at audit"
+  ]
+}

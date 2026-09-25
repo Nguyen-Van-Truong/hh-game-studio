@@ -1,0 +1,64 @@
+{
+  "archive": "studio/.local/archives/gt06-s239-formal-01-s240-interrupted.zip",
+  "archive_members": 170,
+  "archive_sha256": "30bb41f4e70f7d7a4e2e7033fb470e400ec34f98f115f92ae29b68c12f52976e",
+  "authority": 0,
+  "campaign_id": "gt06-s239-formal-01",
+  "cleanup": "No post-reboot inference of old process exit, Job closure, or handle release",
+  "computed_source_closure": "d7c78724ed827c8182af62c3f7bc1489d8dd35d29abe1f70216736a896e66bb3",
+  "formal_acceptance": false,
+  "git_fsck_full_no_reflogs_exit": 0,
+  "git_fsck_scope": "Full object validation completed; dangling objects reported and not deleted.",
+  "manifest": "studio/.local/reviews/gt06-s240-power-recovery/raw-manifest.json",
+  "prior_packet_verifiers": [
+    {
+      "actual_exit": 0,
+      "packet": "20260924-gt06-s235-terminal-review",
+      "stderr": "",
+      "stdout": "{\"archive_members\": 283, \"authority\": 0, \"campaign_id\": \"gt06-s232-formal-01\", \"editor_cleanup_exit\": 2, \"failure\": {\"baseline_batch_index\": 4, \"baseline_value\": 552, \"batch_index\": 8, \"counter\": \"held_handles\", \"maximum_inclusive\": 552, \"observed_value\": 554, \"role\": \"editor\", \"root_cause_claim\": false, \"schema_id\": \"hh-studio.benchmark-screen-failure\", \"schema_version\": \"1.0.0\"}, \"formal_acceptance\": false, \"host_exit\": 1, \"import_exit\": 0, \"post_ack_probe_files\": 8, \"raw_entries\": 282, \"supervisor_actual_exit\": null}\r\n"
+    },
+    {
+      "actual_exit": 0,
+      "packet": "20260924-gt06-s236-handle-boundary",
+      "stderr": "",
+      "stdout": "{\"archive_members\": 213, \"authority\": 0, \"failure_reproduced\": false, \"formal_acceptance\": false, \"post_ack_handles\": [562, 556, 556, 552, 556, 552, 552, 552, 552], \"pre_ack_handles\": [562, 556, 556, 552, 556, 552, 552, 552, 552], \"raw_entries\": 212, \"run_id\": \"gt06-s236-handle-boundary-01\", \"terminal_idle_handles\": [552, 552, 552, 552, 552, 552, 552, 552, 552, 552, 552, 552, 552, 552, 552, 552, 552, 552, 552, 552]}\r\n"
+    },
+    {
+      "actual_exit": 0,
+      "packet": "20260924-gt07-10-capability-catalog-s238",
+      "stderr": "",
+      "stdout": "{\"GT07_GT10\": \"PLANNED_UNOPENED\", \"authority\": 0, \"formal_acceptance\": false, \"observed_files\": 65, \"run_id\": \"gt07-10-s238-capability-catalog-01\"}\r\n"
+    }
+  ],
+  "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+  "raw_files": 169,
+  "raw_json_errors": [],
+  "raw_json_parsed": 28,
+  "raw_last_write_utc": "2026-09-24T07:44:54.683460+00:00",
+  "raw_manifest_sha256": "29efc4ca5f56d4e72a746dde47ab54a90207ed941ef7bfe8bdcd4ba9e3f91b95",
+  "schema": "HH-GT06-S240-INTEGRITY-1",
+  "source_checks": {
+    "attempt_copy": {
+      "checked": 53,
+      "mismatches": []
+    },
+    "campaign_copy": {
+      "checked": 53,
+      "mismatches": []
+    },
+    "current_source": {
+      "checked": 53,
+      "mismatches": []
+    }
+  },
+  "sqlite_checks": [
+    {
+      "integrity_check": [
+        [
+          "ok"
+        ]
+      ],
+      "path": "run-00-attempt-01/commands/.hh-index-6k6rljct/index.sqlite3"
+    }
+  ]
+}
