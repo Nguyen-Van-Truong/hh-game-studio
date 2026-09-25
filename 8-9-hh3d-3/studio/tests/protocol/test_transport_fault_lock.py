@@ -59,7 +59,7 @@ class TransportFaultLockTests(unittest.TestCase):
         self.assertIn("response", result)
         return result["response"]
 
-    def test_durable_pending_ack_arrives_while_terminal_persistence_holds_host_lock(self):
+    def test_durable_pending_ack_arrives_while_terminal_persistence_is_gated(self):
         for write in (False, True):
             with self.subTest(write=write), fixture() as (host, client, _):
                 request = client.request("ack.held", value=17 if write else None,
@@ -86,8 +86,9 @@ class TransportFaultLockTests(unittest.TestCase):
                     thread, done, result = self.start_submit(client, request)
                     try:
                         self.assertTrue(terminal_entered.wait(3))
-                        # The worker is inside _execute's host-lock section.
-                        # Releasing this gate cannot be what makes the ACK arrive.
+                        # The terminal persistence hook is gated after the host
+                        # lock is released; releasing it cannot be what makes
+                        # the admission ACK arrive.
                         self.assertFalse(release_terminal.is_set())
                         self.assertTrue(done.wait(1), "durable ACK waited for terminal journal work")
                         self.assertIs(self.response(result).status, Status.ACCEPTED_PENDING)
