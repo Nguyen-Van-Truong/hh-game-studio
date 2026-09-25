@@ -1,0 +1,767 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:hh:godot-authoring-catalog:1",
+  "title": "CR-GODOT-AUTHORING-01 catalog schema v1",
+  "description": "Schema for the x-candidate catalog instance below, not a replacement Request envelope. Class/property descriptions are hand-authored candidates, NOT extracted or verified against ClassDB. Numeric limits are candidate policy caps, not native property ranges. No runtime capability is enabled.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "catalog_version",
+    "profile",
+    "change_request",
+    "status",
+    "native_evidence",
+    "runtime_enabled",
+    "script_enabled",
+    "required_script_gates",
+    "operations",
+    "resource_bases",
+    "classes"
+  ],
+  "properties": {
+    "catalog_version": {
+      "const": 1
+    },
+    "profile": {
+      "const": "hh-godot-gameplay-source-1"
+    },
+    "change_request": {
+      "const": "CR-GODOT-AUTHORING-01"
+    },
+    "status": {
+      "const": "CANDIDATE_ONLY"
+    },
+    "native_evidence": {
+      "const": "UNVERIFIED"
+    },
+    "runtime_enabled": {
+      "const": false
+    },
+    "script_enabled": {
+      "const": false
+    },
+    "required_script_gates": {
+      "const": [
+        "AUTH-01",
+        "AUTH-02",
+        "AUTH-03",
+        "AUTH-04",
+        "AUTH-05"
+      ]
+    },
+    "operations": {
+      "const": [
+        "scene.node.create",
+        "scene.node.update"
+      ]
+    },
+    "resource_bases": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^[A-Z][A-Za-z0-9_]*$"
+      }
+    },
+    "classes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/class_spec"
+      }
+    }
+  },
+  "$defs": {
+    "property_spec": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "writable"
+      ],
+      "properties": {
+        "type": {
+          "enum": [
+            "bool",
+            "int",
+            "float",
+            "string",
+            "vector2",
+            "vector3",
+            "enum",
+            "resource"
+          ]
+        },
+        "writable": {
+          "type": "boolean"
+        },
+        "minimum": {
+          "type": "number"
+        },
+        "maximum": {
+          "type": "number"
+        },
+        "values": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "integer"
+          }
+        },
+        "resource_base": {
+          "type": "string",
+          "pattern": "^[A-Z][A-Za-z0-9_]*$"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "enum": [
+                  "int",
+                  "float",
+                  "vector2",
+                  "vector3"
+                ]
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "minimum",
+              "maximum"
+            ]
+          },
+          "else": {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "minimum"
+                  ]
+                },
+                {
+                  "required": [
+                    "maximum"
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "enum"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "values"
+            ]
+          },
+          "else": {
+            "not": {
+              "required": [
+                "values"
+              ]
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "resource"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "resource_base"
+            ]
+          },
+          "else": {
+            "not": {
+              "required": [
+                "resource_base"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "class_spec": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "class_name",
+        "property_base",
+        "native_base",
+        "domain",
+        "kind",
+        "instantiable",
+        "properties"
+      ],
+      "properties": {
+        "class_name": {
+          "type": "string",
+          "pattern": "^[A-Z][A-Za-z0-9_]*$"
+        },
+        "property_base": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[A-Z][A-Za-z0-9_]*$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "native_base": {
+          "type": "string",
+          "pattern": "^[A-Z][A-Za-z0-9_]*$"
+        },
+        "domain": {
+          "enum": [
+            "2d",
+            "3d",
+            "ui",
+            "audio",
+            "animation",
+            "input"
+          ]
+        },
+        "kind": {
+          "enum": [
+            "node",
+            "singleton"
+          ]
+        },
+        "instantiable": {
+          "type": "boolean"
+        },
+        "properties": {
+          "type": "object",
+          "propertyNames": {
+            "pattern": "^[a-z][a-z0-9_]*$"
+          },
+          "additionalProperties": {
+            "$ref": "#/$defs/property_spec"
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "singleton"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "instantiable": {
+                "const": false
+              },
+              "property_base": {
+                "type": "null"
+              },
+              "properties": {
+                "maxProperties": 0
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "instantiable": {
+                "const": true
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "x-candidate": {
+    "catalog_version": 1,
+    "profile": "hh-godot-gameplay-source-1",
+    "change_request": "CR-GODOT-AUTHORING-01",
+    "status": "CANDIDATE_ONLY",
+    "native_evidence": "UNVERIFIED",
+    "runtime_enabled": false,
+    "script_enabled": false,
+    "required_script_gates": [
+      "AUTH-01",
+      "AUTH-02",
+      "AUTH-03",
+      "AUTH-04",
+      "AUTH-05"
+    ],
+    "operations": [
+      "scene.node.create",
+      "scene.node.update"
+    ],
+    "resource_bases": [
+      "Texture2D",
+      "SpriteFrames",
+      "Mesh",
+      "Shape2D",
+      "Shape3D",
+      "AudioStream"
+    ],
+    "classes": [
+      {
+        "class_name": "Node2D",
+        "property_base": null,
+        "native_base": "CanvasItem",
+        "domain": "2d",
+        "kind": "node",
+        "instantiable": true,
+        "properties": {
+          "position": {
+            "type": "vector2",
+            "writable": true,
+            "minimum": -10000,
+            "maximum": 10000
+          },
+          "rotation": {
+            "type": "float",
+            "writable": true,
+            "minimum": -10000,
+            "maximum": 10000
+          },
+          "scale": {
+            "type": "vector2",
+            "writable": true,
+            "minimum": -10000,
+            "maximum": 10000
+          },
+          "visible": {
+            "type": "bool",
+            "writable": true
+          }
+        }
+      },
+      {
+        "class_name": "Node3D",
+        "property_base": null,
+        "native_base": "Node",
+        "domain": "3d",
+        "kind": "node",
+        "instantiable": true,
+        "properties": {
+          "position": {
+            "type": "vector3",
+            "writable": true,
+            "minimum": -10000,
+            "maximum": 10000
+          },
+          "rotation": {
+            "type": "vector3",
+            "writable": true,
+            "minimum": -10000,
+            "maximum": 10000
+          },
+          "scale": {
+            "type": "vector3",
+            "writable": true,
+            "minimum": -10000,
+            "maximum": 10000
+          },
+          "visible": {
+            "type": "bool",
+            "writable": true
+          }
+        }
+      },
+      {
+        "class_name": "Sprite2D",
+        "property_base": "Node2D",
+        "native_base": "Node2D",
+        "domain": "2d",
+        "kind": "node",
+        "instantiable": true,
+        "properties": {
+          "texture": {
+            "type": "resource",
+            "writable": true,
+            "resource_base": "Texture2D"
+          },
+          "frame": {
+            "type": "int",
+            "writable": true,
+            "minimum": 0,
+            "maximum": 65535
+          },
+          "centered": {
+            "type": "bool",
+            "writable": true
+          }
+        }
+      },
+      {
+        "class_name": "AnimatedSprite2D",
+        "property_base": "Node2D",
+        "native_base": "Node2D",
+        "domain": "2d",
+        "kind": "node",
+        "instantiable": true,
+        "properties": {
+          "sprite_frames": {
+            "type": "resource",
+            "writable": true,
+            "resource_base": "SpriteFrames"
+          },
+          "animation": {
+            "type": "string",
+            "writable": true
+          },
+          "autoplay": {
+            "type": "string",
+            "writable": true
+          },
+          "frame": {
+            "type": "int",
+            "writable": true,
+            "minimum": 0,
+            "maximum": 65535
+          }
+        }
+      },
+      {
+        "class_name": "MeshInstance3D",
+        "property_base": "Node3D",
+        "native_base": "GeometryInstance3D",
+        "domain": "3d",
+        "kind": "node",
+        "instantiable": true,
+        "properties": {
+          "mesh": {
+            "type": "resource",
+            "writable": true,
+            "resource_base": "Mesh"
+          }
+        }
+      },
+      {
+        "class_name": "CharacterBody2D",
+        "property_base": "Node2D",
+        "native_base": "PhysicsBody2D",
+        "domain": "2d",
+        "kind": "node",
+        "instantiable": true,
+        "properties": {
+          "velocity": {
+            "type": "vector2",
+            "writable": true,
+            "minimum": -10000,
+            "maximum": 10000
+          },
+          "motion_mode": {
+            "type": "enum",
+            "writable": true,
+            "values": [
+              0,
+              1
+            ]
+          },
+          "up_direction": {
+            "type": "vector2",
+            "writable": true,
+            "minimum": -10000,
+            "maximum": 10000
+          }
+        }
+      },
+      {
+        "class_name": "CharacterBody3D",
+        "property_base": "Node3D",
+        "native_base": "PhysicsBody3D",
+        "domain": "3d",
+        "kind": "node",
+        "instantiable": true,
+        "properties": {
+          "velocity": {
+            "type": "vector3",
+            "writable": true,
+            "minimum": -10000,
+            "maximum": 10000
+          },
+          "motion_mode": {
+            "type": "enum",
+            "writable": true,
+            "values": [
+              0,
+              1
+            ]
+          },
+          "up_direction": {
+            "type": "vector3",
+            "writable": true,
+            "minimum": -10000,
+            "maximum": 10000
+          }
+        }
+      },
+      {
+        "class_name": "Area2D",
+        "property_base": "Node2D",
+        "native_base": "CollisionObject2D",
+        "domain": "2d",
+        "kind": "node",
+        "instantiable": true,
+        "properties": {
+          "monitoring": {
+            "type": "bool",
+            "writable": true
+          },
+          "monitorable": {
+            "type": "bool",
+            "writable": true
+          }
+        }
+      },
+      {
+        "class_name": "Area3D",
+        "property_base": "Node3D",
+        "native_base": "CollisionObject3D",
+        "domain": "3d",
+        "kind": "node",
+        "instantiable": true,
+        "properties": {
+          "monitoring": {
+            "type": "bool",
+            "writable": true
+          },
+          "monitorable": {
+            "type": "bool",
+            "writable": true
+          }
+        }
+      },
+      {
+        "class_name": "CollisionShape2D",
+        "property_base": "Node2D",
+        "native_base": "Node2D",
+        "domain": "2d",
+        "kind": "node",
+        "instantiable": true,
+        "properties": {
+          "shape": {
+            "type": "resource",
+            "writable": true,
+            "resource_base": "Shape2D"
+          },
+          "disabled": {
+            "type": "bool",
+            "writable": true
+          }
+        }
+      },
+      {
+        "class_name": "CollisionShape3D",
+        "property_base": "Node3D",
+        "native_base": "Node3D",
+        "domain": "3d",
+        "kind": "node",
+        "instantiable": true,
+        "properties": {
+          "shape": {
+            "type": "resource",
+            "writable": true,
+            "resource_base": "Shape3D"
+          },
+          "disabled": {
+            "type": "bool",
+            "writable": true
+          }
+        }
+      },
+      {
+        "class_name": "Camera2D",
+        "property_base": "Node2D",
+        "native_base": "Node2D",
+        "domain": "2d",
+        "kind": "node",
+        "instantiable": true,
+        "properties": {
+          "enabled": {
+            "type": "bool",
+            "writable": true
+          },
+          "zoom": {
+            "type": "vector2",
+            "writable": true,
+            "minimum": -10000,
+            "maximum": 10000
+          }
+        }
+      },
+      {
+        "class_name": "Camera3D",
+        "property_base": "Node3D",
+        "native_base": "Node3D",
+        "domain": "3d",
+        "kind": "node",
+        "instantiable": true,
+        "properties": {
+          "current": {
+            "type": "bool",
+            "writable": true
+          },
+          "fov": {
+            "type": "float",
+            "writable": true,
+            "minimum": 1,
+            "maximum": 179
+          }
+        }
+      },
+      {
+        "class_name": "TileMapLayer",
+        "property_base": "Node2D",
+        "native_base": "Node2D",
+        "domain": "2d",
+        "kind": "node",
+        "instantiable": true,
+        "properties": {
+          "enabled": {
+            "type": "bool",
+            "writable": true
+          }
+        }
+      },
+      {
+        "class_name": "Control",
+        "property_base": null,
+        "native_base": "CanvasItem",
+        "domain": "ui",
+        "kind": "node",
+        "instantiable": true,
+        "properties": {
+          "position": {
+            "type": "vector2",
+            "writable": true,
+            "minimum": -10000,
+            "maximum": 10000
+          },
+          "size": {
+            "type": "vector2",
+            "writable": true,
+            "minimum": -10000,
+            "maximum": 10000
+          },
+          "visible": {
+            "type": "bool",
+            "writable": true
+          },
+          "mouse_filter": {
+            "type": "enum",
+            "writable": true,
+            "values": [
+              0,
+              1,
+              2
+            ]
+          }
+        }
+      },
+      {
+        "class_name": "Label",
+        "property_base": "Control",
+        "native_base": "Control",
+        "domain": "ui",
+        "kind": "node",
+        "instantiable": true,
+        "properties": {
+          "text": {
+            "type": "string",
+            "writable": true
+          }
+        }
+      },
+      {
+        "class_name": "Button",
+        "property_base": "Control",
+        "native_base": "BaseButton",
+        "domain": "ui",
+        "kind": "node",
+        "instantiable": true,
+        "properties": {
+          "text": {
+            "type": "string",
+            "writable": true
+          },
+          "disabled": {
+            "type": "bool",
+            "writable": true
+          },
+          "toggle_mode": {
+            "type": "bool",
+            "writable": true
+          }
+        }
+      },
+      {
+        "class_name": "AudioStreamPlayer",
+        "property_base": null,
+        "native_base": "Node",
+        "domain": "audio",
+        "kind": "node",
+        "instantiable": true,
+        "properties": {
+          "stream": {
+            "type": "resource",
+            "writable": true,
+            "resource_base": "AudioStream"
+          },
+          "autoplay": {
+            "type": "bool",
+            "writable": true
+          },
+          "volume_db": {
+            "type": "float",
+            "writable": true,
+            "minimum": -80,
+            "maximum": 24
+          },
+          "bus": {
+            "type": "string",
+            "writable": true
+          }
+        }
+      },
+      {
+        "class_name": "AnimationPlayer",
+        "property_base": null,
+        "native_base": "AnimationMixer",
+        "domain": "animation",
+        "kind": "node",
+        "instantiable": true,
+        "properties": {
+          "autoplay": {
+            "type": "string",
+            "writable": true
+          }
+        }
+      },
+      {
+        "class_name": "InputMap",
+        "property_base": null,
+        "native_base": "Object",
+        "domain": "input",
+        "kind": "singleton",
+        "instantiable": false,
+        "properties": {}
+      }
+    ]
+  }
+}
