@@ -1,0 +1,121 @@
+{
+  "authority": 0,
+  "conclusion": "DISTINCT_API_BOUNDARY_PROVEN_ON_OWNED_FIXTURE; GODOT_STACK_CAPTURE_OBSERVED; LIFECYCLE_EXIT_BOUNDARY_UNRESOLVED; DIAGNOSTIC_ONLY",
+  "fixture": {
+    "cdb_exit": 0,
+    "entry_rows": [
+      "S254_EVENT_ENTRY pid=000000000000a54c tid=000000000000ba34 rip=00007ff98e0e0950 out=00000054417eec28 ret=00007ff98b36f23d\\n0:000> kv 12",
+      "S254_IOCP_ENTRY pid=000000000000a54c tid=000000000000ba34 rip=00007ff98e0e1680 out=00000054417eec98 ret=00007ff98b3e2a63\\n0:000> kv 12"
+    ],
+    "ground_truth": {
+      "completion_handle": 572,
+      "completion_last_error": 0,
+      "event_handle": 536,
+      "event_last_error": 0,
+      "pid": 42316
+    },
+    "markers": {
+      "armed": true,
+      "attached": true,
+      "complete": true
+    },
+    "raw_run": "gt06-s254-api-return-01",
+    "return_rows": [
+      "S254_EVENT_RETURN tid=000000000000ba34 status=0000000000000000 handle=0000000000000218\\n0:000> g",
+      "S254_IOCP_RETURN tid=000000000000ba34 status=0000000000000000 handle=000000000000023c\\n0:000> g"
+    ],
+    "stack_rows": 10,
+    "stderr_empty": true,
+    "target_exit": 0
+  },
+  "formal_acceptance": false,
+  "formal_gate_unchanged": true,
+  "godot": {
+    "interpretation": "Entry and return values plus native stacks were captured on the Godot process. Both diagnostic attempts ended with editor_exit=2 after bounded timeout cleanup; no natural editor exit proof and no leak/root-cause claim.",
+    "observations": [
+      {
+        "cdb_exit": 0,
+        "cdb_pid": 32556,
+        "cleanup": {
+          "cdb_exit": 0,
+          "editor_exit": 2,
+          "job": {
+            "active_count": 0,
+            "assigned": true,
+            "close_uncertain": false,
+            "closed": true,
+            "configured": true,
+            "create_uncertain": false,
+            "failed_operations": [],
+            "handle_retained": false,
+            "native_error": null,
+            "tainted": false,
+            "zero_observed": true
+          },
+          "utc": "2026-09-25T10:19:15.697625+00:00"
+        },
+        "entry_rows": [
+          "S255_EVENT_ENTRY pid=00000000000048dc tid=0000000000001a24 rip=00007ff98e0e0950 out=00007ff98e151948 ret=00007ff98e02ea75",
+          "S255_IOCP_ENTRY pid=00000000000048dc tid=0000000000001a24 rip=00007ff98e0e1680 out=000002c449dd1b80 ret=00007ff98e005bab"
+        ],
+        "failure": {
+          "formal_acceptance": false,
+          "message": "S255_EDITOR_TIMEOUT",
+          "type": "RuntimeError",
+          "utc": "2026-09-25T10:19:15.699140+00:00"
+        },
+        "has_complete_marker": true,
+        "return_rows": [
+          "S255_EVENT_RETURN tid=0000000000001a24 status=0000000000000000 handle=0000000000000004",
+          "S255_IOCP_RETURN tid=0000000000001a24 status=0000000000000000 handle=0000000000000020"
+        ],
+        "stack_rows": 29,
+        "target_pid_recorded": 18652
+      },
+      {
+        "cdb_exit": 0,
+        "cdb_pid": 43040,
+        "cleanup": {
+          "cdb_exit": 1,
+          "editor_exit": 2,
+          "job": {
+            "active_count": 0,
+            "assigned": true,
+            "close_uncertain": false,
+            "closed": true,
+            "configured": true,
+            "create_uncertain": false,
+            "failed_operations": [],
+            "handle_retained": false,
+            "native_error": null,
+            "tainted": false,
+            "zero_observed": true
+          },
+          "utc": "2026-09-25T10:32:23.331943+00:00"
+        },
+        "entry_rows": [
+          "S255_EVENT_ENTRY pid=000000000000898c tid=000000000000a5fc rip=00007ff98e0e0950 out=00007ff98e151948 ret=00007ff98e02ea75",
+          "S255_IOCP_ENTRY pid=000000000000898c tid=000000000000a5fc rip=00007ff98e0e1680 out=0000012a046a1b80 ret=00007ff98e005bab"
+        ],
+        "failure": {
+          "formal_acceptance": false,
+          "message": "S255_EDITOR_TIMEOUT",
+          "type": "RuntimeError",
+          "utc": "2026-09-25T10:32:23.333575+00:00"
+        },
+        "has_complete_marker": true,
+        "return_rows": [
+          "S255_EVENT_RETURN tid=000000000000a5fc status=0000000000000000 handle=0000000000000004",
+          "S255_IOCP_RETURN tid=000000000000a5fc status=0000000000000000 handle=0000000000000020"
+        ],
+        "stack_rows": 29,
+        "target_pid_recorded": 35212
+      }
+    ],
+    "raw_runs": [
+      "gt06-s255-godot-api-return-05",
+      "gt06-s255-godot-api-return-12"
+    ]
+  },
+  "run_id": "gt06-s254-255-api-return"
+}

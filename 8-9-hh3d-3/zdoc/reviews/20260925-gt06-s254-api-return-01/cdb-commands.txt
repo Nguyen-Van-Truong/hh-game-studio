@@ -1,0 +1,23 @@
+.sympath+ C:\Windows\System32
+.reload /f ntdll.dll
+.echo S254_ATTACHED
+bp ntdll!NtCreateEvent
+bp ntdll!NtCreateIoCompletion
+.echo S254_BREAKPOINTS_ARMED
+g
+.echo S254_AFTER_EVENT
+r @$t0=@rcx
+.printf "S254_EVENT_ENTRY pid=%p tid=%p rip=%p out=%p ret=%p\\n", @$tpid, @$tid, @rip, @rcx, poi(@rsp)
+kv 12
+gu
+.printf "S254_EVENT_RETURN tid=%p status=%p handle=%p\\n", @$tid, @rax, poi(@$t0)
+g
+.echo S254_AFTER_IOCP
+r @$t1=@rcx
+.printf "S254_IOCP_ENTRY pid=%p tid=%p rip=%p out=%p ret=%p\\n", @$tpid, @$tid, @rip, @rcx, poi(@rsp)
+kv 12
+gu
+.printf "S254_IOCP_RETURN tid=%p status=%p handle=%p\\n", @$tid, @rax, poi(@$t1)
+g
+.echo S254_COMPLETE
+qd

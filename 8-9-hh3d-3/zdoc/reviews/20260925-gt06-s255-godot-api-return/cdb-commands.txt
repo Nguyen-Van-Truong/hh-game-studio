@@ -1,0 +1,26 @@
+.sympath+ C:\Windows\System32
+.reload /f ntdll.dll
+.sxd ibp
+.sxd bpe
+.echo S255_ATTACHED
+bp /1 ntdll!NtCreateEvent
+bp /1 ntdll!NtCreateIoCompletion
+.echo S255_BREAKPOINTS_ARMED
+g
+.echo S255_AFTER_EVENT
+r @$t0=@rcx
+.printf "S255_EVENT_ENTRY pid=%p tid=%p rip=%p out=%p ret=%p\n", @$tpid, @$tid, @rip, @rcx, poi(@rsp)
+kv 12
+gu
+.printf "S255_EVENT_RETURN tid=%p status=%p handle=%p\n", @$tid, @rax, poi(@$t0)
+g
+.echo S255_AFTER_IOCP
+r @$t1=@rcx
+.printf "S255_IOCP_ENTRY pid=%p tid=%p rip=%p out=%p ret=%p\n", @$tpid, @$tid, @rip, @rcx, poi(@rsp)
+kv 12
+gu
+.printf "S255_IOCP_RETURN tid=%p status=%p handle=%p\n", @$tid, @rax, poi(@$t1)
+g
+.echo S255_COMPLETE
+g
+qd

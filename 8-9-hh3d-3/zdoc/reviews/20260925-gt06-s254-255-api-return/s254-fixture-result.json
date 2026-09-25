@@ -1,0 +1,36 @@
+{
+  "authority": 0,
+  "cdb_exit": 0,
+  "cdb_pid": 25848,
+  "entry_rows": [
+    "0:000> .printf \"S254_EVENT_ENTRY pid=%p tid=%p rip=%p out=%p ret=%p\\\\n\", @$tpid, @$tid, @rip, @rcx, poi(@rsp)",
+    "S254_EVENT_ENTRY pid=000000000000a54c tid=000000000000ba34 rip=00007ff98e0e0950 out=00000054417eec28 ret=00007ff98b36f23d\\n0:000> kv 12",
+    "0:000> .printf \"S254_IOCP_ENTRY pid=%p tid=%p rip=%p out=%p ret=%p\\\\n\", @$tpid, @$tid, @rip, @rcx, poi(@rsp)",
+    "S254_IOCP_ENTRY pid=000000000000a54c tid=000000000000ba34 rip=00007ff98e0e1680 out=00000054417eec98 ret=00007ff98b3e2a63\\n0:000> kv 12"
+  ],
+  "formal_acceptance": false,
+  "formal_gate_unchanged": true,
+  "ground_truth": {
+    "completion_handle": 572,
+    "completion_last_error": 0,
+    "event_handle": 536,
+    "event_last_error": 0,
+    "pid": 42316
+  },
+  "markers": {
+    "armed": true,
+    "attached": true,
+    "complete": true
+  },
+  "return_rows": [
+    "0:000> .printf \"S254_EVENT_RETURN tid=%p status=%p handle=%p\\\\n\", @$tid, @rax, poi(@$t0)",
+    "S254_EVENT_RETURN tid=000000000000ba34 status=0000000000000000 handle=0000000000000218\\n0:000> g",
+    "0:000> .printf \"S254_IOCP_RETURN tid=%p status=%p handle=%p\\\\n\", @$tid, @rax, poi(@$t1)",
+    "S254_IOCP_RETURN tid=000000000000ba34 status=0000000000000000 handle=000000000000023c\\n0:000> g"
+  ],
+  "run_id": "gt06-s254-api-return-01",
+  "stack_rows": 10,
+  "stderr_empty": true,
+  "target_exit": 0,
+  "target_pid": 42316
+}
