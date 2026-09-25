@@ -1,0 +1,24 @@
+{
+  "android": {
+    "adb_candidate_paths_observed": [],
+    "adb_on_path": false,
+    "physical_device_status": "UNKNOWN_NOT_TESTED"
+  },
+  "authority": 0,
+  "decision": "Record environment only; lack of adb on PATH is an environment gap, not proof that Android tooling/device is absent. Recheck only when GT08 opens and prerequisites are authorized.",
+  "device_run": false,
+  "engine_run": false,
+  "formal_acceptance": false,
+  "gt06_dependency": "IN_PROGRESS_ZERO_ACCEPTED_FULL_RUNS",
+  "gt07_gt10": "PLANNED_UNOPENED",
+  "os": {
+    "boot_time_observed": "2026-09-25T04:14:28.5000000+07:00",
+    "machine": "AMD64",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "release": "10"
+  },
+  "run_id": "gt07-10-s250-environment-preflight-01",
+  "schema_id": "hh-studio.gt07-10-environment-preflight",
+  "schema_version": "1.0.0",
+  "status": "READONLY_PREPARATION_ONLY"
+}
