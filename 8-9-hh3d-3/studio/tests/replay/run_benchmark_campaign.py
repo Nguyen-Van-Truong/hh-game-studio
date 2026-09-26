@@ -44,6 +44,12 @@ from studio.host.replay.process_probe import ProcessProbe
 from studio.pipeline import native_job
 
 SEQUENCE = 'host1000_then_native100_then_joint_ack_v1'
+HEAVY_PREFLIGHT_NAMES = frozenset({
+    'chrome.exe', 'brave.exe', 'msedge.exe', 'firefox.exe', 'opera.exe',
+    'wsl.exe', 'wslhost.exe', 'wslrelay.exe', 'vmmemwsl', 'vmmemwsl.exe',
+    'telegram.exe', 'slack.exe', 'teams.exe', 'ms-teams.exe', 'discord.exe', 'zalo.exe',
+    'outlook.exe',
+})
 # A formal campaign is one fresh pair per slot.  A failed slot is preserved
 # and the coordinator must dispatch a fresh campaign id after review; retrying
 # the same campaign would make source/harness failures indistinguishable.
@@ -355,6 +361,60 @@ def workstation_profile():
         'scope': 'current machine fixed before campaign; not a claim of performance on other devices'}
 
 
+def heavy_preflight_processes():
+    """Name/PID inventory only; no command lines, termination or load estimates.
+
+    The coordinator app is required to operate the run and is not in the
+    closed-app list. WebView and idle WSL services are not active user apps.
+    Unknown snapshot/enumeration/close failures never authorize a launch.
+    """
+    require(os.name == 'nt', 'CAMPAIGN_PREFLIGHT_PLATFORM')
+    from ctypes import wintypes as w
+    class Entry(ctypes.Structure):
+        _fields_ = [('size', w.DWORD), ('usage', w.DWORD), ('pid', w.DWORD),
+                    ('heap', ctypes.c_void_p), ('module', w.DWORD), ('threads', w.DWORD),
+                    ('parent_pid', w.DWORD), ('base_priority', ctypes.c_long),
+                    ('flags', w.DWORD), ('exe', w.WCHAR * 260)]
+    kernel = ctypes.WinDLL('kernel32', use_last_error=True)
+    kernel.CreateToolhelp32Snapshot.argtypes = [w.DWORD, w.DWORD]
+    kernel.CreateToolhelp32Snapshot.restype = w.HANDLE
+    kernel.Process32FirstW.argtypes = [w.HANDLE, ctypes.POINTER(Entry)]
+    kernel.Process32FirstW.restype = w.BOOL
+    kernel.Process32NextW.argtypes = [w.HANDLE, ctypes.POINTER(Entry)]
+    kernel.Process32NextW.restype = w.BOOL
+    kernel.CloseHandle.argtypes = [w.HANDLE]
+    kernel.CloseHandle.restype = w.BOOL
+    snapshot = kernel.CreateToolhelp32Snapshot(0x00000002, 0)
+    require(snapshot not in (None, ctypes.c_void_p(-1).value), 'CAMPAIGN_PREFLIGHT_SNAPSHOT')
+    found = []
+    primary = None
+    try:
+        entry = Entry()
+        entry.size = ctypes.sizeof(entry)
+        # A Windows process snapshot always includes this caller. Even an
+        # empty first result is therefore not a verified clear environment.
+        require(kernel.Process32FirstW(snapshot, ctypes.byref(entry)), 'CAMPAIGN_PREFLIGHT_PROCESS_FIRST')
+        for _ in range(65536):
+            name = entry.exe.lower()
+            if name in HEAVY_PREFLIGHT_NAMES:
+                found.append({'pid': int(entry.pid), 'name': name})
+            entry.size = ctypes.sizeof(entry)
+            if not kernel.Process32NextW(snapshot, ctypes.byref(entry)):
+                require(ctypes.get_last_error() == 18, 'CAMPAIGN_PREFLIGHT_PROCESS_NEXT')  # ERROR_NO_MORE_FILES
+                break
+        else:
+            raise BenchmarkJobError('CAMPAIGN_PREFLIGHT_PROCESS_CAP')
+    except BaseException as error:
+        primary = error
+        raise
+    finally:
+        if not kernel.CloseHandle(snapshot):
+            if primary is None:
+                raise BenchmarkJobError('CAMPAIGN_PREFLIGHT_SNAPSHOT_CLOSE')
+            primary.add_note('CAMPAIGN_PREFLIGHT_SNAPSHOT_CLOSE')
+    return sorted(found, key=lambda row: (row['name'], row['pid']))
+
+
 def environment_preflight():
     """Capture the owner O1.8 resource gate before or after a campaign.
 
@@ -369,13 +429,15 @@ def environment_preflight():
             (name, ctypes.c_ulonglong) for name in ('physical', 'available', 'page_total',
             'page_available', 'virtual_total', 'virtual_available', 'extended_available')]
     observed_utc = time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())
-    result = {'schema_id': 'hh-studio.benchmark-environment-preflight', 'schema_version': '1.0.0',
+    result = {'schema_id': 'hh-studio.benchmark-environment-preflight', 'schema_version': '1.1.0',
         'observed_utc': observed_utc, 'available_memory_bytes': None,
         'required_available_memory_bytes': 8 * 1024**3, 'commit_total_bytes': None,
         'commit_limit_bytes': None, 'commit_used_percent': None,
-        'required_commit_max_percent': 80.0, 'pass': False,
+        'required_commit_max_percent': 80.0, 'heavy_processes': None,
+        'required_heavy_processes_closed': True, 'pass': False,
         'failure_code': None, 'scope': 'O1.8 system resource snapshot; launch permission requires a fresh before snapshot'}
     try:
+        result['heavy_processes'] = heavy_preflight_processes()
         memory = Memory()
         memory.length = ctypes.sizeof(memory)
         kernel = ctypes.WinDLL('kernel32', use_last_error=True)
@@ -408,9 +470,11 @@ def environment_preflight():
         result.update(commit_total_bytes=commit_total, commit_limit_bytes=commit_limit,
             commit_used_percent=commit_percent,
             **{'pass': result['available_memory_bytes'] >= 8 * 1024**3
-               and commit_total * 100 <= commit_limit * 80})
+               and commit_total * 100 <= commit_limit * 80
+               and not result['heavy_processes']})
         if not result['pass']:
-            result['failure_code'] = 'CAMPAIGN_PREFLIGHT_RESOURCE_LIMIT'
+            result['failure_code'] = ('CAMPAIGN_PREFLIGHT_HEAVY_APPS'
+                                      if result['heavy_processes'] else 'CAMPAIGN_PREFLIGHT_RESOURCE_LIMIT')
     except Exception as error:
         result['failure_code'] = getattr(error, 'code', type(error).__name__)
     return result
@@ -419,9 +483,12 @@ def environment_preflight():
 def require_environment_preflight(result):
     """Enforce a captured preflight only after its evidence is durable."""
     require(type(result) is dict and result.get('schema_id') == 'hh-studio.benchmark-environment-preflight'
-            and result.get('schema_version') == '1.0.0', 'CAMPAIGN_PREFLIGHT_SHAPE')
+            and result.get('schema_version') == '1.1.0', 'CAMPAIGN_PREFLIGHT_SHAPE')
     available = result.get('available_memory_bytes')
     total, limit = result.get('commit_total_bytes'), result.get('commit_limit_bytes')
+    require(type(result.get('heavy_processes')) is list
+            and result.get('required_heavy_processes_closed') is True, 'CAMPAIGN_PREFLIGHT_APP_INVENTORY')
+    require(not result['heavy_processes'], 'CAMPAIGN_PREFLIGHT_HEAVY_APPS')
     require(type(available) is int and available >= 8 * 1024**3
             and type(total) is int and total >= 0 and type(limit) is int and limit > 0
             and total * 100 <= limit * 80 and result.get('pass') is True,

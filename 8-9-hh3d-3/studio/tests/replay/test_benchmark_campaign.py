@@ -275,12 +275,34 @@ class CampaignResumeTests(unittest.TestCase):
 
 
 class CampaignPreflightTests(unittest.TestCase):
+    def test_apps_or_unknown_inventory_reject_even_with_pass_flag_and_free_ram(self):
+        result = {'schema_id': 'hh-studio.benchmark-environment-preflight', 'schema_version': '1.1.0',
+                  'available_memory_bytes': 16 * 1024**3, 'commit_total_bytes': 40,
+                  'commit_limit_bytes': 100, 'heavy_processes': [],
+                  'required_heavy_processes_closed': True, 'pass': True}
+        for name in ('chrome.exe', 'vmmemwsl', 'telegram.exe', 'zalo.exe'):
+            with self.subTest(name=name), self.assertRaisesRegex(BenchmarkJobError, 'CAMPAIGN_PREFLIGHT_HEAVY_APPS'):
+                campaign.require_environment_preflight({**result, 'heavy_processes': [{'pid': 55, 'name': name}]})
+        for value in (None, {}, False):
+            with self.subTest(value=value), self.assertRaisesRegex(BenchmarkJobError, 'CAMPAIGN_PREFLIGHT_APP_INVENTORY'):
+                campaign.require_environment_preflight({**result, 'heavy_processes': value})
+        del result['heavy_processes']
+        with self.assertRaisesRegex(BenchmarkJobError, 'CAMPAIGN_PREFLIGHT_APP_INVENTORY'):
+            campaign.require_environment_preflight(result)
+
+    def test_enumeration_failure_cannot_become_empty_inventory_pass(self):
+        with patch.object(campaign, 'heavy_preflight_processes', side_effect=BenchmarkJobError('CAMPAIGN_PREFLIGHT_PROCESS_NEXT')):
+            snapshot = campaign.environment_preflight()
+        self.assertFalse(snapshot['pass'])
+        self.assertIsNone(snapshot['heavy_processes'])
+        self.assertEqual(snapshot['failure_code'], 'CAMPAIGN_PREFLIGHT_PROCESS_NEXT')
+
     def test_completed_capture_keeps_original_snapshot_hashes_on_resume(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
-            before = {'schema_id': 'hh-studio.benchmark-environment-preflight', 'schema_version': '1.0.0',
+            before = {'schema_id': 'hh-studio.benchmark-environment-preflight', 'schema_version': '1.1.0',
                       'available_memory_bytes': 8 * 1024**3, 'commit_total_bytes': 80,
-                      'commit_limit_bytes': 100, 'pass': True}
+                      'commit_limit_bytes': 100, 'heavy_processes': [], 'required_heavy_processes_closed': True, 'pass': True}
             refs = []
             for invocation in ('a' * 32, 'b' * 32):
                 pair = {}
@@ -301,9 +323,9 @@ class CampaignPreflightTests(unittest.TestCase):
                 campaign.seal_campaign_capture(root, {**result, **refs[1]})
 
     def test_resource_boundaries_are_numeric_and_inclusive(self):
-        result = {'schema_id': 'hh-studio.benchmark-environment-preflight', 'schema_version': '1.0.0',
+        result = {'schema_id': 'hh-studio.benchmark-environment-preflight', 'schema_version': '1.1.0',
                   'available_memory_bytes': 8 * 1024**3, 'commit_total_bytes': 80,
-                  'commit_limit_bytes': 100, 'pass': True}
+                  'commit_limit_bytes': 100, 'heavy_processes': [], 'required_heavy_processes_closed': True, 'pass': True}
         campaign.require_environment_preflight(result)
         for key, value in (('available_memory_bytes', 8 * 1024**3 - 1),
                            ('commit_total_bytes', 81), ('commit_total_bytes', True),
@@ -315,8 +337,8 @@ class CampaignPreflightTests(unittest.TestCase):
     def test_after_snapshot_is_recorded_without_becoming_a_gate(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
-            after = {'schema_id': 'hh-studio.benchmark-environment-preflight', 'schema_version': '1.0.0',
-                     'available_memory_bytes': 1, 'commit_total_bytes': 99, 'commit_limit_bytes': 100, 'pass': False}
+            after = {'schema_id': 'hh-studio.benchmark-environment-preflight', 'schema_version': '1.1.0',
+                     'available_memory_bytes': 1, 'commit_total_bytes': 99, 'commit_limit_bytes': 100, 'heavy_processes': [], 'required_heavy_processes_closed': True, 'pass': False}
             def completed(_campaign_id, _root, before_path, after_path):
                 campaign.write(before_path, {'synthetic': True})
                 return 0
@@ -326,6 +348,54 @@ class CampaignPreflightTests(unittest.TestCase):
             paths = list((root / 'environment').glob('*-after.json'))
             self.assertEqual(len(paths), 1)
             self.assertEqual(json.loads(paths[0].read_bytes()), after)
+
+
+@unittest.skipUnless(sys.platform == 'win32', 'Windows Toolhelp snapshot API')
+class PreflightInventoryTests(unittest.TestCase):
+    def kernel(self, names, *, first=True, terminal_error=18, close=True, handle=0x100000001):
+        entries = iter(enumerate(names, start=10))
+        def fill(_snapshot, pointer):
+            try:
+                pid, name = next(entries)
+            except StopIteration:
+                campaign.ctypes.set_last_error(terminal_error)
+                return False
+            pointer._obj.pid, pointer._obj.exe = pid, name
+            return True
+        return SimpleNamespace(
+            CreateToolhelp32Snapshot=Mock(return_value=handle),
+            Process32FirstW=Mock(side_effect=fill if first else lambda *_: False),
+            Process32NextW=Mock(side_effect=fill), CloseHandle=Mock(return_value=close))
+
+    def test_case_insensitive_known_apps_and_native_handle_width(self):
+        kernel = self.kernel(['python.exe', 'ChatGPT.exe', 'Chrome.EXE', 'vmmemWSL',
+                              'Telegram.exe', 'Zalo.exe', 'wslservice.exe', 'msedgewebview2.exe'])
+        with patch.object(campaign.ctypes, 'WinDLL', return_value=kernel):
+            rows = campaign.heavy_preflight_processes()
+        self.assertEqual([row['name'] for row in rows], ['chrome.exe', 'telegram.exe', 'vmmemwsl', 'zalo.exe'])
+        self.assertTrue(all(set(row) == {'pid', 'name'} for row in rows))
+        kernel.CloseHandle.assert_called_once_with(0x100000001)
+        self.assertIs(kernel.CreateToolhelp32Snapshot.restype, campaign.ctypes.wintypes.HANDLE)
+
+    def test_failed_first_or_partial_walk_is_not_a_clear_environment(self):
+        for first, error, code in ((False, 18, 'PROCESS_FIRST'), (True, 5, 'PROCESS_NEXT')):
+            kernel = self.kernel(['python.exe'], first=first, terminal_error=error)
+            with self.subTest(code=code), patch.object(campaign.ctypes, 'WinDLL', return_value=kernel):
+                with self.assertRaisesRegex(BenchmarkJobError, 'CAMPAIGN_PREFLIGHT_' + code):
+                    campaign.heavy_preflight_processes()
+            kernel.CloseHandle.assert_called_once()
+
+    def test_snapshot_creation_and_close_failures_never_authorize_launch(self):
+        invalid = campaign.ctypes.c_void_p(-1).value
+        kernel = self.kernel([], handle=invalid)
+        with patch.object(campaign.ctypes, 'WinDLL', return_value=kernel):
+            with self.assertRaisesRegex(BenchmarkJobError, 'CAMPAIGN_PREFLIGHT_SNAPSHOT'):
+                campaign.heavy_preflight_processes()
+        kernel.CloseHandle.assert_not_called()
+        kernel = self.kernel(['python.exe'], close=False)
+        with patch.object(campaign.ctypes, 'WinDLL', return_value=kernel):
+            with self.assertRaisesRegex(BenchmarkJobError, 'CAMPAIGN_PREFLIGHT_SNAPSHOT_CLOSE'):
+                campaign.heavy_preflight_processes()
 
 
 class CampaignOwnershipTests(unittest.TestCase):
@@ -350,9 +420,9 @@ class CampaignOwnershipTests(unittest.TestCase):
             stack.enter_context(patch.object(campaign, 'source_files', return_value=files))
             stack.enter_context(patch.object(campaign, 'workstation_profile', return_value={'synthetic': True}))
             stack.enter_context(patch.object(campaign, 'environment_preflight', return_value={
-                'schema_id': 'hh-studio.benchmark-environment-preflight', 'schema_version': '1.0.0',
+                'schema_id': 'hh-studio.benchmark-environment-preflight', 'schema_version': '1.1.0',
                 'pass': True, 'available_memory_bytes': 8 * 1024**3,
-                'commit_total_bytes': 8, 'commit_limit_bytes': 10}))
+                'commit_total_bytes': 8, 'commit_limit_bytes': 10, 'heavy_processes': [], 'required_heavy_processes_closed': True}))
             launch = stack.enter_context(patch.object(campaign, 'BenchmarkProcess', side_effect=original))
             with self.assertRaises(BenchmarkJobError) as caught:
                 campaign.run_campaign('gt06-synthetic-owner', root)
@@ -372,10 +442,19 @@ class CampaignOwnershipTests(unittest.TestCase):
             self.assertEqual(len(list((root / 'environment').glob('*-after.json'))), 1)
             # A formerly passing snapshot cannot authorize a later invocation.
             with patch.object(campaign, 'environment_preflight', return_value={
-                    'schema_id': 'hh-studio.benchmark-environment-preflight', 'schema_version': '1.0.0',
+                    'schema_id': 'hh-studio.benchmark-environment-preflight', 'schema_version': '1.1.0',
                     'pass': False, 'available_memory_bytes': 7 * 1024**3,
-                    'commit_total_bytes': 8, 'commit_limit_bytes': 10}):
+                    'commit_total_bytes': 8, 'commit_limit_bytes': 10, 'heavy_processes': [], 'required_heavy_processes_closed': True}):
                 with self.assertRaisesRegex(BenchmarkJobError, 'CAMPAIGN_PREFLIGHT_RESOURCE_LIMIT'):
+                    campaign.run_campaign('gt06-synthetic-owner', root)
+            launch.assert_called_once()
+            with patch.object(campaign, 'environment_preflight', return_value={
+                    'schema_id': 'hh-studio.benchmark-environment-preflight', 'schema_version': '1.1.0',
+                    'pass': True, 'available_memory_bytes': 16 * 1024**3,
+                    'commit_total_bytes': 4, 'commit_limit_bytes': 10,
+                    'heavy_processes': [{'pid': 444, 'name': 'chrome.exe'}],
+                    'required_heavy_processes_closed': True}):
+                with self.assertRaisesRegex(BenchmarkJobError, 'CAMPAIGN_PREFLIGHT_HEAVY_APPS'):
                     campaign.run_campaign('gt06-synthetic-owner', root)
             launch.assert_called_once()
             # A closed/zero failed attempt must not silently override a Stop.
@@ -383,8 +462,8 @@ class CampaignOwnershipTests(unittest.TestCase):
             with self.assertRaisesRegex(BenchmarkJobError, 'CAMPAIGN_STOP_LATCHED'):
                 campaign.run_campaign('gt06-synthetic-owner', root)
             launch.assert_called_once()
-            self.assertEqual(len(list((root / 'environment').glob('*-before.json'))), 3)
-            self.assertEqual(len(list((root / 'environment').glob('*-after.json'))), 3)
+            self.assertEqual(len(list((root / 'environment').glob('*-before.json'))), 4)
+            self.assertEqual(len(list((root / 'environment').glob('*-after.json'))), 4)
 
     def test_parent_cleanup_failure_preserves_primary_artifact_and_held_owner(self):
         with tempfile.TemporaryDirectory(prefix='gt06-campaign-held-') as directory, ExitStack() as stack:
@@ -407,9 +486,9 @@ class CampaignOwnershipTests(unittest.TestCase):
             stack.enter_context(patch.object(campaign, 'source_files', return_value=files))
             stack.enter_context(patch.object(campaign, 'workstation_profile', return_value={'synthetic': True}))
             stack.enter_context(patch.object(campaign, 'environment_preflight', return_value={
-                'schema_id': 'hh-studio.benchmark-environment-preflight', 'schema_version': '1.0.0',
+                'schema_id': 'hh-studio.benchmark-environment-preflight', 'schema_version': '1.1.0',
                 'pass': True, 'available_memory_bytes': 8 * 1024**3,
-                'commit_total_bytes': 8, 'commit_limit_bytes': 10}))
+                'commit_total_bytes': 8, 'commit_limit_bytes': 10, 'heavy_processes': [], 'required_heavy_processes_closed': True}))
             launch = stack.enter_context(patch.object(campaign, 'BenchmarkProcess', return_value=retained))
             with self.assertRaises(BenchmarkJobError) as caught:
                 campaign.run_campaign('gt06-synthetic-held', root)
