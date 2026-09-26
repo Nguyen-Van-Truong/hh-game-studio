@@ -92,13 +92,44 @@ def source_files():
     return {n: sha(STUDIO/n) for n in sorted(set(names))}
 
 
+def resolve_direct_engine(binary, lock):
+    """Prefer the GUI executable so the captured PID is the Godot process.
+
+    The pinned Windows ``*_console.exe`` is a launcher which creates the
+    actual engine process.  Capturing its launcher PID and comparing it with
+    ``OS.get_process_id()`` therefore reports a false binding drift.  The
+    sibling GUI executable from the same verified release is the direct
+    engine and still accepts redirected stdout/stderr under the trusted Job.
+    """
+    binary = binary.resolve(strict=True)
+    if sha(binary) == lock['gui_sha256']:
+        return binary, lock['gui_sha256'], 'gui-direct'
+    if sha(binary) == lock['console_sha256'] and binary.name.lower().endswith('_console.exe'):
+        sibling = binary.with_name(binary.name[:-len('_console.exe')] + '.exe')
+        if sibling.is_file() and sha(sibling) == lock['gui_sha256']:
+            return sibling, lock['gui_sha256'], 'console-input-resolved-to-gui-direct'
+    raise ValueError('PIN_HASH')
+
+
+def resolve_console(binary, lock):
+    """Return the matching console twin used only for the version receipt."""
+    binary = binary.resolve(strict=True)
+    if sha(binary) == lock['console_sha256']:
+        return binary, lock['console_sha256']
+    if sha(binary) == lock['gui_sha256'] and binary.name.lower().endswith('.exe'):
+        sibling = binary.with_name(binary.stem + '_console.exe')
+        if sibling.is_file() and sha(sibling) == lock['console_sha256']:
+            return sibling, lock['console_sha256']
+    raise ValueError('PIN_CONSOLE_HASH')
+
+
 def run(binary, run_id):
     if not re.fullmatch(r'o2-classdb-[a-z0-9-]{1,32}', run_id):
         raise ValueError('RUN_ID')
-    binary = binary.resolve(strict=True)
     lock = parse_json((STUDIO/'toolchain.lock.json').read_bytes())['godot']
-    if sha(binary) != lock['console_sha256']:
-        raise ValueError('PIN_HASH')
+    requested_binary = binary.resolve(strict=True)
+    binary, binary_sha256, binary_mode = resolve_direct_engine(requested_binary, lock)
+    version_binary, version_sha256 = resolve_console(requested_binary, lock)
     catalog = contract.load_catalog()
     source = source_files()
     root = STUDIO/'.local/reviews'/run_id
@@ -112,12 +143,14 @@ def run(binary, run_id):
     project.joinpath('catalog-input.json').write_bytes(canonical_bytes(requested))
     project_hashes = {p.name: sha(p) for p in project.iterdir()}
     closure = hashlib.sha256(''.join(f'{n}\0{v}\n' for n,v in source.items()).encode()).hexdigest()
-    save(root/'freeze.json', dict(source_files=source, source_closure=closure, binary_sha256=lock['console_sha256'],
+    save(root/'freeze.json', dict(source_files=source, source_closure=closure, binary_sha256=binary_sha256,
+                                  version_binary_sha256=version_sha256,
+                                  binary_mode=binary_mode, binary_path_role='gui_executable',
                                   catalog_digest=catalog.digest, project_files=project_hashes, authority=0))
-    def stage(name, args):
+    def stage(name, args, stage_binary=binary, stage_sha256=binary_sha256):
         out = root/name
-        run_trusted_stage([str(binary), *args], cwd=project, output=out,
-                          source_files=source, source_root=STUDIO, binary_sha256=lock['console_sha256'])
+        run_trusted_stage([str(stage_binary), *args], cwd=project, output=out,
+                          source_files=source, source_root=STUDIO, binary_sha256=stage_sha256)
         capture = verify_captured_stage(out, sha(out/'capture.json'))
         stdout = (out/'stdout.txt').read_text(encoding='utf-8')
         stderr = (out/'stderr.txt').read_text(encoding='utf-8')
@@ -127,7 +160,7 @@ def run(binary, run_id):
             raise ValueError('PROJECT_SOURCE_CHANGED')
         return capture, stdout
     try:
-        _, version = stage('version', ['--version'])
+        _, version = stage('version', ['--version'], version_binary, version_sha256)
         if version.strip() != lock['observed_version']:
             raise ValueError('PIN_VERSION')
         common = ['--headless', '--path', str(project), '--script', 'res://probe.gd']
@@ -148,7 +181,7 @@ def run(binary, run_id):
                              'observed_engine_pid': observed['pid'],
                              'captured_target_pid': capture['actual_process_exit']['pid']})
         result = dict(status='DRIFT' if findings else 'CLASSDB_MATCH', run_id=run_id,
-                      source_closure=closure, findings=findings, observation=observed,
+                      source_closure=closure, binary_mode=binary_mode, findings=findings, observation=observed,
                       formal_acceptance=False, native_readback_undo=False, authority=0)
         save(root/'result.json', result)
         return result
