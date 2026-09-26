@@ -18,7 +18,7 @@ from studio.protocol.core import Request, ValidationError, canonical_bytes
 class GameplayEdgeTests(unittest.TestCase):
     def setUp(self):
         self.context = edges.EdgeContext(
-            "project.fixture", "sha256:" + "1" * 64, 3, "lease.fixture", 7, 31000, 1000,
+            "project.fixture", "sha256:" + "1" * 64, "sha256:" + "2" * 64, 3, "lease.fixture", 7, 31000, 1000,
             (edges.EdgeNode("root"), edges.EdgeNode("actor"), edges.EdgeNode("bot")),
             signals=(edges.SignalEdge("actor", "pressed", "bot", "on_pressed"),),
             groups=(edges.GroupEdge("actor", "fighters"),),
@@ -27,6 +27,7 @@ class GameplayEdgeTests(unittest.TestCase):
     def request(self, operation, payload, target=None, **changes):
         payload = dict(payload)
         payload.setdefault("expected_generation", self.context.generation)
+        payload.setdefault("expected_project_revision", self.context.project_revision)
         values = dict(command_id="edge.command", project_id=self.context.project_id,
                       operation=operation, lease_id=self.context.lease_id,
                       fencing_epoch=self.context.fencing_epoch, expected_revision=self.context.revision,
@@ -69,6 +70,26 @@ class GameplayEdgeTests(unittest.TestCase):
         self.reject(replace(request, fencing_epoch=8), "EDGE_STALE_LEASE")
         self.reject(replace(request, expected_revision="sha256:" + "2" * 64), "EDGE_STALE_REVISION")
         self.reject(replace(request, deadline_ms=1000), "EDGE_DEADLINE")
+
+    def test_stale_and_malformed_project_revision_reject(self):
+        request = self.request("scene.group.assign", {"group_name": "targets"})
+        stale = {**request.payload, "expected_project_revision": "sha256:" + "3" * 64}
+        self.reject(replace(request, payload=stale,
+                            payload_hash="sha256:" + hashlib.sha256(canonical_bytes(stale)).hexdigest()),
+                    "EDGE_STALE_PROJECT_REVISION")
+        malformed = {**request.payload, "expected_project_revision": "project-r2"}
+        self.reject(replace(request, payload=malformed,
+                            payload_hash="sha256:" + hashlib.sha256(canonical_bytes(malformed)).hexdigest()),
+                    "EDGE_PROJECT_REVISION")
+        bad_context = replace(self.context, project_revision="not-a-revision")
+        with self.assertRaises(ValidationError) as raised:
+            edges.validate_request(request, bad_context)
+        self.assertEqual(raised.exception.code, "EDGE_CONTEXT")
+
+    def test_projection_carries_bound_project_revision(self):
+        result = edges.validate_request(self.request("scene.group.assign", {"group_name": "targets"}), self.context)
+        self.assertEqual(result.projection["project_revision"], self.context.project_revision)
+        self.assertEqual(result.projection["expected_project_revision"], self.context.project_revision)
 
     def test_input_values_are_closed_and_boolean_is_not_integer(self):
         for payload in (

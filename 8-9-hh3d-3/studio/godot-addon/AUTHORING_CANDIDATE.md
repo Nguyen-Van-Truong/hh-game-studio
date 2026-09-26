@@ -60,8 +60,10 @@ completion is claimed. Merge remains deferred until GT-06 is accepted.
 `gameplay_edges.py` adds an authority-0 candidate envelope for signal
 connections, group membership, and input-action definitions. It validates
 immutable proposals against observed node IDs, revision, generation, lease,
-and duplicate state; it does not connect a signal, mutate InputMap, or claim
-native readback/UndoRedo. The 94-test O2 static run (including five edge
-tests) covers this candidate with
-the existing authoring and script-profile tests. A future native remint is
-required before it can be included in CR-GODOT-AUTHORING-01 or GT-09.
+project revision, and duplicate state. Every proposal carries an
+`expected_project_revision` in `sha256:<64 lowercase hex>` form, and the
+projection records the bound revision. It does not connect a signal, mutate
+InputMap, or claim native readback/UndoRedo. The 96-test O2 static run
+(including the edge tests) covers this candidate with the existing authoring
+and script-profile tests. A future native remint is required before it can be
+included in CR-GODOT-AUTHORING-01 or GT-09.

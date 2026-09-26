@@ -3,8 +3,8 @@
 This module validates proposals for signal connections, group membership, and
 input actions before a future registered Godot owner exists. It never contacts
 Godot, edits a scene, executes script, grants a capability, or emits an ACK.
-Native readback, UndoRedo, lease ownership, and AUTH-01..05 remain required at
-integration time.
+Native readback, UndoRedo, lease ownership, project-revision fencing, and
+AUTH-01..05 remain required at integration time.
 """
 from __future__ import annotations
 
@@ -20,6 +20,7 @@ PROFILE = "hh-godot-gameplay-edges-1"
 _ID = re.compile(r"[a-z][a-z0-9._-]{0,63}\Z")
 _NAME = re.compile(r"[A-Za-z][A-Za-z0-9_]{0,47}\Z")
 _ACTION = re.compile(r"[a-z][a-z0-9._-]{0,47}\Z")
+_REVISION = re.compile(r"sha256:[0-9a-f]{64}\Z")
 _OPERATIONS = ("scene.signal.connect", "scene.group.assign", "input.action.define")
 
 
@@ -71,6 +72,7 @@ class InputAction:
 class EdgeContext:
     project_id: str
     revision: str
+    project_revision: str
     generation: int
     lease_id: str
     fencing_epoch: int
@@ -96,6 +98,9 @@ class ValidatedEdge:
 
 def _context(context: EdgeContext) -> tuple[set[str], set[tuple[str, str, str, str]], set[tuple[str, str]], set[str]]:
     _need(type(context) is EdgeContext and _id(context.project_id) and _id(context.lease_id), "EDGE_CONTEXT")
+    _need(type(context.revision) is str and _REVISION.fullmatch(context.revision)
+          and type(context.project_revision) is str and _REVISION.fullmatch(context.project_revision),
+          "EDGE_CONTEXT")
     _need(type(context.generation) is int and context.generation >= 1, "EDGE_CONTEXT")
     _need(type(context.fencing_epoch) is int and context.fencing_epoch >= 0, "EDGE_CONTEXT")
     _need(all(type(value) is int and value >= 0 for value in
@@ -138,11 +143,16 @@ def validate_request(request: Request | Mapping[str, Any], context: EdgeContext)
     payload = dict(checked.payload)
     _need(type(payload.get("expected_generation")) is int
           and payload["expected_generation"] == context.generation, "EDGE_STALE_GENERATION")
+    _need(type(payload.get("expected_project_revision")) is str
+          and _REVISION.fullmatch(payload["expected_project_revision"]) is not None,
+          "EDGE_PROJECT_REVISION")
+    _need(payload["expected_project_revision"] == context.project_revision,
+          "EDGE_STALE_PROJECT_REVISION")
     target = dict(checked.target)
     _need(set(target) == {"stable_id"} and _id(target["stable_id"]), "EDGE_TARGET")
     if checked.operation == "scene.signal.connect":
         _need(target["stable_id"] in nodes, "EDGE_TARGET")
-        _need(set(payload) == {"expected_generation", "signal_name", "target_stable_id", "method"},
+        _need(set(payload) == {"expected_generation", "expected_project_revision", "signal_name", "target_stable_id", "method"},
               "EDGE_SIGNAL_SHAPE")
         row = (target["stable_id"], payload["signal_name"], payload["target_stable_id"], payload["method"])
         _need(_name(payload["signal_name"]) and _id(payload["target_stable_id"])
@@ -150,14 +160,14 @@ def validate_request(request: Request | Mapping[str, Any], context: EdgeContext)
         _need(row not in signals, "EDGE_DUPLICATE_SIGNAL")
         after = {"source_id": row[0], "signal_name": row[1], "target_id": row[2], "method": row[3]}
     elif checked.operation == "scene.group.assign":
-        _need(set(payload) == {"expected_generation", "group_name"}
+        _need(set(payload) == {"expected_generation", "expected_project_revision", "group_name"}
               and target["stable_id"] in nodes and _id(payload["group_name"]), "EDGE_GROUP")
         row = (target["stable_id"], payload["group_name"])
         _need(row not in groups, "EDGE_DUPLICATE_GROUP")
         after = {"node_id": row[0], "group_name": row[1]}
     else:
         _need(target["stable_id"] == "root"
-              and set(payload) == {"expected_generation", "action_name", "physical_key", "deadzone"},
+              and set(payload) == {"expected_generation", "expected_project_revision", "action_name", "physical_key", "deadzone"},
               "EDGE_INPUT")
         _need(_ACTION.fullmatch(payload["action_name"]) is not None
               and type(payload["physical_key"]) is int and 0 <= payload["physical_key"] <= 65535
@@ -168,7 +178,9 @@ def validate_request(request: Request | Mapping[str, Any], context: EdgeContext)
                  "deadzone": payload["deadzone"]}
     projection = {"profile": PROFILE, "operation": checked.operation,
                   "command_id": checked.command_id, "request_digest": checked.digest,
-                  "expected_revision": context.revision, "expected_generation": context.generation,
+                  "expected_revision": context.revision, "project_revision": context.project_revision,
+                  "expected_project_revision": context.project_revision,
+                  "expected_generation": context.generation,
                   "target": target, "after": after, "changes_applied": False,
                   "runtime_authorized": False, "native_verified": False,
                   "undo_policy": "remove_created_edge_if_revision_matches"}
