@@ -63,7 +63,11 @@ immutable proposals against observed node IDs, revision, generation, lease,
 project revision, and duplicate state. Every proposal carries an
 `expected_project_revision` in `sha256:<64 lowercase hex>` form, and the
 projection records the bound revision. It does not connect a signal, mutate
-InputMap, or claim native readback/UndoRedo. The 96-test O2 static run
+InputMap, or claim native readback/UndoRedo. The 99-test O2 static run
 (including the edge tests) covers this candidate with the existing authoring
-and script-profile tests. A future native remint is required before it can be
-included in CR-GODOT-AUTHORING-01 or GT-09.
+and script-profile tests. Disposable native diagnostic `o2-native-20260926-19`
+also exercised all three projections through Godot's signal, group, and
+InputMap APIs with do/undo/redo/readback; it had actual host exit 0, clean log,
+unchanged source/project, and authority 0. This does not enable the profile or
+satisfy AUTH-01..05. The native evidence must be reminted if the source closure
+changes before inclusion in CR-GODOT-AUTHORING-01 or GT-09.
