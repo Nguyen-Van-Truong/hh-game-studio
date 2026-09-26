@@ -70,3 +70,10 @@ not prove AUTH-01..05, public authorization, sandbox, ACK, or GT-09
 conformance. The diagnostic binary is the O2 candidate lock's Godot 4.7.2;
 the product/runbook pin is 4.7.1, so this run cannot satisfy V-A1 or product
 acceptance. Any source or engine-pin change requires a fresh native remint.
+
+The O2 branch also adds `ffbc251c`, a pure collision-shape resource candidate
+for RectangleShape2D, CapsuleShape2D, BoxShape3D, and CapsuleShape3D. It binds
+resource creation/update to a matching collision node, scene/project revision,
+lease and generation, rejects shared/unknown resources and invalid dimensions,
+and passes the combined 112-test static suite. It has no native resource
+readback/UndoRedo evidence yet and remains separate until GT-06 is accepted.
