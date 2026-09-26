@@ -34,6 +34,13 @@ _CONTRACT = importlib.util.module_from_spec(_CONTRACT_SPEC)
 sys.modules[_CONTRACT_SPEC.name] = _CONTRACT
 _CONTRACT_SPEC.loader.exec_module(_CONTRACT)
 
+_EDGE_SPEC = importlib.util.spec_from_file_location(
+    "o2_native_gameplay_edges", STUDIO / "godot-addon/gameplay_edges.py")
+_EDGE = importlib.util.module_from_spec(_EDGE_SPEC)
+sys.modules[_EDGE_SPEC.name] = _EDGE
+_EDGE_SPEC.loader.exec_module(_EDGE)
+from studio.protocol.core import Request, canonical_bytes
+
 
 def sha(path: Path) -> str:
     digest = hashlib.sha256()
@@ -56,7 +63,9 @@ def source_files() -> dict[str, str]:
         "contracts/godot-authoring-schema-v1.json",
         "tests/godot/authoring_native_probe.gd",
         "tests/godot/authoring_native_plugin.gd",
+        "tests/godot/gameplay_edges_native.gd",
         "tests/godot/run_authoring_native_probe.py",
+        "godot-addon/gameplay_edges.py",
         "protocol/core.py",
         "protocol/_rfc8785/__init__.py",
         "protocol/_rfc8785/_impl.py",
@@ -113,6 +122,45 @@ def expected_labels(catalog: dict) -> set[str]:
     return labels
 
 
+def expected_edge_labels() -> set[str]:
+    labels = {"edge_proposal_count"}
+    for operation in ("scene.signal.connect", "scene.group.assign", "input.action.define"):
+        prefix = "edge_" + operation.replace(".", "_")
+        labels.update(prefix + suffix for suffix in (
+            "_binding", "_fixture_target", "_before", "_do_readback", "_effect",
+            "_undo_transition", "_undo_readback", "_redo_transition", "_redo_readback",
+            "_redo_effect", "_cleanup_transition", "_cleanup_readback"))
+    return labels
+
+
+def edge_proposals() -> list[dict]:
+    context = _EDGE.EdgeContext(
+        "project.fixture", "sha256:" + "1" * 64, "sha256:" + "2" * 64,
+        3, "lease.fixture", 7, 31000, 1000,
+        (_EDGE.EdgeNode("root"), _EDGE.EdgeNode("actor"), _EDGE.EdgeNode("bot")))
+    rows = (
+        ("scene.signal.connect", {"stable_id": "actor"},
+         {"signal_name": "pressed", "target_stable_id": "bot", "method": "hide"}),
+        ("scene.group.assign", {"stable_id": "actor"},
+         {"group_name": "o2_probe_group"}),
+        ("input.action.define", {"stable_id": "root"},
+         {"action_name": "o2_probe_jump", "physical_key": 32, "deadzone": 0.25}),
+    )
+    result: list[dict] = []
+    for index, (operation, target, body) in enumerate(rows, 1):
+        payload = {"expected_generation": context.generation,
+                   "expected_project_revision": context.project_revision, **body}
+        request = Request(
+            command_id=f"edge.native.{index}", project_id=context.project_id,
+            operation=operation, lease_id=context.lease_id,
+            fencing_epoch=context.fencing_epoch, expected_revision=context.revision,
+            target=target, payload=payload,
+            payload_hash="sha256:" + __import__("hashlib").sha256(canonical_bytes(payload)).hexdigest(),
+            deadline_ms=2000)
+        result.append(_EDGE.validate_request(request, context).projection)
+    return result
+
+
 def validate_result(result: object, catalog: dict, process: dict, run_root: Path) -> tuple[bool, str | None]:
     if not isinstance(result, dict):
         return False, "result-not-object"
@@ -132,9 +180,10 @@ def validate_result(result: object, catalog: dict, process: dict, run_root: Path
         if not isinstance(row, dict) or not isinstance(row.get("label"), str) or row.get("passed") is not True:
             return False, "check-failed"
         labels.append(row["label"])
-    if len(labels) != len(set(labels)) or set(labels) != expected_labels(catalog):
-        missing = sorted(expected_labels(catalog) - set(labels))
-        extra = sorted(set(labels) - expected_labels(catalog))
+    expected = expected_labels(catalog) | expected_edge_labels()
+    if len(labels) != len(set(labels)) or set(labels) != expected:
+        missing = sorted(expected - set(labels))
+        extra = sorted(set(labels) - expected)
         return False, f"check-label-set missing={missing} extra={extra}"
     isolation = result.get("isolation")
     if not isinstance(isolation, dict) or isolation.get("project_under_run_root") is not True or isolation.get("user_under_run_root") is not True or isolation.get("network_used") is not False or isolation.get("arbitrary_script_loaded") is not False or isolation.get("public_ack") is not False:
@@ -173,6 +222,7 @@ def run(godot: Path, run_id: str, output: Path) -> dict:
     scenes.mkdir(parents=True)
     shutil.copyfile(STUDIO / "tests/godot/authoring_native_plugin.gd", addon / "plugin.gd")
     shutil.copyfile(STUDIO / "tests/godot/authoring_native_probe.gd", tests / "authoring_native_probe.gd")
+    shutil.copyfile(STUDIO / "tests/godot/gameplay_edges_native.gd", tests / "gameplay_edges_native.gd")
     (addon / "plugin.cfg").write_text(
         '[plugin]\nname="HH O2 Native Diagnostic"\ndescription="Disposable O2 probe"\n'
         'author="HH Studio"\nversion="0.0-diagnostic"\nscript="plugin.gd"\n',
@@ -189,6 +239,7 @@ def run(godot: Path, run_id: str, output: Path) -> dict:
     (project / "catalog-input.json").write_bytes(
         json.dumps({"catalog_version": catalog["catalog_version"], "classes": catalog["classes"]},
                    ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8"))
+    write_json(project / "edge-input.json", {"proposals": edge_proposals()})
     project_before = project_files(project)
     write_json(output / "freeze.json", {"run_id": run_id, "source_files": manifest,
               "source_closure_sha256": source_closure, "binary_sha256": binary_sha256,

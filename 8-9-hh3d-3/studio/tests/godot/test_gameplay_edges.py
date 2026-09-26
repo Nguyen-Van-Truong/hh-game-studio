@@ -112,6 +112,33 @@ class GameplayEdgeTests(unittest.TestCase):
         self.assertFalse(result.projection["runtime_authorized"])
         self.assertEqual(result.projection["profile"], edges.PROFILE)
 
+    def test_malformed_input_names_reject_without_raw_exception(self):
+        for value in (None, 17, False, [], {}):
+            with self.subTest(value=value):
+                self.reject(self.request("input.action.define", {
+                    "action_name": value, "physical_key": 32, "deadzone": 0.5},
+                    {"stable_id": "root"}), "EDGE_INPUT")
+
+    def test_malformed_or_mutable_observed_rows_reject(self):
+        request = self.request("scene.group.assign", {"group_name": "targets"})
+        for context, code in (
+            (replace(self.context, signals=[]), "EDGE_SIGNAL_STATE"),
+            (replace(self.context, groups=None), "EDGE_GROUP_STATE"),
+            (replace(self.context, inputs=[]), "EDGE_INPUT_STATE"),
+            (replace(self.context, groups=(edges.GroupEdge([], "targets"),)), "EDGE_GROUP_STATE"),
+            (replace(self.context, inputs=(edges.InputAction(None, 32),)), "EDGE_INPUT_STATE"),
+        ):
+            with self.subTest(code=code, context=context), self.assertRaises(ValidationError) as raised:
+                edges.validate_request(request, context)
+            self.assertEqual(raised.exception.code, code)
+
+    def test_input_requires_observed_root(self):
+        request = self.request("input.action.define", {
+            "action_name": "jump", "physical_key": 32, "deadzone": 0.5}, {"stable_id": "root"})
+        with self.assertRaises(ValidationError) as raised:
+            edges.validate_request(request, replace(self.context, nodes=(edges.EdgeNode("actor"), edges.EdgeNode("bot"))))
+        self.assertEqual(raised.exception.code, "EDGE_INPUT")
+
 
 if __name__ == "__main__":
     unittest.main()

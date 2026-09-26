@@ -9,6 +9,7 @@ extends RefCounted
 
 const UNKNOWN_PROPERTY := "__hh_o2_candidate_forbidden__"
 const ROOT_META := "hh_o2_native_root"
+const EdgeProbe = preload("res://tests/gameplay_edges_native.gd")
 
 var _rows: Array[Dictionary] = []
 var _failures: Array[String] = []
@@ -17,7 +18,7 @@ var _root: Node
 var _catalog: Dictionary
 
 
-func run(root: Node, undo: EditorUndoRedoManager, catalog: Dictionary, run_root: String) -> Dictionary:
+func run(root: Node, undo: EditorUndoRedoManager, catalog: Dictionary, run_root: String, edge_proposals: Array = []) -> Dictionary:
 	_root = root
 	_undo = undo
 	_catalog = catalog
@@ -54,6 +55,11 @@ func run(root: Node, undo: EditorUndoRedoManager, catalog: Dictionary, run_root:
 	var input_map := ClassDB.class_exists("InputMap")
 	_check("InputMap_singleton_readback", input_map)
 	_check("InputMap_node_mutation_rejected", true)
+	var edge_report: Dictionary = EdgeProbe.new().run(root, undo, history, edge_proposals)
+	for row: Dictionary in edge_report.get("checks", []):
+		_rows.append(row)
+	for failure: String in edge_report.get("failures", []):
+		_failures.append(failure)
 
 	# Every temporary node is removed synchronously and the native history is
 	# cleared before the editor quits. This prevents diagnostic state leaking to

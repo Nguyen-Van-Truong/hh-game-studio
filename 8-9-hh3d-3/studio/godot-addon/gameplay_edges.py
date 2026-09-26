@@ -9,7 +9,6 @@ AUTH-01..05 remain required at integration time.
 from __future__ import annotations
 
 from dataclasses import dataclass
-import hashlib
 import math
 import re
 from typing import Any, Mapping
@@ -40,6 +39,10 @@ def _id(value: object) -> bool:
 
 def _name(value: object) -> bool:
     return type(value) is str and _NAME.fullmatch(value) is not None
+
+
+def _action(value: object) -> bool:
+    return type(value) is str and _ACTION.fullmatch(value) is not None
 
 
 @dataclass(frozen=True, slots=True)
@@ -110,17 +113,21 @@ def _context(context: EdgeContext) -> tuple[set[str], set[tuple[str, str, str, s
     nodes = {node.stable_id for node in context.nodes
              if type(node) is EdgeNode and _id(node.stable_id)}
     _need(len(nodes) == len(context.nodes), "EDGE_NODE_STATE")
+    _need(type(context.signals) is tuple, "EDGE_SIGNAL_STATE")
     signal_rows = {(row.source_id, row.signal_name, row.target_id, row.method)
                    for row in context.signals
                    if type(row) is SignalEdge and _id(row.source_id) and _name(row.signal_name)
                    and _id(row.target_id) and _name(row.method)
                    and row.source_id in nodes and row.target_id in nodes}
     _need(len(signal_rows) == len(context.signals), "EDGE_SIGNAL_STATE")
+    _need(type(context.groups) is tuple, "EDGE_GROUP_STATE")
     group_rows = {(row.node_id, row.group_name) for row in context.groups
-                  if type(row) is GroupEdge and row.node_id in nodes and _id(row.group_name)}
+                  if type(row) is GroupEdge and _id(row.node_id)
+                  and row.node_id in nodes and _id(row.group_name)}
     _need(len(group_rows) == len(context.groups), "EDGE_GROUP_STATE")
+    _need(type(context.inputs) is tuple, "EDGE_INPUT_STATE")
     input_rows = {row.action_name for row in context.inputs
-                  if type(row) is InputAction and _ACTION.fullmatch(row.action_name)
+                  if type(row) is InputAction and _action(row.action_name)
                   and type(row.physical_key) is int and 0 <= row.physical_key <= 65535
                   and type(row.deadzone) is float and math.isfinite(row.deadzone)
                   and 0.0 <= row.deadzone <= 1.0}
@@ -166,10 +173,10 @@ def validate_request(request: Request | Mapping[str, Any], context: EdgeContext)
         _need(row not in groups, "EDGE_DUPLICATE_GROUP")
         after = {"node_id": row[0], "group_name": row[1]}
     else:
-        _need(target["stable_id"] == "root"
+        _need(target["stable_id"] == "root" and "root" in nodes
               and set(payload) == {"expected_generation", "expected_project_revision", "action_name", "physical_key", "deadzone"},
               "EDGE_INPUT")
-        _need(_ACTION.fullmatch(payload["action_name"]) is not None
+        _need(_action(payload["action_name"])
               and type(payload["physical_key"]) is int and 0 <= payload["physical_key"] <= 65535
               and type(payload["deadzone"]) is float and math.isfinite(payload["deadzone"])
               and 0.0 <= payload["deadzone"] <= 1.0, "EDGE_INPUT")
