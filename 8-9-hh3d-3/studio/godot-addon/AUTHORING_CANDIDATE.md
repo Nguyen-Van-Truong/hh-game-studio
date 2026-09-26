@@ -61,6 +61,7 @@ completion is claimed. Merge remains deferred until GT-06 is accepted.
 connections, group membership, and input-action definitions. It validates
 immutable proposals against observed node IDs, revision, generation, lease,
 and duplicate state; it does not connect a signal, mutate InputMap, or claim
-native readback/UndoRedo. The 57-test O2 static run covers this candidate with
+native readback/UndoRedo. The 94-test O2 static run (including five edge
+tests) covers this candidate with
 the existing authoring and script-profile tests. A future native remint is
 required before it can be included in CR-GODOT-AUTHORING-01 or GT-09.
