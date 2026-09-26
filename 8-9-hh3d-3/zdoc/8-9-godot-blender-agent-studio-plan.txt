@@ -80,12 +80,13 @@ release soak GT-10; các điều kiện khác của mục đó giữ nguyên)
 10. Attribution/debugger chỉ là chẩn đoán, không là điều kiện ACCEPTED. Niêm phong S257 theo hiện
     trạng và dừng nhánh CDB/htrace/API-return; chỉ mở lại khi O1 FAIL có xu hướng tăng thật,
     tối đa 4 giờ.
-11. O1 test yêu cầu chuỗi +1 handle mỗi 7 batch phải FAIL, nhưng chuỗi này PASS các
-    bất đẳng thức T/G nếu đứng một mình. Profile v5 thêm supplemental candidate:
-    retained handles không giảm trong đủ 30 mẫu, ít nhất 3 lần tăng và có tăng nội
-    bộ trong cả hai nửa (5–19 và 20–34); bước đơn lẻ/plateau và nhiễu giảm không bị
-    bắt. Candidate này đang chờ owner quyết định và critic, chưa được dùng để formal.
-O1_NEXT=SEAL_S257_AS_IS; IMPLEMENT_O1_IN_SCREEN_SAMPLE_AND_SUMMARIZE_DATASET_WITH_PRIVATE_COMMIT_SAMPLES; NEW_BENCHMARK_PROFILE_VERSION; UNIT_TESTS_REPLAY_S218_S229_S232_S236_S241_S246_SERIES_AND_SYNTHETIC_LEAKS; ONE_READONLY_CRITIC_ON_VERIFIER_DIFF; ENV_PREFLIGHT; FRESH_ID_2X35_FORMAL; TWO_NEW_SAME_HASH_CRITICS; THEN_ACCEPT_GT06_AND_OPEN_GT07
+11. HISTORICAL_S257_SUPPLEMENT: O1 test yêu cầu chuỗi +1 handle mỗi 7 batch phải
+    FAIL, nhưng chuỗi này PASS các bất đẳng thức T/G nếu đứng một mình. Profile v5
+    từng thêm supplemental candidate: retained handles không giảm trong đủ 30 mẫu,
+    ít nhất 3 lần tăng và có tăng nội bộ trong cả hai nửa (5–19 và 20–34); bước đơn
+    lẻ/plateau và nhiễu giảm không bị bắt. Candidate này thuộc lịch sử S257, đã được
+    supersede bởi quyết định/profiling S258 và không tự tạo acceptance.
+O1_NEXT=AFTER_S258_SEALED__OWNER_CLOSE_REMAINING_CHAT_APPS; FRESH_FULL_PREFLIGHT; FRESH_ID_2X35_FORMAL; TWO_NEW_SAME_HASH_CRITICS; THEN_ACCEPT_GT06_AND_OPEN_GT07
 O1 vẫn FAIL khi rò theo lệnh (từ 1 đơn vị mỗi 1000 lệnh) hoặc rò đều nhỏ: từ khoảng 0,14 handle,
 0,07 resource, 0,54 object hoặc 0,33% private commit mỗi batch. O1 chỉ bỏ báo động giả. Mục TQ
 hiệu năng cho phép đổi target bằng decision/review; O1 là decision đó và được khóa trước lần chạy.
