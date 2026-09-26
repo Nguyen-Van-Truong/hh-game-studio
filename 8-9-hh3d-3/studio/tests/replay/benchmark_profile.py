@@ -145,7 +145,7 @@ def memory_gate_codes(role, counter, baseline, max_all, max_early, max_late):
 
 
 def retained_handle_trend_code(role, counter, values):
-    """Candidate supplemental rule; owner decision and review are pending.
+    """Owner-authorized supplemental rule; final critics still remain pending.
 
     O1's numerical windows remain authoritative. This supplemental rule only
     applies to retained handles and requires a nondecreasing 30-sample series,
