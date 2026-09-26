@@ -67,4 +67,6 @@ passes. Disposable native run `o2-native-20260926-19` exercised signal,
 group, and InputMap projections through Godot do/undo/redo/readback with real
 host exit 0, clean log, unchanged source/project, and authority 0. This does
 not prove AUTH-01..05, public authorization, sandbox, ACK, or GT-09
-conformance; any source change requires a fresh native remint.
+conformance. The diagnostic binary is the O2 candidate lock's Godot 4.7.2;
+the product/runbook pin is 4.7.1, so this run cannot satisfy V-A1 or product
+acceptance. Any source or engine-pin change requires a fresh native remint.
