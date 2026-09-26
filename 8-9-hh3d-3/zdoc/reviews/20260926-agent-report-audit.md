@@ -35,9 +35,10 @@ the plan, approve a gate, or authorize a new formal run.
   not adopted. That would change an owner-approved acceptance gate without a
   new owner decision. Resource-only monitoring can be proposed as a future
   decision, but cannot be silently substituted.
-- The source currently checks `max_status_gap_ms` only after the five warmup
-  samples are skipped for baseline counter checks. No unapproved warmup-gap
-  relaxation is needed or applied.
+- The source skips only baseline counter screens for the five warmup samples;
+  its `max_status_gap_ms` check is unconditional. That matches O1's retained
+  status-gap rule, so the report's claim of an unapproved warmup tightening is
+  unsupported.
 - `O1-OWNER-RESOLUTION.md` is retained as the recorded owner resolution in the
   existing source history. This audit does not create a second interpretation
   of the retained-handle rule.
