@@ -58,7 +58,7 @@ class BenchmarkError(ValueError):
 
 @dataclass(frozen=True, slots=True)
 class BenchmarkProfile:
-    profile_id: str = 'gt06-tools-ux-o1-v4'
+    profile_id: str = 'gt06-tools-ux-o1-v5'
     process_runs: int = 2
     warmup_batches: int = 5
     measured_batches: int = 30
@@ -93,16 +93,17 @@ class BenchmarkProfile:
     editor_objects_trend: int = 8
     editor_resources_tolerance: int = 2
     editor_resources_trend: int = 1
+    retained_handle_trend_min_increments: int = 3
 
     def __post_init__(self):
         # This version describes one workload, not a configurable smaller test.
-        expected = ('gt06-tools-ux-o1-v4', 2, 5, 30, 500, 300, 200, 100, 1,
+        expected = ('gt06-tools-ux-o1-v5', 2, 5, 30, 500, 300, 200, 100, 1,
                     500, 500, 2000, 'diagnostic_only', 10, 'linear_type7',
                     'repeat_5inspect_3reject_2admitted', 'post_batch_quiescent',
                     'host_api_50_30_20_mock_effect_allowed', 'native_editor_direct_semantic_test_fixture',
                     'rss_bytes private_commit_bytes held_handles',
                     'rss_bytes private_commit_bytes objects resources held_handles',
-                    '2,3,4', 110, 105, 64, 256, 150, 4, 2, 8, 2, 32, 8, 2, 1)
+                    '2,3,4', 110, 105, 64, 256, 150, 4, 2, 8, 2, 32, 8, 2, 1, 3)
         if any(type(a) is not type(b) or a != b for a, b in zip(asdict(self).values(), expected)):
             raise BenchmarkError('PROFILE_VERSION_REQUIRED')
 
@@ -141,6 +142,27 @@ def memory_gate_codes(role, counter, baseline, max_all, max_early, max_late):
     return ['RETAINED_COUNTER_GROWTH'] if (
         max_all > baseline + tolerance or
         (max_late is not None and max_late > max_early + trend)) else []
+
+
+def retained_handle_trend_code(role, counter, values):
+    """Candidate supplemental rule; owner decision and review are pending.
+
+    O1's numerical windows remain authoritative. This supplemental rule only
+    applies to retained handles and requires a nondecreasing 30-sample series,
+    at least three positive steps, and a step in both measured halves. A single
+    initialization step and non-monotonic noise remain outside this rule.
+    """
+    if role not in ('host', 'editor') or counter != 'held_handles' or len(values) != PROFILE.measured_batches:
+        return None
+    increases = [index for index in range(1, len(values)) if values[index] > values[index - 1]]
+    early = any(index <= 14 for index in increases)
+    # Both endpoints must lie within a half. The 19 -> 20 transition alone
+    # does not establish growth inside the late (20..34) window.
+    late = any(index >= 16 for index in increases)
+    if (all(later >= earlier for earlier, later in zip(values, values[1:])) and
+            len(increases) >= PROFILE.retained_handle_trend_min_increments and early and late):
+        return 'RETAINED_COUNTER_TREND'
+    return None
 
 
 def _encoded(value):
@@ -444,6 +466,12 @@ def summarize_dataset(value):
                                      'max_batch_5_34': max_all, 'max_batch_5_19': max_early,
                                      'max_batch_20_34': max_late, 'tolerance': tolerance,
                                      'trend_tolerance': trend})
+                trend_code = retained_handle_trend_code(role, counter, values)
+                if trend_code is not None:
+                    failures.append({'run_id': run_id, 'code': trend_code, 'role': role,
+                                     'counter': counter, 'first_measured': values[0],
+                                     'last_measured': values[-1],
+                                     'minimum_increments': PROFILE.retained_handle_trend_min_increments})
         # Warm-up unavailability is retained as a gap too, never fabricated.
         for row in run['samples'][:5]:
             for role in ('host', 'editor'):

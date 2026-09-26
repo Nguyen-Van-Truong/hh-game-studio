@@ -13,10 +13,11 @@ without an additional rule or changing an inequality.
 The coordinator added a >=2 monotonic net-growth rule in source `2f404289`.
 An independent review of `bd230d12` found this also rejects a one-time +2
 object step followed by a plateau, although O1 permits it. That rule was an
-unapproved interpretation and is removed from the current candidate. A later
-uncommitted three-step replacement is also removed. The new profile version
-keeps literal O1 formulas; tests expose the sparse-leak gap explicitly and
-check the plateau and exact inclusive counter/memory boundaries.
+unapproved interpretation and was removed in the v4 candidate (`a7938f9e`).
+V4 keeps literal O1 formulas; its tests expose the sparse-leak gap and check
+the plateau and exact inclusive counter/memory boundaries. V5 now implements
+choice 2 below as a reviewable proposal only. It is not owner-approved, cannot
+authorize formal dispatch, and does not replace any historical verdict.
 
 Two reviewable choices:
 
@@ -27,12 +28,15 @@ Two reviewable choices:
 2. Add an explicit supplemental handle rule: FAIL when all 30 measured handle
    counts are nondecreasing, there are at least three positive consecutive
    differences, and at least one positive difference occurs within each half
-   (5–19 and 20–34). Apply per host/editor; keep all existing T/G and private
+   (both endpoints in 5–19 or in 20–34; a 19-to-20 step alone does not count
+   for the late half). Apply per host/editor; keep all existing T/G and private
    commit bounds. This rejects the seven-batch staircase and permits a single
    step/plateau and alternating +/-3 noise. It can still reject legitimate
    monotonic initialization and cannot guarantee detection with noisy decreases.
    This option requires a new locked profile and focused tests before review/run.
 
-Until the owner chooses, the 1-per-7 requirement is UNMET, not waived by green
-unit tests. No formal dispatch or new acceptance is authorized by this memo.
+Until the owner chooses, the v4 1-per-7 requirement is UNMET and the v5
+supplement is UNAPPROVED, regardless of green unit tests. No formal dispatch
+or new acceptance is authorized by this memo. A generic request to continue
+implementation has not been recorded as approval of either numerical choice.
 Preflight app blockers are independent and still need clearing before launch.

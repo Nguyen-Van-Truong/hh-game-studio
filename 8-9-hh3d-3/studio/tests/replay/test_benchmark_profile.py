@@ -166,18 +166,50 @@ class BenchmarkProfileTests(unittest.TestCase):
         run['baseline']['memory'] = copy.deepcopy(run['samples'][4]['memory'])
         self.rejected('BASELINE_MEDIAN')
 
-    def test_o1_literal_inequalities_have_documented_sparse_leak_gap(self):
-        # This counterexample exposes the conflict between exact O1 T/G
-        # inequalities and the requested sparse-leak FAIL. Formal is held
-        # pending an owner decision; this is not proof of meeting that requirement.
-        for sample in self.data['runs'][0]['samples'][5:]:
-            sample['memory']['editor']['held_handles']['value'] += (sample['index'] - 4) // 7
+    def test_candidate_sparse_handle_trend_fails_for_both_roles(self):
+        # The proposed supplemental rule is needed: the literal T/G windows
+        # alone permit this staircase. No formal dispatch until owner/review.
+        for role in ('host', 'editor'):
+            with self.subTest(role=role):
+                data = copy.deepcopy(self.template)
+                for sample in data['runs'][0]['samples'][5:]:
+                    sample['memory'][role]['held_handles']['value'] += (sample['index'] - 4) // 7
+                result = benchmark.summarize_dataset(data)
+                observed = result['runs'][0]['memory'][role]['held_handles']
+                self.assertEqual((observed['baseline'], observed['max_batch_5_19'], observed['max_batch_20_34']),
+                                 (2, 4, 6))
+                self.assertEqual(benchmark.memory_gate_codes(role, 'held_handles', 2, 6, 4, 6), [])
+                self.assertEqual(result['status'], 'FAIL')
+                self.assertEqual(result['failures'][0]['role'], role)
+                self.assertIn('RETAINED_COUNTER_TREND', {row['code'] for row in result['failures']})
+
+    def test_candidate_trend_needs_repeated_growth_inside_both_halves(self):
+        def series(steps):
+            return [100 + sum(index >= step for step in steps) for index in range(30)]
+        for steps in ((1, 2, 3), (16, 20, 24), (1, 2, 15), (1, 20)):
+            with self.subTest(steps=steps):
+                self.assertIsNone(benchmark.retained_handle_trend_code('editor', 'held_handles', series(steps)))
+        self.assertEqual(benchmark.retained_handle_trend_code('editor', 'held_handles', series((1, 2, 16))),
+                         'RETAINED_COUNTER_TREND')
+
+    def test_candidate_trend_does_not_apply_to_short_prefixes_or_other_counters(self):
+        values = list(range(100, 130))
+        for role, counter, rows in (('editor', 'objects', values), ('editor', 'resources', values),
+                                    ('host', 'private_commit_bytes', values),
+                                    ('editor', 'held_handles', values[:9])):
+            self.assertIsNone(benchmark.retained_handle_trend_code(role, counter, rows))
+
+    def test_one_handle_step_then_plateau_is_not_repeated_trend(self):
+        for sample in self.data['runs'][0]['samples'][10:]:
+            sample['memory']['editor']['held_handles']['value'] += 1
         result = benchmark.summarize_dataset(self.data)
-        observed = result['runs'][0]['memory']['editor']['held_handles']
-        self.assertEqual((observed['baseline'], observed['max_batch_5_19'], observed['max_batch_20_34']),
-                         (2, 4, 6))
         self.assertEqual(result['status'], 'PASS')
-        self.assertEqual(result['failures'], [])
+
+    def test_non_monotonic_noise_is_not_repeated_trend(self):
+        for sample in self.data['runs'][0]['samples'][5:]:
+            sample['memory']['editor']['held_handles']['value'] += (sample['index'] % 2) * 3
+        result = benchmark.summarize_dataset(self.data)
+        self.assertEqual(result['status'], 'PASS')
 
     def test_o1_status_gap_and_missing_counter_stay_non_pass(self):
         self.data['runs'][0]['samples'][0]['max_status_gap_ms'] = 2001
