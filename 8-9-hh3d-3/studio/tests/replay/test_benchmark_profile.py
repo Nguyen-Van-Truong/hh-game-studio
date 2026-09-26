@@ -167,16 +167,17 @@ class BenchmarkProfileTests(unittest.TestCase):
         self.rejected('BASELINE_MEDIAN')
 
     def test_o1_literal_inequalities_have_documented_sparse_leak_gap(self):
-        # The literal T/G windows remain unchanged, while the explicit O1
-        # synthetic sparse-leak requirement is enforced by the trend guard.
+        # This counterexample exposes the conflict between exact O1 T/G
+        # inequalities and the requested sparse-leak FAIL. Formal is held
+        # pending an owner decision; this is not proof of meeting that requirement.
         for sample in self.data['runs'][0]['samples'][5:]:
             sample['memory']['editor']['held_handles']['value'] += (sample['index'] - 4) // 7
         result = benchmark.summarize_dataset(self.data)
         observed = result['runs'][0]['memory']['editor']['held_handles']
         self.assertEqual((observed['baseline'], observed['max_batch_5_19'], observed['max_batch_20_34']),
                          (2, 4, 6))
-        self.assertEqual(result['status'], 'FAIL')
-        self.assertIn('RETAINED_COUNTER_TREND', {row['code'] for row in result['failures']})
+        self.assertEqual(result['status'], 'PASS')
+        self.assertEqual(result['failures'], [])
 
     def test_o1_status_gap_and_missing_counter_stay_non_pass(self):
         self.data['runs'][0]['samples'][0]['max_status_gap_ms'] = 2001
@@ -185,6 +186,35 @@ class BenchmarkProfileTests(unittest.TestCase):
         self.data['runs'][0]['samples'][12]['memory']['editor']['private_commit_bytes'] = {
             'value': None, 'unavailable_reason': 'probe missing'}
         self.assertEqual(benchmark.summarize_dataset(self.data)['status'], 'GAP')
+
+    def test_small_one_time_step_then_plateau_passes_literal_windows(self):
+        for sample in self.data['runs'][0]['samples'][6:]:
+            sample['memory']['editor']['objects']['value'] += 2
+        self.assertEqual(benchmark.summarize_dataset(self.data)['status'], 'PASS')
+
+    def test_all_retained_counter_boundaries_are_inclusive(self):
+        for role, name, tolerance, trend in (
+                ('host', 'held_handles', 4, 2), ('editor', 'held_handles', 8, 2),
+                ('editor', 'objects', 32, 8), ('editor', 'resources', 2, 1)):
+            with self.subTest(role=role, counter=name):
+                self.assertEqual(benchmark.memory_gate_codes(role, name, 100, 100 + tolerance,
+                    100 + tolerance - trend, 100 + tolerance), [])
+                self.assertEqual(benchmark.memory_gate_codes(role, name, 100, 101 + tolerance,
+                    101 + tolerance, 101 + tolerance), ['RETAINED_COUNTER_GROWTH'])
+                self.assertEqual(benchmark.memory_gate_codes(role, name, 100, 101 + trend,
+                    100, 101 + trend), ['RETAINED_COUNTER_GROWTH'])
+
+    def test_private_commit_baseline_and_late_window_boundaries_for_each_role(self):
+        for role in ('host', 'editor'):
+            with self.subTest(role=role):
+                self.assertEqual(benchmark.memory_gate_codes(role, 'private_commit_bytes', 20000,
+                    22000, 22000, 22000), [])
+                self.assertEqual(benchmark.memory_gate_codes(role, 'private_commit_bytes', 20000,
+                    22001, 22001, 22001), ['PRIVATE_COMMIT_GROWTH'])
+                self.assertEqual(benchmark.memory_gate_codes(role, 'private_commit_bytes', 20000,
+                    21000, 20000, 21000), [])
+                self.assertEqual(benchmark.memory_gate_codes(role, 'private_commit_bytes', 20000,
+                    21001, 20000, 21001), ['PRIVATE_COMMIT_TREND'])
 
     def test_explicit_unavailable_counter_is_gap_never_zero_or_pass(self):
         self.data['runs'][0]['samples'][12]['memory']['host']['held_handles'] = {

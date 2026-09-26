@@ -58,7 +58,7 @@ class BenchmarkError(ValueError):
 
 @dataclass(frozen=True, slots=True)
 class BenchmarkProfile:
-    profile_id: str = 'gt06-tools-ux-o1-v3'
+    profile_id: str = 'gt06-tools-ux-o1-v4'
     process_runs: int = 2
     warmup_batches: int = 5
     measured_batches: int = 30
@@ -93,17 +93,16 @@ class BenchmarkProfile:
     editor_objects_trend: int = 8
     editor_resources_tolerance: int = 2
     editor_resources_trend: int = 1
-    retained_counter_monotonic_min_delta: int = 2
 
     def __post_init__(self):
         # This version describes one workload, not a configurable smaller test.
-        expected = ('gt06-tools-ux-o1-v3', 2, 5, 30, 500, 300, 200, 100, 1,
+        expected = ('gt06-tools-ux-o1-v4', 2, 5, 30, 500, 300, 200, 100, 1,
                     500, 500, 2000, 'diagnostic_only', 10, 'linear_type7',
                     'repeat_5inspect_3reject_2admitted', 'post_batch_quiescent',
                     'host_api_50_30_20_mock_effect_allowed', 'native_editor_direct_semantic_test_fixture',
                     'rss_bytes private_commit_bytes held_handles',
                     'rss_bytes private_commit_bytes objects resources held_handles',
-                    '2,3,4', 110, 105, 64, 256, 150, 4, 2, 8, 2, 32, 8, 2, 1, 2)
+                    '2,3,4', 110, 105, 64, 256, 150, 4, 2, 8, 2, 32, 8, 2, 1)
         if any(type(a) is not type(b) or a != b for a, b in zip(asdict(self).values(), expected)):
             raise BenchmarkError('PROFILE_VERSION_REQUIRED')
 
@@ -142,23 +141,6 @@ def memory_gate_codes(role, counter, baseline, max_all, max_early, max_late):
     return ['RETAINED_COUNTER_GROWTH'] if (
         max_all > baseline + tolerance or
         (max_late is not None and max_late > max_early + trend)) else []
-
-
-def monotonic_counter_code(role, counter, values):
-    """Catch a sustained staircase that can sit exactly on the T/G margins.
-
-    O1 keeps the literal T/G inequalities as the primary bounds, but also
-    requires the synthetic sparse leak (one retained handle every seven
-    batches) to fail.  A full formal measured window must therefore show a
-    non-decreasing retained counter with at least two units of net growth.
-    Short historical prefixes are deliberately outside this helper.
-    """
-    if counter not in ('held_handles', 'objects', 'resources') or len(values) < PROFILE.measured_batches:
-        return None
-    if all(later >= earlier for earlier, later in zip(values, values[1:])) and \
-            values[-1] - values[0] >= PROFILE.retained_counter_monotonic_min_delta:
-        return 'RETAINED_COUNTER_TREND'
-    return None
 
 
 def _encoded(value):
@@ -462,12 +444,6 @@ def summarize_dataset(value):
                                      'max_batch_5_34': max_all, 'max_batch_5_19': max_early,
                                      'max_batch_20_34': max_late, 'tolerance': tolerance,
                                      'trend_tolerance': trend})
-                trend_code = monotonic_counter_code(role, counter, values)
-                if trend_code is not None:
-                    failures.append({'run_id': run_id, 'code': trend_code,
-                                     'role': role, 'counter': counter,
-                                     'first_measured': values[0], 'last_measured': values[-1],
-                                     'minimum_net_growth': PROFILE.retained_counter_monotonic_min_delta})
         # Warm-up unavailability is retained as a gap too, never fabricated.
         for row in run['samples'][:5]:
             for role in ('host', 'editor'):
