@@ -1,0 +1,1428 @@
+{
+  "cases": {
+    "s218": {
+      "expected_available_checks": "PASS",
+      "rows": [
+        {
+          "counters": {
+            "editor": {
+              "held_handles": 565,
+              "objects": 71128,
+              "resources": 6,
+              "rss_bytes": 750768128
+            },
+            "host": {
+              "held_handles": 204,
+              "objects": null,
+              "resources": null,
+              "rss_bytes": 48476160
+            }
+          },
+          "index": 0,
+          "max_status_gap_ms": 793.998,
+          "phase": "post_batch_quiescent",
+          "sha256": "6e0a18bfd54585f8f94cc09d768695bb930f142f408abb6bbe712a888f4556b6",
+          "source": "gt06-s218-formal-01/run-00-attempt-01/sample-preview-00.json"
+        },
+        {
+          "counters": {
+            "editor": {
+              "held_handles": 557,
+              "objects": 71128,
+              "resources": 6,
+              "rss_bytes": 102019072
+            },
+            "host": {
+              "held_handles": 204,
+              "objects": null,
+              "resources": null,
+              "rss_bytes": 8941568
+            }
+          },
+          "index": 1,
+          "max_status_gap_ms": 1128.3008,
+          "phase": "post_batch_quiescent",
+          "sha256": "c1e80051756ec7e5d0158b9a4a3216e4d91919b28bb578571cbf21ff92168e2c",
+          "source": "gt06-s218-formal-01/run-00-attempt-01/sample-preview-01.json"
+        },
+        {
+          "counters": {
+            "editor": {
+              "held_handles": 563,
+              "objects": 71128,
+              "resources": 6,
+              "rss_bytes": 171352064
+            },
+            "host": {
+              "held_handles": 204,
+              "objects": null,
+              "resources": null,
+              "rss_bytes": 37654528
+            }
+          },
+          "index": 2,
+          "max_status_gap_ms": 1051.995,
+          "phase": "post_batch_quiescent",
+          "sha256": "d6435f8a37ae2cd71f1dc579080f10ad867b06802440e759e88fce20f15fb21a",
+          "source": "gt06-s218-formal-01/run-00-attempt-01/sample-preview-02.json"
+        },
+        {
+          "counters": {
+            "editor": {
+              "held_handles": 555,
+              "objects": 71128,
+              "resources": 6,
+              "rss_bytes": 171663360
+            },
+            "host": {
+              "held_handles": 204,
+              "objects": null,
+              "resources": null,
+              "rss_bytes": 37515264
+            }
+          },
+          "index": 3,
+          "max_status_gap_ms": 615.366,
+          "phase": "post_batch_quiescent",
+          "sha256": "e06c5c372b64c22723941f9a6f03549465bfd5630165bc35973c95975ebc2fa6",
+          "source": "gt06-s218-formal-01/run-00-attempt-01/sample-preview-03.json"
+        },
+        {
+          "counters": {
+            "editor": {
+              "held_handles": 555,
+              "objects": 71128,
+              "resources": 6,
+              "rss_bytes": 105934848
+            },
+            "host": {
+              "held_handles": 204,
+              "objects": null,
+              "resources": null,
+              "rss_bytes": 27451392
+            }
+          },
+          "index": 4,
+          "max_status_gap_ms": 1642.807,
+          "phase": "post_batch_quiescent",
+          "sha256": "1c0534134b9e6c520afd4acca769afee0dabc99c67ade6d6426d6a658ff8b522",
+          "source": "gt06-s218-formal-01/run-00-attempt-01/sample-preview-04.json"
+        },
+        {
+          "counters": {
+            "editor": {
+              "held_handles": 555,
+              "objects": 71128,
+              "resources": 6,
+              "rss_bytes": 161259520
+            },
+            "host": {
+              "held_handles": 204,
+              "objects": null,
+              "resources": null,
+              "rss_bytes": 38883328
+            }
+          },
+          "index": 5,
+          "max_status_gap_ms": 1675.9498,
+          "phase": "post_batch_quiescent",
+          "sha256": "182b79a9eaa0193ddb5bcd3768bd51589b78f817b8ece2c3898ecff9cd5f3571",
+          "source": "gt06-s218-formal-01/run-00-attempt-01/sample-preview-05.json"
+        }
+      ]
+    },
+    "s229": {
+      "expected_available_checks": "PASS",
+      "rows": [
+        {
+          "counters": {
+            "editor": {
+              "held_handles": 562,
+              "objects": 71128,
+              "resources": 6,
+              "rss_bytes": 762089472
+            },
+            "host": {
+              "held_handles": 204,
+              "objects": null,
+              "resources": null,
+              "rss_bytes": 47411200
+            }
+          },
+          "index": 0,
+          "max_status_gap_ms": 548.754,
+          "phase": "post_batch_quiescent",
+          "sha256": "b8c222f66d66bbcb458e506909141b6fb12400b79d526cc025479259c293a520",
+          "source": "gt06-s229-formal-01/run-00-attempt-01/sample-preview-00.json"
+        },
+        {
+          "counters": {
+            "editor": {
+              "held_handles": 552,
+              "objects": 71128,
+              "resources": 6,
+              "rss_bytes": 762044416
+            },
+            "host": {
+              "held_handles": 204,
+              "objects": null,
+              "resources": null,
+              "rss_bytes": 48701440
+            }
+          },
+          "index": 1,
+          "max_status_gap_ms": 548.733,
+          "phase": "post_batch_quiescent",
+          "sha256": "3341d72cd981af4982d66264089b5f376090672a21b190721d2525086c25fd42",
+          "source": "gt06-s229-formal-01/run-00-attempt-01/sample-preview-01.json"
+        },
+        {
+          "counters": {
+            "editor": {
+              "held_handles": 554,
+              "objects": 71128,
+              "resources": 6,
+              "rss_bytes": 761327616
+            },
+            "host": {
+              "held_handles": 204,
+              "objects": null,
+              "resources": null,
+              "rss_bytes": 48295936
+            }
+          },
+          "index": 2,
+          "max_status_gap_ms": 547.731,
+          "phase": "post_batch_quiescent",
+          "sha256": "4aae7beb8b5c1fb0ec73c602d61e896fdfc12b73c77d285b3a5e93fc000a1307",
+          "source": "gt06-s229-formal-01/run-00-attempt-01/sample-preview-02.json"
+        },
+        {
+          "counters": {
+            "editor": {
+              "held_handles": 554,
+              "objects": 71128,
+              "resources": 6,
+              "rss_bytes": 761716736
+            },
+            "host": {
+              "held_handles": 204,
+              "objects": null,
+              "resources": null,
+              "rss_bytes": 48701440
+            }
+          },
+          "index": 3,
+          "max_status_gap_ms": 655.495,
+          "phase": "post_batch_quiescent",
+          "sha256": "327ce0f2b11a0ebf543b26a052b4a775ec2fe90b4a76687c21041548b51a3328",
+          "source": "gt06-s229-formal-01/run-00-attempt-01/sample-preview-03.json"
+        },
+        {
+          "counters": {
+            "editor": {
+              "held_handles": 558,
+              "objects": 71128,
+              "resources": 6,
+              "rss_bytes": 665341952
+            },
+            "host": {
+              "held_handles": 204,
+              "objects": null,
+              "resources": null,
+              "rss_bytes": 49500160
+            }
+          },
+          "index": 4,
+          "max_status_gap_ms": 542.387,
+          "phase": "post_batch_quiescent",
+          "sha256": "ce6abbcc2558ae6712f6ed552c1ca061e771bdddc8ee0856dcb7c3bdb1610db9",
+          "source": "gt06-s229-formal-01/run-00-attempt-01/sample-preview-04.json"
+        },
+        {
+          "counters": {
+            "editor": {
+              "held_handles": 552,
+              "objects": 71128,
+              "resources": 6,
+              "rss_bytes": 564871168
+            },
+            "host": {
+              "held_handles": 204,
+              "objects": null,
+              "resources": null,
+              "rss_bytes": 49426432
+            }
+          },
+          "index": 5,
+          "max_status_gap_ms": 540.456,
+          "phase": "post_batch_quiescent",
+          "sha256": "23aa121432f43393254a8d0a759c21ba6ab9eb1ef98477c21615c5bf12d6da33",
+          "source": "gt06-s229-formal-01/run-00-attempt-01/sample-preview-05.json"
+        },
+        {
+          "counters": {
+            "editor": {
+              "held_handles": 552,
+              "objects": 71128,
+              "resources": 6,
+              "rss_bytes": 434135040
+            },
+            "host": {
+              "held_handles": 204,
+              "objects": null,
+              "resources": null,
+              "rss_bytes": 47079424
+            }
+          },
+          "index": 6,
+          "max_status_gap_ms": 667.315,
+          "phase": "post_batch_quiescent",
+          "sha256": "1759aa749bcd3e5811be1bbb44876a320627eeec980d8c7b0958622ddcbbe901",
+          "source": "gt06-s229-formal-01/run-00-attempt-01/sample-preview-06.json"
+        },
+        {
+          "counters": {
+            "editor": {
+              "held_handles": 552,
+              "objects": 71128,
+              "resources": 6,
+              "rss_bytes": 367632384
+            },
+            "host": {
+              "held_handles": 204,
+              "objects": null,
+              "resources": null,
+              "rss_bytes": 42090496
+            }
+          },
+          "index": 7,
+          "max_status_gap_ms": 1379.144,
+          "phase": "post_batch_quiescent",
+          "sha256": "45c426578f762395e97a117de58aebac9e7d238f63e82794a71ab1cfaecf8b2c",
+          "source": "gt06-s229-formal-01/run-00-attempt-01/sample-preview-07.json"
+        },
+        {
+          "counters": {
+            "editor": {
+              "held_handles": 552,
+              "objects": 71128,
+              "resources": 6,
+              "rss_bytes": 288284672
+            },
+            "host": {
+              "held_handles": 204,
+              "objects": null,
+              "resources": null,
+              "rss_bytes": 41668608
+            }
+          },
+          "index": 8,
+          "max_status_gap_ms": 1003.366,
+          "phase": "post_batch_quiescent",
+          "sha256": "b32a263643c8af984c127b4124cd442dd9c60bd87f9dd59a000195da2c440892",
+          "source": "gt06-s229-formal-01/run-00-attempt-01/sample-preview-08.json"
+        },
+        {
+          "counters": {
+            "editor": {
+              "held_handles": 552,
+              "objects": 71128,
+              "resources": 6,
+              "rss_bytes": 248893440
+            },
+            "host": {
+              "held_handles": 204,
+              "objects": null,
+              "resources": null,
+              "rss_bytes": 40488960
+            }
+          },
+          "index": 9,
+          "max_status_gap_ms": 701.346,
+          "phase": "post_batch_quiescent",
+          "sha256": "fa84d1c8a1655ac61b15d35b4726dd98298177a700804d89a80d8fd92f07deec",
+          "source": "gt06-s229-formal-01/run-00-attempt-01/sample-preview-09.json"
+        },
+        {
+          "counters": {
+            "editor": {
+              "held_handles": 554,
+              "objects": 71128,
+              "resources": 6,
+              "rss_bytes": 212369408
+            },
+            "host": {
+              "held_handles": 204,
+              "objects": null,
+              "resources": null,
+              "rss_bytes": 38506496
+            }
+          },
+          "index": 10,
+          "max_status_gap_ms": 551.186,
+          "phase": "post_batch_quiescent",
+          "sha256": "0a9d3242a9c1b70327fa7fe4b78b695e522efa34d324fb49a67a4acca9863e36",
+          "source": "gt06-s229-formal-01/run-00-attempt-01/sample-preview-10.json"
+        },
+        {
+          "counters": {
+            "editor": {
+              "held_handles": 554,
+              "objects": 71128,
+              "resources": 6,
+              "rss_bytes": 172208128
+            },
+            "host": {
+              "held_handles": 204,
+              "objects": null,
+              "resources": null,
+              "rss_bytes": 39383040
+            }
+          },
+          "index": 11,
+          "max_status_gap_ms": 550.611,
+          "phase": "post_batch_quiescent",
+          "sha256": "9d664b99d4c287a4c9f3bab7faae160e3619647926ba489b97cab9a10a436c80",
+          "source": "gt06-s229-formal-01/run-00-attempt-01/sample-preview-11.json"
+        },
+        {
+          "counters": {
+            "editor": {
+              "held_handles": 554,
+              "objects": 71128,
+              "resources": 6,
+              "rss_bytes": 158531584
+            },
+            "host": {
+              "held_handles": 204,
+              "objects": null,
+              "resources": null,
+              "rss_bytes": 37425152
+            }
+          },
+          "index": 12,
+          "max_status_gap_ms": 552.931,
+          "phase": "post_batch_quiescent",
+          "sha256": "b16affcd5d5fb00ffe7e967e154c9dd50ab98f7a4ca7951f1a7f56d0d238a1cf",
+          "source": "gt06-s229-formal-01/run-00-attempt-01/sample-preview-12.json"
+        },
+        {
+          "counters": {
+            "editor": {
+              "held_handles": 554,
+              "objects": 71128,
+              "resources": 6,
+              "rss_bytes": 147628032
+            },
+            "host": {
+              "held_handles": 204,
+              "objects": null,
+              "resources": null,
+              "rss_bytes": 36900864
+            }
+          },
+          "index": 13,
+          "max_status_gap_ms": 601.164,
+          "phase": "post_batch_quiescent",
+          "sha256": "14f1a19baa8a5f626bf91b1c614dcc23099afaec3545da0662333c3a0c18913f",
+          "source": "gt06-s229-formal-01/run-00-attempt-01/sample-preview-13.json"
+        },
+        {
+          "counters": {
+            "editor": {
+              "held_handles": 554,
+              "objects": 71128,
+              "resources": 6,
+              "rss_bytes": 141324288
+            },
+            "host": {
+              "held_handles": 204,
+              "objects": null,
+              "resources": null,
+              "rss_bytes": 38154240
+            }
+          },
+          "index": 14,
+          "max_status_gap_ms": 615.565,
+          "phase": "post_batch_quiescent",
+          "sha256": "384c968f8474adedc398da21b43079e220aa56e0a1cc30aaef08bbf93176990c",
+          "source": "gt06-s229-formal-01/run-00-attempt-01/sample-preview-14.json"
+        },
+        {
+          "counters": {
+            "editor": {
+              "held_handles": 554,
+              "objects": 71128,
+              "resources": 6,
+              "rss_bytes": 129073152
+            },
+            "host": {
+              "held_handles": 204,
+              "objects": null,
+              "resources": null,
+              "rss_bytes": 37548032
+            }
+          },
+          "index": 15,
+          "max_status_gap_ms": 631.539,
+          "phase": "post_batch_quiescent",
+          "sha256": "7132a84a410e3f1c79d1274952e89d17217134a8fdeaa9064610aee3040b9bc7",
+          "source": "gt06-s229-formal-01/run-00-attempt-01/sample-preview-15.json"
+        },
+        {
+          "counters": {
+            "editor": {
+              "held_handles": 554,
+              "objects": 71130,
+              "resources": 6,
+              "rss_bytes": 182489088
+            },
+            "host": {
+              "held_handles": 204,
+              "objects": null,
+              "resources": null,
+              "rss_bytes": 36978688
+            }
+          },
+          "index": 16,
+          "max_status_gap_ms": 759.32,
+          "phase": "post_batch_quiescent",
+          "sha256": "e10fc134d816527b5917a04e9aebe848146b135803ec9e3cab2f7330bdd853b0",
+          "source": "gt06-s229-formal-01/run-00-attempt-01/sample-preview-16.json"
+        }
+      ]
+    },
+    "s232": {
+      "expected_available_checks": "PASS",
+      "rows": [
+        {
+          "counters": {
+            "editor": {
+              "held_handles": 562,
+              "objects": 71128,
+              "resources": 6,
+              "rss_bytes": 751923200
+            },
+            "host": {
+              "held_handles": 204,
+              "objects": null,
+              "resources": null,
+              "rss_bytes": 47607808
+            }
+          },
+          "index": 0,
+          "max_status_gap_ms": 640.93,
+          "phase": "post_batch_quiescent",
+          "sha256": "d25b11d8264a167ccc37151872370a4c320055fc4365afe03912c7703d078229",
+          "source": "gt06-s232-formal-01/run-00-attempt-01/sample-preview-00.json"
+        },
+        {
+          "counters": {
+            "editor": {
+              "held_handles": 554,
+              "objects": 71128,
+              "resources": 6,
+              "rss_bytes": 751800320
+            },
+            "host": {
+              "held_handles": 204,
+              "objects": null,
+              "resources": null,
+              "rss_bytes": 48144384
+            }
+          },
+          "index": 1,
+          "max_status_gap_ms": 710.763,
+          "phase": "post_batch_quiescent",
+          "sha256": "60d4dc919e863c7fad0c921291dc0d5ae78a505ce422bcb0024d22c38a6aa1f9",
+          "source": "gt06-s232-formal-01/run-00-attempt-01/sample-preview-01.json"
+        },
+        {
+          "counters": {
+            "editor": {
+              "held_handles": 554,
+              "objects": 71128,
+              "resources": 6,
+              "rss_bytes": 700141568
+            },
+            "host": {
+              "held_handles": 204,
+              "objects": null,
+              "resources": null,
+              "rss_bytes": 52928512
+            }
+          },
+          "index": 2,
+          "max_status_gap_ms": 623.932,
+          "phase": "post_batch_quiescent",
+          "sha256": "9019d6351235d5e7d136ec650f38a2af0f03d92c179a4f9e5883327f1b7ae6ae",
+          "source": "gt06-s232-formal-01/run-00-attempt-01/sample-preview-02.json"
+        },
+        {
+          "counters": {
+            "editor": {
+              "held_handles": 558,
+              "objects": 71130,
+              "resources": 6,
+              "rss_bytes": 535891968
+            },
+            "host": {
+              "held_handles": 204,
+              "objects": null,
+              "resources": null,
+              "rss_bytes": 47816704
+            }
+          },
+          "index": 3,
+          "max_status_gap_ms": 919.8718,
+          "phase": "post_batch_quiescent",
+          "sha256": "a6ccaf4d18f4383bfa7b1fd5b4b973c9121be4b5f9b4ba70f9a2e4755a38aa8c",
+          "source": "gt06-s232-formal-01/run-00-attempt-01/sample-preview-03.json"
+        },
+        {
+          "counters": {
+            "editor": {
+              "held_handles": 552,
+              "objects": 71130,
+              "resources": 6,
+              "rss_bytes": 443002880
+            },
+            "host": {
+              "held_handles": 204,
+              "objects": null,
+              "resources": null,
+              "rss_bytes": 44474368
+            }
+          },
+          "index": 4,
+          "max_status_gap_ms": 585.811,
+          "phase": "post_batch_quiescent",
+          "sha256": "8bc94bee87f9ca9485f93d0e36d4f6109f33f4b382337ddbea4a604aa5e223e0",
+          "source": "gt06-s232-formal-01/run-00-attempt-01/sample-preview-04.json"
+        },
+        {
+          "counters": {
+            "editor": {
+              "held_handles": 552,
+              "objects": 71130,
+              "resources": 6,
+              "rss_bytes": 374169600
+            },
+            "host": {
+              "held_handles": 204,
+              "objects": null,
+              "resources": null,
+              "rss_bytes": 43130880
+            }
+          },
+          "index": 5,
+          "max_status_gap_ms": 540.541,
+          "phase": "post_batch_quiescent",
+          "sha256": "dc4b428c0d6152188011d2e64d37ef0cbdef2a715c8eba98ba13f8efa1f4df6d",
+          "source": "gt06-s232-formal-01/run-00-attempt-01/sample-preview-05.json"
+        },
+        {
+          "counters": {
+            "editor": {
+              "held_handles": 552,
+              "objects": 71130,
+              "resources": 6,
+              "rss_bytes": 302235648
+            },
+            "host": {
+              "held_handles": 204,
+              "objects": null,
+              "resources": null,
+              "rss_bytes": 41136128
+            }
+          },
+          "index": 6,
+          "max_status_gap_ms": 831.47,
+          "phase": "post_batch_quiescent",
+          "sha256": "b2b670f1cd001fdddc580e27cfefdf6134acdbb1719ee92d10c1948a0dec0914",
+          "source": "gt06-s232-formal-01/run-00-attempt-01/sample-preview-06.json"
+        },
+        {
+          "counters": {
+            "editor": {
+              "held_handles": 552,
+              "objects": 71130,
+              "resources": 6,
+              "rss_bytes": 197627904
+            },
+            "host": {
+              "held_handles": 204,
+              "objects": null,
+              "resources": null,
+              "rss_bytes": 38125568
+            }
+          },
+          "index": 7,
+          "max_status_gap_ms": 566.9722,
+          "phase": "post_batch_quiescent",
+          "sha256": "d465821477c78dcd9d303047f3901524b8e921b6bc81cbbe706071ed4c38a2a7",
+          "source": "gt06-s232-formal-01/run-00-attempt-01/sample-preview-07.json"
+        },
+        {
+          "counters": {
+            "editor": {
+              "held_handles": 554,
+              "objects": 71130,
+              "resources": 6,
+              "rss_bytes": 128262144
+            },
+            "host": {
+              "held_handles": 204,
+              "objects": null,
+              "resources": null,
+              "rss_bytes": 36552704
+            }
+          },
+          "index": 8,
+          "max_status_gap_ms": 723.343,
+          "phase": "post_batch_quiescent",
+          "sha256": "4526715aa5caa17bfd6772c66cd65a15ce9d5cd45137d3e824b157ea3b8f2ecb",
+          "source": "gt06-s232-formal-01/run-00-attempt-01/sample-preview-08.json"
+        }
+      ]
+    },
+    "s236": {
+      "expected_available_checks": "PASS",
+      "rows": [
+        {
+          "counters": {
+            "editor": {
+              "held_handles": 562,
+              "objects": 71130,
+              "resources": 6,
+              "rss_bytes": 752459776
+            },
+            "host": {
+              "held_handles": 204,
+              "objects": null,
+              "resources": null,
+              "rss_bytes": 45527040
+            }
+          },
+          "index": 0,
+          "max_status_gap_ms": 539.511,
+          "phase": "post_batch_quiescent",
+          "sha256": "fe160c057e54bee4c3b1be6b0e2f46831c5827139281810a3293f812bd9480a3",
+          "source": "gt06-s236-handle-boundary-01/sample-preview-00.json"
+        },
+        {
+          "counters": {
+            "editor": {
+              "held_handles": 556,
+              "objects": 71130,
+              "resources": 6,
+              "rss_bytes": 752922624
+            },
+            "host": {
+              "held_handles": 204,
+              "objects": null,
+              "resources": null,
+              "rss_bytes": 45699072
+            }
+          },
+          "index": 1,
+          "max_status_gap_ms": 549.708,
+          "phase": "post_batch_quiescent",
+          "sha256": "06aff4d61d11066329d94cd581c0eeedb4f5e8788914b9b9bcb92ca3943fce23",
+          "source": "gt06-s236-handle-boundary-01/sample-preview-01.json"
+        },
+        {
+          "counters": {
+            "editor": {
+              "held_handles": 556,
+              "objects": 71130,
+              "resources": 6,
+              "rss_bytes": 753336320
+            },
+            "host": {
+              "held_handles": 204,
+              "objects": null,
+              "resources": null,
+              "rss_bytes": 44949504
+            }
+          },
+          "index": 2,
+          "max_status_gap_ms": 549.429,
+          "phase": "post_batch_quiescent",
+          "sha256": "d7d0b5ef2e187384dc536ff45897ce90389ff26b9526cd66a04fa50d6dd40cb0",
+          "source": "gt06-s236-handle-boundary-01/sample-preview-02.json"
+        },
+        {
+          "counters": {
+            "editor": {
+              "held_handles": 552,
+              "objects": 71130,
+              "resources": 6,
+              "rss_bytes": 752975872
+            },
+            "host": {
+              "held_handles": 204,
+              "objects": null,
+              "resources": null,
+              "rss_bytes": 47177728
+            }
+          },
+          "index": 3,
+          "max_status_gap_ms": 853.8162,
+          "phase": "post_batch_quiescent",
+          "sha256": "421a7c043a3b2286dbdd18502a7fbc6f8ce6b8aa955daa85e3a78e874c72e6d3",
+          "source": "gt06-s236-handle-boundary-01/sample-preview-03.json"
+        },
+        {
+          "counters": {
+            "editor": {
+              "held_handles": 556,
+              "objects": 71130,
+              "resources": 6,
+              "rss_bytes": 753070080
+            },
+            "host": {
+              "held_handles": 204,
+              "objects": null,
+              "resources": null,
+              "rss_bytes": 46784512
+            }
+          },
+          "index": 4,
+          "max_status_gap_ms": 640.795,
+          "phase": "post_batch_quiescent",
+          "sha256": "8315a430a9add64b670de4daf09881ec42d5560ce8c96c8962020ea408bd272d",
+          "source": "gt06-s236-handle-boundary-01/sample-preview-04.json"
+        },
+        {
+          "counters": {
+            "editor": {
+              "held_handles": 552,
+              "objects": 71130,
+              "resources": 6,
+              "rss_bytes": 753082368
+            },
+            "host": {
+              "held_handles": 204,
+              "objects": null,
+              "resources": null,
+              "rss_bytes": 48168960
+            }
+          },
+          "index": 5,
+          "max_status_gap_ms": 578.454,
+          "phase": "post_batch_quiescent",
+          "sha256": "697f1d0f77e392ca93184173bf5585b3e38eacb568c51dd051a6f1df2442c9cf",
+          "source": "gt06-s236-handle-boundary-01/sample-preview-05.json"
+        },
+        {
+          "counters": {
+            "editor": {
+              "held_handles": 552,
+              "objects": 71130,
+              "resources": 6,
+              "rss_bytes": 753217536
+            },
+            "host": {
+              "held_handles": 204,
+              "objects": null,
+              "resources": null,
+              "rss_bytes": 48365568
+            }
+          },
+          "index": 6,
+          "max_status_gap_ms": 540.213,
+          "phase": "post_batch_quiescent",
+          "sha256": "c2ea80dde69ae6aae94bbf270e775700c6fa21d66823ad8ee01d280d44a6c98a",
+          "source": "gt06-s236-handle-boundary-01/sample-preview-06.json"
+        },
+        {
+          "counters": {
+            "editor": {
+              "held_handles": 552,
+              "objects": 71130,
+              "resources": 6,
+              "rss_bytes": 753246208
+            },
+            "host": {
+              "held_handles": 204,
+              "objects": null,
+              "resources": null,
+              "rss_bytes": 47611904
+            }
+          },
+          "index": 7,
+          "max_status_gap_ms": 616.481,
+          "phase": "post_batch_quiescent",
+          "sha256": "4861ae3359911d9f82ae56faea050f149219205b28b4789f6a7071caa62bd523",
+          "source": "gt06-s236-handle-boundary-01/sample-preview-07.json"
+        },
+        {
+          "counters": {
+            "editor": {
+              "held_handles": 552,
+              "objects": 71130,
+              "resources": 6,
+              "rss_bytes": 753643520
+            },
+            "host": {
+              "held_handles": 204,
+              "objects": null,
+              "resources": null,
+              "rss_bytes": 47656960
+            }
+          },
+          "index": 8,
+          "max_status_gap_ms": 701.18,
+          "phase": "post_batch_quiescent",
+          "sha256": "8cbc07e7d665f5aa96907c02ec8db81b2f0f7b1ae4a0b15a65c8c3aaa544d5b1",
+          "source": "gt06-s236-handle-boundary-01/sample-preview-08.json"
+        }
+      ]
+    },
+    "s241": {
+      "expected_available_checks": "FAIL",
+      "rows": [
+        {
+          "counters": {
+            "editor": {
+              "held_handles": 570,
+              "objects": 71160,
+              "resources": 6,
+              "rss_bytes": 767913984
+            },
+            "host": {
+              "held_handles": 204,
+              "objects": null,
+              "resources": null,
+              "rss_bytes": 47403008
+            }
+          },
+          "index": 0,
+          "max_status_gap_ms": 609.643,
+          "phase": "post_batch_quiescent",
+          "sha256": "ff99a65ba376c19f779c567ac933a0dbf810d6f5d46dce0816c21ceefc9d46c1",
+          "source": "gt06-s241-formal-01/run-00-attempt-01/sample-preview-00.json"
+        },
+        {
+          "counters": {
+            "editor": {
+              "held_handles": 562,
+              "objects": 71160,
+              "resources": 6,
+              "rss_bytes": 768110592
+            },
+            "host": {
+              "held_handles": 204,
+              "objects": null,
+              "resources": null,
+              "rss_bytes": 48074752
+            }
+          },
+          "index": 1,
+          "max_status_gap_ms": 730.055,
+          "phase": "post_batch_quiescent",
+          "sha256": "8d92029da026566622054c4afb75f4ae753564fbe8c2959c02fe16ed00d50833",
+          "source": "gt06-s241-formal-01/run-00-attempt-01/sample-preview-01.json"
+        },
+        {
+          "counters": {
+            "editor": {
+              "held_handles": 564,
+              "objects": 71160,
+              "resources": 6,
+              "rss_bytes": 590872576
+            },
+            "host": {
+              "held_handles": 204,
+              "objects": null,
+              "resources": null,
+              "rss_bytes": 44314624
+            }
+          },
+          "index": 2,
+          "max_status_gap_ms": 564.577,
+          "phase": "post_batch_quiescent",
+          "sha256": "36856856b07e6b537d62c60cffdc657bec122c57efdb27d0a415986def8f0ab4",
+          "source": "gt06-s241-formal-01/run-00-attempt-01/sample-preview-02.json"
+        },
+        {
+          "counters": {
+            "editor": {
+              "held_handles": 564,
+              "objects": 71160,
+              "resources": 6,
+              "rss_bytes": 356483072
+            },
+            "host": {
+              "held_handles": 204,
+              "objects": null,
+              "resources": null,
+              "rss_bytes": 36564992
+            }
+          },
+          "index": 3,
+          "max_status_gap_ms": 768.445,
+          "phase": "post_batch_quiescent",
+          "sha256": "97f6cd80b67aa80312dd997ab8c2a7996bcfa959f67b85e642aa2f63d29c7f1a",
+          "source": "gt06-s241-formal-01/run-00-attempt-01/sample-preview-03.json"
+        },
+        {
+          "counters": {
+            "editor": {
+              "held_handles": 570,
+              "objects": 71160,
+              "resources": 6,
+              "rss_bytes": 231378944
+            },
+            "host": {
+              "held_handles": 204,
+              "objects": null,
+              "resources": null,
+              "rss_bytes": 36089856
+            }
+          },
+          "index": 4,
+          "max_status_gap_ms": 564.341,
+          "phase": "post_batch_quiescent",
+          "sha256": "fc9682c78880b00bc8c1ead412168c7e7ea443298fd6ed6f549b0623d98ff289",
+          "source": "gt06-s241-formal-01/run-00-attempt-01/sample-preview-04.json"
+        },
+        {
+          "counters": {
+            "editor": {
+              "held_handles": 564,
+              "objects": 71160,
+              "resources": 6,
+              "rss_bytes": 148525056
+            },
+            "host": {
+              "held_handles": 204,
+              "objects": null,
+              "resources": null,
+              "rss_bytes": 35250176
+            }
+          },
+          "index": 5,
+          "max_status_gap_ms": 620.141,
+          "phase": "post_batch_quiescent",
+          "sha256": "7def110d04807f3e6b44bb1eea090bffa4ebf9682ac9bba7584cffb881ba3751",
+          "source": "gt06-s241-formal-01/run-00-attempt-01/sample-preview-05.json"
+        },
+        {
+          "counters": {
+            "editor": {
+              "held_handles": 564,
+              "objects": 71160,
+              "resources": 6,
+              "rss_bytes": 129052672
+            },
+            "host": {
+              "held_handles": 204,
+              "objects": null,
+              "resources": null,
+              "rss_bytes": 35291136
+            }
+          },
+          "index": 6,
+          "max_status_gap_ms": 623.167,
+          "phase": "post_batch_quiescent",
+          "sha256": "64c524bf112c16ee16d3b6d7eff53a246e14a1875a63826d9af4f6e21b43bdd4",
+          "source": "gt06-s241-formal-01/run-00-attempt-01/sample-preview-06.json"
+        },
+        {
+          "counters": {
+            "editor": {
+              "held_handles": 560,
+              "objects": 71160,
+              "resources": 6,
+              "rss_bytes": 116662272
+            },
+            "host": {
+              "held_handles": 204,
+              "objects": null,
+              "resources": null,
+              "rss_bytes": 34988032
+            }
+          },
+          "index": 7,
+          "max_status_gap_ms": 618.469,
+          "phase": "post_batch_quiescent",
+          "sha256": "93dc98a9620bbde483d45a77141ce70bbb932212e1a4afeefb1015b2ebf5a08c",
+          "source": "gt06-s241-formal-01/run-00-attempt-01/sample-preview-07.json"
+        },
+        {
+          "counters": {
+            "editor": {
+              "held_handles": 560,
+              "objects": 71160,
+              "resources": 6,
+              "rss_bytes": 114585600
+            },
+            "host": {
+              "held_handles": 204,
+              "objects": null,
+              "resources": null,
+              "rss_bytes": 34697216
+            }
+          },
+          "index": 8,
+          "max_status_gap_ms": 572.115,
+          "phase": "post_batch_quiescent",
+          "sha256": "ecf517047891f1ec6eca8ce2f510230cf30298b5720ef73ed31f35806e3d0a87",
+          "source": "gt06-s241-formal-01/run-00-attempt-01/sample-preview-08.json"
+        },
+        {
+          "counters": {
+            "editor": {
+              "held_handles": 560,
+              "objects": 71160,
+              "resources": 6,
+              "rss_bytes": 114974720
+            },
+            "host": {
+              "held_handles": 204,
+              "objects": null,
+              "resources": null,
+              "rss_bytes": 34082816
+            }
+          },
+          "index": 9,
+          "max_status_gap_ms": 592.2988,
+          "phase": "post_batch_quiescent",
+          "sha256": "2bc755e236bb531419d8811f9eac06b3d7f0a50211aca742fa96df14cbd9cb69",
+          "source": "gt06-s241-formal-01/run-00-attempt-01/sample-preview-09.json"
+        },
+        {
+          "counters": {
+            "editor": {
+              "held_handles": 560,
+              "objects": 71160,
+              "resources": 6,
+              "rss_bytes": 114368512
+            },
+            "host": {
+              "held_handles": 204,
+              "objects": null,
+              "resources": null,
+              "rss_bytes": 35405824
+            }
+          },
+          "index": 10,
+          "max_status_gap_ms": 577.225,
+          "phase": "post_batch_quiescent",
+          "sha256": "87136b9d59b48aff2fcc4bbd48f5e2fc6ea31b5380350517c62021eb490d28a6",
+          "source": "gt06-s241-formal-01/run-00-attempt-01/sample-preview-10.json"
+        },
+        {
+          "counters": {
+            "editor": {
+              "held_handles": 562,
+              "objects": 71160,
+              "resources": 6,
+              "rss_bytes": 115355648
+            },
+            "host": {
+              "held_handles": 204,
+              "objects": null,
+              "resources": null,
+              "rss_bytes": 35090432
+            }
+          },
+          "index": 11,
+          "max_status_gap_ms": 821.6469,
+          "phase": "post_batch_quiescent",
+          "sha256": "1ea9f543ae40d397d96c1e519cf133da6c62d9c4c4c7c0dfc29a8e1398535f42",
+          "source": "gt06-s241-formal-01/run-00-attempt-01/sample-preview-11.json"
+        },
+        {
+          "counters": {
+            "editor": {
+              "held_handles": 560,
+              "objects": 71160,
+              "resources": 6,
+              "rss_bytes": 115232768
+            },
+            "host": {
+              "held_handles": 204,
+              "objects": null,
+              "resources": null,
+              "rss_bytes": 34885632
+            }
+          },
+          "index": 12,
+          "max_status_gap_ms": 578.5259,
+          "phase": "post_batch_quiescent",
+          "sha256": "f9fdf8f710aa54a5082093e7f8e474f0d3b79d5697309691148f73973ceca22f",
+          "source": "gt06-s241-formal-01/run-00-attempt-01/sample-preview-12.json"
+        },
+        {
+          "counters": {
+            "editor": {
+              "held_handles": 562,
+              "objects": 71160,
+              "resources": 6,
+              "rss_bytes": 114896896
+            },
+            "host": {
+              "held_handles": 204,
+              "objects": null,
+              "resources": null,
+              "rss_bytes": 34684928
+            }
+          },
+          "index": 13,
+          "max_status_gap_ms": 752.0001,
+          "phase": "post_batch_quiescent",
+          "sha256": "e9b08bad3cbb53b5de9a867838fdba8fece1e4b6319a3c5e49e8dde1db6a1da8",
+          "source": "gt06-s241-formal-01/run-00-attempt-01/sample-preview-13.json"
+        },
+        {
+          "counters": {
+            "editor": {
+              "held_handles": 562,
+              "objects": 71160,
+              "resources": 6,
+              "rss_bytes": 115163136
+            },
+            "host": {
+              "held_handles": 204,
+              "objects": null,
+              "resources": null,
+              "rss_bytes": 35237888
+            }
+          },
+          "index": 14,
+          "max_status_gap_ms": 652.977,
+          "phase": "post_batch_quiescent",
+          "sha256": "00a44240c548ff199697ae0888a4966f6cf9637f89a8e4d17fd92efb0587820f",
+          "source": "gt06-s241-formal-01/run-00-attempt-01/sample-preview-14.json"
+        },
+        {
+          "counters": {
+            "editor": {
+              "held_handles": 560,
+              "objects": 71160,
+              "resources": 6,
+              "rss_bytes": 115728384
+            },
+            "host": {
+              "held_handles": 204,
+              "objects": null,
+              "resources": null,
+              "rss_bytes": 34672640
+            }
+          },
+          "index": 15,
+          "max_status_gap_ms": 563.214,
+          "phase": "post_batch_quiescent",
+          "sha256": "f3b32e37c321e802aa9ce097b9a90c50eb04a035f9a7addb68af9ce8c365497d",
+          "source": "gt06-s241-formal-01/run-00-attempt-01/sample-preview-15.json"
+        },
+        {
+          "counters": {
+            "editor": {
+              "held_handles": 565,
+              "objects": 71160,
+              "resources": 6,
+              "rss_bytes": 174563328
+            },
+            "host": {
+              "held_handles": 204,
+              "objects": null,
+              "resources": null,
+              "rss_bytes": 35835904
+            }
+          },
+          "index": 16,
+          "max_status_gap_ms": 2218.445,
+          "phase": "post_batch_quiescent",
+          "sha256": "eaeb159b2548cd9a3a6abe3004d59a58a2439b0841c5dd2a34fd6f327668fd84",
+          "source": "gt06-s241-formal-01/run-00-attempt-01/sample-preview-16.json"
+        }
+      ]
+    },
+    "s246": {
+      "expected_available_checks": "PASS",
+      "rows": [
+        {
+          "counters": {
+            "editor": {
+              "held_handles": 564,
+              "objects": 71160,
+              "resources": 6,
+              "rss_bytes": 759189504
+            },
+            "host": {
+              "held_handles": 204,
+              "objects": null,
+              "resources": null,
+              "rss_bytes": 48476160
+            }
+          },
+          "index": 0,
+          "max_status_gap_ms": 672.367,
+          "phase": "post_batch_quiescent",
+          "sha256": "f4b1c929bc8c35eca5927c8107a92aa70894586629b118c6b24f3c925906e6cc",
+          "source": "gt06-s246-formal-01/run-00-attempt-01/sample-preview-00.json"
+        },
+        {
+          "counters": {
+            "editor": {
+              "held_handles": 558,
+              "objects": 71160,
+              "resources": 6,
+              "rss_bytes": 744394752
+            },
+            "host": {
+              "held_handles": 204,
+              "objects": null,
+              "resources": null,
+              "rss_bytes": 48640000
+            }
+          },
+          "index": 1,
+          "max_status_gap_ms": 572.006,
+          "phase": "post_batch_quiescent",
+          "sha256": "b795a612757dcc10f40c3b9555d121b108a1616663d835a57b2ec3f72a7f75a7",
+          "source": "gt06-s246-formal-01/run-00-attempt-01/sample-preview-01.json"
+        },
+        {
+          "counters": {
+            "editor": {
+              "held_handles": 558,
+              "objects": 71160,
+              "resources": 6,
+              "rss_bytes": 375828480
+            },
+            "host": {
+              "held_handles": 204,
+              "objects": null,
+              "resources": null,
+              "rss_bytes": 37040128
+            }
+          },
+          "index": 2,
+          "max_status_gap_ms": 1079.406,
+          "phase": "post_batch_quiescent",
+          "sha256": "8e78c83cff965dc8686593342b1324f3c04f6c5d5fd87706f1f0f14676c863ea",
+          "source": "gt06-s246-formal-01/run-00-attempt-01/sample-preview-02.json"
+        },
+        {
+          "counters": {
+            "editor": {
+              "held_handles": 558,
+              "objects": 71160,
+              "resources": 6,
+              "rss_bytes": 220106752
+            },
+            "host": {
+              "held_handles": 204,
+              "objects": null,
+              "resources": null,
+              "rss_bytes": 36061184
+            }
+          },
+          "index": 3,
+          "max_status_gap_ms": 1542.3929,
+          "phase": "post_batch_quiescent",
+          "sha256": "6c7b4dff8027a1f01ba6a52eb4b197dfb2d32181326d62a0634cd696db60fdad",
+          "source": "gt06-s246-formal-01/run-00-attempt-01/sample-preview-03.json"
+        },
+        {
+          "counters": {
+            "editor": {
+              "held_handles": 558,
+              "objects": 71160,
+              "resources": 6,
+              "rss_bytes": 193941504
+            },
+            "host": {
+              "held_handles": 204,
+              "objects": null,
+              "resources": null,
+              "rss_bytes": 37748736
+            }
+          },
+          "index": 4,
+          "max_status_gap_ms": 1271.3029,
+          "phase": "post_batch_quiescent",
+          "sha256": "ef22bafcab7ec1f98cb93fa965566d77884ab276dbc6ddecabba22c95cb77464",
+          "source": "gt06-s246-formal-01/run-00-attempt-01/sample-preview-04.json"
+        },
+        {
+          "counters": {
+            "editor": {
+              "held_handles": 558,
+              "objects": 71160,
+              "resources": 6,
+              "rss_bytes": 185352192
+            },
+            "host": {
+              "held_handles": 204,
+              "objects": null,
+              "resources": null,
+              "rss_bytes": 37617664
+            }
+          },
+          "index": 5,
+          "max_status_gap_ms": 676.122,
+          "phase": "post_batch_quiescent",
+          "sha256": "776bb7ab7471dd62ebdabf4a4aefbb137b66c61d45cc6b4cadef596ce90e06a8",
+          "source": "gt06-s246-formal-01/run-00-attempt-01/sample-preview-05.json"
+        },
+        {
+          "counters": {
+            "editor": {
+              "held_handles": 556,
+              "objects": 71160,
+              "resources": 6,
+              "rss_bytes": 155807744
+            },
+            "host": {
+              "held_handles": 204,
+              "objects": null,
+              "resources": null,
+              "rss_bytes": 36192256
+            }
+          },
+          "index": 6,
+          "max_status_gap_ms": 752.047,
+          "phase": "post_batch_quiescent",
+          "sha256": "8af33249a69ee70f050ee17383a2b793b439d646bf77f15dc1db8439eb2fc4b6",
+          "source": "gt06-s246-formal-01/run-00-attempt-01/sample-preview-06.json"
+        },
+        {
+          "counters": {
+            "editor": {
+              "held_handles": 559,
+              "objects": 71160,
+              "resources": 6,
+              "rss_bytes": 204177408
+            },
+            "host": {
+              "held_handles": 204,
+              "objects": null,
+              "resources": null,
+              "rss_bytes": 36761600
+            }
+          },
+          "index": 7,
+          "max_status_gap_ms": 570.212,
+          "phase": "post_batch_quiescent",
+          "sha256": "9cb84f3c0f50eaf6f26b51bf61bc2facc573cd96bbb13d2daa5ff2939492fffc",
+          "source": "gt06-s246-formal-01/run-00-attempt-01/sample-preview-07.json"
+        }
+      ]
+    }
+  },
+  "formal_acceptance": false,
+  "s241_command": {
+    "max_status_gap_ms": 2055.5275,
+    "sha256": "988c478f3d0d75bba0ca8fb23d84d01fb2bacff152948413b6e29120dd4fed2d",
+    "source": "gt06-s241-formal-01/run-00-attempt-01/command-16.json"
+  },
+  "schema": "hh-studio.o1-historical-counter-fixture.v1",
+  "scope": "Exact numeric extraction of retained partial prefixes; no late-window or private-commit evidence; old verdicts unchanged."
+}

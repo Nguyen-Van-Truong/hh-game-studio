@@ -30,7 +30,8 @@ class SyntheticObserver:
     def sample(self):
         return {'process': dict(self.identity), 'monotonic_us': time.perf_counter_ns() // 1000,
                 'counters': {name: {'value': value, 'unavailable_reason': reason} for name, value, reason in (
-                    ('rss_bytes', 1000000, None), ('held_handles', 10, None),
+                    ('rss_bytes', 1000000, None), ('private_commit_bytes', 1000000, None),
+                    ('held_handles', 10, None),
                     ('objects', None, 'NOT_APPLICABLE_PYTHON_HOST'),
                     ('resources', None, 'NOT_APPLICABLE_PYTHON_HOST'))}}
 
@@ -63,7 +64,7 @@ class CommandProducerTests(unittest.TestCase):
         self.assertEqual(second['effect_count_after'], 4)
         ids = []
         for index, row in enumerate((first, second)):
-            self.assertEqual(row['schema_version'], '1.3.0')
+            self.assertEqual(row['schema_version'], '1.4.0')
             self.assertEqual(row['index'], index)
             self.assertEqual(row['status'], 'DIAGNOSTIC')
             self.assertFalse(row['complete_command_mix'])

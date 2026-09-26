@@ -1,11 +1,11 @@
 """Owned sequential GT06 campaign; raw capture is never an acceptance verdict.
 
-Each of ten fresh host/editor pairs retains both identities for 35 batches.
+Each of the profile's fresh host/editor pairs retains both identities for 35 batches.
 Native ready -> 1000 real HTTP commands -> bound start permit -> 100 native
 cycles -> quiescent OS observation -> bound ACK with fresh native counters.
 Only a fully captured run can be resumed as part of the same source campaign.
-Interrupted runs retain their artifacts and are restarted with a fresh pair;
-their partial samples never enter the dataset. No production limits change.
+Interrupted runs retain their artifacts and require a new campaign ID after
+review; their partial samples never enter the dataset. No production limits change.
 """
 from __future__ import annotations
 
@@ -23,6 +23,7 @@ import stat
 import sys
 import threading
 import time
+import uuid
 
 STUDIO = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(STUDIO.parent))
@@ -43,7 +44,10 @@ from studio.host.replay.process_probe import ProcessProbe
 from studio.pipeline import native_job
 
 SEQUENCE = 'host1000_then_native100_then_joint_ack_v1'
-MAX_ATTEMPTS = 3
+# A formal campaign is one fresh pair per slot.  A failed slot is preserved
+# and the coordinator must dispatch a fresh campaign id after review; retrying
+# the same campaign would make source/harness failures indistinguishable.
+MAX_ATTEMPTS = 1
 
 # Both entry points belong to the campaign even when only one is imported in
 # this process. Bind the scheduler registration too, without weakening the
@@ -177,6 +181,7 @@ def sample_editor(probe):
     return {'host_mono_us': observed['host_mono_us'],
             'handle_mono_us': observed['handle_mono_us'],
             'rss_bytes': {'value': observed['rss_bytes'], 'unavailable_reason': None},
+            'private_commit_bytes': {'value': observed['private_commit_bytes'], 'unavailable_reason': None},
             'held_handles': {'value': observed['held_handles'], 'unavailable_reason': None},
             'visible_window_handles': observed['visible_window_handles']}
 
@@ -230,9 +235,9 @@ def require_campaign_running(root, *, active=None):
 
     The active run validates its control payload separately. Presence in an
     older slot is sufficient to fail closed, including a broken symlink.
-    Check only the bounded 10 x MAX_ATTEMPTS slots, not arbitrary directories.
+    Check only the bounded profile.process_runs x MAX_ATTEMPTS slots, not arbitrary directories.
     """
-    for index in range(10):
+    for index in range(profile.PROFILE.process_runs):
         for attempt in range(1, MAX_ATTEMPTS + 1):
             output = root / f'run-{index:02d}-attempt-{attempt:02d}'
             if output != active:
@@ -264,31 +269,43 @@ class CampaignScreenError(BenchmarkJobError):
         # Only selected numeric fields and fixed role/counter labels are retained.
         # Construct this after failure, never resample or retain a successful row.
         self.screen_observation = {
-            'schema_id': 'hh-studio.benchmark-screen-failure', 'schema_version': '1.0.0',
-            'batch_index': index, 'baseline_batch_index': 4, 'role': role,
+            'schema_id': 'hh-studio.benchmark-screen-failure', 'schema_version': '1.1.0',
+            'batch_index': index, 'baseline_batch_indices': [2, 3, 4], 'role': role,
             'counter': counter, 'baseline_value': baseline, 'observed_value': observed,
             'maximum_inclusive': maximum, 'root_cause_claim': False,
         }
 
 
 def screen_sample(sample, baseline):
-    """Stop an already-failing prefix; only all ten complete runs can pass."""
+    """Stop only hard failures; O1 keeps mild counter noise running to batch 34."""
     for role in ('host', 'editor'):
-        for name, row in sample['memory'][role].items():
+        require(set(sample['memory'][role]) == set(profile._COUNTERS), 'CAMPAIGN_COUNTER_SHAPE')
+        for name in profile._COUNTERS:
+            row = sample['memory'][role][name]
             if role == 'host' and name in ('objects', 'resources'):
                 continue
             value = row['value']
-            require(type(value) is int, 'CAMPAIGN_COUNTER_UNAVAILABLE')
+            require(type(value) is int and value >= (1 if name in ('rss_bytes', 'private_commit_bytes') else 0),
+                    'CAMPAIGN_COUNTER_UNAVAILABLE')
             if sample['index'] < 5:
                 continue
+            require(type(baseline) is dict, 'CAMPAIGN_BASELINE_UNAVAILABLE')
             reference_value = baseline[role][name]['value']
-            if not (value * 100 <= reference_value * 110 if name == 'rss_bytes' else value <= reference_value):
+            if name in ('held_handles', 'objects'):
+                margin = profile.PROFILE.early_object_margin if name == 'objects' else profile.PROFILE.early_handle_margin
+                if value > reference_value + margin:
+                    raise CampaignScreenError(
+                        'CAMPAIGN_EARLY_COUNTER_LIMIT', index=sample['index'], role=role,
+                        counter=name, baseline=reference_value, observed=value,
+                        maximum=reference_value + margin)
+            elif name == 'private_commit_bytes' and value * 100 > reference_value * profile.PROFILE.early_private_commit_percent:
                 raise CampaignScreenError(
-                    'CAMPAIGN_RSS_GROWTH' if name == 'rss_bytes' else 'CAMPAIGN_RETAINED_COUNTER_GROWTH',
-                    index=sample['index'], role=role, counter=name, baseline=reference_value,
-                    observed=value, maximum=reference_value * 110 // 100 if name == 'rss_bytes' else reference_value)
-    if sample['index'] >= 5:
-        require(sample['max_status_gap_ms'] <= 2000, 'CAMPAIGN_STATUS_GAP')
+                    'CAMPAIGN_EARLY_PRIVATE_COMMIT_LIMIT', index=sample['index'], role=role,
+                    counter=name, baseline=reference_value, observed=value,
+                    maximum=reference_value * profile.PROFILE.early_private_commit_percent // 100)
+    gap = sample.get('max_status_gap_ms')
+    require(type(gap) in (int, float) and gap >= 0 and gap <= profile.PROFILE.max_status_gap_ms,
+            'CAMPAIGN_STATUS_GAP')
 
 
 def write_child_failure(root, *, run_id, batches, progress, error):
@@ -336,6 +353,107 @@ def workstation_profile():
         'displays': displays, 'python': platform.python_version(), 'pointer_bits': ctypes.sizeof(ctypes.c_void_p) * 8,
         'renderer': 'gl_compatibility', 'sequence': SEQUENCE,
         'scope': 'current machine fixed before campaign; not a claim of performance on other devices'}
+
+
+def environment_preflight():
+    """Capture the owner O1.8 resource gate before or after a campaign.
+
+    ``GlobalMemoryStatusEx`` supplies genuinely available physical memory;
+    ``GetPerformanceInfo`` supplies system commit total/limit.  Both values
+    are read in the same parent process that would launch the campaign.  A
+    missing native primitive is a preflight failure, never an inferred pass.
+    """
+    from ctypes import wintypes as w
+    class Memory(ctypes.Structure):
+        _fields_ = [('length', w.DWORD), ('load', w.DWORD)] + [
+            (name, ctypes.c_ulonglong) for name in ('physical', 'available', 'page_total',
+            'page_available', 'virtual_total', 'virtual_available', 'extended_available')]
+    observed_utc = time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())
+    result = {'schema_id': 'hh-studio.benchmark-environment-preflight', 'schema_version': '1.0.0',
+        'observed_utc': observed_utc, 'available_memory_bytes': None,
+        'required_available_memory_bytes': 8 * 1024**3, 'commit_total_bytes': None,
+        'commit_limit_bytes': None, 'commit_used_percent': None,
+        'required_commit_max_percent': 80.0, 'pass': False,
+        'failure_code': None, 'scope': 'O1.8 system resource snapshot; launch permission requires a fresh before snapshot'}
+    try:
+        memory = Memory()
+        memory.length = ctypes.sizeof(memory)
+        kernel = ctypes.WinDLL('kernel32', use_last_error=True)
+        kernel.GlobalMemoryStatusEx.argtypes = [ctypes.POINTER(Memory)]
+        kernel.GlobalMemoryStatusEx.restype = w.BOOL
+        require(kernel.GlobalMemoryStatusEx(ctypes.byref(memory)), 'CAMPAIGN_PREFLIGHT_MEMORY')
+        result['available_memory_bytes'] = int(memory.available)
+    except Exception as error:
+        result['failure_code'] = getattr(error, 'code', type(error).__name__)
+        return result
+    class Performance(ctypes.Structure):
+        _fields_ = [('cb', w.DWORD), ('commit_total', ctypes.c_size_t),
+                    ('commit_limit', ctypes.c_size_t), ('commit_peak', ctypes.c_size_t),
+                    ('physical_total', ctypes.c_size_t), ('physical_available', ctypes.c_size_t),
+                    ('system_cache', ctypes.c_size_t), ('kernel_total', ctypes.c_size_t),
+                    ('kernel_paged', ctypes.c_size_t), ('kernel_nonpaged', ctypes.c_size_t),
+                    ('page_size', ctypes.c_size_t), ('handle_count', w.DWORD),
+                    ('process_count', w.DWORD), ('thread_count', w.DWORD)]
+    try:
+        perf = Performance()
+        perf.cb = ctypes.sizeof(perf)
+        psapi = ctypes.WinDLL('psapi', use_last_error=True)
+        psapi.GetPerformanceInfo.argtypes = [ctypes.POINTER(Performance), w.DWORD]
+        psapi.GetPerformanceInfo.restype = w.BOOL
+        require(psapi.GetPerformanceInfo(ctypes.byref(perf), ctypes.sizeof(perf)), 'CAMPAIGN_PREFLIGHT_COMMIT')
+        require(perf.commit_limit > 0 and perf.page_size > 0, 'CAMPAIGN_PREFLIGHT_COMMIT_LIMIT')
+        commit_total = int(perf.commit_total * perf.page_size)
+        commit_limit = int(perf.commit_limit * perf.page_size)
+        commit_percent = (100.0 * commit_total / commit_limit)
+        result.update(commit_total_bytes=commit_total, commit_limit_bytes=commit_limit,
+            commit_used_percent=commit_percent,
+            **{'pass': result['available_memory_bytes'] >= 8 * 1024**3
+               and commit_total * 100 <= commit_limit * 80})
+        if not result['pass']:
+            result['failure_code'] = 'CAMPAIGN_PREFLIGHT_RESOURCE_LIMIT'
+    except Exception as error:
+        result['failure_code'] = getattr(error, 'code', type(error).__name__)
+    return result
+
+
+def require_environment_preflight(result):
+    """Enforce a captured preflight only after its evidence is durable."""
+    require(type(result) is dict and result.get('schema_id') == 'hh-studio.benchmark-environment-preflight'
+            and result.get('schema_version') == '1.0.0', 'CAMPAIGN_PREFLIGHT_SHAPE')
+    available = result.get('available_memory_bytes')
+    total, limit = result.get('commit_total_bytes'), result.get('commit_limit_bytes')
+    require(type(available) is int and available >= 8 * 1024**3
+            and type(total) is int and total >= 0 and type(limit) is int and limit > 0
+            and total * 100 <= limit * 80 and result.get('pass') is True,
+            'CAMPAIGN_PREFLIGHT_RESOURCE_LIMIT')
+
+
+def seal_campaign_capture(root, result):
+    """Reuse an identical completed capture without rebinding its environment.
+
+    A later invocation still records its own before/after snapshots; they are
+    supplemental observations and cannot replace the completed run's hashes.
+    """
+    final = root / 'campaign-capture.json'
+    if not final.exists():
+        write(final, result)
+        return final
+    previous = json.loads(read_regular(final))
+    normalized = dict(result)
+    for field, phase in (('environment_preflight_before', 'before'),
+                         ('environment_preflight_after', 'after')):
+        ref = previous.get(field)
+        require(type(ref) is dict and set(ref) == {'file', 'sha256', 'size_bytes'}
+                and type(ref['file']) is str
+                and re.fullmatch(r'environment/[0-9a-f]{32}-' + phase + r'\.json', ref['file']),
+                'CAMPAIGN_ENVIRONMENT_REFERENCE')
+        path = root / ref['file']
+        require(reference(root, path) == ref, 'CAMPAIGN_ENVIRONMENT_HASH')
+        if phase == 'before':
+            require_environment_preflight(json.loads(read_regular(path)))
+        normalized[field] = ref
+    require(previous == normalized, 'CAMPAIGN_EXISTING_CAPTURE_CHANGED')
+    return final
 
 
 def verify_owner_captures(root, context):
@@ -402,17 +520,43 @@ def verify_run_capture(root, captured, source_digest, *, campaign_id, index, att
 
 
 def run_campaign(campaign_id, root):
+    # Every invocation (including resume) captures fresh, immutable resource
+    # observations. A cached PASS must never authorize a later launch.
+    invocation = uuid.uuid4().hex
+    preflight_path = root / 'environment' / f'{invocation}-before.json'
+    after_path = root / 'environment' / f'{invocation}-after.json'
+    primary = None
+    try:
+        return _run_campaign(campaign_id, root, preflight_path, after_path)
+    except BaseException as error:
+        primary = error
+        raise
+    finally:
+        # The success path records the after snapshot before binding its hash.
+        # Failure paths also retain a snapshot without replacing the real error.
+        if preflight_path.exists() and not after_path.exists():
+            try:
+                write(after_path, environment_preflight())
+            except Exception as snapshot_error:
+                if primary is None:
+                    raise
+                primary.add_note('Post-run environment snapshot could not be persisted: '
+                                 + type(snapshot_error).__name__)
+
+
+def _run_campaign(campaign_id, root, preflight_path, after_path):
     load_fixture()  # Same dynamic dependency closure in parent and child.
     before = source_files()
     digest = closure(before)
     machine = workstation_profile()
     lock_raw = read_regular(STUDIO / 'toolchain.lock.json')
-    frozen = {'schema_id': 'hh-studio.benchmark-campaign', 'schema_version': '1.0.0',
+    frozen = {'schema_id': 'hh-studio.benchmark-campaign', 'schema_version': '1.1.0',
         'campaign_id': campaign_id, 'source_files': before, 'source_closure_sha256': digest,
         'profile_sha256': profile.PROFILE_SHA256, 'workstation': machine, 'sequence': SEQUENCE,
         'toolchain_sha256': sha(lock_raw), 'formal_acceptance': False,
         'python_executable_sha256': sha(read_regular(Path(sys.executable), 256 * 1024**2)),
-        'run_count': 10, 'batches_per_run': 35, 'max_attempts_per_run': MAX_ATTEMPTS}
+        'run_count': profile.PROFILE.process_runs, 'batches_per_run': profile.PROFILE.warmup_batches + profile.PROFILE.measured_batches,
+        'max_attempts_per_run': MAX_ATTEMPTS}
     if root.exists():
         require(json.loads(read_regular(root / 'campaign.json')) == json.loads(encoded(frozen)),
                 'CAMPAIGN_RESUME_SOURCE_OR_MACHINE_CHANGED')
@@ -425,6 +569,12 @@ def run_campaign(campaign_id, root):
             raw = read_regular(STUDIO / name)
             require(sha(raw) == expected, 'CAMPAIGN_FREEZE_CHANGED')
             write(root / 'source/studio' / name, raw)
+    # Resource availability is dynamic evidence, so it is deliberately kept
+    # outside campaign.json. Persist the snapshot before enforcing it: a
+    # failed preflight must leave a reviewable record and never launch a pair.
+    preflight_before = environment_preflight()
+    write(preflight_path, preflight_before)
+    require_environment_preflight(preflight_before)
     completed = []
     identities = set()
     campaign_sha = sha(read_regular(root / 'campaign.json'))
@@ -435,7 +585,7 @@ def run_campaign(campaign_id, root):
             require(identity not in identities, 'CAMPAIGN_PROCESS_REUSE')
             identities.add(identity)
 
-    for index in range(10):
+    for index in range(profile.PROFILE.process_runs):
         require_campaign_running(root)
         finished = []
         attempts = []
@@ -457,7 +607,6 @@ def run_campaign(campaign_id, root):
             remember(captured)
             completed.append({'index': index, 'run_id': captured['run_id'], 'capture': reference(root, output / 'run-capture.json')})
             continue
-        require(len(attempts) < MAX_ATTEMPTS, 'CAMPAIGN_ATTEMPTS_EXHAUSTED')
         # A failed process pair is never silently reused. Prior attempts must
         # have a parent-captured closed/zero record before starting another.
         for prior in attempts:
@@ -465,6 +614,7 @@ def run_campaign(campaign_id, root):
             failure = json.loads(read_regular(prior / 'parent-failure.json'))
             require(failure.get('owned_tree_zero') is True and failure.get('owner_closed') is True,
                     'CAMPAIGN_PRIOR_OWNER_HELD')
+        require(len(attempts) < MAX_ATTEMPTS, 'CAMPAIGN_ATTEMPTS_EXHAUSTED')
         attempt = len(attempts) + 1
         output = root / f'run-{index:02d}-attempt-{attempt:02d}'
         output.mkdir(exist_ok=False)
@@ -484,6 +634,11 @@ def run_campaign(campaign_id, root):
         try:
             verify_sources(before)
             require_campaign_running(root)
+            # Pair 2 can start hours after the invocation-level snapshot.
+            # Capture again immediately before each fresh host/editor launch.
+            launch_preflight = environment_preflight()
+            write(output / 'environment-preflight-before.json', launch_preflight)
+            require_environment_preflight(launch_preflight)
             owner = BenchmarkProcess([sys.executable, '-B', str(Path(__file__).resolve()), '--campaign-id', campaign_id,
                 '--child-index', str(index), '--attempt', str(attempt)], cwd=output, output=output / 'host-owner',
                 source_root=STUDIO, source_files=before,
@@ -554,17 +709,18 @@ def run_campaign(campaign_id, root):
             if owner is not None and primary is None:
                 owner.close()
     verify_sources(before)
+    # The after snapshot is evidence, not an additional acceptance gate.
+    preflight_after = environment_preflight()
+    write(after_path, preflight_after)
     require_campaign_running(root)
     result = {'schema_id': 'hh-studio.benchmark-campaign-capture', 'schema_version': '1.0.0',
         'campaign_id': campaign_id, 'completed': True, 'formal_acceptance': False,
         'source_closure_sha256': digest, 'profile_sha256': profile.PROFILE_SHA256,
         'campaign_sha256': sha(read_regular(root / 'campaign.json')), 'runs': completed,
+        'environment_preflight_before': reference(root, preflight_path),
+        'environment_preflight_after': reference(root, after_path),
         'measurement_acceptance': 'REQUIRES_STRICT_ASSEMBLY_AND_REVIEW'}
-    final = root / 'campaign-capture.json'
-    if final.exists():
-        require(json.loads(read_regular(final)) == result, 'CAMPAIGN_EXISTING_CAPTURE_CHANGED')
-    else:
-        write(final, result)
+    final = seal_campaign_capture(root, result)
     runs = []
     for row in completed:
         require_campaign_running(root)
@@ -907,6 +1063,7 @@ def run_child(root):
     thread = threading.Thread(target=heartbeat, daemon=True)
     batches = []
     baseline_memory = None
+    warmup_samples = []
     primary = retained = None
     cleanup_errors = []
     try:
@@ -979,7 +1136,7 @@ def run_child(root):
                 'native_mono_us': receipt['ack_observed_mono_us'], 'process_frame': receipt['process_frame'],
                 'objects': receipt['objects'], 'resources': receipt['resources']}
             joint_path = root / f'joint-{index:02d}.json'
-            joint = {'schema_id': 'hh-studio.benchmark-joint-observation', 'schema_version': '1.1.0',
+            joint = {'schema_id': 'hh-studio.benchmark-joint-observation', 'schema_version': '1.2.0',
                 'run_id': run_id, 'index': index, 'profile_sha256': profile.PROFILE_SHA256,
                 'source_closure_sha256': closure(before), 'native_batch_sha256': sha(native_raw),
                 'command_batch_sha256': command_ref['sha256'], 'processes': processes,
@@ -999,8 +1156,11 @@ def run_child(root):
                 barrier_receipt=receipt, ack=bound['ack'], ready=bound['ready'], start=bound['start'])
             write(root / f'sample-preview-{index:02d}.json', sample)
             screen_sample(sample, baseline_memory)
+            if 2 <= index <= 4:
+                warmup_samples.append(sample)
             if index == 4:
-                baseline_memory = sample['memory']
+                baseline_memory = profile.baseline_memory_rows([row['memory'] for row in warmup_samples],
+                                                               '$.campaign_baseline')
             del native, native_raw, joint, editor, host, receipt
             del bound, sample
             gc.collect()
@@ -1082,7 +1242,7 @@ def main():
     require(os.name == 'nt' and re.fullmatch(r'gt06-[a-z0-9-]{1,25}', args.campaign_id), 'CAMPAIGN_ID')
     root = STUDIO / '.local/reviews' / args.campaign_id
     if args.child_index is not None:
-        require(0 <= args.child_index < 10 and type(args.attempt) is int and 1 <= args.attempt <= MAX_ATTEMPTS,
+        require(0 <= args.child_index < profile.PROFILE.process_runs and type(args.attempt) is int and 1 <= args.attempt <= MAX_ATTEMPTS,
                 'CAMPAIGN_CHILD_ARGUMENTS')
         run_child(root / f'run-{args.child_index:02d}-attempt-{args.attempt:02d}')
         return 0

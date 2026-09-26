@@ -36,7 +36,8 @@ MAX_RAW_BYTES = 8 * 1024 * 1024
 _HASH = re.compile(r'[0-9a-f]{64}\Z')
 _NAME = re.compile(r'[A-Za-z0-9._/-]{1,240}\Z')
 _STEPS = ('create', 'undo', 'save', 'reload')
-_COUNTERS = ('rss_bytes', 'objects', 'resources', 'held_handles')
+_COUNTERS = ('rss_bytes', 'private_commit_bytes', 'objects', 'resources', 'held_handles')
+_NATIVE_COUNTERS = ('rss_bytes', 'objects', 'resources', 'held_handles')
 _HOST_NA = profile.HOST_NOT_APPLICABLE
 
 
@@ -275,7 +276,7 @@ def validate_command_batch(value, *, run_id, index, host_identity):
     """Verify all 1000 rows, aggregates, effect chain and separate Cancel."""
     _shape(value, 'schema_id schema_version run_id index mode complete_command_mix native_acceptance effects_kind transport_kind observation_kind host_process warmup commands latency_ms effects_per_admission cancel status started_mono_us setup_responses memory_before memory_after effect_count_before effect_count_after dropped_commands dropped_telemetry journal_bytes diagnostic_retention ended_mono_us host_response_mono_us max_status_gap_ms status_gap_scope')
     _identity(host_identity)
-    _need(value['schema_id'] == 'hh-studio.benchmark-command-batch' and value['schema_version'] == '1.3.0', 'COMMAND_SCHEMA')
+    _need(value['schema_id'] == 'hh-studio.benchmark-command-batch' and value['schema_version'] == '1.4.0', 'COMMAND_SCHEMA')
     _need(value['mode'] == 'benchmark' and value['status'] == 'COMPLETE'
           and value['complete_command_mix'] is True and value['native_acceptance'] is False, 'COMMAND_INCOMPLETE_OR_DIAGNOSTIC')
     _need(value['effects_kind'] == 'in_process_mock_fixture'
@@ -451,7 +452,7 @@ def validate_native_batch(value, *, run_id, index, editor_identity):
     _integer(memory['settle_us'], 1100000)
     _need(memory['settle_frames'] <= memory['process_frame'] - previous_frame
           and memory['settle_us'] <= value['ended_mono_us'] - previous_time, 'NATIVE_QUIESCENCE')
-    _shape(memory['editor'], ' '.join(_COUNTERS))
+    _shape(memory['editor'], ' '.join(_NATIVE_COUNTERS))
     for name, row in memory['editor'].items():
         _counter(row, positive=name in ('rss_bytes', 'objects'), required=name in ('objects', 'resources'))
     barrier = value['barrier']
@@ -546,7 +547,7 @@ def assemble_sample(native, command, joint, *, run_id, index, processes,
     _number(receipt['max_status_gap_ms'], .000000001)
     _need(receipt['max_status_gap_ms'] >= n['max_status_gap_ms'], 'ACK_STATUS_GAP')
     _shape(j, 'schema_id schema_version run_id index profile_sha256 source_closure_sha256 native_batch_sha256 command_batch_sha256 processes phase host_window host editor host_effect_count barrier_receipt ack_ref')
-    _need(j['schema_id'] == 'hh-studio.benchmark-joint-observation' and j['schema_version'] == '1.1.0'
+    _need(j['schema_id'] == 'hh-studio.benchmark-joint-observation' and j['schema_version'] == '1.2.0'
           and j['run_id'] == run_id and j['profile_sha256'] == profile.PROFILE_SHA256
           and j['source_closure_sha256'] == source_closure_sha256 and j['native_batch_sha256'] == native.sha256
           and j['command_batch_sha256'] == command.sha256 and j['processes'] == processes
@@ -563,10 +564,11 @@ def assemble_sample(native, command, joint, *, run_id, index, processes,
     _host_observation({'process': processes['host'], **j['host']}, processes['host'])
     _integer(j['host']['monotonic_us'], c['ended_mono_us'], window['ack_written_mono_us'])
     editor = j['editor']
-    _shape(editor, 'host_mono_us handle_mono_us rss_bytes held_handles visible_window_handles native_observation')
+    _shape(editor, 'host_mono_us handle_mono_us rss_bytes private_commit_bytes held_handles visible_window_handles native_observation')
     _integer(editor['host_mono_us'], c['ended_mono_us'], window['ack_written_mono_us'])
     _integer(editor['handle_mono_us'], editor['host_mono_us'], window['ack_written_mono_us'])
     _counter(editor['rss_bytes'], positive=True)
+    _counter(editor['private_commit_bytes'], positive=True)
     _counter(editor['held_handles'])
     handles = editor['visible_window_handles']
     _need(type(handles) is list and 1 <= len(handles) <= 64 and len(set(handles)) == len(handles)
@@ -576,7 +578,8 @@ def assemble_sample(native, command, joint, *, run_id, index, processes,
     _need(observation == {'source': 'native_ack', 'native_mono_us': receipt['ack_observed_mono_us'],
           'process_frame': receipt['process_frame'], 'objects': receipt['objects'], 'resources': receipt['resources']}, 'STALE_NATIVE_OBSERVATION')
     memory = {'phase': 'post_batch_quiescent', 'host': j['host']['counters'],
-              'editor': {'rss_bytes': editor['rss_bytes'], 'held_handles': editor['held_handles'],
+              'editor': {'rss_bytes': editor['rss_bytes'], 'private_commit_bytes': editor['private_commit_bytes'],
+                         'held_handles': editor['held_handles'],
                          'objects': observation['objects'], 'resources': observation['resources']}}
     profile._memory(memory, '$.assembled.memory')
     evidence = {'profile_sha256': profile.PROFILE_SHA256, 'source_closure_sha256': source_closure_sha256,
@@ -609,7 +612,7 @@ with run_id,processes,host_exit_code,editor_exit_code,owned_tree_zero,held_handl
     _shape(manifest, 'schema_id schema_version run_id index profile_sha256 source_closure_sha256 processes refs native_batches command_batches joint_observations ready_artifacts start_artifacts ack_artifacts')
     _need(manifest['schema_id'] == 'hh-studio.benchmark-run-assembly' and manifest['schema_version'] == '1.0.0'
           and manifest['profile_sha256'] == profile.PROFILE_SHA256, 'MANIFEST_SCHEMA')
-    _integer(manifest['index'], 0, 9)
+    _integer(manifest['index'], 0, profile.PROFILE.process_runs - 1)
     _digest(manifest['source_closure_sha256'])
     _shape(manifest['refs'], 'native_index source_manifest toolchain profile native_stdout native_stderr cleanup')
     artifacts = {name: read_artifact(root, ref) for name, ref in manifest['refs'].items()}
@@ -733,8 +736,9 @@ with run_id,processes,host_exit_code,editor_exit_code,owned_tree_zero,held_handl
           and cleanup['owned_tree_zero'] is True, 'CLEANUP_BINDING')
     for key in ('host_exit_code', 'editor_exit_code', 'held_handles'):
         _integer(cleanup[key], 0, 0)
+    baseline = profile.baseline_memory(samples[:5], '$.assembled_run.baseline')
     run = {'run_id': manifest['run_id'], 'index': manifest['index'], 'processes': manifest['processes'],
-           'baseline': {'after_batch_index': 4, 'memory': samples[4]['memory']}, 'samples': samples,
+           'baseline': {'after_batch_indices': list(profile._BASELINE_BATCHES), 'memory': baseline}, 'samples': samples,
            'cleanup': {key: cleanup[key] for key in ('host_exit_code', 'editor_exit_code', 'owned_tree_zero', 'held_handles')}}
     raw = _encode({'source_closure_sha256': closure, 'toolchain_sha256': artifacts['toolchain'].sha256,
                    'profile_sha256': profile.PROFILE_SHA256, 'run': run})
@@ -742,7 +746,7 @@ with run_id,processes,host_exit_code,editor_exit_code,owned_tree_zero,held_handl
 
 
 def assemble_dataset(provenance, runs):
-    """Require ten bound runs with one source/toolchain/profile; never promote diagnostics."""
+    """Require the frozen process_runs bound runs; never promote diagnostics."""
     _shape(provenance, 'source_closure_sha256 toolchain_sha256 workstation_profile_sha256 driver_sha256 capture_manifest_sha256',
            '$.provenance')
     for digest in provenance.values():
@@ -757,5 +761,5 @@ def assemble_dataset(provenance, runs):
         value = bound.value
         _need(all(value[name] == digest for name, digest in expected.items()), 'RUN_PROVENANCE_MISMATCH', path)
         values.append(value['run'])
-    return profile.validate_dataset({'schema_id': 'hh-studio.tools-ux-benchmark', 'schema_version': '1.1.0',
+    return profile.validate_dataset({'schema_id': 'hh-studio.tools-ux-benchmark', 'schema_version': '1.2.0',
         'profile_sha256': profile.PROFILE_SHA256, 'evidence_kind': 'native', 'provenance': provenance, 'runs': values})

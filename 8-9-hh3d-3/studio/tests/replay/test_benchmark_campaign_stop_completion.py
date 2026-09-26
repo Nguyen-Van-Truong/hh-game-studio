@@ -68,6 +68,10 @@ class CampaignStopCompletionTests(unittest.TestCase):
             stack.enter_context(patch.object(campaign, 'load_fixture'))
             stack.enter_context(patch.object(campaign, 'source_files', return_value=files))
             stack.enter_context(patch.object(campaign, 'workstation_profile', return_value={'synthetic': True}))
+            stack.enter_context(patch.object(campaign, 'environment_preflight', return_value={
+                'schema_id': 'hh-studio.benchmark-environment-preflight', 'schema_version': '1.0.0',
+                'pass': True, 'available_memory_bytes': 8 * 1024**3,
+                'commit_total_bytes': 80, 'commit_limit_bytes': 100}))
             # Every process launch is intercepted, including accidental next-run
             # launch. Existing owner/assembly tests verify their own contracts.
             launch = stack.enter_context(patch.object(campaign, 'BenchmarkProcess'))

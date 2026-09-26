@@ -452,7 +452,12 @@ class ProducerLifecycleTests(unittest.TestCase):
 
             def sample(self):
                 events.append('baseline')
-                return {'process': dict(self.identity), 'counters': {'rss_bytes': {'value': 1024}}}
+                return {'process': dict(self.identity), 'counters': {
+                    'rss_bytes': {'value': 1024, 'unavailable_reason': None},
+                    'private_commit_bytes': {'value': 2048, 'unavailable_reason': None},
+                    'held_handles': {'value': 4, 'unavailable_reason': None},
+                    'objects': {'value': None, 'unavailable_reason': 'NOT_APPLICABLE_PYTHON_HOST'},
+                    'resources': {'value': None, 'unavailable_reason': 'NOT_APPLICABLE_PYTHON_HOST'}}}
 
             def close(self):
                 events.append('observer.close')

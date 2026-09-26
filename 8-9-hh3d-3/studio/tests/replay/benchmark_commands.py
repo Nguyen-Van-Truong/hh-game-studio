@@ -89,16 +89,12 @@ class NativeObserver:
         self.identity = {'pid': self.probe.pid, 'process_start': self.probe.process_start}
 
     def sample(self):
-        from ctypes import wintypes as w
-        row = self.probe.sample()
+        row = self.probe.sample_with_handle_count()
         _need(row is not None, 'HOST_PROCESS_EXITED')
-        count = w.DWORD()
-        api = self.probe.k.GetProcessHandleCount
-        api.argtypes, api.restype = [w.HANDLE, ctypes.POINTER(w.DWORD)], w.BOOL
-        ok = api(self.probe.handle, ctypes.byref(count))
         return {'process': dict(self.identity), 'monotonic_us': row['host_mono_us'],
                 'counters': {'rss_bytes': _counter(row['rss_bytes']),
-                    'held_handles': _counter(int(count.value)) if ok else _counter(None, 'GetProcessHandleCount unavailable'),
+                    'private_commit_bytes': _counter(row['private_commit_bytes']),
+                    'held_handles': _counter(row['held_handles']),
                     'objects': _counter(None, 'NOT_APPLICABLE_PYTHON_HOST'),
                     'resources': _counter(None, 'NOT_APPLICABLE_PYTHON_HOST')}}
 
@@ -145,6 +141,9 @@ class CommandProducer:
         _need(row['process'] == self.identity, 'HOST_PROCESS_CHANGED')
         _need(type(row['counters']['rss_bytes']['value']) is int and row['counters']['rss_bytes']['value'] > 0,
               'HOST_RSS_UNAVAILABLE')
+        _need(type(row['counters']['private_commit_bytes']['value']) is int
+              and row['counters']['private_commit_bytes']['value'] > 0,
+              'HOST_PRIVATE_COMMIT_UNAVAILABLE')
         return row
 
     def _connect_batch(self):
@@ -353,7 +352,7 @@ class CommandProducer:
         _need(type(index) is int and index == self.next_index and 0 <= index < MAX_BATCHES, 'BATCH_ORDER')
         _need(self.mode in (None, mode), 'MODE_MIX')
         self.mode = mode
-        report = {'schema_id': 'hh-studio.benchmark-command-batch', 'schema_version': '1.3.0',
+        report = {'schema_id': 'hh-studio.benchmark-command-batch', 'schema_version': '1.4.0',
                   'run_id': self.run_id, 'index': index, 'mode': mode, 'complete_command_mix': False,
                   'native_acceptance': False, 'effects_kind': 'in_process_mock_fixture',
                   'transport_kind': 'accepted_loopback_fixture_http', 'observation_kind': self.observer.kind,

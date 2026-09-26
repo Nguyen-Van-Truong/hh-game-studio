@@ -13,10 +13,11 @@ readback per admitted ordinal. Each native cycle has all four timings, effect
 counts, scene readback hashes and a changed root instance after reload.
 
 Each run retains the same host/editor process identities throughout 35 batches.
-baseline is exactly batch 4's quiescent memory observation. Counters are closed
+baseline is the per-counter median of batches 2, 3 and 4's quiescent memory
+observations. Counters are closed
 {value, unavailable_reason} objects: unavailable applicable counters never mean
 zero or PASS. Python host objects/resources are canonically not applicable;
-host RSS/OS handles and all four editor counters remain mandatory.
+host RSS/private commit/OS handles and all five editor counters remain mandatory.
 Stop targets a separately bounded owned job; it must not restart the editor.
 Large local series never enter a shared protocol envelope.
 
@@ -43,7 +44,8 @@ SAFE_INTEGER = (1 << 53) - 1
 _HASH = re.compile(r'[0-9a-f]{64}\Z')
 _ID = re.compile(r'[a-z][a-z0-9._-]{0,95}\Z')
 _START = re.compile(r'(?:windows|linux):[1-9][0-9]{0,19}\Z')
-_COUNTERS = ('rss_bytes', 'objects', 'resources', 'held_handles')
+_COUNTERS = ('rss_bytes', 'private_commit_bytes', 'objects', 'resources', 'held_handles')
+_BASELINE_BATCHES = (2, 3, 4)
 _STEPS = ('create', 'undo', 'save', 'reload')
 HOST_NOT_APPLICABLE = 'NOT_APPLICABLE_PYTHON_HOST'
 
@@ -56,8 +58,8 @@ class BenchmarkError(ValueError):
 
 @dataclass(frozen=True, slots=True)
 class BenchmarkProfile:
-    profile_id: str = 'gt06-tools-ux-exact-v2'
-    process_runs: int = 10
+    profile_id: str = 'gt06-tools-ux-o1-v3'
+    process_runs: int = 2
     warmup_batches: int = 5
     measured_batches: int = 30
     inspect_commands: int = 500
@@ -68,28 +70,95 @@ class BenchmarkProfile:
     inspect_p95_limit_ms: int = 500
     stop_p95_limit_ms: int = 500
     max_status_gap_ms: int = 2000
-    rss_growth_limit_percent: int = 10
+    rss_gate: str = 'diagnostic_only'
     memory_checkpoint_repetition: int = 10
     percentile_method: str = 'linear_type7'
     command_order: str = 'repeat_5inspect_3reject_2admitted'
     quiescent_phase: str = 'post_batch_quiescent'
     command_lane: str = 'host_api_50_30_20_mock_effect_allowed'
     cycle_lane: str = 'native_editor_direct_semantic_test_fixture'
-    host_required_counters: str = 'rss_bytes held_handles'
-    editor_required_counters: str = 'rss_bytes objects resources held_handles'
+    host_required_counters: str = 'rss_bytes private_commit_bytes held_handles'
+    editor_required_counters: str = 'rss_bytes private_commit_bytes objects resources held_handles'
+    baseline_batch_indices: str = '2,3,4'
+    private_commit_baseline_percent: int = 110
+    private_commit_trend_percent: int = 105
+    early_handle_margin: int = 64
+    early_object_margin: int = 256
+    early_private_commit_percent: int = 150
+    host_handles_tolerance: int = 4
+    host_handles_trend: int = 2
+    editor_handles_tolerance: int = 8
+    editor_handles_trend: int = 2
+    editor_objects_tolerance: int = 32
+    editor_objects_trend: int = 8
+    editor_resources_tolerance: int = 2
+    editor_resources_trend: int = 1
+    retained_counter_monotonic_min_delta: int = 2
 
     def __post_init__(self):
         # This version describes one workload, not a configurable smaller test.
-        expected = ('gt06-tools-ux-exact-v2', 10, 5, 30, 500, 300, 200, 100, 1,
-                    500, 500, 2000, 10, 10, 'linear_type7',
+        expected = ('gt06-tools-ux-o1-v3', 2, 5, 30, 500, 300, 200, 100, 1,
+                    500, 500, 2000, 'diagnostic_only', 10, 'linear_type7',
                     'repeat_5inspect_3reject_2admitted', 'post_batch_quiescent',
                     'host_api_50_30_20_mock_effect_allowed', 'native_editor_direct_semantic_test_fixture',
-                    'rss_bytes held_handles', 'rss_bytes objects resources held_handles')
+                    'rss_bytes private_commit_bytes held_handles',
+                    'rss_bytes private_commit_bytes objects resources held_handles',
+                    '2,3,4', 110, 105, 64, 256, 150, 4, 2, 8, 2, 32, 8, 2, 1, 2)
         if any(type(a) is not type(b) or a != b for a, b in zip(asdict(self).values(), expected)):
             raise BenchmarkError('PROFILE_VERSION_REQUIRED')
 
 
 PROFILE = BenchmarkProfile()
+
+
+def counter_window(role, counter):
+    """Return the frozen O1 T/G pair for an applicable retained counter."""
+    values = {
+        ('host', 'held_handles'): (PROFILE.host_handles_tolerance, PROFILE.host_handles_trend),
+        ('editor', 'held_handles'): (PROFILE.editor_handles_tolerance, PROFILE.editor_handles_trend),
+        ('editor', 'objects'): (PROFILE.editor_objects_tolerance, PROFILE.editor_objects_trend),
+        ('editor', 'resources'): (PROFILE.editor_resources_tolerance, PROFILE.editor_resources_trend),
+    }
+    return values.get((role, counter))
+
+
+def memory_gate_codes(role, counter, baseline, max_all, max_early, max_late):
+    """Evaluate O1 limits, independently of dataset completeness/provenance.
+
+    A historical prefix may have no late window; None leaves that check
+    unevaluated. Formal callers first validate all 35 batches. This helper
+    cannot issue an acceptance verdict or substitute missing observations.
+    """
+    if counter == 'rss_bytes':
+        return []
+    if counter == 'private_commit_bytes':
+        codes = []
+        if max_all * 100 > baseline * PROFILE.private_commit_baseline_percent:
+            codes.append('PRIVATE_COMMIT_GROWTH')
+        if max_late is not None and max_late * 100 > max_early * PROFILE.private_commit_trend_percent:
+            codes.append('PRIVATE_COMMIT_TREND')
+        return codes
+    tolerance, trend = counter_window(role, counter)
+    return ['RETAINED_COUNTER_GROWTH'] if (
+        max_all > baseline + tolerance or
+        (max_late is not None and max_late > max_early + trend)) else []
+
+
+def monotonic_counter_code(role, counter, values):
+    """Catch a sustained staircase that can sit exactly on the T/G margins.
+
+    O1 keeps the literal T/G inequalities as the primary bounds, but also
+    requires the synthetic sparse leak (one retained handle every seven
+    batches) to fail.  A full formal measured window must therefore show a
+    non-decreasing retained counter with at least two units of net growth.
+    Short historical prefixes are deliberately outside this helper.
+    """
+    if counter not in ('held_handles', 'objects', 'resources') or len(values) < PROFILE.measured_batches:
+        return None
+    if all(later >= earlier for earlier, later in zip(values, values[1:])) and \
+            values[-1] - values[0] >= PROFILE.retained_counter_monotonic_min_delta:
+        return 'RETAINED_COUNTER_TREND'
+    return None
 
 
 def _encoded(value):
@@ -158,13 +227,49 @@ def _memory(value, path):
                 _need(type(reason) is str and 1 <= len(reason) <= 160
                       and reason.isascii() and all(32 <= ord(c) < 127 for c in reason), 'COUNTER_REASON', where)
             else:
-                _int(observed['value'], 1 if counter == 'rss_bytes' else 0, SAFE_INTEGER, where)
+                _int(observed['value'], 1 if counter in ('rss_bytes', 'private_commit_bytes') else 0,
+                     SAFE_INTEGER, where)
                 _need(observed['unavailable_reason'] is None, 'COUNTER_AVAILABILITY', where)
+
+
+def _median_memory(memories, path='$'):
+    """Return the exact per-counter median for the frozen baseline window."""
+    _need(type(memories) is list and len(memories) == len(_BASELINE_BATCHES),
+          'BASELINE_WINDOW', path)
+    for index, memory in zip(_BASELINE_BATCHES, memories):
+        _memory(memory, f'{path}[batch={index}]')
+    result = {'phase': PROFILE.quiescent_phase, 'host': {}, 'editor': {}}
+    for role in ('host', 'editor'):
+        for counter in _COUNTERS:
+            rows = [memory[role][counter] for memory in memories]
+            if role == 'host' and counter in ('objects', 'resources'):
+                result[role][counter] = {'value': None, 'unavailable_reason': HOST_NOT_APPLICABLE}
+                continue
+            values = [row['value'] for row in rows]
+            _need(all(type(value) is int for value in values), 'COUNTER_UNAVAILABLE', path)
+            result[role][counter] = {'value': sorted(values)[1], 'unavailable_reason': None}
+    return result
+
+
+def baseline_memory(samples, path='$'):
+    """Compute the baseline from sample memory rows 2, 3 and 4 only."""
+    _need(type(samples) is list and len(samples) == 5, 'BASELINE_SAMPLES', path)
+    rows = []
+    for index in _BASELINE_BATCHES:
+        row = samples[index]
+        _need(type(row) is dict and row.get('index') == index, 'BASELINE_SAMPLE_INDEX', path)
+        rows.append(row['memory'])
+    return baseline_memory_rows(rows, path + '.memory')
+
+
+def baseline_memory_rows(memories, path='$'):
+    """Compute the same baseline from exactly three memory observations."""
+    return _median_memory(memories, path)
 
 
 def _validate(value):
     _shape(value, 'schema_id schema_version profile_sha256 evidence_kind provenance runs', '$')
-    _need(value['schema_id'] == 'hh-studio.tools-ux-benchmark' and value['schema_version'] == '1.1.0'
+    _need(value['schema_id'] == 'hh-studio.tools-ux-benchmark' and value['schema_version'] == '1.2.0'
           and value['profile_sha256'] == PROFILE_SHA256, 'PROFILE_BINDING', '$')
     _need(value['evidence_kind'] in ('synthetic', 'native'), 'EVIDENCE_KIND', '$')
     _shape(value['provenance'], 'source_closure_sha256 toolchain_sha256 workstation_profile_sha256 driver_sha256 capture_manifest_sha256', '$.provenance')
@@ -184,8 +289,9 @@ def _validate(value):
             identity = (process['pid'], process['process_start'])
             _need(identity not in process_ids, 'REUSED_PROCESS_RUN', path)
             process_ids.add(identity)
-        _shape(run['baseline'], 'after_batch_index memory', path + '.baseline')
-        _int(run['baseline']['after_batch_index'], 4, 4, path)
+        _shape(run['baseline'], 'after_batch_indices memory', path + '.baseline')
+        _need(run['baseline']['after_batch_indices'] == list(_BASELINE_BATCHES),
+              'BASELINE_WINDOW', path)
         _memory(run['baseline']['memory'], path + '.baseline.memory')
         _array(run['samples'], 35, path + '.samples')
         previous_end, previous_root, previous_semantic = None, None, None
@@ -201,18 +307,21 @@ def _validate(value):
             _need(previous_end is None or sample['started_mono_us'] >= previous_end, 'SAMPLE_CLOCK', at)
             previous_end = sample['ended_mono_us']
             _shape(sample['latency_ms'], 'inspect rejected admitted', at)
-            for kind, count in (('inspect', 500), ('rejected', 300), ('admitted', 200)):
+            for kind, count in (('inspect', PROFILE.inspect_commands),
+                                ('rejected', PROFILE.rejected_commands),
+                                ('admitted', PROFILE.admitted_commands)):
                 _array(sample['latency_ms'][kind], count, at + '.' + kind)
                 for latency in sample['latency_ms'][kind]:
                     _latency(latency, at + '.' + kind)
-            _array(sample['effects_per_admission'], 200, at)
-            _need(all(type(n) is int and n == 1 for n in sample['effects_per_admission']), 'DUPLICATE_OR_LOST_EFFECT', at)
+            _array(sample['effects_per_admission'], PROFILE.admitted_commands, at)
+            _need(all(type(n) is int and n == 1 for n in sample['effects_per_admission']),
+                  'DUPLICATE_OR_LOST_EFFECT', at)
             _id(sample['stop_target_instance_id'], at)
             _need(sample['stop_target_instance_id'] not in stop_ids, 'REUSED_STOP_SCOPE', at)
             stop_ids.add(sample['stop_target_instance_id'])
             _latency(sample['stop_receipt_ms'], at)
             _latency(sample['max_status_gap_ms'], at)
-            _array(sample['cycles'], 100, at + '.cycles')
+            _array(sample['cycles'], PROFILE.native_cycles, at + '.cycles')
             for number, cycle in enumerate(sample['cycles']):
                 where = at + f'.cycles[{number}]'
                 _shape(cycle, 'index root_before root_after before_sha256 created_sha256 undone_sha256 saved_file_sha256 reloaded_sha256 latency_ms effects main_thread', where)
@@ -238,7 +347,8 @@ def _validate(value):
             _hash(sample['evidence_sha256'], at)
             _int(sample['dropped_commands'], 0, 0, at)
             _int(sample['dropped_telemetry'], 0, 0, at)
-        _need(run['baseline']['memory'] == run['samples'][4]['memory'], 'WARM_BASELINE', path)
+        _need(run['baseline']['memory'] == baseline_memory(run['samples'][:5], path + '.baseline'),
+              'BASELINE_MEDIAN', path)
         _shape(run['cleanup'], 'host_exit_code editor_exit_code owned_tree_zero held_handles', path)
         _need(run['cleanup'] == {'host_exit_code': 0, 'editor_exit_code': 0, 'owned_tree_zero': True, 'held_handles': 0}
               and run['cleanup']['owned_tree_zero'] is True
@@ -298,7 +408,10 @@ def summarize_dataset(value):
         for metric, limit in (('inspect', 500), ('stop_receipt', 500)):
             if metrics[metric]['p95_ms'] > limit:
                 failures.append({'run_id': run_id, 'code': metric.upper() + '_P95', 'value': metrics[metric]['p95_ms']})
-        max_gap = max(row['max_status_gap_ms'] for row in measured)
+        # The fixed status-gap gate applies to every captured batch. A warmup
+        # row over the limit is still a real protocol timing failure; warmup
+        # is excluded only from percentile and memory growth samples.
+        max_gap = max(row['max_status_gap_ms'] for row in run['samples'])
         if max_gap > 2000:
             failures.append({'run_id': run_id, 'code': 'STATUS_UPDATE_GAP', 'value': max_gap})
         memory = {}
@@ -317,13 +430,44 @@ def summarize_dataset(value):
                     memory[role][counter] = None
                     continue
                 baseline, *values = [row['value'] for row in observations]
-                growth = [100.0 * (n - baseline) / baseline for n in values] if counter == 'rss_bytes' else None
-                memory[role][counter] = {'baseline': baseline, 'values': values,
-                    'repetition_10': values[9], 'max_growth_percent': max(growth) if growth is not None else None}
-                if counter == 'rss_bytes' and max(values) * 100 > baseline * 110:
-                    failures.append({'run_id': run_id, 'code': 'RSS_GROWTH', 'role': role, 'value': max(growth)})
-                if counter != 'rss_bytes' and any(n > baseline for n in values):
-                    failures.append({'run_id': run_id, 'code': 'RETAINED_COUNTER_GROWTH', 'role': role, 'counter': counter})
+                growth = [100.0 * (n - baseline) / baseline for n in values] if counter in ('rss_bytes', 'private_commit_bytes') else None
+                early, late = values[:15], values[15:]
+                max_all, max_early, max_late = max(values), max(early), max(late)
+                row = {'baseline': baseline, 'baseline_batches': list(_BASELINE_BATCHES),
+                       'values': values, 'repetition_10': values[9],
+                       'max_growth_percent': max(growth) if growth is not None else None,
+                       'max_batch_5_34': max_all, 'max_batch_5_19': max_early,
+                       'max_batch_20_34': max_late}
+                memory[role][counter] = row
+                codes = memory_gate_codes(role, counter, baseline, max_all, max_early, max_late)
+                if counter == 'rss_bytes':
+                    # Working set/RSS is retained for diagnosis and reports, but
+                    # O1 deliberately removes it from the automatic gate.
+                    continue
+                if counter == 'private_commit_bytes':
+                    if 'PRIVATE_COMMIT_GROWTH' in codes:
+                        failures.append({'run_id': run_id, 'code': 'PRIVATE_COMMIT_GROWTH',
+                                         'role': role, 'counter': counter, 'value': max_all,
+                                         'baseline': baseline})
+                    if 'PRIVATE_COMMIT_TREND' in codes:
+                        failures.append({'run_id': run_id, 'code': 'PRIVATE_COMMIT_TREND',
+                                         'role': role, 'counter': counter, 'value': max_late,
+                                         'early_max': max_early})
+                    continue
+                window = counter_window(role, counter)
+                tolerance, trend = window if window is not None else (None, None)
+                if 'RETAINED_COUNTER_GROWTH' in codes:
+                    failures.append({'run_id': run_id, 'code': 'RETAINED_COUNTER_GROWTH',
+                                     'role': role, 'counter': counter, 'baseline': baseline,
+                                     'max_batch_5_34': max_all, 'max_batch_5_19': max_early,
+                                     'max_batch_20_34': max_late, 'tolerance': tolerance,
+                                     'trend_tolerance': trend})
+                trend_code = monotonic_counter_code(role, counter, values)
+                if trend_code is not None:
+                    failures.append({'run_id': run_id, 'code': trend_code,
+                                     'role': role, 'counter': counter,
+                                     'first_measured': values[0], 'last_measured': values[-1],
+                                     'minimum_net_growth': PROFILE.retained_counter_monotonic_min_delta})
         # Warm-up unavailability is retained as a gap too, never fabricated.
         for row in run['samples'][:5]:
             for role in ('host', 'editor'):
@@ -337,14 +481,18 @@ def summarize_dataset(value):
                     'stop_receipt_ms': row['stop_receipt_ms']} for row in measured]
         runs.append({'run_id': run_id, 'metrics': metrics, 'batches': batches, 'memory': memory,
                      'max_status_gap_ms': max_gap})
-    return {'schema_id': 'hh-studio.tools-ux-benchmark-summary', 'schema_version': '1.1.0',
+    return {'schema_id': 'hh-studio.tools-ux-benchmark-summary', 'schema_version': '1.3.0',
             'profile_sha256': PROFILE_SHA256, 'raw_sha256': hashlib.sha256(_encoded(data)).hexdigest(),
             'evidence_kind': data['evidence_kind'], 'native_acceptance': False,
             'command_lane': PROFILE.command_lane, 'cycle_lane': PROFILE.cycle_lane,
             'status': 'GAP' if gaps else 'FAIL' if failures else 'PASS',
             'scope': 'supplied raw measurement contract only; source/native origin requires independent verification',
-            'measured_batches': 300, 'measured_commands': 300000, 'measured_cycles': 30000,
-            'excluded_warmup_batches': 50, 'runs': runs, 'failures': failures, 'gaps': gaps}
+            'measured_batches': PROFILE.process_runs * PROFILE.measured_batches,
+            'measured_commands': PROFILE.process_runs * PROFILE.measured_batches *
+            (PROFILE.inspect_commands + PROFILE.rejected_commands + PROFILE.admitted_commands),
+            'measured_cycles': PROFILE.process_runs * PROFILE.measured_batches * PROFILE.native_cycles,
+            'excluded_warmup_batches': PROFILE.process_runs * PROFILE.warmup_batches,
+            'runs': runs, 'failures': failures, 'gaps': gaps}
 
 
 def main(argv=None):

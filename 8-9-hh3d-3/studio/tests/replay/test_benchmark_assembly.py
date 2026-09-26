@@ -27,7 +27,7 @@ def counter(value, reason=None):
 
 
 def host_counters():
-    return {'rss_bytes': counter(1000000), 'held_handles': counter(20),
+    return {'rss_bytes': counter(1000000), 'private_commit_bytes': counter(2000000), 'held_handles': counter(20),
             'objects': counter(None, profile.HOST_NOT_APPLICABLE),
             'resources': counter(None, profile.HOST_NOT_APPLICABLE)}
 
@@ -97,7 +97,7 @@ def command_fixture(index=0):
     end = tick + 100
     status.append(end)
     observation = lambda time: {'process': copy.deepcopy(PROCESSES['host']), 'monotonic_us': time, 'counters': host_counters()}
-    return {'schema_id': 'hh-studio.benchmark-command-batch', 'schema_version': '1.3.0',
+    return {'schema_id': 'hh-studio.benchmark-command-batch', 'schema_version': '1.4.0',
             'run_id': RUN, 'index': index, 'mode': 'benchmark', 'complete_command_mix': True,
             'native_acceptance': False, 'effects_kind': 'in_process_mock_fixture',
             'transport_kind': 'accepted_loopback_fixture_http', 'observation_kind': 'native_windows_process_probe',
@@ -205,7 +205,7 @@ def fixture(index=0, source=SOURCE, scene_hash='c' * 64, *, native_offset=0, fra
         'root_instance_id': root_base + 100, 'generation': generation_base + 100, 'semantic_sha256': 'a' * 64,
         'max_status_gap_ms': 501.0, 'process_frame': frame_base + 1005, 'objects': counter(501), 'resources': counter(6)}
     host_end = command_value['ended_mono_us']
-    joint_value = {'schema_id': 'hh-studio.benchmark-joint-observation', 'schema_version': '1.1.0',
+    joint_value = {'schema_id': 'hh-studio.benchmark-joint-observation', 'schema_version': '1.2.0',
         'run_id': RUN, 'index': index, 'profile_sha256': profile.PROFILE_SHA256, 'source_closure_sha256': source,
         'native_batch_sha256': native.sha256, 'command_batch_sha256': command.sha256,
         'processes': copy.deepcopy(PROCESSES), 'phase': 'post_batch_quiescent',
@@ -213,7 +213,7 @@ def fixture(index=0, source=SOURCE, scene_hash='c' * 64, *, native_offset=0, fra
                         'ended_mono_us': host_end + 2000, 'ack_written_mono_us': host_end + 1000},
         'host': {'monotonic_us': host_end + 100, 'counters': host_counters()},
         'editor': {'host_mono_us': host_end + 200, 'handle_mono_us': host_end + 300,
-            'rss_bytes': counter(10000000), 'held_handles': counter(30),
+            'rss_bytes': counter(10000000), 'private_commit_bytes': counter(20000000), 'held_handles': counter(30),
             'visible_window_handles': ['1234'], 'native_observation': {'source': 'native_ack',
             'native_mono_us': receipt['ack_observed_mono_us'], 'process_frame': frame_base + 1005,
             'objects': counter(501), 'resources': counter(6)}}, 'host_effect_count': (index + 1) * 200,
@@ -599,7 +599,7 @@ class AssemblyTests(unittest.TestCase):
                 report = producer.run_diagnostic()
             finally:
                 producer.close()
-        self.assertEqual(report['schema_version'], '1.3.0')
+        self.assertEqual(report['schema_version'], '1.4.0')
         self.assertEqual(len(report['commands']), 10)
         for row in report['commands']:
             if row['kind'] == 'rejected':
@@ -654,7 +654,8 @@ class CompleteRunTests(unittest.TestCase):
         run = envelope['run']
         self.assertEqual(len(run['samples']), 35)
         self.assertEqual([sample['warmup'] for sample in run['samples']], [True] * 5 + [False] * 30)
-        self.assertEqual(run['baseline'], {'after_batch_index': 4, 'memory': run['samples'][4]['memory']})
+        self.assertEqual(run['baseline']['after_batch_indices'], [2, 3, 4])
+        self.assertEqual(run['baseline']['memory'], profile.baseline_memory(run['samples'][:5]))
         self.assertEqual(sum(len(sample['cycles']) for sample in run['samples']), 3500)
         self.assertEqual(sum(len(sample['latency_ms']['inspect']) for sample in run['samples']), 17500)
         self.assertEqual(run['samples'][-1]['cycles'][-1]['root_after'], 4500)
@@ -675,7 +676,7 @@ class CompleteRunTests(unittest.TestCase):
         with patch.object(profile, 'validate_dataset', side_effect=lambda dataset: dataset) as validate:
             dataset = assembly.assemble_dataset(provenance, [bound])
         validate.assert_called_once_with(dataset)
-        self.assertEqual(dataset['schema_version'], '1.1.0')
+        self.assertEqual(dataset['schema_version'], '1.2.0')
         self.assertEqual(dataset['runs'], [run])
         self.assertNotIn('status', dataset)
 
@@ -775,7 +776,7 @@ class BoundRunProvenanceTests(unittest.TestCase):
         self.provenance = dict(self.template['provenance'])
         self.runs = list(self.bound_runs)
 
-    def test_matching_ten_run_provenance_preserves_strict_dataset_schema(self):
+    def test_matching_two_run_provenance_preserves_strict_dataset_schema(self):
         actual = assembly.assemble_dataset(self.provenance, self.runs)
         expected = copy.deepcopy(self.template)
         # Synthetic containers deliberately exercise the native assembly entry
@@ -786,10 +787,10 @@ class BoundRunProvenanceTests(unittest.TestCase):
     def test_one_run_with_different_source_toolchain_or_profile_is_rejected(self):
         for field in ('source_closure_sha256', 'toolchain_sha256', 'profile_sha256'):
             with self.subTest(field=field):
-                value = self.bound_runs[3].value
+                value = self.bound_runs[1].value
                 value[field] = '0' * 64
                 runs = list(self.bound_runs)
-                runs[3] = self.bind(value)
+                runs[1] = self.bind(value)
                 with self.assertRaisesRegex(assembly.AssemblyError, 'RUN_PROVENANCE_MISMATCH'):
                     assembly.assemble_dataset(self.provenance, runs)
 
@@ -801,7 +802,7 @@ class BoundRunProvenanceTests(unittest.TestCase):
                     assembly.assemble_dataset(provenance, self.runs)
 
     def test_plain_valid_run_dictionary_cannot_bypass_binding(self):
-        self.runs[3] = self.bound_runs[3].value['run']
+        self.runs[1] = self.bound_runs[1].value['run']
         with self.assertRaisesRegex(assembly.AssemblyError, 'BOUND_RUN_REQUIRED'):
             assembly.assemble_dataset(self.provenance, self.runs)
 
