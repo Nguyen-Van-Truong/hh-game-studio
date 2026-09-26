@@ -59,10 +59,11 @@ the plan, approve a gate, or authorize a new formal run.
 
 ## Follow-up completed in the O2 lane
 
-The isolated O2 branch now contains `9010633b` (documented by `4fe87194`), a
-pure candidate contract for signal connections, group membership, and input
-actions, with five new rejection/readback-shape tests. The combined O2 static
-suite is 94 tests and passes. This is useful coverage for the gameplay gap in
-the report, but it is still authority-0: no native edge mutation, sandbox, ACK,
-or GT-09 conformance is claimed, and the native probe must be reminted against
-the new source before any future integration.
+The isolated O2 branch now contains `9010633b` (documented by `4fe87194`) and
+`cbe48fa4`, a pure candidate contract for signal connections, group membership,
+and input actions. The latter binds every proposal to a validated
+`project_revision` and rejects stale or malformed project snapshots. The
+combined O2 static suite is 96 tests and passes. This is useful coverage for
+the gameplay gap in the report, but it is still authority-0: no native edge
+mutation, sandbox, ACK, or GT-09 conformance is claimed, and the native probe
+must be reminted against the new source hash before any future integration.
