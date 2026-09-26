@@ -77,3 +77,49 @@ resource creation/update to a matching collision node, scene/project revision,
 lease and generation, rejects shared/unknown resources and invalid dimensions,
 and passes the combined 112-test static suite. It has no native resource
 readback/UndoRedo evidence yet and remains separate until GT-06 is accepted.
+
+## Re-audit of the later pasted report — 2026-09-27
+
+`AUTHORITY=0; FORMAL_ACCEPTANCE=false; PLAN_GATE_UNCHANGED`
+
+The report is correct that GT-06 has no accepted formal 2x35 run, that the
+machine preflight is the immediate blocker, that O2 must stay in its separate
+worktree, that AUTH-05 is not proven by directory isolation, and that the
+finished tool cannot yet be claimed to author a complete Y8-like or online
+HH World product. Its recommendations to add resources, edges, native
+readback, Android/GT-08 preparation, and product-specific acceptance are
+directionally useful.
+
+Several details are stale or are proposals rather than current truth:
+
+- The reported 4.85 GiB snapshot is historical. The latest direct preflight
+  observed `2026-09-26T23:50:44Z` with 5.60 GiB available, 67.55% commit, and
+  77 heavy-process entries. It still fails `CAMPAIGN_PREFLIGHT_HEAVY_APPS`, so
+  no formal worker was started. O1.8 remains owner-approved and was not
+  silently changed to resource-only monitoring.
+- The warmup tightening allegation is false for the current source. Warmup
+  skips growth-baseline checks, while `max_status_gap_ms` and required counter
+  checks remain enforced; the repository test explicitly covers this.
+- `O1-OWNER-RESOLUTION.md` is present with
+  `AUTHORITY=OWNER_DIRECTIVE_20260925`. The report's speculation that the
+  supplemental rule was invented without an owner decision is not supported by
+  the current recorded authority. The rule still does not accept GT-06.
+- The long-path concern was partly addressed locally: `core.longpaths=true` is
+  set. This is only workstation preparation; no clean checkout/archive or
+  Android proof has been accepted, and the current tree still contains 43,905
+  tracked paths, including 39,969 review paths.
+- O2 is no longer only the original skeleton. `ffbc251c` adds a typed,
+  revision/lease-bound collision-resource candidate for four shape classes;
+  the combined static suite is 112 tests. `o2-native-20260926-19` proves
+  signal/group/InputMap do/undo/redo/readback on the O2 4.7.2 diagnostic pin,
+  authority 0. Scene instancing, TileMap cells, animation authoring,
+  gameplay scripts, AUTH-05 sandbox, and GT-09 mini-games remain open.
+- Parallel GT-07 implementation is not adopted because the current plan keeps
+  GT-07 through GT-10 read-only until GT-06 is accepted. The report's runtime
+  estimates for a 2x35 run or a 10x35 soak are rough planning hints, not
+  evidence and are not copied into the gate.
+
+The report has therefore been reviewed and acted on: the incorrect gate
+changes were rejected, the valid O2 gaps were implemented where bounded, and
+the current commits/evidence are recorded in the plan header above. No plan
+checkbox or acceptance status was advanced.
