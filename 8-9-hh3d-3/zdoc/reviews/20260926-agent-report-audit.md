@@ -208,3 +208,13 @@ The earlier animation claim was too broad. Runs `o2-native-20260927-27` and `-28
 `o2-native-20260927-29` is the current authority-0 diagnostic: 373 checks, actual host and wrapper exit 0, timeout false, verified owned process tree, clean log, unchanged source/project snapshots, and 17-file closure `25dc209c27a8f2140668520e9834c36461e4d67d0d0ec59add36d178ffc5bbba`. The combined O2 static suite is 147 tests passing. This strengthens the animation candidate only; it does not prove general gameplay scripting, public adapter authorization, atomic save/reload, AUTH-01..05 isolation, mini-game conformance or GT-06. `CURRENT_VALID_WP` remains GT-06 with zero accepted formal full runs, and no checkbox was ticked.
 
 The current preflight remains a real blocker: at 2026-09-27T07:04:23Z it reported 10.07 GiB free and 70.34% commit but failed `CAMPAIGN_PREFLIGHT_HEAVY_APPS` because Chrome, Firefox, Edge, Telegram, Zalo and WSL processes were still present. No formal campaign was started or rerun from that failed preflight.
+
+
+The declarative gameplay candidate was then hardened in `d0019fca`. Each
+ effect now has an exact parameter schema (`move`, `jump`, `set_velocity`,
+`face`, `emit_signal`, `play_animation`), string types are checked before set
+membership, signal names use the bounded action grammar, and malformed
+containers fail with a contract error instead of leaking `TypeError`. The
+focused gameplay tests and the complete O2 static regression now pass 149
+cases. This still remains authority-0 data validation; it does not authorize
+GDScript execution or prove AUTH-05 sandboxing.
