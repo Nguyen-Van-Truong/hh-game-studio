@@ -47,6 +47,12 @@ _RESOURCE = importlib.util.module_from_spec(_RESOURCE_SPEC)
 sys.modules[_RESOURCE_SPEC.name] = _RESOURCE
 _RESOURCE_SPEC.loader.exec_module(_RESOURCE)
 
+_INSTANCE_SPEC = importlib.util.spec_from_file_location(
+    "o2_native_scene_instance", STUDIO / "godot-addon/scene_instance.py")
+_INSTANCE = importlib.util.module_from_spec(_INSTANCE_SPEC)
+sys.modules[_INSTANCE_SPEC.name] = _INSTANCE
+_INSTANCE_SPEC.loader.exec_module(_INSTANCE)
+
 
 def sha(path: Path) -> str:
     digest = hashlib.sha256()
@@ -73,6 +79,7 @@ def source_files() -> dict[str, str]:
         "tests/godot/run_authoring_native_probe.py",
         "godot-addon/gameplay_edges.py",
         "godot-addon/resource_authoring.py",
+        "godot-addon/scene_instance.py",
         "protocol/core.py",
         "protocol/_rfc8785/__init__.py",
         "protocol/_rfc8785/_impl.py",
@@ -151,6 +158,15 @@ def expected_resource_labels() -> set[str]:
     return labels
 
 
+def expected_instance_labels() -> set[str]:
+    prefix = "instance_scene"
+    return {prefix + suffix for suffix in (
+        "_proposal_count", "_binding", "_source_loaded", "_parent_created",
+        "_before", "_do_transition", "_do_readback", "_transform_readback",
+        "_undo_transition", "_undo_readback", "_redo_transition",
+        "_redo_readback", "_cleanup_transition", "_cleanup_readback")}
+
+
 def edge_proposals() -> list[dict]:
     context = _EDGE.EdgeContext(
         "project.fixture", "sha256:" + "1" * 64, "sha256:" + "2" * 64,
@@ -209,6 +225,28 @@ def resource_proposals() -> list[dict]:
     return result
 
 
+def instance_proposals() -> list[dict]:
+    context = _INSTANCE.ValidationContext(
+        "project.fixture", "sha256:" + "1" * 64, "sha256:" + "2" * 64,
+        5, "lease.fixture", 10, 31000, 1000,
+        (_INSTANCE.NodeState("root", None, "Node2D", "Root"),
+         _INSTANCE.NodeState("platforms", "root", "Node2D", "Platforms")),
+        (_INSTANCE.SceneSourceState("arena", "scenes/arena.tscn", "sha256:" + "3" * 64, "Node2D"),))
+    payload = {"expected_generation": context.generation,
+               "expected_project_revision": context.project_revision,
+               "scene_id": "arena", "instance_stable_id": "arena_01",
+               "instance_name": "Arena01", "position": [10, 20],
+               "rotation_degrees": [15], "scale": [1.25, 0.75]}
+    request = Request(
+        command_id="instance.native.1", project_id=context.project_id,
+        operation="scene.instance.create", lease_id=context.lease_id,
+        fencing_epoch=context.fencing_epoch, expected_revision=context.revision,
+        target={"stable_id": "platforms"}, payload=payload,
+        payload_hash="sha256:" + hashlib.sha256(canonical_bytes(payload)).hexdigest(),
+        deadline_ms=2000)
+    return [_INSTANCE.validate_request(request, context).projection]
+
+
 def validate_result(result: object, catalog: dict, process: dict, run_root: Path) -> tuple[bool, str | None]:
     if not isinstance(result, dict):
         return False, "result-not-object"
@@ -228,7 +266,8 @@ def validate_result(result: object, catalog: dict, process: dict, run_root: Path
         if not isinstance(row, dict) or not isinstance(row.get("label"), str) or row.get("passed") is not True:
             return False, "check-failed"
         labels.append(row["label"])
-    expected = expected_labels(catalog) | expected_edge_labels() | expected_resource_labels()
+    expected = (expected_labels(catalog) | expected_edge_labels()
+                | expected_resource_labels() | expected_instance_labels())
     if len(labels) != len(set(labels)) or set(labels) != expected:
         missing = sorted(expected - set(labels))
         extra = sorted(set(labels) - expected)
@@ -289,6 +328,11 @@ def run(godot: Path, run_id: str, output: Path) -> dict:
                    ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8"))
     write_json(project / "edge-input.json", {"proposals": edge_proposals()})
     write_json(project / "resource-input.json", {"proposals": resource_proposals()})
+    write_json(project / "instance-input.json", {"proposals": instance_proposals()})
+    (scenes / "arena.tscn").write_text(
+        '[gd_scene format=3]\n\n[node name="Arena" type="Node2D"]\n'
+        '\n[node name="Spawn" type="Node2D" parent="."]\n',
+        encoding="utf-8", newline="\n")
     project_before = project_files(project)
     write_json(output / "freeze.json", {"run_id": run_id, "source_files": manifest,
               "source_closure_sha256": source_closure, "binary_sha256": binary_sha256,

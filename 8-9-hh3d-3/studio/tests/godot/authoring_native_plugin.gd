@@ -23,7 +23,8 @@ func _run() -> void:
 	var catalog_file := FileAccess.open("res://catalog-input.json", FileAccess.READ)
 	var edge_file := FileAccess.open("res://edge-input.json", FileAccess.READ)
 	var resource_file := FileAccess.open("res://resource-input.json", FileAccess.READ)
-	if catalog_file == null or edge_file == null or resource_file == null or root == null:
+	var instance_file := FileAccess.open("res://instance-input.json", FileAccess.READ)
+	if catalog_file == null or edge_file == null or resource_file == null or instance_file == null or root == null:
 		_write_result({"schema": "hh-o2-native-authoring-observation-1", "actual_editor": true,
 			"runtime_authorized": false, "native_mutation": false,
 			"formal_acceptance": false, "checks": [], "failures": ["INPUT_OR_ROOT"]})
@@ -35,8 +36,11 @@ func _run() -> void:
 	edge_file.close()
 	var resource_input: Variant = JSON.parse_string(resource_file.get_as_text())
 	resource_file.close()
+	var instance_input: Variant = JSON.parse_string(instance_file.get_as_text())
+	instance_file.close()
 	if not catalog is Dictionary or not edge_input is Dictionary or not resource_input is Dictionary \
-			or not edge_input.get("proposals", null) is Array or not resource_input.get("proposals", null) is Array:
+			or not instance_input is Dictionary or not edge_input.get("proposals", null) is Array \
+			or not resource_input.get("proposals", null) is Array or not instance_input.get("proposals", null) is Array:
 		_write_result({"schema": "hh-o2-native-authoring-observation-1", "actual_editor": true,
 			"runtime_authorized": false, "native_mutation": false,
 			"formal_acceptance": false, "checks": [], "failures": ["CATALOG_JSON"]})
@@ -44,7 +48,7 @@ func _run() -> void:
 		return
 	var run_root := OS.get_environment("HH_O2_RUN_ROOT").replace("\\", "/").trim_suffix("/")
 	var report: Dictionary = Probe.new().run(root, get_undo_redo(), catalog, run_root,
-		edge_input["proposals"], resource_input["proposals"])
+		edge_input["proposals"], resource_input["proposals"], instance_input["proposals"])
 	_write_result(report)
 	get_tree().quit(0 if report.get("failures", []).is_empty() else 43)
 

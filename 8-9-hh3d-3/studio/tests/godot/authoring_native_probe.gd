@@ -19,7 +19,7 @@ var _catalog: Dictionary
 
 
 func run(root: Node, undo: EditorUndoRedoManager, catalog: Dictionary, run_root: String,
-		edge_proposals: Array = [], resource_proposals: Array = []) -> Dictionary:
+		edge_proposals: Array = [], resource_proposals: Array = [], instance_proposals: Array = []) -> Dictionary:
 	_root = root
 	_undo = undo
 	_catalog = catalog
@@ -62,6 +62,7 @@ func run(root: Node, undo: EditorUndoRedoManager, catalog: Dictionary, run_root:
 	for failure: String in edge_report.get("failures", []):
 		_failures.append(failure)
 	_run_resource_candidates(resource_proposals, history)
+	_run_instance_candidates(instance_proposals, history)
 
 	# Every temporary node is removed synchronously and the native history is
 	# cleared before the editor quits. This prevents diagnostic state leaking to
@@ -128,6 +129,98 @@ func _run_resource_candidates(proposals: Array, history: UndoRedo) -> void:
 		_check(prefix + "_cleanup_readback", node.get(&"shape") == null)
 		_root.remove_child(node)
 		node.free()
+
+
+func _run_instance_candidates(proposals: Array, history: UndoRedo) -> void:
+	var prefix := "instance_scene"
+	_check(prefix + "_proposal_count", proposals.size() == 1)
+	var fixture_parent := Node2D.new()
+	fixture_parent.name = "platforms"
+	fixture_parent.set_meta("hh_o2_temporary", true)
+	_root.add_child(fixture_parent)
+	fixture_parent.owner = _root
+	for proposal: Dictionary in proposals:
+		var payload: Dictionary = proposal.get("payload", {})
+		var scene_id := str(payload.get("scene_id", ""))
+		var instance_id := str(payload.get("instance_stable_id", ""))
+		var parent_id := str(proposal.get("parent_stable_id", ""))
+		var bound: bool = proposal.get("operation") == "scene.instance.create" \
+			and proposal.get("expected_generation") == 5 \
+			and proposal.get("source_revision") == "sha256:" + "3".repeat(64) \
+			and scene_id == "arena" and instance_id == "arena_01"
+		_check(prefix + "_binding", bound)
+		if not bound:
+			continue
+		var packed := load("res://scenes/arena.tscn") as PackedScene
+		_check(prefix + "_source_loaded", packed != null and packed.can_instantiate())
+		if packed == null or not packed.can_instantiate():
+			continue
+		var instance: Node = packed.instantiate()
+		instance.name = str(payload.get("instance_name", ""))
+		instance.set_meta("hh_o2_temporary", true)
+		instance.set_meta("hh_o2_instance", instance_id)
+		_check(prefix + "_parent_created", parent_id == "platforms" and instance.get_class() == "Node2D")
+		_check(prefix + "_before", not _root_has_instance(instance_id))
+		_undo.create_action("O2 scene instance", UndoRedo.MERGE_DISABLE, _root)
+		_undo.add_do_method(self, &"_attach_instance", instance, payload)
+		_undo.add_undo_method(self, &"_detach_instance", instance)
+		_undo.commit_action()
+		_check(prefix + "_do_transition", history.has_undo())
+		_check(prefix + "_do_readback", _root_has_instance(instance_id))
+		_check(prefix + "_transform_readback", _instance_transform_matches(instance, payload))
+		_check(prefix + "_undo_transition", history.undo())
+		_check(prefix + "_undo_readback", not _root_has_instance(instance_id))
+		_check(prefix + "_redo_transition", history.redo())
+		_check(prefix + "_redo_readback", _root_has_instance(instance_id))
+		_check(prefix + "_cleanup_transition", history.undo())
+		_check(prefix + "_cleanup_readback", not _root_has_instance(instance_id))
+		if is_instance_valid(instance):
+			instance.free()
+	if is_instance_valid(fixture_parent):
+		_root.remove_child(fixture_parent)
+		fixture_parent.free()
+
+
+func _attach_instance(instance: Node, payload: Dictionary) -> void:
+	if not is_instance_valid(instance) or instance.get_parent() != null:
+		return
+	_root.get_node("platforms").add_child(instance)
+	instance.owner = _root
+	var position: Array = payload.get("position", [])
+	var rotation: Array = payload.get("rotation_degrees", [])
+	var scale: Array = payload.get("scale", [])
+	var node2d := instance as Node2D
+	if node2d != null:
+		node2d.position = Vector2(float(position[0]), float(position[1]))
+		node2d.rotation_degrees = float(rotation[0])
+		node2d.scale = Vector2(float(scale[0]), float(scale[1]))
+
+
+func _detach_instance(instance: Node) -> void:
+	if is_instance_valid(instance) and instance.get_parent() != null:
+		instance.get_parent().remove_child(instance)
+
+
+func _root_has_instance(instance_id: String) -> bool:
+	var parent := _root.get_node_or_null("platforms")
+	if parent == null:
+		return false
+	for child: Node in parent.get_children():
+		if child.get_meta("hh_o2_instance", "") == instance_id:
+			return true
+	return false
+
+
+func _instance_transform_matches(instance: Node, payload: Dictionary) -> bool:
+	var node2d := instance as Node2D
+	if node2d == null:
+		return false
+	var position: Array = payload.get("position", [])
+	var rotation: Array = payload.get("rotation_degrees", [])
+	var scale: Array = payload.get("scale", [])
+	return node2d.position.is_equal_approx(Vector2(float(position[0]), float(position[1]))) \
+		and is_equal_approx(node2d.rotation_degrees, float(rotation[0])) \
+		and node2d.scale.is_equal_approx(Vector2(float(scale[0]), float(scale[1])))
 
 
 func _make_shape(resource_type: String, properties: Dictionary) -> Resource:
