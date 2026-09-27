@@ -17,9 +17,17 @@ external loads, shared-resource mutation, and script operations are rejected.
 
 The projection and preview are detached copies with `authority=0`,
 `changes_applied=false`, `runtime_authorized=false`, and native checks pending.
-Future integration must add native ClassDB/property/readback/UndoRedo tests,
-atomic save and revision checks, durable deduplication, and AUTH-01..05
-isolation before this candidate can join `CR-GODOT-AUTHORING-01` or GT-09.
+The disposable native O2 probe now exercises all four resource classes through
+Godot ClassDB construction, property readback, and UndoRedo transitions. Run
+`o2-native-20260927-21` passed with host exit 0, a clean log, unchanged source
+and project snapshots, and 305 checks; it remains authority 0 because it uses
+the candidate Godot 4.7.2 diagnostic binary rather than the product's pinned
+4.7.1 executable. The probe is diagnostic evidence only and does not issue an
+ACK or make a product mutation.
+
+Future integration must add atomic save and revision checks, durable
+deduplication, and AUTH-01..05 isolation before this candidate can join
+`CR-GODOT-AUTHORING-01` or GT-09.
 
 Pure static verification (no Godot/Blender process):
 
