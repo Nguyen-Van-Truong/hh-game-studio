@@ -537,7 +537,11 @@ def verify_run_capture(root, captured, source_digest, *, campaign_id, index, att
     require({'environment-preflight-before.json', 'environment-preflight-after.json',
              'environment-samples.jsonl'}.issubset(files), 'CAMPAIGN_ENVIRONMENT_MISSING')
     require_environment_preflight(json.loads(read_regular(root / 'environment-preflight-before.json')))
-    environment.verify_watchdog(root, read_regular, elapsed_seconds=host['elapsed_seconds'])
+    require_environment_preflight(json.loads(read_regular(root / 'environment-preflight-after.json')))
+    environment.verify_watchdog(root, read_regular, elapsed_seconds=host['elapsed_seconds'],
+                               expected_binding={'run_id': run_id,
+                                                 'source_closure_sha256': source_digest,
+                                                 'campaign_sha256': campaign_sha256})
     verify_owner_captures(root, context)
     return child
 
@@ -676,9 +680,12 @@ def _run_campaign(campaign_id, root, preflight_path, after_path):
                 source_closure_sha256=digest, campaign_sha256=campaign_sha,
                 check_campaign_stop=lambda: require_campaign_running(root, active=output), watchdog=watchdog)
             watchdog.close()
-            environment.verify_watchdog(output, read_regular)
+            watchdog_binding = {'run_id': run_id, 'source_closure_sha256': digest,
+                                'campaign_sha256': campaign_sha}
+            environment.verify_watchdog(output, read_regular, expected_binding=watchdog_binding)
             host = owner.finish()
-            environment.verify_watchdog(output, read_regular, elapsed_seconds=host['elapsed_seconds'])
+            environment.verify_watchdog(output, read_regular, elapsed_seconds=host['elapsed_seconds'],
+                                        expected_binding=watchdog_binding)
             write(output / 'environment-preflight-after.json', environment_preflight())
             require_campaign_running(root)
             child = json.loads(read_regular(output / 'child-result.json'))

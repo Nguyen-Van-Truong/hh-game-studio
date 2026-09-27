@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import ctypes
 from ctypes import wintypes as w
+from datetime import datetime
 import json
 import os
 import time
@@ -18,6 +19,7 @@ INTERVAL_SECONDS = 5
 MAX_SAMPLE_GAP_SECONDS = 10
 SCHEMA = 'hh-studio.benchmark-environment-preflight'
 VERSION = '1.2.0'
+SAMPLE_STREAM_SCHEMA = 'HH-GT06-WATCHDOG-SAMPLE-STREAM-1'
 
 
 class Memory(ctypes.Structure):
@@ -195,14 +197,31 @@ class Policy:
     def __init__(self):
         self.first = self.previous = None
         self.low_since = self.cpu_since = None
+        self.previous_observed = None
 
     def observe(self, row):
+        require(type(row) is dict, 'WATCHDOG_SAMPLE_INVALID')
+        required = {'observed_utc', 'heavy_processes', 'docker_wsl_processes',
+                    'top_private_processes', 'owned_processes',
+                    'unavailable_process_count'}
+        require(required.issubset(row), 'WATCHDOG_SAMPLE_INVALID')
         for name in ('available_memory_bytes', 'commit_total_bytes', 'commit_limit_bytes',
                      'uptime_ms', 'awake_100ns', 'cpu_idle_100ns', 'cpu_total_100ns',
-                     'owned_private_bytes'):
+                     'owned_private_bytes', 'unavailable_process_count'):
             require(type(row.get(name)) is int and row[name] >= 0, 'WATCHDOG_SAMPLE_INVALID')
         require(row['commit_limit_bytes'] > 0 and type(row.get('foreign_engines')) is list
                 and type(row.get('owned_inventory_complete')) is bool, 'WATCHDOG_SAMPLE_INVALID')
+        for name in ('heavy_processes', 'docker_wsl_processes', 'top_private_processes',
+                     'owned_processes'):
+            require(type(row[name]) is list, 'WATCHDOG_SAMPLE_INVALID')
+        require(type(row['observed_utc']) is str, 'WATCHDOG_SAMPLE_INVALID')
+        try:
+            observed = datetime.strptime(row['observed_utc'], '%Y-%m-%dT%H:%M:%SZ')
+        except (TypeError, ValueError):
+            raise BenchmarkJobError('WATCHDOG_SAMPLE_INVALID') from None
+        require(self.previous_observed is None or observed >= self.previous_observed,
+                'WATCHDOG_TIMESTAMP_REGRESSION')
+        self.previous_observed = observed
         now = row['uptime_ms'] / 1000
         previous = self.previous
         if self.first is None:
@@ -254,17 +273,69 @@ class Watchdog:
         self.output, self.sample, self.binding, self.write = output, sample, binding, write
         self.policy, self.last, self.count = Policy(), None, 0
         self.stream = (output / 'environment-samples.jsonl').open('xb')
+        require(type(binding) is dict and set(binding) == {
+            'run_id', 'source_closure_sha256', 'campaign_sha256'}, 'WATCHDOG_BINDING')
+        self._append({'schema': SAMPLE_STREAM_SCHEMA, **binding})
+
+    def _append(self, row):
+        self.stream.write((json.dumps(row, sort_keys=True, allow_nan=False) + '\n').encode())
+        self.stream.flush()
+        os.fsync(self.stream.fileno())
+
+    def _observer_failure(self, error, row=None):
+        # Persist a bounded diagnostic and a stop latch before surfacing a
+        # harness error. Never turn an observer/validation failure into a
+        # product failure or silently drop the malformed sample.
+        try:
+            if row is not None:
+                try:
+                    self._append(row)
+                    self.count += 1
+                except (TypeError, ValueError):
+                    self._append({'schema': 'HH-GT06-WATCHDOG-INVALID-SAMPLE-1',
+                                  'exception_class': type(error).__name__})
+                    self.count += 1
+            event = {'schema': 'HH-GT06-WATCHDOG-OBSERVATION-ERROR-1', **self.binding,
+                     'classification': 'HARNESS_FAIL', 'reason': 'OBSERVER_ERROR',
+                     'exception_class': type(error).__name__,
+                     'error_code': getattr(error, 'code', str(error))[:128],
+                     'sample_index': self.count - 1 if self.count else None}
+            self.write(self.output / 'watchdog-observation-error.json', event)
+            self.write(self.output / 'watchdog-stop.json',
+                       {'schema': 'HH-GT06-WATCHDOG-STOP-1', **self.binding,
+                        'classification': 'HARNESS_FAIL', 'reason': 'OBSERVER_ERROR',
+                        'formal_acceptance': False,
+                        'sample_index': self.count - 1 if self.count else None})
+        except BaseException:
+            # The original observer error remains primary; the parent cleanup
+            # receipt records the inability to persist a secondary diagnostic.
+            pass
 
     def poll(self, *, force=False):
         now = time.monotonic()
         if not force and self.last is not None and now - self.last < INTERVAL_SECONDS:
             return
-        row = self.sample()
-        decision = self.policy.observe(row)
-        self.stream.write((json.dumps(row, sort_keys=True, allow_nan=False) + '\n').encode())
-        self.stream.flush()
-        os.fsync(self.stream.fileno())
-        self.count += 1
+        try:
+            row = self.sample()
+        except BaseException as error:
+            self._observer_failure(error)
+            raised = BenchmarkJobError('CAMPAIGN_WATCHDOG_OBSERVER_ERROR')
+            raised.classification = 'HARNESS_FAIL'
+            raise raised from error
+        persisted = False
+        try:
+            # Raw sample durability precedes policy interpretation.
+            self._append(row)
+            self.count += 1
+            persisted = True
+            decision = self.policy.observe(row)
+        except BaseException as error:
+            if isinstance(error, BenchmarkJobError) and getattr(error, 'code', '').startswith('CAMPAIGN_WATCHDOG_'):
+                raise
+            self._observer_failure(error, None if persisted else row)
+            raised = BenchmarkJobError('CAMPAIGN_WATCHDOG_OBSERVER_ERROR')
+            raised.classification = 'HARNESS_FAIL'
+            raise raised from error
         self.last = now
         if decision:
             event = {'schema': 'HH-GT06-WATCHDOG-STOP-1', **self.binding, **decision,
@@ -297,11 +368,18 @@ def require_infra_budget(reviews, read_regular):
     require(count < 2, 'CAMPAIGN_INFRA_DAILY_LIMIT')
 
 
-def verify_watchdog(output, read_regular, *, elapsed_seconds=None):
+def verify_watchdog(output, read_regular, *, elapsed_seconds=None, expected_binding=None):
     require(not (output / 'watchdog-stop.json').exists(), 'CAMPAIGN_WATCHDOG_STOP_LATCHED')
+    require(type(expected_binding) is dict and set(expected_binding) == {
+            'run_id', 'source_closure_sha256', 'campaign_sha256'}, 'CAMPAIGN_WATCHDOG_BINDING')
     raw = read_regular(output / 'environment-samples.jsonl', 64 * 1024**2)
+    lines = raw.splitlines()
+    require(lines, 'CAMPAIGN_WATCHDOG_SAMPLES_MISSING')
+    header = json.loads(lines[0])
+    require(header == {'schema': SAMPLE_STREAM_SCHEMA, **expected_binding},
+            'CAMPAIGN_WATCHDOG_BINDING')
     policy, count = Policy(), 0
-    for line in raw.splitlines():
+    for line in lines[1:]:
         row = json.loads(line)
         require(policy.observe(row) is None, 'CAMPAIGN_WATCHDOG_REPLAY_FAILED')
         count += 1

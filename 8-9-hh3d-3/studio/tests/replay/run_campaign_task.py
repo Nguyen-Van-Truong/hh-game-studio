@@ -100,10 +100,12 @@ def execute(campaign_id, mode, output, request_sha, *, launch_number=1):
         with campaign.environment.KeepAwake():
             campaign.wait_owned_run(owner, output, **binding, watchdog=watchdog)
         watchdog.close()
-        campaign.environment.verify_watchdog(output, campaign.read_regular)
+        campaign.environment.verify_watchdog(output, campaign.read_regular,
+                                             expected_binding=binding)
         capture_value = owner.finish()
         campaign.environment.verify_watchdog(output, campaign.read_regular,
-                                             elapsed_seconds=capture_value['elapsed_seconds'])
+                                             elapsed_seconds=capture_value['elapsed_seconds'],
+                                             expected_binding=binding)
         capture = output / 'probe-owner/capture.json'
         verify_capture(capture.parent, sha(capture), source_root=STUDIO,
             expected_source_files=sources, expected_binary_sha256=sha(Path(sys.executable)))

@@ -102,7 +102,12 @@ class CampaignResumeTests(unittest.TestCase):
         from studio.tests.replay.test_benchmark_environment import sample
         self.put('environment-preflight-before.json', campaign.environment.preflight(sample()))
         self.put('environment-preflight-after.json', campaign.environment.preflight(sample(5)))
-        self.put('environment-samples.jsonl', ('\n'.join(json.dumps(sample(t)) for t in (0, 5)) + '\n').encode())
+        watchdog_binding = {'run_id': self.run_id, 'source_closure_sha256': self.digest,
+                            'campaign_sha256': self.campaign_sha}
+        watchdog_rows = [json.dumps({'schema': campaign.environment.SAMPLE_STREAM_SCHEMA,
+                                     **watchdog_binding})]
+        watchdog_rows.extend(json.dumps(sample(t)) for t in (0, 5))
+        self.put('environment-samples.jsonl', ('\n'.join(watchdog_rows) + '\n').encode())
         self.rebind_artifacts()
 
     def put(self, relative, value):
@@ -128,6 +133,12 @@ class CampaignResumeTests(unittest.TestCase):
     def test_owner_verifier_failure_cannot_be_promoted_by_campaign_metadata(self):
         self.owner_verifier.side_effect = BenchmarkJobError('RAW_EXIT_MISMATCH')
         with self.assertRaisesRegex(BenchmarkJobError, 'RAW_EXIT_MISMATCH'):
+            self.verify()
+
+    def test_malformed_after_preflight_cannot_be_resumed(self):
+        self.put('environment-preflight-after.json', {'schema_id': 'wrong', 'pass': True})
+        self.rebind_artifacts()
+        with self.assertRaisesRegex(BenchmarkJobError, 'CAMPAIGN_PREFLIGHT_SHAPE'):
             self.verify()
 
     def test_copied_success_cannot_fill_a_different_run_slot(self):

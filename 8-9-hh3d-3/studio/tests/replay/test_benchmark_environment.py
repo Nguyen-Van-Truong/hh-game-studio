@@ -20,7 +20,9 @@ def sample(second=0, **changes):
             'uptime_ms': second * 1000, 'awake_100ns': second * 10_000_000,
             'cpu_total_100ns': second * 10_000_000, 'cpu_idle_100ns': second * 5_000_000,
             'owned_private_bytes': 0, 'owned_inventory_complete': True,
-            'foreign_engines': [], 'heavy_processes': [], **changes}
+            'foreign_engines': [], 'heavy_processes': [], 'docker_wsl_processes': [],
+            'top_private_processes': [], 'owned_processes': [],
+            'unavailable_process_count': 0, **changes}
 
 
 class EnvironmentTests(unittest.TestCase):
@@ -142,6 +144,40 @@ class EnvironmentTests(unittest.TestCase):
             with self.assertRaisesRegex(BenchmarkJobError, 'STOP_LATCHED'):
                 env.verify_watchdog(root, campaign.read_regular)
 
+    def test_invalid_observer_row_is_durable_harness_failure(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            binding = {'run_id': 'test', 'source_closure_sha256': 'a' * 64,
+                       'campaign_sha256': 'b' * 64}
+            watch = env.Watchdog(root, lambda: {**sample(), 'available_memory_bytes': 'unavailable'},
+                                 binding, campaign.write)
+            try:
+                with self.assertRaisesRegex(BenchmarkJobError, 'CAMPAIGN_WATCHDOG_OBSERVER_ERROR') as raised:
+                    watch.poll()
+            finally:
+                watch.close()
+            self.assertEqual(getattr(raised.exception, 'classification', None), 'HARNESS_FAIL')
+            self.assertTrue((root / 'environment-samples.jsonl').read_bytes())
+            self.assertTrue((root / 'watchdog-stop.json').exists())
+            self.assertTrue((root / 'watchdog-observation-error.json').exists())
+
+    def test_watchdog_stream_binding_and_timestamp_are_required(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            binding = {'run_id': 'test', 'source_closure_sha256': 'a' * 64,
+                       'campaign_sha256': 'b' * 64}
+            watch = env.Watchdog(root, lambda: sample(), binding, campaign.write)
+            watch.poll()
+            watch.poll(force=True)
+            watch.close()
+            env.verify_watchdog(root, campaign.read_regular, expected_binding=binding)
+            raw = (root / 'environment-samples.jsonl').read_text()
+            rows = raw.splitlines()
+            rows[0] = json.dumps({**binding, 'schema': 'wrong'})
+            (root / 'environment-samples.jsonl').write_text('\n'.join(rows) + '\n')
+            with self.assertRaisesRegex(BenchmarkJobError, 'BINDING'):
+                env.verify_watchdog(root, campaign.read_regular, expected_binding=binding)
+
     def test_owner_failure_wins_before_watchdog_sampling(self):
         with tempfile.TemporaryDirectory() as directory:
             owner = SimpleNamespace(tick=Mock(side_effect=BenchmarkJobError('BENCHMARK_WALL_LIMIT')))
@@ -155,14 +191,21 @@ class EnvironmentTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             samples = root / 'environment-samples.jsonl'
-            samples.write_text('\n'.join(json.dumps(sample(s)) for s in (0, 5)))
-            env.verify_watchdog(root, campaign.read_regular)
+            binding = {'run_id': 'test', 'source_closure_sha256': 'a' * 64,
+                       'campaign_sha256': 'b' * 64}
+            rows = [json.dumps({'schema': env.SAMPLE_STREAM_SCHEMA, **binding})]
+            rows.extend(json.dumps(sample(s)) for s in (0, 5))
+            samples.write_text('\n'.join(rows) + '\n')
+            env.verify_watchdog(root, campaign.read_regular, expected_binding=binding)
             with self.assertRaisesRegex(BenchmarkJobError, 'COVERAGE'):
-                env.verify_watchdog(root, campaign.read_regular, elapsed_seconds=100)
-            samples.write_text('\n'.join(json.dumps(row) for row in (
-                sample(), sample(5, commit_total_bytes=93 * env.GIB))))
+                env.verify_watchdog(root, campaign.read_regular, elapsed_seconds=100,
+                                    expected_binding=binding)
+            rows = [json.dumps({'schema': env.SAMPLE_STREAM_SCHEMA, **binding})]
+            rows.extend(json.dumps(row) for row in (
+                sample(), sample(5, commit_total_bytes=93 * env.GIB)))
+            samples.write_text('\n'.join(rows) + '\n')
             with self.assertRaisesRegex(BenchmarkJobError, 'REPLAY_FAILED'):
-                env.verify_watchdog(root, campaign.read_regular)
+                env.verify_watchdog(root, campaign.read_regular, expected_binding=binding)
 
     def test_keepawake_restores_prior_state_on_failure(self):
         kernel = SimpleNamespace(SetThreadExecutionState=Mock(side_effect=[0x80000002, 0x80000001]))
