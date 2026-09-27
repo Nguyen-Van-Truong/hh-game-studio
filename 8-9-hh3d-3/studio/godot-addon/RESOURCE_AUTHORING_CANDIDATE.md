@@ -17,13 +17,14 @@ external loads, shared-resource mutation, and script operations are rejected.
 
 The projection and preview are detached copies with `authority=0`,
 `changes_applied=false`, `runtime_authorized=false`, and native checks pending.
-The disposable native O2 probe now exercises all four resource classes through
+The disposable native O2 probe exercises all four resource classes through
 Godot ClassDB construction, property readback, and UndoRedo transitions. Run
-`o2-native-20260927-21` passed with host exit 0, a clean log, unchanged source
-and project snapshots, and 305 checks; it remains authority 0 because it uses
-the candidate Godot 4.7.2 diagnostic binary rather than the product's pinned
-4.7.1 executable. The probe is diagnostic evidence only and does not issue an
-ACK or make a product mutation.
+`o2-native-20260927-23` passed with host exit 0, a clean log, unchanged source
+and project snapshots, and 305 checks; it remains authority 0 because it is a
+diagnostic probe outside the accepted profile. It uses the same Godot 4.7.2
+candidate lock as this plan, but does not itself establish product acceptance.
+The probe is diagnostic evidence only and does not issue an ACK or make a
+product mutation.
 
 Future integration must add atomic save and revision checks, durable
 deduplication, and AUTH-01..05 isolation before this candidate can join
@@ -32,7 +33,7 @@ deduplication, and AUTH-01..05 isolation before this candidate can join
 Pure static verification (no Godot/Blender process):
 
 ```powershell
-python -B -m unittest tests.godot.test_resource_authoring
+python -B -m unittest tests.godot.test_resource_authoring tests.godot.test_authoring_native_evidence
 ```
 
 This file does not change the accepted adapter or enable the candidate profile.
