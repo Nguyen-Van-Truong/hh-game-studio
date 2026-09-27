@@ -16,7 +16,7 @@ class NativeEvidenceTests(unittest.TestCase):
         labels = (probe.expected_labels(self.catalog) | probe.expected_edge_labels()
                   | probe.expected_resource_labels() | probe.expected_instance_labels()
                   | probe.expected_tilemap_labels() | probe.expected_animation_labels()
-                  | probe.expected_behavior_labels())
+                  | probe.expected_behavior_labels() | probe.expected_script_labels())
         self.observation = {
             "schema": "hh-o2-native-authoring-observation-1",
             "actual_editor": True, "runtime_authorized": False,
@@ -71,6 +71,10 @@ class NativeEvidenceTests(unittest.TestCase):
             "before": copy.deepcopy(before), "after_do": copy.deepcopy(after_do), "after_undo": copy.deepcopy(before)}
         self.row("behavior_redo_readback")["details"] = {
             "after_do": copy.deepcopy(after_do), "after_redo": copy.deepcopy(after_do)}
+        for label in ("script_do_readback", "script_redo_readback"):
+            self.row(label)["details"] = {"path": "res://o2_candidate_profile.gd",
+                                            "fixture_value": 23, "move_speed": 7.0,
+                                            "turn_speed": 90.125, "enabled": False}
 
     def row(self, label, observation=None):
         return next(row for row in (observation or self.observation)["checks"] if row["label"] == label)
@@ -160,6 +164,25 @@ class NativeEvidenceTests(unittest.TestCase):
                 observation = copy.deepcopy(self.observation)
                 self.row("animation_motion2d" + suffix, observation)["details"]["tracks"][0][field] = value
                 self.assertFalse(self.validate(observation)[0])
+
+    def test_script_rows_require_native_readback_details(self):
+        for label in probe.expected_script_labels():
+            with self.subTest(label=label):
+                observation = copy.deepcopy(self.observation)
+                observation["checks"] = [row for row in observation["checks"] if row["label"] != label]
+                self.assertFalse(self.validate(observation)[0])
+        for label in ("script_do_readback", "script_redo_readback"):
+            observation = copy.deepcopy(self.observation)
+            self.row(label, observation)["details"]["turn_speed"] = 91.0
+            self.assertEqual(self.validate(observation), (False, "script-readback"))
+
+    def test_script_profile_input_is_byte_validated_before_native_run(self):
+        candidate = probe.script_input()
+        self.assertEqual(candidate["profile"], "hh-godot-declarative-1")
+        self.assertEqual(candidate["defaults"], {"fixture_value": 23, "move_speed": 7.0,
+                                                   "turn_speed": 90.125, "enabled": False})
+        self.assertNotIn("FileAccess", candidate["source"])
+        self.assertNotIn("func ", candidate["source"])
 
 
 if __name__ == "__main__":

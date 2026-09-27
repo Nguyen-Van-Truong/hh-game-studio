@@ -27,8 +27,9 @@ func _run() -> void:
 	var tilemap_file := FileAccess.open("res://tilemap-input.json", FileAccess.READ)
 	var animation_file := FileAccess.open("res://animation-input.json", FileAccess.READ)
 	var behavior_file := FileAccess.open("res://behavior-input.json", FileAccess.READ)
+	var script_file := FileAccess.open("res://script-input.json", FileAccess.READ)
 	if catalog_file == null or edge_file == null or resource_file == null or instance_file == null \
-			or tilemap_file == null or animation_file == null or behavior_file == null or root == null:
+			or tilemap_file == null or animation_file == null or behavior_file == null or script_file == null or root == null:
 		_write_result({"schema": "hh-o2-native-authoring-observation-1", "actual_editor": true,
 			"runtime_authorized": false, "native_mutation": false,
 			"formal_acceptance": false, "checks": [], "failures": ["INPUT_OR_ROOT"]})
@@ -48,21 +49,25 @@ func _run() -> void:
 	animation_file.close()
 	var behavior_input: Variant = JSON.parse_string(behavior_file.get_as_text())
 	behavior_file.close()
+	var script_input: Variant = JSON.parse_string(script_file.get_as_text())
+	script_file.close()
 	if not catalog is Dictionary or not edge_input is Dictionary or not resource_input is Dictionary \
 			or not instance_input is Dictionary or not edge_input.get("proposals", null) is Array \
 			or not resource_input.get("proposals", null) is Array or not instance_input.get("proposals", null) is Array \
 			or not tilemap_input is Dictionary or not tilemap_input.get("proposals", null) is Array \
 			or not animation_input is Dictionary or not animation_input.get("proposals", null) is Array \
-			or not behavior_input is Dictionary or not behavior_input.get("proposals", null) is Array:
+			or not behavior_input is Dictionary or not behavior_input.get("proposals", null) is Array \
+			or not script_input is Dictionary:
 		_write_result({"schema": "hh-o2-native-authoring-observation-1", "actual_editor": true,
 			"runtime_authorized": false, "native_mutation": false,
 			"formal_acceptance": false, "checks": [], "failures": ["CATALOG_JSON"]})
 		get_tree().quit(42)
 		return
 	var run_root := OS.get_environment("HH_O2_RUN_ROOT").replace("\\", "/").trim_suffix("/")
+	# The script candidate is one validated immutable input, not an operation list.
 	var report: Dictionary = Probe.new().run(root, get_undo_redo(), catalog, run_root,
 		edge_input["proposals"], resource_input["proposals"], instance_input["proposals"],
-		tilemap_input["proposals"], animation_input["proposals"], behavior_input["proposals"])
+		tilemap_input["proposals"], animation_input["proposals"], behavior_input["proposals"], script_input)
 	_write_result(report)
 	get_tree().quit(0 if report.get("failures", []).is_empty() else 43)
 

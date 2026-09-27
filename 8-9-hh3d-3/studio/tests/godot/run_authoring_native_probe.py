@@ -72,6 +72,12 @@ _BEHAVIOR = importlib.util.module_from_spec(_BEHAVIOR_SPEC)
 sys.modules[_BEHAVIOR_SPEC.name] = _BEHAVIOR
 _BEHAVIOR_SPEC.loader.exec_module(_BEHAVIOR)
 
+_SCRIPT_SPEC = importlib.util.spec_from_file_location(
+    "o2_native_script_profile", STUDIO / "godot-addon/script_profile.py")
+_SCRIPT = importlib.util.module_from_spec(_SCRIPT_SPEC)
+sys.modules[_SCRIPT_SPEC.name] = _SCRIPT
+_SCRIPT_SPEC.loader.exec_module(_SCRIPT)
+
 
 def sha(path: Path) -> str:
     digest = hashlib.sha256()
@@ -104,6 +110,7 @@ def source_files() -> dict[str, str]:
         "godot-addon/tilemap_authoring.py",
         "godot-addon/animation_authoring.py",
         "godot-addon/gameplay_behavior.py",
+        "godot-addon/script_profile.py",
         "protocol/core.py",
         "protocol/_rfc8785/__init__.py",
         "protocol/_rfc8785/_impl.py",
@@ -389,6 +396,40 @@ def expected_behavior_labels() -> set[str]:
             "behavior_cleanup_readback"}
 
 
+def script_input() -> dict:
+    source = (b"extends Node3D\n"
+              b"@export var fixture_value: int = 23\n"
+              b"@export var move_speed: float = 7.0\n"
+              b"@export var turn_speed: float = 90.125\n"
+              b"@export var enabled: bool = false\n")
+    validated = _SCRIPT.validate_script(source)
+    return {"profile": validated.profile, "sha256": validated.sha256,
+            "source": source.decode("ascii"), "defaults": validated.defaults,
+            "runtime_authorized": False, "changes_applied": False}
+
+
+def expected_script_labels() -> set[str]:
+    return {"script_proposal_shape", "script_temp_write", "script_parse_readback",
+            "script_before", "script_do_transition", "script_do_readback",
+            "script_undo_transition", "script_undo_readback", "script_redo_transition",
+            "script_redo_readback", "script_cleanup_transition", "script_cleanup_readback",
+            "script_temp_removed"}
+
+
+def validate_script_observations(checks: list[dict]) -> str | None:
+    rows = {row["label"]: row.get("details") for row in checks}
+    expected = script_input()
+    for label in ("script_do_readback", "script_redo_readback"):
+        details = rows.get(label)
+        if (type(details) is not dict or details.get("path") != "res://o2_candidate_profile.gd"
+                or details.get("fixture_value") != 23
+                or not numeric_match(details.get("move_speed"), 7.0)
+                or not numeric_match(details.get("turn_speed"), 90.125)
+                or details.get("enabled") is not False):
+            return "script-readback"
+    return None
+
+
 def validate_behavior_observations(checks: list[dict]) -> str | None:
     rows = {row["label"]: row.get("details") for row in checks}
     proposal = behavior_proposals()[0]
@@ -509,7 +550,7 @@ def validate_result(result: object, catalog: dict, process: dict, run_root: Path
     expected = (expected_labels(catalog) | expected_edge_labels()
                 | expected_resource_labels() | expected_instance_labels()
                 | expected_tilemap_labels() | expected_animation_labels()
-                | expected_behavior_labels())
+                | expected_behavior_labels() | expected_script_labels())
     if len(labels) != len(set(labels)) or set(labels) != expected:
         missing = sorted(expected - set(labels))
         extra = sorted(set(labels) - expected)
@@ -520,6 +561,9 @@ def validate_result(result: object, catalog: dict, process: dict, run_root: Path
     behavior_error = validate_behavior_observations(checks)
     if behavior_error:
         return False, behavior_error
+    script_error = validate_script_observations(checks)
+    if script_error:
+        return False, script_error
     isolation = result.get("isolation")
     if not isinstance(isolation, dict) or isolation.get("project_under_run_root") is not True or isolation.get("user_under_run_root") is not True or isolation.get("network_used") is not False or isolation.get("arbitrary_script_loaded") is not False or isolation.get("public_ack") is not False:
         return False, "isolation"
@@ -560,6 +604,7 @@ def run(godot: Path, run_id: str, output: Path) -> dict:
     shutil.copyfile(STUDIO / "tests/godot/gameplay_edges_native.gd", tests / "gameplay_edges_native.gd")
     shutil.copyfile(STUDIO / "tests/godot/animation_native.gd", tests / "animation_native.gd")
     shutil.copyfile(STUDIO / "tests/godot/behavior_native.gd", tests / "behavior_native.gd")
+    shutil.copyfile(STUDIO / "tests/godot/script_native.gd", tests / "script_native.gd")
     (addon / "plugin.cfg").write_text(
         '[plugin]\nname="HH O2 Native Diagnostic"\ndescription="Disposable O2 probe"\n'
         'author="HH Studio"\nversion="0.0-diagnostic"\nscript="plugin.gd"\n',
@@ -582,6 +627,7 @@ def run(godot: Path, run_id: str, output: Path) -> dict:
     write_json(project / "tilemap-input.json", {"proposals": tilemap_proposals()})
     write_json(project / "animation-input.json", {"proposals": animation_proposals()})
     write_json(project / "behavior-input.json", {"proposals": behavior_proposals()})
+    write_json(project / "script-input.json", script_input())
     (scenes / "arena.tscn").write_text(
         '[gd_scene format=3]\n\n[node name="Arena" type="Node2D"]\n'
         '\n[node name="Spawn" type="Node2D" parent="."]\n',

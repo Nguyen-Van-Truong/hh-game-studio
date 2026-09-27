@@ -12,6 +12,7 @@ const ROOT_META := "hh_o2_native_root"
 const EdgeProbe = preload("res://tests/gameplay_edges_native.gd")
 const AnimationProbe = preload("res://tests/animation_native.gd")
 const BehaviorProbe = preload("res://tests/behavior_native.gd")
+const ScriptProbe = preload("res://tests/script_native.gd")
 
 var _rows: Array[Dictionary] = []
 var _failures: Array[String] = []
@@ -23,7 +24,7 @@ var _catalog: Dictionary
 func run(root: Node, undo: EditorUndoRedoManager, catalog: Dictionary, run_root: String,
 		edge_proposals: Array = [], resource_proposals: Array = [], instance_proposals: Array = [],
 		tilemap_proposals: Array = [], animation_proposals: Array = [],
-		behavior_proposals: Array = []) -> Dictionary:
+		behavior_proposals: Array = [], script_input: Dictionary = {}) -> Dictionary:
 	_root = root
 	_undo = undo
 	_catalog = catalog
@@ -77,6 +78,11 @@ func run(root: Node, undo: EditorUndoRedoManager, catalog: Dictionary, run_root:
 	for row: Dictionary in behavior_report.get("checks", []):
 		_rows.append(row)
 	for failure: String in behavior_report.get("failures", []):
+		_failures.append(failure)
+	var script_report: Dictionary = ScriptProbe.new().run(root, undo, history, script_input)
+	for row: Dictionary in script_report.get("checks", []):
+		_rows.append(row)
+	for failure: String in script_report.get("failures", []):
 		_failures.append(failure)
 
 	# Every temporary node is removed synchronously and the native history is

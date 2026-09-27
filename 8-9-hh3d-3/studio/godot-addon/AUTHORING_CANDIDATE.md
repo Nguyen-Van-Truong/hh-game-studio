@@ -44,6 +44,17 @@ OS isolation evidence, must be verified by a future registered execution owner
 before the new script profile can be enabled. The accepted
 `hh-godot-declarative-1` profile remains unchanged.
 
+The separate disposable probe now feeds one byte-exact profile-validated
+`hh-godot-declarative-1` script into a temporary Godot editor, checks native
+parse/export readback, attaches it through UndoRedo, repeats after redo, and
+removes the generated source before snapshot comparison. Run
+`o2-native-20260927-33` passed with 396 checks, actual host/wrapper exit 0,
+clean log, verified process tree and unchanged source/project snapshots;
+closure is `278df6de3137f74fb9bf2f536e4c247d1637a89c63ddd8b68f02f4bca9478d43`.
+This is a native profile/readback diagnostic only. It does not execute caller
+GDScript, establish an OS sandbox, prove AUTH-05, authorize a public command,
+or enable the accepted adapter.
+
 Pure-Python checks from the repository root (no Godot/Blender execution):
 
 ```powershell
