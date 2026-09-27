@@ -123,3 +123,30 @@ The report has therefore been reviewed and acted on: the incorrect gate
 changes were rejected, the valid O2 gaps were implemented where bounded, and
 the current commits/evidence are recorded in the plan header above. No plan
 checkbox or acceptance status was advanced.
+
+## Coordinator continuation — 2026-09-27
+
+The coordinator continued without workers. The O2 branch now contains
+`51b8490b` (native resource evidence hardening and negative evidence tests) and
+`d6985a1f` (candidate documentation). The fresh disposable run
+`o2-native-20260927-23` passed with actual host exit 0, wrapper exit 0, no
+timeout, verified process tree, clean log, unchanged source/project snapshots,
+and 305 checks covering ClassDB shape identity, proposal binding, empty-state
+readback, do/undo/redo, and cleanup for RectangleShape2D, CapsuleShape2D,
+BoxShape3D, and CapsuleShape3D. The run is still authority 0 and diagnostic;
+it does not enable the profile, issue an ACK, or satisfy a GT gate. The static
+O2 regression is now 117 tests passing.
+
+The probe was deliberately reminted after source changes. An intermediate
+run (`o2-native-20260927-22`) failed closed on a typed GDScript compile error;
+its raw artifacts remain outside the repository and were not reclassified as
+PASS. The binding checks were then strengthened so a proposal must carry the
+expected revision/generation and the correct 2D/3D collision target, and the
+UndoRedo check now starts from a null shape before the do transition.
+
+The plan's toolchain pin is Godot 4.7.2-stable. Earlier wording that treated
+4.7.1 as the product pin was a cross-plan mix-up with the separate Vault
+Fighters route and is superseded by the current plan header. This correction
+does not turn the O2 diagnostic run into product acceptance. GT-06 remains the
+current valid WP with zero accepted formal full runs, and no checkbox or gate
+was advanced.
