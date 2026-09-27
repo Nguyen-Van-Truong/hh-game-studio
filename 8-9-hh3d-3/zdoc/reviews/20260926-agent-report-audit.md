@@ -218,3 +218,18 @@ containers fail with a contract error instead of leaking `TypeError`. The
 focused gameplay tests and the complete O2 static regression now pass 149
 cases. This still remains authority-0 data validation; it does not authorize
 GDScript execution or prove AUTH-05 sandboxing.
+
+
+The candidate was then exercised in a disposable Godot editor by `d9a99713`.
+`behavior_native.gd` consumes one validated projection, interprets the typed
+move/jump/land transitions on a temporary `CharacterBody2D`, verifies actual
+position/velocity/rotation/state/signal/animation snapshots, repeats the same
+sequence for deterministic equality, and checks Undo/Redo restoration. The
+host verifier independently checks the raw sequence and binding digest. Run
+`o2-native-20260927-31` passed with 383 checks, actual host/wrapper exit 0,
+clean log, verified process tree, unchanged source/project snapshots and
+closure `f548acd8dd3c5e17170a1d71898cb28196dd8898e015e2614a343e6899e87e83`.
+Run `-30` remains a failed compile attempt and was not reclassified. This is
+an authority-0 declarative interpreter diagnostic, not caller GDScript
+execution, sandbox/AUTH-05 proof, production adapter integration, save/reload,
+public ACK or GT-09 acceptance. The full O2 static regression is 149 tests.
