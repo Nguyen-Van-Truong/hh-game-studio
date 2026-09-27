@@ -150,3 +150,13 @@ Fighters route and is superseded by the current plan header. This correction
 does not turn the O2 diagnostic run into product acceptance. GT-06 remains the
 current valid WP with zero accepted formal full runs, and no checkbox or gate
 was advanced.
+
+The coordinator then added `26710772`, an authority-0 typed scene-instance
+candidate. It validates create/remove proposals against a trusted
+`scenes/*.tscn` source manifest, source revision, parent dimensionality,
+generation/lease/deadline, finite transforms, duplicate IDs and stale source
+state. Its 6 focused tests pass; the combined O2 static regression is now 123
+tests passing. Because this changes the candidate source closure, the earlier
+305-check native run is explicitly stale for the new closure. A fresh native
+remint must include the scene-instance module before any claim about native
+scene instancing is made. No GT-06 evidence or acceptance was changed.
