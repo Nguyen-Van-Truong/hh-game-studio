@@ -197,3 +197,14 @@ tests passing. This candidate is intentionally static authority-0 evidence;
 native script execution, deterministic dispatch, sandbox/AUTH-05 and runtime
 readback remain open. It is therefore not folded into the frozen native probe
 source closure at `8911223d`, and no GT checkbox moved.
+
+
+## Coordinator continuation — 2026-09-27 animation evidence repair
+
+The owner then directed the coordinator to work solo and consolidate the earlier worker/subagent results. Existing O2 commits were reviewed as candidate evidence and retained in their isolated worktree; no worker result was promoted to a critic signature and no product gate changed. Workspace routing now records that the coordinator performs remaining work without dispatching workers or subagents.
+
+The earlier animation claim was too broad. Runs `o2-native-20260927-27` and `-28` read a hardcoded or single 2D track; `-27` also used the wrong relative path for the default `AnimationPlayer.root_node`, and neither run independently verified actual 2D/3D playback values. This gap was repaired in `b4dfe799`: `animation_native.gd` consumes validated projections, resolves trusted paths, constructs six tracks for position/rotation/scale on 2D and 3D nodes, uses manual `AnimationPlayer.advance`, samples start/midpoint/end or loop wrap, and repeats playback after Undo/Redo. The host verifier checks raw keys, track paths, interpolation, sample times, numeric values and command/digest bindings against the frozen proposal recipe. Negative tests reject changed poses, stale bindings, malformed samples and missing details even when a row's `passed` flag remains true.
+
+`o2-native-20260927-29` is the current authority-0 diagnostic: 373 checks, actual host and wrapper exit 0, timeout false, verified owned process tree, clean log, unchanged source/project snapshots, and 17-file closure `25dc209c27a8f2140668520e9834c36461e4d67d0d0ec59add36d178ffc5bbba`. The combined O2 static suite is 147 tests passing. This strengthens the animation candidate only; it does not prove general gameplay scripting, public adapter authorization, atomic save/reload, AUTH-01..05 isolation, mini-game conformance or GT-06. `CURRENT_VALID_WP` remains GT-06 with zero accepted formal full runs, and no checkbox was ticked.
+
+The current preflight remains a real blocker: at 2026-09-27T07:04:23Z it reported 10.07 GiB free and 70.34% commit but failed `CAMPAIGN_PREFLIGHT_HEAVY_APPS` because Chrome, Firefox, Edge, Telegram, Zalo and WSL processes were still present. No formal campaign was started or rerun from that failed preflight.
