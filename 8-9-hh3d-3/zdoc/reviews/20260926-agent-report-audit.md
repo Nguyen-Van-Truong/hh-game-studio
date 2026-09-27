@@ -233,3 +233,10 @@ Run `-30` remains a failed compile attempt and was not reclassified. This is
 an authority-0 declarative interpreter diagnostic, not caller GDScript
 execution, sandbox/AUTH-05 proof, production adapter integration, save/reload,
 public ACK or GT-09 acceptance. The full O2 static regression is 149 tests.
+
+
+A later direct preflight at `2026-09-27T08:04:28Z` still failed the same
+`CAMPAIGN_PREFLIGHT_HEAVY_APPS` latch and also observed only 7.14 GiB free
+with 73.31% commit. The plan header records this changed resource snapshot
+once; no formal run was attempted, and the coordinator did not close user
+applications.
