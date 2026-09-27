@@ -13,6 +13,7 @@ import argparse
 import hashlib
 import importlib.util
 import json
+import math
 import os
 from pathlib import Path
 import re
@@ -88,6 +89,7 @@ def source_files() -> dict[str, str]:
         "tests/godot/authoring_native_probe.gd",
         "tests/godot/authoring_native_plugin.gd",
         "tests/godot/gameplay_edges_native.gd",
+        "tests/godot/animation_native.gd",
         "tests/godot/run_authoring_native_probe.py",
         "godot-addon/gameplay_edges.py",
         "godot-addon/resource_authoring.py",
@@ -191,13 +193,14 @@ def expected_tilemap_labels() -> set[str]:
 
 
 def expected_animation_labels() -> set[str]:
-    prefix = "animation_library"
-    return {prefix + suffix for suffix in (
-        "_proposal_count", "_binding", "_player_created", "_before",
-        "_do_transition", "_library_readback", "_track_readback",
-        "_key_readback", "_undo_transition", "_undo_readback",
-        "_redo_transition", "_redo_readback", "_cleanup_transition",
-        "_cleanup_readback")}
+    labels = {"animation_proposal_count"}
+    for proposal in animation_proposals():
+        labels.update("animation_" + proposal["animation_id"] + suffix for suffix in (
+            "_binding", "_native_binding", "_resource_created", "_before",
+            "_do_transition", "_do_readback", "_playback", "_undo_transition", "_undo_readback",
+            "_redo_transition", "_redo_readback", "_redo_playback", "_cleanup_transition",
+            "_cleanup_readback"))
+    return labels
 
 
 def edge_proposals() -> list[dict]:
@@ -304,22 +307,95 @@ def animation_proposals() -> list[dict]:
     context = _ANIMATION.ValidationContext(
         "project.fixture", "sha256:" + "1" * 64, "sha256:" + "2" * 64,
         7, "lease.fixture", 12, 31000, 1000,
-        (_ANIMATION.NodeState("root", None, "Node2D", "Root"),
-         _ANIMATION.NodeState("actor", "root", "Node2D", "Actor"),
+        (_ANIMATION.NodeState("root", None, "Node3D", "Fixture"),
+         _ANIMATION.NodeState("actor2d", "root", "Node2D", "Actor2D"),
+         _ANIMATION.NodeState("actor3d", "root", "Node3D", "Actor3D"),
          _ANIMATION.NodeState("player", "root", "AnimationPlayer", "Player")))
-    payload = {"expected_generation": context.generation,
-               "expected_project_revision": context.project_revision,
-               "animation_id": "idle", "length": 1.0, "loop_mode": 1,
-               "tracks": [{"node_stable_id": "actor", "property": "position",
-                           "keys": [[0.0, [0, 0]], [1.0, [10, 0]]]}]}
-    request = Request(
-        command_id="animation.native.1", project_id=context.project_id,
-        operation="scene.animation.create", lease_id=context.lease_id,
-        fencing_epoch=context.fencing_epoch, expected_revision=context.revision,
-        target={"stable_id": "player"}, payload=payload,
-        payload_hash="sha256:" + hashlib.sha256(canonical_bytes(payload)).hexdigest(),
-        deadline_ms=2000)
-    return [_ANIMATION.validate_request(request, context).projection]
+    examples = (
+        ("motion2d", "actor2d", 2.0, 0, (
+            ("position", [1, 2], [9, 6]), ("rotation_degrees", 0, 60), ("scale", [1, 1], [2, 3]))),
+        ("motion3d", "actor3d", 4.0, 1, (
+            ("position", [0, 0, 0], [4, 8, 12]),
+            ("rotation_degrees", [0, 0, 0], [10, 40, 80]), ("scale", [1, 1, 1], [2, 3, 4]))),
+    )
+    result = []
+    for animation_id, node_id, length, loop, values in examples:
+        payload = {"expected_generation": context.generation,
+                   "expected_project_revision": context.project_revision,
+                   "animation_id": animation_id, "length": length, "loop_mode": loop,
+                   "tracks": [{"node_stable_id": node_id, "property": prop,
+                               "keys": [[0.0, start], [length, end]]} for prop, start, end in values]}
+        request = Request(
+            command_id="animation.native." + animation_id, project_id=context.project_id,
+            operation="scene.animation.create", lease_id=context.lease_id,
+            fencing_epoch=context.fencing_epoch, expected_revision=context.revision,
+            target={"stable_id": "player"}, payload=payload,
+            payload_hash="sha256:" + hashlib.sha256(canonical_bytes(payload)).hexdigest(),
+            deadline_ms=2000)
+        result.append(_ANIMATION.validate_request(request, context).projection)
+    return result
+
+
+def numeric_match(observed: object, expected: object) -> bool:
+    """Godot float32 property readback has bounded error; booleans are not numbers."""
+    if type(expected) is list:
+        return (type(observed) is list and len(observed) == len(expected)
+                and all(numeric_match(left, right) for left, right in zip(observed, expected)))
+    return (type(observed) in (int, float) and math.isfinite(observed)
+            and abs(observed - expected) <= 1e-4)
+
+
+def validate_animation_observations(checks: list[dict]) -> str | None:
+    """Independently check raw engine values against the frozen input recipe.
+
+    Never trust the native 'passed' flag or a caller-supplied expected value.
+    This is diagnostic validation, not a public command ACK.
+    """
+    rows = {row["label"]: row.get("details") for row in checks}
+    for proposal in animation_proposals():
+        prefix = "animation_" + proposal["animation_id"]
+        binding = {key: proposal[key] for key in ("command_id", "request_digest")}
+        if rows.get(prefix + "_binding") != binding:
+            return "animation-request-binding"
+        for suffix in ("_do_readback", "_redo_readback"):
+            observed = rows.get(prefix + suffix)
+            if (type(observed) is not dict or observed.get("animation_id") != proposal["animation_id"]
+                    or not numeric_match(observed.get("length"), proposal["length"])
+                    or type(observed.get("loop_mode")) is not int
+                    or observed["loop_mode"] != proposal["loop_mode"]):
+                return "animation-resource-binding"
+            tracks = observed.get("tracks")
+            if type(tracks) is not list or len(tracks) != len(proposal["tracks"]):
+                return "animation-tracks"
+            for actual, spec in zip(tracks, proposal["tracks"]):
+                if (type(actual) is not dict or actual.get("path") != spec["node_path"] + ":" + spec["property"]
+                        or type(actual.get("type")) is not int or actual["type"] != 0
+                        or type(actual.get("interpolation")) is not int or actual["interpolation"] != 1
+                        or not numeric_match(actual.get("keys"), spec["keys"])):
+                    return "animation-track-readback"
+        # The last sample proves wrap on the looping clip; the non-loop clip reaches its end.
+        fractions = (0.0, 0.5, 0.25 if proposal["loop_mode"] else 1.0)
+        for suffix in ("_playback", "_redo_playback"):
+            observed = rows.get(prefix + suffix)
+            if type(observed) is not dict or any(observed.get(key) != value for key, value in binding.items()):
+                return "animation-playback-binding"
+            samples = observed.get("samples")
+            if type(samples) is not list or len(samples) != len(fractions):
+                return "animation-playback-samples"
+            for sample, fraction in zip(samples, fractions):
+                if (type(sample) is not dict or not numeric_match(sample.get("position_seconds"), proposal["length"] * fraction)
+                        or type(sample.get("values")) is not dict):
+                    return "animation-playback-position"
+                expected_keys = {track["node_stable_id"] + ":" + track["property"] for track in proposal["tracks"]}
+                if set(sample["values"]) != expected_keys:
+                    return "animation-playback-properties"
+                for spec in proposal["tracks"]:
+                    start, end = spec["keys"][0][1], spec["keys"][1][1]
+                    expected = ([a + (b - a) * fraction for a, b in zip(start, end)]
+                                if type(start) is list else start + (end - start) * fraction)
+                    if not numeric_match(sample["values"][spec["node_stable_id"] + ":" + spec["property"]], expected):
+                        return "animation-playback-value"
+    return None
 
 
 def validate_result(result: object, catalog: dict, process: dict, run_root: Path) -> tuple[bool, str | None]:
@@ -348,6 +424,9 @@ def validate_result(result: object, catalog: dict, process: dict, run_root: Path
         missing = sorted(expected - set(labels))
         extra = sorted(set(labels) - expected)
         return False, f"check-label-set missing={missing} extra={extra}"
+    animation_error = validate_animation_observations(checks)
+    if animation_error:
+        return False, animation_error
     isolation = result.get("isolation")
     if not isinstance(isolation, dict) or isolation.get("project_under_run_root") is not True or isolation.get("user_under_run_root") is not True or isolation.get("network_used") is not False or isolation.get("arbitrary_script_loaded") is not False or isolation.get("public_ack") is not False:
         return False, "isolation"
@@ -386,6 +465,7 @@ def run(godot: Path, run_id: str, output: Path) -> dict:
     shutil.copyfile(STUDIO / "tests/godot/authoring_native_plugin.gd", addon / "plugin.gd")
     shutil.copyfile(STUDIO / "tests/godot/authoring_native_probe.gd", tests / "authoring_native_probe.gd")
     shutil.copyfile(STUDIO / "tests/godot/gameplay_edges_native.gd", tests / "gameplay_edges_native.gd")
+    shutil.copyfile(STUDIO / "tests/godot/animation_native.gd", tests / "animation_native.gd")
     (addon / "plugin.cfg").write_text(
         '[plugin]\nname="HH O2 Native Diagnostic"\ndescription="Disposable O2 probe"\n'
         'author="HH Studio"\nversion="0.0-diagnostic"\nscript="plugin.gd"\n',

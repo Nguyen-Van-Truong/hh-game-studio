@@ -1,25 +1,22 @@
 # HH3D-3 — routing hiện hành
 
-Owner steering mới nhất 22-09-2026 (S158): dừng dùng Cursor worker; dùng
-ba Codex worker `gpt-6-astra` effort `xhigh` cho phần việc độc lập. Cursor
-S157 đã terminal cả ba lane, exact outputs đã giữ để review/tiếp tục.
-Mỗi worker một scope/file ownership; không spawn agent con hoặc đổi model.
-Coordinator giữ plan, tích hợp và kiểm báo cáo/evidence. Các chỉ đạo
-SOLO/Cursor trước là lịch sử; không tạo thêm Cursor session.
-Lượt S158 đã thử đúng ba lane Astra xhigh nhưng cả ba bị từ chối trước khi
-chạy vì capacity; không chờ hoặc retry vô hạn, coordinator tiếp quản phần
-static review và giữ bằng chứng lỗi capacity trong S158.
-Resume đúng session/workspace khi gián đoạn; đọc report khi terminal và
-poll thưa theo thời lượng công việc, không lặp AI polling liên tục.
-Giữ hai critic độc lập ở gate cuối khi đủ điều kiện; worker sửa/test không thay
-critic nghiệm thu. Model/effort theo lệnh owner mới nhất, không giả cờ fast.
-Đọc WP và tiến độ mới nhất ở đầu plan; không lấy tên worker hoặc trạng thái
-trong báo cáo lịch sử làm dispatch hiện hành. Coordinator giữ một writer/file,
-tích hợp kết quả và tuần tự hóa các lượt chạy engine; không thêm engine/test
-nặng cạnh phép đo. Giữ actual exits, source/evidence hash và checkpoint.
-Hai critic độc lập chỉ đọc cùng final closure vẫn bắt buộc cho gate mới.
-Worker implementation/preflight và coordinator tự review không thay hai critic;
-không chuyển chữ ký từ source cũ sang source mới.
+Owner steering mới nhất 27-09-2026: "giờ bạn tự làm không cần worker hay
+subagent gì nữa tổng hợp lại tiến độ subagent đã làm và tiếp tục".
+Coordinator tự đọc kết quả/code/evidence đã có, tiếp quản việc còn thiếu và
+thực hiện tuần tự. Không spawn worker/subagent, không mở Cursor session hoặc
+chuyển việc sang thread khác. Chỉ đạo ba worker Astra ở S158 là lịch sử,
+không còn là dispatch hiện hành. Không gán kết quả coordinator làm thành
+kết quả worker hoặc chữ ký critic độc lập.
+
+Resume đúng workspace/checkpoint sau gián đoạn; không làm lại phần đã chứng
+minh. Giữ một writer/file, tuần tự hóa engine runs, không thêm engine/test
+nặng cạnh phép đo formal. Giữ actual exits, source/evidence hash và raw lỗi.
+Không rerun test/commit metadata khi source và blocker không đổi.
+
+Chế độ solo không tự tạo bằng chứng hai critic độc lập mà gate còn yêu cầu:
+giữ phần nghiệm thu đó pending, không tự ký thay và không gọi critic trái
+chỉ đạo solo. Đọc CURRENT_VALID_WP và trạng thái thật ở đầu plan; không lấy
+báo cáo lịch sử hay số test làm nguồn tick. Không chuyển chữ ký từ hash cũ.
 
 Ba plan TXT có scope riêng theo lệnh owner 18-09-2026:
 
@@ -37,7 +34,7 @@ của nhau; research/plan không tự mở triển khai game. Không fork lõi G
 không chạy Blender trên server người chơi; không coi số tài khoản đăng ký là
 số avatar realtime. Routing Grok/Codex workers của các phiên trước chỉ là lịch
 sử trong plan archive/reviews. Coordinator giữ một writer/file, kiểm dependency
-và chỉ dispatch lane đủ dependency, scope rõ. Giữ checkpoint,
+và tự thực hiện phần đủ dependency, scope rõ. Giữ checkpoint,
 actual process exit, source hash và evidence; không bịa cờ hay chữ ký critic.
 
 Owner đã cho phép triển khai theo dependency; đọc trạng thái hiện hành từ

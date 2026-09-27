@@ -26,6 +26,32 @@ class NativeEvidenceTests(unittest.TestCase):
             "project_root": (self.root / "project").as_posix(),
             "user_root": (self.root / "user").as_posix(), "pid": 123,
         }
+        # Synthetic evidence for verifier unit tests, never a native execution claim.
+        poses = {
+            "motion2d": ((0, [1, 2], 0, [1, 1]), (1, [5, 4], 30, [1.5, 2]), (2, [9, 6], 60, [2, 3])),
+            "motion3d": ((0, [0, 0, 0], [0, 0, 0], [1, 1, 1]),
+                         (2, [2, 4, 6], [5, 20, 40], [1.5, 2, 2.5]),
+                         (1, [1, 2, 3], [2.5, 10, 20], [1.25, 1.5, 1.75])),
+        }
+        for proposal in probe.animation_proposals():
+            prefix = "animation_" + proposal["animation_id"]
+            binding = {key: proposal[key] for key in ("command_id", "request_digest")}
+            self.row(prefix + "_binding")["details"] = binding.copy()
+            for suffix in ("_do_readback", "_redo_readback"):
+                self.row(prefix + suffix)["details"] = {
+                    "animation_id": proposal["animation_id"], "length": proposal["length"],
+                    "loop_mode": proposal["loop_mode"], "tracks": [
+                        {"path": spec["node_path"] + ":" + spec["property"], "type": 0,
+                         "interpolation": 1, "keys": copy.deepcopy(spec["keys"])} for spec in proposal["tracks"]]}
+            for suffix in ("_playback", "_redo_playback"):
+                node = "actor2d" if proposal["animation_id"] == "motion2d" else "actor3d"
+                self.row(prefix + suffix)["details"] = {
+                    **binding, "samples": [{"position_seconds": time, "values": {
+                        node + ":position": copy.deepcopy(position), node + ":rotation_degrees": copy.deepcopy(rotation),
+                        node + ":scale": copy.deepcopy(scale)}} for time, position, rotation, scale in poses[proposal["animation_id"]]]}
+
+    def row(self, label, observation=None):
+        return next(row for row in (observation or self.observation)["checks"] if row["label"] == label)
 
     def validate(self, observation):
         return probe.validate_result(observation, self.catalog, {"target_pid": 123}, self.root)
@@ -66,6 +92,52 @@ class NativeEvidenceTests(unittest.TestCase):
             self.assertEqual(row["operation"], "scene.resource.create")
             self.assertEqual(row["expected_generation"], 4)
             self.assertNotIn("runtime_authorized", row)
+
+    def test_animation_flags_cannot_replace_raw_readback(self):
+        for label in probe.expected_animation_labels():
+            with self.subTest(label=label):
+                observation = copy.deepcopy(self.observation)
+                observation["checks"] = [row for row in observation["checks"] if row["label"] != label]
+                self.assertFalse(self.validate(observation)[0])
+        for label in ("animation_motion2d_playback", "animation_motion3d_redo_playback"):
+            observation = copy.deepcopy(self.observation)
+            self.row(label, observation).pop("details")
+            self.assertFalse(self.validate(observation)[0])
+
+    def test_animation_wrong_pose_rejects_even_with_passed_true(self):
+        for motion, actor in (("motion2d", "actor2d"), ("motion3d", "actor3d")):
+            for suffix in ("_playback", "_redo_playback"):
+                for sample_index in range(3):
+                    for prop in ("position", "rotation_degrees", "scale"):
+                        with self.subTest(motion=motion, suffix=suffix, sample=sample_index, prop=prop):
+                            observation = copy.deepcopy(self.observation)
+                            values = self.row("animation_" + motion + suffix, observation)["details"]["samples"][sample_index]["values"]
+                            key = actor + ":" + prop
+                            values[key] = [999] * len(values[key]) if type(values[key]) is list else 999
+                            self.assertEqual(self.validate(observation), (False, "animation-playback-value"))
+
+    def test_animation_malformed_values_and_sample_times_reject(self):
+        for value in (None, True, "5", [], [float("nan"), 4], [float("inf"), 4], [True, 4], [5, 4, 0]):
+            observation = copy.deepcopy(self.observation)
+            self.row("animation_motion2d_playback", observation)["details"]["samples"][1]["values"]["actor2d:position"] = value
+            self.assertFalse(self.validate(observation)[0])
+        for field, value in (("position_seconds", 0), ("values", {})):
+            observation = copy.deepcopy(self.observation)
+            self.row("animation_motion3d_redo_playback", observation)["details"]["samples"][1][field] = value
+            self.assertFalse(self.validate(observation)[0])
+
+    def test_animation_stale_binding_and_resource_mismatches_reject(self):
+        for suffix in ("_binding", "_playback", "_redo_playback"):
+            for key in ("command_id", "request_digest"):
+                observation = copy.deepcopy(self.observation)
+                self.row("animation_motion2d" + suffix, observation)["details"][key] = "stale"
+                self.assertFalse(self.validate(observation)[0])
+        for suffix in ("_do_readback", "_redo_readback"):
+            for field, value in (("path", "../Actor2D:position"), ("keys", [[0, [0, 0]], [2, [10, 0]]]),
+                                 ("type", 1), ("interpolation", 0)):
+                observation = copy.deepcopy(self.observation)
+                self.row("animation_motion2d" + suffix, observation)["details"]["tracks"][0][field] = value
+                self.assertFalse(self.validate(observation)[0])
 
 
 if __name__ == "__main__":

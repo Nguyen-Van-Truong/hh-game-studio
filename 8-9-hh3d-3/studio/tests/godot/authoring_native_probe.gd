@@ -10,6 +10,7 @@ extends RefCounted
 const UNKNOWN_PROPERTY := "__hh_o2_candidate_forbidden__"
 const ROOT_META := "hh_o2_native_root"
 const EdgeProbe = preload("res://tests/gameplay_edges_native.gd")
+const AnimationProbe = preload("res://tests/animation_native.gd")
 
 var _rows: Array[Dictionary] = []
 var _failures: Array[String] = []
@@ -65,7 +66,11 @@ func run(root: Node, undo: EditorUndoRedoManager, catalog: Dictionary, run_root:
 	_run_resource_candidates(resource_proposals, history)
 	_run_instance_candidates(instance_proposals, history)
 	_run_tilemap_candidates(tilemap_proposals, history)
-	_run_animation_candidates(animation_proposals, history)
+	var animation_report: Dictionary = AnimationProbe.new().run(root, undo, history, animation_proposals)
+	for row: Dictionary in animation_report.get("checks", []):
+		_rows.append(row)
+	for failure: String in animation_report.get("failures", []):
+		_failures.append(failure)
 
 	# Every temporary node is removed synchronously and the native history is
 	# cleared before the editor quits. This prevents diagnostic state leaking to
@@ -291,82 +296,6 @@ func _set_tile(tilemap: TileMapLayer, cell: Vector2i, source_id: int, atlas: Vec
 func _clear_tile(tilemap: TileMapLayer, cell: Vector2i) -> void:
 	if is_instance_valid(tilemap):
 		tilemap.erase_cell(cell)
-
-
-func _run_animation_candidates(proposals: Array, history: UndoRedo) -> void:
-	var prefix := "animation_library"
-	_check(prefix + "_proposal_count", proposals.size() == 1)
-	var actor := Node2D.new()
-	actor.name = "Actor"
-	actor.set_meta("hh_o2_temporary", true)
-	_root.add_child(actor)
-	actor.owner = _root
-	var player := AnimationPlayer.new()
-	player.name = "Player"
-	player.set_meta("hh_o2_temporary", true)
-	_root.add_child(player)
-	player.owner = _root
-	var animation := Animation.new()
-	animation.length = 1.0
-	animation.loop_mode = Animation.LOOP_LINEAR
-	var track := animation.add_track(Animation.TYPE_VALUE)
-	animation.track_set_path(track, NodePath("../Actor:position"))
-	animation.track_insert_key(track, 0.0, Vector2(0, 0))
-	animation.track_insert_key(track, 1.0, Vector2(10, 0))
-	var library := AnimationLibrary.new()
-	_check(prefix + "_player_created", animation != null and library != null and track == 0)
-	if animation == null or library == null:
-		return
-	library.add_animation("idle", animation)
-	for proposal: Dictionary in proposals:
-		var tracks: Array = proposal.get("tracks", [])
-		var bound: bool = proposal.get("operation") == "scene.animation.create" \
-			and proposal.get("runtime_authorized") == false \
-			and proposal.get("changes_applied") == false \
-			and proposal.get("target_stable_id") == "player" \
-			and proposal.get("animation_id") == "idle" and tracks.size() == 1
-		_check(prefix + "_binding", bound)
-		_check(prefix + "_before", not player.has_animation_library(StringName("")))
-		if not bound:
-			continue
-		_undo.create_action("O2 animation library", UndoRedo.MERGE_DISABLE, player)
-		_undo.add_do_method(self, &"_attach_animation", player, library)
-		_undo.add_undo_method(self, &"_detach_animation", player)
-		_undo.commit_action()
-		_check(prefix + "_do_transition", history.has_undo())
-		var observed := player.get_animation_library(StringName(""))
-		_check(prefix + "_library_readback", observed != null and observed.has_animation("idle"))
-		if observed != null and observed.has_animation("idle"):
-			var readback: Animation = observed.get_animation("idle")
-			_check(prefix + "_track_readback", readback.get_track_count() == 1
-				and readback.track_get_path(0) == NodePath("../Actor:position"))
-			_check(prefix + "_key_readback", readback.track_get_key_count(0) == 2
-				and (readback.track_get_key_value(0, 1) as Vector2).is_equal_approx(Vector2(10, 0)))
-		else:
-			_check(prefix + "_track_readback", false)
-			_check(prefix + "_key_readback", false)
-		_check(prefix + "_undo_transition", history.undo())
-		_check(prefix + "_undo_readback", not player.has_animation_library(StringName("")))
-		_check(prefix + "_redo_transition", history.redo())
-		_check(prefix + "_redo_readback", player.has_animation_library(StringName("")))
-		_check(prefix + "_cleanup_transition", history.undo())
-		_check(prefix + "_cleanup_readback", not player.has_animation_library(StringName("")))
-	if is_instance_valid(player):
-		_root.remove_child(player)
-		player.free()
-	if is_instance_valid(actor):
-		_root.remove_child(actor)
-		actor.free()
-
-
-func _attach_animation(player: AnimationPlayer, library: AnimationLibrary) -> void:
-	if is_instance_valid(player) and not player.has_animation_library(StringName("")):
-		player.add_animation_library(StringName(""), library)
-
-
-func _detach_animation(player: AnimationPlayer) -> void:
-	if is_instance_valid(player) and player.has_animation_library(StringName("")):
-		player.remove_animation_library(StringName(""))
 
 
 func _make_shape(resource_type: String, properties: Dictionary) -> Resource:
