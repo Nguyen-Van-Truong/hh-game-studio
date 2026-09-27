@@ -14,7 +14,8 @@ class NativeEvidenceTests(unittest.TestCase):
         self.root = Path(self.directory.name)
         self.catalog = probe._CONTRACT.load_catalog().as_dict()
         labels = (probe.expected_labels(self.catalog) | probe.expected_edge_labels()
-                  | probe.expected_resource_labels() | probe.expected_instance_labels())
+                  | probe.expected_resource_labels() | probe.expected_instance_labels()
+                  | probe.expected_tilemap_labels())
         self.observation = {
             "schema": "hh-o2-native-authoring-observation-1",
             "actual_editor": True, "runtime_authorized": False,

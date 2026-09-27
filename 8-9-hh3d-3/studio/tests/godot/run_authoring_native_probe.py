@@ -53,6 +53,12 @@ _INSTANCE = importlib.util.module_from_spec(_INSTANCE_SPEC)
 sys.modules[_INSTANCE_SPEC.name] = _INSTANCE
 _INSTANCE_SPEC.loader.exec_module(_INSTANCE)
 
+_TILEMAP_SPEC = importlib.util.spec_from_file_location(
+    "o2_native_tilemap_authoring", STUDIO / "godot-addon/tilemap_authoring.py")
+_TILEMAP = importlib.util.module_from_spec(_TILEMAP_SPEC)
+sys.modules[_TILEMAP_SPEC.name] = _TILEMAP
+_TILEMAP_SPEC.loader.exec_module(_TILEMAP)
+
 
 def sha(path: Path) -> str:
     digest = hashlib.sha256()
@@ -80,6 +86,7 @@ def source_files() -> dict[str, str]:
         "godot-addon/gameplay_edges.py",
         "godot-addon/resource_authoring.py",
         "godot-addon/scene_instance.py",
+        "godot-addon/tilemap_authoring.py",
         "protocol/core.py",
         "protocol/_rfc8785/__init__.py",
         "protocol/_rfc8785/_impl.py",
@@ -167,6 +174,15 @@ def expected_instance_labels() -> set[str]:
         "_redo_readback", "_cleanup_transition", "_cleanup_readback")}
 
 
+def expected_tilemap_labels() -> set[str]:
+    prefix = "tilemap_cell"
+    return {prefix + suffix for suffix in (
+        "_proposal_count", "_binding", "_layer_created", "_before",
+        "_do_transition", "_do_readback", "_atlas_readback", "_undo_transition",
+        "_undo_readback", "_redo_transition", "_redo_readback",
+        "_cleanup_transition", "_cleanup_readback")}
+
+
 def edge_proposals() -> list[dict]:
     context = _EDGE.EdgeContext(
         "project.fixture", "sha256:" + "1" * 64, "sha256:" + "2" * 64,
@@ -247,6 +263,26 @@ def instance_proposals() -> list[dict]:
     return [_INSTANCE.validate_request(request, context).projection]
 
 
+def tilemap_proposals() -> list[dict]:
+    context = _TILEMAP.ValidationContext(
+        "project.fixture", "sha256:" + "1" * 64, "sha256:" + "2" * 64,
+        6, "lease.fixture", 11, 31000, 1000,
+        (_TILEMAP.NodeState("root", None, "Node2D", "Root"),
+         _TILEMAP.NodeState("map", "root", "TileMapLayer", "Map")),
+        (_TILEMAP.TileSourceState(0, "sha256:" + "3" * 64, ((0, 0),), (0,)),))
+    payload = {"expected_generation": context.generation,
+               "expected_project_revision": context.project_revision,
+               "cell": [2, 3], "source_id": 0, "atlas_coords": [0, 0], "alternative": 0}
+    request = Request(
+        command_id="tilemap.native.1", project_id=context.project_id,
+        operation="scene.tilemap.cell.set", lease_id=context.lease_id,
+        fencing_epoch=context.fencing_epoch, expected_revision=context.revision,
+        target={"stable_id": "map"}, payload=payload,
+        payload_hash="sha256:" + hashlib.sha256(canonical_bytes(payload)).hexdigest(),
+        deadline_ms=2000)
+    return [_TILEMAP.validate_request(request, context).projection]
+
+
 def validate_result(result: object, catalog: dict, process: dict, run_root: Path) -> tuple[bool, str | None]:
     if not isinstance(result, dict):
         return False, "result-not-object"
@@ -267,7 +303,8 @@ def validate_result(result: object, catalog: dict, process: dict, run_root: Path
             return False, "check-failed"
         labels.append(row["label"])
     expected = (expected_labels(catalog) | expected_edge_labels()
-                | expected_resource_labels() | expected_instance_labels())
+                | expected_resource_labels() | expected_instance_labels()
+                | expected_tilemap_labels())
     if len(labels) != len(set(labels)) or set(labels) != expected:
         missing = sorted(expected - set(labels))
         extra = sorted(set(labels) - expected)
@@ -329,6 +366,7 @@ def run(godot: Path, run_id: str, output: Path) -> dict:
     write_json(project / "edge-input.json", {"proposals": edge_proposals()})
     write_json(project / "resource-input.json", {"proposals": resource_proposals()})
     write_json(project / "instance-input.json", {"proposals": instance_proposals()})
+    write_json(project / "tilemap-input.json", {"proposals": tilemap_proposals()})
     (scenes / "arena.tscn").write_text(
         '[gd_scene format=3]\n\n[node name="Arena" type="Node2D"]\n'
         '\n[node name="Spawn" type="Node2D" parent="."]\n',

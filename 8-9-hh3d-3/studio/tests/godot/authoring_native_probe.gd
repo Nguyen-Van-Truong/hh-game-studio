@@ -19,7 +19,8 @@ var _catalog: Dictionary
 
 
 func run(root: Node, undo: EditorUndoRedoManager, catalog: Dictionary, run_root: String,
-		edge_proposals: Array = [], resource_proposals: Array = [], instance_proposals: Array = []) -> Dictionary:
+		edge_proposals: Array = [], resource_proposals: Array = [], instance_proposals: Array = [],
+		tilemap_proposals: Array = []) -> Dictionary:
 	_root = root
 	_undo = undo
 	_catalog = catalog
@@ -63,6 +64,7 @@ func run(root: Node, undo: EditorUndoRedoManager, catalog: Dictionary, run_root:
 		_failures.append(failure)
 	_run_resource_candidates(resource_proposals, history)
 	_run_instance_candidates(instance_proposals, history)
+	_run_tilemap_candidates(tilemap_proposals, history)
 
 	# Every temporary node is removed synchronously and the native history is
 	# cleared before the editor quits. This prevents diagnostic state leaking to
@@ -221,6 +223,73 @@ func _instance_transform_matches(instance: Node, payload: Dictionary) -> bool:
 	return node2d.position.is_equal_approx(Vector2(float(position[0]), float(position[1]))) \
 		and is_equal_approx(node2d.rotation_degrees, float(rotation[0])) \
 		and node2d.scale.is_equal_approx(Vector2(float(scale[0]), float(scale[1])))
+
+
+func _run_tilemap_candidates(proposals: Array, history: UndoRedo) -> void:
+	var prefix := "tilemap_cell"
+	_check(prefix + "_proposal_count", proposals.size() == 1)
+	var tilemap := TileMapLayer.new()
+	tilemap.name = "Map"
+	tilemap.set_meta("hh_o2_temporary", true)
+	_root.add_child(tilemap)
+	tilemap.owner = _root
+	var tile_set := TileSet.new()
+	tile_set.tile_size = Vector2i(16, 16)
+	var source := TileSetAtlasSource.new()
+	var texture := GradientTexture2D.new()
+	texture.width = 16
+	texture.height = 16
+	source.texture = texture
+	source.texture_region_size = Vector2i(16, 16)
+	source.create_tile(Vector2i(0, 0))
+	tile_set.add_source(source, 0)
+	tilemap.tile_set = tile_set
+	for proposal: Dictionary in proposals:
+		var effect: Dictionary = proposal.get("after", {})
+		var cell_array: Array = effect.get("cell", [])
+		var atlas_array: Array = effect.get("atlas_coords", [])
+		var cell := Vector2i(int(cell_array[0]), int(cell_array[1]))
+		var atlas := Vector2i(int(atlas_array[0]), int(atlas_array[1]))
+		var source_id := int(effect.get("source_id", -1))
+		var alternative := int(effect.get("alternative", -1))
+		var bound: bool = proposal.get("operation") == "scene.tilemap.cell.set" \
+			and proposal.get("runtime_authorized") == false \
+			and proposal.get("changes_applied") == false \
+			and effect.get("node_id") == "map" and source_id == 0 \
+			and cell == Vector2i(2, 3) and atlas == Vector2i(0, 0) and alternative == 0
+		_check(prefix + "_binding", bound)
+		_check(prefix + "_layer_created", tilemap.tile_set != null and tile_set.has_source(0))
+		if not bound:
+			continue
+		_check(prefix + "_before", tilemap.get_cell_source_id(cell) == -1)
+		_undo.create_action("O2 TileMap cell", UndoRedo.MERGE_DISABLE, tilemap)
+		_undo.add_do_method(self, &"_set_tile", tilemap, cell, source_id, atlas, alternative)
+		_undo.add_undo_method(self, &"_clear_tile", tilemap, cell)
+		_undo.commit_action()
+		_check(prefix + "_do_transition", history.has_undo())
+		_check(prefix + "_do_readback", tilemap.get_cell_source_id(cell) == source_id)
+		_check(prefix + "_atlas_readback", tilemap.get_cell_atlas_coords(cell) == atlas
+			and tilemap.get_cell_alternative_tile(cell) == alternative)
+		_check(prefix + "_undo_transition", history.undo())
+		_check(prefix + "_undo_readback", tilemap.get_cell_source_id(cell) == -1)
+		_check(prefix + "_redo_transition", history.redo())
+		_check(prefix + "_redo_readback", tilemap.get_cell_source_id(cell) == source_id
+			and tilemap.get_cell_atlas_coords(cell) == atlas)
+		_check(prefix + "_cleanup_transition", history.undo())
+		_check(prefix + "_cleanup_readback", tilemap.get_cell_source_id(cell) == -1)
+	if is_instance_valid(tilemap):
+		_root.remove_child(tilemap)
+		tilemap.free()
+
+
+func _set_tile(tilemap: TileMapLayer, cell: Vector2i, source_id: int, atlas: Vector2i, alternative: int) -> void:
+	if is_instance_valid(tilemap):
+		tilemap.set_cell(cell, source_id, atlas, alternative)
+
+
+func _clear_tile(tilemap: TileMapLayer, cell: Vector2i) -> void:
+	if is_instance_valid(tilemap):
+		tilemap.erase_cell(cell)
 
 
 func _make_shape(resource_type: String, properties: Dictionary) -> Resource:
