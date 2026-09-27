@@ -14,10 +14,17 @@ hash and parent on the Godot main thread, instantiate atomically, verify the
 new stable ID, and add an UndoRedo transaction before this candidate can join
 `CR-GODOT-AUTHORING-01` or GT-09.
 
+The disposable native diagnostic now covers one Node2D `PackedScene` source:
+it loads `scenes/arena.tscn`, instantiates it under a temporary 2D parent,
+checks transform readback, performs do/undo/redo, and cleans up. Run
+`o2-native-20260927-25` passed with host exit 0, clean log, unchanged
+source/project snapshots, and 331 checks. It remains authority 0 and does not
+enable the profile or prove the production save/lease/sandbox requirements.
+
 Static verification:
 
 ```powershell
-python -B -m unittest tests.godot.test_scene_instance
+python -B -m unittest tests.godot.test_scene_instance tests.godot.test_authoring_native_evidence
 ```
 
 This file does not enable the candidate profile or alter the accepted adapter.
