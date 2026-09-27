@@ -5,6 +5,13 @@
 This is a coordinator audit of the pasted progress report. It does not replace
 the plan, approve a gate, or authorize a new formal run.
 
+> Correction, 2026-09-27: the warmup assessment below was wrong. Reviewer
+> described tightening, not removal. Commit 87912523 checked status gap only
+> from batch 5; current source checks warmup too. O4.2 now explicitly approves
+> it. O4.1 supersedes old app-closure restrictions; Docker/WSL are permitted.
+> Historical narrative below is retained, not a current instruction. Latest
+> reconciliation: 20260927-current-state-for-agent-review.md.
+
 ## Verified
 
 - GT-06 is still the first incomplete work package. The plan records zero

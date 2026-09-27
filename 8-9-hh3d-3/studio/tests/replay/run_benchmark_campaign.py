@@ -34,6 +34,7 @@ from studio.tests.replay.benchmark_job import (
 from studio.tests.replay.benchmark_readiness import validate_startup_readiness
 from studio.tests.replay.benchmark_import_observer import ImportObserver, validate_import_snapshot
 from studio.tests.replay.benchmark_http_phases import validate_phase_snapshot
+from studio.tests.replay import benchmark_environment as environment
 from studio.tests.replay import benchmark_profile as profile
 from studio.tests.replay.benchmark_assembly import read_artifact, assemble_sample, assemble_run, assemble_dataset
 from studio.tests.replay.run_native_benchmark import (
@@ -62,6 +63,7 @@ CAMPAIGN_FIXED_SOURCES = (
     'tests/replay/run_benchmark_campaign.py',
     'tests/replay/run_campaign_task.py',
     'tests/replay/campaign_task.ps1',
+    'tests/replay/benchmark_environment.py',
     'contracts/perf-collector.schema.json',
 )
 
@@ -248,16 +250,24 @@ def require_campaign_running(root, *, active=None):
             output = root / f'run-{index:02d}-attempt-{attempt:02d}'
             if output != active:
                 require(not os.path.lexists(output / 'stop-request.json'), 'CAMPAIGN_STOP_LATCHED')
+            require(not os.path.lexists(output / 'watchdog-stop.json'), 'CAMPAIGN_WATCHDOG_STOP_LATCHED')
 
 
 def wait_owned_run(owner, output, *, run_id, source_closure_sha256, campaign_sha256,
-                   check_campaign_stop=None):
+                   check_campaign_stop=None, watchdog=None):
     while True:
         if check_campaign_stop is not None:
             check_campaign_stop()
         stop = stop_requested(output, run_id=run_id,
             source_closure_sha256=source_closure_sha256, campaign_sha256=campaign_sha256)
-        if owner.tick(stop=stop) is not None:
+        terminal = owner.tick(stop=stop)
+        # The owner/child's existing failure always takes precedence. The
+        # watchdog cannot rewrite a recorded failed run into infrastructure.
+        if terminal not in (None, 0):
+            raise BenchmarkJobError('BENCHMARK_WRAPPER_EXIT')
+        if watchdog is not None and not (output / 'child-failure.json').exists():
+            watchdog.poll(force=terminal is not None)
+        if terminal is not None:
             # Stop can arrive while tick observes the terminal process exit.
             require(not stop_requested(output, run_id=run_id,
                 source_closure_sha256=source_closure_sha256, campaign_sha256=campaign_sha256),
@@ -361,11 +371,11 @@ def workstation_profile():
         'scope': 'current machine fixed before campaign; not a claim of performance on other devices'}
 
 
-def heavy_preflight_processes():
+def heavy_preflight_processes(*, all_processes=False):
     """Name/PID inventory only; no command lines, termination or load estimates.
 
-    The coordinator app is required to operate the run and is not in the
-    closed-app list. WebView and idle WSL services are not active user apps.
+    O4.1 permits app names as inventory, never as a launch prohibition.
+    all_processes includes engine names and enables top-private/WSL inventory.
     Unknown snapshot/enumeration/close failures never authorize a launch.
     """
     require(os.name == 'nt', 'CAMPAIGN_PREFLIGHT_PLATFORM')
@@ -396,7 +406,7 @@ def heavy_preflight_processes():
         require(kernel.Process32FirstW(snapshot, ctypes.byref(entry)), 'CAMPAIGN_PREFLIGHT_PROCESS_FIRST')
         for _ in range(65536):
             name = entry.exe.lower()
-            if name in HEAVY_PREFLIGHT_NAMES:
+            if all_processes or name in HEAVY_PREFLIGHT_NAMES:
                 found.append({'pid': int(entry.pid), 'name': name})
             entry.size = ctypes.sizeof(entry)
             if not kernel.Process32NextW(snapshot, ctypes.byref(entry)):
@@ -415,84 +425,26 @@ def heavy_preflight_processes():
     return sorted(found, key=lambda row: (row['name'], row['pid']))
 
 
-def environment_preflight():
-    """Capture the owner O1.8 resource gate before or after a campaign.
+def environment_snapshot(*, job_handle=None):
+    return environment.native_snapshot(heavy_preflight_processes(all_processes=True),
+        job_handle=job_handle, heavy_names=HEAVY_PREFLIGHT_NAMES)
 
-    ``GlobalMemoryStatusEx`` supplies genuinely available physical memory;
-    ``GetPerformanceInfo`` supplies system commit total/limit.  Both values
-    are read in the same parent process that would launch the campaign.  A
-    missing native primitive is a preflight failure, never an inferred pass.
-    """
-    from ctypes import wintypes as w
-    class Memory(ctypes.Structure):
-        _fields_ = [('length', w.DWORD), ('load', w.DWORD)] + [
-            (name, ctypes.c_ulonglong) for name in ('physical', 'available', 'page_total',
-            'page_available', 'virtual_total', 'virtual_available', 'extended_available')]
-    observed_utc = time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())
-    result = {'schema_id': 'hh-studio.benchmark-environment-preflight', 'schema_version': '1.1.0',
-        'observed_utc': observed_utc, 'available_memory_bytes': None,
-        'required_available_memory_bytes': 8 * 1024**3, 'commit_total_bytes': None,
-        'commit_limit_bytes': None, 'commit_used_percent': None,
-        'required_commit_max_percent': 80.0, 'heavy_processes': None,
-        'required_heavy_processes_closed': True, 'pass': False,
-        'failure_code': None, 'scope': 'O1.8 system resource snapshot; launch permission requires a fresh before snapshot'}
+
+def environment_preflight():
+    """O4.1 resource/engine gate; app names are inventory only."""
     try:
-        result['heavy_processes'] = heavy_preflight_processes()
-        memory = Memory()
-        memory.length = ctypes.sizeof(memory)
-        kernel = ctypes.WinDLL('kernel32', use_last_error=True)
-        kernel.GlobalMemoryStatusEx.argtypes = [ctypes.POINTER(Memory)]
-        kernel.GlobalMemoryStatusEx.restype = w.BOOL
-        require(kernel.GlobalMemoryStatusEx(ctypes.byref(memory)), 'CAMPAIGN_PREFLIGHT_MEMORY')
-        result['available_memory_bytes'] = int(memory.available)
+        return environment.preflight(environment_snapshot())
     except Exception as error:
-        result['failure_code'] = getattr(error, 'code', type(error).__name__)
-        return result
-    class Performance(ctypes.Structure):
-        _fields_ = [('cb', w.DWORD), ('commit_total', ctypes.c_size_t),
-                    ('commit_limit', ctypes.c_size_t), ('commit_peak', ctypes.c_size_t),
-                    ('physical_total', ctypes.c_size_t), ('physical_available', ctypes.c_size_t),
-                    ('system_cache', ctypes.c_size_t), ('kernel_total', ctypes.c_size_t),
-                    ('kernel_paged', ctypes.c_size_t), ('kernel_nonpaged', ctypes.c_size_t),
-                    ('page_size', ctypes.c_size_t), ('handle_count', w.DWORD),
-                    ('process_count', w.DWORD), ('thread_count', w.DWORD)]
-    try:
-        perf = Performance()
-        perf.cb = ctypes.sizeof(perf)
-        psapi = ctypes.WinDLL('psapi', use_last_error=True)
-        psapi.GetPerformanceInfo.argtypes = [ctypes.POINTER(Performance), w.DWORD]
-        psapi.GetPerformanceInfo.restype = w.BOOL
-        require(psapi.GetPerformanceInfo(ctypes.byref(perf), ctypes.sizeof(perf)), 'CAMPAIGN_PREFLIGHT_COMMIT')
-        require(perf.commit_limit > 0 and perf.page_size > 0, 'CAMPAIGN_PREFLIGHT_COMMIT_LIMIT')
-        commit_total = int(perf.commit_total * perf.page_size)
-        commit_limit = int(perf.commit_limit * perf.page_size)
-        commit_percent = (100.0 * commit_total / commit_limit)
-        result.update(commit_total_bytes=commit_total, commit_limit_bytes=commit_limit,
-            commit_used_percent=commit_percent,
-            **{'pass': result['available_memory_bytes'] >= 8 * 1024**3
-               and commit_total * 100 <= commit_limit * 80
-               and not result['heavy_processes']})
-        if not result['pass']:
-            result['failure_code'] = ('CAMPAIGN_PREFLIGHT_HEAVY_APPS'
-                                      if result['heavy_processes'] else 'CAMPAIGN_PREFLIGHT_RESOURCE_LIMIT')
-    except Exception as error:
-        result['failure_code'] = getattr(error, 'code', type(error).__name__)
-    return result
+        return {'schema_id': environment.SCHEMA, 'schema_version': environment.VERSION,
+                'observed_utc': time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()),
+                'pass': False, 'failure_code': getattr(error, 'code', type(error).__name__),
+                'heavy_processes': None, 'foreign_engines': None,
+                'required_heavy_processes_closed': False}
 
 
 def require_environment_preflight(result):
-    """Enforce a captured preflight only after its evidence is durable."""
-    require(type(result) is dict and result.get('schema_id') == 'hh-studio.benchmark-environment-preflight'
-            and result.get('schema_version') == '1.1.0', 'CAMPAIGN_PREFLIGHT_SHAPE')
-    available = result.get('available_memory_bytes')
-    total, limit = result.get('commit_total_bytes'), result.get('commit_limit_bytes')
-    require(type(result.get('heavy_processes')) is list
-            and result.get('required_heavy_processes_closed') is True, 'CAMPAIGN_PREFLIGHT_APP_INVENTORY')
-    require(not result['heavy_processes'], 'CAMPAIGN_PREFLIGHT_HEAVY_APPS')
-    require(type(available) is int and available >= 8 * 1024**3
-            and type(total) is int and total >= 0 and type(limit) is int and limit > 0
-            and total * 100 <= limit * 80 and result.get('pass') is True,
-            'CAMPAIGN_PREFLIGHT_RESOURCE_LIMIT')
+    environment.require_preflight(result)
+
 
 
 def seal_campaign_capture(root, result):
@@ -582,6 +534,10 @@ def verify_run_capture(root, captured, source_digest, *, campaign_id, index, att
     require(len(child['batches']) == 35, 'CAMPAIGN_RESUME_BATCH_COUNT')
     verify_child_terminal_cleanup(root, context, child)
     verify_observations(root, context, child)
+    require({'environment-preflight-before.json', 'environment-preflight-after.json',
+             'environment-samples.jsonl'}.issubset(files), 'CAMPAIGN_ENVIRONMENT_MISSING')
+    require_environment_preflight(json.loads(read_regular(root / 'environment-preflight-before.json')))
+    environment.verify_watchdog(root, read_regular, elapsed_seconds=host['elapsed_seconds'])
     verify_owner_captures(root, context)
     return child
 
@@ -594,7 +550,8 @@ def run_campaign(campaign_id, root):
     after_path = root / 'environment' / f'{invocation}-after.json'
     primary = None
     try:
-        return _run_campaign(campaign_id, root, preflight_path, after_path)
+        with environment.KeepAwake():
+            return _run_campaign(campaign_id, root, preflight_path, after_path)
     except BaseException as error:
         primary = error
         raise
@@ -697,10 +654,12 @@ def _run_campaign(campaign_id, root, preflight_path, after_path):
             require(sha(raw) == expected, 'CAMPAIGN_FROZEN_COPY_CHANGED')
             write(output / 'source/studio' / name, raw)
         owner = None
+        watchdog = None
         primary = None
         try:
             verify_sources(before)
             require_campaign_running(root)
+            environment.require_infra_budget(root.parent, read_regular)
             # Pair 2 can start hours after the invocation-level snapshot.
             # Capture again immediately before each fresh host/editor launch.
             launch_preflight = environment_preflight()
@@ -710,10 +669,17 @@ def _run_campaign(campaign_id, root, preflight_path, after_path):
                 '--child-index', str(index), '--attempt', str(attempt)], cwd=output, output=output / 'host-owner',
                 source_root=STUDIO, source_files=before,
                 binary_sha256=sha(read_regular(Path(sys.executable), 256 * 1024**2)), campaign_host=True)
+            watchdog = environment.Watchdog(output,
+                lambda: environment_snapshot(job_handle=owner.job._handle),
+                {'run_id': run_id, 'source_closure_sha256': digest, 'campaign_sha256': campaign_sha}, write)
             wait_owned_run(owner, output, run_id=run_id,
                 source_closure_sha256=digest, campaign_sha256=campaign_sha,
-                check_campaign_stop=lambda: require_campaign_running(root, active=output))
+                check_campaign_stop=lambda: require_campaign_running(root, active=output), watchdog=watchdog)
+            watchdog.close()
+            environment.verify_watchdog(output, read_regular)
             host = owner.finish()
+            environment.verify_watchdog(output, read_regular, elapsed_seconds=host['elapsed_seconds'])
+            write(output / 'environment-preflight-after.json', environment_preflight())
             require_campaign_running(root)
             child = json.loads(read_regular(output / 'child-result.json'))
             require(host['actual_process_exit']['pid'] == child['processes']['host']['pid'], 'CAMPAIGN_HOST_IDENTITY')
@@ -764,6 +730,8 @@ def _run_campaign(campaign_id, root, preflight_path, after_path):
             try:
                 write(output / 'parent-failure.json', {'completed': False, 'run_id': run_id,
                     'code': getattr(error, 'code', type(error).__name__), 'formal_acceptance': False,
+                    'classification': environment.failure_classification(error, output),
+                    'attempt_local_date': time.strftime('%Y-%m-%d'),
                     'owner_closed': owner.closed if owner else False,
                     'owned_tree_zero': owner.job.zero_observed if owner and owner.job else False,
                     'cleanup_error': type(cleanup_error).__name__ if cleanup_error else None})
@@ -773,8 +741,15 @@ def _run_campaign(campaign_id, root, preflight_path, after_path):
                 raise error from cleanup_error
             raise
         finally:
+            if watchdog is not None:
+                watchdog.close()
             if owner is not None and primary is None:
                 owner.close()
+            if primary is not None and not (output / 'environment-preflight-after.json').exists():
+                try:
+                    write(output / 'environment-preflight-after.json', environment_preflight())
+                except Exception as snapshot_error:
+                    primary.add_note('Pair after snapshot failed: ' + type(snapshot_error).__name__)
     verify_sources(before)
     # The after snapshot is evidence, not an additional acceptance gate.
     preflight_after = environment_preflight()

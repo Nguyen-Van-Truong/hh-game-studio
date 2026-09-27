@@ -199,7 +199,11 @@ class ActualPythonMetricsTest(unittest.TestCase):
             probe.close()
         self.assertIsNone(probe.handle)
         self.assertFalse(module.HELD_PROBES)
-        self.assertEqual(handles(), before)
+        # Other replay tests and the Windows runtime may release unrelated
+        # handles while this probe is alive.  Require no net process-handle
+        # growth while separately asserting that the probe released its own
+        # handle and global ownership entry above.
+        self.assertLessEqual(handles(), before)
 
 
 class ImportSnapshotValidatorTests(unittest.TestCase):

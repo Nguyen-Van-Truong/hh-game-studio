@@ -30,13 +30,12 @@ GT-06 has **zero accepted formal full runs**. The current O1 gate requires:
   cleanup, required counters, status-gap and duplicate/lost-effect checks;
 - two independent read-only critics signing the same final source hash.
 
-The latest recorded plan preflight is `2026-09-27T08:04:28Z`: 7.14 GiB free,
-73.31% commit, and heavy Chrome/Firefox/Edge/Telegram/Zalo/WSL processes;
-result `CAMPAIGN_PREFLIGHT_HEAVY_APPS`, `PASS=false`. A later direct snapshot at
-08:13:28Z still failed the same latch (6.83 GiB free, 73.65% commit, the same
-heavy-process set). It was not recorded as a second plan snapshot because the
-plan explicitly records an unchanged blocker once. No formal campaign was
-started from either failed preflight.
+O4 (owner-delegated commit b0802472) supersedes the previous app-closure
+preflight. The latest old-rule snapshot (08:26:45Z) had 5.22 GiB available and
+75.28% commit and was not launch permission. The implemented O4 preflight at
+09:01:55Z reported 10.24 GiB available, 68.84% commit, no foreign engines and
+PASS while 58 application entries remained. Every actual launch still needs a
+fresh captured preflight. The new harness remains subject to final critics.
 
 ## O2 authoring lane retained in isolation
 
@@ -60,18 +59,18 @@ they were not relabeled as PASS.
 
 ## Blender evidence and limits
 
-The available native Blender evidence is `o2-blender-native-20260926-16`,
-`AUTHORITY=0`, with 18 checks for armature/template geometry, action/keyframe
-creation, native UI undo/redo, and reopen. It does not prove full geometry,
-materials, UVs, export/import, or a game-authoring workflow. The pinned
-Blender 5.2.1 archive exists locally and its SHA256 matches `toolchain.lock.json`;
-a verified extracted executable and a fresh native probe are still pending in
-this checkpoint. No system PATH or global toolchain mutation is allowed.
+The latest native Blender diagnostic is o2-blender-native-20260927-17:
+18/18 checks, native/reopen exits 0, verified tree, unchanged source/project,
+AUTHORITY=0. Archive and executable match the Blender 5.2.1 lock. It proves
+armature/template geometry, action/keyframe authoring, native UI undo/redo and
+reopen only. General geometry/material/UV and authored game content loops
+remain open. Details and fixture gaps now live in studio/AUTHORING_STATUS.md
+on the isolated O2 branch (0faf7c44).
 
 ## What the earlier agent assessment got right
 
-- Formal progress is slow because O1.8 preflight is blocking the only current
-  acceptance lane.
+- The old O1.8 preflight blocked launch. O4.1 now permits normal apps under
+  resource and engine-inventory limits; code correctness still needs formal proof.
 - S258 is sealed and must not be resumed.
 - O2 is isolated and useful for bounded capability work, but it is not GT-06
   evidence.
@@ -84,18 +83,20 @@ this checkpoint. No system PATH or global toolchain mutation is allowed.
 
 - Its RAM/commit/process numbers were older than the latest preflight and must
   not be quoted as current.
-- The claim that warmup removed required status-gap/counter checks is false for
-  the current verifier; warmup only skips growth-baseline checks.
-- Relaxing O1.8 or opening GT-07 in parallel was not authorized by the current
-  plan and was correctly rejected.
+- CORRECTION: the reviewer said the newer verifier TIGHTENED warmup checks,
+  not that it removed them. Inspection of 87912523 confirms status-gap checking
+  began at index >= 5 there. Current source checks warmup too; O4.2 explicitly
+  approves this tightening. The previous coordinator assessment was wrong.
+- App-closure relaxation was not authorized before O4; it is now authorized
+  by O4.1. GT-07 remains sequential. The earlier restriction is historical.
 - Static code quality and candidate tests do not justify claims of a complete
   Godot+Blender game, public ACK semantics, or secure sandboxing.
 
 ## Issues the independent reviewer should assess in the plan
 
-1. **Formal environment dependency:** GT-06 cannot progress until unnecessary
-   heavy applications are closed and a fresh full preflight passes. The plan
-   should keep this visible without duplicating unchanged snapshots.
+1. **Formal environment dependency:** implement and verify O4.1 resource/engine
+   preflight and watchdog. App closing is no longer required. No workload PASS
+   follows from passing preflight; preserve product failures over infra stops.
 2. **Evidence authority boundaries:** O2 native probes are strong diagnostics,
    but the plan must continue to label them authority 0 and prevent accidental
    promotion to GT acceptance.
@@ -112,13 +113,12 @@ this checkpoint. No system PATH or global toolchain mutation is allowed.
    change; retain failed raw evidence instead of rewriting it.
 7. **Critic independence:** coordinator or implementer summaries cannot replace
    two independent same-hash critics. A read-only audit agent may report gaps,
-   but cannot sign acceptance.
+   but this report is not an acceptance signature. O4.3 requires two independent
+   final critics through the owner review route.
 
 ## Reviewer decision requested
 
 Please review the source plan, this summary, the cited commits/evidence, and
 return: (a) any factual error, (b) any gate or authority ambiguity, (c) any
 missing acceptance condition, and (d) the smallest safe improvement that can
-be made without opening GT-07 or weakening GT-06.
-
-
+be made under O4 without opening GT-07 before GT-06 acceptance.

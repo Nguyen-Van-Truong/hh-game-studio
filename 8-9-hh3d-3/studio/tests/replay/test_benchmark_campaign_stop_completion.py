@@ -68,10 +68,14 @@ class CampaignStopCompletionTests(unittest.TestCase):
             stack.enter_context(patch.object(campaign, 'load_fixture'))
             stack.enter_context(patch.object(campaign, 'source_files', return_value=files))
             stack.enter_context(patch.object(campaign, 'workstation_profile', return_value={'synthetic': True}))
+            # Watchdog policy has its own tests. This fixture isolates Stop
+            # publication during assembly with an inert, already exited Job.
+            stack.enter_context(patch.object(campaign.environment, 'Watchdog'))
+            stack.enter_context(patch.object(campaign.environment, 'verify_watchdog'))
             stack.enter_context(patch.object(campaign, 'environment_preflight', return_value={
-                'schema_id': 'hh-studio.benchmark-environment-preflight', 'schema_version': '1.1.0',
+                'schema_id': 'hh-studio.benchmark-environment-preflight', 'schema_version': '1.2.0',
                 'pass': True, 'available_memory_bytes': 8 * 1024**3,
-                'commit_total_bytes': 80, 'commit_limit_bytes': 100, 'heavy_processes': [], 'required_heavy_processes_closed': True}))
+                'commit_total_bytes': 80, 'commit_limit_bytes': 100, 'heavy_processes': [], 'required_heavy_processes_closed': False, 'foreign_engines': []}))
             # Every process launch is intercepted, including accidental next-run
             # launch. Existing owner/assembly tests verify their own contracts.
             launch = stack.enter_context(patch.object(campaign, 'BenchmarkProcess'))
@@ -109,6 +113,7 @@ class CampaignStopCompletionTests(unittest.TestCase):
             retained.tick = Mock(return_value=0)
             retained.close = Mock(return_value=True)
             retained.finish = Mock(return_value={
+                'elapsed_seconds': 5.0,
                 'actual_process_exit': {'pid': 100, 'exit_code': 0},
                 'job': {'zero_observed': True}})
             def launch(*_args, **kwargs):

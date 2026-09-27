@@ -1,22 +1,22 @@
 # HH3D-3 — routing hiện hành
 
-Owner steering mới nhất 27-09-2026: "giờ bạn tự làm không cần worker hay
-subagent gì nữa tổng hợp lại tiến độ subagent đã làm và tiếp tục".
-Coordinator tự đọc kết quả/code/evidence đã có, tiếp quản việc còn thiếu và
-thực hiện tuần tự. Không spawn worker/subagent, không mở Cursor session hoặc
-chuyển việc sang thread khác. Chỉ đạo ba worker Astra ở S158 là lịch sử,
-không còn là dispatch hiện hành. Không gán kết quả coordinator làm thành
-kết quả worker hoặc chữ ký critic độc lập.
+Owner steering mới nhất 27-09-2026 và O4 đã thay chế độ solo tuyệt đối:
+coordinator giữ một writer/file; có thể nhờ subagent làm việc độc lập khi cần
+(owner ưu tiên GPT-6 Astra extra-high). Không dispatch lại khi thiếu credit.
+Riêng critic nghiệm thu theo O4.3: coordinator chuẩn bị CRITIC_PACKAGE để
+owner chuyển phiên review độc lập chạy hai critic khác model cùng hash.
+Không tự gọi critic nghiệm thu, không ký thay hoặc tái dùng chữ ký hash cũ.
 
-Resume đúng workspace/checkpoint sau gián đoạn; không làm lại phần đã chứng
-minh. Giữ một writer/file, tuần tự hóa engine runs, không thêm engine/test
-nặng cạnh phép đo formal. Giữ actual exits, source/evidence hash và raw lỗi.
-Không rerun test/commit metadata khi source và blocker không đổi.
+Resume đúng checkpoint; không làm lại phần đã chứng minh. Tuần tự hóa engine
+runs; không chạy Godot/Blender khác hay test nặng cạnh GT-06 formal. Giữ actual
+exits, source/evidence hash và raw lỗi. Không rerun test/commit metadata khi
+source và điều kiện không đổi. Preflight/watchdog dùng O4.1; app người dùng
+là inventory, không tự đóng. Không thay counter/status-gap/timeout của O1.
 
-Chế độ solo không tự tạo bằng chứng hai critic độc lập mà gate còn yêu cầu:
-giữ phần nghiệm thu đó pending, không tự ký thay và không gọi critic trái
-chỉ đạo solo. Đọc CURRENT_VALID_WP và trạng thái thật ở đầu plan; không lấy
-báo cáo lịch sử hay số test làm nguồn tick. Không chuyển chữ ký từ hash cũ.
+Governance chỉ sửa trên nhánh chính. Nhánh O2 ghi chi tiết vào
+studio/AUTHORING_STATUS.md, làm theo gap của hai fixture; giữ DSL sáu effect.
+Không mở GT-07 trước GT-06 ACCEPTED. Đọc CURRENT_VALID_WP và bảng trạng thái
+trong tools plan, không lấy số test/diagnostic làm nguồn tick.
 
 Ba plan TXT có scope riêng theo lệnh owner 18-09-2026:
 

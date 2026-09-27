@@ -83,7 +83,11 @@ def execute(campaign_id, mode, output, request_sha, *, launch_number=1):
     campaign.load_fixture()
     sources = campaign.source_files()
     owner = None
+    watchdog = None
     try:
+        before = campaign.environment_preflight()
+        write(output / 'environment-preflight-before.json', before)
+        campaign.require_environment_preflight(before)
         owner = BenchmarkProcess([sys.executable, '-B', '-c',
             "import time; time.sleep(12); print('HH_GT06_TASK_PROBE_COMPLETE',flush=True)"],
             cwd=output, output=output / 'probe-owner', source_root=STUDIO,
@@ -91,8 +95,15 @@ def execute(campaign_id, mode, output, request_sha, *, launch_number=1):
         binding = {'run_id': campaign_id + '.probe' + launch_suffix(launch_number),
             'source_closure_sha256': campaign.closure(sources), 'campaign_sha256': request_sha}
         write(output / 'probe-context.json', binding)
-        campaign.wait_owned_run(owner, output, **binding)
-        owner.finish()
+        watchdog = campaign.environment.Watchdog(output,
+            lambda: campaign.environment_snapshot(job_handle=owner.job._handle), binding, write)
+        with campaign.environment.KeepAwake():
+            campaign.wait_owned_run(owner, output, **binding, watchdog=watchdog)
+        watchdog.close()
+        campaign.environment.verify_watchdog(output, campaign.read_regular)
+        capture_value = owner.finish()
+        campaign.environment.verify_watchdog(output, campaign.read_regular,
+                                             elapsed_seconds=capture_value['elapsed_seconds'])
         capture = output / 'probe-owner/capture.json'
         verify_capture(capture.parent, sha(capture), source_root=STUDIO,
             expected_source_files=sources, expected_binary_sha256=sha(Path(sys.executable)))
@@ -103,8 +114,11 @@ def execute(campaign_id, mode, output, request_sha, *, launch_number=1):
         owner = owner or getattr(error, 'cleanup_owner', None)
         raise
     finally:
+        if watchdog is not None:
+            watchdog.close()
         if owner is not None:
             owner.close()
+        write(output / 'environment-preflight-after.json', campaign.environment_preflight())
 
 
 def main():
