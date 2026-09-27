@@ -240,3 +240,17 @@ A later direct preflight at `2026-09-27T08:04:28Z` still failed the same
 with 73.31% commit. The plan header records this changed resource snapshot
 once; no formal run was attempted, and the coordinator did not close user
 applications.
+
+
+The coordinator also added a closed-profile script boundary diagnostic in
+`5516db41`. A byte-exact `hh-godot-declarative-1` source is validated in Python
+before the disposable editor sees it; Godot then parses it, attaches it to a
+temporary node through UndoRedo, reads all exported defaults, repeats after
+redo, and removes the generated source. Host verification checks the raw
+property values. `o2-native-20260927-33` passed with 396 checks, actual
+host/wrapper exit 0, clean log, verified process tree and unchanged
+source/project snapshots; closure is
+`278df6de3137f74fb9bf2f536e4c247d1637a89c63ddd8b68f02f4bca9478d43`.
+The static O2 regression is 151 tests. The probe remains authority 0 and does
+not execute caller GDScript, prove an OS sandbox/AUTH-05, enable a public
+profile, or advance GT-06.
