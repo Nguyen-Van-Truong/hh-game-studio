@@ -160,3 +160,12 @@ tests passing. Because this changes the candidate source closure, the earlier
 305-check native run is explicitly stale for the new closure. A fresh native
 remint must include the scene-instance module before any claim about native
 scene instancing is made. No GT-06 evidence or acceptance was changed.
+
+The remint `o2-native-20260927-25` now includes that source closure. It loaded
+`scenes/arena.tscn` as a native PackedScene, instantiated it under a temporary
+Node2D parent, checked transform readback, performed do/undo/redo and cleanup,
+and finished with actual host/wrapper exit 0, verified process tree, clean log,
+unchanged source/project snapshots, and 331 checks. It remains authority 0
+diagnostic evidence. Static O2 regression remains 123 tests passing. The
+earlier 305-check run is retained as historical and is superseded for the new
+source closure.
