@@ -187,3 +187,13 @@ cleans the temporary player. It passed with actual host/wrapper exit 0, clean
 log, unchanged source/project snapshots, and 358 checks. This remains
 authority-0 diagnostic evidence; it does not enable scripting, grant a
 capability, prove AUTH-01..05 or advance GT-06.
+
+The O2 lane also now contains `b9d3b688`, a declarative gameplay behavior
+candidate with five focused tests. It validates a bounded state machine and a
+fixed typed effect vocabulary for movement, jump, velocity, facing, signals
+and animation, while rejecting script text, expressions, arbitrary methods,
+paths and malformed transitions. The combined static O2 regression is 143
+tests passing. This candidate is intentionally static authority-0 evidence;
+native script execution, deterministic dispatch, sandbox/AUTH-05 and runtime
+readback remain open. It is therefore not folded into the frozen native probe
+source closure at `8911223d`, and no GT checkbox moved.
