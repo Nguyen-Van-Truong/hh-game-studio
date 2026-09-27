@@ -86,7 +86,7 @@ class GameplayBehaviorTests(unittest.TestCase):
     def test_rejects_arbitrary_code_paths_and_stale_context(self):
         payload = {"behavior_id": "x", "states": ["idle"], "initial_state": "idle",
                    "transitions": [{"from_state": "idle", "action": "go", "to_state": "idle",
-                                    "effects": [{"kind": "emit_signal", "params": {"animation": "../x"}}]}]}
+                                    "effects": [{"kind": "emit_signal", "params": {"signal": "../x"}}]}]}
         self.reject(self.request(payload=payload), "BEHAVIOR_EFFECT_VALUE")
         payload = {"behavior_id": "x", "states": ["idle"], "initial_state": "idle",
                    "transitions": [{"from_state": "idle", "action": "go", "to_state": "idle",
@@ -106,6 +106,31 @@ class GameplayBehaviorTests(unittest.TestCase):
                    "transitions": [{"from_state": "idle", "action": "go", "to_state": "idle", "effects": [
                        {"kind": "move", "params": {"speed": 1}}] * 9}]}
         self.reject(self.request(payload=payload), "BEHAVIOR_EFFECT_SHAPE")
+
+    def test_effects_use_exact_typed_parameter_schemas(self):
+        for kind, params in (("move", {"velocity_x": 1}),
+                             ("jump", {"speed": 1}),
+                             ("set_velocity", {"velocity_x": 1}),
+                             ("face", {"angle": 1, "speed": 2}),
+                             ("emit_signal", {}),
+                             ("play_animation", {"animation": "run", "signal": "done"})):
+            payload = {"behavior_id": "x", "states": ["idle", "run"], "initial_state": "idle",
+                       "transitions": [{"from_state": "idle", "action": "go", "to_state": "run",
+                                        "effects": [{"kind": kind, "params": params}]}]}
+            self.reject(self.request(payload=payload), "BEHAVIOR_EFFECT_SHAPE")
+        payload = {"behavior_id": "x", "states": ["idle"], "initial_state": "idle",
+                   "transitions": [{"from_state": "idle", "action": "go", "to_state": "idle",
+                                    "effects": [{"kind": "emit_signal", "params": {"signal": "land"}}]}]}
+        self.assertEqual(self.validate(self.request(payload=payload)).projection["transitions"][0]["effects"][0]["params"], {"signal": "land"})
+
+    def test_malformed_effect_containers_fail_as_validation_errors(self):
+        for kind, params in (([], {}), ({}, {}), ("move", []), ("move", {"speed": []}),
+                             ("emit_signal", {"signal": []}), ("play_animation", {"animation": []})):
+            effect = {"kind": kind, "params": params}
+            payload = {"behavior_id": "x", "states": ["idle"], "initial_state": "idle",
+                       "transitions": [{"from_state": "idle", "action": "go", "to_state": "idle",
+                                        "effects": [effect]}]}
+            self.reject(self.request(payload=payload), "BEHAVIOR_EFFECT_SHAPE" if not isinstance(kind, str) or isinstance(params, list) else "BEHAVIOR_EFFECT_VALUE")
 
 
 if __name__ == "__main__":

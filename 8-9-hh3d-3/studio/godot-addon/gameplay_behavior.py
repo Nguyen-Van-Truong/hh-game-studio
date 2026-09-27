@@ -21,7 +21,15 @@ _ID = re.compile(r"[a-z][a-z0-9._-]{0,63}\Z")
 _STATE = re.compile(r"[a-z][a-z0-9_-]{0,31}\Z")
 _ACTION = re.compile(r"[a-z][a-z0-9._-]{0,47}\Z")
 _EFFECTS = frozenset(("move", "jump", "set_velocity", "face", "emit_signal", "play_animation"))
-_PARAMS = frozenset(("speed", "velocity_x", "velocity_y", "angle", "animation"))
+_PARAMS = frozenset(("speed", "velocity_x", "velocity_y", "angle", "animation", "signal"))
+_EFFECT_PARAMS = {
+    "move": frozenset(("speed",)),
+    "jump": frozenset(("velocity_y",)),
+    "set_velocity": frozenset(("velocity_x", "velocity_y")),
+    "face": frozenset(("angle",)),
+    "emit_signal": frozenset(("signal",)),
+    "play_animation": frozenset(("animation",)),
+}
 _REV = re.compile(r"sha256:[0-9a-f]{64}\Z")
 
 
@@ -145,12 +153,15 @@ def _validate_transitions(raw: object, states: set[str], nodes: Mapping[str, Nod
         checked_effects: list[dict[str, Any]] = []
         for effect in effects:
             _need(type(effect) is dict and set(effect) == {"kind", "params"}
-                  and effect["kind"] in _EFFECTS and type(effect["params"]) is dict
-                  and set(effect["params"]) <= _PARAMS, "BEHAVIOR_EFFECT_SHAPE")
+                  and type(effect["kind"]) is str and effect["kind"] in _EFFECTS
+                  and type(effect["params"]) is dict and set(effect["params"]) <= _PARAMS
+                  and set(effect["params"]) == _EFFECT_PARAMS[effect["kind"]], "BEHAVIOR_EFFECT_SHAPE")
             params = _copy(effect["params"])
             for key, value in params.items():
                 if key == "animation":
                     _need(_state(value), "BEHAVIOR_EFFECT_VALUE")
+                elif key == "signal":
+                    _need(_action(value), "BEHAVIOR_EFFECT_VALUE")
                 else:
                     _need(_number(value) and abs(value) <= 10000, "BEHAVIOR_EFFECT_VALUE")
             checked_effects.append({"kind": effect["kind"], "params": params})
