@@ -55,6 +55,10 @@ This is a native profile/readback diagnostic only. It does not execute caller
 GDScript, establish an OS sandbox, prove AUTH-05, authorize a public command,
 or enable the accepted adapter.
 
+Run `o2-native-20260927-32` is retained as a failed compile attempt: the first
+version called a Godot API that does not exist in the pinned engine. It was
+repaired before `-33`; no failed artifact was overwritten or promoted.
+
 Pure-Python checks from the repository root (no Godot/Blender execution):
 
 ```powershell
