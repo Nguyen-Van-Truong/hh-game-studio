@@ -121,3 +121,4 @@ return: (a) any factual error, (b) any gate or authority ambiguity, (c) any
 missing acceptance condition, and (d) the smallest safe improvement that can
 be made without opening GT-07 or weakening GT-06.
 
+
