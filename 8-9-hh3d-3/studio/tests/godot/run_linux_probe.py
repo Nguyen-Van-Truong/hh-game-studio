@@ -19,6 +19,9 @@ SUPERVISOR_SHA256 = '5ef0eaaaa4220593add7716aad74da927ca3bb10605e964330de64fecc3
 SUPERVISOR_BOOTSTRAP_SHA256 = '0194f9d31f6f8abaa8a33cc8c412075efa198546c2f187599ee023bd6be5c377'
 DOCKER_CONTEXT = 'desktop-linux'
 DOCKER_ENDPOINT = 'npipe:////./pipe/dockerDesktopLinuxEngine'
+GUARD_MARKER = 'HH_GAMEPLAY_OS_GUARD fork=EPERM socket=EPERM'
+GUARDED_STARTUP_ERROR = ('ERROR: Cannot create pipe from command: "xdg-user-dir" "DESKTOP" 2>/dev/null.\n'
+                         '   at: execute (drivers/unix/os_unix.cpp:899)\n')
 
 
 def _object(value) -> dict:
@@ -157,6 +160,16 @@ def evaluate(case: dict, result: dict, stdout: str, stderr: str) -> dict:
         details = marker(stdout, 'HH_PROBE_TMPFS ')
         observed = (completed and details is not None and details.get('write_rejected') is True
             and type(details.get('full_files')) is int and 0 < details['full_files'] <= 16)
+    elif kind == 'spawn_observation':
+        details = marker(stdout, 'HH_PROBE_SPAWN ')
+        observed = (completed and details is not None and _integer(details.get('exit'), -1)
+            and details.get('output') == ['']
+            and 'Cannot create pipe from command: "/usr/bin/printf" "HH_UNEXPECTED_CHILD"' in stderr)
+    elif kind == 'guarded_play':
+        details = marker(stdout, 'HH_PROBE_PLAY ')
+        observed = (completed and details is not None and _integer(details.get('ticks'), 12)
+            and type(details.get('x')) in (int, float) and details['x'] == 12.0
+            and stderr.replace('\r\n', '\n') == GUARDED_STARTUP_ERROR)
     elif kind == 'watchdog':
         observed = supervisor_watchdog
     elif kind == 'stream_cap':
@@ -168,6 +181,12 @@ def evaluate(case: dict, result: dict, stdout: str, stderr: str) -> dict:
         observed = completed and details is not None and details.get('public_ack') is True
     else:
         raise ValueError('unknown fixture expectation')
+    guarded = str(case.get('mode', '')).startswith('guarded-') or kind == 'spawn_observation'
+    if guarded:
+        observed = (observed and result.get('mode') == case.get('mode')
+            and result.get('sandbox_harness_unchanged') is True
+            and stdout.splitlines().count(GUARD_MARKER) == 1
+            and stdout.startswith(GUARD_MARKER + '\n'))
     return {'fixture_observed': controlled and observed, 'confinement_lifecycle_observed': controlled,
         'supervisor_binding_verified': bound,
         'supervisor_watchdog_observed': controlled and kind == 'watchdog' and supervisor_watchdog,
@@ -188,6 +207,20 @@ def case_observation(destination: Path, case: dict, *, name: str, binding: dict)
             or result.get('mode') != case['mode']
             or not supervisor_binding(case, result)):
         raise ValueError('raw case evidence does not bind the requested input/mode/supervisor/deadline')
+    if case['mode'].startswith('guarded-'):
+        # Bind the actual mounted bootstrap to the frozen source, not a child
+        # marker or result boolean. Parent container config was checked before
+        # start; recheck the guarded command/mount from captured Docker inspect.
+        expected_guard = binding['files']['godot-addon/gameplay_sandbox.py']
+        if (sha(destination / 'harness/gameplay_sandbox.py') != expected_guard
+                or result.get('sandbox_bootstrap_sha256') != expected_guard):
+            raise ValueError('guarded bootstrap source changed')
+        inspected = json.loads((destination / 'created-inspect-stdout.txt').read_bytes())[0]
+        if (inspected.get('Id') != result['container_id']
+                or inspected['Config']['Cmd'][-2:] != ['/harness/gameplay_sandbox.py', case['mode'].removeprefix('guarded-')]
+                or not any(row.get('Destination') == '/harness' and row.get('RW') is False
+                           and row.get('Source') == str(destination / 'harness') for row in inspected['Mounts'])):
+            raise ValueError('guarded container command/mount mismatch')
     stdout = (destination / 'engine-stdout.txt').read_text(encoding='utf-8', errors='replace')
     stderr = (destination / 'engine-stderr.txt').read_text(encoding='utf-8', errors='replace')
     row = evaluate(case, result, stdout, stderr)
@@ -218,7 +251,13 @@ def main() -> int:
     if not re.fullmatch(r'[A-Za-z0-9_-]{1,80}', args.run_id):
         parser.error('invalid run ID')
     output = args.output.resolve()
-    output.relative_to(STUDIO.parent / 'zdoc/reviews')
+    # New raw belongs in .local. Historical evidence may still be replayed in
+    # its original location, without rewriting it.
+    allowed = [STUDIO / '.local/reviews']
+    if args.resume:
+        allowed.append(STUDIO.parent / 'zdoc/reviews')
+    if not any(output.is_relative_to(root) for root in allowed):
+        parser.error('new evidence must be below studio/.local/reviews')
     freezer = load('gt03_linux_freezer', STUDIO / 'tests/godot/run_editor_probe.py')
     current = freezer.inputs()
     owned = load('gt03_linux_owned', STUDIO / 'build/bootstrap/run_fixture.py')
@@ -244,7 +283,7 @@ def main() -> int:
         raise ValueError('frozen source changed')
     # The environment supplies only an installation location. The executor must
     # verify the exact pinned binary hash before and after every invocation.
-    os.environ['HH_STUDIO_LINUX_GODOT'] = str(STUDIO / '.local/tooling/godot-4.7.2-stable-linux/Godot_v4.7.2-stable_linux.x86_64')
+    os.environ.setdefault('HH_STUDIO_LINUX_GODOT', str(STUDIO / '.local/tooling/godot-4.7.2-stable-linux/Godot_v4.7.2-stable_linux.x86_64'))
     sys.path.insert(0, str(source.parent))
     fixtures = load('gt03_linux_fixtures', source / 'tests/godot/linux_probe_fixtures.py')
     executor = load('gt03_linux_executor', source / 'godot-addon/linux_executor.py')

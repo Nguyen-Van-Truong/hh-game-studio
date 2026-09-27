@@ -35,6 +35,25 @@ Current terminology is **PATH_ISOLATION**, not AUTH_ISOLATION. These probes
 isolate paths and disposable projects; they do not prove OS sandbox/AUTH-05.
 Historical raw labels/hashes are not rewritten.
 
+## 2026-09-27 guarded execution checkpoint
+
+The fixture probe `o2-sandbox-20260927-04` completed with host exit 0 and
+observed all 9/9 selected fixtures. Its frozen source closure is
+`f1bc187653c3036731c3e48cf8173fc2caf31e3ea7d17dc69e3d6efcb86d1030`.
+The scoped regression command completed 109 tests with exit 0. The package
+manifest is `studio/.local/reviews/o2-sandbox-20260927-04-package-manifest.json`
+(`0dce20f99a2d4f1033636d363337baafcbbb2c688df9a15e02e8ce53dafb0f6d`); the
+raw/evidence package is
+`studio/.local/reviews/o2-sandbox-20260927-04-package.zip`
+(`108ab4ae469a0028121cb5f31d9cfb1e68640e399cb07546b99fa6675f6d3de0`).
+
+This is a diagnostic checkpoint only: `AUTHORITY=0`, `public_ack=false`,
+`sandbox_acceptance=false`, and `validation_attribution_proven=false`. It does
+not close AUTH-05, publish a gameplay-source capability, or unlock GT-06.
+Guarded modes are separate from the existing stock executor modes because
+stock Godot startup invokes `xdg-user-dir`; that startup diagnostic and its raw
+error remain in the package rather than being relabeled as a clean run.
+
 ## Fixture-driven gap queue (O4.5)
 
 | Fixture requirement | Existing reusable candidate | Remaining proof / implementation |

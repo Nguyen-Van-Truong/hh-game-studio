@@ -39,6 +39,8 @@ _HELPER = "import subprocess,sys; token=sys.stdin.readline(); sys.exit(125) if t
 _INCOMPLETE_CLI_HOLDS: list = []
 _INCOMPLETE_ADMISSION_HOLDS: list = []
 PROFILE_BOOTSTRAP_SHA256 = 'efde8370a6157ed2f66544ee13b82ee2556b59130f5306e9e0774ed0e3be79a5'
+SANDBOX_BOOTSTRAP_SHA256 = '677f659a04f1a7a58a87b5216295fa887fc82569570088b03e7d1508e2fcfc21'
+GUARDED_MODES = ('guarded-parse', 'guarded-import', 'guarded-play')
 _CLI_JOBS = None
 SUPERVISOR_SHA256 = '5ef0eaaaa4220593add7716aad74da927ca3bb10605e964330de64fecc3ef15e'
 EXECUTOR_CONTEXT = 'hh-gt03-linux-desktop-v1'
@@ -205,10 +207,26 @@ def _profile_driver() -> str:
         ' if code!=0:sys.exit(45)\n')
 
 
+def _sandbox_harness() -> bytes:
+    raw = _read_file(STUDIO / 'godot-addon/gameplay_sandbox.py', 65536)
+    _need(_sha(raw) == SANDBOX_BOOTSTRAP_SHA256, 'EXECUTOR_SANDBOX_HARNESS_PIN')
+    return raw
+
+
+def _sandbox_command(phase: str) -> list[str]:
+    _need(phase in ('parse', 'import', 'play', 'readback'), 'EXECUTOR_SANDBOX_PHASE')
+    return ['/usr/local/bin/python3', '-I', '-B', '/harness/gameplay_sandbox.py', phase]
+
+
 def _supervised_command(mode: str, timeout_seconds: int = 20) -> list[str]:
     _need(type(timeout_seconds) is int and 1 <= timeout_seconds <= 20, 'EXECUTOR_TIMEOUT')
-    command = (['/usr/local/bin/python3', '-I', '-B', '-c', _profile_driver()]
-               if mode == 'profile-validate' else ['/tool/' + BINARY_NAME, *_command(mode)])
+    _command(mode)
+    if mode == 'profile-validate':
+        command = ['/usr/local/bin/python3', '-I', '-B', '-c', _profile_driver()]
+    elif mode in GUARDED_MODES:
+        command = _sandbox_command(mode.removeprefix('guarded-'))
+    else:
+        command = ['/tool/' + BINARY_NAME, *_command(mode)]
     return ['-I', '-B', '-c', SUPERVISOR_BOOTSTRAP, '--signal=TERM', '--kill-after=1s',
             str(max(1, timeout_seconds - 1)) + 's', *command]
 
@@ -366,12 +384,14 @@ def _reconcile_owner(path: Path, call, output: Path) -> dict:
 
 
 def _command(mode: str) -> list[str]:
-    _need(type(mode) is str and mode in ('parse', 'import', 'profile-validate'), 'EXECUTOR_MODE')
+    _need(type(mode) is str and mode in ('parse', 'import', 'profile-validate', *GUARDED_MODES), 'EXECUTOR_MODE')
     if mode == 'profile-validate':
         return ['-I', '-B', '-c', _profile_driver()]
-    if mode == 'parse':
+    if mode in ('parse', 'guarded-parse'):
         return ['--headless', '--path', '/project', '--log-file', '/tmp/engine.log',
                 '--check-only', '--script', 'res://scripts/fixture_actor.gd']
+    if mode == 'guarded-play':
+        return ['--headless', '--path', '/project', '--log-file', '/tmp/engine.log', 'res://scenes/fixture.tscn']
     return ['--headless', '--editor', '--import', '--path', '/project', '--log-file', '/tmp/engine.log',
             'res://scenes/fixture.tscn']
 
@@ -625,7 +645,7 @@ def _create_args(name: str, mode: str, tool: Path, snapshot: Path, timeout_secon
         args += ['--tmpfs', destination + ':' + options]
     for source, destination in ((tool, '/tool'), (snapshot, '/project')):
         args += ['--mount', 'type=bind,src=' + str(source) + ',dst=' + destination + ',readonly,bind-propagation=rprivate']
-    if mode == 'profile-validate':
+    if mode == 'profile-validate' or mode in GUARDED_MODES:
         args += ['--mount', 'type=bind,src=' + str(snapshot.parent / 'harness')
                  + ',dst=/harness,readonly,bind-propagation=rprivate']
     return args + ['--entrypoint', '/usr/local/bin/python3', IMAGE_ID, *_supervised_command(mode, timeout_seconds)]
@@ -663,7 +683,7 @@ def _validate_inspect(value: dict, *, name: str, container_id: str, mode: str,
     _need(len(limits) == len(ULIMITS) and {x['Name']: (x['Soft'], x['Hard']) for x in limits}
           == {key: (number, number) for key, number in ULIMITS.items()}, 'EXECUTOR_ULIMITS')
     expected_mounts = {'/tool': str(tool), '/project': str(snapshot)}
-    if mode == 'profile-validate':
+    if mode == 'profile-validate' or mode in GUARDED_MODES:
         expected_mounts['/harness'] = str(snapshot.parent / 'harness')
     mounts = value.get('Mounts', [])
     _need(len(mounts) == len(expected_mounts) and {mount.get('Destination') for mount in mounts} == set(expected_mounts),
@@ -678,7 +698,7 @@ def _validate_inspect(value: dict, *, name: str, container_id: str, mode: str,
           <= set(host.get('MaskedPaths', [])), 'EXECUTOR_SYSTEM_PATHS')
 
 
-def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate'], output: Path, timeout_seconds: int = 20) -> dict:
+def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate', 'guarded-parse', 'guarded-import', 'guarded-play'], output: Path, timeout_seconds: int = 20) -> dict:
     """Run fixed Godot diagnostics; raises only during argument/input/output preflight.
 
     Remote requests must never choose paths, environment or engine modes directly.
@@ -693,6 +713,10 @@ def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate'], 
     project, output = project.absolute(), output.absolute()
     initial = _inputs(project, mode)
     profile_harness = _profile_harness() if mode == 'profile-validate' else None
+    sandbox_harness = _sandbox_harness() if mode in GUARDED_MODES else None
+    harness_files = {'gameplay_sandbox.py': sandbox_harness} if sandbox_harness is not None else {}
+    if profile_harness is not None:
+        harness_files['validation_bootstrap.gd'] = profile_harness
     _no_links(output.parent)
     _need(not output.exists() and output != project and project not in output.parents and output not in project.parents,
           'EXECUTOR_OUTPUT_SCOPE')
@@ -704,9 +728,10 @@ def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate'], 
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_bytes(raw)
     (snapshot / '.godot').mkdir()
-    if profile_harness is not None:
+    if harness_files:
         (output / 'harness').mkdir()
-        (output / 'harness/validation_bootstrap.gd').write_bytes(profile_harness)
+        for filename, raw in harness_files.items():
+            (output / 'harness' / filename).write_bytes(raw)
     before = _manifest(initial)
     _write(output / 'input-manifest.json', before)
     name = 'hh-gt03-' + uuid.uuid4().hex
@@ -718,6 +743,8 @@ def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate'], 
               'profile_eligible': profile_harness is not None,
               'profile_harness_sha256': _sha(profile_harness) if profile_harness is not None else None,
               'profile_harness_unchanged': profile_harness is None,
+              'sandbox_bootstrap_sha256': _sha(sandbox_harness) if sandbox_harness is not None else None,
+              'sandbox_harness_unchanged': sandbox_harness is None,
               'admission': {'acquired': False}, 'owner_record_retained': False,
               'supervisor': {'path': '/usr/bin/timeout', 'sha256': SUPERVISOR_SHA256,
                              'term_after_seconds': max(1, timeout_seconds - 1), 'kill_after_seconds': 1,
@@ -794,9 +821,9 @@ def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate'], 
                           timeout_seconds=timeout_seconds)
         _need(_manifest(_inputs(project, mode)) == before and _manifest(_inputs(snapshot, mode)) == before,
               'EXECUTOR_PRESTART_INPUT_CHANGED')
-        if profile_harness is not None:
-            _need(_names(output / 'harness') == {'validation_bootstrap.gd'} and
-                  _read_file(output / 'harness/validation_bootstrap.gd', 65536) == profile_harness,
+        if harness_files:
+            _need(_names(output / 'harness') == set(harness_files) and all(
+                  _read_file(output / 'harness' / name, 65536) == raw for name, raw in harness_files.items()),
                   'EXECUTOR_PROFILE_HARNESS_CHANGED')
         owner_record['phase'] = 'start_pending'
         _persist_owner(owner_path, owner_record)
@@ -877,12 +904,19 @@ def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate'], 
         if profile_harness is not None:
             try:
                 result['profile_harness_unchanged'] = (
-                    _names(output / 'harness') == {'validation_bootstrap.gd'} and
+                    _names(output / 'harness') == set(harness_files) and
                     _read_file(output / 'harness/validation_bootstrap.gd', 65536) == profile_harness == _profile_harness())
             except BaseException as error:
                 result['profile_harness_unchanged'] = False
                 if not isinstance(error, Exception):
                     failed(error, 'EXECUTOR_HARNESS_FINALIZE_')
+        if sandbox_harness is not None:
+            try:
+                result['sandbox_harness_unchanged'] = (_names(output / 'harness') == set(harness_files) and
+                    _read_file(output / 'harness/gameplay_sandbox.py', 65536) == sandbox_harness == _sandbox_harness())
+            except BaseException as error:
+                result['sandbox_harness_unchanged'] = False
+                failed(error, 'EXECUTOR_SANDBOX_FINALIZE_')
         try:
             for stream in ('stdout', 'stderr'):
                 log = output / result[stream]
@@ -900,7 +934,7 @@ def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate'], 
             and state.get('ExitCode') == 0 and state.get('Running') is False and state.get('Pid') == 0
             and state.get('OOMKilled') is False and result.get('docker_wait_exit') == 0
             and result['owned_removed'] and result['input_unchanged'] and result['snapshot_unchanged']
-            and result['binary_unchanged'] and result['profile_harness_unchanged']
+            and result['binary_unchanged'] and result['profile_harness_unchanged'] and result['sandbox_harness_unchanged']
             and result['log_clean'] and not result['errors'])
         result['command_host'] = result['commandhost']
         result['container_state'] = result['state']

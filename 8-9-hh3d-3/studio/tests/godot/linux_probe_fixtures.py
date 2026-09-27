@@ -123,6 +123,16 @@ static func _static_init() -> void:
 ''',
         'expect': 'static_callback',
     },
+    'parse_static_spawn': {
+        'mode': 'guarded-parse', 'timeout': 20,
+        'script': '''extends Node3D
+static func _static_init() -> void:
+\tvar output: Array = []
+\tvar status: int = OS.execute("/usr/bin/printf", PackedStringArray(["HH_UNEXPECTED_CHILD"]), output, true)
+\tprint("HH_PROBE_SPAWN " + JSON.stringify({"exit": status, "output": output}))
+''',
+        'expect': 'spawn_observation',
+    },
     'parse_static_busy': {
         'mode': 'parse', 'timeout': 3,
         'script': '''extends Node3D
@@ -133,4 +143,42 @@ static func _static_init() -> void:
 ''',
         'expect': 'watchdog',
     },
+}
+
+# Separate diagnostic modes: the accepted declarative validator retains its
+# commands. All these negative cases execute after the same pre-parse OS guard.
+for _name in ('readonly_and_network', 'parse_static_busy', 'stdout_flood', 'type_error'):
+    FIXTURES['guarded_' + _name] = {
+        **FIXTURES[_name], 'mode': 'guarded-' + FIXTURES[_name]['mode']}
+
+FIXTURES['guarded_play'] = {
+    'mode': 'guarded-play', 'timeout': 20, 'expect': 'guarded_play',
+    'script': '''extends Node3D
+var ticks: int = 0
+func _physics_process(_delta: float) -> void:
+\tticks += 1
+\tposition.x += 1.0
+\tif ticks == 12:
+\t\tprint("HH_PROBE_PLAY " + JSON.stringify({"ticks": ticks, "x": position.x}))
+\t\tget_tree().quit(0)
+''',
+}
+FIXTURES['guarded_play_busy'] = {
+    'mode': 'guarded-play', 'timeout': 5, 'expect': 'watchdog',
+    'script': '''extends Node3D
+func _ready() -> void:
+\tprint("HH_PROBE_BUSY_ENTERED")
+\twhile true:
+\t\tpass
+''',
+}
+FIXTURES['guarded_play_spawn'] = {
+    'mode': 'guarded-play', 'timeout': 20, 'expect': 'spawn_observation',
+    'script': '''extends Node3D
+func _ready() -> void:
+\tvar output: Array = []
+\tvar status: int = OS.execute("/usr/bin/printf", PackedStringArray(["HH_UNEXPECTED_CHILD"]), output, true)
+\tprint("HH_PROBE_SPAWN " + JSON.stringify({"exit": status, "output": output}))
+\tget_tree().quit(0)
+''',
 }
