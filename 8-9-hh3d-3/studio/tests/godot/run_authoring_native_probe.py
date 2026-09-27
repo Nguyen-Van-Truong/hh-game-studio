@@ -41,6 +41,12 @@ sys.modules[_EDGE_SPEC.name] = _EDGE
 _EDGE_SPEC.loader.exec_module(_EDGE)
 from studio.protocol.core import Request, canonical_bytes
 
+_RESOURCE_SPEC = importlib.util.spec_from_file_location(
+    "o2_native_resource_authoring", STUDIO / "godot-addon/resource_authoring.py")
+_RESOURCE = importlib.util.module_from_spec(_RESOURCE_SPEC)
+sys.modules[_RESOURCE_SPEC.name] = _RESOURCE
+_RESOURCE_SPEC.loader.exec_module(_RESOURCE)
+
 
 def sha(path: Path) -> str:
     digest = hashlib.sha256()
@@ -66,6 +72,7 @@ def source_files() -> dict[str, str]:
         "tests/godot/gameplay_edges_native.gd",
         "tests/godot/run_authoring_native_probe.py",
         "godot-addon/gameplay_edges.py",
+        "godot-addon/resource_authoring.py",
         "protocol/core.py",
         "protocol/_rfc8785/__init__.py",
         "protocol/_rfc8785/_impl.py",
@@ -133,6 +140,17 @@ def expected_edge_labels() -> set[str]:
     return labels
 
 
+def expected_resource_labels() -> set[str]:
+    labels = {"resource_proposal_count"}
+    for resource_type in ("RectangleShape2D", "CapsuleShape2D", "BoxShape3D", "CapsuleShape3D"):
+        prefix = "resource_" + resource_type
+        labels.update(prefix + suffix for suffix in (
+            "_binding", "_node_created", "_shape_readback", "_do_readback",
+            "_undo_transition", "_undo_readback", "_redo_transition",
+            "_redo_readback", "_cleanup_transition", "_cleanup_readback"))
+    return labels
+
+
 def edge_proposals() -> list[dict]:
     context = _EDGE.EdgeContext(
         "project.fixture", "sha256:" + "1" * 64, "sha256:" + "2" * 64,
@@ -161,6 +179,36 @@ def edge_proposals() -> list[dict]:
     return result
 
 
+def resource_proposals() -> list[dict]:
+    context = _RESOURCE.ValidationContext(
+        "project.fixture", "sha256:" + "1" * 64, "sha256:" + "2" * 64,
+        4, "lease.fixture", 9, 31000, 1000,
+        (_RESOURCE.NodeState("root", None, "Node2D", "Root"),
+         _RESOURCE.NodeState("collider", "root", "CollisionShape2D", "Collider"),
+         _RESOURCE.NodeState("collider3d", "root", "CollisionShape3D", "Collider3D")))
+    rows = (
+        ("RectangleShape2D", "collider", {"size": [8, 4]}),
+        ("CapsuleShape2D", "collider", {"radius": 2, "height": 5}),
+        ("BoxShape3D", "collider3d", {"size": [2, 3, 4]}),
+        ("CapsuleShape3D", "collider3d", {"radius": 1.5, "height": 4}),
+    )
+    result: list[dict] = []
+    for index, (resource_type, target_id, properties) in enumerate(rows, 1):
+        payload = {"expected_generation": context.generation,
+                   "expected_project_revision": context.project_revision,
+                   "resource_id": "native." + resource_type.lower(),
+                   "resource_type": resource_type, "properties": properties}
+        request = Request(
+            command_id=f"resource.native.{index}", project_id=context.project_id,
+            operation="scene.resource.create", lease_id=context.lease_id,
+            fencing_epoch=context.fencing_epoch, expected_revision=context.revision,
+            target={"stable_id": target_id}, payload=payload,
+            payload_hash="sha256:" + hashlib.sha256(canonical_bytes(payload)).hexdigest(),
+            deadline_ms=2000)
+        result.append(_RESOURCE.validate_request(request, context).projection)
+    return result
+
+
 def validate_result(result: object, catalog: dict, process: dict, run_root: Path) -> tuple[bool, str | None]:
     if not isinstance(result, dict):
         return False, "result-not-object"
@@ -180,7 +228,7 @@ def validate_result(result: object, catalog: dict, process: dict, run_root: Path
         if not isinstance(row, dict) or not isinstance(row.get("label"), str) or row.get("passed") is not True:
             return False, "check-failed"
         labels.append(row["label"])
-    expected = expected_labels(catalog) | expected_edge_labels()
+    expected = expected_labels(catalog) | expected_edge_labels() | expected_resource_labels()
     if len(labels) != len(set(labels)) or set(labels) != expected:
         missing = sorted(expected - set(labels))
         extra = sorted(set(labels) - expected)
@@ -240,6 +288,7 @@ def run(godot: Path, run_id: str, output: Path) -> dict:
         json.dumps({"catalog_version": catalog["catalog_version"], "classes": catalog["classes"]},
                    ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8"))
     write_json(project / "edge-input.json", {"proposals": edge_proposals()})
+    write_json(project / "resource-input.json", {"proposals": resource_proposals()})
     project_before = project_files(project)
     write_json(output / "freeze.json", {"run_id": run_id, "source_files": manifest,
               "source_closure_sha256": source_closure, "binary_sha256": binary_sha256,

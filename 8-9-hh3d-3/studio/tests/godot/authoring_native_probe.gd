@@ -18,7 +18,8 @@ var _root: Node
 var _catalog: Dictionary
 
 
-func run(root: Node, undo: EditorUndoRedoManager, catalog: Dictionary, run_root: String, edge_proposals: Array = []) -> Dictionary:
+func run(root: Node, undo: EditorUndoRedoManager, catalog: Dictionary, run_root: String,
+		edge_proposals: Array = [], resource_proposals: Array = []) -> Dictionary:
 	_root = root
 	_undo = undo
 	_catalog = catalog
@@ -60,6 +61,7 @@ func run(root: Node, undo: EditorUndoRedoManager, catalog: Dictionary, run_root:
 		_rows.append(row)
 	for failure: String in edge_report.get("failures", []):
 		_failures.append(failure)
+	_run_resource_candidates(resource_proposals, history)
 
 	# Every temporary node is removed synchronously and the native history is
 	# cleared before the editor quits. This prevents diagnostic state leaking to
@@ -73,6 +75,95 @@ func run(root: Node, undo: EditorUndoRedoManager, catalog: Dictionary, run_root:
 	_check("cleanup_temporary_nodes", _temporary_count(root) == 0)
 
 	return _result(started_pid, project_root, user_root, normalized_run_root)
+
+
+func _run_resource_candidates(proposals: Array, history: UndoRedo) -> void:
+	_check("resource_proposal_count", proposals.size() == 4)
+	for proposal: Dictionary in proposals:
+		var payload: Dictionary = proposal.get("payload", {})
+		var resource_type := str(payload.get("resource_type", ""))
+		var prefix := "resource_" + resource_type
+		var properties: Dictionary = payload.get("properties", {})
+		var target_id := str(proposal.get("target_stable_id", ""))
+		_check(prefix + "_binding", proposal.get("operation") == "scene.resource.create"
+			and proposal.get("expected_generation") == 4
+			and not proposal.has("runtime_authorized")
+			and not proposal.has("changes_applied"))
+		var node: Node = null
+		if resource_type in ["RectangleShape2D", "CapsuleShape2D"]:
+			node = CollisionShape2D.new()
+		else:
+			node = CollisionShape3D.new()
+		node.name = "O2_" + resource_type
+		node.set_meta("hh_o2_temporary", true)
+		node.set_meta("hh_o2_resource", resource_type)
+		_root.add_child(node)
+		node.owner = _root
+		var shape := _make_shape(resource_type, properties)
+		_check(prefix + "_node_created", target_id in ["collider", "collider3d"] and shape != null)
+		if shape == null:
+			continue
+		node.set(&"shape", shape)
+		_check(prefix + "_shape_readback", _shape_matches(node.get(&"shape"), resource_type, properties))
+		_undo.create_action("O2 resource " + resource_type, UndoRedo.MERGE_DISABLE, node)
+		_undo.add_do_property(node, &"shape", shape)
+		_undo.add_undo_property(node, &"shape", null)
+		_undo.commit_action()
+		_check(prefix + "_do_readback", _shape_matches(node.get(&"shape"), resource_type, properties))
+		_check(prefix + "_undo_transition", history.undo())
+		_check(prefix + "_undo_readback", node.get(&"shape") == null)
+		_check(prefix + "_redo_transition", history.redo())
+		_check(prefix + "_redo_readback", _shape_matches(node.get(&"shape"), resource_type, properties))
+		_check(prefix + "_cleanup_transition", history.undo())
+		_check(prefix + "_cleanup_readback", node.get(&"shape") == null)
+		_root.remove_child(node)
+		node.free()
+
+
+func _make_shape(resource_type: String, properties: Dictionary) -> Resource:
+	match resource_type:
+		"RectangleShape2D":
+			var rectangle := RectangleShape2D.new()
+			var size: Array = properties.get("size", [])
+			if size.size() != 2:
+				return null
+			rectangle.size = Vector2(float(size[0]), float(size[1]))
+			return rectangle
+		"CapsuleShape2D":
+			var capsule2d := CapsuleShape2D.new()
+			capsule2d.radius = float(properties.get("radius", 0.0))
+			capsule2d.height = float(properties.get("height", 0.0))
+			return capsule2d
+		"BoxShape3D":
+			var box := BoxShape3D.new()
+			var box_size: Array = properties.get("size", [])
+			if box_size.size() != 3:
+				return null
+			box.size = Vector3(float(box_size[0]), float(box_size[1]), float(box_size[2]))
+			return box
+		"CapsuleShape3D":
+			var capsule3d := CapsuleShape3D.new()
+			capsule3d.radius = float(properties.get("radius", 0.0))
+			capsule3d.height = float(properties.get("height", 0.0))
+			return capsule3d
+	return null
+
+
+func _shape_matches(value: Variant, resource_type: String, properties: Dictionary) -> bool:
+	if value == null or not value is Resource or (value as Resource).get_class() != resource_type:
+		return false
+	match resource_type:
+		"RectangleShape2D":
+			return (value as RectangleShape2D).size.is_equal_approx(Vector2(float(properties.size[0]), float(properties.size[1])))
+		"CapsuleShape2D":
+			return is_equal_approx((value as CapsuleShape2D).radius, float(properties.radius)) \
+				and is_equal_approx((value as CapsuleShape2D).height, float(properties.height))
+		"BoxShape3D":
+			return (value as BoxShape3D).size.is_equal_approx(Vector3(float(properties.size[0]), float(properties.size[1]), float(properties.size[2])))
+		"CapsuleShape3D":
+			return is_equal_approx((value as CapsuleShape3D).radius, float(properties.radius)) \
+				and is_equal_approx((value as CapsuleShape3D).height, float(properties.height))
+	return false
 
 
 func _run_candidate(candidate: Dictionary, history: UndoRedo) -> void:
