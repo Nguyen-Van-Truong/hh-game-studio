@@ -537,7 +537,7 @@ def verify_run_capture(root, captured, source_digest, *, campaign_id, index, att
     require({'environment-preflight-before.json', 'environment-preflight-after.json',
              'environment-samples.jsonl'}.issubset(files), 'CAMPAIGN_ENVIRONMENT_MISSING')
     require_environment_preflight(json.loads(read_regular(root / 'environment-preflight-before.json')))
-    require_environment_preflight(json.loads(read_regular(root / 'environment-preflight-after.json')))
+    environment.require_snapshot(json.loads(read_regular(root / 'environment-preflight-after.json')))
     environment.verify_watchdog(root, read_regular, elapsed_seconds=host['elapsed_seconds'],
                                expected_binding={'run_id': run_id,
                                                  'source_closure_sha256': source_digest,
@@ -738,6 +738,7 @@ def _run_campaign(campaign_id, root, preflight_path, after_path):
                 write(output / 'parent-failure.json', {'completed': False, 'run_id': run_id,
                     'code': getattr(error, 'code', type(error).__name__), 'formal_acceptance': False,
                     'classification': environment.failure_classification(error, output),
+                    'watchdog_persistence_errors': getattr(error, 'watchdog_persistence_errors', []),
                     'attempt_local_date': time.strftime('%Y-%m-%d'),
                     'owner_closed': owner.closed if owner else False,
                     'owned_tree_zero': owner.job.zero_observed if owner and owner.job else False,

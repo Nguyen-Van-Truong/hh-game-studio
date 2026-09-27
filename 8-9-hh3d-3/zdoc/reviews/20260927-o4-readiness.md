@@ -1,10 +1,15 @@
-# O4 implementation readiness — 2026-09-27
+# Historical O4 implementation readiness — 2026-09-27
+
+Correction recorded after the second formal abort: see
+[O4 repair](20260927-o4-repair.md) for current source, verified archive contents
+and the remaining gate. This report describes earlier checkpoints, not current
+launch permission. Historical raw has not been relabeled.
 
 AUTHORITY=0; FORMAL_ACCEPTANCE=false; GT06 remains IN_PROGRESS.
 
 Owner decision b0802472 is implemented in benchmark_environment.py and the
 campaign supervisor. No performance profile, timeout, warmup/status-gap,
-counter or retained-handle v5 threshold changed. The current hardened source
+counter or retained-handle v5 threshold changed. The source at commit 0d0803a7
 closure is edb07f656dae02581f182291cfe4d0f946d4fa9c74f97cd7e208db3b1e0bcaf0
 (54 files).
 Profile remains 9dfa0ae003577e8607e28e722089328933d60e6cdb5b1ae1c5e978b3ad9d335e.
@@ -33,9 +38,9 @@ Profile remains 9dfa0ae003577e8607e28e722089328933d60e6cdb5b1ae1c5e978b3ad9d335e
   replay validates that header, UTC timestamps, and inventory fields before
   applying policy. Observer/schema failures persist a bounded error and stop
   latch as HARNESS_FAIL instead of becoming an unexplained product failure.
-- Both before and after preflight records are schema/resource validated before
-  a completed pair can be resumable. A post-run foreign-engine observation is
-  retained as failure evidence and never promotes a partial run.
+- The original verifier reapplied launch limits to the after snapshot. This
+  was an unintended extra gate, corrected in the follow-up O4 repair. After
+  snapshots remain validated inventory; launch limits apply before each pair.
 - Interrupted S258 stays sealed. New runs require new IDs. Final two-model,
   same-hash critics still go through the owner per O4.3.
 
@@ -50,7 +55,9 @@ Profile remains 9dfa0ae003577e8607e28e722089328933d60e6cdb5b1ae1c5e978b3ad9d335e
   assertion now requires no net process-handle growth and separately verifies
   the probe handle/global owner are released; it does not assume unrelated
   runtime handles stay constant.
-- Final native supervisor probe: gt06-o4-env-probe-02, matching closure above.
+- Historical native supervisor probe: gt06-o4-env-probe-02, closure
+  0ae5ca2e90021be39b7b6c4fcd61f965e530f9c169c5ee5461261afc3b17ff6e
+  (does not match the later edb07 closure above).
   Scheduler result 0/no instances, target PID 28876 actual exit 0, wrapper
   exit 0, natural Job/tree zero, held owners 0, clean stderr. This is a
   12-second Python ownership/watchdog probe, not a Godot formal run.
@@ -65,10 +72,15 @@ Profile remains 9dfa0ae003577e8607e28e722089328933d60e6cdb5b1ae1c5e978b3ad9d335e
   after the hardened source commit and a fresh idle-host preflight.
 
 Raw, source/test copies and logs are archived under studio/.local/reviews;
-20260927-o4-readiness-manifest.json records 90 members and SHA256 bindings,
-including the final 617-test replay log and exit receipt. The archive is still
+20260927-o4-readiness-manifest.json records 90 members and SHA256 bindings.
+Correction: that ZIP does not contain the 617-test replay log or exit receipt;
+those remained separate local files. Its probe also uses the earlier closure.
+The archive is still
 diagnostic evidence only and does not grant GT06 acceptance.
-Only this summary and manifest are committed. Historical raw is unchanged.
+Only this summary and manifest are committed. The ZIP at this path was replaced
+before this correction: its current hash matches 0d0803a7's manifest but not
+35b67f45's earlier manifest. It must not be cited as the original archive.
+Original formal run directories remain available; see the new immutable package.
 
 ## Reviewer corrections adopted
 

@@ -141,6 +141,15 @@ class CampaignResumeTests(unittest.TestCase):
         with self.assertRaisesRegex(BenchmarkJobError, 'CAMPAIGN_PREFLIGHT_SHAPE'):
             self.verify()
 
+    def test_after_snapshot_does_not_reapply_launch_thresholds(self):
+        from studio.tests.replay.test_benchmark_environment import sample
+        after = campaign.environment.preflight(sample(5, available_memory_bytes=2 * campaign.environment.GIB,
+                                                       commit_total_bytes=90 * campaign.environment.GIB))
+        self.assertFalse(after['pass'])
+        self.put('environment-preflight-after.json', after)
+        self.rebind_artifacts()
+        self.assertEqual(self.verify(), self.child)
+
     def test_copied_success_cannot_fill_a_different_run_slot(self):
         with self.assertRaisesRegex(BenchmarkJobError, 'CAMPAIGN_RESUME_SLOT'):
             self.verify(index=1)

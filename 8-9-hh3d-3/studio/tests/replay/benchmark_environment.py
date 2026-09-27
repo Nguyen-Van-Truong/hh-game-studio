@@ -178,18 +178,26 @@ def preflight(snapshot):
     return result
 
 
-def require_preflight(result):
+def require_snapshot(result):
+    """Validate the recorded inventory without applying launch-only limits."""
     require(type(result) is dict and result.get('schema_id') == SCHEMA
             and result.get('schema_version') == VERSION, 'CAMPAIGN_PREFLIGHT_SHAPE')
     require(type(result.get('heavy_processes')) is list
             and result.get('required_heavy_processes_closed') is False, 'CAMPAIGN_PREFLIGHT_APP_INVENTORY')
     require(type(result.get('foreign_engines')) is list, 'CAMPAIGN_PREFLIGHT_ENGINE_INVENTORY')
-    require(not result['foreign_engines'], 'CAMPAIGN_PREFLIGHT_FOREIGN_ENGINE')
     available, total, limit = (result.get(key) for key in (
         'available_memory_bytes', 'commit_total_bytes', 'commit_limit_bytes'))
-    require(type(available) is int and available >= 4 * GIB and type(total) is int and total >= 0
-            and type(limit) is int and limit > 0 and total * 100 <= limit * 85
-            and result.get('pass') is True, 'CAMPAIGN_PREFLIGHT_RESOURCE_LIMIT')
+    require(type(available) is int and available >= 0 and type(total) is int and total >= 0
+            and type(limit) is int and limit > 0, 'CAMPAIGN_PREFLIGHT_RESOURCE_LIMIT')
+    expected = preflight(result)
+    require(type(result.get('pass')) is bool and result['pass'] == expected['pass'],
+            'CAMPAIGN_PREFLIGHT_FOREIGN_ENGINE' if result['foreign_engines'] else 'CAMPAIGN_PREFLIGHT_RESOURCE_LIMIT')
+
+
+def require_preflight(result):
+    require_snapshot(result)
+    require(not result['foreign_engines'], 'CAMPAIGN_PREFLIGHT_FOREIGN_ENGINE')
+    require(result['pass'], 'CAMPAIGN_PREFLIGHT_RESOURCE_LIMIT')
 
 
 class Policy:
@@ -226,16 +234,18 @@ class Policy:
         previous = self.previous
         if self.first is None:
             self.first = row
-        reason, classification = None, 'INFRA_ABORT'
+        reasons = []
+        classification = 'INFRA_ABORT'
         if previous is not None:
             elapsed = now - previous['uptime_ms'] / 1000
             awake_elapsed = (row['awake_100ns'] - previous['awake_100ns']) / 10_000_000
             require(elapsed >= 0 and awake_elapsed >= 0, 'WATCHDOG_CLOCK_REGRESSION')
             # Two Windows uptime clocks avoid false sleep detection from NTP.
             if elapsed - awake_elapsed > 0.1:
-                reason = 'SLEEP_RESUME'
+                reasons.append('SLEEP_RESUME')
             elif elapsed > MAX_SAMPLE_GAP_SECONDS:
-                reason, classification = 'SAMPLE_GAP', 'HARNESS_FAIL'
+                reasons.append('SAMPLE_GAP')
+                classification = 'HARNESS_FAIL'
             total = row['cpu_total_100ns'] - previous['cpu_total_100ns']
             idle = row['cpu_idle_100ns'] - previous['cpu_idle_100ns']
             require(total >= 0 and 0 <= idle <= total, 'WATCHDOG_CPU_DELTA')
@@ -243,26 +253,34 @@ class Policy:
             self.cpu_since = (self.cpu_since if self.cpu_since is not None else previous['uptime_ms'] / 1000) if cpu_hot else None
         self.low_since = (self.low_since if self.low_since is not None else now) if row['available_memory_bytes'] < 1.5 * GIB else None
         if row['foreign_engines']:
-            reason = reason or 'FOREIGN_ENGINE'
+            reasons.append('FOREIGN_ENGINE')
         if row['commit_total_bytes'] * 100 > row['commit_limit_bytes'] * 92:
-            reason = reason or 'COMMIT_PRESSURE'
+            reasons.append('COMMIT_PRESSURE')
         if self.low_since is not None and now - self.low_since >= 60:
-            reason = reason or 'AVAILABLE_PRESSURE'
+            reasons.append('AVAILABLE_PRESSURE')
         if self.cpu_since is not None and now - self.cpu_since >= 60:
-            reason = reason or 'CPU_PRESSURE'
-        if reason in ('COMMIT_PRESSURE', 'AVAILABLE_PRESSURE'):
+            reasons.append('CPU_PRESSURE')
+        product_pressure = []
+        for pressure in ('COMMIT_PRESSURE', 'AVAILABLE_PRESSURE'):
+            if pressure not in reasons:
+                continue
             # Do not claim a causal leak from correlation. If the budget would
             # still be violated after subtracting ALL campaign private bytes,
             # external pressure is sufficient. Otherwise keep a product hold.
             owned = row['owned_private_bytes']
             external_sufficient = (row['commit_total_bytes'] - owned) * 100 > row['commit_limit_bytes'] * 92
-            if reason == 'AVAILABLE_PRESSURE':
+            if pressure == 'AVAILABLE_PRESSURE':
                 external_sufficient = row['available_memory_bytes'] + owned < 1.5 * GIB
-            classification = ('INFRA_ABORT' if row['owned_inventory_complete'] and external_sufficient
-                              else 'PRODUCT_FAIL')
+            if not (row['owned_inventory_complete'] and external_sufficient):
+                product_pressure.append(pressure)
+        # A simultaneous foreign engine, sleep or sampling gap cannot mask
+        # product memory pressure. Preserve every trigger for later review.
+        if product_pressure:
+            classification = 'PRODUCT_FAIL'
+        reason = product_pressure[0] if product_pressure else (reasons[0] if reasons else None)
         self.previous = row
         return None if reason is None else {
-            'reason': reason, 'classification': classification, 'formal_acceptance': False,
+            'reason': reason, 'reasons': reasons, 'classification': classification, 'formal_acceptance': False,
             'attribution': ('external_pressure_sufficient_without_campaign_private'
                             if reason in ('COMMIT_PRESSURE', 'AVAILABLE_PRESSURE') and classification == 'INFRA_ABORT'
                             else 'no_product_failure_is_waived')}
@@ -272,10 +290,14 @@ class Watchdog:
     def __init__(self, output, sample, binding, write):
         self.output, self.sample, self.binding, self.write = output, sample, binding, write
         self.policy, self.last, self.count = Policy(), None, 0
-        self.stream = (output / 'environment-samples.jsonl').open('xb')
         require(type(binding) is dict and set(binding) == {
             'run_id', 'source_closure_sha256', 'campaign_sha256'}, 'WATCHDOG_BINDING')
-        self._append({'schema': SAMPLE_STREAM_SCHEMA, **binding})
+        self.stream = (output / 'environment-samples.jsonl').open('xb')
+        try:
+            self._append({'schema': SAMPLE_STREAM_SCHEMA, **binding})
+        except BaseException:
+            self.stream.close()
+            raise
 
     def _append(self, row):
         self.stream.write((json.dumps(row, sort_keys=True, allow_nan=False) + '\n').encode())
@@ -286,8 +308,9 @@ class Watchdog:
         # Persist a bounded diagnostic and a stop latch before surfacing a
         # harness error. Never turn an observer/validation failure into a
         # product failure or silently drop the malformed sample.
-        try:
-            if row is not None:
+        persistence_errors = []
+        if row is not None:
+            try:
                 try:
                     self._append(row)
                     self.count += 1
@@ -295,21 +318,26 @@ class Watchdog:
                     self._append({'schema': 'HH-GT06-WATCHDOG-INVALID-SAMPLE-1',
                                   'exception_class': type(error).__name__})
                     self.count += 1
-            event = {'schema': 'HH-GT06-WATCHDOG-OBSERVATION-ERROR-1', **self.binding,
+            except BaseException as persistence_error:
+                persistence_errors.append('sample:' + type(persistence_error).__name__)
+        event = {'schema': 'HH-GT06-WATCHDOG-OBSERVATION-ERROR-1', **self.binding,
                      'classification': 'HARNESS_FAIL', 'reason': 'OBSERVER_ERROR',
                      'exception_class': type(error).__name__,
                      'error_code': getattr(error, 'code', str(error))[:128],
                      'sample_index': self.count - 1 if self.count else None}
-            self.write(self.output / 'watchdog-observation-error.json', event)
-            self.write(self.output / 'watchdog-stop.json',
-                       {'schema': 'HH-GT06-WATCHDOG-STOP-1', **self.binding,
+        stop = {'schema': 'HH-GT06-WATCHDOG-STOP-1', **self.binding,
                         'classification': 'HARNESS_FAIL', 'reason': 'OBSERVER_ERROR',
                         'formal_acceptance': False,
-                        'sample_index': self.count - 1 if self.count else None})
-        except BaseException:
-            # The original observer error remains primary; the parent cleanup
-            # receipt records the inability to persist a secondary diagnostic.
-            pass
+                        'sample_index': self.count - 1 if self.count else None}
+        for name, payload in (('watchdog-observation-error.json', event), ('watchdog-stop.json', stop)):
+            try:
+                self.write(self.output / name, payload)
+            except BaseException as persistence_error:
+                persistence_errors.append(name + ':' + type(persistence_error).__name__)
+        raised = BenchmarkJobError('CAMPAIGN_WATCHDOG_OBSERVER_ERROR')
+        raised.classification = 'HARNESS_FAIL'
+        raised.watchdog_persistence_errors = persistence_errors
+        raise raised from error
 
     def poll(self, *, force=False):
         now = time.monotonic()
@@ -319,9 +347,6 @@ class Watchdog:
             row = self.sample()
         except BaseException as error:
             self._observer_failure(error)
-            raised = BenchmarkJobError('CAMPAIGN_WATCHDOG_OBSERVER_ERROR')
-            raised.classification = 'HARNESS_FAIL'
-            raise raised from error
         persisted = False
         try:
             # Raw sample durability precedes policy interpretation.
@@ -333,14 +358,14 @@ class Watchdog:
             if isinstance(error, BenchmarkJobError) and getattr(error, 'code', '').startswith('CAMPAIGN_WATCHDOG_'):
                 raise
             self._observer_failure(error, None if persisted else row)
-            raised = BenchmarkJobError('CAMPAIGN_WATCHDOG_OBSERVER_ERROR')
-            raised.classification = 'HARNESS_FAIL'
-            raise raised from error
         self.last = now
         if decision:
             event = {'schema': 'HH-GT06-WATCHDOG-STOP-1', **self.binding, **decision,
                      'sample_index': self.count - 1}
-            self.write(self.output / 'watchdog-stop.json', event)
+            try:
+                self.write(self.output / 'watchdog-stop.json', event)
+            except BaseException as error:
+                self._observer_failure(error)
             error = BenchmarkJobError('CAMPAIGN_WATCHDOG_' + decision['reason'])
             error.classification = decision['classification']
             raise error

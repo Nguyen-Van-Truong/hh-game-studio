@@ -1,0 +1,96 @@
+{
+  "schema": "HH-O4-REPAIR-MANIFEST-1",
+  "source_closure_sha256": "9d373d2ef4b18aab43473f3e4de0e92efa88b97a038f976b44e17526b0037954",
+  "source_file_count": 54,
+  "profile_sha256": "9dfa0ae003577e8607e28e722089328933d60e6cdb5b1ae1c5e978b3ad9d335e",
+  "probe_verified": true,
+  "authority": 0,
+  "formal_acceptance": false,
+  "created_utc": "2026-09-27T13:35:34.110600+00:00",
+  "archive": "studio/.local/reviews/o4-repair-20260927-2028.zip",
+  "archive_sha256": "6ef378c0e2e1fc94db820715085b6d83d6384012ffc2775a6deb7850fe2aeb83",
+  "archive_bytes": 27625346,
+  "member_manifest": "members.json",
+  "member_manifest_sha256": "be5805f99b02f31f84e580fc68bb674c5ac273db7bae772ab56f0b040ec1d979",
+  "file_count": 755,
+  "archive_member_count": 756,
+  "excluded": [
+    "Godot generated .godot caches"
+  ],
+  "test_exit": {
+    "command": [
+      "C:\\Users\\truon\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "studio/tests/replay",
+      "-p",
+      "test_*.py"
+    ],
+    "started_utc": "2026-09-27T13:26:53.066392+00:00",
+    "finished_utc": "2026-09-27T13:29:11.961104+00:00",
+    "actual_exit": 0,
+    "log_sha256": "6adcbebcaa73704201f644b35366d88f4df7c83e22d7a26a5771a03c96f4b686"
+  },
+  "probe_binding": {
+    "run_id": "gt06-o4-repair-probe-03.probe",
+    "source_closure_sha256": "9d373d2ef4b18aab43473f3e4de0e92efa88b97a038f976b44e17526b0037954",
+    "campaign_sha256": "0f520acdfa1cb975f7090559389fbc5279d756367775e5f6e61e8f049fd73519"
+  },
+  "formal_campaigns": {
+    "gt06-o4-formal-01": {
+      "source_closure_sha256": "0ae5ca2e90021be39b7b6c4fcd61f965e530f9c169c5ee5461261afc3b17ff6e",
+      "completed_batch_captures": 27,
+      "parent_failure": {
+        "attempt_local_date": "2026-09-27",
+        "classification": "INFRA_ABORT",
+        "cleanup_error": null,
+        "code": "CAMPAIGN_WATCHDOG_CPU_PRESSURE",
+        "completed": false,
+        "formal_acceptance": false,
+        "owned_tree_zero": true,
+        "owner_closed": true,
+        "run_id": "gt06-o4-formal-01.r00.a01"
+      },
+      "watchdog_stop": {
+        "attribution": "no_product_failure_is_waived",
+        "campaign_sha256": "27dc3b68080851873fd70d6e68dc989ab964adc7d356a6a5277a3065d3b1bf20",
+        "classification": "INFRA_ABORT",
+        "formal_acceptance": false,
+        "reason": "CPU_PRESSURE",
+        "run_id": "gt06-o4-formal-01.r00.a01",
+        "sample_index": 977,
+        "schema": "HH-GT06-WATCHDOG-STOP-1",
+        "source_closure_sha256": "0ae5ca2e90021be39b7b6c4fcd61f965e530f9c169c5ee5461261afc3b17ff6e"
+      }
+    },
+    "gt06-o4-formal-02": {
+      "source_closure_sha256": "edb07f656dae02581f182291cfe4d0f946d4fa9c74f97cd7e208db3b1e0bcaf0",
+      "completed_batch_captures": 10,
+      "parent_failure": {
+        "attempt_local_date": "2026-09-27",
+        "classification": "INFRA_ABORT",
+        "cleanup_error": null,
+        "code": "CAMPAIGN_WATCHDOG_CPU_PRESSURE",
+        "completed": false,
+        "formal_acceptance": false,
+        "owned_tree_zero": true,
+        "owner_closed": true,
+        "run_id": "gt06-o4-formal-02.r00.a01"
+      },
+      "watchdog_stop": {
+        "attribution": "no_product_failure_is_waived",
+        "campaign_sha256": "0d8d6885853a1e9eb2657c2ccf347f3c2fc9dbd2c9d6f4ad06d9dfba9b8608bb",
+        "classification": "INFRA_ABORT",
+        "formal_acceptance": false,
+        "reason": "CPU_PRESSURE",
+        "run_id": "gt06-o4-formal-02.r00.a01",
+        "sample_index": 247,
+        "schema": "HH-GT06-WATCHDOG-STOP-1",
+        "source_closure_sha256": "edb07f656dae02581f182291cfe4d0f946d4fa9c74f97cd7e208db3b1e0bcaf0"
+      }
+    }
+  }
+}

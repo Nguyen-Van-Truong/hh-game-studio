@@ -65,6 +65,29 @@ class EnvironmentTests(unittest.TestCase):
         self.assertIsNone(env.Policy().observe(sample(owned_private_bytes=env.GIB,
             owned_processes=[{'pid': 78, 'name': 'godot.exe'}])))
 
+    def test_simultaneous_infrastructure_trigger_cannot_mask_product_memory(self):
+        for extra, other in (({'foreign_engines': [{'pid': 77}]}, 'FOREIGN_ENGINE'),
+                             ({'awake_100ns': 0}, 'SLEEP_RESUME'),
+                             ({'uptime_ms': 11000, 'awake_100ns': 110000000}, 'SAMPLE_GAP')):
+            with self.subTest(other=other):
+                policy = env.Policy()
+                policy.observe(sample())
+                result = policy.observe(sample(5, commit_total_bytes=93 * env.GIB,
+                                               owned_private_bytes=2 * env.GIB, **extra))
+                self.assertEqual((result['reason'], result['classification']),
+                                 ('COMMIT_PRESSURE', 'PRODUCT_FAIL'))
+                self.assertIn(other, result['reasons'])
+
+    def test_external_commit_pressure_cannot_mask_owned_available_pressure(self):
+        policy = env.Policy()
+        for second in range(0, 60, 5):
+            self.assertIsNone(policy.observe(sample(second, available_memory_bytes=env.GIB,
+                                                    owned_private_bytes=env.GIB)))
+        result = policy.observe(sample(60, available_memory_bytes=env.GIB,
+                                       owned_private_bytes=env.GIB, commit_total_bytes=95 * env.GIB))
+        self.assertEqual((result['reason'], result['classification']),
+                         ('AVAILABLE_PRESSURE', 'PRODUCT_FAIL'))
+
     def test_low_available_needs_full_continuous_60_seconds(self):
         policy = env.Policy()
         for second in range(0, 60, 5):
@@ -92,7 +115,8 @@ class EnvironmentTests(unittest.TestCase):
         policy = env.Policy()
         for second in range(0, 60, 5):
             self.assertIsNone(policy.observe(sample(second, cpu_idle_100ns=0)))
-        self.assertEqual(policy.observe(sample(60, cpu_idle_100ns=0))['reason'], 'CPU_PRESSURE')
+        result = policy.observe(sample(60, cpu_idle_100ns=0))
+        self.assertEqual((result['reason'], result['classification']), ('CPU_PRESSURE', 'INFRA_ABORT'))
 
     def test_sleep_clock_difference_aborts_before_sampling_gap(self):
         policy = env.Policy()
@@ -177,6 +201,32 @@ class EnvironmentTests(unittest.TestCase):
             (root / 'environment-samples.jsonl').write_text('\n'.join(rows) + '\n')
             with self.assertRaisesRegex(BenchmarkJobError, 'BINDING'):
                 env.verify_watchdog(root, campaign.read_regular, expected_binding=binding)
+
+    def test_bad_binding_does_not_create_a_stream(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            with self.assertRaisesRegex(BenchmarkJobError, 'WATCHDOG_BINDING'):
+                env.Watchdog(root, lambda: sample(), {}, campaign.write)
+            self.assertFalse((root / 'environment-samples.jsonl').exists())
+
+    def test_observer_error_still_writes_stop_if_diagnostic_write_fails(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            binding = {'run_id': 'test', 'source_closure_sha256': 'a' * 64, 'campaign_sha256': 'b' * 64}
+            def write(path, payload):
+                if path.name == 'watchdog-observation-error.json':
+                    raise OSError('injected write failure')
+                campaign.write(path, payload)
+            watch = env.Watchdog(root, Mock(side_effect=ValueError('bad sample')), binding, write)
+            try:
+                with self.assertRaisesRegex(BenchmarkJobError, 'OBSERVER_ERROR') as raised:
+                    watch.poll()
+            finally:
+                watch.close()
+            self.assertEqual(raised.exception.classification, 'HARNESS_FAIL')
+            self.assertEqual(raised.exception.watchdog_persistence_errors,
+                             ['watchdog-observation-error.json:OSError'])
+            self.assertTrue((root / 'watchdog-stop.json').is_file())
 
     def test_owner_failure_wins_before_watchdog_sampling(self):
         with tempfile.TemporaryDirectory() as directory:
