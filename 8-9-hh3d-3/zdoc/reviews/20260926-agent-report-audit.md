@@ -178,3 +178,12 @@ do/undo/redo, and cleans the temporary layer. It recorded actual host/wrapper
 exit 0, verified process tree, clean log, unchanged source/project snapshots,
 and 344 checks. This is authority-0 diagnostic evidence only; it does not
 enable the profile, prove AUTH-01..05, or change GT-06.
+
+The coordinator then added the animation-library candidate in `8911223d`.
+Ten focused contract tests pass and the combined O2 static regression is now
+138 tests. Native run `o2-native-20260927-27` creates an AnimationLibrary and
+position track, verifies library/track/key readback through do/undo/redo, and
+cleans the temporary player. It passed with actual host/wrapper exit 0, clean
+log, unchanged source/project snapshots, and 358 checks. This remains
+authority-0 diagnostic evidence; it does not enable scripting, grant a
+capability, prove AUTH-01..05 or advance GT-06.
