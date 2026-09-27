@@ -145,7 +145,7 @@ def expected_resource_labels() -> set[str]:
     for resource_type in ("RectangleShape2D", "CapsuleShape2D", "BoxShape3D", "CapsuleShape3D"):
         prefix = "resource_" + resource_type
         labels.update(prefix + suffix for suffix in (
-            "_binding", "_node_created", "_shape_readback", "_do_readback",
+            "_binding", "_classdb", "_node_created", "_before", "_shape_readback", "_do_readback", "_identity",
             "_undo_transition", "_undo_readback", "_redo_transition",
             "_redo_readback", "_cleanup_transition", "_cleanup_readback"))
     return labels

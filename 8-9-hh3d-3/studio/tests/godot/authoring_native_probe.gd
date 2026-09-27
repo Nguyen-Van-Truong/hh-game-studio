@@ -85,12 +85,20 @@ func _run_resource_candidates(proposals: Array, history: UndoRedo) -> void:
 		var prefix := "resource_" + resource_type
 		var properties: Dictionary = payload.get("properties", {})
 		var target_id := str(proposal.get("target_stable_id", ""))
-		_check(prefix + "_binding", proposal.get("operation") == "scene.resource.create"
+		var is_2d := resource_type in ["RectangleShape2D", "CapsuleShape2D"]
+		var bound: bool = (proposal.get("operation") == "scene.resource.create"
 			and proposal.get("expected_generation") == 4
+			and proposal.get("expected_revision") == "sha256:" + "1".repeat(64)
+			and target_id == ("collider" if is_2d else "collider3d")
 			and not proposal.has("runtime_authorized")
 			and not proposal.has("changes_applied"))
+		_check(prefix + "_binding", bound)
+		if not bound:
+			continue
+		_check(prefix + "_classdb", ClassDB.class_exists(resource_type)
+			and ClassDB.is_parent_class(resource_type, "Shape2D" if is_2d else "Shape3D"))
 		var node: Node = null
-		if resource_type in ["RectangleShape2D", "CapsuleShape2D"]:
+		if is_2d:
 			node = CollisionShape2D.new()
 		else:
 			node = CollisionShape3D.new()
@@ -100,16 +108,18 @@ func _run_resource_candidates(proposals: Array, history: UndoRedo) -> void:
 		_root.add_child(node)
 		node.owner = _root
 		var shape := _make_shape(resource_type, properties)
-		_check(prefix + "_node_created", target_id in ["collider", "collider3d"] and shape != null)
+		_check(prefix + "_node_created", shape != null
+			and node.get_class() == ("CollisionShape2D" if is_2d else "CollisionShape3D"))
 		if shape == null:
 			continue
-		node.set(&"shape", shape)
-		_check(prefix + "_shape_readback", _shape_matches(node.get(&"shape"), resource_type, properties))
+		_check(prefix + "_before", node.get(&"shape") == null)
+		_check(prefix + "_shape_readback", _shape_matches(shape, resource_type, properties))
 		_undo.create_action("O2 resource " + resource_type, UndoRedo.MERGE_DISABLE, node)
 		_undo.add_do_property(node, &"shape", shape)
 		_undo.add_undo_property(node, &"shape", null)
 		_undo.commit_action()
 		_check(prefix + "_do_readback", _shape_matches(node.get(&"shape"), resource_type, properties))
+		_check(prefix + "_identity", node.get(&"shape") == shape)
 		_check(prefix + "_undo_transition", history.undo())
 		_check(prefix + "_undo_readback", node.get(&"shape") == null)
 		_check(prefix + "_redo_transition", history.redo())
