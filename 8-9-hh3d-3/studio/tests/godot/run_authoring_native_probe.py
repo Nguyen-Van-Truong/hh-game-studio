@@ -59,6 +59,12 @@ _TILEMAP = importlib.util.module_from_spec(_TILEMAP_SPEC)
 sys.modules[_TILEMAP_SPEC.name] = _TILEMAP
 _TILEMAP_SPEC.loader.exec_module(_TILEMAP)
 
+_ANIMATION_SPEC = importlib.util.spec_from_file_location(
+    "o2_native_animation_authoring", STUDIO / "godot-addon/animation_authoring.py")
+_ANIMATION = importlib.util.module_from_spec(_ANIMATION_SPEC)
+sys.modules[_ANIMATION_SPEC.name] = _ANIMATION
+_ANIMATION_SPEC.loader.exec_module(_ANIMATION)
+
 
 def sha(path: Path) -> str:
     digest = hashlib.sha256()
@@ -87,6 +93,7 @@ def source_files() -> dict[str, str]:
         "godot-addon/resource_authoring.py",
         "godot-addon/scene_instance.py",
         "godot-addon/tilemap_authoring.py",
+        "godot-addon/animation_authoring.py",
         "protocol/core.py",
         "protocol/_rfc8785/__init__.py",
         "protocol/_rfc8785/_impl.py",
@@ -181,6 +188,16 @@ def expected_tilemap_labels() -> set[str]:
         "_do_transition", "_do_readback", "_atlas_readback", "_undo_transition",
         "_undo_readback", "_redo_transition", "_redo_readback",
         "_cleanup_transition", "_cleanup_readback")}
+
+
+def expected_animation_labels() -> set[str]:
+    prefix = "animation_library"
+    return {prefix + suffix for suffix in (
+        "_proposal_count", "_binding", "_player_created", "_before",
+        "_do_transition", "_library_readback", "_track_readback",
+        "_key_readback", "_undo_transition", "_undo_readback",
+        "_redo_transition", "_redo_readback", "_cleanup_transition",
+        "_cleanup_readback")}
 
 
 def edge_proposals() -> list[dict]:
@@ -283,6 +300,28 @@ def tilemap_proposals() -> list[dict]:
     return [_TILEMAP.validate_request(request, context).projection]
 
 
+def animation_proposals() -> list[dict]:
+    context = _ANIMATION.ValidationContext(
+        "project.fixture", "sha256:" + "1" * 64, "sha256:" + "2" * 64,
+        7, "lease.fixture", 12, 31000, 1000,
+        (_ANIMATION.NodeState("root", None, "Node2D", "Root"),
+         _ANIMATION.NodeState("actor", "root", "Node2D", "Actor"),
+         _ANIMATION.NodeState("player", "root", "AnimationPlayer", "Player")))
+    payload = {"expected_generation": context.generation,
+               "expected_project_revision": context.project_revision,
+               "animation_id": "idle", "length": 1.0, "loop_mode": 1,
+               "tracks": [{"node_stable_id": "actor", "property": "position",
+                           "keys": [[0.0, [0, 0]], [1.0, [10, 0]]]}]}
+    request = Request(
+        command_id="animation.native.1", project_id=context.project_id,
+        operation="scene.animation.create", lease_id=context.lease_id,
+        fencing_epoch=context.fencing_epoch, expected_revision=context.revision,
+        target={"stable_id": "player"}, payload=payload,
+        payload_hash="sha256:" + hashlib.sha256(canonical_bytes(payload)).hexdigest(),
+        deadline_ms=2000)
+    return [_ANIMATION.validate_request(request, context).projection]
+
+
 def validate_result(result: object, catalog: dict, process: dict, run_root: Path) -> tuple[bool, str | None]:
     if not isinstance(result, dict):
         return False, "result-not-object"
@@ -304,7 +343,7 @@ def validate_result(result: object, catalog: dict, process: dict, run_root: Path
         labels.append(row["label"])
     expected = (expected_labels(catalog) | expected_edge_labels()
                 | expected_resource_labels() | expected_instance_labels()
-                | expected_tilemap_labels())
+                | expected_tilemap_labels() | expected_animation_labels())
     if len(labels) != len(set(labels)) or set(labels) != expected:
         missing = sorted(expected - set(labels))
         extra = sorted(set(labels) - expected)
@@ -367,6 +406,7 @@ def run(godot: Path, run_id: str, output: Path) -> dict:
     write_json(project / "resource-input.json", {"proposals": resource_proposals()})
     write_json(project / "instance-input.json", {"proposals": instance_proposals()})
     write_json(project / "tilemap-input.json", {"proposals": tilemap_proposals()})
+    write_json(project / "animation-input.json", {"proposals": animation_proposals()})
     (scenes / "arena.tscn").write_text(
         '[gd_scene format=3]\n\n[node name="Arena" type="Node2D"]\n'
         '\n[node name="Spawn" type="Node2D" parent="."]\n',
