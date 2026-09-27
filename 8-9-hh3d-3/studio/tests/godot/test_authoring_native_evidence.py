@@ -15,7 +15,8 @@ class NativeEvidenceTests(unittest.TestCase):
         self.catalog = probe._CONTRACT.load_catalog().as_dict()
         labels = (probe.expected_labels(self.catalog) | probe.expected_edge_labels()
                   | probe.expected_resource_labels() | probe.expected_instance_labels()
-                  | probe.expected_tilemap_labels() | probe.expected_animation_labels())
+                  | probe.expected_tilemap_labels() | probe.expected_animation_labels()
+                  | probe.expected_behavior_labels())
         self.observation = {
             "schema": "hh-o2-native-authoring-observation-1",
             "actual_editor": True, "runtime_authorized": False,
@@ -49,6 +50,27 @@ class NativeEvidenceTests(unittest.TestCase):
                     **binding, "samples": [{"position_seconds": time, "values": {
                         node + ":position": copy.deepcopy(position), node + ":rotation_degrees": copy.deepcopy(rotation),
                         node + ":scale": copy.deepcopy(scale)}} for time, position, rotation, scale in poses[proposal["animation_id"]]]}
+        behavior = probe.behavior_proposals()[0]
+        binding = {key: behavior[key] for key in ("command_id", "request_digest")}
+        sequence = [
+            {"state": "run", "position": [4.0, 0.0], "velocity": [4.0, 0.0],
+             "rotation_degrees": 15.0, "signals": [], "animation": "run"},
+            {"state": "jump", "position": [4.0, 0.0], "velocity": [3.0, -8.0],
+             "rotation_degrees": 15.0, "signals": ["jumped"], "animation": "jump"},
+            {"state": "idle", "position": [4.0, 0.0], "velocity": [0.0, 0.0],
+             "rotation_degrees": 15.0, "signals": ["jumped", "landed"], "animation": "idle"},
+        ]
+        self.row("behavior_binding")["details"] = binding.copy()
+        self.row("behavior_dispatch")["details"] = {**binding, "sequence": copy.deepcopy(sequence)}
+        self.row("behavior_deterministic")["details"] = {
+            **binding, "sequence": copy.deepcopy(sequence), "repeat_sequence": copy.deepcopy(sequence)}
+        before = {"state": "idle", "position": [0.0, 0.0], "velocity": [0.0, 0.0],
+                  "rotation_degrees": 0.0, "signals": [], "animation": ""}
+        after_do = copy.deepcopy(sequence[0])
+        self.row("behavior_undo_readback")["details"] = {
+            "before": copy.deepcopy(before), "after_do": copy.deepcopy(after_do), "after_undo": copy.deepcopy(before)}
+        self.row("behavior_redo_readback")["details"] = {
+            "after_do": copy.deepcopy(after_do), "after_redo": copy.deepcopy(after_do)}
 
     def row(self, label, observation=None):
         return next(row for row in (observation or self.observation)["checks"] if row["label"] == label)

@@ -66,6 +66,12 @@ _ANIMATION = importlib.util.module_from_spec(_ANIMATION_SPEC)
 sys.modules[_ANIMATION_SPEC.name] = _ANIMATION
 _ANIMATION_SPEC.loader.exec_module(_ANIMATION)
 
+_BEHAVIOR_SPEC = importlib.util.spec_from_file_location(
+    "o2_native_gameplay_behavior", STUDIO / "godot-addon/gameplay_behavior.py")
+_BEHAVIOR = importlib.util.module_from_spec(_BEHAVIOR_SPEC)
+sys.modules[_BEHAVIOR_SPEC.name] = _BEHAVIOR
+_BEHAVIOR_SPEC.loader.exec_module(_BEHAVIOR)
+
 
 def sha(path: Path) -> str:
     digest = hashlib.sha256()
@@ -90,12 +96,14 @@ def source_files() -> dict[str, str]:
         "tests/godot/authoring_native_plugin.gd",
         "tests/godot/gameplay_edges_native.gd",
         "tests/godot/animation_native.gd",
+        "tests/godot/behavior_native.gd",
         "tests/godot/run_authoring_native_probe.py",
         "godot-addon/gameplay_edges.py",
         "godot-addon/resource_authoring.py",
         "godot-addon/scene_instance.py",
         "godot-addon/tilemap_authoring.py",
         "godot-addon/animation_authoring.py",
+        "godot-addon/gameplay_behavior.py",
         "protocol/core.py",
         "protocol/_rfc8785/__init__.py",
         "protocol/_rfc8785/_impl.py",
@@ -336,6 +344,87 @@ def animation_proposals() -> list[dict]:
     return result
 
 
+def behavior_proposals() -> list[dict]:
+    context = _BEHAVIOR.ValidationContext(
+        "project.fixture", "sha256:" + "1" * 64, "sha256:" + "2" * 64,
+        8, "lease.fixture", 13, 31000, 1000,
+        (_BEHAVIOR.NodeState("root", "Node3D"),
+         _BEHAVIOR.NodeState("actor", "CharacterBody2D")))
+    payload = {
+        "expected_generation": context.generation,
+        "expected_project_revision": context.project_revision,
+        "behavior_id": "fighter",
+        "states": ["idle", "run", "jump"],
+        "initial_state": "idle",
+        "transitions": [
+            {"from_state": "idle", "action": "move_right", "to_state": "run",
+             "effects": [{"kind": "move", "params": {"speed": 4}},
+                          {"kind": "face", "params": {"angle": 15}},
+                          {"kind": "play_animation", "params": {"animation": "run"}}]},
+            {"from_state": "run", "action": "jump", "to_state": "jump",
+             "effects": [{"kind": "jump", "params": {"velocity_y": -8}},
+                          {"kind": "set_velocity", "params": {"velocity_x": 3, "velocity_y": -8}},
+                          {"kind": "emit_signal", "params": {"signal": "jumped"}},
+                          {"kind": "play_animation", "params": {"animation": "jump"}}]},
+            {"from_state": "jump", "action": "land", "to_state": "idle",
+             "effects": [{"kind": "set_velocity", "params": {"velocity_x": 0, "velocity_y": 0}},
+                          {"kind": "emit_signal", "params": {"signal": "landed"}},
+                          {"kind": "play_animation", "params": {"animation": "idle"}}]},
+        ],
+    }
+    request = Request(
+        command_id="behavior.native.fighter", project_id=context.project_id,
+        operation="scene.behavior.create", lease_id=context.lease_id,
+        fencing_epoch=context.fencing_epoch, expected_revision=context.revision,
+        target={"stable_id": "actor"}, payload=payload,
+        payload_hash="sha256:" + hashlib.sha256(canonical_bytes(payload)).hexdigest(),
+        deadline_ms=2000)
+    return [_BEHAVIOR.validate_request(request, context).projection]
+
+
+def expected_behavior_labels() -> set[str]:
+    return {"behavior_proposal_count", "behavior_binding", "behavior_native_binding",
+            "behavior_dispatch", "behavior_deterministic", "behavior_undo_transition",
+            "behavior_undo_readback", "behavior_redo_transition", "behavior_redo_readback",
+            "behavior_cleanup_readback"}
+
+
+def validate_behavior_observations(checks: list[dict]) -> str | None:
+    rows = {row["label"]: row.get("details") for row in checks}
+    proposal = behavior_proposals()[0]
+    binding = {key: proposal[key] for key in ("command_id", "request_digest")}
+    for label in ("behavior_dispatch", "behavior_deterministic"):
+        details = rows.get(label)
+        if type(details) is not dict or any(details.get(key) != value for key, value in binding.items()):
+            return "behavior-request-binding"
+    expected_sequence = [
+        {"state": "run", "position": [4.0, 0.0], "velocity": [4.0, 0.0],
+         "rotation_degrees": 15.0, "signals": [], "animation": "run"},
+        {"state": "jump", "position": [4.0, 0.0], "velocity": [3.0, -8.0],
+         "rotation_degrees": 15.0, "signals": ["jumped"], "animation": "jump"},
+        {"state": "idle", "position": [4.0, 0.0], "velocity": [0.0, 0.0],
+         "rotation_degrees": 15.0, "signals": ["jumped", "landed"], "animation": "idle"},
+    ]
+    dispatch = rows.get("behavior_dispatch")
+    deterministic = rows.get("behavior_deterministic")
+    if (type(dispatch) is not dict or dispatch.get("sequence") != expected_sequence
+            or type(deterministic) is not dict or deterministic.get("sequence") != expected_sequence
+            or deterministic.get("repeat_sequence") != expected_sequence):
+        return "behavior-dispatch-values"
+    for label in ("behavior_undo_readback", "behavior_redo_readback"):
+        details = rows.get(label)
+        if type(details) is not dict:
+            return "behavior-undo-details"
+    undo = rows["behavior_undo_readback"]
+    expected_before = {"state": "idle", "position": [0.0, 0.0], "velocity": [0.0, 0.0],
+                       "rotation_degrees": 0.0, "signals": [], "animation": ""}
+    if undo.get("before") != expected_before or undo.get("after_undo") != expected_before:
+        return "behavior-undo-values"
+    if rows["behavior_redo_readback"].get("after_redo") != rows["behavior_undo_readback"].get("after_do"):
+        return "behavior-redo-values"
+    return None
+
+
 def numeric_match(observed: object, expected: object) -> bool:
     """Godot float32 property readback has bounded error; booleans are not numbers."""
     if type(expected) is list:
@@ -419,7 +508,8 @@ def validate_result(result: object, catalog: dict, process: dict, run_root: Path
         labels.append(row["label"])
     expected = (expected_labels(catalog) | expected_edge_labels()
                 | expected_resource_labels() | expected_instance_labels()
-                | expected_tilemap_labels() | expected_animation_labels())
+                | expected_tilemap_labels() | expected_animation_labels()
+                | expected_behavior_labels())
     if len(labels) != len(set(labels)) or set(labels) != expected:
         missing = sorted(expected - set(labels))
         extra = sorted(set(labels) - expected)
@@ -427,6 +517,9 @@ def validate_result(result: object, catalog: dict, process: dict, run_root: Path
     animation_error = validate_animation_observations(checks)
     if animation_error:
         return False, animation_error
+    behavior_error = validate_behavior_observations(checks)
+    if behavior_error:
+        return False, behavior_error
     isolation = result.get("isolation")
     if not isinstance(isolation, dict) or isolation.get("project_under_run_root") is not True or isolation.get("user_under_run_root") is not True or isolation.get("network_used") is not False or isolation.get("arbitrary_script_loaded") is not False or isolation.get("public_ack") is not False:
         return False, "isolation"
@@ -466,6 +559,7 @@ def run(godot: Path, run_id: str, output: Path) -> dict:
     shutil.copyfile(STUDIO / "tests/godot/authoring_native_probe.gd", tests / "authoring_native_probe.gd")
     shutil.copyfile(STUDIO / "tests/godot/gameplay_edges_native.gd", tests / "gameplay_edges_native.gd")
     shutil.copyfile(STUDIO / "tests/godot/animation_native.gd", tests / "animation_native.gd")
+    shutil.copyfile(STUDIO / "tests/godot/behavior_native.gd", tests / "behavior_native.gd")
     (addon / "plugin.cfg").write_text(
         '[plugin]\nname="HH O2 Native Diagnostic"\ndescription="Disposable O2 probe"\n'
         'author="HH Studio"\nversion="0.0-diagnostic"\nscript="plugin.gd"\n',
@@ -487,6 +581,7 @@ def run(godot: Path, run_id: str, output: Path) -> dict:
     write_json(project / "instance-input.json", {"proposals": instance_proposals()})
     write_json(project / "tilemap-input.json", {"proposals": tilemap_proposals()})
     write_json(project / "animation-input.json", {"proposals": animation_proposals()})
+    write_json(project / "behavior-input.json", {"proposals": behavior_proposals()})
     (scenes / "arena.tscn").write_text(
         '[gd_scene format=3]\n\n[node name="Arena" type="Node2D"]\n'
         '\n[node name="Spawn" type="Node2D" parent="."]\n',
