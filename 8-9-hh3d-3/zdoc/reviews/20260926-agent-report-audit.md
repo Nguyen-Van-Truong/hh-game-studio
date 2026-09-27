@@ -169,3 +169,12 @@ unchanged source/project snapshots, and 331 checks. It remains authority 0
 diagnostic evidence. Static O2 regression remains 123 tests passing. The
 earlier 305-check run is retained as historical and is superseded for the new
 source closure.
+
+The coordinator next added the TileMap cell candidate in `f6b2e17b`. Its five
+focused tests and the combined 128-test O2 static regression pass. The fresh
+native remint `o2-native-20260927-26` creates a minimal TileSet atlas and
+TileMapLayer, applies one validated cell, verifies source/atlas readback across
+do/undo/redo, and cleans the temporary layer. It recorded actual host/wrapper
+exit 0, verified process tree, clean log, unchanged source/project snapshots,
+and 344 checks. This is authority-0 diagnostic evidence only; it does not
+enable the profile, prove AUTH-01..05, or change GT-06.
