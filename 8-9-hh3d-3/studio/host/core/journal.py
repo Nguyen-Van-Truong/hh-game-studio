@@ -435,7 +435,8 @@ class Journal:
 
     @_mutating
     def append_command(self, *, project_id: str, command_id: str, digest: str,
-                       receipt: Mapping[str, Any], now_ms: int, pending: bool = False) -> dict[str, Any]:
+                       receipt: Mapping[str, Any], now_ms: int, pending: bool = False,
+                       _before_append=None) -> dict[str, Any]:
         _clock(now_ms)
         if type(pending) is not bool:
             raise JournalError("INVALID_PENDING")
@@ -455,6 +456,14 @@ class Journal:
             raise JournalError("INVALID_RECEIPT")
         if pending and len(self._pending) >= self.limits.max_pending_commands:
             raise JournalError("PENDING_LIMIT")
+        if _before_append is not None:
+            if not callable(_before_append):
+                raise JournalError("INVALID_PREFLIGHT")
+            # Coordinator-owned validation runs after the authoritative
+            # reload/dedupe check and before durable bytes are written. A
+            # duplicate therefore returns without lease/revision work, while
+            # a failed preflight leaves no pending record behind.
+            _before_append()
         expires = now_ms + self.limits.retry_horizon_ms
         record = {"kind": "command", "project_id": project_id, "command_id": command_id,
                   "digest": digest, "status": "ACCEPTED_PENDING" if pending else "COMMITTED",

@@ -727,25 +727,46 @@ class LoopbackFixtureHost:
                 raise SafetyViolation("INVALID_FIXTURE_PAYLOAD")
         elif request.payload:
             raise SafetyViolation("INVALID_FIXTURE_PAYLOAD")
-        existing = self._existing(request.command_id, request.digest)
-        if existing is not None:
-            return existing
-        validate_envelope(body, now_ms=epoch_ms())
-        if self._stopped.is_set():
-            raise SafetyViolation("HOST_STOPPED")
-        if len(self._jobs) >= self.limits.max_pending or len(self._queue) >= self.limits.max_pending:
-            raise SafetyViolation("QUEUE_FULL")
         lease = self._leases.get(session.credential.session_id) if request.operation == "fixture.set" else None
-        if request.operation == "fixture.set":
-            if lease is None or request.lease_id != lease.owner or request.fencing_epoch != lease.fencing_epoch:
-                raise SafetyViolation("STALE_LEASE")
-            self.journal.check_lease(lease, now_ms=epoch_ms())
-            self.journal.check_revision(expected_revision=request.expected_revision,
-                                        current_revision=self.fixture.snapshot()["revision"])
         pending = _response(Status.ACCEPTED_PENDING, "QUEUED", request.command_id, request_digest=request.digest)
         admitted_ms = epoch_ms()
-        self.journal.append_command(project_id=self.project_id, command_id=request.command_id,
-            digest=request.digest, receipt=self.sessions.redact_output(pending.as_dict()), now_ms=admitted_ms, pending=True)
+        def preflight_new_request():
+            validate_envelope(body, now_ms=epoch_ms())
+            if self._stopped.is_set():
+                raise SafetyViolation("HOST_STOPPED")
+            if len(self._jobs) >= self.limits.max_pending or len(self._queue) >= self.limits.max_pending:
+                raise SafetyViolation("QUEUE_FULL")
+            if request.operation != "fixture.set":
+                return
+            if lease is None or request.lease_id != lease.owner or request.fencing_epoch != lease.fencing_epoch:
+                raise SafetyViolation("STALE_LEASE")
+            current = self.journal._leases.get((self.project_id, "fixture.counter"))
+            if current != lease or lease.expires_ms <= epoch_ms():
+                raise JournalError("STALE_LEASE")
+            self.journal.check_revision(expected_revision=request.expected_revision,
+                                        current_revision=self.fixture.snapshot()["revision"])
+        admission = self.journal.append_command(project_id=self.project_id, command_id=request.command_id,
+            digest=request.digest, receipt=self.sessions.redact_output(pending.as_dict()), now_ms=admitted_ms,
+            pending=True, _before_append=preflight_new_request)
+        # append_command performs the authoritative dedupe/conflict check while
+        # holding the journal writer lock. Do not perform a separate lookup
+        # before it: that would replay/hash the entire history twice and let a
+        # timed-out client race a still-admitting command. A replayed terminal
+        # or pending receipt is already durable and must not enqueue a second
+        # job or emit a fresh ACK.
+        if admission['replayed']:
+            replay = Response.from_dict(admission['receipt'])
+            if replay.status is Status.ACCEPTED_PENDING:
+                # A durable pending row is only safe to ACK while its live job
+                # is still published.  After a restart/crash the same row is
+                # an orphan and must go through the recovery path instead of
+                # being mistaken for a newly accepted request.
+                live = self._pending_snapshot.get(request.command_id)
+                if live is None or epoch_ms() > live[1]:
+                    return _response(Status.UNKNOWN, "RECOVERY_REQUIRED", request.command_id,
+                                     request_digest=request.digest, next_action="lookup.reconcile")
+                return live[0]
+            return replay
         self._pending_snapshot = {**self._pending_snapshot, request.command_id:
                                   (pending, admitted_ms + self.journal.limits.retry_horizon_ms)}
         job = _Job(request, lease, session)
