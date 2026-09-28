@@ -187,3 +187,20 @@ This source change invalidates earlier native closure hashes; a fresh
 four-fixture native run is required after the GT-06 formal lane permits it.
 The focused pure suite was rerun after integration: 66 tests, actual exit 0,
 2.0 seconds, with no engine, Docker, network, or generated evidence.
+
+### 2026-09-28 dependency-claim correction
+
+Review of the f29fdbb7 helper found that its regex walk was too strong to call
+a Godot dependency-closure proof: it could miss scene ext_resources, UID and
+dynamic loads, and could mistake comments or strings for references. The
+helper is now `validate_source_bundle`. It binds an exact UTF-8 byte inventory,
+canonical `scripts/`/`scenes/` paths, size limits and SHA-256 values, while
+returning `dependency_closure_verified=false`. The executor still validates
+the bounded bundle before Docker admission; no native result or old raw file
+was rewritten. The profile pin and lock manifest were reminted for this source.
+
+The former static tests that claimed missing/unreferenced inference were
+replaced by regression tests proving the honest boundary, including rejection
+of `res://` aliases and dot segments. Actual Godot import/runtime dependency
+closure, scene-resource coverage, and AUTH-05 remain open work; this repair
+does not create an acceptance claim.

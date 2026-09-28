@@ -53,7 +53,7 @@ class GuardedExecutorTests(unittest.TestCase):
                 cli.assert_not_called()
                 self.assertFalse((Path(directory) / 'output').exists())
 
-    def test_gameplay_input_admits_only_the_bounded_dependency_closure(self):
+    def test_gameplay_input_admits_only_the_bounded_source_bundle(self):
         with tempfile.TemporaryDirectory() as directory:
             project = Path(directory) / 'input'
             project.mkdir(); (project / 'scenes').mkdir(); (project / 'scripts').mkdir()
@@ -65,12 +65,12 @@ class GuardedExecutorTests(unittest.TestCase):
             values = executor._gameplay_project_bytes(project)
             self.assertIn('scripts/fixture_actor.gd', values)
             profile = executor._gameplay_profile()
-            with self.assertRaisesRegex(profile.GameplaySourceError,
-                                        'GAMEPLAY_DEPENDENCY_UNREFERENCED'):
-                profile.validate_dependency_closure(
-                    {'scripts/fixture_actor.gd': b'extends Node3D\n',
-                     'scripts/unused.gd': b'extends Node3D\n'},
-                    entrypoint='scripts/fixture_actor.gd')
+            bundle = profile.validate_source_bundle(
+                {'scripts/fixture_actor.gd': b'extends Node3D\n',
+                 'scripts/unused.gd': b'extends Node3D\n'},
+                entrypoint='scripts/fixture_actor.gd')
+            self.assertTrue(bundle['dependency_inventory_verified'])
+            self.assertFalse(bundle['dependency_closure_verified'])
 
     def test_gameplay_source_uses_play_phase_and_exact_harness_mount(self):
         command = executor._supervised_command('gameplay-source')

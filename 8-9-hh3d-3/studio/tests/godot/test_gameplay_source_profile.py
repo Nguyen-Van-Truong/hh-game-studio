@@ -49,26 +49,34 @@ class GameplaySourceProfileTests(unittest.TestCase):
         self.assertLess(driver.index('"import"'), driver.index('"play"'))
         self.assertIn('/harness/gameplay_sandbox.py', driver)
 
-    def test_dependency_closure_is_bounded_and_hash_bound(self):
-        result = profile.validate_dependency_closure(
+    def test_source_bundle_is_bounded_and_hash_bound_but_not_closure_proof(self):
+        result = profile.validate_source_bundle(
             {'scripts/main.gd': DEPENDENCY, 'scripts/base.gd': BASE},
             entrypoint='scripts/main.gd')
-        self.assertTrue(result['dependency_closure_verified'])
+        self.assertTrue(result['dependency_inventory_verified'])
+        self.assertFalse(result['dependency_closure_verified'])
         self.assertFalse(result['syntax_and_types_verified'])
         self.assertEqual(set(result['files']), {'scripts/base.gd', 'scripts/main.gd'})
 
-    def test_dependency_closure_rejects_missing_or_unreferenced_files(self):
-        with self.assertRaisesRegex(profile.GameplaySourceError, 'GAMEPLAY_DEPENDENCY_MISSING'):
-            profile.validate_dependency_closure({'scripts/main.gd': DEPENDENCY}, entrypoint='scripts/main.gd')
-        with self.assertRaisesRegex(profile.GameplaySourceError, 'GAMEPLAY_DEPENDENCY_UNREFERENCED'):
-            profile.validate_dependency_closure(
-                {'scripts/main.gd': VALID, 'scripts/unused.gd': BASE}, entrypoint='scripts/main.gd')
+    def test_source_bundle_does_not_infer_missing_or_unreferenced_files(self):
+        result = profile.validate_source_bundle(
+            {'scripts/main.gd': DEPENDENCY}, entrypoint='scripts/main.gd')
+        self.assertFalse(result['dependency_closure_verified'])
+        result = profile.validate_source_bundle(
+            {'scripts/main.gd': VALID, 'scripts/unused.gd': BASE}, entrypoint='scripts/main.gd')
+        self.assertEqual(len(result['files']), 2)
 
     def test_dependency_closure_rejects_traversal_and_non_bytes(self):
         with self.assertRaisesRegex(profile.GameplaySourceError, 'GAMEPLAY_DEPENDENCY_SHAPE'):
-            profile.validate_dependency_closure({'../outside.gd': BASE}, entrypoint='../outside.gd')
+            profile.validate_source_bundle({'../outside.gd': BASE}, entrypoint='../outside.gd')
         with self.assertRaisesRegex(profile.GameplaySourceError, 'GAMEPLAY_DEPENDENCY_FILE'):
-            profile.validate_dependency_closure({'scripts/main.gd': 'text'}, entrypoint='scripts/main.gd')
+            profile.validate_source_bundle({'scripts/main.gd': 'text'}, entrypoint='scripts/main.gd')
+
+    def test_source_bundle_rejects_res_alias_and_dot_segments(self):
+        for name in ('res://scripts/main.gd', 'scripts/./main.gd', 'scripts/a/../main.gd'):
+            with self.assertRaisesRegex(profile.GameplaySourceError,
+                                        'GAMEPLAY_DEPENDENCY_SHAPE|GAMEPLAY_DEPENDENCY_FILE'):
+                profile.validate_source_bundle({name: BASE}, entrypoint=name)
 
 
 if __name__ == '__main__':
