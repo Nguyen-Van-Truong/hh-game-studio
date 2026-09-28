@@ -22,8 +22,10 @@ Raw evidence remains at `studio/.local/reviews/gt06-o4-formal-05/` and
 `gt06-o4-formal-05-supervisor/`. The verified closeout is
 `studio/.local/reviews/gt06-formal05-closeout-20260928/`:
 
-- manifest SHA-256: `636654af41bd8e7e9e3be32aa4f1870f698ce255b0ce37c8ad25d679f4445b36`
-- raw archive SHA-256: `681908feaba4d433baab3d1d87b89673fbd3c8c29c5d1bbfa865ba4cc2bc9f19`
+- manifest SHA-256: `d1cb3a0ac4820b6703548b552b8fb4ce68da6d4adace7183afa582f7035a9eaf`
+- raw archive SHA-256: `d2d60d00e3f8c66eb72748bb8eb7c194372742fd7e14895b086dad2920f2c4d1`
+- scheduler terminal receipt: `scheduler-terminal.json` (Ready, zero instances,
+  LastTaskResult 1, no remaining Godot/Blender process).
 
 Both formal04 and formal05 consumed the two permitted infrastructure aborts on
 2026-09-28. Do not launch another GT06 campaign today, resume either run, or
