@@ -241,3 +241,15 @@ manifest SHA-256 is
 `08505a94646ceff29f75950628e175c1f61c48bc03824891ed5f27b4a5c55958`.
 Raw evidence remains under `studio/.local/reviews/` and all claims remain
 `AUTHORITY=0`; AUTH-05, adapter integration and GT-06 are open.
+
+### 2026-09-29 static envelope hardening (formal06 outside measured source)
+
+The gameplay-source byte envelope now rejects Windows device names, alternate
+data-stream syntax, control/NUL bytes, trailing dot/space names, non-NFC
+components, and case-folded path aliases. This closes a cross-platform path
+ambiguity in the bounded inventory before Docker admission; it does not infer
+Godot dependencies, prove a sandbox, or grant public ACK. Focused pure profile
+tests pass **9 tests**, actual exit 0 (`python -B -m unittest
+studio.tests.godot.test_gameplay_source_profile`). No Godot, Blender, Docker,
+network, or measured GT-06 source was run or changed. A fresh native O2
+diagnostic remains required after formal06 before any broader claim.

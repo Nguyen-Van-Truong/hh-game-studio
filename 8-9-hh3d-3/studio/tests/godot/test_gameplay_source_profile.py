@@ -73,10 +73,17 @@ class GameplaySourceProfileTests(unittest.TestCase):
             profile.validate_source_bundle({'scripts/main.gd': 'text'}, entrypoint='scripts/main.gd')
 
     def test_source_bundle_rejects_res_alias_and_dot_segments(self):
-        for name in ('res://scripts/main.gd', 'scripts/./main.gd', 'scripts/a/../main.gd'):
+        for name in ('res://scripts/main.gd', 'scripts/./main.gd', 'scripts/a/../main.gd',
+                     'scripts/CON.gd', 'scripts/main.gd:stream', 'scripts/main.gd\x00'):
             with self.assertRaisesRegex(profile.GameplaySourceError,
                                         'GAMEPLAY_DEPENDENCY_SHAPE|GAMEPLAY_DEPENDENCY_FILE'):
                 profile.validate_source_bundle({name: BASE}, entrypoint=name)
+
+    def test_source_bundle_rejects_cross_platform_case_aliases(self):
+        with self.assertRaisesRegex(profile.GameplaySourceError, 'GAMEPLAY_DEPENDENCY_ALIAS'):
+            profile.validate_source_bundle(
+                {'scripts/Main.gd': BASE, 'scripts/main.gd': BASE},
+                entrypoint='scripts/Main.gd')
 
 
 if __name__ == '__main__':

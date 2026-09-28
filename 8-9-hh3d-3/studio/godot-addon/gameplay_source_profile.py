@@ -10,12 +10,18 @@ from __future__ import annotations
 import hashlib
 import posixpath
 from collections.abc import Mapping
+import unicodedata
 
 PROFILE = 'hh-godot-gameplay-source-1'
 MAX_BYTES = 16_384
 MAX_FILES = 64
 MAX_TOTAL_BYTES = 256 * 1024
 _PROJECT_PATH = frozenset(('scripts', 'scenes'))
+_WINDOWS_DEVICES = frozenset({
+    'CON', 'PRN', 'AUX', 'NUL',
+    *(f'COM{i}' for i in range(1, 10)),
+    *(f'LPT{i}' for i in range(1, 10)),
+})
 PROJECT_TEMPLATE = (
     'config_version=5\n[application]\nconfig/name="HH gameplay source diagnostic"\n'
     '[rendering]\nrenderer/rendering_method="gl_compatibility"\n'
@@ -29,11 +35,20 @@ class GameplaySourceError(ValueError):
 
 
 def _path(value: object) -> bool:
-    if type(value) is not str or value.startswith('res://') or '\\' in value:
+    if type(value) is not str or value.startswith('res://') or '\\' in value or ':' in value or '\x00' in value:
         return False
     parts = value.split('/')
     if len(parts) < 2 or parts[0] not in _PROJECT_PATH or any(not part or part in ('.', '..') for part in parts[1:]):
         return False
+    for part in parts[1:]:
+        # The envelope is copied to Windows hosts as well as Linux containers.
+        # Reject names that can alias, become streams, or address a device there.
+        if part != unicodedata.normalize('NFC', part) or part[-1] in ' .':
+            return False
+        if any(ord(char) < 32 for char in part):
+            return False
+        if part.split('.', 1)[0].upper() in _WINDOWS_DEVICES:
+            return False
     normalized = posixpath.normpath(value)
     return normalized == value and not normalized.startswith('../')
 
@@ -68,17 +83,22 @@ def validate_source_bundle(files: Mapping[str, bytes], *, entrypoint: str) -> di
     if not isinstance(files, Mapping) or not files or len(files) > MAX_FILES or not _path(entrypoint):
         raise GameplaySourceError('GAMEPLAY_DEPENDENCY_SHAPE')
     checked: dict[str, bytes] = {}
+    folded: set[str] = set()
     total = 0
     for name, raw in files.items():
         if not _path(name) or type(raw) is not bytes or not 1 <= len(raw) <= MAX_BYTES:
             raise GameplaySourceError('GAMEPLAY_DEPENDENCY_FILE')
         if name in checked:
             raise GameplaySourceError('GAMEPLAY_DEPENDENCY_DUPLICATE')
+        alias = name.casefold()
+        if alias in folded:
+            raise GameplaySourceError('GAMEPLAY_DEPENDENCY_ALIAS')
         validate_source(raw)
         total += len(raw)
         if total > MAX_TOTAL_BYTES:
             raise GameplaySourceError('GAMEPLAY_DEPENDENCY_SIZE')
         checked[name] = raw
+        folded.add(alias)
     if entrypoint not in checked:
         raise GameplaySourceError('GAMEPLAY_DEPENDENCY_ENTRYPOINT')
     return {
