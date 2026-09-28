@@ -31,7 +31,6 @@ GUARDED_LISTEN_ERROR = ('ERROR: Condition "err != OK" is true. Returning: ERR_CA
                         '   at: listen (core/io/tcp_server.cpp:56)\n')
 GAMEPLAY_STARTUP_ERRORS = (GUARDED_STARTUP_ERROR * 2
     + (GUARDED_SOCKET_ERROR + GUARDED_LISTEN_ERROR) * 2 + GUARDED_STARTUP_ERROR)
-GAMEPLAY_WATCHDOG_ERRORS = GUARDED_STARTUP_ERROR * 2
 GAMEPLAY_PHASE_EVENTS = tuple(event for phase in ('parse', 'import', 'play')
     for event in (f'HH_GAMEPLAY_PHASE_BEGIN {phase}', GUARD_MARKER,
                   f'HH_GAMEPLAY_PHASE_END {phase} 0'))
@@ -45,7 +44,10 @@ def gameplay_transcript(case: dict, stdout: str, stderr: str) -> bool:
                    if line.startswith(('HH_GAMEPLAY_PHASE_', 'HH_GAMEPLAY_OS_GUARD')))
     if events != expected or re.search(r'ERROR|WARNING|leaked', stdout, re.IGNORECASE):
         return False
-    errors = GAMEPLAY_WATCHDOG_ERRORS if kind == 'watchdog' else GAMEPLAY_STARTUP_ERRORS
+    # A watchdog fixture must reach play, so all three startups and the import
+    # listener denials precede its loop. Two startup errors alone mean import
+    # was interrupted; they cannot prove hostile play-loop termination.
+    errors = GAMEPLAY_STARTUP_ERRORS
     if kind == 'spawn_observation':
         errors += ('ERROR: Cannot create pipe from command: "/usr/bin/printf" "HH_UNEXPECTED_CHILD" 2>&1.\n'
                    '   at: execute (drivers/unix/os_unix.cpp:899)\n'

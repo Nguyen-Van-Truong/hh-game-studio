@@ -66,11 +66,14 @@ class GameplayProbeEvidenceTests(unittest.TestCase):
         self.result.update(docker_wait_exit=124)
         self.result['command_host']['exit_code'] = 124
         self.result['container_state']['ExitCode'] = 124
-        self.stderr = probe.GAMEPLAY_WATCHDOG_ERRORS
         events = probe.GAMEPLAY_PHASE_EVENTS[:-1]
         good = '\n'.join((*events, 'HH_PROBE_BUSY_ENTERED')) + '\n'
         self.assertTrue(self.check(stdout=good)['supervisor_watchdog_observed'])
         self.assertTrue(self.check(stdout=good)['fixture_observed'])
+        # Raw -03 had only two startups and timed out during import. Raw -04
+        # reached play and emitted all seven explained diagnostic blocks.
+        self.assertFalse(self.check(stdout=good,
+            stderr=probe.GUARDED_STARTUP_ERROR * 2)['fixture_observed'])
         for output in (good.replace('HH_PROBE_BUSY_ENTERED\n', ''),
                        '\n'.join((*events[:5], 'HH_PROBE_BUSY_ENTERED')) + '\n',
                        good + 'HH_GAMEPLAY_PHASE_END play 0\n',

@@ -123,3 +123,36 @@ the exact source/dependency closure admitted by AUTH-01..05.
 No engine run during GT-06 formal measurement. Static preparation is allowed.
 This branch must not change plan or AGENTS.md again. Existing governance
 differences must be excluded/reconciled when integrating code after GT-06.
+
+### 2026-09-28 gameplay-source follow-up (run05)
+
+The fresh native diagnostic `o2-gameplay-source-20260928-05` observed all four
+fixtures (`gameplay_source`, `gameplay_source_spawn`,
+`gameplay_source_boundary`, and `gameplay_source_busy`). The probe runner's
+captured host exit is **0** and each owned container has a confirmed removal
+inspection. The busy fixture reached its intended loop and produced the bounded
+diagnostic exit; this is an observation of the watchdog path, not a product
+failure. Source closure is
+`485c3dbf98592db3945edc6c08bf08b245e56d589fca09b3e07323af1bc8e822`.
+Raw evidence remains under
+`studio/.local/reviews/o2-gameplay-source-20260928-05/` and is not rewritten.
+
+This improves the earlier run03 checkpoint: the outer exit is now captured,
+the spawn and busy cases are interpreted from the exact transcript, and
+cleanup is confirmed after removal. It still remains `AUTHORITY=0`:
+`public_ack=false`, `sandbox_acceptance=false`, and
+`validation_attribution_proven=false` for every case. It does not close
+AUTH-05 or alter GT-06. The bounded container probe demonstrates the guarded
+diagnostic path only; it is not evidence that arbitrary gameplay source is
+safe for publication.
+
+The focused static regression suite now passes **122 tests**, actual exit 0 in
+16.323 seconds. Receipt:
+`studio/.local/reviews/o2-gameplay-evidence-20260928-03/exit.json`; log SHA256
+`1f938ec83aa5b406a8d76a12d5f73c5042eb4c0ad52c065081f480ef5ca7afcd`.
+This count overlaps earlier checkpoints and must not be added to them.
+
+Remaining O2 work is unchanged: add syntax/type/dependency negative fixtures,
+prove source-closure/public adapter integration, and obtain the owner critic
+package after GT-06. Do not run another native gameplay probe during formal
+measurement; preserve both run03 and run05 as separate historical evidence.

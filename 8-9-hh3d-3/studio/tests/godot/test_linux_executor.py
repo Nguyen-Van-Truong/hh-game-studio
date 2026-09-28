@@ -228,7 +228,9 @@ class FakeDocker:
         elif args[0] == 'rm':
             if self.state['State']['Running']: raise AssertionError('removed running container without inspection')
             if args != ['rm', CID]: raise AssertionError('removed foreign ID')
-            self.removed = True
+            self.removed = self.scenario not in ('remove_timeout', 'remove_no_effect')
+            if self.scenario in ('remove_timeout', 'remove_uncertain_gone'):
+                code = 2
         else:
             raise AssertionError('unexpected Docker operation')
         row = {'exit_code': code, 'timed_out': False, 'stream_cap_exceeded': self.scenario == 'cap' and args[0] == 'start',
@@ -236,6 +238,8 @@ class FakeDocker:
                'stream_reader_eof': [True, True], 'stream_reader_errors': [None, None],
                'stdout': label + '-stdout.txt', 'stderr': label + '-stderr.txt'}
         row['job_owner']=copy.deepcopy(CLEAN_JOB)
+        if args[0] == 'rm' and self.scenario in ('remove_timeout', 'remove_uncertain_gone'):
+            row['timed_out'] = True
         (output / row['stdout']).write_bytes(payload)
         (output / row['stderr']).write_bytes(stderr)
         return row, payload
@@ -255,8 +259,9 @@ class LifecycleTests(unittest.TestCase):
                  patch.object(executor, '_lock', return_value={'docker_endpoint': 'npipe:////./pipe/dockerDesktopLinuxEngine'}), \
                  patch.object(executor, 'BINARY_SHA256', hashlib.sha256(binary.read_bytes()).hexdigest()):
                 result = executor.run(project, mode='parse', output=folder / 'out')
-            self.assertFalse((folder / 'owner.json').exists())
-            self.assertTrue(result['owned_removed'])
+            removal_confirmed = not scenario.startswith('remove_')
+            self.assertEqual((folder / 'owner.json').exists(), not removal_confirmed)
+            self.assertIs(result['owned_removed'], removal_confirmed)
             self.assertTrue(result['input_unchanged'])
             self.assertTrue(result['snapshot_unchanged'])
             self.assertFalse(result['public_ack']); self.assertFalse(result['sandbox_acceptance'])
@@ -279,6 +284,15 @@ class LifecycleTests(unittest.TestCase):
         result, _ = self.exercise('clean')
         self.assertTrue(result['diagnostic_process_clean'])
         self.assertFalse(result['public_ack']); self.assertFalse(result['sandbox_acceptance'])
+
+    def test_unconfirmed_removal_keeps_owner_and_records_explicit_error(self):
+        for scenario in ('remove_timeout', 'remove_no_effect', 'remove_uncertain_gone'):
+            with self.subTest(scenario=scenario):
+                result, calls = self.exercise(scenario)
+                self.assertFalse(result['diagnostic_process_clean'])
+                self.assertTrue(result['owner_record_retained'])
+                self.assertIn('EXECUTOR_CLEANUP_REMOVAL_UNCONFIRMED', result['errors'])
+                self.assertEqual(calls.count(['rm', CID]), 1)
 
     def test_start_cancellation_propagates_after_owned_container_cleanup_and_result(self):
         for kind in (KeyboardInterrupt,SystemExit):

@@ -905,6 +905,7 @@ def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate', '
                 stderr = (output / gone['stderr']).read_text(errors='replace')
                 result['owned_removed'] = (_cli_clean(row) and _cli_done(gone, 1)
                     and ('no such object: ' + container_id) in stderr.lower())
+                _need(result['owned_removed'], 'EXECUTOR_CLEANUP_REMOVAL_UNCONFIRMED')
             if owner_record and (result['owned_removed'] or not create_attempted):
                 _clear_owner(owner_path)
         except BaseException as error:
