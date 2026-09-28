@@ -77,6 +77,42 @@ def child(run_id):
         stop.set()
         if thread.ident is not None:
             thread.join(2)
+        # Persist the bounded phase window even when a batch fails. This is
+        # supplemental diagnosis only: it never changes the command verdict,
+        # status-gap threshold, or formal acceptance. The recorder remains
+        # readable after host cleanup, so failure paths retain the same
+        # attribution surface as successful runs.
+        try:
+            observation = producer.phase_snapshot() if producer is not None else None
+            write(root / 'http-phases-final.json', {
+                'schema_id': 'hh-studio.residency-observation',
+                'schema_version': '1.0.0', 'kind': 'http', 'run_id': run_id,
+                'source_closure_sha256': closure(before),
+                'available': observation is not None, 'observation': observation,
+                'formal_acceptance': False,
+                'scope': 'bounded command-only phase window; no acceptance override'})
+            diagnostics = []
+            if producer is not None and producer.host is not None:
+                for raw in producer.host.diagnostics:
+                    try:
+                        value = json.loads(raw)
+                    except (TypeError, ValueError):
+                        value = {'raw_sha256': hashlib.sha256(raw).hexdigest()}
+                    diagnostics.append(value)
+            write(root / 'host-diagnostics.json', {
+                'schema_id': 'hh-studio.residency-diagnostics',
+                'schema_version': '1.0.0', 'run_id': run_id,
+                'source_closure_sha256': closure(before),
+                'codes': diagnostics, 'formal_acceptance': False})
+        except BaseException as error:
+            # Do not replace the primary batch failure with an auxiliary
+            # observation error. The wrapper's cleanup record still proves
+            # whether the owned process/job closed.
+            write(root / 'observation-error.json', {
+                'schema_id': 'hh-studio.residency-observation-error',
+                'schema_version': '1.0.0', 'run_id': run_id,
+                'code': getattr(error, 'code', type(error).__name__),
+                'formal_acceptance': False})
         if producer is not None:
             producer.close()
         require(not thread.is_alive(), 'RESIDENCY_HEARTBEAT_HELD')
