@@ -180,3 +180,10 @@ tests (42 tests); the focused profile/executor/evidence/sandbox/guarded set
 passed 48 tests. No Docker, Godot, Blender, network, or evidence rewrite was
 performed. This closes only the dependency-admission static gap; public
 adapter integration and AUTH-05 acceptance remain open.
+
+The gameplay executor now invokes that closure validator before admission, so
+the native diagnostic cannot silently bypass the static dependency boundary.
+This source change invalidates earlier native closure hashes; a fresh
+four-fixture native run is required after the GT-06 formal lane permits it.
+The focused pure suite was rerun after integration: 66 tests, actual exit 0,
+2.0 seconds, with no engine, Docker, network, or generated evidence.

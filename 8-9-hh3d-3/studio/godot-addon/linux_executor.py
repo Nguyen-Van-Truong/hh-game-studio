@@ -238,7 +238,8 @@ def _gameplay_profile():
 def _gameplay_project_bytes(project: Path) -> dict[str, bytes]:
     profile = _gameplay_profile()
     values = _project_bytes(project, template=profile.PROJECT_TEMPLATE)
-    profile.validate_source(values['scripts/fixture_actor.gd'])
+    scripts = {name: raw for name, raw in values.items() if name.startswith('scripts/')}
+    profile.validate_dependency_closure(scripts, entrypoint='scripts/fixture_actor.gd')
     return values
 
 

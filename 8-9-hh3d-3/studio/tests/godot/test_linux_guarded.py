@@ -53,6 +53,25 @@ class GuardedExecutorTests(unittest.TestCase):
                 cli.assert_not_called()
                 self.assertFalse((Path(directory) / 'output').exists())
 
+    def test_gameplay_input_admits_only_the_bounded_dependency_closure(self):
+        with tempfile.TemporaryDirectory() as directory:
+            project = Path(directory) / 'input'
+            project.mkdir(); (project / 'scenes').mkdir(); (project / 'scripts').mkdir()
+            (project / 'project.godot').write_bytes(
+                executor._gameplay_profile().PROJECT_TEMPLATE.encode())
+            (project / 'scenes/fixture.tscn').write_bytes(
+                b'[gd_scene format=3]\n[node name="Fixture" type="Node3D"]\n')
+            (project / 'scripts/fixture_actor.gd').write_bytes(b'extends Node3D\n')
+            values = executor._gameplay_project_bytes(project)
+            self.assertIn('scripts/fixture_actor.gd', values)
+            profile = executor._gameplay_profile()
+            with self.assertRaisesRegex(profile.GameplaySourceError,
+                                        'GAMEPLAY_DEPENDENCY_UNREFERENCED'):
+                profile.validate_dependency_closure(
+                    {'scripts/fixture_actor.gd': b'extends Node3D\n',
+                     'scripts/unused.gd': b'extends Node3D\n'},
+                    entrypoint='scripts/fixture_actor.gd')
+
     def test_gameplay_source_uses_play_phase_and_exact_harness_mount(self):
         command = executor._supervised_command('gameplay-source')
         self.assertIn('/harness/gameplay_sandbox.py', command[-1])
