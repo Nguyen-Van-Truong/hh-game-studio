@@ -11,6 +11,15 @@ probe = evidence.probe
 
 
 class GameplayProbeEvidenceTests(unittest.TestCase):
+    def test_negative_source_fixtures_cover_syntax_type_and_dependency_failures(self):
+        fixtures = probe.load('gameplay_fixture_catalog',
+                              probe.STUDIO / 'tests/godot/linux_probe_fixtures.py').FIXTURES
+        for name in ('syntax_error', 'type_error', 'dependency_error'):
+            with self.subTest(name=name):
+                self.assertEqual(fixtures[name]['mode'], 'parse')
+                self.assertEqual(fixtures[name]['expect'], 'engine_rejection')
+                self.assertNotEqual(fixtures[name]['script'], '')
+
     def setUp(self):
         self.case = {'expect': 'gameplay_source', 'mode': 'gameplay-source', 'timeout': 20}
         self.result = evidence.LinuxProbeEvidenceTests.clean_result()

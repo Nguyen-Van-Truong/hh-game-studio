@@ -30,6 +30,12 @@ FIXTURES = {
         'script': 'extends Node3D\nvar amount: int = "not-an-integer"\n',
         'expect': 'engine_rejection',
     },
+    'dependency_error': {
+        'mode': 'parse', 'timeout': 20,
+        'script': ('extends Node3D\n'
+                   'const Missing = preload("res://scripts/missing_dependency.gd")\n'),
+        'expect': 'engine_rejection',
+    },
     'tool_callback': {
         'mode': 'import', 'timeout': 20,
         'script': '@tool\nextends Node3D\nfunc _enter_tree() -> void:\n\tprint("HH_PROBE_TOOL_ENTERED")\n',
