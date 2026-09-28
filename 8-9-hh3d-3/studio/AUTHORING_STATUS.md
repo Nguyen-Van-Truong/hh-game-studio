@@ -162,3 +162,21 @@ The static negative-fixture gap now has a separate `dependency_error` case
 and typed-assignment failures. The catalog assertion and related evidence
 suite pass 62 tests with actual exit 0 in commit `fa392dab`; this is static
 coverage only and still requires a fresh native run after GT-06 formal work.
+
+### 2026-09-28 dependency-closure static checkpoint
+
+The gameplay-source profile now has a bounded `validate_dependency_closure`
+admission helper. It accepts only UTF-8 byte files under `scripts/` or
+`scenes/`, caps each file at 16 KiB, caps the closure at 64 files/256 KiB,
+rejects traversal, missing `res://` references, and unreferenced files, and
+returns sorted SHA-256 bindings. It never parses GDScript, executes source,
+publishes an ACK, or changes AUTHORITY=0; Godot syntax/type checks and the
+confined executor remain required. The pinned executor and validator lock were
+updated to the new profile hash.
+
+Pure static checks passed with actual exit 0: gameplay contract/edge/behavior,
+dependency profile, probe evidence, sandbox policy, and guarded executor
+tests (42 tests); the focused profile/executor/evidence/sandbox/guarded set
+passed 48 tests. No Docker, Godot, Blender, network, or evidence rewrite was
+performed. This closes only the dependency-admission static gap; public
+adapter integration and AUTH-05 acceptance remain open.

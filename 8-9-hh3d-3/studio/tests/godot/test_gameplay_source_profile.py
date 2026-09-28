@@ -14,6 +14,12 @@ var ticks: int = 0
 func _physics_process(_delta: float) -> void:
 \tticks += 1
 '''
+DEPENDENCY = b'''extends "res://scripts/base.gd"
+func _ready() -> void:
+\tpass
+'''
+BASE = b'''extends Node3D
+'''
 
 
 class GameplaySourceProfileTests(unittest.TestCase):
@@ -42,6 +48,27 @@ class GameplaySourceProfileTests(unittest.TestCase):
         self.assertLess(driver.index('"parse"'), driver.index('"import"'))
         self.assertLess(driver.index('"import"'), driver.index('"play"'))
         self.assertIn('/harness/gameplay_sandbox.py', driver)
+
+    def test_dependency_closure_is_bounded_and_hash_bound(self):
+        result = profile.validate_dependency_closure(
+            {'scripts/main.gd': DEPENDENCY, 'scripts/base.gd': BASE},
+            entrypoint='scripts/main.gd')
+        self.assertTrue(result['dependency_closure_verified'])
+        self.assertFalse(result['syntax_and_types_verified'])
+        self.assertEqual(set(result['files']), {'scripts/base.gd', 'scripts/main.gd'})
+
+    def test_dependency_closure_rejects_missing_or_unreferenced_files(self):
+        with self.assertRaisesRegex(profile.GameplaySourceError, 'GAMEPLAY_DEPENDENCY_MISSING'):
+            profile.validate_dependency_closure({'scripts/main.gd': DEPENDENCY}, entrypoint='scripts/main.gd')
+        with self.assertRaisesRegex(profile.GameplaySourceError, 'GAMEPLAY_DEPENDENCY_UNREFERENCED'):
+            profile.validate_dependency_closure(
+                {'scripts/main.gd': VALID, 'scripts/unused.gd': BASE}, entrypoint='scripts/main.gd')
+
+    def test_dependency_closure_rejects_traversal_and_non_bytes(self):
+        with self.assertRaisesRegex(profile.GameplaySourceError, 'GAMEPLAY_DEPENDENCY_SHAPE'):
+            profile.validate_dependency_closure({'../outside.gd': BASE}, entrypoint='../outside.gd')
+        with self.assertRaisesRegex(profile.GameplaySourceError, 'GAMEPLAY_DEPENDENCY_FILE'):
+            profile.validate_dependency_closure({'scripts/main.gd': 'text'}, entrypoint='scripts/main.gd')
 
 
 if __name__ == '__main__':
