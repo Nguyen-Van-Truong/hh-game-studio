@@ -19,8 +19,72 @@ STUDIO = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(STUDIO.parent))
 from studio.tests.replay.benchmark_commands import CommandProducer
 from studio.tests.replay.benchmark_job import BenchmarkProcess, write, require
-from studio.tests.replay.run_native_benchmark import source_files, closure
+from studio.tests.replay.run_native_benchmark import source_files as imported_source_files, closure
 from studio.host.replay.perf import summarize as frame_statistics
+
+
+def source_files():
+    files = imported_source_files()
+    # The scheduler imports its entry module only in the parent. Pin the same
+    # launch surface explicitly in both interpreters, including direct runs.
+    for name in ('run_command_residency.py', 'run_campaign_task.py', 'campaign_task.ps1'):
+        path = STUDIO / 'tests/replay' / name
+        files[path.relative_to(STUDIO).as_posix()] = hashlib.sha256(path.read_bytes()).hexdigest()
+    return files
+
+
+def _error(stage, error):
+    code = getattr(error, 'code', None)
+    return {'stage': stage, 'type': type(error).__name__,
+            'code': code if type(code) is str and re.fullmatch(r'[A-Z][A-Z0-9_]{0,63}', code) else None}
+
+
+def _diagnostic_codes(producer):
+    codes = []
+    if producer is not None and producer.host is not None:
+        for raw in producer.host.diagnostics:
+            try:
+                value = json.loads(raw)
+                code = value['payload']['code']
+                valid = (type(value) is dict and set(value) == {'kind', 'payload'}
+                         and value['kind'] == 'log' and set(value['payload']) == {'code'}
+                         and type(code) is str and re.fullmatch(r'[A-Z][A-Z0-9_]{0,63}', code))
+            except (TypeError, ValueError, KeyError):
+                valid = False
+            codes.append(code if valid else 'INVALID_DIAGNOSTIC_SHAPE')
+    return codes
+
+
+def finalize(root, run_id, before, producer, stop, thread):
+    """Attempt all cleanup before independent, single-use observation writes."""
+    errors = []
+
+    def attempt(stage, action):
+        try:
+            action()
+        except BaseException as error:
+            errors.append((stage, error))
+
+    stop.set()
+    if thread.ident is not None:
+        attempt('heartbeat_join', lambda: thread.join(2))
+    if producer is not None:
+        attempt('producer_close', producer.close)
+    attempt('heartbeat_closed', lambda: require(not thread.is_alive(), 'RESIDENCY_HEARTBEAT_HELD'))
+    binding = {'schema_version': '1.0.0', 'run_id': run_id,
+               'source_closure_sha256': closure(before), 'formal_acceptance': False}
+
+    def phases():
+        observation = producer.phase_snapshot() if producer is not None else None
+        write(root / 'http-phases-final.json', {**binding,
+            'schema_id': 'hh-studio.residency-observation', 'kind': 'http',
+            'available': observation is not None, 'observation': observation,
+            'scope': 'bounded command-only phase window; no acceptance override'})
+
+    attempt('http_observation', phases)
+    attempt('host_diagnostics', lambda: write(root / 'host-diagnostics.json', {**binding,
+        'schema_id': 'hh-studio.residency-diagnostics', 'codes': _diagnostic_codes(producer)}))
+    return errors
 
 
 def child(run_id):
@@ -37,6 +101,7 @@ def child(run_id):
     stop = threading.Event()
     progress = {'batch': 0}
     summaries = []
+    primary = None
 
     def heartbeat():
         while not stop.wait(1):
@@ -64,58 +129,27 @@ def child(run_id):
             write(root / f'summary-{index:02d}.json', summary)
             print('HH_GT06_RESIDENCY_BATCH ' + json.dumps({'index': index,
                 'elapsed_ms': summary['elapsed_ms'], 'rss_bytes': summary['memory_after_release']['counters']['rss_bytes']['value']}), flush=True)
-        producer.close()
-        require(source_files() == before, 'RESIDENCY_SOURCE_CHANGED')
-        write(root / 'result.json', {'completed': True, 'run_id': run_id, 'source_closure_sha256': closure(before),
-            'batches': summaries, 'source_unchanged': True, 'full_benchmark': False, 'formal_acceptance': False,
-            'scope': '35 command-only batches; no editor/native cycles; separate scaling diagnostic'})
     except BaseException as error:
-        write(root / 'failure.json', {'completed': False, 'code': getattr(error, 'code', type(error).__name__),
-            'completed_batches': len(summaries), 'partial_batch': getattr(error, 'report', None), 'formal_acceptance': False})
-        raise
+        primary = error
+        producer = producer or getattr(error, 'cleanup_owner', None)
     finally:
-        stop.set()
-        if thread.ident is not None:
-            thread.join(2)
-        # Persist the bounded phase window even when a batch fails. This is
-        # supplemental diagnosis only: it never changes the command verdict,
-        # status-gap threshold, or formal acceptance. The recorder remains
-        # readable after host cleanup, so failure paths retain the same
-        # attribution surface as successful runs.
-        try:
-            observation = producer.phase_snapshot() if producer is not None else None
-            write(root / 'http-phases-final.json', {
-                'schema_id': 'hh-studio.residency-observation',
-                'schema_version': '1.0.0', 'kind': 'http', 'run_id': run_id,
-                'source_closure_sha256': closure(before),
-                'available': observation is not None, 'observation': observation,
-                'formal_acceptance': False,
-                'scope': 'bounded command-only phase window; no acceptance override'})
-            diagnostics = []
-            if producer is not None and producer.host is not None:
-                for raw in producer.host.diagnostics:
-                    try:
-                        value = json.loads(raw)
-                    except (TypeError, ValueError):
-                        value = {'raw_sha256': hashlib.sha256(raw).hexdigest()}
-                    diagnostics.append(value)
-            write(root / 'host-diagnostics.json', {
-                'schema_id': 'hh-studio.residency-diagnostics',
-                'schema_version': '1.0.0', 'run_id': run_id,
-                'source_closure_sha256': closure(before),
-                'codes': diagnostics, 'formal_acceptance': False})
-        except BaseException as error:
-            # Do not replace the primary batch failure with an auxiliary
-            # observation error. The wrapper's cleanup record still proves
-            # whether the owned process/job closed.
-            write(root / 'observation-error.json', {
-                'schema_id': 'hh-studio.residency-observation-error',
-                'schema_version': '1.0.0', 'run_id': run_id,
-                'code': getattr(error, 'code', type(error).__name__),
-                'formal_acceptance': False})
-        if producer is not None:
-            producer.close()
-        require(not thread.is_alive(), 'RESIDENCY_HEARTBEAT_HELD')
+        errors = finalize(root, run_id, before, producer, stop, thread)
+    try:
+        require(source_files() == before, 'RESIDENCY_SOURCE_CHANGED')
+    except BaseException as error:
+        errors.append(('source_verify', error))
+    if primary is not None or errors:
+        failure = primary if primary is not None else errors[0][1]
+        write(root / 'failure.json', {'completed': False, 'run_id': run_id,
+            'source_closure_sha256': closure(before),
+            'code': getattr(failure, 'code', type(failure).__name__),
+            'completed_batches': len(summaries), 'partial_batch': getattr(primary, 'report', None),
+            'cleanup_errors': [_error(stage, error) for stage, error in errors],
+            'formal_acceptance': False})
+        raise failure
+    write(root / 'result.json', {'completed': True, 'run_id': run_id, 'source_closure_sha256': closure(before),
+        'batches': summaries, 'source_unchanged': True, 'full_benchmark': False, 'formal_acceptance': False,
+        'scope': '35 command-only batches; no editor/native cycles; separate scaling diagnostic'})
 
 
 def run(run_id):

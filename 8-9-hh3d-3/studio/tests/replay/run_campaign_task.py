@@ -74,6 +74,11 @@ def process_observation():
 
 
 def execute(campaign_id, mode, output, request_sha, *, launch_number=1):
+    if mode == 'residency':
+        from studio.tests.replay.run_command_residency import run
+        return run(campaign_id)
+    if mode not in ('campaign', 'probe'):
+        raise ValueError('TASK_MODE')
     from studio.tests.replay import run_benchmark_campaign as campaign
     from studio.tests.replay.benchmark_job import BenchmarkProcess, HELD_OWNERS, verify_capture
     if mode == 'campaign':
@@ -126,7 +131,7 @@ def execute(campaign_id, mode, output, request_sha, *, launch_number=1):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--campaign-id', required=True)
-    parser.add_argument('--mode', choices=('probe', 'campaign'), required=True)
+    parser.add_argument('--mode', choices=('probe', 'campaign', 'residency'), required=True)
     parser.add_argument('--launch-number', type=int, default=1)
     args = parser.parse_args()
     if os.name != 'nt' or not re.fullmatch(r'gt06-[a-z0-9-]{1,25}', args.campaign_id):

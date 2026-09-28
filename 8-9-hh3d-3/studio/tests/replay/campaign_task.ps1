@@ -11,7 +11,7 @@ param(
     [ValidatePattern('^gt06-[a-z0-9-]{1,25}$')]
     [string]$CampaignId,
 
-    [ValidateSet('probe', 'campaign')]
+    [ValidateSet('probe', 'campaign', 'residency')]
     [string]$Mode,
 
     [ValidateRange(1, 99)]
@@ -163,7 +163,7 @@ function Assert-Request($Request) {
     $expectedKeys = @($expectedKeys | Sort-Object)
     Require (($keys -join ',') -ceq ($expectedKeys -join ',')) 'TASK_REQUEST_FIELDS'
     Require ($Request.schema -ceq 'HH-GT06-TASK-REQUEST-1' -and $Request.campaign_id -ceq $CampaignId) 'TASK_REQUEST_BINDING'
-    Require ($Request.mode -cin @('probe', 'campaign')) 'TASK_REQUEST_MODE'
+    Require ($Request.mode -cin @('probe', 'campaign', 'residency')) 'TASK_REQUEST_MODE'
     foreach ($key in @('script_sha256', 'pythonw_sha256', 'python_sha256')) {
         Require ($Request.$key -cmatch '^[a-f0-9]{64}$') 'TASK_REQUEST_HASH'
     }
@@ -201,7 +201,7 @@ try {
 
     if ($Command -eq 'register-run') {
         $stage = 'prepare'
-        Require ($Mode -cin @('probe', 'campaign')) 'TASK_MODE_REQUIRED'
+        Require ($Mode -cin @('probe', 'campaign', 'residency')) 'TASK_MODE_REQUIRED'
         Require ($null -eq $task) 'TASK_ALREADY_EXISTS'
         Assert-CampaignIdle $folder
         Require (-not (Test-Path -LiteralPath $outputDirectory)) 'TASK_OUTPUT_ALREADY_EXISTS'
