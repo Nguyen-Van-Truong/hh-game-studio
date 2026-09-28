@@ -19,6 +19,11 @@ class GameplayProbeEvidenceTests(unittest.TestCase):
                 self.assertEqual(fixtures[name]['mode'], 'parse')
                 self.assertEqual(fixtures[name]['expect'], 'engine_rejection')
                 self.assertNotEqual(fixtures[name]['script'], '')
+                guarded = fixtures['gameplay_' + name]
+                self.assertEqual(guarded['mode'], 'gameplay-source')
+                self.assertEqual(guarded['script'], fixtures[name]['script'])
+                self.assertEqual(guarded['expect'], 'engine_rejection')
+                self.assertTrue(guarded['parse_errors'])
 
     def setUp(self):
         self.case = {'expect': 'gameplay_source', 'mode': 'gameplay-source', 'timeout': 20}
@@ -69,6 +74,53 @@ class GameplayProbeEvidenceTests(unittest.TestCase):
                 bad = copy.deepcopy(self.result)
                 bad[key] = value
                 self.assertFalse(self.check(result=bad)['fixture_observed'])
+
+    def rejection(self):
+        self.case = {'expect': 'engine_rejection', 'mode': 'gameplay-source', 'timeout': 20,
+                     'parse_errors': ('Expected parameter name.',)}
+        self.result['docker_wait_exit'] = 45
+        self.result['command_host']['exit_code'] = 45
+        self.result['container_state']['ExitCode'] = 45
+        self.stdout = ('HH_GAMEPLAY_PHASE_BEGIN parse\n' + probe.GUARD_MARKER
+                       + '\nHH_GAMEPLAY_PHASE_END parse 1\n')
+        self.stderr = (probe.GUARDED_STARTUP_ERROR
+            + 'SCRIPT ERROR: Parse Error: Expected parameter name.\n'
+            '          at: GDScript::reload (res://scripts/fixture_actor.gd:2)\n'
+            'ERROR: Failed to load script "res://scripts/fixture_actor.gd" with error "Parse error".\n'
+            '   at: load (modules/gdscript/gdscript_resource_format.cpp:46)\n')
+
+    def test_parse_rejection_requires_guard_and_no_later_phase_or_callback(self):
+        self.rejection()
+        row = self.check()
+        self.assertTrue(row['fixture_observed'])
+        for key in ('public_ack', 'sandbox_acceptance', 'validation_attribution_proven'):
+            self.assertIs(row[key], False)
+        for output in (self.stdout.replace(probe.GUARD_MARKER + '\n', ''),
+                       self.stdout.replace('parse 1', 'parse 0'),
+                       self.stdout + 'HH_GAMEPLAY_PHASE_BEGIN import\n',
+                       self.stdout + 'HH_GAMEPLAY_PHASE_BEGIN play\n',
+                       self.stdout + 'HH_PROBE_PLAY {"ticks":12,"x":12}\n',
+                       self.stdout + 'HH_PROBE_BUSY_ENTERED\n'):
+            self.assertFalse(self.check(stdout=output)['fixture_observed'])
+
+    def test_parse_rejection_requires_exact_reason_and_actual_parent_exit(self):
+        self.rejection()
+        for stderr in ('', self.stderr.replace('Expected parameter name.', 'unrelated failure'),
+                       self.stderr + 'WARNING: extra\n', self.stderr + 'ERROR: extra\n',
+                       self.stderr + 'ObjectDB instances leaked\n'):
+            self.assertFalse(self.check(stderr=stderr)['fixture_observed'])
+        for code in (0, 1, 124, 137, 139, None, True):
+            bad = copy.deepcopy(self.result)
+            bad['command_host']['exit_code'] = bad['container_state']['ExitCode'] = code
+            bad['docker_wait_exit'] = code
+            self.assertFalse(self.check(result=bad)['fixture_observed'])
+        for mutate in (lambda r: r['command_host'].update(timed_out=True),
+                       lambda r: r['command_host'].update(stream_cap_exceeded=True),
+                       lambda r: r.update(owned_removed=False),
+                       lambda r: r['command_host']['job_owner'].update(handle_retained=True)):
+            bad = copy.deepcopy(self.result)
+            mutate(bad)
+            self.assertFalse(self.check(result=bad)['fixture_observed'])
 
     def test_watchdog_requires_play_entry_and_no_successful_play_end(self):
         self.case['expect'] = 'watchdog'

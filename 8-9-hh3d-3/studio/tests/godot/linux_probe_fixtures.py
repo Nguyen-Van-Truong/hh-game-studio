@@ -151,6 +151,18 @@ static func _static_init() -> void:
     },
 }
 
+# Rejection must be exercised through the same parse/import/play driver used
+# for gameplay, including its pre-parse OS guard. The fixed diagnostics belong
+# to these fixtures, never to arbitrary user source or publication approval.
+for _name, _errors in (
+    ('syntax_error', ('Expected parameter name.',)),
+    ('type_error', ('Cannot assign a value of type "String" as "int".',
+                   'Cannot assign a value of type String to variable "amount" with specified type int.')),
+    ('dependency_error', ('Preload file "res://scripts/missing_dependency.gd" does not exist.',)),
+):
+    FIXTURES['gameplay_' + _name] = {
+        **FIXTURES[_name], 'mode': 'gameplay-source', 'parse_errors': _errors}
+
 # Separate diagnostic modes: the accepted declarative validator retains its
 # commands. All these negative cases execute after the same pre-parse OS guard.
 for _name in ('readonly_and_network', 'parse_static_busy', 'stdout_flood', 'type_error'):

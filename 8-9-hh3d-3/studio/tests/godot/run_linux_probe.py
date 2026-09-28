@@ -40,10 +40,26 @@ def gameplay_transcript(case: dict, stdout: str, stderr: str) -> bool:
     """Recognize the full fixture transcript, never attest untrusted gameplay."""
     kind = case['expect']
     expected = GAMEPLAY_PHASE_EVENTS[:-1] if kind == 'watchdog' else GAMEPLAY_PHASE_EVENTS
+    if kind == 'engine_rejection':
+        expected = ('HH_GAMEPLAY_PHASE_BEGIN parse', GUARD_MARKER,
+                    'HH_GAMEPLAY_PHASE_END parse 1')
     events = tuple(line for line in stdout.splitlines()
                    if line.startswith(('HH_GAMEPLAY_PHASE_', 'HH_GAMEPLAY_OS_GUARD')))
     if events != expected or re.search(r'ERROR|WARNING|leaked', stdout, re.IGNORECASE):
         return False
+    if kind == 'engine_rejection':
+        reasons = case.get('parse_errors')
+        if (type(reasons) is not tuple or not reasons
+                or any(type(reason) is not str or not reason for reason in reasons)
+                or any(line.startswith('HH_PROBE_') for line in stdout.splitlines())):
+            return False
+        errors = GUARDED_STARTUP_ERROR + ''.join(
+            'SCRIPT ERROR: Parse Error: ' + reason + '\n'
+            '          at: GDScript::reload (res://scripts/fixture_actor.gd:2)\n'
+            for reason in reasons)
+        errors += ('ERROR: Failed to load script "res://scripts/fixture_actor.gd" with error "Parse error".\n'
+                   '   at: load (modules/gdscript/gdscript_resource_format.cpp:46)\n')
+        return stderr.replace('\r\n', '\n') == errors
     # A watchdog fixture must reach play, so all three startups and the import
     # listener denials precede its loop. Two startup errors alone mean import
     # was interrupted; they cannot prove hostile play-loop termination.
@@ -231,6 +247,11 @@ def evaluate(case: dict, result: dict, stdout: str, stderr: str) -> dict:
     transcript_ok = True
     if case.get('mode') == 'gameplay-source':
         transcript_ok = gameplay_transcript(case, stdout, stderr)
+        if kind == 'engine_rejection':
+            # The trusted parent returns 45 only after a nonzero phase exit.
+            # A crash, watchdog or banner must not impersonate this rejection.
+            observed = (observed and _integer(state.get('ExitCode'), 45)
+                        and _integer(host.get('exit_code'), 45))
         observed = (observed and transcript_ok
                     and result.get('mode') == 'gameplay-source'
                     and result.get('sandbox_harness_unchanged') is True

@@ -221,3 +221,23 @@ Raw evidence remains in `studio/.local/reviews/o2-gameplay-source-20260928-08`.
 This is still `AUTHORITY=0`: `public_ack=false`, `sandbox_acceptance=false`,
 and `validation_attribution_proven=false`. It does not close AUTH-05, prove a
 general Godot dependency closure, or change GT-06.
+
+### 2026-09-28 gameplay-source parse rejection checkpoint
+
+Three new gameplay-source negative fixtures (`gameplay_syntax_error`,
+`gameplay_type_error`, and `gameplay_dependency_error`) ran in native run
+`o2-gameplay-rejection-20260928-01`. The host exit is **0** for the campaign;
+each fixture has an actual host/container exit of **45**, closed Job handles,
+confirmed owned-container removal, and `fixture_observed=true`. The transcript
+contains only `parse` plus the OS guard and parse-end failure; no `import`,
+`play`, or probe callback is accepted. This proves fail-closed phase ordering
+for these pinned diagnostics, not arbitrary-source safety or public ACK.
+
+Source closure is
+`f56bd4c184c375259352723bd6a3e56cd247f2145f3d6147e7d5126b1d120545`.
+Package ZIP SHA-256 is
+`49afc8a23cea48542fa7f541d4c8b78a9c8f2d1a0da368da2d68e1cf38acbc25`; package
+manifest SHA-256 is
+`08505a94646ceff29f75950628e175c1f61c48bc03824891ed5f27b4a5c55958`.
+Raw evidence remains under `studio/.local/reviews/` and all claims remain
+`AUTHORITY=0`; AUTH-05, adapter integration and GT-06 are open.
