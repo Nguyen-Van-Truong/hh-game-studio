@@ -156,3 +156,9 @@ Remaining O2 work is unchanged: add syntax/type/dependency negative fixtures,
 prove source-closure/public adapter integration, and obtain the owner critic
 package after GT-06. Do not run another native gameplay probe during formal
 measurement; preserve both run03 and run05 as separate historical evidence.
+
+The static negative-fixture gap now has a separate `dependency_error` case
+(missing `res://scripts/missing_dependency.gd`) alongside the existing syntax
+and typed-assignment failures. The catalog assertion and related evidence
+suite pass 62 tests with actual exit 0 in commit `fa392dab`; this is static
+coverage only and still requires a fresh native run after GT-06 formal work.
