@@ -22,7 +22,7 @@ BINARY_NAME = 'Godot_v4.7.2-stable_linux.x86_64'
 BINARY_SHA256 = '8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e'
 IMAGE_ID = 'sha256:581429e3df12d76e6af4be5ab7d0e7fc2013eb57dc23d2de691411c8efdbb970'
 OWNED_RUNNER_SHA256 = 'ea522450acc46f90be5e2a7b9257e73ce8b619948105b2c9073aac1f881c7328'
-LOCK_SHA256 = '1441452e54279d94fe4a3bd946f2f494426179301bfe3202ae103b5fb469374d'
+LOCK_SHA256 = '85da992520507bad23f026242170aae774f4c1815e1eac40dfade0249d700c71'
 PROJECT_TEMPLATE = ('config_version=5\n[application]\nconfig/name="HH GT03 Linux validator"\n'
                     '[rendering]\nrenderer/rendering_method="gl_compatibility"\n'
                     '[threading]\nworker_pool/max_threads=4\n')
@@ -40,7 +40,10 @@ _INCOMPLETE_CLI_HOLDS: list = []
 _INCOMPLETE_ADMISSION_HOLDS: list = []
 PROFILE_BOOTSTRAP_SHA256 = 'efde8370a6157ed2f66544ee13b82ee2556b59130f5306e9e0774ed0e3be79a5'
 SANDBOX_BOOTSTRAP_SHA256 = '677f659a04f1a7a58a87b5216295fa887fc82569570088b03e7d1508e2fcfc21'
+GAMEPLAY_PROFILE_SHA256 = '55d68504f9e4676b2ea77e935f768ee64c78934f1ce101f9f6ef3c14fc5ec6b2'
 GUARDED_MODES = ('guarded-parse', 'guarded-import', 'guarded-play')
+GAMEPLAY_MODE = 'gameplay-source'
+SANDBOX_MODES = GUARDED_MODES + (GAMEPLAY_MODE,)
 _CLI_JOBS = None
 SUPERVISOR_SHA256 = '5ef0eaaaa4220593add7716aad74da927ca3bb10605e964330de64fecc3ef15e'
 EXECUTOR_CONTEXT = 'hh-gt03-linux-desktop-v1'
@@ -105,7 +108,7 @@ def _names(path: Path, maximum: int = 8) -> set[str]:
     return names
 
 
-def _project_bytes(project: Path) -> dict[str, bytes]:
+def _project_bytes(project: Path, *, template: str = PROJECT_TEMPLATE) -> dict[str, bytes]:
     names = _names(project)
     _need(names in ({'project.godot', 'scenes', 'scripts'}, {'project.godot', 'scenes', 'scripts', '.godot'}),
           'EXECUTOR_EXTRA_INPUT')
@@ -114,7 +117,7 @@ def _project_bytes(project: Path) -> dict[str, bytes]:
     if '.godot' in names:
         _need(not _names(project / '.godot'), 'EXECUTOR_NONEMPTY_CACHE')
     values = {name: _read_file(project / name, FILE_LIMITS[name]) for name in REQUIRED_FILES}
-    _need(values['project.godot'] == PROJECT_TEMPLATE.encode(), 'EXECUTOR_PROJECT_TEMPLATE')
+    _need(values['project.godot'] == template.encode(), 'EXECUTOR_PROJECT_TEMPLATE')
     return values
 
 
@@ -182,6 +185,8 @@ def _profile_project_bytes(project: Path) -> dict[str, bytes]:
 
 
 def _inputs(project: Path, mode: str) -> dict[str, bytes]:
+    if mode == GAMEPLAY_MODE:
+        return _gameplay_project_bytes(project)
     return _profile_project_bytes(project) if mode == 'profile-validate' else _project_bytes(project)
 
 
@@ -213,6 +218,30 @@ def _sandbox_harness() -> bytes:
     return raw
 
 
+def _gameplay_profile():
+    path = STUDIO / 'godot-addon/gameplay_source_profile.py'
+    raw = _read_file(path, 65536)
+    _need(_sha(raw) == GAMEPLAY_PROFILE_SHA256, 'EXECUTOR_GAMEPLAY_PROFILE_PIN')
+    key = '_hh_gameplay_source_' + _sha(str(path).encode() + b'\0' + raw)
+    if key not in sys.modules:
+        spec = importlib.util.spec_from_file_location(key, path)
+        module = importlib.util.module_from_spec(spec)
+        sys.modules[key] = module
+        try:
+            exec(compile(raw, str(path), 'exec'), module.__dict__)
+        except BaseException:
+            del sys.modules[key]
+            raise
+    return sys.modules[key]
+
+
+def _gameplay_project_bytes(project: Path) -> dict[str, bytes]:
+    profile = _gameplay_profile()
+    values = _project_bytes(project, template=profile.PROJECT_TEMPLATE)
+    profile.validate_source(values['scripts/fixture_actor.gd'])
+    return values
+
+
 def _sandbox_command(phase: str) -> list[str]:
     _need(phase in ('parse', 'import', 'play', 'readback'), 'EXECUTOR_SANDBOX_PHASE')
     return ['/usr/local/bin/python3', '-I', '-B', '/harness/gameplay_sandbox.py', phase]
@@ -223,6 +252,8 @@ def _supervised_command(mode: str, timeout_seconds: int = 20) -> list[str]:
     _command(mode)
     if mode == 'profile-validate':
         command = ['/usr/local/bin/python3', '-I', '-B', '-c', _profile_driver()]
+    elif mode == 'gameplay-source':
+        command = ['/usr/local/bin/python3', '-I', '-B', '-c', _gameplay_profile().driver()]
     elif mode in GUARDED_MODES:
         command = _sandbox_command(mode.removeprefix('guarded-'))
     else:
@@ -384,9 +415,11 @@ def _reconcile_owner(path: Path, call, output: Path) -> dict:
 
 
 def _command(mode: str) -> list[str]:
-    _need(type(mode) is str and mode in ('parse', 'import', 'profile-validate', *GUARDED_MODES), 'EXECUTOR_MODE')
+    _need(type(mode) is str and mode in ('parse', 'import', 'profile-validate', *SANDBOX_MODES), 'EXECUTOR_MODE')
     if mode == 'profile-validate':
         return ['-I', '-B', '-c', _profile_driver()]
+    if mode == GAMEPLAY_MODE:
+        return ['-I', '-B', '-c', _gameplay_profile().driver()]
     if mode in ('parse', 'guarded-parse'):
         return ['--headless', '--path', '/project', '--log-file', '/tmp/engine.log',
                 '--check-only', '--script', 'res://scripts/fixture_actor.gd']
@@ -408,6 +441,7 @@ def _lock() -> dict:
           and value.get('supervisor_sha256') == SUPERVISOR_SHA256
           and value.get('supervisor_bootstrap_sha256') == _sha(SUPERVISOR_BOOTSTRAP.encode())
           and value.get('profile_bootstrap_sha256') == PROFILE_BOOTSTRAP_SHA256
+          and value.get('gameplay_profile_sha256') == GAMEPLAY_PROFILE_SHA256
           and value.get('profile_mode') == 'profile-validate'
           and value.get('docker_context') == 'desktop-linux'
           and value.get('docker_endpoint') == 'npipe:////./pipe/dockerDesktopLinuxEngine', 'EXECUTOR_PIN_MISMATCH')
@@ -645,7 +679,7 @@ def _create_args(name: str, mode: str, tool: Path, snapshot: Path, timeout_secon
         args += ['--tmpfs', destination + ':' + options]
     for source, destination in ((tool, '/tool'), (snapshot, '/project')):
         args += ['--mount', 'type=bind,src=' + str(source) + ',dst=' + destination + ',readonly,bind-propagation=rprivate']
-    if mode == 'profile-validate' or mode in GUARDED_MODES:
+    if mode == 'profile-validate' or mode in SANDBOX_MODES:
         args += ['--mount', 'type=bind,src=' + str(snapshot.parent / 'harness')
                  + ',dst=/harness,readonly,bind-propagation=rprivate']
     return args + ['--entrypoint', '/usr/local/bin/python3', IMAGE_ID, *_supervised_command(mode, timeout_seconds)]
@@ -683,7 +717,7 @@ def _validate_inspect(value: dict, *, name: str, container_id: str, mode: str,
     _need(len(limits) == len(ULIMITS) and {x['Name']: (x['Soft'], x['Hard']) for x in limits}
           == {key: (number, number) for key, number in ULIMITS.items()}, 'EXECUTOR_ULIMITS')
     expected_mounts = {'/tool': str(tool), '/project': str(snapshot)}
-    if mode == 'profile-validate' or mode in GUARDED_MODES:
+    if mode == 'profile-validate' or mode in SANDBOX_MODES:
         expected_mounts['/harness'] = str(snapshot.parent / 'harness')
     mounts = value.get('Mounts', [])
     _need(len(mounts) == len(expected_mounts) and {mount.get('Destination') for mount in mounts} == set(expected_mounts),
@@ -698,7 +732,7 @@ def _validate_inspect(value: dict, *, name: str, container_id: str, mode: str,
           <= set(host.get('MaskedPaths', [])), 'EXECUTOR_SYSTEM_PATHS')
 
 
-def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate', 'guarded-parse', 'guarded-import', 'guarded-play'], output: Path, timeout_seconds: int = 20) -> dict:
+def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate', 'guarded-parse', 'guarded-import', 'guarded-play', 'gameplay-source'], output: Path, timeout_seconds: int = 20) -> dict:
     """Run fixed Godot diagnostics; raises only during argument/input/output preflight.
 
     Remote requests must never choose paths, environment or engine modes directly.
@@ -713,7 +747,8 @@ def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate', '
     project, output = project.absolute(), output.absolute()
     initial = _inputs(project, mode)
     profile_harness = _profile_harness() if mode == 'profile-validate' else None
-    sandbox_harness = _sandbox_harness() if mode in GUARDED_MODES else None
+    sandbox_harness = _sandbox_harness() if mode in SANDBOX_MODES else None
+    gameplay_profile = _gameplay_profile() if mode == GAMEPLAY_MODE else None
     harness_files = {'gameplay_sandbox.py': sandbox_harness} if sandbox_harness is not None else {}
     if profile_harness is not None:
         harness_files['validation_bootstrap.gd'] = profile_harness
@@ -745,6 +780,10 @@ def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate', '
               'profile_harness_unchanged': profile_harness is None,
               'sandbox_bootstrap_sha256': _sha(sandbox_harness) if sandbox_harness is not None else None,
               'sandbox_harness_unchanged': sandbox_harness is None,
+              'gameplay_profile': gameplay_profile.PROFILE if gameplay_profile is not None else None,
+              'gameplay_profile_sha256': GAMEPLAY_PROFILE_SHA256 if gameplay_profile is not None else None,
+              'gameplay_source_envelope_checked': gameplay_profile is not None,
+              'gameplay_profile_unchanged': gameplay_profile is None,
               'admission': {'acquired': False}, 'owner_record_retained': False,
               'supervisor': {'path': '/usr/bin/timeout', 'sha256': SUPERVISOR_SHA256,
                              'term_after_seconds': max(1, timeout_seconds - 1), 'kill_after_seconds': 1,
@@ -917,6 +956,12 @@ def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate', '
             except BaseException as error:
                 result['sandbox_harness_unchanged'] = False
                 failed(error, 'EXECUTOR_SANDBOX_FINALIZE_')
+        if gameplay_profile is not None:
+            try:
+                result['gameplay_profile_unchanged'] = _gameplay_profile() is gameplay_profile
+            except BaseException as error:
+                result['gameplay_profile_unchanged'] = False
+                failed(error, 'EXECUTOR_GAMEPLAY_PROFILE_FINALIZE_')
         try:
             for stream in ('stdout', 'stderr'):
                 log = output / result[stream]
@@ -935,6 +980,7 @@ def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate', '
             and state.get('OOMKilled') is False and result.get('docker_wait_exit') == 0
             and result['owned_removed'] and result['input_unchanged'] and result['snapshot_unchanged']
             and result['binary_unchanged'] and result['profile_harness_unchanged'] and result['sandbox_harness_unchanged']
+            and result['gameplay_profile_unchanged']
             and result['log_clean'] and not result['errors'])
         result['command_host'] = result['commandhost']
         result['container_state'] = result['state']

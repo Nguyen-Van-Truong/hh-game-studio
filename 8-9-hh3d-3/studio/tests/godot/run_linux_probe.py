@@ -22,6 +22,41 @@ DOCKER_ENDPOINT = 'npipe:////./pipe/dockerDesktopLinuxEngine'
 GUARD_MARKER = 'HH_GAMEPLAY_OS_GUARD fork=EPERM socket=EPERM'
 GUARDED_STARTUP_ERROR = ('ERROR: Cannot create pipe from command: "xdg-user-dir" "DESKTOP" 2>/dev/null.\n'
                          '   at: execute (drivers/unix/os_unix.cpp:899)\n')
+# Exact diagnostics for these pinned fixtures only. The guard denies socket()
+# before editor import (two TCP listeners) and the spawn/network fixture calls.
+# These remain errors in raw; explaining them does not make a clean/public PASS.
+GUARDED_SOCKET_ERROR = ('ERROR: Condition "_sock == -1" is true. Returning: FAILED\n'
+                        '   at: _inet_open (drivers/unix/net_socket_unix.cpp:288)\n')
+GUARDED_LISTEN_ERROR = ('ERROR: Condition "err != OK" is true. Returning: ERR_CANT_CREATE\n'
+                        '   at: listen (core/io/tcp_server.cpp:56)\n')
+GAMEPLAY_STARTUP_ERRORS = (GUARDED_STARTUP_ERROR * 2
+    + (GUARDED_SOCKET_ERROR + GUARDED_LISTEN_ERROR) * 2 + GUARDED_STARTUP_ERROR)
+GAMEPLAY_WATCHDOG_ERRORS = GUARDED_STARTUP_ERROR * 2
+GAMEPLAY_PHASE_EVENTS = tuple(event for phase in ('parse', 'import', 'play')
+    for event in (f'HH_GAMEPLAY_PHASE_BEGIN {phase}', GUARD_MARKER,
+                  f'HH_GAMEPLAY_PHASE_END {phase} 0'))
+
+
+def gameplay_transcript(case: dict, stdout: str, stderr: str) -> bool:
+    """Recognize the full fixture transcript, never attest untrusted gameplay."""
+    kind = case['expect']
+    expected = GAMEPLAY_PHASE_EVENTS[:-1] if kind == 'watchdog' else GAMEPLAY_PHASE_EVENTS
+    events = tuple(line for line in stdout.splitlines()
+                   if line.startswith(('HH_GAMEPLAY_PHASE_', 'HH_GAMEPLAY_OS_GUARD')))
+    if events != expected or re.search(r'ERROR|WARNING|leaked', stdout, re.IGNORECASE):
+        return False
+    errors = GAMEPLAY_WATCHDOG_ERRORS if kind == 'watchdog' else GAMEPLAY_STARTUP_ERRORS
+    if kind == 'spawn_observation':
+        errors += ('ERROR: Cannot create pipe from command: "/usr/bin/printf" "HH_UNEXPECTED_CHILD" 2>&1.\n'
+                   '   at: execute (drivers/unix/os_unix.cpp:899)\n'
+                   '   GDScript backtrace (most recent call first):\n'
+                   '       [0] _ready (res://scripts/fixture_actor.gd:4)\n')
+    elif kind == 'boundary_observation':
+        errors += (GUARDED_SOCKET_ERROR + '   GDScript backtrace (most recent call first):\n'
+                   '       [0] _ready (res://scripts/fixture_actor.gd:7)\n')
+    elif kind not in ('gameplay_source', 'watchdog'):
+        return False
+    return stderr.replace('\r\n', '\n') == errors
 
 
 def _object(value) -> dict:
@@ -170,6 +205,10 @@ def evaluate(case: dict, result: dict, stdout: str, stderr: str) -> dict:
         observed = (completed and details is not None and _integer(details.get('ticks'), 12)
             and type(details.get('x')) in (int, float) and details['x'] == 12.0
             and stderr.replace('\r\n', '\n') == GUARDED_STARTUP_ERROR)
+    elif kind == 'gameplay_source':
+        details = marker(stdout, 'HH_PROBE_PLAY ')
+        observed = (completed and details is not None and _integer(details.get('ticks'), 12)
+            and type(details.get('x')) in (int, float) and details['x'] == 12.0)
     elif kind == 'watchdog':
         observed = supervisor_watchdog
     elif kind == 'stream_cap':
@@ -181,19 +220,70 @@ def evaluate(case: dict, result: dict, stdout: str, stderr: str) -> dict:
         observed = completed and details is not None and details.get('public_ack') is True
     else:
         raise ValueError('unknown fixture expectation')
-    guarded = str(case.get('mode', '')).startswith('guarded-') or kind == 'spawn_observation'
+    guarded = str(case.get('mode', '')).startswith('guarded-')
     if guarded:
         observed = (observed and result.get('mode') == case.get('mode')
             and result.get('sandbox_harness_unchanged') is True
             and stdout.splitlines().count(GUARD_MARKER) == 1
             and stdout.startswith(GUARD_MARKER + '\n'))
+    transcript_ok = True
+    if case.get('mode') == 'gameplay-source':
+        transcript_ok = gameplay_transcript(case, stdout, stderr)
+        observed = (observed and transcript_ok
+                    and result.get('mode') == 'gameplay-source'
+                    and result.get('sandbox_harness_unchanged') is True
+                    and result.get('gameplay_source_envelope_checked') is True
+                    and result.get('gameplay_profile') == 'hh-godot-gameplay-source-1'
+                    and result.get('gameplay_profile_unchanged') is True)
     return {'fixture_observed': controlled and observed, 'confinement_lifecycle_observed': controlled,
         'supervisor_binding_verified': bound,
-        'supervisor_watchdog_observed': controlled and kind == 'watchdog' and supervisor_watchdog,
-        'host_watchdog_observed': controlled and kind == 'watchdog' and host_watchdog,
+        'supervisor_watchdog_observed': controlled and transcript_ok and kind == 'watchdog' and supervisor_watchdog,
+        'host_watchdog_observed': controlled and transcript_ok and kind == 'watchdog' and host_watchdog,
         'expectation': kind, 'untrusted_child_observation': details,
         'public_ack': False, 'sandbox_acceptance': False,
         'validation_attribution_proven': False}
+
+
+def sandbox_binding(destination: Path, case: dict, result: dict, binding: dict) -> None:
+    """Recheck native command/mount against hash-bound trusted local source.
+
+    Never execute a Python file supplied by the evidence package. Historical
+    evidence stays attached to its old verifier; resume needs unchanged source.
+    """
+    paths = ['godot-addon/linux_executor.py', 'godot-addon/gameplay_sandbox.py']
+    if case['mode'] == 'gameplay-source':
+        paths.append('godot-addon/gameplay_source_profile.py')
+    files = _object(binding.get('files'))
+    for path in paths:
+        if files.get(path) != sha(STUDIO / path):
+            raise ValueError('sandbox evidence requires the matching trusted source')
+    expected_guard = files['godot-addon/gameplay_sandbox.py']
+    if (sha(destination / 'harness/gameplay_sandbox.py') != expected_guard
+            or result.get('sandbox_bootstrap_sha256') != expected_guard):
+        raise ValueError('guarded bootstrap source changed')
+    executor = load('gt03_probe_bound_executor', STUDIO / 'godot-addon/linux_executor.py')
+    if case['mode'] == 'gameplay-source':
+        expected_profile = files['godot-addon/gameplay_source_profile.py']
+        if (expected_profile != executor.GAMEPLAY_PROFILE_SHA256
+                or result.get('gameplay_profile_sha256') != expected_profile
+                or _object(result.get('toolchain')).get('gameplay_profile_sha256') != expected_profile):
+            raise ValueError('gameplay profile source changed')
+    rows = json.loads((destination / 'created-inspect-stdout.txt').read_bytes())
+    if type(rows) is not list or len(rows) != 1 or type(rows[0]) is not dict:
+        raise ValueError('guarded container inspect shape')
+    inspected = rows[0]
+    config = _object(inspected.get('Config'))
+    mounts = inspected.get('Mounts')
+    harness = ([row for row in mounts if type(row) is dict and row.get('Destination') == '/harness']
+               if type(mounts) is list else [])
+    if (inspected.get('Id') != result['container_id']
+            or config.get('Entrypoint') != ['/usr/local/bin/python3']
+            or config.get('Cmd') != executor._supervised_command(case['mode'], case['timeout'])
+            or len(harness) != 1
+            or harness[0].get('Type') != 'bind' or harness[0].get('RW') is not False
+            or harness[0].get('Propagation') != 'rprivate'
+            or harness[0].get('Source') != str(destination / 'harness')):
+        raise ValueError('guarded container command/mount mismatch')
 
 
 def case_observation(destination: Path, case: dict, *, name: str, binding: dict) -> dict:
@@ -207,20 +297,8 @@ def case_observation(destination: Path, case: dict, *, name: str, binding: dict)
             or result.get('mode') != case['mode']
             or not supervisor_binding(case, result)):
         raise ValueError('raw case evidence does not bind the requested input/mode/supervisor/deadline')
-    if case['mode'].startswith('guarded-'):
-        # Bind the actual mounted bootstrap to the frozen source, not a child
-        # marker or result boolean. Parent container config was checked before
-        # start; recheck the guarded command/mount from captured Docker inspect.
-        expected_guard = binding['files']['godot-addon/gameplay_sandbox.py']
-        if (sha(destination / 'harness/gameplay_sandbox.py') != expected_guard
-                or result.get('sandbox_bootstrap_sha256') != expected_guard):
-            raise ValueError('guarded bootstrap source changed')
-        inspected = json.loads((destination / 'created-inspect-stdout.txt').read_bytes())[0]
-        if (inspected.get('Id') != result['container_id']
-                or inspected['Config']['Cmd'][-2:] != ['/harness/gameplay_sandbox.py', case['mode'].removeprefix('guarded-')]
-                or not any(row.get('Destination') == '/harness' and row.get('RW') is False
-                           and row.get('Source') == str(destination / 'harness') for row in inspected['Mounts'])):
-            raise ValueError('guarded container command/mount mismatch')
+    if case['mode'].startswith('guarded-') or case['mode'] == 'gameplay-source':
+        sandbox_binding(destination, case, result, binding)
     stdout = (destination / 'engine-stdout.txt').read_text(encoding='utf-8', errors='replace')
     stderr = (destination / 'engine-stderr.txt').read_text(encoding='utf-8', errors='replace')
     row = evaluate(case, result, stdout, stderr)
@@ -292,7 +370,10 @@ def main() -> int:
         parser.error('duplicate or unknown case')
     results = {}
     for name in cases:
-        case = {**fixtures.FIXTURES[name], 'scene': fixtures.SCENE, 'project': executor.PROJECT_TEMPLATE}
+        project_template = (executor._gameplay_profile().PROJECT_TEMPLATE
+                            if fixtures.FIXTURES[name]['mode'] == 'gameplay-source'
+                            else executor.PROJECT_TEMPLATE)
+        case = {**fixtures.FIXTURES[name], 'scene': fixtures.SCENE, 'project': project_template}
         destination = output / name
         observation = output / (name + '-observation.json')
         if observation.exists():
@@ -307,7 +388,7 @@ def main() -> int:
         (project / 'scenes').mkdir(parents=True, exist_ok=False)
         (project / 'scripts').mkdir()
         (project / '.godot').mkdir()
-        (project / 'project.godot').write_text(executor.PROJECT_TEMPLATE, encoding='utf-8', newline='\n')
+        (project / 'project.godot').write_text(case['project'], encoding='utf-8', newline='\n')
         (project / 'scenes/fixture.tscn').write_text(fixtures.SCENE, encoding='utf-8', newline='\n')
         (project / 'scripts/fixture_actor.gd').write_text(case['script'], encoding='utf-8', newline='\n')
         result = executor.run(project, mode=case['mode'], output=destination, timeout_seconds=case['timeout'])

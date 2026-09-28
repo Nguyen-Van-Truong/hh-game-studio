@@ -56,6 +56,47 @@ error remain in the package rather than being relabeled as a clean run.
 
 ## Fixture-driven gap queue (O4.5)
 
+### 2026-09-28 gameplay-source checkpoint (native follow-up pending)
+
+The contained diagnostic now has a separate byte-envelope profile and a pinned
+parent driver that runs parse, editor import and play under one wall deadline.
+Byte admission does not prove syntax, typing, dependencies or safe publication.
+The existing validator modes and the six-effect vocabulary remain unchanged.
+
+`o2-gameplay-source-20260928-03` is **3/4 observed**, not an all-fixture PASS.
+Frozen closure: `ba0af2d6b2280eed44c535e9b8bc915824029e0665dfe68413be762ad89ee948`.
+The play, spawn and boundary cases exited 0; the busy case exited 124 during
+import, before `HH_PROBE_BUSY_ENTERED`. All four containers were removed.
+The probe's outer tool handle is gone and its actual outer exit was not
+captured; the earlier chat claim of outer exit 0 was unsupported. Raw/capture
+is retained unchanged under `studio/.local/reviews/`.
+
+Static follow-up binds the entire inspected command, entrypoint, container ID,
+read-only harness mount and bootstrap/profile hashes to trusted source. Phase
+and guard events must be in exact order. Only the pinned fixture-specific
+startup/spawn/network diagnostics are explained; extra errors/warnings/leaks
+fail the fixture check. Explained diagnostics never become a clean process,
+public ACK or sandbox acceptance. No archived evidence Python is executed by
+the verifier. The busy fixture now has one 12s diagnostic wall budget to cover
+the observed ~8s parse/import/play startup and reach its loop before the CPU
+limit. This is unverified natively and changes no GT-06 timeout or OS limit.
+
+Pure evidence unit tests: **28, actual exit 0**, 0.222s; no Docker or engine.
+Receipt: `studio/.local/reviews/o2-gameplay-evidence-20260928-01/exit.json`.
+Log SHA256: `adda88037d5bc0608ccc2a4561833825540884fe344535d12933c95196d0dbad`.
+This focused result overlaps prior test counts; do not add them together.
+
+Next outside formal measurement: freeze new source, run the four native cases
+with a new ID and persist the outer process exit; add syntax/type negatives;
+then seal ZIP/member hashes before committing this milestone. No native rerun,
+package compression or heavy suite runs during GT-06 formal measurement.
+AUTH-05/public gameplay-source remains incomplete; all candidate evidence is
+AUTHORITY=0. No GT-06 or AUTH checkbox changes follow from this checkpoint.
+
+Lessons: budget the entire multi-phase diagnostic, require proof that a hostile
+callback entered, and distinguish child exits from the probe runner's exit.
+Do not infer all-fixture success from clean cleanup or partial success.
+
 | Fixture requirement | Existing reusable candidate | Remaining proof / implementation |
 | --- | --- | --- |
 | 2D platforms, player movement, camera | TileMap, CharacterBody2D, InputMap, animation | Adapter transactions; real collision/input replay |

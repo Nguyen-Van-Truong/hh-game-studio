@@ -182,3 +182,57 @@ func _ready() -> void:
 \tget_tree().quit(0)
 ''',
 }
+FIXTURES['gameplay_source'] = {
+    'mode': 'gameplay-source', 'timeout': 20, 'expect': 'gameplay_source',
+    'script': '''extends Node3D
+var ticks: int = 0
+func _physics_process(_delta: float) -> void:
+\tticks += 1
+\tposition.x += 1.0
+\tif ticks == 12:
+\t\tprint("HH_PROBE_PLAY " + JSON.stringify({"ticks": ticks, "x": position.x}))
+\t\tget_tree().quit(0)
+''',
+}
+FIXTURES['gameplay_source_spawn'] = {
+    'mode': 'gameplay-source', 'timeout': 20, 'expect': 'spawn_observation',
+    'script': '''extends Node3D
+func _ready() -> void:
+\tvar output: Array = []
+\tvar status: int = OS.execute("/usr/bin/printf", PackedStringArray(["HH_UNEXPECTED_CHILD"]), output, true)
+\tprint("HH_PROBE_SPAWN " + JSON.stringify({"exit": status, "output": output}))
+\tget_tree().quit(0)
+''',
+}
+FIXTURES['gameplay_source_boundary'] = {
+    'mode': 'gameplay-source', 'timeout': 20, 'expect': 'boundary_observation',
+    'script': '''extends Node3D
+func _ready() -> void:
+\tvar source_file: FileAccess = FileAccess.open("res://scripts/fixture_actor.gd", FileAccess.WRITE)
+\tvar root_file: FileAccess = FileAccess.open("/escape-at-root", FileAccess.WRITE)
+\tvar docker_socket: bool = FileAccess.file_exists("/var/run/docker.sock")
+\tvar network: StreamPeerTCP = StreamPeerTCP.new()
+\tvar status: int = network.connect_to_host("192.0.2.1", 443)
+\tprint("HH_PROBE_BOUNDARY " + JSON.stringify({"source_denied": source_file == null, "root_denied": root_file == null, "docker_socket_absent": not docker_socket, "external_connect_status": status}))
+\tif source_file != null:
+\t\tsource_file.close()
+\tif root_file != null:
+\t\troot_file.close()
+\tnetwork.disconnect_from_host()
+\tget_tree().quit(0)
+''',
+}
+FIXTURES['gameplay_source_busy'] = {
+    # One shared 12s diagnostic deadline includes parse and editor import.
+    # The old 5s attempt expired during import, before the hostile loop entered.
+    # Prior complete startup took ~8s; stop before the loop's 10 CPU-second limit
+    # so this fixture specifically exercises the independent wall watchdog.
+    # This does not alter any GT-06 formal timeout or the executor's 20s cap.
+    'mode': 'gameplay-source', 'timeout': 12, 'expect': 'watchdog',
+    'script': '''extends Node3D
+func _ready() -> void:
+\tprint("HH_PROBE_BUSY_ENTERED")
+\twhile true:
+\t\tpass
+''',
+}
