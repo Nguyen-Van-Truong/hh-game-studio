@@ -8,9 +8,12 @@ The resident loop completed three full 1,000-command batches and failed during
 batch 3. The completed command-only batch gaps were 681.30 ms, 931.00 ms, and
 808.41 ms. In the partial fourth batch the command lane reached
 `max_status_gap_ms=2015.6922` and a lookup timed out at 2002.7916 ms during
-`getresponse`. The captured transport diagnostic was `HOST_DIAGNOSTICS`, with
-the fixture reporting `INVALID_FIXTURE_PAYLOAD`; this is preserved as a real
-failure signal rather than reclassified as infrastructure.
+`getresponse`. The wrapper classified the failure as `HOST_DIAGNOSTICS` after
+that lookup timeout. The partial command row records `CONNECTION_LOST_LOOKUP`,
+`getresponse`, and 2002.7916 ms; the subsequent diagnostic guard saw an
+unexpected host diagnostic. This old run did not persist the host diagnostic
+ring, so its exact code is unavailable and must not be guessed as
+`INVALID_FIXTURE_PAYLOAD`.
 
 The wrapper recorded actual child exit 1, closed its Job, observed zero active
 handles/tree entries, and retained the partial raw batch. No Godot or Blender
