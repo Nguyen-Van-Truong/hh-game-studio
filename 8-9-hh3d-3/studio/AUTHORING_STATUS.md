@@ -163,16 +163,12 @@ and typed-assignment failures. The catalog assertion and related evidence
 suite pass 62 tests with actual exit 0 in commit `fa392dab`; this is static
 coverage only and still requires a fresh native run after GT-06 formal work.
 
-### 2026-09-28 dependency-closure static checkpoint
+### 2026-09-28 dependency-closure static checkpoint (superseded wording)
 
-The gameplay-source profile now has a bounded `validate_dependency_closure`
-admission helper. It accepts only UTF-8 byte files under `scripts/` or
-`scenes/`, caps each file at 16 KiB, caps the closure at 64 files/256 KiB,
-rejects traversal, missing `res://` references, and unreferenced files, and
-returns sorted SHA-256 bindings. It never parses GDScript, executes source,
-publishes an ACK, or changes AUTHORITY=0; Godot syntax/type checks and the
-confined executor remain required. The pinned executor and validator lock were
-updated to the new profile hash.
+The earlier f29fdbb7 checkpoint described a bounded
+`validate_dependency_closure` helper. That description is historical and is
+superseded by the correction below; it must not be read as proof that a regex
+walk established a Godot dependency closure.
 
 Pure static checks passed with actual exit 0: gameplay contract/edge/behavior,
 dependency profile, probe evidence, sandbox policy, and guarded executor
@@ -181,10 +177,10 @@ passed 48 tests. No Docker, Godot, Blender, network, or evidence rewrite was
 performed. This closes only the dependency-admission static gap; public
 adapter integration and AUTH-05 acceptance remain open.
 
-The gameplay executor now invokes that closure validator before admission, so
-the native diagnostic cannot silently bypass the static dependency boundary.
-This source change invalidates earlier native closure hashes; a fresh
-four-fixture native run is required after the GT-06 formal lane permits it.
+The gameplay executor now invokes the corrected source-bundle inventory before
+admission, so the native diagnostic cannot silently bypass the bounded input
+boundary. This source change invalidated earlier native closure hashes; a
+fresh four-fixture native run was required and is recorded below.
 The focused pure suite was rerun after integration: 66 tests, actual exit 0,
 2.0 seconds, with no engine, Docker, network, or generated evidence.
 
@@ -204,3 +200,24 @@ replaced by regression tests proving the honest boundary, including rejection
 of `res://` aliases and dot segments. Actual Godot import/runtime dependency
 closure, scene-resource coverage, and AUTH-05 remain open work; this repair
 does not create an acceptance claim.
+
+### 2026-09-28 gameplay-source native checkpoint (run08)
+
+After the profile-pin repair, the four bounded fixtures ran against the pinned
+Godot Linux binary with a captured outer host exit of **0**. The ordinary,
+spawn, boundary, and busy-watchdog cases all recorded `fixture_observed=true`;
+the busy case ended with the expected supervisor exit 124. Source closure is
+`36e4016e868097008272d27e0e9894232c5dd664a7e6df61a68caf810543b23c`, with 219
+frozen source files. Each case has host/container exit records, closed zero
+Job handles, confirmed owned-container removal, unchanged inputs, and the
+matching source/profile hashes. The run was independently re-read from raw
+evidence before packaging.
+
+Package ZIP SHA-256 is
+`461ecee7dbe57fc49c7bbe39e459ac8259d02a9223c90547d4e2d879dffcee4b`; package
+manifest SHA-256 is
+`936f8428307d0a025f5a1107b7d3efe49d05dab4808da12e6d8d67d07945fc35`.
+Raw evidence remains in `studio/.local/reviews/o2-gameplay-source-20260928-08`.
+This is still `AUTHORITY=0`: `public_ack=false`, `sandbox_acceptance=false`,
+and `validation_attribution_proven=false`. It does not close AUTH-05, prove a
+general Godot dependency closure, or change GT-06.
