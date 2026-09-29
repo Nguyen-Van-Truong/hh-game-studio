@@ -1,6 +1,6 @@
 HH STUDIO — PLAN 1/3: GODOT + BLENDER + CÔNG CỤ CHO AGENT
 Ngày 26-09-2026, Asia/Saigon | Revision S258 | TRIỂN KHAI THEO GATE
-OWNER_DECISIONS=O1_O2_O3_OWNER_APPROVED_20260925; O4_OWNER_DELEGATED_20260927_WINS_ON_CONFLICT; PRECEDENCE=OVER_CONFLICTING_S2XX; EXACT_DECISIONS_BELOW_STATUS_TABLE; RAW_AND_OLD_VERDICTS_UNCHANGED
+OWNER_DECISIONS=O1_O2_O3_OWNER_APPROVED_20260925; O4_OWNER_DELEGATED_20260927_WINS_ON_CONFLICT; O5_OWNER_DELEGATED_20260930_WINS_OVER_O1_O4; PRECEDENCE=OVER_CONFLICTING_S2XX; EXACT_DECISIONS_BELOW_STATUS_TABLE; RAW_AND_OLD_VERDICTS_UNCHANGED
 HIỆN HÀNH S258 — INTERRUPTED O1 RUN SEALED; PREFLIGHT REPAIRED; GT06 STILL CURRENT VALID WP
 CURRENT_VALID_WP=GT-06
 PLAN_SCOPE=8-9-hh3d-3/studio
@@ -15,7 +15,7 @@ GT06_STATUS=IN_PROGRESS; ZERO_ACCEPTED_FULL_RUNS; HISTORICAL_ACCEPTANCE_GT01_GT0
 GT06_GATE_POLICY=OWNER_O1_2_FRESH_PAIRS_X_35_BATCHES_5_WARMUP_30_MEASURED_WITH_O1_COUNTER_AND_PRIVATE_COMMIT_RULES; FULL_10X35_UNDER_O1_IS_GT10_RELEASE_SOAK; FULL_DATASET_HASH_ACTUAL_EXITS_TREES_JOBS_HANDLES_AND_TWO_NEW_SAME_HASH_CRITICS
 GT06_ATTRIBUTION_POLICY=DIAGNOSTIC_ONLY_UNLESS_OWNER_ADR_ADDS_ACCEPTANCE_REQUIREMENT; UNKNOWN_IS_NOT_LEAK_ROOT_CAUSE_OR_PASS
 GT06_CURRENT_DIAGNOSTIC=O1_9_STOCK_EDITOR_CONTROL02_TERMINAL_20260929; AUTHORITY0; EDITOR_EXIT0_JOB_CLEAN_HANDLES_RELEASED; PACKAGE=studio/.local/reviews/gt06-stock-editor-control-02; FORMAL08_PAIR0_O1_FAIL_PAIR1_INFRA_ABORT_CPU; REVIEW=zdoc/reviews/20260929-gt06-formal08-review-and-pair-guard.md
-GT06_NEXT_ACTION=O1_9_REVIEW_COMPLETE_THEN_O2_FIXTURE_GAP_AND_AUTH05_LANE; NO_FORMAL09_UNCHANGED_RETRY; DAILY_INFRA_ABORTS_20260929=1_OF_2; FINAL_CRITICS_VIA_OWNER_O4_3
+GT06_NEXT_ACTION=O5_1_JOURNAL_INCREMENTAL_RELOAD_AND_BOUNDED_INDEX; HOST_ONLY_35K_SOAK_PER_O5_1C; LOCK_O5_2_EDITOR_HANDLE_RULE_AND_O5_3_CPU_ATTRIBUTION_WITH_TESTS; THEN_FORMAL09_FRESH_ID_NIGHT_WINDOW; NO_FORMAL09_UNCHANGED_RETRY; FINAL_CRITICS_VIA_OWNER_O4_3; O2_ONLY_IN_WAITS
 GT06_SOURCE_POLICY=O1_VERIFIER_AND_PROFILE_CHANGE_CREATES_NEW_FORMAL_SOURCE_CLOSURE_FROZEN_BEFORE_RUN; MEMORY05_CLOSURE=9eccd4530acd98e0f04cf8b565e5a6eb9e3a519e12c71ce17cb67b264bc3a570; O1_9_CONTROL_CLOSURE=09acaf0a2335e5bcdd52815708d0075e8365ee0821018a27139daff48ddfd250; OLD_CLOSURES_AND_RAW_STAY_HISTORICAL; NO_RETROACTIVE_REBINDING; TIMEOUTS_UNCHANGED
 GT06_HISTORICAL_BENCHMARK53_CLOSURE=1f6b7da7f48085b417e5d6d7f3388c75c0a8beadad3659b14057a2a6e71df625; FORMAL_SOURCE_FILES=53; PRIOR_S241_EXECUTED_CLOSURE=d7c78724ed827c8182af62c3f7bc1489d8dd35d29abe1f70216736a896e66bb3; S232_FORMAL_EXECUTED_CLOSURE=817242efa6578ecc92ebab31909d0324020f7617359bc2855c9b004d31907190; NO_RETROACTIVE_REBINDING
 GT06_HISTORICAL_EXECUTION217_CLOSURE=493a7ccce3e42993399910b0fe977f25448f411b863e4cca7b57904348ac374e
@@ -61,8 +61,9 @@ release soak GT-10; các điều kiện khác của mục đó giữ nguyên)
    baseline+64, objects > baseline+256 hoặc private commit > 150% baseline. Lệch nhỏ hơn không
    dừng; mỗi pair chạy đủ 35 batch để có chuỗi xu hướng.
 3. Counter PASS theo từng pair khi max(batch 5–34) ≤ baseline + T và max(batch 20–34) ≤
-   max(batch 5–19) + G. T/G: host handles 4/2; editor handles 8/2; editor objects 32/8;
-   editor resources 2/1. Host objects/resources vẫn NOT_APPLICABLE_PYTHON_HOST.
+   max(batch 5–19) + G. T/G: host handles 4/2; editor handles 8/2 (đã thay bằng luật median của
+   O5.2); editor objects 32/8; editor resources 2/1. Host objects/resources vẫn
+   NOT_APPLICABLE_PYTHON_HOST.
 4. Bộ nhớ gate bằng private commit từng process (cùng API benchmark_import_observer):
    max(batch 5–34) ≤ 110% baseline và max(batch 20–34) ≤ 105% × max(batch 5–19).
    RSS/working set vẫn ghi đủ cho report và critic nhưng không là gate tự động.
@@ -91,7 +92,8 @@ release soak GT-10; các điều kiện khác của mục đó giữ nguyên)
     xác nhận luật phụ v5 hiện hành là một phần của O1.
 O1_NEXT=AFTER_S258_SEALED__O4_1_PREFLIGHT_AND_WATCHDOG; FRESH_ID_2X35_FORMAL; TWO_NEW_SAME_HASH_CRITICS_VIA_O4_3; THEN_ACCEPT_GT06_AND_OPEN_GT07
 O1 vẫn FAIL khi rò theo lệnh (từ 1 đơn vị mỗi 1000 lệnh) hoặc rò đều nhỏ: từ khoảng 0,14 handle,
-0,07 resource, 0,54 object hoặc 0,33% private commit mỗi batch. O1 chỉ bỏ báo động giả. Mục TQ
+0,07 resource, 0,54 object hoặc 0,33% private commit mỗi batch (editor handles theo O5.2: từ
+khoảng 0,4 handle mỗi batch). O1 chỉ bỏ báo động giả. Mục TQ
 hiệu năng cho phép đổi target bằng decision/review; O1 là decision đó và được khóa trước lần chạy.
 
 O2 — LÕI TẠO NỘI DUNG DÙNG CHUNG, LÀM TRƯỚC GT-10
@@ -128,7 +130,7 @@ OWNER_DELEGATED_20260927; thắng các dòng S2xx/O1–O3 mâu thuẫn; raw và 
    và ghi inventory trước/sau (top process theo private bytes, app nặng, Docker/WSL). Trình duyệt,
    app chat, Docker Desktop/WSL (toolchain của executor GT-03) được chạy, chỉ ghi lại. Watchdog lấy
    mẫu ≤ 10 giây: available < 1,5 GiB liên tục 60 giây, commit > 92%, CPU toàn hệ thống > 95% liên
-   tục 60 giây, godot*/blender* lạ, hoặc sleep/resume → Stop latch và INFRA_ABORT theo O1.7 (giữ
+   tục 60 giây (đã thay bằng O5.3), godot*/blender* lạ, hoặc sleep/resume → Stop latch và INFRA_ABORT theo O1.7 (giữ
    raw, ID mới, tối đa 2 lần/ngày). Watchdog chỉ được dừng, không biến FAIL thành PASS; nếu chính
    host/editor gây áp lực bộ nhớ thì là product FAIL. Mọi ngưỡng nghiệm thu O1 (counter, private
    commit, status gap, timeout, exit/Job/tree) giữ nguyên; FAIL không kèm watchdog là product FAIL.
@@ -171,7 +173,52 @@ OWNER_DELEGATED_20260927; thắng các dòng S2xx/O1–O3 mâu thuẫn; raw và 
    và ghi core.longpaths. GT-09 thêm owner playtest khoảng 15 phút mỗi fixture (owner ghi OK/không
    OK và ghi chú; agent không ký thay). GT-10 soak 10×35 theo O4.1, được chia nhiều cửa sổ chạy trên
    cùng hash; package không chứa zdoc/reviews.
-O4_NEXT=O1_9_STOCK_CONTROL_REVIEW_COMPLETE_THEN_O2_FIXTURE_GAP_AUTH05; O3_BOUND_4H_OR_3_ATTEMPTS_THEN_O2; NO_FORMAL09_UNTIL_SOURCE_REPAIR_REVIEW; GT07_REMAINS_UNOPENED
+O4_NEXT=O1_9_STOCK_CONTROL_REVIEW_COMPLETE_THEN_O2_FIXTURE_GAP_AUTH05; O3_BOUND_4H_OR_3_ATTEMPTS_THEN_O2; NO_FORMAL09_UNTIL_SOURCE_REPAIR_REVIEW; GT07_REMAINS_UNOPENED; SUPERSEDED_BY_O5_NEXT
+
+OWNER DECISIONS O5 — 30-09-2026 (owner giao toàn quyền sửa plan cho reviewer; AUTHORITY=
+OWNER_DELEGATED_20260930; thắng O1–O4 khi mâu thuẫn; raw và verdict cũ giữ nguyên, không hồi tố)
+1. GT-06 là đường găng, ưu tiên số 1. Formal08 và diagnostic05 chỉ ra lỗi thiết kế thật trong
+   studio/host/core/journal.py: cả 7 thao tác (append/finish/lookup/lookup_archive/acquire_lease/
+   check_lease/compact) đi qua @_mutating → _reload() đọc, giải mã, kiểm lại toàn bộ file và fsync.
+   Không có compact tự động; trần 64 MiB, 100.000 record, khóa chờ 2 giây. Journal 26 MB ở batch 26
+   làm một lần reload giữ khóa ≈ 2,3 giây, private commit host tăng theo số record, rồi timeout;
+   pair 35.000 lệnh vượt sức chứa thực tế nên chạy lại formal không thể PASS. Đây là source repair
+   đủ căn cứ theo O4_NEXT. Sửa, giữ bất biến GT-02 và không đổi timeout:
+   a) Đọc tăng dần: nhớ file identity + offset đã đọc; chỉ đọc và kiểm tail mới; reload toàn bộ khi
+      file bị thay (compact/replace), bị cắt ngắn hoặc generation đổi. Lookup không fsync cả file
+      khi không có tail mới.
+   b) Index gọn: RAM chỉ giữ trạng thái/digest/expiry/offset; receipt đọc từ đĩa khi cần; compact tự
+      động theo ngưỡng kích thước/record. Vẫn không phẳng thì chuyển index sang SQLite (WAL, cache
+      giới hạn), JSONL giữ làm log kiểm toán.
+   c) Trước formal09: soak host-only (không editor) ≥ 35.000 lệnh cùng mix formal: p95 lookup/append
+      ở 5.000 lệnh cuối ≤ 120% của 5.000 lệnh đầu, private commit batch 5→34 tăng ≤ 5%, không full
+      reload sau khởi động; regression GT-02 (dedupe, recovery cut matrix, đa process) PASS. Soak là
+      diagnostic, không thay formal.
+   O2 chỉ làm trong lúc chờ soak/formal/critic cho tới khi formal09 có kết luận.
+2. Editor handles (thay dòng editor handles của O1.3): control O1.9 không plugin dao động 554–577
+   trong 720 giây, rộng hơn T/G 8/2 cũ nên luật max đang đo nhiễu. Luật mới: median(batch 20–34)
+   ≤ median(batch 5–19) + 6 và max(batch 5–34) ≤ baseline + 32; luật phụ v5 giữ. Rò 1 handle mỗi
+   1000 lệnh (≈ +15 median) vẫn FAIL. Counter khác giữ nguyên. Khóa vào verifier + test trước
+   formal09 và ghi kết quả đối chiếu với control-02; không hồi tố (formal08 vẫn FAIL, riêng host
+   private commit của nó đã FAIL).
+3. CPU watchdog (thay mệnh đề CPU của O4.1): chỉ INFRA_ABORT khi process ngoài Job campaign chiếm
+   ≥ 50% CPU trong cửa sổ 60 giây; ghi top 10 process theo CPU (gồm vmmem/Docker). Chính campaign
+   chiếm CPU thì không abort, để gate status gap/timeout phán. Container hh-* đang chạy tính là
+   engine lạ. Ưu tiên chạy soak/formal ban đêm hoặc lúc owner vắng.
+4. Evidence hai tầng. Tầng F (formal, gói critic, bằng chứng nghiệm thu) niêm phong đầy đủ như hiện
+   nay. Tầng D (diagnostic AUTHORITY=0, probe O2): raw trong .local + một mục trong log lane
+   (studio/AUTHORING_STATUS.md cho O2, zdoc/reviews/gt06-diagnostic-log.md cho GT-06) gồm run id,
+   closure hash, lệnh, exit, kết quả, 1–3 dòng phát hiện; không cần ZIP, manifest, review riêng hay
+   sửa plan, chỉ niêm phong khi được dẫn làm bằng chứng gate. Ngoài dispatch/verdict formal và quyết
+   định owner, tối đa 1 commit sửa plan mỗi ngày; bỏ commit "record O2 checkpoint" trên nhánh chính.
+5. Log Godot vẫn là tiêu chí PASS của fixture gameplay: dùng lại bộ phân loại noise có kiểm soát của
+   fixture verifier (khớp chính xác, có version); mọi ERROR/SCRIPT ERROR/WARNING khác là FAIL. Exit 0
+   + transcript không thay kiểm log. Closure do adapter tự tính, không nhận từ caller.
+6. Khóa cửa sổ đo: khi soak/formal chạy, coordinator giữ file %LOCALAPPDATA%\HHGodotAgent\
+   measure-window.lock (owner, run_id, mục đích, hết hạn). Agent khác trong repo (O2, Vault
+   Fighters) kiểm khóa trước khi chạy Godot/Blender/Docker; có khóa thì chờ hoặc làm việc static.
+   Owner nhờ vậy mở được agent riêng làm game song song mà không làm hỏng formal.
+O5_NEXT=JOURNAL_INCREMENTAL_AND_BOUNDED_INDEX; HOST_ONLY_35K_SOAK; EDITOR_HANDLE_MEDIAN_RULE_AND_CPU_ATTRIBUTION_LOCKED; FORMAL09_NIGHT_WINDOW; CRITIC_PACKAGE_PER_O4_3; O2_IN_GAPS
 
 ACCEPTED_EVIDENCE_INDEX (historical accepted closures; unchanged)
 GT01_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260913
