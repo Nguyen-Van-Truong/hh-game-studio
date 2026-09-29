@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import ctypes
 import errno
+import json
 import os
 from pathlib import Path
 import platform
@@ -85,10 +86,34 @@ def verify_denials():
             raise RuntimeError('GAMEPLAY_SOCKET_NOT_BLOCKED')
 
 
-def command(phase):
+def _parse_launcher(root=Path('/project/scripts'), launcher=Path('/tmp/hh-gameplay-parse-all.gd')):
+    """Create a trusted, disposable script that preloads every submitted GDScript.
+
+    The source bundle is already byte- and path-bound by the host executor. A
+    single check-only Godot invocation still needs to cover secondary modules;
+    otherwise an unreferenced or indirectly referenced script could escape the
+    parse phase. The launcher is generated in tmpfs and never becomes a source
+    or publication artifact.
+    """
+    project_root = root.parent
+    paths = sorted(path.relative_to(project_root).as_posix()
+                   for path in root.rglob('*.gd') if path.is_file())
+    if not paths:
+        raise RuntimeError('GAMEPLAY_NO_SCRIPTS')
+    lines = ['extends RefCounted']
+    for index, path in enumerate(paths):
+        lines.append('const _HH_SOURCE_%d = preload(%s)' %
+                     (index, json.dumps('res://' + path, ensure_ascii=False)))
+    lines.append('func _init() -> void:')
+    lines.append('\tpass')
+    launcher.write_text('\n'.join(lines) + '\n', encoding='utf-8')
+    return launcher.as_posix()
+
+
+def command(phase, *, parse_script=None):
     common = [BINARY, '--headless', '--path', '/project', '--log-file', '/tmp/engine.log']
     if phase == 'parse':
-        return common + ['--check-only', '--script', 'res://scripts/fixture_actor.gd']
+        return common + ['--check-only', '--script', parse_script or 'res://scripts/fixture_actor.gd']
     if phase == 'import':
         return common + ['--editor', '--import', 'res://scenes/fixture.tscn']
     if phase == 'play':
@@ -101,7 +126,9 @@ def command(phase):
 def main():
     if len(sys.argv) != 2:
         raise ValueError('GAMEPLAY_SANDBOX_ARGUMENTS')
-    argv = command(sys.argv[1])
+    phase = sys.argv[1]
+    parse_script = _parse_launcher() if phase == 'parse' else None
+    argv = command(phase, parse_script=parse_script)
     install()
     verify_denials()
     print('HH_GAMEPLAY_OS_GUARD fork=EPERM socket=EPERM', flush=True)

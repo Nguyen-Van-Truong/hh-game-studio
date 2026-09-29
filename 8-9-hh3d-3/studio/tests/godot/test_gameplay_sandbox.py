@@ -2,6 +2,7 @@
 import errno
 import importlib.util
 from pathlib import Path
+import tempfile
 import unittest
 from unittest.mock import patch
 
@@ -53,6 +54,20 @@ class GameplaySandboxTests(unittest.TestCase):
     def test_regular_io_and_initial_engine_exec_remain_available(self):
         for number in (0, 1, 2, 3, 9, 12, 59, 60, 202, 231, 257):
             self.assertEqual(evaluate(number), sandbox.ALLOW)
+
+    def test_parse_launcher_is_disposable_and_preloads_every_script(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp) / 'project' / 'scripts'
+            root.mkdir(parents=True)
+            (root / 'fixture_actor.gd').write_text('extends Node3D\n', encoding='utf-8')
+            (root / 'nested').mkdir()
+            (root / 'nested' / 'shared.gd').write_text('extends Node\n', encoding='utf-8')
+            output = Path(temp) / 'parse-all.gd'
+            source = sandbox._parse_launcher(root, output)
+            generated = output.read_text(encoding='utf-8')
+            self.assertEqual(source, output.as_posix())
+            self.assertIn('preload("res://scripts/fixture_actor.gd")', generated)
+            self.assertIn('preload("res://scripts/nested/shared.gd")', generated)
 
     def test_launcher_does_not_offer_arbitrary_program_or_arguments(self):
         for phase in ('parse', 'import', 'play', 'readback'):

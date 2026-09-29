@@ -290,3 +290,35 @@ revalidates bounded admission and lifecycle behavior only. Remaining O2 gaps
 are the real fixture gap table, public adapter/save-reload integration,
 AUTH-05 review, and Blender GLB/sprite-sheet pipeline checks. Do not merge this
 branch or open GT-07 before GT-06 is accepted.
+
+### 2026-09-29 secondary-script parse hardening (run05)
+
+The gameplay-source parse phase previously passed only the required entrypoint
+to Godot. The trusted Linux guard now writes a disposable launcher in the
+container tmpfs which preloads every submitted `.gd` file under `scripts/`
+before the check-only invocation. The launcher is generated from the already
+validated, exact source inventory, is not caller-authored source, and is never
+published. This closes the concrete gap where a secondary script could be
+admitted and reach import without first receiving parse coverage; it does not
+infer complete Godot scene/UID/dynamic-load closure and does not change the
+Docker limits or GT-06 gates. The sandbox pin was reminted to
+`83872e788f3c2516fdf392d02855d9f64ec935e8a08aa3c563281ea8c4bc046a`.
+
+The first post-change native attempt `o2-gameplay-source-20260929-04` is
+retained: four fixtures observed, while the 12-second busy fixture timed out
+during import before its hostile loop callback. It is not promoted. The busy
+diagnostic deadline was then raised to 16 seconds (within the executor's
+existing 20-second bound) to cover parse-plus-import startup; no GT-06 timeout
+was changed. Fresh run `o2-gameplay-source-20260929-05` observed all five
+selected fixtures (`gameplay_source`, `gameplay_source_multifile`,
+`gameplay_source_spawn`, `gameplay_source_boundary`, and `gameplay_source_busy`)
+with source unchanged, actual host/container exits recorded, and every owned
+container/Job released and removed. Frozen source closure is
+`f0bac8e772037602a91f13ebf63b634fc48f3aa4c0cdb8dc8d35b8ee5e56baa0`.
+The raw package has 460 members; package ZIP SHA-256 is
+`da063fe71c71417649085e8d59c24f10cc9210572f4066f9c1520afe4d2b1233`, and
+the external manifest SHA-256 is
+`2c054e238e24108613d980b3d9149241d652ab9a08f0af97d82fb2c88ddc3536`.
+The campaign remains `AUTHORITY=0`, with `public_ack=false` and
+`sandbox_acceptance=false`; AUTH-05, public adapter integration and complete
+dependency closure remain open.
