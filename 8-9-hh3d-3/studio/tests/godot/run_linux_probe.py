@@ -9,6 +9,7 @@ import argparse
 import hashlib
 import importlib.util
 import json
+import math
 import os
 from pathlib import Path
 import re
@@ -157,6 +158,56 @@ def marker(text: str, prefix: str) -> dict | None:
     return value if type(value) is dict else None
 
 
+def typed_equal(actual, expected) -> bool:
+    """JSON bools cannot substitute for integer counts, including zero/one."""
+    if type(actual) is not type(expected):
+        return False
+    if type(expected) is dict:
+        return (actual.keys() == expected.keys()
+                and all(typed_equal(actual[key], value) for key, value in expected.items()))
+    return actual == expected
+
+
+def physics_trace(case: dict, stdout: str) -> bool:
+    """Cross-check bounded native telemetry for the fixed arena fixture only."""
+    if case.get('fixture_kind') != 'arena_physics':
+        return True
+    def rows(prefix):
+        return [json.loads(line[len(prefix):]) for line in stdout.splitlines() if line.startswith(prefix)]
+    try:
+        inputs = rows('HH_FIXTURE_INPUT ')
+        events = rows('HH_FIXTURE_EVENT ')
+        expected_inputs = [{'tick': t, 'key': k, 'pressed': p} for t, k, p in case['input_trace']]
+        if len(inputs) != len(expected_inputs) or any(not typed_equal(a, b) for a, b in zip(inputs, expected_inputs)):
+            return False
+        if len(events) != len(case['event_trace']):
+            return False
+        if tuple(row['event'] for row in events) != case['event_trace']:
+            return False
+        for row in events:
+            if (type(row) is not dict or set(row) != {'event', 'tick', 'x', 'y', 'health', 'bot_health', 'hits', 'wall_contacts'}
+                    or any(type(row[key]) is not int for key in ('tick', 'health', 'bot_health', 'hits', 'wall_contacts'))
+                    or any(type(row[key]) not in (int, float) or not math.isfinite(row[key]) for key in ('x', 'y'))):
+                return False
+        if not all(a['tick'] < b['tick'] for a, b in zip(events, events[1:])):
+            return False
+        boot, pickup, bullet, jump, bot, landed, wall, finish = events
+        return (boot['tick'] == 0 and boot['health'] == 3 and boot['x'] == 32.0
+            and 2 <= pickup['tick'] < 25 and pickup['health'] == 4 and 45 <= pickup['x'] <= 90
+            # Input.parse_input_event is called during the fixture's physics
+            # callback. Godot's just-pressed physics state is consumed on the
+            # following tick, not retroactively in the current callback.
+            and bullet['tick'] == 26 and jump['tick'] == 29
+            and bot['bot_health'] == 0 and bot['hits'] == 1
+            and landed['y'] >= 173.0 and wall['wall_contacts'] == 1
+            and 281.0 <= wall['x'] <= 282.1
+            and finish['tick'] == 150 and finish['wall_contacts'] >= 3
+            and abs(finish['x'] - wall['x']) < 0.01 and finish['y'] >= 173.0
+            and finish['health'] == 4 and finish['bot_health'] == 0 and finish['hits'] == 1)
+    except (ValueError, KeyError, TypeError):
+        return False
+
+
 def evaluate(case: dict, result: dict, stdout: str, stderr: str) -> dict:
     """Diagnostic assertions, deliberately not a publication PASS predicate."""
     host = _object(result.get('command_host'))
@@ -246,8 +297,9 @@ def evaluate(case: dict, result: dict, stdout: str, stderr: str) -> dict:
             and type(details.get('x')) in (int, float) and details['x'] == 12.0)
     elif kind == 'fixture_state':
         details = marker(stdout, 'HH_PROBE_FIXTURE ')
-        observed = (completed and details == case.get('expected_state')
-                    and type(case.get('fixture_kind')) is str)
+        observed = (completed and type(details) is dict and bool(case.get('expected_state'))
+                    and typed_equal(details, case.get('expected_state'))
+                    and type(case.get('fixture_kind')) is str and physics_trace(case, stdout))
     elif kind == 'watchdog':
         observed = supervisor_watchdog
     elif kind == 'stream_cap':

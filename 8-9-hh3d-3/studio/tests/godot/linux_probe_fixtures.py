@@ -5,6 +5,8 @@ even a correct-looking marker is never a publication attestation.
 """
 from __future__ import annotations
 
+from pathlib import Path
+
 SCENE = '''[gd_scene load_steps=2 format=3]
 
 [ext_resource type="Script" path="res://scripts/fixture_actor.gd" id="1_script"]
@@ -273,6 +275,26 @@ func _ready() -> void:
 \tget_tree().quit(0)
 ''',
 }
+_physics_source = Path(__file__).with_name('gameplay_fixture')
+FIXTURES['gameplay_arena_physics'] = {
+    'mode': 'gameplay-source', 'timeout': 20, 'expect': 'fixture_state',
+    'fixture_kind': 'arena_physics',
+    'expected_state': {
+        'ticks': 150, 'health': 4, 'bot_health': 0, 'pickups': 1, 'hits': 1,
+        'jump_started': True, 'apex_seen': True, 'landed': True,
+        'wall_blocked': True, 'input_released': True, 'stopped': True,
+        'camera_follow': True, 'hud_win': True, 'round_won': True,
+    },
+    'script': (_physics_source / 'arena_physics.gd').read_text(encoding='utf-8'),
+    'extra_files': {
+        'scenes/projectile.tscn': (_physics_source / 'projectile.tscn').read_text(encoding='utf-8'),
+    },
+    'input_trace': ((2, 68, True), (25, 70, True), (26, 70, False),
+                    (28, 32, True), (29, 32, False), (120, 68, False)),
+    'event_trace': ('boot', 'pickup', 'projectile_spawned', 'jump_started',
+                    'bot_defeated', 'landed', 'wall_contact', 'finish'),
+}
+
 FIXTURES['gameplay_source_spawn'] = {
     'mode': 'gameplay-source', 'timeout': 20, 'expect': 'spawn_observation',
     'script': '''extends Node3D

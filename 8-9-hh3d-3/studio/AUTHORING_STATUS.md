@@ -450,3 +450,30 @@ The earlier warning-producing run05 and harness-fix attempts remain raw and are
 not used for the PASS claim. This closes only the Blender asset → Godot import
 readback path; sprite animation timing, gameplay integration, save/reload ACK
 and AUTH-05 remain open. `AUTHORITY=0`; GT-06 is still unaccepted.
+
+The PNG is deliberately evidence of a render/import path only: the current
+four-cell diagnostic camera also captures the authored quad, so it is not being
+claimed as a production sprite atlas. A future sprite fixture must isolate the
+render layer and verify cell boundaries before any art-quality claim.
+
+
+### 2026-09-29 physics/input fixture diagnostic — bounded, not promoted
+
+The new `gameplay_arena_physics` fixture exercised a real Godot
+`CharacterBody2D`/`StaticBody2D`/`Area2D` scene through the guarded Docker
+executor. The child reached 150 physics ticks and emitted actual input events,
+pickup collection, jump/apex/landing, projectile hit, bot defeat, wall
+contacts, camera-follow and HUD state; the container exited 0 and all owned
+handles/containers were cleaned. Raw evidence is sealed in
+`o2-arena-physics-20260929-03-sealed.zip` (275 members, ZIP SHA-256
+`287a2c21cdd8bd9ced3ee2960b7f197d7435e38988cbe7af6b5a93adbcb668ab`, manifest
+SHA-256 `710e4d50be9073c281e91980f59422fea5a9b5a453cdc5ccef8789d9f901bdd2`).
+
+The outer verifier exited **1** because its frozen transcript expected the
+input marker's tick instead of Godot's next-tick `just_pressed` observation;
+that is a verifier repair, not a promoted PASS. The post-run source repair now
+models the one-tick boundary and rejects missing/duplicated input, early finish,
+wrong wall/contact telemetry and bool-for-int substitutions. O3's three-attempt
+diagnostic budget is spent, so this branch does not rerun the native case under
+the repaired verifier until a later owner-approved checkpoint. `AUTHORITY=0`;
+this is not AUTH-05, GT-06 or GT09 acceptance.

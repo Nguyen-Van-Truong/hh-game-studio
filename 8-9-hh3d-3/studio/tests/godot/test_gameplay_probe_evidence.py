@@ -58,9 +58,45 @@ class GameplayProbeEvidenceTests(unittest.TestCase):
             'HH_PROBE_FIXTURE {"ticks":12,"player_health":4,"bot_health":0,"projectile_hits":2,"pickups":1,"round_won":true}')
         self.assertTrue(self.check()['fixture_observed'])
         for output in (self.stdout.replace('"round_won":true', '"round_won":false'),
+                       self.stdout.replace('"round_won":true', '"round_won":1'),
+                       self.stdout.replace('"bot_health":0', '"bot_health":false'),
                        self.stdout.replace('HH_PROBE_FIXTURE', 'HH_PROBE_PLAY'),
                        self.stdout + 'HH_PROBE_FIXTURE {"ticks":12}\n'):
             self.assertFalse(self.check(stdout=output)['fixture_observed'])
+
+    def test_physics_fixture_requires_input_and_collision_telemetry(self):
+        self.case = probe.load('physics_fixture_catalog',
+            probe.STUDIO / 'tests/godot/linux_probe_fixtures.py').FIXTURES['gameplay_arena_physics']
+        inputs = [{'tick': t, 'key': k, 'pressed': p} for t, k, p in self.case['input_trace']]
+        ticks = (0, 10, 26, 29, 45, 74, 87, 150)
+        xs = (32.0, 56.0, 101.0, 110.0, 161.0, 248.0, 281.92, 281.92)
+        events = [{'event': label, 'tick': tick, 'x': x, 'y': 173.92,
+                   'health': 3 if i == 0 else 4, 'bot_health': 1 if i < 4 else 0,
+                   'hits': 0 if i < 4 else 1, 'wall_contacts': 0 if i < 6 else (1 if i == 6 else 30)}
+                  for i, (label, tick, x) in enumerate(zip(self.case['event_trace'], ticks, xs))]
+        def transcript(trace_inputs, trace_events):
+            lines = [*probe.GAMEPLAY_PHASE_EVENTS[:-1]]
+            lines += ['HH_FIXTURE_INPUT ' + json.dumps(row) for row in trace_inputs]
+            lines += ['HH_FIXTURE_EVENT ' + json.dumps(row) for row in trace_events]
+            lines += ['HH_PROBE_FIXTURE ' + json.dumps(self.case['expected_state']),
+                      probe.GAMEPLAY_PHASE_EVENTS[-1]]
+            return '\n'.join(lines) + '\n'
+        self.assertTrue(self.check(stdout=transcript(inputs, events))['fixture_observed'])
+        bad_events = copy.deepcopy(events)
+        bad_events[-1]['wall_contacts'] = 0
+        early = copy.deepcopy(events)
+        early[-1]['tick'] = 4
+        wrong_body = copy.deepcopy(events)
+        wrong_body[-2]['x'] = 100.0
+        wrong_input_tick = copy.deepcopy(events)
+        wrong_input_tick[2]['tick'] = 25
+        bad_input = copy.deepcopy(inputs)
+        bad_input[-1]['pressed'] = 0
+        for trace in (transcript([], events), transcript(bad_input, events),
+                      transcript(inputs, events[:-1]), transcript(inputs, events + [events[-1]]),
+                      transcript(inputs, bad_events), transcript(inputs, early),
+                      transcript(inputs, wrong_body), transcript(inputs, wrong_input_tick)):
+            self.assertFalse(self.check(stdout=trace)['fixture_observed'])
 
     def test_phase_order_and_exactly_one_guard_per_phase_are_required(self):
         variants = [self.stdout.replace(probe.GUARD_MARKER + '\n', '', 1),
