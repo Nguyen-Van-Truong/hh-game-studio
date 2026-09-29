@@ -263,6 +263,7 @@ def evaluate(case: dict, result: dict, stdout: str, stderr: str) -> dict:
         'supervisor_watchdog_observed': controlled and transcript_ok and kind == 'watchdog' and supervisor_watchdog,
         'host_watchdog_observed': controlled and transcript_ok and kind == 'watchdog' and host_watchdog,
         'expectation': kind, 'untrusted_child_observation': details,
+        'authority': 0,
         'public_ack': False, 'sandbox_acceptance': False,
         'validation_attribution_proven': False}
 
@@ -434,7 +435,7 @@ def main() -> int:
     unchanged = current == freezer.inputs() and all(sha(source / n) == h for n, h in current.items())
     summary = {'run_id': args.run_id, 'source_closure_sha256': binding['source_closure_sha256'],
         'cases': results, 'source_unchanged': unchanged, 'sandbox_acceptance': False, 'public_ack': False,
-        'validation_attribution_proven': False,
+        'authority': 0, 'validation_attribution_proven': False,
         'selected_fixtures_observed': unchanged and all(row['fixture_observed'] for row in results.values())}
     save(output / 'capture.json', summary)
     return 0 if summary['selected_fixtures_observed'] else 1

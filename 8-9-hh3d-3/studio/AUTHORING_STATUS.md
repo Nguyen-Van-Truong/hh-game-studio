@@ -268,17 +268,21 @@ checking only the primary script.
 
 Focused static regression tests passed **68 tests**, actual exit 0, after the
 executor/profile pin and lock were reminted. Native campaign
-`o2-gameplay-source-20260929-01` ran five selected fixtures with the pinned
+`o2-gameplay-source-20260929-02` ran five selected fixtures with the pinned
 Godot binary and Docker executor; the outer host process exited 0, all five
 fixtures were observed, source remained unchanged, and all owned containers and
 handles were released. The cases were the ordinary gameplay source, a
 scene-plus-shared-script multi-file case, spawn observation, path/network
 boundary observation, and the busy watchdog. Frozen source closure is
-`a4ffeecfc962cabcf46e576e63751bf826586afdb1c7a3725149f6d68b277900`. The raw
+`f849eff75ef72ff9cbdf66d0680a8ca8b537c2b2533a30e82ee05728f60c1872`. The raw
 package has 460 members; ZIP SHA-256
-`fe59fcf11bddc41f41b02a7f265ddeeae2ff403fda11a4648a3597e996855995`; manifest
+`66e8cd278edb8590c4b99be18520a155903270415caf23a130c34c23546aef98`; manifest
 SHA-256
-`64d5f6afcd994719ca392ef0b9bddb26e8fc34b45945a74a6e3c202036484e75`.
+`d3d9b8f2cb24803e1399e6ae0a59ed9e2006e311ca4bd894518a6c1438ea666c`.
+
+The prior 01 raw package remains unchanged as historical evidence; 02 was
+reminted because the capture now states `authority=0` explicitly and therefore
+has a different frozen source closure.
 
 This remains `AUTHORITY=0`: no public ACK, sandbox acceptance, or complete
 Godot dependency-closure proof follows from this diagnostic. The native run
