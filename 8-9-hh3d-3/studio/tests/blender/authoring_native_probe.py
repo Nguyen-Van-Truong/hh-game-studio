@@ -139,6 +139,61 @@ def _create_mesh_asset(output: Path, rows: list[dict], failures: list[str]) -> d
     return {"snapshot": observed, "sha256": _sha(target), "size_bytes": target.stat().st_size}
 
 
+def _create_sprite_sheet(output: Path, rows: list[dict], failures: list[str]) -> dict:
+    """Render a deterministic four-cell sheet through Blender's native renderer."""
+    scene = bpy.context.scene
+    camera_data = bpy.data.cameras.new("O2_SpriteCameraData")
+    camera = bpy.data.objects.new("O2_SpriteCamera", camera_data)
+    scene.collection.objects.link(camera)
+    camera.location = (0.0, 0.0, 10.0)
+    camera.rotation_euler = (0.0, 0.0, 0.0)
+    camera_data.type = "ORTHO"
+    camera_data.ortho_scale = 4.0
+    scene.camera = camera
+    scene.render.engine = "BLENDER_WORKBENCH"
+    scene.render.resolution_x = 128
+    scene.render.resolution_y = 128
+    scene.render.resolution_percentage = 100
+    scene.render.image_settings.file_format = "PNG"
+    scene.render.film_transparent = False
+    scene.display.shading.light = "FLAT"
+    scene.display.shading.color_type = "MATERIAL"
+    scene.display.shading.show_shadows = False
+    scene.display.shading.show_cavity = False
+    scene.world.color = (0.0, 0.0, 0.0)
+    colors = ((0.9, 0.1, 0.1, 1.0), (0.1, 0.9, 0.1, 1.0),
+              (0.1, 0.2, 0.9, 1.0), (0.9, 0.8, 0.1, 1.0))
+    positions = ((-1.0, 1.0, 0.0), (1.0, 1.0, 0.0),
+                 (-1.0, -1.0, 0.0), (1.0, -1.0, 0.0))
+    cells = []
+    for index, (color, position) in enumerate(zip(colors, positions)):
+        mesh = bpy.data.meshes.new(f"O2_SpriteCellMesh{index}")
+        mesh.from_pydata(((-0.92, -0.92, 0.0), (0.92, -0.92, 0.0),
+                          (0.92, 0.92, 0.0), (-0.92, 0.92, 0.0)), (), ((0, 1, 2, 3),))
+        mesh.update()
+        material = bpy.data.materials.new(f"O2_SpriteCellMaterial{index}")
+        material.diffuse_color = color
+        mesh.materials.append(material)
+        cell = bpy.data.objects.new(f"O2_SpriteCell{index}", mesh)
+        cell.location = position
+        scene.collection.objects.link(cell)
+        cells.append(cell)
+    target = output / "sprite_sheet.png"
+    scene.render.filepath = str(target)
+    result = bpy.ops.render.render(write_still=True)
+    _check(rows, failures, "sprite_sheet_render",
+           result == {"FINISHED"} and target.is_file() and target.stat().st_size > 0,
+           result=sorted(result), size_bytes=target.stat().st_size if target.is_file() else None)
+    image = bpy.data.images.load(str(target), check_existing=False) if target.is_file() else None
+    observed = {"width": image.size[0] if image else 0, "height": image.size[1] if image else 0,
+                "channels": image.channels if image else 0}
+    _check(rows, failures, "sprite_sheet_dimensions",
+           observed == {"width": 128, "height": 128, "channels": 4}, observed=observed)
+    if image is not None:
+        bpy.data.images.remove(image)
+    return {"sha256": _sha(target), "size_bytes": target.stat().st_size, "dimensions": observed}
+
+
 def _load_catalog(source_root: Path) -> dict:
     path = source_root / "contracts" / "blender-authoring-schema-v1.json"
     document = json.loads(path.read_text(encoding="utf-8"))
@@ -288,11 +343,13 @@ def _run_authoring(output: Path, source_root: Path) -> dict:
     _check(rows, failures, "native_redo_readback", redo_ok)
 
     asset = _create_mesh_asset(output, rows, failures)
+    sprite_sheet = _create_sprite_sheet(output, rows, failures)
 
     checkpoint = output / "checkpoint.blend"
     bpy.ops.wm.save_as_mainfile(filepath=str(checkpoint))
     _check(rows, failures, "checkpoint_under_output", checkpoint.is_file() and checkpoint.parent == output)
     expected = {"snapshot": _snapshot(obj, action), "asset": asset,
+                "sprite_sheet": sprite_sheet,
                 "sha256": _sha(checkpoint), "template_id": template["template_id"]}
     (output / "expected.json").write_text(json.dumps(expected, indent=2, sort_keys=True) + "\n",
                                           encoding="utf-8")
@@ -321,11 +378,14 @@ def _run_reopen(output: Path) -> int:
     asset_path = output / "avatar.glb"
     asset_ok = (asset_obj is not None and observed_asset == expected["asset"]["snapshot"]
                 and asset_path.is_file() and _sha(asset_path) == expected["asset"]["sha256"])
+    sprite_path = output / "sprite_sheet.png"
+    sprite_ok = (sprite_path.is_file() and _sha(sprite_path) == expected["sprite_sheet"]["sha256"])
     report = {"schema": SCHEMA, "actual_blender": True, "version": "5.2.1",
               "runtime_authorized": False, "formal_acceptance": False,
-              "reopened": observed == expected["snapshot"] and asset_ok, "observed": observed,
+              "reopened": observed == expected["snapshot"] and asset_ok and sprite_ok,
+              "observed": observed,
               "expected": expected["snapshot"], "asset_reopened": asset_ok,
-              "asset_observed": observed_asset}
+              "asset_observed": observed_asset, "sprite_sheet_reopened": sprite_ok}
     (output / "reopen.json").write_text(json.dumps(report, indent=2, sort_keys=True) + "\n",
                                          encoding="utf-8")
     print("O2_BLENDER_REOPEN " + json.dumps(report, sort_keys=True), flush=True)

@@ -423,3 +423,30 @@ The earlier run01 direct-script attempt is retained as a harness failure and is
 not included in the PASS claim. This checkpoint proves asset import/readback
 only; sprite-sheet rendering, gameplay fixture E2E, save/reload ACK and AUTH-05
 remain open. `AUTHORITY=0`; GT-06 is still unaccepted.
+
+
+### 2026-09-29 Blender sprite-sheet → Godot import checkpoint
+
+The pinned Blender probe now renders a deterministic four-cell 128×128 PNG
+through Blender Workbench, saves it beside the authored GLB, and verifies the
+image dimensions after reopening the `.blend`. Run
+`o2-blender-spritesheet-native-20260929-23` passed **24/24** with native and
+reopen exits 0; source closure is
+`ce3b08187196efe1d56e343a7ba27bc2b55c8fdcc09dcf55b88a0e02e7a17f84` and the
+sheet SHA-256 is
+`135c89ba646d3ee77ab7efddb890d2f8871cf936eefd035c3793c93e7eaed708` (14,635
+bytes).
+
+Disposable Godot run `o2-blender-godot-import-20260929-07` imported both the
+GLB and PNG with the pinned 4.7.2 Windows console binary. The editor and main
+scene exited 0 with no warnings; runtime readback observed the expected 4
+vertices, 4 UVs, material, and 128×128 opaque sprite pixel. The combined raw
+package is `o2-blender-spritesheet-godot-20260929-01-sealed.zip` (43 members,
+ZIP SHA-256
+`3d50b2ab48d637c6d0b349ce3664330d37cda0b14ad9649744b097266fd4c4e7`, external
+manifest SHA-256
+`e9697c2799083877b77716764e0bfced7021c851e2df74547345e98bcc6b939d`).
+The earlier warning-producing run05 and harness-fix attempts remain raw and are
+not used for the PASS claim. This closes only the Blender asset → Godot import
+readback path; sprite animation timing, gameplay integration, save/reload ACK
+and AUTH-05 remain open. `AUTHORITY=0`; GT-06 is still unaccepted.
