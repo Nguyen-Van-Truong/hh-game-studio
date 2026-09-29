@@ -140,3 +140,31 @@ Treat exit 0 as lifecycle proof, not performance acceptance. Budget diagnostic
 storage as measured process memory; retaining bounded data can still exceed
 the gate. Preserve failed runs and distinguish a demonstrated allocation
 improvement from an unproven whole-workload repair.
+
+## Diagnostic05 closeout
+
+`gt06-memory-diagnostic-05` ended after 27 complete command-only batches with
+actual child exit 1 and `TERMINAL_TIMEOUT` in batch 27. The host Job was closed,
+zero active descendants were observed, the wrapper handle was closed and not
+retained, and cleanup recorded no cleanup errors. The final phase snapshot
+validated with no unfinished spans and recorded a real first lookup failure.
+
+The partial series is diagnostic only: baseline private commit from batches
+2–4 was 32,964,608 bytes; the largest measured batch 5–26 value was 42,246,144
+bytes (+28.156%). It recorded status gaps of 2,015.2852 ms at batch 7 and
+2,046.7385 ms at batch 22. No editor or native Godot process was involved.
+The raw package is
+`studio/.local/reviews/gt06-memory05-closeout-20260929`; its 126-member ZIP is
+CRC/member-hash verified with SHA256
+`a14b065a57ca8a45d174e0f8bb53009a96d7377b4fea36c89505c863ed5f89b3`, and its
+analysis SHA256 is
+`a24b34d40b33a19ec23c5d205180e8565e31cfb783906e9f5897f311767bbb4b`.
+The tracked package manifest is not an acceptance verdict.
+
+The final timed lookup spent about 2.05 seconds in `client.headers`, while the
+matching server lookup and journal snapshot held the journal guard for about
+2.28 seconds. The journal was 26,436,349 bytes at batch 26. This establishes a
+credible scaling boundary for the existing full-history verification path; it
+does not prove a single root cause for all earlier private-commit growth. The
+first-failure phase recorder was exercised, so the compact-row repair is not
+the complete fix. Do not rerun unchanged formal09.
