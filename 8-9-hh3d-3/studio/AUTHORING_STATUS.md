@@ -399,3 +399,27 @@ external manifest SHA-256 is
 This proves Blender-side geometry/UV/material and export/reopen only. Godot GLB
 import/readback, sprite-sheet rendering, and full two-fixture content E2E remain
 open; `AUTHORITY=0`.
+
+
+### 2026-09-29 Blender GLB → Godot import/readback checkpoint
+
+Disposable run `o2-blender-godot-import-20260929-03` imported the GLB produced by
+the pinned Blender run into the pinned Godot 4.7.2 Windows console binary. The
+editor import exited **0**, then the declared main scene instantiated the
+imported asset and read back **4 vertices, 4 UVs and a StandardMaterial3D** with
+the expected base color; the runtime exited **0** and emitted the structured
+`HH_GLB_IMPORT` record. The run ended with no owned process or Job residue and
+the source project was unchanged.
+
+The Godot executable SHA-256 is
+`c8f0a6bc45a19b33541501e57f6f7cd972ab18453743266339d495cbbe846643`; the GLB
+SHA-256 remains
+`5f78b1d15a8391c2a77fc3dd87d9afe69909c99c4703e78e33196b60b5b13054`. Raw
+evidence is sealed in `o2-blender-godot-import-20260929-03-sealed.zip` (ZIP
+SHA-256 `8b16238f992416425aad7bfbf3e581f196028af497fbe73159027ea1c4953258`)
+with external manifest SHA-256
+`1659b759620d063bf9b9c1d3c82a7541971b6c134a62a7df1db3941026992adf`.
+The earlier run01 direct-script attempt is retained as a harness failure and is
+not included in the PASS claim. This checkpoint proves asset import/readback
+only; sprite-sheet rendering, gameplay fixture E2E, save/reload ACK and AUTH-05
+remain open. `AUTHORITY=0`; GT-06 is still unaccepted.
