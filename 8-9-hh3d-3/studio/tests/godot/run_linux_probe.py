@@ -309,11 +309,24 @@ def sandbox_binding(destination: Path, case: dict, result: dict, binding: dict) 
         raise ValueError('guarded container command/mount mismatch')
 
 
-def case_observation(destination: Path, case: dict, *, name: str, binding: dict) -> dict:
-    result = json.loads((destination / 'result.json').read_text(encoding='utf-8'))
-    expected = {path: hashlib.sha256(case[key].encode('utf-8')).hexdigest()
+def case_files(case: dict) -> dict[str, bytes]:
+    values = {path: case[key].encode('utf-8')
         for path, key in (('project.godot', 'project'), ('scenes/fixture.tscn', 'scene'),
                           ('scripts/fixture_actor.gd', 'script'))}
+    extras = case.get('extra_files', {})
+    if type(extras) is not dict:
+        raise ValueError('fixture extra files must be a mapping')
+    for path, content in extras.items():
+        if (type(path) is not str or type(content) is not str or path in values
+                or not re.fullmatch(r'(scenes|scripts)/[A-Za-z0-9_-]+\.(tscn|gd)', path)):
+            raise ValueError('invalid fixture extra file')
+        values[path] = content.encode('utf-8')
+    return values
+
+
+def case_observation(destination: Path, case: dict, *, name: str, binding: dict) -> dict:
+    result = json.loads((destination / 'result.json').read_text(encoding='utf-8'))
+    expected = {path: hashlib.sha256(raw).hexdigest() for path, raw in case_files(case).items()}
     actual = {path: sha(destination / 'snapshot' / path) for path in expected}
     if (actual != expected or result.get('input_hashes_before') != expected
             or result.get('input_hashes_after') != expected or result.get('snapshot_hashes_after') != expected
@@ -411,9 +424,8 @@ def main() -> int:
         (project / 'scenes').mkdir(parents=True, exist_ok=False)
         (project / 'scripts').mkdir()
         (project / '.godot').mkdir()
-        (project / 'project.godot').write_text(case['project'], encoding='utf-8', newline='\n')
-        (project / 'scenes/fixture.tscn').write_text(fixtures.SCENE, encoding='utf-8', newline='\n')
-        (project / 'scripts/fixture_actor.gd').write_text(case['script'], encoding='utf-8', newline='\n')
+        for path, raw in case_files(case).items():
+            (project / path).write_bytes(raw)
         result = executor.run(project, mode=case['mode'], output=destination, timeout_seconds=case['timeout'])
         row = case_observation(destination, case, name=name, binding=binding)
         save(observation, row)

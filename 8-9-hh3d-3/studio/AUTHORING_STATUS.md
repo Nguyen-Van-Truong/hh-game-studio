@@ -253,3 +253,36 @@ tests pass **9 tests**, actual exit 0 (`python -B -m unittest
 studio.tests.godot.test_gameplay_source_profile`). No Godot, Blender, Docker,
 network, or measured GT-06 source was run or changed. A fresh native O2
 diagnostic remains required after formal06 before any broader claim.
+
+
+### 2026-09-29 bounded scene/script inventory and native follow-up
+
+The gameplay-source executor now admits the exact bounded inventory under
+`scenes/` and `scripts/`, while still requiring `fixture.tscn` and
+`fixture_actor.gd`. Every admitted byte is read with the profile limits and
+bound through `validate_source_bundle`; the implementation still reports
+`dependency_closure_verified=false` because it does not infer Godot's complete
+scene/UID/dynamic-load closure. The runner now binds extra fixture files into
+raw input and observation manifests, so a multi-file case cannot pass by
+checking only the primary script.
+
+Focused static regression tests passed **68 tests**, actual exit 0, after the
+executor/profile pin and lock were reminted. Native campaign
+`o2-gameplay-source-20260929-01` ran five selected fixtures with the pinned
+Godot binary and Docker executor; the outer host process exited 0, all five
+fixtures were observed, source remained unchanged, and all owned containers and
+handles were released. The cases were the ordinary gameplay source, a
+scene-plus-shared-script multi-file case, spawn observation, path/network
+boundary observation, and the busy watchdog. Frozen source closure is
+`a4ffeecfc962cabcf46e576e63751bf826586afdb1c7a3725149f6d68b277900`. The raw
+package has 460 members; ZIP SHA-256
+`fe59fcf11bddc41f41b02a7f265ddeeae2ff403fda11a4648a3597e996855995`; manifest
+SHA-256
+`64d5f6afcd994719ca392ef0b9bddb26e8fc34b45945a74a6e3c202036484e75`.
+
+This remains `AUTHORITY=0`: no public ACK, sandbox acceptance, or complete
+Godot dependency-closure proof follows from this diagnostic. The native run
+revalidates bounded admission and lifecycle behavior only. Remaining O2 gaps
+are the real fixture gap table, public adapter/save-reload integration,
+AUTH-05 review, and Blender GLB/sprite-sheet pipeline checks. Do not merge this
+branch or open GT-07 before GT-06 is accepted.

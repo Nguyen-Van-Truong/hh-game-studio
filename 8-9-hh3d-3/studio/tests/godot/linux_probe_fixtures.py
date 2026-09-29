@@ -254,3 +254,36 @@ func _ready() -> void:
 \t\tpass
 ''',
 }
+
+# Exercise both PackedScene and GDScript dependencies through the byte inventory.
+# The fixture's movement needs the instantiated scene's value and shared method.
+FIXTURES['gameplay_source_multifile'] = {
+    'mode': 'gameplay-source', 'timeout': 20, 'expect': 'gameplay_source',
+    'script': '''extends Node3D
+const Motion = preload("res://scripts/shared_motion.gd")
+const Mover: PackedScene = preload("res://scenes/mover.tscn")
+var ticks: int = 0
+var mover: Node3D
+func _ready() -> void:
+\tmover = Mover.instantiate() as Node3D
+\tadd_child(mover)
+func _physics_process(_delta: float) -> void:
+\tticks += 1
+\tposition.x += Motion.step_size(mover)
+\tif ticks == 12:
+\t\tprint("HH_PROBE_PLAY " + JSON.stringify({"ticks": ticks, "x": position.x}))
+\t\tget_tree().quit(0)
+''',
+    'extra_files': {
+        'scripts/shared_motion.gd': '''extends Node3D
+static func step_size(actor: Node3D) -> float:
+\treturn actor.position.y
+''',
+        'scenes/mover.tscn': '''[gd_scene load_steps=2 format=3]
+[ext_resource type="Script" path="res://scripts/shared_motion.gd" id="1"]
+[node name="Mover" type="Node3D"]
+position = Vector3(0, 1, 0)
+script = ExtResource("1")
+''',
+    },
+}

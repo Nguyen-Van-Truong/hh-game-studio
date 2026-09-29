@@ -22,7 +22,7 @@ BINARY_NAME = 'Godot_v4.7.2-stable_linux.x86_64'
 BINARY_SHA256 = '8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e'
 IMAGE_ID = 'sha256:581429e3df12d76e6af4be5ab7d0e7fc2013eb57dc23d2de691411c8efdbb970'
 OWNED_RUNNER_SHA256 = 'ea522450acc46f90be5e2a7b9257e73ce8b619948105b2c9073aac1f881c7328'
-LOCK_SHA256 = '91f4a301cdba6e6c4a730e9ecdaa1579dfd255aa3eca1c2ebbf81028737dff76'
+LOCK_SHA256 = '016f494e7dcb5496136424219014aa2dc1525835cdcc0d6fe34f686a585362ee'
 PROJECT_TEMPLATE = ('config_version=5\n[application]\nconfig/name="HH GT03 Linux validator"\n'
                     '[rendering]\nrenderer/rendering_method="gl_compatibility"\n'
                     '[threading]\nworker_pool/max_threads=4\n')
@@ -40,7 +40,7 @@ _INCOMPLETE_CLI_HOLDS: list = []
 _INCOMPLETE_ADMISSION_HOLDS: list = []
 PROFILE_BOOTSTRAP_SHA256 = 'efde8370a6157ed2f66544ee13b82ee2556b59130f5306e9e0774ed0e3be79a5'
 SANDBOX_BOOTSTRAP_SHA256 = '677f659a04f1a7a58a87b5216295fa887fc82569570088b03e7d1508e2fcfc21'
-GAMEPLAY_PROFILE_SHA256 = 'd8355bfb1aa2f32234edc255746bf5d5aa3ccd4f3b7561e483311e6b44745803'
+GAMEPLAY_PROFILE_SHA256 = '07722ba55add88f5c41434b75f32471206b542ea1a188d2011e8027386383feb'
 GUARDED_MODES = ('guarded-parse', 'guarded-import', 'guarded-play')
 GAMEPLAY_MODE = 'gameplay-source'
 SANDBOX_MODES = GUARDED_MODES + (GAMEPLAY_MODE,)
@@ -236,10 +236,35 @@ def _gameplay_profile():
 
 
 def _gameplay_project_bytes(project: Path) -> dict[str, bytes]:
+    """Admit the complete bounded scene/script inventory before Docker.
+
+    The old path admitted only one script even when the scene referenced
+    additional source.  This still does not infer Godot's runtime closure, but
+    it binds every UTF-8 scene/script byte supplied to the diagnostic and
+    prevents an unlisted file from entering the snapshot.
+    """
     profile = _gameplay_profile()
-    values = _project_bytes(project, template=profile.PROJECT_TEMPLATE)
-    scripts = {name: raw for name, raw in values.items() if name.startswith('scripts/')}
-    profile.validate_source_bundle(scripts, entrypoint='scripts/fixture_actor.gd')
+    names = _names(project)
+    _need(names in ({'project.godot', 'scenes', 'scripts'},
+                    {'project.godot', 'scenes', 'scripts', '.godot'}),
+          'EXECUTOR_EXTRA_INPUT')
+    if '.godot' in names:
+        _need(not _names(project / '.godot'), 'EXECUTOR_NONEMPTY_CACHE')
+    scene_names = _names(project / 'scenes', maximum=profile.MAX_FILES)
+    script_names = _names(project / 'scripts', maximum=profile.MAX_FILES)
+    _need('fixture.tscn' in scene_names and 'fixture_actor.gd' in script_names,
+          'EXECUTOR_REQUIRED_FIXTURE')
+    values = {'project.godot': _read_file(project / 'project.godot', FILE_LIMITS['project.godot'])}
+    _need(values['project.godot'] == profile.PROJECT_TEMPLATE.encode(), 'EXECUTOR_PROJECT_TEMPLATE')
+    source_files = {}
+    for directory, names_in_directory in (('scenes', scene_names), ('scripts', script_names)):
+        for name in sorted(names_in_directory):
+            relative = directory + '/' + name
+            maximum = profile.MAX_BYTES
+            raw = _read_file(project / relative, maximum)
+            values[relative] = raw
+            source_files[relative] = raw
+    profile.validate_source_bundle(source_files, entrypoint='scripts/fixture_actor.gd')
     return values
 
 

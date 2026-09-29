@@ -280,12 +280,13 @@ class LinuxProbeEvidenceTests(unittest.TestCase):
             (case_dir / 'engine-stdout.txt').write_text('', encoding='utf-8')
             (case_dir / 'engine-stderr.txt').write_text('', encoding='utf-8')
             case = {'expect': 'clean_process', 'script': 'extends Node3D\n', 'mode': 'parse', 'timeout': 20,
-                'project': 'fixture project', 'scene': 'fixture scene'}
+                'project': 'fixture project', 'scene': 'fixture scene',
+                'extra_files': {'scripts/shared.gd': 'extends Node3D\n',
+                                'scenes/extra.tscn': '[gd_scene format=3]\n'}}
             manifest = {}
-            for path, key in (('project.godot', 'project'), ('scenes/fixture.tscn', 'scene'), ('scripts/fixture_actor.gd', 'script')):
+            for path, raw in probe.case_files(case).items():
                 target = case_dir / 'snapshot' / path
                 target.parent.mkdir(parents=True, exist_ok=True)
-                raw = case[key].encode('utf-8')
                 target.write_bytes(raw)
                 manifest[path] = hashlib.sha256(raw).hexdigest()
             self.result.update(input_hashes_before=manifest, input_hashes_after=manifest,
@@ -318,9 +319,18 @@ class LinuxProbeEvidenceTests(unittest.TestCase):
             (case_dir / 'unexpected.txt').write_text('additional artifact', encoding='utf-8')
             with self.assertRaises(ValueError):
                 probe.resume_case(case_dir, observation, case, name='valid', binding=binding)
-            for replacement in ({'mode': 'import'}, {'script': 'extends Resource\n'}, {'timeout': 10}):
+            for replacement in ({'mode': 'import'}, {'script': 'extends Resource\n'}, {'timeout': 10},
+                                {'extra_files': {}},
+                                {'extra_files': {'scripts/shared.gd': 'extends Resource\n'}}):
                 with self.assertRaises(ValueError):
                     probe.case_observation(case_dir, {**case, **replacement}, name='transplanted', binding=binding)
+
+    def test_fixture_files_cannot_escape_or_replace_primary_source(self):
+        case = {'project': 'project', 'scene': 'scene', 'script': 'script'}
+        for path in ('../escape.gd', 'scripts/../escape.gd', 'C:/outside.gd',
+                     'scripts/fixture_actor.gd', 'scenes/fixture.tscn', 'project.godot'):
+            with self.subTest(path=path), self.assertRaises(ValueError):
+                probe.case_files({**case, 'extra_files': {path: 'bad'}})
 
 
 if __name__ == '__main__':

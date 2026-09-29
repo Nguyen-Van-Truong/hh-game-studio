@@ -62,8 +62,16 @@ class GuardedExecutorTests(unittest.TestCase):
             (project / 'scenes/fixture.tscn').write_bytes(
                 b'[gd_scene format=3]\n[node name="Fixture" type="Node3D"]\n')
             (project / 'scripts/fixture_actor.gd').write_bytes(b'extends Node3D\n')
+            (project / 'scenes/arena.tscn').write_bytes(
+                b'[gd_scene format=3]\n[node name="Arena" type="Node2D"]\n')
+            (project / 'scripts/shared.gd').write_bytes(b'extends Node\n')
             values = executor._gameplay_project_bytes(project)
             self.assertIn('scripts/fixture_actor.gd', values)
+            self.assertIn('scenes/arena.tscn', values)
+            self.assertIn('scripts/shared.gd', values)
+            self.assertEqual(set(values), {'project.godot', 'scenes/arena.tscn',
+                                           'scenes/fixture.tscn', 'scripts/fixture_actor.gd',
+                                           'scripts/shared.gd'})
             profile = executor._gameplay_profile()
             bundle = profile.validate_source_bundle(
                 {'scripts/fixture_actor.gd': b'extends Node3D\n',
@@ -81,6 +89,25 @@ class GuardedExecutorTests(unittest.TestCase):
                              'Destination': '/harness', 'RW': False, 'Propagation': 'rprivate'})
         executor._validate_inspect(row, name=NAME, container_id=CID, mode='gameplay-source',
                                    tool=tool, snapshot=snapshot, image_environment=IMAGE_ENV)
+
+    def test_invalid_secondary_source_is_rejected_before_docker_or_snapshot(self):
+        for extra in ({'scenes/secondary.tscn': b'\xff'},
+                      {'scripts/secondary.gd': b'extends Node\x00'},
+                      {f'scripts/extra{i}.gd': b'#' * 16384 for i in range(16)},
+                      {f'scripts/extra{i}.gd': b'extends Node\n' for i in range(63)}):
+            with self.subTest(files=len(extra)), tempfile.TemporaryDirectory() as directory:
+                project = Path(directory) / 'input'
+                write_project(project)
+                profile = executor._gameplay_profile()
+                (project / 'project.godot').write_bytes(profile.PROJECT_TEMPLATE.encode())
+                for name, raw in extra.items():
+                    (project / name).write_bytes(raw)
+                output = Path(directory) / 'output'
+                with patch.object(executor, '_cli') as cli:
+                    with self.assertRaises(profile.GameplaySourceError):
+                        executor.run(project, mode='gameplay-source', output=output)
+                    cli.assert_not_called()
+                    self.assertFalse(output.exists())
 
     def test_guarded_inspect_rejects_missing_mutable_foreign_or_unprotected_harness(self):
         tool, snapshot = Path('C:/tool'), Path('C:/out/snapshot')
