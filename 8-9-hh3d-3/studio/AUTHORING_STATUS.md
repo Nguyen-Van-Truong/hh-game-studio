@@ -528,3 +528,11 @@ and source closure
 This closes the Blender atlas → Godot import/save/reload/animation diagnostic
 path only; it does not close gameplay-source adapter integration, AUTH-05,
 GT-06 or public ACK. `AUTHORITY=0`.
+
+### 2026-09-29 AUTH-05 gameplay-source executor closure diagnostic
+
+The first four-fixture dispatch `o2-gameplay-source-native-20260929-04` is retained as a host-preflight failure: the pinned Godot 4.7.2 Linux binary was absent from the local tooling root, so the executor stopped before Docker (`EXECUTOR_HOST_FileNotFoundError`, no command host/container evidence). The binary was restored from the declared official archive; archive SHA-256 is `cadd3204e728a35d3f13adb7fd0d7902636b79f6b95c40c265eb73b6c35329e4` and executable SHA-256 is `8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e`.
+
+Fresh run `o2-gameplay-source-native-20260929-05` then exercised `gameplay_source`, `gameplay_source_arena_2d`, `gameplay_source_room_3d` and `gameplay_source_spawn`. All four child/container exits and host attach exits were 0; each had `fixture_observed=true`, supervisor binding verified, Job active count 0, owned container removed, input/snapshot/binary hashes unchanged, no timeout, no stream errors and no retained owner record. The frozen source closure is `c96be8d92cd9b2573663a1dbfc0121dbc8a26ee2c784df20653347024b91344b`; 62 focused pure tests pass with exit 0. Raw evidence is preserved under `studio/.local/reviews/o2-gameplay-source-native-20260929-05`; sealed package has 417 members, ZIP SHA-256 `6a6dc31e7c0193535ff6874c298d4182c930192e126f853eb2ad412e5eb00eb0`, external manifest SHA-256 `261b64f2007a5aa2210c405af8bd4f3f937eb672af49c5778a688c95f3726124`.
+
+This is AUTHORITY=0 diagnostic evidence that the bounded Docker executor can validate the four gameplay-source fixture profiles and clean up its owned process/container. It does not prove OS sandbox acceptance, real Godot gameplay authoring, adapter publication/save-reload ACK, or GT-06 acceptance. `GT07` remains unopened and O2 remains unmerged.
