@@ -39,13 +39,30 @@ GAMEPLAY_PHASE_EVENTS = tuple(event for phase in ('parse', 'import', 'play')
 def gameplay_transcript(case: dict, stdout: str, stderr: str) -> bool:
     """Recognize the full fixture transcript, never attest untrusted gameplay."""
     kind = case['expect']
-    expected = GAMEPLAY_PHASE_EVENTS[:-1] if kind == 'watchdog' else GAMEPLAY_PHASE_EVENTS
-    if kind == 'engine_rejection':
-        expected = ('HH_GAMEPLAY_PHASE_BEGIN parse', GUARD_MARKER,
-                    'HH_GAMEPLAY_PHASE_END parse 1')
+    primary = 'scripts/fixture_actor.gd'
+    scripts = [primary] + sorted(name for name in case.get('extra_files', {})
+                                if name.startswith('scripts/') and name.endswith('.gd'))
+    rejected_path = case.get('parse_error_path', primary) if kind == 'engine_rejection' else None
+    if rejected_path is not None and rejected_path not in scripts:
+        return False
+    expected = ['HH_GAMEPLAY_PHASE_BEGIN parse']
+    parsed = 0
+    for script in scripts:
+        code = 1 if script == rejected_path else 0
+        if script != primary:
+            expected.append('HH_GAMEPLAY_MODULE_BEGIN ' + script)
+        expected.append(GUARD_MARKER)
+        if script != primary:
+            expected.append('HH_GAMEPLAY_MODULE_END ' + script + ' ' + str(code))
+        parsed += 1
+        if code:
+            break
+    expected.append('HH_GAMEPLAY_PHASE_END parse ' + ('1' if rejected_path else '0'))
+    if rejected_path is None:
+        expected.extend(GAMEPLAY_PHASE_EVENTS[3:-1] if kind == 'watchdog' else GAMEPLAY_PHASE_EVENTS[3:])
     events = tuple(line for line in stdout.splitlines()
-                   if line.startswith(('HH_GAMEPLAY_PHASE_', 'HH_GAMEPLAY_OS_GUARD')))
-    if events != expected or re.search(r'ERROR|WARNING|leaked', stdout, re.IGNORECASE):
+                   if line.startswith(('HH_GAMEPLAY_PHASE_', 'HH_GAMEPLAY_OS_GUARD', 'HH_GAMEPLAY_MODULE_')))
+    if events != tuple(expected) or re.search(r'ERROR|WARNING|leaked', stdout, re.IGNORECASE):
         return False
     if kind == 'engine_rejection':
         reasons = case.get('parse_errors')
@@ -53,17 +70,17 @@ def gameplay_transcript(case: dict, stdout: str, stderr: str) -> bool:
                 or any(type(reason) is not str or not reason for reason in reasons)
                 or any(line.startswith('HH_PROBE_') for line in stdout.splitlines())):
             return False
-        errors = GUARDED_STARTUP_ERROR + ''.join(
+        errors = GUARDED_STARTUP_ERROR * parsed + ''.join(
             'SCRIPT ERROR: Parse Error: ' + reason + '\n'
-            '          at: GDScript::reload (res://scripts/fixture_actor.gd:2)\n'
+            '          at: GDScript::reload (res://' + rejected_path + ':2)\n'
             for reason in reasons)
-        errors += ('ERROR: Failed to load script "res://scripts/fixture_actor.gd" with error "Parse error".\n'
+        errors += ('ERROR: Failed to load script "res://' + rejected_path + '" with error "Parse error".\n'
                    '   at: load (modules/gdscript/gdscript_resource_format.cpp:46)\n')
         return stderr.replace('\r\n', '\n') == errors
     # A watchdog fixture must reach play, so all three startups and the import
     # listener denials precede its loop. Two startup errors alone mean import
     # was interrupted; they cannot prove hostile play-loop termination.
-    errors = GAMEPLAY_STARTUP_ERRORS
+    errors = GUARDED_STARTUP_ERROR * (parsed - 1) + GAMEPLAY_STARTUP_ERRORS
     if kind == 'spawn_observation':
         errors += ('ERROR: Cannot create pipe from command: "/usr/bin/printf" "HH_UNEXPECTED_CHILD" 2>&1.\n'
                    '   at: execute (drivers/unix/os_unix.cpp:899)\n'

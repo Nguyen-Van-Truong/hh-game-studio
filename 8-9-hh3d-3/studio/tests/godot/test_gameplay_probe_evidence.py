@@ -114,6 +114,25 @@ class GameplayProbeEvidenceTests(unittest.TestCase):
             bad['command_host']['exit_code'] = bad['container_state']['ExitCode'] = code
             bad['docker_wait_exit'] = code
             self.assertFalse(self.check(result=bad)['fixture_observed'])
+
+    def test_secondary_rejection_requires_its_direct_parse_before_any_import(self):
+        self.rejection()
+        self.case.update(extra_files={'scripts/unused.gd': 'bad source'},
+                         parse_error_path='scripts/unused.gd')
+        self.stdout = ('HH_GAMEPLAY_PHASE_BEGIN parse\n' + probe.GUARD_MARKER + '\n'
+            'HH_GAMEPLAY_MODULE_BEGIN scripts/unused.gd\n' + probe.GUARD_MARKER + '\n'
+            'HH_GAMEPLAY_MODULE_END scripts/unused.gd 1\nHH_GAMEPLAY_PHASE_END parse 1\n')
+        self.stderr = probe.GUARDED_STARTUP_ERROR + self.stderr.replace(
+            'scripts/fixture_actor.gd', 'scripts/unused.gd')
+        self.assertTrue(self.check()['fixture_observed'])
+        for output in (self.stdout.replace('MODULE_END scripts/unused.gd 1',
+                                          'MODULE_END scripts/unused.gd 0'),
+                       self.stdout.replace('MODULE_BEGIN scripts/unused.gd',
+                                           'MODULE_BEGIN scripts/other.gd'),
+                       self.stdout + 'HH_GAMEPLAY_PHASE_BEGIN import\n'):
+            self.assertFalse(self.check(stdout=output)['fixture_observed'])
+        self.assertFalse(self.check(stderr=self.stderr.replace(
+            'scripts/unused.gd', 'scripts/fixture_actor.gd'))['fixture_observed'])
         for mutate in (lambda r: r['command_host'].update(timed_out=True),
                        lambda r: r['command_host'].update(stream_cap_exceeded=True),
                        lambda r: r.update(owned_removed=False),

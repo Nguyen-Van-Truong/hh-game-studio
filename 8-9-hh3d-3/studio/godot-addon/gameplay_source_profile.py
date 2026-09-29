@@ -121,9 +121,20 @@ def driver() -> str:
     """
     return (
         'import subprocess,sys\n'
+        'from pathlib import Path\n'
+        'primary="scripts/fixture_actor.gd"\n'
+        'scripts=sorted(p.relative_to("/project").as_posix() for p in Path("/project/scripts").rglob("*.gd") if p.is_file())\n'
+        'if primary not in scripts or len(scripts)>64:sys.exit(45)\n'
+        'scripts=[primary]+[p for p in scripts if p!=primary]\n'
         'for phase in ("parse","import","play"):\n'
         ' print("HH_GAMEPLAY_PHASE_BEGIN "+phase,flush=True)\n'
-        ' code=subprocess.run(["/usr/local/bin/python3","-I","-B",'
-        '"/harness/gameplay_sandbox.py",phase],stdin=subprocess.DEVNULL).returncode\n'
+        ' for script in (scripts if phase=="parse" else [None]):\n'
+        '  secondary=script is not None and script!=primary\n'
+        '  if secondary:print("HH_GAMEPLAY_MODULE_BEGIN "+script,flush=True)\n'
+        '  argv=["/usr/local/bin/python3","-I","-B","/harness/gameplay_sandbox.py",phase]\n'
+        '  if script is not None:argv.append(script)\n'
+        '  code=subprocess.run(argv,stdin=subprocess.DEVNULL).returncode\n'
+        '  if secondary:print("HH_GAMEPLAY_MODULE_END "+script+" "+str(code),flush=True)\n'
+        '  if code!=0:break\n'
         ' print("HH_GAMEPLAY_PHASE_END "+phase+" "+str(code),flush=True)\n'
         ' if code!=0:sys.exit(45)\n')

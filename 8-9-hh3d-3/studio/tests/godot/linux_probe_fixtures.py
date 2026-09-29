@@ -287,3 +287,14 @@ script = ExtResource("1")
 ''',
     },
 }
+
+# The main script never loads these modules. They must fail during the explicit
+# bundle parse, before editor import or the main script's Play callback.
+for _negative in ('syntax_error', 'type_error', 'dependency_error'):
+    FIXTURES['gameplay_secondary_' + _negative] = {
+        'mode': 'gameplay-source', 'timeout': 20, 'expect': 'engine_rejection',
+        'script': FIXTURES['gameplay_source']['script'],
+        'extra_files': {'scripts/unused.gd': FIXTURES[_negative]['script']},
+        'parse_error_path': 'scripts/unused.gd',
+        'parse_errors': FIXTURES['gameplay_' + _negative]['parse_errors'],
+    }

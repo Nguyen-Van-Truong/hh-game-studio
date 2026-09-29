@@ -2,7 +2,6 @@
 import errno
 import importlib.util
 from pathlib import Path
-import tempfile
 import unittest
 from unittest.mock import patch
 
@@ -55,19 +54,16 @@ class GameplaySandboxTests(unittest.TestCase):
         for number in (0, 1, 2, 3, 9, 12, 59, 60, 202, 231, 257):
             self.assertEqual(evaluate(number), sandbox.ALLOW)
 
-    def test_parse_launcher_is_disposable_and_preloads_every_script(self):
-        with tempfile.TemporaryDirectory() as temp:
-            root = Path(temp) / 'project' / 'scripts'
-            root.mkdir(parents=True)
-            (root / 'fixture_actor.gd').write_text('extends Node3D\n', encoding='utf-8')
-            (root / 'nested').mkdir()
-            (root / 'nested' / 'shared.gd').write_text('extends Node\n', encoding='utf-8')
-            output = Path(temp) / 'parse-all.gd'
-            source = sandbox._parse_launcher(root, output)
-            generated = output.read_text(encoding='utf-8')
-            self.assertEqual(source, output.as_posix())
-            self.assertIn('preload("res://scripts/fixture_actor.gd")', generated)
-            self.assertIn('preload("res://scripts/nested/shared.gd")', generated)
+    def test_secondary_script_is_checked_directly_and_cannot_escape(self):
+        argv = sandbox.command('parse', parse_script='scripts/unused.gd')
+        self.assertEqual(argv[-3:], ['--check-only', '--script', 'res://scripts/unused.gd'])
+        for path in ('../outside.gd', '/tmp/a.gd', 'res://scripts/a.gd',
+                     'scripts/../a.gd', 'scripts//a.gd', 'scripts/./a.gd',
+                     'scripts/a.gd\n', 'scripts/a.txt', 'scripts\\a.gd', ''):
+            with self.subTest(path=path), self.assertRaisesRegex(ValueError, 'SCRIPT_PATH'):
+                sandbox.command('parse', parse_script=path)
+        with self.assertRaisesRegex(ValueError, 'SCRIPT_PATH'):
+            sandbox.command('play', parse_script='scripts/a.gd')
 
     def test_launcher_does_not_offer_arbitrary_program_or_arguments(self):
         for phase in ('parse', 'import', 'play', 'readback'):
