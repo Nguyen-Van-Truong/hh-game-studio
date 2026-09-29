@@ -48,6 +48,20 @@ class GameplayProbeEvidenceTests(unittest.TestCase):
             self.assertIs(row[key], False)
         self.assertIs(self.result['diagnostic_process_clean'], False)
 
+    def test_fixture_state_requires_exact_typed_gameplay_result(self):
+        self.case.update(expect='fixture_state', fixture_kind='arena_2d',
+                         expected_state={'ticks': 12, 'player_health': 4,
+                                         'bot_health': 0, 'projectile_hits': 2,
+                                         'pickups': 1, 'round_won': True})
+        self.stdout = self.stdout.replace(
+            'HH_PROBE_PLAY {"ticks":12,"x":12.0}',
+            'HH_PROBE_FIXTURE {"ticks":12,"player_health":4,"bot_health":0,"projectile_hits":2,"pickups":1,"round_won":true}')
+        self.assertTrue(self.check()['fixture_observed'])
+        for output in (self.stdout.replace('"round_won":true', '"round_won":false'),
+                       self.stdout.replace('HH_PROBE_FIXTURE', 'HH_PROBE_PLAY'),
+                       self.stdout + 'HH_PROBE_FIXTURE {"ticks":12}\n'):
+            self.assertFalse(self.check(stdout=output)['fixture_observed'])
+
     def test_phase_order_and_exactly_one_guard_per_phase_are_required(self):
         variants = [self.stdout.replace(probe.GUARD_MARKER + '\n', '', 1),
             self.stdout + probe.GUARD_MARKER + '\n',

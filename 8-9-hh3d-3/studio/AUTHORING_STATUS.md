@@ -333,3 +333,29 @@ it does not prove arbitrary Godot dependency closure, AUTH-05 OS isolation,
 public adapter/save-reload integration or a publishable gameplay capability.
 `AUTHORITY=0`, `public_ack=false`, `sandbox_acceptance=false`; GT-06 remains
 unaccepted and this branch must not merge or open GT-07.
+
+
+### 2026-09-29 typed gameplay fixture checkpoint
+
+Two fixture-scoped typed GDScript cases now run through the same guarded
+`gameplay-source` profile. `gameplay_source_arena_2d` exercises a deterministic
+health, pickup, projectile-hit, bot-defeat and win transition;
+`gameplay_source_room_3d` exercises typed avatar movement, camera-follow state,
+two interactions and UI visibility. The evidence parser requires the exact
+JSON state and the complete parse/import/play transcript, so a forged or partial
+marker is rejected.
+
+Native run `o2-fixture-state-20260929-01` observed **2/2** cases with captured
+outer exit **0**, actual child/container exits 0, closed Jobs, removed owned
+containers and unchanged source. Closure is
+`6e542b9d0a40c1bd734666854ae269b327e1d76f62f7047e5fa8e0049c4e144b` (219
+files). Sealed ZIP has 317 members, SHA-256
+`bfb7515be963d09013ab9cb1fa9da516aa4cc54a67ab998b6bb4d564a0b4a0d5`; external
+manifest SHA-256 is
+`9defe8a5d489edbf09e7cde2fae6913ddb4510a8beb33584a3386eda73f30ec3`. Focused
+pure regression now passes **80 tests**, actual exit 0.
+
+These are deterministic logic fixtures, not complete playable mini-games: they
+do not prove collision/input replay, Blender asset import, save/reload ACK,
+AUTH-05 acceptance or a public gameplay-source capability. `AUTHORITY=0` and
+GT-06/GT-07 status are unchanged.

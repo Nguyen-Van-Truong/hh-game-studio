@@ -89,7 +89,7 @@ def gameplay_transcript(case: dict, stdout: str, stderr: str) -> bool:
     elif kind == 'boundary_observation':
         errors += (GUARDED_SOCKET_ERROR + '   GDScript backtrace (most recent call first):\n'
                    '       [0] _ready (res://scripts/fixture_actor.gd:7)\n')
-    elif kind not in ('gameplay_source', 'watchdog'):
+    elif kind not in ('gameplay_source', 'fixture_state', 'watchdog'):
         return False
     return stderr.replace('\r\n', '\n') == errors
 
@@ -244,6 +244,10 @@ def evaluate(case: dict, result: dict, stdout: str, stderr: str) -> dict:
         details = marker(stdout, 'HH_PROBE_PLAY ')
         observed = (completed and details is not None and _integer(details.get('ticks'), 12)
             and type(details.get('x')) in (int, float) and details['x'] == 12.0)
+    elif kind == 'fixture_state':
+        details = marker(stdout, 'HH_PROBE_FIXTURE ')
+        observed = (completed and details == case.get('expected_state')
+                    and type(case.get('fixture_kind')) is str)
     elif kind == 'watchdog':
         observed = supervisor_watchdog
     elif kind == 'stream_cap':

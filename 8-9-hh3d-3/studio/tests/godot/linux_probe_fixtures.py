@@ -212,6 +212,67 @@ func _physics_process(_delta: float) -> void:
 \t\tget_tree().quit(0)
 ''',
 }
+FIXTURES['gameplay_source_arena_2d'] = {
+    'mode': 'gameplay-source', 'timeout': 20, 'expect': 'fixture_state',
+    'fixture_kind': 'arena_2d',
+    'expected_state': {
+        'ticks': 12, 'player_health': 4, 'bot_health': 0,
+        'projectile_hits': 2, 'pickups': 1, 'round_won': True,
+    },
+    'script': '''extends Node3D
+class PlayerState:
+\tvar health: int = 3
+\tvar x: float = 0.0
+
+func _ready() -> void:
+\tvar player := PlayerState.new()
+\tvar bot_health: int = 2
+\tvar projectile_hits: int = 0
+\tvar pickups: int = 0
+\tfor tick in range(12):
+\t\tplayer.x += 1.0
+\t\tif tick == 3:
+\t\t\tpickups += 1
+\t\t\tplayer.health += 1
+\t\tif tick == 5 or tick == 7:
+\t\t\tbot_health -= 1
+\t\t\tprojectile_hits += 1
+\tvar state := {"ticks": 12, "player_health": player.health,
+\t\t"bot_health": bot_health, "projectile_hits": projectile_hits,
+\t\t"pickups": pickups, "round_won": bot_health <= 0}
+\tprint("HH_PROBE_FIXTURE " + JSON.stringify(state))
+\tget_tree().quit(0)
+''',
+}
+FIXTURES['gameplay_source_room_3d'] = {
+    'mode': 'gameplay-source', 'timeout': 20, 'expect': 'fixture_state',
+    'fixture_kind': 'room_3d',
+    'expected_state': {
+        'ticks': 12, 'avatar_z': 6.0, 'camera_follow': True,
+        'switch_used': True, 'pickup_collected': True, 'ui_visible': True,
+    },
+    'script': '''extends Node3D
+class AvatarState:
+\tvar z: float = 0.0
+
+func _ready() -> void:
+\tvar avatar := AvatarState.new()
+\tvar camera_follow: bool = true
+\tvar switch_used: bool = false
+\tvar pickup_collected: bool = false
+\tfor tick in range(12):
+\t\tavatar.z += 0.5
+\t\tif tick == 4:
+\t\t\tswitch_used = true
+\t\tif tick == 8:
+\t\t\tpickup_collected = true
+\tvar state := {"ticks": 12, "avatar_z": avatar.z,
+\t\t"camera_follow": camera_follow, "switch_used": switch_used,
+\t\t"pickup_collected": pickup_collected, "ui_visible": true}
+\tprint("HH_PROBE_FIXTURE " + JSON.stringify(state))
+\tget_tree().quit(0)
+''',
+}
 FIXTURES['gameplay_source_spawn'] = {
     'mode': 'gameplay-source', 'timeout': 20, 'expect': 'spawn_observation',
     'script': '''extends Node3D
