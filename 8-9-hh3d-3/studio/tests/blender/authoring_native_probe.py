@@ -17,6 +17,9 @@ import threading
 
 import bpy
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from sprite_sheet_pixels import inspect_pixels
+
 
 SCHEMA = "hh-o2-blender-native-observation-1"
 
@@ -141,7 +144,11 @@ def _create_mesh_asset(output: Path, rows: list[dict], failures: list[str]) -> d
 
 def _create_sprite_sheet(output: Path, rows: list[dict], failures: list[str]) -> dict:
     """Render a deterministic four-cell sheet through Blender's native renderer."""
-    scene = bpy.context.scene
+    original_scene = bpy.context.scene
+    # A separate scene excludes all authored GLB/armature objects without
+    # changing their visibility, selection, camera or material state.
+    scene = bpy.data.scenes.new("O2_SpriteSheet")
+    scene.world = bpy.data.worlds.new("O2_SpriteWorld")
     camera_data = bpy.data.cameras.new("O2_SpriteCameraData")
     camera = bpy.data.objects.new("O2_SpriteCamera", camera_data)
     scene.collection.objects.link(camera)
@@ -155,11 +162,15 @@ def _create_sprite_sheet(output: Path, rows: list[dict], failures: list[str]) ->
     scene.render.resolution_y = 128
     scene.render.resolution_percentage = 100
     scene.render.image_settings.file_format = "PNG"
-    scene.render.film_transparent = False
+    scene.render.image_settings.color_mode = "RGBA"
+    scene.render.film_transparent = True
+    scene.view_settings.view_transform = "Standard"
     scene.display.shading.light = "FLAT"
     scene.display.shading.color_type = "MATERIAL"
     scene.display.shading.show_shadows = False
     scene.display.shading.show_cavity = False
+    scene.display.shading.show_specular_highlight = False
+    scene.display.shading.show_object_outline = False
     scene.world.color = (0.0, 0.0, 0.0)
     colors = ((0.9, 0.1, 0.1, 1.0), (0.1, 0.9, 0.1, 1.0),
               (0.1, 0.2, 0.9, 1.0), (0.9, 0.8, 0.1, 1.0))
@@ -180,7 +191,7 @@ def _create_sprite_sheet(output: Path, rows: list[dict], failures: list[str]) ->
         cells.append(cell)
     target = output / "sprite_sheet.png"
     scene.render.filepath = str(target)
-    result = bpy.ops.render.render(write_still=True)
+    result = bpy.ops.render.render(write_still=True, scene=scene.name)
     _check(rows, failures, "sprite_sheet_render",
            result == {"FINISHED"} and target.is_file() and target.stat().st_size > 0,
            result=sorted(result), size_bytes=target.stat().st_size if target.is_file() else None)
@@ -189,9 +200,16 @@ def _create_sprite_sheet(output: Path, rows: list[dict], failures: list[str]) ->
                 "channels": image.channels if image else 0}
     _check(rows, failures, "sprite_sheet_dimensions",
            observed == {"width": 128, "height": 128, "channels": 4}, observed=observed)
+    pixels = inspect_pixels(image.size[0], image.size[1], list(image.pixels)) if image else {"passed": False}
+    _check(rows, failures, "sprite_sheet_cells_and_gutters", pixels["passed"], observed=pixels)
+    isolated = (bpy.context.scene == original_scene and
+                set(scene.objects) == set(cells + [camera]) and
+                not set(scene.objects).intersection(original_scene.objects))
+    _check(rows, failures, "sprite_sheet_scene_isolated", isolated)
     if image is not None:
         bpy.data.images.remove(image)
-    return {"sha256": _sha(target), "size_bytes": target.stat().st_size, "dimensions": observed}
+    return {"sha256": _sha(target), "size_bytes": target.stat().st_size,
+            "dimensions": observed, "pixels": pixels}
 
 
 def _load_catalog(source_root: Path) -> dict:
@@ -380,12 +398,18 @@ def _run_reopen(output: Path) -> int:
                 and asset_path.is_file() and _sha(asset_path) == expected["asset"]["sha256"])
     sprite_path = output / "sprite_sheet.png"
     sprite_ok = (sprite_path.is_file() and _sha(sprite_path) == expected["sprite_sheet"]["sha256"])
+    image = bpy.data.images.load(str(sprite_path), check_existing=False) if sprite_ok else None
+    pixels = inspect_pixels(image.size[0], image.size[1], list(image.pixels)) if image else {"passed": False}
+    sprite_ok = sprite_ok and pixels == expected["sprite_sheet"]["pixels"] and pixels["passed"]
+    if image is not None:
+        bpy.data.images.remove(image)
     report = {"schema": SCHEMA, "actual_blender": True, "version": "5.2.1",
               "runtime_authorized": False, "formal_acceptance": False,
               "reopened": observed == expected["snapshot"] and asset_ok and sprite_ok,
               "observed": observed,
               "expected": expected["snapshot"], "asset_reopened": asset_ok,
-              "asset_observed": observed_asset, "sprite_sheet_reopened": sprite_ok}
+              "asset_observed": observed_asset, "sprite_sheet_reopened": sprite_ok,
+              "sprite_pixels": pixels}
     (output / "reopen.json").write_text(json.dumps(report, indent=2, sort_keys=True) + "\n",
                                          encoding="utf-8")
     print("O2_BLENDER_REOPEN " + json.dumps(report, sort_keys=True), flush=True)

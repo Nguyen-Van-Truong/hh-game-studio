@@ -477,3 +477,54 @@ wrong wall/contact telemetry and bool-for-int substitutions. O3's three-attempt
 diagnostic budget is spent, so this branch does not rerun the native case under
 the repaired verifier until a later owner-approved checkpoint. `AUTHORITY=0`;
 this is not AUTH-05, GT-06 or GT09 acceptance.
+
+### 2026-09-29 isolated sprite atlas repair
+
+Adapter integration is still open. The attempted wrapper around the inert
+fixture selector was removed before commit: serializing source into fixture
+JSON does not integrate the existing Godot publication/editor owner. Future
+work must use that actual adapter and retain its save/reload, fencing and
+recovery contracts; test counts from the discarded wrapper are not progress.
+
+The Blender sprite diagnostic was repaired by rendering in a separate scene so
+the authored GLB quad cannot cover the atlas. The native pinned run
+`o2-blender-spritesheet-native-20260929-24` passed with native and reopen exits
+0, clean owned trees, four colored 48×48 interiors, transparent gutters,
+and a scene-isolation check. The pixel oracle rejects the prior gray-quad
+overlap, missing/swapped cells and non-finite channels. Raw evidence is sealed
+under `studio/.local/reviews/o2-blender-spritesheet-native-20260929-24`; it has
+20 members, ZIP SHA-256
+`9903160cdc7f6bebc97fa7590e99b8188d4ed614cd3a782726f1f32240f216f8`, external
+manifest SHA-256
+`876a8075cf232da0959e8ce6797e1b145087b1793d1938302d1af5a7f5f4c02a`, and
+sheet SHA-256
+`9a83eedab1d4e05d20d8976db0ed2e256669fc17d2ab78b048e522e4c15c481f`.
+Run24 did not persist a fresh resource preflight; keep it as limited diagnostic
+evidence, not a formal or preflight-qualified result. Future native runs need
+a fresh observed preflight before dispatch.
+This closes only the isolated Blender render/readback defect; Godot atlas
+animation timing, gameplay-source dependency closure, native gameplay E2E,
+AUTH-05 and public publication remain open. `AUTHORITY=0`; GT-06 is still
+unaccepted.
+
+The follow-up Godot atlas run `o2-sprite-atlas-godot-20260929-02` used a fresh
+O4.1 resource observation (available 8.09 GiB, commit 73.5857%, no foreign
+engines) and the pinned Godot 4.7.2 console binary. Import, author and a fresh
+process reload all exited 0 with clean owned trees and no unexplained stderr.
+The author phase created four `AtlasTexture` regions and an 8 FPS looping
+`AnimatedSprite2D`; the reload phase read the saved `SpriteFrames` and scene,
+then observed 100 fixed-FPS ticks, the real frame sequence, pause at ticks
+38–49 and resume at tick 51. The first run was retained as a harness failure:
+Godot correctly recorded the resume call at tick 50 without advancing a frame,
+while the verifier had expected advancement in that same observation. The
+repaired verifier models this boundary and has seven pure tests including
+negative traces. The sealed follow-up has 35 members, ZIP SHA-256
+`b2047720296c3de9f240668ac515dfac39cc0263ca6b6984fea12e90c5a9ddde`, external
+manifest SHA-256
+`20703eba22a4c3b6295c0773f2d6e1a5ff7aa97a1ba1277de2ee81f770b76b8b8`, result
+SHA-256 `ee3c990d2a2bce5dd3182b0666c1f14e01974552b08b88bf7c2ba59f1438996b`,
+and source closure
+`9866af853cbfb6876f204baccd4a8ab616ec3680829f14f344c924f72fd15b51`.
+This closes the Blender atlas → Godot import/save/reload/animation diagnostic
+path only; it does not close gameplay-source adapter integration, AUTH-05,
+GT-06 or public ACK. `AUTHORITY=0`.

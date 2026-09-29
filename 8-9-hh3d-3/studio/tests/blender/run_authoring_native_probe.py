@@ -30,6 +30,7 @@ def _sources(root: Path) -> dict[str, str]:
         "toolchain.lock.json",
         "contracts/blender-authoring-schema-v1.json",
         "tests/blender/authoring_native_probe.py",
+        "tests/blender/sprite_sheet_pixels.py",
         "tests/blender/run_authoring_native_probe.py",
     ]
     return {name: _sha(root / name) for name in names}
