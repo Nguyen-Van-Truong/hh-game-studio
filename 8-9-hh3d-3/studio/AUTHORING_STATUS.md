@@ -374,3 +374,28 @@ manifest SHA-256 is
 The run remains `AUTHORITY=0`: it revalidates armature/action/keyframe native
 readback and reopen only. Geometry/material/UV-to-GLB, sprite-sheet export,
 Godot import, and the two-fixture end-to-end content loop remain open.
+
+
+### 2026-09-29 Blender geometry/UV/material → GLB checkpoint
+
+The Blender probe now creates a four-vertex authored quad with a UVMap and
+Principled material, exports `avatar.glb` through Blender's pinned glTF exporter,
+and checks the mesh/material/GLB again after reopening the saved `.blend`. Two
+failed attempts are preserved: run19 caught an incorrect `diffuse_color`
+assertion, and run20/run21 caught Blender 5.2 `use_nodes` deprecation warnings
+that correctly made the strict log gate fail. The repair reads the shader's
+Base Color directly and avoids the deprecated property.
+
+Fresh run `o2-blender-asset-native-20260929-22` passed **22/22** checks with
+native and reopen exits 0, clean owned trees, unchanged source and
+`asset_reopened=true`. Frozen closure is
+`187f9c6ed916803554c3242752b84d41e4eca38ebf3fc2cecbe165c3da47b396`. The GLB
+is 1,792 bytes with SHA-256
+`5f78b1d15a8391c2a77fc3dd87d9afe69909c99c4703e78e33196b60b5b13054`; sealed
+package ZIP SHA-256 is
+`eb83daa7e6d16f5884888909d51597b6c6ca8204048a8947a4e59ad879754547`, and the
+external manifest SHA-256 is
+`49d85c24e32603a6dd23c8cbbaa125205d2fc01cf9f964e2dfc3d52b0bd19f52`.
+This proves Blender-side geometry/UV/material and export/reopen only. Godot GLB
+import/readback, sprite-sheet rendering, and full two-fixture content E2E remain
+open; `AUTHORITY=0`.

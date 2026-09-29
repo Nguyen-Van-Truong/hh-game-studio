@@ -81,6 +81,64 @@ def _snapshot(obj: bpy.types.Object, action: bpy.types.Action | None) -> dict:
     return {"object": obj.name, "bones": bones, "fcurves": fcurves}
 
 
+def _mesh_snapshot(obj: bpy.types.Object) -> dict:
+    mesh = obj.data
+    material = mesh.materials[0] if mesh.materials else None
+    shader = (next((node for node in material.node_tree.nodes if node.type == "BSDF_PRINCIPLED"), None)
+              if material else None)
+    base_color = (list(shader.inputs["Base Color"].default_value)
+                  if shader is not None else None)
+    return {
+        "object": obj.name,
+        "vertices": len(mesh.vertices),
+        "polygons": len(mesh.polygons),
+        "uv_layers": [layer.name for layer in mesh.uv_layers],
+        "material": material.name if material else None,
+        "base_color": [float(value) for value in base_color] if base_color is not None else None,
+    }
+
+
+def _create_mesh_asset(output: Path, rows: list[dict], failures: list[str]) -> dict:
+    """Create a small authored quad and export it through Blender's GLB exporter."""
+    mesh = bpy.data.meshes.new("O2_AvatarQuadMesh")
+    mesh.from_pydata(((-1.0, -1.0, 0.0), (1.0, -1.0, 0.0),
+                     (1.0, 1.0, 0.0), (-1.0, 1.0, 0.0)), (), ((0, 1, 2, 3),))
+    mesh.update()
+    uv = mesh.uv_layers.new(name="UVMap")
+    for loop in mesh.loops:
+        uv.data[loop.index].uv = ((0.0, 0.0), (1.0, 0.0),
+                                  (1.0, 1.0), (0.0, 1.0))[loop.vertex_index]
+    material = bpy.data.materials.new("O2_AvatarMaterial")
+    shader = next(node for node in material.node_tree.nodes if node.type == "BSDF_PRINCIPLED")
+    shader.inputs["Base Color"].default_value = (0.2, 0.55, 0.9, 1.0)
+    shader.inputs["Roughness"].default_value = 0.65
+    mesh.materials.append(material)
+    obj = bpy.data.objects.new("O2_AvatarQuad", mesh)
+    bpy.context.scene.collection.objects.link(obj)
+    bpy.context.view_layer.objects.active = obj
+    obj.select_set(True)
+    observed = _mesh_snapshot(obj)
+    _check(rows, failures, "mesh_geometry_readback",
+           observed["vertices"] == 4 and observed["polygons"] == 1, observed=observed)
+    _check(rows, failures, "mesh_uv_readback", observed["uv_layers"] == ["UVMap"], observed=observed)
+    _check(rows, failures, "mesh_material_readback",
+           observed["material"] == "O2_AvatarMaterial"
+           and all(abs(a - b) < 1e-5 for a, b in zip(observed["base_color"], (0.2, 0.55, 0.9, 1.0))),
+           observed=observed)
+    target = output / "avatar.glb"
+    with _undo_context():
+        result = bpy.ops.export_scene.gltf(
+            filepath=str(target), export_format="GLB", export_materials="EXPORT",
+            export_animations=False, export_skins=False, export_morph=False,
+            export_cameras=False, export_lights=False, export_extras=False,
+            export_attributes=False, will_save_settings=False, use_selection=True,
+            export_yup=True, export_normals=True, export_tangents=False)
+    _check(rows, failures, "glb_export_readback",
+           result == {"FINISHED"} and target.is_file() and 0 < target.stat().st_size <= 4 * 1024 * 1024,
+           result=sorted(result), size_bytes=target.stat().st_size if target.is_file() else None)
+    return {"snapshot": observed, "sha256": _sha(target), "size_bytes": target.stat().st_size}
+
+
 def _load_catalog(source_root: Path) -> dict:
     path = source_root / "contracts" / "blender-authoring-schema-v1.json"
     document = json.loads(path.read_text(encoding="utf-8"))
@@ -229,11 +287,13 @@ def _run_authoring(output: Path, source_root: Path) -> dict:
     _check(rows, failures, "native_undo_readback", undo_ok)
     _check(rows, failures, "native_redo_readback", redo_ok)
 
+    asset = _create_mesh_asset(output, rows, failures)
+
     checkpoint = output / "checkpoint.blend"
     bpy.ops.wm.save_as_mainfile(filepath=str(checkpoint))
     _check(rows, failures, "checkpoint_under_output", checkpoint.is_file() and checkpoint.parent == output)
-    expected = {"snapshot": _snapshot(obj, action), "sha256": _sha(checkpoint),
-                "template_id": template["template_id"]}
+    expected = {"snapshot": _snapshot(obj, action), "asset": asset,
+                "sha256": _sha(checkpoint), "template_id": template["template_id"]}
     (output / "expected.json").write_text(json.dumps(expected, indent=2, sort_keys=True) + "\n",
                                           encoding="utf-8")
     report = {"schema": SCHEMA, "actual_blender": True, "version": "5.2.1",
@@ -256,10 +316,16 @@ def _run_reopen(output: Path) -> int:
         raise RuntimeError("reopen_failed")
     obj = bpy.data.objects.get("O2_TemplateArmature")
     observed = _snapshot(obj, obj.animation_data.action if obj and obj.animation_data else None)
+    asset_obj = bpy.data.objects.get("O2_AvatarQuad")
+    observed_asset = _mesh_snapshot(asset_obj) if asset_obj else None
+    asset_path = output / "avatar.glb"
+    asset_ok = (asset_obj is not None and observed_asset == expected["asset"]["snapshot"]
+                and asset_path.is_file() and _sha(asset_path) == expected["asset"]["sha256"])
     report = {"schema": SCHEMA, "actual_blender": True, "version": "5.2.1",
               "runtime_authorized": False, "formal_acceptance": False,
-              "reopened": observed == expected["snapshot"], "observed": observed,
-              "expected": expected["snapshot"]}
+              "reopened": observed == expected["snapshot"] and asset_ok, "observed": observed,
+              "expected": expected["snapshot"], "asset_reopened": asset_ok,
+              "asset_observed": observed_asset}
     (output / "reopen.json").write_text(json.dumps(report, indent=2, sort_keys=True) + "\n",
                                          encoding="utf-8")
     print("O2_BLENDER_REOPEN " + json.dumps(report, sort_keys=True), flush=True)
