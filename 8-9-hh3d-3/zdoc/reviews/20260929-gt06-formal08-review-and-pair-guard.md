@@ -168,3 +168,36 @@ credible scaling boundary for the existing full-history verification path; it
 does not prove a single root cause for all earlier private-commit growth. The
 first-failure phase recorder was exercised, so the compact-row repair is not
 the complete fix. Do not rerun unchanged formal09.
+
+## O1.9 stock-editor control closeout
+
+The first control attempt (`gt06-stock-editor-control-01`) stopped before
+launch because the dispatch CPU counter reported a false-looking 100% series;
+its raw remains separate and is not a product result. After the observation
+window returned to normal, a fresh current-source control
+`gt06-stock-editor-control-02` ran once with the benchmark and studio plugins
+absent, no HTTP/native mutation cycles, and the same pinned Godot binary.
+
+The control captured 2,809 external samples over 720 seconds. The target
+editor's retained handle count was bounded and non-monotonic after startup:
+554–577 (first post-startup sample 577, last 554). Its private commit in the
+same window ranged from 813,891,584 to 892,125,184 bytes; these values are
+descriptive control data and were not subtracted from formal measurements.
+The editor exited with an independently observed exit code 0; the owned Job
+was closed with zero active members, no taint, and no retained probe handle.
+The dispatch preflight lasted 60.36 seconds (CPU max 80.0983%, mean 51.0494%,
+available memory minimum 10,205,282,304 bytes, commit maximum 67.2157%, no
+foreign engine). Raw ZIP/member hashes were verified; the tracked package
+manifest is
+`zdoc/reviews/20260929-gt06-stock-editor-control-02-package-manifest.json`,
+with archive SHA256
+`52e914f1481f43ea40df9ae9a3740e50ead9aac94b744ba3f0657ffe6870ddae`.
+
+This stock run shows ordinary editor handle fluctuation of the same order as
+the earlier idle control, so it does not attribute formal08's editor trend to
+the benchmark plugin. It also does not prove that the plugin or host phase
+recorder is safe under the full 35-batch workload. Formal08 remains O1 FAIL
+for pair 0 and INFRA_ABORT for pair 1; no formal09 is dispatched, O1/O4 and
+timeouts remain unchanged, and GT-07 remains unopened. The next bounded lane
+is the O2 fixture work after this review, unless a separately justified source
+repair is found.
