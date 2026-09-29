@@ -359,3 +359,18 @@ These are deterministic logic fixtures, not complete playable mini-games: they
 do not prove collision/input replay, Blender asset import, save/reload ACK,
 AUTH-05 acceptance or a public gameplay-source capability. `AUTHORITY=0` and
 GT-06/GT-07 status are unchanged.
+
+
+### 2026-09-29 Blender native revalidation
+
+The current O2 source was revalidated with the pinned Blender 5.2.1 executable
+in `o2-blender-native-20260929-18`. Native authoring and reopen both exited 0;
+all 18 checks passed, source snapshots matched the live five-file closure
+`eef74f5d3f39579887e05fdfec96396b4915ea9692c821127093982c8188b0b5`, and the
+sealed package has 17 members. ZIP SHA-256 is
+`ee9d18a3293e275b3e59334993dcbd92b3762da3f11352588d3b8b1e064908b9`; external
+manifest SHA-256 is
+`d01f6f7f7caf8d23c573f06c7725d7908c205f9e5feb858192c23cf03b37ecfd`.
+The run remains `AUTHORITY=0`: it revalidates armature/action/keyframe native
+readback and reopen only. Geometry/material/UV-to-GLB, sprite-sheet export,
+Godot import, and the two-fixture end-to-end content loop remain open.
