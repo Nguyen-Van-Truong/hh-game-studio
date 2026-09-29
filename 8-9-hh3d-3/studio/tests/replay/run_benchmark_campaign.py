@@ -632,6 +632,8 @@ def _run_campaign(campaign_id, root, preflight_path, after_path):
         require_campaign_running(root)
         if finished:
             output, captured = finished[0]
+            measured = profile.summarize_run(json.loads(read_regular(output / 'assembled-run.json', profile.MAX_BYTES)))
+            require(measured['status'] == 'PASS', 'CAMPAIGN_RUN_MEASUREMENTS_NOT_PASS')
             remember(captured)
             completed.append({'index': index, 'run_id': captured['run_id'], 'capture': reference(root, output / 'run-capture.json')})
             continue
@@ -710,6 +712,8 @@ def _run_campaign(campaign_id, root, preflight_path, after_path):
             require_campaign_running(root)
             write(output / 'assembly-manifest.json', manifest)
             write(output / 'assembled-run.json', assembled.value['run'])
+            measured = profile.summarize_run(assembled.value['run'])
+            write(output / 'measurement-summary.json', measured)
             artifacts = {p.relative_to(output).as_posix(): sha(artifact_bytes(p))
                          for p in sorted(output.rglob('*')) if p.is_file()
                          and '.godot' not in p.relative_to(output).parts}
@@ -722,6 +726,9 @@ def _run_campaign(campaign_id, root, preflight_path, after_path):
             require_campaign_running(root)
             write(output / 'run-capture.json', captured)
             require_campaign_running(root)
+            # Complete raw/exit evidence is retained even if its O1 windows
+            # fail. A second pair cannot repair a failure in the first pair.
+            require(measured['status'] == 'PASS', 'CAMPAIGN_RUN_MEASUREMENTS_NOT_PASS')
             remember(captured)
             completed.append({'index': index, 'run_id': run_id, 'capture': reference(root, output / 'run-capture.json')})
             print('HH_GT06_CAMPAIGN_RUN_COMPLETE ' + json.dumps(completed[-1]), flush=True)

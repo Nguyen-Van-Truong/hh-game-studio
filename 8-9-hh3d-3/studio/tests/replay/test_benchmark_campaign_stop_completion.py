@@ -174,6 +174,65 @@ class CampaignStopCompletionTests(unittest.TestCase):
             self.assertFalse((fixture.root / 'run-01-attempt-01').exists())
             self.assertFalse((fixture.root / 'campaign-capture.json').exists())
 
+    def test_completed_pair_measurements_block_next_launch_on_fail_or_gap(self):
+        from studio.tests.replay.test_benchmark_profile import synthetic_dataset
+        for status in ('PASS', 'FAIL', 'GAP'):
+            with self.subTest(status=status), self.fixture() as fixture:
+                run = synthetic_dataset()['runs'][0]
+                if status == 'FAIL':
+                    run['samples'][34]['memory']['host']['private_commit_bytes']['value'] = 1200
+                elif status == 'GAP':
+                    run['samples'][10]['memory']['editor']['resources'] = {
+                        'value': None, 'unavailable_reason': 'unavailable'}
+                retained = SimpleNamespace(closed=True, job=SimpleNamespace(zero_observed=True))
+                retained.tick = Mock(return_value=0)
+                retained.close = Mock(return_value=True)
+                retained.finish = Mock(return_value={
+                    'elapsed_seconds': 5.0,
+                    'actual_process_exit': {'pid': run['processes']['host']['pid'], 'exit_code': 0},
+                    'job': {'zero_observed': True}})
+
+                def launch(*_args, **kwargs):
+                    if fixture.launch.call_count > 1:
+                        raise BenchmarkJobError('SYNTHETIC_SECOND_LAUNCH')
+                    output = kwargs['cwd']
+                    binding = json.loads((output / 'context.json').read_bytes())
+                    run['run_id'] = binding['run_id']
+                    campaign.write(output / 'child-result.json', {
+                        'processes': run['processes'], 'batches': [],
+                        'cleanup': {'editor_exit_code': 0, 'editor_owned_tree_zero': True,
+                                    'held_handles': 0}})
+                    return retained
+
+                fixture.launch.side_effect = launch
+                # Native assembly/ownership is inert here; the real O1 evaluator
+                # receives all 35 synthetic samples, including the failing row.
+                fixture.stack.enter_context(patch.object(campaign, 'assemble_run',
+                    return_value=SimpleNamespace(value={'run': run})))
+                fixture.stack.enter_context(patch.object(campaign, 'verify_run_capture'))
+                fixture.stack.enter_context(patch.object(campaign, 'reference',
+                    side_effect=lambda root, path: {
+                        'file': path.relative_to(root).as_posix(), 'sha256': 'c' * 64,
+                        'size_bytes': 1}))
+                expected = 'SYNTHETIC_SECOND_LAUNCH' if status == 'PASS' else 'CAMPAIGN_RUN_MEASUREMENTS_NOT_PASS'
+                with self.assertRaisesRegex(BenchmarkJobError, expected):
+                    campaign.run_campaign(fixture.campaign_id, fixture.root)
+                output = fixture.root / 'run-00-attempt-01'
+                self.assertTrue((output / 'run-capture.json').is_file())
+                summary = json.loads((output / 'measurement-summary.json').read_bytes())
+                self.assertEqual(summary['status'], status)
+                self.assertFalse(summary['formal_acceptance'])
+                capture = json.loads((output / 'run-capture.json').read_bytes())
+                self.assertEqual(capture['artifacts']['measurement-summary.json'],
+                                 campaign.sha((output / 'measurement-summary.json').read_bytes()))
+                self.assertEqual(fixture.launch.call_count, 2 if status == 'PASS' else 1)
+                if status != 'PASS':
+                    self.assertFalse((fixture.root / 'run-01-attempt-01').exists())
+                    failure = json.loads((output / 'parent-failure.json').read_bytes())
+                    self.assertEqual(failure['classification'], 'PRODUCT_FAIL')
+                    self.assertTrue(failure['owned_tree_zero'])
+                self.assertFalse((fixture.root / 'campaign-capture.json').exists())
+
 
 if __name__ == '__main__':
     unittest.main()

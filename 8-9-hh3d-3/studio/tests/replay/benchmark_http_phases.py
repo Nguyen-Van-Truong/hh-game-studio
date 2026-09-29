@@ -6,7 +6,7 @@ The rolling window is supplemental attribution, never an acceptance exemption
 or a complete transport log. No request bodies, credentials, exception text,
 socket objects, disk I/O, retries or per-chunk instrumentation are retained.
 """
-from collections import deque
+from collections import deque, namedtuple
 from contextlib import ExitStack, contextmanager
 import http.client
 import os
@@ -28,6 +28,8 @@ _WINDOW_FIELDS = frozenset({'schema_id', 'schema_version', 'formal_acceptance', 
 _SPAN_FIELDS = frozenset({'span_id', 'parent_id', 'root_id', 'thread_id', 'phase', 'route',
     'server_port', 'client_port', 'started_ns'})
 _EVENT_FIELDS = _SPAN_FIELDS | {'event_id', 'kind', 'timestamp_ns', 'outcome'}
+_Event = namedtuple('_Event', 'span_id parent_id root_id thread_id phase route '
+                   'server_port client_port started_ns event_id kind timestamp_ns outcome')
 
 
 def validate_phase_snapshot(snapshot, expected_pid):
@@ -145,7 +147,7 @@ def loopback_pair(stream, *, client):
 
 
 class PhaseRecorder:
-    """Primitive event ring plus bounded unfinished spans and first-failure copy.
+    """Immutable event ring plus bounded unfinished spans and first-failure window.
 
     IDs are recorder-local. Entries precede the operation; timestamps are QPC
     perf_counter_ns, including snapshots. Instrumentation time is not subtracted.
@@ -173,8 +175,8 @@ class PhaseRecorder:
         # Caller holds only this recorder's mutex, never across delegated work.
         self._next_event += 1
         self._evicted += int(len(self._events) == self._event_capacity)
-        self._events.append(dict(row, event_id=self._next_event, kind=kind,
-                                 timestamp_ns=timestamp_ns, outcome=outcome))
+        self._events.append(_Event(**row, event_id=self._next_event, kind=kind,
+                                   timestamp_ns=timestamp_ns, outcome=outcome))
 
     @contextmanager
     def span(self, phase, *, route=None):
@@ -227,6 +229,9 @@ class PhaseRecorder:
 
     def _snapshot(self):
         # All retained fields are fixed enums, integers, booleans or None.
+        # Share immutable event rows with the ring at failure time. Eviction or
+        # socket rebinding cannot mutate this window; dictionaries are expanded
+        # only for the external snapshot, never retained twice in the producer.
         return {'schema_id': 'hh-studio.benchmark-http-phase-window', 'schema_version': '1.0.0',
                 'formal_acceptance': False,
                 'pid': self._pid, 'clock': 'perf_counter_ns',
@@ -236,8 +241,15 @@ class PhaseRecorder:
                 'identity_missing': self._identity_missing,
                 'failure_trigger': 'first_lookup_transport_failure',
                 'transport_failures_by_route': dict(self._failures_by_route),
-                'events': [dict(row) for row in self._events],
+                'events': tuple(self._events),
                 'unfinished': [dict(row) for row in self._active.values()]}
+
+    @staticmethod
+    def _materialize(window):
+        return dict(window,
+                    transport_failures_by_route=dict(window['transport_failures_by_route']),
+                    events=[row._asdict() for row in window['events']],
+                    unfinished=[dict(row) for row in window['unfinished']])
 
     def capture_failure(self, call_id, *, route):
         """Count every route; freeze only lookup, before retry clears metadata.
@@ -259,13 +271,10 @@ class PhaseRecorder:
 
     def snapshot(self):
         with self._lock:
-            result = self._snapshot()
+            result = self._materialize(self._snapshot())
             first = self._first_failure
             result['transport_failures_observed'] = self._failure_count
-            result['first_failure'] = (None if first is None else dict(first,
-                transport_failures_by_route=dict(first['transport_failures_by_route']),
-                events=[dict(row) for row in first['events']],
-                unfinished=[dict(row) for row in first['unfinished']]))
+            result['first_failure'] = None if first is None else self._materialize(first)
             return result
 
 

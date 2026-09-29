@@ -80,6 +80,48 @@ class BenchmarkProfileTests(unittest.TestCase):
         with self.assertRaisesRegex(benchmark.BenchmarkError, 'PROFILE_VERSION_REQUIRED'):
             replace(benchmark.PROFILE, process_runs=True)
 
+    def test_complete_pair_summary_matches_full_campaign_without_granting_acceptance(self):
+        self.data['runs'][0]['samples'][34]['memory']['host']['private_commit_bytes']['value'] = 1200
+        self.data['runs'][1]['samples'][20]['memory']['editor']['held_handles']['value'] = 11
+        full = benchmark.summarize_dataset(self.data)
+        for index, raw in enumerate(self.data['runs']):
+            with self.subTest(index=index):
+                pair = benchmark.summarize_run(raw)
+                self.assertEqual(pair['status'], 'FAIL')
+                self.assertEqual(pair['run'], full['runs'][index])
+                self.assertEqual(pair['failures'], [row for row in full['failures']
+                                                   if row['run_id'] == raw['run_id']])
+                self.assertFalse(pair['formal_acceptance'])
+                self.assertFalse(pair['campaign_complete'])
+        self.data['runs'].pop()
+        with self.assertRaisesRegex(benchmark.BenchmarkError, 'INCOMPLETE_ARRAY'):
+            benchmark.summarize_dataset(self.data)
+
+    def test_pair_screen_refuses_prefix_wrong_slot_and_unclean_exit(self):
+        for change, code in (
+            (lambda r: r['samples'].pop(), 'INCOMPLETE_ARRAY'),
+            (lambda r: r.update(index=2), 'INTEGER'),
+            (lambda r: r.update(index=True), 'INTEGER'),
+            (lambda r: r['cleanup'].update(host_exit_code=1), 'UNCLEAN_RUN'),
+            (lambda r: r['samples'][10].update(effects_per_admission=[0] * 200),
+             'DUPLICATE_OR_LOST_EFFECT'),
+        ):
+            with self.subTest(code=code):
+                run = copy.deepcopy(self.data['runs'][0])
+                change(run)
+                with self.assertRaisesRegex(benchmark.BenchmarkError, code):
+                    benchmark.summarize_run(run)
+
+    def test_pair_pass_and_missing_counter_remain_distinct(self):
+        run = self.data['runs'][0]
+        self.assertEqual(benchmark.summarize_run(run)['status'], 'PASS')
+        run['samples'][12]['memory']['editor']['resources'] = {
+            'value': None, 'unavailable_reason': 'sample unavailable'}
+        result = benchmark.summarize_run(run)
+        self.assertEqual(result['status'], 'GAP')
+        self.assertEqual(result['gaps'][0]['code'], 'COUNTER_UNAVAILABLE')
+        self.assertFalse(result['formal_acceptance'])
+
     def test_exact_full_campaign_and_warmup_exclusion(self):
         result = benchmark.summarize_dataset(self.data)
         self.assertEqual(result['status'], 'PASS')

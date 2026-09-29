@@ -96,6 +96,25 @@ class PhaseRecorderTests(unittest.TestCase):
                          (12345, 43210))
         self.assertNotIn('private', json.dumps(snapshot))
 
+    def test_failure_window_keeps_pre_bind_state_after_rebinding_and_full_eviction(self):
+        recorder = PhaseRecorder(event_capacity=4)
+        with recorder.span('client.call', route='lookup') as call_id:
+            recorder.capture_failure(call_id, route='lookup')
+            frozen = recorder.snapshot()['first_failure']
+            recorder.bind_socket(FakeSocket(client=True), client=True)
+            changed = recorder.snapshot()
+            self.assertEqual(changed['events'][-1]['server_port'], 12345)
+            changed['first_failure']['unfinished'][0]['server_port'] = 54321
+        for _ in range(10):
+            with recorder.span('client.call', route='stop'):
+                pass
+        current = recorder.snapshot()
+        self.assertEqual(current['first_failure'], frozen)
+        self.assertIsNone(frozen['events'][0]['server_port'])
+        self.assertIsNone(frozen['unfinished'][0]['server_port'])
+        self.assertGreater(current['events'][0]['event_id'], frozen['events'][-1]['event_id'])
+        validate_phase_snapshot(current, os.getpid())
+
 
 class SnapshotValidationTests(unittest.TestCase):
     def snapshot(self, *, fail=False, capacity=8):

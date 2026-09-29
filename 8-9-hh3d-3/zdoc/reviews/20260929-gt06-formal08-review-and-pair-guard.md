@@ -1,0 +1,142 @@
+# GT-06 formal08 closeout and bounded repair — 2026-09-29
+
+AUTHORITY=0. GT-06 remains IN_PROGRESS; no accepted pair, dataset or critic
+package. GT-07 stays unopened. This report supersedes the live status in the
+formal08 dispatch note; it does not rewrite any original verdict or raw file.
+
+## Verified outcome
+
+`gt06-o4-formal-08` ended at 09:30:19 Asia/Saigon. The demand task is Ready,
+has no running instance and returned 1. No campaign host or engine remains.
+Original source: `d64c4ce399f5a79153d8daea289ca087b4f07aed0622ac02788f0cbe666ca475`.
+Profile: `9dfa0ae003577e8607e28e722089328933d60e6cdb5b1ae1c5e978b3ad9d335e`.
+
+Pair 0 completed 35/35 batches. Before editing source, the coordinator verified
+405 captured artifacts, source bindings, native assembly and owned captures.
+Host 29164, editor 23212 and import 19300 have actual exit 0; their wrappers,
+Job/tree/handle release and terminal cleanup verified. The bound run hash is
+`29233a728fe6219567aa9a2a381ec8b99262804f953cb2c153eb920b076be7f1`.
+
+Completion was **not** an O1 measurement PASS:
+
+| Metric | Observed | O1 result |
+| --- | --- | --- |
+| Host private commit | Baseline 40,140,800; max 50,483,200 bytes | Above 110% baseline |
+| Host private commit trend | Early max 46,374,912; late max 50,483,200 bytes | Above 105% early max |
+| Editor handles | Baseline 558; early max 557; late/max 562 | Late exceeds early + 2 |
+| Inspect / Stop p95 | 290.28137 / 88.07516 ms | Within 500 ms |
+| Largest status gap, including warmup | 1880.6612 ms | Within 2000 ms |
+
+Editor handles fluctuate; the spike is not proof of a monotonic leak. Host
+handles, editor objects/resources and editor private commit meet the pair's
+O1 rules. The full two-pair dataset does not exist.
+
+Pair 1 completed 19 batches before its watchdog stopped it for CPU pressure.
+Replaying the original policy reproduces CPU_PRESSURE at sample 477, after
+64.172 seconds of sustained >95% system CPU. Its parent classification remains
+INFRA_ABORT. Its outer Job is closed/zero and the owner handle is released;
+natural host/editor exits and the child's terminal-cleanup receipt are absent
+after that stop, so they are not inferred. Import exited 0. Scheduler exit 1
+does not substitute for those missing child observations.
+
+The campaign is incomplete **with a confirmed O1 failure in the completed first
+pair**. The later CPU abort cannot erase that failure. September 29 has used
+one of two daily INFRA_ABORT slots; an available slot is not a reason to rerun
+the unchanged failing source. Formal06/07 remain PRODUCT_FAIL historically.
+
+Raw is preserved at `studio/.local/reviews/gt06-o4-formal-08` and its supervisor
+sibling. The sealed package `studio/.local/reviews/gt06-formal08-closeout-20260929`
+contains an audit and a CRC/member-hash-verified ZIP of 788 files (266,280,839
+uncompressed bytes). ZIP SHA256:
+`d1c4dc2950a68fd472051342131cfe16877bbc05e9d922980a4e78ac6033a1d9`.
+Manifest SHA256:
+`faac979fcbaf03de3dd8d898baa90d459e1a08a62966bd87511e1fc97ec4bd0b`.
+Audit SHA256:
+`d83f2e8382934033fb589b7f5a2aca8314d9addcd361f8354c808b89e84c353d`.
+
+## Repair and validation
+
+The harness previously launched pair 1 after verifying pair 0's completeness
+and cleanup without evaluating its final O1 windows. It now evaluates every
+complete 35-batch pair before launching the next. A FAIL or GAP preserves the
+raw, real exits, capture and hashed measurement summary, then stops with
+CAMPAIGN_RUN_MEASUREMENTS_NOT_PASS. A complete pair recovered by the existing
+read path is screened too. Acceptance still requires two fresh verified pairs;
+the single-pair summary explicitly grants no campaign acceptance.
+
+The calculation and validation routines are shared with the full dataset
+verifier. Profile hash, all thresholds, warmup handling, timeouts, 35-batch
+workload and two-pair dataset requirement are unchanged. Synthetic tests prove
+FAIL/GAP prevent pair 1 while PASS reaches its launch, with raw evidence kept.
+Reanalysis of original pair 0 returns exactly PRIVATE_COMMIT_GROWTH,
+PRIVATE_COMMIT_TREND and RETAINED_COUNTER_GROWTH. This is a new analysis of old
+raw, not a run executed on the repaired source.
+
+The HTTP phase recorder also retained two large dictionaries per event after
+its first lookup failure. In formal08 that capture occurred in batch 7, when
+host private commit rose from 40,263,680 to 45,514,752 bytes. This correlation
+does not explain all later growth. The repair stores immutable compact event
+rows, shares them when freezing the failure window, and materializes detached
+JSON dictionaries only for output. Both full 8,192-event windows, all fields,
+timestamps, route counters and bounded unfinished spans remain available.
+
+A separate Python allocation probe against source 03137461 observed:
+
+| Python traced allocation | Before repair | After repair |
+| --- | ---: | ---: |
+| Added at first failure capture | 3,869,656 bytes | 67,072 bytes |
+| Total after the live ring fully rolls over | 9,281,252 bytes | 4,167,612 bytes |
+
+Both snapshots validate and retain 8,192 current and 8,192 failure events.
+This proves reduced Python allocation in that controlled probe; it does not
+prove OS private-commit compliance or solve editor handles. A regression also
+checks the frozen pre-bind socket state survives rebinding, complete eviction
+and caller mutation of returned snapshots.
+
+215 focused tests passed with actual exit 0 in 45.640 seconds; no engine was
+launched. The logged command and exit receipt are in
+`studio/.local/reviews/gt06-pair-guard-20260929-01`. This count includes the
+focused earlier tests and is not additive. `git diff --check` passes.
+
+Candidate formal closure (54 files):
+`8275722a4519ae435e5f69c23f9afdde1801dbf3873ba3ad4bb32c59d45e000f`.
+Command-residency diagnostic closure (48 files):
+`9eccd4530acd98e0f04cf8b565e5a6eb9e3a519e12c71ce17cb67b264bc3a570`.
+These are new candidate closures, never rebound to formal08's raw.
+The 63-member verify ZIP is CRC/member-hash checked; its tracked manifest is
+`zdoc/reviews/20260929-gt06-pair-guard-manifest.json`. ZIP SHA256:
+`e2f4da59eab3b12387ecf7dcf35e91d976d0ee3c2ef1d9196465fcfd4dcbda5e`.
+
+## Next work and lessons
+
+Use one fresh command-residency diagnostic to measure host memory after this
+specific repair, including actual exit and ownership cleanup. Record whether
+a lookup failure actually occurred; a run without it does not exercise the
+failure-window allocation. Keep the 35-batch command mix and journal intact.
+Do not call this a formal pair or proof of editor behavior.
+
+`gt06-memory-diagnostic-05` was dispatched at 09:54:44 Asia/Saigon through
+the demand-only task, with the 48-file closure above and fresh O4.1 preflight.
+The preceding 60.437-second window observed CPU max 81.13354%, mean 48.68486%,
+RAM minimum 6.95386 GiB, commit max 73.40952% and no foreign engine. This is
+attempt 1 of the new compact-recorder diagnostic direction; do not modify its
+source or start competing workloads while it runs. Prior residency04 took
+75 minutes; that is an observation for scheduling, not a new timeout or ETA
+guarantee. Raw is written under its own run ID without overwriting old runs.
+The actual running child source list matches the frozen 48 files. The old
+heartbeat ID could not be updated because it no longer exists; the app
+confirmed creation of `ti-p-t-c-gt06-sau-diagnostic-b-nh`, every 30 minutes,
+to continue this chat from the real run state and remain quiet when unchanged.
+
+Editor-handle attribution remains open: prepare the O1.9 stock-editor control,
+state workload equivalence and limitations explicitly, and never subtract
+control counters from formal results. No debugger branch is reopened. Bound
+this direction by O3's four hours/three attempts, then report options and move
+to the allowed O2 fixture lane if unresolved. Do not dispatch formal09 merely
+because the CPU cooled down; first review host growth and the editor trend.
+
+Persist complete-pair measurement decisions as soon as they are available.
+Treat exit 0 as lifecycle proof, not performance acceptance. Budget diagnostic
+storage as measured process memory; retaining bounded data can still exceed
+the gate. Preserve failed runs and distinguish a demonstrated allocation
+improvement from an unproven whole-workload repair.

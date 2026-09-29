@@ -280,8 +280,14 @@ def _validate(value):
     for name, digest in value['provenance'].items():
         _hash(digest, '$.provenance.' + name)
     _array(value['runs'], PROFILE.process_runs, '$.runs')
+    _validate_runs(value['runs'], range(PROFILE.process_runs))
+
+
+def _validate_runs(runs, indexes):
+    # Dataset validation shares identities across pairs; single-pair validation
+    # supplies only its original slot. Neither path fabricates a missing pair.
     run_ids, process_ids, stop_ids = set(), set(), set()
-    for index, run in enumerate(value['runs']):
+    for index, run in zip(indexes, runs):
         path = f'$.runs[{index}]'
         _shape(run, 'run_id index processes baseline samples cleanup', path)
         _int(run['index'], index, index, path)
@@ -397,11 +403,10 @@ def _stats(values):
             'percentile_method': 'linear_type7'}
 
 
-def summarize_dataset(value):
-    """Derive results; failures/gaps retain run identity, never pooled away."""
-    data = validate_dataset(value)
+def _summarize_runs(raw_runs):
+    """Shared O1 calculation for validated complete pairs and full datasets."""
     runs, failures, gaps = [], [], []
-    for run in data['runs']:
+    for run in raw_runs:
         run_id = run['run_id']
         measured = run['samples'][5:]
         metrics = {kind: _stats([n for row in measured for n in row['latency_ms'][kind]])
@@ -485,6 +490,34 @@ def summarize_dataset(value):
                     'stop_receipt_ms': row['stop_receipt_ms']} for row in measured]
         runs.append({'run_id': run_id, 'metrics': metrics, 'batches': batches, 'memory': memory,
                      'max_status_gap_ms': max_gap})
+    return runs, failures, gaps
+
+
+def summarize_run(value):
+    """Screen one complete pair before spending time on the next one.
+
+    This separate result never supplies campaign provenance or acceptance.
+    All 35 samples and cleanup are validated with the full dataset's rules.
+    """
+    raw = _encoded(value)
+    _need(len(raw) <= MAX_BYTES, 'DATASET_BYTE_CAP', '$')
+    run = json.loads(raw)
+    _shape(run, 'run_id index processes baseline samples cleanup', '$.run')
+    _int(run['index'], 0, PROFILE.process_runs - 1, '$.run.index')
+    _validate_runs([run], [run['index']])
+    runs, failures, gaps = _summarize_runs([run])
+    return {'schema_id': 'hh-studio.tools-ux-pair-summary', 'schema_version': '1.0.0',
+            'profile_sha256': PROFILE_SHA256, 'raw_sha256': hashlib.sha256(raw).hexdigest(),
+            'formal_acceptance': False, 'campaign_complete': False,
+            'scope': 'one complete pair only; two verified fresh pairs and final review still required',
+            'status': 'GAP' if gaps else 'FAIL' if failures else 'PASS',
+            'run': runs[0], 'failures': failures, 'gaps': gaps}
+
+
+def summarize_dataset(value):
+    """Derive results; failures/gaps retain run identity, never pooled away."""
+    data = validate_dataset(value)
+    runs, failures, gaps = _summarize_runs(data['runs'])
     return {'schema_id': 'hh-studio.tools-ux-benchmark-summary', 'schema_version': '1.3.0',
             'profile_sha256': PROFILE_SHA256, 'raw_sha256': hashlib.sha256(_encoded(data)).hexdigest(),
             'evidence_kind': data['evidence_kind'], 'native_acceptance': False,
