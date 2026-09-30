@@ -198,3 +198,18 @@ needed for the next repair. Raw evidence remains under `studio/.local/`.
   `CAMPAIGN_PREFLIGHT_RESOURCE_LIMIT`; no soak or engine was dispatched.
 - This is an environment wait, not an INFRA_ABORT and not a product verdict.
   Do not close user applications or lower the launch/acceptance thresholds.
+
+## 2026-09-30 — gt06-o6-host-soak-20260930-03
+
+- Source files matched the frozen O6-02 closure
+  `b43fb6f19cd1f363c925fa82c1c8d9469d75e7191d9e5ac6305d21c04c40851e`.
+- Command: `campaign_task.ps1 -Command register-run -CampaignId gt06-o6-host-soak-20260930-03 -Mode residency`.
+- Actual result: watchdog stopped at batch 0 with
+  `CAMPAIGN_WATCHDOG_OBSERVER_ERROR`; no batch/summary was admitted. The
+  owner failure records `HARNESS_FAIL`, wrapper exit `2`, and
+  `BENCHMARK_CLOSED_BEFORE_FINISH`. Job assigned/configured/closed, active
+  count `0`, zero observed, no retained handle, and no failed operations.
+- Classification: observer/harness failure only; not an INFRA_ABORT, product
+  verdict, O1 pair, or O6.3 result. Preserve the raw observer error and review
+  the Docker-query path before attempting another soak. Do not count this run
+  toward the `>107%` re-soak requirement or dispatch formal09.
