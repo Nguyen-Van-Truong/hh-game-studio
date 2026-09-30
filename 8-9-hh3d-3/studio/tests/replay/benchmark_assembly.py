@@ -289,7 +289,9 @@ def _reconciliation_trace(row, *, schema_version, complete):
             digest = response['postconditions'].get('request_digest')
             if response['status'] == 'UNKNOWN':
                 _need(response['code'] == 'CONNECTION_LOST_LOOKUP'
-                      and response['postconditions'] == {'next_action': 'lookup'},
+                      and response['postconditions'] == {'next_action': 'lookup'}
+                      and response['result_revision'] is None
+                      and response['result_hash'] is None,
                       'RECONCILIATION_STATUS')
             elif response['status'] in ('ACCEPTED_PENDING', 'COMMITTED', 'CANCELED'):
                 _need(digest == row['request_digest'], 'RECONCILIATION_DIGEST')
@@ -564,18 +566,22 @@ def validate_command_batch(value, *, run_id, index, host_identity):
             _number(latency, .000000001)
     _integer(value['effect_count_after'], count, count)
     cancel = value['cancel']
-    cancel_has_reconciliation = 'reconciliation' in cancel
+    # Admission/ACK recovery was moved into explicit nested objects. Reject
+    # the retired top-level fields instead of accepting unbound evidence.
+    _need(not ({'reconciliation', 'receipt_status', 'receipt_code',
+                'receipt_transport_failure', 'cancel_receipt_transport_failure'}
+               & set(cancel)), 'CANCEL_RECONCILIATION_STALE')
     cancel_has_queued_failure = 'queue_recovery' in cancel
     cancel_has_ack_failure = 'cancel_ack' in cancel
     cancel_fields = ('command_id kind separate_from_mix delay_ms queued_mono_us started_mono_us '
                      'receipt_mono_us receipt_ms status terminal_status request_digest no_effect '
                      'lookup_attempts terminal_response terminal_mono_us terminal_ms')
-    if cancel_has_reconciliation:
-        cancel_fields += ' receipt_status receipt_code receipt_transport_failure reconciliation'
     if cancel_has_ack_failure:
         cancel_fields += ' cancel_ack'
     if cancel_has_queued_failure:
         cancel_fields += ' queue_recovery'
+    _need(version == '1.5.0' or not (cancel_has_queued_failure or cancel_has_ack_failure),
+          'CANCEL_SCHEMA')
     _shape(cancel, cancel_fields)
     _need(cancel['command_id'] == f'{run_id}.b{index}.cancel' and cancel['kind'] == 'cancel'
           and cancel['separate_from_mix'] is True and cancel['no_effect'] is True
@@ -601,6 +607,8 @@ def validate_command_batch(value, *, run_id, index, host_identity):
               'CANCEL_RECONCILIATION_CLOCK')
         queue_recovery_ends = _reconciliation_trace(
             queue_recovery, schema_version=version, complete=value['status'] == 'COMPLETE')
+        _need(not queue_recovery_ends or queue_recovery_ends[-1] <= cancel['started_mono_us'],
+              'CANCEL_RECONCILIATION_CLOCK')
         _need(queue_recovery['receipt_status'] == 'UNKNOWN'
               and queue_recovery['receipt_code'] == 'CONNECTION_LOST_LOOKUP',
               'CANCEL_RECONCILIATION')
@@ -624,7 +632,9 @@ def validate_command_batch(value, *, run_id, index, host_identity):
             raise AssemblyError('CANCEL_ACK_RESPONSE') from error
         _need(response['status'] == 'UNKNOWN' and response['code'] == 'CONNECTION_LOST_LOOKUP'
               and response['command_id'] == cancel['command_id']
-              and response['postconditions'] == {'next_action': 'lookup'},
+              and response['postconditions'] == {'next_action': 'lookup'}
+              and response['result_revision'] is None
+              and response['result_hash'] is None,
               'CANCEL_ACK_RECONCILIATION')
         failure = ack['transport_failure']
         _validate_transport_failure(failure, endpoint='cancel',

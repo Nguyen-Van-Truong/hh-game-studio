@@ -206,6 +206,15 @@ class EnvironmentTests(unittest.TestCase):
             with self.assertRaisesRegex(BenchmarkJobError, 'DOCKER_INVENTORY'):
                 env.running_containers(processes)
 
+    def test_docker_inventory_retries_one_transient_read(self):
+        processes = [{'name': 'com.docker.backend.exe'}]
+        timeout = env.subprocess.TimeoutExpired('docker', 2)
+        with patch.object(env.Path, 'is_file', return_value=True), patch.object(env.subprocess, 'run') as run:
+            run.side_effect = [timeout, SimpleNamespace(returncode=0, stdout=b'hh-gameplay-1\n')]
+            self.assertEqual(env.running_containers(processes), ['hh-gameplay-1'])
+            self.assertEqual(run.call_count, 2)
+            self.assertEqual(run.call_args.kwargs['timeout'], 2)
+
     def test_perfproc_fallback_keeps_raw_ticks_without_double_normalization(self):
         processes = [{'pid': 1480, 'name': 'vmmemwsl', 'cpu_total_100ns': None},
                      {'pid': 42, 'name': 'docker', 'cpu_total_100ns': 7}]

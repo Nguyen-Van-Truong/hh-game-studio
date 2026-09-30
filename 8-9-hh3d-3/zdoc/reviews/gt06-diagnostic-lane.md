@@ -94,3 +94,11 @@ needed for the next repair. Raw evidence remains under `studio/.local/`.
   mixed host/editor pair or GT06 acceptance. The corrected artifact supersedes
   the earlier mark-window smoke interpretation without rewriting that raw
   evidence.
+
+## 2026-09-30 — gt06-o6-host-soak-20260930-01
+
+- Source closure in the watchdog binding: `3ae3b69117a0d462849c38d56e161517477f3909eca2318f4e88c9e3b7f291bf`.
+- Command: `campaign_task.ps1 -Command register-run -CampaignId gt06-o6-host-soak-20260930-01 -Mode residency`.
+- Actual result: 28 batches completed; supervisor/child process exit was `1`, Job/tree/handles were clean, and `owner-failure.json` recorded `HARNESS_FAIL`.
+- Finding: watchdog sample 198 raised `WATCHDOG_DOCKER_INVENTORY` while reading the explicit Docker Desktop endpoint. `watchdog-observation-error.json` and `watchdog-stop.json` were retained. This is an observer/harness failure, not O1 acceptance, not a product PASS, and not an `INFRA_ABORT`.
+- Repair: Docker inventory now retries one transient read within the O4.1 sample budget and remains fail-closed on persistent uncertainty. Recovery validation was tightened in the same repair milestone; a fresh source closure and diagnostic run are required before formal consideration.

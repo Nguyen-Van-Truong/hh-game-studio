@@ -110,12 +110,23 @@ def running_containers(processes):
         return []
     executable = Path(os.environ.get('ProgramFiles', r'C:\Program Files')) / 'Docker/Docker/resources/bin/docker.exe'
     require(executable.is_file(), 'WATCHDOG_DOCKER_CLI_MISSING')
-    try:
-        result = subprocess.run([str(executable), '--host', 'npipe:////./pipe/dockerDesktopLinuxEngine',
-            'ps', '--format', '{{.Names}}'], capture_output=True, timeout=2,
-            creationflags=subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0)
-    except (OSError, subprocess.TimeoutExpired) as error:
-        raise BenchmarkJobError('WATCHDOG_DOCKER_INVENTORY') from error
+    # Docker Desktop can briefly reject/timeout a read while its daemon is
+    # refreshing. Retry once within the O4.1 <=10s watchdog sample interval;
+    # persistent uncertainty still aborts closed.
+    result = None
+    last_error = None
+    for attempt in range(2):
+        try:
+            result = subprocess.run([str(executable), '--host', 'npipe:////./pipe/dockerDesktopLinuxEngine',
+                'ps', '--format', '{{.Names}}'], capture_output=True, timeout=2,
+                creationflags=subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0)
+            if result.returncode == 0:
+                break
+            last_error = BenchmarkJobError('WATCHDOG_DOCKER_INVENTORY')
+        except (OSError, subprocess.TimeoutExpired) as error:
+            last_error = error
+    if result is None or result.returncode != 0:
+        raise BenchmarkJobError('WATCHDOG_DOCKER_INVENTORY') from last_error
     require(result.returncode == 0 and len(result.stdout) <= 65536,
             'WATCHDOG_DOCKER_INVENTORY')
     try:

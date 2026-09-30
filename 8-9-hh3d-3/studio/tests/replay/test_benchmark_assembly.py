@@ -691,6 +691,37 @@ class AssemblyTests(unittest.TestCase):
         self.assertEqual(assembly._reconciliation_trace(row, schema_version='1.5.0', complete=True),
                          [1020, 1040])
 
+    def test_unknown_recovery_must_not_claim_a_result(self):
+        failure_detail = {
+            'endpoint': 'lookup', 'stage': 'getresponse', 'category': 'http',
+            'exception': 'HTTPException', 'errno': None, 'winerror': None, 'elapsed_ms': .04,
+        }
+        failure = {**failure_detail, 'attempts': 1, 'attempt_details': [dict(failure_detail)],
+                   'recovered': False, 'bytes_sent': True}
+        row = {
+            'command_id': 'test.unknown', 'kind': 'admitted',
+            'request_digest': 'sha256:' + 'f' * 64, 'receipt_mono_us': 100,
+            'receipt_status': 'UNKNOWN', 'receipt_code': 'CONNECTION_LOST_LOOKUP',
+            'reconciliation': [{
+                'action': 'lookup',
+                'response': {'status': 'UNKNOWN', 'code': 'CONNECTION_LOST_LOOKUP',
+                             'command_id': 'test.unknown', 'result_revision': 'forged',
+                             'result_hash': 'sha256:' + 'a' * 64,
+                             'postconditions': {'next_action': 'lookup'}},
+                'started_mono_us': 101, 'ended_mono_us': 102,
+                'transport_failure': failure,
+            }],
+        }
+        with self.assertRaisesRegex(assembly.AssemblyError, 'RECONCILIATION_STATUS'):
+            assembly._reconciliation_trace(row, schema_version='1.5.0', complete=False)
+
+    def test_cancel_recovery_rejects_retired_top_level_shape(self):
+        value = command_fixture()
+        value['cancel']['reconciliation'] = []
+        with self.assertRaisesRegex(assembly.AssemblyError, 'CANCEL_RECONCILIATION_STALE'):
+            assembly.validate_command_batch(value, run_id=RUN, index=0,
+                                            host_identity=PROCESSES['host'])
+
     def test_reconciliation_trace_requires_not_found_before_submit_and_binds_terminal(self):
         value = command_fixture()
         row = value['commands'][5]
