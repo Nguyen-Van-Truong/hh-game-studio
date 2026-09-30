@@ -11,10 +11,10 @@ source or dispatching a formal campaign.
 
 - `CURRENT_VALID_WP=GT-06`; GT-01 through GT-05 are accepted.
 - GT-06 has **zero accepted formal pairs**. GT-07 through GT-10 remain closed.
-- Current HEAD is `f731b392` (`GT06: harden journal residency and transport
+- Current HEAD is `3f26d765` (`GT06: harden journal residency and transport
   recovery`), the one coherent O6 repair commit.
 - Verification now includes protocol `441` tests (exit 0, four skipped) and
-  replay `675` tests (exit 0). The cancel admission/ACK transport fault tests and the
+  replay `678` tests (exit 0). The cancel admission/ACK transport fault tests, strict UNKNOWN sentinel checks, and the
   one-to-one transport-event binding test also pass. These are source checks,
   not formal acceptance and not a frozen source closure.
 - The installed execution binding was reminted atomically for the committed source
@@ -31,6 +31,7 @@ source or dispatching a formal campaign.
   was also `CPU INFRA_ABORT`).
 - Host-only soak03 and soak04 remain diagnostics. Soak03 exceeded the retired
   O5 comparison; O6.3 supersedes that formula with the exact O1.4 windows.
+- O6.3 gt06-o6-host-soak-20260930-01 stopped at 28 batches with HARNESS_FAIL after watchdog sample 198 could not read Docker inventory. Raw watchdog error/stop and clean Job closeout are retained; the repair retries one transient Docker read and still aborts closed.
 - Soak04 stopped at batch 27 with a rejected command returning
   `CONNECTION_LOST_LOOKUP`/`UNKNOWN` during `client.connect` before request bytes
   were sent. It must remain a product/transport failure, not an infrastructure
