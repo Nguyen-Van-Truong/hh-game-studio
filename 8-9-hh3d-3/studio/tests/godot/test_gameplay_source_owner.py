@@ -1,5 +1,6 @@
 """Pure adapter lifecycle tests; native result is an explicitly shaped fixture."""
 import importlib.util
+import json
 from pathlib import Path
 import sys
 import tempfile
@@ -199,7 +200,8 @@ class GameplaySourceOwnerTests(unittest.TestCase):
 
     def test_reopen_reads_selected_revision_without_reusing_old_lease(self):
         files = dict(self.source)
-        receipt = self.owner.publish(self.request(files), grant=self.grant,
+        request = self.request(files)
+        receipt = self.owner.publish(request, grant=self.grant,
                                      lease=self.lease, deadline_ms=self.lease.expires_ms)
         root = self.owner._root
         self.owner.close()
@@ -210,6 +212,13 @@ class GameplaySourceOwnerTests(unittest.TestCase):
         self.addCleanup(reopened.close)
         self.assertEqual(reopened.inspect()["project_revision"], receipt["project_revision"])
         self.assertEqual(reopened.inspect()["generation"], receipt["generation"])
+        credential = reopened.issue()
+        grant = reopened.authorize("Bearer " + credential.bearer, "scene.save")
+        lease = reopened.lease(grant)
+        calls_before = len(self.runs)
+        self.assertEqual(reopened.publish(request, grant=grant, lease=lease,
+                                          deadline_ms=lease.expires_ms), receipt)
+        self.assertEqual(len(self.runs), calls_before)
         with self.assertRaisesRegex(SafetyViolation, "AUTH_REQUIRED"):
             reopened.authorize("Bearer " + self.credential.bearer, "scene.save")
 
@@ -220,6 +229,24 @@ class GameplaySourceOwnerTests(unittest.TestCase):
             self.owner.publish(request, grant=self.grant, lease=self.lease,
                                deadline_ms=self.lease.expires_ms)
         self.assertEqual(self.runs, [])
+
+    def test_reopen_rejects_tampered_committed_receipt(self):
+        request = self.request(dict(self.source))
+        self.owner.publish(request, grant=self.grant, lease=self.lease,
+                           deadline_ms=self.lease.expires_ms)
+        root = self.owner._root
+        self.owner.close()
+        rows = [json.loads(line) for line in (root / 'journal.jsonl').read_bytes().splitlines()]
+        rows[-1].pop('readback_sha256')
+        (root / 'journal.jsonl').write_bytes(
+            b''.join(json.dumps(row, sort_keys=True, separators=(',', ':')).encode() + b'\n'
+                     for row in rows))
+        with self.assertRaisesRegex(owner_mod.GameplaySourceOwnerError,
+                                    'JOURNAL_COMMITTED_SHAPE'):
+            owner_mod.GameplaySourcePublicationOwner.reopen(
+                root, project_id='project.gameplay',
+                source_closure_sha256=owner_mod.runtime_source_closure()[1],
+                runner=lambda *args, **kwargs: native_result('unused-run'))
 
     def test_concurrent_publication_is_rejected_without_poisoning_active_writer(self):
         entered, release = threading.Event(), threading.Event()

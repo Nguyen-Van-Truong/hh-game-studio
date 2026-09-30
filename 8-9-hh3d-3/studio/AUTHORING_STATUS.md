@@ -624,10 +624,11 @@ if Stop arrives at the selector replacement boundary. A barrier test closes
 at that exact point, proves close waits for the boundary, then reopens and
 reads the committed revision and generation.
 
-`python -B studio/tests/godot/test_gameplay_source_owner.py`: **13 pure
-tests**, actual exit 0, 0.850s. The added cases cover competing writers,
-close during a blocked native run, and close at selector adoption. No native
-engine, Docker, Blender or formal GT06 run was started. This remains
-`AUTHORITY=0`; durable command deduplication/recovery on reopen, crash
-reconciliation, native-run identity binding and full runtime closure remain
-open, and the branch must not merge before GT06 is accepted.
+`python -B studio/tests/godot/test_gameplay_source_owner.py`: **14 pure
+tests**, actual exit 0, 0.784s. The cases cover competing writers, close
+during a blocked native run, close at selector adoption, exact retry after
+reopen without a second native call, and rejection of a tampered terminal
+receipt. No native engine, Docker, Blender or formal GT06 run was started.
+This remains `AUTHORITY=0`; selector/journal crash reconciliation, native-run
+identity binding and full runtime closure remain open, and the branch must
+not merge before GT06 is accepted.

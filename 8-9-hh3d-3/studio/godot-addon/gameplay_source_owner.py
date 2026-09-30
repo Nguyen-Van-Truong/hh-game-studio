@@ -256,6 +256,29 @@ class GameplaySourcePublicationOwner:
         owner._files = owner._read_revision(owner._project_revision)
         owner._profile_observation = profile.validate_source_bundle(owner._files, entrypoint=ENTRYPOINT)
         owner._check_selected()
+        # Rebuild the in-memory retry index from terminal journal rows. A
+        # reopened owner must not rerun a native effect for an already
+        # committed command. Validate the complete row shape before trusting
+        # any receipt and reject conflicting duplicate identities.
+        terminal_keys = {"kind", "command_id", "request_digest", "project_revision",
+                         "source_sha256", "native_run_id", "selected_revision", "generation",
+                         "readback_sha256", "readback_ack", "public_ack", "fencing_epoch",
+                         "observed_ms"}
+        for row in rows:
+            if row["kind"] != "COMMITTED":
+                continue
+            _need(set(row) == terminal_keys, "GAMEPLAY_OWNER_JOURNAL_COMMITTED_SHAPE")
+            receipt = ReadbackAck(**{name: row[name] for name in terminal_keys
+                                     if name in ReadbackAck.__dataclass_fields__})
+            _need(receipt.readback_ack is True and receipt.public_ack is False
+                  and type(row["fencing_epoch"]) is int and row["fencing_epoch"] >= 0
+                  and type(row["observed_ms"]) is int and row["observed_ms"] >= 0,
+                  "GAMEPLAY_OWNER_JOURNAL_COMMITTED_VALUE")
+            rebuilt = {"status": "READBACK_ACK", **asdict(receipt)}
+            previous = owner._jobs.get(receipt.command_id)
+            _need(previous is None or previous == rebuilt,
+                  "GAMEPLAY_OWNER_JOURNAL_COMMAND_CONFLICT")
+            owner._jobs[receipt.command_id] = rebuilt
         return owner
 
     @staticmethod
