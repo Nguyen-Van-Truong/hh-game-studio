@@ -260,6 +260,7 @@ class GameplaySourcePublicationOwner:
         owner._runs = root / "runs"
         owner._selector = root / "CURRENT"
         owner._journal = journal
+        owner._reconcile_stage_markers()
         # Rebuild only a fully validated terminal history. Selector mismatch
         # is reconciled only after the journal and selected revision have been
         # fully checked; malformed or truncated durable state still fails closed.
@@ -343,6 +344,34 @@ class GameplaySourcePublicationOwner:
         owner._session = session_model.PublicationSession(project_id, root,
             contract.CATALOG_DIGEST, minimum_fencing_epoch=last["fencing_epoch"])
         return owner
+
+    def _reconcile_stage_markers(self) -> None:
+        """Remove only an empty pre-dispatch marker left by a crashed owner.
+
+        A marker with any evidence, or one paired with a run directory, is
+        ambiguous and therefore stays durable while reopen fails closed.  The
+        caller can then preserve the raw run for explicit reconciliation; an
+        exact retry is permitted only when no native run directory exists.
+        """
+        _need(self._runs.is_dir(), "GAMEPLAY_OWNER_RUNS_MISSING")
+        for marker in self._runs.iterdir():
+            if not marker.name.endswith(".stage"):
+                continue
+            self._executor._no_links(marker)
+            _need(marker.is_dir(), "GAMEPLAY_OWNER_STAGE_MARKER")
+            command_id = marker.name[:-len(".stage")]
+            _need(_ID.fullmatch(command_id), "GAMEPLAY_OWNER_STAGE_MARKER")
+            run_dir = self._runs / command_id
+            try:
+                run_dir.lstat()
+            except FileNotFoundError:
+                pass
+            else:
+                # lstat deliberately catches regular files, directories and
+                # symlinks, including a broken symlink, as durable evidence.
+                raise GameplaySourceOwnerError("GAMEPLAY_OWNER_STAGE_AMBIGUOUS")
+            _need(not any(marker.iterdir()), "GAMEPLAY_OWNER_STAGE_DIRTY")
+            marker.rmdir()
 
     @staticmethod
     def _source_hash(files) -> str:
@@ -600,17 +629,22 @@ class GameplaySourcePublicationOwner:
         try:
             if not self._safe_revision(candidate_revision).exists():
                 self._materialize(candidate_revision, candidate)
+            else:
+                _need(self._read_revision(candidate_revision) == candidate,
+                      "GAMEPLAY_OWNER_CANDIDATE_REVISION")
             # The revision is not selected yet. Running against this immutable
             # directory exercises the real Docker/Godot executor before ACK.
-            result = self._phase(grant, lease, command_id, digest, deadline_ms, "stage",
-                lambda: self._runner(self._safe_revision(candidate_revision) / "project",
-                                      mode="gameplay-source", output=run_dir, timeout_seconds=20))
-            result = self._read_native_result(run_dir, result)
             expected_native_inputs = {
                 "project.godot": _sha(self._profile.PROJECT_TEMPLATE.encode()),
                 **{name: _sha(raw) for name, raw in sorted(candidate.items())},
             }
-            self._validate_native(result, expected_input_hashes=expected_native_inputs)
+            def run_stage():
+                observed = self._runner(self._safe_revision(candidate_revision) / "project",
+                                         mode="gameplay-source", output=run_dir, timeout_seconds=20)
+                observed = self._read_native_result(run_dir, observed)
+                self._validate_native(observed, expected_input_hashes=expected_native_inputs)
+                return observed
+            result = self._phase(grant, lease, command_id, digest, deadline_ms, "stage", run_stage)
             native_run_id = result["run_id"]
             # Once selection starts, keep the lifecycle lock through the
             # durable journal commit.  Stop/close may still interrupt the

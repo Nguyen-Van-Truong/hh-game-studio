@@ -77,6 +77,18 @@ class GameplaySourceOwnerTests(unittest.TestCase):
         self.lease = self.owner.lease(self.grant)
         self.addCleanup(self.owner.close)
 
+    def fresh_owner(self, runner):
+        owner = owner_mod.GameplaySourcePublicationOwner.create(
+            self.parent, project_id="project.gameplay", source_files=self.source,
+            entrypoint=owner_mod.ENTRYPOINT,
+            source_closure_sha256=owner_mod.runtime_source_closure()[1],
+            runner=runner)
+        self.addCleanup(owner.close)
+        credential = owner.issue()
+        grant = owner.authorize("Bearer " + credential.bearer, "scene.save")
+        lease = owner.lease(grant)
+        return owner, grant, lease
+
     def request(self, files, expected=None, command="command.gameplay.1"):
         request = {
             "command_id": command,
@@ -303,6 +315,67 @@ class GameplaySourceOwnerTests(unittest.TestCase):
             'schema': 'hh-gameplay-selector-1', 'revision': initial['project_revision'],
             'generation': initial['generation']})
 
+    def test_reopen_removes_only_empty_stage_marker_for_exact_retry(self):
+        request = self.request(dict(self.source), command='command.crashed.stage')
+        marker = self.owner._runs / (request['command_id'] + '.stage')
+        marker.mkdir()
+        root = self.owner._root
+        self.owner.close()
+        reopened = owner_mod.GameplaySourcePublicationOwner.reopen(
+            root, project_id='project.gameplay',
+            source_closure_sha256=owner_mod.runtime_source_closure()[1],
+            runner=lambda project, **kwargs: bound_native_result(project, output=kwargs['output']))
+        self.addCleanup(reopened.close)
+        self.assertFalse(marker.exists())
+        credential = reopened.issue()
+        grant = reopened.authorize('Bearer ' + credential.bearer, 'scene.save')
+        lease = reopened.lease(grant)
+        receipt = reopened.publish(request, grant=grant, lease=lease,
+                                   deadline_ms=lease.expires_ms)
+        self.assertEqual(receipt['status'], 'READBACK_ACK')
+
+    def test_reopen_preserves_partial_stage_evidence_and_fails_closed(self):
+        marker = self.owner._runs / 'command.partial.stage'
+        marker.mkdir()
+        evidence = marker / 'runner.log'
+        evidence.write_bytes(b'runner started\n')
+        root = self.owner._root
+        self.owner.close()
+        with self.assertRaisesRegex(owner_mod.GameplaySourceOwnerError,
+                                    'GAMEPLAY_OWNER_STAGE_DIRTY'):
+            owner_mod.GameplaySourcePublicationOwner.reopen(
+                root, project_id='project.gameplay',
+                source_closure_sha256=owner_mod.runtime_source_closure()[1],
+                runner=lambda *args, **kwargs: native_result('unused-run'))
+        self.assertTrue(marker.is_dir())
+        self.assertEqual(evidence.read_bytes(), b'runner started\n')
+
+    def test_reopen_rejects_stage_marker_file_without_touching_evidence(self):
+        marker = self.owner._runs / 'command.marker-file.stage'
+        marker.write_bytes(b'partial marker')
+        root = self.owner._root
+        self.owner.close()
+        with self.assertRaisesRegex(owner_mod.GameplaySourceOwnerError,
+                                    'GAMEPLAY_OWNER_STAGE_MARKER'):
+            owner_mod.GameplaySourcePublicationOwner.reopen(
+                root, project_id='project.gameplay',
+                source_closure_sha256=owner_mod.runtime_source_closure()[1],
+                runner=lambda *args, **kwargs: native_result('unused-run'))
+        self.assertEqual(marker.read_bytes(), b'partial marker')
+
+    def test_existing_candidate_revision_is_verified_before_native_run(self):
+        files = dict(self.source)
+        files[owner_mod.ENTRYPOINT] += b'\n# existing candidate\n'
+        request = self.request(files, command='command.tampered.revision')
+        revision = owner_mod.GameplaySourcePublicationOwner._revision(files)
+        self.owner._materialize(revision, files)
+        target = self.owner._safe_revision(revision) / 'project' / owner_mod.ENTRYPOINT
+        target.write_bytes(b'extends Node3D\n# tampered\n')
+        with self.assertRaisesRegex(owner_mod.GameplaySourceOwnerError, 'READBACK_HASH'):
+            self.owner.publish(request, grant=self.grant, lease=self.lease,
+                               deadline_ms=self.lease.expires_ms)
+        self.assertEqual(self.runs, [])
+
     def test_concurrent_publication_is_rejected_without_poisoning_active_writer(self):
         entered, release = threading.Event(), threading.Event()
         completed, failures = [], []
@@ -449,7 +522,6 @@ class GameplaySourceOwnerTests(unittest.TestCase):
         self.assertEqual(reopened.inspect()['generation'], self.owner._generation)
 
     def test_dirty_native_observation_cannot_publish_or_ack(self):
-        before = self.owner.inspect()
         files = dict(self.source)
         fields = (
             ("diagnostic_process_clean", False),
@@ -474,18 +546,31 @@ class GameplaySourceOwnerTests(unittest.TestCase):
                     kwargs['output'].joinpath('result.json').write_bytes(
                         owner_mod.canonical_bytes(_result))
                     return _result
-                self.owner._runner = dirty_runner
+                owner, grant, lease = self.fresh_owner(dirty_runner)
+                before = owner.inspect()
+                request = self.request(files, command="command.dirty." + field)
+                request["expected_project_revision"] = before["project_revision"]
+                request["digest"] = owner_mod.request_digest(project_id=owner.project_id,
+                    command_id=request["command_id"], entrypoint=request["entrypoint"],
+                    expected_project_revision=request["expected_project_revision"],
+                    source_files=files)
                 with self.assertRaisesRegex(owner_mod.GameplaySourceOwnerError,
                                             "GAMEPLAY_OWNER_NATIVE_NOT_CLEAN"):
-                    self.owner.publish(self.request(files, command="command.dirty." + field),
-                                       grant=self.grant, lease=self.lease,
-                                       deadline_ms=self.lease.expires_ms)
-                self.assertEqual(self.owner.inspect()["generation"], before["generation"])
-                self.assertEqual(self.owner.inspect()["project_revision"], before["project_revision"])
+                    owner.publish(request, grant=grant, lease=lease,
+                                  deadline_ms=lease.expires_ms)
+                self.assertTrue(owner._held)
+                self.assertTrue(owner._session.status()["held"])
+                self.assertEqual(owner._selector.read_bytes(),
+                                 json.dumps({"schema": "hh-gameplay-selector-1",
+                                     "revision": before["project_revision"],
+                                     "generation": before["generation"]},
+                                     sort_keys=True, separators=(',', ':')).encode())
 
     def test_native_result_must_bind_all_published_source_hashes(self):
-        before = self.durable_state()
+        before_selector = self.owner._selector.read_bytes()
+        before_journal = self.owner._journal.read_bytes()
         files = dict(self.source)
+        request = self.request(files, command="command.native-binding")
 
         def dirty_runner(project, **kwargs):
             result = bound_native_result(project, output=kwargs['output'])
@@ -496,10 +581,44 @@ class GameplaySourceOwnerTests(unittest.TestCase):
         self.owner._runner = dirty_runner
         with self.assertRaisesRegex(owner_mod.GameplaySourceOwnerError,
                                     "GAMEPLAY_OWNER_NATIVE_INPUT_BINDING"):
-            self.owner.publish(self.request(files, command="command.native-binding"),
+            self.owner.publish(request,
                                grant=self.grant, lease=self.lease,
                                deadline_ms=self.lease.expires_ms)
-        self.assertEqual(self.durable_state(), before)
+        self.assertTrue(self.owner._held)
+        self.assertEqual(self.owner._session.status(),
+                         {'stopped': True, 'held': True, 'draining': False,
+                          'public_ack': False})
+        self.assertEqual(self.owner._selector.read_bytes(), before_selector)
+        self.assertEqual(self.owner._journal.read_bytes(), before_journal)
+        with self.assertRaisesRegex(owner_mod.GameplaySourceOwnerError,
+                                    'GAMEPLAY_OWNER_CLOSED'):
+            self.owner.publish(request, grant=self.grant, lease=self.lease,
+                               deadline_ms=self.lease.expires_ms)
+
+    def test_native_result_readback_failure_latches_owner_and_session(self):
+        before_selector = self.owner._selector.read_bytes()
+        before_journal = self.owner._journal.read_bytes()
+        request = self.request(dict(self.source), command='command.missing-result')
+
+        def missing_result_runner(project, **kwargs):
+            kwargs['output'].mkdir()
+            return native_result('missing-result')
+
+        self.owner._runner = missing_result_runner
+        with self.assertRaisesRegex(owner_mod.GameplaySourceOwnerError,
+                                    'GAMEPLAY_OWNER_NATIVE_RESULT_MISSING'):
+            self.owner.publish(request, grant=self.grant, lease=self.lease,
+                               deadline_ms=self.lease.expires_ms)
+        self.assertTrue(self.owner._held)
+        self.assertEqual(self.owner._session.status(),
+                         {'stopped': True, 'held': True, 'draining': False,
+                          'public_ack': False})
+        self.assertEqual(self.owner._selector.read_bytes(), before_selector)
+        self.assertEqual(self.owner._journal.read_bytes(), before_journal)
+        with self.assertRaisesRegex(owner_mod.GameplaySourceOwnerError,
+                                    'GAMEPLAY_OWNER_CLOSED'):
+            self.owner.publish(request, grant=self.grant, lease=self.lease,
+                               deadline_ms=self.lease.expires_ms)
 
 
 if __name__ == "__main__":

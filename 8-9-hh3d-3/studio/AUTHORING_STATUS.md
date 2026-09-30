@@ -641,3 +641,22 @@ The reconciliation cases are covered by the same pure suite: a selector behind
 the committed journal is advanced back to the durable receipt, while a
 selector ahead of a journal whose terminal row is missing is rolled back to
 the last durable revision. No selector-only revision is adopted.
+
+### 2026-09-30 recovery evidence hardening (static)
+
+This recovery milestone closes three gaps in the candidate adapter. Native
+runner output, durable `result.json` readback, and validation now stay inside
+one stage effect; a missing, mismatched, or dirty result marks the session and
+owner held before any selector or journal mutation, so a later publish cannot
+continue from an unknown native outcome. Reopen removes only an empty
+pre-dispatch `.stage` marker when no matching run artifact exists. A nonempty
+marker, marker file, symlink, or matching run artifact is retained and causes
+fail-closed recovery without deleting evidence. Existing candidate revisions
+are re-read and hash-validated before the native runner can use them.
+
+The focused owner suite now passes **21 tests**, actual exit 0 (2.776s),
+including missing-result and dirty-result latching, safe empty-stage retry,
+partial-stage evidence preservation, marker-file rejection, and tampered
+existing-revision rejection. No Godot, Blender, Docker, or public capability
+was enabled; `AUTHORITY=0`, full arbitrary runtime closure and AUTH-05 remain
+open, and this branch must not merge before GT-06 acceptance.
