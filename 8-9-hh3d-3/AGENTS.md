@@ -1,8 +1,8 @@
 # HH3D-3 — routing hiện hành
 
-Owner steering mới nhất 27-09-2026: coordinator tự làm, không gọi worker hay
-subagent. Chỉ dẫn cho phép subagent trước đó đã được owner thay thế.
-Giữ một writer/file và tiếp tục từ checkpoint đã kiểm chứng.
+Owner steering mới nhất 30-09-2026: coordinator được dùng subagent khi giúp
+nhanh/chính xác hơn; ưu tiên gpt-6.1-sol ultra cho việc có phạm vi rõ.
+Giữ một writer/file, tuần tự hóa workload đo và tiếp tục từ checkpoint đã kiểm chứng.
 Riêng critic nghiệm thu theo O4.3: coordinator chuẩn bị CRITIC_PACKAGE để
 owner chuyển phiên review độc lập chạy hai critic khác model cùng hash.
 Không tự gọi critic nghiệm thu, không ký thay hoặc tái dùng chữ ký hash cũ.

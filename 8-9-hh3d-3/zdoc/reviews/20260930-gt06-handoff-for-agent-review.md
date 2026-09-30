@@ -11,15 +11,22 @@ source or dispatching a formal campaign.
 
 - `CURRENT_VALID_WP=GT-06`; GT-01 through GT-05 are accepted.
 - GT-06 has **zero accepted formal pairs**. GT-07 through GT-10 remain closed.
-- Current HEAD is `3f26d765` (`GT06: harden journal residency and transport
-  recovery`), the one coherent O6 repair commit.
-- Verification now includes protocol `441` tests (exit 0, four skipped) and
-  replay `678` tests (exit 0). The cancel admission/ACK transport fault tests, strict UNKNOWN sentinel checks, and the
+- Implementation checkpoints: `9da2635b` (journal residency/transport) and
+  `3f26d765` (recovery schema/watchdog retry). Use `git status` and `git log`
+  for current HEAD; a hash embedded in its own handoff is not a live pointer.
+- Verification after the redaction/Docker repair includes protocol `443` tests
+  (exit 0, four skipped) and replay `683` tests (exit 0). The cancel admission/ACK transport fault tests, strict UNKNOWN sentinel checks, and the
   one-to-one transport-event binding test also pass. These are source checks,
   not formal acceptance and not a frozen source closure.
-- The installed execution binding was reminted atomically for the committed source
+- The installed execution binding was reminted by atomic file replacement for the source
   delta, retaining the GT05 anchor: 215 source files, 217 verified execution
-  files, closure `38dbf542016cfecd7cfcb477bccb3cef57fd12f9a9e30566ed9277e1a79b70b5`.
+  files, verified closure `09733a55e3121db88b33dbaadca273cb66d2ddb9e6decfb38db765bb1ac46176`.
+- Short HTTP allocation tracing found retained compiled regexes from cumulative
+  credential redactors. The repaired instance-owned literal matcher preserves
+  credential history and matching behavior. Isolated live allocations fell
+  from 1,655,417 to 38,546 bytes after 35 credential generations; detailed
+  evidence and scope limits are in the diagnostic lane. Full host soak remains
+  required. Preflight at 19:53 was blocked by 92.165% system commit.
 - O2 remains a separate authority-zero candidate tree and must not be merged
   before GT-06 acceptance.
 
@@ -31,7 +38,14 @@ source or dispatching a formal campaign.
   was also `CPU INFRA_ABORT`).
 - Host-only soak03 and soak04 remain diagnostics. Soak03 exceeded the retired
   O5 comparison; O6.3 supersedes that formula with the exact O1.4 windows.
-- O6.3 gt06-o6-host-soak-20260930-01 stopped at 28 batches with HARNESS_FAIL after watchdog sample 198 could not read Docker inventory. Raw watchdog error/stop and clean Job closeout are retained; the repair retries one transient Docker read and still aborts closed.
+- O6.3 `gt06-o6-host-soak-20260930-01` stopped after 28 batches with
+  `HARNESS_FAIL` when watchdog sample 198 could not read Docker inventory.
+  Its generic code does not prove timeout. Wrapper exit was 2 with clean Job;
+  child exit/capture is missing. Supervisor return 1 is not that child exit.
+- Independently, this prefix already exceeds the memory growth limit:
+  baseline median 2-4 `30,650,368` bytes; max 5-27 `35,188,736` (114.806896%).
+  Partial late/early max is 103.096124%; the full late window is absent.
+  Fixing Docker inventory alone cannot establish readiness for formal.
 - Soak04 stopped at batch 27 with a rejected command returning
   `CONNECTION_LOST_LOOKUP`/`UNKNOWN` during `client.connect` before request bytes
   were sent. It must remain a product/transport failure, not an infrastructure
@@ -69,16 +83,21 @@ stock-control run is requested by this handoff.
 
 ## Required next sequence
 
-1. Finish review of the O6 transport repair and its focused protocol/reconcile tests.
-   Record phase, exception, errno/winerror, attempt count, and whether bytes
-   were sent. Retry only pre-send `connect` failures with the O6 bounded policy;
-   after bytes are sent, reconcile by lookup and never blindly resend.
-2. Keep the source WIP uncommitted until the repair is reviewed as one change
-   set; retain raw diagnostic packages and do not rewrite historical verdicts.
-3. Freeze one complete source closure, pass a fresh O4.1 preflight, then run a
-   new formal 2x35 host/editor campaign with exact O1.4 metrics and actual exits.
-   Use a new run/command ID after any source change.
-4. If formal evidence passes, prepare the `CRITIC_PACKAGE` for the owner’s
+1. Preserve the completed short attribution and redaction/Docker repair. Do
+   not repeat these probes or regression suites unless source changes or new
+   evidence warrants it. O2 can proceed in its worktree during the resource wait.
+2. At dispatch, verify/freeze the complete source closure. The computed current
+   residency closure has 54 files and hash
+   `b43fb6f19cd1f363c925fa82c1c8d9469d75e7191d9e5ac6305d21c04c40851e`;
+   this is not a completed-run binding. Docker uncertainty still fails closed.
+3. Pass fresh O4.1 preflight and run a new 35-batch host-only soak under O6.3.
+   If max/baseline exceeds 107% but passes O1.4, an additional fresh soak is
+   required. Only sufficient soak evidence permits a new formal 2x35 campaign.
+   Source/profile bindings and actual exits must be checked for each run.
+4. Current implemented profile is O5/v6, hash
+   `8a2e599c40f927ffaff5ded5e48b6bf2a0f0a6bb3a23de31434a695f4258cb35`.
+   Reuse existing stock control offline; do not rewrite historical v5 raw.
+5. If formal evidence passes, prepare the `CRITIC_PACKAGE` for the owner’s
    independent read-only critics. Do not self-sign or tick GT-06.
 
 ## Guardrails

@@ -45,8 +45,9 @@ needed for the next repair. Raw evidence remains under `studio/.local/`.
 
 - Source closure: `6cd560efe44cb1a97be6709d32b355ea2e438da176551d59b2bb0b7ed811b709`
 - Actual result: 35/35, child exit `0`, clean Job/tree/handle
-- Finding: private commit batch 5 to 34 grew `+5.528084%`, over the O5 `<=5%`
-  criterion; diagnostic only.
+- Finding corrected under O6.3: exact O1.4 max/baseline is `116.4%` and
+  late/early max `102.7%`; the growth limit fails. The historical batch 5 to
+  34 comparison was `+5.528084%`; that retired formula is not the current gate.
 
 ## 2026-09-30 — O6.2 journal live-state microbench
 
@@ -99,6 +100,61 @@ needed for the next repair. Raw evidence remains under `studio/.local/`.
 
 - Source closure in the watchdog binding: `3ae3b69117a0d462849c38d56e161517477f3909eca2318f4e88c9e3b7f291bf`.
 - Command: `campaign_task.ps1 -Command register-run -CampaignId gt06-o6-host-soak-20260930-01 -Mode residency`.
-- Actual result: 28 batches completed; supervisor/child process exit was `1`, Job/tree/handles were clean, and `owner-failure.json` recorded `HARNESS_FAIL`.
+- Actual result: 28 batches completed; `owner-failure.json` recorded `HARNESS_FAIL`.
+  `owner/cleanup-001.json` records wrapper exit `2`, Job zero/closed and retained
+  wrapper handle closed. There is no child `process-exit.json` or capture.
+  Supervisor `return.json` says return `1` with actual process exit still
+  unobserved; it is not a child exit record. Read-only Task Scheduler closeout
+  on 30-09 later reports Ready/LastTaskResult `1` for this task.
 - Finding: watchdog sample 198 raised `WATCHDOG_DOCKER_INVENTORY` while reading the explicit Docker Desktop endpoint. `watchdog-observation-error.json` and `watchdog-stop.json` were retained. This is an observer/harness failure, not O1 acceptance, not a product PASS, and not an `INFRA_ABORT`.
-- Repair: Docker inventory now retries one transient read within the O4.1 sample budget and remains fail-closed on persistent uncertainty. Recovery validation was tightened in the same repair milestone; a fresh source closure and diagnostic run are required before formal consideration.
+- The generic inventory code does not distinguish timeout, nonzero exit, OS
+  error or malformed output. Do not attribute it specifically to a timeout.
+- Separate memory finding: post-release baseline median batches 2-4 is
+  `30,650,368` bytes; max 5-27 is `35,188,736` at batch 25 (`114.806896%`).
+  This already breaches O1.4's `110%`; a completed suffix cannot undo that max.
+  Partial late/early max is `103.096124%`, with batches 28-34 absent; handles
+  stay at 182. No full-window PASS follows from this partial run.
+- Next: short HTTP-path allocation attribution and bounded Docker query error
+  diagnostics, then targeted repair/tests. Fresh preflight alone does not
+  justify another long soak. Preserve all old raw and verdicts.
+
+## 2026-09-30 — HTTP allocation attribution and credential redaction repair
+
+- Short HTTP diagnostic: `studio/.local/reviews/http-alloc-20260930-01/`;
+  35 batches of **100** commands (3,500 total, not the formal 1,000 per batch),
+  tracemalloc enabled, no editor. Actual exit 0 in 234.766s, producer closed,
+  source unchanged. It cannot establish latency or O1.4 acceptance.
+- Allocation snapshots after batches 4/19/34 show regex compiler live bytes
+  `89,184 / 633,144 / 1,621,704`, counts `16 / 46 / 76`. Each credential
+  rotation compiles two new secret-bearing patterns. Python's global regex
+  cache retains obsolete cumulative secret sets; the bounded phase ring stays
+  approximately constant. This identifies a real retention source, without
+  attributing every byte of the prior host private-commit series to it.
+- Isolated reproducer: `studio/tests/replay/run_redaction_residency.py --output
+  <new-directory>`, 35 SessionAuthority generations (issue + 34 rotations), all issued secrets
+  still checked for redaction. Before/after packages are
+  `studio/.local/reviews/redaction-before-20260930/` and
+  `studio/.local/reviews/redaction-after-20260930/`, both actual exit 0.
+  Traced bytes at mark 34: `1,655,417 -> 38,546`; private bytes at marks
+  4/19/34 before: `17,637,376 / 19,128,320 / 21,508,096`, after:
+  `17,530,880 / 17,530,880 / 17,530,880`.
+- Repair uses instance-owned literal matching, preserving leftmost-longest
+  replacement and never rescanning inserted markers. It does not forget old
+  credentials, clear global caches, enlarge the baseline, or change workload.
+  Redaction tests cover overlap, metacharacters, Unicode, nonrecursive markers,
+  exact old-matcher equivalence and absence of retired sets in the regex cache.
+- Docker observer repair shares the original total two-second budget across
+  at most two reads and records a whitelisted cause (timeout/nonzero/OS/bad
+  output). No exception text, argv or output is copied into the diagnostic.
+  Its focused suite passes 42 tests, exit 0. Past generic errors stay unknown.
+- Final script metadata/cleanup smoke `redaction-bound-20260930`: exit 0,
+  source unchanged, PID/start/Python hash/import closure bound; 38,842 traced
+  bytes at mark 34. Original before/after artifacts stay unchanged; their
+  smaller metadata scopes are not upgraded retroactively.
+- Regression: protocol 443 tests, exit 0 (4 skipped), 106.675s; replay 683 tests,
+  exit 0, 120.748s. A maximal repeated-prefix literal check returned unchanged
+  text in about 35ms; it is a local timing observation, not a latency gate.
+- Remaining: freeze at dispatch, fresh O4.1 preflight and O6.3 host soak.
+  Preflight 30-09 19:53 Asia/Saigon: available 6,225,252,352 bytes, commit
+  92.164854%, no foreign engines; launch denied by resource limit. No new long
+  run was dispatched. O2 work may continue separately. No acceptance claim.

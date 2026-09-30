@@ -110,32 +110,57 @@ def running_containers(processes):
         return []
     executable = Path(os.environ.get('ProgramFiles', r'C:\Program Files')) / 'Docker/Docker/resources/bin/docker.exe'
     require(executable.is_file(), 'WATCHDOG_DOCKER_CLI_MISSING')
-    # Docker Desktop can briefly reject/timeout a read while its daemon is
-    # refreshing. Retry once within the O4.1 <=10s watchdog sample interval;
-    # persistent uncertainty still aborts closed.
-    result = None
-    last_error = None
-    for attempt in range(2):
+    # Docker Desktop can briefly reject a read while its daemon is refreshing.
+    # Both attempts share the original two-second inventory budget; a timeout
+    # cannot grant a fresh two seconds. Persistent uncertainty aborts closed.
+    started = time.monotonic()
+    deadline = started + 2
+    diagnostic = None
+    for attempt in range(1, 3):
+        remaining = deadline - time.monotonic()
+        if remaining <= 0:
+            break
         try:
             result = subprocess.run([str(executable), '--host', 'npipe:////./pipe/dockerDesktopLinuxEngine',
-                'ps', '--format', '{{.Names}}'], capture_output=True, timeout=2,
+                'ps', '--format', '{{.Names}}'], capture_output=True, timeout=remaining,
                 creationflags=subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0)
-            if result.returncode == 0:
+        except subprocess.TimeoutExpired:
+            diagnostic = {'reason': 'timeout', 'attempt': attempt}
+        except OSError as error:
+            diagnostic = {'reason': 'oserror', 'attempt': attempt}
+            if type(error.errno) is int:
+                diagnostic['errno'] = error.errno
+        else:
+            if time.monotonic() > deadline:
+                diagnostic = {'reason': 'timeout', 'attempt': attempt}
                 break
-            last_error = BenchmarkJobError('WATCHDOG_DOCKER_INVENTORY')
-        except (OSError, subprocess.TimeoutExpired) as error:
-            last_error = error
-    if result is None or result.returncode != 0:
-        raise BenchmarkJobError('WATCHDOG_DOCKER_INVENTORY') from last_error
-    require(result.returncode == 0 and len(result.stdout) <= 65536,
-            'WATCHDOG_DOCKER_INVENTORY')
-    try:
-        names = result.stdout.decode('utf-8', 'strict').splitlines()
-    except UnicodeError as error:
-        raise BenchmarkJobError('WATCHDOG_DOCKER_INVENTORY') from error
-    require(all(re.fullmatch(r'[a-zA-Z0-9][a-zA-Z0-9_.-]*', name) for name in names)
-            and len(names) == len(set(names)), 'WATCHDOG_DOCKER_INVENTORY')
-    return sorted(names)
+            if type(result.returncode) is not int or type(result.stdout) is not bytes:
+                diagnostic = {'reason': 'bad_output', 'attempt': attempt}
+                break
+            if result.returncode != 0:
+                diagnostic = {'reason': 'nonzero', 'attempt': attempt,
+                              'returncode': result.returncode}
+                continue
+            if len(result.stdout) > 65536:
+                diagnostic = {'reason': 'bad_output', 'attempt': attempt}
+                break
+            try:
+                names = result.stdout.decode('utf-8', 'strict').splitlines()
+            except UnicodeError:
+                diagnostic = {'reason': 'bad_output', 'attempt': attempt}
+                break
+            if (not all(re.fullmatch(r'[a-zA-Z0-9][a-zA-Z0-9_.-]*', name) for name in names)
+                    or len(names) != len(set(names))):
+                diagnostic = {'reason': 'bad_output', 'attempt': attempt}
+                break
+            return sorted(names)
+    diagnostic = diagnostic or {'reason': 'timeout', 'attempt': 1}
+    diagnostic['elapsed_seconds'] = round(max(0, time.monotonic() - started), 6)
+    error = BenchmarkJobError('WATCHDOG_DOCKER_INVENTORY')
+    error.docker_inventory = diagnostic
+    # TimeoutExpired/OSError can contain argv, output or a sensitive path.
+    # Keep only the fixed scalar diagnosis, with no raw exception chain.
+    raise error from None
 
 
 def perf_process_times(processes):
@@ -536,6 +561,18 @@ class Watchdog:
                      'exception_class': type(error).__name__,
                      'error_code': getattr(error, 'code', str(error))[:128],
                      'sample_index': self.count - 1 if self.count else None}
+        diagnostic = getattr(error, 'docker_inventory', None)
+        if (getattr(error, 'code', None) == 'WATCHDOG_DOCKER_INVENTORY'
+                and type(diagnostic) is dict
+                and diagnostic.get('reason') in ('timeout', 'nonzero', 'oserror', 'bad_output')
+                and type(diagnostic.get('attempt')) is int and 1 <= diagnostic['attempt'] <= 2
+                and type(diagnostic.get('elapsed_seconds')) in (int, float)
+                and 0 <= diagnostic['elapsed_seconds'] < float('inf')):
+            event['docker_inventory'] = {name: diagnostic[name]
+                for name in ('reason', 'attempt', 'elapsed_seconds')}
+            for name in ('errno', 'returncode'):
+                if type(diagnostic.get(name)) is int:
+                    event['docker_inventory'][name] = diagnostic[name]
         stop = {'schema': 'HH-GT06-WATCHDOG-STOP-1', **self.binding,
                         'classification': 'HARNESS_FAIL', 'reason': 'OBSERVER_ERROR',
                         'formal_acceptance': False,

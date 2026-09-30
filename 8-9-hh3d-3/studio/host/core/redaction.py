@@ -90,11 +90,36 @@ class Redactor:
                     variants.add(base64.b64encode(encoded).decode("ascii"))
                 replacements.update(variants)
         self._replacements = tuple(sorted(replacements, key=lambda item: (-len(item), item)))
-        self._replacement_pattern = (re.compile("|".join(re.escape(item) for item in self._replacements))
-                                     if self._replacements else None)
+        # A new combined regex per credential rotation leaves every older,
+        # increasingly large pattern (and its secrets) in re's process cache.
+        # Keep only instance-owned literals. Grouping lets startswith perform
+        # the common no-match check in C without allocating candidate lists.
+        groups: dict[str, list[str]] = {}
+        for item in self._replacements:
+            groups.setdefault(item[0], []).append(item)
+        self._replacement_groups = {initial: tuple(items) for initial, items in groups.items()}
 
     def __repr__(self) -> str:
         return "Redactor(<private registrations>)"
+
+    def _replace_registered(self, value: str) -> str:
+        """Leftmost, longest literal match; never scan inserted markers."""
+        parts = []
+        cursor = unchanged = 0
+        while cursor < len(value):
+            candidates = self._replacement_groups.get(value[cursor])
+            if candidates and value.startswith(candidates, cursor):
+                # Candidates retain the descending-length registration order.
+                match = next(item for item in candidates if value.startswith(item, cursor))
+                parts.extend((value[unchanged:cursor], REDACTED))
+                cursor += len(match)
+                unchanged = cursor
+            else:
+                cursor += 1
+        if not parts:
+            return value
+        parts.append(value[unchanged:])
+        return ''.join(parts)
 
     def text(self, value: str | bytes) -> str:
         if type(value) is bytes:
@@ -112,9 +137,9 @@ class Redactor:
             value.encode("utf-8", "strict")
         except UnicodeError:
             return "[REDACTED:INVALID_UNICODE]"
-        if self._replacement_pattern is not None:
+        if self._replacement_groups:
             # One pass avoids recursively replacing markers for short secrets.
-            value = self._replacement_pattern.sub(REDACTED, value)
+            value = self._replace_registered(value)
         # Whole-line redaction safely covers malformed parser fragments and
         # quoted values containing spaces without trying to repair hostile JSON.
         value = "\n".join(REDACTED if _SECRET_LINE.search(line) else line

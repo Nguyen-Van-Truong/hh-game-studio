@@ -4,6 +4,8 @@ from __future__ import annotations
 import base64
 import io
 import json
+import random
+import re
 from pathlib import Path
 import sys
 import tempfile
@@ -120,6 +122,30 @@ class RedactionTests(unittest.TestCase):
     def test_no_recursive_secret_marker_expansion(self):
         value = Redactor(secrets=("A", "R", "E")).text("AAA")
         self.assertEqual(value, REDACTED * 3)
+
+    def test_literal_matching_preserves_leftmost_longest_and_metacharacters(self):
+        redactor = Redactor(secrets=('abc', 'abcde', 'bcdef', 'a.b', '[x]', 'R'))
+        self.assertEqual(redactor._replace_registered('abcdef a.b [x] R'),
+                         REDACTED + 'f ' + REDACTED + ' ' + REDACTED + ' ' + REDACTED)
+        # The old expression establishes the exact matching semantics, including
+        # overlaps, unicode, escaped variants and short marker characters.
+        rng = random.Random(606)
+        alphabet = 'ab.R[]é中'
+        for _ in range(40):
+            secrets = {''.join(rng.choices(alphabet, k=rng.randrange(1, 7))) for _ in range(12)}
+            redactor = Redactor(secrets=secrets)
+            oracle = re.compile('|'.join(re.escape(item) for item in redactor._replacements))
+            value = ''.join(rng.choices(alphabet, k=180))
+            self.assertEqual(redactor._replace_registered(value), oracle.sub(REDACTED, value))
+
+    def test_retired_secret_sets_do_not_enter_global_regex_cache(self):
+        # Inspect only the runtime's diagnostic cache keys, with synthetic data.
+        # A retired redactor must not leave credentials in this unrelated cache.
+        marker = 'synthetic-retirement-606-'
+        for index in range(35):
+            redactor = Redactor(secrets=(marker + str(n) for n in range(index + 1)))
+            self.assertEqual(redactor.text(marker + str(index)), REDACTED)
+        self.assertFalse(any(marker in key[1] for key in re._cache if type(key[1]) is str))
 
     def test_sink_error_does_not_leak_exception_detail(self):
         def bad_sink(_):
