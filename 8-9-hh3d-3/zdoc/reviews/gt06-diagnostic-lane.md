@@ -118,6 +118,25 @@ needed for the next repair. Raw evidence remains under `studio/.local/`.
   diagnostics, then targeted repair/tests. Fresh preflight alone does not
   justify another long soak. Preserve all old raw and verdicts.
 
+## 2026-09-30 — gt06-o6-host-soak-20260930-02
+
+- Source closure: `b43fb6f19cd1f363c925fa82c1c8d9469d75e7191d9e5ac6305d21c04c40851e`.
+- Command: `campaign_task.ps1 -Command register-run -CampaignId gt06-o6-host-soak-20260930-02 -Mode residency`.
+- Actual result: all 35/35 host-only batches completed; child `process-exit.json`
+  and owner capture both record exit `0`; Job assigned/configured/closed,
+  active count `0`, zero observed, no retained handle, no failed operations,
+  and natural tree exit. Task Scheduler closeout also returned `0`.
+- O1.4 diagnostic values: batches 2–4 baseline median private commit
+  `30,568,448` bytes; max batches 5–34 `32,743,424` bytes = `107.1151%`;
+  early/late maximum is also `107.1151%`; handles stayed `182`; maximum
+  status gap was `279.0004 ms`.
+- Classification: complete host soak with clean exit/cleanup, but not O1
+  formal acceptance and not a PASS for the O6.3 promotion trigger because
+  growth is above the `107%` re-soak threshold (while below the formal `110%`
+  ceiling). No editor pair, critic package, GT06 acceptance, or GT07 opening
+  follows. Keep raw evidence immutable and run another fresh O6.3 soak only
+  after review and a new O4.1 preflight.
+
 ## 2026-09-30 — HTTP allocation attribution and credential redaction repair
 
 - Short HTTP diagnostic: `studio/.local/reviews/http-alloc-20260930-01/`;
