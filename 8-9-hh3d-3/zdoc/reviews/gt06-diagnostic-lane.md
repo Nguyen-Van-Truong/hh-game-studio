@@ -158,3 +158,14 @@ needed for the next repair. Raw evidence remains under `studio/.local/`.
   Preflight 30-09 19:53 Asia/Saigon: available 6,225,252,352 bytes, commit
   92.164854%, no foreign engines; launch denied by resource limit. No new long
   run was dispatched. O2 work may continue separately. No acceptance claim.
+
+## 2026-09-30 — O2 retry identity checkpoint
+
+- Separate worktree commit `3db8c3e5` binds the gameplay-source retry digest to
+  project/profile, command ID, expected revision, entrypoint and sorted source
+  path/hash/size records. It validates and copies source bytes before cached
+  ACK lookup; live grant/lease/deadline and owner state are rechecked for every
+  retry. Ten pure adapter tests exit 0.
+- This does not merge O2, close AUTH-02..04, or alter GT-06. Reopen dedupe,
+  selector/journal crash recovery, concurrent admission, and full native
+  runtime binding remain open and are recorded in `studio/AUTHORING_STATUS.md`.
