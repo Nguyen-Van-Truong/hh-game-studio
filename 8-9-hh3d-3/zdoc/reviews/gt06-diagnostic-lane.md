@@ -236,4 +236,5 @@ needed for the next repair. Raw evidence remains under `studio/.local/`.
   short check that records timeout/nonzero/OS/bad-output causes, then either
   apply a targeted repair and rerun the short check or document its cost/risk
   and continue O2 while waiting for a clean environment. Never resume this
-  run or any prior formal run; preserve all raw evidence.
+  run or any prior formal run; preserve all raw evidence. Options and cost/risk
+  are recorded in `zdoc/reviews/20261001-o6-observer-options.md`.
