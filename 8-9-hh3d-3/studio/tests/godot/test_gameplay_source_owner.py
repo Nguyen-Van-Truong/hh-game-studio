@@ -1,5 +1,6 @@
 """Pure adapter lifecycle tests; native result is an explicitly shaped fixture."""
 import importlib.util
+import hashlib
 import json
 from pathlib import Path
 import sys
@@ -38,6 +39,16 @@ def native_result(run_id="fake-run-1"):
     }
 
 
+def bound_native_result(project, run_id="fake-run-1"):
+    result = native_result(run_id)
+    manifest = {path.relative_to(project).as_posix():
+                hashlib.sha256(path.read_bytes()).hexdigest()
+                for path in sorted(project.rglob('*')) if path.is_file()}
+    result.update(input_hashes_before=manifest, input_hashes_after=dict(manifest),
+                  snapshot_hashes_after=dict(manifest))
+    return result
+
+
 class GameplaySourceOwnerTests(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory(prefix="hh-gameplay-owner-")
@@ -51,7 +62,7 @@ class GameplaySourceOwnerTests(unittest.TestCase):
 
         def runner(project, **kwargs):
             self.runs.append((project, kwargs))
-            return native_result("fake-run-%d" % len(self.runs))
+            return bound_native_result(project, "fake-run-%d" % len(self.runs))
 
         self.owner = owner_mod.GameplaySourcePublicationOwner.create(
             self.parent, project_id="project.gameplay", source_files=self.source,
@@ -299,12 +310,12 @@ class GameplaySourceOwnerTests(unittest.TestCase):
         first = self.request(files)
         second = self.request(dict(self.source), command='command.concurrent.2')
 
-        def runner(*args, **kwargs):
+        def runner(project, **kwargs):
             calls.append(1)
             entered.set()
             if not release.wait(5):
                 raise RuntimeError('TEST_RELEASE_TIMEOUT')
-            return native_result()
+            return bound_native_result(project)
 
         def publish_first():
             try:
@@ -343,11 +354,11 @@ class GameplaySourceOwnerTests(unittest.TestCase):
         request = self.request(files)
         before = (self.owner._selector.read_bytes(), self.owner._journal.read_bytes())
 
-        def runner(*args, **kwargs):
+        def runner(project, **kwargs):
             entered.set()
             if not release.wait(5):
                 raise RuntimeError('TEST_RELEASE_TIMEOUT')
-            return native_result()
+            return bound_native_result(project)
 
         def publish():
             try:
@@ -447,6 +458,13 @@ class GameplaySourceOwnerTests(unittest.TestCase):
         for field, dirty in fields:
             with self.subTest(field=field):
                 result = native_result("dirty-" + field)
+                manifest = {"project.godot": hashlib.sha256(
+                    self.owner._profile.PROJECT_TEMPLATE.encode()).hexdigest(),
+                    **{name: hashlib.sha256(raw).hexdigest()
+                       for name, raw in sorted(files.items())}}
+                result.update(input_hashes_before=manifest,
+                              input_hashes_after=dict(manifest),
+                              snapshot_hashes_after=dict(manifest))
                 result[field] = dirty
                 self.owner._runner = lambda *args, _result=result, **kwargs: _result
                 with self.assertRaisesRegex(owner_mod.GameplaySourceOwnerError,
@@ -456,6 +474,23 @@ class GameplaySourceOwnerTests(unittest.TestCase):
                                        deadline_ms=self.lease.expires_ms)
                 self.assertEqual(self.owner.inspect()["generation"], before["generation"])
                 self.assertEqual(self.owner.inspect()["project_revision"], before["project_revision"])
+
+    def test_native_result_must_bind_all_published_source_hashes(self):
+        before = self.durable_state()
+        files = dict(self.source)
+
+        def dirty_runner(project, **kwargs):
+            result = bound_native_result(project)
+            result["input_hashes_after"][owner_mod.ENTRYPOINT] = "0" * 64
+            return result
+
+        self.owner._runner = dirty_runner
+        with self.assertRaisesRegex(owner_mod.GameplaySourceOwnerError,
+                                    "GAMEPLAY_OWNER_NATIVE_INPUT_BINDING"):
+            self.owner.publish(self.request(files, command="command.native-binding"),
+                               grant=self.grant, lease=self.lease,
+                               deadline_ms=self.lease.expires_ms)
+        self.assertEqual(self.durable_state(), before)
 
 
 if __name__ == "__main__":

@@ -624,15 +624,17 @@ if Stop arrives at the selector replacement boundary. A barrier test closes
 at that exact point, proves close waits for the boundary, then reopens and
 reads the committed revision and generation.
 
-`python -B studio/tests/godot/test_gameplay_source_owner.py`: **14 pure
-tests**, actual exit 0, 0.784s. The cases cover competing writers, close
+`python -B studio/tests/godot/test_gameplay_source_owner.py`: **16 pure
+tests**, actual exit 0, 1.837s. The cases cover competing writers, close
 during a blocked native run, close at selector adoption, exact retry after
-reopen without a second native call, and rejection of a tampered terminal
-receipt. No native engine, Docker, Blender or formal GT06 run was started.
-This remains `AUTHORITY=0`; selector/journal crash reconciliation now uses the
-terminal journal row as the durable source and repairs only `CURRENT` after a
-shape check. Native-run identity binding and full runtime closure remain open,
-and the branch must not merge before GT06 is accepted.
+reopen without a second native call, rejection of a tampered terminal
+receipt, and native input hash binding. Journal reopen now validates canonical
+bounded rows, project/profile/source-closure identity, monotonic generation,
+receipt digest/readback, and the revision manifest before it repairs only
+`CURRENT` from the terminal journal row. No native engine, Docker, Blender or
+formal GT06 run was started. This remains `AUTHORITY=0`; external run-output
+identity and full arbitrary runtime closure remain open, and the branch must
+not merge before GT06 is accepted.
 
 The reconciliation cases are covered by the same pure suite: a selector behind
 the committed journal is advanced back to the durable receipt, while a

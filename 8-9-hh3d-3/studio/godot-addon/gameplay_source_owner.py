@@ -21,11 +21,13 @@ import uuid
 
 from studio.host.core.transport import epoch_ms
 from studio.host.core.limits import SafetyViolation
-from studio.protocol.core import canonical_bytes, parse_json
+from studio.protocol.core import SAFE_INTEGER, canonical_bytes, parse_json
 
 HERE = Path(__file__).resolve().parent
 ENTRYPOINT = "scripts/fixture_actor.gd"
 PROFILE = "hh-godot-gameplay-source-1"
+JOURNAL_SCHEMA = "hh-gameplay-source-journal-1"
+MAX_JOURNAL_BYTES = 512 * 1024
 _HEX = re.compile(r"[0-9a-f]{64}\Z")
 _ID = re.compile(r"[a-z][a-z0-9._-]{0,63}\Z")
 _RUNTIME_FILES = (
@@ -162,13 +164,14 @@ class GameplaySourcePublicationOwner:
         executor = _load("linux_executor")
         _need(isinstance(parent, Path) and parent.is_absolute() and parent.is_dir(),
               "GAMEPLAY_OWNER_PARENT_REQUIRED")
+        executor._no_links(parent)
         _need(type(project_id) is str and _ID.fullmatch(project_id), "GAMEPLAY_OWNER_PROJECT")
         _need(entrypoint == ENTRYPOINT, "GAMEPLAY_OWNER_ENTRYPOINT_PIN")
         _need(type(source_closure_sha256) is str and _HEX.fullmatch(source_closure_sha256),
               "GAMEPLAY_OWNER_CLOSURE")
         _need(runtime_source_closure()[1] == source_closure_sha256,
               "GAMEPLAY_OWNER_SOURCE_CLOSURE_MISMATCH")
-        checked = profile.validate_source_bundle(source_files, entrypoint=entrypoint)
+        candidate, checked = _copy_source_bundle(profile, source_files, entrypoint=entrypoint)
         owner = object.__new__(cls)
         owner._lock = threading.RLock()
         owner._work = threading.Lock()
@@ -193,13 +196,16 @@ class GameplaySourcePublicationOwner:
         owner._runs.mkdir()
         owner._session = session_model.PublicationSession(project_id, owner._root,
                                                            contract.CATALOG_DIGEST)
-        owner._files = {name: bytes(raw) for name, raw in source_files.items()}
+        owner._files = candidate
         owner._profile_observation = checked
         owner._generation = 1
         owner._project_revision = owner._revision(owner._files)
         owner._materialize(owner._project_revision, owner._files)
         owner._atomic_select(owner._project_revision, owner._generation)
-        owner._append({"kind": "INITIAL", "generation": owner._generation,
+        owner._append({"schema": JOURNAL_SCHEMA, "kind": "INITIAL",
+                       "project_id": project_id, "profile": PROFILE, "entrypoint": ENTRYPOINT,
+                       "source_closure_sha256": source_closure_sha256,
+                       "generation": owner._generation,
                        "project_revision": owner._project_revision,
                        "source_sha256": owner._source_hash(owner._files),
                        "fencing_epoch": 0, "observed_ms": epoch_ms()})
@@ -215,6 +221,7 @@ class GameplaySourcePublicationOwner:
         executor = _load("linux_executor")
         _need(isinstance(root, Path) and root.is_absolute() and root.is_dir(),
               "GAMEPLAY_OWNER_ROOT_REQUIRED")
+        executor._no_links(root)
         _need(type(project_id) is str and _ID.fullmatch(project_id), "GAMEPLAY_OWNER_PROJECT")
         _need(type(source_closure_sha256) is str and _HEX.fullmatch(source_closure_sha256),
               "GAMEPLAY_OWNER_CLOSURE")
@@ -223,12 +230,16 @@ class GameplaySourcePublicationOwner:
         rows = []
         journal = root / "journal.jsonl"
         _need(journal.is_file(), "GAMEPLAY_OWNER_JOURNAL_MISSING")
-        for line in journal.read_bytes().splitlines():
+        raw = executor._read_file(journal, MAX_JOURNAL_BYTES)
+        _need(raw.endswith(b'\n'), "GAMEPLAY_OWNER_JOURNAL_TRUNCATED")
+        for line in raw.splitlines():
             value = parse_json(line)
             _need(type(value) is dict and value.get("kind") in ("INITIAL", "COMMITTED"),
                   "GAMEPLAY_OWNER_JOURNAL_ROW")
+            _need(canonical_bytes(value) == line, "GAMEPLAY_OWNER_JOURNAL_ENCODING")
             rows.append(value)
         _need(rows, "GAMEPLAY_OWNER_JOURNAL_EMPTY")
+        _need(len(rows) <= session_model.MAX_COMMANDS + 1, "GAMEPLAY_OWNER_JOURNAL_LIMIT")
         last = rows[-1]
         owner = object.__new__(cls)
         owner._lock = threading.RLock()
@@ -249,54 +260,88 @@ class GameplaySourcePublicationOwner:
         owner._runs = root / "runs"
         owner._selector = root / "CURRENT"
         owner._journal = journal
-        owner._generation = int(last["generation"])
+        # Rebuild only a fully validated terminal history. Selector mismatch
+        # is reconciled only after the journal and selected revision have been
+        # fully checked; malformed or truncated durable state still fails closed.
+        initial = rows[0]
+        _need(set(initial) == {"schema", "kind", "project_id", "profile", "entrypoint",
+              "source_closure_sha256", "generation", "project_revision", "source_sha256",
+              "fencing_epoch", "observed_ms"} and initial["kind"] == "INITIAL"
+              and initial["schema"] == JOURNAL_SCHEMA, "GAMEPLAY_OWNER_JOURNAL_INITIAL")
+        _need(initial["project_id"] == project_id and initial["profile"] == PROFILE
+              and initial["entrypoint"] == ENTRYPOINT
+              and initial["source_closure_sha256"] == source_closure_sha256,
+              "GAMEPLAY_OWNER_JOURNAL_BINDING")
+        _need(type(initial["generation"]) is int and initial["generation"] == 1
+              and type(initial["fencing_epoch"]) is int and initial["fencing_epoch"] == 0
+              and type(initial["observed_ms"]) is int
+              and 0 <= initial["observed_ms"] <= SAFE_INTEGER,
+              "GAMEPLAY_OWNER_JOURNAL_INITIAL")
+        files = owner._read_revision(initial["project_revision"])
+        _need(initial["source_sha256"] == owner._source_hash(files),
+              "GAMEPLAY_OWNER_JOURNAL_SOURCE")
+        terminal_keys = {"schema", "project_id", "profile", "entrypoint",
+                         "source_closure_sha256", "kind", "command_id", "request_digest", "project_revision",
+                         "source_sha256", "native_run_id", "selected_revision", "generation",
+                         "readback_sha256", "readback_ack", "public_ack", "fencing_epoch",
+                         "observed_ms"}
+        previous_row = initial
+        for row in rows[1:]:
+            _need(set(row) == terminal_keys and row["schema"] == JOURNAL_SCHEMA
+                  and row["project_id"] == project_id and row["profile"] == PROFILE
+                  and row["entrypoint"] == ENTRYPOINT
+                  and row["source_closure_sha256"] == source_closure_sha256
+                  and row["kind"] == "COMMITTED",
+                  "GAMEPLAY_OWNER_JOURNAL_COMMITTED_SHAPE")
+            receipt = ReadbackAck(**{name: row[name] for name in terminal_keys
+                                     if name in ReadbackAck.__dataclass_fields__})
+            _need(receipt.readback_ack is True and receipt.public_ack is False
+                  and type(receipt.generation) is int
+                  and receipt.generation == previous_row["generation"] + 1
+                  and type(row["fencing_epoch"]) is int
+                  and max(1, previous_row["fencing_epoch"]) <= row["fencing_epoch"] < SAFE_INTEGER
+                  and type(row["observed_ms"]) is int and 0 <= row["observed_ms"] <= SAFE_INTEGER
+                  and type(receipt.command_id) is str and _ID.fullmatch(receipt.command_id)
+                  and type(receipt.native_run_id) is str
+                  and _ID.fullmatch(receipt.native_run_id.replace("-", ".")),
+                  "GAMEPLAY_OWNER_JOURNAL_COMMITTED_VALUE")
+            _need(receipt.command_id not in owner._jobs,
+                  "GAMEPLAY_OWNER_JOURNAL_COMMAND_CONFLICT")
+            files = owner._read_revision(receipt.project_revision)
+            expected_digest = _request_digest(project_id=project_id, command_id=receipt.command_id,
+                entrypoint=ENTRYPOINT, expected_project_revision=previous_row["project_revision"],
+                source_files=files)
+            _need(receipt.request_digest == expected_digest
+                  and receipt.source_sha256 == owner._source_hash(files)
+                  and receipt.selected_revision == receipt.project_revision
+                  and receipt.readback_sha256 == _sha(canonical_bytes(owner._readback(
+                      files, receipt.project_revision, receipt.generation))),
+                  "GAMEPLAY_OWNER_JOURNAL_RECEIPT_BINDING")
+            rebuilt = {"status": "READBACK_ACK", **asdict(receipt)}
+            owner._jobs[receipt.command_id] = rebuilt
+            previous_row = row
+        owner._generation = last["generation"]
         owner._project_revision = last["project_revision"]
-        owner._session = session_model.PublicationSession(project_id, root,
-            contract.CATALOG_DIGEST, minimum_fencing_epoch=int(last.get("fencing_epoch", 0)))
-        owner._files = owner._read_revision(owner._project_revision)
-        owner._profile_observation = profile.validate_source_bundle(owner._files, entrypoint=ENTRYPOINT)
-        # CURRENT and the journal are separate atomic files. On a crash in
-        # either direction of selector replacement versus journal append,
-        # prefer the terminal journal row and repair only CURRENT. Never adopt
-        # a selector-only revision because it has no durable receipt.
-        selector = parse_json(owner._selector.read_bytes())
-        _need(type(selector) is dict and set(selector) ==
-              {"schema", "revision", "generation"}
+        owner._files = files
+        owner._profile_observation = profile.validate_source_bundle(files, entrypoint=ENTRYPOINT)
+        selector = parse_json(executor._read_file(owner._selector, 4096))
+        _need(type(selector) is dict and set(selector) == {"schema", "revision", "generation"}
               and selector.get("schema") == "hh-gameplay-selector-1"
               and type(selector.get("revision")) is str
-              and _HEX.fullmatch(selector["revision"].removeprefix("sha256:"))
               and selector["revision"].startswith("sha256:")
+              and _HEX.fullmatch(selector["revision"][7:])
               and type(selector.get("generation")) is int and selector["generation"] > 0,
               "GAMEPLAY_OWNER_SELECTOR_SHAPE")
         expected_selector = {"schema": "hh-gameplay-selector-1",
                              "revision": owner._project_revision,
                              "generation": owner._generation}
         if selector != expected_selector:
+            # Journal validation above proves the durable target first; only
+            # then may recovery repair the pointer file.
             owner._atomic_select(owner._project_revision, owner._generation)
         owner._check_selected()
-        # Rebuild the in-memory retry index from terminal journal rows. A
-        # reopened owner must not rerun a native effect for an already
-        # committed command. Validate the complete row shape before trusting
-        # any receipt and reject conflicting duplicate identities.
-        terminal_keys = {"kind", "command_id", "request_digest", "project_revision",
-                         "source_sha256", "native_run_id", "selected_revision", "generation",
-                         "readback_sha256", "readback_ack", "public_ack", "fencing_epoch",
-                         "observed_ms"}
-        for row in rows:
-            if row["kind"] != "COMMITTED":
-                continue
-            _need(set(row) == terminal_keys, "GAMEPLAY_OWNER_JOURNAL_COMMITTED_SHAPE")
-            receipt = ReadbackAck(**{name: row[name] for name in terminal_keys
-                                     if name in ReadbackAck.__dataclass_fields__})
-            _need(receipt.readback_ack is True and receipt.public_ack is False
-                  and type(row["fencing_epoch"]) is int and row["fencing_epoch"] >= 0
-                  and type(row["observed_ms"]) is int and row["observed_ms"] >= 0,
-                  "GAMEPLAY_OWNER_JOURNAL_COMMITTED_VALUE")
-            rebuilt = {"status": "READBACK_ACK", **asdict(receipt)}
-            previous = owner._jobs.get(receipt.command_id)
-            _need(previous is None or previous == rebuilt,
-                  "GAMEPLAY_OWNER_JOURNAL_COMMAND_CONFLICT")
-            owner._jobs[receipt.command_id] = rebuilt
+        owner._session = session_model.PublicationSession(project_id, root,
+            contract.CATALOG_DIGEST, minimum_fencing_epoch=last["fencing_epoch"])
         return owner
 
     @staticmethod
@@ -341,18 +386,39 @@ class GameplaySourcePublicationOwner:
 
     def _read_revision(self, revision: str):
         target = self._safe_revision(revision)
-        manifest = parse_json(target.joinpath("manifest.json").read_bytes())
-        _need(manifest.get("project_revision") == revision and manifest.get("entrypoint") == ENTRYPOINT,
+        manifest = parse_json(self._executor._read_file(target / "manifest.json", 65536))
+        _need(type(manifest) is dict and set(manifest) == {
+              "schema", "profile", "entrypoint", "files", "project_godot_sha256", "project_revision"}
+              and manifest["schema"] == "hh-gameplay-source-revision-1"
+              and manifest["profile"] == PROFILE
+              and manifest["project_revision"] == revision and manifest["entrypoint"] == ENTRYPOINT,
               "GAMEPLAY_OWNER_MANIFEST")
+        inventory = manifest["files"]
+        _need(type(inventory) is dict and 1 <= len(inventory) <= self._profile.MAX_FILES,
+              "GAMEPLAY_OWNER_MANIFEST_FILES")
+        # Validate every path/size before any project file is read. Reuse the
+        # profile's platform-aware path rules and the executor's bounded,
+        # no-link reader; a manifest cannot introduce an external file.
+        for name, row in inventory.items():
+            _need(self._profile._path(name) and type(row) is dict
+                  and set(row) == {"sha256", "size_bytes"}
+                  and type(row["sha256"]) is str and _HEX.fullmatch(row["sha256"])
+                  and type(row["size_bytes"]) is int
+                  and 1 <= row["size_bytes"] <= self._profile.MAX_BYTES,
+                  "GAMEPLAY_OWNER_MANIFEST_FILE")
+        _need(sum(row["size_bytes"] for row in inventory.values()) <= self._profile.MAX_TOTAL_BYTES,
+              "GAMEPLAY_OWNER_MANIFEST_FILES")
         files = {}
-        for name, row in manifest.get("files", {}).items():
-            raw = target.joinpath("project", name).read_bytes()
+        for name, row in inventory.items():
+            raw = self._executor._read_file(target / "project" / name, row["size_bytes"])
             _need(_sha(raw) == row.get("sha256") and len(raw) == row.get("size_bytes"),
                   "GAMEPLAY_OWNER_READBACK_HASH")
             files[name] = raw
         _need(self._revision(files) == revision, "GAMEPLAY_OWNER_REVISION_MISMATCH")
-        _need(_sha(target.joinpath("project/project.godot").read_bytes())
-              == manifest.get("project_godot_sha256"), "GAMEPLAY_OWNER_PROJECT_HASH")
+        self._profile.validate_source_bundle(files, entrypoint=ENTRYPOINT)
+        project = self._executor._read_file(target / "project/project.godot", 65536)
+        _need(project == self._profile.PROJECT_TEMPLATE.encode()
+              and _sha(project) == manifest["project_godot_sha256"], "GAMEPLAY_OWNER_PROJECT_HASH")
         return files
 
     def _atomic_select(self, revision: str, generation: int) -> None:
@@ -366,10 +432,12 @@ class GameplaySourcePublicationOwner:
         os.replace(temp, self._selector)
 
     def _check_selected(self):
-        selector = parse_json(self._selector.read_bytes())
-        _need(selector.get("schema") == "hh-gameplay-selector-1"
-              and selector.get("revision") == self._project_revision
-              and selector.get("generation") == self._generation, "GAMEPLAY_OWNER_SELECTOR")
+        selector = parse_json(self._executor._read_file(self._selector, 4096))
+        _need(type(selector) is dict and set(selector) == {"schema", "revision", "generation"}
+              and selector["schema"] == "hh-gameplay-selector-1"
+              and selector["revision"] == self._project_revision
+              and type(selector["generation"]) is int
+              and selector["generation"] == self._generation, "GAMEPLAY_OWNER_SELECTOR")
         files = self._read_revision(selector["revision"])
         _need(files == self._files, "GAMEPLAY_OWNER_SELECTED_FILES")
 
@@ -397,12 +465,15 @@ class GameplaySourcePublicationOwner:
         with self._lock:
             _need(not self._closed and not self._held, "GAMEPLAY_OWNER_CLOSED")
             self._check_selected()
-            return {"schema": "hh-gameplay-source-readback-1", "profile": PROFILE,
+            return self._readback(self._files, self._project_revision, self._generation)
+
+    def _readback(self, files, revision, generation) -> dict:
+        return {"schema": "hh-gameplay-source-readback-1", "profile": PROFILE,
                     "project_id": self.project_id, "entrypoint": ENTRYPOINT,
-                    "generation": self._generation, "project_revision": self._project_revision,
-                    "selected_revision": self._project_revision,
-                    "source_sha256": self._source_hash(self._files),
-                    "files": {name: _sha(raw) for name, raw in sorted(self._files.items())},
+                    "generation": generation, "project_revision": revision,
+                    "selected_revision": revision,
+                    "source_sha256": self._source_hash(files),
+                    "files": {name: _sha(raw) for name, raw in sorted(files.items())},
                     "public_ack": False}
 
     def _phase(self, grant, lease, command_id, digest, deadline_ms, phase, effect):
@@ -425,7 +496,7 @@ class GameplaySourcePublicationOwner:
         return value
 
     @staticmethod
-    def _validate_native(result: dict) -> None:
+    def _validate_native(result: dict, *, expected_input_hashes) -> None:
         _need(type(result) is dict and result.get("schema") == "hh-gt03-linux-diagnostic-1",
               "GAMEPLAY_OWNER_NATIVE_SCHEMA")
         _need(result.get("mode") == "gameplay-source" and result.get("public_ack") is False,
@@ -458,6 +529,9 @@ class GameplaySourcePublicationOwner:
               "GAMEPLAY_OWNER_NATIVE_JOB")
         _need(type(result.get("run_id")) is str and _ID.fullmatch(result["run_id"].replace("-", ".")),
               "GAMEPLAY_OWNER_NATIVE_RUN_ID")
+        for field in ("input_hashes_before", "input_hashes_after", "snapshot_hashes_after"):
+            _need(result.get(field) == expected_input_hashes,
+                  "GAMEPLAY_OWNER_NATIVE_INPUT_BINDING")
 
     def publish(self, request: dict, *, grant, lease, deadline_ms: int) -> dict:
         # Serialize complete publication, including validation, native work and
@@ -497,6 +571,8 @@ class GameplaySourcePublicationOwner:
             if previous is not None:
                 _need(previous["request_digest"] == digest, "GAMEPLAY_OWNER_COMMAND_CONFLICT")
                 return dict(previous)
+            _need(len(self._jobs) < self._session_model.MAX_COMMANDS,
+                  "GAMEPLAY_OWNER_JOURNAL_LIMIT")
         candidate_revision = self._revision(candidate)
         _need(expected_revision == self._project_revision,
               "GAMEPLAY_OWNER_STALE_PROJECT")
@@ -516,7 +592,11 @@ class GameplaySourcePublicationOwner:
             result = self._phase(grant, lease, command_id, digest, deadline_ms, "stage",
                 lambda: self._runner(self._safe_revision(candidate_revision) / "project",
                                       mode="gameplay-source", output=run_dir, timeout_seconds=20))
-            self._validate_native(result)
+            expected_native_inputs = {
+                "project.godot": _sha(self._profile.PROJECT_TEMPLATE.encode()),
+                **{name: _sha(raw) for name, raw in sorted(candidate.items())},
+            }
+            self._validate_native(result, expected_input_hashes=expected_native_inputs)
             native_run_id = result["run_id"]
             # Once selection starts, keep the lifecycle lock through the
             # durable journal commit.  Stop/close may still interrupt the
@@ -555,7 +635,18 @@ class GameplaySourcePublicationOwner:
 
     def _commit(self, ack, fencing_epoch):
         receipt = ReadbackAck(**ack)
-        row = {"kind": "COMMITTED", **asdict(receipt), "fencing_epoch": fencing_epoch,
+        raw_rows = self._executor._read_file(self._journal, MAX_JOURNAL_BYTES)
+        prior = parse_json(raw_rows.splitlines()[-1])
+        _need(prior.get("kind") in ("INITIAL", "COMMITTED"),
+              "GAMEPLAY_OWNER_JOURNAL_ROW")
+        _need(receipt.request_digest == _request_digest(
+              project_id=self.project_id, command_id=receipt.command_id,
+              entrypoint=ENTRYPOINT, expected_project_revision=prior["project_revision"],
+              source_files=self._files), "GAMEPLAY_OWNER_COMMIT_DIGEST")
+        row = {"schema": JOURNAL_SCHEMA, "project_id": self.project_id,
+               "profile": PROFILE, "entrypoint": ENTRYPOINT,
+               "source_closure_sha256": self.source_closure_sha256,
+               "kind": "COMMITTED", **asdict(receipt), "fencing_epoch": fencing_epoch,
                "observed_ms": epoch_ms()}
         self._append(row)
         self._check_selected()
