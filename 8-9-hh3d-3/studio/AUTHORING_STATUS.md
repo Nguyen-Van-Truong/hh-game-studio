@@ -542,3 +542,47 @@ This is AUTHORITY=0 diagnostic evidence that the bounded Docker executor can val
 A separate fresh run `o2-gameplay-source-native-20260929-06` exercised the multi-file gameplay fixture plus the three negative profiles for an unused syntax error, typed assignment error and missing dependency. All four observations were bound to the same frozen source closure `c96be8d92cd9b2573663a1dbfc0121dbc8a26ee2c784df20653347024b91344b` and reported `fixture_observed=true`; the multi-file case exited 0, while each intentional engine rejection exited 45 in both the container and host attach record. Every Job had active count 0, every owned container was removed and input/snapshot/binary hashes remained unchanged. The expected rejection rows retain `EXECUTOR_ENGINE_OR_HOST_NOT_CLEAN` because the child deliberately exits nonzero; this is not relabeled as a clean process.
 
 The sealed raw package has 427 members, ZIP SHA-256 `d01085ee12b53f3cd243f28a930719a3a19b6ef2a9ca8941aebb6c3eebb10b82`, external manifest SHA-256 `c37e607dc440f1ce2df20844679eb962ff25066334a3ab1066bc0e7b7d71ea42`. This extends native evidence for bounded source inventory and rejection attribution only. It does not prove Godot's complete arbitrary dependency closure, OS sandbox acceptance, adapter publication/save-reload ACK, or AUTH-05/GT-06 acceptance. `AUTHORITY=0`; GT07 remains unopened.
+
+### 2026-09-30 gameplay-source publication adapter (static lifecycle milestone)
+
+`studio/godot-addon/gameplay_source_owner.py` now binds the existing
+`PublicationSession` grant/lease/fencing lifecycle to the bounded
+`gameplay-source` executor. A candidate is staged as an immutable revision,
+validated by the real executor before selection, selected through an atomic
+`CURRENT` pointer, re-read by hash, and appended to a durable journal. Exact
+command retry is idempotent, digest conflict is rejected, stale project
+revisions are rejected before native execution, and `reopen()` restores only
+the selected revision with no old bearer or lease. The receipt is explicitly
+`READBACK_ACK` with `readback_ack=true` and `public_ack=false`; it is a
+candidate adapter observation, not a public capability or GT06 evidence.
+
+The focused pure suite (`linux_executor`, source profile, sandbox, probe
+evidence, and the new adapter tests) passed **66 tests**, exit 0. A first
+native adapter attempt was retained as a rejected input/watchdog diagnostic;
+the repaired fixture then ran as
+`o2-gameplay-source-adapter-native-20260930-04`. Its multifile GDScript and
+PackedScene source reached real Godot parse/import/play, with child/container
+and host exits 0, Job active count 0, owned container removed, unchanged
+input/snapshot/binary hashes, and an atomic selector plus durable journal
+`READBACK_ACK`. The exact runtime closure is
+`69e72c10f71e0c092717a98abcc9c8bac65c75c8669326edff31618f839ccfdc`; raw
+evidence and `adapter-closeout.json` remain under
+`studio/.local/reviews/o2-gameplay-source-adapter-native-20260930-04/`.
+The receipt still has `public_ack=false` and this is one fixture-backed
+candidate run, not AUTH-05 acceptance or GT06 evidence. Arbitrary dependency
+closure, hostile sandbox acceptance, owner critic review, public ACK, GT-06
+acceptance, and GT07 remain open.
+
+### 2026-09-30 owner ACK cleanliness correction (pure static)
+
+A review found that `gameplay_source_owner._validate_native()` accepted a
+native diagnostic with `diagnostic_process_clean=false`, `log_clean=false`, or
+`owner_record_retained=true` when the executor reported the explanatory
+`EXECUTOR_ENGINE_OR_HOST_NOT_CLEAN` error. That could let a dirty diagnostic
+reach selector adoption and a `READBACK_ACK`. The validator now requires
+`gameplay_profile_unchanged=true`, `diagnostic_process_clean=true`,
+`log_clean=true`, `owner_record_retained=false`, and `errors=[]` before any
+adoption phase. Five pure tests pass with actual exit 0, including one negative
+case for each dirty field; no Godot, Docker, Blender, or native evidence was
+run or rewritten. This remains `AUTHORITY=0`, does not close AUTH-05, and does
+not change GT-06.
