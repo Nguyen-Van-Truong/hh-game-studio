@@ -1,33 +1,27 @@
 HH STUDIO — PLAN 1/3: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 26-09-2026, Asia/Saigon | Revision S258 | TRIỂN KHAI THEO GATE
-OWNER_DECISIONS=O1_O2_O3_OWNER_APPROVED_20260925; O4_OWNER_DELEGATED_20260927_WINS_ON_CONFLICT; O5_OWNER_DELEGATED_20260930_WINS_OVER_O1_O4; PRECEDENCE=OVER_CONFLICTING_S2XX; EXACT_DECISIONS_BELOW_STATUS_TABLE; RAW_AND_OLD_VERDICTS_UNCHANGED
-HIỆN HÀNH S258 — INTERRUPTED O1 RUN SEALED; PREFLIGHT REPAIRED; GT06 STILL CURRENT VALID WP
+Cập nhật 30-09-2026, Asia/Saigon | Revision S258 + quyết định owner O1–O6 | TRIỂN KHAI THEO GATE
+OWNER_DECISIONS=O1_O3_20260925; O4_20260927; O5_O6_20260930; ONE_CONSOLIDATED_BLOCK_BELOW_STATUS_TABLE; LATER_DECISION_WINS; PRECEDENCE=OVER_CONFLICTING_S2XX; OLD_TEXT_IN_GIT=87912523,b0802472,8298c107; RAW_AND_OLD_VERDICTS_UNCHANGED
+HIỆN HÀNH 30-09 — GT-06: SỬA HOST (TRANSPORT + RAM JOURNAL) RỒI SOAK ĐÚNG CÔNG THỨC O1.4; CHƯA CÓ PAIR FORMAL NÀO ĐẠT
 CURRENT_VALID_WP=GT-06
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
 PLAN_REVISION=S258
 EXECUTION_AUTHORIZATION=OWNER_APPROVED_GATED
 EXECUTION_MODE=COORDINATOR_SOLO_OWNER_LATEST_20260927; NO_WORKER_OR_SUBAGENT; FINAL_CRITICS_VIA_OWNER_O4_3
-GOAL_STATE=ACTIVE; INDEPENDENT_CONSUMER_PILOT_AUTHORIZED; NO_GAME_PLAN_OPENED; GT06_LANE_OWNER_O1_VERIFIER_THEN_2X35_FORMAL; O2_CAPABILITY_LANE_ALLOWED_IN_SEPARATE_WORKTREE_FIXTURE_FIRST_PER_O4_5; GT07_GT10_READONLY_PREP
+GOAL_STATE=ACTIVE; INDEPENDENT_CONSUMER_PILOT_AUTHORIZED; NO_GAME_PLAN_OPENED; GT06_O6_HOST_REPAIR_THEN_2X35_FORMAL; O2_CAPABILITY_LANE_SEPARATE_WORKTREE_FIXTURE_FIRST_O4_5; GT07_GT10_READONLY_PREP
 OVERALL_PLAN_STATUS=INCOMPLETE; GT01_GT05_ACCEPTED; GT06_IN_PROGRESS; GT07_GT10_PLANNED_UNOPENED
 CONSUMER_PILOT_STATUS=REVALIDATED_PROVISIONAL_AUTHORITY0; NOT_GT06_ACCEPTANCE; NOT_COMPLETE_GAME_CLAIM
-GT06_STATUS=IN_PROGRESS; ZERO_ACCEPTED_FULL_RUNS; HISTORICAL_ACCEPTANCE_GT01_GT05_UNCHANGED
+GT06_STATUS=IN_PROGRESS; ZERO_ACCEPTED_FORMAL_PAIRS; FORMAL01_08_AND_S258_TERMINAL_NOT_RESUMABLE; HISTORICAL_ACCEPTANCE_GT01_GT05_UNCHANGED
 GT06_GATE_POLICY=OWNER_O1_2_FRESH_PAIRS_X_35_BATCHES_5_WARMUP_30_MEASURED_WITH_O1_COUNTER_AND_PRIVATE_COMMIT_RULES; FULL_10X35_UNDER_O1_IS_GT10_RELEASE_SOAK; FULL_DATASET_HASH_ACTUAL_EXITS_TREES_JOBS_HANDLES_AND_TWO_NEW_SAME_HASH_CRITICS
 GT06_ATTRIBUTION_POLICY=DIAGNOSTIC_ONLY_UNLESS_OWNER_ADR_ADDS_ACCEPTANCE_REQUIREMENT; UNKNOWN_IS_NOT_LEAK_ROOT_CAUSE_OR_PASS
-GT06_CURRENT_DIAGNOSTIC=O1_9_STOCK_EDITOR_CONTROL02_TERMINAL_20260929; AUTHORITY0; EDITOR_EXIT0_JOB_CLEAN_HANDLES_RELEASED; PACKAGE=studio/.local/reviews/gt06-stock-editor-control-02; FORMAL08_PAIR0_O1_FAIL_PAIR1_INFRA_ABORT_CPU; REVIEW=zdoc/reviews/20260929-gt06-formal08-review-and-pair-guard.md
-GT06_NEXT_ACTION=O5_1_JOURNAL_INCREMENTAL_RELOAD_AND_BOUNDED_INDEX; HOST_ONLY_35K_SOAK_PER_O5_1C; LOCK_O5_2_EDITOR_HANDLE_RULE_AND_O5_3_CPU_ATTRIBUTION_WITH_TESTS; THEN_FORMAL09_FRESH_ID_NIGHT_WINDOW; NO_FORMAL09_UNCHANGED_RETRY; FINAL_CRITICS_VIA_OWNER_O4_3; O2_ONLY_IN_WAITS
-GT06_SOURCE_POLICY=O1_VERIFIER_AND_PROFILE_CHANGE_CREATES_NEW_FORMAL_SOURCE_CLOSURE_FROZEN_BEFORE_RUN; MEMORY05_CLOSURE=9eccd4530acd98e0f04cf8b565e5a6eb9e3a519e12c71ce17cb67b264bc3a570; O1_9_CONTROL_CLOSURE=09acaf0a2335e5bcdd52815708d0075e8365ee0821018a27139daff48ddfd250; OLD_CLOSURES_AND_RAW_STAY_HISTORICAL; NO_RETROACTIVE_REBINDING; TIMEOUTS_UNCHANGED
-GT06_HISTORICAL_BENCHMARK53_CLOSURE=1f6b7da7f48085b417e5d6d7f3388c75c0a8beadad3659b14057a2a6e71df625; FORMAL_SOURCE_FILES=53; PRIOR_S241_EXECUTED_CLOSURE=d7c78724ed827c8182af62c3f7bc1489d8dd35d29abe1f70216736a896e66bb3; S232_FORMAL_EXECUTED_CLOSURE=817242efa6578ecc92ebab31909d0324020f7617359bc2855c9b004d31907190; NO_RETROACTIVE_REBINDING
-GT06_HISTORICAL_EXECUTION217_CLOSURE=493a7ccce3e42993399910b0fe977f25448f411b863e4cca7b57904348ac374e
-GT06_CURRENT_FORMAL_EXECUTION_CLOSURE=NONE_ACCEPTED; S239_PARTIAL_IS_NOT_A_CLOSURE
-GT06_CURRENT_SOURCE_CLOSURE=8275722a4519ae435e5f69c23f9afdde1801dbf3873ba3ad4bb32c59d45e000f; SOURCE_FILES=54; PAIR_O1_SCREEN_AND_COMPACT_PHASE_RECORDS; PURE_TESTS=215_EXIT0; CANDIDATE_ONLY_NOT_FORMALLY_EXECUTED; MEMORY05=27_BATCHES_TIMEOUT; O1_9_CONTROL=720S_2809_SAMPLES_NONMONOTONIC_HANDLES; FINAL_CRITICS_PENDING
-GT06_PROFILE_SHA256=9dfa0ae003577e8607e28e722089328933d60e6cdb5b1ae1c5e978b3ad9d335e
-O1_VERIFIER_TEST_RESULT=PACKAGE=studio/.local/reviews/o1-profile-v5-docfix-20260926; SOURCE_CLOSURE=9b704d59587a003151c5a03a653d826737e4f4031b47048883b622912919a9f6; ACTUAL_EXIT=0; TESTS=218; LOG_SHA256=4816b42a17d72e8feac2368cce0c070f642cbafced270bf5c2395d8c0c9df80d; AUTHORITY=0; NO_ENGINE_RUN_FOR_REPAIR; OWNER_COUNTER_RULE_RESOLVED; CRITIC=zdoc/reviews/20260926-gt06-s258-terminal/O1-CRITIC-FINAL.md; TICK=yes
-S258_TERMINAL_PACKAGE=zdoc/reviews/20260926-gt06-s258-terminal; RAW_FILES=198; ARCHIVE_MEMBERS=199; MANIFEST_SHA256=f0c2bb917a28143f818c621eee3c70becec03ad5dd57432ec6f4e0253877d4ab; AUTHORITY=0; FORMAL_ACCEPTANCE=false
-O1_PREFLIGHT_CURRENT=20260929_STOCK_EDITOR_CONTROL02; RULE=O4_1; CPU_60S_MAX_PERCENT=80.09834; CPU_MEAN_PERCENT=51.04935; RAM_MIN_GIB=9.51449; COMMIT_MAX_PERCENT=67.21575; FOREIGN_ENGINES=0; PASS=true; FRESH_PREFLIGHT_REQUIRED_FOR_FUTURE_FORMAL
-O2_CANDIDATE_STATUS=AUTHORITY0; BRANCH=codex/o2-authoring-contract; DETAIL=studio/AUTHORING_STATUS.md@26944e8b; STATIC=80; DIRECT_PARSE=11/11; FIXTURE_STATE=2/2; NATIVE_GAMEPLAY=4/4_RUN05_PLUS_MULTIFILE_AND_3_NEGATIVES_RUN06; CLOSURE=c96be8d92cd9b2573663a1dbfc0121dbc8a26ee2c784df20653347024b91344b; PRELOAD_WITHDRAWN; NO_MERGE_BEFORE_GT06
-O2_PROGRESS_RECONCILIATION=DIRECT_PARSE_PRIMARY_SECONDARY_NEGATIVES_VERIFIED; FIXTURE_STATE_2D3D=2/2; NATIVE_SOURCE_RUN05_4OF4_AND_RUN06_MULTIFILE_NEGATIVES; AUTH05_DOCKER_DIAGNOSTIC_ONLY; ADAPTER_AUTH05_BLENDER_OPEN; GOVERNANCE_MAIN_ONLY; NO_CRITIC_FORGED; NO_GT07
-PREFLIGHT_POLICY=BINARY_VERSION_PATH_HASH_SYMBOL_DEVICE_MEMORY_AND_REPRO_CAPABILITY_BEFORE_NEW_DIAGNOSTIC; RECORD_ONCE_WHEN_UNCHANGED; WORKER_POLICY=BOUNDED_ATTEMPTS; NO_INFINITE_RETRY; O3_ONE_FALLBACK_TO_ANOTHER_AVAILABLE_MODEL_AFTER_CAPACITY_OR_404; CRITICS_READONLY_INDEPENDENT_SAME_HASH_NOT_IMPLEMENTER; COORDINATOR_HAS_USEFUL_WORK; ACTIVE_QUEUE_POLICY=GT06_O1_VERIFIER_AND_FORMAL_FIRST; O2_CAPABILITY_LANE_IN_SEPARATE_WORKTREE_AND_NO_ENGINE_RUN_WHILE_FORMAL_MEASURES; GT07_GT10_READONLY_PREP_UNTIL_GT06_ACCEPTED; NEVER_TICK_FROM_BANNER_OR_PARTIAL_PREFIX; FORMAL_DISPATCH_RULE=USE_FRESH_CAMPAIGN_ID_ONLY; VERIFY_SOURCE_PROFILE_WORKSTATION_AND_STOP_LATCH_BEFORE_START; PRESERVE_RAW_ON_FAILURE; REPAIR_ONLY_PROVEN_SOURCE_OR_HARNESS_BOUNDARY; NEVER_TICK_FROM_BANNER_OR_PARTIAL_PREFIX
+GT06_CURRENT_DIAGNOSTIC=O5_HOST_SOAK04_20260930_PRODUCT_FAIL_B27_CLIENT_CONNECT_ERRNO_SWALLOWED; SOAK01_03_35OF35_BUT_HOST_PRIVATE_COMMIT_O1_4_FAIL_123.8_119.3_116.4_PCT_VS_110; LOG=zdoc/reviews/gt06-diagnostic-lane.md; RAW=studio/.local/reviews/gt06-o5-host-soak-20260930-01..04; AUTHORITY0
+GT06_NEXT_ACTION=O6_1_TRANSPORT_ERRNO_PHASE_RETRY_DRIVER_LOOKUP_ALL_KINDS; O6_2_HOST_RAM_LIVE_STATE_ONLY_MICROBENCH; ONE_REPAIR_COMMIT_AND_FROZEN_CLOSURE; O6_3_HOST_SOAK_EXACT_O1_4; O6_5_OFFLINE_CONTROL02_RULE_IN_VERIFIER; FRESH_O4_1_PREFLIGHT; FORMAL09_NIGHT_FRESH_ID; CRITIC_PACKAGE_O4_3; O2_ONLY_IN_WAITS
+GT06_SOURCE_POLICY=SOURCE_VERIFIER_OR_PROFILE_CHANGE_CREATES_NEW_CLOSURE_FROZEN_BEFORE_RUN; CLOSURE_COMPUTED_BY_TOOL; OLD_CLOSURES_AND_RAW_HISTORICAL_SEE_GT06_HISTORY_S258; NO_RETROACTIVE_REBINDING; TIMEOUTS_UNCHANGED
+GT06_CURRENT_SOURCE_CLOSURE=NONE_FROZEN; O5_REPAIR_WIP_UNCOMMITTED; FOCUSED_SUITE_306_EXIT0; SOAK04_RAN=ed42f2b8912f482dd597423a31e23d40cff2899f6232ca03ebfb860e1b299081; SOAK03_RAN=6cd560efe44cb1a97be6709d32b355ea2e438da176551d59b2bb0b7ed811b709
+GT06_PROFILE_SHA256=9dfa0ae003577e8607e28e722089328933d60e6cdb5b1ae1c5e978b3ad9d335e; PROFILE_V5; O5_2_EDITOR_HANDLE_RULE_NEEDS_NEW_VERIFIER_PROFILE_CLOSURE_BEFORE_FORMAL09
+O1_PREFLIGHT_CURRENT=LAST_PASS_20260929_CONTROL02_RULE_O4_1_DETAIL_IN_GT06_HISTORY_S258; FRESH_PREFLIGHT_REQUIRED_BEFORE_EACH_FORMAL_PAIR
+O2_CANDIDATE_STATUS=AUTHORITY0; BRANCH=codex/o2-authoring-contract; DETAIL=studio/AUTHORING_STATUS.md@26944e8b; DIRECT_PARSE=11/11; FIXTURE_STATE=2/2; NATIVE_GAMEPLAY=4/4+MULTIFILE+3_NEGATIVES; AUTH05=DOCKER_DIAGNOSTIC_ONLY; OPEN=REAL_ADAPTER_AUTH02_04_AUTH05_BLENDER_RIG; NO_MERGE_BEFORE_GT06
+RUN_POLICY=FRESH_ID_PER_RUN; VERIFY_SOURCE_PROFILE_WORKSTATION_STOP_LATCH_AND_O5_6_LOCK_BEFORE_START; PRESERVE_RAW_ON_FAILURE; REPAIR_ONLY_PROVEN_BOUNDARY; FIX_AND_CONTINUE_O6_4; NEVER_TICK_FROM_BANNER_OR_PARTIAL_PREFIX; CRITICS_READONLY_INDEPENDENT_SAME_HASH
 S_RECORD_HISTORY_ARCHIVE=8-9-hh3d-3/zdoc/reviews/20260925-plan-s-record-history-s256.txt; SHA256=14e4d00b5f574f9c06c8f4041cf284fa70f7bded09dee6d6d2914cdb1d3c5fdb; AUTHORITY=0; RAW_HEADER_BLOCK_S256_LINES_93_150_BYTE_FOR_BYTE; NO_GATE_CHANGE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
@@ -43,58 +37,47 @@ STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng
 09 | GT-09 | Lõi tạo nội dung O2 + agent conformance trên 2 mini-game 2D/3D | GT-08 hoặc GT-08A (O4.6) | PLANNED
 10 | GT-10 | Gói công cụ v0.1, cài/upgrade/rollback, bàn giao game | GT-09 + GT-08B nếu tách | PLANNED
 
-OWNER DECISIONS O1–O3 — 25-09-2026 (owner chọn hướng A ở review 23-09; O1–O3 ghi vào plan theo yêu cầu owner 25-09)
-OWNER_DECISIONS=O1_GT06_BENCHMARK_GATE; O2_SHARED_AUTHORING_CORE_BEFORE_GT10; O3_SPEED_AND_PLAN_HYGIENE; STATUS=OWNER_APPROVED; PRECEDENCE=OVER_CONFLICTING_S2XX_LINES; RAW_HISTORY_AND_OLD_VERDICTS_UNCHANGED; NO_RETROACTIVE_PASS
-Lý do O1: từ 23-09 có 14 campaign formal (S181…S246), không run nào đủ 35 batch. Benchmark đã
-tìm ra hai lỗi thật và đã sửa (lease lookup S218, lock gây status gap S243). Các fail counter/bộ
-nhớ còn lại là lệch nhỏ không đơn điệu (editor handles 558→556→559 và 552→554; ObjectDB
-71128→71130; host 204→205 ở S147), working set nhảy giữa hai batch (S218 +42%/+52%; S225
-88–748 MB) hoặc sự cố hạ tầng (mất điện S239, import wall S243). Gate cũ (vượt baseline một đơn
-vị là FAIL, dừng ngay, baseline một điểm) không phân biệt dao động với rò. Mỗi batch có 1000
-lệnh + 100 chu kỳ nên rò theo lệnh sẽ tăng hàng trăm mỗi batch. Nhánh debugger/attribution
-S162–S257 không tạo được kết luận nghiệm thu nào.
+QUYẾT ĐỊNH OWNER ĐANG HIỆU LỰC O1–O6 — BẢN HỢP NHẤT 30-09-2026
+Chỉ giữ luật đang áp dụng; câu đã bị thay đã xóa khỏi đây. Văn bản gốc: O1–O3 ở git 87912523 (25-09),
+O4 ở b0802472 (27-09), O5 ở 8298c107 (30-09). Mâu thuẫn thì quyết định muộn hơn thắng; thắng các dòng
+S2xx mâu thuẫn; raw và verdict cũ giữ nguyên, không hồi tố PASS. Số mục giữ nguyên để tham chiếu cũ
+(O1.4, O4.3, O5.6…) vẫn đúng.
 
-O1 — GATE BENCHMARK (thay các câu baseline/counter/RSS/10×35 ở mục hiệu năng TQ cho GT-06 và
-release soak GT-10; các điều kiện khác của mục đó giữ nguyên)
+O1 — GATE BENCHMARK GT-06 (25-09; thay các câu baseline/counter/RSS/10×35 ở mục hiệu năng TQ cho GT-06
+và release soak GT-10; các điều kiện khác của mục đó giữ nguyên)
 1. Baseline mỗi role/counter = trung vị post_batch_quiescent của batch 2–4.
 2. Chỉ dừng sớm khi crash, timeout, status gap > 2000 ms, thiếu counter bắt buộc, handles >
    baseline+64, objects > baseline+256 hoặc private commit > 150% baseline. Lệch nhỏ hơn không
    dừng; mỗi pair chạy đủ 35 batch để có chuỗi xu hướng.
 3. Counter PASS theo từng pair khi max(batch 5–34) ≤ baseline + T và max(batch 20–34) ≤
-   max(batch 5–19) + G. T/G: host handles 4/2; editor handles 8/2 (đã thay bằng luật median của
-   O5.2); editor objects 32/8; editor resources 2/1. Host objects/resources vẫn
-   NOT_APPLICABLE_PYTHON_HOST.
+   max(batch 5–19) + G. T/G: host handles 4/2; editor objects 32/8; editor resources 2/1.
+   Editor handles theo luật median (O5.2; control không plugin dao động 554–577):
+   median(batch 20–34) ≤ median(batch 5–19) + 6 và max(batch 5–34) ≤ baseline + 32. Luật phụ
+   retained-handle v5 định nghĩa ở zdoc/reviews/20260926-gt06-s258-terminal/O1-OWNER-RESOLUTION.md
+   là một phần của O1 (O4.2). Host objects/resources NOT_APPLICABLE_PYTHON_HOST.
 4. Bộ nhớ gate bằng private commit từng process (cùng API benchmark_import_observer):
    max(batch 5–34) ≤ 110% baseline và max(batch 20–34) ≤ 105% × max(batch 5–19).
    RSS/working set vẫn ghi đủ cho report và critic nhưng không là gate tự động.
 5. Giữ nguyên: 1000 lệnh + 100 chu kỳ mỗi batch, cùng PID, không duplicate/lost effect, status
-   gap ≤ 2000 ms, actual exit 0, owned tree 0, retained owned handles 0, Job zero/closed.
-6. GT-06 benchmark = 2 fresh host/editor pair × 35 batch theo O1. Full 10 pair × 35 batch theo
-   O1 là release soak trong DoD GT-10, chạy trên source release.
+   gap ≤ 2000 ms ở mọi batch kể cả 5 batch warmup (O4.2), actual exit 0, owned tree 0, retained
+   owned handles 0, Job zero/closed.
+6. GT-06 benchmark = 2 fresh host/editor pair × 35 batch. Full 10 pair × 35 batch là release soak
+   trong DoD GT-10, chạy trên source release, chia được nhiều cửa sổ trên cùng hash (O4.6).
 7. INFRA_ABORT: mất điện/reboot, preflight môi trường không đạt, import wall trước batch 0, lỗi
-   Task Scheduler/OS ngoài source. Giữ raw, ghi INFRA_ABORT (không phải product FAIL), rerun
-   bằng ID mới sau preflight mà không cần giả thuyết mới; tối đa 2 lần mỗi ngày, quá thì sửa
-   môi trường trước.
-8. [Đã thay bằng O4.1 ngày 27-09; giữ làm lịch sử] Preflight môi trường trước formal: RAM trống
-   ≥ 8 GiB, commit ≤ 80% limit, đã tắt app nặng không cần (trình duyệt, WSL, app chat), ghi
-   snapshot trước và sau. Không đạt thì không chạy.
-9. Stock control (editor không plugin, cùng profile) chỉ chạy khi formal O1 FAIL vì counter hoặc
-   bộ nhớ, để tách engine với tool; chỉ ghi so sánh, không dùng để trừ số.
-10. Attribution/debugger chỉ là chẩn đoán, không là điều kiện ACCEPTED. Niêm phong S257 theo hiện
-    trạng và dừng nhánh CDB/htrace/API-return; chỉ mở lại khi O1 FAIL có xu hướng tăng thật,
-    tối đa 4 giờ.
-11. HISTORICAL_S257_SUPPLEMENT: O1 test yêu cầu chuỗi +1 handle mỗi 7 batch phải
-    FAIL, nhưng chuỗi này PASS các bất đẳng thức T/G nếu đứng một mình. Profile v5
-    từng thêm supplemental candidate: retained handles không giảm trong đủ 30 mẫu,
-    ít nhất 3 lần tăng và có tăng nội bộ trong cả hai nửa (5–19 và 20–34); bước đơn
-    lẻ/plateau và nhiễu giảm không bị bắt. Candidate này thuộc lịch sử S257, đã được
-    supersede bởi quyết định/profiling S258 và không tự tạo acceptance. O4.2 (27-09): owner
-    xác nhận luật phụ v5 hiện hành là một phần của O1.
-O1_NEXT=AFTER_S258_SEALED__O4_1_PREFLIGHT_AND_WATCHDOG; FRESH_ID_2X35_FORMAL; TWO_NEW_SAME_HASH_CRITICS_VIA_O4_3; THEN_ACCEPT_GT06_AND_OPEN_GT07
-O1 vẫn FAIL khi rò theo lệnh (từ 1 đơn vị mỗi 1000 lệnh) hoặc rò đều nhỏ: từ khoảng 0,14 handle,
-0,07 resource, 0,54 object hoặc 0,33% private commit mỗi batch (editor handles theo O5.2: từ
-khoảng 0,4 handle mỗi batch). O1 chỉ bỏ báo động giả. Mục TQ
-hiệu năng cho phép đổi target bằng decision/review; O1 là decision đó và được khóa trước lần chạy.
+   Task Scheduler/OS ngoài source, hoặc watchdog O4.1. Giữ raw, ghi INFRA_ABORT (không phải product
+   FAIL), rerun bằng ID mới sau preflight mà không cần giả thuyết mới; tối đa 2 lần mỗi ngày, quá
+   thì sửa môi trường trước.
+8. Môi trường formal theo O4.1 (bản cũ đòi RAM trống ≥ 8 GiB và tắt app đã bỏ).
+9. Stock control (editor không plugin, cùng profile) chỉ chạy khi formal FAIL vì counter hoặc bộ
+   nhớ, để tách engine với tool; chỉ so sánh, không trừ số. Dùng lại dữ liệu control đã có trước
+   khi chạy control mới (O6.5).
+10. Attribution/debugger chỉ là chẩn đoán, không là điều kiện ACCEPTED. Nhánh CDB/htrace/API-return
+    S257 đã niêm phong; chỉ mở lại khi formal FAIL có xu hướng tăng thật, tối đa 4 giờ.
+11. Luật phụ v5: đã ghi ở O1.3 (candidate S257 cũ chỉ còn trong lịch sử Git).
+Độ nhạy: O1 vẫn FAIL khi rò theo lệnh (từ 1 đơn vị mỗi 1000 lệnh) hoặc rò đều nhỏ: từ khoảng 0,14
+handle host, 0,4 handle editor, 0,07 resource, 0,54 object hoặc 0,33% private commit mỗi batch.
+O1 chỉ bỏ báo động giả. Mục TQ hiệu năng cho phép đổi target bằng decision/review; O1 là decision
+đó và được khóa trước lần chạy.
 
 O2 — LÕI TẠO NỘI DUNG DÙNG CHUNG, LÀM TRƯỚC GT-10
 Catalog đã nghiệm thu chỉ có Node3D/MeshInstance3D/BoxMesh, script khai báo biến và Blender
@@ -122,33 +105,38 @@ O3 — TỐC ĐỘ VÀ VỆ SINH PLAN
 4. Header chỉ giữ trạng thái hiện hành, next action, pin và quyết định owner (mục tiêu ≤ 40 dòng);
    S-record cũ chuyển sang file history có hash. Không tạo S mới chỉ để đổi metadata.
 
-OWNER DECISIONS O4 — 27-09-2026 (owner giao toàn quyền sửa plan cho reviewer; AUTHORITY=
-OWNER_DELEGATED_20260927; thắng các dòng S2xx/O1–O3 mâu thuẫn; raw và verdict cũ giữ nguyên)
-1. Môi trường formal (thay O1.8). Tool nhắm máy dev đang dùng bình thường và gate O1 đo theo từng
-   process, nên không bắt owner tắt app. Trước mỗi pair: RAM available ≥ 4 GiB, commit ≤ 85%,
-   không có godot*/blender* ngoài Job của campaign; campaign giữ máy thức (SetThreadExecutionState)
-   và ghi inventory trước/sau (top process theo private bytes, app nặng, Docker/WSL). Trình duyệt,
-   app chat, Docker Desktop/WSL (toolchain của executor GT-03) được chạy, chỉ ghi lại. Watchdog lấy
-   mẫu ≤ 10 giây: available < 1,5 GiB liên tục 60 giây, commit > 92%, CPU toàn hệ thống > 95% liên
-   tục 60 giây (đã thay bằng O5.3), godot*/blender* lạ, hoặc sleep/resume → Stop latch và INFRA_ABORT theo O1.7 (giữ
-   raw, ID mới, tối đa 2 lần/ngày). Watchdog chỉ được dừng, không biến FAIL thành PASS; nếu chính
-   host/editor gây áp lực bộ nhớ thì là product FAIL. Mọi ngưỡng nghiệm thu O1 (counter, private
-   commit, status gap, timeout, exit/Job/tree) giữ nguyên; FAIL không kèm watchdog là product FAIL.
+O4 — 27-09-2026 (owner giao toàn quyền sửa plan cho reviewer; AUTHORITY=OWNER_DELEGATED_20260927)
+1. Môi trường formal (thay O1.8; mệnh đề CPU theo O5.3). Tool nhắm máy dev đang dùng bình thường và
+   gate O1 đo theo từng process, nên không bắt owner tắt app. Trước mỗi pair: RAM available ≥ 4 GiB,
+   commit ≤ 85%, không có godot*/blender* ngoài Job của campaign; campaign giữ máy thức
+   (SetThreadExecutionState) và ghi inventory trước/sau (top process theo private bytes, app nặng,
+   Docker/WSL). Trình duyệt, app chat, Docker Desktop/WSL (toolchain của executor GT-03) được chạy,
+   chỉ ghi lại. Watchdog lấy mẫu ≤ 10 giây và bật Stop latch + INFRA_ABORT (O1.7) khi: available
+   < 1,5 GiB liên tục 60 giây; commit > 92%; process ngoài Job campaign chiếm ≥ 50% CPU trong cửa sổ
+   60 giây (ghi top 10 process theo CPU, gồm vmmem/Docker; chính campaign chiếm CPU thì không abort
+   mà để gate status gap/timeout phán); có godot*/blender* lạ hoặc container hh-* đang chạy;
+   sleep/resume. Watchdog chỉ được dừng, không biến FAIL thành PASS; host/editor tự gây áp lực bộ nhớ
+   là product FAIL; mọi ngưỡng nghiệm thu O1 giữ nguyên; FAIL không kèm watchdog là product FAIL.
    Sửa preflight/watchdog không cần critic trước khi chạy: có unit test, freeze closure mới, hai
-   critic cuối kiểm cả closure; critic cuối bắt lỗi harness thì chạy lại bằng ID mới.
+   critic cuối kiểm cả closure; critic cuối bắt lỗi harness thì chạy lại bằng ID mới. Ưu tiên chạy
+   soak/formal ban đêm hoặc lúc owner vắng.
 2. Owner xác nhận luật phụ retained-handle v5 (O1-OWNER-RESOLUTION.md) là một phần của O1, và xác
    nhận việc kiểm status gap cả 5 batch warmup (chặt hơn bản cũ, khớp yêu cầu status ≤ 2 giây).
 3. Critic trong chế độ solo: coordinator không gọi critic mà chuẩn bị CRITIC_PACKAGE (source/profile/
    dataset hash, lệnh verify, checklist, đường dẫn raw) rồi báo owner. Owner gửi gói cho một phiên
    review độc lập (ví dụ Cursor) chạy hai critic read-only khác model trên cùng hash; coordinator
    lưu nguyên văn kết quả, kiểm hash rồi mới ACCEPT. Trong lúc chờ critic thì làm lane khác.
-4. Tốc độ và vệ sinh (bổ sung O3): chỉ sửa plan khi WP/gate đổi trạng thái, có quyết định owner,
-   hoặc tối đa 1 lần/ngày để tóm tắt lane. Chi tiết O2 ghi trong file trạng thái trên nhánh O2;
+4. Evidence và vệ sinh (gộp O5.4). Tầng F (formal, gói critic, bằng chứng nghiệm thu): raw trong
+   .local, zip + manifest hash, chỉ commit manifest/tóm tắt; đường dẫn tương đối ≤ 180 ký tự. Tầng D
+   (diagnostic AUTHORITY=0, probe O2): raw trong .local + một mục trong log lane
+   (studio/AUTHORING_STATUS.md trên nhánh O2; zdoc/reviews/gt06-diagnostic-lane.md cho GT-06) gồm
+   run id, closure, lệnh, exit, số liệu tính đúng công thức gate, 1–3 dòng phát hiện; không cần ZIP,
+   manifest, review riêng hay sửa plan; chỉ niêm phong khi được dẫn làm bằng chứng gate. Chỉ sửa plan
+   khi WP/gate đổi trạng thái hoặc có quyết định owner; ngoài dispatch/verdict formal tối đa 1 commit
+   plan mỗi ngày; không commit "record checkpoint" trên nhánh chính. Nhánh O2 không sửa plan/AGENTS.md;
    header giữ một dòng O2 ≤ 300 ký tự. Gộp code + test + tài liệu của một mốc vào một commit.
-   Heartbeat chỉ kiểm điều kiện chạy formal, không chạy test hay commit khi không đổi. Nhánh O2
-   không sửa plan/AGENTS.md; governance chỉ sửa trên nhánh chính. Evidence mới: raw trong .local,
-   zip + manifest hash, chỉ commit manifest/tóm tắt; đường dẫn tương đối ≤ 180 ký tự. Không xóa
-   hàng loạt hay viết lại lịch sử evidence cũ.
+   Heartbeat chỉ kiểm điều kiện chạy formal, không chạy test hay commit khi không đổi. Không xóa hàng
+   loạt hay viết lại lịch sử evidence cũ.
 5. O2 làm theo fixture, không dàn trải catalog. Thứ tự:
    a) Bảng gap cho 2 fixture: đấu trường 2D (TileMap platform, người chơi + bot đơn giản, đạn bằng
       scene instance, pickup, máu/hạ gục/hồi sinh, HUD, âm thanh, pause/restart) và phòng 3D
@@ -173,44 +161,24 @@ OWNER_DELEGATED_20260927; thắng các dòng S2xx/O1–O3 mâu thuẫn; raw và 
    và ghi core.longpaths. GT-09 thêm owner playtest khoảng 15 phút mỗi fixture (owner ghi OK/không
    OK và ghi chú; agent không ký thay). GT-10 soak 10×35 theo O4.1, được chia nhiều cửa sổ chạy trên
    cùng hash; package không chứa zdoc/reviews.
-O4_NEXT=O1_9_STOCK_CONTROL_REVIEW_COMPLETE_THEN_O2_FIXTURE_GAP_AUTH05; O3_BOUND_4H_OR_3_ATTEMPTS_THEN_O2; NO_FORMAL09_UNTIL_SOURCE_REPAIR_REVIEW; GT07_REMAINS_UNOPENED; SUPERSEDED_BY_O5_NEXT
-
-OWNER DECISIONS O5 — 30-09-2026 (owner giao toàn quyền sửa plan cho reviewer; AUTHORITY=
-OWNER_DELEGATED_20260930; thắng O1–O4 khi mâu thuẫn; raw và verdict cũ giữ nguyên, không hồi tố)
+O5 — 30-09-2026 (sửa gốc journal; AUTHORITY=OWNER_DELEGATED_20260930)
 1. GT-06 là đường găng, ưu tiên số 1. Formal08 và diagnostic05 chỉ ra lỗi thiết kế thật trong
    studio/host/core/journal.py: cả 7 thao tác (append/finish/lookup/lookup_archive/acquire_lease/
-   check_lease/compact) đi qua @_mutating → _reload() đọc, giải mã, kiểm lại toàn bộ file và fsync.
-   Không có compact tự động; trần 64 MiB, 100.000 record, khóa chờ 2 giây. Journal 26 MB ở batch 26
-   làm một lần reload giữ khóa ≈ 2,3 giây, private commit host tăng theo số record, rồi timeout;
-   pair 35.000 lệnh vượt sức chứa thực tế nên chạy lại formal không thể PASS. Đây là source repair
-   đủ căn cứ theo O4_NEXT. Sửa, giữ bất biến GT-02 và không đổi timeout:
-   a) Đọc tăng dần: nhớ file identity + offset đã đọc; chỉ đọc và kiểm tail mới; reload toàn bộ khi
-      file bị thay (compact/replace), bị cắt ngắn hoặc generation đổi. Lookup không fsync cả file
-      khi không có tail mới.
-   b) Index gọn: RAM chỉ giữ trạng thái/digest/expiry/offset; receipt đọc từ đĩa khi cần; compact tự
-      động theo ngưỡng kích thước/record. Vẫn không phẳng thì chuyển index sang SQLite (WAL, cache
-      giới hạn), JSONL giữ làm log kiểm toán.
-   c) Trước formal09: soak host-only (không editor) ≥ 35.000 lệnh cùng mix formal: p95 lookup/append
-      ở 5.000 lệnh cuối ≤ 120% của 5.000 lệnh đầu, private commit batch 5→34 tăng ≤ 5%, không full
-      reload sau khởi động; regression GT-02 (dedupe, recovery cut matrix, đa process) PASS. Soak là
-      diagnostic, không thay formal.
-   O2 chỉ làm trong lúc chờ soak/formal/critic cho tới khi formal09 có kết luận.
-2. Editor handles (thay dòng editor handles của O1.3): control O1.9 không plugin dao động 554–577
-   trong 720 giây, rộng hơn T/G 8/2 cũ nên luật max đang đo nhiễu. Luật mới: median(batch 20–34)
-   ≤ median(batch 5–19) + 6 và max(batch 5–34) ≤ baseline + 32; luật phụ v5 giữ. Rò 1 handle mỗi
-   1000 lệnh (≈ +15 median) vẫn FAIL. Counter khác giữ nguyên. Khóa vào verifier + test trước
-   formal09 và ghi kết quả đối chiếu với control-02; không hồi tố (formal08 vẫn FAIL, riêng host
-   private commit của nó đã FAIL).
-3. CPU watchdog (thay mệnh đề CPU của O4.1): chỉ INFRA_ABORT khi process ngoài Job campaign chiếm
-   ≥ 50% CPU trong cửa sổ 60 giây; ghi top 10 process theo CPU (gồm vmmem/Docker). Chính campaign
-   chiếm CPU thì không abort, để gate status gap/timeout phán. Container hh-* đang chạy tính là
-   engine lạ. Ưu tiên chạy soak/formal ban đêm hoặc lúc owner vắng.
-4. Evidence hai tầng. Tầng F (formal, gói critic, bằng chứng nghiệm thu) niêm phong đầy đủ như hiện
-   nay. Tầng D (diagnostic AUTHORITY=0, probe O2): raw trong .local + một mục trong log lane
-   (studio/AUTHORING_STATUS.md cho O2, zdoc/reviews/gt06-diagnostic-log.md cho GT-06) gồm run id,
-   closure hash, lệnh, exit, kết quả, 1–3 dòng phát hiện; không cần ZIP, manifest, review riêng hay
-   sửa plan, chỉ niêm phong khi được dẫn làm bằng chứng gate. Ngoài dispatch/verdict formal và quyết
-   định owner, tối đa 1 commit sửa plan mỗi ngày; bỏ commit "record O2 checkpoint" trên nhánh chính.
+   check_lease/compact) đi qua @_mutating → _reload() đọc, giải mã, kiểm lại toàn bộ file và fsync;
+   không compact tự động; trần 64 MiB, 100.000 record, khóa chờ 2 giây; journal 26 MB làm một lần
+   reload giữ khóa ≈ 2,3 giây rồi timeout. Sửa, giữ bất biến GT-02 và không đổi timeout:
+   a) Đọc tăng dần theo file identity/size/generation; chỉ đọc và kiểm tail mới; reload toàn bộ khi
+      file bị thay (compact/replace), bị cắt ngắn hoặc generation đổi; lookup không fsync khi không
+      có tail mới.
+   b) Index trên đĩa (SQLite WAL, cache có trần), JSONL giữ làm log kiểm toán; compact tự động theo
+      ngưỡng; RAM chỉ giữ trạng thái sống (O6.2).
+   Trạng thái 30-09: a) và b) có trong WIP chưa commit (bộ test tập trung 306 test exit 0; soak04
+   load=1 nên không còn full reload). Tiêu chí soak cũ O5.1c đã thay bằng O6.3. O2 chỉ làm trong
+   lúc chờ soak/formal/critic cho tới khi formal09 có kết luận.
+2. Editor handles: luật median đã ghi vào O1.3. Khóa vào verifier + test trước formal09, đối chiếu
+   control-02 theo O6.5; không hồi tố (formal08 vẫn FAIL, riêng host private commit của nó đã FAIL).
+3. CPU watchdog: đã ghi vào O4.1.
+4. Evidence hai tầng: đã ghi vào O4.4.
 5. Log Godot vẫn là tiêu chí PASS của fixture gameplay: dùng lại bộ phân loại noise có kiểm soát của
    fixture verifier (khớp chính xác, có version); mọi ERROR/SCRIPT ERROR/WARNING khác là FAIL. Exit 0
    + transcript không thay kiểm log. Closure do adapter tự tính, không nhận từ caller.
@@ -218,7 +186,71 @@ OWNER_DELEGATED_20260930; thắng O1–O4 khi mâu thuẫn; raw và verdict cũ 
    measure-window.lock (owner, run_id, mục đích, hết hạn). Agent khác trong repo (O2, Vault
    Fighters) kiểm khóa trước khi chạy Godot/Blender/Docker; có khóa thì chờ hoặc làm việc static.
    Owner nhờ vậy mở được agent riêng làm game song song mà không làm hỏng formal.
-O5_NEXT=JOURNAL_INCREMENTAL_AND_BOUNDED_INDEX; HOST_ONLY_35K_SOAK; EDITOR_HANDLE_MEDIAN_RULE_AND_CPU_ATTRIBUTION_LOCKED; FORMAL09_NIGHT_WINDOW; CRITIC_PACKAGE_PER_O4_3; O2_IN_GAPS
+
+O6 — 30-09-2026 (sau soak01–04; AUTHORITY=OWNER_DELEGATED_20260930; không đổi ngưỡng/timeout O1–O4)
+Số liệu tầng D, tính lại được từ summary-NN.json (private commit host sau batch, công thức O1.4):
+soak01 max/baseline 123,8%, muộn/sớm 110,3%; soak02 119,3%/112,7%; soak03 116,4%/102,7%; soak04 (27
+batch) 111,0%/104,9%; ngưỡng 110%/105%. Formal chạy trên source này vẫn FAIL host private commit.
+Journal tăng đều ≈ 0,95 MB mỗi batch (33 MB ở batch 34). Soak04 dừng ở batch 27: lệnh rejected nhận
+CONNECTION_LOST_LOOKUP/UNKNOWN sau 1,66 ms; lỗi nằm ở phase client.connect (≈ 1,3 ms, chưa gửi byte
+nào) và exception bị nuốt nên mất errno. Lúc đó client mở ≈ 102 kết nối TCP mới mỗi giây (mỗi request
+một kết nối; ≈ 120.000 kết nối cả run, 1 lần lỗi).
+1. Transport, làm trước:
+   a) Receipt và phase record của lỗi transport ghi exception class, errno/winerror, phase và số lần
+      thử (cập nhật schema/test); không trả CONNECTION_LOST_LOOKUP trơn.
+   b) Retry theo phase, không theo loại lệnh: gọi connect() riêng trước khi gửi; lỗi ở connect (chưa
+      ghi byte request) thì gửi lại đúng request đó (cùng command_id, cùng bytes) tối đa 3 lần, chờ
+      25/50/100 ms, cho mọi route. Đã ghi byte thì giữ đường UNKNOWN → lookup cùng command_id; không
+      bao giờ gửi lại mù.
+   c) Driver benchmark xử lý next_action=lookup như nhau cho mọi loại lệnh (soak04: lệnh rejected
+      nhận UNKNOWN thì ném WRONG_VALIDATION_REJECTION ngay, lookup_attempts rỗng). Lookup chứng minh
+      chưa admit thì gửi lại cùng command_id; hết giới hạn vẫn chưa rõ thì product FAIL.
+   d) Mỗi lần recover được đếm theo batch (errno, route, phase). Trong một formal pair: hơn 10 lần
+      recover hoặc một lần không recover được là product FAIL; O1.5 (không duplicate/lost effect)
+      giữ nguyên.
+   e) Keep-alive (HTTP/1.1 persistent theo thread + worker server có trần) chỉ làm nếu A/B microbench
+      (khoảng 100.000 request, vài phút) cho thấy churn kết nối vẫn gây lỗi connect sau b) hoặc góp
+      phần vào các bậc private commit host; nếu không thì để hardening GT-10.
+   Đề xuất "retry riêng cho validation rejection" trong handoff 30-09 không dùng: nó khóa theo loại
+   lệnh thay vì phase lỗi và để nguyên lỗi này cho các lệnh khác.
+2. Bộ nhớ host, làm song song với 1: private commit host tăng ≈ 4,8 MB qua 30.000 lệnh (≈ 160 byte/
+   lệnh), khớp với việc WIP vẫn giữ _commands + offsets trong RAM cho mọi record; 10% baseline host
+   chỉ ≈ 3 MB. Xác nhận nguồn tăng bằng tracemalloc trong microbench trước khi sửa. Sửa: RAM chỉ giữ
+   trạng thái sống, có trần theo concurrency (intent pending, lease đang giữ, LRU nhỏ); command đã
+   xong và receipt chỉ ở SQLite/đĩa với cache_size có trần. Trước soak, microbench trong process (mix
+   như formal, 35.000 lệnh, private commit sau GC mỗi 1.000 lệnh) phải cho độ dốc ≤ 32 byte/lệnh
+   (≈ 1,1 MB, chừa chỗ cho dao động ±1,5 MB đã thấy) và đạt công thức O1.4. Regression GT-02 (dedupe,
+   recovery cut matrix, đa process) PASS.
+3. Soak host-only (thay O5.1c) dùng đúng metric và công thức gate: private commit host theo O1.4
+   (max(5–34) ≤ 110% × median(2–4); max(20–34) ≤ 105% × max(5–19)), host handles theo O1.3, status
+   gap ≤ 2000 ms mọi batch, p95 lookup/append ở 5.000 lệnh cuối ≤ 120% của 5.000 lệnh đầu, load=1
+   (không full reload sau khởi động), 0 lỗi transport không recover. Max/baseline > 107% thì chạy
+   thêm một soak bằng ID mới để xem dao động trước khi dùng cửa sổ formal. Tiêu chí cũ "batch 5→34
+   tăng ≤ 5%" rút lại vì bỏ qua bước nhảy từ baseline tới batch 5 (soak03: +5,5% theo cách cũ nhưng
+   116,4% theo O1.4). Soak là tầng D, không thay formal.
+4. Sửa rồi chạy tiếp, không làm lại từ đầu:
+   a) Run dài lỗi: giữ raw; đọc raw khoanh phase lỗi trước; dựng reproducer nhanh ở đúng trạng thái
+      đó (journal seed N record, fault injection tại phase, microbench) chạy trong vài phút; sửa; qua
+      reproducer + bộ test tập trung; chỉ khi đó mới chạy một run dài xác nhận bằng ID mới. Không
+      chạy lại run dài để "xem có lặp lại không" khi chưa có giả thuyết mới.
+   b) Run tầng D được bắt đầu từ trạng thái seed (ví dụ journal 27.000 record) để tới điểm lỗi nhanh.
+      Run tầng F luôn fresh và không ghép partial.
+   c) Script/lệnh hỏng giữa chừng: sửa đúng bước đó rồi chạy tiếp từ checkpoint tốt gần nhất (bước
+      idempotent, output từng bước). Chỉ làm lại từ đầu khi trạng thái không khôi phục được, và ghi
+      lý do vào log lane.
+5. Không chạy control mới: áp luật editor handles O1.3 offline lên control-02 (samples.jsonl chia 35
+   cửa sổ bằng nhau, lấy mẫu cuối mỗi cửa sổ) và lên pair 0 formal08 (tham khảo, không hồi tố); khóa
+   luật vào verifier + test. Reviewer tính thử 30-09 (AUTHORITY=0): control-02 PASS (median sớm 556,
+   muộn 554; max 566 ≤ baseline 558–564 + 32). Luật mới FAIL trên stock thì dừng và báo owner, không
+   tự nới.
+6. Log lane GT-06 là zdoc/reviews/gt06-diagnostic-lane.md (thay tên trong O5.4 cũ) và phải có đủ
+   soak01–04 với số liệu O1.4 ở trên. Handoff/brief của agent không phải nguồn trạng thái; agent sau
+   chỉ cần đọc header, khối quyết định này và log lane.
+7. Sức chứa journal (không chặn GT-06): ID duy nhất trong retry horizon 24 giờ không compact được;
+   ≈ 0,95 MB mỗi batch nên trần 64 MiB đầy sau ≈ 68 batch nếu compact không bỏ được phiên bản cũ.
+   GT-07 VERIFY journalfull phải đo sức chứa thật, có compact theo hết hạn bằng đồng hồ thật và
+   JOURNAL_FULL có next_action rõ; GT-10 ghi sức chứa vào known limits.
+O6_NEXT=TRANSPORT_ERRNO_PHASE_RETRY_DRIVER_LOOKUP; HOST_RAM_LIVE_STATE_ONLY_MICROBENCH; ONE_REPAIR_COMMIT_FROZEN_CLOSURE; HOST_SOAK_EXACT_O1_4; OFFLINE_CONTROL02_RULE_IN_VERIFIER; FRESH_O4_1_PREFLIGHT; FORMAL09_NIGHT_FRESH_ID; CRITIC_PACKAGE_O4_3; O2_IN_WAITS
 
 ACCEPTED_EVIDENCE_INDEX (historical accepted closures; unchanged)
 GT01_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260913
@@ -250,6 +282,17 @@ GT05_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260917_S64
 GT05_REVIEW_STATUS=TWO_INDEPENDENT_PASS_TICK_YES_S64
 GT05_CHECKPOINT_COMMIT=808d8ba
 GT05_LAST_TESTED_SOURCE_CLOSURE=c141d54b80022ca7fefdf81f83e7e1078d3cc6aa43954831f82bb3178338a135
+GT06_HISTORY_S258 (chưa nghiệm thu; AUTHORITY=0; chuyển nguyên văn từ header ngày 30-09-2026, chỉ thêm tiền tố HIST_S258_; không phải trạng thái hiện hành):
+HIST_S258_GT06_SOURCE_POLICY=O1_VERIFIER_AND_PROFILE_CHANGE_CREATES_NEW_FORMAL_SOURCE_CLOSURE_FROZEN_BEFORE_RUN; MEMORY05_CLOSURE=9eccd4530acd98e0f04cf8b565e5a6eb9e3a519e12c71ce17cb67b264bc3a570; O1_9_CONTROL_CLOSURE=09acaf0a2335e5bcdd52815708d0075e8365ee0821018a27139daff48ddfd250; OLD_CLOSURES_AND_RAW_STAY_HISTORICAL; NO_RETROACTIVE_REBINDING; TIMEOUTS_UNCHANGED
+HIST_S258_GT06_HISTORICAL_BENCHMARK53_CLOSURE=1f6b7da7f48085b417e5d6d7f3388c75c0a8beadad3659b14057a2a6e71df625; FORMAL_SOURCE_FILES=53; PRIOR_S241_EXECUTED_CLOSURE=d7c78724ed827c8182af62c3f7bc1489d8dd35d29abe1f70216736a896e66bb3; S232_FORMAL_EXECUTED_CLOSURE=817242efa6578ecc92ebab31909d0324020f7617359bc2855c9b004d31907190; NO_RETROACTIVE_REBINDING
+HIST_S258_GT06_HISTORICAL_EXECUTION217_CLOSURE=493a7ccce3e42993399910b0fe977f25448f411b863e4cca7b57904348ac374e
+HIST_S258_GT06_CURRENT_FORMAL_EXECUTION_CLOSURE=NONE_ACCEPTED; S239_PARTIAL_IS_NOT_A_CLOSURE
+HIST_S258_GT06_CURRENT_SOURCE_CLOSURE=8275722a4519ae435e5f69c23f9afdde1801dbf3873ba3ad4bb32c59d45e000f; SOURCE_FILES=54; PAIR_O1_SCREEN_AND_COMPACT_PHASE_RECORDS; PURE_TESTS=215_EXIT0; CANDIDATE_ONLY_NOT_FORMALLY_EXECUTED; MEMORY05=27_BATCHES_TIMEOUT; O1_9_CONTROL=720S_2809_SAMPLES_NONMONOTONIC_HANDLES; FINAL_CRITICS_PENDING
+HIST_S258_O1_VERIFIER_TEST_RESULT=PACKAGE=studio/.local/reviews/o1-profile-v5-docfix-20260926; SOURCE_CLOSURE=9b704d59587a003151c5a03a653d826737e4f4031b47048883b622912919a9f6; ACTUAL_EXIT=0; TESTS=218; LOG_SHA256=4816b42a17d72e8feac2368cce0c070f642cbafced270bf5c2395d8c0c9df80d; AUTHORITY=0; NO_ENGINE_RUN_FOR_REPAIR; OWNER_COUNTER_RULE_RESOLVED; CRITIC=zdoc/reviews/20260926-gt06-s258-terminal/O1-CRITIC-FINAL.md; TICK=yes
+HIST_S258_S258_TERMINAL_PACKAGE=zdoc/reviews/20260926-gt06-s258-terminal; RAW_FILES=198; ARCHIVE_MEMBERS=199; MANIFEST_SHA256=f0c2bb917a28143f818c621eee3c70becec03ad5dd57432ec6f4e0253877d4ab; AUTHORITY=0; FORMAL_ACCEPTANCE=false
+HIST_S258_O1_PREFLIGHT_CURRENT=20260929_STOCK_EDITOR_CONTROL02; RULE=O4_1; CPU_60S_MAX_PERCENT=80.09834; CPU_MEAN_PERCENT=51.04935; RAM_MIN_GIB=9.51449; COMMIT_MAX_PERCENT=67.21575; FOREIGN_ENGINES=0; PASS=true; FRESH_PREFLIGHT_REQUIRED_FOR_FUTURE_FORMAL
+HIST_S258_O2_PROGRESS_RECONCILIATION=DIRECT_PARSE_PRIMARY_SECONDARY_NEGATIVES_VERIFIED; FIXTURE_STATE_2D3D=2/2; NATIVE_SOURCE_RUN05_4OF4_AND_RUN06_MULTIFILE_NEGATIVES; AUTH05_DOCKER_DIAGNOSTIC_ONLY; ADAPTER_AUTH05_BLENDER_OPEN; GOVERNANCE_MAIN_ONLY; NO_CRITIC_FORGED; NO_GT07
+HIST_S258_PREFLIGHT_POLICY=BINARY_VERSION_PATH_HASH_SYMBOL_DEVICE_MEMORY_AND_REPRO_CAPABILITY_BEFORE_NEW_DIAGNOSTIC; RECORD_ONCE_WHEN_UNCHANGED; WORKER_POLICY=BOUNDED_ATTEMPTS; NO_INFINITE_RETRY; O3_ONE_FALLBACK_TO_ANOTHER_AVAILABLE_MODEL_AFTER_CAPACITY_OR_404; CRITICS_READONLY_INDEPENDENT_SAME_HASH_NOT_IMPLEMENTER; COORDINATOR_HAS_USEFUL_WORK; ACTIVE_QUEUE_POLICY=GT06_O1_VERIFIER_AND_FORMAL_FIRST; O2_CAPABILITY_LANE_IN_SEPARATE_WORKTREE_AND_NO_ENGINE_RUN_WHILE_FORMAL_MEASURES; GT07_GT10_READONLY_PREP_UNTIL_GT06_ACCEPTED; NEVER_TICK_FROM_BANNER_OR_PARTIAL_PREFIX; FORMAL_DISPATCH_RULE=USE_FRESH_CAMPAIGN_ID_ONLY; VERIFY_SOURCE_PROFILE_WORKSTATION_AND_STOP_LATCH_BEFORE_START; PRESERVE_RAW_ON_FAILURE; REPAIR_ONLY_PROVEN_SOURCE_OR_HARNESS_BOUNDARY; NEVER_TICK_FROM_BANNER_OR_PARTIAL_PREFIX
 
 HISTORY_AUTHORITY=0; lịch sử S70–S181 và các next-action cũ đã được rút khỏi phần hiện hành.
 ARCHIVE_S182=zdoc/reviews/20260923-gt06-s182-terminal/plan-before-s182.txt; SHA256=233632dd71751e66a8a7585ce87a717c21bd1333a156d1fb512eda6074c013e1; AUTHORITY=0
@@ -314,7 +357,8 @@ GT-06 hiện hành — phần đã làm và đường tới nghiệm thu
 - Journal dùng exact-byte verified cache dưới accepted lock, giữ receipt,
   tombstone và offsets sau compact. Stop bao completion/assembly/resume;
   ownership giữ khi constructor/CloseHandle lỗi. Chi tiết/checkpoints c5e56c7,
-  3147778 và S69 ở archive; core Journal đã nghiệm thu không đổi.
+  3147778 và S69 ở archive. Core Journal GT-02 đang được sửa theo O5.1/O6.2 (đọc tăng
+  dần, index SQLite, RAM chỉ trạng thái sống); bất biến GT-02 giữ bằng regression.
 - Benchmark bắt buộc theo OWNER O1: 2 fresh host/editor pairs ×35batch (5warmup+30measured)
   cho GT-06; 10×35 theo O1 là release soak GT-10;
   mỗi batch1000HTTPcommands+100nativecycles, cùngPID xuyên run. Giữ ready/start/
@@ -330,11 +374,9 @@ GT-06 hiện hành — phần đã làm và đường tới nghiệm thu
 - Dependency reuse: S73 382/382 unit, 5 service/native lanes158checks; S75
   next/dependency bridge14maps nối S73 service, S69 managed replay và S68 GUI.
   Chỉ reuse dependency không đổi; draft seal chưa phải closure nghiệm thu.
-- Workstation telemetry cũ có RAM available0.91–2.21GiB, commit95.33–96.65%limit.
-  Không chứng minh trimming là nguyên nhân. OWNER O1 thay quy tắc cũ: gate bộ nhớ dùng
-  private commit (RSS chỉ report); preflight theo O4.1 (available ≥4GiB, commit ≤85% lúc bắt
-  đầu; watchdog <1,5GiB hoặc >92% → INFRA_ABORT; không bắt tắt app), nên vùng 0.91–2.21GiB và
-  95–96% ở trên không còn được đo. Vẫn không đổi priority, pinRAM hoặc dùng WPR ReferenceSet toàn hệ thống.
+- Telemetry máy cũ (available 0,91–2,21 GiB, commit 95–97%) là lịch sử; gate bộ nhớ dùng
+  private commit (O1.4) và môi trường theo O4.1. Không đổi priority, pin RAM hoặc dùng WPR
+  ReferenceSet toàn hệ thống.
 - S76 historical diagnostics/failures are retained byte-for-byte in
   reviews/20260918-plan-history-s79/tools-plan-s79.txt (AUTHORITY=0;
   SHA256=3d5ef7ef4acc26bbe721a3ff0628edf3c2d7d9755da8b75394d998795a250a44).
@@ -354,16 +396,13 @@ GT-10: package/install/upgrade/rollback/uninstall/handoff, release soak 10×35 t
 sau GT-10. Không suy phần trăm sản phẩm hoặc ETA toàn plan từ số test/gate.
 
 Thực thi và tốc độ
-- Tiêu chí/gate theo OWNER O1–O3; ưu tiên đường chức năng, file lease độc lập,
-  focused regression và dependency reuse. Không mở thêm vòng audit/helper không
-  phục vụ requirement còn thiếu; không chạy lại lanePASS chỉ vì sửa báo cáo.
-- Owner cho phép heartbeat tiếp tục task HH3D; phải query/readback lịch qua
-  app trước khi ghi ACTIVE. Các receipt S76/qua-m là lịch sử. Máy/app phải
-  hoạt động; thay đổi prompt theo run hiện hành, không tạo lịch trùng.
-- Ba worker S91 kiểm raw, bộ phân tích và detached launcher theo lease;
-  chưa có hai critic final GT06.
-  Thiết bị/SDK Android phải kiểm thực tế ở
-  prerequisite; thiếu PATH không chứng minh thiếu công cụ hoặc không có thiết bị.
+- Tiêu chí/gate theo khối quyết định owner O1–O6; ưu tiên đường chức năng, focused regression
+  và dependency reuse. Không mở thêm vòng audit/helper không phục vụ requirement còn thiếu;
+  không chạy lại lane PASS chỉ vì sửa báo cáo. Gặp lỗi thì sửa và chạy tiếp theo O6.4.
+- Heartbeat (nếu owner bật) chỉ kiểm điều kiện chạy formal; query/readback lịch qua app trước
+  khi ghi ACTIVE, không tạo lịch trùng.
+- Thiết bị/SDK Android phải kiểm thực tế ở prerequisite; thiếu PATH không chứng minh thiếu công
+  cụ hoặc không có thiết bị.
 
 KINH NGHIỆM ĐANG ÁP DỤNG
 S224: Child không tự quan sát exit của nó; đối chiếu parent-owned process-exit
@@ -403,14 +442,32 @@ Sửa receipt không mở quyền retry RSS. load_fixture() phải chạy trư�
     không truyền823pathargv. Gate shellphụ thuộc phải checkexit trướccommit;
     S76indexprobe lỗi206, đã verify lại823HEADblobs của ccfb27ab. Resolve
     sys.executable trướcpythonw, vì PATH có thể làapp-executionalias.
+Bài học 25–30/09 (từ các lần sai của formal01–08 và soak01–04):
+12. Kiểm môi trường thật trước khi đặt gate: O1.8 cũ đòi RAM trống ≥ 8 GiB trên máy dev nên formal
+    không chạy được; ngưỡng CPU toàn hệ thống không tách tải của chính campaign nên formal04/05 và
+    pair 1 formal08 đều INFRA_ABORT.
+13. Đo nhiễu bằng control trước khi đặt ngưỡng counter; T/G 8/2 cho editor handles từng hẹp hơn dao
+    động của editor không plugin.
+14. Kiểm độ phức tạp bằng test tổng hợp vài phút trước formal nhiều giờ: reload O(n) của journal chỉ
+    lộ ở batch 26, sau nhiều campaign.
+15. Pre-check phải dùng đúng metric và công thức của gate: "batch 5→34 ≤ 5%" lệch baseline nên soak03
+    trông gần đạt trong khi O1.4 là 116%. Pre-check chặt hơn gate phải ghi lý do (ví dụ biên nhiễu).
+16. Không nuốt chi tiết lỗi: mã UNKNOWN/CONNECTION_* phải kèm class/errno/phase. Retry khóa theo phase
+    lỗi (chưa gửi byte), không theo loại lệnh; đã gửi byte thì chỉ lookup cùng command_id.
+17. Lỗi ở cuối run dài: tái hiện bằng trạng thái seed + fault injection trong vài phút; run dài chỉ để
+    xác nhận một lần (O6.4).
+18. Sau mỗi lần sửa plan: kiểm không BOM, không CRLF, còn sentinel/markers và mọi hash cũ vẫn còn
+    (một lần StrReplace từng chèn BOM UTF-8).
 
 LỊCH SỬ / CÁCH ĐỌC
 Bản S71 đầy đủ trước tinh gọn giữ tại reviews/20260918-plan-history-s71/
 tools-plan-s71.txt, AUTHORITY=0; SHA256 1f3ca50b8a0931a12f8c334ea2e6cf969d8d667d8af659ac22fa523996390963.
 Chi tiết lessons S27–S71, lỗi/giải pháp và các archive/hash cũ giữ trong bản đó
 và Git/reviews, không xóa verdict. Phần requirement/DoD/TQ/TX bên dưới giữ nguyên.
-Tiến độ hiện hành chỉ ở bảng/markers đầu file. Đọc GT hiện tại và references
-liên quan; không cần đọc lại mọi nhật ký.
+Tiến độ hiện hành chỉ ở header/bảng đầu file; chi tiết diagnostic ở log lane (O4.4). Đọc GT
+hiện tại và references liên quan; không cần đọc lại mọi nhật ký. Văn bản O1–O5 trước khi hợp
+nhất: git show 8298c107:8-9-hh3d-3/zdoc/8-9-godot-blender-agent-studio-plan.txt; các dòng
+header S258 cũ nằm nguyên văn ở GT06_HISTORY_S258 trong ACCEPTED_EVIDENCE_INDEX.
 
 QUYẾT ĐỊNH KỸ THUẬT CÒN HIỆU LỰC
 MCP_ADAPTER_POLICY=External MCP review is a sequencing input only; the
@@ -916,7 +973,8 @@ BUILD: FIFO/expiry/fencing/dependency/bounded concurrency, active manifest
 mục2.5, safe manual-edit reconciliation. Safety ban đầu GT-02 vẫn bắt buộc.
 VERIFY: hai writer cùng .blend/.tscn; expired lease late-result; terminate
 đúng job; crash từng PREPARED/VALIDATED/ACTIVATING/COMMITTED/reload/ACK;
-filelock/diskfull/crossvolume/journalfull; không lost source/partial active.
+filelock/diskfull/crossvolume/journalfull (đo sức chứa thật, compact theo hết
+hạn bằng đồng hồ thật, JOURNAL_FULL có next_action; O6.7); không lost source/partial active.
 DoD: TQ07/TX05/06/09/11/13/14,2 critics; queue không starvation, Stop ưu tiên,
 rollback không đè manual edit mới; logs state rõ không lộ token.
 
