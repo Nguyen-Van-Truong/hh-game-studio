@@ -586,3 +586,27 @@ adoption phase. Five pure tests pass with actual exit 0, including one negative
 case for each dirty field; no Godot, Docker, Blender, or native evidence was
 run or rewritten. This remains `AUTHORITY=0`, does not close AUTH-05, and does
 not change GT-06.
+
+### 2026-09-30 gameplay-source retry identity and authorization
+
+The owner now derives a canonical request digest from project/profile,
+command ID, expected revision, entrypoint and sorted path/hash/size records.
+It validates a private copy of immutable source bytes before consulting cached
+receipts. Changed source/entrypoint/revision with an old digest is rejected;
+an exact retry (including reordered file mappings) remains idempotent after
+the selected revision advances. Cached receipts also require an open owner,
+live grant, current lease and valid deadline. Caller mutation after validation
+cannot change the selected bytes.
+
+`python -B studio/tests/godot/test_gameplay_source_owner.py`: 10 pure tests,
+actual exit 0, 0.647s. Negatives verify unchanged selector/journal and no
+repeated native-runner call. No native engine, Docker run or public capability
+was enabled; `AUTHORITY=0`, no merge before GT-06 acceptance.
+
+Remaining AUTH-02..04 work: persist/rebuild command deduplication on reopen;
+reconcile a crash between selector replacement and terminal journal append;
+serialize concurrent publication admission; bind native result to the owned
+executor run and full runtime closure. Reuse the existing publication owner's
+capture/prepare/select/readback recovery design rather than extending this
+candidate with an unrelated recovery protocol. Current pure tests and old
+native evidence do not establish those guarantees or authoring acceptance.

@@ -8,6 +8,7 @@ for this candidate only; it never grants public capability or GT06 authority.
 """
 from __future__ import annotations
 
+from collections.abc import Mapping
 from dataclasses import dataclass, asdict
 import hashlib
 import importlib.util
@@ -81,6 +82,49 @@ class GameplaySourceOwnerError(SafetyViolation):
 def _need(condition: object, code: str) -> None:
     if not condition:
         raise GameplaySourceOwnerError(code)
+
+
+def _copy_source_bundle(profile, source_files, *, entrypoint: str):
+    """Validate a bounded private mapping of immutable source bytes."""
+    if (not isinstance(source_files, Mapping) or not source_files
+            or len(source_files) > profile.MAX_FILES):
+        raise profile.GameplaySourceError("GAMEPLAY_DEPENDENCY_SHAPE")
+    candidate = {}
+    for index, (name, raw) in enumerate(source_files.items()):
+        if index >= profile.MAX_FILES:
+            raise profile.GameplaySourceError("GAMEPLAY_DEPENDENCY_SHAPE")
+        if type(name) is not str or type(raw) is not bytes:
+            raise profile.GameplaySourceError("GAMEPLAY_DEPENDENCY_FILE")
+        if name in candidate:
+            raise profile.GameplaySourceError("GAMEPLAY_DEPENDENCY_DUPLICATE")
+        candidate[name] = raw
+    checked = profile.validate_source_bundle(candidate, entrypoint=entrypoint)
+    return candidate, checked
+
+
+def _request_digest(*, project_id: str, command_id: str, entrypoint: str,
+                    expected_project_revision: str, source_files) -> str:
+    _need(type(project_id) is str and _ID.fullmatch(project_id), "GAMEPLAY_OWNER_PROJECT")
+    _need(type(command_id) is str and _ID.fullmatch(command_id), "GAMEPLAY_OWNER_COMMAND")
+    _need(type(expected_project_revision) is str
+          and expected_project_revision.startswith("sha256:")
+          and _HEX.fullmatch(expected_project_revision[7:]), "GAMEPLAY_OWNER_REVISION")
+    body = {"schema": "hh-gameplay-source-request-1", "project_id": project_id,
+            "profile": PROFILE, "command_id": command_id, "entrypoint": entrypoint,
+            "expected_project_revision": expected_project_revision,
+            "files": {name: {"sha256": _sha(raw), "size_bytes": len(raw)}
+                      for name, raw in sorted(source_files.items())}}
+    return "sha256:" + _sha(canonical_bytes(body))
+
+
+def request_digest(*, project_id: str, command_id: str, entrypoint: str,
+                   expected_project_revision: str, source_files) -> str:
+    """Derive retry identity from the validated, byte-exact source request."""
+    candidate, _ = _copy_source_bundle(_load("gameplay_source_profile"), source_files,
+                                       entrypoint=entrypoint)
+    return _request_digest(project_id=project_id, command_id=command_id, entrypoint=entrypoint,
+                           expected_project_revision=expected_project_revision,
+                           source_files=candidate)
 
 
 @dataclass(frozen=True, slots=True)
@@ -377,21 +421,30 @@ class GameplaySourcePublicationOwner:
               {"command_id", "digest", "expected_project_revision", "source_files", "entrypoint"},
               "GAMEPLAY_OWNER_REQUEST")
         command_id, digest = request["command_id"], request["digest"]
+        entrypoint = request["entrypoint"]
+        expected_revision = request["expected_project_revision"]
         _need(type(command_id) is str and _ID.fullmatch(command_id), "GAMEPLAY_OWNER_COMMAND")
         _need(type(digest) is str and digest.startswith("sha256:") and _HEX.fullmatch(digest[7:]),
               "GAMEPLAY_OWNER_DIGEST")
+        candidate, checked = _copy_source_bundle(self._profile, request["source_files"],
+                                                  entrypoint=entrypoint)
+        derived_digest = _request_digest(project_id=self.project_id, command_id=command_id,
+            entrypoint=entrypoint, expected_project_revision=expected_revision,
+            source_files=candidate)
+        _need(digest == derived_digest, "GAMEPLAY_OWNER_DIGEST_MISMATCH")
+        _need(entrypoint == ENTRYPOINT, "GAMEPLAY_OWNER_ENTRYPOINT_PIN")
         self._session.validate_public_identifier(command_id)
         with self._lock:
+            _need(not self._closed and not self._held, "GAMEPLAY_OWNER_CLOSED")
+            # A cached receipt is still private project data. Retry identity
+            # does not authorize an expired/revoked grant or a fenced lease.
+            self._session.check(grant, lease, deadline_ms=deadline_ms, operation="scene.save")
             previous = self._jobs.get(command_id)
             if previous is not None:
                 _need(previous["request_digest"] == digest, "GAMEPLAY_OWNER_COMMAND_CONFLICT")
                 return dict(previous)
-            _need(not self._closed and not self._held, "GAMEPLAY_OWNER_CLOSED")
-        _need(request["entrypoint"] == ENTRYPOINT, "GAMEPLAY_OWNER_ENTRYPOINT_PIN")
-        checked = self._profile.validate_source_bundle(request["source_files"], entrypoint=ENTRYPOINT)
-        candidate = {name: bytes(raw) for name, raw in request["source_files"].items()}
         candidate_revision = self._revision(candidate)
-        _need(request["expected_project_revision"] == self._project_revision,
+        _need(expected_revision == self._project_revision,
               "GAMEPLAY_OWNER_STALE_PROJECT")
         _need(self._session.check(grant, lease, deadline_ms=deadline_ms, operation="scene.save") is None,
               "GAMEPLAY_OWNER_LEASE")
@@ -458,4 +511,3 @@ class GameplaySourcePublicationOwner:
                 return
             self._closed = True
         self._session.halt()
-

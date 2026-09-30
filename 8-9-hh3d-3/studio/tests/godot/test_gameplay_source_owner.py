@@ -1,10 +1,10 @@
 """Pure adapter lifecycle tests; native result is an explicitly shaped fixture."""
-import hashlib
 import importlib.util
 from pathlib import Path
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 
 STUDIO = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(STUDIO.parent))
@@ -14,10 +14,6 @@ spec = importlib.util.spec_from_file_location(
 owner_mod = importlib.util.module_from_spec(spec)
 sys.modules[spec.name] = owner_mod
 spec.loader.exec_module(owner_mod)
-
-
-def digest(value: bytes) -> str:
-    return hashlib.sha256(value).hexdigest()
 
 
 def native_result(run_id="fake-run-1"):
@@ -66,12 +62,17 @@ class GameplaySourceOwnerTests(unittest.TestCase):
         self.addCleanup(self.owner.close)
 
     def request(self, files, expected=None, command="command.gameplay.1"):
-        raw_digest = digest(b"request-" + command.encode())
-        return {
-            "command_id": command, "digest": "sha256:" + raw_digest,
+        request = {
+            "command_id": command,
             "expected_project_revision": expected or self.owner.inspect()["project_revision"],
             "source_files": files, "entrypoint": owner_mod.ENTRYPOINT,
         }
+        request["digest"] = owner_mod.request_digest(project_id=self.owner.project_id, **request)
+        return request
+
+    def durable_state(self):
+        return (self.owner.inspect(), self.owner._selector.read_bytes(),
+                self.owner._journal.read_bytes())
 
     def test_native_validation_precedes_atomic_selection_and_readback_ack(self):
         before = self.owner.inspect()
@@ -89,16 +90,111 @@ class GameplaySourceOwnerTests(unittest.TestCase):
 
     def test_exact_command_retry_is_idempotent_and_digest_conflict_is_rejected(self):
         files = dict(self.source)
+        files["scripts/fixture_actor.gd"] += b"\nfunc _ready() -> void:\n\tpass\n"
         request = self.request(files)
         first = self.owner.publish(request, grant=self.grant, lease=self.lease,
                                    deadline_ms=self.lease.expires_ms)
+        self.assertNotEqual(request["expected_project_revision"], first["project_revision"])
+        after = self.durable_state()
         self.assertEqual(first, self.owner.publish(request, grant=self.grant,
                                                    lease=self.lease, deadline_ms=self.lease.expires_ms))
-        conflict = dict(request, digest="sha256:" + "b" * 64)
+        changed = dict(files)
+        changed["scripts/fixture_actor.gd"] += b"\n# changed source request\n"
+        conflict = self.request(changed, expected=request["expected_project_revision"])
         with self.assertRaisesRegex(owner_mod.GameplaySourceOwnerError, "COMMAND_CONFLICT"):
             self.owner.publish(conflict, grant=self.grant, lease=self.lease,
                                deadline_ms=self.lease.expires_ms)
         self.assertEqual(len(self.runs), 1)
+        self.assertEqual(self.durable_state(), after)
+
+    def test_cached_ack_rejects_changed_request_with_original_digest(self):
+        files = dict(self.source)
+        files["scripts/fixture_actor.gd"] += b"\n# published bytes\n"
+        request = self.request(files)
+        self.owner.publish(request, grant=self.grant, lease=self.lease,
+                           deadline_ms=self.lease.expires_ms)
+        after = self.durable_state()
+        changed = dict(files)
+        changed["scripts/fixture_actor.gd"] += b"\n# different request bytes\n"
+        cases = (
+            dict(request, source_files=changed),
+            dict(request, entrypoint="scenes/fixture.tscn"),
+            dict(request, expected_project_revision="sha256:" + "c" * 64),
+        )
+        for altered in cases:
+            with self.subTest(field=next(key for key in request if request[key] != altered[key])):
+                with self.assertRaisesRegex(owner_mod.GameplaySourceOwnerError, "DIGEST_MISMATCH"):
+                    self.owner.publish(altered, grant=self.grant, lease=self.lease,
+                                       deadline_ms=self.lease.expires_ms)
+                self.assertEqual(len(self.runs), 1)
+                self.assertEqual(self.durable_state(), after)
+
+    def test_reordered_source_mapping_has_same_digest_and_cached_ack(self):
+        request = self.request(dict(self.source))
+        first = self.owner.publish(request, grant=self.grant, lease=self.lease,
+                                   deadline_ms=self.lease.expires_ms)
+        after = self.durable_state()
+        reordered = self.request(dict(reversed(list(self.source.items()))),
+                                 expected=request["expected_project_revision"])
+        self.assertEqual(reordered["digest"], request["digest"])
+        self.assertEqual(self.owner.publish(reordered, grant=self.grant, lease=self.lease,
+                                           deadline_ms=self.lease.expires_ms), first)
+        self.assertEqual(len(self.runs), 1)
+        self.assertEqual(self.durable_state(), after)
+
+    def test_cached_ack_requires_live_grant_lease_deadline_and_owner(self):
+        request = self.request(dict(self.source))
+        self.owner.publish(request, grant=self.grant, lease=self.lease,
+                           deadline_ms=self.lease.expires_ms)
+        after = (self.owner._selector.read_bytes(), self.owner._journal.read_bytes())
+        for changes, code in (({'grant': object()}, 'GRANT'),
+                              ({'lease': object()}, 'STALE_LEASE'),
+                              ({'deadline_ms': 0}, 'DEADLINE_EXPIRED')):
+            args = dict(grant=self.grant, lease=self.lease, deadline_ms=self.lease.expires_ms)
+            args.update(changes)
+            with self.subTest(code=code), self.assertRaisesRegex(SafetyViolation, code):
+                self.owner.publish(request, **args)
+        self.owner._session.revoke(self.credential)
+        with self.assertRaises(SafetyViolation):
+            self.owner.publish(request, grant=self.grant, lease=self.lease,
+                               deadline_ms=self.lease.expires_ms)
+        self.owner.close()
+        with self.assertRaisesRegex(SafetyViolation, 'GAMEPLAY_OWNER_CLOSED'):
+            self.owner.publish(request, grant=self.grant, lease=self.lease,
+                               deadline_ms=self.lease.expires_ms)
+        self.assertEqual(len(self.runs), 1)
+        self.assertEqual((self.owner._selector.read_bytes(), self.owner._journal.read_bytes()), after)
+
+    def test_digest_mismatch_rejects_new_request_before_native_or_durable_changes(self):
+        request = self.request(dict(self.source))
+        request["digest"] = "sha256:" + "b" * 64
+        before = self.durable_state()
+        with self.assertRaisesRegex(owner_mod.GameplaySourceOwnerError, "DIGEST_MISMATCH"):
+            self.owner.publish(request, grant=self.grant, lease=self.lease,
+                               deadline_ms=self.lease.expires_ms)
+        self.assertEqual(self.runs, [])
+        self.assertEqual(self.durable_state(), before)
+
+    def test_validated_copy_binds_digest_and_published_bytes_after_caller_mutation(self):
+        files = dict(self.source)
+        files["scripts/fixture_actor.gd"] += b"\n# immutable candidate\n"
+        expected = dict(files)
+        request = self.request(files)
+        validate = self.owner._profile.validate_source_bundle
+
+        def mutate_after_validation(candidate, *, entrypoint):
+            checked = validate(candidate, entrypoint=entrypoint)
+            files["scripts/fixture_actor.gd"] += b"\n# caller mutation\n"
+            return checked
+
+        with patch.object(self.owner._profile, "validate_source_bundle", mutate_after_validation):
+            receipt = self.owner.publish(request, grant=self.grant, lease=self.lease,
+                                         deadline_ms=self.lease.expires_ms)
+        self.assertNotEqual(files, expected)
+        self.assertEqual(receipt["request_digest"], request["digest"])
+        self.assertEqual(self.owner._files, expected)
+        project = self.runs[0][0]
+        self.assertEqual({name: (project / name).read_bytes() for name in expected}, expected)
 
     def test_reopen_reads_selected_revision_without_reusing_old_lease(self):
         files = dict(self.source)
