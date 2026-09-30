@@ -629,6 +629,12 @@ tests**, actual exit 0, 0.784s. The cases cover competing writers, close
 during a blocked native run, close at selector adoption, exact retry after
 reopen without a second native call, and rejection of a tampered terminal
 receipt. No native engine, Docker, Blender or formal GT06 run was started.
-This remains `AUTHORITY=0`; selector/journal crash reconciliation, native-run
-identity binding and full runtime closure remain open, and the branch must
-not merge before GT06 is accepted.
+This remains `AUTHORITY=0`; selector/journal crash reconciliation now uses the
+terminal journal row as the durable source and repairs only `CURRENT` after a
+shape check. Native-run identity binding and full runtime closure remain open,
+and the branch must not merge before GT06 is accepted.
+
+The reconciliation cases are covered by the same pure suite: a selector behind
+the committed journal is advanced back to the durable receipt, while a
+selector ahead of a journal whose terminal row is missing is rolled back to
+the last durable revision. No selector-only revision is adopted.

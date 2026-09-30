@@ -248,6 +248,47 @@ class GameplaySourceOwnerTests(unittest.TestCase):
                 source_closure_sha256=owner_mod.runtime_source_closure()[1],
                 runner=lambda *args, **kwargs: native_result('unused-run'))
 
+    def test_reopen_reconciles_selector_against_durable_journal(self):
+        request = self.request(dict(self.source))
+        receipt = self.owner.publish(request, grant=self.grant, lease=self.lease,
+                                     deadline_ms=self.lease.expires_ms)
+        root = self.owner._root
+        initial = json.loads((root / 'journal.jsonl').read_bytes().splitlines()[0])
+        self.owner.close()
+        selector = root / 'CURRENT'
+
+        # Selector behind the terminal journal: journal wins and CURRENT is
+        # restored to the committed revision.
+        selector.write_bytes((json.dumps({"schema": "hh-gameplay-selector-1",
+            "revision": initial['project_revision'], "generation": initial['generation']},
+            sort_keys=True, separators=(',', ':')) + '\n').encode())
+        reopened = owner_mod.GameplaySourcePublicationOwner.reopen(
+            root, project_id='project.gameplay',
+            source_closure_sha256=owner_mod.runtime_source_closure()[1],
+            runner=lambda *args, **kwargs: native_result('unused-run'))
+        self.addCleanup(reopened.close)
+        self.assertEqual(reopened.inspect()['project_revision'], receipt['project_revision'])
+        self.assertEqual(json.loads(selector.read_bytes()), {
+            'schema': 'hh-gameplay-selector-1', 'revision': receipt['project_revision'],
+            'generation': receipt['generation']})
+
+        # Selector ahead of the terminal journal: remove the terminal receipt
+        # and prove reopen rolls back to the last durable row.
+        reopened.close()
+        rows = [json.loads(line) for line in (root / 'journal.jsonl').read_bytes().splitlines()]
+        (root / 'journal.jsonl').write_bytes(
+            b''.join(json.dumps(row, sort_keys=True, separators=(',', ':')).encode() + b'\n'
+                     for row in rows[:-1]))
+        rolled_back = owner_mod.GameplaySourcePublicationOwner.reopen(
+            root, project_id='project.gameplay',
+            source_closure_sha256=owner_mod.runtime_source_closure()[1],
+            runner=lambda *args, **kwargs: native_result('unused-run'))
+        self.addCleanup(rolled_back.close)
+        self.assertEqual(rolled_back.inspect()['project_revision'], initial['project_revision'])
+        self.assertEqual(json.loads(selector.read_bytes()), {
+            'schema': 'hh-gameplay-selector-1', 'revision': initial['project_revision'],
+            'generation': initial['generation']})
+
     def test_concurrent_publication_is_rejected_without_poisoning_active_writer(self):
         entered, release = threading.Event(), threading.Event()
         completed, failures = [], []

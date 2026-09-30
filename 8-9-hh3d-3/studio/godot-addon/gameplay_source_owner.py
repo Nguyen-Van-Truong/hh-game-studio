@@ -255,6 +255,24 @@ class GameplaySourcePublicationOwner:
             contract.CATALOG_DIGEST, minimum_fencing_epoch=int(last.get("fencing_epoch", 0)))
         owner._files = owner._read_revision(owner._project_revision)
         owner._profile_observation = profile.validate_source_bundle(owner._files, entrypoint=ENTRYPOINT)
+        # CURRENT and the journal are separate atomic files. On a crash in
+        # either direction of selector replacement versus journal append,
+        # prefer the terminal journal row and repair only CURRENT. Never adopt
+        # a selector-only revision because it has no durable receipt.
+        selector = parse_json(owner._selector.read_bytes())
+        _need(type(selector) is dict and set(selector) ==
+              {"schema", "revision", "generation"}
+              and selector.get("schema") == "hh-gameplay-selector-1"
+              and type(selector.get("revision")) is str
+              and _HEX.fullmatch(selector["revision"].removeprefix("sha256:"))
+              and selector["revision"].startswith("sha256:")
+              and type(selector.get("generation")) is int and selector["generation"] > 0,
+              "GAMEPLAY_OWNER_SELECTOR_SHAPE")
+        expected_selector = {"schema": "hh-gameplay-selector-1",
+                             "revision": owner._project_revision,
+                             "generation": owner._generation}
+        if selector != expected_selector:
+            owner._atomic_select(owner._project_revision, owner._generation)
         owner._check_selected()
         # Rebuild the in-memory retry index from terminal journal rows. A
         # reopened owner must not rerun a native effect for an already
