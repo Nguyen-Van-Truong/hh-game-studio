@@ -238,3 +238,25 @@ needed for the next repair. Raw evidence remains under `studio/.local/`.
   and continue O2 while waiting for a clean environment. Never resume this
   run or any prior formal run; preserve all raw evidence. Options and cost/risk
   are recorded in `zdoc/reviews/20261001-o6-observer-options.md`.
+
+## 2026-10-01 — gt06-o6-host-soak-20261001-01
+
+- Source closure: `b43fb6f19cd1f363c925fa82c1c8d9469d75e7191d9e5ac6305d21c04c40851e`;
+  profile `8a2e599c40f927ffaff5ded5e48b6bf2a0f0a6bb3a23de31434a695f4258cb35`.
+- Command: `campaign_task.ps1 -Command register-run -CampaignId
+  gt06-o6-host-soak-20261001-01 -Mode residency`.
+- Actual result: all 35/35 host-only batches completed. Child and wrapper exit
+  `0`; Scheduler result `0`; Job assigned/configured/closed with active count
+  `0`, zero observed, no retained handle, no failed operations, and natural
+  tree exit. `result.json` records `source_unchanged=true`.
+- O6.3 metrics from `residency_metrics.py`: **FAIL** only on
+  `private_growth`; baseline median batches 2–4 was `29,814,784` bytes and
+  max batches 5–34 was `32,804,864` bytes (`110.0288501%`). Handles stayed
+  at `182`; maximum status gap was `527.0567 ms`; lookup p95 was `101.0764%`
+  and append p95 `95.5321%` of the first logical window; load was `1` and
+  transport recoveries were `0`.
+- Classification: complete clean host soak with a product memory-gate fail,
+  not `INFRA_ABORT`, not a formal pair, not acceptance, and not evidence for
+  opening GT-07. The run is the independent `>107%` variation trigger and
+  also crosses the `110%` O1.4 ceiling. Keep raw immutable; do not dispatch a
+  formal run or repeat a long soak before a bounded memory/index diagnosis.
