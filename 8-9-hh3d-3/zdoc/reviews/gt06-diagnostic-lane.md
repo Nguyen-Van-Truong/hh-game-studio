@@ -142,7 +142,8 @@ needed for the next repair. Raw evidence remains under `studio/.local/`.
   replacement and never rescanning inserted markers. It does not forget old
   credentials, clear global caches, enlarge the baseline, or change workload.
   Redaction tests cover overlap, metacharacters, Unicode, nonrecursive markers,
-  exact old-matcher equivalence and absence of retired sets in the regex cache.
+  exact old-matcher equivalence and a public-API spy proving rotations do not
+  compile dynamic regexes.
 - Docker observer repair shares the original total two-second budget across
   at most two reads and records a whitelisted cause (timeout/nonzero/OS/bad
   output). No exception text, argv or output is copied into the diagnostic.
