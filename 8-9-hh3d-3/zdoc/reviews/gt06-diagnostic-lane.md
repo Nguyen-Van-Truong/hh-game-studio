@@ -170,3 +170,12 @@ needed for the next repair. Raw evidence remains under `studio/.local/`.
 - This does not merge O2, close AUTH-02..04, or alter GT-06. Reopen dedupe,
   selector/journal crash recovery, concurrent admission, and full native
   runtime binding remain open and are recorded in `studio/AUTHORING_STATUS.md`.
+
+## 2026-09-30 — latest resource gate observation
+
+- Fresh read-only O4.1 preflight at about 20:20 Asia/Saigon: available memory
+  `2,848,792,576` bytes, system commit `99.283519%`, foreign engines `0`,
+  running Docker containers observed but allowed by O4.1. Result:
+  `CAMPAIGN_PREFLIGHT_RESOURCE_LIMIT`; no soak or engine was dispatched.
+- This is an environment wait, not an INFRA_ABORT and not a product verdict.
+  Do not close user applications or lower the launch/acceptance thresholds.
