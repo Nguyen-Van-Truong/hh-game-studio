@@ -605,8 +605,29 @@ was enabled; `AUTHORITY=0`, no merge before GT-06 acceptance.
 
 Remaining AUTH-02..04 work: persist/rebuild command deduplication on reopen;
 reconcile a crash between selector replacement and terminal journal append;
-serialize concurrent publication admission; bind native result to the owned
-executor run and full runtime closure. Reuse the existing publication owner's
+bind native result to the owned executor run and full runtime closure. Reuse
+the existing publication owner's
 capture/prepare/select/readback recovery design rather than extending this
 candidate with an unrelated recovery protocol. Current pure tests and old
 native evidence do not establish those guarantees or authoring acceptance.
+
+### 2026-09-30 publication writer and lifecycle boundary (static)
+
+The candidate publication owner now admits only one complete publish writer at
+a time. A competing request fails closed with `GAMEPLAY_OWNER_BUSY` before it
+can reserve a session phase, touch a revision, selector or journal, and the
+active writer remains usable for an exact retry. The lifecycle lock is kept
+only across the short selector-adoption and durable-journal commit boundary;
+the native executor remains interruptible by `close()` while it is running.
+This prevents `CURRENT` from advancing beyond the last `COMMITTED` journal row
+if Stop arrives at the selector replacement boundary. A barrier test closes
+at that exact point, proves close waits for the boundary, then reopens and
+reads the committed revision and generation.
+
+`python -B studio/tests/godot/test_gameplay_source_owner.py`: **13 pure
+tests**, actual exit 0, 0.850s. The added cases cover competing writers,
+close during a blocked native run, and close at selector adoption. No native
+engine, Docker, Blender or formal GT06 run was started. This remains
+`AUTHORITY=0`; durable command deduplication/recovery on reopen, crash
+reconciliation, native-run identity binding and full runtime closure remain
+open, and the branch must not merge before GT06 is accepted.

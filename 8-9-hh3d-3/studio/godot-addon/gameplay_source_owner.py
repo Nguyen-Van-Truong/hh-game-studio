@@ -171,6 +171,7 @@ class GameplaySourcePublicationOwner:
         checked = profile.validate_source_bundle(source_files, entrypoint=entrypoint)
         owner = object.__new__(cls)
         owner._lock = threading.RLock()
+        owner._work = threading.Lock()
         owner._closed = False
         owner._held = False
         owner._jobs = {}
@@ -231,6 +232,7 @@ class GameplaySourcePublicationOwner:
         last = rows[-1]
         owner = object.__new__(cls)
         owner._lock = threading.RLock()
+        owner._work = threading.Lock()
         owner._closed = False
         owner._held = False
         owner._jobs = {}
@@ -417,6 +419,17 @@ class GameplaySourcePublicationOwner:
               "GAMEPLAY_OWNER_NATIVE_RUN_ID")
 
     def publish(self, request: dict, *, grant, lease, deadline_ms: int) -> dict:
+        # Serialize complete publication, including validation, native work and
+        # selector/journal updates. The short lifecycle lock remains available
+        # to close/Stop while the executor is running. A competing writer must
+        # retry from a fresh observation, not wait with a stale revision/lease.
+        _need(self._work.acquire(blocking=False), "GAMEPLAY_OWNER_BUSY")
+        try:
+            return self._publish_owned(request, grant=grant, lease=lease, deadline_ms=deadline_ms)
+        finally:
+            self._work.release()
+
+    def _publish_owned(self, request: dict, *, grant, lease, deadline_ms: int) -> dict:
         _need(type(request) is dict and set(request) ==
               {"command_id", "digest", "expected_project_revision", "source_files", "entrypoint"},
               "GAMEPLAY_OWNER_REQUEST")
@@ -464,11 +477,15 @@ class GameplaySourcePublicationOwner:
                                       mode="gameplay-source", output=run_dir, timeout_seconds=20))
             self._validate_native(result)
             native_run_id = result["run_id"]
-            ack = self._phase(grant, lease, command_id, digest, deadline_ms, "adopt", lambda: self._adopt(
-                candidate_revision, candidate, command_id, digest, checked, native_run_id))
-            committed = self._phase(grant, lease, command_id, digest, deadline_ms, "commit",
-                                    lambda: self._commit(ack, lease.fencing_epoch))
+            # Once selection starts, keep the lifecycle lock through the
+            # durable journal commit.  Stop/close may still interrupt the
+            # native runner above, but cannot leave CURRENT ahead of the last
+            # committed journal row and make reopen observe a split state.
             with self._lock:
+                ack = self._phase(grant, lease, command_id, digest, deadline_ms, "adopt", lambda: self._adopt(
+                    candidate_revision, candidate, command_id, digest, checked, native_run_id))
+                committed = self._phase(grant, lease, command_id, digest, deadline_ms, "commit",
+                                        lambda: self._commit(ack, lease.fencing_epoch))
                 self._jobs[command_id] = committed
             return dict(committed)
         finally:

@@ -3,6 +3,7 @@ import importlib.util
 from pathlib import Path
 import sys
 import tempfile
+import threading
 import unittest
 from unittest.mock import patch
 
@@ -219,6 +220,151 @@ class GameplaySourceOwnerTests(unittest.TestCase):
             self.owner.publish(request, grant=self.grant, lease=self.lease,
                                deadline_ms=self.lease.expires_ms)
         self.assertEqual(self.runs, [])
+
+    def test_concurrent_publication_is_rejected_without_poisoning_active_writer(self):
+        entered, release = threading.Event(), threading.Event()
+        completed, failures = [], []
+        calls = []
+        before = self.durable_state()
+        files = dict(self.source)
+        files[owner_mod.ENTRYPOINT] += b'\n# first writer\n'
+        first = self.request(files)
+        second = self.request(dict(self.source), command='command.concurrent.2')
+
+        def runner(*args, **kwargs):
+            calls.append(1)
+            entered.set()
+            if not release.wait(5):
+                raise RuntimeError('TEST_RELEASE_TIMEOUT')
+            return native_result()
+
+        def publish_first():
+            try:
+                completed.append(self.owner.publish(first, grant=self.grant, lease=self.lease,
+                                                     deadline_ms=self.lease.expires_ms))
+            except BaseException as error:
+                failures.append(error)
+
+        self.owner._runner = runner
+        worker = threading.Thread(target=publish_first)
+        worker.start()
+        try:
+            self.assertTrue(entered.wait(5))
+            with self.assertRaisesRegex(SafetyViolation, 'GAMEPLAY_OWNER_BUSY'):
+                self.owner.publish(second, grant=self.grant, lease=self.lease,
+                                   deadline_ms=self.lease.expires_ms)
+            self.assertEqual(self.durable_state(), before)
+            self.assertFalse(self.owner._held)
+            self.assertEqual(len(calls), 1)
+        finally:
+            release.set()
+            worker.join(5)
+        self.assertFalse(worker.is_alive())
+        self.assertEqual(failures, [])
+        self.assertEqual(len(completed), 1)
+        self.assertEqual(self.owner.inspect()['generation'], before[0]['generation'] + 1)
+        self.assertEqual(self.owner.publish(first, grant=self.grant, lease=self.lease,
+                                           deadline_ms=self.lease.expires_ms), completed[0])
+        self.assertEqual(len(calls), 1)
+
+    def test_close_remains_available_while_native_writer_is_blocked(self):
+        entered, release, closed = threading.Event(), threading.Event(), threading.Event()
+        failures = []
+        files = dict(self.source)
+        files[owner_mod.ENTRYPOINT] += b'\n# never selected\n'
+        request = self.request(files)
+        before = (self.owner._selector.read_bytes(), self.owner._journal.read_bytes())
+
+        def runner(*args, **kwargs):
+            entered.set()
+            if not release.wait(5):
+                raise RuntimeError('TEST_RELEASE_TIMEOUT')
+            return native_result()
+
+        def publish():
+            try:
+                self.owner.publish(request, grant=self.grant, lease=self.lease,
+                                   deadline_ms=self.lease.expires_ms)
+            except BaseException as error:
+                failures.append(error)
+
+        def close():
+            self.owner.close()
+            closed.set()
+
+        self.owner._runner = runner
+        worker = threading.Thread(target=publish)
+        closer = threading.Thread(target=close)
+        worker.start()
+        try:
+            self.assertTrue(entered.wait(5))
+            closer.start()
+            self.assertTrue(closed.wait(2), 'close must not wait on publication lock')
+        finally:
+            release.set()
+            worker.join(5)
+            if closer.ident is not None:
+                closer.join(5)
+        self.assertFalse(worker.is_alive())
+        self.assertFalse(closer.is_alive())
+        self.assertEqual(len(failures), 1)
+        self.assertIsInstance(failures[0], SafetyViolation)
+        self.assertEqual((self.owner._selector.read_bytes(), self.owner._journal.read_bytes()), before)
+        self.assertFalse(self.owner._work.locked())
+
+    def test_close_waits_for_selector_adoption_and_reopen_sees_committed_revision(self):
+        selected, release, close_started, closed = (
+            threading.Event(), threading.Event(), threading.Event(), threading.Event())
+        failures = []
+        files = dict(self.source)
+        files[owner_mod.ENTRYPOINT] += b'\n# selector barrier\n'
+        request = self.request(files)
+        original_select = self.owner._atomic_select
+
+        def select(revision, generation):
+            original_select(revision, generation)
+            selected.set()
+            if not release.wait(5):
+                raise RuntimeError('TEST_RELEASE_TIMEOUT')
+
+        def publish():
+            try:
+                self.owner.publish(request, grant=self.grant, lease=self.lease,
+                                   deadline_ms=self.lease.expires_ms)
+            except BaseException as error:
+                failures.append(error)
+
+        def close():
+            close_started.set()
+            self.owner.close()
+            closed.set()
+
+        self.owner._atomic_select = select
+        worker = threading.Thread(target=publish)
+        closer = threading.Thread(target=close)
+        worker.start()
+        try:
+            self.assertTrue(selected.wait(5))
+            closer.start()
+            self.assertTrue(close_started.wait(2))
+            self.assertFalse(closed.wait(0.1), 'close must wait for adopt/commit boundary')
+        finally:
+            release.set()
+            worker.join(5)
+            if closer.ident is not None:
+                closer.join(5)
+        self.assertFalse(worker.is_alive())
+        self.assertFalse(closer.is_alive())
+        self.assertEqual(failures, [])
+        self.assertTrue(closed.is_set())
+        reopened = owner_mod.GameplaySourcePublicationOwner.reopen(
+            self.owner._root, project_id='project.gameplay',
+            source_closure_sha256=owner_mod.runtime_source_closure()[1],
+            runner=lambda *args, **kwargs: native_result('unused-run'))
+        self.addCleanup(reopened.close)
+        self.assertEqual(reopened.inspect()['project_revision'],
+                         self.owner._project_revision)
+        self.assertEqual(reopened.inspect()['generation'], self.owner._generation)
 
     def test_dirty_native_observation_cannot_publish_or_ack(self):
         before = self.owner.inspect()
