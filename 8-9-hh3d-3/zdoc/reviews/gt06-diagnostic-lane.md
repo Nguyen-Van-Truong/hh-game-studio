@@ -128,14 +128,18 @@ needed for the next repair. Raw evidence remains under `studio/.local/`.
   and natural tree exit. Task Scheduler closeout also returned `0`.
 - O1.4 diagnostic values: batches 2–4 baseline median private commit
   `30,568,448` bytes; max batches 5–34 `32,743,424` bytes = `107.1151%`;
-  early/late maximum is also `107.1151%`; handles stayed `182`; maximum
-  status gap was `279.0004 ms`.
-- Classification: complete host soak with clean exit/cleanup, but not O1
-  formal acceptance and not a PASS for the O6.3 promotion trigger because
-  growth is above the `107%` re-soak threshold (while below the formal `110%`
-  ceiling). No editor pair, critic package, GT06 acceptance, or GT07 opening
-  follows. Keep raw evidence immutable and run another fresh O6.3 soak only
-  after review and a new O4.1 preflight.
+  late/early maximum is `97.0978%`; handles stayed `182`; maximum status gap
+  was `279.0004 ms`.
+- O6.3 timing calculation over logical command windows (batches 0–4 versus
+  30–34) is also required. Lookup p95 is `3.59502 ms` to `4.45738 ms`
+  (`123.9876%`), and append p95 is `15.43761 ms` to `18.59155 ms`
+  (`120.4302%`). Both exceed the `120%` limit.
+- Classification: complete host soak with clean exit/cleanup, but O6.3
+  metrics **FAIL** on both journal timing checks. The private-commit growth is
+  below the formal `110%` ceiling but above the `107%` variation threshold;
+  that threshold is not the only failure. No editor pair, critic package,
+  GT06 acceptance, or GT07 opening follows. The offline calculator and its
+  pure tests are diagnostic only; raw evidence remains immutable.
 
 ## 2026-09-30 — HTTP allocation attribution and credential redaction repair
 
@@ -213,3 +217,23 @@ needed for the next repair. Raw evidence remains under `studio/.local/`.
   verdict, O1 pair, or O6.3 result. Preserve the raw observer error and review
   the Docker-query path before attempting another soak. Do not count this run
   toward the `>107%` re-soak requirement or dispatch formal09.
+
+## 2026-09-30 — gt06-o6-host-soak-20260930-04
+
+- Source closure: `b43fb6f19cd1f363c925fa82c1c8d9469d75e7191d9e5ac6305d21c04c40851e`.
+- Command: `campaign_task.ps1 -Command register-run -CampaignId gt06-o6-host-soak-20260930-04 -Mode residency`.
+- Actual result: watchdog stopped after batches `0..8` at sample `68` with
+  `CAMPAIGN_WATCHDOG_OBSERVER_ERROR`. The Docker inventory observer recorded
+  an explicit `timeout` after `2.219 s` on attempt 1. The owner failure is
+  `HARNESS_FAIL`; wrapper exit is `2`, Job/tree/handle cleanup is closed and
+  zero-observed, and no child `process-exit.json` was produced. Supervisor
+  return code `1` is not a child exit record.
+- Classification: repeated observer/harness failure, not an O6.3 result,
+  `INFRA_ABORT`, product verdict, or acceptance. This is the third attempt in
+  the bounded O6 diagnostic direction (O6-02 completed, O6-03 stopped at batch
+  0, O6-04 stopped at batch 8). Do not dispatch another long soak from a fresh
+  preflight alone. First make the observer path reproducible with a bounded
+  short check that records timeout/nonzero/OS/bad-output causes, then either
+  apply a targeted repair and rerun the short check or document its cost/risk
+  and continue O2 while waiting for a clean environment. Never resume this
+  run or any prior formal run; preserve all raw evidence.
