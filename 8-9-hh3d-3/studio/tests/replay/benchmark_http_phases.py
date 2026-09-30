@@ -7,11 +7,17 @@ or a complete transport log. No request bodies, credentials, exception text,
 socket objects, disk I/O, retries or per-chunk instrumentation are retained.
 """
 from collections import deque, namedtuple
+from array import array
 from contextlib import ExitStack, contextmanager
 import http.client
+import math
 import os
+import re
 import threading
 import time
+from studio.tests.replay.benchmark_transport_metadata import (
+    TransportMetadataError, validate_transport_event,
+)
 
 
 PHASES = frozenset({
@@ -24,7 +30,8 @@ ROUTES = frozenset({'discovery', 'lease', 'commands', 'lookup', 'archive', 'canc
 ENDPOINTS = {'/v1/' + name: name for name in ROUTES if name != 'other'}
 _WINDOW_FIELDS = frozenset({'schema_id', 'schema_version', 'formal_acceptance', 'pid', 'clock',
     'captured_ns', 'event_capacity', 'active_capacity', 'events_evicted', 'spans_dropped',
-    'identity_missing', 'failure_trigger', 'transport_failures_by_route', 'events', 'unfinished'})
+    'identity_missing', 'failure_trigger', 'transport_failures_by_route',
+    'transport_events', 'transport_events_evicted', 'events', 'unfinished'})
 _SPAN_FIELDS = frozenset({'span_id', 'parent_id', 'root_id', 'thread_id', 'phase', 'route',
     'server_port', 'client_port', 'started_ns'})
 _EVENT_FIELDS = _SPAN_FIELDS | {'event_id', 'kind', 'timestamp_ns', 'outcome'}
@@ -69,6 +76,12 @@ def validate_phase_snapshot(snapshot, expected_pid):
             need(type(row['outcome']) is str and row['outcome'] in ('returned', 'raised') if row['kind'] == 'exit'
                  else row['outcome'] is None)
 
+    def transport_event(row):
+        try:
+            validate_transport_event(row)
+        except TransportMetadataError:
+            raise ValueError('INVALID_HTTP_PHASE_SNAPSHOT')
+
     def window(value, *, first):
         shape(value, _WINDOW_FIELDS | ({'failed_call_id'} if first else
                                       {'transport_failures_observed', 'first_failure'}))
@@ -82,6 +95,10 @@ def validate_phase_snapshot(snapshot, expected_pid):
              and integer(value['active_capacity'], 1) and value['active_capacity'] <= 64)
         for key in ('events_evicted', 'spans_dropped', 'identity_missing'):
             need(integer(value[key]))
+        need(integer(value['transport_events_evicted']))
+        need(type(value['transport_events']) is list and len(value['transport_events']) <= 64)
+        for row in value['transport_events']:
+            transport_event(row)
         routes = value['transport_failures_by_route']
         shape(routes, ROUTES)
         need(all(integer(count) for count in routes.values()))
@@ -164,6 +181,8 @@ class PhaseRecorder:
         self._evicted, self._overflow, self._identity_missing = 0, 0, 0
         self._failure_count, self._first_failure = 0, None
         self._failures_by_route = {route: 0 for route in sorted(ROUTES)}
+        self._transport_events = deque(maxlen=64)
+        self._transport_events_evicted = 0
         self._pid = os.getpid()
 
     def _stack(self):
@@ -241,6 +260,8 @@ class PhaseRecorder:
                 'identity_missing': self._identity_missing,
                 'failure_trigger': 'first_lookup_transport_failure',
                 'transport_failures_by_route': dict(self._failures_by_route),
+                'transport_events': list(self._transport_events),
+                'transport_events_evicted': self._transport_events_evicted,
                 'events': tuple(self._events),
                 'unfinished': [dict(row) for row in self._active.values()]}
 
@@ -276,6 +297,19 @@ class PhaseRecorder:
             result['transport_failures_observed'] = self._failure_count
             result['first_failure'] = None if first is None else self._materialize(first)
             return result
+
+    def capture_transport(self, event):
+        """Keep bounded phase-keyed transport diagnostics without secrets."""
+        try:
+            validate_transport_event(event)
+        except TransportMetadataError as error:
+            raise ValueError('INVALID_TRANSPORT_EVENT') from error
+        if type(event) is not dict:
+            raise ValueError('INVALID_TRANSPORT_EVENT')
+        with self._lock:
+            if len(self._transport_events) == self._transport_events.maxlen:
+                self._transport_events_evicted += 1
+            self._transport_events.append(dict(event))
 
 
 def observed_connection_type(base, recorder):
@@ -318,8 +352,16 @@ def observed_client_type(base, recorder):
 
         def _call(self, path, body, *, control=False):
             route = route_for(path)
+            # Some protocol-only test clients do not inherit the transport
+            # observation mixin.  Keep the observer compatible with those
+            # clients while still recording all O6 events for real clients.
+            cursor = getattr(self, 'transport_event_total', 0)
             with recorder.span('client.call', route=route) as call_id:
                 result = super()._call(path, body, control=control)
+                read_events = getattr(self, 'transport_events_since', None)
+                if read_events is not None:
+                    for event in read_events(cursor):
+                        recorder.capture_transport(event)
                 if self.last_transport_failure is not None:
                     recorder.capture_failure(call_id, route=route)
                 return result
@@ -357,23 +399,115 @@ def observed_host_type(base, recorder):
     return Host
 
 
-def observed_journal_type(base, recorder):
+class JournalTimingBook:
+    """Bounded direct journal timings for the O5 host-only diagnostic.
+
+    The first 5,000 and rolling last 5,000 samples are retained by operation;
+    counters also prove how often reload/load/tail paths were entered. This
+    supplemental book is separate from the HTTP phase ring and is never an
+    acceptance override.
+    """
+    def __init__(self, *, window=5000):
+        if type(window) is not int or window <= 0:
+            raise ValueError('INVALID_JOURNAL_TIMING_WINDOW')
+        self._lock = threading.Lock()
+        self._window = window
+        # Numeric buffers are one fixed observation allocation at startup,
+        # rather than cardinality-growing Python float objects during soak.
+        self._first = {key: array('d', [0]) * window for key in ('lookup', 'append')}
+        self._last = {key: array('d', [0]) * window for key in ('lookup', 'append')}
+        self._batch = {key: array('d', [0]) * 4096 for key in ('lookup', 'append')}
+        self._batch_counts = {'lookup': 0, 'append': 0}
+        self._batch_dropped = {'lookup': 0, 'append': 0}
+        self._counts = {'lookup': 0, 'append': 0, 'reload': 0, 'load': 0,
+                        'tail_replay': 0, 'no_tail': 0}
+
+    def operation(self, name, elapsed_ns):
+        with self._lock:
+            self._counts[name] += 1
+            if name in self._first:
+                ordinal = self._counts[name] - 1
+                value = elapsed_ns / 1_000_000
+                if ordinal < self._window:
+                    self._first[name][ordinal] = value
+                self._last[name][ordinal % self._window] = value
+                batch = self._batch_counts[name]
+                if batch < len(self._batch[name]):
+                    self._batch[name][batch] = value
+                    self._batch_counts[name] += 1
+                else:
+                    self._batch_dropped[name] += 1
+
+    def path(self, name):
+        with self._lock:
+            self._counts[name] += 1
+
+    def snapshot(self):
+        with self._lock:
+            def last(key):
+                count = self._counts[key]
+                if count <= self._window:
+                    return list(self._last[key][:count])
+                pivot = count % self._window
+                return list(self._last[key][pivot:]) + list(self._last[key][:pivot])
+            return {'window': self._window,
+                    'first_ms': {key: list(value[:min(self._counts[key], self._window)])
+                                 for key, value in self._first.items()},
+                    'last_ms': {key: last(key) for key in self._last},
+                    'counts': dict(self._counts), 'formal_acceptance': False}
+
+    def take_batch(self):
+        with self._lock:
+            result = {'latency_ms': {key: list(value[:self._batch_counts[key]])
+                                    for key, value in self._batch.items()},
+                      'dropped': dict(self._batch_dropped), 'counts': dict(self._counts),
+                      'formal_acceptance': False}
+            for key in self._batch_counts:
+                self._batch_counts[key] = self._batch_dropped[key] = 0
+            return result
+
+
+def observed_journal_type(base, recorder, timings=None):
     class Journal(base):
+        def _timed(self, name, action, *args, **kwargs):
+            started = time.perf_counter_ns()
+            try:
+                return action(*args, **kwargs)
+            finally:
+                if timings is not None:
+                    timings.operation(name, time.perf_counter_ns() - started)
+
         def _snapshot(self, *, synchronize):
             with recorder.span('journal.snapshot'):
                 return super()._snapshot(synchronize=synchronize)
 
         def _reload(self):
+            if timings is not None:
+                timings.path('reload')
             with recorder.span('journal.reload'):
                 return super()._reload()
 
         def _append(self, record):
             with recorder.span('journal.append'):
-                return super()._append(record)
+                return self._timed('append', super()._append, record)
 
         def _load(self):
+            if timings is not None:
+                timings.path('load')
             with recorder.span('journal.load'):
                 return super()._load()
+
+        def _tail_replay(self):
+            if timings is not None:
+                timings.path('tail_replay')
+            before = self._verified_size
+            result = super()._tail_replay()
+            if timings is not None and result and self._verified_size == before:
+                timings.path('no_tail')
+            return result
+
+        def lookup(self, *args, **kwargs):
+            return self._timed('lookup', super().lookup, *args, **kwargs)
 
         @contextmanager
         def _writer_lock(self):

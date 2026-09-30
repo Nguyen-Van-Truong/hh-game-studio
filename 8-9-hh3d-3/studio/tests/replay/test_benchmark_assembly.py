@@ -138,7 +138,13 @@ def add_lookup_recovery(value, *, canceled=False, extra_us=2000):
     attempt = {'status': 'UNKNOWN', 'code': 'CONNECTION_LOST_LOOKUP', 'command_id': row['command_id'],
         'request_digest': None, 'started_mono_us': row['receipt_mono_us'] + 1,
         'ended_mono_us': row['receipt_mono_us'] + 50,
-        'transport_failure': {'endpoint': 'lookup', 'stage': 'getresponse', 'category': 'http', 'elapsed_ms': .04}}
+        'transport_failure': {
+            'endpoint': 'lookup', 'stage': 'getresponse', 'category': 'http',
+            'exception': 'HTTPException', 'errno': None, 'winerror': None,
+            'elapsed_ms': .04, 'attempts': 1, 'attempt_details': [{
+                'endpoint': 'lookup', 'stage': 'getresponse', 'category': 'http',
+                'exception': 'HTTPException', 'errno': None, 'winerror': None,
+                'elapsed_ms': .04}], 'recovered': False, 'bytes_sent': True}}
     row['lookup_attempts'][0]['started_mono_us'] = attempt['ended_mono_us'] + 1000
     row['lookup_attempts'].insert(0, attempt)
     stamps = value['host_response_mono_us']
@@ -148,10 +154,14 @@ def add_lookup_recovery(value, *, canceled=False, extra_us=2000):
     return row
 
 
-def fixture(index=0, source=SOURCE, scene_hash='c' * 64, *, native_offset=0, frame_offset=0):
+def fixture(index=0, source=SOURCE, scene_hash='c' * 64, *, native_offset=0, frame_offset=0, current=False):
     native_base, root_base, generation_base, frame_base = index * 10000000 + native_offset, 1000 + index * 100, 1 + index * 100, index * 2000 + frame_offset
     suffix = f'{index:02d}.json'
     command_value = command_fixture(index)
+    if current:
+        command_value.update(schema_version='1.5.0', transport_recovery={
+            'events': [], 'event_count_before': 0, 'event_count_after': 0,
+            'all_reconciled': True})
     command = artifact('commands/batch-' + suffix, command_value)
     ready_value = {'schema_id': 'hh-studio.native-cycle-batch-ready', 'schema_version': '1.0.0',
         'run_id': RUN, 'pid': 202, 'batch_index': index, 'source_closure_sha256': source,
@@ -277,7 +287,7 @@ def complete_run_fixture(root):
         **{field: [] for field in field_names.values()}}
     batches, barriers, permits = [], [], []
     for index in range(35):
-        values = fixture(index, closure, scene_hash, native_offset=2000000, frame_offset=100)
+        values = fixture(index, closure, scene_hash, native_offset=2000000, frame_offset=100, current=True)
         for name, field in field_names.items():
             bound = values[name]
             manifest[field].append(write_raw(root, bound.file, bound.raw))
@@ -389,6 +399,9 @@ class AssemblyTests(unittest.TestCase):
                     row = add_lookup_recovery(value, canceled=canceled, extra_us=2100000)
                     attempt = row['lookup_attempts'][0]
                     attempt['transport_failure'].update(stage=stage, category=category,
+                        elapsed_ms=(attempt['ended_mono_us'] - attempt['started_mono_us']) / 1000)
+                    attempt['transport_failure']['attempt_details'][0].update(
+                        stage=stage, category=category,
                         elapsed_ms=(attempt['ended_mono_us'] - attempt['started_mono_us']) / 1000)
                     original_stamps = list(value['host_response_mono_us'])
                     original_gap = value['max_status_gap_ms']
@@ -599,7 +612,11 @@ class AssemblyTests(unittest.TestCase):
                 report = producer.run_diagnostic()
             finally:
                 producer.close()
-        self.assertEqual(report['schema_version'], '1.4.0')
+        self.assertEqual(report['schema_version'], '1.5.0')
+        self.assertEqual(report['transport_recovery']['event_count_before'], 0)
+        self.assertEqual(report['transport_recovery']['event_count_after'],
+                         len(report['transport_recovery']['events']))
+        self.assertTrue(report['transport_recovery']['all_reconciled'])
         self.assertEqual(len(report['commands']), 10)
         for row in report['commands']:
             if row['kind'] == 'rejected':
@@ -614,6 +631,130 @@ class AssemblyTests(unittest.TestCase):
         with self.assertRaisesRegex(assembly.AssemblyError, 'COMMAND_INCOMPLETE_OR_DIAGNOSTIC'):
             assembly.validate_command_batch(report, run_id=report['run_id'], index=0,
                                             host_identity=report['host_process'])
+
+    def test_schema_15_transport_recovery_is_closed_and_counted(self):
+        value = command_fixture()
+        value['schema_version'] = '1.5.0'
+        value['transport_recovery'] = {
+            'events': [], 'event_count_before': 0, 'event_count_after': 0,
+            'all_reconciled': True,
+        }
+        assembly.validate_command_batch(value, run_id=RUN, index=0,
+                                        host_identity=PROCESSES['host'])
+        for mutation, code in (
+                (lambda item: item.pop('transport_recovery'), 'FIELDS'),
+                (lambda item: item['transport_recovery'].update(event_count_after=1),
+                 'TRANSPORT_RECOVERY_COUNT'),
+                (lambda item: item['transport_recovery'].update(all_reconciled=False),
+                 'TRANSPORT_RECOVERY_INCOMPLETE')):
+            broken = copy.deepcopy(value)
+            mutation(broken)
+            with self.subTest(code=code), self.assertRaisesRegex(assembly.AssemblyError, code):
+                assembly.validate_command_batch(broken, run_id=RUN, index=0,
+                                                host_identity=PROCESSES['host'])
+
+    def test_transport_recovery_binds_duplicate_events_one_to_one(self):
+        value = command_fixture()
+        first = add_lookup_recovery(value, extra_us=100)
+        failure = copy.deepcopy(first['lookup_attempts'][0]['transport_failure'])
+        with self.assertRaisesRegex(assembly.AssemblyError, 'TRANSPORT_EVENT_BINDING'):
+            assembly._bind_transport_events([failure], [failure, copy.deepcopy(failure)])
+        assembly._bind_transport_events([failure, copy.deepcopy(failure)],
+                                        [failure, copy.deepcopy(failure)])
+
+    def test_cancel_admission_recovery_trace_is_validated_separately(self):
+        failure_detail = {
+            'endpoint': 'commands', 'stage': 'getresponse', 'category': 'http',
+            'exception': 'HTTPException', 'errno': None, 'winerror': None, 'elapsed_ms': .04,
+        }
+        failure = {**failure_detail, 'attempts': 1, 'attempt_details': [dict(failure_detail)],
+                   'recovered': False, 'bytes_sent': True}
+        digest = 'sha256:' + 'f' * 64
+        row = {
+            'command_id': 'test.cancel', 'kind': 'cancel', 'request_digest': digest,
+            'started_mono_us': 900, 'receipt_mono_us': 1000, 'receipt_status': 'UNKNOWN',
+            'receipt_code': 'CONNECTION_LOST_LOOKUP', 'receipt_transport_failure': failure,
+            'reconciliation': [
+                {'action': 'lookup', 'response': {
+                    'status': 'REJECTED', 'code': 'COMMAND_NOT_FOUND', 'command_id': 'test.cancel',
+                    'result_revision': None, 'result_hash': None, 'postconditions': {}},
+                 'started_mono_us': 1001, 'ended_mono_us': 1020,
+                 'transport_failure': None},
+                {'action': 'submit', 'response': {
+                    'status': 'ACCEPTED_PENDING', 'code': 'QUEUED', 'command_id': 'test.cancel',
+                    'result_revision': None, 'result_hash': None,
+                    'postconditions': {'request_digest': digest}},
+                 'started_mono_us': 1021, 'ended_mono_us': 1040,
+                 'transport_failure': None},
+            ],
+        }
+        self.assertEqual(assembly._reconciliation_trace(row, schema_version='1.5.0', complete=True),
+                         [1020, 1040])
+
+    def test_reconciliation_trace_requires_not_found_before_submit_and_binds_terminal(self):
+        value = command_fixture()
+        row = value['commands'][5]
+        row.update(receipt_status='UNKNOWN', receipt_code='CONNECTION_LOST_LOOKUP')
+        base = row['receipt_mono_us']
+        first_end, final_end = base + 50, base + 100
+        final = {'status': 'REJECTED', 'code': 'INVALID_FIXTURE_PAYLOAD',
+                 'command_id': row['command_id'], 'result_revision': None,
+                 'result_hash': None, 'postconditions': {}}
+        row.update(terminal_mono_us=final_end, terminal_ms=(final_end - row['started_mono_us']) / 1000,
+                   terminal_response=final,
+                   receipt_transport_failure=None,
+                   latency_ms=(final_end - row['started_mono_us']) / 1000)
+        row['reconciliation'] = [
+            {'action': 'lookup', 'response': {
+                'status': 'REJECTED', 'code': 'COMMAND_NOT_FOUND',
+                'command_id': row['command_id'], 'result_revision': None,
+                'result_hash': None, 'postconditions': {}},
+             'started_mono_us': base + 1, 'ended_mono_us': first_end,
+             'transport_failure': None},
+            {'action': 'submit', 'response': final,
+             'started_mono_us': first_end + 1, 'ended_mono_us': final_end,
+             'transport_failure': None},
+        ]
+        value['latency_ms']['rejected'][0] = row['latency_ms']
+        value['host_response_mono_us'].extend([first_end, final_end])
+        value['host_response_mono_us'].sort()
+        stamps = value['host_response_mono_us']
+        value['max_status_gap_ms'] = max(b - a for a, b in zip(stamps, stamps[1:])) / 1000
+        assembly.validate_command_batch(value, run_id=RUN, index=0,
+                                        host_identity=PROCESSES['host'])
+        broken = copy.deepcopy(value)
+        broken['commands'][5]['reconciliation'][0]['action'] = 'submit'
+        with self.assertRaisesRegex(assembly.AssemblyError, 'RECONCILIATION_SUBMIT_ORDER'):
+            assembly.validate_command_batch(broken, run_id=RUN, index=0,
+                                            host_identity=PROCESSES['host'])
+
+    def test_real_tiny_producer_reconciliation_trace_is_consumable(self):
+        from studio.tests.replay.benchmark_commands import CommandProducer, FixtureClient
+        from studio.tests.replay.test_benchmark_commands import SyntheticObserver
+        from studio.protocol.core import Response, Status
+        actual_submit = FixtureClient.submit
+        first = True
+
+        def submit(client, request):
+            nonlocal first
+            result = actual_submit(client, request)
+            if first and request.command_id.endswith('.rejected.0'):
+                first = False
+                return Response(Status.UNKNOWN, 'CONNECTION_LOST_LOOKUP', request.command_id,
+                                postconditions={'next_action': 'lookup'})
+            return result
+
+        with tempfile.TemporaryDirectory(prefix='assembly-http-reconcile-') as directory:
+            producer = CommandProducer(Path(directory) / 'host', 'test.assembly.http', observer=SyntheticObserver())
+            try:
+                with patch.object(FixtureClient, 'submit', submit):
+                    report = producer.run_diagnostic()
+            finally:
+                producer.close()
+        row = report['commands'][5]
+        self.assertEqual([step['action'] for step in row['reconciliation']], ['lookup', 'submit'])
+        self.assertEqual(assembly._reconciliation_trace(row, schema_version='1.5.0', complete=False),
+                         [step['ended_mono_us'] for step in row['reconciliation']])
 
 
 class CompleteRunTests(unittest.TestCase):

@@ -38,6 +38,17 @@ class VerifiedJournalTests(unittest.TestCase):
             self.assertEqual(self.lookup('c2')['receipt'], {'value': 'c2'})
             self.assertEqual(load.call_count, 0)
 
+    def test_large_cached_lookup_skips_full_snapshot_and_fsync(self):
+        for index in range(400):
+            self.journal.append_command(project_id='p', command_id=f'large-{index}',
+                                        digest='sha256:' + 'a' * 64,
+                                        receipt={'value': 'x' * 3000}, now_ms=index + 1)
+        self.assertGreater(self.path.stat().st_size, 1_048_576)
+        with patch.object(self.journal, '_snapshot', wraps=self.journal._snapshot) as snapshot:
+            with patch('studio.host.replay.verified_journal.os.fsync', side_effect=OSError('no full barrier')):
+                self.assertEqual(len(self.lookup('large-399')['receipt']['value']), 3000)
+            self.assertEqual(snapshot.call_count, 0)
+
     def test_snapshot_hash_covers_full_buffer_boundaries_and_tail(self):
         # Exercise the byte verifier independently of the JSONL parser. An
         # altered byte beyond the first read and a short tail must affect it.
@@ -87,12 +98,11 @@ class VerifiedJournalTests(unittest.TestCase):
         with self.assertRaisesRegex(JournalError, 'TRUNCATED'):
             self.lookup()
 
-    def test_cached_read_requires_successful_recovery_fsync(self):
+    def test_cached_read_without_tail_does_not_require_full_recovery_fsync(self):
         self.append()
         with patch('studio.host.replay.verified_journal.os.fsync', side_effect=OSError('test')):
-            with self.assertRaisesRegex(JournalError, 'DURABILITY_UNCONFIRMED'):
-                self.lookup()
-        self.assertIsNone(self.journal._verified_hash)
+            self.assertEqual(self.lookup()['receipt']['value'], 'c1')
+        self.assertIsNotNone(self.journal._verified_hash)
         self.assertEqual(self.lookup()['receipt']['value'], 'c1')
 
     def test_append_sync_failure_invalidates_cache_and_reopen_reconciles(self):
@@ -102,7 +112,7 @@ class VerifiedJournalTests(unittest.TestCase):
 
         def fail_write(fd):
             calls.append(fd)
-            if len(calls) == 2:  # inherited reload barrier then actual append
+            if len(calls) == 1:  # the authoritative append barrier
                 raise OSError('simulated failed flush')
             return actual(fd)
 
@@ -127,6 +137,25 @@ class VerifiedJournalTests(unittest.TestCase):
                 j.lookup(project_id='p', command_id='c1', now_ms=31)
             with self.assertRaisesRegex(JournalError, 'RETRY_HORIZON_EXPIRED'):
                 self.append(journal=j, now=31)
+
+    def test_automatic_compaction_reclaims_superseded_rows_without_resetting_ids(self):
+        self.journal.close()
+        self.journal = VerifiedJournal(self.path, limits=JournalLimits(max_records=3))
+        self.addCleanup(self.journal.close)
+        self.append(pending=True, now=1)
+        self.journal.finish_command(project_id='p', command_id='c1', status='COMMITTED',
+                                    receipt={'value': 'done'}, now_ms=2)
+        self.journal.acquire_lease(project_id='p', target='t', owner='o', now_ms=1, ttl_ms=100)
+        # The fourth version exceeds the cap, so only the latest command and
+        # lease rows are compacted before the new lease epoch is appended.
+        self.journal.acquire_lease(project_id='p', target='t', owner='o', now_ms=2, ttl_ms=100)
+        self.assertLessEqual(len(self.path.read_bytes().splitlines()), 3)
+        self.assertEqual(self.journal.lookup(project_id='p', command_id='c1', now_ms=3)['receipt'],
+                         {'value': 'done'})
+        reopened = VerifiedJournal(self.path, limits=JournalLimits(max_records=3))
+        self.addCleanup(reopened.close)
+        self.assertEqual(reopened.lookup(project_id='p', command_id='c1', now_ms=3)['receipt'],
+                         {'value': 'done'})
 
     def test_same_bytes_replaced_file_requires_full_validation(self):
         self.append()

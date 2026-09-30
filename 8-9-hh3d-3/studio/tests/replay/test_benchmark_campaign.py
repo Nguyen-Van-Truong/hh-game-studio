@@ -20,6 +20,15 @@ from studio.tests.replay.benchmark_import_observer import ImportObserver
 
 
 class CampaignResumeTests(unittest.TestCase):
+    def test_reconciliation_diagnostic_reaches_base_producer(self):
+        producer = campaign.CampaignProducer.__new__(campaign.CampaignProducer)
+        producer.native_log = Mock()
+        producer.native_log.poll.return_value = None
+        with patch.object(campaign.CommandProducer, '_received', return_value=123) as received:
+            self.assertEqual(producer._received(expected_diagnostic='COMMAND_NOT_FOUND'), 123)
+        received.assert_called_once_with(expected_diagnostic='COMMAND_NOT_FOUND')
+        producer.native_log.poll.assert_called_once_with()
+
     def setUp(self):
         self.directory = tempfile.TemporaryDirectory(prefix='gt06-campaign-test-')
         self.addCleanup(self.directory.cleanup)
@@ -106,7 +115,12 @@ class CampaignResumeTests(unittest.TestCase):
                             'campaign_sha256': self.campaign_sha}
         watchdog_rows = [json.dumps({'schema': campaign.environment.SAMPLE_STREAM_SCHEMA,
                                      **watchdog_binding})]
-        watchdog_rows.extend(json.dumps(sample(t)) for t in (0, 5))
+        previous = None
+        for t in (0, 5):
+            row = sample(t)
+            row['cpu_observation'] = campaign.environment.cpu_interval(previous, row)
+            watchdog_rows.append(json.dumps(row))
+            previous = row
         self.put('environment-samples.jsonl', ('\n'.join(watchdog_rows) + '\n').encode())
         self.rebind_artifacts()
 

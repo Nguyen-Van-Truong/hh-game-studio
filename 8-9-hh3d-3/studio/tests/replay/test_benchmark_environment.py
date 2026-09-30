@@ -21,11 +21,22 @@ def sample(second=0, **changes):
             'cpu_total_100ns': second * 10_000_000, 'cpu_idle_100ns': second * 5_000_000,
             'owned_private_bytes': 0, 'owned_inventory_complete': True,
             'foreign_engines': [], 'heavy_processes': [], 'docker_wsl_processes': [],
-            'top_private_processes': [], 'owned_processes': [],
+            'top_private_processes': [], 'owned_processes': [], 'processes': [],
             'unavailable_process_count': 0, **changes}
 
 
 class EnvironmentTests(unittest.TestCase):
+    def test_cpu_inventory_encoding_is_lossless_bounded_and_tamper_rejected(self):
+        value = sample(processes=[{'pid': n, 'name': 'python.exe', 'owned': False,
+            'cpu_total_100ns': n * 100, 'process_start_100ns': n + 1} for n in range(500)])
+        packed = env.pack_sample(value)
+        self.assertNotIn('processes', packed)
+        self.assertEqual(env.unpack_sample(json.loads(json.dumps(packed))), value)
+        self.assertLess(len(json.dumps(packed)), len(json.dumps(value)) / 3)
+        packed['process_inventory_zlib_b64'] = 'bad!'
+        with self.assertRaisesRegex(BenchmarkJobError, 'CPU_ENCODING'):
+            env.unpack_sample(packed)
+
     def test_heavy_apps_are_inventory_with_boundary_resources(self):
         row = sample(commit_total_bytes=85 * env.GIB,
                      heavy_processes=[{'name': 'chrome.exe', 'pid': 123}, {'name': 'vmmemwsl', 'pid': 456}])
@@ -108,15 +119,136 @@ class EnvironmentTests(unittest.TestCase):
             available = int(1.5 * env.GIB) if second == 55 else env.GIB
             self.assertIsNone(policy.observe(sample(second, available_memory_bytes=available)))
 
-    def test_cpu_95_is_inclusive_and_hot_requires_60_seconds(self):
+    def test_system_cpu_pressure_alone_does_not_abort(self):
         policy = env.Policy()
         for second in range(0, 61, 5):
             self.assertIsNone(policy.observe(sample(second, cpu_idle_100ns=second * 500_000)))
+
+    def test_external_process_cpu_requires_50_percent_for_60_seconds(self):
         policy = env.Policy()
         for second in range(0, 60, 5):
-            self.assertIsNone(policy.observe(sample(second, cpu_idle_100ns=0)))
-        result = policy.observe(sample(60, cpu_idle_100ns=0))
-        self.assertEqual((result['reason'], result['classification']), ('CPU_PRESSURE', 'INFRA_ABORT'))
+            self.assertIsNone(policy.observe(sample(second, processes=[
+                {'pid': 77, 'name': 'compiler.exe', 'owned': False,
+                 'process_start_100ns': 10, 'cpu_total_100ns': second * 10_000_000 * 60 // 100}])))
+        result = policy.observe(sample(60, processes=[
+            {'pid': 77, 'name': 'compiler.exe', 'owned': False,
+             'process_start_100ns': 10, 'cpu_total_100ns': 60 * 10_000_000 * 60 // 100}]))
+        self.assertEqual((result['reason'], result['classification']), ('EXTERNAL_CPU_PRESSURE', 'INFRA_ABORT'))
+        self.assertEqual(result['top_cpu_processes'][0]['pid'], 77)
+
+    def test_campaign_process_cpu_is_not_external_pressure(self):
+        policy = env.Policy()
+        for second in range(0, 60, 5):
+            self.assertIsNone(policy.observe(sample(second, processes=[
+                {'pid': 78, 'name': 'godot.exe', 'owned': True,
+                 'process_start_100ns': 11, 'cpu_total_100ns': second * 10_000_000 * 90 // 100}])))
+        self.assertIsNone(policy.observe(sample(60, processes=[
+            {'pid': 78, 'name': 'godot.exe', 'owned': True,
+             'process_start_100ns': 11, 'cpu_total_100ns': 60 * 10_000_000 * 90 // 100}])))
+
+    def test_process_cpu_is_normalized_by_machine_capacity_and_top10_includes_owned(self):
+        before = sample(processes=[{'pid': pid, 'name': 'vmmemwsl' if pid == 1 else 'python.exe',
+            'owned': pid == 2, 'process_start_100ns': pid, 'cpu_total_100ns': 0} for pid in range(1, 13)])
+        after = sample(5, cpu_total_100ns=5 * 16 * 10_000_000,
+            processes=[{**p, 'cpu_total_100ns': (13 - p['pid']) * 1_000_000} for p in before['processes']])
+        result = env.cpu_interval(before, after)
+        self.assertEqual(len(result['top_processes']), 10)
+        self.assertEqual(result['top_processes'][0]['name'], 'vmmemwsl')
+        self.assertTrue(result['top_processes'][1]['owned'])
+        self.assertEqual(result['top_processes'][0]['interval_cpu_percent'], 1.5)
+        self.assertFalse(result['hot_external_processes'])
+
+    def test_cpu_timer_resets_for_pid_reuse_missing_counter_or_cool_interval(self):
+        for reset in ('pid_reuse', 'missing', 'cool'):
+            with self.subTest(reset=reset):
+                policy = env.Policy()
+                for second in range(0, 66, 5):
+                    start = 2 if reset == 'pid_reuse' and second >= 55 else 1
+                    ticks = second * 5_000_000
+                    if reset == 'missing' and second == 55:
+                        ticks = None
+                    if reset == 'cool' and second >= 55:
+                        ticks -= 10_000_000
+                    self.assertIsNone(policy.observe(sample(second, processes=[{
+                        'pid': 77, 'name': 'external.exe', 'owned': False,
+                        'process_start_100ns': start, 'cpu_total_100ns': ticks}])))
+
+    def test_cpu_exact_50_percent_aborts_and_49_99_does_not(self):
+        for percent, aborts in ((50, True), (49.99, False)):
+            policy = env.Policy()
+            for second in range(0, 61, 5):
+                result = policy.observe(sample(second, processes=[{
+                    'pid': 77, 'name': 'external.exe', 'owned': False,
+                    'process_start_100ns': 1,
+                    'cpu_total_100ns': int(second * 10_000_000 * percent / 100)}]))
+                if second < 60:
+                    self.assertIsNone(result)
+            self.assertEqual(result is not None, aborts)
+
+    def test_missing_cpu_inventory_is_not_silently_zero_and_idle_pid_is_allowed(self):
+        row = sample()
+        del row['processes']
+        with self.assertRaisesRegex(BenchmarkJobError, 'CPU_INVENTORY'):
+            env.Policy().observe(row)
+        self.assertIsNone(env.Policy().observe(sample(processes=[{
+            'pid': 0, 'name': '[system process]', 'owned': False,
+            'process_start_100ns': None, 'cpu_total_100ns': None}])))
+
+    def test_docker_inventory_is_local_readonly_and_query_failure_is_not_empty(self):
+        processes = [{'name': 'com.docker.backend.exe'}]
+        with patch.object(env.Path, 'is_file', return_value=True), patch.object(env.subprocess, 'run') as run:
+            run.return_value = SimpleNamespace(returncode=0, stdout=b'hh-gameplay-1\nother\n')
+            self.assertEqual(env.running_containers(processes), ['hh-gameplay-1', 'other'])
+            argv = run.call_args.args[0]
+            self.assertEqual(argv[1:4], ['--host', 'npipe:////./pipe/dockerDesktopLinuxEngine', 'ps'])
+            self.assertEqual(run.call_args.kwargs['timeout'], 2)
+            run.return_value = SimpleNamespace(returncode=1, stdout=b'')
+            with self.assertRaisesRegex(BenchmarkJobError, 'DOCKER_INVENTORY'):
+                env.running_containers(processes)
+
+    def test_perfproc_fallback_keeps_raw_ticks_without_double_normalization(self):
+        processes = [{'pid': 1480, 'name': 'vmmemwsl', 'cpu_total_100ns': None},
+                     {'pid': 42, 'name': 'docker', 'cpu_total_100ns': 7}]
+        payload = b'[{"IDProcess":1480,"PercentProcessorTime":120,"ElapsedTime":999}]'
+        with patch.object(env.Path, 'is_file', return_value=True), patch.object(env.os, 'cpu_count', return_value=12), \
+             patch.object(env.subprocess, 'run', return_value=SimpleNamespace(returncode=0, stdout=payload)) as run:
+            result = env.perf_process_times(processes)
+        self.assertEqual(result[1480], {'cpu_total_100ns': 120, 'process_start_100ns': 999,
+                                        'cpu_source': 'PerfProcRaw'})
+        self.assertIn('-NoProfile', run.call_args.args[0])
+        script = run.call_args.args[0][-1]
+        self.assertIn("-Filter 'IDProcess = 1480'", script)
+        self.assertNotIn('IDProcess = 42', script)
+        self.assertIn('ConvertTo-Json -Compress -InputObject @(', script)
+        self.assertEqual(run.call_args.kwargs['timeout'], 8)
+
+    def test_perfproc_fallback_failure_is_unknown_not_zero(self):
+        processes = [{'pid': 1480, 'name': 'vmmemwsl', 'cpu_total_100ns': None}]
+        with patch.object(env.Path, 'is_file', return_value=True), \
+             patch.object(env.subprocess, 'run', side_effect=env.subprocess.TimeoutExpired('powershell', 8)):
+            with self.assertRaisesRegex(BenchmarkJobError, 'PERF_COUNTER_QUERY'):
+                env.perf_process_times(processes)
+
+    def test_watchdog_cpu_top_is_persisted_and_verified(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            binding = {'run_id': 'test', 'source_closure_sha256': 'a' * 64, 'campaign_sha256': 'b' * 64}
+            rows = [sample(s, processes=[{'pid': 77, 'name': 'vmmemwsl', 'owned': False,
+                'process_start_100ns': 1, 'cpu_total_100ns': s * 1_000_000}]) for s in (0, 5)]
+            watch = env.Watchdog(root, Mock(side_effect=rows), binding, campaign.write)
+            try:
+                watch.poll(force=True)
+                watch.poll(force=True)
+            finally:
+                watch.close()
+            env.verify_watchdog(root, campaign.read_regular, expected_binding=binding)
+            path = root / 'environment-samples.jsonl'
+            captured = [json.loads(line) for line in path.read_text().splitlines()]
+            self.assertEqual(captured[-1]['cpu_observation']['top_processes'][0]['interval_cpu_percent'], 10)
+            captured[-1]['cpu_observation']['top_processes'][0]['interval_cpu_percent'] = 0
+            path.write_text('\n'.join(json.dumps(row) for row in captured) + '\n')
+            with self.assertRaisesRegex(BenchmarkJobError, 'CPU_OBSERVATION_MISMATCH'):
+                env.verify_watchdog(root, campaign.read_regular, expected_binding=binding)
 
     def test_sleep_clock_difference_aborts_before_sampling_gap(self):
         policy = env.Policy()
@@ -244,15 +376,23 @@ class EnvironmentTests(unittest.TestCase):
             binding = {'run_id': 'test', 'source_closure_sha256': 'a' * 64,
                        'campaign_sha256': 'b' * 64}
             rows = [json.dumps({'schema': env.SAMPLE_STREAM_SCHEMA, **binding})]
-            rows.extend(json.dumps(sample(s)) for s in (0, 5))
+            previous = None
+            for second in (0, 5):
+                row = sample(second)
+                row['cpu_observation'] = env.cpu_interval(previous, row)
+                rows.append(json.dumps(row))
+                previous = row
             samples.write_text('\n'.join(rows) + '\n')
             env.verify_watchdog(root, campaign.read_regular, expected_binding=binding)
             with self.assertRaisesRegex(BenchmarkJobError, 'COVERAGE'):
                 env.verify_watchdog(root, campaign.read_regular, elapsed_seconds=100,
                                     expected_binding=binding)
             rows = [json.dumps({'schema': env.SAMPLE_STREAM_SCHEMA, **binding})]
-            rows.extend(json.dumps(row) for row in (
-                sample(), sample(5, commit_total_bytes=93 * env.GIB)))
+            previous = None
+            for row in (sample(), sample(5, commit_total_bytes=93 * env.GIB)):
+                row['cpu_observation'] = env.cpu_interval(previous, row)
+                rows.append(json.dumps(row))
+                previous = row
             samples.write_text('\n'.join(rows) + '\n')
             with self.assertRaisesRegex(BenchmarkJobError, 'REPLAY_FAILED'):
                 env.verify_watchdog(root, campaign.read_regular, expected_binding=binding)

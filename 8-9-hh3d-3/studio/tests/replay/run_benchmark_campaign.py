@@ -36,6 +36,7 @@ from studio.tests.replay.benchmark_import_observer import ImportObserver, valida
 from studio.tests.replay.benchmark_http_phases import validate_phase_snapshot
 from studio.tests.replay import benchmark_environment as environment
 from studio.tests.replay import benchmark_profile as profile
+from studio.tests.replay.measure_window import measurement_window
 from studio.tests.replay.benchmark_assembly import read_artifact, assemble_sample, assemble_run, assemble_dataset
 from studio.tests.replay.run_native_benchmark import (
     load_fixture, source_files as imported_source_files, closure, read_regular, write, sha, encoded,
@@ -174,8 +175,8 @@ class CampaignProducer(CommandProducer):
         self.native_log = log
         super().__init__(root, run_id)
 
-    def _received(self):
-        observed = super()._received()
+    def _received(self, *, expected_diagnostic=None):
+        observed = super()._received(expected_diagnostic=expected_diagnostic)
         require(self.native_log.poll() is None, 'CAMPAIGN_NATIVE_EXIT_DURING_COMMANDS')
         return observed
 
@@ -547,6 +548,13 @@ def verify_run_capture(root, captured, source_digest, *, campaign_id, index, att
 
 
 def run_campaign(campaign_id, root):
+    from studio.tests.replay.benchmark_job import HELD_OWNERS
+    with measurement_window(campaign_id, 'GT06 formal 2x35',
+                            safe_to_release=lambda: not HELD_OWNERS):
+        return _run_campaign_window(campaign_id, root)
+
+
+def _run_campaign_window(campaign_id, root):
     # Every invocation (including resume) captures fresh, immutable resource
     # observations. A cached PASS must never authorize a later launch.
     invocation = uuid.uuid4().hex

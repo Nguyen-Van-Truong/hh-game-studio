@@ -73,6 +73,11 @@ class BenchmarkProfileTests(unittest.TestCase):
         self.assertEqual(caught.exception.code, code)
 
     def test_profile_cannot_be_mutated_or_shrunk_under_same_version(self):
+        self.assertNotEqual(benchmark.PROFILE_SHA256,
+                            '9dfa0ae003577e8607e28e722089328933d60e6cdb5b1ae1c5e978b3ad9d335e')
+        with self.assertRaisesRegex(benchmark.BenchmarkError, 'PROFILE_BINDING'):
+            benchmark.summarize_dataset({**self.data, 'profile_sha256':
+                '9dfa0ae003577e8607e28e722089328933d60e6cdb5b1ae1c5e978b3ad9d335e'})
         with self.assertRaises(FrozenInstanceError):
             benchmark.PROFILE.process_runs = 1
         with self.assertRaisesRegex(benchmark.BenchmarkError, 'PROFILE_VERSION_REQUIRED'):
@@ -82,7 +87,7 @@ class BenchmarkProfileTests(unittest.TestCase):
 
     def test_complete_pair_summary_matches_full_campaign_without_granting_acceptance(self):
         self.data['runs'][0]['samples'][34]['memory']['host']['private_commit_bytes']['value'] = 1200
-        self.data['runs'][1]['samples'][20]['memory']['editor']['held_handles']['value'] = 11
+        self.data['runs'][1]['samples'][20]['memory']['editor']['held_handles']['value'] = 35
         full = benchmark.summarize_dataset(self.data)
         for index, raw in enumerate(self.data['runs']):
             with self.subTest(index=index):
@@ -166,15 +171,15 @@ class BenchmarkProfileTests(unittest.TestCase):
         self.assertEqual(result['runs'][0]['memory']['host']['rss_bytes']['repetition_10'], 1101)
 
     def test_held_handles_or_retained_objects_cannot_grow_silently(self):
-        self.data['runs'][0]['samples'][34]['memory']['editor']['held_handles']['value'] = 11
+        self.data['runs'][0]['samples'][34]['memory']['editor']['held_handles']['value'] = 35
         result = benchmark.summarize_dataset(self.data)
         self.assertEqual(result['status'], 'FAIL')
         self.assertEqual(result['failures'][0]['counter'], 'held_handles')
 
     def test_o1_synthetic_counter_and_private_commit_leaks_fail(self):
-        # A +9 editor-handle jump is outside the O1 window regardless of its
-        # position in the measured suffix.
-        self.data['runs'][0]['samples'][20]['memory']['editor']['held_handles']['value'] = 11
+        # A value beyond the O5.2 absolute baseline+32 margin fails regardless
+        # of its position in the measured suffix.
+        self.data['runs'][0]['samples'][20]['memory']['editor']['held_handles']['value'] = 35
         self.assertEqual(benchmark.summarize_dataset(self.data)['status'], 'FAIL')
         self.data = copy.deepcopy(self.template)
         # One retained handle per 1000-command batch accumulates beyond T/G.
@@ -277,6 +282,16 @@ class BenchmarkProfileTests(unittest.TestCase):
                     101 + tolerance, 101 + tolerance), ['RETAINED_COUNTER_GROWTH'])
                 self.assertEqual(benchmark.memory_gate_codes(role, name, 100, 101 + trend,
                     100, 101 + trend), ['RETAINED_COUNTER_GROWTH'])
+
+    def test_o5_editor_handle_rule_uses_medians_and_absolute_margin(self):
+        # Equal-to-six median drift is allowed; seven is the first failure.
+        self.assertEqual(benchmark.editor_handle_gate_codes(20, [20] * 15 + [26] * 15), [])
+        self.assertEqual(benchmark.editor_handle_gate_codes(20, [20] * 15 + [27] * 15),
+                         ['EDITOR_HANDLE_MEDIAN_TREND'])
+        # A single large retained value still fails the absolute baseline+32
+        # bound even when both half-medians are stable.
+        values = [20] * 29 + [53]
+        self.assertEqual(benchmark.editor_handle_gate_codes(20, values), ['EDITOR_HANDLE_GROWTH'])
 
     def test_private_commit_baseline_and_late_window_boundaries_for_each_role(self):
         for role in ('host', 'editor'):

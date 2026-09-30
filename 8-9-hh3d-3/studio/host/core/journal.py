@@ -70,6 +70,15 @@ def _clock(value: int) -> None:
         raise JournalError("INVALID_CLOCK")
 
 
+def _journal_state(stream):
+    """Return the regular-file identity, byte size and cheap generation."""
+    info = os.fstat(stream.fileno())
+    if not stat.S_ISREG(info.st_mode) or info.st_nlink != 1:
+        raise JournalError("JOURNAL_PATH_UNSAFE")
+    return ((info.st_dev, info.st_ino), info.st_size,
+            (info.st_mtime_ns, info.st_ctime_ns))
+
+
 class _DiskRecords(Sequence):
     """Bounded offset index; receipt bodies remain on disk, not in the index."""
     def __init__(self, journal):
@@ -105,6 +114,10 @@ class Journal:
         self._commands: dict[tuple[str, str], int] = {}
         self._pending: set[tuple[str, str]] = set()
         self._leases: dict[tuple[str, str], Lease] = {}
+        self._loaded_identity = None
+        self._loaded_size = 0
+        self._loaded_generation = None
+        self._loaded_policy = None
         with self._writer_lock():
             self._load()
 
@@ -253,11 +266,72 @@ class Journal:
         yield
 
     def _reload(self) -> None:
-        self._records.clear()
-        self._commands.clear()
-        self._pending.clear()
-        self._leases.clear()
-        self._load()
+        try:
+            if self._loaded_policy == (self.limits, self.profile) and self._incremental_refresh():
+                return
+            self._records.clear()
+            self._commands.clear()
+            self._pending.clear()
+            self._leases.clear()
+            self._load()
+        except BaseException:
+            # A failed tail parse/barrier may have populated a partial index.
+            # It must never serve a receipt before complete recovery succeeds.
+            self._loaded_policy = None
+            raise
+
+    def _incremental_refresh(self) -> bool:
+        """Refresh an unchanged journal from only its appended tail."""
+        try:
+            with self.path.open("rb") as stream:
+                identity, size, generation = _journal_state(stream)
+        except FileNotFoundError:
+            return self._loaded_identity is None and self._loaded_size == 0
+        except OSError as exc:
+            raise JournalError("JOURNAL_UNREADABLE") from exc
+        if (self._loaded_identity is None or identity != self._loaded_identity
+                or size < self._loaded_size or generation != self._loaded_generation):
+            return False
+        if size == self._loaded_size:
+            # A metadata-only generation change can indicate an in-place
+            # rewrite. Force the accepted full parser in that case.
+            return generation == self._loaded_generation
+        if size > self.limits.max_bytes:
+            raise JournalError("JOURNAL_FULL")
+        offset = self._loaded_size
+        try:
+            with self.path.open("r+b") as stream:
+                if _journal_state(stream) != (identity, size, generation):
+                    raise JournalError("JOURNAL_HISTORY_CHANGED")
+                stream.seek(offset)
+                while offset < size:
+                    if len(self._records) >= self.limits.max_records:
+                        raise JournalError("JOURNAL_RECORD_LIMIT")
+                    line = stream.readline(self.profile.max_envelope_bytes + 1)
+                    if not line:
+                        raise JournalError("JOURNAL_TRUNCATED")
+                    if len(line) > self.profile.max_envelope_bytes:
+                        raise JournalError("JOURNAL_RECORD_INVALID")
+                    record = self._decode_record(line)
+                    self._apply_loaded(record, len(self._records))
+                    self._records.offsets.append((offset, len(line)))
+                    offset += len(line)
+                # Newly observed bytes require recovery durability; an already
+                # verified no-tail lookup does not. Keep one retained file handle.
+                try:
+                    stream.flush()
+                    os.fsync(stream.fileno())
+                except OSError as exc:
+                    raise JournalError("JOURNAL_DURABILITY_UNCONFIRMED") from exc
+                final_identity, final_size, final_generation = _journal_state(stream)
+        except OSError as exc:
+            raise JournalError("JOURNAL_UNREADABLE") from exc
+        if (final_identity, final_size, final_generation) != (identity, size, generation) or offset != size:
+            raise JournalError("JOURNAL_HISTORY_CHANGED")
+        self._loaded_identity = final_identity
+        self._loaded_size = final_size
+        self._loaded_generation = final_generation
+        return True
 
     @staticmethod
     def _mutating(method):
@@ -287,7 +361,12 @@ class Journal:
         return hashlib.sha256(canonical_json(dict(record))).hexdigest()
 
     def _load(self) -> None:
+        self._loaded_identity = None
+        self._loaded_size = 0
+        self._loaded_generation = None
+        self._loaded_policy = None
         if not self.path.exists():
+            self._loaded_policy = (self.limits, self.profile)
             return
         try:
             # A terminal line can be visible in the page cache even when the
@@ -296,10 +375,8 @@ class Journal:
             # This is the recovery barrier for a fresh Journal instance too;
             # an in-memory poison flag would not protect reopen/lookup.
             with self.path.open("r+b") as stream:
-                info = os.fstat(stream.fileno())
-                if not stat.S_ISREG(info.st_mode) or info.st_nlink != 1:
-                    raise JournalError("JOURNAL_PATH_UNSAFE")
-                if info.st_size > self.limits.max_bytes:
+                identity, size, generation = _journal_state(stream)
+                if size > self.limits.max_bytes:
                     raise JournalError("JOURNAL_FULL")
                 while True:
                     offset = stream.tell()
@@ -318,6 +395,13 @@ class Journal:
                     os.fsync(stream.fileno())
                 except OSError as exc:
                     raise JournalError("JOURNAL_DURABILITY_UNCONFIRMED") from exc
+                final_identity, final_size, final_generation = _journal_state(stream)
+                if final_identity != identity or final_size != size:
+                    raise JournalError("JOURNAL_HISTORY_CHANGED")
+                self._loaded_identity = final_identity
+                self._loaded_size = final_size
+                self._loaded_generation = final_generation
+                self._loaded_policy = (self.limits, self.profile)
         except OSError as exc:
             raise JournalError("JOURNAL_UNREADABLE") from exc
 
@@ -396,7 +480,14 @@ class Journal:
             self._leases[(record["project_id"], record["target"])] = Lease(
                 record["project_id"], record["target"], record["owner"], record["fencing_epoch"], record["expires_ms"])
 
-    def _append(self, record: dict[str, Any]) -> None:
+    def _prepare_append(self, record: dict[str, Any]):
+        """Validate and reclaim obsolete rows before opening an index transaction.
+
+        Automatic compaction starts at 75% of configured bytes/records, or
+        when the next row would exhaust its reserved capacity. It runs only
+        when older command/lease versions exist. Every ID and receipt remains;
+        a history full of unique IDs still refuses admission at the same cap.
+        """
         self._validate_record(record)
         pending_after = len(self._pending)
         if record["kind"] == "command":
@@ -405,12 +496,32 @@ class Journal:
         # Each durable intent owns one future terminal row and the maximum
         # encoded record size. Other commands/leases cannot consume its budget.
         # This reserves configured capacity, not immunity to physical I/O faults.
-        if len(self._records) + 1 + pending_after > self.limits.max_records:
-            raise JournalError("JOURNAL_RECORD_LIMIT")
         line = self._encoded_record(record)
         existing = self.path.stat().st_size if self.path.exists() else 0
+        reserved = pending_after * self.profile.max_envelope_bytes
+        count = len(self._records)
+        if (count > len(self._commands) + len(self._leases)
+                and (existing * 4 >= self.limits.max_bytes * 3
+                     or count * 4 >= self.limits.max_records * 3
+                     or count + 1 + pending_after > self.limits.max_records
+                     or existing + len(line) + reserved > self.limits.max_bytes)):
+            # Do not expire pending intents from an invented clock. Explicit
+            # compact(now_ms=...) owns expiry; automatic reclaim removes only
+            # obsolete versions and preserves pending terminal reservations.
+            self._compact_locked(now_ms=0)
+            count = len(self._records)
+            existing = self.path.stat().st_size
+        if count + 1 + pending_after > self.limits.max_records:
+            raise JournalError("JOURNAL_RECORD_LIMIT")
         if existing + len(line) + pending_after * self.profile.max_envelope_bytes > self.limits.max_bytes:
             raise JournalError("JOURNAL_FULL")
+        return line, existing
+
+    def _append(self, record: dict[str, Any]) -> None:
+        line, existing = self._prepare_append(record)
+        self._append_prepared(record, line, existing)
+
+    def _append_prepared(self, record, line, existing) -> None:
         self.path.parent.mkdir(parents=True, exist_ok=True)
         try:
             with self.path.open("ab") as stream:
@@ -418,9 +529,29 @@ class Journal:
                 stream.flush()
                 os.fsync(stream.fileno())
         except OSError as exc:
+            self._loaded_identity = None
+            self._loaded_size = 0
+            self._loaded_generation = None
             raise JournalError("JOURNAL_WRITE_FAILED") from exc
         self._apply_loaded(record, len(self._records))
         self._records.offsets.append((existing, len(line)))
+        try:
+            with self.path.open("rb") as stream:
+                identity, size, generation = _journal_state(stream)
+        except OSError as exc:
+            self._loaded_identity = None
+            self._loaded_size = 0
+            self._loaded_generation = None
+            raise JournalError("JOURNAL_UNREADABLE") from exc
+        if size != existing + len(line):
+            self._loaded_identity = None
+            self._loaded_size = 0
+            self._loaded_generation = None
+            raise JournalError("JOURNAL_HISTORY_CHANGED")
+        self._loaded_identity = identity
+        self._loaded_size = size
+        self._loaded_generation = generation
+        self._loaded_policy = (self.limits, self.profile)
 
     def _encoded_record(self, record: dict[str, Any]) -> bytes:
         """Validate exact durable bytes with the same profile used on reopen."""
@@ -583,6 +714,9 @@ class Journal:
     def compact(self, *, now_ms: int) -> None:
         """Atomically rewrite retained tombstones/leases after a checkpoint."""
         _clock(now_ms)
+        self._compact_locked(now_ms=now_ms)
+
+    def _compact_locked(self, *, now_ms: int) -> None:
         # Keep an immutable tombstone for every expired ID.  Dropping it would
         # permit a retry after the horizon to be interpreted as a new command.
         def retained_records():

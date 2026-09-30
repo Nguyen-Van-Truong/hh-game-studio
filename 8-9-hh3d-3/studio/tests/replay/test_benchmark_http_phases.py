@@ -28,6 +28,21 @@ class TestFailure(RuntimeError):
     pass
 
 
+class JournalTimingTests(unittest.TestCase):
+    def test_first_and_last_windows_are_bounded_and_detached(self):
+        book = phases.JournalTimingBook(window=3)
+        for index in range(8):
+            book.operation('lookup', index * 1_000_000)
+        book.path('load')
+        value = book.snapshot()
+        self.assertEqual(value['first_ms']['lookup'], [0, 1, 2])
+        self.assertEqual(value['last_ms']['lookup'], [5, 6, 7])
+        self.assertEqual(value['counts']['lookup'], 8)
+        self.assertEqual(value['counts']['load'], 1)
+        value['first_ms']['lookup'].clear()
+        self.assertEqual(len(book.snapshot()['first_ms']['lookup']), 3)
+
+
 class FakeSocket:
     def __init__(self, client=False):
         self.client = client
@@ -232,6 +247,9 @@ class DelegationTests(unittest.TestCase):
         class Connection:
             def __init__(self, *args, **kwargs):
                 traces.append(('construct', args, kwargs))
+
+            def connect(self):
+                traces.append(('connect',))
 
             def request(self, *args, **kwargs):
                 traces.append(('request', args, kwargs))

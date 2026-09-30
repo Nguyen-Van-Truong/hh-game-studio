@@ -18,7 +18,12 @@ import time
 STUDIO = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(STUDIO.parent))
 from studio.tests.replay.benchmark_commands import CommandProducer
-from studio.tests.replay.benchmark_job import BenchmarkProcess, write, require
+from studio.tests.replay.benchmark_job import BenchmarkProcess, HELD_OWNERS, write, require
+from studio.tests.replay.measure_window import measurement_window
+from studio.tests.replay import benchmark_environment as environment
+from studio.tests.replay.run_benchmark_campaign import (
+    environment_preflight, require_environment_preflight, environment_snapshot,
+    wait_owned_run, read_regular)
 from studio.tests.replay.run_native_benchmark import source_files as imported_source_files, closure
 from studio.host.replay.perf import summarize as frame_statistics
 
@@ -84,6 +89,11 @@ def finalize(root, run_id, before, producer, stop, thread):
     attempt('http_observation', phases)
     attempt('host_diagnostics', lambda: write(root / 'host-diagnostics.json', {**binding,
         'schema_id': 'hh-studio.residency-diagnostics', 'codes': _diagnostic_codes(producer)}))
+    attempt('journal_timings', lambda: write(root / 'journal-timings.json', {**binding,
+        'schema_id': 'hh-studio.gt06-journal-timings',
+        'observation': (producer.journal_timing_snapshot() if producer is not None
+                        and hasattr(producer, 'journal_timing_snapshot') else None),
+        'scope': 'direct bounded journal operation timings; diagnostic only'}))
     return errors
 
 
@@ -115,6 +125,10 @@ def child(run_id):
             progress['batch'] = index
             report = producer.run_batch(index)
             write(root / f'batch-{index:02d}.json', report)
+            if hasattr(producer, 'journal_timing_batch'):
+                direct = producer.journal_timing_batch()
+                write(root / f'journal-timing-{index:02d}.json', direct)
+                del direct
             summary = {'index': index, 'host_process': report['host_process'],
                 'elapsed_ms': (report['ended_mono_us'] - report['started_mono_us']) / 1000,
                 'commands': len(report['commands']), 'journal_bytes': report['journal_bytes'],
@@ -153,18 +167,35 @@ def child(run_id):
 
 
 def run(run_id):
+    with measurement_window(run_id, 'GT06 O5 host-only 35k diagnostic',
+                            safe_to_release=lambda: not HELD_OWNERS):
+        with environment.KeepAwake():
+            return _run_in_window(run_id)
+
+
+def _run_in_window(run_id):
     require(re.fullmatch(r'gt06-[a-z0-9-]{1,35}', run_id) is not None, 'RESIDENCY_RUN_ID')
     root = STUDIO / '.local/reviews' / run_id
     root.mkdir(exist_ok=False)
     owner = None
+    watchdog = None
     before = source_files()
     try:
+        preflight = environment_preflight()
+        write(root / 'environment-preflight-before.json', preflight)
+        require_environment_preflight(preflight)
         owner = BenchmarkProcess([sys.executable, '-B', str(Path(__file__).resolve()), '--child', '--run-id', run_id],
             cwd=root, output=root / 'owner', source_root=STUDIO, source_files=before,
             binary_sha256=hashlib.sha256(Path(sys.executable).read_bytes()).hexdigest())
-        while owner.tick() is None:
-            time.sleep(.05)
+        binding = {'run_id': run_id, 'source_closure_sha256': closure(before),
+                   'campaign_sha256': hashlib.sha256(run_id.encode()).hexdigest()}
+        watchdog = environment.Watchdog(root,
+            lambda: environment_snapshot(job_handle=owner.job._handle), binding, write)
+        wait_owned_run(owner, root, **binding, watchdog=watchdog)
+        watchdog.close()
         capture = owner.finish()
+        environment.verify_watchdog(root, read_regular,
+                                   elapsed_seconds=capture['elapsed_seconds'], expected_binding=binding)
         require((root / 'result.json').is_file(), 'RESIDENCY_RESULT_MISSING')
         print(json.dumps({'completed': True, 'run_id': run_id, 'host': capture, 'full_benchmark': False}), flush=True)
         return 0
@@ -172,10 +203,13 @@ def run(run_id):
         if owner is not None:
             owner.close()
         write(root / 'owner-failure.json', {'completed': False, 'code': getattr(error, 'code', type(error).__name__),
+              'classification': environment.failure_classification(error, root),
               'job': owner.job.snapshot() if owner and owner.job else None, 'formal_acceptance': False})
         print(json.dumps({'completed': False, 'code': getattr(error, 'code', type(error).__name__), 'run_id': run_id}), flush=True)
         return 1
     finally:
+        if watchdog is not None:
+            watchdog.close()
         if owner is not None:
             owner.close()
 

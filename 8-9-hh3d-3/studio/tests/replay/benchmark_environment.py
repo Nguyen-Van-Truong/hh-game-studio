@@ -6,11 +6,16 @@ Unknown attribution fails closed. No process is stopped by name or PID.
 from __future__ import annotations
 
 import ctypes
+import base64
 from ctypes import wintypes as w
 from datetime import datetime
 import json
 import os
+from pathlib import Path
+import re
+import subprocess
 import time
+import zlib
 
 from studio.tests.replay.benchmark_job import BenchmarkJobError, require
 
@@ -19,7 +24,7 @@ INTERVAL_SECONDS = 5
 MAX_SAMPLE_GAP_SECONDS = 10
 SCHEMA = 'hh-studio.benchmark-environment-preflight'
 VERSION = '1.2.0'
-SAMPLE_STREAM_SCHEMA = 'HH-GT06-WATCHDOG-SAMPLE-STREAM-1'
+SAMPLE_STREAM_SCHEMA = 'HH-GT06-WATCHDOG-SAMPLE-STREAM-3'
 
 
 class Memory(ctypes.Structure):
@@ -58,6 +63,9 @@ def api():
     k.QueryUnbiasedInterruptTime.argtypes = [ctypes.POINTER(ctypes.c_ulonglong)]
     k.QueryUnbiasedInterruptTime.restype = w.BOOL
     p.GetProcessMemoryInfo.argtypes, p.GetProcessMemoryInfo.restype = [w.HANDLE, ctypes.POINTER(Counters), w.DWORD], w.BOOL
+    k.GetProcessTimes.argtypes = [w.HANDLE, ctypes.POINTER(w.FILETIME), ctypes.POINTER(w.FILETIME),
+                                  ctypes.POINTER(w.FILETIME), ctypes.POINTER(w.FILETIME)]
+    k.GetProcessTimes.restype = w.BOOL
     return k, p
 
 
@@ -90,6 +98,89 @@ def job_members(k, handle):
     return set(int(value.pids[i]) for i in range(value.count))
 
 
+def running_containers(processes):
+    """Read the local Docker Desktop Linux engine; never start a container.
+
+    The endpoint is explicit so a user's DOCKER_HOST/context cannot redirect
+    the inventory to an unrelated daemon. If Docker is present but cannot be
+    queried, absence of competing workloads is unproven.
+    """
+    active = any('docker' in row['name'].lower() for row in processes)
+    if not active:
+        return []
+    executable = Path(os.environ.get('ProgramFiles', r'C:\Program Files')) / 'Docker/Docker/resources/bin/docker.exe'
+    require(executable.is_file(), 'WATCHDOG_DOCKER_CLI_MISSING')
+    try:
+        result = subprocess.run([str(executable), '--host', 'npipe:////./pipe/dockerDesktopLinuxEngine',
+            'ps', '--format', '{{.Names}}'], capture_output=True, timeout=2,
+            creationflags=subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0)
+    except (OSError, subprocess.TimeoutExpired) as error:
+        raise BenchmarkJobError('WATCHDOG_DOCKER_INVENTORY') from error
+    require(result.returncode == 0 and len(result.stdout) <= 65536,
+            'WATCHDOG_DOCKER_INVENTORY')
+    try:
+        names = result.stdout.decode('utf-8', 'strict').splitlines()
+    except UnicodeError as error:
+        raise BenchmarkJobError('WATCHDOG_DOCKER_INVENTORY') from error
+    require(all(re.fullmatch(r'[a-zA-Z0-9][a-zA-Z0-9_.-]*', name) for name in names)
+            and len(names) == len(set(names)), 'WATCHDOG_DOCKER_INVENTORY')
+    return sorted(names)
+
+
+def perf_process_times(processes):
+    """Fallback cumulative CPU for protected Windows processes.
+
+    ``GetProcessTimes`` can legitimately deny ``vmmemWSL``.  Windows exposes
+    the same process through the read-only PerfProc raw counter. Its raw
+    cumulative processor ticks match GetProcessTimes; machine normalization
+    happens once in ``cpu_interval``. Query failure is unknown,
+    never an all-zero result.
+    """
+    # Most protected rows are system/engine hosts. Ordinary processes are
+    # queried with GetProcessTimes; only these names need the slower PerfProc
+    # fallback when Windows denies that handle.
+    missing = {row['pid'] for row in processes
+               if row.get('cpu_total_100ns') is None
+               and any(token in row.get('name', '').lower() for token in ('vmmem', 'docker', 'wsl'))}
+    if not missing:
+        return {}
+    require(all(type(pid) is int and pid > 0 for pid in missing),
+            'WATCHDOG_PERF_COUNTER_PID')
+    powershell = Path(os.environ.get('WINDIR', r'C:\Windows')) / 'System32/WindowsPowerShell/v1.0/powershell.exe'
+    require(powershell.is_file(), 'WATCHDOG_PERF_COUNTER_MISSING')
+    # Filter at the provider rather than serializing every process. InputObject
+    # preserves an array even when there is only one protected process.
+    pid_filter = ' OR '.join(f'IDProcess = {pid}' for pid in sorted(missing))
+    script = ("$ErrorActionPreference='Stop'; ConvertTo-Json -Compress -InputObject @("
+              "Get-CimInstance Win32_PerfRawData_PerfProc_Process "
+              f"-Filter '{pid_filter}' | "
+              "Select-Object IDProcess,PercentProcessorTime,ElapsedTime"
+              ")")
+    try:
+        result = subprocess.run([str(powershell), '-NoProfile', '-NonInteractive', '-Command', script],
+            capture_output=True, timeout=8,
+            creationflags=subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0)
+    except (OSError, subprocess.TimeoutExpired) as error:
+        raise BenchmarkJobError('WATCHDOG_PERF_COUNTER_QUERY') from error
+    require(result.returncode == 0 and len(result.stdout) <= 8 * 1024 * 1024,
+            'WATCHDOG_PERF_COUNTER_QUERY')
+    try:
+        rows = json.loads(result.stdout.decode('utf-8', 'strict'))
+    except (UnicodeError, ValueError) as error:
+        raise BenchmarkJobError('WATCHDOG_PERF_COUNTER_QUERY') from error
+    require(type(rows) is list, 'WATCHDOG_PERF_COUNTER_SHAPE')
+    found = {}
+    for row in rows:
+        require(type(row) is dict and type(row.get('IDProcess')) is int
+                and type(row.get('PercentProcessorTime')) in (int, float)
+                and type(row.get('ElapsedTime')) is int, 'WATCHDOG_PERF_COUNTER_SHAPE')
+        if row['IDProcess'] in missing:
+            found[row['IDProcess']] = {
+                'cpu_total_100ns': int(row['PercentProcessorTime']),
+                'process_start_100ns': row['ElapsedTime'], 'cpu_source': 'PerfProcRaw'}
+    return found
+
+
 def native_snapshot(processes, *, job_handle=None, heavy_names=frozenset()):
     k, p = api()
     memory, perf = Memory(), Performance()
@@ -112,7 +203,8 @@ def native_snapshot(processes, *, job_handle=None, heavy_names=frozenset()):
         names.setdefault(pid, '<job-member>')
     for pid, name in names.items():
         engine = name.startswith(('godot', 'blender'))
-        row = {'pid': pid, 'name': name, 'private_bytes': None, 'owned': False}
+        row = {'pid': pid, 'name': name, 'private_bytes': None,
+               'cpu_total_100ns': None, 'process_start_100ns': None, 'owned': False}
         h = k.OpenProcess(0x1000, False, pid)
         if not h:
             row['unavailable_error'] = ctypes.get_last_error()
@@ -132,6 +224,15 @@ def native_snapshot(processes, *, job_handle=None, heavy_names=frozenset()):
                 foreign.append({'pid': pid, 'name': name, 'ownership': 'outside_campaign_job'})
             counter = Counters()
             counter.cb = ctypes.sizeof(counter)
+            creation, exit_time = w.FILETIME(), w.FILETIME()
+            kernel_time, user_time = w.FILETIME(), w.FILETIME()
+            if k.GetProcessTimes(h, ctypes.byref(creation), ctypes.byref(exit_time),
+                                 ctypes.byref(kernel_time), ctypes.byref(user_time)):
+                row['process_start_100ns'] = int(creation.dwLowDateTime | creation.dwHighDateTime << 32)
+                row['cpu_total_100ns'] = int(kernel_time.dwLowDateTime | kernel_time.dwHighDateTime << 32) + int(
+                    user_time.dwLowDateTime | user_time.dwHighDateTime << 32)
+            else:
+                row['cpu_unavailable_error'] = ctypes.get_last_error()
             if p.GetProcessMemoryInfo(h, ctypes.byref(counter), ctypes.sizeof(counter)):
                 row['private_bytes'] = int(counter.private)
                 if row['owned']:
@@ -143,6 +244,13 @@ def native_snapshot(processes, *, job_handle=None, heavy_names=frozenset()):
         finally:
             require(k.CloseHandle(h), 'WATCHDOG_PROCESS_HANDLE_CLOSE')
         rows.append(row)
+    fallback = perf_process_times(rows)
+    for row in rows:
+        if row['pid'] in fallback and row['cpu_total_100ns'] is None:
+            row.update(fallback[row['pid']])
+    containers = running_containers(processes)
+    foreign.extend({'name': name, 'ownership': 'outside_campaign_job', 'kind': 'docker_container'}
+                   for name in containers if name.startswith('hh-'))
     return {
         'observed_utc': time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()),
         'available_memory_bytes': int(memory.available),
@@ -156,6 +264,11 @@ def native_snapshot(processes, *, job_handle=None, heavy_names=frozenset()):
         'heavy_processes': [row for row in rows if row['name'] in heavy_names],
         'docker_wsl_processes': [row for row in rows if any(
             label in row['name'] for label in ('docker', 'wsl', 'vmmem'))],
+        # The watchdog derives interval CPU from these cumulative process
+        # counters.  Keep the full bounded inventory so an external process
+        # cannot disappear merely because it is small in private memory.
+        'processes': rows,
+        'running_containers': containers,
         'top_private_processes': sorted(
             (row for row in rows if row['private_bytes'] is not None),
             key=lambda row: row['private_bytes'], reverse=True)[:20],
@@ -200,11 +313,58 @@ def require_preflight(result):
     require(result['pass'], 'CAMPAIGN_PREFLIGHT_RESOURCE_LIMIT')
 
 
+def cpu_interval(previous, row):
+    """Process CPU as percent of total machine capacity, keyed by creation time.
+
+    GetSystemTimes is summed across logical CPUs. Dividing process ticks by
+    its delta avoids treating one busy core as 100% of a many-core machine.
+    An inaccessible or newly observed process is unknown, never zero CPU.
+    """
+    processes = row.get('processes')
+    require(type(processes) is list and len(processes) <= 65536,
+            'WATCHDOG_CPU_INVENTORY')
+    seen = set()
+    for item in processes:
+        require(type(item) is dict and type(item.get('pid')) is int and item['pid'] >= 0
+                and item['pid'] not in seen and type(item.get('name')) is str
+                and type(item.get('owned')) is bool, 'WATCHDOG_CPU_INVENTORY')
+        seen.add(item['pid'])
+        cpu, start = item.get('cpu_total_100ns'), item.get('process_start_100ns')
+        require(cpu is None or (type(cpu) is int and cpu >= 0 and type(start) is int and start > 0),
+                'WATCHDOG_CPU_INVENTORY')
+    old = {(p['pid'], p.get('process_start_100ns')): p
+           for p in previous['processes']} if previous is not None else {}
+    total = row['cpu_total_100ns'] - previous['cpu_total_100ns'] if previous is not None else 0
+    require(total >= 0, 'WATCHDOG_CPU_DELTA')
+    intervals, unknown = [], []
+    for item in processes:
+        key = (item['pid'], item.get('process_start_100ns'))
+        before = old.get(key)
+        current_cpu = item.get('cpu_total_100ns')
+        before_cpu = before.get('cpu_total_100ns') if before is not None else None
+        if (item['pid'] == 0 or total == 0 or before is None or current_cpu is None
+                or before_cpu is None or key[1] is None or before['owned'] != item['owned']):
+            unknown.append(item['pid'])
+            continue
+        require(current_cpu >= before_cpu, 'WATCHDOG_PROCESS_CPU_REGRESSION')
+        intervals.append({'pid': item['pid'], 'name': item['name'], 'owned': item['owned'],
+                          'process_start_100ns': key[1],
+                          'cpu_delta_100ns': current_cpu - before_cpu,
+                          'interval_cpu_percent': 100 * (current_cpu - before_cpu) / total})
+    intervals.sort(key=lambda p: (-p['interval_cpu_percent'], p['pid']))
+    return {'basis': 'process_tick_delta_over_system_tick_delta',
+            'system_delta_100ns': total, 'top_processes': intervals[:10],
+            'hot_external_processes': [p for p in intervals
+                                       if not p['owned'] and p['cpu_delta_100ns'] * 100 >= total * 50],
+            'unavailable_or_new_pids': unknown}
+
+
 class Policy:
     """Replayable sampled policy; counters/measurement acceptance stay elsewhere."""
     def __init__(self):
         self.first = self.previous = None
-        self.low_since = self.cpu_since = None
+        self.low_since = None
+        self.external_cpu_since = {}
         self.previous_observed = None
 
     def observe(self, row):
@@ -232,6 +392,9 @@ class Policy:
         self.previous_observed = observed
         now = row['uptime_ms'] / 1000
         previous = self.previous
+        cpu = cpu_interval(previous, row)
+        if 'cpu_observation' in row:
+            require(row['cpu_observation'] == cpu, 'WATCHDOG_CPU_OBSERVATION_MISMATCH')
         if self.first is None:
             self.first = row
         reasons = []
@@ -249,8 +412,9 @@ class Policy:
             total = row['cpu_total_100ns'] - previous['cpu_total_100ns']
             idle = row['cpu_idle_100ns'] - previous['cpu_idle_100ns']
             require(total >= 0 and 0 <= idle <= total, 'WATCHDOG_CPU_DELTA')
-            cpu_hot = total > 0 and (total - idle) * 100 > total * 95
-            self.cpu_since = (self.cpu_since if self.cpu_since is not None else previous['uptime_ms'] / 1000) if cpu_hot else None
+            hot = {(p['pid'], p['process_start_100ns']) for p in cpu['hot_external_processes']}
+            self.external_cpu_since = {key: self.external_cpu_since.get(key, previous['uptime_ms'] / 1000)
+                                       for key in hot}
         self.low_since = (self.low_since if self.low_since is not None else now) if row['available_memory_bytes'] < 1.5 * GIB else None
         if row['foreign_engines']:
             reasons.append('FOREIGN_ENGINE')
@@ -258,8 +422,8 @@ class Policy:
             reasons.append('COMMIT_PRESSURE')
         if self.low_since is not None and now - self.low_since >= 60:
             reasons.append('AVAILABLE_PRESSURE')
-        if self.cpu_since is not None and now - self.cpu_since >= 60:
-            reasons.append('CPU_PRESSURE')
+        if any(now - since >= 60 for since in self.external_cpu_since.values()):
+            reasons.append('EXTERNAL_CPU_PRESSURE')
         product_pressure = []
         for pressure in ('COMMIT_PRESSURE', 'AVAILABLE_PRESSURE'):
             if pressure not in reasons:
@@ -281,9 +445,42 @@ class Policy:
         self.previous = row
         return None if reason is None else {
             'reason': reason, 'reasons': reasons, 'classification': classification, 'formal_acceptance': False,
+            'top_cpu_processes': cpu['top_processes'],
             'attribution': ('external_pressure_sufficient_without_campaign_private'
                             if reason in ('COMMIT_PRESSURE', 'AVAILABLE_PRESSURE') and classification == 'INFRA_ABORT'
                             else 'no_product_failure_is_waived')}
+
+
+def pack_sample(row):
+    """Lossless bounded CPU inventory encoding; top-ten remains plain JSON."""
+    processes = row.get('processes')
+    if type(processes) is not list or len(processes) <= 64:
+        return row
+    raw = json.dumps(processes, sort_keys=True, separators=(',', ':'), allow_nan=False).encode()
+    require(len(raw) <= 16 * 1024**2, 'WATCHDOG_CPU_INVENTORY_SIZE')
+    packed = dict(row)
+    del packed['processes']
+    packed['process_inventory_zlib_b64'] = base64.b64encode(zlib.compress(raw)).decode('ascii')
+    return packed
+
+
+def unpack_sample(row):
+    if 'process_inventory_zlib_b64' not in row:
+        return row
+    require('processes' not in row and type(row['process_inventory_zlib_b64']) is str,
+            'WATCHDOG_CPU_ENCODING')
+    try:
+        packed = base64.b64decode(row['process_inventory_zlib_b64'], validate=True)
+        decoder = zlib.decompressobj()
+        raw = decoder.decompress(packed, 16 * 1024**2 + 1)
+        require(len(raw) <= 16 * 1024**2 and decoder.eof and not decoder.unused_data
+                and not decoder.unconsumed_tail, 'WATCHDOG_CPU_ENCODING')
+        result = dict(row)
+        del result['process_inventory_zlib_b64']
+        result['processes'] = json.loads(raw)
+        return result
+    except (ValueError, zlib.error) as error:
+        raise BenchmarkJobError('WATCHDOG_CPU_ENCODING') from error
 
 
 class Watchdog:
@@ -300,7 +497,10 @@ class Watchdog:
             raise
 
     def _append(self, row):
-        self.stream.write((json.dumps(row, sort_keys=True, allow_nan=False) + '\n').encode())
+        raw = (json.dumps(pack_sample(row), sort_keys=True, separators=(',', ':'),
+                          allow_nan=False) + '\n').encode()
+        require(self.stream.tell() + len(raw) <= 64 * 1024**2, 'WATCHDOG_SAMPLE_STREAM_FULL')
+        self.stream.write(raw)
         self.stream.flush()
         os.fsync(self.stream.fileno())
 
@@ -349,6 +549,7 @@ class Watchdog:
             self._observer_failure(error)
         persisted = False
         try:
+            row['cpu_observation'] = cpu_interval(self.policy.previous, row)
             # Raw sample durability precedes policy interpretation.
             self._append(row)
             self.count += 1
@@ -405,7 +606,8 @@ def verify_watchdog(output, read_regular, *, elapsed_seconds=None, expected_bind
             'CAMPAIGN_WATCHDOG_BINDING')
     policy, count = Policy(), 0
     for line in lines[1:]:
-        row = json.loads(line)
+        row = unpack_sample(json.loads(line))
+        require('cpu_observation' in row, 'CAMPAIGN_WATCHDOG_CPU_OBSERVATION_MISSING')
         require(policy.observe(row) is None, 'CAMPAIGN_WATCHDOG_REPLAY_FAILED')
         count += 1
     require(count >= 2, 'CAMPAIGN_WATCHDOG_SAMPLES_MISSING')

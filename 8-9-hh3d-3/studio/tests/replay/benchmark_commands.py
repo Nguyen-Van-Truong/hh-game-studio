@@ -48,7 +48,7 @@ from studio.tests.replay.benchmark_transport import (
     BenchmarkFixtureClient as FixtureClient, BenchmarkFixtureHost as LoopbackFixtureHost,
 )
 from studio.tests.replay.benchmark_http_phases import (
-    PhaseRecorder, observed_client_type, observed_host_type, observed_journal_type,
+    JournalTimingBook, PhaseRecorder, observed_client_type, observed_host_type, observed_journal_type,
 )
 from studio.host.replay.process_probe import ProcessProbe
 from studio.protocol.core import Status, canonical_bytes
@@ -112,10 +112,15 @@ class CommandProducer:
         self.effects, self.revision = 0, 'rev-0'
         self._status_ns = []
         self._setup_responses = []
+        self._reconciled_diagnostics = ()
+        self._transport_total = 0
+        self._transport_cursor = 0
+        self._batch_transport = None
         # One fixed recorder and wrapper set before any host work or baseline.
         # The bounded rolling window remains part of measured host RSS/time.
         self._phase_recorder = PhaseRecorder(event_capacity=8192, active_capacity=64)
-        journal_type = observed_journal_type(Journal, self._phase_recorder)
+        self._journal_timings = JournalTimingBook(window=5000)
+        journal_type = observed_journal_type(Journal, self._phase_recorder, self._journal_timings)
         host_type = observed_host_type(LoopbackFixtureHost, self._phase_recorder)
         self._client_type = observed_client_type(FixtureClient, self._phase_recorder)
         self.root.mkdir(parents=False, exist_ok=False)
@@ -154,6 +159,7 @@ class CommandProducer:
         else:
             self.credential = self.host.sessions.issue(scopes=_SCOPES, ttl_ms=900_000)
         self.client = self._client_type(self.host.port, self.host.control_port, self.credential)
+        self._transport_cursor = 0
         started = _clock()
         discovery = self.client.discover()
         received = self._received()
@@ -190,19 +196,108 @@ class CommandProducer:
         _need(lease.revision == self.revision, 'REVISION_DRIFT')
         return lease
 
-    def _received(self):
+    def _collect_transport(self):
+        """Drain new observations once; retain the pair-wide O6 recovery count."""
+        if self.client is None or self._batch_transport is None:
+            return
+        events = self.client.transport_events_since(self._transport_cursor)
+        self._transport_cursor = self.client.transport_event_total
+        self._transport_total += len(events)
+        self._batch_transport['events'].extend(events)
+        self._batch_transport['event_count_after'] = self._transport_total
+
+    def _received(self, *, expected_diagnostic=None):
         now = _clock()
         self._status_ns.append(now)
+        self._collect_transport()
+        _need(self._transport_total <= 10, 'TRANSPORT_RECOVERY_BUDGET')
         # Expected invalid-payload responses are diagnostic events in the
         # accepted host. Check every response so an unexpected event cannot be
         # silently displaced by the next 32 deliberate validation rejections.
+        retained, matched = [], 0
         for raw in self.host.diagnostics:
-            _need(json.loads(raw) == {'kind': 'log', 'payload': {'code': 'INVALID_FIXTURE_PAYLOAD'}},
-                  'HOST_DIAGNOSTICS')
+            decoded = json.loads(raw)
+            if decoded == {'kind': 'log', 'payload': {'code': 'INVALID_FIXTURE_PAYLOAD'}}:
+                continue
+            if any(raw is prior for prior in self._reconciled_diagnostics):
+                retained.append(raw)
+                continue
+            _need(expected_diagnostic == 'COMMAND_NOT_FOUND'
+                  and decoded == {'kind': 'log', 'payload': {'code': expected_diagnostic}}
+                  and matched == 0, 'HOST_DIAGNOSTICS')
+            retained.append(raw)
+            matched += 1
+        # Retain only identities still in the bounded host ring. A later
+        # unrelated code with identical bytes does not inherit this allowance.
+        self._reconciled_diagnostics = tuple(retained)
         return now
 
-    def _terminal(self, command_id, request_digest, row, *, started_ns=None):
-        deadline = None
+    @staticmethod
+    def _lookup_required(result, command_id):
+        return (result.status is Status.UNKNOWN
+                and result.code == 'CONNECTION_LOST_LOOKUP'
+                and result.command_id == command_id
+                and result.postconditions == {'next_action': 'lookup'})
+
+    def _reconcile_submission(self, request, result, row):
+        """Resolve every command kind; resend only after explicit non-admission.
+
+        The first receipt is never replaced. Every recovery response has its
+        own clock and full receipt, including NOT_FOUND before a same-ID resend.
+        Admitted/pending or terminal commands are never resubmitted here.
+        """
+        if not self._lookup_required(result, request.command_id):
+            return result, None
+        deadline = _clock() + TERMINAL_TIMEOUT_SECONDS * 1_000_000_000
+        trace = row.setdefault('reconciliation', [])
+        action, resubmits = 'lookup', 0
+        while True:
+            started = _clock()
+            remaining = (deadline - started) / 1_000_000_000
+            _need(remaining > 0, 'SUBMISSION_RECONCILE_TIMEOUT')
+            original_timeout = self.client.timeout
+            try:
+                self.client.timeout = min(original_timeout, remaining)
+                response = (self.client.lookup(request.command_id) if action == 'lookup'
+                            else self.client.submit(request))
+                failure = getattr(self.client, 'last_transport_failure', None)
+            finally:
+                self.client.timeout = original_timeout
+            step = {'action': action, 'response': response.as_dict(),
+                    'started_mono_us': started // 1000, 'ended_mono_us': _clock() // 1000,
+                    'transport_failure': failure}
+            trace.append(step)
+            missing = (action == 'lookup' and response.status is Status.REJECTED
+                       and response.code == 'COMMAND_NOT_FOUND'
+                       and response.command_id == request.command_id and response.postconditions == {})
+            ended = self._received(expected_diagnostic='COMMAND_NOT_FOUND' if missing else None)
+            step['ended_mono_us'] = ended // 1000
+            _need(ended <= deadline, 'SUBMISSION_RECONCILE_TIMEOUT')
+            busy = (action == 'lookup' and response.status is Status.REJECTED
+                    and response.code == 'CONNECTION_LIMIT'
+                    and response.command_id == 'transport.request' and response.postconditions == {})
+            _need(busy or response.command_id == request.command_id, 'RECONCILE_IDENTITY')
+            if busy or self._lookup_required(response, request.command_id):
+                action = 'lookup'
+                time.sleep(.001)
+                continue
+            if (action == 'lookup' and response.status is Status.REJECTED
+                    and response.code == 'COMMAND_NOT_FOUND' and response.postconditions == {}):
+                _need(resubmits < 3, 'SUBMISSION_RECONCILE_EXHAUSTED')
+                resubmits += 1
+                action = 'submit'
+                continue
+            if action == 'lookup':
+                _need(response.postconditions.get('request_digest') == request.digest,
+                      'RECONCILE_DIGEST')
+                _need(response.status in (Status.ACCEPTED_PENDING, Status.COMMITTED, Status.CANCELED),
+                      'RECONCILE_STATUS')
+            return response, deadline
+
+    def _terminal(self, command_id, request_digest, row, *, started_ns=None, deadline_ns=None):
+        deadline = deadline_ns
+        if deadline is not None and started_ns is None:
+            started_ns = _clock()
         while True:
             started = _clock()
             if deadline is None:
@@ -282,16 +377,27 @@ class CommandProducer:
         request = self.client.request(command_id, value=value, lease=replace(lease, revision=self.revision))
         start = _clock()
         result = self.client.submit(request)
+        receipt_failure = getattr(self.client, 'last_transport_failure', None)
         received = self._received()
         row.update(started_mono_us=start // 1000, receipt_mono_us=received // 1000,
                    receipt_ms=(received - start) / 1_000_000, receipt_status=result.status.value,
                    receipt_code=result.code, request_digest=request.digest)
         _need(result.command_id == command_id, 'RECEIPT_IDENTITY')
+        if self._lookup_required(result, command_id):
+            row['receipt_transport_failure'] = receipt_failure
+            result, recovery_deadline = self._reconcile_submission(request, result, row)
+        else:
+            recovery_deadline = None
         if kind == 'rejected':
             _need(result.status is Status.REJECTED and result.code == 'INVALID_FIXTURE_PAYLOAD', 'WRONG_VALIDATION_REJECTION')
             _need(self.host.fixture.effect_count == expected, 'REJECTED_EFFECT')
             row.update(latency_ms=row['receipt_ms'], terminal_status=result.status.value,
                        effect_count_before=expected, effect_count_after=expected)
+            if row.get('reconciliation'):
+                ended_us = row['reconciliation'][-1]['ended_mono_us']
+                row.update(terminal_mono_us=ended_us, terminal_ms=(ended_us * 1000 - start) / 1_000_000,
+                           terminal_response=result.as_dict())
+                row['latency_ms'] = row['terminal_ms']
             return
         # A response can be lost after the host durably admits the command.
         # The client returns this one exact, identity-bound sentinel; never
@@ -304,10 +410,14 @@ class CommandProducer:
             and result.command_id == command_id
             and result.postconditions == {'next_action': 'lookup'}
         )
-        if not admission_uncertain:
+        if not admission_uncertain and not row.get('reconciliation'):
             _need(result.status is Status.ACCEPTED_PENDING, 'ADMISSION_' + result.status.value)
             _need(result.postconditions.get('request_digest') == request.digest, 'RECEIPT_DIGEST')
-        terminal, ended = self._terminal(command_id, request.digest, row, started_ns=start)
+        if row.get('reconciliation'):
+            _need(result.status in (Status.ACCEPTED_PENDING, Status.COMMITTED), 'ADMISSION_' + result.status.value)
+            _need(result.postconditions.get('request_digest') == request.digest, 'RECEIPT_DIGEST')
+        terminal, ended = self._terminal(command_id, request.digest, row, started_ns=start,
+                                         deadline_ns=recovery_deadline)
         snapshot = self._readback(terminal, expected + (kind == 'admitted'), value if kind == 'admitted' else None)
         row.update(terminal_mono_us=ended // 1000, terminal_ms=(ended - start) / 1_000_000,
                    terminal_status=terminal.status.value, terminal_code=terminal.code,
@@ -321,24 +431,48 @@ class CommandProducer:
                                       lease=replace(lease, revision=self.revision))
         row.update(command_id=command_id, kind='cancel', separate_from_mix=True,
                    delay_ms=1000, request_digest=request.digest, lookup_attempts=[])
+        queued_started = _clock()
         queued = self.client.submit(request)
-        row['queued_mono_us'] = self._received() // 1000
+        queued_failure = getattr(self.client, 'last_transport_failure', None)
+        queued_received = self._received()
+        row['queued_mono_us'] = queued_received // 1000
+        if self._lookup_required(queued, command_id):
+            # Admission and Cancel are separate calls and clock domains within
+            # this probe. Never overwrite the admission clock with Cancel's.
+            recovery = row['queue_recovery'] = {
+                'command_id': command_id, 'kind': 'cancel', 'request_digest': request.digest,
+                'started_mono_us': queued_started // 1000,
+                'receipt_mono_us': queued_received // 1000,
+                'receipt_status': queued.status.value, 'receipt_code': queued.code,
+                'receipt_transport_failure': queued_failure}
+            queued, _ = self._reconcile_submission(request, queued, recovery)
         _need(queued.status is Status.ACCEPTED_PENDING, 'CANCEL_JOB_NOT_ADMITTED')
         _need(queued.command_id == command_id and queued.postconditions.get('request_digest') == request.digest,
               'CANCEL_JOB_IDENTITY')
         start = _clock()
         receipt = self.client.cancel(command_id)
+        receipt_failure = getattr(self.client, 'last_transport_failure', None)
         end = self._received()
         row.update(started_mono_us=start // 1000, receipt_mono_us=end // 1000,
                    receipt_ms=(end - start) / 1_000_000, status=receipt.status.value)
-        _need(receipt.status is Status.CANCELED and receipt.code == 'CANCELED_BEFORE_APPLY', 'CANCEL_NOT_LATCHED')
-        _need(receipt.command_id == command_id and receipt.postconditions.get('request_digest') == request.digest,
-              'CANCEL_RECEIPT_IDENTITY')
+        if self._lookup_required(receipt, command_id):
+            # A cancel ACK is a mutation response.  Once bytes may have been
+            # sent, preserve UNKNOWN and reconcile the same command by lookup;
+            # never issue a blind second cancel.
+            row['cancel_ack'] = {'response': receipt.as_dict(),
+                                 'transport_failure': receipt_failure}
+        else:
+            _need(receipt.status is Status.CANCELED and receipt.code == 'CANCELED_BEFORE_APPLY',
+                  'CANCEL_NOT_LATCHED')
+            _need(receipt.command_id == command_id
+                  and receipt.postconditions.get('request_digest') == request.digest,
+                  'CANCEL_RECEIPT_IDENTITY')
         terminal, ended = self._terminal(command_id, request.digest, row, started_ns=start)
         _need(terminal.status is Status.CANCELED and terminal.postconditions.get('no_effect') is True, 'CANCEL_TERMINAL')
         _need(self.host.fixture.effect_count == self.effects, 'CANCEL_JOB_EFFECT')
         row.update(terminal_mono_us=ended // 1000, terminal_ms=(ended - start) / 1_000_000,
-                   terminal_status=terminal.status.value, no_effect=True)
+                   terminal_status=terminal.status.value, status=terminal.status.value,
+                   no_effect=True)
         return row
 
     def run_batch(self, index):
@@ -352,7 +486,7 @@ class CommandProducer:
         _need(type(index) is int and index == self.next_index and 0 <= index < MAX_BATCHES, 'BATCH_ORDER')
         _need(self.mode in (None, mode), 'MODE_MIX')
         self.mode = mode
-        report = {'schema_id': 'hh-studio.benchmark-command-batch', 'schema_version': '1.4.0',
+        report = {'schema_id': 'hh-studio.benchmark-command-batch', 'schema_version': '1.5.0',
                   'run_id': self.run_id, 'index': index, 'mode': mode, 'complete_command_mix': False,
                   'native_acceptance': False, 'effects_kind': 'in_process_mock_fixture',
                   'transport_kind': 'accepted_loopback_fixture_http', 'observation_kind': self.observer.kind,
@@ -360,6 +494,9 @@ class CommandProducer:
                   'commands': [], 'latency_ms': {'inspect': [], 'rejected': [], 'admitted': []},
                   'effects_per_admission': [], 'cancel': None, 'status': 'RUNNING',
                   'setup_responses': []}
+        self._batch_transport = report['transport_recovery'] = {
+            'events': [], 'event_count_before': self._transport_total,
+            'event_count_after': self._transport_total, 'all_reconciled': False}
         start, initial_effects = _clock(), self.effects
         self._status_ns = [start]
         self._setup_responses = report['setup_responses']
@@ -382,6 +519,9 @@ class CommandProducer:
                     report['cancel'] = {}
                     self._cancel_probe(index, lease, report['cancel'])
             _need(self.effects == initial_effects + groups * 2, 'BATCH_EFFECT_COUNT')
+            self._collect_transport()
+            _need(self._transport_total <= 10, 'TRANSPORT_RECOVERY_BUDGET')
+            self._batch_transport['all_reconciled'] = True
             report['memory_after'] = self._observe()
             report.update(status='COMPLETE' if mode == 'benchmark' else 'DIAGNOSTIC',
                           complete_command_mix=groups == GROUPS, effect_count_before=initial_effects,
@@ -391,6 +531,8 @@ class CommandProducer:
             self.next_index += 1
         except Exception as error:
             self.failed = True
+            self._collect_transport()
+            self._batch_transport['all_reconciled'] = False
             report.update(status='FAILED', failure_code=getattr(error, 'code', type(error).__name__))
             # Preserve only the client's fixed, secret-free failure categories.
             # Successful batch schemas and uncertainty/retry policy do not change.
@@ -406,6 +548,7 @@ class CommandProducer:
             report['max_status_gap_ms'] = max(b - a for a, b in zip(self._status_ns, self._status_ns[1:])) / 1_000_000
             report['status_gap_scope'] = 'host command-lane response progress; not editor UI heartbeat'
             self._status_ns = []
+            self._batch_transport = None
         return report
 
     def close(self):
@@ -430,6 +573,13 @@ class CommandProducer:
         observing it cannot manufacture closure or a target process exit.
         """
         return self._phase_recorder.snapshot()
+
+    def journal_timing_snapshot(self):
+        """Return bounded direct journal timings and path counters."""
+        return self._journal_timings.snapshot()
+
+    def journal_timing_batch(self):
+        return self._journal_timings.take_batch()
 
     def __enter__(self):
         return self

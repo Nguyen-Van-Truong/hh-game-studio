@@ -3,6 +3,13 @@
 Hướng dẫn **cách agent phải chạy Godot trên máy này**. Không phải tutorial Godot
 chung. Pin, `--path`, leftover-0, và host `WaitForExit` là hợp đồng nghiệm thu.
 
+O5.6 (30-09-2026, tools plan): trước mọi lần agent chạy Godot, Blender hoặc
+Docker trên máy dùng chung, kiểm
+`$env:LOCALAPPDATA\HHGodotAgent\measure-window.lock`. Có marker thì chờ hoặc
+làm static; không tự xóa vì hết hạn và không chạy cạnh soak/formal GT-06.
+Coordinator giữ kernel guard cùng marker trong cả cửa sổ đo, chỉ giải phóng
+sau cleanup. Đây là điều phối tài nguyên máy, không đổi pin/gate sản phẩm.
+
 Display title: **Vault Fighters**. Không Superfighters trên title card / nhân
 vật / map display / metadata phát hành. Parent platform vẫn **59/60**; không
 mở G6 / GX / R9-WP4.

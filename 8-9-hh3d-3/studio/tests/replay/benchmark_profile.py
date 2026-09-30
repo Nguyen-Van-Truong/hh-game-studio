@@ -32,6 +32,7 @@ import json
 import math
 from pathlib import Path
 import re
+import statistics
 import sys
 
 if __name__ == '__main__':
@@ -58,7 +59,7 @@ class BenchmarkError(ValueError):
 
 @dataclass(frozen=True, slots=True)
 class BenchmarkProfile:
-    profile_id: str = 'gt06-tools-ux-o1-v5'
+    profile_id: str = 'gt06-tools-ux-o5-v6'
     process_runs: int = 2
     warmup_batches: int = 5
     measured_batches: int = 30
@@ -87,23 +88,25 @@ class BenchmarkProfile:
     early_private_commit_percent: int = 150
     host_handles_tolerance: int = 4
     host_handles_trend: int = 2
-    editor_handles_tolerance: int = 8
-    editor_handles_trend: int = 2
+    editor_handles_tolerance: int = 32
+    editor_handles_trend: int = 6
     editor_objects_tolerance: int = 32
     editor_objects_trend: int = 8
     editor_resources_tolerance: int = 2
     editor_resources_trend: int = 1
     retained_handle_trend_min_increments: int = 3
+    editor_handles_trend_method: str = 'late_median_vs_early_median'
 
     def __post_init__(self):
         # This version describes one workload, not a configurable smaller test.
-        expected = ('gt06-tools-ux-o1-v5', 2, 5, 30, 500, 300, 200, 100, 1,
+        expected = ('gt06-tools-ux-o5-v6', 2, 5, 30, 500, 300, 200, 100, 1,
                     500, 500, 2000, 'diagnostic_only', 10, 'linear_type7',
                     'repeat_5inspect_3reject_2admitted', 'post_batch_quiescent',
                     'host_api_50_30_20_mock_effect_allowed', 'native_editor_direct_semantic_test_fixture',
                     'rss_bytes private_commit_bytes held_handles',
                     'rss_bytes private_commit_bytes objects resources held_handles',
-                    '2,3,4', 110, 105, 64, 256, 150, 4, 2, 8, 2, 32, 8, 2, 1, 3)
+                    '2,3,4', 110, 105, 64, 256, 150, 4, 2, 32, 6, 32, 8, 2, 1, 3,
+                    'late_median_vs_early_median')
         if any(type(a) is not type(b) or a != b for a, b in zip(asdict(self).values(), expected)):
             raise BenchmarkError('PROFILE_VERSION_REQUIRED')
 
@@ -115,7 +118,9 @@ def counter_window(role, counter):
     """Return the frozen O1 T/G pair for an applicable retained counter."""
     values = {
         ('host', 'held_handles'): (PROFILE.host_handles_tolerance, PROFILE.host_handles_trend),
-        ('editor', 'held_handles'): (PROFILE.editor_handles_tolerance, PROFILE.editor_handles_trend),
+        # Historical O1 max-window helper only. Current datasets use O5.2's
+        # complete-series function and bind the changed rule to a new hash.
+        ('editor', 'held_handles'): (8, 2),
         ('editor', 'objects'): (PROFILE.editor_objects_tolerance, PROFILE.editor_objects_trend),
         ('editor', 'resources'): (PROFILE.editor_resources_tolerance, PROFILE.editor_resources_trend),
     }
@@ -142,6 +147,28 @@ def memory_gate_codes(role, counter, baseline, max_all, max_early, max_late):
     return ['RETAINED_COUNTER_GROWTH'] if (
         max_all > baseline + tolerance or
         (max_late is not None and max_late > max_early + trend)) else []
+
+
+def editor_handle_gate_codes(baseline, values):
+    """Apply the owner-approved O5.2 rule to one complete editor series.
+
+    Stock-editor control data is non-monotonic, so editor handles use robust
+    medians for the early/late trend and a wide absolute bound.  The v5
+    retained-handle supplemental rule remains evaluated separately by the
+    dataset verifier.  Keeping this function separate prevents historical
+    callers of ``memory_gate_codes`` from reinterpreting old evidence.
+    """
+    if type(baseline) is not int or len(values) != PROFILE.measured_batches:
+        raise BenchmarkError('EDITOR_HANDLE_SERIES')
+    if any(type(value) is not int for value in values):
+        raise BenchmarkError('EDITOR_HANDLE_SERIES')
+    early, late = values[:15], values[15:]
+    codes = []
+    if max(values) > baseline + PROFILE.editor_handles_tolerance:
+        codes.append('EDITOR_HANDLE_GROWTH')
+    if statistics.median(late) > statistics.median(early) + PROFILE.editor_handles_trend:
+        codes.append('EDITOR_HANDLE_MEDIAN_TREND')
+    return codes
 
 
 def retained_handle_trend_code(role, counter, values):
@@ -448,7 +475,13 @@ def _summarize_runs(raw_runs):
                        'max_batch_5_34': max_all, 'max_batch_5_19': max_early,
                        'max_batch_20_34': max_late}
                 memory[role][counter] = row
-                codes = memory_gate_codes(role, counter, baseline, max_all, max_early, max_late)
+                if role == 'editor' and counter == 'held_handles':
+                    row.update(median_batch_5_19=statistics.median(early),
+                               median_batch_20_34=statistics.median(late),
+                               rule='O5.2')
+                    codes = editor_handle_gate_codes(baseline, values)
+                else:
+                    codes = memory_gate_codes(role, counter, baseline, max_all, max_early, max_late)
                 if counter == 'rss_bytes':
                     # Working set/RSS is retained for diagnosis and reports, but
                     # O1 deliberately removes it from the automatic gate.
@@ -463,6 +496,18 @@ def _summarize_runs(raw_runs):
                                          'role': role, 'counter': counter, 'value': max_late,
                                          'early_max': max_early})
                     continue
+                if role == 'editor' and counter == 'held_handles':
+                    if 'EDITOR_HANDLE_GROWTH' in codes:
+                        failures.append({'run_id': run_id, 'code': 'EDITOR_HANDLE_GROWTH',
+                                         'role': role, 'counter': counter, 'baseline': baseline,
+                                         'max_batch_5_34': max_all,
+                                         'absolute_margin': PROFILE.editor_handles_tolerance})
+                    if 'EDITOR_HANDLE_MEDIAN_TREND' in codes:
+                        failures.append({'run_id': run_id, 'code': 'EDITOR_HANDLE_MEDIAN_TREND',
+                                         'role': role, 'counter': counter,
+                                         'median_batch_5_19': statistics.median(values[:15]),
+                                         'median_batch_20_34': statistics.median(values[15:]),
+                                         'median_margin': PROFILE.editor_handles_trend})
                 window = counter_window(role, counter)
                 tolerance, trend = window if window is not None else (None, None)
                 if 'RETAINED_COUNTER_GROWTH' in codes:

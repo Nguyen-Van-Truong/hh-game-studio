@@ -209,8 +209,18 @@ def scenario(mode):
 
 
 class JournalDurabilityTests(unittest.TestCase):
-    def test_reload_barrier_failure_across_fresh_process_and_archive(self):
-        scenario('pre_barrier')
+    def test_lookup_without_new_tail_does_not_require_full_barrier(self):
+        # O5 removes the full-file fsync from a no-tail lookup.  Keep the
+        # terminal write/flush barriers below strict; this regression only
+        # proves that an unrelated fsync failure cannot poison a cached read.
+        with tempfile.TemporaryDirectory(prefix='gt02-no-tail-') as directory:
+            path = Path(directory) / 'journal.jsonl'
+            journal = jm.Journal(path)
+            journal.append_command(project_id='project.fixture', command_id='cached',
+                                   digest='sha256:' + 'a' * 64, receipt={'value': 1}, now_ms=1)
+            with mock.patch.object(jm.os, 'fsync', side_effect=OSError('no-tail-barrier')):
+                result = journal.lookup(project_id='project.fixture', command_id='cached', now_ms=2)
+            self.assertEqual(result['status'], 'COMMITTED')
 
     def test_terminal_write_failure_across_fresh_process_and_archive(self):
         scenario('write_before')
