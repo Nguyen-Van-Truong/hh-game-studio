@@ -31,20 +31,6 @@ MAX_JOURNAL_BYTES = 512 * 1024
 _UNSET_RESULT = object()
 _HEX = re.compile(r"[0-9a-f]{64}\Z")
 _ID = re.compile(r"[a-z][a-z0-9._-]{0,63}\Z")
-_RUNTIME_FILES = (
-    "godot-addon/gameplay_source_owner.py",
-    "godot-addon/gameplay_source_profile.py",
-    "godot-addon/linux_executor.py",
-    "godot-addon/gameplay_sandbox.py",
-    "godot-addon/publication_session.py",
-    "godot-addon/contract.py",
-    "godot-addon/operations.json",
-    "protocol/core.py",
-    "host/core/transport.py",
-    "host/core/limits.py",
-    "build/bootstrap/run_fixture.py",
-    "godot-addon/validator-toolchain.lock.json",
-)
 
 
 def _sha(raw: bytes) -> str:
@@ -53,13 +39,7 @@ def _sha(raw: bytes) -> str:
 
 def runtime_source_closure() -> tuple[dict[str, str], str]:
     """Hash the exact adapter/executor inputs before a run is admitted."""
-    studio = HERE.parent
-    files = {}
-    for relative in _RUNTIME_FILES:
-        path = studio / relative
-        _need(path.is_file() and not path.is_symlink(), "GAMEPLAY_OWNER_SOURCE_MISSING")
-        files[relative] = _sha(path.read_bytes())
-    return files, _sha(canonical_bytes(files))
+    return _load("linux_executor").gameplay_runtime_source_closure()
 
 
 def _load(name: str):
@@ -325,7 +305,8 @@ class GameplaySourcePublicationOwner:
             # or repairing CURRENT; recovery must not promote missing/dirty
             # executor evidence into a successful publication.
             native = owner._read_native_result(owner._runs / receipt.command_id)
-            owner._validate_native(native, expected_input_hashes=owner._native_inputs(files))
+            owner._validate_native(native, expected_input_hashes=owner._native_inputs(files),
+                                   expected_source_closure_sha256=owner.source_closure_sha256)
             _need(native["run_id"] == receipt.native_run_id,
                   "GAMEPLAY_OWNER_NATIVE_RUN_BINDING")
             rebuilt = {"status": "READBACK_ACK", **asdict(receipt)}
@@ -551,9 +532,13 @@ class GameplaySourcePublicationOwner:
         return value
 
     @staticmethod
-    def _validate_native(result: dict, *, expected_input_hashes) -> None:
+    def _validate_native(result: dict, *, expected_input_hashes,
+                         expected_source_closure_sha256: str) -> None:
         _need(type(result) is dict and result.get("schema") == "hh-gt03-linux-diagnostic-1",
               "GAMEPLAY_OWNER_NATIVE_SCHEMA")
+        _need(result.get("source_closure_sha256") == expected_source_closure_sha256
+              and result.get("source_closure_unchanged") is True,
+              "GAMEPLAY_OWNER_NATIVE_SOURCE_CLOSURE")
         _need(result.get("mode") == "gameplay-source" and result.get("public_ack") is False,
               "GAMEPLAY_OWNER_NATIVE_MODE")
         _need(result.get("gameplay_source_envelope_checked") is True
@@ -668,9 +653,11 @@ class GameplaySourcePublicationOwner:
             expected_native_inputs = self._native_inputs(candidate)
             def run_stage():
                 observed = self._runner(self._safe_revision(candidate_revision) / "project",
-                                         mode="gameplay-source", output=run_dir, timeout_seconds=20)
+                                         mode="gameplay-source", output=run_dir, timeout_seconds=20,
+                                         source_closure_sha256=self.source_closure_sha256)
                 observed = self._read_native_result(run_dir, observed)
-                self._validate_native(observed, expected_input_hashes=expected_native_inputs)
+                self._validate_native(observed, expected_input_hashes=expected_native_inputs,
+                                      expected_source_closure_sha256=self.source_closure_sha256)
                 return observed
             result = self._phase(grant, lease, command_id, digest, deadline_ms, "stage", run_stage)
             native_run_id = result["run_id"]

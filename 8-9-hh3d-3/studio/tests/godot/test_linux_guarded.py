@@ -1,5 +1,6 @@
 """Guarded modes keep the accepted validator separate and inspect exact mounts."""
 import copy
+import json
 from pathlib import Path
 import tempfile
 import unittest
@@ -9,6 +10,67 @@ from tests.godot.test_linux_executor import executor, inspected, write_project, 
 
 
 class GuardedExecutorTests(unittest.TestCase):
+    def test_runtime_source_closure_rejects_invalid_or_stale_binding_before_output(self):
+        current = executor.gameplay_runtime_source_closure()[1]
+        for supplied in ('0' * 64, '', 'A' * 64, 42, True):
+            with self.subTest(supplied=supplied), tempfile.TemporaryDirectory() as directory:
+                output = Path(directory) / 'output'
+                with patch.object(executor, '_cli') as cli:
+                    with self.assertRaisesRegex(executor.ExecutorError, 'SOURCE_CLOSURE'):
+                        executor.run(Path(directory) / 'unused', mode='gameplay-source',
+                                     output=output, source_closure_sha256=supplied)
+                    cli.assert_not_called()
+                    self.assertFalse(output.exists())
+        with patch.object(executor, '_cli') as cli:
+            with self.assertRaisesRegex(executor.ExecutorError, 'SOURCE_CLOSURE_MODE'):
+                executor.run(Path('unused'), mode='parse', output=Path('unused-output'),
+                             source_closure_sha256=current)
+            cli.assert_not_called()
+
+    def test_runtime_source_closure_is_observed_before_and_after_executor_work(self):
+        current = executor.gameplay_runtime_source_closure()[1]
+        for after in (current, '0' * 64):
+            with self.subTest(changed=after != current), tempfile.TemporaryDirectory() as directory:
+                project = Path(directory) / 'input'
+                write_project(project)
+                (project / 'project.godot').write_bytes(
+                    executor._gameplay_profile().PROJECT_TEMPLATE.encode())
+                output = Path(directory) / 'output'
+                with patch.object(executor, 'gameplay_runtime_source_closure',
+                                  side_effect=[({}, current), ({}, after)]), \
+                     patch.object(executor, '_lock',
+                                  side_effect=executor.ExecutorError('STOP_BEFORE_DAEMON')), \
+                     patch.object(executor, '_cli') as cli:
+                    result = executor.run(project, mode='gameplay-source', output=output,
+                                          source_closure_sha256=current)
+                    cli.assert_not_called()
+                self.assertEqual(result['source_closure_sha256'], current)
+                self.assertIs(result['source_closure_unchanged'], after == current)
+                self.assertEqual(json.loads((output / 'result.json').read_bytes()), result)
+                self.assertFalse(result['diagnostic_process_clean'])
+                if after != current:
+                    self.assertIn('EXECUTOR_SOURCE_CLOSURE_CHANGED', result['errors'])
+
+    def test_gameplay_diagnostic_records_observed_closure_without_a_caller_hash(self):
+        current = executor.gameplay_runtime_source_closure()[1]
+        with tempfile.TemporaryDirectory() as directory:
+            project = Path(directory) / 'input'
+            write_project(project)
+            (project / 'project.godot').write_bytes(
+                executor._gameplay_profile().PROJECT_TEMPLATE.encode())
+            with patch.object(executor, 'gameplay_runtime_source_closure',
+                              return_value=({}, current)) as closure, \
+                 patch.object(executor, '_lock',
+                              side_effect=executor.ExecutorError('STOP_BEFORE_DAEMON')), \
+                 patch.object(executor, '_cli') as cli:
+                result = executor.run(project, mode='gameplay-source',
+                                      output=Path(directory) / 'output')
+                cli.assert_not_called()
+                self.assertEqual(closure.call_count, 2)
+            self.assertEqual(result['source_closure_sha256'], current)
+            self.assertIs(result['source_closure_unchanged'], True)
+            self.assertFalse(result['diagnostic_process_clean'])
+
     def test_only_guarded_modes_use_the_sandbox_bootstrap(self):
         for mode in ('parse', 'import', 'profile-validate'):
             argv = executor._supervised_command(mode)

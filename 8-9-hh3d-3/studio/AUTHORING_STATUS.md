@@ -679,3 +679,18 @@ tests**, actual exit 0 (including recovery-result, journal-race and durability
 cuts). No Godot, Docker, Blender or public capability was enabled. This is
 `AUTHORITY=0`; AUTH-02..04 full runtime closure, AUTH-05, Blender rig/GLB and
 GT-06 acceptance remain open, and this branch must not merge before GT-06.
+
+### 2026-10-01 executor source-closure binding (static)
+
+The gameplay-source executor now computes the declared runtime adapter closure
+itself before work and again before result finalization. A caller-supplied hash,
+when present, must match that observation; a changed or malformed closure
+fails closed and cannot start the container. Native result validation requires
+the observed closure hash and an unchanged flag before selector or journal
+adoption. Pure tests cover missing, stale and changed closure evidence while
+preserving `CURRENT` and the journal. The focused suites pass **36 owner
+tests**, **10 executor guard tests**, and **12 probe tests**, all actual exit 0.
+This remains `AUTHORITY=0`: the inventory is an explicit adapter closure and
+does not prove arbitrary project dependency discovery, AUTH-02..04 full
+runtime closure, AUTH-05, Blender rig/GLB acceptance or GT-06; do not merge
+before GT-06 acceptance.

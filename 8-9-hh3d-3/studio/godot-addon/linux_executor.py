@@ -44,6 +44,20 @@ GAMEPLAY_PROFILE_SHA256 = 'a5ecd2c25acd5387842a5647932b1d86eb361254ebf4918a5f3bf
 GUARDED_MODES = ('guarded-parse', 'guarded-import', 'guarded-play')
 GAMEPLAY_MODE = 'gameplay-source'
 SANDBOX_MODES = GUARDED_MODES + (GAMEPLAY_MODE,)
+GAMEPLAY_RUNTIME_FILES = (
+    'godot-addon/gameplay_source_owner.py',
+    'godot-addon/gameplay_source_profile.py',
+    'godot-addon/linux_executor.py',
+    'godot-addon/gameplay_sandbox.py',
+    'godot-addon/publication_session.py',
+    'godot-addon/contract.py',
+    'godot-addon/operations.json',
+    'protocol/core.py',
+    'host/core/transport.py',
+    'host/core/limits.py',
+    'build/bootstrap/run_fixture.py',
+    'godot-addon/validator-toolchain.lock.json',
+)
 _CLI_JOBS = None
 SUPERVISOR_SHA256 = '5ef0eaaaa4220593add7716aad74da927ca3bb10605e964330de64fecc3ef15e'
 EXECUTOR_CONTEXT = 'hh-gt03-linux-desktop-v1'
@@ -95,6 +109,13 @@ def _read_file(path: Path, maximum: int) -> bytes:
     _need(len(raw) <= maximum and (before.st_dev, before.st_ino, before.st_size, before.st_mtime_ns)
           == (after.st_dev, after.st_ino, after.st_size, after.st_mtime_ns), 'EXECUTOR_SOURCE_CHANGED')
     return raw
+
+
+def gameplay_runtime_source_closure() -> tuple[dict[str, str], str]:
+    """Bind the existing adapter/executor inventory; no project dependency inference."""
+    files = {relative: _sha(_read_file(STUDIO / relative, 1048576))
+             for relative in GAMEPLAY_RUNTIME_FILES}
+    return files, _sha(json.dumps(files, sort_keys=True, separators=(',', ':')).encode())
 
 
 def _names(path: Path, maximum: int = 8) -> set[str]:
@@ -758,7 +779,7 @@ def _validate_inspect(value: dict, *, name: str, container_id: str, mode: str,
           <= set(host.get('MaskedPaths', [])), 'EXECUTOR_SYSTEM_PATHS')
 
 
-def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate', 'guarded-parse', 'guarded-import', 'guarded-play', 'gameplay-source'], output: Path, timeout_seconds: int = 20) -> dict:
+def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate', 'guarded-parse', 'guarded-import', 'guarded-play', 'gameplay-source'], output: Path, timeout_seconds: int = 20, source_closure_sha256: str | None = None) -> dict:
     """Run fixed Godot diagnostics; raises only during argument/input/output preflight.
 
     Remote requests must never choose paths, environment or engine modes directly.
@@ -770,6 +791,15 @@ def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate', '
     _need(not _INCOMPLETE_ADMISSION_HOLDS, 'EXECUTOR_UNFINISHED_ADMISSION_HELD')
     _need(type(timeout_seconds) is int and 1 <= timeout_seconds <= 20, 'EXECUTOR_TIMEOUT')
     _need(isinstance(project, Path) and isinstance(output, Path), 'EXECUTOR_PATH_TYPE')
+    observed_source_closure = None
+    if source_closure_sha256 is not None:
+        _need(type(source_closure_sha256) is str and re.fullmatch(r'[0-9a-f]{64}', source_closure_sha256),
+              'EXECUTOR_SOURCE_CLOSURE')
+        _need(mode == GAMEPLAY_MODE, 'EXECUTOR_SOURCE_CLOSURE_MODE')
+    if mode == GAMEPLAY_MODE:
+        observed_source_closure = gameplay_runtime_source_closure()[1]
+        if source_closure_sha256 is not None:
+            _need(observed_source_closure == source_closure_sha256, 'EXECUTOR_SOURCE_CLOSURE_MISMATCH')
     project, output = project.absolute(), output.absolute()
     initial = _inputs(project, mode)
     profile_harness = _profile_harness() if mode == 'profile-validate' else None
@@ -797,6 +827,8 @@ def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate', '
     _write(output / 'input-manifest.json', before)
     name = 'hh-gt03-' + uuid.uuid4().hex
     result = {'schema': 'hh-gt03-linux-diagnostic-1', 'run_id': name, 'mode': mode,
+              'source_closure_sha256': observed_source_closure,
+              'source_closure_unchanged': None,
               'public_ack': False, 'sandbox_acceptance': False, 'diagnostic_process_clean': False,
               'container_id': None, 'state': None, 'owned_removed': False, 'input_unchanged': False,
               'snapshot_unchanged': False, 'commandhost': None, 'input_hashes_before': before,
@@ -989,6 +1021,14 @@ def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate', '
             except BaseException as error:
                 result['gameplay_profile_unchanged'] = False
                 failed(error, 'EXECUTOR_GAMEPLAY_PROFILE_FINALIZE_')
+        if mode == GAMEPLAY_MODE:
+            try:
+                result['source_closure_unchanged'] = (
+                    gameplay_runtime_source_closure()[1] == observed_source_closure)
+                _need(result['source_closure_unchanged'], 'EXECUTOR_SOURCE_CLOSURE_CHANGED')
+            except BaseException as error:
+                result['source_closure_unchanged'] = False
+                failed(error, 'EXECUTOR_SOURCE_CLOSURE_FINALIZE_')
         try:
             for stream in ('stdout', 'stderr'):
                 log = output / result[stream]
@@ -1008,6 +1048,7 @@ def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate', '
             and result['owned_removed'] and result['input_unchanged'] and result['snapshot_unchanged']
             and result['binary_unchanged'] and result['profile_harness_unchanged'] and result['sandbox_harness_unchanged']
             and result['gameplay_profile_unchanged']
+            and (mode != GAMEPLAY_MODE or result['source_closure_unchanged'] is True)
             and result['log_clean'] and not result['errors'])
         result['command_host'] = result['commandhost']
         result['container_state'] = result['state']

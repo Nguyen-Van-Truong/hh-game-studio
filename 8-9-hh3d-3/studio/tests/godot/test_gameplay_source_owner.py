@@ -27,6 +27,8 @@ def native_result(run_id="fake-run-1"):
             "readers_stopped": True, "job_active_count": 0, "job_owner": job}
     return {
         "schema": "hh-gt03-linux-diagnostic-1", "mode": "gameplay-source",
+        "source_closure_sha256": owner_mod.runtime_source_closure()[1],
+        "source_closure_unchanged": True,
         "run_id": run_id, "public_ack": False,
         "gameplay_source_envelope_checked": True,
         "gameplay_profile": owner_mod.PROFILE,
@@ -65,6 +67,7 @@ class GameplaySourceOwnerTests(unittest.TestCase):
 
         def runner(project, **kwargs):
             self.runs.append((project, kwargs))
+            self.assertEqual(kwargs['source_closure_sha256'], self.owner.source_closure_sha256)
             return bound_native_result(project, "fake-run-%d" % len(self.runs), kwargs['output'])
 
         self.owner = owner_mod.GameplaySourcePublicationOwner.create(
@@ -289,6 +292,9 @@ class GameplaySourceOwnerTests(unittest.TestCase):
         mutations = (
             ("missing", None, "NATIVE_RESULT_MISSING"),
             ("other-run", {"run_id": "other-run"}, "NATIVE_RUN_BINDING"),
+            ("missing-closure", False, "NATIVE_SOURCE_CLOSURE"),
+            ("other-closure", {"source_closure_sha256": "0" * 64}, "NATIVE_SOURCE_CLOSURE"),
+            ("changed-closure", {"source_closure_unchanged": False}, "NATIVE_SOURCE_CLOSURE"),
             ("dirty", {"log_clean": False}, "NATIVE_NOT_CLEAN"),
             ("other-input", {"input_hashes_after": {}}, "NATIVE_INPUT_BINDING"),
         )
@@ -296,6 +302,10 @@ class GameplaySourceOwnerTests(unittest.TestCase):
             with self.subTest(name=name):
                 if change is None:
                     result_path.unlink()
+                elif change is False:
+                    value = json.loads(good)
+                    value.pop("source_closure_sha256", None)
+                    result_path.write_bytes(owner_mod.canonical_bytes(value))
                 else:
                     result_path.write_bytes(owner_mod.canonical_bytes(
                         {**json.loads(good), **change}))
@@ -719,6 +729,32 @@ class GameplaySourceOwnerTests(unittest.TestCase):
                                     'GAMEPLAY_OWNER_CLOSED'):
             self.owner.publish(request, grant=self.grant, lease=self.lease,
                                deadline_ms=self.lease.expires_ms)
+
+    def test_native_result_requires_unchanged_runtime_source_closure_before_selection(self):
+        for name, change in (("missing", None), ("other", "0" * 64), ("changed", False)):
+            with self.subTest(name=name):
+                def runner(project, **kwargs):
+                    result = bound_native_result(project, output=kwargs['output'])
+                    if change is None:
+                        result.pop('source_closure_sha256')
+                    elif change is False:
+                        result['source_closure_unchanged'] = False
+                    else:
+                        result['source_closure_sha256'] = change
+                    kwargs['output'].joinpath('result.json').write_bytes(owner_mod.canonical_bytes(result))
+                    return result
+
+                owner, grant, lease = self.fresh_owner(runner)
+                selector_before = owner._selector.read_bytes()
+                journal_before = owner._journal.read_bytes()
+                request = self.request(dict(self.source), command='command.closure.' + name)
+                with self.assertRaisesRegex(owner_mod.GameplaySourceOwnerError,
+                                            'GAMEPLAY_OWNER_NATIVE_SOURCE_CLOSURE'):
+                    owner.publish(request, grant=grant, lease=lease, deadline_ms=lease.expires_ms)
+                self.assertTrue(owner._held)
+                self.assertTrue(owner._session.status()['held'])
+                self.assertEqual(owner._selector.read_bytes(), selector_before)
+                self.assertEqual(owner._journal.read_bytes(), journal_before)
 
     def test_native_result_readback_failure_latches_owner_and_session(self):
         before_selector = self.owner._selector.read_bytes()
