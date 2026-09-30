@@ -39,13 +39,16 @@ def native_result(run_id="fake-run-1"):
     }
 
 
-def bound_native_result(project, run_id="fake-run-1"):
+def bound_native_result(project, run_id="fake-run-1", output=None):
     result = native_result(run_id)
     manifest = {path.relative_to(project).as_posix():
                 hashlib.sha256(path.read_bytes()).hexdigest()
                 for path in sorted(project.rglob('*')) if path.is_file()}
     result.update(input_hashes_before=manifest, input_hashes_after=dict(manifest),
                   snapshot_hashes_after=dict(manifest))
+    if output is not None:
+        output.mkdir()
+        (output / 'result.json').write_bytes(owner_mod.canonical_bytes(result))
     return result
 
 
@@ -62,7 +65,7 @@ class GameplaySourceOwnerTests(unittest.TestCase):
 
         def runner(project, **kwargs):
             self.runs.append((project, kwargs))
-            return bound_native_result(project, "fake-run-%d" % len(self.runs))
+            return bound_native_result(project, "fake-run-%d" % len(self.runs), kwargs['output'])
 
         self.owner = owner_mod.GameplaySourcePublicationOwner.create(
             self.parent, project_id="project.gameplay", source_files=self.source,
@@ -315,7 +318,7 @@ class GameplaySourceOwnerTests(unittest.TestCase):
             entered.set()
             if not release.wait(5):
                 raise RuntimeError('TEST_RELEASE_TIMEOUT')
-            return bound_native_result(project)
+            return bound_native_result(project, output=kwargs['output'])
 
         def publish_first():
             try:
@@ -358,7 +361,7 @@ class GameplaySourceOwnerTests(unittest.TestCase):
             entered.set()
             if not release.wait(5):
                 raise RuntimeError('TEST_RELEASE_TIMEOUT')
-            return bound_native_result(project)
+            return bound_native_result(project, output=kwargs['output'])
 
         def publish():
             try:
@@ -466,7 +469,12 @@ class GameplaySourceOwnerTests(unittest.TestCase):
                               input_hashes_after=dict(manifest),
                               snapshot_hashes_after=dict(manifest))
                 result[field] = dirty
-                self.owner._runner = lambda *args, _result=result, **kwargs: _result
+                def dirty_runner(project, *, _result=result, **kwargs):
+                    kwargs['output'].mkdir()
+                    kwargs['output'].joinpath('result.json').write_bytes(
+                        owner_mod.canonical_bytes(_result))
+                    return _result
+                self.owner._runner = dirty_runner
                 with self.assertRaisesRegex(owner_mod.GameplaySourceOwnerError,
                                             "GAMEPLAY_OWNER_NATIVE_NOT_CLEAN"):
                     self.owner.publish(self.request(files, command="command.dirty." + field),
@@ -480,8 +488,9 @@ class GameplaySourceOwnerTests(unittest.TestCase):
         files = dict(self.source)
 
         def dirty_runner(project, **kwargs):
-            result = bound_native_result(project)
+            result = bound_native_result(project, output=kwargs['output'])
             result["input_hashes_after"][owner_mod.ENTRYPOINT] = "0" * 64
+            kwargs['output'].joinpath('result.json').write_bytes(owner_mod.canonical_bytes(result))
             return result
 
         self.owner._runner = dirty_runner

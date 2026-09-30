@@ -625,16 +625,17 @@ at that exact point, proves close waits for the boundary, then reopens and
 reads the committed revision and generation.
 
 `python -B studio/tests/godot/test_gameplay_source_owner.py`: **16 pure
-tests**, actual exit 0, 1.837s. The cases cover competing writers, close
+tests**, actual exit 0, 2.879s. The cases cover competing writers, close
 during a blocked native run, close at selector adoption, exact retry after
 reopen without a second native call, rejection of a tampered terminal
-receipt, and native input hash binding. Journal reopen now validates canonical
+receipt, native input hash binding, and run-directory `result.json` readback.
+Journal reopen now validates canonical
 bounded rows, project/profile/source-closure identity, monotonic generation,
 receipt digest/readback, and the revision manifest before it repairs only
 `CURRENT` from the terminal journal row. No native engine, Docker, Blender or
-formal GT06 run was started. This remains `AUTHORITY=0`; external run-output
-identity and full arbitrary runtime closure remain open, and the branch must
-not merge before GT06 is accepted.
+formal GT06 run was started. This remains `AUTHORITY=0`; full arbitrary
+runtime closure remains open, and the branch must not merge before GT06 is
+accepted.
 
 The reconciliation cases are covered by the same pure suite: a selector behind
 the committed journal is advanced back to the durable receipt, while a

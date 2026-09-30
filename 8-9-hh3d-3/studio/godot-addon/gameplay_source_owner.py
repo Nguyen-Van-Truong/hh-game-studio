@@ -533,6 +533,19 @@ class GameplaySourcePublicationOwner:
             _need(result.get(field) == expected_input_hashes,
                   "GAMEPLAY_OWNER_NATIVE_INPUT_BINDING")
 
+    def _read_native_result(self, output: Path, returned: dict) -> dict:
+        """Bind the in-memory diagnostic to the owned run's durable evidence."""
+        _need(isinstance(output, Path) and output.is_absolute(),
+              "GAMEPLAY_OWNER_NATIVE_OUTPUT")
+        try:
+            raw = self._executor._read_file(output / "result.json", 512 * 1024)
+            persisted = parse_json(raw)
+        except BaseException:
+            raise GameplaySourceOwnerError("GAMEPLAY_OWNER_NATIVE_RESULT_MISSING") from None
+        _need(canonical_bytes(persisted) == canonical_bytes(returned),
+              "GAMEPLAY_OWNER_NATIVE_RESULT_BINDING")
+        return persisted
+
     def publish(self, request: dict, *, grant, lease, deadline_ms: int) -> dict:
         # Serialize complete publication, including validation, native work and
         # selector/journal updates. The short lifecycle lock remains available
@@ -592,6 +605,7 @@ class GameplaySourcePublicationOwner:
             result = self._phase(grant, lease, command_id, digest, deadline_ms, "stage",
                 lambda: self._runner(self._safe_revision(candidate_revision) / "project",
                                       mode="gameplay-source", output=run_dir, timeout_seconds=20))
+            result = self._read_native_result(run_dir, result)
             expected_native_inputs = {
                 "project.godot": _sha(self._profile.PROJECT_TEMPLATE.encode()),
                 **{name: _sha(raw) for name, raw in sorted(candidate.items())},
