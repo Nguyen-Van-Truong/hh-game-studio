@@ -28,6 +28,7 @@ ENTRYPOINT = "scripts/fixture_actor.gd"
 PROFILE = "hh-godot-gameplay-source-1"
 JOURNAL_SCHEMA = "hh-gameplay-source-journal-1"
 MAX_JOURNAL_BYTES = 512 * 1024
+_UNSET_RESULT = object()
 _HEX = re.compile(r"[0-9a-f]{64}\Z")
 _ID = re.compile(r"[a-z][a-z0-9._-]{0,63}\Z")
 _RUNTIME_FILES = (
@@ -191,6 +192,7 @@ class GameplaySourcePublicationOwner:
         owner._runs = owner._root / "runs"
         owner._selector = owner._root / "CURRENT"
         owner._journal = owner._root / "journal.jsonl"
+        owner._journal_digest = None
         owner._root.mkdir()
         owner._revisions.mkdir()
         owner._runs.mkdir()
@@ -318,12 +320,22 @@ class GameplaySourcePublicationOwner:
                   and receipt.readback_sha256 == _sha(canonical_bytes(owner._readback(
                       files, receipt.project_revision, receipt.generation))),
                   "GAMEPLAY_OWNER_JOURNAL_RECEIPT_BINDING")
+            # A terminal receipt alone cannot reconstruct a native validation
+            # result. Check the retained, owned result before rebuilding ACKs
+            # or repairing CURRENT; recovery must not promote missing/dirty
+            # executor evidence into a successful publication.
+            native = owner._read_native_result(owner._runs / receipt.command_id)
+            owner._validate_native(native, expected_input_hashes=owner._native_inputs(files))
+            _need(native["run_id"] == receipt.native_run_id,
+                  "GAMEPLAY_OWNER_NATIVE_RUN_BINDING")
             rebuilt = {"status": "READBACK_ACK", **asdict(receipt)}
             owner._jobs[receipt.command_id] = rebuilt
             previous_row = row
         owner._generation = last["generation"]
         owner._project_revision = last["project_revision"]
         owner._files = files
+        owner._journal_digest = _sha(raw)
+        owner._read_current_journal()
         owner._profile_observation = profile.validate_source_bundle(files, entrypoint=ENTRYPOINT)
         selector = parse_json(executor._read_file(owner._selector, 4096))
         _need(type(selector) is dict and set(selector) == {"schema", "revision", "generation"}
@@ -472,10 +484,23 @@ class GameplaySourcePublicationOwner:
 
     def _append(self, value: dict) -> None:
         raw = canonical_bytes(value) + b"\n"
-        with self._journal.open("ab") as stream:
+        # The prefix was produced by this owner, or fully validated at reopen.
+        # A manual edit/truncation must be reconciled, never silently extended.
+        previous = b"" if self._journal_digest is None else self._read_current_journal()
+        _need(len(previous) + len(raw) <= MAX_JOURNAL_BYTES, "GAMEPLAY_OWNER_JOURNAL_LIMIT")
+        with self._journal.open("xb" if self._journal_digest is None else "ab") as stream:
             stream.write(raw)
             stream.flush()
             os.fsync(stream.fileno())
+        persisted = self._executor._read_file(self._journal, MAX_JOURNAL_BYTES)
+        _need(persisted == previous + raw, "GAMEPLAY_OWNER_JOURNAL_WRITE_READBACK")
+        self._journal_digest = _sha(persisted)
+
+    def _read_current_journal(self) -> bytes:
+        raw = self._executor._read_file(self._journal, MAX_JOURNAL_BYTES)
+        _need(self._journal_digest is not None and _sha(raw) == self._journal_digest,
+              "GAMEPLAY_OWNER_JOURNAL_CHANGED")
+        return raw
 
     def issue(self, *, operations=None, ttl_ms=120_000):
         if operations is None:
@@ -493,6 +518,7 @@ class GameplaySourcePublicationOwner:
     def inspect(self) -> dict:
         with self._lock:
             _need(not self._closed and not self._held, "GAMEPLAY_OWNER_CLOSED")
+            self._read_current_journal()
             self._check_selected()
             return self._readback(self._files, self._project_revision, self._generation)
 
@@ -562,16 +588,20 @@ class GameplaySourcePublicationOwner:
             _need(result.get(field) == expected_input_hashes,
                   "GAMEPLAY_OWNER_NATIVE_INPUT_BINDING")
 
-    def _read_native_result(self, output: Path, returned: dict) -> dict:
+    def _native_inputs(self, files) -> dict:
+        return {"project.godot": _sha(self._profile.PROJECT_TEMPLATE.encode()),
+                **{name: _sha(raw) for name, raw in sorted(files.items())}}
+
+    def _read_native_result(self, output: Path, returned=_UNSET_RESULT) -> dict:
         """Bind the in-memory diagnostic to the owned run's durable evidence."""
         _need(isinstance(output, Path) and output.is_absolute(),
               "GAMEPLAY_OWNER_NATIVE_OUTPUT")
         try:
             raw = self._executor._read_file(output / "result.json", 512 * 1024)
             persisted = parse_json(raw)
-        except BaseException:
+        except Exception:
             raise GameplaySourceOwnerError("GAMEPLAY_OWNER_NATIVE_RESULT_MISSING") from None
-        _need(canonical_bytes(persisted) == canonical_bytes(returned),
+        _need(returned is _UNSET_RESULT or canonical_bytes(persisted) == canonical_bytes(returned),
               "GAMEPLAY_OWNER_NATIVE_RESULT_BINDING")
         return persisted
 
@@ -609,6 +639,7 @@ class GameplaySourcePublicationOwner:
             # A cached receipt is still private project data. Retry identity
             # does not authorize an expired/revoked grant or a fenced lease.
             self._session.check(grant, lease, deadline_ms=deadline_ms, operation="scene.save")
+            self._read_current_journal()
             previous = self._jobs.get(command_id)
             if previous is not None:
                 _need(previous["request_digest"] == digest, "GAMEPLAY_OWNER_COMMAND_CONFLICT")
@@ -634,10 +665,7 @@ class GameplaySourcePublicationOwner:
                       "GAMEPLAY_OWNER_CANDIDATE_REVISION")
             # The revision is not selected yet. Running against this immutable
             # directory exercises the real Docker/Godot executor before ACK.
-            expected_native_inputs = {
-                "project.godot": _sha(self._profile.PROJECT_TEMPLATE.encode()),
-                **{name: _sha(raw) for name, raw in sorted(candidate.items())},
-            }
+            expected_native_inputs = self._native_inputs(candidate)
             def run_stage():
                 observed = self._runner(self._safe_revision(candidate_revision) / "project",
                                          mode="gameplay-source", output=run_dir, timeout_seconds=20)
@@ -667,6 +695,10 @@ class GameplaySourcePublicationOwner:
                     pass
 
     def _adopt(self, revision, candidate, command_id, digest, checked, native_run_id):
+        # Native validation may take time. Recheck the last-good state before
+        # replacing its selector so a concurrent manual edit remains intact.
+        self._read_current_journal()
+        self._check_selected()
         self._atomic_select(revision, self._generation + 1)
         self._files = candidate
         self._profile_observation = checked
@@ -683,7 +715,7 @@ class GameplaySourcePublicationOwner:
 
     def _commit(self, ack, fencing_epoch):
         receipt = ReadbackAck(**ack)
-        raw_rows = self._executor._read_file(self._journal, MAX_JOURNAL_BYTES)
+        raw_rows = self._read_current_journal()
         prior = parse_json(raw_rows.splitlines()[-1])
         _need(prior.get("kind") in ("INITIAL", "COMMITTED"),
               "GAMEPLAY_OWNER_JOURNAL_ROW")

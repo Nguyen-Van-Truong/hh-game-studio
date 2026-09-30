@@ -1,4 +1,4 @@
-# O2 authoring state — 2026-09-27
+# O2 authoring state — 2026-10-01
 
 Authority 0. Separate branch: codex/o2-authoring-contract.
 Merge only after GT-06 acceptance. Tools-plan O4 is authoritative; this file
@@ -660,3 +660,22 @@ partial-stage evidence preservation, marker-file rejection, and tampered
 existing-revision rejection. No Godot, Blender, Docker, or public capability
 was enabled; `AUTHORITY=0`, full arbitrary runtime closure and AUTH-05 remain
 open, and this branch must not merge before GT-06 acceptance.
+
+### 2026-10-01 recovery evidence binding (static)
+
+The gameplay-source publication owner now treats the journal and native run
+evidence as one recovery boundary. Reopen validates the retained
+`runs/<command_id>/result.json`, rechecks the complete source input hash map,
+and requires its `run_id` to match the committed receipt before rebuilding a
+cached `READBACK_ACK` or repairing `CURRENT`. Missing, dirty, substituted or
+source-mismatched native evidence fails closed without dispatching a runner.
+
+Create/reopen now pins the exact journal bytes. Publish checks that digest
+before cached ACK, before native adoption, and before append; after fsync it
+reads the complete prefix plus new row back before advancing the digest. A
+manual journal or selector change during native work leaves the owner held and
+preserves the changed evidence. The focused pure owner suite passes **26
+tests**, actual exit 0 (including recovery-result, journal-race and durability
+cuts). No Godot, Docker, Blender or public capability was enabled. This is
+`AUTHORITY=0`; AUTH-02..04 full runtime closure, AUTH-05, Blender rig/GLB and
+GT-06 acceptance remain open, and this branch must not merge before GT-06.

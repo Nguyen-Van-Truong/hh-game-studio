@@ -274,6 +274,131 @@ class GameplaySourceOwnerTests(unittest.TestCase):
                 source_closure_sha256=owner_mod.runtime_source_closure()[1],
                 runner=lambda *args, **kwargs: native_result('unused-run'))
 
+    def test_reopen_requires_committed_native_result_before_repairing_selector(self):
+        request = self.request(dict(self.source))
+        receipt = self.owner.publish(request, grant=self.grant, lease=self.lease,
+                                     deadline_ms=self.lease.expires_ms)
+        root = self.owner._root
+        self.owner.close()
+        initial = json.loads(self.owner._journal.read_bytes().splitlines()[0])
+        selector_before = owner_mod.canonical_bytes({"schema": "hh-gameplay-selector-1",
+            "revision": initial["project_revision"], "generation": initial["generation"]})
+        self.owner._selector.write_bytes(selector_before)
+        result_path = self.owner._runs / request["command_id"] / "result.json"
+        good = result_path.read_bytes()
+        mutations = (
+            ("missing", None, "NATIVE_RESULT_MISSING"),
+            ("other-run", {"run_id": "other-run"}, "NATIVE_RUN_BINDING"),
+            ("dirty", {"log_clean": False}, "NATIVE_NOT_CLEAN"),
+            ("other-input", {"input_hashes_after": {}}, "NATIVE_INPUT_BINDING"),
+        )
+        for name, change, code in mutations:
+            with self.subTest(name=name):
+                if change is None:
+                    result_path.unlink()
+                else:
+                    result_path.write_bytes(owner_mod.canonical_bytes(
+                        {**json.loads(good), **change}))
+                journal_before = self.owner._journal.read_bytes()
+                with self.assertRaisesRegex(owner_mod.GameplaySourceOwnerError, code):
+                    owner_mod.GameplaySourcePublicationOwner.reopen(
+                        root, project_id=self.owner.project_id,
+                        source_closure_sha256=owner_mod.runtime_source_closure()[1],
+                        runner=lambda *args, **kw: self.fail("recovery must not dispatch"))
+                self.assertEqual(self.owner._selector.read_bytes(), selector_before)
+                self.assertEqual(self.owner._journal.read_bytes(), journal_before)
+                result_path.write_bytes(good)
+        reopened = owner_mod.GameplaySourcePublicationOwner.reopen(root,
+            project_id=self.owner.project_id,
+            source_closure_sha256=owner_mod.runtime_source_closure()[1],
+            runner=lambda *args, **kw: self.fail("recovery must not dispatch"))
+        self.addCleanup(reopened.close)
+        self.assertEqual(reopened.inspect()["generation"], receipt["generation"])
+
+    def test_live_journal_edits_block_new_work_and_cached_ack(self):
+        request = self.request(dict(self.source))
+        self.owner.publish(request, grant=self.grant, lease=self.lease,
+                           deadline_ms=self.lease.expires_ms)
+        next_request = self.request(dict(self.source), command="command.second")
+        good = self.owner._journal.read_bytes()
+        cases = (good.rstrip(b'\n'), b' ' + good, good.splitlines()[0] + b'\n')
+        selected = self.owner._selector.read_bytes()
+        calls = len(self.runs)
+        for corrupt in cases:
+            self.owner._journal.write_bytes(corrupt)
+            for candidate in (request, next_request):
+                with self.assertRaisesRegex(owner_mod.GameplaySourceOwnerError,
+                                            "JOURNAL_CHANGED"):
+                    self.owner.publish(candidate, grant=self.grant, lease=self.lease,
+                                       deadline_ms=self.lease.expires_ms)
+                self.assertEqual(self.owner._journal.read_bytes(), corrupt)
+                self.assertEqual(self.owner._selector.read_bytes(), selected)
+                self.assertEqual(len(self.runs), calls)
+        self.owner._journal.write_bytes(good)
+
+    def test_manual_edit_during_native_run_preserved_before_adoption(self):
+        for target in ("journal", "selector"):
+            with self.subTest(target=target):
+                owner, grant, lease = self.fresh_owner(lambda *args, **kw: None)
+                request = self.request(dict(self.source), command="command.racing." + target)
+                before_selector, before_journal = owner._selector.read_bytes(), owner._journal.read_bytes()
+                changed = b"manual-edit-preserved"
+                path = owner._journal if target == "journal" else owner._selector
+                def runner(project, **kw):
+                    result = bound_native_result(project, output=kw["output"])
+                    path.write_bytes(changed)
+                    return result
+                owner._runner = runner
+                with self.assertRaises((owner_mod.GameplaySourceOwnerError, ValueError)):
+                    owner.publish(request, grant=grant, lease=lease, deadline_ms=lease.expires_ms)
+                self.assertTrue(owner._held)
+                self.assertTrue(owner._session.status()["held"])
+                self.assertEqual(path.read_bytes(), changed)
+                if target == "journal":
+                    self.assertEqual(owner._selector.read_bytes(), before_selector)
+                else:
+                    self.assertEqual(owner._journal.read_bytes(), before_journal)
+
+    def test_interrupted_journal_append_keeps_owner_held_without_ack(self):
+        request = self.request(dict(self.source))
+        real_fsync = owner_mod.os.fsync
+        calls = 0
+        def cut(fd):
+            nonlocal calls
+            calls += 1
+            if calls == 2:  # selector succeeds, journal flush fails
+                raise OSError("injected journal durability cut")
+            return real_fsync(fd)
+        with patch.object(owner_mod.os, 'fsync', side_effect=cut):
+            with self.assertRaises(OSError):
+                self.owner.publish(request, grant=self.grant, lease=self.lease,
+                                   deadline_ms=self.lease.expires_ms)
+        self.assertTrue(self.owner._held)
+        self.assertNotIn(request["command_id"], self.owner._jobs)
+        self.owner.close()
+        reopened = owner_mod.GameplaySourcePublicationOwner.reopen(self.owner._root,
+            project_id=self.owner.project_id,
+            source_closure_sha256=owner_mod.runtime_source_closure()[1],
+            runner=lambda *args, **kw: self.fail("do not repeat validated effect"))
+        self.addCleanup(reopened.close)
+        credential = reopened.issue()
+        grant = reopened.authorize("Bearer " + credential.bearer, "scene.save")
+        lease = reopened.lease(grant)
+        ack = reopened.publish(request, grant=grant, lease=lease, deadline_ms=lease.expires_ms)
+        self.assertEqual(ack["generation"], 2)
+
+    def test_none_runner_return_cannot_borrow_persisted_success(self):
+        def runner(project, **kw):
+            bound_native_result(project, output=kw["output"])
+            return None
+        self.owner._runner = runner
+        selected = self.owner._selector.read_bytes()
+        with self.assertRaisesRegex(owner_mod.GameplaySourceOwnerError, "NATIVE_RESULT_BINDING"):
+            self.owner.publish(self.request(dict(self.source)), grant=self.grant,
+                               lease=self.lease, deadline_ms=self.lease.expires_ms)
+        self.assertTrue(self.owner._held)
+        self.assertEqual(self.owner._selector.read_bytes(), selected)
+
     def test_reopen_reconciles_selector_against_durable_journal(self):
         request = self.request(dict(self.source))
         receipt = self.owner.publish(request, grant=self.grant, lease=self.lease,
