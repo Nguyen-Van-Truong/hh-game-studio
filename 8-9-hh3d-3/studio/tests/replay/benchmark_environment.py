@@ -18,6 +18,7 @@ import time
 import zlib
 
 from studio.tests.replay.benchmark_job import BenchmarkJobError, require
+from studio.tests.replay.benchmark_docker_inventory import query_containers, InventoryError
 
 GIB = 1024**3
 INTERVAL_SECONDS = 5
@@ -99,67 +100,37 @@ def job_members(k, handle):
 
 
 def running_containers(processes):
-    """Read the local Docker Desktop Linux engine; never start a container.
+    """Fresh read-only inventory from the fixed local Docker Desktop pipe.
 
-    The endpoint is explicit so a user's DOCKER_HOST/context cannot redirect
-    the inventory to an unrelated daemon. If Docker is present but cannot be
-    queried, absence of competing workloads is unproven.
+    Bypass CLI startup, never the daemon or its current response. The same
+    two-second total budget and fail-closed unknown semantics apply. No retry
+    is allowed after malformed output or unverified native cleanup.
     """
-    active = any('docker' in row['name'].lower() for row in processes)
-    if not active:
+    if not any('docker' in row['name'].lower() for row in processes):
         return []
-    executable = Path(os.environ.get('ProgramFiles', r'C:\Program Files')) / 'Docker/Docker/resources/bin/docker.exe'
-    require(executable.is_file(), 'WATCHDOG_DOCKER_CLI_MISSING')
-    # Docker Desktop can briefly reject a read while its daemon is refreshing.
-    # Both attempts share the original two-second inventory budget; a timeout
-    # cannot grant a fresh two seconds. Persistent uncertainty aborts closed.
     started = time.monotonic()
     deadline = started + 2
     diagnostic = None
     for attempt in range(1, 3):
-        remaining = deadline - time.monotonic()
-        if remaining <= 0:
+        if time.monotonic() >= deadline:
             break
         try:
-            result = subprocess.run([str(executable), '--host', 'npipe:////./pipe/dockerDesktopLinuxEngine',
-                'ps', '--format', '{{.Names}}'], capture_output=True, timeout=remaining,
-                creationflags=subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0)
-        except subprocess.TimeoutExpired:
-            diagnostic = {'reason': 'timeout', 'attempt': attempt}
-        except OSError as error:
-            diagnostic = {'reason': 'oserror', 'attempt': attempt}
-            if type(error.errno) is int:
-                diagnostic['errno'] = error.errno
+            names = query_containers(deadline)
+        except InventoryError as error:
+            diagnostic = {'reason': error.reason, 'attempt': attempt}
+            if type(error.detail) is int:
+                diagnostic['returncode' if error.reason == 'nonzero' else 'errno'] = error.detail
+            if not error.retryable:
+                break
         else:
-            if time.monotonic() > deadline:
+            if time.monotonic() >= deadline:
                 diagnostic = {'reason': 'timeout', 'attempt': attempt}
                 break
-            if type(result.returncode) is not int or type(result.stdout) is not bytes:
-                diagnostic = {'reason': 'bad_output', 'attempt': attempt}
-                break
-            if result.returncode != 0:
-                diagnostic = {'reason': 'nonzero', 'attempt': attempt,
-                              'returncode': result.returncode}
-                continue
-            if len(result.stdout) > 65536:
-                diagnostic = {'reason': 'bad_output', 'attempt': attempt}
-                break
-            try:
-                names = result.stdout.decode('utf-8', 'strict').splitlines()
-            except UnicodeError:
-                diagnostic = {'reason': 'bad_output', 'attempt': attempt}
-                break
-            if (not all(re.fullmatch(r'[a-zA-Z0-9][a-zA-Z0-9_.-]*', name) for name in names)
-                    or len(names) != len(set(names))):
-                diagnostic = {'reason': 'bad_output', 'attempt': attempt}
-                break
-            return sorted(names)
+            return names
     diagnostic = diagnostic or {'reason': 'timeout', 'attempt': 1}
     diagnostic['elapsed_seconds'] = round(max(0, time.monotonic() - started), 6)
     error = BenchmarkJobError('WATCHDOG_DOCKER_INVENTORY')
     error.docker_inventory = diagnostic
-    # TimeoutExpired/OSError can contain argv, output or a sensitive path.
-    # Keep only the fixed scalar diagnosis, with no raw exception chain.
     raise error from None
 
 

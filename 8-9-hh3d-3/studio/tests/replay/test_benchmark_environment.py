@@ -195,121 +195,80 @@ class EnvironmentTests(unittest.TestCase):
             'pid': 0, 'name': '[system process]', 'owned': False,
             'process_start_100ns': None, 'cpu_total_100ns': None}])))
 
-    def test_docker_inventory_is_local_readonly_and_query_failure_is_not_empty(self):
-        processes = [{'name': 'com.docker.backend.exe'}]
-        with patch.object(env.Path, 'is_file', return_value=True), patch.object(env.subprocess, 'run') as run:
-            run.return_value = SimpleNamespace(returncode=0, stdout=b'hh-gameplay-1\nother\n')
-            self.assertEqual(env.running_containers(processes), ['hh-gameplay-1', 'other'])
-            argv = run.call_args.args[0]
-            self.assertEqual(argv[1:4], ['--host', 'npipe:////./pipe/dockerDesktopLinuxEngine', 'ps'])
-            self.assertGreater(run.call_args.kwargs['timeout'], 0)
-            self.assertLessEqual(run.call_args.kwargs['timeout'], 2)
-            run.return_value = SimpleNamespace(returncode=1, stdout=b'')
-            run.reset_mock()
-            with self.assertRaisesRegex(BenchmarkJobError, 'DOCKER_INVENTORY') as raised:
-                env.running_containers(processes)
-            self.assertEqual(run.call_count, 2)
-            self.assertEqual(raised.exception.docker_inventory['reason'], 'nonzero')
-            self.assertEqual(raised.exception.docker_inventory['returncode'], 1)
+    def test_docker_inventory_uses_fresh_pipe_with_fixed_total_deadline(self):
+        with patch.object(env.time, 'monotonic', return_value=100.0), \
+             patch.object(env, 'query_containers', return_value=['hh-gameplay-1', 'other']) as query:
+            self.assertEqual(env.running_containers([{'name': 'com.docker.backend.exe'}]),
+                             ['hh-gameplay-1', 'other'])
+        query.assert_called_once_with(102.0)
 
-    def test_docker_inventory_quick_nonzero_can_retry_with_remaining_budget(self):
-        processes = [{'name': 'com.docker.backend.exe'}]
+    def test_docker_inventory_no_docker_process_does_not_query_daemon(self):
+        with patch.object(env, 'query_containers') as query:
+            self.assertEqual(env.running_containers([{'name': 'python.exe'}]), [])
+        query.assert_not_called()
+
+    def test_docker_inventory_quick_failure_retries_same_absolute_deadline(self):
         clock = [100.0]
-        def probe(*_args, **_kwargs):
+        def probe(deadline):
             if clock[0] == 100.0:
                 clock[0] += 0.25
-                return SimpleNamespace(returncode=125, stdout=b'')
+                raise env.InventoryError('nonzero', detail=503, retryable=True)
             clock[0] += 0.5
-            return SimpleNamespace(returncode=0, stdout=b'hh-gameplay-1\n')
-        with patch.object(env.Path, 'is_file', return_value=True), \
-             patch.object(env.time, 'monotonic', side_effect=lambda: clock[0]), \
-             patch.object(env.subprocess, 'run', side_effect=probe) as run:
-            self.assertEqual(env.running_containers(processes), ['hh-gameplay-1'])
-            self.assertEqual(run.call_count, 2)
-            self.assertEqual([call.kwargs['timeout'] for call in run.call_args_list], [2, 1.75])
+            return ['hh-gameplay-1']
+        with patch.object(env.time, 'monotonic', side_effect=lambda: clock[0]), \
+             patch.object(env, 'query_containers', side_effect=probe) as query:
+            self.assertEqual(env.running_containers([{'name': 'docker.exe'}]), ['hh-gameplay-1'])
+        self.assertEqual([call.args[0] for call in query.call_args_list], [102.0, 102.0])
 
-    def test_docker_inventory_timeout_cannot_restart_total_deadline(self):
-        processes = [{'name': 'com.docker.backend.exe'}]
+    def test_docker_inventory_timeout_cannot_restart_deadline(self):
         clock = [100.0]
-        def probe(*_args, **kwargs):
-            clock[0] += kwargs['timeout']
-            raise env.subprocess.TimeoutExpired('secret-argv', kwargs['timeout'],
-                                               output=b'secret-stdout', stderr=b'secret-stderr')
-        with patch.object(env.Path, 'is_file', return_value=True), \
-             patch.object(env.time, 'monotonic', side_effect=lambda: clock[0]), \
-             patch.object(env.subprocess, 'run', side_effect=probe) as run:
+        def probe(deadline):
+            clock[0] = deadline
+            raise env.InventoryError('timeout')
+        with patch.object(env.time, 'monotonic', side_effect=lambda: clock[0]), \
+             patch.object(env, 'query_containers', side_effect=probe) as query:
             with self.assertRaisesRegex(BenchmarkJobError, 'DOCKER_INVENTORY') as raised:
-                env.running_containers(processes)
-        self.assertEqual(run.call_count, 1)
-        self.assertEqual(run.call_args.kwargs['timeout'], 2)
+                env.running_containers([{'name': 'docker.exe'}])
+        self.assertEqual(query.call_count, 1)
         self.assertEqual(raised.exception.docker_inventory,
                          {'reason': 'timeout', 'attempt': 1, 'elapsed_seconds': 2})
         self.assertIsNone(raised.exception.__cause__)
         self.assertIsNone(raised.exception.__context__)
 
-    def test_docker_inventory_partial_timeout_retry_uses_only_remaining_time(self):
-        processes = [{'name': 'com.docker.backend.exe'}]
-        clock = [100.0]
-        def probe(*_args, **kwargs):
-            if clock[0] == 100.0:
-                clock[0] += 0.75
-            else:
-                clock[0] += kwargs['timeout']
-            raise env.subprocess.TimeoutExpired('secret-argv', kwargs['timeout'])
-        with patch.object(env.Path, 'is_file', return_value=True), \
-             patch.object(env.time, 'monotonic', side_effect=lambda: clock[0]), \
-             patch.object(env.subprocess, 'run', side_effect=probe) as run:
-            with self.assertRaisesRegex(BenchmarkJobError, 'DOCKER_INVENTORY') as raised:
-                env.running_containers(processes)
-        self.assertEqual([call.kwargs['timeout'] for call in run.call_args_list], [2, 1.25])
-        self.assertEqual(raised.exception.docker_inventory,
-                         {'reason': 'timeout', 'attempt': 2, 'elapsed_seconds': 2})
-
-    def test_docker_inventory_malformed_output_is_unknown_without_retry(self):
-        processes = [{'name': 'com.docker.backend.exe'}]
-        for output in (b'\xff', b'duplicate\nduplicate\n', b'invalid/name\n', b'x' * 65537,
-                       'unexpected-text'):
-            with self.subTest(output_kind=type(output).__name__, output_length=len(output)), \
-                 patch.object(env.Path, 'is_file', return_value=True), \
-                 patch.object(env.subprocess, 'run',
-                              return_value=SimpleNamespace(returncode=0, stdout=output)) as run:
+    def test_docker_inventory_uncertain_cleanup_or_bad_output_never_retries(self):
+        for reason in ('oserror', 'bad_output'):
+            with self.subTest(reason=reason), patch.object(env.time, 'monotonic', return_value=100.0), \
+                 patch.object(env, 'query_containers', side_effect=env.InventoryError(reason)) as query:
                 with self.assertRaisesRegex(BenchmarkJobError, 'DOCKER_INVENTORY') as raised:
-                    env.running_containers(processes)
-            self.assertEqual(run.call_count, 1)
-            self.assertEqual(raised.exception.docker_inventory['reason'], 'bad_output')
-            self.assertEqual(raised.exception.docker_inventory['attempt'], 1)
+                    env.running_containers([{'name': 'docker.exe'}])
+            self.assertEqual(query.call_count, 1)
+            self.assertEqual(raised.exception.docker_inventory,
+                             {'reason': reason, 'attempt': 1, 'elapsed_seconds': 0})
 
     def test_docker_inventory_late_success_is_unknown(self):
         clock = [100.0]
-        def probe(*_args, **_kwargs):
-            clock[0] += 2.1
-            return SimpleNamespace(returncode=0, stdout=b'')
-        with patch.object(env.Path, 'is_file', return_value=True), \
-             patch.object(env.time, 'monotonic', side_effect=lambda: clock[0]), \
-             patch.object(env.subprocess, 'run', side_effect=probe) as run:
+        def probe(deadline):
+            clock[0] = deadline + 0.1
+            return []
+        with patch.object(env.time, 'monotonic', side_effect=lambda: clock[0]), \
+             patch.object(env, 'query_containers', side_effect=probe) as query:
             with self.assertRaisesRegex(BenchmarkJobError, 'DOCKER_INVENTORY') as raised:
-                env.running_containers([{'name': 'com.docker.backend.exe'}])
-        self.assertEqual(run.call_count, 1)
+                env.running_containers([{'name': 'docker.exe'}])
+        self.assertEqual(query.call_count, 1)
         self.assertEqual(raised.exception.docker_inventory,
                          {'reason': 'timeout', 'attempt': 1, 'elapsed_seconds': 2.1})
 
     def test_docker_inventory_diagnostic_persists_without_raw_secrets(self):
-        processes = [{'name': 'com.docker.backend.exe'}]
-        for failure, reason, detail in (
-                (OSError(13, 'secret-error', 'secret-path'), 'oserror', {'errno': 13}),
-                (SimpleNamespace(returncode=125, stdout=b'secret-stdout',
-                                 stderr=b'secret-stderr'), 'nonzero', {'returncode': 125})):
-            with self.subTest(reason=reason), patch.object(env.Path, 'is_file', return_value=True), \
-                 patch.object(env.time, 'monotonic', return_value=100.0), \
-                 patch.object(env.subprocess, 'run') as run:
-                if isinstance(failure, Exception):
-                    run.side_effect = failure
-                else:
-                    run.return_value = failure
+        for reason, detail, key in (('oserror', 5, 'errno'), ('nonzero', 503, 'returncode')):
+            error = env.InventoryError(reason, detail=detail, retryable=True)
+            error.stdout = 'secret-stdout'
+            with self.subTest(reason=reason), patch.object(env.time, 'monotonic', return_value=100.0), \
+                 patch.object(env, 'query_containers', side_effect=error) as query:
                 with self.assertRaises(BenchmarkJobError) as inventory:
-                    env.running_containers(processes)
+                    env.running_containers([{'name': 'docker.exe'}])
+            self.assertEqual(query.call_count, 2)
             self.assertEqual(inventory.exception.docker_inventory,
-                             {'reason': reason, 'attempt': 2, 'elapsed_seconds': 0, **detail})
+                             {'reason': reason, 'attempt': 2, 'elapsed_seconds': 0, key: detail})
             self.assertNotIn('secret', ''.join(traceback.format_exception(inventory.exception)))
             with tempfile.TemporaryDirectory() as directory:
                 root = Path(directory)
