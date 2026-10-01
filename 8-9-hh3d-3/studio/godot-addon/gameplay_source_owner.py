@@ -447,13 +447,20 @@ class GameplaySourcePublicationOwner:
         # profile's platform-aware path rules and the executor's bounded,
         # no-link reader; a manifest cannot introduce an external file.
         for name, row in inventory.items():
-            _need(self._profile._path(name) and type(row) is dict
+            asset = name in getattr(self._profile, '_ASSET_FILES', ())
+            _need((asset or self._profile._path(name)) and type(row) is dict
                   and set(row) == {"sha256", "size_bytes"}
                   and type(row["sha256"]) is str and _HEX.fullmatch(row["sha256"])
                   and type(row["size_bytes"]) is int
-                  and 1 <= row["size_bytes"] <= self._profile.MAX_BYTES,
+                  and 1 <= row["size_bytes"] <= (self._profile.MAX_ASSET_BYTES
+                      if asset else self._profile.MAX_BYTES),
                   "GAMEPLAY_OWNER_MANIFEST_FILE")
-        _need(sum(row["size_bytes"] for row in inventory.values()) <= self._profile.MAX_TOTAL_BYTES,
+        source_total = sum(row["size_bytes"] for name, row in inventory.items()
+                           if name not in getattr(self._profile, '_ASSET_FILES', ()))
+        asset_total = sum(row["size_bytes"] for name, row in inventory.items()
+                          if name in getattr(self._profile, '_ASSET_FILES', ()))
+        _need(source_total <= self._profile.MAX_TOTAL_BYTES
+              and asset_total <= self._profile.MAX_ASSET_TOTAL_BYTES,
               "GAMEPLAY_OWNER_MANIFEST_FILES")
         files = {}
         for name, row in inventory.items():

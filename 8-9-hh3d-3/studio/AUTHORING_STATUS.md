@@ -4,11 +4,13 @@ Authority 0. Separate branch: codex/o2-authoring-contract.
 Merge only after GT-06 acceptance. Tools-plan O4 is authoritative; this file
 tracks implementation gaps and does not create another acceptance plan.
 
-Current checkpoint: `o2-publication-20261001-05` repeated real Docker/Godot
-publication after adding an owner-side publication eligibility boundary.
-Exactly one native dispatch, outer/host/container exits 0, clean cleanup; live
-retry, close/reopen and recovered retry are byte/durable-state equal. The new
-eligibility plus regression suite is 143 tests, actual exit 0. A prior native
+Current checkpoint: `o2-publication-20261001-06` repeated real Docker/Godot
+publication on the source and lock closure after adding an owner-side
+publication eligibility boundary and bounded asset inventory. Exactly one
+native dispatch, outer/host/container exits 0, clean cleanup; live retry,
+close/reopen and recovered retry are byte/durable-state equal. The focused
+source/eligibility/owner/runtime suite is 68 tests, actual exit 0; the broader
+executor/guarded regression is 103 tests, actual exit 0. A prior native
 reproducer (`o2-tool-publication-baseline-20261001-01`) remains preserved as a
 real bug finding: a clean native run previously accepted `@tool` and returned
 READBACK_ACK. The owner now rejects that source before staging, while the
@@ -24,11 +26,20 @@ The eligibility boundary is deliberately narrow: every `scripts/**/*.gd` is
 lexically checked for a real `@tool` annotation outside comments/strings, and
 every `scenes/**/*.tscn` is checked for embedded script/native-resource
 declarations (including escaped or split reserved keys). Ordinary scene data and
-external `Script` resources remain allowed. Other file kinds are rejected by
-the publication candidate. This is not a GDScript or TSCN parser, dependency
+external `Script` resources remain allowed. Only the two allowlisted binary
+assets below are additionally admitted; other file kinds are rejected by the
+publication candidate. This is not a GDScript or TSCN parser, dependency
 closure proof, or sandbox acceptance; native Godot validation and AUTH-02..05
 remain open. Embedded scripts are rejected before dispatch rather than silently
 ignored.
+
+The asset extension is intentionally allowlisted to `assets/avatar.glb` and
+`assets/sprite_sheet.png`, with separate 1 MiB per-file and 2 MiB aggregate
+caps, GLB v2/length and PNG signature checks, exact path/hash/size records, and
+before/after/snapshot inclusion in the Docker input inventory. Assets remain
+`asset_import_verified=false`; `o2-publication-20261001-06` exercises the
+existing script/scene native fixture and proves executor compatibility only.
+Actual Godot GLB/PNG import/readback remains open for fixture E2E.
 
 ## Verified candidate evidence
 

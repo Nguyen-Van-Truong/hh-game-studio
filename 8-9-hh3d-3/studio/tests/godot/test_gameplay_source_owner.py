@@ -1117,6 +1117,33 @@ class GameplaySourceOwnerTests(unittest.TestCase):
                 runner=lambda *a, **kw: self.fail('reopen must not dispatch'))
         self.assertEqual((self.owner._selector.read_bytes(), self.owner._journal.read_bytes()), before)
 
+    def test_allowlisted_assets_survive_publish_reopen_and_retry(self):
+        files = {**self.source,
+                 'assets/avatar.glb': b'glTF' + (2).to_bytes(4, 'little') + (12).to_bytes(4, 'little'),
+                 'assets/sprite_sheet.png': b'\x89PNG\r\n\x1a\nfixture'}
+        owner, grant, lease = self.fresh_owner(lambda project, **kwargs:
+            bound_native_result(project, 'asset-run', kwargs['output']))
+        request = self.request(files, expected=owner.inspect()['project_revision'])
+        first = owner.publish(request, grant=grant, lease=lease, deadline_ms=lease.expires_ms)
+        root = owner._root
+        owner.close()
+        reopened = owner_mod.GameplaySourcePublicationOwner.reopen(
+            root, project_id=owner.project_id,
+            source_closure_sha256=owner.source_closure_sha256,
+            runner=lambda *a, **kw: self.fail('retry must not dispatch'))
+        self.addCleanup(reopened.close)
+        second = owner_mod.GameplaySourcePublicationOwner.reopen(
+            root, project_id=owner.project_id,
+            source_closure_sha256=owner.source_closure_sha256,
+            runner=lambda *a, **kw: self.fail('second reopen must not dispatch'))
+        self.addCleanup(second.close)
+        self.assertEqual(reopened.inspect(), second.inspect())
+        fresh = reopened.issue()
+        grant2 = reopened.authorize('Bearer ' + fresh.bearer, 'scene.save')
+        lease2 = reopened.lease(grant2)
+        self.assertEqual(reopened.publish(request, grant=grant2, lease=lease2,
+                                          deadline_ms=lease2.expires_ms), first)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -155,5 +155,10 @@ def validate_publication_sources(files):
             _script(raw.decode('utf-8'))
         elif name.startswith('scenes/') and name.endswith('.tscn'):
             _scene(raw.decode('utf-8'))
+        elif name in ('assets/avatar.glb', 'assets/sprite_sheet.png'):
+            # Binary validation is performed by gameplay_source_profile;
+            # eligibility only keeps the publication path closed to all other
+            # asset kinds. Native import/readback remains a later requirement.
+            continue
         else:
             _reject('GAMEPLAY_PUBLICATION_FILE_KIND')

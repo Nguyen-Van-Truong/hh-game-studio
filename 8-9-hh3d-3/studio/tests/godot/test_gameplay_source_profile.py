@@ -20,6 +20,8 @@ func _ready() -> void:
 '''
 BASE = b'''extends Node3D
 '''
+GLB = b'glTF' + (2).to_bytes(4, 'little') + (12).to_bytes(4, 'little')
+PNG = b'\x89PNG\r\n\x1a\nfixture'
 
 
 class GameplaySourceProfileTests(unittest.TestCase):
@@ -84,6 +86,36 @@ class GameplaySourceProfileTests(unittest.TestCase):
             profile.validate_source_bundle(
                 {'scripts/Main.gd': BASE, 'scripts/main.gd': BASE},
                 entrypoint='scripts/Main.gd')
+
+    def test_allowlisted_binary_assets_are_hash_bound_separately(self):
+        result = profile.validate_source_bundle(
+            {'scripts/main.gd': BASE, 'scenes/main.tscn': b'[gd_scene format=3]\n',
+             'assets/avatar.glb': GLB, 'assets/sprite_sheet.png': PNG},
+            entrypoint='scripts/main.gd')
+        self.assertEqual(set(result['assets']), {'assets/avatar.glb', 'assets/sprite_sheet.png'})
+        self.assertEqual(result['assets']['assets/avatar.glb']['size_bytes'], len(GLB))
+        self.assertFalse(result['assets']['assets/avatar.glb']['asset_import_verified'])
+
+    def test_binary_asset_caps_signatures_and_aliases_fail_closed(self):
+        base = {'scripts/main.gd': BASE, 'scenes/main.tscn': b'[gd_scene format=3]\n'}
+        cases = (
+            ({**base, 'assets/avatar.glb': b'bad'}, 'GAMEPLAY_ASSET_GLB'),
+            ({**base, 'assets/sprite_sheet.png': b'bad'}, 'GAMEPLAY_ASSET_PNG'),
+            ({**base, 'assets/avatar.glb': GLB, 'assets/Avatar.glb': GLB}, 'GAMEPLAY_DEPENDENCY_FILE|GAMEPLAY_DEPENDENCY_ALIAS'),
+            ({**base, 'assets/avatar.glb': b'glTF' + (2).to_bytes(4, 'little') + (13).to_bytes(4, 'little')}, 'GAMEPLAY_ASSET_GLB'),
+            ({**base, 'assets/not-allowed.bin': GLB}, 'GAMEPLAY_ASSET_FILE|GAMEPLAY_DEPENDENCY_FILE'),
+        )
+        for files, code in cases:
+            with self.subTest(code=code):
+                with self.assertRaisesRegex(profile.GameplaySourceError, code):
+                    profile.validate_source_bundle(files, entrypoint='scripts/main.gd')
+
+    def test_asset_total_is_separate_from_source_cap(self):
+        base = {'scripts/main.gd': BASE, 'scenes/main.tscn': b'[gd_scene format=3]\n'}
+        oversized = b'glTF' + (2).to_bytes(4, 'little') + (profile.MAX_ASSET_BYTES + 12).to_bytes(4, 'little')
+        oversized += b'x' * (profile.MAX_ASSET_BYTES - 12)
+        with self.assertRaisesRegex(profile.GameplaySourceError, 'GAMEPLAY_ASSET_SIZE|GAMEPLAY_ASSET_GLB'):
+            profile.validate_source_bundle({**base, 'assets/avatar.glb': oversized}, entrypoint='scripts/main.gd')
 
 
 if __name__ == '__main__':

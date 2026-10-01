@@ -1,9 +1,9 @@
 """Byte admission for the contained gameplay-source diagnostic, authority zero.
 
-Godot owns syntax/type analysis. This module does not implement GDScript or
-grant publication: an admitted byte envelope is still untrusted executable code.
-The first diagnostic uses one script/scene; dependency-graph admission and
-public AUTH-01..07 integration remain separate unfinished requirements.
+Godot owns syntax/type/asset-import analysis. This module does not implement
+GDScript, GLB or PNG parsing and does not grant publication: an admitted byte
+envelope is still untrusted executable code. Dependency-graph closure, native
+asset import and public AUTH-01..07 integration remain unfinished.
 """
 from __future__ import annotations
 
@@ -16,7 +16,10 @@ PROFILE = 'hh-godot-gameplay-source-1'
 MAX_BYTES = 16_384
 MAX_FILES = 64
 MAX_TOTAL_BYTES = 256 * 1024
+MAX_ASSET_BYTES = 1 * 1024 * 1024
+MAX_ASSET_TOTAL_BYTES = 2 * 1024 * 1024
 _PROJECT_PATH = frozenset(('scripts', 'scenes'))
+_ASSET_FILES = frozenset(('assets/avatar.glb', 'assets/sprite_sheet.png'))
 _WINDOWS_DEVICES = frozenset({
     'CON', 'PRN', 'AUX', 'NUL',
     *(f'COM{i}' for i in range(1, 10)),
@@ -71,6 +74,24 @@ def validate_source(source: bytes) -> dict:
             'public_ack': False, 'sandbox_acceptance': False}
 
 
+def validate_asset(name: str, raw: bytes) -> dict:
+    """Admit only the two bounded binary fixture artifacts.
+
+    This binds bytes and basic container signatures; it does not parse GLB
+    meshes, PNG dimensions, Blender metadata, or prove Godot importability.
+    """
+    if name not in _ASSET_FILES or type(raw) is not bytes or not 1 <= len(raw) <= MAX_ASSET_BYTES:
+        raise GameplaySourceError('GAMEPLAY_ASSET_FILE')
+    if name.endswith('.glb') and (len(raw) < 12 or raw[:4] != b'glTF'
+                                  or int.from_bytes(raw[4:8], 'little') != 2
+                                  or int.from_bytes(raw[8:12], 'little') != len(raw)):
+        raise GameplaySourceError('GAMEPLAY_ASSET_GLB')
+    if name.endswith('.png') and not raw.startswith(b'\x89PNG\r\n\x1a\n'):
+        raise GameplaySourceError('GAMEPLAY_ASSET_PNG')
+    return {'path': name, 'sha256': hashlib.sha256(raw).hexdigest(),
+            'size_bytes': len(raw), 'asset_import_verified': False}
+
+
 def validate_source_bundle(files: Mapping[str, bytes], *, entrypoint: str) -> dict:
     """Validate an exact bounded source envelope without parsing GDScript.
 
@@ -83,16 +104,24 @@ def validate_source_bundle(files: Mapping[str, bytes], *, entrypoint: str) -> di
     if not isinstance(files, Mapping) or not files or len(files) > MAX_FILES or not _path(entrypoint):
         raise GameplaySourceError('GAMEPLAY_DEPENDENCY_SHAPE')
     checked: dict[str, bytes] = {}
+    assets: dict[str, bytes] = {}
     folded: set[str] = set()
     total = 0
     for name, raw in files.items():
+        if type(name) is not str:
+            raise GameplaySourceError('GAMEPLAY_DEPENDENCY_FILE')
+        alias = name.casefold()
+        if alias in folded:
+            raise GameplaySourceError('GAMEPLAY_DEPENDENCY_ALIAS')
+        if name in _ASSET_FILES:
+            validate_asset(name, raw)
+            assets[name] = raw
+            folded.add(alias)
+            continue
         if not _path(name) or type(raw) is not bytes or not 1 <= len(raw) <= MAX_BYTES:
             raise GameplaySourceError('GAMEPLAY_DEPENDENCY_FILE')
         if name in checked:
             raise GameplaySourceError('GAMEPLAY_DEPENDENCY_DUPLICATE')
-        alias = name.casefold()
-        if alias in folded:
-            raise GameplaySourceError('GAMEPLAY_DEPENDENCY_ALIAS')
         validate_source(raw)
         total += len(raw)
         if total > MAX_TOTAL_BYTES:
@@ -101,10 +130,17 @@ def validate_source_bundle(files: Mapping[str, bytes], *, entrypoint: str) -> di
         folded.add(alias)
     if entrypoint not in checked:
         raise GameplaySourceError('GAMEPLAY_DEPENDENCY_ENTRYPOINT')
+    asset_total = sum(len(raw) for raw in assets.values())
+    if asset_total > MAX_ASSET_TOTAL_BYTES:
+        raise GameplaySourceError('GAMEPLAY_ASSET_SIZE')
     return {
         'profile': PROFILE, 'authority': 0,
         'entrypoint': entrypoint,
         'files': {name: hashlib.sha256(checked[name]).hexdigest() for name in sorted(checked)},
+        'assets': {name: {'sha256': hashlib.sha256(assets[name]).hexdigest(),
+                          'size_bytes': len(assets[name]),
+                          'asset_import_verified': False}
+                   for name in sorted(assets)},
         'dependency_inventory_verified': True,
         'dependency_closure_verified': False,
         'syntax_and_types_verified': False,
