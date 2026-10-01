@@ -312,3 +312,27 @@ needed for the next repair. Raw evidence remains under `studio/.local/`.
   window, so it is not clean O6.2 evidence. The next validation uses an
   independent demand task with retained Job supervision, persisted actual
   exit, measurement lock and watchdog; no competing tests are allowed.
+
+## 2026-10-01 — O6.2 journal validation closeout
+
+- `o6-ram-20261001-04` was a one-use demand task with clean Job setup but
+  stopped before child start at `BENCHMARK_WORKSPACE_LIMIT`: its working
+  directory scanned the existing `.local` corpus. This is a harness boundary,
+  not a memory verdict. Raw supervisor exit and closed zero-observed Job are
+  retained; the task was deleted only after `actual_instances=0`.
+- `o6-ram-20261001-05` reran with an isolated workspace and separate output.
+  It completed 35 marks/35,000 logical commands. Child actual exit and
+  supervisor exit were both `0`; Job assigned/configured/closed with active
+  count `0`, zero observed and no retained handles. Result is
+  `PASS_DIAGNOSTIC`, not product acceptance. Source closure was
+  `b9fb8c284c3c26db317987dbc53989e64cfdf57a79679e58ac2816920fbd8538`.
+- O6.2 measurements: baseline median `17,842,176` private bytes; maximum
+  `18,227,200` (`102.1579%`); late/early maximum `101.3437%`; private slope
+  `13.7295` bytes/logical command; `diagnostic_gate_codes=[]`; invalid
+  rejections `10,500`, index leftovers `[]`, source unchanged. This confirms
+  the bounded journal/index direction under its direct mixed-host workload.
+  It is not an O1.4 pair, editor result, or reason to lower a gate.
+- Next action is one fresh O6.3 host-only 35-batch soak after a new source
+  closure and O4.1 preflight/CPU observation. No formal pair is allowed before
+  that soak and its timing/memory/cleanup checks pass. Raw diagnostics remain
+  under `.local`; no old run is resumed.
