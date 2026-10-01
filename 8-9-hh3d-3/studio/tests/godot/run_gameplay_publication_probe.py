@@ -62,7 +62,8 @@ def main():
         parser.error('fixture must be a gameplay_source_* case')
     files, closure = owner_mod.runtime_source_closure()
     for name in ('tests/godot/run_gameplay_publication_probe.py',
-                 'tests/godot/run_linux_probe.py', 'tests/godot/linux_probe_fixtures.py'):
+                 'tests/godot/run_linux_probe.py', 'tests/godot/linux_probe_fixtures.py',
+                 'godot-addon/gameplay_dependency_observation.py'):
         files[name] = probe.sha(STUDIO / name)
     binding = {'run_id': args.run_id, 'source_closure_sha256': closure,
                'files': files, 'authority': 0, 'public_ack': False,

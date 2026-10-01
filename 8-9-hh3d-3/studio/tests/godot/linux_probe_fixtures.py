@@ -343,11 +343,47 @@ func _ready() -> void:
 # The fixture's movement needs the instantiated scene's value and shared method.
 FIXTURES['gameplay_source_multifile'] = {
     'mode': 'gameplay-source', 'timeout': 20, 'expect': 'gameplay_source',
+    # The marker is parsed and byte-bound by the host harness.  It remains a
+    # candidate observation (AUTHORITY=0); it is not a self-attested closure.
+    'dependency_observation': True,
+    'dependency_files': ('scripts/fixture_actor.gd', 'scripts/shared_motion.gd',
+                         'scenes/mover.tscn'),
     'script': '''extends Node3D
 const Motion = preload("res://scripts/shared_motion.gd")
 const Mover: PackedScene = preload("res://scenes/mover.tscn")
 var ticks: int = 0
 var mover: Node3D
+
+func _sha256(path: String) -> String:
+\tvar context := HashingContext.new()
+\tcontext.start(HashingContext.HASH_SHA256)
+\tcontext.update(FileAccess.get_file_as_bytes(path))
+\treturn context.finish().hex_encode()
+
+func _dependency_node(path: String, kind: String, edge_kind: String,
+\t\tdeclared_targets: Array[String] = []) -> Dictionary:
+\tvar edges: Array[Dictionary] = []
+\tfor target in declared_targets:
+\t\tedges.append({"kind": edge_kind, "target": target})
+\tfor dependency in ResourceLoader.get_dependencies("res://" + path):
+\t\tvar target := String(dependency).split("::", false, 1)[0].trim_prefix("res://")
+\t\tif target.is_empty():
+\t\t\tcontinue
+\t\tif not edges.any(func(edge: Dictionary) -> bool: return edge["target"] == target):
+\t\t\tedges.append({"kind": edge_kind, "target": target})
+\treturn {"path": path, "kind": kind,
+\t\t"size_bytes": FileAccess.get_file_as_bytes("res://" + path).size(),
+\t\t"sha256": _sha256("res://" + path), "edges": edges}
+
+func _dependency_observation() -> Dictionary:
+\treturn {"schema": "hh-gameplay-dependency-observation-1", "version": 1,
+\t\t"entrypoint": "scripts/fixture_actor.gd", "nodes": [
+\t\t\t_dependency_node("scripts/fixture_actor.gd", "script", "script_preload",
+\t\t\t\t["scripts/shared_motion.gd", "scenes/mover.tscn"]),
+\t\t\t_dependency_node("scripts/shared_motion.gd", "script", "script_preload"),
+\t\t\t_dependency_node("scenes/mover.tscn", "scene", "scene_ext_resource")
+\t\t]}
+
 func _ready() -> void:
 \tmover = Mover.instantiate() as Node3D
 \tadd_child(mover)
@@ -355,6 +391,7 @@ func _physics_process(_delta: float) -> void:
 \tticks += 1
 \tposition.x += Motion.step_size(mover)
 \tif ticks == 12:
+\t\tprint("HH_PROBE_DEPENDENCY " + JSON.stringify(_dependency_observation()))
 \t\tprint("HH_PROBE_PLAY " + JSON.stringify({"ticks": ticks, "x": position.x}))
 \t\tget_tree().quit(0)
 ''',

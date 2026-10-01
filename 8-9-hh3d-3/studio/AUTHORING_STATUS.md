@@ -4,8 +4,9 @@ Authority 0. Separate branch: codex/o2-authoring-contract.
 Merge only after GT-06 acceptance. Tools-plan O4 is authoritative; this file
 tracks implementation gaps and does not create another acceptance plan.
 
-Current checkpoint: `o2-publication-20261001-11` is a fresh real Docker/Godot
-publication on the repaired read-only project/asset-overlay design, with
+Current checkpoint: `o2-publication-20261001-13` is the latest fresh real
+Docker/Godot publication on the repaired read-only project/asset-overlay
+design, with
 source closure `0b2fec9eb23e57ba663868d45b1a8ed635912d2aefbc34b5493e0ddd40d71b8e`.
 Exactly one native dispatch, supervisor/outer/host/container exits 0, clean
 Job/tree/handle cleanup; live retry, close/reopen and recovered retry are
@@ -26,6 +27,31 @@ This is candidate evidence, not AUTH-05 or public capability. Next: dependency
 closure needed by the two fixtures, remaining hostile AUTH-05 proof and complete
 fixture E2E. Dated entries below preserve history; their
 old next-action notes do not supersede this checkpoint or the tools plan.
+
+## 2026-10-01 native dependency observation checkpoint
+
+The multifile fixture now emits one runtime dependency marker from Godot after
+the real play path. The host harness parses exactly one marker, binds its
+canonical nodes, typed edges, sizes and SHA-256 values to the immutable fixture
+bytes, and rejects authority-looking fields before validation. The marker uses
+Godot's `ResourceLoader` observations plus the fixture's explicit preload
+declarations; it is a bounded candidate observation, not a claim that arbitrary
+GDScript dependency closure is complete.
+
+`o2-publication-20261001-13` is a fresh native diagnostic on the repaired
+read-only project/asset-overlay executor. It had one native dispatch, actual
+outer/host/container exits `0`, clean Job/tree/handle cleanup, unchanged
+source/snapshot hashes, and live retry, close/reopen and recovered retry
+equality. The dependency report has `authority=0`,
+`dependency_closure_verified=false`, `public_ack=false`, and graph digest
+`007fc327090d7c97ed75927133570231b8f351e2392ab71d46452af63a2c17cf`.
+The first repair attempt `o2-publication-20261001-12` remains raw and is a
+real harness finding (`DEPENDENCY_FILE_PATH`) caused by including
+`project.godot` in the validator input; it was fixed by requiring an explicit
+dependency file set before the fresh run. The combined pure gameplay suite
+after the repair ran **135 tests**, actual exit `0`, with no measurement
+process. This evidence does not alter AUTHORITY, AUTH-02..05, GT-06, or the
+merge gate.
 
 ## 2026-10-01 dependency contract hardening checkpoint
 

@@ -24,6 +24,11 @@ _POLICY_SPEC = importlib.util.spec_from_file_location('gt03_gameplay_log_policy'
     STUDIO / 'godot-addon/gameplay_log_policy.py')
 log_policy = importlib.util.module_from_spec(_POLICY_SPEC)
 _POLICY_SPEC.loader.exec_module(log_policy)
+_DEPENDENCY_SPEC = importlib.util.spec_from_file_location(
+    'o2_gameplay_dependency_observation',
+    STUDIO / 'godot-addon/gameplay_dependency_observation.py')
+dependency_observation = importlib.util.module_from_spec(_DEPENDENCY_SPEC)
+_DEPENDENCY_SPEC.loader.exec_module(dependency_observation)
 GUARD_MARKER = log_policy.GUARD_MARKER
 GUARDED_STARTUP_ERROR = log_policy.GUARDED_STARTUP_ERROR
 # Exact diagnostics for these pinned fixtures only. The guard denies socket()
@@ -461,6 +466,22 @@ def case_observation(destination: Path, case: dict, *, name: str, binding: dict)
     stdout = (destination / 'engine-stdout.txt').read_text(encoding='utf-8', errors='replace')
     stderr = (destination / 'engine-stderr.txt').read_text(encoding='utf-8', errors='replace')
     row = evaluate(case, result, stdout, stderr)
+    if case.get('dependency_observation'):
+        # This is deliberately a candidate report.  The helper binds every
+        # node/hash/edge to the immutable fixture bytes but never raises
+        # AUTHORITY or claims that the process proved a complete closure.
+        all_files = case_files(case)
+        dependency_paths = case.get('dependency_files')
+        if (type(dependency_paths) is not tuple or not dependency_paths
+                or any(type(path) is not str for path in dependency_paths)):
+            raise ValueError('dependency observation requires explicit file set')
+        dependency_files = {path: all_files[path] for path in dependency_paths
+                            if path in all_files}
+        if len(dependency_files) != len(dependency_paths):
+            raise ValueError('dependency observation file is not in fixture')
+        row['dependency_observation'] = dependency_observation.parse_dependency_observation(
+            stdout, dependency_files)
+        row['dependency_observation_candidate'] = True
     row.update(case_name=name, run_id=binding['run_id'],
         source_closure_sha256=binding['source_closure_sha256'],
         fixture_script_sha256=hashlib.sha256(case['script'].encode('utf-8')).hexdigest(),
