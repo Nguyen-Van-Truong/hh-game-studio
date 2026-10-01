@@ -10,8 +10,9 @@
 - Probe03 production trim1: median lookup 108,5744%, append 106,5340%; không gộp trim64.
 - O7: kiểm offline/version riêng trước formal09; không đổi verdict cũ hoặc threshold O1–O4.
 - O6.5 offline control02 và formal08 reference PASS, không hồi tố (receipt o7-review-20261001-01).
-- Preview 21:47: RAM 2,49 GiB / commit 93,37%; foreign container hh-plan19-admission-20260919-r01.
-- Chưa dispatch; preview không tiêu INFRA budget. Điều kiện máy phải được kiểm mới trước chạy.
+- Preview cũ 21:47: RAM 2,49 GiB / commit 93,37%; foreign container hh-plan19-admission-20260919-r01; không dùng làm điều kiện hiện hành.
+- Preflight O4.1 đầy đủ ngày 02-10 lúc 06:44: RAM khả dụng 13,523 GiB, commit 41,952%, foreign engines/containers 0; không tiêu INFRA budget.
+- Chưa dispatch vì đã ngoài cửa sổ 22:00–06:00; kiểm lại source freeze, budget và CPU khoảng một phút trước formal09 ID mới.
 - Sau offline đạt: một formal09 ID mới trong 22:00–06:00 với pair guard; không confirmation soak.
 - O2 ở worktree riêng, AUTHORITY=0; chi tiết AUTHORING_STATUS.md; không merge trước GT06.
 
