@@ -95,18 +95,21 @@ class GameplayDependencyEvidenceTests(unittest.TestCase):
     def test_paths_are_canonical_in_root_and_case_unique(self):
         for bad in ("res://scripts/main.gd", "scripts/../main.gd",
                     "scripts\\main.gd", "outside/main.gd", "scripts/CON.gd",
-                    "scripts/Main.gd"):
+                    "scripts/\ud800.gd"):
             files = dict(FILES)
-            if bad == "scripts/Main.gd":
-                files[bad] = files.pop("scripts/main.gd")
             report = observation()
-            if bad != "scripts/Main.gd":
-                report["nodes"][0]["path"] = bad
-            else:
-                report["entrypoint"] = bad
-                report["nodes"][0]["path"] = bad
+            report["nodes"][0]["path"] = bad
             self.assert_code("DEPENDENCY_FILE_PATH|DEPENDENCY_NODE_PATH|DEPENDENCY_PATH_ALIAS",
                              files=files, report=report)
+        # Case is preserved for canonical names; only aliases are rejected.
+        uppercase_files = dict(FILES)
+        uppercase_files["scripts/Main.gd"] = uppercase_files.pop("scripts/main.gd")
+        uppercase_report = observation()
+        uppercase_report["entrypoint"] = "scripts/Main.gd"
+        uppercase_report["nodes"][0]["path"] = "scripts/Main.gd"
+        result = evidence.validate_dependency_observation(
+            uppercase_files, uppercase_report)
+        self.assertEqual(result["authority"], 0)
         files = dict(FILES)
         files["scripts/Main.gd"] = files["scripts/main.gd"]
         self.assert_code("DEPENDENCY_PATH_ALIAS", files=files)
@@ -148,6 +151,14 @@ class GameplayDependencyEvidenceTests(unittest.TestCase):
             report = observation()
             mutate(report["nodes"][0])
             self.assert_code(code, report=report)
+        malformed = observation()
+        malformed["nodes"][0]["edges"][0] = [
+            "script_preload", "scripts/shared.gd"]
+        self.assert_code("DEPENDENCY_EDGE_FIELDS", report=malformed)
+        alias = observation()
+        alias["nodes"][0]["edges"][0]["target"] = "scripts/SHARED.gd"
+        self.assert_code("DEPENDENCY_PATH_ALIAS|DEPENDENCY_EDGE_MISSING",
+                         report=alias)
 
     def test_cycles_are_rejected(self):
         report = observation()
@@ -176,6 +187,48 @@ class GameplayDependencyEvidenceTests(unittest.TestCase):
         report = observation()
         report["nodes"][0]["edges"].append({"kind": "dynamic_load", "target": "assets/avatar.glb"})
         self.assert_code("DEPENDENCY_EDGE_DUPLICATE|DEPENDENCY_EDGE_KIND", report=report)
+
+    def test_uid_is_optional_but_present_values_remain_unique_and_typed(self):
+        report = observation()
+        del report["nodes"][1]["uid"]
+        result = evidence.validate_dependency_observation(FILES, report)
+        self.assertEqual(result["authority"], 0)
+        report = observation()
+        report["nodes"][1]["uid"] = None
+        self.assert_code("DEPENDENCY_UID_INVALID", report=report)
+
+    def test_observation_and_byte_caps_fail_closed(self):
+        report = observation()
+        report["nodes"] = [report["nodes"][0]] * (evidence.MAX_NODES + 1)
+        self.assert_code("DEPENDENCY_NODE_CAP", report=report)
+
+        report = observation()
+        report["nodes"][0]["edges"] = [
+            {"kind": "script_preload", "target": "scripts/shared.gd"}
+        ] * (evidence.MAX_EDGES + 1)
+        self.assert_code("DEPENDENCY_EDGE_CAP", report=report)
+
+        files = dict(FILES)
+        for index in range(evidence.MAX_FILES - len(files) + 1):
+            files[f"scripts/extra{index}.gd"] = b"x"
+        self.assert_code("DEPENDENCY_FILE_CAP", files=files)
+
+    def test_graph_depth_is_bounded_without_recursion_error(self):
+        raw = b"extends Node\n"
+        files = {}
+        nodes = []
+        for index in range(evidence.MAX_GRAPH_DEPTH + 1):
+            path = f"scripts/deep{index}.gd"
+            files[path] = raw
+            edges = [] if index == evidence.MAX_GRAPH_DEPTH else [
+                {"kind": "script_preload", "target": f"scripts/deep{index + 1}.gd"}
+            ]
+            nodes.append({"path": path, "kind": "script",
+                          "size_bytes": len(raw),
+                          "sha256": evidence._sha(raw), "edges": edges})
+        report = {"schema": evidence.SCHEMA, "version": evidence.VERSION,
+                  "entrypoint": "scripts/deep0.gd", "nodes": nodes}
+        self.assert_code("DEPENDENCY_GRAPH_DEPTH", files=files, report=report)
 
 
 if __name__ == "__main__":

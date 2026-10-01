@@ -27,6 +27,28 @@ closure needed by the two fixtures, remaining hostile AUTH-05 proof and complete
 fixture E2E. Dated entries below preserve history; their
 old next-action notes do not supersede this checkpoint or the tools plan.
 
+## 2026-10-01 dependency contract hardening checkpoint
+
+The fail-closed dependency observation contract was hardened after review of
+malformed inputs and resource exhaustion boundaries. It now rejects malformed
+edge objects before mapping coercion, bounds nodes/edges/files/bytes/path
+length and graph depth, uses iterative cycle detection, preserves canonical
+case while rejecting case aliases, and accepts an omitted UID while validating
+and de-duplicating any UID that is present. The contract still accepts only
+the exact observation schema, binds every declared byte hash/size, checks
+typed/present/non-cyclic edges, and keeps `dependency_closure_verified=false`,
+`public_ack=false`, and `authority=0`.
+
+The focused suite was rerun once after this repair: **88 tests**, actual exit
+`0`, with no Godot, Docker, Blender, or GT06 measurement process started.
+Receipt:
+`studio/.local/reviews/o2-dependency-evidence-tests-20261001-04/exit.json`.
+The measured runtime closure remains
+`0b2fec9eb23e57ba663868d45b1a8ed635912d2aefbc34b5493e0ddd40d71b8e`; the new
+validator is not yet wired into native runtime closure observation, so this
+milestone does not change `AUTHORITY=0`, does not prove AUTH-02, and does not
+authorize an O2 merge or a GT-06 claim.
+
 ## 2026-10-01 focused pure regression receipt and closure matrix
 
 The current read-only repair suite was run once after `6485a18e` with no
