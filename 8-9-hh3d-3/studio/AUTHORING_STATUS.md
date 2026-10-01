@@ -684,8 +684,9 @@ GT-06 acceptance remain open, and this branch must not merge before GT-06.
 
 The gameplay-source executor now computes the declared runtime adapter closure
 itself before work and again before result finalization. A caller-supplied hash,
-when present, must match that observation; a missing or malformed declaration,
-or a stale pre-dispatch hash, fails closed before starting the container. A
+when present, must match that observation; a malformed or stale supplied hash
+fails closed before starting the container. Omitting this optional caller hash
+still requires independent observation and recheck by the executor. A
 source change discovered during execution invalidates the final result and
 preserves `CURRENT` and the journal. Native result validation requires the
 observed closure hash and an unchanged flag before selector or journal
@@ -693,9 +694,18 @@ adoption. The explicit inventory now includes the package initializers and
 implementation imported transitively by `studio.protocol.core`, plus
 `host/core/journal.py` and `host/core/redaction.py`; it is still a declared
 adapter closure, not arbitrary project dependency discovery. The focused
-suite passes **36 owner tests**, **10 executor guard tests**, and **12 probe
-tests** (58 total), all actual exit 0.
+suite passed **27 owner tests + 9 profile tests**, **10 executor guard tests**,
+and **12 probe tests** (58 total), all actual exit 0 at `b7ae5c75`.
 This remains `AUTHORITY=0`: the inventory is an explicit adapter closure and
 does not prove arbitrary project dependency discovery, AUTH-02..04 full
 runtime closure, AUTH-05, Blender rig/GLB acceptance or GT-06; do not merge
 before GT-06 acceptance.
+
+Follow-up after the GT06 measurement window ended: also inventory
+`godot-addon/cli_job.py`, loaded dynamically by `_cli_jobs()`. A new negative
+test simulates changes in each of the six newly covered imported/loaded
+dependencies and requires stale-hash rejection before any Docker CLI call.
+Focused validation: 27 owner + 9 profile + 11 executor guard + 12 probe tests
+(59 total), actual exit 0 in 8.104 seconds, no Docker or engine. Imported-versus-disk
+generation binding remains a separate open runtime-closure obligation; this
+inventory correction alone does not prove it.

@@ -10,6 +10,31 @@ from tests.godot.test_linux_executor import executor, inspected, write_project, 
 
 
 class GuardedExecutorTests(unittest.TestCase):
+    def test_transitive_and_loaded_runtime_changes_reject_old_binding(self):
+        current = executor.gameplay_runtime_source_closure()[1]
+        read = executor._read_file
+        # Load the trusted CLI helper before simulating a disk change. The
+        # admission check must notice even dependencies already in memory.
+        executor._cli_jobs()
+        for dependency in ('godot-addon/cli_job.py', 'host/core/journal.py',
+                           'host/core/redaction.py', 'protocol/__init__.py',
+                           'protocol/_rfc8785/__init__.py', 'protocol/_rfc8785/_impl.py'):
+            target = executor.STUDIO / dependency
+
+            def changed(path, cap):
+                raw = read(path, cap)
+                return raw + b'\n# simulated revision\n' if path == target else raw
+
+            with self.subTest(dependency=dependency), tempfile.TemporaryDirectory() as directory:
+                output = Path(directory) / 'output'
+                with patch.object(executor, '_read_file', side_effect=changed), \
+                     patch.object(executor, '_cli') as cli:
+                    with self.assertRaisesRegex(executor.ExecutorError, 'SOURCE_CLOSURE_MISMATCH'):
+                        executor.run(Path(directory) / 'unused', mode='gameplay-source',
+                                     output=output, source_closure_sha256=current)
+                    cli.assert_not_called()
+                    self.assertFalse(output.exists())
+
     def test_runtime_source_closure_rejects_invalid_or_stale_binding_before_output(self):
         current = executor.gameplay_runtime_source_closure()[1]
         for supplied in ('0' * 64, '', 'A' * 64, 42, True):
