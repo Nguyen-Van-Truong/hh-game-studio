@@ -362,3 +362,24 @@ needed for the next repair. Raw evidence remains under `studio/.local/`.
   new ID and this frozen closure. Do not run formal09 until its actual exits,
   cleanup, timing and O1.4 memory/handle/status metrics pass; if private
   growth exceeds 107%, perform the required additional soak with another ID.
+
+## 2026-10-01 — O6.3 Docker observer window check
+
+- `gt06-o6-soak-20261001-03` reached only batches `0..4` before the watchdog
+  stopped on `WATCHDOG_DOCKER_INVENTORY`: Docker query attempt 1 timed out at
+  `2.094 s` (sample `35`). It is `HARNESS_FAIL`, with no O6.3 metric/result,
+  no child actual-exit record, and no product/formal verdict. Job/tree/handle
+  cleanup is closed, active count is `0`, zero observed, and no handle is
+  retained. The scheduler task was deleted after status and cleanup checks;
+  raw evidence remains under `.local`.
+- A separate bounded read-only Docker probe at `docker-observer-probe-20261001-02`
+  queried the fixed Docker Desktop Linux named pipe and returned the validated
+  nine-container inventory in `2.625 s` wall time (the query itself stayed
+  within its two-second observer budget). This is an environment-window check,
+  not a soak result or acceptance proof; it does not justify changing any
+  timeout or accepting stale inventory.
+- With no live campaign and the same verified closure
+  `46bfe26f04d6dc4e73cf3f18fc35a9974cd957ce2a232ce2e36b3d85206b9915`, the next
+  action is a fresh O4.1 preflight/CPU observation followed by one new O6.3
+  host-only ID if the observer remains responsive. Do not resume this run,
+  start formal09, or treat the five-batch prefix as evidence.
