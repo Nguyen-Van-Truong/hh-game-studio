@@ -11,7 +11,8 @@ retry, close/reopen and recovered retry are byte/durable-state equal. The
 asset fixture observed `avatar_loaded=true` and `sprite_loaded=true` after
 Godot import, with `asset_import_observed=true`; the source and snapshot
 inventories stayed unchanged. The focused source/eligibility/owner/runtime
-suite is 144 tests across the repair set, actual exit 0. A prior native
+repair regression set is 157 tests across source, owner, executor and probe
+evidence, actual exit 0. A prior native
 reproducer (`o2-tool-publication-baseline-20261001-01`) remains preserved as a
 real bug finding: a clean native run previously accepted `@tool` and returned
 READBACK_ACK. The owner now rejects that source before staging, while the

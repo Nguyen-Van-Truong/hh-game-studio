@@ -48,6 +48,21 @@ class GameplayProbeEvidenceTests(unittest.TestCase):
             self.assertIs(row[key], False)
         self.assertIs(self.result['diagnostic_process_clean'], False)
 
+    def test_asset_fixture_requires_both_native_readback_values(self):
+        self.case['asset_readback'] = True
+        self.stdout = self.stdout.replace(
+            'HH_PROBE_PLAY {"ticks":12,"x":12.0}',
+            'HH_PROBE_ASSET_READBACK {"avatar_loaded":true,"sprite_loaded":true}\n'
+            'HH_PROBE_PLAY {"ticks":12,"x":12.0}')
+        row = self.check()
+        self.assertTrue(row['fixture_observed'])
+        self.assertTrue(row['asset_import_observed'])
+        for output in (self.stdout.replace('"avatar_loaded":true', '"avatar_loaded":false'),
+                       self.stdout.replace('"sprite_loaded":true', '"sprite_loaded":false'),
+                       self.stdout.replace('HH_PROBE_ASSET_READBACK {"avatar_loaded":true,"sprite_loaded":true}\n', '')):
+            with self.subTest(output=output):
+                self.assertFalse(self.check(stdout=output)['fixture_observed'])
+
     def test_fixture_state_requires_exact_typed_gameplay_result(self):
         self.case.update(expect='fixture_state', fixture_kind='arena_2d',
                          expected_state={'ticks': 12, 'player_health': 4,
