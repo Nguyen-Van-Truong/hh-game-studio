@@ -4,6 +4,16 @@ Authority 0. Separate branch: codex/o2-authoring-contract.
 Merge only after GT-06 acceptance. Tools-plan O4 is authoritative; this file
 tracks implementation gaps and does not create another acceptance plan.
 
+Current checkpoint: `o2-publication-20261001-02` completed real Docker/Godot
+publication, live retry, close/reopen and recovered retry with exactly one
+native dispatch. Outer/host/container exits 0, clean ownership cleanup;
+123 focused pure tests exit 0. Raw startup diagnostics stay visible and are
+checked by the exact versioned host policy on publish and reopen. This remains
+candidate evidence, not AUTH-05 or public capability. Next: imported-versus-disk
+generation binding, arbitrary dependency closure, remaining hostile AUTH-05
+proof and complete fixture E2E. Dated entries below preserve history; their
+old next-action notes do not supersede this checkpoint or the tools plan.
+
 ## Verified candidate evidence
 
 | Area | Source checkpoint | Evidence / limit |
@@ -28,8 +38,9 @@ Blender o2-blender-native-20260927-17 passed 18 checks, actual native and
 reopen exits 0, verified tree and unchanged source/project. Five-file closure:
 eef74f5d3f39579887e05fdfec96396b4915ea9692c821127093982c8188b0b5.
 Archive and executable match Blender 5.2.1 toolchain.lock.json.
-Legacy raw remains in its original local worktree directories; new evidence
-goes into .local with ZIP and manifest hashes per O4.4.
+Legacy raw remains in its original local worktree directories. Under current
+O4.4, diagnostic raw stays in .local with a lane entry; ZIP/member manifests
+are required when packaging formal/critic/acceptance evidence.
 
 Current terminology is **PATH_ISOLATION**, not AUTH_ISOLATION. These probes
 isolate paths and disposable projects; they do not prove OS sandbox/AUTH-05.
@@ -728,3 +739,55 @@ selector/journal; a failed native stage holds the owner and session. No native
 engine or Docker ran. `AUTHORITY=0`; imported-versus-disk generation binding,
 full dependency closure, AUTH-05 and fixture E2E remain open. Do not merge
 before GT-06 acceptance.
+
+### 2026-10-01 native publication/recovery and exact startup diagnostics
+
+The owner now rejects conflicting or malformed `commandhost`/`command_host`
+aliases; a single legacy/current alias remains compatible. Both aliases are
+validated independently, including integer-versus-boolean/float distinctions.
+The first focused check passed 32 owner +32 related tests, exit 0.
+
+New repeatable `run_gameplay_publication_probe.py` exposed a real integration
+gap: run `o2-publication-20261001-01` had container/host exits 0 and clean
+cleanup, but guarded Godot startup produced the exact known `xdg-user-dir`
+and editor socket denials. The strict owner correctly refused publication
+(`GAMEPLAY_OWNER_NATIVE_NOT_CLEAN`); outer exit 1 and raw remain unchanged.
+The offline fixture verifier observed its multifile play, without granting ACK.
+
+O5.5 repair extracts the existing normal-success classifier into
+`gameplay_log_policy.py` (`hh-gameplay-startup-log-1`). It requires exact
+phase/module order and inventory, exact startup diagnostics, bounded UTF-8
+logs, and no unexplained error/warning/leak. Executor raw `log_clean` and
+`diagnostic_process_clean` remain false for these logs; execution completion
+and the policy verdict are separate fields. The owner rereads fixed raw files
+on both publish and reopen, verifies hashes and recomputes the policy. Even
+two forged clean flags cannot skip raw checking. Hostile/rejection/watchdog
+fixture interpretation and OS restrictions are unchanged. A declared adapter
+closure now includes the classifier, and its final recheck follows log work.
+
+Focused owner/policy/executor/guard/profile/probe suites pass **123 tests**,
+actual exit 0 in 20.781s. Receipt and command (including required PYTHONPATH):
+`studio/.local/reviews/o2-log-policy-tests-20261001-03/exit.json`.
+The earlier `-01` test launcher failed module discovery before testing; its
+raw is retained. New negatives cover malformed aliases, stale/forged policy,
+missing/changed raw logs, both clean flags forged, and recovery without
+selector/journal mutation or redispatch.
+
+Fresh run `o2-publication-20261001-02` completed with outer actual exit 0
+(15.61s), host/container exits 0, Job closed/active 0/no retained handles,
+owned container removed and no owner record retained. Frozen runtime closure:
+`e8183b09f19821831c4bf48cd97a29ece974b89cce06590ed3365889f4a4c709`.
+All 22 runtime+harness files match both retained and live copies. Publication
+advances generation once; live retry and reopen/retry return the same ACK,
+preserve selector/journal bytes and make exactly one native dispatch. Exact
+multifile parse/import/play and supervisor/cleanup observations were rechecked.
+Raw, `closeout-check.json` and the separate supervisor's actual exit receipt
+are in `.local/reviews/o2-publication-20261001-02{,-supervisor}`.
+
+This is `AUTHORITY=0`, `public_ack=false`, `sandbox_acceptance=false`.
+It proves this bounded native publication/recovery path, not arbitrary-source
+safety, full game authoring, AUTH-05 or GT06 acceptance. Imported-versus-disk
+generation binding, arbitrary runtime closure and complete fixture E2E remain
+open. No merge before GT06 acceptance. Use the repeatable probe instead of
+one-off native commands; retain failed stages and reproduce their boundary
+offline before spending another native run.

@@ -16,7 +16,7 @@ class GuardedExecutorTests(unittest.TestCase):
         # Load the trusted CLI helper before simulating a disk change. The
         # admission check must notice even dependencies already in memory.
         executor._cli_jobs()
-        for dependency in ('godot-addon/cli_job.py', 'host/core/journal.py',
+        for dependency in ('godot-addon/cli_job.py', 'godot-addon/gameplay_log_policy.py', 'host/core/journal.py',
                            'host/core/redaction.py', 'protocol/__init__.py',
                            'protocol/_rfc8785/__init__.py', 'protocol/_rfc8785/_impl.py'):
             target = executor.STUDIO / dependency

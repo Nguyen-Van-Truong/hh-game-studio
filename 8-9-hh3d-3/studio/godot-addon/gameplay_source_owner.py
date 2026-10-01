@@ -306,7 +306,8 @@ class GameplaySourcePublicationOwner:
             # executor evidence into a successful publication.
             native = owner._read_native_result(owner._runs / receipt.command_id)
             owner._validate_native(native, expected_input_hashes=owner._native_inputs(files),
-                                   expected_source_closure_sha256=owner.source_closure_sha256)
+                                   expected_source_closure_sha256=owner.source_closure_sha256,
+                                   evidence_directory=owner._runs / receipt.command_id)
             _need(native["run_id"] == receipt.native_run_id,
                   "GAMEPLAY_OWNER_NATIVE_RUN_BINDING")
             rebuilt = {"status": "READBACK_ACK", **asdict(receipt)}
@@ -533,7 +534,7 @@ class GameplaySourcePublicationOwner:
 
     @staticmethod
     def _validate_native(result: dict, *, expected_input_hashes,
-                         expected_source_closure_sha256: str) -> None:
+                         expected_source_closure_sha256: str, evidence_directory=None) -> None:
         _need(type(result) is dict and result.get("schema") == "hh-gt03-linux-diagnostic-1",
               "GAMEPLAY_OWNER_NATIVE_SCHEMA")
         _need(result.get("source_closure_sha256") == expected_source_closure_sha256
@@ -541,14 +542,37 @@ class GameplaySourcePublicationOwner:
               "GAMEPLAY_OWNER_NATIVE_SOURCE_CLOSURE")
         _need(result.get("mode") == "gameplay-source" and result.get("public_ack") is False,
               "GAMEPLAY_OWNER_NATIVE_MODE")
+        raw_clean = False
+        explained_startup = False
+        if isinstance(evidence_directory, Path) and evidence_directory.is_absolute():
+            try:
+                executor = _load("linux_executor")
+                stdout = executor._read_file(evidence_directory / "engine-stdout.txt", 262144)
+                stderr = executor._read_file(evidence_directory / "engine-stderr.txt", 262144)
+                combined = (stdout + b'\n' + stderr).decode('utf-8', errors='strict')
+                raw_clean = (result.get("diagnostic_process_clean") is True
+                    and result.get("log_clean") is True and '\x00' not in combined
+                    and re.search(r'ERROR|WARNING|leaked', combined, re.IGNORECASE) is None)
+                scripts = [ENTRYPOINT] + sorted(name for name in expected_input_hashes
+                    if name.startswith("scripts/") and name.endswith(".gd") and name != ENTRYPOINT)
+                observed_policy = executor._gameplay_log_policy().classify(stdout, stderr, scripts)
+                # Recompute from retained raw on publish AND reopen. Caller
+                # flags or an earlier persisted verdict cannot substitute.
+                explained_startup = (result.get("diagnostic_process_clean") is False
+                    and result.get("log_clean") is False
+                    and result.get("diagnostic_execution_complete") is True
+                    and observed_policy.get("accepted") is True
+                    and canonical_bytes(result.get("log_policy")) == canonical_bytes(observed_policy))
+            except (OSError, ValueError, SafetyViolation):
+                raw_clean = False
+                explained_startup = False
         _need(result.get("gameplay_source_envelope_checked") is True
               and result.get("gameplay_profile") == PROFILE
               and result.get("gameplay_profile_unchanged") is True
-              and result.get("diagnostic_process_clean") is True
+              and (raw_clean or explained_startup)
               and result.get("owned_removed") is True
               and result.get("input_unchanged") is True and result.get("snapshot_unchanged") is True
               and result.get("binary_unchanged") is True
-              and result.get("log_clean") is True
               and result.get("owner_record_retained") is False
               and result.get("errors") == [],
               "GAMEPLAY_OWNER_NATIVE_NOT_CLEAN")
@@ -561,20 +585,27 @@ class GameplaySourcePublicationOwner:
               and state.get("OOMKilled") is False
               and type(result.get("docker_wait_exit")) is int
               and result["docker_wait_exit"] == 0, "GAMEPLAY_OWNER_NATIVE_EXIT")
-        host = result.get("commandhost") or result.get("command_host")
-        _need(type(host) is dict
-              and all(type(host.get(key)) is int and host[key] == 0
-                      for key in ("exit_code", "job_active_count"))
-              and host.get("timed_out") is False and host.get("stream_cap_exceeded") is False
-              and host.get("readers_stopped") is True,
+        # A single legacy/current alias remains supported. If both are
+        # retained, neither may hide a malformed or conflicting observation.
+        hosts = tuple(result[key] for key in ("commandhost", "command_host") if key in result)
+        _need(hosts and all(type(host) is dict for host in hosts),
               "GAMEPLAY_OWNER_NATIVE_HOST")
-        job = host.get("job_owner")
-        _need(type(job) is dict and job.get("configured") is True and job.get("assigned") is True
-              and job.get("closed") is True and job.get("zero_observed") is True
-              and type(job.get("active_count")) is int and job["active_count"] == 0
-              and job.get("tainted") is False
-              and job.get("handle_retained") is False and job.get("failed_operations") == [],
-              "GAMEPLAY_OWNER_NATIVE_JOB")
+        _need(len(hosts) == 1 or hosts[0] == hosts[1],
+              "GAMEPLAY_OWNER_NATIVE_HOST_ALIASES")
+        for host in hosts:
+            # Validate both even when Python equality treats false/0.0 as 0.
+            _need(all(type(host.get(key)) is int and host[key] == 0
+                      for key in ("exit_code", "job_active_count"))
+                  and host.get("timed_out") is False and host.get("stream_cap_exceeded") is False
+                  and host.get("readers_stopped") is True,
+                  "GAMEPLAY_OWNER_NATIVE_HOST")
+            job = host.get("job_owner")
+            _need(type(job) is dict and job.get("configured") is True and job.get("assigned") is True
+                  and job.get("closed") is True and job.get("zero_observed") is True
+                  and type(job.get("active_count")) is int and job["active_count"] == 0
+                  and job.get("tainted") is False
+                  and job.get("handle_retained") is False and job.get("failed_operations") == [],
+                  "GAMEPLAY_OWNER_NATIVE_JOB")
         _need(type(result.get("run_id")) is str and _ID.fullmatch(result["run_id"].replace("-", ".")),
               "GAMEPLAY_OWNER_NATIVE_RUN_ID")
         for field in ("input_hashes_before", "input_hashes_after", "snapshot_hashes_after"):
@@ -665,7 +696,8 @@ class GameplaySourcePublicationOwner:
                                          source_closure_sha256=self.source_closure_sha256)
                 observed = self._read_native_result(run_dir, observed)
                 self._validate_native(observed, expected_input_hashes=expected_native_inputs,
-                                      expected_source_closure_sha256=self.source_closure_sha256)
+                                      expected_source_closure_sha256=self.source_closure_sha256,
+                                      evidence_directory=run_dir)
                 return observed
             result = self._phase(grant, lease, command_id, digest, deadline_ms, "stage", run_stage)
             native_run_id = result["run_id"]

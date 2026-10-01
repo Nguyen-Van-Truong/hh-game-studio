@@ -50,7 +50,46 @@ def bound_native_result(project, run_id="fake-run-1", output=None):
                   snapshot_hashes_after=dict(manifest))
     if output is not None:
         output.mkdir()
+        (output / 'engine-stdout.txt').write_bytes(b'')
+        (output / 'engine-stderr.txt').write_bytes(b'')
         (output / 'result.json').write_bytes(owner_mod.canonical_bytes(result))
+    return result
+
+
+def invalid_native_host_aliases():
+    host = native_result()["commandhost"]
+    cases = []
+    for alias in ("commandhost", "command_host"):
+        for name, value in (("empty", {}), ("null", None), ("boolean", False), ("list", [])):
+            cases.append((alias + "-" + name,
+                          {"commandhost": host, "command_host": host, alias: value}))
+    cases.append(("conflicting-exit", {"commandhost": host,
+                                      "command_host": {**host, "exit_code": 1}}))
+    for name, value in (("boolean", False), ("float", 0.0)):
+        cases.append(("secondary-exit-" + name, {"commandhost": host,
+                      "command_host": {**host, "exit_code": value}}))
+        cases.append(("secondary-count-" + name, {"commandhost": host,
+                      "command_host": {**host, "job_active_count": value}}))
+        cases.append(("secondary-job-" + name, {"commandhost": host,
+                      "command_host": {**host, "job_owner": {
+                          **host["job_owner"], "active_count": value}}}))
+    cases.append(("secondary-boolean-as-int", {"commandhost": host,
+                  "command_host": {**host, "readers_stopped": 1}}))
+    cases.append(("missing-both", {}))
+    return cases
+
+
+def explained_native_result(project, output):
+    policy = owner_mod._load('gameplay_log_policy')
+    stdout = ('\n'.join(policy.GAMEPLAY_PHASE_EVENTS) + '\n').encode()
+    stderr = policy.GAMEPLAY_STARTUP_ERRORS.encode()
+    result = bound_native_result(project, output=output)
+    result.update(diagnostic_process_clean=False, diagnostic_execution_complete=True,
+                  log_clean=False, log_policy=policy.classify(
+                      stdout, stderr, [owner_mod.ENTRYPOINT]))
+    (output / 'engine-stdout.txt').write_bytes(stdout)
+    (output / 'engine-stderr.txt').write_bytes(stderr)
+    (output / 'result.json').write_bytes(owner_mod.canonical_bytes(result))
     return result
 
 
@@ -59,6 +98,10 @@ class GameplaySourceOwnerTests(unittest.TestCase):
         self.temp = tempfile.TemporaryDirectory(prefix="hh-gameplay-owner-")
         self.addCleanup(self.temp.cleanup)
         self.parent = Path(self.temp.name)
+        self.proof = self.parent / 'native-proof'
+        self.proof.mkdir()
+        (self.proof / 'engine-stdout.txt').write_bytes(b'')
+        (self.proof / 'engine-stderr.txt').write_bytes(b'')
         self.source = {
             "scripts/fixture_actor.gd": b"extends Node3D\n@export var speed: float = 2.0\n",
             "scenes/fixture.tscn": b"[gd_scene format=3]\n",
@@ -773,7 +816,8 @@ class GameplaySourceOwnerTests(unittest.TestCase):
                     with self.assertRaisesRegex(owner_mod.GameplaySourceOwnerError, "NATIVE_(EXIT|HOST|JOB)"):
                         owner_mod.GameplaySourcePublicationOwner._validate_native(
                             result, expected_input_hashes={},
-                            expected_source_closure_sha256=owner_mod.runtime_source_closure()[1])
+                            expected_source_closure_sha256=owner_mod.runtime_source_closure()[1],
+                            evidence_directory=self.proof)
 
     def test_boolean_exit_cannot_publish_or_restore_cached_ack(self):
         request = self.request(dict(self.source), command="command.boolean-exit")
@@ -812,6 +856,77 @@ class GameplaySourceOwnerTests(unittest.TestCase):
         self.assertEqual(owner._selector.read_bytes(), selected)
         self.assertEqual(owner._journal.read_bytes(), journal)
 
+    def test_native_host_aliases_preserve_single_alias_compatibility(self):
+        for aliases in (("commandhost",), ("command_host",), ("commandhost", "command_host")):
+            with self.subTest(aliases=aliases):
+                result = native_result()
+                host = result.pop("commandhost")
+                for alias in aliases:
+                    result[alias] = json.loads(json.dumps(host))
+                for field in ("input_hashes_before", "input_hashes_after", "snapshot_hashes_after"):
+                    result[field] = {}
+                owner_mod.GameplaySourcePublicationOwner._validate_native(
+                    result, expected_input_hashes={},
+                    expected_source_closure_sha256=owner_mod.runtime_source_closure()[1],
+                    evidence_directory=self.proof)
+
+    def test_malformed_native_host_alias_cannot_publish_or_ack(self):
+        request = self.request(dict(self.source), command="command.host-alias")
+        for name, aliases in invalid_native_host_aliases():
+            with self.subTest(name=name):
+                def runner(project, **kwargs):
+                    result = bound_native_result(project, output=kwargs['output'])
+                    result.pop('commandhost')
+                    result.update(aliases)
+                    # Preserve 0.0 in the retained JSON; JCS normalizes it to 0.
+                    kwargs['output'].joinpath('result.json').write_bytes(
+                        json.dumps(result, sort_keys=True, separators=(',', ':')).encode())
+                    return result
+
+                owner, grant, lease = self.fresh_owner(runner)
+                selected, journal = owner._selector.read_bytes(), owner._journal.read_bytes()
+                with self.assertRaisesRegex(owner_mod.GameplaySourceOwnerError, "NATIVE_(HOST|JOB)"):
+                    owner.publish(request, grant=grant, lease=lease, deadline_ms=lease.expires_ms)
+                self.assertEqual(owner._selector.read_bytes(), selected)
+                self.assertEqual(owner._journal.read_bytes(), journal)
+                self.assertTrue(owner._held)
+                self.assertTrue(owner._session.status()['held'])
+                self.assertTrue((owner._runs / request['command_id'] / 'result.json').is_file())
+
+    def test_malformed_native_host_alias_cannot_restore_ack_or_repair_selector(self):
+        request = self.request(dict(self.source), command="command.host-alias")
+        receipt = self.owner.publish(request, grant=self.grant, lease=self.lease,
+                                     deadline_ms=self.lease.expires_ms)
+        self.owner.close()
+        initial = json.loads(self.owner._journal.read_bytes().splitlines()[0])
+        selected = owner_mod.canonical_bytes({"schema": "hh-gameplay-selector-1",
+            "revision": initial["project_revision"], "generation": initial["generation"]})
+        self.owner._selector.write_bytes(selected)
+        journal = self.owner._journal.read_bytes()
+        result_path = self.owner._runs / request['command_id'] / 'result.json'
+        good = result_path.read_bytes()
+        for name, aliases in invalid_native_host_aliases():
+            with self.subTest(name=name):
+                result = json.loads(good)
+                result.pop('commandhost')
+                result.update(aliases)
+                result_path.write_bytes(
+                    json.dumps(result, sort_keys=True, separators=(',', ':')).encode())
+                with self.assertRaisesRegex(owner_mod.GameplaySourceOwnerError, "NATIVE_(HOST|JOB)"):
+                    owner_mod.GameplaySourcePublicationOwner.reopen(
+                        self.owner._root, project_id=self.owner.project_id,
+                        source_closure_sha256=owner_mod.runtime_source_closure()[1],
+                        runner=lambda *args, **kw: self.fail("recovery must not dispatch"))
+                self.assertEqual(self.owner._selector.read_bytes(), selected)
+                self.assertEqual(self.owner._journal.read_bytes(), journal)
+        result_path.write_bytes(good)
+        reopened = owner_mod.GameplaySourcePublicationOwner.reopen(
+            self.owner._root, project_id=self.owner.project_id,
+            source_closure_sha256=owner_mod.runtime_source_closure()[1],
+            runner=lambda *args, **kw: self.fail("recovery must not dispatch"))
+        self.addCleanup(reopened.close)
+        self.assertEqual(reopened.inspect()['generation'], receipt['generation'])
+
     def test_native_result_readback_failure_latches_owner_and_session(self):
         before_selector = self.owner._selector.read_bytes()
         before_journal = self.owner._journal.read_bytes()
@@ -836,6 +951,119 @@ class GameplaySourceOwnerTests(unittest.TestCase):
                                     'GAMEPLAY_OWNER_CLOSED'):
             self.owner.publish(request, grant=self.grant, lease=self.lease,
                                deadline_ms=self.lease.expires_ms)
+
+
+    def test_exact_startup_policy_is_rechecked_for_publish_and_recovered_ack(self):
+        calls = []
+        def runner(project, **kwargs):
+            calls.append(kwargs['output'])
+            return explained_native_result(project, kwargs['output'])
+        owner, grant, lease = self.fresh_owner(runner)
+        request = self.request(dict(self.source), expected=owner.inspect()['project_revision'])
+        receipt = owner.publish(request, grant=grant, lease=lease, deadline_ms=lease.expires_ms)
+        raw_result = json.loads((calls[0] / 'result.json').read_bytes())
+        self.assertIs(raw_result['log_clean'], False)
+        self.assertIs(raw_result['diagnostic_process_clean'], False)
+        self.assertIs(receipt['public_ack'], False)
+        owner.close()
+        reopened = owner_mod.GameplaySourcePublicationOwner.reopen(owner._root,
+            project_id=owner.project_id, source_closure_sha256=owner.source_closure_sha256,
+            runner=lambda *a, **kw: self.fail('recovery must not dispatch'))
+        self.addCleanup(reopened.close)
+        fresh = reopened.issue()
+        grant = reopened.authorize('Bearer ' + fresh.bearer, 'scene.save')
+        lease = reopened.lease(grant)
+        self.assertEqual(reopened.publish(request, grant=grant, lease=lease,
+                                         deadline_ms=lease.expires_ms), receipt)
+        self.assertEqual(len(calls), 1)
+
+    def test_explained_policy_cannot_hide_changed_missing_or_unproven_raw(self):
+        for case in ('missing', 'warning', 'extra_stdout', 'forged_hash',
+                     'forged_policy', 'incomplete', 'false_clean', 'both_flags_clean'):
+            with self.subTest(case=case):
+                def runner(project, **kwargs):
+                    output = kwargs['output']
+                    result = explained_native_result(project, output)
+                    if case == 'missing':
+                        (output / 'engine-stderr.txt').unlink()
+                    elif case == 'warning':
+                        with (output / 'engine-stderr.txt').open('ab') as stream:
+                            stream.write(b'WARNING: unexpected\n')
+                    elif case == 'extra_stdout':
+                        with (output / 'engine-stdout.txt').open('ab') as stream:
+                            stream.write(b'SCRIPT ERROR: unexpected\n')
+                    elif case == 'forged_hash':
+                        result['log_policy']['stderr_sha256'] = '0' * 64
+                    elif case == 'forged_policy':
+                        result['log_policy']['policy'] = 'accept-anything'
+                    elif case == 'incomplete':
+                        result['diagnostic_execution_complete'] = False
+                    elif case == 'false_clean':
+                        result['diagnostic_process_clean'] = True
+                    else:
+                        result.update(diagnostic_process_clean=True, log_clean=True)
+                    (output / 'result.json').write_bytes(owner_mod.canonical_bytes(result))
+                    return result
+                owner, grant, lease = self.fresh_owner(runner)
+                before = owner._selector.read_bytes(), owner._journal.read_bytes()
+                request = self.request(dict(self.source), expected=owner.inspect()['project_revision'])
+                with self.assertRaisesRegex(owner_mod.GameplaySourceOwnerError, 'NATIVE_NOT_CLEAN'):
+                    owner.publish(request, grant=grant, lease=lease, deadline_ms=lease.expires_ms)
+                self.assertEqual((owner._selector.read_bytes(), owner._journal.read_bytes()), before)
+                self.assertTrue(owner._held)
+
+    def test_reopen_does_not_trust_prior_startup_policy_after_log_tampering(self):
+        outputs = []
+        def runner(project, **kwargs):
+            outputs.append(kwargs['output'])
+            return explained_native_result(project, kwargs['output'])
+        owner, grant, lease = self.fresh_owner(runner)
+        request = self.request(dict(self.source), expected=owner.inspect()['project_revision'])
+        owner.publish(request, grant=grant, lease=lease, deadline_ms=lease.expires_ms)
+        owner.close()
+        before = owner._selector.read_bytes(), owner._journal.read_bytes()
+        with (outputs[0] / 'engine-stderr.txt').open('ab') as stream:
+            stream.write(b'ERROR: new failure\n')
+        with self.assertRaisesRegex(owner_mod.GameplaySourceOwnerError, 'NATIVE_NOT_CLEAN'):
+            owner_mod.GameplaySourcePublicationOwner.reopen(owner._root,
+                project_id=owner.project_id, source_closure_sha256=owner.source_closure_sha256,
+                runner=lambda *a, **kw: self.fail('recovery must not dispatch'))
+        self.assertEqual((owner._selector.read_bytes(), owner._journal.read_bytes()), before)
+
+    def test_clean_flags_do_not_bypass_raw_checks_on_publish_or_reopen(self):
+        for phase in ('publish', 'reopen'):
+            for missing in (False, True):
+                with self.subTest(phase=phase, missing=missing):
+                    outputs = []
+                    def corrupt(output):
+                        path = output / 'engine-stderr.txt'
+                        if missing:
+                            path.unlink()
+                        else:
+                            path.write_bytes(b'WARNING: not a clean log\n')
+                    def runner(project, **kwargs):
+                        output = kwargs['output']
+                        outputs.append(output)
+                        result = bound_native_result(project, output=output)
+                        if phase == 'publish':
+                            corrupt(output)
+                        return result
+                    owner, grant, lease = self.fresh_owner(runner)
+                    request = self.request(dict(self.source), expected=owner.inspect()['project_revision'])
+                    if phase == 'publish':
+                        before = owner._selector.read_bytes(), owner._journal.read_bytes()
+                        with self.assertRaisesRegex(owner_mod.GameplaySourceOwnerError, 'NATIVE_NOT_CLEAN'):
+                            owner.publish(request, grant=grant, lease=lease, deadline_ms=lease.expires_ms)
+                    else:
+                        owner.publish(request, grant=grant, lease=lease, deadline_ms=lease.expires_ms)
+                        owner.close()
+                        before = owner._selector.read_bytes(), owner._journal.read_bytes()
+                        corrupt(outputs[0])
+                        with self.assertRaisesRegex(owner_mod.GameplaySourceOwnerError, 'NATIVE_NOT_CLEAN'):
+                            owner_mod.GameplaySourcePublicationOwner.reopen(owner._root,
+                                project_id=owner.project_id, source_closure_sha256=owner.source_closure_sha256,
+                                runner=lambda *a, **kw: self.fail('recovery must not dispatch'))
+                    self.assertEqual((owner._selector.read_bytes(), owner._journal.read_bytes()), before)
 
 
 if __name__ == "__main__":

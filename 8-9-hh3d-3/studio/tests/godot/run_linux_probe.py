@@ -20,21 +20,19 @@ SUPERVISOR_SHA256 = '5ef0eaaaa4220593add7716aad74da927ca3bb10605e964330de64fecc3
 SUPERVISOR_BOOTSTRAP_SHA256 = '0194f9d31f6f8abaa8a33cc8c412075efa198546c2f187599ee023bd6be5c377'
 DOCKER_CONTEXT = 'desktop-linux'
 DOCKER_ENDPOINT = 'npipe:////./pipe/dockerDesktopLinuxEngine'
-GUARD_MARKER = 'HH_GAMEPLAY_OS_GUARD fork=EPERM socket=EPERM'
-GUARDED_STARTUP_ERROR = ('ERROR: Cannot create pipe from command: "xdg-user-dir" "DESKTOP" 2>/dev/null.\n'
-                         '   at: execute (drivers/unix/os_unix.cpp:899)\n')
+_POLICY_SPEC = importlib.util.spec_from_file_location('gt03_gameplay_log_policy',
+    STUDIO / 'godot-addon/gameplay_log_policy.py')
+log_policy = importlib.util.module_from_spec(_POLICY_SPEC)
+_POLICY_SPEC.loader.exec_module(log_policy)
+GUARD_MARKER = log_policy.GUARD_MARKER
+GUARDED_STARTUP_ERROR = log_policy.GUARDED_STARTUP_ERROR
 # Exact diagnostics for these pinned fixtures only. The guard denies socket()
 # before editor import (two TCP listeners) and the spawn/network fixture calls.
 # These remain errors in raw; explaining them does not make a clean/public PASS.
-GUARDED_SOCKET_ERROR = ('ERROR: Condition "_sock == -1" is true. Returning: FAILED\n'
-                        '   at: _inet_open (drivers/unix/net_socket_unix.cpp:288)\n')
-GUARDED_LISTEN_ERROR = ('ERROR: Condition "err != OK" is true. Returning: ERR_CANT_CREATE\n'
-                        '   at: listen (core/io/tcp_server.cpp:56)\n')
-GAMEPLAY_STARTUP_ERRORS = (GUARDED_STARTUP_ERROR * 2
-    + (GUARDED_SOCKET_ERROR + GUARDED_LISTEN_ERROR) * 2 + GUARDED_STARTUP_ERROR)
-GAMEPLAY_PHASE_EVENTS = tuple(event for phase in ('parse', 'import', 'play')
-    for event in (f'HH_GAMEPLAY_PHASE_BEGIN {phase}', GUARD_MARKER,
-                  f'HH_GAMEPLAY_PHASE_END {phase} 0'))
+GUARDED_SOCKET_ERROR = log_policy.GUARDED_SOCKET_ERROR
+GUARDED_LISTEN_ERROR = log_policy.GUARDED_LISTEN_ERROR
+GAMEPLAY_STARTUP_ERRORS = log_policy.GAMEPLAY_STARTUP_ERRORS
+GAMEPLAY_PHASE_EVENTS = log_policy.GAMEPLAY_PHASE_EVENTS
 
 
 def gameplay_transcript(case: dict, stdout: str, stderr: str) -> bool:
@@ -43,6 +41,11 @@ def gameplay_transcript(case: dict, stdout: str, stderr: str) -> bool:
     primary = 'scripts/fixture_actor.gd'
     scripts = [primary] + sorted(name for name in case.get('extra_files', {})
                                 if name.startswith('scripts/') and name.endswith('.gd'))
+    if kind in ('gameplay_source', 'fixture_state'):
+        try:
+            return log_policy.classify(stdout.encode('utf-8'), stderr.encode('utf-8'), scripts)['accepted']
+        except UnicodeEncodeError:
+            return False
     rejected_path = case.get('parse_error_path', primary) if kind == 'engine_rejection' else None
     if rejected_path is not None and rejected_path not in scripts:
         return False

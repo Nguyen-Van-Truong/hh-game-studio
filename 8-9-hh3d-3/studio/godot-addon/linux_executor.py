@@ -47,6 +47,7 @@ SANDBOX_MODES = GUARDED_MODES + (GAMEPLAY_MODE,)
 GAMEPLAY_RUNTIME_FILES = (
     'godot-addon/gameplay_source_owner.py',
     'godot-addon/gameplay_source_profile.py',
+    'godot-addon/gameplay_log_policy.py',
     'godot-addon/linux_executor.py',
     'godot-addon/cli_job.py',
     'godot-addon/gameplay_sandbox.py',
@@ -250,6 +251,24 @@ def _gameplay_profile():
     raw = _read_file(path, 65536)
     _need(_sha(raw) == GAMEPLAY_PROFILE_SHA256, 'EXECUTOR_GAMEPLAY_PROFILE_PIN')
     key = '_hh_gameplay_source_' + _sha(str(path).encode() + b'\0' + raw)
+    if key not in sys.modules:
+        spec = importlib.util.spec_from_file_location(key, path)
+        module = importlib.util.module_from_spec(spec)
+        sys.modules[key] = module
+        try:
+            exec(compile(raw, str(path), 'exec'), module.__dict__)
+        except BaseException:
+            del sys.modules[key]
+            raise
+    return sys.modules[key]
+
+
+def _gameplay_log_policy():
+    # This host-only classifier is part of the independently observed runtime
+    # closure. Load the exact bytes being hashed, never a module from evidence.
+    path = STUDIO / 'godot-addon/gameplay_log_policy.py'
+    raw = _read_file(path, 65536)
+    key = '_hh_gameplay_log_' + _sha(str(path).encode() + b'\0' + raw)
     if key not in sys.modules:
         spec = importlib.util.spec_from_file_location(key, path)
         module = importlib.util.module_from_spec(spec)
@@ -1027,6 +1046,24 @@ def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate', '
             except BaseException as error:
                 result['gameplay_profile_unchanged'] = False
                 failed(error, 'EXECUTOR_GAMEPLAY_PROFILE_FINALIZE_')
+        try:
+            for stream in ('stdout', 'stderr'):
+                log = output / result[stream]
+                if not log.exists():
+                    log.write_bytes(b'')
+            logs = [_read_file(output / result[field], 262144) for field in ('stdout', 'stderr')]
+            combined = b'\n'.join(logs)
+            result['log_clean'] = re.search(rb'(?m)^(?:SCRIPT ERROR|ERROR|WARNING):|ObjectDB instances leaked', combined) is None
+            if mode == GAMEPLAY_MODE:
+                primary = 'scripts/fixture_actor.gd'
+                scripts = [primary] + sorted(name for name in before if name.startswith('scripts/')
+                                             and name.endswith('.gd') and name != primary)
+                result['log_policy'] = _gameplay_log_policy().classify(logs[0], logs[1], scripts)
+        except BaseException as error:
+            result['log_clean'] = False
+            result['errors'].append('EXECUTOR_EVIDENCE_LOG_UNAVAILABLE')
+            if not isinstance(error, Exception):
+                failed(error, 'EXECUTOR_LOG_FINALIZE_')
         if mode == GAMEPLAY_MODE:
             try:
                 result['source_closure_unchanged'] = (
@@ -1035,33 +1072,25 @@ def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate', '
             except BaseException as error:
                 result['source_closure_unchanged'] = False
                 failed(error, 'EXECUTOR_SOURCE_CLOSURE_FINALIZE_')
-        try:
-            for stream in ('stdout', 'stderr'):
-                log = output / result[stream]
-                if not log.exists():
-                    log.write_bytes(b'')
-            combined = b'\n'.join(_read_file(output / result[field], 262144) for field in ('stdout', 'stderr'))
-            result['log_clean'] = re.search(rb'(?m)^(?:SCRIPT ERROR|ERROR|WARNING):|ObjectDB instances leaked', combined) is None
-        except BaseException as error:
-            result['log_clean'] = False
-            result['errors'].append('EXECUTOR_EVIDENCE_LOG_UNAVAILABLE')
-            if not isinstance(error, Exception):
-                failed(error, 'EXECUTOR_LOG_FINALIZE_')
         state = result['state'] or {}
-        result['diagnostic_process_clean'] = bool(result['commandhost'] and _cli_clean(result['commandhost'])
+        result['diagnostic_execution_complete'] = bool(result['commandhost'] and _cli_clean(result['commandhost'])
             and state.get('ExitCode') == 0 and state.get('Running') is False and state.get('Pid') == 0
             and state.get('OOMKilled') is False and result.get('docker_wait_exit') == 0
             and result['owned_removed'] and result['input_unchanged'] and result['snapshot_unchanged']
             and result['binary_unchanged'] and result['profile_harness_unchanged'] and result['sandbox_harness_unchanged']
             and result['gameplay_profile_unchanged']
             and (mode != GAMEPLAY_MODE or result['source_closure_unchanged'] is True)
-            and result['log_clean'] and not result['errors'])
+            and not result['errors'])
+        # Preserve the raw meaning of both existing fields. A known-noise
+        # policy is separate evidence, not a relabeling of ERROR lines as clean.
+        result['diagnostic_process_clean'] = result['diagnostic_execution_complete'] and result['log_clean']
         result['command_host'] = result['commandhost']
         result['container_state'] = result['state']
         try:
             _write(output / 'result.json', result)
         except BaseException as error:
             result['errors'].append('EXECUTOR_RESULT_WRITE_FAILED')
+            result['diagnostic_execution_complete'] = False
             result['diagnostic_process_clean'] = False
             if not isinstance(error, Exception):
                 failed(error, 'EXECUTOR_RESULT_FINALIZE_')
