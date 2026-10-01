@@ -27,6 +27,28 @@ closure needed by the two fixtures, remaining hostile AUTH-05 proof and complete
 fixture E2E. Dated entries below preserve history; their
 old next-action notes do not supersede this checkpoint or the tools plan.
 
+## 2026-10-01 focused pure regression receipt and closure matrix
+
+The current read-only repair suite was run once after `6485a18e` with no
+engine, Docker, or Blender process. It ran **75 tests**, captured an actual
+exit code of `0`, and left the measured source unchanged. The receipt is
+`studio/.local/reviews/o2-focused-tests-20261001-02/exit.json`; its bound
+runtime source closure is
+`0b2fec9eb23e57ba663868d45b1a8ed635912d2aefbc34b5493e0ddd40d71b8e`.
+
+The remaining authoring gates are recorded explicitly so a clean fixture run
+cannot be mistaken for a public capability:
+
+| Gate | What is proven now | Missing proof before AUTHORITY can change |
+| --- | --- | --- |
+| AUTH-02 dependency closure | Bounded path/hash inventory and guarded fixture inputs | Observe and bind the complete Godot graph (scene `ext_resource`, UID, preload/dynamic loads), reject missing/stale/out-of-root/cyclic dependencies, then save-close-reopen and read back the same closure |
+| AUTH-03 failure recovery | Static fail-closed checks preserve CURRENT/journal and reject dirty or forged native evidence | Native syntax/type/dependency/timeout/output-cap/Stop failures with actual exits, raw evidence, cleanup, and last-good publication still selected |
+| AUTH-04 publication/recovery | One clean native dispatch plus static selector/journal cuts, retry and reopen checks | Native cuts at every durable phase, process-restart deduplication, manual-edit reconciliation, and adapter ACK bound to the owned run and full closure |
+| AUTH-05 sandbox/public | Guarded Docker diagnostics and exact read-only asset mounts | OS-observed hostile tests, attribution, and owner approval for public gameplay-source publication |
+
+These rows are implementation gaps, not acceptance ticks. No O2 merge or
+GT-06 claim follows from the receipt.
+
 The eligibility boundary is deliberately narrow: every `scripts/**/*.gd` is
 lexically checked for a real `@tool` annotation outside comments/strings, and
 every `scenes/**/*.tscn` is checked for embedded script/native-resource
@@ -92,7 +114,7 @@ launches were accidentally overlapped after the tool session IDs were not
 retained; only those known test processes were stopped before the native run.
 Do not count the broad discovery as PASS. Keep the exec session ID visible,
 poll that session instead of relaunching, and use the completed focused suite
-for this repair. The 75 focused checks and fresh native run are the verified
+for this repair. The receipt above and fresh native run are the verified
 results; no user application was stopped.
 
 ## Verified candidate evidence
@@ -197,7 +219,7 @@ Do not infer all-fixture success from clean cleanup or partial success.
 | HUD, audio, pause/restart | Typed nodes and GT-06 Play controls | Public adapter integration and actual fixture E2E |
 | 3D avatar from Blender | Armature/action/keyframe and GT-05 pipeline | Geometry/material/UV -> GLB -> Godot on authored avatar |
 | 3D movement, follow camera, two interactions | CharacterBody3D/Camera3D/Area candidates | Typed gameplay source, collision/input and UI evidence |
-| 2D sprite sheet | No completed candidate evidence | Blender render/export and Godot import |
+| 2D sprite sheet | Bounded PNG import/readback observed in `o2-publication-20261001-11` | Full authored sprite-sheet gameplay fixture, animation and public acceptance |
 | Both: save/reload, ACK, lease/recovery | Existing accepted narrow adapters | AUTH-02..04 integration for new candidates |
 | Both: hostile source execution | Existing GT-03 Docker executor only | AUTH-05 gameplay profile and OS-observed hostile tests |
 
