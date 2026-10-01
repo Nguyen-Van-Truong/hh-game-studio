@@ -336,3 +336,29 @@ needed for the next repair. Raw evidence remains under `studio/.local/`.
   closure and O4.1 preflight/CPU observation. No formal pair is allowed before
   that soak and its timing/memory/cleanup checks pass. Raw diagnostics remain
   under `.local`; no old run is resumed.
+
+## 2026-10-01 — O6.3 observer repair and fresh dispatch readiness
+
+- `gt06-o6-host-soak-20261001-02` was terminal before completion: batches
+  `0..13`, sample `92`, `CAMPAIGN_WATCHDOG_OBSERVER_ERROR` from the PerfProc
+  query. It is a `HARNESS_FAIL`, not an O6.3 result, `INFRA_ABORT`, product
+  verdict, or formal pair. The supervisor had no child actual-exit record, but
+  its Job/tree/handle cleanup is closed with active count `0`, zero observed,
+  and no retained handle. The exact task was deleted only after that cleanup;
+  raw evidence remains under `.local/reviews/gt06-o6-host-soak-20261001-02/`.
+- Repair commit `50fc45c1` bounds PerfProc queries to two attempts under one
+  eight-second deadline, preserves unknown counters on empty/partial provider
+  output, rejects late/malformed/duplicate rows, and persists only whitelisted
+  diagnostics. Regression commit `e12268eb` adds the failure/retry/shape and
+  secret-suppression cases; focused suite is **50 tests, exit 0**. A separate
+  12-call provider probe also returned exit `0` on every call (diagnostic only).
+- Fresh source closure after the repair/test commit is
+  `46bfe26f04d6dc4e73cf3f18fc35a9974cd957ce2a232ce2e36b3d85206b9915` (54
+  files). O4.1 preflight/CPU observation `soak-preflight-20261001-03` ran for
+  about one minute: available memory stayed `5.66–7.18 GiB`, commit
+  `72.93–75.57%`, no foreign Godot/Blender engine, and no external process
+  reached the 50% CPU abort threshold. This is launch readiness only.
+- The next permitted action is one fresh host-only O6.3 35-batch soak with a
+  new ID and this frozen closure. Do not run formal09 until its actual exits,
+  cleanup, timing and O1.4 memory/handle/status metrics pass; if private
+  growth exceeds 107%, perform the required additional soak with another ID.
