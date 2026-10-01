@@ -1066,5 +1066,57 @@ class GameplaySourceOwnerTests(unittest.TestCase):
                     self.assertEqual((owner._selector.read_bytes(), owner._journal.read_bytes()), before)
 
 
+    def test_unsupported_sources_reject_before_creation_digest_or_native_stage(self):
+        cases = (
+            ('scripts/fixture_actor.gd', b'@tool\nextends Node3D\n', 'TOOL_SCRIPT'),
+            ('scripts/secondary.gd', b'@tool\nextends RefCounted\n', 'TOOL_SCRIPT'),
+            ('scenes/secondary.tscn', b'[gd_scene format=3]\n[sub_resource type="GDScript" id="s"]\n',
+             'EXECUTABLE_RESOURCE'),
+            ('scripts/extension.gdextension', b'[configuration]\n', 'FILE_KIND'),
+        )
+        for name, raw, code in cases:
+            with self.subTest(name=name):
+                files = {**self.source, name: raw}
+                before = self.durable_state()
+                inventory = sorted(path.relative_to(self.parent).as_posix()
+                                   for path in self.parent.rglob('*'))
+                with self.assertRaisesRegex(ValueError, code):
+                    owner_mod.GameplaySourcePublicationOwner.create(self.parent,
+                        project_id='project.rejected', source_files=files,
+                        entrypoint=owner_mod.ENTRYPOINT,
+                        source_closure_sha256=self.owner.source_closure_sha256)
+                with self.assertRaisesRegex(ValueError, code):
+                    self.request(files)
+                # A caller need not use request_digest(). Admission must still
+                # reject a correctly hashed unsupported request before staging.
+                request = {'command_id': 'command.rejected', 'entrypoint': owner_mod.ENTRYPOINT,
+                    'expected_project_revision': before[0]['project_revision'], 'source_files': files}
+                request['digest'] = owner_mod._request_digest(project_id=self.owner.project_id, **request)
+                with self.assertRaisesRegex(ValueError, code):
+                    self.owner.publish(request, grant=self.grant, lease=self.lease,
+                                       deadline_ms=self.lease.expires_ms)
+                self.assertEqual(self.runs, [])
+                self.assertEqual(self.durable_state(), before)
+                self.assertEqual(sorted(path.relative_to(self.parent).as_posix()
+                                        for path in self.parent.rglob('*')), inventory)
+
+    def test_reopen_rechecks_eligibility_before_repairing_selector(self):
+        # Simulate a coherent durable candidate written by the pre-fix owner.
+        # Hash consistency must not replace the current eligibility policy.
+        files = {**self.source, 'scripts/secondary.gd': b'@tool\nextends RefCounted\n'}
+        revision = self.owner._revision(files)
+        self.owner._materialize(revision, files)
+        row = json.loads(self.owner._journal.read_bytes())
+        row.update(project_revision=revision, source_sha256=self.owner._source_hash(files))
+        self.owner._journal.write_bytes(owner_mod.canonical_bytes(row) + b'\n')
+        self.owner.close()
+        before = self.owner._selector.read_bytes(), self.owner._journal.read_bytes()
+        with self.assertRaisesRegex(ValueError, 'TOOL_SCRIPT'):
+            owner_mod.GameplaySourcePublicationOwner.reopen(self.owner._root,
+                project_id=self.owner.project_id, source_closure_sha256=self.owner.source_closure_sha256,
+                runner=lambda *a, **kw: self.fail('reopen must not dispatch'))
+        self.assertEqual((self.owner._selector.read_bytes(), self.owner._journal.read_bytes()), before)
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -48,6 +48,7 @@ GAMEPLAY_RUNTIME_FILES = (
     'godot-addon/gameplay_source_owner.py',
     'godot-addon/gameplay_runtime.py',
     'godot-addon/gameplay_source_profile.py',
+    'godot-addon/gameplay_source_eligibility.py',
     'godot-addon/gameplay_log_policy.py',
     'godot-addon/linux_executor.py',
     'godot-addon/cli_job.py',

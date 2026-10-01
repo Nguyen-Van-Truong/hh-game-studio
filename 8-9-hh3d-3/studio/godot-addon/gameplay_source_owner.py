@@ -100,6 +100,7 @@ def _copy_source_bundle(profile, source_files, *, entrypoint: str):
             raise profile.GameplaySourceError("GAMEPLAY_DEPENDENCY_DUPLICATE")
         candidate[name] = raw
     checked = profile.validate_source_bundle(candidate, entrypoint=entrypoint)
+    _load('gameplay_source_eligibility').validate_publication_sources(candidate)
     return candidate, checked
 
 
@@ -461,7 +462,7 @@ class GameplaySourcePublicationOwner:
                   "GAMEPLAY_OWNER_READBACK_HASH")
             files[name] = raw
         _need(self._revision(files) == revision, "GAMEPLAY_OWNER_REVISION_MISMATCH")
-        self._profile.validate_source_bundle(files, entrypoint=ENTRYPOINT)
+        _copy_source_bundle(self._profile, files, entrypoint=ENTRYPOINT)
         project = self._executor._read_file(target / "project/project.godot", 65536)
         _need(project == self._profile.PROJECT_TEMPLATE.encode()
               and _sha(project) == manifest["project_godot_sha256"], "GAMEPLAY_OWNER_PROJECT_HASH")

@@ -4,16 +4,31 @@ Authority 0. Separate branch: codex/o2-authoring-contract.
 Merge only after GT-06 acceptance. Tools-plan O4 is authoritative; this file
 tracks implementation gaps and does not create another acceptance plan.
 
-Current checkpoint: `o2-publication-20261001-03` repeated real Docker/Godot
-publication, live retry, close/reopen and recovered retry after binding the
-declared Python runtime to one captured source generation. Exactly one native
-dispatch, outer/host/container exits 0, clean cleanup; 131 focused tests exit 0.
+Current checkpoint: `o2-publication-20261001-05` repeated real Docker/Godot
+publication after adding an owner-side publication eligibility boundary.
+Exactly one native dispatch, outer/host/container exits 0, clean cleanup; live
+retry, close/reopen and recovered retry are byte/durable-state equal. The new
+eligibility plus regression suite is 143 tests, actual exit 0. A prior native
+reproducer (`o2-tool-publication-baseline-20261001-01`) remains preserved as a
+real bug finding: a clean native run previously accepted `@tool` and returned
+READBACK_ACK. The owner now rejects that source before staging, while the
+diagnostic byte profile still admits hostile input for AUTH-05 testing.
 Stale shared imports/pyc cannot acquire a new source label; drift blocks cached
 ACK, adoption and selector recovery. Raw startup diagnostics remain visible.
 This is candidate evidence, not AUTH-05 or public capability. Next: dependency
 closure needed by the two fixtures, remaining hostile AUTH-05 proof and complete
 fixture E2E. Dated entries below preserve history; their
 old next-action notes do not supersede this checkpoint or the tools plan.
+
+The eligibility boundary is deliberately narrow: every `scripts/**/*.gd` is
+lexically checked for a real `@tool` annotation outside comments/strings, and
+every `scenes/**/*.tscn` is checked for embedded script/native-resource
+declarations (including escaped or split reserved keys). Ordinary scene data and
+external `Script` resources remain allowed. Other file kinds are rejected by
+the publication candidate. This is not a GDScript or TSCN parser, dependency
+closure proof, or sandbox acceptance; native Godot validation and AUTH-02..05
+remain open. Embedded scripts are rejected before dispatch rather than silently
+ignored.
 
 ## Verified candidate evidence
 
