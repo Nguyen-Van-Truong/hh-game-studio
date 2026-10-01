@@ -684,12 +684,17 @@ GT-06 acceptance remain open, and this branch must not merge before GT-06.
 
 The gameplay-source executor now computes the declared runtime adapter closure
 itself before work and again before result finalization. A caller-supplied hash,
-when present, must match that observation; a changed or malformed closure
-fails closed and cannot start the container. Native result validation requires
-the observed closure hash and an unchanged flag before selector or journal
-adoption. Pure tests cover missing, stale and changed closure evidence while
-preserving `CURRENT` and the journal. The focused suites pass **36 owner
-tests**, **10 executor guard tests**, and **12 probe tests**, all actual exit 0.
+when present, must match that observation; a missing or malformed declaration,
+or a stale pre-dispatch hash, fails closed before starting the container. A
+source change discovered during execution invalidates the final result and
+preserves `CURRENT` and the journal. Native result validation requires the
+observed closure hash and an unchanged flag before selector or journal
+adoption. The explicit inventory now includes the package initializers and
+implementation imported transitively by `studio.protocol.core`, plus
+`host/core/journal.py` and `host/core/redaction.py`; it is still a declared
+adapter closure, not arbitrary project dependency discovery. The focused
+suite passes **36 owner tests**, **10 executor guard tests**, and **12 probe
+tests** (58 total), all actual exit 0.
 This remains `AUTHORITY=0`: the inventory is an explicit adapter closure and
 does not prove arbitrary project dependency discovery, AUTH-02..04 full
 runtime closure, AUTH-05, Blender rig/GLB acceptance or GT-06; do not merge
