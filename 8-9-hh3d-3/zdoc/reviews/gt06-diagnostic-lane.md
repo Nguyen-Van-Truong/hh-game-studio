@@ -260,3 +260,55 @@ needed for the next repair. Raw evidence remains under `studio/.local/`.
   opening GT-07. The run is the independent `>107%` variation trigger and
   also crosses the `110%` O1.4 ceiling. Keep raw immutable; do not dispatch a
   formal run or repeat a long soak before a bounded memory/index diagnosis.
+
+## 2026-10-01 — bounded HTTP allocation diagnosis and journal sidecar repair
+
+- Initial `o6-memory-attribution-20261001-01/run.py` used 10 tracing frames
+  and produced only batch 0 before losing its process/tool observation. No
+  actual exit, complete result or cleanup proof is available. Preserve it as
+  incomplete, not PASS, and do not resume it. Lesson: deep tracing materially
+  distorts this HTTP workload; use one frame and bounded supervision.
+- `http-alloc-20261001-01/probe.py` completed 35 x 100 commands (3,500 total)
+  with one tracing frame in 315.11 seconds; captured child exit 0, clean Job,
+  tree and handles, producer closed, source unchanged. Closure:
+  `15337fb2fd9a10e6a9234e6818b6d376b6f386596c602777010861121b8bc046`.
+  It is not the 35,000-command soak or an O1.4 result. Live traced allocation
+  increased from about 2.64 MB to 3.63 MB; snapshot 19 attributed 961,600
+  bytes to `pathlib.py:74` (`sys.intern`). The phase ring remained bounded.
+- Isolated `path-intern-20261001-01/probe.py` ran 200,000 repeated guard/lock
+  name evaluations in each of two fresh interpreters, both actual exit 0.
+  Rebuilding names retained 967,384 traced bytes (961,216 at pathlib's intern
+  call), versus 6,168 when the same two Path objects were retained. Private
+  bytes increased 1,798,144 versus 4,096. This proves a source of allocation,
+  not attribution of every byte of the prior soak. The isolated raw records
+  script hash and Python version, not a full imported-source closure.
+- Repair retains only the journal's two derived sidecar names, keyed by its
+  current path. Every namespace lstat, guard open/fstat, kernel lock and
+  metadata recovery check still executes. No global cache purge, baseline
+  padding, workload reduction or gate/timeout change is introduced. Focused
+  tests cover bounded retained allocation, path changes, and unsafe aliases
+  introduced after cache population.
+- O3 direction closeout (three diagnostic attempts): (1) selected: validate
+  this demonstrated repair with regressions and the existing 35,000-command
+  direct microbench, then one fresh O6.3 soak if it passes; cost roughly a few
+  minutes of tests plus the prior microbench's 16-minute runtime, risk that
+  other native allocator variation remains. (2) Keep diagnosing unrelated
+  allocation sites: higher cost with no current evidence, so deferred.
+  (3) Continue O2 if the environment or validation prevents measurement;
+  GT06 remains open. No further blind diagnostic/soak loop is authorized by
+  this note, and no formal dispatch follows before all O6 prerequisites.
+- Static implementation review found that Windows Path equality can fold case
+  despite a case-sensitive directory. Cache invalidation now uses immutable
+  Path identity, with an exact-spelling reassignment regression. Final tests
+  recorded under `sidecar-verify-20261001-01`: protocol **447** (4 skipped),
+  replay **693**, both actual exit 0 and unchanged source. The earlier replay
+  run rejected the changed journal with `REPLAY_REUSE_SOURCE_CHANGED`; only
+  the installed execution binding/selector was refreshed, leaving GT05's
+  accepted manifest unchanged. An intervening protocol tool handle vanished
+  with no terminal proof; it was not counted.
+- Direct microbench `o6-ram-20261001-03` was launched from the tool session
+  and stopped after 30,000 commands without a captured exit/result. Do not
+  infer completion or resume it. Brief O2 pure tests also overlapped its early
+  window, so it is not clean O6.2 evidence. The next validation uses an
+  independent demand task with retained Job supervision, persisted actual
+  exit, measurement lock and watchdog; no competing tests are allowed.

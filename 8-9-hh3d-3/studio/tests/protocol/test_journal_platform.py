@@ -16,6 +16,63 @@ from host.core.limits import LimitsProfile
 
 
 class JournalPlatformTests(unittest.TestCase):
+    def test_repeated_sidecar_names_do_not_retain_an_intern_table(self):
+        # A fresh interpreter isolates the global intern table from other
+        # tests. No journal records or files are involved in this allocation.
+        code = "\n".join([
+            "import gc,sys,tracemalloc", "from pathlib import Path",
+            "sys.path.insert(0,sys.argv[1])", "from host.core.journal import Journal",
+            "j=object.__new__(Journal)", "j.path=Path('journal.jsonl')",
+            "j._sidecar_cache=None", "tracemalloc.start(1)",
+            "for _ in range(200000):",
+            "    lock,guard=j._lock_path,j._guard_path",
+            "    assert lock.name=='journal.jsonl.lock' and guard.name=='journal.jsonl.guard'",
+            "del lock,guard", "gc.collect()",
+            "current,peak=tracemalloc.get_traced_memory()",
+            "assert current < 65536, (current,peak)",
+            "print('BOUNDED_SIDECAR_NAMES',flush=True)",
+        ])
+        result = subprocess.run([sys.executable, "-B", "-c", code, str(ROOT)],
+                                capture_output=True, text=True, timeout=30)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(result.stdout.strip(), "BOUNDED_SIDECAR_NAMES")
+
+    def test_sidecar_cache_follows_current_path(self):
+        with tempfile.TemporaryDirectory() as td:
+            journal = Journal(Path(td) / "first", limits=JournalLimits(lock_timeout_ms=30))
+            journal.path = Path(td) / "second"
+            lock = Path(td) / "second.lock"
+            raw = json.dumps({"pid": str(os.getpid()), "created_ns": "1"}).encode()
+            lock.write_bytes(raw)
+            with self.assertRaisesRegex(JournalError, "JOURNAL_LOCKED"):
+                with journal._writer_lock():
+                    self.fail("new path's live lock was ignored")
+            self.assertEqual(lock.read_bytes(), raw)
+            self.assertTrue((Path(td) / "second.guard").exists())
+
+    def test_cached_sidecar_names_do_not_cache_filesystem_safety(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            journal = Journal(root / "journal")
+            guard = journal._guard_path
+            os.link(guard, root / "guard-alias")
+            with self.assertRaisesRegex(JournalError, "JOURNAL_LOCK_UNSAFE"):
+                journal.lookup(project_id="p", command_id="c", now_ms=0)
+            (root / "guard-alias").unlink()
+            journal.path.write_bytes(b"")
+            os.link(journal.path, root / "journal-alias")
+            with self.assertRaisesRegex(JournalError, "JOURNAL_PATH_UNSAFE"):
+                journal.lookup(project_id="p", command_id="c", now_ms=0)
+
+    def test_case_only_path_reassignment_uses_exact_new_sidecar_names(self):
+        with tempfile.TemporaryDirectory() as td:
+            journal = Journal(Path(td) / "journal")
+            journal.path = Path(td) / "JOURNAL"
+            # WindowsPath equality is case-insensitive even for a directory
+            # configured for case-sensitive lookup. Compare exact spelling.
+            self.assertEqual(journal._lock_path.name, "JOURNAL.lock")
+            self.assertEqual(journal._guard_path.name, "JOURNAL.guard")
+
     def test_liveness_probe_returns_without_terminating_caller(self):
         # Isolate the legacy bug: on Windows os.kill(pid, 0) terminates this
         # disposable child with exit 0, so a host exit alone is insufficient.

@@ -108,6 +108,7 @@ class Journal:
     def __init__(self, path: str | os.PathLike[str], *, limits: JournalLimits | None = None,
                  profile: LimitsProfile = DEFAULT_LIMITS) -> None:
         self.path = Path(path)
+        self._sidecar_cache: tuple[Path, Path, Path] | None = None
         self.limits = limits or JournalLimits()
         self.profile = profile
         self._records = _DiskRecords(self)
@@ -140,7 +141,25 @@ class Journal:
 
     @property
     def _lock_path(self) -> Path:
-        return self.path.with_name(self.path.name + ".lock")
+        return self._sidecar_paths()[1]
+
+    @property
+    def _guard_path(self) -> Path:
+        return self._sidecar_paths()[2]
+
+    def _sidecar_paths(self) -> tuple[Path, Path, Path]:
+        # Rebuilding fixed names makes pathlib repeatedly intern temporary
+        # strings and grow CPython's intern table. Retain only this journal's
+        # two names; never cache filesystem identity or safety observations.
+        path = self.path
+        cached = self._sidecar_cache
+        # Path is immutable. Identity also notices case-only reassignment on
+        # Windows volumes where Path equality folds distinct file names.
+        if cached is None or cached[0] is not path:
+            cached = (path, path.with_name(path.name + ".lock"),
+                      path.with_name(path.name + ".guard"))
+            self._sidecar_cache = cached
+        return cached
 
     @staticmethod
     def _pid_alive(pid: int) -> bool:
@@ -181,7 +200,7 @@ class Journal:
         allow another writer to lock a replacement inode at the same path.
         Kernel ownership is released automatically on process death.
         """
-        guard = self.path.with_name(self.path.name + ".guard")
+        guard = self._guard_path
         self._check_private_namespace()
         guard.parent.mkdir(parents=True, exist_ok=True)
         flags = os.O_CREAT | os.O_RDWR | getattr(os, "O_BINARY", 0) | getattr(os, "O_NOFOLLOW", 0)
