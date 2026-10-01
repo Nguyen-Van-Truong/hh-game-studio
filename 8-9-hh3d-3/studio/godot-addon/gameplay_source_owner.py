@@ -553,18 +553,26 @@ class GameplaySourcePublicationOwner:
               and result.get("errors") == [],
               "GAMEPLAY_OWNER_NATIVE_NOT_CLEAN")
         state = result.get("state")
-        _need(type(state) is dict and state.get("Running") is False and state.get("Pid") == 0
-              and state.get("ExitCode") == 0 and state.get("OOMKilled") is False
-              and result.get("docker_wait_exit") == 0, "GAMEPLAY_OWNER_NATIVE_EXIT")
+        # JSON false compares equal to 0 in Python. Exit/count proof must be
+        # an observed integer, including when durable evidence is reopened.
+        _need(type(state) is dict and state.get("Running") is False
+              and all(type(state.get(key)) is int and state[key] == 0
+                      for key in ("Pid", "ExitCode"))
+              and state.get("OOMKilled") is False
+              and type(result.get("docker_wait_exit")) is int
+              and result["docker_wait_exit"] == 0, "GAMEPLAY_OWNER_NATIVE_EXIT")
         host = result.get("commandhost") or result.get("command_host")
-        _need(type(host) is dict and host.get("exit_code") == 0
+        _need(type(host) is dict
+              and all(type(host.get(key)) is int and host[key] == 0
+                      for key in ("exit_code", "job_active_count"))
               and host.get("timed_out") is False and host.get("stream_cap_exceeded") is False
-              and host.get("readers_stopped") is True and host.get("job_active_count") == 0,
+              and host.get("readers_stopped") is True,
               "GAMEPLAY_OWNER_NATIVE_HOST")
         job = host.get("job_owner")
         _need(type(job) is dict and job.get("configured") is True and job.get("assigned") is True
               and job.get("closed") is True and job.get("zero_observed") is True
-              and job.get("active_count") == 0 and job.get("tainted") is False
+              and type(job.get("active_count")) is int and job["active_count"] == 0
+              and job.get("tainted") is False
               and job.get("handle_retained") is False and job.get("failed_operations") == [],
               "GAMEPLAY_OWNER_NATIVE_JOB")
         _need(type(result.get("run_id")) is str and _ID.fullmatch(result["run_id"].replace("-", ".")),

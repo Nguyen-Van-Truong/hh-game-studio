@@ -756,6 +756,62 @@ class GameplaySourceOwnerTests(unittest.TestCase):
                 self.assertEqual(owner._selector.read_bytes(), selector_before)
                 self.assertEqual(owner._journal.read_bytes(), journal_before)
 
+    def test_native_exit_and_process_counts_require_integer_zero(self):
+        paths = (("state", "Pid"), ("state", "ExitCode"), ("docker_wait_exit",),
+                 ("commandhost", "exit_code"), ("commandhost", "job_active_count"),
+                 ("commandhost", "job_owner", "active_count"))
+        for path in paths:
+            for value in (False, 0.0, None, "0", 1, -1):
+                with self.subTest(path=path, value=value, kind=type(value).__name__):
+                    result = native_result()
+                    for field in ("input_hashes_before", "input_hashes_after", "snapshot_hashes_after"):
+                        result[field] = {}
+                    target = result
+                    for key in path[:-1]:
+                        target = target[key]
+                    target[path[-1]] = value
+                    with self.assertRaisesRegex(owner_mod.GameplaySourceOwnerError, "NATIVE_(EXIT|HOST|JOB)"):
+                        owner_mod.GameplaySourcePublicationOwner._validate_native(
+                            result, expected_input_hashes={},
+                            expected_source_closure_sha256=owner_mod.runtime_source_closure()[1])
+
+    def test_boolean_exit_cannot_publish_or_restore_cached_ack(self):
+        request = self.request(dict(self.source), command="command.boolean-exit")
+        selected, journal = self.owner._selector.read_bytes(), self.owner._journal.read_bytes()
+
+        def runner(project, **kwargs):
+            result = bound_native_result(project, output=kwargs['output'])
+            result['state']['ExitCode'] = False
+            kwargs['output'].joinpath('result.json').write_bytes(owner_mod.canonical_bytes(result))
+            return result
+
+        self.owner._runner = runner
+        with self.assertRaisesRegex(owner_mod.GameplaySourceOwnerError, "NATIVE_EXIT"):
+            self.owner.publish(request, grant=self.grant, lease=self.lease,
+                               deadline_ms=self.lease.expires_ms)
+        self.assertEqual(self.owner._selector.read_bytes(), selected)
+        self.assertEqual(self.owner._journal.read_bytes(), journal)
+        self.assertTrue(self.owner._held)
+        self.assertTrue(self.owner._session.status()['held'])
+        self.assertTrue((self.owner._runs / request['command_id'] / 'result.json').is_file())
+
+        owner, grant, lease = self.fresh_owner(
+            lambda project, **kw: bound_native_result(project, output=kw['output']))
+        owner.publish(request, grant=grant, lease=lease, deadline_ms=lease.expires_ms)
+        owner.close()
+        result_path = owner._runs / request['command_id'] / 'result.json'
+        result = json.loads(result_path.read_bytes())
+        result['docker_wait_exit'] = False
+        result_path.write_bytes(owner_mod.canonical_bytes(result))
+        selected, journal = owner._selector.read_bytes(), owner._journal.read_bytes()
+        with self.assertRaisesRegex(owner_mod.GameplaySourceOwnerError, "NATIVE_EXIT"):
+            owner_mod.GameplaySourcePublicationOwner.reopen(
+                owner._root, project_id=owner.project_id,
+                source_closure_sha256=owner_mod.runtime_source_closure()[1],
+                runner=lambda *args, **kw: self.fail("recovery must not dispatch"))
+        self.assertEqual(owner._selector.read_bytes(), selected)
+        self.assertEqual(owner._journal.read_bytes(), journal)
+
     def test_native_result_readback_failure_latches_owner_and_session(self):
         before_selector = self.owner._selector.read_bytes()
         before_journal = self.owner._journal.read_bytes()

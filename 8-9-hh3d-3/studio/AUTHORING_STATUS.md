@@ -709,3 +709,22 @@ Focused validation: 27 owner + 9 profile + 11 executor guard + 12 probe tests
 (59 total), actual exit 0 in 8.104 seconds, no Docker or engine. Imported-versus-disk
 generation binding remains a separate open runtime-closure obligation; this
 inventory correction alone does not prove it.
+
+### 2026-10-01 native result numeric evidence (static)
+
+The publication owner rejected dirty exit codes but previously accepted JSON
+`false` or floating-point zero for six integer exit/process-count fields,
+because Python compares them equal to `0`. The new reproducer failed before
+repair (12 malformed numeric cases plus publication with a boolean exit).
+Validation now requires integer zero for the container PID/exit, Docker wait
+exit, host exit/active count and Job active count. This check also applies when
+reopening durable evidence before restoring a cached ACK.
+
+The owner suite passes **29 tests**, actual exit 0 in 9.641 seconds; profile,
+guarded executor and probe-evidence suites pass **32 tests**, actual exit 0 in
+1.240 seconds. Coverage includes 36 negative field/value cases and publication
+and recovery paths: malformed proof preserves raw evidence and the previous
+selector/journal; a failed native stage holds the owner and session. No native
+engine or Docker ran. `AUTHORITY=0`; imported-versus-disk generation binding,
+full dependency closure, AUTH-05 and fixture E2E remain open. Do not merge
+before GT-06 acceptance.
