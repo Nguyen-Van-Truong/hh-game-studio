@@ -51,6 +51,7 @@ class GameplayProbeEvidenceTests(unittest.TestCase):
     def test_complete_fixture_is_observed_but_never_public_validation(self):
         row = self.check()
         self.assertTrue(row['fixture_observed'])
+        self.assertFalse(row['asset_import_observed'])
         for key in ('public_ack', 'sandbox_acceptance', 'validation_attribution_proven'):
             self.assertIs(row[key], False)
         self.assertIs(self.result['diagnostic_process_clean'], False)
@@ -64,11 +65,21 @@ class GameplayProbeEvidenceTests(unittest.TestCase):
         row = self.check()
         self.assertTrue(row['fixture_observed'])
         self.assertTrue(row['asset_import_observed'])
+        dirty = copy.deepcopy(self.result)
+        dirty['owned_removed'] = False
+        self.assertFalse(self.check(result=dirty)['asset_import_observed'])
+        self.assertFalse(self.check(stderr=self.stderr + 'ERROR: unexplained\n')['asset_import_observed'])
         for output in (self.stdout.replace('"avatar_loaded":true', '"avatar_loaded":false'),
                        self.stdout.replace('"sprite_loaded":true', '"sprite_loaded":false'),
                        self.stdout.replace('HH_PROBE_ASSET_READBACK {"avatar_loaded":true,"sprite_loaded":true}\n', '')):
             with self.subTest(output=output):
                 self.assertFalse(self.check(stdout=output)['fixture_observed'])
+                self.assertFalse(self.check(stdout=output)['asset_import_observed'])
+
+    def test_asset_marker_without_asset_fixture_does_not_claim_import(self):
+        self.stdout = self.stdout.replace('HH_PROBE_PLAY ',
+            'HH_PROBE_ASSET_READBACK {"avatar_loaded":true,"sprite_loaded":true}\nHH_PROBE_PLAY ')
+        self.assertFalse(self.check()['asset_import_observed'])
 
     def test_fixture_state_requires_exact_typed_gameplay_result(self):
         self.case.update(expect='fixture_state', fixture_kind='arena_2d',

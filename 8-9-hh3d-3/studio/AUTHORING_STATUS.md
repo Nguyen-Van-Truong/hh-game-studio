@@ -4,31 +4,45 @@ Authority 0. Separate branch: codex/o2-authoring-contract.
 Merge only after GT-06 acceptance. Tools-plan O4 is authoritative; this file
 tracks implementation gaps and does not create another acceptance plan.
 
-Current checkpoint: `o2-auth05-native-20261001-02` is the latest fresh real
-Docker/Godot hostile-fixture observation on the repaired read-only
-project/asset-overlay design, with
-source closure `0b2fec9eb23e57ba663868d45b1a8ed635912d2aefbc34b5493e0ddd40d71b8e`.
-Exactly one native dispatch, supervisor/outer/host/container exits 0, clean
-Job/tree/handle cleanup; live retry, close/reopen and recovered retry are
-byte/durable-state equal. The asset fixture observed
-`avatar_loaded=true` and `sprite_loaded=true` after Godot import, with
-`asset_import_observed=true`; the source and snapshot inventories stayed
-unchanged. `/project` remains an immutable bind; only the allowlisted
-`/project/assets` tmpfs and exact read-only asset binds are added. The focused
-repair regression set is 138 tests, actual exit 0; the separate probe-evidence
-suite is 23 tests, actual exit 0. A
-prior native
-reproducer (`o2-tool-publication-baseline-20261001-01`) remains preserved as a
-real bug finding: a clean native run previously accepted `@tool` and returned
-READBACK_ACK. The owner now rejects that source before staging, while the
-diagnostic byte profile still admits hostile input for AUTH-05 testing.
-Stale shared imports/pyc cannot acquire a new source label; drift blocks cached
-ACK, adoption and selector recovery. Raw startup diagnostics remain visible.
-This is candidate evidence, not AUTH-05 or public capability. Dependency observation
-and the bounded hostile boundary/spawn/watchdog matrix are diagnostic-only
-checkpoints; remaining work is AUTH-05 review, adapter save/reload integration and
-complete fixture E2E. Dated entries below preserve history; their
-old next-action notes do not supersede this checkpoint or the tools plan.
+Current checkpoints (distinct runs; do not combine their exit/asset claims):
+
+- Publication/dependency: `o2-publication-20261001-15`, runtime closure
+  `0b2fec9eb23e57ba663868d45b1a8ed635912d2aefbc34b5493e0ddd40d71b8e`.
+  Multifile dependency marker, outer/host/container exits 0, one native dispatch,
+  clean Job/tree/handle, unchanged source/snapshot, equal live/recovered retry.
+  This case does not contain the GLB/PNG asset fixture; its generic
+  `asset_import_observed=true` is not proof of an asset being loaded.
+- Asset publication: `o2-publication-20261001-11` is the separate GLB/PNG
+  import/readback diagnostic on immutable `/project`, bounded assets tmpfs and
+  exact read-only asset binds. Keep its hashes and raw with that run.
+- Hostile profile: `o2-auth05-native-20261001-01` observed boundary/network and
+  spawn denial, but its busy case failed before entry. New busy-only run
+  `o2-auth05-native-20261001-02` has outer exit 0 and actual child/host exit 124
+  after the busy-entry marker and supervisor timeout; it has no publication
+  retry/reopen or asset-readback claim. Capture closure:
+  `b40f97ae4206c77e528ee3f4880dbee2ed80d6bf4d74fab0e987adcaf728e6a8`.
+- Pure regression after the watchdog fixture repair: gameplay 138 tests and
+  separate probe-evidence 23 tests, actual exits 0. These are test counts, not
+  completion percentages or independent acceptance evidence.
+
+These are AUTHORITY=0 candidates, not AUTH-05 acceptance or public capability.
+Remaining work: fixture-specific dependency/adapter integration, AUTH-05 review,
+and complete authored fixture E2E. The `@tool` rejection and stale-import guards
+remain active. Dated entries preserve history; old next-action notes do not
+supersede these checkpoints or the tools plan. The earlier header at 4fcd650b
+conflated hostile, publication and asset runs; this summary corrects attribution
+without modifying raw, source or historical verdicts.
+
+## 2026-10-01 review correction: asset observation scope
+
+The raw run15 and busy02 reports used a vacuous `asset_import_observed=true`
+when the fixture did not require assets. That flag is not asset evidence; raw
+is retained unchanged. The probe now returns true only for an asset fixture
+with both asset readbacks and verified enclosing lifecycle/transcript. Missing
+assets, unrequested markers, dirty cleanup or unexplained logs return false.
+The focused gameplay/probe evidence tests pass **38 tests**, actual exit 0;
+no engine or Docker run was needed for this report-only correction. It does
+not change the frozen executor source, grant authority or relabel old runs.
 
 ## 2026-10-01 native dependency observation checkpoint
 

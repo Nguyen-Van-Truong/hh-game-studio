@@ -257,6 +257,7 @@ def evaluate(case: dict, result: dict, stdout: str, stderr: str) -> dict:
         and host.get('timed_out') is False and host.get('stream_cap_exceeded') is False)
     kind = case['expect']
     details = None
+    asset_import_observed = False
     busy_entered = stdout.splitlines().count('HH_PROBE_BUSY_ENTERED') == 1
     supervisor_watchdog = (busy_entered and host.get('timed_out') is False
         and host.get('stream_cap_exceeded') is False
@@ -304,11 +305,11 @@ def evaluate(case: dict, result: dict, stdout: str, stderr: str) -> dict:
         observed = (completed and details is not None and _integer(details.get('ticks'), 12)
             and type(details.get('x')) in (int, float) and details['x'] == 12.0)
         asset_details = marker(stdout, 'HH_PROBE_ASSET_READBACK ')
-        asset_import_observed = (not case.get('asset_readback')
-            or (type(asset_details) is dict
+        asset_import_observed = (case.get('asset_readback') is True
+            and (type(asset_details) is dict
                 and asset_details.get('avatar_loaded') is True
                 and asset_details.get('sprite_loaded') is True))
-        observed = observed and asset_import_observed
+        observed = observed and (not case.get('asset_readback') or asset_import_observed)
     elif kind == 'fixture_state':
         details = marker(stdout, 'HH_PROBE_FIXTURE ')
         observed = (completed and type(details) is dict and bool(case.get('expected_state'))
@@ -350,10 +351,9 @@ def evaluate(case: dict, result: dict, stdout: str, stderr: str) -> dict:
         'supervisor_watchdog_observed': controlled and transcript_ok and kind == 'watchdog' and supervisor_watchdog,
         'host_watchdog_observed': controlled and transcript_ok and kind == 'watchdog' and host_watchdog,
         'expectation': kind, 'untrusted_child_observation': details,
-        'asset_import_observed': (not case.get('asset_readback')
-            or (type(marker(stdout, 'HH_PROBE_ASSET_READBACK ')) is dict
-                and marker(stdout, 'HH_PROBE_ASSET_READBACK ').get('avatar_loaded') is True
-                and marker(stdout, 'HH_PROBE_ASSET_READBACK ').get('sprite_loaded') is True)),
+        # Not applicable is not a positive observation. The marker also needs
+        # the same lifecycle/transcript proof as the enclosing fixture.
+        'asset_import_observed': controlled and observed and asset_import_observed,
         'authority': 0,
         'public_ack': False, 'sandbox_acceptance': False,
         'validation_attribution_proven': False}
