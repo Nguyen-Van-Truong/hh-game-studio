@@ -192,25 +192,67 @@ def perf_process_times(processes):
               f"-Filter '{pid_filter}' | "
               "Select-Object IDProcess,PercentProcessorTime,ElapsedTime"
               ")")
-    try:
-        result = subprocess.run([str(powershell), '-NoProfile', '-NonInteractive', '-Command', script],
-            capture_output=True, timeout=8,
-            creationflags=subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0)
-    except (OSError, subprocess.TimeoutExpired) as error:
-        raise BenchmarkJobError('WATCHDOG_PERF_COUNTER_QUERY') from error
-    require(result.returncode == 0 and len(result.stdout) <= 8 * 1024 * 1024,
-            'WATCHDOG_PERF_COUNTER_QUERY')
-    try:
-        rows = json.loads(result.stdout.decode('utf-8', 'strict'))
-    except (UnicodeError, ValueError) as error:
-        raise BenchmarkJobError('WATCHDOG_PERF_COUNTER_QUERY') from error
+    # Retry a transient provider/process failure only within the original
+    # eight-second query budget. Never replace an unavailable sample with an
+    # old value, grant a fresh timeout, or accept a response after the deadline.
+    started = time.monotonic()
+    deadline = started + 8
+    rows = None
+    diagnostic = None
+    for attempt in range(1, 3):
+        remaining = deadline - time.monotonic()
+        if remaining <= 0:
+            break
+        try:
+            result = subprocess.run([str(powershell), '-NoProfile', '-NonInteractive', '-Command', script],
+                capture_output=True, timeout=remaining,
+                creationflags=subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0)
+        except subprocess.TimeoutExpired:
+            diagnostic = {'reason': 'timeout', 'attempt': attempt}
+        except OSError as error:
+            diagnostic = {'reason': 'oserror', 'attempt': attempt}
+            if type(error.errno) is int:
+                diagnostic['errno'] = error.errno
+        else:
+            if time.monotonic() > deadline:
+                diagnostic = {'reason': 'timeout', 'attempt': attempt}
+                break
+            if type(result.returncode) is not int or type(result.stdout) is not bytes:
+                diagnostic = {'reason': 'bad_output', 'attempt': attempt}
+                break
+            if result.returncode != 0:
+                diagnostic = {'reason': 'nonzero', 'attempt': attempt,
+                              'returncode': result.returncode}
+                continue
+            if len(result.stdout) > 8 * 1024 * 1024:
+                diagnostic = {'reason': 'bad_output', 'attempt': attempt}
+                break
+            try:
+                rows = json.loads(result.stdout.decode('utf-8', 'strict'))
+            except (UnicodeError, ValueError):
+                diagnostic = {'reason': 'bad_output', 'attempt': attempt}
+                break
+            # A valid JSON null is a shape error, not a missing response.
+            require(type(rows) is list, 'WATCHDOG_PERF_COUNTER_SHAPE')
+            break
+    if rows is None:
+        diagnostic = diagnostic or {'reason': 'timeout', 'attempt': 1}
+        diagnostic['elapsed_seconds'] = round(max(0, time.monotonic() - started), 6)
+        error = BenchmarkJobError('WATCHDOG_PERF_COUNTER_QUERY')
+        error.perf_counter = diagnostic
+        # Exception chains can contain provider output, argv or a local path.
+        raise error from None
     require(type(rows) is list, 'WATCHDOG_PERF_COUNTER_SHAPE')
     found = {}
     for row in rows:
         require(type(row) is dict and type(row.get('IDProcess')) is int
                 and type(row.get('PercentProcessorTime')) in (int, float)
-                and type(row.get('ElapsedTime')) is int, 'WATCHDOG_PERF_COUNTER_SHAPE')
+                and 0 <= row['PercentProcessorTime'] < 2**64
+                and (type(row['PercentProcessorTime']) is int or row['PercentProcessorTime'].is_integer())
+                and type(row.get('ElapsedTime')) is int and 0 <= row['ElapsedTime'] < 2**64,
+                'WATCHDOG_PERF_COUNTER_SHAPE')
         if row['IDProcess'] in missing:
+            require(row['IDProcess'] not in found, 'WATCHDOG_PERF_COUNTER_SHAPE')
             found[row['IDProcess']] = {
                 'cpu_total_100ns': int(row['PercentProcessorTime']),
                 'process_start_100ns': row['ElapsedTime'], 'cpu_source': 'PerfProcRaw'}
@@ -561,18 +603,20 @@ class Watchdog:
                      'exception_class': type(error).__name__,
                      'error_code': getattr(error, 'code', str(error))[:128],
                      'sample_index': self.count - 1 if self.count else None}
-        diagnostic = getattr(error, 'docker_inventory', None)
-        if (getattr(error, 'code', None) == 'WATCHDOG_DOCKER_INVENTORY'
-                and type(diagnostic) is dict
-                and diagnostic.get('reason') in ('timeout', 'nonzero', 'oserror', 'bad_output')
-                and type(diagnostic.get('attempt')) is int and 1 <= diagnostic['attempt'] <= 2
-                and type(diagnostic.get('elapsed_seconds')) in (int, float)
-                and 0 <= diagnostic['elapsed_seconds'] < float('inf')):
-            event['docker_inventory'] = {name: diagnostic[name]
-                for name in ('reason', 'attempt', 'elapsed_seconds')}
-            for name in ('errno', 'returncode'):
-                if type(diagnostic.get(name)) is int:
-                    event['docker_inventory'][name] = diagnostic[name]
+        for code, field in (('WATCHDOG_DOCKER_INVENTORY', 'docker_inventory'),
+                            ('WATCHDOG_PERF_COUNTER_QUERY', 'perf_counter')):
+            diagnostic = getattr(error, field, None)
+            if (getattr(error, 'code', None) == code
+                    and type(diagnostic) is dict
+                    and diagnostic.get('reason') in ('timeout', 'nonzero', 'oserror', 'bad_output')
+                    and type(diagnostic.get('attempt')) is int and 1 <= diagnostic['attempt'] <= 2
+                    and type(diagnostic.get('elapsed_seconds')) in (int, float)
+                    and 0 <= diagnostic['elapsed_seconds'] < float('inf')):
+                event[field] = {name: diagnostic[name]
+                    for name in ('reason', 'attempt', 'elapsed_seconds')}
+                for name in ('errno', 'returncode'):
+                    if type(diagnostic.get(name)) is int:
+                        event[field][name] = diagnostic[name]
         stop = {'schema': 'HH-GT06-WATCHDOG-STOP-1', **self.binding,
                         'classification': 'HARNESS_FAIL', 'reason': 'OBSERVER_ERROR',
                         'formal_acceptance': False,
