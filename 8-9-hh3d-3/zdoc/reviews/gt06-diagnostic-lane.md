@@ -610,3 +610,8 @@ needed for the next repair. Raw evidence remains under `studio/.local/`.
   ended. No app/container was stopped and no INFRA budget was consumed; a new
   one-minute CPU observation, zero foreign engines, source freeze and daily
   budget check are required in the next permitted window.
+- At 06:44 Asia/Saigon the foreign container had terminated naturally. A fresh
+  read-only preflight recorded `pass=true`, available RAM `13.523 GiB`, commit
+  `41.952%`, zero foreign engines and zero running containers. This was outside
+  the 22:00–06:00 dispatch window, so it did not launch a task or consume budget;
+  it is only a readiness receipt for the next window.
