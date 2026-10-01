@@ -432,3 +432,83 @@ needed for the next repair. Raw evidence remains under `studio/.local/`.
   acceptance is inferred. Next action is to wait for a fresh O4.1 pass, then
   register exactly one new host-only O6.3 ID. Do not lower the 4 GiB gate,
   resume a terminal run, or dispatch formal09.
+
+## 2026-10-01 — Fresh O6.3 confirmation dispatched
+
+- Resources changed after preflight06. `soak-preflight-20261001-07` captured
+  seven passing O4.1 samples over about 65 seconds: available minimum
+  `4.2145 GiB`, commit maximum `84.1018%`, no foreign engine and no hot
+  external process. Daily recorded INFRA_ABORT count was zero.
+- Dispatched `gt06-o6-soak-20261001-05` at `09:49:03 Asia/Saigon` using
+  `campaign_task.ps1 -Command register-run -CampaignId gt06-o6-soak-20261001-05 -Mode residency`.
+  It uses the unchanged 56-file closure `172d7d0ce1b14d6302791fc2b4b9c2c242db72baa285dfae1fbda777098b62e8`.
+  This is one confirmation of the reviewed Docker observer repair, not a
+  resumption of -04, a formal pair or a completed O6.3 result. At the first
+  readback, batches 0 and 1 were complete and the scheduler instance was live;
+  measurement-window.lock was held for this exact run.
+- While live, only read status/evidence. Terminal review must verify actual
+  exits, Job/tree/handle cleanup, watchdog and source before offline O6.3
+  metrics. No new long run without that review. The app heartbeat
+  `theo-d-i-o6-3-v-ti-p-t-c-gt06` now checks this checkpoint every 20 minutes;
+  the old heartbeat ID no longer exists.
+
+## 2026-10-01 — O6.3-05 complete; latency gates fail
+
+- `gt06-o6-soak-20261001-05` completed 35/35 in about 20.4 minutes.
+  Actual child exit 0 (PID 31612), wrapper exit 0 and Scheduler result 0/no
+  instances. Offline `benchmark_job.verify_capture` and watchdog replay
+  passed; retained/live 56-file source still equals `172d7d0ce1b14d6302791fc2b4b9c2c242db72baa285dfae1fbda777098b62e8`.
+  Natural tree exit, Job active 0/closed, no retained handle, empty stderr.
+  The exact demand task was deleted only after closeout. Proof is
+  `studio/.local/reviews/gt06-o6-soak-20261001-05/closeout-check.json`.
+- `residency_metrics.py --run-directory .local/reviews/gt06-o6-soak-20261001-05`
+  returned exit 1: private baseline 31,674,368 bytes/max 33,792,000
+  (`106.6856%`, late/early `103.0091%`), handles 183–184, max status gap
+  366.8387 ms, load=1, one reconciled transport recovery. These checks pass
+  and private growth does not trigger the >107% additional-soak rule.
+  Lookup p95 first/last = 3.57274/4.55176 ms (`127.4025%`); append =
+  15.38933/19.73632 ms (`128.2468%`). Both exceed 120%, so O6.3 FAIL,
+  AUTHORITY=0, no formal dispatch. It is not an INFRA_ABORT or harness stop.
+- Bounded latency diagnosis starts 10:11 Asia/Saigon (O3: four hours/three
+  diagnostic attempts). Per-batch times are nonmonotonic, so do not infer
+  history-size complexity alone. First seeded probe compares the 4.86 MB and
+  34.18 MB retained states using alternating common-key lookups; raw untouched,
+  actual exit 0. A second probe tests repeated pager trimming as a hypothesis
+  on separate copies; no production source or gate has been changed.
+
+### O3 latency direction closed after three short probes
+
+- Fresh copy probes `journal-latency-seed-20261001-01`, `-02`, `-03`
+  each completed with actual exit 0 (`python -u <probe-directory>/probe.py`).
+  They preserve source journal bytes; live 56-file residency source still
+  matches `172d7d0ce1b14d6302791fc2b4b9c2c242db72baa285dfae1fbda777098b62e8`.
+  Probe03 also records its conservative imported-source closure before/after.
+  These are short AUTHORITY=0 comparisons, not O6.2/O6.3 or formal evidence.
+- Probe01 alternated lookups on 4.86 MB and 34.18 MB retained states: the
+  larger state was often faster, with one noisy block. Probe02's early
+  apparent cache improvement disappeared substantially in later baseline
+  blocks. Probe03 balanced six randomized rounds of both sizes and trim
+  intervals 1/64 (1,200 command cycles, 1,800 durable appends), recording
+  CPU, process memory, SQL and Python fsync duration. At matched low CPU
+  (25.97%/26.08%), trim64 did not improve early-state append or lookup p95.
+  At matched higher CPU (61.57%/62.92%), late-state trim64 was slower:
+  append 14.956 -> 16.420 ms; lookup 3.965 -> 4.553 ms. Combined-process
+  memory is not a per-variant memory proof. No production trim change.
+- Offline alignment of soak batches with environment samples found mean
+  total CPU 31.54% in the first-five window versus 50.88% in the last five.
+  The correlation JSON is retained with soak05. This is a timing association,
+  not root-cause proof, and the recorded watchdog did not trigger; soak05
+  remains O6.3 FAIL, not INFRA_ABORT. Do not discard spikes or select a
+  favorable subset for acceptance.
+- O3 limit reached (3/3 attempts; direction started 10:11 Asia/Saigon).
+  Options: (1) keep source and run **one** fresh quiet-window confirmation,
+  about 20–25 minutes after existing O4.1/CPU observation; outside load can
+  return; (2) change cache trimming only after better controlled evidence,
+  with regression and a new 35k RAM microbench, risking memory regression;
+  (3) advance fixture O2 independently while waiting. Choose (1)+(3).
+  Prefer 22:00–06:00 local for the confirmation; this selects a time and
+  does not alter preflight, watchdog, timeout or metric thresholds. Do not
+  start a fourth seed probe, a daytime blind rerun, or formal09. A further
+  O6.3 failure needs fresh review, not automatic repeated soak dispatch.
+  Current source remains verified; a fresh freeze/preflight is still required
+  immediately before the next measurement.
