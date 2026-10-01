@@ -1,7 +1,7 @@
 HH STUDIO — PLAN 1/3: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Cập nhật 01-10-2026, Asia/Saigon | Revision S258 + quyết định owner O1–O7 | TRIỂN KHAI THEO GATE
+Cập nhật 02-10-2026, Asia/Saigon | Revision S258 + quyết định owner O1–O7 | TRIỂN KHAI THEO GATE
 OWNER_DECISIONS=O1_O3_20260925; O4_20260927; O5_O6_20260930; O7_20261001; ONE_CONSOLIDATED_BLOCK_BELOW_STATUS_TABLE; LATER_DECISION_WINS; PRECEDENCE=OVER_CONFLICTING_S2XX; OLD_TEXT_IN_GIT=87912523,b0802472,8298c107,fcc1906f; RAW_AND_OLD_VERDICTS_UNCHANGED
-HIỆN HÀNH 01-10 — GT-06: TẦNG D ĐỦ ĐIỀU KIỆN DISPATCH FORMAL09 THEO O7 (soak05 + probe03 + O6.5; p95 chỉ báo cáo); CHẠY ĐÊM 22:00–06:00 SAU PREFLIGHT
+HIỆN HÀNH 01-10 — GT-06: TẦNG D HỖ TRỢ FORMAL09 THEO O7; OFFLINE SOAK05 + PROBE03 + O6.5 ĐÃ VERIFY, CHỜ ĐÓNG BĂNG CLOSURE VÀ PREFLIGHT TƯƠI TRƯỚC DISPATCH; CHẠY ĐÊM 22:00–06:00
 CURRENT_VALID_WP=GT-06
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
@@ -14,12 +14,12 @@ CONSUMER_PILOT_STATUS=REVALIDATED_PROVISIONAL_AUTHORITY0; NOT_GT06_ACCEPTANCE; N
 GT06_STATUS=IN_PROGRESS; ZERO_ACCEPTED_FORMAL_PAIRS; FORMAL01_08_AND_S258_TERMINAL_NOT_RESUMABLE; HISTORICAL_ACCEPTANCE_GT01_GT05_UNCHANGED
 GT06_GATE_POLICY=OWNER_O1_2_FRESH_PAIRS_X_35_BATCHES_5_WARMUP_30_MEASURED_WITH_O1_COUNTER_AND_PRIVATE_COMMIT_RULES; FULL_10X35_UNDER_O1_IS_GT10_RELEASE_SOAK; FULL_DATASET_HASH_ACTUAL_EXITS_TREES_JOBS_HANDLES_AND_TWO_NEW_SAME_HASH_CRITICS
 GT06_ATTRIBUTION_POLICY=DIAGNOSTIC_ONLY_UNLESS_OWNER_ADR_ADDS_ACCEPTANCE_REQUIREMENT; UNKNOWN_IS_NOT_LEAK_ROOT_CAUSE_OR_PASS
-GT06_CURRENT_DIAGNOSTIC=O7_2_DISPATCH_READY_TIER_D; SOAK05_HOST_ONLY_PRIVATE_106_69_TREND_103_01_HANDLES_183_184_GAP_367MS; PROBE03_MEDIAN_SCALING_LOOKUP_106_5_APPEND_105_9; O6_5_CONTROL02_AND_FORMAL08_REF_PASS; NATIVE_EDITOR_LEG_NOT_YET_RUN_ON_CURRENT_SOURCE; NO_ACCEPTED_PAIR; LOG=zdoc/reviews/gt06-diagnostic-lane.md; AUTHORITY0
-GT06_NEXT_ACTION=FORMAL09_TONIGHT_22_06_PER_O7_3; FRESH_O4_1_PREFLIGHT_EACH_PAIR; PAIR_GUARD; NO_CONFIRMATION_SOAK; FAIL_BRANCHES_O7_4; O2_STATIC_WHILE_LOCKED; DETAIL=zdoc/reviews/gt06-diagnostic-lane.md
+GT06_CURRENT_DIAGNOSTIC=O7_2_TIER_D_REVIEW_OFFLINE_VERIFIED; SOAK05_HOST_ONLY_PRIVATE_106_69_TREND_103_01_HANDLES_183_184_GAP_367MS; PROBE03_BASELINE_TRIM1_LOOKUP_108_5744_APPEND_106_5340; O6_5_CONTROL02_AND_FORMAL08_REF_PASS; NATIVE_EDITOR_LEG_NOT_YET_RUN_ON_CURRENT_SOURCE; NO_ACCEPTED_PAIR; LOG=zdoc/reviews/gt06-diagnostic-lane.md; AUTHORITY0
+GT06_NEXT_ACTION=FORMAL09_22_06_AFTER_FRESH_SOURCE_FREEZE_PREFLIGHT; FRESH_O4_1_PREFLIGHT_EACH_PAIR; PAIR_GUARD; NO_CONFIRMATION_SOAK; FAIL_BRANCHES_O7_4; O2_STATIC_WHILE_LOCKED; DETAIL=zdoc/reviews/gt06-diagnostic-lane.md
 GT06_SOURCE_POLICY=SOURCE_VERIFIER_OR_PROFILE_CHANGE_CREATES_NEW_CLOSURE_FROZEN_BEFORE_RUN; CLOSURE_COMPUTED_BY_TOOL; OLD_CLOSURES_AND_RAW_HISTORICAL_SEE_GT06_HISTORY_S258; NO_RETROACTIVE_REBINDING; TIMEOUTS_UNCHANGED
-GT06_SOURCE_CHECKPOINT=DIRECT_DOCKER_PIPE_REPAIR_DAFFB01A_NATIVE_COVERAGE_891E14BE; VERIFIED_PROTOCOL447_REPLAY731_EXIT0; RESIDENCY_CLOSURE=172d7d0ce1b14d6302791fc2b4b9c2c242db72baa285dfae1fbda777098b62e8; FROZEN_AT_DISPATCH_20261001_094903_ASIA_SAIGON; LAST_TERMINAL_SOAK=gt06-o6-soak-20261001-05; TERMINAL_SOURCE=172d7d0ce1b14d6302791fc2b4b9c2c242db72baa285dfae1fbda777098b62e8
+GT06_SOURCE_CHECKPOINT=DIRECT_DOCKER_PIPE_REPAIR_DAFFB01A_NATIVE_COVERAGE_891E14BE; VERIFIED_PROTOCOL447_REPLAY731_EXIT0; RESIDENCY_CLOSURE=172d7d0ce1b14d6302791fc2b4b9c2c242db72baa285dfae1fbda777098b62e8_56FILES; FORMAL09_CANDIDATE_CLOSURE=bc00a2aef953f068a122ec9ecaa48242db453cc73ef97e3eb31b5befd60f6e58_58FILES_AFTER_LOAD_FIXTURE_COMPUTED_20261001_2221; NO_FORMAL_FREEZE_YET; LAST_TERMINAL_SOAK=gt06-o6-soak-20261001-05
 GT06_PROFILE_SHA256=8a2e599c40f927ffaff5ded5e48b6bf2a0f0a6bb3a23de31434a695f4258cb35; PROFILE_O5_V6_IMPLEMENTED_VERIFIED; NOT_YET_FORMAL_ACCEPTED; OLD_V5_RAW_UNCHANGED
-O1_PREFLIGHT_CURRENT=PASS_SOAK_PREFLIGHT_20261001_07; AVAILABLE_MIN_4_2145_GIB; COMMIT_MAX_84_1018_PERCENT; CPU_7_SAMPLES_NO_HOT_EXTERNAL; FOREIGN_ENGINES0; FRESH_PREFLIGHT_REQUIRED_BEFORE_EACH_FORMAL_PAIR
+O1_PREFLIGHT_CURRENT=LAST_PASS_20261001_2208_AVAILABLE_MIN_13_066_GIB_COMMIT_MAX_47_285_PERCENT_CPU_MAX_14_198_PERCENT; LATEST_CHECK_20261001_2220_BLOCKED_FOREIGN_DOCKER_CONTAINER_HH_PLAN19; AVAILABLE_9_883_GIB_COMMIT_54_769_PERCENT; NO_DISPATCH_OR_BUDGET_USE; STALE_FOR_DISPATCH_20261002; FRESH_O4_1_REQUIRED
 O2_CANDIDATE_STATUS=AUTHORITY0; BRANCH=codex/o2-authoring-contract; DETAIL=studio/AUTHORING_STATUS.md_AT_BRANCH_HEAD; OPEN=AUTH05_ADAPTER_E2E; NO_MERGE_BEFORE_GT06; POINTER_ONLY_NO_HASH_OR_TEST_COUNT_O7_6
 RUN_POLICY=FRESH_ID_PER_RUN; VERIFY_SOURCE_PROFILE_WORKSTATION_STOP_LATCH_AND_O5_6_LOCK_BEFORE_START; PRESERVE_RAW_ON_FAILURE; REPAIR_ONLY_PROVEN_BOUNDARY; FIX_AND_CONTINUE_O6_4; NEVER_TICK_FROM_BANNER_OR_PARTIAL_PREFIX; CRITICS_READONLY_INDEPENDENT_SAME_HASH
 S_RECORD_HISTORY_ARCHIVE=8-9-hh3d-3/zdoc/reviews/20260925-plan-s-record-history-s256.txt; SHA256=14e4d00b5f574f9c06c8f4041cf284fa70f7bded09dee6d6d2914cdb1d3c5fdb; AUTHORITY=0; RAW_HEADER_BLOCK_S256_LINES_93_150_BYTE_FOR_BYTE; NO_GATE_CHANGE
@@ -235,66 +235,73 @@ git fcc1906f; số liệu soak01–04 và mọi run sau đó ở log lane. Dư�
    GT-07 VERIFY journalfull phải đo sức chứa thật, có compact theo hết hạn bằng đồng hồ thật và
    JOURNAL_FULL có next_action rõ; GT-10 ghi sức chứa vào known limits.
 
-O7 — 01-10-2026 (AUTHORITY=OWNER_DELEGATED_20260930; không đổi ngưỡng/timeout O1–O4; thay O6_NEXT)
-Căn cứ (reviewer tính lại từ raw 01-10, AUTHORITY=0): soak05 (closure 172d7d0c…, 35/35, exit 0,
-20,4 phút) đạt mọi điều kiện O6.3 trừ câu p95 cũ: private commit host 106,69% baseline, muộn/sớm
-103,01%, handles 183–184, status gap max 367 ms, load=1. P95 batch 30–34 so với batch 0–4 là
-127,4% (lookup) và 128,2% (append), nhưng median chỉ 109,5% và 112,1%, trong khi CPU toàn máy
-trung bình tăng từ 31,5% lên 50,9%. Probe03 xen kẽ journal 4,9 MiB và 32,9 MiB trong cùng cửa sổ
-(6 vòng, 12 block mỗi bên): median gộp lookup 106,5%, append 105,9%; p95 từng vòng dao động
-79–440% theo CPU. Không có dấu hiệu O(n): tỉ số p95 giữa hai thời điểm trên máy dùng chung đo tải
-máy, không đo code. 48 file của probe03 và 56 file closure soak05 trùng hash với cây hiện tại.
-1. Độ trễ journal (thay câu p95 ≤ 120% của O6.3): kiểm O(n) bằng probe xen kẽ có seed, state nhỏ
-   và lớn (lớn ≥ 5 lần), ≥ 6 vòng thứ tự ngẫu nhiên trong cùng cửa sổ, ghi CPU từng block. Đạt khi
-   median gộp của state lớn ≤ 130% state nhỏ cho cả lookup và append (O(n) thuần cho ≈ 500–700%;
-   130% vẫn bắt phần O(n) chiếm từ ≈ 5–8% chi phí ở state nhỏ). P95 và median đầu/cuối soak chỉ
-   báo cáo. Ngưỡng tuyệt đối vẫn là O1 (status gap, timeout) và mục TQ hiệu năng. Probe03 đạt luật
-   này. residency_metrics.py (ngoài closure formal) đổi theo luật này kèm test, chạy lại offline
-   trên soak05 + probe03 phải exit 0; việc này không chặn formal09.
-2. Kết luận tầng D: O6.3 đạt theo O7.1 (soak05 + probe03 + O6.5); không chạy confirmation soak.
-   Soak05 không có chu kỳ native editor, nên pair 0 formal09 là lần đầu chặng đó chạy trên source
-   mới. Formal08 pair 0 (source cũ) tăng private commit host 10,3 MB: ≈ 5,25 MB ở batch 7 do HTTP
-   phase recorder giữ event lớn (đã sửa), ≈ 5,0 MB còn lại tới batch 34, cùng cỡ mức journal
-   residency đo ở soak (≈ 4,8 MB/30.000 lệnh, đã sửa). Không thấy phần tăng riêng của chặng native
-   nhưng chưa chứng minh. Status gap formal08 là 1.881 ms (trần 2.000), đo khi còn reload O(n).
-   Pair guard giới hạn chi phí ở ≈ 90 phút nếu pair 0 FAIL.
-3. Formal09 là việc tiếp theo, đêm 22:00–06:00 (pair ≈ 90 phút):
-   a) Freeze closure do tool tính lúc dispatch (cùng tập file và source không đổi thì là 172d7d0c…;
-      tập khác thì mọi file chung với closure soak05 phải trùng hash). Đổi bất kỳ file nào trong đó
-      thì soak05/probe03 không còn là căn cứ và phải có tầng D mới. Profile v6 8a2e599c….
-   b) Giữ measure-window.lock suốt formal (O5.6); O2 và agent khác chỉ làm việc static.
-   c) Preflight O4.1 mới trước mỗi pair. Khoảng 21:30 đọc thử RAM trống/commit (không spawn engine);
-      không đạt thì báo owner một dòng để owner tự chọn đóng app hay chờ. Preflight trượt là
-      INFRA_ABORT theo O1.7 (tối đa 2 lần mỗi ngày), không phải product FAIL.
-   d) Dispatch bằng scheduled task một lần với ID mới; closeout xong thì gỡ task đó, giữ evidence.
-      Tắt heartbeat của soak05 nếu còn chạy; heartbeat formal09 (nếu dùng) chỉ đọc trạng thái, tối
-      đa 1 lần mỗi giờ.
-   e) Hai pair PASS: lập CRITIC_PACKAGE theo O4.3 ngay trong phiên rồi báo owner; owner chạy hai
-      critic độc lập cùng hash. Agent không tick.
-4. Nhánh đã quyết trước (không cần hỏi lại owner; mỗi nhánh theo ngân sách O3.1):
-   a) FAIL private commit host: so pair 0 formal09 với soak05 (cùng closure, chỉ khác chặng native)
-      để khoanh batch/phase tăng; tracemalloc diff trên vài trăm cycle bridge (vài phút); tăng theo
-      số kết nối thì làm keep-alive (HTTP/1.1 persistent, worker có trần) với A/B. Sửa xong chạy một
-      soak đủ hình formal (tầng D, 35 batch, ID mới) rồi formal10.
-   b) FAIL counter editor: so với control-02 bằng verifier O6.5; attribution chỉ là chẩn đoán (O1.10).
-   c) FAIL status gap: đọc timeline status/http-phase để khoanh phase (khóa journal, GC, frame editor,
-      CPU máy); sửa đúng boundary đã chứng minh, tái hiện bằng seed trong vài phút (O6.4); không nới
-      ngưỡng.
-   d) Observer Docker/PerfProc HARNESS_FAIL: thêm dung sai có trần, tối đa 2 lần lỡ mẫu liên tiếp
-      (≤ 30 giây) và 6 lần mỗi pair, ghi UNKNOWN; mẫu RAM trống, commit, danh sách process và Stop
-      latch không bao giờ được bỏ; vượt trần là HARNESS_FAIL. Kèm unit test, freeze closure mới, rerun
-      ID mới. Không làm trước khi có lỗi mới.
-   e) INFRA ở bất kỳ pair nào: theo O1.7.
-5. Song song: trong lúc chờ cửa sổ đêm làm O2 (AUTH-05 adapter E2E) theo O4.5. Khi formal09 đã có
-   hai pair PASS và đang chờ critic, được mở worktree chuẩn bị GT-07 (code + unit test, không chạy
-   đo, không merge trước GT-06 ACCEPTED; CURRENT_VALID_WP vẫn là GT-06). Mục này thay câu "không làm
-   song song" của O4.6 cho riêng giai đoạn chờ critic.
-6. Vệ sinh: header chỉ đổi khi gate/WP đổi trạng thái hoặc có quyết định owner; tiến độ tầng D chỉ
-   ghi ở log lane, tiến độ O2 chỉ ở studio/AUTHORING_STATUS.md trên nhánh O2; dòng O2 trong header
-   là con trỏ cố định, không ghi hash hay số test. Log lane commit cùng commit code kế tiếp hoặc một
-   commit cuối ngày (O4.4). Gỡ các scheduled task HHStudio.GT06.* đã closeout (chỉ task, evidence
-   giữ nguyên) và ghi danh sách vào log lane.
-O7_NEXT=FORMAL09_TONIGHT_22_06_AFTER_FRESH_O4_1_PREFLIGHT_EACH_PAIR; NO_CONFIRMATION_SOAK; PAIR_GUARD; CLOSURE_172D7D0C_IF_UNCHANGED; FAIL_BRANCHES_O7_4; O2_STATIC_WHILE_LOCKED; GT07_WORKTREE_ONLY_DURING_CRITIC_WAIT; CRITIC_PACKAGE_O4_3
+O7 — 01-10-2026 (reviewer đề xuất; coordinator rà soát theo quyền owner; không đổi O1–O4)
+Căn cứ tầng D: soak05 (closure 172d7d0c…, 35/35, exit 0, khoảng 20,4 phút) có private commit
+host 106,69% baseline, muộn/sớm 103,01%, handles 183–184, status gap max 367 ms, load=1.
+P95 batch 30–34 / 0–4 là 127,4% lookup và 128,2% append; median là 109,5% và 112,1%.
+CPU trung bình cùng hai cửa sổ tăng 31,5% → 50,9%: có yếu tố nhiễu, chưa chứng minh nguyên nhân.
+Probe03 có 6 vòng xen kẽ 2 kích thước journal và 2 biến thể trim. Chỉ interval=1 là code hiện
+hành: median lớn/nhỏ = 108,5744% lookup và 106,5340% append. Số 106,5%/105,9% của reviewer
+đã gộp interval=64 thử nghiệm, không dùng để đánh giá source hiện hành. Không sửa production trim.
+1. Độ trễ journal (thay riêng tỷ số p95 ≤ 120% của O6.3, không thay ngưỡng tuyệt đối TQ): dùng
+   probe xen kẽ có seed, state lớn ≥ 5 lần state nhỏ, ít nhất 6 vòng và CPU từng block. Chọn trước
+   biến thể trùng production (probe03: interval=1); dùng đủ mọi block/vòng của biến thể đó, không
+   loại spike/chọn vòng theo CPU. Tính lại median từ raw; cả lookup/append lớn ≤ 130% nhỏ.
+   Kiểm seed/hash/source, số mẫu, thứ tự và workload; không tin summary do caller cung cấp.
+   Seed gốc probe03 có 7.015/49.105 record (7×), không dùng size sau append. Workload chỉ gồm
+   lookup khóa vừa append/receipt nhỏ; không suy mọi route/workload. Closure lịch sử 48 file
+   thiếu probe.py và helper tính percentile: ghi hạn chế này, hash script đang lưu và verifier
+   mới vào review; không gọi đó là full harness closure đã freeze tại thời điểm probe.
+   Tỷ số p95 đầu/cuối soak chỉ báo cáo; raw p95 và ngưỡng inspect/Stop/status/timeout vẫn giữ.
+   Đây là tiêu chí chẩn đoán hữu hạn được chọn sau soak05, không chứng minh không có O(n), không
+   chứng minh tail latency không lỗi. Hai kích thước không đủ suy độ phức tạp tiệm cận.
+   residency_metrics.py phải giữ chế độ O6.3 cũ để tái lập FAIL; O7 là chế độ tường minh, thiếu
+   probe hợp lệ không được PASS. Chạy offline và test trước dispatch; lưu kết quả mới riêng,
+   không sửa raw/closeout/verdict cũ. Verifier offline ngoài closure formal vẫn phải được hash.
+2. Quyết định chạy: sau verifier O7 và O6.5 đạt, cho một formal09 fresh 2×35 với pair guard,
+   bỏ confirmation host-only trùng workload. Đây là quyết định dùng tầng D để thử formal, không
+   hồi tố soak05 thành formal PASS. Soak05 không có chu kỳ native editor; chặng đó còn rủi ro.
+   Formal08 pair 0 tăng private commit host khoảng 10,3 MB. Bậc khoảng 5,25 MB trùng recorder
+   event lớn; phần còn lại cùng cỡ journal residency cũ. Các boundary này đã sửa, nhưng không
+   cộng hai con số thành phân rã nguyên nhân đã chứng minh hoặc nói mọi lỗi formal01–08 đã hết.
+   Status gap formal08 1.881 ms gần trần 2.000 ms; chỉ formal mới xác nhận hành vi tổng hợp.
+3. Formal09 trong cửa sổ 22:00–06:00 Asia/Saigon; pair khoảng 90 phút chỉ là ước lượng:
+   a) Tool freeze source/profile tại dispatch. Host-soak O6.3 dùng 56 file, closure
+      172d7d0ce1b14d6302791fc2b4b9c2c242db72baa285dfae1fbda777098b62e8; campaign formal09
+      gọi `load_fixture()` rồi mới tính closure, hiện ứng viên 58 file /
+      `bc00a2aef953f068a122ec9ecaa48242db453cc73ef97e3eb31b5befd60f6e58`;
+      hai closure khác nhau và không được gắn hash soak cho formal. Profile v6
+      8a2e599c40f927ffaff5ded5e48b6bf2a0f0a6bb3a23de31434a695f4258cb35. Nếu tập file hoặc byte
+      đo đổi thì review phần đổi và bằng chứng tầng D tương ứng trước chạy; không gắn hash cũ.
+   b) Giữ measure-window.lock suốt formal (O5.6); O2/agent khác chỉ làm static không cạnh tranh đo.
+   c) O4.1 mới trước mỗi pair, còn budget O1.7 và CPU quan sát khoảng một phút. Đọc thử RAM/commit
+      trước cửa sổ là kiểm khả năng chạy, không tạo attempt hay tiêu budget. Preflight của campaign
+      đã dispatch không đạt thì ghi INFRA_ABORT theo O1.7. Không tự đóng app; Docker/WSL còn là
+      toolchain, không mặc định tắt để lấy RAM. Điều kiện chưa đạt thì chờ, không lặp dispatch.
+   d) Một demand task, ID mới; chỉ gỡ sau terminal, actual exits, Job/tree/handle và source closeout.
+      Thay heartbeat soak bằng formal khi dispatch; tối đa một lần/giờ, chỉ báo thay đổi có nghĩa.
+   e) Hai pair PASS: lập CRITIC_PACKAGE O4.3 ngay; owner chuyển hai critic cùng hash. Không tự tick.
+4. Khi lỗi, giữ raw và review boundary theo ngân sách O3.1; đây là hướng điều tra, không sửa mù:
+   a) Host private commit: so phase/batch formal với soak; dùng reproducer nhỏ/tracemalloc nếu cần.
+      Keep-alive chỉ khi A/B chứng minh churn kết nối gây lỗi hoặc tăng RAM. Bản sửa bộ nhớ phải
+      qua microbench O6.2 và diagnostic đủ workload bị lỗi trước formal ID mới (O6.4).
+   b) Editor counter: dùng lại control-02/O6.5; không trừ control hoặc nới gate (O1.9–10).
+   c) Status gap: đọc status/http-phase để phân biệt journal, GC, editor và CPU; sửa boundary có
+      reproducer. Không đổi ngưỡng/timeout hoặc gọi chậm không rõ nguyên nhân là INFRA.
+   d) Observer Docker/PerfProc: xác định phase lỗi, sửa trong deadline hiện hành, test và freeze.
+      Không tự bỏ 2 mẫu/30 giây hoặc 6 mẫu/pair: sẽ mất bằng chứng CPU/engine/container và xung đột
+      cadence ≤ 10 giây của O4.1. UNKNOWN không suy an toàn/PASS; thiếu mẫu bắt buộc vẫn HARNESS_FAIL.
+   e) INFRA theo O1.7; pair guard chặn pair tiếp nếu pair trước fail, không ghép partial hoặc rerun mù.
+5. Trong lúc chờ cửa sổ làm O2 theo O4.5. Chỉ khi formal đủ hai pair PASS và chờ critic mới được
+   chuẩn bị code/unit test GT-07 trong worktree riêng; không mở/tick WP, không merge trước GT-06
+   ACCEPTED, CURRENT_VALID_WP vẫn GT-06. Đây là ngoại lệ chuẩn bị của O4.6, không bỏ dependency.
+6. Header chỉ đổi khi gate/WP hoặc quyết định thay đổi. Tầng D ghi log lane, O2 ghi AUTHORING_STATUS.md;
+   con trỏ O2 không chứa hash/test count. Log lane có "Hiện trạng" ≤ 15 dòng; commit cùng code hoặc
+   một lần cuối ngày. Dọn task HHStudio.GT06.* từng task đã chứng minh terminal/closeout, không
+   instance/process sống; lưu export task và danh sách trước khi gỡ, giữ raw. Không xóa theo prefix
+   hoặc vì State=Ready đơn thuần. Claim game chỉ sau fixture/acceptance và plan sản phẩm riêng;
+   route 2D hiện hành là Superagent, không tự quay sang Vault Fighters cũ.
+O7_NEXT=VERIFY_OFFLINE_O7_AND_O6_5_THEN_FORMAL09_22_06; NO_CONFIRMATION_SOAK; FRESH_PREFLIGHT_BUDGET_CPU; PAIR_GUARD; O1_O4_UNCHANGED; CRITIC_PACKAGE_O4_3
 
 ACCEPTED_EVIDENCE_INDEX (historical accepted closures; unchanged)
 GT01_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260913
@@ -503,10 +510,10 @@ Bài học 25–30/09 (từ các lần sai của formal01–08 và soak01–04):
 18. Sau mỗi lần sửa plan: kiểm không BOM, không CRLF, còn sentinel/markers và mọi hash cũ vẫn còn
     (một lần StrReplace từng chèn BOM UTF-8).
 Bài học 01-10 (soak05, probe01–03, observer):
-19. Tỉ số p95 giữa hai thời điểm trên máy dùng chung đo tải máy, không đo code: soak05 p95 +27–28%
-    trong khi median +9,5%/+12,1% và CPU 31,5% → 50,9%. Kiểm độ phức tạp bằng A/B xen kẽ cùng cửa
-    sổ và so median; p95 chỉ báo cáo. Tiêu chí tầng D mới phải chạy thử trên dữ liệu đã có trước
-    khi dùng để chặn; thiếu bước này tốn khoảng nửa ngày và 3 probe.
+19. P95 đầu/cuối trên máy dùng chung có thể lẫn ảnh hưởng workload và môi trường. Tương quan CPU
+    chưa chứng minh nguyên nhân. Probe phải tách biến thể production, dùng đủ raw; hai kích thước
+    không chứng minh loại trừ O(n). Đổi luật tầng D ghi policy/version, giữ verdict cũ; kiểm offline
+    trước dispatch, không đặt mục tiêu ép verifier trả PASS.
 20. Observer trong watchdog phải có timeout, retry có trần và test lỗi trước run dài: 6 run
     HARNESS_FAIL vì observer Docker/PerfProc tốn gần một ngày.
 21. Khi gọi một run tầng D là "sẵn sàng formal", ghi rõ phần hình dạng formal mà nó không phủ

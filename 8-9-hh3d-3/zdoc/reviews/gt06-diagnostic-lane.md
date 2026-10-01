@@ -1,5 +1,20 @@
 # GT06 diagnostic lane
 
+## Hiện trạng
+
+- WP: GT-06 chưa ACCEPTED; zero accepted formal pairs; GT-07 chưa mở.
+- Residency source: 56 file, `172d7d0ce1b14d6302791fc2b4b9c2c242db72baa285dfae1fbda777098b62e8`; formal entry closure is separate and recomputed after `load_fixture()`.
+- Profile v6: `8a2e599c40f927ffaff5ded5e48b6bf2a0f0a6bb3a23de31434a695f4258cb35`.
+- Run đo cuối: soak05 ngày 01-10 đủ 35/35, actual exit 0, cleanup/watchdog/source đã kiểm.
+- O6.3 cũ: FAIL p95; private 106,6856% / trend 103,0091%, handles 183–184, gap 366,8387 ms.
+- Probe03 production trim1: median lookup 108,5744%, append 106,5340%; không gộp trim64.
+- O7: kiểm offline/version riêng trước formal09; không đổi verdict cũ hoặc threshold O1–O4.
+- O6.5 offline control02 và formal08 reference PASS, không hồi tố (receipt o7-review-20261001-01).
+- Preview 21:47: RAM 2,49 GiB / commit 93,37%; foreign container hh-plan19-admission-20260919-r01.
+- Chưa dispatch; preview không tiêu INFRA budget. Điều kiện máy phải được kiểm mới trước chạy.
+- Sau offline đạt: một formal09 ID mới trong 22:00–06:00 với pair guard; không confirmation soak.
+- O2 ở worktree riêng, AUTHORITY=0; chi tiết AUTHORING_STATUS.md; không merge trước GT06.
+
 This lane records diagnostics without changing the authoritative plan. Each
 entry keeps the run ID, source closure, command, actual result and the finding
 needed for the next repair. Raw evidence remains under `studio/.local/`.
@@ -512,3 +527,86 @@ needed for the next repair. Raw evidence remains under `studio/.local/`.
   O6.3 failure needs fresh review, not automatic repeated soak dispatch.
   Current source remains verified; a fresh freeze/preflight is still required
   immediately before the next measurement.
+
+## 2026-10-01 — O7 reviewer corrections and offline review
+
+- Reviewed commit `56c37fc5` against retained raw. Soak05 memory/handle/status
+  numbers reproduce. Formal08 reference recomputes host peak/baseline
+  `125.7653%`, late/early `108.8589%`, growth `10,342,400` bytes. These are
+  different workloads/sources; no claim that all earlier formal failures are fixed.
+- Probe03's quoted `106.5%/105.9%` pools production trim1 and experimental trim64.
+  All six production blocks per state yield lookup `2.1914 -> 2.3793 ms`
+  (`108.5744%`) and append `9.9617 -> 10.6126 ms` (`106.5340%`). Six-round
+  Random(61001) order and 50 lookups/75 appends per block are intact. Original
+  seeds have 7,015/49,105 records (7x); all 48 runtime hashes and 56 soak hashes
+  match live, with 17 shared files agreeing. Probe closure did not include
+  probe.py or its percentile helper; newly recorded hashes do not repair that
+  historical coverage. This is bounded evidence, not a proof of asymptotic complexity.
+- CPU means differ even within production blocks. CPU association and median
+  ratios do not establish that p95 growth is entirely external load. O7 now
+  preserves raw tail metrics, legacy O6.3 FAIL, and absolute O1/TQ gates. New
+  O7 offline checks must complete before dispatch; no forced exit0 or missing
+  evidence treated as PASS. No fourth latency probe was run.
+- Removed the proposed automatic 30-second observer sample gap: mandatory
+  CPU/engine/container observation still obeys O4.1 <=10 seconds. Failure
+  branches require phase evidence/reproducer, not a preselected speculative fix.
+  Task cleanup requires terminal/closeout and no live instance; Ready alone is
+  insufficient. AGENTS now distinguishes O7.5 static preparation from opening GT07.
+- `verify_editor_handle_control.py` actual exit0 on control02 and formal08
+  reference, retaining source/profile-bound raw. Control baseline564,
+  early/late medians556/554, max566; formal reference baseline558,
+  early/late554/555, max562. New receipts are in
+  `studio/.local/reviews/o7-review-20261001-01/`; no historical verdict changed.
+- Resource preview at 21:47 had available2.49055GiB, commit93.37299%, and an
+  unrelated running hh-plan19 container. No campaign dispatched or app stopped;
+  this preview is not an INFRA_ABORT attempt. Fresh O4.1/CPU/budget checks remain
+  required immediately before the permitted formal window.
+
+## 2026-10-01 — O7 offline verifier and formal closure review
+
+- `residency_metrics.py --policy O7` ran against the retained soak05 and probe03
+  with actual exit `0`. O7's finite diagnostic checks pass: production interval=1
+  lookup `108.5744%` and append `106.5340%`; the embedded legacy O6.3 result
+  remains `metrics_pass=false` for lookup/append p95 and is preserved in the
+  output. The report is authority 0 and cannot sign formal acceptance.
+- The command-bound source closure was recomputed through the real formal entry
+  path: after `load_fixture()`, host-only soak05 is 56 files /
+  `172d7d0c…`, while the formal campaign candidate is 58 files /
+  `bc00a2aef953f068a122ec9ecaa48242db453cc73ef97e3eb31b5befd60f6e58`.
+  The extra formal imports are `godot-addon/fixture_profile.py`,
+  `godot-addon/bundle_staging.py`, and `godot-addon/bundle_v2.py`; the soak-only
+  `tests/replay/run_command_residency.py` is absent. These closures must remain
+  separate and the formal closure must be frozen again at dispatch. Profile
+  remains v6 `8a2e599c…`.
+- A fresh pre-dispatch observation at 22:08–22:09 Asia/Saigon had available RAM
+  `13.066 GiB` minimum, commit `47.285%` maximum, CPU `14.198%` maximum over
+  three samples, and zero foreign Godot/Blender engines. It is a readiness
+  observation, not an INFRA attempt; O4.1 must still run before each formal pair.
+- A later read-only O4.1 snapshot at 22:20 recorded available RAM `9.883 GiB`
+  and commit `54.769%`, but still found the unrelated Docker container
+  `hh-plan19-admission-20260919-r01` as a foreign engine/toolchain entry. The
+  snapshot is `pass=false`; no task was dispatched, no budget was consumed, and
+  the container was not stopped. Formal dispatch remains gated until a new
+  snapshot has zero foreign engines and the one-minute CPU observation is clean.
+
+## 2026-10-02 — O7 binding hardening and dispatch hold
+
+- The offline verifier was rerun after binding seeds to the retained soak journal
+  prefix and exact batch journal sizes. Actual exit is `0`; O7 remains
+  `metrics_pass=true`, authority `0`, while the embedded legacy O6.3 result is
+  still `metrics_pass=false` for both p95 checks. The bound original seeds are
+  `7,015` and `49,105` JSONL records and match the batch-04/batch-34 prefixes.
+- Focused pure tests now pass: residency/O6.3+O7 `12/12`, retained-probe binding
+  `6/6`, actual exit `0` for each suite. They exercise altered prefixes, rehashed
+  caller claims, forged summaries, missing blocks, nonfinite values, and the
+  excluded trim64 experiment. No engine, Docker or measurement workload ran.
+- A clean formal-entry computation in a fresh Python process after
+  `load_fixture()` produced `58` files and closure
+  `bc00a2aef953f068a122ec9ecaa48242db453cc73ef97e3eb31b5befd60f6e58`; this is
+  recorded under `studio/.local/reviews/o7-review-20261001-01/` and is not yet a
+  dispatch freeze. The 56-file residency closure remains historical evidence.
+- Formal09 was not dispatched: the last O4.1 snapshot found foreign Docker
+  container `hh-plan19-admission-20260919-r01`, and the 22:00–06:00 window has
+  ended. No app/container was stopped and no INFRA budget was consumed; a new
+  one-minute CPU observation, zero foreign engines, source freeze and daily
+  budget check are required in the next permitted window.

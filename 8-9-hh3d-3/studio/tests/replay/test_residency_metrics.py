@@ -10,6 +10,7 @@ import sys
 import json
 import tempfile
 import unittest
+from unittest import mock
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[3]))
 from studio.tests.replay import residency_metrics as metrics
@@ -110,6 +111,52 @@ class ResidencyMetricTests(unittest.TestCase):
         self.assertFalse(metrics.number(float("inf")))
         with self.assertRaisesRegex(ValueError, "TIMING_VALUES"):
             metrics.p95([1.0, math.inf])
+
+    def test_o7_is_explicit_and_legacy_fail_is_preserved(self):
+        """The O6.3 p95 verdict remains visible when O7's finite probe passes."""
+        data = self.fixture(private=100, lookup_tail=1.21, append_tail=1.21)
+        legacy = metrics.calculate(*data)
+        self.assertFalse(legacy["metrics_pass"])
+        self.assertIn("lookup_p95", legacy["failed_checks"])
+        with self.assertRaisesRegex(ValueError, "INTERLEAVED_PROBE_REQUIRED"):
+            metrics.calculate(*data, policy=metrics.O7_POLICY)
+
+    def test_from_run_o7_reports_passing_probe_and_failing_legacy_verdict(self):
+        """The O7 file path retains the historical O6.3 result for review."""
+        data = self.fixture(private=100, lookup_tail=1.21, append_tail=1.21)
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary) / "o7-run"
+            root.mkdir()
+            summaries, timings, recoveries = data
+            for index in range(35):
+                batch = {"index": index, "run_id": root.name,
+                         "host_process": summaries[index]["host_process"],
+                         "commands": [None] * 1000, "max_status_gap_ms": 1.0,
+                         "transport_recovery": recoveries[index]}
+                for name, value in (("summary", summaries[index]),
+                                    ("journal-timing", timings[index]), ("batch", batch)):
+                    (root / f"{name}-{index:02}.json").write_text(json.dumps(value))
+            retained = {"checks": {"lookup": True, "append": True},
+                        "baseline_blocks": 12}
+            with mock.patch.object(metrics, "calculate", wraps=metrics.calculate) as calculate,
+                 mock.patch("studio.tests.replay.journal_scaling_metrics.read_bound_probe",
+                             return_value=retained):
+                report = metrics.from_run(root, policy=metrics.O7_POLICY,
+                                          interleaved_probe=root / "probe-result.json",
+                                          seed_directory=root / "seeds")
+            self.assertTrue(report["metrics_pass"])
+            self.assertEqual(report["policy"], metrics.O7_POLICY)
+            self.assertFalse(report["legacy_policy_result"]["metrics_pass"])
+            self.assertIn("lookup_p95", report["legacy_policy_result"]["failed_checks"])
+            self.assertTrue(calculate.called)
+
+    def test_o1_counters_and_legacy_policy_shape_are_unchanged(self):
+        report = metrics.calculate(*self.fixture())
+        self.assertEqual(report["load"], 1)
+        self.assertEqual(report["recovery_event_count"], 0)
+        self.assertEqual(report["policy"], metrics.LEGACY_POLICY)
+        self.assertEqual(report["authority"], 0)
+        self.assertFalse(report["formal_acceptance"])
 
     def test_windows_are_neither_5000_operations_nor_mean_batch_percentiles(self):
         data = self.fixture()
