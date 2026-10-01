@@ -11,6 +11,13 @@ probe = evidence.probe
 
 
 class GameplayProbeEvidenceTests(unittest.TestCase):
+    def test_gameplay_busy_fixture_allows_startup_before_supervisor_watchdog(self):
+        fixtures = probe.load('gameplay_fixture_catalog',
+                              probe.STUDIO / 'tests/godot/linux_probe_fixtures.py').FIXTURES
+        self.assertEqual(fixtures['gameplay_source_busy']['expect'], 'watchdog')
+        self.assertEqual(fixtures['gameplay_source_busy']['timeout'], 20)
+        self.assertLessEqual(fixtures['gameplay_source_busy']['timeout'], 20)
+
     def test_negative_source_fixtures_cover_syntax_type_and_dependency_failures(self):
         fixtures = probe.load('gameplay_fixture_catalog',
                               probe.STUDIO / 'tests/godot/linux_probe_fixtures.py').FIXTURES

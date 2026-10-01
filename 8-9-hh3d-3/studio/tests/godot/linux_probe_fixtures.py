@@ -325,12 +325,12 @@ func _ready() -> void:
 ''',
 }
 FIXTURES['gameplay_source_busy'] = {
-    # One shared 16s diagnostic deadline includes parse and editor import.
+    # One shared 20s diagnostic deadline includes parse and editor import.
     # The old 5s attempt expired during import, before the hostile loop entered.
     # Prior complete startup took ~8s; stop before the loop's 10 CPU-second limit
     # so this fixture specifically exercises the independent wall watchdog.
     # This does not alter any GT-06 formal timeout or the executor's 20s cap.
-    'mode': 'gameplay-source', 'timeout': 16, 'expect': 'watchdog',
+    'mode': 'gameplay-source', 'timeout': 20, 'expect': 'watchdog',
     'script': '''extends Node3D
 func _ready() -> void:
 \tprint("HH_PROBE_BUSY_ENTERED")

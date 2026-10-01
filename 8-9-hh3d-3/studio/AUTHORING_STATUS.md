@@ -58,6 +58,26 @@ gameplay suite after these repairs ran **137 tests**, actual exit `0`, with no
 measurement process. This evidence does not alter AUTHORITY, AUTH-02..05,
 GT-06, or the merge gate.
 
+## 2026-10-01 AUTH-05 hostile fixture checkpoint
+
+The fresh bounded matrix `o2-auth05-native-20261001-01` observed the
+gameplay-source boundary/network denial and process-spawn denial with actual
+child/host exits, closed Jobs, zero active handles and owned-container cleanup;
+both rows are `fixture_observed=true`, `authority=0`. Its busy row honestly
+failed because the 16-second deadline expired during Godot import before the
+hostile loop printed `HH_PROBE_BUSY_ENTERED`; raw evidence is retained and is
+not called a watchdog PASS.
+
+The fixture deadline was repaired within the existing 20-second profile limit.
+`o2-auth05-native-20261001-02` then observed parse/import/play startup followed
+by `HH_PROBE_BUSY_ENTERED` and the supervisor timeout: child/host exit `124`,
+owned container removed, Job active count `0`, no retained handle, unchanged
+input/snapshot/source. The selected case is `fixture_observed=true`,
+`supervisor_watchdog_observed=true`, `host_watchdog_observed=false`, and
+`authority=0`. The focused gameplay test suite after this repair ran **138
+tests**, actual exit `0`. These are AUTHORITY-0 diagnostics; they do not grant
+AUTH-05, public capability, AUTH-02..04, or GT-06 acceptance.
+
 ## 2026-10-01 dependency contract hardening checkpoint
 
 The fail-closed dependency observation contract was hardened after review of
