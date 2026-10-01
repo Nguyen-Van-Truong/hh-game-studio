@@ -383,16 +383,44 @@ def sandbox_binding(destination: Path, case: dict, result: dict, binding: dict) 
         raise ValueError('guarded container inspect shape')
     inspected = rows[0]
     config = _object(inspected.get('Config'))
+    assets = tuple(sorted(path for path in case.get('extra_binary_files', {})
+                          if path in executor.ASSET_PATHS))
+    host = _object(inspected.get('HostConfig'))
+    expected_tmpfs = dict(executor.TMPFS)
+    if assets:
+        expected_tmpfs.update(executor.ASSET_TMPFS)
     mounts = inspected.get('Mounts')
     harness = ([row for row in mounts if type(row) is dict and row.get('Destination') == '/harness']
                if type(mounts) is list else [])
+    mount_map = ({row.get('Destination'): row for row in mounts}
+                 if type(mounts) is list and all(type(row) is dict for row in mounts) else {})
+    expected_destinations = {'/tool', '/project', '/harness'} | {
+        '/project/' + path for path in assets}
+    expected_tool = result.get('tool_mount_source')
     if (inspected.get('Id') != result['container_id']
             or config.get('Entrypoint') != ['/usr/local/bin/python3']
             or config.get('Cmd') != executor._supervised_command(case['mode'], case['timeout'])
+            or host.get('Tmpfs') != expected_tmpfs
+            or type(expected_tool) is not str
+            or type(mounts) is not list
+            or len(mounts) != len(expected_destinations)
+            or set(mount_map) != expected_destinations
+            or mount_map.get('/tool', {}).get('Source') != expected_tool
+            or mount_map.get('/project', {}).get('Source') != str(destination / 'snapshot')
+            or any(mount_map.get(destination, {}).get('Type') != 'bind'
+                   or mount_map.get(destination, {}).get('RW') is not False
+                   or mount_map.get(destination, {}).get('Propagation') != 'rprivate'
+                   for destination in expected_destinations)
             or len(harness) != 1
             or harness[0].get('Type') != 'bind' or harness[0].get('RW') is not False
             or harness[0].get('Propagation') != 'rprivate'
-            or harness[0].get('Source') != str(destination / 'harness')):
+            or harness[0].get('Source') != str(destination / 'harness')
+            or any('/project/' + path not in mount_map
+                   or mount_map['/project/' + path].get('Type') != 'bind'
+                   or mount_map['/project/' + path].get('Source') != str(destination / 'snapshot' / path)
+                   or mount_map['/project/' + path].get('RW') is not False
+                   or mount_map['/project/' + path].get('Propagation') != 'rprivate'
+                   for path in assets)):
         raise ValueError('guarded container command/mount mismatch')
 
 

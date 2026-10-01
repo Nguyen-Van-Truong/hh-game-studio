@@ -11,7 +11,6 @@ import errno
 import os
 from pathlib import Path, PurePosixPath
 import platform
-import shutil
 import socket
 import sys
 
@@ -19,7 +18,6 @@ ARCH_X86_64 = 0xC000003E
 ALLOW, KILL, ERRNO = 0x7FFF0000, 0x80000000, 0x00050000
 CLONE_THREAD = 0x10000
 BINARY = '/tool/Godot_v4.7.2-stable_linux.x86_64'
-STAGED_PROJECT = '/tmp/gameplay-project'
 # Linux x86-64 syscall table. Other ABIs (including x32) are rejected first.
 DENIED = (41, 53, 57, 58, 62, 101, 200, 272, 308, 310, 311, 438)
 
@@ -88,7 +86,7 @@ def verify_denials():
 
 
 def command(phase, *, parse_script=None):
-    common = [BINARY, '--headless', '--path', STAGED_PROJECT, '--log-file', '/tmp/engine.log']
+    common = [BINARY, '--headless', '--path', '/project', '--log-file', '/tmp/engine.log']
     if parse_script is not None:
         if (phase != 'parse' or type(parse_script) is not str
                 or not parse_script.startswith('scripts/') or not parse_script.endswith('.gd')
@@ -107,44 +105,11 @@ def command(phase, *, parse_script=None):
     raise ValueError('GAMEPLAY_SANDBOX_PHASE')
 
 
-def stage_project():
-    """Stage the immutable host snapshot once in a disposable writable tmpfs.
-
-    Godot's importer writes adjacent ``.import`` sidecars. The source bind is
-    intentionally read-only, so the staged copy permits import without
-    allowing candidate code to mutate the measured input or its host snapshot.
-    The same container runs parse, import and play as separate child processes;
-    retaining this directory lets the play phase consume import sidecars.
-    Before every phase, all source bytes are compared with the immutable bind;
-    only Godot's disposable cache/sidecar files may differ.
-    """
-    source = Path('/project')
-    destination = Path(STAGED_PROJECT)
-    if not destination.exists():
-        shutil.copytree(source, destination, symlinks=False)
-        return destination
-    def source_file(path, root):
-        relative = path.relative_to(root)
-        return (path.is_file() and '.godot' not in relative.parts
-                and not path.name.endswith(('.import', '.uid')))
-    source_files = sorted(path.relative_to(source).as_posix() for path in source.rglob('*')
-                          if source_file(path, source))
-    staged_files = sorted(path.relative_to(destination).as_posix() for path in destination.rglob('*')
-                          if source_file(path, destination))
-    if source_files != staged_files:
-        raise RuntimeError('GAMEPLAY_STAGE_SOURCE_CHANGED')
-    for relative in source_files:
-        if (source / relative).read_bytes() != (destination / relative).read_bytes():
-            raise RuntimeError('GAMEPLAY_STAGE_SOURCE_CHANGED')
-    return destination
-
-
 def main():
     if len(sys.argv) not in (2, 3):
         raise ValueError('GAMEPLAY_SANDBOX_ARGUMENTS')
     phase = sys.argv[1]
     parse_script = sys.argv[2] if len(sys.argv) == 3 else None
-    stage_project()
     argv = command(phase, parse_script=parse_script)
     install()
     verify_denials()

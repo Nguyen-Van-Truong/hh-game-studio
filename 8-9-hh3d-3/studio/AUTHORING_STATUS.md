@@ -4,15 +4,18 @@ Authority 0. Separate branch: codex/o2-authoring-contract.
 Merge only after GT-06 acceptance. Tools-plan O4 is authoritative; this file
 tracks implementation gaps and does not create another acceptance plan.
 
-Current checkpoint: `o2-publication-20261001-10` is a fresh real Docker/Godot
-publication on the source and lock closure after the sandbox staging repair.
-Exactly one native dispatch, outer/host/container exits 0, clean cleanup; live
-retry, close/reopen and recovered retry are byte/durable-state equal. The
-asset fixture observed `avatar_loaded=true` and `sprite_loaded=true` after
-Godot import, with `asset_import_observed=true`; the source and snapshot
-inventories stayed unchanged. The focused source/eligibility/owner/runtime
-repair regression set is 157 tests across source, owner, executor and probe
-evidence, actual exit 0. A prior native
+Current checkpoint: `o2-publication-20261001-11` is a fresh real Docker/Godot
+publication on the repaired read-only project/asset-overlay design, with
+source closure `0b2fec9eb23e57ba663868d45b1a8ed635912d2aefbc34b5493e0ddd40d71b8e`.
+Exactly one native dispatch, supervisor/outer/host/container exits 0, clean
+Job/tree/handle cleanup; live retry, close/reopen and recovered retry are
+byte/durable-state equal. The asset fixture observed
+`avatar_loaded=true` and `sprite_loaded=true` after Godot import, with
+`asset_import_observed=true`; the source and snapshot inventories stayed
+unchanged. `/project` remains an immutable bind; only the allowlisted
+`/project/assets` tmpfs and exact read-only asset binds are added. The focused
+repair regression set is 75 tests, actual exit 0. A
+prior native
 reproducer (`o2-tool-publication-baseline-20261001-01`) remains preserved as a
 real bug finding: a clean native run previously accepted `@tool` and returned
 READBACK_ACK. The owner now rejects that source before staging, while the
@@ -39,12 +42,13 @@ The asset extension is intentionally allowlisted to `assets/avatar.glb` and
 `assets/sprite_sheet.png`, with separate 1 MiB per-file and 2 MiB aggregate
 caps, GLB v2/length and PNG signature checks, exact path/hash/size records, and
 before/after/snapshot inclusion in the Docker input inventory. Native
-`o2-publication-20261001-10` now proves this bounded fixture's Godot
-GLB/PNG import/readback and durable publication path. This remains
+`o2-publication-20261001-11` now proves this bounded fixture's Godot
+GLB/PNG import/readback and durable publication path with the repaired mount
+contract. This remains
 `AUTHORITY=0`: it does not prove arbitrary asset closure, AUTH-05, or public
 gameplay publication.
 
-## 2026-10-01 asset import repair checkpoint
+## 2026-10-01 asset import repair checkpoint (historical staging runs)
 
 The first asset-native attempt (`o2-publication-20261001-07`) failed honestly:
 Godot could scan the two assets but the read-only `/project` bind prevented
@@ -53,16 +57,43 @@ Godot could scan the two assets but the read-only `/project` bind prevented
 phase therefore lost the importer sidecars. A second repair (`...-09`) kept the
 staging copy across parse/import/play and correctly detected Godot's generated
 script `.uid` metadata as disposable, but its fail-closed source check exposed
-that metadata as a sidecar. The final repair retains one staged copy per
-container, compares every immutable source byte before each phase, and allows
-only `.import`, `.uid`, and `.godot` cache metadata to differ.
+that metadata as a sidecar. The historical staged variant retained one
+writable copy per container, compared immutable source bytes before each phase,
+and allowed only `.import`, `.uid`, and `.godot` cache metadata to differ; that
+design is superseded below because the writable copy weakened the `res://`
+boundary.
 
-Fresh `o2-publication-20261001-10` then observed both asset loads true, one
-native dispatch, outer/host/container exit 0, clean Job/tree/handle cleanup,
-unchanged input/snapshot/binary hashes, live retry equality, close/reopen
-equality, and recovered retry equality. Raw evidence is preserved under
-`studio/.local/reviews/o2-publication-20261001-10{,-supervisor}`. This is a
+Those staging runs are retained as historical raw evidence only; they are
+superseded because the writable project copy weakened the `res://` source
+boundary. Do not use `o2-publication-20261001-10` for the current source hash
+or acceptance claim.
+
+## 2026-10-01 read-only asset overlay repair
+
+The final repair removed project staging from every sandbox phase. Gameplay
+source now executes with the exact `/project` read-only bind. When the admitted
+fixture contains assets, the executor adds only a bounded `/project/assets`
+tmpfs and read-only/rprivate binds for `assets/avatar.glb` and
+`assets/sprite_sheet.png`; tuple-only inventory validation, exact inspector
+mount/tmpfs checks, and evidence binding reject missing, extra, writable or
+substituted mounts. The evidence verifier also binds the host tool mount source
+and rejects unexpected destinations.
+
+Fresh `o2-publication-20261001-11` observed both asset loads true with one
+native dispatch, actual supervisor/outer/host/container exit 0, clean
+Job/tree/handle cleanup, unchanged input/snapshot/binary hashes, live retry
+equality, close/reopen equality, and recovered retry equality. The raw package
+and supervisor receipt are preserved under
+`studio/.local/reviews/o2-publication-20261001-11{,-supervisor}`. This is a
 diagnostic fixture result; it does not alter GT-06 or authorize a merge.
+
+Validation limit: broad Godot-suite discovery did not complete. Three test
+launches were accidentally overlapped after the tool session IDs were not
+retained; only those known test processes were stopped before the native run.
+Do not count the broad discovery as PASS. Keep the exec session ID visible,
+poll that session instead of relaunching, and use the completed focused suite
+for this repair. The 75 focused checks and fresh native run are the verified
+results; no user application was stopped.
 
 ## Verified candidate evidence
 

@@ -235,6 +235,7 @@ class GameplayProbeEvidenceTests(unittest.TestCase):
         binding = {'files': files}
         result = {**self.result, 'sandbox_bootstrap_sha256': files['godot-addon/gameplay_sandbox.py'],
             'gameplay_profile_sha256': files['godot-addon/gameplay_source_profile.py'],
+            'tool_mount_source': 'C:/tool',
             'toolchain': {'gameplay_profile_sha256': files['godot-addon/gameplay_source_profile.py']}}
         with tempfile.TemporaryDirectory(prefix='hh-gameplay-evidence-') as temp:
             root = Path(temp)
@@ -245,8 +246,15 @@ class GameplayProbeEvidenceTests(unittest.TestCase):
             row = {'Id': result['container_id'], 'Config': {
                 'Entrypoint': ['/usr/local/bin/python3'],
                 'Cmd': executor._supervised_command('gameplay-source', 20)},
-                'Mounts': [{'Destination': '/harness', 'Source': str(root / 'harness'),
-                            'Type': 'bind', 'RW': False, 'Propagation': 'rprivate'}]}
+                'HostConfig': {'Tmpfs': dict(executor.TMPFS)},
+                'Mounts': [
+                    {'Destination': '/tool', 'Source': 'C:/tool',
+                     'Type': 'bind', 'RW': False, 'Propagation': 'rprivate'},
+                    {'Destination': '/project', 'Source': str(root / 'snapshot'),
+                     'Type': 'bind', 'RW': False, 'Propagation': 'rprivate'},
+                    {'Destination': '/harness', 'Source': str(root / 'harness'),
+                     'Type': 'bind', 'RW': False, 'Propagation': 'rprivate'},
+                ]}
 
             def verify(inspected=row, actual=result, source=binding):
                 inspect_file.write_text(json.dumps([inspected]), encoding='utf-8')

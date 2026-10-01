@@ -31,6 +31,8 @@ FILE_LIMITS = {'project.godot': 4096, 'scenes/fixture.tscn': 1048576, 'scripts/f
 TMPFS = {path: 'rw,nosuid,nodev,noexec,size=' + size + ',nr_inodes=' + str(inodes) + ',uid=65532,gid=65532,mode=0700'
          for path, size, inodes in (('/tmp', '16m', 2048), ('/home/validator', '16m', 2048),
                                    ('/run', '4m', 512), ('/project/.godot', '64m', 8192))}
+ASSET_TMPFS = {'/project/assets': 'rw,nosuid,nodev,noexec,size=4m,nr_inodes=512,uid=65532,gid=65532,mode=0700'}
+ASSET_PATHS = frozenset(('assets/avatar.glb', 'assets/sprite_sheet.png'))
 ENVIRONMENT = {'HOME': '/home/validator', 'TMPDIR': '/tmp', 'XDG_CACHE_HOME': '/home/validator/cache',
                'XDG_CONFIG_HOME': '/home/validator/config', 'XDG_DATA_HOME': '/home/validator/data',
                'XDG_RUNTIME_DIR': '/run'}
@@ -39,7 +41,7 @@ _HELPER = "import subprocess,sys; token=sys.stdin.readline(); sys.exit(125) if t
 _INCOMPLETE_CLI_HOLDS: list = []
 _INCOMPLETE_ADMISSION_HOLDS: list = []
 PROFILE_BOOTSTRAP_SHA256 = 'efde8370a6157ed2f66544ee13b82ee2556b59130f5306e9e0774ed0e3be79a5'
-SANDBOX_BOOTSTRAP_SHA256 = '1aa884c45cff9f473a68c4331f112b31caf34bc7dd712ca275468ff33ae82a9b'
+SANDBOX_BOOTSTRAP_SHA256 = 'ed31974d0bdf659ca8c237db1fa0f2857a3260cbd5e363e6c1c9f248d075fbb0'
 GAMEPLAY_PROFILE_SHA256 = '7ad2f6adfe182ad3e91ec21ddb3c5e305e3864bcddc6c7d614c6464bcf5f4669'
 GUARDED_MODES = ('guarded-parse', 'guarded-import', 'guarded-play')
 GAMEPLAY_MODE = 'gameplay-source'
@@ -750,8 +752,23 @@ def _owned_identity(value: dict, name: str, container_id: str | None = None) -> 
             and value.get('Config', {}).get('Labels', {}).get('hh.gt03.owner') == name)
 
 
-def _create_args(name: str, mode: str, tool: Path, snapshot: Path, timeout_seconds: int = 20) -> list[str]:
+def _asset_inventory(asset_files=()):
+    if type(asset_files) is not tuple:
+        raise ExecutorError('EXECUTOR_ASSET_INVENTORY')
+    values = tuple(asset_files)
+    if values != tuple(sorted(values)) or len(set(values)) != len(values):
+        raise ExecutorError('EXECUTOR_ASSET_INVENTORY')
+    if any(type(path) is not str or path not in ASSET_PATHS for path in values):
+        raise ExecutorError('EXECUTOR_ASSET_INVENTORY')
+    return values
+
+
+def _create_args(name: str, mode: str, tool: Path, snapshot: Path, timeout_seconds: int = 20,
+                 *, asset_files=()) -> list[str]:
     _need(re.fullmatch(r'hh-gt03-[0-9a-f]{32}', name) is not None, 'EXECUTOR_OWNER_NAME')
+    assets = _asset_inventory(asset_files)
+    if assets and mode != GAMEPLAY_MODE:
+        raise ExecutorError('EXECUTOR_ASSET_MODE')
     args = ['create', '--pull=never', '--name', name, '--label', 'hh.gt03.owner=' + name,
             '--label', 'hh.gt03.executor=' + EXECUTOR_CONTEXT,
             '--platform', 'linux/amd64', '--read-only', '--network', 'none', '--ipc', 'private',
@@ -768,6 +785,12 @@ def _create_args(name: str, mode: str, tool: Path, snapshot: Path, timeout_secon
         args += ['--tmpfs', destination + ':' + options]
     for source, destination in ((tool, '/tool'), (snapshot, '/project')):
         args += ['--mount', 'type=bind,src=' + str(source) + ',dst=' + destination + ',readonly,bind-propagation=rprivate']
+    if assets:
+        for destination, options in ASSET_TMPFS.items():
+            args += ['--tmpfs', destination + ':' + options]
+        for relative in assets:
+            args += ['--mount', 'type=bind,src=' + str(snapshot / relative)
+                     + ',dst=/project/' + relative + ',readonly,bind-propagation=rprivate']
     if mode == 'profile-validate' or mode in SANDBOX_MODES:
         args += ['--mount', 'type=bind,src=' + str(snapshot.parent / 'harness')
                  + ',dst=/harness,readonly,bind-propagation=rprivate']
@@ -775,7 +798,11 @@ def _create_args(name: str, mode: str, tool: Path, snapshot: Path, timeout_secon
 
 
 def _validate_inspect(value: dict, *, name: str, container_id: str, mode: str,
-                      tool: Path, snapshot: Path, image_environment: list[str], timeout_seconds: int = 20) -> None:
+                      tool: Path, snapshot: Path, image_environment: list[str], timeout_seconds: int = 20,
+                      asset_files=()) -> None:
+    assets = _asset_inventory(asset_files)
+    if assets and mode != GAMEPLAY_MODE:
+        raise ExecutorError('EXECUTOR_ASSET_MODE')
     _need(_owned_identity(value, name, container_id), 'EXECUTOR_OWNER_IDENTITY')
     host, config = value['HostConfig'], value['Config']
     expected_environment = dict(entry.split('=', 1) for entry in image_environment)
@@ -801,11 +828,15 @@ def _validate_inspect(value: dict, *, name: str, container_id: str, mode: str,
           and host.get('ShmSize') == 16777216 and host.get('LogConfig') == {'Type': 'none', 'Config': {}}
           and host.get('RestartPolicy', {}).get('Name') == 'no' and host.get('AutoRemove') is False
           and config.get('Healthcheck', {}).get('Test') == ['NONE'], 'EXECUTOR_RESOURCE_CONFIG')
-    _need(host.get('Tmpfs') == TMPFS, 'EXECUTOR_TMPFS_CONFIG')
+    expected_tmpfs = dict(TMPFS)
+    if assets:
+        expected_tmpfs.update(ASSET_TMPFS)
+    _need(host.get('Tmpfs') == expected_tmpfs, 'EXECUTOR_TMPFS_CONFIG')
     limits = host.get('Ulimits', [])
     _need(len(limits) == len(ULIMITS) and {x['Name']: (x['Soft'], x['Hard']) for x in limits}
           == {key: (number, number) for key, number in ULIMITS.items()}, 'EXECUTOR_ULIMITS')
     expected_mounts = {'/tool': str(tool), '/project': str(snapshot)}
+    expected_mounts.update({('/project/' + relative): str(snapshot / relative) for relative in assets})
     if mode == 'profile-validate' or mode in SANDBOX_MODES:
         expected_mounts['/harness'] = str(snapshot.parent / 'harness')
     mounts = value.get('Mounts', [])
@@ -924,6 +955,7 @@ def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate', '
         result['admission'] = {'acquired': True, 'wait_ms': admission.wait_ms,
                                'abandoned_mutex': admission.abandoned, 'maximum_active': 1}
         binary = _binary()
+        result['tool_mount_source'] = str(binary.parent)
         owned = _owned_runner()
         row, raw = call(['context', 'inspect', 'desktop-linux', '--format', '{{json .Endpoints.docker.Host}}'], 'context')
         _need(_cli_clean(row) and json.loads(raw) == result['toolchain']['docker_endpoint'], 'EXECUTOR_DAEMON_ENDPOINT')
@@ -937,7 +969,8 @@ def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate', '
         image_environment = image['Config'].get('Env', [])
         _need({entry.split('=', 1)[0] for entry in image_environment}
               == {'PATH', 'LANG', 'GPG_KEY', 'PYTHON_VERSION', 'PYTHON_SHA256'}, 'EXECUTOR_BASE_ENVIRONMENT')
-        args = _create_args(name, mode, binary.parent, snapshot, timeout_seconds)
+        asset_files = tuple(sorted(path for path in initial if path in ASSET_PATHS))
+        args = _create_args(name, mode, binary.parent, snapshot, timeout_seconds, asset_files=asset_files)
         _write(output / 'create-argv.json', args)
         owner_record = {'schema': 'hh-linux-owner-1', 'context': EXECUTOR_CONTEXT, 'image': IMAGE_ID,
                         'name': name, 'container_id': None, 'phase': 'prepared', 'host_pid': os.getpid()}
@@ -961,7 +994,7 @@ def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate', '
         _need(created is not None, 'EXECUTOR_CREATED_INSPECT_UNAVAILABLE')
         _validate_inspect(created, name=name, container_id=container_id, mode=mode,
                           tool=binary.parent, snapshot=snapshot, image_environment=image_environment,
-                          timeout_seconds=timeout_seconds)
+                          timeout_seconds=timeout_seconds, asset_files=asset_files)
         _need(_manifest(_inputs(project, mode)) == before and _manifest(_inputs(snapshot, mode)) == before,
               'EXECUTOR_PRESTART_INPUT_CHANGED')
         if harness_files:
