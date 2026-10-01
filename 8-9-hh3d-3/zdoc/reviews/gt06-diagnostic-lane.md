@@ -383,3 +383,52 @@ needed for the next repair. Raw evidence remains under `studio/.local/`.
   action is a fresh O4.1 preflight/CPU observation followed by one new O6.3
   host-only ID if the observer remains responsive. Do not resume this run,
   start formal09, or treat the five-batch prefix as evidence.
+
+## 2026-10-01 — Docker observer repair and O6.3-04 closeout
+
+- `gt06-o6-soak-20261001-04` used the previous CLI observer and stopped at
+  batches `0..4` (sample `33`) with `WATCHDOG_DOCKER_INVENTORY`, attempt 1
+  timeout `2.391 s`. It is `HARNESS_FAIL`, not O6.3, `INFRA_ABORT`, product
+  FAIL, or a formal pair. Job/tree/handle cleanup is closed with active count
+  `0`, zero observed, no retained handle, and no child actual-exit record.
+  The task was deleted after those checks; raw remains immutable.
+- Targeted repair commit `daffb01a` replaces repeated Docker CLI startup with a
+  direct read-only HTTP GET on the fixed Docker Desktop Linux named pipe. It
+  keeps the Docker-process gate, one shared two-second deadline, bounded HTTP
+  headers/body, strict status/content framing/JSON/name/state validation, no
+  stale cache, and sanitized fail-closed diagnostics. Native pipe coverage is
+  in `891e14be`: 3 tests exit 0 (fragmented response/request, stalled read
+  cancellation, malformed response cleanup). The pure/direct suite is 80 tests
+  exit 0; replay discovery is **731 tests, exit 0**. A separate authority-0
+  direct-vs-CLI probe matched nine names; direct calls were roughly 32–62 ms
+  versus CLI 109–157 ms. A 100-call direct lifecycle probe reached at most
+  219 ms, with no retained pipe/handle and unchanged source. These probes do
+  not constitute O6.3 or formal acceptance.
+- New measured source closure after this repair is
+  `172d7d0ce1b14d6302791fc2b4b9c2c242db72baa285dfae1fbda777098b62e8` (56
+  files). Fresh O4.1 preflight/CPU samples had passed before the prior soak;
+  a new preflight is required at dispatch. Next action is one fresh host-only
+  O6.3 ID with this closure. Do not resume any terminal run or dispatch
+  formal09 until actual exits, cleanup, O1.4 memory/handle/status and timing
+  metrics pass; private growth above 107% requires the extra fresh soak.
+
+
+## 2026-10-01 — O4.1 preflight block after Docker observer repair
+
+- A fresh O4.1 observation was attempted as `soak-preflight-20261001-06`
+  against source closure `172d7d0ce1b14d6302791fc2b4b9c2c242db72baa285dfae1fbda777098b62e8`
+  (56 files). All seven samples were structurally captured, with available
+  memory `2.19–3.77 GiB` and commit `78.77–82.16%`; foreign Godot/Blender
+  engines and hot external CPU were absent, but every sample failed the
+  O4.1 available-memory requirement of `>=4 GiB`. No O6.3 task was
+  registered, and no campaign/engine workload was started.
+- The initial preflight attempt hit `WATCHDOG_PERF_COUNTER_QUERY` before its
+  first sample. A bounded exact-query follow-up completed in `1.375 s` and
+  returned sanitized PerfProc rows; this is an observer diagnostic, not a
+  preflight pass. The failed preflight is an environment block, not
+  `INFRA_ABORT`, product FAIL, O6.3 evidence or formal evidence.
+- The direct Docker observer repair remains covered by `daffb01a` and
+  `891e14be`: native/direct suites and replay discovery were green, but no
+  acceptance is inferred. Next action is to wait for a fresh O4.1 pass, then
+  register exactly one new host-only O6.3 ID. Do not lower the 4 GiB gate,
+  resume a terminal run, or dispatch formal09.
