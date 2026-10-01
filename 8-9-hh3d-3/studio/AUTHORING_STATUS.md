@@ -36,6 +36,15 @@ exit code of `0`, and left the measured source unchanged. The receipt is
 runtime source closure is
 `0b2fec9eb23e57ba663868d45b1a8ed635912d2aefbc34b5493e0ddd40d71b8e`.
 
+The follow-up pure dependency-observation contract adds 10 checks. The
+combined focused suite now runs **85 tests**, actual exit `0`; receipt:
+`studio/.local/reviews/o2-dependency-evidence-tests-20261001-03/exit.json`.
+The new `gameplay_dependency_evidence.py` validator binds an observation to
+exact bytes, canonical paths, UIDs, typed edges, deterministic graph digest
+and close/reopen equality. It does not parse Godot files, launch a process,
+or set `dependency_closure_verified`; it remains a future native-readback
+contract only.
+
 The remaining authoring gates are recorded explicitly so a clean fixture run
 cannot be mistaken for a public capability:
 
