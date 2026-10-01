@@ -138,9 +138,9 @@ class ResidencyMetricTests(unittest.TestCase):
                     (root / f"{name}-{index:02}.json").write_text(json.dumps(value))
             retained = {"checks": {"lookup": True, "append": True},
                         "baseline_blocks": 12}
-            with mock.patch.object(metrics, "calculate", wraps=metrics.calculate) as calculate,
-                 mock.patch("studio.tests.replay.journal_scaling_metrics.read_bound_probe",
-                             return_value=retained):
+            with (mock.patch.object(metrics, "calculate", wraps=metrics.calculate) as calculate,
+                  mock.patch("studio.tests.replay.journal_scaling_metrics.read_bound_probe",
+                              return_value=retained)):
                 report = metrics.from_run(root, policy=metrics.O7_POLICY,
                                           interleaved_probe=root / "probe-result.json",
                                           seed_directory=root / "seeds")

@@ -227,6 +227,13 @@ class JournalScalingMetricTests(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, "PROBE_SEED_PREFIX"):
                     scaling.read_bound_probe(paths["probe"], paths["seeds"],
                                               source_root=paths["source"], soak_root=paths["soak"])
+                invalid_record = b"[]" + b" " * (len(paths["early_bytes"]) - 3) + b"\n"
+                paths["seeds"].joinpath("early.jsonl").write_bytes(invalid_record)
+                changed_payload["seed_hashes"]["early"] = hashlib.sha256(invalid_record).hexdigest()
+                paths["probe"].write_text(json.dumps(changed_payload), encoding="utf-8")
+                with self.assertRaisesRegex(ValueError, "PROBE_SEED_RECORD"):
+                    scaling.read_bound_probe(paths["probe"], paths["seeds"],
+                                              source_root=paths["source"], soak_root=paths["soak"])
                 paths["seeds"].joinpath("early.jsonl").write_bytes(paths["early_bytes"])
                 paths["probe"].write_text(json.dumps(paths["payload"]), encoding="utf-8")
                 source_file = paths["source"] / "host" / "core" / "journal.py"
