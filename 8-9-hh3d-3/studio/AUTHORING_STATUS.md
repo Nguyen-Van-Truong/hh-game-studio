@@ -4,9 +4,9 @@ Authority 0. Separate branch: codex/o2-authoring-contract.
 Merge only after GT-06 acceptance. Tools-plan O4 is authoritative; this file
 tracks implementation gaps and does not create another acceptance plan.
 
-Current checkpoint: `o2-publication-20261001-15` is the latest fresh real
-Docker/Godot publication on the repaired read-only project/asset-overlay
-design, with
+Current checkpoint: `o2-auth05-native-20261001-02` is the latest fresh real
+Docker/Godot hostile-fixture observation on the repaired read-only
+project/asset-overlay design, with
 source closure `0b2fec9eb23e57ba663868d45b1a8ed635912d2aefbc34b5493e0ddd40d71b8e`.
 Exactly one native dispatch, supervisor/outer/host/container exits 0, clean
 Job/tree/handle cleanup; live retry, close/reopen and recovered retry are
@@ -15,7 +15,8 @@ byte/durable-state equal. The asset fixture observed
 `asset_import_observed=true`; the source and snapshot inventories stayed
 unchanged. `/project` remains an immutable bind; only the allowlisted
 `/project/assets` tmpfs and exact read-only asset binds are added. The focused
-repair regression set is 75 tests, actual exit 0. A
+repair regression set is 138 tests, actual exit 0; the separate probe-evidence
+suite is 23 tests, actual exit 0. A
 prior native
 reproducer (`o2-tool-publication-baseline-20261001-01`) remains preserved as a
 real bug finding: a clean native run previously accepted `@tool` and returned
@@ -23,9 +24,10 @@ READBACK_ACK. The owner now rejects that source before staging, while the
 diagnostic byte profile still admits hostile input for AUTH-05 testing.
 Stale shared imports/pyc cannot acquire a new source label; drift blocks cached
 ACK, adoption and selector recovery. Raw startup diagnostics remain visible.
-This is candidate evidence, not AUTH-05 or public capability. Next: dependency
-closure needed by the two fixtures, remaining hostile AUTH-05 proof and complete
-fixture E2E. Dated entries below preserve history; their
+This is candidate evidence, not AUTH-05 or public capability. Dependency observation
+and the bounded hostile boundary/spawn/watchdog matrix are diagnostic-only
+checkpoints; remaining work is AUTH-05 review, adapter save/reload integration and
+complete fixture E2E. Dated entries below preserve history; their
 old next-action notes do not supersede this checkpoint or the tools plan.
 
 ## 2026-10-01 native dependency observation checkpoint
