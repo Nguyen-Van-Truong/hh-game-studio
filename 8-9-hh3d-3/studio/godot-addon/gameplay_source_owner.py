@@ -19,11 +19,36 @@ import sys
 import threading
 import uuid
 
-from studio.host.core.transport import epoch_ms
-from studio.host.core.limits import SafetyViolation
-from studio.protocol.core import SAFE_INTEGER, canonical_bytes, parse_json
-
 HERE = Path(__file__).resolve().parent
+
+
+def _bootstrap_runtime():
+    path = HERE / 'gameplay_runtime.py'
+    raw = path.read_bytes()
+    digest = hashlib.sha256(raw).hexdigest()
+    key = '_hh_gameplay_runtime_loader_' + hashlib.sha256(str(path).encode() + b'\0' + raw).hexdigest()
+    if key not in sys.modules:
+        spec = importlib.util.spec_from_file_location(key, path)
+        module = importlib.util.module_from_spec(spec)
+        module._gameplay_source = digest
+        sys.modules[key] = module
+        try:
+            exec(compile(raw, str(path), 'exec', dont_inherit=True), module.__dict__)
+        except BaseException:
+            del sys.modules[key]
+            raise
+    # Checking the live module code also rejects a stale timestamp-based pyc
+    # when this owner itself was imported by a standard Python loader.
+    return sys.modules[key].GameplayRuntime(HERE.parent, sys._getframe(1).f_code)
+
+
+_RUNTIME = _bootstrap_runtime()
+_protocol = _RUNTIME.module('studio.protocol.core')
+SAFE_INTEGER, canonical_bytes, parse_json = (_protocol.SAFE_INTEGER,
+                                           _protocol.canonical_bytes, _protocol.parse_json)
+epoch_ms = _RUNTIME.module('studio.host.core.transport').epoch_ms
+SafetyViolation = _RUNTIME.module('studio.host.core.limits').SafetyViolation
+_RUNTIME.ensure_current()
 ENTRYPOINT = "scripts/fixture_actor.gd"
 PROFILE = "hh-godot-gameplay-source-1"
 JOURNAL_SCHEMA = "hh-gameplay-source-journal-1"
@@ -38,24 +63,17 @@ def _sha(raw: bytes) -> str:
 
 
 def runtime_source_closure() -> tuple[dict[str, str], str]:
-    """Hash the exact adapter/executor inputs before a run is admitted."""
-    return _load("linux_executor").gameplay_runtime_source_closure()
+    """Return only this imported generation, never adopt a newer disk label."""
+    try:
+        return _RUNTIME.closure()
+    except (OSError, ValueError):
+        raise GameplaySourceOwnerError('GAMEPLAY_OWNER_IMPORT_RELEASE_CHANGED') from None
 
 
 def _load(name: str):
-    path = HERE / (name + ".py")
-    raw = path.read_bytes()
-    key = "_hh_gameplay_owner_" + _sha(str(path).encode() + b"\0" + raw)
-    if key not in sys.modules:
-        spec = importlib.util.spec_from_file_location(key, path)
-        module = importlib.util.module_from_spec(spec)
-        sys.modules[key] = module
-        try:
-            exec(compile(raw, str(path), "exec"), module.__dict__)
-        except BaseException:
-            del sys.modules[key]
-            raise
-    return sys.modules[key]
+    # Modules compile only the captured generation. Semantic admission and
+    # publication boundaries check disk drift, not every internal cache lookup.
+    return _RUNTIME.addon(name)
 
 
 class GameplaySourceOwnerError(SafetyViolation):
@@ -139,6 +157,7 @@ class GameplaySourcePublicationOwner:
     @classmethod
     def create(cls, parent: Path, *, project_id: str, source_files, entrypoint: str,
                source_closure_sha256: str, runner=None):
+        runtime_source_closure()
         profile = _load("gameplay_source_profile")
         session_model = _load("publication_session")
         contract = _load("contract")
@@ -197,6 +216,7 @@ class GameplaySourcePublicationOwner:
     def reopen(cls, root: Path, *, project_id: str, source_closure_sha256: str,
                 runner=None):
         """Reopen only the durable selected revision; no old lease survives."""
+        runtime_source_closure()
         profile = _load("gameplay_source_profile")
         session_model = _load("publication_session")
         contract = _load("contract")
@@ -330,6 +350,9 @@ class GameplaySourcePublicationOwner:
         expected_selector = {"schema": "hh-gameplay-selector-1",
                              "revision": owner._project_revision,
                              "generation": owner._generation}
+        # Durable receipt verification can load the raw-log policy. Recheck
+        # the generation after that work and before repairing any selector.
+        runtime_source_closure()
         if selector != expected_selector:
             # Journal validation above proves the durable target first; only
             # then may recovery repair the pointer file.
@@ -641,6 +664,8 @@ class GameplaySourcePublicationOwner:
             self._work.release()
 
     def _publish_owned(self, request: dict, *, grant, lease, deadline_ms: int) -> dict:
+        _need(runtime_source_closure()[1] == self.source_closure_sha256,
+              'GAMEPLAY_OWNER_SOURCE_CLOSURE_MISMATCH')
         _need(type(request) is dict and set(request) ==
               {"command_id", "digest", "expected_project_revision", "source_files", "entrypoint"},
               "GAMEPLAY_OWNER_REQUEST")
@@ -722,6 +747,8 @@ class GameplaySourcePublicationOwner:
                     pass
 
     def _adopt(self, revision, candidate, command_id, digest, checked, native_run_id):
+        _need(runtime_source_closure()[1] == self.source_closure_sha256,
+              'GAMEPLAY_OWNER_SOURCE_CLOSURE_MISMATCH')
         # Native validation may take time. Recheck the last-good state before
         # replacing its selector so a concurrent manual edit remains intact.
         self._read_current_journal()

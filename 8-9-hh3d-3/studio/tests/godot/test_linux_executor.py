@@ -192,12 +192,47 @@ class PolicyTests(unittest.TestCase):
         self.assertEqual(row['host_error'],'CLI_JOB_OWNERSHIP_UNCERTAIN')
         self.assertTrue(row['job_owner']['handle_retained'])
 
+    def test_source_drift_cannot_block_cleanup_of_an_already_created_job(self):
+        class Process:
+            stdin = io.BytesIO(); stdout = io.BytesIO(); stderr = io.BytesIO()
+            returncode = 0
+            def poll(self): return 0
+            def wait(self, timeout): return 0
+        process = Process()
+        class Owner:
+            closed = False; zero_observed = True; tainted = False
+            looked_up = None
+            def require_no_holds(self): pass
+            def create(self, observed):
+                self.process = observed
+                # Native assignment succeeded; cancellation lost the return
+                # before the caller could store its cleanup owner.
+                raise RuntimeError('interrupted after native assignment')
+            def owner_for_process(self, observed):
+                self.looked_up = observed
+                return self if observed is self.process else None
+            def active_count(self): return 0
+            def close(self): self.closed = True
+            def snapshot(self): return copy.deepcopy(CLEAN_JOB)
+        owner = Owner()
+        with tempfile.TemporaryDirectory() as folder, \
+             patch.object(executor.subprocess, 'Popen', return_value=process), \
+             patch.object(executor, '_cli_jobs', side_effect=[owner,
+                 executor.ExecutorError('EXECUTOR_CLI_SOURCE_CHANGED')]), \
+             patch.object(executor, '_INCOMPLETE_CLI_HOLDS', []) as holds:
+            row, _ = executor._cli(None, ['version'], Path(folder), 'source-drift-cleanup')
+            self.assertEqual(holds, [])
+        self.assertIs(owner.looked_up, process)
+        self.assertTrue(owner.closed)
+        self.assertTrue(row['job_owner']['closed'])
+        self.assertFalse(executor._cli_clean(row))
+
 
 class FakeDocker:
     def __init__(self, scenario):
         self.scenario = scenario; self.state = None; self.calls = []; self.removed = False
 
-    def __call__(self, owned, args, output, label, *, timeout=20, cap=262144):
+    def __call__(self, owned, args, output, label, *, timeout=20, cap=262144, jobs=None):
         self.calls.append(args)
         code, payload, stderr = 0, b'', b''
         if args[:2] == ['context', 'inspect']:

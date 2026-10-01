@@ -4,14 +4,15 @@ Authority 0. Separate branch: codex/o2-authoring-contract.
 Merge only after GT-06 acceptance. Tools-plan O4 is authoritative; this file
 tracks implementation gaps and does not create another acceptance plan.
 
-Current checkpoint: `o2-publication-20261001-02` completed real Docker/Godot
-publication, live retry, close/reopen and recovered retry with exactly one
-native dispatch. Outer/host/container exits 0, clean ownership cleanup;
-123 focused pure tests exit 0. Raw startup diagnostics stay visible and are
-checked by the exact versioned host policy on publish and reopen. This remains
-candidate evidence, not AUTH-05 or public capability. Next: imported-versus-disk
-generation binding, arbitrary dependency closure, remaining hostile AUTH-05
-proof and complete fixture E2E. Dated entries below preserve history; their
+Current checkpoint: `o2-publication-20261001-03` repeated real Docker/Godot
+publication, live retry, close/reopen and recovered retry after binding the
+declared Python runtime to one captured source generation. Exactly one native
+dispatch, outer/host/container exits 0, clean cleanup; 131 focused tests exit 0.
+Stale shared imports/pyc cannot acquire a new source label; drift blocks cached
+ACK, adoption and selector recovery. Raw startup diagnostics remain visible.
+This is candidate evidence, not AUTH-05 or public capability. Next: dependency
+closure needed by the two fixtures, remaining hostile AUTH-05 proof and complete
+fixture E2E. Dated entries below preserve history; their
 old next-action notes do not supersede this checkpoint or the tools plan.
 
 ## Verified candidate evidence
@@ -791,3 +792,49 @@ generation binding, arbitrary runtime closure and complete fixture E2E remain
 open. No merge before GT06 acceptance. Use the repeatable probe instead of
 one-off native commands; retain failed stages and reproduce their boundary
 offline before spending another native run.
+
+### 2026-10-01 imported runtime generation and safe cleanup
+
+The temporary-copy reproducer `o2-import-generation-20261001-01` confirmed that
+the old adapter accepted a new disk closure while keeping the old imported
+`canonical_bytes` function (actual exit 0, no native dispatch). The repair uses
+`gameplay_runtime.py` to compile the fixed adapter dependencies from the same
+captured bytes used for their hash, in a private namespace. It does not replace
+shared `studio` modules, install global import hooks or edit vendored code.
+The owner also checks its complete loaded code object against current source,
+so an old timestamp-based owner pyc fails closed. Source changes require a fresh
+owner generation; never relabel or hot-reload a live owner/lease/Job.
+
+Closure checks guard create/reopen, cached ACK and adoption; recovery checks
+again after receipt validation before repairing CURRENT. The CLI helper is
+checked at admission and retained through the whole run, including Docker/Job
+cleanup. A source change invalidates the result without preventing cleanup.
+Generation checks run at semantic boundaries, avoiding repeated inventory
+scans on every internal module lookup. First focused regression caught a
+changed error ordering; admission now checks the supplied closure before CLI
+cache validation. No prior diagnostic evidence was relabeled.
+
+Focused runtime/owner/log-policy/executor/guard/profile/probe suites: **131
+tests, actual exit 0**, 34.312s; source unchanged. Command and receipt:
+`studio/.local/reviews/o2-runtime-binding-tests-20261001-01/exit.json`.
+Temporary-copy negatives cover preloaded shared modules, timestamp/size-matched
+stale pyc, five changed dependencies, cached ACK, post-native adoption and
+receipt-loop recovery. Cleanup retains the already-created Job after source
+drift. These are pure injected-race tests, not OS isolation evidence.
+
+Fresh native command: `python -B studio/tests/godot/run_gameplay_publication_probe.py
+--run-id o2-publication-20261001-03`. Outer PID 2808 actually exited 0 in
+14.734s. Host/container exits 0; Job closed/zero/no retained handles; owned
+container removed, no retained owner. Runtime closure (20 files):
+`2bdfcfaa1e1ec38e157461b794bb95192df28ba29c6ddb9fb746544cf490c08e`.
+All 23 runtime+harness files match retained and live copies. Generation advances
+once; live and recovered retry preserve ACK/selector/journal with one native
+dispatch. Raw log cleanliness remains false; the exact versioned startup policy
+is accepted. Raw, closeout and supervisor receipt:
+`.local/reviews/o2-publication-20261001-03{,-supervisor}`.
+
+`AUTHORITY=0`, `public_ack=false`, `sandbox_acceptance=false`. This closes the
+demonstrated stale-import path for this declared adapter graph, not arbitrary
+Godot project dependency discovery or all AUTH-02..05 obligations. Next work
+must follow the two fixture gaps; GT06 and its measured source are unchanged,
+and this branch must not merge before GT06 acceptance.

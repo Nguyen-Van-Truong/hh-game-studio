@@ -11,12 +11,12 @@ from unittest.mock import patch
 
 STUDIO = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(STUDIO.parent))
-from studio.host.core.limits import SafetyViolation
 spec = importlib.util.spec_from_file_location(
     "hh_gameplay_source_owner_test", STUDIO / "godot-addon/gameplay_source_owner.py")
 owner_mod = importlib.util.module_from_spec(spec)
 sys.modules[spec.name] = owner_mod
 spec.loader.exec_module(owner_mod)
+SafetyViolation = owner_mod.SafetyViolation
 
 
 def native_result(run_id="fake-run-1"):

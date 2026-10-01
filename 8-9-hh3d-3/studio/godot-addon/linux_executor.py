@@ -46,6 +46,7 @@ GAMEPLAY_MODE = 'gameplay-source'
 SANDBOX_MODES = GUARDED_MODES + (GAMEPLAY_MODE,)
 GAMEPLAY_RUNTIME_FILES = (
     'godot-addon/gameplay_source_owner.py',
+    'godot-addon/gameplay_runtime.py',
     'godot-addon/gameplay_source_profile.py',
     'godot-addon/gameplay_log_policy.py',
     'godot-addon/linux_executor.py',
@@ -171,10 +172,10 @@ def _profile_factory():
 
 def _cli_jobs():
     global _CLI_JOBS
+    path = STUDIO / 'godot-addon/cli_job.py'
+    raw = _read_file(path, 65536)
+    key = '_hh_linux_cli_job_' + _sha(str(path).encode() + b'\0' + raw)
     if _CLI_JOBS is None:
-        path = STUDIO / 'godot-addon/cli_job.py'
-        raw = _read_file(path, 65536)
-        key = '_hh_linux_cli_job_' + _sha(str(path).encode() + b'\0' + raw)
         if key not in sys.modules:
             spec = importlib.util.spec_from_file_location(key, path)
             module = importlib.util.module_from_spec(spec)
@@ -185,6 +186,8 @@ def _cli_jobs():
                 del sys.modules[key]
                 raise
         _CLI_JOBS = sys.modules[key]
+    _need(_CLI_JOBS.__name__ == key and _CLI_JOBS.__file__ == str(path),
+          'EXECUTOR_CLI_SOURCE_CHANGED')
     return _CLI_JOBS
 
 
@@ -532,15 +535,16 @@ def _binary() -> Path:
 
 def _owned_runner():
     path = STUDIO / 'build/bootstrap/run_fixture.py'
-    _need(_sha(_read_file(path, 262144)) == OWNED_RUNNER_SHA256, 'EXECUTOR_RUNNER_PIN')
+    raw = _read_file(path, 262144)
+    _need(_sha(raw) == OWNED_RUNNER_SHA256, 'EXECUTOR_RUNNER_PIN')
     spec = importlib.util.spec_from_file_location('hh_gt03_owned_cli_' + uuid.uuid4().hex, path)
     module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
+    exec(compile(raw, str(path), 'exec', dont_inherit=True), module.__dict__)
     return module
 
 
 def _cli(owned, args: list[str], output: Path, label: str, *, timeout: int = 20,
-         cap: int = 262144) -> tuple[dict, bytes]:
+         cap: int = 262144, jobs=None) -> tuple[dict, bytes]:
     _need(re.fullmatch(r'[a-z0-9-]+', label) is not None, 'EXECUTOR_LABEL')
     argv = [DOCKER, '--context', 'desktop-linux', *args]
     row = {'argv': ['docker.exe', '--context', 'desktop-linux', *args], 'exit_code': None,
@@ -555,6 +559,7 @@ def _cli(owned, args: list[str], output: Path, label: str, *, timeout: int = 20,
     exceeded = threading.Event()
     process = None
     job = None
+    cli_jobs = None
     cancellation = None
     start = time.monotonic()
     def failed(error, prefix=''):
@@ -590,11 +595,12 @@ def _cli(owned, args: list[str], output: Path, label: str, *, timeout: int = 20,
             except BaseException as error:
                 failed(error, 'CLI_READER_JOIN_')
     try:
-        _cli_jobs().require_no_holds()
+        cli_jobs = jobs if jobs is not None else _cli_jobs()
+        cli_jobs.require_no_holds()
         process = subprocess.Popen([sys.executable, '-B', '-c', _HELPER, *argv], stdin=subprocess.PIPE,
                                    stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                                    creationflags=subprocess.CREATE_NO_WINDOW)
-        job = _cli_jobs().create(process)
+        job = cli_jobs.create(process)
         for index, stream in enumerate((process.stdout, process.stderr)):
             thread = threading.Thread(target=drain, args=(stream, index), daemon=True)
             readers.append(thread)
@@ -625,7 +631,7 @@ def _cli(owned, args: list[str], output: Path, label: str, *, timeout: int = 20,
             try:
                 # Also covers interruption after create returned but before the
                 # caller's assignment. Lookup uses exact process object identity.
-                lookup = getattr(_cli_jobs(), 'owner_for_process', None)
+                lookup = getattr(cli_jobs, 'owner_for_process', None)
                 job = lookup(process) if lookup is not None else None
             except BaseException as error:
                 failed(error, 'CLI_JOB_LOOKUP_')
@@ -812,7 +818,6 @@ def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate', '
     """
     _command(mode)
     _need(not _INCOMPLETE_CLI_HOLDS, 'EXECUTOR_UNFINISHED_CLI_HELD')
-    _cli_jobs().require_no_holds()
     _need(not _INCOMPLETE_ADMISSION_HOLDS, 'EXECUTOR_UNFINISHED_ADMISSION_HELD')
     _need(type(timeout_seconds) is int and 1 <= timeout_seconds <= 20, 'EXECUTOR_TIMEOUT')
     _need(isinstance(project, Path) and isinstance(output, Path), 'EXECUTOR_PATH_TYPE')
@@ -825,6 +830,8 @@ def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate', '
         observed_source_closure = gameplay_runtime_source_closure()[1]
         if source_closure_sha256 is not None:
             _need(observed_source_closure == source_closure_sha256, 'EXECUTOR_SOURCE_CLOSURE_MISMATCH')
+    cli_jobs = _cli_jobs()
+    cli_jobs.require_no_holds()
     project, output = project.absolute(), output.absolute()
     initial = _inputs(project, mode)
     profile_harness = _profile_harness() if mode == 'profile-validate' else None
@@ -889,7 +896,10 @@ def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate', '
                 cancellation = error
             result['host_cancelled'] = type(cancellation).__name__
     def call(args, label, timeout=20, cap=262144):
-        return _cli(owned, args, output, label, timeout=timeout, cap=cap)
+        # Finish cleanup with the exact helper admitted before dispatch even
+        # if its source changes. Final closure verification still rejects it;
+        # a subsequent run must pass the source guard again.
+        return _cli(owned, args, output, label, timeout=timeout, cap=cap, jobs=cli_jobs)
     def inspect(selector, label):
         row, raw = call(['inspect', selector], label, timeout=5)
         if not _cli_clean(row):
