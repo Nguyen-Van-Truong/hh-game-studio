@@ -333,6 +333,7 @@ class EnvironmentTests(unittest.TestCase):
                      {'pid': 42, 'name': 'docker', 'cpu_total_100ns': 7}]
         payload = b'[{"IDProcess":1480,"PercentProcessorTime":120,"ElapsedTime":999}]'
         with patch.object(env.Path, 'is_file', return_value=True), patch.object(env.os, 'cpu_count', return_value=12), \
+             patch.object(env.time, 'monotonic', return_value=100.0), \
              patch.object(env.subprocess, 'run', return_value=SimpleNamespace(returncode=0, stdout=payload)) as run:
             result = env.perf_process_times(processes)
         self.assertEqual(result[1480], {'cpu_total_100ns': 120, 'process_start_100ns': 999,
@@ -346,10 +347,182 @@ class EnvironmentTests(unittest.TestCase):
 
     def test_perfproc_fallback_failure_is_unknown_not_zero(self):
         processes = [{'pid': 1480, 'name': 'vmmemwsl', 'cpu_total_100ns': None}]
+        clock = [100.0]
+        def probe(*_args, **kwargs):
+            clock[0] += kwargs['timeout']
+            raise env.subprocess.TimeoutExpired('secret-argv', kwargs['timeout'],
+                                               output=b'secret-stdout', stderr=b'secret-stderr')
         with patch.object(env.Path, 'is_file', return_value=True), \
-             patch.object(env.subprocess, 'run', side_effect=env.subprocess.TimeoutExpired('powershell', 8)):
-            with self.assertRaisesRegex(BenchmarkJobError, 'PERF_COUNTER_QUERY'):
+             patch.object(env.time, 'monotonic', side_effect=lambda: clock[0]), \
+             patch.object(env.subprocess, 'run', side_effect=probe) as run:
+            with self.assertRaisesRegex(BenchmarkJobError, 'PERF_COUNTER_QUERY') as raised:
                 env.perf_process_times(processes)
+        self.assertEqual(run.call_count, 1)
+        self.assertEqual(run.call_args.kwargs['timeout'], 8)
+        self.assertEqual(raised.exception.perf_counter,
+                         {'reason': 'timeout', 'attempt': 1, 'elapsed_seconds': 8})
+        self.assertIsNone(raised.exception.__cause__)
+        self.assertIsNone(raised.exception.__context__)
+        self.assertNotIn('secret', ''.join(traceback.format_exception(raised.exception)))
+
+    def test_perfproc_quick_nonzero_retries_with_only_remaining_budget(self):
+        processes = [{'pid': 1480, 'name': 'vmmemwsl', 'cpu_total_100ns': None}]
+        payload = b'[{"IDProcess":1480,"PercentProcessorTime":120,"ElapsedTime":999}]'
+        clock = [100.0]
+        def probe(*_args, **_kwargs):
+            if clock[0] == 100.0:
+                clock[0] += 0.25
+                return SimpleNamespace(returncode=125, stdout=b'')
+            clock[0] += 0.5
+            return SimpleNamespace(returncode=0, stdout=payload)
+        with patch.object(env.Path, 'is_file', return_value=True), \
+             patch.object(env.time, 'monotonic', side_effect=lambda: clock[0]), \
+             patch.object(env.subprocess, 'run', side_effect=probe) as run:
+            result = env.perf_process_times(processes)
+        self.assertEqual(result[1480]['cpu_total_100ns'], 120)
+        self.assertEqual(run.call_count, 2)
+        self.assertEqual([call.kwargs['timeout'] for call in run.call_args_list], [8, 7.75])
+
+    def test_perfproc_partial_timeout_retry_cannot_restart_total_deadline(self):
+        processes = [{'pid': 1480, 'name': 'vmmemwsl', 'cpu_total_100ns': None}]
+        clock = [100.0]
+        def probe(*_args, **kwargs):
+            clock[0] += 0.75 if clock[0] == 100.0 else kwargs['timeout']
+            raise env.subprocess.TimeoutExpired('secret-argv', kwargs['timeout'])
+        with patch.object(env.Path, 'is_file', return_value=True), \
+             patch.object(env.time, 'monotonic', side_effect=lambda: clock[0]), \
+             patch.object(env.subprocess, 'run', side_effect=probe) as run:
+            with self.assertRaisesRegex(BenchmarkJobError, 'PERF_COUNTER_QUERY') as raised:
+                env.perf_process_times(processes)
+        self.assertEqual([call.kwargs['timeout'] for call in run.call_args_list], [8, 7.25])
+        self.assertEqual(raised.exception.perf_counter,
+                         {'reason': 'timeout', 'attempt': 2, 'elapsed_seconds': 8})
+
+    def test_perfproc_oserror_retries_with_only_remaining_budget(self):
+        processes = [{'pid': 1480, 'name': 'vmmemwsl', 'cpu_total_100ns': None}]
+        payload = b'[{"IDProcess":1480,"PercentProcessorTime":120,"ElapsedTime":999}]'
+        clock = [100.0]
+        def probe(*_args, **_kwargs):
+            if clock[0] == 100.0:
+                clock[0] += 0.125
+                raise OSError(13, 'secret-error', 'secret-path')
+            clock[0] += 0.5
+            return SimpleNamespace(returncode=0, stdout=payload)
+        with patch.object(env.Path, 'is_file', return_value=True), \
+             patch.object(env.time, 'monotonic', side_effect=lambda: clock[0]), \
+             patch.object(env.subprocess, 'run', side_effect=probe) as run:
+            result = env.perf_process_times(processes)
+        self.assertEqual(result[1480]['cpu_total_100ns'], 120)
+        self.assertEqual([call.kwargs['timeout'] for call in run.call_args_list], [8, 7.875])
+
+    def test_perfproc_late_success_is_unknown_without_retry(self):
+        clock = [100.0]
+        def probe(*_args, **_kwargs):
+            clock[0] += 8.1
+            return SimpleNamespace(returncode=0,
+                                   stdout=b'[{"IDProcess":1480,"PercentProcessorTime":120,"ElapsedTime":999}]')
+        with patch.object(env.Path, 'is_file', return_value=True), \
+             patch.object(env.time, 'monotonic', side_effect=lambda: clock[0]), \
+             patch.object(env.subprocess, 'run', side_effect=probe) as run:
+            with self.assertRaisesRegex(BenchmarkJobError, 'PERF_COUNTER_QUERY') as raised:
+                env.perf_process_times([{'pid': 1480, 'name': 'vmmemwsl', 'cpu_total_100ns': None}])
+        self.assertEqual(run.call_count, 1)
+        self.assertEqual(raised.exception.perf_counter,
+                         {'reason': 'timeout', 'attempt': 1, 'elapsed_seconds': 8.1})
+
+    def test_perfproc_malformed_output_is_unknown_without_retry(self):
+        processes = [{'pid': 1480, 'name': 'vmmemwsl', 'cpu_total_100ns': None}]
+        for output in (b'\xff', b'not-json', b'', b'x' * (8 * 1024 * 1024 + 1),
+                       'unexpected-text', None):
+            with self.subTest(output_kind=type(output).__name__), \
+                 patch.object(env.Path, 'is_file', return_value=True), \
+                 patch.object(env.time, 'monotonic', return_value=100.0), \
+                 patch.object(env.subprocess, 'run',
+                              return_value=SimpleNamespace(returncode=0, stdout=output)) as run:
+                with self.assertRaisesRegex(BenchmarkJobError, 'PERF_COUNTER_QUERY') as raised:
+                    env.perf_process_times(processes)
+            self.assertEqual(run.call_count, 1)
+            self.assertEqual(raised.exception.perf_counter,
+                             {'reason': 'bad_output', 'attempt': 1, 'elapsed_seconds': 0})
+
+    def test_perfproc_empty_or_partial_provider_inventory_preserves_unknown(self):
+        processes = [{'pid': 1480, 'name': 'vmmemwsl', 'cpu_total_100ns': None},
+                     {'pid': 1481, 'name': 'docker', 'cpu_total_100ns': None}]
+        for payload, expected in (
+                (b'[]', {}),
+                (b'[{"IDProcess":1480,"PercentProcessorTime":120,"ElapsedTime":999}]',
+                 {1480: {'cpu_total_100ns': 120, 'process_start_100ns': 999,
+                         'cpu_source': 'PerfProcRaw'}})):
+            with self.subTest(payload=payload), patch.object(env.Path, 'is_file', return_value=True), \
+                 patch.object(env.time, 'monotonic', return_value=100.0), \
+                 patch.object(env.subprocess, 'run',
+                              return_value=SimpleNamespace(returncode=0, stdout=payload)):
+                self.assertEqual(env.perf_process_times(processes), expected)
+        self.assertTrue(all(row['cpu_total_100ns'] is None for row in processes))
+
+    def test_perfproc_shape_rejects_non_integral_or_duplicate_counter_rows(self):
+        outputs = (
+            b'[{"IDProcess":1480,"PercentProcessorTime":-1,"ElapsedTime":999}]',
+            b'[{"IDProcess":1480,"PercentProcessorTime":1.5,"ElapsedTime":999}]',
+            b'[{"IDProcess":1480,"PercentProcessorTime":NaN,"ElapsedTime":999}]',
+            b'[{"IDProcess":1480,"PercentProcessorTime":18446744073709551616,"ElapsedTime":999}]',
+            b'[{"IDProcess":1480,"PercentProcessorTime":120,"ElapsedTime":-1}]',
+            b'[{"IDProcess":1480,"PercentProcessorTime":120,"ElapsedTime":true}]',
+            b'[{"IDProcess":1480,"PercentProcessorTime":120,"ElapsedTime":18446744073709551616}]',
+            b'[{"IDProcess":1480,"PercentProcessorTime":120,"ElapsedTime":999},'
+            b'{"IDProcess":1480,"PercentProcessorTime":121,"ElapsedTime":1000}]',
+        )
+        for payload in outputs:
+            with self.subTest(payload=payload), patch.object(env.Path, 'is_file', return_value=True), \
+                 patch.object(env.time, 'monotonic', return_value=100.0), \
+                 patch.object(env.subprocess, 'run',
+                              return_value=SimpleNamespace(returncode=0, stdout=payload)) as run:
+                with self.assertRaisesRegex(BenchmarkJobError, 'PERF_COUNTER_SHAPE'):
+                    env.perf_process_times([{'pid': 1480, 'name': 'vmmemwsl',
+                                              'cpu_total_100ns': None}])
+            self.assertEqual(run.call_count, 1)
+
+    def test_perfproc_diagnostic_persists_without_raw_secrets(self):
+        processes = [{'pid': 1480, 'name': 'vmmemwsl', 'cpu_total_100ns': None}]
+        for failure, reason, detail in (
+                (OSError(13, 'secret-error', 'secret-path'), 'oserror', {'errno': 13}),
+                (SimpleNamespace(returncode=125, stdout=b'secret-stdout',
+                                 stderr=b'secret-stderr'), 'nonzero', {'returncode': 125})):
+            with self.subTest(reason=reason), patch.object(env.Path, 'is_file', return_value=True), \
+                 patch.object(env.time, 'monotonic', return_value=100.0), \
+                 patch.object(env.subprocess, 'run') as run:
+                if isinstance(failure, Exception):
+                    run.side_effect = failure
+                else:
+                    run.return_value = failure
+                with self.assertRaisesRegex(BenchmarkJobError, 'PERF_COUNTER_QUERY') as query:
+                    env.perf_process_times(processes)
+            self.assertEqual(run.call_count, 2)
+            expected = {'reason': reason, 'attempt': 2, 'elapsed_seconds': 0, **detail}
+            self.assertEqual(query.exception.perf_counter, expected)
+            self.assertIsNone(query.exception.__cause__)
+            self.assertIsNone(query.exception.__context__)
+            self.assertNotIn('secret', ''.join(traceback.format_exception(query.exception)))
+            # The observer must persist only whitelisted scalar diagnostics.
+            query.exception.perf_counter['stdout'] = 'secret-stdout'
+            query.exception.perf_counter['stderr'] = 'secret-stderr'
+            with tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                binding = {'run_id': 'test', 'source_closure_sha256': 'a' * 64,
+                           'campaign_sha256': 'b' * 64}
+                watch = env.Watchdog(root, Mock(side_effect=query.exception), binding, campaign.write)
+                try:
+                    with self.assertRaisesRegex(BenchmarkJobError, 'OBSERVER_ERROR') as raised:
+                        watch.poll()
+                finally:
+                    watch.close()
+                event_text = (root / 'watchdog-observation-error.json').read_text()
+                self.assertEqual(json.loads(event_text)['perf_counter'], expected)
+                self.assertEqual(json.loads(event_text)['error_code'], 'WATCHDOG_PERF_COUNTER_QUERY')
+                self.assertNotIn('secret', event_text)
+                self.assertNotIn('secret', ''.join(traceback.format_exception(raised.exception)))
+                self.assertIs(raised.exception.__cause__, query.exception)
+                self.assertTrue((root / 'watchdog-stop.json').is_file())
 
     def test_watchdog_cpu_top_is_persisted_and_verified(self):
         with tempfile.TemporaryDirectory() as directory:
