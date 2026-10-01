@@ -6,6 +6,7 @@ even a correct-looking marker is never a publication attestation.
 from __future__ import annotations
 
 from pathlib import Path
+import base64
 
 SCENE = '''[gd_scene load_steps=2 format=3]
 
@@ -368,6 +369,40 @@ static func step_size(actor: Node3D) -> float:
 position = Vector3(0, 1, 0)
 script = ExtResource("1")
 ''',
+    },
+}
+
+# Minimal valid GLB v2 and 1x1 RGBA PNG bytes. They are authored fixture
+# artifacts only; native import/readback remains a separate evidence claim.
+ASSET_AVATAR_GLB = base64.b64decode(
+    'Z2xURgIAAACoAQAAaAEAAEpTT057ImFzc2V0Ijp7InZlcnNpb24iOiIyLjAiLCJnZW5lcmF0b3IiOiJISCBmaXh0dXJlIn0sInNjZW5lIjowLCJzY2VuZXMiOlt7Im5vZGVzIjpbMF19XSwibm9kZXMiOlt7Im1lc2giOjB9XSwibWVzaGVzIjpbeyJwcmltaXRpdmVzIjpbeyJhdHRyaWJ1dGVzIjp7IlBPU0lUSU9OIjowfX1dfV0sImJ1ZmZlcnMiOlt7ImJ5dGVMZW5ndGgiOjM2fV0sImJ1ZmZlclZpZXdzIjpbeyJidWZmZXIiOjAsImJ5dGVPZmZzZXQiOjAsImJ5dGVMZW5ndGgiOjM2fV0sImFjY2Vzc29ycyI6W3siYnVmZmVyVmlldyI6MCwiY29tcG9uZW50VHlwZSI6NTEyNiwiY291bnQiOjMsInR5cGUiOiJWRUMzIiwibWluIjpbMCwwLDBdLCJtYXgiOlsxLDEsMF19XX0kAAAAQklOAAAAAAAAAAAAAAAAAAAAgD8AAAAAAAAAAAAAAAAAAIA/AAAAAA==')
+ASSET_SPRITE_SHEET = base64.b64decode(
+    'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR4nGP4z8DwHwAFAAH/iZk9HQAAAABJRU5ErkJggg==')
+FIXTURES['gameplay_source_assets'] = {
+    'mode': 'gameplay-source', 'timeout': 20, 'expect': 'gameplay_source',
+    'asset_readback': True,
+    'script': '''extends Node3D
+var ticks: int = 0
+var avatar_loaded: bool = false
+var sprite_loaded: bool = false
+func _ready() -> void:
+\tvar avatar: Resource = load("res://assets/avatar.glb")
+\tvar sprite: Resource = load("res://assets/sprite_sheet.png")
+\tavatar_loaded = avatar != null
+\tsprite_loaded = sprite != null
+\tif not avatar_loaded or not sprite_loaded:
+\t\tpush_error("fixture asset readback failed")
+func _physics_process(_delta: float) -> void:
+\tticks += 1
+\tposition.x += 1.0
+\tif ticks == 12:
+\t\tprint("HH_PROBE_ASSET_READBACK " + JSON.stringify({"avatar_loaded": avatar_loaded, "sprite_loaded": sprite_loaded}))
+\t\tprint("HH_PROBE_PLAY " + JSON.stringify({"ticks": ticks, "x": position.x}))
+\t\tget_tree().quit(0)
+''',
+    'extra_binary_files': {
+        'assets/avatar.glb': ASSET_AVATAR_GLB,
+        'assets/sprite_sheet.png': ASSET_SPRITE_SHEET,
     },
 }
 

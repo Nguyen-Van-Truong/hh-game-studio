@@ -48,6 +48,7 @@ def idle_window():
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--run-id', required=True)
+    parser.add_argument('--fixture', default='gameplay_source_multifile')
     args = parser.parse_args()
     if not re.fullmatch(r'o2-publication-[a-z0-9-]{1,48}', args.run_id):
         parser.error('use a fresh o2-publication-<id>')
@@ -57,6 +58,8 @@ def main():
     owner_mod = load('o2_native_gameplay_owner', STUDIO / 'godot-addon/gameplay_source_owner.py')
     probe = load('o2_native_linux_probe', STUDIO / 'tests/godot/run_linux_probe.py')
     fixtures = load('o2_native_gameplay_fixtures', STUDIO / 'tests/godot/linux_probe_fixtures.py')
+    if args.fixture not in fixtures.FIXTURES or not args.fixture.startswith('gameplay_source_'):
+        parser.error('fixture must be a gameplay_source_* case')
     files, closure = owner_mod.runtime_source_closure()
     for name in ('tests/godot/run_gameplay_publication_probe.py',
                  'tests/godot/run_linux_probe.py', 'tests/godot/linux_probe_fixtures.py'):
@@ -75,7 +78,8 @@ def main():
     os.environ.setdefault('HH_STUDIO_LINUX_GODOT', str(STUDIO /
         '.local/tooling/godot-4.7.2-stable-linux/Godot_v4.7.2-stable_linux.x86_64'))
     profile = owner_mod._load('gameplay_source_profile')
-    case = {**fixtures.FIXTURES['gameplay_source_multifile'],
+    fixture_name = args.fixture
+    case = {**fixtures.FIXTURES[fixture_name],
             'scene': fixtures.SCENE, 'project': profile.PROJECT_TEMPLATE}
     candidate = probe.case_files(case)
     candidate.pop('project.godot')
@@ -118,7 +122,7 @@ def main():
              'LIVE_RETRY_MUTATED_STATE')
         native_dir = owner._root / 'runs' / request['command_id']
         observation = probe.case_observation(native_dir, case,
-            name='gameplay_source_multifile', binding=binding)
+            name=fixture_name, binding=binding)
         save(output / 'native-observation.json', observation)
         need(observation['fixture_observed'] is True, 'NATIVE_FIXTURE_NOT_OBSERVED')
         root = owner._root

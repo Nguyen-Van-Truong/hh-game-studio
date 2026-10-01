@@ -298,6 +298,12 @@ def evaluate(case: dict, result: dict, stdout: str, stderr: str) -> dict:
         details = marker(stdout, 'HH_PROBE_PLAY ')
         observed = (completed and details is not None and _integer(details.get('ticks'), 12)
             and type(details.get('x')) in (int, float) and details['x'] == 12.0)
+        asset_details = marker(stdout, 'HH_PROBE_ASSET_READBACK ')
+        asset_import_observed = (not case.get('asset_readback')
+            or (type(asset_details) is dict
+                and asset_details.get('avatar_loaded') is True
+                and asset_details.get('sprite_loaded') is True))
+        observed = observed and asset_import_observed
     elif kind == 'fixture_state':
         details = marker(stdout, 'HH_PROBE_FIXTURE ')
         observed = (completed and type(details) is dict and bool(case.get('expected_state'))
@@ -339,6 +345,10 @@ def evaluate(case: dict, result: dict, stdout: str, stderr: str) -> dict:
         'supervisor_watchdog_observed': controlled and transcript_ok and kind == 'watchdog' and supervisor_watchdog,
         'host_watchdog_observed': controlled and transcript_ok and kind == 'watchdog' and host_watchdog,
         'expectation': kind, 'untrusted_child_observation': details,
+        'asset_import_observed': (not case.get('asset_readback')
+            or (type(marker(stdout, 'HH_PROBE_ASSET_READBACK ')) is dict
+                and marker(stdout, 'HH_PROBE_ASSET_READBACK ').get('avatar_loaded') is True
+                and marker(stdout, 'HH_PROBE_ASSET_READBACK ').get('sprite_loaded') is True)),
         'authority': 0,
         'public_ack': False, 'sandbox_acceptance': False,
         'validation_attribution_proven': False}
@@ -398,6 +408,14 @@ def case_files(case: dict) -> dict[str, bytes]:
                 or not re.fullmatch(r'(scenes|scripts)/[A-Za-z0-9_-]+\.(tscn|gd)', path)):
             raise ValueError('invalid fixture extra file')
         values[path] = content.encode('utf-8')
+    binary_extras = case.get('extra_binary_files', {})
+    if type(binary_extras) is not dict:
+        raise ValueError('fixture binary files must be a mapping')
+    for path, content in binary_extras.items():
+        if (type(path) is not str or type(content) is not bytes or path in values
+                or path not in ('assets/avatar.glb', 'assets/sprite_sheet.png')):
+            raise ValueError('invalid fixture binary file')
+        values[path] = content
     return values
 
 

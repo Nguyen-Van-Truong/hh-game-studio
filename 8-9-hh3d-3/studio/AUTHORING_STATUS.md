@@ -4,13 +4,14 @@ Authority 0. Separate branch: codex/o2-authoring-contract.
 Merge only after GT-06 acceptance. Tools-plan O4 is authoritative; this file
 tracks implementation gaps and does not create another acceptance plan.
 
-Current checkpoint: `o2-publication-20261001-06` repeated real Docker/Godot
-publication on the source and lock closure after adding an owner-side
-publication eligibility boundary and bounded asset inventory. Exactly one
-native dispatch, outer/host/container exits 0, clean cleanup; live retry,
-close/reopen and recovered retry are byte/durable-state equal. The focused
-source/eligibility/owner/runtime suite is 68 tests, actual exit 0; the broader
-executor/guarded regression is 103 tests, actual exit 0. A prior native
+Current checkpoint: `o2-publication-20261001-10` is a fresh real Docker/Godot
+publication on the source and lock closure after the sandbox staging repair.
+Exactly one native dispatch, outer/host/container exits 0, clean cleanup; live
+retry, close/reopen and recovered retry are byte/durable-state equal. The
+asset fixture observed `avatar_loaded=true` and `sprite_loaded=true` after
+Godot import, with `asset_import_observed=true`; the source and snapshot
+inventories stayed unchanged. The focused source/eligibility/owner/runtime
+suite is 144 tests across the repair set, actual exit 0. A prior native
 reproducer (`o2-tool-publication-baseline-20261001-01`) remains preserved as a
 real bug finding: a clean native run previously accepted `@tool` and returned
 READBACK_ACK. The owner now rejects that source before staging, while the
@@ -36,10 +37,31 @@ ignored.
 The asset extension is intentionally allowlisted to `assets/avatar.glb` and
 `assets/sprite_sheet.png`, with separate 1 MiB per-file and 2 MiB aggregate
 caps, GLB v2/length and PNG signature checks, exact path/hash/size records, and
-before/after/snapshot inclusion in the Docker input inventory. Assets remain
-`asset_import_verified=false`; `o2-publication-20261001-06` exercises the
-existing script/scene native fixture and proves executor compatibility only.
-Actual Godot GLB/PNG import/readback remains open for fixture E2E.
+before/after/snapshot inclusion in the Docker input inventory. Native
+`o2-publication-20261001-10` now proves this bounded fixture's Godot
+GLB/PNG import/readback and durable publication path. This remains
+`AUTHORITY=0`: it does not prove arbitrary asset closure, AUTH-05, or public
+gameplay publication.
+
+## 2026-10-01 asset import repair checkpoint
+
+The first asset-native attempt (`o2-publication-20261001-07`) failed honestly:
+Godot could scan the two assets but the read-only `/project` bind prevented
+`.import` sidecars, so both `load()` calls were null. A first repair
+(`...-08`) staged a writable copy but recreated it for each phase; the play
+phase therefore lost the importer sidecars. A second repair (`...-09`) kept the
+staging copy across parse/import/play and correctly detected Godot's generated
+script `.uid` metadata as disposable, but its fail-closed source check exposed
+that metadata as a sidecar. The final repair retains one staged copy per
+container, compares every immutable source byte before each phase, and allows
+only `.import`, `.uid`, and `.godot` cache metadata to differ.
+
+Fresh `o2-publication-20261001-10` then observed both asset loads true, one
+native dispatch, outer/host/container exit 0, clean Job/tree/handle cleanup,
+unchanged input/snapshot/binary hashes, live retry equality, close/reopen
+equality, and recovered retry equality. Raw evidence is preserved under
+`studio/.local/reviews/o2-publication-20261001-10{,-supervisor}`. This is a
+diagnostic fixture result; it does not alter GT-06 or authorize a merge.
 
 ## Verified candidate evidence
 
