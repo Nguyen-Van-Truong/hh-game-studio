@@ -4,7 +4,7 @@ Authority 0. Separate branch: codex/o2-authoring-contract.
 Merge only after GT-06 acceptance. Tools-plan O4 is authoritative; this file
 tracks implementation gaps and does not create another acceptance plan.
 
-Current checkpoint: `o2-publication-20261001-13` is the latest fresh real
+Current checkpoint: `o2-publication-20261001-15` is the latest fresh real
 Docker/Godot publication on the repaired read-only project/asset-overlay
 design, with
 source closure `0b2fec9eb23e57ba663868d45b1a8ed635912d2aefbc34b5493e0ddd40d71b8e`.
@@ -38,20 +38,25 @@ Godot's `ResourceLoader` observations plus the fixture's explicit preload
 declarations; it is a bounded candidate observation, not a claim that arbitrary
 GDScript dependency closure is complete.
 
-`o2-publication-20261001-13` is a fresh native diagnostic on the repaired
+`o2-publication-20261001-15` is a fresh native diagnostic on the repaired
 read-only project/asset-overlay executor. It had one native dispatch, actual
 outer/host/container exits `0`, clean Job/tree/handle cleanup, unchanged
 source/snapshot hashes, and live retry, close/reopen and recovered retry
-equality. The dependency report has `authority=0`,
+equality. Godot read back the fixture scene, script preloads and scene
+external resource edges; the host report has `authority=0`,
 `dependency_closure_verified=false`, `public_ack=false`, and graph digest
-`007fc327090d7c97ed75927133570231b8f351e2392ab71d46452af63a2c17cf`.
+`33db343fad82fc02b0b1deef74ad1512be924f87b27d74ec5bd826334f7df036`.
 The first repair attempt `o2-publication-20261001-12` remains raw and is a
 real harness finding (`DEPENDENCY_FILE_PATH`) caused by including
 `project.godot` in the validator input; it was fixed by requiring an explicit
-dependency file set before the fresh run. The combined pure gameplay suite
-after the repair ran **135 tests**, actual exit `0`, with no measurement
-process. This evidence does not alter AUTHORITY, AUTH-02..05, GT-06, or the
-merge gate.
+dependency file set before the fresh run. A second harness-only mismatch in
+`o2-publication-20261001-14` is retained raw; the allowlist field was repaired
+before run 15. The marker helper now loads the validator from exact sibling
+bytes, rejects duplicate keys, oversized/deep JSON and authority claims, and
+the graph depth bound is independent of node-name order. The combined pure
+gameplay suite after these repairs ran **137 tests**, actual exit `0`, with no
+measurement process. This evidence does not alter AUTHORITY, AUTH-02..05,
+GT-06, or the merge gate.
 
 ## 2026-10-01 dependency contract hardening checkpoint
 

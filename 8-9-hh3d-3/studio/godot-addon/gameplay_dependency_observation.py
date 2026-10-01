@@ -10,12 +10,15 @@ caller-supplied immutable file bytes by
 from __future__ import annotations
 
 import importlib.util
+import hashlib
 import json
 from pathlib import Path
 from collections.abc import Mapping
 
 
 MARKER = "HH_PROBE_DEPENDENCY "
+MAX_OUTPUT_BYTES = 262_144
+MAX_JSON_DEPTH = 16
 _AUTHORITY_KEYS = frozenset({
     "authority",
     "dependency_closure_verified",
@@ -29,35 +32,65 @@ class DependencyObservationMarkerError(ValueError):
 
 
 def _load_validator():
-    """Load the sibling validator in both script and test-import contexts."""
-    try:
-        from gameplay_dependency_evidence import (  # type: ignore
-            DependencyEvidenceError,
-            validate_dependency_observation,
-        )
-        return DependencyEvidenceError, validate_dependency_observation
-    except ModuleNotFoundError:
-        path = Path(__file__).with_name("gameplay_dependency_evidence.py")
-        spec = importlib.util.spec_from_file_location(
-            "gameplay_dependency_evidence_for_observation", path)
-        if spec is None or spec.loader is None:
-            raise ImportError("DEPENDENCY_VALIDATOR_UNAVAILABLE")
-        module = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(module)
-        return (module.DependencyEvidenceError,
-                module.validate_dependency_observation)
+    """Compile exact sibling bytes; never import a shared or cached module."""
+    path = Path(__file__).with_name("gameplay_dependency_evidence.py")
+    raw = path.read_bytes()
+    spec = importlib.util.spec_from_file_location(
+        "gameplay_dependency_evidence_for_observation", path)
+    module = importlib.util.module_from_spec(spec)
+    exec(compile(raw, str(path), "exec", dont_inherit=True), module.__dict__)
+    return module, hashlib.sha256(raw).hexdigest()
+
+
+_VALIDATOR, VALIDATOR_SHA256 = _load_validator()
 
 
 def _text(stdout: str | bytes) -> str:
-    if type(stdout) is str:
-        return stdout
-    if type(stdout) is bytes:
-        try:
-            return stdout.decode("utf-8", errors="strict")
-        except UnicodeDecodeError as exc:
-            raise DependencyObservationMarkerError(
-                "DEPENDENCY_MARKER_ENCODING") from exc
-    raise DependencyObservationMarkerError("DEPENDENCY_MARKER_OUTPUT_TYPE")
+    if type(stdout) not in (str, bytes):
+        raise DependencyObservationMarkerError("DEPENDENCY_MARKER_OUTPUT_TYPE")
+    if len(stdout) > MAX_OUTPUT_BYTES:
+        raise DependencyObservationMarkerError("DEPENDENCY_MARKER_OUTPUT_CAP")
+    try:
+        raw = stdout.encode('utf-8', errors='strict') if type(stdout) is str else stdout
+        if len(raw) > MAX_OUTPUT_BYTES:
+            raise DependencyObservationMarkerError("DEPENDENCY_MARKER_OUTPUT_CAP")
+        return raw.decode('utf-8', errors='strict')
+    except UnicodeError as exc:
+        raise DependencyObservationMarkerError("DEPENDENCY_MARKER_ENCODING") from exc
+
+
+def _object_pairs(pairs):
+    result = {}
+    for key, value in pairs:
+        if key in result:
+            raise DependencyObservationMarkerError("DEPENDENCY_MARKER_DUPLICATE_KEY")
+        result[key] = value
+    return result
+
+
+def _nonfinite(_value):
+    raise DependencyObservationMarkerError("DEPENDENCY_MARKER_NONFINITE")
+
+
+def _json_depth(payload: str) -> None:
+    # Scan nesting before json.loads; brackets inside strings do not count.
+    depth, quoted, escaped = 0, False, False
+    for char in payload:
+        if quoted:
+            if escaped:
+                escaped = False
+            elif char == '\\':
+                escaped = True
+            elif char == '"':
+                quoted = False
+        elif char == '"':
+            quoted = True
+        elif char in '[{':
+            depth += 1
+            if depth > MAX_JSON_DEPTH:
+                raise DependencyObservationMarkerError("DEPENDENCY_MARKER_JSON_DEPTH")
+        elif char in ']}':
+            depth -= 1
 
 
 def _reject_authority_keys(value: object) -> None:
@@ -83,10 +116,12 @@ def parse_dependency_observation(stdout: str | bytes, files: Mapping,
     transport envelope only; this function always returns the validator's
     authority-zero report and never turns native output into acceptance.
     """
-    _, validate = _load_validator()
+    if hashlib.sha256(Path(_VALIDATOR.__file__).read_bytes()).hexdigest() != VALIDATOR_SHA256:
+        raise DependencyObservationMarkerError("DEPENDENCY_VALIDATOR_SOURCE_CHANGED")
+    validate = _VALIDATOR.validate_dependency_observation
 
     def parse_one(raw: str | bytes) -> dict:
-        lines = [line for line in _text(raw).splitlines()
+        lines = [line for line in _text(raw).split('\n')
                  if line.startswith(MARKER)]
         if not lines:
             raise DependencyObservationMarkerError(
@@ -95,9 +130,13 @@ def parse_dependency_observation(stdout: str | bytes, files: Mapping,
             raise DependencyObservationMarkerError(
                 "DEPENDENCY_MARKER_DUPLICATE")
         payload = lines[0][len(MARKER):]
+        _json_depth(payload)
         try:
-            value = json.loads(payload)
-        except (TypeError, ValueError, json.JSONDecodeError) as exc:
+            value = json.loads(payload, object_pairs_hook=_object_pairs,
+                               parse_constant=_nonfinite)
+        except DependencyObservationMarkerError:
+            raise
+        except (ValueError, RecursionError) as exc:
             raise DependencyObservationMarkerError(
                 "DEPENDENCY_MARKER_JSON") from exc
         if not isinstance(value, Mapping):

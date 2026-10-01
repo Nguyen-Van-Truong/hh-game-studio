@@ -234,6 +234,7 @@ def _bind_edges(graph: dict) -> None:
     # Iterative DFS keeps malformed caller graphs from exhausting Python's
     # recursion limit.  The explicit depth cap also bounds retained state.
     color: dict[str, int] = {}
+    depths: dict[str, int] = {}
     for root in sorted(nodes):
         if color.get(root, 0):
             continue
@@ -246,6 +247,11 @@ def _bind_edges(graph: dict) -> None:
             try:
                 target = next(targets)
             except StopIteration:
+                # Reusing a completed child must still count its entire path;
+                # otherwise sink-first node names bypass the stack-depth cap.
+                depths[source] = 1 + max((depths[target] for target in adjacency[source]), default=0)
+                if depths[source] > MAX_GRAPH_DEPTH:
+                    _fail("DEPENDENCY_GRAPH_DEPTH")
                 color[source] = 2
                 stack.pop()
                 continue

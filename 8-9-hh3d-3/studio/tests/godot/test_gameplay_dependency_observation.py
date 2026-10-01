@@ -8,6 +8,7 @@ import copy
 import importlib.util
 from pathlib import Path
 import json
+import sys
 import unittest
 
 
@@ -103,6 +104,38 @@ class GameplayDependencyObservationTests(unittest.TestCase):
         with self.assertRaisesRegex(observation.DependencyObservationMarkerError,
                                     "DEPENDENCY_MARKER_ENCODING"):
             observation.parse_dependency_observation(b"\xff", FILES)
+
+    def test_duplicate_keys_and_nested_depth_are_rejected(self):
+        raw = (observation.MARKER + '{"schema":"x","schema":"y"}\n')
+        with self.assertRaisesRegex(observation.DependencyObservationMarkerError,
+                                    "DEPENDENCY_MARKER_DUPLICATE_KEY"):
+            observation.parse_dependency_observation(raw, FILES)
+        nested = "[" * (observation.MAX_JSON_DEPTH + 1) + "0" + "]" * (observation.MAX_JSON_DEPTH + 1)
+        with self.assertRaisesRegex(observation.DependencyObservationMarkerError,
+                                    "DEPENDENCY_MARKER_JSON_DEPTH"):
+            observation.parse_dependency_observation(observation.MARKER + nested, FILES)
+
+    def test_oversized_output_and_shadow_module_do_not_bypass_validation(self):
+        with self.assertRaisesRegex(observation.DependencyObservationMarkerError,
+                                    "DEPENDENCY_MARKER_OUTPUT_CAP"):
+            observation.parse_dependency_observation(
+                "x" * (observation.MAX_OUTPUT_BYTES + 1), FILES)
+        # The helper must keep using its hash-bound sibling implementation even
+        # if a caller has placed a lookalike module in sys.modules.
+        original = sys.modules.get("gameplay_dependency_evidence")
+        poisoned = type(sys)("gameplay_dependency_evidence")
+        poisoned.validate_dependency_observation = lambda *_a, **_k: {
+            "authority": 1, "public_ack": True}
+        sys.modules["gameplay_dependency_evidence"] = poisoned
+        try:
+            report = observation.parse_dependency_observation(stdout(), FILES)
+            self.assertEqual(report["authority"], 0)
+            self.assertIs(report["public_ack"], False)
+        finally:
+            if original is None:
+                sys.modules.pop("gameplay_dependency_evidence", None)
+            else:
+                sys.modules["gameplay_dependency_evidence"] = original
 
 
 if __name__ == "__main__":

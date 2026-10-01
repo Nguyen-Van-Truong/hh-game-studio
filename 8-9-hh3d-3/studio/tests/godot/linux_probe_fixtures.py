@@ -346,8 +346,10 @@ FIXTURES['gameplay_source_multifile'] = {
     # The marker is parsed and byte-bound by the host harness.  It remains a
     # candidate observation (AUTHORITY=0); it is not a self-attested closure.
     'dependency_observation': True,
-    'dependency_files': ('scripts/fixture_actor.gd', 'scripts/shared_motion.gd',
-                         'scenes/mover.tscn'),
+    # Explicit host input set for the marker contract; the edges are supplied
+    # by native Godot readback and never by this list.
+    'dependency_files': ('scenes/fixture.tscn', 'scripts/fixture_actor.gd',
+                         'scripts/shared_motion.gd', 'scenes/mover.tscn'),
     'script': '''extends Node3D
 const Motion = preload("res://scripts/shared_motion.gd")
 const Mover: PackedScene = preload("res://scenes/mover.tscn")
@@ -360,29 +362,67 @@ func _sha256(path: String) -> String:
 \tcontext.update(FileAccess.get_file_as_bytes(path))
 \treturn context.finish().hex_encode()
 
-func _dependency_node(path: String, kind: String, edge_kind: String,
-\t\tdeclared_targets: Array[String] = []) -> Dictionary:
+func _dependency_node(path: String) -> Dictionary:
+\tvar resource: Resource = ResourceLoader.load("res://" + path)
+\tif resource == null:
+\t\treturn {}
+\tvar kind: String = "script" if resource is Script else "scene"
 \tvar edges: Array[Dictionary] = []
-\tfor target in declared_targets:
-\t\tedges.append({"kind": edge_kind, "target": target})
-\tfor dependency in ResourceLoader.get_dependencies("res://" + path):
-\t\tvar target := String(dependency).split("::", false, 1)[0].trim_prefix("res://")
-\t\tif target.is_empty():
-\t\t\tcontinue
-\t\tif not edges.any(func(edge: Dictionary) -> bool: return edge["target"] == target):
-\t\t\tedges.append({"kind": edge_kind, "target": target})
-\treturn {"path": path, "kind": kind,
+\tvar targets: Array[String] = []
+\tif resource is Script:
+\t\t# Observe the actual preloaded Resource constants, not declared paths.
+\t\t# Nested constants/dynamic loads are outside this bounded fixture.
+\t\tfor value: Variant in (resource as Script).get_script_constant_map().values():
+\t\t\tif value is Resource:
+\t\t\t\ttargets.append((value as Resource).resource_path)
+\telse:
+\t\tfor dependency: String in ResourceLoader.get_dependencies("res://" + path):
+\t\t\tvar parts: PackedStringArray = dependency.split("::", true)
+\t\t\tif parts.size() == 1:
+\t\t\t\ttargets.append(parts[0])
+\t\t\telif parts.size() == 3 and parts[1].is_empty():
+\t\t\t\tvar uid: int = ResourceUID.text_to_id(parts[0])
+\t\t\t\tif ResourceUID.has_id(uid) and ResourceUID.get_id_path(uid) != parts[2]:
+\t\t\t\t\treturn {}
+\t\t\t\ttargets.append(parts[2])
+\t\t\telse:
+\t\t\t\treturn {}
+\tvar seen: Dictionary = {}
+\tfor target: String in targets:
+\t\tif not target.begins_with("res://") or target.contains("::"):
+\t\t\treturn {}
+\t\tif not seen.has(target):
+\t\t\tseen[target] = true
+\t\t\tedges.append({"kind": "script_preload" if resource is Script else "scene_ext_resource",
+\t\t\t\t"target": target.trim_prefix("res://")})
+\tvar node: Dictionary = {"path": path, "kind": kind,
 \t\t"size_bytes": FileAccess.get_file_as_bytes("res://" + path).size(),
 \t\t"sha256": _sha256("res://" + path), "edges": edges}
+\tvar resource_uid: int = ResourceLoader.get_resource_uid("res://" + path)
+\tif resource_uid != ResourceUID.INVALID_ID:
+\t\tnode["uid"] = ResourceUID.id_to_text(resource_uid)
+\treturn node
 
 func _dependency_observation() -> Dictionary:
+\tvar entry: String = get_tree().current_scene.scene_file_path.trim_prefix("res://")
+\tvar pending: Array[String] = [entry]
+\tvar seen: Dictionary = {}
+\tvar nodes: Array[Dictionary] = []
+\twhile not pending.is_empty():
+\t\tvar path: String = pending.pop_front()
+\t\tif seen.has(path):
+\t\t\tcontinue
+\t\tseen[path] = true
+\t\tif seen.size() > 256:
+\t\t\treturn {}
+\t\tvar node: Dictionary = _dependency_node(path)
+\t\tif node.is_empty():
+\t\t\treturn {}
+\t\tnodes.append(node)
+\t\tfor edge: Dictionary in node["edges"]:
+\t\t\tpending.append(edge["target"])
 \treturn {"schema": "hh-gameplay-dependency-observation-1", "version": 1,
-\t\t"entrypoint": "scripts/fixture_actor.gd", "nodes": [
-\t\t\t_dependency_node("scripts/fixture_actor.gd", "script", "script_preload",
-\t\t\t\t["scripts/shared_motion.gd", "scenes/mover.tscn"]),
-\t\t\t_dependency_node("scripts/shared_motion.gd", "script", "script_preload"),
-\t\t\t_dependency_node("scenes/mover.tscn", "scene", "scene_ext_resource")
-\t\t]}
+\t\t"entrypoint": entry, "nodes": nodes}
 
 func _ready() -> void:
 \tmover = Mover.instantiate() as Node3D
