@@ -2,8 +2,10 @@
 
 No caller-selected host, context, method, path or container command. Each fresh
 query shares the caller's absolute deadline. OwnedPipe retains native buffers
-if cancellation/close cannot be proven; such uncertainty forbids retry. Its
-cancel drain is cleanup only and cannot make a late response successful.
+if cancellation/close cannot be proven; such uncertainty forbids retry. A
+transport timeout with a verified close is retryable within the same total
+deadline because this request is a read-only GET. Its cancel drain is cleanup
+only and cannot make a late response successful.
 """
 from __future__ import annotations
 
@@ -205,7 +207,12 @@ def query_containers(deadline):
     except InventoryError as error:
         primary = error
     except PipeIOError as error:
-        primary = InventoryError('timeout' if error.code == 'PIPE_TIMEOUT' else 'oserror')
+        # A timed-out read/write is safe to retry only after owner.close()
+        # proves that no native pipe remains retained.  Drain-pending and
+        # other I/O failures stay non-retryable because their cleanup or
+        # request boundary is not sufficiently known.
+        primary = InventoryError('timeout' if error.code == 'PIPE_TIMEOUT' else 'oserror',
+                                 retryable=error.code == 'PIPE_TIMEOUT')
     except Exception:
         # Native wrappers can raise before OwnedPipe normalizes their error.
         # Never persist an exception containing response bytes or OS text.

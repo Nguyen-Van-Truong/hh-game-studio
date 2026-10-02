@@ -365,7 +365,7 @@ class QueryTests(unittest.TestCase):
                 with self.assertRaises(inventory.InventoryError) as caught:
                     inventory.query_containers(102.0)
                 self.assertEqual(caught.exception.reason, reason)
-                self.assertFalse(caught.exception.retryable)
+                self.assertEqual(caught.exception.retryable, code == 'PIPE_TIMEOUT')
                 owner.close.assert_called_once_with()
 
     def test_late_read_and_late_cleanup_cannot_return_success(self):
@@ -401,6 +401,15 @@ class QueryTests(unittest.TestCase):
             self.assertFalse(next_error.exception.retryable)
             kernel.CreateFileW.assert_not_called()
             owner.close.assert_called_once_with()
+
+    def test_pipe_timeout_with_failed_close_is_not_retryable(self):
+        with self.native() as (_kernel, owner, *_rest):
+            owner._io.side_effect = inventory.PipeIOError('PIPE_TIMEOUT')
+            owner.close.side_effect = RuntimeError('secret-close-message')
+            with self.assertRaises(inventory.InventoryError) as caught:
+                inventory.query_containers(102.0)
+        self.assertEqual(caught.exception.reason, 'oserror')
+        self.assertFalse(caught.exception.retryable)
 
     def test_adoption_failure_closes_raw_handle_or_retains_it_without_retry(self):
         for closed in (True, False):

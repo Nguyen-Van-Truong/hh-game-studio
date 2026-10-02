@@ -229,6 +229,19 @@ class EnvironmentTests(unittest.TestCase):
             self.assertEqual(env.running_containers([{'name': 'docker.exe'}]), ['hh-gameplay-1'])
         self.assertEqual([call.args[0] for call in query.call_args_list], [102.0, 102.0])
 
+    def test_docker_inventory_verified_pipe_timeout_retries_before_deadline(self):
+        clock = [100.0]
+        def probe(deadline):
+            if clock[0] == 100.0:
+                clock[0] += 0.25
+                raise env.InventoryError('timeout', retryable=True)
+            clock[0] += 0.5
+            return ['hh-gameplay-1']
+        with patch.object(env.time, 'monotonic', side_effect=lambda: clock[0]), \
+             patch.object(env, 'query_containers', side_effect=probe) as query:
+            self.assertEqual(env.running_containers([{'name': 'docker.exe'}]), ['hh-gameplay-1'])
+        self.assertEqual([call.args[0] for call in query.call_args_list], [102.0, 102.0])
+
     def test_docker_inventory_timeout_cannot_restart_deadline(self):
         clock = [100.0]
         def probe(deadline):
