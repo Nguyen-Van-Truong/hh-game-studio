@@ -387,7 +387,8 @@ tốn 1–4 giờ closeout/sửa; 12/25 commit sửa plan.
    `67f9e9fa` (kernel-only NTQSI counters, missing PID fails closed); O9.1b
    is implemented in `7495eea6` plus `3e03e482` (in-run Docker poll is
    best-effort at most once per 60 s with explicit UNKNOWN/CACHED evidence,
-   and both executor create/start paths fence `measure-window.lock`). Focused
+   and both executor create/start paths fence `measure-window.lock`; the O2
+   worktree carries the equivalent fence in `4be9af68`). Focused
    environment/executor tests are green. These commits do not satisfy the
    soak or formal gate: the 30-minute watchdog-only run and a distinct
    formal21 command-gap reproducer remain required.

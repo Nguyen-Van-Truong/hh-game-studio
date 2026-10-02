@@ -1117,10 +1117,10 @@ Archive manifests (AUTHORITY0, raw preserved):
   container remains conservatively visible until a successful poll clears it.
   Preflight still uses the strict bounded pipe and fails closed before a pair.
 - The same repair fences `measure-window.lock` immediately before Docker
-  `create` and `start` in the main executor. The O2 worktree must carry the
-  equivalent fence before its native confirmation. Pure cadence/error and
-  executor lifecycle tests pass; no Docker/Godot run was started by this
-  source repair.
+  `create` and `start` in the main executor. O2 carries the equivalent fence
+  in commit `4be9af68`; its focused executor/asset/dependency suite passed
+  `42` tests, exit `0`. Pure cadence/error and executor lifecycle tests pass;
+  no Docker/Godot run was started by this source repair.
 - Current verifier mode requires each new formal watchdog row to carry
   `KNOWN`, `CACHED` or `UNKNOWN` Docker status plus a bounded error object when
   unknown. Historical raw remains readable under the compatibility default.
