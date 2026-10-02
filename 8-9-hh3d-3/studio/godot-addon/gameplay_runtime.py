@@ -139,5 +139,6 @@ class GameplayRuntime:
 
     def addon(self, name):
         _need(name in {'linux_executor', 'gameplay_source_profile', 'gameplay_source_eligibility', 'gameplay_log_policy',
+                      'gameplay_dependency_observation', 'gameplay_dependency_evidence',
                       'publication_session', 'contract'})
         return self.module('studio.addon.' + name)
