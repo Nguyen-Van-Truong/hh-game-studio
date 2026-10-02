@@ -2,24 +2,67 @@
 
 ## Hiện trạng
 
-- GT-06 chưa ACCEPTED; zero accepted formal pairs; GT-07 chưa mở. Formal14 terminal PRODUCT_FAIL: 14/35 batch, native status gap 5077.626 ms tại batch13/cycle85/SAVE; không resume hay dispatch formal mới trước review/sửa có bằng chứng.
-- Formal09 terminal: pair0 35/35 RUN PASS; pair1 INFRA_ABORT trước batch0 vì RAM/commit.
-- Formal10 terminal: pair0 20/35, PRODUCT_FAIL COMMIT_PRESSURE; không pair1, không resume.
-- Daily INFRA ngày 02-10: 1/2; PRODUCT_FAIL formal10/14 không tiêu INFRA và không cho phép rerun mù.
-- Source formal09/10: 58 file, `eaf377f8960303083d81f92e446401518ce2b80b38f405636aa43d9725f9c85b`; formal11: 58 file, `4ad0786bde478b1015011d0e00a0625f2aac5eb9f823f311b089954ed42b8ecd`.
-- Profile v6: `8a2e599c40f927ffaff5ded5e48b6bf2a0f0a6bb3a23de31434a695f4258cb35`.
-- Formal10 watchdog replay đúng verdict; chưa chứng minh rò bộ nhớ. Prefix không thay 35 batch.
-- Outer Job formal10 zero/closed, wrapper exit2; thiếu actual host/editor exit receipts do hard abort.
-- Formal11 dispatch: arm `HHStudio.GT06.arm-formal11-20261002` started16:20, fresh attempt DISPATCH at16:21, then terminal `HARNESS_FAIL`; no actual natural child exit was observed.
-- Formal14 source 58 file e24fa2bb22c848a0b3309ce7580c2a3ebc43d4d6916300a06c101db2ad81bc40 đã đối chiếu bản freeze/current; 84 artifact refs và watchdog replay đạt kiểm tra toàn vẹn, không thay verdict FAIL.
-- Formal11 used a fresh dry-run: available memory8.24 GiB, commit62.56%, CPU max33.65%/mean17.41% over60s, lock absent, scheduler idle and budget available. The arm is bound to source/profile and does not lower O1–O4/timeouts.
-- Formal14 host actual exit1; host/editor Jobs zero/closed, handle released; editor natural-exit receipt thiếu. Arm và demand task đã gỡ exact-name, XML/receipt giữ nguyên. Closeout: studio/.local/reviews/gt06-formal14-closeout-20261002/.
-- Preview A/B đã hoàn tất: stock01/off02 mỗi bản100/100, actual exits0; median save60.825/29.292ms, không tái hiện stall5s. Off01 dừng preflight; hướng đã dùng3IDs. Review mismatch production/benchmark, không tự chuyển formal sang no-preview hay chạy lại mù.
-- O2 tiếp tục riêng theo O8.3/AUTHORING_STATUS.md, AUTHORITY0, không merge trước GT06.
+- GT-06 chưa ACCEPTED; zero accepted formal pairs; GT-07 chưa mở. Formal14 terminal PRODUCT_FAIL: 14/35 batch, native SAVE status gap5077.626ms; không resume hay formal mới khi chưa có review đủ bằng chứng.
+- Formal09 pair0 35/35 RUN PASS, pair1 INFRA_ABORT trước batch0. Formal10 PRODUCT_FAIL COMMIT_PRESSURE sau20 batch. Daily INFRA02-10:1/2; product/harness failures không tự cho phép rerun.
+- Formal11 HARNESS_FAIL counter query; formal13 lỗi launcher trước dispatch. Hai boundary đã sửa có test; formal12 không dispatch. Formal01..14 terminal/unused như plan, S258 không resume.
+- Formal14 host actual exit1; editor natural-exit receipt thiếu. Jobs zero/closed/handle released,58 frozen source và84 artifact refs khớp; watchdog replay không stop. Arm/demand đã gỡ exact-name, XML/receipt/raw giữ nguyên.
+- Formal14 closure e24fa2bb22c848a0b3309ce7580c2a3ebc43d4d6916300a06c101db2ad81bc40; profilev6 8a2e599c40f927ffaff5ded5e48b6bf2a0f0a6bb3a23de31434a695f4258cb35. Current source có guard mới, cần freeze mới nếu run tiếp.
+- Preview A/B stock01/off02 mỗi bản100/100 actual exits0, median60.825/29.292ms; không tái hiện stall5s. Không đổi formal sang no-preview; hướng đã đóng3IDs.
+- Save-return boundary mới: fault-ordering01 tái hiện premature readback/reload; repair02 actual exit0,27/27. Native real-save03 import/editor exit0, save/readback/reload hoàn tất; outer verifier exit1 do nhầm key-presence, đã review offline riêng, không viết lại verdict.
+- Guard chỉ khóa readback đến khi save API trảOK; heartbeat/timeouts/readback và O1–O4 giữ nguyên. Không chứng minh nguyên nhân formal14, không tự dispatch formal15; hướng boundary đã3IDs, không chạy thêm mù.
+- Không measurement live tại closeout; tiếp tục O2 registered adapter trong worktree riêng theo AUTHORING_STATUS.md, AUTHORITY0, không merge trướcGT06. Sau review mới đủ bằng chứng: fresh freeze/preflight/CPU minute/budget trước formal.
 
 This lane records diagnostics without changing the authoritative plan. Each
 entry keeps the run ID, source closure, command, actual result and the finding
 needed for the next repair. Raw evidence remains under `studio/.local/`.
+
+## 2026-10-02 — Save-return ordering guard, distinct from latency attribution
+
+- Static audit found `_save()` publishes SAVE_WAIT before invoking the native API.
+  A synchronous scene_saved followed by nested processing could read back and advance
+  to RELOAD before that API returns. This conditional ordering defect is not proof of
+  naturally occurring reentry or the5.077626s formal14 stall. A read-only scoped agent
+  independently confirmed the narrow guard; this is not an acceptance critic.
+- Added a per-save completion latch: reset before SAVE_WAIT, set only after native
+  returnOK and no prior failure; `_wait_save()` waits for it. Heartbeat and all deadline,
+  signal/path/count/hash/reload checks stay active. Save API/preview/profile/timeouts
+  are unchanged. Supplemental diagnostic patch anchors were updated.
+- Fault runner copies the real GDScript driver, replacing only the save-call expression
+  and overriding adapter readback/failure capture in a test subclass. It exercises
+  synchronousOK/error, delayed/wrong/duplicate signal, next-cycle reset, timeout and
+  unhidden status gap. It does not execute a real save or prove latency improvement.
+- `gt06-save-boundary-20261002-01`: old driver target29432 exit41, wrapper41,
+  outer1;9 of27 checks fail (premature readback/reload, including before later error).
+  Natural tree exit and Job zero/closed observed. Startup scan-aborted warning is
+  retained; the harness now waits for filesystem scanning before completing.
+- `...-02`: repaired driver target18772 actual exit0, wrapper/outer0,27/27,
+  clean stdout/stderr, natural tree exit, Job closed/zero/unretained. Marker PID and
+  exact unique check set were additionally reverified offline; no extra engine run.
+- `...-03 --real-save`: original preview-enabled save plus one forced `_process(0)`
+  at its real scene_saved callback. Actual import32704/editor36144 exits0, native
+  save/hash/semantic-reload diagnostic completed, both Jobs closed/zero/unretained.
+  Outer verifier originally exit1/BOUNDARY_REAL_ADVANCED because `recorded` meant
+  key presence: `_begin_cycle` already creates an empty saved_file_sha256 field.
+  Preserve that failed outer verdict. Corrected verifier has regression tests.
+- New `...-03/offline-boundary-review.json` independently verifies both stage
+  captures,57 frozen source files and16 final project files. Before/after forced
+  reentry: SAVE_WAIT, completed=false, end_us0, stable root/batch/cycle. Lack of
+  hash publication/readback is inferred from the frozen guard, not a sampled hash
+  value. Corrected phase check is true; this does not retroactively change outer1.
+- Focused native-benchmark/save-marker suites15 tests and boundary suite4 tests
+  actual exit0; native fault suite27 checks. Empty/duplicate/failed check sets and
+  mismatched PID are rejected; measurement release also checks retained Job/probe
+  registries. No broad suite or repeated native measurement was required.
+- All three IDs are terminal, raw and ZIP manifests retained. Direction budget3/3;
+  do not resume or rerun merely to get a green outer banner. This repair closes an
+  ordering hole but does not establish formal14 root cause or authorize formal15.
+  Continue O2 registered adapter work while selecting a reviewed latency direction.
+
+Archive manifests (AUTHORITY0, raw preserved):
+
+- `gt06-save-boundary-20261002-01/raw.zip`: 8d90897e0bd12e6b9bfdc455efc3bdaec3cbce766bb39e06ac4a791b2ee6f557 (3611655 bytes).
+- `gt06-save-boundary-20261002-02/raw.zip`: 0ba9c983f78500eb4436df0399a3e5eb80ab01d1394abbeda73cdf8616f4aba0 (3613099 bytes).
+- `gt06-save-boundary-20261002-03/raw.zip`: 5e6804c21f0110766c0177c9259d15752fc78ef4c23ed70ddea6cec209212b77 (7126406 bytes).
 
 ## 2026-10-02 — formal14 closeout and native save localization
 

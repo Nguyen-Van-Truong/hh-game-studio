@@ -106,6 +106,7 @@ var _reload_ready_before: int = 0
 var _save_signal_count: int = 0
 var _save_signal_before: int = 0
 var _save_signal_us: int = 0
+var _save_call_completed: bool = false
 var _settle_start_us: int = 0
 var _settle_start_frame: int = 0
 var _last_heartbeat_us: int = 0
@@ -688,6 +689,7 @@ func _undo() -> void:
 
 
 func _save() -> void:
+    _save_call_completed = false
     _save_signal_before = _save_signal_count
     _save_signal_us = 0
     _timing["save"] = {"start_us": Time.get_ticks_usec(), "end_us": 0}
@@ -695,6 +697,9 @@ func _save() -> void:
     var result: Error = EditorInterface.save_scene()
     if result != OK:
         _fail("BENCHMARK_SAVE_CALL")
+        return
+    if not _failed:
+        _save_call_completed = true
 
 
 func _on_scene_saved(path: String) -> void:
@@ -708,6 +713,10 @@ func _on_scene_saved(path: String) -> void:
 
 
 func _wait_save() -> void:
+    # scene_saved may be synchronous. Nested processing must still heartbeat
+    # and check deadlines, but cannot read back/reload an active save call.
+    if not _save_call_completed:
+        return
     if _save_signal_count == _save_signal_before:
         return
     var snapshot: Dictionary = _adapter.inspect_scene()

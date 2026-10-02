@@ -49,11 +49,11 @@ def patched_driver(raw, preview_mode='stock'):
                  + ('result' if preview_mode == 'stock' else 'null')
                  + ', diagnostic_batch, diagnostic_cycle, diagnostic_start_us)\n')
     if preview_mode == 'stock':
-        save_call += '    if result != OK:\n        _fail("BENCHMARK_SAVE_CALL")\n'
+        save_call += '    if result != OK:\n        _fail("BENCHMARK_SAVE_CALL")\n        return\n'
     replacements = [
         ('        _cycle_limit = 1\n', '        _cycle_limit = 100\n'),
         ('    var result: Error = EditorInterface.save_scene()\n'
-         '    if result != OK:\n        _fail("BENCHMARK_SAVE_CALL")\n',
+         '    if result != OK:\n        _fail("BENCHMARK_SAVE_CALL")\n        return\n',
          '    var diagnostic_batch: int = _batch\n'
          '    var diagnostic_cycle: int = _cycle\n'
          '    var diagnostic_start_us: int = int(_timing.save.start_us)\n'
