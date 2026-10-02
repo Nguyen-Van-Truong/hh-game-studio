@@ -4,10 +4,11 @@ extends Node3D
 
 const Bullet: PackedScene = preload("res://scenes/projectile.tscn")
 const FINAL_TICK: int = 150
+@export var saved_world: PackedScene
 var tick: int = 0
-var arena := Node2D.new()
-var player := CharacterBody2D.new()
-var wall := StaticBody2D.new()
+var arena: Node2D
+var player: CharacterBody2D
+var wall: StaticBody2D
 var pickup := Area2D.new()
 var bot := Area2D.new()
 var camera := Camera2D.new()
@@ -99,19 +100,9 @@ func _ready() -> void:
 	_action("left", KEY_A)
 	_action("jump", KEY_SPACE)
 	_action("shoot", KEY_F)
-	add_child(arena)
-	var floor_body := StaticBody2D.new()
-	floor_body.position = Vector2(200.0, 200.0)
-	floor_body.add_child(_box(Vector2(400.0, 20.0)))
-	arena.add_child(floor_body)
-	wall.position = Vector2(300.0, 110.0)
-	wall.add_child(_box(Vector2(20.0, 160.0)))
-	arena.add_child(wall)
-	player.position = Vector2(32.0, 174.0)
-	player.collision_layer = 2
-	player.collision_mask = 1
-	player.add_child(_box(Vector2(16.0, 32.0)))
-	arena.add_child(player)
+	if not _build_world():
+		get_tree().quit(32)
+		return
 	pickup.position = Vector2(70.0, 174.0)
 	pickup.collision_layer = 4
 	pickup.collision_mask = 2
@@ -128,6 +119,45 @@ func _ready() -> void:
 	ui.add_child(hud)
 	add_child(ui)
 	_event("boot")
+
+func _build_world() -> bool:
+	if saved_world != null:
+		var loaded: Node = saved_world.instantiate()
+		arena = loaded as Node2D
+		if arena == null:
+			loaded.free()
+			return false
+		player = arena.get_node_or_null("Player") as CharacterBody2D
+		wall = arena.get_node_or_null("Wall") as StaticBody2D
+		var saved_floor: StaticBody2D = arena.get_node_or_null("Floor") as StaticBody2D
+		if player == null or wall == null or saved_floor == null:
+			arena.free()
+			return false
+		for body: PhysicsBody2D in [player, wall, saved_floor]:
+			var collision: CollisionShape2D = body.get_node_or_null("Shape") as CollisionShape2D
+			if collision == null or not collision.shape is RectangleShape2D:
+				arena.free()
+				return false
+		add_child(arena)
+		return true
+	# The legacy fixture still creates exactly the same runtime geometry.
+	arena = Node2D.new()
+	player = CharacterBody2D.new()
+	wall = StaticBody2D.new()
+	add_child(arena)
+	var floor_body := StaticBody2D.new()
+	floor_body.position = Vector2(200.0, 200.0)
+	floor_body.add_child(_box(Vector2(400.0, 20.0)))
+	arena.add_child(floor_body)
+	wall.position = Vector2(300.0, 110.0)
+	wall.add_child(_box(Vector2(20.0, 160.0)))
+	arena.add_child(wall)
+	player.position = Vector2(32.0, 174.0)
+	player.collision_layer = 2
+	player.collision_mask = 1
+	player.add_child(_box(Vector2(16.0, 32.0)))
+	arena.add_child(player)
+	return true
 
 func _action(action: String, key: Key) -> void:
 	InputMap.add_action(action)
@@ -233,6 +263,9 @@ func _finish() -> void:
 		"stopped": absf(player.position.x - stopped_x) < 0.01,
 		"camera_follow": camera.position.is_equal_approx(player.position),
 		"hud_win": hud.text == "WON", "round_won": bot_health == 0 and hits == 1}
+	if saved_world != null:
+		state["saved_world_instantiated"] = arena.scene_file_path == saved_world.resource_path \
+			and player.get_parent() == arena and wall.get_parent() == arena
 	_event("finish")
 	print("HH_PROBE_DEPENDENCY " + JSON.stringify(_dependency_observation()))
 	print("HH_PROBE_FIXTURE " + JSON.stringify(state))

@@ -74,7 +74,7 @@ class AuthoringContractTests(unittest.TestCase):
                 self.assertFalse(result.preview['classdb_verified'])
                 self.assertEqual(result.preview['native_tests_pending'], ['classdb_extraction', 'reject', 'readback', 'undo'])
                 seen.add(name)
-        self.assertEqual(len(seen), 19)
+        self.assertEqual(len(seen), 20)
         self.assertIn('MeshInstance3D', seen)
         self.assertIn('position', self.catalog.classes['Button'].properties)
         self.assertIn('rotation', self.catalog.classes['CharacterBody2D'].properties)

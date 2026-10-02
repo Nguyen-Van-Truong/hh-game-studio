@@ -21,8 +21,10 @@ Tools-plan O1–O8 governs; test counts/native diagnostics do not close AUTH or 
   Adapter boundary run20261002-01 preserves last-good but predates the later run-ID harness
   validation; keep it as historical diagnostic, not a run of today's harness or AUTH acceptance.
 - Duplicate-key hardening retains strict hostile-marker parsing; diagnostics do not grant AUTH05.
-- Arena publication20261002-01 now joins real physics/input, mandatory3-file dependency graph,
-  READBACK_ACK and durable reopen/retry in1 native dispatch. Authored catalog scenes remain next.
+- Saved-arena builder04 now persists the seven-node physical world through validated candidate
+  proposals + native UndoRedo/save/reload. Publication-saved-arena01 loads those exact scene bytes
+  and proves physics, four-file dependencies, READBACK_ACK/reopen/retry. Other actors remain runtime;
+  generic registered authoring, complete arena and3D fixture remain open.
 - AUTH-05 publication-owner hostile runs now include native spawn and a distinct wall-wait
   confirmation. Wall20261002-01 actual outer0, good host/container0 then bad124;
   supervisor/cleanup/last-good/reopen/retry checked with exactly2 dispatches.
@@ -36,6 +38,50 @@ Tools-plan O1–O8 governs; test counts/native diagnostics do not close AUTH or 
   fixture in a real container with actual exit0 and clean owned lifecycle; authority remains0.
 - GT-06 formal14 is terminal PRODUCT_FAIL; no measured workload active at last check. Recheck process/lock
   before engine/Docker work; when formal runs, static work only and one writer per file.
+
+## 2026-10-02 — Saved physical world composed with native gameplay publication
+
+- Added a private planned recipe: six node and three resource requests validated before
+  native mutation; StaticBody2D, body collision layer/mask and truthful collider ancestry
+  fill only the fixture's catalog gaps. Fixed script-free Arena root is bootstrap, not
+  a claimed public create command. Planned revisions/lease placeholders grant no runtime
+  authority. Candidate profile stays disabled; accepted adapter unchanged.
+- Builder prepares actual Node2D/CharacterBody2D/StaticBody2D/CollisionShape2D objects,
+  reads ClassDB properties, attaches one UndoRedo transaction, verifies do/undo/redo,
+  packs via PackedScene, saves via ResourceSaver and cache-ignore reloads exact semantics.
+  Seven nodes, three distinct RectangleShape2D resources, owner identities and no gameplay
+  script in the Windows editor. Proof verifies exact project input set, plugin/frozen-source,
+  recipe/scene bytes, pinned invocation and actual process receipts; a PASS field alone fails.
+- Focused recipe/contract/resource/publication/builder suites:57 pure tests exit0. After
+  numeric-comparison repair, builder verifier5 tests exit0. Run01 stopped before engine:
+  Windows binary is in main tooling, not O2's Linux-only tooling. Run02 actual editor43,
+  clean Job, rejected prepared snapshot because Godot Dictionary equality distinguishes
+  JSON floats from native ints. Repair compares JSON numbers recursively while preserving
+  bool/string types, exact keys/order/value. Native regression checks1==1.0,true!=1,1!=2.
+  Run03 was interrupted during launch by the user turn; no terminal receipt/capture,
+  no inferred natural exit. Raw preserved; no engine remained on resume.
+- Fresh O4.1 then `python -B -X utf8 studio/tests/godot/run_saved_arena_builder.py
+  --run-id o2-saved-arena-20261002-04 --godot <main pinned Windows GUI binary>`.
+  21:54 Asia/Saigon:113 native checks, actual outer/target/wrapper0, natural tree0,
+  Job zero/closed/unretained, clean logs,5.172s.24 frozen/current source files verified.
+  Binding SHA256 e08d8e0ee4b6b27517b31fe957be304134cb12367120f796243abad2fe34503b;
+  scene SHA256 ee5b8b1c7e04eaab4cb7d6fd9ed512fc8d1e1164b9f304fd580b14300054d481.
+- Fresh O4.1 then `python -B -X utf8 studio/tests/godot/run_gameplay_publication_probe.py
+  --run-id o2-publication-saved-arena-20261002-01 --fixture gameplay_arena_physics
+  --saved-arena <absolute builder04 directory>`.21:55, actual outer/host/container0,
+  one native dispatch, host attach11.875s. Required saved_world_instantiated=true;
+ 150-tick oracle observed jump/apex/landing, wall, pickup, shot/hit, input release,
+  stop, camera/HUD win. Four-file native graph: fixture -> actor+arena, actor -> projectile.
+  READBACK_ACK generation2; live/reopened retry keeps CURRENT/journal and no second dispatch.
+ 31 current/frozen probe sources and44 native artifact hashes verified; builder provenance
+  copied/hash-bound/rechecked. Owned container removed, Job zero/closed/handles released,
+  admission released. Raw log_clean=false remains; exact startup-log policy accepted=true.
+- Runtime closure80300fb2f4dd699c4d01b982855ffa7334d756608eb90a4cefdfb07404c30cb4;
+  actor SHA2560a509590f82eecb16a352d87d7c9d91e23702f4aa7f5c3ce30ca68e013da7f51.
+  Raw under studio/.local/reviews/<run-id>/. AUTHORITY0/public_ack=false, not AUTH/GT09.
+  Saved nodes are Player/Floor/Wall and colliders; pickup/bot/camera/HUD/InputMap remain
+  runtime. Next: bind further required arena content to candidate authoring; integrate
+  registered transaction/adoption path and complete fixture gaps. No O2 merge or GT07 yet.
 
 ## 2026-10-02 — Real arena physics composed with publication and durable recovery
 

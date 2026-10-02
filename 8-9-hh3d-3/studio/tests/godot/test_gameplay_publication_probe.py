@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 import tempfile
 import unittest
+from unittest import mock
 
 from studio.tests.godot import linux_probe_fixtures as fixtures
 from studio.tests.godot import run_gameplay_publication_probe as probe
@@ -96,6 +97,10 @@ class ArenaPublicationFixtureTests(unittest.TestCase):
                  'scripts/fixture_actor.gd': [{'kind': 'script_preload',
                                              'target': 'scenes/projectile.tscn'}],
                  'scenes/projectile.tscn': []}
+        if probe.SAVED_ARENA_PATH in self.candidate:
+            edges['scenes/fixture.tscn'].append({'kind': 'scene_ext_resource',
+                                               'target': probe.SAVED_ARENA_PATH})
+            edges[probe.SAVED_ARENA_PATH] = []
         return {'schema': 'hh-gameplay-dependency-observation-1', 'version': 1,
                 'entrypoint': 'scenes/fixture.tscn',
                 'nodes': [{'path': path, 'kind': 'script' if path.endswith('.gd') else 'scene',
@@ -131,6 +136,113 @@ class ArenaPublicationFixtureTests(unittest.TestCase):
                 node['sha256'] = '0' * 64
             with self.subTest(defect=defect), self.assertRaises(ValueError):
                 self.parse_graph(graph)
+
+    def saved_case(self):
+        # Opaque verifier output, deliberately not a hand-authored runnable arena.
+        raw = b'; native builder bytes stand-in for a pure composition test\n'
+        self.case = probe.saved_arena_case(probe.ARENA_FIXTURE, self.case, raw)
+        self.candidate = linux_probe.case_files(self.case)
+        self.candidate.pop('project.godot')
+        return raw
+
+    def test_saved_arena_composition_preserves_bytes_and_requires_four_file_policy(self):
+        original = copy.deepcopy(self.case)
+        raw = self.saved_case()
+        self.assertEqual(self.candidate[probe.SAVED_ARENA_PATH], raw)
+        self.assertEqual(set(self.candidate), set(probe.SAVED_ARENA_DEPENDENCY_FILES))
+        self.assertIn('type="PackedScene" path="res://scenes/arena.tscn"', self.case['scene'])
+        self.assertIn('saved_world = ExtResource("2_world")', self.case['scene'])
+        self.assertTrue(self.case['expected_state']['saved_world_instantiated'])
+        self.assertNotIn('saved_world_instantiated', original['expected_state'])
+        self.assertEqual(probe.publication_dependency_policy(probe.ARENA_FIXTURE,
+            self.case, saved_arena=True)['dependency_observation_files'],
+            probe.SAVED_ARENA_DEPENDENCY_FILES)
+        with self.assertRaisesRegex(RuntimeError, 'ARENA_DEPENDENCY_POLICY_REQUIRED'):
+            probe.publication_dependency_policy(probe.ARENA_FIXTURE, self.case)
+        with self.assertRaisesRegex(RuntimeError, 'ARENA_DEPENDENCY_POLICY_REQUIRED'):
+            probe.publication_dependency_policy(probe.ARENA_FIXTURE, original, saved_arena=True)
+        with self.assertRaisesRegex(RuntimeError, 'SAVED_ARENA_FIXTURE_REQUIRED'):
+            probe.saved_arena_case('gameplay_source_multifile', original, raw)
+
+    def test_saved_arena_cli_rejects_other_fixture_before_admission(self):
+        with mock.patch('sys.argv', ['probe', '--run-id', 'o2-publication-pure',
+                '--saved-arena', 'builder-run']), mock.patch.object(probe, 'idle_window') as idle:
+            with self.assertRaises(SystemExit) as error:
+                probe.main()
+        self.assertEqual(error.exception.code, 2)
+        idle.assert_not_called()
+
+    def test_saved_arena_native_graph_requires_instanced_scene_and_no_scene_dependencies(self):
+        self.saved_case()
+        graph = self.graph()
+        graph['nodes'][0]['edges'].reverse()
+        report = self.parse_graph(graph)
+        observation = {'fixture_observed': True, 'dependency_observation': report}
+        probe.verify_fixture_observation(probe.ARENA_FIXTURE, observation, saved_arena=True)
+        for defect in ('missing_world', 'scene_dependency'):
+            bad = copy.deepcopy(observation)
+            nodes = bad['dependency_observation']['observation']['nodes']
+            if defect == 'missing_world':
+                nodes[:] = [row for row in nodes if row['path'] != probe.SAVED_ARENA_PATH]
+            else:
+                next(row for row in nodes if row['path'] == probe.SAVED_ARENA_PATH)['edges'] = [
+                    {'kind': 'scene_ext_resource', 'target': 'scripts/fixture_actor.gd'}]
+            with self.subTest(defect=defect), self.assertRaisesRegex(
+                    RuntimeError, 'ARENA_DEPENDENCY_GRAPH_MISMATCH'):
+                probe.verify_fixture_observation(probe.ARENA_FIXTURE, bad, saved_arena=True)
+
+    def builder_proof(self):
+        raw = self.saved_case()
+        directory = self.source.parent / 'builder-run'
+        directory.mkdir()
+        contents = {'binding.json': b'{"test":"source binding"}\n',
+                    'native-observation.json': b'{"test":"semantic observation"}\n'}
+        for name, content in contents.items():
+            (directory / name).write_bytes(content)
+        provenance = {'schema': 'pure-test-provenance', 'run_id': 'builder-pure',
+                      'files': {name: hashlib.sha256(value).hexdigest()
+                                for name, value in contents.items()}}
+        builder = mock.Mock()
+        builder.verify_saved_arena.return_value = raw
+        builder.saved_arena_provenance.return_value = provenance
+        frozen = self.source.parent / 'saved-arena'
+        returned, binding = probe.freeze_saved_arena(probe.ARENA_FIXTURE,
+                                                     directory, frozen, builder)
+        self.assertEqual(returned, raw)
+        return directory, frozen, builder, binding
+
+    def test_builder_verifier_and_exact_provenance_are_rechecked_before_use(self):
+        directory, frozen, builder, binding = self.builder_proof()
+        probe.verify_saved_arena_binding(directory, frozen, binding, builder, self.candidate)
+        self.assertEqual(builder.verify_saved_arena.call_count, 2)
+        self.assertEqual((frozen / 'arena.tscn').read_bytes(), self.candidate[probe.SAVED_ARENA_PATH])
+        for name, digest in binding['provenance']['files'].items():
+            self.assertEqual(hashlib.sha256((frozen / 'provenance' / name).read_bytes()).hexdigest(), digest)
+        builder.verify_saved_arena.side_effect = RuntimeError('BUILDER_SOURCE_CHANGED')
+        with self.assertRaisesRegex(RuntimeError, 'BUILDER_SOURCE_CHANGED'):
+            probe.verify_saved_arena_binding(directory, frozen, binding, builder, self.candidate)
+
+    def test_saved_arena_or_provenance_drift_rejects_before_dispatch(self):
+        directory, frozen, builder, binding = self.builder_proof()
+        def verify():
+            probe.verify_saved_arena_binding(directory, frozen, binding, builder, self.candidate)
+        for path in (directory / 'native-observation.json',
+                     frozen / 'provenance/native-observation.json', frozen / 'arena.tscn'):
+            original = path.read_bytes()
+            path.write_bytes(original + b'changed\n')
+            with self.subTest(path=path), self.assertRaisesRegex(RuntimeError,
+                    'SAVED_ARENA_(PROVENANCE|SOURCE)_CHANGED'):
+                verify()
+            path.write_bytes(original)
+        self.candidate[probe.SAVED_ARENA_PATH] += b'changed\n'
+        with self.assertRaisesRegex(RuntimeError, 'SAVED_ARENA_SOURCE_CHANGED'):
+            verify()
+
+    def test_saved_arena_provenance_cannot_escape_its_directory(self):
+        for name in ('../outside', '/outside', 'C:outside', 'a\\outside'):
+            with self.subTest(name=name), self.assertRaisesRegex(RuntimeError,
+                    'SAVED_ARENA_PROVENANCE_PATH'):
+                probe._provenance_file(self.source, name)
 
 
 if __name__ == '__main__':

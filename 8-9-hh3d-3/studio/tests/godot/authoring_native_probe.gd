@@ -542,6 +542,8 @@ func _sample(class_name_value: String, property_name: String) -> Dictionary:
 			return {"ok": true, "kind": "vector2", "value": Vector2(2.0, -3.0)} if class_name_value == "CharacterBody2D" else {"ok": true, "kind": "vector3", "value": Vector3(2.0, -3.0, 4.0)}
 		"up_direction":
 			return {"ok": true, "kind": "vector2", "value": Vector2(0.0, -1.0)} if class_name_value == "CharacterBody2D" else {"ok": true, "kind": "vector3", "value": Vector3(0.0, 1.0, 0.0)}
+		"collision_layer", "collision_mask":
+			return {"ok": true, "kind": "int", "value": 3}
 		"motion_mode":
 			return {"ok": true, "kind": "enum", "value": 1}
 		"monitoring", "monitorable", "disabled", "enabled", "current", "toggle_mode":

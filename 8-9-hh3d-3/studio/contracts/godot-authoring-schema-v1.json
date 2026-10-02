@@ -459,6 +459,18 @@
         "kind": "node",
         "instantiable": true,
         "properties": {
+          "collision_layer": {
+            "type": "int",
+            "writable": true,
+            "minimum": 0,
+            "maximum": 4294967295
+          },
+          "collision_mask": {
+            "type": "int",
+            "writable": true,
+            "minimum": 0,
+            "maximum": 4294967295
+          },
           "velocity": {
             "type": "vector2",
             "writable": true,
@@ -478,6 +490,28 @@
             "writable": true,
             "minimum": -10000,
             "maximum": 10000
+          }
+        }
+      },
+      {
+        "class_name": "StaticBody2D",
+        "property_base": "Node2D",
+        "native_base": "PhysicsBody2D",
+        "domain": "2d",
+        "kind": "node",
+        "instantiable": true,
+        "properties": {
+          "collision_layer": {
+            "type": "int",
+            "writable": true,
+            "minimum": 0,
+            "maximum": 4294967295
+          },
+          "collision_mask": {
+            "type": "int",
+            "writable": true,
+            "minimum": 0,
+            "maximum": 4294967295
           }
         }
       },
