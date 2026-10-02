@@ -23,6 +23,7 @@ AUTH05_FAILURE_FIXTURES = {
     'boundary': 'gameplay_source_boundary',
     'spawn': 'gameplay_source_spawn',
     'busy': 'gameplay_source_busy',
+    'wall': 'gameplay_source_wall_wait',
 }
 AUTH03_FAILURE_FIXTURES = {
     'syntax': 'gameplay_secondary_syntax_error',
@@ -71,13 +72,13 @@ def is_auth05_failure(failure_fixture):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--run-id', required=True)
-    parser.add_argument('--failure-fixture', choices=('syntax', 'type', 'boundary', 'spawn', 'busy'), default='syntax')
+    parser.add_argument('--failure-fixture', choices=('syntax', 'type', 'boundary', 'spawn', 'busy', 'wall'), default='syntax')
     args = parser.parse_args()
     if not re.fullmatch(r'o2-auth0[35]-native-[a-z0-9-]{1,40}', args.run_id):
         parser.error('use a fresh o2-auth03-native-<id> or o2-auth05-native-<id>')
     auth05 = is_auth05_failure(args.failure_fixture)
     if auth05 != args.run_id.startswith('o2-auth05-native-'):
-        parser.error('boundary/spawn/busy require o2-auth05-native-<id>; syntax/type require o2-auth03-native-<id>')
+        parser.error('boundary/spawn/busy/wall require o2-auth05-native-<id>; syntax/type require o2-auth03-native-<id>')
     idle_window()
     output = STUDIO / '.local/reviews' / args.run_id
     output.mkdir(exist_ok=False)

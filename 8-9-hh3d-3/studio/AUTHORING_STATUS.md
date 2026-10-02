@@ -23,11 +23,11 @@ Tools-plan O1–O8 governs; test counts/native diagnostics do not close AUTH or 
 - AUTH-05 static hardening commit `55433374ee03de50d0837d549b8cd3d8b03f4bd9` now rejects
   duplicate JSON keys recursively in hostile boundary/spawn markers. Focused pure suites
   passed46 and43 tests, both actual exit0; no native engine, Docker or network probe was run.
-- The failure-probe mapping now routes the existing boundary, spawn and busy watchdog
-  fixtures through the same AUTH-05 publication-owner reject/last-good/reopen/retry
-  lifecycle. Native spawn confirmation20261002-01 now passed at the pre-repair runtime
-  closure below. Busy run20261002-01 failed during import before the hostile loop;
-  watchdog confirmation remains pending and AUTHORITY stays0.
+- AUTH-05 publication-owner hostile runs now include native spawn and a distinct wall-wait
+  confirmation. Wall20261002-01 actual outer0, good host/container0 then bad124;
+  supervisor/cleanup/last-good/reopen/retry checked with exactly2 dispatches.
+  Busy01 import failure and busy02 CPU/wall mismatch remain FAIL; bounded resource
+  telemetry is advisory. Distinct source bindings below; AUTHORITY stays0.
 - Publication recovery now uses a marker namespace disjoint from valid command IDs.
   IDs ending `.stage` previously broke reopen after success or rejection; six focused
   pure tests now pass. Old-source roots retain their binding; no implicit migration.
@@ -36,6 +36,62 @@ Tools-plan O1–O8 governs; test counts/native diagnostics do not close AUTH or 
   fixture in a real container with actual exit0 and clean owned lifecycle; authority remains0.
 - GT-06 formal14 is terminal PRODUCT_FAIL; no measured workload active at last check. Recheck process/lock
   before engine/Docker work; when formal runs, static work only and one writer per file.
+
+## 2026-10-02 — Native wall-watchdog rejection and last-good recovery verified
+
+- Fixed the test design without changing the guard: new `gameplay_source_wall_wait`
+  enters a real nonterminating `OS.delay_msec(1000)` loop. Original busy loop/raw
+  kept. The same20s total cap,10 CPU-second cap and strict124/137 wall oracle apply;
+  no acceptance of exit45 or advisory metrics as watchdog proof. Mapping/evidence
+  focused suites:20 pure tests passed, actual exit0.
+- Fresh O4.1 passed, then `python -B -X utf8 studio/tests/godot/run_gameplay_failure_probe.py
+  --run-id o2-auth05-native-wall-20261002-01 --failure-fixture wall`.
+  21:10–21:11 Asia/Saigon, actual outerexit0 / DIAGNOSTIC_PASS. Runtime closure
+  `80300fb2f4dd699c4d01b982855ffa7334d756608eb90a4cefdfb07404c30cb4`;
+  fixture script SHA256 `6f831737af67fd1e1847c991c6b6ac340d28f2f7bf6ac89cc4328bd6db1ba621`.
+- Good publish host/container0 then real loop entry; bad host/container124 after
+  ~19.765s host duration, timed_out=false. Pinned in-container PID1 supervisor
+  termination at19s / kill-after1s, binding verified and watchdog observed.
+  No claim that the killed engine naturally exited0. Negative publication rejected;
+  CURRENT/journal unchanged, reopen equal and idempotent good retry caused no third
+  dispatch. Both owned containers removed, Jobs zero/closed, handles released,
+  admissions released. All28 current/frozen source files and41 bad artifact hashes
+  independently matched after terminal. No engine left running.
+- Raw: `studio/.local/reviews/o2-auth05-native-wall-20261002-01/`. Diagnostic
+  AUTHORITY0/public_ack=false/sandbox_acceptance=false; this closes that pending
+  native observation, not AUTH05/GT09 acceptance. Busy01/02 verdicts untouched.
+
+## 2026-10-02 — Child resource telemetry; CPU/wall fixture race localized
+
+- Trusted phase parent now emits bounded advisory child-resource records after
+  wait: actual child returncode, elapsed time, inherited CPU limits, per-child
+  user/system CPU deltas and bounded cgroup-v2 memory.events. Missing readings
+  remain null. These transcript records carry authority0 and never grant PASS,
+  change a child exit, replace lifecycle proof or relax log policy. Long-uptime
+  clocks preserve elapsed nanoseconds and use bounded absolute microseconds.
+  Profile16 + log policy9 + integrity-pin1 focused tests passed, actual exits0.
+- Profile SHA256 `aa01428ff26dc56fc20f19f7093bd025685fe9ca509843826ee02fe7acb6485c`;
+  runtime closure `80300fb2f4dd699c4d01b982855ffa7334d756608eb90a4cefdfb07404c30cb4`.
+  Fresh O4.1 then `python -B -X utf8 studio/tests/godot/run_gameplay_failure_probe.py
+  --run-id o2-auth05-native-busy-20261002-02 --failure-fixture busy`.
+- Actual outerexit1 / BAD_FIXTURE_NOT_OBSERVED remains FAIL. Good host/container0;
+  bad parse0/import0, real BUSY_ENTERED, play child-9, host/container45. Play used
+  9.918739 user +0.079925 system CPU seconds (~9.998664), with soft/hard CPU10s;
+  cgroup OOM counters stayed0. This is consistent with CPU-limit termination,
+  not independent proof of the signal's cause. It does not explain busy01's
+  earlier import kill retroactively. No wall watchdog was observed in busy02.
+- Static review found the fixture's timing assumption wrong: a tight loop races
+  its CPU limit against the shared wall deadline. The existing verifier correctly
+  refuses exit45/play-9 as evidence of supervisor124/137; do not weaken that rule
+  or promote advisory resource markers into trusted acceptance.
+- Both containers removed, Jobs zero/closed/handles released, admissions released;
+ 28 frozen/current source files and41 bad artifact hashes verified. Offline
+  reopen performed0 dispatches and preserved CURRENT/journal byte-for-byte.
+  Raw and original result stay under `studio/.local/reviews/o2-auth05-native-busy-20261002-02/`.
+- Add a distinct low-CPU wall-wait fixture, retaining the old busy loop and raw:
+  real script enters a nonterminating delay loop; same20s cap, same wall-only
+  exit/transcript/lifecycle oracle. One native confirmation after focused tests;
+  no executor timeout/resource change and no claim that all AUTH05 is accepted.
 
 ## 2026-10-02 — Recovery marker collision repair; busy confirmation incomplete
 
@@ -119,9 +175,11 @@ Tools-plan O1–O8 governs; test counts/native diagnostics do not close AUTH or 
 3. Do not repeat the completed native confirmations without a new reproducer; retain raw evidence and
    keep the candidate authority0 until the formal GT06 and later gates are accepted.
 
-The duplicate-key repair only hardens evidence parsing. AUTH-05 native boundary,
-spawn, network and timeout observations remain required and must be run only when
-the measurement lock is absent and the host preflight permits it.
+The duplicate-key repair only hardens evidence parsing. Boundary/network, spawn and
+wall-timeout observations above are separate diagnostics on recorded closures;
+do not repeat them just to update hashes or combine them into acceptance. Remaining
+work is the fixture-specific adapter path and authored2D/3D end-to-end coverage.
+Native work requires an absent measurement lock and a fresh host preflight.
 
 Historical entries (including obsolete next actions): [history](AUTHORING_STATUS_HISTORY_20261002.md).
 History preserves the previous status file byte-for-byte; SHA256 `48fc9e191150cebd2c546f360cc75f3cd3ae2b5c0e77844bd316712a36407b9a`.

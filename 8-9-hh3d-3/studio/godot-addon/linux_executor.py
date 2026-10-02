@@ -22,7 +22,7 @@ BINARY_NAME = 'Godot_v4.7.2-stable_linux.x86_64'
 BINARY_SHA256 = '8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e'
 IMAGE_ID = 'sha256:581429e3df12d76e6af4be5ab7d0e7fc2013eb57dc23d2de691411c8efdbb970'
 OWNED_RUNNER_SHA256 = 'ea522450acc46f90be5e2a7b9257e73ce8b619948105b2c9073aac1f881c7328'
-LOCK_SHA256 = 'afe20ce53591f4e5078a654f55209ab9cb52afe03faf711bbcea3d4e06170c0b'
+LOCK_SHA256 = 'f8484bcd8d0d7c7df8d469196bd27ac61e79cb3c462637a4eab20055d4f15f8b'
 PROJECT_TEMPLATE = ('config_version=5\n[application]\nconfig/name="HH GT03 Linux validator"\n'
                     '[rendering]\nrenderer/rendering_method="gl_compatibility"\n'
                     '[threading]\nworker_pool/max_threads=4\n')
@@ -42,7 +42,7 @@ _INCOMPLETE_CLI_HOLDS: list = []
 _INCOMPLETE_ADMISSION_HOLDS: list = []
 PROFILE_BOOTSTRAP_SHA256 = 'efde8370a6157ed2f66544ee13b82ee2556b59130f5306e9e0774ed0e3be79a5'
 SANDBOX_BOOTSTRAP_SHA256 = 'ed31974d0bdf659ca8c237db1fa0f2857a3260cbd5e363e6c1c9f248d075fbb0'
-GAMEPLAY_PROFILE_SHA256 = '7ad2f6adfe182ad3e91ec21ddb3c5e305e3864bcddc6c7d614c6464bcf5f4669'
+GAMEPLAY_PROFILE_SHA256 = 'aa01428ff26dc56fc20f19f7093bd025685fe9ca509843826ee02fe7acb6485c'
 GUARDED_MODES = ('guarded-parse', 'guarded-import', 'guarded-play')
 GAMEPLAY_MODE = 'gameplay-source'
 SANDBOX_MODES = GUARDED_MODES + (GAMEPLAY_MODE,)

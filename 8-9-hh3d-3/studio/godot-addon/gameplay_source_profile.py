@@ -154,23 +154,93 @@ def driver() -> str:
     Children cannot signal/ptrace the parent. Its phase ordering and real wait
     results drive execution; printed phase markers remain diagnostic data only.
     The same PID-1 wall deadline covers all phases, not a fresh timeout per phase.
+
+    Resource records are advisory, unauthenticated transcript data. Missing
+    observations stay null; they never alter the child's result or admission.
     """
-    return (
-        'import subprocess,sys\n'
-        'from pathlib import Path\n'
-        'primary="scripts/fixture_actor.gd"\n'
-        'scripts=sorted(p.relative_to("/project").as_posix() for p in Path("/project/scripts").rglob("*.gd") if p.is_file())\n'
-        'if primary not in scripts or len(scripts)>64:sys.exit(45)\n'
-        'scripts=[primary]+[p for p in scripts if p!=primary]\n'
-        'for phase in ("parse","import","play"):\n'
-        ' print("HH_GAMEPLAY_PHASE_BEGIN "+phase,flush=True)\n'
-        ' for script in (scripts if phase=="parse" else [None]):\n'
-        '  secondary=script is not None and script!=primary\n'
-        '  if secondary:print("HH_GAMEPLAY_MODULE_BEGIN "+script,flush=True)\n'
-        '  argv=["/usr/local/bin/python3","-I","-B","/harness/gameplay_sandbox.py",phase]\n'
-        '  if script is not None:argv.append(script)\n'
-        '  code=subprocess.run(argv,stdin=subprocess.DEVNULL).returncode\n'
-        '  if secondary:print("HH_GAMEPLAY_MODULE_END "+script+" "+str(code),flush=True)\n'
-        '  if code!=0:break\n'
-        ' print("HH_GAMEPLAY_PHASE_END "+phase+" "+str(code),flush=True)\n'
-        ' if code!=0:sys.exit(45)\n')
+    return '''import json,math,resource,subprocess,sys,time
+from pathlib import Path
+safe_integer=(1<<53)-1
+memory_fields=("low","high","max","oom","oom_kill","oom_group_kill")
+def clock():
+    try:
+        value=time.monotonic_ns()
+        return value if type(value) is int and value>=0 else None
+    except (OSError,ValueError):
+        return None
+def cpu_usage():
+    try:
+        value=resource.getrusage(resource.RUSAGE_CHILDREN)
+        pair=(value.ru_utime,value.ru_stime)
+        if all(type(n) in (int,float) and math.isfinite(n) and 0<=n<=safe_integer for n in pair):
+            return pair
+    except (OSError,ValueError):
+        pass
+    return (None,None)
+def cpu_limits():
+    try:
+        pair=resource.getrlimit(resource.RLIMIT_CPU)
+        if len(pair)==2 and all(type(n) is int and -1<=n<=safe_integer for n in pair):
+            return pair
+    except (OSError,ValueError):
+        pass
+    return (None,None)
+def memory_events():
+    unavailable={"status":"unavailable","counts":dict.fromkeys(memory_fields)}
+    try:
+        with Path("/sys/fs/cgroup/memory.events").open("rb") as stream:
+            raw=stream.read(4097)
+        if not 0<len(raw)<=4096:
+            return unavailable
+        values={}
+        lines=raw.decode("ascii").splitlines()
+        if len(lines)>16:
+            return unavailable
+        for line in lines:
+            key,value=line.split()
+            if key in values or not value.isdecimal() or not 0<=int(value)<=safe_integer:
+                return unavailable
+            values[key]=int(value)
+        if any(key in values for key in memory_fields):
+            return {"status":"observed","counts":{key:values.get(key) for key in memory_fields}}
+    except (OSError,ValueError):
+        pass
+    return unavailable
+def delta(before,after):
+    return after-before if before is not None and after is not None and 0<=after-before<=safe_integer else None
+def microseconds(value):
+    return value//1000 if value is not None and value//1000<=safe_integer else None
+primary="scripts/fixture_actor.gd"
+scripts=sorted(p.relative_to("/project").as_posix() for p in Path("/project/scripts").rglob("*.gd") if p.is_file())
+if primary not in scripts or len(scripts)>64:sys.exit(45)
+scripts=[primary]+[p for p in scripts if p!=primary]
+sample_index=0
+for phase in ("parse","import","play"):
+    print("HH_GAMEPLAY_PHASE_BEGIN "+phase,flush=True)
+    for script in (scripts if phase=="parse" else [None]):
+        secondary=script is not None and script!=primary
+        if secondary:print("HH_GAMEPLAY_MODULE_BEGIN "+script,flush=True)
+        argv=["/usr/local/bin/python3","-I","-B","/harness/gameplay_sandbox.py",phase]
+        if script is not None:argv.append(script)
+        limits=cpu_limits()
+        usage_before=cpu_usage()
+        memory_before=memory_events()
+        started=clock()
+        code=subprocess.run(argv,stdin=subprocess.DEVNULL).returncode
+        ended=clock()
+        usage_after=cpu_usage()
+        memory_after=memory_events()
+        record={"schema":"hh-gameplay-child-resources-1","scope":"diagnostic_untrusted_transcript",
+            "authority":0,"phase":phase,"sample_index":sample_index,"returncode":code,
+            "start_monotonic_us":microseconds(started),"end_monotonic_us":microseconds(ended),"elapsed_ns":delta(started,ended),
+            "cpu_limit_soft_seconds":limits[0],"cpu_limit_hard_seconds":limits[1],
+            "user_cpu_seconds":delta(usage_before[0],usage_after[0]),
+            "system_cpu_seconds":delta(usage_before[1],usage_after[1]),
+            "memory_events_before":memory_before,"memory_events_after":memory_after}
+        print("HH_GAMEPLAY_CHILD_RESOURCES "+json.dumps(record,separators=(",",":"),allow_nan=False),flush=True)
+        sample_index+=1
+        if secondary:print("HH_GAMEPLAY_MODULE_END "+script+" "+str(code),flush=True)
+        if code!=0:break
+    print("HH_GAMEPLAY_PHASE_END "+phase+" "+str(code),flush=True)
+    if code!=0:sys.exit(45)
+'''

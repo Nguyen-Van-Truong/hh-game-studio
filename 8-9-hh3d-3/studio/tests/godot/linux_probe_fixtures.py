@@ -327,8 +327,9 @@ func _ready() -> void:
 FIXTURES['gameplay_source_busy'] = {
     # One shared 20s diagnostic deadline includes parse and editor import.
     # The old 5s attempt expired during import, before the hostile loop entered.
-    # Prior complete startup took ~8s; stop before the loop's 10 CPU-second limit
-    # so this fixture specifically exercises the independent wall watchdog.
+    # The tight loop races its unchanged 10 CPU-second limit against the shared
+    # wall deadline; faster startup can let the CPU limit terminate play first.
+    # That termination does not satisfy this fixture's wall-watchdog oracle.
     # This does not alter any GT-06 formal timeout or the executor's 20s cap.
     'mode': 'gameplay-source', 'timeout': 20, 'expect': 'watchdog',
     'script': '''extends Node3D
@@ -336,6 +337,20 @@ func _ready() -> void:
 \tprint("HH_PROBE_BUSY_ENTERED")
 \twhile true:
 \t\tpass
+''',
+}
+
+FIXTURES['gameplay_source_wall_wait'] = {
+    # Sleep inside the real script's nonterminating loop so the shared wall
+    # deadline can be observed without a tight loop exhausting the CPU budget.
+    # The generic entry marker proves loop entry, not a CPU-limit cause.
+    # Keep the existing watchdog oracle and all executor resource/deadline caps.
+    'mode': 'gameplay-source', 'timeout': 20, 'expect': 'watchdog',
+    'script': '''extends Node3D
+func _ready() -> void:
+\tprint("HH_PROBE_BUSY_ENTERED")
+\twhile true:
+\t\tOS.delay_msec(1000)
 ''',
 }
 
