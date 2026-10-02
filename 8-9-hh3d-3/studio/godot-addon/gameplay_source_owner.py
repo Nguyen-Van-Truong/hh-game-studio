@@ -400,14 +400,7 @@ class GameplaySourcePublicationOwner:
             # result. Check the retained, owned result before rebuilding ACKs
             # or repairing CURRENT; recovery must not promote missing/dirty
             # executor evidence into a successful publication.
-            native = owner._read_native_result(owner._runs / receipt.command_id)
-            owner._validate_native(native, expected_input_hashes=owner._native_inputs(files),
-                                   expected_source_closure_sha256=owner.source_closure_sha256,
-                                   evidence_directory=owner._runs / receipt.command_id,
-                                   expected_dependency_files=owner._dependency_inputs(files),
-                                   dependency_observation_required=owner._dependency_observation_required)
-            _need(native["run_id"] == receipt.native_run_id,
-                  "GAMEPLAY_OWNER_NATIVE_RUN_BINDING")
+            owner._recheck_native_evidence(receipt.command_id, files, receipt.native_run_id)
             rebuilt = {"status": "READBACK_ACK", **asdict(receipt)}
             owner._jobs[receipt.command_id] = rebuilt
             previous_row = row
@@ -795,14 +788,18 @@ class GameplaySourcePublicationOwner:
         return {"project.godot": _sha(self._profile.PROJECT_TEMPLATE.encode()),
                 **{name: _sha(raw) for name, raw in sorted(files.items())}}
 
-    def _recheck_dependency_evidence(self, command_id, files):
-        if self._dependency_observation_required:
-            output = self._runs / command_id
-            self._validate_native(self._read_native_result(output),
-                expected_input_hashes=self._native_inputs(files),
-                expected_source_closure_sha256=self.source_closure_sha256,
-                evidence_directory=output, expected_dependency_files=self._dependency_inputs(files),
-                dependency_observation_required=True)
+    def _recheck_native_evidence(self, command_id, files, expected_run_id):
+        # Every receipt needs its retained native result, including fixtures
+        # without graph observation. Retry binds to the original request/run;
+        # it does not reselect that revision over a later committed version.
+        output = self._runs / command_id
+        native = self._read_native_result(output)
+        self._validate_native(native,
+            expected_input_hashes=self._native_inputs(files),
+            expected_source_closure_sha256=self.source_closure_sha256,
+            evidence_directory=output, expected_dependency_files=self._dependency_inputs(files),
+            dependency_observation_required=self._dependency_observation_required)
+        _need(native["run_id"] == expected_run_id, "GAMEPLAY_OWNER_NATIVE_RUN_BINDING")
 
     def _read_native_result(self, output: Path, returned=_UNSET_RESULT) -> dict:
         """Bind the in-memory diagnostic to the owned run's durable evidence."""
@@ -858,7 +855,7 @@ class GameplaySourcePublicationOwner:
             previous = self._jobs.get(command_id)
             if previous is not None:
                 _need(previous["request_digest"] == digest, "GAMEPLAY_OWNER_COMMAND_CONFLICT")
-                self._recheck_dependency_evidence(command_id, candidate)
+                self._recheck_native_evidence(command_id, candidate, previous["native_run_id"])
                 return dict(previous)
             _need(len(self._jobs) < self._session_model.MAX_COMMANDS,
                   "GAMEPLAY_OWNER_JOURNAL_LIMIT")
@@ -923,7 +920,7 @@ class GameplaySourcePublicationOwner:
         # replacing its selector so a concurrent manual edit remains intact.
         self._read_current_journal()
         self._check_selected()
-        self._recheck_dependency_evidence(command_id, candidate)
+        self._recheck_native_evidence(command_id, candidate, native_run_id)
         self._atomic_select(revision, self._generation + 1)
         self._files = candidate
         self._profile_observation = checked

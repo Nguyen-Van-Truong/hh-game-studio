@@ -93,6 +93,26 @@ def explained_native_result(project, output):
     return result
 
 
+def damage_native_evidence(output, damage):
+    if damage in ('missing-result', 'missing-stdout'):
+        (output / ('result.json' if damage == 'missing-result' else 'engine-stdout.txt')).unlink()
+    elif damage == 'warning':
+        (output / 'engine-stderr.txt').write_bytes(b'WARNING: unproven native result\n')
+    else:
+        result = json.loads((output / 'result.json').read_bytes())
+        if damage == 'exit':
+            result['commandhost']['exit_code'] = 124
+        elif damage == 'run-id':
+            result['run_id'] = 'different-native-run'
+        else:
+            raise AssertionError(damage)
+        (output / 'result.json').write_bytes(owner_mod.canonical_bytes(result))
+
+
+def evidence_bytes(output):
+    return {path.name: path.read_bytes() for path in output.iterdir() if path.is_file()}
+
+
 class GameplaySourceOwnerTests(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory(prefix="hh-gameplay-owner-")
@@ -215,6 +235,78 @@ class GameplaySourceOwnerTests(unittest.TestCase):
                                            deadline_ms=self.lease.expires_ms), first)
         self.assertEqual(len(self.runs), 1)
         self.assertEqual(self.durable_state(), after)
+
+    def test_cached_ack_rechecks_native_evidence_without_dependency_policy(self):
+        for damage in ('missing-result', 'missing-stdout', 'warning', 'exit', 'run-id'):
+            with self.subTest(damage=damage):
+                calls = []
+                def runner(project, **kwargs):
+                    calls.append(kwargs['output'])
+                    return bound_native_result(project, output=kwargs['output'])
+                owner, grant, lease = self.fresh_owner(runner)
+                self.assertFalse(owner._dependency_observation_required)
+                request = self.request(dict(self.source), command='command.raw.retry')
+                owner.publish(request, grant=grant, lease=lease, deadline_ms=lease.expires_ms)
+                before = owner._selector.read_bytes(), owner._journal.read_bytes()
+                damage_native_evidence(calls[0], damage)
+                raw = evidence_bytes(calls[0])
+                with self.assertRaisesRegex(owner_mod.GameplaySourceOwnerError, 'NATIVE_'):
+                    owner.publish(request, grant=grant, lease=lease, deadline_ms=lease.expires_ms)
+                self.assertEqual(len(calls), 1)
+                self.assertEqual((owner._selector.read_bytes(), owner._journal.read_bytes()), before)
+                self.assertEqual(evidence_bytes(calls[0]), raw)
+
+    def test_pre_adopt_rechecks_native_evidence_without_dependency_policy(self):
+        for damage in ('missing-result', 'missing-stdout', 'warning', 'exit', 'run-id'):
+            with self.subTest(damage=damage):
+                calls = []
+                def runner(project, **kwargs):
+                    calls.append(kwargs['output'])
+                    return bound_native_result(project, output=kwargs['output'])
+                owner, grant, lease = self.fresh_owner(runner)
+                original = owner._adopt
+                retained = []
+                def adopt(*args):
+                    damage_native_evidence(calls[0], damage)
+                    retained.append(evidence_bytes(calls[0]))
+                    return original(*args)
+                owner._adopt = adopt
+                files = dict(self.source)
+                files[owner_mod.ENTRYPOINT] += b'\n# candidate must not be selected\n'
+                request = self.request(files, command='command.raw.adopt')
+                before = owner._selector.read_bytes(), owner._journal.read_bytes()
+                with self.assertRaisesRegex(owner_mod.GameplaySourceOwnerError, 'NATIVE_'):
+                    owner.publish(request, grant=grant, lease=lease, deadline_ms=lease.expires_ms)
+                self.assertEqual(len(calls), 1)
+                self.assertEqual((owner._selector.read_bytes(), owner._journal.read_bytes()), before)
+                self.assertEqual(evidence_bytes(calls[0]), retained[0])
+                self.assertTrue(owner._held)
+                self.assertTrue(owner._session.status()['held'])
+
+    def test_older_receipt_retry_after_later_publication_keeps_current(self):
+        first_request = self.request(dict(self.source), command='command.history.1')
+        first = self.owner.publish(first_request, grant=self.grant, lease=self.lease,
+                                   deadline_ms=self.lease.expires_ms)
+        files = dict(self.source)
+        files[owner_mod.ENTRYPOINT] += b'\n# next revision\n'
+        second_request = self.request(files, command='command.history.2')
+        second = self.owner.publish(second_request, grant=self.grant, lease=self.lease,
+                                    deadline_ms=self.lease.expires_ms)
+        current = self.durable_state()
+        self.assertNotEqual(first['project_revision'], second['project_revision'])
+        self.assertEqual(self.owner.publish(first_request, grant=self.grant, lease=self.lease,
+                                           deadline_ms=self.lease.expires_ms), first)
+        self.assertEqual(len(self.runs), 2)
+        self.assertEqual(self.durable_state(), current)
+        old_output = self.runs[0][1]['output']
+        damage_native_evidence(old_output, 'run-id')
+        damaged = evidence_bytes(old_output)
+        with self.assertRaisesRegex(owner_mod.GameplaySourceOwnerError, 'NATIVE_RUN_BINDING'):
+            self.owner.publish(first_request, grant=self.grant, lease=self.lease,
+                               deadline_ms=self.lease.expires_ms)
+        self.assertEqual(len(self.runs), 2)
+        self.assertEqual(self.durable_state(), current)
+        self.assertEqual(evidence_bytes(old_output), damaged)
 
     def test_cached_ack_requires_live_grant_lease_deadline_and_owner(self):
         request = self.request(dict(self.source))

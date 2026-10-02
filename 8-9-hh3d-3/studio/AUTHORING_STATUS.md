@@ -6,6 +6,9 @@ tracks implementation gaps and does not create another acceptance plan.
 
 Current checkpoints (distinct runs; do not combine their exit/asset claims):
 
+- Current publication repair: retained native evidence is now checked for
+  every policy at adoption, cached retry and reopen, including run-ID binding.
+  The combined focused suite passes 79 tests, actual exit 0; pure proof only.
 - Current dependency integration: pure enabled-policy lifecycle repaired and
   verified by 76 focused tests, exit 0. Native 20261002-01..03 remain FAIL;
   O3 attempt budget 3/3 reached. No fourth native attempt in this direction
@@ -36,6 +39,38 @@ remain active. Dated entries preserve history; old next-action notes do not
 supersede these checkpoints or the tools plan. The earlier header at 4fcd650b
 conflated hostile, publication and asset runs; this summary corrects attribution
 without modifying raw, source or historical verdicts.
+
+## 2026-10-02 AUTH-03 retained-evidence repair
+
+The helper added in `ec45fdd9` rechecked native evidence only when dependency
+observation was enabled. Default/asset fixtures could adopt a revision or
+return a cached ACK despite missing result/stdout, a warning, nonzero host exit,
+or changed native run ID. Ten injected cases reproduced the defect before the
+repair. All policies now use one retained-native check for adoption, cached
+retry and reopen; only graph-sidecar validation depends on the graph policy.
+The run ID must match the stage result or the original receipt. Raw is neither
+rewritten nor repaired. Rejection preserves CURRENT and the durable journal;
+an ambiguous adoption latches the owner/session for recovery.
+
+The history test publishes A then B and retries A: the original A receipt is
+returned, B remains selected and no third dispatch occurs. Corrupting A's run
+ID then rejects its retry without changing B. This prevents the stricter
+evidence check from breaking historical idempotence.
+
+Verification command: `python -B -m unittest` with modules under
+`studio.tests.godot`: `test_gameplay_source_owner`,
+`test_gameplay_owner_dependencies`, `test_gameplay_runtime_binding`,
+`test_gameplay_dependency_observation`, `test_gameplay_dependency_evidence`.
+Result: **79 tests**, **36.536 seconds**, actual exit **0**; logs and durable
+exit receipt: `studio/.local/reviews/o2-retained-native-tests-20261002-01/`.
+Runtime closure: 23 files,
+`f4f061f5574aaa59264bb0aae9204c595e4380fd2a4dbb12fe89301db70e6633`.
+An earlier test handle disappeared without a captured exit; no PASS is claimed
+for it. The retained receipt above covers the final test/source edits.
+
+These are fake-executor failure/retry tests, not native AUTH-03/04 acceptance.
+No new native attempt, main-plan edit, formal-source change or gate tick.
+O3 native dependency budget remains 3/3; GT06 formal09 still awaits its window.
 
 ## 2026-10-02 enabled-policy repair and O3 handoff
 
