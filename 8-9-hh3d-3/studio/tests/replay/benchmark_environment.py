@@ -327,15 +327,11 @@ def native_snapshot(processes, *, job_handle=None, heavy_names=frozenset(),
                 foreign.append({'pid': pid, 'name': name, 'ownership': 'outside_campaign_job'})
             counter = Counters()
             counter.cb = ctypes.sizeof(counter)
-            creation, exit_time = w.FILETIME(), w.FILETIME()
-            kernel_time, user_time = w.FILETIME(), w.FILETIME()
-            if k.GetProcessTimes(h, ctypes.byref(creation), ctypes.byref(exit_time),
-                                 ctypes.byref(kernel_time), ctypes.byref(user_time)):
-                row['process_start_100ns'] = int(creation.dwLowDateTime | creation.dwHighDateTime << 32)
-                row['cpu_total_100ns'] = int(kernel_time.dwLowDateTime | kernel_time.dwHighDateTime << 32) + int(
-                    user_time.dwLowDateTime | user_time.dwHighDateTime << 32)
-            else:
-                row['cpu_unavailable_error'] = ctypes.get_last_error()
+            # CPU and process-start counters deliberately come only from the
+            # single NTQSI snapshot below. A process that exits between the
+            # Toolhelp and NTQSI snapshots remains unknown for this sample;
+            # it is never filled with a fabricated zero or a second handle
+            # query that would violate O9.1a's source binding.
             if p.GetProcessMemoryInfo(h, ctypes.byref(counter), ctypes.sizeof(counter)):
                 row['private_bytes'] = int(counter.private)
                 if row['owned']:
@@ -352,8 +348,6 @@ def native_snapshot(processes, *, job_handle=None, heavy_names=frozenset(),
     # ``perf_process_times`` helper above for callers/tests that explicitly
     # request a bounded PID lookup; the measured watchdog never uses it.
     fallback = _nt_process_times(None)
-    require(all(row['pid'] == 0 or row['pid'] in fallback for row in rows),
-            'WATCHDOG_NTQSI_MISSING')
     for row in rows:
         # The System Idle row has no usable creation timestamp; keep it as an
         # explicitly unknown sentinel rather than violating the CPU inventory

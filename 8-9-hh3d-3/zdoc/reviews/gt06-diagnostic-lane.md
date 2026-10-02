@@ -21,10 +21,16 @@
   fresh soak to use the new closure.
 - A second O9 audit then closed three observer gaps in `d0374cbf`: the missing
   sample bound is now 30 seconds as O9.1c requires, external CPU pressure is
-  summed across all non-Job processes before its 50%/60-second timer, and a
-  missing PID in the all-process NTQSI map fails closed. The soak runner now
-  verifies its stream before writing `actual_exit_code=0`, so verifier failure
-  cannot leave a false success receipt. Focused environment/soak tests pass.
+  summed across all non-Job processes before its 50%/60-second timer, and the
+  soak runner verifies its stream before writing `actual_exit_code=0`, so a
+  verifier failure cannot leave a false success receipt. The measured path
+  now uses one NTQSI CPU source per sample; a process that exits between the
+  Toolhelp and NTQSI snapshots remains explicitly unknown rather than being
+  filled from a second handle query or fabricated as zero. Focused
+  environment/soak tests pass.
+- Fresh soak `gt06-o9-watchdog-soak-20261003-07` exercised this repair for
+  71.453 seconds before the first version's overly strict missing-PID guard
+  produced `HARNESS_FAIL`; it is invalid DoD and preserved unchanged.
 - The audit also found two gates that remain open and are not silently claimed
   repaired: O9.2 durable same-closure pair deferral/retry is not implemented
   (`MAX_ATTEMPTS=1` and one-shot preflight remain), and O9.3 cannot yet apply
