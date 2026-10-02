@@ -122,14 +122,16 @@ def running_containers(processes):
     # 250 ms cleanup windows plus scheduler margin inside the same absolute
     # observer budget so a second timeout cannot report after t0+2 s.
     cleanup_reserve = 0.6
-    attempt_budget = (total_budget - (2 * cleanup_reserve)) / 2
+    operation_deadline = deadline - cleanup_reserve
     diagnostic = None
     for attempt in range(1, 3):
-        if time.monotonic() >= deadline:
+        if time.monotonic() >= operation_deadline:
             break
-        attempt_deadline = min(deadline, started + attempt_budget * attempt)
         try:
-            names = query_containers(attempt_deadline)
+            # Retries reuse one absolute operation cutoff. A quick transient
+            # failure can retry, but a full timeout leaves only cleanup grace
+            # and cannot start another read.
+            names = query_containers(operation_deadline)
         except InventoryError as error:
             diagnostic = {'reason': error.reason, 'attempt': attempt}
             if type(error.detail) is int:
@@ -137,7 +139,7 @@ def running_containers(processes):
             if not error.retryable:
                 break
         else:
-            if time.monotonic() >= attempt_deadline:
+            if time.monotonic() >= operation_deadline:
                 diagnostic = {'reason': 'timeout', 'attempt': attempt}
                 break
             return names
