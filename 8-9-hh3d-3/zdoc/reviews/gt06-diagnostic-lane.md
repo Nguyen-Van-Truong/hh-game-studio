@@ -10,7 +10,7 @@
 - Preview A/B stock01/off02 mỗi bản100/100 actual exits0, median60.825/29.292ms; không tái hiện stall5s. Không đổi formal sang no-preview; hướng đã đóng3IDs.
 - Save-return boundary mới: fault-ordering01 tái hiện premature readback/reload; repair02 actual exit0,27/27. Native real-save03 import/editor exit0, save/readback/reload hoàn tất; outer verifier exit1 do nhầm key-presence, đã review offline riêng, không viết lại verdict.
 - Guard chỉ khóa readback đến khi save API trảOK; heartbeat/timeouts/readback và O1–O4 giữ nguyên. Không chứng minh nguyên nhân formal14, không tự dispatch formal15; hướng boundary đã3IDs, không chạy thêm mù.
-- Offline formal21 gap review ghi nhận admitted command `.153`, lookup gap2766618us giữa hai QUEUED attempts, không có transport failure; đây là command-lane boundary, root cause chưa chứng minh và không đổi verdict.
+- Offline formal21 gap review/replay ghi nhận admitted command `.153`, lookup gap2766618us giữa hai QUEUED attempts, không có transport failure; đây là command-lane boundary, root cause chưa chứng minh và không đổi verdict.
 - O9 watchdog-only soak attempts `gt06-o9-watchdog-soak-20261003-01` và `...-03` chỉ có158/38 mẫu rồi dừng thiếu closeout; `...-02` dừng ở setup. Cả ba không tính DoD, raw giữ riêng. Runner đã sửa ở `ccb6792c` để bind full campaign import closure (59 files, gồm Docker module); cần soak mới đủ30 phút.
 - Không measurement live tại closeout; tiếp tục O2 registered adapter trong worktree riêng theo AUTHORING_STATUS.md, AUTHORITY0, không merge trướcGT06. Sau review mới đủ bằng chứng: fresh freeze/preflight/CPU minute/budget trước formal.
 
@@ -1133,7 +1133,7 @@ Archive manifests (AUTHORITY0, raw preserved):
 
 - `studio/tests/replay/review_formal21_gap.py` reads the preserved
   `command-00.json` without starting an engine or changing the measured source.
-  Its focused unit suite passed 2/2, and the generated review under
+  Its focused unit suite passed 3/3, and the generated review/replay under
   `studio/.local/reviews/gt06-formal21-gap-review-20261003-01/` binds the raw
   SHA-256 `4a4eb4136d1d0b3579f5b4494051eab154709a0510252a267bc1f6990d29a55d`.
 - The largest monotonic lookup gap is `2766618 us` between adjacent QUEUED
@@ -1141,6 +1141,10 @@ Archive manifests (AUTHORITY0, raw preserved):
   The result explicitly sets `formal_acceptance=false` and
   `root_cause_proven=false`. It confirms a reproducible evidence boundary,
   not a repair or permission to dispatch formal22.
+- The in-memory phase replay binds the same raw SHA and reproduces the same
+  monotonic delta without sleeping or starting a process. It is a deterministic
+  diagnostic replay, not a scheduler/queue reproduction and not acceptance
+  evidence.
 
 ### O9 soak closure repair — incomplete attempts retained
 

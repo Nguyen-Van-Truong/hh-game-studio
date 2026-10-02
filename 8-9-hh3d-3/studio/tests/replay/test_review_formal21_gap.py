@@ -3,7 +3,7 @@ from pathlib import Path
 import tempfile
 import unittest
 
-from studio.tests.replay.review_formal21_gap import review
+from studio.tests.replay.review_formal21_gap import replay, review
 
 
 class Formal21GapReviewTests(unittest.TestCase):
@@ -36,6 +36,20 @@ class Formal21GapReviewTests(unittest.TestCase):
             }), encoding="utf-8")
             with self.assertRaisesRegex(ValueError, "GAP_CANDIDATE_MISSING"):
                 review(path)
+
+    def test_replays_timeline_without_waiting_or_acceptance(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "command-00.json"
+            path.write_text(json.dumps({
+                "commands": [{"command_id": "run.admitted.153", "lookup_attempts": [
+                    {"ended_mono_us": 10, "status": "ACCEPTED_PENDING", "code": "QUEUED", "transport_failure": None},
+                    {"ended_mono_us": 25, "status": "COMMITTED", "code": "READBACK_CONFIRMED", "transport_failure": None},
+                ]}]
+            }), encoding="utf-8")
+            result = replay(path)
+        self.assertEqual(result["largest_gap_us"], 15)
+        self.assertTrue(result["replay_is_in_memory_only"])
+        self.assertFalse(result["formal_acceptance"])
 
 
 if __name__ == "__main__":

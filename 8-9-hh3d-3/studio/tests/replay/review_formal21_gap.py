@@ -12,6 +12,7 @@ from pathlib import Path
 
 
 SCHEMA = "HH-GT06-FORMAL21-GAP-REVIEW-1"
+REPLAY_SCHEMA = "HH-GT06-FORMAL21-GAP-REPLAY-1"
 SCOPE = "host command-lane response progress; not editor UI heartbeat"
 
 
@@ -97,16 +98,62 @@ def review(command_path: Path, *, command_suffix: str = ".153") -> dict:
     }
 
 
+def replay(command_path: Path, *, command_suffix: str = ".153") -> dict:
+    """Replay the preserved lookup timeline in memory, without waiting."""
+    result = review(command_path, command_suffix=command_suffix)
+    commands = _load_commands(command_path)
+    command = next(
+        command for command in commands
+        if command.get("command_id") == result["largest_gap"]["command_id"]
+    )
+    timeline = []
+    previous = None
+    for index, attempt in enumerate(command["lookup_attempts"]):
+        delta = None if previous is None else _gap(previous, attempt)
+        timeline.append({
+            "attempt_index": index,
+            "ended_mono_us": int(attempt["ended_mono_us"]),
+            "delta_from_previous_us": delta,
+            "status": attempt.get("status"),
+            "code": attempt.get("code"),
+            "transport_failure": attempt.get("transport_failure"),
+        })
+        previous = attempt
+    return {
+        "schema": REPLAY_SCHEMA,
+        "formal_acceptance": False,
+        "root_cause_proven": False,
+        "raw_command_json": str(command_path.resolve()),
+        "raw_command_sha256": result["raw_command_sha256"],
+        "command_id": result["largest_gap"]["command_id"],
+        "timeline": timeline,
+        "largest_gap_us": result["largest_gap"]["gap_us"],
+        "replay_is_in_memory_only": True,
+        "replay_conclusion": (
+            "The preserved lookup sequence deterministically replays the same "
+            "monotonic gap. It does not reproduce the scheduler or identify "
+            "the cause, and it cannot change the formal verdict."
+        ),
+    }
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("command_json", type=Path)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--replay-output", type=Path)
     args = parser.parse_args(argv)
     result = review(args.command_json)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     with args.output.open("x", encoding="utf-8") as stream:
         json.dump(result, stream, sort_keys=True, indent=2)
         stream.write("\n")
+    if args.replay_output is not None:
+        replay_result = replay(args.command_json)
+        args.replay_output.parent.mkdir(parents=True, exist_ok=True)
+        with args.replay_output.open("x", encoding="utf-8") as stream:
+            json.dump(replay_result, stream, sort_keys=True, indent=2)
+            stream.write("\n")
     return 0
 
 
