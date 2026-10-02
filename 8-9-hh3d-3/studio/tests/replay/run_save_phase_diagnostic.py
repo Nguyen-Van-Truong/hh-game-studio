@@ -28,19 +28,36 @@ CYCLES = 100
 DEADLINE_SECONDS = 180
 MARKER = 'HH_GT06_SAVE_PHASE '
 SCOPE = {'authority': 0, 'tier': 'D', 'formal_acceptance': False, 'full_benchmark': False}
+PREVIEW_MODES = ('stock', 'off')
 
 
-def patched_driver(raw):
+def variant_metadata(preview_mode):
+    require(preview_mode in PREVIEW_MODES, 'SAVE_DIAGNOSTIC_PREVIEW_MODE')
+    return {'preview_mode': preview_mode,
+            'save_api': 'EditorInterface.save_scene()' if preview_mode == 'stock'
+                else 'EditorInterface.save_scene_as(SCENE, false)',
+            'return_kind': 'Error' if preview_mode == 'stock' else 'void'}
+
+
+def patched_driver(raw, preview_mode='stock'):
+    variant = variant_metadata(preview_mode)
     text = raw.decode('utf-8')
+    save_call = ('    var result: Error = EditorInterface.save_scene()\n'
+                 if preview_mode == 'stock' else '    EditorInterface.save_scene_as(SCENE, false)\n')
+    save_call += ('    var diagnostic_return_us: int = Time.get_ticks_usec()\n'
+                 '    _diagnostic_save_phase("return", diagnostic_return_us, '
+                 + ('result' if preview_mode == 'stock' else 'null')
+                 + ', diagnostic_batch, diagnostic_cycle, diagnostic_start_us)\n')
+    if preview_mode == 'stock':
+        save_call += '    if result != OK:\n        _fail("BENCHMARK_SAVE_CALL")\n'
     replacements = [
         ('        _cycle_limit = 1\n', '        _cycle_limit = 100\n'),
-        ('    var result: Error = EditorInterface.save_scene()\n',
+        ('    var result: Error = EditorInterface.save_scene()\n'
+         '    if result != OK:\n        _fail("BENCHMARK_SAVE_CALL")\n',
          '    var diagnostic_batch: int = _batch\n'
          '    var diagnostic_cycle: int = _cycle\n'
          '    var diagnostic_start_us: int = int(_timing.save.start_us)\n'
-         '    var result: Error = EditorInterface.save_scene()\n'
-         '    var diagnostic_return_us: int = Time.get_ticks_usec()\n'
-         '    _diagnostic_save_phase("return", diagnostic_return_us, result, diagnostic_batch, diagnostic_cycle, diagnostic_start_us)\n'),
+         + save_call),
         ('    _save_signal_us = Time.get_ticks_usec()\n',
          '    _save_signal_us = Time.get_ticks_usec()\n'
          '    _diagnostic_save_phase("signal", _save_signal_us)\n'),
@@ -50,8 +67,9 @@ def patched_driver(raw):
         text = text.replace(old, new)
     text += '''
 
-func _diagnostic_save_phase(event: String, observed_us: int, result: int = -1, call_batch: int = -1, call_cycle: int = -1, call_start_us: int = -1) -> void:
+func _diagnostic_save_phase(event: String, observed_us: int, result: Variant = null, call_batch: int = -1, call_cycle: int = -1, call_start_us: int = -1) -> void:
     print("HH_GT06_SAVE_PHASE " + JSON.stringify({"event": event, "result": result,
+        "preview_mode": __PREVIEW_MODE__, "return_kind": __RETURN_KIND__,
         "run_id": _input.run_id, "pid": OS.get_process_id(),
         "batch": _batch if call_batch < 0 else call_batch,
         "cycle": _cycle if call_cycle < 0 else call_cycle,
@@ -59,12 +77,13 @@ func _diagnostic_save_phase(event: String, observed_us: int, result: int = -1, c
         "start_us": int(_timing.save.start_us) if call_start_us < 0 else call_start_us,
         "live_batch": _batch, "live_cycle": _cycle, "live_phase": int(_phase),
         "monotonic_us": observed_us}))
-'''
+'''.replace('__PREVIEW_MODE__', json.dumps(preview_mode)).replace('__RETURN_KIND__', json.dumps(variant['return_kind']))
     return text.encode('utf-8')
 
 
-def summarize(raw, batch, binding, pid, cycles=CYCLES):
+def summarize(raw, batch, binding, pid, cycles=CYCLES, preview_mode='stock'):
     """Join supplemental markers to unchanged native timings; allow sync signal."""
+    variant = variant_metadata(preview_mode)
     require(batch['run_id'] == binding['run_id'] and batch['pid'] == pid
             and batch['index'] == 0 and len(batch['raw_timings']) == cycles,
             'SAVE_DIAGNOSTIC_BATCH_BINDING')
@@ -74,6 +93,9 @@ def summarize(raw, batch, binding, pid, cycles=CYCLES):
                     ('run_id', 'source_closure_sha256', 'profile_sha256'))
                 and marker.get('pid') == pid and marker.get('batch') == 0,
                 'SAVE_DIAGNOSTIC_MARKER_BINDING')
+        require(marker.get('preview_mode') == preview_mode
+                and marker.get('return_kind') == variant['return_kind'],
+                'SAVE_DIAGNOSTIC_MARKER_VARIANT')
         cycle, event = marker.get('cycle'), marker.get('event')
         require(native.integer(cycle) and cycle < cycles and event in ('return', 'signal'),
                 'SAVE_DIAGNOSTIC_MARKER_POSITION')
@@ -84,6 +106,10 @@ def summarize(raw, batch, binding, pid, cycles=CYCLES):
         require(timing['index'] == cycle and set(rows.get(cycle, {})) == {'return', 'signal'},
                 'SAVE_DIAGNOSTIC_MISSING_MARKER')
         returned, signal = rows[cycle]['return'], rows[cycle]['signal']
+        require('result' in returned and 'result' in signal and signal['result'] is None
+                and (native.integer(returned['result']) and returned['result'] == 0
+                    if preview_mode == 'stock' else returned['result'] is None),
+                'SAVE_DIAGNOSTIC_RETURN_SEMANTICS')
         require(all(row.get('live_batch') == 0 and row.get('live_cycle') == cycle
                     for row in (returned, signal)), 'SAVE_DIAGNOSTIC_CALL_IDENTITY_DRIFT')
         start, end = timing['save']['start_us'], timing['save']['end_us']
@@ -91,9 +117,9 @@ def summarize(raw, batch, binding, pid, cycles=CYCLES):
         require(native.integer(start, 1) and native.integer(end, start + 1)
                 and all(row['start_us'] == start for row in (returned, signal))
                 and all(native.integer(value, start) and value <= end for value in (ret, sig))
-                and sig == timing['save_signal_mono_us'] and returned['result'] == 0
-                and signal['result'] == -1, 'SAVE_DIAGNOSTIC_MARKER_CLOCK')
+                and sig == timing['save_signal_mono_us'], 'SAVE_DIAGNOSTIC_MARKER_CLOCK')
         result.append({'cycle': cycle, 'start_us': start, 'return_us': ret, 'signal_us': sig,
+            'return_kind': variant['return_kind'], 'return_result': returned['result'],
             'end_us': end, 'call_ms': (ret - start) / 1000,
             'signal_minus_return_ms': (sig - ret) / 1000,
             'after_return_to_signal_ms': max(0, sig - ret) / 1000,
@@ -105,7 +131,7 @@ def summarize(raw, batch, binding, pid, cycles=CYCLES):
     gaps = [{'gap_ms': (b['monotonic_us'] - a['monotonic_us']) / 1000, 'before': a, 'after': b}
             for a, b in zip(beats, beats[1:])]
     require(all(row['gap_ms'] >= 0 for row in gaps), 'SAVE_DIAGNOSTIC_HEARTBEAT_CLOCK')
-    return {'saves': result, 'slowest_save': max(result, key=lambda row: row['total_save_ms']),
+    return {**variant, 'saves': result, 'slowest_save': max(result, key=lambda row: row['total_save_ms']),
             'largest_heartbeat_gap': max(gaps, key=lambda row: row['gap_ms']),
             'native_batch_max_status_gap_ms': batch['max_status_gap_ms'],
             'formula': 'total = call + max(0, signal-return) + end-max(return,signal); all ms',
@@ -129,7 +155,8 @@ def verify_log(directory):
                               (directory / 'stdout.txt').read_bytes()), 'SAVE_DIAGNOSTIC_NATIVE_LOG')
 
 
-def run_locked(root, run_id):
+def run_locked(root, run_id, preview_mode='stock'):
+    variant = variant_metadata(preview_mode)
     owner = probe = watchdog = import_owner = None
     host = frozen = runtime = snapshot = None
     failure = report = None
@@ -144,7 +171,7 @@ def run_locked(root, run_id):
         require(cpu and not all(value > 95 for value in cpu), 'CAMPAIGN_PREFLIGHT_CPU_BUSY')
         host = native.source_files()  # After imports/preflight, include actual Python closure.
         project = root / 'project'
-        driver = patched_driver(native.read_regular(STUDIO / 'tests/replay/benchmark_native.gd'))
+        driver = patched_driver(native.read_regular(STUDIO / 'tests/replay/benchmark_native.gd'), preview_mode)
         files = {**trusted, 'project.godot': native.benchmark_project_config(trusted['project.godot']),
             native.MUTABLE_SCENE: factory.DEFAULT_SCENE, 'scripts/fixture_actor.gd': factory.DEFAULT_SCRIPT,
             'addons/hh_benchmark/benchmark_native.gd': driver,
@@ -164,7 +191,7 @@ def run_locked(root, run_id):
         lock = json.loads(native.read_regular(STUDIO / 'toolchain.lock.json'))['godot']
         exe = STUDIO / '.local/tooling/godot-4.7.2-stable' / lock['gui_executable']
         require(native.sha(native.read_regular(exe, 256 * 1024**2)) == lock['gui_sha256'], 'SAVE_DIAGNOSTIC_BINARY_PIN')
-        native.write(root / 'freeze.json', {**SCOPE, 'binding': binding, 'source_files': frozen,
+        native.write(root / 'freeze.json', {**SCOPE, **variant, 'binding': binding, 'source_files': frozen,
             'source_closure_sha256': native.closure(frozen), 'binding_excludes': ['benchmark/input.json'],
             'diagnostic_driver_sha256': native.sha(driver), 'cycles': CYCLES,
             'tracked_driver_sha256': host['tests/replay/benchmark_native.gd'],
@@ -182,7 +209,7 @@ def run_locked(root, run_id):
         require(not list((project / 'benchmark/out').iterdir()), 'SAVE_DIAGNOSTIC_IMPORT_ACTIVATED')
         snapshot = native.project_files(project)
         runtime = project_sources(project, host, runtime=True)
-        native.write(root / 'runtime-freeze.json', {**SCOPE, 'source_files': runtime,
+        native.write(root / 'runtime-freeze.json', {**SCOPE, **variant, 'source_files': runtime,
             'source_closure_sha256': native.closure(runtime), 'mutable_project_paths': [native.MUTABLE_SCENE]})
         fresh = campaign.environment_preflight()
         native.write(root / 'environment-preflight-before.json', fresh)
@@ -229,7 +256,7 @@ def run_locked(root, run_id):
         for timing, cycle in zip(batch['raw_timings'], batch['cycles']):
             native.validate_cycle_timing(timing, cycle, batch['memory'], batch)
         report = {**SCOPE, 'run_id': run_id, 'binding': binding,
-            **summarize(raw, batch, binding, captured['actual_process_exit']['pid']),
+            **summarize(raw, batch, binding, captured['actual_process_exit']['pid'], preview_mode=preview_mode),
             'actual_exits': {'import': imported['actual_process_exit'], 'editor': captured['actual_process_exit']},
             'jobs': {'import': imported['job'], 'editor': captured['job']},
             'wrapper_process_handle': captured['wrapper_process_handle'],
@@ -265,7 +292,7 @@ def run_locked(root, run_id):
             native.write(root / 'environment-preflight-after.json', campaign.environment_preflight())
         except BaseException as error:
             cleanup_errors.append({'stage': 'source_or_inventory', 'code': getattr(error, 'code', str(error))})
-    native.write(root / 'terminal.json', {**SCOPE, 'run_id': run_id,
+    native.write(root / 'terminal.json', {**SCOPE, **variant, 'run_id': run_id,
         'failure': getattr(failure, 'code', str(failure)) if failure else None, 'cleanup_errors': cleanup_errors,
         'owner_closed': owner.closed if owner else None, 'job': owner.job.snapshot() if owner and owner.job else None,
         'wrapper_process_handle': owner.process_handle_snapshot() if owner else None,
@@ -280,17 +307,20 @@ def run_locked(root, run_id):
     return 0
 
 
-def run(run_id):
+def run(run_id, preview_mode='stock'):
+    variant_metadata(preview_mode)
     require(os.name == 'nt' and re.fullmatch(r'gt06-[a-z0-9-]{1,59}', run_id), 'SAVE_DIAGNOSTIC_ID_OR_PLATFORM')
     root = STUDIO / '.local/reviews' / run_id
     root.mkdir(exist_ok=False)
     with measurement_window(run_id, 'tier-D save phase diagnostic; AUTHORITY=0',
             safe_to_release=lambda: not HELD_OWNERS and not HELD_PROBES and not native.native_job.cli_job.HOLDS):
         with campaign.environment.KeepAwake():
-            return run_locked(root, run_id)
+            return run_locked(root, run_id, preview_mode)
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--run-id', required=True)
-    raise SystemExit(run(parser.parse_args().run_id))
+    parser.add_argument('--preview-mode', choices=PREVIEW_MODES, default='stock')
+    args = parser.parse_args()
+    raise SystemExit(run(args.run_id, args.preview_mode))

@@ -7,16 +7,19 @@ from studio.tests.replay import run_save_phase_diagnostic as diagnostic
 
 
 class SavePhaseTests(unittest.TestCase):
-    def fixture(self, signal=16000):
+    def fixture(self, signal=16000, preview_mode='stock'):
         binding = {'run_id': 'synthetic', 'source_closure_sha256': 'a' * 64,
                    'profile_sha256': 'b' * 64}
         batch = {'run_id': 'synthetic', 'pid': 123, 'index': 0, 'max_status_gap_ms': 20,
             'raw_timings': [{'index': 0, 'save': {'start_us': 1000, 'end_us': 21000},
                              'save_signal_mono_us': signal}]}
         rows = [{**binding, 'pid': 123, 'batch': 0, 'cycle': 0, 'start_us': 1000,
+                 'preview_mode': preview_mode,
+                 'return_kind': 'Error' if preview_mode == 'stock' else 'void',
                  'live_batch': 0, 'live_cycle': 0, 'live_phase': 7,
                  'event': event, 'monotonic_us': when, 'result': result}
-                for event, when, result in [('return', 11000, 0), ('signal', signal, -1)]]
+                for event, when, result in [('return', 11000, 0 if preview_mode == 'stock' else None),
+                                           ('signal', signal, None)]]
         return binding, batch, rows
 
     def raw(self, rows):
@@ -67,6 +70,35 @@ class SavePhaseTests(unittest.TestCase):
             with self.subTest(field=field), self.assertRaisesRegex(
                     diagnostic.campaign.BenchmarkJobError, 'CALL_IDENTITY_DRIFT'):
                 diagnostic.summarize(self.raw(changed), batch, binding, 123, cycles=1)
+
+    def test_preview_variant_preserves_error_or_void_return_semantics(self):
+        path = diagnostic.STUDIO / 'tests/replay/benchmark_native.gd'
+        original = path.read_bytes()
+        variants = {mode: diagnostic.patched_driver(original, mode) for mode in diagnostic.PREVIEW_MODES}
+        self.assertEqual(path.read_bytes(), original)
+        self.assertNotEqual(variants['stock'], variants['off'])
+        self.assertIn(b'    var result: Error = EditorInterface.save_scene()\n', variants['stock'])
+        self.assertIn(b'    if result != OK:\n        _fail("BENCHMARK_SAVE_CALL")\n', variants['stock'])
+        self.assertIn(b'    EditorInterface.save_scene_as(SCENE, false)\n', variants['off'])
+        self.assertIn(b'_diagnostic_save_phase("return", diagnostic_return_us, null,', variants['off'])
+        self.assertNotIn(b'var result: Error = EditorInterface.save_scene()', variants['off'])
+        self.assertNotIn(b'BENCHMARK_SAVE_CALL', variants['off'])
+        readback = original.split(b'func _wait_save() -> void:\n', 1)[1].split(b'func _on_adapter_ready', 1)[0]
+        for mode, patched in variants.items():
+            with self.subTest(mode=mode):
+                self.assertIn(readback, patched)
+                binding, batch, rows = self.fixture(preview_mode=mode)
+                report = diagnostic.summarize(self.raw(rows), batch, binding, 123, cycles=1, preview_mode=mode)
+                self.assertEqual(report['preview_mode'], mode)
+                self.assertEqual(report['return_kind'], 'Error' if mode == 'stock' else 'void')
+                self.assertEqual(report['saves'][0]['return_result'], 0 if mode == 'stock' else None)
+                for field, value in [('preview_mode', 'off' if mode == 'stock' else 'stock'),
+                                     ('return_kind', 'void' if mode == 'stock' else 'Error'),
+                                     ('result', None if mode == 'stock' else 0)]:
+                    changed = copy.deepcopy(rows)
+                    changed[0][field] = value
+                    with self.subTest(field=field), self.assertRaises(diagnostic.campaign.BenchmarkJobError):
+                        diagnostic.summarize(self.raw(changed), batch, binding, 123, cycles=1, preview_mode=mode)
 
 
 if __name__ == '__main__':

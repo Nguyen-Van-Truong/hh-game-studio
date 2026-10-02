@@ -14,7 +14,7 @@
 - Formal14 source 58 file e24fa2bb22c848a0b3309ce7580c2a3ebc43d4d6916300a06c101db2ad81bc40 đã đối chiếu bản freeze/current; 84 artifact refs và watchdog replay đạt kiểm tra toàn vẹn, không thay verdict FAIL.
 - Formal11 used a fresh dry-run: available memory8.24 GiB, commit62.56%, CPU max33.65%/mean17.41% over60s, lock absent, scheduler idle and budget available. The arm is bound to source/profile and does not lower O1–O4/timeouts.
 - Formal14 host actual exit1; host/editor Jobs zero/closed, handle released; editor natural-exit receipt thiếu. Arm và demand task đã gỡ exact-name, XML/receipt giữ nguyên. Closeout: studio/.local/reviews/gt06-formal14-closeout-20261002/.
-- Hướng save diagnostic 19:43–20:23 ngày02-10 đã dùng 3 run ID: 01 sai runner20s, 02 lỗi counter query, 03 RAM giảm3.19GiB; 02/03 chưa spawn engine. Dừng retry hướng này theo O3; runner mới đã qua2 pure tests, cần review lại trước native attempt mới.
+- Preview A/B đã hoàn tất: stock01/off02 mỗi bản100/100, actual exits0; median save60.825/29.292ms, không tái hiện stall5s. Off01 dừng preflight; hướng đã dùng3IDs. Review mismatch production/benchmark, không tự chuyển formal sang no-preview hay chạy lại mù.
 - O2 tiếp tục riêng theo O8.3/AUTHORING_STATUS.md, AUTHORITY0, không merge trước GT06.
 
 This lane records diagnostics without changing the authoritative plan. Each
@@ -918,3 +918,63 @@ needed for the next repair. Raw evidence remains under `studio/.local/`.
   `41.952%`, zero foreign engines and zero running containers. This was outside
   the 22:00–06:00 dispatch window, so it did not launch a task or consume budget;
   it is only a readiness receipt for the next window.
+
+## 2026-10-02 — Preview A/B direction, preregistered before native launch
+
+- Distinct hypothesis from the pinned review above: preview readback/PNG work
+  may dominate the synchronous scene-save call. This starts a reviewed A/B
+  direction under O3, not a fourth repeat of the prior resource-blocked run.
+- Run stock then off, each fresh disposable project and100 cycles with the
+  same source, fresh60-second preflight,20-second import and180-second editor
+  diagnostic deadline. Planned IDs: gt06-preview-stock-20261002-01 and
+  gt06-preview-off-20261002-01. Stop and review if the first run fails to reach
+  its intended boundary; no automatic rerun. Direction budget:3 attempts/4h.
+- Stock preserves save_scene() Error checking. Off calls save_scene_as(SCENE,
+  false), whose return is void; record null, retain signal/disk/semantic
+  readback and reload. Four focused pure tests passed before dispatch, exit0.
+  Variant is bound in copied driver bytes, freeze, markers and offline joins.
+- Compare call/signal/readback and heartbeat timings. Fixed order, independent
+  caches and transient host load limit causal inference. A fast off run is
+  diagnostic only; it neither repairs formal14 nor changes the formal workload.
+
+## 2026-10-02 — Preview A/B completed; transient stall remains unproven
+
+- `gt06-preview-stock-20261002-01` (20:55–20:57):100/100 cycles, outer/import/
+  editor actual exit0; source unchanged, watchdog verified, Jobs zero/closed,
+  process handles/probe released. Binding closure
+  `29cf524478f0c43e95a97201afb28d9488120a635fedd3f6387186c4602b83d1`.
+  Save call median/p95/max52.1935/66.398/297.444ms; total save
+  60.8245/88.157/304.270ms. Native maximum status gap558.955ms.
+- `gt06-preview-off-20261002-01` stopped before source freeze/import/editor:
+  fresh minute fell from4.93 to3.67GiB available, commit77.178%, outerexit1
+  CAMPAIGN_PREFLIGHT_RESOURCE_LIMIT, no owned Job. Preserve raw unchanged.
+  A later readonly snapshot recovered to7.02GiB/71.27%; then fresh ID02.
+- `gt06-preview-off-20261002-02` (20:59–21:01):100/100, actual exits0 and same
+  clean owned lifecycle. Binding closure
+  `7944ad3315b1bd6ac35c6514cc9d5cd15c92e14ed87a062e40293642fdc3efdd`.
+  Call median/p95/max22.050/31.114/60.429ms; total29.292/40.680/68.173ms;
+  maximum status gap550.868ms. p95 above uses nearest-rank of100 values.
+- Shared58 source files were byte-identical across stock/off; only copied
+  variant/run binding differs. Final scenes differ only in generated root
+  unique_id. Each variant independently passed100 signal/disk/semantic/reload
+  checks; there was no call-identity drift. Original timing/raw kept intact.
+- Both native runs failed to reproduce the5.078s formal14 gap. Preview-off
+  lowers ordinary save cost in this sample, but order/cache/host load remain
+  confounders and cannot explain the prior tail stall. Three IDs consumed this
+  direction; do not run a fourth or promote off into formal merely to pass.
+  Review actual managed save versus benchmark workload/reentrancy next; when
+  evidence is insufficient, continue O2. Formal14 stays PRODUCT_FAIL.
+
+- Read-only design review: production managed save uses checked PackedScene/
+  ResourceSaver capture plus publication-owner validate/CAS/adopt/reload.
+  The direct EditorInterface save in this benchmark is deliberately synthetic;
+  removing preview would therefore change benchmark workload, not repair a
+  production consumer. No actual reentrant phase drift was observed in A/B.
+  Signal plus unchanged baseline alone is weak failed-save proof, but the full
+  error-log/modal path has not been reproduced bypassing the verifier; do not
+  present this static concern as an established false PASS or tail-stall cause.
+- O3 direction closeout/options: (1) continue O2 now, no extra GT06 runtime;
+  (2) a focused disposable failed-save negative, if pursued, tests proof strength
+  only, not the5s stall; (3) no-preview needs an explicit reviewed workload/profile
+  decision before any formal use. It must not inherit v6 comparability or change
+  old verdicts. Selected now: option1, preserve formal source/timeouts/gates.
