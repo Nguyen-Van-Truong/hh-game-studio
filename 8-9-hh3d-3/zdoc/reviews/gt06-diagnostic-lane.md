@@ -11,7 +11,7 @@
 - Save-return boundary mới: fault-ordering01 tái hiện premature readback/reload; repair02 actual exit0,27/27. Native real-save03 import/editor exit0, save/readback/reload hoàn tất; outer verifier exit1 do nhầm key-presence, đã review offline riêng, không viết lại verdict.
 - Guard chỉ khóa readback đến khi save API trảOK; heartbeat/timeouts/readback và O1–O4 giữ nguyên. Không chứng minh nguyên nhân formal14, không tự dispatch formal15; hướng boundary đã3IDs, không chạy thêm mù.
 - Offline formal21 gap review ghi nhận admitted command `.153`, lookup gap2766618us giữa hai QUEUED attempts, không có transport failure; đây là command-lane boundary, root cause chưa chứng minh và không đổi verdict.
-- O9 watchdog-only soak attempt `gt06-o9-watchdog-soak-20261003-01` mới có46 mẫu khoảng3m38s rồi thiếu process/closeout; không tính vào DoD, raw giữ riêng và phải chạy lại một soak mới đủ30 phút sau khi review runner.
+- O9 watchdog-only soak attempts `gt06-o9-watchdog-soak-20261003-01` và `...-03` chỉ có158/38 mẫu rồi dừng thiếu closeout; `...-02` dừng ở setup. Cả ba không tính DoD, raw giữ riêng. Runner đã sửa ở `ccb6792c` để bind full campaign import closure (59 files, gồm Docker module); cần soak mới đủ30 phút.
 - Không measurement live tại closeout; tiếp tục O2 registered adapter trong worktree riêng theo AUTHORING_STATUS.md, AUTHORITY0, không merge trướcGT06. Sau review mới đủ bằng chứng: fresh freeze/preflight/CPU minute/budget trước formal.
 
 This lane records diagnostics without changing the authoritative plan. Each
@@ -1141,3 +1141,14 @@ Archive manifests (AUTHORITY0, raw preserved):
   The result explicitly sets `formal_acceptance=false` and
   `root_cause_proven=false`. It confirms a reproducible evidence boundary,
   not a repair or permission to dispatch formal22.
+
+### O9 soak closure repair — incomplete attempts retained
+
+- The first detached soak attempts were stopped after partial samples and had
+  no `soak-result.json`; one setup attempt only reported `SOAK_OUTPUT_EXISTS`.
+  They are invalid DoD evidence and remain untouched under `.local`.
+- Audit found the runner's four-file manifest omitted the campaign's imported
+  dependency closure, including `benchmark_docker_inventory.py`. Commit
+  `ccb6792c` now reuses `campaign.source_files()` and adds the soak entrypoint;
+  the computed closure contains 59 files. Focused O9/environment/executor and
+  soak-manifest tests pass (80/80). A fresh soak with this closure is required.
