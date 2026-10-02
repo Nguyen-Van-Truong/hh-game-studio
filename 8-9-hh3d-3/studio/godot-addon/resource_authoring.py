@@ -24,7 +24,7 @@ _REV = re.compile(r'sha256:[0-9a-f]{64}\Z')
 _SHAPE_TYPES = frozenset(('RectangleShape2D', 'CapsuleShape2D', 'BoxShape3D', 'CapsuleShape3D'))
 _NODE_TYPES = frozenset(('CollisionShape2D', 'CollisionShape3D'))
 _CONTEXT_NODE_TYPES = _NODE_TYPES | frozenset((
-    'Node', 'Node2D', 'Node3D', 'CharacterBody2D', 'StaticBody2D'))
+    'Node', 'Node2D', 'Node3D', 'CharacterBody2D', 'StaticBody2D', 'Area2D', 'Camera2D'))
 _DIMENSION_LIMIT = 10000.0
 
 

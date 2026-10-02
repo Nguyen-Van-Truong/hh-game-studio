@@ -553,6 +553,18 @@
         "kind": "node",
         "instantiable": true,
         "properties": {
+          "collision_layer": {
+            "type": "int",
+            "writable": true,
+            "minimum": 0,
+            "maximum": 4294967295
+          },
+          "collision_mask": {
+            "type": "int",
+            "writable": true,
+            "minimum": 0,
+            "maximum": 4294967295
+          },
           "monitoring": {
             "type": "bool",
             "writable": true

@@ -9,10 +9,12 @@ var tick: int = 0
 var arena: Node2D
 var player: CharacterBody2D
 var wall: StaticBody2D
-var pickup := Area2D.new()
-var bot := Area2D.new()
-var camera := Camera2D.new()
-var hud := Label.new()
+var pickup: Area2D
+var bot: Area2D
+var camera: Camera2D
+var hud: Label
+var saved_actors_resolved: bool = false
+var saved_actor_paths: Dictionary = {}
 var projectile: Area2D
 var health: int = 3
 var bot_health: int = 1
@@ -103,19 +105,10 @@ func _ready() -> void:
 	if not _build_world():
 		get_tree().quit(32)
 		return
-	pickup.position = Vector2(70.0, 174.0)
-	pickup.collision_layer = 4
-	pickup.collision_mask = 2
-	pickup.add_child(_box(Vector2(16.0, 16.0)))
+	# Signal connections, InputMap and HUD remain runtime fixture logic.
 	pickup.body_entered.connect(_pickup_entered)
-	arena.add_child(pickup)
-	bot.position = Vector2(220.0, 174.0)
-	bot.collision_layer = 8
-	bot.collision_mask = 16
-	bot.add_child(_box(Vector2(20.0, 28.0)))
-	arena.add_child(bot)
-	arena.add_child(camera)
 	var ui := CanvasLayer.new()
+	hud = Label.new()
 	ui.add_child(hud)
 	add_child(ui)
 	_event("boot")
@@ -125,20 +118,38 @@ func _build_world() -> bool:
 		var loaded: Node = saved_world.instantiate()
 		arena = loaded as Node2D
 		if arena == null:
-			loaded.free()
+			if loaded != null:
+				loaded.free()
 			return false
 		player = arena.get_node_or_null("Player") as CharacterBody2D
 		wall = arena.get_node_or_null("Wall") as StaticBody2D
 		var saved_floor: StaticBody2D = arena.get_node_or_null("Floor") as StaticBody2D
-		if player == null or wall == null or saved_floor == null:
+		pickup = arena.get_node_or_null("Pickup") as Area2D
+		bot = arena.get_node_or_null("Bot") as Area2D
+		camera = arena.get_node_or_null("Camera") as Camera2D
+		if player == null or wall == null or saved_floor == null \
+				or pickup == null or bot == null or camera == null:
 			arena.free()
 			return false
-		for body: PhysicsBody2D in [player, wall, saved_floor]:
-			var collision: CollisionShape2D = body.get_node_or_null("Shape") as CollisionShape2D
+		for collision_object: CollisionObject2D in [player, wall, saved_floor, pickup, bot]:
+			var collision: CollisionShape2D = collision_object.get_node_or_null("Shape") as CollisionShape2D
 			if collision == null or not collision.shape is RectangleShape2D:
 				arena.free()
 				return false
+		saved_actors_resolved = pickup.get_parent() == arena and pickup.owner == arena \
+			and pickup.get_meta("hh_saved_id", "") == "pickup" \
+			and bot.get_parent() == arena and bot.owner == arena \
+			and bot.get_meta("hh_saved_id", "") == "bot" \
+			and camera.get_parent() == arena and camera.owner == arena \
+			and camera.get_meta("hh_saved_id", "") == "camera"
+		if not saved_actors_resolved:
+			arena.free()
+			return false
 		add_child(arena)
+		# Capture the actual loaded bindings now: pickup and bot are freed by
+		# the unchanged physics/event oracle before its final observation.
+		saved_actor_paths = {"pickup": str(arena.get_path_to(pickup)),
+			"bot": str(arena.get_path_to(bot)), "camera": str(arena.get_path_to(camera))}
 		return true
 	# The legacy fixture still creates exactly the same runtime geometry.
 	arena = Node2D.new()
@@ -157,6 +168,20 @@ func _build_world() -> bool:
 	player.collision_mask = 1
 	player.add_child(_box(Vector2(16.0, 32.0)))
 	arena.add_child(player)
+	pickup = Area2D.new()
+	pickup.position = Vector2(70.0, 174.0)
+	pickup.collision_layer = 4
+	pickup.collision_mask = 2
+	pickup.add_child(_box(Vector2(16.0, 16.0)))
+	arena.add_child(pickup)
+	bot = Area2D.new()
+	bot.position = Vector2(220.0, 174.0)
+	bot.collision_layer = 8
+	bot.collision_mask = 16
+	bot.add_child(_box(Vector2(20.0, 28.0)))
+	arena.add_child(bot)
+	camera = Camera2D.new()
+	arena.add_child(camera)
 	return true
 
 func _action(action: String, key: Key) -> void:
@@ -266,6 +291,9 @@ func _finish() -> void:
 	if saved_world != null:
 		state["saved_world_instantiated"] = arena.scene_file_path == saved_world.resource_path \
 			and player.get_parent() == arena and wall.get_parent() == arena
+		state["saved_world_path"] = arena.scene_file_path
+		state["saved_actors_resolved"] = saved_actors_resolved
+		state["saved_actor_paths"] = saved_actor_paths
 	_event("finish")
 	print("HH_PROBE_DEPENDENCY " + JSON.stringify(_dependency_observation()))
 	print("HH_PROBE_FIXTURE " + JSON.stringify(state))

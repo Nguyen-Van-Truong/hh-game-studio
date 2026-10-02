@@ -32,8 +32,8 @@ class SavedArenaRecipeTests(unittest.TestCase):
                 patch.object(recipe._RESOURCE, 'validate_request',
                              wraps=recipe._RESOURCE.validate_request) as resources:
             value = recipe.build_recipe()
-        self.assertEqual(nodes.call_count, 6)
-        self.assertEqual(resources.call_count, 3)
+        self.assertEqual(nodes.call_count, 11)
+        self.assertEqual(resources.call_count, 5)
         for calls, commands in ((nodes.call_args_list, value['node_commands']),
                                 (resources.call_args_list, value['resource_commands'])):
             for call, command in zip(calls, commands):
@@ -48,8 +48,12 @@ class SavedArenaRecipeTests(unittest.TestCase):
         for call in resources.call_args_list:
             context = call.args[1]
             identities = {node.stable_id: node for node in context.nodes}
+            self.assertEqual(set(identities), {node['stable_id']
+                                              for node in value['expected_snapshot']['nodes']})
+            self.assertEqual(identities['camera'].node_type, 'Camera2D')
+            self.assertEqual(identities['camera'].parent_id, 'root')
             for parent, kind in (('player', 'CharacterBody2D'), ('floor', 'StaticBody2D'),
-                                 ('wall', 'StaticBody2D')):
+                                 ('wall', 'StaticBody2D'), ('pickup', 'Area2D'), ('bot', 'Area2D')):
                 self.assertEqual(identities[parent].node_type, kind)
                 self.assertEqual(identities[parent + '_shape'].parent_id, parent)
 
@@ -57,27 +61,36 @@ class SavedArenaRecipeTests(unittest.TestCase):
         value = recipe.build_recipe()
         nodes = {row['stable_id']: row for row in value['expected_snapshot']['nodes']}
         shapes = {row['owner_stable_id']: row for row in value['expected_snapshot']['resources']}
-        self.assertEqual(len(nodes), 7)
-        self.assertEqual(len(shapes), 3)
+        self.assertEqual(len(nodes), 12)
+        self.assertEqual(len(shapes), 5)
         self.assertEqual(nodes['root'], {**value['root'], 'parent_id': None})
-        for identity, position, size, layer in (
-                ('player', [32, 174], [16, 32], 2),
-                ('floor', [200, 200], [400, 20], 1),
-                ('wall', [300, 110], [20, 160], 1)):
+        for identity, position, size, layer, mask in (
+                ('player', [32, 174], [16, 32], 2, 1),
+                ('floor', [200, 200], [400, 20], 1, 1),
+                ('wall', [300, 110], [20, 160], 1, 1),
+                ('pickup', [70, 174], [16, 16], 4, 2),
+                ('bot', [220, 174], [20, 28], 8, 16)):
             self.assertEqual(nodes[identity]['properties']['position'], position)
             self.assertEqual(nodes[identity]['properties']['collision_layer'], layer)
-            self.assertEqual(nodes[identity]['properties']['collision_mask'], 1)
+            self.assertEqual(nodes[identity]['properties']['collision_mask'], mask)
             self.assertEqual(nodes[identity + '_shape']['name'], 'Shape')
             self.assertNotIn('shape', nodes[identity + '_shape']['properties'])
             self.assertEqual(shapes[identity + '_shape'], {
                 'resource_id': 'shape.' + identity, 'owner_stable_id': identity + '_shape',
                 'resource_type': 'RectangleShape2D', 'properties': {'size': size}})
+        for identity in ('pickup', 'bot'):
+            self.assertIs(nodes[identity]['properties']['monitoring'], True)
+            self.assertIs(nodes[identity]['properties']['monitorable'], True)
+        self.assertEqual(nodes['camera'], {
+            'stable_id': 'camera', 'parent_id': 'root', 'node_type': 'Camera2D', 'name': 'Camera',
+            'properties': {'position': [0, 0], 'rotation': 0, 'scale': [1, 1],
+                           'visible': True, 'enabled': True, 'zoom': [1, 1]}})
 
-    def test_body_collision_fields_require_uint32_in_both_candidate_classes(self):
+    def test_collision_fields_require_uint32_for_bodies_and_areas(self):
         value = recipe.build_recipe()
         context = recipe._planned_context(recipe._NODE, value['initial_snapshot'],
                                           value['planned_project_revision'])
-        for kind in ('CharacterBody2D', 'StaticBody2D'):
+        for kind in ('CharacterBody2D', 'StaticBody2D', 'Area2D'):
             for field in ('collision_layer', 'collision_mask'):
                 for number in (0, 4294967295, -1, 4294967296, True, 1.5):
                     request = recipe._request(context, 'scene.node.create', 'recipe.test.body', 'root',
@@ -94,16 +107,28 @@ class SavedArenaRecipeTests(unittest.TestCase):
         value = recipe.build_recipe()
         context = recipe._planned_context(recipe._RESOURCE, value['expected_snapshot'],
                                           value['planned_project_revision'])
-        request = recipe._request(context, 'scene.resource.create', 'recipe.test.shape', 'player_shape',
-            {'resource_id': 'shape.new', 'resource_type': 'RectangleShape2D', 'properties': {'size': [16, 32]}})
-        recipe._RESOURCE.validate_request(request, context)
-        for change, code in (({'node_type': 'EditorPlugin'}, 'AUTHORING_NODE_STATE'),
-                             ({'parent_id': 'missing'}, 'AUTHORING_HIERARCHY')):
-            changed = replace(context, nodes=tuple(replace(node, **change) if node.stable_id == 'player'
-                                                  else node for node in context.nodes))
-            with self.subTest(change=change), self.assertRaises(ValidationError) as raised:
-                recipe._RESOURCE.validate_request(request, changed)
-            self.assertEqual(raised.exception.code, code)
+        for parent in ('player', 'pickup', 'bot'):
+            request = recipe._request(context, 'scene.resource.create', 'recipe.test.shape', parent + '_shape',
+                {'resource_id': 'shape.new', 'resource_type': 'RectangleShape2D', 'properties': {'size': [16, 32]}})
+            recipe._RESOURCE.validate_request(request, context)
+            for change, code in (({'node_type': 'EditorPlugin'}, 'AUTHORING_NODE_STATE'),
+                                 ({'parent_id': 'missing'}, 'AUTHORING_HIERARCHY')):
+                changed = replace(context, nodes=tuple(replace(node, **change) if node.stable_id == parent
+                                                      else node for node in context.nodes))
+                with self.subTest(parent=parent, change=change), self.assertRaises(ValidationError) as raised:
+                    recipe._RESOURCE.validate_request(request, changed)
+                self.assertEqual(raised.exception.code, code)
+
+    def test_context_area_and_camera_cannot_own_shape_resources(self):
+        value = recipe.build_recipe()
+        context = recipe._planned_context(recipe._RESOURCE, value['expected_snapshot'],
+                                          value['planned_project_revision'])
+        for target in ('pickup', 'bot', 'camera'):
+            request = recipe._request(context, 'scene.resource.create', 'recipe.test.owner', target,
+                {'resource_id': 'shape.new', 'resource_type': 'RectangleShape2D', 'properties': {'size': [16, 16]}})
+            with self.subTest(target=target), self.assertRaises(ValidationError) as raised:
+                recipe._RESOURCE.validate_request(request, context)
+            self.assertEqual(raised.exception.code, 'AUTHORING_RESOURCE_NODE_TYPE')
 
     def test_validator_rejection_cannot_return_partial_recipe(self):
         with patch.object(recipe._RESOURCE, 'validate_request', side_effect=RuntimeError('REJECT_RECIPE')):

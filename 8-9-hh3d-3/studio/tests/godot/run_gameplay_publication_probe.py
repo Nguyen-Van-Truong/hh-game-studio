@@ -88,7 +88,9 @@ def saved_arena_case(name, case, raw):
     need(SAVED_ARENA_PATH not in case.get('extra_files', {}), 'SAVED_ARENA_INPUT_COLLISION')
     return {**case, 'scene': scene,
             'extra_files': {**case.get('extra_files', {}), SAVED_ARENA_PATH: raw.decode('utf-8')},
-            'expected_state': {**case['expected_state'], 'saved_world_instantiated': True},
+            'expected_state': {**case['expected_state'], 'saved_world_instantiated': True,
+                'saved_actors_resolved': True, 'saved_world_path': 'res://scenes/arena.tscn',
+                'saved_actor_paths': {'pickup': 'Pickup', 'bot': 'Bot', 'camera': 'Camera'}},
             'dependency_files': SAVED_ARENA_DEPENDENCY_FILES}
 
 
@@ -330,7 +332,7 @@ def main():
             result.update(saved_arena_scene_sha256=saved_arena_binding['scene_sha256'],
                           saved_arena_provenance_unchanged=True,
                           saved_arena_instantiation_observed=True,
-                          saved_arena_scope='Player/Floor/Wall and shapes; other fixture actors remain runtime')
+                          saved_arena_scope='Player/Floor/Wall/Pickup/Bot and shapes plus Camera; HUD/input/signals remain runtime')
     except Exception as error:
         # Native raw remains at its original location; never log credentials or
         # arbitrary exception text. The class and phase evidence locate failure.

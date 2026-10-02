@@ -91,29 +91,37 @@ def build_recipe() -> dict:
     project_revision = _revision({'schema': SCHEMA, 'root': root, 'state_kind': 'PLANNED_NOT_NATIVE'})
     initial_snapshot = _copy(snapshot)
     node_commands, resource_commands, request_digests = [], [], {}
-    bodies = (('player', 'Player', 'CharacterBody2D', (32, 174), (16, 32), 2),
-              ('floor', 'Floor', 'StaticBody2D', (200, 200), (400, 20), 1),
-              ('wall', 'Wall', 'StaticBody2D', (300, 110), (20, 160), 1))
-    # Six node requests are validated first, in parent-before-child order.
-    for stable_id, name, node_type, position, _size, layer in bodies:
-        properties = {**_node_properties(position), 'collision_layer': layer, 'collision_mask': 1}
+    collision_objects = (
+        ('player', 'Player', 'CharacterBody2D', (32, 174), (16, 32), 2, 1),
+        ('floor', 'Floor', 'StaticBody2D', (200, 200), (400, 20), 1, 1),
+        ('wall', 'Wall', 'StaticBody2D', (300, 110), (20, 160), 1, 1),
+        ('pickup', 'Pickup', 'Area2D', (70, 174), (16, 16), 4, 2),
+        ('bot', 'Bot', 'Area2D', (220, 174), (20, 28), 8, 16))
+    node_specs = []
+    for stable_id, name, node_type, position, _size, layer, mask in collision_objects:
+        properties = {**_node_properties(position), 'collision_layer': layer, 'collision_mask': mask}
         if node_type == 'CharacterBody2D':
             properties.update(velocity=[0, 0], motion_mode=0, up_direction=[0, -1])
-        rows = ((stable_id, 'root', node_type, name, properties),
-                (stable_id + '_shape', stable_id, 'CollisionShape2D', 'Shape',
-                 {**_node_properties((0, 0)), 'disabled': False}))
-        for identity, parent, kind, node_name, values in rows:
-            context = _planned_context(_NODE, snapshot, project_revision)
-            request = _request(context, 'scene.node.create', 'recipe.node.' + identity, parent,
-                {'stable_id': identity, 'node_type': kind, 'name': node_name, 'properties': values})
-            command = _NODE.validate_request(request, context, catalog)
-            node_commands.append(command.projection)
-            request_digests[request.command_id] = command.request_digest
-            snapshot['nodes'].append({'stable_id': identity, 'parent_id': parent,
-                                      'node_type': kind, 'name': node_name, 'properties': _copy(values)})
-    # Resource contexts retain the actual planned body ancestry; no flattened
+        elif node_type == 'Area2D':
+            properties.update(monitoring=True, monitorable=True)
+        node_specs.extend(((stable_id, 'root', node_type, name, properties),
+                           (stable_id + '_shape', stable_id, 'CollisionShape2D', 'Shape',
+                            {**_node_properties((0, 0)), 'disabled': False})))
+    node_specs.append(('camera', 'root', 'Camera2D', 'Camera',
+                       {**_node_properties((0, 0)), 'enabled': True, 'zoom': [1, 1]}))
+    # Every node request is validated first, in parent-before-child order.
+    for identity, parent, kind, node_name, values in node_specs:
+        context = _planned_context(_NODE, snapshot, project_revision)
+        request = _request(context, 'scene.node.create', 'recipe.node.' + identity, parent,
+            {'stable_id': identity, 'node_type': kind, 'name': node_name, 'properties': values})
+        command = _NODE.validate_request(request, context, catalog)
+        node_commands.append(command.projection)
+        request_digests[request.command_id] = command.request_digest
+        snapshot['nodes'].append({'stable_id': identity, 'parent_id': parent,
+                                  'node_type': kind, 'name': node_name, 'properties': _copy(values)})
+    # Resource contexts retain the actual planned collision ancestry; no flattened
     # Collider->root fiction is used to satisfy the resource contract.
-    for stable_id, _name, _kind, _position, size, _layer in bodies:
+    for stable_id, _name, _kind, _position, size, _layer, _mask in collision_objects:
         context = _planned_context(_RESOURCE, snapshot, project_revision)
         owner_id, resource_id = stable_id + '_shape', 'shape.' + stable_id
         properties = {'size': list(size)}

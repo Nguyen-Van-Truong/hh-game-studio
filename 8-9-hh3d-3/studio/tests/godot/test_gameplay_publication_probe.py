@@ -153,6 +153,10 @@ class ArenaPublicationFixtureTests(unittest.TestCase):
         self.assertIn('type="PackedScene" path="res://scenes/arena.tscn"', self.case['scene'])
         self.assertIn('saved_world = ExtResource("2_world")', self.case['scene'])
         self.assertTrue(self.case['expected_state']['saved_world_instantiated'])
+        self.assertTrue(self.case['expected_state']['saved_actors_resolved'])
+        self.assertEqual(self.case['expected_state']['saved_world_path'], 'res://scenes/arena.tscn')
+        self.assertEqual(self.case['expected_state']['saved_actor_paths'],
+                         {'pickup': 'Pickup', 'bot': 'Bot', 'camera': 'Camera'})
         self.assertNotIn('saved_world_instantiated', original['expected_state'])
         self.assertEqual(probe.publication_dependency_policy(probe.ARENA_FIXTURE,
             self.case, saved_arena=True)['dependency_observation_files'],
