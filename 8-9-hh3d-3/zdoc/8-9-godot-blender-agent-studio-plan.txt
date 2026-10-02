@@ -356,8 +356,8 @@ có 2 pair PASS cùng closure.
   rerun như INFRA.
 - Formal11 HARNESS_FAIL do PerfProc: watchdog gọi powershell.exe + WMI mỗi ≤ 10 giây để lấy CPU
   vmmem. Formal13 lỗi launcher. Formal17 HARNESS_FAIL vì một lần đọc pipe Docker hết trọn 2 giây;
-  sau khi chia ngân sách (mỗi lần thử thực chất 0,4 giây), formal19 (04:44) lại HARNESS_FAIL cùng
-  lỗi sau 1 batch.
+  sau khi chia thành 2 lần thử 1 giây, formal19 (04:44) lại HARNESS_FAIL sau 1 batch vì cả hai lần
+  đều timeout (2,016 giây).
 - Formal14 PRODUCT_FAIL vì một lần save native 5,13 giây (status gap 5.077 ms), chưa rõ nguyên nhân.
 Lõi studio đã qua một pair đầy đủ; phần lớn lỗi còn lại đến từ môi trường và observer. Mỗi lần hỏng
 tốn 1–4 giờ closeout/sửa; 12/25 commit sửa plan.
