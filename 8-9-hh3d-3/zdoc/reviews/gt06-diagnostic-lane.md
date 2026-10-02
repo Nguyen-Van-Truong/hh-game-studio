@@ -20,6 +20,24 @@ This lane records diagnostics without changing the authoritative plan. Each
 entry keeps the run ID, source closure, command, actual result and the finding
 needed for the next repair. Raw evidence remains under `studio/.local/`.
 
+## 2026-10-02 — post-375947ee gate state
+
+- Commit `375947ee` implements the O7.3c per-pair launch observation: each
+  fresh pair now records a bound 60-second sample stream, replays O4.1/CPU
+  policy, rechecks source and Stop before launch, and verifies freshness against
+  the first watchdog sample. Focused launcher/campaign tests remain green
+  (107 campaign tests and 11 arm/registrar tests, exit 0); no engine or formal
+  campaign was run by this repair.
+- A read-only host snapshot at `2026-10-02T07:52:37.9515200Z` showed 6.482 GiB
+  available, total commit 79.661%, and total CPU 7.016%; this is one snapshot,
+  not the required O4.1 60-second preflight. No campaign is live and no new
+  formal ID was dispatched.
+- The next formal requires an owner-confirmed machine-on window of at least
+  four hours, a fresh source/profile freeze after `375947ee`, a new O4.1
+  preflight plus one-minute CPU observation before each pair, and an unused
+  daily INFRA budget. Do not resume formal01–10 or S258, and do not lower O1–O4
+  thresholds/timeouts.
+
 ## 2026-10-02 — per-pair launch guard repair
 
 - `run_benchmark_campaign.py` now records a new immutable `environment-launch-samples.jsonl`
