@@ -8,6 +8,37 @@ from studio.protocol.core import ValidationError, canonical_bytes, parse_json
 
 
 class SavedArenaRecipeTests(unittest.TestCase):
+    def _owner_admission(self):
+        return {'project_id': 'project.live.arena', 'revision': 'sha256:' + '1' * 64,
+                'project_revision': 'sha256:' + '2' * 64, 'generation': 7,
+                'lease_id': 'lease.live.arena', 'fencing_epoch': 3,
+                'lease_expires_ms': 50_000, 'now_ms': 1_000}
+
+    def test_recipe_binds_detached_requests_to_owner_admission(self):
+        value = recipe.bind_recipe_to_owner_admission(recipe.build_recipe(), self._owner_admission())
+        self.assertEqual(value['schema'], recipe.ADMISSION_SCHEMA)
+        self.assertEqual((value['node_command_count'], value['resource_command_count']), (13, 5))
+        self.assertFalse(value['native_observed'])
+        self.assertEqual(value['admission']['generation'], 7)
+        self.assertEqual(len(value['commands']), 18)
+        self.assertEqual(len({row['request_digest'] for row in value['commands']}), 18)
+        for row in value['commands']:
+            request = row['request']
+            self.assertEqual(request['expected_revision'], self._owner_admission()['revision'])
+            self.assertEqual(request['payload']['expected_generation'], 7)
+            self.assertEqual(request['payload']['expected_project_revision'],
+                             self._owner_admission()['project_revision'])
+
+    def test_owner_admission_binding_rejects_stale_or_tampered_recipe(self):
+        admission = self._owner_admission()
+        with self.assertRaisesRegex(ValidationError, 'ARENA_ADMISSION_LIFETIME'):
+            recipe.bind_recipe_to_owner_admission(recipe.build_recipe(),
+                                                   {**admission, 'now_ms': 50_000})
+        altered = recipe.build_recipe()
+        altered['node_commands'][0]['payload']['node_type'] = 'Node3D'
+        with self.assertRaisesRegex(ValidationError, 'AUTHORING_PROPERTY_REJECTED'):
+            recipe.bind_recipe_to_owner_admission(altered, admission)
+
     def test_document_is_reproducible_detached_and_explicitly_planned(self):
         first = recipe.build_recipe()
         frozen = canonical_bytes(first)

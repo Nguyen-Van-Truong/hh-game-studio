@@ -5,6 +5,15 @@ Tools-plan O1–O8 governs; test counts/native diagnostics do not close AUTH or 
 
 ## Current state
 
+- Saved-arena candidate composition now has a pure owner-admission binding seam:
+  `bind_recipe_to_owner_admission` rehydrates each existing node/resource projection
+  with a supplied owner project/revision/generation/lease observation, revalidates
+  through the existing typed candidate contracts, and returns detached request
+  envelopes plus projection hashes. It performs no owner submit, native edit,
+  save, ACK, or runtime claim. Focused recipe/builder tests: **15**, exit0.
+  AUTHORITY remains0; native editor proof is open and the raw `o2-authoring-update-20261002-04`
+  `EDITOR_IPC_TIMEOUT` verdict is unchanged.
+
 - Typed nodes/resources, scene instances, signals/InputMap, animation and six-effect gameplay
   shortcut have candidate validation/native readback; generic typed gameplay uses gameplay-source.
 - Blender template armature/action, geometry/material/UV, GLB export and 2D sprite import have
