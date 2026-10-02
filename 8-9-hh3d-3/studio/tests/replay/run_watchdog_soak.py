@@ -26,14 +26,14 @@ def digest(path: Path) -> str:
 
 
 def source_manifest() -> dict[str, str]:
-    paths = [
-        Path(__file__),
-        STUDIO / 'tests/replay/benchmark_environment.py',
-        STUDIO / 'tests/replay/run_benchmark_campaign.py',
-        STUDIO / 'tests/replay/benchmark_job.py',
-    ]
-    return {path.relative_to(STUDIO).as_posix(): digest(path)
-            for path in sorted(set(paths))}
+    # Reuse the campaign's verified import closure so observer-only runs bind
+    # the same Docker/query modules as a formal watchdog. Add this runner
+    # explicitly because it is the entry point rather than a campaign import.
+    campaign.load_fixture()
+    files = campaign.source_files()
+    relative = Path(__file__).relative_to(STUDIO).as_posix()
+    files[relative] = digest(Path(__file__))
+    return dict(sorted(files.items()))
 
 
 def closure(files: dict[str, str]) -> str:
