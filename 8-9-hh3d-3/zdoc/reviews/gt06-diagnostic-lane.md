@@ -1021,3 +1021,17 @@ Archive manifests (AUTHORITY0, raw preserved):
   only, not the5s stall; (3) no-preview needs an explicit reviewed workload/profile
   decision before any formal use. It must not inherit v6 comparability or change
   old verdicts. Selected now: option1, preserve formal source/timeouts/gates.
+
+## 2026-10-02 — Offline correlation review after O2/native closeout
+
+- Read-only review of formal14 `environment-launch-samples.jsonl` found 15
+  samples over about 65 seconds, with aggregate CPU mean 17.38% and maximum
+  26.98%. The samples contain UTC wall time but no monotonic binding to the
+  benchmark phase clocks; they cannot be joined safely to the 1.324 s, 2.019 s
+  or 5.130 s save bursts. Batch preview records are post-batch snapshots, not
+  measurements during the save call.
+- Existing call/scene-saved/readback timestamps remain the sufficient
+  decomposition for a future reproduced stall. No CPU, memory, disk or
+  scheduler cause is established, so no runtime latency patch, timeout change
+  or formal15 dispatch is authorized by this review. Keep formal14 PRODUCT_FAIL
+  and all raw evidence unchanged.
