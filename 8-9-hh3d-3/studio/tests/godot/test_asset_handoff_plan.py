@@ -98,6 +98,12 @@ class AssetHandoffPlanTests(unittest.TestCase):
             asset.validate_plan(changed)
         self.assertEqual(raised.exception.args[0], "ASSET_MANIFEST_SIDECAR")
 
+        changed = copy.deepcopy(value)
+        changed["assets"][1]["manifest_path"] = "assets/atlas.png"
+        with self.assertRaises(ValueError) as raised:
+            asset.validate_plan(changed)
+        self.assertEqual(raised.exception.args[0], "ASSET_MANIFEST_PATH")
+
 
 if __name__ == "__main__":
     unittest.main()

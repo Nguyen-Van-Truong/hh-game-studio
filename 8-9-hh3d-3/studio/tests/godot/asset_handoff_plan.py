@@ -106,6 +106,7 @@ def _validate_asset(row: object) -> None:
     _expect(row["fixture"] in _FIXTURES and row["source"] == "Blender", "ASSET_FIXTURE")
     _expect(row["format"] in ("GLB", "PNG") and _PATH.fullmatch(row["path"])
             and _PATH.fullmatch(row["manifest_path"]), "ASSET_PATH")
+    _expect(row["manifest_path"].endswith(".json"), "ASSET_MANIFEST_PATH")
     _expect(row["path"] in ADAPTER_ASSET_PATHS, "ASSET_ADAPTER_PATH")
     _expect(row["manifest_runtime_asset"] is False
             and row["manifest_path"] not in ADAPTER_ASSET_PATHS,
