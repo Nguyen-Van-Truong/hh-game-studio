@@ -187,9 +187,14 @@ def perf_process_times(processes):
         remaining = deadline - time.monotonic()
         if remaining <= 0:
             break
+        # Reserve an equal share for every attempt still available. A stalled
+        # first query must leave time for the bounded retry while all reads
+        # remain inside the same absolute eight-second budget.
+        attempts_left = 3 - attempt
+        timeout = remaining / attempts_left
         try:
             result = subprocess.run([str(powershell), '-NoProfile', '-NonInteractive', '-Command', script],
-                capture_output=True, timeout=remaining,
+                capture_output=True, timeout=timeout,
                 creationflags=subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0)
         except subprocess.TimeoutExpired:
             diagnostic = {'reason': 'timeout', 'attempt': attempt}

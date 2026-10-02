@@ -311,7 +311,7 @@ class EnvironmentTests(unittest.TestCase):
         self.assertIn("-Filter 'IDProcess = 1480'", script)
         self.assertNotIn('IDProcess = 42', script)
         self.assertIn('ConvertTo-Json -Compress -InputObject @(', script)
-        self.assertEqual(run.call_args.kwargs['timeout'], 8)
+        self.assertEqual(run.call_args.kwargs['timeout'], 4)
 
     def test_perfproc_fallback_failure_is_unknown_not_zero(self):
         processes = [{'pid': 1480, 'name': 'vmmemwsl', 'cpu_total_100ns': None}]
@@ -325,10 +325,10 @@ class EnvironmentTests(unittest.TestCase):
              patch.object(env.subprocess, 'run', side_effect=probe) as run:
             with self.assertRaisesRegex(BenchmarkJobError, 'PERF_COUNTER_QUERY') as raised:
                 env.perf_process_times(processes)
-        self.assertEqual(run.call_count, 1)
-        self.assertEqual(run.call_args.kwargs['timeout'], 8)
+        self.assertEqual(run.call_count, 2)
+        self.assertEqual([call.kwargs['timeout'] for call in run.call_args_list], [4, 4])
         self.assertEqual(raised.exception.perf_counter,
-                         {'reason': 'timeout', 'attempt': 1, 'elapsed_seconds': 8})
+                         {'reason': 'timeout', 'attempt': 2, 'elapsed_seconds': 8})
         self.assertIsNone(raised.exception.__cause__)
         self.assertIsNone(raised.exception.__context__)
         self.assertNotIn('secret', ''.join(traceback.format_exception(raised.exception)))
@@ -349,7 +349,7 @@ class EnvironmentTests(unittest.TestCase):
             result = env.perf_process_times(processes)
         self.assertEqual(result[1480]['cpu_total_100ns'], 120)
         self.assertEqual(run.call_count, 2)
-        self.assertEqual([call.kwargs['timeout'] for call in run.call_args_list], [8, 7.75])
+        self.assertEqual([call.kwargs['timeout'] for call in run.call_args_list], [4, 7.75])
 
     def test_perfproc_partial_timeout_retry_cannot_restart_total_deadline(self):
         processes = [{'pid': 1480, 'name': 'vmmemwsl', 'cpu_total_100ns': None}]
@@ -362,7 +362,7 @@ class EnvironmentTests(unittest.TestCase):
              patch.object(env.subprocess, 'run', side_effect=probe) as run:
             with self.assertRaisesRegex(BenchmarkJobError, 'PERF_COUNTER_QUERY') as raised:
                 env.perf_process_times(processes)
-        self.assertEqual([call.kwargs['timeout'] for call in run.call_args_list], [8, 7.25])
+        self.assertEqual([call.kwargs['timeout'] for call in run.call_args_list], [4, 7.25])
         self.assertEqual(raised.exception.perf_counter,
                          {'reason': 'timeout', 'attempt': 2, 'elapsed_seconds': 8})
 
@@ -381,7 +381,7 @@ class EnvironmentTests(unittest.TestCase):
              patch.object(env.subprocess, 'run', side_effect=probe) as run:
             result = env.perf_process_times(processes)
         self.assertEqual(result[1480]['cpu_total_100ns'], 120)
-        self.assertEqual([call.kwargs['timeout'] for call in run.call_args_list], [8, 7.875])
+        self.assertEqual([call.kwargs['timeout'] for call in run.call_args_list], [4, 7.875])
 
     def test_perfproc_late_success_is_unknown_without_retry(self):
         clock = [100.0]
