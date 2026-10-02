@@ -3,6 +3,15 @@
 AUTHORITY=0. Branch `codex/o2-authoring-contract`; no merge before GT-06 ACCEPTED.
 Tools-plan O1–O8 governs; test counts/native diagnostics do not close AUTH or a WP.
 
+## 2026-10-03 — Static asset contract binding hardening
+
+- The asset handoff verifier now binds each planned asset ID to its exact
+  fixture, adapter path, format and detached manifest path. A row that swaps
+  the 2D/3D fixture or reuses the other manifest fails closed before any native
+  work. Focused asset/profile tests: **23**, actual exit0. This remains a
+  static authority-zero contract; Blender export and Godot import/readback are
+  still pending.
+
 - Added an authority-zero asset handoff plan for both fixture lanes (`tests/godot/asset_handoff_plan.py`). The room GLB row records explicit Blender geometry/material/UV/axis/export/import-readback steps, while the arena row records the separate pose-render/sprite-sheet/texture-readback path at the adapter's admitted `assets/sprite_sheet.png` path. A pure cross-contract check binds both handoff paths to the existing gameplay-source adapter; runtime paths are limited to `assets/avatar.glb` and `assets/sprite_sheet.png`, manifest paths are explicitly detached sidecars, and each planning profile label is bound to an existing source file. Profile references and sidecar/runtime drift fail closed; every import/native flag remains false. 26 focused pure tests exit0; this is a static handoff contract only and does not verify a Blender export, Godot import, texture readback, or gameplay.
 
 ## Current state

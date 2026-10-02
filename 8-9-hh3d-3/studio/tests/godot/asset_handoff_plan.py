@@ -24,6 +24,19 @@ _FIXTURES = {"room_3d", "arena_2d"}
 # These are the two exact asset paths that the adapter/executor admit today;
 # Blender export/readback remains a later native gate.
 ADAPTER_ASSET_PATHS = frozenset(("assets/avatar.glb", "assets/sprite_sheet.png"))
+# Keep each adapter path tied to the fixture and import contract that consumes
+# it.  Merely admitting a known path is insufficient: a swapped 2D/3D row
+# could otherwise pass static validation while describing the wrong handoff.
+ASSET_CONTRACTS = {
+    "avatar_blender": {
+        "fixture": "room_3d", "path": "assets/avatar.glb", "format": "GLB",
+        "manifest_path": "assets/manifest.json",
+    },
+    "arena_sprite_atlas": {
+        "fixture": "arena_2d", "path": "assets/sprite_sheet.png", "format": "PNG",
+        "manifest_path": "assets/arena_sprite_atlas.json",
+    },
+}
 # These labels are planning labels, not implementation claims.  Binding each
 # label to its source file makes drift fail closed; native profile proof is
 # still required before any label can be treated as enabled.
@@ -108,6 +121,9 @@ def _validate_asset(row: object) -> None:
             and _PATH.fullmatch(row["manifest_path"]), "ASSET_PATH")
     _expect(row["manifest_path"].endswith(".json"), "ASSET_MANIFEST_PATH")
     _expect(row["path"] in ADAPTER_ASSET_PATHS, "ASSET_ADAPTER_PATH")
+    contract = ASSET_CONTRACTS.get(row["asset_id"])
+    _expect(contract is not None and all(row[key] == expected for key, expected in contract.items()),
+            "ASSET_CONTRACT_BINDING")
     _expect(row["manifest_runtime_asset"] is False
             and row["manifest_path"] not in ADAPTER_ASSET_PATHS,
             "ASSET_MANIFEST_SIDECAR")

@@ -105,6 +105,24 @@ class AssetHandoffPlanTests(unittest.TestCase):
             asset.validate_plan(changed)
         self.assertEqual(raised.exception.args[0], "ASSET_MANIFEST_PATH")
 
+    def test_asset_id_binds_fixture_format_and_manifest_contract(self):
+        value = asset.build_plan()
+        changed = copy.deepcopy(value)
+        changed["assets"][0]["fixture"] = "arena_2d"
+        changed["canonical_sha256"] = asset._sha(
+            {key: changed[key] for key in changed if key != "canonical_sha256"})
+        with self.assertRaises(ValueError) as raised:
+            asset.validate_plan(changed)
+        self.assertEqual(raised.exception.args[0], "ASSET_CONTRACT_BINDING")
+
+        changed = copy.deepcopy(value)
+        changed["assets"][1]["manifest_path"] = "assets/manifest.json"
+        changed["canonical_sha256"] = asset._sha(
+            {key: changed[key] for key in changed if key != "canonical_sha256"})
+        with self.assertRaises(ValueError) as raised:
+            asset.validate_plan(changed)
+        self.assertEqual(raised.exception.args[0], "ASSET_CONTRACT_BINDING")
+
 
 if __name__ == "__main__":
     unittest.main()
