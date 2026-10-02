@@ -76,8 +76,9 @@ class ArmTests(unittest.TestCase):
         before = {p.name: p.read_bytes() for p in self.root.iterdir()}
         self.assertEqual(self.invoke('--validate'), 0)
         self.assertEqual(before, {p.name: p.read_bytes() for p in self.root.iterdir()})
-        terminal = {'schema': 'HH-GT06-TASK-STATUS-1', 'campaign_id': 'gt06-o4-formal-10',
-                    'state': 3, 'instances': [], 'formal_acceptance': False}
+        terminal = {'schema': 'HH-GT06-TASK-STATUS-1', 'task_path': '\\HHStudio.GT06.gt06-o4-formal-10',
+                    'campaign_id': 'gt06-o4-formal-10', 'mode': 'campaign', 'state': 3,
+                    'last_task_result': 1, 'instances': [], 'formal_acceptance': False}
         with patch.object(arm, 'fresh_probe', return_value=self.observation()) as probe, \
              patch.object(arm, 'keep_awake', return_value=contextlib.nullcontext()) as awake, \
              patch.object(arm.subprocess, 'run', side_effect=[subprocess.CompletedProcess([], 0),
@@ -90,6 +91,37 @@ class ArmTests(unittest.TestCase):
         self.assertEqual(dispatch[-6:], ['-Command', 'register-run', '-CampaignId', 'gt06-o4-formal-10', '-Mode', 'campaign'])
         self.assertEqual(status[-4:], ['-Command', 'status', '-CampaignId', 'gt06-o4-formal-10'])
         self.assertEqual(json.loads((self.root / 'campaign-terminal-scheduler.json').read_bytes()), terminal)
+        receipt = json.loads((self.root / 'campaign-status-receipt-01.json').read_bytes())
+        self.assertEqual(receipt['return_code'], 0)
+        self.assertEqual(receipt['stderr'], '')
+        self.assertFalse(receipt['campaign_success'])
+
+    def test_status_validation_rejects_malformed_and_mismatched_rows(self):
+        valid = {'schema': arm.STATUS_SCHEMA, 'task_path': '\\HHStudio.GT06.gt06-o4-formal-10',
+                 'campaign_id': 'gt06-o4-formal-10', 'mode': 'campaign', 'state': 3,
+                 'last_task_result': 1, 'instances': []}
+        arm.validate_status(valid, 'gt06-o4-formal-10')
+        for field, value in (('schema', 'wrong'), ('campaign_id', 'gt06-o4-formal-09'),
+                             ('task_path', '\\wrong'), ('mode', 'probe'), ('instances', {}),
+                             ('last_task_result', '1')):
+            with self.subTest(field=field):
+                with self.assertRaises(ValueError):
+                    arm.validate_status({**valid, field: value}, 'gt06-o4-formal-10')
+
+    def test_nonzero_status_poll_retains_raw_receipt_and_does_not_retry(self):
+        self.save_request()
+        self.dry_run()
+        result = subprocess.CompletedProcess([], 7, b'{"bad":true}', b'status failure')
+        with patch.object(arm, 'fresh_probe', return_value=self.observation()), \
+             patch.object(arm, 'keep_awake', return_value=contextlib.nullcontext()), \
+             patch.object(arm.subprocess, 'run', side_effect=[subprocess.CompletedProcess([], 0), result]) as launcher:
+            self.assertEqual(self.invoke('--run'), 1)
+        self.assertEqual(launcher.call_count, 2)
+        receipt = json.loads((self.root / 'campaign-status-receipt-01.json').read_bytes())
+        self.assertEqual(receipt['return_code'], 7)
+        self.assertEqual(receipt['stdout'], '{"bad":true}')
+        self.assertEqual(receipt['stderr'], 'status failure')
+        self.assertEqual(receipt['error'], 'CAMPAIGN_STATUS_NONZERO')
 
     def test_failed_dry_run_before_window_cannot_arm(self):
         self.config['start'] = (self.at + timedelta(hours=1)).isoformat()

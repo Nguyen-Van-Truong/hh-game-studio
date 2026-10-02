@@ -6,6 +6,7 @@ an uncertain scheduler response is never retried. No acceptance is granted here.
 from __future__ import annotations
 
 import argparse
+import base64
 from datetime import datetime, timezone
 import hashlib
 import json
@@ -25,6 +26,8 @@ HERE = Path(__file__).resolve()
 POWERSHELL = Path(os.environ.get('WINDIR', 'C:/Windows')) / 'System32/WindowsPowerShell/v1.0/powershell.exe'
 CAMPAIGN_PATTERN = re.compile(r'gt06-o4-formal-(?:0[1-9]|[1-9][0-9])')
 ARM_TASK_PATTERN = re.compile(r'HHStudio\.GT06\.arm-formal(?:0[1-9]|[1-9][0-9])-\d{8}')
+STATUS_SCHEMA = 'HH-GT06-TASK-STATUS-1'
+STATUS_RECEIPT_SCHEMA = 'HH-GT06-ARM-STATUS-RECEIPT-1'
 
 
 def now():
@@ -79,6 +82,82 @@ def write(path, value):
         stream.write('\n')
         stream.flush()
         os.fsync(stream.fileno())
+
+
+def validate_status(status, campaign_id):
+    """Validate the scheduler response binding before it can close the arm.
+
+    Scheduler state is only a dispatch/closeout observation.  It is never a
+    campaign result, so this deliberately validates the fields needed to
+    identify the task and distinguish a running task from a terminal one.
+    """
+    if not isinstance(status, dict) or status.get('schema') != STATUS_SCHEMA:
+        raise ValueError('CAMPAIGN_STATUS_SCHEMA')
+    if status.get('campaign_id') != campaign_id:
+        raise ValueError('CAMPAIGN_STATUS_CAMPAIGN_MISMATCH')
+    expected_path = '\\HHStudio.GT06.' + campaign_id
+    if status.get('task_path') != expected_path:
+        raise ValueError('CAMPAIGN_STATUS_TASK_PATH_MISMATCH')
+    if status.get('mode') != 'campaign':
+        raise ValueError('CAMPAIGN_STATUS_MODE_MISMATCH')
+    instances = status.get('instances')
+    if not isinstance(instances, list):
+        raise ValueError('CAMPAIGN_STATUS_INSTANCES')
+    for instance in instances:
+        if not isinstance(instance, dict):
+            raise ValueError('CAMPAIGN_STATUS_INSTANCE_ROW')
+        if not isinstance(instance.get('instance_guid'), str) or not instance['instance_guid']:
+            raise ValueError('CAMPAIGN_STATUS_INSTANCE_GUID')
+        if type(instance.get('state')) is not int or instance['state'] < 0:
+            raise ValueError('CAMPAIGN_STATUS_INSTANCE_STATE')
+        if type(instance.get('scheduler_engine_pid')) is not int or instance['scheduler_engine_pid'] < 0:
+            raise ValueError('CAMPAIGN_STATUS_INSTANCE_ENGINE_PID')
+    if type(status.get('state')) is not int or status['state'] < 0:
+        raise ValueError('CAMPAIGN_STATUS_STATE')
+    if type(status.get('last_task_result')) is not int:
+        raise ValueError('CAMPAIGN_STATUS_LAST_TASK_RESULT')
+    return status
+
+
+def _raw_stream(value):
+    if value is None:
+        return b''
+    if isinstance(value, bytes):
+        return value
+    if isinstance(value, bytearray):
+        return bytes(value)
+    if isinstance(value, str):
+        return value.encode('utf-8', errors='replace')
+    return str(value).encode('utf-8', errors='replace')
+
+
+def write_status_receipt(root, poll, campaign_id, result=None, *, error=None, status=None):
+    """Persist every status poll, including malformed/nonzero responses."""
+    stdout = _raw_stream(getattr(result, 'stdout', None))
+    stderr = _raw_stream(getattr(result, 'stderr', None))
+    return_code = getattr(result, 'returncode', None)
+    receipt = {
+        'schema': STATUS_RECEIPT_SCHEMA,
+        'campaign_id': campaign_id,
+        'poll': poll,
+        'observed_at': now().isoformat(),
+        'return_code': return_code,
+        'exit_code': return_code,
+        'stdout': stdout.decode('utf-8-sig', errors='replace'),
+        'stderr': stderr.decode('utf-8-sig', errors='replace'),
+        'stdout_base64': base64.b64encode(stdout).decode('ascii'),
+        'stderr_base64': base64.b64encode(stderr).decode('ascii'),
+        'status_scope': 'Scheduler state only; not actual process exit or campaign success',
+        'formal_acceptance': False,
+        'campaign_success': False,
+    }
+    if status is not None:
+        receipt['status'] = status
+    if error is not None:
+        receipt['error'] = str(error)
+    path = root / f'campaign-status-receipt-{poll:02d}.json'
+    write(path, receipt)
+    return path
 
 
 def decision(config, observation, at):
@@ -242,13 +321,33 @@ def run(config, root, request=None):
                 status_command = [str(POWERSHELL), '-NoProfile', '-NonInteractive', '-ExecutionPolicy', 'Bypass',
                                   '-File', str(STUDIO / 'tests/replay/campaign_task.ps1'),
                                   '-Command', 'status', '-CampaignId', campaign_id]
+                poll = 0
                 while now() < end:
-                    result = subprocess.run(status_command,
-                                            capture_output=True, timeout=30, creationflags=0x08000000)
+                    poll += 1
+                    result = None
+                    try:
+                        result = subprocess.run(status_command,
+                                                capture_output=True, timeout=30, creationflags=0x08000000)
+                    except Exception as error:
+                        # Preserve timeout/OSError streams before closing the
+                        # arm.  There is intentionally no retry after dispatch.
+                        write_status_receipt(root, poll, campaign_id, error=error)
+                        raise RuntimeError('CAMPAIGN_STATUS_UNKNOWN_NO_RETRY') from error
                     if result.returncode != 0:
+                        write_status_receipt(root, poll, campaign_id, result,
+                                             error='CAMPAIGN_STATUS_NONZERO')
                         raise RuntimeError('CAMPAIGN_STATUS_UNKNOWN_NO_RETRY')
-                    status = json.loads(result.stdout.decode('utf-8-sig'))
+                    status = None
+                    try:
+                        status = json.loads(result.stdout.decode('utf-8-sig'))
+                        validate_status(status, campaign_id)
+                    except Exception as error:
+                        write_status_receipt(root, poll, campaign_id, result, error=error, status=status)
+                        raise RuntimeError('CAMPAIGN_STATUS_INVALID_NO_RETRY') from error
+                    write_status_receipt(root, poll, campaign_id, result, status=status)
                     if not status['instances'] and status['state'] in (1, 3):
+                        # This closes the one-shot arm only.  Scheduler state,
+                        # including LastTaskResult=1, is never campaign success.
                         write(root / 'campaign-terminal-scheduler.json', status)
                         return
                     time.sleep(min(30, max(0, (end - now()).total_seconds())))
