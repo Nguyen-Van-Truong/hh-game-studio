@@ -30,6 +30,15 @@ Tools-plan O1–O8 governs; test counts/native diagnostics do not close AUTH or 
   AUTHORITY remains0; this does not open GT-06 or prove Blender/Godot native
   import.
 
+- The 2D arena fixture now has a pure composition plan over the existing
+  TileMapLayer, signal/group/InputMap edge and typed gameplay validators. It
+  binds nine deterministic platform cells, pickup/bot/lifecycle edges and
+  typed player/pickup/bot source references into a canonical
+  `DETACHED_PLAN_ONLY` document. Its offline verifier rejects unknown fields,
+  stale admission, altered projection hashes and validator-invalid rows;
+  eight focused tests exit0. This remains authority0: no Godot mutation,
+  native readback, save, ACK, or complete-game claim.
+
 - Typed nodes/resources, scene instances, signals/InputMap, animation and six-effect gameplay
   shortcut have candidate validation/native readback; generic typed gameplay uses gameplay-source.
 - Blender template armature/action, geometry/material/UV, GLB export and 2D sprite import have
