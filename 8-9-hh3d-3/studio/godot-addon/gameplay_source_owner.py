@@ -92,8 +92,11 @@ def _dependency_policy_payload(required: bool, files=()) -> bytes:
     _need(type(files) is tuple and all(type(name) is str and name for name in files),
           "GAMEPLAY_OWNER_DEPENDENCY_POLICY")
     _need(tuple(sorted(set(files))) == files, "GAMEPLAY_OWNER_DEPENDENCY_POLICY")
-    return canonical_bytes({"schema": DEPENDENCY_POLICY_SCHEMA, "required": required,
-                            "files": list(files)})
+    _need(required == bool(files), "GAMEPLAY_OWNER_DEPENDENCY_POLICY")
+    raw = canonical_bytes({"schema": DEPENDENCY_POLICY_SCHEMA, "required": required,
+                           "files": list(files)})
+    _need(len(raw) <= 4096, "GAMEPLAY_OWNER_DEPENDENCY_POLICY")
+    return raw
 
 
 def _write_dependency_policy(root: Path, required: bool, files=()) -> None:
@@ -217,6 +220,7 @@ class GameplaySourcePublicationOwner:
         dependency_observation_files = tuple(sorted(dependency_observation_files))
         _need(not dependency_observation_required or dependency_observation_files,
               "GAMEPLAY_OWNER_DEPENDENCY_POLICY")
+        _dependency_policy_payload(dependency_observation_required, dependency_observation_files)
         _need(runtime_source_closure()[1] == source_closure_sha256,
               "GAMEPLAY_OWNER_SOURCE_CLOSURE_MISMATCH")
         owner = object.__new__(cls)
@@ -246,6 +250,8 @@ class GameplaySourcePublicationOwner:
         owner._runs.mkdir()
         _write_dependency_policy(owner._root, dependency_observation_required,
                                  dependency_observation_files)
+        owner._dependency_policy_sha256 = _sha(_dependency_policy_payload(
+            dependency_observation_required, dependency_observation_files))
         owner._session = session_model.PublicationSession(project_id, owner._root,
                                                            contract.CATALOG_DIGEST)
         owner._files = candidate
@@ -257,6 +263,7 @@ class GameplaySourcePublicationOwner:
         owner._append({"schema": JOURNAL_SCHEMA, "kind": "INITIAL",
                        "project_id": project_id, "profile": PROFILE, "entrypoint": ENTRYPOINT,
                        "source_closure_sha256": source_closure_sha256,
+                       "dependency_policy_sha256": owner._dependency_policy_sha256,
                        "generation": owner._generation,
                        "project_revision": owner._project_revision,
                        "source_sha256": owner._source_hash(owner._files),
@@ -288,7 +295,9 @@ class GameplaySourcePublicationOwner:
                   "GAMEPLAY_OWNER_DEPENDENCY_POLICY_MISMATCH")
         if dependency_observation_files is not None:
             _need(type(dependency_observation_files) is tuple
-                  and dependency_observation_files == dependency_files,
+                  and all(type(name) is str for name in dependency_observation_files)
+                  and len(set(dependency_observation_files)) == len(dependency_observation_files)
+                  and tuple(sorted(dependency_observation_files)) == dependency_files,
                   "GAMEPLAY_OWNER_DEPENDENCY_POLICY_MISMATCH")
         rows = []
         journal = root / "journal.jsonl"
@@ -325,15 +334,18 @@ class GameplaySourcePublicationOwner:
         owner._journal = journal
         owner._dependency_observation_required = dependency_required
         owner._dependency_observation_files = dependency_files
-        owner._reconcile_stage_markers()
+        owner._dependency_policy_sha256 = _sha(_dependency_policy_payload(
+            dependency_required, dependency_files))
         # Rebuild only a fully validated terminal history. Selector mismatch
         # is reconciled only after the journal and selected revision have been
         # fully checked; malformed or truncated durable state still fails closed.
         initial = rows[0]
         _need(set(initial) == {"schema", "kind", "project_id", "profile", "entrypoint",
               "source_closure_sha256", "generation", "project_revision", "source_sha256",
-              "fencing_epoch", "observed_ms"} and initial["kind"] == "INITIAL"
+              "fencing_epoch", "observed_ms", "dependency_policy_sha256"} and initial["kind"] == "INITIAL"
               and initial["schema"] == JOURNAL_SCHEMA, "GAMEPLAY_OWNER_JOURNAL_INITIAL")
+        _need(initial["dependency_policy_sha256"] == owner._dependency_policy_sha256,
+              "GAMEPLAY_OWNER_DEPENDENCY_POLICY_MISMATCH")
         _need(initial["project_id"] == project_id and initial["profile"] == PROFILE
               and initial["entrypoint"] == ENTRYPOINT
               and initial["source_closure_sha256"] == source_closure_sha256,
@@ -344,6 +356,7 @@ class GameplaySourcePublicationOwner:
               and 0 <= initial["observed_ms"] <= SAFE_INTEGER,
               "GAMEPLAY_OWNER_JOURNAL_INITIAL")
         files = owner._read_revision(initial["project_revision"])
+        owner._dependency_inputs(files)
         _need(initial["source_sha256"] == owner._source_hash(files),
               "GAMEPLAY_OWNER_JOURNAL_SOURCE")
         terminal_keys = {"schema", "project_id", "profile", "entrypoint",
@@ -391,7 +404,7 @@ class GameplaySourcePublicationOwner:
             owner._validate_native(native, expected_input_hashes=owner._native_inputs(files),
                                    expected_source_closure_sha256=owner.source_closure_sha256,
                                    evidence_directory=owner._runs / receipt.command_id,
-                                   expected_dependency_files={name: files[name] for name in owner._dependency_observation_files},
+                                   expected_dependency_files=owner._dependency_inputs(files),
                                    dependency_observation_required=owner._dependency_observation_required)
             _need(native["run_id"] == receipt.native_run_id,
                   "GAMEPLAY_OWNER_NATIVE_RUN_BINDING")
@@ -418,6 +431,8 @@ class GameplaySourcePublicationOwner:
         # Durable receipt verification can load the raw-log policy. Recheck
         # the generation after that work and before repairing any selector.
         runtime_source_closure()
+        owner._check_dependency_policy()
+        owner._reconcile_stage_markers()
         if selector != expected_selector:
             # Journal validation above proves the durable target first; only
             # then may recovery repair the pointer file.
@@ -574,10 +589,22 @@ class GameplaySourcePublicationOwner:
         self._journal_digest = _sha(persisted)
 
     def _read_current_journal(self) -> bytes:
+        self._check_dependency_policy()
         raw = self._executor._read_file(self._journal, MAX_JOURNAL_BYTES)
         _need(self._journal_digest is not None and _sha(raw) == self._journal_digest,
               "GAMEPLAY_OWNER_JOURNAL_CHANGED")
         return raw
+
+    def _check_dependency_policy(self):
+        raw = self._executor._read_file(self._root / DEPENDENCY_POLICY_FILE, 4096)
+        _need(_sha(raw) == self._dependency_policy_sha256,
+              "GAMEPLAY_OWNER_DEPENDENCY_POLICY_CHANGED")
+
+    def _dependency_inputs(self, files):
+        _need(all(name in files and type(files[name]) is bytes
+                  for name in self._dependency_observation_files),
+              "GAMEPLAY_OWNER_DEPENDENCY_FILES")
+        return {name: files[name] for name in self._dependency_observation_files}
 
     def issue(self, *, operations=None, ttl_ms=120_000):
         if operations is None:
@@ -628,69 +655,55 @@ class GameplaySourcePublicationOwner:
         return value
 
     @staticmethod
-    def _validate_dependency_observation(result: dict, *, evidence_directory: Path,
-                                         expected_files) -> dict:
-        """Re-read and byte-bind the native graph before any selector change."""
+    def _dependency_observation_binding(result: dict, *, evidence_directory: Path,
+                                        expected_files) -> dict:
+        """Derive evidence from the exact immutable inputs and retained raw."""
         _need(isinstance(evidence_directory, Path) and evidence_directory.is_absolute(),
               "GAMEPLAY_OWNER_DEPENDENCY_OUTPUT")
         _need(isinstance(expected_files, Mapping) and expected_files,
               "GAMEPLAY_OWNER_DEPENDENCY_FILES")
         try:
             executor = _load("linux_executor")
+            native_raw = executor._read_file(evidence_directory / "result.json", 512 * 1024)
+            _need(canonical_bytes(parse_json(native_raw)) == canonical_bytes(result),
+                  "GAMEPLAY_OWNER_NATIVE_RESULT_BINDING")
             stdout = executor._read_file(evidence_directory / "engine-stdout.txt", 262144)
             marker = _load("gameplay_dependency_observation")
             report = marker.parse_dependency_observation(stdout, expected_files)
+        except GameplaySourceOwnerError:
+            raise
         except (OSError, ValueError, SafetyViolation):
             raise GameplaySourceOwnerError("GAMEPLAY_OWNER_DEPENDENCY_OBSERVATION") from None
-        expected_hashes = {name: _sha(raw) for name, raw in sorted(expected_files.items())}
-        _need(result.get("dependency_observation") == report
-              and result.get("dependency_observation_graph_sha256") == report["graph_sha256"]
-              and result.get("dependency_observation_stdout_sha256") == _sha(stdout)
-              and result.get("dependency_observation_input_hashes") == expected_hashes,
+        return {"schema": "hh-gameplay-dependency-binding-1", "report": report,
+                "native_result_sha256": _sha(native_raw), "stdout_sha256": _sha(stdout),
+                "input_hashes": {name: _sha(raw) for name, raw in sorted(expected_files.items())}}
+
+    @staticmethod
+    def _validate_dependency_observation(result: dict, *, evidence_directory: Path,
+                                         expected_files) -> dict:
+        binding = GameplaySourcePublicationOwner._dependency_observation_binding(
+            result, evidence_directory=evidence_directory, expected_files=expected_files)
+        try:
+            raw = _load("linux_executor")._read_file(
+                evidence_directory / "dependency-observation.json", 512 * 1024)
+        except (OSError, ValueError, SafetyViolation):
+            raise GameplaySourceOwnerError("GAMEPLAY_OWNER_DEPENDENCY_BINDING") from None
+        _need(raw == canonical_bytes(binding),
               "GAMEPLAY_OWNER_DEPENDENCY_BINDING")
-        return report
+        return binding
 
     def _persist_dependency_observation(self, result: dict, output: Path,
                                         expected_files) -> dict:
-        """Persist the canonical marker report before native adoption."""
-        _need(isinstance(output, Path) and output.is_absolute(),
-              "GAMEPLAY_OWNER_DEPENDENCY_OUTPUT")
-        _need(isinstance(expected_files, Mapping) and expected_files,
-              "GAMEPLAY_OWNER_DEPENDENCY_FILES")
-        try:
-            stdout = self._executor._read_file(output / "engine-stdout.txt", 262144)
-            marker = _load("gameplay_dependency_observation")
-            report = marker.parse_dependency_observation(stdout, expected_files)
-        except (OSError, ValueError, SafetyViolation):
-            raise GameplaySourceOwnerError("GAMEPLAY_OWNER_DEPENDENCY_OBSERVATION") from None
-        expected_hashes = {name: _sha(raw) for name, raw in sorted(expected_files.items())}
-        additions = {
-            "dependency_observation": report,
-            "dependency_observation_graph_sha256": report["graph_sha256"],
-            "dependency_observation_stdout_sha256": _sha(stdout),
-            "dependency_observation_input_hashes": expected_hashes,
-        }
-        for key, value in additions.items():
-            if key in result:
-                _need(canonical_bytes(result[key]) == canonical_bytes(value),
-                      "GAMEPLAY_OWNER_DEPENDENCY_BINDING")
-        persisted = {**result, **additions}
-        result_path = output / "result.json"
+        """Write a new sidecar; the executor's raw result stays byte-identical."""
+        binding = self._dependency_observation_binding(
+            result, evidence_directory=output, expected_files=expected_files)
         self._executor._no_links(output)
-        self._executor._read_file(result_path, 512 * 1024)
-        temporary = result_path.with_name("result." + uuid.uuid4().hex + ".tmp")
-        try:
-            with temporary.open("xb") as stream:
-                stream.write(canonical_bytes(persisted))
-                stream.flush()
-                os.fsync(stream.fileno())
-            os.replace(temporary, result_path)
-        finally:
-            try:
-                temporary.unlink()
-            except FileNotFoundError:
-                pass
-        return self._read_native_result(output, persisted)
+        with (output / "dependency-observation.json").open("xb") as stream:
+            stream.write(canonical_bytes(binding))
+            stream.flush()
+            os.fsync(stream.fileno())
+        return self._validate_dependency_observation(
+            result, evidence_directory=output, expected_files=expected_files)
 
     @staticmethod
     def _validate_native(result: dict, *, expected_input_hashes,
@@ -717,7 +730,7 @@ class GameplaySourcePublicationOwner:
                     and re.search(r'ERROR|WARNING|leaked', combined, re.IGNORECASE) is None)
                 scripts = [ENTRYPOINT] + sorted(name for name in expected_input_hashes
                     if name.startswith("scripts/") and name.endswith(".gd") and name != ENTRYPOINT)
-                observed_policy = executor._gameplay_log_policy().classify(stdout, stderr, scripts)
+                observed_policy = _load('gameplay_log_policy').classify(stdout, stderr, scripts)
                 # Recompute from retained raw on publish AND reopen. Caller
                 # flags or an earlier persisted verdict cannot substitute.
                 explained_startup = (result.get("diagnostic_process_clean") is False
@@ -782,6 +795,15 @@ class GameplaySourcePublicationOwner:
         return {"project.godot": _sha(self._profile.PROJECT_TEMPLATE.encode()),
                 **{name: _sha(raw) for name, raw in sorted(files.items())}}
 
+    def _recheck_dependency_evidence(self, command_id, files):
+        if self._dependency_observation_required:
+            output = self._runs / command_id
+            self._validate_native(self._read_native_result(output),
+                expected_input_hashes=self._native_inputs(files),
+                expected_source_closure_sha256=self.source_closure_sha256,
+                evidence_directory=output, expected_dependency_files=self._dependency_inputs(files),
+                dependency_observation_required=True)
+
     def _read_native_result(self, output: Path, returned=_UNSET_RESULT) -> dict:
         """Bind the in-memory diagnostic to the owned run's durable evidence."""
         _need(isinstance(output, Path) and output.is_absolute(),
@@ -820,6 +842,7 @@ class GameplaySourcePublicationOwner:
               "GAMEPLAY_OWNER_DIGEST")
         candidate, checked = _copy_source_bundle(self._profile, request["source_files"],
                                                   entrypoint=entrypoint)
+        dependency_files = self._dependency_inputs(candidate)
         derived_digest = _request_digest(project_id=self.project_id, command_id=command_id,
             entrypoint=entrypoint, expected_project_revision=expected_revision,
             source_files=candidate)
@@ -835,6 +858,7 @@ class GameplaySourcePublicationOwner:
             previous = self._jobs.get(command_id)
             if previous is not None:
                 _need(previous["request_digest"] == digest, "GAMEPLAY_OWNER_COMMAND_CONFLICT")
+                self._recheck_dependency_evidence(command_id, candidate)
                 return dict(previous)
             _need(len(self._jobs) < self._session_model.MAX_COMMANDS,
                   "GAMEPLAY_OWNER_JOURNAL_LIMIT")
@@ -863,16 +887,12 @@ class GameplaySourcePublicationOwner:
                                          mode="gameplay-source", output=run_dir, timeout_seconds=20,
                                          source_closure_sha256=self.source_closure_sha256)
                 observed = self._read_native_result(run_dir, observed)
-                dependency_files = {name: expected_native_inputs[name]
-                                    for name in self._dependency_observation_files}
-                if self._dependency_observation_required:
-                    observed = self._persist_dependency_observation(
-                        observed, run_dir, dependency_files)
+                # Diagnose executor failures before requiring its dependency output.
                 self._validate_native(observed, expected_input_hashes=expected_native_inputs,
                                       expected_source_closure_sha256=self.source_closure_sha256,
-                                      evidence_directory=run_dir,
-                                      expected_dependency_files=dependency_files,
-                                      dependency_observation_required=self._dependency_observation_required)
+                                      evidence_directory=run_dir)
+                if self._dependency_observation_required:
+                    self._persist_dependency_observation(observed, run_dir, dependency_files)
                 return observed
             result = self._phase(grant, lease, command_id, digest, deadline_ms, "stage", run_stage)
             native_run_id = result["run_id"]
@@ -903,6 +923,7 @@ class GameplaySourcePublicationOwner:
         # replacing its selector so a concurrent manual edit remains intact.
         self._read_current_journal()
         self._check_selected()
+        self._recheck_dependency_evidence(command_id, candidate)
         self._atomic_select(revision, self._generation + 1)
         self._files = candidate
         self._profile_observation = checked

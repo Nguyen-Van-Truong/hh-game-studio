@@ -70,6 +70,24 @@ def mutate_dependency():
 
 
 class GameplayRuntimeBindingTests(unittest.TestCase):
+    def test_dependency_parser_uses_captured_validator_before_drift_rejection(self):
+        observation = self.run_copy(r'''
+owner_mod = load_owner()
+path = studio / 'godot-addon/gameplay_dependency_evidence.py'
+path.write_bytes(path.read_bytes() + b'\nraise AssertionError("new disk validator executed")\n')
+marker = owner_mod._load('gameplay_dependency_observation')
+assert marker._VALIDATOR is owner_mod._load('gameplay_dependency_evidence')
+assert marker.VALIDATOR_SHA256 == marker._VALIDATOR._gameplay_source
+try:
+    marker.parse_dependency_observation('', {})
+except marker.DependencyObservationMarkerError as error:
+    assert str(error) == 'DEPENDENCY_VALIDATOR_SOURCE_CHANGED', str(error)
+else:
+    raise AssertionError('changed validator accepted')
+print(json.dumps({'captured_validator_used':True, 'disk_drift_rejected':True}))
+''')
+        self.assertEqual(observation, {'captured_validator_used': True, 'disk_drift_rejected': True})
+
     def run_copy(self, code):
         tree = ast.parse((STUDIO / 'godot-addon/linux_executor.py').read_bytes())
         inventory = next(ast.literal_eval(node.value) for node in tree.body

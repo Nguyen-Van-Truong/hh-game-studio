@@ -101,8 +101,8 @@ def main():
         owner = owner_mod.GameplaySourcePublicationOwner.create(output,
             project_id='project.publication', source_files=initial,
             entrypoint=owner_mod.ENTRYPOINT, source_closure_sha256=closure, runner=run_native,
-            dependency_observation_required=True,
-            dependency_observation_files=tuple(case['dependency_files']))
+            dependency_observation_required=case.get('dependency_observation') is True,
+            dependency_observation_files=tuple(case.get('dependency_files', ())))
         initial_readback = owner.inspect()
         credential = owner.issue()
         grant = owner.authorize('Bearer ' + credential.bearer, 'scene.save')
@@ -132,8 +132,8 @@ def main():
         owner.close()
         reopened = owner_mod.GameplaySourcePublicationOwner.reopen(root,
             project_id='project.publication', source_closure_sha256=closure, runner=run_native,
-            dependency_observation_required=True,
-            dependency_observation_files=tuple(case['dependency_files']))
+            dependency_observation_required=case.get('dependency_observation') is True,
+            dependency_observation_files=tuple(case.get('dependency_files', ())))
         need(reopened.inspect() == selected, 'REOPEN_READBACK_CHANGED')
         fresh = reopened.issue()
         grant = reopened.authorize('Bearer ' + fresh.bearer, 'scene.save')

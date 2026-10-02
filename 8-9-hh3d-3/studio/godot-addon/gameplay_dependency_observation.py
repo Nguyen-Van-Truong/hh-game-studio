@@ -33,6 +33,11 @@ class DependencyObservationMarkerError(ValueError):
 
 def _load_validator():
     """Compile exact sibling bytes; never import a shared or cached module."""
+    if '_gameplay_generation' in globals():
+        # The publication owner already captured this entire generation.
+        # Its importer must supply those bytes instead of executing newer disk code.
+        from . import gameplay_dependency_evidence as module
+        return module, module._gameplay_source
     path = Path(__file__).with_name("gameplay_dependency_evidence.py")
     raw = path.read_bytes()
     spec = importlib.util.spec_from_file_location(

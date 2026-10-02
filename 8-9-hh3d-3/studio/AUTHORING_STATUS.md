@@ -1,4 +1,4 @@
-# O2 authoring state — 2026-10-01
+# O2 authoring state — 2026-10-02
 
 Authority 0. Separate branch: codex/o2-authoring-contract.
 Merge only after GT-06 acceptance. Tools-plan O4 is authoritative; this file
@@ -6,6 +6,10 @@ tracks implementation gaps and does not create another acceptance plan.
 
 Current checkpoints (distinct runs; do not combine their exit/asset claims):
 
+- Current dependency integration: pure enabled-policy lifecycle repaired and
+  verified by 76 focused tests, exit 0. Native 20261002-01..03 remain FAIL;
+  O3 attempt budget 3/3 reached. No fourth native attempt in this direction
+  before review. See the current repair and options below; run15 is historical.
 - Publication/dependency: `o2-publication-20261001-15`, runtime closure
   `0b2fec9eb23e57ba663868d45b1a8ed635912d2aefbc34b5493e0ddd40d71b8e`.
   Multifile dependency marker, outer/host/container exits 0, one native dispatch,
@@ -33,24 +37,56 @@ supersede these checkpoints or the tools plan. The earlier header at 4fcd650b
 conflated hostile, publication and asset runs; this summary corrects attribution
 without modifying raw, source or historical verdicts.
 
-## 2026-10-02 dependency observation bound to publication recovery
+## 2026-10-02 enabled-policy repair and O3 handoff
 
-Commit `dc3e9589` wires the bounded Godot dependency marker into the gameplay
-publication owner when the fixture explicitly requires it. Before a native
-candidate can be adopted, the owner parses the retained stdout, binds the graph
-to the exact dependency-file bytes and stdout digest, and persists the canonical
-authority-zero report. Reopen/recovery validates the same report before it can
-rebuild an ACK or repair `CURRENT`; the policy and dependency file list are
-durable and fail closed on mismatch. The native probe selects the four-file
-fixture set explicitly, while the project input remains part of the ordinary
-runtime input manifest.
+The earlier claim for `dc3e9589` was too broad: its 58/65 green tests did not
+enable the new policy. The real fixture exposed ordering and use-before-copy
+bugs (repaired in `e25425bc` / `c2afb6d4`), and source review found hash strings
+passed instead of file bytes, an unbound recovery policy and native raw rewriting.
+No historical raw or verdict has been changed.
 
-The focused owner/dependency suites ran 58 tests with actual exit 0 after this
-repair. No Godot, Docker, Blender or GT06 measurement run was started for the
-repair. This is a bounded fixture integration: it does not prove arbitrary
-dynamic-load closure, AUTH-02, AUTH-04, public capability, or change
-`AUTHORITY=0`; a fresh native fixture run is still required to observe the
-end-to-end path.
+| Run (`o2-publication-` prefix) | Runtime closure | Actual outer exit / finding |
+| --- | --- | --- |
+| `20261002-01` | `0080c261af857e528f801dcbea405e0c5426707d9741b9e9ea2757c7abdfc02f` | 1; policy ordering; zero executor calls |
+| `20261002-02` | `441c747725254f246d42804a16031af1846b024dee0f3dd0d7b4364d13de7515` | 1; NameError before source copy; zero executor calls |
+| `20261002-03` | `3ad5c819fea3c68e2365fb30f4778e5e4dd4da97cfe83cc0bd9d4ba3edbb69e8` | 1; one executor call, inventory CLI timed out at 5 seconds (exit 2), no container/Godot started |
+
+Raw lives in `studio/.local/reviews/<run-id>/`. Run03's CLI host evidence
+proves Job closed, active count 0, no retained handle, readers stopped. Its
+`EXECUTOR_UNRECORDED_CONTAINER` code combines inventory failure with nonempty
+inventory; it does not prove a foreign owned-label container. The outer
+dependency error masked this earlier executor failure. No timeout was changed.
+
+The current repair passes actual candidate bytes, canonicalizes the policy on
+create/reopen, binds its hash into INITIAL, checks it before live retry/adopt
+and recovery mutations, and rejects missing dependencies before dispatch.
+Executor validation precedes marker parsing. A new write-once dependency
+sidecar binds stdout, exact native-result bytes and graph; original raw remains
+unchanged. Adoption, live retry and reopen revalidate this evidence. Owner
+helper imports use the captured generation. Non-dependency fixtures keep their
+explicit disabled policy rather than failing on a missing fixture key.
+
+Verification: `python -B -m unittest studio.tests.godot.test_gameplay_owner_dependencies
+studio.tests.godot.test_gameplay_source_owner studio.tests.godot.test_gameplay_dependency_observation
+studio.tests.godot.test_gameplay_dependency_evidence studio.tests.godot.test_gameplay_runtime_binding`
+(join into one command) ran **76 tests**, actual exit **0**, 32.454 seconds.
+The new tests first reproduced failures on the old code. They exercise enabled
+publish/retry/reopen, lost/stale evidence, policy downgrade, missing files,
+executor-error precedence and changed captured helpers. The executor is a fake;
+this is not native Godot closure proof or AUTH-02/04/05 acceptance.
+
+O3 options for owner review (3 native attempts used; no fourth dispatched):
+1. After reviewing this repair, permit one fresh multifile native run with new
+   closure/preflight. Existing run took seconds; allow several minutes for
+   startup and closeout. Remaining risk is native attribution, not proven by mocks.
+2. In the meantime, continue a different fixture/Blender or AUTH-03 static gap;
+   this advances O2 but cannot substitute for native dependency evidence.
+3. Give GT06 formal09 the next 22:00–06:00 window after fresh gates; O2 then
+   stays static. This preserves the main acceptance dependency and measurement.
+
+Next: option 2 outside measurement, option 3 at its window; option 1 remains a
+review decision. No O2 merge, gate tick, arbitrary dynamic-load closure claim,
+or public authority follows from this repair.
 
 ## 2026-10-01 review correction: asset observation scope
 
