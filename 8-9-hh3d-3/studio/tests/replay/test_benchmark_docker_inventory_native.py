@@ -171,7 +171,7 @@ class NativeInventoryTests(unittest.TestCase):
                     inventory.query_containers(started + 0.15)
             elapsed = time.monotonic() - started
             self.assertEqual(caught.exception.reason, 'timeout')
-            self.assertFalse(caught.exception.retryable)
+            self.assertTrue(caught.exception.retryable)
             self.assertGreaterEqual(elapsed, 0.14)
             self.assertLess(elapsed, 0.5, 'Deadline plus native cancellation drain must stay bounded')
         finally:
