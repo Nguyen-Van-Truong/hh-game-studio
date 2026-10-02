@@ -78,9 +78,11 @@ class CampaignStopCompletionTests(unittest.TestCase):
                 'commit_total_bytes': 80, 'commit_limit_bytes': 100, 'heavy_processes': [], 'required_heavy_processes_closed': False, 'foreign_engines': []}))
             # Every process launch is intercepted, including accidental next-run
             # launch. Existing owner/assembly tests verify their own contracts.
+            from studio.tests.replay.test_launch_observation import collect_synthetic
+            observe = stack.enter_context(patch.object(campaign, 'observe_pair_launch', side_effect=collect_synthetic))
             launch = stack.enter_context(patch.object(campaign, 'BenchmarkProcess'))
             yield SimpleNamespace(root=studio / 'raw', campaign_id='gt06-stop-completion',
-                                  stack=stack, launch=launch)
+                                  stack=stack, launch=launch, observe=observe)
 
     def test_stop_published_by_terminal_tick_is_not_lost(self):
         with tempfile.TemporaryDirectory(prefix='gt06-stop-terminal-tick-') as directory:
@@ -226,6 +228,9 @@ class CampaignStopCompletionTests(unittest.TestCase):
                 self.assertEqual(capture['artifacts']['measurement-summary.json'],
                                  campaign.sha((output / 'measurement-summary.json').read_bytes()))
                 self.assertEqual(fixture.launch.call_count, 2 if status == 'PASS' else 1)
+                self.assertEqual(fixture.observe.call_count, fixture.launch.call_count)
+                observed_runs = [call.args[1]['run_id'] for call in fixture.observe.call_args_list]
+                self.assertEqual(len(set(observed_runs)), len(observed_runs))
                 if status != 'PASS':
                     self.assertFalse((fixture.root / 'run-01-attempt-01').exists())
                     failure = json.loads((output / 'parent-failure.json').read_bytes())

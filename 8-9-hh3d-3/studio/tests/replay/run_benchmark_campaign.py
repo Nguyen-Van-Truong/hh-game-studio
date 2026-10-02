@@ -56,6 +56,8 @@ HEAVY_PREFLIGHT_NAMES = frozenset({
 # and the coordinator must dispatch a fresh campaign id after review; retrying
 # the same campaign would make source/harness failures indistinguishable.
 MAX_ATTEMPTS = 1
+LAUNCH_OBSERVATION_SCHEMA = 'HH-GT06-LAUNCH-OBSERVATION-1'
+LAUNCH_SAMPLE_SCHEMA = 'HH-GT06-LAUNCH-SAMPLE-STREAM-1'
 
 # Both entry points belong to the campaign even when only one is imported in
 # this process. Bind the scheduler registration too, without weakening the
@@ -447,6 +449,89 @@ def require_environment_preflight(result):
     environment.require_preflight(result)
 
 
+def _observe_launch_row(policy, row):
+    previous = policy.previous
+    require('cpu_observation' in row, 'CAMPAIGN_PREFLIGHT_CPU_OBSERVATION_MISSING')
+    failure = policy.observe(row)  # Recomputes recorded per-process CPU too.
+    require(failure is None, 'CAMPAIGN_PREFLIGHT_OBSERVATION_' + (failure['reason'] if failure else 'FAILED'))
+    require_environment_preflight(environment.preflight(row))
+    if previous is None:
+        return None
+    total = row['cpu_total_100ns'] - previous['cpu_total_100ns']
+    idle = row['cpu_idle_100ns'] - previous['cpu_idle_100ns']
+    require(total > 0, 'CAMPAIGN_PREFLIGHT_CPU_UNOBSERVED')
+    return 100 * (total - idle) / total
+
+
+def _launch_summary(output, binding, policy, percentages, count):
+    span = (policy.previous['uptime_ms'] - policy.first['uptime_ms']) / 1000
+    require(60 <= span <= 60 + environment.MAX_SAMPLE_GAP_SECONDS, 'CAMPAIGN_PREFLIGHT_OBSERVATION_DURATION')
+    require(percentages and not all(value > 95 for value in percentages), 'CAMPAIGN_PREFLIGHT_CPU_BUSY')
+    return {'schema': LAUNCH_OBSERVATION_SCHEMA, **binding, 'sample_count': count,
+            'observed_seconds': span, 'cpu_interval_percent': percentages,
+            'cpu_max_percent': max(percentages), 'cpu_mean_percent': sum(percentages) / len(percentages),
+            'samples': reference(output, output / 'environment-launch-samples.jsonl'),
+            'preflight': reference(output, output / 'environment-preflight-before.json'),
+            'formal_acceptance': False}
+
+
+def observe_pair_launch(output, context, check_campaign_stop):
+    """A new, bounded minute before every fresh pair; never reuses arm telemetry."""
+    binding = {key: context[key] for key in ('run_id', 'source_closure_sha256', 'campaign_sha256')}
+    policy, percentages = environment.Policy(), []
+    with (output / 'environment-launch-samples.jsonl').open('xb') as stream:
+        stream.write(encoded({'schema': LAUNCH_SAMPLE_SCHEMA, **binding}))
+        # 13 samples normally span 60 s. One extra tolerates millisecond rounding;
+        # a stalled uptime clock cannot turn this into an unbounded observation.
+        for count in range(1, 15):
+            started = time.monotonic()
+            check_campaign_stop()
+            verify_sources(context['source_files'])
+            row = environment_snapshot()
+            row['cpu_observation'] = environment.cpu_interval(policy.previous, row)
+            stream.write(encoded(environment.pack_sample(row)))
+            stream.flush()
+            os.fsync(stream.fileno())
+            check_campaign_stop()
+            percentage = _observe_launch_row(policy, row)
+            if percentage is not None:
+                percentages.append(percentage)
+            if row['uptime_ms'] - policy.first['uptime_ms'] >= 60_000:
+                break
+            if count < 14:
+                time.sleep(max(0, environment.INTERVAL_SECONDS - (time.monotonic() - started)))
+    write(output / 'environment-preflight-before.json', environment.preflight(policy.previous))
+    summary = _launch_summary(output, binding, policy, percentages, count)
+    write(output / 'launch-observation.json', summary)
+    verify_sources(context['source_files'])
+    check_campaign_stop()
+
+
+def verify_launch_observation(output, context, first_run_sample):
+    """Current verifier requires the new proof; old captures use their frozen verifier."""
+    require(context.get('launch_observation_schema') == LAUNCH_OBSERVATION_SCHEMA,
+            'CAMPAIGN_LAUNCH_OBSERVATION_REQUIRED_CURRENT_VERIFIER')
+    binding = {key: context[key] for key in ('run_id', 'source_closure_sha256', 'campaign_sha256')}
+    lines = read_regular(output / 'environment-launch-samples.jsonl', 64 * 1024**2).splitlines()
+    require(lines and json.loads(lines[0]) == {'schema': LAUNCH_SAMPLE_SCHEMA, **binding},
+            'CAMPAIGN_LAUNCH_OBSERVATION_BINDING')
+    policy, percentages = environment.Policy(), []
+    require(2 <= len(lines) - 1 <= 14, 'CAMPAIGN_PREFLIGHT_OBSERVATION_DURATION')
+    for line in lines[1:]:
+        percentage = _observe_launch_row(policy, environment.unpack_sample(json.loads(line)))
+        if percentage is not None:
+            percentages.append(percentage)
+    require(json.loads(read_regular(output / 'environment-preflight-before.json')) == environment.preflight(policy.previous),
+            'CAMPAIGN_LAUNCH_PREFLIGHT_CHANGED')
+    expected = _launch_summary(output, binding, policy, percentages, len(lines) - 1)
+    require(json.loads(read_regular(output / 'launch-observation.json')) == expected,
+            'CAMPAIGN_LAUNCH_OBSERVATION_CHANGED')
+    uptime_gap = (first_run_sample['uptime_ms'] - policy.previous['uptime_ms']) / 1000
+    awake_gap = (first_run_sample['awake_100ns'] - policy.previous['awake_100ns']) / 10_000_000
+    require(0 <= uptime_gap <= environment.MAX_SAMPLE_GAP_SECONDS and awake_gap >= 0
+            and abs(uptime_gap - awake_gap) <= .1, 'CAMPAIGN_LAUNCH_OBSERVATION_STALE')
+
+
 
 def seal_campaign_capture(root, result):
     """Reuse an identical completed capture without rebinding its environment.
@@ -505,6 +590,8 @@ def verify_run_capture(root, captured, source_digest, *, campaign_id, index, att
             and context['campaign_sha256'] == campaign_sha256
             and context['source_closure_sha256'] == source_digest
             and closure(context['source_files']) == source_digest, 'CAMPAIGN_RESUME_CONTEXT')
+    require(context.get('launch_observation_schema') == LAUNCH_OBSERVATION_SCHEMA,
+            'CAMPAIGN_LAUNCH_OBSERVATION_REQUIRED_CURRENT_VERIFIER')
     files = captured['artifacts']
     require(type(files) is dict and files, 'CAMPAIGN_RESUME_ARTIFACTS')
     for relative, digest in files.items():
@@ -536,13 +623,17 @@ def verify_run_capture(root, captured, source_digest, *, campaign_id, index, att
     verify_child_terminal_cleanup(root, context, child)
     verify_observations(root, context, child)
     require({'environment-preflight-before.json', 'environment-preflight-after.json',
-             'environment-samples.jsonl'}.issubset(files), 'CAMPAIGN_ENVIRONMENT_MISSING')
+             'environment-samples.jsonl', 'environment-launch-samples.jsonl',
+             'launch-observation.json'}.issubset(files), 'CAMPAIGN_ENVIRONMENT_MISSING')
     require_environment_preflight(json.loads(read_regular(root / 'environment-preflight-before.json')))
     environment.require_snapshot(json.loads(read_regular(root / 'environment-preflight-after.json')))
     environment.verify_watchdog(root, read_regular, elapsed_seconds=host['elapsed_seconds'],
                                expected_binding={'run_id': run_id,
                                                  'source_closure_sha256': source_digest,
                                                  'campaign_sha256': campaign_sha256})
+    first_run_sample = environment.unpack_sample(json.loads(
+        read_regular(root / 'environment-samples.jsonl', 64 * 1024**2).splitlines()[1]))
+    verify_launch_observation(root, context, first_run_sample)
     verify_owner_captures(root, context)
     return child
 
@@ -586,13 +677,13 @@ def _run_campaign(campaign_id, root, preflight_path, after_path):
     digest = closure(before)
     machine = workstation_profile()
     lock_raw = read_regular(STUDIO / 'toolchain.lock.json')
-    frozen = {'schema_id': 'hh-studio.benchmark-campaign', 'schema_version': '1.1.0',
+    frozen = {'schema_id': 'hh-studio.benchmark-campaign', 'schema_version': '1.2.0',
         'campaign_id': campaign_id, 'source_files': before, 'source_closure_sha256': digest,
         'profile_sha256': profile.PROFILE_SHA256, 'workstation': machine, 'sequence': SEQUENCE,
         'toolchain_sha256': sha(lock_raw), 'formal_acceptance': False,
         'python_executable_sha256': sha(read_regular(Path(sys.executable), 256 * 1024**2)),
         'run_count': profile.PROFILE.process_runs, 'batches_per_run': profile.PROFILE.warmup_batches + profile.PROFILE.measured_batches,
-        'max_attempts_per_run': MAX_ATTEMPTS}
+        'max_attempts_per_run': MAX_ATTEMPTS, 'launch_observation_schema': LAUNCH_OBSERVATION_SCHEMA}
     if root.exists():
         require(json.loads(read_regular(root / 'campaign.json')) == json.loads(encoded(frozen)),
                 'CAMPAIGN_RESUME_SOURCE_OR_MACHINE_CHANGED')
@@ -657,9 +748,11 @@ def _run_campaign(campaign_id, root, preflight_path, after_path):
         output = root / f'run-{index:02d}-attempt-{attempt:02d}'
         output.mkdir(exist_ok=False)
         run_id = f'{campaign_id}.r{index:02d}.a{attempt:02d}'
-        write(output / 'context.json', {'run_id': run_id, 'index': index, 'attempt': attempt,
+        context = {'run_id': run_id, 'index': index, 'attempt': attempt,
             'source_files': before, 'source_closure_sha256': digest, 'profile_sha256': profile.PROFILE_SHA256,
-            'campaign_sha256': sha(read_regular(root / 'campaign.json'))})
+            'campaign_sha256': sha(read_regular(root / 'campaign.json')),
+            'launch_observation_schema': LAUNCH_OBSERVATION_SCHEMA}
+        write(output / 'context.json', context)
         write(output / 'source-files.json', before)
         write(output / 'toolchain.lock.json', lock_raw)
         write(output / 'benchmark-profile.json', read_regular(root / 'benchmark-profile.json'))
@@ -674,11 +767,7 @@ def _run_campaign(campaign_id, root, preflight_path, after_path):
             verify_sources(before)
             require_campaign_running(root)
             environment.require_infra_budget(root.parent, read_regular)
-            # Pair 2 can start hours after the invocation-level snapshot.
-            # Capture again immediately before each fresh host/editor launch.
-            launch_preflight = environment_preflight()
-            write(output / 'environment-preflight-before.json', launch_preflight)
-            require_environment_preflight(launch_preflight)
+            observe_pair_launch(output, context, lambda: require_campaign_running(root))
             owner = BenchmarkProcess([sys.executable, '-B', str(Path(__file__).resolve()), '--campaign-id', campaign_id,
                 '--child-index', str(index), '--attempt', str(attempt)], cwd=output, output=output / 'host-owner',
                 source_root=STUDIO, source_files=before,

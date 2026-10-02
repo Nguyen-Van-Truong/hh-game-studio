@@ -47,7 +47,8 @@ class CampaignResumeTests(unittest.TestCase):
                           'editor': {'pid': 101, 'process_start': 'windows:1001'}}
         self.put('context.json', {'run_id': self.run_id, 'index': 0, 'attempt': 1,
             'source_files': self.files, 'source_closure_sha256': self.digest,
-            'profile_sha256': campaign.profile.PROFILE_SHA256, 'campaign_sha256': self.campaign_sha})
+            'profile_sha256': campaign.profile.PROFILE_SHA256, 'campaign_sha256': self.campaign_sha,
+            'launch_observation_schema': campaign.LAUNCH_OBSERVATION_SCHEMA})
         self.child = {'run_id': self.run_id, 'index': 0, 'completed': True,
             'source_closure_sha256': self.digest, 'profile_sha256': campaign.profile.PROFILE_SHA256,
             'processes': self.processes, 'batches': [{'index': i} for i in range(35)]}
@@ -109,14 +110,16 @@ class CampaignResumeTests(unittest.TestCase):
             'source_closure_sha256': self.digest, 'profile_sha256': campaign.profile.PROFILE_SHA256,
             'processes': deepcopy(self.processes), 'artifacts': {}}
         from studio.tests.replay.test_benchmark_environment import sample
-        self.put('environment-preflight-before.json', campaign.environment.preflight(sample()))
+        from studio.tests.replay.test_launch_observation import collect_synthetic
+        collect_synthetic(self.root, context, 0)
+        self.put('unused-synthetic.txt', b'fixture')
         self.put('environment-preflight-after.json', campaign.environment.preflight(sample(5)))
         watchdog_binding = {'run_id': self.run_id, 'source_closure_sha256': self.digest,
                             'campaign_sha256': self.campaign_sha}
         watchdog_rows = [json.dumps({'schema': campaign.environment.SAMPLE_STREAM_SCHEMA,
                                      **watchdog_binding})]
         previous = None
-        for t in (0, 5):
+        for t in (65, 70):
             row = sample(t)
             row['cpu_observation'] = campaign.environment.cpu_interval(previous, row)
             watchdog_rows.append(json.dumps(row))
@@ -462,6 +465,8 @@ class CampaignOwnershipTests(unittest.TestCase):
                 'schema_id': 'hh-studio.benchmark-environment-preflight', 'schema_version': '1.2.0',
                 'pass': True, 'available_memory_bytes': 8 * 1024**3,
                 'commit_total_bytes': 8, 'commit_limit_bytes': 10, 'heavy_processes': [], 'required_heavy_processes_closed': False, 'foreign_engines': []}))
+            from studio.tests.replay.test_launch_observation import collect_synthetic
+            stack.enter_context(patch.object(campaign, 'observe_pair_launch', side_effect=collect_synthetic))
             launch = stack.enter_context(patch.object(campaign, 'BenchmarkProcess', side_effect=original))
             with self.assertRaises(BenchmarkJobError) as caught:
                 campaign.run_campaign('gt06-synthetic-owner', root)
@@ -528,6 +533,8 @@ class CampaignOwnershipTests(unittest.TestCase):
                 'schema_id': 'hh-studio.benchmark-environment-preflight', 'schema_version': '1.2.0',
                 'pass': True, 'available_memory_bytes': 8 * 1024**3,
                 'commit_total_bytes': 8, 'commit_limit_bytes': 10, 'heavy_processes': [], 'required_heavy_processes_closed': False, 'foreign_engines': []}))
+            from studio.tests.replay.test_launch_observation import collect_synthetic
+            stack.enter_context(patch.object(campaign, 'observe_pair_launch', side_effect=collect_synthetic))
             launch = stack.enter_context(patch.object(campaign, 'BenchmarkProcess', return_value=retained))
             with self.assertRaises(BenchmarkJobError) as caught:
                 campaign.run_campaign('gt06-synthetic-held', root)

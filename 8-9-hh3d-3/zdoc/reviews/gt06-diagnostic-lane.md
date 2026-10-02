@@ -2,23 +2,76 @@
 
 ## Hiện trạng
 
-- WP: GT-06 chưa ACCEPTED; zero accepted formal pairs; GT-07 chưa mở.
-- Residency source: 56 file, `172d7d0ce1b14d6302791fc2b4b9c2c242db72baa285dfae1fbda777098b62e8`; formal entry closure is separate and recomputed after `load_fixture()`.
+- GT-06 chưa ACCEPTED; zero accepted formal pairs; GT-07 chưa mở, không ghép partial giữa campaign.
+- Formal09 terminal: pair0 35/35 RUN PASS; pair1 INFRA_ABORT trước batch0 vì RAM/commit.
+- Formal10 terminal: pair0 20/35, PRODUCT_FAIL COMMIT_PRESSURE; không pair1, không resume.
+- Daily INFRA ngày 02-10: 1/2; PRODUCT_FAIL formal10 không tiêu INFRA và không cho phép rerun mù.
+- Source formal09/10: 58 file, `eaf377f8960303083d81f92e446401518ce2b80b38f405636aa43d9725f9c85b`.
 - Profile v6: `8a2e599c40f927ffaff5ded5e48b6bf2a0f0a6bb3a23de31434a695f4258cb35`.
-- Run đo cuối: soak05 ngày 01-10 đủ 35/35, actual exit 0, cleanup/watchdog/source đã kiểm.
-- O6.3 cũ: FAIL p95; private 106,6856% / trend 103,0091%, handles 183–184, gap 366,8387 ms.
-- Probe03 production trim1: median lookup 108,5744%, append 106,5340%; không gộp trim64.
-- O7: kiểm offline/version riêng trước formal09; không đổi verdict cũ hoặc threshold O1–O4.
-- O6.5 offline control02 và formal08 reference PASS, không hồi tố (receipt o7-review-20261001-01).
-- Preview cũ 21:47: RAM 2,49 GiB / commit 93,37%; foreign container hh-plan19-admission-20260919-r01; không dùng làm điều kiện hiện hành.
-- Preflight O4.1 đầy đủ ngày 02-10 lúc 06:44: RAM khả dụng 13,523 GiB, commit 41,952%, foreign engines/containers 0; không tiêu INFRA budget.
-- Chưa dispatch vì đã ngoài cửa sổ 22:00–06:00; kiểm lại source freeze, budget và CPU khoảng một phút trước formal09 ID mới.
-- Sau offline đạt: một formal09 ID mới trong 22:00–06:00 với pair guard; không confirmation soak.
-- O2 ở worktree riêng, AUTHORITY=0; chi tiết AUTHORING_STATUS.md; không merge trước GT06.
+- Formal10 watchdog replay đúng verdict; chưa chứng minh rò bộ nhớ. Prefix không thay 35 batch.
+- Outer Job formal10 zero/closed, wrapper exit2; thiếu actual host/editor exit receipts do hard abort.
+- Scheduler14:01: cả arm/campaign terminal result1, instances0; không engine live, khóa đo vắng.
+- Helper sau dispatch đã sửa và bắt buộc dry-run thật trước arm; không còn task mới được arm.
+- Trước formal mới: đóng review cleanup/attribution, bổ sung CPU minute trước từng pair theo O7.3c.
+- O8.2 vẫn cần khung máy bật được owner xác nhận; không tự kéo dài khung13:00–17:00.
+- O2 tiếp tục riêng theo O8.3/AUTHORING_STATUS.md, AUTHORITY0, không merge trước GT06.
 
 This lane records diagnostics without changing the authoritative plan. Each
 entry keeps the run ID, source closure, command, actual result and the finding
 needed for the next repair. Raw evidence remains under `studio/.local/`.
+
+## 2026-10-02 — per-pair launch guard repair
+
+- `run_benchmark_campaign.py` now records a new immutable `environment-launch-samples.jsonl`
+  and `launch-observation.json` for every fresh pair. Each record binds run/source/campaign hashes,
+  recomputes O4.1 policy and CPU intervals from the raw samples, requires at least60 seconds with
+  sample gaps within the existing cadence, rejects sustained external CPU>95%, pressure, sleep,
+  source drift or Stop, and checks freshness against the first run watchdog sample. The pair is
+  launched only after the observation and source/Stop recheck; old captures remain on their frozen
+  verifier and cannot be rebound.
+- Tests: launcher/registrar 11 tests exit0; campaign/environment/Stop/launch tests 107 exit0.
+  No engine, Docker or formal campaign was run. This is harness evidence; it does not turn formal09
+  or formal10 into accepted pairs. The next fresh formal must mint a new closure after this source
+  change and pass O4.1 before each pair.
+
+## 2026-10-02 — formal10 terminal review and arm repair
+
+- `gt06-o4-formal-10` dispatched13:11:17 Asia/Saigon, terminal13:35:47; pair0 has20/35 batch captures.
+  Raw parent verdict remains PRODUCT_FAIL / CAMPAIGN_WATCHDOG_COMMIT_PRESSURE. No second pair.
+- Offline replay of288 watchdog samples reproduces the sole trigger at index287: total commit
+  56,270,299,136 / 61,064,339,456 bytes =92.1492%; owned private902,148,096 bytes. Removing all
+  owned private would yield90.6718%, so current conservative product hold is correct. It does not
+  prove a causal leak. In the last interval total commit grew989,892,608 bytes while owned private
+  fell28,672 bytes; this indicates an external/unobserved contribution, not sufficient attribution
+  to reclassify the run. Keep O1/O4 unchanged.
+- Quiescent partial prefix uses O1 baseline median batches2–4 and max batches5–19: host private
+  103.4943%, editor100.5761%; host handles209, editor max564 versus baseline558; status-gap max
+  host595.6511ms/native989.379ms. No batches20–34 means no late trend or whole-pair PASS.
+  A transient host-private sample206,684,160 bytes is undiagnosed; do not hide it with quiescent data
+  or infer retained leakage from a single peak. All120 capture refs and58 source files hash-match.
+- Outer host Job cleanup records zero/closed, retained wrapper handle=false and wrapper exit2.
+  Child actual exit and editor target-exit/cleanup receipts are absent because the parent watchdog
+  hard-stopped the Job. This cannot be reported as natural exit0 or complete per-role proof.
+  After-snapshot inventory has an unverified editor row which may be stale; it does not prove a
+  live process leak. Scheduler result1/instances0 and no current engines were captured at14:01.
+- Supplemental: `studio/.local/formal10-offline-audit-20261002/supplemental.json`, SHA256
+  `82ca90a472e57fc4f92319c30296531faeed29af78c7908dd58b9bb0aeebc00a`; script SHA256
+  `3a4b9264e0a972aa05e69d0e9b8f339cd43f8a6fb6bc34cf40eff170c86f4ed4`.
+  Repro from tools root: `python -B studio/.local/formal10-offline-audit-20261002/offline_audit.py`.
+  This is supplemental diagnostic evidence, not a signed critic or an acceptance package.
+- Arm helper had NameError CAMPAIGN immediately after successful dispatch. Campaign ownership and
+  its own KeepAwake continued independently. Repair uses request.campaign_id in status polling,
+  validates gates before BEFORE_WINDOW, and requires a matching successful dry-run receipt before
+  run/registration. Registrar checks exact task name and retains requested/readback XML.11 focused
+  tests exit0 (mock dispatch plus real PowerShell ValidateOnly; no campaign or task registration).
+- Historical procedural gaps retained: no recorded formal10 dry-run; formal09 arm was removed
+  without prior XML export. Formal10 task XML/status are now in `.local/formal10-task-closeout-20261002`.
+  Neither gap is retroactively repaired by today's tests. No formal11 is armed/dispatched.
+- Next repair before another formal: the campaign currently records one fresh snapshot at each
+  pair launch, while the arm observes CPU for a minute only before campaign dispatch. O7.3c asks
+  for a minute before each pair; close this enforcement/evidence gap. Review abort observations
+  without substituting killed exits for exit0. Then use a confirmed quiet machine-on window and
+  fresh source/profile freeze; no gate/timeout relaxation and no user-app termination.
 
 ## 2026-10-02 — gt06-o4-formal-09 closeout
 
@@ -29,14 +82,18 @@ needed for the next repair. Raw evidence remains under `studio/.local/`.
   no watchdog latch; run summary status `PASS`, maximum status gap `1295.624 ms`, raw summary
   `c18ea56c92a6f1c7dcd3da2738618ae5a2b0de1ed968304cd6507bd82b2a2474`. This is one pair only;
   it does not grant GT06 acceptance.
+- Supplemental offline `verify_run_capture` on02-10 rehashed all410 artifacts and verified35 batches,
+  actual exits/Job/tree/handle/watchdog with the unchanged live source. Receipt:
+  `.local/formal09-offline-closeout-20261002/verification.json`. This validates the existing run
+  capture, not the per-pair CPU-minute omission identified above or complete GT06 acceptance.
 - Pair 1: no batch started. Fresh preflight at `2026-10-02T04:18:53Z` recorded available
-  memory `3667136512` bytes (3.417 GiB), commit `86.7199556%`, no foreign engines; classification
+  memory `3667136512` bytes (3.415 GiB), commit `86.7199556%`, no foreign engines; classification
   `INFRA_ABORT` with `CAMPAIGN_PREFLIGHT_RESOURCE_LIMIT`. Raw `run-01-attempt-01` is retained.
 - Campaign is terminal with zero accepted formal pairs. The arm repair task was removed only after
   scheduler terminal/zero instances; arm receipts remain under `.local/formal09-arm-20261002-repair01`.
   Daily O1.7 INFRA budget consumed: `1/2` on 2026-10-02. Do not resume formal09 or S258; a new ID
   may be considered only after fresh source freeze, O4.1 preflight and one-minute CPU observation.
-- Formal10 arm: one-shot task `HHStudio.GT06.arm-formal10-20261002`, window 13:00–17:00 Asia/Saigon,
+- Historical formal10 arm (now terminal; see review above): one-shot task `HHStudio.GT06.arm-formal10-20261002`, window 13:00–17:00 Asia/Saigon,
   request bound to the same freshly computed 58-file closure and profile v6. It must dispatch at most
   one new ID and records no-dispatch when commit/RAM/CPU or budget is not valid.
 
