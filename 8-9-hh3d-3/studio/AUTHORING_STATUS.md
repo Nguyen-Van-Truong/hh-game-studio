@@ -33,6 +33,25 @@ supersede these checkpoints or the tools plan. The earlier header at 4fcd650b
 conflated hostile, publication and asset runs; this summary corrects attribution
 without modifying raw, source or historical verdicts.
 
+## 2026-10-02 dependency observation bound to publication recovery
+
+Commit `dc3e9589` wires the bounded Godot dependency marker into the gameplay
+publication owner when the fixture explicitly requires it. Before a native
+candidate can be adopted, the owner parses the retained stdout, binds the graph
+to the exact dependency-file bytes and stdout digest, and persists the canonical
+authority-zero report. Reopen/recovery validates the same report before it can
+rebuild an ACK or repair `CURRENT`; the policy and dependency file list are
+durable and fail closed on mismatch. The native probe selects the four-file
+fixture set explicitly, while the project input remains part of the ordinary
+runtime input manifest.
+
+The focused owner/dependency suites ran 58 tests with actual exit 0 after this
+repair. No Godot, Docker, Blender or GT06 measurement run was started for the
+repair. This is a bounded fixture integration: it does not prove arbitrary
+dynamic-load closure, AUTH-02, AUTH-04, public capability, or change
+`AUTHORITY=0`; a fresh native fixture run is still required to observe the
+end-to-end path.
+
 ## 2026-10-01 review correction: asset observation scope
 
 The raw run15 and busy02 reports used a vacuous `asset_import_observed=true`
