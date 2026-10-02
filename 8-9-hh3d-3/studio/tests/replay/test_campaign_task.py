@@ -1,6 +1,8 @@
 """Local scheduler request binding and early native error regressions."""
 from pathlib import Path
+import hashlib
 import json
+import os
 import subprocess
 import sys
 import tempfile
@@ -12,6 +14,46 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[3]))
 from studio.tests.replay import run_campaign_task as task
 from studio.tests.replay import run_benchmark_campaign as campaign
 from studio.tests.replay.benchmark_job import BenchmarkJobError
+
+
+@unittest.skipUnless(os.name == 'nt', 'Windows task launcher')
+class LauncherHashTests(unittest.TestCase):
+    def test_hash_without_filehash_cmdlet_and_missing_file_rejection(self):
+        # Load only functions from the actual launcher: no task registration.
+        # This reproduces formal13's missing-cmdlet boundary independently of
+        # which PowerShell modules happen to be installed in the test session.
+        script = r'''
+$ErrorActionPreference = 'Stop'
+$tokens = $null; $errors = $null
+$ast = [System.Management.Automation.Language.Parser]::ParseFile($env:HH_TEST_LAUNCHER, [ref]$tokens, [ref]$errors)
+if ($errors.Count) { throw 'LAUNCHER_PARSE_ERROR' }
+foreach ($name in @('Require', 'Assert-PlainPath', 'Hash-File')) {
+    $fn = $ast.Find({param($node) $node -is [System.Management.Automation.Language.FunctionDefinitionAst] -and $node.Name -eq $name}, $false)
+    if ($null -eq $fn) { throw 'LAUNCHER_FUNCTION_MISSING' }
+    . ([scriptblock]::Create($fn.Extent.Text))
+}
+function Get-FileHash { throw 'FILEHASH_CMDLET_UNAVAILABLE' }
+$digest = Hash-File $env:HH_TEST_PAYLOAD
+$missingRejected = $false
+try { $null = Hash-File ($env:HH_TEST_PAYLOAD + '.missing') }
+catch { if ($_.Exception.Message -ne 'TASK_PATH_MISSING') { throw }; $missingRejected = $true }
+[IO.File]::Delete($env:HH_TEST_PAYLOAD)
+@{digest=$digest; missing_rejected=$missingRejected; released=(-not [IO.File]::Exists($env:HH_TEST_PAYLOAD))} | ConvertTo-Json -Compress
+'''
+        with tempfile.TemporaryDirectory() as directory:
+            payload = Path(directory) / 'literal [payload].bin'
+            raw = bytes(range(256)) * 4096
+            payload.write_bytes(raw)
+            environment = {**os.environ, 'HH_TEST_PAYLOAD': str(payload),
+                           'HH_TEST_LAUNCHER': str(Path(__file__).with_name('campaign_task.ps1'))}
+            powershell = Path(os.environ['WINDIR']) / 'System32/WindowsPowerShell/v1.0/powershell.exe'
+            result = subprocess.run([str(powershell), '-NoProfile', '-NonInteractive', '-Command', script],
+                                    capture_output=True, timeout=20, env=environment,
+                                    creationflags=subprocess.CREATE_NO_WINDOW)
+            self.assertEqual(result.returncode, 0, result.stderr.decode(errors='replace'))
+            self.assertEqual(json.loads(result.stdout.decode('utf-8-sig')),
+                             {'digest': hashlib.sha256(raw).hexdigest(),
+                              'missing_rejected': True, 'released': True})
 
 
 class TaskRequestTests(unittest.TestCase):

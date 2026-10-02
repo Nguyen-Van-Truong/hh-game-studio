@@ -2,7 +2,7 @@
 
 ## Hiện trạng
 
-- GT-06 chưa ACCEPTED; formal11 terminal `HARNESS_FAIL` after3 batches; zero accepted formal pairs; GT-07 chưa mở, không ghép partial giữa campaign.
+- GT-06 chưa ACCEPTED; zero accepted formal pairs; GT-07 chưa mở, không ghép partial giữa campaign. Formal13 dừng ở launcher trước dispatch; bản sửa hash được kiểm chứng, bước tiếp theo là fresh freeze/dry-run và arm formal14 qua Task Scheduler.
 - Formal09 terminal: pair0 35/35 RUN PASS; pair1 INFRA_ABORT trước batch0 vì RAM/commit.
 - Formal10 terminal: pair0 20/35, PRODUCT_FAIL COMMIT_PRESSURE; không pair1, không resume.
 - Daily INFRA ngày 02-10: 1/2; PRODUCT_FAIL formal10 không tiêu INFRA và không cho phép rerun mù.
@@ -11,7 +11,7 @@
 - Formal10 watchdog replay đúng verdict; chưa chứng minh rò bộ nhớ. Prefix không thay 35 batch.
 - Outer Job formal10 zero/closed, wrapper exit2; thiếu actual host/editor exit receipts do hard abort.
 - Formal11 dispatch: arm `HHStudio.GT06.arm-formal11-20261002` started16:20, fresh attempt DISPATCH at16:21, then terminal `HARNESS_FAIL`; no actual natural child exit was observed.
-- Helper sau dispatch đã sửa và bắt buộc dry-run thật trước arm; không còn task mới được arm.
+- Helper bắt buộc dry-run thật trước arm; formal13 đã terminal, không có campaign live tại kiểm tra 18:37 ngày 02-10.
 - Formal11 used a fresh dry-run: available memory8.24 GiB, commit62.56%, CPU max33.65%/mean17.41% over60s, lock absent, scheduler idle and budget available. The arm is bound to source/profile and does not lower O1–O4/timeouts.
 - Formal11 raw is closed; verify actual exits, Job/tree/handles, watchdog, dataset and source/profile hashes before any future formal. Do not resume or self-accept.
 - O2 tiếp tục riêng theo O8.3/AUTHORING_STATUS.md, AUTHORITY0, không merge trước GT06.
@@ -19,6 +19,26 @@
 This lane records diagnostics without changing the authoritative plan. Each
 entry keeps the run ID, source closure, command, actual result and the finding
 needed for the next repair. Raw evidence remains under `studio/.local/`.
+
+## 2026-10-02 — formal13 pre-dispatch failure and launcher repair
+
+- Formal13's fresh dry-run and arm preflight passed, but the launcher failed at
+  18:31:03 Asia/Saigon in `prepare`: `Get-FileHash` was unavailable in that
+  PowerShell process. `launcher-failure.json` records `run_invoked=false`;
+  no campaign batches or new INFRA_ABORT budget were consumed. Preserve
+  `.local/formal13-arm-20261002/` and
+  `studio/.local/reviews/gt06-o4-formal-13-supervisor/`; do not reuse the ID.
+- The command's absence is observed; its environment/module cause is not yet
+  established. `Hash-File` now streams the file through .NET SHA256, retains
+  literal-path validation, and disposes both stream and algorithm in `finally`.
+  The SHA256 contract, gates, profile and timeouts are unchanged.
+- A Windows PowerShell regression shadows `Get-FileHash` with a failing stub,
+  checks a binary file with brackets in its path against Python SHA256, checks
+  missing-file rejection and verifies stream release. It failed before the
+  repair; `python -B -m unittest studio.tests.replay.test_campaign_task` then
+  passed all 8 tests with actual exit 0. This proves the repaired hash boundary,
+  not formal acceptance. Next arm must use the Windows one-shot registrar,
+  fresh source binding and successful dry-run, rather than a tool session.
 
 ## 2026-10-02 — formal11 dispatch
 
@@ -68,8 +88,9 @@ needed for the next repair. Raw evidence remains under `studio/.local/`.
   WSL/Docker protected PIDs10 times; all10 returned all3 counters, actual exit0,
   with no Godot/Blender/Docker dispatch. Raw result and hash are under
   `studio/.local/reviews/gt06-perfcounter-repair-20261002-01/`.
-- This closes the specific formal11 observer reproducer, but does not turn
-  formal11 into a pair or prove a product result. Before a new formal ID,
+- These checks cover the bounded retry logic and host counter reads; they do
+  not reproduce the complete formal11 failure under load or prove its root
+  cause. They do not turn formal11 into a pair or prove a product result. Before a new formal ID,
   freeze the new source closure, run a fresh O4.1 preflight and one-minute CPU
   observation for each pair, and verify the machine-on window and remaining
   INFRA budget. Do not retry formal11 blindly or lower any gate.

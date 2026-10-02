@@ -47,7 +47,17 @@ function Assert-PlainPath([string]$Path, [bool]$MustExist = $true) {
 function Hash-File([string]$Path) {
     Assert-PlainPath $Path
     Require ([System.IO.File]::Exists($Path)) 'TASK_NOT_REGULAR_FILE'
-    return (Get-FileHash -LiteralPath $Path -Algorithm SHA256).Hash.ToLowerInvariant()
+    # Native Windows PowerShell may inherit a module path that cannot resolve
+    # Get-FileHash. Use the same SHA256 algorithm without module discovery.
+    $algorithm = [System.Security.Cryptography.SHA256]::Create()
+    $stream = $null
+    try {
+        $stream = [System.IO.File]::OpenRead($Path)
+        return ([BitConverter]::ToString($algorithm.ComputeHash($stream))).Replace('-', '').ToLowerInvariant()
+    } finally {
+        if ($null -ne $stream) { $stream.Dispose() }
+        $algorithm.Dispose()
+    }
 }
 
 function Hash-Text([string]$Value) {
