@@ -70,6 +70,29 @@ def mutate_dependency():
 
 
 class GameplayRuntimeBindingTests(unittest.TestCase):
+    def test_inventory_and_pipe_use_captured_generation_with_stdlib_bootstrap(self):
+        observation = self.run_copy(r'''
+owner_mod = load_owner()
+executor = owner_mod._load('linux_executor')
+inventory = owner_mod._RUNTIME.module('studio.host.core.docker_inventory')
+pipe = owner_mod._RUNTIME.module('studio.host.core.pipe_io')
+assert inventory.OwnedPipe is pipe.OwnedPipe
+path = studio / 'host/core/docker_inventory.py'
+path.write_bytes(path.read_bytes() + b'\nraise AssertionError("changed disk inventory executed")\n')
+inventory.query_owned_executor_containers = lambda deadline: []
+assert executor._inventory_ids(root) == []
+receipt = json.loads((root / 'admission-inventory.json').read_text())
+assert receipt['status'] == 'ok' and receipt['container_ids'] == []
+try:
+    owner_mod.runtime_source_closure()
+except Exception as error:
+    assert error_code(error) == 'GAMEPLAY_OWNER_IMPORT_RELEASE_CHANGED', str(error)
+else:
+    raise AssertionError('changed inventory accepted')
+print(json.dumps({'captured_inventory_used':True, 'disk_drift_rejected':True}))
+''')
+        self.assertEqual(observation, {'captured_inventory_used': True, 'disk_drift_rejected': True})
+
     def test_dependency_parser_uses_captured_validator_before_drift_rejection(self):
         observation = self.run_copy(r'''
 owner_mod = load_owner()

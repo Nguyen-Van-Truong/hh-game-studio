@@ -68,6 +68,8 @@ GAMEPLAY_RUNTIME_FILES = (
     'host/core/redaction.py',
     'host/core/transport.py',
     'host/core/limits.py',
+    'host/core/docker_inventory.py',
+    'host/core/pipe_io.py',
     'build/bootstrap/run_fixture.py',
     'godot-addon/validator-toolchain.lock.json',
 )
@@ -464,6 +466,30 @@ def _missing(row: dict, output: Path, selector: str) -> bool:
             and ('no such object: ' + selector) in _read_file(output / row['stderr'], 262144).decode(errors='replace').lower())
 
 
+def _inventory_ids(output: Path) -> list[str]:
+    # Lazy import keeps the gameplay runtime's executor bootstrap stdlib-only.
+    from studio.host.core import docker_inventory as inventory
+    started = time.monotonic()
+    deadline = started + 5
+    row = {'schema': 'hh-linux-admission-inventory-1', 'transport': 'named-pipe',
+           'endpoint': inventory.ENDPOINT, 'request': inventory.REQUEST.decode('ascii'),
+           'timeout_seconds': 5, 'status': 'interrupted', 'container_ids': None}
+    try:
+        _need(inventory.EXECUTOR_CONTEXT == EXECUTOR_CONTEXT, 'EXECUTOR_INVENTORY_CONTEXT')
+        identifiers = inventory.query_owned_executor_containers(deadline)
+        inventory.check_deadline(deadline)
+        row.update(status='ok', container_ids=identifiers)
+        return identifiers
+    except inventory.InventoryError as error:
+        row['status'] = error.reason
+        if type(error.detail) is int:
+            row['http_status' if error.reason == 'nonzero' else 'errno'] = error.detail
+        raise ExecutorError('EXECUTOR_INVENTORY_' + error.reason.upper()) from None
+    finally:
+        row['elapsed_seconds'] = round(max(0, time.monotonic() - started), 6)
+        _write(output / 'admission-inventory.json', row)
+
+
 def _reconcile_owner(path: Path, call, output: Path) -> dict:
     record = _read_owner(path)
     recovery = {'previous_owner': record, 'reconciled': False, 'removed': False}
@@ -497,9 +523,8 @@ def _reconcile_owner(path: Path, call, output: Path) -> dict:
             recovery['removed'] = True
         _clear_owner(path)
     # Never clean an unknown container merely because it carries our label.
-    row, raw = call(['ps', '--all', '--no-trunc', '--filter', 'label=hh.gt03.executor=' + EXECUTOR_CONTEXT,
-                     '--format', '{{.ID}}'], 'admission-inventory', timeout=5, cap=4096)
-    _need(_cli_clean(row) and not raw.strip(), 'EXECUTOR_UNRECORDED_CONTAINER')
+    identifiers = _inventory_ids(output)
+    _need(not identifiers, 'EXECUTOR_UNRECORDED_CONTAINER')
     recovery['reconciled'] = True
     return recovery
 

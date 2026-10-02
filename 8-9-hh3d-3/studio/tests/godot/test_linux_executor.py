@@ -240,7 +240,7 @@ class FakeDocker:
         elif args[:2] == ['image', 'inspect']:
             payload = json.dumps([{'Id': executor.IMAGE_ID, 'Os': 'linux', 'Architecture': 'amd64', 'Config': {'Env': IMAGE_ENV}}]).encode()
         elif args[0] == 'ps':
-            payload = b''
+            raise AssertionError('admission inventory must not fall back to Docker CLI')
         elif args[0] == 'create':
             name = args[args.index('--name') + 1]
             mounts = [args[i + 1] for i, item in enumerate(args) if item == '--mount']
@@ -290,6 +290,7 @@ class LifecycleTests(unittest.TestCase):
             with patch.object(executor, '_cli', side_effect=fake), patch.object(executor, '_binary', return_value=binary), \
                  patch.object(executor, '_owned_runner', return_value=object()), \
                  patch.object(executor, '_Admission', return_value=admission), \
+                 patch.object(executor, '_inventory_ids', return_value=[]), \
                  patch.object(executor, '_owner_path', return_value=folder / 'owner.json'), \
                  patch.object(executor, '_lock', return_value={'docker_endpoint': 'npipe:////./pipe/dockerDesktopLinuxEngine'}), \
                  patch.object(executor, 'BINARY_SHA256', hashlib.sha256(binary.read_bytes()).hexdigest()):
@@ -342,6 +343,7 @@ class LifecycleTests(unittest.TestCase):
                 admission=Mock(wait_ms=0,abandoned=False,acquired=True)
                 with patch.object(executor,'_cli',side_effect=cancelled),patch.object(executor,'_binary',return_value=binary), \
                      patch.object(executor,'_owned_runner',return_value=object()),patch.object(executor,'_Admission',return_value=admission), \
+                     patch.object(executor,'_inventory_ids',return_value=[]), \
                      patch.object(executor,'_owner_path',return_value=folder/'owner.json'), \
                      patch.object(executor,'_lock',return_value={'docker_endpoint':'npipe:////./pipe/dockerDesktopLinuxEngine'}), \
                      patch.object(executor,'BINARY_SHA256',hashlib.sha256(b'pin').hexdigest()):
@@ -403,10 +405,20 @@ class AdmissionTests(unittest.TestCase):
             return clean_row(), CID.encode()
         with tempfile.TemporaryDirectory() as folder:
             path = Path(folder) / 'owner.json'
-            with self.assertRaisesRegex(executor.ExecutorError, 'UNRECORDED_CONTAINER'):
+            with patch.object(executor, '_inventory_ids', return_value=[CID]) as inventory, \
+                 self.assertRaisesRegex(executor.ExecutorError, 'UNRECORDED_CONTAINER'):
                 executor._reconcile_owner(path, call, Path(folder))
-        self.assertEqual(len(calls),1)
-        self.assertEqual(calls[0][0],'ps')
+            inventory.assert_called_once_with(Path(folder))
+        self.assertEqual(calls, [])
+
+    def test_inventory_failure_never_admits_or_dispatches_container_cleanup(self):
+        call = Mock()
+        with tempfile.TemporaryDirectory() as folder, \
+             patch.object(executor, '_inventory_ids',
+                          side_effect=executor.ExecutorError('EXECUTOR_INVENTORY_TIMEOUT')):
+            with self.assertRaisesRegex(executor.ExecutorError, 'EXECUTOR_INVENTORY_TIMEOUT'):
+                executor._reconcile_owner(Path(folder) / 'owner.json', call, Path(folder))
+        call.assert_not_called()
 
     def test_missing_create_reply_retains_ambiguity_and_never_admits(self):
         with tempfile.TemporaryDirectory() as folder:
@@ -425,11 +437,13 @@ class AdmissionTests(unittest.TestCase):
             executor._persist_owner(path,self.record('start_pending'))
             fake=FakeDocker('clean'); fake.state=inspected(NAME,CID,'parse',Path('C:/t'),Path('C:/s'))
             fake.state['State'].update(Running=True,Pid=42)
-            result=executor._reconcile_owner(path,lambda args,label,**kwargs:fake(None,args,folder,label,**kwargs),folder)
+            with patch.object(executor,'_inventory_ids',return_value=[]) as inventory:
+                result=executor._reconcile_owner(path,lambda args,label,**kwargs:fake(None,args,folder,label,**kwargs),folder)
+            inventory.assert_called_once_with(folder)
             self.assertTrue(result['reconciled']);self.assertTrue(result['removed'])
             self.assertFalse(path.exists())
             self.assertLess(fake.calls.index(['kill',CID]),fake.calls.index(['rm',CID]))
-            self.assertEqual(fake.calls[-1][0],'ps')
+            self.assertEqual(fake.calls[-1], ['inspect', CID])
 
     def test_native_mutex_create_or_wait_cancellation_retains_ambiguous_owner(self):
         for kind in (KeyboardInterrupt,SystemExit):
