@@ -92,11 +92,12 @@ class EnvironmentTests(unittest.TestCase):
     def test_simultaneous_infrastructure_trigger_cannot_mask_product_memory(self):
         for extra, other in (({'foreign_engines': [{'pid': 77}]}, 'FOREIGN_ENGINE'),
                              ({'awake_100ns': 0}, 'SLEEP_RESUME'),
-                             ({'uptime_ms': 11000, 'awake_100ns': 110000000}, 'SAMPLE_GAP')):
+                             ({'uptime_ms': 31000, 'awake_100ns': 310000000}, 'SAMPLE_GAP')):
             with self.subTest(other=other):
                 policy = env.Policy()
                 policy.observe(sample())
-                result = policy.observe(sample(5, commit_total_bytes=93 * env.GIB,
+                result = policy.observe(sample(31 if other == 'SAMPLE_GAP' else 5,
+                                               commit_total_bytes=93 * env.GIB,
                                                owned_private_bytes=2 * env.GIB, **extra))
                 self.assertEqual((result['reason'], result['classification']),
                                  ('COMMIT_PRESSURE', 'PRODUCT_FAIL'))
@@ -170,6 +171,27 @@ class EnvironmentTests(unittest.TestCase):
         self.assertTrue(result['top_processes'][1]['owned'])
         self.assertEqual(result['top_processes'][0]['interval_cpu_percent'], 1.5)
         self.assertFalse(result['hot_external_processes'])
+        self.assertAlmostEqual(result['external_cpu_percent'], 8.375)
+
+    def test_external_cpu_pressure_sums_multiple_processes(self):
+        policy = env.Policy()
+        for second in range(0, 60, 5):
+            self.assertIsNone(policy.observe(sample(second, processes=[
+                {'pid': 77, 'name': 'compiler-a.exe', 'owned': False,
+                 'process_start_100ns': 10,
+                 'cpu_total_100ns': second * 10_000_000 * 30 // 100},
+                {'pid': 78, 'name': 'compiler-b.exe', 'owned': False,
+                 'process_start_100ns': 11,
+                 'cpu_total_100ns': second * 10_000_000 * 30 // 100}])))
+        result = policy.observe(sample(60, processes=[
+            {'pid': 77, 'name': 'compiler-a.exe', 'owned': False,
+             'process_start_100ns': 10,
+             'cpu_total_100ns': 60 * 10_000_000 * 30 // 100},
+            {'pid': 78, 'name': 'compiler-b.exe', 'owned': False,
+             'process_start_100ns': 11,
+             'cpu_total_100ns': 60 * 10_000_000 * 30 // 100}]))
+        self.assertEqual((result['reason'], result['classification']),
+                         ('EXTERNAL_CPU_PRESSURE', 'INFRA_ABORT'))
 
     def test_cpu_timer_resets_for_pid_reuse_missing_counter_or_cool_interval(self):
         for reset in ('pid_reuse', 'missing', 'cool'):
@@ -512,7 +534,7 @@ class EnvironmentTests(unittest.TestCase):
     def test_missing_sampling_budget_is_harness_failure(self):
         policy = env.Policy()
         policy.observe(sample())
-        result = policy.observe(sample(11))
+        result = policy.observe(sample(31))
         self.assertEqual((result['reason'], result['classification']), ('SAMPLE_GAP', 'HARNESS_FAIL'))
 
     def test_invalid_native_values_fail_closed(self):

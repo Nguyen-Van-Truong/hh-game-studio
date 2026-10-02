@@ -27,7 +27,10 @@ STUDIO_CONTAINER_RE = re.compile(r'^hh-gt03-[0-9a-f]{32}$')
 
 GIB = 1024**3
 INTERVAL_SECONDS = 5
-MAX_SAMPLE_GAP_SECONDS = 10
+# O9.1c: a mandatory sample stream may be absent for less than 30 seconds;
+# only a longer continuous gap is a harness failure. The normal poll cadence
+# remains five seconds and O1 product timeouts are unchanged.
+MAX_SAMPLE_GAP_SECONDS = 30
 SCHEMA = 'hh-studio.benchmark-environment-preflight'
 VERSION = '1.2.0'
 SAMPLE_STREAM_SCHEMA = 'HH-GT06-WATCHDOG-SAMPLE-STREAM-3'
@@ -349,8 +352,16 @@ def native_snapshot(processes, *, job_handle=None, heavy_names=frozenset(),
     # ``perf_process_times`` helper above for callers/tests that explicitly
     # request a bounded PID lookup; the measured watchdog never uses it.
     fallback = _nt_process_times(None)
+    require(all(row['pid'] == 0 or row['pid'] in fallback for row in rows),
+            'WATCHDOG_NTQSI_MISSING')
     for row in rows:
-        if row['pid'] in fallback:
+        # The System Idle row has no usable creation timestamp; keep it as an
+        # explicitly unknown sentinel rather than violating the CPU inventory
+        # shape contract with a zero start time.
+        if row['pid'] == 0:
+            row['cpu_total_100ns'] = None
+            row['process_start_100ns'] = None
+        elif row['pid'] in fallback:
             row.update(fallback[row['pid']])
     docker_inventory_status = 'KNOWN'
     docker_inventory_error = None
@@ -466,10 +477,13 @@ def cpu_interval(previous, row):
                           'cpu_delta_100ns': current_cpu - before_cpu,
                           'interval_cpu_percent': 100 * (current_cpu - before_cpu) / total})
     intervals.sort(key=lambda p: (-p['interval_cpu_percent'], p['pid']))
+    external_ticks = sum(p['cpu_delta_100ns'] for p in intervals if not p['owned'])
+    external_percent = 100 * external_ticks / total if total else 0
     return {'basis': 'process_tick_delta_over_system_tick_delta',
             'system_delta_100ns': total, 'top_processes': intervals[:10],
             'hot_external_processes': [p for p in intervals
                                        if not p['owned'] and p['cpu_delta_100ns'] * 100 >= total * 50],
+            'external_cpu_percent': external_percent,
             'unavailable_or_new_pids': unknown}
 
 
@@ -478,7 +492,7 @@ class Policy:
     def __init__(self):
         self.first = self.previous = None
         self.low_since = None
-        self.external_cpu_since = {}
+        self.external_cpu_since = None
         self.previous_observed = None
 
     def observe(self, row):
@@ -526,9 +540,13 @@ class Policy:
             total = row['cpu_total_100ns'] - previous['cpu_total_100ns']
             idle = row['cpu_idle_100ns'] - previous['cpu_idle_100ns']
             require(total >= 0 and 0 <= idle <= total, 'WATCHDOG_CPU_DELTA')
-            hot = {(p['pid'], p['process_start_100ns']) for p in cpu['hot_external_processes']}
-            self.external_cpu_since = {key: self.external_cpu_since.get(key, previous['uptime_ms'] / 1000)
-                                       for key in hot}
+            # Sum all external process CPU. Tracking only the hottest PID
+            # would miss two moderate processes crossing the O9 threshold.
+            if cpu['external_cpu_percent'] >= 50:
+                if self.external_cpu_since is None:
+                    self.external_cpu_since = previous['uptime_ms'] / 1000
+            else:
+                self.external_cpu_since = None
         self.low_since = (self.low_since if self.low_since is not None else now) if row['available_memory_bytes'] < 1.5 * GIB else None
         if row['foreign_engines']:
             reasons.append('FOREIGN_ENGINE')
@@ -536,7 +554,7 @@ class Policy:
             reasons.append('COMMIT_PRESSURE')
         if self.low_since is not None and now - self.low_since >= 60:
             reasons.append('AVAILABLE_PRESSURE')
-        if any(now - since >= 60 for since in self.external_cpu_since.values()):
+        if self.external_cpu_since is not None and now - self.external_cpu_since >= 60:
             reasons.append('EXTERNAL_CPU_PRESSURE')
         product_pressure = []
         for pressure in ('COMMIT_PRESSURE', 'AVAILABLE_PRESSURE'):

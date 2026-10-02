@@ -88,15 +88,19 @@ def run(root: Path, seconds: int, interval: float) -> int:
         except BaseException as error:
             primary = primary or error
     elapsed = time.monotonic() - started
+    if primary is None:
+        try:
+            environment.verify_watchdog(root, campaign.read_regular, elapsed_seconds=elapsed,
+                                        expected_binding=binding, require_docker_inventory=True)
+        except BaseException as error:
+            primary = error
     result = {'schema': SOAK_SCHEMA, **binding, 'actual_exit_code': 0 if primary is None else 1,
               'elapsed_seconds': round(elapsed, 3), 'sample_stream_closed': watchdog.stream.closed,
-              'formal_acceptance': False,
+              'verified_watchdog': primary is None, 'formal_acceptance': False,
               'error_code': getattr(primary, 'code', type(primary).__name__) if primary else None}
     write_new(root / 'soak-result.json', result)
     if primary is not None:
         raise primary
-    environment.verify_watchdog(root, campaign.read_regular, elapsed_seconds=elapsed,
-                                expected_binding=binding, require_docker_inventory=True)
     return 0
 
 
