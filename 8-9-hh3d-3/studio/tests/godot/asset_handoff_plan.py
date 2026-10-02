@@ -166,7 +166,7 @@ def source_paths() -> tuple[str, ...]:
     return ("tests/godot/asset_handoff_plan.py", "tests/asset-profile.json",
             "blender-addon/export_profile.py", "blender-addon/material_profile.py",
             "host/blender/glb_preflight.py", "pipeline/glb_semantics.py",
-            "godot-addon/gameplay_source_profile.py")
+            "godot-addon/gameplay_source_profile.py", "tests/blender/sprite_sheet_pixels.py")
 
 
 if __name__ == "__main__":

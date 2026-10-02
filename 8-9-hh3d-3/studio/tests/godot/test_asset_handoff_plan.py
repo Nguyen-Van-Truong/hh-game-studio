@@ -85,6 +85,7 @@ class AssetHandoffPlanTests(unittest.TestCase):
             for key, source in row["profile_sources"].items():
                 self.assertEqual(source, asset.PROFILE_SOURCE_PATHS[key])
                 self.assertTrue((asset.STUDIO / source).is_file())
+        self.assertTrue(set(asset.PROFILE_SOURCE_PATHS.values()).issubset(asset.source_paths()))
 
         changed = copy.deepcopy(value)
         changed["assets"][0]["profile_sources"]["geometry"] = "blender-addon/missing.py"
