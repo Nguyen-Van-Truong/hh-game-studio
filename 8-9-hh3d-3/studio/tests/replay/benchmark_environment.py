@@ -20,6 +20,12 @@ import zlib
 from studio.tests.replay.benchmark_job import BenchmarkJobError, require
 from studio.tests.replay.benchmark_docker_inventory import query_containers, InventoryError
 
+# O8.1: only the executor's owned-container naming contract blocks a formal
+# campaign. Other hh-* containers may belong to a different local project;
+# they remain in the inventory for evidence and are handled by CPU/RAM
+# watchdogs. Inventory/query errors remain fail-closed in running_containers.
+STUDIO_CONTAINER_RE = re.compile(r'^hh-gt03-[0-9a-f]{32}$')
+
 GIB = 1024**3
 INTERVAL_SECONDS = 5
 MAX_SAMPLE_GAP_SECONDS = 10
@@ -132,6 +138,13 @@ def running_containers(processes):
     error = BenchmarkJobError('WATCHDOG_DOCKER_INVENTORY')
     error.docker_inventory = diagnostic
     raise error from None
+
+
+def foreign_container_names(containers):
+    """Return only studio-owned GT03 names that block a formal campaign."""
+    require(type(containers) is list and all(type(name) is str for name in containers),
+            'DOCKER_INVENTORY_SHAPE')
+    return [name for name in containers if STUDIO_CONTAINER_RE.fullmatch(name)]
 
 
 def perf_process_times(processes):
@@ -299,7 +312,7 @@ def native_snapshot(processes, *, job_handle=None, heavy_names=frozenset()):
             row.update(fallback[row['pid']])
     containers = running_containers(processes)
     foreign.extend({'name': name, 'ownership': 'outside_campaign_job', 'kind': 'docker_container'}
-                   for name in containers if name.startswith('hh-'))
+                   for name in foreign_container_names(containers))
     return {
         'observed_utc': time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()),
         'available_memory_bytes': int(memory.available),

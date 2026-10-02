@@ -27,6 +27,15 @@ def sample(second=0, **changes):
 
 
 class EnvironmentTests(unittest.TestCase):
+    def test_o8_only_owned_gt03_container_blocks_formal(self):
+        owned = 'hh-gt03-' + 'a' * 32
+        self.assertEqual(env.foreign_container_names([
+            'hh-plan19-admission-20260919-r01', owned, 'redis-local']), [owned])
+
+    def test_o8_rejects_malformed_container_inventory_fail_closed(self):
+        with self.assertRaisesRegex(BenchmarkJobError, 'DOCKER_INVENTORY_SHAPE'):
+            env.foreign_container_names([owned for owned in ('hh-gt03-' + 'b' * 31, None)])
+
     def test_cpu_inventory_encoding_is_lossless_bounded_and_tamper_rejected(self):
         value = sample(processes=[{'pid': n, 'name': 'python.exe', 'owned': False,
             'cpu_total_100ns': n * 100, 'process_start_100ns': n + 1} for n in range(500)])
