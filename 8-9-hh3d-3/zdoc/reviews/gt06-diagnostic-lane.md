@@ -1080,3 +1080,10 @@ Archive manifests (AUTHORITY0, raw preserved):
   dispatch formal22 blindly. The next source review must also close the O9.1
   requirement that in-run CPU sampling avoid the remaining PowerShell/PerfProc
   fallback; the current implementation is not yet evidence that O9.1a is done.
+- The gap is localized to admitted command `.153` (row ordinal `769`): its
+  same-ID lookup attempts remain `QUEUED` for roughly 2.766 s before the final
+  `READBACK_CONFIRMED`; no transport failure is recorded. The retained HTTP
+  ring starts after this interval, so it cannot prove whether journal/queue
+  contention caused the stall. A future diagnostic must persist bounded
+  per-command phase timestamps or reproduce from the journal seed before any
+  source patch or formal retry.
