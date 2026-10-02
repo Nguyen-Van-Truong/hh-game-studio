@@ -210,9 +210,10 @@ class GameplaySourcePublicationOwner:
         _need(type(dependency_observation_required) is bool,
               "GAMEPLAY_OWNER_DEPENDENCY_POLICY")
         _need(type(dependency_observation_files) is tuple
-              and tuple(sorted(set(dependency_observation_files))) == dependency_observation_files
-              and all(type(name) is str and name in candidate for name in dependency_observation_files),
+              and all(type(name) is str and name in candidate for name in dependency_observation_files)
+              and len(set(dependency_observation_files)) == len(dependency_observation_files),
               "GAMEPLAY_OWNER_DEPENDENCY_POLICY")
+        dependency_observation_files = tuple(sorted(dependency_observation_files))
         _need(not dependency_observation_required or dependency_observation_files,
               "GAMEPLAY_OWNER_DEPENDENCY_POLICY")
         _need(runtime_source_closure()[1] == source_closure_sha256,
