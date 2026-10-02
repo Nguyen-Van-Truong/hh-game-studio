@@ -1055,3 +1055,28 @@ Archive manifests (AUTHORITY0, raw preserved):
 - Formal19’s `2.016 s` terminal observation is a real deadline-accounting gap: `running_containers()` gave the second pipe operation a deadline at `t0+2 s`, while `_io` and `OwnedPipe.close()` can each consume a bounded `250 ms` drain when completion is uncertain. The extra time must not be clamped or treated as valid inventory.
 - The repair reserves `0.6 s` for the worst-case two-stage cleanup inside the unchanged absolute `2 s` budget, giving one operation a `1.4 s` cutoff. A quick transient error may retry against that same cutoff; a full timeout cannot start a late second read. A focused mocked timeout-plus-`250 ms` cleanup test proves the recorded elapsed time remains ≤ `2 s`; the environment/Docker/native-pipe suite now has `88` tests, exit `0`. The O1/O4 thresholds and timeout remain unchanged.
 - This is a source-level repair for the observed boundary, not acceptance evidence. Freeze a new closure and run a fresh O4.1/CPU-minute check before any next campaign; do not dispatch formal20 from the old closure or raw.
+
+## 2026-10-03 — gt06-o4-formal-21 terminal status-gap product failure
+
+- Formal21 dispatched at 05:11:06 Asia/Saigon from fresh source closure `01c735149811d4d49f92e478c69386d8db6edc6e0ffbefa19eb0e46c883b39ed`, profile v6 `8a2e599c40f927ffaff5ded5e48b6bf2a0f0a6bb3a23de31434a695f4258cb35`, after the cleanup-deadline repair and a passing O4.1 dry-run. It reached one warmup batch and stopped in `joint_observation` with `CAMPAIGN_STATUS_GAP`; the authoritative sample preview reports `max_status_gap_ms=2766.6174`, above the unchanged O1 limit of `2000 ms`. The joint barrier receipt for the same batch was `650.59 ms`, so the phase/timestamp discrepancy must be reviewed from raw evidence rather than averaged or ignored.
+- This is a `PRODUCT_FAIL` under the O1 status-gap rule, not an INFRA_ABORT and not a Docker watchdog failure. Host wrapper actual exit was `1`; import host exit was `0`; the editor target natural exit was not recorded. Owned Job/tree closed with zero active members and no retained handles. The exact arm task `HHStudio.GT06.arm-formal21-20261003` was removed after terminal closeout; raw evidence and `closeout-check.json` remain under `studio/.local/reviews/gt06-o4-formal-21/`.
+- The result does not prove a memory leak or explain formal14’s save tail. Preserve the verdict and raw files. Review the batch-0 status-gap phase, editor/host monotonic timestamps and receipt-generation boundary before any new formal ID; do not resume formal01–21/S258 or dispatch formal22 blindly. GT06 remains incomplete with zero accepted pairs; O2 remains separate and unmerged.
+
+### Offline scope binding after formal21
+
+- The apparent `2766.6174 ms` versus `650.59 ms` discrepancy is a scope difference,
+  not a reason to average or discard the failure. In `run-00-attempt-01`,
+  `command-00.json` has a real `2766618 us` gap between adjacent
+  `host_response_mono_us` samples (indices 3632→3633); its
+  `status_gap_scope` is the host command-lane response progress. The native
+  `batch-00.json`/joint barrier reports `650.59 ms` for the editor heartbeat
+  lane only. `assemble_sample()` takes the maximum of command, native and
+  barrier/start-permit gaps, so the authoritative sample value `2766.6174 ms`
+  correctly violates O1.5. This is a product status-gap failure, not an
+  evidence merge error or Docker watchdog event.
+- The gap has no command receipt timestamp inside it and no monotonic CPU
+  binding that proves a cause. Keep the raw verdict, review the host-lane
+  stall boundary/reproducer before a new formal ID, and do not lower O1 or
+  dispatch formal22 blindly. The next source review must also close the O9.1
+  requirement that in-run CPU sampling avoid the remaining PowerShell/PerfProc
+  fallback; the current implementation is not yet evidence that O9.1a is done.
