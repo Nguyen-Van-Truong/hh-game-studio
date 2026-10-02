@@ -20,6 +20,9 @@ Tools-plan O1–O8 governs; test counts/native diagnostics do not close AUTH or 
 - AUTH-05 hostile boundary/spawn/network/timeout observations remain separate cases.
   Adapter boundary run20261002-01 preserves last-good but predates the later run-ID harness
   validation; keep it as historical diagnostic, not a run of today's harness or AUTH acceptance.
+- AUTH-05 static hardening commit `55433374ee03de50d0837d549b8cd3d8b03f4bd9` now rejects
+  duplicate JSON keys recursively in hostile boundary/spawn markers. Focused pure suites
+  passed46 and43 tests, both actual exit0; no native engine, Docker or network probe was run.
 - O8.3a physics repair re-evaluated44 raw artifacts from20260929-03: corrected trace/lifecycle
   check true; original verifier FAIL unchanged. Fresh native confirmation below observed the repaired
   fixture in a real container with actual exit0 and clean owned lifecycle; authority remains0.
@@ -61,6 +64,10 @@ Tools-plan O1–O8 governs; test counts/native diagnostics do not close AUTH or 
 2. Keep GT09/GT10 acceptance, human playtest and two independent critics separate from diagnostics.
 3. Do not repeat the completed native confirmations without a new reproducer; retain raw evidence and
    keep the candidate authority0 until the formal GT06 and later gates are accepted.
+
+The duplicate-key repair only hardens evidence parsing. AUTH-05 native boundary,
+spawn, network and timeout observations remain required and must be run only when
+the measurement lock is absent and the host preflight permits it.
 
 Historical entries (including obsolete next actions): [history](AUTHORING_STATUS_HISTORY_20261002.md).
 History preserves the previous status file byte-for-byte; SHA256 `48fc9e191150cebd2c546f360cc75f3cd3ae2b5c0e77844bd316712a36407b9a`.
