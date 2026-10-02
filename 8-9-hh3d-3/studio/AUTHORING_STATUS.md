@@ -21,10 +21,10 @@ Tools-plan O1–O8 governs; test counts/native diagnostics do not close AUTH or 
   Adapter boundary run20261002-01 preserves last-good but predates the later run-ID harness
   validation; keep it as historical diagnostic, not a run of today's harness or AUTH acceptance.
 - Duplicate-key hardening retains strict hostile-marker parsing; diagnostics do not grant AUTH05.
-- Saved-arena builder05 now persists a twelve-node physical world (five collision shapes + Camera)
-  through validated candidate proposals and native UndoRedo/save/reload. Publication-saved-arena02
-  loads those exact scene bytes and proves physics, four-file dependencies, READBACK_ACK/reopen/retry.
-  HUD/InputMap/signals remain runtime; generic registered authoring, complete arena and3D fixture remain open.
+- Saved-arena builder06 persists fourteen nodes (five collision shapes, Camera and HUD/Status)
+  through validated candidate proposals and native UndoRedo/save/reload. Publication-saved-arena03
+  loads those exact scene bytes and proves physics, saved HUD, dependencies and ACK/reopen/retry.
+  InputMap/signals remain runtime; generic registered authoring, complete arena and3D remain open.
 - AUTH-05 publication-owner hostile runs now include native spawn and a distinct wall-wait
   confirmation. Wall20261002-01 actual outer0, good host/container0 then bad124;
   supervisor/cleanup/last-good/reopen/retry checked with exactly2 dispatches.
@@ -38,6 +38,29 @@ Tools-plan O1–O8 governs; test counts/native diagnostics do not close AUTH or 
   fixture in a real container with actual exit0 and clean owned lifecycle; authority remains0.
 - GT-06 formal14 is terminal PRODUCT_FAIL; no measured workload active at last check. Recheck process/lock
   before engine/Docker work; when formal runs, static work only and one writer per file.
+
+## 2026-10-02 — Saved HUD composed with the native arena and publication owner
+
+- Candidate catalog/resource context now admits `CanvasLayer` and `Label`; the saved-arena
+  recipe persists a fourteen-node scene: the twelve physical nodes plus `HUD/Status`.
+  The label is validated as a typed candidate (`text`, position, visibility and mouse filter),
+  and the builder still verifies one atomic UndoRedo transaction, save, cache-ignore reload,
+  ownership, distinct resources and exact snapshots. Authority remains0.
+- Focused pure authoring/recipe/builder/publication/owner tests: **104**, actual exit0.
+- Builder preflight passed (available memory12.41GiB, commit54.50%, no foreign engines).
+  Publication used a second fresh O4.1 check:10.64GiB,58.14%, no foreign engines. `o2-saved-arena-20261002-06` used the pinned Windows Godot editor:
+  actual editor/target/wrapper exit0, natural tree exit, Job closed/zero, no retained handles;
+  builder verifier observed 202 native checks, 14 nodes and scene SHA256
+  `563f773d8b30025baf859f1d967489abdbdb3a35943c67ecfe60174b645fff30`.
+- `o2-publication-saved-arena-20261002-03` then used that exact scene through the real
+  gameplay publication owner and Docker executor. Outer/host/container actual exit0, one
+  native dispatch, READBACK_ACK generation2, live/reopened retry equal, CURRENT/journal
+  unchanged, owned cleanup verified. The 150-tick physics oracle passed and
+  `saved_hud_resolved=true` proves the loaded `HUD/Status` label drove the final HUD state.
+  Raw evidence is under `studio/.local/reviews/`; `authority=0`, `public_ack=false`.
+- InputMap and signal wiring remain runtime fixture logic. TileMap, audio, pause/restart,
+  respawn and the real3D/Blender fixture remain open; candidate authoring is not yet a
+  registered public adapter/profile and must not be described as a complete game or GT09 proof.
 
 ## 2026-10-02 — Saved physical world composed with native gameplay publication
 
@@ -62,7 +85,7 @@ Tools-plan O1–O8 governs; test counts/native diagnostics do not close AUTH or 
   no inferred natural exit. Raw preserved; no engine remained on resume.
 - Fresh O4.1 then `python -B -X utf8 studio/tests/godot/run_saved_arena_builder.py
   --run-id o2-saved-arena-20261002-05 --godot <main pinned Windows GUI binary>`.
-  21:59 Asia/Saigon:113 native checks, actual outer/target/wrapper0, natural tree0,
+  21:59 Asia/Saigon:188 native checks (corrected from the earlier seven-node run count), actual outer/target/wrapper0, natural tree0,
   Job zero/closed/unretained, clean logs.24 frozen/current source files verified.
   Builder native scene binding was rederived before publication.
 - Fresh O4.1 then `python -B -X utf8 studio/tests/godot/run_gameplay_publication_probe.py
@@ -248,10 +271,12 @@ Tools-plan O1–O8 governs; test counts/native diagnostics do not close AUTH or 
 
 ## Next actions
 
-1. Build the arena as a saved scene/resource through candidate catalog transactions, preserving the
-   real physics/input oracle. Add fixture-specific native reload of the selected saved scene;
-   durable owner reopen alone is not that proof. Then reuse the path for a real3D avatar,
-   follow camera and collision-driven interactions. Do not repeat generic sandbox confirmations.
+1. Connect candidate scene/node/resource commands to the registered adapter boundary. The fixed
+   fourteen-node saved scene already has native UndoRedo/save/reload and gameplay publication proof,
+   but its builder is private diagnostic tooling. Preserve the existing lease/fencing, command
+   identity, checkpoint, effect-time guards, native readback and durable recovery while integrating.
+   Then complete2D TileMap/audio/pause/restart/respawn and3D avatar/camera/interactions through that path.
+   Do not repeat completed sandbox/HUD confirmations solely to refresh hashes.
 2. Keep GT09/GT10 acceptance, human playtest and two independent critics separate from diagnostics.
 3. Do not repeat the completed native confirmations without a new reproducer; retain raw evidence and
    keep the candidate authority0 until the formal GT06 and later gates are accepted.

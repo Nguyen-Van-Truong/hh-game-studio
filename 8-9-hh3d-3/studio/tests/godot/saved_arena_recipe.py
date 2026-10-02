@@ -109,6 +109,10 @@ def build_recipe() -> dict:
                             {**_node_properties((0, 0)), 'disabled': False})))
     node_specs.append(('camera', 'root', 'Camera2D', 'Camera',
                        {**_node_properties((0, 0)), 'enabled': True, 'zoom': [1, 1]}))
+    node_specs.extend((('hud_layer', 'root', 'CanvasLayer', 'HUD', {}),
+                       ('hud_label', 'hud_layer', 'Label', 'Status',
+                        {'position': [8, 8], 'visible': True, 'mouse_filter': 2,
+                         'text': 'HP 3'})))
     # Every node request is validated first, in parent-before-child order.
     for identity, parent, kind, node_name, values in node_specs:
         context = _planned_context(_NODE, snapshot, project_revision)

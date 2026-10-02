@@ -21,7 +21,7 @@ The separately versioned payload uses `properties` on create and `changes` on
 update. Profile selection belongs to a future registered owner; a request cannot
 select or enable it. The current adapter/catalog/publication owner is unchanged.
 
-The declaration contains 19 candidate node classes. Each receives static
+The declaration's `x-candidate` catalog is the source of the candidate class list. Each receives static
 accept/reject coverage, including inherited properties. `InputMap` is declared
 as a singleton and rejects node creation. Resource properties accept only
 `{"resource_id": "..."}` references resolved against the supplied trusted

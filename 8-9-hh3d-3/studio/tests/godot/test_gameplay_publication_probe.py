@@ -154,6 +154,7 @@ class ArenaPublicationFixtureTests(unittest.TestCase):
         self.assertIn('saved_world = ExtResource("2_world")', self.case['scene'])
         self.assertTrue(self.case['expected_state']['saved_world_instantiated'])
         self.assertTrue(self.case['expected_state']['saved_actors_resolved'])
+        self.assertTrue(self.case['expected_state']['saved_hud_resolved'])
         self.assertEqual(self.case['expected_state']['saved_world_path'], 'res://scenes/arena.tscn')
         self.assertEqual(self.case['expected_state']['saved_actor_paths'],
                          {'pickup': 'Pickup', 'bot': 'Bot', 'camera': 'Camera'})

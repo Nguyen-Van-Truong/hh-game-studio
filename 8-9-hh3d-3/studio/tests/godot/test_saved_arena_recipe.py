@@ -32,7 +32,7 @@ class SavedArenaRecipeTests(unittest.TestCase):
                 patch.object(recipe._RESOURCE, 'validate_request',
                              wraps=recipe._RESOURCE.validate_request) as resources:
             value = recipe.build_recipe()
-        self.assertEqual(nodes.call_count, 11)
+        self.assertEqual(nodes.call_count, 13)
         self.assertEqual(resources.call_count, 5)
         for calls, commands in ((nodes.call_args_list, value['node_commands']),
                                 (resources.call_args_list, value['resource_commands'])):
@@ -61,7 +61,7 @@ class SavedArenaRecipeTests(unittest.TestCase):
         value = recipe.build_recipe()
         nodes = {row['stable_id']: row for row in value['expected_snapshot']['nodes']}
         shapes = {row['owner_stable_id']: row for row in value['expected_snapshot']['resources']}
-        self.assertEqual(len(nodes), 12)
+        self.assertEqual(len(nodes), 14)
         self.assertEqual(len(shapes), 5)
         self.assertEqual(nodes['root'], {**value['root'], 'parent_id': None})
         for identity, position, size, layer, mask in (
@@ -85,6 +85,13 @@ class SavedArenaRecipeTests(unittest.TestCase):
             'stable_id': 'camera', 'parent_id': 'root', 'node_type': 'Camera2D', 'name': 'Camera',
             'properties': {'position': [0, 0], 'rotation': 0, 'scale': [1, 1],
                            'visible': True, 'enabled': True, 'zoom': [1, 1]}})
+        self.assertEqual(nodes['hud_layer'], {
+            'stable_id': 'hud_layer', 'parent_id': 'root', 'node_type': 'CanvasLayer',
+            'name': 'HUD', 'properties': {}})
+        self.assertEqual(nodes['hud_label'], {
+            'stable_id': 'hud_label', 'parent_id': 'hud_layer', 'node_type': 'Label',
+            'name': 'Status', 'properties': {'position': [8, 8], 'visible': True,
+                                           'mouse_filter': 2, 'text': 'HP 3'}})
 
     def test_collision_fields_require_uint32_for_bodies_and_areas(self):
         value = recipe.build_recipe()
@@ -123,7 +130,7 @@ class SavedArenaRecipeTests(unittest.TestCase):
         value = recipe.build_recipe()
         context = recipe._planned_context(recipe._RESOURCE, value['expected_snapshot'],
                                           value['planned_project_revision'])
-        for target in ('pickup', 'bot', 'camera'):
+        for target in ('pickup', 'bot', 'camera', 'hud_layer', 'hud_label'):
             request = recipe._request(context, 'scene.resource.create', 'recipe.test.owner', target,
                 {'resource_id': 'shape.new', 'resource_type': 'RectangleShape2D', 'properties': {'size': [16, 16]}})
             with self.subTest(target=target), self.assertRaises(ValidationError) as raised:

@@ -13,6 +13,7 @@ var pickup: Area2D
 var bot: Area2D
 var camera: Camera2D
 var hud: Label
+var saved_hud_resolved: bool = false
 var saved_actors_resolved: bool = false
 var saved_actor_paths: Dictionary = {}
 var projectile: Area2D
@@ -105,12 +106,13 @@ func _ready() -> void:
 	if not _build_world():
 		get_tree().quit(32)
 		return
-	# Signal connections, InputMap and HUD remain runtime fixture logic.
+	# Signal connections and InputMap remain runtime fixture logic.
 	pickup.body_entered.connect(_pickup_entered)
-	var ui := CanvasLayer.new()
-	hud = Label.new()
-	ui.add_child(hud)
-	add_child(ui)
+	if saved_world == null:
+		var ui := CanvasLayer.new()
+		hud = Label.new()
+		ui.add_child(hud)
+		add_child(ui)
 	_event("boot")
 
 func _build_world() -> bool:
@@ -127,8 +129,11 @@ func _build_world() -> bool:
 		pickup = arena.get_node_or_null("Pickup") as Area2D
 		bot = arena.get_node_or_null("Bot") as Area2D
 		camera = arena.get_node_or_null("Camera") as Camera2D
+		var saved_ui: CanvasLayer = arena.get_node_or_null("HUD") as CanvasLayer
+		hud = arena.get_node_or_null("HUD/Status") as Label
 		if player == null or wall == null or saved_floor == null \
-				or pickup == null or bot == null or camera == null:
+				or pickup == null or bot == null or camera == null \
+				or saved_ui == null or hud == null:
 			arena.free()
 			return false
 		for collision_object: CollisionObject2D in [player, wall, saved_floor, pickup, bot]:
@@ -142,7 +147,11 @@ func _build_world() -> bool:
 			and bot.get_meta("hh_saved_id", "") == "bot" \
 			and camera.get_parent() == arena and camera.owner == arena \
 			and camera.get_meta("hh_saved_id", "") == "camera"
-		if not saved_actors_resolved:
+		saved_hud_resolved = saved_ui.get_parent() == arena and saved_ui.owner == arena \
+			and saved_ui.get_meta("hh_saved_id", "") == "hud_layer" \
+			and hud.get_parent() == saved_ui and hud.owner == arena \
+			and hud.get_meta("hh_saved_id", "") == "hud_label" and hud.text == "HP 3"
+		if not saved_actors_resolved or not saved_hud_resolved:
 			arena.free()
 			return false
 		add_child(arena)
@@ -294,6 +303,8 @@ func _finish() -> void:
 		state["saved_world_path"] = arena.scene_file_path
 		state["saved_actors_resolved"] = saved_actors_resolved
 		state["saved_actor_paths"] = saved_actor_paths
+		state["saved_hud_resolved"] = saved_hud_resolved and hud.owner == arena \
+			and str(arena.get_path_to(hud)) == "HUD/Status"
 	_event("finish")
 	print("HH_PROBE_DEPENDENCY " + JSON.stringify(_dependency_observation()))
 	print("HH_PROBE_FIXTURE " + JSON.stringify(state))
