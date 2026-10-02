@@ -80,6 +80,35 @@ needed for the next repair. Raw evidence remains under `studio/.local/`.
   21,938,945 bytes, SHA256 `2b9d0cba0c397440d490f68b08c0b53ab5d6c741efdfa17c5480849f580d044a`.
   Original raw, file manifest and terminal receipts remain alongside it.
 
+## 2026-10-02 — pinned save-path review and diagnostic identity
+
+- Read-only code review (not an acceptance critic) identified a distinct preview
+  hypothesis: the pinned preview wrapper performs viewport image readback, image
+  processing and cached PNG output before calling the shared scene-save function.
+  Disabling preview changes this workload; it is not an approved formal fix and
+  does not prove preview/GPU/disk caused formal14. Sources: [preview implementation](https://github.com/godotengine/godot/blob/ed1daf0bf001b61586d9930840f2f1394092c079/editor/editor_node.cpp#L2255-L2338)
+  and [preview switch](https://github.com/godotengine/godot/blob/ed1daf0bf001b61586d9930840f2f1394092c079/editor/editor_node.h#L981-L987).
+- Preview progress can run a nested main-loop iteration. Therefore a heartbeat
+  inside the save interval does not establish that the API returned. scene_saved
+  is emitted before external-resource saving; direct post-signal progress pumping
+  was not found. Callback reentrancy remains possible, not observed in formal14.
+  [Progress pump](https://github.com/godotengine/godot/blob/ed1daf0bf001b61586d9930840f2f1394092c079/editor/gui/progress_dialog.cpp#L148-L153),
+  [save ordering](https://github.com/godotengine/godot/blob/ed1daf0bf001b61586d9930840f2f1394092c079/editor/editor_node.cpp#L2518-L2559).
+- Supplemental return markers now retain batch/cycle/start values captured before
+  the call and record live identity separately. The parser rejects identity drift
+  instead of joining a return to a different cycle. Three focused pure tests passed,
+  actual exit0. No additional native run, production API change or gate change.
+- Next reviewed diagnostic option: matched disposable preview-on/off variants,
+  sequential100 cycles each with180s diagnostic deadlines, fresh O4.1/CPU minute,
+  source binding and unchanged signal/hash/reload/actual-exit checks. This is a new
+  hypothesis, not a fourth blind retry. save_scene_as returns void: never fabricate
+  Error.OK for that variant. Cost roughly several minutes if admission passes;
+  risks include cache/order and transient-stall confounding. Even a faster short
+  variant does not establish repair or authorize formal15 without a further review.
+- Alternative: retain the current instrumentation for a later stable resource
+  window; cost unknown waiting time and it may not reproduce a transient. Meanwhile
+  continue O2 work. No fourth run has been launched; old raw and verdicts unchanged.
+
 ## 2026-10-02 — formal13 pre-dispatch failure and launcher repair
 
 - Formal13's fresh dry-run and arm preflight passed, but the launcher failed at

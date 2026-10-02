@@ -35,9 +35,12 @@ def patched_driver(raw):
     replacements = [
         ('        _cycle_limit = 1\n', '        _cycle_limit = 100\n'),
         ('    var result: Error = EditorInterface.save_scene()\n',
+         '    var diagnostic_batch: int = _batch\n'
+         '    var diagnostic_cycle: int = _cycle\n'
+         '    var diagnostic_start_us: int = int(_timing.save.start_us)\n'
          '    var result: Error = EditorInterface.save_scene()\n'
          '    var diagnostic_return_us: int = Time.get_ticks_usec()\n'
-         '    _diagnostic_save_phase("return", diagnostic_return_us, result)\n'),
+         '    _diagnostic_save_phase("return", diagnostic_return_us, result, diagnostic_batch, diagnostic_cycle, diagnostic_start_us)\n'),
         ('    _save_signal_us = Time.get_ticks_usec()\n',
          '    _save_signal_us = Time.get_ticks_usec()\n'
          '    _diagnostic_save_phase("signal", _save_signal_us)\n'),
@@ -47,11 +50,15 @@ def patched_driver(raw):
         text = text.replace(old, new)
     text += '''
 
-func _diagnostic_save_phase(event: String, observed_us: int, result: int = -1) -> void:
+func _diagnostic_save_phase(event: String, observed_us: int, result: int = -1, call_batch: int = -1, call_cycle: int = -1, call_start_us: int = -1) -> void:
     print("HH_GT06_SAVE_PHASE " + JSON.stringify({"event": event, "result": result,
-        "run_id": _input.run_id, "pid": OS.get_process_id(), "batch": _batch, "cycle": _cycle,
+        "run_id": _input.run_id, "pid": OS.get_process_id(),
+        "batch": _batch if call_batch < 0 else call_batch,
+        "cycle": _cycle if call_cycle < 0 else call_cycle,
         "source_closure_sha256": _input.source_closure_sha256, "profile_sha256": _input.profile_sha256,
-        "start_us": int(_timing.save.start_us), "monotonic_us": observed_us}))
+        "start_us": int(_timing.save.start_us) if call_start_us < 0 else call_start_us,
+        "live_batch": _batch, "live_cycle": _cycle, "live_phase": int(_phase),
+        "monotonic_us": observed_us}))
 '''
     return text.encode('utf-8')
 
@@ -77,6 +84,8 @@ def summarize(raw, batch, binding, pid, cycles=CYCLES):
         require(timing['index'] == cycle and set(rows.get(cycle, {})) == {'return', 'signal'},
                 'SAVE_DIAGNOSTIC_MISSING_MARKER')
         returned, signal = rows[cycle]['return'], rows[cycle]['signal']
+        require(all(row.get('live_batch') == 0 and row.get('live_cycle') == cycle
+                    for row in (returned, signal)), 'SAVE_DIAGNOSTIC_CALL_IDENTITY_DRIFT')
         start, end = timing['save']['start_us'], timing['save']['end_us']
         ret, sig = returned['monotonic_us'], signal['monotonic_us']
         require(native.integer(start, 1) and native.integer(end, start + 1)

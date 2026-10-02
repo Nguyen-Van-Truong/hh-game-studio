@@ -14,6 +14,7 @@ class SavePhaseTests(unittest.TestCase):
             'raw_timings': [{'index': 0, 'save': {'start_us': 1000, 'end_us': 21000},
                              'save_signal_mono_us': signal}]}
         rows = [{**binding, 'pid': 123, 'batch': 0, 'cycle': 0, 'start_us': 1000,
+                 'live_batch': 0, 'live_cycle': 0, 'live_phase': 7,
                  'event': event, 'monotonic_us': when, 'result': result}
                 for event, when, result in [('return', 11000, 0), ('signal', signal, -1)]]
         return binding, batch, rows
@@ -56,6 +57,15 @@ class SavePhaseTests(unittest.TestCase):
             cases.append(changed)
         for changed in cases:
             with self.subTest(rows=changed), self.assertRaises(diagnostic.campaign.BenchmarkJobError):
+                diagnostic.summarize(self.raw(changed), batch, binding, 123, cycles=1)
+
+    def test_return_drift_is_not_joined_to_a_different_cycle(self):
+        binding, batch, rows = self.fixture()
+        for field in ('live_batch', 'live_cycle'):
+            changed = copy.deepcopy(rows)
+            changed[0][field] = 1
+            with self.subTest(field=field), self.assertRaisesRegex(
+                    diagnostic.campaign.BenchmarkJobError, 'CALL_IDENTITY_DRIFT'):
                 diagnostic.summarize(self.raw(changed), batch, binding, 123, cycles=1)
 
 
