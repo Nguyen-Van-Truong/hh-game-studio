@@ -281,6 +281,55 @@ class FakeDocker:
 
 
 class LifecycleTests(unittest.TestCase):
+    def run_with_measure_lock(self, *, before_create=False, before_start=False):
+        with tempfile.TemporaryDirectory() as folder:
+            folder = Path(folder); project = folder / 'project'; write_project(project)
+            tool = folder / 'tool'; tool.mkdir(); binary = tool / executor.BINARY_NAME; binary.write_bytes(b'pinned-test-binary')
+            local_appdata = folder / 'localappdata'; local_appdata.mkdir()
+            lock = local_appdata / 'HHGodotAgent' / 'measure-window.lock'
+            if before_create:
+                lock.parent.mkdir()
+                lock.write_text('formal-live\n')
+            fake = FakeDocker('clean')
+            admission = type('Admission', (), {'wait_ms': 0, 'abandoned': False, 'close': lambda self: None})()
+            original_fence = executor._assert_measure_window_clear
+            checks = [0]
+            def fence():
+                checks[0] += 1
+                if before_start and checks[0] == 2:
+                    lock.parent.mkdir()
+                    lock.write_text('formal-live\n')
+                return original_fence()
+            with patch.dict(executor.os.environ, {'LOCALAPPDATA': str(local_appdata)}), \
+                 patch.object(executor, '_assert_measure_window_clear', side_effect=fence), \
+                 patch.object(executor, '_cli', side_effect=fake), patch.object(executor, '_binary', return_value=binary), \
+                 patch.object(executor, '_owned_runner', return_value=object()), \
+                 patch.object(executor, '_Admission', return_value=admission), \
+                 patch.object(executor, '_inventory_ids', return_value=[]), \
+                 patch.object(executor, '_owner_path', return_value=folder / 'owner.json'), \
+                 patch.object(executor, '_lock', return_value={'docker_endpoint': 'npipe:////./pipe/dockerDesktopLinuxEngine'}), \
+                 patch.object(executor, 'BINARY_SHA256', hashlib.sha256(binary.read_bytes()).hexdigest()):
+                result = executor.run(project, mode='parse', output=folder / 'out')
+            return result, fake.calls
+
+    def test_measure_window_lock_absent_allows_fence_check(self):
+        with tempfile.TemporaryDirectory() as folder:
+            local_appdata = Path(folder) / 'localappdata'; local_appdata.mkdir()
+            with patch.dict(executor.os.environ, {'LOCALAPPDATA': str(local_appdata)}):
+                self.assertIsNone(executor._assert_measure_window_clear())
+
+    def test_measure_window_lock_blocks_create(self):
+        result, calls = self.run_with_measure_lock(before_create=True)
+        self.assertIn('EXECUTOR_MEASURE_WINDOW_LOCKED', result['errors'])
+        self.assertFalse(any(args[0] == 'create' for args in calls))
+        self.assertFalse(any(args[0] == 'start' for args in calls))
+
+    def test_measure_window_lock_blocks_start_after_create(self):
+        result, calls = self.run_with_measure_lock(before_start=True)
+        self.assertIn('EXECUTOR_MEASURE_WINDOW_LOCKED', result['errors'])
+        self.assertTrue(any(args[0] == 'create' for args in calls))
+        self.assertFalse(any(args[0] == 'start' for args in calls))
+
     def exercise(self, scenario):
         with tempfile.TemporaryDirectory() as folder:
             folder = Path(folder); project = folder / 'project'; write_project(project)

@@ -422,6 +422,29 @@ def _owner_path() -> Path:
     return root / 'owner.json'
 
 
+def _measure_window_lock_path() -> Path:
+    """Return the host-wide formal-measurement fence without creating it."""
+    local_appdata = os.environ.get('LOCALAPPDATA')
+    _need(type(local_appdata) is str and bool(local_appdata),
+          'EXECUTOR_LOCALAPPDATA_REQUIRED')
+    root = Path(local_appdata).absolute()
+    _no_links(root)
+    owner_root = root / 'HHGodotAgent'
+    if owner_root.exists():
+        _no_links(owner_root)
+    return owner_root / 'measure-window.lock'
+
+
+def _assert_measure_window_clear() -> None:
+    """Refuse Docker mutation while a formal measurement owns this host."""
+    path = _measure_window_lock_path()
+    # is_symlink() also catches a dangling reparse point, which must fail
+    # closed instead of being treated as an absent fence.
+    if path.exists() or path.is_symlink():
+        _no_links(path)
+        raise ExecutorError('EXECUTOR_MEASURE_WINDOW_LOCKED')
+
+
 def _persist_owner(path: Path, record: dict) -> None:
     raw = (json.dumps(record, sort_keys=True) + '\n').encode()
     _need(len(raw) <= 8192, 'EXECUTOR_OWNER_RECORD_SIZE')
@@ -1004,6 +1027,7 @@ def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate', '
         _persist_owner(owner_path, owner_record)
         owner_record['phase'] = 'create_pending'
         _persist_owner(owner_path, owner_record)
+        _assert_measure_window_clear()
         create_attempted = True
         row, raw = call(args, 'create', cap=4096)
         candidate = raw.decode('ascii', errors='replace').strip()
@@ -1030,6 +1054,7 @@ def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate', '
                   'EXECUTOR_PROFILE_HARNESS_CHANGED')
         owner_record['phase'] = 'start_pending'
         _persist_owner(owner_path, owner_record)
+        _assert_measure_window_clear()
         row, _ = call(['start', '--attach', container_id], 'engine', timeout=timeout_seconds + 2)
         result['commandhost'] = row
         if not _cli_clean(row):
