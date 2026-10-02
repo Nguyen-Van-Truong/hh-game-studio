@@ -38,6 +38,16 @@ needed for the next repair. Raw evidence remains under `studio/.local/`.
   daily INFRA budget. Do not resume formal01–10 or S258, and do not lower O1–O4
   thresholds/timeouts.
 
+## 2026-10-02 — O4.1 read-only probe blocked
+
+- Read-only probe `gt06-o8-preflight-20261002-01` bound the fresh source closure
+  `4ad0786bde478b1015011d0e00a0625f2aac5eb9f823f311b089954ed42b8ecd` and
+  profile v6. It stopped after the second sample with
+  `CAMPAIGN_PREFLIGHT_RESOURCE_LIMIT`: available memory stayed above 6.4 GiB,
+  but total commit moved from 84.738547% to 85.02%, crossing the O4.1 `≤85%`
+  launch gate. No foreign engine was present and no campaign/engine was started;
+  this probe is not an INFRA_ABORT attempt. Raw samples remain under `.local/`.
+
 ## 2026-10-02 — per-pair launch guard repair
 
 - `run_benchmark_campaign.py` now records a new immutable `environment-launch-samples.jsonl`
