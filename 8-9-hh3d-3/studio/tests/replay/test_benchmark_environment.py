@@ -343,9 +343,10 @@ class EnvironmentTests(unittest.TestCase):
         second = self._nt_record(pid=1481, create=1000, user=2, kernel=3)
         self.assertEqual(env._parse_nt_process_information(first + second, {1481})[1481]['cpu_total_100ns'], 5)
 
-    def test_ntqsi_parser_missing_target_preserves_unknown(self):
+    def test_ntqsi_parser_missing_target_fails_closed(self):
         raw = self._nt_record(pid=1480)
-        self.assertEqual(env._parse_nt_process_information(raw, {1481}), {})
+        with self.assertRaisesRegex(BenchmarkJobError, 'NTQSI_MISSING'):
+            env._parse_nt_process_information(raw, {1481})
 
     def test_ntqsi_parser_rejects_bad_chain_or_negative_counter(self):
         record = env._SystemProcessInformationPrefix()

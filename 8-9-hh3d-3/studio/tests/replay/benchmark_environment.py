@@ -219,6 +219,8 @@ def _parse_nt_process_information(raw, target_pids=None):
         require(next_offset >= size and next_offset % 8 == 0
                 and offset + next_offset <= len(raw), 'WATCHDOG_NTQSI_SHAPE')
         offset += next_offset
+    if target is not None:
+        require(target <= set(found), 'WATCHDOG_NTQSI_MISSING')
     return found
 
 
