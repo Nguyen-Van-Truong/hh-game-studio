@@ -2,14 +2,16 @@
 
 ## Hiện trạng
 
-- GT-06 chưa ACCEPTED; zero accepted formal pairs; GT-07 chưa mở. Formal14 terminal PRODUCT_FAIL: 14/35 batch, native SAVE status gap5077.626ms; không resume hay formal mới khi chưa có review đủ bằng chứng.
+- GT-06 chưa ACCEPTED; zero accepted formal pairs; GT-07 chưa mở. Formal21 là run mới nhất: batch0 PRODUCT_FAIL vì host command-lane status gap2766.6174ms > 2000ms; không resume hay formal mới khi chưa có distinct review và O9 soak đạt.
 - Formal09 pair0 35/35 RUN PASS, pair1 INFRA_ABORT trước batch0. Formal10 PRODUCT_FAIL COMMIT_PRESSURE sau20 batch. Daily INFRA02-10:1/2; product/harness failures không tự cho phép rerun.
-- Formal11 HARNESS_FAIL counter query; formal13 lỗi launcher trước dispatch. Hai boundary đã sửa có test; formal12 không dispatch. Formal01..14 terminal/unused như plan, S258 không resume.
-- Formal14 host actual exit1; editor natural-exit receipt thiếu. Jobs zero/closed/handle released,58 frozen source và84 artifact refs khớp; watchdog replay không stop. Arm/demand đã gỡ exact-name, XML/receipt/raw giữ nguyên.
-- Formal14 closure e24fa2bb22c848a0b3309ce7580c2a3ebc43d4d6916300a06c101db2ad81bc40; profilev6 8a2e599c40f927ffaff5ded5e48b6bf2a0f0a6bb3a23de31434a695f4258cb35. Current source có guard mới, cần freeze mới nếu run tiếp.
+- Formal11 HARNESS_FAIL counter query; formal13 lỗi launcher trước dispatch; formal17/19 HARNESS_FAIL Docker observer; formal21 PRODUCT_FAIL status gap. Các boundary O9 đã có test; formal12/15/16/18/20 không dispatch. Formal01..21 terminal/unused như plan, S258 không resume.
+- Formal21 host actual exit1; import exit0; editor natural-exit receipt thiếu. Jobs zero/closed/handle released; arm/demand đã gỡ exact-name, XML/receipt/raw giữ nguyên. Formal14 verdict và raw vẫn bất biến.
+- Formal21 closure 01c735149811d4d49f92e478c69386d8db6edc6e0ffbefa19eb0e46c883b39ed; profilev6 8a2e599c40f927ffaff5ded5e48b6bf2a0f0a6bb3a23de31434a695f4258cb35. Current source có O9.1a/b repair, cần freeze mới nếu run tiếp.
 - Preview A/B stock01/off02 mỗi bản100/100 actual exits0, median60.825/29.292ms; không tái hiện stall5s. Không đổi formal sang no-preview; hướng đã đóng3IDs.
 - Save-return boundary mới: fault-ordering01 tái hiện premature readback/reload; repair02 actual exit0,27/27. Native real-save03 import/editor exit0, save/readback/reload hoàn tất; outer verifier exit1 do nhầm key-presence, đã review offline riêng, không viết lại verdict.
 - Guard chỉ khóa readback đến khi save API trảOK; heartbeat/timeouts/readback và O1–O4 giữ nguyên. Không chứng minh nguyên nhân formal14, không tự dispatch formal15; hướng boundary đã3IDs, không chạy thêm mù.
+- Offline formal21 gap review ghi nhận admitted command `.153`, lookup gap2766618us giữa hai QUEUED attempts, không có transport failure; đây là command-lane boundary, root cause chưa chứng minh và không đổi verdict.
+- O9 watchdog-only soak attempt `gt06-o9-watchdog-soak-20261003-01` mới có46 mẫu khoảng3m38s rồi thiếu process/closeout; không tính vào DoD, raw giữ riêng và phải chạy lại một soak mới đủ30 phút sau khi review runner.
 - Không measurement live tại closeout; tiếp tục O2 registered adapter trong worktree riêng theo AUTHORING_STATUS.md, AUTHORITY0, không merge trướcGT06. Sau review mới đủ bằng chứng: fresh freeze/preflight/CPU minute/budget trước formal.
 
 This lane records diagnostics without changing the authoritative plan. Each
@@ -1126,3 +1128,16 @@ Archive manifests (AUTHORITY0, raw preserved):
   unknown. Historical raw remains readable under the compatibility default.
   O9.1b still needs the 30-minute watchdog-only soak and its independent
   duration/source/lifecycle verification before a new formal freeze.
+
+### Offline formal21 command-gap review — diagnostic only
+
+- `studio/tests/replay/review_formal21_gap.py` reads the preserved
+  `command-00.json` without starting an engine or changing the measured source.
+  Its focused unit suite passed 2/2, and the generated review under
+  `studio/.local/reviews/gt06-formal21-gap-review-20261003-01/` binds the raw
+  SHA-256 `4a4eb4136d1d0b3579f5b4494051eab154709a0510252a267bc1f6990d29a55d`.
+- The largest monotonic lookup gap is `2766618 us` between adjacent QUEUED
+  attempts of admitted command `.153`; both transport-failure fields are null.
+  The result explicitly sets `formal_acceptance=false` and
+  `root_cause_proven=false`. It confirms a reproducible evidence boundary,
+  not a repair or permission to dispatch formal22.
