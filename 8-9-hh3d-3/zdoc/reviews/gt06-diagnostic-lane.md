@@ -48,6 +48,20 @@ needed for the next repair. Raw evidence remains under `studio/.local/`.
   launch gate. No foreign engine was present and no campaign/engine was started;
   this probe is not an INFRA_ABORT attempt. Raw samples remain under `.local/`.
 
+## 2026-10-02 — O2 bounded-inventory milestone
+
+- O2 branch `codex/o2-authoring-contract` commit `b4307012` replaces the
+  executor's Docker admission inventory call with the bounded named-pipe
+  request. It keeps exact `hh.gt03.executor` ownership, includes all container
+  states, uses one five-second deadline, and fails closed without a CLI
+  fallback. The focused pure suite is recorded as 71 tests, exit 0; runtime
+  closure is 25 files, SHA256
+  `f9e295de500888e4c1d3f721d2675e3dacaa96af7c4cec641b5eeac949284a91`.
+- This is still `AUTHORITY=0`: no native confirmation was run because the host
+  was over the O4.1 resource threshold, and the branch remains unmerged until
+  GT06 is accepted. The earlier `o2-publication-20261002-03` timeout remains
+  historical and is not replaced by this static proof.
+
 ## 2026-10-02 — per-pair launch guard repair
 
 - `run_benchmark_campaign.py` now records a new immutable `environment-launch-samples.jsonl`
