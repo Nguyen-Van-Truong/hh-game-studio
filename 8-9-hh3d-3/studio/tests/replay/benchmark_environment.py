@@ -116,12 +116,14 @@ def running_containers(processes):
         return []
     started = time.monotonic()
     deadline = started + 2
+    attempt_budget = (deadline - started) / 2
     diagnostic = None
     for attempt in range(1, 3):
         if time.monotonic() >= deadline:
             break
+        attempt_deadline = min(deadline, started + attempt_budget * attempt)
         try:
-            names = query_containers(deadline)
+            names = query_containers(attempt_deadline)
         except InventoryError as error:
             diagnostic = {'reason': error.reason, 'attempt': attempt}
             if type(error.detail) is int:
@@ -129,7 +131,7 @@ def running_containers(processes):
             if not error.retryable:
                 break
         else:
-            if time.monotonic() >= deadline:
+            if time.monotonic() >= attempt_deadline:
                 diagnostic = {'reason': 'timeout', 'attempt': attempt}
                 break
             return names
