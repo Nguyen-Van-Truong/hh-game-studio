@@ -15,10 +15,12 @@ Current checkpoints (distinct runs; do not combine their exit/asset claims):
   The combined focused suite is 80 tests, actual exit 0; no native dispatch.
 - Native AUTH-03 probe `o2-auth03-native-20261002-03` exercised the same
   boundary with two real dispatches: good publication, followed by Godot
-  syntax rejection (child/container exit 45). Raw rejection stayed intact;
+  type rejection (child/container exit 45). Raw rejection stayed intact;
   CURRENT/journal stayed on the good revision, reopen and exact retry matched,
   and no third dispatch occurred. Wrapper actual exit was 0. This remains a
-  fixture diagnostic (`AUTHORITY=0`), not complete AUTH-03 acceptance.
+  fixture diagnostic (`AUTHORITY=0`), not complete AUTH-03 acceptance. Its
+  probe binding predates the boundary option below; retain it as historical
+  type-rejection evidence, not a run of the current probe.
 - `o2-auth03-native-20261002-02` remains raw history only because the probe was
   subsequently parameterized and its binding predates that source hash.
 - `o2-auth03-native-20261002-01` remains raw history only: its binding included
@@ -45,6 +47,29 @@ Current checkpoints (distinct runs; do not combine their exit/asset claims):
 - Pure regression after the watchdog fixture repair: gameplay 138 tests and
   separate probe-evidence 23 tests, actual exits 0. These are test counts, not
   completion percentages or independent acceptance evidence.
+
+- AUTH-05 adapter boundary diagnostic `o2-auth05-native-boundary-20261002-01`
+  routed a hostile gameplay fixture through the real publication owner. The
+  good revision received a readback ACK; the boundary fixture observed source
+  and root write denial, absent Docker socket and nonzero external-connect
+  status, then was rejected as `GAMEPLAY_OWNER_NATIVE_NOT_CLEAN`. The selected
+  CURRENT/journal stayed byte-identical, reopen read back the good revision,
+  retry returned the same receipt without a third dispatch, and the two native
+  runs had actual container/host exit 0 with owned cleanup. Wrapper exit was 0.
+  This is AUTHORITY=0 diagnostic evidence: it does not grant AUTH-05, public
+  capability, or GT-06 acceptance. Raw evidence is under
+  `studio/.local/reviews/o2-auth05-native-boundary-20261002-01/`; source
+  closure is `f4f061f5574aaa59264bb0aae9204c595e4380fd2a4dbb12fe89301db70e6633`.
+  Command: `python -B studio/tests/godot/run_gameplay_failure_probe.py
+  --run-id o2-auth05-native-boundary-20261002-01 --failure-fixture boundary`.
+  The preceding `o2-publication-auth05-boundary-20261002-01` wrapper exited 1
+  because it required publication success; its raw rejection remains intact.
+  No production log policy was relaxed: a hostile fixture's expected errors
+  are diagnostic observations and must still reject publication.
+  Regression: 104 pure tests, actual exit 0, in
+  `studio/.local/reviews/o2-auth05-boundary-tests-20261002-01/`. Tests using
+  `tests.godot` require `studio` on PYTHONPATH; the earlier combined invocation
+  had one import error, so it is not a passing suite.
 
 These are AUTHORITY=0 candidates, not AUTH-05 acceptance or public capability.
 Remaining work: fixture-specific dependency/adapter integration, AUTH-05 review,

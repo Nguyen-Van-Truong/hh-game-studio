@@ -49,10 +49,13 @@ def idle_window():
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--run-id', required=True)
-    parser.add_argument('--failure-fixture', choices=('syntax', 'type'), default='syntax')
+    parser.add_argument('--failure-fixture', choices=('syntax', 'type', 'boundary'), default='syntax')
     args = parser.parse_args()
-    if not re.fullmatch(r'o2-auth03-native-[a-z0-9-]{1,40}', args.run_id):
-        parser.error('use a fresh o2-auth03-native-<id>')
+    if not re.fullmatch(r'o2-auth0[35]-native-[a-z0-9-]{1,40}', args.run_id):
+        parser.error('use a fresh o2-auth03-native-<id> or o2-auth05-native-<id>')
+    auth05 = args.failure_fixture == 'boundary'
+    if auth05 != args.run_id.startswith('o2-auth05-native-'):
+        parser.error('boundary requires o2-auth05-native-<id>; syntax/type require o2-auth03-native-<id>')
     idle_window()
     output = STUDIO / '.local/reviews' / args.run_id
     output.mkdir(exist_ok=False)
@@ -60,7 +63,10 @@ def main():
     probe = load('o2_auth03_linux_probe', STUDIO / 'tests/godot/run_linux_probe.py')
     fixtures = load('o2_auth03_gameplay_fixtures', STUDIO / 'tests/godot/linux_probe_fixtures.py')
     good_case_name = 'gameplay_source'
-    bad_case_name = 'gameplay_secondary_' + args.failure_fixture + '_error'
+    if args.failure_fixture == 'boundary':
+        bad_case_name = 'gameplay_source_boundary'
+    else:
+        bad_case_name = 'gameplay_secondary_' + args.failure_fixture + '_error'
     good_case = {**fixtures.FIXTURES[good_case_name], 'scene': fixtures.SCENE,
                  'project': owner_mod._load('gameplay_source_profile').PROJECT_TEMPLATE}
     bad_case = {**fixtures.FIXTURES[bad_case_name], 'scene': fixtures.SCENE,
@@ -71,7 +77,9 @@ def main():
         files[name] = probe.sha(STUDIO / name)
     binding = {'run_id': args.run_id, 'source_closure_sha256': closure, 'files': files,
                'authority': 0, 'public_ack': False,
-               'scope': 'AUTH-03 good publication then native rejection; not public acceptance.'}
+               'scope': ('AUTH-05 hostile boundary rejection after a good publication; '
+                         'not public acceptance.' if args.failure_fixture == 'boundary'
+                         else 'AUTH-03 good publication then native rejection; not public acceptance.')}
     save(output / 'binding.json', binding)
     for name, digest in files.items():
         raw = (STUDIO / name).read_bytes()
