@@ -12,6 +12,13 @@
 - Guard chỉ khóa readback đến khi save API trảOK; heartbeat/timeouts/readback và O1–O4 giữ nguyên. Không chứng minh nguyên nhân formal14, không tự dispatch formal15; hướng boundary đã3IDs, không chạy thêm mù.
 - Offline formal21 gap review/replay ghi nhận admitted command `.153`, lookup gap2766618us giữa hai QUEUED attempts, không có transport failure; đây là command-lane boundary, root cause chưa chứng minh và không đổi verdict.
 - O9 watchdog-only soak attempts `gt06-o9-watchdog-soak-20261003-01` và `...-03` chỉ có158/38 mẫu rồi dừng thiếu closeout; `...-02` dừng ở setup. Cả ba không tính DoD, raw giữ riêng. Runner đã sửa ở `ccb6792c` để bind full campaign import closure (59 files, gồm Docker module); cần soak mới đủ30 phút.
+- O9.1a wording audit found the measured path still used `GetProcessTimes` as
+  the primary CPU source for accessible PIDs. Commit `8f54a79f` now makes each
+  `native_snapshot` call one unfiltered `NtQuerySystemInformation` snapshot and
+  bind CPU/start counters from that all-process map; the older bounded helper
+  remains only for compatibility tests/callers. Environment-focused tests
+  remain green. This source change invalidates no raw verdict, but requires the
+  fresh soak to use the new closure.
 - Không measurement live tại closeout; tiếp tục O2 registered adapter trong worktree riêng theo AUTHORING_STATUS.md, AUTHORITY0, không merge trướcGT06. Sau review mới đủ bằng chứng: fresh freeze/preflight/CPU minute/budget trước formal.
 
 This lane records diagnostics without changing the authoritative plan. Each
