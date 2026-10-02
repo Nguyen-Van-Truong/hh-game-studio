@@ -2,7 +2,7 @@
 
 ## Hiện trạng
 
-- GT-06 chưa ACCEPTED; formal11 đang live với 2×35 theo closure mới; zero accepted formal pairs; GT-07 chưa mở, không ghép partial giữa campaign.
+- GT-06 chưa ACCEPTED; formal11 terminal `HARNESS_FAIL` after3 batches; zero accepted formal pairs; GT-07 chưa mở, không ghép partial giữa campaign.
 - Formal09 terminal: pair0 35/35 RUN PASS; pair1 INFRA_ABORT trước batch0 vì RAM/commit.
 - Formal10 terminal: pair0 20/35, PRODUCT_FAIL COMMIT_PRESSURE; không pair1, không resume.
 - Daily INFRA ngày 02-10: 1/2; PRODUCT_FAIL formal10 không tiêu INFRA và không cho phép rerun mù.
@@ -10,10 +10,10 @@
 - Profile v6: `8a2e599c40f927ffaff5ded5e48b6bf2a0f0a6bb3a23de31434a695f4258cb35`.
 - Formal10 watchdog replay đúng verdict; chưa chứng minh rò bộ nhớ. Prefix không thay 35 batch.
 - Outer Job formal10 zero/closed, wrapper exit2; thiếu actual host/editor exit receipts do hard abort.
-- Formal11 dispatch: arm `HHStudio.GT06.arm-formal11-20261002` started16:20, fresh attempt DISPATCH at16:21, campaign task `HHStudio.GT06.gt06-o4-formal-11` returned scheduler exit0 and is live; actual pair exits are pending supervisor evidence.
+- Formal11 dispatch: arm `HHStudio.GT06.arm-formal11-20261002` started16:20, fresh attempt DISPATCH at16:21, then terminal `HARNESS_FAIL`; no actual natural child exit was observed.
 - Helper sau dispatch đã sửa và bắt buộc dry-run thật trước arm; không còn task mới được arm.
 - Formal11 used a fresh dry-run: available memory8.24 GiB, commit62.56%, CPU max33.65%/mean17.41% over60s, lock absent, scheduler idle and budget available. The arm is bound to source/profile and does not lower O1–O4/timeouts.
-- While formal11 is live, only read scheduler/process/evidence; do not run competing engines/tests/Docker or edit measured source. After terminal, verify actual exits, Job/tree/handles, watchdog, dataset and source/profile hashes; do not self-accept.
+- Formal11 raw is closed; verify actual exits, Job/tree/handles, watchdog, dataset and source/profile hashes before any future formal. Do not resume or self-accept.
 - O2 tiếp tục riêng theo O8.3/AUTHORING_STATUS.md, AUTHORITY0, không merge trước GT06.
 
 This lane records diagnostics without changing the authoritative plan. Each
@@ -33,6 +33,27 @@ needed for the next repair. Raw evidence remains under `studio/.local/`.
   This is dispatch evidence only: formal acceptance remains false until both
   pairs finish with actual child/editor exits, cleanup, watchdog and dataset
   checks. Do not infer PASS from the scheduler banner or a partial prefix.
+
+## 2026-10-02 — formal11 terminal harness failure
+
+- The first pair launch observation completed 60.422 seconds with 13 samples and
+  was bound to the fresh source hash. CPU intervals varied above and below95%
+  (max100%, mean95.626%), so this record is not a sustained external-CPU
+  abort. No pair reached 35 batches.
+- After three batches the campaign watchdog raised `WATCHDOG_PERF_COUNTER_QUERY`
+  while reading a host process counter. `parent-failure.json` classifies the
+  run `HARNESS_FAIL`, with `owned_tree_zero=true` and `owner_closed=true`;
+  supervisor return code is1 and says an actual natural child exit was not
+  observed. This is neither product PASS nor product FAIL.
+- The arm terminal snapshot had state3 and no instances but
+  `last_task_result=1`; it is scheduler closeout only, not success evidence.
+  Raw failure, launch observation and watchdog error remain under
+  `studio/.local/reviews/gt06-o4-formal-11/` and its supervisor directory.
+- After preserving `task-registered.xml`, the registration receipt and
+  `arm-task-closeout.json`, the exact arm task was removed. Do not resume
+  formal11, formal01–10 or S258. Review and repair the PerfCounter failure
+  boundary with a reproducer before any new formal ID; do not retry blindly or
+  lower O1–O4.
 
 ## 2026-10-02 — post-375947ee gate state
 
