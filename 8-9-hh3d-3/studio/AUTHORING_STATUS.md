@@ -3,6 +3,8 @@
 AUTHORITY=0. Branch `codex/o2-authoring-contract`; no merge before GT-06 ACCEPTED.
 Tools-plan O1–O8 governs; test counts/native diagnostics do not close AUTH or a WP.
 
+- Added an authority-zero asset handoff plan for both fixture lanes (`tests/godot/asset_handoff_plan.py`). The room GLB row now records explicit Blender geometry/material/UV/axis/export/import-readback steps, while the arena row records the separate pose-render/sprite-sheet/texture-readback path. Hashes and profile labels are shape-checked, paths are confined to `assets/`, and every import/native flag remains false. Four focused pure tests exit0; this is a static handoff contract only and does not verify a Blender export, Godot import, texture readback, or gameplay.
+
 ## Current state
 
 - Saved-arena candidate composition now has a pure owner-admission binding seam:
