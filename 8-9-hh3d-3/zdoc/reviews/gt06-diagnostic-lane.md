@@ -19,6 +19,19 @@
   remains only for compatibility tests/callers. Environment-focused tests
   remain green. This source change invalidates no raw verdict, but requires the
   fresh soak to use the new closure.
+- A second O9 audit then closed three observer gaps in `d0374cbf`: the missing
+  sample bound is now 30 seconds as O9.1c requires, external CPU pressure is
+  summed across all non-Job processes before its 50%/60-second timer, and a
+  missing PID in the all-process NTQSI map fails closed. The soak runner now
+  verifies its stream before writing `actual_exit_code=0`, so verifier failure
+  cannot leave a false success receipt. Focused environment/soak tests pass.
+- The audit also found two gates that remain open and are not silently claimed
+  repaired: O9.2 durable same-closure pair deferral/retry is not implemented
+  (`MAX_ATTEMPTS=1` and one-shot preflight remain), and O9.3 cannot yet apply
+  role-wise O1.2 thresholds because watchdog rows do not carry immutable
+  host/editor baseline/current counters. No new formal is allowed until those
+  gaps are either implemented and tested or explicitly resolved by an owner
+  decision; the soak below is still required independently.
 - Không measurement live tại closeout; tiếp tục O2 registered adapter trong worktree riêng theo AUTHORING_STATUS.md, AUTHORITY0, không merge trướcGT06. Sau review mới đủ bằng chứng: fresh freeze/preflight/CPU minute/budget trước formal.
 
 This lane records diagnostics without changing the authoritative plan. Each
