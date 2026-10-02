@@ -36,6 +36,9 @@ needed for the next repair. Raw evidence remains under `studio/.local/`.
   scheduler terminal/zero instances; arm receipts remain under `.local/formal09-arm-20261002-repair01`.
   Daily O1.7 INFRA budget consumed: `1/2` on 2026-10-02. Do not resume formal09 or S258; a new ID
   may be considered only after fresh source freeze, O4.1 preflight and one-minute CPU observation.
+- Formal10 arm: one-shot task `HHStudio.GT06.arm-formal10-20261002`, window 13:00–17:00 Asia/Saigon,
+  request bound to the same freshly computed 58-file closure and profile v6. It must dispatch at most
+  one new ID and records no-dispatch when commit/RAM/CPU or budget is not valid.
 
 ## 2026-09-30 — gt06-o5-host-soak-20260930-01
 
