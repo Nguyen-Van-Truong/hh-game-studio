@@ -75,16 +75,16 @@ def build_plan() -> dict[str, Any]:
                path="assets/avatar.glb", fmt="GLB",
                manifest_path="assets/manifest.json",
                steps=["geometry", "material", "uv", "export_glb", "godot_import_readback"],
-               profiles={"geometry": "hh-blender-geometry-1",
-                         "material": "hh-blender-material-pbr-1",
-                         "uv": "hh-blender-uv-1",
-                         "axis": "hh-blender-axis-zup-gltf-yup-1"}),
+               profiles={"geometry": "pending-export-profile",
+                         "material": "pending-material-profile",
+                         "uv": "pending-asset-profile-uv",
+                         "axis": "pending-asset-profile-axis"}),
         _asset(asset_id="arena_sprite_atlas", fixture="arena_2d",
                path="assets/sprite_sheet.png", fmt="PNG",
                manifest_path="assets/arena_sprite_atlas.json",
                steps=["pose_render", "sprite_sheet", "godot_texture_readback"],
-               profiles={"render": "hh-blender-sprite-sheet-1",
-                         "axis": "hh-blender-axis-zup-gltf-yup-1"}),
+               profiles={"render": "pending-sprite-sheet-profile",
+                         "axis": "pending-asset-profile-axis"}),
     ]
     body = {"authority": 0, "runtime_authorized": False,
             "native_observed": False, "execution": DETACHED_MODE,
@@ -114,7 +114,7 @@ def _validate_asset(row: object) -> None:
     _expect(type(row["pipeline_steps"]) is list and row["pipeline_steps"] and
             all(type(step) is str and re.fullmatch(r"[a-z][a-z0-9_]{1,63}", step) for step in row["pipeline_steps"]), "ASSET_STEPS")
     _expect(type(row["pipeline_profiles"]) is dict and row["pipeline_profiles"], "ASSET_PROFILES")
-    _expect(all(type(key) is str and type(value) is str and re.fullmatch(r"hh-[a-z0-9-]+", value)
+    _expect(all(type(key) is str and type(value) is str and re.fullmatch(r"pending-[a-z0-9-]+", value)
                 for key, value in row["pipeline_profiles"].items()), "ASSET_PROFILE_ID")
     _expect(type(row["profile_sources"]) is dict
             and set(row["profile_sources"]) == set(row["pipeline_profiles"])
