@@ -205,6 +205,7 @@ class GameplaySourcePublicationOwner:
         executor._no_links(parent)
         _need(type(project_id) is str and _ID.fullmatch(project_id), "GAMEPLAY_OWNER_PROJECT")
         _need(entrypoint == ENTRYPOINT, "GAMEPLAY_OWNER_ENTRYPOINT_PIN")
+        candidate, checked = _copy_source_bundle(profile, source_files, entrypoint=entrypoint)
         _need(type(source_closure_sha256) is str and _HEX.fullmatch(source_closure_sha256),
               "GAMEPLAY_OWNER_CLOSURE")
         _need(type(dependency_observation_required) is bool,
@@ -218,7 +219,6 @@ class GameplaySourcePublicationOwner:
               "GAMEPLAY_OWNER_DEPENDENCY_POLICY")
         _need(runtime_source_closure()[1] == source_closure_sha256,
               "GAMEPLAY_OWNER_SOURCE_CLOSURE_MISMATCH")
-        candidate, checked = _copy_source_bundle(profile, source_files, entrypoint=entrypoint)
         owner = object.__new__(cls)
         owner._lock = threading.RLock()
         owner._work = threading.Lock()
