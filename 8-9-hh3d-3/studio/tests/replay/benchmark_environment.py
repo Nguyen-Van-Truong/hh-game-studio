@@ -225,11 +225,19 @@ def _parse_nt_process_information(raw, target_pids=None):
     return found
 
 
-def _nt_process_times(target_pids):
-    """Read protected-process CPU counters with a kernel API only."""
+def _nt_process_times(target_pids=None):
+    """Read process CPU counters with one kernel API snapshot.
+
+    ``target_pids`` is retained for the compatibility helper used by older
+    callers.  The in-measure watchdog passes ``None`` so one
+    NtQuerySystemInformation call supplies CPU counters for every process in
+    the sample, including protected ``vmmem``/Docker/WSL processes, without
+    opening a process handle for CPU accounting.
+    """
     require(os.name == 'nt', 'WATCHDOG_NTQSI_PLATFORM')
-    require(all(type(pid) is int and pid > 0 for pid in target_pids),
-            'WATCHDOG_NTQSI_PID')
+    if target_pids is not None:
+        require(all(type(pid) is int and pid > 0 for pid in target_pids),
+                'WATCHDOG_NTQSI_PID')
     ntdll = ctypes.WinDLL('ntdll', use_last_error=True)
     query = ntdll.NtQuerySystemInformation
     query.argtypes = [w.ULONG, ctypes.c_void_p, w.ULONG, ctypes.POINTER(w.ULONG)]
@@ -336,9 +344,13 @@ def native_snapshot(processes, *, job_handle=None, heavy_names=frozenset(),
         finally:
             require(k.CloseHandle(h), 'WATCHDOG_PROCESS_HANDLE_CLOSE')
         rows.append(row)
-    fallback = perf_process_times(rows)
+    # O9.1a: exactly one kernel process-information snapshot supplies the CPU
+    # counters for every process in this sample.  Keep the legacy
+    # ``perf_process_times`` helper above for callers/tests that explicitly
+    # request a bounded PID lookup; the measured watchdog never uses it.
+    fallback = _nt_process_times(None)
     for row in rows:
-        if row['pid'] in fallback and row['cpu_total_100ns'] is None:
+        if row['pid'] in fallback:
             row.update(fallback[row['pid']])
     docker_inventory_status = 'KNOWN'
     docker_inventory_error = None

@@ -340,6 +340,8 @@ class EnvironmentTests(unittest.TestCase):
         self.assertEqual(env._parse_nt_process_information(raw, {1480}), {
             1480: {'cpu_total_100ns': 120, 'process_start_100ns': 999,
                    'cpu_source': 'NtQuerySystemInformation'}})
+        self.assertEqual(env._parse_nt_process_information(raw, None)[1480]['cpu_source'],
+                         'NtQuerySystemInformation')
 
     def test_ntqsi_parser_follows_aligned_record_chain(self):
         first = self._nt_record(next_offset=env.ctypes.sizeof(env._SystemProcessInformationPrefix), pid=1480)
@@ -407,6 +409,22 @@ class EnvironmentTests(unittest.TestCase):
         self.assertEqual(result[1480]['cpu_source'], 'NtQuerySystemInformation')
         self.assertEqual(query.calls[0][0], env.SYSTEM_PROCESS_INFORMATION)
         self.assertGreater(query.calls[1][1], query.calls[0][1])
+
+    def test_ntqsi_all_process_snapshot_accepts_unfiltered_query(self):
+        raw = self._nt_record(pid=1480, create=999, user=40, kernel=80)
+
+        class FakeQuery:
+            def __call__(self, _info_class, buffer, size, returned):
+                env.ctypes.memmove(buffer, raw, len(raw))
+                env.ctypes.cast(returned, env.ctypes.POINTER(env.w.ULONG)).contents.value = len(raw)
+                return 0
+
+        with patch.object(env.os, 'name', 'nt'), \
+             patch.object(env.ctypes, 'WinDLL', return_value=SimpleNamespace(
+                 NtQuerySystemInformation=FakeQuery()), create=True):
+            result = env._nt_process_times(None)
+        self.assertEqual(result[1480]['cpu_total_100ns'], 120)
+        self.assertEqual(result[1480]['cpu_source'], 'NtQuerySystemInformation')
 
     def test_ntqsi_status_failure_is_bounded_and_diagnostic_only(self):
         class FakeQuery:
