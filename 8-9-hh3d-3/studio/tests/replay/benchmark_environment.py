@@ -115,8 +115,14 @@ def running_containers(processes):
     if not any('docker' in row['name'].lower() for row in processes):
         return []
     started = time.monotonic()
-    deadline = started + 2
-    attempt_budget = (deadline - started) / 2
+    total_budget = 2.0
+    deadline = started + total_budget
+    # A timed-out _io may drain once, and owner.close() may need a second
+    # bounded drain when the first completion is unverified. Reserve both
+    # 250 ms cleanup windows plus scheduler margin inside the same absolute
+    # observer budget so a second timeout cannot report after t0+2 s.
+    cleanup_reserve = 0.6
+    attempt_budget = (total_budget - (2 * cleanup_reserve)) / 2
     diagnostic = None
     for attempt in range(1, 3):
         if time.monotonic() >= deadline:

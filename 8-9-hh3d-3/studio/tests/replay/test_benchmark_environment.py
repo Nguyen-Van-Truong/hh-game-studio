@@ -209,7 +209,7 @@ class EnvironmentTests(unittest.TestCase):
              patch.object(env, 'query_containers', return_value=['hh-gameplay-1', 'other']) as query:
             self.assertEqual(env.running_containers([{'name': 'com.docker.backend.exe'}]),
                              ['hh-gameplay-1', 'other'])
-        query.assert_called_once_with(101.0)
+        query.assert_called_once_with(100.4)
 
     def test_docker_inventory_no_docker_process_does_not_query_daemon(self):
         with patch.object(env, 'query_containers') as query:
@@ -227,7 +227,7 @@ class EnvironmentTests(unittest.TestCase):
         with patch.object(env.time, 'monotonic', side_effect=lambda: clock[0]), \
              patch.object(env, 'query_containers', side_effect=probe) as query:
             self.assertEqual(env.running_containers([{'name': 'docker.exe'}]), ['hh-gameplay-1'])
-        self.assertEqual([call.args[0] for call in query.call_args_list], [101.0, 102.0])
+        self.assertEqual([call.args[0] for call in query.call_args_list], [100.4, 100.8])
 
     def test_docker_inventory_verified_pipe_timeout_retries_before_deadline(self):
         clock = [100.0]
@@ -240,7 +240,21 @@ class EnvironmentTests(unittest.TestCase):
         with patch.object(env.time, 'monotonic', side_effect=lambda: clock[0]), \
              patch.object(env, 'query_containers', side_effect=probe) as query:
             self.assertEqual(env.running_containers([{'name': 'docker.exe'}]), ['hh-gameplay-1'])
-        self.assertEqual([call.args[0] for call in query.call_args_list], [101.0, 102.0])
+        self.assertEqual([call.args[0] for call in query.call_args_list], [100.4, 100.8])
+
+    def test_docker_inventory_cleanup_grace_stays_inside_total_deadline(self):
+        clock = [100.0]
+        def probe(deadline):
+            # Simulate a pipe timeout followed by its bounded 250 ms drain.
+            clock[0] = deadline + 0.25
+            raise env.InventoryError('timeout', retryable=True)
+        with patch.object(env.time, 'monotonic', side_effect=lambda: clock[0]), \
+             patch.object(env, 'query_containers', side_effect=probe) as query:
+            with self.assertRaisesRegex(BenchmarkJobError, 'DOCKER_INVENTORY') as raised:
+                env.running_containers([{'name': 'docker.exe'}])
+        self.assertEqual(query.call_count, 2)
+        self.assertLessEqual(raised.exception.docker_inventory['elapsed_seconds'], 2.0)
+        self.assertEqual(raised.exception.docker_inventory['attempt'], 2)
 
     def test_docker_inventory_timeout_cannot_restart_deadline(self):
         clock = [100.0]
@@ -253,7 +267,7 @@ class EnvironmentTests(unittest.TestCase):
                 env.running_containers([{'name': 'docker.exe'}])
         self.assertEqual(query.call_count, 1)
         self.assertEqual(raised.exception.docker_inventory,
-                         {'reason': 'timeout', 'attempt': 1, 'elapsed_seconds': 1})
+                         {'reason': 'timeout', 'attempt': 1, 'elapsed_seconds': 0.4})
         self.assertIsNone(raised.exception.__cause__)
         self.assertIsNone(raised.exception.__context__)
 
@@ -278,7 +292,7 @@ class EnvironmentTests(unittest.TestCase):
                 env.running_containers([{'name': 'docker.exe'}])
         self.assertEqual(query.call_count, 1)
         self.assertEqual(raised.exception.docker_inventory,
-                             {'reason': 'timeout', 'attempt': 1, 'elapsed_seconds': 1.1})
+                         {'reason': 'timeout', 'attempt': 1, 'elapsed_seconds': 0.5})
 
     def test_docker_inventory_diagnostic_persists_without_raw_secrets(self):
         for reason, detail, key in (('oserror', 5, 'errno'), ('nonzero', 503, 'returncode')):
