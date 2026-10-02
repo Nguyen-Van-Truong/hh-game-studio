@@ -24,6 +24,22 @@ Tools-plan O1–O8 governs; test counts/native diagnostics do not close AUTH or 
 - GT-06 formal10 is terminal; no measured workload active at last check. Recheck process/lock
   before engine/Docker work; when formal runs, static work only and one writer per file.
 
+## 2026-10-02 — O8.3b native dependency confirmation
+
+- Fresh run `o2-publication-20261002-04` used the repaired named-pipe inventory
+  with source closure `f9e295de500888e4c1d3f721d2675e3dacaa96af7c4cec641b5eeac949284a91`.
+  Wrapper actual exit was `0`; the native container actual exit was `0`, state
+  `exited`, `OOMKilled=false`, and the owned Job was closed with active count
+  `0`, retained handle `false`, and no failed operations.
+- The real dependency fixture observed four nodes and its dependency edges;
+  publication returned `READBACK_ACK`, live retry and reopened retry were equal,
+  durable `CURRENT`/journal state stayed unchanged, and source hashes were
+  unchanged. Native dispatch count was exactly one. Raw evidence is under
+  `studio/.local/reviews/o2-publication-20261002-04/`.
+- This remains a diagnostic confirmation (`AUTHORITY=0`, `public_ack=false`,
+  `sandbox_acceptance=false`); it does not accept GT06 or authorize an O2 merge.
+  The earlier `o2-publication-20261002-03` timeout remains historical.
+
 ## Next actions
 
 1. Review/test O8.3b repair, then one fresh dependency publication confirmation when host allows.
