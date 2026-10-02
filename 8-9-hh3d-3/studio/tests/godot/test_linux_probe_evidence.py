@@ -79,6 +79,17 @@ class LinuxProbeEvidenceTests(unittest.TestCase):
             self.assertFalse(self.evaluate(case, self.result, output, rejected)['fixture_observed'])
         self.assertFalse(self.evaluate(case, self.result, guard + valid)['fixture_observed'])
 
+    def test_hostile_markers_reject_duplicate_json_keys(self):
+        cases = (
+            ('HH_PROBE_BOUNDARY ',
+             '{"source_denied":true,"source_denied":false}'),
+            ('HH_PROBE_SPAWN ',
+             '{"exit":-1,"output":[""],"output":["HH_UNEXPECTED_CHILD"]}'),
+        )
+        for prefix, payload in cases:
+            with self.subTest(prefix=prefix):
+                self.assertIsNone(probe.marker(prefix + payload + '\n', prefix))
+
     def test_guarded_play_only_explains_exact_pinned_startup_error(self):
         self.result.update(mode='guarded-play', sandbox_harness_unchanged=True, diagnostic_process_clean=False)
         case = {'expect': 'guarded_play', 'mode': 'guarded-play'}

@@ -159,8 +159,17 @@ def marker(text: str, prefix: str) -> dict | None:
     rows = [line[len(prefix):] for line in text.split('\n') if line.startswith(prefix)]
     if len(rows) != 1:
         return None
+
+    def unique_pairs(pairs):
+        value = {}
+        for key, item in pairs:
+            if key in value:
+                raise ValueError('DUPLICATE_MARKER_KEY')
+            value[key] = item
+        return value
+
     try:
-        value = json.loads(rows[0])
+        value = json.loads(rows[0], object_pairs_hook=unique_pairs)
     except ValueError:
         return None
     return value if type(value) is dict else None
