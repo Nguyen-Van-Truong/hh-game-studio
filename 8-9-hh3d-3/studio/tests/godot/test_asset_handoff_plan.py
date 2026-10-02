@@ -93,7 +93,7 @@ class AssetHandoffPlanTests(unittest.TestCase):
         self.assertEqual(raised.exception.args[0], "ASSET_PROFILE_SOURCE")
 
         changed = copy.deepcopy(value)
-        changed["assets"][0]["manifest_path"] = "assets/avatar.glb"
+        changed["assets"][0]["manifest_runtime_asset"] = True
         with self.assertRaises(ValueError) as raised:
             asset.validate_plan(changed)
         self.assertEqual(raised.exception.args[0], "ASSET_MANIFEST_SIDECAR")
