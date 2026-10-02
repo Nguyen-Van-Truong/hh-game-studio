@@ -2,23 +2,83 @@
 
 ## Hiện trạng
 
-- GT-06 chưa ACCEPTED; zero accepted formal pairs; GT-07 chưa mở, không ghép partial giữa campaign. Formal13 dừng ở launcher trước dispatch; bản sửa hash được kiểm chứng, bước tiếp theo là fresh freeze/dry-run và arm formal14 qua Task Scheduler.
+- GT-06 chưa ACCEPTED; zero accepted formal pairs; GT-07 chưa mở. Formal14 terminal PRODUCT_FAIL: 14/35 batch, native status gap 5077.626 ms tại batch13/cycle85/SAVE; không resume hay dispatch formal mới trước review/sửa có bằng chứng.
 - Formal09 terminal: pair0 35/35 RUN PASS; pair1 INFRA_ABORT trước batch0 vì RAM/commit.
 - Formal10 terminal: pair0 20/35, PRODUCT_FAIL COMMIT_PRESSURE; không pair1, không resume.
-- Daily INFRA ngày 02-10: 1/2; PRODUCT_FAIL formal10 không tiêu INFRA và không cho phép rerun mù.
+- Daily INFRA ngày 02-10: 1/2; PRODUCT_FAIL formal10/14 không tiêu INFRA và không cho phép rerun mù.
 - Source formal09/10: 58 file, `eaf377f8960303083d81f92e446401518ce2b80b38f405636aa43d9725f9c85b`; formal11: 58 file, `4ad0786bde478b1015011d0e00a0625f2aac5eb9f823f311b089954ed42b8ecd`.
 - Profile v6: `8a2e599c40f927ffaff5ded5e48b6bf2a0f0a6bb3a23de31434a695f4258cb35`.
 - Formal10 watchdog replay đúng verdict; chưa chứng minh rò bộ nhớ. Prefix không thay 35 batch.
 - Outer Job formal10 zero/closed, wrapper exit2; thiếu actual host/editor exit receipts do hard abort.
 - Formal11 dispatch: arm `HHStudio.GT06.arm-formal11-20261002` started16:20, fresh attempt DISPATCH at16:21, then terminal `HARNESS_FAIL`; no actual natural child exit was observed.
-- Helper bắt buộc dry-run thật trước arm; formal13 đã terminal, không có campaign live tại kiểm tra 18:37 ngày 02-10.
+- Formal14 source 58 file e24fa2bb22c848a0b3309ce7580c2a3ebc43d4d6916300a06c101db2ad81bc40 đã đối chiếu bản freeze/current; 84 artifact refs và watchdog replay đạt kiểm tra toàn vẹn, không thay verdict FAIL.
 - Formal11 used a fresh dry-run: available memory8.24 GiB, commit62.56%, CPU max33.65%/mean17.41% over60s, lock absent, scheduler idle and budget available. The arm is bound to source/profile and does not lower O1–O4/timeouts.
-- Formal11 raw is closed; verify actual exits, Job/tree/handles, watchdog, dataset and source/profile hashes before any future formal. Do not resume or self-accept.
+- Formal14 host actual exit1; host/editor Jobs zero/closed, handle released; editor natural-exit receipt thiếu. Arm và demand task đã gỡ exact-name, XML/receipt giữ nguyên. Closeout: studio/.local/reviews/gt06-formal14-closeout-20261002/.
+- Hướng save diagnostic 19:43–20:23 ngày02-10 đã dùng 3 run ID: 01 sai runner20s, 02 lỗi counter query, 03 RAM giảm3.19GiB; 02/03 chưa spawn engine. Dừng retry hướng này theo O3; runner mới đã qua2 pure tests, cần review lại trước native attempt mới.
 - O2 tiếp tục riêng theo O8.3/AUTHORING_STATUS.md, AUTHORITY0, không merge trước GT06.
 
 This lane records diagnostics without changing the authoritative plan. Each
 entry keeps the run ID, source closure, command, actual result and the finding
 needed for the next repair. Raw evidence remains under `studio/.local/`.
+
+## 2026-10-02 — formal14 closeout and native save localization
+
+- Windows arm dispatched formal14 at18:48 after a fresh O4.1/CPU minute. The
+  campaign ended19:06:13 with PRODUCT_FAIL / CAMPAIGN_STATUS_GAP, 14 captured
+  batches and no complete pair. Native batch13 and ACK report5077.626ms,
+  start permit529.257ms, host124.8732ms. Old raw/verdict remain unchanged.
+- Heartbeats at native ticks994784408 (cycle84/RELOAD_WAIT) and999862034
+  (cycle85/SAVE_WAIT) delimit the gap. Cycle85 save starts994912948, signal
+  arrives1000004933 and readback completes1000042836: save5129.888ms,
+  before signal5091.985ms, after signal37.903ms; reload27.690ms.
+  This localizes the slow path to native save/signal delivery, but there is
+  no call-return timestamp to distinguish a synchronous save block from a
+  later callback. CPU, disk and root-cause attribution remain unproven.
+- Host PID29960 actually exited1. Host/editor owners report zero active Job
+  members, closed Jobs and released wrapper handles; editor target exit was
+  not recorded, so cleanup must not be described as natural exit0.
+  Current/frozen58-file hashes and84 captured batch references match.
+  Offline watchdog replay completed exit0 with no stop; it does not relabel
+  this product failure as infrastructure. Both exact scheduler tasks were
+  removed after terminal/cleanup validation, retaining XML and deletion receipts.
+- Diagnostic `gt06-status-gap-save-diagnostic-20261002-01` used a disposable
+  100-cycle copy with the20-second production-stage runner by mistake. It
+  stopped at20.141s with STAGE_WALL_LIMIT; Job zero/closed, wrapperexit2.
+  Preserve it as a harness failure. No formal source or timeout changed.
+  The corrected diagnostic must use the existing long benchmark owner plus
+  a finite diagnostic deadline, O4.1/watchdog/measurement lock and actual exits.
+  Add out-of-band call-return/signal stamps, keeping formal schemas and the
+  2-second gate unchanged. Do not use a100-cycle success as formal acceptance
+  or proof that the observed transient stall has been repaired.
+
+## 2026-10-02 — bounded save runner; preflight stops before launch
+
+- Added `studio/tests/replay/run_save_phase_diagnostic.py`: copied driver only,
+  100 cycles, supplemental call-return/signal clocks, 180-second diagnostic
+  deadline using the existing benchmark Job; production import retains20s.
+  Fresh60-second O4.1/CPU observation, measurement lock, KeepAwake and watchdog
+  remain required. Two focused pure tests passed, actual exit0; native validity
+  is still unproven. Tracked driver, schemas, thresholds and formal timeouts unchanged.
+- Command: `python -B -X utf8 studio/tests/replay/run_save_phase_diagnostic.py
+  --run-id gt06-status-gap-save-diagnostic-20261002-02`, actual outer exit1.
+  The underlying preflight failure is WATCHDOG_PERF_COUNTER_QUERY; the caller
+  surfaced CAMPAIGN_PREFLIGHT_APP_INVENTORY because the failed snapshot contains
+  null inventories. No source freeze/import/editor was reached; no CPU/RAM
+  conclusion can be drawn from that missing sample.
+- Fresh readonly snapshot succeeded, then run03 using the same CLI stopped
+  during its minute before source freeze/import/editor, actual outer exit1.
+  Five samples at20:22:58–20:23:23: available5.65GiB to3.19GiB,
+  final commit80.31%; failure CAMPAIGN_PREFLIGHT_RESOURCE_LIMIT. No cleanup errors;
+  no owned Job was created. Preserve both run directories, do not resume them.
+- Conservative O3 accounting uses all three IDs01–03, including the two
+  prelaunch stops: no fourth retry without a new reviewed direction. Options:
+  retain the instrumentation for a later resource-stable window after review;
+  inspect the pinned save/preview path statically for a distinct hypothesis;
+  continue AUTH-05 fixture work in O2 when its own fresh preflight passes.
+  Neither successful preflight nor these stops repairs formal14 or permits formal15.
+- Formal14 closeout archive: `studio/.local/reviews/gt06-formal14-closeout-20261002/raw.zip`,
+  21,938,945 bytes, SHA256 `2b9d0cba0c397440d490f68b08c0b53ab5d6c741efdfa17c5480849f580d044a`.
+  Original raw, file manifest and terminal receipts remain alongside it.
 
 ## 2026-10-02 — formal13 pre-dispatch failure and launcher repair
 
