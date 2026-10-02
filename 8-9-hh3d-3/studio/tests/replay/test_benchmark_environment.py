@@ -433,6 +433,34 @@ class EnvironmentTests(unittest.TestCase):
             event_text = (root / 'watchdog-observation-error.json').read_text()
             self.assertEqual(json.loads(event_text)['ntqsi'], {'status': 0xC0000004})
             self.assertNotIn('powershell', event_text.lower())
+
+    def test_in_measure_docker_poll_is_nonfatal_and_rate_limited(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            binding = {'run_id': 'test', 'source_closure_sha256': 'a' * 64,
+                       'campaign_sha256': 'b' * 64}
+            rows = [sample(0), sample(5), sample(10)]
+            probe = Mock(side_effect=[env.InventoryError('timeout', retryable=True), ['other']])
+            clock = [100.0]
+            watch = env.Watchdog(root, Mock(side_effect=rows), binding, campaign.write,
+                                 docker_probe=probe)
+            try:
+                with patch.object(env.time, 'monotonic', side_effect=lambda: clock[0]):
+                    watch.poll(force=True)
+                    clock[0] = 105.0
+                    watch.poll(force=True)
+                    clock[0] = 165.0
+                    watch.poll(force=True)
+            finally:
+                watch.close()
+            captured = [json.loads(line) for line in (root / 'environment-samples.jsonl').read_text().splitlines()[1:]]
+            self.assertEqual(probe.call_count, 2)
+            self.assertEqual([row['docker_inventory_status'] for row in captured],
+                             ['UNKNOWN', 'CACHED', 'KNOWN'])
+            self.assertIsInstance(captured[0]['docker_inventory_error'], dict)
+            self.assertEqual(captured[2]['running_containers'], ['other'])
+            env.verify_watchdog(root, campaign.read_regular, expected_binding=binding)
+
     def test_watchdog_cpu_top_is_persisted_and_verified(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
