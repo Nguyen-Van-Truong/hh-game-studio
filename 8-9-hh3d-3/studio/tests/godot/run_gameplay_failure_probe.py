@@ -49,6 +49,7 @@ def idle_window():
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--run-id', required=True)
+    parser.add_argument('--failure-fixture', choices=('syntax', 'type'), default='syntax')
     args = parser.parse_args()
     if not re.fullmatch(r'o2-auth03-native-[a-z0-9-]{1,40}', args.run_id):
         parser.error('use a fresh o2-auth03-native-<id>')
@@ -59,7 +60,7 @@ def main():
     probe = load('o2_auth03_linux_probe', STUDIO / 'tests/godot/run_linux_probe.py')
     fixtures = load('o2_auth03_gameplay_fixtures', STUDIO / 'tests/godot/linux_probe_fixtures.py')
     good_case_name = 'gameplay_source'
-    bad_case_name = 'gameplay_secondary_syntax_error'
+    bad_case_name = 'gameplay_secondary_' + args.failure_fixture + '_error'
     good_case = {**fixtures.FIXTURES[good_case_name], 'scene': fixtures.SCENE,
                  'project': owner_mod._load('gameplay_source_profile').PROJECT_TEMPLATE}
     bad_case = {**fixtures.FIXTURES[bad_case_name], 'scene': fixtures.SCENE,
@@ -97,6 +98,7 @@ def main():
     try:
         def run_native(project, **kwargs):
             idle_window()
+            need(len(calls) < 2, 'UNEXPECTED_NATIVE_REDISPATCH')
             calls.append(str(kwargs['output'].relative_to(output)))
             return owner_mod._load('linux_executor').run(project, **kwargs)
 
@@ -156,6 +158,7 @@ def main():
         result.update(status='DIAGNOSTIC_PASS', initial=initial_readback, selected=selected,
             good_receipt=good_ack, bad_error_code=str(bad_error), bad_observation=observation,
             native_run_count=len(calls), native_paths=calls, bad_rejected=True,
+            failure_fixture=args.failure_fixture,
             last_good_current_sha256=hashlib.sha256(selected_bytes).hexdigest(),
             last_good_journal_sha256=hashlib.sha256(journal_bytes).hexdigest(),
             reopen_readback_equal=True, retry_equal=True, retry_no_redispatch=True,

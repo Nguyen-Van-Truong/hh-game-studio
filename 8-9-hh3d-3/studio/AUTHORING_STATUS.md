@@ -13,12 +13,16 @@ Current checkpoints (distinct runs; do not combine their exit/asset claims):
   followed by an engine rejection: exit 45 and `SCRIPT ERROR` remain raw,
   CURRENT/journal stay on the good revision, and reopen reads that revision.
   The combined focused suite is 80 tests, actual exit 0; no native dispatch.
-- Native AUTH-03 probe `o2-auth03-native-20261002-01` exercised the same
+- Native AUTH-03 probe `o2-auth03-native-20261002-03` exercised the same
   boundary with two real dispatches: good publication, followed by Godot
   syntax rejection (child/container exit 45). Raw rejection stayed intact;
   CURRENT/journal stayed on the good revision, reopen and exact retry matched,
   and no third dispatch occurred. Wrapper actual exit was 0. This remains a
   fixture diagnostic (`AUTHORITY=0`), not complete AUTH-03 acceptance.
+- `o2-auth03-native-20261002-02` remains raw history only because the probe was
+  subsequently parameterized and its binding predates that source hash.
+- `o2-auth03-native-20261002-01` remains raw history only: its binding included
+  a pre-final docstring hash and is not used as current evidence.
 - Current dependency integration: pure enabled-policy lifecycle repaired and
   verified by 76 focused tests, exit 0. Native 20261002-01..03 remain FAIL;
   O3 attempt budget 3/3 reached. No fourth native attempt in this direction
@@ -67,26 +71,31 @@ the focused five-module suite ran **80 tests**, actual exit **0**, with
 by this static proof. Native syntax/type/timeout/Stop cases, OS isolation,
 complete dependency closure, and public AUTHORITY remain open.
 
-## 2026-10-02 AUTH-03 native syntax-rejection diagnostic
+## 2026-10-02 AUTH-03 native syntax/type-rejection diagnostics
 
-Fresh run `o2-auth03-native-20261002-01` froze runtime closure
+The superseding fresh run `o2-auth03-native-20261002-03` froze runtime closure
 `f4f061f5574aaa59264bb0aae9204c595e4380fd2a4dbb12fe89301db70e6633` and
 used the pinned gameplay-source executor outside the GT-06 measurement window.
 The valid source revision received `READBACK_ACK`; a second revision containing
-`scripts/unused.gd` with a real syntax error reached Godot and produced an
-engine/container exit `45`, host exit `45`, no timeout/output-cap, and clean
-owned-container/Job cleanup. The adapter rejected it with
+`scripts/unused.gd` with a real type error reached Godot in run `...-03` and
+produced an engine/container exit `45`, host exit `45`, no timeout/output-cap,
+and clean owned-container/Job cleanup. The adapter rejected it with
 `GAMEPLAY_OWNER_NATIVE_NOT_CLEAN` before selection. The observation verifier
 reported `fixture_observed=true`, `expectation=engine_rejection`, but retained
 `authority=0`, `public_ack=false`, and `validation_attribution_proven=false`.
 
 After the failure, CURRENT and `journal.jsonl` hashes remained
 `823a45d88eccd977c378eadb7db6fdc58a38aed27a8c985df93e5e6292515450` and
-`5f19bd0a5dfc1122e9816406d58da2367dbbae897fab8cd00bf956cd998a9586`. Reopen
+`17ad0e690dbb0d404d413e505d1605d81c0781c994b6d35f7855f147497c0732`. Reopen
 read back the valid revision and retry returned the original receipt without a
 third native dispatch. Raw package and manifest remain under
-`studio/.local/reviews/o2-auth03-native-20261002-01/`; wrapper actual exit was
-`0`. This closes one observed syntax-rejection boundary only; type/timeout/
+`studio/.local/reviews/o2-auth03-native-20261002-03/`; wrapper actual exit was
+`0`. The earlier `...-01` and `...-02` raw are retained but stale for current
+source binding. This run used the type-error fixture through the same path;
+the probe accepts `--failure-fixture syntax|type` and guards against a third
+dispatch. The earlier run `...-02` covered syntax rejection but is stale for
+the current parameterized probe source. These close syntax/type rejection
+boundaries only; timeout/
 output-cap/Stop matrices, complete dependency closure, AUTH-05 and public
 publication remain open.
 
