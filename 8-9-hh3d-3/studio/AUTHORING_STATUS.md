@@ -39,6 +39,38 @@ Tools-plan O1–O8 governs; test counts/native diagnostics do not close AUTH or 
 - GT-06 formal14 is terminal PRODUCT_FAIL; no measured workload active at last check. Recheck process/lock
   before engine/Docker work; when formal runs, static work only and one writer per file.
 
+## 2026-10-02 — Private registered update bridge and native confirmation closeout
+
+- Added a private `scene.node.update` bridge into the existing registered publication
+  owner. It reuses the owner’s current inspected context, grant, lease/fencing,
+  idempotent journal and accepted projection; it admits only `position`/`scale` on
+  existing Node3D/MeshInstance3D nodes. It does not expose HTTP, enable an AUTH
+  profile, save, or claim 2D/gameplay authoring. Source/catalog drift and forged
+  projections fail closed. Focused pure bridge/owner/session tests: **67**, exit0.
+- The independent Windows run `o2-authoring-update-20261002-02` was interrupted
+  before terminal closeout and remains non-PASS. Its raw evidence is retained; no
+  effect or exit is inferred from the missing receipt.
+- Run `o2-authoring-update-20261002-03` initially failed before owner creation because
+  the scheduler worker lacked the trusted registry parents. The exact task was
+  removed after tree/Job cleanup. The probe now calls the existing
+  `RegistryCustody.provision_base()` before loading the owner, without changing ACLs
+  or making normal create/reopen provision implicitly; setup-failure regression test
+  exits0. Run03 remains `HARNESS_SETUP_FAIL`, authority0.
+- Fresh run `o2-authoring-update-20261002-04` used a new frozen closure
+  `8c2b257d833815a284d7d376576dcd3d57310fe713f4378309e7de663199cd70` and created
+  the three trusted parents. Validation container exited0 and was cleaned, but the
+  first registered `scene.node.create` then timed out waiting for the editor IPC
+  response (`EDITOR_IPC_TIMEOUT` → `EDITOR_EDIT_UNKNOWN`); outer tree was verified
+  and the editor Job was closed/zero/unretained, but the editor natural exit receipt
+  is absent. The candidate bridge was not reached. Classify as
+  `NATIVE_EDITOR_TIMEOUT_UNKNOWN_EFFECT`, authority0; no timeout increase, replay,
+  or PASS claim. Exact task/XML/deletion receipt and raw closeout remain under
+  `studio/.local/reviews/`.
+- The native failure does not prove a bridge or Godot root cause. Existing source has
+  no per-command breadcrumbs to distinguish apply, post-snapshot, or reply flush;
+  adding markers or another native run needs a distinct reviewed reproducer. Continue
+  static bridge/fixture work and keep GT-06/O1 gates unchanged.
+
 ## 2026-10-02 — Saved HUD composed with the native arena and publication owner
 
 - Candidate catalog/resource context now admits `CanvasLayer` and `Label`; the saved-arena
