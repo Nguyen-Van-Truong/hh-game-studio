@@ -9,6 +9,10 @@ Current checkpoints (distinct runs; do not combine their exit/asset claims):
 - Current publication repair: retained native evidence is now checked for
   every policy at adoption, cached retry and reopen, including run-ID binding.
   The combined focused suite passes 79 tests, actual exit 0; pure proof only.
+- AUTH-03 static recovery proof now covers a previously good publication
+  followed by an engine rejection: exit 45 and `SCRIPT ERROR` remain raw,
+  CURRENT/journal stay on the good revision, and reopen reads that revision.
+  The combined focused suite is 80 tests, actual exit 0; no native dispatch.
 - Current dependency integration: pure enabled-policy lifecycle repaired and
   verified by 76 focused tests, exit 0. Native 20261002-01..03 remain FAIL;
   O3 attempt budget 3/3 reached. No fourth native attempt in this direction
@@ -39,6 +43,23 @@ remain active. Dated entries preserve history; old next-action notes do not
 supersede these checkpoints or the tools plan. The earlier header at 4fcd650b
 conflated hostile, publication and asset runs; this summary corrects attribution
 without modifying raw, source or historical verdicts.
+
+## 2026-10-02 AUTH-03 last-good recovery proof
+
+The fake executor now returns a typed nonzero host/container result (`45`) with
+an engine `SCRIPT ERROR` after a known-good publication. The owner rejects the
+candidate before selection, leaves the previous `CURRENT` selector and
+`journal.jsonl` byte-identical, retains the failed run's result/stdout/stderr,
+and latches the session for explicit recovery. A reopen then validates the
+committed good receipt and reads it back while leaving the failed raw directory
+untouched. This is the bounded failure-preserves-last-good contract; it does
+not claim native Godot execution.
+
+Receipt: `studio/.local/reviews/o2-auth03-static-tests-20261002-01/exit.json`;
+the focused five-module suite ran **80 tests**, actual exit **0**, with
+`native_dispatches=0`, authority `0`. Runtime source closure was not changed
+by this static proof. Native syntax/type/timeout/Stop cases, OS isolation,
+complete dependency closure, and public AUTHORITY remain open.
 
 ## 2026-10-02 AUTH-03 retained-evidence repair
 

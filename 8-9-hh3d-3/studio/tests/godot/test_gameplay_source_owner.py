@@ -56,6 +56,26 @@ def bound_native_result(project, run_id="fake-run-1", output=None):
     return result
 
 
+def rejected_native_result(project, run_id="failed-run-1", output=None):
+    result = bound_native_result(project, run_id, output)
+    result.update(
+        diagnostic_process_clean=False,
+        log_clean=False,
+        errors=["EXECUTOR_ENGINE_OR_HOST_NOT_CLEAN"],
+        docker_wait_exit=45,
+        state={"Running": False, "Pid": 0, "ExitCode": 45, "OOMKilled": False},
+    )
+    result["commandhost"]["exit_code"] = 45
+    result["commandhost"]["timed_out"] = False
+    if output is not None:
+        (output / "engine-stdout.txt").write_bytes(
+            b"HH_GAMEPLAY_PHASE_BEGIN parse\nHH_GAMEPLAY_PHASE_END parse 1\n")
+        (output / "engine-stderr.txt").write_bytes(
+            b"SCRIPT ERROR: Parse Error: Expected parameter name.\n")
+        (output / "result.json").write_bytes(owner_mod.canonical_bytes(result))
+    return result
+
+
 def invalid_native_host_aliases():
     host = native_result()["commandhost"]
     cases = []
@@ -835,6 +855,46 @@ class GameplaySourceOwnerTests(unittest.TestCase):
                                      "revision": before["project_revision"],
                                      "generation": before["generation"]},
                                      sort_keys=True, separators=(',', ':')).encode())
+
+    def test_native_rejection_preserves_last_good_revision_and_raw_reason(self):
+        good_files = dict(self.source)
+        good_files[owner_mod.ENTRYPOINT] += b"\n# known good publication\n"
+        good_request = self.request(good_files, command="command.recovery.good")
+        good = self.owner.publish(good_request, grant=self.grant, lease=self.lease,
+                                  deadline_ms=self.lease.expires_ms)
+        selected = self.owner.inspect()
+        durable_before = self.durable_state()
+        failed_calls = []
+
+        def rejected_runner(project, **kwargs):
+            failed_calls.append(kwargs["output"])
+            return rejected_native_result(project, "failed-native-run", kwargs["output"])
+
+        self.owner._runner = rejected_runner
+        broken_files = dict(self.source)
+        broken_files[owner_mod.ENTRYPOINT] += b"\n# syntax/type failure candidate\n"
+        failed_request = self.request(broken_files, command="command.recovery.failed")
+        with self.assertRaisesRegex(owner_mod.GameplaySourceOwnerError,
+                                    "GAMEPLAY_OWNER_NATIVE_NOT_CLEAN"):
+            self.owner.publish(failed_request, grant=self.grant, lease=self.lease,
+                               deadline_ms=self.lease.expires_ms)
+        self.assertEqual(len(failed_calls), 1)
+        self.assertTrue(self.owner._held)
+        self.assertEqual((self.owner._selector.read_bytes(), self.owner._journal.read_bytes()),
+                         durable_before[1:])
+        failed_output = failed_calls[0]
+        self.assertTrue((failed_output / "result.json").is_file())
+        self.assertEqual(json.loads((failed_output / "result.json").read_bytes())["state"]["ExitCode"], 45)
+        self.assertIn(b"SCRIPT ERROR", (failed_output / "engine-stderr.txt").read_bytes())
+        self.owner.close()
+        reopened = owner_mod.GameplaySourcePublicationOwner.reopen(
+            self.owner._root, project_id="project.gameplay",
+            source_closure_sha256=owner_mod.runtime_source_closure()[1],
+            runner=lambda *args, **kwargs: bound_native_result("unused-run"))
+        self.addCleanup(reopened.close)
+        self.assertEqual(reopened.inspect(), selected)
+        self.assertEqual(reopened.inspect()["project_revision"], good["project_revision"])
+        self.assertTrue((failed_output / "result.json").is_file())
 
     def test_native_result_must_bind_all_published_source_hashes(self):
         before_selector = self.owner._selector.read_bytes()
