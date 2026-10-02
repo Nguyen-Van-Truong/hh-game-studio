@@ -23,6 +23,10 @@ Tools-plan O1–O8 governs; test counts/native diagnostics do not close AUTH or 
 - AUTH-05 static hardening commit `55433374ee03de50d0837d549b8cd3d8b03f4bd9` now rejects
   duplicate JSON keys recursively in hostile boundary/spawn markers. Focused pure suites
   passed46 and43 tests, both actual exit0; no native engine, Docker or network probe was run.
+- The failure-probe mapping now routes the existing boundary, spawn and busy watchdog
+  fixtures through the same AUTH-05 publication-owner reject/last-good/reopen/retry
+  lifecycle. A pure mapping suite covers all three hostile cases; native confirmation
+  remains pending and AUTHORITY stays0.
 - O8.3a physics repair re-evaluated44 raw artifacts from20260929-03: corrected trace/lifecycle
   check true; original verifier FAIL unchanged. Fresh native confirmation below observed the repaired
   fixture in a real container with actual exit0 and clean owned lifecycle; authority remains0.

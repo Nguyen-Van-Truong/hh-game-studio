@@ -19,6 +19,16 @@ import sys
 STUDIO = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(STUDIO.parent))
 
+AUTH05_FAILURE_FIXTURES = {
+    'boundary': 'gameplay_source_boundary',
+    'spawn': 'gameplay_source_spawn',
+    'busy': 'gameplay_source_busy',
+}
+AUTH03_FAILURE_FIXTURES = {
+    'syntax': 'gameplay_secondary_syntax_error',
+    'type': 'gameplay_secondary_type_error',
+}
+
 
 def load(name, path):
     spec = importlib.util.spec_from_file_location(name, path)
@@ -46,16 +56,28 @@ def idle_window():
          'MEASUREMENT_WINDOW_HELD')
 
 
+def failure_case_name(failure_fixture):
+    if failure_fixture in AUTH05_FAILURE_FIXTURES:
+        return AUTH05_FAILURE_FIXTURES[failure_fixture]
+    if failure_fixture in AUTH03_FAILURE_FIXTURES:
+        return AUTH03_FAILURE_FIXTURES[failure_fixture]
+    raise ValueError('UNKNOWN_FAILURE_FIXTURE')
+
+
+def is_auth05_failure(failure_fixture):
+    return failure_fixture in AUTH05_FAILURE_FIXTURES
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--run-id', required=True)
-    parser.add_argument('--failure-fixture', choices=('syntax', 'type', 'boundary'), default='syntax')
+    parser.add_argument('--failure-fixture', choices=('syntax', 'type', 'boundary', 'spawn', 'busy'), default='syntax')
     args = parser.parse_args()
     if not re.fullmatch(r'o2-auth0[35]-native-[a-z0-9-]{1,40}', args.run_id):
         parser.error('use a fresh o2-auth03-native-<id> or o2-auth05-native-<id>')
-    auth05 = args.failure_fixture == 'boundary'
+    auth05 = is_auth05_failure(args.failure_fixture)
     if auth05 != args.run_id.startswith('o2-auth05-native-'):
-        parser.error('boundary requires o2-auth05-native-<id>; syntax/type require o2-auth03-native-<id>')
+        parser.error('boundary/spawn/busy require o2-auth05-native-<id>; syntax/type require o2-auth03-native-<id>')
     idle_window()
     output = STUDIO / '.local/reviews' / args.run_id
     output.mkdir(exist_ok=False)
@@ -63,10 +85,7 @@ def main():
     probe = load('o2_auth03_linux_probe', STUDIO / 'tests/godot/run_linux_probe.py')
     fixtures = load('o2_auth03_gameplay_fixtures', STUDIO / 'tests/godot/linux_probe_fixtures.py')
     good_case_name = 'gameplay_source'
-    if args.failure_fixture == 'boundary':
-        bad_case_name = 'gameplay_source_boundary'
-    else:
-        bad_case_name = 'gameplay_secondary_' + args.failure_fixture + '_error'
+    bad_case_name = failure_case_name(args.failure_fixture)
     good_case = {**fixtures.FIXTURES[good_case_name], 'scene': fixtures.SCENE,
                  'project': owner_mod._load('gameplay_source_profile').PROJECT_TEMPLATE}
     bad_case = {**fixtures.FIXTURES[bad_case_name], 'scene': fixtures.SCENE,
@@ -77,8 +96,8 @@ def main():
         files[name] = probe.sha(STUDIO / name)
     binding = {'run_id': args.run_id, 'source_closure_sha256': closure, 'files': files,
                'authority': 0, 'public_ack': False,
-               'scope': ('AUTH-05 hostile boundary rejection after a good publication; '
-                         'not public acceptance.' if args.failure_fixture == 'boundary'
+               'scope': ('AUTH-05 hostile boundary/spawn/watchdog rejection after a good publication; '
+                         'not public acceptance.' if auth05
                          else 'AUTH-03 good publication then native rejection; not public acceptance.')}
     save(output / 'binding.json', binding)
     for name, digest in files.items():
