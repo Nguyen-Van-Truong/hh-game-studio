@@ -19,6 +19,10 @@ DETACHED_MODE = "DETACHED_PLAN_ONLY"
 _HEX = re.compile(r"[0-9a-f]{64}\Z")
 _PATH = re.compile(r"assets/[a-z][a-z0-9._-]{0,63}\.(?:glb|png|json)\Z")
 _FIXTURES = {"room_3d", "arena_2d"}
+# Keep the detached plan consumable by the existing gameplay-source adapter.
+# These are the two exact asset paths that the adapter/executor admit today;
+# Blender export/readback remains a later native gate.
+ADAPTER_ASSET_PATHS = frozenset(("assets/avatar.glb", "assets/sprite_sheet.png"))
 
 
 def _copy(value: Any) -> Any:
@@ -61,7 +65,7 @@ def build_plan() -> dict[str, Any]:
                          "uv": "hh-blender-uv-1",
                          "axis": "hh-blender-axis-zup-gltf-yup-1"}),
         _asset(asset_id="arena_sprite_atlas", fixture="arena_2d",
-               path="assets/arena_sprite_atlas.png", fmt="PNG",
+               path="assets/sprite_sheet.png", fmt="PNG",
                manifest_path="assets/arena_sprite_atlas.json",
                steps=["pose_render", "sprite_sheet", "godot_texture_readback"],
                profiles={"render": "hh-blender-sprite-sheet-1",
@@ -86,6 +90,7 @@ def _validate_asset(row: object) -> None:
     _expect(row["fixture"] in _FIXTURES and row["source"] == "Blender", "ASSET_FIXTURE")
     _expect(row["format"] in ("GLB", "PNG") and _PATH.fullmatch(row["path"])
             and _PATH.fullmatch(row["manifest_path"]), "ASSET_PATH")
+    _expect(row["path"] in ADAPTER_ASSET_PATHS, "ASSET_ADAPTER_PATH")
     _expect(_HEX.fullmatch(row["sha256"]) and _HEX.fullmatch(row["manifest_sha256"]), "ASSET_HASH")
     _expect(type(row["pipeline_steps"]) is list and row["pipeline_steps"] and
             all(type(step) is str and re.fullmatch(r"[a-z][a-z0-9_]{1,63}", step) for step in row["pipeline_steps"]), "ASSET_STEPS")
@@ -133,7 +138,8 @@ def validate_plan(value: Mapping[str, Any]) -> dict[str, Any]:
 def source_paths() -> tuple[str, ...]:
     return ("tests/godot/asset_handoff_plan.py", "tests/asset-profile.json",
             "blender-addon/export_profile.py", "blender-addon/material_profile.py",
-            "host/blender/glb_preflight.py", "pipeline/glb_semantics.py")
+            "host/blender/glb_preflight.py", "pipeline/glb_semantics.py",
+            "godot-addon/gameplay_source_profile.py")
 
 
 if __name__ == "__main__":

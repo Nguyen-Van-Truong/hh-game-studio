@@ -11,6 +11,12 @@ asset = importlib.util.module_from_spec(SPEC)
 sys.modules[SPEC.name] = asset
 SPEC.loader.exec_module(asset)
 
+PROFILE_SPEC = importlib.util.spec_from_file_location(
+    "o2_gameplay_source_profile", STUDIO / "godot-addon/gameplay_source_profile.py")
+profile = importlib.util.module_from_spec(PROFILE_SPEC)
+sys.modules[PROFILE_SPEC.name] = profile
+PROFILE_SPEC.loader.exec_module(profile)
+
 
 class AssetHandoffPlanTests(unittest.TestCase):
     def test_build_and_validate_is_deterministic(self):
@@ -19,6 +25,19 @@ class AssetHandoffPlanTests(unittest.TestCase):
         self.assertEqual(first, second)
         self.assertEqual(asset.validate_plan(first), first)
         self.assertEqual([row["format"] for row in first["assets"]], ["GLB", "PNG"])
+
+    def test_paths_match_the_existing_gameplay_source_adapter(self):
+        value = asset.build_plan()
+        self.assertEqual(set(asset.ADAPTER_ASSET_PATHS), set(profile._ASSET_FILES))
+        self.assertEqual(
+            {row["path"] for row in value["assets"]}, set(profile._ASSET_FILES))
+        changed = copy.deepcopy(value)
+        changed["assets"][1]["path"] = "assets/arena_sprite_atlas.png"
+        changed["canonical_sha256"] = asset._sha(
+            {key: changed[key] for key in changed if key != "canonical_sha256"})
+        with self.assertRaises(ValueError) as raised:
+            asset.validate_plan(changed)
+        self.assertEqual(raised.exception.args[0], "ASSET_ADAPTER_PATH")
 
     def test_glb_requires_geometry_material_uv_and_readback(self):
         value = asset.build_plan()
