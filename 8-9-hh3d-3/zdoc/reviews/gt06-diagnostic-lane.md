@@ -1087,3 +1087,22 @@ Archive manifests (AUTHORITY0, raw preserved):
   contention caused the stall. A future diagnostic must persist bounded
   per-command phase timestamps or reproduce from the journal seed before any
   source patch or formal retry.
+
+### O9.1a repair after formal21 — kernel-only process counters
+
+- Commit `bb35bdc3` replaces the in-measure process-counter fallback with the
+  Windows kernel `NtQuerySystemInformation(SystemProcessInformation=5)` API.
+  The query grows its buffer only on `STATUS_INFO_LENGTH_MISMATCH`, enforces a
+  bounded 64 MiB allocation, validates the x64 record size/offset chain and
+  returns a fail-closed unknown result for a missing target PID. PowerShell and
+  PerfProc are not used by the measured watchdog path; the compatibility
+  `perf_process_times` name remains for callers and tests.
+- The focused environment suite passed `53/53`, exit `0`, after the repair;
+  an additional read-only host probe on the live Windows host returned real
+  PID counters with `cpu_source=NtQuerySystemInformation`, and `py_compile`
+  passed. This validates the query path only; it is not a formal pair and does
+  not explain the formal21 command-lane stall.
+- O9.1a is therefore source-repaired, but the required 30-minute
+  watchdog-only soak, distinct command-gap reproducer/review and fresh O4.1
+  freeze are still open. Do not dispatch formal22 or change O1/O4 thresholds
+  until those gates are complete.
