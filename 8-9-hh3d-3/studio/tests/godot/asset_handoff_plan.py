@@ -18,11 +18,22 @@ SCHEMA = "hh-o2-asset-handoff-plan-1"
 DETACHED_MODE = "DETACHED_PLAN_ONLY"
 _HEX = re.compile(r"[0-9a-f]{64}\Z")
 _PATH = re.compile(r"assets/[a-z][a-z0-9._-]{0,63}\.(?:glb|png|json)\Z")
+_SOURCE_PATH = re.compile(r"(?:blender-addon|host/blender|pipeline|tests)/(?:[a-z0-9._-]+/)*[a-z0-9._-]+\Z")
 _FIXTURES = {"room_3d", "arena_2d"}
 # Keep the detached plan consumable by the existing gameplay-source adapter.
 # These are the two exact asset paths that the adapter/executor admit today;
 # Blender export/readback remains a later native gate.
 ADAPTER_ASSET_PATHS = frozenset(("assets/avatar.glb", "assets/sprite_sheet.png"))
+# These labels are planning labels, not implementation claims.  Binding each
+# label to its source file makes drift fail closed; native profile proof is
+# still required before any label can be treated as enabled.
+PROFILE_SOURCE_PATHS = {
+    "geometry": "blender-addon/export_profile.py",
+    "material": "blender-addon/material_profile.py",
+    "uv": "tests/asset-profile.json",
+    "axis": "tests/asset-profile.json",
+    "render": "tests/blender/sprite_sheet_pixels.py",
+}
 
 
 def _copy(value: Any) -> Any:
@@ -46,8 +57,12 @@ def _asset(*, asset_id: str, fixture: str, path: str, fmt: str,
     return {
         "asset_id": asset_id, "fixture": fixture, "source": "Blender",
         "path": path, "format": fmt, "manifest_path": manifest_path,
+        # The runtime adapter mounts only the two binary paths above.  A
+        # manifest_path is detached provenance and is never an input asset.
+        "manifest_runtime_asset": False,
         "sha256": "0" * 64, "manifest_sha256": "1" * 64,
         "pipeline_steps": list(steps), "pipeline_profiles": dict(profiles),
+        "profile_sources": {key: PROFILE_SOURCE_PATHS[key] for key in profiles},
         "import_readback_required": True, "asset_import_verified": False,
         "native_observed": False,
     }
@@ -82,7 +97,8 @@ def build_plan() -> dict[str, Any]:
 
 def _validate_asset(row: object) -> None:
     fields = {"asset_id", "fixture", "source", "path", "format", "manifest_path",
-              "sha256", "manifest_sha256", "pipeline_steps", "pipeline_profiles",
+              "manifest_runtime_asset", "sha256", "manifest_sha256", "pipeline_steps", "pipeline_profiles",
+              "profile_sources",
               "import_readback_required", "asset_import_verified", "native_observed"}
     _expect(type(row) is dict and set(row) == fields, "ASSET_ROW_SHAPE")
     row = row  # type: ignore[assignment]
@@ -91,12 +107,22 @@ def _validate_asset(row: object) -> None:
     _expect(row["format"] in ("GLB", "PNG") and _PATH.fullmatch(row["path"])
             and _PATH.fullmatch(row["manifest_path"]), "ASSET_PATH")
     _expect(row["path"] in ADAPTER_ASSET_PATHS, "ASSET_ADAPTER_PATH")
+    _expect(row["manifest_runtime_asset"] is False
+            and row["manifest_path"] not in ADAPTER_ASSET_PATHS,
+            "ASSET_MANIFEST_SIDECAR")
     _expect(_HEX.fullmatch(row["sha256"]) and _HEX.fullmatch(row["manifest_sha256"]), "ASSET_HASH")
     _expect(type(row["pipeline_steps"]) is list and row["pipeline_steps"] and
             all(type(step) is str and re.fullmatch(r"[a-z][a-z0-9_]{1,63}", step) for step in row["pipeline_steps"]), "ASSET_STEPS")
     _expect(type(row["pipeline_profiles"]) is dict and row["pipeline_profiles"], "ASSET_PROFILES")
     _expect(all(type(key) is str and type(value) is str and re.fullmatch(r"hh-[a-z0-9-]+", value)
                 for key, value in row["pipeline_profiles"].items()), "ASSET_PROFILE_ID")
+    _expect(type(row["profile_sources"]) is dict
+            and set(row["profile_sources"]) == set(row["pipeline_profiles"])
+            and all(type(key) is str and type(path) is str and _SOURCE_PATH.fullmatch(path)
+                    and PROFILE_SOURCE_PATHS.get(key) == path
+                    and (STUDIO / path).is_file()
+                    for key, path in row["profile_sources"].items()),
+            "ASSET_PROFILE_SOURCE")
     _expect(type(row["import_readback_required"]) is bool and row["import_readback_required"] is True
             and row["asset_import_verified"] is False and row["native_observed"] is False,
             "ASSET_AUTHORITY")

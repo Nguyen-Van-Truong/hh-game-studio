@@ -50,7 +50,7 @@ class AssetHandoffPlanTests(unittest.TestCase):
             changed["canonical_sha256"] = "0" * 64
             with self.assertRaises(ValueError) as raised:
                 asset.validate_plan(changed)
-            self.assertIn(raised.exception.args[0], {"GLB_PROFILE_KEYS", "PLAN_HASH"})
+            self.assertIn(raised.exception.args[0], {"GLB_PROFILE_KEYS", "ASSET_PROFILE_SOURCE", "PLAN_HASH"})
 
     def test_sprite_is_separate_from_glb_and_unknown_fields_reject(self):
         value = asset.build_plan()
@@ -76,6 +76,27 @@ class AssetHandoffPlanTests(unittest.TestCase):
             with self.assertRaises(ValueError) as raised:
                 asset.validate_plan(changed)
             self.assertEqual(raised.exception.args[0], code)
+
+    def test_profile_sources_and_manifest_sidecars_are_bound(self):
+        value = asset.build_plan()
+        for row in value["assets"]:
+            self.assertFalse(row["manifest_runtime_asset"])
+            self.assertNotIn(row["manifest_path"], profile._ASSET_FILES)
+            for key, source in row["profile_sources"].items():
+                self.assertEqual(source, asset.PROFILE_SOURCE_PATHS[key])
+                self.assertTrue((asset.STUDIO / source).is_file())
+
+        changed = copy.deepcopy(value)
+        changed["assets"][0]["profile_sources"]["geometry"] = "blender-addon/missing.py"
+        with self.assertRaises(ValueError) as raised:
+            asset.validate_plan(changed)
+        self.assertEqual(raised.exception.args[0], "ASSET_PROFILE_SOURCE")
+
+        changed = copy.deepcopy(value)
+        changed["assets"][0]["manifest_path"] = "assets/avatar.glb"
+        with self.assertRaises(ValueError) as raised:
+            asset.validate_plan(changed)
+        self.assertEqual(raised.exception.args[0], "ASSET_MANIFEST_SIDECAR")
 
 
 if __name__ == "__main__":
