@@ -383,6 +383,14 @@ tốn 1–4 giờ closeout/sửa; 12/25 commit sửa plan.
       HARNESS_FAIL; lỡ lẻ một mẫu thì không.
    d) DoD: unit test công thức CPU/Job và lock fence; một watchdog-only soak 30 phút không Godot,
       ngoài khung đo, không lỗi mẫu bắt buộc (ghi số UNKNOWN); rồi mới freeze closure mới.
+   Implementation checkpoint 03-10: O9.1a is implemented in `bb35bdc3` plus
+   `67f9e9fa` (kernel-only NTQSI counters, missing PID fails closed); O9.1b
+   is implemented in `7495eea6` plus `3e03e482` (in-run Docker poll is
+   best-effort at most once per 60 s with explicit UNKNOWN/CACHED evidence,
+   and both executor create/start paths fence `measure-window.lock`). Focused
+   environment/executor tests are green. These commits do not satisfy the
+   soak or formal gate: the 30-minute watchdog-only run and a distinct
+   formal21 command-gap reproducer remain required.
 2. Pair hoãn được: pair chỉ bắt đầu khi preflight của chính nó đạt; chưa đạt thì chờ, kiểm lại mỗi
    5 phút tới hết khung. Pair 0 PASS được giữ cho campaign đó. Pair chưa bắt đầu batch 0, hoặc bị
    INFRA_ABORT theo O9.3, được chạy lại fresh ở khung sau bằng attempt mới của cùng campaign nếu
@@ -420,7 +428,7 @@ tốn 1–4 giờ closeout/sửa; 12/25 commit sửa plan.
    d) Model mạnh chỉ cho thiết kế và review boundary; closeout, log, test, status dùng model rẻ hơn.
    e) Khi formal đang chạy hoặc chờ critic chỉ làm việc static hoặc O2 không chạm closure; khi không
       có run thì làm O9.1/O9.4 hoặc O2; không ngồi chờ khung.
-O9_NEXT=CLOSEOUT_FORMAL21_AND_REVIEW_COMMAND_GAP; NO_FORMAL22_UNTIL_DISTINCT_REPRODUCER_AND_O9_1A_KERNEL_REPAIR; O9_1B_DOCKER_NONFATAL_IN_RUN_AND_LOCK_FENCE_FIRST; O9_1A_CPU_NTQSI; O9_1C_O9_3_O9_2; WATCHDOG_SOAK_30M_THEN_FREEZE_DRY_RUN_ARM; O9_4_SAVE_TAIL_OFFLINE_FIRST; TWO_PAIRS_PASS_THEN_CRITIC_PACKAGE_O4_3_NO_CLOSURE_CHANGE; O2_STATIC_WHILE_LOCKED; GT07_OPENS_AFTER_GT06_ACCEPTED
+O9_NEXT=CLOSEOUT_FORMAL21_AND_REVIEW_COMMAND_GAP; NO_FORMAL22_UNTIL_DISTINCT_REPRODUCER_AND_WATCHDOG_SOAK; O9_1A_REPAIRED_NTQSI; O9_1B_REPAIRED_DOCKER_NONFATAL_AND_LOCK_FENCE; O9_1C_O9_3_O9_2; WATCHDOG_SOAK_30M_THEN_FREEZE_DRY_RUN_ARM; O9_4_SAVE_TAIL_OFFLINE_FIRST; TWO_PAIRS_PASS_THEN_CRITIC_PACKAGE_O4_3_NO_CLOSURE_CHANGE; O2_STATIC_WHILE_LOCKED; GT07_OPENS_AFTER_GT06_ACCEPTED
 
 ACCEPTED_EVIDENCE_INDEX (historical accepted closures; unchanged)
 GT01_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260913

@@ -1106,3 +1106,23 @@ Archive manifests (AUTHORITY0, raw preserved):
   watchdog-only soak, distinct command-gap reproducer/review and fresh O4.1
   freeze are still open. Do not dispatch formal22 or change O1/O4 thresholds
   until those gates are complete.
+
+### O9.1b repair — bounded Docker observation and executor lock fence
+
+- Commit `7495eea6` keeps Docker out of the mandatory in-measure sample path:
+  `native_snapshot()` takes a deferred inventory for watchdog rows, while
+  `Watchdog` polls at most once per 60 seconds. A pipe timeout, malformed
+  response or other Docker read error is recorded as `UNKNOWN` and does not
+  stop the CPU/RAM/commit/sleep stream; a previously observed studio-owned
+  container remains conservatively visible until a successful poll clears it.
+  Preflight still uses the strict bounded pipe and fails closed before a pair.
+- The same repair fences `measure-window.lock` immediately before Docker
+  `create` and `start` in the main executor. The O2 worktree must carry the
+  equivalent fence before its native confirmation. Pure cadence/error and
+  executor lifecycle tests pass; no Docker/Godot run was started by this
+  source repair.
+- Current verifier mode requires each new formal watchdog row to carry
+  `KNOWN`, `CACHED` or `UNKNOWN` Docker status plus a bounded error object when
+  unknown. Historical raw remains readable under the compatibility default.
+  O9.1b still needs the 30-minute watchdog-only soak and its independent
+  duration/source/lifecycle verification before a new formal freeze.
