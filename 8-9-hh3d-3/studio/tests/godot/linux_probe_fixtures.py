@@ -280,6 +280,9 @@ _physics_source = Path(__file__).with_name('gameplay_fixture')
 FIXTURES['gameplay_arena_physics'] = {
     'mode': 'gameplay-source', 'timeout': 20, 'expect': 'fixture_state',
     'fixture_kind': 'arena_physics',
+    'dependency_observation': True,
+    'dependency_files': ('scenes/fixture.tscn', 'scripts/fixture_actor.gd',
+                         'scenes/projectile.tscn'),
     'expected_state': {
         'ticks': 150, 'health': 4, 'bot_health': 0, 'pickups': 1, 'hits': 1,
         'jump_started': True, 'apex_seen': True, 'landed': True,

@@ -20,9 +20,9 @@ Tools-plan O1–O8 governs; test counts/native diagnostics do not close AUTH or 
 - AUTH-05 hostile boundary/spawn/network/timeout observations remain separate cases.
   Adapter boundary run20261002-01 preserves last-good but predates the later run-ID harness
   validation; keep it as historical diagnostic, not a run of today's harness or AUTH acceptance.
-- AUTH-05 static hardening commit `55433374ee03de50d0837d549b8cd3d8b03f4bd9` now rejects
-  duplicate JSON keys recursively in hostile boundary/spawn markers. Focused pure suites
-  passed46 and43 tests, both actual exit0; no native engine, Docker or network probe was run.
+- Duplicate-key hardening retains strict hostile-marker parsing; diagnostics do not grant AUTH05.
+- Arena publication20261002-01 now joins real physics/input, mandatory3-file dependency graph,
+  READBACK_ACK and durable reopen/retry in1 native dispatch. Authored catalog scenes remain next.
 - AUTH-05 publication-owner hostile runs now include native spawn and a distinct wall-wait
   confirmation. Wall20261002-01 actual outer0, good host/container0 then bad124;
   supervisor/cleanup/last-good/reopen/retry checked with exactly2 dispatches.
@@ -36,6 +36,38 @@ Tools-plan O1–O8 governs; test counts/native diagnostics do not close AUTH or 
   fixture in a real container with actual exit0 and clean owned lifecycle; authority remains0.
 - GT-06 formal14 is terminal PRODUCT_FAIL; no measured workload active at last check. Recheck process/lock
   before engine/Docker work; when formal runs, static work only and one writer per file.
+
+## 2026-10-02 — Real arena physics composed with publication and durable recovery
+
+- Publication probe explicitly admits `gameplay_arena_physics`; requires native
+  dependency observation for exactly fixture.tscn -> fixture_actor.gd -> projectile.tscn.
+  The original input/physics/event oracle is unchanged. Both external templates
+  arena_physics.gd and projectile.tscn are now in the frozen probe source inventory;
+  loaded bytes must match the raw-hash-verified snapshot before native dispatch.
+  Current/frozen drift, stale/missing projectile and disabled dependency policy
+  reject.33 focused pure tests passed, actual exit0. First suite invocation had a
+  Python import-path error; reran with studio on sys.path without a source workaround.
+- Fresh O4.1 passed, then `python -B -X utf8 studio/tests/godot/run_gameplay_publication_probe.py
+  --run-id o2-publication-arena-20261002-01 --fixture gameplay_arena_physics`.
+  21:24 Asia/Saigon; actual outer/host/container exit0, one native dispatch.
+  Runtime closure `80300fb2f4dd699c4d01b982855ffa7334d756608eb90a4cefdfb07404c30cb4`;
+  actor SHA256 `6efd556e135935c350ed61f3e3f42015c13651f553c3a6e4a663b788ca0a53c9`;
+  observed graph SHA256 `fb46d8cc6317a1d1a3f21f597ef74cd8642dd3d7bc9b801ad2b384cf4037072c`.
+- Existing oracle observed150 physics ticks: pickup, projectile hit, jump/apex/
+  landing, wall collision, released input and stop, camera/HUD win. Exact native
+  three-file graph is byte-bound; arbitrary closure verification remains false.
+  READBACK_ACK generation2 selected the matching source; live and reopened retries
+  preserved CURRENT/journal and caused no second native dispatch. Reopen is durable
+  owner/evidence readback, not a second Godot load of the selected directory.
+- Host attach16.406s, no timeout; owned container removed, Job zero/closed, handles
+  released and admission released.30 current/frozen source files and43 retained
+  artifact hashes independently verified. Stderr contains only the exact expected
+  guarded startup noise accepted by hh-gameplay-startup-log-1; raw log_clean=false
+  is preserved, policy accepted=true and diagnostic_execution_complete=true.
+- Raw: `studio/.local/reviews/o2-publication-arena-20261002-01/`. AUTHORITY0,
+  public_ack=false; no AUTH/GT09 acceptance or full-game claim. This fixture still
+  constructs the arena in typed GDScript at runtime; catalog-authored saved scene,
+  TileMap/art/audio/pause/respawn and a real3D avatar/interactions remain unfinished.
 
 ## 2026-10-02 — Native wall-watchdog rejection and last-good recovery verified
 
@@ -170,7 +202,10 @@ Tools-plan O1–O8 governs; test counts/native diagnostics do not close AUTH or 
 
 ## Next actions
 
-1. Complete fixture-specific adapter AUTH-02..05 evidence, then authored2D arena and3D room E2E.
+1. Build the arena as a saved scene/resource through candidate catalog transactions, preserving the
+   real physics/input oracle. Add fixture-specific native reload of the selected saved scene;
+   durable owner reopen alone is not that proof. Then reuse the path for a real3D avatar,
+   follow camera and collision-driven interactions. Do not repeat generic sandbox confirmations.
 2. Keep GT09/GT10 acceptance, human playtest and two independent critics separate from diagnostics.
 3. Do not repeat the completed native confirmations without a new reproducer; retain raw evidence and
    keep the candidate authority0 until the formal GT06 and later gates are accepted.

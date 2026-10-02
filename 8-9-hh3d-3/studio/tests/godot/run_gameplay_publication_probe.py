@@ -17,6 +17,13 @@ import sys
 
 STUDIO = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(STUDIO.parent))
+ARENA_FIXTURE = 'gameplay_arena_physics'
+ARENA_DEPENDENCY_FILES = ('scenes/fixture.tscn', 'scripts/fixture_actor.gd',
+                          'scenes/projectile.tscn')
+ARENA_SOURCE_FILES = {
+    'scripts/fixture_actor.gd': 'tests/godot/gameplay_fixture/arena_physics.gd',
+    'scenes/projectile.tscn': 'tests/godot/gameplay_fixture/projectile.tscn',
+}
 
 
 def load(name, path):
@@ -45,6 +52,56 @@ def idle_window():
          'MEASUREMENT_WINDOW_HELD')
 
 
+def publication_fixture_allowed(name, catalog):
+    return name in catalog and (name.startswith('gameplay_source_') or name == ARENA_FIXTURE)
+
+
+def publication_dependency_policy(name, case):
+    if name == ARENA_FIXTURE:
+        need(case.get('dependency_observation') is True
+             and case.get('dependency_files') == ARENA_DEPENDENCY_FILES,
+             'ARENA_DEPENDENCY_POLICY_REQUIRED')
+    return {'dependency_observation_required': case.get('dependency_observation') is True,
+            'dependency_observation_files': tuple(case.get('dependency_files', ()))}
+
+
+def verify_fixture_sources(name, case, candidate, hashes, *, source_root, frozen_root):
+    """Bind imported arena templates to frozen raw bytes and current disk bytes.
+
+    read_text uses universal newlines on Windows. Preserve raw hashes while
+    comparing the loaded template to the same normalized text from the freeze.
+    """
+    if name != ARENA_FIXTURE:
+        return
+    for target, source in ARENA_SOURCE_FILES.items():
+        need(source in hashes, 'ARENA_SOURCE_BINDING_MISSING')
+        frozen = (frozen_root / source).read_bytes()
+        current = (source_root / source).read_bytes()
+        need(hashlib.sha256(frozen).hexdigest() == hashes[source]
+             and hashlib.sha256(current).hexdigest() == hashes[source],
+             'ARENA_SOURCE_CHANGED')
+        expected = frozen.decode('utf-8').replace('\r\n', '\n').replace('\r', '\n').encode('utf-8')
+        loaded = case.get('script') if target.endswith('.gd') else case.get('extra_files', {}).get(target)
+        need(type(loaded) is str and loaded.encode('utf-8') == expected
+             and candidate.get(target) == expected, 'ARENA_TEMPLATE_FREEZE_MISMATCH')
+
+
+def verify_fixture_observation(name, observation):
+    need(observation['fixture_observed'] is True, 'NATIVE_FIXTURE_NOT_OBSERVED')
+    if name != ARENA_FIXTURE:
+        return
+    graph = observation.get('dependency_observation', {}).get('observation', {})
+    nodes = graph.get('nodes', [])
+    expected = {
+        'scenes/fixture.tscn': [{'kind': 'scene_ext_resource', 'target': 'scripts/fixture_actor.gd'}],
+        'scripts/fixture_actor.gd': [{'kind': 'script_preload', 'target': 'scenes/projectile.tscn'}],
+        'scenes/projectile.tscn': [],
+    }
+    need(graph.get('entrypoint') == 'scenes/fixture.tscn' and len(nodes) == len(expected)
+         and {row.get('path'): row.get('edges') for row in nodes} == expected,
+         'ARENA_DEPENDENCY_GRAPH_MISMATCH')
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--run-id', required=True)
@@ -58,13 +115,16 @@ def main():
     owner_mod = load('o2_native_gameplay_owner', STUDIO / 'godot-addon/gameplay_source_owner.py')
     probe = load('o2_native_linux_probe', STUDIO / 'tests/godot/run_linux_probe.py')
     fixtures = load('o2_native_gameplay_fixtures', STUDIO / 'tests/godot/linux_probe_fixtures.py')
-    if args.fixture not in fixtures.FIXTURES or not args.fixture.startswith('gameplay_source_'):
-        parser.error('fixture must be a gameplay_source_* case')
+    if not publication_fixture_allowed(args.fixture, fixtures.FIXTURES):
+        parser.error('fixture must be a gameplay_source_* case or gameplay_arena_physics')
     files, closure = owner_mod.runtime_source_closure()
     for name in ('tests/godot/run_gameplay_publication_probe.py',
                  'tests/godot/run_linux_probe.py', 'tests/godot/linux_probe_fixtures.py',
                  'godot-addon/gameplay_dependency_observation.py'):
         files[name] = probe.sha(STUDIO / name)
+    if args.fixture == ARENA_FIXTURE:
+        for name in ARENA_SOURCE_FILES.values():
+            files[name] = probe.sha(STUDIO / name)
     binding = {'run_id': args.run_id, 'source_closure_sha256': closure,
                'files': files, 'authority': 0, 'public_ack': False,
                'scope': 'Declared adapter closure plus diagnostic harness; not arbitrary dependencies.'}
@@ -84,6 +144,9 @@ def main():
             'scene': fixtures.SCENE, 'project': profile.PROJECT_TEMPLATE}
     candidate = probe.case_files(case)
     candidate.pop('project.godot')
+    dependency_policy = publication_dependency_policy(fixture_name, case)
+    verify_fixture_sources(fixture_name, case, candidate, files,
+                           source_root=STUDIO, frozen_root=output / 'source')
     initial = dict(candidate)
     initial[owner_mod.ENTRYPOINT] += b'\n# Initial unpublished fixture revision.\n'
     calls = []
@@ -95,14 +158,15 @@ def main():
         def run_native(project, **kwargs):
             idle_window()
             need(not calls, 'UNEXPECTED_SECOND_NATIVE_DISPATCH')
+            verify_fixture_sources(fixture_name, case, candidate, files,
+                                   source_root=STUDIO, frozen_root=output / 'source')
             calls.append(str(kwargs['output'].relative_to(output)))
             return owner_mod._load('linux_executor').run(project, **kwargs)
 
         owner = owner_mod.GameplaySourcePublicationOwner.create(output,
             project_id='project.publication', source_files=initial,
             entrypoint=owner_mod.ENTRYPOINT, source_closure_sha256=closure, runner=run_native,
-            dependency_observation_required=case.get('dependency_observation') is True,
-            dependency_observation_files=tuple(case.get('dependency_files', ())))
+            **dependency_policy)
         initial_readback = owner.inspect()
         credential = owner.issue()
         grant = owner.authorize('Bearer ' + credential.bearer, 'scene.save')
@@ -127,13 +191,12 @@ def main():
         observation = probe.case_observation(native_dir, case,
             name=fixture_name, binding=binding)
         save(output / 'native-observation.json', observation)
-        need(observation['fixture_observed'] is True, 'NATIVE_FIXTURE_NOT_OBSERVED')
+        verify_fixture_observation(fixture_name, observation)
         root = owner._root
         owner.close()
         reopened = owner_mod.GameplaySourcePublicationOwner.reopen(root,
             project_id='project.publication', source_closure_sha256=closure, runner=run_native,
-            dependency_observation_required=case.get('dependency_observation') is True,
-            dependency_observation_files=tuple(case.get('dependency_files', ())))
+            **dependency_policy)
         need(reopened.inspect() == selected, 'REOPEN_READBACK_CHANGED')
         fresh = reopened.issue()
         grant = reopened.authorize('Bearer ' + fresh.bearer, 'scene.save')
