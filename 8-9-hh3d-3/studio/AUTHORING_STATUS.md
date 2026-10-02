@@ -17,6 +17,19 @@ Tools-plan O1–O8 governs; test counts/native diagnostics do not close AUTH or 
   AUTHORITY remains0; native editor proof is open and the raw `o2-authoring-update-20261002-04`
   `EDITOR_IPC_TIMEOUT` verdict is unchanged.
 
+- Saved-room 3D fixture now has a separate pure recipe seam. It validates a
+  parent-before-child `Node3D` room with `CharacterBody3D`, `MeshInstance3D`,
+  `Camera3D`, `Area3D` triggers and `CollisionShape3D` nodes, plus typed
+  `CapsuleShape3D`/`BoxShape3D` resources. The mesh is bound to a detached
+  Blender `assets/avatar.glb` and `assets/manifest.json` hash reference;
+  import/readback remains explicitly pending. Owner-admission binding returns
+  `DETACHED_PLAN_ONLY` envelopes and requires fresh admission per effect; it
+  performs no editor submit, save, ACK or native claim. Focused pure recipe
+  tests: **7**, exit0. The resource candidate allowlist now includes the
+  necessary 3D ancestor node types and rejects broken hierarchy/dimensions.
+  AUTHORITY remains0; this does not open GT-06 or prove Blender/Godot native
+  import.
+
 - Typed nodes/resources, scene instances, signals/InputMap, animation and six-effect gameplay
   shortcut have candidate validation/native readback; generic typed gameplay uses gameplay-source.
 - Blender template armature/action, geometry/material/UV, GLB export and 2D sprite import have
