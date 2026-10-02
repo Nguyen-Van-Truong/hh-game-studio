@@ -1146,6 +1146,23 @@ Archive manifests (AUTHORITY0, raw preserved):
   diagnostic replay, not a scheduler/queue reproduction and not acceptance
   evidence.
 
+### Controlled host command-gap reproducer — diagnostic only
+
+- `studio/tests/replay/run_command_gap_reproducer.py` ran twice with actual
+  process exit `0`; the retained fresh result is
+  `gt06-gap-repro-20261003-02` under
+  `studio/.local/reviews/gt06-command-gap-reproducer-20261003-02/`. It used
+  the real loopback `CommandProducer` fixture, injected one bounded `2.5 s`
+  delay at admitted lookup `.0`, and started neither Godot nor Docker. Its
+  complete source closure is
+  `10485c949411b5672631cc7a8952989ee3c6dad32ff728708b6f1d6c42c91188`.
+- The controlled run recorded `max_status_gap_ms=2509.9916` and retained
+  phase/journal timing, with no dropped commands, no transport failure and all
+  effects reconciled. It demonstrates that the unchanged 2-second host gate
+  observes a delayed lookup; it does not reproduce the formal21 scheduler,
+  prove a natural root cause, or permit formal22. A fresh full O9 watchdog soak
+  remains required before any new formal freeze.
+
 ### O9 soak closure repair — incomplete attempts retained
 
 - The first detached soak attempts were stopped after partial samples and had
