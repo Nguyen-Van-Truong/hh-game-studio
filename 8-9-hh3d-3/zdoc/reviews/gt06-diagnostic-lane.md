@@ -20,6 +20,23 @@ This lane records diagnostics without changing the authoritative plan. Each
 entry keeps the run ID, source closure, command, actual result and the finding
 needed for the next repair. Raw evidence remains under `studio/.local/`.
 
+## 2026-10-02 — gt06-o4-formal-09 closeout
+
+- Dispatch: `HHStudio.GT06.gt06-o4-formal-09`, one scheduler start at 10:43:10 Asia/Saigon;
+  formal source closure `eaf377f8960303083d81f92e446401518ce2b80b38f405636aa43d9725f9c85b`
+  (58 files), profile v6 `8a2e599c40f927ffaff5ded5e48b6bf2a0f0a6bb3a23de31434a695f4258cb35`.
+- Pair 0: 35/35 batches, child/host/editor actual exit `0`, Job/tree/handle cleanup verified,
+  no watchdog latch; run summary status `PASS`, maximum status gap `1295.624 ms`, raw summary
+  `c18ea56c92a6f1c7dcd3da2738618ae5a2b0de1ed968304cd6507bd82b2a2474`. This is one pair only;
+  it does not grant GT06 acceptance.
+- Pair 1: no batch started. Fresh preflight at `2026-10-02T04:18:53Z` recorded available
+  memory `3667136512` bytes (3.417 GiB), commit `86.7199556%`, no foreign engines; classification
+  `INFRA_ABORT` with `CAMPAIGN_PREFLIGHT_RESOURCE_LIMIT`. Raw `run-01-attempt-01` is retained.
+- Campaign is terminal with zero accepted formal pairs. The arm repair task was removed only after
+  scheduler terminal/zero instances; arm receipts remain under `.local/formal09-arm-20261002-repair01`.
+  Daily O1.7 INFRA budget consumed: `1/2` on 2026-10-02. Do not resume formal09 or S258; a new ID
+  may be considered only after fresh source freeze, O4.1 preflight and one-minute CPU observation.
+
 ## 2026-09-30 — gt06-o5-host-soak-20260930-01
 
 - Source closure: `01c76e467611fccf2dff2f5d8b0e0d0382bd438705230062ba2cccd0aa46671f`
