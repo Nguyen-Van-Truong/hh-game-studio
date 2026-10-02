@@ -281,6 +281,25 @@ def _owner_path() -> Path:
     return root / 'owner.json'
 
 
+def _require_measure_window_clear() -> None:
+    """Refuse Docker create/start while a formal measurement owns the lease."""
+    base = os.environ.get('LOCALAPPDATA')
+    _need(isinstance(base, str) and base, 'EXECUTOR_MEASURE_WINDOW_LOCALAPPDATA')
+    base_path = Path(base)
+    _no_links(base_path)
+    root = base_path / 'HHGodotAgent'
+    if not root.exists():
+        return
+    _no_links(root)
+    marker = root / 'measure-window.lock'
+    if marker.exists():
+        _no_links(marker)
+        info = marker.stat(follow_symlinks=False)
+        _need(stat.S_ISREG(info.st_mode) and info.st_nlink == 1 and info.st_size <= 4096,
+              'EXECUTOR_MEASURE_WINDOW_LOCKED')
+        raise ExecutorError('EXECUTOR_MEASURE_WINDOW_LOCKED')
+
+
 def _persist_owner(path: Path, record: dict) -> None:
     raw = (json.dumps(record, sort_keys=True) + '\n').encode()
     _need(len(raw) <= 8192, 'EXECUTOR_OWNER_RECORD_SIZE')
@@ -774,6 +793,7 @@ def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate'], 
         _persist_owner(owner_path, owner_record)
         owner_record['phase'] = 'create_pending'
         _persist_owner(owner_path, owner_record)
+        _require_measure_window_clear()
         create_attempted = True
         row, raw = call(args, 'create', cap=4096)
         candidate = raw.decode('ascii', errors='replace').strip()
@@ -800,6 +820,7 @@ def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate'], 
                   'EXECUTOR_PROFILE_HARNESS_CHANGED')
         owner_record['phase'] = 'start_pending'
         _persist_owner(owner_path, owner_record)
+        _require_measure_window_clear()
         row, _ = call(['start', '--attach', container_id], 'engine', timeout=timeout_seconds + 2)
         result['commandhost'] = row
         if not _cli_clean(row):

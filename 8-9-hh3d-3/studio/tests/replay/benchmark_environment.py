@@ -160,6 +160,7 @@ SYSTEM_PROCESS_INFORMATION = 5
 STATUS_INFO_LENGTH_MISMATCH = 0xC0000004
 NTQSI_INITIAL_BYTES = 256 * 1024
 NTQSI_MAX_BYTES = 64 * 1024 * 1024
+_REQUIRE_DOCKER_INVENTORY = object()
 
 
 class _SystemProcessInformationPrefix(ctypes.Structure):
@@ -271,7 +272,8 @@ def perf_process_times(processes):
     return _nt_process_times(missing)
 
 
-def native_snapshot(processes, *, job_handle=None, heavy_names=frozenset()):
+def native_snapshot(processes, *, job_handle=None, heavy_names=frozenset(),
+                    docker_inventory=_REQUIRE_DOCKER_INVENTORY):
     k, p = api()
     memory, perf = Memory(), Performance()
     memory.length, perf.cb = ctypes.sizeof(memory), ctypes.sizeof(perf)
@@ -338,7 +340,16 @@ def native_snapshot(processes, *, job_handle=None, heavy_names=frozenset()):
     for row in rows:
         if row['pid'] in fallback and row['cpu_total_100ns'] is None:
             row.update(fallback[row['pid']])
-    containers = running_containers(processes)
+    docker_inventory_status = 'KNOWN'
+    docker_inventory_error = None
+    if docker_inventory is _REQUIRE_DOCKER_INVENTORY:
+        containers = running_containers(processes)
+    else:
+        require(type(docker_inventory) is list and
+                all(type(name) is str for name in docker_inventory),
+                'DOCKER_INVENTORY_SHAPE')
+        containers = list(docker_inventory)
+        docker_inventory_status = 'DEFERRED'
     foreign.extend({'name': name, 'ownership': 'outside_campaign_job', 'kind': 'docker_container'}
                    for name in foreign_container_names(containers))
     return {
@@ -358,7 +369,8 @@ def native_snapshot(processes, *, job_handle=None, heavy_names=frozenset()):
         # counters.  Keep the full bounded inventory so an external process
         # cannot disappear merely because it is small in private memory.
         'processes': rows,
-        'running_containers': containers,
+        'running_containers': containers, 'docker_inventory_status': docker_inventory_status,
+        'docker_inventory_error': docker_inventory_error,
         'top_private_processes': sorted(
             (row for row in rows if row['private_bytes'] is not None),
             key=lambda row: row['private_bytes'], reverse=True)[:20],
@@ -574,8 +586,11 @@ def unpack_sample(row):
 
 
 class Watchdog:
-    def __init__(self, output, sample, binding, write):
+    def __init__(self, output, sample, binding, write, *, docker_probe=None):
         self.output, self.sample, self.binding, self.write = output, sample, binding, write
+        self.docker_probe = docker_probe
+        self.docker_last = None
+        self.docker_names = []
         self.policy, self.last, self.count = Policy(), None, 0
         require(type(binding) is dict and set(binding) == {
             'run_id', 'source_closure_sha256', 'campaign_sha256'}, 'WATCHDOG_BINDING')
@@ -656,6 +671,11 @@ class Watchdog:
             row = self.sample()
         except BaseException as error:
             self._observer_failure(error)
+        if self.docker_probe is not None:
+            try:
+                row = self._poll_docker(row)
+            except BaseException as error:
+                self._observer_failure(error, row)
         persisted = False
         try:
             row['cpu_observation'] = cpu_interval(self.policy.previous, row)
@@ -680,6 +700,47 @@ class Watchdog:
             error.classification = decision['classification']
             raise error
 
+    def _poll_docker(self, row):
+        """Poll Docker at most once per minute; an error is recorded as UNKNOWN.
+
+        CPU, RAM, commit and sleep samples remain mandatory and continue even
+        when the optional Docker pipe is slow or unavailable. A previously
+        observed studio container remains conservatively visible until a
+        later successful poll proves it gone.
+        """
+        now = time.monotonic()
+        due = self.docker_last is None or now - self.docker_last >= 60
+        if due:
+            self.docker_last = now
+            try:
+                names = self.docker_probe(row.get('processes', []))
+                require(type(names) is list and all(type(name) is str for name in names),
+                        'DOCKER_INVENTORY_SHAPE')
+                self.docker_names = list(names)
+                row['docker_inventory_status'] = 'KNOWN'
+                row['docker_inventory_error'] = None
+            except Exception as error:
+                row['docker_inventory_status'] = 'UNKNOWN'
+                diagnostic = {'code': type(error).__name__}
+                detail = getattr(error, 'docker_inventory', None)
+                if type(detail) is dict:
+                    diagnostic = {name: detail[name] for name in
+                                  ('reason', 'attempt', 'elapsed_seconds', 'errno', 'returncode')
+                                  if name in detail and type(detail[name]) in (str, int, float)}
+                    diagnostic['code'] = getattr(error, 'code', type(error).__name__)
+                row['docker_inventory_error'] = diagnostic
+        else:
+            row['docker_inventory_status'] = 'CACHED'
+            row['docker_inventory_error'] = None
+        row['running_containers'] = list(self.docker_names)
+        foreign = [item for item in row.get('foreign_engines', [])
+                   if item.get('kind') != 'docker_container']
+        foreign.extend({'name': name, 'ownership': 'outside_campaign_job',
+                        'kind': 'docker_container'}
+                       for name in foreign_container_names(self.docker_names))
+        row['foreign_engines'] = foreign
+        return row
+
     def close(self):
         self.stream.close()
 
@@ -703,7 +764,8 @@ def require_infra_budget(reviews, read_regular):
     require(count < 2, 'CAMPAIGN_INFRA_DAILY_LIMIT')
 
 
-def verify_watchdog(output, read_regular, *, elapsed_seconds=None, expected_binding=None):
+def verify_watchdog(output, read_regular, *, elapsed_seconds=None, expected_binding=None,
+                    require_docker_inventory=False):
     require(not (output / 'watchdog-stop.json').exists(), 'CAMPAIGN_WATCHDOG_STOP_LATCHED')
     require(type(expected_binding) is dict and set(expected_binding) == {
             'run_id', 'source_closure_sha256', 'campaign_sha256'}, 'CAMPAIGN_WATCHDOG_BINDING')
@@ -717,6 +779,19 @@ def verify_watchdog(output, read_regular, *, elapsed_seconds=None, expected_bind
     for line in lines[1:]:
         row = unpack_sample(json.loads(line))
         require('cpu_observation' in row, 'CAMPAIGN_WATCHDOG_CPU_OBSERVATION_MISSING')
+        if require_docker_inventory:
+            status = row.get('docker_inventory_status')
+            require(status in ('KNOWN', 'CACHED', 'UNKNOWN'),
+                    'CAMPAIGN_WATCHDOG_DOCKER_STATUS')
+            require(type(row.get('running_containers')) is list and
+                    all(type(name) is str for name in row['running_containers']),
+                    'CAMPAIGN_WATCHDOG_DOCKER_STATUS')
+            if status == 'UNKNOWN':
+                require(type(row.get('docker_inventory_error')) is dict,
+                        'CAMPAIGN_WATCHDOG_DOCKER_STATUS')
+            else:
+                require(row.get('docker_inventory_error') is None,
+                        'CAMPAIGN_WATCHDOG_DOCKER_STATUS')
         require(policy.observe(row) is None, 'CAMPAIGN_WATCHDOG_REPLAY_FAILED')
         count += 1
     require(count >= 2, 'CAMPAIGN_WATCHDOG_SAMPLES_MISSING')

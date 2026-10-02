@@ -156,7 +156,8 @@ def run(run_id):
                 source_root=STUDIO, source_files=runtime, binary_sha256=lock['gui_sha256'])
             launched = time.monotonic()
             watchdog = campaign.environment.Watchdog(root,
-                lambda: campaign.environment_snapshot(job_handle=owner.job._handle), binding, campaign.write)
+                lambda: campaign.environment_snapshot(job_handle=owner.job._handle, docker_inventory=[]), binding,
+                campaign.write, docker_probe=campaign.environment.running_containers)
             while not (owner.output / 'process-start.json').is_file():
                 watchdog.poll()
                 require(owner.tick() is None and time.monotonic() - launched < 15, 'STOCK_START_FAILED')
@@ -189,7 +190,7 @@ def run(run_id):
             probe.close()
             watchdog.close()
             campaign.environment.verify_watchdog(root, campaign.read_regular, expected_binding=binding,
-                elapsed_seconds=capture['elapsed_seconds'])
+                elapsed_seconds=capture['elapsed_seconds'], require_docker_inventory=True)
             verify_capture(owner.output, sha(owner.output / 'capture.json'), source_root=STUDIO,
                 expected_source_files=runtime, expected_binary_sha256=lock['gui_sha256'])
             require(not (owner.output / 'stderr.txt').read_bytes().strip(), 'STOCK_EDITOR_STDERR')

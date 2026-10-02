@@ -220,7 +220,8 @@ def run_locked(root, run_id, preview_mode='stock'):
         context = {'run_id': run_id, 'source_closure_sha256': binding['source_closure_sha256'],
                    'campaign_sha256': native.sha(native.encoded(binding))}
         watchdog = campaign.environment.Watchdog(root,
-            lambda: campaign.environment_snapshot(job_handle=owner.job._handle), context, native.write)
+            lambda: campaign.environment_snapshot(job_handle=owner.job._handle, docker_inventory=[]), context,
+            native.write, docker_probe=campaign.environment.running_containers)
         seen_window = False
         while owner.tick(stop=campaign.stop_requested(root, **context)) is None:
             watchdog.poll()
@@ -239,7 +240,7 @@ def run_locked(root, run_id, preview_mode='stock'):
                 'SAVE_DIAGNOSTIC_GUI_OR_EXIT')
         watchdog.close()
         campaign.environment.verify_watchdog(root, native.read_regular,
-            expected_binding=context, elapsed_seconds=captured['elapsed_seconds'])
+            expected_binding=context, elapsed_seconds=captured['elapsed_seconds'], require_docker_inventory=True)
         raw = native.read_regular(owner.output / 'stdout.txt')
         batch = json.loads(native.read_regular(project / 'benchmark/out/batch-00.json'))
         index_raw = native.read_regular(project / 'benchmark/out/index.json')

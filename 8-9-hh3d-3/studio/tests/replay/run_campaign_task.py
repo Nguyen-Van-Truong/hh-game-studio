@@ -101,16 +101,18 @@ def execute(campaign_id, mode, output, request_sha, *, launch_number=1):
             'source_closure_sha256': campaign.closure(sources), 'campaign_sha256': request_sha}
         write(output / 'probe-context.json', binding)
         watchdog = campaign.environment.Watchdog(output,
-            lambda: campaign.environment_snapshot(job_handle=owner.job._handle), binding, write)
+            lambda: campaign.environment_snapshot(job_handle=owner.job._handle,
+                                                   docker_inventory=[]), binding, write,
+            docker_probe=campaign.environment.running_containers)
         with campaign.environment.KeepAwake():
             campaign.wait_owned_run(owner, output, **binding, watchdog=watchdog)
         watchdog.close()
         campaign.environment.verify_watchdog(output, campaign.read_regular,
-                                             expected_binding=binding)
+                                             expected_binding=binding, require_docker_inventory=True)
         capture_value = owner.finish()
         campaign.environment.verify_watchdog(output, campaign.read_regular,
                                              elapsed_seconds=capture_value['elapsed_seconds'],
-                                             expected_binding=binding)
+                                             expected_binding=binding, require_docker_inventory=True)
         capture = output / 'probe-owner/capture.json'
         verify_capture(capture.parent, sha(capture), source_root=STUDIO,
             expected_source_files=sources, expected_binary_sha256=sha(Path(sys.executable)))

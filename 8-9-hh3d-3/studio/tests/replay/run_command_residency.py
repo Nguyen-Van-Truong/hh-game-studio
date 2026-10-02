@@ -190,12 +190,14 @@ def _run_in_window(run_id):
         binding = {'run_id': run_id, 'source_closure_sha256': closure(before),
                    'campaign_sha256': hashlib.sha256(run_id.encode()).hexdigest()}
         watchdog = environment.Watchdog(root,
-            lambda: environment_snapshot(job_handle=owner.job._handle), binding, write)
+            lambda: environment_snapshot(job_handle=owner.job._handle, docker_inventory=[]), binding, write,
+            docker_probe=environment.running_containers)
         wait_owned_run(owner, root, **binding, watchdog=watchdog)
         watchdog.close()
         capture = owner.finish()
         environment.verify_watchdog(root, read_regular,
-                                   elapsed_seconds=capture['elapsed_seconds'], expected_binding=binding)
+                                   elapsed_seconds=capture['elapsed_seconds'], expected_binding=binding,
+                                   require_docker_inventory=True)
         require((root / 'result.json').is_file(), 'RESIDENCY_RESULT_MISSING')
         print(json.dumps({'completed': True, 'run_id': run_id, 'host': capture, 'full_benchmark': False}), flush=True)
         return 0

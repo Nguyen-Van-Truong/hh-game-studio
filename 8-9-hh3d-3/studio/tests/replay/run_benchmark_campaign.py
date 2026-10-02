@@ -428,9 +428,11 @@ def heavy_preflight_processes(*, all_processes=False):
     return sorted(found, key=lambda row: (row['name'], row['pid']))
 
 
-def environment_snapshot(*, job_handle=None):
+def environment_snapshot(*, job_handle=None,
+                         docker_inventory=environment._REQUIRE_DOCKER_INVENTORY):
     return environment.native_snapshot(heavy_preflight_processes(all_processes=True),
-        job_handle=job_handle, heavy_names=HEAVY_PREFLIGHT_NAMES)
+        job_handle=job_handle, heavy_names=HEAVY_PREFLIGHT_NAMES,
+        docker_inventory=docker_inventory)
 
 
 def environment_preflight():
@@ -630,7 +632,8 @@ def verify_run_capture(root, captured, source_digest, *, campaign_id, index, att
     environment.verify_watchdog(root, read_regular, elapsed_seconds=host['elapsed_seconds'],
                                expected_binding={'run_id': run_id,
                                                  'source_closure_sha256': source_digest,
-                                                 'campaign_sha256': campaign_sha256})
+                                                 'campaign_sha256': campaign_sha256},
+                               require_docker_inventory=True)
     first_run_sample = environment.unpack_sample(json.loads(
         read_regular(root / 'environment-samples.jsonl', 64 * 1024**2).splitlines()[1]))
     verify_launch_observation(root, context, first_run_sample)
@@ -773,18 +776,20 @@ def _run_campaign(campaign_id, root, preflight_path, after_path):
                 source_root=STUDIO, source_files=before,
                 binary_sha256=sha(read_regular(Path(sys.executable), 256 * 1024**2)), campaign_host=True)
             watchdog = environment.Watchdog(output,
-                lambda: environment_snapshot(job_handle=owner.job._handle),
-                {'run_id': run_id, 'source_closure_sha256': digest, 'campaign_sha256': campaign_sha}, write)
+                lambda: environment_snapshot(job_handle=owner.job._handle, docker_inventory=[]),
+                {'run_id': run_id, 'source_closure_sha256': digest, 'campaign_sha256': campaign_sha}, write,
+                docker_probe=environment.running_containers)
             wait_owned_run(owner, output, run_id=run_id,
                 source_closure_sha256=digest, campaign_sha256=campaign_sha,
                 check_campaign_stop=lambda: require_campaign_running(root, active=output), watchdog=watchdog)
             watchdog.close()
             watchdog_binding = {'run_id': run_id, 'source_closure_sha256': digest,
                                 'campaign_sha256': campaign_sha}
-            environment.verify_watchdog(output, read_regular, expected_binding=watchdog_binding)
+            environment.verify_watchdog(output, read_regular, expected_binding=watchdog_binding,
+                                        require_docker_inventory=True)
             host = owner.finish()
             environment.verify_watchdog(output, read_regular, elapsed_seconds=host['elapsed_seconds'],
-                                        expected_binding=watchdog_binding)
+                                        expected_binding=watchdog_binding, require_docker_inventory=True)
             write(output / 'environment-preflight-after.json', environment_preflight())
             require_campaign_running(root)
             child = json.loads(read_regular(output / 'child-result.json'))

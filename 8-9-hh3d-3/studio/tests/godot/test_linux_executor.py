@@ -245,6 +245,7 @@ class LifecycleTests(unittest.TestCase):
     def exercise(self, scenario):
         with tempfile.TemporaryDirectory() as folder:
             folder = Path(folder); project = folder / 'project'; write_project(project)
+            localappdata = folder / 'Local'; localappdata.mkdir()
             tool = folder / 'tool'; tool.mkdir(); binary = tool / executor.BINARY_NAME; binary.write_bytes(b'pinned-test-binary')
             fake = FakeDocker(scenario)
             admission = type('Admission', (), {'wait_ms': 0, 'abandoned': False, 'close': lambda self: None})()
@@ -253,6 +254,7 @@ class LifecycleTests(unittest.TestCase):
                  patch.object(executor, '_Admission', return_value=admission), \
                  patch.object(executor, '_owner_path', return_value=folder / 'owner.json'), \
                  patch.object(executor, '_lock', return_value={'docker_endpoint': 'npipe:////./pipe/dockerDesktopLinuxEngine'}), \
+                 patch.dict(os.environ, {'LOCALAPPDATA': str(localappdata)}), \
                  patch.object(executor, 'BINARY_SHA256', hashlib.sha256(binary.read_bytes()).hexdigest()):
                 result = executor.run(project, mode='parse', output=folder / 'out')
             self.assertFalse((folder / 'owner.json').exists())
@@ -262,6 +264,28 @@ class LifecycleTests(unittest.TestCase):
             self.assertFalse(result['public_ack']); self.assertFalse(result['sandbox_acceptance'])
             self.assertEqual(result['state']['Pid'], 0)
             return result, fake.calls
+
+    def test_measure_window_marker_blocks_create_and_start(self):
+        with tempfile.TemporaryDirectory() as folder:
+            folder = Path(folder); project = folder / 'project'; write_project(project)
+            localappdata = folder / 'Local'
+            marker = localappdata / 'HHGodotAgent/measure-window.lock'
+            marker.parent.mkdir(parents=True)
+            marker.write_text('{"schema":"HH-MEASURE-WINDOW-1"}\n')
+            tool = folder / 'tool'; tool.mkdir(); binary = tool / executor.BINARY_NAME; binary.write_bytes(b'pin')
+            fake = FakeDocker('clean')
+            admission = type('Admission', (), {'wait_ms': 0, 'abandoned': False, 'close': lambda self: None})()
+            with patch.object(executor, '_cli', side_effect=fake), patch.object(executor, '_binary', return_value=binary), \
+                 patch.object(executor, '_owned_runner', return_value=object()), \
+                 patch.object(executor, '_Admission', return_value=admission), \
+                 patch.object(executor, '_owner_path', return_value=folder / 'owner.json'), \
+                 patch.object(executor, '_lock', return_value={'docker_endpoint': 'npipe:////./pipe/dockerDesktopLinuxEngine'}), \
+                 patch.dict(os.environ, {'LOCALAPPDATA': str(localappdata)}), \
+                 patch.object(executor, 'BINARY_SHA256', hashlib.sha256(binary.read_bytes()).hexdigest()):
+                result = executor.run(project, mode='parse', output=folder / 'out')
+            self.assertIn('EXECUTOR_MEASURE_WINDOW_LOCKED', result['errors'])
+            self.assertFalse(any(args[0] in ('create', 'start') for args in fake.calls))
+            self.assertTrue(marker.exists())
 
     def test_lost_create_reply_reconciles_owned_id_without_start(self):
         result, calls = self.exercise('lost_create')
