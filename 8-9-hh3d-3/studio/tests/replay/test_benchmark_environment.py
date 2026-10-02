@@ -22,6 +22,9 @@ def sample(second=0, **changes):
             'cpu_total_100ns': second * 10_000_000, 'cpu_idle_100ns': second * 5_000_000,
             'owned_private_bytes': 0, 'owned_inventory_complete': True,
             'foreign_engines': [], 'heavy_processes': [], 'docker_wsl_processes': [],
+            'docker_inventory_status': 'UNKNOWN',
+            'docker_inventory_error': {'code': 'SYNTHETIC_TEST'},
+            'running_containers': [],
             'top_private_processes': [], 'owned_processes': [], 'processes': [],
             'unavailable_process_count': 0, **changes}
 
