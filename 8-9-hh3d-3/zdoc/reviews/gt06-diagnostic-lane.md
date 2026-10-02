@@ -2,23 +2,37 @@
 
 ## Hiện trạng
 
-- GT-06 chưa ACCEPTED; zero accepted formal pairs; GT-07 chưa mở, không ghép partial giữa campaign.
+- GT-06 chưa ACCEPTED; formal11 đang live với 2×35 theo closure mới; zero accepted formal pairs; GT-07 chưa mở, không ghép partial giữa campaign.
 - Formal09 terminal: pair0 35/35 RUN PASS; pair1 INFRA_ABORT trước batch0 vì RAM/commit.
 - Formal10 terminal: pair0 20/35, PRODUCT_FAIL COMMIT_PRESSURE; không pair1, không resume.
 - Daily INFRA ngày 02-10: 1/2; PRODUCT_FAIL formal10 không tiêu INFRA và không cho phép rerun mù.
-- Source formal09/10: 58 file, `eaf377f8960303083d81f92e446401518ce2b80b38f405636aa43d9725f9c85b`.
+- Source formal09/10: 58 file, `eaf377f8960303083d81f92e446401518ce2b80b38f405636aa43d9725f9c85b`; formal11: 58 file, `4ad0786bde478b1015011d0e00a0625f2aac5eb9f823f311b089954ed42b8ecd`.
 - Profile v6: `8a2e599c40f927ffaff5ded5e48b6bf2a0f0a6bb3a23de31434a695f4258cb35`.
 - Formal10 watchdog replay đúng verdict; chưa chứng minh rò bộ nhớ. Prefix không thay 35 batch.
 - Outer Job formal10 zero/closed, wrapper exit2; thiếu actual host/editor exit receipts do hard abort.
-- Scheduler14:01: cả arm/campaign terminal result1, instances0; không engine live, khóa đo vắng.
+- Formal11 dispatch: arm `HHStudio.GT06.arm-formal11-20261002` started16:20, fresh attempt DISPATCH at16:21, campaign task `HHStudio.GT06.gt06-o4-formal-11` returned scheduler exit0 and is live; actual pair exits are pending supervisor evidence.
 - Helper sau dispatch đã sửa và bắt buộc dry-run thật trước arm; không còn task mới được arm.
-- Trước formal mới: đóng review cleanup/attribution, bổ sung CPU minute trước từng pair theo O7.3c.
-- O8.2 vẫn cần khung máy bật được owner xác nhận; không tự kéo dài khung13:00–17:00.
+- Formal11 used a fresh dry-run: available memory8.24 GiB, commit62.56%, CPU max33.65%/mean17.41% over60s, lock absent, scheduler idle and budget available. The arm is bound to source/profile and does not lower O1–O4/timeouts.
+- While formal11 is live, only read scheduler/process/evidence; do not run competing engines/tests/Docker or edit measured source. After terminal, verify actual exits, Job/tree/handles, watchdog, dataset and source/profile hashes; do not self-accept.
 - O2 tiếp tục riêng theo O8.3/AUTHORING_STATUS.md, AUTHORITY0, không merge trước GT06.
 
 This lane records diagnostics without changing the authoritative plan. Each
 entry keeps the run ID, source closure, command, actual result and the finding
 needed for the next repair. Raw evidence remains under `studio/.local/`.
+
+## 2026-10-02 — formal11 dispatch
+
+- New campaign `gt06-o4-formal-11` was prepared from source closure
+  `4ad0786bde478b1015011d0e00a0625f2aac5eb9f823f311b089954ed42b8ecd`, profile
+  `8a2e599c40f927ffaff5ded5e48b6bf2a0f0a6bb3a23de31434a695f4258cb35`, and the
+  unchanged v6 gates/timeouts. Arm root is
+  `studio/.local/formal11-arm-20261002/`; the successful dry-run is recorded
+  there with a 60-second O4.1/CPU observation.
+- Dispatch at 16:21 Asia/Saigon returned scheduler exit0 and created the
+  supervisor output directory `studio/.local/reviews/gt06-o4-formal-11-supervisor/`.
+  This is dispatch evidence only: formal acceptance remains false until both
+  pairs finish with actual child/editor exits, cleanup, watchdog and dataset
+  checks. Do not infer PASS from the scheduler banner or a partial prefix.
 
 ## 2026-10-02 — post-375947ee gate state
 
