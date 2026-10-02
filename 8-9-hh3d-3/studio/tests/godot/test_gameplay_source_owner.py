@@ -607,7 +607,7 @@ class GameplaySourceOwnerTests(unittest.TestCase):
 
     def test_reopen_removes_only_empty_stage_marker_for_exact_retry(self):
         request = self.request(dict(self.source), command='command.crashed.stage')
-        marker = self.owner._runs / (request['command_id'] + '.stage')
+        marker = self.owner._runs / ('.stage.' + request['command_id'])
         marker.mkdir()
         root = self.owner._root
         self.owner.close()
@@ -623,9 +623,22 @@ class GameplaySourceOwnerTests(unittest.TestCase):
         receipt = reopened.publish(request, grant=grant, lease=lease,
                                    deadline_ms=lease.expires_ms)
         self.assertEqual(receipt['status'], 'READBACK_ACK')
+        selected = reopened.inspect()
+        reopened.close()
+        recovered = owner_mod.GameplaySourcePublicationOwner.reopen(
+            root, project_id='project.gameplay',
+            source_closure_sha256=owner_mod.runtime_source_closure()[1],
+            runner=lambda *a, **kw: self.fail('committed retry must not redispatch'))
+        self.addCleanup(recovered.close)
+        self.assertEqual(recovered.inspect(), selected)
+        credential = recovered.issue()
+        grant = recovered.authorize('Bearer ' + credential.bearer, 'scene.save')
+        lease = recovered.lease(grant)
+        self.assertEqual(recovered.publish(request, grant=grant, lease=lease,
+                                         deadline_ms=lease.expires_ms), receipt)
 
     def test_reopen_preserves_partial_stage_evidence_and_fails_closed(self):
-        marker = self.owner._runs / 'command.partial.stage'
+        marker = self.owner._runs / '.stage.command.partial'
         marker.mkdir()
         evidence = marker / 'runner.log'
         evidence.write_bytes(b'runner started\n')
@@ -641,7 +654,7 @@ class GameplaySourceOwnerTests(unittest.TestCase):
         self.assertEqual(evidence.read_bytes(), b'runner started\n')
 
     def test_reopen_rejects_stage_marker_file_without_touching_evidence(self):
-        marker = self.owner._runs / 'command.marker-file.stage'
+        marker = self.owner._runs / '.stage.command.marker-file'
         marker.write_bytes(b'partial marker')
         root = self.owner._root
         self.owner.close()
@@ -652,6 +665,48 @@ class GameplaySourceOwnerTests(unittest.TestCase):
                 source_closure_sha256=owner_mod.runtime_source_closure()[1],
                 runner=lambda *args, **kwargs: native_result('unused-run'))
         self.assertEqual(marker.read_bytes(), b'partial marker')
+
+    def test_reopen_preserves_paired_stage_marker_and_partial_run(self):
+        marker = self.owner._runs / '.stage.command.orphan'
+        marker.mkdir()
+        run = self.owner._runs / 'command.orphan'
+        run.mkdir()
+        evidence = run / 'runner.log'
+        evidence.write_bytes(b'unknown native outcome\n')
+        self.owner.close()
+        with self.assertRaisesRegex(owner_mod.GameplaySourceOwnerError, 'GAMEPLAY_OWNER_STAGE_AMBIGUOUS'):
+            owner_mod.GameplaySourcePublicationOwner.reopen(
+                self.owner._root, project_id=self.owner.project_id,
+                source_closure_sha256=owner_mod.runtime_source_closure()[1],
+                runner=lambda *a, **kw: self.fail('ambiguous run must not redispatch'))
+        self.assertTrue(marker.is_dir())
+        self.assertEqual(evidence.read_bytes(), b'unknown native outcome\n')
+
+    def test_legacy_stage_layout_cannot_be_relabelled_to_current_closure(self):
+        root = self.owner._root
+        self.owner.close()
+        # Model an owner made by the prior runtime, retaining both a dirty
+        # suffix marker and a rejected native run whose ID also ends .stage.
+        initial = json.loads(self.owner._journal.read_bytes())
+        old_closure = '0' * 64
+        initial['source_closure_sha256'] = old_closure
+        self.owner._journal.write_bytes(owner_mod.canonical_bytes(initial) + b'\n')
+        marker = self.owner._runs / 'command.legacy.stage'
+        marker.mkdir()
+        (marker / 'runner.log').write_bytes(b'legacy partial stage\n')
+        rejected = self.owner._runs / 'command.rejected.stage'
+        rejected.mkdir()
+        (rejected / 'result.json').write_bytes(b'{"legacy_failure":true}\n')
+        before = {p: p.read_bytes() for p in root.rglob('*') if p.is_file()}
+        for closure, error in ((old_closure, 'GAMEPLAY_OWNER_SOURCE_CLOSURE_MISMATCH'),
+                (owner_mod.runtime_source_closure()[1], 'GAMEPLAY_OWNER_JOURNAL_BINDING')):
+            with self.subTest(closure=closure), self.assertRaisesRegex(owner_mod.GameplaySourceOwnerError, error):
+                owner_mod.GameplaySourcePublicationOwner.reopen(root, project_id=self.owner.project_id,
+                    source_closure_sha256=closure,
+                    runner=lambda *a, **kw: self.fail('legacy owner must not redispatch'))
+            self.assertEqual({p: p.read_bytes() for p in root.rglob('*') if p.is_file()}, before)
+            self.assertTrue(marker.is_dir())
+            self.assertTrue(rejected.is_dir())
 
     def test_existing_candidate_revision_is_verified_before_native_run(self):
         files = dict(self.source)
@@ -895,6 +950,56 @@ class GameplaySourceOwnerTests(unittest.TestCase):
         self.assertEqual(reopened.inspect(), selected)
         self.assertEqual(reopened.inspect()["project_revision"], good["project_revision"])
         self.assertTrue((failed_output / "result.json").is_file())
+
+    def test_rejected_stage_suffix_command_recovers_last_good_without_redispatch(self):
+        for exit_code in (45, 124):  # Native rejection and supervisor watchdog.
+            with self.subTest(exit_code=exit_code):
+                calls = []
+                def runner(project, **kwargs):
+                    calls.append(kwargs['output'])
+                    if len(calls) == 1:
+                        return bound_native_result(project, output=kwargs['output'])
+                    result = rejected_native_result(project, output=kwargs['output'])
+                    result['state']['ExitCode'] = result['docker_wait_exit'] = exit_code
+                    result['commandhost']['exit_code'] = exit_code
+                    kwargs['output'].joinpath('result.json').write_bytes(owner_mod.canonical_bytes(result))
+                    return result
+                owner, grant, lease = self.fresh_owner(runner)
+                good = dict(self.source)
+                good[owner_mod.ENTRYPOINT] += b'\n# Last good.\n'
+                good_request = self.request(good, expected=owner.inspect()['project_revision'],
+                                            command='command.good')
+                receipt = owner.publish(good_request, grant=grant, lease=lease,
+                                        deadline_ms=lease.expires_ms)
+                selected = owner.inspect()
+                durable = owner._selector.read_bytes(), owner._journal.read_bytes()
+                bad = dict(self.source)
+                bad[owner_mod.ENTRYPOINT] += b'\n# Rejected candidate.\n'
+                rejected = self.request(bad, expected=selected['project_revision'],
+                                        command='command.bad.stage')
+                with self.assertRaisesRegex(owner_mod.GameplaySourceOwnerError, 'NATIVE_NOT_CLEAN'):
+                    owner.publish(rejected, grant=grant, lease=lease, deadline_ms=lease.expires_ms)
+                with self.assertRaisesRegex(owner_mod.GameplaySourceOwnerError, 'GAMEPLAY_OWNER_CLOSED'):
+                    owner.publish(rejected, grant=grant, lease=lease, deadline_ms=lease.expires_ms)
+                evidence = {path: path.read_bytes() for path in calls[-1].rglob('*') if path.is_file()}
+                self.assertEqual(len(calls), 2)
+                owner.close()
+                recovered = owner_mod.GameplaySourcePublicationOwner.reopen(
+                    owner._root, project_id=owner.project_id,
+                    source_closure_sha256=owner_mod.runtime_source_closure()[1],
+                    runner=lambda *a, **kw: self.fail('rejected retry must not redispatch'))
+                self.addCleanup(recovered.close)
+                self.assertEqual(recovered.inspect(), selected)
+                credential = recovered.issue()
+                grant = recovered.authorize('Bearer ' + credential.bearer, 'scene.save')
+                lease = recovered.lease(grant)
+                with self.assertRaisesRegex(owner_mod.GameplaySourceOwnerError, 'GAMEPLAY_OWNER_COMMAND_REUSED'):
+                    recovered.publish(rejected, grant=grant, lease=lease, deadline_ms=lease.expires_ms)
+                self.assertEqual(recovered.publish(good_request, grant=grant, lease=lease,
+                                                  deadline_ms=lease.expires_ms), receipt)
+                self.assertEqual((recovered._selector.read_bytes(), recovered._journal.read_bytes()), durable)
+                self.assertEqual({path: path.read_bytes() for path in evidence}, evidence)
+                self.assertEqual(len(calls), 2)
 
     def test_native_result_must_bind_all_published_source_hashes(self):
         before_selector = self.owner._selector.read_bytes()

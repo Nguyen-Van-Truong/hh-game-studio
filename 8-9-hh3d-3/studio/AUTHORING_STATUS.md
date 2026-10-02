@@ -25,13 +25,63 @@ Tools-plan O1–O8 governs; test counts/native diagnostics do not close AUTH or 
   passed46 and43 tests, both actual exit0; no native engine, Docker or network probe was run.
 - The failure-probe mapping now routes the existing boundary, spawn and busy watchdog
   fixtures through the same AUTH-05 publication-owner reject/last-good/reopen/retry
-  lifecycle. A pure mapping suite covers all three hostile cases; native confirmation
-  remains pending and AUTHORITY stays0.
+  lifecycle. Native spawn confirmation20261002-01 now passed at the pre-repair runtime
+  closure below. Busy run20261002-01 failed during import before the hostile loop;
+  watchdog confirmation remains pending and AUTHORITY stays0.
+- Publication recovery now uses a marker namespace disjoint from valid command IDs.
+  IDs ending `.stage` previously broke reopen after success or rejection; six focused
+  pure tests now pass. Old-source roots retain their binding; no implicit migration.
 - O8.3a physics repair re-evaluated44 raw artifacts from20260929-03: corrected trace/lifecycle
   check true; original verifier FAIL unchanged. Fresh native confirmation below observed the repaired
   fixture in a real container with actual exit0 and clean owned lifecycle; authority remains0.
-- GT-06 formal10 is terminal; no measured workload active at last check. Recheck process/lock
+- GT-06 formal14 is terminal PRODUCT_FAIL; no measured workload active at last check. Recheck process/lock
   before engine/Docker work; when formal runs, static work only and one writer per file.
+
+## 2026-10-02 — Recovery marker collision repair; busy confirmation incomplete
+
+- A valid command ID ending `.stage` was confused with a temporary directory on
+  reopen. Both successful and rejected native runs reproduced STAGE_DIRTY before
+  repair. Markers now use `.stage.<command_id>`; valid IDs cannot start with a dot.
+  Six focused lifecycle tests passed, actual exit0 (2.821s): committed retry,
+  rejected45/watchdog124 retry, dirty/file/paired markers, and old-root preservation.
+  Rejected retry never redispatches; no failed raw is removed. Old runtime closures
+  are rejected before reconciliation, not silently migrated/rebound.
+- New runtime closure (25 files):
+  `be82d6e85d4577842bd0ef852e472fa3576aacabe39a7f49ef8395866a3d9a8f`.
+  Command: `python -B -X utf8 studio/tests/godot/run_gameplay_failure_probe.py
+  --run-id o2-auth05-native-busy-20261002-01 --failure-fixture busy`.
+  Fresh O4.1 preflight passed; outer actual exit1 / BAD_FIXTURE_NOT_OBSERVED.
+  Good publish host/container exit0; bad host/container exit45, transcript
+  PHASE_END import -9. No BUSY_ENTERED or runtime phase, and no watchdog observation.
+  Container OOMKilled=false does not establish why the import child was killed.
+  Do not retry blindly or claim the infinite loop was bounded by this run.
+- Both containers removed, Jobs zero/closed/handles released, admissions released;
+  source28 files and41 negative artifact references matched. Offline recovery from
+  the retained owner succeeded with0 native dispatches and byte-identical CURRENT/
+  journal (`offline-reopen-closeout.json`). Original DIAGNOSTIC_FAIL is unchanged;
+  this supplements recovery evidence only. First offline helper attempts stopped
+  before reopen (missing module registration, then relative root); corrected those
+  invocation errors without restarting engines or rewriting raw.
+- Raw: `studio/.local/reviews/o2-auth05-native-busy-20261002-01/`. AUTHORITY=0.
+  Next: identify the import-child termination boundary before another busy attempt;
+  keep the existing executor resource and wall limits. This is not GT06 acceptance.
+
+## 2026-10-02 — AUTH-05 native spawn rejection and recovery
+
+- Command: `python -B -X utf8 studio/tests/godot/run_gameplay_failure_probe.py
+  --run-id o2-auth05-native-spawn-20261002-01 --failure-fixture spawn`.
+  Fresh O4.1 snapshot passed before launch; outer actual exit0 is in outer-exit.json.
+  Runtime closure `f9e295de500888e4c1d3f721d2675e3dacaa96af7c4cec641b5eeac949284a91`;
+  all28 frozen/current source files and all bad-observation artifact hashes matched.
+- Good publish returned READBACK_ACK, then OS.execute returned-1/output[""] with
+  the expected OS pipe-denial log. Publication rejected GAMEPLAY_OWNER_NATIVE_NOT_CLEAN;
+  CURRENT/journal unchanged, reopen/readback/retry equal, exactly2 native dispatches.
+  Each host/container actually exited0, owned Jobs zero/closed/handles released,
+  containers removed and admission released. The negative fixture's expected error
+  is rejection evidence, not a clean gameplay log or general sandbox acceptance.
+- Raw: `studio/.local/reviews/o2-auth05-native-spawn-20261002-01/`. AUTHORITY=0,
+  public_ack=false, sandbox_acceptance=false. This run predates any following
+  stage-marker namespace repair; retain its original closure and verdict.
 
 ## 2026-10-02 — O8.3b native dependency confirmation
 

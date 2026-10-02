@@ -58,6 +58,9 @@ MAX_JOURNAL_BYTES = 512 * 1024
 _UNSET_RESULT = object()
 _HEX = re.compile(r"[0-9a-f]{64}\Z")
 _ID = re.compile(r"[a-z][a-z0-9._-]{0,63}\Z")
+# Native run directories use command IDs, which cannot start with a dot.
+# A suffix would collide with valid IDs such as "command.rejected.stage".
+_STAGE_PREFIX = ".stage."
 
 
 def _sha(raw: bytes) -> str:
@@ -442,14 +445,19 @@ class GameplaySourcePublicationOwner:
         ambiguous and therefore stays durable while reopen fails closed.  The
         caller can then preserve the raw run for explicit reconciliation; an
         exact retry is permitted only when no native run directory exists.
+
+        There is no implicit migration of the former <command_id>.stage
+        layout: reopen checks this runtime closure and the INITIAL journal
+        binding before reaching here. Old owners/evidence stay attached to
+        their old source; changing a caller's closure cannot relabel them.
         """
         _need(self._runs.is_dir(), "GAMEPLAY_OWNER_RUNS_MISSING")
         for marker in self._runs.iterdir():
-            if not marker.name.endswith(".stage"):
+            if not marker.name.startswith(_STAGE_PREFIX):
                 continue
             self._executor._no_links(marker)
             _need(marker.is_dir(), "GAMEPLAY_OWNER_STAGE_MARKER")
-            command_id = marker.name[:-len(".stage")]
+            command_id = marker.name[len(_STAGE_PREFIX):]
             _need(_ID.fullmatch(command_id), "GAMEPLAY_OWNER_STAGE_MARKER")
             run_dir = self._runs / command_id
             try:
@@ -867,7 +875,7 @@ class GameplaySourcePublicationOwner:
         self._phase(grant, lease, command_id, digest, deadline_ms, "capture",
                     lambda: self.inspect())
         run_dir = self._runs / command_id
-        stage_dir = self._runs / (command_id + ".stage")
+        stage_dir = self._runs / (_STAGE_PREFIX + command_id)
         _need(not run_dir.exists() and not stage_dir.exists(), "GAMEPLAY_OWNER_COMMAND_REUSED")
         stage_dir.mkdir()
         try:
