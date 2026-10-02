@@ -10,8 +10,9 @@ Tools-plan O1–O8 governs; test counts/native diagnostics do not close AUTH or 
 - Blender template armature/action, geometry/material/UV, GLB export and 2D sprite import have
   separate diagnostics; neither asset presence nor a marker proves complete authored gameplay.
 - Publication owner supports readback ACK, lease/revision checks, idempotent retry and reopen.
-  Dependency-enabled lifecycle has pure proof; native dependency run20261002-03 stopped at
-  Docker CLI inventory5s before container creation. Old failure remains unchanged.
+  Dependency-enabled lifecycle has pure proof; the old native dependency run20261002-03 stopped at
+  Docker CLI inventory5s before container creation and remains unchanged. Fresh native confirmation
+  run20261002-04 completed with one container dispatch and actual outer/host/container exit0.
 - O8.3b repair verified by 71 focused pure tests, exit0: exact-label/all-container bounded named-pipe inventory replaces only that
   admission CLI call, preserving5s and fail-closed ownership. Test/confirmation details below.
 - AUTH-03 native type rejection preserves last-good CURRENT/journal and avoids third dispatch.
@@ -20,7 +21,8 @@ Tools-plan O1–O8 governs; test counts/native diagnostics do not close AUTH or 
   Adapter boundary run20261002-01 preserves last-good but predates the later run-ID harness
   validation; keep it as historical diagnostic, not a run of today's harness or AUTH acceptance.
 - O8.3a physics repair re-evaluated44 raw artifacts from20260929-03: corrected trace/lifecycle
-  check true; original verifier FAIL unchanged. Supplemental below; fresh native confirmation open.
+  check true; original verifier FAIL unchanged. Fresh native confirmation below observed the repaired
+  fixture in a real container with actual exit0 and clean owned lifecycle; authority remains0.
 - GT-06 formal10 is terminal; no measured workload active at last check. Recheck process/lock
   before engine/Docker work; when formal runs, static work only and one writer per file.
 
@@ -40,12 +42,25 @@ Tools-plan O1–O8 governs; test counts/native diagnostics do not close AUTH or 
   `sandbox_acceptance=false`); it does not accept GT06 or authorize an O2 merge.
   The earlier `o2-publication-20261002-03` timeout remains historical.
 
+## 2026-10-02 — O8.3a native physics confirmation
+
+- Fresh run `o2-physics-native-20261002-01` used the repaired arena fixture. The wrapper,
+  host supervisor and container each reported actual exit0; the owned Job was closed,
+  retained handles were false, and owned resources were removed. Raw evidence is under
+  `studio/.local/reviews/o2-physics-native-20261002-01/`.
+- The observed trace covered boot, pickup, projectile, jump, bot defeat, landing, wall,
+  input release and finish at 150 ticks; fixture and lifecycle observations were true.
+  This is a bounded native fixture diagnostic, not complete authored-game E2E evidence:
+  `AUTHORITY=0`, `sandbox_acceptance=false`, and `validation_attribution_proven=false`.
+- The retained `o2-arena-physics-20260929-03` original outer FAIL and its offline correction
+  remain unchanged; the fresh run does not rewrite either verdict.
+
 ## Next actions
 
-1. Review/test O8.3b repair, then one fresh dependency publication confirmation when host allows.
-2. One physics native confirmation after the offline repair; preserve raw and actual exit/cleanup.
-3. Complete fixture-specific adapter AUTH-02..05 evidence, then authored2D arena and3D room E2E.
-4. Keep GT09/GT10 acceptance, human playtest and two independent critics separate from diagnostics.
+1. Complete fixture-specific adapter AUTH-02..05 evidence, then authored2D arena and3D room E2E.
+2. Keep GT09/GT10 acceptance, human playtest and two independent critics separate from diagnostics.
+3. Do not repeat the completed native confirmations without a new reproducer; retain raw evidence and
+   keep the candidate authority0 until the formal GT06 and later gates are accepted.
 
 Historical entries (including obsolete next actions): [history](AUTHORING_STATUS_HISTORY_20261002.md).
 History preserves the previous status file byte-for-byte; SHA256 `48fc9e191150cebd2c546f360cc75f3cd3ae2b5c0e77844bd316712a36407b9a`.
