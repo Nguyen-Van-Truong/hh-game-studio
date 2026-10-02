@@ -80,9 +80,11 @@ needed for the next repair. Raw evidence remains under `studio/.local/`.
   `gt06-o4-formal-12`; no arm task or campaign was registered. The fresh dry-run
   verified source/profile, lock absence, scheduler idle and budget, but failed
   the O4.1 CPU observation with `OBSERVATION_EXTERNAL_CPU_PRESSURE`.
-- The 60-second samples had external CPU mean97.13% and max99.84% across12
-  intervals. At the end, available memory was10.58 GiB and commit58.12%, so
-  this was CPU timing pressure rather than a RAM/commit gate failure. Raw
+- The 60-second samples measured total machine CPU mean97.13% and max99.84% across12
+  intervals. The stored observation does not attribute that load to a process outside
+  the campaign Job, so it is not evidence of an external-CPU watchdog trigger. At the
+  end, available memory was10.58 GiB and commit58.12%; the dry-run was blocked by
+  the CPU observation, not by a RAM/commit gate failure. Raw
   samples and the decision remain under `studio/.local/formal12-arm-20261002/`.
 - No engine, Docker or formal workload was started. Wait for a naturally quiet
   host, then perform one fresh dry-run; dispatch only if all O4.1/CPU checks
@@ -104,8 +106,9 @@ needed for the next repair. Raw evidence remains under `studio/.local/`.
 - The next formal requires an owner-confirmed machine-on window of at least
   four hours, a fresh source/profile freeze after `375947ee`, a new O4.1
   preflight plus one-minute CPU observation before each pair, and an unused
-  daily INFRA budget. Do not resume formal01–10 or S258, and do not lower O1–O4
-  thresholds/timeouts.
+  daily INFRA budget. The one-minute observation must record process attribution
+  separately from total CPU; total CPU alone cannot be labelled external pressure.
+  Do not resume formal01–10 or S258, and do not lower O1–O4 thresholds/timeouts.
 
 ## 2026-10-02 — O4.1 read-only probe blocked
 
@@ -136,7 +139,8 @@ needed for the next repair. Raw evidence remains under `studio/.local/`.
 - `run_benchmark_campaign.py` now records a new immutable `environment-launch-samples.jsonl`
   and `launch-observation.json` for every fresh pair. Each record binds run/source/campaign hashes,
   recomputes O4.1 policy and CPU intervals from the raw samples, requires at least60 seconds with
-  sample gaps within the existing cadence, rejects sustained external CPU>95%, pressure, sleep,
+  sample gaps within the existing cadence, rejects a process outside the campaign Job at >=50% CPU
+  for60 seconds, pressure, sleep,
   source drift or Stop, and checks freshness against the first run watchdog sample. The pair is
   launched only after the observation and source/Stop recheck; old captures remain on their frozen
   verifier and cannot be rebound.
