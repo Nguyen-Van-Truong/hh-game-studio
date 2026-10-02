@@ -323,202 +323,115 @@ class EnvironmentTests(unittest.TestCase):
                 self.assertNotIn('secret', ''.join(traceback.format_exception(raised.exception)))
                 self.assertTrue((root / 'watchdog-stop.json').is_file())
 
-    def test_perfproc_fallback_keeps_raw_ticks_without_double_normalization(self):
+    def _nt_record(self, *, next_offset=0, pid=1480, create=999, user=40, kernel=80):
+        record = env._SystemProcessInformationPrefix()
+        record.next_entry_offset = next_offset
+        record.create_time = create
+        record.user_time = user
+        record.kernel_time = kernel
+        record.unique_process_id = pid
+        return bytes(record)
+
+    def test_ntqsi_parser_returns_cumulative_ticks_and_source(self):
+        raw = self._nt_record(pid=1480, create=999, user=40, kernel=80)
+        self.assertEqual(env._parse_nt_process_information(raw, {1480}), {
+            1480: {'cpu_total_100ns': 120, 'process_start_100ns': 999,
+                   'cpu_source': 'NtQuerySystemInformation'}})
+
+    def test_ntqsi_parser_follows_aligned_record_chain(self):
+        first = self._nt_record(next_offset=env.ctypes.sizeof(env._SystemProcessInformationPrefix), pid=1480)
+        second = self._nt_record(pid=1481, create=1000, user=2, kernel=3)
+        self.assertEqual(env._parse_nt_process_information(first + second, {1481})[1481]['cpu_total_100ns'], 5)
+
+    def test_ntqsi_parser_missing_target_preserves_unknown(self):
+        raw = self._nt_record(pid=1480)
+        self.assertEqual(env._parse_nt_process_information(raw, {1481}), {})
+
+    def test_ntqsi_parser_rejects_bad_chain_or_negative_counter(self):
+        record = env._SystemProcessInformationPrefix()
+        record.next_entry_offset = 1
+        record.unique_process_id = 1480
+        with self.assertRaisesRegex(BenchmarkJobError, 'NTQSI_SHAPE'):
+            env._parse_nt_process_information(bytes(record), {1480})
+        record = env._SystemProcessInformationPrefix()
+        record.unique_process_id = 1480
+        record.user_time = -1
+        with self.assertRaisesRegex(BenchmarkJobError, 'NTQSI_SHAPE'):
+            env._parse_nt_process_information(bytes(record), {1480})
+
+    def test_ntqsi_lookup_uses_kernel_api_and_no_subprocess(self):
         processes = [{'pid': 1480, 'name': 'vmmemwsl', 'cpu_total_100ns': None},
                      {'pid': 42, 'name': 'docker', 'cpu_total_100ns': 7}]
-        payload = b'[{"IDProcess":1480,"PercentProcessorTime":120,"ElapsedTime":999}]'
-        with patch.object(env.Path, 'is_file', return_value=True), patch.object(env.os, 'cpu_count', return_value=12), \
-             patch.object(env.time, 'monotonic', return_value=100.0), \
-             patch.object(env.subprocess, 'run', return_value=SimpleNamespace(returncode=0, stdout=payload)) as run:
-            result = env.perf_process_times(processes)
-        self.assertEqual(result[1480], {'cpu_total_100ns': 120, 'process_start_100ns': 999,
-                                        'cpu_source': 'PerfProcRaw'})
-        self.assertIn('-NoProfile', run.call_args.args[0])
-        script = run.call_args.args[0][-1]
-        self.assertIn("-Filter 'IDProcess = 1480'", script)
-        self.assertNotIn('IDProcess = 42', script)
-        self.assertIn('ConvertTo-Json -Compress -InputObject @(', script)
-        self.assertEqual(run.call_args.kwargs['timeout'], 4)
-
-    def test_perfproc_fallback_failure_is_unknown_not_zero(self):
-        processes = [{'pid': 1480, 'name': 'vmmemwsl', 'cpu_total_100ns': None}]
-        clock = [100.0]
-        def probe(*_args, **kwargs):
-            clock[0] += kwargs['timeout']
-            raise env.subprocess.TimeoutExpired('secret-argv', kwargs['timeout'],
-                                               output=b'secret-stdout', stderr=b'secret-stderr')
-        with patch.object(env.Path, 'is_file', return_value=True), \
-             patch.object(env.time, 'monotonic', side_effect=lambda: clock[0]), \
-             patch.object(env.subprocess, 'run', side_effect=probe) as run:
-            with self.assertRaisesRegex(BenchmarkJobError, 'PERF_COUNTER_QUERY') as raised:
-                env.perf_process_times(processes)
-        self.assertEqual(run.call_count, 2)
-        self.assertEqual([call.kwargs['timeout'] for call in run.call_args_list], [4, 4])
-        self.assertEqual(raised.exception.perf_counter,
-                         {'reason': 'timeout', 'attempt': 2, 'elapsed_seconds': 8})
-        self.assertIsNone(raised.exception.__cause__)
-        self.assertIsNone(raised.exception.__context__)
-        self.assertNotIn('secret', ''.join(traceback.format_exception(raised.exception)))
-
-    def test_perfproc_quick_nonzero_retries_with_only_remaining_budget(self):
-        processes = [{'pid': 1480, 'name': 'vmmemwsl', 'cpu_total_100ns': None}]
-        payload = b'[{"IDProcess":1480,"PercentProcessorTime":120,"ElapsedTime":999}]'
-        clock = [100.0]
-        def probe(*_args, **_kwargs):
-            if clock[0] == 100.0:
-                clock[0] += 0.25
-                return SimpleNamespace(returncode=125, stdout=b'')
-            clock[0] += 0.5
-            return SimpleNamespace(returncode=0, stdout=payload)
-        with patch.object(env.Path, 'is_file', return_value=True), \
-             patch.object(env.time, 'monotonic', side_effect=lambda: clock[0]), \
-             patch.object(env.subprocess, 'run', side_effect=probe) as run:
+        with patch.object(env, '_nt_process_times', return_value={1480: {
+                'cpu_total_100ns': 120, 'process_start_100ns': 999,
+                'cpu_source': 'NtQuerySystemInformation'}}) as query, \
+             patch.object(env.subprocess, 'run') as run:
             result = env.perf_process_times(processes)
         self.assertEqual(result[1480]['cpu_total_100ns'], 120)
-        self.assertEqual(run.call_count, 2)
-        self.assertEqual([call.kwargs['timeout'] for call in run.call_args_list], [4, 7.75])
+        self.assertEqual(result[1480]['cpu_source'], 'NtQuerySystemInformation')
+        query.assert_called_once_with({1480})
+        run.assert_not_called()
 
-    def test_perfproc_partial_timeout_retry_cannot_restart_total_deadline(self):
-        processes = [{'pid': 1480, 'name': 'vmmemwsl', 'cpu_total_100ns': None}]
-        clock = [100.0]
-        def probe(*_args, **kwargs):
-            clock[0] += 0.75 if clock[0] == 100.0 else kwargs['timeout']
-            raise env.subprocess.TimeoutExpired('secret-argv', kwargs['timeout'])
-        with patch.object(env.Path, 'is_file', return_value=True), \
-             patch.object(env.time, 'monotonic', side_effect=lambda: clock[0]), \
-             patch.object(env.subprocess, 'run', side_effect=probe) as run:
-            with self.assertRaisesRegex(BenchmarkJobError, 'PERF_COUNTER_QUERY') as raised:
-                env.perf_process_times(processes)
-        self.assertEqual([call.kwargs['timeout'] for call in run.call_args_list], [4, 7.25])
-        self.assertEqual(raised.exception.perf_counter,
-                         {'reason': 'timeout', 'attempt': 2, 'elapsed_seconds': 8})
-
-    def test_perfproc_oserror_retries_with_only_remaining_budget(self):
-        processes = [{'pid': 1480, 'name': 'vmmemwsl', 'cpu_total_100ns': None}]
-        payload = b'[{"IDProcess":1480,"PercentProcessorTime":120,"ElapsedTime":999}]'
-        clock = [100.0]
-        def probe(*_args, **_kwargs):
-            if clock[0] == 100.0:
-                clock[0] += 0.125
-                raise OSError(13, 'secret-error', 'secret-path')
-            clock[0] += 0.5
-            return SimpleNamespace(returncode=0, stdout=payload)
-        with patch.object(env.Path, 'is_file', return_value=True), \
-             patch.object(env.time, 'monotonic', side_effect=lambda: clock[0]), \
-             patch.object(env.subprocess, 'run', side_effect=probe) as run:
-            result = env.perf_process_times(processes)
-        self.assertEqual(result[1480]['cpu_total_100ns'], 120)
-        self.assertEqual([call.kwargs['timeout'] for call in run.call_args_list], [4, 7.875])
-
-    def test_perfproc_late_success_is_unknown_without_retry(self):
-        clock = [100.0]
-        def probe(*_args, **_kwargs):
-            clock[0] += 8.1
-            return SimpleNamespace(returncode=0,
-                                   stdout=b'[{"IDProcess":1480,"PercentProcessorTime":120,"ElapsedTime":999}]')
-        with patch.object(env.Path, 'is_file', return_value=True), \
-             patch.object(env.time, 'monotonic', side_effect=lambda: clock[0]), \
-             patch.object(env.subprocess, 'run', side_effect=probe) as run:
-            with self.assertRaisesRegex(BenchmarkJobError, 'PERF_COUNTER_QUERY') as raised:
+    def test_ntqsi_lookup_failure_is_not_zero(self):
+        with patch.object(env, '_nt_process_times', side_effect=BenchmarkJobError('WATCHDOG_NTQSI_QUERY')):
+            with self.assertRaisesRegex(BenchmarkJobError, 'NTQSI_QUERY'):
                 env.perf_process_times([{'pid': 1480, 'name': 'vmmemwsl', 'cpu_total_100ns': None}])
-        self.assertEqual(run.call_count, 1)
-        self.assertEqual(raised.exception.perf_counter,
-                         {'reason': 'timeout', 'attempt': 1, 'elapsed_seconds': 8.1})
 
-    def test_perfproc_malformed_output_is_unknown_without_retry(self):
-        processes = [{'pid': 1480, 'name': 'vmmemwsl', 'cpu_total_100ns': None}]
-        for output in (b'\xff', b'not-json', b'', b'x' * (8 * 1024 * 1024 + 1),
-                       'unexpected-text', None):
-            with self.subTest(output_kind=type(output).__name__), \
-                 patch.object(env.Path, 'is_file', return_value=True), \
-                 patch.object(env.time, 'monotonic', return_value=100.0), \
-                 patch.object(env.subprocess, 'run',
-                              return_value=SimpleNamespace(returncode=0, stdout=output)) as run:
-                with self.assertRaisesRegex(BenchmarkJobError, 'PERF_COUNTER_QUERY') as raised:
-                    env.perf_process_times(processes)
-            self.assertEqual(run.call_count, 1)
-            self.assertEqual(raised.exception.perf_counter,
-                             {'reason': 'bad_output', 'attempt': 1, 'elapsed_seconds': 0})
+    def test_ntqsi_resizes_buffer_on_length_mismatch(self):
+        raw = self._nt_record(pid=1480, create=999, user=40, kernel=80)
 
-    def test_perfproc_empty_or_partial_provider_inventory_preserves_unknown(self):
-        processes = [{'pid': 1480, 'name': 'vmmemwsl', 'cpu_total_100ns': None},
-                     {'pid': 1481, 'name': 'docker', 'cpu_total_100ns': None}]
-        for payload, expected in (
-                (b'[]', {}),
-                (b'[{"IDProcess":1480,"PercentProcessorTime":120,"ElapsedTime":999}]',
-                 {1480: {'cpu_total_100ns': 120, 'process_start_100ns': 999,
-                         'cpu_source': 'PerfProcRaw'}})):
-            with self.subTest(payload=payload), patch.object(env.Path, 'is_file', return_value=True), \
-                 patch.object(env.time, 'monotonic', return_value=100.0), \
-                 patch.object(env.subprocess, 'run',
-                              return_value=SimpleNamespace(returncode=0, stdout=payload)):
-                self.assertEqual(env.perf_process_times(processes), expected)
-        self.assertTrue(all(row['cpu_total_100ns'] is None for row in processes))
+        class FakeQuery:
+            def __init__(self):
+                self.calls = []
 
-    def test_perfproc_shape_rejects_non_integral_or_duplicate_counter_rows(self):
-        outputs = (
-            b'[{"IDProcess":1480,"PercentProcessorTime":-1,"ElapsedTime":999}]',
-            b'[{"IDProcess":1480,"PercentProcessorTime":1.5,"ElapsedTime":999}]',
-            b'[{"IDProcess":1480,"PercentProcessorTime":NaN,"ElapsedTime":999}]',
-            b'[{"IDProcess":1480,"PercentProcessorTime":18446744073709551616,"ElapsedTime":999}]',
-            b'[{"IDProcess":1480,"PercentProcessorTime":120,"ElapsedTime":-1}]',
-            b'[{"IDProcess":1480,"PercentProcessorTime":120,"ElapsedTime":true}]',
-            b'[{"IDProcess":1480,"PercentProcessorTime":120,"ElapsedTime":18446744073709551616}]',
-            b'[{"IDProcess":1480,"PercentProcessorTime":120,"ElapsedTime":999},'
-            b'{"IDProcess":1480,"PercentProcessorTime":121,"ElapsedTime":1000}]',
-        )
-        for payload in outputs:
-            with self.subTest(payload=payload), patch.object(env.Path, 'is_file', return_value=True), \
-                 patch.object(env.time, 'monotonic', return_value=100.0), \
-                 patch.object(env.subprocess, 'run',
-                              return_value=SimpleNamespace(returncode=0, stdout=payload)) as run:
-                with self.assertRaisesRegex(BenchmarkJobError, 'PERF_COUNTER_SHAPE'):
-                    env.perf_process_times([{'pid': 1480, 'name': 'vmmemwsl',
-                                              'cpu_total_100ns': None}])
-            self.assertEqual(run.call_count, 1)
+            def __call__(self, info_class, buffer, size, returned):
+                self.calls.append((info_class, size))
+                returned = env.ctypes.cast(returned, env.ctypes.POINTER(env.w.ULONG)).contents
+                if len(self.calls) == 1:
+                    returned.value = size * 2
+                    return env.STATUS_INFO_LENGTH_MISMATCH
+                env.ctypes.memmove(buffer, raw, len(raw))
+                returned.value = len(raw)
+                return 0
 
-    def test_perfproc_diagnostic_persists_without_raw_secrets(self):
-        processes = [{'pid': 1480, 'name': 'vmmemwsl', 'cpu_total_100ns': None}]
-        for failure, reason, detail in (
-                (OSError(13, 'secret-error', 'secret-path'), 'oserror', {'errno': 13}),
-                (SimpleNamespace(returncode=125, stdout=b'secret-stdout',
-                                 stderr=b'secret-stderr'), 'nonzero', {'returncode': 125})):
-            with self.subTest(reason=reason), patch.object(env.Path, 'is_file', return_value=True), \
-                 patch.object(env.time, 'monotonic', return_value=100.0), \
-                 patch.object(env.subprocess, 'run') as run:
-                if isinstance(failure, Exception):
-                    run.side_effect = failure
-                else:
-                    run.return_value = failure
-                with self.assertRaisesRegex(BenchmarkJobError, 'PERF_COUNTER_QUERY') as query:
-                    env.perf_process_times(processes)
-            self.assertEqual(run.call_count, 2)
-            expected = {'reason': reason, 'attempt': 2, 'elapsed_seconds': 0, **detail}
-            self.assertEqual(query.exception.perf_counter, expected)
-            self.assertIsNone(query.exception.__cause__)
-            self.assertIsNone(query.exception.__context__)
-            self.assertNotIn('secret', ''.join(traceback.format_exception(query.exception)))
-            # The observer must persist only whitelisted scalar diagnostics.
-            query.exception.perf_counter['stdout'] = 'secret-stdout'
-            query.exception.perf_counter['stderr'] = 'secret-stderr'
-            with tempfile.TemporaryDirectory() as directory:
-                root = Path(directory)
-                binding = {'run_id': 'test', 'source_closure_sha256': 'a' * 64,
-                           'campaign_sha256': 'b' * 64}
-                watch = env.Watchdog(root, Mock(side_effect=query.exception), binding, campaign.write)
-                try:
-                    with self.assertRaisesRegex(BenchmarkJobError, 'OBSERVER_ERROR') as raised:
-                        watch.poll()
-                finally:
-                    watch.close()
-                event_text = (root / 'watchdog-observation-error.json').read_text()
-                self.assertEqual(json.loads(event_text)['perf_counter'], expected)
-                self.assertEqual(json.loads(event_text)['error_code'], 'WATCHDOG_PERF_COUNTER_QUERY')
-                self.assertNotIn('secret', event_text)
-                self.assertNotIn('secret', ''.join(traceback.format_exception(raised.exception)))
-                self.assertIs(raised.exception.__cause__, query.exception)
-                self.assertTrue((root / 'watchdog-stop.json').is_file())
+        query = FakeQuery()
+        fake_ntdll = SimpleNamespace(NtQuerySystemInformation=query)
+        with patch.object(env.os, 'name', 'nt'), \
+             patch.object(env.ctypes, 'WinDLL', return_value=fake_ntdll, create=True):
+            result = env._nt_process_times({1480})
+        self.assertEqual(result[1480]['cpu_total_100ns'], 120)
+        self.assertEqual(result[1480]['cpu_source'], 'NtQuerySystemInformation')
+        self.assertEqual(query.calls[0][0], env.SYSTEM_PROCESS_INFORMATION)
+        self.assertGreater(query.calls[1][1], query.calls[0][1])
 
+    def test_ntqsi_status_failure_is_bounded_and_diagnostic_only(self):
+        class FakeQuery:
+            def __call__(self, *_args):
+                return 0xC0000005
+
+        with patch.object(env.os, 'name', 'nt'), \
+             patch.object(env.ctypes, 'WinDLL', return_value=SimpleNamespace(
+                 NtQuerySystemInformation=FakeQuery()), create=True):
+            with self.assertRaisesRegex(BenchmarkJobError, 'NTQSI_QUERY') as raised:
+                env._nt_process_times({1480})
+        self.assertEqual(raised.exception.ntqsi, {'status': 0xC0000005})
+
+    def test_ntqsi_watchdog_diagnostics_never_include_provider_secrets(self):
+        error = BenchmarkJobError('WATCHDOG_NTQSI_QUERY')
+        error.ntqsi = {'status': 0xC0000004}
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            binding = {'run_id': 'test', 'source_closure_sha256': 'a' * 64,
+                       'campaign_sha256': 'b' * 64}
+            watch = env.Watchdog(root, Mock(side_effect=error), binding, campaign.write)
+            try:
+                with self.assertRaisesRegex(BenchmarkJobError, 'OBSERVER_ERROR'):
+                    watch.poll()
+            finally:
+                watch.close()
+            event_text = (root / 'watchdog-observation-error.json').read_text()
+            self.assertEqual(json.loads(event_text)['ntqsi'], {'status': 0xC0000004})
+            self.assertNotIn('powershell', event_text.lower())
     def test_watchdog_cpu_top_is_persisted_and_verified(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

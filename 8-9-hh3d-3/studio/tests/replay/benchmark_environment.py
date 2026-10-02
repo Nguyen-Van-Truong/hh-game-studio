@@ -157,105 +157,117 @@ def foreign_container_names(containers):
     return [name for name in containers if STUDIO_CONTAINER_RE.fullmatch(name)]
 
 
-def perf_process_times(processes):
-    """Fallback cumulative CPU for protected Windows processes.
+SYSTEM_PROCESS_INFORMATION = 5
+STATUS_INFO_LENGTH_MISMATCH = 0xC0000004
+NTQSI_INITIAL_BYTES = 256 * 1024
+NTQSI_MAX_BYTES = 64 * 1024 * 1024
 
-    ``GetProcessTimes`` can legitimately deny ``vmmemWSL``.  Windows exposes
-    the same process through the read-only PerfProc raw counter. Its raw
-    cumulative processor ticks match GetProcessTimes; machine normalization
-    happens once in ``cpu_interval``. Query failure is unknown,
-    never an all-zero result.
+
+class _SystemProcessInformationPrefix(ctypes.Structure):
+    """Stable x64 prefix of SYSTEM_PROCESS_INFORMATION.
+
+    NtQuerySystemInformation returns a variable-length record chain.  We only
+    read fields documented by the stable prefix; no process image string or
+    variable tail is dereferenced.  A non-x64 interpreter is rejected rather
+    than guessing offsets for the protected-process watchdog path.
     """
-    # Most protected rows are system/engine hosts. Ordinary processes are
-    # queried with GetProcessTimes; only these names need the slower PerfProc
-    # fallback when Windows denies that handle.
+    _fields_ = [
+        ('next_entry_offset', ctypes.c_ulong),
+        ('thread_count', ctypes.c_ulong),
+        ('working_set_private', ctypes.c_longlong),
+        ('hard_fault_count', ctypes.c_ulong),
+        ('thread_count_high_watermark', ctypes.c_ulong),
+        ('cycle_time', ctypes.c_ulonglong),
+        ('create_time', ctypes.c_longlong),
+        ('user_time', ctypes.c_longlong),
+        ('kernel_time', ctypes.c_longlong),
+        ('image_name_length', ctypes.c_ushort),
+        ('image_name_maximum_length', ctypes.c_ushort),
+        ('image_name_buffer', ctypes.c_void_p),
+        ('base_priority', ctypes.c_long),
+        ('unique_process_id', ctypes.c_void_p),
+        ('inherited_process_id', ctypes.c_void_p),
+    ]
+
+
+def _parse_nt_process_information(raw, target_pids=None):
+    """Parse a bounded NT process-record chain into cumulative CPU counters."""
+    require(type(raw) in (bytes, bytearray), 'WATCHDOG_NTQSI_SHAPE')
+    require(ctypes.sizeof(ctypes.c_void_p) == 8
+            and ctypes.sizeof(_SystemProcessInformationPrefix) == 96,
+            'WATCHDOG_NTQSI_PLATFORM')
+    target = None if target_pids is None else set(target_pids)
+    require(target is None or all(type(pid) is int and pid > 0 for pid in target),
+            'WATCHDOG_NTQSI_PID')
+    size = ctypes.sizeof(_SystemProcessInformationPrefix)
+    found, offset, visited = {}, 0, set()
+    while True:
+        require(offset not in visited and offset + size <= len(raw), 'WATCHDOG_NTQSI_SHAPE')
+        visited.add(offset)
+        record = _SystemProcessInformationPrefix.from_buffer_copy(raw, offset)
+        pid = int(record.unique_process_id or 0)
+        require(record.create_time >= 0 and record.user_time >= 0 and record.kernel_time >= 0,
+                'WATCHDOG_NTQSI_SHAPE')
+        if target is None or pid in target:
+            require(pid not in found, 'WATCHDOG_NTQSI_SHAPE')
+            found[pid] = {
+                'cpu_total_100ns': int(record.user_time + record.kernel_time),
+                'process_start_100ns': int(record.create_time),
+                'cpu_source': 'NtQuerySystemInformation'}
+        next_offset = int(record.next_entry_offset)
+        if next_offset == 0:
+            break
+        require(next_offset >= size and next_offset % 8 == 0
+                and offset + next_offset <= len(raw), 'WATCHDOG_NTQSI_SHAPE')
+        offset += next_offset
+    return found
+
+
+def _nt_process_times(target_pids):
+    """Read protected-process CPU counters with a kernel API only."""
+    require(os.name == 'nt', 'WATCHDOG_NTQSI_PLATFORM')
+    require(all(type(pid) is int and pid > 0 for pid in target_pids),
+            'WATCHDOG_NTQSI_PID')
+    ntdll = ctypes.WinDLL('ntdll', use_last_error=True)
+    query = ntdll.NtQuerySystemInformation
+    query.argtypes = [w.ULONG, ctypes.c_void_p, w.ULONG, ctypes.POINTER(w.ULONG)]
+    query.restype = ctypes.c_long
+    size = NTQSI_INITIAL_BYTES
+    for _attempt in range(9):
+        buffer = (ctypes.c_ubyte * size)()
+        returned = w.ULONG()
+        status = ctypes.c_ulong(query(SYSTEM_PROCESS_INFORMATION, buffer, size,
+                                      ctypes.byref(returned))).value
+        if status == 0:
+            used = int(returned.value) or size
+            require(0 < used <= size, 'WATCHDOG_NTQSI_SHAPE')
+            return _parse_nt_process_information(bytes(buffer[:used]), target_pids)
+        if status != STATUS_INFO_LENGTH_MISMATCH:
+            error = BenchmarkJobError('WATCHDOG_NTQSI_QUERY')
+            error.ntqsi = {'status': status}
+            raise error from None
+        requested = int(returned.value)
+        next_size = max(size * 2, requested, size + 1)
+        require(next_size <= NTQSI_MAX_BYTES, 'WATCHDOG_NTQSI_QUERY')
+        size = next_size
+    error = BenchmarkJobError('WATCHDOG_NTQSI_QUERY')
+    error.ntqsi = {'status': STATUS_INFO_LENGTH_MISMATCH}
+    raise error from None
+
+
+def perf_process_times(processes):
+    """Compatibility name for the protected-process kernel CPU lookup.
+
+    The old implementation spawned PowerShell/PerfProc, which could block the
+    in-measure watchdog.  Keep callers stable while making the lookup entirely
+    in-process and kernel-backed through NtQuerySystemInformation.
+    """
     missing = {row['pid'] for row in processes
                if row.get('cpu_total_100ns') is None
                and any(token in row.get('name', '').lower() for token in ('vmmem', 'docker', 'wsl'))}
     if not missing:
         return {}
-    require(all(type(pid) is int and pid > 0 for pid in missing),
-            'WATCHDOG_PERF_COUNTER_PID')
-    powershell = Path(os.environ.get('WINDIR', r'C:\Windows')) / 'System32/WindowsPowerShell/v1.0/powershell.exe'
-    require(powershell.is_file(), 'WATCHDOG_PERF_COUNTER_MISSING')
-    # Filter at the provider rather than serializing every process. InputObject
-    # preserves an array even when there is only one protected process.
-    pid_filter = ' OR '.join(f'IDProcess = {pid}' for pid in sorted(missing))
-    script = ("$ErrorActionPreference='Stop'; ConvertTo-Json -Compress -InputObject @("
-              "Get-CimInstance Win32_PerfRawData_PerfProc_Process "
-              f"-Filter '{pid_filter}' | "
-              "Select-Object IDProcess,PercentProcessorTime,ElapsedTime"
-              ")")
-    # Retry a transient provider/process failure only within the original
-    # eight-second query budget. Never replace an unavailable sample with an
-    # old value, grant a fresh timeout, or accept a response after the deadline.
-    started = time.monotonic()
-    deadline = started + 8
-    rows = None
-    diagnostic = None
-    for attempt in range(1, 3):
-        remaining = deadline - time.monotonic()
-        if remaining <= 0:
-            break
-        # Reserve an equal share for every attempt still available. A stalled
-        # first query must leave time for the bounded retry while all reads
-        # remain inside the same absolute eight-second budget.
-        attempts_left = 3 - attempt
-        timeout = remaining / attempts_left
-        try:
-            result = subprocess.run([str(powershell), '-NoProfile', '-NonInteractive', '-Command', script],
-                capture_output=True, timeout=timeout,
-                creationflags=subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0)
-        except subprocess.TimeoutExpired:
-            diagnostic = {'reason': 'timeout', 'attempt': attempt}
-        except OSError as error:
-            diagnostic = {'reason': 'oserror', 'attempt': attempt}
-            if type(error.errno) is int:
-                diagnostic['errno'] = error.errno
-        else:
-            if time.monotonic() > deadline:
-                diagnostic = {'reason': 'timeout', 'attempt': attempt}
-                break
-            if type(result.returncode) is not int or type(result.stdout) is not bytes:
-                diagnostic = {'reason': 'bad_output', 'attempt': attempt}
-                break
-            if result.returncode != 0:
-                diagnostic = {'reason': 'nonzero', 'attempt': attempt,
-                              'returncode': result.returncode}
-                continue
-            if len(result.stdout) > 8 * 1024 * 1024:
-                diagnostic = {'reason': 'bad_output', 'attempt': attempt}
-                break
-            try:
-                rows = json.loads(result.stdout.decode('utf-8', 'strict'))
-            except (UnicodeError, ValueError):
-                diagnostic = {'reason': 'bad_output', 'attempt': attempt}
-                break
-            # A valid JSON null is a shape error, not a missing response.
-            require(type(rows) is list, 'WATCHDOG_PERF_COUNTER_SHAPE')
-            break
-    if rows is None:
-        diagnostic = diagnostic or {'reason': 'timeout', 'attempt': 1}
-        diagnostic['elapsed_seconds'] = round(max(0, time.monotonic() - started), 6)
-        error = BenchmarkJobError('WATCHDOG_PERF_COUNTER_QUERY')
-        error.perf_counter = diagnostic
-        # Exception chains can contain provider output, argv or a local path.
-        raise error from None
-    require(type(rows) is list, 'WATCHDOG_PERF_COUNTER_SHAPE')
-    found = {}
-    for row in rows:
-        require(type(row) is dict and type(row.get('IDProcess')) is int
-                and type(row.get('PercentProcessorTime')) in (int, float)
-                and 0 <= row['PercentProcessorTime'] < 2**64
-                and (type(row['PercentProcessorTime']) is int or row['PercentProcessorTime'].is_integer())
-                and type(row.get('ElapsedTime')) is int and 0 <= row['ElapsedTime'] < 2**64,
-                'WATCHDOG_PERF_COUNTER_SHAPE')
-        if row['IDProcess'] in missing:
-            require(row['IDProcess'] not in found, 'WATCHDOG_PERF_COUNTER_SHAPE')
-            found[row['IDProcess']] = {
-                'cpu_total_100ns': int(row['PercentProcessorTime']),
-                'process_start_100ns': row['ElapsedTime'], 'cpu_source': 'PerfProcRaw'}
-    return found
+    return _nt_process_times(missing)
 
 
 def native_snapshot(processes, *, job_handle=None, heavy_names=frozenset()):
@@ -616,6 +628,11 @@ class Watchdog:
                 for name in ('errno', 'returncode'):
                     if type(diagnostic.get(name)) is int:
                         event[field][name] = diagnostic[name]
+        ntqsi = getattr(error, 'ntqsi', None)
+        if (getattr(error, 'code', None) == 'WATCHDOG_NTQSI_QUERY'
+                and type(ntqsi) is dict and type(ntqsi.get('status')) is int
+                and 0 <= ntqsi['status'] < 2**32):
+            event['ntqsi'] = {'status': ntqsi['status']}
         stop = {'schema': 'HH-GT06-WATCHDOG-STOP-1', **self.binding,
                         'classification': 'HARNESS_FAIL', 'reason': 'OBSERVER_ERROR',
                         'formal_acceptance': False,
