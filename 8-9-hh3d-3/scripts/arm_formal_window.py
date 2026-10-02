@@ -17,7 +17,7 @@ import time
 
 TOOLS = Path(__file__).resolve().parents[1]
 STUDIO = TOOLS / 'studio'
-CAMPAIGN = 'gt06-o4-formal-09'
+DEFAULT_CAMPAIGN = 'gt06-o4-formal-09'
 PROFILE = '8a2e599c40f927ffaff5ded5e48b6bf2a0f0a6bb3a23de31434a695f4258cb35'
 HERE = Path(__file__).resolve()
 POWERSHELL = Path(os.environ.get('WINDIR', 'C:/Windows')) / 'System32/WindowsPowerShell/v1.0/powershell.exe'
@@ -63,7 +63,7 @@ def scheduler_idle():
     # The one-shot arm task is expected to be live while it probes. Only an
     # already-running formal09 demand task blocks dispatch; counting the arm
     # helper itself would make every valid window fail closed.
-    code = "$ErrorActionPreference='Stop'; $s=New-Object -ComObject Schedule.Service; $s.Connect(); @($s.GetRunningTasks(0) | Where-Object { $_.Name -like 'HHStudio.GT06.gt06-o4-formal-09*' }).Count"
+    code = "$ErrorActionPreference='Stop'; $s=New-Object -ComObject Schedule.Service; $s.Connect(); @($s.GetRunningTasks(0) | Where-Object { $_.Name -like 'HHStudio.GT06.gt06-o4-formal-*' }).Count"
     result = subprocess.run([str(POWERSHELL), '-NoProfile', '-NonInteractive', '-Command', code],
                             capture_output=True, timeout=20, creationflags=0x08000000)
     if result.returncode != 0:
@@ -153,7 +153,10 @@ def run(config, root):
     sys.path.insert(0, str(TOOLS))
     from studio.tests.replay.benchmark_environment import KeepAwake
     # Claim survives exceptions and prevents double-dispatch after a task restart.
-    write(root / 'arm-claim.json', {'pid': os.getpid(), 'at': now().isoformat()})
+    campaign_id = config['campaign_id']
+    if not isinstance(campaign_id, str) or not campaign_id.startswith('gt06-o4-formal-'):
+        raise RuntimeError('ARM_CAMPAIGN_ID')
+    write(root / 'arm-claim.json', {'pid': os.getpid(), 'at': now().isoformat(), 'campaign_id': campaign_id})
     if hashlib.sha256(HERE.read_bytes()).hexdigest() != config['arm_sha256']:
         raise RuntimeError('ARM_SOURCE_CHANGED')
     end = stamp(config['end'])
@@ -168,10 +171,10 @@ def run(config, root):
             if verdict == 'DISPATCH':
                 # Exclusive claim BEFORE calling the existing launcher. Timeout,
                 # failure or an uncertain reply is a closeout, never a retry.
-                write(root / 'dispatch-claim.json', {'at': now().isoformat(), 'campaign_id': CAMPAIGN})
+                write(root / 'dispatch-claim.json', {'at': now().isoformat(), 'campaign_id': campaign_id})
                 command = [str(POWERSHELL), '-NoProfile', '-NonInteractive', '-ExecutionPolicy', 'Bypass',
                            '-File', str(STUDIO / 'tests/replay/campaign_task.ps1'),
-                           '-Command', 'register-run', '-CampaignId', CAMPAIGN, '-Mode', 'campaign']
+                           '-Command', 'register-run', '-CampaignId', campaign_id, '-Mode', 'campaign']
                 with (root / 'dispatch-stdout.txt').open('xb') as out, (root / 'dispatch-stderr.txt').open('xb') as err:
                     result = subprocess.run(command, stdout=out, stderr=err, timeout=60, creationflags=0x08000000)
                 write(root / 'dispatch-return.json', {'exit_code': result.returncode, 'at': now().isoformat()})
@@ -206,6 +209,7 @@ def main():
     action.add_argument('--dry-run', type=Path)
     action.add_argument('--run', type=Path)
     parser.add_argument('--binding-only', action='store_true')
+    parser.add_argument('--campaign-id', default=DEFAULT_CAMPAIGN)
     parser.add_argument('--start')
     parser.add_argument('--end')
     args = parser.parse_args()
@@ -218,13 +222,15 @@ def main():
         binding = fresh_probe(root / 'binding.json', binding_only=True)
         if binding['profile'] != PROFILE or (stamp(args.end) - stamp(args.start)).total_seconds() < 4 * 3600:
             raise ValueError('ARM_BINDING_OR_WINDOW')
+        if not args.campaign_id.startswith('gt06-o4-formal-'):
+            raise ValueError('ARM_CAMPAIGN_ID')
         write(root / 'request.json', {**binding, 'start': args.start, 'end': args.end,
-              'campaign_id': CAMPAIGN, 'arm_sha256': hashlib.sha256(HERE.read_bytes()).hexdigest()})
+              'campaign_id': args.campaign_id, 'arm_sha256': hashlib.sha256(HERE.read_bytes()).hexdigest()})
         print(str(root / 'request.json'))
         return 0
     request = (args.dry_run or args.run).resolve()
     config, root = json.loads(request.read_bytes()), request.parent
-    if config['campaign_id'] != CAMPAIGN:
+    if not str(config.get('campaign_id', '')).startswith('gt06-o4-formal-'):
         raise ValueError('ARM_CAMPAIGN')
     if args.dry_run:
         verdict = check(config, root, 'dry-run')
