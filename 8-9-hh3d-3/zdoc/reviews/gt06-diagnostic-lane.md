@@ -55,6 +55,25 @@ needed for the next repair. Raw evidence remains under `studio/.local/`.
   boundary with a reproducer before any new formal ID; do not retry blindly or
   lower O1–O4.
 
+## 2026-10-02 — bounded PerfCounter repair and diagnostic
+
+- Commit `7cfcc2d22c1f879989ef7b79a5877860f13607e2` keeps the absolute
+  PerfProc query budget at8 seconds but divides it across the two permitted
+  attempts. A stalled first query can no longer consume the whole budget and
+  silently skip the bounded retry; unknown, malformed and late samples still
+  fail closed and no O1/O4 threshold or campaign timeout changed.
+- Focused regression suite `python -m unittest
+  studio.tests.replay.test_benchmark_environment` passed52/52 with actual
+  exit0. A host-only diagnostic invoked the fallback for the three observed
+  WSL/Docker protected PIDs10 times; all10 returned all3 counters, actual exit0,
+  with no Godot/Blender/Docker dispatch. Raw result and hash are under
+  `studio/.local/reviews/gt06-perfcounter-repair-20261002-01/`.
+- This closes the specific formal11 observer reproducer, but does not turn
+  formal11 into a pair or prove a product result. Before a new formal ID,
+  freeze the new source closure, run a fresh O4.1 preflight and one-minute CPU
+  observation for each pair, and verify the machine-on window and remaining
+  INFRA budget. Do not retry formal11 blindly or lower any gate.
+
 ## 2026-10-02 — post-375947ee gate state
 
 - Commit `375947ee` implements the O7.3c per-pair launch observation: each
