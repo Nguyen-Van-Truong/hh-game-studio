@@ -19,15 +19,29 @@ class SavedArenaRecipeTests(unittest.TestCase):
         self.assertEqual(value['schema'], recipe.ADMISSION_SCHEMA)
         self.assertEqual((value['node_command_count'], value['resource_command_count']), (13, 5))
         self.assertFalse(value['native_observed'])
+        self.assertFalse(value['runtime_authorized'])
         self.assertEqual(value['admission']['generation'], 7)
         self.assertEqual(len(value['commands']), 18)
         self.assertEqual(len({row['request_digest'] for row in value['commands']}), 18)
+        self.assertEqual(value['execution'], {
+            'mode': 'DETACHED_PLAN_ONLY',
+            'sequential_apply_supported': False,
+            'requires_fresh_owner_admission_per_effect': True,
+        })
         for row in value['commands']:
             request = row['request']
             self.assertEqual(request['expected_revision'], self._owner_admission()['revision'])
             self.assertEqual(request['payload']['expected_generation'], 7)
             self.assertEqual(request['payload']['expected_project_revision'],
                              self._owner_admission()['project_revision'])
+
+    def test_bound_batch_is_explicitly_not_a_sequential_command_stream(self):
+        admission = self._owner_admission()
+        value = recipe.bind_recipe_to_owner_admission(recipe.build_recipe(), admission)
+        self.assertFalse(value['execution']['sequential_apply_supported'])
+        self.assertTrue(value['execution']['requires_fresh_owner_admission_per_effect'])
+        self.assertEqual({row['request']['expected_revision'] for row in value['commands']},
+                         {admission['revision']})
 
     def test_owner_admission_binding_rejects_stale_or_tampered_recipe(self):
         admission = self._owner_admission()

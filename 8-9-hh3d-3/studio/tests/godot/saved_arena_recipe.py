@@ -107,11 +107,14 @@ def _admission_context(module, snapshot, admission):
 def bind_recipe_to_owner_admission(recipe, admission, *, deadline_ms=None):
     """Bind planned recipe projections to a registered owner's admission fields.
 
-    The result contains detached requests and candidate projections suitable for
-    a future owner call.  Existing node/resource validators run against the
-    supplied owner observation, so stale generations, leases, revisions and
-    malformed projections fail closed.  This function does not call the owner,
-    issue ACKs, or imply native/readback proof.
+    The result contains detached candidate envelopes, not an executable
+    sequential command stream.  The single observed revision/lease is copied
+    into every envelope as provenance; a native owner must obtain a fresh
+    admission and revalidate before each effect because any accepted effect
+    may advance revision or fencing state.  Existing node/resource validators
+    run against the supplied owner observation, so stale generations, leases,
+    revisions and malformed projections fail closed.  This function does not
+    call the owner, issue ACKs, or imply native/readback proof.
     """
     _admission_need(type(recipe) is dict and recipe.get('schema') == SCHEMA,
                     'ARENA_RECIPE_SCHEMA')
@@ -188,7 +191,9 @@ def bind_recipe_to_owner_admission(recipe, admission, *, deadline_ms=None):
     _admission_need({'nodes': nodes, 'resources': resources} == expected,
                     'ARENA_EXPECTED_SNAPSHOT_MISMATCH')
     return _copy({'schema': ADMISSION_SCHEMA, 'authority': 0, 'state_kind': 'PLANNED_NOT_NATIVE',
-        'native_observed': False, 'public_ack': False,
+        'runtime_authorized': False, 'native_observed': False, 'public_ack': False,
+        'execution': {'mode': 'DETACHED_PLAN_ONLY', 'sequential_apply_supported': False,
+                      'requires_fresh_owner_admission_per_effect': True},
         'admission': {**admission, 'deadline_ms': deadline_ms},
         'commands': bound, 'node_command_count': len(recipe.get('node_commands', ())),
         'resource_command_count': len(recipe.get('resource_commands', ()))})

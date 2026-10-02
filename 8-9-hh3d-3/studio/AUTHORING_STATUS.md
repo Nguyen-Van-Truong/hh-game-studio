@@ -9,8 +9,11 @@ Tools-plan O1–O8 governs; test counts/native diagnostics do not close AUTH or 
   `bind_recipe_to_owner_admission` rehydrates each existing node/resource projection
   with a supplied owner project/revision/generation/lease observation, revalidates
   through the existing typed candidate contracts, and returns detached request
-  envelopes plus projection hashes. It performs no owner submit, native edit,
-  save, ACK, or runtime claim. Focused recipe/builder tests: **15**, exit0.
+  envelopes plus projection hashes. The repeated observed revision/lease is
+  provenance only: the result is explicitly `DETACHED_PLAN_ONLY`, not a
+  sequential executable stream; an owner must re-admit before every effect.
+  It performs no owner submit, native edit, save, ACK, or runtime claim.
+  Focused recipe/builder tests: **16**, exit0.
   AUTHORITY remains0; native editor proof is open and the raw `o2-authoring-update-20261002-04`
   `EDITOR_IPC_TIMEOUT` verdict is unchanged.
 
