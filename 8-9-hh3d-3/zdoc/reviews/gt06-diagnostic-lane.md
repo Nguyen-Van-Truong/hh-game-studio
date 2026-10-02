@@ -74,6 +74,21 @@ needed for the next repair. Raw evidence remains under `studio/.local/`.
   observation for each pair, and verify the machine-on window and remaining
   INFRA budget. Do not retry formal11 blindly or lower any gate.
 
+## 2026-10-02 — formal12 dry-run resource hold
+
+- A new closure was prepared after the PerfCounter repair for
+  `gt06-o4-formal-12`; no arm task or campaign was registered. The fresh dry-run
+  verified source/profile, lock absence, scheduler idle and budget, but failed
+  the O4.1 CPU observation with `OBSERVATION_EXTERNAL_CPU_PRESSURE`.
+- The 60-second samples had external CPU mean97.13% and max99.84% across12
+  intervals. At the end, available memory was10.58 GiB and commit58.12%, so
+  this was CPU timing pressure rather than a RAM/commit gate failure. Raw
+  samples and the decision remain under `studio/.local/formal12-arm-20261002/`.
+- No engine, Docker or formal workload was started. Wait for a naturally quiet
+  host, then perform one fresh dry-run; dispatch only if all O4.1/CPU checks
+  pass. Do not close user applications automatically, lower thresholds or
+  reuse this blocked dry-run as a formal receipt.
+
 ## 2026-10-02 — post-375947ee gate state
 
 - Commit `375947ee` implements the O7.3c per-pair launch observation: each
