@@ -204,6 +204,113 @@ function Assert-SourcePins($Request) {
     }
 }
 
+function Get-TaskStatus($Task, $Registration) {
+    $rows = @()
+    foreach ($instance in $Task.GetInstances(0)) {
+        $rows += [ordered]@{ instance_guid = [string]$instance.InstanceGuid
+            state = [int]$instance.State; scheduler_engine_pid = [int]$instance.EnginePID }
+    }
+    return [ordered]@{ schema = 'HH-GT06-TASK-STATUS-1'; task_path = '\' + $taskName
+        campaign_id = $CampaignId; mode = $Mode; launch_number = $LaunchNumber; state = [int]$Task.State
+        last_run_time = $Task.LastRunTime.ToString('o'); last_task_result = [long]$Task.LastTaskResult
+        instances = $rows; output_directory = $outputDirectory; formal_acceptance = $false
+        status_scope = 'Scheduler state only; not actual process exit or owned-tree proof'
+        request_sha256 = $Registration.request_sha256; task_definition_sha256 = $Registration.task_definition_sha256 }
+}
+
+function Assert-DeletionBinding($Task, $Registration) {
+    Require ((Hash-File $requestPath) -ceq $Registration.request_sha256) 'TASK_REQUEST_CHANGED'
+    Require ((Hash-File $xmlPath) -ceq $Registration.task_definition_sha256) 'TASK_XML_CHANGED'
+    if ($null -ne $Task) {
+        Assert-Definition $Task $Mode
+        Require ((Hash-Text ([string]$Task.Xml)) -ceq $Registration.task_definition_sha256) 'TASK_XML_CHANGED'
+    }
+}
+
+function Assert-TerminalStatus($Value, $Registration) {
+    $keys = @($Value.PSObject.Properties.Name | Sort-Object)
+    $expected = @('schema', 'task_path', 'campaign_id', 'mode', 'launch_number', 'state',
+        'last_run_time', 'last_task_result', 'instances', 'output_directory', 'formal_acceptance',
+        'status_scope', 'request_sha256', 'task_definition_sha256') | Sort-Object
+    Require (($keys -join ',') -ceq ($expected -join ',')) 'TASK_TERMINAL_RECEIPT_FIELDS'
+    Require ($Value.schema -ceq 'HH-GT06-TASK-STATUS-1' -and $Value.task_path -ceq ('\' + $taskName) -and
+        $Value.campaign_id -ceq $CampaignId -and $Value.mode -ceq $Mode -and
+        ($Value.launch_number -is [int] -or $Value.launch_number -is [long]) -and
+        $Value.launch_number -eq $LaunchNumber -and $Value.output_directory -ceq $outputDirectory -and
+        $Value.request_sha256 -ceq $Registration.request_sha256 -and
+        $Value.task_definition_sha256 -ceq $Registration.task_definition_sha256 -and
+        $Value.formal_acceptance -is [bool] -and -not $Value.formal_acceptance -and
+        $Value.status_scope -ceq 'Scheduler state only; not actual process exit or owned-tree proof') 'TASK_TERMINAL_RECEIPT_BINDING'
+    Require (($Value.state -is [int] -or $Value.state -is [long]) -and $Value.state -in @(1, 3) -and
+        $Value.instances -is [array] -and $Value.instances.Count -eq 0 -and
+        ($Value.last_task_result -is [int] -or $Value.last_task_result -is [long])) 'TASK_TERMINAL_RECEIPT_STATE'
+    $parsedTime = [DateTime]::MinValue
+    Require ($Value.last_run_time -is [DateTime] -or ($Value.last_run_time -is [string] -and
+        [DateTime]::TryParseExact($Value.last_run_time, 'o', [Globalization.CultureInfo]::InvariantCulture,
+            [Globalization.DateTimeStyles]::RoundtripKind, [ref]$parsedTime))) 'TASK_TERMINAL_RECEIPT_TIME'
+}
+
+function Remove-VerifiedTask($Folder, $Registration) {
+    # Append-only receipt, flushed and read back BEFORE the irreversible call.
+    # Scheduler result is an observation, including failure; it is not exit proof.
+    $terminalPath = Join-Path $outputDirectory 'task-terminal.json'
+    $deletedPath = Join-Path $outputDirectory 'task-deleted.json'
+    $current = Get-OwnTask $Folder $taskName
+    Assert-DeletionBinding $current $Registration
+    if ($null -ne $current) {
+        Require (-not (Test-Path -LiteralPath $deletedPath)) 'TASK_DELETED_BINDING_REUSED'
+        $status = Get-TaskStatus $current $Registration
+        Require ($status.instances.Count -eq 0) 'TASK_RUNNING_DELETE_REFUSED_USE_STOP_REQUEST'
+        Require ($status.state -in @(1, 3)) 'TASK_NONTERMINAL_DELETE_REFUSED_USE_STOP_REQUEST'
+        if (-not (Test-Path -LiteralPath $terminalPath)) { Write-NewJson $terminalPath $status }
+        $expectedHash = Hash-Text (($status | ConvertTo-Json -Depth 12) + "`n")
+    } else {
+        Require (Test-Path -LiteralPath $terminalPath) 'TASK_NOT_REGISTERED'
+    }
+    $terminal = Read-Json $terminalPath
+    Assert-TerminalStatus $terminal $Registration
+    $terminalHash = Hash-File $terminalPath
+    if ($null -ne $current) {
+        Require ($terminalHash -ceq $expectedHash) 'TASK_TERMINAL_RECEIPT_CHANGED'
+        # Re-read after durable I/O: queued/running/replaced tasks are not deleted.
+        $current = Get-OwnTask $Folder $taskName
+        Assert-DeletionBinding $current $Registration
+        if ($null -ne $current) {
+            $status = Get-TaskStatus $current $Registration
+            Require ($status.instances.Count -eq 0) 'TASK_RUNNING_DELETE_REFUSED_USE_STOP_REQUEST'
+            Require ($status.state -in @(1, 3)) 'TASK_NONTERMINAL_DELETE_REFUSED_USE_STOP_REQUEST'
+            Require ((Hash-Text (($status | ConvertTo-Json -Depth 12) + "`n")) -ceq $terminalHash) 'TASK_TERMINAL_RECEIPT_CHANGED'
+            Require ((Hash-File $terminalPath) -ceq $terminalHash) 'TASK_TERMINAL_RECEIPT_CHANGED'
+            $Folder.DeleteTask($taskName, 0)
+        }
+    }
+    # A lost delete reply leaves the terminal receipt intact. A later explicit
+    # retry proves exact absence rather than replaying deletion on another task.
+    Require ($null -eq (Get-OwnTask $Folder $taskName)) 'TASK_DELETE_UNPROVEN'
+    if (Test-Path -LiteralPath $deletedPath) {
+        $deleted = Read-Json $deletedPath
+        $keys = @($deleted.PSObject.Properties.Name | Sort-Object)
+        $expected = @('schema', 'task_path', 'campaign_id', 'mode', 'launch_number', 'deleted_utc',
+            'request_sha256', 'task_definition_sha256', 'terminal_status_file', 'terminal_status_sha256',
+            'formal_acceptance') | Sort-Object
+        Require (($keys -join ',') -ceq ($expected -join ',')) 'TASK_DELETED_RECEIPT_FIELDS'
+        Require ($deleted.schema -ceq 'HH-GT06-TASK-DELETED-1' -and $deleted.task_path -ceq ('\' + $taskName) -and
+            $deleted.campaign_id -ceq $CampaignId -and $deleted.mode -ceq $Mode -and
+            ($deleted.launch_number -is [int] -or $deleted.launch_number -is [long]) -and
+            $deleted.launch_number -eq $LaunchNumber -and $deleted.request_sha256 -ceq $Registration.request_sha256 -and
+            $deleted.task_definition_sha256 -ceq $Registration.task_definition_sha256 -and
+            $deleted.terminal_status_file -ceq 'task-terminal.json' -and $deleted.terminal_status_sha256 -ceq $terminalHash -and
+            $deleted.formal_acceptance -is [bool] -and -not $deleted.formal_acceptance) 'TASK_DELETED_RECEIPT_BINDING'
+    } else {
+        $deleted = [ordered]@{ schema = 'HH-GT06-TASK-DELETED-1'; task_path = '\' + $taskName
+            campaign_id = $CampaignId; mode = $Mode; launch_number = $LaunchNumber; deleted_utc = [DateTime]::UtcNow.ToString('o')
+            request_sha256 = $Registration.request_sha256; task_definition_sha256 = $Registration.task_definition_sha256
+            terminal_status_file = 'task-terminal.json'; terminal_status_sha256 = $terminalHash; formal_acceptance = $false }
+        Write-NewJson $deletedPath $deleted
+    }
+    return $deleted
+}
+
 try {
     $scriptPath = [System.IO.Path]::GetFullPath((Join-Path $PSScriptRoot 'run_campaign_task.py'))
     $studio = [System.IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\..'))
@@ -350,7 +457,7 @@ try {
     }
 
     $stage = 'inspect-existing'
-    Require ($null -ne $task) 'TASK_NOT_REGISTERED'
+    if ($Command -ne 'delete') { Require ($null -ne $task) 'TASK_NOT_REGISTERED' }
     $request = Read-Json $requestPath
     Assert-Request $request
     if ($PSBoundParameters.ContainsKey('Mode')) { Require ($Mode -ceq $request.mode) 'TASK_MODE_MISMATCH' }
@@ -367,34 +474,14 @@ try {
         $registration.task_path -ceq ('\' + $taskName) -and $registration.campaign_id -ceq $CampaignId -and
         $registration.mode -ceq $Mode -and $registration.principal_sid -ceq $userSid) 'TASK_REGISTRATION_BINDING'
     Require ((Hash-File $requestPath) -ceq $registration.request_sha256) 'TASK_REQUEST_CHANGED'
-    Require ((Hash-File $xmlPath) -ceq $registration.task_definition_sha256 -and
-        (Hash-Text ([string]$task.Xml)) -ceq $registration.task_definition_sha256) 'TASK_XML_CHANGED'
-    Assert-Definition $task $Mode
-    $instances = $task.GetInstances(0)
+    Assert-DeletionBinding $task $registration
     if ($Command -eq 'status') {
-        $rows = @()
-        foreach ($instance in $instances) {
-            $rows += [ordered]@{ instance_guid = [string]$instance.InstanceGuid
-                state = [int]$instance.State; scheduler_engine_pid = [int]$instance.EnginePID }
-        }
-        [ordered]@{ schema = 'HH-GT06-TASK-STATUS-1'; task_path = '\' + $taskName
-            campaign_id = $CampaignId; mode = $Mode; launch_number = $LaunchNumber; state = [int]$task.State
-            last_run_time = $task.LastRunTime.ToString('o'); last_task_result = [long]$task.LastTaskResult
-            instances = $rows; output_directory = $outputDirectory; formal_acceptance = $false
-            status_scope = 'Scheduler state only; not actual process exit or owned-tree proof'
-        } | ConvertTo-Json -Depth 12
+        Get-TaskStatus $task $registration | ConvertTo-Json -Depth 12
         exit 0
     }
 
     $stage = 'delete'
-    Require ($instances.Count -eq 0) 'TASK_RUNNING_DELETE_REFUSED_USE_STOP_REQUEST'
-    # Delete only this exact verified, nonrunning task. Evidence is retained.
-    $folder.DeleteTask($taskName, 0)
-    Require ($null -eq (Get-OwnTask $folder $taskName)) 'TASK_DELETE_UNPROVEN'
-    $deleted = [ordered]@{ schema = 'HH-GT06-TASK-DELETED-1'; task_path = '\' + $taskName
-        campaign_id = $CampaignId; launch_number = $LaunchNumber; deleted_utc = [DateTime]::UtcNow.ToString('o')
-        task_definition_sha256 = $registration.task_definition_sha256; formal_acceptance = $false }
-    Write-NewJson (Join-Path $outputDirectory 'task-deleted.json') $deleted
+    $deleted = Remove-VerifiedTask $folder $registration
     $deleted | ConvertTo-Json -Depth 12
     exit 0
 } catch {
