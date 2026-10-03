@@ -29,6 +29,8 @@ EXIT_GUARD = 125
 EXIT_TIMEOUT = 124
 EXIT_CONTAINMENT = 126
 EXIT_DIAGNOSTIC = 1
+_WIN_CREATE_NEW_PROCESS_GROUP = 0x00000200
+_WIN_CREATE_SUSPENDED = 0x00000004
 MAX_TIMEOUT_SECONDS = 24 * 60 * 60
 LOCK_POLL_SECONDS = 0.20
 DEFAULT_TASK_POLL_SECONDS = 3.0
@@ -224,7 +226,7 @@ class _ProcessContainer:
 
     def popen_kwargs(self) -> dict:
         if self._windows:
-            return {"creationflags": subprocess.CREATE_NEW_PROCESS_GROUP | subprocess.CREATE_SUSPENDED, "startupinfo": _startupinfo()}
+            return {"creationflags": _WIN_CREATE_NEW_PROCESS_GROUP | _WIN_CREATE_SUSPENDED, "startupinfo": _startupinfo()}
         return {"start_new_session": True}
 
     def attach_and_resume(self, proc: subprocess.Popen) -> None:
