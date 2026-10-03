@@ -58,7 +58,7 @@ def _startupinfo() -> subprocess.STARTUPINFO | None:
     return startup
 
 
-def scheduled_gt06_running(*, timeout: float = 1.5) -> tuple[bool, str | None]:
+def scheduled_gt06_running(*, timeout: float = 5.0) -> tuple[bool, str | None]:
     """Return (running, detail), with a bounded one-shot Task Scheduler query."""
     if os.name != "nt":
         return False, None

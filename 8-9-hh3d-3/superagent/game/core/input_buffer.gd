@@ -5,9 +5,9 @@ extends RefCounted
 
 const ACTIONS: Array[StringName] = InputFrame.ACTIONS
 
-var _down: Dictionary = {}
-var _initial_held: Dictionary = {}
-var _edges: Dictionary = {}
+var _down: Dictionary[StringName, bool] = {}
+var _initial_held: Dictionary[StringName, bool] = {}
+var _edges: Dictionary[StringName, Array[StringName]] = {}
 
 func _init() -> void:
 	for action: StringName in ACTIONS:
@@ -23,24 +23,24 @@ func accept_event(event: InputEvent) -> void:
 		return
 	if event.is_pressed():
 		if not bool(_down[action]):
-			(_edges[action] as Array).append(InputFrame.EDGE_PRESSED)
+			_edges[action].append(InputFrame.EDGE_PRESSED)
 			_down[action] = true
 	else:
 		if bool(_down[action]):
-			(_edges[action] as Array).append(InputFrame.EDGE_RELEASED)
+			_edges[action].append(InputFrame.EDGE_RELEASED)
 			_down[action] = false
 
 ## Converts held keys to ordered release edges on focus loss or explicit cancel.
 func cancel_all() -> void:
 	for action: StringName in ACTIONS:
 		if bool(_down[action]):
-			(_edges[action] as Array).append(InputFrame.EDGE_RELEASED)
+			_edges[action].append(InputFrame.EDGE_RELEASED)
 			_down[action] = false
 
 func build_frame(frame_tick: int) -> InputFrame:
 	var records: Array[Dictionary] = []
 	for action: StringName in ACTIONS:
-		var edges: Array = (_edges[action] as Array).duplicate(true)
+		var edges: Array[StringName] = _edges[action].duplicate(true)
 		var pressed: bool = edges.has(InputFrame.EDGE_PRESSED)
 		var released: bool = edges.has(InputFrame.EDGE_RELEASED)
 		records.append({
@@ -54,7 +54,7 @@ func build_frame(frame_tick: int) -> InputFrame:
 			&"held": bool(_down[action]),
 			&"released": released,
 		})
-		(_edges[action] as Array).clear()
+		_edges[action].clear()
 		_initial_held[action] = bool(_down[action])
 	var frame: InputFrame = InputFrame.create(frame_tick, records)
 	if frame == null:
