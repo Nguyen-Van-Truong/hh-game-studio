@@ -787,14 +787,6 @@ def observed_journal_type(base, recorder, timings=None):
                     if timings is not None:
                         timings.operation('fsync', time.perf_counter_ns() - started)
 
-        def _append_prepared(self, record, line, existing):
-            started = time.perf_counter_ns()
-            try:
-                return super()._append_prepared(record, line, existing)
-            finally:
-                if timings is not None:
-                    timings.operation('fsync', time.perf_counter_ns() - started)
-
         def _compact_locked(self, *, now_ms):
             started = time.perf_counter_ns()
             try:

@@ -53,6 +53,23 @@ class JournalTimingTests(unittest.TestCase):
             phases.validate_journal_timing_snapshot(snapshot, os.getpid())
 
 
+class WakeLagMonitorTests(unittest.TestCase):
+    def test_start_stop_joins_and_is_idempotent(self):
+        monitor = phases.WakeLagMonitor(interval_ms=2, threshold_ms=2, capacity=2)
+        monitor.start()
+        time.sleep(0.01)
+        self.assertTrue(monitor.stop(timeout=1.0))
+        value = monitor.snapshot()
+        self.assertFalse(value['thread_alive'])
+        self.assertTrue(value['stopped'])
+        self.assertTrue(monitor.stop(timeout=0.0))
+
+    def test_invalid_configuration_is_rejected(self):
+        with self.assertRaises(ValueError):
+            phases.WakeLagMonitor(interval_ms=0)
+        with self.assertRaises(ValueError):
+            phases.WakeLagMonitor(interval_ms=10, threshold_ms=5)
+
 class FakeSocket:
     def __init__(self, client=False):
         self.client = client

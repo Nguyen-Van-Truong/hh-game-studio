@@ -117,6 +117,9 @@ class CommandProducer:
         self._transport_total = 0
         self._transport_cursor = 0
         self._batch_transport = None
+        # Refuse an existing output before starting any observer thread. A
+        # setup failure must never leave a daemon sampling this process.
+        self.root.mkdir(parents=False, exist_ok=False)
         # One fixed recorder and wrapper set before any host work or baseline.
         # The bounded rolling window remains part of measured host RSS/time.
         # Host and command driver are resident in this same process.  One
@@ -130,7 +133,6 @@ class CommandProducer:
         journal_type = observed_journal_type(Journal, self._phase_recorder, self._journal_timings)
         host_type = observed_host_type(LoopbackFixtureHost, self._phase_recorder)
         self._client_type = observed_client_type(FixtureClient, self._phase_recorder)
-        self.root.mkdir(parents=False, exist_ok=False)
         try:
             self.observer = self.observer or NativeObserver()
             _need(self.observer.kind in ('native_windows_process_probe', 'synthetic_test_observer'), 'OBSERVER_KIND')

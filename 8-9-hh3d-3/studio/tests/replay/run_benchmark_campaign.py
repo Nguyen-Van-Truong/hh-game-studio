@@ -432,7 +432,12 @@ def _watchdog_retry_slots(root, lifecycle, *, source_closure_sha256,
                     or context.get('campaign_sha256') != campaign_sha256
                     or context.get('index') != index
                     or context.get('attempt') != attempt
+                    or context.get('run_id') != f'{lifecycle["campaign_id"]}.r{index:02d}.a{attempt:02d}'
                     or (output / 'stop-request.json').exists()):
+                continue
+            try:
+                _o9_verify_retry_cleanup(output, context)
+            except BaseException:
                 continue
             # The parent receipt is mutable raw metadata. Rebuild and bind
             # the watchdog role evidence from the frozen sample stream before
@@ -953,6 +958,26 @@ def _o9_verify_role_stop(output, context):
     return role_result
 
 
+def _o9_verify_retry_cleanup(output, context):
+    """Verify owner cleanup observations before exempting a retry latch."""
+    require(type(context) is dict, 'O9_3_RETRY_CONTEXT')
+    for role in ('host-owner', 'editor-host'):
+        cleanup = json.loads(read_regular(output / role / 'cleanup-001.json'))
+        require(type(cleanup) is dict, 'O9_2_RETRY_CLEANUP')
+        job = cleanup.get('job')
+        wrapper = cleanup.get('wrapper_process_handle')
+        require(cleanup.get('closed') is True
+                and cleanup.get('completed') is False
+                and type(job) is dict and job.get('closed') is True
+                and job.get('zero_observed') is True
+                and job.get('handle_retained') is False
+                and job.get('close_uncertain') is False
+                and type(wrapper) is dict and wrapper.get('closed') is True
+                and wrapper.get('handle_retained') is False
+                and wrapper.get('close_uncertain') is False,
+                'O9_2_RETRY_CLEANUP')
+
+
 def environment_preflight():
     """O4.1 resource/engine gate; app names are inventory only."""
     try:
@@ -1342,8 +1367,18 @@ def _run_campaign(campaign_id, root, preflight_path, after_path, *,
         for prior in attempts:
             require(not (prior / 'stop-request.json').exists(), 'CAMPAIGN_STOP_LATCHED')
             failure = json.loads(read_regular(prior / 'parent-failure.json'))
+            context = json.loads(read_regular(prior / 'context.json'))
+            prior_attempt = int(prior.name.rsplit('-attempt-', 1)[1])
+            require(context.get('run_id') == f'{campaign_id}.r{index:02d}.a{prior_attempt:02d}'
+                    and context.get('source_closure_sha256') == digest
+                    and context.get('profile_sha256') == profile.PROFILE_SHA256
+                    and context.get('campaign_sha256') == campaign_sha
+                    and context.get('index') == index
+                    and context.get('attempt') == prior_attempt,
+                    'CAMPAIGN_PRIOR_CONTEXT_BINDING')
             require(failure.get('owned_tree_zero') is True and failure.get('owner_closed') is True,
                     'CAMPAIGN_PRIOR_OWNER_HELD')
+            _o9_verify_retry_cleanup(prior, context)
             # Only an objectively classified infrastructure abort is eligible
             # for the one fresh same-closure retry. Product and harness rows
             # remain terminal and are never silently replayed.
@@ -1351,6 +1386,21 @@ def _run_campaign(campaign_id, root, preflight_path, after_path, *,
                 code = failure.get('code')
                 require(False, code if type(code) is str and re.fullmatch(r'[A-Z][A-Z0-9_]{0,63}', code)
                         else 'CAMPAIGN_PRIOR_FAILURE')
+            if (prior / 'watchdog-stop.json').is_file():
+                role_stop = _o9_verify_role_stop(prior, context)
+                require(type(role_stop) is dict
+                        and role_stop.get('classification') == 'INFRA_ABORT',
+                        'CAMPAIGN_PRIOR_WATCHDOG_BINDING')
+            require(infra_retry_allowed(root, lifecycle,
+                                        source_closure_sha256=digest,
+                                        profile_sha256=profile.PROFILE_SHA256,
+                                        attempt=prior_attempt,
+                                        window_remaining_seconds=_window_remaining_seconds(
+                                            window_started_mono)),
+                    'CAMPAIGN_PRIOR_RETRY_NOT_AUTHORIZED')
+            _record_campaign_state(root, lifecycle, 'INFRA_RETRY', pair_index=index,
+                                   attempt=prior_attempt,
+                                   reason=failure.get('code', 'CAMPAIGN_INFRA_RETRY'))
         require(len(attempts) < frozen_attempts, 'CAMPAIGN_ATTEMPTS_EXHAUSTED')
         attempt = len(attempts) + 1
         while True:

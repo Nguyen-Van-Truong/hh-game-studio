@@ -36,10 +36,20 @@
   71.453 seconds before the first version's overly strict missing-PID guard
   produced `HARNESS_FAIL`; it is invalid DoD and preserved unchanged.
 - The O9.1/O9.2/O9.3/O9.4a repairs are covered by the focused combined suite
-  (155 tests, actual exit 0; py_compile and diff-check also pass). They do not
+  (157 tests, actual exit 0; py_compile and diff-check also pass). They do not
   authorize a formal by themselves: O9.4C quiet host-only soak, final watchdog
   soak on the exact frozen closure, fresh O4.1/CPU-minute/source freeze, and
   the existing formal 2x35 + critic path remain mandatory.
+- The latest pre-freeze full replay discovery completed 335 tests with actual
+  exit 0. Retry resume now rebinds the expected run id, owner cleanup receipts,
+  watchdog role stop and the live 40-minute window/budget gate; the watchdog
+  soak rechecks source closure at end and records constructor failures. These
+  changes are source updates, so the next valid soak must use a new frozen
+  closure after this milestone commit.
+- Post-milestone source verification reports 55 closure files with digest
+  `65b51d012808bb62ed7ed472171059bd320ac1e1c865ac90ed15d11345575900`.
+  This is a candidate freeze only; no soak or formal verdict is bound to it
+  until fresh O4.1 and the quiet-window chain complete.
 - Không measurement live tại closeout; tiếp tục O2 registered adapter trong worktree riêng theo AUTHORING_STATUS.md, AUTHORITY0, không merge trướcGT06. Sau review mới đủ bằng chứng: fresh freeze/preflight/CPU minute/budget trước formal.
 
 This lane records diagnostics without changing the authoritative plan. Each
