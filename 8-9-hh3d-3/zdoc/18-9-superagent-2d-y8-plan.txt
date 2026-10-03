@@ -621,4 +621,23 @@ Q5 Web: dung lượng tải lần đầu và bộ nhớ đo từ SA-04; ngân s�
   SA-03 remains an unaccepted scaffold; SA-14 stays locked. All agent browser tabs
   were closed. Main tracked tree/index were clean and no GT06 lock/task/process
   was active before normal merge `5347b07c`; product files match superagent/main.
+2026-10-03 SA-02 third observation checkpoint (13:34 UTC).
+- Product `2aa08960`, `3557d3b0`, `9ae1602d`: OBS-2026-10-03-04 records all six
+  1P VS arena entries, isolated P1 power consumption/feedback, a contextual
+  Flamethrower slot change/use and partial ladder traversal. Ledger now has
+  79 rows: 25 OBSERVED, 54 UNVERIFIED, zero MATCHED. SA-02 remains open.
+- `cmd.sa02.ledger.4` run `20261003T132552.091426Z-d377494603` exited 0;
+  `.inventory.5` run `20261003T132607.081132Z-b3574e807e` exited 1 for exactly
+  54 remaining gaps. Both actual/host exits agree, cleanup 0, before/after hash
+  `bb3d6d7621df3e4a903001d776cb1334ba9570b145ceaca263180cc4c667bd31`.
+  Evidence/handoff metadata was written after those freezes; no runtime claim.
+- Lesson: gun stock reaching zero followed by a changed icon/count does not
+  establish reloading; nearby pickups confound that endpoint. A power label
+  of 5/10 is not a measured duration. Count traversal attempts, not tap requests.
+- Agent tabs closed when nonformal GT06 work resumed. It had exited at the
+  latest 13:34 UTC preflight (no lock/task/live process). These product commits
+  are not yet merged: unrelated tracked GT06 edits remain in the main checkout.
+  Do not stage/stash them. Continue observation when idle and integrate only
+  after the main tracked tree/index clear. Next: controlled object/pickup trials,
+  P2 power activation, mode outcomes, remaining catalog and timing/capture gaps.
 END_OF_SUPERAGENT_PLAN
