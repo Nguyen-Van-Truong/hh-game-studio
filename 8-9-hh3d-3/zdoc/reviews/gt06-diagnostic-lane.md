@@ -2,55 +2,21 @@
 
 ## Hiện trạng
 
-- GT-06 chưa ACCEPTED; zero accepted formal pairs; GT-07 chưa mở. Formal21 là run mới nhất: batch0 PRODUCT_FAIL vì host command-lane status gap2766.6174ms > 2000ms; không resume hay formal mới khi chưa có distinct review và O9 soak đạt.
-- Formal09 pair0 35/35 RUN PASS, pair1 INFRA_ABORT trước batch0. Formal10 PRODUCT_FAIL COMMIT_PRESSURE sau20 batch. Daily INFRA02-10:1/2; product/harness failures không tự cho phép rerun.
-- Formal11 HARNESS_FAIL counter query; formal13 lỗi launcher trước dispatch; formal17/19 HARNESS_FAIL Docker observer; formal21 PRODUCT_FAIL status gap. Các boundary O9 đã có test; formal12/15/16/18/20 không dispatch. Formal01..21 terminal/unused như plan, S258 không resume.
-- Formal21 host actual exit1; import exit0; editor natural-exit receipt thiếu. Jobs zero/closed/handle released; arm/demand đã gỡ exact-name, XML/receipt/raw giữ nguyên. Formal14 verdict và raw vẫn bất biến.
-- Formal21 closure 01c735149811d4d49f92e478c69386d8db6edc6e0ffbefa19eb0e46c883b39ed; profilev6 8a2e599c40f927ffaff5ded5e48b6bf2a0f0a6bb3a23de31434a695f4258cb35. Current source có O9.1a/b repair, cần freeze mới nếu run tiếp.
-- O9.2 lifecycle đã được triển khai ở `46f692e6` và harden trong mốc hiện tại: campaign mới giữ lease cùng source/profile/toolchain tối đa 7 ngày, ghi state append-only và receipt DEFERRED; state JSON/sequence/time/order, backoff mới nhất, policy lịch sử hỏng và retry thiếu thời gian quan sát đều fail-closed. Chỉ cho một retry fresh cùng closure khi pair trước là `INFRA_ABORT`, owner Job đã zero/closed, còn ≥40 phút và còn budget. Campaign lịch sử vẫn giữ max-attempts=1; product/harness không tự retry.
-- O9.3 role attribution đã tích hợp ở `ea84f337` (sau helper `46e3b1db`/`23d14d79`) và được harden trong mốc hiện tại: child ghi binding host/editor sớm; watchdog gắn nhãn bằng PID + process start FILETIME đầy đủ, lưu private ở trigger và handles/objects ở nearest batch; baseline bắt buộc đúng ba batch 2–4, thiếu/malformed là gap; stop evidence có digest và closeout verifier đọc lại. Thiếu role/baseline/batch là `ROLE_COUNTER_EVIDENCE_GAP`/INFRA_ABORT, không dựng zero; HARNESS_FAIL không bị role callback ghi đè. O1 thresholds/timeouts không đổi.
-- O9.4a instrumentation hiện giữ bounded top-N request, status-gap ring/largest gap, journal lookup/append/fsync/compact/path timings và một WakeLagMonitor 10ms/100ms trong đúng PID producer; cleanup stop/join được kiểm tra. Campaign ghi `http-phases-final.json` và `journal-timings-final.json` với binding/validator riêng; telemetry luôn `formal_acceptance=false`, không trừ overhead hay đổi gate. `fsync` ở đây là proxy cho toàn bộ delegated durable-append boundary (serialization/write/lock/index + fsync) ở các đường VerifiedJournal, không phải phép đo fsync-only và không được dùng để khẳng định nguyên nhân. O9.1d watchdog-only soak ghi policy triggers vào event stream và replay exact, chỉ HARNESS_FAIL mới dừng.
-- O9.4a chưa tuyên bố có một monitor thứ hai trong Godot/editor process: native driver vẫn được phân tích bằng các timestamp/heartbeat đã có trong batch/joint receipts. Nếu review yêu cầu wake-lag riêng cho editor, đó là gap tiếp theo và phải được bổ sung trong closure riêng trước khi gọi O9.4a hoàn tất.
-- Preview A/B stock01/off02 mỗi bản100/100 actual exits0, median60.825/29.292ms; không tái hiện stall5s. Không đổi formal sang no-preview; hướng đã đóng3IDs.
-- Save-return boundary mới: fault-ordering01 tái hiện premature readback/reload; repair02 actual exit0,27/27. Native real-save03 import/editor exit0, save/readback/reload hoàn tất; outer verifier exit1 do nhầm key-presence, đã review offline riêng, không viết lại verdict.
-- Guard chỉ khóa readback đến khi save API trảOK; heartbeat/timeouts/readback và O1–O4 giữ nguyên. Không chứng minh nguyên nhân formal14, không tự dispatch formal15; hướng boundary đã3IDs, không chạy thêm mù.
-- Offline formal21 gap review/replay ghi nhận admitted command `.153`, lookup gap2766618us giữa hai QUEUED attempts, không có transport failure; đây là command-lane boundary, root cause chưa chứng minh và không đổi verdict.
-- O9 watchdog-only soak attempts `gt06-o9-watchdog-soak-20261003-01` và `...-03` chỉ có158/38 mẫu rồi dừng thiếu closeout; `...-02` dừng ở setup. Cả ba không tính DoD, raw giữ riêng. Runner đã sửa ở `ccb6792c` để bind full campaign import closure (59 files, gồm Docker module); cần soak mới đủ30 phút.
-- O9.1a wording audit found the measured path still used `GetProcessTimes` as
-  the primary CPU source for accessible PIDs. Commit `8f54a79f` now makes each
-  `native_snapshot` call one unfiltered `NtQuerySystemInformation` snapshot and
-  bind CPU/start counters from that all-process map; the older bounded helper
-  remains only for compatibility tests/callers. Environment-focused tests
-  remain green. This source change invalidates no raw verdict, but requires the
-  fresh soak to use the new closure.
-- A second O9 audit then closed three observer gaps in `d0374cbf`: the missing
-  sample bound is now 30 seconds as O9.1c requires, external CPU pressure is
-  summed across all non-Job processes before its 50%/60-second timer, and the
-  soak runner verifies its stream before writing `actual_exit_code=0`, so a
-  verifier failure cannot leave a false success receipt. The measured path
-  now uses one NTQSI CPU source per sample; a process that exits between the
-  Toolhelp and NTQSI snapshots remains explicitly unknown rather than being
-  filled from a second handle query or fabricated as zero. Focused
-  environment/soak tests pass.
-- Fresh soak `gt06-o9-watchdog-soak-20261003-07` exercised this repair for
-  71.453 seconds before the first version's overly strict missing-PID guard
-  produced `HARNESS_FAIL`; it is invalid DoD and preserved unchanged.
-- The O9.1/O9.2/O9.3/O9.4a repairs are covered by the focused combined suite
-  (157 tests, actual exit 0; py_compile and diff-check also pass). They do not
-  authorize a formal by themselves: O9.4C quiet host-only soak, final watchdog
-  soak on the exact frozen closure, fresh O4.1/CPU-minute/source freeze, and
-  the existing formal 2x35 + critic path remain mandatory.
-- The latest pre-freeze full replay discovery completed 335 tests with actual
-  exit 0. Retry resume now rebinds the expected run id, owner cleanup receipts,
-  watchdog role stop and the live 40-minute window/budget gate; the watchdog
-  soak rechecks source closure at end and records constructor failures. These
-  changes are source updates, so the next valid soak must use a new frozen
-  closure after this milestone commit.
-- Post-milestone source verification reports 55 closure files with digest
-  `65b51d012808bb62ed7ed472171059bd320ac1e1c865ac90ed15d11345575900`.
-  This is a candidate freeze only; no soak or formal verdict is bound to it
-  until fresh O4.1 and the quiet-window chain complete.
-- Không measurement live tại closeout; tiếp tục O2 registered adapter trong worktree riêng theo AUTHORING_STATUS.md, AUTHORITY0, không merge trướcGT06. Sau review mới đủ bằng chứng: fresh freeze/preflight/CPU minute/budget trước formal.
+- GT-06 chưa ACCEPTED; zero accepted formal pairs; GT-07 chưa mở. Formal21 là PRODUCT_FAIL status gap 2766.6174 ms; không resume run cũ/S258.
+- Formal09 pair0 PASS 35/35 nhưng pair1 INFRA_ABORT; formal10 PRODUCT_FAIL; formal11/17/19 HARNESS_FAIL; formal14/21 PRODUCT_FAIL; verdict/raw giữ nguyên.
+- O9.2 lifecycle, O9.3 role binding và O9.4a telemetry đã harden; O1/O4 thresholds, timeout và phân loại cũ không đổi.
+- Wake-lag cleanup, retry binding, NaN/overflow window guard và source-closure binding đã có regression coverage; vắng telemetry thì fail-closed.
+- O9.4D I/O/Godot source review chỉ là chẩn đoán; chưa chứng minh nguyên nhân status-gap/save-tail.
+- O9.4C còn thiếu: host-only 35 batch phải đạt tối thiểu 30 phút, watchdog stream/exit/Job/tree/handle/source phải verify trên cùng closure.
+- O9.5 quiet-chain runner mặc định dry-run; execute có CPU-minute trước/sau, host residency, metrics, watchdog, source recheck và formal dispatch receipt.
+- Runner hiện vẫn chạy hai stage tiền-formal trong coordinator process; chưa phải Scheduled Task chain hoàn chỉnh, nên không được gọi là unattended closeout.
+- Host/watchdog/formal manifests hiện đồng nhất 62 file; closure ứng viên sau các sửa tĩnh: `1f7abf3f4a9e5b6c1e1a1c4ff1dd23c910a7481888c41026085251ca780e44ed`.
+- Closure trên chỉ là candidate; phải freeze lại sau khi source dừng thay đổi, rồi O4.1 + CPU-minute mới trước mọi run.
+- Formal mới chỉ được dispatch trong cửa sổ yên, không workload cạnh tranh, còn INFRA budget, và không đóng app/container ngoài ownership.
+- Nếu metrics/status-gap/cleanup/source drift fail, giữ raw và dừng; không retry mù, không hạ gate, không tự ACCEPT.
+- Sau hai pair formal PASS cùng closure mới lập CRITIC_PACKAGE O4.3 cho owner; không tự gọi critic/ký ACCEPTED.
+- O2 fixture/adapter/particle worktree vẫn AUTHORITY0, không merge trước GT06; GT07 chưa mở.
+- Bằng chứng chi tiết và các verdict lịch sử nằm ở các mục bên dưới; raw mới giữ riêng dưới `studio/.local/`.
 
 This lane records diagnostics without changing the authoritative plan. Each
 entry keeps the run ID, source closure, command, actual result and the finding

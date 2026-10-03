@@ -88,6 +88,12 @@ class InertProducer(CommandProducer):
     def phase_snapshot(self):
         return {'pid': self.identity['pid'], 'unfinished': []}
 
+    def journal_timing_snapshot(self):
+        return {'pid': self.identity['pid'], 'samples': []}
+
+    def wake_lag_snapshot(self):
+        return {'wake_lag_thread_alive': False}
+
     def close(self):
         self.events.append('producer_close')
         self.failed = True

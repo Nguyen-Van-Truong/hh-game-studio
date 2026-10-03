@@ -18,6 +18,7 @@ from datetime import datetime, timezone
 import gc
 import hashlib
 import json
+import math
 import os
 import platform
 from pathlib import Path
@@ -78,6 +79,10 @@ CAMPAIGN_FIXED_SOURCES = (
     'tests/replay/run_benchmark_campaign.py',
     'tests/replay/run_campaign_task.py',
     'tests/replay/campaign_task.ps1',
+    'tests/replay/run_command_residency.py',
+    'tests/replay/run_watchdog_soak.py',
+    'tests/replay/run_o9_quiet_chain.py',
+    'tests/replay/residency_metrics.py',
     'tests/replay/benchmark_environment.py',
     'contracts/perf-collector.schema.json',
 )
@@ -377,7 +382,13 @@ def infra_retry_allowed(root, lifecycle, *, source_closure_sha256, profile_sha25
     require(lifecycle['source_closure_sha256'] == source_closure_sha256
             and lifecycle['profile_sha256'] == profile_sha256, 'CAMPAIGN_RETRY_BINDING')
     require(attempt == 1, 'CAMPAIGN_RETRY_ATTEMPTS')
-    require(type(window_remaining_seconds) in (int, float), 'CAMPAIGN_RETRY_WINDOW')
+    try:
+        finite_window = math.isfinite(window_remaining_seconds)
+    except (OverflowError, ValueError, TypeError):
+        finite_window = False
+    require(type(window_remaining_seconds) in (int, float)
+            and type(window_remaining_seconds) is not bool and finite_window,
+            'CAMPAIGN_RETRY_WINDOW')
     require(window_remaining_seconds >= 0, 'CAMPAIGN_RETRY_WINDOW')
     if window_remaining_seconds < INFRA_RETRY_MIN_REMAINING_SECONDS:
         return False
@@ -818,6 +829,12 @@ def _o9_role_binding(context):
     return {key: context[key] for key in ('run_id', 'source_closure_sha256', 'campaign_sha256')}
 
 
+def _o9_evidence_binding(context):
+    """Return the cleanup-receipt binding when this is a fully formed attempt."""
+    keys = ('run_id', 'source_closure_sha256', 'profile_sha256', 'campaign_sha256')
+    return {key: context[key] for key in keys} if all(key in context for key in keys) else None
+
+
 def _o9_role_process_start(value):
     if type(value) is not str or re.fullmatch(r'windows:[1-9][0-9]{0,19}', value) is None:
         return None
@@ -964,6 +981,9 @@ def _o9_verify_retry_cleanup(output, context):
     for role in ('host-owner', 'editor-host'):
         cleanup = json.loads(read_regular(output / role / 'cleanup-001.json'))
         require(type(cleanup) is dict, 'O9_2_RETRY_CLEANUP')
+        require(all(cleanup.get(key) == context.get(key) for key in (
+            'run_id', 'source_closure_sha256', 'profile_sha256', 'campaign_sha256')),
+            'O9_2_RETRY_CLEANUP_BINDING')
         job = cleanup.get('job')
         wrapper = cleanup.get('wrapper_process_handle')
         require(cleanup.get('closed') is True
@@ -1431,7 +1451,8 @@ def _run_campaign(campaign_id, root, preflight_path, after_path, *,
                 owner = BenchmarkProcess([sys.executable, '-B', str(Path(__file__).resolve()), '--campaign-id', campaign_id,
                     '--child-index', str(index), '--attempt', str(attempt)], cwd=output, output=output / 'host-owner',
                     source_root=STUDIO, source_files=before,
-                    binary_sha256=sha(read_regular(Path(sys.executable), 256 * 1024**2)), campaign_host=True)
+                    binary_sha256=sha(read_regular(Path(sys.executable), 256 * 1024**2)), campaign_host=True,
+                    evidence_binding=_o9_evidence_binding(context))
                 watchdog = environment.Watchdog(output,
                     lambda: environment_snapshot(job_handle=owner.job._handle, docker_inventory=[]),
                     {'run_id': run_id, 'source_closure_sha256': digest, 'campaign_sha256': campaign_sha}, write,
@@ -1704,7 +1725,14 @@ def _producer_cleanup_state(producer):
         return {'present': False}
     host, journal = producer.host, producer.journal
     index = journal._index_store if journal is not None else None
+    wake_snapshot = getattr(producer, 'wake_lag_snapshot', None)
+    require(callable(wake_snapshot), 'CAMPAIGN_TERMINAL_WAKE_LAG_MISSING')
+    wake = wake_snapshot()
+    require(type(wake) is dict and type(wake.get('wake_lag_thread_alive')) is bool,
+            'CAMPAIGN_TERMINAL_WAKE_LAG_SHAPE')
     return {'present': True, 'closed': producer.closed, 'failed': producer.failed,
+            'wake_lag': {'thread_alive': wake['wake_lag_thread_alive'],
+                         'stopped': not wake['wake_lag_thread_alive']},
             'host': None if host is None else {
                 'stopped': host._stopped.is_set(), 'closing': host._closing.is_set(),
                 'threads_alive': [thread.is_alive() for thread in host._threads],
@@ -1877,8 +1905,11 @@ def verify_child_terminal_cleanup(root, context, child):
         require(type(probe) is dict and probe.keys() == expected_probe.keys()
                 and all(probe[key] is value for key, value in expected_probe.items()),
                 'CAMPAIGN_TERMINAL_PROBE_HELD')
+    wake = producer.get('wake_lag')
     host, journal = producer['host'], producer['journal']
     require(producer['present'] is True and producer['closed'] is True
+            and type(wake) is dict and wake.keys() == {'thread_alive', 'stopped'}
+            and wake['thread_alive'] is False and wake['stopped'] is True
             and host['stopped'] is True and host['closing'] is True
             and all(value is False for value in host['threads_alive'])
             and host['main_socket_closed'] is True and host['control_socket_closed'] is True
@@ -1949,7 +1980,8 @@ def run_child(root):
                                for name, value in snapshot.items() if name != MUTABLE_SCENE})
         owner = BenchmarkProcess([str(executable), '--editor', '--path', str(project), 'res://scenes/fixture.tscn',
             '--', '--hh-benchmark-mode=full'], cwd=project, output=root / 'editor-host', source_root=STUDIO,
-            source_files=runtime_sources, binary_sha256=lock['gui_sha256'])
+            source_files=runtime_sources, binary_sha256=lock['gui_sha256'],
+            evidence_binding=_o9_evidence_binding(context))
         log = NativeLog(owner)
         probe = open_probe(owner, executable)
         producer = CampaignProducer(root / 'commands', run_id, log)
@@ -1957,7 +1989,10 @@ def run_child(root):
         write(root / 'role-process-binding.json', {
             'schema_id': O9_ROLE_PROCESS_SCHEMA, 'schema_version': O9_ROLE_PROCESS_VERSION,
             'run_id': run_id, 'source_closure_sha256': closure(before),
-            'campaign_sha256': context['campaign_sha256'],
+            # Older engine-free cleanup fixtures predate the campaign hash;
+            # production attempts always carry it, while a deterministic
+            # fallback keeps those diagnostic fixtures readable.
+            'campaign_sha256': context.get('campaign_sha256', sha(run_id.encode())),
             'roles': processes})
         for index in range(35):
             progress.update(batch=index, phase='ready')

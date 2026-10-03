@@ -87,6 +87,7 @@ class CampaignResumeTests(unittest.TestCase):
             'host_actual_exit': None, 'supervisor_actual_exit': None,
             'observations': {'heartbeat_alive': False, 'editor_probe': deepcopy(released_probe),
                 'producer': {'present': True, 'closed': True, 'failed': True,
+                    'wake_lag': {'thread_alive': False, 'stopped': True},
                     'observer_probe': deepcopy(released_probe), 'host': {'stopped': True, 'closing': True,
                         'threads_alive': [False, False, False], 'main_socket_closed': True, 'control_socket_closed': True},
                     'journal': {'cache_closed': True, 'index_retained': False,
@@ -279,7 +280,8 @@ class CampaignResumeTests(unittest.TestCase):
                                   ('editor_probe', 'close_uncertain', True),
                                   ('editor_probe', 'handle_retained', 0),
                                   ('editor_owner', 'closed', False),
-                                  ('producer', 'closed', False)]:
+                                  ('producer', 'closed', False),
+                                  ('producer', 'wake_lag', {'thread_alive': True, 'stopped': False})]:
             with self.subTest(role=role, key=key, value=value):
                 modified = deepcopy(self.terminal)
                 modified['observations'][role][key] = value
@@ -380,7 +382,33 @@ class CampaignLifecycleTests(unittest.TestCase):
                     root, lifecycle, source_closure_sha256='a' * 64,
                     profile_sha256=campaign.profile.PROFILE_SHA256, attempt=1,
                     now=1_001.0, window_remaining_seconds=2_399))
+                with self.assertRaisesRegex(BenchmarkJobError, 'CAMPAIGN_RETRY_WINDOW'):
+                    campaign.infra_retry_allowed(
+                        root, lifecycle, source_closure_sha256='a' * 64,
+                        profile_sha256=campaign.profile.PROFILE_SHA256, attempt=1,
+                        now=1_001.0, window_remaining_seconds=float('nan'))
                 budget.assert_called()
+
+    def test_retry_cleanup_receipt_is_bound_to_attempt_context(self):
+        with tempfile.TemporaryDirectory(prefix='gt06-retry-cleanup-binding-') as directory:
+            root = Path(directory)
+            context = {'run_id': 'gt06-lifecycle-test.r00.a01',
+                       'source_closure_sha256': 'a' * 64,
+                       'profile_sha256': campaign.profile.PROFILE_SHA256,
+                       'campaign_sha256': 'b' * 64}
+            cleanup = {**context, 'closed': True, 'completed': False,
+                       'job': {'closed': True, 'zero_observed': True,
+                               'handle_retained': False, 'close_uncertain': False},
+                       'wrapper_process_handle': {'closed': True,
+                               'handle_retained': False, 'close_uncertain': False}}
+            for role in ('host-owner', 'editor-host'):
+                campaign.write(root / role / 'cleanup-001.json', cleanup)
+            campaign._o9_verify_retry_cleanup(root, context)
+            stale = dict(cleanup, run_id='gt06-lifecycle-test.r00.a02')
+            (root / 'editor-host' / 'cleanup-001.json').unlink()
+            campaign.write(root / 'editor-host' / 'cleanup-001.json', stale)
+            with self.assertRaisesRegex(BenchmarkJobError, 'O9_2_RETRY_CLEANUP_BINDING'):
+                campaign._o9_verify_retry_cleanup(root, context)
 
     def test_historical_campaign_keeps_one_attempt_policy(self):
         with tempfile.TemporaryDirectory(prefix='gt06-old-campaign-') as directory:

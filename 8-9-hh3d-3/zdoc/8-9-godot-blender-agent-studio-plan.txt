@@ -91,10 +91,12 @@ SA-T0x/H2-T0x và dùng lại lõi:
    theo ClassDB; mỗi class vào allowlist phải có test reject, readback và undo.
 3. Blender: modifier/UV/material mở rộng, armature từ template, keyframe/action, preset export.
 4. Trình bày và cảm giác chơi (thêm 03-10), dùng cùng cơ chế allowlist ClassDB của mục 2, không
-   viết adapter riêng từng class. Bắt buộc cho GT-09: GPUParticles2D/CPUParticles2D +
-   ParticleProcessMaterial (one_shot, amount, lifetime, texture, use_fixed_seed/seed,
-   visibility_rect; flipbook qua CanvasItemMaterial), ShaderMaterial với .gdshader theo luật source
-   của mục 1 (readback có kiểm compile), AudioStreamPlayer2D, CanvasLayer/ProgressBar cho HUD. Thêm
+   viết adapter riêng từng class. Bắt buộc cho GT-09: GPUParticles2D/CPUParticles2D với các
+   thuộc tính emitter được kiểm riêng (one_shot, amount, lifetime, texture, use_fixed_seed/seed,
+   visibility_rect); ParticleProcessMaterial chỉ nhận các thuộc tính resource đúng ClassDB và
+   được đọc lại qua process_material (không gán nhầm thuộc tính emitter vào resource; flipbook
+   dùng texture/AtlasTexture hoặc CanvasItemMaterial theo fixture). ShaderMaterial với .gdshader
+   theo luật source của mục 1 (readback có kiểm compile), AudioStreamPlayer2D, CanvasLayer/ProgressBar cho HUD. Thêm
    khi game đầu tiên cần: PointLight2D, bus layout, Theme/Container, NavigationAgent2D/
    NavigationRegion2D, Path2D/PathFollow2D, AnimationTree. Phát hiệu ứng (restart(keep_seed)),
    pooling và giới hạn số lượng làm trong script gameplay; emit_particle() không có ở renderer
@@ -476,6 +478,18 @@ giờ là máy yên trong khung đo và tail status gap (formal14, formal21). M�
    soak-result, exit receipt và verify stream như O9.1d thì tính luôn soak O9.1d; INFRA_ABORT thì
    chờ preflight rồi chạy lại một lần nếu còn đủ giờ) → có gap từ 1 giây thì dừng, không formal,
    phân tích sau bằng telemetry O9.4a → dry-run → formal 2 pair theo O9.2a. Tổng khoảng 2–2,5 giờ.
+   Runner `tests/replay/run_o9_quiet_chain.py` đã được thêm: mặc định chỉ tạo kế hoạch đọc-only;
+   `--execute` mới được phép chạy chuỗi. Runner bind một closure chung cho host residency,
+   watchdog và formal, ghi receipt riêng cho từng bước, dừng fail-closed khi closure drift,
+   O6.3/private-growth chưa đạt hoặc status gap ≥ 1 giây, rồi mới dispatch demand task formal ID mới.
+   Nó không tự retry product/harness fail, không tự ACCEPT và không tự đóng ứng dụng. Nếu host
+   residency hoặc formal import closure không khớp, chain dừng trước formal để sửa closure, không
+   tiêu thêm một lượt đo mù.
+   Ghi chú implementation: hai stage host-residency và watchdog hiện chạy trong coordinator process
+   với thời lượng hữu hạn và receipt độc lập; chỉ formal được dispatch qua Scheduled Task. Vì vậy
+   `--execute` chưa được gọi là unattended Scheduled Task chain; nếu coordinator bị dừng, không được
+   suy ra stage hoàn tất. Adapter scheduler cho hai stage là backlog O9.5b và phải hoàn tất trước khi
+   dùng chuỗi như closeout không người trông.
    Ngoài khung làm O2 hoặc việc static; hôm sau closeout bằng lệnh chung ở mục 6a.
 6. Nhịp làm việc của agent:
    a) Closeout run hỏng bằng một lệnh chung (hash raw, actual exit, Job/handle, export rồi gỡ đúng

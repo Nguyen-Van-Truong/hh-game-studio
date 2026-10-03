@@ -21,21 +21,21 @@ from studio.tests.replay.benchmark_commands import CommandProducer
 from studio.tests.replay.benchmark_job import BenchmarkProcess, HELD_OWNERS, write, require
 from studio.tests.replay.measure_window import measurement_window
 from studio.tests.replay import benchmark_environment as environment
+from studio.tests.replay import run_benchmark_campaign as campaign_module
 from studio.tests.replay.run_benchmark_campaign import (
     environment_preflight, require_environment_preflight, environment_snapshot,
-    wait_owned_run, read_regular)
-from studio.tests.replay.run_native_benchmark import source_files as imported_source_files, closure
+    wait_owned_run, read_regular, source_files as campaign_source_files)
+from studio.tests.replay.run_native_benchmark import closure
 from studio.host.replay.perf import summarize as frame_statistics
 
 
 def source_files():
-    files = imported_source_files()
-    # The scheduler imports its entry module only in the parent. Pin the same
-    # launch surface explicitly in both interpreters, including direct runs.
-    for name in ('run_command_residency.py', 'run_campaign_task.py', 'campaign_task.ps1'):
-        path = STUDIO / 'tests/replay' / name
-        files[path.relative_to(STUDIO).as_posix()] = hashlib.sha256(path.read_bytes()).hexdigest()
-    return files
+    # Use the formal campaign closure, including the scheduler and quiet-chain
+    # entrypoints.  A host soak must be comparable to the subsequent formal;
+    # silently using the smaller native-import closure would make the chain
+    # freeze ambiguous and fail closed only after an expensive run.
+    campaign_module.load_fixture()
+    return campaign_source_files()
 
 
 def _error(stage, error):
@@ -166,14 +166,16 @@ def child(run_id):
         'scope': '35 command-only batches; no editor/native cycles; separate scaling diagnostic'})
 
 
-def run(run_id):
+def run(run_id, *, minimum_seconds=0):
+    require(type(minimum_seconds) is int and minimum_seconds >= 0,
+            'RESIDENCY_MINIMUM_SECONDS')
     with measurement_window(run_id, 'GT06 O5 host-only 35k diagnostic',
                             safe_to_release=lambda: not HELD_OWNERS):
         with environment.KeepAwake():
-            return _run_in_window(run_id)
+            return _run_in_window(run_id, minimum_seconds=minimum_seconds)
 
 
-def _run_in_window(run_id):
+def _run_in_window(run_id, *, minimum_seconds=0):
     require(re.fullmatch(r'gt06-[a-z0-9-]{1,35}', run_id) is not None, 'RESIDENCY_RUN_ID')
     root = STUDIO / '.local/reviews' / run_id
     root.mkdir(exist_ok=False)
@@ -193,6 +195,15 @@ def _run_in_window(run_id):
             lambda: environment_snapshot(job_handle=owner.job._handle, docker_inventory=[]), binding, write,
             docker_probe=environment.running_containers)
         wait_owned_run(owner, root, **binding, watchdog=watchdog)
+        # O9.4C is a 30-minute host-only soak.  If the fixed 35-batch
+        # workload finishes sooner, retain the same watchdog and owned Job
+        # for the remaining bounded interval instead of claiming a soak from
+        # a short diagnostic run.
+        remaining = minimum_seconds - (time.monotonic() - started)
+        while remaining > 0:
+            watchdog.poll(force=True)
+            time.sleep(min(5.0, remaining))
+            remaining = minimum_seconds - (time.monotonic() - started)
         watchdog.close()
         capture = owner.finish()
         environment.verify_watchdog(root, read_regular,
