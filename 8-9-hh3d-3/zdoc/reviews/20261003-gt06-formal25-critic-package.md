@@ -128,3 +128,24 @@ The prerequisite archive (host, chain and original O7 controls) is
 `studio/.local/reviews/gt06-f25-prerequisites.zip`, SHA-256
 `a22ab8280ff02b37d28f216f259efa7da764a67423cf4d5b3dc2011ca287c9da`.
 Both evidence archives were read back entry-by-entry with matching SHA-256/CRC.
+
+## Deferred admission repair (group 03)
+
+The active adapter now uses fresh group `gt06-f25-functional-20261003-03` and
+native IDs `gt06-f25-<lane>-03`. Each `--run` invocation records exactly one
+admission under `admissions/NNNN/`. Resource/CPU-busy deferral returns 75 without
+consuming a native ID or making a group terminal; a later admission may use the
+same unchanged source freeze. Only admitted engine work consumes the group.
+An actual failed/started/terminal group cannot launch again, and attempted
+reentry is rejected before touching a retained ownership marker. No automatic
+retry or poll loop was added. Old groups 01/02 remain unchanged.
+
+Five pure lifecycle regressions passed with exit 0, including defer then one
+launch, immutable prior receipts, native-failure guard retention and rejection
+of repeat launch. A scoped read-only review found no blocking issue; it is not
+an acceptance critic. Group03 was prepared with functional217 and helper234
+source files, plus the separate 64-file preflight domain and driver snapshot.
+Preview at 19:48 recorded 11.03 GiB available, commit 59.77%, no foreign engine.
+Execution still requires its own fresh preflight/CPU minute. Determine the
+actual outcome from the group admission/terminal and per-lane receipts, never
+from this preparation record.

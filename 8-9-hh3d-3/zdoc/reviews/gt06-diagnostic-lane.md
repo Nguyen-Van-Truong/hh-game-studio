@@ -10,7 +10,7 @@
 - Two read-only critics with different models must use the exact hashes and leave verbatim reports before coordinator review; GT-07 remains closed.
 - Formal25 cannot prove F01–F12/TQ00, authored gameplay, Blender publication, Android export or human playtest.
 - Installed217 refreshed to 9a9c9c42fa2be7dedf485b25c99245e92073f7b024909a8f72ec948f08219691; Linux create/start guard regression plus 57 focused tests exit0; Formal25 source unchanged.
-- Functional setup02 terminal before engines: 19:30 resource preflight RAM3.56GiB/commit71.95%; zero lanes, guard released. Setup01 domain64/217 mismatch repaired. Next: safe deferred admission, seven service/UI lanes, F06 repair/replay, final map; no benchmark rerun.
+- Functional group03 uses append-only admissions and once-only engine launch (5 regression tests exit0); read studio/.local/reviews/gt06-f25-functional-20261003-03 for live/terminal state. Groups01/02 preserved. Next: seven service/UI lanes, F06 repair/replay, final map; no benchmark rerun.
 - Formal01–24 and S258 raw/verdicts remain unchanged; never resume, lower O1/O4/timeouts or mix campaigns.
 - O9 quiet-chain/telemetry and O1/O4 guards remain active; new raw stays under `studio/.local/` and detail follows below.
 
