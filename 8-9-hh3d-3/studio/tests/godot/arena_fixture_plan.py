@@ -315,7 +315,8 @@ def _validate_edges(plan: Mapping[str, Any], base: Mapping[str, Any]) -> None:
     _expect(edges["profile"] == expected["profile"] and edges["nodes"] == expected["nodes"],
             "ARENA_PLAN_EDGE_BINDING", "edges")
     rows = edges.get("commands")
-    _expect(type(rows) is list and edges.get("command_count") == len(rows),
+    _expect(type(rows) is list and edges.get("command_count") == len(rows)
+            and len(rows) == len(expected["commands"]),
             "ARENA_PLAN_EDGE_ROWS", "edges")
     nodes = tuple(_EDGES.EdgeNode(value) for value in ("root", "player", "pickup", "bot"))
     signals: list[Any] = []
@@ -328,6 +329,8 @@ def _validate_edges(plan: Mapping[str, Any], base: Mapping[str, Any]) -> None:
                   "projection", "semantic"}
         row = _check_row(raw, fields=fields, label=f"edges.commands[{index}]")
         _expect(operation in _EDGES._OPERATIONS, "ARENA_PLAN_EDGE_OPERATION", f"edges.commands[{index}]")
+        _expect(row["semantic"] == expected["commands"][index]["semantic"],
+                "ARENA_PLAN_EDGE_SEMANTIC", f"edges.commands[{index}]")
         _expect(row["authority"] == AUTHORITY and row["runtime_authorized"] is False
                 and row["native_observed"] is False and row["execution"] == DETACHED_MODE,
                 "ARENA_PLAN_AUTHORITY", f"edges.commands[{index}]")

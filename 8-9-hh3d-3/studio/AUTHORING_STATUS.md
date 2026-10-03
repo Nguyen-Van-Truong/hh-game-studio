@@ -26,6 +26,13 @@ No Blender export/import/readback, native presentation run, or gameplay claim
 is added by these static changes. The retained native editor timeout remains
 unknown and no retry is made without a reviewed reproducer.
 
+## 2026-10-03 — Arena edge semantic binding
+
+- The detached arena verifier now binds each edge row's semantic metadata to
+  the deterministic recipe. Recomputed section and plan hashes cannot legitimize
+  a forged pickup/bot/lifecycle semantic row. One negative pure test covers the
+  failure; authority remains0 and no native run was made.
+
 ## 2026-10-03 — Arena source-closure protocol binding
 
 - Commit `e9be9623` makes the arena fixture closure include the shared protocol

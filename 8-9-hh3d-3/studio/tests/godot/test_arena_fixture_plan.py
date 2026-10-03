@@ -81,6 +81,15 @@ class ArenaFixturePlanTests(unittest.TestCase):
         with self.assertRaisesRegex(ValidationError, "ARENA_PLAN_PROJECTION"):
             plan.validate_plan(altered)
 
+    def test_offline_verifier_rejects_forged_edge_semantics(self):
+        altered = parse_json(canonical_bytes(plan.build_plan()))
+        altered["edges"]["commands"][0]["semantic"]["pickup"] = "forged"
+        altered["edges"]["canonical_sha256"] = plan._sha(altered["edges"]["commands"])
+        altered["canonical_sha256"] = plan._sha({key: altered[key] for key in altered
+                                                   if key != "canonical_sha256"})
+        with self.assertRaisesRegex(ValidationError, "ARENA_PLAN_EDGE_SEMANTIC"):
+            plan.validate_plan(altered)
+
     def test_validator_rejection_is_not_hidden_by_composition(self):
         value = plan.build_plan()
         altered = value["tilemap"]["commands"][0]["request"]
