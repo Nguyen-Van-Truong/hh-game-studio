@@ -57,11 +57,15 @@ func build_frame(frame_tick: int) -> InputFrame:
 			&"held": bool(_down[action]),
 			&"released": released,
 		})
-		_edges[action].values.clear()
-		_initial_held[action] = bool(_down[action])
 	var frame: InputFrame = InputFrame.create(frame_tick, records)
 	if frame == null:
 		push_error("InputBuffer produced an invalid input frame")
+		return null
+	# Only a successfully constructed frame consumes pending edges. Its final
+	# held state is the next frame's initial state, including across idle ticks.
+	for action: StringName in ACTIONS:
+		_edges[action].values.clear()
+		_initial_held[action] = _down[action]
 	return frame
 
 func _action_for_event(event: InputEvent) -> StringName:

@@ -2,6 +2,9 @@ class_name InputFrame
 extends RefCounted
 ## Immutable fixed-step input value passed into the future simulation.
 ## SA-01 deliberately contains no gameplay; this schema only captures edges.
+## initial_held is the preceding frame's held state. Ordered events describe
+## all transitions within this tick; pressed/released summarize their presence.
+## An empty event list retains initial_held, and held is always the final state.
 
 const SCHEMA_VERSION: int = 1
 const ACTIONS: Array[StringName] = [
