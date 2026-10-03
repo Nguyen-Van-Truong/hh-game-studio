@@ -538,7 +538,22 @@ giờ là máy yên trong khung đo và tail status gap (formal14, formal21). M�
    trong 60 giây trước đó CPU ngoài ≥ 50% và wake-lag O9.4a ≥ 100 ms ở host hoặc driver thì
    INFRA_ABORT; còn lại theo O9.3. RAM, commit, sleep, engine và container lạ vẫn dừng như O4.1; PASS
    dưới tải vẫn là PASS; ngưỡng O1 không đổi. Chain-f22-r01 bị dừng khi gap lớn nhất mới 324 ms.
-O9_NEXT=O9_2_LIFECYCLE_HARDENED; O9_3_ROLE_BINDING_HARDENED; O9_4A_SCOPED_HOST_DRIVER_TELEMETRY; O9_4B_IO_PROBE_02_DIAGNOSTIC; O9_4C_HOST_SOAK_01_INFRA_CPU; O9_4D_SOURCE_NOT_VENDORED; O9_5_QUIET_WINDOW_CHAIN; O9_6_CLOSEOUT; O9_7_ARM_QUIET_CHAIN_NOW_FORMAL_INFRA_0_OF_2_DOCKER_WSL_OFF; O9_6F_NO_NEW_PROCESS_WHILE_ARMED; O9_8_O2_COPY_PINNED_GODOT_NATIVE_OUTSIDE_WINDOW; O9_9_ONLY_IF_CPU_INFRA_AGAIN; TWO_PAIRS_PASS_THEN_CRITIC_PACKAGE_O4_3_NO_CLOSURE_CHANGE; O2_STATIC_WHILE_LOCKED; GT07_OPENS_AFTER_GT06_ACCEPTED
+10. Chain-f22-r02 (03-10 11:40–12:12) dừng vì lỗi harness, không phải môi trường. Host soak đạt số đo
+    (51 batch; 35 batch tính có gap lớn nhất 300 ms; active 1834 s ≥ 1800 s; source_unchanged) rồi
+    thoát mã 1: run_command_residency.py tạo Watchdog không observation_only nên không ghi
+    environment-events.jsonl, nhưng lần verify_watchdog thứ hai gọi observation_only=True và đọc file
+    đó → FileNotFoundError → owner-failure PRODUCT_FAIL (raw giữ nguyên) → HOST_RESIDENCY_EXIT. Không
+    tính INFRA, chưa tốn attempt formal. Sửa và chạy tiếp:
+    a) Sửa đúng chỗ đó: chỉ replay observer khi Watchdog là observation_only, hoặc cho Watchdog
+       residency ghi event stream; thiếu event stream thì fail có code, không để FileNotFoundError thô.
+       Thêm test chạy run_command_residency thời lượng ngắn qua cả hai lần verify và test file thiếu.
+    b) Chấm lại bằng chứng r02 bằng verifier đã sửa để thử bản sửa trên dữ liệu thật; freeze closure
+       mới (file này nằm trong closure) rồi arm lại chuỗi đủ ngay theo mục 7c. Không viết thêm chế
+       độ bỏ host soak.
+    c) Batch 47 (ngoài 35 batch tính) có gap 2026 ms lúc 12:10:23, đúng lúc CPU ngoài 104%, đứng đầu
+       là chrome.exe và cursor.exe. Chỉ là chẩn đoán, ngưỡng không đổi; khi arm formal, nhắc owner
+       hạn chế dùng máy nặng trong khoảng 1,5 giờ formal chạy.
+O9_NEXT=O9_2_LIFECYCLE_HARDENED; O9_3_ROLE_BINDING_HARDENED; O9_4A_SCOPED_HOST_DRIVER_TELEMETRY; O9_4B_IO_PROBE_02_DIAGNOSTIC; O9_4C_HOST_SOAK_01_INFRA_CPU; O9_4D_SOURCE_NOT_VENDORED; O9_5_QUIET_WINDOW_CHAIN; O9_6_CLOSEOUT; O9_7_ARM_QUIET_CHAIN_NOW_FORMAL_INFRA_0_OF_2_DOCKER_WSL_OFF; O9_10_R02_FIX_RESIDENCY_OBSERVER_VERIFY_THEN_REARM_FULL_CHAIN; O9_6F_NO_NEW_PROCESS_WHILE_ARMED; O9_8_O2_COPY_PINNED_GODOT_NATIVE_OUTSIDE_WINDOW; O9_9_ONLY_IF_CPU_INFRA_AGAIN; TWO_PAIRS_PASS_THEN_CRITIC_PACKAGE_O4_3_NO_CLOSURE_CHANGE; O2_STATIC_WHILE_LOCKED; GT07_OPENS_AFTER_GT06_ACCEPTED
 
 ACCEPTED_EVIDENCE_INDEX (historical accepted closures; unchanged)
 GT01_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260913
@@ -803,6 +818,8 @@ Bài học 03-10 (formal09–21, soak O9):
     phần làm hủy chain-f22-r01.
 41. Trước khi ghi "thiếu tool" phải tìm theo hash trên đĩa; worktree không mang .local theo, binary
     đúng pin vẫn nằm ở repo chính.
+42. Mỗi đường verify cần một test chạy ngắn end-to-end đúng chế độ của run thật: chain-f22-r02 chạy
+    đủ 30 phút rồi mới hỏng ở bước verify cuối, vì file cần đọc chỉ chế độ observer mới ghi.
 
 39. Soak phải đo host đang sống và hoạt động: chờ bù sau child exit không chứng minh thời lượng.
     Control cũ giữ seed/journal/source gốc; run mới bind riêng. Chỉ chấp nhận khác byte do xuống

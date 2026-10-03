@@ -24,10 +24,11 @@ PREVIOUS_REVISION=SA2 trong Git bf88058f, chỉ còn là lịch sử
 - Làm ngay, không chờ plan công cụ (GT-06 đến GT-10). Dùng Godot 4.7.2 stock, viết file trực tiếp,
   test headless, git làm checkpoint. Một agent riêng do owner giao làm game; coordinator plan
   công cụ không kiêm.
-- Làm trong worktree riêng (mục 5.1). Không sửa 8-9-hh3d-3/studio, Vault Fighters, Kho Bí Ẩn,
+- Code làm trong worktree riêng (mục 5.1). Không sửa 8-9-hh3d-3/studio, Vault Fighters, Kho Bí Ẩn,
   Snake hay dịch vụ Hoàn Hảo. AGENTS.md ở gốc repo nói về Vault Fighters, không áp dụng cho game
   này; routing HH3D nằm ở 8-9-hh3d-3/AGENTS.md.
-- Trước mọi lệnh nặng phải kiểm khóa đo (mục 6). Có khóa thì chỉ viết code, tài liệu và commit.
+- Trước mọi lệnh nặng phải kiểm xem có đang đo không (mục 6). Đang đo thì không chạy gì nặng;
+  đang đo formal thì dừng hẳn.
 - Chưa có dòng MATCHED trong sổ đối chiếu (mục 7) thì không được claim "giống Y8".
 - WP hiện hành là CURRENT_VALID_WP. Coordinator game tick sau khi đạt DoD; subagent không tick.
 - Chỉ hỏi owner ở E1 (tiền, secret), E2 (ký, phát hành), E3 (pháp lý, thương hiệu), E4 (đổi mục
@@ -88,8 +89,9 @@ D6 (E1) Ngân sách asset và âm thanh. Mặc định 0 đồng: tự làm, ho�
 4. TIẾN ĐỘ (nguồn tiến độ duy nhất của Superagent)
 Coordinator game đánh [x] sau khi đạt DoD và verify của WP; subagent không tick. Từ SA-04 trở đi
 được làm song song các WP đã đủ cột "cần". CURRENT_VALID_WP là WP chưa tick sớm nhất.
-Một writer cho file này: coordinator game, trên nhánh superagent/main. Bên khác muốn sửa thì sửa
-trên nhánh chính, coordinator game merge về nhánh mình rồi mới sửa tiếp.
+Một writer cho file này: coordinator game. File nằm ở repo chính, trên nhánh chính. Đọc lại file
+ngay trước khi sửa (owner hoặc reviewer có thể vừa sửa), rồi commit riêng đúng file này:
+git commit -m "SA-xx: ..." -- 8-9-hh3d-3/zdoc/18-9-superagent-2d-y8-plan.txt
 
 [ ] SA-01 Khởi động: worktree, project, phím, test runner, sổ đối chiếu v1 — cần: không
 [ ] SA-02 Quan sát Y8 đợt 1: đo phím, di chuyển, đánh, kiểm kê nội dung — cần: SA-01, máy rảnh
@@ -112,18 +114,21 @@ SA-01 đến SA-04 khoảng 3–7 ngày; SA-05 đến SA-10 khoảng 2–4 tuầ
 ro nhất; SA-11 đến SA-13 khoảng 1–2 tuần.
 
 5. CÁCH LÀM
-5.1 Chỗ làm. Tạo worktree sparse riêng trên nhánh superagent/main, tách từ nhánh chính hiện tại
-    (codex/hh3d-s14-bootstrap). Chỉ làm khi không có khóa đo:
+5.1 Chỗ làm. Code của game làm trong worktree sparse riêng trên nhánh superagent/main, tách từ
+    nhánh chính hiện tại (codex/hh3d-s14-bootstrap). Chỉ tạo khi không đang đo:
       git worktree add --no-checkout -b superagent/main D:\dataDiskD\hh-superagent
       cd D:\dataDiskD\hh-superagent
-      git sparse-checkout set --cone 8-9-hh3d-3/superagent 8-9-hh3d-3/zdoc
+      git sparse-checkout set --cone 8-9-hh3d-3/superagent
       git checkout superagent/main   (nếu thư mục vẫn trống: git read-tree -mu HEAD)
-    Code, test và build của game nằm dưới 8-9-hh3d-3/superagent/ trong worktree này. Tiến độ và
-    LOG sửa trên bản plan của nhánh này. Sau mỗi WP, merge nhánh về nhánh chính bằng merge commit
-    thường (không rebase, không force, không push). Thư mục repo chính chỉ đọc khi cần tham khảo.
+    Không checkout 8-9-hh3d-3/zdoc (khoảng 40.000 file, 0,9 GB bằng chứng review).
+    - Code, test và build nằm dưới 8-9-hh3d-3/superagent/ trong worktree này.
+    - Sau mỗi WP, khi không đang đo, merge nhánh về nhánh chính bằng merge commit thường (không
+      rebase, không force, không push).
+    - File plan này sửa ở repo chính (mục 4). Các file khác trong repo chính chỉ đọc.
 5.2 Engine. Dùng Godot 4.7.2-stable, bản đã khóa trong 8-9-hh3d-3/studio/toolchain.lock.json, có
-    sẵn ở <repo chính>/8-9-hh3d-3/studio/.local/tooling/godot-4.7.2-stable/ (Godot_v4.7.2-stable_
-    win64.exe và Godot_v4.7.2-stable_win64_console.exe).
+    sẵn ở <repo chính>/8-9-hh3d-3/studio/.local/tooling/godot-4.7.2-stable/ gồm hai file:
+      Godot_v4.7.2-stable_win64.exe
+      Godot_v4.7.2-stable_win64_console.exe
     - Chép (không link) cả hai file vào superagent/.local/tooling/godot-4.7.2-stable/, kiểm sha256
       với lock, tạo file _sc_ cạnh exe để dữ liệu editor nằm luôn trong .local.
     - Template export: lấy từ Godot_v4.7.2-stable_export_templates.tpz cùng thư mục tooling, chỉ
@@ -136,8 +141,8 @@ ro nhất; SA-11 đến SA-13 khoảng 1–2 tuần.
       kết quả trận. Particle ưu tiên CPUParticles2D (Web, điện thoại).
     - Mọi số chỉnh gameplay nằm trong file dữ liệu, mỗi số ghi mã dòng sổ đối chiếu.
     - RNG có seed theo trận. Bot đi qua cùng lệnh điều khiển như người chơi.
-5.4 Test. tests/run_all.gd chạy headless. Mọi lệnh chạy qua tools/run_guarded.py: kiểm khóa, đặt
-    timeout, giết cả cây process khi quá hạn, ghi exit code thật.
+5.4 Test. tests/run_all.gd chạy headless. Mọi lệnh chạy qua tools/run_guarded.py: từ chối khi đang
+    đo (mục 6), đặt timeout, giết cả cây process khi quá hạn, ghi exit code thật.
     - Log có SCRIPT ERROR, WARNING hoặc leaked object là fail.
     - Test gameplay dùng input trace 60 Hz (tick, người chơi, action, nhấn/giữ/thả) kèm seed; lỗi
       nào tìm được cũng có trace tái hiện.
@@ -160,17 +165,21 @@ ro nhất; SA-11 đến SA-13 khoảng 1–2 tuần.
     - Tưởng thiếu tool: tìm trên đĩa theo hash trước khi kết luận.
 
 6. CHẠY CHUNG MÁY VỚI GT-06 (KHÓA ĐO)
-Plan công cụ đang đo độ ổn định (GT-06) trên chính máy này. Trong lúc đo, coordinator công cụ giữ
-file %LOCALAPPDATA%\HHGodotAgent\measure-window.lock.
-- Trước mỗi lệnh nặng, kiểm file khóa. Lệnh nặng gồm Godot, Blender, export, test GDScript,
-  browser chơi Y8, quay màn hình, giải nén lớn, cài tool. Có khóa thì chỉ viết code/tài liệu và
-  commit, không chạy.
-- Trước phiên dài hơn 5 phút, xem thêm (chỉ đọc) task HHStudio.GT06.* trong Task Scheduler. Có
-  task sẽ chạy trong 60 phút tới thì làm phiên ngắn cho xong trước giờ đó, hoặc chờ.
-- Khóa xuất hiện khi đang chạy: dừng ngay lệnh nặng của mình (giết cây process), ghi LOG, chờ.
+Plan công cụ đang đo độ ổn định (GT-06) trên chính máy này. Mỗi bước đo giữ file
+%LOCALAPPDATA%\HHGodotAgent\measure-window.lock (JSON có run_id, purpose, expires_utc). Giữa hai
+bước của một chuỗi có lúc không có khóa. Vì vậy "đang đo" nghĩa là: có file khóa, hoặc có task
+HHStudio.GT06.* ở trạng thái Running.
+- Đang đo thì không chạy lệnh nặng: Godot, Blender, export, test GDScript, browser chơi Y8, quay
+  màn hình, giải nén lớn, cài tool, search toàn repo.
+- purpose bắt đầu bằng "GT06 formal" thì dừng hẳn, chỉ kiểm lại mỗi 15 phút. Formal cần gap
+  ≤ 2000 ms; lúc 12:10 ngày 03-10 gap lên 2026 ms đúng lúc CPU ngoài 104% (đứng đầu là Chrome,
+  Cursor).
+- Đang đo nhưng không phải formal: được sửa vài file nhỏ trong superagent/ và commit.
+- Trước phiên dài hơn 5 phút, xem thêm (chỉ đọc) NextRunTime của task HHStudio.GT06.*. Có task sẽ
+  chạy trong 60 phút tới thì làm phiên ngắn cho xong trước giờ đó, hoặc chờ.
+- Lệnh của mình đang chạy mà phát hiện đang đo: dừng ngay (giết cây process của mình), ghi LOG, chờ.
 - Không xóa/sửa file khóa, không đụng task HHStudio.*, không đóng app của owner, không bật Docker/WSL.
-- Khi đang có task GT-06 armed, mỗi lệnh nặng dưới 2 phút và có timeout.
-Không có khóa và không có task sắp chạy thì làm bình thường.
+Không đang đo và không có task sắp chạy thì làm bình thường.
 
 7. SỔ ĐỐI CHIẾU Y8 (REFERENCE LEDGER)
 File: 8-9-hh3d-3/superagent/docs/reference-ledger.tsv; tools/check_ledger.py kiểm format.
@@ -276,8 +285,8 @@ Làm:
 5. Sổ đối chiếu v1 (mục 7) và docs/observation-plan.md cho SA-02.
 6. docs/reuse-audit.md: đọc sổ đối chiếu và KNOWN_ISSUES của Vault Fighters, ghi lại số liệu và
    bài học dùng được (D4: không port code).
-Bước 1 (chỉ phần file), 2, 4, 5, 6 làm được cả khi có khóa đo. Bước 3, tạo worktree và chạy test
-chờ hết khóa.
+Tạo worktree, bước 3 và chạy test cần lúc không đang đo. Khi đã có worktree, các bước 2, 4, 5, 6
+làm được cả lúc đang đo mà không phải formal.
 DoD:
 - Import headless, rồi run_all.gd exit 0, log sạch.
 - Test InputMap: mỗi action đúng phím; P1 và P2 không trùng phím.
@@ -471,6 +480,8 @@ Q5 Web: dung lượng tải lần đầu và bộ nhớ đo từ SA-04; ngân s�
 5. Không khởi động process nặng cạnh phiên đo; build/test chạy cạnh chuỗi đo từng làm hỏng một
    lần đo.
 6. Một writer một file. Commit đúng path của mình, không git add rộng.
+7. Mỗi đường verify cần một test chạy ngắn end-to-end đúng chế độ của lần chạy thật. Chuỗi đo
+   03-10 chạy đủ 30 phút rồi mới hỏng ở bước verify cuối, vì file cần đọc không được ghi ở chế độ đó.
 
 15. LOG
 2026-10-03 SA3: viết lại toàn bộ theo lệnh owner 03-10.
