@@ -2,21 +2,16 @@
 
 ## Hiện trạng
 
-- GT-06 chưa ACCEPTED; zero accepted formal pairs; GT-07 chưa mở. Formal21 là PRODUCT_FAIL status gap 2766.6174 ms; không resume run cũ/S258.
-- Formal09 pair0 PASS 35/35 nhưng pair1 INFRA_ABORT; formal10 PRODUCT_FAIL; formal11/17/19 HARNESS_FAIL; formal14/21 PRODUCT_FAIL; verdict/raw giữ nguyên.
-- O9.2 lifecycle, O9.3 role binding và O9.4a telemetry đã harden; O1/O4 thresholds, timeout và phân loại cũ không đổi.
-- Wake-lag cleanup, retry binding, NaN/overflow window guard và source-closure binding đã có regression coverage; vắng telemetry thì fail-closed.
-- O9.4D I/O/Godot source review chỉ là chẩn đoán; chưa chứng minh nguyên nhân status-gap/save-tail.
-- O9.4C chưa đạt: f22-r01 là INFRA_ABORT do CPU ngoài, còn Scheduler chain f24-r01 đã chạy đến batch 52 nhưng PRODUCT_FAIL vì partial batch có status gap 2016.4559 ms; formal24 chưa dispatch. Không resume hoặc retry mù; phải review partial batch rồi chạy lại trên closure mới trong khung yên.
-- O9.5b đã có mode Scheduler quiet-chain độc lập chat, hash frozen plan, actual host capture, combined watchdog và exact source/profile trước formal.
-- O7 reader tách control gốc/host mới; chỉ chấp nhận profile normalization CRLF→LF đã pin, không hồi tố raw/hash/verdict hoặc giảm ngưỡng.
-- Host/watchdog/formal dùng chung closure 64 file; lấy hash freeze từ quiet-chain-plan.json của scheduler, không dùng hash candidate cũ trong chat.
-- Closure trên chỉ là candidate; phải freeze lại sau khi source dừng thay đổi, rồi O4.1 + CPU-minute mới trước mọi run.
-- Formal mới chỉ được dispatch trong cửa sổ yên, không workload cạnh tranh, còn INFRA budget, và không đóng app/container ngoài ownership.
-- Nếu metrics/status-gap/cleanup/source drift fail, giữ raw và dừng; không retry mù, không hạ gate, không tự ACCEPT.
-- Sau hai pair formal PASS cùng closure mới lập CRITIC_PACKAGE O4.3 cho owner; không tự gọi critic/ký ACCEPTED.
-- O2 fixture/adapter/particle worktree vẫn AUTHORITY0, không merge trước GT06; GT07 chưa mở.
-- Bằng chứng chi tiết và các verdict lịch sử nằm ở các mục bên dưới; raw mới giữ riêng dưới `studio/.local/`.
+- Formal25 terminal: two pairs on one closure/profile, 35/35 samples each.
+- Actual child/editor/import exits 0; natural trees, Jobs closed/zero, no retained handles; exact Scheduler task closeout/deletion complete.
+- Offline assembly rebuilt `dataset.json` byte-for-byte; summary PASS; status gaps 1082.058/607.993 ms; source unchanged.
+- O7 prerequisite on same closure: 49 batches, 1832.842787 seconds, max gap 444.9745 ms, watchdog and metrics PASS.
+- Formal25 is benchmark evidence PASS pending two independent critics, not GT-06 ACCEPTED; hashes are in the tracked package review.
+- Two read-only critics with different models must use the exact hashes and leave verbatim reports before coordinator review; GT-07 remains closed.
+- Formal25 cannot prove F01–F12/TQ00, authored gameplay, Blender publication, Android export or human playtest.
+- S133/helper functional closures remain separate authority-0 provenance; no closure merge or verdict retroaction.
+- Formal01–24 and S258 raw/verdicts remain unchanged; never resume, lower O1/O4/timeouts or mix campaigns.
+- O9 quiet-chain/telemetry and O1/O4 guards remain active; new raw stays under `studio/.local/` and detail follows below.
 
 ## 2026-10-03 — current checkpoint after f24
 
