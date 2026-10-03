@@ -249,14 +249,15 @@ class ResidencyTests(unittest.TestCase):
         self.assertEqual(factory.call_args.args[0][-2:], ['--minimum-seconds', '1800'])
         waiter.assert_called_once()
         watchdog.poll.assert_not_called()  # no dead-child parent padding
-        self.assertEqual(verifier.call_count, 2)
-        self.assertTrue(verifier.call_args_list[-1].kwargs['observation_only'])
+        self.assertEqual(verifier.call_count, 1)
+        self.assertFalse(verifier.call_args_list[0].kwargs.get('observation_only', False))
         value = json.loads((root / 'soak-result.json').read_bytes())
         self.assertEqual(value['schema'], residency.SOAK_SCHEMA)
         self.assertEqual(value['active_elapsed_seconds'], 1800)
         self.assertTrue(value['verified_watchdog'])
         self.assertTrue(value['sample_stream_closed'])
         self.assertTrue(value['event_stream_closed'])
+        self.assertFalse(value['watchdog_observation_only'])
         self.assertFalse(value['formal_acceptance'])
         self.assertEqual(value['source_closure_sha256'], residency.closure({}))
         self.assertEqual(value['owner_capture_sha256'],

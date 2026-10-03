@@ -121,6 +121,14 @@ class CloseoutTests(unittest.TestCase):
         self.assertEqual(self.calls, ['status'])
         self.assertEqual(before, {p: p.read_bytes() for p in self.studio.rglob('*') if p.is_file()})
 
+    def test_terminal_harness_or_product_failure_keeps_recorded_verdict(self):
+        for classification in ('HARNESS_FAIL', 'PRODUCT_FAIL'):
+            with self.subTest(classification=classification):
+                self.change(self.host / 'owner-failure.json', classification=classification)
+                result = self.run_closeout()
+                self.assertEqual(result['classification'], classification)
+                self.assertFalse(result['acceptance_verified'])
+
     def test_write_exports_new_manifest_and_preserves_raw(self):
         result = self.run_closeout(write=True)
         self.assertEqual(result['output_directory'], str(self.output))

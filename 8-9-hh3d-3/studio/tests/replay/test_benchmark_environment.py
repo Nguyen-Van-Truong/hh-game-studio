@@ -620,6 +620,36 @@ class EnvironmentTests(unittest.TestCase):
             with self.assertRaisesRegex(BenchmarkJobError, 'BINDING'):
                 env.verify_watchdog(root, campaign.read_regular, expected_binding=binding)
 
+    def test_residency_replay_skips_absent_observer_stream_but_observer_mode_is_verified(self):
+        binding = {'run_id': 'test', 'source_closure_sha256': 'a' * 64,
+                   'campaign_sha256': 'b' * 64}
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            watch = env.Watchdog(root, Mock(side_effect=[sample(), sample(5)]),
+                                 binding, campaign.write)
+            try:
+                watch.poll(force=True)
+                watch.poll(force=True)
+            finally:
+                watch.close()
+            env.verify_watchdog(root, campaign.read_regular, expected_binding=binding)
+            with self.assertRaisesRegex(BenchmarkJobError, 'EVENTS_MISSING'):
+                env.verify_watchdog(root, campaign.read_regular, expected_binding=binding,
+                                    observation_only=True)
+
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            watch = env.Watchdog(root, Mock(side_effect=[sample(), sample(5)]),
+                                 binding, campaign.write, observation_only=True)
+            try:
+                watch.poll(force=True)
+                watch.poll(force=True)
+            finally:
+                watch.close()
+            env.verify_watchdog(root, campaign.read_regular, expected_binding=binding)
+            env.verify_watchdog(root, campaign.read_regular, expected_binding=binding,
+                                observation_only=True)
+
     def test_bad_binding_does_not_create_a_stream(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

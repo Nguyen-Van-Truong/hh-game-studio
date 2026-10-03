@@ -538,15 +538,18 @@ giờ là máy yên trong khung đo và tail status gap (formal14, formal21). M�
    trong 60 giây trước đó CPU ngoài ≥ 50% và wake-lag O9.4a ≥ 100 ms ở host hoặc driver thì
    INFRA_ABORT; còn lại theo O9.3. RAM, commit, sleep, engine và container lạ vẫn dừng như O4.1; PASS
    dưới tải vẫn là PASS; ngưỡng O1 không đổi. Chain-f22-r01 bị dừng khi gap lớn nhất mới 324 ms.
-10. Chain-f22-r02 (03-10 11:40–12:12) dừng vì lỗi harness, không phải môi trường. Host soak đạt số đo
-    (51 batch; 35 batch tính có gap lớn nhất 300 ms; active 1834 s ≥ 1800 s; source_unchanged) rồi
-    thoát mã 1: run_command_residency.py tạo Watchdog không observation_only nên không ghi
+10. Chain-f22-r02 (03-10 11:40–12:12) dừng vì lỗi harness, không phải môi trường. Phần 35 batch
+    O6.3 và thời lượng host đạt các điều kiện hẹp (51 batch; 35 batch tính có gap lớn nhất 300 ms;
+    active 1834 s ≥ 1800 s; source_unchanged), nhưng toàn bộ O9.4C chưa đạt: batch 47 trong phần
+    mở rộng có gap 2026 ms lúc CPU ngoài 104%. Run cũng thoát mã 1 vì run_command_residency.py
+    tạo Watchdog không observation_only nên không ghi
     environment-events.jsonl, nhưng lần verify_watchdog thứ hai gọi observation_only=True và đọc file
-    đó → FileNotFoundError → owner-failure PRODUCT_FAIL (raw giữ nguyên) → HOST_RESIDENCY_EXIT. Không
-    tính INFRA, chưa tốn attempt formal. Sửa và chạy tiếp:
+    đó → FileNotFoundError → owner-failure PRODUCT_FAIL (raw giữ nguyên; đã chuẩn hóa lỗi thiếu file
+    thành mã fail-closed) → HOST_RESIDENCY_EXIT. Không tính INFRA, chưa tốn attempt formal. Sửa và chạy tiếp:
     a) Sửa đúng chỗ đó: chỉ replay observer khi Watchdog là observation_only, hoặc cho Watchdog
        residency ghi event stream; thiếu event stream thì fail có code, không để FileNotFoundError thô.
-       Thêm test chạy run_command_residency thời lượng ngắn qua cả hai lần verify và test file thiếu.
+       Đã thêm test chạy residency thường và observer mode thời lượng ngắn qua đúng verifier, cùng
+       test file thiếu; focused suite 99 tests, exit 0.
     b) Chấm lại bằng chứng r02 bằng verifier đã sửa để thử bản sửa trên dữ liệu thật; freeze closure
        mới (file này nằm trong closure) rồi arm lại chuỗi đủ ngay theo mục 7c. Không viết thêm chế
        độ bỏ host soak.

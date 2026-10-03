@@ -241,11 +241,15 @@ def _run_in_window(run_id, *, minimum_seconds=0):
         environment.verify_watchdog(root, read_regular,
                                    elapsed_seconds=capture['elapsed_seconds'], expected_binding=binding,
                                    require_docker_inventory=True)
-        # Gating replay above must have no policy failures. Observer replay
-        # additionally verifies the event stream against the sample stream.
-        environment.verify_watchdog(root, read_regular,
-                                   elapsed_seconds=capture['elapsed_seconds'], expected_binding=binding,
-                                   require_docker_inventory=True, observation_only=True)
+        # Gating replay above must have no policy failures. Observer replay is
+        # only valid for a Watchdog that was explicitly created in
+        # observation_only mode; ordinary residency intentionally has no
+        # environment-events.jsonl stream. Calling the observer verifier on
+        # that mode turns a completed run into a verifier FileNotFoundError.
+        if getattr(watchdog, 'observation_only', False):
+            environment.verify_watchdog(root, read_regular,
+                                       elapsed_seconds=capture['elapsed_seconds'], expected_binding=binding,
+                                       require_docker_inventory=True, observation_only=True)
         require((root / 'result.json').is_file(), 'RESIDENCY_RESULT_MISSING')
         result_raw = read_regular(root / 'result.json', 4 * 1024**2)
         result = json.loads(result_raw)
@@ -257,14 +261,19 @@ def _run_in_window(run_id, *, minimum_seconds=0):
         require(type(active_elapsed) in (int, float) and minimum_seconds <= active_elapsed
                 <= capture['elapsed_seconds'] and result.get('minimum_seconds') == minimum_seconds,
                 'RESIDENCY_MINIMUM_UNMET')
-        require(watchdog.stream.closed and watchdog.event_stream.closed, 'RESIDENCY_WATCHDOG_STREAM_HELD')
+        event_stream = getattr(watchdog, 'event_stream', None)
+        require(watchdog.stream.closed and
+                (event_stream is None or event_stream.closed),
+                'RESIDENCY_WATCHDOG_STREAM_HELD')
         write(root / 'soak-result.json', {'schema': SOAK_SCHEMA, **binding,
             'actual_exit_code': capture['actual_process_exit']['exit_code'],
             'elapsed_seconds': capture['elapsed_seconds'], 'active_elapsed_seconds': active_elapsed,
             'minimum_seconds': minimum_seconds, 'completed_batches': result['completed_batches'],
             'owner_capture_sha256': hashlib.sha256(read_regular(root / 'owner/capture.json', 1024**2)).hexdigest(),
             'result_sha256': hashlib.sha256(result_raw).hexdigest(),
-            'sample_stream_closed': True, 'event_stream_closed': True,
+            'sample_stream_closed': watchdog.stream.closed,
+            'event_stream_closed': event_stream is None or event_stream.closed,
+            'watchdog_observation_only': bool(getattr(watchdog, 'observation_only', False)),
             'verified_watchdog': True, 'formal_acceptance': False, 'error_code': None,
             'scope': 'O9.5 combined host/watchdog diagnostic; O9.1d duration credit requires active elapsed >=1800'})
         print(json.dumps({'completed': True, 'run_id': run_id, 'host': capture, 'full_benchmark': False}), flush=True)

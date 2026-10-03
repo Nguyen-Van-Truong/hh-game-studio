@@ -31,6 +31,33 @@ This lane records diagnostics without changing the authoritative plan. Each
 entry keeps the run ID, source closure, command, actual result and the finding
 needed for the next repair. Raw evidence remains under `studio/.local/`.
 
+## 2026-10-03 — O9.10 r02 residency-verifier repair
+
+- Read-only closeout confirms `gt06-o9-chain-f22-r02` host work completed 51
+  batches and 1833.8716 s with actual child exit `0`, source unchanged and a
+  clean owned Job/tree/handle closeout. The first 35 O6.3 batches had maximum
+  status gap about 300.2118 ms, but the diagnostic extension is still covered
+  by O9.4C: batch 47 reached 2026.1827 ms while external CPU was 104.2678%
+  (Chrome dominated). Therefore this run is not an O9.4C pass or formal input.
+- The chain wrapper stopped because standard residency creates only
+  `environment-samples.jsonl`; `run_command_residency.py` then incorrectly
+  replayed `verify_watchdog(..., observation_only=True)` and read a missing
+  `environment-events.jsonl`. The retained raw `owner-failure.json` remains
+  `PRODUCT_FAIL` and is not rewritten; the operational cause is a harness
+  verifier bug, not an environment acceptance result. The common closeout
+  recorded actual child exit `0`, task deletion and raw retention.
+- Repair is now in the source: observer replay runs only when the Watchdog was
+  created with `observation_only=True`; stream closure handles the normal mode,
+  and missing observer files fail closed with
+  `CAMPAIGN_WATCHDOG_EVENTS_MISSING` rather than a raw file exception. The
+  focused command/residency/environment/closeout suite passes 99 tests (one
+  Windows symlink privilege skip), exit `0`. No native engine or formal run
+  was started by the repair.
+- Freeze a fresh closure including this repair, then perform a new O4.1 and
+  one-minute CPU observation before arming a new quiet-chain ID. Do not
+  reclassify r02, reuse its raw, or dispatch formal22 from the old closure;
+  first-35 metrics and the extension gap remain diagnostic only.
+
 ## 2026-10-03 — Scheduled quiet chain r01 closeout
 
 - `gt06-o9-chain-f22-r01` / host `gt06-o9-host-f22-r01`: INFRA_ABORT `EXTERNAL_CPU_PRESSURE`, 1 completed batch, max gap323.6126ms; formal22 never started.

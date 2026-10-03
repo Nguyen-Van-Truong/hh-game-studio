@@ -1122,6 +1122,8 @@ def verify_watchdog(output, read_regular, *, elapsed_seconds=None, expected_bind
         require(type(expected_binding) is dict and set(expected_binding) == {
                 'run_id', 'source_closure_sha256', 'campaign_sha256'},
                 'CAMPAIGN_WATCHDOG_BINDING')
+        require((output / 'environment-events.jsonl').is_file(),
+                'CAMPAIGN_WATCHDOG_EVENTS_MISSING')
         require(not (output / 'watchdog-stop.json').exists(), 'CAMPAIGN_WATCHDOG_STOP_LATCHED')
         event_raw = read_regular(output / 'environment-events.jsonl', 8 * 1024**2)
         event_lines = event_raw.splitlines()

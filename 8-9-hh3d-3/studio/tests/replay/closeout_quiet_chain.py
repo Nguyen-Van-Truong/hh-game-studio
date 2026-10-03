@@ -224,7 +224,7 @@ def collect(studio, campaign_id, *, scheduler=task_command, probe=observe_pid):
                 str(studio / 'tests/replay/run_command_residency.py'), '--child', '--run-id', host_id,
                 '--minimum-seconds', '1800'], 'OWNER_INVOCATION_BINDING')
     require(failure.get('formal_acceptance') is False and failure.get('completed') is False
-            and failure.get('classification') in ('INFRA_ABORT', 'FAIL')
+            and failure.get('classification') in ('INFRA_ABORT', 'HARNESS_FAIL', 'PRODUCT_FAIL', 'FAIL')
             and type(failure.get('code')) is str and failure['code'], 'FAILURE_CLASSIFICATION')
     require(cleanup_valid(cleanup) and failure.get('job') == cleanup['job'], 'CLEANUP_UNPROVEN')
     require(type(returned.get('returned_exit_code')) is int and returned['returned_exit_code'] != 0
