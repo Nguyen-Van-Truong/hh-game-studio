@@ -34,6 +34,24 @@
   soak and host-only O9.4C in a quiet window → dry-run → formal pairs. Keep O1
   thresholds/timeouts and all old raw verdicts unchanged.
 
+## 2026-10-03 — F24 partial-batch phase localization
+
+- Offline phase replay of `gt06-o9-host-f24-r01/failure.json` binds the failure to
+  batch 52 command ordinal 103 (`inspect`). The client sent the request, then
+  its `client.headers` phase raised after about 2,007.98 ms; the adjacent
+  `client.call` returned only after the bounded timeout and the recovery lookup
+  also timed out.
+- The same phase stream shows `server.dispatch → journal.append` entered for
+  the preceding `commands` request and has no matching exit before the client
+  timeout. This localizes the observed stall to the journal append/write path
+  boundary, not to a proven `server.lookup` or editor heartbeat cause. The raw
+  stream does not prove whether `fsync`, filesystem contention or another OS
+  wait held that phase, so no root-cause claim or source patch is justified yet.
+- Next diagnostic, if approved by the quiet-window gate, is a bounded journal
+  append/fsync contention reproducer with the existing phase recorder and raw
+  timestamps. It must not change the 2-second status-gap gate, ACK durability,
+  timeout or old verdicts; no Godot/editor run is needed for that diagnostic.
+
 ## 2026-10-03 — O9.7 owner environment relief
 
 - Owner decision `7aeaec20` clarifies that the O1.7 daily counter reads only
