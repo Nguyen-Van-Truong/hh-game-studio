@@ -9,6 +9,7 @@ import ctypes
 import base64
 from ctypes import wintypes as w
 from datetime import datetime
+import hashlib
 import json
 import os
 import re
@@ -582,6 +583,241 @@ class Policy:
             'attribution': ('external_pressure_sufficient_without_campaign_private'
                             if reason in ('COMMIT_PRESSURE', 'AVAILABLE_PRESSURE') and classification == 'INFRA_ABORT'
                             else 'no_product_failure_is_waived')}
+
+
+# O9.3 role-wise early-stop evidence.  This is deliberately kept separate from
+# the O1 dataset/profile verifier: the watchdog's trigger sample is the sole
+# source of current private commit, while handles/objects come from the most
+# recent quiescent batch observed before that trigger.  A formal runner may
+# call these helpers when it has made those role identities explicit; old raw
+# watchdog rows without role labels fail closed instead of being guessed.
+O9_ROLE_EVIDENCE_SCHEMA = 'HH-GT06-O9.3-ROLE-COUNTER-EVIDENCE-1'
+O9_ROLE_EVIDENCE_VERSION = '1.0.0'
+O9_ROLE_NAMES = ('host', 'editor')
+O9_ROLE_BASELINE_BATCHES = (2, 3, 4)
+O9_ROLE_GATE_COUNTERS = ('private_commit_bytes', 'held_handles', 'objects')
+O9_ROLE_HASH = re.compile(r'[0-9a-f]{64}\Z')
+O9_ROLE_ID = re.compile(r'[a-zA-Z0-9][a-zA-Z0-9._-]{0,127}\Z')
+O9_ROLE_SAFE_INTEGER = (1 << 53) - 1
+
+
+def _o9_role_need(value, code):
+    require(bool(value), 'O9_3_' + code)
+
+
+def _o9_role_int(value, *, minimum=0):
+    _o9_role_need(type(value) is int and minimum <= value <= O9_ROLE_SAFE_INTEGER,
+                  'ROLE_COUNTER_SHAPE')
+
+
+def _o9_role_hash(value):
+    _o9_role_need(type(value) is str and O9_ROLE_HASH.fullmatch(value) is not None,
+                  'ROLE_BINDING')
+
+
+def _o9_role_binding(binding):
+    _o9_role_need(type(binding) is dict and set(binding) ==
+                  {'run_id', 'source_closure_sha256', 'campaign_sha256'}, 'BINDING')
+    _o9_role_need(type(binding['run_id']) is str and O9_ROLE_ID.fullmatch(binding['run_id'])
+                  is not None, 'BINDING')
+    _o9_role_hash(binding['source_closure_sha256'])
+    _o9_role_hash(binding['campaign_sha256'])
+    return dict(binding)
+
+
+def _o9_role_json(value):
+    try:
+        return json.dumps(value, sort_keys=True, separators=(',', ':'), allow_nan=False).encode('utf-8')
+    except (TypeError, ValueError, UnicodeError, RecursionError) as error:
+        raise BenchmarkJobError('O9_3_ROLE_EVIDENCE_JSON') from error
+
+
+def _o9_role_digest(value):
+    return hashlib.sha256(_o9_role_json(value)).hexdigest()
+
+
+def _o9_role_memory(memory, path):
+    """Extract applicable O1.2 counters from one post-batch memory row."""
+    _o9_role_need(type(memory) is dict and set(memory) == {'phase', 'host', 'editor'},
+                  'ROLE_MEMORY_SHAPE')
+    _o9_role_need(memory['phase'] == 'post_batch_quiescent', 'ROLE_MEMORY_PHASE')
+    result = {}
+    for role in O9_ROLE_NAMES:
+        source = memory[role]
+        _o9_role_need(type(source) is dict and all(name in source for name in profile_counters()),
+                      'ROLE_MEMORY_SHAPE')
+        result[role] = {}
+        for counter in O9_ROLE_GATE_COUNTERS:
+            cell = source[counter]
+            _o9_role_need(type(cell) is dict and set(cell) == {'value', 'unavailable_reason'},
+                          'ROLE_MEMORY_SHAPE')
+            value, reason = cell['value'], cell['unavailable_reason']
+            if role == 'host' and counter == 'objects':
+                _o9_role_need(value is None and reason == 'NOT_APPLICABLE_PYTHON_HOST',
+                              'ROLE_MEMORY_APPLICABILITY')
+                continue
+            low = 1 if counter == 'private_commit_bytes' else 0
+            _o9_role_need(type(value) is int and low <= value <= O9_ROLE_SAFE_INTEGER
+                          and reason is None, 'ROLE_MEMORY_COUNTER')
+            result[role][counter] = value
+    return result
+
+
+def profile_counters():
+    """Return the fixed profile counter names without importing benchmark_profile.
+
+    Keeping this tiny contract local avoids making the diagnostic helper a new
+    dependency of the formal source closure.  It also makes accidental profile
+    threshold edits visible in review.
+    """
+    return ('rss_bytes', 'private_commit_bytes', 'objects', 'resources', 'held_handles')
+
+
+def _o9_role_processes(row):
+    """Select role/process identity from the watchdog trigger without guessing."""
+    _o9_role_need(type(row) is dict and type(row.get('owned_processes')) is list,
+                  'TRIGGER_PROCESS_SHAPE')
+    selected, seen = [], set()
+    for process in row['owned_processes']:
+        _o9_role_need(type(process) is dict and process.get('owned') is True,
+                      'TRIGGER_PROCESS_SHAPE')
+        role = process.get('role')
+        # A Job can contain campaign helper processes in addition to the two
+        # measured roles.  They are retained in the raw watchdog row but do
+        # not authorize a role threshold; only explicitly labelled host/editor
+        # rows are selected.  An unknown explicit label remains malformed.
+        if role is None:
+            continue
+        _o9_role_need(role in O9_ROLE_NAMES and role not in seen, 'TRIGGER_ROLE_BINDING')
+        pid, start, private = (process.get(name) for name in
+                               ('pid', 'process_start_100ns', 'private_bytes'))
+        _o9_role_int(pid, minimum=1)
+        _o9_role_int(start, minimum=1)
+        _o9_role_int(private, minimum=1)
+        selected.append({'role': role, 'pid': pid, 'process_start_100ns': start,
+                         'private_bytes': private})
+        seen.add(role)
+    _o9_role_need(seen == set(O9_ROLE_NAMES), 'TRIGGER_ROLE_BINDING')
+    return sorted(selected, key=lambda item: item['role'])
+
+
+def _o9_role_nearest_batch(batch_samples, trigger_batch_index):
+    _o9_role_int(trigger_batch_index, minimum=0)
+    _o9_role_need(type(batch_samples) is list and batch_samples, 'BATCH_MISSING')
+    candidates, seen = [], set()
+    for sample in batch_samples:
+        _o9_role_need(type(sample) is dict and type(sample.get('index')) is int,
+                      'BATCH_SHAPE')
+        index = sample['index']
+        _o9_role_need(0 <= index <= 34 and index not in seen, 'BATCH_SHAPE')
+        seen.add(index)
+        if index <= trigger_batch_index:
+            candidates.append(sample)
+    _o9_role_need(candidates, 'BATCH_MISSING')
+    current = max(candidates, key=lambda sample: sample['index'])
+    _o9_role_need(type(current.get('memory')) is dict, 'BATCH_SHAPE')
+    return current
+
+
+def _o9_role_body(*, binding, watchdog_sample_index, watchdog_row,
+                   baseline_memory, batch_samples):
+    binding = _o9_role_binding(binding)
+    _o9_role_int(watchdog_sample_index, minimum=0)
+    _o9_role_need(type(watchdog_row) is dict, 'TRIGGER_SHAPE')
+    trigger_batch_index = watchdog_row.get('batch_index')
+    _o9_role_int(trigger_batch_index, minimum=0)
+    trigger_processes = _o9_role_processes(watchdog_row)
+    baseline = _o9_role_memory(baseline_memory, '$.baseline')
+    current_sample = _o9_role_nearest_batch(batch_samples, trigger_batch_index)
+    current = _o9_role_memory(current_sample['memory'], '$.current')
+    current_by_role = {item['role']: item for item in trigger_processes}
+    roles = {}
+    for role in O9_ROLE_NAMES:
+        # Private commit must come from the trigger's owned process row.  Do not
+        # replace it with the older batch's aggregate or a zero sentinel.
+        roles[role] = {
+            'baseline': baseline[role],
+            'current': {
+                'private_commit_bytes': current_by_role[role]['private_bytes'],
+                'held_handles': current[role]['held_handles'],
+            },
+            'process': current_by_role[role],
+        }
+        if role == 'editor':
+            roles[role]['current']['objects'] = current[role]['objects']
+            roles[role]['baseline']['objects'] = baseline[role]['objects']
+    return {
+        'schema': O9_ROLE_EVIDENCE_SCHEMA,
+        'schema_version': O9_ROLE_EVIDENCE_VERSION,
+        **binding,
+        'watchdog_sample_index': watchdog_sample_index,
+        'watchdog_batch_index': trigger_batch_index,
+        'nearest_batch_index': current_sample['index'],
+        'baseline_batch_indices': list(O9_ROLE_BASELINE_BATCHES),
+        'trigger_owned_processes': trigger_processes,
+        'roles': roles,
+    }
+
+
+def bind_role_counter_evidence(*, binding, watchdog_sample_index, watchdog_row,
+                               baseline_memory, batch_samples):
+    """Create immutable O9.3 role evidence from one trigger and nearest batch.
+
+    The returned digest covers every selected role/process/value and all
+    campaign identities.  Callers must persist this object as bytes and later
+    pass the original source rows to :func:`verify_role_counter_evidence`.
+    """
+    body = _o9_role_body(binding=binding, watchdog_sample_index=watchdog_sample_index,
+                         watchdog_row=watchdog_row, baseline_memory=baseline_memory,
+                         batch_samples=batch_samples)
+    return {**body, 'evidence_sha256': _o9_role_digest(body)}
+
+
+def verify_role_counter_evidence(evidence, *, binding, watchdog_sample_index,
+                                 watchdog_row, baseline_memory, batch_samples):
+    """Rebuild and byte-bind O9.3 evidence; reject stale or caller-edited rows."""
+    _o9_role_need(type(evidence) is dict and type(evidence.get('evidence_sha256')) is str,
+                  'EVIDENCE_SHAPE')
+    _o9_role_hash(evidence['evidence_sha256'])
+    body = _o9_role_body(binding=binding, watchdog_sample_index=watchdog_sample_index,
+                         watchdog_row=watchdog_row, baseline_memory=baseline_memory,
+                         batch_samples=batch_samples)
+    _o9_role_need(evidence['evidence_sha256'] == _o9_role_digest(body), 'EVIDENCE_HASH')
+    _o9_role_need(evidence == {**body, 'evidence_sha256': evidence['evidence_sha256']},
+                  'EVIDENCE_BINDING')
+    return evidence
+
+
+def classify_role_counter_trigger(*, binding, watchdog_sample_index, watchdog_row,
+                                  baseline_memory, batch_samples, trigger_reason):
+    """Classify O9.3 trigger without fabricating missing role/current values."""
+    try:
+        evidence = bind_role_counter_evidence(
+            binding=binding, watchdog_sample_index=watchdog_sample_index,
+            watchdog_row=watchdog_row, baseline_memory=baseline_memory,
+            batch_samples=batch_samples)
+    except BenchmarkJobError as error:
+        return {'classification': 'INFRA_ABORT', 'reason': 'ROLE_COUNTER_EVIDENCE_GAP',
+                'formal_acceptance': False, 'evidence': None,
+                'evidence_error': getattr(error, 'code', type(error).__name__)}
+    failures = []
+    for role in O9_ROLE_NAMES:
+        row = evidence['roles'][role]
+        baseline, current = row['baseline'], row['current']
+        if current['private_commit_bytes'] * 100 > baseline['private_commit_bytes'] * 150:
+            failures.append({'role': role, 'counter': 'private_commit_bytes',
+                             'baseline': baseline['private_commit_bytes'],
+                             'current': current['private_commit_bytes']})
+        if current['held_handles'] > baseline['held_handles'] + 64:
+            failures.append({'role': role, 'counter': 'held_handles',
+                             'baseline': baseline['held_handles'],
+                             'current': current['held_handles']})
+        if role == 'editor' and current['objects'] > baseline['objects'] + 256:
+            failures.append({'role': role, 'counter': 'objects',
+                             'baseline': baseline['objects'], 'current': current['objects']})
+    return {'classification': 'PRODUCT_FAIL' if failures else 'INFRA_ABORT',
+            'reason': 'ROLE_COUNTER_LIMIT' if failures else trigger_reason,
+            'formal_acceptance': False, 'evidence': evidence, 'failures': failures}
 
 
 def pack_sample(row):
