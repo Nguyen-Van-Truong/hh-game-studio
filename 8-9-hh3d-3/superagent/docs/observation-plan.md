@@ -1,9 +1,9 @@
 # Superagent Classic — Y8 observation plan (SA-02)
 
 This plan records what a clean-room observer will measure in the current public
-Y8 page. It does not claim that any row is observed. Until a run is captured,
-every row in `reference-ledger.tsv` remains `UNVERIFIED` and Classic parity is
-blocked.
+Y8 page. It does not itself claim that any row is observed. At creation all
+ledger rows were UNVERIFIED; dated OBS records and the ledger hold subsequent
+partial observations. Classic parity remains blocked until its full gate.
 
 ## Rules and evidence
 
@@ -20,6 +20,15 @@ blocked.
   default tolerances in the plan unless the row records a justified exception.
   Random rates need at least 30 samples before `MATCHED`; fewer samples remain
   uncertain.
+- Count samples per claim: ten Random-map launches do not supply ten item-spawn
+  or critical-hit samples. Retain repeats and empty outcomes. Unknown RNG seed
+  and independence must be stated; a minimum count alone does not prove a rate.
+- For timing, predefine visible start/end events and record at least three
+  separate trials with individual values, range and uncertainty. Video frames
+  observe elapsed time; they do not expose the reference simulation's ticks.
+  Input-to-action/hold-release claims also need an observable input cue.
+- Isolate one binding/action, inspect its postcondition, then send the next.
+  A joint-input final state is smoke evidence until the assignments are isolated.
 - A row may become `OBSERVED` only with a dated observation and evidence source.
   It may become `IMPLEMENTED` only with product code and a test. `MATCHED`
   requires both sides and a measured tolerance. Use `NOT_IN_CURRENT` only when
