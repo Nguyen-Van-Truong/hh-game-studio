@@ -58,6 +58,18 @@ needed for the next repair. Raw evidence remains under `studio/.local/`.
   reclassify r02, reuse its raw, or dispatch formal22 from the old closure;
   first-35 metrics and the extension gap remain diagnostic only.
 
+## 2026-10-03 — f23 preflight observer stop
+
+- A coordinator invocation of `gt06-o9-chain-f23-r01` reached only the fresh
+  O4.1 CPU-minute stage on closure `727f9039…` and did not start residency,
+  Godot, Docker workload or formal23. The preflight samples were retained;
+  the attempt stopped on a bounded `WATCHDOG_DOCKER_INVENTORY` timeout while
+  reading the live Docker pipe. It has no host batch, formal pair or
+  acceptance result and is not resumable.
+- This is retained as a harness/observer stop. The next run must use the
+  demand-only Scheduler `quiet-chain` task (not a direct Python invocation),
+  a newly frozen closure after this test update, and a new O4.1/CPU-minute.
+
 ## 2026-10-03 — Scheduled quiet chain r01 closeout
 
 - `gt06-o9-chain-f22-r01` / host `gt06-o9-host-f22-r01`: INFRA_ABORT `EXTERNAL_CPU_PRESSURE`, 1 completed batch, max gap323.6126ms; formal22 never started.

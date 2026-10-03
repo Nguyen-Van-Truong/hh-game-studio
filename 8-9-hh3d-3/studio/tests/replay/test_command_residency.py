@@ -202,10 +202,14 @@ class ResidencyTests(unittest.TestCase):
                     residency._run_in_window('gt06-test', minimum_seconds=value)
         self.assertEqual(list(self.root.iterdir()), [])
 
-    def run_mock_owner(self, *, active_elapsed=1800, verify_error=None):
+    def run_mock_owner(self, *, active_elapsed=1800, verify_error=None,
+                       real_watchdog=False, observation_only=False, missing_events=False):
         root = self.root / '.local/reviews/gt06-test'
         root.parent.mkdir(parents=True)
-        capture = {'elapsed_seconds': 1805, 'actual_process_exit': {'exit_code': 0}}
+        minimum_seconds = 5 if real_watchdog else 1800
+        if real_watchdog:
+            active_elapsed = minimum_seconds
+        capture = {'elapsed_seconds': minimum_seconds + 5, 'actual_process_exit': {'exit_code': 0}}
         owner = SimpleNamespace(job=SimpleNamespace(_handle=123, snapshot=Mock(return_value={})),
                                 close=Mock())
 
@@ -217,33 +221,55 @@ class ResidencyTests(unittest.TestCase):
         owner.finish = Mock(side_effect=finish)
 
         def wait(*args, **kwargs):
+            if real_watchdog:
+                for _ in range(3):
+                    kwargs['watchdog'].poll(force=True)
+                if missing_events:
+                    kwargs['watchdog'].close()
+                    (root / 'environment-events.jsonl').unlink()
             residency.write(root / 'result.json', {'completed': True, 'run_id': 'gt06-test',
                 'source_closure_sha256': residency.closure({}), 'source_unchanged': True,
-                'formal_acceptance': False, 'minimum_seconds': 1800,
+                'formal_acceptance': False, 'minimum_seconds': minimum_seconds,
                 'active_elapsed_seconds': active_elapsed, 'completed_batches': 36})
 
         watchdog = SimpleNamespace(stream=SimpleNamespace(closed=False),
-            event_stream=SimpleNamespace(closed=False), poll=Mock())
+            observation_only=False, poll=Mock())
 
         def close_watchdog():
-            watchdog.stream.closed = watchdog.event_stream.closed = True
+            watchdog.stream.closed = True
 
         watchdog.close = Mock(side_effect=close_watchdog)
+        watchdog_class = residency.environment.Watchdog
+
+        def make_watchdog(*args, **kwargs):
+            nonlocal watchdog
+            watchdog = watchdog_class(*args, **kwargs, observation_only=observation_only)
+            return watchdog
+
         with ExitStack() as stack:
             stack.enter_context(patch.object(residency, 'STUDIO', self.root))
             stack.enter_context(patch.object(residency, 'source_files', return_value={}))
             stack.enter_context(patch.object(residency, 'environment_preflight', return_value={}))
             stack.enter_context(patch.object(residency, 'require_environment_preflight'))
             factory = stack.enter_context(patch.object(residency, 'BenchmarkProcess', return_value=owner))
-            stack.enter_context(patch.object(residency.environment, 'Watchdog', return_value=watchdog))
+            if real_watchdog:
+                from studio.tests.replay.test_benchmark_environment import sample
+                stack.enter_context(patch.object(residency, 'environment_snapshot',
+                    side_effect=[sample(0), sample(5), sample(10)]))
+                stack.enter_context(patch.object(residency.environment, 'running_containers', return_value=[]))
+                stack.enter_context(patch.object(residency.environment, 'Watchdog', side_effect=make_watchdog))
+            else:
+                stack.enter_context(patch.object(residency.environment, 'Watchdog', return_value=watchdog))
             stack.enter_context(patch.object(residency.environment, 'failure_classification', return_value='HARNESS_FAIL'))
-            verifier = stack.enter_context(patch.object(residency.environment, 'verify_watchdog', side_effect=verify_error))
+            verifier = stack.enter_context(patch.object(residency.environment, 'verify_watchdog',
+                side_effect=verify_error,
+                **({'wraps': residency.environment.verify_watchdog} if real_watchdog else {})))
             waiter = stack.enter_context(patch.object(residency, 'wait_owned_run', side_effect=wait))
             stack.enter_context(patch('builtins.print'))
-            code = residency._run_in_window('gt06-test', minimum_seconds=1800)
+            code = residency._run_in_window('gt06-test', minimum_seconds=minimum_seconds)
         return code, root, factory, waiter, verifier, watchdog
 
-    def test_owner_forwards_floor_verifies_both_streams_and_binds_combined_soak(self):
+    def test_owner_forwards_floor_verifies_default_stream_and_binds_combined_soak(self):
         code, root, factory, waiter, verifier, watchdog = self.run_mock_owner()
         self.assertEqual(code, 0)
         self.assertEqual(factory.call_args.args[0][-2:], ['--minimum-seconds', '1800'])
@@ -264,6 +290,32 @@ class ResidencyTests(unittest.TestCase):
                          residency.hashlib.sha256((root / 'owner/capture.json').read_bytes()).hexdigest())
         self.assertEqual(value['result_sha256'],
                          residency.hashlib.sha256((root / 'result.json').read_bytes()).hexdigest())
+
+    def test_owner_replays_real_watchdog_in_both_modes(self):
+        # Synthetic OS samples and child receipt keep this short; Watchdog,
+        # durable streams and both replay verifiers execute real code.
+        for observer in (False, True):
+            with self.subTest(observation_only=observer), \
+                 patch.object(self, 'root', self.root / str(observer)):
+                code, root, _, _, verifier, watchdog = self.run_mock_owner(
+                    real_watchdog=True, observation_only=observer)
+                self.assertEqual(code, 0)
+                self.assertEqual(verifier.call_count, 2 if observer else 1)
+                self.assertEqual((root / 'environment-events.jsonl').exists(), observer)
+                self.assertEqual(hasattr(watchdog, 'event_stream'), observer)
+                self.assertTrue(watchdog.stream.closed)
+                value = json.loads((root / 'soak-result.json').read_bytes())
+                self.assertEqual(value['watchdog_observation_only'], observer)
+                self.assertFalse(value['formal_acceptance'])
+
+    def test_owner_missing_real_observer_stream_cannot_publish_receipt(self):
+        code, root, _, _, _, watchdog = self.run_mock_owner(
+            real_watchdog=True, observation_only=True, missing_events=True)
+        self.assertEqual(code, 1)
+        self.assertTrue(watchdog.stream.closed)
+        self.assertFalse((root / 'soak-result.json').exists())
+        failure = json.loads((root / 'owner-failure.json').read_bytes())
+        self.assertEqual(failure['code'], 'CAMPAIGN_WATCHDOG_EVENTS_MISSING')
 
     def test_owner_cannot_credit_long_process_lifetime_for_short_active_mix(self):
         code, root, _, _, _, _ = self.run_mock_owner(active_elapsed=1799)
