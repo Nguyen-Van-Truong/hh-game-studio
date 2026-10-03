@@ -26,6 +26,17 @@ No Blender export/import/readback, native presentation run, or gameplay claim
 is added by these static changes. The retained native editor timeout remains
 unknown and no retry is made without a reviewed reproducer.
 
+## 2026-10-03 — Saved-room asset identity binding
+
+- The detached saved-room admission now requires the exact existing handoff
+  tuple `avatar_blender` / `assets/avatar.glb` /
+  `assets/manifest.json`; shape-valid alternate paths or IDs fail closed with
+  `ROOM_ASSET_IDENTITY` instead of drifting from the asset contract.
+- Added negative coverage for altered asset ID, GLB path and manifest path.
+  The focused authoring set remains **59** tests with actual exit0. This is a
+  static authority-zero repair; Blender export/import/readback and native
+  Godot proof remain pending.
+
 ## 2026-10-03 — Environment check for the next native O2 run
 
 - After Docker/WSL were stopped, the host preflight observed no running
