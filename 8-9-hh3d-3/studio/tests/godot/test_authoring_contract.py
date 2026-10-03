@@ -58,7 +58,8 @@ class AuthoringContractTests(unittest.TestCase):
         return dict(stable_id='new.node', node_type=node_type, name='NewNode', properties=properties)
 
     def sample(self, spec):
-        return {'bool': False, 'int': 0, 'float': 1.0, 'string': 'Original fixture',
+        return {'bool': False, 'int': max(0, int(spec.minimum or 0)),
+                'float': max(1.0, float(spec.minimum or 0)), 'string': 'Original fixture',
                 'vector2': [1.25, 2], 'vector3': [1, 2.5, 3], 'enum': 0,
                 'resource': {'resource_id': (spec.resource_base or 'unused').lower()}}[spec.type]
 
@@ -74,10 +75,48 @@ class AuthoringContractTests(unittest.TestCase):
                 self.assertFalse(result.preview['classdb_verified'])
                 self.assertEqual(result.preview['native_tests_pending'], ['classdb_extraction', 'reject', 'readback', 'undo'])
                 seen.add(name)
-        self.assertEqual(len(seen), 21)
+        self.assertEqual(len(seen), 25)
         self.assertIn('MeshInstance3D', seen)
+        self.assertIn('GPUParticles2D', seen)
+        self.assertIn('CPUParticles2D', seen)
+        self.assertIn('AudioStreamPlayer2D', seen)
+        self.assertIn('ProgressBar', seen)
         self.assertIn('position', self.catalog.classes['Button'].properties)
         self.assertIn('rotation', self.catalog.classes['CharacterBody2D'].properties)
+
+    def test_particle_presentation_properties_are_typed_and_bounded(self):
+        gpu = self.payload('GPUParticles2D', {
+            'amount': 128, 'lifetime': 1.5, 'one_shot': True, 'emitting': False,
+            'texture': {'resource_id': 'texture2d'},
+            'process_material': {'resource_id': 'particleprocessmaterial'},
+            'material': {'resource_id': 'shadermaterial'},
+        })
+        result = self.validate(self.request(payload=gpu))
+        self.assertEqual(result.projection['payload']['node_type'], 'GPUParticles2D')
+        cpu = self.payload('CPUParticles2D', {
+            'amount': 64, 'lifetime': 0.25, 'one_shot': False, 'emitting': True,
+            'texture': {'resource_id': 'texture2d'},
+            'material': {'resource_id': 'shadermaterial'},
+        })
+        self.validate(self.request(payload=cpu))
+        self.validate(self.request(payload=self.payload('AudioStreamPlayer2D', {
+            'stream': {'resource_id': 'audiostream'}, 'autoplay': True,
+            'volume_db': -6.0, 'bus': 'SFX'})))
+        self.validate(self.request(payload=self.payload('ProgressBar', {
+            'min_value': 0.0, 'max_value': 100.0, 'value': 25.0,
+            'show_percentage': True})))
+        for node_type, field, value in (
+                ('GPUParticles2D', 'amount', 0),
+                ('GPUParticles2D', 'lifetime', 0.0),
+                ('CPUParticles2D', 'amount', 10001),
+                ('AudioStreamPlayer2D', 'volume_db', -81.0),
+                ('ProgressBar', 'value', 100001.0)):
+            with self.subTest(node_type=node_type, field=field):
+                self.reject(self.request(payload=self.payload(node_type, {field: value})),
+                            'AUTHORING_PROPERTY_TYPE')
+        self.reject(self.request(payload=self.payload('GPUParticles2D', {
+            'process_material': {'resource_id': 'shadermaterial'}})),
+                    'AUTHORING_RESOURCE_REFERENCE')
 
     def test_every_class_rejects_unknown_property_or_non_node_creation(self):
         for name, spec in self.catalog.classes.items():

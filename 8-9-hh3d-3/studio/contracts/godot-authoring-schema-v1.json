@@ -315,7 +315,9 @@
       "Mesh",
       "Shape2D",
       "Shape3D",
-      "AudioStream"
+      "AudioStream",
+      "ParticleProcessMaterial",
+      "ShaderMaterial"
     ],
     "classes": [
       {
@@ -686,6 +688,91 @@
         }
       },
       {
+        "class_name": "GPUParticles2D",
+        "property_base": "Node2D",
+        "native_base": "Node2D",
+        "domain": "2d",
+        "kind": "node",
+        "instantiable": true,
+        "properties": {
+          "amount": {
+            "type": "int",
+            "writable": true,
+            "minimum": 1,
+            "maximum": 10000
+          },
+          "lifetime": {
+            "type": "float",
+            "writable": true,
+            "minimum": 0.001,
+            "maximum": 60
+          },
+          "one_shot": {
+            "type": "bool",
+            "writable": true
+          },
+          "emitting": {
+            "type": "bool",
+            "writable": true
+          },
+          "texture": {
+            "type": "resource",
+            "writable": true,
+            "resource_base": "Texture2D"
+          },
+          "process_material": {
+            "type": "resource",
+            "writable": true,
+            "resource_base": "ParticleProcessMaterial"
+          },
+          "material": {
+            "type": "resource",
+            "writable": true,
+            "resource_base": "ShaderMaterial"
+          }
+        }
+      },
+      {
+        "class_name": "CPUParticles2D",
+        "property_base": "Node2D",
+        "native_base": "Node2D",
+        "domain": "2d",
+        "kind": "node",
+        "instantiable": true,
+        "properties": {
+          "amount": {
+            "type": "int",
+            "writable": true,
+            "minimum": 1,
+            "maximum": 10000
+          },
+          "lifetime": {
+            "type": "float",
+            "writable": true,
+            "minimum": 0.001,
+            "maximum": 60
+          },
+          "one_shot": {
+            "type": "bool",
+            "writable": true
+          },
+          "emitting": {
+            "type": "bool",
+            "writable": true
+          },
+          "texture": {
+            "type": "resource",
+            "writable": true,
+            "resource_base": "Texture2D"
+          },
+          "material": {
+            "type": "resource",
+            "writable": true,
+            "resource_base": "ShaderMaterial"
+          }
+        }
+      },
+      {
         "class_name": "CanvasLayer",
         "property_base": null,
         "native_base": "Node",
@@ -744,6 +831,38 @@
         }
       },
       {
+        "class_name": "ProgressBar",
+        "property_base": "Control",
+        "native_base": "Range",
+        "domain": "ui",
+        "kind": "node",
+        "instantiable": true,
+        "properties": {
+          "min_value": {
+            "type": "float",
+            "writable": true,
+            "minimum": 0,
+            "maximum": 100000
+          },
+          "max_value": {
+            "type": "float",
+            "writable": true,
+            "minimum": 0,
+            "maximum": 100000
+          },
+          "value": {
+            "type": "float",
+            "writable": true,
+            "minimum": 0,
+            "maximum": 100000
+          },
+          "show_percentage": {
+            "type": "bool",
+            "writable": true
+          }
+        }
+      },
+      {
         "class_name": "Button",
         "property_base": "Control",
         "native_base": "BaseButton",
@@ -769,6 +888,35 @@
         "class_name": "AudioStreamPlayer",
         "property_base": null,
         "native_base": "Node",
+        "domain": "audio",
+        "kind": "node",
+        "instantiable": true,
+        "properties": {
+          "stream": {
+            "type": "resource",
+            "writable": true,
+            "resource_base": "AudioStream"
+          },
+          "autoplay": {
+            "type": "bool",
+            "writable": true
+          },
+          "volume_db": {
+            "type": "float",
+            "writable": true,
+            "minimum": -80,
+            "maximum": 24
+          },
+          "bus": {
+            "type": "string",
+            "writable": true
+          }
+        }
+      },
+      {
+        "class_name": "AudioStreamPlayer2D",
+        "property_base": "Node2D",
+        "native_base": "Node2D",
         "domain": "audio",
         "kind": "node",
         "instantiable": true,
