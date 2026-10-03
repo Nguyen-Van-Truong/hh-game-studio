@@ -854,9 +854,17 @@ def unpack_sample(row):
 
 
 class Watchdog:
-    def __init__(self, output, sample, binding, write, *, docker_probe=None):
+    def __init__(self, output, sample, binding, write, *, docker_probe=None,
+                 role_annotator=None, role_classifier=None):
         self.output, self.sample, self.binding, self.write = output, sample, binding, write
         self.docker_probe = docker_probe
+        # O9.3 callbacks are intentionally optional so diagnostic/legacy
+        # observers retain their frozen behavior.  A formal campaign supplies
+        # both callbacks: the annotator binds raw process rows by PID and
+        # creation time; the classifier binds the trigger to role counters and
+        # the nearest completed batch without inventing missing values.
+        self.role_annotator = role_annotator
+        self.role_classifier = role_classifier
         self.docker_last = None
         self.docker_names = []
         self.policy, self.last, self.count = Policy(), None, 0
@@ -939,6 +947,12 @@ class Watchdog:
             row = self.sample()
         except BaseException as error:
             self._observer_failure(error)
+        if self.role_annotator is not None:
+            try:
+                row = self.role_annotator(row)
+                require(type(row) is dict, 'WATCHDOG_ROLE_ANNOTATION_SHAPE')
+            except BaseException as error:
+                self._observer_failure(error, row if isinstance(row, dict) else None)
         if self.docker_probe is not None:
             try:
                 row = self._poll_docker(row)
@@ -958,6 +972,22 @@ class Watchdog:
             self._observer_failure(error, None if persisted else row)
         self.last = now
         if decision:
+            if self.role_classifier is not None:
+                try:
+                    role_result = self.role_classifier(self.count - 1, row, decision)
+                    require(type(role_result) is dict
+                            and role_result.get('classification') in ('INFRA_ABORT', 'PRODUCT_FAIL')
+                            and role_result.get('formal_acceptance') is False,
+                            'WATCHDOG_ROLE_CLASSIFICATION_SHAPE')
+                    decision = dict(decision)
+                    # Preserve the original O4 trigger reason while binding
+                    # the objective O9.3 attribution beside it.
+                    decision['role_counter'] = role_result
+                    decision['role_counter_classification'] = role_result['classification']
+                    decision['role_counter_reason'] = role_result.get('reason')
+                    decision['classification'] = role_result['classification']
+                except BaseException as error:
+                    self._observer_failure(error, row)
             event = {'schema': 'HH-GT06-WATCHDOG-STOP-1', **self.binding, **decision,
                      'sample_index': self.count - 1}
             try:

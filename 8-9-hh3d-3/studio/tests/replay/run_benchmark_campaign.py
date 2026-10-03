@@ -668,6 +668,149 @@ def environment_snapshot(*, job_handle=None,
         docker_inventory=docker_inventory)
 
 
+O9_ROLE_PROCESS_SCHEMA = 'HH-GT06-O9.3-ROLE-PROCESS-BINDING-1'
+O9_ROLE_PROCESS_VERSION = '1.0.0'
+
+
+def _o9_role_binding(context):
+    """Return the fixed O9.3 binding carried by every current attempt."""
+    return {key: context[key] for key in ('run_id', 'source_closure_sha256', 'campaign_sha256')}
+
+
+def _o9_role_process_start(value):
+    if type(value) is not str or re.fullmatch(r'windows:[1-9][0-9]{0,19}', value) is None:
+        return None
+    return int(value.split(':', 1)[1])
+
+
+def _o9_read_role_process_binding(output, context):
+    path = output / 'role-process-binding.json'
+    if not path.is_file():
+        return None
+    value = json.loads(read_regular(path))
+    require(value.get('schema_id') == O9_ROLE_PROCESS_SCHEMA
+            and value.get('schema_version') == O9_ROLE_PROCESS_VERSION,
+            'O9_3_ROLE_PROCESS_SCHEMA')
+    binding = _o9_role_binding(context)
+    require(all(value.get(key) == expected for key, expected in binding.items()),
+            'O9_3_ROLE_PROCESS_BINDING')
+    roles = value.get('roles')
+    require(type(roles) is dict and set(roles) == {'host', 'editor'},
+            'O9_3_ROLE_PROCESS_ROLES')
+    normalized = {}
+    identities = set()
+    for role in ('host', 'editor'):
+        identity = roles[role]
+        require(type(identity) is dict and set(identity) == {'pid', 'process_start'},
+                'O9_3_ROLE_PROCESS_IDENTITY')
+        start = _o9_role_process_start(identity['process_start'])
+        require(type(identity['pid']) is int and identity['pid'] > 0 and start is not None,
+                'O9_3_ROLE_PROCESS_IDENTITY')
+        key = (identity['pid'], start)
+        require(key not in identities, 'O9_3_ROLE_PROCESS_DUPLICATE')
+        identities.add(key)
+        normalized[role] = {'pid': identity['pid'], 'process_start_100ns': start}
+    return {'binding': binding, 'roles': normalized}
+
+
+def _o9_annotate_role_processes(output, context, row):
+    """Label watchdog-owned processes only after exact PID/start binding."""
+    binding = _o9_read_role_process_binding(output, context)
+    if binding is None:
+        return row
+    result = dict(row)
+    owned = row.get('owned_processes')
+    require(type(owned) is list, 'O9_3_ROLE_PROCESS_SAMPLE')
+    rows = []
+    for process in owned:
+        require(type(process) is dict, 'O9_3_ROLE_PROCESS_SAMPLE')
+        current = dict(process)
+        key = (process.get('pid'), process.get('process_start_100ns'))
+        for role, expected in binding['roles'].items():
+            if key == (expected['pid'], expected['process_start_100ns']):
+                current['role'] = role
+                break
+        rows.append(current)
+    result['owned_processes'] = rows
+    return result
+
+
+def _o9_role_context(output, context, row):
+    """Load only complete child previews; missing data stays an O9.3 gap."""
+    process_binding = _o9_read_role_process_binding(output, context)
+    binding = _o9_role_binding(context)
+    samples = []
+    for path in sorted(output.glob('sample-preview-*.json')):
+        try:
+            value = json.loads(read_regular(path))
+            index = value.get('index')
+            if type(index) is int and 0 <= index <= 34 and type(value.get('memory')) is dict:
+                samples.append({'index': index, 'memory': value['memory']})
+        except (OSError, ValueError, TypeError):
+            continue
+    samples = {value['index']: value for value in samples}
+    batch_samples = [samples[index] for index in sorted(samples)]
+    baseline = None
+    if all(index in samples for index in environment.O9_ROLE_BASELINE_BATCHES):
+        baseline = profile.baseline_memory_rows(
+            [samples[index]['memory'] for index in environment.O9_ROLE_BASELINE_BATCHES],
+            '$.o9_role_baseline')
+    if batch_samples:
+        row = dict(row)
+        row['batch_index'] = batch_samples[-1]['index']
+    return binding, process_binding, baseline, batch_samples, row
+
+
+def _o9_role_annotator(output, context):
+    return lambda row: _o9_annotate_role_processes(output, context, row)
+
+
+def _o9_role_classifier(output, context):
+    def classify(sample_index, row, decision):
+        binding, _process_binding, baseline, batch_samples, trigger = _o9_role_context(output, context, row)
+        return environment.classify_role_counter_trigger(
+            binding=binding, watchdog_sample_index=sample_index,
+            watchdog_row=trigger, baseline_memory=baseline,
+            batch_samples=batch_samples, trigger_reason=decision['reason'])
+    return classify
+
+
+def _o9_verify_role_stop(output, context):
+    """Rebuild O9.3 attribution from the durable stop row before closeout."""
+    stop_path = output / 'watchdog-stop.json'
+    if not stop_path.is_file():
+        return None
+    stop = json.loads(read_regular(stop_path))
+    role_result = stop.get('role_counter')
+    require(type(role_result) is dict, 'O9_3_ROLE_STOP_MISSING')
+    require(role_result.get('formal_acceptance') is False
+            and role_result.get('classification') in ('INFRA_ABORT', 'PRODUCT_FAIL'),
+            'O9_3_ROLE_STOP_SHAPE')
+    if role_result.get('evidence') is None:
+        require(role_result.get('classification') == 'INFRA_ABORT'
+                and role_result.get('reason') == 'ROLE_COUNTER_EVIDENCE_GAP',
+                'O9_3_ROLE_STOP_GAP')
+        return role_result
+    lines = read_regular(output / 'environment-samples.jsonl', 64 * 1024**2).splitlines()
+    sample_index = stop.get('sample_index')
+    require(type(sample_index) is int and sample_index >= 0 and sample_index < len(lines) - 1,
+            'O9_3_ROLE_STOP_INDEX')
+    row = environment.unpack_sample(json.loads(lines[sample_index + 1]))
+    binding, _process_binding, baseline, batch_samples, trigger = _o9_role_context(output, context, row)
+    expected = environment.classify_role_counter_trigger(
+        binding=binding, watchdog_sample_index=sample_index,
+        watchdog_row=trigger, baseline_memory=baseline,
+        batch_samples=batch_samples, trigger_reason=stop['reason'])
+    environment.verify_role_counter_evidence(
+        role_result['evidence'], binding=binding, watchdog_sample_index=sample_index,
+        watchdog_row=trigger, baseline_memory=baseline, batch_samples=batch_samples)
+    require(expected['classification'] == role_result['classification']
+            and expected['reason'] == role_result.get('reason')
+            and expected.get('failures', []) == role_result.get('failures', []),
+            'O9_3_ROLE_STOP_RECLASSIFIED')
+    return role_result
+
+
 def environment_preflight():
     """O4.1 resource/engine gate; app names are inventory only."""
     try:
@@ -1048,7 +1191,9 @@ def _run_campaign(campaign_id, root, preflight_path, after_path):
                 watchdog = environment.Watchdog(output,
                     lambda: environment_snapshot(job_handle=owner.job._handle, docker_inventory=[]),
                     {'run_id': run_id, 'source_closure_sha256': digest, 'campaign_sha256': campaign_sha}, write,
-                    docker_probe=environment.running_containers)
+                    docker_probe=environment.running_containers,
+                    role_annotator=_o9_role_annotator(output, context),
+                    role_classifier=_o9_role_classifier(output, context))
                 wait_owned_run(owner, output, run_id=run_id,
                     source_closure_sha256=digest, campaign_sha256=campaign_sha,
                     check_campaign_stop=lambda: require_campaign_running(root, active=output), watchdog=watchdog)
@@ -1114,10 +1259,25 @@ def _run_campaign(campaign_id, root, preflight_path, after_path):
                     except BaseException as cleanup:
                         cleanup_error = cleanup
                 classification = environment.failure_classification(error, output)
+                role_counter_verification = None
+                if (output / 'watchdog-stop.json').is_file():
+                    try:
+                        role_counter_verification = _o9_verify_role_stop(output, context)
+                    except BaseException as verification_error:
+                        # A stop latch with unverifiable role evidence is a
+                        # harness failure. It cannot be retried as an infra
+                        # sample and cannot silently inherit the original
+                        # watchdog classification.
+                        classification = 'HARNESS_FAIL'
+                        role_counter_verification = {
+                            'status': 'FAIL',
+                            'code': getattr(verification_error, 'code', type(verification_error).__name__),
+                        }
                 try:
                     write(output / 'parent-failure.json', {'completed': False, 'run_id': run_id,
                         'code': getattr(error, 'code', type(error).__name__), 'formal_acceptance': False,
                         'classification': classification,
+                        'role_counter_verification': role_counter_verification,
                         'watchdog_persistence_errors': getattr(error, 'watchdog_persistence_errors', []),
                         'attempt_local_date': time.strftime('%Y-%m-%d'),
                         'owner_closed': owner.closed if owner else False,
@@ -1533,6 +1693,11 @@ def run_child(root):
         probe = open_probe(owner, executable)
         producer = CampaignProducer(root / 'commands', run_id, log)
         processes = {'host': dict(producer.identity), 'editor': {'pid': probe.pid, 'process_start': probe.process_start}}
+        write(root / 'role-process-binding.json', {
+            'schema_id': O9_ROLE_PROCESS_SCHEMA, 'schema_version': O9_ROLE_PROCESS_VERSION,
+            'run_id': run_id, 'source_closure_sha256': closure(before),
+            'campaign_sha256': context['campaign_sha256'],
+            'roles': processes})
         for index in range(35):
             progress.update(batch=index, phase='ready')
             ready_marker = log.wait('READY', index, 20)
