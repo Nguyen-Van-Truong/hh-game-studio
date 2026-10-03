@@ -411,7 +411,8 @@ def source_paths() -> tuple[str, ...]:
     """Files whose code defines this plan; no generated/native output is listed."""
     return ("tests/godot/arena_fixture_plan.py", "godot-addon/tilemap_authoring.py",
             "godot-addon/gameplay_edges.py", "godot-addon/gameplay_behavior.py",
-            "protocol/core.py")
+            "protocol/__init__.py", "protocol/core.py",
+            "protocol/_rfc8785/__init__.py", "protocol/_rfc8785/_impl.py")
 
 
 if __name__ == "__main__":

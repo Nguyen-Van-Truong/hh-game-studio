@@ -26,6 +26,18 @@ No Blender export/import/readback, native presentation run, or gameplay claim
 is added by these static changes. The retained native editor timeout remains
 unknown and no retry is made without a reviewed reproducer.
 
+## 2026-10-03 — Arena source-closure protocol binding
+
+- Commit `e9be9623` makes the arena fixture closure include the shared protocol
+  package and RFC8785 implementation files (`protocol/__init__.py`,
+  `protocol/core.py`, `protocol/_rfc8785/__init__.py`, and
+  `protocol/_rfc8785/_impl.py`). Duplicate, traversal and missing-file checks
+  now fail closed before a native handoff.
+- The focused closure/path set passed 9 pure tests; the broader O2 pure set
+  passed 95 tests with the worktree runtime configured. No native Godot,
+  Blender, Docker or gameplay claim was made; AUTHORITY remains 0 and the
+  branch stays unmerged until GT-06 is accepted.
+
 ## 2026-10-03 — Saved-room asset identity binding
 
 - The detached saved-room admission now requires the exact existing handoff

@@ -52,6 +52,18 @@ class ArenaFixturePlanTests(unittest.TestCase):
     def test_rebuild_is_reproducible(self):
         self.assertEqual(plan.build_plan(), plan.build_plan())
 
+    def test_source_manifest_covers_shared_protocol_dependencies(self):
+        paths = plan.source_paths()
+        self.assertEqual(len(paths), len(set(paths)))
+        self.assertTrue({
+            "protocol/__init__.py", "protocol/core.py",
+            "protocol/_rfc8785/__init__.py", "protocol/_rfc8785/_impl.py",
+        }.issubset(paths))
+        for name in paths:
+            path = (plan.STUDIO / name).resolve(strict=True)
+            self.assertTrue(path.is_relative_to(plan.STUDIO))
+            self.assertTrue(path.is_file())
+
     def test_offline_verifier_accepts_only_the_frozen_plan(self):
         value = plan.build_plan()
         self.assertEqual(plan.validate_plan(value), value)
