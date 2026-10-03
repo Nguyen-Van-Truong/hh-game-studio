@@ -112,6 +112,13 @@ the launch observer requires its exact 64-file campaign domain, while the first
 adapter supplied functional217. Attempt 02 separates these checks: the unchanged
 launch observer verifies64 and the frozen functional envelope verifies217.
 Attempt01 raw remains unchanged; no functional engine run or formal retry was consumed.
+Attempt02 also ended before engines, at 19:30:14 Asia/Saigon: resource
+preflight recorded 3,826,409,472 available bytes (3.56 GiB), 71.9545% commit,
+and no foreign engines. No lane started; the measurement guard released cleanly.
+Keep this terminal record. Next admission requires changed resource conditions;
+do not rerun the terminal wrapper or any old native ID. A subsequent adapter
+should separate append-only admission attempts from the once-only engine launch,
+so deferred resource checks do not require recreating a valid source freeze.
 For F06, source audit narrowed the remaining native supplement to authenticated
 managed repair and replay against the original S65 fault anchor. No new fault
 run is needed; the Linux-validator guard and redactor changes need integration
