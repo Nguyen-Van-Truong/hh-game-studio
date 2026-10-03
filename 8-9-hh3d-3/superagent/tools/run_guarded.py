@@ -204,7 +204,6 @@ class _ProcessContainer:
             ("CreateJobObjectW", [wintypes.LPVOID, wintypes.LPCWSTR], wintypes.HANDLE),
             ("SetInformationJobObject", [wintypes.HANDLE, wintypes.INT, wintypes.LPVOID, wintypes.DWORD], wintypes.BOOL),
             ("AssignProcessToJobObject", [wintypes.HANDLE, wintypes.HANDLE], wintypes.BOOL),
-            ("ResumeThread", [wintypes.HANDLE], wintypes.DWORD),
             ("CloseHandle", [wintypes.HANDLE], wintypes.BOOL),
         ):
             proc = getattr(kernel32, function); proc.argtypes = args; proc.restype = result
@@ -226,17 +225,16 @@ class _ProcessContainer:
 
     def popen_kwargs(self) -> dict:
         if self._windows:
-            return {"creationflags": _WIN_CREATE_NEW_PROCESS_GROUP | _WIN_CREATE_SUSPENDED, "startupinfo": _startupinfo()}
+            # Popen closes its primary-thread handle, so CREATE_SUSPENDED cannot be resumed safely
+            # through its public/private API. Attach immediately after creation; the Job Object
+            # still owns the process tree and is closed on timeout/guard failure.
+            return {"creationflags": _WIN_CREATE_NEW_PROCESS_GROUP, "startupinfo": _startupinfo()}
         return {"start_new_session": True}
 
     def attach_and_resume(self, proc: subprocess.Popen) -> None:
         if self._windows:
             if not self._kernel32.AssignProcessToJobObject(self.handle, proc._handle):
                 raise OSError(ctypes.get_last_error(), "AssignProcessToJobObject failed")
-            # ResumeThread returns the previous suspend count (normally 1),
-            # and uses DWORD(-1) only for failure.
-            if self._kernel32.ResumeThread(proc._thread) == 0xFFFFFFFF:
-                raise OSError(ctypes.get_last_error(), "ResumeThread failed")
 
     def terminate(self, proc: subprocess.Popen) -> None:
         if self._windows:
