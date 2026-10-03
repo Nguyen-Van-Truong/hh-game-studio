@@ -411,9 +411,12 @@ giờ là máy yên trong khung đo và tail status gap (formal14, formal21). M�
       freeze (sau mọi sửa O9 cho lần formal tới; soak trước đó chỉ là smoke, raw giữ nguyên). Soak
       chỉ FAIL vì lỗi quan sát (mẫu bắt buộc thiếu quá 30 giây, query lỗi, sai shape); trigger môi
       trường (CPU, RAM, commit, sleep) ghi thành sự kiện rồi chạy tiếp.
-   Trạng thái 03-10 07:00: a), c) xong (bb35bdc3, 8f54a79f, d0374cbf, 25f1f11a); b) xong poll trong
-   run và fence lock (7495eea6, 3e03e482; O2 4be9af68), còn thiếu luật pipe vắng; d) soak -08 PASS
-   nhưng chỉ là smoke vì closure 22db7610 còn đổi. Chi tiết ở log lane.
+   Trạng thái 03-10: a), c) xong; b) xong poll trong run và fence lock, còn thiếu luật pipe vắng;
+   d) soak -08 PASS nhưng chỉ là smoke vì closure 22db7610 còn đổi. O9.2 lifecycle, O9.3 role
+   binding và O9.4a bounded host/journal/status/wake telemetry đã được harden bằng focused suite
+   155 tests exit0; watchdog-only runner hiện ghi policy events và replay exact ở observation-only
+   mode. Các sửa này cần một closure mới; chưa thay thế O9.4C quiet host soak hoặc final soak.
+   Chi tiết ở log lane.
 2. Pair hoãn được:
    a) Bắt buộc trước formal mới: pair chỉ bắt đầu khi preflight của chính nó đạt; chưa đạt thì chờ,
       kiểm lại mỗi 5 phút tới hết khung. Pair INFRA_ABORT theo O9.3 được chạy lại fresh một lần trong
@@ -483,7 +486,7 @@ giờ là máy yên trong khung đo và tail status gap (formal14, formal21). M�
    e) Khi formal đang chạy hoặc chờ critic chỉ làm việc static nhẹ (không test suite, subagent hay
       lệnh nặng khi đang đo) hoặc O2 không chạm closure; khi không có run thì làm O9.1–O9.4 hoặc O2;
       không ngồi chờ khung.
-O9_NEXT=O9_2_DONE_46f692e6; O9_3_ROLE_BINDING_DONE_ea84f337; O9_4B_IO_PROBE_02_DIAGNOSTIC; O9_4C_HOST_SOAK_01_INFRA_CPU; O9_4D_SOURCE_NOT_VENDORED; FRESH_QUIET_HOST_SOAK; FINAL_WATCHDOG_SOAK_ON_FREEZE_CLOSURE; OWNER_QUITS_DOCKER_BEFORE_WINDOW_RECOMMENDED; DRY_RUN_THEN_ARM_FORMAL22; TWO_PAIRS_PASS_THEN_CRITIC_PACKAGE_O4_3_NO_CLOSURE_CHANGE; O2_STATIC_WHILE_LOCKED; GT07_OPENS_AFTER_GT06_ACCEPTED
+O9_NEXT=O9_2_LIFECYCLE_HARDENED; O9_3_ROLE_BINDING_HARDENED; O9_4A_BOUNDED_HOST_JOURNAL_WAKE_TELEMETRY; O9_4B_IO_PROBE_02_DIAGNOSTIC; O9_4C_HOST_SOAK_01_INFRA_CPU; O9_4D_SOURCE_NOT_VENDORED; FRESH_QUIET_HOST_SOAK; FINAL_WATCHDOG_SOAK_ON_FREEZE_CLOSURE; OWNER_QUITS_DOCKER_BEFORE_WINDOW_RECOMMENDED; DRY_RUN_THEN_ARM_FORMAL22; TWO_PAIRS_PASS_THEN_CRITIC_PACKAGE_O4_3_NO_CLOSURE_CHANGE; O2_STATIC_WHILE_LOCKED; GT07_OPENS_AFTER_GT06_ACCEPTED
 
 ACCEPTED_EVIDENCE_INDEX (historical accepted closures; unchanged)
 GT01_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260913

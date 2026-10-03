@@ -42,6 +42,16 @@ class JournalTimingTests(unittest.TestCase):
         value['first_ms']['lookup'].clear()
         self.assertEqual(len(book.snapshot()['first_ms']['lookup']), 3)
 
+    def test_snapshot_validator_binds_pid_and_rejects_tampering(self):
+        book = phases.JournalTimingBook(window=3)
+        for name, value in (('lookup', 1), ('append', 2), ('fsync', 3), ('compact', 4)):
+            book.operation(name, value * 1_000_000)
+        snapshot = book.snapshot()
+        phases.validate_journal_timing_snapshot(snapshot, os.getpid())
+        snapshot['pid'] += 1
+        with self.assertRaisesRegex(ValueError, 'INVALID_JOURNAL_TIMING_SNAPSHOT'):
+            phases.validate_journal_timing_snapshot(snapshot, os.getpid())
+
 
 class FakeSocket:
     def __init__(self, client=False):

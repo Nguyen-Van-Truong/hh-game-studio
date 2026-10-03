@@ -1,8 +1,11 @@
 """Focused O9.3 role baseline/current evidence regressions."""
 from copy import deepcopy
+import json
 from pathlib import Path
 import sys
+import tempfile
 import unittest
+from unittest.mock import Mock
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[3]))
 from studio.tests.replay import benchmark_environment as env
@@ -40,6 +43,24 @@ def trigger(*, host_private=110, editor_private=210, batch_index=8):
             {'role': 'editor', 'owned': True, 'pid': 202, 'process_start_100ns': 2002,
              'private_bytes': editor_private},
         ],
+    }
+
+
+def watchdog_sample(second=0, **changes):
+    return {
+        'observed_utc': '2026-10-03T00:00:00Z',
+        'available_memory_bytes': 4 * env.GIB,
+        'commit_total_bytes': 80 * env.GIB,
+        'commit_limit_bytes': 100 * env.GIB,
+        'uptime_ms': second * 1000,
+        'awake_100ns': second * 10_000_000,
+        'cpu_total_100ns': second * 10_000_000,
+        'cpu_idle_100ns': second * 5_000_000,
+        'owned_private_bytes': 0,
+        'owned_inventory_complete': True,
+        'foreign_engines': [], 'heavy_processes': [], 'docker_wsl_processes': [],
+        'top_private_processes': [], 'owned_processes': [], 'processes': [],
+        'unavailable_process_count': 0, **changes,
     }
 
 
@@ -150,6 +171,83 @@ class RoleGateTests(unittest.TestCase):
             env.bind_role_counter_evidence(
                 watchdog_row=row, binding=self.binding, watchdog_sample_index=7,
                 baseline_memory=self.baseline, batch_samples=self.batches)
+
+    def test_process_start_accepts_real_unsigned_filetime(self):
+        row = trigger()
+        row['owned_processes'][0]['process_start_100ns'] = 134064000000000000
+        row['owned_processes'][1]['process_start_100ns'] = 134064000000100000
+        evidence = env.bind_role_counter_evidence(
+            binding=self.binding, watchdog_sample_index=7, watchdog_row=row,
+            baseline_memory=self.baseline, batch_samples=self.batches)
+        self.assertEqual(evidence['roles']['host']['process']['process_start_100ns'],
+                         134064000000000000)
+
+    def test_prebaseline_without_exact_2_to_4_window_is_an_evidence_gap(self):
+        result = env.classify_role_counter_trigger(
+            binding=self.binding, watchdog_sample_index=1,
+            watchdog_row=trigger(host_private=151, batch_index=1),
+            baseline_memory=None,
+            batch_samples=[{'index': 0, 'memory': memory()}],
+            trigger_reason='COMMIT_PRESSURE')
+        self.assertEqual(result['classification'], 'INFRA_ABORT')
+        self.assertEqual(result['reason'], 'ROLE_COUNTER_EVIDENCE_GAP')
+        self.assertIsNone(result['evidence'])
+
+    def test_missing_role_counter_is_not_treated_as_zero(self):
+        row = trigger()
+        row['owned_processes'][0]['private_bytes'] = None
+        result = env.classify_role_counter_trigger(
+            binding=self.binding, watchdog_sample_index=7, watchdog_row=row,
+            baseline_memory=self.baseline, batch_samples=self.batches,
+            trigger_reason='COMMIT_PRESSURE')
+        self.assertEqual(result['classification'], 'INFRA_ABORT')
+        self.assertEqual(result['reason'], 'ROLE_COUNTER_EVIDENCE_GAP')
+        self.assertIsNone(result['evidence'])
+
+    def test_harness_sample_gap_cannot_be_overridden_by_role_callback(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            write = lambda path, payload: path.write_text(
+                json.dumps(payload, sort_keys=True) + '\n', encoding='utf-8')
+            callback = Mock(return_value={
+                'classification': 'INFRA_ABORT', 'formal_acceptance': False,
+            })
+            watch = env.Watchdog(
+                root, Mock(side_effect=[watchdog_sample(0), watchdog_sample(31)]),
+                self.binding, write, role_classifier=callback)
+            try:
+                watch.poll(force=True)
+                with self.assertRaisesRegex(BenchmarkJobError, 'SAMPLE_GAP') as raised:
+                    watch.poll(force=True)
+            finally:
+                watch.close()
+            self.assertEqual(raised.exception.classification, 'HARNESS_FAIL')
+            callback.assert_not_called()
+            event = json.loads((root / 'watchdog-stop.json').read_text())
+            self.assertEqual(event['classification'], 'HARNESS_FAIL')
+            self.assertEqual(len((root / 'environment-samples.jsonl').read_text().splitlines()), 3)
+
+    def test_observation_only_records_and_replays_environment_trigger(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            write = lambda path, payload: path.write_text(
+                json.dumps(payload, sort_keys=True) + '\n', encoding='utf-8')
+            rows = [watchdog_sample(0),
+                    watchdog_sample(5, commit_total_bytes=93 * env.GIB)]
+            watch = env.Watchdog(root, Mock(side_effect=rows), self.binding, write,
+                                 observation_only=True)
+            try:
+                watch.poll(force=True)
+                watch.poll(force=True)
+            finally:
+                watch.close()
+            self.assertFalse((root / 'watchdog-stop.json').exists())
+            event_lines = (root / 'environment-events.jsonl').read_text().splitlines()
+            self.assertEqual(len(event_lines), 2)
+            env.verify_watchdog(
+                root, lambda path, *_args: path.read_text(),
+                expected_binding=self.binding, observation_only=True,
+                elapsed_seconds=5)
 
 
 if __name__ == '__main__':

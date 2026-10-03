@@ -35,6 +35,8 @@ MAX_SAMPLE_GAP_SECONDS = 30
 SCHEMA = 'hh-studio.benchmark-environment-preflight'
 VERSION = '1.2.0'
 SAMPLE_STREAM_SCHEMA = 'HH-GT06-WATCHDOG-SAMPLE-STREAM-3'
+EVENT_STREAM_SCHEMA = 'HH-GT06-WATCHDOG-EVENT-STREAM-1'
+EVENT_SCHEMA = 'HH-GT06-WATCHDOG-EVENT-1'
 
 
 class Memory(ctypes.Structure):
@@ -599,6 +601,10 @@ O9_ROLE_GATE_COUNTERS = ('private_commit_bytes', 'held_handles', 'objects')
 O9_ROLE_HASH = re.compile(r'[0-9a-f]{64}\Z')
 O9_ROLE_ID = re.compile(r'[a-zA-Z0-9][a-zA-Z0-9._-]{0,127}\Z')
 O9_ROLE_SAFE_INTEGER = (1 << 53) - 1
+# Process creation times come from Win32 FILETIME.  They are unsigned 64-bit
+# counts of 100-ns intervals since 1601 (current values are around 1.3e17),
+# so the JSON-safe counter bound above must not be reused for this identity.
+O9_ROLE_FILETIME_MAX = (1 << 64) - 1
 
 
 def _o9_role_need(value, code):
@@ -608,6 +614,11 @@ def _o9_role_need(value, code):
 def _o9_role_int(value, *, minimum=0):
     _o9_role_need(type(value) is int and minimum <= value <= O9_ROLE_SAFE_INTEGER,
                   'ROLE_COUNTER_SHAPE')
+
+
+def _o9_role_filetime(value):
+    _o9_role_need(type(value) is int and 1 <= value <= O9_ROLE_FILETIME_MAX,
+                  'ROLE_PROCESS_START')
 
 
 def _o9_role_hash(value):
@@ -692,7 +703,7 @@ def _o9_role_processes(row):
         pid, start, private = (process.get(name) for name in
                                ('pid', 'process_start_100ns', 'private_bytes'))
         _o9_role_int(pid, minimum=1)
-        _o9_role_int(start, minimum=1)
+        _o9_role_filetime(start)
         _o9_role_int(private, minimum=1)
         selected.append({'role': role, 'pid': pid, 'process_start_100ns': start,
                          'private_bytes': private})
@@ -728,6 +739,10 @@ def _o9_role_body(*, binding, watchdog_sample_index, watchdog_row,
     _o9_role_need(type(trigger_batch_index) is int and 0 <= trigger_batch_index <= 34,
                   'BATCH_SHAPE')
     trigger_processes = _o9_role_processes(watchdog_row)
+    # O9.3 requires the exact three-batch 2–4 baseline.  A trigger before
+    # that window is an attribution gap; never infer a baseline from batch 0,
+    # a prefix, a banner, or fabricated zero values.
+    _o9_role_need(baseline_memory is not None, 'BASELINE_MISSING')
     baseline = _o9_role_memory(baseline_memory, '$.baseline')
     current_sample = _o9_role_nearest_batch(batch_samples, trigger_batch_index)
     current = _o9_role_memory(current_sample['memory'], '$.current')
@@ -854,8 +869,17 @@ def unpack_sample(row):
 
 
 class Watchdog:
+    """Durable environment observer with strict and observation-only modes.
+
+    ``observation_only`` is reserved for O9.1d watchdog soaks: ordinary
+    policy triggers become an immutable event stream and sampling continues;
+    observer failures and mandatory sample gaps still latch HARNESS_FAIL.
+    Formal campaigns leave the flag false and retain the stop-on-trigger
+    contract.
+    """
+
     def __init__(self, output, sample, binding, write, *, docker_probe=None,
-                 role_annotator=None, role_classifier=None):
+                 role_annotator=None, role_classifier=None, observation_only=False):
         self.output, self.sample, self.binding, self.write = output, sample, binding, write
         self.docker_probe = docker_probe
         # O9.3 callbacks are intentionally optional so diagnostic/legacy
@@ -865,6 +889,8 @@ class Watchdog:
         # the nearest completed batch without inventing missing values.
         self.role_annotator = role_annotator
         self.role_classifier = role_classifier
+        require(type(observation_only) is bool, 'WATCHDOG_OBSERVATION_MODE')
+        self.observation_only = observation_only
         self.docker_last = None
         self.docker_names = []
         self.policy, self.last, self.count = Policy(), None, 0
@@ -873,8 +899,13 @@ class Watchdog:
         self.stream = (output / 'environment-samples.jsonl').open('xb')
         try:
             self._append({'schema': SAMPLE_STREAM_SCHEMA, **binding})
+            if self.observation_only:
+                self.event_stream = (output / 'environment-events.jsonl').open('xb')
+                self._append_event({'schema': EVENT_STREAM_SCHEMA, **binding})
         except BaseException:
             self.stream.close()
+            if getattr(self, 'event_stream', None) is not None:
+                self.event_stream.close()
             raise
 
     def _append(self, row):
@@ -884,6 +915,15 @@ class Watchdog:
         self.stream.write(raw)
         self.stream.flush()
         os.fsync(self.stream.fileno())
+
+    def _append_event(self, row):
+        raw = (json.dumps(row, sort_keys=True, separators=(',', ':'),
+                          allow_nan=False) + '\n').encode()
+        require(self.event_stream.tell() + len(raw) <= 8 * 1024**2,
+                'WATCHDOG_EVENT_STREAM_FULL')
+        self.event_stream.write(raw)
+        self.event_stream.flush()
+        os.fsync(self.event_stream.fileno())
 
     def _observer_failure(self, error, row=None):
         # Persist a bounded diagnostic and a stop latch before surfacing a
@@ -972,7 +1012,11 @@ class Watchdog:
             self._observer_failure(error, None if persisted else row)
         self.last = now
         if decision:
-            if self.role_classifier is not None:
+            # A mandatory sample gap or observer error is HARNESS_FAIL.  Role
+            # attribution is never allowed to rewrite that objective harness
+            # result as INFRA_ABORT/PRODUCT_FAIL.
+            if (self.role_classifier is not None
+                    and decision.get('classification') != 'HARNESS_FAIL'):
                 try:
                     role_result = self.role_classifier(self.count - 1, row, decision)
                     require(type(role_result) is dict
@@ -987,10 +1031,17 @@ class Watchdog:
                     decision['role_counter_reason'] = role_result.get('reason')
                     decision['classification'] = role_result['classification']
                 except BaseException as error:
-                    self._observer_failure(error, row)
+                    # The raw row is already durable. Passing it to
+                    # _observer_failure would duplicate the sample stream.
+                    self._observer_failure(error)
             event = {'schema': 'HH-GT06-WATCHDOG-STOP-1', **self.binding, **decision,
                      'sample_index': self.count - 1}
             try:
+                if self.observation_only and decision.get('classification') != 'HARNESS_FAIL':
+                    event['schema'] = EVENT_SCHEMA
+                    self._append_event(event)
+                    self.last = now
+                    return
                 self.write(self.output / 'watchdog-stop.json', event)
             except BaseException as error:
                 self._observer_failure(error)
@@ -1041,6 +1092,8 @@ class Watchdog:
 
     def close(self):
         self.stream.close()
+        if getattr(self, 'event_stream', None) is not None:
+            self.event_stream.close()
 
 
 def failure_classification(error, output):
@@ -1063,10 +1116,32 @@ def require_infra_budget(reviews, read_regular):
 
 
 def verify_watchdog(output, read_regular, *, elapsed_seconds=None, expected_binding=None,
-                    require_docker_inventory=False):
-    require(not (output / 'watchdog-stop.json').exists(), 'CAMPAIGN_WATCHDOG_STOP_LATCHED')
-    require(type(expected_binding) is dict and set(expected_binding) == {
-            'run_id', 'source_closure_sha256', 'campaign_sha256'}, 'CAMPAIGN_WATCHDOG_BINDING')
+                    require_docker_inventory=False, observation_only=False):
+    require(type(observation_only) is bool, 'CAMPAIGN_WATCHDOG_MODE')
+    if observation_only:
+        require(type(expected_binding) is dict and set(expected_binding) == {
+                'run_id', 'source_closure_sha256', 'campaign_sha256'},
+                'CAMPAIGN_WATCHDOG_BINDING')
+        require(not (output / 'watchdog-stop.json').exists(), 'CAMPAIGN_WATCHDOG_STOP_LATCHED')
+        event_raw = read_regular(output / 'environment-events.jsonl', 8 * 1024**2)
+        event_lines = event_raw.splitlines()
+        require(event_lines, 'CAMPAIGN_WATCHDOG_EVENTS_MISSING')
+        event_header = json.loads(event_lines[0])
+        require(event_header == {'schema': EVENT_STREAM_SCHEMA, **expected_binding},
+                'CAMPAIGN_WATCHDOG_EVENT_BINDING')
+        events = [json.loads(line) for line in event_lines[1:]]
+        for event in events:
+            require(type(event) is dict and event.get('schema') == EVENT_SCHEMA
+                    and event.get('run_id') == expected_binding['run_id']
+                    and event.get('source_closure_sha256') == expected_binding['source_closure_sha256']
+                    and event.get('campaign_sha256') == expected_binding['campaign_sha256'],
+                    'CAMPAIGN_WATCHDOG_EVENT_BINDING')
+    else:
+        events = None
+        require(not (output / 'watchdog-stop.json').exists(), 'CAMPAIGN_WATCHDOG_STOP_LATCHED')
+        require(type(expected_binding) is dict and set(expected_binding) == {
+                'run_id', 'source_closure_sha256', 'campaign_sha256'},
+                'CAMPAIGN_WATCHDOG_BINDING')
     raw = read_regular(output / 'environment-samples.jsonl', 64 * 1024**2)
     lines = raw.splitlines()
     require(lines, 'CAMPAIGN_WATCHDOG_SAMPLES_MISSING')
@@ -1074,7 +1149,8 @@ def verify_watchdog(output, read_regular, *, elapsed_seconds=None, expected_bind
     require(header == {'schema': SAMPLE_STREAM_SCHEMA, **expected_binding},
             'CAMPAIGN_WATCHDOG_BINDING')
     policy, count = Policy(), 0
-    for line in lines[1:]:
+    expected_events = []
+    for sample_index, line in enumerate(lines[1:]):
         row = unpack_sample(json.loads(line))
         require('cpu_observation' in row, 'CAMPAIGN_WATCHDOG_CPU_OBSERVATION_MISSING')
         if require_docker_inventory:
@@ -1090,9 +1166,21 @@ def verify_watchdog(output, read_regular, *, elapsed_seconds=None, expected_bind
             else:
                 require(row.get('docker_inventory_error') is None,
                         'CAMPAIGN_WATCHDOG_DOCKER_STATUS')
-        require(policy.observe(row) is None, 'CAMPAIGN_WATCHDOG_REPLAY_FAILED')
+        decision = policy.observe(row)
+        if observation_only:
+            if decision is not None:
+                require(decision.get('classification') != 'HARNESS_FAIL',
+                        'CAMPAIGN_WATCHDOG_REPLAY_FAILED')
+                expected_events.append({
+                    'schema': EVENT_SCHEMA, **expected_binding, **decision,
+                    'sample_index': sample_index,
+                })
+        else:
+            require(decision is None, 'CAMPAIGN_WATCHDOG_REPLAY_FAILED')
         count += 1
     require(count >= 2, 'CAMPAIGN_WATCHDOG_SAMPLES_MISSING')
+    if observation_only:
+        require(events == expected_events, 'CAMPAIGN_WATCHDOG_EVENT_REPLAY_FAILED')
     if elapsed_seconds is not None:
         require(type(elapsed_seconds) in (float, int) and elapsed_seconds > 0,
                 'CAMPAIGN_WATCHDOG_DURATION')

@@ -72,7 +72,10 @@ def run(root: Path, seconds: int, interval: float) -> int:
         lambda: campaign.environment_snapshot(docker_inventory=[]),
         binding,
         campaign.write,
-        docker_probe=environment.running_containers)
+        docker_probe=environment.running_containers,
+        # O9.1d is an observer soak. Resource/foreign-engine policy events are
+        # retained and replayed, while only mandatory harness failures stop it.
+        observation_only=True)
     primary = None
     try:
         with environment.KeepAwake():
@@ -91,11 +94,13 @@ def run(root: Path, seconds: int, interval: float) -> int:
     if primary is None:
         try:
             environment.verify_watchdog(root, campaign.read_regular, elapsed_seconds=elapsed,
-                                        expected_binding=binding, require_docker_inventory=True)
+                                        expected_binding=binding, require_docker_inventory=True,
+                                        observation_only=True)
         except BaseException as error:
             primary = error
     result = {'schema': SOAK_SCHEMA, **binding, 'actual_exit_code': 0 if primary is None else 1,
               'elapsed_seconds': round(elapsed, 3), 'sample_stream_closed': watchdog.stream.closed,
+              'event_stream_closed': watchdog.event_stream.closed,
               'verified_watchdog': primary is None, 'formal_acceptance': False,
               'error_code': getattr(primary, 'code', type(primary).__name__) if primary else None}
     write_new(root / 'soak-result.json', result)

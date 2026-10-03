@@ -48,7 +48,8 @@ from studio.tests.replay.benchmark_transport import (
     BenchmarkFixtureClient as FixtureClient, BenchmarkFixtureHost as LoopbackFixtureHost,
 )
 from studio.tests.replay.benchmark_http_phases import (
-    JournalTimingBook, PhaseRecorder, observed_client_type, observed_host_type, observed_journal_type,
+    JournalTimingBook, PhaseRecorder, WakeLagMonitor, observed_client_type,
+    observed_host_type, observed_journal_type,
 )
 from studio.host.replay.process_probe import ProcessProbe
 from studio.protocol.core import Status, canonical_bytes
@@ -118,7 +119,13 @@ class CommandProducer:
         self._batch_transport = None
         # One fixed recorder and wrapper set before any host work or baseline.
         # The bounded rolling window remains part of measured host RSS/time.
-        self._phase_recorder = PhaseRecorder(event_capacity=8192, active_capacity=64)
+        # Host and command driver are resident in this same process.  One
+        # bounded wake observer is therefore sufficient and reports this
+        # producer PID honestly; it is not presented as a second process.
+        self._wake_monitor = WakeLagMonitor(interval_ms=10, threshold_ms=100, capacity=128)
+        self._phase_recorder = PhaseRecorder(event_capacity=8192, active_capacity=64,
+                                             wake_monitor=self._wake_monitor)
+        self._wake_monitor.start()
         self._journal_timings = JournalTimingBook(window=5000)
         journal_type = observed_journal_type(Journal, self._phase_recorder, self._journal_timings)
         host_type = observed_host_type(LoopbackFixtureHost, self._phase_recorder)
@@ -209,6 +216,7 @@ class CommandProducer:
     def _received(self, *, expected_diagnostic=None):
         now = _clock()
         self._status_ns.append(now)
+        self._phase_recorder.record_status(now, label='response')
         self._collect_transport()
         _need(self._transport_total <= 10, 'TRANSPORT_RECOVERY_BUDGET')
         # Expected invalid-payload responses are diagnostic events in the
@@ -499,6 +507,7 @@ class CommandProducer:
             'event_count_after': self._transport_total, 'all_reconciled': False}
         start, initial_effects = _clock(), self.effects
         self._status_ns = [start]
+        self._phase_recorder.record_status(start, label='batch')
         self._setup_responses = report['setup_responses']
         report['started_mono_us'] = start // 1000
         try:
@@ -555,6 +564,11 @@ class CommandProducer:
         if self.closed:
             return
         self.failed = True
+        # Stop the observer first so cleanup evidence can prove the thread is
+        # no longer sampling while host/journal resources are released.
+        observer_stopped = self._wake_monitor.stop() if self._wake_monitor is not None else True
+        if not observer_stopped:
+            raise CommandError('CLEANUP_HELD', cleanup_owner=self)
         try:
             if self.host is not None:
                 self.host.close()
@@ -573,6 +587,26 @@ class CommandProducer:
         observing it cannot manufacture closure or a target process exit.
         """
         return self._phase_recorder.snapshot()
+
+    def observation_snapshot(self):
+        """Alias used by campaign/residency writers for O9.4a evidence."""
+        return self.phase_snapshot()
+
+    def status_gap_snapshot(self):
+        """Return only bounded status-gap attribution for lane persistence."""
+        snapshot = self.phase_snapshot()
+        return {key: snapshot[key] for key in (
+            'pid', 'status_count', 'status_gap_capacity', 'status_gap_evicted',
+            'status_gap_max_ms', 'status_gap_ring', 'status_gap_largest',
+        )}
+
+    def wake_lag_snapshot(self):
+        """Return the shared-process wake-lag samples and cleanup state."""
+        snapshot = self.phase_snapshot()
+        return {key: snapshot[key] for key in (
+            'pid', 'wake_lag_interval_ms', 'wake_lag_threshold_ms',
+            'wake_lag_samples', 'wake_lag_evicted', 'wake_lag_thread_alive',
+        )}
 
     def journal_timing_snapshot(self):
         """Return bounded direct journal timings and path counters."""

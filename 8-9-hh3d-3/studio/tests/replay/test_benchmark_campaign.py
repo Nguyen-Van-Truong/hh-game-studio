@@ -15,7 +15,7 @@ STUDIO = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(STUDIO.parent))
 from studio.tests.replay import run_benchmark_campaign as campaign
 from studio.tests.replay.benchmark_job import BenchmarkJobError
-from studio.tests.replay.benchmark_http_phases import PhaseRecorder
+from studio.tests.replay.benchmark_http_phases import JournalTimingBook, PhaseRecorder
 from studio.tests.replay.benchmark_import_observer import ImportObserver
 
 
@@ -102,6 +102,10 @@ class CampaignResumeTests(unittest.TestCase):
         imported = ImportObserver(self.root, self.root, self.root)
         imported._started_ns, imported._closed = 1, True
         campaign._write_observation(self.root, context, 'import', imported.snapshot())
+        journal = JournalTimingBook(window=3)
+        journal._pid = 100
+        journal.operation('lookup', 1_000_000)
+        campaign._write_observation(self.root, context, 'journal', journal.snapshot())
         self.terminal['observations']['import_observer'] = campaign._import_cleanup_state(imported)
         self.put('child-terminal-cleanup.json', self.terminal)
         self.put('commands/journal.guard', b'')
@@ -207,7 +211,7 @@ class CampaignResumeTests(unittest.TestCase):
             self.verify()
 
     def test_observation_cannot_be_omitted_from_manifest(self):
-        for name in ('http-phases-final.json', 'import-observation.json'):
+        for name in ('http-phases-final.json', 'journal-timings-final.json', 'import-observation.json'):
             with self.subTest(name=name):
                 self.rebind_artifacts()
                 del self.captured['artifacts'][name]
@@ -383,6 +387,28 @@ class CampaignLifecycleTests(unittest.TestCase):
             root = Path(directory)
             campaign.write(root / 'campaign.json', {'max_attempts_per_run': 1})
             self.assertEqual(campaign.campaign_attempt_limit(root), 1)
+
+    def test_corrupt_historical_attempt_policy_fails_closed(self):
+        with tempfile.TemporaryDirectory(prefix='gt06-corrupt-policy-') as directory:
+            root = Path(directory)
+            (root / 'campaign.json').write_bytes(b'{not-json')
+            with self.assertRaisesRegex(BenchmarkJobError, 'CAMPAIGN_ATTEMPT_POLICY_CORRUPT'):
+                campaign.campaign_attempt_limit(root)
+            (root / 'campaign.json').write_bytes(b'{"max_attempts_per_run":99}')
+            with self.assertRaisesRegex(BenchmarkJobError, 'CAMPAIGN_ATTEMPT_POLICY_CORRUPT'):
+                campaign.campaign_attempt_limit(root)
+
+    def test_retry_without_observed_window_fails_closed(self):
+        with tempfile.TemporaryDirectory(prefix='gt06-unobserved-window-') as directory:
+            root = Path(directory)
+            lifecycle = self.lifecycle(root)
+            with patch.object(campaign.environment, 'require_infra_budget') as budget:
+                with self.assertRaisesRegex(BenchmarkJobError, 'CAMPAIGN_RETRY_WINDOW'):
+                    campaign.infra_retry_allowed(
+                        root, lifecycle, source_closure_sha256='a' * 64,
+                        profile_sha256=campaign.profile.PROFILE_SHA256,
+                        attempt=1, now=1_001.0)
+                budget.assert_not_called()
 
 
 class CampaignPreflightTests(unittest.TestCase):
