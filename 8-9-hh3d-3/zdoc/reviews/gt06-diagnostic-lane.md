@@ -18,6 +18,15 @@
 - O2 fixture/adapter/particle worktree vẫn AUTHORITY0, không merge trước GT06; GT07 chưa mở.
 - Bằng chứng chi tiết và các verdict lịch sử nằm ở các mục bên dưới; raw mới giữ riêng dưới `studio/.local/`.
 
+## 2026-10-03 — O9.7 owner environment relief
+
+- Owner decision `7aeaec20` clarifies that the O1.7 daily counter reads only
+  formal `parent-failure.json`; diagnostic host/watchdog `owner-failure.json`
+  entries do not consume the formal attempt budget. Docker/WSL were stopped,
+  so a fresh quiet-chain dry-run may proceed only after a new O4.1/CPU-minute
+  pass and no competing workload. This does not change O1 thresholds or turn
+  either prior diagnostic into PASS.
+
 This lane records diagnostics without changing the authoritative plan. Each
 entry keeps the run ID, source closure, command, actual result and the finding
 needed for the next repair. Raw evidence remains under `studio/.local/`.
