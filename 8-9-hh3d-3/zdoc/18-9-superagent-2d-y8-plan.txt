@@ -657,4 +657,20 @@ Q5 Web: dung lượng tải lần đầu và bộ nhớ đo từ SA-04; ngân s�
   merge `7a1e9ab6` integrated product `530977a4` including OBS-04. Product files
   match superagent/main. Next: controlled world/pickup trials, P2 power,
   remaining modes/catalog/touch/feedback and held-input/capture measurements.
+2026-10-03 SA-02 fifth observation checkpoint (14:02 UTC).
+- Product `8b3fff9f`, OBS-06: in zero-bot VS, isolated melee tilted a cabinet
+  and displaced/rotated a nearby marked cylinder; a moving platform carried
+  idle P1. A mixed grenade/shot trial did not capture a blast and proves no
+  explosion/fire law. Four broad R09/R10 rows gained partial facts; still
+  79 rows, 25 OBSERVED, 54 UNVERIFIED, zero MATCHED. SA-02 remains open.
+- Ledger `.6` exited 0, inventory `.7` exited 1 for exactly 54 gaps, both
+  actual/host exits agree and cleanup 0. Both before/after source hashes:
+  `a63a8a5be5ed7a44213c0f8fae4b6eb4ab5381cd63ffcd6cd295cbc2a0181d6f`.
+  Raw IDs/repro commands are in SA-02 evidence; later metadata is outside freeze.
+- Lesson: observe one input's causal transition before attributing destruction;
+  sparse stock readbacks cannot establish per-tap consumption or timing.
+- After package-verification processes ended, clean tracked/index preflight
+  allowed normal merge `f0348a4c`; product matches superagent/main. No runtime
+  changes. Next: P2 power/pickups, full item/world catalog, remaining mode
+  outcomes, touch/viewport/feedback and proper held-input/60-fps measurements.
 END_OF_SUPERAGENT_PLAN
