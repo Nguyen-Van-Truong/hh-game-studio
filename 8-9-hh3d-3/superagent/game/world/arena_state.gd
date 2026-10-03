@@ -47,13 +47,30 @@ func is_in_pit(x: int) -> bool:
 	return false
 
 func ladder_at(x: int, y: int) -> bool:
+	return ladder_index_at(x, y) >= 0
+
+func ladder_index_at(x: int, y: int) -> int:
+	var index: int = 0
 	for ladder: Dictionary in _ladders:
 		var ladder_x: int = int(ladder[&"x"])
 		var top: int = int(ladder[&"top"])
 		var bottom: int = int(ladder[&"bottom"])
 		if abs(x - ladder_x) <= 18 and y >= top - 8 and y <= bottom + 8:
-			return true
-	return false
+			return index
+		index += 1
+	return -1
+
+func ladder_top_at(x: int, y: int) -> int:
+	var index: int = ladder_index_at(x, y)
+	return -1 if index < 0 else int(_ladders[index][&"top"])
+
+func ladder_bottom_at(x: int, y: int) -> int:
+	var index: int = ladder_index_at(x, y)
+	return -1 if index < 0 else int(_ladders[index][&"bottom"])
+
+func ladder_x_at(x: int, y: int) -> int:
+	var index: int = ladder_index_at(x, y)
+	return x if index < 0 else int(_ladders[index][&"x"])
 
 func landing_y(x: int, previous_y: int, candidate_y: int) -> int:
 	if candidate_y < previous_y:
@@ -80,13 +97,29 @@ func spawn_for_player(player_id: int) -> Vector2i:
 func snapshot() -> Dictionary:
 	var platforms: Array[Dictionary] = []
 	for platform: Dictionary in _platforms:
-		platforms.append(platform.duplicate(true))
+		var copy: Dictionary = platform.duplicate(true)
+		copy.make_read_only()
+		platforms.append(copy)
 	var ladders: Array[Dictionary] = []
 	for ladder: Dictionary in _ladders:
-		ladders.append(ladder.duplicate(true))
+		var copy: Dictionary = ladder.duplicate(true)
+		copy.make_read_only()
+		ladders.append(copy)
 	var pits: Array[Dictionary] = []
 	for pit: Dictionary in _pits:
-		pits.append(pit.duplicate(true))
+		var copy: Dictionary = pit.duplicate(true)
+		copy.make_read_only()
+		pits.append(copy)
+	platforms.make_read_only()
+	ladders.make_read_only()
+	pits.make_read_only()
+	var spawns: Array[Dictionary] = [
+		{&"player_id": 1, &"x": spawn_for_player(1).x, &"y": spawn_for_player(1).y},
+		{&"player_id": 2, &"x": spawn_for_player(2).x, &"y": spawn_for_player(2).y},
+	]
+	for spawn: Dictionary in spawns:
+		spawn.make_read_only()
+	spawns.make_read_only()
 	var result: Dictionary = {
 		&"schema": WORLD_SCHEMA,
 		&"width": width,
@@ -100,21 +133,32 @@ func snapshot() -> Dictionary:
 		&"platforms": platforms,
 		&"ladders": ladders,
 		&"pits": pits,
+		&"spawns": spawns,
+		&"canonical_topology": canonical_topology(),
 	}
 	result.make_read_only()
 	return result
 
 func canonical_fragment() -> String:
-	return "arena=%d,%d,%d,%d,%d,%d,%d,%d" % [
-		width,
-		height,
-		floor_y,
-		pit_death_y,
-		tick,
-		hazard_timer_ticks,
-		rng_state,
-		rng_counter,
+	return "arena_topology=%s|arena_runtime=%d,%d,%d,%d" % [canonical_topology(), tick, hazard_timer_ticks, rng_state, rng_counter]
+
+func canonical_topology() -> String:
+	var parts: Array[String] = [
+		"bounds=%d,%d" % [width, height],
+		"floor=%d" % floor_y,
+		"pitdeath=%d" % pit_death_y,
 	]
+	for platform: Dictionary in _platforms:
+		parts.append("platform:%s,%d,%d,%d" % [String(platform[&"id"]), int(platform[&"left"]), int(platform[&"right"]), int(platform[&"y"])])
+	for ladder: Dictionary in _ladders:
+		parts.append("ladder:%s,%d,%d,%d" % [String(ladder[&"id"]), int(ladder[&"x"]), int(ladder[&"top"]), int(ladder[&"bottom"])])
+	for pit: Dictionary in _pits:
+		parts.append("pit:%s,%d,%d" % [String(pit[&"id"]), int(pit[&"left"]), int(pit[&"right"])])
+	var p1: Vector2i = spawn_for_player(1)
+	var p2: Vector2i = spawn_for_player(2)
+	parts.append("spawn:1,%d,%d" % [p1.x, p1.y])
+	parts.append("spawn:2,%d,%d" % [p2.x, p2.y])
+	return ";".join(parts)
 
 func _next_rng(value: int) -> int:
 	# LCG state is retained only as a deterministic counter source for future

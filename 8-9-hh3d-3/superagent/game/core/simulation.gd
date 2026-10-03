@@ -21,8 +21,12 @@ func _init(seed_input: int = 1, tuning_input: Dictionary = {}) -> void:
 		tuning[key] = tuning_input[key]
 	tuning.make_read_only()
 	world = ArenaState.new(seed_value)
-	fighters.append(FighterState.new(1, world.spawn_for_player(1)))
-	fighters.append(FighterState.new(2, world.spawn_for_player(2)))
+	var first_fighter: FighterState = FighterState.new(1, world.spawn_for_player(1))
+	var second_fighter: FighterState = FighterState.new(2, world.spawn_for_player(2))
+	first_fighter.health = int(tuning.get(&"max_health", 100))
+	second_fighter.health = int(tuning.get(&"max_health", 100))
+	fighters.append(first_fighter)
+	fighters.append(second_fighter)
 
 func step(frame: InputFrame) -> bool:
 	if frame == null or frame.tick() != tick:
@@ -51,6 +55,7 @@ func snapshot() -> Dictionary:
 		&"tick": tick,
 		&"round_timer_ticks": round_timer_ticks,
 		&"last_input_tick": last_input_tick,
+		&"tuning": tuning,
 		&"world": world.snapshot(),
 		&"fighters": fighter_rows,
 	}
@@ -66,10 +71,21 @@ func canonical_snapshot() -> String:
 	fragments.append("tick=%d" % tick)
 	fragments.append("round=%d" % round_timer_ticks)
 	fragments.append("input=%d" % last_input_tick)
+	fragments.append(_canonical_tuning())
 	fragments.append(world.canonical_fragment())
 	for fighter: FighterState in fighters:
 		fragments.append(fighter.canonical_fragment())
 	return "|".join(fragments)
+
+func _canonical_tuning() -> String:
+	var keys: Array[StringName] = []
+	for key: StringName in tuning.keys():
+		keys.append(key)
+	keys.sort_custom(func(a: StringName, b: StringName) -> bool: return String(a) < String(b))
+	var parts: Array[String] = []
+	for key: StringName in keys:
+		parts.append("%s=%s" % [String(key), str(tuning[key])])
+	return "tuning=%s" % ";".join(parts)
 
 func snapshot_hash() -> String:
 	var value: int = 2166136261

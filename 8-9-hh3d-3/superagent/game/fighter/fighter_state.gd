@@ -66,19 +66,20 @@ func step(actions: Dictionary, arena: ArenaState, tuning: Dictionary) -> void:
 	if on_ladder and (_held(actions, &"up") or _held(actions, &"down")):
 		locomotion = Locomotion.CLIMBING
 		grounded = false
+		# Horizontal input is ignored while climbing until SA-02 observes an exit.
+		velocity.x = 0
 		velocity.y = 0
 		if _held(actions, &"up"):
 			position.y -= climb_speed
 		elif _held(actions, &"down"):
 			position.y += climb_speed
-		if _pressed(actions, &"jump"):
-			locomotion = Locomotion.AIRBORNE
-			velocity.y = -jump_speed
-		else:
-			position.y = clampi(position.y, 270, arena.floor_y)
-			position.x = clampi(position.x, 0, arena.width)
-			_update_action(actions, &"climb", 1)
-			return
+		var ladder_top: int = arena.ladder_top_at(position.x, position.y)
+		var ladder_bottom: int = arena.ladder_bottom_at(position.x, position.y)
+		if ladder_top >= 0 and ladder_bottom >= ladder_top:
+			position.y = clampi(position.y, ladder_top, ladder_bottom)
+		position.x = clampi(position.x, 0, arena.width)
+		_update_action(actions, &"climb", 1)
+		return
 
 	if grounded and _pressed(actions, &"up") and jump_lock_ticks == 0:
 		velocity.y = -jump_speed
