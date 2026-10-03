@@ -10,7 +10,7 @@ VARIANT_SCOPE=SA-14_VARIANT_01_LOCKED_BY_OWNER
 CURRENT_VALID_WP=SA-01
 EXECUTION_AUTHORIZATION=OWNER_OPENED_2026_10_03
 DISPATCHABLE=YES_SEPARATE_AGENT_RESPECT_MEASURE_LOCK
-IMPLEMENTATION=NOT_STARTED
+IMPLEMENTATION=IN_PROGRESS_SA01_VERIFY_PENDING
 RUNTIME_ACCEPTANCE=NONE
 HUMAN_ACCEPTANCE=NONE
 REFERENCE_INVENTORY=NOT_FROZEN
@@ -550,5 +550,12 @@ Q5 Web: dung lượng tải lần đầu và bộ nhớ đo từ SA-04; ngân s�
 - SA-10 dùng art/trang phục cố định nguyên bản; bỏ hệ lớp đổi màu khỏi Classic.
 - Bổ sung check_parity fail-closed, mode×map matrix, fixed-step GameSession/snapshot hash và
   nguyên tắc clean-room topology/vai trò thay cho sao chép hình học.
+
+2026-10-03 SA-01 implementation checkpoint (chưa tick):
+- Code riêng trên superagent/main tại D:\dataDiskD\hh-superagent; không sửa studio/GT-06.
+- Godot 4.7.2 console/gui đã chép và SHA256 khớp toolchain lock. Import và input unit smoke
+  đã chạy exit 0; runner containment và input event end-to-end đang được sửa/kiểm lại.
+- Giữ CURRENT_VALID_WP=SA-01, RUNTIME_ACCEPTANCE=NONE. Chưa nghiệm thu chỉ từ smoke PASS.
+- SA-03 chỉ có code chuẩn bị với thông số UNVERIFIED; không thay thế quan sát SA-02.
 
 END_OF_SUPERAGENT_PLAN
