@@ -90,11 +90,31 @@ SA-T0x/H2-T0x và dùng lại lõi:
    Control/Label/Button, AudioStreamPlayer, AnimationPlayer, InputMap. Kiểu property validate
    theo ClassDB; mỗi class vào allowlist phải có test reject, readback và undo.
 3. Blender: modifier/UV/material mở rộng, armature từ template, keyframe/action, preset export.
+4. Trình bày và cảm giác chơi (thêm 03-10), dùng cùng cơ chế allowlist ClassDB của mục 2, không
+   viết adapter riêng từng class. Bắt buộc cho GT-09: GPUParticles2D/CPUParticles2D +
+   ParticleProcessMaterial (one_shot, amount, lifetime, texture, use_fixed_seed/seed,
+   visibility_rect; flipbook qua CanvasItemMaterial), ShaderMaterial với .gdshader theo luật source
+   của mục 1 (readback có kiểm compile), AudioStreamPlayer2D, CanvasLayer/ProgressBar cho HUD. Thêm
+   khi game đầu tiên cần: PointLight2D, bus layout, Theme/Container, NavigationAgent2D/
+   NavigationRegion2D, Path2D/PathFollow2D, AnimationTree. Phát hiệu ứng (restart(keep_seed)),
+   pooling và giới hạn số lượng làm trong script gameplay; emit_particle() không có ở renderer
+   Compatibility (Web) nên không dựa vào nó. Particle 2D chỉ va chạm LightOccluder2D, không va
+   chạm PhysicsBody2D; va chạm gameplay luôn dùng physics node. Không làm graph VFX kiểu
+   Niagara/VFX Graph.
+5. Port có kiểm từ plugin cũ godot/plugin-project/addons/hh_agent (R5 plan 20-8: TileMapLayer,
+   animation, UI, audio, physics, navigation, shader, particles; render.particles ở đó chỉ nhận
+   GPUParticles2D với amount, lifetime, process_material, texture): đọc làm tham khảo hoặc chép có
+   ghi nguồn + hash, viết lại theo contract HH Studio (schema, UndoRedo, readback, journal) và chạy
+   test của HH Studio. Không sửa plugin cũ, không coi tick plan 20-8 là bằng chứng cho HH Studio.
+6. Ngân sách hiệu năng: observe đọc Performance monitor (FPS, frame time, process/physics time,
+   draw calls, object count) trong Play; mỗi mini-game ghi ngân sách trước và kết quả đo trên máy
+   owner.
 Code và unit test được làm ngay trong worktree/lease riêng, không chạm closure formal GT-06 và
 không chạy engine khi formal đang đo; merge sau khi GT-06 ACCEPTED. Profile script chỉ được bật
 sau khi AUTH-01 đến AUTH-05 đạt (gồm isolation). Nghiệm thu trong GT-09 bằng 2 mini-game fixture
-gốc làm hoàn toàn qua catalog (đấu trường 2D có platform, pickup, bot; phòng 3D có avatar đi lại
-và tương tác); GT-10 đóng gói. Không claim game hoàn chỉnh hay parity Y8/PlayTogether.
+gốc làm hoàn toàn qua catalog: đấu trường 2D có platform, pickup, bot, bốn hiệu ứng (lửa đầu nòng,
+tia trúng, bụi, nổ) có giới hạn số lượng và đạt ngân sách hiệu năng; phòng 3D có avatar đi lại và
+tương tác. GT-10 đóng gói. Không claim game hoàn chỉnh hay parity Y8/PlayTogether.
 
 O3 — TỐC ĐỘ VÀ VỆ SINH PLAN
 1. Mỗi hướng chẩn đoán tối đa 4 giờ hoặc 3 lần chạy; hết ngân sách thì viết một trang cho owner
@@ -187,7 +207,9 @@ O5 — 30-09-2026 (sửa gốc journal; AUTHORITY=OWNER_DELEGATED_20260930)
 6. Khóa cửa sổ đo: khi soak/formal chạy, coordinator giữ file %LOCALAPPDATA%\HHGodotAgent\
    measure-window.lock (owner, run_id, mục đích, hết hạn). Agent khác trong repo (O2, Vault
    Fighters) kiểm khóa trước khi chạy Godot/Blender/Docker; có khóa thì chờ hoặc làm việc static.
-   Owner nhờ vậy mở được agent riêng làm game song song mà không làm hỏng formal.
+   Owner nhờ vậy mở được agent riêng làm game song song mà không làm hỏng formal. Test tự động
+   không lấy khóa thật này mà dùng đường khóa tạm do test cấp, có timeout và không để process sống
+   sang lượt sau (03-10 một test replay giữ khóa thật làm lượt test sau báo MEASURE_WINDOW_BUSY).
 
 O6 — 30-09-2026 (AUTHORITY=OWNER_DELEGATED_20260930; không đổi ngưỡng/timeout O1–O4). Bản đầy đủ ở
 git fcc1906f; số liệu soak01–04 và mọi run sau đó ở log lane. Dưới đây chỉ giữ luật còn hiệu lực.
@@ -430,12 +452,26 @@ giờ là máy yên trong khung đo và tail status gap (formal14, formal21). M�
    Reproducer tiêm delay chỉ chứng minh detector chạy, không tính là tái hiện. Không đổi gate 2 giây,
    không bỏ preview để cho qua. Backlog GT-07: editor báo "đang save" từ thread phụ; dùng cho gate
    phải có quyết định owner riêng.
+   Kết quả 03-10: (b) probe-02 20.000 vòng: open/read tối đa 12 ms, ReplaceFileW 96 ms,
+   append+fsync 581 ms (một lần từ 500 ms), chưa tái hiện gap cỡ giây. (d) Godot 4.7.2
+   FileAccessWindows::_close() thử ReplaceFileW rồi MoveFileW, lặp tới 1.000 lần nghỉ 1 ms khi file
+   đích bị giữ; khóa giữ vài giây trên file đang save đủ làm main thread đứng vài giây (cơ chế khả
+   dĩ cho formal14, chưa chứng minh). (c) host-soak-01 INFRA_ABORT vì CPU ngoài (vmmemWSL, Chrome,
+   rustc, node), phải chạy lại trong khung yên theo mục 5.
 5. Khung đo (bổ sung O8.2): theo OWNER_ALWAYS_RUN_AUTHORIZATION_RECORDED_20261002 agent không cần xác
    nhận từng khung; arm khung 4 giờ khi máy bật và preflight có khả năng đạt; khung không chồng giờ
    owner hay tắt máy (khoảng 22:00–23:00) trừ khi owner báo để máy chạy qua đêm. Hai pair khoảng 75
    phút. Ưu tiên lúc owner không dùng máy. Khuyến nghị owner trước khung: thoát hẳn Docker Desktop
    (Quit ở khay hệ thống, cần thì mở lại sau), không chạy Cursor/agent review, `wsl --shutdown` nếu
    không cần WSL; tăng pagefile là tùy chọn. Agent không tự tắt app của owner.
+   Máy chỉ yên khi owner không dùng (sáng 03-10 có Docker, Chrome, rustc, node), nên không ngồi chờ
+   trong ngày. Việc cần máy yên gom thành một chuỗi Scheduled Task chạy không người trông trong một
+   khung; bước sau chỉ chạy khi receipt bước trước đạt: freeze closure mới → preflight O4.1 và
+   CPU-minute → host-only soak 30 phút O9.4c trên đúng closure đó, watchdog chạy suốt (runner ghi
+   soak-result, exit receipt và verify stream như O9.1d thì tính luôn soak O9.1d; INFRA_ABORT thì
+   chờ preflight rồi chạy lại một lần nếu còn đủ giờ) → có gap từ 1 giây thì dừng, không formal,
+   phân tích sau bằng telemetry O9.4a → dry-run → formal 2 pair theo O9.2a. Tổng khoảng 2–2,5 giờ.
+   Ngoài khung làm O2 hoặc việc static; hôm sau closeout bằng lệnh chung ở mục 6a.
 6. Nhịp làm việc của agent:
    a) Closeout run hỏng bằng một lệnh chung (hash raw, actual exit, Job/handle, export rồi gỡ đúng
       task, ≤ 5 dòng log lane); không viết script audit riêng cho từng run; mục tiêu ≤ 20 phút.
@@ -699,6 +735,13 @@ Bài học 03-10 (formal09–21, soak O9):
     không được fail chỉ vì máy bận.
 35. Mỗi run phải mang đủ instrumentation để một lần hỏng là đủ chẩn đoán; reproducer tiêm delay chỉ
     chứng minh detector chạy, không thay tái hiện tự nhiên.
+36. Test không được đụng tài nguyên thật của run đo (khóa measure-window, task, thư mục evidence) và
+    không để process sống sang lượt sau: một test replay còn giữ khóa thật đã chặn lượt sau.
+37. Việc cần máy yên không chờ trong giờ owner dùng máy; gom thành một chuỗi chạy không người trông
+    trong khung yên, có điểm dừng tự động, rồi closeout hôm sau.
+38. Nâng công cụ bằng cơ chế chung (allowlist ClassDB, readback, undo) và port có kiểm adapter đã
+    có ở plugin cũ, không viết adapter mới cho từng class; tính năng chỉ claim khi mini-game dùng
+    nó qua catalog và đạt ngân sách hiệu năng.
 
 LỊCH SỬ / CÁCH ĐỌC
 Bản S71 đầy đủ trước tinh gọn giữ tại reviews/20260918-plan-history-s71/
