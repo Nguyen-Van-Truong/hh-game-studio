@@ -725,7 +725,8 @@ def _o9_role_body(*, binding, watchdog_sample_index, watchdog_row,
     _o9_role_int(watchdog_sample_index, minimum=0)
     _o9_role_need(type(watchdog_row) is dict, 'TRIGGER_SHAPE')
     trigger_batch_index = watchdog_row.get('batch_index')
-    _o9_role_int(trigger_batch_index, minimum=0)
+    _o9_role_need(type(trigger_batch_index) is int and 0 <= trigger_batch_index <= 34,
+                  'BATCH_SHAPE')
     trigger_processes = _o9_role_processes(watchdog_row)
     baseline = _o9_role_memory(baseline_memory, '$.baseline')
     current_sample = _o9_role_nearest_batch(batch_samples, trigger_batch_index)
