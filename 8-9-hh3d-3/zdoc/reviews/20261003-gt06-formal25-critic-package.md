@@ -4,9 +4,10 @@
 
 Formal25 đã hoàn tất hai pair trên cùng source closure. Bằng chứng benchmark
 đạt các kiểm tra lắp ghép và verifier offline, nhưng GT-06 vẫn **chưa
-ACCEPTED**. Đây là thành phần benchmark của gói critic; coordinator còn phải
-đóng mapping functional/dependency và final manifest theo dòng 692–695 của
-plan trước khi đề nghị nghiệm thu toàn GT06. Coordinator không ký thay critic.
+ACCEPTED**. Bảy luồng chức năng và F06 repair/replay cũng đã hoàn tất; mapping
+functional/dependency và quy trình đóng manifest cuối nằm trong
+`20261003-gt06-functional-refresh/README.md` và `requirements.md`.
+Chỉ bàn giao nghiệm thu khi kiểm manifest cuối thành công; coordinator không ký thay critic.
 Hai phiên review độc lập phải dùng hai model khác nhau, cùng final manifest/
 source/profile/dataset hash; lưu nguyên văn hai báo cáo trước quyết định nghiệm thu.
 
@@ -72,8 +73,10 @@ lane and direct native fixture cycles do not by themselves prove an authored
 game, full product gameplay, Blender asset publication, Android export or
 human playtest.
 
-Pending artifacts: final functional dependency/requirement map and final
-source/review manifest, then `critic-01.json` and `critic-02.json`. Until both reports
+Current functional map and sealing instructions are in the functional-refresh
+directory. The final-review packet's `manifest.json` and `manifest.sha256` bind
+that map and the source/public raw. Remaining acceptance artifacts are
+`critic-01.json` and `critic-02.json`. Until both reports
 explicitly say `TICK=yes` for these exact hashes, GT06 remains unaccepted and
 GT07 remains closed.
 
@@ -108,9 +111,9 @@ Read `terminal.json` and lane receipts for its actual result. It is neither a
 new formal campaign nor acceptance; never resume engines from partial output.
 
 Preparation attempt 01 passed resource preflight but stopped before any engine:
-the launch observer requires its exact 64-file campaign domain, while the first
+the launch observer requires its exact imported collector domain, while the first
 adapter supplied functional217. Attempt 02 separates these checks: the unchanged
-launch observer verifies64 and the frozen functional envelope verifies217.
+launch observer verifies that domain and the frozen functional envelope verifies217.
 Attempt01 raw remains unchanged; no functional engine run or formal retry was consumed.
 Attempt02 also ended before engines, at 19:30:14 Asia/Saigon: resource
 preflight recorded 3,826,409,472 available bytes (3.56 GiB), 71.9545% commit,
@@ -144,8 +147,101 @@ Five pure lifecycle regressions passed with exit 0, including defer then one
 launch, immutable prior receipts, native-failure guard retention and rejection
 of repeat launch. A scoped read-only review found no blocking issue; it is not
 an acceptance critic. Group03 was prepared with functional217 and helper234
-source files, plus the separate 64-file preflight domain and driver snapshot.
+source files, plus the separate 71-file imported preflight domain and two driver
+files (73 total). Formal25 itself freezes 64 files; the collector's imported
+membership depends on the driver. Earlier adapter comments calling this domain
+64 are shorthand, not the actual frozen inventory or its acceptance condition.
 Preview at 19:48 recorded 11.03 GiB available, commit 59.77%, no foreign engine.
 Execution still requires its own fresh preflight/CPU minute. Determine the
 actual outcome from the group admission/terminal and per-lane receipts, never
 from this preparation record.
+
+## Group03 verified terminal result
+
+At 19:55:17 Asia/Saigon the seven functional lanes finished on installed217
+`9a9c9c42fa2be7dedf485b25c99245e92073f7b024909a8f72ec948f08219691`.
+The captured outer execution session returned exit 0. The existing helper
+verified each lane's original host receipts, source copies, native artifact
+hashes, named checks or real UI flags before starting the next lane, then
+collected the selected public raw. `lanes/verification.json` SHA-256 is
+`a6b23ff2a4255c6e7d52e453d5d2ed8b9d99e4208cd80c16dd7feec5dbde6639`.
+
+Lanes: HTTP complete, HTTP Stop, saturated Stop, revoked result, stale capture,
+reviewer complete and reviewer Stop. Actual outer/inner helper exits and all
+imports are 0; the four completion runtimes also have actual exit 0. The three
+intentional Stop runtimes keep `completed=false`, wrapper exit 2 and unknown
+natural exit; they are cancellation evidence, not natural-success evidence.
+All native Jobs are zero/closed/untainted with no retained handle. A fresh
+process snapshot found no Godot/Blender, and the cooperative marker is absent.
+
+F06 continues through `run_managed.py` with fresh repair/replay IDs and the
+unchanged S138 verifier. The wrapper holds the same permanent kernel guard as
+the benchmark, but creates no measurement marker because this non-benchmark
+repair requires the Linux validator. It never removes an existing marker;
+the executor's Docker fence remains unchanged. Seven pure guard/lifecycle tests
+passed, including both-direction exclusion, preservation of a formal marker,
+rejection of reused lanes and refusal to replay an unverified repair.
+The packet is `studio/.local/reviews/gt06-f25-managed-20261003-02/`.
+A scoped review also required post-run driver verification and deterministic
+registration of the lazily imported script-profile module before freezing.
+Both were fixed before native launch; group01 remains preparation-only, with no
+engine. The managed driver freezes 75 imported studio files and two driver files
+(77 total), separately from installed217. Repair was launched at 20:14:22
+Asia/Saigon; actual lane receipts remain necessary before F06 is current evidence.
+
+## F06 completed on the current execution source
+
+Both lanes in `gt06-f25-managed-20261003-02` completed and were verified by the
+unchanged S138 semantic verifier plus the new wrapper's post-run driver check.
+The outer tool session also returned actual exit 0 for each lane. Repair owner
+36416/child13740 and editor29968/editor19712 exited 0; both editors have zero,
+closed, untainted Jobs and no retained handles. Replay owner31284/import14340/
+runtime49180 exited 0; both native stages have natural tree exits and clean Jobs.
+No natural-exit classification was invented for the repair editor close records.
+
+The original S65 fault capture remains
+`d3469bee92f7decad37d1f937631cff467548c8751f03ca99eac029c7547b7a1`.
+Authenticated repair selected config
+`4fe3141b9afe6b411b585b203cebae77e851a406c291ac26620eb8cd7c018d90`
+and read it back before COMMITTED/public ACK; retry and lookup returned the same
+receipt. Repair capture SHA256 is
+`e49a4522962e3c9a062079550251ff654682617b4e6e2793f0d2a7bca50aca81`.
+
+Replay binds that config, accepted GLB and original 60 Hz/seed17 trace to its
+immutable runtime snapshot. Observed movement is 1.50000023841858 m against
+1.5 m expected; fault is absent and every declared semantic postcondition passes.
+Replay capture SHA256 is
+`4ff63ca53048da5e322507da641052fd2804b194c67503a556a178f98317f167`;
+causal report SHA256 is
+`93201023b6a2f1b44fbe73b3d9578f0eb867ff598c928a85792d554106c7a0f2`.
+The outer causal report establishes managed repair; the nested standalone
+observation's `managed_repair_proven=false` remains unchanged and has narrower
+scope. Likewise a native runtime capture's `public_ack=false` does not overwrite
+the authenticated repair command's observed `public_ack=true`.
+
+The source domains remain separate: native217, functional launch71/driver73,
+managed launch75/driver77 and Formal25 benchmark64. A bounded read-only audit
+checked the causal hashes, receipt order, validation exits/removal and teardown;
+it is not either acceptance critic. The final map is
+`20261003-gt06-functional-refresh/requirements.md`.
+
+## Captured regression receipts for the final package
+
+Source-bound subprocess receipts retain protocol 447 tests (4 skips), replay
+849 (1 skip), reviewer65, Linux executor24 and admission wrappers13; each named
+successful suite has actual exit0. Replay already includes execution binding
+and installed-source tests, so totals are not double-counted. Source maps,
+invocations and full logs are in `gt06-f25-final-tests-20261003-01/02/03`.
+
+Two proof-harness issues were retained and corrected without changing native
+runtime source: group01's parent guard collided with campaign unit tests; group02
+isolated child LOCALAPPDATA. Then two wrapper unit tests saw real already-consumed
+IDs; their disposable raw namespace was fixed and explicit consumed-ID rejection
+added. Group03 reran only wrappers. Protocol and already successful suites were
+not repeated. The original failing logs and pre-fix wrapper test bytes remain.
+
+The archive builder rejects missing required members using source freezes,
+public lane inventories, repair artifact hashes, runtime snapshots and captured
+process-artifact hashes. A missing-inventory-reference injection was rejected
+without changing raw. Byte integrity still does not replace source/semantic
+review, and neither scoped implementation audit counts as an acceptance critic.
