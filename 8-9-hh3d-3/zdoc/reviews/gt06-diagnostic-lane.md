@@ -7,6 +7,8 @@
 - Formal11 HARNESS_FAIL counter query; formal13 lỗi launcher trước dispatch; formal17/19 HARNESS_FAIL Docker observer; formal21 PRODUCT_FAIL status gap. Các boundary O9 đã có test; formal12/15/16/18/20 không dispatch. Formal01..21 terminal/unused như plan, S258 không resume.
 - Formal21 host actual exit1; import exit0; editor natural-exit receipt thiếu. Jobs zero/closed/handle released; arm/demand đã gỡ exact-name, XML/receipt/raw giữ nguyên. Formal14 verdict và raw vẫn bất biến.
 - Formal21 closure 01c735149811d4d49f92e478c69386d8db6edc6e0ffbefa19eb0e46c883b39ed; profilev6 8a2e599c40f927ffaff5ded5e48b6bf2a0f0a6bb3a23de31434a695f4258cb35. Current source có O9.1a/b repair, cần freeze mới nếu run tiếp.
+- O9.2 lifecycle đã được triển khai ở `46f692e6`: campaign mới giữ lease cùng source/profile/toolchain tối đa 7 ngày, ghi state append-only và receipt DEFERRED; chỉ cho một retry fresh cùng closure khi pair trước là `INFRA_ABORT`, owner Job đã zero/closed, còn ≥40 phút và còn budget. Campaign lịch sử vẫn giữ max-attempts=1; product/harness không tự retry.
+- O9.3 role attribution đã tích hợp ở `ea84f337` (sau helper `46e3b1db`/`23d14d79`): child ghi binding host/editor sớm; watchdog gắn nhãn bằng PID + process start, lưu private ở trigger và handles/objects ở nearest batch; stop evidence có digest và closeout verifier đọc lại. Thiếu role/baseline/batch là `ROLE_COUNTER_EVIDENCE_GAP`/INFRA_ABORT, không dựng zero. O1 thresholds/timeouts không đổi.
 - Preview A/B stock01/off02 mỗi bản100/100 actual exits0, median60.825/29.292ms; không tái hiện stall5s. Không đổi formal sang no-preview; hướng đã đóng3IDs.
 - Save-return boundary mới: fault-ordering01 tái hiện premature readback/reload; repair02 actual exit0,27/27. Native real-save03 import/editor exit0, save/readback/reload hoàn tất; outer verifier exit1 do nhầm key-presence, đã review offline riêng, không viết lại verdict.
 - Guard chỉ khóa readback đến khi save API trảOK; heartbeat/timeouts/readback và O1–O4 giữ nguyên. Không chứng minh nguyên nhân formal14, không tự dispatch formal15; hướng boundary đã3IDs, không chạy thêm mù.
@@ -31,18 +33,38 @@
 - Fresh soak `gt06-o9-watchdog-soak-20261003-07` exercised this repair for
   71.453 seconds before the first version's overly strict missing-PID guard
   produced `HARNESS_FAIL`; it is invalid DoD and preserved unchanged.
-- The audit also found two gates that remain open and are not silently claimed
-  repaired: O9.2 durable same-closure pair deferral/retry is not implemented
-  (`MAX_ATTEMPTS=1` and one-shot preflight remain), and O9.3 cannot yet apply
-  role-wise O1.2 thresholds because watchdog rows do not carry immutable
-  host/editor baseline/current counters. No new formal is allowed until those
-  gaps are either implemented and tested or explicitly resolved by an owner
-  decision; the soak below is still required independently.
+- The two audit gaps above are now implemented and covered by focused tests
+  (campaign/lifecycle 54 pass; environment/role 65 pass; combined benchmark/
+  environment run 119 pass). They do not authorize a formal by themselves:
+  O9.4C quiet host-only soak, final watchdog soak on the exact frozen closure,
+  fresh O4.1/CPU-minute/source freeze, and the existing formal 2x35 + critic
+  path remain mandatory.
 - Không measurement live tại closeout; tiếp tục O2 registered adapter trong worktree riêng theo AUTHORING_STATUS.md, AUTHORITY0, không merge trướcGT06. Sau review mới đủ bằng chứng: fresh freeze/preflight/CPU minute/budget trước formal.
 
 This lane records diagnostics without changing the authoritative plan. Each
 entry keeps the run ID, source closure, command, actual result and the finding
 needed for the next repair. Raw evidence remains under `studio/.local/`.
+
+## 2026-10-03 — O9.2/O9.3 closeout and O9.4 diagnostics
+
+- `gt06-o9-io-probe-20261003-02` completed 20,000 iterations with actual
+  process exit 0. Open/read max was 12.0503 ms; ReplaceFileW/os.replace max
+  was 96.483 ms; append+flush+fsync max was 580.682 ms with one tail ≥500 ms.
+  Defender/SearchIndexer CPU counters were captured before/after. The probe is
+  diagnostic only (`formal_acceptance=false`); no latency is subtracted from
+  O1 and no root cause is claimed. Raw result remains in its own `.local`
+  directory.
+- `gt06-o9-host-soak-20261003-01` used the new closure after preflight and
+  terminated at watchdog sample 31 with `INFRA_ABORT /
+  EXTERNAL_CPU_PRESSURE`. Actual owner Job was closed/zero with no retained
+  handle; raw stream and `watchdog-stop.json` are preserved. External load
+  included vmmemWSL, Chrome, rustc and node, so this is an invalid O9.4C
+  quiet-window soak, not a product verdict and not a reason to lower gates.
+- O9.4D source review is currently blocked by the pinned Godot source not being
+  present in this repository; only the official executable is pinned. Do not
+  infer Windows file-access retry behavior from the binary. The next valid
+  action is a quiet host-only soak after owner workload reduction, then a final
+  watchdog soak on the exact frozen closure before a fresh formal dry-run.
 
 ## 2026-10-02 — Save-return ordering guard, distinct from latency attribution
 

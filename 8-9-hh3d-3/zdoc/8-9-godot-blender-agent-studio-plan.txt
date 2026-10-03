@@ -402,12 +402,14 @@ giờ là máy yên trong khung đo và tail status gap (formal14, formal21). M�
    hai closure. Không sửa file trong closure khi campaign còn pair chưa xong hoặc đang chờ critic;
    sửa thì campaign đó đóng, raw giữ nguyên.
 3. Phân loại watchdog khách quan (thay câu đầu bài học 27): trigger O4.1 là INFRA_ABORT nếu lúc đó
-   mọi role còn trong ngưỡng dừng sớm O1.2 (private commit ≤ 150% baseline, hoặc ≤ 150% batch 0 khi
-   chưa có baseline; handles ≤ baseline+64; objects ≤ baseline+256); vượt thì PRODUCT_FAIL. Nguồn số:
-   private từng role lấy từ owned_processes trong chính mẫu watchdog lúc trigger (khớp PID role);
-   handles/objects lấy từ mẫu batch gần nhất đã ghi; chưa có mẫu batch nào thì là INFRA_ABORT. Luật
-   này thay luật hiện có trong Policy (chỉ INFRA khi trừ hết private campaign mà máy vẫn vượt).
-   Campaign tự ghi phân loại kèm số liệu đã dùng; không phán tay. Verdict cũ (formal10) giữ nguyên.
+   mọi role còn trong ngưỡng dừng sớm O1.2 (private commit ≤ 150% baseline; handles ≤ baseline+64;
+   objects ≤ baseline+256); vượt thì PRODUCT_FAIL. Nguồn số: private từng role lấy từ
+   `owned_processes` trong chính mẫu watchdog lúc trigger (khớp PID + process start); handles/objects
+   lấy từ mẫu batch gần nhất đã ghi và baseline đúng ba batch 2–4. Khi binding role, baseline hoặc
+   nearest batch bị thiếu/malformed thì ghi `ROLE_COUNTER_EVIDENCE_GAP` và INFRA_ABORT, không dùng
+   zero hoặc suy ra baseline từ banner/prefix. Luật này thay luật cũ trong Policy (chỉ INFRA khi
+   trừ hết private campaign mà máy vẫn vượt). Campaign tự ghi phân loại kèm số liệu đã dùng và
+   verifier đọc lại evidence/hash trước closeout; không phán tay. Verdict cũ (formal10) giữ nguyên.
 4. Tail status gap (formal14: save 5,13 giây; formal21: lookup 2,77 giây). Làm phần rẻ trước, chưa
    có kết quả thì không chạy Godot thêm:
    a) Instrumentation có trần, bộ nhớ cố định, không đổi hành vi hay timeout, đi cùng mọi run sau:
@@ -445,7 +447,7 @@ giờ là máy yên trong khung đo và tail status gap (formal14, formal21). M�
    e) Khi formal đang chạy hoặc chờ critic chỉ làm việc static nhẹ (không test suite, subagent hay
       lệnh nặng khi đang đo) hoặc O2 không chạm closure; khi không có run thì làm O9.1–O9.4 hoặc O2;
       không ngồi chờ khung.
-O9_NEXT=SOAK08_PASS_AS_SMOKE; O9_1B_PIPE_ABSENT_RULE; O9_1D_SOAK_TRIGGER_IS_EVENT; O9_4A_INSTRUMENTATION; O9_4B_IO_PROBE_AND_O9_4D_GODOT_SOURCE; O9_2A_AND_O9_3; O9_4C_HOST_ONLY_SOAK; FINAL_WATCHDOG_SOAK_ON_FREEZE_CLOSURE; OWNER_QUITS_DOCKER_BEFORE_WINDOW_RECOMMENDED; DRY_RUN_THEN_ARM_FORMAL22; TWO_PAIRS_PASS_THEN_CRITIC_PACKAGE_O4_3_NO_CLOSURE_CHANGE; O2_STATIC_WHILE_LOCKED; GT07_OPENS_AFTER_GT06_ACCEPTED
+O9_NEXT=O9_2_DONE_46f692e6; O9_3_ROLE_BINDING_DONE_ea84f337; O9_4B_IO_PROBE_02_DIAGNOSTIC; O9_4C_HOST_SOAK_01_INFRA_CPU; O9_4D_SOURCE_NOT_VENDORED; FRESH_QUIET_HOST_SOAK; FINAL_WATCHDOG_SOAK_ON_FREEZE_CLOSURE; OWNER_QUITS_DOCKER_BEFORE_WINDOW_RECOMMENDED; DRY_RUN_THEN_ARM_FORMAL22; TWO_PAIRS_PASS_THEN_CRITIC_PACKAGE_O4_3_NO_CLOSURE_CHANGE; O2_STATIC_WHILE_LOCKED; GT07_OPENS_AFTER_GT06_ACCEPTED
 
 ACCEPTED_EVIDENCE_INDEX (historical accepted closures; unchanged)
 GT01_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260913
