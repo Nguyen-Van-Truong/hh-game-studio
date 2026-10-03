@@ -26,6 +26,18 @@ No Blender export/import/readback, native presentation run, or gameplay claim
 is added by these static changes. The retained native editor timeout remains
 unknown and no retry is made without a reviewed reproducer.
 
+## 2026-10-03 — Environment check for the next native O2 run
+
+- After Docker/WSL were stopped, the host preflight observed no running
+  containers, about 15 GiB available memory and 45% commit usage. This is an
+  environment observation only; it does not change GT-06's two-INFRA daily
+  budget or grant a native result.
+- The O2 lock requires the pinned Godot **4.7.2-stable** binary. The local
+  tooling currently exposes 4.7.1, while the 4.7.2 copies found in historical
+  evidence do not match the locked GUI hash. No native O2 run is substituted
+  with the wrong pin; install/provide the exact locked binary before native
+  ClassDB or fixture readback.
+
 ## 2026-10-03 — Static asset contract binding hardening
 
 - The asset handoff verifier now binds each planned asset ID to its exact
