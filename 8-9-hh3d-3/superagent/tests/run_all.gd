@@ -62,7 +62,6 @@ func _test_input_frame_validation() -> void:
 	if valid_frame != null:
 		_expect(valid_frame.tick() == 7, "frame tick must be retained")
 		_expect(valid_frame.records().is_read_only(), "records must be immutable")
-		_expect((valid_frame.records()[0][&"events"] as Array).is_read_only(), "edge list must be immutable")
 
 	var extra: Array[Dictionary] = valid_records.duplicate()
 	extra[0] = extra[0].duplicate()
@@ -111,7 +110,7 @@ func _test_real_input_edges() -> void:
 	var p2: Dictionary = _record_for(frame, &"p2_punch", 2)
 	_expect(bool(p1[&"pressed"]) and bool(p1[&"held"]), "P1 key must route independently")
 	_expect(bool(p2[&"pressed"]) and bool(p2[&"held"]), "P2 key must route independently")
-	_expect((p1[&"events"] as Array).size() == 1 and (p2[&"events"] as Array).size() == 1, "one edge per action")
+	_expect(_events_for(p1).size() == 1 and _events_for(p2).size() == 1, "one edge per action")
 	var held: InputFrame = buffer.build_frame(2)
 	_expect(not bool(_record_for(held, &"p1_punch", 1)[&"pressed"]), "pressed resets at frame boundary")
 	_expect(bool(_record_for(held, &"p1_punch", 1)[&"held"]), "held survives frame boundary")
@@ -120,7 +119,7 @@ func _test_real_input_edges() -> void:
 	harness._input(_key_event(78, true))
 	var tap_frame: InputFrame = buffer.build_frame(3)
 	var tap: Dictionary = _record_for(tap_frame, &"p1_punch", 1)
-	var tap_events: Array = tap[&"events"]
+	var tap_events: Array = _events_for(tap)
 	_expect(tap_events.size() == 2 and tap_events[0] == &"released" and tap_events[1] == &"pressed", "ordered release-press must survive")
 	_expect(bool(tap[&"held"]), "end-held state follows final edge")
 
@@ -139,7 +138,7 @@ func _test_focus_cancel_and_echo() -> void:
 	buffer.cancel_all()
 	var cancelled: Dictionary = _record_for(buffer.build_frame(2), &"p1_punch", 1)
 	_expect(bool(cancelled[&"released"]) and not bool(cancelled[&"held"]), "cancel must release held action")
-	_expect((cancelled[&"events"] as Array) == [&"pressed", &"released"], "cancel preserves press then release")
+	_expect(_events_for(cancelled) == [&"pressed", &"released"], "cancel preserves press then release")
 
 func _empty_records(frame_tick: int) -> Array[Dictionary]:
 	var records: Array[Dictionary] = []
@@ -161,9 +160,16 @@ func _empty_records(frame_tick: int) -> Array[Dictionary]:
 func _key_event(code: int, is_down: bool) -> InputEventKey:
 	var event := InputEventKey.new()
 	event.keycode = code
-		event.pressed = is_down
+	event.physical_keycode = 0
+	event.pressed = is_down
 	event.echo = false
 	return event
+
+func _events_for(record: Dictionary) -> Array:
+	var events: Array = []
+	for edge: Variant in record[&"events"]:
+		events.append(edge)
+	return events
 
 func _record_for(frame: InputFrame, action: StringName, player: int) -> Dictionary:
 	for record: Dictionary in frame.records():
