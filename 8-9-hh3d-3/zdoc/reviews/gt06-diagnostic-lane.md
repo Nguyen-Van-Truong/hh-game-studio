@@ -2,17 +2,16 @@
 
 ## Hiện trạng
 
-- Formal25 terminal: two pairs on one closure/profile, 35/35 samples each.
-- Actual child/editor/import exits 0; natural trees, Jobs closed/zero, no retained handles; exact Scheduler task closeout/deletion complete.
-- Offline assembly rebuilt `dataset.json` byte-for-byte; summary PASS; status gaps 1082.058/607.993 ms; source unchanged.
-- O7 prerequisite on same closure: 49 batches, 1832.842787 seconds, max gap 444.9745 ms, watchdog and metrics PASS.
-- Formal25 benchmark PASS; current functional map/final manifest sealed and byte-verified (4327 files). Ready for owner-dispatched critics; GT-06 is not ACCEPTED.
-- Two read-only critics with different models must use the exact hashes and leave verbatim reports before coordinator review; GT-07 remains closed.
-- Formal25 cannot prove F01–F12/TQ00, authored gameplay, Blender publication, Android export or human playtest.
-- Installed217 refreshed to 9a9c9c42fa2be7dedf485b25c99245e92073f7b024909a8f72ec948f08219691; Linux create/start guard regression plus 57 focused tests exit0; Formal25 source unchanged.
-- Functional group03: 7/7 verified; three Stop natural exits UNKNOWN. F06 group02 repair/replay verified, actual exits0. Final manifest fb5770aaaa30aeec4c481947a185c28e2f0bb4a10dae34c05f9b7610215100e0; handoff: zdoc/reviews/20261003-gt06-functional-refresh/handoff.json; no benchmark rerun.
-- Formal01–24 and S258 raw/verdicts remain unchanged; never resume, lower O1/O4/timeouts or mix campaigns.
-- O9 quiet-chain/telemetry and O1/O4 guards remain active; new raw stays under `studio/.local/` and detail follows below.
+- GT06 ACCEPTED 03-10-2026; GT07 is now the first unaccepted WP. Do not rerun Formal25.
+- Formal25: 2×35 PASS, actual exits/trees/Jobs/handles and exact Scheduler terminal result verified; dataset/summary rebuilt byte-equal.
+- Source64 727f9039c1cc83239f5ef1daff13de5e92e37b5ba442e64be8341ca058800b58; profile v6 unchanged.
+- Functional217 9a9c9c42fa2be7dedf485b25c99245e92073f7b024909a8f72ec948f08219691: 7 lanes and F06 authenticated managed repair/replay verified.
+- Three intentional Stop runtimes retain UNKNOWN natural exits/wrapper2; historical source domains remain distinct.
+- Final additive manifest 318081a3c71f334cc44aa4542a5fa5fff459b4045006f6daa91559b1ccc4d4d3 binds unchanged base fb5770aaaa30aeec4c481947a185c28e2f0bb4a10dae34c05f9b7610215100e0.
+- Independent Astra/Sol final reports both TICK=yes on this same hash; coordinator read both and reverified actual exit0 before governance edit.
+- Decision and full limits: zdoc/reviews/20261003-gt06-owner-critics/coordinator-acceptance.md. First critic reports/raw failures preserved.
+- GT07 prep integration/recovery is next. O2 remains AUTHORITY0; no complete-game, Android or release-soak claim.
+- GT06 monitoring heartbeat ends at acceptance. All dated sections below are historical; old retry instructions are not current dispatch authorization.
 
 ## 2026-10-03 — current checkpoint after f24
 

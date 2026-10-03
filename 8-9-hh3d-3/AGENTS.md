@@ -1,11 +1,12 @@
 # HH3D-3 — routing hiện hành
 
-Owner steering mới nhất 30-09-2026: coordinator được dùng subagent khi giúp
-nhanh/chính xác hơn; ưu tiên gpt-6.1-sol ultra cho việc có phạm vi rõ.
+Owner steering mới nhất 03-10-2026: coordinator được dùng subagent và audit;
+ưu tiên gpt-6-astra ultra khi hữu ích, gpt-6.1-sol ultra cho việc có phạm vi rõ.
 Giữ một writer/file, tuần tự hóa workload đo và tiếp tục từ checkpoint đã kiểm chứng.
-Riêng critic nghiệm thu theo O4.3: coordinator chuẩn bị CRITIC_PACKAGE để
-owner chuyển phiên review độc lập chạy hai critic khác model cùng hash.
-Không tự gọi critic nghiệm thu, không ký thay hoặc tái dùng chữ ký hash cũ.
+Theo quyền audit mới nhất của owner, coordinator được dispatch hai critic
+độc lập khác model trên cùng hash; giữ nguyên report, kiểm hash trước nghiệm thu.
+Không tự ký thay critic hoặc tái dùng chữ ký hash cũ. Quyết định GT06:
+zdoc/reviews/20261003-gt06-owner-critics/coordinator-acceptance.md.
 
 Resume đúng checkpoint; không làm lại phần đã chứng minh. Tuần tự hóa engine
 runs; không chạy Godot/Blender khác hay test nặng cạnh GT-06 formal. Giữ actual

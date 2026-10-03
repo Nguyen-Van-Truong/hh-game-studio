@@ -1,24 +1,24 @@
 HH STUDIO — PLAN 1/3: GODOT + BLENDER + CÔNG CỤ CHO AGENT
 Cập nhật 03-10-2026, Asia/Saigon | Revision S258 + quyết định owner O1–O9 | TRIỂN KHAI THEO GATE
 OWNER_DECISIONS=O1_O3_20260925; O4_20260927; O5_O6_20260930; O7_20261001; O8_20261002; O9_20261003; ONE_CONSOLIDATED_BLOCK_BELOW_STATUS_TABLE; LATER_DECISION_WINS; PRECEDENCE=OVER_CONFLICTING_S2XX; OLD_TEXT_IN_GIT=87912523,b0802472,8298c107,fcc1906f,6d8eb81d,d04266e8; RAW_AND_OLD_VERDICTS_UNCHANGED
-HIỆN HÀNH 03-10 — GT-06: CHƯA CÓ 2 PAIR PASS CÙNG CLOSURE (FORMAL09 PAIR 0 ĐÃ PASS 35/35); RUN MỚI NHẤT CHỈ GHI Ở LOG LANE; O9: WATCHDOG TRONG LÚC ĐO CHỈ DÙNG API KERNEL, PHÂN LOẠI WATCHDOG KHÁCH QUAN, PAIR CHƯA CHẠY ĐƯỢC HOÃN SANG KHUNG SAU
-CURRENT_VALID_WP=GT-06
+HIỆN HÀNH 03-10 — GT-06 ACCEPTED: FORMAL25 2×35 + FUNCTIONAL/F06 + HAI CRITIC KHÁC MODEL TICK=YES CÙNG HASH; GT-07 ĐÃ MỞ, TOÀN PLAN CHƯA HOÀN TẤT
+CURRENT_VALID_WP=GT-07
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
 PLAN_REVISION=S258
 EXECUTION_AUTHORIZATION=OWNER_APPROVED_GATED
-EXECUTION_MODE=COORDINATOR_WITH_SCOPED_SUBAGENTS_OWNER_20260930; PREFER_GPT_6_1_SOL_ULTRA; ONE_WRITER_PER_FILE; FINAL_CRITICS_VIA_OWNER_O4_3
-GOAL_STATE=ACTIVE; INDEPENDENT_CONSUMER_PILOT_AUTHORIZED; NO_GAME_PLAN_OPENED; GT06_FORMAL_PER_O9; O2_CAPABILITY_LANE_SEPARATE_WORKTREE_FIXTURE_FIRST_O4_5; GT07_GT10_UNOPENED
-OVERALL_PLAN_STATUS=INCOMPLETE; GT01_GT05_ACCEPTED; GT06_IN_PROGRESS; GT07_GT10_PLANNED_UNOPENED
+EXECUTION_MODE=COORDINATOR_WITH_SCOPED_SUBAGENTS_AND_INDEPENDENT_CRITICS_OWNER_20261003; PREFER_GPT_6_ASTRA_ULTRA; ONE_WRITER_PER_FILE; TWO_DIFFERENT_MODELS_SAME_HASH
+GOAL_STATE=ACTIVE; INDEPENDENT_CONSUMER_PILOT_AUTHORIZED; O2_CAPABILITY_LANE_FIXTURE_FIRST_O4_5; GT07_IMPLEMENTATION_OPEN; GT08_GT10_UNOPENED; SUPERAGENT_SEPARATE_OWNER_AUTHORIZED_LANE
+OVERALL_PLAN_STATUS=INCOMPLETE; GT01_GT06_ACCEPTED; GT07_IN_PROGRESS; GT08_GT10_PLANNED_UNOPENED
 CONSUMER_PILOT_STATUS=REVALIDATED_PROVISIONAL_AUTHORITY0; NOT_GT06_ACCEPTANCE; NOT_COMPLETE_GAME_CLAIM
-GT06_STATUS=IN_PROGRESS; ZERO_ACCEPTED_FORMAL_PAIRS; TERMINAL_AND_UNUSED_FORMAL_IDS_ONLY_IN_LANE_LOG; TERMINAL_CAMPAIGNS_NOT_RESUMABLE; HISTORICAL_ACCEPTANCE_GT01_GT05_UNCHANGED
+GT06_STATUS=ACCEPTED; FORMAL25_TWO_ACCEPTED_PAIRS; FINAL_MANIFEST=318081a3c71f334cc44aa4542a5fa5fff459b4045006f6daa91559b1ccc4d4d3; DECISION=zdoc/reviews/20261003-gt06-owner-critics/coordinator-acceptance.md
 GT06_GATE_POLICY=OWNER_O1_2_FRESH_PAIRS_X_35_BATCHES_5_WARMUP_30_MEASURED_WITH_O1_COUNTER_AND_PRIVATE_COMMIT_RULES; FULL_10X35_UNDER_O1_IS_GT10_RELEASE_SOAK; FULL_DATASET_HASH_ACTUAL_EXITS_TREES_JOBS_HANDLES_AND_TWO_NEW_SAME_HASH_CRITICS
 GT06_ATTRIBUTION_POLICY=DIAGNOSTIC_ONLY_UNLESS_OWNER_ADR_ADDS_ACCEPTANCE_REQUIREMENT; UNKNOWN_IS_NOT_LEAK_ROOT_CAUSE_OR_PASS
 GT06_CURRENT_DIAGNOSTIC=SEE_LANE_LOG_HIEN_TRANG; HEADER_NOT_UPDATED_PER_RUN_O9_6; FORMAL14_SAVE_TAIL_ROOT_CAUSE_UNPROVEN_O9_4; AUTHORITY0
-GT06_NEXT_ACTION=SEE_O9_NEXT; NO_BLIND_FORMAL_RETRY; O1_O4_THRESHOLDS_AND_TIMEOUTS_UNCHANGED; DETAIL=zdoc/reviews/gt06-diagnostic-lane.md
+GT07_NEXT_ACTION=INTEGRATE_REVIEWED_PREP_POLICY_WITH_DURABLE_JOB_LEASE_AUTHORITY_AND_PUBLISH_RECOVERY; MAP_TQ07_TX_GAPS_BEFORE_NATIVE; GT06_NO_BENCHMARK_RERUN
 GT06_SOURCE_POLICY=SOURCE_VERIFIER_OR_PROFILE_CHANGE_CREATES_NEW_CLOSURE_FROZEN_BEFORE_RUN; CLOSURE_COMPUTED_BY_TOOL; OLD_CLOSURES_AND_RAW_HISTORICAL_SEE_GT06_HISTORY_S258; NO_RETROACTIVE_REBINDING; TIMEOUTS_UNCHANGED
 GT06_SOURCE_CHECKPOINT=SEE_LANE_LOG_AND_SCHEDULER_FROZEN_PLAN; CURRENT_ENTRYPOINTS_SHARE_VERIFIED_CLOSURE; HISTORICAL_DISTINCT_CLOSURES_UNCHANGED; NO_RETROACTIVE_SOURCE_REBINDING
-GT06_PROFILE_SHA256=8a2e599c40f927ffaff5ded5e48b6bf2a0f0a6bb3a23de31434a695f4258cb35; PROFILE_O5_V6_IMPLEMENTED_VERIFIED; NOT_YET_FORMAL_ACCEPTED; OLD_V5_RAW_UNCHANGED
+GT06_PROFILE_SHA256=8a2e599c40f927ffaff5ded5e48b6bf2a0f0a6bb3a23de31434a695f4258cb35; ACCEPTED_FORMAL25_SOURCE64=727f9039c1cc83239f5ef1daff13de5e92e37b5ba442e64be8341ca058800b58; OLD_RAW_UNCHANGED
 O1_PREFLIGHT_POLICY=FRESH_O4_1_AND_CPU_MINUTE_BEFORE_EACH_PAIR; READONLY_CHECK_RESULTS_ONLY_IN_LANE_LOG; FOREIGN_CONTAINER_MEANS_STUDIO_HH_GT03_HEX32_O8_1
 O2_CANDIDATE_STATUS=AUTHORITY0; BRANCH=codex/o2-authoring-contract; DETAIL=studio/AUTHORING_STATUS.md_AT_BRANCH_HEAD; OPEN=AUTH05_ADAPTER_E2E; NO_MERGE_BEFORE_GT06; POINTER_ONLY_NO_HASH_OR_TEST_COUNT_O7_6
 RUN_POLICY=FRESH_ID_PER_RUN; VERIFY_SOURCE_PROFILE_WORKSTATION_STOP_LATCH_AND_O5_6_LOCK_BEFORE_START; PRESERVE_RAW_ON_FAILURE; REPAIR_ONLY_PROVEN_BOUNDARY; FIX_AND_CONTINUE_O6_4; NEVER_TICK_FROM_BANNER_OR_PARTIAL_PREFIX; CRITICS_READONLY_INDEPENDENT_SAME_HASH
@@ -31,8 +31,8 @@ STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng
 03 | GT-03 | Godot EditorPlugin: sửa scene, UndoRedo, save/readback | GT-02 | ACCEPTED
 04 | GT-04 | Blender adapter UI và background jobs an toàn | GT-02 | ACCEPTED
 05 | GT-05 | Pipeline .blend → GLB → Godot, asset manifest | GT-03, GT-04 | ACCEPTED
-06 | GT-06 | Play/input/pause/stop/observe/capture qua công cụ | GT-05 | IN_PROGRESS
-07 | GT-07 | Đa agent, publish, lease/fencing và recovery | GT-05, GT-06 | PLANNED
+06 | GT-06 | Play/input/pause/stop/observe/capture qua công cụ | GT-05 | ACCEPTED
+07 | GT-07 | Đa agent, publish, lease/fencing và recovery | GT-05, GT-06 | IN_PROGRESS
 08 | GT-08 | Clean import/export/CI, target và cache matrix (O4.6: có thể tách 08A/08B) | GT-07 | PLANNED
 09 | GT-09 | Lõi tạo nội dung O2 + agent conformance trên 2 mini-game 2D/3D | GT-08 hoặc GT-08A (O4.6) | PLANNED
 10 | GT-10 | Gói công cụ v0.1, cài/upgrade/rollback, bàn giao game | GT-09 + GT-08B nếu tách | PLANNED
@@ -149,10 +149,11 @@ O4 — 27-09-2026 (owner giao toàn quyền sửa plan cho reviewer; AUTHORITY=O
    soak/formal ban đêm hoặc lúc owner vắng.
 2. Owner xác nhận luật phụ retained-handle v5 (O1-OWNER-RESOLUTION.md) là một phần của O1, và xác
    nhận việc kiểm status gap cả 5 batch warmup (chặt hơn bản cũ, khớp yêu cầu status ≤ 2 giây).
-3. Critic trong chế độ solo: coordinator không gọi critic mà chuẩn bị CRITIC_PACKAGE (source/profile/
-   dataset hash, lệnh verify, checklist, đường dẫn raw) rồi báo owner. Owner gửi gói cho một phiên
-   review độc lập (ví dụ Cursor) chạy hai critic read-only khác model trên cùng hash; coordinator
-   lưu nguyên văn kết quả, kiểm hash rồi mới ACCEPT. Trong lúc chờ critic thì làm lane khác.
+3. Critic: owner 03-10 cho phép subagent audit, thay đường chuyển review của chế độ solo cũ.
+   Coordinator chuẩn bị CRITIC_PACKAGE (source/profile/dataset hash, verify command, checklist,
+   raw paths), được dispatch hai critic read-only độc lập khác model cùng hash; lưu nguyên văn
+   kết quả, kiểm sealed bytes rồi mới ACCEPT. Không tự ký critic hoặc hạ tiêu chí. Quyền dispatch
+   và nghiệm thu GT06 ghi tại reviews/20261003-gt06-owner-critics/coordinator-acceptance.md.
 4. Evidence và vệ sinh (gộp O5.4). Tầng F (formal, gói critic, bằng chứng nghiệm thu): raw trong
    .local, zip + manifest hash, chỉ commit manifest/tóm tắt; đường dẫn tương đối ≤ 180 ký tự. Tầng D
    (diagnostic AUTHORITY=0, probe O2): raw trong .local + một mục trong log lane
@@ -557,7 +558,7 @@ giờ là máy yên trong khung đo và tail status gap (formal14, formal21). M�
     c) Batch 47 (ngoài 35 batch tính) có gap 2026 ms lúc 12:10:23, đúng lúc CPU ngoài 104%, đứng đầu
        là chrome.exe và cursor.exe. Chỉ là chẩn đoán, ngưỡng không đổi; khi arm formal, nhắc owner
        hạn chế dùng máy nặng trong khoảng 1,5 giờ formal chạy.
-O9_NEXT=O9_1D_FRESH_WATCHDOG_SOAK_AFTER_CCB6792C; O9_4C_REVIEW_F24_GAP_THEN_HOST_SOAK; O9_5_QUIET_WINDOW_CHAIN; O9_6_CLOSEOUT; O9_7_FRESH_O4_1_CPU_MINUTE_BEFORE_EACH_PAIR; O9_10_R02_FIX_RESIDENCY_OBSERVER_VERIFY_THEN_REARM_FULL_CHAIN; O9_6F_NO_NEW_PROCESS_WHILE_ARMED; O9_8_O2_COPY_PINNED_GODOT_NATIVE_OUTSIDE_WINDOW; O9_9_ONLY_IF_CPU_INFRA_AGAIN; TWO_PAIRS_PASS_THEN_CRITIC_PACKAGE_O4_3_NO_CLOSURE_CHANGE; O2_STATIC_WHILE_LOCKED; GT07_OPENS_AFTER_GT06_ACCEPTED
+O9_HISTORICAL_PRE_ACCEPTANCE_NEXT=O9_1D_FRESH_WATCHDOG_SOAK_AFTER_CCB6792C; O9_4C_REVIEW_F24_GAP_THEN_HOST_SOAK; O9_5_QUIET_WINDOW_CHAIN; O9_6_CLOSEOUT; O9_7_FRESH_O4_1_CPU_MINUTE_BEFORE_EACH_PAIR; O9_10_R02_FIX_RESIDENCY_OBSERVER_VERIFY_THEN_REARM_FULL_CHAIN; O9_6F_NO_NEW_PROCESS_WHILE_ARMED; O9_8_O2_COPY_PINNED_GODOT_NATIVE_OUTSIDE_WINDOW; O9_9_ONLY_IF_CPU_INFRA_AGAIN; TWO_PAIRS_PASS_THEN_CRITIC_PACKAGE_O4_3_NO_CLOSURE_CHANGE; O2_STATIC_WHILE_LOCKED; GT07_OPENS_AFTER_GT06_ACCEPTED
 
 ACCEPTED_EVIDENCE_INDEX (historical accepted closures; unchanged)
 GT01_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260913
@@ -652,47 +653,20 @@ không đồng nghĩa pipeline thành phố3D đã hoàn chỉnh.
   snapshot. Giữ raw gốc; source/review S64 ở808d8ba và governance snapshot,
   không đổi chữ ký theo source mới. Full details: gt05-s63-audit/requirements-s64.md.
 
-GT-06 hiện hành — phần đã làm và đường tới nghiệm thu
-- Functional: Play tách Editor; trace60Hz, real menu/input/pause/resume/quit,
-  interaction/camera/capture và perf export đã chạy thật trên fixture. S65 fault
-  → authenticated GT03 repair → replay có causal chain; S69 managed replay
-  dùng receipt repair02. HTTP/Stop/inspector/reviewer GUI và ba adversary
-  saturated-stop/revoked-result/stale-capture đã có evidence theo lane.
-  GUI S68 và functional S69 chỉ được reuse khi toàn dependency khớp; không
-  gán source mới cho log cũ. Mapping: reviews/20260918-gt06-s70-resume/
-  requirements-final-draft.md, closure-packaging-check.md, fault-coverage-links.md.
-- Journal dùng exact-byte verified cache dưới accepted lock, giữ receipt,
-  tombstone và offsets sau compact. Stop bao completion/assembly/resume;
-  ownership giữ khi constructor/CloseHandle lỗi. Chi tiết/checkpoints c5e56c7,
-  3147778 và S69 ở archive. Core Journal GT-02 đang được sửa theo O5.1/O6.2 (đọc tăng
-  dần, index SQLite, RAM chỉ trạng thái sống); bất biến GT-02 giữ bằng regression.
-- Benchmark bắt buộc theo OWNER O1: 2 fresh host/editor pairs ×35batch (5warmup+30measured)
-  cho GT-06; 10×35 theo O1 là release soak GT-10;
-  mỗi batch1000HTTPcommands+100nativecycles, cùngPID xuyên run. Giữ ready/start/
-  joint/ACK, ngưỡng và7410s/run. Partial attempt không ghép thành runPASS.
-  Không chạy engine/test nặng cạnh phép đo. Scheduler0 không thay actual
-  target/helper exit, Jobzero/closed, released handles và complete dataset.
-- Các campaign S70/S71/S73/S75 trước đều là FAILED/partial, không có fullrun
-  PASS. Nguyên nhân đã sửa có Output display growth, indexing JSON evidence,
-  response-loss retry và chi phí journal. Giữ mọi failure/source/actual-exit
-  record; chi tiết S70–S75 ở reviews/20260918-plan-history-s75/tools-plan-s75.txt
-  (AUTHORITY=0, SHA256 fc338e3651a406d09dffd3199b9bc49acc1dad9c5445f233babff25fb5af6a0e).
-  Không retry campaign cũ dưới source mới, bỏ Stop hoặc trộn partial samples.
-- Dependency reuse: S73 382/382 unit, 5 service/native lanes158checks; S75
-  next/dependency bridge14maps nối S73 service, S69 managed replay và S68 GUI.
-  Chỉ reuse dependency không đổi; draft seal chưa phải closure nghiệm thu.
-- Telemetry máy cũ (available 0,91–2,21 GiB, commit 95–97%) là lịch sử; gate bộ nhớ dùng
-  private commit (O1.4) và môi trường theo O4.1. Không đổi priority, pin RAM hoặc dùng WPR
-  ReferenceSet toàn hệ thống.
-- S76 historical diagnostics/failures are retained byte-for-byte in
-  reviews/20260918-plan-history-s79/tools-plan-s79.txt (AUTHORITY=0;
-  SHA256=3d5ef7ef4acc26bbe721a3ff0628edf3c2d7d9755da8b75394d998795a250a44).
-  Keep the original retention/PSS/latency records and limits; no partial run is
-  a full campaign PASS. Current campaign/source/status are only at the top.
-- Sau benchmark: verify complete 2×35 theo O1, raw/hash/schema/counters/actual exits;
-  ghép functional bằng dependency đã kiểm; đóng final source/review/raw manifest
-  và requirement→test→evidence. Hai critic mới đọc độc lập cùng final hash,
-  PASS/TICK=yes rồi coordinator mới ACCEPT GT06 và mở implementation GT07.
+GT-06 ACCEPTED — 03-10-2026
+- Formal25: hai pair đủ 35/35, source64 và profile v6 không đổi; dataset/summary
+  dựng lại byte-equal, actual exits/tree/Job/handles và Scheduler terminal đã kiểm.
+- Functional217: bảy service/UI/adversary lanes và F06 authenticated managed
+  repair → immutable replay đóng F01–F15/TQ00. Ba Stop natural exits vẫn UNKNOWN,
+  wrapper2; chúng chứng minh cancellation, không phải natural success.
+- Hai critic độc lập gpt-6-astra ultra và gpt-6.1-sol ultra đều TICK=yes trên
+  final manifest 318081a3c71f334cc44aa4542a5fa5fff459b4045006f6daa91559b1ccc4d4d3.
+  Coordinator reverify exit0 trước đổi governance. Chi tiết, source domains,
+  report hashes và limits: reviews/20261003-gt06-owner-critics/coordinator-acceptance.md.
+- Giữ base seal/raw/verdict cũ; bổ sung original Scheduler receipt để đóng gap
+  F14, không chạy lại benchmark. Các run lỗi/partial trước không được hồi tố PASS.
+- GT07 mở implementation. Acceptance này không nghiệm thu O2, game hoàn chỉnh,
+  Android hoặc release soak 10×35 của GT10; source sau merge cần evidence riêng.
 
 Phần còn lại để xong plan
 GT-07: scheduling/concurrency/recovery và cross-app activation.
