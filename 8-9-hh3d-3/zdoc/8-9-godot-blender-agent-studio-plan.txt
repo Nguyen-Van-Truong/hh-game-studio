@@ -359,19 +359,22 @@ có 2 pair PASS cùng closure.
   sau khi chia thành 2 lần thử 1 giây, formal19 (04:44) lại HARNESS_FAIL sau 1 batch vì cả hai lần
   đều timeout (2,016 giây).
 - Formal14 PRODUCT_FAIL vì một lần save native 5,13 giây (status gap 5.077 ms), chưa rõ nguyên nhân.
-- Formal21 (03-10, sau repair cleanup) PRODUCT_FAIL ngay batch 0 vì command-lane
-  `max_status_gap_ms=2766.6174` > 2000. Native barrier cùng batch là 650.59 ms;
-  đây là hai scope khác nhau và sample hợp nhất lấy giá trị lớn nhất, không được
-  trung bình hoặc bỏ qua. Raw cho thấy khoảng trống nằm trong các lookup lặp lại
-  của cùng admitted command, chưa có transport failure hay monotonic CPU binding;
-  root cause vẫn chưa được chứng minh.
-Lõi studio đã qua một pair đầy đủ; phần lớn lỗi còn lại đến từ môi trường và observer. Mỗi lần hỏng
-tốn 1–4 giờ closeout/sửa; 12/25 commit sửa plan.
+- Formal21 (05:11) PRODUCT_FAIL ở batch 0: driver hỏi lại mỗi khoảng 1 ms nhưng không nhận được phản
+  hồi nào trong 2.766 ms khi lookup một command đã nhận (QUEUED); chưa rõ do host, driver hay I/O.
+- Soak watchdog -08 (06:38–07:08, không Godot) PASS 1.800 giây, 30/30 lần đọc Docker thành công.
+  Nhưng máy không yên: CPU ngoài trung bình 36% của máy 12 CPU logic, 16% mẫu ≥ 50%, chuỗi dài nhất
+  40 giây (abort ở 60 giây); com.docker.backend trung bình 11,6% (đo riêng: 2 core liên tục từ 02-10
+  07:16), vmmemWSL 5,6%, Cursor và Defender có đỉnh; RAM trống có lúc 3,95 GiB (< 4 GiB preflight).
+  Docker Desktop bật là nguồn chung của pipe chậm, tải CPU và thiếu RAM.
+Lõi studio đã qua một pair đầy đủ (status gap max 1.295 ms, biên còn mỏng so với 2.000). Đường găng
+giờ là máy yên trong khung đo và tail status gap (formal14, formal21). Mỗi lần hỏng tốn 1–4 giờ.
 1. Watchdog trong lúc đo chỉ dùng API kernel, không gọi PowerShell/WMI/Docker trong vòng ≤ 10 giây:
    a) CPU: mỗi mẫu một lần NtQuerySystemInformation(SystemProcessInformation), cho CPU mọi process
       kể cả vmmem mà không cần mở handle, cùng GetSystemTimes. CPU ngoài campaign = tổng các process
       không thuộc Job campaign (danh sách PID qua QueryInformationJobObject); ngưỡng 50% trong 60
-      giây giữ nguyên, tính trên tổng ngoài Job. Top 10 process lấy từ cùng mẫu.
+      giây giữ nguyên, tính trên tổng ngoài Job. Top 10 process lấy từ cùng mẫu. Process mới hoặc
+      sống ngắn hơn một nhịp không được tính (số đo là cận dưới), mỗi mẫu ghi số PID unknown;
+      chấp nhận cho GT-06.
    b) Container studio: kiểm ở preflight mỗi pair (pipe có trần; lỗi thì thử lại cách nhau, quá 60
       giây chưa đọc được thì không bắt đầu pair; pipe vắng vì Docker Desktop đã tắt là không có
       container, có test). Trong lúc đo, linux_executor (cả bản nhánh O2) từ chối create/start khi
@@ -382,54 +385,67 @@ tốn 1–4 giờ closeout/sửa; 12/25 commit sửa plan.
       sleep/resume giữ nhịp ≤ 10 giây. Mẫu bắt buộc (a, c) thiếu quá 30 giây liên tiếp là
       HARNESS_FAIL; lỡ lẻ một mẫu thì không.
    d) DoD: unit test công thức CPU/Job và lock fence; một watchdog-only soak 30 phút không Godot,
-      ngoài khung đo, không lỗi mẫu bắt buộc (ghi số UNKNOWN); rồi mới freeze closure mới.
-   Implementation checkpoint 03-10: O9.1a is implemented in `bb35bdc3` plus
-   `67f9e9fa` (kernel-only NTQSI counters, missing PID fails closed); O9.1b
-   is implemented in `7495eea6` plus `3e03e482` (in-run Docker poll is
-   best-effort at most once per 60 s with explicit UNKNOWN/CACHED evidence,
-   and both executor create/start paths fence `measure-window.lock`; the O2
-   worktree carries the equivalent fence in `4be9af68`). Focused
-   environment/executor tests are green. These commits do not satisfy the
-   soak or formal gate: the 30-minute watchdog-only run and a distinct
-   formal21 command-gap reproducer remain required.
-2. Pair hoãn được: pair chỉ bắt đầu khi preflight của chính nó đạt; chưa đạt thì chờ, kiểm lại mỗi
-   5 phút tới hết khung. Pair 0 PASS được giữ cho campaign đó. Pair chưa bắt đầu batch 0, hoặc bị
-   INFRA_ABORT theo O9.3, được chạy lại fresh ở khung sau bằng attempt mới của cùng campaign nếu
-   closure và profile kiểm lại đúng hash đã freeze; campaign mở tối đa 7 ngày; budget INFRA O1.7 vẫn
-   áp. Pair FAIL vì product/harness thì campaign kết thúc; không chạy lại pair FAIL, không ghép pair
-   từ hai closure. Không sửa file trong closure khi campaign còn pair chưa xong hoặc đang chờ critic;
+      ngoài khung đo, qua Scheduled Task có soak-result và exit receipt, chạy trên đúng closure sẽ
+      freeze (sau mọi sửa O9 cho lần formal tới; soak trước đó chỉ là smoke, raw giữ nguyên). Soak
+      chỉ FAIL vì lỗi quan sát (mẫu bắt buộc thiếu quá 30 giây, query lỗi, sai shape); trigger môi
+      trường (CPU, RAM, commit, sleep) ghi thành sự kiện rồi chạy tiếp.
+   Trạng thái 03-10 07:00: a), c) xong (bb35bdc3, 8f54a79f, d0374cbf, 25f1f11a); b) xong poll trong
+   run và fence lock (7495eea6, 3e03e482; O2 4be9af68), còn thiếu luật pipe vắng; d) soak -08 PASS
+   nhưng chỉ là smoke vì closure 22db7610 còn đổi. Chi tiết ở log lane.
+2. Pair hoãn được:
+   a) Bắt buộc trước formal mới: pair chỉ bắt đầu khi preflight của chính nó đạt; chưa đạt thì chờ,
+      kiểm lại mỗi 5 phút tới hết khung. Pair INFRA_ABORT theo O9.3 được chạy lại fresh một lần trong
+      khung nếu còn ít nhất 40 phút và còn budget O1.7. Pair PASS được giữ trong campaign.
+   b) Làm sau, chỉ khi hết khung mà pair còn dở: giữ campaign sang khung sau bằng attempt mới nếu
+      closure và profile kiểm lại đúng hash đã freeze; campaign mở tối đa 7 ngày.
+   Pair FAIL vì product/harness thì campaign kết thúc; không chạy lại pair FAIL, không ghép pair từ
+   hai closure. Không sửa file trong closure khi campaign còn pair chưa xong hoặc đang chờ critic;
    sửa thì campaign đó đóng, raw giữ nguyên.
 3. Phân loại watchdog khách quan (thay câu đầu bài học 27): trigger O4.1 là INFRA_ABORT nếu lúc đó
    mọi role còn trong ngưỡng dừng sớm O1.2 (private commit ≤ 150% baseline, hoặc ≤ 150% batch 0 khi
-   chưa có baseline; handles ≤ baseline+64; objects ≤ baseline+256); vượt thì PRODUCT_FAIL. Campaign
-   tự ghi phân loại kèm số liệu đã dùng; không phán tay. Verdict cũ (formal10) giữ nguyên.
-4. Save tail (formal14), làm phần rẻ trước khi chạy Godot thêm:
-   a) Offline: RAM trống/commit trong các mẫu watchdog quanh lần save 5,13 giây (khớp theo wall
-      time, ghi độ bất định).
-   b) Đọc source Godot 4.7.2 (drivers/windows/file_access_windows.cpp): editor safe-save ghi file tạm
-      rồi thay file; xác nhận có vòng thử lại trên main thread khi file đích bị khóa (antivirus,
-      indexer) hay không.
-   c) Nếu có: probe không Godot lặp đúng mẫu đó ≥ 20.000 lần trong thư mục fixture, ghi latency và số
-      lần bị khóa (tầng D, ngoài khung đo). Tail ≥ 1 giây kèm bị khóa là nguyên nhân môi trường: owner
-      quyết thêm exclusion Defender hoặc Dev Drive cho thư mục fixture; không thấy thì đóng hướng này.
-   Không đổi gate 2 giây, không bỏ preview để cho qua. Backlog GT-07: editor báo "đang save" từ
-   thread phụ để host phân biệt bận với treo; dùng cho gate phải có quyết định owner riêng.
+   chưa có baseline; handles ≤ baseline+64; objects ≤ baseline+256); vượt thì PRODUCT_FAIL. Nguồn số:
+   private từng role lấy từ owned_processes trong chính mẫu watchdog lúc trigger (khớp PID role);
+   handles/objects lấy từ mẫu batch gần nhất đã ghi; chưa có mẫu batch nào thì là INFRA_ABORT. Luật
+   này thay luật hiện có trong Policy (chỉ INFRA khi trừ hết private campaign mà máy vẫn vượt).
+   Campaign tự ghi phân loại kèm số liệu đã dùng; không phán tay. Verdict cũ (formal10) giữ nguyên.
+4. Tail status gap (formal14: save 5,13 giây; formal21: lookup 2,77 giây). Làm phần rẻ trước, chưa
+   có kết quả thì không chạy Godot thêm:
+   a) Instrumentation có trần, bộ nhớ cố định, không đổi hành vi hay timeout, đi cùng mọi run sau:
+      host ghi mốc nhận/bắt đầu/trả của từng request, thời gian chờ và giữ khóa journal, fsync,
+      compact; host và driver mỗi process có một thread đo độ trễ thức dậy (ngủ 10 ms, ghi lần trễ
+      từ 100 ms). Giữ top-N request chậm nhất và ring quanh gap lớn nhất. Mục tiêu: một lần hỏng là
+      đủ biết gap nằm ở driver, host, khóa/I/O hay cả process bị đứng.
+   b) Probe I/O không Godot, không studio: mở/đọc, append + fsync, ghi tạm + ReplaceFileW trong thư
+      mục .local của studio, ít nhất 20.000 vòng mỗi loại; ghi tail từ 500 ms kèm CPU msmpeng và
+      SearchIndexer cùng lúc (NTQSI).
+   c) Host-only soak 30 phút ở mix formal, không Godot, không tiêm delay, có (a). Gap từ 1 giây
+      phải được chỉ ra nằm ở đâu theo (a) trước khi arm formal.
+   d) Đọc drivers/windows/file_access_windows.cpp (Godot 4.7.2): safe-save có vòng thử lại trên main
+      thread khi file đích bị khóa (antivirus, indexer) không; có thì đưa đúng mẫu đó vào (b).
+   e) Kết luận: do Defender/indexer thì owner quyết exclusion hoặc Dev Drive cho thư mục studio; do
+      khóa journal hoặc fsync thì sửa để lookup/status trả từ trạng thái trong bộ nhớ, không chờ khóa
+      file (giữ luật ACK/độ bền và regression GT-02); do cả process đứng thì tìm thao tác gây đứng.
+   Reproducer tiêm delay chỉ chứng minh detector chạy, không tính là tái hiện. Không đổi gate 2 giây,
+   không bỏ preview để cho qua. Backlog GT-07: editor báo "đang save" từ thread phụ; dùng cho gate
+   phải có quyết định owner riêng.
 5. Khung đo (bổ sung O8.2): theo OWNER_ALWAYS_RUN_AUTHORIZATION_RECORDED_20261002 agent không cần xác
    nhận từng khung; arm khung 4 giờ khi máy bật và preflight có khả năng đạt; khung không chồng giờ
    owner hay tắt máy (khoảng 22:00–23:00) trừ khi owner báo để máy chạy qua đêm. Hai pair khoảng 75
-   phút. Ưu tiên lúc owner không dùng máy và chưa mở Docker/WSL/IDE nặng. Owner có thể (không bắt
-   buộc) chạy `wsl --shutdown` hoặc tắt Docker Desktop trước khung, hoặc tăng pagefile để giảm %
-   commit; agent không tự làm.
+   phút. Ưu tiên lúc owner không dùng máy. Khuyến nghị owner trước khung: thoát hẳn Docker Desktop
+   (Quit ở khay hệ thống, cần thì mở lại sau), không chạy Cursor/agent review, `wsl --shutdown` nếu
+   không cần WSL; tăng pagefile là tùy chọn. Agent không tự tắt app của owner.
 6. Nhịp làm việc của agent:
    a) Closeout run hỏng bằng một lệnh chung (hash raw, actual exit, Job/handle, export rồi gỡ đúng
       task, ≤ 5 dòng log lane); không viết script audit riêng cho từng run; mục tiêu ≤ 20 phút.
    b) Header plan chỉ đổi khi gate/WP đổi hoặc có quyết định owner; dispatch, verdict run hỏng,
       preflight, số test chỉ ghi log lane. GT06_CURRENT_DIAGNOSTIC/GT06_NEXT_ACTION là con trỏ cố định.
-   c) Một commit một mốc, cả nhánh O2 (03:29–03:32 có 6 commit trong 3 phút); không viết lại lịch sử.
+   c) Một commit một mốc, gộp code và log lane của cùng mốc (03-10 05:26–06:37 có 22 commit, nhiều
+      commit chỉ ghi log); chỉ git add đúng file mình sửa; không viết lại lịch sử.
    d) Model mạnh chỉ cho thiết kế và review boundary; closeout, log, test, status dùng model rẻ hơn.
-   e) Khi formal đang chạy hoặc chờ critic chỉ làm việc static hoặc O2 không chạm closure; khi không
-      có run thì làm O9.1/O9.4 hoặc O2; không ngồi chờ khung.
-O9_NEXT=CLOSEOUT_FORMAL21_AND_REVIEW_COMMAND_GAP; NO_FORMAL22_UNTIL_DISTINCT_REPRODUCER_AND_WATCHDOG_SOAK; O9_1A_REPAIRED_NTQSI; O9_1B_REPAIRED_DOCKER_NONFATAL_AND_LOCK_FENCE; O9_1C_O9_3_O9_2; WATCHDOG_SOAK_30M_THEN_FREEZE_DRY_RUN_ARM; O9_4_SAVE_TAIL_OFFLINE_FIRST; TWO_PAIRS_PASS_THEN_CRITIC_PACKAGE_O4_3_NO_CLOSURE_CHANGE; O2_STATIC_WHILE_LOCKED; GT07_OPENS_AFTER_GT06_ACCEPTED
+   e) Khi formal đang chạy hoặc chờ critic chỉ làm việc static nhẹ (không test suite, subagent hay
+      lệnh nặng khi đang đo) hoặc O2 không chạm closure; khi không có run thì làm O9.1–O9.4 hoặc O2;
+      không ngồi chờ khung.
+O9_NEXT=SOAK08_PASS_AS_SMOKE; O9_1B_PIPE_ABSENT_RULE; O9_1D_SOAK_TRIGGER_IS_EVENT; O9_4A_INSTRUMENTATION; O9_4B_IO_PROBE_AND_O9_4D_GODOT_SOURCE; O9_2A_AND_O9_3; O9_4C_HOST_ONLY_SOAK; FINAL_WATCHDOG_SOAK_ON_FREEZE_CLOSURE; OWNER_QUITS_DOCKER_BEFORE_WINDOW_RECOMMENDED; DRY_RUN_THEN_ARM_FORMAL22; TWO_PAIRS_PASS_THEN_CRITIC_PACKAGE_O4_3_NO_CLOSURE_CHANGE; O2_STATIC_WHILE_LOCKED; GT07_OPENS_AFTER_GT06_ACCEPTED
 
 ACCEPTED_EVIDENCE_INDEX (historical accepted closures; unchanged)
 GT01_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260913
@@ -662,7 +678,7 @@ Bài học 02-10 (formal09 không chạy được đêm 01-10):
     không thay actual exit0 hay receipt của từng role.
 28. Điều kiện trước từng pair phải được thực thi/ghi evidence ở từng pair; quan sát CPU trước
     campaign không chứng minh điều kiện trước pair thứ hai. Sửa harness trước run mới, giữ raw cũ.
-Bài học 03-10 (formal09–19):
+Bài học 03-10 (formal09–21, soak O9):
 29. Observer không được là nguồn lỗi chính của run dài: trong vòng đo chỉ dùng API kernel, công cụ
     ngoài (PowerShell/WMI/Docker) để ở preflight hoặc best-effort. 12 lần đọc pipe thành công không
     chứng minh đủ cho khoảng 430 lần đọc của một campaign 2 pair; vá retry xong formal19 vẫn hỏng
@@ -674,6 +690,13 @@ Bài học 03-10 (formal09–19):
     làm trước campaign.
 32. Lỗi đuôi hiếm (một lần save 5 giây trong khoảng 1.400 lần) không tái hiện được bằng run Godot
     100 chu kỳ; dùng dữ liệu đã có và probe rẻ chạy hàng chục nghìn lần trước khi chạy Godot.
+33. Run dài (soak, probe, formal) chạy qua Scheduled Task có result và exit receipt; phiên tool có
+    thể cắt process giữa chừng (soak -05 mất sau 97 mẫu).
+34. Đo môi trường trước khi sửa code: Docker Desktop đốt khoảng 2 core suốt 24 giờ, vừa làm pipe chậm
+    vừa đẩy CPU ngoài trung bình lên 36% và RAM trống xuống dưới 4 GiB. Soak kiểm độ bền observer
+    không được fail chỉ vì máy bận.
+35. Mỗi run phải mang đủ instrumentation để một lần hỏng là đủ chẩn đoán; reproducer tiêm delay chỉ
+    chứng minh detector chạy, không thay tái hiện tự nhiên.
 
 LỊCH SỬ / CÁCH ĐỌC
 Bản S71 đầy đủ trước tinh gọn giữ tại reviews/20260918-plan-history-s71/
