@@ -661,6 +661,8 @@ func _describe_native(value: Variant) -> Variant:
 		return [value.x, value.y]
 	if value is Vector3:
 		return [value.x, value.y, value.z]
+	if value is Rect2:
+		return [value.position.x, value.position.y, value.size.x, value.size.y]
 	if value is StringName:
 		return str(value)
 	return value

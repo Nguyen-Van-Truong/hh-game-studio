@@ -1,4 +1,4 @@
-# O2 authoring state — 2026-10-02
+# O2 authoring state — 2026-10-03
 
 AUTHORITY=0. Branch `codex/o2-authoring-contract`; no merge before GT-06 ACCEPTED.
 Tools-plan O1–O8 governs; test counts/native diagnostics do not close AUTH or a WP.
@@ -19,8 +19,8 @@ Tools-plan O1–O8 governs; test counts/native diagnostics do not close AUTH or 
   properties. Both retain bounded emitter properties and fixed-seed inputs;
   fixed seed is only a replay aid until a pinned native fixture proves behavior.
   `Rect2` validation is bounded and native readback/UndoRedo rows require
-  detailed observed values, not a boolean marker. The focused contract set is
-  **48** tests, actual exit0; AUTHORITY remains0.
+  detailed observed values, not a boolean marker. The focused contract and
+  diagnostic-verifier set is **59** tests, actual exit0; AUTHORITY remains0.
 
 No Blender export/import/readback, native presentation run, or gameplay claim
 is added by these static changes. The retained native editor timeout remains
