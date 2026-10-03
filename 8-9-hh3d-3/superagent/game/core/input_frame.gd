@@ -63,7 +63,11 @@ static func validate_record(frame_tick: int, record: Dictionary) -> bool:
 		return false
 	if typeof(record[&"events"]) != TYPE_ARRAY:
 		return false
-	var events: Array = record[&"events"] as Array
+	var events: Array[StringName] = []
+	for edge: Variant in record[&"events"]:
+		if typeof(edge) != TYPE_STRING_NAME:
+			return false
+		events.append(StringName(edge))
 	var saw_pressed: bool = false
 	var saw_released: bool = false
 	var expected_held: bool = bool(record[&"initial_held"])
@@ -102,7 +106,9 @@ func _init(frame_tick: int, source_records: Array[Dictionary]) -> void:
 	_tick = frame_tick
 	for source_record: Dictionary in source_records:
 		var record: Dictionary = source_record.duplicate(true)
-		var events: Array = (record[&"events"] as Array).duplicate(true)
+		var events: Array[StringName] = []
+		for edge: Variant in record[&"events"]:
+			events.append(StringName(edge))
 		events.make_read_only()
 		record[&"events"] = events
 		record.make_read_only()

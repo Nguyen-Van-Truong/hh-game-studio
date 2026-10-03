@@ -5,15 +5,18 @@ extends RefCounted
 
 const ACTIONS: Array[StringName] = InputFrame.ACTIONS
 
+class ActionEdges extends RefCounted:
+	var values: Array[StringName] = []
+
 var _down: Dictionary[StringName, bool] = {}
 var _initial_held: Dictionary[StringName, bool] = {}
-var _edges: Dictionary[StringName, Array[StringName]] = {}
+var _edges: Dictionary[StringName, ActionEdges] = {}
 
 func _init() -> void:
 	for action: StringName in ACTIONS:
 		_down[action] = false
 		_initial_held[action] = false
-		_edges[action] = []
+		_edges[action] = ActionEdges.new()
 
 func accept_event(event: InputEvent) -> void:
 	if event == null or (event is InputEventKey and (event as InputEventKey).echo):
@@ -23,24 +26,24 @@ func accept_event(event: InputEvent) -> void:
 		return
 	if event.is_pressed():
 		if not bool(_down[action]):
-			_edges[action].append(InputFrame.EDGE_PRESSED)
+			_edges[action].values.append(InputFrame.EDGE_PRESSED)
 			_down[action] = true
 	else:
 		if bool(_down[action]):
-			_edges[action].append(InputFrame.EDGE_RELEASED)
+			_edges[action].values.append(InputFrame.EDGE_RELEASED)
 			_down[action] = false
 
 ## Converts held keys to ordered release edges on focus loss or explicit cancel.
 func cancel_all() -> void:
 	for action: StringName in ACTIONS:
 		if bool(_down[action]):
-			_edges[action].append(InputFrame.EDGE_RELEASED)
+			_edges[action].values.append(InputFrame.EDGE_RELEASED)
 			_down[action] = false
 
 func build_frame(frame_tick: int) -> InputFrame:
 	var records: Array[Dictionary] = []
 	for action: StringName in ACTIONS:
-		var edges: Array[StringName] = _edges[action].duplicate(true)
+		var edges: Array[StringName] = _edges[action].values.duplicate(true)
 		var pressed: bool = edges.has(InputFrame.EDGE_PRESSED)
 		var released: bool = edges.has(InputFrame.EDGE_RELEASED)
 		records.append({
@@ -54,7 +57,7 @@ func build_frame(frame_tick: int) -> InputFrame:
 			&"held": bool(_down[action]),
 			&"released": released,
 		})
-		_edges[action].clear()
+		_edges[action].values.clear()
 		_initial_held[action] = bool(_down[action])
 	var frame: InputFrame = InputFrame.create(frame_tick, records)
 	if frame == null:
