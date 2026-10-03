@@ -1,0 +1,48 @@
+; Engine and project identity
+; Superagent SA-01 bootstrap: no gameplay is claimed before SA-02 observations.
+config_version=5
+
+[application]
+config/name="Superagent"
+config/description="Superagent Classic bootstrap (SA-01 input contract; gameplay follows observation)."
+run/main_scene="res://main.tscn"
+
+[display]
+window/size/viewport_width=1280
+window/size/viewport_height=720
+window/size/window_width_override=1280
+window/size/window_height_override=720
+window/stretch/mode="canvas_items"
+window/stretch/aspect="keep"
+
+[physics]
+common/physics_ticks_per_second=60
+
+[rendering]
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+environment/defaults/default_clear_color=Color(0.035, 0.047, 0.078, 1)
+
+[debug]
+gdscript/warnings/untyped_declaration=2
+gdscript/warnings/unsafe_method_access=2
+gdscript/warnings/unsafe_property_access=2
+gdscript/warnings/unsafe_cast=2
+
+[input]
+p1_left={"deadzone":0.5,"events":[Object(InputEventKey,"physical_keycode":4194319)]}
+p1_right={"deadzone":0.5,"events":[Object(InputEventKey,"physical_keycode":4194321)]}
+p1_up={"deadzone":0.5,"events":[Object(InputEventKey,"physical_keycode":4194320)]}
+p1_down={"deadzone":0.5,"events":[Object(InputEventKey,"physical_keycode":4194322)]}
+p1_punch={"deadzone":0.5,"events":[Object(InputEventKey,"physical_keycode":78)]}
+p1_shoot={"deadzone":0.5,"events":[Object(InputEventKey,"physical_keycode":77)]}
+p1_throw={"deadzone":0.5,"events":[Object(InputEventKey,"physical_keycode":44)]}
+p1_power={"deadzone":0.5,"events":[Object(InputEventKey,"physical_keycode":46)]}
+p2_left={"deadzone":0.5,"events":[Object(InputEventKey,"physical_keycode":65)]}
+p2_right={"deadzone":0.5,"events":[Object(InputEventKey,"physical_keycode":68)]}
+p2_up={"deadzone":0.5,"events":[Object(InputEventKey,"physical_keycode":87)]}
+p2_down={"deadzone":0.5,"events":[Object(InputEventKey,"physical_keycode":83)]}
+p2_punch={"deadzone":0.5,"events":[Object(InputEventKey,"physical_keycode":49)]}
+p2_shoot={"deadzone":0.5,"events":[Object(InputEventKey,"physical_keycode":50)]}
+p2_throw={"deadzone":0.5,"events":[Object(InputEventKey,"physical_keycode":51)]}
+p2_power={"deadzone":0.5,"events":[Object(InputEventKey,"physical_keycode":52)]}
