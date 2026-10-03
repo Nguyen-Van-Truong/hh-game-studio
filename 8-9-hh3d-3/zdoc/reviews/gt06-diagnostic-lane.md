@@ -1189,6 +1189,20 @@ Archive manifests (AUTHORITY0, raw preserved):
   prove a natural root cause, or permit formal22. A fresh full O9 watchdog soak
   remains required before any new formal freeze.
 
+### O9 watchdog soak closeout — valid run
+
+- `gt06-o9-watchdog-soak-20261003-08` used the post-repair source closure
+  `22db76103738d7cf4327f94fcd234d882610ed14831e432e9e93debc946a55ec` and
+  ran outside a formal window with `godot_started=false` and
+  `docker_create_started=false`. Its actual process exit is `0`, elapsed
+  coverage is exactly `1800 s`, the stream has `354` data samples, and
+  `soak-result.json` records `verified_watchdog=true`.
+- Docker evidence is bounded and explicit: `KNOWN=30`, `CACHED=324`, with no
+  `UNKNOWN` or watchdog stop latch. The raw stream, context, result and source
+  manifest remain under `studio/.local/reviews/gt06-o9-watchdog-soak-20261003-08/`.
+  This closes the O9.1 watchdog-soak DoD, but it is not a formal pair and does
+  not change GT06 acceptance.
+
 ### O9 soak closure repair — incomplete attempts retained
 
 - The first detached soak attempts were stopped after partial samples and had
