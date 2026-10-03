@@ -7,7 +7,7 @@
 - O9.2 lifecycle, O9.3 role binding và O9.4a telemetry đã harden; O1/O4 thresholds, timeout và phân loại cũ không đổi.
 - Wake-lag cleanup, retry binding, NaN/overflow window guard và source-closure binding đã có regression coverage; vắng telemetry thì fail-closed.
 - O9.4D I/O/Godot source review chỉ là chẩn đoán; chưa chứng minh nguyên nhân status-gap/save-tail.
-- O9.4C chưa đạt: chain-f22-r01 đã chạy nhưng host INFRA_ABORT CPU ngoài sau một batch; formal22 chưa dispatch. Ngày 03-10 đã có hai host INFRA_ABORT, không chạy thêm GT06 ngày đó.
+- O9.4C chưa đạt: f22-r01 là INFRA_ABORT do CPU ngoài, còn Scheduler chain f24-r01 đã chạy đến batch 52 nhưng PRODUCT_FAIL vì partial batch có status gap 2016.4559 ms; formal24 chưa dispatch. Không resume hoặc retry mù; phải review partial batch rồi chạy lại trên closure mới trong khung yên.
 - O9.5b đã có mode Scheduler quiet-chain độc lập chat, hash frozen plan, actual host capture, combined watchdog và exact source/profile trước formal.
 - O7 reader tách control gốc/host mới; chỉ chấp nhận profile normalization CRLF→LF đã pin, không hồi tố raw/hash/verdict hoặc giảm ngưỡng.
 - Host/watchdog/formal dùng chung closure 64 file; lấy hash freeze từ quiet-chain-plan.json của scheduler, không dùng hash candidate cũ trong chat.
@@ -17,6 +17,22 @@
 - Sau hai pair formal PASS cùng closure mới lập CRITIC_PACKAGE O4.3 cho owner; không tự gọi critic/ký ACCEPTED.
 - O2 fixture/adapter/particle worktree vẫn AUTHORITY0, không merge trước GT06; GT07 chưa mở.
 - Bằng chứng chi tiết và các verdict lịch sử nằm ở các mục bên dưới; raw mới giữ riêng dưới `studio/.local/`.
+
+## 2026-10-03 — current checkpoint after f24
+
+- F24 closeout is terminal and retained: actual child exit `1`, Job/tree closed and
+  empty, no retained handle, exact Scheduler task removed. The 2016.4559 ms
+  partial-batch gap is a product-lane failure; external CPU is context only and
+  does not erase the observed gap.
+- Watchdog soak `gt06-o9-watchdog-soak-20261003-08` reached 1,800 s with exit `0`,
+  but it used the pre-`ccb6792c` closure. Because that repair completed the
+  manifest dependency closure, a fresh watchdog soak and a fresh O9.4C host soak
+  are required before any formal dispatch.
+- Current daytime observation has no live GT06 campaign, but Docker processes are
+  present. Do not close owner applications or start a competing run. The next
+  permitted sequence is: freeze new closure → O4.1/CPU-minute → fresh watchdog
+  soak and host-only O9.4C in a quiet window → dry-run → formal pairs. Keep O1
+  thresholds/timeouts and all old raw verdicts unchanged.
 
 ## 2026-10-03 — O9.7 owner environment relief
 

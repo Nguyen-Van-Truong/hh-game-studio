@@ -418,7 +418,8 @@ giờ là máy yên trong khung đo và tail status gap (formal14, formal21). M�
       chỉ FAIL vì lỗi quan sát (mẫu bắt buộc thiếu quá 30 giây, query lỗi, sai shape); trigger môi
       trường (CPU, RAM, commit, sleep) ghi thành sự kiện rồi chạy tiếp.
    Trạng thái 03-10: a), c) xong; b) xong poll trong run và fence lock, còn thiếu luật pipe vắng;
-   d) soak -08 PASS nhưng chỉ là smoke vì closure 22db7610 còn đổi. O9.2 lifecycle, O9.3 role
+   d) soak -08 đạt 1.800 s/exit 0 trên closure 22db7610 nhưng chỉ là smoke cho lần freeze mới;
+   manifest closure sau đó đã được sửa ở ccb6792c nên phải chạy lại watchdog soak trên closure đầy đủ. O9.2 lifecycle, O9.3 role
    binding và O9.4a bounded host/journal/status/wake telemetry đã được harden bằng focused suite
    157 tests exit0; watchdog-only runner hiện ghi policy events và replay exact ở observation-only
    mode. Các sửa này cần một closure mới; chưa thay thế O9.4C quiet host soak hoặc final soak.
@@ -556,7 +557,7 @@ giờ là máy yên trong khung đo và tail status gap (formal14, formal21). M�
     c) Batch 47 (ngoài 35 batch tính) có gap 2026 ms lúc 12:10:23, đúng lúc CPU ngoài 104%, đứng đầu
        là chrome.exe và cursor.exe. Chỉ là chẩn đoán, ngưỡng không đổi; khi arm formal, nhắc owner
        hạn chế dùng máy nặng trong khoảng 1,5 giờ formal chạy.
-O9_NEXT=O9_2_LIFECYCLE_HARDENED; O9_3_ROLE_BINDING_HARDENED; O9_4A_SCOPED_HOST_DRIVER_TELEMETRY; O9_4B_IO_PROBE_02_DIAGNOSTIC; O9_4C_HOST_SOAK_01_INFRA_CPU; O9_4D_SOURCE_NOT_VENDORED; O9_5_QUIET_WINDOW_CHAIN; O9_6_CLOSEOUT; O9_7_ARM_QUIET_CHAIN_NOW_FORMAL_INFRA_0_OF_2_DOCKER_WSL_OFF; O9_10_R02_FIX_RESIDENCY_OBSERVER_VERIFY_THEN_REARM_FULL_CHAIN; O9_6F_NO_NEW_PROCESS_WHILE_ARMED; O9_8_O2_COPY_PINNED_GODOT_NATIVE_OUTSIDE_WINDOW; O9_9_ONLY_IF_CPU_INFRA_AGAIN; TWO_PAIRS_PASS_THEN_CRITIC_PACKAGE_O4_3_NO_CLOSURE_CHANGE; O2_STATIC_WHILE_LOCKED; GT07_OPENS_AFTER_GT06_ACCEPTED
+O9_NEXT=O9_1D_FRESH_WATCHDOG_SOAK_AFTER_CCB6792C; O9_4C_REVIEW_F24_GAP_THEN_HOST_SOAK; O9_5_QUIET_WINDOW_CHAIN; O9_6_CLOSEOUT; O9_7_FRESH_O4_1_CPU_MINUTE_BEFORE_EACH_PAIR; O9_10_R02_FIX_RESIDENCY_OBSERVER_VERIFY_THEN_REARM_FULL_CHAIN; O9_6F_NO_NEW_PROCESS_WHILE_ARMED; O9_8_O2_COPY_PINNED_GODOT_NATIVE_OUTSIDE_WINDOW; O9_9_ONLY_IF_CPU_INFRA_AGAIN; TWO_PAIRS_PASS_THEN_CRITIC_PACKAGE_O4_3_NO_CLOSURE_CHANGE; O2_STATIC_WHILE_LOCKED; GT07_OPENS_AFTER_GT06_ACCEPTED
 
 ACCEPTED_EVIDENCE_INDEX (historical accepted closures; unchanged)
 GT01_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260913
