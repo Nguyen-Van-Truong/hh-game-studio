@@ -175,7 +175,7 @@ def _hash_sources(paths: Sequence[Path], root: Path, command: Sequence[str] = ()
         selected = 0
         for original_file in candidates:
             relative = original_file.relative_to(root)
-            if any(part.lower() in excluded for part in relative.parts) or original_file.suffix.lower() in {".pyc", ".pyo"}:
+            if any(part.lower() in excluded for part in relative.parts) or original_file.suffix.lower() in {".pyc", ".pyo", ".uid"}:
                 continue
             path = original_file.resolve()
             if not _inside(path, root):
