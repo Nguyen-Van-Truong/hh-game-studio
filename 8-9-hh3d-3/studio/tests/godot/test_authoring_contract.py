@@ -60,7 +60,8 @@ class AuthoringContractTests(unittest.TestCase):
     def sample(self, spec):
         return {'bool': False, 'int': max(0, int(spec.minimum or 0)),
                 'float': max(1.0, float(spec.minimum or 0)), 'string': 'Original fixture',
-                'vector2': [1.25, 2], 'vector3': [1, 2.5, 3], 'enum': 0,
+                'vector2': [1.25, 2], 'vector3': [1, 2.5, 3],
+                'rect2': [-10.0, -10.0, 20.0, 20.0], 'enum': 0,
                 'resource': {'resource_id': (spec.resource_base or 'unused').lower()}}[spec.type]
 
     def test_each_candidate_node_accepts_own_and_inherited_typed_properties(self):
@@ -75,14 +76,33 @@ class AuthoringContractTests(unittest.TestCase):
                 self.assertFalse(result.preview['classdb_verified'])
                 self.assertEqual(result.preview['native_tests_pending'], ['classdb_extraction', 'reject', 'readback', 'undo'])
                 seen.add(name)
-        self.assertEqual(len(seen), 25)
+        self.assertEqual(len(seen), 26)
         self.assertIn('MeshInstance3D', seen)
         self.assertIn('GPUParticles2D', seen)
         self.assertIn('CPUParticles2D', seen)
         self.assertIn('AudioStreamPlayer2D', seen)
         self.assertIn('ProgressBar', seen)
+        self.assertIn('StaticBody3D', seen)
         self.assertIn('position', self.catalog.classes['Button'].properties)
         self.assertIn('rotation', self.catalog.classes['CharacterBody2D'].properties)
+
+    def test_static_body_3d_collision_bits_are_typed_and_area_fields_reject(self):
+        properties = {'position': [0, 0, 0], 'collision_layer': 1, 'collision_mask': 1}
+        for value in (0, 1, 4294967295):
+            with self.subTest(valid_bits=value):
+                accepted = self.validate(self.request(payload=self.payload('StaticBody3D',
+                    {**properties, 'collision_layer': value, 'collision_mask': value})))
+                self.assertFalse(accepted.preview['runtime_authorized'])
+                self.assertFalse(accepted.preview['classdb_verified'])
+        for field in ('collision_layer', 'collision_mask'):
+            for value in (True, -1, 4294967296, 1.5, '1'):
+                with self.subTest(field=field, invalid_bits=value):
+                    self.reject(self.request(payload=self.payload('StaticBody3D',
+                        {**properties, field: value})), 'AUTHORING_PROPERTY_TYPE')
+        for field in ('monitoring', 'monitorable'):
+            with self.subTest(area_property=field):
+                self.reject(self.request(payload=self.payload('StaticBody3D',
+                    {**properties, field: True})), 'AUTHORING_PROPERTY_REJECTED')
 
     def test_particle_presentation_properties_are_typed_and_bounded(self):
         gpu = self.payload('GPUParticles2D', {
@@ -93,6 +113,13 @@ class AuthoringContractTests(unittest.TestCase):
         })
         result = self.validate(self.request(payload=gpu))
         self.assertEqual(result.projection['payload']['node_type'], 'GPUParticles2D')
+        gpu['properties']['visibility_rect'] = [-100.0, -60.0, 200.0, 120.0]
+        self.validate(self.request(payload=gpu))
+        for value in ([0, 1, 2], [0, 1, 2, 3, 4], [True, 0, 1, 2],
+                      [0, 0, 100001, 100]):
+            with self.subTest(visibility_rect=value):
+                self.reject(self.request(payload=self.payload('GPUParticles2D',
+                    {'visibility_rect': value})), 'AUTHORING_PROPERTY_TYPE')
         cpu = self.payload('CPUParticles2D', {
             'amount': 64, 'lifetime': 0.25, 'one_shot': False, 'emitting': True,
             'texture': {'resource_id': 'texture2d'},
@@ -117,6 +144,13 @@ class AuthoringContractTests(unittest.TestCase):
         self.reject(self.request(payload=self.payload('GPUParticles2D', {
             'process_material': {'resource_id': 'shadermaterial'}})),
                     'AUTHORING_RESOURCE_REFERENCE')
+
+    def test_cpu_particles_reject_gpu_only_properties(self):
+        for field, value in (('process_material', {'resource_id': 'particleprocessmaterial'}),
+                             ('visibility_rect', [-100, -100, 200, 200])):
+            with self.subTest(field=field):
+                self.reject(self.request(payload=self.payload('CPUParticles2D', {field: value})),
+                            'AUTHORING_PROPERTY_REJECTED')
 
     def test_every_class_rejects_unknown_property_or_non_node_creation(self):
         for name, spec in self.catalog.classes.items():

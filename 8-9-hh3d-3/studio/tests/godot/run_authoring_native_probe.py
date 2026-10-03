@@ -555,6 +555,23 @@ def validate_result(result: object, catalog: dict, process: dict, run_root: Path
         missing = sorted(expected - set(labels))
         extra = sorted(set(labels) - expected)
         return False, f"check-label-set missing={missing} extra={extra}"
+    # Presentation candidates carry data-bearing native readback rows. A true
+    # flag without property names/observed values is not evidence for a particle
+    # or HUD contract and must fail closed.
+    rows_by_label = {row["label"]: row for row in checks}
+    for class_name in ("GPUParticles2D", "CPUParticles2D", "AudioStreamPlayer2D", "ProgressBar"):
+        spec = next((row for row in catalog["classes"] if row["class_name"] == class_name), None)
+        if spec is None:
+            continue
+        names = set(spec["properties"])
+        for suffix in ("_readback_all_properties", "_undo_do_readback", "_undo_readback", "_redo_readback"):
+            row = rows_by_label.get("class_" + class_name + suffix)
+            details = row.get("details") if row else None
+            if (type(details) is not list or
+                    {item.get("name") for item in details if type(item) is dict} != names or
+                    any(type(item) is not dict or item.get("passed") is not True
+                        for item in details)):
+                return False, "presentation-readback-details"
     animation_error = validate_animation_observations(checks)
     if animation_error:
         return False, animation_error

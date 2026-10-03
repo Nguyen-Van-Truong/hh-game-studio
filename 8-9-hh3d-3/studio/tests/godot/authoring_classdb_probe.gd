@@ -3,9 +3,19 @@ extends SceneTree
 
 func _initialize() -> void:
 	var document: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://catalog-input.json"))
-	if not document is Dictionary or not document.get("classes") is Array:
+	if not document is Dictionary or not document.get("classes") is Array \
+			or not document.get("resource_types") is Array:
 		quit(31)
 		return
+	var resource_types: Array[Dictionary] = []
+	for resource_name: String in document["resource_types"]:
+		var ancestors: Array[String] = []
+		var exists: bool = ClassDB.class_exists(resource_name)
+		var current: StringName = StringName(resource_name) if exists else &""
+		while not current.is_empty() and ancestors.size() < 64:
+			ancestors.append(str(current))
+			current = ClassDB.get_parent_class(current)
+		resource_types.append({"class_name": resource_name, "exists": exists, "inheritance": ancestors})
 	var classes: Array[Dictionary] = []
 	for candidate: Dictionary in document["classes"]:
 		var class_name_value: StringName = StringName(candidate["class_name"])
@@ -27,9 +37,9 @@ func _initialize() -> void:
 							"setter": str(ClassDB.class_get_property_setter(class_name_value, property_name))})
 				row["properties"].append({"name": property_name, "matches": matches})
 		classes.append(row)
-	var report: Dictionary = {"schema": "hh-o2-classdb-observation-1", "pid": OS.get_process_id(),
+	var report: Dictionary = {"schema": "hh-o2-classdb-observation-2", "pid": OS.get_process_id(),
 		"engine_version": Engine.get_version_info(), "catalog_input_sha256": FileAccess.get_sha256("res://catalog-input.json"),
-		"classes": classes, "runtime_authorized": false, "native_mutation": false}
+		"classes": classes, "resource_types": resource_types, "runtime_authorized": false, "native_mutation": false}
 	var encoded: String = JSON.stringify(report, "", true, true)
 	if encoded.to_utf8_buffer().size() > 262144:
 		quit(32)

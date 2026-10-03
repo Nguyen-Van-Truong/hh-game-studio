@@ -23,7 +23,14 @@ class SavedRoomRecipeTests(unittest.TestCase):
         self.assertEqual(nodes['avatar']['node_type'], 'CharacterBody3D')
         self.assertEqual(nodes['avatar_mesh']['node_type'], 'MeshInstance3D')
         self.assertEqual(nodes['camera']['node_type'], 'Camera3D')
-        self.assertEqual({nodes[key]['node_type'] for key in ('platform', 'trigger')}, {'Area3D'})
+        self.assertEqual(nodes['platform']['node_type'], 'StaticBody3D')
+        self.assertEqual(nodes['platform']['properties']['collision_layer'], 1)
+        self.assertEqual(nodes['platform']['properties']['collision_mask'], 1)
+        self.assertNotIn('monitoring', nodes['platform']['properties'])
+        self.assertEqual(nodes['trigger']['node_type'], 'Area3D')
+        self.assertTrue(nodes['trigger']['properties']['monitoring'])
+        self.assertTrue(nodes['trigger']['properties']['monitorable'])
+        self.assertEqual(nodes['platform_shape']['parent_id'], 'platform')
         self.assertEqual({nodes[key]['node_type'] for key in
                           ('avatar_shape', 'platform_shape', 'trigger_shape')}, {'CollisionShape3D'})
         resources = {row['resource_id']: row for row in value['expected_snapshot']['resources']}
@@ -91,13 +98,14 @@ class SavedRoomRecipeTests(unittest.TestCase):
         resource_snapshot = {**value['expected_snapshot'], 'resources': []}
         context = recipe._resource_context(resource_snapshot,
                                             value['planned_project_revision'])
-        command = value['resource_commands'][0]
+        command = next(row for row in value['resource_commands']
+                       if row['target_stable_id'] == 'platform_shape')
         request = recipe._request(context, command['operation'], command['command_id'],
                                   command['target_stable_id'], command['payload'])
         recipe._RESOURCE.validate_request(request, context)
         broken = list(context.nodes)
         broken = tuple(recipe._RESOURCE.NodeState(n.stable_id, 'missing' if n.stable_id ==
-                         'avatar_shape' else n.parent_id, n.node_type, n.name) for n in broken)
+                         'platform' else n.parent_id, n.node_type, n.name) for n in broken)
         invalid = context.__class__(context.project_id, context.revision,
             context.project_revision, context.generation, context.lease_id,
             context.fencing_epoch, context.lease_expires_ms, context.now_ms,

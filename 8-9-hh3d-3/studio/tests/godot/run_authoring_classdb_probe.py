@@ -24,7 +24,7 @@ contract = importlib.util.module_from_spec(SPEC)
 sys.modules[SPEC.name] = contract
 SPEC.loader.exec_module(contract)
 TYPES = {'bool': (1,), 'int': (2,), 'float': (3,), 'string': (4, 21),
-         'vector2': (5,), 'vector3': (9,), 'enum': (2,), 'resource': (24,)}
+         'vector2': (5,), 'vector3': (9,), 'rect2': (7,), 'enum': (2,), 'resource': (24,)}
 
 
 def sha(path):
@@ -39,13 +39,34 @@ def save(path, value):
 def compare(catalog, observation):
     """Compare reflection; candidate caps and native ranges are separate."""
     raw_classes = {c['class_name']: c for c in catalog.as_dict()['classes']}
+    resources = observation.get('resource_types')
+    if type(resources) is not list or len(resources) != len(catalog.resource_bases):
+        raise ValueError('CLASSDB_RESOURCE_SET')
+    lineage = {}
+    for resource in resources:
+        if type(resource) is not dict or set(resource) != {'class_name', 'exists', 'inheritance'}:
+            raise ValueError('CLASSDB_RESOURCE_SHAPE')
+        name, ancestors = resource['class_name'], resource['inheritance']
+        if (type(name) is not str or name not in catalog.resource_bases or name in lineage or
+                type(resource['exists']) is not bool or type(ancestors) is not list or
+                any(type(base) is not str or not re.fullmatch(r'[A-Z][A-Za-z0-9_]*', base)
+                    for base in ancestors) or len(ancestors) > 64 or
+                len(set(ancestors)) != len(ancestors)):
+            raise ValueError('CLASSDB_RESOURCE_SHAPE')
+        if resource['exists']:
+            if not ancestors or ancestors[0] != name or ancestors[-1] != 'Object':
+                raise ValueError('CLASSDB_RESOURCE_INHERITANCE')
+        elif ancestors:
+            raise ValueError('CLASSDB_RESOURCE_INHERITANCE')
+        lineage[name] = ancestors
     rows = observation.get('classes')
     if type(rows) is not list or len(rows) != len(raw_classes):
         raise ValueError('CLASSDB_CLASS_SET')
     names = [r['class_name'] for r in rows]
     if len(set(names)) != len(names) or set(names) != set(raw_classes):
         raise ValueError('CLASSDB_CLASS_SET')
-    findings = []
+    findings = [dict(class_name=name, code='NOT_NATIVE_RESOURCE')
+                for name, ancestors in lineage.items() if 'Resource' not in ancestors]
     for row in rows:
         name = row['class_name']
         expected = catalog.classes[name]
@@ -75,9 +96,17 @@ def compare(catalog, observation):
                 findings.append(dict(class_name=name, property=pname, code='VARIANT_TYPE', expected=policy.type, observed=prop['type']))
             if policy.writable and (not prop['setter'] or prop['usage'] & (1 << 28)):
                 findings.append(dict(class_name=name, property=pname, code='NO_WRITABLE_SETTER'))
-            if policy.type == 'resource' and policy.resource_base not in prop['hint_string'].split(','):
-                findings.append(dict(class_name=name, property=pname, code='RESOURCE_BASE',
-                                     expected=policy.resource_base, observed=prop['hint_string']))
+            if policy.type == 'resource':
+                # A catalog may safely narrow Material to ShaderMaterial. Exact
+                # string equality rejected this even though native ClassDB accepts
+                # the subtype. Require the observed native RESOURCE_TYPE hint and
+                # a reflected ancestor; do not invent inheritance from class names.
+                hints = prop['hint_string'].split(',') if type(prop['hint_string']) is str else []
+                if (type(prop['hint']) is not int or prop['hint'] != 17 or
+                        not hints or any(not re.fullmatch(r'[A-Z][A-Za-z0-9_]*', h) for h in hints) or
+                        not any(base in lineage[policy.resource_base] for base in hints)):
+                    findings.append(dict(class_name=name, property=pname, code='RESOURCE_BASE',
+                                         expected=policy.resource_base, observed=prop['hint_string']))
     return findings
 
 
@@ -138,7 +167,8 @@ def run(binary, run_id):
     project.mkdir()
     project.joinpath('project.godot').write_text('config_version=5\n[application]\nconfig/name="O2 ClassDB probe"\n[rendering]\nrenderer/rendering_method="gl_compatibility"\n', encoding='utf-8')
     shutil.copyfile(STUDIO/'tests/godot/authoring_classdb_probe.gd', project/'probe.gd')
-    requested = {'classes': [dict(class_name=name, properties=sorted(spec.properties))
+    requested = {'resource_types': sorted(catalog.resource_bases),
+                 'classes': [dict(class_name=name, properties=sorted(spec.properties))
                             for name, spec in sorted(catalog.classes.items())]}
     project.joinpath('catalog-input.json').write_bytes(canonical_bytes(requested))
     project_hashes = {p.name: sha(p) for p in project.iterdir()}
@@ -170,7 +200,7 @@ def run(binary, run_id):
         if len(markers) != 1:
             raise ValueError('CLASSDB_MARKER_COUNT')
         observed = parse_json(markers[0])
-        if (observed['schema'] != 'hh-o2-classdb-observation-1' or
+        if (observed['schema'] != 'hh-o2-classdb-observation-2' or
                 type(observed.get('pid')) is not int or observed['pid'] <= 0 or
                 observed['catalog_input_sha256'] != project_hashes['catalog-input.json'] or
                 observed['runtime_authorized'] is not False or observed['native_mutation'] is not False):

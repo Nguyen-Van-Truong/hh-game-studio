@@ -416,13 +416,30 @@ func _run_candidate(candidate: Dictionary, history: UndoRedo) -> void:
 		if not read_ok:
 			_failures.append(prefix + "_readback_" + property_name)
 		all_readback = all_readback and read_ok
-		property_rows.append({"name": property_name, "readback": read_ok,
+		property_rows.append({"name": property_name, "readback": read_ok, "passed": read_ok,
 			"before": _describe_native(before), "after": _describe_native(read_value),
 			"sample": sample.kind})
 		# Restore the actual default before building one atomic undo action. This
 		# keeps the do/undo pair as the sole effect under test.
 		node.set(property_name, before)
-	_check(prefix + "_readback_all_properties", all_readback)
+	_rows.append({"label": prefix + "_readback_all_properties", "passed": all_readback,
+		"details": property_rows})
+	if not all_readback:
+		_failures.append(prefix + "_readback_all_properties")
+	if properties.is_empty():
+		# An empty property set still needs a real reversible effect. An empty
+		# history action could otherwise undo the previous class's action.
+		_root.remove_child(node)
+		_undo.create_action("HH O2 candidate " + class_name_value, UndoRedo.MERGE_DISABLE, _root)
+		_undo.add_do_method(self, &"_attach_candidate", node)
+		_undo.add_undo_method(_root, &"remove_child", node)
+		_undo.commit_action()
+		_check(prefix + "_undo_do_readback", node.get_parent() == _root and node.owner == _root)
+		_check(prefix + "_undo_transition", history.undo())
+		_check(prefix + "_undo_readback", node.get_parent() == null)
+		_check(prefix + "_redo_transition", history.redo())
+		_check(prefix + "_redo_readback", node.get_parent() == _root and node.owner == _root)
+		return
 
 	var action_name := "HH O2 candidate " + class_name_value
 	_undo.create_action(action_name, UndoRedo.MERGE_DISABLE, _root)
@@ -463,6 +480,7 @@ func _run_candidate(candidate: Dictionary, history: UndoRedo) -> void:
 	var moved_undo := history.undo()
 	_check(prefix + "_undo_transition", moved_undo)
 	var restored := true
+	var undo_details: Array[Dictionary] = []
 	for row: Dictionary in property_rows:
 		if row.get("readback", false) != true:
 			continue
@@ -470,8 +488,14 @@ func _run_candidate(candidate: Dictionary, history: UndoRedo) -> void:
 		# Compare the stable description captured immediately before the action;
 		# resource identity is intentionally represented by class/path, not an
 		# ObjectID that may change across editor history traversal.
-		restored = restored and _describe_native(node.get(str(row.name))) == before_value
-	_check(prefix + "_undo_readback", restored)
+		var undo_value: Variant = _describe_native(node.get(str(row.name)))
+		var property_restored: bool = undo_value == before_value
+		restored = restored and property_restored
+		undo_details.append({"name": str(row.name), "passed": property_restored,
+			"expected": before_value, "observed": undo_value})
+	_rows.append({"label": prefix + "_undo_readback", "passed": restored, "details": undo_details})
+	if not restored:
+		_failures.append(prefix + "_undo_readback")
 	var moved_redo := history.redo()
 	_check(prefix + "_redo_transition", moved_redo)
 	var redone := true
@@ -491,7 +515,14 @@ func _run_candidate(candidate: Dictionary, history: UndoRedo) -> void:
 		_failures.append(prefix + "_redo_readback")
 
 
+func _attach_candidate(node: Node) -> void:
+	_root.add_child(node)
+	node.owner = _root
+
+
 func _prepare_special_node(node: Node, class_name_value: String) -> void:
+	if class_name_value in ["GPUParticles2D", "CPUParticles2D"]:
+		node.set(&"emitting", false)
 	if class_name_value == "Sprite2D":
 		(node as Sprite2D).hframes = 2
 	if class_name_value == "AnimatedSprite2D":
@@ -509,13 +540,14 @@ func _prepare_special_node(node: Node, class_name_value: String) -> void:
 
 
 func _sample(class_name_value: String, property_name: String) -> Dictionary:
+	var is_2d_class := class_name_value.ends_with("2D") or class_name_value in ["Control", "Button", "Label", "ProgressBar"]
 	match property_name:
 		"position":
-			return {"ok": true, "kind": "vector2", "value": Vector2(1.25, -2.5)} if class_name_value in ["Node2D", "Control"] else {"ok": true, "kind": "vector3", "value": Vector3(1.25, -2.5, 3.75)}
+			return {"ok": true, "kind": "vector2", "value": Vector2(1.25, -2.5)} if is_2d_class else {"ok": true, "kind": "vector3", "value": Vector3(1.25, -2.5, 3.75)}
 		"rotation":
-			return {"ok": true, "kind": "vector3", "value": Vector3(0.35, -0.2, 0.1)} if class_name_value in ["Node3D", "CharacterBody3D"] else {"ok": true, "kind": "float", "value": 0.35}
+			return {"ok": true, "kind": "vector3", "value": Vector3(0.35, -0.2, 0.1)} if not is_2d_class else {"ok": true, "kind": "float", "value": 0.35}
 		"scale":
-			return {"ok": true, "kind": "vector2", "value": Vector2(1.2, 0.8)} if class_name_value == "Node2D" else {"ok": true, "kind": "vector3", "value": Vector3(1.2, 0.8, 1.1)}
+			return {"ok": true, "kind": "vector2", "value": Vector2(1.2, 0.8)} if is_2d_class else {"ok": true, "kind": "vector3", "value": Vector3(1.2, 0.8, 1.1)}
 		"visible":
 			return {"ok": true, "kind": "bool", "value": false}
 		"centered":
@@ -524,10 +556,35 @@ func _sample(class_name_value: String, property_name: String) -> Dictionary:
 			return {"ok": true, "kind": "int", "value": 1}
 		"texture":
 			return {"ok": true, "kind": "resource:Texture2D", "value": GradientTexture2D.new()}
+		"visibility_rect":
+			return {"ok": true, "kind": "rect2", "value": Rect2(-100, -60, 200, 120)}
 		"animation":
 			return {"ok": true, "kind": "string_name", "value": StringName("idle")}
 		"autoplay":
-			return {"ok": true, "kind": "bool", "value": false} if class_name_value == "AudioStreamPlayer" else {"ok": true, "kind": "string_name", "value": StringName("idle")}
+			return {"ok": true, "kind": "bool", "value": false} if class_name_value in ["AudioStreamPlayer", "AudioStreamPlayer2D"] else {"ok": true, "kind": "string_name", "value": StringName("idle")}
+		"amount":
+			return {"ok": true, "kind": "int", "value": 16}
+		"seed":
+			return {"ok": true, "kind": "int", "value": 12345}
+		"use_fixed_seed":
+			return {"ok": true, "kind": "bool", "value": true}
+		"lifetime":
+			return {"ok": true, "kind": "float", "value": 0.5}
+		"one_shot":
+			return {"ok": true, "kind": "bool", "value": true}
+		"emitting", "show_percentage":
+			return {"ok": true, "kind": "bool", "value": false}
+		"process_material":
+			return {"ok": true, "kind": "resource:ParticleProcessMaterial", "value": ParticleProcessMaterial.new()}
+		"material":
+			# Resource assignment only; shader-source compile is a separate proof.
+			return {"ok": true, "kind": "resource:ShaderMaterial", "value": ShaderMaterial.new()}
+		"min_value":
+			return {"ok": true, "kind": "float", "value": 0.0}
+		"max_value":
+			return {"ok": true, "kind": "float", "value": 200.0}
+		"value":
+			return {"ok": true, "kind": "float", "value": 25.0}
 		"sprite_frames":
 			var frames := SpriteFrames.new()
 			frames.add_animation(&"idle")

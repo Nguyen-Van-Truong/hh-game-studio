@@ -25,7 +25,7 @@ _NAME = re.compile(r'[A-Za-z][A-Za-z0-9_]{0,47}\Z')
 _CLASS = re.compile(r'[A-Z][A-Za-z0-9_]*\Z')
 _PROPERTY = re.compile(r'[a-z][a-z0-9_]*\Z')
 _REV = re.compile(r'sha256:[0-9a-f]{64}\Z')
-_TYPES = frozenset(('bool', 'int', 'float', 'string', 'vector2', 'vector3', 'enum', 'resource'))
+_TYPES = frozenset(('bool', 'int', 'float', 'string', 'vector2', 'vector3', 'rect2', 'enum', 'resource'))
 _OPERATIONS = ('scene.node.create', 'scene.node.update')
 
 
@@ -267,6 +267,9 @@ def _properties(changes: object, spec: ClassSpec, resources: Mapping[str, Resour
         elif prop.type in ('vector2', 'vector3'):
             valid = type(value) is list and len(value) == int(prop.type[-1]) and all(
                 _number(v) and prop.minimum <= v <= prop.maximum for v in value)
+        elif prop.type == 'rect2':
+            valid = (type(value) is list and len(value) == 4 and
+                     all(_number(v) and abs(v) <= 100000 for v in value))
         elif prop.type == 'string':
             valid = type(value) is str and len(value) <= 4096 and '\x00' not in value
         elif prop.type == 'enum':

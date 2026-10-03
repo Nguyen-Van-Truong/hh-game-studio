@@ -27,6 +27,14 @@ class NativeEvidenceTests(unittest.TestCase):
             "project_root": (self.root / "project").as_posix(),
             "user_root": (self.root / "user").as_posix(), "pid": 123,
         }
+        for class_name in ("GPUParticles2D", "CPUParticles2D", "AudioStreamPlayer2D", "ProgressBar"):
+            spec = next(row for row in self.catalog["classes"] if row["class_name"] == class_name)
+            names = list(spec["properties"])
+            for suffix in ("_readback_all_properties", "_undo_do_readback", "_undo_readback", "_redo_readback"):
+                row = self.row("class_" + class_name + suffix)
+                row["details"] = [{"name": name, "passed": True,
+                                    "observed": {"synthetic": True}, "expected": {"synthetic": True}}
+                                   for name in names]
         # Synthetic evidence for verifier unit tests, never a native execution claim.
         poses = {
             "motion2d": ((0, [1, 2], 0, [1, 1]), (1, [5, 4], 30, [1.5, 2]), (2, [9, 6], 60, [2, 3])),

@@ -3,6 +3,29 @@
 AUTHORITY=0. Branch `codex/o2-authoring-contract`; no merge before GT-06 ACCEPTED.
 Tools-plan O1–O8 governs; test counts/native diagnostics do not close AUTH or a WP.
 
+## 2026-10-03 — Fixture and presentation contract corrections
+
+- The saved 3D room candidate now uses `StaticBody3D` with bounded collision
+  layer/mask for the floor; the trigger remains `Area3D`. This fixes a real
+  recipe defect (an Area3D cannot provide a solid floor). The contract still
+  has no native walk/trigger proof; 40 focused pure tests exit0.
+- ClassDB reflection now records resource inheritance and accepts a candidate
+  subtype only when the native resource hint and reflected lineage support it.
+  This avoids rejecting `ParticleProcessMaterial` under native `Material` while
+  still rejecting widened or forged hints. Seven synthetic reflection tests
+  exit0; no native ClassDB run was performed.
+- Presentation candidates are separated: GPU particles own
+  `process_material`/`visibility_rect`; CPU particles reject those GPU-only
+  properties. Both retain bounded emitter properties and fixed-seed inputs;
+  fixed seed is only a replay aid until a pinned native fixture proves behavior.
+  `Rect2` validation is bounded and native readback/UndoRedo rows require
+  detailed observed values, not a boolean marker. The focused contract set is
+  **48** tests, actual exit0; AUTHORITY remains0.
+
+No Blender export/import/readback, native presentation run, or gameplay claim
+is added by these static changes. The retained native editor timeout remains
+unknown and no retry is made without a reviewed reproducer.
+
 ## 2026-10-03 — Static asset contract binding hardening
 
 - The asset handoff verifier now binds each planned asset ID to its exact

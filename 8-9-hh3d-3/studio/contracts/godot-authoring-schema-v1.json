@@ -548,6 +548,28 @@
         }
       },
       {
+        "class_name": "StaticBody3D",
+        "property_base": "Node3D",
+        "native_base": "PhysicsBody3D",
+        "domain": "3d",
+        "kind": "node",
+        "instantiable": true,
+        "properties": {
+          "collision_layer": {
+            "type": "int",
+            "writable": true,
+            "minimum": 0,
+            "maximum": 4294967295
+          },
+          "collision_mask": {
+            "type": "int",
+            "writable": true,
+            "minimum": 0,
+            "maximum": 4294967295
+          }
+        }
+      },
+      {
         "class_name": "Area2D",
         "property_base": "Node2D",
         "native_base": "CollisionObject2D",
@@ -729,6 +751,20 @@
             "type": "resource",
             "writable": true,
             "resource_base": "ShaderMaterial"
+          },
+          "visibility_rect": {
+            "type": "rect2",
+            "writable": true
+          },
+          "use_fixed_seed": {
+            "type": "bool",
+            "writable": true
+          },
+          "seed": {
+            "type": "int",
+            "writable": true,
+            "minimum": 0,
+            "maximum": 2147483647
           }
         }
       },
@@ -769,6 +805,16 @@
             "type": "resource",
             "writable": true,
             "resource_base": "ShaderMaterial"
+          },
+          "use_fixed_seed": {
+            "type": "bool",
+            "writable": true
+          },
+          "seed": {
+            "type": "int",
+            "writable": true,
+            "minimum": 0,
+            "maximum": 2147483647
           }
         }
       },
