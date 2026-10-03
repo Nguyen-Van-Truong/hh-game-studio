@@ -1,0 +1,23 @@
+{
+  "schema": "sa03.tuning.v1",
+  "status": "UNVERIFIED_PLACEHOLDER",
+  "fixed_hz": 60,
+  "seed": 1,
+  "quantum_world_units": 1,
+  "movement": {
+    "max_health": 100,
+    "acceleration_per_tick": 2,
+    "max_horizontal_speed": 72,
+    "friction_per_tick": 3,
+    "gravity_per_tick": 5,
+    "terminal_fall_speed": 120,
+    "jump_speed": 88,
+    "jump_lock_ticks": 6,
+    "climb_speed": 4,
+    "respawn_delay_ticks": 90
+  },
+  "notes": [
+    "Values are deterministic engineering placeholders.",
+    "No Y8 parity or observed timing claim is made by this file."
+  ]
+}
