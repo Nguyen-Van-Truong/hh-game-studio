@@ -40,7 +40,7 @@ class DispatchPolicyTests(unittest.TestCase):
     def test_two_level_fairness_many_sessions_cannot_overwhelm_another_project(self):
         jobs = []
         sequence = 0
-        for project, sessions, depth in [('project-a', 20, 2), ('project-b', 2, 6)]:
+        for project, sessions, depth in [('project-a', 16, 2), ('project-b', 2, 6)]:
             for session in range(sessions):
                 for index in range(depth):
                     sequence += 1

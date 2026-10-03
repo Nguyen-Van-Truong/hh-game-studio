@@ -601,6 +601,10 @@ class LoopbackFixtureHost:
         if uncertain:
             self._stopped.set()
         details = {"accepting_work": False, "next_action": "lookup.reconcile"} if uncertain else {}
+        if not uncertain and exc.code in {"JOURNAL_FULL", "JOURNAL_RECORD_LIMIT"}:
+            # Capacity recovery belongs to the host: expiry/compaction cannot
+            # discard unique command IDs or guarantee room for another command.
+            details["next_action"] = "pause_new_work_and_request_host_capacity_recovery"
         return (_response(Status.UNKNOWN if uncertain else Status.REJECTED, exc.code, command_id, **details),
                 503 if uncertain else 400)
 

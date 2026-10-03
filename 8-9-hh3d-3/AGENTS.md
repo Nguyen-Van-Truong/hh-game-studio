@@ -16,8 +16,9 @@ là inventory, không tự đóng. Không thay counter/status-gap/timeout của 
 
 Governance chỉ sửa trên nhánh chính. Nhánh O2 ghi chi tiết vào
 studio/AUTHORING_STATUS.md, làm theo gap của hai fixture; giữ DSL sáu effect.
-Không mở/tick GT-07 trước GT-06 ACCEPTED. O7.5 chỉ cho chuẩn bị code/test
-trong worktree riêng sau hai formal pair PASS khi chờ critic, không merge.
+GT-07 đã mở sau khi GT-06 được ACCEPTED. Không tự tick WP; O7.5 chỉ cho
+chuẩn bị code/test trong worktree riêng khi chờ critic, còn nghiệm thu GT-07
+vẫn cần đủ evidence và hai critic cùng hash.
 Đọc CURRENT_VALID_WP và bảng trạng thái
 trong tools plan, không lấy số test/diagnostic làm nguồn tick.
 

@@ -21,6 +21,8 @@ class DispatchPolicyError(ValueError):
 class QueueLimits:
     """Internal candidate profile; does not alter an installed public profile."""
     pending: int = 64
+    project_pending: int = 32
+    session_pending: int = 8
     active: int = 4
     project_active: int = 2
     session_active: int = 1
@@ -102,6 +104,7 @@ def select_next(*, pending: tuple[PendingJob, ...], active: tuple[ActiveJob, ...
           for v in vars(limits).values()), 'DISPATCH_LIMITS_INVALID')
     _need(limits.session_active <= limits.project_active <= limits.active,
           'DISPATCH_LIMITS_INVALID')
+    _need(limits.session_pending <= limits.project_pending, 'DISPATCH_LIMITS_INVALID')
     _need(type(pending) is tuple and len(pending) <= limits.pending
           and type(active) is tuple and len(active) <= limits.active, 'DISPATCH_CAPACITY')
     _need(type(stopped) is bool and _integer(now_ms), 'DISPATCH_CONTEXT_INVALID')
@@ -123,6 +126,8 @@ def select_next(*, pending: tuple[PendingJob, ...], active: tuple[ActiveJob, ...
     project_active: Counter[str] = Counter()
     session_active: Counter[tuple[str, str]] = Counter()
     occupied: set[str] = set()
+    project_pending: Counter[str] = Counter()
+    session_pending: Counter[tuple[str, str]] = Counter()
     for job in active:
         _need(type(job) is ActiveJob and all(_identifier(v) for v in
               (job.job_id, job.project_id, job.session_id))
@@ -146,6 +151,11 @@ def select_next(*, pending: tuple[PendingJob, ...], active: tuple[ActiveJob, ...
         _need(job.job_id not in job.dependencies, 'DISPATCH_DEPENDENCY_INVALID')
         seen_ids.add(job.job_id)
         sequences.add(job.sequence)
+        project_pending[job.project_id] += 1
+        session_pending[(job.project_id, job.session_id)] += 1
+    _need(all(n <= limits.project_pending for n in project_pending.values())
+          and all(n <= limits.session_pending for n in session_pending.values()),
+          'DISPATCH_PENDING_OVER_QUOTA')
     if stopped or len(active) == limits.active:
         return None
 
