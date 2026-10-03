@@ -70,6 +70,26 @@ needed for the next repair. Raw evidence remains under `studio/.local/`.
   demand-only Scheduler `quiet-chain` task (not a direct Python invocation),
   a newly frozen closure after this test update, and a new O4.1/CPU-minute.
 
+## 2026-10-03 — f24 host residency terminal status-gap failure
+
+- Scheduler-owned `gt06-o9-chain-f24-r01` ran on fresh closure `727f9039…`.
+  O4.1 CPU-minute passed and the host child reached batch 52, but its active
+  command residency stopped at 1788.180045 s with `HOST_DIAGNOSTICS`; the
+  final partial batch recorded a 2016.4559 ms status gap. The preceding 52
+  completed summaries peaked at 649.0498 ms; the failing partial batch is
+  retained separately and therefore cannot be hidden by the summary prefix.
+- Host samples recorded external CPU above 50% at several points (maximum
+  81.2039%); this is diagnostic context, not an automatic INFRA reclassification
+  after the host child had already observed a product-lane status gap. No
+  residency result or O9.4C pass receipt exists, and formal24 was never
+  dispatched. The raw owner failure remains `PRODUCT_FAIL`/`BENCHMARK_WRAPPER_EXIT`;
+  the common closeout recorded actual child exit `1`, Job closed/zero and no
+  retained handle, then deleted the exact Scheduler task.
+- Do not resume f24 or retry blindly. Review the partial batch/CPU timeline and
+  require a new quiet-window O4.1, fresh closure and a new chain ID before any
+  further host or formal run. GT06 remains zero accepted pairs; O2 remains
+  separate and unmerged.
+
 ## 2026-10-03 — Scheduled quiet chain r01 closeout
 
 - `gt06-o9-chain-f22-r01` / host `gt06-o9-host-f22-r01`: INFRA_ABORT `EXTERNAL_CPU_PRESSURE`, 1 completed batch, max gap323.6126ms; formal22 never started.
