@@ -67,17 +67,19 @@ def run(root: Path, seconds: int, interval: float) -> int:
         'interval_seconds': interval, 'source_files': files,
         'formal_acceptance': False, 'godot_started': False,
         'docker_create_started': False, 'started_utc': time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())})
-    watchdog = environment.Watchdog(
-        root,
-        lambda: campaign.environment_snapshot(docker_inventory=[]),
-        binding,
-        campaign.write,
-        docker_probe=environment.running_containers,
-        # O9.1d is an observer soak. Resource/foreign-engine policy events are
-        # retained and replayed, while only mandatory harness failures stop it.
-        observation_only=True)
+    watchdog = None
     primary = None
     try:
+        watchdog = environment.Watchdog(
+            root,
+            lambda: campaign.environment_snapshot(docker_inventory=[]),
+            binding,
+            campaign.write,
+            docker_probe=environment.running_containers,
+            # O9.1d is an observer soak. Resource/foreign-engine policy events
+            # are retained and replayed, while only mandatory harness failures
+            # stop it.
+            observation_only=True)
         with environment.KeepAwake():
             while time.monotonic() - started < seconds:
                 watchdog.poll(force=True)
@@ -86,21 +88,28 @@ def run(root: Path, seconds: int, interval: float) -> int:
     except BaseException as error:
         primary = error
     finally:
-        try:
-            watchdog.close()
-        except BaseException as error:
-            primary = primary or error
+        if watchdog is not None:
+            try:
+                watchdog.close()
+            except BaseException as error:
+                primary = primary or error
     elapsed = time.monotonic() - started
     if primary is None:
         try:
+            # A long observer run is valid only if the exact imported closure
+            # is still the one that was frozen before launch.  Rehash after the
+            # loop so a source edit cannot be reported as a verified soak.
+            if source_manifest() != files:
+                raise RuntimeError('SOAK_SOURCE_DRIFT')
             environment.verify_watchdog(root, campaign.read_regular, elapsed_seconds=elapsed,
                                         expected_binding=binding, require_docker_inventory=True,
                                         observation_only=True)
         except BaseException as error:
             primary = error
     result = {'schema': SOAK_SCHEMA, **binding, 'actual_exit_code': 0 if primary is None else 1,
-              'elapsed_seconds': round(elapsed, 3), 'sample_stream_closed': watchdog.stream.closed,
-              'event_stream_closed': watchdog.event_stream.closed,
+              'elapsed_seconds': round(elapsed, 3),
+              'sample_stream_closed': bool(watchdog is not None and watchdog.stream.closed),
+              'event_stream_closed': bool(watchdog is not None and watchdog.event_stream.closed),
               'verified_watchdog': primary is None, 'formal_acceptance': False,
               'error_code': getattr(primary, 'code', type(primary).__name__) if primary else None}
     write_new(root / 'soak-result.json', result)
