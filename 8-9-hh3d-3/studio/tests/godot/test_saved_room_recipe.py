@@ -76,6 +76,14 @@ class SavedRoomRecipeTests(unittest.TestCase):
         altered['asset_bindings'][0]['path'] = '../avatar.glb'
         with self.assertRaisesRegex(ValidationError, 'ROOM_ASSET_IDENTITY'):
             recipe.bind_recipe_to_owner_admission(altered, self.admission())
+        for field, value_to_try in (
+                ('asset_id', 'other_asset'),
+                ('path', 'assets/other.glb'),
+                ('manifest_path', 'assets/other.json')):
+            altered = recipe.build_recipe()
+            altered['asset_bindings'][0][field] = value_to_try
+            with self.assertRaisesRegex(ValidationError, 'ROOM_ASSET_IDENTITY'):
+                recipe.bind_recipe_to_owner_admission(altered, self.admission())
         altered = recipe.build_recipe()
         altered['asset_resource_refs']['mesh.avatar'] = 'other_asset'
         with self.assertRaisesRegex(ValidationError, 'ROOM_ASSET_REFERENCE'):

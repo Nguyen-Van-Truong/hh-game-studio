@@ -148,6 +148,13 @@ def _validate_admission(recipe, admission, deadline_ms):
           and _ASSET_PATH.fullmatch(asset['manifest_path'])
           and _HEX.fullmatch(asset['sha256']) and _HEX.fullmatch(asset['manifest_sha256']),
           'ROOM_ASSET_IDENTITY')
+    # The saved-room adapter admits one already-bound fixture.  Shape-valid
+    # detached paths are not interchangeable: accepting another asset or
+    # manifest would split the recipe from the asset-handoff contract.
+    _need(asset['asset_id'] == 'avatar_blender'
+          and asset['path'] == 'assets/avatar.glb'
+          and asset['manifest_path'] == 'assets/manifest.json',
+          'ROOM_ASSET_IDENTITY')
     _need(asset['import_readback_required'] is True and asset['asset_import_verified'] is False
           and asset['native_observed'] is False, 'ROOM_ASSET_AUTHORITY')
     refs = recipe.get('asset_resource_refs')
