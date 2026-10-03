@@ -673,4 +673,33 @@ Q5 Web: dung lượng tải lần đầu và bộ nhớ đo từ SA-04; ngân s�
   allowed normal merge `f0348a4c`; product matches superagent/main. No runtime
   changes. Next: P2 power/pickups, full item/world catalog, remaining mode
   outcomes, touch/viewport/feedback and proper held-input/60-fps measurements.
+2026-10-03 SA-02 sixth observation checkpoint (14:28 UTC).
+- Product `adb84946` / OBS-07 records desktop resize limits and an unsuccessful
+  P2 power-access attempt. Requested viewport dimensions differed from DOM
+  client dimensions; no touch, calibrated aspect or P2 power activation claim.
+  Two independent GPT-6 Astra ultra methods reviews corrected stale integration
+  wording and the Stage evidence pointer, and produced measurement-handoff.md.
+  These reviews are not acceptance signatures. A 30–60-second pilot with verified
+  60-fps/audio/input cues is the plan-section-8 fallback; none has been received.
+- Product `71836d07` / OBS-08 adds full displayed graphics/effects selector
+  cycles, two settings reload checks, and later Stage row1col2 availability in
+  both 1P/2P grids. Medium/Best survived both sampled direct-tab reloads; sound
+  79 then 50 read back as 80. Original High/High/80 was restored. No storage-cause,
+  browser-restart, co-op-completion or embedded-page parity claim. Astra methods
+  review found no supported overstatement. Ledger stays 79/25/54/0; SA-02 open.
+- OBS-07 ledger `.7` / inventory `.8` had actual/host exits 0/1, cleanup 0,
+  matching before/after hash
+  `0783ad9d3cc7b83d59c1cc97cf76086b451271227bb344b42bb5b10bf43d202f`.
+  OBS-08 ledger `.8` / inventory `.9` likewise had exits 0/1 and cleanup 0,
+  hash `b6038108c33fd4cda4a3d3d6fba6b871f25e048e56a08cefb87c7924fb0ab24f`.
+  Both inventory raw logs contain exactly 54 UNVERIFIED gaps. Raw IDs and repro
+  commands are in SA-02 evidence; later metadata is outside those freezes.
+- Lesson: verify persistence per field; one retained setting does not prove
+  all settings save. A resized desktop is not a touch device. Sparse captures
+  may lag input; do not repeat actions blindly or turn tap failures into absence.
+- Agent tabs closed; no viewport override remains. Latest live preflight was
+  clear, but unrelated tracked studio work keeps main integration deferred.
+  Do not stage/stash that work. Resume from product `71836d07`, not main's older
+  product copy. Next: remaining item/world/mode/feedback observations and proper
+  held-input/timing samples; no new rows added to inflate observed counts.
 END_OF_SUPERAGENT_PLAN
