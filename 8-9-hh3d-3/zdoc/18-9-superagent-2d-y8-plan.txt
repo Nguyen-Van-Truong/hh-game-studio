@@ -1,9 +1,12 @@
-SUPERAGENT — PLAN GAME 2D THEO SUPERFIGHTERS TRÊN Y8 (SA3, VIẾT LẠI 03-10-2026)
+SUPERAGENT — PLAN GAME 2D THEO SUPERFIGHTERS TRÊN Y8 (SA4, CLASSIC-FIRST, 03-10-2026)
 
 PRODUCT_NAME=Superagent
 PLAN_ROLE=SUPERAGENT_PRODUCT_SOURCE_OF_PROGRESS
 PLAN_SCOPE=8-9-hh3d-3/superagent
-PLAN_REVISION=SA3
+PLAN_REVISION=SA4
+CLASSIC_FIRST_POLICY=CLASSIC_PARITY_BEFORE_VARIANTS
+CLASSIC_RELEASE_SCOPE=SA-01..SA-13_ONLY
+VARIANT_SCOPE=SA-14_VARIANT_01_LOCKED_BY_OWNER
 CURRENT_VALID_WP=SA-01
 EXECUTION_AUTHORIZATION=OWNER_OPENED_2026_10_03
 DISPATCHABLE=YES_SEPARATE_AGENT_RESPECT_MEASURE_LOCK
@@ -17,10 +20,10 @@ LEGACY_PROGRESS_INHERITED=NONE
 PREVIOUS_REVISION=SA2 trong Git bf88058f, chỉ còn là lịch sử
 
 0. ĐỌC NHANH
-- Làm game Superagent: game 2D đấu trường, bắn súng trên nền platform. Phím, cơ chế, vũ khí, vật
-  thể, bot, chế độ chơi và luồng menu phải giống bản HTML5 Superfighters trên
-  https://www.y8.com/games/superfighters ở mức đo được. Nhân vật mặc trang phục mới; hình, âm
-  thanh, tên và layout map là của mình (mục 2).
+- Làm game Superagent Classic: game 2D đấu trường, bắn súng trên nền platform. Phím, cơ chế, vũ
+  khí, vật thể, bot, chế độ chơi và luồng menu phải giống bản HTML5 Superfighters hiện có trên
+  https://www.y8.com/games/superfighters ở mức đo được. Nhân vật, hình, âm thanh, tên và layout
+  map là nguyên bản của mình (mục 2). Classic phải hoàn thành trước mọi biến thể.
 - Làm ngay, không chờ plan công cụ (GT-06 đến GT-10). Dùng Godot 4.7.2 stock, viết file trực tiếp,
   test headless, git làm checkpoint. Một agent riêng do owner giao làm game; coordinator plan
   công cụ không kiêm.
@@ -29,19 +32,24 @@ PREVIOUS_REVISION=SA2 trong Git bf88058f, chỉ còn là lịch sử
   này; routing HH3D nằm ở 8-9-hh3d-3/AGENTS.md.
 - Trước mọi lệnh nặng phải kiểm xem có đang đo không (mục 6). Đang đo thì không chạy gì nặng;
   đang đo formal thì dừng hẳn.
-- Chưa có dòng MATCHED trong sổ đối chiếu (mục 7) thì không được claim "giống Y8".
+- Chưa đủ các dòng chức năng bắt buộc MATCHED trong sổ đối chiếu (mục 7) thì không được claim
+  "giống Y8". GAP về phím, di chuyển, combat, bot, mode, menu hoặc nhịp trận là blocker; owner
+  chỉ được miễn khác biệt biểu hiện nguyên bản. Muốn đổi chức năng phải có quyết định phạm vi mới.
+- SA-14 không thuộc Classic release và không được tự mở. Nó là backlog biến thể, chỉ mở sau khi
+  owner đã chấp nhận Classic và gửi lệnh mới.
 - WP hiện hành là CURRENT_VALID_WP. Coordinator game tick sau khi đạt DoD; subagent không tick.
 - Chỉ hỏi owner ở E1 (tiền, secret), E2 (ký, phát hành), E3 (pháp lý, thương hiệu), E4 (đổi mục
   tiêu lớn). Việc khác tự quyết, tự sửa, ghi LOG.
 
 1. MỤC TIÊU VÀ THỨ TỰ ƯU TIÊN
-Owner 03-10: giống y chang trừ trang phục nhân vật, kiểu các game MUGEN, nhưng nút, phím đánh và
-cơ chế phải giống Superfighters trên Y8 trước. Thứ tự:
+Owner 03-10: hoàn thành Classic giống bản Y8 trước; phần nâng cấp kiểu MUGEN chỉ làm sau bằng lệnh
+mới. Thứ tự:
 1) Classic: chơi như bản Y8, gồm phím, cảm giác di chuyển, đấm/bắn/ném, vũ khí, item, vật thể,
    bot, chế độ, luồng menu và nhịp trận. Đây là ưu tiên số một và là bản phát hành đầu tiên.
-2) Phần của mình: nhân vật và trang phục mới, map mới cùng chức năng (D1), art, âm thanh, UI mới.
-3) Sau Classic: Hero mode kiểu MUGEN (SA-14) gồm roster nhiều nhân vật, chiêu riêng, gói nhân vật.
-   Hero mode là chế độ riêng, không làm lệch Classic.
+2) Phần nguyên bản trong Classic: nhân vật/trang phục cố định mới, map mới cùng chức năng (D1),
+   art, âm thanh và UI mới. Không làm hệ chỉnh trang phục trong Classic.
+3) Sau Classic và chỉ khi owner mở: Hero mode kiểu MUGEN (SA-14) gồm roster nhiều nhân vật,
+   chiêu riêng và gói nhân vật. Hero mode là chế độ riêng, không làm lệch Classic.
 Nền tảng: Web trên desktop và điện thoại (như Y8) và Windows. Phát hành công khai do owner ký (E2).
 
 2. PHẠM VI "GIỐNG Y CHANG" VÀ PHẦN PHẢI LÀ CỦA MÌNH
@@ -55,26 +63,44 @@ Giống reference (đo rồi làm theo, ghi vào sổ đối chiếu):
 - Bot: hành vi và các mức khó. Chế độ: VS, hai người, Stage, Survival, luật thắng thua.
 - Luồng menu, HUD (hiện thông tin gì, khi nào), camera và khung nhìn, nhịp trận.
 Phải là của mình (không lấy từ reference):
-- Trang phục và hình nhân vật (ngoại lệ owner đã chọn); tên Superagent, logo, chữ trong game.
+- Trang phục và hình nhân vật nguyên bản (không sao chép reference); tên Superagent, logo, chữ
+  trong game. Classic dùng bộ trang phục cố định; hệ chỉnh/ghép trang phục thuộc biến thể sau này.
 - Toàn bộ sprite, frame animation, tile, nền, hiệu ứng, âm thanh, nhạc, font, đồ họa UI.
 - Layout map: mặc định là layout mới cùng chức năng (D1). Số tầng, thang, hố, chỗ nấp, hazard,
-  điểm spawn tương đương; kích thước trong khoảng ±10%.
+  điểm spawn tương đương; kích thước và hình học phải được tự thiết kế, không ép ±10% để tránh
+  sao chép bố cục cụ thể. Chỉ topology/vai trò traversal và hazard được đối chiếu.
 Lý do: luật chơi, phím và cơ chế là ý tưởng/chức năng nên được làm giống. Hình, âm thanh, tên và
 bố cục cụ thể là phần biểu hiện, có bản quyền và thương hiệu. Vụ Tetris Holding kiện Xio
 Interactive (Mỹ, 2012): code viết mới nhưng nhìn gần y hệt bản gốc vẫn bị xử vi phạm. MythoLogic
 Interactive vẫn đang bán Superfighters Deluxe. Plan này không phải tư vấn luật; trước khi phát
 hành công khai, owner và luật sư duyệt (E3, SA-13).
 
+CLASSIC_PARITY_GATE
+- Classic chỉ nghiệm thu chức năng đã OBSERVED ở bản Y8 hiện tại. Mỗi dòng R01–R15 bắt buộc có
+  OBSERVED hoặc NOT_IN_CURRENT, IMPLEMENTED và MATCHED; UNVERIFIED, UNCERTAIN hoặc GAP ở dòng
+  chức năng là blocker.
+- Asset, audio, tên, logo và biểu hiện hình học do clean-room tự tạo. Topology/vai trò map và
+  thông tin/luồng UI vẫn phải tương đương reference; EXEMPT_BY_OWNER chỉ dành cho biểu hiện,
+  không dùng để bỏ qua khác biệt gameplay.
+- Chưa qua Classic gate thì không làm và không mở feature biến thể: costume editor/layered outfit,
+  Hero/MUGEN, extra maps, extra rules, extra weapons hoặc mode mới.
+
+POST_CLASSIC_VARIANTS
+- SA-V1 costume editor/layered outfit, SA-V2 Hero/MUGEN, map/weapon/rule mở rộng là backlog riêng,
+  LOCKED_BY_OWNER. Chỉ mở bằng lệnh owner sau SA-13; mỗi biến thể giữ regression hash của Classic
+  và không làm thay đổi hành vi Classic.
+
 3. QUYẾT ĐỊNH OWNER
 Đã có:
 - 18-09: tên Superagent; parity chức năng với bản Y8; nhân vật mới.
-- 03-10: viết lại plan; làm ngay, không chờ GT-10; ưu tiên phím và cơ chế giống Y8; chỉ khác
-  trang phục nhân vật; phần kiểu MUGEN làm sau; tăng tốc để phát hành.
+- 03-10: viết lại plan; làm ngay, không chờ GT-10; ưu tiên phím và cơ chế giống Y8; Classic dùng
+  hình/trang phục nguyên bản cố định; phần kiểu MUGEN và mọi hệ tùy biến làm sau Classic.
 Cần owner chọn. Agent dùng mặc định cho tới khi owner đổi, không dừng việc để chờ:
 D1 (E3) Map. Mặc định: layout mới cùng chức năng. Map gần y hệt chỉ khi owner chọn và luật sư
    duyệt trước khi public.
 D2 (E1 nếu tốn tiền) Art. Mặc định: agent dựng nhân vật low-poly trong Blender 5.2.1, render
-   sprite sheet cỡ nhỏ tự động (lượng tử hóa palette, viền), trang phục là lớp riêng đổi màu được.
+   sprite sheet cỡ nhỏ tự động (lượng tử hóa palette, viền); Classic dùng sprite/trang phục cố định.
+    Lớp đổi màu và màn tùy biến để SA-V1.
    Muốn đẹp hơn thì thuê họa sĩ pixel. Ảnh AI chỉ dùng làm concept, không đưa vào game khi
    chưa rõ quyền.
 D3 (E3) Tên. Kiểm thương hiệu "Superagent" (USPTO, EUIPO, WIPO, Cục Sở hữu trí tuệ Việt Nam)
@@ -87,8 +113,9 @@ D6 (E1) Ngân sách asset và âm thanh. Mặc định 0 đồng: tự làm, ho�
    có ghi nguồn.
 
 4. TIẾN ĐỘ (nguồn tiến độ duy nhất của Superagent)
-Coordinator game đánh [x] sau khi đạt DoD và verify của WP; subagent không tick. Từ SA-04 trở đi
-được làm song song các WP đã đủ cột "cần". CURRENT_VALID_WP là WP chưa tick sớm nhất.
+Coordinator game đánh [x] sau khi đạt DoD và verify của WP; subagent không tick. SA-01→SA-13 là
+chuỗi Classic nối tiếp: chỉ được chuẩn bị test/art độc lập; WP kế tiếp không được nghiệm thu trước
+gate của WP trước. CURRENT_VALID_WP là WP Classic chưa tick sớm nhất.
 Một writer cho file này: coordinator game. File nằm ở repo chính, trên nhánh chính. Đọc lại file
 ngay trước khi sửa (owner hoặc reviewer có thể vừa sửa), rồi commit riêng đúng file này:
 git commit -m "SA-xx: ..." -- 8-9-hh3d-3/zdoc/18-9-superagent-2d-y8-plan.txt
@@ -102,12 +129,12 @@ git commit -m "SA-xx: ..." -- 8-9-hh3d-3/zdoc/18-9-superagent-2d-y8-plan.txt
 [ ] SA-07 Chế độ chơi, luật trận, menu đầy đủ, tạm dừng, cài đặt, lưu — cần: SA-04
 [ ] SA-08 Bot đủ hành vi và mức khó — cần: SA-05, SA-06
 [ ] SA-09 Đủ bộ map theo D1, có đồ thị di chuyển cho bot — cần: SA-06
-[ ] SA-10 Art, animation, âm thanh, UI hoàn chỉnh và hệ trang phục — cần: SA-04, D2
+[ ] SA-10 Classic art, animation, âm thanh và UI hoàn chỉnh (sprite/trang phục cố định) — cần: SA-04, D2
 [ ] SA-11 Cảm ứng điện thoại, bản Web và Windows, hiệu năng — cần: SA-07, SA-10
 [ ] SA-12 Đối chiếu toàn bộ, playtest người thật, sửa lỗi — cần: SA-05 đến SA-11
 [ ] SA-13 Bản phát hành ứng viên: pháp lý, thương hiệu, đóng gói — cần: SA-12, D1, D3, D5
-[ ] SA-14 Hero mode kiểu MUGEN: roster, chiêu riêng, gói nhân vật — cần: SA-13 (owner có thể mở
-          sớm sau SA-12)
+[BACKLOG / LOCKED_BY_OWNER] SA-14 VARIANT-01 Hero mode kiểu MUGEN: roster, chiêu riêng, gói
+          nhân vật — chỉ mở sau Classic release khi owner gửi lệnh mới; không thuộc CURRENT_VALID_WP
 
 Ước lượng, không phải cam kết (một agent chính có subagent, owner thử bản build trong 24 giờ):
 SA-01 đến SA-04 khoảng 3–7 ngày; SA-05 đến SA-10 khoảng 2–4 tuần, trong đó art là phần dài và rủi
@@ -137,15 +164,20 @@ ro nhất; SA-11 đến SA-13 khoảng 1–2 tuần.
     Không sửa hay ghi gì vào studio/.local.
 5.3 Project. Renderer Compatibility (chạy được trên Web và điện thoại), physics 60 tick/giây,
     typed GDScript, các cảnh báo untyped/unsafe đặt ở mức lỗi.
-    - Mô phỏng tách khỏi phần hiển thị: hiệu ứng, âm thanh và particle chỉ để nhìn/nghe, không đổi
-      kết quả trận. Particle ưu tiên CPUParticles2D (Web, điện thoại).
+    - Mô phỏng tách khỏi phần hiển thị: một GameSession fixed-step nhận immutable InputFrame của
+      người hoặc bot, rồi xử lý locomotion → combat → projectile/item → world/hazard → mode →
+      snapshot. Hiệu ứng, âm thanh và particle chỉ để nhìn/nghe, không đổi kết quả trận.
+    - Snapshot/hash phải gồm fighter, active attack, projectile, pickup, world prop/hazard,
+      inventory/ammo, mode phase, timer và bộ đếm RNG; thứ tự canonical, số thực lượng tử hóa.
+      Tách RNG stream cho spawn, crit/spread và AI. RigidBody2D không là nguồn sự thật gameplay.
+      Particle ưu tiên CPUParticles2D (Web, điện thoại).
     - Mọi số chỉnh gameplay nằm trong file dữ liệu, mỗi số ghi mã dòng sổ đối chiếu.
     - RNG có seed theo trận. Bot đi qua cùng lệnh điều khiển như người chơi.
 5.4 Test. tests/run_all.gd chạy headless. Mọi lệnh chạy qua tools/run_guarded.py: từ chối khi đang
     đo (mục 6), đặt timeout, giết cả cây process khi quá hạn, ghi exit code thật.
     - Log có SCRIPT ERROR, WARNING hoặc leaked object là fail.
     - Test gameplay dùng input trace 60 Hz (tick, người chơi, action, nhấn/giữ/thả) kèm seed; lỗi
-      nào tìm được cũng có trace tái hiện.
+      nào tìm được cũng có trace tái hiện. Replay cùng trace hai lần phải có snapshot hash giống nhau.
     - Test luồng menu đi qua input event thật, không gọi thẳng hàm hay phát signal nút.
     Mỗi WP ghi docs/evidence/SA-xx.md: lệnh, exit code, số test, hash bản build, số dòng sổ theo
     trạng thái, phản hồi của owner.
@@ -153,8 +185,9 @@ ro nhất; SA-11 đến SA-13 khoảng 1–2 tuần.
     rộng). Không commit .godot/, .local/, build/, ảnh/video quan sát, token. Không push.
 5.6 Review.
     - Owner thử bản build ở SA-04, SA-05, SA-08, SA-10 và SA-12 (kèm hướng dẫn 5 dòng và danh sách
-      dòng sổ cần thử). Phản hồi của owner thành dòng GAP để sửa.
-    - Phản hồi owner chỉ chặn tick ở SA-04 và SA-12; ở các WP khác không chờ.
+      dòng sổ cần thử). Phản hồi gameplay thành blocker GAP để sửa; phản hồi biểu hiện ghi
+      EXEMPT_BY_OWNER nếu owner chấp nhận.
+    - SA-04, SA-08 và SA-12 đều là parity gates; không bỏ qua phản hồi gameplay để chạy sang WP sau.
     - Critic đọc độc lập (chỉ đọc, model khác): một critic ở SA-04, SA-07, SA-12; hai critic cùng
       hash ở SA-13. Không lập vòng audit cho việc nhỏ.
 5.7 Model. Theo routing hiện hành trong 8-9-hh3d-3/AGENTS.md. Việc đơn giản (dọn tài liệu, nhập
@@ -200,7 +233,7 @@ Trạng thái:
 - IMPLEMENTED: đã có code và test.
 - MATCHED: đo trong dung sai; dòng về cảm giác cần owner OK.
 - GAP: khác reference, ghi lý do và cách sửa.
-- EXEMPT_BY_OWNER: trang phục, map theo D1, tên.
+- EXEMPT_BY_OWNER: skin, exact visual geometry và tên; topology/vai trò map vẫn phải MATCHED.
 - NOT_IN_CURRENT: bản 2011 có nhưng bản Y8 hiện tại không có.
 Đơn vị: chiều dài tính theo chiều cao nhân vật (H); thời gian tính bằng giây và tick 60 Hz.
 Dung sai mặc định (dòng nào cần khác thì ghi riêng):
@@ -281,7 +314,8 @@ Làm:
    InputMap có đủ action p1_left/right/up/down/punch/shoot/throw/power và p2_* theo phím hạt
    giống; dùng mã phím theo nhãn (keycode) như bản web, ghi thành một dòng R01 để kiểm lại.
 3. Chép Godot pin và kiểm hash (mục 5.2).
-4. tools/run_guarded.py; tests/run_all.gd và một test mẫu; tools/check_ledger.py.
+4. tools/run_guarded.py; tests/run_all.gd và một test mẫu; tools/check_ledger.py; tools/check_parity.py
+   (fail-closed trên các row R01–R15 bắt buộc).
 5. Sổ đối chiếu v1 (mục 7) và docs/observation-plan.md cho SA-02.
 6. docs/reuse-audit.md: đọc sổ đối chiếu và KNOWN_ISSUES của Vault Fighters, ghi lại số liệu và
    bài học dùng được (D4: không port code).
@@ -307,11 +341,12 @@ Làm: theo observation-plan (mục 8), quan sát:
 - tỉ lệ khung hình; giả lập điện thoại trong browser để xem nút cảm ứng.
 DoD:
 - Mỗi dòng R01 đến R06 có số đo, hoặc lý do không đo được.
-- R07 đến R14 có danh sách kiểm kê.
+- R07 đến R15 có danh sách kiểm kê; R12 phải có ma trận mode×map và R15 phải có phản hồi chức năng.
 - Số đo thời gian/khoảng cách có ≥ 3 mẫu; thứ có ngẫu nhiên có ≥ 10 mẫu (cần ≥ 30 trước khi MATCHED).
 - Có OBS-*.md cho mọi kịch bản.
 - Header đổi thành REFERENCE_INVENTORY=FROZEN_V1; bổ sung sau đó phải ghi LOG.
-Verify: check_ledger; đếm dòng theo trạng thái; git ls-files không có ảnh/video quan sát.
+Verify: check_ledger; check_parity ở chế độ inventory (chưa MATCHED nhưng không được UNVERIFIED
+ngoài các dòng chưa quan sát); đếm dòng theo trạng thái; git ls-files không có ảnh/video quan sát.
 
 SA-03 Điều khiển và di chuyển
 Làm:
@@ -322,7 +357,8 @@ Làm:
 Có thể bắt đầu bằng số hạt giống trước khi SA-02 xong, rồi chỉnh lại theo số đo.
 DoD:
 - Mọi dòng R01, R02 là IMPLEMENTED và có test trace.
-- Dòng đã đo thì đạt MATCHED, hoặc là GAP có lý do.
+- Dòng đã đo về phím/di chuyển phải đạt MATCHED; GAP gameplay chặn SA-04. Khác biệt biểu hiện
+  nguyên bản ghi EXEMPT_BY_OWNER, không dùng miễn cho gameplay.
 - Test nhấn/giữ/thả đúng tick.
 - Hai người bấm cùng lúc không mất lệnh (nếu bàn phím có giới hạn phần cứng thì ghi lại).
 - Bản Windows chạy được phòng thử.
@@ -336,34 +372,41 @@ Làm:
 - Luồng chơi: menu → VS (P1 đấu bot, P1 đấu P2) → thắng/thua → chơi lại; HUD tối thiểu.
 - Bản Windows và Web chạy được; đo khung hình ở cảnh nặng nhất.
 DoD:
-- Test kịch bản: đấm chết sau đúng số đòn; sát thương súng; bán kính và giờ nổ của lựu đạn; nhặt
-  súng; chết; thắng → kết quả → chơi lại, đi qua input thật.
+- Đây là CORE_PARITY_GATE: test kịch bản đi qua input thật gồm đấm chết sau đúng số đòn; sát thương
+  súng; bán kính và giờ nổ của lựu đạn; nhặt súng; chết; thắng → kết quả → chơi lại.
+- R01–R06 phải MATCHED trong ledger, có deterministic trace/seed, owner core-signoff và critic;
+  gameplay GAP chưa miễn riêng chặn SA-05/SA-06/SA-07.
 - Bản Web chạy được trong Chrome.
-- Owner chơi bản Windows và Web, ghi lại chỗ khác bản Y8 (bắt buộc).
+- Owner chơi bản Windows và Web, ghi lại chỗ khác bản Y8 (bắt buộc); gameplay khác biệt là blocker
+  cho gate, khác biệt biểu hiện nguyên bản mới được ghi EXEMPT_BY_OWNER.
 - Một critic độc lập; sửa hết P0/P1.
 
 SA-05 Vũ khí, item, power-up
 Làm: mỗi vũ khí, item, power-up trong kiểm kê có một file dữ liệu và hành vi riêng (đạn tức thời
 hay bay, độ tản, giật, đạn, nạp, vũ khí cận chiến, đồ ném). Luật spawn theo R08 (nhịp, vị trí,
 xác suất, chí mạng). Bullet time áp dụng cho ai và kéo dài bao lâu thì theo số đo.
-DoD: mọi dòng R07, R08 trong kiểm kê có test kịch bản và là MATCHED hoặc GAP; owner thử vũ khí
-(không chặn).
+DoD: mọi dòng R07, R08 trong kiểm kê có test kịch bản; cơ chế đã quan sát phải MATCHED, không có
+GAP/UNCERTAIN gameplay; owner thử vũ khí. Mục vắng trong Y8 hiện tại ghi NOT_IN_CURRENT.
 
 SA-06 Vật thể, vật liệu, hazard
 Làm: thùng, vật nổ, kính, cửa, vật phá được, lửa, vật liệu (đạn xuyên hay không), mảnh vỡ, hazard
-theo kiểm kê. Dùng RigidBody2D cho vật thể. Nếu Godot Physics không cho cảm giác giống, ghi GAP và
-đề xuất phương án khác cho owner chọn; không tự thêm GDExtension.
-DoD: các dòng R09, R10 về vật thể đều có test; test ổn định với 100 vật thể (không nổ tung, không
-rung) và vẫn trong ngân sách Q2; kết quả liên quan gameplay lặp lại được trong dung sai.
+theo kiểm kê. Dùng state mô phỏng fixed-step làm nguồn gameplay; RigidBody2D chỉ là adapter hiển
+thị/tương tác. Nếu Godot Physics không cho cảm giác giống, sửa boundary hoặc dừng để owner quyết;
+không tự thêm GDExtension.
+DoD: các dòng R09, R10 về vật thể đều có test và MATCHED/NOT_IN_CURRENT; test ổn định với 100 vật
+thể (không nổ tung, không rung) và vẫn trong ngân sách Q2; khác biệt vật lý gameplay phải sửa hoặc
+dừng để owner ra quyết định phạm vi, không được che bằng GAP.
 
 SA-07 Chế độ, luật trận, menu
 Làm:
 - Cây menu đủ theo R13.
-- Chế độ theo R12: VS với số bot/đội, Stage, Survival một người và co-op.
+- Chỉ triển khai chế độ theo R12 sau khi SA-02 xác nhận OBSERVED trên bản Y8 hiện tại: VS, Stage,
+  Survival, co-op hay mục nào khác. Mục chưa quan sát không được tự phát minh; nếu vắng mặt ghi
+  NOT_IN_CURRENT.
 - Luật hiệp, giờ trận, điểm.
-- Tạm dừng; cài đặt (âm lượng, toàn màn hình; đổi phím nếu bản gốc có, hoặc thêm vào nhưng không
-  đổi mặc định).
-- Lưu tiến trình trong user:// bằng ghi file tạm rồi đổi tên.
+- Tạm dừng; chỉ cài đặt được OBSERVED trong bản Y8 (âm lượng, toàn màn hình, đổi phím nếu có);
+  không tự thêm hành vi/settings vào Classic.
+- Chỉ lưu tiến trình nếu SA-02 xác nhận bản Y8 có lưu; nếu không ghi NOT_IN_CURRENT.
 DoD:
 - Test luồng đi qua input event thật.
 - Mỗi chế độ chạy trọn một phiên trong test (chạy nhanh hơn thời gian thực, không render).
@@ -374,33 +417,36 @@ Làm: đồ thị di chuyển theo map (sàn, thang, cú nhảy). Hành vi: tìm
 dùng item. Mức khó theo R11. Bot dùng cùng lệnh điều khiển như người chơi.
 DoD:
 - 100 trận bot đấu bot headless: không kẹt quá 5 giây, không crash.
-- Mức khó cao thắng nhiều hơn mức thấp.
-- Owner thử cảm giác (không chặn).
+- Có scenario reference cho nhặt vũ khí, truy đuổi, phản ứng, né lựu đạn, leo/nấp/tấn công và mức
+  khó; R11 phải MATCHED, không chỉ chứng minh ổn định.
+- Owner thử cảm giác và critic là gate parity, không phải phản hồi không chặn.
 
 SA-09 Map
 Làm: đủ số map theo kiểm kê. Theo D1, mỗi map có layout mới nhưng giữ cùng vai trò chức năng;
-tile set của mình; mỗi map có đồ thị bot và test riêng.
+tile set của mình; mỗi map có đồ thị bot và test riêng. Trước khi làm phải đóng băng ma trận
+mode×map OBSERVED; không tự thêm tổ hợp mode×map chưa có trong reference.
 DoD:
 - Mỗi map có checklist topology so với map tham chiếu tương ứng, kèm ghi chú khác biệt layout.
-- Mọi chế độ chơi được trên mọi map.
+- Mọi tổ hợp mode×map đã OBSERVED trong reference chạy được; tổ hợp mới là biến thể và không nằm
+  trong Classic gate.
 - Mỗi map đạt ngân sách Q2.
 
-SA-10 Art, animation, âm thanh, UI và trang phục
+SA-10 Classic art, animation, âm thanh và UI (sprite/trang phục cố định)
 Làm:
 - Pipeline theo D2. Nhân vật có đủ animation cho mọi trạng thái, cùng tỉ lệ trên màn hình như
   reference (R14).
-- Trang phục chia lớp (đầu/tóc, mũ, mặt/kính, áo, găng, quần, giày, phụ kiện), mỗi lớp đổi màu
-  được; màn chọn trang phục.
+- Classic dùng sprite/trang phục cố định nguyên bản; không làm lớp đổi màu, trình ghép trang phục
+  hoặc màn tùy biến. Các phần đó chỉ được mở trong SA-V1 sau lệnh owner.
 - Tile, đồ vật, hiệu ứng, UI và font có giấy phép (ví dụ OFL).
 - SFX và nhạc tự làm hoặc CC0/có giấy phép.
 DoD:
 - Mỗi asset trong game có dòng LICENSES.tsv; không có asset nào từ reference.
-- Owner duyệt hình (không chặn tick, phản hồi thành GAP).
+- Owner duyệt hình; khác biệt hình được ghi EXEMPT_BY_OWNER, còn phản hồi gameplay vẫn chặn gate.
 
 SA-11 Điện thoại, Web, Windows, hiệu năng
 Làm:
-- Nút cảm ứng theo bố cục của bản Y8 trên điện thoại (không quan sát được thì dùng bố cục
-  chuẩn và ghi GAP); đa chạm; màn hình ngang.
+- Nút cảm ứng theo bố cục của bản Y8 trên điện thoại (không quan sát được thì ghi UNCERTAIN và
+  không claim parity); đa chạm; màn hình ngang.
 - Web xuất bản không thread (không cần header COOP/COEP); màn "bấm để chơi" để mở âm thanh và
   lấy focus bàn phím.
 - Bản Windows.
@@ -410,13 +456,17 @@ DoD:
 
 SA-12 Đối chiếu toàn bộ và playtest
 Làm:
-- Rà lại mọi dòng sổ: MATCHED, GAP hoặc EXEMPT, kèm bằng chứng.
+- Rà lại mọi dòng sổ: MATCHED, GAP hoặc EXEMPT, kèm bằng chứng. Tất cả dòng gameplay lõi R01–R15
+  phải MATCHED hoặc NOT_IN_CURRENT; GAP/UNVERIFIED/UNCERTAIN chức năng chặn Classic.
 - Owner chơi song song bản Y8 và Superagent 30 phút; nếu được, thêm 2–3 người chơi thử.
 - Gom lỗi và sửa.
 DoD:
 - Không còn lỗi P0/P1.
-- Owner duyệt danh sách GAP (chấp nhận hay sửa) — bắt buộc.
-- Một critic độc lập.
+- `python tools/check_parity.py --classic` phải PASS: R01–R15 đều OBSERVED/NOT_IN_CURRENT,
+  IMPLEMENTED và MATCHED; không còn UNVERIFIED/UNCERTAIN/GAP chức năng.
+- Owner duyệt Classic build và danh sách GAP — bắt buộc; owner chỉ miễn riêng khác biệt biểu hiện
+  nguyên bản, không miễn khác biệt gameplay chung chung.
+- Một critic độc lập trên cùng source/evidence hash.
 
 SA-13 Bản phát hành ứng viên
 Làm:
@@ -425,15 +475,16 @@ Làm:
 - Đánh số phiên bản; build Web (zip cho portal) và Windows; nháp trang phát hành theo D5.
 DoD:
 - Hai critic độc lập đều TICK=yes trên cùng hash.
+- Có source/evidence hash và kết quả `check_parity.py --classic` trong gói phát hành.
 - Owner ký phát hành (E2); luật sư duyệt nếu D1 chọn map gần y hệt (E3).
 - Có hash của các file phát hành.
 
-SA-14 Hero mode kiểu MUGEN
+SA-14 VARIANT-01 Hero mode kiểu MUGEN (BACKLOG / LOCKED_BY_OWNER)
 Làm:
 - Định dạng gói nhân vật: sprite, trang phục, chỉ số, chiêu.
 - Chiêu riêng cho từng hero, dùng cùng các nút (ví dụ hướng + đấm).
 - Chế độ Hero tách riêng; trình nạp gói có kiểm tra định dạng và nguồn gốc.
-- Không dùng nhân vật có chủ (Naruto, Marvel...).
+- Không dùng nhân vật có chủ (Naruto, Marvel...). Chỉ mở khi owner gửi lệnh mới sau SA-13.
 DoD:
 - Test hồi quy Classic không đổi; các dòng MATCHED vẫn MATCHED.
 - Có bốn hero nguyên bản; test kiểm gói nhân vật đạt.
@@ -490,5 +541,13 @@ Q5 Web: dung lượng tải lần đầu và bộ nhớ đo từ SA-04; ngân s�
 - Thêm phím hạt giống, đơn vị và dung sai, cách quan sát, khóa đo, worktree riêng, D1–D6.
 - Hero mode kiểu MUGEN làm sau Classic.
 - Bản SA2 còn trong Git bf88058f.
+
+2026-10-03 SA4: owner chốt Classic-first.
+- SA-01→SA-13 là chuỗi Classic nối tiếp; SA-14 và SA-V1 bị khóa tới khi owner ra lệnh sau Classic.
+- Functional parity gate yêu cầu toàn bộ R01–R15 là OBSERVED/NOT_IN_CURRENT + IMPLEMENTED + MATCHED;
+  GAP gameplay, UNVERIFIED và UNCERTAIN chặn nghiệm thu.
+- SA-10 dùng art/trang phục cố định nguyên bản; bỏ hệ lớp đổi màu khỏi Classic.
+- Bổ sung check_parity fail-closed, mode×map matrix, fixed-step GameSession/snapshot hash và
+  nguyên tắc clean-room topology/vai trò thay cho sao chép hình học.
 
 END_OF_SUPERAGENT_PLAN
