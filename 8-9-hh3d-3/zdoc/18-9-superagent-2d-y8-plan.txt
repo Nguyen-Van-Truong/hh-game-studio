@@ -554,13 +554,43 @@ Q5 Web: dung lượng tải lần đầu và bộ nhớ đo từ SA-04; ngân s�
 2026-10-03 SA-01 accepted; SA-02 is now the next valid WP.
 - Coordinator froze and verified the separate worktree at D:\dataDiskD\hh-superagent.
 - Product commits: `74963e08` (SA-03 deterministic scaffold, still unaccepted) and `00bbb2cc` (SA-01/SA-03 evidence).
-- Guarded runs on frozen source recorded real host exits, source hash
+- Guarded runs recorded real host exits, whole-project source hash
   `c0fb2ea1457a1b25b2a013625f63e7e827896b70829d1a7f2a0d0c2b1b1c1def`, and zero active processes:
   import `cmd.sa01.import.9`, input suite `cmd.sa01.godot.5` (225 assertions),
-  Python suite `cmd.sa01.python.5`, ledger `cmd.sa01.ledger.3` (61 rows R01-R15),
+  Python suite `cmd.sa01.python.5`,
   and trace smoke `cmd.sa03.trace.6` (tick 120, hash `d217782f`).
+- Ledger `cmd.sa01.ledger.3` passed (61 rows R01-R15, exit 0, zero active processes)
+  after documentation changed, at whole-project source hash
+  `64ec39811e5337be1a43ae6be3c325cccd8ce7c13b2b5a06f94f22ef1ea7827b`.
+  Each run retained matching before/after hashes; these hashes include eligible docs,
+  not only runtime code. The later ledger run does not re-certify the Godot runtime.
 - SA-01 is a technical bootstrap acceptance only. Reference inventory remains
   NOT_FROZEN and functional parity remains UNVERIFIED; SA-02 observation is required.
 - Lesson recorded: do not use a PASS banner as acceptance; capture host exit and
   cleanup proof, and keep SA-03 scaffold separate from its observation-dependent gate.
+2026-10-03 SA-02 partial observation checkpoint (12:31 UTC).
+- Product `1661f457`: runner rejects an evidence directory before launch and
+  always releases its own lease on output failure. Guarded regression passed:
+  `cmd.sa01.runner-finalize.1`, 13 tests/1 skip, real exit 0, cleanup 0;
+  hash and raw run id are recorded in docs/evidence/SA-01.md.
+- Product `45934bfa`, `cec1e453`: OBS-2026-10-03-01 records the first live menu
+  inventory. 74 ledger rows now contain 13 narrow OBSERVED menu/setting facts
+  and 61 UNVERIFIED behavioral rows; MATCHED remains 0. Current WP stays SA-02.
+- Observed menu facts include six 1P VS maps, three bot difficulty choices,
+  seven VS rule choices, seven currently open character slots plus Random,
+  four teams plus Independent, Simple/Advanced controls and a 12-cell Stage panel.
+  These are menu facts only; no claim about loaded maps, AI scaling, character
+  stats, unlock completion, combat timing or gameplay parity follows from them.
+- `cmd.sa02.ledger.1` passed with 74 rows. Inventory attempt .1 was blocked by
+  a scheduler-query timeout while a GT06 refresh preparation process existed;
+  observation tabs were closed. After that process exited and preflight cleared,
+  .2 ran and correctly rejected all 61 UNVERIFIED rows (real exit 1, cleanup 0).
+  Both attempts and their different source hashes are retained in SA-02 evidence.
+- Lesson: nested iframe clicks and screenshot/viewport scaling cannot be assumed
+  reliable. The exact live Y8-configured inner frame worked when opened separately;
+  a stripped embed URL loaded a different game and was rejected. No reference
+  package/assets were downloaded. Preserve query parameters, inspect the title,
+  and cross-check embedded-page behavior before final parity.
+- Next: finish mode×map inventory and reliable held-input/60-fps measurements.
+  SA-03 remains an unaccepted scaffold; SA-14 remains locked.
 END_OF_SUPERAGENT_PLAN
