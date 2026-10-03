@@ -4,9 +4,11 @@
 
 Formal25 đã hoàn tất hai pair trên cùng source closure. Bằng chứng benchmark
 đạt các kiểm tra lắp ghép và verifier offline, nhưng GT-06 vẫn **chưa
-ACCEPTED**. Coordinator không ký thay critic. Owner cần chuyển nguyên gói này
-cho hai phiên review độc lập, dùng hai model khác nhau, cùng source/profile/
-dataset hash, rồi lưu nguyên văn hai báo cáo trước khi quyết định nghiệm thu.
+ACCEPTED**. Đây là thành phần benchmark của gói critic; coordinator còn phải
+đóng mapping functional/dependency và final manifest theo dòng 692–695 của
+plan trước khi đề nghị nghiệm thu toàn GT06. Coordinator không ký thay critic.
+Hai phiên review độc lập phải dùng hai model khác nhau, cùng final manifest/
+source/profile/dataset hash; lưu nguyên văn hai báo cáo trước quyết định nghiệm thu.
 
 - Formal ID: `gt06-o4-formal-25`
 - Pair 0: `gt06-o4-formal-25.r00.a01`, 35 mẫu, actual child/editor/import exit 0
@@ -49,8 +51,10 @@ The following read-only checks were run after the campaign ended:
 
 Reproducible read-only command:
 
-```text
-PYTHONPATH=8-9-hh3d-3 python -B 8-9-hh3d-3/studio/.local/reviews/gt06-o4-formal-25-critic-package/verify.py --studio 8-9-hh3d-3/studio
+Chạy trong PowerShell tại repo chính:
+
+```powershell
+python -B '8-9-hh3d-3/studio/.local/reviews/gt06-o4-formal-25-critic-package/verify.py' --studio '8-9-hh3d-3/studio'
 ```
 
 The command does not start Godot, Blender, Docker, a campaign, or a retry. It
@@ -68,6 +72,52 @@ lane and direct native fixture cycles do not by themselves prove an authored
 game, full product gameplay, Blender asset publication, Android export or
 human playtest.
 
-Pending artifacts: `critic-01.json` and `critic-02.json`. Until both reports
+Pending artifacts: final functional dependency/requirement map and final
+source/review manifest, then `critic-01.json` and `critic-02.json`. Until both reports
 explicitly say `TICK=yes` for these exact hashes, GT06 remains unaccepted and
 GT07 remains closed.
+
+## Functional binding repair and targeted refresh
+
+The current installed binding had one changed source out of 215:
+`godot-addon/linux_executor.py`, adding the O9 measurement-window guard before
+Docker create/start. The regression now also acquires that guard between
+create and start and verifies no start/ACK, removal of the owned container,
+unchanged input/snapshot and preserved guard. The 57 focused executor/binding/
+installed tests exited 0. No Docker or engine was started by those tests.
+
+The two installed metadata files were refreshed after verifying exact source
+membership and the accepted GT05 input hashes. Their old/new bytes and receipt
+are retained under the local critic package's `binding-refresh/` directory.
+Current execution-source SHA-256 is
+`7bd657381817fe873214272f96e296f93a04d9f1608147399742a91bb36eda1c`;
+the 217-file installed closure is
+`9a9c9c42fa2be7dedf485b25c99245e92073f7b024909a8f72ec948f08219691`.
+All 64 Formal25 pins are unchanged. This refresh does not change the source
+identity or verdict of any historical native run.
+
+S138's authenticated repair/replay already exists (S139 coordinator report);
+the earlier S133 pending repair label is stale. S65 performance exports also
+exist, with the three exporter/schema pins still equal to current bytes.
+However, S133 HTTP/reviewer evidence has changed journal/transport/probe
+dependencies. A bounded seven-lane functional supplement uses the original
+S133 verifier, unchanged thresholds/timeouts and fresh `gt06-f25-*-02` IDs.
+The adapter is `20261003-gt06-functional-refresh/run_refresh.py`; raw and frozen
+sources are in `studio/.local/reviews/gt06-f25-functional-20261003-02/`.
+Read `terminal.json` and lane receipts for its actual result. It is neither a
+new formal campaign nor acceptance; never resume engines from partial output.
+
+Preparation attempt 01 passed resource preflight but stopped before any engine:
+the launch observer requires its exact 64-file campaign domain, while the first
+adapter supplied functional217. Attempt 02 separates these checks: the unchanged
+launch observer verifies64 and the frozen functional envelope verifies217.
+Attempt01 raw remains unchanged; no functional engine run or formal retry was consumed.
+For F06, source audit narrowed the remaining native supplement to authenticated
+managed repair and replay against the original S65 fault anchor. No new fault
+run is needed; the Linux-validator guard and redactor changes need integration
+evidence rather than relabeling S138 as current.
+
+The prerequisite archive (host, chain and original O7 controls) is
+`studio/.local/reviews/gt06-f25-prerequisites.zip`, SHA-256
+`a22ab8280ff02b37d28f216f259efa7da764a67423cf4d5b3dc2011ca287c9da`.
+Both evidence archives were read back entry-by-entry with matching SHA-256/CRC.

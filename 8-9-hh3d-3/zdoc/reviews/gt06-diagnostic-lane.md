@@ -6,10 +6,11 @@
 - Actual child/editor/import exits 0; natural trees, Jobs closed/zero, no retained handles; exact Scheduler task closeout/deletion complete.
 - Offline assembly rebuilt `dataset.json` byte-for-byte; summary PASS; status gaps 1082.058/607.993 ms; source unchanged.
 - O7 prerequisite on same closure: 49 batches, 1832.842787 seconds, max gap 444.9745 ms, watchdog and metrics PASS.
-- Formal25 is benchmark evidence PASS pending two independent critics, not GT-06 ACCEPTED; hashes are in the tracked package review.
+- Formal25 benchmark PASS; full functional dependency map/final manifest must finish before two critics. GT-06 is not ACCEPTED.
 - Two read-only critics with different models must use the exact hashes and leave verbatim reports before coordinator review; GT-07 remains closed.
 - Formal25 cannot prove F01–F12/TQ00, authored gameplay, Blender publication, Android export or human playtest.
-- S133/helper functional closures remain separate authority-0 provenance; no closure merge or verdict retroaction.
+- Installed217 refreshed to 9a9c9c42fa2be7dedf485b25c99245e92073f7b024909a8f72ec948f08219691; Linux create/start guard regression plus 57 focused tests exit0; Formal25 source unchanged.
+- Fresh seven-lane functional supplement `gt06-f25-functional-20261003-02`: read terminal/receipts in studio/.local/reviews; setup01 stopped before engines (64/217 domain mismatch, repaired); F06 repair/replay supplement and final map remain open.
 - Formal01–24 and S258 raw/verdicts remain unchanged; never resume, lower O1/O4/timeouts or mix campaigns.
 - O9 quiet-chain/telemetry and O1/O4 guards remain active; new raw stays under `studio/.local/` and detail follows below.
 
