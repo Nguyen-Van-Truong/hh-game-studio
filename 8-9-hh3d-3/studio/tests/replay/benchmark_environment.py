@@ -135,6 +135,13 @@ def running_containers(processes):
             # and cannot start another read.
             names = query_containers(operation_deadline)
         except InventoryError as error:
+            # Docker Desktop's named pipe is absent when the daemon is not
+            # running. That is an empty inventory, not an unknown inventory:
+            # no container can be running behind a pipe the kernel could not
+            # open. Keep all other OS errors fail-closed; only the documented
+            # Win32 missing-file/path results are this pipe-absent case.
+            if error.reason == 'oserror' and error.detail in (2, 3):
+                return []
             diagnostic = {'reason': error.reason, 'attempt': attempt}
             if type(error.detail) is int:
                 diagnostic['returncode' if error.reason == 'nonzero' else 'errno'] = error.detail

@@ -241,6 +241,17 @@ class EnvironmentTests(unittest.TestCase):
             self.assertEqual(env.running_containers([{'name': 'python.exe'}]), [])
         query.assert_not_called()
 
+    def test_docker_inventory_absent_pipe_is_empty_inventory(self):
+        with patch.object(env, 'query_containers', side_effect=env.InventoryError(
+                'oserror', detail=2, retryable=True)):
+            self.assertEqual(env.running_containers([{'name': 'docker.exe'}]), [])
+
+    def test_docker_inventory_unclassified_oserror_remains_fail_closed(self):
+        with patch.object(env, 'query_containers', side_effect=env.InventoryError(
+                'oserror', detail=5, retryable=True)):
+            with self.assertRaisesRegex(BenchmarkJobError, 'DOCKER_INVENTORY'):
+                env.running_containers([{'name': 'docker.exe'}])
+
     def test_docker_inventory_quick_failure_retries_same_absolute_deadline(self):
         clock = [100.0]
         def probe(deadline):
