@@ -25,14 +25,15 @@
   partial-batch gap is a product-lane failure; external CPU is context only and
   does not erase the observed gap.
 - Watchdog soak `gt06-o9-watchdog-soak-20261003-08` reached 1,800 s with exit `0`,
-  but it used the pre-`ccb6792c` closure. Because that repair completed the
-  manifest dependency closure, a fresh watchdog soak and a fresh O9.4C host soak
-  are required before any formal dispatch.
+  but it used the pre-`ccb6792c` closure. F24 itself used the post-repair
+  64-file closure, but failed before 1,800 s; therefore a fresh **combined**
+  O9.5 host/watchdog chain is required. The chain's watchdog stream supplies the
+  O9.1D receipt; do not run a duplicate standalone 30-minute observer soak.
 - Current daytime observation has no live GT06 campaign, but Docker processes are
   present. Do not close owner applications or start a competing run. The next
-  permitted sequence is: freeze new closure → O4.1/CPU-minute → fresh watchdog
-  soak and host-only O9.4C in a quiet window → dry-run → formal pairs. Keep O1
-  thresholds/timeouts and all old raw verdicts unchanged.
+  permitted sequence is: freeze new closure → O4.1/CPU-minute → one fresh
+  combined O9.5 host/watchdog chain in a quiet window → dry-run → formal pairs.
+  Keep O1 thresholds/timeouts and all old raw verdicts unchanged.
 
 ## 2026-10-03 — F24 partial-batch phase localization
 
