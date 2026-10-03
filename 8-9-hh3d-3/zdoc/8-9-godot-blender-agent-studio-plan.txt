@@ -862,11 +862,12 @@ never an implicit PASS. Research evidence: reviews/20260913-r12-os/.
 Owner18-09 mở thêm plan sản phẩm2D. Ba TXT có scope/tiến độ riêng:
 1) File này: Godot + Blender + công cụ, ưu tiên hoàn thiện GT-06→GT-10.
 2) ./8-9-hh-world-gameplay-viet-nam-plan.txt — HH World3D/social/Việt Nam.
-3) ./18-9-superagent-2d-y8-plan.txt — Superagent2D, full functional parity
-   bản Y8 đã kiểm kê trừ nhân vật/map mới; hiện chỉ planning theo lệnh owner.
+3) ./18-9-superagent-2d-y8-plan.txt — Superagent 2D (SA3): phím và cơ chế như bản
+   Y8, trang phục nhân vật mới; owner mở 03-10, agent riêng làm ngay bằng Godot pin.
 Không thêm master plan tổng. Report/schema/log không là nguồn tiến độ mới.
-Superagent không lấy tick/code/asset Vault Fighters cũ làm baseline. Hai game
-không phụ thuộc nhau; planning không tự mở runtime trước GT-10 và quyền scope.
+Superagent không lấy tick Vault Fighters cũ làm baseline. Hai game không phụ thuộc
+nhau và không thêm gate vào GT. Superagent chỉ dùng chung máy: kiểm
+measure-window.lock trước lệnh nặng (mục 6 plan đó); coordinator công cụ không kiêm.
 
 Làm CÔNG CỤ TRƯỚC: GT-01 → GT-10 tạo gói v0.1 có phạm vi hữu hạn. Kiểm liên tục
 bằng studio/fixtures/sample-game: 1 khu nhỏ nguyên bản, 1 avatar đại diện,
