@@ -7,11 +7,11 @@ PLAN_REVISION=SA4
 CLASSIC_FIRST_POLICY=CLASSIC_PARITY_BEFORE_VARIANTS
 CLASSIC_RELEASE_SCOPE=SA-01..SA-13_ONLY
 VARIANT_SCOPE=SA-14_VARIANT_01_LOCKED_BY_OWNER
-CURRENT_VALID_WP=SA-01
+CURRENT_VALID_WP=SA-02
 EXECUTION_AUTHORIZATION=OWNER_OPENED_2026_10_03
 DISPATCHABLE=YES_SEPARATE_AGENT_RESPECT_MEASURE_LOCK
-IMPLEMENTATION=IN_PROGRESS_SA01_VERIFY_PENDING
-RUNTIME_ACCEPTANCE=NONE
+IMPLEMENTATION=IN_PROGRESS
+RUNTIME_ACCEPTANCE=SA-01_TECHNICAL_PASS
 HUMAN_ACCEPTANCE=NONE
 REFERENCE_INVENTORY=NOT_FROZEN
 FUNCTIONAL_PARITY=UNVERIFIED
@@ -120,7 +120,7 @@ Một writer cho file này: coordinator game. File nằm ở repo chính, trên 
 ngay trước khi sửa (owner hoặc reviewer có thể vừa sửa), rồi commit riêng đúng file này:
 git commit -m "SA-xx: ..." -- 8-9-hh3d-3/zdoc/18-9-superagent-2d-y8-plan.txt
 
-[ ] SA-01 Khởi động: worktree, project, phím, test runner, sổ đối chiếu v1 — cần: không
+[x] SA-01 Khởi động: worktree, project, phím, test runner, sổ đối chiếu v1 — cần: không
 [ ] SA-02 Quan sát Y8 đợt 1: đo phím, di chuyển, đánh, kiểm kê nội dung — cần: SA-01, máy rảnh
 [ ] SA-03 Điều khiển và di chuyển giống Y8, hai người một bàn phím — cần: SA-01 (số đo SA-02)
 [ ] SA-04 Bản chơi được đầu tiên: đấm, bắn, ném, nhặt súng, 1 map, VS bot/2P — cần: SA-02, SA-03
@@ -551,11 +551,16 @@ Q5 Web: dung lượng tải lần đầu và bộ nhớ đo từ SA-04; ngân s�
 - Bổ sung check_parity fail-closed, mode×map matrix, fixed-step GameSession/snapshot hash và
   nguyên tắc clean-room topology/vai trò thay cho sao chép hình học.
 
-2026-10-03 SA-01 implementation checkpoint (chưa tick):
-- Code riêng trên superagent/main tại D:\dataDiskD\hh-superagent; không sửa studio/GT-06.
-- Godot 4.7.2 console/gui đã chép và SHA256 khớp toolchain lock. Import và input unit smoke
-  đã chạy exit 0; runner containment và input event end-to-end đang được sửa/kiểm lại.
-- Giữ CURRENT_VALID_WP=SA-01, RUNTIME_ACCEPTANCE=NONE. Chưa nghiệm thu chỉ từ smoke PASS.
-- SA-03 chỉ có code chuẩn bị với thông số UNVERIFIED; không thay thế quan sát SA-02.
-
+2026-10-03 SA-01 accepted; SA-02 is now the next valid WP.
+- Coordinator froze and verified the separate worktree at D:\dataDiskD\hh-superagent.
+- Product commits: `74963e08` (SA-03 deterministic scaffold, still unaccepted) and `00bbb2cc` (SA-01/SA-03 evidence).
+- Guarded runs on frozen source recorded real host exits, source hash
+  `c0fb2ea1457a1b25b2a013625f63e7e827896b70829d1a7f2a0d0c2b1b1c1def`, and zero active processes:
+  import `cmd.sa01.import.9`, input suite `cmd.sa01.godot.5` (225 assertions),
+  Python suite `cmd.sa01.python.5`, ledger `cmd.sa01.ledger.3` (61 rows R01-R15),
+  and trace smoke `cmd.sa03.trace.6` (tick 120, hash `d217782f`).
+- SA-01 is a technical bootstrap acceptance only. Reference inventory remains
+  NOT_FROZEN and functional parity remains UNVERIFIED; SA-02 observation is required.
+- Lesson recorded: do not use a PASS banner as acceptance; capture host exit and
+  cleanup proof, and keep SA-03 scaffold separate from its observation-dependent gate.
 END_OF_SUPERAGENT_PLAN
