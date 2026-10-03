@@ -16,7 +16,6 @@ import os
 from pathlib import Path
 import re
 import shutil
-import signal
 import subprocess
 import sys
 import threading
@@ -31,6 +30,7 @@ EXIT_CONTAINMENT = 126
 EXIT_DIAGNOSTIC = 1
 _WIN_CREATE_NEW_PROCESS_GROUP = 0x00000200
 _WIN_CREATE_SUSPENDED = 0x00000004
+_IS_WINDOWS = os.name == "nt"
 MAX_TIMEOUT_SECONDS = 24 * 60 * 60
 LOCK_POLL_SECONDS = 0.20
 DEFAULT_TASK_POLL_SECONDS = 3.0
@@ -143,30 +143,57 @@ def _inside(path: Path, root: Path) -> bool:
         return False
 
 
-def _hash_sources(paths: Sequence[Path], root: Path, command: Sequence[str]) -> str:
+def _hash_sources(paths: Sequence[Path], root: Path, command: Sequence[str] = ()) -> str:
+    """Hash selected file contents, never caches or generated local evidence.
+
+    With no selection, hash the project closure. Explicit missing/empty/cache
+    selections fail rather than manufacturing a hash of the command line.
+    """
+    del command  # Kept for callers of the earlier helper signature.
     digest = hashlib.sha256()
-    if not paths:
-        digest.update(b"command-spec\0")
-        digest.update(json.dumps(list(command), ensure_ascii=False, separators=(",", ":")).encode())
-        return digest.hexdigest()
+    files: set[Path] = set()
+    excluded = {".git", ".godot", ".local", "__pycache__"}
+    paths = paths or [root]
     for original in sorted(paths, key=lambda p: os.fspath(p).lower()):
         resolved = original.resolve()
         if not _inside(resolved, root):
             raise ValueError(f"source path escapes project root: {original}")
         if not resolved.exists():
             raise ValueError(f"source path does not exist: {original}")
-        files = [resolved] if resolved.is_file() else sorted((p for p in resolved.rglob("*") if p.is_file()), key=lambda p: os.fspath(p).lower())
-        for path in files:
-            path = path.resolve()
-            if not _inside(path, root):
-                raise ValueError(f"source path escapes project root: {path}")
-            if ".godot" in path.parts or (".local" in path.parts and "runs" in path.parts):
+        candidates = []
+        if resolved.is_file():
+            candidates.append(resolved)
+        elif resolved.is_dir():
+            for base, directories, names in os.walk(resolved, followlinks=False):
+                directories[:] = [name for name in directories if name.lower() not in excluded]
+                for name in directories:
+                    if not _inside((Path(base) / name).resolve(), root):
+                        raise ValueError("source directory link escapes project root")
+                candidates.extend(Path(base) / name for name in names)
+        else:
+            raise ValueError("source path must be a file or directory")
+        selected = 0
+        for original_file in candidates:
+            relative = original_file.relative_to(root)
+            if any(part.lower() in excluded for part in relative.parts) or original_file.suffix.lower() in {".pyc", ".pyo"}:
                 continue
-            rel = path.relative_to(root).as_posix().encode()
-            digest.update(len(rel).to_bytes(4, "big")); digest.update(rel)
-            with path.open("rb") as handle:
-                for block in iter(lambda: handle.read(1024 * 1024), b""):
-                    digest.update(block)
+            path = original_file.resolve()
+            if not _inside(path, root):
+                raise ValueError("source file link escapes project root")
+            if path.is_file():
+                files.add(path)
+                selected += 1
+        if not selected:
+            raise ValueError("source selection contains no eligible files")
+    for path in sorted(files, key=lambda p: p.relative_to(root).as_posix()):
+        rel = path.relative_to(root).as_posix().encode("utf-8")
+        content_hash = hashlib.sha256()
+        with path.open("rb") as handle:
+            for block in iter(lambda: handle.read(1024 * 1024), b""):
+                content_hash.update(block)
+        digest.update(len(rel).to_bytes(4, "big"))
+        digest.update(rel)
+        digest.update(content_hash.digest())
     return digest.hexdigest()
 
 
@@ -189,13 +216,27 @@ def _safe_command(command: Sequence[str], root: Path) -> None:
         raise ValueError(f"pinned Godot executable does not exist: {resolved}")
 
 
+class _ThreadEntry(ctypes.Structure):
+    _fields_ = [("dwSize", wintypes.DWORD), ("cntUsage", wintypes.DWORD),
+                ("th32ThreadID", wintypes.DWORD), ("th32OwnerProcessID", wintypes.DWORD),
+                ("tpBasePri", wintypes.LONG), ("tpDeltaPri", wintypes.LONG), ("dwFlags", wintypes.DWORD)]
+
+
+class _Accounting(ctypes.Structure):
+    _fields_ = [(name, ctypes.c_longlong) for name in (
+        "TotalUserTime", "TotalKernelTime", "ThisPeriodTotalUserTime", "ThisPeriodTotalKernelTime")]
+    _fields_ += [(name, wintypes.DWORD) for name in (
+        "TotalPageFaultCount", "TotalProcesses", "ActiveProcesses", "TotalTerminatedProcesses")]
+
+
 class _ProcessContainer:
-    """Windows Job Object; POSIX process group fallback is for source tests."""
+    """Windows job with no breakaway flags and verified active-process count."""
     def __init__(self) -> None:
         self.handle = None
-        self._windows = os.name == "nt"
-        if self._windows:
-            self._open_job()
+        self.assigned = False
+        if not _IS_WINDOWS:
+            raise RuntimeError("guarded execution requires Windows Job Objects")
+        self._open_job()
 
     def _open_job(self) -> None:
         kernel32 = ctypes.WinDLL("kernel32", use_last_error=True)
@@ -204,6 +245,14 @@ class _ProcessContainer:
             ("CreateJobObjectW", [wintypes.LPVOID, wintypes.LPCWSTR], wintypes.HANDLE),
             ("SetInformationJobObject", [wintypes.HANDLE, wintypes.INT, wintypes.LPVOID, wintypes.DWORD], wintypes.BOOL),
             ("AssignProcessToJobObject", [wintypes.HANDLE, wintypes.HANDLE], wintypes.BOOL),
+            ("OpenProcess", [wintypes.DWORD, wintypes.BOOL, wintypes.DWORD], wintypes.HANDLE),
+            ("CreateToolhelp32Snapshot", [wintypes.DWORD, wintypes.DWORD], wintypes.HANDLE),
+            ("Thread32First", [wintypes.HANDLE, ctypes.POINTER(_ThreadEntry)], wintypes.BOOL),
+            ("Thread32Next", [wintypes.HANDLE, ctypes.POINTER(_ThreadEntry)], wintypes.BOOL),
+            ("OpenThread", [wintypes.DWORD, wintypes.BOOL, wintypes.DWORD], wintypes.HANDLE),
+            ("ResumeThread", [wintypes.HANDLE], wintypes.DWORD),
+            ("TerminateJobObject", [wintypes.HANDLE, wintypes.UINT], wintypes.BOOL),
+            ("QueryInformationJobObject", [wintypes.HANDLE, wintypes.INT, wintypes.LPVOID, wintypes.DWORD, wintypes.LPVOID], wintypes.BOOL),
             ("CloseHandle", [wintypes.HANDLE], wintypes.BOOL),
         ):
             proc = getattr(kernel32, function); proc.argtypes = args; proc.restype = result
@@ -224,30 +273,82 @@ class _ProcessContainer:
         self.handle = job
 
     def popen_kwargs(self) -> dict:
-        if self._windows:
-            # Popen closes its primary-thread handle, so CREATE_SUSPENDED cannot be resumed safely
-            # through its public/private API. Attach immediately after creation; the Job Object
-            # still owns the process tree and is closed on timeout/guard failure.
-            return {"creationflags": _WIN_CREATE_NEW_PROCESS_GROUP, "startupinfo": _startupinfo()}
-        return {"start_new_session": True}
+        # CPython closes the primary-thread handle. Reopen that thread through
+        # documented Toolhelp/OpenThread APIs after Job assignment, before any
+        # child user code can run. Do not use the nonexistent Popen._thread.
+        return {"creationflags": _WIN_CREATE_NEW_PROCESS_GROUP | _WIN_CREATE_SUSPENDED,
+                "startupinfo": _startupinfo()}
 
     def attach_and_resume(self, proc: subprocess.Popen) -> None:
-        if self._windows:
-            if not self._kernel32.AssignProcessToJobObject(self.handle, proc._handle):
+        kernel = self._kernel32
+        process = kernel.OpenProcess(0x0100 | 0x0001, False, proc.pid)  # SET_QUOTA | TERMINATE
+        if not process:
+            raise OSError(ctypes.get_last_error(), "OpenProcess failed")
+        try:
+            if not kernel.AssignProcessToJobObject(self.handle, process):
                 raise OSError(ctypes.get_last_error(), "AssignProcessToJobObject failed")
+            self.assigned = True
+        finally:
+            kernel.CloseHandle(process)
+        snapshot = kernel.CreateToolhelp32Snapshot(0x00000004, 0)  # TH32CS_SNAPTHREAD
+        if not snapshot or snapshot == ctypes.c_void_p(-1).value:
+            raise OSError(ctypes.get_last_error(), "thread snapshot failed")
+        threads = []
+        try:
+            entry = _ThreadEntry()
+            entry.dwSize = ctypes.sizeof(entry)
+            found = kernel.Thread32First(snapshot, ctypes.byref(entry))
+            while found:
+                if entry.th32OwnerProcessID == proc.pid:
+                    threads.append(entry.th32ThreadID)
+                entry.dwSize = ctypes.sizeof(entry)
+                found = kernel.Thread32Next(snapshot, ctypes.byref(entry))
+        finally:
+            kernel.CloseHandle(snapshot)
+        # CREATE_SUSPENDED has exactly one initial thread. Extra threads mean
+        # the assumed launch contract does not hold; do not resume any of them.
+        if len(threads) != 1:
+            raise RuntimeError("suspended child does not have exactly one primary thread")
+        thread = kernel.OpenThread(0x0002, False, threads[0])  # THREAD_SUSPEND_RESUME
+        if not thread:
+            raise OSError(ctypes.get_last_error(), "OpenThread failed")
+        try:
+            previous_count = kernel.ResumeThread(thread)
+            if previous_count != 1:
+                raise RuntimeError(f"unexpected primary-thread suspend count: {previous_count}")
+        finally:
+            kernel.CloseHandle(thread)
+
+    def active_count(self) -> int:
+        accounting = _Accounting()
+        if not self._kernel32.QueryInformationJobObject(self.handle, 1, ctypes.byref(accounting), ctypes.sizeof(accounting), None):
+            raise OSError(ctypes.get_last_error(), "job accounting query failed")
+        return int(accounting.ActiveProcesses)
+
+    def wait_empty(self, timeout: float = 3.0) -> int:
+        deadline = time.monotonic() + timeout
+        count = self.active_count()
+        while count and time.monotonic() < deadline:
+            time.sleep(0.02)
+            count = self.active_count()
+        return count
 
     def terminate(self, proc: subprocess.Popen) -> None:
-        if self._windows:
-            self.close(); return
+        """Kill only our job and our direct child, including failed assignment."""
+        error = None
         try:
-            os.killpg(proc.pid, signal.SIGKILL)
-        except OSError:
-            try: proc.kill()
-            except OSError: pass
+            if self.handle and not self._kernel32.TerminateJobObject(self.handle, EXIT_CONTAINMENT):
+                error = OSError(ctypes.get_last_error(), "TerminateJobObject failed")
+        finally:
+            if proc.poll() is None:
+                proc.kill()  # Necessary if assignment failed while suspended.
+        if error:
+            raise error
 
     def close(self) -> None:
-        if self._windows and self.handle:
-            self._kernel32.CloseHandle(self.handle); self.handle = None
+        if self.handle:
+            self._kernel32.CloseHandle(self.handle)
+            self.handle = None
 
 
 class ProjectLock:
@@ -326,9 +427,18 @@ def run(argv: Sequence[str]) -> tuple[int, dict]:
         started = time.monotonic(); guard_reason = None; timed_out = False
         try:
             proc = subprocess.Popen(list(command), cwd=str(root), stdin=subprocess.DEVNULL, stdout=subprocess.PIPE, stderr=subprocess.PIPE, **container.popen_kwargs())
-            try: container.attach_and_resume(proc)
+            try:
+                container.attach_and_resume(proc)
             except Exception:
-                container.terminate(proc); proc.wait(timeout=2); raise
+                # Assignment or primary-thread resume failed: direct kill is
+                # still required because the child may remain suspended.
+                try:
+                    container.terminate(proc)
+                finally:
+                    if proc.poll() is None:
+                        proc.kill()
+                    proc.wait(timeout=2)
+                raise
             assert proc.stdout is not None and proc.stderr is not None
             threads = [threading.Thread(target=_reader, args=(proc.stdout, run_dir / "stdout.log"), daemon=True), threading.Thread(target=_reader, args=(proc.stderr, run_dir / "stderr.log"), daemon=True)]
             for thread in threads: thread.start()
@@ -341,20 +451,45 @@ def run(argv: Sequence[str]) -> tuple[int, dict]:
                     last_task_check = now; blocked, reason, _ = measurement_guard_status()
                     if blocked: guard_reason = reason; break
                 time.sleep(LOCK_POLL_SECONDS)
-            if timed_out or guard_reason: container.terminate(proc)
-            else: container.close()
-            try: actual_exit = proc.wait(timeout=3)
+            if timed_out or guard_reason:
+                container.terminate(proc)
+            try:
+                actual_exit = proc.wait(timeout=3)
             except subprocess.TimeoutExpired:
-                container.terminate(proc); actual_exit = proc.wait(timeout=3)
+                container.terminate(proc)
+                actual_exit = proc.wait(timeout=3)
+            # A clean parent exit can still leave grandchildren running. Keep
+            # the job open until accounting proves the full tree is empty.
+            active_before_cleanup = container.wait_empty(0.25)
+            leftovers = active_before_cleanup
+            if leftovers:
+                container.terminate(proc)
+                leftovers = container.wait_empty(3.0)
             for thread in threads: thread.join(timeout=2)
-            result.update(exit_code=actual_exit, host_exit_code=actual_exit, actual_exit_code=actual_exit, duration_seconds=round(time.monotonic() - started, 3), timed_out=timed_out)
+            # Close the pipe handles after readers drain them; otherwise the
+            # caller's interpreter reports ResourceWarning on supervised runs.
+            for stream in (proc.stdout, proc.stderr):
+                if stream is not None:
+                    stream.close()
+            result.update(exit_code=actual_exit, host_exit_code=actual_exit, actual_exit_code=actual_exit, duration_seconds=round(time.monotonic() - started, 3), timed_out=timed_out, active_processes_after_cleanup=leftovers)
+            if leftovers:
+                result.update(status="FAILED_LEFTOVERS", guard_reason=guard_reason)
+                return EXIT_CONTAINMENT, result
             if guard_reason: result.update(status="MEASURE_WINDOW_STARTED", guard_reason=guard_reason); return EXIT_GUARD, result
             if timed_out: result["status"] = "TIMEOUT"; return EXIT_TIMEOUT, result
+            source_hash_after = _hash_sources(source_paths, root, command)
+            result["source_hash_after"] = source_hash_after
+            if source_hash_after != source_hash:
+                result["status"] = "FAILED_SOURCE_CHANGED"
+                return EXIT_CONTAINMENT, result
             combined = "".join(path.read_text(encoding="utf-8", errors="replace") for path in (run_dir / "stdout.log", run_dir / "stderr.log"))
             diagnostics = [line.strip() for line in combined.splitlines() if _DIAGNOSTIC.search(line)]; result["diagnostics"] = diagnostics[:50]
             if diagnostics: result["status"] = "FAILED_DIAGNOSTICS"; return EXIT_DIAGNOSTIC, result
             result["status"] = "EXITED"; return int(actual_exit), result
         finally: container.close()
+    except Exception as exc:
+        result.update(status="FAILED", error=f"{type(exc).__name__}: {exc}")
+        return EXIT_CONTAINMENT, result
     finally:
         result.setdefault("finished_utc", utc_now()); result.setdefault("duration_seconds", 0.0)
         _write_json(run_dir / "manifest.json", result)
