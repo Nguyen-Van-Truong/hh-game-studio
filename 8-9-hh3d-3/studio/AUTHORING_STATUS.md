@@ -1,7 +1,31 @@
 # O2 authoring state — 2026-10-03
 
 AUTHORITY=0. Branch `codex/o2-authoring-contract`; no merge before GT-06 ACCEPTED.
-Tools-plan O1–O8 governs; test counts/native diagnostics do not close AUTH or a WP.
+Tools-plan O1–O9 governs; test counts/native diagnostics do not close AUTH or a WP.
+
+## 2026-10-03 — Local Godot pin binding restored
+
+- The earlier missing-4.7.2 claim below was based on the global HHGodotAgent
+  tooling directory. The project's existing `studio/.local/tooling/godot-4.7.2-stable`
+  installation in the main checkout contains both exact pinned binaries:
+  console SHA256 `c8f0a6bc45a19b33541501e57f6f7cd972ab18453743266339d495cbbe846643`
+  and GUI SHA256 `ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424`.
+- This worktree was missing `.local/toolchain.local.json`. Created the local
+  console-path override pointing to that verified existing installation and
+  checked its readback. No downloads, global PATH changes or engines were needed.
+  Receipt: `.local/reviews/o2-toolchain-binding-20261003-01/verification.json`.
+- Recheck the local override and project pin before searching global tooling or
+  claiming a missing executable. This repairs setup only: the earlier native
+  editor timeout remains unresolved; no native retry or gameplay proof is added.
+- A distinct ClassDB reflection admission at 21:02 was deferred during its fresh
+  O4.1 CPU-minute: available memory fell to 3,942,862,848 bytes (3.67 GiB),
+  below 4 GiB, while commit was about 70%. Wrapper actual exit 1 was
+  `CAMPAIGN_PREFLIGHT_RESOURCE_LIMIT`; no engine/started receipt/native output
+  exists, and the measurement marker was released. Raw admission and the frozen
+  source lists are in `.local/reviews/o2-classdb-admission-20261003-01`.
+  Native ID `o2-classdb-20261003-01` remains unused. Continue admission with fresh
+  resource/CPU checks only after conditions change; this is not a native failure
+  or evidence that the reflected catalog matches. No formal attempt was used.
 
 ## 2026-10-03 — Fixture and presentation contract corrections
 
@@ -67,6 +91,8 @@ unknown and no retry is made without a reviewed reproducer.
   evidence do not match the locked GUI hash. No native O2 run is substituted
   with the wrong pin; install/provide the exact locked binary before native
   ClassDB or fixture readback.
+  **Superseded by the local binding verification above:** the correct binary
+  already exists in the main checkout; this worktree's path override was missing.
 
 ## 2026-10-03 — Static asset contract binding hardening
 
