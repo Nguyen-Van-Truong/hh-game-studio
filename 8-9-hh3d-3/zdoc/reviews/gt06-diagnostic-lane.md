@@ -10,7 +10,7 @@
 - O9.4C còn thiếu: host-only 35 batch phải đạt tối thiểu 30 phút, watchdog stream/exit/Job/tree/handle/source phải verify trên cùng closure.
 - O9.5 quiet-chain runner mặc định dry-run; execute có CPU-minute trước/sau, host residency, metrics, watchdog, source recheck và formal dispatch receipt.
 - Runner hiện vẫn chạy hai stage tiền-formal trong coordinator process; chưa phải Scheduled Task chain hoàn chỉnh, nên không được gọi là unattended closeout.
-- Host/watchdog/formal manifests hiện đồng nhất 62 file; closure ứng viên sau các sửa tĩnh: `1f7abf3f4a9e5b6c1e1a1c4ff1dd23c910a7481888c41026085251ca780e44ed`.
+- Host/watchdog/formal manifests hiện đồng nhất 62 file; dry-run O9 tại HEAD hiện tại sinh closure ứng viên `822756f2b91e28ad2b42a5c4704edb78a5756c176a2077b9db7e72e9fc674bdf`.
 - Closure trên chỉ là candidate; phải freeze lại sau khi source dừng thay đổi, rồi O4.1 + CPU-minute mới trước mọi run.
 - Formal mới chỉ được dispatch trong cửa sổ yên, không workload cạnh tranh, còn INFRA budget, và không đóng app/container ngoài ownership.
 - Nếu metrics/status-gap/cleanup/source drift fail, giữ raw và dừng; không retry mù, không hạ gate, không tự ACCEPT.
