@@ -148,14 +148,7 @@ def read_json(path, limit):
     return json.loads(raw)
 
 
-def from_run(root, *, policy=LEGACY_POLICY, interleaved_probe=None,
-             seed_directory=None, source_root=STUDIO):
-    need(policy in POLICIES, 'UNKNOWN_POLICY')
-    if policy == O7_POLICY:
-        need(interleaved_probe is not None and seed_directory is not None,
-             'INTERLEAVED_PROBE_REQUIRED')
-    else:
-        need(interleaved_probe is None and seed_directory is None, 'PROBE_REQUIRES_O7_POLICY')
+def _read_run_data(root, *, require_formal_mix=False):
     summaries, timings, recoveries = [], [], []
     for index in range(35):
         summaries.append(read_json(root / f'summary-{index:02}.json', 65536))
@@ -169,7 +162,32 @@ def from_run(root, *, policy=LEGACY_POLICY, interleaved_probe=None,
              and number(batch['max_status_gap_ms'])
              and batch['max_status_gap_ms'] == summaries[-1]['max_status_gap_ms'],
              'BATCH_BINDING')
+        if require_formal_mix:
+            need(batch.get('schema_id') == 'hh-studio.benchmark-command-batch'
+                 and batch.get('schema_version') == '1.5.0'
+                 and batch.get('mode') == 'benchmark'
+                 and batch.get('complete_command_mix') is True
+                 and batch.get('effects_kind') == 'in_process_mock_fixture'
+                 and batch.get('transport_kind') == 'accepted_loopback_fixture_http'
+                 and batch.get('native_acceptance') is False, 'CURRENT_SOAK_WORKLOAD')
+            mix = ('inspect',) * 5 + ('rejected',) * 3 + ('admitted',) * 2
+            need(len(batch['commands']) == 1000
+                 and all(type(command) is dict and command.get('kind') == mix[ordinal % 10]
+                         and type(command.get('ordinal')) is int and command['ordinal'] == ordinal
+                         for ordinal, command in enumerate(batch['commands'])), 'CURRENT_SOAK_WORKLOAD')
         recoveries.append(batch['transport_recovery'])
+    return summaries, timings, recoveries
+
+
+def from_run(root, *, policy=LEGACY_POLICY, interleaved_probe=None,
+              seed_directory=None, source_root=STUDIO):
+    need(policy in POLICIES, 'UNKNOWN_POLICY')
+    if policy == O7_POLICY:
+        need(interleaved_probe is not None and seed_directory is not None,
+              'INTERLEAVED_PROBE_REQUIRED')
+    else:
+        need(interleaved_probe is None and seed_directory is None, 'PROBE_REQUIRES_O7_POLICY')
+    summaries, timings, recoveries = _read_run_data(root)
     legacy = calculate(summaries, timings, recoveries)
     if policy == LEGACY_POLICY:
         return {'run_id': root.name, **legacy}
@@ -183,6 +201,31 @@ def from_run(root, *, policy=LEGACY_POLICY, interleaved_probe=None,
     report['legacy_policy_result'] = {'policy': LEGACY_POLICY,
                                      'metrics_pass': legacy['metrics_pass'],
                                      'failed_checks': legacy['failed_checks']}
+    return {'run_id': root.name, **report}
+
+
+def from_run_with_retained_control(root, *, interleaved_probe, seed_directory,
+                                    reference_soak, source_root=STUDIO):
+    """Current first35 counters plus O7's separately bound retained control.
+
+    The seed journal belongs to reference_soak, never to the new host run.
+    Actual exits, ownership, watchdog and extension-batch gaps remain separate
+    gates; this reader cannot grant formal acceptance.
+    """
+    from studio.tests.replay.journal_scaling_metrics import read_retained_control
+    root = Path(root)
+    scaling = read_retained_control(Path(interleaved_probe), Path(seed_directory),
+                                   source_root=Path(source_root), reference_soak=Path(reference_soak),
+                                   current_soak=root)
+    summaries, timings, recoveries = _read_run_data(root, require_formal_mix=True)
+    legacy = calculate(summaries, timings, recoveries)
+    report = _calculate(summaries, timings, recoveries, policy=O7_POLICY, journal_scaling=scaling)
+    report['legacy_policy_result'] = {'policy': LEGACY_POLICY,
+                                     'metrics_pass': legacy['metrics_pass'],
+                                     'failed_checks': legacy['failed_checks']}
+    report['scope'] = ('current first35 residency counters/status with original O7 finite-workload '
+                       'journal control; seed and current soak are separate; verify all extension '
+                       'gaps, raw commands, actual exits, ownership and watchdog separately')
     return {'run_id': root.name, **report}
 
 

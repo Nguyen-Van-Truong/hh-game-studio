@@ -11,8 +11,16 @@ param(
     [ValidatePattern('^gt06-[a-z0-9-]{1,25}$')]
     [string]$CampaignId,
 
-    [ValidateSet('probe', 'campaign', 'residency')]
+    [ValidateSet('probe', 'campaign', 'residency', 'quiet-chain')]
     [string]$Mode,
+
+    [switch]$HostOnly,
+
+    [ValidatePattern('^[a-f0-9]{64}$')]
+    [string]$SourceClosure,
+
+    [ValidatePattern('^[a-f0-9]{64}$')]
+    [string]$ProfileHash,
 
     [ValidateRange(1, 99)]
     [int]$LaunchNumber = 1
@@ -145,7 +153,7 @@ function Assert-Definition($Task, [string]$ExpectedMode) {
     Require ([string]::Equals($action.WorkingDirectory, $studio, [StringComparison]::OrdinalIgnoreCase)) 'TASK_ACTION_CWD'
     $settings = $definition.Settings
     Require ($settings.Compatibility -eq 2) 'TASK_COMPATIBILITY'
-    $expectedLimit = if ($ExpectedMode -eq 'probe') { 'PT2M' } else { 'PT24H' }
+    $expectedLimit = if ($ExpectedMode -eq 'probe') { 'PT2M' } elseif ($ExpectedMode -eq 'quiet-chain') { 'PT4H' } else { 'PT24H' }
     Require ([System.Xml.XmlConvert]::ToTimeSpan($settings.ExecutionTimeLimit) -eq
         [System.Xml.XmlConvert]::ToTimeSpan($expectedLimit)) 'TASK_WALL_LIMIT'
     Require ($settings.Enabled -and $settings.AllowDemandStart -and $settings.AllowHardTerminate) 'TASK_START_OR_TERMINATION_DISABLED'
@@ -165,6 +173,13 @@ function Action-Arguments([string]$SelectedMode) {
 function Assert-Request($Request) {
     $keys = @($Request.PSObject.Properties.Name | Sort-Object)
     $expectedKeys = @('schema', 'campaign_id', 'mode', 'script_sha256', 'pythonw_sha256', 'python_sha256')
+    if ($Request.mode -ceq 'quiet-chain') { $expectedKeys += 'chain_plan_sha256' }
+    if ($Request.PSObject.Properties['source_closure_sha256']) {
+        Require ($Request.mode -ceq 'campaign') 'TASK_FROZEN_SOURCE_MODE'
+        $expectedKeys += @('source_closure_sha256', 'profile_sha256')
+        Require ($Request.source_closure_sha256 -cmatch '^[a-f0-9]{64}$' -and
+            $Request.profile_sha256 -cmatch '^[a-f0-9]{64}$') 'TASK_FROZEN_SOURCE_BINDING'
+    }
     if ($LaunchNumber -gt 1) {
         $expectedKeys += 'launch_number'
         Require (($Request.launch_number -is [int] -or $Request.launch_number -is [long]) -and
@@ -173,7 +188,7 @@ function Assert-Request($Request) {
     $expectedKeys = @($expectedKeys | Sort-Object)
     Require (($keys -join ',') -ceq ($expectedKeys -join ',')) 'TASK_REQUEST_FIELDS'
     Require ($Request.schema -ceq 'HH-GT06-TASK-REQUEST-1' -and $Request.campaign_id -ceq $CampaignId) 'TASK_REQUEST_BINDING'
-    Require ($Request.mode -cin @('probe', 'campaign', 'residency')) 'TASK_REQUEST_MODE'
+    Require ($Request.mode -cin @('probe', 'campaign', 'residency', 'quiet-chain')) 'TASK_REQUEST_MODE'
     foreach ($key in @('script_sha256', 'pythonw_sha256', 'python_sha256')) {
         Require ($Request.$key -cmatch '^[a-f0-9]{64}$') 'TASK_REQUEST_HASH'
     }
@@ -183,6 +198,10 @@ function Assert-SourcePins($Request) {
     Require ((Hash-File $scriptPath) -ceq $Request.script_sha256) 'TASK_SCRIPT_CHANGED'
     Require ((Hash-File $pythonwPath) -ceq $Request.pythonw_sha256) 'TASK_PYTHONW_CHANGED'
     Require ((Hash-File $pythonPath) -ceq $Request.python_sha256) 'TASK_PYTHON_CHANGED'
+    if ($Request.mode -ceq 'quiet-chain') {
+        Require ((Hash-File (Join-Path $outputDirectory 'quiet-chain-plan.json')) -ceq
+            $Request.chain_plan_sha256) 'TASK_CHAIN_PLAN_CHANGED'
+    }
 }
 
 try {
@@ -211,12 +230,28 @@ try {
 
     if ($Command -eq 'register-run') {
         $stage = 'prepare'
-        Require ($Mode -cin @('probe', 'campaign', 'residency')) 'TASK_MODE_REQUIRED'
+        Require ($Mode -cin @('probe', 'campaign', 'residency', 'quiet-chain')) 'TASK_MODE_REQUIRED'
+        Require ((-not $HostOnly) -or $Mode -ceq 'quiet-chain') 'TASK_HOST_ONLY_MODE'
+        Require (([string]::IsNullOrEmpty($SourceClosure)) -eq ([string]::IsNullOrEmpty($ProfileHash))) 'TASK_SOURCE_PROFILE_PAIR'
+        Require ([string]::IsNullOrEmpty($SourceClosure) -or $Mode -ceq 'campaign') 'TASK_FROZEN_SOURCE_MODE'
         Require ($null -eq $task) 'TASK_ALREADY_EXISTS'
         Assert-CampaignIdle $folder
         Require (-not (Test-Path -LiteralPath $outputDirectory)) 'TASK_OUTPUT_ALREADY_EXISTS'
         $null = New-Item -ItemType Directory -Path $outputDirectory -ErrorAction Stop
         $createdOutput = $true
+        if ($Mode -ceq 'quiet-chain') {
+            Require ($LaunchNumber -eq 1 -and $CampaignId -cmatch '^gt06-o9-chain-f([2-9][0-9])-[a-z0-9]{1,5}$') 'TASK_CHAIN_ID'
+            $formalId = 'gt06-o4-formal-' + $Matches[1]
+            $chainArgs = @('-B', (Join-Path $PSScriptRoot 'run_o9_quiet_chain.py'),
+                '--chain-id', $CampaignId, '--formal-id', $formalId, '--dry-run')
+            if ($HostOnly) { $chainArgs += '--host-only' }
+            $planLines = & $pythonPath @chainArgs
+            Require ($LASTEXITCODE -eq 0) 'TASK_CHAIN_DRY_RUN_FAILED'
+            $planText = ($planLines -join "`n") + "`n"
+            $chainPlan = $planText | ConvertFrom-Json
+            Require ($chainPlan.commands_started -eq $false -and $chainPlan.executable -eq $true) 'TASK_CHAIN_NOT_READY'
+            Write-NewText (Join-Path $outputDirectory 'quiet-chain-plan.json') $planText
+        }
         $request = [ordered]@{
             schema = 'HH-GT06-TASK-REQUEST-1'
             campaign_id = $CampaignId
@@ -226,6 +261,13 @@ try {
             python_sha256 = Hash-File $pythonPath
         }
         if ($LaunchNumber -gt 1) { $request['launch_number'] = $LaunchNumber }
+        if ($Mode -ceq 'quiet-chain') {
+            $request['chain_plan_sha256'] = Hash-File (Join-Path $outputDirectory 'quiet-chain-plan.json')
+        }
+        if (-not [string]::IsNullOrEmpty($SourceClosure)) {
+            $request['source_closure_sha256'] = $SourceClosure
+            $request['profile_sha256'] = $ProfileHash
+        }
         Write-NewJson $requestPath $request
         $request = Read-Json $requestPath
         Assert-Request $request
@@ -247,7 +289,7 @@ try {
         $settings.MultipleInstances = 2
         $settings.RestartCount = 0
         $settings.Priority = 6
-        $settings.ExecutionTimeLimit = if ($Mode -eq 'probe') { 'PT2M' } else { 'PT24H' }
+        $settings.ExecutionTimeLimit = if ($Mode -eq 'probe') { 'PT2M' } elseif ($Mode -eq 'quiet-chain') { 'PT4H' } else { 'PT24H' }
         $settings.Hidden = $false
         $settings.StartWhenAvailable = $false
         $settings.WakeToRun = $false

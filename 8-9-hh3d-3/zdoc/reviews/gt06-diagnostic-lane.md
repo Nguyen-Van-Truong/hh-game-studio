@@ -7,10 +7,10 @@
 - O9.2 lifecycle, O9.3 role binding và O9.4a telemetry đã harden; O1/O4 thresholds, timeout và phân loại cũ không đổi.
 - Wake-lag cleanup, retry binding, NaN/overflow window guard và source-closure binding đã có regression coverage; vắng telemetry thì fail-closed.
 - O9.4D I/O/Godot source review chỉ là chẩn đoán; chưa chứng minh nguyên nhân status-gap/save-tail.
-- O9.4C còn thiếu: host-only 35 batch phải đạt tối thiểu 30 phút, watchdog stream/exit/Job/tree/handle/source phải verify trên cùng closure.
-- O9.5 quiet-chain runner mặc định dry-run; execute có CPU-minute trước/sau, host residency, metrics, watchdog, source recheck và formal dispatch receipt.
-- Runner hiện vẫn chạy hai stage tiền-formal trong coordinator process; chưa phải Scheduled Task chain hoàn chỉnh, nên không được gọi là unattended closeout.
-- Host/watchdog/formal manifests hiện đồng nhất 62 file; dry-run O9 tại HEAD hiện tại sinh closure ứng viên `822756f2b91e28ad2b42a5c4704edb78a5756c176a2077b9db7e72e9fc674bdf`.
+- O9.4C còn thiếu run mới: host hoạt động tối thiểu 30 phút cùng PID; 35 batch gốc + extension chẩn đoán tối đa 64; không idle-padding sau child exit.
+- O9.5b đã có mode Scheduler quiet-chain độc lập chat, hash frozen plan, actual host capture, combined watchdog và exact source/profile trước formal.
+- O7 reader tách control gốc/host mới; chỉ chấp nhận profile normalization CRLF→LF đã pin, không hồi tố raw/hash/verdict hoặc giảm ngưỡng.
+- Host/watchdog/formal dùng chung closure 64 file; lấy hash freeze từ quiet-chain-plan.json của scheduler, không dùng hash candidate cũ trong chat.
 - Closure trên chỉ là candidate; phải freeze lại sau khi source dừng thay đổi, rồi O4.1 + CPU-minute mới trước mọi run.
 - Formal mới chỉ được dispatch trong cửa sổ yên, không workload cạnh tranh, còn INFRA budget, và không đóng app/container ngoài ownership.
 - Nếu metrics/status-gap/cleanup/source drift fail, giữ raw và dừng; không retry mù, không hạ gate, không tự ACCEPT.
@@ -21,6 +21,14 @@
 This lane records diagnostics without changing the authoritative plan. Each
 entry keeps the run ID, source closure, command, actual result and the finding
 needed for the next repair. Raw evidence remains under `studio/.local/`.
+
+## 2026-10-03 — O9.5 scheduled chain and retained-control repair
+
+- Fixed undefined residency clock and dead-child padding; active same-producer extension is bounded at 64, with all-batch gap checks and first-35 O6.3 unchanged.
+- One host+watchdog run now satisfies O9.5 combined diagnostic when verified, with replayed streams and hash-bound actual exit/capture; no duplicate 30-minute observer run.
+- Scheduled quiet-chain binds its saved dry-run; formal request and child both verify frozen source/profile. Wrapper return alone remains insufficient for closeout.
+- Retained O7 readiness verified offline: 48 dependency files compatible, one exact mixed-CRLF normalization; lookup 108.5744%, append 106.5340%. Original seeds remain bound to original soak05, never the new journal.
+- 264 focused replay/command/environment/scheduler/O7 tests passed, actual exit 0; PowerShell parse and diff checks passed. No new native/formal PASS claimed.
 
 ## 2026-10-03 — O9.2/O9.3 closeout and O9.4 diagnostics
 

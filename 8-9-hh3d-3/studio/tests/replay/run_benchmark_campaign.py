@@ -83,6 +83,8 @@ CAMPAIGN_FIXED_SOURCES = (
     'tests/replay/run_watchdog_soak.py',
     'tests/replay/run_o9_quiet_chain.py',
     'tests/replay/residency_metrics.py',
+    'tests/replay/journal_scaling_metrics.py',
+    'tests/replay/run_journal_microbench.py',
     'tests/replay/benchmark_environment.py',
     'contracts/perf-collector.schema.json',
 )

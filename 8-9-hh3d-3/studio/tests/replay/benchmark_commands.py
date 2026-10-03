@@ -1,7 +1,8 @@
 """Real loopback API timings with explicit in-process mock effects.
 
 CommandProducer owns one benchmark-derived loopback fixture host and journal for
-up to 35 batches. run_batch(index) sends the exact 5/3/2 mix 100 times.
+35 batches by default. The host-only diagnostic may explicitly extend to the
+existing 64-credential lifetime bound. run_batch(index) sends the exact 5/3/2 mix 100 times.
 run_diagnostic() sends one group and never claims benchmark completeness.
 Inspection includes terminal readback; admission measures ACCEPTED_PENDING;
 validation rejection is the actual INVALID_FIXTURE_PAYLOAD wire response.
@@ -55,6 +56,9 @@ from studio.host.replay.process_probe import ProcessProbe
 from studio.protocol.core import Status, canonical_bytes
 
 MAX_BATCHES = 35
+# Each batch rotates one credential. Diagnostic extension must respect the
+# unchanged transport history budget, not reset history or raise public caps.
+MAX_DIAGNOSTIC_BATCHES = 64
 GROUPS = 100
 BATCH_TIMEOUT_SECONDS = 600
 TERMINAL_TIMEOUT_SECONDS = 5
@@ -105,8 +109,11 @@ class NativeObserver:
 
 class CommandProducer:
     """One resident host. observer injection is only for explicitly marked tests."""
-    def __init__(self, root, run_id, *, observer=None):
+    def __init__(self, root, run_id, *, observer=None, max_batches=MAX_BATCHES):
         _need(type(run_id) is str and _ID.fullmatch(run_id), 'RUN_ID')
+        _need(type(max_batches) is int and MAX_BATCHES <= max_batches <= MAX_DIAGNOSTIC_BATCHES,
+              'DIAGNOSTIC_BATCH_LIMIT')
+        self.max_batches = max_batches
         self.root, self.run_id = Path(root), run_id
         self.host, self.observer, self.credential, self.client, self.journal = None, observer, None, None, None
         self.next_index, self.failed, self.closed, self.mode = 0, False, False, None
@@ -493,7 +500,7 @@ class CommandProducer:
 
     def _run(self, index, groups, mode):
         _need(not self.closed and not self.failed, 'PRODUCER_CLOSED_OR_HELD')
-        _need(type(index) is int and index == self.next_index and 0 <= index < MAX_BATCHES, 'BATCH_ORDER')
+        _need(type(index) is int and index == self.next_index and 0 <= index < self.max_batches, 'BATCH_ORDER')
         _need(self.mode in (None, mode), 'MODE_MIX')
         self.mode = mode
         report = {'schema_id': 'hh-studio.benchmark-command-batch', 'schema_version': '1.5.0',
@@ -504,6 +511,10 @@ class CommandProducer:
                   'commands': [], 'latency_ms': {'inspect': [], 'rejected': [], 'admitted': []},
                   'effects_per_admission': [], 'cancel': None, 'status': 'RUNNING',
                   'setup_responses': []}
+        if index >= MAX_BATCHES:
+            report['diagnostic_extension'] = {
+                'scope': 'host-only residency extension; outside first-35 O6.3 metrics; no formal acceptance',
+                'max_batches': self.max_batches, 'formal_acceptance': False}
         self._batch_transport = report['transport_recovery'] = {
             'events': [], 'event_count_before': self._transport_total,
             'event_count_after': self._transport_total, 'all_reconciled': False}

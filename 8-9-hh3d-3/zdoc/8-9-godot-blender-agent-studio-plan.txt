@@ -17,7 +17,7 @@ GT06_ATTRIBUTION_POLICY=DIAGNOSTIC_ONLY_UNLESS_OWNER_ADR_ADDS_ACCEPTANCE_REQUIRE
 GT06_CURRENT_DIAGNOSTIC=SEE_LANE_LOG_HIEN_TRANG; HEADER_NOT_UPDATED_PER_RUN_O9_6; FORMAL14_SAVE_TAIL_ROOT_CAUSE_UNPROVEN_O9_4; AUTHORITY0
 GT06_NEXT_ACTION=SEE_O9_NEXT; NO_BLIND_FORMAL_RETRY; O1_O4_THRESHOLDS_AND_TIMEOUTS_UNCHANGED; DETAIL=zdoc/reviews/gt06-diagnostic-lane.md
 GT06_SOURCE_POLICY=SOURCE_VERIFIER_OR_PROFILE_CHANGE_CREATES_NEW_CLOSURE_FROZEN_BEFORE_RUN; CLOSURE_COMPUTED_BY_TOOL; OLD_CLOSURES_AND_RAW_HISTORICAL_SEE_GT06_HISTORY_S258; NO_RETROACTIVE_REBINDING; TIMEOUTS_UNCHANGED
-GT06_SOURCE_CHECKPOINT=SEE_LANE_LOG_FOR_ACTUAL_FROZEN_CLOSURE; FORMAL_AND_RESIDENCY_IMPORT_SETS_DIFFER; ARM_HELPER_OUTSIDE_MEASURED_CLOSURE; NO_RETROACTIVE_SOURCE_REBINDING
+GT06_SOURCE_CHECKPOINT=SEE_LANE_LOG_AND_SCHEDULER_FROZEN_PLAN; CURRENT_ENTRYPOINTS_SHARE_VERIFIED_CLOSURE; HISTORICAL_DISTINCT_CLOSURES_UNCHANGED; NO_RETROACTIVE_SOURCE_REBINDING
 GT06_PROFILE_SHA256=8a2e599c40f927ffaff5ded5e48b6bf2a0f0a6bb3a23de31434a695f4258cb35; PROFILE_O5_V6_IMPLEMENTED_VERIFIED; NOT_YET_FORMAL_ACCEPTED; OLD_V5_RAW_UNCHANGED
 O1_PREFLIGHT_POLICY=FRESH_O4_1_AND_CPU_MINUTE_BEFORE_EACH_PAIR; READONLY_CHECK_RESULTS_ONLY_IN_LANE_LOG; FOREIGN_CONTAINER_MEANS_STUDIO_HH_GT03_HEX32_O8_1
 O2_CANDIDATE_STATUS=AUTHORITY0; BRANCH=codex/o2-authoring-contract; DETAIL=studio/AUTHORING_STATUS.md_AT_BRANCH_HEAD; OPEN=AUTH05_ADAPTER_E2E; NO_MERGE_BEFORE_GT06; POINTER_ONLY_NO_HASH_OR_TEST_COUNT_O7_6
@@ -485,11 +485,20 @@ giờ là máy yên trong khung đo và tail status gap (formal14, formal21). M�
    Nó không tự retry product/harness fail, không tự ACCEPT và không tự đóng ứng dụng. Nếu host
    residency hoặc formal import closure không khớp, chain dừng trước formal để sửa closure, không
    tiêu thêm một lượt đo mù.
-   Ghi chú implementation: hai stage host-residency và watchdog hiện chạy trong coordinator process
-   với thời lượng hữu hạn và receipt độc lập; chỉ formal được dispatch qua Scheduled Task. Vì vậy
-   `--execute` chưa được gọi là unattended Scheduled Task chain; nếu coordinator bị dừng, không được
-   suy ra stage hoàn tất. Adapter scheduler cho hai stage là backlog O9.5b và phải hoàn tất trước khi
-   dùng chuỗi như closeout không người trông.
+   Implementation O9.5b: mode `quiet-chain` của campaign_task.ps1 chạy toàn chuỗi trong process
+   pythonw do Scheduled Task sở hữu, độc lập phiên chat; request khóa hash dry-run/frozen plan.
+   Host vẫn là child trong Job với actual-exit/capture riêng; stream watchdog được replay rồi mới
+   nhận receipt kết hợp, không chạy thêm soak 30 phút trùng lặp. Nếu 35 batch kết thúc trước 30 phút,
+   cùng host/producer tiếp tục mix bằng batch chẩn đoán mới, tối đa 64; không chờ bù sau khi host đã
+   thoát. O6.3 vẫn tính đúng batch 0–34; O9.4c kiểm gap trên tất cả batch. Không đủ thời lượng thì FAIL.
+   O7 control giữ nguyên probe03, seed gốc và binding vào soak05 gốc; không gán seed cũ vào journal
+   mới. Verifier kiểm snapshot gốc, toàn bộ dependency control hiện tại và counter/workload của host
+   mới riêng biệt. Ngoại lệ byte duy nhất là benchmark_profile.py cũ SHA 4c0c1512… sang LF SHA
+   67d6ad3f…: phải chứng minh CRLF→LF đúng từng byte từ snapshot đã băm. Khác nội dung khác thì từ
+   chối; hash/verdict cũ giữ nguyên, giới hạn finite-workload và harness lịch sử không đầy đủ vẫn ghi.
+   Trước dispatch formal, đóng băng lại đúng closure/profile trong scheduler request và child kiểm
+   lại trước khi chạy. `return.json` chỉ là return của wrapper; closeout vẫn cần trạng thái Scheduler,
+   actual child exits và Job/tree/handles, không suy PASS khi phiên chat hay tool handle mất.
    Ngoài khung làm O2 hoặc việc static; hôm sau closeout bằng lệnh chung ở mục 6a.
 6. Nhịp làm việc của agent:
    a) Closeout run hỏng bằng một lệnh chung (hash raw, actual exit, Job/handle, export rồi gỡ đúng
@@ -761,6 +770,10 @@ Bài học 03-10 (formal09–21, soak O9):
 38. Nâng công cụ bằng cơ chế chung (allowlist ClassDB, readback, undo) và port có kiểm adapter đã
     có ở plugin cũ, không viết adapter mới cho từng class; tính năng chỉ claim khi mini-game dùng
     nó qua catalog và đạt ngân sách hiệu năng.
+
+39. Soak phải đo host đang sống và hoạt động: chờ bù sau child exit không chứng minh thời lượng.
+    Control cũ giữ seed/journal/source gốc; run mới bind riêng. Chỉ chấp nhận khác byte do xuống
+    dòng khi có snapshot, hash hai phía và phép biến đổi đúng từng byte; không gắn lại hash lịch sử.
 
 LỊCH SỬ / CÁCH ĐỌC
 Bản S71 đầy đủ trước tinh gọn giữ tại reviews/20260918-plan-history-s71/

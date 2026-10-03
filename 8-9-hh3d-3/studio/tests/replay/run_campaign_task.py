@@ -42,11 +42,22 @@ def launch_suffix(launch_number):
     return '' if launch_number == 1 else f'-launch-{launch_number:02d}'
 
 
-def validate_request(value, campaign_id, mode, script, windowed, console, *, launch_number=1):
+def validate_request(value, campaign_id, mode, script, windowed, console, *, launch_number=1,
+                     frozen_plan=None):
     launch_suffix(launch_number)
     expected = {'schema': 'HH-GT06-TASK-REQUEST-1', 'campaign_id': campaign_id,
         'mode': mode, 'script_sha256': sha(script),
         'pythonw_sha256': sha(windowed), 'python_sha256': sha(console)}
+    if mode == 'quiet-chain':
+        if frozen_plan is None:
+            raise ValueError('TASK_FROZEN_PLAN_REQUIRED')
+        expected['chain_plan_sha256'] = sha(frozen_plan)
+    if mode == 'campaign' and type(value) is dict and 'source_closure_sha256' in value:
+        for key in ('source_closure_sha256', 'profile_sha256'):
+            digest = value.get(key)
+            if type(digest) is not str or re.fullmatch('[a-f0-9]{64}', digest) is None:
+                raise ValueError('TASK_FROZEN_SOURCE_BINDING')
+            expected[key] = digest
     if launch_number > 1:
         expected['launch_number'] = launch_number
         if type(value) is not dict or type(value.get('launch_number')) is not int:
@@ -74,6 +85,11 @@ def process_observation():
 
 
 def execute(campaign_id, mode, output, request_sha, *, launch_number=1):
+    if mode == 'quiet-chain':
+        from studio.tests.replay import run_o9_quiet_chain as chain
+        plan = json.loads((output / 'quiet-chain-plan.json').read_bytes())
+        return chain.execute(campaign_id, chain.formal_id_for(campaign_id),
+                             chain.REVIEWS / campaign_id, frozen_plan=plan)
     if mode == 'residency':
         from studio.tests.replay.run_command_residency import run
         return run(campaign_id)
@@ -82,6 +98,12 @@ def execute(campaign_id, mode, output, request_sha, *, launch_number=1):
     from studio.tests.replay import run_benchmark_campaign as campaign
     from studio.tests.replay.benchmark_job import BenchmarkProcess, HELD_OWNERS, verify_capture
     if mode == 'campaign':
+        request = json.loads((output / 'request.json').read_bytes())
+        if 'source_closure_sha256' in request:
+            campaign.load_fixture()
+            if (campaign.closure(campaign.source_files()) != request['source_closure_sha256']
+                    or campaign.profile.PROFILE_SHA256 != request['profile_sha256']):
+                raise ValueError('TASK_FROZEN_SOURCE_CHANGED')
         # Calling in this scheduler-owned process preserves the accepted run
         # owner hierarchy and does not add a fifth process to its four-slot Job.
         return campaign.run_campaign(campaign_id, STUDIO / '.local/reviews' / campaign_id)
@@ -133,7 +155,7 @@ def execute(campaign_id, mode, output, request_sha, *, launch_number=1):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--campaign-id', required=True)
-    parser.add_argument('--mode', choices=('probe', 'campaign', 'residency'), required=True)
+    parser.add_argument('--mode', choices=('probe', 'campaign', 'residency', 'quiet-chain'), required=True)
     parser.add_argument('--launch-number', type=int, default=1)
     args = parser.parse_args()
     if os.name != 'nt' or not re.fullmatch(r'gt06-[a-z0-9-]{1,25}', args.campaign_id):
@@ -159,8 +181,9 @@ def main():
                 raise ValueError('TASK_WINDOWED_INTERPRETER_REQUIRED')
             request = output / 'request.json'
             value = json.loads(request.read_bytes())
+            frozen_plan = output / 'quiet-chain-plan.json' if args.mode == 'quiet-chain' else None
             validate_request(value, args.campaign_id, args.mode, Path(__file__), windowed, console,
-                launch_number=args.launch_number)
+                launch_number=args.launch_number, frozen_plan=frozen_plan)
             # The scheduler console stays hidden; owned helpers use the
             # checked console companion with their existing redirected pipes.
             sys.executable = str(console)
@@ -171,7 +194,7 @@ def main():
                 'scheduler_result_still_required': True, 'formal_acceptance': False})
             code = execute(args.campaign_id, args.mode, output, sha(request), launch_number=args.launch_number)
             validate_request(value, args.campaign_id, args.mode, Path(__file__), windowed, console,
-                launch_number=args.launch_number)
+                launch_number=args.launch_number, frozen_plan=frozen_plan)
         except BaseException as error:
             code = 1
             traceback.print_exc()

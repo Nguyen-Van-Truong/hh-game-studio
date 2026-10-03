@@ -29,6 +29,18 @@ OPERATION_COUNTS = {'lookup_ms': 50, 'append_ms': 75}
 INSPECTED_PROBE_SHA256 = '1e8cd1ab4d38351559afe3ed58b427c73bfea1c8f976e26d3b34c97449b31666'
 SHARED_REQUIRED = {'host/core/journal.py', 'host/replay/verified_journal.py',
                    'host/replay/disk_journal_index.py'}
+# Exact retained O7 control. These are inspection pins, not a retroactive
+# claim that the historical harness closure was complete.
+RETAINED_CONTROL_PINS = {
+    'probe_result': '85ad2709502789d37c7608bb9a1cfcf15a0fba589d4e0f0f567d2a46bd3db342',
+    'soak_manifest': 'de64f9d2bba192db8634e137bb67341f57b3c84be989c474aa65696dc7f3ce50',
+    'soak_result': 'e0a5e5f8941b3d1d23c54071e56cb35eb82b8d7974e4762e8bf0a8e186498492',
+}
+PROFILE_NEWLINE_BRIDGE = {
+    'file': 'tests/replay/benchmark_profile.py',
+    'retained_sha256': '4c0c1512cafc8d1d86ceeec11efabe7ab814e28d5fb6b71a4c31fd0b872ac96a',
+    'current_sha256': '67d6ad3f04d5fdd68f51670f67bf27fdb9188cafc86f60a26fad8bb3e8d44fdd',
+}
 
 
 def stats(values):
@@ -220,7 +232,36 @@ def current_probe_sources(source_root):
 
 def read_bound_probe(probe_path, seed_root, *, source_root, soak_root):
     """Validate retained raw inputs/current graph, then calculate baseline stats."""
+    return _read_probe(probe_path, seed_root, source_root=source_root,
+                       soak_root=soak_root, retained_control=False)
+
+
+def _compatible_probe_graph(source_root, files, snapshot_root):
+    current = current_probe_sources(source_root)
+    need(set(current) == set(files), 'PROBE_SOURCE_COVERAGE')
+    bridges = []
+    for name, expected in files.items():
+        if current[name] == expected:
+            continue
+        bridge = PROFILE_NEWLINE_BRIDGE
+        need(name == bridge['file'] and expected == bridge['retained_sha256']
+             and current[name] == bridge['current_sha256'], 'PROBE_SOURCE_CHANGED')
+        original = _regular(snapshot_root / name, 4 * 1024 * 1024).read_bytes()
+        live = _regular(source_root / name, 4 * 1024 * 1024).read_bytes()
+        need(hashlib.sha256(original).hexdigest() == expected
+             and original.replace(b'\r\n', b'\n') == live,
+             'PROBE_PROFILE_NORMALIZATION_UNPROVEN')
+        bridges.append({**bridge, 'rule': 'exact_retained_bytes_crlf_to_lf_only',
+                        'retained_crlf_count': original.count(b'\r\n'),
+                        'retained_lf_count': original.count(b'\n')})
+    return current, bridges
+
+
+def _read_probe(probe_path, seed_root, *, source_root, soak_root, retained_control):
     probe, raw_binding = _json(probe_path, 2 * 1024 * 1024)
+    if retained_control:
+        need(raw_binding['sha256'] == RETAINED_CONTROL_PINS['probe_result'],
+             'RETAINED_PROBE_RAW_CHANGED')
     result = calculate_probe(probe)
     code_binding = _sha_file(probe_path.parent / 'probe.py', 64 * 1024)
     need(code_binding['sha256'] == INSPECTED_PROBE_SHA256, 'PROBE_INSPECTED_CODE_CHANGED')
@@ -228,8 +269,13 @@ def read_bound_probe(probe_path, seed_root, *, source_root, soak_root):
          'PROBE_UNCHANGED_FLAGS')
     files = _manifest(probe['source_before'])
     need(source_closure(files) == probe.get('source_closure'), 'PROBE_SOURCE_CLOSURE')
-    _current_manifest(source_root, files)
-    need(files == current_probe_sources(source_root), 'PROBE_SOURCE_COVERAGE')
+    bridges = []
+    if retained_control:
+        current_files, bridges = _compatible_probe_graph(source_root, files, soak_root / 'source')
+    else:
+        _current_manifest(source_root, files)
+        current_files = current_probe_sources(source_root)
+        need(files == current_files, 'PROBE_SOURCE_COVERAGE')
     need(type(probe.get('seed_hashes')) is dict and set(probe['seed_hashes']) == set(SEEDS),
          'PROBE_SEED_BINDING')
     seeds = {s: _sha_file(seed_root / (s + '.jsonl'), 64 * 1024 * 1024) for s in SEEDS}
@@ -239,7 +285,11 @@ def read_bound_probe(probe_path, seed_root, *, source_root, soak_root):
     soak_sources, soak_source_binding = _json(soak_root / 'source-files.json', 256 * 1024)
     soak_result, soak_result_binding = _json(soak_root / 'result.json', 2 * 1024 * 1024)
     soak_sources = _manifest(soak_sources)
-    _current_manifest(source_root, soak_sources)
+    if retained_control:
+        need(soak_source_binding['sha256'] == RETAINED_CONTROL_PINS['soak_manifest']
+             and soak_result_binding['sha256'] == RETAINED_CONTROL_PINS['soak_result'],
+             'RETAINED_SOAK_RAW_CHANGED')
+    _current_manifest(soak_root / 'source' if retained_control else source_root, soak_sources)
     need(soak_result.get('run_id') == soak_root.name and soak_result.get('completed') is True
          and soak_result.get('source_unchanged') is True
          and soak_result.get('formal_acceptance') is False
@@ -258,10 +308,57 @@ def read_bound_probe(probe_path, seed_root, *, source_root, soak_root):
         'soak_source_files': len(soak_sources), 'soak_source_closure': source_closure(soak_sources),
         'soak_source_manifest': soak_source_binding, 'soak_result': soak_result_binding,
         'shared_source_files': len(shared), 'shared_source_hashes': {n: files[n] for n in sorted(shared)},
-        'current_source_graph_consistent': True, 'historical_harness_closure_complete': False,
+        'current_source_graph_consistent': not retained_control,
+        'historical_harness_closure_complete': False,
         'historical_harness_omissions': ['probe.py', 'tests/replay/residency_metrics.py'],
         'current_offline_verifier_files': {
             'tests/replay/journal_scaling_metrics.py': _sha_file(Path(__file__)),
             'tests/replay/residency_metrics.py': _sha_file(Path(__file__).with_name('residency_metrics.py'))},
         'scope': 'current/retained inspection hashes; historical complete harness binding is unproven'}
+    if retained_control:
+        result['evidence_binding'].update({
+            'retained_control': True, 'current_probe_sources_compatible': True,
+            'current_probe_source_files': current_files,
+            'current_probe_source_closure': source_closure(current_files),
+            'reviewed_byte_normalizations': bridges,
+            'seed_soak': {'run_id': soak_root.name, 'source_closure_sha256': source_closure(soak_sources),
+                          'source_manifest': soak_source_binding, 'result': soak_result_binding},
+            'seeds_bound_to_current_soak': False,
+            'scope': ('original seeds and measurements retain their original soak/source binding; '
+                      'current journal dependencies are byte-identical except the pinned LF-only '
+                      'profile normalization; no full historical harness or new timing claim')})
+    return result
+
+
+def read_retained_control(probe_path, seed_root, *, source_root, reference_soak,
+                          current_soak=None):
+    """Reuse the exact O7 control without binding its seeds to a new journal.
+
+    Omitting current_soak permits read-only readiness checks before a host run.
+    A metrics caller supplies it to bind the independently measured first35.
+    """
+    source_root, reference_soak = Path(source_root), Path(reference_soak)
+    result = _read_probe(Path(probe_path), Path(seed_root), source_root=source_root,
+                         soak_root=reference_soak, retained_control=True)
+    if current_soak is None:
+        return result
+    current_soak = Path(current_soak)
+    need(current_soak.resolve() != reference_soak.resolve(), 'RETAINED_SOAK_IS_CURRENT')
+    files, manifest_binding = _json(current_soak / 'source-files.json', 256 * 1024)
+    outcome, outcome_binding = _json(current_soak / 'result.json', 2 * 1024 * 1024)
+    files = _manifest(files)
+    _current_manifest(source_root, files)
+    need(outcome.get('run_id') == current_soak.name and outcome.get('completed') is True
+         and outcome.get('source_unchanged') is True and outcome.get('formal_acceptance') is False
+         and outcome.get('full_benchmark') is False
+         and outcome.get('source_closure_sha256') == source_closure(files), 'CURRENT_SOAK_SOURCE_BINDING')
+    probe_files = result['evidence_binding']['current_probe_source_files']
+    shared = set(files) & set(probe_files)
+    need(SHARED_REQUIRED | {PROFILE_NEWLINE_BRIDGE['file']} <= shared
+         and all(files[name] == probe_files[name] for name in shared), 'CURRENT_PROBE_SOAK_MISMATCH')
+    result['evidence_binding']['current_soak'] = {
+        'run_id': current_soak.name, 'source_closure_sha256': source_closure(files),
+        'source_manifest': manifest_binding, 'result': outcome_binding,
+        'shared_current_probe_source_hashes': {name: files[name] for name in sorted(shared)},
+        'metrics_batch_indices': list(range(35)), 'seed_journal_binding_claim': False}
     return result
