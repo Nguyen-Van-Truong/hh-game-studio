@@ -300,7 +300,7 @@ Capture chỉ để ở .local, xóa khi không còn cần; không bao giờ dù
   data/          định nghĩa nhân vật, trang phục, vũ khí, map
   art/, audio/   asset của mình và LICENSES.tsv (nguồn, tác giả, giấy phép, ngày)
   tests/         run_all.gd, unit test, trace, kịch bản
-  tools/         run_guarded.py, check_ledger.py, script export
+  tools/         run_guarded.py, check_ledger.py, check_parity.py, script export
   docs/          reference-ledger.tsv, observation-plan.md, observations/, evidence/, reuse-audit.md
   .local/        tool, template, capture, build (gitignore)
 
