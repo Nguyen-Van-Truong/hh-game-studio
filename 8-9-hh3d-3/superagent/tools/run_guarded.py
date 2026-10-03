@@ -398,6 +398,11 @@ def run(argv: Sequence[str]) -> tuple[int, dict]:
     if not 0.25 <= args.task_poll_seconds <= 60: parser.error("--task-poll-seconds is outside bounded range")
 
     root = args.project_root.resolve(); _safe_command(command, root)
+    if args.evidence is not None:
+        if args.evidence.exists() and not args.evidence.is_file():
+            raise ValueError("--evidence must name a file, not a directory or special file")
+        if any(parent.exists() and not parent.is_dir() for parent in args.evidence.parents):
+            raise ValueError("--evidence parent must be a directory")
     source_paths = [path if path.is_absolute() else root / path for path in args.source]
     source_hash = _hash_sources(source_paths, root, command)
     run_id = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S.%fZ") + "-" + uuid.uuid4().hex[:10]
@@ -491,10 +496,13 @@ def run(argv: Sequence[str]) -> tuple[int, dict]:
         result.update(status="FAILED", error=f"{type(exc).__name__}: {exc}")
         return EXIT_CONTAINMENT, result
     finally:
-        result.setdefault("finished_utc", utc_now()); result.setdefault("duration_seconds", 0.0)
-        _write_json(run_dir / "manifest.json", result)
-        if args.evidence: args.evidence.parent.mkdir(parents=True, exist_ok=True); _write_json(args.evidence, result)
-        print(json.dumps(result, ensure_ascii=False)); lock.release()
+        try:
+            result.setdefault("finished_utc", utc_now()); result.setdefault("duration_seconds", 0.0)
+            _write_json(run_dir / "manifest.json", result)
+            if args.evidence: args.evidence.parent.mkdir(parents=True, exist_ok=True); _write_json(args.evidence, result)
+            print(json.dumps(result, ensure_ascii=False))
+        finally:
+            lock.release()
 
 
 def main(argv: Sequence[str] | None = None) -> int:

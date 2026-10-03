@@ -103,6 +103,56 @@ class GuardUnitTests(unittest.TestCase):
             self.assertTrue((run_dir / "manifest.json").exists())
             self.assertTrue(guard.exists())
 
+    def test_directory_evidence_is_rejected_before_lease_or_child(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            project = Path(tmp)
+            (project / "fixture.txt").write_text("fixture\n", encoding="utf-8")
+            evidence = project / ".local" / "runs"; evidence.mkdir(parents=True)
+            with mock.patch.object(run_guarded.ProjectLock, "acquire") as acquire, mock.patch.object(
+                run_guarded.subprocess, "Popen"
+            ) as popen, mock.patch.object(run_guarded, "_write_json") as write_json:
+                with self.assertRaisesRegex(ValueError, "--evidence must name a file"):
+                    run_guarded.run([
+                        "--timeout", "1", "--project-root", str(project), "--evidence", str(evidence),
+                        "--", sys.executable, "-c", "pass"
+                    ])
+            acquire.assert_not_called()
+            popen.assert_not_called()
+            write_json.assert_not_called()
+            self.assertEqual(list(evidence.iterdir()), [])
+            self.assertFalse((project / ".local" / "run_guarded.lock").exists())
+
+    def test_final_evidence_write_failure_releases_owned_project_lock(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            project = Path(tmp)
+            (project / "fixture.txt").write_text("fixture\n", encoding="utf-8")
+            evidence = project / ".local" / "summary.json"
+            write_json = run_guarded._write_json
+
+            def fail_optional_evidence(path: Path, result: dict) -> None:
+                if path == evidence:
+                    raise OSError("optional evidence write failed")
+                write_json(path, result)
+
+            # An early guard return still enters finalization, without starting
+            # an engine or changing the real machine measurement lock.
+            with mock.patch.object(run_guarded, "measurement_guard_status", return_value=(True, "test-guard", False)), mock.patch.object(
+                run_guarded, "_write_json", side_effect=fail_optional_evidence
+            ), mock.patch.object(run_guarded.subprocess, "Popen") as popen:
+                with self.assertRaisesRegex(OSError, "optional evidence write failed"):
+                    run_guarded.run([
+                        "--timeout", "1", "--project-root", str(project), "--evidence", str(evidence),
+                        "--", sys.executable, "-c", "pass"
+                    ])
+            popen.assert_not_called()
+            self.assertFalse((project / ".local" / "run_guarded.lock").exists())
+            manifests = list((project / ".local" / "runs").glob("*/manifest.json"))
+            self.assertEqual(len(manifests), 1)
+            result = json.loads(manifests[0].read_text(encoding="utf-8"))
+            self.assertEqual(result["status"], "MEASURE_GUARD_BLOCKED")
+            self.assertIn("finished_utc", result)
+            self.assertFalse(evidence.exists())
+
 
 @unittest.skipUnless(os.name == "nt", "requires Windows Job Object and an idle measurement host")
 class WindowsDescendantTimeoutTests(unittest.TestCase):
