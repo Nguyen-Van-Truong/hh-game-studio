@@ -7,7 +7,7 @@
 - O9.2 lifecycle, O9.3 role binding và O9.4a telemetry đã harden; O1/O4 thresholds, timeout và phân loại cũ không đổi.
 - Wake-lag cleanup, retry binding, NaN/overflow window guard và source-closure binding đã có regression coverage; vắng telemetry thì fail-closed.
 - O9.4D I/O/Godot source review chỉ là chẩn đoán; chưa chứng minh nguyên nhân status-gap/save-tail.
-- O9.4C còn thiếu run mới: host hoạt động tối thiểu 30 phút cùng PID; 35 batch gốc + extension chẩn đoán tối đa 64; không idle-padding sau child exit.
+- O9.4C chưa đạt: chain-f22-r01 đã chạy nhưng host INFRA_ABORT CPU ngoài sau một batch; formal22 chưa dispatch. Ngày 03-10 đã có hai host INFRA_ABORT, không chạy thêm GT06 ngày đó.
 - O9.5b đã có mode Scheduler quiet-chain độc lập chat, hash frozen plan, actual host capture, combined watchdog và exact source/profile trước formal.
 - O7 reader tách control gốc/host mới; chỉ chấp nhận profile normalization CRLF→LF đã pin, không hồi tố raw/hash/verdict hoặc giảm ngưỡng.
 - Host/watchdog/formal dùng chung closure 64 file; lấy hash freeze từ quiet-chain-plan.json của scheduler, không dùng hash candidate cũ trong chat.
@@ -21,6 +21,14 @@
 This lane records diagnostics without changing the authoritative plan. Each
 entry keeps the run ID, source closure, command, actual result and the finding
 needed for the next repair. Raw evidence remains under `studio/.local/`.
+
+## 2026-10-03 — Scheduled quiet chain r01 closeout
+
+- `gt06-o9-chain-f22-r01` / host `gt06-o9-host-f22-r01`: INFRA_ABORT `EXTERNAL_CPU_PRESSURE`, 1 completed batch, max gap323.6126ms; formal22 never started.
+- Closure64 `001fbebff68d225a861890dd05b9b841ed76417750064251255bbe359928dd0f` rehashed unchanged. Scheduler return1, helper wrapper2; actual/natural child exit UNKNOWN, not PASS. Job zero/closed and owned handles unretained; both observed PIDs absent.
+- `python -B studio/tests/replay/closeout_quiet_chain.py --campaign-id gt06-o9-chain-f22-r01 --write --delete-task` exited0; exact task deleted, XML/raw retained and hashed at `studio/.local/reviews/gt06-o9-chain-f22-r01-closeout`.
+- Common closeout tests: 23 cases, 22 passed + 1 Windows symlink privilege skip, exit0. Utility is outside measured runtime closure; diagnostic administrative cleanup does not grant acceptance.
+- Along with host-soak-20261003-01 this reaches two INFRA_ABORT today; no further GT06 dispatch today. Continue O2; later fresh run requires genuine resource relief and current O4.1/CPU-minute, never cumulative CPU or app-name guesses.
 
 ## 2026-10-03 — O9.5 scheduled chain and retained-control repair
 

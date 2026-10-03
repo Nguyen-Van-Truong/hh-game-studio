@@ -92,17 +92,20 @@ SA-T0x/H2-T0x và dùng lại lõi:
 3. Blender: modifier/UV/material mở rộng, armature từ template, keyframe/action, preset export.
 4. Trình bày và cảm giác chơi (thêm 03-10), dùng cùng cơ chế allowlist ClassDB của mục 2, không
    viết adapter riêng từng class. Bắt buộc cho GT-09: GPUParticles2D/CPUParticles2D với các
-   thuộc tính emitter được kiểm riêng (one_shot, amount, lifetime, texture, use_fixed_seed/seed,
-   visibility_rect); ParticleProcessMaterial chỉ nhận các thuộc tính resource đúng ClassDB và
-   được đọc lại qua process_material (không gán nhầm thuộc tính emitter vào resource; flipbook
-   dùng texture/AtlasTexture hoặc CanvasItemMaterial theo fixture). ShaderMaterial với .gdshader
+   thuộc tính emitter được kiểm riêng (one_shot, amount, lifetime, texture, use_fixed_seed/seed).
+   visibility_rect và process_material chỉ thuộc GPUParticles2D; CPU cấu hình chuyển động trên
+   node và phải từ chối hai property GPU này. ParticleProcessMaterial chỉ nhận thuộc tính resource
+   đúng ClassDB, đọc lại qua process_material. Flipbook dùng spritesheet + CanvasItemMaterial
+   particles_animation/H-V frames; AtlasTexture riêng lẻ chỉ chọn vùng ảnh. ShaderMaterial với .gdshader
    theo luật source của mục 1 (readback có kiểm compile), AudioStreamPlayer2D, CanvasLayer/ProgressBar cho HUD. Thêm
    khi game đầu tiên cần: PointLight2D, bus layout, Theme/Container, NavigationAgent2D/
    NavigationRegion2D, Path2D/PathFollow2D, AnimationTree. Phát hiệu ứng (restart(keep_seed)),
-   pooling và giới hạn số lượng làm trong script gameplay; emit_particle() không có ở renderer
-   Compatibility (Web) nên không dựa vào nó. Particle 2D chỉ va chạm LightOccluder2D, không va
-   chạm PhysicsBody2D; va chạm gameplay luôn dùng physics node. Không làm graph VFX kiểu
-   Niagara/VFX Graph.
+   pooling và giới hạn số lượng làm trong script gameplay; restart xóa hạt đang tồn tại nên pool
+   phải xử lý burst chồng nhau. Seed cố định hỗ trợ replay nhất quán trên pin/renderer/timestep đã
+   khóa; không hứa bit-identical giữa CPU/GPU hoặc thiết bị. emit_particle() không hỗ trợ renderer
+   Compatibility. Va chạm hạt GPU 2D tích hợp dùng SDF từ LightOccluder2D, không PhysicsBody2D;
+   CPU fallback và Compatibility không có va chạm SDF này. Va chạm gameplay dùng physics node.
+   Không làm graph VFX kiểu Niagara/VFX Graph. API phải kiểm trên Godot pin và native fixture.
 5. Port có kiểm từ plugin cũ godot/plugin-project/addons/hh_agent (R5 plan 20-8: TileMapLayer,
    animation, UI, audio, physics, navigation, shader, particles; render.particles ở đó chỉ nhận
    GPUParticles2D với amount, lifetime, process_material, texture): đọc làm tham khảo hoặc chép có
@@ -389,7 +392,8 @@ có 2 pair PASS cùng closure.
   Nhưng máy không yên: CPU ngoài trung bình 36% của máy 12 CPU logic, 16% mẫu ≥ 50%, chuỗi dài nhất
   40 giây (abort ở 60 giây); com.docker.backend trung bình 11,6% (đo riêng: 2 core liên tục từ 02-10
   07:16), vmmemWSL 5,6%, Cursor và Defender có đỉnh; RAM trống có lúc 3,95 GiB (< 4 GiB preflight).
-  Docker Desktop bật là nguồn chung của pipe chậm, tải CPU và thiếu RAM.
+  Đây là tương quan tải tại thời điểm đo, chưa chứng minh Docker là nguyên nhân mọi gap.
+  CPU tích lũy không thay số CPU trong cửa sổ; attribution dùng mẫu watchdog gắn đúng run/PID.
 Lõi studio đã qua một pair đầy đủ (status gap max 1.295 ms, biên còn mỏng so với 2.000). Đường găng
 giờ là máy yên trong khung đo và tail status gap (formal14, formal21). Mỗi lần hỏng tốn 1–4 giờ.
 1. Watchdog trong lúc đo chỉ dùng API kernel, không gọi PowerShell/WMI/Docker trong vòng ≤ 10 giây:
