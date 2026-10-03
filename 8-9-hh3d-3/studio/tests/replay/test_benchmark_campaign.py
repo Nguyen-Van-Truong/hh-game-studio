@@ -316,6 +316,75 @@ class CampaignResumeTests(unittest.TestCase):
             self.verify()
 
 
+class CampaignLifecycleTests(unittest.TestCase):
+    def lifecycle(self, root, *, now=1_000.0):
+        root.mkdir(parents=True, exist_ok=True)
+        return campaign.ensure_campaign_lifecycle(
+            root, campaign_id='gt06-lifecycle-test',
+            source_closure_sha256='a' * 64,
+            profile_sha256=campaign.profile.PROFILE_SHA256,
+            toolchain_sha256='b' * 64, now=now)
+
+    def test_lifecycle_is_immutable_and_binds_the_frozen_closure(self):
+        with tempfile.TemporaryDirectory(prefix='gt06-lifecycle-') as directory:
+            root = Path(directory)
+            value = self.lifecycle(root)
+            self.assertEqual(value['expires_epoch'] - value['opened_epoch'],
+                             campaign.CAMPAIGN_MAX_AGE_SECONDS)
+            self.assertEqual(campaign.ensure_campaign_lifecycle(
+                root, campaign_id='gt06-lifecycle-test',
+                source_closure_sha256='a' * 64,
+                profile_sha256=campaign.profile.PROFILE_SHA256,
+                toolchain_sha256='b' * 64, now=1_001.0), value)
+            with self.assertRaisesRegex(BenchmarkJobError, 'CAMPAIGN_LIFECYCLE_BINDING'):
+                campaign.ensure_campaign_lifecycle(
+                    root, campaign_id='gt06-lifecycle-test',
+                    source_closure_sha256='c' * 64,
+                    profile_sha256=campaign.profile.PROFILE_SHA256,
+                    toolchain_sha256='b' * 64, now=1_001.0)
+
+    def test_defer_writes_first_receipt_and_append_only_state(self):
+        with tempfile.TemporaryDirectory(prefix='gt06-defer-') as directory:
+            root = Path(directory)
+            lifecycle = self.lifecycle(root)
+            with self.assertRaises(campaign.CampaignDeferredError) as caught:
+                campaign.defer_campaign(root, lifecycle, code='CAMPAIGN_PREFLIGHT_RESOURCE_LIMIT',
+                                        reason='PAIR_PREFLIGHT', pair_index=1, now=2_000.0)
+            self.assertTrue(caught.exception.deferred)
+            first = json.loads((root / 'deferred.json').read_bytes())
+            self.assertEqual(first['pair_index'], 1)
+            with self.assertRaises(campaign.CampaignDeferredError):
+                campaign.defer_campaign(root, lifecycle, code='CAMPAIGN_PREFLIGHT_RESOURCE_LIMIT',
+                                        reason='PAIR_PREFLIGHT', pair_index=1, now=2_001.0)
+            self.assertEqual(json.loads((root / 'deferred.json').read_bytes()), first)
+            states = (root / 'campaign-state.jsonl').read_bytes().splitlines()
+            self.assertEqual([json.loads(row)['state'] for row in states], ['OPEN', 'DEFERRED', 'DEFERRED'])
+            with self.assertRaises(campaign.CampaignDeferredError):
+                campaign.require_defer_elapsed(root, lifecycle, now=2_001.0)
+            campaign.require_defer_elapsed(root, lifecycle, now=2_301.0)
+
+    def test_infra_retry_requires_window_and_budget(self):
+        with tempfile.TemporaryDirectory(prefix='gt06-retry-') as directory:
+            root = Path(directory)
+            lifecycle = self.lifecycle(root)
+            with patch.object(campaign.environment, 'require_infra_budget') as budget:
+                self.assertTrue(campaign.infra_retry_allowed(
+                    root, lifecycle, source_closure_sha256='a' * 64,
+                    profile_sha256=campaign.profile.PROFILE_SHA256, attempt=1,
+                    now=1_001.0, window_remaining_seconds=2_400))
+                self.assertFalse(campaign.infra_retry_allowed(
+                    root, lifecycle, source_closure_sha256='a' * 64,
+                    profile_sha256=campaign.profile.PROFILE_SHA256, attempt=1,
+                    now=1_001.0, window_remaining_seconds=2_399))
+                budget.assert_called()
+
+    def test_historical_campaign_keeps_one_attempt_policy(self):
+        with tempfile.TemporaryDirectory(prefix='gt06-old-campaign-') as directory:
+            root = Path(directory)
+            campaign.write(root / 'campaign.json', {'max_attempts_per_run': 1})
+            self.assertEqual(campaign.campaign_attempt_limit(root), 1)
+
+
 class CampaignPreflightTests(unittest.TestCase):
     def test_apps_allowed_but_unknown_inventory_rejected(self):
         result = {'schema_id': 'hh-studio.benchmark-environment-preflight', 'schema_version': '1.2.0',
