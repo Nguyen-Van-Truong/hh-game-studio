@@ -3,7 +3,7 @@ extends RefCounted
 ## Deterministic SA-03 gameplay core: two fighters, integer state, fixed 60 Hz.
 ## Presentation and engine physics are intentionally outside this class.
 
-const SIM_SCHEMA: StringName = &"sa03.simulation.v2"
+const SIM_SCHEMA: StringName = &"sa03.simulation.v3"
 const FIXED_HZ: int = 60
 const TUNING_SCRIPT = preload("res://game/core/movement_tuning.gd")
 
@@ -98,7 +98,7 @@ func snapshot_hash() -> String:
 	return "%08x" % value
 
 func _actions_for(frame: InputFrame, player: int) -> Dictionary:
-	var action_state: Dictionary = {}
+	var action_state: Dictionary = {&"down_press_count": 0}
 	for suffix: StringName in FighterState.ACTION_SUFFIXES:
 		action_state[StringName("%s_pressed" % String(suffix))] = false
 		action_state[StringName("%s_held" % String(suffix))] = false
@@ -116,6 +116,9 @@ func _actions_for(frame: InputFrame, player: int) -> Dictionary:
 			action_state[pressed_key] = bool(action_state[pressed_key]) or bool(record[&"pressed"])
 			action_state[held_key] = bool(action_state[held_key]) or bool(record[&"held"])
 			action_state[released_key] = bool(action_state[released_key]) or bool(record[&"released"])
+			if suffix == &"down":
+				var down_events: Array = record[&"events"]
+				action_state[&"down_press_count"] = down_events.count(InputFrame.EDGE_PRESSED)
 			break
 	action_state.make_read_only()
 	return action_state

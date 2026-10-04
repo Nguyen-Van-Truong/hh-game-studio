@@ -1,4 +1,4 @@
-# Vault Fighters Classic controls
+# Superagent Classic controls
 
 This is the owner-approved keyboard layout for the Classic test build. It is
 an implementation choice for this clean-room game; the reference ledger keeps

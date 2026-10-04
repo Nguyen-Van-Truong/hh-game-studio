@@ -34,7 +34,7 @@ func _run() -> void:
 		return
 
 	var initial: Dictionary = movement_room.read_snapshot()
-	_expect(initial.get(&"schema", &"") == &"sa03.simulation.v2", "room exposes v2 simulation snapshot")
+	_expect(initial.get(&"schema", &"") == &"sa03.simulation.v3", "room exposes v3 simulation snapshot")
 	_expect(int(initial.get(&"fixed_hz", 0)) == 60, "room simulation is fixed at 60 Hz")
 	var world: Dictionary = initial.get(&"world", {})
 	_expect(world.get(&"schema", &"") == &"sa03.arena.v2", "room exposes arena v2")
@@ -108,6 +108,43 @@ func _run() -> void:
 	var reset_first_frame: InputFrame = await _sample_step(movement_room, &"reset-first-tick")
 	_expect(int(reset_first_frame.tick()) == 0, "reset first tick starts at zero")
 	_expect(_frame_is_idle(reset_first_frame), "reset cancels held input without stale first-tick edges")
+
+	# Use the live SceneTree input path for the seeded one-way-platform gesture.
+	# This fixture places both fighters on the authored deck so the two players'
+	# independent down actions can be observed without relying on traversal luck.
+	var p1_fixture: FighterState = movement_room.simulation.fighters[0]
+	var p2_fixture: FighterState = movement_room.simulation.fighters[1]
+	for fixture: FighterState in [p1_fixture, p2_fixture]:
+		fixture.position = Vector2i(1100 if fixture.player_id == 1 else 1200, 572)
+		fixture.velocity = Vector2i.ZERO
+		fixture.grounded = true
+		fixture.locomotion = FighterState.Locomotion.GROUNDED
+	var deck_first_frame: InputFrame
+	_parse_key(KEY_S, true)
+	_parse_key(KEY_DOWN, true)
+	deck_first_frame = await _sample_step(movement_room, &"drop-first-taps")
+	_expect(bool(_record_for(deck_first_frame, &"p1_down", 1).get(&"pressed", false)), "P1 down press reaches drop gesture")
+	_expect(bool(_record_for(deck_first_frame, &"p2_down", 2).get(&"pressed", false)), "P2 down press reaches drop gesture independently")
+	_parse_key(KEY_S, false)
+	_parse_key(KEY_DOWN, false)
+	await _sample_step(movement_room, &"drop-first-release")
+	_parse_key(KEY_S, true)
+	var p1_drop_frame: InputFrame = await _sample_step(movement_room, &"p1-drop-second-tap")
+	var after_p1_drop: Dictionary = movement_room.read_snapshot()
+	_expect(bool(_record_for(p1_drop_frame, &"p1_down", 1).get(&"pressed", false)), "P1 second down tap reaches room")
+	_expect(not _fighter_grounded(after_p1_drop, 0) and _fighter_drop_ticks(after_p1_drop, 0) > 0, "P1 arms drop-through at the second tap")
+	_expect(_fighter_y(after_p1_drop, 1) == 572 and _fighter_grounded(after_p1_drop, 1), "P2 remains on the deck while P1 drops")
+	_parse_key(KEY_S, false)
+	await _sample_step(movement_room, &"p1-drop-release")
+	_expect(_fighter_y(movement_room.read_snapshot(), 0) > 572, "P1 descends below the deck on the following tick")
+	_parse_key(KEY_DOWN, true)
+	var p2_drop_frame: InputFrame = await _sample_step(movement_room, &"p2-drop-second-tap")
+	var after_p2_drop: Dictionary = movement_room.read_snapshot()
+	_expect(bool(_record_for(p2_drop_frame, &"p2_down", 2).get(&"pressed", false)), "P2 second down tap reaches room")
+	_expect(not _fighter_grounded(after_p2_drop, 1) and _fighter_drop_ticks(after_p2_drop, 1) > 0, "P2 arms drop-through at the second tap")
+	_parse_key(KEY_DOWN, false)
+	await _sample_step(movement_room, &"p2-drop-release")
+	_expect(_fighter_y(movement_room.read_snapshot(), 1) > 572, "P2 descends below the deck on the following tick")
 
 	_parse_key(KEY_ESCAPE, true)
 	_expect(await _await_scene_name(&"SuperagentBootstrap"), "Escape must return to bootstrap through SceneTree input")
@@ -199,6 +236,36 @@ func _fighter_x(snapshot: Dictionary, index: int) -> int:
 		return 0
 	var fighter: Dictionary = Dictionary(fighters[index])
 	return int(fighter.get(&"x", 0))
+
+func _fighter_y(snapshot: Dictionary, index: int) -> int:
+	var value: Variant = snapshot.get(&"fighters", [])
+	if typeof(value) != TYPE_ARRAY:
+		return 0
+	var fighters: Array = Array(value)
+	if index < 0 or index >= fighters.size() or typeof(fighters[index]) != TYPE_DICTIONARY:
+		return 0
+	var fighter: Dictionary = Dictionary(fighters[index])
+	return int(fighter.get(&"y", 0))
+
+func _fighter_grounded(snapshot: Dictionary, index: int) -> bool:
+	var value: Variant = snapshot.get(&"fighters", [])
+	if typeof(value) != TYPE_ARRAY:
+		return false
+	var fighters: Array = Array(value)
+	if index < 0 or index >= fighters.size() or typeof(fighters[index]) != TYPE_DICTIONARY:
+		return false
+	var fighter: Dictionary = Dictionary(fighters[index])
+	return bool(fighter.get(&"grounded", false))
+
+func _fighter_drop_ticks(snapshot: Dictionary, index: int) -> int:
+	var value: Variant = snapshot.get(&"fighters", [])
+	if typeof(value) != TYPE_ARRAY:
+		return 0
+	var fighters: Array = Array(value)
+	if index < 0 or index >= fighters.size() or typeof(fighters[index]) != TYPE_DICTIONARY:
+		return 0
+	var fighter: Dictionary = Dictionary(fighters[index])
+	return int(fighter.get(&"drop_through_ticks", 0))
 
 func _expect(condition: bool, message: String) -> void:
 	_assertions += 1
