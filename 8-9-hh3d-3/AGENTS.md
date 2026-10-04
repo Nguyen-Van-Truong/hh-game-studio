@@ -8,17 +8,17 @@ Theo quyền audit mới nhất của owner, coordinator được dispatch hai c
 Không tự ký thay critic hoặc tái dùng chữ ký hash cũ. Quyết định GT06:
 zdoc/reviews/20261003-gt06-owner-critics/coordinator-acceptance.md.
 
-Resume đúng checkpoint; không làm lại phần đã chứng minh. Tuần tự hóa engine
-runs; không chạy Godot/Blender khác hay test nặng cạnh GT-06 formal. Giữ actual
-exits, source/evidence hash và raw lỗi. Không rerun test/commit metadata khi
-source và điều kiện không đổi. Preflight/watchdog dùng O4.1; app người dùng
-là inventory, không tự đóng. Không thay counter/status-gap/timeout của O1.
+Resume đúng checkpoint; không làm lại phần đã chứng minh. Một Godot/Blender mỗi
+project path; không chạy engine hay test nặng cạnh formal/soak đang giữ khóa đo.
+Giữ actual exits, source/evidence hash và raw lỗi. Không rerun test/commit metadata
+khi source và điều kiện không đổi. Preflight/watchdog O4.1 chỉ cho formal/soak; app
+người dùng là inventory, không tự đóng. Không thay counter/status-gap/timeout của O1.
 
 Governance chỉ sửa trên nhánh chính. Nhánh O2 ghi chi tiết vào
 studio/AUTHORING_STATUS.md, làm theo gap của hai fixture; giữ DSL sáu effect.
-GT-07 đã mở sau khi GT-06 được ACCEPTED. Không tự tick WP; O7.5 chỉ cho
-chuẩn bị code/test trong worktree riêng khi chờ critic, còn nghiệm thu GT-07
-vẫn cần đủ evidence và hai critic cùng hash.
+GT-07 làm theo ma trận M1–M9 và NEXT của O10 (dry-run trước run native, bằng chứng
+tầng D chỉ ở .local); O2 chạy song song bằng worker riêng theo O10.5. Không tự tick
+WP; nghiệm thu GT-07 cần gói cuối và hai critic cùng hash.
 Đọc CURRENT_VALID_WP và bảng trạng thái
 trong tools plan, không lấy số test/diagnostic làm nguồn tick.
 
