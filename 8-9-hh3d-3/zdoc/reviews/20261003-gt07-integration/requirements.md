@@ -21,7 +21,8 @@ Historical entries below are retained for provenance; they do not override the t
 
 N1: scenario runner, mandatory engine-free dry-run, fixed measurement guard,
 stop-on-first-failure matrix, and opt-in failpoint admission are implemented;
-the 13 focused guard tests and both Godot/Blender dry-run contracts pass.
+the 20 focused runner/guard/recovery tests and both Godot/Blender dry-run
+contracts pass.
 Native M1–M9 execution remains open and must use fresh IDs after this source
 freeze.  A dry-run validates wiring and contract bounds only; it cannot prove
 runtime IPC, process cleanup, or engine behavior.
@@ -256,7 +257,7 @@ native script-successor or queued publication result.
   is under `studio/.local/reviews/gt07-native-queue-20261004-13/`.
 - The runner now rejects an armed failpoint, duplicate measure-window holder,
   reused output ID, stale source/binary after dry-run, and matrix continuation
-  after a nonzero scenario. The 19 focused runner/guard/recovery tests exit 0.
+  after a nonzero scenario. The 20 focused runner/guard/recovery tests exit 0.
   These are diagnostic slices
   (`AUTHORITY=0`); M2–M9 and the final matrix,
   complete closure and two independent critics remain open.
@@ -302,3 +303,15 @@ native script-successor or queued publication result.
   They close the two publication branches of this queue adapter but do not
   close Q03/Q04/Q05/Q08: revoked/expired late workers, two writers, crash cuts,
   storage faults, and the final same-hash independent critics remain required.
+
+## Raw migration checkpoint, 04-10-2026
+
+- The 22 historical `gt07-*` raw directories previously left under
+  `zdoc/reviews/` were moved unchanged into `studio/.local/reviews/`; the
+  ignored `migration-20261004.json` records each run's file count, byte count,
+  and hash concatenation. The migration covers 6,304 files and 116,304 bytes
+  as recorded by that manifest. No raw evidence was deleted or rewritten.
+- The two untracked native manifests for runs 20 and 21 were moved into their
+  matching `.local/reviews/<run>/manifest.json` directories. Their content and
+  SHA-256 values were preserved. `zdoc/reviews/` now contains only tracked
+  requirement/history documents for these runs.
