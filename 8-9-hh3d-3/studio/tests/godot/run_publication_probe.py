@@ -111,6 +111,16 @@ def frozen(output, binary, closure):
         _,stopped = call('/v1/stop',{'project_id':owner.project_id,'command_id':'control.stop'},control=True)
         save(output/'stop-response.json',stopped)
         check('authenticated_stop',stopped.get('stopped') is True and stopped.get('draining') is False)
+        # Stop is intentionally a fast latch.  Its owned persistence drain is
+        # asynchronous; close only after the same owner reports DURABLE so the
+        # closeout records a real natural exit instead of manufacturing a
+        # cleanup failure from an avoidable race.
+        stop_thread = getattr(owner, '_stop_thread', None)
+        if stop_thread is not None:
+            stop_thread.join(timeout=95)
+            check('stop_persistence_durable_before_close',
+                  not stop_thread.is_alive() and owner._stop_persistence == 'DURABLE'
+                  and owner._journal.snapshot()['stopped'] is True)
         save(output/'events.json',[parse_json(raw) for raw in owner._journal._state.events])
         journal_model,storage_id = owner.journal_model,owner.storage_id
         editor = owner._editor

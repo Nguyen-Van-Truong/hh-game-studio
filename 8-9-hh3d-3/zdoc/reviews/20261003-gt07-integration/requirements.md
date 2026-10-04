@@ -103,3 +103,29 @@ The negative raw runs are retained and must not be relabeled as PASS. The
 remaining work stays explicit: add native Godot typed-owner binding, native
 publication/reload and conflict/fault cuts, and then prepare the complete
 source/review manifest before two independent critics on one frozen hash.
+
+## Verified checkpoint, 04-10-2026 — native Godot publication owner
+
+- `gt07-godot-publication-20261004-01` is retained as a negative closeout
+  diagnostic. The frozen Godot child completed authenticated discovery,
+  editor mutation, scene save, actual reload, duplicate lookup, and Stop, but
+  the helper closed the owner before its asynchronous Stop persistence drained.
+  It therefore ended with child exit `1` and `GODOT_STOP_DRAIN_REQUIRED`; no
+  PASS is inferred from its partial rows.
+- `gt07-godot-publication-20261004-02` reran the same bounded publication
+  fixture with a reproducer-driven closeout repair: it waits for the existing
+  owner Stop thread to report `DURABLE` before closing. The frozen source
+  closure is `710fde2bf9d413c17d1207a152a6f36729c05b53c382817fb4b7156e31901c9e`.
+  The wrapper and child both exit `0`, the owned Godot editor exit is `0`,
+  its Job is closed with `zero_observed=true`, `active_count=0`,
+  `handle_retained=false`, and the source and snapshot remain unchanged.
+  The progress rows prove authenticated scene save, actual editor reload,
+  duplicate no-effect, lookup, durable Stop, and read-only journal reopen.
+  This remains `candidate_only=true`, `gt03_acceptance=false`, and
+  `AUTHORITY=0`.
+
+This slice is native Godot publication evidence, but it is not yet a
+coordinator queue binding. Q03 still needs the exact typed Godot owner binding
+in `native_dispatch.py`, and Q04–Q06 still need queue-level Stop, crash,
+revision-conflict, and storage-fault cuts. Do not combine this run with the
+Blender queue receipt or claim GT07 acceptance.
