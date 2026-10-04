@@ -1,27 +1,21 @@
 HH STUDIO — PLAN 1/3: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Cập nhật 03-10-2026, Asia/Saigon | Revision S258 + quyết định owner O1–O9 | TRIỂN KHAI THEO GATE
-OWNER_DECISIONS=O1_O3_20260925; O4_20260927; O5_O6_20260930; O7_20261001; O8_20261002; O9_20261003; ONE_CONSOLIDATED_BLOCK_BELOW_STATUS_TABLE; LATER_DECISION_WINS; PRECEDENCE=OVER_CONFLICTING_S2XX; OLD_TEXT_IN_GIT=87912523,b0802472,8298c107,fcc1906f,6d8eb81d,d04266e8; RAW_AND_OLD_VERDICTS_UNCHANGED
-HIỆN HÀNH 03-10 — GT-06 ACCEPTED: FORMAL25 2×35 + FUNCTIONAL/F06 + HAI CRITIC KHÁC MODEL TICK=YES CÙNG HASH; GT-07 ĐÃ MỞ, TOÀN PLAN CHƯA HOÀN TẤT
+Cập nhật 04-10-2026, Asia/Saigon | Revision S259 + quyết định owner O1–O10 | TRIỂN KHAI THEO GATE
+OWNER_DECISIONS=O1_O3_20260925; O4_20260927; O5_O6_20260930; O7_20261001; O8_20261002; O9_20261003; O10_20261004; BLOCK_BELOW_STATUS_TABLE; LATER_DECISION_WINS; PRECEDENCE=OVER_CONFLICTING_S2XX; FULL_TEXT_IN_GIT=87912523,b0802472,8298c107,fcc1906f,6d8eb81d,d04266e8,091506fa; OLD_VERDICTS_UNCHANGED
+HIỆN HÀNH 04-10 — GT-01..GT-06 ACCEPTED; GT-07 IN_PROGRESS THEO MA TRẬN O10 (M1–M9); O2 CHẠY SONG SONG (O10.5); TOÀN PLAN CHƯA HOÀN TẤT
 CURRENT_VALID_WP=GT-07
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S258
+PLAN_REVISION=S259
 EXECUTION_AUTHORIZATION=OWNER_APPROVED_GATED
-EXECUTION_MODE=COORDINATOR_WITH_SCOPED_SUBAGENTS_AND_INDEPENDENT_CRITICS_OWNER_20261003; PREFER_GPT_6_ASTRA_ULTRA; ONE_WRITER_PER_FILE; TWO_DIFFERENT_MODELS_SAME_HASH
-GOAL_STATE=ACTIVE; INDEPENDENT_CONSUMER_PILOT_AUTHORIZED; O2_CAPABILITY_LANE_FIXTURE_FIRST_O4_5; GT07_IMPLEMENTATION_OPEN; GT08_GT10_UNOPENED; SUPERAGENT_SEPARATE_OWNER_AUTHORIZED_LANE
+EXECUTION_MODE=COORDINATOR_WITH_SCOPED_SUBAGENTS_AND_INDEPENDENT_CRITICS_OWNER_20261003; PREFER_GPT_6_ASTRA_ULTRA; ONE_WRITER_PER_FILE; TWO_DIFFERENT_MODELS_SAME_HASH; O2_PARALLEL_WORKER_O10_5
+GOAL_STATE=ACTIVE; INDEPENDENT_CONSUMER_PILOT_AUTHORIZED; GT07_IMPLEMENTATION_OPEN; O2_PARALLEL_LANE_O10_5; GT08_GT10_UNOPENED; SUPERAGENT_SEPARATE_OWNER_AUTHORIZED_LANE
 OVERALL_PLAN_STATUS=INCOMPLETE; GT01_GT06_ACCEPTED; GT07_IN_PROGRESS; GT08_GT10_PLANNED_UNOPENED
 CONSUMER_PILOT_STATUS=REVALIDATED_PROVISIONAL_AUTHORITY0; NOT_GT06_ACCEPTANCE; NOT_COMPLETE_GAME_CLAIM
 GT06_STATUS=ACCEPTED; FORMAL25_TWO_ACCEPTED_PAIRS; FINAL_MANIFEST=318081a3c71f334cc44aa4542a5fa5fff459b4045006f6daa91559b1ccc4d4d3; DECISION=zdoc/reviews/20261003-gt06-owner-critics/coordinator-acceptance.md
-GT06_GATE_POLICY=OWNER_O1_2_FRESH_PAIRS_X_35_BATCHES_5_WARMUP_30_MEASURED_WITH_O1_COUNTER_AND_PRIVATE_COMMIT_RULES; FULL_10X35_UNDER_O1_IS_GT10_RELEASE_SOAK; FULL_DATASET_HASH_ACTUAL_EXITS_TREES_JOBS_HANDLES_AND_TWO_NEW_SAME_HASH_CRITICS
-GT06_ATTRIBUTION_POLICY=DIAGNOSTIC_ONLY_UNLESS_OWNER_ADR_ADDS_ACCEPTANCE_REQUIREMENT; UNKNOWN_IS_NOT_LEAK_ROOT_CAUSE_OR_PASS
-GT06_CURRENT_DIAGNOSTIC=ACCEPTED; FORMAL25_AND_FUNCTIONAL_F06_SEALED; DETAIL=20261003-GT06-OWNER-CRITICS
-GT07_NEXT_ACTION=COMPLETE_NATIVE_GODOT_BLENDER_OWNER_INTEGRATION_AND_Q03_Q08_CRASH_CONFLICT_CAPACITY_MATRIX; CURRENT_CHECKPOINT=46_JOBS_TESTS_PLUS_DEFAULT_STREAM_CAPACITY; GT06_NO_BENCHMARK_RERUN
-GT06_SOURCE_POLICY=SOURCE_VERIFIER_OR_PROFILE_CHANGE_CREATES_NEW_CLOSURE_FROZEN_BEFORE_RUN; CLOSURE_COMPUTED_BY_TOOL; OLD_CLOSURES_AND_RAW_HISTORICAL_SEE_GT06_HISTORY_S258; NO_RETROACTIVE_REBINDING; TIMEOUTS_UNCHANGED
-GT06_SOURCE_CHECKPOINT=SEE_LANE_LOG_AND_SCHEDULER_FROZEN_PLAN; CURRENT_ENTRYPOINTS_SHARE_VERIFIED_CLOSURE; HISTORICAL_DISTINCT_CLOSURES_UNCHANGED; NO_RETROACTIVE_SOURCE_REBINDING
-GT06_PROFILE_SHA256=8a2e599c40f927ffaff5ded5e48b6bf2a0f0a6bb3a23de31434a695f4258cb35; ACCEPTED_FORMAL25_SOURCE64=727f9039c1cc83239f5ef1daff13de5e92e37b5ba442e64be8341ca058800b58; OLD_RAW_UNCHANGED
-O1_PREFLIGHT_POLICY=FRESH_O4_1_AND_CPU_MINUTE_BEFORE_EACH_PAIR; READONLY_CHECK_RESULTS_ONLY_IN_LANE_LOG; FOREIGN_CONTAINER_MEANS_STUDIO_HH_GT03_HEX32_O8_1
-O2_CANDIDATE_STATUS=AUTHORITY0; BRANCH=codex/o2-authoring-contract; DETAIL=studio/AUTHORING_STATUS.md_AT_BRANCH_HEAD; OPEN=AUTH05_ADAPTER_E2E; GT06_ACCEPTED_MERGE_REQUIRES_O2_OWN_GATES; POINTER_ONLY_NO_HASH_OR_TEST_COUNT_O7_6
-RUN_POLICY=FRESH_ID_PER_RUN; VERIFY_SOURCE_PROFILE_WORKSTATION_STOP_LATCH_AND_O5_6_LOCK_BEFORE_START; PRESERVE_RAW_ON_FAILURE; REPAIR_ONLY_PROVEN_BOUNDARY; FIX_AND_CONTINUE_O6_4; NEVER_TICK_FROM_BANNER_OR_PARTIAL_PREFIX; CRITICS_READONLY_INDEPENDENT_SAME_HASH
+GT07_NEXT_ACTION=O10_8_NEXT_N0_TO_N6_IN_ORDER; MATRIX=O10_1_M1_M9_CLOSED; STATUS=zdoc/reviews/20261003-gt07-integration/requirements.md; GT06_NO_BENCHMARK_RERUN
+GT10_SOAK_POLICY=OWNER_O1_10X35_ON_RELEASE_SOURCE; REUSE_ACCEPTED_FORMAL25_MACHINERY; PROFILE_V6=8a2e599c40f927ffaff5ded5e48b6bf2a0f0a6bb3a23de31434a695f4258cb35; FORMAL25_SOURCE64=727f9039c1cc83239f5ef1daff13de5e92e37b5ba442e64be8341ca058800b58
+O2_CANDIDATE_STATUS=AUTHORITY0; BRANCH=codex/o2-authoring-contract; DETAIL=studio/AUTHORING_STATUS.md_AT_BRANCH_HEAD; OPEN=AUTH05_ADAPTER_E2E; SYNC_MAIN_THEN_MERGE_O10_5; POINTER_ONLY_NO_HASH_OR_TEST_COUNT_O7_6
+RUN_POLICY=FRESH_ID_PER_RUN; DRY_RUN_BEFORE_NATIVE_O10_2; VERIFY_SOURCE_STOP_LATCH_AND_O5_6_LOCK_BEFORE_START; PRESERVE_RAW_ON_FAILURE; REPAIR_ONLY_PROVEN_BOUNDARY; FIX_AND_CONTINUE_O6_4; NEVER_TICK_FROM_BANNER_OR_PARTIAL_PREFIX; CRITICS_READONLY_INDEPENDENT_SAME_HASH
 S_RECORD_HISTORY_ARCHIVE=8-9-hh3d-3/zdoc/reviews/20260925-plan-s-record-history-s256.txt; SHA256=14e4d00b5f574f9c06c8f4041cf284fa70f7bded09dee6d6d2914cdb1d3c5fdb; AUTHORITY=0; RAW_HEADER_BLOCK_S256_LINES_93_150_BYTE_FOR_BYTE; NO_GATE_CHANGE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
@@ -37,11 +31,97 @@ STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng
 09 | GT-09 | Lõi tạo nội dung O2 + agent conformance trên 2 mini-game 2D/3D | GT-08 hoặc GT-08A (O4.6) | PLANNED
 10 | GT-10 | Gói công cụ v0.1, cài/upgrade/rollback, bàn giao game | GT-09 + GT-08B nếu tách | PLANNED
 
-QUYẾT ĐỊNH OWNER ĐANG HIỆU LỰC O1–O9 — BẢN HỢP NHẤT 03-10-2026
-Chỉ giữ luật đang áp dụng; câu đã bị thay đã xóa khỏi đây. Văn bản gốc: O1–O3 ở git 87912523 (25-09),
-O4 ở b0802472 (27-09), O5 ở 8298c107 (30-09), O6 đầy đủ trước khi rút gọn ở fcc1906f (01-10). Mâu
-thuẫn thì quyết định muộn hơn thắng; thắng các dòng S2xx mâu thuẫn; raw và verdict cũ giữ nguyên,
-không hồi tố PASS. Số mục giữ nguyên để tham chiếu cũ (O1.4, O4.3, O5.6…) vẫn đúng.
+QUYẾT ĐỊNH OWNER ĐANG HIỆU LỰC O1–O10 — BẢN HỢP NHẤT 04-10-2026 (S259)
+Chỉ giữ luật còn áp dụng sau GT-06 ACCEPTED; O10 mới nhất nên đặt đầu. Nguyên văn O1–O9 trước
+tinh gọn: git show 091506fa:8-9-hh3d-3/zdoc/8-9-godot-blender-agent-studio-plan.txt (dòng 40–561);
+bản gốc O1–O3 87912523, O4 b0802472, O5 8298c107, O6 fcc1906f. Mâu thuẫn thì quyết định muộn hơn
+thắng và thắng các dòng S2xx; raw và verdict cũ giữ nguyên, không hồi tố PASS. Số mục cũ (O1.4,
+O4.4, O6.4…) giữ nguyên để tham chiếu.
+
+O10 — 04-10-2026, MỚI NHẤT, ĐỌC TRƯỚC (AUTHORITY=OWNER_DELEGATED_20260930; ngưỡng O1/O4.1,
+timeout và DoD GT-07 không đổi; thay GT07_NEXT_ACTION cũ)
+Căn cứ 03-10 21:21 → 04-10 18:00: khoảng 10 giờ làm thật, 10 commit, khoảng 45 run chẩn đoán.
+- Đã có: admission bền + quota project/session (46 test inert, có reproducer race), sức chứa stream
+  mặc định đo thật (510 record, JOURNAL_FULL có next action), năm lát native (Blender queue; Godot
+  edit, save, script; recovery lookup-only sau khi cố ý mất receipt ở run 21), Stop drain bền.
+- Godot native 16/20 run hỏng (01–15, 20), Blender queue chỉ đạt từ run 12; gần như toàn lỗi
+  harness bắt được mà không cần mở engine (bài học 43–46).
+- Mỗi run chép snapshot 2–9,5 MB vào zdoc/reviews (trái O4.4; manifest lại ghi raw ở .local),
+  manifest 1.179–1.595 dòng cho mỗi run chẩn đoán (đã commit 16, 18, 19); requirements.md thành
+  nhật ký 247 dòng.
+- Ma trận còn lại chưa chốt nên mỗi lát cần probe, run, manifest, ghi chú riêng. O2 đứng từ 03-10.
+1. Ma trận đóng GT-07 (chốt; thêm hàng chỉ khi có TX mới theo mục 5). Native = Godot/Blender pin
+   thật; host = host thật với owner inert và process/filesystem thật.
+   M1 Q01/TX18 admission, quota, fairness, flood, không starvation — host (46 test đã có).
+   M2 Q03/TX06 hai writer cùng .tscn và cùng .blend; lease hết hạn trả kết quả muộn; worker bị thu
+      hồi — native, mỗi app một run nhiều bước.
+   M3 Q05/TQ07/TX09/TX11 publish Blender→GLB→Godot (mục 2.5): crash ở PREPARED, VALIDATED,
+      ACTIVATING, COMMITTED, reload, ACK, mỗi pha một run; giết đúng process đang giữ pha (host,
+      Blender hoặc editor) tại failpoint chặn; sau restart lookup journal/active manifest/hash rồi
+      complete hoặc giữ last-good; không object/output trùng, staging không thành active. Godot
+      scene save/script thêm cut reload và ACK (cut sau effect trước receipt đã có ở run 21).
+   M4 Q06/TX06 owner sửa tay .tscn/.blend trong lúc lease: không rollback đè, giữ cả hai bản, trả
+      conflict có next action — native, mỗi app một run.
+   M5 Q06/TX05/TX09 lưu trữ: filelock thật (process khác giữ file share=0, gồm lúc Godot save),
+      crossvolume thật (C: ↔ D:), diskfull và fsync lỗi tiêm ở primitive ghi (nhãn INJECTED);
+      không trả COMMITTED khi thiếu proof, giữ last-good — host + một run Godot.
+   M6 Q04/TX14 Stop khi queue đầy, hủy job đang chờ, job đang chạy drain có trần, reconnect sau
+      Stop không tự resume, token rotate giữa job — host; Stop native đã có ở run 16 nên không cần
+      run chẩn đoán native mới, gói cuối chạy lại cùng ma trận.
+   M7 Q07/TX11 compact theo hết hạn bằng đồng hồ thật với horizon test ngắn (ví dụ 10 phút, cấu
+      hình fixture, không giả đồng hồ), rotation; horizon 24 giờ mặc định ghi known limit GT-10.
+   M8 TX05 terminate đúng job: PID còn sống nhưng start time khác thì từ chối kill; timeout giết
+      đúng owned tree; OOM bằng giới hạn bộ nhớ Job Object thật — host + process thật, không engine.
+   M9 TX13 mutation khi Play đang chạy và capture cũ bị từ chối — một run native bằng bộ máy GT-06.
+   Gói cuối: freeze closure đầy đủ một lần; chạy lại M1–M9 và regression bị ảnh hưởng của
+   GT-02..GT-06 (focused, không benchmark) trên đúng closure; map requirement→test→artifact; hai
+   critic khác model cùng hash. Diskfull tiêm lỗi là đủ cho GT-07 vì máy không có volume nhỏ tạo
+   được mà không cần admin; nếu có cách không cần admin thì thêm, không chặn GT-07.
+2. Một runner kịch bản: mở rộng run_native_godot_queue_probe.py và run_native_blender_queue_probe.py
+   (không viết lại) thành entrypoint --scenario đọc bảng kịch bản. --dry-run kiểm admission,
+   deadline cả hai cận, route lease công khai, dependency closure, đường binary và PYTHONPATH mà
+   không mở engine; mọi run native phải qua dry-run cùng tham số trước. --matrix chạy tuần tự nhiều
+   kịch bản, mỗi kịch bản một dòng kết quả. Failpoint crash: một module duy nhất, tên theo pha,
+   dừng chờ tại pha để harness giết process; chỉ bật bằng cấu hình test trong .local; scan package
+   GT-10 phải từ chối khi failpoint bật.
+3. Bằng chứng tầng D (O4.4): raw và snapshot chỉ ở studio/.local/reviews/<run_id>/; requirements.md
+   một dòng mỗi run (id, kịch bản, exit, kết quả, phát hiện); không manifest/zip riêng và không
+   commit cho run chẩn đoán. Chỉ gói cuối GT-07 có manifest + zip + critic package; review closure
+   trong zdoc/reviews chỉ chứa source text như tiền lệ GT-04/GT-05. Một lần, model rẻ: chuyển 22
+   thư mục zdoc/reviews/gt07-* chưa track (godot-publication 01–03, native-godot 01–15 và 18–21,
+   khoảng 110 MB) về studio/.local/reviews/ cùng tên, so hash từng file trước/sau; không xóa; sửa
+   đường output của runner. Manifest 16/18/19 đã commit giữ nguyên; manifest 20/21 chưa commit thì
+   chuyển vào .local cùng raw, không commit.
+4. requirements.md: đầu file "Hiện trạng" ≤ 15 dòng + bảng M1–M9 (DONE/OPEN, run id) + Next; ghi
+   chú checkpoint ≤ 3 dòng; nhật ký dài cũ chuyển xuống mục lịch sử cuối file.
+5. O2 chạy song song từ 04-10 (thay câu "không làm song song" của O4.6 riêng cho O2; GT-07 rồi
+   GT-08 vẫn tuần tự): một worker phạm vi rõ (gpt-6.1-sol ultra) trong worktree O2. Trước tiên merge
+   main vào nhánh O2 và chạy suite O2; rồi làm theo O4.5: AUTH-05 qua executor Docker, nối adapter
+   thật (publication/save/reload/ACK, lease, recovery), vòng Blender→GLB→Godot, sprite sheet 2D.
+   Run chẩn đoán O2 không cần preflight O4.1, chỉ kiểm khóa đo và một Godot mỗi path. Tool tầng D
+   chỉ test công thức + 1–2 negative (O8.4a), không thêm lớp chống giả mạo. Merge O2 → main khi
+   suite O2 và suite GT bị ảnh hưởng đạt trên cây đã merge, coordinator duyệt phạm vi diff, profile
+   gameplay-source vẫn tắt tới khi AUTH-01..05 đạt; hai critic để dành cho GT-09.
+6. Vệ sinh một lần (model rẻ, ≤ 1 giờ): đóng 48 task HHStudio.GT06.* đang Ready theo O7.6 bằng lệnh
+   closeout chung (export XML và danh sách vào .local, kiểm không instance/process sống, gỡ từng
+   task, một dòng log); thêm 8-9-hh3d-3/.local/ vào .gitignore như studio/.local/ (157 file
+   arm/formal/preflight đang untracked, không file nào đã được track).
+7. Nhịp: không dừng lượt sau mỗi checkpoint; đi hết NEXT tới khi gói GT-07 sẵn sàng critic hoặc gặp
+   E1–E4. Commit theo mốc (code + test + dòng log), không commit chỉ để ghi log. Run native hỏng:
+   đọc raw, sửa, qua dry-run rồi mới chạy native ID mới; cùng một lỗi lặp hai lần thì dừng native
+   và viết reproducer thuần.
+8. NEXT (ước tính giờ làm của agent, không phải ETA toàn plan):
+   N0 vệ sinh mục 3, 4 và 6 (≤ 1 giờ, model rẻ, song song với N1).
+   N1 runner --scenario/--dry-run/--matrix + module failpoint (2–3 giờ).
+   N2 M3 crash matrix (3–4 giờ).
+   N3 M2 và M4 (2–3 giờ).
+   N4 M5 và M7 (khoảng 2 giờ; M7 chạy nền theo đồng hồ thật).
+   N5 M6, M8, M9 (2–3 giờ).
+   N6 gói cuối và hai critic.
+   O2 chạy song song suốt N0–N6.
+9. Chuẩn bị bước sau: owner chuẩn bị máy Android thật bật USB debugging (O3.3) trước GT-08B;
+   GT-08A (Windows + Linux headless, Linux qua Docker) mở ngay sau GT-07 ACCEPTED; release soak
+   GT-10 10×35 cần khoảng 6 giờ máy yên, chia nhiều khung theo O4.6 bằng bộ máy Formal25.
 
 O1 — GATE BENCHMARK GT-06 (25-09; thay các câu baseline/counter/RSS/10×35 ở mục hiệu năng TQ cho GT-06
 và release soak GT-10; các điều kiện khác của mục đó giữ nguyên)
@@ -78,6 +158,8 @@ và release soak GT-10; các điều kiện khác của mục đó giữ nguyên
 handle host, 0,4 handle editor, 0,07 resource, 0,54 object hoặc 0,33% private commit mỗi batch.
 O1 chỉ bỏ báo động giả. Mục TQ hiệu năng cho phép đổi target bằng decision/review; O1 là decision
 đó và được khóa trước lần chạy.
+Sau GT-06 ACCEPTED, O1 chỉ còn là gate release soak GT-10 (O1.6); không áp cho run chẩn đoán
+GT-07/O2.
 
 O2 — LÕI TẠO NỘI DUNG DÙNG CHUNG, LÀM TRƯỚC GT-10
 Catalog đã nghiệm thu chỉ có Node3D/MeshInstance3D/BoxMesh, script khai báo biến và Blender
@@ -189,376 +271,53 @@ O4 — 27-09-2026 (owner giao toàn quyền sửa plan cho reviewer; AUTHORITY=O
    và ghi core.longpaths. GT-09 thêm owner playtest khoảng 15 phút mỗi fixture (owner ghi OK/không
    OK và ghi chú; agent không ký thay). GT-10 soak 10×35 theo O4.1, được chia nhiều cửa sổ chạy trên
    cùng hash; package không chứa zdoc/reviews.
-O5 — 30-09-2026 (sửa gốc journal; AUTHORITY=OWNER_DELEGATED_20260930)
-1. GT-06 là đường găng, ưu tiên số 1. Formal08 và diagnostic05 chỉ ra lỗi thiết kế thật trong
-   studio/host/core/journal.py: cả 7 thao tác (append/finish/lookup/lookup_archive/acquire_lease/
-   check_lease/compact) đi qua @_mutating → _reload() đọc, giải mã, kiểm lại toàn bộ file và fsync;
-   không compact tự động; trần 64 MiB, 100.000 record, khóa chờ 2 giây; journal 26 MB làm một lần
-   reload giữ khóa ≈ 2,3 giây rồi timeout. Sửa, giữ bất biến GT-02 và không đổi timeout:
-   a) Đọc tăng dần theo file identity/size/generation; chỉ đọc và kiểm tail mới; reload toàn bộ khi
-      file bị thay (compact/replace), bị cắt ngắn hoặc generation đổi; lookup không fsync khi không
-      có tail mới.
-   b) Index trên đĩa (SQLite WAL, cache có trần), JSONL giữ làm log kiểm toán; compact tự động theo
-      ngưỡng; RAM chỉ giữ trạng thái sống (O6.2).
-   Trạng thái 01-10: a) và b) đã commit (9da2635b, b58513d9); soak05 load=1, không còn full
-   reload. Tiêu chí soak cũ O5.1c đã thay bằng O6.3 và O7.1. O2 chỉ làm trong lúc chờ soak/formal/
-   critic cho tới khi formal09 có kết luận.
-2. Editor handles: luật median đã ghi vào O1.3 và đã khóa vào verifier + test, có kết quả ở O6.5;
-   không hồi tố (formal08 vẫn FAIL, riêng host private commit của nó đã FAIL).
-3. CPU watchdog: đã ghi vào O4.1.
-4. Evidence hai tầng: đã ghi vào O4.4.
-5. Log Godot vẫn là tiêu chí PASS của fixture gameplay: dùng lại bộ phân loại noise có kiểm soát của
-   fixture verifier (khớp chính xác, có version); mọi ERROR/SCRIPT ERROR/WARNING khác là FAIL. Exit 0
-   + transcript không thay kiểm log. Closure do adapter tự tính, không nhận từ caller.
-6. Khóa cửa sổ đo: khi soak/formal chạy, coordinator giữ file %LOCALAPPDATA%\HHGodotAgent\
-   measure-window.lock (owner, run_id, mục đích, hết hạn). Agent khác trong repo (O2, Vault
-   Fighters) kiểm khóa trước khi chạy Godot/Blender/Docker; có khóa thì chờ hoặc làm việc static.
-   Owner nhờ vậy mở được agent riêng làm game song song mà không làm hỏng formal. Test tự động
-   không lấy khóa thật này mà dùng đường khóa tạm do test cấp, có timeout và không để process sống
-   sang lượt sau (03-10 một test replay giữ khóa thật làm lượt test sau báo MEASURE_WINDOW_BUSY).
 
-O6 — 30-09-2026 (AUTHORITY=OWNER_DELEGATED_20260930; không đổi ngưỡng/timeout O1–O4). Bản đầy đủ ở
-git fcc1906f; số liệu soak01–04 và mọi run sau đó ở log lane. Dưới đây chỉ giữ luật còn hiệu lực.
-1. Transport (đã làm 30-09; soak05 có 1 lần recover, đã reconcile): lỗi transport ghi exception
-   class, errno/winerror, phase và số lần thử. Retry theo phase, không theo loại lệnh: lỗi ở connect
-   (chưa ghi byte request) thì gửi lại đúng request đó (cùng command_id, cùng bytes) tối đa 3 lần,
-   chờ 25/50/100 ms; đã ghi byte thì UNKNOWN → lookup cùng command_id, không bao giờ gửi lại mù.
-   Driver xử lý next_action=lookup như nhau cho mọi loại lệnh. Trong một formal pair: hơn 10 lần
-   recover hoặc một lần không recover được là product FAIL; O1.5 giữ nguyên. Keep-alive chỉ làm
-   theo O7.4a.
-2. Bộ nhớ host (đã làm 30-09 đến 01-10): RAM chỉ giữ trạng thái sống có trần; command xong và
-   receipt ở SQLite/đĩa với cache có trần; microbench 35.000 lệnh đo 13,7 byte/lệnh. Đã sửa thêm
-   cache regex của redaction và allocation path của sidecar journal. Mỗi lần sửa bộ nhớ host sau
-   này: microbench trong process (mix như formal, 35.000 lệnh, private commit sau GC mỗi 1.000 lệnh)
-   ≤ 32 byte/lệnh và đạt O1.4 trước khi soak; regression GT-02 (dedupe, recovery cut matrix, đa
-   process) PASS.
-3. Soak host-only (tầng D, không thay formal): private commit host theo O1.4, host handles theo O1.3,
-   status gap ≤ 2000 ms mọi batch, load=1 (không full reload sau khởi động), 0 lỗi transport không
-   recover. Max/baseline > 107% thì chạy thêm một soak ID mới trước khi dùng cửa sổ formal. Độ trễ
-   journal kiểm theo O7.1 (câu p95 ≤ 120% cũ đã rút). Soak này chỉ chạy lệnh host, không có chu kỳ
-   native editor (O7.2).
-4. Sửa rồi chạy tiếp, không làm lại từ đầu:
-   a) Run dài lỗi: giữ raw; đọc raw khoanh phase lỗi trước; dựng reproducer nhanh ở đúng trạng thái
-      đó (journal seed N record, fault injection tại phase, microbench) chạy trong vài phút; sửa; qua
-      reproducer + bộ test tập trung; chỉ khi đó mới chạy một run dài xác nhận bằng ID mới. Không
-      chạy lại run dài để "xem có lặp lại không" khi chưa có giả thuyết mới.
-   b) Run tầng D được bắt đầu từ trạng thái seed (ví dụ journal 27.000 record) để tới điểm lỗi nhanh.
-      Run tầng F luôn fresh và không ghép partial.
-   c) Script/lệnh hỏng giữa chừng: sửa đúng bước đó rồi chạy tiếp từ checkpoint tốt gần nhất (bước
-      idempotent, output từng bước). Chỉ làm lại từ đầu khi trạng thái không khôi phục được, và ghi
-      lý do vào log lane.
-5. Luật editor handles O1.3 đã khóa vào tests/replay/verify_editor_handle_control.py (profile v6; 35
-   cửa sổ bằng nhau, lấy mẫu cuối mỗi cửa sổ; verifier sha256
-   8b4edb7c0f108fd2b2be5b0983f3ab97d564987132bcd1aac06fbe369067a5b7). Reviewer chạy 01-10 ≈ 20:50
-   (AUTHORITY=0, exit 0) từ studio/ với
-   --control-samples .local/reviews/gt06-stock-editor-control-02/samples.jsonl
-   --formal-manifest .local/reviews/gt06-o4-formal-08/run-00-attempt-01/assembly-manifest.json:
-   control-02 PASS (baseline 564; median sớm 556, muộn 554 ≤ 562; max 566 ≤ 596); pair 0 formal08
-   PASS tham khảo, không hồi tố (baseline 558; 554/555 ≤ 560; max 562 ≤ 590). Không chạy control
-   mới. Luật FAIL trên stock thì dừng và báo owner, không tự nới.
-6. Log lane GT-06 là zdoc/reviews/gt06-diagnostic-lane.md. Đầu file giữ mục "Hiện trạng" ≤ 15 dòng
-   (run cuối, closure, kết quả theo công thức gate, việc tiếp theo, blocker), viết lại sau mỗi run;
-   bên dưới là nhật ký theo thời gian. Handoff/brief của agent không phải nguồn trạng thái; agent
-   sau chỉ cần đọc header, khối quyết định này và mục "Hiện trạng".
-7. Sức chứa journal (không chặn GT-06): ID duy nhất trong retry horizon 24 giờ không compact được;
-   ≈ 0,95 MB mỗi batch nên trần 64 MiB đầy sau ≈ 68 batch nếu compact không bỏ được phiên bản cũ.
-   GT-07 VERIFY journalfull phải đo sức chứa thật, có compact theo hết hạn bằng đồng hồ thật và
-   JOURNAL_FULL có next_action rõ; GT-10 ghi sức chứa vào known limits.
-
-O7 — 01-10-2026 (reviewer đề xuất; coordinator rà soát theo quyền owner; không đổi O1–O4)
-Căn cứ (số liệu soak05/probe03 đầy đủ ở log lane và git 6d8eb81d): p95 đầu/cuối soak05 lẫn nhiễu
-CPU nên chỉ báo cáo; probe03 biến thể production (interval=1) có median lớn/nhỏ 108,5744% lookup
-và 106,5340% append. Không sửa production trim.
-1. Độ trễ journal (thay riêng tỷ số p95 ≤ 120% của O6.3, không thay ngưỡng tuyệt đối TQ): dùng
-   probe xen kẽ có seed, state lớn ≥ 5 lần state nhỏ, ít nhất 6 vòng và CPU từng block. Chọn trước
-   biến thể trùng production (probe03: interval=1); dùng đủ mọi block/vòng của biến thể đó, không
-   loại spike/chọn vòng theo CPU. Tính lại median từ raw; cả lookup/append lớn ≤ 130% nhỏ.
-   Kiểm seed/hash/source, số mẫu, thứ tự và workload; không tin summary do caller cung cấp.
-   Seed gốc probe03 có 7.015/49.105 record (7×), không dùng size sau append. Workload chỉ gồm
-   lookup khóa vừa append/receipt nhỏ; không suy mọi route/workload. Closure lịch sử 48 file
-   thiếu probe.py và helper tính percentile: ghi hạn chế này, hash script đang lưu và verifier
-   mới vào review; không gọi đó là full harness closure đã freeze tại thời điểm probe.
-   Tỷ số p95 đầu/cuối soak chỉ báo cáo; raw p95 và ngưỡng inspect/Stop/status/timeout vẫn giữ.
-   Đây là tiêu chí chẩn đoán hữu hạn được chọn sau soak05, không chứng minh không có O(n), không
-   chứng minh tail latency không lỗi. Hai kích thước không đủ suy độ phức tạp tiệm cận.
-   residency_metrics.py phải giữ chế độ O6.3 cũ để tái lập FAIL; O7 là chế độ tường minh, thiếu
-   probe hợp lệ không được PASS. Chạy offline và test trước dispatch; lưu kết quả mới riêng,
-   không sửa raw/closeout/verdict cũ. Verifier offline ngoài closure formal vẫn phải được hash.
-2. Đã thực hiện 02-10: formal09 fresh 2×35 có pair guard, không confirmation soak; pair 0 PASS
-   35/35 gồm chặng native editor, pair 1 INFRA_ABORT trước batch 0. Không hồi tố soak05 thành
-   formal PASS; không suy mọi lỗi formal01–08 đã hết.
-3. Quy trình cho mọi formal mới, trong khung máy bật theo O8.2/O9.5 (một pair hiện khoảng 36 phút):
-   a) Tool freeze source/profile tại dispatch; closure formal tính sau `load_fixture()` và khác
-      closure soak (hash lịch sử ở log lane). Profile v6
-      8a2e599c40f927ffaff5ded5e48b6bf2a0f0a6bb3a23de31434a695f4258cb35. Tập file hoặc byte đo đổi
-      thì review phần đổi và bằng chứng tầng D tương ứng trước chạy; không gắn hash cũ.
-   b) Giữ measure-window.lock suốt formal (O5.6); O2/agent khác chỉ làm static không cạnh tranh đo.
-   c) O4.1 mới trước mỗi pair, còn budget O1.7 và CPU quan sát khoảng một phút. Đọc thử RAM/commit
-      trước cửa sổ là kiểm khả năng chạy, không tạo attempt hay tiêu budget. Preflight trước một pair
-      chưa đạt thì chờ theo O9.2; hết khung thì pair đó ghi chưa chạy. Không tự đóng app; Docker/WSL
-      còn là toolchain, không mặc định tắt để lấy RAM. Điều kiện chưa đạt thì chờ, không lặp dispatch.
-   d) Một demand task, ID mới; chỉ gỡ sau terminal, actual exits, Job/tree/handle và source closeout.
-      Thay heartbeat soak bằng formal khi dispatch; tối đa một lần/giờ, chỉ báo thay đổi có nghĩa.
-   e) Hai pair PASS: lập CRITIC_PACKAGE O4.3 ngay; owner chuyển hai critic cùng hash. Không tự tick.
-4. Khi lỗi, giữ raw và review boundary theo ngân sách O3.1; đây là hướng điều tra, không sửa mù:
-   a) Host private commit: so phase/batch formal với soak; dùng reproducer nhỏ/tracemalloc nếu cần.
-      Keep-alive chỉ khi A/B chứng minh churn kết nối gây lỗi hoặc tăng RAM. Bản sửa bộ nhớ phải
-      qua microbench O6.2 và diagnostic đủ workload bị lỗi trước formal ID mới (O6.4).
-   b) Editor counter: dùng lại control-02/O6.5; không trừ control hoặc nới gate (O1.9–10).
-   c) Status gap: đọc status/http-phase để phân biệt journal, GC, editor và CPU; sửa boundary có
-      reproducer. Không đổi ngưỡng/timeout hoặc gọi chậm không rõ nguyên nhân là INFRA.
-   d) Observer theo O9.1: trong vòng đo chỉ dùng API kernel; Docker/PerfProc chỉ ở preflight hoặc
-      best-effort. UNKNOWN không suy an toàn/PASS; mẫu bắt buộc thiếu quá 30 giây liên tiếp là
-      HARNESS_FAIL.
-   e) INFRA theo O1.7 và O9.3; pair guard chặn pair tiếp nếu pair trước fail; pair chưa chạy hoặc
-      bị INFRA được hoãn theo O9.2; không ghép partial hoặc rerun mù.
-5. Trong lúc chờ cửa sổ làm O2 theo O4.5. Chỉ khi formal đủ hai pair PASS và chờ critic mới được
-   chuẩn bị code/unit test GT-07 trong worktree riêng; không mở/tick WP, không merge trước GT-06
-   ACCEPTED, CURRENT_VALID_WP vẫn GT-06. Đây là ngoại lệ chuẩn bị của O4.6, không bỏ dependency.
-6. Header chỉ đổi khi gate/WP hoặc quyết định thay đổi. Tầng D ghi log lane, O2 ghi AUTHORING_STATUS.md;
-   con trỏ O2 không chứa hash/test count. Log lane có "Hiện trạng" ≤ 15 dòng; commit cùng code hoặc
-   một lần cuối ngày. Dọn task HHStudio.GT06.* từng task đã chứng minh terminal/closeout, không
-   instance/process sống; lưu export task và danh sách trước khi gỡ, giữ raw. Không xóa theo prefix
-   hoặc vì State=Ready đơn thuần. Claim game chỉ sau fixture/acceptance và plan sản phẩm riêng;
-   route 2D hiện hành là Superagent, không tự quay sang Vault Fighters cũ.
-
-O8 — 02-10-2026 (AUTHORITY=OWNER_DELEGATED_20260930; không đổi ngưỡng/timeout O1–O4; thay O7_NEXT)
-Căn cứ: formal09 không chạy được đêm 01-10 vì hai lý do độc lập.
-a) 22:20 preflight FAIL chỉ vì container hh-plan19-admission-20260919-r01 (Valkey của dự án Hoàn
-   Hảo, restart=no; sáng 02-10 đo CPU 0,15%, RAM 3,6 MiB) khớp luật tên `hh-*` trong
-   benchmark_environment.py, dù 22:08 RAM trống 13,07 GiB, commit 47,3%, CPU 14,2%.
-b) Log nguồn Windows (Kernel-Power 42, Power-Troubleshooter 1): 22:26 máy tắt kiểu Fast Startup,
-   06:26 mới bật lại; preflight có đạt thì run cũng bị cắt sau vài phút. 5/6 đêm 26-09→02-10 máy
-   tắt lúc 22:10–22:54 và bật 04:39–06:26; chỉ đêm 29→30-09 để bật (soak chạy 02:27–07:05).
-   Formal01–08 đều chạy ban ngày/sáng sớm; formal08 07:21–09:30, pair 0 mất 89 phút, status gap
-   1.881 ms. Gói nguồn Balanced: cắm điện tự ngủ sau 3 giờ không thao tác; wake timer bật.
-Executor GT-03/O2 chỉ tạo container tên hh-gt03-<32 hex> có label hh.gt03.owner. Physics arena 2D
-và O2 dependency native đang treo chờ owner vì ngân sách O3.1.
-1. Luật container (thay câu "container hh-*" cũ của O4.1): chỉ container của studio, tên khớp đúng
-   `hh-gt03-[0-9a-f]{32}`, là foreign engine; container khác chỉ ghi inventory, tải của chúng do
-   watchdog CPU/RAM xử lý như app khác; lỗi đọc inventory vẫn fail-closed. Sửa benchmark_environment.py
-   kèm test (hh-plan19-* được ghi mà không chặn; hh-gt03-<hex> chặn; inventory lỗi vẫn chặn). Đây là
-   đổi phân loại watchdog: unit test + một preflight read-only chứng minh, freeze closure mới lúc
-   dispatch; không cần soak/probe mới. Phải commit trước khi arm; chưa xong thì khung đó giữ code cũ
-   và owner tự quyết có dừng container hay không.
-2. Lịch đo theo lúc máy thật sự bật (thay cửa sổ cố định 22:00–06:00 của O7.3): formal chỉ dispatch
-   trong khung owner xác nhận máy bật liên tục ≥ 4 giờ (khóa màn hình được; không Sleep/Shut down;
-   ưu tiên lúc owner vắng hoặc ít dùng vì status gap formal08 sát trần). Owner báo một lần lịch cố
-   định hoặc báo từng khung; chưa có khung thì không arm. Hẹn không phụ thuộc phiên agent: một script
-   arm nhỏ ngoài closure đo (campaign không import) chạy bằng một Windows task một lần (WakeToRun)
-   lúc đầu khung, tách khỏi demand task của campaign (O7.3d giữ nguyên). Script giữ
-   ES_CONTINUOUS|ES_SYSTEM_REQUIRED tới khi campaign kết thúc hoặc hết khung để máy không tự ngủ;
-   không đổi cấu hình nguồn của owner. Mỗi 10 phút tới hạn bắt đầu muộn nhất (cuối khung trừ 3,5 giờ)
-   kiểm: khóa đo vắng, budget INFRA O1.7 còn, preflight O4.1 read-only + CPU 60 giây đạt, closure
-   tính trong process mới đúng hash ghi lúc arm, profile v6. Đạt thì gọi đúng một lần
-   campaign_task.ps1 register-run cho formal09; quá hạn thì ghi receipt "không dispatch" kèm lý do
-   từng lần kiểm. Không dispatch hai lần, không tắt app/container, không cần heartbeat; đọc receipt
-   sau khung rồi gỡ task arm. Hàm quyết định có test; --dry-run trước khi arm; thứ tự O8.1 → dry-run
-   → arm; đổi file trong closure sau khi arm thì arm lại. Máy tắt/ngủ giữa run là INFRA_ABORT theo
-   O1.7: giữ raw, arm lại ở khung sau.
-3. Ngân sách O3.1 (làm rõ): chỉ tính lần chạy không có giả thuyết mới. Sau sửa có nguyên nhân chứng
-   minh bằng reproducer/test (O6.4) được thêm một run xác nhận ID mới, không chờ owner; FAIL lần nữa
-   cùng hướng mới viết trang review. Áp ngay, ngoài cửa sổ đo:
-   a) Physics arena 2D (o2-arena-physics-20260929-03): chạy verifier đã sửa offline trên raw gốc
-      (bài học 2, không chạy engine), ghi supplemental; rồi một native run xác nhận ID mới.
-   b) O2 dependency native (option 1 trong AUTHORING_STATUS.md 02-10): run 20261002-03 hỏng vì
-      inventory Docker CLI timeout 5 giây, cùng loại lỗi observer GT-06 đã sửa bằng named pipe. Dùng
-      lại cách đọc pipe có trần của GT-06 cho bước inventory của executor trên nhánh O2 (giữ
-      fail-closed, không đổi timeout), test, rồi một native run xác nhận.
-4. Tiết kiệm hạn mức agent (đêm 01-10 hết hạn mức đúng lúc cần dispatch):
-   a) Mức kiểm theo tầng: tool tầng D chỉ cần test công thức + 1–2 negative; chống giả mạo và
-      binding nhiều lớp chỉ dành cho verifier/packer tầng F.
-   b) AUTHORING_STATUS.md (≈ 1.200 dòng): phần đầu ≤ 40 dòng hiện trạng (log lane giữ ≤ 15 dòng
-      theo O7.6); nhật ký cũ chuyển sang file history; mỗi phiên agent chỉ đọc phần đầu.
-   c) Một commit cho một mốc (code + test + status). Preflight read-only, con trỏ và số test chỉ ghi
-      vào log lane/AUTHORING_STATUS.md, không vào header và không commit riêng.
-   d) Model mạnh chỉ cho thiết kế/review; chạy test, đọc log, cập nhật status dùng model rẻ hơn.
-
-O9 — 03-10-2026 (AUTHORITY=OWNER_DELEGATED_20260930; ngưỡng O1, ngưỡng môi trường O4.1 và timeout không đổi; thay O8_NEXT)
-Căn cứ 02-10 09:34 → 03-10 04:50: 25 commit, 6 lần dispatch (formal09, 10, 11, 14, 17, 19), chưa
-có 2 pair PASS cùng closure.
-- Formal09 pair 0 PASS 35/35 (status gap max 1.295 ms); pair 1 INFRA_ABORT trước batch 0 vì RAM
-  trống 3,4 GiB, commit 86,7%, nên mất luôn pair 0 PASS.
-- Formal10 dừng ở batch 20 vì commit toàn máy 92,15% (giới hạn ≈ 61 GB) trong khi private của
-  studio bình thường (host 103,5%, editor 100,6%); bị ghi PRODUCT_FAIL "thận trọng" nên không được
-  rerun như INFRA.
-- Formal11 HARNESS_FAIL do PerfProc: watchdog gọi powershell.exe + WMI mỗi ≤ 10 giây để lấy CPU
-  vmmem. Formal13 lỗi launcher. Formal17 HARNESS_FAIL vì một lần đọc pipe Docker hết trọn 2 giây;
-  sau khi chia thành 2 lần thử 1 giây, formal19 (04:44) lại HARNESS_FAIL sau 1 batch vì cả hai lần
-  đều timeout (2,016 giây).
-- Formal14 PRODUCT_FAIL vì một lần save native 5,13 giây (status gap 5.077 ms), chưa rõ nguyên nhân.
-- Formal21 (05:11) PRODUCT_FAIL ở batch 0: driver hỏi lại mỗi khoảng 1 ms nhưng không nhận được phản
-  hồi nào trong 2.766 ms khi lookup một command đã nhận (QUEUED); chưa rõ do host, driver hay I/O.
-- Soak watchdog -08 (06:38–07:08, không Godot) PASS 1.800 giây, 30/30 lần đọc Docker thành công.
-  Nhưng máy không yên: CPU ngoài trung bình 36% của máy 12 CPU logic, 16% mẫu ≥ 50%, chuỗi dài nhất
-  40 giây (abort ở 60 giây); com.docker.backend trung bình 11,6% (đo riêng: 2 core liên tục từ 02-10
-  07:16), vmmemWSL 5,6%, Cursor và Defender có đỉnh; RAM trống có lúc 3,95 GiB (< 4 GiB preflight).
-  Đây là tương quan tải tại thời điểm đo, chưa chứng minh Docker là nguyên nhân mọi gap.
-  CPU tích lũy không thay số CPU trong cửa sổ; attribution dùng mẫu watchdog gắn đúng run/PID.
-Lõi studio đã qua một pair đầy đủ (status gap max 1.295 ms, biên còn mỏng so với 2.000). Đường găng
-giờ là máy yên trong khung đo và tail status gap (formal14, formal21). Mỗi lần hỏng tốn 1–4 giờ.
-1. Watchdog trong lúc đo chỉ dùng API kernel, không gọi PowerShell/WMI/Docker trong vòng ≤ 10 giây:
-   a) CPU: mỗi mẫu một lần NtQuerySystemInformation(SystemProcessInformation), cho CPU mọi process
-      kể cả vmmem mà không cần mở handle, cùng GetSystemTimes. CPU ngoài campaign = tổng các process
-      không thuộc Job campaign (danh sách PID qua QueryInformationJobObject); ngưỡng 50% trong 60
-      giây giữ nguyên, tính trên tổng ngoài Job. Top 10 process lấy từ cùng mẫu. Process mới hoặc
-      sống ngắn hơn một nhịp không được tính (số đo là cận dưới), mỗi mẫu ghi số PID unknown;
-      chấp nhận cho GT-06.
-   b) Container studio: kiểm ở preflight mỗi pair (pipe có trần; lỗi thì thử lại cách nhau, quá 60
-      giây chưa đọc được thì không bắt đầu pair; pipe vắng vì Docker Desktop đã tắt là không có
-      container, có test). Trong lúc đo, linux_executor (cả bản nhánh O2) từ chối create/start khi
-      có measure-window.lock, kiểm trước create và trước start, có test. Poll Docker trong run tối
-      đa 60 giây một lần, best-effort: thấy container studio đang chạy thì INFRA_ABORT; đọc lỗi chỉ
-      ghi UNKNOWN.
-   c) RAM/commit (GlobalMemoryStatusEx/GetPerformanceInfo), godot*/blender* lạ (Toolhelp) và
-      sleep/resume giữ nhịp ≤ 10 giây. Mẫu bắt buộc (a, c) thiếu quá 30 giây liên tiếp là
-      HARNESS_FAIL; lỡ lẻ một mẫu thì không.
-   d) DoD: unit test công thức CPU/Job và lock fence; một watchdog-only soak 30 phút không Godot,
-      ngoài khung đo, qua Scheduled Task có soak-result và exit receipt, chạy trên đúng closure sẽ
-      freeze (sau mọi sửa O9 cho lần formal tới; soak trước đó chỉ là smoke, raw giữ nguyên). Soak
-      chỉ FAIL vì lỗi quan sát (mẫu bắt buộc thiếu quá 30 giây, query lỗi, sai shape); trigger môi
-      trường (CPU, RAM, commit, sleep) ghi thành sự kiện rồi chạy tiếp.
-   Trạng thái 03-10: a), c) xong; b) xong poll trong run và fence lock, còn thiếu luật pipe vắng;
-   d) soak -08 đạt 1.800 s/exit 0 trên closure 22db7610 nhưng chỉ là smoke cho lần freeze mới;
-   manifest closure sau đó đã được sửa ở ccb6792c nên phải chạy lại watchdog soak trên closure đầy đủ. O9.2 lifecycle, O9.3 role
-   binding và O9.4a bounded host/journal/status/wake telemetry đã được harden bằng focused suite
-   157 tests exit0; watchdog-only runner hiện ghi policy events và replay exact ở observation-only
-   mode. Các sửa này cần một closure mới; chưa thay thế O9.4C quiet host soak hoặc final soak.
-   Chi tiết ở log lane.
-2. Pair hoãn được:
-   a) Bắt buộc trước formal mới: pair chỉ bắt đầu khi preflight của chính nó đạt; chưa đạt thì chờ,
-      kiểm lại mỗi 5 phút tới hết khung. Pair INFRA_ABORT theo O9.3 được chạy lại fresh một lần trong
-      khung nếu còn ít nhất 40 phút và còn budget O1.7. Pair PASS được giữ trong campaign.
-   b) Làm sau, chỉ khi hết khung mà pair còn dở: giữ campaign sang khung sau bằng attempt mới nếu
-      closure và profile kiểm lại đúng hash đã freeze; campaign mở tối đa 7 ngày.
-   Pair FAIL vì product/harness thì campaign kết thúc; không chạy lại pair FAIL, không ghép pair từ
-   hai closure. Không sửa file trong closure khi campaign còn pair chưa xong hoặc đang chờ critic;
-   sửa thì campaign đó đóng, raw giữ nguyên.
-3. Phân loại watchdog khách quan (thay câu đầu bài học 27): trigger O4.1 là INFRA_ABORT nếu lúc đó
-   mọi role còn trong ngưỡng dừng sớm O1.2 (private commit ≤ 150% baseline; handles ≤ baseline+64;
-   objects ≤ baseline+256); vượt thì PRODUCT_FAIL. Nguồn số: private từng role lấy từ
-   `owned_processes` trong chính mẫu watchdog lúc trigger (khớp PID + process start); handles/objects
-   lấy từ mẫu batch gần nhất đã ghi và baseline đúng ba batch 2–4. Khi binding role, baseline hoặc
-   nearest batch bị thiếu/malformed thì ghi `ROLE_COUNTER_EVIDENCE_GAP` và INFRA_ABORT, không dùng
-   zero hoặc suy ra baseline từ banner/prefix. Luật này thay luật cũ trong Policy (chỉ INFRA khi
-   trừ hết private campaign mà máy vẫn vượt). Campaign tự ghi phân loại kèm số liệu đã dùng và
-   verifier đọc lại evidence/hash trước closeout; không phán tay. Verdict cũ (formal10) giữ nguyên.
-4. Tail status gap (formal14: save 5,13 giây; formal21: lookup 2,77 giây). Làm phần rẻ trước, chưa
-   có kết quả thì không chạy Godot thêm:
-   a) Instrumentation có trần, bộ nhớ cố định, không đổi hành vi hay timeout, đi cùng mọi run sau:
-      host và command driver của fixture (cùng một PID producer) ghi mốc nhận/bắt đầu/trả của từng
-      request, thời gian chờ và giữ khóa journal, fsync, compact; đúng một thread đo độ trễ thức dậy
-      trong PID đó (ngủ 10 ms, ghi lần trễ từ 100 ms). Giữ top-N request chậm nhất và ring quanh gap
-      lớn nhất. Mục tiêu: một lần hỏng là đủ biết gap nằm ở driver, host, khóa/I/O hay cả process bị
-      đứng. Godot/editor PID chỉ có timestamp/heartbeat supplemental; monitor riêng cho PID đó là
-      follow-up không-gating và không được ngầm claim đã có.
-   b) Probe I/O không Godot, không studio: mở/đọc, append + fsync, ghi tạm + ReplaceFileW trong thư
-      mục .local của studio, ít nhất 20.000 vòng mỗi loại; ghi tail từ 500 ms kèm CPU msmpeng và
-      SearchIndexer cùng lúc (NTQSI).
-   c) Host-only soak 30 phút ở mix formal, không Godot, không tiêm delay, có (a). Gap từ 1 giây
-      phải được chỉ ra nằm ở đâu theo (a) trước khi arm formal.
-   d) Đọc drivers/windows/file_access_windows.cpp (Godot 4.7.2): safe-save có vòng thử lại trên main
-      thread khi file đích bị khóa (antivirus, indexer) không; có thì đưa đúng mẫu đó vào (b).
-   e) Kết luận: do Defender/indexer thì owner quyết exclusion hoặc Dev Drive cho thư mục studio; do
-      khóa journal hoặc fsync thì sửa để lookup/status trả từ trạng thái trong bộ nhớ, không chờ khóa
-      file (giữ luật ACK/độ bền và regression GT-02); do cả process đứng thì tìm thao tác gây đứng.
-   Reproducer tiêm delay chỉ chứng minh detector chạy, không tính là tái hiện. Không đổi gate 2 giây,
-   không bỏ preview để cho qua. Backlog GT-07: editor báo "đang save" từ thread phụ; dùng cho gate
-   phải có quyết định owner riêng.
-   Kết quả 03-10: (b) probe-02 20.000 vòng: open/read tối đa 12 ms, ReplaceFileW 96 ms,
-   append+fsync 581 ms (một lần từ 500 ms), chưa tái hiện gap cỡ giây. (d) Godot 4.7.2
-   FileAccessWindows::_close() thử ReplaceFileW rồi MoveFileW, lặp tới 1.000 lần nghỉ 1 ms khi file
-   đích bị giữ; khóa giữ vài giây trên file đang save đủ làm main thread đứng vài giây (cơ chế khả
-   dĩ cho formal14, chưa chứng minh). (c) host-soak-01 INFRA_ABORT vì CPU ngoài (vmmemWSL, Chrome,
-   rustc, node), phải chạy lại trong khung yên theo mục 5.
-5. Khung đo (bổ sung O8.2): theo OWNER_ALWAYS_RUN_AUTHORIZATION_RECORDED_20261002 agent không cần xác
-   nhận từng khung; arm khung 4 giờ khi máy bật và preflight có khả năng đạt; khung không chồng giờ
-   owner hay tắt máy (khoảng 22:00–23:00) trừ khi owner báo để máy chạy qua đêm. Hai pair khoảng 75
-   phút. Ưu tiên lúc owner không dùng máy. Khuyến nghị owner trước khung: thoát hẳn Docker Desktop
-   (Quit ở khay hệ thống, cần thì mở lại sau), không chạy Cursor/agent review, `wsl --shutdown` nếu
-   không cần WSL; tăng pagefile là tùy chọn. Agent không tự tắt app của owner.
-   Máy chỉ yên khi owner không dùng (sáng 03-10 có Docker, Chrome, rustc, node), nên không ngồi chờ
-   trong ngày. Việc cần máy yên gom thành một chuỗi Scheduled Task chạy không người trông trong một
-   khung; bước sau chỉ chạy khi receipt bước trước đạt: freeze closure mới → preflight O4.1 và
-   CPU-minute → host-only soak 30 phút O9.4c trên đúng closure đó, watchdog chạy suốt (runner ghi
-   soak-result, exit receipt và verify stream như O9.1d thì tính luôn soak O9.1d; INFRA_ABORT thì
-   chờ preflight rồi chạy lại một lần nếu còn đủ giờ) → có gap từ 1 giây thì dừng, không formal,
-   phân tích sau bằng telemetry O9.4a → dry-run → formal 2 pair theo O9.2a. Tổng khoảng 2–2,5 giờ.
-   Runner `tests/replay/run_o9_quiet_chain.py` đã được thêm: mặc định chỉ tạo kế hoạch đọc-only;
-   `--execute` mới được phép chạy chuỗi. Runner bind một closure chung cho host residency,
-   watchdog và formal, ghi receipt riêng cho từng bước, dừng fail-closed khi closure drift,
-   O6.3/private-growth chưa đạt hoặc status gap ≥ 1 giây, rồi mới dispatch demand task formal ID mới.
-   Nó không tự retry product/harness fail, không tự ACCEPT và không tự đóng ứng dụng. Nếu host
-   residency hoặc formal import closure không khớp, chain dừng trước formal để sửa closure, không
-   tiêu thêm một lượt đo mù.
-   Implementation O9.5b: mode `quiet-chain` của campaign_task.ps1 chạy toàn chuỗi trong process
-   pythonw do Scheduled Task sở hữu, độc lập phiên chat; request khóa hash dry-run/frozen plan.
-   Host vẫn là child trong Job với actual-exit/capture riêng; stream watchdog được replay rồi mới
-   nhận receipt kết hợp, không chạy thêm soak 30 phút trùng lặp. Nếu 35 batch kết thúc trước 30 phút,
-   cùng host/producer tiếp tục mix bằng batch chẩn đoán mới, tối đa 64; không chờ bù sau khi host đã
-   thoát. O6.3 vẫn tính đúng batch 0–34; O9.4c kiểm gap trên tất cả batch. Không đủ thời lượng thì FAIL.
-   O7 control giữ nguyên probe03, seed gốc và binding vào soak05 gốc; không gán seed cũ vào journal
-   mới. Verifier kiểm snapshot gốc, toàn bộ dependency control hiện tại và counter/workload của host
-   mới riêng biệt. Ngoại lệ byte duy nhất là benchmark_profile.py cũ SHA 4c0c1512… sang LF SHA
-   67d6ad3f…: phải chứng minh CRLF→LF đúng từng byte từ snapshot đã băm. Khác nội dung khác thì từ
-   chối; hash/verdict cũ giữ nguyên, giới hạn finite-workload và harness lịch sử không đầy đủ vẫn ghi.
-   Trước dispatch formal, đóng băng lại đúng closure/profile trong scheduler request và child kiểm
-   lại trước khi chạy. `return.json` chỉ là return của wrapper; closeout vẫn cần trạng thái Scheduler,
-   actual child exits và Job/tree/handles, không suy PASS khi phiên chat hay tool handle mất.
-   Ngoài khung làm O2 hoặc việc static; hôm sau closeout bằng lệnh chung ở mục 6a.
-6. Nhịp làm việc của agent:
-   a) Closeout run hỏng bằng một lệnh chung (hash raw, actual exit, Job/handle, export rồi gỡ đúng
-      task, ≤ 5 dòng log lane); không viết script audit riêng cho từng run; mục tiêu ≤ 20 phút.
-   b) Header plan chỉ đổi khi gate/WP đổi hoặc có quyết định owner; dispatch, verdict run hỏng,
-      preflight, số test chỉ ghi log lane. GT06_CURRENT_DIAGNOSTIC/GT06_NEXT_ACTION là con trỏ cố định.
-   c) Một commit một mốc, gộp code và log lane của cùng mốc (03-10 05:26–06:37 có 22 commit, nhiều
-      commit chỉ ghi log); chỉ git add đúng file mình sửa; không viết lại lịch sử.
-   d) Model mạnh chỉ cho thiết kế và review boundary; closeout, log, test, status dùng model rẻ hơn.
-   e) Khi formal đang chạy hoặc chờ critic chỉ làm việc static nhẹ (không test suite, subagent hay
-      lệnh nặng khi đang đo) hoặc O2 không chạm closure; khi không có run thì làm O9.1–O9.4 hoặc O2;
-      không ngồi chờ khung.
-   f) Đã arm chuỗi hoặc formal thì không khởi động thêm process nào (test, build cargo/rustc/clippy,
-      subagent, audit, Docker, Godot/Blender); chỉ đọc trạng thái nhẹ, tối đa 15 phút một lần, hoặc
-      kết thúc lượt. Chain-f22-r01 bị hủy khi rustc, clippy và python khởi động 1–2 phút sau lúc
-      chuỗi bắt đầu (khoảng 27% CPU ngoài, cộng vmmemWSL 11,5%).
-7. Chạy ngay khi môi trường đã sửa (owner trực tiếp 03-10 11:08: đã tắt Docker/WSL, cho chạy liên tục
-   tới hết plan):
-   a) Trần INFRA O1.7 (2 lần/ngày) chỉ đếm attempt formal, tức parent-failure.json của campaign formal
-      như require_infra_budget đang đếm; host/watchdog soak và probe chẩn đoán không tính.
-   b) Chạm trần vẫn được chạy tiếp trong ngày sau khi sửa môi trường: process ngoài trong
-      top_cpu_processes của trigger gần nhất đã thoát hoặc dưới 5% CPU, O4.1 và CPU-minute mới đạt;
-      ghi environment-relief.json (trước/sau) và cho require_infra_budget đọc bản ghi đó khi cần.
-   c) Điều kiện của bước kế đạt thì arm ngay, không chờ owner xác nhận hay chờ sang ngày.
-   d) 03-10 11:10: Docker/WSL đã thoát, RAM trống khoảng 15 GiB, commit 45%, chưa có INFRA formal
-      nào trong ngày (0/2). Arm lại chuỗi mục 5 ngay; closure đổi thì freeze lại trong chuỗi.
-8. Kiểm tool trên đĩa trước khi ghi thiếu: Godot 4.7.2 khớp gui_sha256 ab1824f8… và console_sha256
-   c8f0a6bc… của toolchain.lock.json nằm ở studio/.local/tooling/godot-4.7.2-stable của repo chính;
-   worktree không mang .local theo. Worktree O2 chép (không link) hai file đó vào .local/tooling
-   của mình, kiểm hash, rồi chạy native O2 ngoài khung đo. Blender làm tương tự nếu cần.
-9. Dự phòng CPU ngoài: làm ngay nếu chuỗi lại INFRA_ABORT vì CPU; nếu GT-06 đã ACCEPTED thì làm trong
-   GT-10 cho release soak. CPU ngoài không còn tự dừng run mà là bằng chứng phân loại: run fail mà
-   trong 60 giây trước đó CPU ngoài ≥ 50% và wake-lag O9.4a ≥ 100 ms ở host hoặc driver thì
-   INFRA_ABORT; còn lại theo O9.3. RAM, commit, sleep, engine và container lạ vẫn dừng như O4.1; PASS
-   dưới tải vẫn là PASS; ngưỡng O1 không đổi. Chain-f22-r01 bị dừng khi gap lớn nhất mới 324 ms.
-10. Chain-f22-r02 (03-10 11:40–12:12) dừng vì lỗi harness, không phải môi trường. Phần 35 batch
-    O6.3 và thời lượng host đạt các điều kiện hẹp (51 batch; 35 batch tính có gap lớn nhất 300 ms;
-    active 1834 s ≥ 1800 s; source_unchanged), nhưng toàn bộ O9.4C chưa đạt: batch 47 trong phần
-    mở rộng có gap 2026 ms lúc CPU ngoài 104%. Run cũng thoát mã 1 vì run_command_residency.py
-    tạo Watchdog không observation_only nên không ghi
-    environment-events.jsonl, nhưng lần verify_watchdog thứ hai gọi observation_only=True và đọc file
-    đó → FileNotFoundError → owner-failure PRODUCT_FAIL (raw giữ nguyên; đã chuẩn hóa lỗi thiếu file
-    thành mã fail-closed) → HOST_RESIDENCY_EXIT. Không tính INFRA, chưa tốn attempt formal. Sửa và chạy tiếp:
-    a) Sửa đúng chỗ đó: chỉ replay observer khi Watchdog là observation_only, hoặc cho Watchdog
-       residency ghi event stream; thiếu event stream thì fail có code, không để FileNotFoundError thô.
-       Đã thêm test chạy residency thường và observer mode thời lượng ngắn qua đúng verifier, cùng
-       test file thiếu; focused suite 99 tests, exit 0.
-    b) Chấm lại bằng chứng r02 bằng verifier đã sửa để thử bản sửa trên dữ liệu thật; freeze closure
-       mới (file này nằm trong closure) rồi arm lại chuỗi đủ ngay theo mục 7c. Không viết thêm chế
-       độ bỏ host soak.
-    c) Batch 47 (ngoài 35 batch tính) có gap 2026 ms lúc 12:10:23, đúng lúc CPU ngoài 104%, đứng đầu
-       là chrome.exe và cursor.exe. Chỉ là chẩn đoán, ngưỡng không đổi; khi arm formal, nhắc owner
-       hạn chế dùng máy nặng trong khoảng 1,5 giờ formal chạy.
-O9_HISTORICAL_PRE_ACCEPTANCE_NEXT=O9_1D_FRESH_WATCHDOG_SOAK_AFTER_CCB6792C; O9_4C_REVIEW_F24_GAP_THEN_HOST_SOAK; O9_5_QUIET_WINDOW_CHAIN; O9_6_CLOSEOUT; O9_7_FRESH_O4_1_CPU_MINUTE_BEFORE_EACH_PAIR; O9_10_R02_FIX_RESIDENCY_OBSERVER_VERIFY_THEN_REARM_FULL_CHAIN; O9_6F_NO_NEW_PROCESS_WHILE_ARMED; O9_8_O2_COPY_PINNED_GODOT_NATIVE_OUTSIDE_WINDOW; O9_9_ONLY_IF_CPU_INFRA_AGAIN; TWO_PAIRS_PASS_THEN_CRITIC_PACKAGE_O4_3_NO_CLOSURE_CHANGE; O2_STATIC_WHILE_LOCKED; GT07_OPENS_AFTER_GT06_ACCEPTED
+O5–O9 — PHẦN CÒN HIỆU LỰC SAU GT-06 (giữ số mục gốc; nguyên văn ở git 091506fa)
+- O5.5 Log Godot là tiêu chí PASS của fixture gameplay: bộ phân loại noise có version, khớp chính
+  xác; mọi ERROR/SCRIPT ERROR/WARNING khác là FAIL; exit 0 không thay kiểm log; closure do adapter
+  tự tính, không nhận từ caller.
+- O5.6 Khóa đo %LOCALAPPDATA%\HHGodotAgent\measure-window.lock (owner, run_id, mục đích, hết hạn):
+  coordinator giữ khi formal/soak tầng F chạy; agent khác (O2, Superagent) kiểm khóa và task
+  HHStudio.* Running trước Godot/Blender/Docker, có thì chờ hoặc làm việc static. Test tự động dùng
+  đường khóa tạm do test cấp, có timeout, không để process sống sang lượt sau.
+- O6.1 Retry transport theo phase: chưa ghi byte request thì gửi lại đúng request (cùng command_id,
+  cùng bytes) tối đa 3 lần, chờ 25/50/100 ms; đã ghi byte thì UNKNOWN → lookup cùng command_id,
+  không gửi lại mù. Trong một formal pair, hơn 10 lần recover hoặc một lần không recover là FAIL.
+- O6.2 Mỗi lần sửa bộ nhớ host: microbench trong process 35.000 lệnh ≤ 32 byte/lệnh và đạt O1.4
+  trước soak; regression GT-02 (dedupe, recovery cut matrix, đa process) PASS.
+- O6.4 Sửa rồi chạy tiếp: giữ raw; dựng reproducer nhanh ở đúng trạng thái lỗi; qua reproducer +
+  test tập trung rồi mới chạy một run dài/native xác nhận bằng ID mới. Script hỏng giữa chừng thì
+  sửa đúng bước rồi chạy tiếp từ checkpoint tốt gần nhất; chỉ làm lại từ đầu khi trạng thái không
+  khôi phục được, ghi lý do.
+- O6.7 Sức chứa journal: ID trong retry horizon 24 giờ không compact được; GT-07 đo sức chứa thật,
+  compact theo hết hạn bằng đồng hồ thật (O10 M7), JOURNAL_FULL có next_action; GT-10 ghi sức chứa
+  vào known limits.
+- O7.6 Header chỉ đổi khi gate/WP hoặc quyết định đổi; tầng D ghi log lane (GT-07:
+  requirements.md), O2 ghi AUTHORING_STATUS.md, con trỏ O2 không chứa hash/test count. Dọn task
+  HHStudio.* từng task đã chứng minh terminal (lưu export và danh sách trước khi gỡ, giữ raw);
+  không xóa theo prefix hoặc vì State=Ready đơn thuần. Claim game chỉ sau fixture/acceptance và
+  plan sản phẩm riêng; route 2D hiện hành là Superagent, không quay sang Vault Fighters cũ.
+- O8.3 Ngân sách O3.1 chỉ tính lần chạy không có giả thuyết mới; sau sửa có nguyên nhân chứng minh
+  bằng reproducer/test được thêm một run xác nhận ID mới, không chờ owner.
+- O8.4 Tiết kiệm hạn mức: tool tầng D chỉ test công thức + 1–2 negative, chống giả mạo và binding
+  nhiều lớp chỉ cho verifier/packer tầng F; một commit một mốc; model mạnh chỉ cho thiết kế và
+  review boundary; chạy test, đọc log, closeout, cập nhật status dùng model rẻ hơn.
+- O9.6 Nhịp: closeout run hỏng bằng một lệnh chung ≤ 20 phút, không viết script audit riêng mỗi
+  run; dispatch, preflight, số test chỉ ghi log lane; chỉ git add đúng file mình sửa, không viết lại
+  lịch sử. Khi formal/soak đang đo chỉ làm việc static nhẹ; đã arm thì không khởi động process mới.
+- O9.8 Tìm tool theo hash trên đĩa trước khi ghi thiếu: Godot 4.7.2 (gui ab1824f8…, console
+  c8f0a6bc… theo toolchain.lock.json) ở studio/.local/tooling/godot-4.7.2-stable của repo chính;
+  worktree không mang .local theo nên chép (không link) và kiểm hash.
+Ngủ tới release soak GT-10 (vẫn hiệu lực, bộ máy đã nghiệm thu ở Formal25, nguyên văn ở git
+091506fa): O4.1–O4.2 ở trên; O6.3 host soak; O6.5 verifier editor handles
+tests/replay/verify_editor_handle_control.py sha256
+8b4edb7c0f108fd2b2be5b0983f3ab97d564987132bcd1aac06fbe369067a5b7 (profile v6); O7.3 quy trình
+formal; O8.1 chỉ container hh-gt03-<32 hex> là engine lạ; O8.2 lịch theo lúc máy bật + task arm;
+O9.1 watchdog trong vòng đo chỉ dùng API kernel; O9.2 pair hoãn; O9.3 phân loại watchdog khách
+quan; O9.4a/c telemetry và host soak; O9.5 quiet chain; O9.7 trần INFRA chỉ đếm attempt formal;
+O9.9 CPU ngoài là bằng chứng phân loại. Không áp các luật này cho run chẩn đoán GT-07/O2.
+Đã đóng cùng GT-06 (chỉ còn trong git): O5.1–O5.4, O6.6, O7.1, O7.2, O7.4, O7.5, căn cứ O9,
+O9.4b/d/e, O9.10 và mọi dòng O*_NEXT.
 
 ACCEPTED_EVIDENCE_INDEX (historical accepted closures; unchanged)
 GT01_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260913
@@ -590,17 +349,7 @@ GT05_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260917_S64
 GT05_REVIEW_STATUS=TWO_INDEPENDENT_PASS_TICK_YES_S64
 GT05_CHECKPOINT_COMMIT=808d8ba
 GT05_LAST_TESTED_SOURCE_CLOSURE=c141d54b80022ca7fefdf81f83e7e1078d3cc6aa43954831f82bb3178338a135
-GT06_HISTORY_S258 (chưa nghiệm thu; AUTHORITY=0; chuyển nguyên văn từ header ngày 30-09-2026, chỉ thêm tiền tố HIST_S258_; không phải trạng thái hiện hành):
-HIST_S258_GT06_SOURCE_POLICY=O1_VERIFIER_AND_PROFILE_CHANGE_CREATES_NEW_FORMAL_SOURCE_CLOSURE_FROZEN_BEFORE_RUN; MEMORY05_CLOSURE=9eccd4530acd98e0f04cf8b565e5a6eb9e3a519e12c71ce17cb67b264bc3a570; O1_9_CONTROL_CLOSURE=09acaf0a2335e5bcdd52815708d0075e8365ee0821018a27139daff48ddfd250; OLD_CLOSURES_AND_RAW_STAY_HISTORICAL; NO_RETROACTIVE_REBINDING; TIMEOUTS_UNCHANGED
-HIST_S258_GT06_HISTORICAL_BENCHMARK53_CLOSURE=1f6b7da7f48085b417e5d6d7f3388c75c0a8beadad3659b14057a2a6e71df625; FORMAL_SOURCE_FILES=53; PRIOR_S241_EXECUTED_CLOSURE=d7c78724ed827c8182af62c3f7bc1489d8dd35d29abe1f70216736a896e66bb3; S232_FORMAL_EXECUTED_CLOSURE=817242efa6578ecc92ebab31909d0324020f7617359bc2855c9b004d31907190; NO_RETROACTIVE_REBINDING
-HIST_S258_GT06_HISTORICAL_EXECUTION217_CLOSURE=493a7ccce3e42993399910b0fe977f25448f411b863e4cca7b57904348ac374e
-HIST_S258_GT06_CURRENT_FORMAL_EXECUTION_CLOSURE=NONE_ACCEPTED; S239_PARTIAL_IS_NOT_A_CLOSURE
-HIST_S258_GT06_CURRENT_SOURCE_CLOSURE=8275722a4519ae435e5f69c23f9afdde1801dbf3873ba3ad4bb32c59d45e000f; SOURCE_FILES=54; PAIR_O1_SCREEN_AND_COMPACT_PHASE_RECORDS; PURE_TESTS=215_EXIT0; CANDIDATE_ONLY_NOT_FORMALLY_EXECUTED; MEMORY05=27_BATCHES_TIMEOUT; O1_9_CONTROL=720S_2809_SAMPLES_NONMONOTONIC_HANDLES; FINAL_CRITICS_PENDING
-HIST_S258_O1_VERIFIER_TEST_RESULT=PACKAGE=studio/.local/reviews/o1-profile-v5-docfix-20260926; SOURCE_CLOSURE=9b704d59587a003151c5a03a653d826737e4f4031b47048883b622912919a9f6; ACTUAL_EXIT=0; TESTS=218; LOG_SHA256=4816b42a17d72e8feac2368cce0c070f642cbafced270bf5c2395d8c0c9df80d; AUTHORITY=0; NO_ENGINE_RUN_FOR_REPAIR; OWNER_COUNTER_RULE_RESOLVED; CRITIC=zdoc/reviews/20260926-gt06-s258-terminal/O1-CRITIC-FINAL.md; TICK=yes
-HIST_S258_S258_TERMINAL_PACKAGE=zdoc/reviews/20260926-gt06-s258-terminal; RAW_FILES=198; ARCHIVE_MEMBERS=199; MANIFEST_SHA256=f0c2bb917a28143f818c621eee3c70becec03ad5dd57432ec6f4e0253877d4ab; AUTHORITY=0; FORMAL_ACCEPTANCE=false
-HIST_S258_O1_PREFLIGHT_CURRENT=20260929_STOCK_EDITOR_CONTROL02; RULE=O4_1; CPU_60S_MAX_PERCENT=80.09834; CPU_MEAN_PERCENT=51.04935; RAM_MIN_GIB=9.51449; COMMIT_MAX_PERCENT=67.21575; FOREIGN_ENGINES=0; PASS=true; FRESH_PREFLIGHT_REQUIRED_FOR_FUTURE_FORMAL
-HIST_S258_O2_PROGRESS_RECONCILIATION=DIRECT_PARSE_PRIMARY_SECONDARY_NEGATIVES_VERIFIED; FIXTURE_STATE_2D3D=2/2; NATIVE_SOURCE_RUN05_4OF4_AND_RUN06_MULTIFILE_NEGATIVES; AUTH05_DOCKER_DIAGNOSTIC_ONLY; ADAPTER_AUTH05_BLENDER_OPEN; GOVERNANCE_MAIN_ONLY; NO_CRITIC_FORGED; NO_GT07
-HIST_S258_PREFLIGHT_POLICY=BINARY_VERSION_PATH_HASH_SYMBOL_DEVICE_MEMORY_AND_REPRO_CAPABILITY_BEFORE_NEW_DIAGNOSTIC; RECORD_ONCE_WHEN_UNCHANGED; WORKER_POLICY=BOUNDED_ATTEMPTS; NO_INFINITE_RETRY; O3_ONE_FALLBACK_TO_ANOTHER_AVAILABLE_MODEL_AFTER_CAPACITY_OR_404; CRITICS_READONLY_INDEPENDENT_SAME_HASH_NOT_IMPLEMENTER; COORDINATOR_HAS_USEFUL_WORK; ACTIVE_QUEUE_POLICY=GT06_O1_VERIFIER_AND_FORMAL_FIRST; O2_CAPABILITY_LANE_IN_SEPARATE_WORKTREE_AND_NO_ENGINE_RUN_WHILE_FORMAL_MEASURES; GT07_GT10_READONLY_PREP_UNTIL_GT06_ACCEPTED; NEVER_TICK_FROM_BANNER_OR_PARTIAL_PREFIX; FORMAL_DISPATCH_RULE=USE_FRESH_CAMPAIGN_ID_ONLY; VERIFY_SOURCE_PROFILE_WORKSTATION_AND_STOP_LATCH_BEFORE_START; PRESERVE_RAW_ON_FAILURE; REPAIR_ONLY_PROVEN_SOURCE_OR_HARNESS_BOUNDARY; NEVER_TICK_FROM_BANNER_OR_PARTIAL_PREFIX
+GT06_HISTORY_S258=MOVED_OUT_S259; AUTHORITY=0; VERBATIM=git show 091506fa:8-9-hh3d-3/zdoc/8-9-godot-blender-agent-studio-plan.txt LINES_593_603; NOT_CURRENT_STATE
 
 HISTORY_AUTHORITY=0; lịch sử S70–S181 và các next-action cũ đã được rút khỏi phần hiện hành.
 ARCHIVE_S182=zdoc/reviews/20260923-gt06-s182-terminal/plan-before-s182.txt; SHA256=233632dd71751e66a8a7585ce87a717c21bd1333a156d1fb512eda6074c013e1; AUTHORITY=0
@@ -669,15 +418,16 @@ GT-06 ACCEPTED — 03-10-2026
   Android hoặc release soak 10×35 của GT10; source sau merge cần evidence riêng.
 
 Phần còn lại để xong plan
-GT-07: scheduling/concurrency/recovery và cross-app activation.
+GT-07: scheduling/concurrency/recovery và cross-app activation — ma trận M1–M9 và NEXT ở O10.
 GT-08: clean Windows/Linux/Android export; máy Android thật là hard gate (O4.6: được tách công khai
 08A Windows/Linux mở GT-09, 08B Android bắt buộc trước GT-10).
-GT-09: lõi tạo nội dung O2, full client conformance, MCP spike đã pin và 2 mini-game fixture.
+GT-09: lõi tạo nội dung O2 (chạy song song từ 04-10 theo O10.5), full client conformance, MCP spike
+đã pin và 2 mini-game fixture.
 GT-10: package/install/upgrade/rollback/uninstall/handoff, release soak 10×35 theo O1. HH World là plan riêng
 sau GT-10. Không suy phần trăm sản phẩm hoặc ETA toàn plan từ số test/gate.
 
 Thực thi và tốc độ
-- Tiêu chí/gate theo khối quyết định owner O1–O9; ưu tiên đường chức năng, focused regression
+- Tiêu chí/gate theo khối quyết định owner O1–O10; ưu tiên đường chức năng, focused regression
   và dependency reuse. Không mở thêm vòng audit/helper không phục vụ requirement còn thiếu;
   không chạy lại lane PASS chỉ vì sửa báo cáo. Gặp lỗi thì sửa và chạy tiếp theo O6.4.
 - Heartbeat (nếu owner bật) chỉ kiểm điều kiện chạy formal; query/readback lịch qua app trước
@@ -723,95 +473,68 @@ Sửa receipt không mở quyền retry RSS. load_fixture() phải chạy trư�
     không truyền823pathargv. Gate shellphụ thuộc phải checkexit trướccommit;
     S76indexprobe lỗi206, đã verify lại823HEADblobs của ccfb27ab. Resolve
     sys.executable trướcpythonw, vì PATH có thể làapp-executionalias.
-Bài học 25–30/09 (từ các lần sai của formal01–08 và soak01–04):
-12. Kiểm môi trường thật trước khi đặt gate: O1.8 cũ đòi RAM trống ≥ 8 GiB trên máy dev nên formal
-    không chạy được; ngưỡng CPU toàn hệ thống không tách tải của chính campaign nên formal04/05 và
-    pair 1 formal08 đều INFRA_ABORT.
-13. Đo nhiễu bằng control trước khi đặt ngưỡng counter; T/G 8/2 cho editor handles từng hẹp hơn dao
-    động của editor không plugin.
+Bài học chung từ GT-06 (giữ số cũ). Bài học đo 12–13, 15, 19, 21, 23, 27–28, 30–32, 34, 37,
+39–40 dùng lại khi chuẩn bị release soak GT-10; nguyên văn ở git 091506fa.
 14. Kiểm độ phức tạp bằng test tổng hợp vài phút trước formal nhiều giờ: reload O(n) của journal chỉ
     lộ ở batch 26, sau nhiều campaign.
-15. Pre-check phải dùng đúng metric và công thức của gate: "batch 5→34 ≤ 5%" lệch baseline nên soak03
-    trông gần đạt trong khi O1.4 là 116%. Pre-check chặt hơn gate phải ghi lý do (ví dụ biên nhiễu).
 16. Không nuốt chi tiết lỗi: mã UNKNOWN/CONNECTION_* phải kèm class/errno/phase. Retry khóa theo phase
     lỗi (chưa gửi byte), không theo loại lệnh; đã gửi byte thì chỉ lookup cùng command_id.
 17. Lỗi ở cuối run dài: tái hiện bằng trạng thái seed + fault injection trong vài phút; run dài chỉ để
     xác nhận một lần (O6.4).
-18. Sau mỗi lần sửa plan: kiểm không BOM, không CRLF, còn sentinel/markers và mọi hash cũ vẫn còn
-    (một lần StrReplace từng chèn BOM UTF-8).
-Bài học 01-10 (soak05, probe01–03, observer):
-19. P95 đầu/cuối trên máy dùng chung có thể lẫn ảnh hưởng workload và môi trường. Tương quan CPU
-    chưa chứng minh nguyên nhân. Probe phải tách biến thể production, dùng đủ raw; hai kích thước
-    không chứng minh loại trừ O(n). Đổi luật tầng D ghi policy/version, giữ verdict cũ; kiểm offline
-    trước dispatch, không đặt mục tiêu ép verifier trả PASS.
+18. Sau mỗi lần sửa plan: kiểm không BOM, không CRLF, còn sentinel/markers; hash cũ phải
+    còn trong plan hoặc có con trỏ git (một lần StrReplace từng chèn BOM UTF-8).
 20. Observer trong watchdog phải có timeout, retry có trần và test lỗi trước run dài: 6 run
     HARNESS_FAIL vì observer Docker/PerfProc tốn gần một ngày.
-21. Khi gọi một run tầng D là "sẵn sàng formal", ghi rõ phần hình dạng formal mà nó không phủ
-    (soak05 không có chu kỳ native editor).
 22. Header là con trỏ trạng thái, không phải nhật ký: ngày 01-10 có 7 commit plan chỉ để đổi con
     trỏ hoặc số test, mỗi lần đều có rủi ro BOM/marker. Tiến độ ghi ở log lane/AUTHORING_STATUS.md.
-Bài học 02-10 (formal09 không chạy được đêm 01-10):
-23. Lịch đo phải dựa vào lúc máy thật sự bật (log nguồn Windows), không giả định máy chạy qua đêm:
-    5/6 đêm gần nhất máy tắt lúc 22:10–22:54, cả 8 formal đều chạy ban ngày/sáng sớm. Run dài cần
-    khung owner xác nhận và được hẹn sẵn, không dựa vào phiên agent còn sống.
 24. Nhận diện tài nguyên của mình bằng tên/label chính xác do mình tạo, không bằng prefix chung:
     `hh-*` đã khớp nhầm container của dự án khác trên cùng máy.
 25. Ngân sách chẩn đoán để chặn chạy mù, không chặn run xác nhận sau sửa đã chứng minh; nếu không,
     việc gần xong bị treo chờ owner (physics arena 2D, O2 dependency).
 26. Test helper phải đi qua dispatch → status bằng ID mới; chỉ test hàm quyết định đã bỏ sót
     NameError sau dispatch. Dry-run trước khung vẫn phải kiểm điều kiện, không tự coi là đạt.
-27. Phân loại trigger watchdog theo O9.3; verdict cũ giữ nguyên, không hồi tố. Job bị dừng sạch
-    không thay actual exit0 hay receipt của từng role.
-28. Điều kiện trước từng pair phải được thực thi/ghi evidence ở từng pair; quan sát CPU trước
-    campaign không chứng minh điều kiện trước pair thứ hai. Sửa harness trước run mới, giữ raw cũ.
-Bài học 03-10 (formal09–21, soak O9):
 29. Observer không được là nguồn lỗi chính của run dài: trong vòng đo chỉ dùng API kernel, công cụ
     ngoài (PowerShell/WMI/Docker) để ở preflight hoặc best-effort. 12 lần đọc pipe thành công không
     chứng minh đủ cho khoảng 430 lần đọc của một campaign 2 pair; vá retry xong formal19 vẫn hỏng
     sau 5 phút. Sửa bằng thiết kế, không vá retry.
-30. Phân loại phải theo quy tắc khách quan viết trước; phán "thận trọng" từng run đã biến tải bộ
-    nhớ của app khác thành PRODUCT_FAIL (formal10) và chặn rerun hợp lệ.
-31. Điều kiện chưa đạt giữa hai pair thì chờ, không hủy campaign: formal09 mất pair 0 PASS chỉ vì
-    lúc bắt đầu pair 1 RAM trống còn 3,4 GiB. Đã có pair PASS thì không sửa closure; sửa harness
-    làm trước campaign.
-32. Lỗi đuôi hiếm (một lần save 5 giây trong khoảng 1.400 lần) không tái hiện được bằng run Godot
-    100 chu kỳ; dùng dữ liệu đã có và probe rẻ chạy hàng chục nghìn lần trước khi chạy Godot.
 33. Run dài (soak, probe, formal) chạy qua Scheduled Task có result và exit receipt; phiên tool có
     thể cắt process giữa chừng (soak -05 mất sau 97 mẫu).
-34. Đo môi trường trước khi sửa code: Docker Desktop đốt khoảng 2 core suốt 24 giờ, vừa làm pipe chậm
-    vừa đẩy CPU ngoài trung bình lên 36% và RAM trống xuống dưới 4 GiB. Soak kiểm độ bền observer
-    không được fail chỉ vì máy bận.
 35. Mỗi run phải mang đủ instrumentation để một lần hỏng là đủ chẩn đoán; reproducer tiêm delay chỉ
     chứng minh detector chạy, không thay tái hiện tự nhiên.
 36. Test không được đụng tài nguyên thật của run đo (khóa measure-window, task, thư mục evidence) và
     không để process sống sang lượt sau: một test replay còn giữ khóa thật đã chặn lượt sau.
-37. Việc cần máy yên không chờ trong giờ owner dùng máy; gom thành một chuỗi chạy không người trông
-    trong khung yên, có điểm dừng tự động, rồi closeout hôm sau.
 38. Nâng công cụ bằng cơ chế chung (allowlist ClassDB, readback, undo) và port có kiểm adapter đã
     có ở plugin cũ, không viết adapter mới cho từng class; tính năng chỉ claim khi mini-game dùng
     nó qua catalog và đạt ngân sách hiệu năng.
-39. Trần chạy lại là để chặn chạy mù khi môi trường chưa sửa, không phải lịch chờ: 03-10 owner tắt
-    Docker lúc 11:07 nhưng agent định chờ sang ngày vì đếm cả host soak chẩn đoán vào trần formal.
-40. Đã arm thì không chạy gì thêm: build Rust và python khởi động ngay sau khi chuỗi bắt đầu đã góp
-    phần làm hủy chain-f22-r01.
 41. Trước khi ghi "thiếu tool" phải tìm theo hash trên đĩa; worktree không mang .local theo, binary
     đúng pin vẫn nằm ở repo chính.
 42. Mỗi đường verify cần một test chạy ngắn end-to-end đúng chế độ của run thật: chain-f22-r02 chạy
     đủ 30 phút rồi mới hỏng ở bước verify cuối, vì file cần đọc chỉ chế độ observer mới ghi.
-
-39. Soak phải đo host đang sống và hoạt động: chờ bù sau child exit không chứng minh thời lượng.
-    Control cũ giữ seed/journal/source gốc; run mới bind riêng. Chỉ chấp nhận khác byte do xuống
-    dòng khi có snapshot, hash hai phía và phép biến đổi đúng từng byte; không gắn lại hash lịch sử.
+Bài học GT-07 (03-10 → 04-10):
+43. Chạy dry-run cùng tham số trước mỗi run native: 16/20 run Godot đầu GT-07 hỏng vì harness
+    (thiếu dependency khi freeze, verifier đòi field không có trong schema, deadline vượt cận, bỏ
+    qua route lease công khai, đường binary tương đối), đều bắt được mà không cần mở engine.
+44. Lỗi limit/deadline phải đọc cả hai cận và timestamp trước khi đoán: sáu run bị từ chối vì
+    deadline edit quá 30 giây, trong khi giả thuyết ban đầu là startup làm hết lease.
+45. Đường evidence trong manifest phải là đường thật: manifest run 18–21 ghi raw ở .local nhưng
+    runner ghi vào zdoc/reviews; verifier kiểm đường tồn tại, không tin field.
+46. Bẫy lặp lại: `$PID` của PowerShell là biến chỉ đọc; suite gộp phải có cùng PYTHONPATH với suite
+    con (exit 1 vì thiếu path không là PASS); bản ghi nội bộ (JobRecord) khác wire response.
+47. Chốt ma trận nghiệm thu trước khi làm lát: mở từng lát một khiến mỗi lát cần probe, run,
+    manifest và ghi chú riêng; một runner kịch bản và bảng M chạy được cả ma trận.
+48. Bằng chứng tầng D chỉ để chẩn đoán: snapshot vài MB và manifest hàng nghìn dòng cho mỗi run
+    hỏng làm chậm và dễ commit nhầm; gói đầy đủ chỉ lập ở mốc nghiệm thu.
 
 LỊCH SỬ / CÁCH ĐỌC
 Bản S71 đầy đủ trước tinh gọn giữ tại reviews/20260918-plan-history-s71/
 tools-plan-s71.txt, AUTHORITY=0; SHA256 1f3ca50b8a0931a12f8c334ea2e6cf969d8d667d8af659ac22fa523996390963.
 Chi tiết lessons S27–S71, lỗi/giải pháp và các archive/hash cũ giữ trong bản đó
 và Git/reviews, không xóa verdict. Phần requirement/DoD/TQ/TX bên dưới giữ nguyên.
-Tiến độ hiện hành chỉ ở header/bảng đầu file; chi tiết diagnostic ở log lane (O4.4). Đọc GT
-hiện tại và references liên quan; không cần đọc lại mọi nhật ký. Văn bản O1–O5 trước khi hợp
-nhất: git show 8298c107:8-9-hh3d-3/zdoc/8-9-godot-blender-agent-studio-plan.txt; các dòng
-header S258 cũ nằm nguyên văn ở GT06_HISTORY_S258 trong ACCEPTED_EVIDENCE_INDEX.
+Đọc theo thứ tự: header và bảng đầu; O10 (mới nhất); spec GT hiện hành ở mục 3 cùng TQ/TX
+nó trỏ tới; mục Hiện trạng của zdoc/reviews/20261003-gt07-integration/requirements.md. O1, O4.1
+và phần ngủ tới GT-10 chỉ đọc khi chuẩn bị release soak. Nguyên văn O1–O9, header S258 và
+GT06_HISTORY_S258 trước tinh gọn S259: git show 091506fa:8-9-hh3d-3/zdoc/
+8-9-godot-blender-agent-studio-plan.txt; văn bản O1–O5 trước hợp nhất ở git 8298c107.
 
 QUYẾT ĐỊNH KỸ THUẬT CÒN HIỆU LỰC
 MCP_ADAPTER_POLICY=External MCP review is a sequencing input only; the
