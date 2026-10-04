@@ -138,8 +138,12 @@ D6 (E1) Ngân sách asset và âm thanh. Mặc định 0 đồng: tự làm, ho�
 
 4. TIẾN ĐỘ (nguồn tiến độ duy nhất của Superagent)
 Coordinator game đánh [x] sau khi đạt DoD và verify của WP; subagent không tick. SA-01→SA-13 là
-chuỗi Classic nối tiếp: chỉ được chuẩn bị test/art độc lập; WP kế tiếp không được nghiệm thu trước
-gate của WP trước. CURRENT_VALID_WP là WP Classic chưa tick sớm nhất.
+chuỗi nghiệm thu Classic nối tiếp; WP kế tiếp không được nghiệm thu trước gate của WP trước.
+CURRENT_VALID_WP là WP Classic chưa tick sớm nhất. Theo owner 04-10 giao nghiên cứu và tiếp tục
+triển khai, SA-03 và core SA-04 được code/test tạm song song SA-02 để sớm có bản chơi được.
+Mọi số chưa đo phải ghi seed; các checkpoint này không đóng SA-02/03/04 hoặc mở gate SA-05+.
+Phạm vi core tạm: movement, stamina, melee/knockdown, pistol/throw, pickup, một map và local 2P;
+bot/menu/art được chuẩn bị theo dependency. Không gọi phòng thử hoặc test nội bộ là parity.
 Một writer cho file này: coordinator game. File nằm ở repo chính, trên nhánh chính. Đọc lại file
 ngay trước khi sửa (owner hoặc reviewer có thể vừa sửa), rồi commit riêng đúng file này:
 git commit -m "SA-xx: ..." -- 8-9-hh3d-3/zdoc/18-9-superagent-2d-y8-plan.txt
@@ -242,6 +246,14 @@ Không đang đo và không có task sắp chạy thì làm bình thường.
 File: 8-9-hh3d-3/superagent/docs/reference-ledger.tsv; tools/check_ledger.py kiểm format.
 Cột: id, nhóm, mục, nguồn, quan sát (số và đơn vị), số mẫu, sai số, dung sai, giá trị của mình,
 test, trạng thái, ghi chú.
+Nguồn bổ sung owner gửi 04-10: docs/reference-research-2026-10-04.md đối chiếu đủ 18 tip với
+ảnh gốc trên forum Y8 và bài tác giả Newgrounds. Đây là DOCUMENTED_LEAD cho từng cơ chế,
+không tự thành OBSERVED/MATCHED ở HTML5 hiện tại. Dùng crosswalk trong tài liệu để không sót:
+đá prop, swap, disarm, team damage theo loại đòn, jump kick, stamina hồi nhanh khi đứng yên,
+random knockdown, healing, rocket steering, dive và invulnerability. Không nhân bản ledger rows.
+Sửa quan trọng: tip 7 nói súng đang cầm ra bị disarm rồi biến mất; chưa chứng minh rơi để nhặt.
+Giá trị gravity/fuse/HP/regen/time-scale/spawn weight trong bản nghiên cứu là seed đề xuất,
+không ghi thành số đo. Godot 4.7.2 và clean-room giữ nguyên; không đổi sang Phaser/Box2D.
 Nhóm:
   R01 phím và nút (bàn phím P1/P2, cảm ứng)   R09 vật thể, vật liệu, nổ, lửa, mảnh vỡ
   R02 di chuyển                                R10 map, hazard, điểm spawn
@@ -377,6 +389,8 @@ ngoài các dòng chưa quan sát); đếm dòng theo trạng thái; git ls-file
 SA-03 Điều khiển và di chuyển
 Làm:
 - Nhân vật CharacterBody2D, điều khiển tự viết chạy theo tick, đủ các trạng thái di chuyển của R02.
+- Kiểm sprint/stamina, roll, dive cùng double-down; stamina thường không phải mana hay nội tại.
+  Tip 14 định hướng hồi stamina nhanh hơn khi đứng yên; binding và mọi tốc độ/thời gian còn cần đo.
 - Phòng thử: sàn, bậc cao 1H/2H/3H, thang, sàn xuyên, hố, tường.
 - Camera cơ bản theo R14; hai người chơi cùng bàn phím.
 - File số chỉnh ghi mã dòng sổ.
@@ -392,6 +406,8 @@ DoD:
 SA-04 Bản chơi được đầu tiên
 Làm:
 - Đấm; bắn với kiểu ngắm theo R04; ném lựu đạn; máu, sát thương, ngã, chết.
+- Crosswalk tip 2/7/12/13/15/18: kick theo ngữ cảnh, disarm khi gun-out, team melee/bullet khác
+  nhau, jump kick, xác suất knockdown và miễn thương sau ngã. Chỉ nghiệm thu qua current Y8.
 - Nhặt/bỏ vũ khí với 2–3 vũ khí đầu tiên; spawn đơn giản.
 - Một map greybox có tầng, thang, hố, chỗ nấp.
 - Bot v0: đi, nhặt súng, đấm, bắn.
@@ -411,6 +427,8 @@ SA-05 Vũ khí, item, power-up
 Làm: mỗi vũ khí, item, power-up trong kiểm kê có một file dữ liệu và hành vi riêng (đạn tức thời
 hay bay, độ tản, giật, đạn, nạp, vũ khí cận chiến, đồ ném). Luật spawn theo R08 (nhịp, vị trí,
 xác suất, chí mạng). Bullet time áp dụng cho ai và kéo dài bao lâu thì theo số đo.
+Crosswalk tip 3/4/5/9/10/11/16: slot/swap, cancel bullet time và owner-projectile advantage,
+melee reach/damage, đạn mạnh xuyên phá nhiều vật, rocket-riding control, walkover heal.
 DoD: mọi dòng R07, R08 trong kiểm kê có test kịch bản; cơ chế đã quan sát phải MATCHED, không có
 GAP/UNCERTAIN gameplay; owner thử vũ khí. Mục vắng trong Y8 hiện tại ghi NOT_IN_CURRENT.
 
@@ -419,6 +437,8 @@ Làm: thùng, vật nổ, kính, cửa, vật phá được, lửa, vật liệu
 theo kiểm kê. Dùng state mô phỏng fixed-step làm nguồn gameplay; RigidBody2D chỉ là adapter hiển
 thị/tương tác. Nếu Godot Physics không cho cảm giác giống, sửa boundary hoặc dừng để owner quyết;
 không tự thêm GDExtension.
+Crosswalk tip 6/8/10/17: roll dập cháy, va chạm prop gây hậu quả gameplay, phá gỗ bằng đạn,
+dive xuyên kính và tương tác với fall damage. Không thay vật lý tương tác bằng hiệu ứng giả.
 DoD: các dòng R09, R10 về vật thể đều có test và MATCHED/NOT_IN_CURRENT; test ổn định với 100 vật
 thể (không nổ tung, không rung) và vẫn trong ngân sách Q2; khác biệt vật lý gameplay phải sửa hoặc
 dừng để owner ra quyết định phạm vi, không được che bằng GAP.
@@ -869,4 +889,28 @@ Q5 Web: dung lượng tải lần đầu và bộ nhớ đo từ SA-04; ngân s�
   prior Y8-configured wrapper, not a fresh outer-page cross-check; timestamp bounds 07:34:19–07:52:35.
   Fixed copied Vault Fighters label in Superagent controls. Ledger remains 25/54/0;
   CURRENT_VALID_WP=SA-02, SA-03 pending, variants locked. Resume catalog/behavior observations.
+2026-10-04 Owner research review and execution clarification.
+- Verified the 18-panel 1400x1300 Y8 tip sheet; corrected tip 7 mistranslation and separated
+  historical author statements from community claims and suggested numbers. Crosswalk is in
+  docs/reference-research-2026-10-04.md; none of these documentary leads promotes ledger status.
+- Allow provisional SA-03/core SA-04 implementation alongside targeted observation, so missing
+  timing capture does not force endless menu repetition. Acceptance order/gates stay unchanged.
+- Product ed3e10a3 is integrated into main by normal merge 1e5e7e4e; tracked index was clean,
+  unrelated untracked studio evidence preserved. Next: seeded sprint/stamina through real inputs,
+  then playable core combat; refine from measured reference before any acceptance.
+2026-10-04 SA-03/SA-04 provisional core checkpoint (09:52 UTC).
+- Product worktree now includes shared Classic stamina sprint and a deterministic provisional combat
+  slice. Sprint edge review found and fixed two concrete issues: the last funded tick retains sprint
+  speed, and a same-tick release/repress cancels active sprint and arms a new first tap. Product
+  source `aa3c16f1a13f949e602f8d21ae48d5dc7c5e62bb8b508c359efa459c44291c5f` was exercised by guarded state, room,
+  movement and trace runs with 183/92/474 assertions and trace tick 120 hash `e27f7fad`; all exits,
+  cleanup and diagnostics were clean. These are implementation checks, not SA-03 acceptance.
+- Provisional SA-04 core adds close punch, airborne jump-kick, aligned shot/ammo, seeded knockdown
+  and invulnerability, plus a floor-clamped fuse grenade. Tuning is data-driven and all values remain
+  placeholders tied to R03–R07. `cmd.sa04.combat.core.3` / `20261004T095159.725383Z-3ac6efda04`
+  passed 70 assertions, actual/host exit 0, cleanup 0, diagnostics empty. Product evidence is in
+  docs/evidence/SA-03.md and SA-04.md; no parity row or gate status changed.
+- Independent GPT-6.1 Sol review found the sprint edge cases above; this is a bounded methods review,
+  not an acceptance critic. The next implementation slice is pickup/inventory and real room combat
+  feedback; continue targeted SA-02 observation and preserve 25 OBSERVED / 54 UNVERIFIED / 0 MATCHED.
 END_OF_SUPERAGENT_PLAN
