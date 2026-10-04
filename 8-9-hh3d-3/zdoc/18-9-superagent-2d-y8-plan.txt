@@ -843,4 +843,11 @@ Q5 Web: dung lượng tải lần đầu và bộ nhớ đo từ SA-04; ngân s�
   with Web/Windows/mobile delivery in SA-11. Online multiplayer is not in SA-01..SA-13; SA-V3
   now records it as a locked post-Classic backlog so a future netplay phase can design transport,
   rooms, deterministic sync, reconnect and anti-cheat without weakening the Classic gate.
+2026-10-04 SA-02 tutorial observation (07:52 UTC).
+- Product commit `cccfe618` records `OBS-2026-10-04-01`: the live tutorial tip states that
+  double-tapping the down direction key drops through platforms. A bounded two-tap attempt was
+  not isolated with before/after position or frame timing, so R02-05 remains UNVERIFIED and no
+  mechanic/absence claim was promoted. `python tools/check_ledger.py docs/reference-ledger.tsv`
+  still passes with 79 rows and groups R01-R15. Next useful trial is a controlled one-way-platform
+  placement with captured visible before/after state; do not count the tutorial text as runtime proof.
 END_OF_SUPERAGENT_PLAN
