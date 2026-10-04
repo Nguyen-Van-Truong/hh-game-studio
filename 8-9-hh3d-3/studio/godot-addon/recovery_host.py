@@ -193,6 +193,12 @@ class GodotRecoveryHost:
         if attempt is not None and attempt[0]==body['command_id']:return self._reply(attempt)
         command=self._recovery._journal.lookup(body['command_id'])
         if command is not None:
+            # A crash cut at RELOAD/SELECTED has a valid command record but no
+            # durable response yet.  Do not call the strict receipt reader for
+            # that nonterminal phase; recovery.reconcile owns completion.
+            if command.get('phase') not in ('COMMITTED','FAILED','UNKNOWN'):
+                return Response(Status.UNKNOWN,'GODOT_RECOVERY_NOT_TERMINAL',body['command_id'],
+                    postconditions={'public_ack':False,'new_mutation_permitted':False})
             raw=self._recovery.original_response(body['command_id'],command['digest'])
             if raw is not None:
                 response=Response.from_dict(parse_json(raw))

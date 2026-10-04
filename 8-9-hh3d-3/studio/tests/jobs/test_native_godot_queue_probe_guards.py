@@ -5,6 +5,7 @@ import importlib.util
 import copy
 from pathlib import Path
 import sys
+from types import SimpleNamespace
 import unittest
 from unittest.mock import patch
 
@@ -18,6 +19,40 @@ _spec.loader.exec_module(_module)
 
 
 class NativeGodotQueueProbeGuardTests(unittest.TestCase):
+    def test_crash_snapshot_reads_response_only_at_durable_terminal(self):
+        # Real reducer histories reproduce run25: RELOAD is SELECTED, where
+        # lookup_response must raise rather than return an absent receipt.
+        spec = importlib.util.spec_from_file_location(
+            'gt07_cut_state_fixtures', STUDIO / 'tests/godot/test_publication_state_v4.py')
+        fixture = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(fixture)
+        from studio.protocol.core import ValidationError
+        for operation in ('scene.save', 'script_text.replace'):
+            for phase in ('PREPARED', 'VALIDATED', 'ACTIVATING', 'SELECTED', 'COMMITTED'):
+                with self.subTest(operation=operation, phase=phase):
+                    state = fixture.state.replay(fixture.history(operation, until=phase))
+                    journal = SimpleNamespace(
+                        lookup=lambda *args: fixture.state.lookup(state, *args),
+                        lookup_response=lambda *args: fixture.state.lookup_response(state, *args))
+                    args = ('command.one', fixture.rev('command.one'))
+                    if phase == 'COMMITTED':
+                        self.assertEqual(_module._durable_response(journal, *args),
+                                         journal.lookup_response(*args))
+                    else:
+                        with self.assertRaisesRegex(ValidationError, 'RESPONSE_NOT_DURABLE'):
+                            journal.lookup_response(*args)
+                        self.assertIsNone(_module._durable_response(journal, *args))
+
+    def test_crash_snapshot_does_not_hide_corrupt_terminal_or_missing_command(self):
+        journal = SimpleNamespace(lookup=lambda *_: {'phase': 'COMMITTED'},
+                                  lookup_response=lambda *_: (_ for _ in ()).throw(
+                                      ValueError('RESPONSE_NOT_DURABLE')))
+        with self.assertRaisesRegex(ValueError, 'RESPONSE_NOT_DURABLE'):
+            _module._durable_response(journal, 'command.one', 'digest')
+        journal.lookup = lambda *_: None
+        with self.assertRaisesRegex(RuntimeError, 'COMMAND_MISSING'):
+            _module._durable_response(journal, 'command.one', 'digest')
+
     def test_close_proof_requires_actual_pid_exit_and_clean_job(self):
         identity = {"pid": 1234, "session_id": "editor.fixture"}
         clean = {
