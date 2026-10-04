@@ -725,4 +725,27 @@ Q5 Web: dung lượng tải lần đầu và bộ nhớ đo từ SA-04; ngân s�
   overwrite those files. This checkpoint does not tick SA-02 or SA-03. Resume
   SA-02 observations (P2 power/pickups, remaining catalog/modes/feedback and
   held-input/timing samples) when the measurement guard is clear.
+2026-10-04 SA-03 SceneTree input hardening checkpoint (05:26 UTC).
+- Product commit `995fa8aa` supersedes the provisional room test wiring from
+  `b5ad4e82`. The room now exposes a fixed-step completion signal, cancels
+  input on focus loss, replaces the input session on reset, and uses the
+  required `CharacterBody2D` presenter without calling `move_and_slide` or
+  making engine physics authoritative. SA-03 remains `PENDING_ACCEPTANCE`,
+  `CURRENT_VALID_WP` remains `SA-02`, and SA-14 stays locked.
+- Frozen run source hash:
+  `4be6e1cb472f1b32d621f4f82344c11e176f53675aee372f7b2fcf543348a065`.
+  `cmd.sa03.movement-room.10` (`20261004T052500.294414Z-32a4588bda`) exited
+  0/0 with 57 assertions; `cmd.sa03.trace.10`
+  (`20261004T052538.768984Z-861c3fd312`) exited 0/0 at tick 120; and
+  `cmd.sa03.scene-regression.3`
+  (`20261004T052611.673727Z-039efccfc0`) exited 0/0 with 225 SA-01
+  assertions. Diagnostics are empty and cleanup is zero for all three.
+- Lesson: a real input path must be sampled after the room's own fixed-step
+  signal; a reset is a new input session, not merely a new simulation; and
+  headless import is a prerequisite for newly added global script classes.
+  These are implementation lessons only, not reference measurements.
+- Main checkout still has unrelated tracked studio work and owner-local files;
+  do not stage/stash/overwrite them. Normal merge remains deferred. Continue
+  SA-02 supported observations and the authorized recording fallback; do not
+  tick SA-02 or SA-03 from this checkpoint.
 END_OF_SUPERAGENT_PLAN
