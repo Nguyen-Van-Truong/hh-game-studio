@@ -197,8 +197,29 @@ IN_PROGRESS and still requires the complete frozen package and two critics.
 - `studio/tests/jobs/test_native_godot_recovery.py` covers three focused
   regressions: exact reservation reattachment with execution blocked, rejection
   of queued/command-mismatched rows, and fence mismatch rejection. Actual run:
-  three tests, exit 0. This is static/inert evidence only; it does not claim a
-  native script-successor or queued publication result.
+three tests, exit 0. This is static/inert evidence only; it does not claim a
+native script-successor or queued publication result.
 - A test fixture exposed and repaired an incorrect lookup of the command hash
   from `PendingJob`; the durable hash belongs to `JobRecord.command_sha256`.
   Existing native queue semantics and timeout gates are unchanged.
+
+## Native queue checkpoint, 04-10-2026 — publication branches
+
+- `gt07-native-godot-20261004-18` exercised one queued `scene.save` on a fresh
+  frozen source (`4fda899b0159548c30f7e60f3740414acfefe0bfcd0dbc2983271cd64a19e751`).
+  The dirty scene was admitted through the public write lease and queue, then
+  the durable response was checked against publication adoption/readback. The
+  queue row is `COMMITTED`, response code is `GODOT_MANAGED_SCENE_SAVED`, and
+  generation/history boundary, editor exit 0, Job zero/closed/unretained,
+  wrapper/child exits 0, and durable Stop all hold. Archive and file hashes are
+  in `gt07-native-godot-20261004-18-manifest.json`; raw stays under `.local`.
+- `gt07-native-godot-20261004-19` repeated the same bounded fixture for queued
+  `script_text.replace` with a path target. It returned
+  `GODOT_MANAGED_SCRIPT_REPLACED`; the new editor identity, script readback,
+  adoption hash, queue COMMITTED state, actual exits and durable Stop all hold
+  under the same frozen closure. Its archive is recorded in the matching
+  `...-19-manifest.json`.
+- Both are native diagnostic slices (`AUTHORITY=0`, `formal_acceptance=false`).
+  They close the two publication branches of this queue adapter but do not
+  close Q03/Q04/Q05/Q08: revoked/expired late workers, two writers, crash cuts,
+  storage faults, and the final same-hash independent critics remain required.

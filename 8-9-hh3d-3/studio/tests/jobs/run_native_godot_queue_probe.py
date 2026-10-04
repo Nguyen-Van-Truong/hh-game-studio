@@ -72,7 +72,7 @@ def _safe_error(error: BaseException) -> dict[str, str]:
     return value
 
 
-def _child(output: Path, binary: Path, run_id: str,
+def _child(output: Path, binary: Path, run_id: str, operation: str,
            source: dict[str, str], closure: str) -> int:
     from studio.host.core.transport import epoch_ms
     from studio.host.jobs.native_dispatch import GodotOwnerBinding, NativeOwnerDispatcher
@@ -132,15 +132,41 @@ def _child(output: Path, binary: Path, run_id: str,
         lease = owner.lease(
             {"project_id": owner.project_id, "access": "write", "ttl_ms": 90_000},
             authorization=authorization, catalog_digest=owner.contract.CATALOG_DIGEST)
-        payload = {"expected_generation": before["generation"],
-                   "expected_project_revision": before["project_revision"],
-                   "changes": {"position": [3, 4, 5]}}
-        request = Request("queue.godot.update", owner.project_id,
-            "scene.node.update", lease["lease_id"], lease["fencing_epoch"],
-            before["revision"], {"stable_id": "root"}, payload,
+        if operation == "scene.node.update":
+            payload = {"expected_generation": before["generation"],
+                       "expected_project_revision": before["project_revision"],
+                       "changes": {"position": [3, 4, 5]}}
+            command_id, request_revision, request_target, horizon = (
+                "queue.godot.update", before["revision"], {"stable_id": "root"}, 29_000)
+        elif operation == "scene.save":
+            changed = owner._editor.apply_projection({"operation": "scene.node.update",
+                "command_id": "queue.dirty", "expected_revision": before["revision"],
+                "expected_generation": before["generation"], "target_stable_id": "root",
+                "payload": {"expected_generation": before["generation"],
+                            "changes": {"position": [6, 7, 8]}}})
+            if changed.get("ok") is not True:
+                raise RuntimeError("NATIVE_GODOT_DIRTY_SETUP_FAILED")
+            before = owner.inspect()
+            payload = {"expected_generation": before["generation"],
+                       "expected_project_revision": before["project_revision"],
+                       "expected_files": {path: before["working_files"][path]["sha256"]
+                                          for path in (owner.contract.SCENE_PATH,
+                                                       owner.contract.SCRIPT_PATH)}}
+            command_id, request_revision, request_target, horizon = (
+                "queue.godot.save", before["revision"], {"stable_id": "root"}, 89_000)
+        else:
+            text = factory.DEFAULT_SCRIPT.replace(b"int = 7", b"int = 9").decode("utf-8")
+            payload = {"expected_generation": before["generation"],
+                       "expected_project_revision": before["project_revision"],
+                       "expected_sha256": before["working_files"][owner.contract.SCRIPT_PATH]["sha256"],
+                       "text": text}
+            command_id, request_revision, request_target, horizon = (
+                "queue.godot.script", before["revision"], {"path": owner.contract.SCRIPT_PATH}, 89_000)
+        request = Request(command_id, owner.project_id, operation,
+            lease["lease_id"], lease["fencing_epoch"], request_revision, request_target, payload,
             "sha256:" + hashlib.sha256(canonical_bytes(payload)).hexdigest(),
-            # Edit horizon is 30 s; the 90 s lease does not extend it.
-            min(lease["expires_ms"], epoch_ms() + 29_000))
+            # The operation-specific horizon is independent of the 90 s lease.
+            min(lease["expires_ms"], epoch_ms() + horizon))
         grant = owner.sessions.authorize(authorization, request.operation,
             project_id=owner.project_id, catalog_digest=owner.contract.CATALOG_DIGEST)
         owner.contract.validate_request(request,
@@ -163,8 +189,17 @@ def _child(output: Path, binary: Path, run_id: str,
             raise RuntimeError("NATIVE_GODOT_QUEUE_NOT_COMMITTED")
         after = owner.inspect()
         root = next(item for item in after["state"]["nodes"] if item["stable_id"] == "root")
-        if root["position"] != [3, 4, 5]:
+        if operation == "scene.node.update" and root["position"] != [3, 4, 5]:
             raise RuntimeError("NATIVE_GODOT_READBACK_POSITION_MISMATCH")
+        if operation == "scene.save" and (response.code != "GODOT_MANAGED_SCENE_SAVED"
+                or after["generation"] <= before["generation"]
+                or after["can_undo"] is not False or after["can_redo"] is not False):
+            raise RuntimeError("NATIVE_GODOT_SCENE_SAVE_READBACK_MISMATCH")
+        if operation == "script_text.replace" and (response.code != "GODOT_MANAGED_SCRIPT_REPLACED"
+                or after["generation"] <= before["generation"]
+                or after["working_files"][owner.contract.SCRIPT_PATH]["sha256"] ==
+                   before["working_files"][owner.contract.SCRIPT_PATH]["sha256"]):
+            raise RuntimeError("NATIVE_GODOT_SCRIPT_REPLACE_READBACK_MISMATCH")
         lookup = binding.lookup()
         if lookup.as_dict() != response.as_dict():
             raise RuntimeError("NATIVE_GODOT_LOOKUP_MISMATCH")
@@ -224,7 +259,7 @@ def _child(output: Path, binary: Path, run_id: str,
     return 0 if report["passed"] else 1
 
 
-def run(output: Path, binary: Path, run_id: str) -> int:
+def run(output: Path, binary: Path, run_id: str, operation: str) -> int:
     output = output.resolve()
     # The frozen child runs with its snapshot as cwd.  Keep the pinned editor
     # executable absolute so admission cannot silently resolve it under the
@@ -256,7 +291,7 @@ def run(output: Path, binary: Path, run_id: str) -> int:
     spec.loader.exec_module(runner)
     child = [sys.executable, "-B", str(snapshot / "tests/jobs/run_native_godot_queue_probe.py"),
              "--frozen", "--output", str(output), "--binary", str(binary),
-             "--run-id", run_id]
+             "--run-id", run_id, "--operation", operation]
     environment = os.environ.copy()
     environment["HH_STUDIO_LINUX_GODOT"] = str(
         STUDIO / ".local/tooling/godot-4.7.2-stable-linux/Godot_v4.7.2-stable_linux.x86_64")
@@ -287,13 +322,16 @@ def main(argv=None) -> int:
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--binary", type=Path, required=True)
     parser.add_argument("--run-id", type=_run_id, required=True)
+    parser.add_argument("--operation", choices=("scene.node.update", "scene.save",
+                                                 "script_text.replace"),
+                        default="scene.node.update")
     parser.add_argument("--frozen", action="store_true")
     args = parser.parse_args(argv)
     if args.frozen:
         manifest = json.loads((args.output / "source-closure.json").read_bytes())
         return _child(args.output.resolve(), args.binary.resolve(), args.run_id,
-                      manifest["files"], manifest["source_closure_sha256"])
-    return run(args.output, args.binary, args.run_id)
+                      args.operation, manifest["files"], manifest["source_closure_sha256"])
+    return run(args.output, args.binary, args.run_id, args.operation)
 
 
 if __name__ == "__main__":
