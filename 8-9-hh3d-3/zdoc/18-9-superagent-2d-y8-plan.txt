@@ -103,6 +103,15 @@ POST_CLASSIC_VARIANTS
   Cỡ thử +15% là lựa chọn triển khai tạm của agent để review. Khác biệt kích thước hình ảnh
   này thay yêu cầu bằng đúng tỷ lệ reference ở SA-10, không tự miễn test hitbox, tầm đánh,
   traversal hoặc đổi balance Classic. Không mở triển khai Hero trước Classic gate.
+- 04-10: chốt keymap Classic mới theo owner: P1 di chuyển WASD, hành động J/K/L/; theo thứ tự
+  đấm/bắn/ném/power; P2 di chuyển bằng phím mũi tên, hành động Numpad 1/2/3/4 cùng thứ tự
+  (Num Lock bật). Đây là remap triển khai của Vault Fighters; các phím và hành vi đã quan sát
+  ở reference ledger vẫn giữ nguyên để đối chiếu, không sửa dữ liệu quan sát. Nhân vật thường
+  chỉ dùng bốn vai trò hành động chung, không có chiêu riêng hoặc nội tại.
+- 04-10: U/I/O/P cho P1 và Numpad 5/6/7/8 cho P2 được dành riêng, chưa bind và chưa hoạt động
+  trong Classic cho tới SA-14. Khi mở SA-14, có thể thiết kế tối đa một nội tại ban đầu và
+  health/mana/energy theo nhu cầu từng hero; đây là hướng thiết kế cần test/balance, không phải
+  mặc định mọi nhân vật đặc biệt đều nhiều máu hoặc có mana.
 Cần owner chọn. Agent dùng mặc định cho tới khi owner đổi, không dừng việc để chờ:
 D1 (E3) Map. Mặc định: layout mới cùng chức năng. Map gần y hệt chỉ khi owner chọn và luật sư
    duyệt trước khi public.
@@ -319,8 +328,10 @@ Làm:
 1. Worktree theo mục 5.1; khung thư mục theo mục 9; .gitignore; AGENTS.md ngắn (đọc plan này,
    các luật ở mục 0).
 2. project.godot theo mục 5.3. Cửa sổ tạm 1280×720, stretch canvas_items/keep, chỉnh lại sau SA-02.
-   InputMap có đủ action p1_left/right/up/down/punch/shoot/throw/power và p2_* theo phím hạt
-   giống; dùng mã phím theo nhãn (keycode) như bản web, ghi thành một dòng R01 để kiểm lại.
+    InputMap có đủ action p1_left/right/up/down/punch/shoot/throw/power và p2_* theo keymap
+    Classic owner đã chốt (P1 WASD + J/K/L/;, P2 arrows + Numpad 1/2/3/4, Num Lock bật).
+    Dùng mã keycode logic, ghi keymap thành một dòng implementation để kiểm lại; reference R01
+    vẫn giữ phím quan sát gốc và được so theo semantic action correspondence.
 3. Chép Godot pin và kiểm hash (mục 5.2).
 4. tools/run_guarded.py; tests/run_all.gd và một test mẫu; tools/check_ledger.py; tools/check_parity.py
    (fail-closed trên các row R01–R15 bắt buộc).
@@ -494,7 +505,9 @@ SA-14 VARIANT-01 Hero mode kiểu MUGEN (BACKLOG / LOCKED_BY_OWNER)
 Làm:
 - Định dạng gói nhân vật: sprite, trang phục, chỉ số, chiêu.
 - Nhân vật loại 2 siêu đặc biệt: năng lực mạnh, đúng 4 chiêu riêng cho mỗi nhân vật theo
-  định hướng owner 04-10. Ánh xạ phím chốt khi mở WP; ưu tiên cùng các nút (ví dụ hướng + đấm).
+  định hướng owner 04-10. Ánh xạ bốn chiêu dự kiến là U/I/O/P cho P1 và Numpad 5/6/7/8
+  cho P2 (Num Lock bật); các phím này vẫn inactive trong Classic. Có thể thử tối đa một nội tại
+  ban đầu và health/mana/energy theo từng hero, không mặc định tăng máu hoặc thêm mana cho tất cả.
 - Chế độ Hero tách riêng; trình nạp gói có kiểm tra định dạng và nguồn gốc.
 - Không dùng nhân vật có chủ (Naruto, Marvel...). Chỉ mở khi owner gửi lệnh mới sau SA-13.
 DoD:
@@ -803,4 +816,21 @@ Q5 Web: dung lượng tải lần đầu và bộ nhớ đo từ SA-04; ngân s�
   SA-02. Prioritize attainable weapon pickup/attack feedback, bot behavior and mode outcomes;
   held/release timing, audio and touch still need the supported recording/device fallback.
   Current gate stays SA-02 (79 rows: 25 OBSERVED, 54 UNVERIFIED, 0 MATCHED).
+2026-10-04 Owner Classic keymap applied and verified (07:12 UTC).
+- Product commit `0999f985` applies the owner-approved Classic layout: P1 WASD plus
+  J/K/L/; for punch/shoot/throw/power, and P2 arrows plus Numpad 1/2/3/4 with
+  Num Lock on. `docs/control-bindings.md` records the semantic correspondence,
+  ordinary-character restriction, and the inactive future U/I/O/P and Numpad 5/6/7/8
+  reservation. Reference-ledger keys remain unchanged; no timing or parity gate is waived.
+- Godot 4.7.2 enum probe confirmed keypad keycodes `4194439..4194446`; no guessed values
+  were used. Synthetic routing proves keypad/top-row identity and semantic pressed/held/released
+  delivery, but not every physical keyboard's Num Lock or ghosting behavior.
+- `cmd.sa.owner-keymap.scene.1` / run `20261004T071051.732557Z-b490abedf6` exited 0/0,
+  cleanup 0, diagnostics empty, source hash `3ead2c5037ae43f771e164d49b590b23b51b72734975ec386101ced009a446eb`,
+  and reported 2,977 SA-01 assertions. `cmd.sa.owner-keymap.room.1` /
+  `20261004T071205.091431Z-d5eeeb345f` exited 0/0, cleanup 0, diagnostics empty at the
+  same source hash and reported 57 SA-03 SceneTree assertions. SA-02 remains the current
+  gate (79 rows: 25 OBSERVED, 54 UNVERIFIED, 0 MATCHED); SA-14 remains locked.
+- Lesson: keep owner remaps in implementation/docs while preserving original reference observations;
+  reserved hero keys must stay inactive until the post-Classic variant gate.
 END_OF_SUPERAGENT_PLAN
