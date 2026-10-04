@@ -351,6 +351,9 @@ class BlenderPublicationOwner:
         self._stop.set()
         if self._job is not None:self._job.request_stop()
         with self._mutex:
+            if getattr(self, '_queue_dispatcher', None) is not None:
+                raise model.PublicationError('PUBLICATION_QUEUE_DRAIN_REQUIRED',
+                                             outcome_unknown=True,cleanup_owner=self)
             if self._job is not None:
                 if not self._job.done.is_set():
                     raise model.PublicationError('PUBLICATION_EXPORT_ACTIVE',outcome_unknown=True,cleanup_owner=self)

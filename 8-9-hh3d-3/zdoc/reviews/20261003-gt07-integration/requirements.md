@@ -73,3 +73,33 @@ All entries remain AUTHORITY=0. Hash scope in diagnostic receipts is an explicit
 file list, not a claim of a complete runtime dependency closure. The final
 package still needs the complete closure, Q03-Q08 native evidence and two
 independent critics on the same frozen candidate.
+
+## Verified checkpoint, 04-10-2026 — native Blender queue slice
+
+- `gt07-native-queue-20261004-10` is a preserved negative diagnostic. Its
+  frozen child could not load `godot-addon/cli_job.py` because the first probe
+  source list omitted that runtime dependency. The wrapper exit and Job cleanup
+  were captured, and no native mutation was claimed.
+- `gt07-native-queue-20261004-11` is a preserved negative diagnostic after the
+  dependency repair. Blender created the box and returned a committed owner
+  receipt, but the probe verifier incorrectly expected a `size` field that is
+  not part of the native observation schema. The child and Blender both exited
+  cleanly; this remains FAIL because the verifier did not prove its postcondition.
+- `gt07-native-queue-20261004-12` is the first successful bounded native queue
+  slice after those two reproducer-driven repairs. A frozen source snapshot
+  (`source_closure_sha256=adbf8a98820eff44406790aeced8eb0b1a0790d9f5604255e5873a50f6f0401c`)
+  launched one pinned Blender owner through `NativeOwnerDispatcher`. The actual
+  wrapper and child exits are both `0`; the native Blender cleanup exit is `0`,
+  `tree_verified=true`, `job.zero_observed=true`, `handle_retained=false`, and
+  the durable queue receipt is `COMMITTED`. Readback proves the object id,
+  eight vertices, and extents `[1,2,3]`. The report is `authority=0`,
+  `formal_acceptance=false`, and `public_ack=false`.
+- The source freeze now includes the dynamically loaded `godot-addon/cli_job.py`.
+  The probe uses the existing Job runner and records source stability before
+  and after the child. It does not prove Godot integration, publication/reload,
+  crash cuts, two-writer fencing, disk-full/expiry, or the full Q03–Q08 matrix.
+
+The negative raw runs are retained and must not be relabeled as PASS. The
+remaining work stays explicit: add native Godot typed-owner binding, native
+publication/reload and conflict/fault cuts, and then prepare the complete
+source/review manifest before two independent critics on one frozen hash.
