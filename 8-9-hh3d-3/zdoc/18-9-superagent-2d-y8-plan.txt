@@ -91,6 +91,9 @@ POST_CLASSIC_VARIANTS
 - SA-V1 costume editor/layered outfit, SA-V2 Hero/MUGEN, map/weapon/rule mở rộng là backlog riêng,
   LOCKED_BY_OWNER. Chỉ mở bằng lệnh owner sau SA-13; mỗi biến thể giữ regression hash của Classic
   và không làm thay đổi hành vi Classic.
+- SA-V3 online/netplay là backlog hậu Classic riêng, cũng LOCKED_BY_OWNER. Classic hiện chỉ hỗ trợ
+  hai người trên cùng bàn phím; không được gọi local 2P là online. Khi mở SA-V3 mới thiết kế
+  transport, phòng chơi, đồng bộ mô phỏng 60 Hz, reconnect, anti-cheat và backend/phí vận hành.
 
 3. QUYẾT ĐỊNH OWNER
 Đã có:
@@ -112,6 +115,8 @@ POST_CLASSIC_VARIANTS
   trong Classic cho tới SA-14. Khi mở SA-14, có thể thiết kế tối đa một nội tại ban đầu và
   health/mana/energy theo nhu cầu từng hero; đây là hướng thiết kế cần test/balance, không phải
   mặc định mọi nhân vật đặc biệt đều nhiều máu hoặc có mana.
+- 04-10: online là hướng nâng cấp sau Classic, không phải yêu cầu của SA-01..SA-13. Ghi thành
+  SA-V3 backlog để không nhầm P2 cùng bàn phím với netplay; chưa mở triển khai hoặc chọn backend.
 Cần owner chọn. Agent dùng mặc định cho tới khi owner đổi, không dừng việc để chờ:
 D1 (E3) Map. Mặc định: layout mới cùng chức năng. Map gần y hệt chỉ khi owner chọn và luật sư
    duyệt trước khi public.
@@ -833,4 +838,9 @@ Q5 Web: dung lượng tải lần đầu và bộ nhớ đo từ SA-04; ngân s�
   gate (79 rows: 25 OBSERVED, 54 UNVERIFIED, 0 MATCHED); SA-14 remains locked.
 - Lesson: keep owner remaps in implementation/docs while preserving original reference observations;
   reserved hero keys must stay inactive until the post-Classic variant gate.
+2026-10-04 Owner roadmap clarification (after 07:12 UTC).
+- The product is Godot 4.7.2 and the current Classic target is local two-player keyboard play,
+  with Web/Windows/mobile delivery in SA-11. Online multiplayer is not in SA-01..SA-13; SA-V3
+  now records it as a locked post-Classic backlog so a future netplay phase can design transport,
+  rooms, deterministic sync, reconnect and anti-cheat without weakening the Classic gate.
 END_OF_SUPERAGENT_PLAN
