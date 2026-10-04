@@ -271,3 +271,30 @@ class PublicationJournalV4(base.PublicationJournalV3):
             try: state = self._refresh()
             except BaseException as error: self._poison(error)
             return state_model.lookup_response(state, command_id, command_digest)
+
+    def lookup_adoption(self, command_id, command_digest):
+        """Verified publication readback, including fresh-editor identity.
+
+        Terminal projections compact away adoption details. Resolve them from
+        the exact retained event bound by the durable receipt, never from a
+        caller-provided identity or the current editor alone.
+        """
+        with self._locked():
+            try: state = self._refresh()
+            except BaseException as error: self._poison(error)
+            command = state_model.lookup(state, command_id, command_digest)
+            _need(command is not None and command['phase'] == 'COMMITTED',
+                  'PUBLICATION_ADOPTION_NOT_COMMITTED')
+            receipt = command['receipt']
+            _need(receipt['schema'] == 'hh-godot-publication-terminal-4',
+                  'PUBLICATION_ADOPTION_NOT_PUBLICATION')
+            for raw in state.events:
+                if hashlib.sha256(raw).hexdigest() != receipt['readback_event_sha256']:
+                    continue
+                event = parse_json(raw)
+                _need(event['kind'] == 'READBACK' and event['command_id'] == command_id
+                      and event['digest'] == command_digest
+                      and hashlib.sha256(canonical_bytes(event['adoption'])).hexdigest()
+                          == receipt['adoption_sha256'], 'PUBLICATION_ADOPTION_BINDING')
+                return event['adoption']
+            raise PublicationJournalV4Error('PUBLICATION_ADOPTION_MISSING')

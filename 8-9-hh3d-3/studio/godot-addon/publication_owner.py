@@ -67,6 +67,9 @@ class GodotPublicationOwner:
         owner = object.__new__(cls)
         owner._lock = threading.RLock()
         owner._work = threading.Lock()
+        owner._attachment_lock = threading.RLock()
+        owner._admission = threading.RLock()
+        owner._transport = owner._queue_dispatcher = None
         owner._closed = owner._held = False
         owner._jobs, owner._leases, owner._read_leases = {}, {}, {}
         owner._stop_thread = None
@@ -282,6 +285,22 @@ class GodotPublicationOwner:
             can_redo=inspected['can_redo'], stopped=self.sessions.status()['stopped'])
 
     def submit(self, body, *, authorization, catalog_digest):
+        # Queue collection retains this gate after submit returns, through
+        # fresh readback and durable broker accounting. A competing direct
+        # request must not edit the scene in that interval.
+        admission = getattr(self, '_admission', None)
+        if admission is None:
+            with self._lock:
+                if not hasattr(self, '_admission'):
+                    self._admission = threading.RLock()
+                admission = self._admission
+        _need(admission.acquire(blocking=False), 'GODOT_OWNER_BUSY')
+        try:
+            return self._submit(body, authorization=authorization, catalog_digest=catalog_digest)
+        finally:
+            admission.release()
+
+    def _submit(self, body, *, authorization, catalog_digest):
         request = Request.from_dict(body)
         _need(request.operation in ('scene.inspect','scene.preview','scene.save','script_text.replace',
               'scene.node.create','scene.node.update','scene.node.remove','scene.undo','scene.redo'),
@@ -721,6 +740,17 @@ class GodotPublicationOwner:
         # Latch before queuing persistence; never wait for disk on the control
         # listener. The owned drain waits for the current effect's accounting.
         stopped = self.sessions.stop(grant)
+        return self._request_stop(stopped)
+
+    def request_stop(self):
+        """Trusted supervisor Stop; revocation cannot prevent cleanup.
+
+        Public listeners only expose stop(), which authenticates first.
+        Persistence remains asynchronous and uses the same bounded drain.
+        """
+        return self._request_stop(self.sessions.halt())
+
+    def _request_stop(self, stopped):
         fifo=getattr(self,'_fifo',None)
         if fifo is not None:fifo.halt()
         with self._lock:
@@ -756,6 +786,13 @@ class GodotPublicationOwner:
             if acquired:self._work.release()
 
     def close(self):
+        attachment = getattr(self, '_attachment_lock', self._lock)
+        with attachment:
+            _need(getattr(self, '_queue_dispatcher', None) is None,
+                  'GODOT_QUEUE_DRAIN_REQUIRED')
+            return self._close()
+
+    def _close(self):
         with self._lock:
             self._closed = True
             stop_thread = getattr(self,'_stop_thread',None)

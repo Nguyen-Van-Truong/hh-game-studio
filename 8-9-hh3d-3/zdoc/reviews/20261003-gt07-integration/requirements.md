@@ -129,3 +129,59 @@ coordinator queue binding. Q03 still needs the exact typed Godot owner binding
 in `native_dispatch.py`, and Q04–Q06 still need queue-level Stop, crash,
 revision-conflict, and storage-fault cuts. Do not combine this run with the
 Blender queue receipt or claim GT07 acceptance.
+
+## Verified checkpoint, 04-10-2026 — native Godot queue edit
+
+- `gt07-native-godot-20261004-16` completed one authenticated node update via
+  the exact `GodotPublicationOwner` and `NativeOwnerDispatcher`. Source closure:
+  `03c45847e9c1bee22f1e3648d6bc1c1bd45ce66f01ce7f7401e8ba9d78aacd4f`.
+  Raw: `studio/.local/reviews/gt07-native-godot-20261004-16/`.
+  Wrapper PID 25860 and child PID 9372 exited 0; editor PID 22220 exited 0.
+  The queue recorded COMMITTED after exact journal-response/receipt verification
+  and fresh native readback. Root position is `[3,4,5]`. Editor Job was closed,
+  active_count 0, zero_observed true, handle_retained false; both source and
+  frozen snapshot were unchanged. Stop persistence and journal Stop readback
+  are DURABLE/true. This remains AUTHORITY=0 and formal_acceptance=false.
+- The edit ACK explicitly says `effect_scope=editor_session`, files_saved=false
+  and live_state_durable=false. This run does not prove queued scene save,
+  script replacement, crash recovery, game completion, or GT07 acceptance.
+- Queue collection now checks exact receipt hashes, scene/project revisions,
+  selection/file manifest, editor identity and history. Publication readback
+  resolves the retained READBACK event through its receipt hash; script
+  replacement validates the old/new editor identities rather than requiring
+  the original editor to remain alive. Native coverage for these publication
+  branches is still pending.
+- Stop latches immediately; `drain_stop()` is a separate bounded supervisor
+  step. Pending Stop prevents detach. UNKNOWN persistence cannot satisfy the
+  drain, even if the worker thread has ended; current journal readback is also
+  required. Four inert lifecycle regressions passed. Eight inert readback
+  tests cover identity/revision/selection/saved-state mismatches and script
+  successor checks. These are not native engine evidence.
+- The combined 101-test invocation exited 1 because four contract-vector tests
+  lacked `studio/tests/godot` on PYTHONPATH. It is not a suite PASS. With that
+  existing test path supplied, all 25 contract tests passed (exit 0); the 12
+  focused readback/Stop tests also passed (exit 0). Journal V4 adoption/reopen
+  checks, Blender dispatcher and Godot owner/transport checks produced no
+  failures in the combined invocation.
+
+Negative runs `gt07-native-godot-20261004-01` through `-15` remain unchanged
+under `zdoc/reviews/`. They exposed missing frozen dependencies, a missing Linux
+validator path, bypassing the public lease registration, and a relative editor
+binary resolved under the snapshot. Runs 09 and 11–15 rejected an oversized
+edit deadline. The earlier explanation that startup exhausted the lease was
+incorrect: run14/15 timestamps showed almost 90 seconds remaining. The actual
+contract permits at most 30 seconds for edits and 90 seconds only for save/
+script replacement. Run10's attempted 300-second lease was also invalid.
+The final harness uses the public FIFO lease route and a 29-second edit
+deadline; no production timeout or gate was relaxed. Immediate close after
+asynchronous Stop caused the separate STOP_DRAIN_REQUIRED failures.
+
+Lesson: check both bounds of a deadline error and reproduce admission purely
+before another native run. Share catalog deadline validation at queue admission;
+never repair a harness failure by bypassing the public lease table or extending
+timeouts. Preserve actual errors and distinguish queue Stop from owner durability.
+
+Next gaps: lookup-only recovery registration after a script successor replaces
+the bound editor; native queued save/script/reload; Q03/Q04/Q08 revoked/expired/
+two-writer/crash/Stop matrix; Q05–Q07 storage/conflict/retention cuts. GT07 remains
+IN_PROGRESS and still requires the complete frozen package and two critics.

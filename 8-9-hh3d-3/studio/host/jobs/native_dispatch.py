@@ -1,19 +1,22 @@
-"""Trusted queue pump for the registered Blender writer.
+"""Trusted queue pump for native Blender and Godot writers.
 
 Reservations carry the hash of the full canonical Request (including absolute
 deadline/fence), never credentials or payload. Effects remain subject to the
 existing native owner. Unknown completion consumes the local ticket and holds
 the durable slot until explicit authenticated lookup plus current readback.
-Godot integration remains a separate GT07 requirement.
+Godot read-only inspection stays on the owner route: it has no durable command
+receipt and cannot be reconciled as a queued write after coordinator failure.
 """
 from __future__ import annotations
 
 from contextlib import ExitStack
 from dataclasses import dataclass, field
 import hashlib
+import sys
 import secrets
 import threading
 import weakref
+from pathlib import Path
 
 from ...protocol.core import Request, Response, Status, canonical_bytes, parse_json
 from ..blender import client_write_catalog as catalog
@@ -112,11 +115,112 @@ class BlenderOwnerBinding:
                                  authorization=self.authorization, catalog_digest=self.catalog_digest)
 
 
+def _godot_owner_required(owner):
+    """Accept only the exact dynamically loaded publication owner class."""
+    module = sys.modules.get(type(owner).__module__)
+    expected = Path(__file__).resolve().parents[2] / 'godot-addon' / 'publication_owner.py'
+    _need(module is not None and Path(getattr(module, '__file__', '')).resolve() == expected
+          and type(owner) is getattr(module, 'GodotPublicationOwner', None),
+          'NATIVE_GODOT_OWNER_REQUIRED')
+    return module
+
+
+def _godot_lease(owner, request, grant):
+    with owner._lock:
+        lease = owner._leases.get(grant.session_id)
+        _need(lease is not None and lease.lease_id == request.lease_id
+              and lease.fencing_epoch == request.fencing_epoch,
+              'NATIVE_GODOT_LEASE_REQUIRED')
+    owner.sessions.check(grant, lease, deadline_ms=request.deadline_ms,
+                         operation=request.operation)
+    owner.contract.validate_deadline(request, now_ms=epoch_ms(), lease_expires_ms=lease.expires_ms)
+    return lease
+
+
+@dataclass(frozen=True, eq=False, init=False)
 class GodotOwnerBinding:
-    """No untyped Godot adapter: the addon loader remains a GT07 gap."""
+    owner: object = field(repr=False)
+    body: bytes = field(repr=False)
+    authorization: str = field(repr=False)
+    grant: object = field(repr=False)
+    resource: str
+    session_id: str
+    project_id: str
+    command_id: str
+    command_sha256: str
+    catalog_digest: str
+    source_closure_sha256: str
+    source_release: object = field(repr=False)
+    editor_identity: object = field(repr=False)
+    storage_id: str
+    journal: object = field(repr=False)
+    sessions: object = field(repr=False)
+
+    def __init__(self, *args, **kwargs):
+        raise TypeError('use GodotOwnerBinding.create')
+
     @classmethod
-    def create(cls, owner, **kwargs):
-        raise NativeDispatchError('NATIVE_GODOT_TYPED_BRIDGE_REQUIRED')
+    def create(cls, owner, *, body, authorization, catalog_digest):
+        _need(cls is GodotOwnerBinding, 'NATIVE_BINDING_REQUIRED')
+        _godot_owner_required(owner)
+        _need(type(body) is dict, 'NATIVE_GODOT_REQUEST_REQUIRED')
+        request = Request.from_dict(body)
+        grant = owner._auth(body, request.operation, authorization, catalog_digest)
+        _need(request.project_id == owner.project_id, 'NATIVE_GODOT_PROJECT_CHANGED')
+        _need(request.operation in (owner.auth_model.EDIT_OPERATIONS
+                                    | {'scene.save', 'script_text.replace'}),
+              'NATIVE_GODOT_OPERATION_NOT_CONNECTED')
+        for operation in ('scene.inspect', 'control.lookup'):
+            owner.sessions._check_grant(grant, operation)
+        owner._same_release()
+        lease = _godot_lease(owner, request, grant)
+        # Validate the real catalog (including the shorter edit horizon)
+        # before consuming a durable queue identity. Submit checks again.
+        owner.contract.validate_request(request, owner._context(owner.inspect(), lease))
+        identity = canonical_bytes(owner._editor.identity)
+        values = dict(owner=owner, body=canonical_bytes(request.as_dict()),
+                      authorization=authorization, grant=grant,
+                      resource='godot-' + owner.storage_id,
+                      session_id=grant.session_id, project_id=request.project_id,
+                      command_id=request.command_id, command_sha256=_sha(canonical_bytes(request.as_dict())),
+                      catalog_digest=catalog_digest,
+                      source_closure_sha256=owner._source_closure_sha256,
+                      source_release=owner._source_release, editor_identity=identity,
+                      storage_id=owner.storage_id, journal=owner._journal, sessions=owner.sessions)
+        binding = object.__new__(cls)
+        for name, value in values.items():
+            object.__setattr__(binding, name, value)
+        with _BIND:
+            _BINDINGS[binding] = tuple(values.values())
+        return binding
+
+    def check(self, *, control=False):
+        with _BIND:
+            _need(type(self) is GodotOwnerBinding and _BINDINGS.get(self) == tuple(
+                getattr(self, name) for name in self.__dataclass_fields__),
+                  'NATIVE_BINDING_CHANGED')
+        _godot_owner_required(self.owner)
+        request = Request.from_json(self.body)
+        _need(self.owner._source_closure_sha256 == self.source_closure_sha256
+              and self.owner._source_release == self.source_release
+              and self.owner.storage_id == self.storage_id
+              and self.owner._journal is self.journal and self.owner.sessions is self.sessions
+              and (control and request.operation == 'script_text.replace'
+                   or canonical_bytes(self.owner._editor.identity) == self.editor_identity),
+              'NATIVE_GODOT_OWNER_BINDING_CHANGED')
+        self.owner._same_release()
+        grant = self.owner._auth(parse_json(self.body), request.operation,
+                                 self.authorization, self.catalog_digest)
+        _need(grant is self.grant and grant.session_id == self.session_id,
+              'NATIVE_GODOT_SESSION_CHANGED')
+        self.owner.sessions._check_grant(grant, 'control.lookup')
+        if not control:
+            _godot_lease(self.owner, request, grant)
+        return request
+
+    def lookup(self):
+        return self.owner.lookup({'project_id': self.project_id, 'command_id': self.command_id},
+                                 authorization=self.authorization, catalog_digest=self.catalog_digest)
 
 
 class NativeOwnerDispatcher:
@@ -142,17 +246,44 @@ class NativeOwnerDispatcher:
         _need(not self._closed and not self._stop.is_set(), 'NATIVE_DISPATCH_STOPPED')
 
     def register(self, binding):
-        _need(type(binding) is BlenderOwnerBinding, 'NATIVE_BINDING_REQUIRED')
+        _need(type(binding) in (BlenderOwnerBinding, GodotOwnerBinding), 'NATIVE_BINDING_REQUIRED')
         binding.check()
         owner = binding.owner
-        with _BIND, owner._attachment_lock, ExitStack() as stack:
+        if type(binding) is BlenderOwnerBinding:
+            with _BIND, owner._attachment_lock, ExitStack() as stack:
+                self._open()
+                stack.enter_context(owner._host._close_lock)
+                for publisher in owner._publications.values():
+                    stack.enter_context(publisher._mutex)
+                _registered(owner)
+                _need(owner._transport is None and owner._queue_dispatcher in (None, self)
+                      and getattr(owner._host, '_queue_dispatcher', None) in (None, self),
+                      'NATIVE_OWNER_ALREADY_BOUND')
+                _need(self._owners.get(binding.resource, owner) is owner, 'NATIVE_OWNER_BINDING_CHANGED')
+                key = self._job_id(binding)
+                _need(key not in self._bindings or self._bindings[key] is binding,
+                      'NATIVE_BINDING_ALREADY_REGISTERED')
+                _need(len(self._bindings) < self.queue.broker.limits.receipts
+                      and sum(b.owner is owner for b in self._bindings.values()) < MAX_COMMANDS,
+                      'NATIVE_BINDING_CAPACITY')
+                for publisher in owner._publications.values():
+                    _need(getattr(publisher, '_queue_dispatcher', None) in (None, self),
+                          'NATIVE_OWNER_ALREADY_BOUND')
+                owner._queue_dispatcher = owner._host._queue_dispatcher = self
+                for publisher in owner._publications.values():
+                    publisher._queue_dispatcher = self
+                self._owners[binding.resource] = owner
+                self._bindings[key] = binding
+            return
+        # Godot's publication owner is dynamically loaded and has a single
+        # owner lock, not Blender's transport/publication attachment graph.
+        # Attach an explicit queue marker and admission lock so its direct
+        # PublicationTransport cannot race a queued effect.
+        with _BIND, owner._attachment_lock, owner._lock:
             self._open()
-            stack.enter_context(owner._host._close_lock)
-            for publisher in owner._publications.values():
-                stack.enter_context(publisher._mutex)
-            _registered(owner)
-            _need(owner._transport is None and owner._queue_dispatcher in (None, self)
-                  and getattr(owner._host, '_queue_dispatcher', None) in (None, self),
+            _need(not owner._closed and not owner._work.locked()
+                  and owner._transport is None
+                  and owner._queue_dispatcher in (None, self),
                   'NATIVE_OWNER_ALREADY_BOUND')
             _need(self._owners.get(binding.resource, owner) is owner, 'NATIVE_OWNER_BINDING_CHANGED')
             key = self._job_id(binding)
@@ -161,29 +292,24 @@ class NativeOwnerDispatcher:
             _need(len(self._bindings) < self.queue.broker.limits.receipts
                   and sum(b.owner is owner for b in self._bindings.values()) < MAX_COMMANDS,
                   'NATIVE_BINDING_CAPACITY')
-            for publisher in owner._publications.values():
-                _need(getattr(publisher, '_queue_dispatcher', None) in (None, self),
-                      'NATIVE_OWNER_ALREADY_BOUND')
-            owner._queue_dispatcher = owner._host._queue_dispatcher = self
-            for publisher in owner._publications.values():
-                publisher._queue_dispatcher = self
+            owner._queue_dispatcher = self
             self._owners[binding.resource] = owner
             self._bindings[key] = binding
 
     def enqueue(self, binding, *, dependencies=()):
         with _BIND:
             self._open()
-            _need(type(binding) is BlenderOwnerBinding
+            _need(type(binding) in (BlenderOwnerBinding, GodotOwnerBinding)
                   and self._bindings.get(self._job_id(binding)) is binding,
                   'NATIVE_BINDING_NOT_REGISTERED')
             request = binding.check()
             owner, grant = binding.owner, binding.grant
             # Fail the harness/admission before consuming native IDs if it
             # confuses the lease horizon with the shorter operation horizon.
-            if request.operation == catalog.READ:
+            if type(binding) is BlenderOwnerBinding and request.operation == catalog.READ:
                 lease = owner.sessions.resolve_lease(grant, request.lease_id, request.fencing_epoch)
                 owner.sessions.check_read(grant, lease, deadline_ms=request.deadline_ms)
-            else:
+            elif type(binding) is BlenderOwnerBinding:
                 lease = owner.sessions.resolve_writer_lease(grant, request.lease_id, request.fencing_epoch)
                 owner.sessions.check_write(grant, lease, operation=request.operation,
                                            deadline_ms=request.deadline_ms)
@@ -219,6 +345,116 @@ class NativeOwnerDispatcher:
         return binding
 
     def _collect(self, reservation, binding, response=None):
+        if type(binding) is GodotOwnerBinding:
+            return self._collect_godot(reservation, binding, response)
+        return self._collect_blender(reservation, binding, response)
+
+    def _collect_godot(self, reservation, binding, response=None):
+        request = binding.check(control=True)
+        owner = binding.owner
+        _need(not owner._work.locked(), 'NATIVE_OWNER_PHASE_ACTIVE')
+        with owner.sessions._mutex:
+            _need(owner.sessions._active is None, 'NATIVE_OWNER_PHASE_ACTIVE')
+        actual = binding.lookup()
+        raw = canonical_bytes(actual.as_dict())
+        if response is not None:
+            _need(raw == canonical_bytes(response.as_dict()), 'NATIVE_GODOT_LOOKUP_MISMATCH')
+        _need(actual.command_id == request.command_id and actual.status in {
+            Status.COMMITTED, Status.REJECTED, Status.UNKNOWN},
+              'NATIVE_GODOT_NOT_TERMINAL')
+        if actual.status is Status.REJECTED and response is not None:
+            _need(actual.postconditions.get('public_ack') is False
+                  and actual.postconditions.get('request_digest') == request.digest
+                  and 'durable_receipt_sha256' not in actual.postconditions,
+                  'NATIVE_GODOT_REJECTION_MISMATCH')
+        else:
+            durable = owner._journal.lookup_response(request.command_id, request.digest)
+            _need(type(durable) is bytes and durable == raw,
+                  'NATIVE_GODOT_DURABLE_RESPONSE_MISMATCH')
+            if actual.status is Status.UNKNOWN:
+                _need(actual.postconditions.get('public_ack') is False
+                      and actual.postconditions.get('next_action') == 'lookup.reconcile',
+                      'NATIVE_GODOT_UNKNOWN_MISMATCH')
+        if actual.status is Status.COMMITTED:
+            post = actual.postconditions
+            durable = owner._journal.lookup(request.command_id, request.digest)
+            _need(post.get('public_ack') is True
+                  and post.get('request_digest') == request.digest
+                  and type(durable) is dict and durable.get('phase') == 'COMMITTED'
+                  and durable.get('receipt_sha256') == post.get('durable_receipt_sha256')
+                  and type(durable.get('receipt')) is dict
+                  and _sha(canonical_bytes(durable['receipt'])) == post.get('durable_receipt_sha256'),
+                  'NATIVE_GODOT_RECEIPT_MISMATCH')
+            self._godot_readback(binding, request, actual, durable['receipt'])
+        result = self.queue.broker.record_owner_result(
+            reservation, OwnerResult(actual.status.value, binding.command_sha256, _sha(raw)))
+        return result, actual
+
+    @staticmethod
+    def _godot_readback(binding, request, actual, receipt):
+        owner, post = binding.owner, actual.postconditions
+        identity = owner._editor.identity
+        observed = owner.inspect()
+        selected = owner._journal.selection_facts()
+        manifest = parse_json(owner._journal.read_selected_bundle().manifest_bytes)
+        _need(receipt.get('command_id') == request.command_id
+              and receipt.get('digest') == request.digest
+              and receipt.get('operation') == request.operation
+              and receipt.get('status') == 'COMMITTED'
+              and owner._source_closure_sha256 == binding.source_closure_sha256
+              and type(observed) is dict
+              and observed.get('revision') == post.get('scene_revision')
+              and observed.get('project_revision') == post.get('project_revision')
+              and observed.get('generation') == post.get('generation')
+              and observed.get('editor_session_id') == identity['session_id']
+              and observed.get('selected_files') == manifest['files']
+              and observed.get('project_revision') == manifest['project_revision']
+              and selected['selector']['selection'] == post.get('selection')
+              and receipt.get('selection') == post.get('selection')
+              and receipt.get('selector_version') == selected['selector_version'],
+              'NATIVE_GODOT_READBACK_CHANGED')
+        if request.operation in owner.auth_model.EDIT_OPERATIONS:
+            _need(receipt.get('schema') == 'hh-godot-editor-terminal-5'
+                  and canonical_bytes(identity) == binding.editor_identity
+                  and receipt.get('editor') == identity
+                  and str(receipt.get('root_instance_id')) == observed.get('root_instance_id')
+                  and actual.code == 'GODOT_EDITOR_EDITED'
+                  and post.get('effect_scope') == 'editor_session'
+                  and post.get('files_saved') is False and post.get('live_state_durable') is False
+                  and post.get('journal_receipt_durable') is True
+                  and post.get('history_boundary') is False
+                  and post.get('editor_session_id') == identity['session_id']
+                  and all(post.get(key) == observed.get(key) for key in
+                          ('history_id', 'can_undo', 'can_redo'))
+                  and receipt['observation']['semantic_revision'] == observed.get('revision')
+                  and receipt['observation']['history_id_after'] == observed.get('history_id'),
+                  'NATIVE_GODOT_EDIT_READBACK_CHANGED')
+            return
+        adoption = owner._journal.lookup_adoption(request.command_id, request.digest)
+        _need(receipt.get('schema') == 'hh-godot-publication-terminal-4'
+              and receipt.get('adoption_sha256') == _sha(canonical_bytes(adoption))
+              and adoption['generation_after'] == observed['generation']
+              and adoption['semantic_revision'] == observed['revision']
+              and adoption['project_revision'] == observed['project_revision']
+              and adoption['files'] == observed['selected_files']
+              and post.get('history_boundary') is True
+              and observed.get('can_undo') is False and observed.get('can_redo') is False,
+              'NATIVE_GODOT_PUBLICATION_READBACK_CHANGED')
+        if request.operation == 'script_text.replace':
+            _need(actual.code == 'GODOT_MANAGED_SCRIPT_REPLACED'
+                  and canonical_bytes(adoption['old_editor']) == binding.editor_identity
+                  and adoption['new_editor'] == identity
+                  and canonical_bytes(identity) != binding.editor_identity
+                  and str(adoption['root_after']) == observed['root_instance_id'],
+                  'NATIVE_GODOT_SUCCESSOR_CHANGED')
+        else:
+            _need(request.operation == 'scene.save' and actual.code == 'GODOT_MANAGED_SCENE_SAVED'
+                  and canonical_bytes(identity) == binding.editor_identity
+                  and adoption['editor'] == identity
+                  and str(adoption['root_instance_id_after']) == observed['root_instance_id'],
+                  'NATIVE_GODOT_SAVED_EDITOR_CHANGED')
+
+    def _collect_blender(self, reservation, binding, response=None):
         request = binding.check(control=True)
         owner = binding.owner
         _need(not owner._work.locked(), 'NATIVE_OWNER_PHASE_ACTIVE')
@@ -316,7 +552,8 @@ class NativeOwnerDispatcher:
 
     def reconcile(self, reservation, binding):
         """Explicit lookup only after lost collection; never replays an effect."""
-        _need(type(reservation) is Reservation and type(binding) is BlenderOwnerBinding,
+        _need(type(reservation) is Reservation
+              and type(binding) in (BlenderOwnerBinding, GodotOwnerBinding),
               'NATIVE_RECONCILE_REQUIRED')
         _need(self._phase.acquire(blocking=False), 'NATIVE_PHASE_BUSY')
         try:
@@ -341,16 +578,25 @@ class NativeOwnerDispatcher:
             owners = tuple(self._owners.values())
         for owner in owners:
             owner.sessions._stopped.set()
-            for publisher in owner._publications.values():
-                publisher.request_stop()
+            if type(owner) is BlenderWriterClientOwner:
+                for publisher in owner._publications.values():
+                    publisher.request_stop()
         failure = None
         for owner in owners:
             try:
-                owner._durable.stop()
-                for publisher in owner._publications.values():
-                    publisher.stop()
+                if type(owner) is BlenderWriterClientOwner:
+                    owner._durable.stop()
+                    for publisher in owner._publications.values():
+                        publisher.stop()
+                else:
+                    _godot_owner_required(owner)
+                    owner.request_stop()
             except BaseException as error:
-                owner._hold()
+                if type(owner) is BlenderWriterClientOwner:
+                    owner._hold()
+                else:
+                    owner.sessions.halt()
+                    owner._held = True
                 failure = error
         snapshot = self.queue.broker.stop()
         if failure is not None:
@@ -363,6 +609,14 @@ class NativeOwnerDispatcher:
         try:
             with _BIND, self.queue._lifecycle:
                 for owner in self._owners.values():
+                    if type(owner) is not BlenderWriterClientOwner:
+                        with owner._attachment_lock:
+                            stop_thread = getattr(owner, '_stop_thread', None)
+                            _need(stop_thread is None or not stop_thread.is_alive(),
+                                  'NATIVE_STOP_DRAIN_REQUIRED')
+                            if owner._queue_dispatcher is self:
+                                owner._queue_dispatcher = None
+                        continue
                     with owner._attachment_lock, owner._host._close_lock, ExitStack() as stack:
                         for publisher in owner._publications.values():
                             stack.enter_context(publisher._mutex)
@@ -380,6 +634,22 @@ class NativeOwnerDispatcher:
                     self.queue._dispatcher = None
         finally:
             self._phase.release()
+
+    def drain_stop(self, *, timeout=95):
+        """Supervisor wait after the priority Stop latch, never a wire call."""
+        _need(self._stop.is_set() and not self._closed, 'NATIVE_STOP_REQUIRED')
+        with _BIND:
+            owners = tuple(self._owners.values())
+        for owner in owners:
+            if type(owner) is BlenderWriterClientOwner:
+                continue
+            _godot_owner_required(owner)
+            thread = getattr(owner, '_stop_thread', None)
+            _need(thread is not None, 'NATIVE_STOP_REQUIRED')
+            thread.join(timeout=timeout)
+            _need(not thread.is_alive(), 'NATIVE_STOP_DRAIN_REQUIRED')
+            _need(owner._stop_persistence == 'DURABLE'
+                  and owner._journal.snapshot()['stopped'] is True, 'NATIVE_STOP_UNKNOWN')
 
     def __enter__(self):
         return self
