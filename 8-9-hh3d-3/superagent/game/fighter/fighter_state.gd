@@ -28,20 +28,31 @@ var action_timer_ticks: int = 0
 var jump_lock_ticks: int = 0
 var hitstun_ticks: int = 0
 var downed_ticks: int = 0
+var drop_through_ticks: int = 0
+var down_tap_window_remaining: int = 0
 
 func _init(id: int, spawn: Vector2i) -> void:
 	player_id = id
 	position = spawn
 
 func step(actions: Dictionary, arena: ArenaState, tuning: Dictionary) -> void:
+	# A second edge exactly N ticks after the first is still inside the seeded
+	# N-tick window. Holding down never creates a second press.
+	var down_tap_open: bool = down_tap_window_remaining > 0
 	if action_timer_ticks > 0:
 		action_timer_ticks -= 1
 	if jump_lock_ticks > 0:
 		jump_lock_ticks -= 1
 	if hitstun_ticks > 0:
 		hitstun_ticks -= 1
+	if drop_through_ticks > 0:
+		drop_through_ticks -= 1
+	if down_tap_window_remaining > 0:
+		down_tap_window_remaining -= 1
 
 	if locomotion == Locomotion.DOWNED:
+		down_tap_window_remaining = 0
+		drop_through_ticks = 0
 		_step_downed(arena, tuning)
 		return
 
@@ -51,6 +62,8 @@ func step(actions: Dictionary, arena: ArenaState, tuning: Dictionary) -> void:
 	var gravity: int = int(tuning.get(&"gravity_per_tick", 5))
 	var jump_speed: int = int(tuning.get(&"jump_speed", 88))
 	var climb_speed: int = int(tuning.get(&"climb_speed", 4))
+	var body_height: int = int(tuning.get(&"char_height", 48))
+	var half_width: int = maxi(1, int(tuning.get(&"char_width", 28)) / 2)
 	var axis: int = 0
 	if _held(actions, &"left"):
 		axis -= 1
@@ -64,6 +77,7 @@ func step(actions: Dictionary, arena: ArenaState, tuning: Dictionary) -> void:
 
 	var on_ladder: bool = arena.ladder_at(position.x, position.y)
 	if on_ladder and (_held(actions, &"up") or _held(actions, &"down")):
+		down_tap_window_remaining = 0
 		locomotion = Locomotion.CLIMBING
 		grounded = false
 		# Horizontal input is ignored while climbing until SA-02 observes an exit.
@@ -82,6 +96,7 @@ func step(actions: Dictionary, arena: ArenaState, tuning: Dictionary) -> void:
 		return
 
 	if grounded and _pressed(actions, &"up") and jump_lock_ticks == 0:
+		down_tap_window_remaining = 0
 		velocity.y = -jump_speed
 		grounded = false
 		locomotion = Locomotion.AIRBORNE
@@ -93,11 +108,24 @@ func step(actions: Dictionary, arena: ArenaState, tuning: Dictionary) -> void:
 			velocity.y = mini(velocity.y + gravity, int(tuning.get(&"terminal_fall_speed", 120)))
 		else:
 			velocity.y = 0
+		if grounded and arena.on_one_way(position.x, position.y, half_width):
+			# Count validated edges, not only their bool summary: two quick taps
+			# can both arrive before the same fixed-step tick.
+			for _press: int in range(int(actions.get(&"down_press_count", 0))):
+				if down_tap_open:
+					drop_through_ticks = int(tuning.get(&"drop_through_ticks", 12))
+					down_tap_window_remaining = 0
+					break
+				down_tap_window_remaining = int(tuning.get(&"down_tap_window_ticks", 12))
+				down_tap_open = true
+		else:
+			down_tap_window_remaining = 0
 
 	var previous_y: int = position.y
-	position.x = clampi(position.x + velocity.x, 0, arena.width)
+	position.x = arena.horizontal_stop(position.x, position.x + velocity.x, position.y, half_width, body_height)
 	var candidate_y: int = position.y + velocity.y
-	var landing: int = arena.landing_y(position.x, previous_y, candidate_y)
+	candidate_y = arena.ceiling_stop(position.x, previous_y, candidate_y, half_width, body_height)
+	var landing: int = arena.landing_y(position.x, previous_y, candidate_y, half_width, drop_through_ticks > 0)
 	if landing >= 0 and velocity.y >= 0:
 		position.y = landing
 		velocity.y = 0
@@ -113,6 +141,8 @@ func step(actions: Dictionary, arena: ArenaState, tuning: Dictionary) -> void:
 			locomotion = Locomotion.FALLING
 
 	if position.y > arena.pit_death_y:
+		down_tap_window_remaining = 0
+		drop_through_ticks = 0
 		health = 0
 		locomotion = Locomotion.DOWNED
 		downed_ticks = int(tuning.get(&"respawn_delay_ticks", 90))
@@ -142,12 +172,14 @@ func snapshot() -> Dictionary:
 		&"jump_lock_ticks": jump_lock_ticks,
 		&"hitstun_ticks": hitstun_ticks,
 		&"downed_ticks": downed_ticks,
+		&"drop_through_ticks": drop_through_ticks,
+		&"down_tap_window_remaining": down_tap_window_remaining,
 	}
 	result.make_read_only()
 	return result
 
 func canonical_fragment() -> String:
-	return "fighter=%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%s,%d,%d,%d,%d" % [
+	return "fighter=%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%s,%d,%d,%d,%d,%d,%d" % [
 		player_id,
 		position.x,
 		position.y,
@@ -163,6 +195,8 @@ func canonical_fragment() -> String:
 		jump_lock_ticks,
 		hitstun_ticks,
 		downed_ticks,
+		drop_through_ticks,
+		down_tap_window_remaining,
 	]
 
 func _step_downed(arena: ArenaState, tuning: Dictionary) -> void:
