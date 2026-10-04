@@ -3,8 +3,9 @@ extends RefCounted
 ## Deterministic SA-03 gameplay core: two fighters, integer state, fixed 60 Hz.
 ## Presentation and engine physics are intentionally outside this class.
 
-const SIM_SCHEMA: StringName = &"sa03.simulation.v1"
+const SIM_SCHEMA: StringName = &"sa03.simulation.v2"
 const FIXED_HZ: int = 60
+const TUNING_SCRIPT = preload("res://game/core/movement_tuning.gd")
 
 var seed_value: int
 var tick: int = 0
@@ -17,6 +18,8 @@ var last_input_tick: int = -1
 func _init(seed_input: int = 1, tuning_input: Dictionary = {}) -> void:
 	seed_value = seed_input if seed_input > 0 else 1
 	tuning = _default_tuning()
+	if tuning.is_empty():
+		return
 	for key: Variant in tuning_input.keys():
 		tuning[key] = tuning_input[key]
 	tuning.make_read_only()
@@ -29,7 +32,7 @@ func _init(seed_input: int = 1, tuning_input: Dictionary = {}) -> void:
 	fighters.append(second_fighter)
 
 func step(frame: InputFrame) -> bool:
-	if frame == null or frame.tick() != tick:
+	if fighters.size() != 2 or frame == null or frame.tick() != tick:
 		return false
 	var frame_actions: Array[Dictionary] = []
 	for fighter: FighterState in fighters:
@@ -118,15 +121,4 @@ func _actions_for(frame: InputFrame, player: int) -> Dictionary:
 	return action_state
 
 func _default_tuning() -> Dictionary:
-	return {
-		&"max_health": 100,
-		&"acceleration_per_tick": 2,
-		&"max_horizontal_speed": 72,
-		&"friction_per_tick": 3,
-		&"gravity_per_tick": 5,
-		&"terminal_fall_speed": 120,
-		&"jump_speed": 88,
-		&"jump_lock_ticks": 6,
-		&"climb_speed": 4,
-		&"respawn_delay_ticks": 90,
-	}
+	return TUNING_SCRIPT.load_default()

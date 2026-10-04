@@ -28,6 +28,7 @@ var action_timer_ticks: int = 0
 var jump_lock_ticks: int = 0
 var hitstun_ticks: int = 0
 var downed_ticks: int = 0
+var drop_through_ticks: int = 0
 
 func _init(id: int, spawn: Vector2i) -> void:
 	player_id = id
@@ -40,6 +41,8 @@ func step(actions: Dictionary, arena: ArenaState, tuning: Dictionary) -> void:
 		jump_lock_ticks -= 1
 	if hitstun_ticks > 0:
 		hitstun_ticks -= 1
+	if drop_through_ticks > 0:
+		drop_through_ticks -= 1
 
 	if locomotion == Locomotion.DOWNED:
 		_step_downed(arena, tuning)
@@ -51,6 +54,8 @@ func step(actions: Dictionary, arena: ArenaState, tuning: Dictionary) -> void:
 	var gravity: int = int(tuning.get(&"gravity_per_tick", 5))
 	var jump_speed: int = int(tuning.get(&"jump_speed", 88))
 	var climb_speed: int = int(tuning.get(&"climb_speed", 4))
+	var body_height: int = int(tuning.get(&"char_height", 48))
+	var half_width: int = maxi(1, int(tuning.get(&"char_width", 28)) / 2)
 	var axis: int = 0
 	if _held(actions, &"left"):
 		axis -= 1
@@ -93,11 +98,14 @@ func step(actions: Dictionary, arena: ArenaState, tuning: Dictionary) -> void:
 			velocity.y = mini(velocity.y + gravity, int(tuning.get(&"terminal_fall_speed", 120)))
 		else:
 			velocity.y = 0
+		if grounded and _pressed(actions, &"down") and arena.on_one_way(position.x, position.y, half_width):
+			drop_through_ticks = int(tuning.get(&"drop_through_ticks", 12))
 
 	var previous_y: int = position.y
-	position.x = clampi(position.x + velocity.x, 0, arena.width)
+	position.x = arena.horizontal_stop(position.x, position.x + velocity.x, position.y, half_width, body_height)
 	var candidate_y: int = position.y + velocity.y
-	var landing: int = arena.landing_y(position.x, previous_y, candidate_y)
+	candidate_y = arena.ceiling_stop(position.x, previous_y, candidate_y, half_width, body_height)
+	var landing: int = arena.landing_y(position.x, previous_y, candidate_y, half_width, drop_through_ticks > 0)
 	if landing >= 0 and velocity.y >= 0:
 		position.y = landing
 		velocity.y = 0
@@ -142,12 +150,13 @@ func snapshot() -> Dictionary:
 		&"jump_lock_ticks": jump_lock_ticks,
 		&"hitstun_ticks": hitstun_ticks,
 		&"downed_ticks": downed_ticks,
+		&"drop_through_ticks": drop_through_ticks,
 	}
 	result.make_read_only()
 	return result
 
 func canonical_fragment() -> String:
-	return "fighter=%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%s,%d,%d,%d,%d" % [
+	return "fighter=%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%s,%d,%d,%d,%d,%d" % [
 		player_id,
 		position.x,
 		position.y,
@@ -163,6 +172,7 @@ func canonical_fragment() -> String:
 		jump_lock_ticks,
 		hitstun_ticks,
 		downed_ticks,
+		drop_through_ticks,
 	]
 
 func _step_downed(arena: ArenaState, tuning: Dictionary) -> void:
