@@ -748,4 +748,29 @@ Q5 Web: dung lượng tải lần đầu và bộ nhớ đo từ SA-04; ngân s�
   do not stage/stash/overwrite them. Normal merge remains deferred. Continue
   SA-02 supported observations and the authorized recording fallback; do not
   tick SA-02 or SA-03 from this checkpoint.
+2026-10-04 SA-03 focused movement-state checkpoint (06:02 UTC).
+- Product commit `f082a94a` adds a separate fixed-step state test for jump/land,
+  crouch, ladder entry/held climb, one-way drop-through and pit entry. The
+  ladder/deck cases use explicit original-room fixtures to isolate state
+  transitions; the SceneTree room remains the real input-path proof. This is
+  provisional implementation evidence only: `CURRENT_VALID_WP` remains
+  `SA-02`, SA-03 remains `PENDING_ACCEPTANCE`, and no Y8 parity or observed
+  timing claim is made.
+- Frozen run source hash:
+  `57aabed2fe20205e83a46b78141d7054671b92ac97d8330ca9fff8e5e86748f8`.
+  `cmd.sa03.movement-states.2`
+  (`20261004T055242.525215Z-2d4cbb7ffa`) exited 0/0 with 298 assertions;
+  `cmd.sa03.movement-room.11`
+  (`20261004T060003.344319Z-f0b97f8691`) exited 0/0 with 57 assertions;
+  `cmd.sa03.trace.11`
+  (`20261004T060048.103904Z-5873250d2c`) exited 0/0 at tick 120 with hash
+  `103c3382`; and `cmd.sa03.scene-regression.4`
+  (`20261004T060205.188358Z-8aab9fa03e`) exited 0/0 with 225 SA-01
+  assertions. Diagnostics are empty and cleanup is zero for all four.
+- Lesson: the authored stairs block a direct floor run to the west ladder and
+  the west deck overlaps the ladder trigger. Isolated fixtures make those
+  provisional transitions testable without presenting fixture coverage as
+  end-to-end parity evidence. Main merge remains deferred while unrelated
+  tracked studio work is dirty; do not stage/stash it. Continue SA-02
+  supported observations and the authorized recording fallback.
 END_OF_SUPERAGENT_PLAN
