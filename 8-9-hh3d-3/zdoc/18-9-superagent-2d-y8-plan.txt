@@ -20,10 +20,12 @@ LEGACY_PROGRESS_INHERITED=NONE
 PREVIOUS_REVISION=SA2 trong Git bf88058f, chỉ còn là lịch sử
 
 0. ĐỌC NHANH
-- Làm game Superagent Classic: game 2D đấu trường, bắn súng trên nền platform. Phím, cơ chế, vũ
-  khí, vật thể, bot, chế độ chơi và luồng menu phải giống bản HTML5 Superfighters hiện có trên
+- Làm game Superagent Classic: game 2D đấu trường, bắn súng trên nền platform. Vai trò hành động,
+  cơ chế, vũ khí, vật thể, bot, chế độ chơi và luồng menu phải giống bản HTML5 Superfighters trên
   https://www.y8.com/games/superfighters ở mức đo được. Nhân vật, hình, âm thanh, tên và layout
-  map là nguyên bản của mình (mục 2). Classic phải hoàn thành trước mọi biến thể.
+  map là nguyên bản của mình (mục 2). Phím vật lý dùng keymap owner chốt 04-10 ở mục 3;
+  đối chiếu theo vai trò hành động, không bắt buộc dùng lại nhãn phím reference.
+  Classic phải hoàn thành trước mọi biến thể.
 - Làm ngay, không chờ plan công cụ (GT-06 đến GT-10). Dùng Godot 4.7.2 stock, viết file trực tiếp,
   test headless, git làm checkpoint. Một agent riêng do owner giao làm game; coordinator plan
   công cụ không kiêm.
@@ -108,7 +110,7 @@ POST_CLASSIC_VARIANTS
   traversal hoặc đổi balance Classic. Không mở triển khai Hero trước Classic gate.
 - 04-10: chốt keymap Classic mới theo owner: P1 di chuyển WASD, hành động J/K/L/; theo thứ tự
   đấm/bắn/ném/power; P2 di chuyển bằng phím mũi tên, hành động Numpad 1/2/3/4 cùng thứ tự
-  (Num Lock bật). Đây là remap triển khai của Vault Fighters; các phím và hành vi đã quan sát
+  (Num Lock bật). Đây là remap triển khai của Superagent; các phím và hành vi đã quan sát
   ở reference ledger vẫn giữ nguyên để đối chiếu, không sửa dữ liệu quan sát. Nhân vật thường
   chỉ dùng bốn vai trò hành động chung, không có chiêu riêng hoặc nội tại.
 - 04-10: U/I/O/P cho P1 và Numpad 5/6/7/8 cho P2 được dành riêng, chưa bind và chưa hoạt động
@@ -850,4 +852,21 @@ Q5 Web: dung lượng tải lần đầu và bộ nhớ đo từ SA-04; ngân s�
   mechanic/absence claim was promoted. `python tools/check_ledger.py docs/reference-ledger.tsv`
   still passes with 79 rows and groups R01-R15. Next useful trial is a controlled one-way-platform
   placement with captured visible before/after state; do not count the tutorial text as runtime proof.
+2026-10-04 SA-03 seeded double-tap correction (08:50 UTC).
+- Replaced provisional one-press drop with two validated down presses on a one-way deck,
+  preserving same-tick edge order/count and including pending tap state in schema v3 hashes.
+  Seed remains 12 ticks inclusive; this is not measured reference timing or accepted parity.
+- Core run cmd.sa03.double-tap.2 / 20261004T082909.270880Z-266a4018a1 passed 474 assertions,
+  source 6e69cc3da23e6df154ec863299081d7920fecda3fea19c6db71c7f859da377bb.
+  SceneTree cmd.sa03.double-tap.room.2 / 20261004T085030.989898Z-ad50baae45 passed 78 assertions;
+  cmd.sa03.double-tap.trace.1 / 20261004T085050.233607Z-eacf7e2dc6 reached tick 120/hash 2fde131b.
+  Both latter runs use source 5bda2f086adbd3589b49e1a4a10d6c809cc12481110673899c280127eca5d716.
+  All actual/host exits 0, cleanup 0, diagnostics empty. Later docs are outside those freezes.
+- Lesson from failed room.1: check grounded->falling on the second-press tick, then actual descent
+  on the next tick. Do not replace a positional postcondition with an action label alone.
+  Final Sol subagent audit failed at usage limit; no acceptance critic claimed.
+- Corrected OBS-2026-10-04-01 provenance: pre-round tip, not confirmed Tutorial mode; reopened
+  prior Y8-configured wrapper, not a fresh outer-page cross-check; timestamp bounds 07:34:19–07:52:35.
+  Fixed copied Vault Fighters label in Superagent controls. Ledger remains 25/54/0;
+  CURRENT_VALID_WP=SA-02, SA-03 pending, variants locked. Resume catalog/behavior observations.
 END_OF_SUPERAGENT_PLAN
