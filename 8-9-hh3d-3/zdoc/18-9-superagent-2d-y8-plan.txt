@@ -47,7 +47,9 @@ mới. Thứ tự:
 1) Classic: chơi như bản Y8, gồm phím, cảm giác di chuyển, đấm/bắn/ném, vũ khí, item, vật thể,
    bot, chế độ, luồng menu và nhịp trận. Đây là ưu tiên số một và là bản phát hành đầu tiên.
 2) Phần nguyên bản trong Classic: nhân vật/trang phục cố định mới, map mới cùng chức năng (D1),
-   art, âm thanh và UI mới. Không làm hệ chỉnh trang phục trong Classic.
+   art, âm thanh và UI mới. Owner 04-10 muốn nhân vật trông to hơn Y8 một chút; mức thử ban đầu
+   khoảng +15% chiều cao hiển thị do agent đề xuất, chưa phải số đo hay phê duyệt tỷ lệ cuối.
+   Không làm hệ chỉnh trang phục trong Classic.
 3) Sau Classic và chỉ khi owner mở: Hero mode kiểu MUGEN (SA-14) gồm roster nhiều nhân vật,
    chiêu riêng và gói nhân vật. Hero mode là chế độ riêng, không làm lệch Classic.
 Nền tảng: Web trên desktop và điện thoại (như Y8) và Windows. Phát hành công khai do owner ký (E2).
@@ -95,6 +97,12 @@ POST_CLASSIC_VARIANTS
 - 18-09: tên Superagent; parity chức năng với bản Y8; nhân vật mới.
 - 03-10: viết lại plan; làm ngay, không chờ GT-10; ưu tiên phím và cơ chế giống Y8; Classic dùng
   hình/trang phục nguyên bản cố định; phần kiểu MUGEN và mọi hệ tùy biến làm sau Classic.
+- 04-10: nhân vật hiển thị lớn hơn một chút; sau Classic thêm nhân vật loại 2 siêu đặc biệt,
+  năng lực mạnh và đúng 4 chiêu riêng mỗi nhân vật (ví dụ owner nêu: Goku). Ghi vào SA-14;
+  đây là định hướng về loại nhân vật, chưa chốt roster cụ thể.
+  Cỡ thử +15% là lựa chọn triển khai tạm của agent để review. Khác biệt kích thước hình ảnh
+  này thay yêu cầu bằng đúng tỷ lệ reference ở SA-10, không tự miễn test hitbox, tầm đánh,
+  traversal hoặc đổi balance Classic. Không mở triển khai Hero trước Classic gate.
 Cần owner chọn. Agent dùng mặc định cho tới khi owner đổi, không dừng việc để chờ:
 D1 (E3) Map. Mặc định: layout mới cùng chức năng. Map gần y hệt chỉ khi owner chọn và luật sư
    duyệt trước khi public.
@@ -434,8 +442,10 @@ DoD:
 
 SA-10 Classic art, animation, âm thanh và UI (sprite/trang phục cố định)
 Làm:
-- Pipeline theo D2. Nhân vật có đủ animation cho mọi trạng thái, cùng tỉ lệ trên màn hình như
-  reference (R14).
+- Pipeline theo D2. Nhân vật có đủ animation cho mọi trạng thái; theo owner 04-10, nhân vật
+  trông lớn hơn reference một chút (R14; mức thử +15% chiều cao hiển thị). Đây là khác biệt
+  biểu hiện được owner yêu cầu, không phải MATCHED với tỷ lệ Y8. Ghi tỷ lệ thật trong build
+  và kiểm hitbox/animation, tầm đánh, độ thoáng của thang/sàn và camera trước nghiệm thu.
 - Classic dùng sprite/trang phục cố định nguyên bản; không làm lớp đổi màu, trình ghép trang phục
   hoặc màn tùy biến. Các phần đó chỉ được mở trong SA-V1 sau lệnh owner.
 - Tile, đồ vật, hiệu ứng, UI và font có giấy phép (ví dụ OFL).
@@ -483,12 +493,15 @@ DoD:
 SA-14 VARIANT-01 Hero mode kiểu MUGEN (BACKLOG / LOCKED_BY_OWNER)
 Làm:
 - Định dạng gói nhân vật: sprite, trang phục, chỉ số, chiêu.
-- Chiêu riêng cho từng hero, dùng cùng các nút (ví dụ hướng + đấm).
+- Nhân vật loại 2 siêu đặc biệt: năng lực mạnh, đúng 4 chiêu riêng cho mỗi nhân vật theo
+  định hướng owner 04-10. Ánh xạ phím chốt khi mở WP; ưu tiên cùng các nút (ví dụ hướng + đấm).
 - Chế độ Hero tách riêng; trình nạp gói có kiểm tra định dạng và nguồn gốc.
 - Không dùng nhân vật có chủ (Naruto, Marvel...). Chỉ mở khi owner gửi lệnh mới sau SA-13.
 DoD:
 - Test hồi quy Classic không đổi; các dòng MATCHED vẫn MATCHED.
 - Có bốn hero nguyên bản; test kiểm gói nhân vật đạt.
+- Mỗi hero loại 2 có đủ 4 chiêu khác nhau, dữ liệu và test riêng cho kích hoạt, hiệu lực,
+  thời gian hồi và tương tác. Chiêu mạnh thuộc biến thể; không đổi luật Classic.
 
 11. CHẤT LƯỢNG VÀ HIỆU NĂNG
 Q1 Mô phỏng 60 tick/giây, không phụ thuộc tốc độ khung hình. Cùng trace, seed và build thì ra
@@ -773,4 +786,21 @@ Q5 Web: dung lượng tải lần đầu và bộ nhớ đo từ SA-04; ngân s�
   end-to-end parity evidence. Main merge remains deferred while unrelated
   tracked studio work is dirty; do not stage/stash it. Continue SA-02
   supported observations and the authorized recording fallback.
+2026-10-04 Owner direction and audit correction (06:25 UTC).
+- Owner requested slightly larger characters and future type-2 heroes with four skills each.
+  SA-10 now records the visual-size exception; +15% is an agent-selected preview target, not
+  measured reference data or final owner signoff. SA-14 records four skills per hero and stays
+  post-Classic. No character art/scale or Hero gameplay has been implemented by this plan edit.
+- Independent Astra audit caught a vacuous descent assertion: fixture started at y=572 but
+  check used y>520. The corrected test compares against its actual start height. Focused
+  run cmd.sa03.movement-states.3 / 20261004T062503.165247Z-80edbd89c8 passed with actual/host
+  exit 0, cleanup 0, no diagnostics; frozen source hash
+  dab91a274bf1dcbb9c122ee5daf56ef27cab413847ecbb6b7a40b6752972070a.
+  It supersedes the prior below-deck claim only; runtime is unchanged. Evidence was appended
+  after freeze. Do not rerun unaffected tests just to give documentation a fresh whole-tree hash.
+- Execution correction: stop repeated menu/map-entry and low-yield tap-burst traversal.
+  Movement room already exists provisionally; more scaffold or assertion counts do not close
+  SA-02. Prioritize attainable weapon pickup/attack feedback, bot behavior and mode outcomes;
+  held/release timing, audio and touch still need the supported recording/device fallback.
+  Current gate stays SA-02 (79 rows: 25 OBSERVED, 54 UNVERIFIED, 0 MATCHED).
 END_OF_SUPERAGENT_PLAN
