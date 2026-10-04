@@ -702,4 +702,27 @@ Q5 Web: dung lượng tải lần đầu và bộ nhớ đo từ SA-04; ngân s�
   Do not stage/stash that work. Resume from product `71836d07`, not main's older
   product copy. Next: remaining item/world/mode/feedback observations and proper
   held-input/timing samples; no new rows added to inflate observed counts.
+2026-10-04 SA-03 provisional movement-room checkpoint (04:29 UTC).
+- Product commit `b5ad4e82` adds an original two-player calibration room,
+  explicit placeholder tuning loader, platform/step/ladder/pit topology,
+  Node2D-only fighter presenters, and a fixed-step room controller. This is a
+  bounded provisional implementation allowed by SA-03's seed-values clause;
+  SA-03 remains `PENDING_ACCEPTANCE`, `CURRENT_VALID_WP` remains `SA-02`, and
+  SA-14 remains locked. No Y8 parity or observed timing claim is made.
+- Source hash for the accepted run set:
+  `89e3784a052c0db52603ecb9a02af26cb39cb20d624e04b27142c9ace843808b`.
+  `cmd.sa03.movement-room.6` exited 0 with cleanup 0 and 18 scene assertions;
+  `cmd.sa03.trace.9` exited 0 with cleanup 0 at tick 120; and
+  `cmd.sa03.scene-regression.2` exited 0 with cleanup 0 and 225 SA-01
+  assertions. Run IDs, hashes and diagnostics are in product `docs/evidence/SA-03.md`.
+- Lesson: fresh headless imports must run once before new global script classes
+  are available; scheduler timing can consume an edge before a scene test
+  samples it, so the final room test drives one explicit fixed step. The
+  canonical fighter fragment now includes `drop_through_ticks` to avoid a
+  provisional snapshot-hash collision.
+- Main product merge remains deferred because the main checkout still contains
+  unrelated tracked studio work plus owner-local files. Do not stage/stash or
+  overwrite those files. This checkpoint does not tick SA-02 or SA-03. Resume
+  SA-02 observations (P2 power/pickups, remaining catalog/modes/feedback and
+  held-input/timing samples) when the measurement guard is clear.
 END_OF_SUPERAGENT_PLAN
