@@ -27,6 +27,22 @@ def config_path(root: Path) -> Path:
     return Path(root).absolute() / ".local" / "gt07-failpoint.json"
 
 
+def runtime_root(default: Path) -> Path:
+    """Resolve the private diagnostic root selected by the native harness.
+
+    The environment override is accepted only as an absolute path.  Release
+    callers that do not opt into the harness stay bound to the product's own
+    root, and a malformed override fails closed before any publication phase.
+    """
+    raw = os.environ.get("HH_GT07_FAILPOINT_ROOT")
+    if raw is None or raw == "":
+        return Path(default).absolute()
+    path = Path(raw).expanduser()
+    if not path.is_absolute() or ".." in path.parts:
+        raise ValueError("GT07_FAILPOINT_ROOT_UNSAFE")
+    return path.absolute()
+
+
 def _read(root: Path) -> dict | None:
     path = config_path(root)
     for parent in (path.parent, *path.parent.parents):

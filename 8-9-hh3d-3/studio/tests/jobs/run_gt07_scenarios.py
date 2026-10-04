@@ -23,7 +23,7 @@ sys.dont_write_bytecode = True
 STUDIO = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(STUDIO.parent))
 from studio.tests.replay.measure_window import default_path, plain
-from studio.tests.jobs.gt07_failpoints import assert_disabled
+from studio.host.core.gt07_failpoints import assert_disabled, runtime_root
 
 SCENARIOS = {
     "godot-edit": {"kind": "godot", "operation": "scene.node.update",
@@ -205,7 +205,7 @@ def _output_for(name: str, args: argparse.Namespace, index: int = 0) -> Path:
 def dry_run(name: str, args: argparse.Namespace, index: int = 0) -> dict[str, object]:
     scenario = SCENARIOS[name]
     output = _output_for(name, args, index)
-    assert_disabled(STUDIO)
+    assert_disabled(runtime_root(STUDIO))
     contract = _contract_dry_run(name, scenario)
     binary = _binary_for(scenario, args)
     # Dry-run must inspect the same lock that native execution will require;
@@ -235,7 +235,7 @@ def _run_one(name: str, args: argparse.Namespace, index: int = 0) -> dict[str, o
     probe = _load_probe(scenario["probe"])
     binary = Path(check["binary"])
     with _native_measure_guard():
-        assert_disabled(STUDIO)
+        assert_disabled(runtime_root(STUDIO))
         _output_for(name, args, index)
         if _closure(scenario) != check["source_closure_sha256"]:
             raise ValueError("SCENARIO_SOURCE_CHANGED_AFTER_DRY_RUN")

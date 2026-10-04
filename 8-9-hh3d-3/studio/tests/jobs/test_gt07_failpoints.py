@@ -7,7 +7,7 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
-from studio.tests.jobs import gt07_failpoints as module
+from studio.host.core import gt07_failpoints as module
 
 
 class GT07FailpointTests(unittest.TestCase):

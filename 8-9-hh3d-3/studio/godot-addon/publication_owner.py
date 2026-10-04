@@ -18,6 +18,7 @@ import uuid
 from studio.protocol.core import Request, Response, Status, canonical_bytes, parse_json
 from studio.host.core.transport import epoch_ms
 from studio.host.core.limits import SafetyViolation
+from studio.host.core.gt07_failpoints import hit as _failpoint_hit, runtime_root as _failpoint_root
 
 HERE = Path(__file__).resolve().parent
 
@@ -126,6 +127,11 @@ class GodotPublicationOwner:
 
     def _same_release(self):
         _need(self.validation_model.source_release() == self._source_release, 'GODOT_SOURCE_CHANGED')
+
+    def _failpoint(self, phase):
+        # Diagnostic only: the harness may redirect this to its private raw
+        # root; normal product/release execution has no armed config.
+        _failpoint_hit(_failpoint_root(HERE.parent), phase)
 
     def _qualify_script(self, raw):
         profile = self.validation_model.factory._sibling('script_profile')
@@ -380,6 +386,10 @@ class GodotPublicationOwner:
         except BaseException:
             self.sessions.finish_effect(permit, known=False)
             raise
+        mapped = {'capture':'PREPARED', 'stage':'VALIDATED', 'select':'ACTIVATING',
+                  'adopt':'RELOAD', 'commit':'COMMITTED'}.get(phase)
+        if mapped is not None:
+            self._failpoint(mapped)
         self.sessions.finish_effect(permit, known=True)
         return result
 
@@ -688,6 +698,7 @@ class GodotPublicationOwner:
               'GODOT_DURABLE_RESPONSE_MISMATCH')
         self._update_record(record,status=response.status.value,code=response.code,
             postconditions=response.postconditions,durable_response_sha256=_sha(raw))
+        self._failpoint('ACK')
 
     def _reply(self, command_id, record):
         # Receipt verification can wait on native storage. Retain the journal
