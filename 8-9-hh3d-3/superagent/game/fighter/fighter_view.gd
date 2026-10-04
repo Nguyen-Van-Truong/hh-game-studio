@@ -1,6 +1,8 @@
 class_name FighterView
-extends Node2D
-## Visual presenter for the deterministic FighterState. It never owns movement.
+extends CharacterBody2D
+## Visual presenter required by SA-03. It never owns movement or collisions;
+## Simulation/FighterState is the only gameplay authority and move_and_slide is
+## intentionally never called.
 
 var player_id: int = 1
 var body_width: int = 28

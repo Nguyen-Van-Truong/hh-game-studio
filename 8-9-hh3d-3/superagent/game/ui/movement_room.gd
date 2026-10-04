@@ -7,6 +7,8 @@ const WORLD_SIZE := Vector2(1600.0, 900.0)
 const SIMULATION_SCRIPT = preload("res://game/core/simulation.gd")
 const BUFFER_SCRIPT = preload("res://game/core/input_buffer.gd")
 
+signal fixed_step_completed(frame: InputFrame)
+
 var simulation: Simulation
 var input_buffer: InputBuffer
 var _last_frame: InputFrame
@@ -43,6 +45,10 @@ func _input(event: InputEvent) -> void:
 			return
 	input_buffer.accept_event(event)
 
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_APPLICATION_FOCUS_OUT and input_buffer != null:
+		input_buffer.cancel_all()
+
 func _physics_process(delta: float) -> void:
 	_accumulator = minf(_accumulator + delta, 0.25)
 	while _accumulator >= FIXED_STEP:
@@ -52,6 +58,7 @@ func _physics_process(delta: float) -> void:
 			return
 		_accumulator -= FIXED_STEP
 		_update_views()
+		fixed_step_completed.emit(_last_frame)
 
 func _process(_delta: float) -> void:
 	_update_transform()
@@ -64,6 +71,9 @@ func read_last_frame() -> InputFrame:
 
 func _reset_room() -> void:
 	input_buffer.cancel_all()
+	# Reset starts a fresh input session. Drop cancellation edges from the old
+	# session so the first new simulation tick cannot replay stale held input.
+	input_buffer = BUFFER_SCRIPT.new()
 	simulation = SIMULATION_SCRIPT.new(1)
 	_accumulator = 0.0
 	_last_frame = null
