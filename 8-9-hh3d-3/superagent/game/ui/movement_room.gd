@@ -94,7 +94,8 @@ func _update_views() -> void:
 		var state_1: Dictionary = simulation.fighters[0].snapshot()
 		var state_2: Dictionary = simulation.fighters[1].snapshot()
 		_label.text = "SA-03 MOVEMENT LAB  |  PROVISIONAL TUNING\n" + \
-			"P1 arrows  •  P2 WASD  •  R reset lab  •  Esc menu\n" + \
+			"P1 WASD  •  P2 arrows  •  R reset lab  •  Esc menu\n" + \
+			"Punch / Shoot / Throw / Power: P1 J / K / L / ;  •  P2 NumPad 1 / 2 / 3 / 4 (Num Lock on)\n" + \
 			"tick %d   P1 %s (%d,%d)   P2 %s (%d,%d)" % [
 				simulation.tick, String(state_1.get(&"action", &"idle")), int(state_1.get(&"x", 0)), int(state_1.get(&"y", 0)),
 				String(state_2.get(&"action", &"idle")), int(state_2.get(&"x", 0)), int(state_2.get(&"y", 0))]

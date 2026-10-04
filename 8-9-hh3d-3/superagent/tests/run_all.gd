@@ -25,11 +25,15 @@ class InputHarness extends Node:
 			_buffer.cancel_all()
 
 const EXPECTED_CODES: Dictionary = {
-	&"p1_left": 4194319, &"p1_right": 4194321, &"p1_up": 4194320, &"p1_down": 4194322,
-	&"p1_punch": 78, &"p1_shoot": 77, &"p1_throw": 44, &"p1_power": 46,
-	&"p2_left": 65, &"p2_right": 68, &"p2_up": 87, &"p2_down": 83,
-	&"p2_punch": 49, &"p2_shoot": 50, &"p2_throw": 51, &"p2_power": 52,
+	&"p1_left": KEY_A, &"p1_right": KEY_D, &"p1_up": KEY_W, &"p1_down": KEY_S,
+	&"p1_punch": KEY_J, &"p1_shoot": KEY_K, &"p1_throw": KEY_L, &"p1_power": KEY_SEMICOLON,
+	&"p2_left": KEY_LEFT, &"p2_right": KEY_RIGHT, &"p2_up": KEY_UP, &"p2_down": KEY_DOWN,
+	&"p2_punch": KEY_KP_1, &"p2_shoot": KEY_KP_2, &"p2_throw": KEY_KP_3, &"p2_power": KEY_KP_4,
 }
+const UNBOUND_CODES: Array[int] = [
+	KEY_1, KEY_2, KEY_3, KEY_4,
+	KEY_U, KEY_I, KEY_O, KEY_P, KEY_KP_5, KEY_KP_6, KEY_KP_7, KEY_KP_8,
+]
 
 var _failures: int = 0
 var _assertions: int = 0
@@ -175,8 +179,8 @@ func _test_input_frame_validation() -> void:
 
 func _test_buffer_input_edges() -> void:
 	var buffer: InputBuffer = InputBufferType.new()
-	buffer.accept_event(_key_event(78, true))
-	buffer.accept_event(_key_event(49, true))
+	buffer.accept_event(_key_event(KEY_J, true))
+	buffer.accept_event(_key_event(KEY_KP_1, true))
 	var frame: InputFrame = buffer.build_frame(1)
 	var p1: Dictionary = _record_for(frame, &"p1_punch", 1)
 	var p2: Dictionary = _record_for(frame, &"p2_punch", 2)
@@ -188,17 +192,17 @@ func _test_buffer_input_edges() -> void:
 	_expect(bool(_record_for(held, &"p1_punch", 1)[&"held"]), "held survives frame boundary")
 	_expect_continuity(frame, held)
 
-	buffer.accept_event(_key_event(78, false))
-	buffer.accept_event(_key_event(78, true))
+	buffer.accept_event(_key_event(KEY_J, false))
+	buffer.accept_event(_key_event(KEY_J, true))
 	var tap_frame: InputFrame = buffer.build_frame(3)
 	var tap: Dictionary = _record_for(tap_frame, &"p1_punch", 1)
 	var tap_events: Array = _events_for(tap)
 	_expect(tap_events.size() == 2 and tap_events[0] == &"released" and tap_events[1] == &"pressed", "ordered release-press must survive")
 	_expect(bool(tap[&"held"]), "end-held state follows final edge")
 	_expect_continuity(held, tap_frame)
-	buffer.accept_event(_key_event(77, true))
-	buffer.accept_event(_key_event(77, false))
-	buffer.accept_event(_key_event(77, true))
+	buffer.accept_event(_key_event(KEY_K, true))
+	buffer.accept_event(_key_event(KEY_K, false))
+	buffer.accept_event(_key_event(KEY_K, true))
 	var rapid_frame: InputFrame = buffer.build_frame(4)
 	var rapid: Dictionary = _record_for(rapid_frame, &"p1_shoot", 1)
 	_expect(_events_for(rapid) == [&"pressed", &"released", &"pressed"], "buffer must preserve press-release-press between ticks")
@@ -207,14 +211,14 @@ func _test_buffer_input_edges() -> void:
 
 func _test_focus_cancel_and_echo() -> void:
 	var buffer: InputBuffer = InputBufferType.new()
-	var echo_down := _key_event(78, true)
+	var echo_down := _key_event(KEY_J, true)
 	echo_down.echo = true
 	buffer.accept_event(echo_down)
 	var no_echo_frame: InputFrame = buffer.build_frame(1)
 	_expect(not bool(_record_for(no_echo_frame, &"p1_punch", 1)[&"pressed"]), "echo keydown must be ignored")
-	buffer.accept_event(_key_event(78, true))
-	buffer.accept_event(_key_event(78, true))
-	var held_echo := _key_event(78, true)
+	buffer.accept_event(_key_event(KEY_J, true))
+	buffer.accept_event(_key_event(KEY_J, true))
+	var held_echo := _key_event(KEY_J, true)
 	held_echo.echo = true
 	buffer.accept_event(held_echo)
 	buffer.accept_event(held_echo)
@@ -223,7 +227,7 @@ func _test_focus_cancel_and_echo() -> void:
 	var cancelled: Dictionary = _record_for(buffer.build_frame(2), &"p1_punch", 1)
 	_expect(bool(cancelled[&"released"]) and not bool(cancelled[&"held"]), "cancel must release held action")
 	_expect(_events_for(cancelled) == [&"pressed", &"released"], "cancel preserves press then release")
-	buffer.accept_event(_key_event(78, false))
+	buffer.accept_event(_key_event(KEY_J, false))
 	var after_cancel: Dictionary = _record_for(buffer.build_frame(3), &"p1_punch", 1)
 	_expect(_events_for(after_cancel).is_empty() and not bool(after_cancel[&"held"]), "late keyup after repeated cancel must remain idle")
 
@@ -233,13 +237,34 @@ func _test_scene_input_dispatch() -> void:
 	_live_harness.set_process_input(true)
 	get_root().add_child(_live_harness)
 	await process_frame
-	var p1_down := _key_event(78, true)
-	var p2_down := _key_event(49, true)
+	# Exercise the actual dispatcher, not only numeric InputMap equality. Each
+	# key must produce exactly its own action, including keypad versus top row.
+	var frame_tick: int = 0
+	for action: StringName in EXPECTED_CODES.keys():
+		var code: int = int(EXPECTED_CODES[action])
+		Input.parse_input_event(_key_event(code, true))
+		await process_frame
+		_expect_only_action(buffer.build_frame(frame_tick), action, true)
+		frame_tick += 1
+		Input.parse_input_event(_key_event(code, false))
+		await process_frame
+		_expect_only_action(buffer.build_frame(frame_tick), action, false)
+		frame_tick += 1
+	for code: int in UNBOUND_CODES:
+		Input.parse_input_event(_key_event(code, true))
+		Input.parse_input_event(_key_event(code, false))
+		await process_frame
+		var idle: InputFrame = buffer.build_frame(frame_tick)
+		frame_tick += 1
+		for record: Dictionary in idle.records():
+			_expect(_events_for(record).is_empty() and not bool(record[&"held"]), "unbound key %d must not reach %s" % [code, record[&"action"]])
+	var p1_down := _key_event(KEY_J, true)
+	var p2_down := _key_event(KEY_KP_1, true)
 	Input.parse_input_event(p1_down)
 	Input.parse_input_event(p2_down)
 	await process_frame
 	_expect(_live_harness.received_keys >= 2, "registered Node must consume parsed P1/P2 key events")
-	var routed: InputFrame = buffer.build_frame(20)
+	var routed: InputFrame = buffer.build_frame(frame_tick)
 	_expect(bool(_record_for(routed, &"p1_punch", 1)[&"pressed"]), "SceneTree route must deliver P1")
 	_expect(bool(_record_for(routed, &"p2_punch", 2)[&"pressed"]), "SceneTree route must deliver P2")
 	_expect(bool(_record_for(routed, &"p1_punch", 1)[&"held"]), "P1 remains held before focus loss")
@@ -248,7 +273,7 @@ func _test_scene_input_dispatch() -> void:
 	_live_harness.notification(NOTIFICATION_APPLICATION_FOCUS_OUT)
 	await process_frame
 	_expect(_live_harness.focus_cancels == 1, "focus-out notification must invoke cancel")
-	var cancelled: InputFrame = buffer.build_frame(21)
+	var cancelled: InputFrame = buffer.build_frame(frame_tick + 1)
 	_expect(_events_for(_record_for(cancelled, &"p1_punch", 1)) == [&"released"], "focus cancel must release P1")
 	_expect(_events_for(_record_for(cancelled, &"p2_punch", 2)) == [&"released"], "focus cancel must release P2")
 	_expect(not bool(_record_for(cancelled, &"p1_punch", 1)[&"held"]), "focus cancel clears P1 held")
@@ -257,6 +282,19 @@ func _test_scene_input_dispatch() -> void:
 	_live_harness.queue_free()
 	await process_frame
 	_live_harness = null
+
+func _expect_only_action(frame: InputFrame, expected_action: StringName, is_down: bool) -> void:
+	for record: Dictionary in frame.records():
+		var action: StringName = StringName(record[&"action"])
+		var is_target: bool = action == expected_action
+		var expected_edges: Array = []
+		if is_target:
+			expected_edges.append(&"pressed" if is_down else &"released")
+		_expect(_events_for(record) == expected_edges, "%s event routes only to %s" % [expected_action, action])
+		_expect(bool(record[&"initial_held"]) == (is_target and not is_down), "%s initial held state for %s" % [expected_action, action])
+		_expect(bool(record[&"pressed"]) == (is_target and is_down), "%s pressed state for %s" % [expected_action, action])
+		_expect(bool(record[&"held"]) == (is_target and is_down), "%s held state for %s" % [expected_action, action])
+		_expect(bool(record[&"released"]) == (is_target and not is_down), "%s released state for %s" % [expected_action, action])
 
 func _expect_continuity(previous: InputFrame, current: InputFrame) -> void:
 	for previous_record: Dictionary in previous.records():
@@ -275,8 +313,8 @@ func _append_edge(record: Dictionary, edge: StringName) -> void:
 func _release_injected_keys() -> void:
 	if not is_instance_valid(_live_harness) or not _live_harness.is_inside_tree() or _live_harness.received_keys == 0:
 		return
-	Input.parse_input_event(_key_event(78, false))
-	Input.parse_input_event(_key_event(49, false))
+	for code: int in EXPECTED_CODES.values():
+		Input.parse_input_event(_key_event(code, false))
 
 func _empty_records(frame_tick: int) -> Array[Dictionary]:
 	var records: Array[Dictionary] = []

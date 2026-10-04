@@ -44,7 +44,7 @@ func _run() -> void:
 	_expect(movement_room.get_node_or_null("Fighter2") is FighterView, "P2 view is visual-only FighterView")
 
 	var p1_before_x: int = _fighter_x(initial, 0)
-	_parse_key(KEY_RIGHT, true)
+	_parse_key(KEY_D, true)
 	var p1_frame: InputFrame = await _sample_step(movement_room, &"p1-right-pressed")
 	var p1_right: Dictionary = _record_for(p1_frame, &"p1_right", 1)
 	_expect(bool(p1_right.get(&"pressed", false)), "P1 right pressed edge reaches room")
@@ -59,7 +59,7 @@ func _run() -> void:
 	_expect(bool(p1_held.get(&"held", false)), "P1 remains held without a repeat keydown")
 
 	var p2_before_x: int = _fighter_x(movement_room.read_snapshot(), 1)
-	_parse_key(KEY_D, true)
+	_parse_key(KEY_RIGHT, true)
 	var p2_frame: InputFrame = await _sample_step(movement_room, &"p2-right-pressed")
 	var p2_right: Dictionary = _record_for(p2_frame, &"p2_right", 2)
 	_expect(bool(p2_right.get(&"pressed", false)), "P2 right pressed edge reaches room independently")
@@ -67,8 +67,8 @@ func _run() -> void:
 	_expect(bool(_record_for(p2_frame, &"p1_right", 1).get(&"held", false)), "P1 remains held while P2 presses")
 	_expect(_fighter_x(movement_room.read_snapshot(), 1) != p2_before_x, "P2 movement changes simulation state")
 
-	_parse_key(KEY_RIGHT, false)
 	_parse_key(KEY_D, false)
+	_parse_key(KEY_RIGHT, false)
 	var release_frame: InputFrame = await _sample_step(movement_room, &"p1-p2-release")
 	var p1_release: Dictionary = _record_for(release_frame, &"p1_right", 1)
 	var p2_release: Dictionary = _record_for(release_frame, &"p2_right", 2)
@@ -79,8 +79,8 @@ func _run() -> void:
 	var idle_frame: InputFrame = await _sample_step(movement_room, &"post-release-idle")
 	_expect(_frame_is_idle(idle_frame), "released keys do not leave stale edges on the next tick")
 
-	_parse_key(KEY_RIGHT, true)
 	_parse_key(KEY_D, true)
+	_parse_key(KEY_RIGHT, true)
 	var focus_held_frame: InputFrame = await _sample_step(movement_room, &"focus-held")
 	_expect(bool(_record_for(focus_held_frame, &"p1_right", 1).get(&"held", false)), "P1 is held before focus loss")
 	_expect(bool(_record_for(focus_held_frame, &"p2_right", 2).get(&"held", false)), "P2 is held before focus loss")
@@ -93,8 +93,8 @@ func _run() -> void:
 	_expect(not bool(_record_for(focus_release_frame, &"p1_right", 1).get(&"held", true)), "focus loss clears P1 held")
 	_expect(not bool(_record_for(focus_release_frame, &"p2_right", 2).get(&"held", true)), "focus loss clears P2 held")
 
-	_parse_key(KEY_RIGHT, true)
 	_parse_key(KEY_D, true)
+	_parse_key(KEY_RIGHT, true)
 	var reset_held_frame: InputFrame = await _sample_step(movement_room, &"reset-held")
 	_expect(bool(_record_for(reset_held_frame, &"p1_right", 1).get(&"held", false)), "P1 held state exists before reset")
 	_expect(bool(_record_for(reset_held_frame, &"p2_right", 2).get(&"held", false)), "P2 held state exists before reset")
