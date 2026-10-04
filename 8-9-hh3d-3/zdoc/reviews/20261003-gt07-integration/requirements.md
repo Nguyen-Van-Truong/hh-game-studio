@@ -1,3 +1,34 @@
+# GT07 integration map — current status (O10)
+
+AUTHORITY=0; GT07=IN_PROGRESS; GT01-GT06=ACCEPTED; GT08-GT10=PLANNED.
+This file records the fixed M1-M9 scope and evidence status; it is not an acceptance signature.
+All raw diagnostic evidence remains immutable and is stored under `studio/.local/reviews/` for new runs.
+Historical entries below are retained for provenance; they do not override the table above.
+
+| Matrix | Status | Existing evidence | Remaining proof |
+|---|---|---|---|
+| M1 / Q01 | DONE (host) | `gt07-jobs-integration-20261004-03`, 46 tests | Repeat only in final frozen matrix |
+| M2 / Q03 | OPEN | static admission/lease guards | native two-writer, expiry, revoke, late worker |
+| M3 / Q05 | OPEN (partial) | Godot edit/save/script and receipt-loss run21 | six publish crash cuts, reload/ACK, last-good |
+| M4 / Q06 | OPEN | no final native proof | manual edit conflict and no rollback overwrite |
+| M5 / TX05/TX09 | OPEN | component fault helpers | filelock, cross-volume and injected disk/fsync cuts |
+| M6 / Q04 | OPEN (partial) | Stop drain and native run16 | full queue/cancel/reconnect matrix in final run |
+| M7 / Q07 | OPEN (partial) | 510-record capacity/JOURNAL_FULL | real-clock expiry, compaction/rotation |
+| M8 / Q08 | OPEN | host cleanup helpers | PID reuse, timeout ownership, OOM Job evidence |
+| M9 / TX13 | OPEN | no native Play mutation proof | Play/capture conflict on pinned fixture |
+
+## Next
+
+N1: scenario runner, mandatory engine-free dry-run, fixed measurement guard,
+stop-on-first-failure matrix, and opt-in failpoint admission are implemented;
+the 13 focused guard tests and both Godot/Blender dry-run contracts pass.
+Native M1–M9 execution remains open and must use fresh IDs after this source
+freeze.  A dry-run validates wiring and contract bounds only; it cannot prove
+runtime IPC, process cleanup, or engine behavior.
+N2-N5: execute M3, M2/M4, M5/M7, then M6/M8/M9 with fresh IDs and preserved raw.
+N6: freeze closure once, run the full matrix plus focused regressions, map artifacts, then send the same hash to two independent critics.
+
+## Historical log (preserved verbatim)
 # GT07 integration map — opened after GT06 acceptance
 
 AUTHORITY=0 until full GT07 evidence and two independent critics.
@@ -202,6 +233,54 @@ native script-successor or queued publication result.
 - A test fixture exposed and repaired an incorrect lookup of the command hash
   from `PendingJob`; the durable hash belongs to `JobRecord.command_sha256`.
   Existing native queue semantics and timeout gates are unchanged.
+
+## Native runner checkpoint, 04-10-2026 — O10 admission and live slices
+
+- `gt07-native-godot-20261004-22` ran the new `godot-edit` scenario after an
+  engine-free dry-run. The pinned GUI hash, source closure, fixed measurement
+  guard and public lease route matched. Native scene update read back
+  position `[3,4,5]`; queue state was `COMMITTED`; editor and wrapper exits
+  were 0; Job was closed/zero/unretained; durable Stop was read back. Raw is
+  under `studio/.local/reviews/gt07-native-godot-20261004-22/`.
+- `gt07-native-godot-20261004-23` ran the `godot-recovery` scenario with a
+  receipt-loss injection after the native script effect. The child exited 0.
+  The reopened reservation retained the exact fence; lookup returned the
+  existing `COMMITTED` effect; reconcile appended exactly one `OWNER_RESULT`
+  queue event; editor journal head and native scene state were unchanged;
+  submit count stayed one; actual editor/Job/wrapper cleanup was clean. Raw is
+  under `studio/.local/reviews/gt07-native-godot-20261004-23/`.
+- `gt07-native-queue-20261004-13` ran the new Blender scenario after the same
+  dry-run boundary. One pinned Blender process created the box and read back
+  extents `[1,2,3]`; queue receipt was `COMMITTED`; actual child/wrapper exits
+  were 0; Job was closed/zero/unretained; source snapshot was unchanged. Raw
+  is under `studio/.local/reviews/gt07-native-queue-20261004-13/`.
+- The runner now rejects an armed failpoint, duplicate measure-window holder,
+  reused output ID, stale source/binary after dry-run, and matrix continuation
+  after a nonzero scenario. The 19 focused runner/guard/recovery tests exit 0.
+  These are diagnostic slices
+  (`AUTHORITY=0`); M2–M9 and the final matrix,
+  complete closure and two independent critics remain open.
+
+## Native lookup recovery checkpoint, 04-10-2026
+
+- `gt07-native-godot-20261004-20` is retained as a negative diagnostic. The
+  deliberate lost-collection probe completed the native script effect but the
+  verifier attempted to serialize the broker `JobRecord` as a wire response;
+  child exit was 1 and no PASS is inferred. The raw and manifest remain
+  immutable.
+- `gt07-native-godot-20261004-21` is the repaired fresh run with closure
+  `4ec43bcb4724bd0ca5988fd41116d7096ca2f9fbd796244f6063ef1ef1e4f9d1`.
+  It uses `script_text.replace`, intentionally loses queue receipt after the
+  native effect, closes/reopens the durable queue, attaches the old binding via
+  `register_recovery()` and reconciles by exact authenticated lookup. The
+  recovery proof records `native_effect_committed`, `queue_receipt_lost`,
+  `reopened_reservation`, `lookup_only_reconcile`, and `COMMITTED`; the effect
+  is not replayed. Wrapper/child/editor exits are 0, Job is closed/zero/
+  unretained, source and snapshot are unchanged, and Stop persistence/readback
+  is durable. Archive and per-file hashes are in the matching manifest.
+- This is a native Q02/Q03 recovery slice (`AUTHORITY=0`), not GT07 acceptance.
+  It does not close revoked/expired late workers, two-writer fencing, crash
+  cuts at every phase, storage faults, or the remaining Q04–Q08 matrix.
 
 ## Native queue checkpoint, 04-10-2026 — publication branches
 

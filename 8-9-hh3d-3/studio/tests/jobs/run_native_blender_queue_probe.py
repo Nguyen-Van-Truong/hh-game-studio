@@ -24,6 +24,84 @@ STUDIO = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(STUDIO.parent))
 
 
+def _request_for(*, before, lease, project_id, now_ms):
+    """Use the same command recipe in dry-run and native admission."""
+    from studio.host.blender import client_write_catalog as catalog
+    from studio.protocol.core import Request, canonical_bytes
+    payload = {"expected_context": before["context"],
+               "arguments": {"object_id": "queue_probe_box", "size": [1, 2, 3]}}
+    return Request("QueueMeshCreate", project_id, "mesh.create_box",
+                   lease["lease_id"], lease["fencing_epoch"], before["revision"],
+                   {"stable_id": catalog.TARGET}, payload,
+                   "sha256:" + hashlib.sha256(canonical_bytes(payload)).hexdigest(),
+                   now_ms + catalog.MAX_UI_MS - 250)
+
+
+def dry_run_contract(operation="mesh.create_box", recover_after_loss=False):
+    """Real public admission over the existing explicitly inert owner fixture.
+
+    Native process/Job/journal backends are modeled by the GT04 test fixture;
+    public authentication, lease registration and deadline validation are real.
+    This grants no Blender execution or native durability claim.
+    """
+    from unittest.mock import patch
+    from studio.host.blender import client_write_catalog as catalog
+    from studio.host.blender import client_session, client_writer_session
+    from studio.host.core.limits import SafetyViolation
+    from studio.host.core.transport import epoch_ms
+    from studio.protocol.core import parse_json
+    if recover_after_loss or operation != "mesh.create_box":
+        raise ValueError("BLENDER_SCENARIO_UNSUPPORTED")
+    # Reuse the maintained inert integration fixture, not another mock owner.
+    # Its bare test_client_ledger import is resolved only during this import.
+    old_path = sys.path[:]
+    try:
+        sys.path.insert(0, str(STUDIO / "tests/blender"))
+        from studio.tests.blender.test_client_writer_owner import WriterOwnerTests
+    finally:
+        sys.path[:] = old_path
+    fixture = WriterOwnerTests()
+    try:
+        fixture.setUp()
+        owner = fixture.owner
+        lease = owner.lease({"project_id": owner.project_id, "access": "write", "ttl_ms": 30_000},
+                            **fixture.kw)
+        now = epoch_ms()
+        request = _request_for(before=parse_json(owner._read_owner._baseline), lease=lease,
+                               project_id=owner.project_id, now_ms=now)
+        checked = catalog.validate_request(request.as_dict(), project_id=owner.project_id,
+                                           source_sha256=owner._source_sha256)
+        grant = owner.sessions.authorize(fixture.auth, request.operation,
+                                        project_id=owner.project_id,
+                                        catalog_digest=owner.catalog_digest)
+        resolved = owner.sessions.resolve_writer_lease(grant, request.lease_id, request.fencing_epoch)
+        rejected = []
+        with patch.object(client_session, "epoch_ms", return_value=now), \
+                patch.object(client_writer_session, "epoch_ms", return_value=now):
+            for offset in (1, catalog.MAX_UI_MS, request.deadline_ms - now):
+                owner.sessions.check_write(grant, resolved, operation=request.operation,
+                                            deadline_ms=now + offset)
+            for offset in (0, catalog.MAX_UI_MS + 1):
+                try:
+                    owner.sessions.check_write(grant, resolved, operation=request.operation,
+                                                deadline_ms=now + offset)
+                except SafetyViolation as error:
+                    if error.code != "BLENDER_DEADLINE_EXPIRED":
+                        raise
+                    rejected.append(offset)
+                else:
+                    raise RuntimeError("SCENARIO_DEADLINE_NOT_REJECTED")
+        fixture.host.execute.assert_not_called()
+        return {"operation": checked.operation, "request_digest": checked.digest,
+                "admission_validated": True, "public_lease_route_validated": True,
+                "deadline_lower_bound_rejected": rejected[0] == 0,
+                "deadline_upper_bound_rejected": rejected[1] == catalog.MAX_UI_MS + 1,
+                "synthetic_state": True, "native_effect": False,
+                "modeled_backends": ["native_process", "Job", "writer_journal", "ledger"]}
+    finally:
+        fixture.doCleanups()
+
+
 def _sha(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
@@ -31,7 +109,9 @@ def _sha(path: Path) -> str:
 def _sources(root: Path) -> dict[str, str]:
     """Return only the runtime closure used by this probe and its owner."""
     names = ["build/bootstrap/run_fixture.py", "godot-addon/cli_job.py",
-             "toolchain.lock.json"]
+             "toolchain.lock.json", "tests/replay/measure_window.py",
+             "tests/replay/benchmark_job.py", "pipeline/native_job.py",
+             "tests/blender/test_client_writer_owner.py", "tests/blender/test_client_ledger.py"]
     paths = [root / name for name in names]
     for name in ("blender-addon", "host/blender", "host/core", "host/jobs",
                  "protocol", "tests/jobs"):
@@ -112,14 +192,7 @@ def _child(output: Path, binary: Path, run_id: str,
                              "ttl_ms": 30000}, authorization="Bearer " + writer.bearer,
                             catalog_digest=owner.catalog_digest)
         before = parse_json(owner._read_owner._baseline)
-        payload = {"expected_context": before["context"],
-                   "arguments": {"object_id": "queue_probe_box", "size": [1, 2, 3]}}
-        request = Request(
-            "QueueMeshCreate", owner.project_id, "mesh.create_box",
-            lease["lease_id"], lease["fencing_epoch"], before["revision"],
-            {"stable_id": catalog.TARGET}, payload,
-            "sha256:" + hashlib.sha256(canonical_bytes(payload)).hexdigest(),
-            epoch_ms() + catalog.MAX_UI_MS - 250)
+        request = _request_for(before=before, lease=lease, project_id=owner.project_id, now_ms=epoch_ms())
         body = request.as_dict()
         binding = BlenderOwnerBinding.create(
             owner, body=body, authorization="Bearer " + writer.bearer,
@@ -255,7 +328,11 @@ def main(argv=None) -> int:
         manifest = json.loads((args.output / "source-closure.json").read_bytes())
         return _child(args.output.resolve(), args.binary.resolve(), args.run_id,
                       manifest["files"], manifest["source_closure_sha256"])
-    return run(args.output, args.binary, args.run_id)
+    if args.output.name != args.run_id:
+        parser.error("output basename must equal the run ID")
+    from studio.tests.jobs.run_gt07_scenarios import main as scenario_main
+    return scenario_main(["--scenario", "blender-box", "--blender-binary", str(args.binary),
+                          "--run-id", args.run_id, "--output-root", str(args.output.parent)])
 
 
 if __name__ == "__main__":

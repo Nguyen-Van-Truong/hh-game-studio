@@ -9,7 +9,7 @@ GT07 acceptance run until the Q03/Q04/Q08 matrix and two critics are complete.
 from __future__ import annotations
 
 import argparse
-from dataclasses import asdict
+from dataclasses import asdict, replace
 import hashlib
 import importlib.util
 import json
@@ -18,6 +18,8 @@ from pathlib import Path
 import re
 import shutil
 import sys
+import tempfile
+import threading
 
 sys.dont_write_bytecode = True
 STUDIO = Path(__file__).resolve().parents[2]
@@ -29,7 +31,9 @@ def _sha(path: Path) -> str:
 
 
 def _sources(root: Path) -> dict[str, str]:
-    names = ["build/bootstrap/run_fixture.py", "toolchain.lock.json"]
+    names = ["build/bootstrap/run_fixture.py", "toolchain.lock.json",
+             "tests/replay/measure_window.py", "tests/replay/benchmark_job.py",
+             "pipeline/native_job.py"]
     paths = [root / name for name in names]
     for name in ("godot-addon", "host/core", "host/jobs", "host/blender",
                  "blender-addon", "protocol", "tests/jobs"):
@@ -72,16 +76,185 @@ def _safe_error(error: BaseException) -> dict[str, str]:
     return value
 
 
+def _event_head(event_log) -> dict[str, object]:
+    """Return the durable event head without mutating or replaying anything."""
+    head = event_log.binding().witnessed
+    return {"sequence": head.sequence, "sha256": head.sha256, "size": head.size}
+
+
+def _load_owner():
+    name = "gt07_frozen_publication_owner"
+    spec = importlib.util.spec_from_file_location(name, STUDIO / "godot-addon/publication_owner.py")
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[name] = module
+    spec.loader.exec_module(module)
+    return module
+
+
+def _request_for(operation, *, before, lease, contract, default_script, now_ms,
+                 project_id="project.fixture"):
+    """One request recipe for native and engine-free admission."""
+    from studio.protocol.core import Request, canonical_bytes
+    payload = {"expected_generation": before["generation"],
+               "expected_project_revision": before["project_revision"]}
+    target = {"stable_id": "root"}
+    if operation == "scene.node.update":
+        payload["changes"] = {"position": [3, 4, 5]}
+        command_id, horizon = "queue.godot.update", 29_000
+    elif operation == "scene.save":
+        payload["expected_files"] = {path: before["working_files"][path]["sha256"]
+                                      for path in (contract.SCENE_PATH, contract.SCRIPT_PATH)}
+        command_id, horizon = "queue.godot.save", 89_000
+    elif operation == "script_text.replace":
+        payload.update(expected_sha256=before["working_files"][contract.SCRIPT_PATH]["sha256"],
+                       text=default_script.replace(b"int = 7", b"int = 9").decode("utf-8"))
+        target = {"path": contract.SCRIPT_PATH}
+        command_id, horizon = "queue.godot.script", 89_000
+    else:
+        raise ValueError("SCENARIO_OPERATION_UNSUPPORTED")
+    return Request(command_id, project_id, operation, lease["lease_id"], lease["fencing_epoch"],
+                   before["revision"], target, payload,
+                   "sha256:" + hashlib.sha256(canonical_bytes(payload)).hexdigest(),
+                   min(lease["expires_ms"], now_ms + horizon))
+
+
+def dry_run_contract(operation, recover_after_loss=False):
+    """Exercise public lease registration and exact request recipe, no engine.
+
+    The editor state is explicitly synthetic. This checks harness wiring,
+    schema and both deadline bounds; it grants no native/public ACK.
+    """
+    from studio.host.core.transport import epoch_ms
+    if recover_after_loss and operation != "script_text.replace":
+        raise ValueError("RECOVERY_PROBE_REQUIRES_SCRIPT_REPLACEMENT")
+    module = _load_owner()
+    contract, auth = module._load("contract"), module._load("publication_session")
+    factory = module._load("validation_owner").factory
+    with tempfile.TemporaryDirectory(prefix="gt07-admission-") as root:
+        owner = object.__new__(module.GodotPublicationOwner)
+        owner._lock = threading.RLock()
+        owner._closed = owner._held = False
+        owner._leases = {}
+        owner.project_id, owner.contract = "project.fixture", contract
+        owner.sessions = auth.PublicationSession(owner.project_id, Path(root), contract.CATALOG_DIGEST)
+        try:
+            credential = owner.sessions.issue()
+            authorization = "Bearer " + credential.bearer
+            lease = owner.lease({"project_id": owner.project_id, "access": "write", "ttl_ms": 90_000},
+                                authorization=authorization, catalog_digest=contract.CATALOG_DIGEST)
+            before = {"revision": "sha256:" + "1" * 64, "project_revision": "sha256:" + "2" * 64,
+                      "generation": 1, "can_undo": False, "can_redo": False,
+                      "state": {"nodes": [contract.NodeState("root", None, "Node3D", "Fixture").as_dict()]},
+                      "working_files": {contract.SCENE_PATH: {"sha256": "3" * 64},
+                                        contract.SCRIPT_PATH: {"sha256": hashlib.sha256(factory.DEFAULT_SCRIPT).hexdigest()}}}
+            request = _request_for(operation, before=before, lease=lease, contract=contract,
+                                   default_script=factory.DEFAULT_SCRIPT, now_ms=epoch_ms())
+            grant = owner.sessions.authorize(authorization, operation,
+                        project_id=owner.project_id, catalog_digest=contract.CATALOG_DIGEST)
+            context = owner._context(before, owner._leases[grant.session_id])
+            result = contract.validate_request(request, context)
+            maximum = 30_000 if operation == "scene.node.update" else 90_000
+            # A longer synthetic lease keeps the upper-bound test specific to
+            # the operation limit rather than merely exceeding lease expiry.
+            bounds = replace(context, lease_expires_ms=context.now_ms + 120_000)
+            for offset in (1, maximum):
+                contract.validate_request(replace(request, deadline_ms=bounds.now_ms + offset), bounds)
+            rejected = []
+            for offset in (0, maximum + 1):
+                try:
+                    contract.validate_request(replace(request, deadline_ms=bounds.now_ms + offset), bounds)
+                except contract.ContractError as error:
+                    if error.code != "GODOT_DEADLINE_EXPIRED":
+                        raise
+                    rejected.append(offset)
+                else:
+                    raise RuntimeError("SCENARIO_DEADLINE_NOT_REJECTED")
+            return {"operation": operation, "request_digest": result.request_digest,
+                    "admission_validated": True, "public_lease_route_validated": True,
+                    "deadline_lower_bound_rejected": rejected[0] == 0,
+                    "deadline_upper_bound_rejected": rejected[1] == maximum + 1,
+                    "synthetic_state": True, "native_effect": False}
+        finally:
+            owner.sessions.halt()
+
+
+def _editor_close_proof(cleanup: object, identity: object) -> dict[str, object]:
+    """Validate the host/editor close receipt independently of its banner."""
+    result = {"present": isinstance(cleanup, dict), "identity": identity,
+              "pid_match": False, "actual_exit": None, "wrapper_exit": None,
+              "job_clean": False, "valid": False}
+    if not isinstance(cleanup, dict) or not isinstance(identity, dict):
+        return result
+    actual = cleanup.get("actual_process_exit")
+    job = cleanup.get("job")
+    result["actual_exit"] = actual
+    result["wrapper_exit"] = cleanup.get("wrapper_exit_code")
+    result["pid_match"] = (isinstance(actual, dict)
+                            and type(actual.get("pid")) is int
+                            and type(identity.get("pid")) is int
+                            and actual["pid"] == identity["pid"])
+    result["job_clean"] = (isinstance(job, dict)
+                           and all(job.get(key) is True for key in
+                                   ("configured", "assigned", "closed", "zero_observed"))
+                           and all(job.get(key) is False for key in
+                                   ("tainted", "handle_retained", "close_uncertain", "create_uncertain"))
+                           and type(job.get("active_count")) is int and job["active_count"] == 0
+                           and job.get("failed_operations") == []
+                           and job.get("native_error") is None)
+    result["valid"] = (cleanup.get("closed") is True
+                        and cleanup.get("held") is False
+                        and cleanup.get("logs_overflow") is False
+                        and result["pid_match"]
+                        and isinstance(actual, dict) and type(actual.get("exit_code")) is int
+                        and actual["exit_code"] == 0
+                        and type(cleanup.get("wrapper_exit_code")) is int
+                        and cleanup["wrapper_exit_code"] == 0
+                        and result["job_clean"])
+    return result
+
+
+def _recovery_evidence_complete(recover_after_loss: bool,
+                                proof: object) -> bool:
+    """Fail closed unless the loss boundary and lookup-only invariants hold."""
+    if not recover_after_loss:
+        return True
+    if not isinstance(proof, dict):
+        return False
+    try:
+        return (proof["receipt_boundary"] == "record_owner_result"
+                and proof["injection_count"] == 1
+                and proof["reconciled_status"] == "COMMITTED"
+                and proof["response_before"] == proof["response_after"]
+                and proof["response_before"]["status"] == "COMMITTED"
+                and proof["submit_calls_before"] == proof["submit_calls_after"] == 1
+                and proof["fence_before"] == proof["fence_after"]
+                and proof["queue_before_loss"] == proof["queue_after_loss"] == proof["queue_reopened"]
+                and proof["queue_after_reconcile"]["sequence"] == proof["queue_after_loss"]["sequence"] + 1
+                and proof["queue_result_event"] == proof["expected_queue_result_event"]
+                and proof["journal_after_loss"]["sequence"] > proof["journal_before_loss"]["sequence"]
+                and proof["journal_after_reconcile"] == proof["journal_after_loss"]
+                and proof["native_before_reconcile"] == proof["native_after_reconcile"])
+    except (KeyError, TypeError):
+        return False
+
+
+def _native_recovery_state(owner) -> dict[str, object]:
+    """Fresh no-effect reads around reconciliation, before the Stop event."""
+    return {"editor": owner._editor.identity, "scene": owner.inspect(),
+            "selection": owner._journal.selection_facts()}
+
+
 def _child(output: Path, binary: Path, run_id: str, operation: str,
-           source: dict[str, str], closure: str) -> int:
+           recover_after_loss: bool, source: dict[str, str], closure: str) -> int:
     from studio.host.core.transport import epoch_ms
     from studio.host.jobs.native_dispatch import GodotOwnerBinding, NativeOwnerDispatcher
     from studio.host.jobs.queue_owner import QueueOwner
-    from studio.protocol.core import Request, Status, canonical_bytes
+    from studio.protocol.core import Request, Status, canonical_bytes, parse_json
 
     owner_module = None
     owner = queue = dispatch = None
     editor = None
+    successor_editor = None
     response = None
     row = reservation = None
     editor_identity = None
@@ -91,6 +264,14 @@ def _child(output: Path, binary: Path, run_id: str, operation: str,
     owner_stop_durable = False
     queue_state = None
     passed = False
+    recovery_proof = None
+    editor_cleanup_proof = []
+    journal_before_loss = journal_after_loss = journal_after_reconcile = None
+    queue_before_loss = queue_after_loss = queue_after_reconcile = None
+    reservation_fence = None
+    successor_identity = None
+    submit_calls = 0
+    injection_count = 0
     steps: list[str] = []
     try:
         steps.append("start")
@@ -132,13 +313,7 @@ def _child(output: Path, binary: Path, run_id: str, operation: str,
         lease = owner.lease(
             {"project_id": owner.project_id, "access": "write", "ttl_ms": 90_000},
             authorization=authorization, catalog_digest=owner.contract.CATALOG_DIGEST)
-        if operation == "scene.node.update":
-            payload = {"expected_generation": before["generation"],
-                       "expected_project_revision": before["project_revision"],
-                       "changes": {"position": [3, 4, 5]}}
-            command_id, request_revision, request_target, horizon = (
-                "queue.godot.update", before["revision"], {"stable_id": "root"}, 29_000)
-        elif operation == "scene.save":
+        if operation == "scene.save":
             changed = owner._editor.apply_projection({"operation": "scene.node.update",
                 "command_id": "queue.dirty", "expected_revision": before["revision"],
                 "expected_generation": before["generation"], "target_stable_id": "root",
@@ -147,26 +322,9 @@ def _child(output: Path, binary: Path, run_id: str, operation: str,
             if changed.get("ok") is not True:
                 raise RuntimeError("NATIVE_GODOT_DIRTY_SETUP_FAILED")
             before = owner.inspect()
-            payload = {"expected_generation": before["generation"],
-                       "expected_project_revision": before["project_revision"],
-                       "expected_files": {path: before["working_files"][path]["sha256"]
-                                          for path in (owner.contract.SCENE_PATH,
-                                                       owner.contract.SCRIPT_PATH)}}
-            command_id, request_revision, request_target, horizon = (
-                "queue.godot.save", before["revision"], {"stable_id": "root"}, 89_000)
-        else:
-            text = factory.DEFAULT_SCRIPT.replace(b"int = 7", b"int = 9").decode("utf-8")
-            payload = {"expected_generation": before["generation"],
-                       "expected_project_revision": before["project_revision"],
-                       "expected_sha256": before["working_files"][owner.contract.SCRIPT_PATH]["sha256"],
-                       "text": text}
-            command_id, request_revision, request_target, horizon = (
-                "queue.godot.script", before["revision"], {"path": owner.contract.SCRIPT_PATH}, 89_000)
-        request = Request(command_id, owner.project_id, operation,
-            lease["lease_id"], lease["fencing_epoch"], request_revision, request_target, payload,
-            "sha256:" + hashlib.sha256(canonical_bytes(payload)).hexdigest(),
-            # The operation-specific horizon is independent of the 90 s lease.
-            min(lease["expires_ms"], epoch_ms() + horizon))
+        request = _request_for(operation, before=before, lease=lease, contract=owner.contract,
+                               default_script=factory.DEFAULT_SCRIPT, now_ms=epoch_ms(),
+                               project_id=owner.project_id)
         grant = owner.sessions.authorize(authorization, request.operation,
             project_id=owner.project_id, catalog_digest=owner.contract.CATALOG_DIGEST)
         owner.contract.validate_request(request,
@@ -179,10 +337,104 @@ def _child(output: Path, binary: Path, run_id: str, operation: str,
         reservation = dispatch.reserve()
         if reservation is None:
             raise RuntimeError("QUEUE_RESERVATION_MISSING")
+        reservation_fence = asdict(reservation.fence)
         steps.append("reserved")
         steps.append(f"deadline:{request.deadline_ms}")
         steps.append(f"now_before_advance:{epoch_ms()}")
-        response = dispatch.advance(reservation)
+        if recover_after_loss:
+            if operation != "script_text.replace":
+                raise RuntimeError("RECOVERY_PROBE_REQUIRES_SCRIPT_REPLACEMENT")
+            original_record = queue.broker.record_owner_result
+            original_submit = owner.submit
+            def counted_submit(*args, **kwargs):
+                nonlocal submit_calls
+                submit_calls += 1
+                return original_submit(*args, **kwargs)
+            owner.submit = counted_submit
+            journal_before_loss = _event_head(owner._journal._log)
+            queue_before_loss = _event_head(queue.log)
+            class ReceiptLossInjected(OSError):
+                pass
+            def lost_collection(*_args, **_kwargs):
+                nonlocal injection_count
+                injection_count += 1
+                # Inject only at the queue receipt boundary, after native
+                # submit/readback has returned a terminal response.
+                raise ReceiptLossInjected("injected queue receipt loss after native effect")
+            queue.broker.record_owner_result = lost_collection
+            try:
+                try:
+                    dispatch.advance(reservation)
+                except ReceiptLossInjected:
+                    journal_after_loss = _event_head(owner._journal._log)
+                    queue_after_loss = _event_head(queue.log)
+                    native_before_reconcile = _native_recovery_state(owner)
+                    lost_response = binding.lookup()
+                    if lost_response.status is not Status.COMMITTED:
+                        raise RuntimeError("RECOVERY_NATIVE_EFFECT_NOT_COMMITTED")
+                    recovery_proof = {"receipt_boundary": "record_owner_result",
+                                      "native_effect_committed": journal_after_loss != journal_before_loss,
+                                      "queue_receipt_lost": True,
+                                      "lookup_after_loss_status": lost_response.status.value,
+                                      "response_before": lost_response.as_dict(),
+                                      "submit_calls_before": submit_calls,
+                                      "injection_count": injection_count}
+            finally:
+                queue.broker.record_owner_result = original_record
+            if recovery_proof is None:
+                raise RuntimeError("RECOVERY_LOST_COLLECTION_NOT_REPRODUCED")
+            storage_id = queue.storage_id
+            dispatch.close()
+            dispatch = None
+            queue.close()
+            queue = QueueOwner.reopen(storage_id)
+            dispatch = NativeOwnerDispatcher(queue)
+            dispatch.register_recovery(binding)
+            queue_reopened = _event_head(queue.log)
+            recovered = queue.broker.snapshot().reservations
+            if (len(recovered) != 1 or not recovered[0].recovered
+                    or asdict(recovered[0].fence) != reservation_fence):
+                raise RuntimeError("RECOVERY_RESERVATION_NOT_RETAINED")
+            reconciled = dispatch.reconcile(recovered[0], binding)
+            response = binding.lookup()
+            native_after_reconcile = _native_recovery_state(owner)
+            journal_after_reconcile = _event_head(owner._journal._log)
+            queue_after_reconcile = _event_head(queue.log)
+            queue_result_event = parse_json(queue.log.read(queue_after_reconcile["sequence"]).event)
+            recovery_proof.update({"reopened_reservation": True,
+                                   "lookup_only_reconcile": True,
+                                   "reconciled_status": reconciled.state,
+                                   "fence_before": reservation_fence,
+                                   "fence_after": asdict(recovered[0].fence),
+                                   "fence_continuity": asdict(recovered[0].fence) == reservation_fence,
+                                   "journal_before_loss": journal_before_loss,
+                                   "journal_after_loss": journal_after_loss,
+                                   "journal_after_reconcile": journal_after_reconcile,
+                                   "journal_unchanged_during_reconcile": journal_after_reconcile == journal_after_loss,
+                                   "queue_before_loss": queue_before_loss,
+                                   "queue_after_loss": queue_after_loss,
+                                   "queue_reopened": queue_reopened,
+                                   "queue_after_reconcile": queue_after_reconcile,
+                                   "queue_unchanged_during_reopen": queue_reopened == queue_after_loss,
+                                   "queue_result_event": queue_result_event,
+                                   "expected_queue_result_event": {"schema": "hh-durable-dispatch-1",
+                                                                    "kind": "OWNER_RESULT",
+                                                                    "job_id": row.job.job_id,
+                                                                    "fence": reservation_fence,
+                                                                    "outcome": "COMMITTED",
+                                                                    "command_sha256": binding.command_sha256,
+                                                                    "receipt_sha256": hashlib.sha256(
+                                                                        canonical_bytes(response.as_dict())).hexdigest()},
+                                   "response_after": response.as_dict(),
+                                   "submit_calls_after": submit_calls,
+                                   "native_before_reconcile": native_before_reconcile,
+                                   "native_after_reconcile": native_after_reconcile,
+                                   "no_native_replay": (journal_after_reconcile == journal_after_loss
+                                                         and queue_reopened == queue_after_loss
+                                                         and submit_calls == 1
+                                                         and asdict(recovered[0].fence) == reservation_fence)})
+        else:
+            response = dispatch.advance(reservation)
         steps.append("advanced")
         steps.append(f"now_after_advance:{epoch_ms()}")
         if response.status is not Status.COMMITTED:
@@ -192,14 +444,17 @@ def _child(output: Path, binary: Path, run_id: str, operation: str,
         if operation == "scene.node.update" and root["position"] != [3, 4, 5]:
             raise RuntimeError("NATIVE_GODOT_READBACK_POSITION_MISMATCH")
         if operation == "scene.save" and (response.code != "GODOT_MANAGED_SCENE_SAVED"
+                or root["position"] != [6, 7, 8]
                 or after["generation"] <= before["generation"]
                 or after["can_undo"] is not False or after["can_redo"] is not False):
             raise RuntimeError("NATIVE_GODOT_SCENE_SAVE_READBACK_MISMATCH")
         if operation == "script_text.replace" and (response.code != "GODOT_MANAGED_SCRIPT_REPLACED"
                 or after["generation"] <= before["generation"]
-                or after["working_files"][owner.contract.SCRIPT_PATH]["sha256"] ==
-                   before["working_files"][owner.contract.SCRIPT_PATH]["sha256"]):
+                or after["working_files"][owner.contract.SCRIPT_PATH]["sha256"] !=
+                   hashlib.sha256(request.payload["text"].encode("utf-8")).hexdigest()):
             raise RuntimeError("NATIVE_GODOT_SCRIPT_REPLACE_READBACK_MISMATCH")
+        successor_editor = owner._editor
+        successor_identity = successor_editor.identity
         lookup = binding.lookup()
         if lookup.as_dict() != response.as_dict():
             raise RuntimeError("NATIVE_GODOT_LOOKUP_MISMATCH")
@@ -207,6 +462,9 @@ def _child(output: Path, binary: Path, run_id: str, operation: str,
         if broker_row is None or broker_row.state != "COMMITTED":
             raise RuntimeError("DURABLE_GODOT_RECEIPT_NOT_COMMITTED")
         queue_state = broker_row.state
+        if recover_after_loss:
+            if response.status is not Status.COMMITTED or response.code != "GODOT_MANAGED_SCRIPT_REPLACED":
+                raise RuntimeError("RECOVERY_TERMINAL_READBACK_MISMATCH")
         passed = True
     except BaseException as error:
         errors.append(_safe_error(error))
@@ -225,10 +483,22 @@ def _child(output: Path, binary: Path, run_id: str, operation: str,
             except BaseException as error:
                 errors.append(_safe_error(error))
         if owner is not None:
+            # Retain the current editor even when an earlier verifier raised.
+            # Owner.close() clears its references as each resource drains.
+            if owner._editor is not None:
+                successor_editor = owner._editor
+                successor_identity = successor_editor.identity
             try:
                 owner.close()
             except BaseException as error:
                 errors.append(_safe_error(error))
+            for role, resource, identity in (
+                    [("original", editor, editor_identity)]
+                    + ([("successor", successor_editor, successor_identity)]
+                       if successor_editor is not None and successor_editor is not editor else [])):
+                proof = _editor_close_proof(getattr(resource, "_cleanup", None), identity)
+                proof["role"] = role
+                editor_cleanup_proof.append(proof)
         if queue is not None:
             try:
                 queue.close()
@@ -243,15 +513,25 @@ def _child(output: Path, binary: Path, run_id: str, operation: str,
                    and stop_persistence == 'DURABLE' and owner_stop_durable),
         "editor_identity": editor_identity,
         "editor_cleanup": getattr(editor, '_cleanup', None),
+        "successor_identity": successor_identity,
+        "editor_cleanup_proof": editor_cleanup_proof,
         "owner_stop_persistence": stop_persistence,
         "owner_stop_durable": owner_stop_durable,
         "queue_job_id": row.job.job_id if row is not None else None,
         "queue_state": queue_state,
+        "recovery_proof": recovery_proof,
         "response": response.as_dict() if response is not None else None,
         "stop_snapshot": asdict(stop_snapshot) if stop_snapshot is not None else None,
         "errors": errors,
         "steps": steps,
     }
+    required_cleanup = 2 if operation == "script_text.replace" else 1
+    report["editor_cleanup_complete"] = (len(editor_cleanup_proof) == required_cleanup
+                                         and all(item["valid"] for item in editor_cleanup_proof))
+    recovery_ok = _recovery_evidence_complete(recover_after_loss, recovery_proof)
+    report["recovery_evidence_complete"] = recovery_ok
+    report["passed"] = bool(report["passed"] and report["editor_cleanup_complete"]
+                             and report["recovery_evidence_complete"])
     _write(output / "native-child.json", report)
     print("GT07_NATIVE_GODOT_QUEUE_CHILD " + json.dumps(
         {"run_id": run_id, "passed": report["passed"], "errors": len(errors)},
@@ -259,7 +539,8 @@ def _child(output: Path, binary: Path, run_id: str, operation: str,
     return 0 if report["passed"] else 1
 
 
-def run(output: Path, binary: Path, run_id: str, operation: str) -> int:
+def run(output: Path, binary: Path, run_id: str, operation: str,
+        recover_after_loss: bool) -> int:
     output = output.resolve()
     # The frozen child runs with its snapshot as cwd.  Keep the pinned editor
     # executable absolute so admission cannot silently resolve it under the
@@ -292,6 +573,8 @@ def run(output: Path, binary: Path, run_id: str, operation: str) -> int:
     child = [sys.executable, "-B", str(snapshot / "tests/jobs/run_native_godot_queue_probe.py"),
              "--frozen", "--output", str(output), "--binary", str(binary),
              "--run-id", run_id, "--operation", operation]
+    if recover_after_loss:
+        child.append("--recover-after-loss")
     environment = os.environ.copy()
     environment["HH_STUDIO_LINUX_GODOT"] = str(
         STUDIO / ".local/tooling/godot-4.7.2-stable-linux/Godot_v4.7.2-stable_linux.x86_64")
@@ -307,6 +590,7 @@ def run(output: Path, binary: Path, run_id: str, operation: str) -> int:
               "snapshot_unchanged": _sources(snapshot) == source,
               "passed": bool(child_report and child_report.get("passed") is True
                   and host.get("exit_code") == 0 and host.get("wrapper_exit_code") == 0
+                  and host.get("timed_out") is False
                   and host.get("tree_verified") is True
                   and _sources(STUDIO) == source and _sources(snapshot) == source)}
     _write(output / "queue-native.json", report)
@@ -325,13 +609,24 @@ def main(argv=None) -> int:
     parser.add_argument("--operation", choices=("scene.node.update", "scene.save",
                                                  "script_text.replace"),
                         default="scene.node.update")
+    parser.add_argument("--recover-after-loss", action="store_true")
     parser.add_argument("--frozen", action="store_true")
     args = parser.parse_args(argv)
     if args.frozen:
         manifest = json.loads((args.output / "source-closure.json").read_bytes())
         return _child(args.output.resolve(), args.binary.resolve(), args.run_id,
-                      args.operation, manifest["files"], manifest["source_closure_sha256"])
-    return run(args.output, args.binary, args.run_id, args.operation)
+                      args.operation, args.recover_after_loss,
+                      manifest["files"], manifest["source_closure_sha256"])
+    if args.output.name != args.run_id:
+        parser.error("output basename must equal the run ID")
+    if args.recover_after_loss and args.operation != "script_text.replace":
+        parser.error("recovery requires script_text.replace")
+    from studio.tests.jobs.run_gt07_scenarios import main as scenario_main
+    scenario = "godot-recovery" if args.recover_after_loss else {
+        "scene.node.update": "godot-edit", "scene.save": "godot-save",
+        "script_text.replace": "godot-script"}[args.operation]
+    return scenario_main(["--scenario", scenario, "--godot-binary", str(args.binary),
+                          "--run-id", args.run_id, "--output-root", str(args.output.parent)])
 
 
 if __name__ == "__main__":
