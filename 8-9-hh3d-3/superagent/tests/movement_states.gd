@@ -75,6 +75,7 @@ func _test_drop_through() -> void:
 	# Fixture placement selects the authored one-way deck; movement-room input
 	# coverage separately proves events arrive through the real SceneTree path.
 	fighter.position = Vector2i(1100, 572)
+	var deck_y: int = fighter.position.y
 	fighter.grounded = true
 	fighter.locomotion = FighterState.Locomotion.GROUNDED
 	var held: Dictionary = {}
@@ -84,7 +85,7 @@ func _test_drop_through() -> void:
 	_expect(fighter.locomotion == FighterState.Locomotion.FALLING, "drop-through enters falling state")
 	for frame_tick: int in range(1, 21):
 		held = _step(simulation, frame_tick, held, {}, {})
-	_expect(fighter.position.y > 520, "drop-through descends below deck")
+	_expect(fighter.position.y > deck_y, "drop-through descends below its starting deck")
 
 func _test_pit_entry() -> void:
 	var simulation := Simulation.new(105)
