@@ -26,7 +26,10 @@ contracts pass.
 Native M1–M9 execution remains open and must use fresh IDs after this source
 freeze.  A dry-run validates wiring and contract bounds only; it cannot prove
 runtime IPC, process cleanup, or engine behavior.
-N2-N5: execute M3, M2/M4, M5/M7, then M6/M8/M9 with fresh IDs and preserved raw.
+N2: Godot ACK crash cut run `gt07-native-godot-20261004-24` reached the exact
+phase, was killed by owned handle, and recovered with byte-equal ACK/readback;
+the RELOAD attempt 25 did not reach its phase and remains a failure diagnostic.
+N2-N5: execute remaining M3 cuts, M2/M4, M5/M7, then M6/M8/M9 with fresh IDs and preserved raw.
 N6: freeze closure once, run the full matrix plus focused regressions, map artifacts, then send the same hash to two independent critics.
 
 ## Historical log (preserved verbatim)
@@ -309,7 +312,7 @@ native script-successor or queued publication result.
 - The 22 historical `gt07-*` raw directories previously left under
   `zdoc/reviews/` were moved unchanged into `studio/.local/reviews/`; the
   ignored `migration-20261004.json` records each run's file count, byte count,
-  and hash concatenation. The migration covers 6,304 files and 116,304 bytes
+  and hash concatenation. The migration covers 6,304 files and 116,304,991 bytes
   as recorded by that manifest. No raw evidence was deleted or rewritten.
 - The two untracked native manifests for runs 20 and 21 were moved into their
   matching `.local/reviews/<run>/manifest.json` directories. Their content and

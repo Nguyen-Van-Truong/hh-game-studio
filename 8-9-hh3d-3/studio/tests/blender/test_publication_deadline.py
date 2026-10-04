@@ -4,6 +4,7 @@ import io
 from pathlib import Path
 import sys
 import tempfile
+import threading
 from types import SimpleNamespace
 import unittest
 from unittest.mock import Mock, patch
@@ -15,6 +16,7 @@ from studio.host.blender.publication_owner import BlenderPublicationOwner
 from studio.host.blender.publication_state import PublicationError
 from studio.host.blender.ui_host import HostError
 from studio.host.core.custody import identity_from
+from studio.host.core.private_events import EventBinding, EventHead
 from studio.protocol.core import canonical_bytes, parse_json
 from test_publication import descriptor, events, replay
 
@@ -120,6 +122,35 @@ class PublicationDeadlineTests(unittest.TestCase):
 
     def publish(self, **options):
         return self.owner.publish(self.owner.request, self.owner.lease, **options)
+
+    def test_failpoints_observe_durable_prefix_before_activation_and_terminal_ack(self):
+        observed = []
+        def at_boundary(phase):
+            observed.append((phase, self.owner._state['phase'],
+                             tuple(step for step in self.owner.trace if step.startswith('append:')),
+                             'active.json' in self.owner.writes, tuple(self.owner.trace)))
+        with patch.object(self.owner, '_failpoint', side_effect=at_boundary):
+            raw = self.publish(deadline_ms=1001000)
+        intent = ('append:INTENT',)
+        staged = intent + ('append:STAGED',)
+        selecting = staged + ('append:SELECTING',)
+        terminal = selecting + ('append:TERMINAL',)
+        self.assertEqual([row[:4] for row in observed], [
+            ('PREPARED', 'INTENT', intent, False),
+            ('VALIDATED', 'STAGED', staged, False),
+            ('ACTIVATING', 'SELECTING', selecting, False),
+            ('COMMITTED', 'TERMINAL', terminal, True),
+            ('ACK', 'TERMINAL', terminal, True),
+        ])
+        self.assertNotIn('native:export.prepare', observed[0][4])
+        self.assertIn('read-bundle', observed[1][4])
+        self.assertNotIn('create:active.json', observed[2][4])
+        for row in observed[3:]:
+            self.assertLess(row[4].index('create:active.json'), row[4].index('barrier'))
+            self.assertLess(row[4].index('barrier'), row[4].index('append:TERMINAL'))
+        self.assertEqual(raw, canonical_bytes(self.owner._state['terminal']['response']))
+        self.assertEqual(parse_json(raw)['status'], 'COMMITTED')
+        self.assertEqual(self.owner.trace.count('create:active.json'), 1)
 
     def test_fresh_malformed_deadline_has_no_intent_or_effect(self):
         for value in (False, True, 0, -1, 2**53, 1.5, '1001000', {}, []):
@@ -263,6 +294,58 @@ class PublicationDeadlineTests(unittest.TestCase):
             self.publish(deadline_ms=1001000, phase_guard=self.owner._stop.set)
         self.assertNotIn('append:INTENT', self.owner.trace)
         self.assertFalse(self.owner._held)
+
+
+class PublicationCustodyBindingTests(unittest.TestCase):
+    def owner(self):
+        value = BlenderPublicationOwner()
+        value.storage_id = 'a' * 32
+        value._head = EventHead(2, 'b' * 64, 100)
+        record = {'storage_id': value.storage_id, 'project_id': publication.model.PROJECT}
+        for name, attribute, number in (('files', 'files', 1), ('blobs', 'store', 2)):
+            root = Path('inert') / name
+            identity = identity_from(descriptor(number)['identity'])
+            setattr(value, attribute, SimpleNamespace(root=root, root_identity=identity,
+                    _mutex=threading.RLock(), _check=Mock()))
+            record[name] = {'path': str(root), 'identity': descriptor(number)['identity']}
+        binding = EventBinding(identity_from(descriptor(3)['identity']),
+                               identity_from(descriptor(4)['identity']), value._head)
+        value.log = SimpleNamespace(root=Path('inert/events'), binding=Mock(return_value=binding))
+        record['events'] = {'path': str(value.log.root)}
+        value.custody = SimpleNamespace(record=record, binding=binding, confirm_current=Mock())
+        return value
+
+    def test_owners_verifies_event_binding_without_failpoint(self):
+        value = self.owner()
+        with patch.object(value, '_failpoint', side_effect=AssertionError('not a custody boundary')):
+            value._owners()
+        value.custody.confirm_current.assert_called_once()
+        value.files._check.assert_called_once_with(mutation=False)
+        value.store._check.assert_called_once_with()
+        value.log.binding.assert_called_once_with()
+
+    def test_owners_rejects_foreign_event_path_identity_or_head(self):
+        for changed in ('path', 'root', 'stream', 'log_head', 'custody_head', 'owner_head'):
+            with self.subTest(changed=changed):
+                value = self.owner()
+                saved = value.custody.binding
+                foreign = identity_from(descriptor(9)['identity'])
+                next_head = EventHead(3, 'c' * 64, 200)
+                if changed == 'path':
+                    value.log.root = Path('inert/foreign-events')
+                elif changed in ('root', 'stream'):
+                    parts = {'root': saved.root, 'stream': saved.stream, 'witnessed': saved.witnessed}
+                    parts[changed] = foreign
+                    value.log.binding.return_value = EventBinding(**parts)
+                elif changed == 'log_head':
+                    value.log.binding.return_value = EventBinding(saved.root, saved.stream, next_head)
+                elif changed == 'custody_head':
+                    value.custody.binding = EventBinding(saved.root, saved.stream, next_head)
+                else:
+                    value._head = next_head
+                with self.assertRaisesRegex(PublicationError, 'PUBLICATION_CUSTODY_HEAD'):
+                    value._owners()
+                value.log.binding.assert_called_once_with()
 
 
 class InertApi:

@@ -27,6 +27,32 @@ def config_path(root: Path) -> Path:
     return Path(root).absolute() / ".local" / "gt07-failpoint.json"
 
 
+def reached_path(root: Path) -> Path:
+    return config_path(root).with_name("gt07-failpoint-reached.json")
+
+
+def arm(root: Path, *, run_id: str, phase: str, wait_seconds: int = 300) -> Path:
+    """Create one private diagnostic arm file; never overwrite an old cut."""
+    if phase not in PHASES or type(run_id) is not str or not run_id or len(run_id) > 128:
+        raise ValueError("GT07_FAILPOINT_INVALID")
+    if type(wait_seconds) is not int or not 1 <= wait_seconds <= 300:
+        raise ValueError("GT07_FAILPOINT_INVALID")
+    path = config_path(root)
+    _read(root)  # Check existing parents before creating diagnostic files.
+    path.parent.mkdir(parents=True, exist_ok=True)
+    if path.exists() or reached_path(root).exists():
+        raise ValueError("GT07_FAILPOINT_OUTPUT_NOT_FRESH")
+    payload = {"schema": _SCHEMA, "enabled": True, "phase": phase,
+               "action": "pause", "run_id": run_id,
+               "wait_seconds": wait_seconds}
+    with path.open("x", encoding="utf-8") as stream:
+        json.dump(payload, stream, sort_keys=True, separators=(",", ":"))
+        stream.write("\n")
+        stream.flush()
+        os.fsync(stream.fileno())
+    return path
+
+
 def runtime_root(default: Path) -> Path:
     """Resolve the private diagnostic root selected by the native harness.
 
@@ -89,12 +115,17 @@ def hit(root: Path, phase: str) -> None:
     value = _read(root)
     if value is None or value["phase"] != phase:
         return
-    receipt = config_path(root).with_name("gt07-failpoint-reached.json")
-    with receipt.open("x", encoding="utf-8") as stream:
+    receipt = reached_path(root)
+    temporary = receipt.with_suffix(".pending")
+    with temporary.open("x", encoding="utf-8") as stream:
         json.dump({"schema": "HH-GT07-FAILPOINT-REACHED-1", "run_id": value["run_id"],
                    "phase": phase, "pid": os.getpid(), "monotonic_ns": time.monotonic_ns()}, stream)
         stream.flush()
         os.fsync(stream.fileno())
+    # Publish complete bytes atomically without replacing a previous receipt.
+    # The harness must never interpret partially written JSON as a cut.
+    os.link(temporary, receipt)
+    temporary.unlink()
     deadline = time.monotonic() + value["wait_seconds"]
     while time.monotonic() < deadline:
         time.sleep(0.25)

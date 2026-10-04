@@ -24,6 +24,7 @@ import threading
 sys.dont_write_bytecode = True
 STUDIO = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(STUDIO.parent))
+from studio.host.core.gt07_failpoints import arm as arm_failpoint, reached_path
 
 
 def _sha(path: Path) -> str:
@@ -245,7 +246,8 @@ def _native_recovery_state(owner) -> dict[str, object]:
 
 
 def _child(output: Path, binary: Path, run_id: str, operation: str,
-           recover_after_loss: bool, source: dict[str, str], closure: str) -> int:
+           recover_after_loss: bool, source: dict[str, str], closure: str,
+           failpoint_phase: str | None = None) -> int:
     from studio.host.core.transport import epoch_ms
     from studio.host.jobs.native_dispatch import GodotOwnerBinding, NativeOwnerDispatcher
     from studio.host.jobs.queue_owner import QueueOwner
@@ -341,6 +343,30 @@ def _child(output: Path, binary: Path, run_id: str, operation: str,
         steps.append("reserved")
         steps.append(f"deadline:{request.deadline_ms}")
         steps.append(f"now_before_advance:{epoch_ms()}")
+        if failpoint_phase is not None:
+            context = {"run_id": run_id, "source_closure_sha256": closure,
+                "storage_id": owner.storage_id, "project_id": owner.project_id,
+                "queue_storage_id": queue.storage_id, "queue_job_id": row.job.job_id,
+                "queue_head": _event_head(queue.log), "reservation_fence": reservation_fence,
+                "request": request.as_dict(), "digest": request.digest,
+                "before": before, "editor_identity": editor_identity,
+                "selection": owner._journal.selection_facts()}
+            _write(output / "recovery-context.json", context)
+            original_failpoint = owner._failpoint
+            def captured_failpoint(phase):
+                if phase == failpoint_phase:
+                    bundle = owner._journal.read_selected_bundle()
+                    terminal_raw = owner._journal.lookup_response(request.command_id, request.digest)
+                    _write(output / "cut-state.json", {"phase": phase,
+                        "journal": owner._journal.snapshot(),
+                        "command": owner._journal.lookup(request.command_id, request.digest),
+                        "selection": owner._journal.selection_facts(),
+                        "files": {name: {"sha256": hashlib.sha256(data).hexdigest(),
+                                         "size_bytes": len(data)} for name, data in bundle.files.items()},
+                        "original_response": parse_json(terminal_raw) if terminal_raw else None,
+                        "queue_head": _event_head(queue.log)})
+                original_failpoint(phase)
+            owner._failpoint = captured_failpoint
         if recover_after_loss:
             if operation != "script_text.replace":
                 raise RuntimeError("RECOVERY_PROBE_REQUIRES_SCRIPT_REPLACEMENT")
@@ -539,8 +565,106 @@ def _child(output: Path, binary: Path, run_id: str, operation: str,
     return 0 if report["passed"] else 1
 
 
+def _recover_crash(output: Path, binary: Path, run_id: str, source: dict, closure: str) -> int:
+    """Fresh-process authenticated recovery of a real cut; never resubmit."""
+    from studio.host.core.transport import epoch_ms
+    from studio.host.jobs.queue_owner import QueueOwner
+    from studio.protocol.core import canonical_bytes
+    actor = queue = editor = None
+    report = {"schema": "gt07-crash-recovery-1", "run_id": run_id, "authority": 0,
+              "checks": {}, "errors": [], "passed": False}
+    def check(name, condition):
+        report["checks"][name] = bool(condition)
+        if not condition:
+            raise RuntimeError("CRASH_RECOVERY_" + name.upper())
+    try:
+        check("source_unchanged", _sources(STUDIO) == source and _closure(STUDIO, source) == closure)
+        original = json.loads((output / "recovery-context.json").read_bytes())
+        cut = json.loads((output / "cut-state.json").read_bytes())
+        request = original["request"]
+        command, digest = request["command_id"], original["digest"]
+        check("context_binding", original["run_id"] == run_id and original["source_closure_sha256"] == closure)
+        queue = QueueOwner.reopen(original["queue_storage_id"])
+        record = queue.broker.lookup(original["queue_job_id"])
+        check("queue_reservation_retained", record is not None
+              and record.fence is not None and asdict(record.fence) == original["reservation_fence"]
+              and _event_head(queue.log) == original["queue_head"] == cut["queue_head"])
+        owner_module = _load_owner()
+        module = owner_module._load("recovery_host")
+        work = output / "recovered"
+        work.mkdir()
+        actor = module.GodotRecoveryHost.open(work, storage_id=original["storage_id"],
+            project_id=original["project_id"], expected_source_closure_sha256=closure, editor_binary=binary)
+        credential = actor.sessions.issue(operations=module.GRANTS)
+        auth = {"authorization": "Bearer " + credential.bearer, "catalog_digest": module.CATALOG_DIGEST}
+        lookup_body = {"project_id": actor.project_id, "command_id": command}
+        initial = actor.lookup(lookup_body, **auth).as_dict()
+        journal = actor._recovery._journal
+        selected = journal.selection_facts()
+        check("selected_version_preserved", selected == cut["selection"])
+        if cut["original_response"] is not None:
+            check("original_ack_preserved", initial == cut["original_response"])
+        else:
+            check("no_premature_ack", initial["status"] != "COMMITTED")
+        lease = actor.lease({"project_id": actor.project_id, "ttl_ms": 30_000}, **auth)
+        check("new_fencing_epoch", lease["fencing_epoch"] > request["fencing_epoch"])
+        body = {**lookup_body, "digest": digest, "lease_id": lease["lease_id"],
+            "fencing_epoch": lease["fencing_epoch"], "deadline_ms": min(lease["expires_ms"], epoch_ms() + 29_000)}
+        response = actor.reconcile(body, **auth).as_dict()
+        report.update(initial_lookup=initial, response=response)
+        restored = selected == original["selection"] and cut["original_response"] is None
+        check("expected_terminal", response["status"] == ("REJECTED" if restored else "COMMITTED"))
+        check("durable_response", journal.recovered_response(command, digest) == canonical_bytes(response))
+        if cut["original_response"] is not None:
+            check("same_ack_after_reconcile", response == cut["original_response"])
+        editor = actor._recovery._editor
+        observation = editor.script_observation()
+        report["editor_identity"] = editor.identity
+        check("fresh_editor", editor.identity["session_id"] != original["editor_identity"]["session_id"]
+              and (editor.identity["pid"], editor.identity["creation_filetime"]) !=
+                  (original["editor_identity"]["pid"], original["editor_identity"]["creation_filetime"]))
+        check("native_readback_files", observation["snapshot"]["working_files"] == cut["files"])
+        state = journal.snapshot()
+        check("retry_no_effect", actor.reconcile(body, **auth).as_dict() == response
+              and actor._recovery._editor is editor and journal.snapshot() == state)
+        check("lookup_exact", actor.lookup(lookup_body, **auth).as_dict() == response)
+        check("selection_unchanged_after_recovery", journal.selection_facts() == selected)
+        check("queue_not_redispatched", _event_head(queue.log) == original["queue_head"])
+        actor.close()
+        actor = None
+        cleanup = _editor_close_proof(editor._cleanup, report["editor_identity"])
+        report["editor_cleanup"] = cleanup
+        check("recovery_editor_clean", cleanup["valid"])
+        restart = output / "lookup-restart"
+        restart.mkdir()
+        actor = module.GodotRecoveryHost.open(restart, storage_id=original["storage_id"],
+            project_id=original["project_id"], expected_source_closure_sha256=closure, editor_binary=binary)
+        credential = actor.sessions.issue(operations=module.GRANTS)
+        auth["authorization"] = "Bearer " + credential.bearer
+        journal = actor._recovery._journal
+        state = journal.snapshot()
+        check("reopen_lookup_and_retry_no_engine", actor.lookup(lookup_body, **auth).as_dict() == response
+              and actor.reconcile(body, **auth).as_dict() == response
+              and actor._recovery._editor is None and journal.snapshot() == state
+              and journal.selection_facts() == selected)
+        report["passed"] = True
+    except Exception as error:
+        report["errors"].append(_safe_error(error))
+        report["failure_code"] = str(error) if isinstance(error, RuntimeError) else type(error).__name__
+    finally:
+        for resource in (actor, queue):
+            if resource is not None:
+                try:
+                    resource.close()
+                except Exception as error:
+                    report["errors"].append(_safe_error(error))
+        report["passed"] = bool(report["passed"] and not report["errors"])
+        _write(output / "crash-recovery.json", report)
+    return 0 if report["passed"] else 1
+
+
 def run(output: Path, binary: Path, run_id: str, operation: str,
-        recover_after_loss: bool) -> int:
+        recover_after_loss: bool, failpoint_phase: str | None = None) -> int:
     output = output.resolve()
     # The frozen child runs with its snapshot as cwd.  Keep the pinned editor
     # executable absolute so admission cannot silently resolve it under the
@@ -550,6 +674,8 @@ def run(output: Path, binary: Path, run_id: str, operation: str,
     if _sha(binary) != lock['gui_sha256']:
         raise ValueError('GODOT_GUI_PIN_MISMATCH')
     output.mkdir(parents=True, exist_ok=False)
+    if failpoint_phase is not None:
+        arm_failpoint(output, run_id=run_id, phase=failpoint_phase)
     source = _sources(STUDIO)
     closure = _closure(STUDIO, source)
     manifest = {"schema": "gt07-native-godot-queue-source-1", "run_id": run_id,
@@ -575,20 +701,49 @@ def run(output: Path, binary: Path, run_id: str, operation: str,
              "--run-id", run_id, "--operation", operation]
     if recover_after_loss:
         child.append("--recover-after-loss")
+    if failpoint_phase is not None:
+        child.extend(["--failpoint-phase", failpoint_phase])
     environment = os.environ.copy()
     environment["HH_STUDIO_LINUX_GODOT"] = str(
         STUDIO / ".local/tooling/godot-4.7.2-stable-linux/Godot_v4.7.2-stable_linux.x86_64")
-    host = runner.run_process(child, cwd=snapshot, output=output, timeout=240,
-                              label="native-godot", env=environment)
+    environment.pop("HH_GT07_FAILPOINT_ROOT", None)
+    environment.pop("HH_GT07_CRASH_GATE", None)
+    recovery_host = recovery_report = None
+    if failpoint_phase is not None:
+        from studio.tests.jobs.gt07_crash_process import run_cut
+        environment["HH_GT07_FAILPOINT_ROOT"] = str(output)
+        host = run_cut(child, cwd=snapshot, output=output, timeout=240, env=environment,
+            receipt_path=reached_path(output), run_id=run_id, phase=failpoint_phase)
+        _write(output / "crash-host.json", host)
+        if host["cut_verified"]:
+            environment.pop("HH_GT07_FAILPOINT_ROOT")
+            recovery_child = child[:]
+            recovery_child.append("--recover-crash")
+            recovery_host = runner.run_process(recovery_child, cwd=snapshot, output=output,
+                timeout=240, label="crash-recovery", env=environment)
+            if (output / "crash-recovery.json").is_file():
+                recovery_report = json.loads((output / "crash-recovery.json").read_bytes())
+    else:
+        host = runner.run_process(child, cwd=snapshot, output=output, timeout=240,
+                                  label="native-godot", env=environment)
     child_report = json.loads((output / "native-child.json").read_bytes()) \
         if (output / "native-child.json").is_file() else None
+    failpoint_passed = bool(
+        failpoint_phase is not None and host.get("cut_verified") is True
+        and recovery_host and recovery_host.get("exit_code") == 0
+        and recovery_host.get("wrapper_exit_code") == 0
+        and recovery_host.get("tree_verified") is True and not recovery_host.get("timed_out")
+        and recovery_report and recovery_report.get("passed") is True)
     report = {"schema": "gt07-native-godot-queue-wrapper-1", "run_id": run_id,
               "source_closure_sha256": closure, "authority": 0,
               "formal_acceptance": False, "public_ack": False,
               "host": host, "child": child_report,
+              "failpoint": {"phase": failpoint_phase, "passed": failpoint_passed,
+                            "recovery_host": recovery_host, "recovery": recovery_report}
+                            if failpoint_phase is not None else None,
               "source_unchanged": _sources(STUDIO) == source,
               "snapshot_unchanged": _sources(snapshot) == source,
-              "passed": bool(child_report and child_report.get("passed") is True
+              "passed": bool(failpoint_phase is None and child_report and child_report.get("passed") is True
                   and host.get("exit_code") == 0 and host.get("wrapper_exit_code") == 0
                   and host.get("timed_out") is False
                   and host.get("tree_verified") is True
@@ -598,6 +753,14 @@ def run(output: Path, binary: Path, run_id: str, operation: str,
         {"run_id": run_id, "passed": report["passed"],
          "wrapper_exit": host.get("wrapper_exit_code"),
          "child_exit": host.get("exit_code")}, separators=(",", ":")), flush=True)
+    # A deliberate cut has a forced process exit, separate from the recovery
+    # child's natural exit. Keep crash/recovery proof distinct from normal ACK.
+    if failpoint_phase is not None:
+        report["passed"] = False
+        report["failpoint_passed"] = bool(failpoint_passed and report["source_unchanged"]
+                                          and report["snapshot_unchanged"])
+        _write(output / "queue-native.json", report)
+        return 0 if report["failpoint_passed"] else 1
     return 0 if report["passed"] else 1
 
 
@@ -610,13 +773,23 @@ def main(argv=None) -> int:
                                                  "script_text.replace"),
                         default="scene.node.update")
     parser.add_argument("--recover-after-loss", action="store_true")
+    parser.add_argument("--failpoint-phase", choices=("PREPARED", "VALIDATED", "ACTIVATING",
+                                                        "COMMITTED", "RELOAD", "ACK"))
     parser.add_argument("--frozen", action="store_true")
+    parser.add_argument("--recover-crash", action="store_true")
     args = parser.parse_args(argv)
+    if args.recover_crash and not args.frozen:
+        parser.error("--recover-crash is an internal frozen recovery stage")
     if args.frozen:
+        if os.environ.get("HH_GT07_CRASH_GATE") == "1" and sys.stdin.readline() != "GO\n":
+            return 74
         manifest = json.loads((args.output / "source-closure.json").read_bytes())
+        if args.recover_crash:
+            return _recover_crash(args.output.resolve(), args.binary.resolve(), args.run_id,
+                                  manifest["files"], manifest["source_closure_sha256"])
         return _child(args.output.resolve(), args.binary.resolve(), args.run_id,
                       args.operation, args.recover_after_loss,
-                      manifest["files"], manifest["source_closure_sha256"])
+                      manifest["files"], manifest["source_closure_sha256"], args.failpoint_phase)
     if args.output.name != args.run_id:
         parser.error("output basename must equal the run ID")
     if args.recover_after_loss and args.operation != "script_text.replace":
@@ -626,7 +799,8 @@ def main(argv=None) -> int:
         "scene.node.update": "godot-edit", "scene.save": "godot-save",
         "script_text.replace": "godot-script"}[args.operation]
     return scenario_main(["--scenario", scenario, "--godot-binary", str(args.binary),
-                          "--run-id", args.run_id, "--output-root", str(args.output.parent)])
+                          "--run-id", args.run_id, "--output-root", str(args.output.parent),
+                          *( ["--failpoint-phase", args.failpoint_phase] if args.failpoint_phase else [] )])
 
 
 if __name__ == "__main__":

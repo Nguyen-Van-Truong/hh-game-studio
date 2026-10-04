@@ -386,10 +386,6 @@ class GodotPublicationOwner:
         except BaseException:
             self.sessions.finish_effect(permit, known=False)
             raise
-        mapped = {'capture':'PREPARED', 'stage':'VALIDATED', 'select':'ACTIVATING',
-                  'adopt':'RELOAD', 'commit':'COMMITTED'}.get(phase)
-        if mapped is not None:
-            self._failpoint(mapped)
         self.sessions.finish_effect(permit, known=True)
         return result
 
@@ -525,10 +521,12 @@ class GodotPublicationOwner:
                       'GODOT_CAPTURE_VALIDATION_MISMATCH')
             self.sessions.check(grant,lease,deadline_ms=request.deadline_ms,operation=request.operation)
             self._journal.prepare(command,digest,final,observed_ms=epoch_ms())
+            self._failpoint('PREPARED')
             self._phase(request,grant,lease,'stage',
                 lambda:self._journal.stage_prepared(command,digest,observed_ms=epoch_ms()))
             self._validator.semantic_observation(semantic_receipt,final)
             self._journal.validated(command,digest,asdict(semantic_receipt),observed_ms=epoch_ms())
+            self._failpoint('VALIDATED')
             ready = self.inspect()
             _need(all(ready[k] == before[k] for k in ('revision','generation','root_instance_id','state','working_files',
                       'project_revision')), 'GODOT_EDITOR_CHANGED_DURING_VALIDATION')
@@ -550,6 +548,7 @@ class GodotPublicationOwner:
                 facts = old_editor.retirement_observation(retired)
                 self._journal.retired(command,digest,self._retirement_facts(retired,facts),observed_ms=epoch_ms())
             self._journal.prepare_activation(command,digest,current=current,observed_ms=epoch_ms())
+            self._failpoint('ACTIVATING')
             self._phase(request,grant,lease,'select',
                 lambda:self._journal.select_prepared(command,digest,observed_ms=epoch_ms()))
             selected = self._journal.read_selected_bundle()
@@ -573,6 +572,7 @@ class GodotPublicationOwner:
                 adopted = self._phase(request,grant,lease,'adopt',
                     lambda:self._editor.adopt(adoption_intent,selected,selection['selector']['selection']))
                 adoption = self._adoption_facts(self._editor.observation(adopted,selected),selected,selection)
+            self._failpoint('RELOAD')
             def finalize():
                 self._editor.observation(adopted,selected)
                 self._validator.semantic_observation(semantic_receipt,selected)
@@ -582,7 +582,9 @@ class GodotPublicationOwner:
             terminal = self._phase(request,grant,lease,'commit',finalize)
             receipt = terminal['receipt']
             _need(receipt['status'] == 'COMMITTED', 'GODOT_DURABLE_COMMIT_REQUIRED')
+            self._failpoint('COMMITTED')
             self._remember_response(command,record)
+            self._failpoint('ACK')
             return self._reply(command,record)
         except BaseException as exc:
             cleanup_owner = getattr(exc,'cleanup_owner',None)
@@ -698,7 +700,6 @@ class GodotPublicationOwner:
               'GODOT_DURABLE_RESPONSE_MISMATCH')
         self._update_record(record,status=response.status.value,code=response.code,
             postconditions=response.postconditions,durable_response_sha256=_sha(raw))
-        self._failpoint('ACK')
 
     def _reply(self, command_id, record):
         # Receipt verification can wait on native storage. Retain the journal

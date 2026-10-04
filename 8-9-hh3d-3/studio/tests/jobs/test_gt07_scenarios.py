@@ -108,6 +108,19 @@ class GT07ScenarioAdmissionTests(unittest.TestCase):
             with self.assertRaisesRegex(RuntimeError, "DEADLINE_NOT_REJECTED"):
                 module._contract_dry_run("blender-box", module.SCENARIOS["blender-box"])
 
+    def test_failpoint_rejects_routes_without_a_publication_phase(self):
+        with tempfile.TemporaryDirectory() as root:
+            studio = Path(root) / "studio"
+            args = argparse.Namespace(run_id="gt07-native-godot-20261004-97",
+                                      run_ids=[], output_root=studio / ".local/reviews",
+                                      failpoint_phase="PREPARED")
+            with patch.object(module, "STUDIO", studio):
+                with self.assertRaisesRegex(ValueError, "FAILPOINT_UNSUPPORTED"):
+                    module.dry_run("godot-edit", args)
+                args.run_id = "gt07-native-queue-20261004-97"
+                with self.assertRaisesRegex(ValueError, "FAILPOINT_UNSUPPORTED"):
+                    module.dry_run("blender-box", args)
+
 
 if __name__ == "__main__":
     unittest.main()

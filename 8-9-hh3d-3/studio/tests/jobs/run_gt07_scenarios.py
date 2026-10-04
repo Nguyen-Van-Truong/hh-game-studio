@@ -28,19 +28,21 @@ from studio.host.core.gt07_failpoints import assert_disabled, runtime_root
 SCENARIOS = {
     "godot-edit": {"kind": "godot", "operation": "scene.node.update",
                    "probe": "run_native_godot_queue_probe.py", "suffix": "edit",
-                   "max_horizon_ms": 30_000},
+                   "max_horizon_ms": 30_000, "failpoint_phases": ()},
     "godot-save": {"kind": "godot", "operation": "scene.save",
                    "probe": "run_native_godot_queue_probe.py", "suffix": "save",
-                   "max_horizon_ms": 90_000},
+                   "max_horizon_ms": 90_000,
+                   "failpoint_phases": ("PREPARED", "VALIDATED", "ACTIVATING", "COMMITTED", "RELOAD", "ACK")},
     "godot-script": {"kind": "godot", "operation": "script_text.replace",
                      "probe": "run_native_godot_queue_probe.py", "suffix": "script",
-                     "max_horizon_ms": 90_000},
+                     "max_horizon_ms": 90_000,
+                     "failpoint_phases": ("PREPARED", "VALIDATED", "ACTIVATING", "COMMITTED", "RELOAD", "ACK")},
     "godot-recovery": {"kind": "godot", "operation": "script_text.replace",
                        "probe": "run_native_godot_queue_probe.py", "suffix": "recovery",
-                       "max_horizon_ms": 90_000, "recover_after_loss": True},
+                   "max_horizon_ms": 90_000, "recover_after_loss": True, "failpoint_phases": ()},
     "blender-box": {"kind": "blender", "operation": "mesh.create_box",
                     "probe": "run_native_blender_queue_probe.py", "suffix": "blender",
-                    "max_horizon_ms": 5_000},
+                    "max_horizon_ms": 5_000, "failpoint_phases": ()},
 }
 
 
@@ -205,6 +207,10 @@ def _output_for(name: str, args: argparse.Namespace, index: int = 0) -> Path:
 def dry_run(name: str, args: argparse.Namespace, index: int = 0) -> dict[str, object]:
     scenario = SCENARIOS[name]
     output = _output_for(name, args, index)
+    phase = getattr(args, "failpoint_phase", None)
+    if phase is not None and phase not in scenario.get("failpoint_phases", ()):
+        raise ValueError("FAILPOINT_UNSUPPORTED_SCENARIO")
+    assert_disabled(STUDIO)
     assert_disabled(runtime_root(STUDIO))
     contract = _contract_dry_run(name, scenario)
     binary = _binary_for(scenario, args)
@@ -218,7 +224,7 @@ def dry_run(name: str, args: argparse.Namespace, index: int = 0) -> dict[str, ob
     if horizon not in (5_000, 30_000, 90_000):
         raise ValueError("SCENARIO_DEADLINE_PROFILE_INVALID")
     return {"scenario": name, "kind": scenario["kind"], "run_id": output.name,
-            "output": str(output),
+            "output": str(output), "failpoint_phase": phase,
             "operation": scenario["operation"], "probe": scenario["probe"],
             "binary": str(binary), "binary_sha256": _sha(binary),
             "source_closure_sha256": closure, "deadline_ms": horizon,
@@ -235,6 +241,7 @@ def _run_one(name: str, args: argparse.Namespace, index: int = 0) -> dict[str, o
     probe = _load_probe(scenario["probe"])
     binary = Path(check["binary"])
     with _native_measure_guard():
+        assert_disabled(STUDIO)
         assert_disabled(runtime_root(STUDIO))
         _output_for(name, args, index)
         if _closure(scenario) != check["source_closure_sha256"]:
@@ -245,7 +252,8 @@ def _run_one(name: str, args: argparse.Namespace, index: int = 0) -> dict[str, o
             exit_code = probe.run(output, binary, output.name)
         else:
             exit_code = probe.run(output, binary, output.name, scenario["operation"],
-                                  bool(scenario.get("recover_after_loss")))
+                                  bool(scenario.get("recover_after_loss")),
+                                  getattr(args, "failpoint_phase", None))
     return {"scenario": name, "run_id": output.name, "exit_code": exit_code,
             "dry_run": check, "output": str(output)}
 
@@ -263,6 +271,8 @@ def main(argv: list[str] | None = None) -> int:
                         default=STUDIO / ".local" / "reviews")
     parser.add_argument("--run-id")
     parser.add_argument("--run-ids", help="comma-separated fresh IDs for --matrix")
+    parser.add_argument("--failpoint-phase", choices=("PREPARED", "VALIDATED", "ACTIVATING",
+                                                        "COMMITTED", "RELOAD", "ACK"))
     args = parser.parse_args(argv)
     names = ([value.strip() for value in args.matrix.split(",") if value.strip()]
              if args.matrix else ([args.scenario] if args.scenario else []))
@@ -273,6 +283,8 @@ def main(argv: list[str] | None = None) -> int:
     if args.matrix and (args.run_id or len(args.run_ids) != len(names)
                         or len(set(args.run_ids)) != len(args.run_ids)):
         parser.error("--matrix requires one distinct --run-ids entry per scenario")
+    if args.matrix and args.failpoint_phase:
+        parser.error("--failpoint-phase requires one scenario")
     if not args.matrix and (args.run_id is None or args.run_ids):
         parser.error("one --run-id is required, also for --dry-run")
     # Check every intended output before starting the first engine in a matrix.
