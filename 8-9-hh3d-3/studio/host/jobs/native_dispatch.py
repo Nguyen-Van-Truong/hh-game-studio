@@ -228,6 +228,7 @@ class NativeOwnerDispatcher:
         _need(type(queue) is QueueOwner and queue.broker is not None, 'NATIVE_QUEUE_OWNER_REQUIRED')
         self.queue = queue
         self._bindings, self._owners, self._issued = {}, {}, {}
+        self._recovery_only = set()
         self._phase = threading.Lock()
         self._stop = threading.Event()
         self._closed = False
@@ -246,9 +247,35 @@ class NativeOwnerDispatcher:
         _need(not self._closed and not self._stop.is_set(), 'NATIVE_DISPATCH_STOPPED')
 
     def register(self, binding):
+        self._register_binding(binding, recovery=False)
+
+    def register_recovery(self, binding):
+        """Reattach an exact surviving owner for lookup only, never execution.
+
+        A script publication may replace the editor before queue collection.
+        Its old binding is valid history but cannot authorize another effect.
+        Reopening a queue does not reconstruct an owner, grant or binding.
+        """
+        self._register_binding(binding, recovery=True)
+
+    def _register_binding(self, binding, *, recovery):
         _need(type(binding) in (BlenderOwnerBinding, GodotOwnerBinding), 'NATIVE_BINDING_REQUIRED')
-        binding.check()
+        binding.check(control=recovery)
         owner = binding.owner
+        key = self._job_id(binding)
+        with _BIND:
+            self._open()
+            if recovery:
+                row = self.queue.broker.lookup(key)
+                _need(row is not None and row.state in ('RESERVED', 'UNKNOWN')
+                      and row.fence is not None
+                      and row.job.resources == (binding.resource,)
+                      and row.job.project_id == binding.project_id
+                      and row.job.session_id == binding.session_id
+                      and row.command_sha256 == binding.command_sha256,
+                      'NATIVE_RECOVERY_RESERVATION_REQUIRED')
+            else:
+                _need(key not in self._recovery_only, 'NATIVE_RECOVERY_LOOKUP_ONLY')
         if type(binding) is BlenderOwnerBinding:
             with _BIND, owner._attachment_lock, ExitStack() as stack:
                 self._open()
@@ -274,6 +301,8 @@ class NativeOwnerDispatcher:
                     publisher._queue_dispatcher = self
                 self._owners[binding.resource] = owner
                 self._bindings[key] = binding
+                if recovery:
+                    self._recovery_only.add(key)
             return
         # Godot's publication owner is dynamically loaded and has a single
         # owner lock, not Blender's transport/publication attachment graph.
@@ -295,6 +324,8 @@ class NativeOwnerDispatcher:
             owner._queue_dispatcher = self
             self._owners[binding.resource] = owner
             self._bindings[key] = binding
+            if recovery:
+                self._recovery_only.add(key)
 
     def enqueue(self, binding, *, dependencies=()):
         with _BIND:
@@ -302,6 +333,7 @@ class NativeOwnerDispatcher:
             _need(type(binding) in (BlenderOwnerBinding, GodotOwnerBinding)
                   and self._bindings.get(self._job_id(binding)) is binding,
                   'NATIVE_BINDING_NOT_REGISTERED')
+            _need(self._job_id(binding) not in self._recovery_only, 'NATIVE_RECOVERY_LOOKUP_ONLY')
             request = binding.check()
             owner, grant = binding.owner, binding.grant
             # Fail the harness/admission before consuming native IDs if it
@@ -532,6 +564,7 @@ class NativeOwnerDispatcher:
         try:
             with _BIND:
                 self._open()
+                _need(reservation.job.job_id not in self._recovery_only, 'NATIVE_RECOVERY_LOOKUP_ONLY')
                 _need(not reservation.recovered
                       and self._issued.get(reservation.job.job_id) is reservation,
                       'NATIVE_RESERVATION_REQUIRED')
@@ -608,12 +641,16 @@ class NativeOwnerDispatcher:
         _need(self._phase.acquire(blocking=False), 'NATIVE_PHASE_BUSY')
         try:
             with _BIND, self.queue._lifecycle:
+                # Validate all drains before detaching any owner. A later
+                # pending Godot must not leave earlier owners half detached.
+                for owner in self._owners.values():
+                    if type(owner) is not BlenderWriterClientOwner:
+                        stop_thread = getattr(owner, '_stop_thread', None)
+                        _need(stop_thread is None or not stop_thread.is_alive(),
+                              'NATIVE_STOP_DRAIN_REQUIRED')
                 for owner in self._owners.values():
                     if type(owner) is not BlenderWriterClientOwner:
                         with owner._attachment_lock:
-                            stop_thread = getattr(owner, '_stop_thread', None)
-                            _need(stop_thread is None or not stop_thread.is_alive(),
-                                  'NATIVE_STOP_DRAIN_REQUIRED')
                             if owner._queue_dispatcher is self:
                                 owner._queue_dispatcher = None
                         continue
@@ -630,6 +667,7 @@ class NativeOwnerDispatcher:
                 self._closed = True
                 self._bindings.clear()
                 self._issued.clear()
+                self._recovery_only.clear()
                 if self.queue._dispatcher is self:
                     self.queue._dispatcher = None
         finally:

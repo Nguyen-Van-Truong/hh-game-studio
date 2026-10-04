@@ -185,3 +185,20 @@ Next gaps: lookup-only recovery registration after a script successor replaces
 the bound editor; native queued save/script/reload; Q03/Q04/Q08 revoked/expired/
 two-writer/crash/Stop matrix; Q05–Q07 storage/conflict/retention cuts. GT07 remains
 IN_PROGRESS and still requires the complete frozen package and two critics.
+
+## Verification note, 04-10-2026 — recovery guard (static)
+
+- `studio/host/jobs/native_dispatch.py` now exposes `register_recovery()` as a
+  lookup-only reattachment path. It accepts only an existing durable
+  `RESERVED`/`UNKNOWN` row whose resource, project/session and command hash match
+  the binding. Recovery bindings are rejected by both `enqueue()` and
+  `advance()`; `_binding_for()` still requires the exact persisted fence before
+  collection. No new native effect or lease is reconstructed.
+- `studio/tests/jobs/test_native_godot_recovery.py` covers three focused
+  regressions: exact reservation reattachment with execution blocked, rejection
+  of queued/command-mismatched rows, and fence mismatch rejection. Actual run:
+  three tests, exit 0. This is static/inert evidence only; it does not claim a
+  native script-successor or queued publication result.
+- A test fixture exposed and repaired an incorrect lookup of the command hash
+  from `PendingJob`; the durable hash belongs to `JobRecord.command_sha256`.
+  Existing native queue semantics and timeout gates are unchanged.
