@@ -26,9 +26,11 @@ contracts pass.
 Native M1–M9 execution remains open and must use fresh IDs after this source
 freeze.  A dry-run validates wiring and contract bounds only; it cannot prove
 runtime IPC, process cleanup, or engine behavior.
-N2: Godot ACK crash cut run `gt07-native-godot-20261004-24` reached the exact
-phase, was killed by owned handle, and recovered with byte-equal ACK/readback;
-the RELOAD attempt 25 did not reach its phase and remains a failure diagnostic.
+N2: Godot ACK crash cut run `gt07-native-godot-20261004-24` and RELOAD cut run
+`gt07-native-godot-20261005-03` reached their exact phases, were killed by an
+owned handle, and recovered with byte-equal readback; run03 has authority 0.
+The RELOAD failures in runs 25 and 02 remain immutable diagnostics. PREPARED,
+VALIDATED, ACTIVATING, COMMITTED and ACK cuts still need fresh IDs.
 N2-N5: execute remaining M3 cuts, M2/M4, M5/M7, then M6/M8/M9 with fresh IDs and preserved raw.
 N6: freeze closure once, run the full matrix plus focused regressions, map artifacts, then send the same hash to two independent critics.
 
