@@ -14,7 +14,7 @@ Historical entries below are retained for provenance; they do not override the t
 | M5 / TX05/TX09 | OPEN (partial) | host-only `gt07-m5-storage-20261005-05` and fresh repeat `gt07-m5-storage-20261005-07` verified exclusive file-lock denial, cross-volume `MoveFileExW` refusal (error 17), and injected fsync/diskfull UNKNOWN with last-good preservation; source closure `308602e8...fd072` for the repaired runner | final frozen repeat, requirement-map binding, and any product-boundary proof beyond the authority-zero host diagnostic |
 | M6 / Q04 | OPEN (partial) | Stop drain and native run16 | full queue/cancel/reconnect matrix in final run |
 | M7 / Q07 | OPEN (partial) | 510-record capacity/JOURNAL_FULL | real-clock expiry, compaction/rotation |
-| M8 / Q08 | OPEN (partial) | host-only repeats `gt07-m8-process-20261005-05` and `-07` verify PID/start identity, forged-start refusal, owned-tree timeout and 64 MiB Job memory denial; actual worker exits and Job cleanup recorded (closure `e54646f8...58f71`) | final frozen M1–M9 matrix and source-specific manifest |
+| M8 / Q08 | OPEN (partial) | host-only repeats `gt07-m8-process-20261005-05`, `-07` and fresh `-08` verify PID/start identity, forged-start refusal, owned-tree timeout and 64 MiB Job memory denial; actual worker exits and Job cleanup recorded (closure `e54646f8...58f71`) | final frozen M1–M9 matrix and source-specific manifest |
 | M9 / TX13 | OPEN (partial) | static `play-mutation` lane (`36e8d56b`) binds a generated-state mutation while Play is RUNNING to stale-capture rejection/UNKNOWN/no-replay; one-use binding refresh `20261005-gt07-binding-refresh` verified source=233/execution=235; dry-run `...-01` exit 0; native `gt06-gt07-m9-playmutation-20261005-02` exit 0 with actual runtime/import exits, clean Job/tree and 18/18 checks | repeat in the final frozen matrix |
 
 ## Next
@@ -193,6 +193,17 @@ source closure was
 `ccc2c3f2f5feac425d358309253f1d5f7be5c375d80d1263d3a3176a050dbae9`.
 This remains authority-zero evidence until the final frozen M1-M9 matrix and
 independent critics.
+
+## Checkpoint, 05-10-2026 — fresh M8 process ownership repeat
+
+`gt07-m8-process-20261005-08` ran without an engine and verified all three
+owned-process cases: forged PID/start-time termination was refused, the owned
+timeout removed only the gated tree while the sentinel stayed alive, and a
+64 MiB Job memory limit caused native `VirtualAlloc` denial (1455) rather than
+a Python allocation error. Actual worker exits were captured and every Job
+closed with zero active members and no retained handle. Source closure remained
+`e54646f8ca640cc465231ddecd204adc233df3aefbf96e39d9376697b7b58f71`.
+This is authority-zero host evidence; the final frozen matrix is still open.
 
 ## Checkpoint, 05-10-2026 — M5 dry-run/native handoff repair
 
