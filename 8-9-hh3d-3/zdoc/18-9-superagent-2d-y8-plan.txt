@@ -36,7 +36,7 @@ PREVIOUS_REVISION=SA4 trong Git 5b2d4c7b; LOG chi tiết (run id, hash, số ass
   routing HH3D nằm ở 8-9-hh3d-3/AGENTS.md.
 - Coordinator game tick WP khi đạt DoD; subagent không tick.
 
-HIỆN TRẠNG (05-10 13:27; coordinator cập nhật khi xong một mốc, tối đa 15 dòng)
+HIỆN TRẠNG (05-10 13:38; coordinator cập nhật khi xong một mốc, tối đa 15 dòng)
 - SA-01 ACCEPTED 03-10 (bootstrap kỹ thuật). CURRENT_VALID_WP=SA-02 từ 03-10.
 - Ledger 79 dòng: 25 OBSERVED, 54 UNVERIFIED, 0 MATCHED. Đã thấy chủ yếu menu, map, mode, phím
   đánh và vài phản ứng vật thể (mục 7.4). Chưa có số đo thời gian hay khoảng cách nào: browser
@@ -670,4 +670,8 @@ Q5 Web: dung lượng tải lần đầu và bộ nhớ đo từ SA-04; ngân s�
   replay `RUN_ID=20261005T062555.566161Z-2ca459b1e4` passed with source selection hash
   `34e96458c3c152eea2e891c72fb02f06e84737e3cac64b29b69475ea204c78f9`, exit 0/cleanup 0/diagnostics
   empty. No SA-03/SA-04 tick; this remains technical/provisional proof pending measurements, owner and build.
+2026-10-05 SA-04 regression close: product docs commits `f5123dd2`/`3b75b28a` record replay
+  reproduction, final 2,977-assertion guarded regression (`RUN_ID=20261005T063646.437469Z-99cd603941`)
+  and guarded Python 23 tests/1 skip (`RUN_ID=20261005T063742.653749Z-492e13eaaa`). SA-02 remains
+  CURRENT_VALID_WP; browser research was not converted into parity counts or a checkbox.
 END_OF_SUPERAGENT_PLAN
