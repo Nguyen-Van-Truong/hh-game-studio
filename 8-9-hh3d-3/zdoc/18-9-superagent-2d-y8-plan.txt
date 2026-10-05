@@ -36,19 +36,22 @@ PREVIOUS_REVISION=SA4 trong Git 5b2d4c7b; LOG chi tiết (run id, hash, số ass
   routing HH3D nằm ở 8-9-hh3d-3/AGENTS.md.
 - Coordinator game tick WP khi đạt DoD; subagent không tick.
 
-HIỆN TRẠNG (05-10 11:32; coordinator cập nhật khi xong một mốc, tối đa 15 dòng)
+HIỆN TRẠNG (05-10 13:05; coordinator cập nhật khi xong một mốc, tối đa 15 dòng)
 - SA-01 ACCEPTED 03-10 (bootstrap kỹ thuật). CURRENT_VALID_WP=SA-02 từ 03-10.
 - Ledger 79 dòng: 25 OBSERVED, 54 UNVERIFIED, 0 MATCHED. Đã thấy chủ yếu menu, map, mode, phím
   đánh và vài phản ứng vật thể (mục 7.4). Chưa có số đo thời gian hay khoảng cách nào: browser
   agent đang dùng chỉ bấm rời và chụp ảnh, không giữ/thả phím, không quay 60 fps. Chưa có video
   owner.
-- Code Classic vẫn chưa nghiệm thu (superagent/main đang có WIP N4): phòng di chuyển hai người;
-  nhảy, cúi, thang, rơi qua sàn bằng hai lần xuống, hố; sprint/stamina; combat core (đấm, jump
-  kick, bắn, knockdown, miễn thương, lựu đạn). Số gameplay vẫn là seed cho tới khi có A01–A06.
-  N4 đã chuyển đường chạy sang float và Godot Physics; chưa được gọi là parity.
-- Keymap owner đã áp dụng và có test. Main đã merge product tới ed3e10a3 (merge 1e5e7e4e); WIP N4
-  chưa merge vì SA-03 chưa đạt gate.
-- Chưa có: số đo Y8 A01–A06, map trận thật, pickup, bot, HUD, menu trận, build Web/Windows.
+- Code Classic vẫn chưa nghiệm thu: phòng di chuyển hai người và lõi N4 đã chuyển sang float/Godot
+  Physics; commit `0659f2ef` bổ sung map greybox relay yard, match 2P/bot, pistol/shotgun,
+  Down+Punch pickup, grenade/health, HUD, result/rematch và scene bot riêng. Bản tiếp theo nối
+  giữ K/Num2 để ngắm, W/S hoặc Up/Down chỉnh góc, thả nút để bắn và hiển thị tia ngắm. Tất cả vẫn
+  là implementation/provisional, không gọi là parity.
+- Keymap owner đã áp dụng và có test. Product commit `0659f2ef` đã chốt match shell; plan vẫn
+  không tick SA-03/SA-04 khi thiếu gate.
+- Chưa có: số đo Y8 A01–A06, owner side-by-side, build Web/Windows. Match/aim shell đã có test
+  guarded 41 assertions + combat 73 assertions ở source hash `b8ca0dcee9f3da3170214cb63730f649eeac24fe26593390d78faa817f79f1a1`;
+  map/row validation và snapshot immutable đã fail-closed.
 - SA5 N1 đã xong: guard kiểm mọi task `HHStudio.*`; ledger 79 dòng có tier A/B/C;
   checker hiểu trạng thái APPROX và giữ fail-closed cho tầng C. Bộ đo A01–A06 còn trống,
   nên inventory vẫn báo thiếu số đo thay vì tự coi là đạt.
@@ -58,15 +61,16 @@ HIỆN TRẠNG (05-10 11:32; coordinator cập nhật khi xong một mốc, tố
   CharacterBody2D đứng/đẩy crate và rolling stair đều có postcondition; đây là bằng chứng kỹ thuật.
 - N4 seam và live tick probe đã PASS guarded; sau đó lõi Simulation/FighterState/MovementRoom đã
   được nối vào CharacterBody2D/StaticBody2D, float và readback mỗi physics frame. Các test movement,
-  sprint, combat, trace, room và regression đều sạch; đây vẫn là bằng chứng kỹ thuật, SA-03 còn chờ
-  A01–A06 và owner thử phòng di chuyển.
+  sprint, combat, trace, room, match và regression đều sạch; đây vẫn là bằng chứng kỹ thuật, SA-03 còn chờ
+  A01–A06 và owner thử phòng di chuyển. Export template 4.7.2/Web chưa có trong clone.
 
 NEXT (làm theo thứ tự; việc nào phải chờ thì làm việc sau, không ngồi chờ)
 N2 Rig Y8 đã tự kiểm bằng fixture cục bộ nhưng chưa lấy được A01–A06; không lặp lại vòng browser
    không có timed hold/60-fps. Fallback quay owner ở mục 8.4 đã ghi; tiếp tục phần product.
 N4 Chuyển lõi kỹ thuật đã xong; bước kế là nghiệm thu SA-03 sau khi có A01–A06 (hoặc ghi tầng B theo
    gate) và owner thử phòng di chuyển 5 phút.
-N5 SA-04 bản chơi được; build Windows và Web; gửi owner thử kèm hướng dẫn 5 dòng.
+N5 SA-04 bản chơi được đã có ở commit `0659f2ef`; tiếp tục lấy template/export Windows+Web khi
+   toolchain mở, rồi gửi owner thử kèm hướng dẫn 5 dòng. Không tick SA-04 khi thiếu build/owner.
 N6 Trong lúc chờ owner: đo A07–A17; kiểm kê trong trận thật (mục 7.4); thử pipeline art cho
    một nhân vật (SA-10, thư mục art/, subagent riêng).
 
@@ -647,4 +651,14 @@ Q5 Web: dung lượng tải lần đầu và bộ nhớ đo từ SA-04; ngân s�
   giữ Simulation/FighterState làm authority, chưa claim SA-03/Y8 parity.
 2026-10-05 N4 migration: nối Simulation/FighterState/MovementRoom vào Godot Physics, đổi chuyển động sang float;
   focused tests và regression sạch, chưa tick SA-03 vì A01–A06 và owner side-by-side còn thiếu.
+2026-10-05 SA-04 implementation: product commit `0659f2ef`; guarded match run 37 assertions, host
+  exit 0/cleanup 0/diagnostics empty; regression run_all 2,977, movement room 93, N4 16+13, Python 23/1 skip.
+  Map validation, Down+Punch pickup, immutable snapshot and bot/2P routes are provisional; no SA-04 tick.
+2026-10-05 SA-04 aim/release pass: product working tree adds explicit held-fire aim state, bounded
+  W/S or Up/Down elevation, release-to-fire semantics, aim-ray presentation and focus/pause input reset.
+  Guarded `cmd.sa04.aim.match.1` (`RUN_ID=20261005T060315.567249Z-add7b36f12`) passed 41 assertions;
+  `cmd.sa04.aim.combat.1` (`RUN_ID=20261005T060354.972517Z-ac513fdada`) passed 73; both exit 0,
+  cleanup 0, diagnostics empty, source hash `b8ca0dcee9f3da3170214cb63730f649eeac24fe26593390d78faa817f79f1a1`.
+  Guarded run_all `RUN_ID=20261005T060435.274221Z-60341297ee` passed 2,977. No SA-03/SA-04 tick;
+  4.7.2 Windows/Web templates remain unavailable and owner/critic/Y8 measurements remain open.
 END_OF_SUPERAGENT_PLAN
