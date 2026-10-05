@@ -8,7 +8,7 @@ Historical entries below are retained for provenance; they do not override the t
 | Matrix | Status | Existing evidence | Remaining proof |
 |---|---|---|---|
 | M1 / Q01 | DONE (host) | `gt07-jobs-integration-20261004-03`, 46 tests | Repeat only in final frozen matrix |
-| M2 / Q03 | OPEN | static admission/lease guards | native two-writer, expiry, revoke, late worker |
+| M2 / Q03 | OPEN (partial) | static admission/lease guards; native writer FIFO `gt07-native-writer-fifo-20261005-02` | final frozen repeat and explicit coordinator revoke mapping |
 | M3 / Q05 | OPEN (partial) | Godot edit/save/script and receipt-loss run21; Blender queued export `gt07-native-queue-20261005-06`; all six Godot save crash cuts `gt07-native-godot-20261005-06..11`; O2 asset readback `o2-publication-blender-handoff-20261005-03` | queue-level Blender→Godot publish/reload/ACK and cross-app last-good binding |
 | M4 / Q06 | OPEN | no final native proof | manual edit conflict and no rollback overwrite |
 | M5 / TX05/TX09 | OPEN | component fault helpers | filelock, cross-volume and injected disk/fsync cuts |
@@ -102,6 +102,17 @@ the source closure for `-08..-11` is
 `COMMITTED` and `ACK` here mean the producer's terminal publication boundary;
 the queue receipt remains unacknowledged until the coordinator collects it.
 These five cuts still do not prove queue-level Godot reload/ACK or close M3.
+
+## Checkpoint, 05-10-2026 — native Blender writer FIFO and fencing
+
+`gt07-native-writer-fifo-20261005-02` passed its frozen unit gate (actual exit
+0) and native host (actual exit 0, clean Job/tree). Two distinct client
+processes committed in FIFO order; the expired head was never granted, the
+fencing epoch advanced on handoff, old and late writers were rejected without
+scene drift, and Stop canceled waiters and blocked new effects. This is an
+authority-zero diagnostic, not the final frozen GT07 package. Raw is immutable
+under `studio/.local/reviews/gt07-native-writer-fifo-20261005-02/`; source
+closure is `ccc2c3f2f5feac425d358309253f1d5f7be5c375d80d1263d3a3176a050dbae9`.
 ## Historical log (preserved verbatim)
 # GT07 integration map — opened after GT06 acceptance
 

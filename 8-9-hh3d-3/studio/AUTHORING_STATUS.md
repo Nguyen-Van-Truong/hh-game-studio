@@ -29,6 +29,16 @@ AUTHORITY=0. Branch `codex/o2-authoring-contract`; GT-06 is ACCEPTED and GT-07 i
   The terminal labels describe producer publication state; they are not queue
   ACKs. The queue-level Godot reload/ACK path remains open.
 
+- `gt07-native-writer-fifo-20261005-02` passed the frozen Blender unit gate
+  (actual exit 0) and native host (actual exit 0, clean Job/tree). Two distinct
+  client processes committed in FIFO order; expired/canceled tickets were not
+  granted, fencing advanced on handoff, old and late writers were rejected
+  without scene drift, and Stop canceled waiters and blocked new effects. This
+  is authority-zero M2 diagnostic evidence; final frozen repeat and coordinator
+  revoke mapping remain open. Raw is under
+  `studio/.local/reviews/gt07-native-writer-fifo-20261005-02/`; source closure
+  is `ccc2c3f2f5feac425d358309253f1d5f7be5c375d80d1263d3a3176a050dbae9`.
+
 ## 2026-10-03 — Local Godot pin binding restored
 
 - The earlier missing-4.7.2 claim below was based on the global HHGodotAgent
