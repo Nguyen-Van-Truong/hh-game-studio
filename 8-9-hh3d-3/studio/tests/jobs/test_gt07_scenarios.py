@@ -24,7 +24,7 @@ class GT07ScenarioAdmissionTests(unittest.TestCase):
     def test_matrix_is_explicit_and_deadlines_are_bounded(self):
         self.assertEqual(set(module.SCENARIOS), {
             "godot-edit", "godot-save", "godot-script", "godot-recovery", "godot-conflict",
-            "blender-box", "blender-export"})
+            "blender-box", "blender-conflict", "blender-export"})
         self.assertEqual({row["max_horizon_ms"] for row in module.SCENARIOS.values()},
                          {5_000, 30_000, 90_000})
 
@@ -46,6 +46,13 @@ class GT07ScenarioAdmissionTests(unittest.TestCase):
             result = module._contract_dry_run("blender-export", module.SCENARIOS["blender-export"])
         self.assertTrue(result["admission_validated"])
         self.assertTrue(result["deadline_upper_bound_rejected"])
+        self.assertFalse(result["native_effect"])
+
+    def test_blender_conflict_contract_is_engine_free(self):
+        with patch("subprocess.Popen", side_effect=AssertionError("unexpected engine")):
+            result = module._contract_dry_run("blender-conflict", module.SCENARIOS["blender-conflict"])
+        self.assertEqual(result["operation"], "object.transform.set")
+        self.assertTrue(result["admission_validated"])
         self.assertFalse(result["native_effect"])
 
     def test_lock_is_required_and_bounded(self):

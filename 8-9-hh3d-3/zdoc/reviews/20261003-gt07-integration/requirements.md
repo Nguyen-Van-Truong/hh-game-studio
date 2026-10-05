@@ -9,8 +9,8 @@ Historical entries below are retained for provenance; they do not override the t
 |---|---|---|---|
 | M1 / Q01 | DONE (host) | `gt07-jobs-integration-20261004-03`, 46 tests | Repeat only in final frozen matrix |
 | M2 / Q03 | OPEN (partial) | static admission/lease guards; native writer FIFO `gt07-native-writer-fifo-20261005-02` and fresh repeat `gt07-native-writer-fifo-20261005-04` | final frozen repeat and explicit coordinator revoke mapping |
-| M3 / Q05 | OPEN (partial) | Godot edit/save/script and receipt-loss run21; Blender queued export `gt07-native-queue-20261005-06`; current-source Blender cuts `gt07-native-queue-20261005-12,13,15,16,17,43,44` (PREPARED/VALIDATED/COMMITTED/ACK/ACTIVATING) with actual crash recovery; queue consumers `gt07-cross-app-20261005-07,11,13,16,18,19` plus receipt-loss/reopen `gt07-native-godot-20261005-27,41` and fresh edit/save/script `gt07-native-godot-20261005-28,29,30` | queue-level crash/reload/last-good cut and frozen matrix |
-| M4 / Q06 | OPEN (partial) | governed `gt07-native-godot-20261005-19`, current-source repeats `gt07-native-godot-20261005-26,42` native queue conflict PASS (actual child/wrapper 0, Job/tree clean, source unchanged); direct `-01` remains diagnostic | `.blend` conflict and final frozen matrix remain; native `-16`/`-17` failures retained as history |
+| M3 / Q05 | OPEN (partial) | Blender producer cuts plus consumer cuts `gt07-cross-app-20261005-53` (RELOAD: HELD_LAST_GOOD) and `gt07-cross-app-20261005-54` (ACK: COMMITTED_LOOKUP_ONLY); both actual child/recovery exits and owned Jobs clean, one native dispatch, no replay, source/snapshot unchanged | six-phase producer coverage and final frozen matrix |
+| M4 / Q06 | OPEN (partial) | Godot `gt07-native-godot-20261005-26,42`; Blender `gt07-native-queue-20261005-47`: queued stale transform returns UNKNOWN/lookup.reconcile, manual `.blend` state retained, actual child/wrapper exits 0 and owned Job clean | final frozen matrix; previous failed diagnostics remain immutable |
 | M5 / TX05/TX09 | OPEN (partial) | host-only `gt07-m5-storage-20261005-05` and fresh repeat `gt07-m5-storage-20261005-07` verified exclusive file-lock denial, cross-volume `MoveFileExW` refusal (error 17), and injected fsync/diskfull UNKNOWN with last-good preservation; source closure `308602e8...fd072` for the repaired runner | final frozen repeat, requirement-map binding, and any product-boundary proof beyond the authority-zero host diagnostic |
 | M6 / Q04 | OPEN (partial) | Stop drain and native run16 | full queue/cancel/reconnect matrix in final run |
 | M7 / Q07 | OPEN (partial) | 510-record capacity/JOURNAL_FULL; queue-only custody rotation barriers; segmented queue checkpoint/reopen, two-segment archive chain, expired terminal same-ID replay guard, bounded real-clock expiry soak, malformed candidate pointer guard (`test_segmented_journal` 6 tests, `test_segmented_broker_regression` 8 tests, `test_durable_broker` 18 tests; exits 0) | crash rotation matrix, final matrix |
@@ -19,35 +19,28 @@ Historical entries below are retained for provenance; they do not override the t
 
 ## Next
 
-Fresh Godot source closure `977deec7eb1719eddddcb7658bb790e1d401a39a3e81dcca8b7edea68c223dda` fixed the recovery validator's retention-field mismatch; native IDs `gt07-native-godot-20261005-41`, `-42` and Blender IDs `gt07-native-queue-20261005-43`, `-44` passed with actual exits and clean owned Jobs. These are diagnostic slices only; the frozen M1–M9 matrix and critics remain required.
+Close the M3 queue-consumer RELOAD/ACK recovery gap and M7 integrated rotation
+crash proof. Then freeze one complete closure and execute one sequential M1–M9
+matrix plus affected regressions. Map requirements to artifacts and submit the
+same frozen hash to two independent critics. Existing diagnostic slices are
+context; none grants acceptance. Do not replay a completed diagnostic solely
+to refresh its timestamp. Every native launch needs its matching engine-free
+dry-run; source changes invalidate that admission.
 
-N1: scenario runner, mandatory engine-free dry-run, fixed measurement guard,
-stop-on-first-failure matrix, and opt-in failpoint admission are implemented;
-the focused runner/guard/recovery suites and both Godot/Blender dry-run
-contracts pass.  Their counts are kept per suite; an aggregate test count is
-not an acceptance signal.
-Native M1–M9 execution remains open and must use fresh IDs after this source
-freeze.  A dry-run validates wiring and contract bounds only; it cannot prove
-runtime IPC, process cleanup, or engine behavior.
+## Latest diagnostic checkpoint
 
-The fresh six-scenario dry-run matrix on 05-10 (`godot-edit`, `godot-save`,
-`godot-script`, `godot-recovery`, `blender-box`, `blender-export`; IDs
-`gt07-native-godot-20261005-12..15` and `gt07-native-queue-20261005-12..13`)
-passed with both pinned binary hashes, source closures and the shared lock
-checked. No engine started and no native acceptance is implied.
-N2: Godot save cuts `gt07-native-godot-20261005-06` through `-11` reached
-PREPARED, VALIDATED, ACTIVATING, COMMITTED, RELOAD and ACK in fresh runs.
-Each intentional child exit 1 was followed by recovery exit 0, clean owned Job
-tree, and a retained last-good state; these are diagnostic crash-cut proofs,
-not acceptance. The older RELOAD failures in runs 25 and 02 remain immutable.
-The cross-application Blender artifact handoff and queue-level last-good proof
-are still open.
-N2-N5: the Blender producer PREPARED cut is recorded above; execute the
-remaining VALIDATED/ACTIVATING/COMMITTED/ACK producer cuts, then the separate
-queue-level Godot reload/ACK binding, followed by M2/M4, M5/M7, M6/M8/M9 with
-fresh IDs and preserved raw. `RELOAD` is a Godot consumer phase and is rejected
-for the Blender producer route.
-N6: freeze closure once, run the full matrix plus focused regressions, map artifacts, then send the same hash to two independent critics.
+`gt07-native-queue-20261005-47` — Blender manual conflict PASS; child/wrapper 0,
+source unchanged (`0eff6f0d…137172`), manual checkpoint retained. Runs 45/46 remain
+failed harness history (missing import, then wrong expected terminal state).
+
+`gt07-cross-app-20261005-53` and `-54` close the previously missing consumer
+cuts diagnostically on source closure `c91bc0d770e9730cb10a3bc9fd8e80729f6db9d3485b024664706658993be51c`:
+RELOAD retains the exact last-good CURRENT/journal and refuses ambiguous staging;
+ACK reopens the durable owner and reconciles the queue lookup-only with no second
+native dispatch. Authority remains zero; the final frozen M1–M9 matrix and critics
+are still required.
+
+## Historical checkpoints
 
 ## Checkpoint, 05-10-2026 — M8 host process ownership proof
 

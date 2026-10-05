@@ -131,6 +131,47 @@ class CrossAppPublicationCoordinator:
         self._reservation = reservation
         return reservation
 
+    def recover_consumer(self, *, job_id: str, producer: ProducerReceipt,
+                         command_sha256: str | None = None):
+        """Bind a durable consumer reservation after a coordinator restart.
+
+        Reopening the queue must retain the reservation and its fence.  This
+        method only reattaches that exact row for lookup/reconciliation; it
+        never reserves a new job or invokes the gameplay owner.
+        """
+        producer.validate()
+        _need(type(job_id) is str and job_id, "CROSS_APP_RECOVERY_JOB")
+        if command_sha256 is not None:
+            _need(type(command_sha256) is str and len(command_sha256) == 64
+                  and all(char in "0123456789abcdef" for char in command_sha256),
+                  "CROSS_APP_RECOVERY_COMMAND")
+        row = self.queue.broker.lookup(job_id)
+        _need(row is not None and row.state in ("RESERVED", "UNKNOWN"),
+              "CROSS_APP_RECOVERY_RESERVATION")
+        _need(row.job.project_id == self.project_id
+              and row.job.session_id == self.session_id
+              and row.job.resources == ("godot-gameplay",)
+              and row.job.dependencies == (producer.job_id,),
+              "CROSS_APP_RECOVERY_BINDING")
+        _need(command_sha256 is None or row.command_sha256 == command_sha256,
+              "CROSS_APP_RECOVERY_COMMAND")
+        producer_row = self.queue.broker.lookup(producer.job_id)
+        _need(producer_row is not None and producer_row.state == "COMMITTED"
+              and producer_row.command_sha256 == producer.command_sha256
+              and producer_row.receipt_sha256 == producer.receipt_sha256,
+              "CROSS_APP_RECOVERY_PRODUCER")
+        reservations = tuple(item for item in self.queue.broker.snapshot().reservations
+                             if item.job.job_id == job_id)
+        _need(len(reservations) == 1 and reservations[0].recovered,
+              "CROSS_APP_RECOVERY_RESERVATION")
+        reservation = reservations[0]
+        _need(reservation.job == row.job and reservation.command_sha256 == row.command_sha256
+              and reservation.fence == row.fence,
+              "CROSS_APP_RECOVERY_BINDING")
+        self._consumer = (job_id, producer)
+        self._reservation = reservation
+        return reservation
+
     def publish_once(self, reservation: Reservation, owner, request: dict,
                      grant, lease, *, artifact: bytes, manifest: bytes,
                      producer: ProducerReceipt, deadline_ms: int,
@@ -172,15 +213,32 @@ class CrossAppPublicationCoordinator:
     def reconcile_lookup_only(self, reservation: Reservation, *, ack: dict,
                               observed: dict, producer: ProducerReceipt) -> ConsumerReceipt:
         """Reconcile an uncertain consumer without invoking owner.publish."""
+        _need(reservation is self._reservation and getattr(reservation, "recovered", False),
+              "CROSS_APP_RECOVERY_RESERVATION")
         _need(reservation.job.job_id == (self._consumer or (None,))[0],
               "CROSS_APP_RECOVERY_RESERVATION")
+        _need((self._consumer or (None, None))[1] == producer
+              and reservation.job.dependencies == (producer.job_id,),
+              "CROSS_APP_RECOVERY_PRODUCER")
         _need(self._calls == 0, "CROSS_APP_RECOVERY_REPLAY")
-        _need(ack.get("status") == "READBACK_ACK" and ack.get("public_ack") is False,
+        producer.validate()
+        producer_row = self.queue.broker.lookup(producer.job_id)
+        _need(producer_row is not None and producer_row.state == "COMMITTED"
+              and producer_row.command_sha256 == producer.command_sha256
+              and producer_row.receipt_sha256 == producer.receipt_sha256,
+              "CROSS_APP_RECOVERY_PRODUCER")
+        _need(type(ack) is dict and ack.get("status") == "READBACK_ACK"
+              and ack.get("readback_ack") is True and ack.get("public_ack") is False,
               "CROSS_APP_RECOVERY_ACK")
         _need(type(observed) is dict and observed.get("project_revision"),
               "CROSS_APP_RECOVERY_READBACK")
         _need(observed.get("files", {}).get("assets/avatar.glb") ==
               producer.artifact_sha256, "CROSS_APP_RECOVERY_ARTIFACT")
+        _need(ack.get("project_revision") == observed.get("project_revision")
+              and ack.get("selected_revision") == observed.get("project_revision")
+              and ack.get("source_sha256") == observed.get("source_sha256")
+              and ack.get("readback_sha256") == _sha(canonical_bytes(observed)),
+              "CROSS_APP_RECOVERY_READBACK")
         raw = canonical_bytes(ack)
         result = self.queue.broker.record_owner_result(
             reservation, OwnerResult("COMMITTED", reservation.command_sha256,

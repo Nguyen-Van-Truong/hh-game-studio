@@ -110,6 +110,35 @@ class NativeDispatchTests(unittest.TestCase):
             self.dispatch.advance(ticket)
         self.assertEqual(self.case.host.execute.call_count, 1)
 
+    def test_blender_manual_revision_conflict_is_unknown_without_queue_replay(self):
+        # First create the fixture object through the normal queue.  Then a
+        # direct native UI edit advances Blender's revision before the stale
+        # queued transform is admitted; the manual state must survive and the
+        # broker must retain UNKNOWN for explicit reconciliation.
+        first, _, ticket = self.admit()
+        self.assertIs(self.dispatch.advance(ticket).status, Status.COMMITTED)
+        stale_body = self.case.body(command_id='Client:Transform/Conflict',
+            operation='object.transform.set', payload={
+                'expected_context': self.case.scene['context'],
+                'arguments': {'object_id': 'box', 'location': [3, 4, 5],
+                              'rotation': [0, 0, 0], 'scale': [1, 1, 1]}})
+        binding = self.binding(stale_body)
+        self.dispatch.register(binding)
+        row = self.dispatch.enqueue(binding)
+        ticket = self.dispatch.reserve()
+        self.assertIsNotNone(ticket)
+        self.case.scene['snapshot']['objects'][0]['location'] = [8, 8, 8]
+        self.case._revision()
+        response = self.dispatch.advance(ticket)
+        self.assertIs(response.status, Status.UNKNOWN)
+        self.assertEqual(response.code, 'BLENDER_MANUAL_EDIT_RECONCILE_REQUIRED')
+        self.assertEqual(response.postconditions['next_action'], 'lookup.reconcile')
+        self.assertTrue(response.postconditions['manual_state_preserved'])
+        self.assertEqual(binding.lookup(), response)
+        self.assertEqual(self.queue.broker.lookup(row.job.job_id).state, 'UNKNOWN')
+        self.assertEqual(self.case.scene['snapshot']['objects'][0]['location'], [8, 8, 8])
+        self.assertEqual(self.case.host.execute.call_count, 2)
+
     def test_stop_after_reserve_blocks_effect_and_is_durable(self):
         _, _, ticket = self.admit()
         stopped = self.dispatch.stop()

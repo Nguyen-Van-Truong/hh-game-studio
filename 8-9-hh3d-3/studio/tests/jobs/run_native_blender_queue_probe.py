@@ -28,15 +28,20 @@ def _request_for(*, before, lease, project_id, now_ms, operation="mesh.create_bo
     """Use the same command recipe in dry-run and native admission."""
     from studio.host.blender import client_write_catalog as catalog
     from studio.protocol.core import Request, canonical_bytes
-    if operation not in ("mesh.create_box", "export.publish"):
+    if operation not in ("mesh.create_box", "object.transform.set", "export.publish"):
         raise ValueError("BLENDER_SCENARIO_UNSUPPORTED")
     export = operation == "export.publish"
+    transform = operation == "object.transform.set"
+    arguments = ({} if export else
+                 {"object_id": "queue_probe_box", "location": [3, 4, 5],
+                  "rotation": [0, 0, 0], "scale": [1, 1, 1]} if transform else
+                 {"object_id": "queue_probe_box", "size": [1, 2, 3]})
     payload = {"expected_context": before["context"],
-               "arguments": {} if export else {"object_id": "queue_probe_box", "size": [1, 2, 3]}}
+               "arguments": arguments}
     maximum = catalog.MAX_LEASE_MS if export else catalog.MAX_UI_MS
     expires_ms = (lease.expires_ms if hasattr(lease, "expires_ms")
                   else lease["expires_ms"])
-    return Request("QueueExport" if export else "QueueMeshCreate", project_id, operation,
+    return Request("QueueExport" if export else ("QueueTransform" if transform else "QueueMeshCreate"), project_id, operation,
                    lease["lease_id"], lease["fencing_epoch"], before["revision"],
                    {"stable_id": catalog.TARGET}, payload,
                    "sha256:" + hashlib.sha256(canonical_bytes(payload)).hexdigest(),
@@ -56,7 +61,7 @@ def dry_run_contract(operation="mesh.create_box", recover_after_loss=False):
     from studio.host.core.limits import SafetyViolation
     from studio.host.core.transport import epoch_ms
     from studio.protocol.core import parse_json
-    if recover_after_loss or operation not in ("mesh.create_box", "export.publish"):
+    if recover_after_loss or operation not in ("mesh.create_box", "object.transform.set", "export.publish"):
         raise ValueError("BLENDER_SCENARIO_UNSUPPORTED")
     # Reuse the maintained inert integration fixture, not another mock owner.
     # Its bare test_client_ledger import is resolved only during this import.
@@ -184,6 +189,7 @@ def _child(output: Path, binary: Path, run_id: str,
     errors: list[dict[str, str]] = []
     gui = durable = owner = queue = dispatch = publisher = None
     publication_proof = None
+    conflict_proof = None
     response = None
     stop_snapshot = None
     cleanup = None
@@ -242,7 +248,81 @@ def _child(output: Path, binary: Path, run_id: str,
                     for i in range(3)] if len(vertices) == 8 else [])
         if box is None or extents != [1, 2, 3]:
             raise RuntimeError("NATIVE_READBACK_GEOMETRY_MISMATCH")
-        if publisher is not None:
+        if operation == "object.transform.set":
+            # The queue request below keeps this owner's pre-edit revision.
+            # A direct UI command then edits and saves the native .blend while
+            # that request is reserved.  This is the manual-writer boundary;
+            # it bypasses the public ledger but uses the already armed native
+            # fence and fixed save slot.
+            before_manual = parse_json(owner._read_owner._baseline)
+            lease_row = next(iter(owner.sessions._writer_leases.values()))
+            native_lease = lease_row["native"]
+            native_fence = {"fencing_epoch": native_lease.fencing_epoch,
+                            "expires_ms": native_lease.expires_ms}
+            request = _request_for(before=before_manual, lease=lease,
+                project_id=owner.project_id, now_ms=epoch_ms(), operation=operation)
+            binding = BlenderOwnerBinding.create(owner, body=request.as_dict(),
+                authorization="Bearer " + writer.bearer,
+                catalog_digest=owner.catalog_digest)
+            dispatch.register(binding)
+            queue_row = dispatch.enqueue(binding)
+            reservation = dispatch.reserve()
+            if reservation is None:
+                raise RuntimeError("QUEUE_CONFLICT_RESERVATION_MISSING")
+            manual_edit = {"schema": catalog.queue.SCHEMA,
+                "command_id": "manual-blend-edit", "operation": operation,
+                "expected_revision": before_manual["revision"],
+                "expected_context": before_manual["context"],
+                "payload": {"object_id": "queue_probe_box", "location": [8, 8, 8],
+                            "rotation": [0, 0, 0], "scale": [1, 1, 1]}}
+            edited = gui.execute(manual_edit, lease=native_fence,
+                                 deadline_ms=epoch_ms() + catalog.MAX_UI_MS)
+            if edited.get("state") != "COMPLETED":
+                raise RuntimeError("NATIVE_MANUAL_EDIT_NOT_COMMITTED")
+            manual_after = edited.get("result", {}).get("after")
+            if not isinstance(manual_after, dict):
+                raise RuntimeError("NATIVE_MANUAL_EDIT_READBACK_MISSING")
+            checkpoint = {"schema": catalog.queue.SCHEMA,
+                "command_id": "manual-blend-checkpoint", "operation": "checkpoint.save",
+                "expected_revision": manual_after["revision"],
+                "expected_context": manual_after["context"],
+                "payload": {"slot": "checkpoint"}}
+            saved = gui.execute(checkpoint, lease=native_fence,
+                                deadline_ms=epoch_ms() + catalog.MAX_UI_MS)
+            if saved.get("state") != "COMPLETED":
+                raise RuntimeError("NATIVE_MANUAL_BLEND_SAVE_NOT_COMMITTED")
+            artifact = saved.get("result", {}).get("artifact")
+            if not isinstance(artifact, dict) or artifact.get("name") != "checkpoint.blend":
+                raise RuntimeError("NATIVE_MANUAL_BLEND_ARTIFACT_MISSING")
+            response = dispatch.advance(reservation)
+            if (response.status is not Status.UNKNOWN
+                    or response.code != "BLENDER_MANUAL_EDIT_RECONCILE_REQUIRED"
+                    or response.postconditions.get("next_action") != "lookup.reconcile"
+                    or response.postconditions.get("manual_state_preserved") is not True):
+                raise RuntimeError("NATIVE_BLENDER_CONFLICT_NOT_UNKNOWN")
+            lookup = binding.lookup()
+            if lookup.as_dict() != response.as_dict():
+                raise RuntimeError("NATIVE_BLENDER_CONFLICT_LOOKUP_MISMATCH")
+            live = gui.execute({"schema": catalog.queue.SCHEMA,
+                "command_id": "manual-blend-inspect", "operation": "scene.inspect",
+                "expected_revision": None, "expected_context": None, "payload": {}})
+            live_scene = live.get("result")
+            objects = live_scene.get("snapshot", {}).get("objects", []) if isinstance(live_scene, dict) else []
+            box = next((item for item in objects if item.get("object_id") == "queue_probe_box"), None)
+            if box is None or box.get("location") != [8.0, 8.0, 8.0]:
+                raise RuntimeError("NATIVE_MANUAL_BLENDER_STATE_NOT_PRESERVED")
+            row = queue.broker.lookup(queue_row.job.job_id)
+            if row is None or row.state != "UNKNOWN":
+                raise RuntimeError("NATIVE_BLENDER_CONFLICT_NOT_DURABLE")
+            conflict_proof = {"manual_edit": edited, "manual_save": saved,
+                              "checkpoint_artifact": artifact,
+                              "manual_revision": live_scene["revision"],
+                              "owner_response_code": response.code,
+                              "next_action": response.postconditions["next_action"],
+                              "queue_state": row.state, "public_ack": False}
+            queue_state = row.state
+            passed = True
+        elif publisher is not None:
             # The producer setup is an ordinary queued command. Re-admit the
             # publication against its actual observation and a fresh lease.
             lease = owner.lease({"project_id": owner.project_id, "access": "write",
@@ -296,8 +376,10 @@ def _child(output: Path, binary: Path, run_id: str,
                     or cleanup_export["job"]["handle_retained"]):
                 raise RuntimeError("NATIVE_EXPORT_CLEANUP_UNPROVEN")
         row = queue.broker.lookup(queue_row.job.job_id)
-        if row is None or row.state != "COMMITTED":
-            raise RuntimeError("DURABLE_RECEIPT_NOT_COMMITTED")
+        expected_state = "UNKNOWN" if operation == "object.transform.set" else "COMMITTED"
+        if row is None or row.state != expected_state:
+            raise RuntimeError("DURABLE_RECEIPT_NOT_COMMITTED" if expected_state == "COMMITTED"
+                               else "NATIVE_BLENDER_CONFLICT_NOT_DURABLE")
         queue_state = row.state
         passed = True
     except BaseException as error:
@@ -340,6 +422,7 @@ def _child(output: Path, binary: Path, run_id: str,
         "queue_job_id": queue_row.job.job_id if queue_row is not None else None,
         "queue_state": queue_state,
         "operation": operation, "publication": publication_proof,
+        "conflict": conflict_proof,
         "response": response.as_dict() if response is not None else None,
         "stop_snapshot": (asdict(stop_snapshot) if stop_snapshot is not None else None),
         "cleanup": cleanup, "errors": errors,
@@ -439,7 +522,7 @@ def main(argv=None) -> int:
     parser.add_argument("--binary", type=Path, required=True)
     parser.add_argument("--run-id", type=_run_id, required=True)
     parser.add_argument("--frozen", action="store_true")
-    parser.add_argument("--operation", choices=("mesh.create_box", "export.publish"), default="mesh.create_box")
+    parser.add_argument("--operation", choices=("mesh.create_box", "object.transform.set", "export.publish"), default="mesh.create_box")
     parser.add_argument("--failpoint-phase", choices=("PREPARED", "VALIDATED", "ACTIVATING", "COMMITTED", "ACK"))
     parser.add_argument("--recover-crash", action="store_true")
     args = parser.parse_args(argv)
@@ -455,7 +538,9 @@ def main(argv=None) -> int:
     if args.output.name != args.run_id:
         parser.error("output basename must equal the run ID")
     from studio.tests.jobs.run_gt07_scenarios import main as scenario_main
-    scenario = "blender-export" if args.operation == "export.publish" else "blender-box"
+    scenario = ("blender-export" if args.operation == "export.publish"
+                else "blender-conflict" if args.operation == "object.transform.set"
+                else "blender-box")
     argv = ["--scenario", scenario, "--blender-binary", str(args.binary),
             "--run-id", args.run_id, "--output-root", str(args.output.parent)]
     if args.failpoint_phase:

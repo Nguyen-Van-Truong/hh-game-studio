@@ -27,7 +27,14 @@ ARENA_SOURCE_FILES = {
     'scripts/fixture_actor.gd': 'tests/godot/gameplay_fixture/arena_physics.gd',
     'scenes/projectile.tscn': 'tests/godot/gameplay_fixture/projectile.tscn',
 }
-BLENDER_HANDOFF_ROOT = STUDIO / '.local' / 'reviews'
+_HANDOFF_ROOT_OVERRIDE = os.environ.get('HH_GT07_HANDOFF_ROOT')
+if _HANDOFF_ROOT_OVERRIDE:
+    _HANDOFF_PATH = Path(_HANDOFF_ROOT_OVERRIDE).expanduser()
+    if not _HANDOFF_PATH.is_absolute() or '..' in _HANDOFF_PATH.parts:
+        raise RuntimeError('BLENDER_HANDOFF_ROOT_UNSAFE')
+    BLENDER_HANDOFF_ROOT = _HANDOFF_PATH.absolute()
+else:
+    BLENDER_HANDOFF_ROOT = STUDIO / '.local' / 'reviews'
 BLENDER_GLTF_NAME = 'scene.glb'
 
 

@@ -4,6 +4,7 @@ import hashlib
 import unittest
 from types import SimpleNamespace
 
+from ...protocol.core import canonical_bytes
 from .cross_app_publication import (CrossAppPublicationCoordinator,
                                     CrossAppPublicationError, ProducerReceipt)
 
@@ -19,7 +20,9 @@ class _Broker:
 
     def enqueue(self, request, *, now_ms):
         self.calls.append(("enqueue", request, now_ms))
-        row = SimpleNamespace(state="QUEUED", job=request)
+        row = SimpleNamespace(state="QUEUED", job=request,
+                              command_sha256=request.command_sha256,
+                              receipt_sha256=None)
         self.rows[request.job_id] = row
         return row
 
@@ -29,8 +32,9 @@ class _Broker:
                 row.state = "RESERVED"
                 reservation = SimpleNamespace(job=row.job,
                     command_sha256=row.job.command_sha256,
-                    fence=SimpleNamespace(generation=1))
+                    fence=SimpleNamespace(generation=1), recovered=False)
                 row.reservation = reservation
+                row.fence = reservation.fence
                 self.calls.append(("reserve", reservation, now_ms))
                 return reservation
         return None
@@ -38,16 +42,37 @@ class _Broker:
     def record_owner_result(self, reservation, result):
         row = self.rows[reservation.job.job_id]
         row.state = result.outcome
+        row.receipt_sha256 = result.receipt_sha256
         self.calls.append(("result", reservation, result))
         return row
 
     def lookup(self, job_id):
         return self.rows.get(job_id)
 
+    def snapshot(self):
+        return SimpleNamespace(reservations=tuple(
+            row.reservation for row in self.rows.values()
+            if row.state in ("RESERVED", "UNKNOWN")))
+
+    def reopen(self):
+        reopened = _Broker()
+        for job_id, row in self.rows.items():
+            clone = SimpleNamespace(state=row.state, job=row.job,
+                                    command_sha256=row.command_sha256,
+                                    receipt_sha256=getattr(row, "receipt_sha256", None),
+                                    fence=getattr(row, "fence", None),
+                                    reservation=None)
+            if row.reservation is not None:
+                old = row.reservation
+                clone.reservation = SimpleNamespace(job=old.job,
+                    command_sha256=old.command_sha256, fence=old.fence, recovered=True)
+            reopened.rows[job_id] = clone
+        return reopened
+
 
 class _Queue:
-    def __init__(self):
-        self.broker = _Broker()
+    def __init__(self, broker=None):
+        self.broker = broker or _Broker()
 
 
 class _Owner:
@@ -113,19 +138,45 @@ class CrossAppPublicationTests(unittest.TestCase):
                          "RESERVED")
 
     def test_reconcile_does_not_replay(self):
-        # A fresh coordinator represents a recovered supervisor. It receives
-        # only the durable reservation and exact owner lookup response.
-        recovered = CrossAppPublicationCoordinator(self.adapter.queue)
-        recovered._consumer = ("consumer-1", self.producer)
-        recovered._reservation = self.reservation
-        receipt = recovered.reconcile_lookup_only(self.reservation,
-            ack={"status": "READBACK_ACK", "public_ack": False},
-            observed={"project_revision": "sha256:" + "b" * 64,
-                      "files": {"assets/avatar.glb": self.producer.artifact_sha256}},
+        # A fresh queue/coordinator represents a recovered supervisor. It must
+        # bind the durable reservation before accepting owner lookup data.
+        recovered_queue = _Queue(self.adapter.queue.broker.reopen())
+        recovered = CrossAppPublicationCoordinator(recovered_queue)
+        reservation = recovered.recover_consumer(job_id="consumer-1",
+            producer=self.producer, command_sha256="c" * 64)
+        observed = {"project_revision": "sha256:" + "b" * 64,
+                    "source_sha256": "sha256:" + "d" * 64,
+                    "files": {"assets/avatar.glb": self.producer.artifact_sha256}}
+        ack = {"status": "READBACK_ACK", "readback_ack": True,
+               "public_ack": False, "project_revision": observed["project_revision"],
+               "selected_revision": observed["project_revision"],
+               "source_sha256": observed["source_sha256"],
+               "readback_sha256": _sha(canonical_bytes(observed))}
+        receipt = recovered.reconcile_lookup_only(reservation,
+            ack=ack, observed=observed,
             producer=self.producer)
         self.assertTrue(receipt.readback_ack)
-        self.assertEqual(self.adapter.queue.broker.lookup("consumer-1").state,
+        self.assertEqual(recovered_queue.broker.lookup("consumer-1").state,
                          "COMMITTED")
+        self.assertEqual(len([call for call in recovered_queue.broker.calls
+                              if call[0] == "result"]), 1)
+
+    def test_recovery_rejects_live_reservation_and_unbound_producer(self):
+        recovered = CrossAppPublicationCoordinator(self.adapter.queue)
+        with self.assertRaisesRegex(CrossAppPublicationError,
+                                    "CROSS_APP_RECOVERY_RESERVATION"):
+            recovered.recover_consumer(job_id="consumer-1", producer=self.producer,
+                                       command_sha256="c" * 64)
+        reopened = _Queue(self.adapter.queue.broker.reopen())
+        recovered = CrossAppPublicationCoordinator(reopened)
+        bad = ProducerReceipt("other", self.producer.project_id, self.producer.session_id,
+                              self.producer.command_sha256, self.producer.receipt_sha256,
+                              self.producer.artifact_sha256, self.producer.artifact_size,
+                              self.producer.manifest_sha256)
+        with self.assertRaisesRegex(CrossAppPublicationError,
+                                    "CROSS_APP_RECOVERY_BINDING"):
+            recovered.recover_consumer(job_id="consumer-1", producer=bad,
+                                       command_sha256="c" * 64)
 
 
 if __name__ == "__main__":

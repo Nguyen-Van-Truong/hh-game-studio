@@ -7,6 +7,7 @@ Public durable ACK and writable GUI restart remain unavailable on this owner.
 from dataclasses import replace
 from functools import wraps
 import re
+import secrets
 import threading
 
 from studio.host.core.journal import JournalError
@@ -208,6 +209,23 @@ class BlenderWriterClientOwner:
         need(state in ('COMPLETED', 'REJECTED', 'EXPIRED', 'CANCELLED', 'HELD'),
              'BLENDER_NATIVE_RESPONSE_STATE')
         if state != 'COMPLETED':
+            # A direct Blender UI edit can advance the native revision after
+            # this owner's baseline was captured.  The queued command is then
+            # rejected by the main-thread precondition, but returning a plain
+            # REJECTED would discard the manual state and invite a blind
+            # replay.  Read the live scene once and expose the conflict for
+            # authenticated reconciliation.  Other pre-effect refusals keep
+            # their existing policy codes and remain ordinary rejections.
+            if state == 'REJECTED':
+                live = self._read_owner._read_native(
+                    'qr' + secrets.token_hex(20), epoch_ms() + catalog.MAX_READ_MS)
+                objects = live.get('snapshot', {}).get('objects', [])
+                complete_manual = (isinstance(objects, list) and all(
+                    isinstance(item, dict) and {
+                        'object_id', 'location', 'rotation', 'scale',
+                        'vertices', 'faces'} <= set(item) for item in objects))
+                if live['revision'] != before['revision'] and complete_manual:
+                    return 'CONFLICT', live
             return state, None
         value = row.get('result')
         if command['operation'] == catalog.READ:
@@ -468,6 +486,21 @@ class BlenderWriterClientOwner:
                 known = False
                 self._hold()
                 result = response(Status.UNKNOWN, 'BLENDER_NATIVE_HELD', key)
+            elif state == 'CONFLICT':
+                # The native queue has proved that the stale owner command was
+                # refused, while the fresh inspect proves a distinct manual
+                # scene revision.  Preserve both histories and require lookup
+                # reconciliation; never overwrite or replay the manual edit.
+                need(after is not None and after['revision'] != before['revision'],
+                     'BLENDER_MANUAL_CONFLICT_READBACK')
+                known = False
+                result = response(Status.UNKNOWN,
+                    'BLENDER_MANUAL_EDIT_RECONCILE_REQUIRED', key,
+                    next_action='lookup.reconcile',
+                    before_revision=before['revision'],
+                    manual_revision=after['revision'],
+                    manual_state_hash=digest(canonical_bytes(after['snapshot'])),
+                    manual_state_preserved=True)
             else:
                 result = response(Status.CANCELED if state == 'CANCELLED' else Status.REJECTED,
                     'BLENDER_NATIVE_' + state, key)

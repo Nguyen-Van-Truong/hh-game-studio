@@ -516,7 +516,16 @@ class NativeOwnerDispatcher:
         _need(raw == saved.response and (response is None or raw == canonical_bytes(response.as_dict())),
               'NATIVE_OWNER_LOOKUP_MISMATCH')
         _need(actual.command_id == request.command_id and actual.status in {
-            Status.COMMITTED, Status.REJECTED, Status.CANCELED}, 'NATIVE_OWNER_NOT_TERMINAL')
+            Status.COMMITTED, Status.REJECTED, Status.CANCELED, Status.UNKNOWN},
+              'NATIVE_OWNER_NOT_TERMINAL')
+        if actual.status is Status.UNKNOWN:
+            post = actual.postconditions
+            _need(post.get('public_ack') is False
+                  and post.get('ledger_receipt_only') is True
+                  and post.get('next_action') == 'lookup.reconcile'
+                  and post.get('manual_state_preserved') is True
+                  and isinstance(post.get('manual_revision'), str),
+                  'NATIVE_BLENDER_UNKNOWN_MISMATCH')
         if actual.status is Status.COMMITTED:
             post = actual.postconditions
             _need(post.get('public_ack') is False and post.get('ledger_receipt_only') is True,
