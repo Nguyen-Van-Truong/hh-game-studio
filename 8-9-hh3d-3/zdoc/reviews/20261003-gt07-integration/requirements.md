@@ -26,6 +26,12 @@ contracts pass.
 Native M1–M9 execution remains open and must use fresh IDs after this source
 freeze.  A dry-run validates wiring and contract bounds only; it cannot prove
 runtime IPC, process cleanup, or engine behavior.
+
+The fresh six-scenario dry-run matrix on 05-10 (`godot-edit`, `godot-save`,
+`godot-script`, `godot-recovery`, `blender-box`, `blender-export`; IDs
+`gt07-native-godot-20261005-12..15` and `gt07-native-queue-20261005-12..13`)
+passed with both pinned binary hashes, source closures and the shared lock
+checked. No engine started and no native acceptance is implied.
 N2: Godot save cuts `gt07-native-godot-20261005-06` through `-11` reached
 PREPARED, VALIDATED, ACTIVATING, COMMITTED, RELOAD and ACK in fresh runs.
 Each intentional child exit 1 was followed by recovery exit 0, clean owned Job
