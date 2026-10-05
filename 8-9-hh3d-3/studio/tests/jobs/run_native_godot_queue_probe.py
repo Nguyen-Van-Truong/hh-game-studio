@@ -242,6 +242,26 @@ def _recovery_evidence_complete(recover_after_loss: bool,
     if not isinstance(proof, dict):
         return False
     try:
+        actual_event = proof["queue_result_event"]
+        expected_event = proof["expected_queue_result_event"]
+        if not isinstance(actual_event, dict) or not isinstance(expected_event, dict):
+            return False
+        if any(actual_event.get(key) != value
+               for key, value in expected_event.items()):
+            return False
+        extra_event_keys = set(actual_event) - set(expected_event)
+        if extra_event_keys:
+            if extra_event_keys != {"terminal_ms", "expires_ms"}:
+                return False
+            terminal_ms = actual_event["terminal_ms"]
+            expires_ms = actual_event["expires_ms"]
+            if type(terminal_ms) is not int or type(expires_ms) is not int:
+                return False
+            horizon_ms = proof.get("retry_horizon_ms")
+            if (horizon_ms is not None
+                    and (type(horizon_ms) is not int
+                         or expires_ms != terminal_ms + horizon_ms)):
+                return False
         return (proof["receipt_boundary"] == "record_owner_result"
                 and proof["injection_count"] == 1
                 and proof["reconciled_status"] == "COMMITTED"
@@ -251,7 +271,6 @@ def _recovery_evidence_complete(recover_after_loss: bool,
                 and proof["fence_before"] == proof["fence_after"]
                 and proof["queue_before_loss"] == proof["queue_after_loss"] == proof["queue_reopened"]
                 and proof["queue_after_reconcile"]["sequence"] == proof["queue_after_loss"]["sequence"] + 1
-                and proof["queue_result_event"] == proof["expected_queue_result_event"]
                 and proof["journal_after_loss"]["sequence"] > proof["journal_before_loss"]["sequence"]
                 and proof["journal_after_reconcile"] == proof["journal_after_loss"]
                 and proof["native_before_reconcile"] == proof["native_after_reconcile"])
@@ -464,6 +483,7 @@ def _child(output: Path, binary: Path, run_id: str, operation: str,
                                    "queue_after_reconcile": queue_after_reconcile,
                                    "queue_unchanged_during_reopen": queue_reopened == queue_after_loss,
                                    "queue_result_event": queue_result_event,
+                                   "retry_horizon_ms": queue.broker.retry_horizon_ms,
                                    "expected_queue_result_event": {"schema": "hh-durable-dispatch-1",
                                                                     "kind": "OWNER_RESULT",
                                                                     "job_id": row.job.job_id,

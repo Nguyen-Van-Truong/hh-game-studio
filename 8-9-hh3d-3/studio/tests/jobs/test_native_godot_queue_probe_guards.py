@@ -91,6 +91,14 @@ class NativeGodotQueueProbeGuardTests(unittest.TestCase):
             "native_after_reconcile": {"generation": 2},
         }
         self.assertTrue(_module._recovery_evidence_complete(True, proof))
+        timed = copy.deepcopy(proof)
+        timed["retry_horizon_ms"] = 100
+        timed["queue_result_event"] = {
+            "kind": "OWNER_RESULT", "terminal_ms": 900, "expires_ms": 1000}
+        timed["expected_queue_result_event"] = {"kind": "OWNER_RESULT"}
+        self.assertTrue(_module._recovery_evidence_complete(True, timed))
+        timed["queue_result_event"]["expires_ms"] = 1001
+        self.assertFalse(_module._recovery_evidence_complete(True, timed))
         for key, value in (("fence_after", {"stream_id": "stream.fixture", "generation": 2}),
                            ("submit_calls_after", 2), ("queue_after_reconcile", {"sequence": 3}),
                            ("journal_after_reconcile", {"sequence": 15}),
