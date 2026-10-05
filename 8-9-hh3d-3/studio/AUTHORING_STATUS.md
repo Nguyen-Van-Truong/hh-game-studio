@@ -21,6 +21,13 @@ AUTHORITY=0. Branch `codex/o2-authoring-contract`; GT-06 is ACCEPTED and GT-07 i
   `studio/.local/reviews/gt07-native-queue-20261005-07/`; source closure is
   `cf15cb641ef1e54f6a389bd3ded440c10e43ef9924244c97a7d57310237e5914`.
   This does not close cross-application reload/ACK or GT07 acceptance.
+- Companion producer cuts `gt07-native-queue-20261005-08` through `-11`
+  covered `VALIDATED`, `ACTIVATING`, `COMMITTED` and `ACK` with the same fresh
+  dry-run, intentional cut exit 1, read-only recovery exit 0 and clean
+  Job/tree checks. Source closure for `-08..-11` is
+  `59f94968f321de72908c508123b2dd492545e14348b1c7a6faeb51ac211b6155`.
+  The terminal labels describe producer publication state; they are not queue
+  ACKs. The queue-level Godot reload/ACK path remains open.
 
 ## 2026-10-03 — Local Godot pin binding restored
 

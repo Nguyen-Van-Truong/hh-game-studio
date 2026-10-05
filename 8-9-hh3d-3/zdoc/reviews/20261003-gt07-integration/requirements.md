@@ -92,6 +92,16 @@ created. This is a producer-side crash diagnostic only; cross-application
 Godot reload/ACK and GT07 acceptance remain open. Raw is immutable under
 `studio/.local/reviews/gt07-native-queue-20261005-07/`; source closure is
 `cf15cb641ef1e54f6a389bd3ded440c10e43ef9924244c97a7d57310237e5914`.
+
+The companion producer cuts `gt07-native-queue-20261005-08` through `-11`
+covered `VALIDATED`, `ACTIVATING`, `COMMITTED` and `ACK` with fresh dry-runs
+and the same owned-cut/recovery contract. Each intentionally cut child exited
+1, recovery exited 0 with a clean Job/tree, and all recovery checks passed;
+the source closure for `-08..-11` is
+`59f94968f321de72908c508123b2dd492545e14348b1c7a6faeb51ac211b6155`.
+`COMMITTED` and `ACK` here mean the producer's terminal publication boundary;
+the queue receipt remains unacknowledged until the coordinator collects it.
+These five cuts still do not prove queue-level Godot reload/ACK or close M3.
 ## Historical log (preserved verbatim)
 # GT07 integration map — opened after GT06 acceptance
 
