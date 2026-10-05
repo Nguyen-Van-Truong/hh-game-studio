@@ -88,7 +88,13 @@ def dry_run_contract(operation="mesh.create_box", recover_after_loss=False):
         maximum = catalog.MAX_LEASE_MS if operation == "export.publish" else catalog.MAX_UI_MS
         with patch.object(client_session, "epoch_ms", return_value=now), \
                 patch.object(client_writer_session, "epoch_ms", return_value=now):
-            for offset in (1, maximum, request.deadline_ms - now):
+            # The native owner deadline can be a few milliseconds shorter
+            # than the catalog maximum.  Validate the exact admitted upper
+            # bound instead of assuming the nominal maximum is reachable.
+            valid_upper = request.deadline_ms - now
+            if valid_upper <= 1:
+                raise RuntimeError("SCENARIO_DEADLINE_WINDOW_TOO_SHORT")
+            for offset in (1, valid_upper):
                 owner.sessions.check_write(grant, resolved, operation=request.operation,
                                             deadline_ms=now + offset)
             for offset in (0, maximum + 1):

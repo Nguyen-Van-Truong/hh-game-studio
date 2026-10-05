@@ -35,6 +35,13 @@ class GT07ScenarioAdmissionTests(unittest.TestCase):
         self.assertTrue(result["public_lease_route_validated"])
         self.assertFalse(result["native_effect"])
 
+    def test_blender_publication_contract_uses_exact_owner_deadline(self):
+        with patch("subprocess.Popen", side_effect=AssertionError("unexpected engine")):
+            result = module._contract_dry_run("blender-export", module.SCENARIOS["blender-export"])
+        self.assertTrue(result["admission_validated"])
+        self.assertTrue(result["deadline_upper_bound_rejected"])
+        self.assertFalse(result["native_effect"])
+
     def test_lock_is_required_and_bounded(self):
         with tempfile.TemporaryDirectory() as root:
             lock = Path(root) / "measure-window.lock"
