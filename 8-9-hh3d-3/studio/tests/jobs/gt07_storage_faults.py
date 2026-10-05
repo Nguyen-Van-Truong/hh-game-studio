@@ -204,6 +204,11 @@ def run_file_lock(output: Path, worker: Path) -> dict[str, Any]:
     old = b"last-good-m5-v1\n"
     candidate = b"candidate-m5-v2\n"
     target.write_bytes(old); backup.write_bytes(old); stage.write_bytes(candidate)
+    # Capture the target identity before the exclusive holder denies every
+    # subsequent open.  Reading identity while the lock is held would itself
+    # fail with sharing violation and would erase the baseline we need to
+    # prove last-good preservation.
+    before = _identity(target)
     process = None
     try:
         if os.name != "nt":
@@ -217,7 +222,6 @@ def run_file_lock(output: Path, worker: Path) -> dict[str, Any]:
         held = _read_marker(marker, time.monotonic() + 5)
         if held.get("opened") is not True:
             raise DiagnosticError(f"LOCK_HOLDER_OPEN:{held.get('error')}")
-        before = _identity(target)
         replaced, error_code = _move_replace(stage, target)
         result.update({"status": "UNKNOWN" if not replaced else "UNEXPECTED_COMMIT",
                        "replace_succeeded": replaced, "replace_error": error_code,
