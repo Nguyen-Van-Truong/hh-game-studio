@@ -68,7 +68,10 @@ not Blender→Godot import/readback or GT07 acceptance.
 
 ## Checkpoint, 05-10-2026 — Blender artifact read by Godot fixture
 
-`o2-publication-blender-handoff-20261005-03` is an O2 diagnostic pass. It
+`o2-publication-blender-handoff-20261005-03` is an O2 diagnostic pass.
+## Checkpoint, 05-10-2026 — Blender sprite sheet read by Godot fixture
+
+`o2-sprite-atlas-20261005-01` is an authority-zero asset diagnostic. Pinned Blender produced and reopened a 4-cell 128x128 sprite sheet with actual native/reopen exits 0 and clean owned Jobs; pinned Godot then imported, authored, and reloaded it in three fresh processes, all actual exits 0 with clean Jobs. The sheet hash is `42d342dd4e1f6e6ef9ff31d1370703b83ae76e60ad3756156297478c1e546cf8` and the Godot frame artifact hash is `989c4fbbab77a00b40f03bc062890a6d0ea7e188346f43034d18ae4bb0314ef2`. Raw is under `studio/.local/reviews/o2-sprite-atlas-20261005-01/`; this closes only the Blender sprite → Godot fixture import/reload slice. Queue-level cross-app publish/reload/ACK and GT07 acceptance remain open. It
 froze the exact `scene.glb` and producer manifest from
 `gt07-native-queue-20261005-06`, rechecked the producer hash immediately before
 dispatch, and loaded that byte through the gameplay-source Godot fixture. The
