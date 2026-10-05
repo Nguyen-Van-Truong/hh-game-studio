@@ -1,0 +1,51 @@
+{
+  "schema": "sa03.tuning.v2",
+  "status": "UNVERIFIED_PLACEHOLDER",
+  "fixed_hz": 60,
+  "seed": 1,
+  "quantum_world_units": 1,
+  "movement": {
+    "max_health": 100,
+    "acceleration_per_tick": 1,
+    "max_horizontal_speed": 6,
+    "friction_per_tick": 1,
+    "gravity_per_tick": 1,
+    "terminal_fall_speed": 18,
+    "jump_speed": 14,
+    "jump_lock_ticks": 6,
+    "climb_speed": 3,
+    "respawn_delay_ticks": 90,
+    "char_height": 48,
+    "char_width": 28,
+    "down_tap_window_ticks": 12,
+    "drop_through_ticks": 12
+  },
+  "references": {
+    "max_health": "R06-01",
+    "acceleration_per_tick": "R02-01",
+    "max_horizontal_speed": "R02-01",
+    "friction_per_tick": "R02-01",
+    "gravity_per_tick": "R02-02",
+    "terminal_fall_speed": "R02-02",
+    "jump_speed": "R02-02",
+    "jump_lock_ticks": "R02-02",
+    "climb_speed": "R02-04",
+    "respawn_delay_ticks": "R06-03",
+    "char_height": "R02-02",
+    "char_width": "R02-02",
+    "down_tap_window_ticks": "R02-05",
+    "drop_through_ticks": "R02-05"
+  },
+  "units": {
+    "position": "integer world pixels; H = char_height",
+    "speed": "world pixels per 60-Hz tick",
+    "acceleration": "world pixels per tick squared",
+    "duration": "60-Hz ticks"
+  },
+  "notes": [
+    "Values are deterministic engineering placeholders.",
+    "No Y8 parity or observed timing claim is made by this file.",
+    "Reference IDs identify future calibration targets, not measured values.",
+    "Pit reset is a test-room convenience, not an observed match respawn rule."
+  ]
+}

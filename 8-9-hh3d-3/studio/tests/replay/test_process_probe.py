@@ -57,14 +57,16 @@ class ProbeTests(unittest.TestCase):
 
     def test_sample_with_handle_count_timestamps_the_handle_read(self):
         owner = self.fake([])
-        owner.sample = lambda: {
+        owner.sample = Mock(return_value={
             'host_mono_us': 100, 'rss_bytes': 4096,
-            'visible_window_handles': ['101']}
+            'private_commit_bytes': 8192, 'visible_window_handles': ['101']})
         def count_handles(_handle, pointer):
             pointer._obj.value = 17
             return True
         owner.k.GetProcessHandleCount = count_handles
         row = owner.sample_with_handle_count()
+        owner.sample.assert_called_once_with(include_private_commit=True)
+        self.assertEqual(row['private_commit_bytes'], 8192)
         self.assertEqual(row['held_handles'], 17)
         self.assertIs(type(row['handle_mono_us']), int)
         self.assertGreaterEqual(row['handle_mono_us'], row['host_mono_us'])
@@ -129,6 +131,10 @@ class ProbeTests(unittest.TestCase):
     def test_actual_retained_process_identity_and_memory(self):
         with ProcessProbe(os.getpid(), Path(sys.executable)) as owner:
             first, second = owner.sample(), owner.sample()
+            full = owner.sample_with_handle_count()
+            self.assertNotIn('private_commit_bytes', first)
+            self.assertGreater(full['private_commit_bytes'], 0)
+            self.assertGreater(full['held_handles'], 0)
             self.assertRegex(owner.process_start, r'^windows:[0-9]+$')
             self.assertGreater(first['rss_bytes'], 0)
             self.assertGreater(second['host_mono_us'], first['host_mono_us'])

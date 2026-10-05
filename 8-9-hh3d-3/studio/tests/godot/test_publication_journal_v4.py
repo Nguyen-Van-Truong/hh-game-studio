@@ -99,8 +99,13 @@ class JournalV4Tests(unittest.TestCase):
         owner.select_prepared('command.one',fixtures.rev('command.one'),observed_ms=now(owner))
         selected=owner.selection_facts();self.assertNotEqual(old['selector_version']['file_id'],selected['selector_version']['file_id'])
         self.assertEqual(owner.read_selected_bundle(),value)
-        t=now(owner);owner.readback('command.one',fixtures.rev('command.one'),fixtures.adoption_facts(self.command(owner),t),observed_ms=t)
+        t=now(owner);adoption=fixtures.adoption_facts(self.command(owner),t)
+        owner.readback('command.one',fixtures.rev('command.one'),adoption,observed_ms=t)
         result=owner.commit('command.one',fixtures.rev('command.one'),observed_ms=now(owner))
+        self.assertEqual(owner.lookup_adoption('command.one',fixtures.rev('command.one')),adoption)
+        detached=owner.lookup_adoption('command.one',fixtures.rev('command.one'))
+        detached['new_editor']['pid'] += 1
+        self.assertEqual(owner.lookup_adoption('command.one',fixtures.rev('command.one')),adoption)
         response=owner.lookup_response('command.one',fixtures.rev('command.one'))
         self.assertEqual(response,canonical_bytes(result['response']))
         self.assertEqual(parse_json(response)['code'],'GODOT_MANAGED_SCRIPT_REPLACED')
@@ -108,6 +113,7 @@ class JournalV4Tests(unittest.TestCase):
         head=owner._head;self.assertEqual(owner.commit('command.one',fixtures.rev('command.one'),observed_ms=now(owner)),result)
         self.assertEqual(owner._head,head)
         owner.close();reopened=self.reopen()
+        self.assertEqual(reopened.lookup_adoption('command.one',fixtures.rev('command.one')),adoption)
         self.assertEqual(reopened.lookup_response('command.one',fixtures.rev('command.one')),response)
         self.assertEqual(reopened.read_selected_bundle(),value);self.assertEqual(reopened.selection_facts(),selected)
         with self.assertRaisesRegex(journal.PublicationJournalV4Error,'READ_ONLY'):

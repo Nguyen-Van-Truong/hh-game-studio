@@ -344,6 +344,8 @@ class BlenderUIHost:
 
     def close(self):
         with self._close_lock:
+            need(getattr(self, '_queue_dispatcher', None) is None,
+                 'BLENDER_QUEUE_DRAIN_REQUIRED')
             if self._closed: return self._cleanup
             self._stopped=True
             export_failure=None;export_cleanup=None

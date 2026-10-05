@@ -28,6 +28,48 @@ class TestFailure(RuntimeError):
     pass
 
 
+class JournalTimingTests(unittest.TestCase):
+    def test_first_and_last_windows_are_bounded_and_detached(self):
+        book = phases.JournalTimingBook(window=3)
+        for index in range(8):
+            book.operation('lookup', index * 1_000_000)
+        book.path('load')
+        value = book.snapshot()
+        self.assertEqual(value['first_ms']['lookup'], [0, 1, 2])
+        self.assertEqual(value['last_ms']['lookup'], [5, 6, 7])
+        self.assertEqual(value['counts']['lookup'], 8)
+        self.assertEqual(value['counts']['load'], 1)
+        value['first_ms']['lookup'].clear()
+        self.assertEqual(len(book.snapshot()['first_ms']['lookup']), 3)
+
+    def test_snapshot_validator_binds_pid_and_rejects_tampering(self):
+        book = phases.JournalTimingBook(window=3)
+        for name, value in (('lookup', 1), ('append', 2), ('fsync', 3), ('compact', 4)):
+            book.operation(name, value * 1_000_000)
+        snapshot = book.snapshot()
+        phases.validate_journal_timing_snapshot(snapshot, os.getpid())
+        snapshot['pid'] += 1
+        with self.assertRaisesRegex(ValueError, 'INVALID_JOURNAL_TIMING_SNAPSHOT'):
+            phases.validate_journal_timing_snapshot(snapshot, os.getpid())
+
+
+class WakeLagMonitorTests(unittest.TestCase):
+    def test_start_stop_joins_and_is_idempotent(self):
+        monitor = phases.WakeLagMonitor(interval_ms=2, threshold_ms=2, capacity=2)
+        monitor.start()
+        time.sleep(0.01)
+        self.assertTrue(monitor.stop(timeout=1.0))
+        value = monitor.snapshot()
+        self.assertFalse(value['thread_alive'])
+        self.assertTrue(value['stopped'])
+        self.assertTrue(monitor.stop(timeout=0.0))
+
+    def test_invalid_configuration_is_rejected(self):
+        with self.assertRaises(ValueError):
+            phases.WakeLagMonitor(interval_ms=0)
+        with self.assertRaises(ValueError):
+            phases.WakeLagMonitor(interval_ms=10, threshold_ms=5)
+
 class FakeSocket:
     def __init__(self, client=False):
         self.client = client
@@ -95,6 +137,25 @@ class PhaseRecorderTests(unittest.TestCase):
         self.assertEqual((snapshot['events'][-1]['server_port'], snapshot['events'][-1]['client_port']),
                          (12345, 43210))
         self.assertNotIn('private', json.dumps(snapshot))
+
+    def test_failure_window_keeps_pre_bind_state_after_rebinding_and_full_eviction(self):
+        recorder = PhaseRecorder(event_capacity=4)
+        with recorder.span('client.call', route='lookup') as call_id:
+            recorder.capture_failure(call_id, route='lookup')
+            frozen = recorder.snapshot()['first_failure']
+            recorder.bind_socket(FakeSocket(client=True), client=True)
+            changed = recorder.snapshot()
+            self.assertEqual(changed['events'][-1]['server_port'], 12345)
+            changed['first_failure']['unfinished'][0]['server_port'] = 54321
+        for _ in range(10):
+            with recorder.span('client.call', route='stop'):
+                pass
+        current = recorder.snapshot()
+        self.assertEqual(current['first_failure'], frozen)
+        self.assertIsNone(frozen['events'][0]['server_port'])
+        self.assertIsNone(frozen['unfinished'][0]['server_port'])
+        self.assertGreater(current['events'][0]['event_id'], frozen['events'][-1]['event_id'])
+        validate_phase_snapshot(current, os.getpid())
 
 
 class SnapshotValidationTests(unittest.TestCase):
@@ -213,6 +274,9 @@ class DelegationTests(unittest.TestCase):
         class Connection:
             def __init__(self, *args, **kwargs):
                 traces.append(('construct', args, kwargs))
+
+            def connect(self):
+                traces.append(('connect',))
 
             def request(self, *args, **kwargs):
                 traces.append(('request', args, kwargs))
@@ -452,7 +516,12 @@ class ProducerLifecycleTests(unittest.TestCase):
 
             def sample(self):
                 events.append('baseline')
-                return {'process': dict(self.identity), 'counters': {'rss_bytes': {'value': 1024}}}
+                return {'process': dict(self.identity), 'counters': {
+                    'rss_bytes': {'value': 1024, 'unavailable_reason': None},
+                    'private_commit_bytes': {'value': 2048, 'unavailable_reason': None},
+                    'held_handles': {'value': 4, 'unavailable_reason': None},
+                    'objects': {'value': None, 'unavailable_reason': 'NOT_APPLICABLE_PYTHON_HOST'},
+                    'resources': {'value': None, 'unavailable_reason': 'NOT_APPLICABLE_PYTHON_HOST'}}}
 
             def close(self):
                 events.append('observer.close')

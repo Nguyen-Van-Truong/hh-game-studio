@@ -56,6 +56,16 @@ class ContractTests(unittest.TestCase):
             value['box_size'] = [1, 2, 3]
         return value
 
+    def test_operation_horizon_is_independent_of_longer_lease(self):
+        for operation, horizon in (('scene.node.update', 30_000),
+                                   ('scene.save', 90_000), ('script_text.replace', 90_000)):
+            with self.subTest(operation=operation):
+                request = self.request(operation=operation, deadline_ms=1000 + horizon)
+                contract.validate_deadline(request, now_ms=1000, lease_expires_ms=500_000)
+                with self.assertRaisesRegex(contract.ContractError, 'GODOT_DEADLINE_EXPIRED'):
+                    contract.validate_deadline(replace(request, deadline_ms=1001 + horizon),
+                                               now_ms=1000, lease_expires_ms=500_000)
+
     def test_declared_catalog_does_not_advertise_runtime_without_explicit_backend(self):
         declared = contract.catalog()
         self.assertTrue(all(not row['implemented'] and not row['runtime_enabled'] for row in declared['operations'].values()))

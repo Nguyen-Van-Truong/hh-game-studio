@@ -57,7 +57,7 @@ class DiskJournalIndex:
     No persisted index is ever reopened. Same-principal hostile writers still
     require the journal's existing OS isolation; this is not a safe-write API.
     """
-    def __init__(self, private_parent, *, cache_kib=256, cached_statements=32):
+    def __init__(self, private_parent, *, cache_kib=64, cached_statements=0):
         self._lock = threading.RLock()
         self._depth = 0
         self._generation = 0
@@ -84,8 +84,14 @@ class DiskJournalIndex:
                 self._execute(f"PRAGMA {key}={value}")
                 if self._one(f"PRAGMA {key}")[0] != value:
                     raise DiskIndexError("INDEX_SETTINGS_UNSUPPORTED")
-            if self._one("PRAGMA journal_mode=DELETE")[0] != "delete":
+            if self._one("PRAGMA journal_mode=WAL")[0] != "wal":
                 raise DiskIndexError("INDEX_SETTINGS_UNSUPPORTED")
+            # Bounded derived pager/WAL; JSONL fsync remains the authoritative
+            # receipt barrier. Checkpoints do not discard IDs or reset history.
+            for key, value in {"wal_autocheckpoint": 64, "journal_size_limit": 262144}.items():
+                self._execute(f"PRAGMA {key}={value}")
+                if self._one(f"PRAGMA {key}")[0] != value:
+                    raise DiskIndexError("INDEX_SETTINGS_UNSUPPORTED")
             self._execute("PRAGMA cache_spill=ON")
             if self._one("PRAGMA cache_spill")[0] <= 0:
                 raise DiskIndexError("INDEX_SETTINGS_UNSUPPORTED")
@@ -137,6 +143,17 @@ class DiskJournalIndex:
     def indexed_bytes(self):
         return self._meta("bytes")
 
+    def health_check(self):
+        """Run one bounded read against the disposable index.
+
+        Cached journal operations must not rebuild or scan the JSONL history,
+        but they still need to fail closed if the derived SQLite owner has
+        been poisoned or its connection has become unusable.  The query is
+        deliberately cardinality independent; it does not return receipt
+        bodies or materialize the index.
+        """
+        self._one("SELECT c.value FROM commands c LIMIT 1")
+
     @contextmanager
     def transaction(self):
         with self._lock:
@@ -149,6 +166,19 @@ class DiskJournalIndex:
                 yield
                 if outer:
                     self._execute("COMMIT")
+                    # SQLite's bounded page cache still retains dirty/read
+                    # pages in the connection after a large tail transaction.
+                    # Release that disposable cache at the transaction
+                    # boundary so private commit tracks the bounded index,
+                    # rather than the 35k-record JSONL history.
+                    try:
+                        self._execute("PRAGMA shrink_memory")
+                    except DiskIndexError:
+                        # The durable COMMIT already succeeded.  A cache trim
+                        # failure must not turn a committed command into an
+                        # UNKNOWN result; the next operation remains guarded
+                        # by the live index connection.
+                        pass
             except BaseException:
                 if outer:
                     try:
@@ -175,10 +205,11 @@ class DiskJournalIndex:
                             _identity(self._dir, directory=True) != self._dir_identity):
                         raise DiskIndexError("INDEX_CLEANUP_IDENTITY")
                     entries = list(self._dir.iterdir())
-                    if len(entries) > 2:
+                    if len(entries) > 4:
                         raise DiskIndexError("INDEX_CLEANUP_UNEXPECTED")
                     for path in entries:
-                        if path.name not in {"index.sqlite3", "index.sqlite3-journal"}:
+                        if path.name not in {"index.sqlite3", "index.sqlite3-journal",
+                                             "index.sqlite3-wal", "index.sqlite3-shm"}:
                             raise DiskIndexError("INDEX_CLEANUP_UNEXPECTED")
                         _identity(path, directory=False)
                     for path in entries:

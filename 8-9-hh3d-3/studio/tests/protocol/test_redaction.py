@@ -4,16 +4,20 @@ from __future__ import annotations
 import base64
 import io
 import json
+import random
+import re
 from pathlib import Path
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 from urllib.parse import quote
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 from host.core.limits import SafetyViolation
 from host.core.redaction import REDACTED, RedactedBoundary, RedactionLimits, Redactor
+import host.core.redaction as redaction
 
 
 class RedactionTests(unittest.TestCase):
@@ -120,6 +124,31 @@ class RedactionTests(unittest.TestCase):
     def test_no_recursive_secret_marker_expansion(self):
         value = Redactor(secrets=("A", "R", "E")).text("AAA")
         self.assertEqual(value, REDACTED * 3)
+
+    def test_literal_matching_preserves_leftmost_longest_and_metacharacters(self):
+        redactor = Redactor(secrets=('abc', 'abcde', 'bcdef', 'a.b', '[x]', 'R'))
+        self.assertEqual(redactor._replace_registered('abcdef a.b [x] R'),
+                         REDACTED + 'f ' + REDACTED + ' ' + REDACTED + ' ' + REDACTED)
+        # The old expression establishes the exact matching semantics, including
+        # overlaps, unicode, escaped variants and short marker characters.
+        rng = random.Random(606)
+        alphabet = 'ab.R[]é中'
+        for _ in range(40):
+            secrets = {''.join(rng.choices(alphabet, k=rng.randrange(1, 7))) for _ in range(12)}
+            redactor = Redactor(secrets=secrets)
+            oracle = re.compile('|'.join(re.escape(item) for item in redactor._replacements))
+            value = ''.join(rng.choices(alphabet, k=180))
+            self.assertEqual(redactor._replace_registered(value), oracle.sub(REDACTED, value))
+
+    def test_retired_secret_sets_do_not_enter_global_regex_cache(self):
+        # The matcher must not compile a new global regex for each credential
+        # generation. Spy on the public compile API rather than CPython's
+        # private cache; the runtime's cache policy is an implementation detail.
+        marker = 'synthetic-retirement-606-'
+        with patch.object(redaction.re, 'compile', side_effect=AssertionError('dynamic regex')):
+            for index in range(35):
+                redactor = Redactor(secrets=(marker + str(n) for n in range(index + 1)))
+                self.assertEqual(redactor.text(marker + str(index)), REDACTED)
 
     def test_sink_error_does_not_leak_exception_detail(self):
         def bad_sink(_):

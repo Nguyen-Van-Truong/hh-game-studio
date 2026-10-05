@@ -115,6 +115,14 @@ class TransportRecoveryTests(unittest.TestCase):
                                      lease=client.lease())
             self.assertIs(client.submit(request).status, Status.ACCEPTED_PENDING)
             self.assertTrue(host.faults.applied.wait(1))
+            if not terminal_bytes:
+                # O5 skips recovery fsync for the same already-durable local
+                # generation. Change the history through a second writer so
+                # this case still exercises a real pre-append reload barrier.
+                competitor = Journal(host.journal.path)
+                competitor.acquire_lease(project_id=host.project_id,
+                    target='recovery.barrier.probe', owner='external.writer',
+                    now_ms=epoch_ms(), ttl_ms=60_000)
             pending_size = host.journal.path.stat().st_size
             real_fsync = journal_module.os.fsync
             failed_sizes = []

@@ -5,6 +5,7 @@ durable session supplies native writer fencing, not a second command journal.
 Public durable ACK and writable GUI restart remain unavailable on this owner.
 """
 from dataclasses import replace
+from functools import wraps
 import re
 import threading
 
@@ -31,6 +32,17 @@ def response(status, code, key, **details):
     return Response(status, code, key, postconditions={
         'public_ack': False, 'ledger_receipt_only': True, 'scene_state_durable': False,
         'durable_publication': False, **details})
+
+
+def _admitted(method):
+    @wraps(method)
+    def call(self, *args, **kwargs):
+        need(self._admission.acquire(blocking=False), 'BLENDER_CLIENT_BUSY')
+        try:
+            return method(self, *args, **kwargs)
+        finally:
+            self._admission.release()
+    return call
 
 
 class BlenderWriterClientOwner:
@@ -77,6 +89,9 @@ class BlenderWriterClientOwner:
         observed.catalog_digest = self.catalog_digest
         self._ledger = BlenderClientLedger.from_owner(observed)
         self._work = threading.Lock()
+        self._admission = threading.RLock()
+        self._attachment_lock = threading.RLock()
+        self._queue_dispatcher = self._transport = None
         self._mutex = threading.Lock()
         self._held = False
         self._stop_pending = False
@@ -135,6 +150,7 @@ class BlenderWriterClientOwner:
         return replace(result, capabilities=tuple(item for item in result.capabilities
             if item.operation in self._supported and item.operation in grant.operations))
 
+    @_admitted
     def lease(self, body, *, authorization, catalog_digest):
         grant = self._auth(body, authorization, catalog_digest,
             keys={'project_id', 'access', 'ttl_ms'})
@@ -224,6 +240,7 @@ class BlenderWriterClientOwner:
              'BLENDER_SENSITIVE_OBSERVATION')
         return result
 
+    @_admitted
     def preview(self, body, *, authorization, catalog_digest):
         """Inspect native preconditions without consuming an apply ID or intent.
 
@@ -389,7 +406,13 @@ class BlenderWriterClientOwner:
                 self._hold()
             return response(Status.UNKNOWN if getattr(error, 'outcome_unknown', False)
                 else Status.REJECTED, error.code, key)
+        # Historical retries above retain their nonblocking lookup semantics.
+        # Fresh effects serialize through terminal queue collection as well as
+        # native work. Stop and lookup never take this reentrant admission gate.
+        if not self._admission.acquire(blocking=False):
+            return response(Status.REJECTED, 'BLENDER_CLIENT_BUSY', key)
         if not self._work.acquire(blocking=False):
+            self._admission.release()
             return response(Status.REJECTED, 'BLENDER_CLIENT_BUSY', key)
         admission = permit = None
         write = request.operation != catalog.READ
@@ -476,6 +499,7 @@ class BlenderWriterClientOwner:
                         self.sessions.finish_read(permit)
             finally:
                 self._work.release()
+                self._admission.release()
 
     def _check_native_after_effect(self):
         # A completed observation can legitimately drain after Stop. Verify

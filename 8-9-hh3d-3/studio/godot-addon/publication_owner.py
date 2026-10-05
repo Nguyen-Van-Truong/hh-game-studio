@@ -18,6 +18,7 @@ import uuid
 from studio.protocol.core import Request, Response, Status, canonical_bytes, parse_json
 from studio.host.core.transport import epoch_ms
 from studio.host.core.limits import SafetyViolation
+from studio.host.core.gt07_failpoints import hit as _failpoint_hit, runtime_root as _failpoint_root
 
 HERE = Path(__file__).resolve().parent
 
@@ -67,6 +68,9 @@ class GodotPublicationOwner:
         owner = object.__new__(cls)
         owner._lock = threading.RLock()
         owner._work = threading.Lock()
+        owner._attachment_lock = threading.RLock()
+        owner._admission = threading.RLock()
+        owner._transport = owner._queue_dispatcher = None
         owner._closed = owner._held = False
         owner._jobs, owner._leases, owner._read_leases = {}, {}, {}
         owner._stop_thread = None
@@ -123,6 +127,11 @@ class GodotPublicationOwner:
 
     def _same_release(self):
         _need(self.validation_model.source_release() == self._source_release, 'GODOT_SOURCE_CHANGED')
+
+    def _failpoint(self, phase):
+        # Diagnostic only: the harness may redirect this to its private raw
+        # root; normal product/release execution has no armed config.
+        _failpoint_hit(_failpoint_root(HERE.parent), phase)
 
     def _qualify_script(self, raw):
         profile = self.validation_model.factory._sibling('script_profile')
@@ -282,7 +291,7 @@ class GodotPublicationOwner:
             can_redo=inspected['can_redo'], stopped=self.sessions.status()['stopped'])
 
     def submit(self, body, *, authorization, catalog_digest):
-        return self._submit(body, authorization=authorization, catalog_digest=catalog_digest)
+        return self._submit_admitted(body, authorization=authorization, catalog_digest=catalog_digest)
 
     def submit_candidate_update(self, body, *, authorization, catalog_digest):
         """Private O2 integration seam; no HTTP route/profile is enabled.
@@ -292,8 +301,25 @@ class GodotPublicationOwner:
         """
         request = Request.from_dict(body)
         _need(request.operation == 'scene.node.update', 'GODOT_CANDIDATE_UPDATE_ONLY')
-        return self._submit(body, authorization=authorization, catalog_digest=catalog_digest,
-                            candidate_update=True)
+        return self._submit_admitted(body, authorization=authorization, catalog_digest=catalog_digest,
+                                     candidate_update=True)
+
+    def _submit_admitted(self, body, *, authorization, catalog_digest, candidate_update=False):
+        # Queue collection retains this gate after submit returns, through
+        # fresh readback and durable broker accounting. A competing direct
+        # request must not edit the scene in that interval.
+        admission = getattr(self, '_admission', None)
+        if admission is None:
+            with self._lock:
+                if not hasattr(self, '_admission'):
+                    self._admission = threading.RLock()
+                admission = self._admission
+        _need(admission.acquire(blocking=False), 'GODOT_OWNER_BUSY')
+        try:
+            return self._submit(body, authorization=authorization, catalog_digest=catalog_digest,
+                                candidate_update=candidate_update)
+        finally:
+            admission.release()
 
     def _submit(self, body, *, authorization, catalog_digest, candidate_update=False):
         request = Request.from_dict(body)
@@ -517,10 +543,12 @@ class GodotPublicationOwner:
                       'GODOT_CAPTURE_VALIDATION_MISMATCH')
             self.sessions.check(grant,lease,deadline_ms=request.deadline_ms,operation=request.operation)
             self._journal.prepare(command,digest,final,observed_ms=epoch_ms())
+            self._failpoint('PREPARED')
             self._phase(request,grant,lease,'stage',
                 lambda:self._journal.stage_prepared(command,digest,observed_ms=epoch_ms()))
             self._validator.semantic_observation(semantic_receipt,final)
             self._journal.validated(command,digest,asdict(semantic_receipt),observed_ms=epoch_ms())
+            self._failpoint('VALIDATED')
             ready = self.inspect()
             _need(all(ready[k] == before[k] for k in ('revision','generation','root_instance_id','state','working_files',
                       'project_revision')), 'GODOT_EDITOR_CHANGED_DURING_VALIDATION')
@@ -542,6 +570,7 @@ class GodotPublicationOwner:
                 facts = old_editor.retirement_observation(retired)
                 self._journal.retired(command,digest,self._retirement_facts(retired,facts),observed_ms=epoch_ms())
             self._journal.prepare_activation(command,digest,current=current,observed_ms=epoch_ms())
+            self._failpoint('ACTIVATING')
             self._phase(request,grant,lease,'select',
                 lambda:self._journal.select_prepared(command,digest,observed_ms=epoch_ms()))
             selected = self._journal.read_selected_bundle()
@@ -565,6 +594,7 @@ class GodotPublicationOwner:
                 adopted = self._phase(request,grant,lease,'adopt',
                     lambda:self._editor.adopt(adoption_intent,selected,selection['selector']['selection']))
                 adoption = self._adoption_facts(self._editor.observation(adopted,selected),selected,selection)
+            self._failpoint('RELOAD')
             def finalize():
                 self._editor.observation(adopted,selected)
                 self._validator.semantic_observation(semantic_receipt,selected)
@@ -574,7 +604,9 @@ class GodotPublicationOwner:
             terminal = self._phase(request,grant,lease,'commit',finalize)
             receipt = terminal['receipt']
             _need(receipt['status'] == 'COMMITTED', 'GODOT_DURABLE_COMMIT_REQUIRED')
+            self._failpoint('COMMITTED')
             self._remember_response(command,record)
+            self._failpoint('ACK')
             return self._reply(command,record)
         except BaseException as exc:
             cleanup_owner = getattr(exc,'cleanup_owner',None)
@@ -742,6 +774,17 @@ class GodotPublicationOwner:
         # Latch before queuing persistence; never wait for disk on the control
         # listener. The owned drain waits for the current effect's accounting.
         stopped = self.sessions.stop(grant)
+        return self._request_stop(stopped)
+
+    def request_stop(self):
+        """Trusted supervisor Stop; revocation cannot prevent cleanup.
+
+        Public listeners only expose stop(), which authenticates first.
+        Persistence remains asynchronous and uses the same bounded drain.
+        """
+        return self._request_stop(self.sessions.halt())
+
+    def _request_stop(self, stopped):
         fifo=getattr(self,'_fifo',None)
         if fifo is not None:fifo.halt()
         with self._lock:
@@ -777,6 +820,13 @@ class GodotPublicationOwner:
             if acquired:self._work.release()
 
     def close(self):
+        attachment = getattr(self, '_attachment_lock', self._lock)
+        with attachment:
+            _need(getattr(self, '_queue_dispatcher', None) is None,
+                  'GODOT_QUEUE_DRAIN_REQUIRED')
+            return self._close()
+
+    def _close(self):
         with self._lock:
             self._closed = True
             stop_thread = getattr(self,'_stop_thread',None)

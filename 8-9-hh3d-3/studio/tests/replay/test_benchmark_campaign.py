@@ -15,11 +15,20 @@ STUDIO = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(STUDIO.parent))
 from studio.tests.replay import run_benchmark_campaign as campaign
 from studio.tests.replay.benchmark_job import BenchmarkJobError
-from studio.tests.replay.benchmark_http_phases import PhaseRecorder
+from studio.tests.replay.benchmark_http_phases import JournalTimingBook, PhaseRecorder
 from studio.tests.replay.benchmark_import_observer import ImportObserver
 
 
 class CampaignResumeTests(unittest.TestCase):
+    def test_reconciliation_diagnostic_reaches_base_producer(self):
+        producer = campaign.CampaignProducer.__new__(campaign.CampaignProducer)
+        producer.native_log = Mock()
+        producer.native_log.poll.return_value = None
+        with patch.object(campaign.CommandProducer, '_received', return_value=123) as received:
+            self.assertEqual(producer._received(expected_diagnostic='COMMAND_NOT_FOUND'), 123)
+        received.assert_called_once_with(expected_diagnostic='COMMAND_NOT_FOUND')
+        producer.native_log.poll.assert_called_once_with()
+
     def setUp(self):
         self.directory = tempfile.TemporaryDirectory(prefix='gt06-campaign-test-')
         self.addCleanup(self.directory.cleanup)
@@ -38,7 +47,8 @@ class CampaignResumeTests(unittest.TestCase):
                           'editor': {'pid': 101, 'process_start': 'windows:1001'}}
         self.put('context.json', {'run_id': self.run_id, 'index': 0, 'attempt': 1,
             'source_files': self.files, 'source_closure_sha256': self.digest,
-            'profile_sha256': campaign.profile.PROFILE_SHA256, 'campaign_sha256': self.campaign_sha})
+            'profile_sha256': campaign.profile.PROFILE_SHA256, 'campaign_sha256': self.campaign_sha,
+            'launch_observation_schema': campaign.LAUNCH_OBSERVATION_SCHEMA})
         self.child = {'run_id': self.run_id, 'index': 0, 'completed': True,
             'source_closure_sha256': self.digest, 'profile_sha256': campaign.profile.PROFILE_SHA256,
             'processes': self.processes, 'batches': [{'index': i} for i in range(35)]}
@@ -51,6 +61,7 @@ class CampaignResumeTests(unittest.TestCase):
             self.put(directory + '/stdout.txt', b'')
             self.put(directory + '/stderr.txt', b'')
             self.put(directory + '/capture.json', {'completed': True,
+                'elapsed_seconds': 5.0,
                 'source_unchanged': True, 'wrapper_exit_code': 0, 'actual_process_exit': actual,
                 'natural_tree_exit': True, 'formal_acceptance': False,
                 'job': {'closed': True, 'zero_observed': True, 'tainted': False},
@@ -76,6 +87,7 @@ class CampaignResumeTests(unittest.TestCase):
             'host_actual_exit': None, 'supervisor_actual_exit': None,
             'observations': {'heartbeat_alive': False, 'editor_probe': deepcopy(released_probe),
                 'producer': {'present': True, 'closed': True, 'failed': True,
+                    'wake_lag': {'thread_alive': False, 'stopped': True},
                     'observer_probe': deepcopy(released_probe), 'host': {'stopped': True, 'closing': True,
                         'threads_alive': [False, False, False], 'main_socket_closed': True, 'control_socket_closed': True},
                     'journal': {'cache_closed': True, 'index_retained': False,
@@ -91,6 +103,10 @@ class CampaignResumeTests(unittest.TestCase):
         imported = ImportObserver(self.root, self.root, self.root)
         imported._started_ns, imported._closed = 1, True
         campaign._write_observation(self.root, context, 'import', imported.snapshot())
+        journal = JournalTimingBook(window=3)
+        journal._pid = 100
+        journal.operation('lookup', 1_000_000)
+        campaign._write_observation(self.root, context, 'journal', journal.snapshot())
         self.terminal['observations']['import_observer'] = campaign._import_cleanup_state(imported)
         self.put('child-terminal-cleanup.json', self.terminal)
         self.put('commands/journal.guard', b'')
@@ -98,6 +114,22 @@ class CampaignResumeTests(unittest.TestCase):
             'completed': True, 'run_id': self.run_id, 'index': 0,
             'source_closure_sha256': self.digest, 'profile_sha256': campaign.profile.PROFILE_SHA256,
             'processes': deepcopy(self.processes), 'artifacts': {}}
+        from studio.tests.replay.test_benchmark_environment import sample
+        from studio.tests.replay.test_launch_observation import collect_synthetic
+        collect_synthetic(self.root, context, 0)
+        self.put('unused-synthetic.txt', b'fixture')
+        self.put('environment-preflight-after.json', campaign.environment.preflight(sample(5)))
+        watchdog_binding = {'run_id': self.run_id, 'source_closure_sha256': self.digest,
+                            'campaign_sha256': self.campaign_sha}
+        watchdog_rows = [json.dumps({'schema': campaign.environment.SAMPLE_STREAM_SCHEMA,
+                                     **watchdog_binding})]
+        previous = None
+        for t in (65, 70):
+            row = sample(t)
+            row['cpu_observation'] = campaign.environment.cpu_interval(previous, row)
+            watchdog_rows.append(json.dumps(row))
+            previous = row
+        self.put('environment-samples.jsonl', ('\n'.join(watchdog_rows) + '\n').encode())
         self.rebind_artifacts()
 
     def put(self, relative, value):
@@ -124,6 +156,21 @@ class CampaignResumeTests(unittest.TestCase):
         self.owner_verifier.side_effect = BenchmarkJobError('RAW_EXIT_MISMATCH')
         with self.assertRaisesRegex(BenchmarkJobError, 'RAW_EXIT_MISMATCH'):
             self.verify()
+
+    def test_malformed_after_preflight_cannot_be_resumed(self):
+        self.put('environment-preflight-after.json', {'schema_id': 'wrong', 'pass': True})
+        self.rebind_artifacts()
+        with self.assertRaisesRegex(BenchmarkJobError, 'CAMPAIGN_PREFLIGHT_SHAPE'):
+            self.verify()
+
+    def test_after_snapshot_does_not_reapply_launch_thresholds(self):
+        from studio.tests.replay.test_benchmark_environment import sample
+        after = campaign.environment.preflight(sample(5, available_memory_bytes=2 * campaign.environment.GIB,
+                                                       commit_total_bytes=90 * campaign.environment.GIB))
+        self.assertFalse(after['pass'])
+        self.put('environment-preflight-after.json', after)
+        self.rebind_artifacts()
+        self.assertEqual(self.verify(), self.child)
 
     def test_copied_success_cannot_fill_a_different_run_slot(self):
         with self.assertRaisesRegex(BenchmarkJobError, 'CAMPAIGN_RESUME_SLOT'):
@@ -165,7 +212,7 @@ class CampaignResumeTests(unittest.TestCase):
             self.verify()
 
     def test_observation_cannot_be_omitted_from_manifest(self):
-        for name in ('http-phases-final.json', 'import-observation.json'):
+        for name in ('http-phases-final.json', 'journal-timings-final.json', 'import-observation.json'):
             with self.subTest(name=name):
                 self.rebind_artifacts()
                 del self.captured['artifacts'][name]
@@ -233,7 +280,8 @@ class CampaignResumeTests(unittest.TestCase):
                                   ('editor_probe', 'close_uncertain', True),
                                   ('editor_probe', 'handle_retained', 0),
                                   ('editor_owner', 'closed', False),
-                                  ('producer', 'closed', False)]:
+                                  ('producer', 'closed', False),
+                                  ('producer', 'wake_lag', {'thread_alive': True, 'stopped': False})]:
             with self.subTest(role=role, key=key, value=value):
                 modified = deepcopy(self.terminal)
                 modified['observations'][role][key] = value
@@ -274,6 +322,247 @@ class CampaignResumeTests(unittest.TestCase):
             self.verify()
 
 
+class CampaignLifecycleTests(unittest.TestCase):
+    def lifecycle(self, root, *, now=1_000.0):
+        root.mkdir(parents=True, exist_ok=True)
+        return campaign.ensure_campaign_lifecycle(
+            root, campaign_id='gt06-lifecycle-test',
+            source_closure_sha256='a' * 64,
+            profile_sha256=campaign.profile.PROFILE_SHA256,
+            toolchain_sha256='b' * 64, now=now)
+
+    def test_lifecycle_is_immutable_and_binds_the_frozen_closure(self):
+        with tempfile.TemporaryDirectory(prefix='gt06-lifecycle-') as directory:
+            root = Path(directory)
+            value = self.lifecycle(root)
+            self.assertEqual(value['expires_epoch'] - value['opened_epoch'],
+                             campaign.CAMPAIGN_MAX_AGE_SECONDS)
+            self.assertEqual(campaign.ensure_campaign_lifecycle(
+                root, campaign_id='gt06-lifecycle-test',
+                source_closure_sha256='a' * 64,
+                profile_sha256=campaign.profile.PROFILE_SHA256,
+                toolchain_sha256='b' * 64, now=1_001.0), value)
+            with self.assertRaisesRegex(BenchmarkJobError, 'CAMPAIGN_LIFECYCLE_BINDING'):
+                campaign.ensure_campaign_lifecycle(
+                    root, campaign_id='gt06-lifecycle-test',
+                    source_closure_sha256='c' * 64,
+                    profile_sha256=campaign.profile.PROFILE_SHA256,
+                    toolchain_sha256='b' * 64, now=1_001.0)
+
+    def test_defer_writes_first_receipt_and_append_only_state(self):
+        with tempfile.TemporaryDirectory(prefix='gt06-defer-') as directory:
+            root = Path(directory)
+            lifecycle = self.lifecycle(root)
+            with self.assertRaises(campaign.CampaignDeferredError) as caught:
+                campaign.defer_campaign(root, lifecycle, code='CAMPAIGN_PREFLIGHT_RESOURCE_LIMIT',
+                                        reason='PAIR_PREFLIGHT', pair_index=1, now=2_000.0)
+            self.assertTrue(caught.exception.deferred)
+            first = json.loads((root / 'deferred.json').read_bytes())
+            self.assertEqual(first['pair_index'], 1)
+            with self.assertRaises(campaign.CampaignDeferredError):
+                campaign.defer_campaign(root, lifecycle, code='CAMPAIGN_PREFLIGHT_RESOURCE_LIMIT',
+                                        reason='PAIR_PREFLIGHT', pair_index=1, now=2_001.0)
+            self.assertEqual(json.loads((root / 'deferred.json').read_bytes()), first)
+            states = (root / 'campaign-state.jsonl').read_bytes().splitlines()
+            self.assertEqual([json.loads(row)['state'] for row in states], ['OPEN', 'DEFERRED', 'DEFERRED'])
+            with self.assertRaises(campaign.CampaignDeferredError):
+                campaign.require_defer_elapsed(root, lifecycle, now=2_001.0)
+            campaign.require_defer_elapsed(root, lifecycle, now=2_301.0)
+
+    def test_infra_retry_requires_window_and_budget(self):
+        with tempfile.TemporaryDirectory(prefix='gt06-retry-') as directory:
+            root = Path(directory)
+            lifecycle = self.lifecycle(root)
+            with patch.object(campaign.environment, 'require_infra_budget') as budget:
+                self.assertTrue(campaign.infra_retry_allowed(
+                    root, lifecycle, source_closure_sha256='a' * 64,
+                    profile_sha256=campaign.profile.PROFILE_SHA256, attempt=1,
+                    now=1_001.0, window_remaining_seconds=2_400))
+                self.assertFalse(campaign.infra_retry_allowed(
+                    root, lifecycle, source_closure_sha256='a' * 64,
+                    profile_sha256=campaign.profile.PROFILE_SHA256, attempt=1,
+                    now=1_001.0, window_remaining_seconds=2_399))
+                with self.assertRaisesRegex(BenchmarkJobError, 'CAMPAIGN_RETRY_WINDOW'):
+                    campaign.infra_retry_allowed(
+                        root, lifecycle, source_closure_sha256='a' * 64,
+                        profile_sha256=campaign.profile.PROFILE_SHA256, attempt=1,
+                        now=1_001.0, window_remaining_seconds=float('nan'))
+                budget.assert_called()
+
+    def test_retry_cleanup_receipt_is_bound_to_attempt_context(self):
+        with tempfile.TemporaryDirectory(prefix='gt06-retry-cleanup-binding-') as directory:
+            root = Path(directory)
+            context = {'run_id': 'gt06-lifecycle-test.r00.a01',
+                       'source_closure_sha256': 'a' * 64,
+                       'profile_sha256': campaign.profile.PROFILE_SHA256,
+                       'campaign_sha256': 'b' * 64}
+            cleanup = {**context, 'closed': True, 'completed': False,
+                       'job': {'closed': True, 'zero_observed': True,
+                               'handle_retained': False, 'close_uncertain': False},
+                       'wrapper_process_handle': {'closed': True,
+                               'handle_retained': False, 'close_uncertain': False}}
+            for role in ('host-owner', 'editor-host'):
+                campaign.write(root / role / 'cleanup-001.json', cleanup)
+            campaign._o9_verify_retry_cleanup(root, context)
+            stale = dict(cleanup, run_id='gt06-lifecycle-test.r00.a02')
+            (root / 'editor-host' / 'cleanup-001.json').unlink()
+            campaign.write(root / 'editor-host' / 'cleanup-001.json', stale)
+            with self.assertRaisesRegex(BenchmarkJobError, 'O9_2_RETRY_CLEANUP_BINDING'):
+                campaign._o9_verify_retry_cleanup(root, context)
+
+    def test_historical_campaign_keeps_one_attempt_policy(self):
+        with tempfile.TemporaryDirectory(prefix='gt06-old-campaign-') as directory:
+            root = Path(directory)
+            campaign.write(root / 'campaign.json', {'max_attempts_per_run': 1})
+            self.assertEqual(campaign.campaign_attempt_limit(root), 1)
+
+    def test_corrupt_historical_attempt_policy_fails_closed(self):
+        with tempfile.TemporaryDirectory(prefix='gt06-corrupt-policy-') as directory:
+            root = Path(directory)
+            (root / 'campaign.json').write_bytes(b'{not-json')
+            with self.assertRaisesRegex(BenchmarkJobError, 'CAMPAIGN_ATTEMPT_POLICY_CORRUPT'):
+                campaign.campaign_attempt_limit(root)
+            (root / 'campaign.json').write_bytes(b'{"max_attempts_per_run":99}')
+            with self.assertRaisesRegex(BenchmarkJobError, 'CAMPAIGN_ATTEMPT_POLICY_CORRUPT'):
+                campaign.campaign_attempt_limit(root)
+
+    def test_retry_without_observed_window_fails_closed(self):
+        with tempfile.TemporaryDirectory(prefix='gt06-unobserved-window-') as directory:
+            root = Path(directory)
+            lifecycle = self.lifecycle(root)
+            with patch.object(campaign.environment, 'require_infra_budget') as budget:
+                with self.assertRaisesRegex(BenchmarkJobError, 'CAMPAIGN_RETRY_WINDOW'):
+                    campaign.infra_retry_allowed(
+                        root, lifecycle, source_closure_sha256='a' * 64,
+                        profile_sha256=campaign.profile.PROFILE_SHA256,
+                        attempt=1, now=1_001.0)
+                budget.assert_not_called()
+
+
+class CampaignPreflightTests(unittest.TestCase):
+    def test_apps_allowed_but_unknown_inventory_rejected(self):
+        result = {'schema_id': 'hh-studio.benchmark-environment-preflight', 'schema_version': '1.2.0',
+                  'available_memory_bytes': 16 * 1024**3, 'commit_total_bytes': 40,
+                  'commit_limit_bytes': 100, 'heavy_processes': [],
+                  'required_heavy_processes_closed': False, 'foreign_engines': [], 'pass': True}
+        for name in ('chrome.exe', 'vmmemwsl', 'telegram.exe', 'zalo.exe'):
+            with self.subTest(name=name):
+                campaign.require_environment_preflight({**result, 'heavy_processes': [{'pid': 55, 'name': name}]})
+        for value in (None, {}, False):
+            with self.subTest(value=value), self.assertRaisesRegex(BenchmarkJobError, 'CAMPAIGN_PREFLIGHT_APP_INVENTORY'):
+                campaign.require_environment_preflight({**result, 'heavy_processes': value})
+        del result['heavy_processes']
+        with self.assertRaisesRegex(BenchmarkJobError, 'CAMPAIGN_PREFLIGHT_APP_INVENTORY'):
+            campaign.require_environment_preflight(result)
+
+    def test_enumeration_failure_cannot_become_empty_inventory_pass(self):
+        with patch.object(campaign, 'heavy_preflight_processes', side_effect=BenchmarkJobError('CAMPAIGN_PREFLIGHT_PROCESS_NEXT')):
+            snapshot = campaign.environment_preflight()
+        self.assertFalse(snapshot['pass'])
+        self.assertIsNone(snapshot['heavy_processes'])
+        self.assertEqual(snapshot['failure_code'], 'CAMPAIGN_PREFLIGHT_PROCESS_NEXT')
+
+    def test_completed_capture_keeps_original_snapshot_hashes_on_resume(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            before = {'schema_id': 'hh-studio.benchmark-environment-preflight', 'schema_version': '1.2.0',
+                      'available_memory_bytes': 8 * 1024**3, 'commit_total_bytes': 80,
+                      'commit_limit_bytes': 100, 'heavy_processes': [], 'required_heavy_processes_closed': False, 'foreign_engines': [], 'pass': True}
+            refs = []
+            for invocation in ('a' * 32, 'b' * 32):
+                pair = {}
+                for phase in ('before', 'after'):
+                    path = root / 'environment' / f'{invocation}-{phase}.json'
+                    campaign.write(path, before if phase == 'before' else {**before, 'pass': False})
+                    pair['environment_preflight_' + phase] = campaign.reference(root, path)
+                refs.append(pair)
+            result = {'completed': True, 'source_closure_sha256': 'c' * 64, **refs[0]}
+            final = campaign.seal_campaign_capture(root, result)
+            original = final.read_bytes()
+            campaign.seal_campaign_capture(root, {**result, **refs[1]})
+            self.assertEqual(final.read_bytes(), original)
+            with self.assertRaisesRegex(BenchmarkJobError, 'CAMPAIGN_EXISTING_CAPTURE_CHANGED'):
+                campaign.seal_campaign_capture(root, {**result, **refs[1], 'source_closure_sha256': 'd' * 64})
+            (root / refs[0]['environment_preflight_before']['file']).write_bytes(b'{}')
+            with self.assertRaisesRegex(BenchmarkJobError, 'CAMPAIGN_ENVIRONMENT_HASH'):
+                campaign.seal_campaign_capture(root, {**result, **refs[1]})
+
+    def test_resource_boundaries_are_numeric_and_inclusive(self):
+        result = {'schema_id': 'hh-studio.benchmark-environment-preflight', 'schema_version': '1.2.0',
+                  'available_memory_bytes': 8 * 1024**3, 'commit_total_bytes': 80,
+                  'commit_limit_bytes': 100, 'heavy_processes': [], 'required_heavy_processes_closed': False, 'foreign_engines': [], 'pass': True}
+        campaign.require_environment_preflight(result)
+        for key, value in (('available_memory_bytes', 4 * 1024**3 - 1),
+                           ('commit_total_bytes', 86), ('commit_total_bytes', True),
+                           ('commit_limit_bytes', 0), ('pass', False)):
+            with self.subTest(key=key, value=value):
+                with self.assertRaisesRegex(BenchmarkJobError, 'CAMPAIGN_PREFLIGHT_RESOURCE_LIMIT'):
+                    campaign.require_environment_preflight({**result, key: value})
+
+    def test_after_snapshot_is_recorded_without_becoming_a_gate(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            after = {'schema_id': 'hh-studio.benchmark-environment-preflight', 'schema_version': '1.2.0',
+                     'available_memory_bytes': 1, 'commit_total_bytes': 99, 'commit_limit_bytes': 100, 'heavy_processes': [], 'required_heavy_processes_closed': False, 'foreign_engines': [], 'pass': False}
+            def completed(_campaign_id, _root, before_path, after_path):
+                campaign.write(before_path, {'synthetic': True})
+                return 0
+            with patch.object(campaign, '_run_campaign', side_effect=completed), \
+                    patch.object(campaign, 'environment_preflight', return_value=after):
+                self.assertEqual(campaign.run_campaign('gt06-preflight-test', root), 0)
+            paths = list((root / 'environment').glob('*-after.json'))
+            self.assertEqual(len(paths), 1)
+            self.assertEqual(json.loads(paths[0].read_bytes()), after)
+
+
+@unittest.skipUnless(sys.platform == 'win32', 'Windows Toolhelp snapshot API')
+class PreflightInventoryTests(unittest.TestCase):
+    def kernel(self, names, *, first=True, terminal_error=18, close=True, handle=0x100000001):
+        entries = iter(enumerate(names, start=10))
+        def fill(_snapshot, pointer):
+            try:
+                pid, name = next(entries)
+            except StopIteration:
+                campaign.ctypes.set_last_error(terminal_error)
+                return False
+            pointer._obj.pid, pointer._obj.exe = pid, name
+            return True
+        return SimpleNamespace(
+            CreateToolhelp32Snapshot=Mock(return_value=handle),
+            Process32FirstW=Mock(side_effect=fill if first else lambda *_: False),
+            Process32NextW=Mock(side_effect=fill), CloseHandle=Mock(return_value=close))
+
+    def test_case_insensitive_known_apps_and_native_handle_width(self):
+        kernel = self.kernel(['python.exe', 'ChatGPT.exe', 'Chrome.EXE', 'vmmemWSL',
+                              'Telegram.exe', 'Zalo.exe', 'wslservice.exe', 'msedgewebview2.exe'])
+        with patch.object(campaign.ctypes, 'WinDLL', return_value=kernel):
+            rows = campaign.heavy_preflight_processes()
+        self.assertEqual([row['name'] for row in rows], ['chrome.exe', 'telegram.exe', 'vmmemwsl', 'zalo.exe'])
+        self.assertTrue(all(set(row) == {'pid', 'name'} for row in rows))
+        kernel.CloseHandle.assert_called_once_with(0x100000001)
+        self.assertIs(kernel.CreateToolhelp32Snapshot.restype, campaign.ctypes.wintypes.HANDLE)
+
+    def test_failed_first_or_partial_walk_is_not_a_clear_environment(self):
+        for first, error, code in ((False, 18, 'PROCESS_FIRST'), (True, 5, 'PROCESS_NEXT')):
+            kernel = self.kernel(['python.exe'], first=first, terminal_error=error)
+            with self.subTest(code=code), patch.object(campaign.ctypes, 'WinDLL', return_value=kernel):
+                with self.assertRaisesRegex(BenchmarkJobError, 'CAMPAIGN_PREFLIGHT_' + code):
+                    campaign.heavy_preflight_processes()
+            kernel.CloseHandle.assert_called_once()
+
+    def test_snapshot_creation_and_close_failures_never_authorize_launch(self):
+        invalid = campaign.ctypes.c_void_p(-1).value
+        kernel = self.kernel([], handle=invalid)
+        with patch.object(campaign.ctypes, 'WinDLL', return_value=kernel):
+            with self.assertRaisesRegex(BenchmarkJobError, 'CAMPAIGN_PREFLIGHT_SNAPSHOT'):
+                campaign.heavy_preflight_processes()
+        kernel.CloseHandle.assert_not_called()
+        kernel = self.kernel(['python.exe'], close=False)
+        with patch.object(campaign.ctypes, 'WinDLL', return_value=kernel):
+            with self.assertRaisesRegex(BenchmarkJobError, 'CAMPAIGN_PREFLIGHT_SNAPSHOT_CLOSE'):
+                campaign.heavy_preflight_processes()
+
+
 class CampaignOwnershipTests(unittest.TestCase):
     def test_constructor_retained_owner_is_closed_and_primary_error_preserved(self):
         with tempfile.TemporaryDirectory(prefix='gt06-campaign-owner-') as directory, ExitStack() as stack:
@@ -295,11 +584,18 @@ class CampaignOwnershipTests(unittest.TestCase):
             stack.enter_context(patch.object(campaign, 'load_fixture'))
             stack.enter_context(patch.object(campaign, 'source_files', return_value=files))
             stack.enter_context(patch.object(campaign, 'workstation_profile', return_value={'synthetic': True}))
+            stack.enter_context(patch.object(campaign, 'environment_preflight', return_value={
+                'schema_id': 'hh-studio.benchmark-environment-preflight', 'schema_version': '1.2.0',
+                'pass': True, 'available_memory_bytes': 8 * 1024**3,
+                'commit_total_bytes': 8, 'commit_limit_bytes': 10, 'heavy_processes': [], 'required_heavy_processes_closed': False, 'foreign_engines': []}))
+            from studio.tests.replay.test_launch_observation import collect_synthetic
+            stack.enter_context(patch.object(campaign, 'observe_pair_launch', side_effect=collect_synthetic))
             launch = stack.enter_context(patch.object(campaign, 'BenchmarkProcess', side_effect=original))
             with self.assertRaises(BenchmarkJobError) as caught:
                 campaign.run_campaign('gt06-synthetic-owner', root)
             self.assertIs(caught.exception, original)
             self.assertEqual(launch.call_count, 1)
+            self.assertTrue((root / 'run-00-attempt-01/environment-preflight-before.json').is_file())
             self.assertTrue(retained.close.called)
             failure = json.loads((root / 'run-00-attempt-01/parent-failure.json').read_bytes())
             self.assertTrue(failure['owner_closed'])
@@ -309,11 +605,32 @@ class CampaignOwnershipTests(unittest.TestCase):
             self.assertFalse((root / 'run-00-attempt-01/run-capture.json').exists())
             frozen_profile = (root / 'benchmark-profile.json').read_bytes()
             self.assertEqual(campaign.sha(frozen_profile), campaign.profile.PROFILE_SHA256)
+            self.assertEqual(len(list((root / 'environment').glob('*-before.json'))), 1)
+            self.assertEqual(len(list((root / 'environment').glob('*-after.json'))), 1)
+            # A formerly passing snapshot cannot authorize a later invocation.
+            with patch.object(campaign, 'environment_preflight', return_value={
+                    'schema_id': 'hh-studio.benchmark-environment-preflight', 'schema_version': '1.2.0',
+                    'pass': False, 'available_memory_bytes': 3 * 1024**3,
+                    'commit_total_bytes': 8, 'commit_limit_bytes': 10, 'heavy_processes': [], 'required_heavy_processes_closed': False, 'foreign_engines': []}):
+                with self.assertRaisesRegex(BenchmarkJobError, 'CAMPAIGN_PREFLIGHT_RESOURCE_LIMIT'):
+                    campaign.run_campaign('gt06-synthetic-owner', root)
+            launch.assert_called_once()
+            with patch.object(campaign, 'environment_preflight', return_value={
+                    'schema_id': 'hh-studio.benchmark-environment-preflight', 'schema_version': '1.2.0',
+                    'pass': True, 'available_memory_bytes': 16 * 1024**3,
+                    'commit_total_bytes': 4, 'commit_limit_bytes': 10,
+                    'heavy_processes': [],
+                    'required_heavy_processes_closed': False, 'foreign_engines': [{'pid': 444, 'name': 'godot.exe'}]}):
+                with self.assertRaisesRegex(BenchmarkJobError, 'CAMPAIGN_PREFLIGHT_FOREIGN_ENGINE'):
+                    campaign.run_campaign('gt06-synthetic-owner', root)
+            launch.assert_called_once()
             # A closed/zero failed attempt must not silently override a Stop.
             (root / 'run-00-attempt-01/stop-request.json').write_bytes(b'{}')
             with self.assertRaisesRegex(BenchmarkJobError, 'CAMPAIGN_STOP_LATCHED'):
                 campaign.run_campaign('gt06-synthetic-owner', root)
             launch.assert_called_once()
+            self.assertEqual(len(list((root / 'environment').glob('*-before.json'))), 4)
+            self.assertEqual(len(list((root / 'environment').glob('*-after.json'))), 4)
 
     def test_parent_cleanup_failure_preserves_primary_artifact_and_held_owner(self):
         with tempfile.TemporaryDirectory(prefix='gt06-campaign-held-') as directory, ExitStack() as stack:
@@ -335,6 +652,12 @@ class CampaignOwnershipTests(unittest.TestCase):
             stack.enter_context(patch.object(campaign, 'load_fixture'))
             stack.enter_context(patch.object(campaign, 'source_files', return_value=files))
             stack.enter_context(patch.object(campaign, 'workstation_profile', return_value={'synthetic': True}))
+            stack.enter_context(patch.object(campaign, 'environment_preflight', return_value={
+                'schema_id': 'hh-studio.benchmark-environment-preflight', 'schema_version': '1.2.0',
+                'pass': True, 'available_memory_bytes': 8 * 1024**3,
+                'commit_total_bytes': 8, 'commit_limit_bytes': 10, 'heavy_processes': [], 'required_heavy_processes_closed': False, 'foreign_engines': []}))
+            from studio.tests.replay.test_launch_observation import collect_synthetic
+            stack.enter_context(patch.object(campaign, 'observe_pair_launch', side_effect=collect_synthetic))
             launch = stack.enter_context(patch.object(campaign, 'BenchmarkProcess', return_value=retained))
             with self.assertRaises(BenchmarkJobError) as caught:
                 campaign.run_campaign('gt06-synthetic-held', root)
@@ -361,9 +684,10 @@ class CampaignOwnershipTests(unittest.TestCase):
     def test_editor_observation_uses_the_assembly_counter_contract(self):
         probe = SimpleNamespace(sample_with_handle_count=lambda: {
             'host_mono_us': 12345, 'handle_mono_us': 12350, 'rss_bytes': 4096,
-            'held_handles': 17, 'visible_window_handles': ['101']})
+            'private_commit_bytes': 8192, 'held_handles': 17, 'visible_window_handles': ['101']})
         result = campaign.sample_editor(probe)
         self.assertEqual(result['rss_bytes'], {'value': 4096, 'unavailable_reason': None})
+        self.assertEqual(result['private_commit_bytes'], {'value': 8192, 'unavailable_reason': None})
         self.assertEqual(result['held_handles'], {'value': 17, 'unavailable_reason': None})
         self.assertEqual(result['host_mono_us'], 12345)
         self.assertEqual(result['handle_mono_us'], 12350)
@@ -372,7 +696,7 @@ class CampaignOwnershipTests(unittest.TestCase):
     def test_editor_observation_rejects_untimestamped_handle_count(self):
         probe = SimpleNamespace(sample_with_handle_count=lambda: {
             'host_mono_us': 12345, 'rss_bytes': 4096, 'held_handles': 17,
-            'visible_window_handles': ['101']})
+            'private_commit_bytes': 8192, 'visible_window_handles': ['101']})
         with self.assertRaisesRegex(campaign.BenchmarkJobError, 'CAMPAIGN_EDITOR_HANDLES'):
             campaign.sample_editor(probe)
 
@@ -382,58 +706,48 @@ class CampaignScreenTests(unittest.TestCase):
     def memory():
         def counter(value):
             return {'value': value, 'unavailable_reason': None}
-        return {'host': {'rss_bytes': counter(1000), 'held_handles': counter(10),
+        return {'phase': 'post_batch_quiescent',
+                'host': {'rss_bytes': counter(1000), 'private_commit_bytes': counter(1000), 'held_handles': counter(10),
                          'objects': {'value': None, 'unavailable_reason': 'NOT_APPLICABLE_PYTHON_HOST'},
                          'resources': {'value': None, 'unavailable_reason': 'NOT_APPLICABLE_PYTHON_HOST'}},
-                'editor': {'rss_bytes': counter(2000), 'objects': counter(200),
+                'editor': {'rss_bytes': counter(2000), 'private_commit_bytes': counter(2000), 'objects': counter(200),
                            'resources': counter(50), 'held_handles': counter(12)}}
 
     def sample(self, index=5):
         return {'index': index, 'memory': self.memory(), 'max_status_gap_ms': 2000}
 
-    def test_exact_110_percent_rss_is_allowed_but_one_byte_above_fails(self):
-        for role in ('host', 'editor'):
-            for original in (1000, 1001, 8_000_000_000_000_000):
-                with self.subTest(role=role, baseline=original):
-                    baseline = self.memory()
-                    baseline[role]['rss_bytes']['value'] = original
-                    sample = self.sample()
-                    limit = original * 110 // 100
-                    sample['memory'][role]['rss_bytes']['value'] = limit
-                    campaign.screen_sample(sample, baseline)
-                    sample['memory'][role]['rss_bytes']['value'] = limit + 1
-                    with self.assertRaisesRegex(BenchmarkJobError, 'CAMPAIGN_RSS_GROWTH') as raised:
-                        campaign.screen_sample(sample, baseline)
-                    observation = raised.exception.screen_observation
-                    self.assertEqual(observation['role'], role)
-                    self.assertEqual(observation['counter'], 'rss_bytes')
-                    self.assertEqual(observation['baseline_value'], original)
-                    self.assertEqual(observation['observed_value'], limit + 1)
-                    self.assertEqual(observation['maximum_inclusive'], limit)
-
-    def test_each_applicable_retained_counter_cannot_grow_after_warmup(self):
-        for role, name in (('host', 'held_handles'), ('editor', 'held_handles'),
-                           ('editor', 'objects'), ('editor', 'resources')):
-            with self.subTest(role=role, counter=name):
-                baseline = self.memory()
-                sample = self.sample()
-                campaign.screen_sample(sample, baseline)
-                sample['memory'][role][name]['value'] -= 1
-                campaign.screen_sample(sample, baseline)
-                sample['memory'][role][name]['value'] = baseline[role][name]['value'] + 1
-                with self.assertRaisesRegex(BenchmarkJobError, 'CAMPAIGN_RETAINED_COUNTER_GROWTH') as raised:
-                    campaign.screen_sample(sample, baseline)
-                observation = raised.exception.screen_observation
-                self.assertEqual((observation['role'], observation['counter']), (role, name))
-                self.assertEqual(observation['maximum_inclusive'], baseline[role][name]['value'])
-
-    def test_simultaneous_rss_failures_retain_first_host_row_through_receipt(self):
-        # Synthetic control: both roles fail. The first gate hit must not be
-        # misreported as an editor-only failure, or inferred from a generic code.
+    def test_rss_noise_is_not_a_screen_gate_but_private_has_150_percent_limit(self):
         baseline = self.memory()
         sample = self.sample()
-        sample['memory']['host']['rss_bytes']['value'] = 1200
-        sample['memory']['editor']['rss_bytes']['value'] = 2600
+        sample['memory']['host']['rss_bytes']['value'] = 10_000
+        sample['memory']['editor']['rss_bytes']['value'] = 20_000
+        campaign.screen_sample(sample, baseline)
+        sample['memory']['host']['private_commit_bytes']['value'] = 1500
+        campaign.screen_sample(sample, baseline)
+        sample['memory']['host']['private_commit_bytes']['value'] = 1501
+        with self.assertRaisesRegex(BenchmarkJobError, 'CAMPAIGN_EARLY_PRIVATE_COMMIT_LIMIT') as raised:
+            campaign.screen_sample(sample, baseline)
+        self.assertEqual(raised.exception.screen_observation['counter'], 'private_commit_bytes')
+
+    def test_hard_handle_and_object_thresholds_are_inclusive(self):
+        baseline = self.memory()
+        sample = self.sample()
+        for role, name, margin in (('host', 'held_handles', 64), ('editor', 'held_handles', 64),
+                                   ('editor', 'objects', 256)):
+            with self.subTest(role=role, counter=name):
+                value = baseline[role][name]['value'] + margin
+                sample['memory'][role][name]['value'] = value
+                campaign.screen_sample(sample, baseline)
+                sample['memory'][role][name]['value'] = value + 1
+                with self.assertRaisesRegex(BenchmarkJobError, 'CAMPAIGN_EARLY_COUNTER_LIMIT') as raised:
+                    campaign.screen_sample(sample, baseline)
+                self.assertEqual(raised.exception.screen_observation['counter'], name)
+                sample['memory'][role][name]['value'] = baseline[role][name]['value']
+
+    def test_screen_failure_receipt_keeps_hard_gate_and_does_not_claim_root_cause(self):
+        baseline = self.memory()
+        sample = self.sample()
+        sample['memory']['host']['held_handles']['value'] = 75
         before = deepcopy((sample, baseline))
         with self.assertRaises(campaign.CampaignScreenError) as raised:
             campaign.screen_sample(sample, baseline)
@@ -443,16 +757,10 @@ class CampaignScreenTests(unittest.TestCase):
             campaign.write_child_failure(root, run_id='synthetic.r00.a01', batches=[None] * 6,
                 progress={'batch': 5, 'phase': 'joint_observation'}, error=raised.exception)
             receipt = json.loads((root / 'child-failure.json').read_bytes())
-        self.assertEqual(receipt['code'], 'CAMPAIGN_RSS_GROWTH')
-        self.assertEqual(receipt['completed_batches'], 6)
-        self.assertIsNone(receipt['partial_command'])
-        self.assertFalse(receipt['formal_acceptance'])
-        self.assertEqual(receipt['screen_observation'], {
-            'schema_id': 'hh-studio.benchmark-screen-failure', 'schema_version': '1.0.0',
-            'batch_index': 5, 'baseline_batch_index': 4, 'role': 'host', 'counter': 'rss_bytes',
-            'baseline_value': 1000, 'observed_value': 1200, 'maximum_inclusive': 1100,
-            'root_cause_claim': False,
-        })
+        self.assertEqual(receipt['code'], 'CAMPAIGN_EARLY_COUNTER_LIMIT')
+        self.assertEqual(receipt['screen_observation']['counter'], 'held_handles')
+        self.assertEqual(receipt['screen_observation']['baseline_batch_indices'], [2, 3, 4])
+        self.assertFalse(receipt['screen_observation']['root_cause_claim'])
 
     def test_non_screen_failure_preserves_partial_command_without_gate_claim(self):
         error = BenchmarkJobError('TERMINAL_TIMEOUT')
@@ -467,7 +775,7 @@ class CampaignScreenTests(unittest.TestCase):
         self.assertEqual(receipt['code'], 'TERMINAL_TIMEOUT')
         self.assertFalse(receipt['formal_acceptance'])
 
-    def test_warmup_does_not_apply_growth_or_status_gap_limits_before_baseline(self):
+    def test_warmup_still_enforces_status_gap_but_skips_growth_limits(self):
         for index in range(5):
             with self.subTest(index=index):
                 sample = self.sample(index)
@@ -476,6 +784,9 @@ class CampaignScreenTests(unittest.TestCase):
                     for row in sample['memory'][role].values():
                         if row['value'] is not None:
                             row['value'] += 1_000_000
+                with self.assertRaisesRegex(BenchmarkJobError, 'CAMPAIGN_STATUS_GAP'):
+                    campaign.screen_sample(sample, None)
+                sample['max_status_gap_ms'] = 2000
                 campaign.screen_sample(sample, None)
 
     def test_unavailable_applicable_counter_rejected_even_during_warmup(self):

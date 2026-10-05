@@ -19,13 +19,15 @@ def memory():
         name: ({'value': None, 'unavailable_reason': benchmark.HOST_NOT_APPLICABLE}
                if role == 'host' and name in ('objects', 'resources')
                else {'value': value, 'unavailable_reason': None}) for name, value in
-        (('rss_bytes', 1000 if role == 'host' else 2000), ('objects', 10), ('resources', 5), ('held_handles', 2))}
+        (('rss_bytes', 1000 if role == 'host' else 2000),
+         ('private_commit_bytes', 1000 if role == 'host' else 2000),
+         ('objects', 10), ('resources', 5), ('held_handles', 2))}
         for role in ('host', 'editor')}}
 
 
 def synthetic_dataset():
     runs = []
-    for run_index in range(10):
+    for run_index in range(benchmark.PROFILE.process_runs):
         processes = {role: {'pid': 100 + run_index * 2 + i, 'process_start': f'windows:{1000 + run_index * 2 + i}'}
                      for i, role in enumerate(('host', 'editor'))}
         samples = []
@@ -48,9 +50,10 @@ def synthetic_dataset():
                 'cycles': cycles, 'memory': memory(), 'evidence_sha256': 'd' * 64,
                 'dropped_commands': 0, 'dropped_telemetry': 0})
         runs.append({'run_id': f'benchmark.run.{run_index}', 'index': run_index, 'processes': processes,
-            'baseline': {'after_batch_index': 4, 'memory': memory()}, 'samples': samples,
+            'baseline': {'after_batch_indices': [2, 3, 4],
+                         'memory': benchmark.baseline_memory(samples[:5])}, 'samples': samples,
             'cleanup': {'host_exit_code': 0, 'editor_exit_code': 0, 'owned_tree_zero': True, 'held_handles': 0}})
-    return {'schema_id': 'hh-studio.tools-ux-benchmark', 'schema_version': '1.1.0',
+    return {'schema_id': 'hh-studio.tools-ux-benchmark', 'schema_version': '1.2.0',
         'profile_sha256': benchmark.PROFILE_SHA256, 'evidence_kind': 'synthetic',
         'provenance': dict.fromkeys(('source_closure_sha256', 'toolchain_sha256',
             'workstation_profile_sha256', 'driver_sha256', 'capture_manifest_sha256'), 'e' * 64), 'runs': runs}
@@ -70,12 +73,59 @@ class BenchmarkProfileTests(unittest.TestCase):
         self.assertEqual(caught.exception.code, code)
 
     def test_profile_cannot_be_mutated_or_shrunk_under_same_version(self):
+        self.assertNotEqual(benchmark.PROFILE_SHA256,
+                            '9dfa0ae003577e8607e28e722089328933d60e6cdb5b1ae1c5e978b3ad9d335e')
+        with self.assertRaisesRegex(benchmark.BenchmarkError, 'PROFILE_BINDING'):
+            benchmark.summarize_dataset({**self.data, 'profile_sha256':
+                '9dfa0ae003577e8607e28e722089328933d60e6cdb5b1ae1c5e978b3ad9d335e'})
         with self.assertRaises(FrozenInstanceError):
             benchmark.PROFILE.process_runs = 1
         with self.assertRaisesRegex(benchmark.BenchmarkError, 'PROFILE_VERSION_REQUIRED'):
             replace(benchmark.PROFILE, measured_batches=1)
         with self.assertRaisesRegex(benchmark.BenchmarkError, 'PROFILE_VERSION_REQUIRED'):
             replace(benchmark.PROFILE, process_runs=True)
+
+    def test_complete_pair_summary_matches_full_campaign_without_granting_acceptance(self):
+        self.data['runs'][0]['samples'][34]['memory']['host']['private_commit_bytes']['value'] = 1200
+        self.data['runs'][1]['samples'][20]['memory']['editor']['held_handles']['value'] = 35
+        full = benchmark.summarize_dataset(self.data)
+        for index, raw in enumerate(self.data['runs']):
+            with self.subTest(index=index):
+                pair = benchmark.summarize_run(raw)
+                self.assertEqual(pair['status'], 'FAIL')
+                self.assertEqual(pair['run'], full['runs'][index])
+                self.assertEqual(pair['failures'], [row for row in full['failures']
+                                                   if row['run_id'] == raw['run_id']])
+                self.assertFalse(pair['formal_acceptance'])
+                self.assertFalse(pair['campaign_complete'])
+        self.data['runs'].pop()
+        with self.assertRaisesRegex(benchmark.BenchmarkError, 'INCOMPLETE_ARRAY'):
+            benchmark.summarize_dataset(self.data)
+
+    def test_pair_screen_refuses_prefix_wrong_slot_and_unclean_exit(self):
+        for change, code in (
+            (lambda r: r['samples'].pop(), 'INCOMPLETE_ARRAY'),
+            (lambda r: r.update(index=2), 'INTEGER'),
+            (lambda r: r.update(index=True), 'INTEGER'),
+            (lambda r: r['cleanup'].update(host_exit_code=1), 'UNCLEAN_RUN'),
+            (lambda r: r['samples'][10].update(effects_per_admission=[0] * 200),
+             'DUPLICATE_OR_LOST_EFFECT'),
+        ):
+            with self.subTest(code=code):
+                run = copy.deepcopy(self.data['runs'][0])
+                change(run)
+                with self.assertRaisesRegex(benchmark.BenchmarkError, code):
+                    benchmark.summarize_run(run)
+
+    def test_pair_pass_and_missing_counter_remain_distinct(self):
+        run = self.data['runs'][0]
+        self.assertEqual(benchmark.summarize_run(run)['status'], 'PASS')
+        run['samples'][12]['memory']['editor']['resources'] = {
+            'value': None, 'unavailable_reason': 'sample unavailable'}
+        result = benchmark.summarize_run(run)
+        self.assertEqual(result['status'], 'GAP')
+        self.assertEqual(result['gaps'][0]['code'], 'COUNTER_UNAVAILABLE')
+        self.assertFalse(result['formal_acceptance'])
 
     def test_exact_full_campaign_and_warmup_exclusion(self):
         result = benchmark.summarize_dataset(self.data)
@@ -85,8 +135,8 @@ class BenchmarkProfileTests(unittest.TestCase):
         self.assertEqual(result['command_lane'], 'host_api_50_30_20_mock_effect_allowed')
         self.assertEqual(result['cycle_lane'], 'native_editor_direct_semantic_test_fixture')
         self.assertEqual((result['measured_batches'], result['measured_commands'], result['measured_cycles']),
-                         (300, 300000, 30000))
-        self.assertEqual(result['excluded_warmup_batches'], 50)
+                         (60, 60000, 6000))
+        self.assertEqual(result['excluded_warmup_batches'], 10)
         for run in result['runs']:
             self.assertEqual(run['metrics']['inspect']['count'], 15000)
             self.assertEqual(run['metrics']['inspect']['p95_ms'], 100)
@@ -117,14 +167,143 @@ class BenchmarkProfileTests(unittest.TestCase):
         self.data['runs'][0]['samples'][9]['max_status_gap_ms'] = 2001
         result = benchmark.summarize_dataset(self.data)
         self.assertEqual(result['status'], 'FAIL')
-        self.assertEqual({row['code'] for row in result['failures']}, {'RSS_GROWTH', 'STATUS_UPDATE_GAP'})
+        self.assertEqual({row['code'] for row in result['failures']}, {'STATUS_UPDATE_GAP'})
         self.assertEqual(result['runs'][0]['memory']['host']['rss_bytes']['repetition_10'], 1101)
 
     def test_held_handles_or_retained_objects_cannot_grow_silently(self):
-        self.data['runs'][0]['samples'][34]['memory']['editor']['held_handles']['value'] = 3
+        self.data['runs'][0]['samples'][34]['memory']['editor']['held_handles']['value'] = 35
         result = benchmark.summarize_dataset(self.data)
         self.assertEqual(result['status'], 'FAIL')
         self.assertEqual(result['failures'][0]['counter'], 'held_handles')
+
+    def test_o1_synthetic_counter_and_private_commit_leaks_fail(self):
+        # A value beyond the O5.2 absolute baseline+32 margin fails regardless
+        # of its position in the measured suffix.
+        self.data['runs'][0]['samples'][20]['memory']['editor']['held_handles']['value'] = 35
+        self.assertEqual(benchmark.summarize_dataset(self.data)['status'], 'FAIL')
+        self.data = copy.deepcopy(self.template)
+        # One retained handle per 1000-command batch accumulates beyond T/G.
+        for sample in self.data['runs'][0]['samples'][5:]:
+            sample['memory']['editor']['held_handles']['value'] += sample['index'] - 4
+        self.assertEqual(benchmark.summarize_dataset(self.data)['status'], 'FAIL')
+        self.data = copy.deepcopy(self.template)
+        for sample in self.data['runs'][0]['samples'][5:]:
+            sample['memory']['editor']['private_commit_bytes']['value'] = round(
+                2000 * (1.004 ** (sample['index'] - 4)))
+        self.assertEqual(benchmark.summarize_dataset(self.data)['status'], 'FAIL')
+
+    def test_o1_noise_within_frozen_windows_passes(self):
+        for sample in self.data['runs'][0]['samples'][5:]:
+            sample['memory']['editor']['held_handles']['value'] = 20 + 3 * ((sample['index'] % 3) - 1)
+            sample['memory']['editor']['objects']['value'] = 10 + 3 * ((sample['index'] % 3) - 1)
+        for sample in self.data['runs'][0]['samples'][:5]:
+            sample['memory']['editor']['held_handles']['value'] = 20
+        self.data['runs'][0]['baseline']['memory'] = benchmark.baseline_memory(self.data['runs'][0]['samples'][:5])
+        self.assertEqual(benchmark.summarize_dataset(self.data)['status'], 'PASS')
+
+    def test_baseline_is_per_counter_median_not_last_warmup(self):
+        run = self.data['runs'][0]
+        for index, handles, objects in ((2, 8, 14), (3, 2, 20), (4, 6, 10)):
+            run['samples'][index]['memory']['editor']['held_handles']['value'] = handles
+            run['samples'][index]['memory']['editor']['objects']['value'] = objects
+        run['baseline']['memory'] = benchmark.baseline_memory(run['samples'][:5])
+        self.assertEqual(run['baseline']['memory']['editor']['held_handles']['value'], 6)
+        self.assertEqual(run['baseline']['memory']['editor']['objects']['value'], 14)
+        self.assertEqual(benchmark.summarize_dataset(self.data)['status'], 'PASS')
+        run['baseline']['memory'] = copy.deepcopy(run['samples'][4]['memory'])
+        self.rejected('BASELINE_MEDIAN')
+
+    def test_candidate_sparse_handle_trend_fails_for_both_roles(self):
+        # The proposed supplemental rule is needed: the literal T/G windows
+        # alone permit this staircase. No formal dispatch until owner/review.
+        for role in ('host', 'editor'):
+            with self.subTest(role=role):
+                data = copy.deepcopy(self.template)
+                for sample in data['runs'][0]['samples'][5:]:
+                    sample['memory'][role]['held_handles']['value'] += (sample['index'] - 4) // 7
+                result = benchmark.summarize_dataset(data)
+                observed = result['runs'][0]['memory'][role]['held_handles']
+                self.assertEqual((observed['baseline'], observed['max_batch_5_19'], observed['max_batch_20_34']),
+                                 (2, 4, 6))
+                self.assertEqual(benchmark.memory_gate_codes(role, 'held_handles', 2, 6, 4, 6), [])
+                self.assertEqual(result['status'], 'FAIL')
+                self.assertEqual(result['failures'][0]['role'], role)
+                self.assertIn('RETAINED_COUNTER_TREND', {row['code'] for row in result['failures']})
+
+    def test_candidate_trend_needs_repeated_growth_inside_both_halves(self):
+        def series(steps):
+            return [100 + sum(index >= step for step in steps) for index in range(30)]
+        for steps in ((1, 2, 3), (16, 20, 24), (1, 2, 15), (1, 20)):
+            with self.subTest(steps=steps):
+                self.assertIsNone(benchmark.retained_handle_trend_code('editor', 'held_handles', series(steps)))
+        self.assertEqual(benchmark.retained_handle_trend_code('editor', 'held_handles', series((1, 2, 16))),
+                         'RETAINED_COUNTER_TREND')
+
+    def test_candidate_trend_does_not_apply_to_short_prefixes_or_other_counters(self):
+        values = list(range(100, 130))
+        for role, counter, rows in (('editor', 'objects', values), ('editor', 'resources', values),
+                                    ('host', 'private_commit_bytes', values),
+                                    ('editor', 'held_handles', values[:9])):
+            self.assertIsNone(benchmark.retained_handle_trend_code(role, counter, rows))
+
+    def test_one_handle_step_then_plateau_is_not_repeated_trend(self):
+        for sample in self.data['runs'][0]['samples'][10:]:
+            sample['memory']['editor']['held_handles']['value'] += 1
+        result = benchmark.summarize_dataset(self.data)
+        self.assertEqual(result['status'], 'PASS')
+
+    def test_non_monotonic_noise_is_not_repeated_trend(self):
+        for sample in self.data['runs'][0]['samples'][5:]:
+            sample['memory']['editor']['held_handles']['value'] += (sample['index'] % 2) * 3
+        result = benchmark.summarize_dataset(self.data)
+        self.assertEqual(result['status'], 'PASS')
+
+    def test_o1_status_gap_and_missing_counter_stay_non_pass(self):
+        self.data['runs'][0]['samples'][0]['max_status_gap_ms'] = 2001
+        self.assertEqual(benchmark.summarize_dataset(self.data)['status'], 'FAIL')
+        self.data = copy.deepcopy(self.template)
+        self.data['runs'][0]['samples'][12]['memory']['editor']['private_commit_bytes'] = {
+            'value': None, 'unavailable_reason': 'probe missing'}
+        self.assertEqual(benchmark.summarize_dataset(self.data)['status'], 'GAP')
+
+    def test_small_one_time_step_then_plateau_passes_literal_windows(self):
+        for sample in self.data['runs'][0]['samples'][6:]:
+            sample['memory']['editor']['objects']['value'] += 2
+        self.assertEqual(benchmark.summarize_dataset(self.data)['status'], 'PASS')
+
+    def test_all_retained_counter_boundaries_are_inclusive(self):
+        for role, name, tolerance, trend in (
+                ('host', 'held_handles', 4, 2), ('editor', 'held_handles', 8, 2),
+                ('editor', 'objects', 32, 8), ('editor', 'resources', 2, 1)):
+            with self.subTest(role=role, counter=name):
+                self.assertEqual(benchmark.memory_gate_codes(role, name, 100, 100 + tolerance,
+                    100 + tolerance - trend, 100 + tolerance), [])
+                self.assertEqual(benchmark.memory_gate_codes(role, name, 100, 101 + tolerance,
+                    101 + tolerance, 101 + tolerance), ['RETAINED_COUNTER_GROWTH'])
+                self.assertEqual(benchmark.memory_gate_codes(role, name, 100, 101 + trend,
+                    100, 101 + trend), ['RETAINED_COUNTER_GROWTH'])
+
+    def test_o5_editor_handle_rule_uses_medians_and_absolute_margin(self):
+        # Equal-to-six median drift is allowed; seven is the first failure.
+        self.assertEqual(benchmark.editor_handle_gate_codes(20, [20] * 15 + [26] * 15), [])
+        self.assertEqual(benchmark.editor_handle_gate_codes(20, [20] * 15 + [27] * 15),
+                         ['EDITOR_HANDLE_MEDIAN_TREND'])
+        # A single large retained value still fails the absolute baseline+32
+        # bound even when both half-medians are stable.
+        values = [20] * 29 + [53]
+        self.assertEqual(benchmark.editor_handle_gate_codes(20, values), ['EDITOR_HANDLE_GROWTH'])
+
+    def test_private_commit_baseline_and_late_window_boundaries_for_each_role(self):
+        for role in ('host', 'editor'):
+            with self.subTest(role=role):
+                self.assertEqual(benchmark.memory_gate_codes(role, 'private_commit_bytes', 20000,
+                    22000, 22000, 22000), [])
+                self.assertEqual(benchmark.memory_gate_codes(role, 'private_commit_bytes', 20000,
+                    22001, 22001, 22001), ['PRIVATE_COMMIT_GROWTH'])
+                self.assertEqual(benchmark.memory_gate_codes(role, 'private_commit_bytes', 20000,
+                    21000, 20000, 21000), [])
+                self.assertEqual(benchmark.memory_gate_codes(role, 'private_commit_bytes', 20000,
+                    21001, 20000, 21001), ['PRIVATE_COMMIT_TREND'])
 
     def test_explicit_unavailable_counter_is_gap_never_zero_or_pass(self):
         self.data['runs'][0]['samples'][12]['memory']['host']['held_handles'] = {
@@ -165,7 +344,7 @@ class BenchmarkProfileTests(unittest.TestCase):
         self.rejected('WARMUP_LABEL')
         self.data['runs'][0]['samples'][0]['warmup'] = True
         self.data['runs'][0]['baseline']['memory']['host']['rss_bytes']['value'] = 2000
-        self.rejected('WARM_BASELINE')
+        self.rejected('BASELINE_MEDIAN')
 
     def test_lost_and_duplicate_admitted_effects_rejected(self):
         for count in (0, 2, True):
@@ -219,7 +398,7 @@ class BenchmarkCliTests(unittest.TestCase):
         value['host']['objects'] = {'value': 0, 'unavailable_reason': None}
         with self.assertRaisesRegex(benchmark.BenchmarkError, 'HOST_COUNTER_APPLICABILITY'):
             benchmark._memory(value, '$.memory')
-        for role, counter in (('host', 'rss_bytes'), ('host', 'held_handles'),
+        for role, counter in (('host', 'rss_bytes'), ('host', 'private_commit_bytes'), ('host', 'held_handles'),
                               ('editor', 'objects'), ('editor', 'resources')):
             value = memory()
             value[role][counter] = {'value': None, 'unavailable_reason': benchmark.HOST_NOT_APPLICABLE}

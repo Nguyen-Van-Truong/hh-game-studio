@@ -1,0 +1,33 @@
+{
+  "schema": "HH-GT06-F25-OWNER-HANDOFF-1",
+  "status": "READY_FOR_OWNER_DISPATCHED_CRITICS",
+  "gt06_accepted": false,
+  "final_manifest": "studio/.local/reviews/gt06-f25-final-review-20261003-01/manifest.json",
+  "final_manifest_sha256": "fb5770aaaa30aeec4c481947a185c28e2f0bb4a10dae34c05f9b7610215100e0",
+  "files": 4327,
+  "required_artifact_pins": 3430,
+  "payload": {
+    "path": "studio/.local/reviews/gt06-f25-final-review-20261003-01/functional-source-review.zip",
+    "sha256": "175d7f46444f8520de8e1d8155138ba5700d594f16531453bec21bd85fbf7d65",
+    "size_bytes": 18332379
+  },
+  "benchmark_archives": [
+    {
+      "path": "studio/.local/reviews/gt06-o4-formal-25-f-tier.zip",
+      "sha256": "0e4e8e94d5860c1b3ba6cf63b84cb15de31ebd2cd3e724e035b2dbfd174572a2",
+      "size_bytes": 40435667
+    },
+    {
+      "path": "studio/.local/reviews/gt06-f25-prerequisites.zip",
+      "sha256": "a22ab8280ff02b37d28f216f259efa7da764a67423cf4d5b3dc2011ca287c9da",
+      "size_bytes": 37690030
+    }
+  ],
+  "formal_source_closure": "727f9039c1cc83239f5ef1daff13de5e92e37b5ba442e64be8341ca058800b58",
+  "functional_source_closure": "9a9c9c42fa2be7dedf485b25c99245e92073f7b024909a8f72ec948f08219691",
+  "read_first": "zdoc/reviews/20261003-gt06-functional-refresh/README.md",
+  "verify_command": "python -B '8-9-hh3d-3/zdoc/reviews/20261003-gt06-functional-refresh/build_review.py' --verify",
+  "critics_pending": 2,
+  "critics_via_owner": true,
+  "gate": "O4.3; same final manifest hash; different models; verbatim TICK report; coordinator rechecks hashes before acceptance"
+}

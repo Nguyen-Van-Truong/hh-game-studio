@@ -1,14 +1,12 @@
-"""GT06 candidate: reuse a decoded index only for byte-identical durable history.
+"""GT06 journal with verified incremental tail replay.
 
-The accepted Journal remains the writer/validator/lock implementation. Every
-operation still takes its process lock, reads and hashes the entire regular
-single-link file, and fsyncs it before exposing a receipt. Any external append,
-replacement, truncation or policy change runs the accepted complete replay.
-Only a successful local append extends the previously verified digest/index.
-No mtime-only trust, skipped recovery barrier, journal reset, or larger limits.
-The private in-memory fingerprint uses SHA-512, which is faster on the pinned
-workstation. Persisted record checksums and protocol/evidence hashes remain
-SHA-256; no history bytes or persistent receipt bodies are cached in RAM.
+The accepted Journal remains the writer/validator/lock implementation. A
+fresh owner or replaced/truncated file still gets a complete parse and
+durability barrier. Once the file identity is unchanged, an operation only
+parses and hashes the bytes appended after the verified offset; a lookup with
+no new tail does not reread or fsync the complete history. The decoded command
+index remains in the bounded private SQLite store and receipt bodies stay on
+disk. Any identity/size race fails closed and forces a later full recovery.
 """
 from __future__ import annotations
 
@@ -55,6 +53,7 @@ class VerifiedJournal(Journal):
         self._verified_hash = None
         self._verified_identity = None
         self._verified_size = 0
+        self._verified_generation = None
         self._verified_policy = None
         try:
             super().__init__(*args, **kwargs)
@@ -97,6 +96,7 @@ class VerifiedJournal(Journal):
         with self._cache_mutex:
             self._cache_closed = True
             self._verified_hash = None
+            self._verified_generation = None
             if self._index_store is not None:
                 try:
                     self._index_store.close()
@@ -156,6 +156,7 @@ class VerifiedJournal(Journal):
 
     def _load(self):
         self._verified_hash = None
+        self._verified_generation = None
         if self._index_store is not None:
             self._index_store.close()
             self._index_store = None
@@ -180,17 +181,125 @@ class VerifiedJournal(Journal):
             raise JournalError('JOURNAL_HISTORY_CHANGED')
         self._verified_hash, self._verified_size = digest, size
         self._verified_identity = identity
+        if identity is None:
+            self._verified_generation = None
+            self._verified_policy = (self.limits, self.profile)
+            return
+        try:
+            info = self.path.stat(follow_symlinks=False)
+        except OSError as error:
+            raise JournalError('JOURNAL_UNREADABLE') from error
+        self._verified_generation = (info.st_mtime_ns, info.st_ctime_ns)
         self._verified_policy = (self.limits, self.profile)
 
     def _reload(self):
         try:
-            digest, size, identity = self._snapshot(synchronize=True)
-            if self._matches(digest, size, identity):
+            if self._verified_hash is not None and self._tail_replay():
                 return
             self._load()
         except BaseException:
             self._verified_hash = None
+            self._verified_generation = None
             raise
+
+    def _command(self, key):
+        try:
+            return super()._command(key)
+        except JournalError:
+            # Receipts are checked on disk even on a cached no-tail lookup.
+            # Corrupt requested bytes poison the cache, including a rewrite
+            # by the same OS principal that restores the metadata timestamp.
+            self._verified_hash = None
+            self._verified_generation = None
+            raise
+
+    def _tail_replay(self) -> bool:
+        """Apply only a verified append after the current durable offset.
+
+        The caller holds the writer guard.  We read one bounded record at a
+        time, update the SQLite offset/command index in one transaction, and
+        compare the file identity and size again before publishing the new
+        fingerprint.  A partial or concurrently changed tail is never made
+        visible as a successful operation.
+        """
+        try:
+            with self.path.open('rb') as stream:
+                first = os.fstat(stream.fileno())
+                if not stat.S_ISREG(first.st_mode) or first.st_nlink != 1:
+                    raise JournalError('JOURNAL_PATH_UNSAFE')
+                identity = (first.st_dev, first.st_ino)
+                if identity != self._verified_identity:
+                    return False
+                if first.st_size < self._verified_size:
+                    return False
+                if first.st_size > self.limits.max_bytes:
+                    raise JournalError('JOURNAL_FULL')
+                generation = (first.st_mtime_ns, first.st_ctime_ns)
+                if self._verified_policy != (self.limits, self.profile):
+                    return False
+                # An append from another writer changes the generation.  A
+                # local append updates the verified generation atomically, so
+                # only that hot path can use tail replay; external changes
+                # retain the complete rebuild/index fault boundary.
+                if generation != self._verified_generation:
+                    return False
+                if first.st_size == self._verified_size:
+                    # A metadata generation change can represent an in-place
+                    # rewrite even when identity and size are unchanged.  It
+                    # forces the existing full parser/checksum barrier rather
+                    # than trusting a stale digest.  With no tail and no
+                    # generation change, no full read or fsync is necessary.
+                    if generation != self._verified_generation:
+                        return False
+                    # Keep the disposable SQLite index exercised on every
+                    # cached operation.  This is a single bounded query, not a
+                    # journal scan, and keeps index faults fail-closed.
+                    self._index_store.health_check()
+                    return True
+                stream.seek(self._verified_size)
+                digest = self._verified_hash.copy()
+                offset = self._verified_size
+                with self._index_store.transaction():
+                    while offset < first.st_size:
+                        if len(self._records) >= self.limits.max_records:
+                            raise JournalError('JOURNAL_RECORD_LIMIT')
+                        line = stream.readline(self.profile.max_envelope_bytes + 1)
+                        if not line:
+                            raise JournalError('JOURNAL_TRUNCATED')
+                        if len(line) > self.profile.max_envelope_bytes:
+                            raise JournalError('JOURNAL_RECORD_INVALID')
+                        record = self._decode_record(line)
+                        self._apply_loaded(record, len(self._records))
+                        self._records.offsets.append((offset, len(line)))
+                        digest.update(line)
+                        offset += len(line)
+                    final = os.fstat(stream.fileno())
+                    if ((final.st_dev, final.st_ino) != identity or final.st_size != offset
+                            or offset != first.st_size
+                            or (final.st_mtime_ns, final.st_ctime_ns) != generation):
+                        raise JournalError('JOURNAL_HISTORY_CHANGED')
+                # The appending writer has already flushed and fsynced its
+                # record.  Preserve the old recovery barrier for a new tail,
+                # without paying it on no-op lookups.
+                try:
+                    with self.path.open('r+b') as durable:
+                        durable.flush()
+                        os.fsync(durable.fileno())
+                except OSError as error:
+                    raise JournalError('JOURNAL_DURABILITY_UNCONFIRMED') from error
+                self._verified_hash = digest
+                self._verified_size = offset
+                self._verified_identity = identity
+                self._verified_generation = generation
+                self._verified_policy = (self.limits, self.profile)
+                return True
+        except FileNotFoundError:
+            # An empty journal has no inode yet. Keep its disposable index and
+            # cache stable; a populated history disappearing must recover via
+            # the full loader instead.
+            return self._verified_identity is None and self._verified_size == 0
+        except OSError as error:
+            raise JournalError('JOURNAL_UNREADABLE') from error
 
     def _matches(self, digest, size, identity):
         return (self._verified_hash is not None and size == self._verified_size
@@ -199,16 +308,19 @@ class VerifiedJournal(Journal):
                 and digest.digest() == self._verified_hash.digest())
 
     def _append(self, record):
+        # Compaction may replace the index owner. Do it before the disposable
+        # transaction; never close/rebuild a connection inside its own commit.
+        line, existing = self._prepare_append(record)
         # Encode using exactly the accepted serializer; never hash caller JSON.
-        line = self._encoded_record(record)
         old_hash, old_size, old_identity = self._verified_hash, self._verified_size, self._verified_identity
         self._verified_hash = None
+        self._verified_generation = None
         # A cache commit can fail after the authoritative append has fsynced.
         # Its rollback cannot undo that append. Leave the fingerprint poisoned
         # and report UNKNOWN so a later locked replay reconciles the same ID.
         try:
             with self._index_store.transaction():
-                super()._append(record)
+                super()._append_prepared(record, line, existing)
         except DiskIndexError as error:
             raise self._index_error(error) from error
         if old_hash is None:
@@ -228,4 +340,5 @@ class VerifiedJournal(Journal):
         old_hash.update(line)
         self._verified_hash, self._verified_size = old_hash, info.st_size
         self._verified_identity = identity
+        self._verified_generation = (info.st_mtime_ns, info.st_ctime_ns)
         self._verified_policy = (self.limits, self.profile)

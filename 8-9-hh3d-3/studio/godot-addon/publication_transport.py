@@ -82,6 +82,26 @@ class PublicationTransport:
         '/v1/lease/enqueue':'lease_enqueue','/v1/lease/poll':'lease_poll','/v1/lease/cancel':'lease_cancel'}
 
     def __init__(self, owner):
+        # Real publication owners share this attachment lock with the queue.
+        # Inert transport fixtures intentionally have no native attachment.
+        attachment = getattr(owner, '_attachment_lock', None)
+        if attachment is not None:
+            with attachment:
+                if (getattr(owner, '_queue_dispatcher', None) is not None
+                        or getattr(owner, '_transport', None) is not None
+                        or getattr(owner, '_closed', False)):
+                    raise SafetyViolation('GODOT_OWNER_ALREADY_ATTACHED')
+                owner._transport = self
+        try:
+            self._initialize(owner)
+        except BaseException:
+            if attachment is not None:
+                with attachment:
+                    if owner._transport is self:
+                        owner._transport = None
+            raise
+
+    def _initialize(self, owner):
         self.owner, self.sessions = owner, owner.sessions
         self.limits = TransportLimits(max_connections=2, max_control_connections=2)
         self.allowed_origins = frozenset()
@@ -160,6 +180,11 @@ class PublicationTransport:
         # timeout; closing listening sockets does not prove active effects ended.
         if not self._drained.wait(timeout=2) or any(t.is_alive() for t in self._threads):
             raise SafetyViolation('GODOT_TRANSPORT_DRAIN_REQUIRED')
+        attachment = getattr(self.owner, '_attachment_lock', None)
+        if attachment is not None:
+            with attachment:
+                if self.owner._transport is self:
+                    self.owner._transport = None
 
     def _handle(self, stream, listener):
         command_id = 'transport.request'

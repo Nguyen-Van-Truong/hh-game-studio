@@ -156,6 +156,31 @@ class PublicationOwnerTests(unittest.TestCase):
         record={'digest':request.digest,'status':'UNKNOWN','code':'PENDING'}
         return request,grant,lease,before,record,credential
 
+    def test_save_failpoints_follow_durable_phases_and_precede_later_effects(self):
+        request,grant,lease,before,record,_=self._inert_save()
+        journal=self.value._journal
+        steps=('prepare','stage_prepared','validated','prepare_activation','select_prepared',
+               'adopt','readback','commit','lookup_response')
+        methods=[getattr(self.value._editor if name=='adopt' else journal,name) for name in steps]
+        observed=[]
+        def at_boundary(phase):
+            observed.append((phase,tuple(method.call_count for method in methods),
+                             record['status'],record.get('durable_response_sha256')))
+        with patch.object(self.value,'_failpoint',side_effect=at_boundary):
+            result=self.value._save(request,grant,lease,before,None,record)
+        response_sha=hashlib.sha256(journal.lookup_response.return_value).hexdigest()
+        self.assertEqual(observed,[
+            ('PREPARED', (1,0,0,0,0,0,0,0,0),'ACCEPTED_PENDING',None),
+            ('VALIDATED',(1,1,1,0,0,0,0,0,0),'ACCEPTED_PENDING',None),
+            ('ACTIVATING',(1,1,1,1,0,0,0,0,0),'ACCEPTED_PENDING',None),
+            ('RELOAD',   (1,1,1,1,1,1,0,0,0),'ACCEPTED_PENDING',None),
+            ('COMMITTED',(1,1,1,1,1,1,1,1,0),'ACCEPTED_PENDING',None),
+            ('ACK',     (1,1,1,1,1,1,1,1,1),'COMMITTED',response_sha),
+        ])
+        self.assertEqual(result.status,Status.COMMITTED)
+        self.assertTrue(result.postconditions['public_ack'])
+        self.assertEqual(canonical_bytes(result.as_dict()),journal.lookup_response.return_value)
+
     def test_stop_during_durable_readback_reports_commit_draining(self):
         request,grant,lease,before,record,_=self._inert_save()
         stops=[]

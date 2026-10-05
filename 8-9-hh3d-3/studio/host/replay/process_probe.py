@@ -73,7 +73,7 @@ class ProcessProbe:
         if not value:
             raise ProbeError(code)
 
-    def sample(self):
+    def sample(self, *, include_private_commit=False):
         from ctypes import wintypes as w
         self._need(self.handle is not None and not self.close_uncertain, 'PROBE_CLOSED_OR_UNCERTAIN')
         wait = self.k.WaitForSingleObject(self.handle, 0)
@@ -95,8 +95,16 @@ class ProcessProbe:
             return True
         callback = self.callback_type(visit)
         self._need(self.u.EnumWindows(callback, 0), 'PROBE_WINDOWS')
-        return {'host_mono_us': time.perf_counter_ns() // 1000,
-                'rss_bytes': int(memory.working_set), 'visible_window_handles': sorted(windows)}
+        row = {'host_mono_us': time.perf_counter_ns() // 1000,
+               'rss_bytes': int(memory.working_set),
+               'visible_window_handles': sorted(windows)}
+        if include_private_commit:
+            # ``pagefile`` is PROCESS_MEMORY_COUNTERS.PagefileUsage (process
+            # commit charge), the API used by the import observer. Keep it opt-in so the
+            # long-standing lightweight probe contract remains unchanged for
+            # native runner and nested-owner callers.
+            row['private_commit_bytes'] = int(memory.pagefile)
+        return row
 
     def sample_with_handle_count(self):
         """Return the normal observation plus a timestamped target handle count.
@@ -106,7 +114,7 @@ class ProcessProbe:
         ``sample()`` timestamps the RSS/window read, while this method records
         the clock immediately after ``GetProcessHandleCount`` succeeds.
         """
-        observed = self.sample()
+        observed = self.sample(include_private_commit=True)
         if observed is None:
             return None
         from ctypes import wintypes as w

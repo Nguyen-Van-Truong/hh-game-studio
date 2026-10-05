@@ -42,11 +42,22 @@ def launch_suffix(launch_number):
     return '' if launch_number == 1 else f'-launch-{launch_number:02d}'
 
 
-def validate_request(value, campaign_id, mode, script, windowed, console, *, launch_number=1):
+def validate_request(value, campaign_id, mode, script, windowed, console, *, launch_number=1,
+                     frozen_plan=None):
     launch_suffix(launch_number)
     expected = {'schema': 'HH-GT06-TASK-REQUEST-1', 'campaign_id': campaign_id,
         'mode': mode, 'script_sha256': sha(script),
         'pythonw_sha256': sha(windowed), 'python_sha256': sha(console)}
+    if mode == 'quiet-chain':
+        if frozen_plan is None:
+            raise ValueError('TASK_FROZEN_PLAN_REQUIRED')
+        expected['chain_plan_sha256'] = sha(frozen_plan)
+    if mode == 'campaign' and type(value) is dict and 'source_closure_sha256' in value:
+        for key in ('source_closure_sha256', 'profile_sha256'):
+            digest = value.get(key)
+            if type(digest) is not str or re.fullmatch('[a-f0-9]{64}', digest) is None:
+                raise ValueError('TASK_FROZEN_SOURCE_BINDING')
+            expected[key] = digest
     if launch_number > 1:
         expected['launch_number'] = launch_number
         if type(value) is not dict or type(value.get('launch_number')) is not int:
@@ -74,16 +85,36 @@ def process_observation():
 
 
 def execute(campaign_id, mode, output, request_sha, *, launch_number=1):
+    if mode == 'quiet-chain':
+        from studio.tests.replay import run_o9_quiet_chain as chain
+        plan = json.loads((output / 'quiet-chain-plan.json').read_bytes())
+        return chain.execute(campaign_id, chain.formal_id_for(campaign_id),
+                             chain.REVIEWS / campaign_id, frozen_plan=plan)
+    if mode == 'residency':
+        from studio.tests.replay.run_command_residency import run
+        return run(campaign_id)
+    if mode not in ('campaign', 'probe'):
+        raise ValueError('TASK_MODE')
     from studio.tests.replay import run_benchmark_campaign as campaign
     from studio.tests.replay.benchmark_job import BenchmarkProcess, HELD_OWNERS, verify_capture
     if mode == 'campaign':
+        request = json.loads((output / 'request.json').read_bytes())
+        if 'source_closure_sha256' in request:
+            campaign.load_fixture()
+            if (campaign.closure(campaign.source_files()) != request['source_closure_sha256']
+                    or campaign.profile.PROFILE_SHA256 != request['profile_sha256']):
+                raise ValueError('TASK_FROZEN_SOURCE_CHANGED')
         # Calling in this scheduler-owned process preserves the accepted run
         # owner hierarchy and does not add a fifth process to its four-slot Job.
         return campaign.run_campaign(campaign_id, STUDIO / '.local/reviews' / campaign_id)
     campaign.load_fixture()
     sources = campaign.source_files()
     owner = None
+    watchdog = None
     try:
+        before = campaign.environment_preflight()
+        write(output / 'environment-preflight-before.json', before)
+        campaign.require_environment_preflight(before)
         owner = BenchmarkProcess([sys.executable, '-B', '-c',
             "import time; time.sleep(12); print('HH_GT06_TASK_PROBE_COMPLETE',flush=True)"],
             cwd=output, output=output / 'probe-owner', source_root=STUDIO,
@@ -91,8 +122,19 @@ def execute(campaign_id, mode, output, request_sha, *, launch_number=1):
         binding = {'run_id': campaign_id + '.probe' + launch_suffix(launch_number),
             'source_closure_sha256': campaign.closure(sources), 'campaign_sha256': request_sha}
         write(output / 'probe-context.json', binding)
-        campaign.wait_owned_run(owner, output, **binding)
-        owner.finish()
+        watchdog = campaign.environment.Watchdog(output,
+            lambda: campaign.environment_snapshot(job_handle=owner.job._handle,
+                                                   docker_inventory=[]), binding, write,
+            docker_probe=campaign.environment.running_containers)
+        with campaign.environment.KeepAwake():
+            campaign.wait_owned_run(owner, output, **binding, watchdog=watchdog)
+        watchdog.close()
+        campaign.environment.verify_watchdog(output, campaign.read_regular,
+                                             expected_binding=binding, require_docker_inventory=True)
+        capture_value = owner.finish()
+        campaign.environment.verify_watchdog(output, campaign.read_regular,
+                                             elapsed_seconds=capture_value['elapsed_seconds'],
+                                             expected_binding=binding, require_docker_inventory=True)
         capture = output / 'probe-owner/capture.json'
         verify_capture(capture.parent, sha(capture), source_root=STUDIO,
             expected_source_files=sources, expected_binary_sha256=sha(Path(sys.executable)))
@@ -103,14 +145,17 @@ def execute(campaign_id, mode, output, request_sha, *, launch_number=1):
         owner = owner or getattr(error, 'cleanup_owner', None)
         raise
     finally:
+        if watchdog is not None:
+            watchdog.close()
         if owner is not None:
             owner.close()
+        write(output / 'environment-preflight-after.json', campaign.environment_preflight())
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--campaign-id', required=True)
-    parser.add_argument('--mode', choices=('probe', 'campaign'), required=True)
+    parser.add_argument('--mode', choices=('probe', 'campaign', 'residency', 'quiet-chain'), required=True)
     parser.add_argument('--launch-number', type=int, default=1)
     args = parser.parse_args()
     if os.name != 'nt' or not re.fullmatch(r'gt06-[a-z0-9-]{1,25}', args.campaign_id):
@@ -136,8 +181,9 @@ def main():
                 raise ValueError('TASK_WINDOWED_INTERPRETER_REQUIRED')
             request = output / 'request.json'
             value = json.loads(request.read_bytes())
+            frozen_plan = output / 'quiet-chain-plan.json' if args.mode == 'quiet-chain' else None
             validate_request(value, args.campaign_id, args.mode, Path(__file__), windowed, console,
-                launch_number=args.launch_number)
+                launch_number=args.launch_number, frozen_plan=frozen_plan)
             # The scheduler console stays hidden; owned helpers use the
             # checked console companion with their existing redirected pipes.
             sys.executable = str(console)
@@ -148,7 +194,7 @@ def main():
                 'scheduler_result_still_required': True, 'formal_acceptance': False})
             code = execute(args.campaign_id, args.mode, output, sha(request), launch_number=args.launch_number)
             validate_request(value, args.campaign_id, args.mode, Path(__file__), windowed, console,
-                launch_number=args.launch_number)
+                launch_number=args.launch_number, frozen_plan=frozen_plan)
         except BaseException as error:
             code = 1
             traceback.print_exc()

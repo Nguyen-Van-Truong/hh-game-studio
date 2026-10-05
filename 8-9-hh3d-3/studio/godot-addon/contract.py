@@ -312,6 +312,13 @@ def _semantic(operation: str, target: dict, payload: dict, context: ValidationCo
     return projection, preview
 
 
+def validate_deadline(request: Request, *, now_ms: int, lease_expires_ms: int) -> None:
+    """Shared admission horizon; a longer lease never extends an operation."""
+    horizon = _LIMITS['max_save_deadline_ms'] if request.operation in ('scene.save','script_text.replace') else _LIMITS['max_deadline_ms']
+    _need(now_ms < request.deadline_ms <= min(lease_expires_ms, now_ms + horizon),
+          'GODOT_DEADLINE_EXPIRED')
+
+
 def validate_request(request: Request | Mapping[str, Any], context: ValidationContext) -> ValidatedCommand:
     """Validate/copy once and return a proposed effect; never authorize/apply it."""
     nodes, files = _context(context)
@@ -321,9 +328,7 @@ def validate_request(request: Request | Mapping[str, Any], context: ValidationCo
     _need(checked.project_id == context.project_id, 'GODOT_PROJECT_MISMATCH')
     _need(checked.expected_revision == context.revision, 'GODOT_STALE_REVISION')
     _need(checked.lease_id == context.lease_id and checked.fencing_epoch == context.fencing_epoch, 'GODOT_STALE_LEASE')
-    horizon = _LIMITS['max_save_deadline_ms'] if checked.operation in ('scene.save','script_text.replace') else _LIMITS['max_deadline_ms']
-    _need(context.now_ms < checked.deadline_ms <= min(context.lease_expires_ms,
-          context.now_ms + horizon), 'GODOT_DEADLINE_EXPIRED')
+    validate_deadline(checked, now_ms=context.now_ms, lease_expires_ms=context.lease_expires_ms)
     _need(not context.stopped or checked.operation in ('scene.inspect','scene.preview'), 'GODOT_STOPPED')
     _need(len(canonical_bytes(checked.payload)) <= _LIMITS['max_payload_bytes'], 'GODOT_PAYLOAD_LIMIT')
     projection, preview = _semantic(checked.operation, dict(checked.target), dict(checked.payload), context, nodes, files)

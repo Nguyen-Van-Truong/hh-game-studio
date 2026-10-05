@@ -1,6 +1,8 @@
 """Local scheduler request binding and early native error regressions."""
 from pathlib import Path
+import hashlib
 import json
+import os
 import subprocess
 import sys
 import tempfile
@@ -14,7 +16,75 @@ from studio.tests.replay import run_benchmark_campaign as campaign
 from studio.tests.replay.benchmark_job import BenchmarkJobError
 
 
+@unittest.skipUnless(os.name == 'nt', 'Windows task launcher')
+class LauncherHashTests(unittest.TestCase):
+    def test_hash_without_filehash_cmdlet_and_missing_file_rejection(self):
+        # Load only functions from the actual launcher: no task registration.
+        # This reproduces formal13's missing-cmdlet boundary independently of
+        # which PowerShell modules happen to be installed in the test session.
+        script = r'''
+$ErrorActionPreference = 'Stop'
+$tokens = $null; $errors = $null
+$ast = [System.Management.Automation.Language.Parser]::ParseFile($env:HH_TEST_LAUNCHER, [ref]$tokens, [ref]$errors)
+if ($errors.Count) { throw 'LAUNCHER_PARSE_ERROR' }
+foreach ($name in @('Require', 'Assert-PlainPath', 'Hash-File')) {
+    $fn = $ast.Find({param($node) $node -is [System.Management.Automation.Language.FunctionDefinitionAst] -and $node.Name -eq $name}, $false)
+    if ($null -eq $fn) { throw 'LAUNCHER_FUNCTION_MISSING' }
+    . ([scriptblock]::Create($fn.Extent.Text))
+}
+function Get-FileHash { throw 'FILEHASH_CMDLET_UNAVAILABLE' }
+$digest = Hash-File $env:HH_TEST_PAYLOAD
+$missingRejected = $false
+try { $null = Hash-File ($env:HH_TEST_PAYLOAD + '.missing') }
+catch { if ($_.Exception.Message -ne 'TASK_PATH_MISSING') { throw }; $missingRejected = $true }
+[IO.File]::Delete($env:HH_TEST_PAYLOAD)
+@{digest=$digest; missing_rejected=$missingRejected; released=(-not [IO.File]::Exists($env:HH_TEST_PAYLOAD))} | ConvertTo-Json -Compress
+'''
+        with tempfile.TemporaryDirectory() as directory:
+            payload = Path(directory) / 'literal [payload].bin'
+            raw = bytes(range(256)) * 4096
+            payload.write_bytes(raw)
+            environment = {**os.environ, 'HH_TEST_PAYLOAD': str(payload),
+                           'HH_TEST_LAUNCHER': str(Path(__file__).with_name('campaign_task.ps1'))}
+            powershell = Path(os.environ['WINDIR']) / 'System32/WindowsPowerShell/v1.0/powershell.exe'
+            result = subprocess.run([str(powershell), '-NoProfile', '-NonInteractive', '-Command', script],
+                                    capture_output=True, timeout=20, env=environment,
+                                    creationflags=subprocess.CREATE_NO_WINDOW)
+            self.assertEqual(result.returncode, 0, result.stderr.decode(errors='replace'))
+            self.assertEqual(json.loads(result.stdout.decode('utf-8-sig')),
+                             {'digest': hashlib.sha256(raw).hexdigest(),
+                              'missing_rejected': True, 'released': True})
+
+
 class TaskRequestTests(unittest.TestCase):
+    def test_quiet_chain_request_binds_frozen_plan_before_execution(self):
+        with tempfile.TemporaryDirectory() as directory:
+            paths = [Path(directory) / name for name in ('script.py', 'pythonw.exe', 'python.exe', 'plan.json')]
+            for path in paths:
+                path.write_bytes(path.name.encode())
+            value = {'schema': 'HH-GT06-TASK-REQUEST-1', 'campaign_id': 'gt06-o9-chain-f22-r01',
+                     'mode': 'quiet-chain', 'script_sha256': task.sha(paths[0]),
+                     'pythonw_sha256': task.sha(paths[1]), 'python_sha256': task.sha(paths[2]),
+                     'chain_plan_sha256': task.sha(paths[3])}
+            task.validate_request(value, value['campaign_id'], value['mode'], *paths[:3], frozen_plan=paths[3])
+            paths[3].write_text('changed')
+            with self.assertRaisesRegex(ValueError, 'TASK_REQUEST_BINDING'):
+                task.validate_request(value, value['campaign_id'], value['mode'], *paths[:3], frozen_plan=paths[3])
+            with self.assertRaisesRegex(ValueError, 'TASK_FROZEN_PLAN_REQUIRED'):
+                task.validate_request(value, value['campaign_id'], value['mode'], *paths[:3])
+
+    def test_campaign_frozen_source_drift_blocks_native_run(self):
+        with tempfile.TemporaryDirectory() as directory, \
+             patch.object(campaign, 'load_fixture'), \
+             patch.object(campaign, 'source_files', return_value={}), \
+             patch.object(campaign, 'run_campaign') as run:
+            root = Path(directory)
+            (root / 'request.json').write_text(json.dumps({'source_closure_sha256': '0' * 64,
+                'profile_sha256': campaign.profile.PROFILE_SHA256}))
+            with self.assertRaisesRegex(ValueError, 'TASK_FROZEN_SOURCE_CHANGED'):
+                task.execute('gt06-o4-formal-22', 'campaign', root, 'a' * 64)
+            run.assert_not_called()
+
     def test_exact_request_rejects_changed_mode_id_script_or_interpreter(self):
         with tempfile.TemporaryDirectory() as directory:
             paths = [Path(directory) / name for name in ('script.py', 'pythonw.exe', 'python.exe')]
@@ -69,12 +139,16 @@ class CampaignEntryClosureTests(unittest.TestCase):
             'c.load_fixture(); print(json.dumps(c.source_files(),sort_keys=True))'
         )
         maps = []
-        for prefix in ('from studio.tests.replay import run_campaign_task; ', ''):
+        for prefix in ('from studio.tests.replay import run_campaign_task; ', '',
+                       'from studio.tests.replay import run_o9_quiet_chain as q; q.o7_readiness(); ',
+                       'from studio.tests.replay import run_command_residency; ',
+                       'from studio.tests.replay import run_watchdog_soak; '):
             result = subprocess.run([sys.executable, '-B', '-c', 'import json; ' + prefix + common],
                 cwd=campaign.STUDIO.parent, capture_output=True, text=True, timeout=20, check=True)
             self.assertEqual(result.stderr, '')
             maps.append(json.loads(result.stdout))
-        self.assertEqual(maps[0], maps[1])
+        for manifest in maps[1:]:
+            self.assertEqual(maps[0], manifest)
         for relative in campaign.CAMPAIGN_FIXED_SOURCES:
             self.assertEqual(maps[0][relative], task.sha(campaign.STUDIO / relative))
         self.assertIn('host/core/transport.py', maps[0])

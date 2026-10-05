@@ -442,6 +442,9 @@ def _assert_measure_window_clear() -> None:
     # closed instead of being treated as an absent fence.
     if path.exists() or path.is_symlink():
         _no_links(path)
+        info = path.stat(follow_symlinks=False)
+        _need(stat.S_ISREG(info.st_mode) and info.st_nlink == 1 and info.st_size <= 4096,
+              'EXECUTOR_MEASURE_WINDOW_LOCKED')
         raise ExecutorError('EXECUTOR_MEASURE_WINDOW_LOCKED')
 
 

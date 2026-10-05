@@ -14,6 +14,7 @@ from studio.host.core.private_store import PrivateBlobStore,MAX_BLOB_BYTES
 from studio.host.core.safe_replace import ProtectedFileRoot
 from studio.host.core.limits import SafePathResolver
 from studio.host.core.journal import Lease
+from studio.host.core.gt07_failpoints import hit as _failpoint_hit, runtime_root as _failpoint_root
 from . import publication_state as model
 from .durable_session import DurableBlenderSession,queue,PROJECT,TARGET,epoch_ms
 from .ui_host import BlenderUIHost,BLENDER_SHA256,source_files
@@ -93,6 +94,12 @@ class BlenderPublicationOwner:
         need(str(self.log.root)==record['events']['path'] and binding.root.same_file(saved.root)
             and binding.stream.same_file(saved.stream) and binding.witnessed==saved.witnessed==self._head,
             'PUBLICATION_CUSTODY_HEAD')
+
+    def _failpoint(self, phase):
+        # Diagnostic only: absent config is a no-op.  The native harness sets
+        # a private root so a crash cut can be observed without touching the
+        # product checkout's .local state.
+        _failpoint_hit(_failpoint_root(Path(__file__).resolve().parents[2]), phase)
 
     def _refresh(self):
         self._owners()
@@ -208,6 +215,7 @@ class BlenderPublicationOwner:
             check_phase()
             self._append('INTENT',request=request,request_sha256=digest,lease_epoch=lease.fencing_epoch)
             try:
+                self._failpoint('PREPARED')
                 check_phase()
                 token='pub-'+digest[:20]
                 operation,slot=model.preparation(self._state['config'])
@@ -255,8 +263,10 @@ class BlenderPublicationOwner:
                 self._append('STAGED',command_id=key,request_sha256=digest,manifest=staged,artifacts=artifacts)
                 check_phase()
                 self._read_bundle(self._state['staged'])
+                self._failpoint('VALIDATED')
                 check_phase();selected=model.selection(self._state['staged'])
                 self._append('SELECTING',selector=selected);check_phase()
+                self._failpoint('ACTIVATING')
                 observed=self.files.create_new('active.json',canonical_bytes(selected))
                 actual,raw=self.files.read('active.json')
                 need(actual==observed and raw==canonical_bytes(selected),'PUBLICATION_SELECTOR_READBACK')
@@ -264,6 +274,10 @@ class BlenderPublicationOwner:
                 check_phase()
                 result=model.response(self._state['intent'],self._state['staged'],selected)
                 self._append('TERMINAL',response=result,response_sha256=model.sha(canonical_bytes(result)),selector_version=version(actual))
+                self._failpoint('COMMITTED')
+                # Native Godot reload belongs to the cross-app consumer, not
+                # this Blender storage readback; there is no RELOAD cut here.
+                self._failpoint('ACK')
                 return self.lookup_bytes(key,digest)
             except BaseException as error:
                 self._held=True
@@ -351,6 +365,9 @@ class BlenderPublicationOwner:
         self._stop.set()
         if self._job is not None:self._job.request_stop()
         with self._mutex:
+            if getattr(self, '_queue_dispatcher', None) is not None:
+                raise model.PublicationError('PUBLICATION_QUEUE_DRAIN_REQUIRED',
+                                             outcome_unknown=True,cleanup_owner=self)
             if self._job is not None:
                 if not self._job.done.is_set():
                     raise model.PublicationError('PUBLICATION_EXPORT_ACTIVE',outcome_unknown=True,cleanup_owner=self)

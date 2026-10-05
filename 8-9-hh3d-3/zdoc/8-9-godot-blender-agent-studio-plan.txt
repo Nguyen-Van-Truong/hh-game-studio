@@ -1,48 +1,165 @@
 HH STUDIO — PLAN 1/3: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 25-09-2026, Asia/Saigon | Revision S256 | TRIỂN KHAI THEO GATE
+Cập nhật 04-10-2026, Asia/Saigon | Revision S259 + quyết định owner O1–O10 | TRIỂN KHAI THEO GATE
+OWNER_DECISIONS=O1_O3_20260925; O4_20260927; O5_O6_20260930; O7_20261001; O8_20261002; O9_20261003; O10_20261004; BLOCK_BELOW_STATUS_TABLE; LATER_DECISION_WINS; PRECEDENCE=OVER_CONFLICTING_S2XX; FULL_TEXT_IN_GIT=87912523,b0802472,8298c107,fcc1906f,6d8eb81d,d04266e8,091506fa; OLD_VERDICTS_UNCHANGED
+HIỆN HÀNH 04-10 — GT-01..GT-06 ACCEPTED; GT-07 IN_PROGRESS THEO MA TRẬN O10 (M1–M9); O2 CHẠY SONG SONG (O10.5); TOÀN PLAN CHƯA HOÀN TẤT
+CURRENT_VALID_WP=GT-07
+PLAN_SCOPE=8-9-hh3d-3/studio
+PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
+PLAN_REVISION=S259
+EXECUTION_AUTHORIZATION=OWNER_APPROVED_GATED
+EXECUTION_MODE=COORDINATOR_WITH_SCOPED_SUBAGENTS_AND_INDEPENDENT_CRITICS_OWNER_20261003; PREFER_GPT_6_ASTRA_ULTRA; ONE_WRITER_PER_FILE; TWO_DIFFERENT_MODELS_SAME_HASH; O2_PARALLEL_WORKER_O10_5
+GOAL_STATE=ACTIVE; INDEPENDENT_CONSUMER_PILOT_AUTHORIZED; GT07_IMPLEMENTATION_OPEN; O2_PARALLEL_LANE_O10_5; GT08_GT10_UNOPENED; SUPERAGENT_SEPARATE_OWNER_AUTHORIZED_LANE
+OVERALL_PLAN_STATUS=INCOMPLETE; GT01_GT06_ACCEPTED; GT07_IN_PROGRESS; GT08_GT10_PLANNED_UNOPENED
+CONSUMER_PILOT_STATUS=REVALIDATED_PROVISIONAL_AUTHORITY0; NOT_GT06_ACCEPTANCE; NOT_COMPLETE_GAME_CLAIM
+GT06_STATUS=ACCEPTED; FORMAL25_TWO_ACCEPTED_PAIRS; FINAL_MANIFEST=318081a3c71f334cc44aa4542a5fa5fff459b4045006f6daa91559b1ccc4d4d3; DECISION=zdoc/reviews/20261003-gt06-owner-critics/coordinator-acceptance.md
+GT07_NEXT_ACTION=O10_8_NEXT_N0_TO_N6_IN_ORDER; MATRIX_SCOPE=O10_1_M1_M9_LOCKED; M1_M9_EVIDENCE=OPEN; STATUS=zdoc/reviews/20261003-gt07-integration/requirements.md; GT06_NO_BENCHMARK_RERUN
+GT10_SOAK_POLICY=OWNER_O1_10X35_ON_RELEASE_SOURCE; REUSE_ACCEPTED_FORMAL25_MACHINERY; PROFILE_V6=8a2e599c40f927ffaff5ded5e48b6bf2a0f0a6bb3a23de31434a695f4258cb35; FORMAL25_SOURCE64=727f9039c1cc83239f5ef1daff13de5e92e37b5ba442e64be8341ca058800b58
+O2_CANDIDATE_STATUS=AUTHORITY0; BRANCH=codex/o2-authoring-contract; DETAIL=studio/AUTHORING_STATUS.md_AT_BRANCH_HEAD; OPEN=AUTH05_ADAPTER_E2E; SYNC_MAIN_THEN_MERGE_O10_5; POINTER_ONLY_NO_HASH_OR_TEST_COUNT_O7_6
+RUN_POLICY=FRESH_ID_PER_RUN; DRY_RUN_BEFORE_NATIVE_O10_2; VERIFY_SOURCE_STOP_LATCH_AND_O5_6_LOCK_BEFORE_START; PRESERVE_RAW_ON_FAILURE; REPAIR_ONLY_PROVEN_BOUNDARY; FIX_AND_CONTINUE_O6_4; NEVER_TICK_FROM_BANNER_OR_PARTIAL_PREFIX; CRITICS_READONLY_INDEPENDENT_SAME_HASH
+S_RECORD_HISTORY_ARCHIVE=8-9-hh3d-3/zdoc/reviews/20260925-plan-s-record-history-s256.txt; SHA256=14e4d00b5f574f9c06c8f4041cf284fa70f7bded09dee6d6d2914cdb1d3c5fdb; AUTHORITY=0; RAW_HEADER_BLOCK_S256_LINES_93_150_BYTE_FOR_BYTE; NO_GATE_CHANGE
 
-OWNER DECISIONS O1–O3 — 25-09-2026 (owner chọn hướng A ở review 23-09; O1–O3 ghi vào plan theo yêu cầu owner 25-09)
-OWNER_DECISIONS=O1_GT06_BENCHMARK_GATE; O2_SHARED_AUTHORING_CORE_BEFORE_GT10; O3_SPEED_AND_PLAN_HYGIENE; STATUS=OWNER_APPROVED; PRECEDENCE=OVER_CONFLICTING_S2XX_LINES; RAW_HISTORY_AND_OLD_VERDICTS_UNCHANGED; NO_RETROACTIVE_PASS
-Lý do O1: từ 23-09 có 14 campaign formal (S181…S246), không run nào đủ 35 batch. Benchmark đã
-tìm ra hai lỗi thật và đã sửa (lease lookup S218, lock gây status gap S243). Các fail counter/bộ
-nhớ còn lại là lệch nhỏ không đơn điệu (editor handles 558→556→559 và 552→554; ObjectDB
-71128→71130; host 204→205 ở S147), working set nhảy giữa hai batch (S218 +42%/+52%; S225
-88–748 MB) hoặc sự cố hạ tầng (mất điện S239, import wall S243). Gate cũ (vượt baseline một đơn
-vị là FAIL, dừng ngay, baseline một điểm) không phân biệt dao động với rò. Mỗi batch có 1000
-lệnh + 100 chu kỳ nên rò theo lệnh sẽ tăng hàng trăm mỗi batch. Nhánh debugger/attribution
-S162–S257 không tạo được kết luận nghiệm thu nào.
+BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
+STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
+01 | GT-01 | Chốt pin/phạm vi/reuse; bootstrap dự án mẫu độc lập | OWNER_START | ACCEPTED
+02 | GT-02 | Protocol, capability, journal và an toàn lệnh tối thiểu | GT-01 | ACCEPTED
+03 | GT-03 | Godot EditorPlugin: sửa scene, UndoRedo, save/readback | GT-02 | ACCEPTED
+04 | GT-04 | Blender adapter UI và background jobs an toàn | GT-02 | ACCEPTED
+05 | GT-05 | Pipeline .blend → GLB → Godot, asset manifest | GT-03, GT-04 | ACCEPTED
+06 | GT-06 | Play/input/pause/stop/observe/capture qua công cụ | GT-05 | ACCEPTED
+07 | GT-07 | Đa agent, publish, lease/fencing và recovery | GT-05, GT-06 | IN_PROGRESS
+08 | GT-08 | Clean import/export/CI, target và cache matrix (O4.6: có thể tách 08A/08B) | GT-07 | PLANNED
+09 | GT-09 | Lõi tạo nội dung O2 + agent conformance trên 2 mini-game 2D/3D | GT-08 hoặc GT-08A (O4.6) | PLANNED
+10 | GT-10 | Gói công cụ v0.1, cài/upgrade/rollback, bàn giao game | GT-09 + GT-08B nếu tách | PLANNED
 
-O1 — GATE BENCHMARK (thay các câu baseline/counter/RSS/10×35 ở mục hiệu năng TQ cho GT-06 và
-release soak GT-10; các điều kiện khác của mục đó giữ nguyên)
+QUYẾT ĐỊNH OWNER ĐANG HIỆU LỰC O1–O10 — BẢN HỢP NHẤT 04-10-2026 (S259)
+Chỉ giữ luật còn áp dụng sau GT-06 ACCEPTED; O10 mới nhất nên đặt đầu. Nguyên văn O1–O9 trước
+tinh gọn: git show 091506fa:8-9-hh3d-3/zdoc/8-9-godot-blender-agent-studio-plan.txt (dòng 40–561);
+bản gốc O1–O3 87912523, O4 b0802472, O5 8298c107, O6 fcc1906f. Mâu thuẫn thì quyết định muộn hơn
+thắng và thắng các dòng S2xx; raw và verdict cũ giữ nguyên, không hồi tố PASS. Số mục cũ (O1.4,
+O4.4, O6.4…) giữ nguyên để tham chiếu.
+
+O10 — 04-10-2026, MỚI NHẤT, ĐỌC TRƯỚC (AUTHORITY=OWNER_DELEGATED_20260930; ngưỡng O1/O4.1,
+timeout và DoD GT-07 không đổi; thay GT07_NEXT_ACTION cũ)
+Căn cứ 03-10 21:21 → 04-10 18:00: khoảng 10 giờ làm thật, 10 commit, khoảng 45 run chẩn đoán.
+- Đã có: admission bền + quota project/session (46 test inert, có reproducer race), sức chứa stream
+  mặc định đo thật (510 record, JOURNAL_FULL có next action), năm lát native (Blender queue; Godot
+  edit, save, script; recovery lookup-only sau khi cố ý mất receipt ở run 21), Stop drain bền.
+- Godot native 16/20 run hỏng (01–15, 20), Blender queue chỉ đạt từ run 12; gần như toàn lỗi
+  harness bắt được mà không cần mở engine (bài học 43–46).
+- Mỗi run chép snapshot 2–9,5 MB vào zdoc/reviews (trái O4.4; manifest lại ghi raw ở .local),
+  manifest 1.179–1.595 dòng cho mỗi run chẩn đoán (đã commit 16, 18, 19); requirements.md thành
+  nhật ký 247 dòng.
+- Ma trận còn lại chưa chốt nên mỗi lát cần probe, run, manifest, ghi chú riêng. O2 đứng từ 03-10.
+1. Ma trận đóng GT-07 (chốt; thêm hàng chỉ khi có TX mới theo mục 5). Native = Godot/Blender pin
+   thật; host = host thật với owner inert và process/filesystem thật.
+   M1 Q01/TX18 admission, quota, fairness, flood, không starvation — host (46 test đã có).
+   M2 Q03/TX06 hai writer cùng .tscn và cùng .blend; lease hết hạn trả kết quả muộn; worker bị thu
+      hồi — native, mỗi app một run nhiều bước.
+   M3 Q05/TQ07/TX09/TX11 publish Blender→GLB→Godot (mục 2.5): crash ở PREPARED, VALIDATED,
+      ACTIVATING, COMMITTED, reload, ACK, mỗi pha một run; giết đúng process đang giữ pha (host,
+      Blender hoặc editor) tại failpoint chặn; sau restart lookup journal/active manifest/hash rồi
+      complete hoặc giữ last-good; không object/output trùng, staging không thành active. Godot
+      scene save/script thêm cut reload và ACK (cut sau effect trước receipt đã có ở run 21).
+   M4 Q06/TX06 owner sửa tay .tscn/.blend trong lúc lease: không rollback đè, giữ cả hai bản, trả
+      conflict có next action — native, mỗi app một run.
+   M5 Q06/TX05/TX09 lưu trữ: filelock thật (process khác giữ file share=0, gồm lúc Godot save),
+      crossvolume thật (C: ↔ D:), diskfull và fsync lỗi tiêm ở primitive ghi (nhãn INJECTED);
+      không trả COMMITTED khi thiếu proof, giữ last-good — host + một run Godot.
+   M6 Q04/TX14 Stop khi queue đầy, hủy job đang chờ, job đang chạy drain có trần, reconnect sau
+      Stop không tự resume, token rotate giữa job — host; Stop native đã có ở run 16 nên không cần
+      run chẩn đoán native mới, gói cuối chạy lại cùng ma trận.
+   M7 Q07/TX11 compact theo hết hạn bằng đồng hồ thật với horizon test ngắn (ví dụ 10 phút, cấu
+      hình fixture, không giả đồng hồ), rotation; horizon 24 giờ mặc định ghi known limit GT-10.
+   M8 TX05 terminate đúng job: PID còn sống nhưng start time khác thì từ chối kill; timeout giết
+      đúng owned tree; OOM bằng giới hạn bộ nhớ Job Object thật — host + process thật, không engine.
+   M9 TX13 mutation khi Play đang chạy và capture cũ bị từ chối — một run native bằng bộ máy GT-06.
+   Gói cuối: freeze closure đầy đủ một lần; chạy lại M1–M9 và regression bị ảnh hưởng của
+   GT-02..GT-06 (focused, không benchmark) trên đúng closure; map requirement→test→artifact; hai
+   critic khác model cùng hash. Diskfull tiêm lỗi là đủ cho GT-07 vì máy không có volume nhỏ tạo
+   được mà không cần admin; nếu có cách không cần admin thì thêm, không chặn GT-07.
+2. Một runner kịch bản: mở rộng run_native_godot_queue_probe.py và run_native_blender_queue_probe.py
+   (không viết lại) thành entrypoint --scenario đọc bảng kịch bản. --dry-run kiểm admission,
+   deadline cả hai cận, route lease công khai, dependency closure, đường binary và PYTHONPATH mà
+   không mở engine; mọi run native phải qua dry-run cùng tham số trước. --matrix chạy tuần tự nhiều
+   kịch bản, mỗi kịch bản một dòng kết quả. Failpoint crash: một module duy nhất, tên theo pha,
+   dừng chờ tại pha để harness giết process; chỉ bật bằng cấu hình test trong .local; scan package
+   GT-10 phải từ chối khi failpoint bật.
+3. Bằng chứng tầng D (O4.4): raw và snapshot chỉ ở studio/.local/reviews/<run_id>/; requirements.md
+   một dòng mỗi run (id, kịch bản, exit, kết quả, phát hiện); không manifest/zip riêng và không
+   commit cho run chẩn đoán. Chỉ gói cuối GT-07 có manifest + zip + critic package; review closure
+   trong zdoc/reviews chỉ chứa source text như tiền lệ GT-04/GT-05. Một lần, model rẻ: chuyển 22
+   thư mục zdoc/reviews/gt07-* chưa track (godot-publication 01–03, native-godot 01–15 và 18–21,
+   khoảng 110 MB) về studio/.local/reviews/ cùng tên, so hash từng file trước/sau; không xóa; sửa
+   đường output của runner. Manifest 16/18/19 đã commit giữ nguyên; manifest 20/21 chưa commit thì
+   chuyển vào .local cùng raw, không commit.
+4. requirements.md: đầu file "Hiện trạng" ≤ 15 dòng + bảng M1–M9 (DONE/OPEN, run id) + Next; ghi
+   chú checkpoint ≤ 3 dòng; nhật ký dài cũ chuyển xuống mục lịch sử cuối file.
+5. O2 chạy song song từ 04-10 (thay câu "không làm song song" của O4.6 riêng cho O2; GT-07 rồi
+   GT-08 vẫn tuần tự): một worker phạm vi rõ (gpt-6.1-sol ultra) trong worktree O2. Trước tiên merge
+   main vào nhánh O2 và chạy suite O2; rồi làm theo O4.5: AUTH-05 qua executor Docker, nối adapter
+   thật (publication/save/reload/ACK, lease, recovery), vòng Blender→GLB→Godot, sprite sheet 2D.
+   Run chẩn đoán O2 không cần preflight O4.1, chỉ kiểm khóa đo và một Godot mỗi path. Tool tầng D
+   chỉ test công thức + 1–2 negative (O8.4a), không thêm lớp chống giả mạo. Merge O2 → main khi
+   suite O2 và suite GT bị ảnh hưởng đạt trên cây đã merge, coordinator duyệt phạm vi diff, profile
+   gameplay-source vẫn tắt tới khi AUTH-01..05 đạt; hai critic để dành cho GT-09.
+6. Vệ sinh một lần (model rẻ, ≤ 1 giờ): đóng 48 task HHStudio.GT06.* đang Ready theo O7.6 bằng lệnh
+   closeout chung (export XML và danh sách vào .local, kiểm không instance/process sống, gỡ từng
+   task, một dòng log); thêm 8-9-hh3d-3/.local/ vào .gitignore như studio/.local/ (157 file
+   arm/formal/preflight đang untracked, không file nào đã được track).
+7. Nhịp: không dừng lượt sau mỗi checkpoint; đi hết NEXT tới khi gói GT-07 sẵn sàng critic hoặc gặp
+   E1–E4. Commit theo mốc (code + test + dòng log), không commit chỉ để ghi log. Run native hỏng:
+   đọc raw, sửa, qua dry-run rồi mới chạy native ID mới; cùng một lỗi lặp hai lần thì dừng native
+   và viết reproducer thuần.
+8. NEXT (ước tính giờ làm của agent, không phải ETA toàn plan):
+   N0 vệ sinh mục 3, 4 và 6 (≤ 1 giờ, model rẻ, song song với N1).
+   N1 runner --scenario/--dry-run/--matrix + module failpoint (2–3 giờ).
+   N2 M3 crash matrix (3–4 giờ).
+   N3 M2 và M4 (2–3 giờ).
+   N4 M5 và M7 (khoảng 2 giờ; M7 chạy nền theo đồng hồ thật).
+   N5 M6, M8, M9 (2–3 giờ).
+   N6 gói cuối và hai critic.
+   O2 chạy song song suốt N0–N6.
+9. Chuẩn bị bước sau: owner chuẩn bị máy Android thật bật USB debugging (O3.3) trước GT-08B;
+   GT-08A (Windows + Linux headless, Linux qua Docker) mở ngay sau GT-07 ACCEPTED; release soak
+   GT-10 10×35 cần khoảng 6 giờ máy yên, chia nhiều khung theo O4.6 bằng bộ máy Formal25.
+
+O1 — GATE BENCHMARK GT-06 (25-09; thay các câu baseline/counter/RSS/10×35 ở mục hiệu năng TQ cho GT-06
+và release soak GT-10; các điều kiện khác của mục đó giữ nguyên)
 1. Baseline mỗi role/counter = trung vị post_batch_quiescent của batch 2–4.
 2. Chỉ dừng sớm khi crash, timeout, status gap > 2000 ms, thiếu counter bắt buộc, handles >
    baseline+64, objects > baseline+256 hoặc private commit > 150% baseline. Lệch nhỏ hơn không
    dừng; mỗi pair chạy đủ 35 batch để có chuỗi xu hướng.
 3. Counter PASS theo từng pair khi max(batch 5–34) ≤ baseline + T và max(batch 20–34) ≤
-   max(batch 5–19) + G. T/G: host handles 4/2; editor handles 8/2; editor objects 32/8;
-   editor resources 2/1. Host objects/resources vẫn NOT_APPLICABLE_PYTHON_HOST.
+   max(batch 5–19) + G. T/G: host handles 4/2; editor objects 32/8; editor resources 2/1.
+   Editor handles theo luật median (O5.2; control không plugin dao động 554–577):
+   median(batch 20–34) ≤ median(batch 5–19) + 6 và max(batch 5–34) ≤ baseline + 32. Luật phụ
+   retained-handle v5 định nghĩa ở zdoc/reviews/20260926-gt06-s258-terminal/O1-OWNER-RESOLUTION.md
+   là một phần của O1 (O4.2). Host objects/resources NOT_APPLICABLE_PYTHON_HOST.
 4. Bộ nhớ gate bằng private commit từng process (cùng API benchmark_import_observer):
    max(batch 5–34) ≤ 110% baseline và max(batch 20–34) ≤ 105% × max(batch 5–19).
    RSS/working set vẫn ghi đủ cho report và critic nhưng không là gate tự động.
 5. Giữ nguyên: 1000 lệnh + 100 chu kỳ mỗi batch, cùng PID, không duplicate/lost effect, status
-   gap ≤ 2000 ms, actual exit 0, owned tree 0, retained owned handles 0, Job zero/closed.
-6. GT-06 benchmark = 2 fresh host/editor pair × 35 batch theo O1. Full 10 pair × 35 batch theo
-   O1 là release soak trong DoD GT-10, chạy trên source release.
+   gap ≤ 2000 ms ở mọi batch kể cả 5 batch warmup (O4.2), actual exit 0, owned tree 0, retained
+   owned handles 0, Job zero/closed.
+6. GT-06 benchmark = 2 fresh host/editor pair × 35 batch. Full 10 pair × 35 batch là release soak
+   trong DoD GT-10, chạy trên source release, chia được nhiều cửa sổ trên cùng hash (O4.6).
 7. INFRA_ABORT: mất điện/reboot, preflight môi trường không đạt, import wall trước batch 0, lỗi
-   Task Scheduler/OS ngoài source. Giữ raw, ghi INFRA_ABORT (không phải product FAIL), rerun
-   bằng ID mới sau preflight mà không cần giả thuyết mới; tối đa 2 lần mỗi ngày, quá thì sửa
-   môi trường trước.
-8. Preflight môi trường trước formal: RAM trống ≥ 8 GiB, commit ≤ 80% limit, đã tắt app nặng
-   không cần (trình duyệt, WSL, app chat), ghi snapshot trước và sau. Không đạt thì không chạy.
-9. Stock control (editor không plugin, cùng profile) chỉ chạy khi formal O1 FAIL vì counter hoặc
-   bộ nhớ, để tách engine với tool; chỉ ghi so sánh, không dùng để trừ số.
-10. Attribution/debugger chỉ là chẩn đoán, không là điều kiện ACCEPTED. Niêm phong S257 theo hiện
-    trạng và dừng nhánh CDB/htrace/API-return; chỉ mở lại khi O1 FAIL có xu hướng tăng thật,
-    tối đa 4 giờ.
-O1_NEXT=SEAL_S257_AS_IS; IMPLEMENT_O1_IN_SCREEN_SAMPLE_AND_SUMMARIZE_DATASET_WITH_PRIVATE_COMMIT_SAMPLES; NEW_BENCHMARK_PROFILE_VERSION; UNIT_TESTS_REPLAY_S218_S229_S232_S236_S241_S246_SERIES_AND_SYNTHETIC_LEAKS; ONE_READONLY_CRITIC_ON_VERIFIER_DIFF; ENV_PREFLIGHT; FRESH_ID_2X35_FORMAL; TWO_NEW_SAME_HASH_CRITICS; THEN_ACCEPT_GT06_AND_OPEN_GT07
-O1 vẫn FAIL khi rò theo lệnh (từ 1 đơn vị mỗi 1000 lệnh) hoặc rò đều nhỏ: từ khoảng 0,14 handle,
-0,07 resource, 0,54 object hoặc 0,33% private commit mỗi batch. O1 chỉ bỏ báo động giả. Mục TQ
-hiệu năng cho phép đổi target bằng decision/review; O1 là decision đó và được khóa trước lần chạy.
+   Task Scheduler/OS ngoài source, hoặc watchdog O4.1. Giữ raw, ghi INFRA_ABORT (không phải product
+   FAIL), rerun bằng ID mới sau preflight mà không cần giả thuyết mới; tối đa 2 lần mỗi ngày, quá
+   thì sửa môi trường trước.
+8. Môi trường formal theo O4.1 (bản cũ đòi RAM trống ≥ 8 GiB và tắt app đã bỏ).
+9. Stock control (editor không plugin, cùng profile) chỉ chạy khi formal FAIL vì counter hoặc bộ
+   nhớ, để tách engine với tool; chỉ so sánh, không trừ số. Dùng lại dữ liệu control đã có trước
+   khi chạy control mới (O6.5).
+10. Attribution/debugger chỉ là chẩn đoán, không là điều kiện ACCEPTED. Nhánh CDB/htrace/API-return
+    S257 đã niêm phong; chỉ mở lại khi formal FAIL có xu hướng tăng thật, tối đa 4 giờ.
+11. Luật phụ v5: đã ghi ở O1.3 (candidate S257 cũ chỉ còn trong lịch sử Git).
+Độ nhạy: O1 vẫn FAIL khi rò theo lệnh (từ 1 đơn vị mỗi 1000 lệnh) hoặc rò đều nhỏ: từ khoảng 0,14
+handle host, 0,4 handle editor, 0,07 resource, 0,54 object hoặc 0,33% private commit mỗi batch.
+O1 chỉ bỏ báo động giả. Mục TQ hiệu năng cho phép đổi target bằng decision/review; O1 là decision
+đó và được khóa trước lần chạy.
+Sau GT-06 ACCEPTED, O1 chỉ còn là gate release soak GT-10 (O1.6); không áp cho run chẩn đoán
+GT-07/O2.
 
 O2 — LÕI TẠO NỘI DUNG DÙNG CHUNG, LÀM TRƯỚC GT-10
 Catalog đã nghiệm thu chỉ có Node3D/MeshInstance3D/BoxMesh, script khai báo biến và Blender
@@ -55,112 +172,152 @@ SA-T0x/H2-T0x và dùng lại lõi:
    Control/Label/Button, AudioStreamPlayer, AnimationPlayer, InputMap. Kiểu property validate
    theo ClassDB; mỗi class vào allowlist phải có test reject, readback và undo.
 3. Blender: modifier/UV/material mở rộng, armature từ template, keyframe/action, preset export.
+4. Trình bày và cảm giác chơi (thêm 03-10), dùng cùng cơ chế allowlist ClassDB của mục 2, không
+   viết adapter riêng từng class. Bắt buộc cho GT-09: GPUParticles2D/CPUParticles2D với các
+   thuộc tính emitter được kiểm riêng (one_shot, amount, lifetime, texture, use_fixed_seed/seed).
+   visibility_rect và process_material chỉ thuộc GPUParticles2D; CPU cấu hình chuyển động trên
+   node và phải từ chối hai property GPU này. ParticleProcessMaterial chỉ nhận thuộc tính resource
+   đúng ClassDB, đọc lại qua process_material. Flipbook dùng spritesheet + CanvasItemMaterial
+   particles_animation/H-V frames; AtlasTexture riêng lẻ chỉ chọn vùng ảnh. ShaderMaterial với .gdshader
+   theo luật source của mục 1 (readback có kiểm compile), AudioStreamPlayer2D, CanvasLayer/ProgressBar cho HUD. Thêm
+   khi game đầu tiên cần: PointLight2D, bus layout, Theme/Container, NavigationAgent2D/
+   NavigationRegion2D, Path2D/PathFollow2D, AnimationTree. Phát hiệu ứng (restart(keep_seed)),
+   pooling và giới hạn số lượng làm trong script gameplay; restart xóa hạt đang tồn tại nên pool
+   phải xử lý burst chồng nhau. Seed cố định hỗ trợ replay nhất quán trên pin/renderer/timestep đã
+   khóa; không hứa bit-identical giữa CPU/GPU hoặc thiết bị. emit_particle() không hỗ trợ renderer
+   Compatibility. Va chạm hạt GPU 2D tích hợp dùng SDF từ LightOccluder2D, không PhysicsBody2D;
+   CPU fallback và Compatibility không có va chạm SDF này. Va chạm gameplay dùng physics node.
+   Không làm graph VFX kiểu Niagara/VFX Graph. API phải kiểm trên Godot pin và native fixture.
+5. Port có kiểm từ plugin cũ godot/plugin-project/addons/hh_agent (R5 plan 20-8: TileMapLayer,
+   animation, UI, audio, physics, navigation, shader, particles; render.particles ở đó chỉ nhận
+   GPUParticles2D với amount, lifetime, process_material, texture): đọc làm tham khảo hoặc chép có
+   ghi nguồn + hash, viết lại theo contract HH Studio (schema, UndoRedo, readback, journal) và chạy
+   test của HH Studio. Không sửa plugin cũ, không coi tick plan 20-8 là bằng chứng cho HH Studio.
+6. Ngân sách hiệu năng: observe đọc Performance monitor (FPS, frame time, process/physics time,
+   draw calls, object count) trong Play; mỗi mini-game ghi ngân sách trước và kết quả đo trên máy
+   owner.
 Code và unit test được làm ngay trong worktree/lease riêng, không chạm closure formal GT-06 và
 không chạy engine khi formal đang đo; merge sau khi GT-06 ACCEPTED. Profile script chỉ được bật
 sau khi AUTH-01 đến AUTH-05 đạt (gồm isolation). Nghiệm thu trong GT-09 bằng 2 mini-game fixture
-gốc làm hoàn toàn qua catalog (đấu trường 2D có platform, pickup, bot; phòng 3D có avatar đi lại
-và tương tác); GT-10 đóng gói. Không claim game hoàn chỉnh hay parity Y8/PlayTogether.
+gốc làm hoàn toàn qua catalog: đấu trường 2D có platform, pickup, bot, bốn hiệu ứng (lửa đầu nòng,
+tia trúng, bụi, nổ) có giới hạn số lượng và đạt ngân sách hiệu năng; phòng 3D có avatar đi lại và
+tương tác. GT-10 đóng gói. Không claim game hoàn chỉnh hay parity Y8/PlayTogether.
 
 O3 — TỐC ĐỘ VÀ VỆ SINH PLAN
 1. Mỗi hướng chẩn đoán tối đa 4 giờ hoặc 3 lần chạy; hết ngân sách thì viết một trang cho owner
-   (nguyên nhân, 2–3 lựa chọn, chi phí, rủi ro) rồi chuyển lane khác.
+   (nguyên nhân, 2–3 lựa chọn, chi phí, rủi ro) rồi chuyển lane khác. Ngân sách chỉ tính lần chạy
+   không có giả thuyết mới; run xác nhận sau sửa đã chứng minh theo O8.3 không cần chờ owner.
 2. Worker/critic bị capacity/404: được chuyển một lần sang model khả dụng khác; critic vẫn
    read-only, độc lập, khác implementer và cùng hash.
 3. Owner chuẩn bị một máy Android thật (bật USB debugging) và nguồn điện ổn định/UPS trước GT-08.
 4. Header chỉ giữ trạng thái hiện hành, next action, pin và quyết định owner (mục tiêu ≤ 40 dòng);
    S-record cũ chuyển sang file history có hash. Không tạo S mới chỉ để đổi metadata.
 
-HIỆN HÀNH S256 — API-RETURN BOUNDARY DIAGNOSTIC SEALED; GT06 STILL CURRENT VALID WP
-CURRENT_VALID_WP=GT-06
-PLAN_SCOPE=8-9-hh3d-3/studio
-PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S256
-EXECUTION_AUTHORIZATION=OWNER_APPROVED_GATED
-EXECUTION_MODE=COORDINATOR_CONTINUES_AFTER_WORKER_CAPACITY_AND_REVOKED_REFRESH_TOKEN
-GOAL_STATE=ACTIVE; INDEPENDENT_CONSUMER_PILOT_AUTHORIZED; NO_GAME_PLAN_OPENED; GT06_LANE_OWNER_O1_VERIFIER_THEN_2X35_FORMAL; O2_CAPABILITY_LANE_ALLOWED_IN_SEPARATE_WORKTREE; GT07_GT10_READONLY_PREP
-OVERALL_PLAN_STATUS=INCOMPLETE; GT01_GT05_ACCEPTED; GT06_IN_PROGRESS; GT07_GT10_PLANNED_UNOPENED
-CONSUMER_PILOT_STATUS=REVALIDATED_PROVISIONAL_AUTHORITY0; NOT_GT06_ACCEPTANCE; NOT_COMPLETE_GAME_CLAIM
-GT06_STATUS=IN_PROGRESS; ZERO_ACCEPTED_FULL_RUNS; HISTORICAL_ACCEPTANCE_GT01_GT05_UNCHANGED
-GT06_GATE_POLICY=OWNER_O1_2_FRESH_PAIRS_X_35_BATCHES_5_WARMUP_30_MEASURED_WITH_O1_COUNTER_AND_PRIVATE_COMMIT_RULES; FULL_10X35_UNDER_O1_IS_GT10_RELEASE_SOAK; FULL_DATASET_HASH_ACTUAL_EXITS_TREES_JOBS_HANDLES_AND_TWO_NEW_SAME_HASH_CRITICS
-GT06_ATTRIBUTION_POLICY=DIAGNOSTIC_ONLY_UNLESS_OWNER_ADR_ADDS_ACCEPTANCE_REQUIREMENT; UNKNOWN_IS_NOT_LEAK_ROOT_CAUSE_OR_PASS
-GT06_CURRENT_DIAGNOSTIC=S256_API_RETURN_BOUNDARY_DIAGNOSTIC_SEALED; S253_STATIC_PREFLIGHT_VERIFIED; S252_PLAN_SENTINEL_CLEANUP_SEALED; S251_HANDOFF_VERIFICATION_SEALED; S250_ENVIRONMENT_PREFLIGHT_SEALED; S249_READONLY_CATALOG_CORRECTION_SEALED; S248_COUNTER_SERIES_REVIEW_SEALED; S247_S246_COUNTER_FAILURE_SEALED; S246_S245_IMPORT_DIFFERENTIAL_COMPLETED; S244_S243_IMPORT_STAGE_TIMEOUT_TERMINAL_SEALED; S243_TERMINAL_PERSISTENCE_LOCK_REPAIR_VERIFIED; S242_S241_STATUS_GAP_TERMINAL_SEALED; S241_COMMAND16_MAX_GAP_2055.5275MS; S241_COMPLETED_BATCHES0_TO16_PARTIAL; S240_POWER_RECOVERY_AUDIT_SEALED; S239_INTERRUPTED_AFTER_IMPORT_AND_BATCH0_READY; S238_READONLY_CAPABILITY_CATALOG_SEALED; S236_BOUNDARY_DIAGNOSTIC_SEALED; S236_DID_NOT_REPRODUCE_S232_PLUS2; S235_S232_FORMAL_TERMINAL_REVIEW_SEALED; ALL_PRIOR_FAILURES_RETAINED
-GT06_NEXT_ACTION=OWNER_O1_RECORDED_20260925; FOLLOW_O1_NEXT; S256_API_RETURN_ROUTE_REMAINS_DIAGNOSTIC_ONLY; NO_FURTHER_DEBUGGER_BRANCH_UNLESS_O1_FORMAL_FAILS_WITH_REAL_TREND; NO_BLIND_FORMAL_RETRY_EXCEPT_O1_INFRA_ABORT_RULE; TIMEOUTS_UNCHANGED
-GT06_SOURCE_POLICY=O1_VERIFIER_AND_PROFILE_CHANGE_CREATES_NEW_FORMAL_SOURCE_CLOSURE_FROZEN_BEFORE_RUN; OLD_53_FILE_CLOSURES_AND_RAW_STAY_HISTORICAL; DIAGNOSTIC_S236_IS_SEPARATE_54_FILE_CLOSURE; NO_RETROACTIVE_REBINDING; TIMEOUTS_UNCHANGED
-GT06_BENCHMARK53_CLOSURE=1f6b7da7f48085b417e5d6d7f3388c75c0a8beadad3659b14057a2a6e71df625; FORMAL_SOURCE_FILES=53; PRIOR_S241_EXECUTED_CLOSURE=d7c78724ed827c8182af62c3f7bc1489d8dd35d29abe1f70216736a896e66bb3; S232_FORMAL_EXECUTED_CLOSURE=817242efa6578ecc92ebab31909d0324020f7617359bc2855c9b004d31907190; NO_RETROACTIVE_REBINDING
-GT06_HISTORICAL_EXECUTION217_CLOSURE=493a7ccce3e42993399910b0fe977f25448f411b863e4cca7b57904348ac374e
-GT06_CURRENT_FORMAL_EXECUTION_CLOSURE=NONE_ACCEPTED; S239_PARTIAL_IS_NOT_A_CLOSURE
-GT06_PROFILE_SHA256=0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85
-S254_S255_API_RETURN_DIAGNOSTIC=PACKAGE=zdoc/reviews/20260925-gt06-s254-255-api-return; RAW_S254=gt06-s254-api-return-01; S254_FIXTURE_TARGET_EXIT0_CDB_EXIT0; NT_CREATE_EVENT_AND_IO_COMPLETION_ENTRY_RETURN_STACKS_BOUND_TO_KNOWN_HANDLES; RAW_S255=gt06-s255-godot-api-return-05_AND_-12; GODOT_ENTRY_RETURN_STACK_CAPTURE_OBSERVED_ON_TARGET_PID; GODOT_EDITOR_NATURAL_EXIT_UNPROVEN; CLEANUP_JOB_ZERO_CLOSED; AUTHORITY=0; FORMAL_ACCEPTANCE=false
-S256_DECISION=DISTINCT_API_BOUNDARY_IS_DIAGNOSTIC_ONLY; NO_GT06_ACCEPTANCE; NO_ROOTCAUSE_OR_LEAK_OWNERSHIP_CLAIM; KEEP_10X35_GATE_TIMEOUT_BASELINE_PROFILE_COUNTER_RSS_UNCHANGED; DO_NOT_RUN_FORMAL_UNTIL_GODOT_LIFECYCLE_BOUNDARY_OR_OWNER_ADR_IS_SUPPORTED; KEEP_GT07_GT10_PREP_READONLY
-S256_LESSONS=API_ENTRY_RETURN_WITH_KNOWN_HANDLE_IS_STRONGER_THAN_STACKLESS_HTRACE_BUT_NOT_FORMAL_EVIDENCE; CDB_DEBUG_BREAK_AND_EDITOR_QUIT_MUST_HAVE_SEPARATE_NATURAL_EXIT_PROOF; JOB_ZERO_CLOSED_AFTER_FORCED_DIAGNOSTIC_CLEANUP_DOES_NOT_EQUAL_EDITOR_EXIT0; PRESERVE_RAW_AND_USE_FRESH_ID_AFTER_EACH_HARNESS_REPAIR
-S235_TERMINAL_REVIEW=PACKAGE=zdoc/reviews/20260924-gt06-s235-terminal-review; CAMPAIGN=gt06-s232-formal-01; RAW_MANIFEST_SHA256=9c169eb4e569fbddea17404024237aef4edebd26cce2398c70e4fb6ecf621c83; ARCHIVE_SHA256=c16795594067a9caf39ab5dec53fbfb7e26989ac1657913fda832e77f242ff86; VERIFIED_RAW_ENTRIES=282; ARCHIVE_MEMBERS=283; FAILURE=BATCH8_JOINT_OBSERVATION_EDITOR_HELD_HANDLES_552_TO554; HOST_EXIT1_IMPORT_EXIT0_EDITOR_CLEANUP_EXIT2_SUPERVISOR_UNKNOWN; AUTHORITY=0
-S235_DECISION=TERMINAL_DIAGNOSTIC_ONLY; POST_ACK_PROBE_CADENCE_CHANGE_NOT_A_REPAIR; NO_FORMAL_ACCEPTANCE; NO_GATE_CHANGE; NO_UNCHANGED_RETRY
-S236_BOUNDARY_DIAGNOSTIC=RUN_ID=gt06-s236-handle-boundary-01; PACKAGE=zdoc/reviews/20260924-gt06-s236-handle-boundary; SOURCE_CLOSURE=8fd43c2d72ea881d616e40daef03accaae469822848f44aa961938a6b10c92f5; SOURCE_FILES=54; RAW_MANIFEST_SHA256=91eb3a9e1cf1f3e701db4af0393bcbb4b20e204d6205ec6a15868c1259de467b; ARCHIVE_SHA256=c72226459bcb9a6e47fda419fb590fa51a58190f4edbb2223c501fcda12e85ff; RAW_ENTRIES=212; ARCHIVE_MEMBERS=213; COMPLETED_BATCHES=9; PRE_ACK_HANDLES=562,556,556,552,556,552,552,552,552; POST_ACK_HANDLES=562,556,556,552,556,552,552,552,552; TERMINAL_IDLE_HANDLES=20_SAMPLES_ALL_552; FAILURE_REPRODUCED=false; FORMAL_ACCEPTANCE=false; AUTHORITY=0
-S236_DECISION=DISTINCT_BOUNDARY_DIAGNOSTIC_ONLY; NO_MEASUREMENT_DEFECT_OR_ROOTCAUSE_PROVEN; NO_GT06_ACCEPTANCE; NO_GATE_CHANGE; NO_UNCHANGED_FORMAL_RETRY
-COUNTER_PROPOSAL=SUPERSEDED_BY_OWNER_O1_20260925; VERIFIER_IMPLEMENTATION_UNIT_TESTS_AND_ONE_READONLY_CRITIC_BEFORE_FIRST_O1_FORMAL; SHORT_RUNS_DIAGNOSTIC_ONLY
-PREFLIGHT_POLICY=BINARY_VERSION_PATH_HASH_SYMBOL_DEVICE_MEMORY_AND_REPRO_CAPABILITY_BEFORE_NEW_DIAGNOSTIC; RECORD_ONCE_WHEN_UNCHANGED
-WORKER_POLICY=BOUNDED_ATTEMPTS; NO_INFINITE_RETRY; O3_ONE_FALLBACK_TO_ANOTHER_AVAILABLE_MODEL_AFTER_CAPACITY_OR_404; CRITICS_READONLY_INDEPENDENT_SAME_HASH_NOT_IMPLEMENTER; COORDINATOR_HAS_USEFUL_WORK
-ACTIVE_QUEUE_POLICY=GT06_O1_VERIFIER_AND_FORMAL_FIRST; O2_CAPABILITY_LANE_IN_SEPARATE_WORKTREE_AND_NO_ENGINE_RUN_WHILE_FORMAL_MEASURES; GT07_GT10_READONLY_PREP_UNTIL_GT06_ACCEPTED; NEVER_TICK_FROM_BANNER_OR_PARTIAL_PREFIX
-FORMAL_DISPATCH_RULE=USE_FRESH_CAMPAIGN_ID_ONLY; VERIFY_SOURCE_PROFILE_WORKSTATION_AND_STOP_LATCH_BEFORE_START; PRESERVE_RAW_ON_FAILURE; REPAIR_ONLY_PROVEN_SOURCE_OR_HARNESS_BOUNDARY; NEVER_TICK_FROM_BANNER_OR_PARTIAL_PREFIX
+O4 — 27-09-2026 (owner giao toàn quyền sửa plan cho reviewer; AUTHORITY=OWNER_DELEGATED_20260927)
+1. Môi trường formal (thay O1.8; mệnh đề CPU theo O5.3). Tool nhắm máy dev đang dùng bình thường và
+   gate O1 đo theo từng process, nên không bắt owner tắt app. Trước mỗi pair: RAM available ≥ 4 GiB,
+   commit ≤ 85%, không có godot*/blender* ngoài Job của campaign; campaign giữ máy thức
+   (SetThreadExecutionState) và ghi inventory trước/sau (top process theo private bytes, app nặng,
+   Docker/WSL). Trình duyệt, app chat, Docker Desktop/WSL (toolchain của executor GT-03) được chạy,
+   chỉ ghi lại. Watchdog lấy mẫu ≤ 10 giây và bật Stop latch + INFRA_ABORT (O1.7) khi: available
+   < 1,5 GiB liên tục 60 giây; commit > 92%; CPU ngoài Job campaign (tổng, đo theo O9.1) ≥ 50% trong
+   cửa sổ 60 giây (ghi top 10 process theo CPU, gồm vmmem/Docker; chính campaign chiếm CPU thì
+   không abort mà để gate status gap/timeout phán); có godot*/blender* lạ hoặc container của
+   studio đang chạy (O8.1, cách kiểm O9.1); sleep/resume. Watchdog chỉ được dừng, không biến FAIL thành
+   PASS; host/editor tự gây áp lực bộ nhớ là product FAIL (tiêu chí O9.3); mọi ngưỡng nghiệm thu O1
+   giữ nguyên; FAIL không kèm watchdog là product FAIL.
+   Sửa preflight/watchdog không cần critic trước khi chạy: có unit test, freeze closure mới, hai
+   critic cuối kiểm cả closure; critic cuối bắt lỗi harness thì chạy lại bằng ID mới. Ưu tiên chạy
+   soak/formal ban đêm hoặc lúc owner vắng.
+2. Owner xác nhận luật phụ retained-handle v5 (O1-OWNER-RESOLUTION.md) là một phần của O1, và xác
+   nhận việc kiểm status gap cả 5 batch warmup (chặt hơn bản cũ, khớp yêu cầu status ≤ 2 giây).
+3. Critic: owner 03-10 cho phép subagent audit, thay đường chuyển review của chế độ solo cũ.
+   Coordinator chuẩn bị CRITIC_PACKAGE (source/profile/dataset hash, verify command, checklist,
+   raw paths), được dispatch hai critic read-only độc lập khác model cùng hash; lưu nguyên văn
+   kết quả, kiểm sealed bytes rồi mới ACCEPT. Không tự ký critic hoặc hạ tiêu chí. Quyền dispatch
+   và nghiệm thu GT06 ghi tại reviews/20261003-gt06-owner-critics/coordinator-acceptance.md.
+4. Evidence và vệ sinh (gộp O5.4). Tầng F (formal, gói critic, bằng chứng nghiệm thu): raw trong
+   .local, zip + manifest hash, chỉ commit manifest/tóm tắt; đường dẫn tương đối ≤ 180 ký tự. Tầng D
+   (diagnostic AUTHORITY=0, probe O2): raw trong .local + một mục trong log lane
+   (studio/AUTHORING_STATUS.md trên nhánh O2; zdoc/reviews/gt06-diagnostic-lane.md cho GT-06) gồm
+   run id, closure, lệnh, exit, số liệu tính đúng công thức gate, 1–3 dòng phát hiện; không cần ZIP,
+   manifest, review riêng hay sửa plan; chỉ niêm phong khi được dẫn làm bằng chứng gate. Chỉ sửa plan
+   khi WP/gate đổi trạng thái hoặc có quyết định owner; dispatch và verdict run hỏng chỉ ghi log lane
+   (O9.6b); không commit "record checkpoint" trên nhánh chính. Nhánh O2 không sửa plan/AGENTS.md;
+   header giữ một dòng O2 ≤ 300 ký tự. Gộp code + test + tài liệu của một mốc vào một commit.
+   Heartbeat chỉ kiểm điều kiện chạy formal, không chạy test hay commit khi không đổi. Không xóa hàng
+   loạt hay viết lại lịch sử evidence cũ.
+5. O2 làm theo fixture, không dàn trải catalog. Thứ tự:
+   a) Bảng gap cho 2 fixture: đấu trường 2D (TileMap platform, người chơi + bot đơn giản, đạn bằng
+      scene instance, pickup, máu/hạ gục/hồi sinh, HUD, âm thanh, pause/restart) và phòng 3D
+      (avatar GLB từ Blender đi lại, camera theo, 2 vật tương tác, UI). Chỉ làm tiếp thứ fixture cần.
+   b) AUTH-05: dùng lại executor Docker GT-03 (linux_executor.py: read-only, --network none,
+      cap-drop ALL, seccomp, 1 GiB/1 CPU/64 pids, timeout) để validate và chạy test/replay headless
+      của profile gameplay-source; script thù địch (ghi ngoài root, spawn process, mạng, vòng lặp
+      vô hạn) phải bị chặn và quan sát được. Không xây sandbox Windows mới. Play có cửa sổ trên
+      host chỉ chạy source đã qua AUTH-01..05.
+   c) DSL gameplay_behavior giữ 6 effect hiện có làm lối tắt, không phát triển thành ngôn ngữ riêng;
+      logic game (máu, đạn, bot, luật thắng) viết bằng GDScript typed qua profile gameplay-source.
+   d) Nối vào adapter thật: publication/save/reload/ACK sau readback, lease/fencing, recovery
+      (AUTH-02..04); probe tạm không thay được.
+   e) Blender: geometry/material/UV, export GLB rồi import vào Godot (vòng nội dung đủ), render
+      sprite sheet cho 2D.
+   Nhãn AUTH_ISOLATION của probe hiện có đổi thành PATH_ISOLATION (chưa phải AUTH-05). Evidence O2
+   vẫn AUTHORITY=0 tới GT-09.
+6. Thứ tự WP: GT-07 mở ngay sau GT-06 ACCEPTED, không làm song song (coordinator đang solo; O4.1
+   gỡ nút thắt chính). Nếu phần Windows/Linux của GT-08 đạt mà chưa có máy Android thật thì tách
+   công khai GT-08A (clean checkout + export Windows/Linux) mở khóa GT-09, còn GT-08B (Android máy
+   thật) bắt buộc trước GT-10 và H2-P0-01. Clean checkout dùng sparse checkout bỏ zdoc/reviews/**
+   và ghi core.longpaths. GT-09 thêm owner playtest khoảng 15 phút mỗi fixture (owner ghi OK/không
+   OK và ghi chú; agent không ký thay). GT-10 soak 10×35 theo O4.1, được chia nhiều cửa sổ chạy trên
+   cùng hash; package không chứa zdoc/reviews.
 
-HISTORICAL_S224_TO_S236_ARCHIVE=zdoc/reviews/20260924-plan-before-s237-trim.txt; SHA256=aa831f2ff0204cb8226880ae0cc0c40dff7bd9878dc5192edbcca67b7f35cd54; AUTHORITY=0; RAW_FAILURES_AND_VERDICTS_RETAINED
-GT06_CURRENT_SOURCE_CLOSURE=1f6b7da7f48085b417e5d6d7f3388c75c0a8beadad3659b14057a2a6e71df625; SOURCE_FILES=53; FORMAL_SOURCE_CANDIDATE_FROZEN; PRIOR_S241_EXECUTED_SOURCE=d7c78724ed827c8182af62c3f7bc1489d8dd35d29abe1f70216736a896e66bb3; EXECUTED_S232_SOURCE=817242efa6578ecc92ebab31909d0324020f7617359bc2855c9b004d31907190; NO_RETROACTIVE_REBINDING
-S235_PACKET_CORRECTION=PACKAGE=zdoc/reviews/20260924-gt06-s235-terminal-review; VERIFIER_NOW_CHECKS_PACKET_HASHES_AND_EXACT_8_PROBES_WITHOUT_08; RAW_AND_ARCHIVE_IMMUTABLE; AUTHORITY=0
-S236_PACKET_CORRECTION=PACKAGE=zdoc/reviews/20260924-gt06-s236-handle-boundary; ARCHIVE_SHA256=c72226459bcb9a6e47fda419fb590fa51a58190f4edbb2223c501fcda12e85ff; VERIFIER_CHECKS_PACKET_HASHES_SOURCE_MAP_AND_TARGET_IDENTITY; RAW_IMMUTABLE; AUTHORITY=0
-S237_LESSONS=DIAGNOSTIC_INSTRUMENTATION_DOES_NOT_AUTHORIZE_RETRY; FORMAL_AND_DIAGNOSTIC_SOURCE_CLOSURES_STAY_SEPARATE; PACKAGE_VERIFIERS_MUST_CHECK_ACTUAL_NESTED_PATHS_AND_PACKET_BYTE_HASHES; A_FORCED_EDITOR_EXIT_IS_NOT_NATURAL_EXIT; KEEP_GT06_GATE_TIMEOUT_BASELINE_PROFILE_COUNTER_RSS_UNCHANGED
-S238_CAPABILITY_CATALOG=PACKAGE=zdoc/reviews/20260924-gt07-10-capability-catalog-s238; RUN_ID=gt07-10-s238-capability-catalog-01; OBSERVED_FILES=65; STATUS=READONLY_PREPARATION_ONLY; AUTHORITY=0; GT07_GT10=PLANNED_UNOPENED; NO_ENGINE_OR_DEVICE_RUN; DO_NOT_USE_AS_GT06_EVIDENCE
-S239_DELEGATED_RESUME_RECORD=PACKAGE=zdoc/reviews/20260924-gt06-s239-owner-resume; ADR_ID=gt06-s239-owner-resume-01; CAMPAIGN_ID=gt06-s239-formal-01; SOURCE_CLOSURE=d7c78724ed827c8182af62c3f7bc1489d8dd35d29abe1f70216736a896e66bb3; PROFILE=0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85; STATUS=COORDINATOR_DECISION_UNDER_STANDING_OWNER_SCOPE; NO_NEW_OWNER_SIGNATURE; FORMAL_GATE_UNCHANGED; NO_GT07_GT10_OPEN
-S239_RESULT=CAMPAIGN_INTERRUPTED_BY_POWER_RECOVERY; PACKAGE=zdoc/reviews/20260925-gt06-s240-power-recovery; RUN_ID=gt06-s239-formal-01.r00.a01; DISPATCH_UTC=2026-09-24T07:44:41.5687841Z; RAW_LAST_WRITE_UTC=2026-09-24T07:44:54.683460Z; EVENT41_RECORDED_LOCAL=2026-09-24T14:46:19.992+07:00; TEMPORAL_OVERLAP_NOT_CAUSAL_PROOF; HOST_PROGRESS=IMPORT_AND_BATCH0_READY; MEASURED_BATCHES=0; IMPORT_ACTUAL_EXIT=0; EDITOR_ACTUAL_EXIT=UNKNOWN; HOST_ACTUAL_EXIT=UNKNOWN; SCHEDULER_TASK=RETIRED_AFTER_RAW_SEAL; FORMAL_ACCEPTANCE=false; AUTHORITY=0
-S239_SOURCE_INTEGRITY=PACKAGE=run-00-attempt-01; SOURCE_FILES=53; MISSING=0; BAD_SHA256=0; CONTEXT_AND_CAMPAIGN_CLOSURE=d7c78724ed827c8182af62c3f7bc1489d8dd35d29abe1f70216736a896e66bb3; RAW_PRESERVED=true
-S240_POWER_AUDIT=PACKAGE=zdoc/reviews/20260925-gt06-s240-power-recovery; EVENT41_20260924=21; EVENT41_20260924_TO_25=22; EVENT41_BUGCHECK_ZERO_ALL=true; EVENT41_WHEA_BOOT_ERROR_ZERO_ALL=true; VOLMGR_EVENT46_CRASH_DUMP_INIT_FAILED=true; WHEA_DISK_STORAHCI_STORNVME_NTFS_EVENTS_IN_QUERY=0; CURRENT_BOARD=GIGABYTE_B560M_AORUS_PRO_AX; CURRENT_BIOS=F9; CURRENT_WORKSTATION_PACKET_SHA256=993395fdd5b7a3d8828bcde287652d4b7ab1fe72368f3cfbd7f1723a9d9f7844; HARDWARE_PROFILE_REUSE=REQUIRES_NEW_PROFILE; FORMAL_GATE_UNCHANGED; AUTHORITY=0
-
-S240_INTEGRITY=GIT_FSCK_FULL_EXIT0; S235_S236_S238_VERIFIERS_EXIT0; S239_RAW_AND_SUPERVISOR169_FILES_ARCHIVE170_MEMBERS_VERIFIED; RAW_MANIFEST_SHA256=29efc4ca5f56d4e72a746dde47ab54a90207ed941ef7bfe8bdcd4ba9e3f91b95; ARCHIVE_SHA256=30bb41f4e70f7d7a4e2e7033fb470e400ec34f98f115f92ae29b68c12f52976e; THREE_COPIES53_FILES_EACH_MATCH; RAW_JSON28_PARSE_OK; SQLITE_READONLY_INTEGRITY_OK; NOT_FULL_HISTORICAL_EVIDENCE_REAUDIT
-S240_RECOVERY_LESSONS=REBOOT_INVALIDATES_OLD_PID_LIVENESS; MISSING_EXIT_AND_JOB_CLOSURE_STAY_UNKNOWN; SCHEDULER0_NEVER_PASS; PRESERVE_PARTIAL_BEFORE_NEW_ID; BOARD_PSU_CHANGE_REQUIRES_FRESH_WORKSTATION_CAPTURE; EVENT41_TIME_IS_BOOT_RECORD_NOT_EXACT_FAILURE_TIME; VOLMGR46_PREVENTS_NO_DUMP_AS_EXCLUSION; NO_REDO_GT01_GT05_FOR_METADATA
-S241_PREFLIGHT=SOURCE_FILES53_CLOSURE_d7c78724ed827c8182af62c3f7bc1489d8dd35d29abe1f70216736a896e66bb3; PROFILE_0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85; GODOT_CONSOLE_4.7.2_HASH_c8f0a6bc45a19b33541501e57f6f7cd972ab18453743266339d495cbbe846643; BLENDER_5.2.1_HASH_8f7a131ad8bc148edc218b334f07d92a57f5a357fa66d913b290537fd8353c06; WORKSTATION_CAPTURED_NEW_BOARD; NO_STALE_ENGINE_PROCESS; READINESS_EXIT0; FORMAL_GATE_UNCHANGED; AUTHORITY=0
-S241_DISPATCH=CAMPAIGN_ID=gt06-s241-formal-01; TASK=HHStudio.GT06.gt06-s241-formal-01; REQUESTED_UTC=2026-09-25T06:01:08.6755988Z; INSTANCE_GUID={B8809823-1FCF-472F-8BC0-F11514CD9382}; SCHEDULER_ENGINE_PID=7616; REQUEST_SHA256=db8092df9f6055e9eb7ac9a0cb0b04929ee18adcb04749421e0ed62bb3cbf329; TASK_DEFINITION_SHA256=01aef55f00e58939fae121f0b579999fbd56a896961d8664d5c99711c23cd142; FORMAL_ACCEPTANCE=false; ACTUAL_SUPERVISOR_START_RECORDED; RUNNING_AT_HANDOFF; SCHEDULER_RESULT_NOT_EXIT_PROOF
-S243_DISPATCH=CAMPAIGN_ID=gt06-s243-formal-01; TASK=HHStudio.GT06.gt06-s243-formal-01; REQUESTED_UTC=2026-09-25T07:43:01.0722173Z; INSTANCE_GUID={1A95C08C-6C03-4DEA-8031-4DA5FA20E541}; SCHEDULER_ENGINE_PID=44092; REQUEST_SHA256=853d13e01019e2814675dfa7ab3561c37a2624a5445e8b7d1ec36ceaeb3c2d16; TASK_DEFINITION_SHA256=2a59c11792212d3cf90f68deac076b110772bd322887d5c332664272620a0cae; SOURCE_CLOSURE=1f6b7da7f48085b417e5d6d7f3388c75c0a8beadad3659b14057a2a6e71df625; FORMAL_ACCEPTANCE=false; SCHEDULER_RESULT_NOT_EXIT_PROOF
-S244_TERMINAL_SEAL=CAMPAIGN_ID=gt06-s243-formal-01; PACKAGE=zdoc/reviews/20260925-gt06-s243-import-wall; RAW_MANIFEST_SHA256=75437e7130c1b120e889af6712533dccd1acb1dbd3e14409a6b9c3a0db9ddcee; ARCHIVE=studio/.local/archives/gt06-s243-formal-01-s244-import-wall.zip; ARCHIVE_SHA256=5260eee2e2f8ff1053974e2b9f7c43e12f2e8f9c9a0545f60cde3b90659e746c; RAW_FILES=159; AUTHORITY=0; FORMAL_ACCEPTANCE=false
-S244_FAILURE=S243_IMPORT_STAGE_WALL_LIMIT; COMPLETED_BATCHES=0; PHASE=IMPORT; SUPERVISOR_RETURNED_EXIT1; NO_GT06_ACCEPTANCE; NO_F13_F14_OR_ROOTCAUSE
-S244_CLEANUP=HOST_OWNED_TREE_ZERO=true; OWNER_CLOSED=true; IMPORT_OBSERVER_CLOSED; IMPORT_TARGET_ACTUAL_EXIT_UNKNOWN; NO_RETAINED_PROBE_HANDLES; TASK_DELETED_AFTER_RAW_PRESERVATION; SCHEDULER_NOT_EXIT_PROOF
-S244_DECISION=DO_NOT_INFER_SOURCE_REPAIR_CAUSALITY_FROM_IMPORT_TIMEOUT; KEEP_S243_RAW_IMMUTABLE; NO_PARTIAL_MERGE; NO_ID_REUSE; NO_BLIND_RETRY; REVIEW_PINNED_IMPORT_RECIPE_AND_WORKSTATION_BEFORE_FRESH_FORMAL
-S247_TERMINAL_SEAL=CAMPAIGN_ID=gt06-s246-formal-01; PACKAGE=zdoc/reviews/20260925-gt06-s246-counter-failure; RAW_MANIFEST_SHA256=e3e4be50cde3e0fcbe43958efa9ed462eae6984999e06f2e7b71e4dca733ecbe; ARCHIVE=studio/.local/archives/gt06-s246-formal-01-s247-counter-failure.zip; ARCHIVE_SHA256=8c11df0104dd6da3bb404117cb2e01da672cc9d4e85db624726e88a8f5c02635; RAW_FILES=267; AUTHORITY=0; FORMAL_ACCEPTANCE=false
-S247_FAILURE=S246_FORMAL_BATCH7_JOINT_OBSERVATION_CAMPAIGN_RETAINED_COUNTER_GROWTH; COMPLETED_BATCHES=8; EDITOR_HELD_HANDLES_BASELINE_BATCH4_558_TO_BATCH7_559; HOST_STABLE_NOT_ROOTCAUSE; IMPORT_ACTUAL_EXIT0; EDITOR_TARGET_ACTUAL_EXIT_UNKNOWN; ZERO_ACCEPTED_FULL_RUNS; NO_F13_F14_OR_ROOTCAUSE
-S247_CLEANUP=OWNED_TREE_ZERO=true; OWNER_CLOSED=true; EDITOR_OWNER_JOB_ZERO_CLOSED=true; HANDLES_RELEASED=true; IMPORT_JOB_ZERO_CLOSED=true; IMPORT_TARGET_EXIT0; EDITOR_CLEANUP_EXIT2_NOT_NATURAL_EXIT; SUPERVISOR_ACTUAL_EXIT_UNKNOWN; TASK_SCHEDULER_REGISTRATION_REMAINS_READY_NO_INSTANCES_AFTER_RAW_PRESERVATION
-S247_DECISION=KEEP_S246_RAW_IMMUTABLE; NO_PARTIAL_MERGE; NO_ID_REUSE; NO_GATE_OR_TIMEOUT_BASELINE_PROFILE_COUNTER_RSS_CHANGE; COUNTER_ROW_ATTRIBUTION_ONLY; REQUIRE_DISTINCT_SUPPORTED_BOUNDARY_OR_OWNER_ADR_BEFORE_NEW_FORMAL
-S248_COUNTER_SERIES_REVIEW=RUN_ID=gt06-s248-counter-series-review-01; PACKAGE=zdoc/reviews/20260925-gt06-s248-counter-series; COUNTER_SERIES_SHA256=8cd719d49a65af322247d5ecee6b24417bcd24a7e392263a6d8507df2d2181bd; PACKET_MANIFEST_SHA256=0e8db6b3f3c210bb3974e811154123ac1a9e255432b2a8cedea6a4bd470e7a6f; AUTHORITY=0; FORMAL_ACCEPTANCE=false; ENGINE_RUN=false; S246_HELD_HANDLES_ROWS=564,558,558,558,558,558,556,559; S246_OBJECTS=71160; S246_RESOURCES=6; S246_BASELINE_BATCH4=558; S246_FAILURE_BATCH7=559; S190_S185_S236_NON_MONOTONIC_VARIATION_RETAINED; NO_ROOTCAUSE_OR_MEASUREMENT_DEFECT_PROVEN
-S248_DECISION=NO_NEW_SUPPORTED_FORMAL_BOUNDARY; KEEP_GT06_IN_PROGRESS_ZERO_ACCEPTED_FULL_RUNS; KEEP_GATE_TIMEOUT_BASELINE_PROFILE_COUNTER_RSS_UNCHANGED; NO_UNCHANGED_RETRY; NO_GT07_GT10_OPEN
-S249_CATALOG_CORRECTION=RUN_ID=gt07-10-s249-catalog-correction-01; PACKAGE=zdoc/reviews/20260925-gt07-10-catalog-correction-s249; STATUS=READONLY_PREPARATION_ONLY; AUTHORITY=0; S238_IMMUTABLE_CATALOG_HAS_ONE_SOURCE_DRIFT=test_transport_fault_lock.py; CURRENT_SHA256=76c1ea134ac377fb495b3abfe9f42d44c2daf7632d33db27e726c3e8e9b02591; CURRENT_BYTES=11975; NO_ENGINE_OR_DEVICE_RUN; GT07_GT10_PLANNED_UNOPENED
-S249_DECISION=KEEP_S238_HISTORICAL_PACKET_IMMUTABLE; USE_CORRECTION_ONLY_FOR_SOURCE_DRIFT; DO_NOT_USE_CATALOG_AS_GT06_EVIDENCE; NO_GATE_CHANGE
-S250_ENVIRONMENT_PREFLIGHT=RUN_ID=gt07-10-s250-environment-preflight-01; PACKAGE=zdoc/reviews/20260925-gt07-10-environment-preflight-s250; STATUS=READONLY_PREPARATION_ONLY; AUTHORITY=0; ENGINE_RUN=false; DEVICE_RUN=false; OS_BOOT_OBSERVED=2026-09-25T04:14:28.5000000+07:00; ADB_ON_PATH=false; PHYSICAL_DEVICE_STATUS=UNKNOWN_NOT_TESTED; NO_GT07_GT10_OPEN
-S250_DECISION=ADB_PATH_GAP_ONLY_NOT_DEVICE_ABSENCE_PROOF; RECHECK_PREREQUISITES_WHEN_GT08_OPENS; KEEP_GT06_GATE_AND_GT07_GT10_DEPENDENCY
-S251_HANDOFF=PACKAGE=zdoc/reviews/20260925-tools-handoff-s251; STATUS=AUTHORITY0_NAVIGATION_ONLY; SOURCE_SNAPSHOT_HEAD=4ee1000197e143be6b7c3d7ff2f90c85c34d2964; HANDOFF_COMMIT=a6d52f79; NO_GATE_CHANGE; NO_ENGINE_RUN; TASK_S246_SCHEDULER_REGISTERED_READY_NO_INSTANCES; RAW_FAILURES_AND_LOCAL_ARCHIVES_RETAINED
-S252_PLAN_CLEANUP=PACKAGE=zdoc/reviews/20260925-s252-plan-sentinel-cleanup; MOVED_POST_SENTINEL_TAIL_BYTE_FOR_BYTE; TAIL_SHA256=66c2f634df515ea22af88228af57b4ceef2312b0f42874d8eeed850cc5249044; NO_GATE_CHANGE; NO_SOURCE_CLOSURE_CHANGE; NO_ENGINE_RUN
-S253_STATIC_PREFLIGHT=PACKAGE=zdoc/reviews/20260925-gt06-s253-static-preflight; SOURCE_FILES=53; SOURCE_CLOSURE_SHA256=1f6b7da7f48085b417e5d6d7f3388c75c0a8beadad3659b14057a2a6e71df625; PROFILE_SHA256=0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85; CAMPAIGN_TASK_BENCHMARK_TESTS=41_41; GODOT_CONTRACT_TESTS=24_24; ENGINE_RUN=false; DEVICE_RUN=false; FORMAL_ACCEPTANCE=false; AUTHORITY=0; NO_GATE_CHANGE; NO_GT07_GT10_OPEN
-S246_DISPATCH=CAMPAIGN_ID=gt06-s246-formal-01; TASK=HHStudio.GT06.gt06-s246-formal-01; REQUESTED_UTC=2026-09-25T08:22:08.1226083Z; INSTANCE_GUID={3AABCBDA-7E0A-44C5-BF87-C9F56EA7897D}; SCHEDULER_ENGINE_PID=26820; REQUEST_SHA256=4309645feb6b7f49b4e354ad3317f9cf012fdc5b8576527c7d5725575c769c96; TASK_DEFINITION_SHA256=4d8bd729636d4863812b68c54e9e0f409b9adeda78bd788004d69fe979e1b29b; SOURCE_CLOSURE=1f6b7da7f48085b417e5d6d7f3388c75c0a8beadad3659b14057a2a6e71df625; PROFILE=0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85; FORMAL_ACCEPTANCE=false; SCHEDULER_RESULT_NOT_EXIT_PROOF
-S245_IMPORT_DIAGNOSTIC=RUN_ID=gt06-s245-import-diagnostic-01; PACKAGE=zdoc/reviews/20260925-gt06-s245-import-diagnostic; SOURCE_CLOSURE=d31598b55ec947137b8ec10fb2090dea56134a24b22750de6b4146db12b96c61; RAW_MANIFEST_SHA256=2d5748a85c4a6fc37a6020a2d06715815f2a16fbc88f0775deea364cbdaa7900; ARCHIVE=studio/.local/archives/gt06-s245-import-diagnostic-01-s246-terminal.zip; ARCHIVE_SHA256=258e947bba2c3eab6e0cb22f6abd3ba9b1084b5cc9faa0a35f10ff7a4b8444b1; RAW_FILES=119; IMPORT_ACTUAL_EXIT0; EDITOR_ACTUAL_EXIT0; JOBS_ZERO_CLOSED; HANDLES_RELEASED; FORMAL_ACCEPTANCE=false; AUTHORITY=0
-S246_DECISION=PINNED_IMPORT_WALL_TIMEOUT_DID_NOT_REPRODUCE_ON_CURRENT_WORKSTATION; KEEP_FORMAL_53_FILE_SOURCE_CLOSURE_1f6b7da7f48085b417e5d6d7f3388c75c0a8beadad3659b14057a2a6e71df625; NEW_FORMAL_ID_ALLOWED_AFTER_PREFLIGHT; NO_GATE_TIMEOUT_BASELINE_COUNTER_RSS_CHANGE; GT07_GT10_UNOPENED
-S246_LESSONS=SEPARATE_FORMAL_IMPORT_TIMEOUT_FROM_SOURCE_REPAIR; A_BOUNDED_DIAGNOSTIC_EXIT0_CANNOT_REPLACE_10X35_ACCEPTANCE; RECORD_ACTUAL_EXIT_AND_JOB_HANDLE_PROOF; KEEP_DYNAMIC_DIAGNOSTIC_CLOSURE_SEPARATE_FROM_FORMAL_53_FILE_CLOSURE
-S241_TERMINAL_SEAL=CAMPAIGN_ID=gt06-s241-formal-01; PACKAGE=zdoc/reviews/20260925-gt06-s241-status-gap; RAW_MANIFEST_SHA256=cc739e6ea4655c88b5f4b58ee9bd6235bb50144b6dc057ea2efcc7995b2ff5cc; ARCHIVE=studio/.local/archives/gt06-s241-formal-01-s242-status-gap.zip; ARCHIVE_SHA256=794f68ed014d9fc3980a6632dbf218f64eb085e26646d54e58e605d2d8365b1c; RAW_FILES=340; AUTHORITY=0; FORMAL_ACCEPTANCE=false
-S241_FAILURE=CAMPAIGN_STATUS_GAP_BATCH16_JOINT_OBSERVATION; COMPLETED_BATCHES0_TO16; COMMAND16_COMPLETE_1000_HTTP_ROWS; COMMAND16_MAX_STATUS_GAP_MS=2055.5275; ADDITIONAL_GAPS=2017.529,1891.190; PARENT_BENCHMARK_WRAPPER_EXIT1; ZERO_ACCEPTED_FULL_RUNS; NO_F13_F14_OR_ROOTCAUSE
-S241_CLEANUP=IMPORT_TARGET_ACTUAL_EXIT0; EDITOR_TARGET_ACTUAL_EXIT_UNKNOWN; HOST_SUPERVISOR_ACTUAL_EXIT_UNKNOWN; OWNED_TREE_ZERO=true; OWNER_CLOSED=true; JOBS_ZERO_CLOSED; HANDLES_RELEASED; TASK_DELETED_AFTER_RAW_PRESERVATION; SCHEDULER_NOT_EXIT_PROOF
-S242_STATUS_GAP_REVIEW=HOST_COMMAND_LANE_RESPONSE_PROGRESS_NOT_EDITOR_HEARTBEAT; PYTHON_ONLY_CURRENT_SOURCE_100_COMMANDS_COMPLETE_MAX_GAP42.8974MS; FILE_DIGEST_DIAGNOSTIC_100_COMMANDS_COMPLETE_MAX_GAP197.6064MS; NO_PROVEN_SOURCE_REPAIR; NO_GATE_OR_PROFILE_CHANGE; FORMAL_SOURCE_REMAINS_53_FILES
-S242_DECISION=KEEP_S241_RAW_IMMUTABLE; NO_PARTIAL_MERGE; NO_ID_REUSE; NO_BLIND_RETRY; SOURCE_REPAIR_NOT_AUTHORIZED_BY_DIAGNOSTIC; NEXT_DISTINCT_ROUTE_REQUIRED_BEFORE_FRESH_FORMAL
-S242_LESSONS=STATUS_GAP_IS_HOST_COMMAND_RESPONSE_LANE; COMPLETE_COMMAND_REPORT_DOES_NOT_PROVE_PARENT_OR_TARGET_EXIT; FILE_DIGEST_MICROBENCHMARK_DID_NOT_PROVE_REPAIR; KEEP_FORMAL_AND_DIAGNOSTIC_CLOSURES_SEPARATE; POWER_RECOVERY_REQUIRES_FRESH_PID_AND_WORKSTATION_PROOF
-S243_SOURCE_REPAIR=COMMIT_a5dfb42; FINAL_RECEIPT_PERSISTENCE_MOVED_OUTSIDE_HOST_STATE_LOCK_FOR_READBACK_PATH; FINALIZING_PHASE_MAKES_CANCEL_FAIL_CLOSED; NEW_LOCK_CONTENTION_REGRESSION_PASS; FOCUSED_TESTS=21_TRANSPORT+17_RECOVERY+8_DRAIN+24_COMMANDS=70_PASS; BOUNDED_100_COMMAND_RUN_COMPLETE_MAX_STATUS_GAP45.8686MS; FORMAL_GATE_UNCHANGED
-S243_DECISION=SOURCE_BOUNDARY_PROVEN_FOR_HOST_RESPONSE_SERIALIZATION; FRESH_FORMAL_ALLOWED_WITH_NEW_SOURCE_CLOSURE; KEEP_TIMEOUT_BASELINE_COUNTER_RSS_AND_10X35_GATE; NO_GT07_GT10_OPEN
-
-BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
-STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
-01 | GT-01 | Chốt pin/phạm vi/reuse; bootstrap dự án mẫu độc lập | OWNER_START | ACCEPTED
-02 | GT-02 | Protocol, capability, journal và an toàn lệnh tối thiểu | GT-01 | ACCEPTED
-03 | GT-03 | Godot EditorPlugin: sửa scene, UndoRedo, save/readback | GT-02 | ACCEPTED
-04 | GT-04 | Blender adapter UI và background jobs an toàn | GT-02 | ACCEPTED
-05 | GT-05 | Pipeline .blend → GLB → Godot, asset manifest | GT-03, GT-04 | ACCEPTED
-06 | GT-06 | Play/input/pause/stop/observe/capture qua công cụ | GT-05 | IN_PROGRESS
-07 | GT-07 | Đa agent, publish, lease/fencing và recovery | GT-05, GT-06 | PLANNED
-08 | GT-08 | Clean import/export/CI, target và cache matrix | GT-07 | PLANNED
-09 | GT-09 | Lõi tạo nội dung O2 + agent conformance trên 2 mini-game 2D/3D | GT-08 | PLANNED
-10 | GT-10 | Gói công cụ v0.1, cài/upgrade/rollback, bàn giao game | GT-09 | PLANNED
+O5–O9 — PHẦN CÒN HIỆU LỰC SAU GT-06 (giữ số mục gốc; nguyên văn ở git 091506fa)
+- O5.5 Log Godot là tiêu chí PASS của fixture gameplay: bộ phân loại noise có version, khớp chính
+  xác; mọi ERROR/SCRIPT ERROR/WARNING khác là FAIL; exit 0 không thay kiểm log; closure do adapter
+  tự tính, không nhận từ caller.
+- O5.6 Khóa đo %LOCALAPPDATA%\HHGodotAgent\measure-window.lock (owner, run_id, mục đích, hết hạn):
+  coordinator giữ khi formal/soak tầng F chạy; agent khác (O2, Superagent) kiểm khóa và task
+  HHStudio.* Running trước Godot/Blender/Docker, có thì chờ hoặc làm việc static. Test tự động dùng
+  đường khóa tạm do test cấp, có timeout, không để process sống sang lượt sau.
+- O6.1 Retry transport theo phase: chưa ghi byte request thì gửi lại đúng request (cùng command_id,
+  cùng bytes) tối đa 3 lần, chờ 25/50/100 ms; đã ghi byte thì UNKNOWN → lookup cùng command_id,
+  không gửi lại mù. Trong một formal pair, hơn 10 lần recover hoặc một lần không recover là FAIL.
+- O6.2 Mỗi lần sửa bộ nhớ host: microbench trong process 35.000 lệnh ≤ 32 byte/lệnh và đạt O1.4
+  trước soak; regression GT-02 (dedupe, recovery cut matrix, đa process) PASS.
+- O6.4 Sửa rồi chạy tiếp: giữ raw; dựng reproducer nhanh ở đúng trạng thái lỗi; qua reproducer +
+  test tập trung rồi mới chạy một run dài/native xác nhận bằng ID mới. Script hỏng giữa chừng thì
+  sửa đúng bước rồi chạy tiếp từ checkpoint tốt gần nhất; chỉ làm lại từ đầu khi trạng thái không
+  khôi phục được, ghi lý do.
+- O6.7 Sức chứa journal: ID trong retry horizon 24 giờ không compact được; GT-07 đo sức chứa thật,
+  compact theo hết hạn bằng đồng hồ thật (O10 M7), JOURNAL_FULL có next_action; GT-10 ghi sức chứa
+  vào known limits.
+- O7.6 Header chỉ đổi khi gate/WP hoặc quyết định đổi; tầng D ghi log lane (GT-07:
+  requirements.md), O2 ghi AUTHORING_STATUS.md, con trỏ O2 không chứa hash/test count. Dọn task
+  HHStudio.* từng task đã chứng minh terminal (lưu export và danh sách trước khi gỡ, giữ raw);
+  không xóa theo prefix hoặc vì State=Ready đơn thuần. Claim game chỉ sau fixture/acceptance và
+  plan sản phẩm riêng; route 2D hiện hành là Superagent, không quay sang Vault Fighters cũ.
+- O8.3 Ngân sách O3.1 chỉ tính lần chạy không có giả thuyết mới; sau sửa có nguyên nhân chứng minh
+  bằng reproducer/test được thêm một run xác nhận ID mới, không chờ owner.
+- O8.4 Tiết kiệm hạn mức: tool tầng D chỉ test công thức + 1–2 negative, chống giả mạo và binding
+  nhiều lớp chỉ cho verifier/packer tầng F; một commit một mốc; model mạnh chỉ cho thiết kế và
+  review boundary; chạy test, đọc log, closeout, cập nhật status dùng model rẻ hơn.
+- O9.6 Nhịp: closeout run hỏng bằng một lệnh chung ≤ 20 phút, không viết script audit riêng mỗi
+  run; dispatch, preflight, số test chỉ ghi log lane; chỉ git add đúng file mình sửa, không viết lại
+  lịch sử. Khi formal/soak đang đo chỉ làm việc static nhẹ; đã arm thì không khởi động process mới.
+- O9.8 Tìm tool theo hash trên đĩa trước khi ghi thiếu: Godot 4.7.2 (gui ab1824f8…, console
+  c8f0a6bc… theo toolchain.lock.json) ở studio/.local/tooling/godot-4.7.2-stable của repo chính;
+  worktree không mang .local theo nên chép (không link) và kiểm hash.
+Ngủ tới release soak GT-10 (vẫn hiệu lực, bộ máy đã nghiệm thu ở Formal25, nguyên văn ở git
+091506fa): O4.1–O4.2 ở trên; O6.3 host soak; O6.5 verifier editor handles
+tests/replay/verify_editor_handle_control.py sha256
+8b4edb7c0f108fd2b2be5b0983f3ab97d564987132bcd1aac06fbe369067a5b7 (profile v6); O7.3 quy trình
+formal; O8.1 chỉ container hh-gt03-<32 hex> là engine lạ; O8.2 lịch theo lúc máy bật + task arm;
+O9.1 watchdog trong vòng đo chỉ dùng API kernel; O9.2 pair hoãn; O9.3 phân loại watchdog khách
+quan; O9.4a/c telemetry và host soak; O9.5 quiet chain; O9.7 trần INFRA chỉ đếm attempt formal;
+O9.9 CPU ngoài là bằng chứng phân loại. Không áp các luật này cho run chẩn đoán GT-07/O2.
+Đã đóng cùng GT-06 (chỉ còn trong git): O5.1–O5.4, O6.6, O7.1, O7.2, O7.4, O7.5, căn cứ O9,
+O9.4b/d/e, O9.10 và mọi dòng O*_NEXT.
 
 ACCEPTED_EVIDENCE_INDEX (historical accepted closures; unchanged)
 GT01_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260913
@@ -192,6 +349,7 @@ GT05_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260917_S64
 GT05_REVIEW_STATUS=TWO_INDEPENDENT_PASS_TICK_YES_S64
 GT05_CHECKPOINT_COMMIT=808d8ba
 GT05_LAST_TESTED_SOURCE_CLOSURE=c141d54b80022ca7fefdf81f83e7e1078d3cc6aa43954831f82bb3178338a135
+GT06_HISTORY_S258=MOVED_OUT_S259; AUTHORITY=0; VERBATIM=git show 091506fa:8-9-hh3d-3/zdoc/8-9-godot-blender-agent-studio-plan.txt LINES_593_603; NOT_CURRENT_STATE
 
 HISTORY_AUTHORITY=0; lịch sử S70–S181 và các next-action cũ đã được rút khỏi phần hiện hành.
 ARCHIVE_S182=zdoc/reviews/20260923-gt06-s182-terminal/plan-before-s182.txt; SHA256=233632dd71751e66a8a7585ce87a717c21bd1333a156d1fb512eda6074c013e1; AUTHORITY=0
@@ -244,66 +402,38 @@ không đồng nghĩa pipeline thành phố3D đã hoàn chỉnh.
   snapshot. Giữ raw gốc; source/review S64 ở808d8ba và governance snapshot,
   không đổi chữ ký theo source mới. Full details: gt05-s63-audit/requirements-s64.md.
 
-GT-06 hiện hành — phần đã làm và đường tới nghiệm thu
-- Functional: Play tách Editor; trace60Hz, real menu/input/pause/resume/quit,
-  interaction/camera/capture và perf export đã chạy thật trên fixture. S65 fault
-  → authenticated GT03 repair → replay có causal chain; S69 managed replay
-  dùng receipt repair02. HTTP/Stop/inspector/reviewer GUI và ba adversary
-  saturated-stop/revoked-result/stale-capture đã có evidence theo lane.
-  GUI S68 và functional S69 chỉ được reuse khi toàn dependency khớp; không
-  gán source mới cho log cũ. Mapping: reviews/20260918-gt06-s70-resume/
-  requirements-final-draft.md, closure-packaging-check.md, fault-coverage-links.md.
-- Journal dùng exact-byte verified cache dưới accepted lock, giữ receipt,
-  tombstone và offsets sau compact. Stop bao completion/assembly/resume;
-  ownership giữ khi constructor/CloseHandle lỗi. Chi tiết/checkpoints c5e56c7,
-  3147778 và S69 ở archive; core Journal đã nghiệm thu không đổi.
-- Benchmark bắt buộc theo OWNER O1: 2 fresh host/editor pairs ×35batch (5warmup+30measured)
-  cho GT-06; 10×35 theo O1 là release soak GT-10;
-  mỗi batch1000HTTPcommands+100nativecycles, cùngPID xuyên run. Giữ ready/start/
-  joint/ACK, ngưỡng và7410s/run. Partial attempt không ghép thành runPASS.
-  Không chạy engine/test nặng cạnh phép đo. Scheduler0 không thay actual
-  target/helper exit, Jobzero/closed, released handles và complete dataset.
-- Các campaign S70/S71/S73/S75 trước đều là FAILED/partial, không có fullrun
-  PASS. Nguyên nhân đã sửa có Output display growth, indexing JSON evidence,
-  response-loss retry và chi phí journal. Giữ mọi failure/source/actual-exit
-  record; chi tiết S70–S75 ở reviews/20260918-plan-history-s75/tools-plan-s75.txt
-  (AUTHORITY=0, SHA256 fc338e3651a406d09dffd3199b9bc49acc1dad9c5445f233babff25fb5af6a0e).
-  Không retry campaign cũ dưới source mới, bỏ Stop hoặc trộn partial samples.
-- Dependency reuse: S73 382/382 unit, 5 service/native lanes158checks; S75
-  next/dependency bridge14maps nối S73 service, S69 managed replay và S68 GUI.
-  Chỉ reuse dependency không đổi; draft seal chưa phải closure nghiệm thu.
-- Workstation telemetry cũ có RAM available0.91–2.21GiB, commit95.33–96.65%limit.
-  Không chứng minh trimming là nguyên nhân. OWNER O1 thay quy tắc cũ: gate bộ nhớ dùng
-  private commit (RSS chỉ report) và preflight đòi RAM trống ≥8GiB, commit ≤80%, tắt app
-  nặng không cần. Vẫn không đổi priority, pinRAM hoặc dùng WPR ReferenceSet toàn hệ thống.
-- S76 historical diagnostics/failures are retained byte-for-byte in
-  reviews/20260918-plan-history-s79/tools-plan-s79.txt (AUTHORITY=0;
-  SHA256=3d5ef7ef4acc26bbe721a3ff0628edf3c2d7d9755da8b75394d998795a250a44).
-  Keep the original retention/PSS/latency records and limits; no partial run is
-  a full campaign PASS. Current campaign/source/status are only at the top.
-- Sau benchmark: verify complete 2×35 theo O1, raw/hash/schema/counters/actual exits;
-  ghép functional bằng dependency đã kiểm; đóng final source/review/raw manifest
-  và requirement→test→evidence. Hai critic mới đọc độc lập cùng final hash,
-  PASS/TICK=yes rồi coordinator mới ACCEPT GT06 và mở implementation GT07.
+GT-06 ACCEPTED — 03-10-2026
+- Formal25: hai pair đủ 35/35, source64 và profile v6 không đổi; dataset/summary
+  dựng lại byte-equal, actual exits/tree/Job/handles và Scheduler terminal đã kiểm.
+- Functional217: bảy service/UI/adversary lanes và F06 authenticated managed
+  repair → immutable replay đóng F01–F15/TQ00. Ba Stop natural exits vẫn UNKNOWN,
+  wrapper2; chúng chứng minh cancellation, không phải natural success.
+- Hai critic độc lập gpt-6-astra ultra và gpt-6.1-sol ultra đều TICK=yes trên
+  final manifest 318081a3c71f334cc44aa4542a5fa5fff459b4045006f6daa91559b1ccc4d4d3.
+  Coordinator reverify exit0 trước đổi governance. Chi tiết, source domains,
+  report hashes và limits: reviews/20261003-gt06-owner-critics/coordinator-acceptance.md.
+- Giữ base seal/raw/verdict cũ; bổ sung original Scheduler receipt để đóng gap
+  F14, không chạy lại benchmark. Các run lỗi/partial trước không được hồi tố PASS.
+- GT07 mở implementation. Acceptance này không nghiệm thu O2, game hoàn chỉnh,
+  Android hoặc release soak 10×35 của GT10; source sau merge cần evidence riêng.
 
 Phần còn lại để xong plan
-GT-07: scheduling/concurrency/recovery và cross-app activation.
-GT-08: clean Windows/Linux/Android export; máy Android thật là hard gate.
-GT-09: lõi tạo nội dung O2, full client conformance, MCP spike đã pin và 2 mini-game fixture.
+GT-07: scheduling/concurrency/recovery và cross-app activation — ma trận M1–M9 và NEXT ở O10.
+GT-08: clean Windows/Linux/Android export; máy Android thật là hard gate (O4.6: được tách công khai
+08A Windows/Linux mở GT-09, 08B Android bắt buộc trước GT-10).
+GT-09: lõi tạo nội dung O2 (chạy song song từ 04-10 theo O10.5), full client conformance, MCP spike
+đã pin và 2 mini-game fixture.
 GT-10: package/install/upgrade/rollback/uninstall/handoff, release soak 10×35 theo O1. HH World là plan riêng
 sau GT-10. Không suy phần trăm sản phẩm hoặc ETA toàn plan từ số test/gate.
 
 Thực thi và tốc độ
-- Tiêu chí/gate theo OWNER O1–O3; ưu tiên đường chức năng, file lease độc lập,
-  focused regression và dependency reuse. Không mở thêm vòng audit/helper không
-  phục vụ requirement còn thiếu; không chạy lại lanePASS chỉ vì sửa báo cáo.
-- Owner cho phép heartbeat tiếp tục task HH3D; phải query/readback lịch qua
-  app trước khi ghi ACTIVE. Các receipt S76/qua-m là lịch sử. Máy/app phải
-  hoạt động; thay đổi prompt theo run hiện hành, không tạo lịch trùng.
-- Ba worker S91 kiểm raw, bộ phân tích và detached launcher theo lease;
-  chưa có hai critic final GT06.
-  Thiết bị/SDK Android phải kiểm thực tế ở
-  prerequisite; thiếu PATH không chứng minh thiếu công cụ hoặc không có thiết bị.
+- Tiêu chí/gate theo khối quyết định owner O1–O10; ưu tiên đường chức năng, focused regression
+  và dependency reuse. Không mở thêm vòng audit/helper không phục vụ requirement còn thiếu;
+  không chạy lại lane PASS chỉ vì sửa báo cáo. Gặp lỗi thì sửa và chạy tiếp theo O6.4.
+- Heartbeat (nếu owner bật) chỉ kiểm điều kiện chạy formal; query/readback lịch qua app trước
+  khi ghi ACTIVE, không tạo lịch trùng.
+- Thiết bị/SDK Android phải kiểm thực tế ở prerequisite; thiếu PATH không chứng minh thiếu công
+  cụ hoặc không có thiết bị.
 
 KINH NGHIỆM ĐANG ÁP DỤNG
 S224: Child không tự quan sát exit của nó; đối chiếu parent-owned process-exit
@@ -343,14 +473,68 @@ Sửa receipt không mở quyền retry RSS. load_fixture() phải chạy trư�
     không truyền823pathargv. Gate shellphụ thuộc phải checkexit trướccommit;
     S76indexprobe lỗi206, đã verify lại823HEADblobs của ccfb27ab. Resolve
     sys.executable trướcpythonw, vì PATH có thể làapp-executionalias.
+Bài học chung từ GT-06 (giữ số cũ). Bài học đo 12–13, 15, 19, 21, 23, 27–28, 30–32, 34, 37,
+39–40 dùng lại khi chuẩn bị release soak GT-10; nguyên văn ở git 091506fa.
+14. Kiểm độ phức tạp bằng test tổng hợp vài phút trước formal nhiều giờ: reload O(n) của journal chỉ
+    lộ ở batch 26, sau nhiều campaign.
+16. Không nuốt chi tiết lỗi: mã UNKNOWN/CONNECTION_* phải kèm class/errno/phase. Retry khóa theo phase
+    lỗi (chưa gửi byte), không theo loại lệnh; đã gửi byte thì chỉ lookup cùng command_id.
+17. Lỗi ở cuối run dài: tái hiện bằng trạng thái seed + fault injection trong vài phút; run dài chỉ để
+    xác nhận một lần (O6.4).
+18. Sau mỗi lần sửa plan: kiểm không BOM, không CRLF, còn sentinel/markers; hash cũ phải
+    còn trong plan hoặc có con trỏ git (một lần StrReplace từng chèn BOM UTF-8).
+20. Observer trong watchdog phải có timeout, retry có trần và test lỗi trước run dài: 6 run
+    HARNESS_FAIL vì observer Docker/PerfProc tốn gần một ngày.
+22. Header là con trỏ trạng thái, không phải nhật ký: ngày 01-10 có 7 commit plan chỉ để đổi con
+    trỏ hoặc số test, mỗi lần đều có rủi ro BOM/marker. Tiến độ ghi ở log lane/AUTHORING_STATUS.md.
+24. Nhận diện tài nguyên của mình bằng tên/label chính xác do mình tạo, không bằng prefix chung:
+    `hh-*` đã khớp nhầm container của dự án khác trên cùng máy.
+25. Ngân sách chẩn đoán để chặn chạy mù, không chặn run xác nhận sau sửa đã chứng minh; nếu không,
+    việc gần xong bị treo chờ owner (physics arena 2D, O2 dependency).
+26. Test helper phải đi qua dispatch → status bằng ID mới; chỉ test hàm quyết định đã bỏ sót
+    NameError sau dispatch. Dry-run trước khung vẫn phải kiểm điều kiện, không tự coi là đạt.
+29. Observer không được là nguồn lỗi chính của run dài: trong vòng đo chỉ dùng API kernel, công cụ
+    ngoài (PowerShell/WMI/Docker) để ở preflight hoặc best-effort. 12 lần đọc pipe thành công không
+    chứng minh đủ cho khoảng 430 lần đọc của một campaign 2 pair; vá retry xong formal19 vẫn hỏng
+    sau 5 phút. Sửa bằng thiết kế, không vá retry.
+33. Run dài (soak, probe, formal) chạy qua Scheduled Task có result và exit receipt; phiên tool có
+    thể cắt process giữa chừng (soak -05 mất sau 97 mẫu).
+35. Mỗi run phải mang đủ instrumentation để một lần hỏng là đủ chẩn đoán; reproducer tiêm delay chỉ
+    chứng minh detector chạy, không thay tái hiện tự nhiên.
+36. Test không được đụng tài nguyên thật của run đo (khóa measure-window, task, thư mục evidence) và
+    không để process sống sang lượt sau: một test replay còn giữ khóa thật đã chặn lượt sau.
+38. Nâng công cụ bằng cơ chế chung (allowlist ClassDB, readback, undo) và port có kiểm adapter đã
+    có ở plugin cũ, không viết adapter mới cho từng class; tính năng chỉ claim khi mini-game dùng
+    nó qua catalog và đạt ngân sách hiệu năng.
+41. Trước khi ghi "thiếu tool" phải tìm theo hash trên đĩa; worktree không mang .local theo, binary
+    đúng pin vẫn nằm ở repo chính.
+42. Mỗi đường verify cần một test chạy ngắn end-to-end đúng chế độ của run thật: chain-f22-r02 chạy
+    đủ 30 phút rồi mới hỏng ở bước verify cuối, vì file cần đọc chỉ chế độ observer mới ghi.
+Bài học GT-07 (03-10 → 04-10):
+43. Chạy dry-run cùng tham số trước mỗi run native: 16/20 run Godot đầu GT-07 hỏng vì harness
+    (thiếu dependency khi freeze, verifier đòi field không có trong schema, deadline vượt cận, bỏ
+    qua route lease công khai, đường binary tương đối), đều bắt được mà không cần mở engine.
+44. Lỗi limit/deadline phải đọc cả hai cận và timestamp trước khi đoán: sáu run bị từ chối vì
+    deadline edit quá 30 giây, trong khi giả thuyết ban đầu là startup làm hết lease.
+45. Đường evidence trong manifest phải là đường thật: manifest run 18–21 ghi raw ở .local nhưng
+    runner ghi vào zdoc/reviews; verifier kiểm đường tồn tại, không tin field.
+46. Bẫy lặp lại: `$PID` của PowerShell là biến chỉ đọc; suite gộp phải có cùng PYTHONPATH với suite
+    con (exit 1 vì thiếu path không là PASS); bản ghi nội bộ (JobRecord) khác wire response.
+47. Chốt ma trận nghiệm thu trước khi làm lát: mở từng lát một khiến mỗi lát cần probe, run,
+    manifest và ghi chú riêng; một runner kịch bản và bảng M chạy được cả ma trận.
+48. Bằng chứng tầng D chỉ để chẩn đoán: snapshot vài MB và manifest hàng nghìn dòng cho mỗi run
+    hỏng làm chậm và dễ commit nhầm; gói đầy đủ chỉ lập ở mốc nghiệm thu.
 
 LỊCH SỬ / CÁCH ĐỌC
 Bản S71 đầy đủ trước tinh gọn giữ tại reviews/20260918-plan-history-s71/
 tools-plan-s71.txt, AUTHORITY=0; SHA256 1f3ca50b8a0931a12f8c334ea2e6cf969d8d667d8af659ac22fa523996390963.
 Chi tiết lessons S27–S71, lỗi/giải pháp và các archive/hash cũ giữ trong bản đó
 và Git/reviews, không xóa verdict. Phần requirement/DoD/TQ/TX bên dưới giữ nguyên.
-Tiến độ hiện hành chỉ ở bảng/markers đầu file. Đọc GT hiện tại và references
-liên quan; không cần đọc lại mọi nhật ký.
+Đọc theo thứ tự: header và bảng đầu; O10 (mới nhất); spec GT hiện hành ở mục 3 cùng TQ/TX
+nó trỏ tới; mục Hiện trạng của zdoc/reviews/20261003-gt07-integration/requirements.md. O1, O4.1
+và phần ngủ tới GT-10 chỉ đọc khi chuẩn bị release soak. Nguyên văn O1–O9, header S258 và
+GT06_HISTORY_S258 trước tinh gọn S259: git show 091506fa:8-9-hh3d-3/zdoc/
+8-9-godot-blender-agent-studio-plan.txt; văn bản O1–O5 trước hợp nhất ở git 8298c107.
 
 QUYẾT ĐỊNH KỸ THUẬT CÒN HIỆU LỰC
 MCP_ADAPTER_POLICY=External MCP review is a sequencing input only; the
@@ -396,11 +580,12 @@ never an implicit PASS. Research evidence: reviews/20260913-r12-os/.
 Owner18-09 mở thêm plan sản phẩm2D. Ba TXT có scope/tiến độ riêng:
 1) File này: Godot + Blender + công cụ, ưu tiên hoàn thiện GT-06→GT-10.
 2) ./8-9-hh-world-gameplay-viet-nam-plan.txt — HH World3D/social/Việt Nam.
-3) ./18-9-superagent-2d-y8-plan.txt — Superagent2D, full functional parity
-   bản Y8 đã kiểm kê trừ nhân vật/map mới; hiện chỉ planning theo lệnh owner.
+3) ./18-9-superagent-2d-y8-plan.txt — Superagent 2D (revision ghi trong file): cơ chế như
+   bản Y8, keymap owner 04-10, nhân vật mới; owner mở 03-10, agent riêng làm bằng Godot pin.
 Không thêm master plan tổng. Report/schema/log không là nguồn tiến độ mới.
-Superagent không lấy tick/code/asset Vault Fighters cũ làm baseline. Hai game
-không phụ thuộc nhau; planning không tự mở runtime trước GT-10 và quyền scope.
+Superagent không lấy tick Vault Fighters cũ làm baseline. Hai game không phụ thuộc
+nhau và không thêm gate vào GT. Superagent chỉ dùng chung máy: kiểm
+measure-window.lock trước lệnh nặng (mục 6 plan đó); coordinator công cụ không kiêm.
 
 Làm CÔNG CỤ TRƯỚC: GT-01 → GT-10 tạo gói v0.1 có phạm vi hữu hạn. Kiểm liên tục
 bằng studio/fixtures/sample-game: 1 khu nhỏ nguyên bản, 1 avatar đại diện,
@@ -856,7 +1041,8 @@ BUILD: FIFO/expiry/fencing/dependency/bounded concurrency, active manifest
 mục2.5, safe manual-edit reconciliation. Safety ban đầu GT-02 vẫn bắt buộc.
 VERIFY: hai writer cùng .blend/.tscn; expired lease late-result; terminate
 đúng job; crash từng PREPARED/VALIDATED/ACTIVATING/COMMITTED/reload/ACK;
-filelock/diskfull/crossvolume/journalfull; không lost source/partial active.
+filelock/diskfull/crossvolume/journalfull (đo sức chứa thật, compact theo hết
+hạn bằng đồng hồ thật, JOURNAL_FULL có next_action; O6.7); không lost source/partial active.
 DoD: TQ07/TX05/06/09/11/13/14,2 critics; queue không starvation, Stop ưu tiên,
 rollback không đè manual edit mới; logs state rõ không lộ token.
 
@@ -874,6 +1060,10 @@ Android máy thật là hard gate của GT-08 cho toàn gói v0.1 (Windows/Andro
 Linux headless). Thiếu máy ghi GAP, có thể chuẩn bị/test phần độc lập nhưng
 không ACCEPT GT-08, GT-09, GT-10 hoặc dispatch source H2-P0-01. Không có
 desktop-only ACCEPT hay partial package unlock ngầm; cần bố trí thiết bị.
+OWNER O4.6: ngoại lệ công khai duy nhất — chưa có máy Android khi phần Windows/Linux đạt thì
+tách GT-08A (clean checkout + export Windows/Linux, 2 critics) mở khóa GT-09; GT-08B (Android
+máy thật) vẫn bắt buộc trước GT-10 và H2-P0-01. Clean checkout dùng sparse checkout bỏ
+zdoc/reviews/**, ghi core.longpaths; không xóa hay viết lại lịch sử evidence cũ.
 TQ08-B/TX16-C là closure GT-08; install/upgrade consumer closure ở GT-10.
 
 ### GT-09 — Agent conformance toàn tuyến
@@ -889,6 +1079,9 @@ OWNER O2: GT-09 cũng nghiệm thu lõi tạo nội dung dùng chung (CR-GODOT-A
 node/resource 2D/3D typed, Blender armature/keyframe/action) bằng 2 mini-game fixture gốc làm
 hoàn toàn qua catalog: đấu trường 2D (platform, pickup, bot) và phòng 3D (avatar đi lại, tương
 tác). Mỗi fixture có actual play/input, replay, save/reload và perf budget ghi trước chạy.
+OWNER O4.5/O4.6: làm theo bảng gap của fixture; AUTH-05 qua executor Docker GT-03; logic game
+bằng GDScript typed qua profile gameplay-source. Mỗi fixture có owner playtest khoảng 15 phút
+(owner ghi OK/không OK và ghi chú; agent không ký thay, không thay 2 critics).
 VERIFY: measured pinned MCP compatibility spike theo MCP_ADAPTER_POLICY;
 client/model/host đúng capability bằng adapter được cấp, operations có command IDs,
 pre/postcondition; reconnect/retry/context reset không mutation trùng; owner
@@ -909,7 +1102,8 @@ VERIFY: install vào clean fixture copy, source/save cũ giữ nguyên, upgrade/
 rollback old/new state compatibility, uninstall addon không xóa art/game;
 one roundtrip+play sau update. Chỉ ký bằng test trust key local; không public upload/production sign/install scope khác.
 DoD: TQ08-I/TX16-I + TX10/12/14,2 critics; hash/package/model/matrix/handoff đầy đủ;
-release soak 10 fresh pair × 35 batch theo OWNER O1 trên source release.
+release soak 10 fresh pair × 35 batch theo OWNER O1 trên source release; môi trường theo O4.1,
+được chia nhiều cửa sổ chạy trên cùng hash; package không chứa zdoc/reviews.
 GT-10 release manifest chỉ được giữ trạng thái `monetization=OFF` và phải fail
 closed nếu có payment SDK, endpoint, voucher/refund/chargeback handler hoặc UI
 monetization. Năng lực CCU/capacity thuộc profile đo được của plan game P8-03,

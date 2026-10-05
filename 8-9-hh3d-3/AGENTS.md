@@ -1,36 +1,41 @@
 # HH3D-3 — routing hiện hành
 
-Owner steering mới nhất 27-09-2026: "giờ bạn tự làm không cần worker hay
-subagent gì nữa tổng hợp lại tiến độ subagent đã làm và tiếp tục".
-Coordinator tự đọc kết quả/code/evidence đã có, tiếp quản việc còn thiếu và
-thực hiện tuần tự. Không spawn worker/subagent, không mở Cursor session hoặc
-chuyển việc sang thread khác. Chỉ đạo ba worker Astra ở S158 là lịch sử,
-không còn là dispatch hiện hành. Không gán kết quả coordinator làm thành
-kết quả worker hoặc chữ ký critic độc lập.
+Owner steering mới nhất 03-10-2026: coordinator được dùng subagent và audit;
+ưu tiên gpt-6-astra ultra khi hữu ích, gpt-6.1-sol ultra cho việc có phạm vi rõ.
+Giữ một writer/file, tuần tự hóa workload đo và tiếp tục từ checkpoint đã kiểm chứng.
+Theo quyền audit mới nhất của owner, coordinator được dispatch hai critic
+độc lập khác model trên cùng hash; giữ nguyên report, kiểm hash trước nghiệm thu.
+Không tự ký thay critic hoặc tái dùng chữ ký hash cũ. Quyết định GT06:
+zdoc/reviews/20261003-gt06-owner-critics/coordinator-acceptance.md.
 
-Resume đúng workspace/checkpoint sau gián đoạn; không làm lại phần đã chứng
-minh. Giữ một writer/file, tuần tự hóa engine runs, không thêm engine/test
-nặng cạnh phép đo formal. Giữ actual exits, source/evidence hash và raw lỗi.
-Không rerun test/commit metadata khi source và blocker không đổi.
+Resume đúng checkpoint; không làm lại phần đã chứng minh. Một Godot/Blender mỗi
+project path; không chạy engine hay test nặng cạnh formal/soak đang giữ khóa đo.
+Giữ actual exits, source/evidence hash và raw lỗi. Không rerun test/commit metadata
+khi source và điều kiện không đổi. Preflight/watchdog O4.1 chỉ cho formal/soak; app
+người dùng là inventory, không tự đóng. Không thay counter/status-gap/timeout của O1.
 
-Chế độ solo không tự tạo bằng chứng hai critic độc lập mà gate còn yêu cầu:
-giữ phần nghiệm thu đó pending, không tự ký thay và không gọi critic trái
-chỉ đạo solo. Đọc CURRENT_VALID_WP và trạng thái thật ở đầu plan; không lấy
-báo cáo lịch sử hay số test làm nguồn tick. Không chuyển chữ ký từ hash cũ.
+Governance chỉ sửa trên nhánh chính. Nhánh O2 ghi chi tiết vào
+studio/AUTHORING_STATUS.md, làm theo gap của hai fixture; giữ DSL sáu effect.
+GT-07 làm theo ma trận M1–M9 và NEXT của O10 (dry-run trước run native, bằng chứng
+tầng D chỉ ở .local); O2 chạy song song bằng worker riêng theo O10.5. Không tự tick
+WP; nghiệm thu GT-07 cần gói cuối và hai critic cùng hash.
+Đọc CURRENT_VALID_WP và bảng trạng thái
+trong tools plan, không lấy số test/diagnostic làm nguồn tick.
 
 Ba plan TXT có scope riêng theo lệnh owner 18-09-2026:
 
 1. [8-9-godot-blender-agent-studio-plan.txt](zdoc/8-9-godot-blender-agent-studio-plan.txt) — bộ công cụ Godot + Blender + agent, làm trước.
 2. [8-9-hh-world-gameplay-viet-nam-plan.txt](zdoc/8-9-hh-world-gameplay-viet-nam-plan.txt) — game HH World, nhận package GT-10 rồi mới mở rộng gameplay và bản đồ Việt Nam.
-3. [18-9-superagent-2d-y8-plan.txt](zdoc/18-9-superagent-2d-y8-plan.txt) — game Superagent 2D mới, đủ functional parity Y8 trừ nhân vật/map mới; không kế thừa Vault Fighters cũ. Hiện chỉ planning, triển khai sau GT-10 và lệnh mở sản phẩm.
+3. [18-9-superagent-2d-y8-plan.txt](zdoc/18-9-superagent-2d-y8-plan.txt) — game Superagent 2D (SA5 Classic-first, gate ba tầng A/B/C, rig đo Y8): hoàn thành cơ chế/chức năng giống bản Y8 trước, phím theo keymap owner 04-10; biến thể và hệ tùy biến bị khóa sau Classic; không kế thừa tick Vault Fighters cũ. Owner mở triển khai 03-10: agent riêng làm trong worktree nhánh superagent/main, không chờ GT-10, kiểm measure-window.lock trước lệnh nặng.
 
 Đọc bảng tiến độ và CURRENT_VALID_WP trong đúng file. Plan công cụ kiểm bằng
 fixture độc lập; plan game kiểm lại trên workload thật. Không tạo master plan thứ tư. Các file 5-9 và unified cũ chỉ lịch sử/routing, không tick và không bổ sung
 DoD. Review/static evidence nằm trong zdoc/reviews/, không phải nguồn tiến độ.
 
 Thứ tự ưu tiên hiện tại: GT-01→GT-10. HH World đi H2-P0-01→H2-P9-02;
-Superagent đi SA-01→SA-16 khi được mở. Hai game độc lập, không là dependency
-của nhau; research/plan không tự mở triển khai game. Không fork lõi Godot lúc đầu;
+Superagent đi SA-01→SA-13 (SA-14 khóa sau Classic), owner mở 03-10 cho agent riêng; coordinator công cụ
+không kiêm. Hai game độc lập, không là dependency của nhau; research/plan không
+tự mở triển khai game khác. Không fork lõi Godot lúc đầu;
 không chạy Blender trên server người chơi; không coi số tài khoản đăng ký là
 số avatar realtime. Routing Grok/Codex workers của các phiên trước chỉ là lịch
 sử trong plan archive/reviews. Coordinator giữ một writer/file, kiểm dependency

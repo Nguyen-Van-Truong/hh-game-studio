@@ -31,12 +31,16 @@ import re
 from studio.protocol.core import Response, ValidationError, canonical_bytes
 from studio.tests.replay import benchmark_profile as profile
 from studio.tests.replay.benchmark_readiness import ReadinessError, validate_startup_readiness
+from studio.tests.replay.benchmark_transport_metadata import (
+    TransportMetadataError, validate_transport_event,
+)
 
 MAX_RAW_BYTES = 8 * 1024 * 1024
 _HASH = re.compile(r'[0-9a-f]{64}\Z')
 _NAME = re.compile(r'[A-Za-z0-9._/-]{1,240}\Z')
 _STEPS = ('create', 'undo', 'save', 'reload')
-_COUNTERS = ('rss_bytes', 'objects', 'resources', 'held_handles')
+_COUNTERS = ('rss_bytes', 'private_commit_bytes', 'objects', 'resources', 'held_handles')
+_NATIVE_COUNTERS = ('rss_bytes', 'objects', 'resources', 'held_handles')
 _HOST_NA = profile.HOST_NOT_APPLICABLE
 
 
@@ -49,6 +53,24 @@ class AssemblyError(ValueError):
 def _need(condition, code, path='$'):
     if not condition:
         raise AssemblyError(code, path)
+
+
+def _bind_transport_events(transport_events, linked_transport):
+    """Bind unrecovered transport observations as a one-to-one multiset."""
+    expected_events = [event for event in transport_events
+                       if not event['recovered'] and event['endpoint'] not in ('discovery', 'lease')]
+    linked_events = [candidate for candidate in linked_transport
+                     if type(candidate) is dict and not candidate.get('recovered', False)]
+    _need(len(expected_events) == len(linked_events), 'TRANSPORT_EVENT_BINDING')
+    remaining = list(linked_events)
+    for event in expected_events:
+        for index, candidate in enumerate(remaining):
+            if candidate == event:
+                remaining.pop(index)
+                break
+        else:
+            raise AssemblyError('TRANSPORT_EVENT_UNBOUND')
+    _need(not remaining, 'TRANSPORT_TRACE_UNBOUND')
 
 
 def _shape(value, fields, path='$'):
@@ -205,7 +227,125 @@ def _timing(start, end, ms, *, host=False):
     _need(abs(ms - (end - start) / 1000) <= (.001001 if host else 1e-9), 'TIMING_MISMATCH')
 
 
-def _lookup_trace(row, *, canceled=False):
+def _validate_transport_failure(value, *, endpoint, elapsed_max, code_prefix):
+    """Validate one client transport observation and map its stable errors."""
+    _need(type(value) is dict, code_prefix + '_MISSING')
+    try:
+        # A returned UNKNOWN is necessarily an unrecovered transport failure.
+        # Bytes may or may not have been sent: an exhausted connect retry has
+        # bytes_sent=False while a send/read loss has bytes_sent=True.
+        validate_transport_event(value, expected_endpoint=endpoint,
+                                 expected_recovered=False,
+                                 elapsed_max=elapsed_max)
+    except TransportMetadataError as error:
+        code = {
+            'ENDPOINT': code_prefix + '_ENDPOINT',
+            'STAGE': code_prefix + '_STAGE',
+            'CATEGORY': code_prefix + '_CATEGORY',
+            'EXCEPTION': 'FIELDS',
+        }.get(error.code, error.code)
+        raise AssemblyError(code) from error
+
+
+def _reconciliation_trace(row, *, schema_version, complete):
+    """Validate the same-ID recovery trace emitted after an UNKNOWN receipt."""
+    trace = row.get('reconciliation')
+    if trace is None:
+        if schema_version == '1.5.0' and row['receipt_status'] == 'UNKNOWN':
+            raise AssemblyError('RECONCILIATION_REQUIRED')
+        return []
+    _need(type(trace) is list and 1 <= len(trace) <= 5001, 'RECONCILIATION_TRACE')
+    _need(row['receipt_status'] == 'UNKNOWN'
+          and row['receipt_code'] == 'CONNECTION_LOST_LOOKUP', 'RECONCILIATION_RECEIPT')
+    budget_end = None
+    previous = row['receipt_mono_us']
+    next_action, resubmits = 'lookup', 0
+    ends = []
+    for index, step in enumerate(trace):
+        _shape(step, 'action response started_mono_us ended_mono_us transport_failure')
+        action = step['action']
+        _need(action in ('lookup', 'submit'), 'RECONCILIATION_ACTION')
+        _need(action == next_action, 'RECONCILIATION_SUBMIT_ORDER')
+        _integer(step['started_mono_us'], previous)
+        if budget_end is None:
+            budget_end = step['started_mono_us'] + 5_000_000
+        _integer(step['started_mono_us'], previous, budget_end)
+        _integer(step['ended_mono_us'], step['started_mono_us'], budget_end)
+        _need(previous <= step['started_mono_us'] <= step['ended_mono_us'], 'RECONCILIATION_CLOCK')
+        if action == 'submit':
+            resubmits += 1
+            _need(resubmits <= 3, 'RECONCILIATION_SUBMIT_LIMIT')
+        response = step['response']
+        try:
+            _need(Response.from_dict(response).as_dict() == response, 'RECONCILIATION_RESPONSE')
+        except ValidationError as error:
+            raise AssemblyError('RECONCILIATION_RESPONSE') from error
+        busy = (action == 'lookup' and response['status'] == 'REJECTED'
+                and response['code'] == 'CONNECTION_LIMIT'
+                and response['command_id'] == 'transport.request'
+                and response['postconditions'] == {})
+        if not busy:
+            _need(response['command_id'] == row['command_id'], 'RECONCILIATION_IDENTITY')
+            digest = response['postconditions'].get('request_digest')
+            if response['status'] == 'UNKNOWN':
+                _need(response['code'] == 'CONNECTION_LOST_LOOKUP'
+                      and response['postconditions'] == {'next_action': 'lookup'}
+                      and response['result_revision'] is None
+                      and response['result_hash'] is None,
+                      'RECONCILIATION_STATUS')
+            elif response['status'] in ('ACCEPTED_PENDING', 'COMMITTED', 'CANCELED'):
+                _need(digest == row['request_digest'], 'RECONCILIATION_DIGEST')
+                if response['status'] == 'ACCEPTED_PENDING':
+                    _need(response['result_revision'] is None and response['result_hash'] is None,
+                          'RECONCILIATION_RESPONSE')
+                elif response['status'] == 'COMMITTED' and 'snapshot' in row:
+                    _need(response['result_revision'] == row['snapshot']['revision']
+                          and response['result_hash'] == row['result_hash']
+                          and _encode(response['postconditions']) == _encode({
+                              'request_digest': row['request_digest'], 'snapshot': row['snapshot']}),
+                          'RECONCILIATION_RESPONSE')
+            elif response['status'] == 'REJECTED':
+                _need(response['code'] in ('COMMAND_NOT_FOUND', 'INVALID_FIXTURE_PAYLOAD'),
+                      'RECONCILIATION_STATUS')
+                _need(response['postconditions'] == {}, 'RECONCILIATION_STATUS')
+                _need((action == 'lookup' and response['code'] == 'COMMAND_NOT_FOUND')
+                      or (action == 'submit' and response['code'] == 'INVALID_FIXTURE_PAYLOAD'),
+                      'RECONCILIATION_STATUS')
+            else:
+                raise AssemblyError('RECONCILIATION_STATUS')
+        missing = (action == 'lookup' and response['status'] == 'REJECTED'
+                   and response['code'] == 'COMMAND_NOT_FOUND' and not busy)
+        retry = busy or response['status'] == 'UNKNOWN' or missing
+        next_action = 'submit' if missing else 'lookup' if retry else None
+        _need(retry == (index < len(trace) - 1), 'RECONCILIATION_TERMINAL')
+        failure = step['transport_failure']
+        if response['status'] == 'UNKNOWN':
+            elapsed_limit = (step['ended_mono_us'] - step['started_mono_us']) / 1000 + .001001
+            _validate_transport_failure(failure, endpoint='lookup' if action == 'lookup' else 'commands',
+                                        elapsed_max=elapsed_limit, code_prefix='RECONCILIATION_TRANSPORT')
+        else:
+            _need(failure is None, 'RECONCILIATION_TRANSPORT_UNEXPECTED')
+        previous = step['ended_mono_us']
+        ends.append(previous)
+    final = trace[-1]['response']
+    _need(final['status'] != 'UNKNOWN' and final['command_id'] == row['command_id'],
+          'RECONCILIATION_TERMINAL')
+    if row['kind'] == 'rejected':
+        _need(resubmits > 0 and final['status'] == 'REJECTED'
+              and final['code'] == 'INVALID_FIXTURE_PAYLOAD', 'RECONCILIATION_TERMINAL')
+        _need(row.get('terminal_response') == final, 'RECONCILIATION_RESPONSE_BINDING')
+    else:
+        _need(final['status'] in ('ACCEPTED_PENDING', 'COMMITTED', 'CANCELED'),
+              'RECONCILIATION_TERMINAL')
+    if complete and schema_version == '1.5.0':
+        failure = row.get('receipt_transport_failure')
+        elapsed_limit = (row['receipt_mono_us'] - row['started_mono_us']) / 1000 + .001001
+        _validate_transport_failure(failure, endpoint='commands', elapsed_max=elapsed_limit,
+                                    code_prefix='RECEIPT_TRANSPORT')
+    return ends
+
+
+def _lookup_trace(row, *, canceled=False, after_mono_us=None):
     """Reconcile the original ID only; every attempt remains measurable."""
     attempts = row['lookup_attempts']
     _need(type(attempts) is list and 1 <= len(attempts) <= 5001, 'LOOKUP_ATTEMPTS')
@@ -230,12 +370,22 @@ def _lookup_trace(row, *, canceled=False):
               and _encode(response['postconditions']) == _encode({'request_digest': row['request_digest'], 'snapshot': row['snapshot']}),
               'TERMINAL_RESPONSE_READBACK')
     previous, first_start, ends = row['receipt_mono_us'], None, []
+    if after_mono_us is not None:
+        previous = after_mono_us
+    # The existing five-second terminal budget begins at the first lookup,
+    # not at the original submit. Reconciliation and terminal lookup share
+    # one budget when the initial response was lost.
+    budget_end = (row['reconciliation'][0]['started_mono_us'] + 5_000_000
+                  if row.get('reconciliation') else None)
     for index, attempt in enumerate(attempts):
         _shape(attempt, 'status code command_id request_digest started_mono_us ended_mono_us transport_failure')
         _integer(attempt['started_mono_us'], previous)
         if first_start is None:
             first_start = attempt['started_mono_us']
-        _integer(attempt['ended_mono_us'], attempt['started_mono_us'], first_start + 5000000)
+            if budget_end is None:
+                budget_end = first_start + 5_000_000
+        _integer(attempt['started_mono_us'], previous, budget_end)
+        _integer(attempt['ended_mono_us'], attempt['started_mono_us'], budget_end)
         control_busy = (attempt['status'] == 'REJECTED'
                         and attempt['code'] == 'CONNECTION_LIMIT'
                         and attempt['command_id'] == 'transport.request'
@@ -249,14 +399,11 @@ def _lookup_trace(row, *, canceled=False):
             # This code is synthesized only by the client's transport catch;
             # it must retain that call's observation, not a later retry's.
             _need(type(failure) is dict, 'LOOKUP_TRANSPORT_MISSING')
-            _shape(failure, 'endpoint stage category elapsed_ms')
-            _need(failure['endpoint'] == 'lookup', 'LOOKUP_TRANSPORT_ENDPOINT')
-            _need(failure['stage'] in ('request', 'getresponse', 'read'), 'LOOKUP_TRANSPORT_STAGE')
-            _need(failure['category'] in ('timeout', 'connection', 'http', 'os'), 'LOOKUP_TRANSPORT_CATEGORY')
             # Inner monotonic transport timing cannot exceed the enclosing
             # attempt. Allow only its existing microsecond truncation epsilon.
             elapsed_limit = (attempt['ended_mono_us'] - attempt['started_mono_us']) / 1000 + .001001
-            _number(failure['elapsed_ms'], 0, elapsed_limit)
+            _validate_transport_failure(failure, endpoint='lookup', elapsed_max=elapsed_limit,
+                                        code_prefix='LOOKUP_TRANSPORT')
         else:
             _need(failure is None, 'LOOKUP_TRANSPORT_UNEXPECTED')
         _need(attempt['request_digest'] == row['request_digest']
@@ -273,9 +420,15 @@ def _lookup_trace(row, *, canceled=False):
 
 def validate_command_batch(value, *, run_id, index, host_identity):
     """Verify all 1000 rows, aggregates, effect chain and separate Cancel."""
-    _shape(value, 'schema_id schema_version run_id index mode complete_command_mix native_acceptance effects_kind transport_kind observation_kind host_process warmup commands latency_ms effects_per_admission cancel status started_mono_us setup_responses memory_before memory_after effect_count_before effect_count_after dropped_commands dropped_telemetry journal_bytes diagnostic_retention ended_mono_us host_response_mono_us max_status_gap_ms status_gap_scope')
+    _need(type(value) is dict and type(value.get('schema_version')) is str, 'FIELDS')
+    version = value['schema_version']
+    _need(version in ('1.4.0', '1.5.0'), 'COMMAND_SCHEMA')
+    fields = 'schema_id schema_version run_id index mode complete_command_mix native_acceptance effects_kind transport_kind observation_kind host_process warmup commands latency_ms effects_per_admission cancel status started_mono_us setup_responses memory_before memory_after effect_count_before effect_count_after dropped_commands dropped_telemetry journal_bytes diagnostic_retention ended_mono_us host_response_mono_us max_status_gap_ms status_gap_scope'
+    if version == '1.5.0':
+        fields += ' transport_recovery'
+    _shape(value, fields)
     _identity(host_identity)
-    _need(value['schema_id'] == 'hh-studio.benchmark-command-batch' and value['schema_version'] == '1.3.0', 'COMMAND_SCHEMA')
+    _need(value['schema_id'] == 'hh-studio.benchmark-command-batch', 'COMMAND_SCHEMA')
     _need(value['mode'] == 'benchmark' and value['status'] == 'COMPLETE'
           and value['complete_command_mix'] is True and value['native_acceptance'] is False, 'COMMAND_INCOMPLETE_OR_DIAGNOSTIC')
     _need(value['effects_kind'] == 'in_process_mock_fixture'
@@ -308,6 +461,24 @@ def validate_command_batch(value, *, run_id, index, host_identity):
     _shape(value['latency_ms'], 'inspect rejected admitted')
     latencies = {kind: [] for kind in ('inspect', 'rejected', 'admitted')}
     effects, lookup_ends = [], []
+    linked_transport = []
+    recovery = value.get('transport_recovery')
+    if version == '1.5.0':
+        _shape(recovery, 'events event_count_before event_count_after all_reconciled')
+        _integer(recovery['event_count_before'], 0, 10)
+        _integer(recovery['event_count_after'], recovery['event_count_before'], 10)
+        _need(type(recovery['events']) is list
+              and recovery['event_count_after'] == recovery['event_count_before'] + len(recovery['events']),
+              'TRANSPORT_RECOVERY_COUNT')
+        _need(type(recovery['all_reconciled']) is bool
+              and (value['status'] != 'COMPLETE' or recovery['all_reconciled'] is True),
+              'TRANSPORT_RECOVERY_INCOMPLETE')
+        for event in recovery['events']:
+            try:
+                validate_transport_event(event)
+            except TransportMetadataError as error:
+                raise AssemblyError('TRANSPORT_' + error.code) from error
+    transport_events = [] if recovery is None else recovery['events']
     count, previous = index * 200, value['memory_before']['monotonic_us']
     _integer(value['effect_count_before'], count, count)
     base = 'ordinal group kind command_id started_mono_us receipt_mono_us receipt_ms receipt_status receipt_code request_digest latency_ms terminal_status effect_count_before effect_count_after lookup_attempts'
@@ -315,20 +486,49 @@ def validate_command_batch(value, *, run_id, index, host_identity):
     for ordinal, row in enumerate(value['commands']):
         kind = ('inspect',) * 5 + ('rejected',) * 3 + ('admitted',) * 2
         kind = kind[ordinal % 10]
-        _shape(row, base + ('' if kind == 'rejected' else extra))
+        has_reconciliation = 'reconciliation' in row
+        has_receipt_failure = 'receipt_transport_failure' in row
+        row_fields = base + ('' if kind == 'rejected' else extra)
+        if has_reconciliation or has_receipt_failure:
+            row_fields += ' reconciliation receipt_transport_failure'
+            if kind == 'rejected':
+                row_fields += ' terminal_mono_us terminal_ms terminal_response'
+        _shape(row, row_fields)
         _integer(row['ordinal'], ordinal, ordinal)
         _integer(row['group'], ordinal // 10, ordinal // 10)
         _need(row['kind'] == kind and row['command_id'] == f'{run_id}.b{index}.{kind}.{len(latencies[kind])}', 'COMMAND_ORDER_OR_ID')
         _digest(row['request_digest'], True)
         _need(row['started_mono_us'] >= previous, 'COMMAND_CLOCK_ORDER')
         _timing(row['started_mono_us'], row['receipt_mono_us'], row['receipt_ms'], host=True)
+        reconciliation_ends = _reconciliation_trace(
+            row, schema_version=version, complete=value['status'] == 'COMPLETE')
+        lookup_ends.extend(reconciliation_ends)
+        if row.get('receipt_transport_failure') is not None:
+            linked_transport.append(row['receipt_transport_failure'])
+        for step in row.get('reconciliation', ()):
+            if step.get('transport_failure') is not None:
+                linked_transport.append(step['transport_failure'])
+        if reconciliation_ends:
+            _need(row['receipt_mono_us'] < reconciliation_ends[0], 'RECONCILIATION_CLOCK')
         _integer(row['effect_count_before'], count, count)
         if kind == 'rejected':
-            _need(row['receipt_status'] == row['terminal_status'] == 'REJECTED'
-                  and row['receipt_code'] == 'INVALID_FIXTURE_PAYLOAD', 'REJECTION_KIND')
+            _need(row['receipt_status'] == 'UNKNOWN' if reconciliation_ends
+                  else row['receipt_status'] == row['terminal_status'] == 'REJECTED', 'REJECTION_KIND')
+            if reconciliation_ends:
+                _need(row['terminal_status'] == 'REJECTED'
+                      and row['receipt_code'] == 'CONNECTION_LOST_LOOKUP', 'REJECTION_KIND')
+                _timing(row['started_mono_us'], row['terminal_mono_us'], row['terminal_ms'], host=True)
+                _need(row['terminal_mono_us'] == reconciliation_ends[-1]
+                      and row['terminal_response']['status'] == 'REJECTED'
+                      and row['terminal_response']['code'] == 'INVALID_FIXTURE_PAYLOAD',
+                      'RECONCILIATION_TERMINAL')
+                previous = row['terminal_mono_us']
+                expected_latency = row['terminal_ms']
+            else:
+                _need(row['receipt_code'] == 'INVALID_FIXTURE_PAYLOAD', 'REJECTION_KIND')
+                previous = row['receipt_mono_us']
+                expected_latency = row['receipt_ms']
             _need(row['lookup_attempts'] == [], 'REJECTED_LOOKUP')
-            previous = row['receipt_mono_us']
-            expected_latency = row['receipt_ms']
         else:
             normal_admission = (row['receipt_status'] == 'ACCEPTED_PENDING'
                                 and row['receipt_code'] == 'QUEUED')
@@ -345,7 +545,11 @@ def validate_command_batch(value, *, run_id, index, host_identity):
                 _integer(row['snapshot'][key], count, count)
             _need(row['snapshot']['revision'] == 'rev-' + str(count)
                   and row['result_hash'] == 'sha256:' + _sha(canonical_bytes(row['snapshot'])), 'COMMAND_READBACK')
-            lookup_ends.extend(_lookup_trace(row))
+            lookup_ends.extend(_lookup_trace(row, after_mono_us=(reconciliation_ends[-1]
+                                if reconciliation_ends else None)))
+            linked_transport.extend(attempt['transport_failure']
+                                    for attempt in row['lookup_attempts']
+                                    if attempt.get('transport_failure') is not None)
             previous = row['terminal_mono_us']
             expected_latency = row['receipt_ms'] if kind == 'admitted' else row['terminal_ms']
         _integer(row['effect_count_after'], count, count)
@@ -362,7 +566,23 @@ def validate_command_batch(value, *, run_id, index, host_identity):
             _number(latency, .000000001)
     _integer(value['effect_count_after'], count, count)
     cancel = value['cancel']
-    _shape(cancel, 'command_id kind separate_from_mix delay_ms queued_mono_us started_mono_us receipt_mono_us receipt_ms status terminal_status request_digest no_effect lookup_attempts terminal_response terminal_mono_us terminal_ms')
+    # Admission/ACK recovery was moved into explicit nested objects. Reject
+    # the retired top-level fields instead of accepting unbound evidence.
+    _need(not ({'reconciliation', 'receipt_status', 'receipt_code',
+                'receipt_transport_failure', 'cancel_receipt_transport_failure'}
+               & set(cancel)), 'CANCEL_RECONCILIATION_STALE')
+    cancel_has_queued_failure = 'queue_recovery' in cancel
+    cancel_has_ack_failure = 'cancel_ack' in cancel
+    cancel_fields = ('command_id kind separate_from_mix delay_ms queued_mono_us started_mono_us '
+                     'receipt_mono_us receipt_ms status terminal_status request_digest no_effect '
+                     'lookup_attempts terminal_response terminal_mono_us terminal_ms')
+    if cancel_has_ack_failure:
+        cancel_fields += ' cancel_ack'
+    if cancel_has_queued_failure:
+        cancel_fields += ' queue_recovery'
+    _need(version == '1.5.0' or not (cancel_has_queued_failure or cancel_has_ack_failure),
+          'CANCEL_SCHEMA')
+    _shape(cancel, cancel_fields)
     _need(cancel['command_id'] == f'{run_id}.b{index}.cancel' and cancel['kind'] == 'cancel'
           and cancel['separate_from_mix'] is True and cancel['no_effect'] is True
           and cancel['status'] == cancel['terminal_status'] == 'CANCELED', 'CANCEL_BINDING')
@@ -371,7 +591,70 @@ def validate_command_batch(value, *, run_id, index, host_identity):
     _timing(cancel['started_mono_us'], cancel['receipt_mono_us'], cancel['receipt_ms'], host=True)
     _timing(cancel['started_mono_us'], cancel['terminal_mono_us'], cancel['terminal_ms'], host=True)
     _integer(cancel['queued_mono_us'], value['started_mono_us'], value['ended_mono_us'])
-    lookup_ends.extend(_lookup_trace(cancel, canceled=True))
+    queue_recovery = cancel.get('queue_recovery')
+    queue_recovery_ends = []
+    if queue_recovery is not None:
+        _shape(queue_recovery,
+               'command_id kind request_digest started_mono_us receipt_mono_us '
+               'receipt_status receipt_code receipt_transport_failure reconciliation')
+        _need(queue_recovery['command_id'] == cancel['command_id']
+              and queue_recovery['kind'] == 'cancel'
+              and queue_recovery['request_digest'] == cancel['request_digest'],
+              'CANCEL_RECONCILIATION_BINDING')
+        _integer(queue_recovery['started_mono_us'], value['started_mono_us'],
+                 queue_recovery['receipt_mono_us'])
+        _need(queue_recovery['receipt_mono_us'] == cancel['queued_mono_us'],
+              'CANCEL_RECONCILIATION_CLOCK')
+        queue_recovery_ends = _reconciliation_trace(
+            queue_recovery, schema_version=version, complete=value['status'] == 'COMPLETE')
+        _need(not queue_recovery_ends or queue_recovery_ends[-1] <= cancel['started_mono_us'],
+              'CANCEL_RECONCILIATION_CLOCK')
+        _need(queue_recovery['receipt_status'] == 'UNKNOWN'
+              and queue_recovery['receipt_code'] == 'CONNECTION_LOST_LOOKUP',
+              'CANCEL_RECONCILIATION')
+        failure = queue_recovery['receipt_transport_failure']
+        elapsed_limit = (queue_recovery['receipt_mono_us'] - queue_recovery['started_mono_us']) / 1000 + .001001
+        _validate_transport_failure(failure, endpoint='commands', elapsed_max=elapsed_limit,
+                                    code_prefix='CANCEL_RECEIPT_TRANSPORT')
+        linked_transport.append(failure)
+        linked_transport.extend(step['transport_failure'] for step in queue_recovery['reconciliation']
+                                if step.get('transport_failure') is not None)
+        lookup_ends.extend(queue_recovery_ends)
+    elif cancel_has_queued_failure:
+        raise AssemblyError('CANCEL_RECONCILIATION_MISSING')
+    if cancel_has_ack_failure:
+        ack = cancel['cancel_ack']
+        _shape(ack, 'response transport_failure')
+        response = ack['response']
+        try:
+            _need(Response.from_dict(response).as_dict() == response, 'CANCEL_ACK_RESPONSE')
+        except ValidationError as error:
+            raise AssemblyError('CANCEL_ACK_RESPONSE') from error
+        _need(response['status'] == 'UNKNOWN' and response['code'] == 'CONNECTION_LOST_LOOKUP'
+              and response['command_id'] == cancel['command_id']
+              and response['postconditions'] == {'next_action': 'lookup'}
+              and response['result_revision'] is None
+              and response['result_hash'] is None,
+              'CANCEL_ACK_RECONCILIATION')
+        failure = ack['transport_failure']
+        _validate_transport_failure(failure, endpoint='cancel',
+                                    elapsed_max=cancel['receipt_ms'] + .001001,
+                                    code_prefix='CANCEL_ACK_TRANSPORT')
+        linked_transport.append(failure)
+    cancel_reconciliation_ends = queue_recovery_ends
+    lookup_ends.extend(_lookup_trace(cancel, canceled=True,
+                                      after_mono_us=(cancel_reconciliation_ends[-1]
+                                                     if cancel_reconciliation_ends else None)))
+    linked_transport.extend(attempt['transport_failure']
+                            for attempt in cancel['lookup_attempts']
+                            if attempt.get('transport_failure') is not None)
+    if version == '1.5.0':
+        # Metadata has no caller-controlled event id. Exact canonical object
+        # equality is the binding: every send-side/exhausted event must be
+        # visible in the receipt, lookup, or reconciliation trace. Setup
+        # endpoint losses are retained by the producer's bounded ledger and
+        # are allowed when no command row can carry the observation.
+        _bind_transport_events(transport_events, linked_transport)
     _need(value['commands'][499]['terminal_mono_us'] <= cancel['queued_mono_us'] <= cancel['started_mono_us']
           and cancel['terminal_mono_us'] <= value['commands'][500]['started_mono_us'], 'CANCEL_SCHEDULE')
     stamps = value['host_response_mono_us']
@@ -451,7 +734,7 @@ def validate_native_batch(value, *, run_id, index, editor_identity):
     _integer(memory['settle_us'], 1100000)
     _need(memory['settle_frames'] <= memory['process_frame'] - previous_frame
           and memory['settle_us'] <= value['ended_mono_us'] - previous_time, 'NATIVE_QUIESCENCE')
-    _shape(memory['editor'], ' '.join(_COUNTERS))
+    _shape(memory['editor'], ' '.join(_NATIVE_COUNTERS))
     for name, row in memory['editor'].items():
         _counter(row, positive=name in ('rss_bytes', 'objects'), required=name in ('objects', 'resources'))
     barrier = value['barrier']
@@ -546,7 +829,7 @@ def assemble_sample(native, command, joint, *, run_id, index, processes,
     _number(receipt['max_status_gap_ms'], .000000001)
     _need(receipt['max_status_gap_ms'] >= n['max_status_gap_ms'], 'ACK_STATUS_GAP')
     _shape(j, 'schema_id schema_version run_id index profile_sha256 source_closure_sha256 native_batch_sha256 command_batch_sha256 processes phase host_window host editor host_effect_count barrier_receipt ack_ref')
-    _need(j['schema_id'] == 'hh-studio.benchmark-joint-observation' and j['schema_version'] == '1.1.0'
+    _need(j['schema_id'] == 'hh-studio.benchmark-joint-observation' and j['schema_version'] == '1.2.0'
           and j['run_id'] == run_id and j['profile_sha256'] == profile.PROFILE_SHA256
           and j['source_closure_sha256'] == source_closure_sha256 and j['native_batch_sha256'] == native.sha256
           and j['command_batch_sha256'] == command.sha256 and j['processes'] == processes
@@ -563,10 +846,11 @@ def assemble_sample(native, command, joint, *, run_id, index, processes,
     _host_observation({'process': processes['host'], **j['host']}, processes['host'])
     _integer(j['host']['monotonic_us'], c['ended_mono_us'], window['ack_written_mono_us'])
     editor = j['editor']
-    _shape(editor, 'host_mono_us handle_mono_us rss_bytes held_handles visible_window_handles native_observation')
+    _shape(editor, 'host_mono_us handle_mono_us rss_bytes private_commit_bytes held_handles visible_window_handles native_observation')
     _integer(editor['host_mono_us'], c['ended_mono_us'], window['ack_written_mono_us'])
     _integer(editor['handle_mono_us'], editor['host_mono_us'], window['ack_written_mono_us'])
     _counter(editor['rss_bytes'], positive=True)
+    _counter(editor['private_commit_bytes'], positive=True)
     _counter(editor['held_handles'])
     handles = editor['visible_window_handles']
     _need(type(handles) is list and 1 <= len(handles) <= 64 and len(set(handles)) == len(handles)
@@ -576,7 +860,8 @@ def assemble_sample(native, command, joint, *, run_id, index, processes,
     _need(observation == {'source': 'native_ack', 'native_mono_us': receipt['ack_observed_mono_us'],
           'process_frame': receipt['process_frame'], 'objects': receipt['objects'], 'resources': receipt['resources']}, 'STALE_NATIVE_OBSERVATION')
     memory = {'phase': 'post_batch_quiescent', 'host': j['host']['counters'],
-              'editor': {'rss_bytes': editor['rss_bytes'], 'held_handles': editor['held_handles'],
+              'editor': {'rss_bytes': editor['rss_bytes'], 'private_commit_bytes': editor['private_commit_bytes'],
+                         'held_handles': editor['held_handles'],
                          'objects': observation['objects'], 'resources': observation['resources']}}
     profile._memory(memory, '$.assembled.memory')
     evidence = {'profile_sha256': profile.PROFILE_SHA256, 'source_closure_sha256': source_closure_sha256,
@@ -609,7 +894,7 @@ with run_id,processes,host_exit_code,editor_exit_code,owned_tree_zero,held_handl
     _shape(manifest, 'schema_id schema_version run_id index profile_sha256 source_closure_sha256 processes refs native_batches command_batches joint_observations ready_artifacts start_artifacts ack_artifacts')
     _need(manifest['schema_id'] == 'hh-studio.benchmark-run-assembly' and manifest['schema_version'] == '1.0.0'
           and manifest['profile_sha256'] == profile.PROFILE_SHA256, 'MANIFEST_SCHEMA')
-    _integer(manifest['index'], 0, 9)
+    _integer(manifest['index'], 0, profile.PROFILE.process_runs - 1)
     _digest(manifest['source_closure_sha256'])
     _shape(manifest['refs'], 'native_index source_manifest toolchain profile native_stdout native_stderr cleanup')
     artifacts = {name: read_artifact(root, ref) for name, ref in manifest['refs'].items()}
@@ -683,6 +968,7 @@ with run_id,processes,host_exit_code,editor_exit_code,owned_tree_zero,held_handl
     for field in ('batches', 'host_barriers', 'start_permits'):
         _need(type(native_index.get(field)) is list and len(native_index[field]) == 35, 'NATIVE_INDEX_INCOMPLETE')
     samples, previous_native, previous_ack = [], None, None
+    transport_count = 0
     for index in range(35):
         n, c, j, r, s, a = [read_artifact(root, manifest[field][index]) for field in
                             ('native_batches', 'command_batches', 'joint_observations', 'ready_artifacts', 'start_artifacts', 'ack_artifacts')]
@@ -690,6 +976,16 @@ with run_id,processes,host_exit_code,editor_exit_code,owned_tree_zero,held_handl
               and native_index['start_permits'][index] == n.value['start_permit'], 'INDEX_BATCH_BINDING')
         sample = assemble_sample(n, c, j, run_id=manifest['run_id'], index=index, processes=manifest['processes'],
             source_closure_sha256=closure, barrier_receipt=native_index['host_barriers'][index], ack=a, ready=r, start=s)
+        command_value = c.value
+        command_version = command_value['schema_version']
+        # Legacy rows remain readable by the standalone historical validator,
+        # but cannot bypass O6's mandatory ledger in a new formal pair.
+        _need(command_version == '1.5.0', 'COMMAND_SCHEMA_CURRENT_REQUIRED')
+        recovery = command_value['transport_recovery']
+        _need(recovery['event_count_before'] == transport_count,
+              'TRANSPORT_RECOVERY_CONTINUITY')
+        transport_count = recovery['event_count_after']
+        _need(transport_count <= 10, 'TRANSPORT_RECOVERY_BUDGET')
         if index == 0:
             try:
                 validate_startup_readiness(native_index['startup_readiness'], binding=binding,
@@ -733,8 +1029,9 @@ with run_id,processes,host_exit_code,editor_exit_code,owned_tree_zero,held_handl
           and cleanup['owned_tree_zero'] is True, 'CLEANUP_BINDING')
     for key in ('host_exit_code', 'editor_exit_code', 'held_handles'):
         _integer(cleanup[key], 0, 0)
+    baseline = profile.baseline_memory(samples[:5], '$.assembled_run.baseline')
     run = {'run_id': manifest['run_id'], 'index': manifest['index'], 'processes': manifest['processes'],
-           'baseline': {'after_batch_index': 4, 'memory': samples[4]['memory']}, 'samples': samples,
+           'baseline': {'after_batch_indices': list(profile._BASELINE_BATCHES), 'memory': baseline}, 'samples': samples,
            'cleanup': {key: cleanup[key] for key in ('host_exit_code', 'editor_exit_code', 'owned_tree_zero', 'held_handles')}}
     raw = _encode({'source_closure_sha256': closure, 'toolchain_sha256': artifacts['toolchain'].sha256,
                    'profile_sha256': profile.PROFILE_SHA256, 'run': run})
@@ -742,7 +1039,7 @@ with run_id,processes,host_exit_code,editor_exit_code,owned_tree_zero,held_handl
 
 
 def assemble_dataset(provenance, runs):
-    """Require ten bound runs with one source/toolchain/profile; never promote diagnostics."""
+    """Require the frozen process_runs bound runs; never promote diagnostics."""
     _shape(provenance, 'source_closure_sha256 toolchain_sha256 workstation_profile_sha256 driver_sha256 capture_manifest_sha256',
            '$.provenance')
     for digest in provenance.values():
@@ -757,5 +1054,5 @@ def assemble_dataset(provenance, runs):
         value = bound.value
         _need(all(value[name] == digest for name, digest in expected.items()), 'RUN_PROVENANCE_MISMATCH', path)
         values.append(value['run'])
-    return profile.validate_dataset({'schema_id': 'hh-studio.tools-ux-benchmark', 'schema_version': '1.1.0',
+    return profile.validate_dataset({'schema_id': 'hh-studio.tools-ux-benchmark', 'schema_version': '1.2.0',
         'profile_sha256': profile.PROFILE_SHA256, 'evidence_kind': 'native', 'provenance': provenance, 'runs': values})

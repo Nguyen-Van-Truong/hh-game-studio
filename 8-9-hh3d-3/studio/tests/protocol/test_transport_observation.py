@@ -47,11 +47,17 @@ class TransportObservationTests(unittest.TestCase):
                     with mock.patch("studio.tests.replay.benchmark_transport.http.client.HTTPConnection",
                                     return_value=self.connection) as constructor, \
                          mock.patch("studio.tests.replay.benchmark_transport.time.perf_counter_ns",
-                                    side_effect=[1_000_000, 3_500_000]):
+                                    side_effect=[1_000_000, 1_000_000, 3_500_000]):
                         result = self.client._call("/v1/commands", self.body)
                     self.assertEqual(result, expected_response)
-                    self.assertEqual(self.client.last_transport_failure, {
-                        "endpoint": "commands", "stage": stage, "category": category, "elapsed_ms": 2.5})
+                    failure = self.client.last_transport_failure
+                    self.assertEqual(set(failure), {
+                        "endpoint", "stage", "category", "exception", "errno", "winerror",
+                        "elapsed_ms", "attempts", "attempt_details", "recovered", "bytes_sent"})
+                    self.assertEqual((failure["endpoint"], failure["stage"], failure["category"],
+                                      failure["elapsed_ms"], failure["attempts"],
+                                      failure["recovered"], failure["bytes_sent"]),
+                                     ("commands", stage, category, 2.5, 1, False, True))
                     self.assertNotIn("private", json.dumps(self.client.last_transport_failure))
                     constructor.assert_called_once_with("127.0.0.1", 12345, timeout=2.0)
                     self.connection.request.assert_called_once()
@@ -74,16 +80,19 @@ class TransportObservationTests(unittest.TestCase):
                  mock.patch("studio.tests.replay.benchmark_transport.http.client.HTTPConnection",
                             return_value=self.connection) as constructor, \
                  mock.patch("studio.tests.replay.benchmark_transport.time.perf_counter_ns",
-                            side_effect=[1_000_000_000, 1_001_000_000, 1_004_000_000, 1_006_000_000]) as perf, \
+                            side_effect=[1_000_000_000, 1_001_000_000, 1_004_000_000,
+                                         1_006_000_000, 1_009_000_000]) as perf, \
                  mock.patch("studio.tests.replay.benchmark_transport.time.monotonic_ns",
                             side_effect=[5_000_000_000, 5_015_625_000]) as coarse:
                 started = producer_clock()
                 result = self.client.lookup("clock.lookup")
                 ended = producer_clock()
-                self.assertEqual(self.client.last_transport_failure,
-                    {"endpoint": "lookup", "stage": stage, "category": "timeout", "elapsed_ms": 3.0})
+                failure = self.client.last_transport_failure
+                self.assertEqual((failure["endpoint"], failure["stage"], failure["category"],
+                                  failure["elapsed_ms"], failure["attempts"], failure["bytes_sent"]),
+                                 ("lookup", stage, "timeout", 2.0, 1, True))
                 self.assertLessEqual(self.client.last_transport_failure["elapsed_ms"], (ended - started) / 1_000_000)
-                self.assertEqual(perf.call_count, 4)
+                self.assertEqual(perf.call_count, 5)
                 coarse.assert_not_called()
                 self.assertEqual((result.status.value, result.code, result.command_id),
                                  ("UNKNOWN", "CONNECTION_LOST_LOOKUP", "clock.lookup"))
@@ -104,7 +113,9 @@ class TransportObservationTests(unittest.TestCase):
                                 return_value=self.connection):
                     self.client._call("/v1/" + suffix, self.body, control=True)
                 observation = self.client.last_transport_failure
-                self.assertEqual(set(observation), {"endpoint", "stage", "category", "elapsed_ms"})
+                self.assertEqual(set(observation), {
+                    "endpoint", "stage", "category", "exception", "errno", "winerror",
+                    "elapsed_ms", "attempts", "attempt_details", "recovered", "bytes_sent"})
                 self.assertEqual(observation["endpoint"], endpoint)
                 self.assertEqual(observation["category"], "os")
                 self.assertGreaterEqual(observation["elapsed_ms"], 0)
@@ -135,7 +146,7 @@ class TransportObservationTests(unittest.TestCase):
             self.connection.request.side_effect = request
             with mock.patch("studio.tests.replay.benchmark_transport.time.perf_counter_ns", return_value=5_000_000) as clock:
                 result = self.client._call("/v1/lookup", self.body, control=True)
-            clock.assert_called_once()
+            self.assertEqual(clock.call_count, 2)
         self.assertEqual(result, {"observed": "success"})
         self.assertIsNone(self.client.last_transport_failure)
 
@@ -181,7 +192,12 @@ class TransportObservationTests(unittest.TestCase):
                     outcomes.append(outcome)
                     calls.append((constructor.call_args_list, connection.mock_calls))
                 self.assertEqual(outcomes[0], outcomes[1])
-                self.assertEqual(calls[0], calls[1])
+                # O6 explicitly adds a connect phase before every request;
+                # compare the accepted wire calls after removing that seam.
+                observed_calls = [call for call in calls[1][1]
+                                  if call != mock.call.connect()]
+                self.assertEqual(calls[0][0], calls[1][0])
+                self.assertEqual(calls[0][1], observed_calls)
 
 
 if __name__ == "__main__":

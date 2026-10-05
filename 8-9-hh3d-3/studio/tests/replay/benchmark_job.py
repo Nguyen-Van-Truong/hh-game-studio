@@ -221,8 +221,13 @@ def verify_capture(output, expected_sha256, *, source_root, expected_source_file
 class BenchmarkProcess:
     """Retained helper/Job/streams; caller polls tick and always closes owner."""
     def __init__(self, argv, *, cwd, output, source_root, source_files, binary_sha256,
-                 campaign_host=False):
+                 campaign_host=False, evidence_binding=None):
         require(os.name == 'nt' and not HELD_OWNERS, 'BENCHMARK_ENVIRONMENT_OR_HELD_OWNER')
+        if evidence_binding is not None:
+            require(type(evidence_binding) is dict and set(evidence_binding) == {
+                'run_id', 'source_closure_sha256', 'profile_sha256', 'campaign_sha256'},
+                'BENCHMARK_EVIDENCE_BINDING')
+        self.evidence_binding = None if evidence_binding is None else dict(evidence_binding)
         self.profile = owner_profile(campaign_host)
         validate_invocation(argv, source_files, binary_sha256)
         self.cwd, self.output, self.source_root = Path(cwd).absolute(), Path(output).absolute(), Path(source_root).absolute()
@@ -484,10 +489,14 @@ class BenchmarkProcess:
                     if pipe is not None and not pipe.closed:
                         pipe.close()
             self._close_process_handle()
-            write(self.output / f'cleanup-{self._report_number:03d}.json', {'closed': True,
+            cleanup = {'closed': True,
                 'job': self.job.snapshot() if self.job else None, 'wrapper_exit_code': self.process.returncode if self.process else None,
                 'wrapper_process_handle': self.process_handle_snapshot(),
-                'failure_code': getattr(self, '_failure_code', None), 'completed': False})
+                'failure_code': getattr(self, '_failure_code', None), 'completed': False}
+            evidence_binding = getattr(self, 'evidence_binding', None)
+            if evidence_binding is not None:
+                cleanup.update(evidence_binding)
+            write(self.output / f'cleanup-{self._report_number:03d}.json', cleanup)
             self.closed = True
             HELD_OWNERS.remove(self)
             return True

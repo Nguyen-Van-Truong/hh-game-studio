@@ -68,11 +68,21 @@ class CampaignStopCompletionTests(unittest.TestCase):
             stack.enter_context(patch.object(campaign, 'load_fixture'))
             stack.enter_context(patch.object(campaign, 'source_files', return_value=files))
             stack.enter_context(patch.object(campaign, 'workstation_profile', return_value={'synthetic': True}))
+            # Watchdog policy has its own tests. This fixture isolates Stop
+            # publication during assembly with an inert, already exited Job.
+            stack.enter_context(patch.object(campaign.environment, 'Watchdog'))
+            stack.enter_context(patch.object(campaign.environment, 'verify_watchdog'))
+            stack.enter_context(patch.object(campaign, 'environment_preflight', return_value={
+                'schema_id': 'hh-studio.benchmark-environment-preflight', 'schema_version': '1.2.0',
+                'pass': True, 'available_memory_bytes': 8 * 1024**3,
+                'commit_total_bytes': 80, 'commit_limit_bytes': 100, 'heavy_processes': [], 'required_heavy_processes_closed': False, 'foreign_engines': []}))
             # Every process launch is intercepted, including accidental next-run
             # launch. Existing owner/assembly tests verify their own contracts.
+            from studio.tests.replay.test_launch_observation import collect_synthetic
+            observe = stack.enter_context(patch.object(campaign, 'observe_pair_launch', side_effect=collect_synthetic))
             launch = stack.enter_context(patch.object(campaign, 'BenchmarkProcess'))
             yield SimpleNamespace(root=studio / 'raw', campaign_id='gt06-stop-completion',
-                                  stack=stack, launch=launch)
+                                  stack=stack, launch=launch, observe=observe)
 
     def test_stop_published_by_terminal_tick_is_not_lost(self):
         with tempfile.TemporaryDirectory(prefix='gt06-stop-terminal-tick-') as directory:
@@ -105,6 +115,7 @@ class CampaignStopCompletionTests(unittest.TestCase):
             retained.tick = Mock(return_value=0)
             retained.close = Mock(return_value=True)
             retained.finish = Mock(return_value={
+                'elapsed_seconds': 5.0,
                 'actual_process_exit': {'pid': 100, 'exit_code': 0},
                 'job': {'zero_observed': True}})
             def launch(*_args, **kwargs):
@@ -164,6 +175,68 @@ class CampaignStopCompletionTests(unittest.TestCase):
             fixture.launch.assert_not_called()
             self.assertFalse((fixture.root / 'run-01-attempt-01').exists())
             self.assertFalse((fixture.root / 'campaign-capture.json').exists())
+
+    def test_completed_pair_measurements_block_next_launch_on_fail_or_gap(self):
+        from studio.tests.replay.test_benchmark_profile import synthetic_dataset
+        for status in ('PASS', 'FAIL', 'GAP'):
+            with self.subTest(status=status), self.fixture() as fixture:
+                run = synthetic_dataset()['runs'][0]
+                if status == 'FAIL':
+                    run['samples'][34]['memory']['host']['private_commit_bytes']['value'] = 1200
+                elif status == 'GAP':
+                    run['samples'][10]['memory']['editor']['resources'] = {
+                        'value': None, 'unavailable_reason': 'unavailable'}
+                retained = SimpleNamespace(closed=True, job=SimpleNamespace(zero_observed=True))
+                retained.tick = Mock(return_value=0)
+                retained.close = Mock(return_value=True)
+                retained.finish = Mock(return_value={
+                    'elapsed_seconds': 5.0,
+                    'actual_process_exit': {'pid': run['processes']['host']['pid'], 'exit_code': 0},
+                    'job': {'zero_observed': True}})
+
+                def launch(*_args, **kwargs):
+                    if fixture.launch.call_count > 1:
+                        raise BenchmarkJobError('SYNTHETIC_SECOND_LAUNCH')
+                    output = kwargs['cwd']
+                    binding = json.loads((output / 'context.json').read_bytes())
+                    run['run_id'] = binding['run_id']
+                    campaign.write(output / 'child-result.json', {
+                        'processes': run['processes'], 'batches': [],
+                        'cleanup': {'editor_exit_code': 0, 'editor_owned_tree_zero': True,
+                                    'held_handles': 0}})
+                    return retained
+
+                fixture.launch.side_effect = launch
+                # Native assembly/ownership is inert here; the real O1 evaluator
+                # receives all 35 synthetic samples, including the failing row.
+                fixture.stack.enter_context(patch.object(campaign, 'assemble_run',
+                    return_value=SimpleNamespace(value={'run': run})))
+                fixture.stack.enter_context(patch.object(campaign, 'verify_run_capture'))
+                fixture.stack.enter_context(patch.object(campaign, 'reference',
+                    side_effect=lambda root, path: {
+                        'file': path.relative_to(root).as_posix(), 'sha256': 'c' * 64,
+                        'size_bytes': 1}))
+                expected = 'SYNTHETIC_SECOND_LAUNCH' if status == 'PASS' else 'CAMPAIGN_RUN_MEASUREMENTS_NOT_PASS'
+                with self.assertRaisesRegex(BenchmarkJobError, expected):
+                    campaign.run_campaign(fixture.campaign_id, fixture.root)
+                output = fixture.root / 'run-00-attempt-01'
+                self.assertTrue((output / 'run-capture.json').is_file())
+                summary = json.loads((output / 'measurement-summary.json').read_bytes())
+                self.assertEqual(summary['status'], status)
+                self.assertFalse(summary['formal_acceptance'])
+                capture = json.loads((output / 'run-capture.json').read_bytes())
+                self.assertEqual(capture['artifacts']['measurement-summary.json'],
+                                 campaign.sha((output / 'measurement-summary.json').read_bytes()))
+                self.assertEqual(fixture.launch.call_count, 2 if status == 'PASS' else 1)
+                self.assertEqual(fixture.observe.call_count, fixture.launch.call_count)
+                observed_runs = [call.args[1]['run_id'] for call in fixture.observe.call_args_list]
+                self.assertEqual(len(set(observed_runs)), len(observed_runs))
+                if status != 'PASS':
+                    self.assertFalse((fixture.root / 'run-01-attempt-01').exists())
+                    failure = json.loads((output / 'parent-failure.json').read_bytes())
+                    self.assertEqual(failure['classification'], 'PRODUCT_FAIL')
+                    self.assertTrue(failure['owned_tree_zero'])
+                self.assertFalse((fixture.root / 'campaign-capture.json').exists())
 
 
 if __name__ == '__main__':

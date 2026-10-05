@@ -1,20 +1,24 @@
 """Owned sequential GT06 campaign; raw capture is never an acceptance verdict.
 
-Each of ten fresh host/editor pairs retains both identities for 35 batches.
+Each of the profile's fresh host/editor pairs retains both identities for 35 batches.
 Native ready -> 1000 real HTTP commands -> bound start permit -> 100 native
 cycles -> quiescent OS observation -> bound ACK with fresh native counters.
 Only a fully captured run can be resumed as part of the same source campaign.
-Interrupted runs retain their artifacts and are restarted with a fresh pair;
-their partial samples never enter the dataset. No production limits change.
+An objectively infrastructure-aborted pair may receive one fresh attempt while
+the immutable seven-day campaign lease remains valid; product/harness failures
+stay terminal. Interrupted runs retain their artifacts and partial samples
+never enter the dataset. No production limits change.
 """
 from __future__ import annotations
 
 import argparse
 import ctypes
 from dataclasses import asdict
+from datetime import datetime, timezone
 import gc
 import hashlib
 import json
+import math
 import os
 import platform
 from pathlib import Path
@@ -23,6 +27,7 @@ import stat
 import sys
 import threading
 import time
+import uuid
 
 STUDIO = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(STUDIO.parent))
@@ -32,8 +37,12 @@ from studio.tests.replay.benchmark_job import (
 )
 from studio.tests.replay.benchmark_readiness import validate_startup_readiness
 from studio.tests.replay.benchmark_import_observer import ImportObserver, validate_import_snapshot
-from studio.tests.replay.benchmark_http_phases import validate_phase_snapshot
+from studio.tests.replay.benchmark_http_phases import (
+    validate_journal_timing_snapshot, validate_phase_snapshot,
+)
+from studio.tests.replay import benchmark_environment as environment
 from studio.tests.replay import benchmark_profile as profile
+from studio.tests.replay.measure_window import measurement_window
 from studio.tests.replay.benchmark_assembly import read_artifact, assemble_sample, assemble_run, assemble_dataset
 from studio.tests.replay.run_native_benchmark import (
     load_fixture, source_files as imported_source_files, closure, read_regular, write, sha, encoded,
@@ -43,7 +52,25 @@ from studio.host.replay.process_probe import ProcessProbe
 from studio.pipeline import native_job
 
 SEQUENCE = 'host1000_then_native100_then_joint_ack_v1'
-MAX_ATTEMPTS = 3
+HEAVY_PREFLIGHT_NAMES = frozenset({
+    'chrome.exe', 'brave.exe', 'msedge.exe', 'firefox.exe', 'opera.exe',
+    'wsl.exe', 'wslhost.exe', 'wslrelay.exe', 'vmmemwsl', 'vmmemwsl.exe',
+    'telegram.exe', 'slack.exe', 'teams.exe', 'ms-teams.exe', 'discord.exe', 'zalo.exe',
+    'outlook.exe',
+})
+# O9.2 permits one fresh retry of an infrastructure-aborted pair, while
+# product/harness failures remain terminal.  Historical campaign.json files
+# carry ``max_attempts_per_run=1`` and are deliberately left on that policy.
+MAX_ATTEMPTS = 2
+CAMPAIGN_LIFECYCLE_SCHEMA = 'hh-studio.benchmark-campaign-lifecycle'
+CAMPAIGN_STATE_SCHEMA = 'hh-studio.benchmark-campaign-state'
+CAMPAIGN_LIFECYCLE_VERSION = '1.0.0'
+CAMPAIGN_MAX_AGE_SECONDS = 7 * 24 * 60 * 60
+CAMPAIGN_WINDOW_SECONDS = 4 * 60 * 60
+PREFLIGHT_RECHECK_SECONDS = 5 * 60
+INFRA_RETRY_MIN_REMAINING_SECONDS = 40 * 60
+LAUNCH_OBSERVATION_SCHEMA = 'HH-GT06-LAUNCH-OBSERVATION-1'
+LAUNCH_SAMPLE_SCHEMA = 'HH-GT06-LAUNCH-SAMPLE-STREAM-1'
 
 # Both entry points belong to the campaign even when only one is imported in
 # this process. Bind the scheduler registration too, without weakening the
@@ -52,6 +79,13 @@ CAMPAIGN_FIXED_SOURCES = (
     'tests/replay/run_benchmark_campaign.py',
     'tests/replay/run_campaign_task.py',
     'tests/replay/campaign_task.ps1',
+    'tests/replay/run_command_residency.py',
+    'tests/replay/run_watchdog_soak.py',
+    'tests/replay/run_o9_quiet_chain.py',
+    'tests/replay/residency_metrics.py',
+    'tests/replay/journal_scaling_metrics.py',
+    'tests/replay/run_journal_microbench.py',
+    'tests/replay/benchmark_environment.py',
     'contracts/perf-collector.schema.json',
 )
 
@@ -99,6 +133,367 @@ def publish(path, value):
     temporary.rename(path)
     require(read_regular(path) == raw, 'CAMPAIGN_INPUT_READBACK')
     return clock()
+
+
+class CampaignDeferredError(BenchmarkJobError):
+    """The campaign is durable, but this measurement window is not ready.
+
+    The original gate code remains the public ``code`` so callers that already
+    classify the resource failure keep their historical diagnostics.  The
+    explicit attributes let lifecycle consumers distinguish a deferred pair
+    from a terminal product/harness failure without guessing from text.
+    """
+    def __init__(self, code, *, reason, next_check_epoch, pair_index=None):
+        super().__init__(code)
+        self.deferred = True
+        self.lifecycle_code = 'DEFERRED'
+        self.deferred_code = 'CAMPAIGN_DEFERRED'
+        self.reason = reason
+        self.next_check_epoch = next_check_epoch
+        self.pair_index = pair_index
+
+
+def _utc(epoch):
+    return datetime.fromtimestamp(float(epoch), timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
+
+
+def _epoch(value, code):
+    require(type(value) in (int, float) and value >= 0, code)
+    return float(value)
+
+
+def _append_json_line(path, value, *, code='CAMPAIGN_STATE_WRITE'):
+    """Append one fsynced lifecycle event without rewriting prior history."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    if os.path.lexists(path):
+        info = path.lstat()
+        require(stat.S_ISREG(info.st_mode) and info.st_nlink == 1,
+                'CAMPAIGN_STATE_UNSAFE_PATH')
+        mode = 'ab'
+    else:
+        mode = 'xb'
+    raw = (json.dumps(value, sort_keys=True, separators=(',', ':'), allow_nan=False) + '\n').encode()
+    try:
+        with path.open(mode) as stream:
+            stream.write(raw)
+            stream.flush()
+            os.fsync(stream.fileno())
+    except FileExistsError:
+        # A second writer must never silently append to a path that appeared
+        # after our lstat.  The campaign lease will surface this as a gate.
+        require(False, code)
+    require(path.read_bytes().endswith(raw), code)
+
+
+def campaign_attempt_limit(root):
+    """Read the frozen attempt policy, failing closed when history is corrupt.
+
+    A malformed historical campaign is not equivalent to a fresh campaign.
+    Falling back to ``MAX_ATTEMPTS`` could silently grant a retry that the
+    frozen receipt never authorized.
+    """
+    path = root / 'campaign.json'
+    if not path.is_file():
+        return MAX_ATTEMPTS
+    try:
+        value = json.loads(read_regular(path))
+    except (OSError, ValueError, TypeError):
+        require(False, 'CAMPAIGN_ATTEMPT_POLICY_CORRUPT')
+    require(type(value) is dict and 'max_attempts_per_run' in value,
+            'CAMPAIGN_ATTEMPT_POLICY_CORRUPT')
+    limit = value['max_attempts_per_run']
+    require(type(limit) is int and 1 <= limit <= MAX_ATTEMPTS,
+            'CAMPAIGN_ATTEMPT_POLICY_CORRUPT')
+    return limit
+
+
+def _validate_campaign_state(root, lifecycle):
+    path = root / 'campaign-state.jsonl'
+    require(path.exists(), 'CAMPAIGN_STATE_MISSING')
+    lines = read_regular(path, 4 * 1024**2).splitlines()
+    require(lines, 'CAMPAIGN_STATE_MISSING')
+    previous_epoch = None
+    for expected, raw in enumerate(lines):
+        try:
+            value = json.loads(raw)
+        except (ValueError, TypeError):
+            require(False, 'CAMPAIGN_STATE_CORRUPT')
+        require(value.get('schema_id') == CAMPAIGN_STATE_SCHEMA
+                and value.get('schema_version') == CAMPAIGN_LIFECYCLE_VERSION
+                and value.get('campaign_id') == lifecycle['campaign_id']
+                and value.get('source_closure_sha256') == lifecycle['source_closure_sha256']
+                and value.get('profile_sha256') == lifecycle['profile_sha256']
+                and value.get('sequence') == expected
+                and value.get('state') in ('OPEN', 'DEFERRED', 'INFRA_RETRY', 'COMPLETE'),
+                'CAMPAIGN_STATE_BINDING')
+        observed = _epoch(value.get('observed_epoch'), 'CAMPAIGN_STATE_TIME')
+        require(value.get('observed_utc') == _utc(observed), 'CAMPAIGN_STATE_TIME')
+        if previous_epoch is not None:
+            require(observed >= previous_epoch, 'CAMPAIGN_STATE_ORDER')
+        previous_epoch = observed
+        if value.get('state') == 'DEFERRED':
+            next_check = _epoch(value.get('next_check_epoch'), 'CAMPAIGN_STATE_DEFER')
+            require(next_check >= observed
+                    and value.get('next_check_utc') == _utc(next_check),
+                    'CAMPAIGN_STATE_DEFER')
+    return json.loads(lines[-1])
+
+
+def ensure_campaign_lifecycle(root, *, campaign_id, source_closure_sha256,
+                              profile_sha256, toolchain_sha256, now=None):
+    """Create or verify the immutable seven-day same-closure campaign lease."""
+    now = time.time() if now is None else float(now)
+    require(now >= 0, 'CAMPAIGN_LIFECYCLE_CLOCK')
+    path = root / 'campaign-lifecycle.json'
+    if path.exists():
+        value = json.loads(read_regular(path))
+        require(value.get('schema_id') == CAMPAIGN_LIFECYCLE_SCHEMA
+                and value.get('schema_version') == CAMPAIGN_LIFECYCLE_VERSION,
+                'CAMPAIGN_LIFECYCLE_SCHEMA')
+        require(value.get('campaign_id') == campaign_id
+                and value.get('source_closure_sha256') == source_closure_sha256
+                and value.get('profile_sha256') == profile_sha256
+                and value.get('toolchain_sha256') == toolchain_sha256,
+                'CAMPAIGN_LIFECYCLE_BINDING')
+        opened = _epoch(value.get('opened_epoch'), 'CAMPAIGN_LIFECYCLE_OPENED')
+        expires = _epoch(value.get('expires_epoch'), 'CAMPAIGN_LIFECYCLE_EXPIRES')
+        require(value.get('max_age_seconds') == CAMPAIGN_MAX_AGE_SECONDS
+                and expires > opened and expires - opened == CAMPAIGN_MAX_AGE_SECONDS,
+                'CAMPAIGN_LIFECYCLE_WINDOW')
+        require(value.get('opened_utc') == _utc(opened)
+                and value.get('expires_utc') == _utc(expires), 'CAMPAIGN_LIFECYCLE_TIME')
+        require(now <= expires, 'CAMPAIGN_LIFECYCLE_EXPIRED')
+        _validate_campaign_state(root, value)
+        return value
+    opened = now
+    expires = opened + CAMPAIGN_MAX_AGE_SECONDS
+    value = {'schema_id': CAMPAIGN_LIFECYCLE_SCHEMA, 'schema_version': CAMPAIGN_LIFECYCLE_VERSION,
+             'campaign_id': campaign_id, 'source_closure_sha256': source_closure_sha256,
+             'profile_sha256': profile_sha256, 'toolchain_sha256': toolchain_sha256,
+             'opened_epoch': opened, 'expires_epoch': expires, 'opened_utc': _utc(opened),
+             'expires_utc': _utc(expires), 'max_age_seconds': CAMPAIGN_MAX_AGE_SECONDS,
+             'formal_acceptance': False}
+    write(path, value)
+    _append_json_line(root / 'campaign-state.jsonl', {
+        'schema_id': CAMPAIGN_STATE_SCHEMA, 'schema_version': CAMPAIGN_LIFECYCLE_VERSION,
+        'sequence': 0, 'state': 'OPEN', 'campaign_id': campaign_id,
+        'source_closure_sha256': source_closure_sha256, 'profile_sha256': profile_sha256,
+        'observed_epoch': opened, 'observed_utc': _utc(opened), 'formal_acceptance': False})
+    return value
+
+
+def _record_campaign_state(root, lifecycle, state, *, pair_index=None, attempt=None,
+                           reason=None, code=None, now=None, next_check_epoch=None):
+    path = root / 'campaign-state.jsonl'
+    sequence = 0
+    if path.exists():
+        previous = _validate_campaign_state(root, lifecycle)
+        previous_sequence = previous.get('sequence')
+        require(type(previous_sequence) is int and previous_sequence >= 0,
+                'CAMPAIGN_STATE_SEQUENCE')
+        sequence = previous_sequence + 1
+    now = time.time() if now is None else float(now)
+    require(now >= 0, 'CAMPAIGN_STATE_TIME')
+    require(previous.get('state') != 'COMPLETE' if path.exists() else True,
+            'CAMPAIGN_STATE_TERMINAL')
+    row = {'schema_id': CAMPAIGN_STATE_SCHEMA, 'schema_version': CAMPAIGN_LIFECYCLE_VERSION,
+           'sequence': sequence, 'state': state, 'campaign_id': lifecycle['campaign_id'],
+           'source_closure_sha256': lifecycle['source_closure_sha256'],
+           'profile_sha256': lifecycle['profile_sha256'], 'observed_epoch': now,
+           'observed_utc': _utc(now), 'formal_acceptance': False}
+    if pair_index is not None:
+        row['pair_index'] = pair_index
+    if attempt is not None:
+        row['attempt'] = attempt
+    if reason is not None:
+        row['reason'] = reason
+    if code is not None:
+        row['code'] = code
+    if next_check_epoch is not None:
+        row['next_check_epoch'] = next_check_epoch
+        row['next_check_utc'] = _utc(next_check_epoch)
+    _append_json_line(path, row)
+    return row
+
+
+def defer_campaign(root, lifecycle, *, code, reason, pair_index=None, now=None):
+    """Persist a DEFERRED decision and retain the first defer receipt forever."""
+    now = time.time() if now is None else float(now)
+    next_check = now + PREFLIGHT_RECHECK_SECONDS
+    deferred = {'schema_id': 'hh-studio.benchmark-campaign-deferred', 'schema_version': '1.0.0',
+                'campaign_id': lifecycle['campaign_id'],
+                'source_closure_sha256': lifecycle['source_closure_sha256'],
+                'profile_sha256': lifecycle['profile_sha256'], 'reason': reason,
+                'code': code, 'pair_index': pair_index, 'first_observed_epoch': now,
+                'first_observed_utc': _utc(now), 'next_check_epoch': next_check,
+                'next_check_utc': _utc(next_check), 'formal_acceptance': False}
+    path = root / 'deferred.json'
+    if path.exists():
+        previous = json.loads(read_regular(path))
+        require(previous.get('schema_id') == deferred['schema_id']
+                and previous.get('campaign_id') == deferred['campaign_id']
+                and previous.get('source_closure_sha256') == deferred['source_closure_sha256']
+                and previous.get('profile_sha256') == deferred['profile_sha256'],
+                'CAMPAIGN_DEFERRED_BINDING')
+    else:
+        write(path, deferred)
+    # ``deferred.json`` is the immutable first receipt.  Every subsequent
+    # defer gets its own append-only state row so the latest backoff is
+    # durable without rewriting that receipt.
+    _record_campaign_state(root, lifecycle, 'DEFERRED', pair_index=pair_index,
+                           reason=reason, code=code, now=now,
+                           next_check_epoch=next_check)
+    raise CampaignDeferredError(code, reason=reason, next_check_epoch=next_check,
+                                pair_index=pair_index)
+
+
+def require_defer_elapsed(root, lifecycle, *, now=None):
+    """Honor the five-minute backoff without rewriting the first receipt."""
+    path = root / 'deferred.json'
+    if not path.exists():
+        return
+    try:
+        value = json.loads(read_regular(path))
+    except (ValueError, TypeError, OSError):
+        require(False, 'CAMPAIGN_DEFERRED_CORRUPT')
+    require(value.get('schema_id') == 'hh-studio.benchmark-campaign-deferred'
+            and value.get('campaign_id') == lifecycle['campaign_id']
+            and value.get('source_closure_sha256') == lifecycle['source_closure_sha256']
+            and value.get('profile_sha256') == lifecycle['profile_sha256'],
+            'CAMPAIGN_DEFERRED_BINDING')
+    # The receipt remains immutable, while the state log carries the latest
+    # defer timestamp/check.  Never keep using the first five-minute window.
+    latest = _validate_campaign_state(root, lifecycle)
+    if latest.get('state') != 'DEFERRED':
+        return
+    next_check = _epoch(latest.get('next_check_epoch'), 'CAMPAIGN_DEFERRED_TIME')
+    require(latest.get('next_check_utc') == _utc(next_check), 'CAMPAIGN_DEFERRED_TIME')
+    now = time.time() if now is None else float(now)
+    if now < next_check:
+        raise CampaignDeferredError(latest.get('code', value.get('code',
+                                    'CAMPAIGN_PREFLIGHT_DEFERRED')),
+                                    reason='WAIT_RECHECK_INTERVAL',
+                                    next_check_epoch=next_check,
+                                    pair_index=value.get('pair_index'))
+
+
+def infra_retry_allowed(root, lifecycle, *, source_closure_sha256, profile_sha256,
+                        attempt, now=None, window_remaining_seconds=None):
+    """O9.2a gate for exactly one fresh INFRA_ABORT retry."""
+    now = time.time() if now is None else float(now)
+    require(lifecycle['source_closure_sha256'] == source_closure_sha256
+            and lifecycle['profile_sha256'] == profile_sha256, 'CAMPAIGN_RETRY_BINDING')
+    require(attempt == 1, 'CAMPAIGN_RETRY_ATTEMPTS')
+    try:
+        finite_window = math.isfinite(window_remaining_seconds)
+    except (OverflowError, ValueError, TypeError):
+        finite_window = False
+    require(type(window_remaining_seconds) in (int, float)
+            and type(window_remaining_seconds) is not bool and finite_window,
+            'CAMPAIGN_RETRY_WINDOW')
+    require(window_remaining_seconds >= 0, 'CAMPAIGN_RETRY_WINDOW')
+    if window_remaining_seconds < INFRA_RETRY_MIN_REMAINING_SECONDS:
+        return False
+    try:
+        environment.require_infra_budget(root.parent, read_regular)
+    except BenchmarkJobError:
+        return False
+    return now <= lifecycle['expires_epoch']
+
+
+def _window_remaining_seconds(window_started_mono):
+    """Return the observed remainder of this invocation's four-hour window."""
+    require(type(window_started_mono) in (int, float), 'CAMPAIGN_WINDOW_CLOCK')
+    elapsed = time.monotonic() - float(window_started_mono)
+    require(elapsed >= 0, 'CAMPAIGN_WINDOW_CLOCK')
+    return max(0.0, CAMPAIGN_WINDOW_SECONDS - elapsed)
+
+
+def _watchdog_retry_slots(root, lifecycle, *, source_closure_sha256,
+                          profile_sha256, campaign_sha256, max_attempts,
+                          window_started_mono):
+    """Return only watchdog slots authorized for this exact fresh retry.
+
+    A watchdog receipt is a stop latch by default.  It is temporarily
+    exempted only when the immutable prior failure proves INFRA_ABORT and
+    cleanup, the context is bound to the current closure, and O9.2's live
+    remaining-window/budget gate authorizes the one retry.  Once a later
+    attempt has a complete bound capture, the old latch is historical raw
+    evidence and no longer blocks closeout.
+    """
+    if lifecycle is None:
+        return frozenset()
+    allowed = set()
+    remaining = _window_remaining_seconds(window_started_mono)
+    for index in range(profile.PROFILE.process_runs):
+        for attempt in range(1, max_attempts + 1):
+            output = root / f'run-{index:02d}-attempt-{attempt:02d}'
+            stop = output / 'watchdog-stop.json'
+            failure_path = output / 'parent-failure.json'
+            if not stop.is_file() or not failure_path.is_file():
+                continue
+            try:
+                failure = json.loads(read_regular(failure_path))
+                context = json.loads(read_regular(output / 'context.json'))
+            except (OSError, ValueError, TypeError):
+                continue
+            if (failure.get('classification') != 'INFRA_ABORT'
+                    or failure.get('owner_closed') is not True
+                    or failure.get('owned_tree_zero') is not True
+                    or context.get('source_closure_sha256') != source_closure_sha256
+                    or context.get('profile_sha256') != profile_sha256
+                    or context.get('campaign_sha256') != campaign_sha256
+                    or context.get('index') != index
+                    or context.get('attempt') != attempt
+                    or context.get('run_id') != f'{lifecycle["campaign_id"]}.r{index:02d}.a{attempt:02d}'
+                    or (output / 'stop-request.json').exists()):
+                continue
+            try:
+                _o9_verify_retry_cleanup(output, context)
+            except BaseException:
+                continue
+            # The parent receipt is mutable raw metadata. Rebuild and bind
+            # the watchdog role evidence from the frozen sample stream before
+            # exempting this stop latch for a retry; a forged/stale
+            # INFRA_ABORT must remain latched.
+            try:
+                role_stop = _o9_verify_role_stop(output, context)
+                if (type(role_stop) is not dict
+                        or role_stop.get('classification') != 'INFRA_ABORT'):
+                    continue
+            except BaseException:
+                continue
+            # A later successful attempt proves this stop is no longer an
+            # active latch; retain the stop artifact for review.
+            later_success = False
+            for later in range(attempt + 1, max_attempts + 1):
+                capture_path = root / f'run-{index:02d}-attempt-{later:02d}' / 'run-capture.json'
+                if not capture_path.is_file():
+                    continue
+                try:
+                    capture = json.loads(read_regular(capture_path))
+                except (OSError, ValueError, TypeError):
+                    continue
+                if (capture.get('completed') is True
+                        and capture.get('source_closure_sha256') == source_closure_sha256
+                        and capture.get('profile_sha256') == profile_sha256
+                        and capture.get('run_id') == f'{lifecycle["campaign_id"]}.r{index:02d}.a{later:02d}'):
+                    later_success = True
+                    break
+            if later_success:
+                allowed.add(output)
+                continue
+            if attempt == 1 and attempt < max_attempts:
+                try:
+                    if infra_retry_allowed(root, lifecycle,
+                            source_closure_sha256=source_closure_sha256,
+                            profile_sha256=profile_sha256, attempt=attempt,
+                            window_remaining_seconds=remaining):
+                        allowed.add(output)
+                except BenchmarkJobError:
+                    # An unproven authorization remains a latched stop.
+                    pass
+    return frozenset(allowed)
 
 
 class NativeLog:
@@ -162,8 +557,8 @@ class CampaignProducer(CommandProducer):
         self.native_log = log
         super().__init__(root, run_id)
 
-    def _received(self):
-        observed = super()._received()
+    def _received(self, *, expected_diagnostic=None):
+        observed = super()._received(expected_diagnostic=expected_diagnostic)
         require(self.native_log.poll() is None, 'CAMPAIGN_NATIVE_EXIT_DURING_COMMANDS')
         return observed
 
@@ -177,6 +572,7 @@ def sample_editor(probe):
     return {'host_mono_us': observed['host_mono_us'],
             'handle_mono_us': observed['handle_mono_us'],
             'rss_bytes': {'value': observed['rss_bytes'], 'unavailable_reason': None},
+            'private_commit_bytes': {'value': observed['private_commit_bytes'], 'unavailable_reason': None},
             'held_handles': {'value': observed['held_handles'], 'unavailable_reason': None},
             'visible_window_handles': observed['visible_window_handles']}
 
@@ -225,28 +621,43 @@ def stop_requested(output, *, run_id, source_closure_sha256, campaign_sha256):
     return True
 
 
-def require_campaign_running(root, *, active=None):
+def require_campaign_running(root, *, active=None, max_attempts=None,
+                             allow_watchdog_slots=()):
     """A Stop in any fixed attempt slot stays latched across run boundaries.
 
     The active run validates its control payload separately. Presence in an
     older slot is sufficient to fail closed, including a broken symlink.
-    Check only the bounded 10 x MAX_ATTEMPTS slots, not arbitrary directories.
+    Check only the bounded profile.process_runs x MAX_ATTEMPTS slots, not arbitrary directories.
     """
-    for index in range(10):
-        for attempt in range(1, MAX_ATTEMPTS + 1):
+    max_attempts = campaign_attempt_limit(root) if max_attempts is None else max_attempts
+    require(type(max_attempts) is int and 1 <= max_attempts <= MAX_ATTEMPTS,
+            'CAMPAIGN_ATTEMPT_POLICY')
+    allow_watchdog_slots = frozenset(allow_watchdog_slots)
+    for index in range(profile.PROFILE.process_runs):
+        for attempt in range(1, max_attempts + 1):
             output = root / f'run-{index:02d}-attempt-{attempt:02d}'
             if output != active:
                 require(not os.path.lexists(output / 'stop-request.json'), 'CAMPAIGN_STOP_LATCHED')
+            if output not in allow_watchdog_slots:
+                require(not os.path.lexists(output / 'watchdog-stop.json'),
+                        'CAMPAIGN_WATCHDOG_STOP_LATCHED')
 
 
 def wait_owned_run(owner, output, *, run_id, source_closure_sha256, campaign_sha256,
-                   check_campaign_stop=None):
+                   check_campaign_stop=None, watchdog=None):
     while True:
         if check_campaign_stop is not None:
             check_campaign_stop()
         stop = stop_requested(output, run_id=run_id,
             source_closure_sha256=source_closure_sha256, campaign_sha256=campaign_sha256)
-        if owner.tick(stop=stop) is not None:
+        terminal = owner.tick(stop=stop)
+        # The owner/child's existing failure always takes precedence. The
+        # watchdog cannot rewrite a recorded failed run into infrastructure.
+        if terminal not in (None, 0):
+            raise BenchmarkJobError('BENCHMARK_WRAPPER_EXIT')
+        if watchdog is not None and not (output / 'child-failure.json').exists():
+            watchdog.poll(force=terminal is not None)
+        if terminal is not None:
             # Stop can arrive while tick observes the terminal process exit.
             require(not stop_requested(output, run_id=run_id,
                 source_closure_sha256=source_closure_sha256, campaign_sha256=campaign_sha256),
@@ -264,31 +675,43 @@ class CampaignScreenError(BenchmarkJobError):
         # Only selected numeric fields and fixed role/counter labels are retained.
         # Construct this after failure, never resample or retain a successful row.
         self.screen_observation = {
-            'schema_id': 'hh-studio.benchmark-screen-failure', 'schema_version': '1.0.0',
-            'batch_index': index, 'baseline_batch_index': 4, 'role': role,
+            'schema_id': 'hh-studio.benchmark-screen-failure', 'schema_version': '1.1.0',
+            'batch_index': index, 'baseline_batch_indices': [2, 3, 4], 'role': role,
             'counter': counter, 'baseline_value': baseline, 'observed_value': observed,
             'maximum_inclusive': maximum, 'root_cause_claim': False,
         }
 
 
 def screen_sample(sample, baseline):
-    """Stop an already-failing prefix; only all ten complete runs can pass."""
+    """Stop only hard failures; O1 keeps mild counter noise running to batch 34."""
     for role in ('host', 'editor'):
-        for name, row in sample['memory'][role].items():
+        require(set(sample['memory'][role]) == set(profile._COUNTERS), 'CAMPAIGN_COUNTER_SHAPE')
+        for name in profile._COUNTERS:
+            row = sample['memory'][role][name]
             if role == 'host' and name in ('objects', 'resources'):
                 continue
             value = row['value']
-            require(type(value) is int, 'CAMPAIGN_COUNTER_UNAVAILABLE')
+            require(type(value) is int and value >= (1 if name in ('rss_bytes', 'private_commit_bytes') else 0),
+                    'CAMPAIGN_COUNTER_UNAVAILABLE')
             if sample['index'] < 5:
                 continue
+            require(type(baseline) is dict, 'CAMPAIGN_BASELINE_UNAVAILABLE')
             reference_value = baseline[role][name]['value']
-            if not (value * 100 <= reference_value * 110 if name == 'rss_bytes' else value <= reference_value):
+            if name in ('held_handles', 'objects'):
+                margin = profile.PROFILE.early_object_margin if name == 'objects' else profile.PROFILE.early_handle_margin
+                if value > reference_value + margin:
+                    raise CampaignScreenError(
+                        'CAMPAIGN_EARLY_COUNTER_LIMIT', index=sample['index'], role=role,
+                        counter=name, baseline=reference_value, observed=value,
+                        maximum=reference_value + margin)
+            elif name == 'private_commit_bytes' and value * 100 > reference_value * profile.PROFILE.early_private_commit_percent:
                 raise CampaignScreenError(
-                    'CAMPAIGN_RSS_GROWTH' if name == 'rss_bytes' else 'CAMPAIGN_RETAINED_COUNTER_GROWTH',
-                    index=sample['index'], role=role, counter=name, baseline=reference_value,
-                    observed=value, maximum=reference_value * 110 // 100 if name == 'rss_bytes' else reference_value)
-    if sample['index'] >= 5:
-        require(sample['max_status_gap_ms'] <= 2000, 'CAMPAIGN_STATUS_GAP')
+                    'CAMPAIGN_EARLY_PRIVATE_COMMIT_LIMIT', index=sample['index'], role=role,
+                    counter=name, baseline=reference_value, observed=value,
+                    maximum=reference_value * profile.PROFILE.early_private_commit_percent // 100)
+    gap = sample.get('max_status_gap_ms')
+    require(type(gap) in (int, float) and gap >= 0 and gap <= profile.PROFILE.max_status_gap_ms,
+            'CAMPAIGN_STATUS_GAP')
 
 
 def write_child_failure(root, *, run_id, batches, progress, error):
@@ -338,6 +761,373 @@ def workstation_profile():
         'scope': 'current machine fixed before campaign; not a claim of performance on other devices'}
 
 
+def heavy_preflight_processes(*, all_processes=False):
+    """Name/PID inventory only; no command lines, termination or load estimates.
+
+    O4.1 permits app names as inventory, never as a launch prohibition.
+    all_processes includes engine names and enables top-private/WSL inventory.
+    Unknown snapshot/enumeration/close failures never authorize a launch.
+    """
+    require(os.name == 'nt', 'CAMPAIGN_PREFLIGHT_PLATFORM')
+    from ctypes import wintypes as w
+    class Entry(ctypes.Structure):
+        _fields_ = [('size', w.DWORD), ('usage', w.DWORD), ('pid', w.DWORD),
+                    ('heap', ctypes.c_void_p), ('module', w.DWORD), ('threads', w.DWORD),
+                    ('parent_pid', w.DWORD), ('base_priority', ctypes.c_long),
+                    ('flags', w.DWORD), ('exe', w.WCHAR * 260)]
+    kernel = ctypes.WinDLL('kernel32', use_last_error=True)
+    kernel.CreateToolhelp32Snapshot.argtypes = [w.DWORD, w.DWORD]
+    kernel.CreateToolhelp32Snapshot.restype = w.HANDLE
+    kernel.Process32FirstW.argtypes = [w.HANDLE, ctypes.POINTER(Entry)]
+    kernel.Process32FirstW.restype = w.BOOL
+    kernel.Process32NextW.argtypes = [w.HANDLE, ctypes.POINTER(Entry)]
+    kernel.Process32NextW.restype = w.BOOL
+    kernel.CloseHandle.argtypes = [w.HANDLE]
+    kernel.CloseHandle.restype = w.BOOL
+    snapshot = kernel.CreateToolhelp32Snapshot(0x00000002, 0)
+    require(snapshot not in (None, ctypes.c_void_p(-1).value), 'CAMPAIGN_PREFLIGHT_SNAPSHOT')
+    found = []
+    primary = None
+    try:
+        entry = Entry()
+        entry.size = ctypes.sizeof(entry)
+        # A Windows process snapshot always includes this caller. Even an
+        # empty first result is therefore not a verified clear environment.
+        require(kernel.Process32FirstW(snapshot, ctypes.byref(entry)), 'CAMPAIGN_PREFLIGHT_PROCESS_FIRST')
+        for _ in range(65536):
+            name = entry.exe.lower()
+            if all_processes or name in HEAVY_PREFLIGHT_NAMES:
+                found.append({'pid': int(entry.pid), 'name': name})
+            entry.size = ctypes.sizeof(entry)
+            if not kernel.Process32NextW(snapshot, ctypes.byref(entry)):
+                require(ctypes.get_last_error() == 18, 'CAMPAIGN_PREFLIGHT_PROCESS_NEXT')  # ERROR_NO_MORE_FILES
+                break
+        else:
+            raise BenchmarkJobError('CAMPAIGN_PREFLIGHT_PROCESS_CAP')
+    except BaseException as error:
+        primary = error
+        raise
+    finally:
+        if not kernel.CloseHandle(snapshot):
+            if primary is None:
+                raise BenchmarkJobError('CAMPAIGN_PREFLIGHT_SNAPSHOT_CLOSE')
+            primary.add_note('CAMPAIGN_PREFLIGHT_SNAPSHOT_CLOSE')
+    return sorted(found, key=lambda row: (row['name'], row['pid']))
+
+
+def environment_snapshot(*, job_handle=None,
+                         docker_inventory=environment._REQUIRE_DOCKER_INVENTORY):
+    return environment.native_snapshot(heavy_preflight_processes(all_processes=True),
+        job_handle=job_handle, heavy_names=HEAVY_PREFLIGHT_NAMES,
+        docker_inventory=docker_inventory)
+
+
+O9_ROLE_PROCESS_SCHEMA = 'HH-GT06-O9.3-ROLE-PROCESS-BINDING-1'
+O9_ROLE_PROCESS_VERSION = '1.0.0'
+
+
+def _o9_role_binding(context):
+    """Return the fixed O9.3 binding carried by every current attempt."""
+    return {key: context[key] for key in ('run_id', 'source_closure_sha256', 'campaign_sha256')}
+
+
+def _o9_evidence_binding(context):
+    """Return the cleanup-receipt binding when this is a fully formed attempt."""
+    keys = ('run_id', 'source_closure_sha256', 'profile_sha256', 'campaign_sha256')
+    return {key: context[key] for key in keys} if all(key in context for key in keys) else None
+
+
+def _o9_role_process_start(value):
+    if type(value) is not str or re.fullmatch(r'windows:[1-9][0-9]{0,19}', value) is None:
+        return None
+    return int(value.split(':', 1)[1])
+
+
+def _o9_read_role_process_binding(output, context):
+    path = output / 'role-process-binding.json'
+    if not path.is_file():
+        return None
+    value = json.loads(read_regular(path))
+    require(value.get('schema_id') == O9_ROLE_PROCESS_SCHEMA
+            and value.get('schema_version') == O9_ROLE_PROCESS_VERSION,
+            'O9_3_ROLE_PROCESS_SCHEMA')
+    binding = _o9_role_binding(context)
+    require(all(value.get(key) == expected for key, expected in binding.items()),
+            'O9_3_ROLE_PROCESS_BINDING')
+    roles = value.get('roles')
+    require(type(roles) is dict and set(roles) == {'host', 'editor'},
+            'O9_3_ROLE_PROCESS_ROLES')
+    normalized = {}
+    identities = set()
+    for role in ('host', 'editor'):
+        identity = roles[role]
+        require(type(identity) is dict and set(identity) == {'pid', 'process_start'},
+                'O9_3_ROLE_PROCESS_IDENTITY')
+        start = _o9_role_process_start(identity['process_start'])
+        require(type(identity['pid']) is int and identity['pid'] > 0 and start is not None,
+                'O9_3_ROLE_PROCESS_IDENTITY')
+        key = (identity['pid'], start)
+        require(key not in identities, 'O9_3_ROLE_PROCESS_DUPLICATE')
+        identities.add(key)
+        normalized[role] = {'pid': identity['pid'], 'process_start_100ns': start}
+    return {'binding': binding, 'roles': normalized}
+
+
+def _o9_annotate_role_processes(output, context, row):
+    """Label watchdog-owned processes only after exact PID/start binding."""
+    binding = _o9_read_role_process_binding(output, context)
+    if binding is None:
+        return row
+    result = dict(row)
+    owned = row.get('owned_processes')
+    require(type(owned) is list, 'O9_3_ROLE_PROCESS_SAMPLE')
+    rows = []
+    for process in owned:
+        require(type(process) is dict, 'O9_3_ROLE_PROCESS_SAMPLE')
+        current = dict(process)
+        key = (process.get('pid'), process.get('process_start_100ns'))
+        for role, expected in binding['roles'].items():
+            if key == (expected['pid'], expected['process_start_100ns']):
+                current['role'] = role
+                break
+        rows.append(current)
+    result['owned_processes'] = rows
+    return result
+
+
+def _o9_role_context(output, context, row):
+    """Load only complete child previews; missing data stays an O9.3 gap."""
+    process_binding = _o9_read_role_process_binding(output, context)
+    binding = _o9_role_binding(context)
+    samples = []
+    for path in sorted(output.glob('sample-preview-*.json')):
+        try:
+            value = json.loads(read_regular(path))
+            index = value.get('index')
+            if type(index) is int and 0 <= index <= 34 and type(value.get('memory')) is dict:
+                samples.append({'index': index, 'memory': value['memory']})
+        except (OSError, ValueError, TypeError):
+            continue
+    samples = {value['index']: value for value in samples}
+    batch_samples = [samples[index] for index in sorted(samples)]
+    baseline = None
+    if all(index in samples for index in environment.O9_ROLE_BASELINE_BATCHES):
+        baseline = profile.baseline_memory_rows(
+            [samples[index]['memory'] for index in environment.O9_ROLE_BASELINE_BATCHES],
+            '$.o9_role_baseline')
+    if batch_samples:
+        row = dict(row)
+        row['batch_index'] = batch_samples[-1]['index']
+    return binding, process_binding, baseline, batch_samples, row
+
+
+def _o9_role_annotator(output, context):
+    return lambda row: _o9_annotate_role_processes(output, context, row)
+
+
+def _o9_role_classifier(output, context):
+    def classify(sample_index, row, decision):
+        binding, _process_binding, baseline, batch_samples, trigger = _o9_role_context(output, context, row)
+        return environment.classify_role_counter_trigger(
+            binding=binding, watchdog_sample_index=sample_index,
+            watchdog_row=trigger, baseline_memory=baseline,
+            batch_samples=batch_samples, trigger_reason=decision['reason'])
+    return classify
+
+
+def _o9_verify_role_stop(output, context):
+    """Rebuild O9.3 attribution from the durable stop row before closeout."""
+    stop_path = output / 'watchdog-stop.json'
+    if not stop_path.is_file():
+        return None
+    stop = json.loads(read_regular(stop_path))
+    require(type(stop) is dict and stop.get('schema') == 'HH-GT06-WATCHDOG-STOP-1'
+            and stop.get('run_id') == context['run_id']
+            and stop.get('source_closure_sha256') == context['source_closure_sha256']
+            and stop.get('campaign_sha256') == context['campaign_sha256']
+            and stop.get('formal_acceptance') is False,
+            'O9_3_ROLE_STOP_BINDING')
+    role_result = stop.get('role_counter')
+    require(type(role_result) is dict, 'O9_3_ROLE_STOP_MISSING')
+    require(role_result.get('formal_acceptance') is False
+            and role_result.get('classification') in ('INFRA_ABORT', 'PRODUCT_FAIL'),
+            'O9_3_ROLE_STOP_SHAPE')
+    if role_result.get('evidence') is None:
+        require(role_result.get('classification') == 'INFRA_ABORT'
+                and role_result.get('reason') == 'ROLE_COUNTER_EVIDENCE_GAP',
+                'O9_3_ROLE_STOP_GAP')
+        return role_result
+    lines = read_regular(output / 'environment-samples.jsonl', 64 * 1024**2).splitlines()
+    sample_index = stop.get('sample_index')
+    require(type(sample_index) is int and sample_index >= 0 and sample_index < len(lines) - 1,
+            'O9_3_ROLE_STOP_INDEX')
+    row = environment.unpack_sample(json.loads(lines[sample_index + 1]))
+    binding, _process_binding, baseline, batch_samples, trigger = _o9_role_context(output, context, row)
+    expected = environment.classify_role_counter_trigger(
+        binding=binding, watchdog_sample_index=sample_index,
+        watchdog_row=trigger, baseline_memory=baseline,
+        batch_samples=batch_samples, trigger_reason=stop['reason'])
+    environment.verify_role_counter_evidence(
+        role_result['evidence'], binding=binding, watchdog_sample_index=sample_index,
+        watchdog_row=trigger, baseline_memory=baseline, batch_samples=batch_samples)
+    require(expected['classification'] == role_result['classification']
+            and expected['reason'] == role_result.get('reason')
+            and expected.get('failures', []) == role_result.get('failures', []),
+            'O9_3_ROLE_STOP_RECLASSIFIED')
+    return role_result
+
+
+def _o9_verify_retry_cleanup(output, context):
+    """Verify owner cleanup observations before exempting a retry latch."""
+    require(type(context) is dict, 'O9_3_RETRY_CONTEXT')
+    for role in ('host-owner', 'editor-host'):
+        cleanup = json.loads(read_regular(output / role / 'cleanup-001.json'))
+        require(type(cleanup) is dict, 'O9_2_RETRY_CLEANUP')
+        require(all(cleanup.get(key) == context.get(key) for key in (
+            'run_id', 'source_closure_sha256', 'profile_sha256', 'campaign_sha256')),
+            'O9_2_RETRY_CLEANUP_BINDING')
+        job = cleanup.get('job')
+        wrapper = cleanup.get('wrapper_process_handle')
+        require(cleanup.get('closed') is True
+                and cleanup.get('completed') is False
+                and type(job) is dict and job.get('closed') is True
+                and job.get('zero_observed') is True
+                and job.get('handle_retained') is False
+                and job.get('close_uncertain') is False
+                and type(wrapper) is dict and wrapper.get('closed') is True
+                and wrapper.get('handle_retained') is False
+                and wrapper.get('close_uncertain') is False,
+                'O9_2_RETRY_CLEANUP')
+
+
+def environment_preflight():
+    """O4.1 resource/engine gate; app names are inventory only."""
+    try:
+        return environment.preflight(environment_snapshot())
+    except Exception as error:
+        return {'schema_id': environment.SCHEMA, 'schema_version': environment.VERSION,
+                'observed_utc': time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()),
+                'pass': False, 'failure_code': getattr(error, 'code', type(error).__name__),
+                'heavy_processes': None, 'foreign_engines': None,
+                'required_heavy_processes_closed': False}
+
+
+def require_environment_preflight(result):
+    environment.require_preflight(result)
+
+
+def _observe_launch_row(policy, row):
+    previous = policy.previous
+    require('cpu_observation' in row, 'CAMPAIGN_PREFLIGHT_CPU_OBSERVATION_MISSING')
+    failure = policy.observe(row)  # Recomputes recorded per-process CPU too.
+    require(failure is None, 'CAMPAIGN_PREFLIGHT_OBSERVATION_' + (failure['reason'] if failure else 'FAILED'))
+    require_environment_preflight(environment.preflight(row))
+    if previous is None:
+        return None
+    total = row['cpu_total_100ns'] - previous['cpu_total_100ns']
+    idle = row['cpu_idle_100ns'] - previous['cpu_idle_100ns']
+    require(total > 0, 'CAMPAIGN_PREFLIGHT_CPU_UNOBSERVED')
+    return 100 * (total - idle) / total
+
+
+def _launch_summary(output, binding, policy, percentages, count):
+    span = (policy.previous['uptime_ms'] - policy.first['uptime_ms']) / 1000
+    require(60 <= span <= 60 + environment.MAX_SAMPLE_GAP_SECONDS, 'CAMPAIGN_PREFLIGHT_OBSERVATION_DURATION')
+    require(percentages and not all(value > 95 for value in percentages), 'CAMPAIGN_PREFLIGHT_CPU_BUSY')
+    return {'schema': LAUNCH_OBSERVATION_SCHEMA, **binding, 'sample_count': count,
+            'observed_seconds': span, 'cpu_interval_percent': percentages,
+            'cpu_max_percent': max(percentages), 'cpu_mean_percent': sum(percentages) / len(percentages),
+            'samples': reference(output, output / 'environment-launch-samples.jsonl'),
+            'preflight': reference(output, output / 'environment-preflight-before.json'),
+            'formal_acceptance': False}
+
+
+def observe_pair_launch(output, context, check_campaign_stop):
+    """A new, bounded minute before every fresh pair; never reuses arm telemetry."""
+    binding = {key: context[key] for key in ('run_id', 'source_closure_sha256', 'campaign_sha256')}
+    policy, percentages = environment.Policy(), []
+    with (output / 'environment-launch-samples.jsonl').open('xb') as stream:
+        stream.write(encoded({'schema': LAUNCH_SAMPLE_SCHEMA, **binding}))
+        # 13 samples normally span 60 s. One extra tolerates millisecond rounding;
+        # a stalled uptime clock cannot turn this into an unbounded observation.
+        for count in range(1, 15):
+            started = time.monotonic()
+            check_campaign_stop()
+            verify_sources(context['source_files'])
+            row = environment_snapshot()
+            row['cpu_observation'] = environment.cpu_interval(policy.previous, row)
+            stream.write(encoded(environment.pack_sample(row)))
+            stream.flush()
+            os.fsync(stream.fileno())
+            check_campaign_stop()
+            percentage = _observe_launch_row(policy, row)
+            if percentage is not None:
+                percentages.append(percentage)
+            if row['uptime_ms'] - policy.first['uptime_ms'] >= 60_000:
+                break
+            if count < 14:
+                time.sleep(max(0, environment.INTERVAL_SECONDS - (time.monotonic() - started)))
+    write(output / 'environment-preflight-before.json', environment.preflight(policy.previous))
+    summary = _launch_summary(output, binding, policy, percentages, count)
+    write(output / 'launch-observation.json', summary)
+    verify_sources(context['source_files'])
+    check_campaign_stop()
+
+
+def verify_launch_observation(output, context, first_run_sample):
+    """Current verifier requires the new proof; old captures use their frozen verifier."""
+    require(context.get('launch_observation_schema') == LAUNCH_OBSERVATION_SCHEMA,
+            'CAMPAIGN_LAUNCH_OBSERVATION_REQUIRED_CURRENT_VERIFIER')
+    binding = {key: context[key] for key in ('run_id', 'source_closure_sha256', 'campaign_sha256')}
+    lines = read_regular(output / 'environment-launch-samples.jsonl', 64 * 1024**2).splitlines()
+    require(lines and json.loads(lines[0]) == {'schema': LAUNCH_SAMPLE_SCHEMA, **binding},
+            'CAMPAIGN_LAUNCH_OBSERVATION_BINDING')
+    policy, percentages = environment.Policy(), []
+    require(2 <= len(lines) - 1 <= 14, 'CAMPAIGN_PREFLIGHT_OBSERVATION_DURATION')
+    for line in lines[1:]:
+        percentage = _observe_launch_row(policy, environment.unpack_sample(json.loads(line)))
+        if percentage is not None:
+            percentages.append(percentage)
+    require(json.loads(read_regular(output / 'environment-preflight-before.json')) == environment.preflight(policy.previous),
+            'CAMPAIGN_LAUNCH_PREFLIGHT_CHANGED')
+    expected = _launch_summary(output, binding, policy, percentages, len(lines) - 1)
+    require(json.loads(read_regular(output / 'launch-observation.json')) == expected,
+            'CAMPAIGN_LAUNCH_OBSERVATION_CHANGED')
+    uptime_gap = (first_run_sample['uptime_ms'] - policy.previous['uptime_ms']) / 1000
+    awake_gap = (first_run_sample['awake_100ns'] - policy.previous['awake_100ns']) / 10_000_000
+    require(0 <= uptime_gap <= environment.MAX_SAMPLE_GAP_SECONDS and awake_gap >= 0
+            and abs(uptime_gap - awake_gap) <= .1, 'CAMPAIGN_LAUNCH_OBSERVATION_STALE')
+
+
+
+def seal_campaign_capture(root, result):
+    """Reuse an identical completed capture without rebinding its environment.
+
+    A later invocation still records its own before/after snapshots; they are
+    supplemental observations and cannot replace the completed run's hashes.
+    """
+    final = root / 'campaign-capture.json'
+    if not final.exists():
+        write(final, result)
+        return final
+    previous = json.loads(read_regular(final))
+    normalized = dict(result)
+    for field, phase in (('environment_preflight_before', 'before'),
+                         ('environment_preflight_after', 'after')):
+        ref = previous.get(field)
+        require(type(ref) is dict and set(ref) == {'file', 'sha256', 'size_bytes'}
+                and type(ref['file']) is str
+                and re.fullmatch(r'environment/[0-9a-f]{32}-' + phase + r'\.json', ref['file']),
+                'CAMPAIGN_ENVIRONMENT_REFERENCE')
+        path = root / ref['file']
+        require(reference(root, path) == ref, 'CAMPAIGN_ENVIRONMENT_HASH')
+        if phase == 'before':
+            require_environment_preflight(json.loads(read_regular(path)))
+        normalized[field] = ref
+    require(previous == normalized, 'CAMPAIGN_EXISTING_CAPTURE_CHANGED')
+    return final
+
+
 def verify_owner_captures(root, context):
     """Delegate raw exits/limits/invocation/source binding to the checked owner."""
     sources = context['source_files']
@@ -367,6 +1157,8 @@ def verify_run_capture(root, captured, source_digest, *, campaign_id, index, att
             and context['campaign_sha256'] == campaign_sha256
             and context['source_closure_sha256'] == source_digest
             and closure(context['source_files']) == source_digest, 'CAMPAIGN_RESUME_CONTEXT')
+    require(context.get('launch_observation_schema') == LAUNCH_OBSERVATION_SCHEMA,
+            'CAMPAIGN_LAUNCH_OBSERVATION_REQUIRED_CURRENT_VERIFIER')
     files = captured['artifacts']
     require(type(files) is dict and files, 'CAMPAIGN_RESUME_ARTIFACTS')
     for relative, digest in files.items():
@@ -374,7 +1166,7 @@ def verify_run_capture(root, captured, source_digest, *, campaign_id, index, att
                 and all(part not in ('', '.', '..') for part in relative.split('/')), 'CAMPAIGN_ARTIFACT_PATH')
         require(sha(artifact_bytes(root / relative)) == digest, 'CAMPAIGN_RESUME_ARTIFACT_CHANGED')
     require({'context.json', 'child-result.json', 'child-terminal-cleanup.json',
-             'http-phases-final.json', 'import-observation.json',
+             'http-phases-final.json', 'journal-timings-final.json', 'import-observation.json',
              'host-owner/capture.json', 'editor-host/capture.json',
              'host-owner/process-start.json', 'host-owner/process-exit.json', 'host-owner/stdout.txt',
              'host-owner/stderr.txt', 'editor-host/process-start.json', 'editor-host/process-exit.json',
@@ -397,23 +1189,88 @@ def verify_run_capture(root, captured, source_digest, *, campaign_id, index, att
     require(len(child['batches']) == 35, 'CAMPAIGN_RESUME_BATCH_COUNT')
     verify_child_terminal_cleanup(root, context, child)
     verify_observations(root, context, child)
+    require({'environment-preflight-before.json', 'environment-preflight-after.json',
+             'environment-samples.jsonl', 'environment-launch-samples.jsonl',
+             'launch-observation.json'}.issubset(files), 'CAMPAIGN_ENVIRONMENT_MISSING')
+    require_environment_preflight(json.loads(read_regular(root / 'environment-preflight-before.json')))
+    environment.require_snapshot(json.loads(read_regular(root / 'environment-preflight-after.json')))
+    environment.verify_watchdog(root, read_regular, elapsed_seconds=host['elapsed_seconds'],
+                               expected_binding={'run_id': run_id,
+                                                 'source_closure_sha256': source_digest,
+                                                 'campaign_sha256': campaign_sha256},
+                               require_docker_inventory=True)
+    first_run_sample = environment.unpack_sample(json.loads(
+        read_regular(root / 'environment-samples.jsonl', 64 * 1024**2).splitlines()[1]))
+    verify_launch_observation(root, context, first_run_sample)
     verify_owner_captures(root, context)
     return child
 
 
 def run_campaign(campaign_id, root):
+    window_started_mono = time.monotonic()
+    from studio.tests.replay.benchmark_job import HELD_OWNERS
+    with measurement_window(campaign_id, 'GT06 formal 2x35',
+                            safe_to_release=lambda: not HELD_OWNERS):
+        return _run_campaign_window(campaign_id, root,
+                                     window_started_mono=window_started_mono)
+
+
+def _run_campaign_window(campaign_id, root, *, window_started_mono=None):
+    # Every invocation (including resume) captures fresh, immutable resource
+    # observations. A cached PASS must never authorize a later launch.
+    invocation = uuid.uuid4().hex
+    preflight_path = root / 'environment' / f'{invocation}-before.json'
+    after_path = root / 'environment' / f'{invocation}-after.json'
+    primary = None
+    if window_started_mono is None:
+        window_started_mono = time.monotonic()
+    try:
+        with environment.KeepAwake():
+            try:
+                return _run_campaign(campaign_id, root, preflight_path, after_path,
+                                     window_started_mono=window_started_mono)
+            except TypeError as error:
+                # Keep lightweight test doubles and old scheduler wrappers
+                # source-compatible while the real implementation observes the
+                # invocation window.
+                if "unexpected keyword argument 'window_started_mono'" not in str(error):
+                    raise
+                return _run_campaign(campaign_id, root, preflight_path, after_path)
+    except BaseException as error:
+        primary = error
+        raise
+    finally:
+        # The success path records the after snapshot before binding its hash.
+        # Failure paths also retain a snapshot without replacing the real error.
+        if preflight_path.exists() and not after_path.exists():
+            try:
+                write(after_path, environment_preflight())
+            except Exception as snapshot_error:
+                if primary is None:
+                    raise
+                primary.add_note('Post-run environment snapshot could not be persisted: '
+                                 + type(snapshot_error).__name__)
+
+
+def _run_campaign(campaign_id, root, preflight_path, after_path, *,
+                  window_started_mono=None):
+    if window_started_mono is None:
+        window_started_mono = time.monotonic()
     load_fixture()  # Same dynamic dependency closure in parent and child.
     before = source_files()
     digest = closure(before)
     machine = workstation_profile()
     lock_raw = read_regular(STUDIO / 'toolchain.lock.json')
-    frozen = {'schema_id': 'hh-studio.benchmark-campaign', 'schema_version': '1.0.0',
+    new_campaign = not root.exists()
+    frozen_attempts = MAX_ATTEMPTS if new_campaign else campaign_attempt_limit(root)
+    frozen = {'schema_id': 'hh-studio.benchmark-campaign', 'schema_version': '1.2.0',
         'campaign_id': campaign_id, 'source_files': before, 'source_closure_sha256': digest,
         'profile_sha256': profile.PROFILE_SHA256, 'workstation': machine, 'sequence': SEQUENCE,
         'toolchain_sha256': sha(lock_raw), 'formal_acceptance': False,
         'python_executable_sha256': sha(read_regular(Path(sys.executable), 256 * 1024**2)),
-        'run_count': 10, 'batches_per_run': 35, 'max_attempts_per_run': MAX_ATTEMPTS}
-    if root.exists():
+        'run_count': profile.PROFILE.process_runs, 'batches_per_run': profile.PROFILE.warmup_batches + profile.PROFILE.measured_batches,
+        'max_attempts_per_run': frozen_attempts, 'launch_observation_schema': LAUNCH_OBSERVATION_SCHEMA}
+    if not new_campaign:
         require(json.loads(read_regular(root / 'campaign.json')) == json.loads(encoded(frozen)),
                 'CAMPAIGN_RESUME_SOURCE_OR_MACHINE_CHANGED')
     else:
@@ -425,9 +1282,60 @@ def run_campaign(campaign_id, root):
             raw = read_regular(STUDIO / name)
             require(sha(raw) == expected, 'CAMPAIGN_FREEZE_CHANGED')
             write(root / 'source/studio' / name, raw)
+    lifecycle = None
+    lifecycle_path = root / 'campaign-lifecycle.json'
+    defer_wait = None
+    resuming_deferred = False
+    if new_campaign or lifecycle_path.exists():
+        lifecycle = ensure_campaign_lifecycle(root, campaign_id=campaign_id,
+            source_closure_sha256=digest, profile_sha256=profile.PROFILE_SHA256,
+            toolchain_sha256=sha(lock_raw))
+        # A previous invocation that deferred remains durable, but must wait
+        # for the latest append-only state's five-minute recheck timestamp.
+        if (root / 'deferred.json').exists():
+            resuming_deferred = (_validate_campaign_state(root, lifecycle).get('state') == 'DEFERRED')
+            try:
+                require_defer_elapsed(root, lifecycle)
+            except CampaignDeferredError as error:
+                defer_wait = error
+    campaign_sha = sha(read_regular(root / 'campaign.json'))
+    authorized_watchdog_slots = set(_watchdog_retry_slots(
+        root, lifecycle, source_closure_sha256=digest,
+        profile_sha256=profile.PROFILE_SHA256, campaign_sha256=campaign_sha,
+        max_attempts=frozen_attempts, window_started_mono=window_started_mono))
+    # Resource availability is dynamic evidence, so it is deliberately kept
+    # outside campaign.json. Persist the snapshot before enforcing it: a
+    # failed preflight must leave a reviewable record and never launch a pair.
+    preflight_before = environment_preflight()
+    write(preflight_path, preflight_before)
+    # Stop/watchdog latches are checked after capturing this invocation's
+    # preflight, so a requested stop cannot be masked by resource state and
+    # the failed invocation still has complete reviewable evidence.
+    require_campaign_running(root, max_attempts=frozen_attempts,
+                             allow_watchdog_slots=authorized_watchdog_slots)
+    if lifecycle is not None:
+        try:
+            require_environment_preflight(preflight_before)
+        except BenchmarkJobError as error:
+            if defer_wait is not None:
+                # Preserve the current observed gate code while honoring the
+                # latest five-minute receipt.  No new timestamp is appended
+                # until a real recheck window opens.
+                raise CampaignDeferredError(
+                    error.code, reason='WAIT_RECHECK_INTERVAL',
+                    next_check_epoch=defer_wait.next_check_epoch,
+                    pair_index=defer_wait.pair_index)
+            defer_campaign(root, lifecycle, code=error.code,
+                           reason='CAMPAIGN_PREFLIGHT', pair_index=None)
+        if defer_wait is not None:
+            raise defer_wait
+        if resuming_deferred:
+            _record_campaign_state(root, lifecycle, 'OPEN', reason='DEFER_RECHECK_READY',
+                                   code='CAMPAIGN_DEFERRED_RESUMED', now=time.time())
+    else:
+        require_environment_preflight(preflight_before)
     completed = []
     identities = set()
-    campaign_sha = sha(read_regular(root / 'campaign.json'))
 
     def remember(captured):
         for process in captured['processes'].values():
@@ -435,11 +1343,12 @@ def run_campaign(campaign_id, root):
             require(identity not in identities, 'CAMPAIGN_PROCESS_REUSE')
             identities.add(identity)
 
-    for index in range(10):
-        require_campaign_running(root)
+    for index in range(profile.PROFILE.process_runs):
+        require_campaign_running(root, max_attempts=frozen_attempts,
+                                 allow_watchdog_slots=authorized_watchdog_slots)
         finished = []
         attempts = []
-        for attempt in range(1, MAX_ATTEMPTS + 1):
+        for attempt in range(1, frozen_attempts + 1):
             output = root / f'run-{index:02d}-attempt-{attempt:02d}'
             if not output.exists():
                 break
@@ -451,123 +1360,250 @@ def run_campaign(campaign_id, root):
                                    index=index, attempt=attempt, campaign_sha256=campaign_sha)
                 finished.append((output, captured))
         require(len(finished) <= 1, 'CAMPAIGN_DUPLICATE_SUCCESS')
-        require_campaign_running(root)
+        require_campaign_running(root, max_attempts=frozen_attempts,
+                                 allow_watchdog_slots=authorized_watchdog_slots)
         if finished:
             output, captured = finished[0]
+            measured = profile.summarize_run(json.loads(read_regular(output / 'assembled-run.json', profile.MAX_BYTES)))
+            require(measured['status'] == 'PASS', 'CAMPAIGN_RUN_MEASUREMENTS_NOT_PASS')
             remember(captured)
             completed.append({'index': index, 'run_id': captured['run_id'], 'capture': reference(root, output / 'run-capture.json')})
             continue
-        require(len(attempts) < MAX_ATTEMPTS, 'CAMPAIGN_ATTEMPTS_EXHAUSTED')
+        # O9.2a: every fresh pair gets its own resource gate.  A transient
+        # preflight failure is durable DEFERRED state; no empty attempt slot
+        # is created and a later invocation can continue this same closure.
+        if lifecycle is not None:
+            pair_preflight = environment_preflight()
+            try:
+                require_environment_preflight(pair_preflight)
+            except BenchmarkJobError as error:
+                defer_campaign(root, lifecycle, code=error.code,
+                               reason='PAIR_PREFLIGHT', pair_index=index)
+            try:
+                environment.require_infra_budget(root.parent, read_regular)
+            except BenchmarkJobError as error:
+                defer_campaign(root, lifecycle, code=error.code,
+                               reason='INFRA_RETRY_BUDGET', pair_index=index)
         # A failed process pair is never silently reused. Prior attempts must
         # have a parent-captured closed/zero record before starting another.
         for prior in attempts:
             require(not (prior / 'stop-request.json').exists(), 'CAMPAIGN_STOP_LATCHED')
             failure = json.loads(read_regular(prior / 'parent-failure.json'))
+            context = json.loads(read_regular(prior / 'context.json'))
+            prior_attempt = int(prior.name.rsplit('-attempt-', 1)[1])
+            require(context.get('run_id') == f'{campaign_id}.r{index:02d}.a{prior_attempt:02d}'
+                    and context.get('source_closure_sha256') == digest
+                    and context.get('profile_sha256') == profile.PROFILE_SHA256
+                    and context.get('campaign_sha256') == campaign_sha
+                    and context.get('index') == index
+                    and context.get('attempt') == prior_attempt,
+                    'CAMPAIGN_PRIOR_CONTEXT_BINDING')
             require(failure.get('owned_tree_zero') is True and failure.get('owner_closed') is True,
                     'CAMPAIGN_PRIOR_OWNER_HELD')
+            _o9_verify_retry_cleanup(prior, context)
+            # Only an objectively classified infrastructure abort is eligible
+            # for the one fresh same-closure retry. Product and harness rows
+            # remain terminal and are never silently replayed.
+            if failure.get('classification') != 'INFRA_ABORT':
+                code = failure.get('code')
+                require(False, code if type(code) is str and re.fullmatch(r'[A-Z][A-Z0-9_]{0,63}', code)
+                        else 'CAMPAIGN_PRIOR_FAILURE')
+            if (prior / 'watchdog-stop.json').is_file():
+                role_stop = _o9_verify_role_stop(prior, context)
+                require(type(role_stop) is dict
+                        and role_stop.get('classification') == 'INFRA_ABORT',
+                        'CAMPAIGN_PRIOR_WATCHDOG_BINDING')
+            require(infra_retry_allowed(root, lifecycle,
+                                        source_closure_sha256=digest,
+                                        profile_sha256=profile.PROFILE_SHA256,
+                                        attempt=prior_attempt,
+                                        window_remaining_seconds=_window_remaining_seconds(
+                                            window_started_mono)),
+                    'CAMPAIGN_PRIOR_RETRY_NOT_AUTHORIZED')
+            _record_campaign_state(root, lifecycle, 'INFRA_RETRY', pair_index=index,
+                                   attempt=prior_attempt,
+                                   reason=failure.get('code', 'CAMPAIGN_INFRA_RETRY'))
+        require(len(attempts) < frozen_attempts, 'CAMPAIGN_ATTEMPTS_EXHAUSTED')
         attempt = len(attempts) + 1
-        output = root / f'run-{index:02d}-attempt-{attempt:02d}'
-        output.mkdir(exist_ok=False)
-        run_id = f'{campaign_id}.r{index:02d}.a{attempt:02d}'
-        write(output / 'context.json', {'run_id': run_id, 'index': index, 'attempt': attempt,
-            'source_files': before, 'source_closure_sha256': digest, 'profile_sha256': profile.PROFILE_SHA256,
-            'campaign_sha256': sha(read_regular(root / 'campaign.json'))})
-        write(output / 'source-files.json', before)
-        write(output / 'toolchain.lock.json', lock_raw)
-        write(output / 'benchmark-profile.json', read_regular(root / 'benchmark-profile.json'))
-        for name, expected in before.items():
-            raw = read_regular(root / 'source/studio' / name)
-            require(sha(raw) == expected, 'CAMPAIGN_FROZEN_COPY_CHANGED')
-            write(output / 'source/studio' / name, raw)
-        owner = None
-        primary = None
-        try:
-            verify_sources(before)
-            require_campaign_running(root)
-            owner = BenchmarkProcess([sys.executable, '-B', str(Path(__file__).resolve()), '--campaign-id', campaign_id,
-                '--child-index', str(index), '--attempt', str(attempt)], cwd=output, output=output / 'host-owner',
-                source_root=STUDIO, source_files=before,
-                binary_sha256=sha(read_regular(Path(sys.executable), 256 * 1024**2)), campaign_host=True)
-            wait_owned_run(owner, output, run_id=run_id,
-                source_closure_sha256=digest, campaign_sha256=campaign_sha,
-                check_campaign_stop=lambda: require_campaign_running(root, active=output))
-            host = owner.finish()
-            require_campaign_running(root)
-            child = json.loads(read_regular(output / 'child-result.json'))
-            require(host['actual_process_exit']['pid'] == child['processes']['host']['pid'], 'CAMPAIGN_HOST_IDENTITY')
-            write(output / 'cleanup.json', {'schema_id': 'hh-studio.benchmark-cleanup', 'schema_version': '1.0.0',
-                'run_id': run_id, 'processes': child['processes'], 'host_exit_code': host['actual_process_exit']['exit_code'],
-                'editor_exit_code': child['cleanup']['editor_exit_code'],
-                'owned_tree_zero': host['job']['zero_observed'] and child['cleanup']['editor_owned_tree_zero'],
-                'held_handles': child['cleanup']['held_handles']})
-            manifest = {'schema_id': 'hh-studio.benchmark-run-assembly', 'schema_version': '1.0.0',
-                'run_id': run_id, 'index': index, 'profile_sha256': profile.PROFILE_SHA256,
-                'source_closure_sha256': digest, 'processes': child['processes'],
-                'refs': {name: reference(output, output / relative) for name, relative in {
-                    'native_index': 'project/benchmark/out/index.json', 'source_manifest': 'source-files.json',
-                    'toolchain': 'toolchain.lock.json', 'profile': 'benchmark-profile.json',
-                    'native_stdout': 'editor-host/stdout.txt', 'native_stderr': 'editor-host/stderr.txt',
-                    'cleanup': 'cleanup.json'}.items()}}
-            for name, key in {'native_batches': 'native', 'command_batches': 'command',
-                'joint_observations': 'joint', 'ready_artifacts': 'ready', 'start_artifacts': 'start', 'ack_artifacts': 'ack'}.items():
-                manifest[name] = [row[key] for row in child['batches']]
-            assembled = assemble_run(output, manifest)
-            require_campaign_running(root)
-            write(output / 'assembly-manifest.json', manifest)
-            write(output / 'assembled-run.json', assembled.value['run'])
-            artifacts = {p.relative_to(output).as_posix(): sha(artifact_bytes(p))
-                         for p in sorted(output.rglob('*')) if p.is_file()
-                         and '.godot' not in p.relative_to(output).parts}
-            captured = {'schema_id': 'hh-studio.benchmark-owned-run', 'schema_version': '1.0.0',
-                'run_id': run_id, 'index': index, 'completed': True, 'source_closure_sha256': digest,
-                'profile_sha256': profile.PROFILE_SHA256, 'processes': child['processes'],
-                'artifacts': artifacts, 'formal_acceptance': False, 'measurement_acceptance': 'RUN_ASSEMBLED_DATASET_PENDING'}
-            verify_run_capture(output, captured, digest, campaign_id=campaign_id,
-                               index=index, attempt=attempt, campaign_sha256=campaign_sha)
-            require_campaign_running(root)
-            write(output / 'run-capture.json', captured)
-            require_campaign_running(root)
-            remember(captured)
-            completed.append({'index': index, 'run_id': run_id, 'capture': reference(root, output / 'run-capture.json')})
-            print('HH_GT06_CAMPAIGN_RUN_COMPLETE ' + json.dumps(completed[-1]), flush=True)
-        except BaseException as error:
-            primary = error
-            owner = owner or getattr(error, 'cleanup_owner', None)
-            cleanup_error = None
-            if owner is not None:
-                try:
-                    owner.close()
-                except BaseException as cleanup:
-                    cleanup_error = cleanup
+        while True:
+            output = root / f'run-{index:02d}-attempt-{attempt:02d}'
+            output.mkdir(exist_ok=False)
+            run_id = f'{campaign_id}.r{index:02d}.a{attempt:02d}'
+            context = {'run_id': run_id, 'index': index, 'attempt': attempt,
+                'source_files': before, 'source_closure_sha256': digest, 'profile_sha256': profile.PROFILE_SHA256,
+                'campaign_sha256': sha(read_regular(root / 'campaign.json')),
+                'launch_observation_schema': LAUNCH_OBSERVATION_SCHEMA}
+            write(output / 'context.json', context)
+            write(output / 'source-files.json', before)
+            write(output / 'toolchain.lock.json', lock_raw)
+            write(output / 'benchmark-profile.json', read_regular(root / 'benchmark-profile.json'))
+            for name, expected in before.items():
+                raw = read_regular(root / 'source/studio' / name)
+                require(sha(raw) == expected, 'CAMPAIGN_FROZEN_COPY_CHANGED')
+                write(output / 'source/studio' / name, raw)
+            owner = None
+            watchdog = None
+            primary = None
             try:
-                write(output / 'parent-failure.json', {'completed': False, 'run_id': run_id,
-                    'code': getattr(error, 'code', type(error).__name__), 'formal_acceptance': False,
-                    'owner_closed': owner.closed if owner else False,
-                    'owned_tree_zero': owner.job.zero_observed if owner and owner.job else False,
-                    'cleanup_error': type(cleanup_error).__name__ if cleanup_error else None})
-            except BaseException as capture_error:
-                raise error from capture_error
-            if cleanup_error is not None:
-                raise error from cleanup_error
-            raise
-        finally:
-            if owner is not None and primary is None:
-                owner.close()
+                verify_sources(before)
+                require_campaign_running(root, max_attempts=frozen_attempts,
+                                         allow_watchdog_slots=authorized_watchdog_slots)
+                observe_pair_launch(output, context, lambda: require_campaign_running(
+                    root, allow_watchdog_slots=authorized_watchdog_slots))
+                owner = BenchmarkProcess([sys.executable, '-B', str(Path(__file__).resolve()), '--campaign-id', campaign_id,
+                    '--child-index', str(index), '--attempt', str(attempt)], cwd=output, output=output / 'host-owner',
+                    source_root=STUDIO, source_files=before,
+                    binary_sha256=sha(read_regular(Path(sys.executable), 256 * 1024**2)), campaign_host=True,
+                    evidence_binding=_o9_evidence_binding(context))
+                watchdog = environment.Watchdog(output,
+                    lambda: environment_snapshot(job_handle=owner.job._handle, docker_inventory=[]),
+                    {'run_id': run_id, 'source_closure_sha256': digest, 'campaign_sha256': campaign_sha}, write,
+                    docker_probe=environment.running_containers,
+                    role_annotator=_o9_role_annotator(output, context),
+                    role_classifier=_o9_role_classifier(output, context))
+                wait_owned_run(owner, output, run_id=run_id,
+                    source_closure_sha256=digest, campaign_sha256=campaign_sha,
+                    check_campaign_stop=lambda: require_campaign_running(
+                        root, active=output, allow_watchdog_slots=authorized_watchdog_slots), watchdog=watchdog)
+                watchdog.close()
+                watchdog_binding = {'run_id': run_id, 'source_closure_sha256': digest,
+                                    'campaign_sha256': campaign_sha}
+                environment.verify_watchdog(output, read_regular, expected_binding=watchdog_binding,
+                                            require_docker_inventory=True)
+                host = owner.finish()
+                environment.verify_watchdog(output, read_regular, elapsed_seconds=host['elapsed_seconds'],
+                                            expected_binding=watchdog_binding, require_docker_inventory=True)
+                write(output / 'environment-preflight-after.json', environment_preflight())
+                require_campaign_running(root, allow_watchdog_slots=authorized_watchdog_slots)
+                child = json.loads(read_regular(output / 'child-result.json'))
+                require(host['actual_process_exit']['pid'] == child['processes']['host']['pid'], 'CAMPAIGN_HOST_IDENTITY')
+                write(output / 'cleanup.json', {'schema_id': 'hh-studio.benchmark-cleanup', 'schema_version': '1.0.0',
+                    'run_id': run_id, 'processes': child['processes'], 'host_exit_code': host['actual_process_exit']['exit_code'],
+                    'editor_exit_code': child['cleanup']['editor_exit_code'],
+                    'owned_tree_zero': host['job']['zero_observed'] and child['cleanup']['editor_owned_tree_zero'],
+                    'held_handles': child['cleanup']['held_handles']})
+                manifest = {'schema_id': 'hh-studio.benchmark-run-assembly', 'schema_version': '1.0.0',
+                    'run_id': run_id, 'index': index, 'profile_sha256': profile.PROFILE_SHA256,
+                    'source_closure_sha256': digest, 'processes': child['processes'],
+                    'refs': {name: reference(output, output / relative) for name, relative in {
+                        'native_index': 'project/benchmark/out/index.json', 'source_manifest': 'source-files.json',
+                        'toolchain': 'toolchain.lock.json', 'profile': 'benchmark-profile.json',
+                        'native_stdout': 'editor-host/stdout.txt', 'native_stderr': 'editor-host/stderr.txt',
+                        'cleanup': 'cleanup.json'}.items()}}
+                for name, key in {'native_batches': 'native', 'command_batches': 'command',
+                    'joint_observations': 'joint', 'ready_artifacts': 'ready', 'start_artifacts': 'start', 'ack_artifacts': 'ack'}.items():
+                    manifest[name] = [row[key] for row in child['batches']]
+                assembled = assemble_run(output, manifest)
+                require_campaign_running(root, allow_watchdog_slots=authorized_watchdog_slots)
+                write(output / 'assembly-manifest.json', manifest)
+                write(output / 'assembled-run.json', assembled.value['run'])
+                measured = profile.summarize_run(assembled.value['run'])
+                write(output / 'measurement-summary.json', measured)
+                artifacts = {p.relative_to(output).as_posix(): sha(artifact_bytes(p))
+                             for p in sorted(output.rglob('*')) if p.is_file()
+                             and '.godot' not in p.relative_to(output).parts}
+                captured = {'schema_id': 'hh-studio.benchmark-owned-run', 'schema_version': '1.0.0',
+                    'run_id': run_id, 'index': index, 'completed': True, 'source_closure_sha256': digest,
+                    'profile_sha256': profile.PROFILE_SHA256, 'processes': child['processes'],
+                    'artifacts': artifacts, 'formal_acceptance': False, 'measurement_acceptance': 'RUN_ASSEMBLED_DATASET_PENDING'}
+                verify_run_capture(output, captured, digest, campaign_id=campaign_id,
+                                   index=index, attempt=attempt, campaign_sha256=campaign_sha)
+                require_campaign_running(root, allow_watchdog_slots=authorized_watchdog_slots)
+                write(output / 'run-capture.json', captured)
+                require_campaign_running(root, allow_watchdog_slots=authorized_watchdog_slots)
+                # Complete raw/exit evidence is retained even if its O1 windows
+                # fail. A second pair cannot repair a failure in the first pair.
+                require(measured['status'] == 'PASS', 'CAMPAIGN_RUN_MEASUREMENTS_NOT_PASS')
+                remember(captured)
+                completed.append({'index': index, 'run_id': run_id, 'capture': reference(root, output / 'run-capture.json')})
+                print('HH_GT06_CAMPAIGN_RUN_COMPLETE ' + json.dumps(completed[-1]), flush=True)
+            except BaseException as error:
+                primary = error
+                owner = owner or getattr(error, 'cleanup_owner', None)
+                cleanup_error = None
+                if owner is not None:
+                    try:
+                        owner.close()
+                    except BaseException as cleanup:
+                        cleanup_error = cleanup
+                classification = environment.failure_classification(error, output)
+                role_counter_verification = None
+                if (output / 'watchdog-stop.json').is_file():
+                    try:
+                        role_counter_verification = _o9_verify_role_stop(output, context)
+                    except BaseException as verification_error:
+                        # A stop latch with unverifiable role evidence is a
+                        # harness failure. It cannot be retried as an infra
+                        # sample and cannot silently inherit the original
+                        # watchdog classification.
+                        classification = 'HARNESS_FAIL'
+                        role_counter_verification = {
+                            'status': 'FAIL',
+                            'code': getattr(verification_error, 'code', type(verification_error).__name__),
+                        }
+                try:
+                    write(output / 'parent-failure.json', {'completed': False, 'run_id': run_id,
+                        'code': getattr(error, 'code', type(error).__name__), 'formal_acceptance': False,
+                        'classification': classification,
+                        'role_counter_verification': role_counter_verification,
+                        'watchdog_persistence_errors': getattr(error, 'watchdog_persistence_errors', []),
+                        'attempt_local_date': time.strftime('%Y-%m-%d'),
+                        'owner_closed': owner.closed if owner else False,
+                        'owned_tree_zero': owner.job.zero_observed if owner and owner.job else False,
+                        'cleanup_error': type(cleanup_error).__name__ if cleanup_error else None})
+                except BaseException as capture_error:
+                    raise error from capture_error
+                if cleanup_error is not None:
+                    raise error from cleanup_error
+                # O9.2 permits one fresh retry only for an objectively
+                # classified INFRA_ABORT.  The failed attempt remains raw
+                # evidence and is never folded into the eventual dataset.
+                if (lifecycle is not None and classification == 'INFRA_ABORT'
+                        and attempt < frozen_attempts
+                        and owner is not None and owner.closed and owner.job.zero_observed
+                        and infra_retry_allowed(root, lifecycle,
+                            source_closure_sha256=digest,
+                            profile_sha256=profile.PROFILE_SHA256, attempt=attempt,
+                            window_remaining_seconds=_window_remaining_seconds(window_started_mono))):
+                    # This invocation has now proven the exact failed slot is
+                    # eligible for its one same-closure retry. Keep the
+                    # authorization live for the next attempt; computing it
+                    # only once before the pair loop would re-hit the stop
+                    # latch and block the authorized retry.
+                    authorized_watchdog_slots.add(output)
+                    _record_campaign_state(root, lifecycle, 'INFRA_RETRY', pair_index=index,
+                                           attempt=attempt, reason=getattr(error, 'code', type(error).__name__))
+                    attempts.append(output)
+                    attempt += 1
+                    continue
+                raise
+            finally:
+                if watchdog is not None:
+                    watchdog.close()
+                if owner is not None and primary is None:
+                    owner.close()
+                if primary is not None and not (output / 'environment-preflight-after.json').exists():
+                    try:
+                        write(output / 'environment-preflight-after.json', environment_preflight())
+                    except Exception as snapshot_error:
+                        primary.add_note('Pair after snapshot failed: ' + type(snapshot_error).__name__)
+            break
     verify_sources(before)
-    require_campaign_running(root)
+    # The after snapshot is evidence, not an additional acceptance gate.
+    preflight_after = environment_preflight()
+    write(after_path, preflight_after)
+    require_campaign_running(root, allow_watchdog_slots=authorized_watchdog_slots)
     result = {'schema_id': 'hh-studio.benchmark-campaign-capture', 'schema_version': '1.0.0',
         'campaign_id': campaign_id, 'completed': True, 'formal_acceptance': False,
         'source_closure_sha256': digest, 'profile_sha256': profile.PROFILE_SHA256,
         'campaign_sha256': sha(read_regular(root / 'campaign.json')), 'runs': completed,
+        'environment_preflight_before': reference(root, preflight_path),
+        'environment_preflight_after': reference(root, after_path),
         'measurement_acceptance': 'REQUIRES_STRICT_ASSEMBLY_AND_REVIEW'}
-    final = root / 'campaign-capture.json'
-    if final.exists():
-        require(json.loads(read_regular(final)) == result, 'CAMPAIGN_EXISTING_CAPTURE_CHANGED')
-    else:
-        write(final, result)
+    final = seal_campaign_capture(root, result)
     runs = []
     for row in completed:
-        require_campaign_running(root)
+        require_campaign_running(root, allow_watchdog_slots=authorized_watchdog_slots)
         output = root / row['capture']['file'].rsplit('/', 1)[0]
         runs.append(assemble_run(output, json.loads(read_regular(output / 'assembly-manifest.json'))))
     provenance = {'source_closure_sha256': digest, 'toolchain_sha256': sha(lock_raw),
@@ -576,14 +1612,16 @@ def run_campaign(campaign_id, root):
     dataset = assemble_dataset(provenance, runs)
     summary = profile.summarize_dataset(dataset)
     for name, value in (('dataset.json', dataset), ('summary.json', summary)):
-        require_campaign_running(root)
+        require_campaign_running(root, allow_watchdog_slots=authorized_watchdog_slots)
         target = root / name
         if target.exists():
             require(json.loads(read_regular(target, profile.MAX_BYTES)) == value, 'CAMPAIGN_FINAL_CHANGED')
         else:
             write(target, value)
     require(summary['status'] == 'PASS', 'CAMPAIGN_MEASUREMENTS_NOT_PASS')
-    require_campaign_running(root)
+    require_campaign_running(root, allow_watchdog_slots=authorized_watchdog_slots)
+    if lifecycle is not None:
+        _record_campaign_state(root, lifecycle, 'COMPLETE', now=time.time())
     return 0
 
 
@@ -595,7 +1633,8 @@ def _cleanup_error(stage, error):
 
 def _write_observation(root, context, kind, observation):
     """A separate exact artifact; command/sample schemas and gates stay fixed."""
-    names = {'http': 'http-phases-final.json', 'import': 'import-observation.json'}
+    names = {'http': 'http-phases-final.json', 'import': 'import-observation.json',
+             'journal': 'journal-timings-final.json'}
     require(kind in names, 'CAMPAIGN_OBSERVATION_KIND')
     write(root / names[kind], {
         'schema_id': 'hh-studio.benchmark-observation', 'schema_version': '1.0.0',
@@ -611,7 +1650,8 @@ def _write_observation(root, context, kind, observation):
 
 def verify_observations(root, context, child):
     """Bind the new observation artifacts without treating telemetry as PASS."""
-    for kind, name in [('http', 'http-phases-final.json'), ('import', 'import-observation.json')]:
+    for kind, name in [('http', 'http-phases-final.json'), ('journal', 'journal-timings-final.json'),
+                       ('import', 'import-observation.json')]:
         value = json.loads(read_regular(root / name))
         require(value.get('schema_id') == 'hh-studio.benchmark-observation'
                 and value.get('schema_version') == '1.0.0' and value.get('kind') == kind
@@ -626,6 +1666,8 @@ def verify_observations(root, context, child):
             require(value['observation'].get('pid') == child['processes']['host']['pid'],
                     'CAMPAIGN_OBSERVATION_HOST_IDENTITY')
             validate_phase_snapshot(value['observation'], child['processes']['host']['pid'])
+        elif kind == 'journal':
+            validate_journal_timing_snapshot(value['observation'], child['processes']['host']['pid'])
         else:
             validate_import_snapshot(value['observation'])
             identity = value['observation']['target_identity']
@@ -685,7 +1727,14 @@ def _producer_cleanup_state(producer):
         return {'present': False}
     host, journal = producer.host, producer.journal
     index = journal._index_store if journal is not None else None
+    wake_snapshot = getattr(producer, 'wake_lag_snapshot', None)
+    require(callable(wake_snapshot), 'CAMPAIGN_TERMINAL_WAKE_LAG_MISSING')
+    wake = wake_snapshot()
+    require(type(wake) is dict and type(wake.get('wake_lag_thread_alive')) is bool,
+            'CAMPAIGN_TERMINAL_WAKE_LAG_SHAPE')
     return {'present': True, 'closed': producer.closed, 'failed': producer.failed,
+            'wake_lag': {'thread_alive': wake['wake_lag_thread_alive'],
+                         'stopped': not wake['wake_lag_thread_alive']},
             'host': None if host is None else {
                 'stopped': host._stopped.is_set(), 'closing': host._closing.is_set(),
                 'threads_alive': [thread.is_alive() for thread in host._threads],
@@ -801,6 +1850,11 @@ def _finish_child_cleanup(root, context, progress, batches, *, producer, probe, 
     except BaseException as error:
         errors.append(('http_observation_receipt', error))
     try:
+        _write_observation(root, context, 'journal',
+                           producer.journal_timing_snapshot() if producer is not None else None)
+    except BaseException as error:
+        errors.append(('journal_observation_receipt', error))
+    try:
         context_ref = reference(root, root / 'context.json')
         write_cleanup(root / 'child-terminal-cleanup.json', {
             'schema_id': 'hh-studio.benchmark-child-terminal-cleanup', 'schema_version': '1.0.0',
@@ -853,8 +1907,11 @@ def verify_child_terminal_cleanup(root, context, child):
         require(type(probe) is dict and probe.keys() == expected_probe.keys()
                 and all(probe[key] is value for key, value in expected_probe.items()),
                 'CAMPAIGN_TERMINAL_PROBE_HELD')
+    wake = producer.get('wake_lag')
     host, journal = producer['host'], producer['journal']
     require(producer['present'] is True and producer['closed'] is True
+            and type(wake) is dict and wake.keys() == {'thread_alive', 'stopped'}
+            and wake['thread_alive'] is False and wake['stopped'] is True
             and host['stopped'] is True and host['closing'] is True
             and all(value is False for value in host['threads_alive'])
             and host['main_socket_closed'] is True and host['control_socket_closed'] is True
@@ -907,6 +1964,7 @@ def run_child(root):
     thread = threading.Thread(target=heartbeat, daemon=True)
     batches = []
     baseline_memory = None
+    warmup_samples = []
     primary = retained = None
     cleanup_errors = []
     try:
@@ -924,11 +1982,20 @@ def run_child(root):
                                for name, value in snapshot.items() if name != MUTABLE_SCENE})
         owner = BenchmarkProcess([str(executable), '--editor', '--path', str(project), 'res://scenes/fixture.tscn',
             '--', '--hh-benchmark-mode=full'], cwd=project, output=root / 'editor-host', source_root=STUDIO,
-            source_files=runtime_sources, binary_sha256=lock['gui_sha256'])
+            source_files=runtime_sources, binary_sha256=lock['gui_sha256'],
+            evidence_binding=_o9_evidence_binding(context))
         log = NativeLog(owner)
         probe = open_probe(owner, executable)
         producer = CampaignProducer(root / 'commands', run_id, log)
         processes = {'host': dict(producer.identity), 'editor': {'pid': probe.pid, 'process_start': probe.process_start}}
+        write(root / 'role-process-binding.json', {
+            'schema_id': O9_ROLE_PROCESS_SCHEMA, 'schema_version': O9_ROLE_PROCESS_VERSION,
+            'run_id': run_id, 'source_closure_sha256': closure(before),
+            # Older engine-free cleanup fixtures predate the campaign hash;
+            # production attempts always carry it, while a deterministic
+            # fallback keeps those diagnostic fixtures readable.
+            'campaign_sha256': context.get('campaign_sha256', sha(run_id.encode())),
+            'roles': processes})
         for index in range(35):
             progress.update(batch=index, phase='ready')
             ready_marker = log.wait('READY', index, 20)
@@ -979,7 +2046,7 @@ def run_child(root):
                 'native_mono_us': receipt['ack_observed_mono_us'], 'process_frame': receipt['process_frame'],
                 'objects': receipt['objects'], 'resources': receipt['resources']}
             joint_path = root / f'joint-{index:02d}.json'
-            joint = {'schema_id': 'hh-studio.benchmark-joint-observation', 'schema_version': '1.1.0',
+            joint = {'schema_id': 'hh-studio.benchmark-joint-observation', 'schema_version': '1.2.0',
                 'run_id': run_id, 'index': index, 'profile_sha256': profile.PROFILE_SHA256,
                 'source_closure_sha256': closure(before), 'native_batch_sha256': sha(native_raw),
                 'command_batch_sha256': command_ref['sha256'], 'processes': processes,
@@ -999,8 +2066,11 @@ def run_child(root):
                 barrier_receipt=receipt, ack=bound['ack'], ready=bound['ready'], start=bound['start'])
             write(root / f'sample-preview-{index:02d}.json', sample)
             screen_sample(sample, baseline_memory)
+            if 2 <= index <= 4:
+                warmup_samples.append(sample)
             if index == 4:
-                baseline_memory = sample['memory']
+                baseline_memory = profile.baseline_memory_rows([row['memory'] for row in warmup_samples],
+                                                               '$.campaign_baseline')
             del native, native_raw, joint, editor, host, receipt
             del bound, sample
             gc.collect()
@@ -1082,7 +2152,7 @@ def main():
     require(os.name == 'nt' and re.fullmatch(r'gt06-[a-z0-9-]{1,25}', args.campaign_id), 'CAMPAIGN_ID')
     root = STUDIO / '.local/reviews' / args.campaign_id
     if args.child_index is not None:
-        require(0 <= args.child_index < 10 and type(args.attempt) is int and 1 <= args.attempt <= MAX_ATTEMPTS,
+        require(0 <= args.child_index < profile.PROFILE.process_runs and type(args.attempt) is int and 1 <= args.attempt <= MAX_ATTEMPTS,
                 'CAMPAIGN_CHILD_ARGUMENTS')
         run_child(root / f'run-{args.child_index:02d}-attempt-{args.attempt:02d}')
         return 0

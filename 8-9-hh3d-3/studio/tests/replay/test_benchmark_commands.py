@@ -9,7 +9,7 @@ import tempfile
 import time
 from types import SimpleNamespace
 import unittest
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 
 STUDIO = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(STUDIO.parent))
@@ -30,7 +30,8 @@ class SyntheticObserver:
     def sample(self):
         return {'process': dict(self.identity), 'monotonic_us': time.perf_counter_ns() // 1000,
                 'counters': {name: {'value': value, 'unavailable_reason': reason} for name, value, reason in (
-                    ('rss_bytes', 1000000, None), ('held_handles', 10, None),
+                    ('rss_bytes', 1000000, None), ('private_commit_bytes', 1000000, None),
+                    ('held_handles', 10, None),
                     ('objects', None, 'NOT_APPLICABLE_PYTHON_HOST'),
                     ('resources', None, 'NOT_APPLICABLE_PYTHON_HOST'))}}
 
@@ -38,6 +39,59 @@ class SyntheticObserver:
         if self.fail_close:
             raise RuntimeError('synthetic cleanup held')
         self.closed = True
+
+
+class DiagnosticBatchBoundsTests(unittest.TestCase):
+    def test_invalid_extension_limit_fails_before_host_start(self):
+        for value in (True, 0, 34, 65, 140, 35.0):
+            with self.subTest(value=value), patch.object(benchmark, 'NativeObserver') as observer:
+                with self.assertRaisesRegex(benchmark.CommandError, 'DIAGNOSTIC_BATCH_LIMIT'):
+                    benchmark.CommandProducer(Path('unused'), 'test.commands', max_batches=value)
+                observer.assert_not_called()
+
+    def test_extension_runs_same_full_mix_without_recycling_ids_or_effects(self):
+        # Synthetic command execution at the boundary: no sockets, delays or
+        # engines, while exercising the real run_batch/_run loops unchanged.
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / 'commands.jsonl').write_bytes(b'')
+            producer = benchmark.CommandProducer.__new__(benchmark.CommandProducer)
+            producer.root, producer.run_id = root, 'test.extension'
+            producer.closed, producer.failed, producer.mode = False, False, None
+            producer.next_index, producer.max_batches = 34, benchmark.MAX_DIAGNOSTIC_BATCHES
+            producer.identity = {'pid': os.getpid(), 'process_start': 'synthetic:fixed'}
+            producer.observer = SimpleNamespace(kind='synthetic_test_observer')
+            producer._phase_recorder = SimpleNamespace(record_status=Mock())
+            producer._transport_total, producer.effects = 0, 0
+            producer._connect_batch = Mock(return_value=object())
+            producer._collect_transport = Mock()
+            producer._observe = Mock(return_value={})
+            producer._cancel_probe = Mock(return_value={'no_effect': True})
+
+            def command(kind, command_id, lease, row):
+                row['latency_ms'] = 1
+                row['effect_count_before'] = producer.effects
+                if kind == 'admitted':
+                    producer.effects += 1
+                row['effect_count_after'] = producer.effects
+
+            producer._command = command
+            first = producer.run_batch(34)
+            extension = producer.run_batch(35)
+            self.assertEqual(len(first['commands']), 1000)
+            self.assertEqual(len(extension['commands']), 1000)
+            self.assertEqual(extension['effect_count_before'], first['effect_count_after'])
+            self.assertEqual(extension['effect_count_after'], 400)
+            self.assertTrue(extension['complete_command_mix'])
+            self.assertEqual(extension['host_process'], first['host_process'])
+            self.assertNotIn('diagnostic_extension', first)
+            self.assertFalse(extension['diagnostic_extension']['formal_acceptance'])
+            self.assertEqual(len({row['command_id'] for row in first['commands'] + extension['commands']}), 2000)
+            self.assertEqual([row['kind'] for row in extension['commands']],
+                             (['inspect'] * 5 + ['rejected'] * 3 + ['admitted'] * 2) * 100)
+            producer.next_index = producer.max_batches
+            with self.assertRaisesRegex(benchmark.CommandError, 'BATCH_ORDER'):
+                producer.run_batch(producer.next_index)
 
 
 class CommandProducerTests(unittest.TestCase):
@@ -63,7 +117,7 @@ class CommandProducerTests(unittest.TestCase):
         self.assertEqual(second['effect_count_after'], 4)
         ids = []
         for index, row in enumerate((first, second)):
-            self.assertEqual(row['schema_version'], '1.3.0')
+            self.assertEqual(row['schema_version'], '1.5.0')
             self.assertEqual(row['index'], index)
             self.assertEqual(row['status'], 'DIAGNOSTIC')
             self.assertFalse(row['complete_command_mix'])
@@ -172,6 +226,30 @@ class CommandProducerTests(unittest.TestCase):
                 self.producer.run_diagnostic()
         self.assertEqual(self.producer.host.fixture.effect_count, 0)
 
+    def test_rejected_unknown_looks_up_before_same_id_resubmit(self):
+        actual_submit = FixtureClient.submit
+        first = True
+
+        def submit(client, request):
+            nonlocal first
+            result = actual_submit(client, request)
+            if first and request.command_id.endswith('.rejected.0'):
+                first = False
+                return Response(Status.UNKNOWN, 'CONNECTION_LOST_LOOKUP', request.command_id,
+                                postconditions={'next_action': 'lookup'})
+            return result
+
+        with patch.object(FixtureClient, 'submit', submit):
+            report = self.producer.run_diagnostic()
+        row = report['commands'][5]
+        self.assertEqual((row['kind'], row['receipt_status'], row['receipt_code'],
+                          row['terminal_status'], row['receipt_transport_failure']),
+                         ('rejected', 'UNKNOWN', 'CONNECTION_LOST_LOOKUP', 'REJECTED', None))
+        self.assertEqual([step['action'] for step in row['reconciliation']], ['lookup', 'submit'])
+        self.assertEqual(row['reconciliation'][0]['response']['code'], 'COMMAND_NOT_FOUND')
+        self.assertEqual(row['reconciliation'][1]['response']['code'], 'INVALID_FIXTURE_PAYLOAD')
+        self.assertEqual(self.producer.host.fixture.effect_count, 2)
+
     def test_process_drift_and_bad_batch_order_fail_before_claim(self):
         with self.assertRaisesRegex(benchmark.CommandError, 'BATCH_ORDER'):
             self.producer.run_batch(True)
@@ -181,6 +259,13 @@ class CommandProducerTests(unittest.TestCase):
         with self.assertRaisesRegex(benchmark.CommandError, 'HOST_PROCESS_CHANGED') as caught:
             self.producer.run_diagnostic()
         self.assertEqual(caught.exception.report['commands'], [])
+
+    def test_default_producer_does_not_allow_batch_35(self):
+        self.assertEqual(self.producer.max_batches, 35)
+        self.assertEqual(benchmark.MAX_DIAGNOSTIC_BATCHES, self.producer.host.limits.max_session_history)
+        self.producer.next_index = 35
+        with self.assertRaisesRegex(benchmark.CommandError, 'BATCH_ORDER'):
+            self.producer.run_batch(35)
 
     def test_cleanup_held_is_retained_and_retry_is_explicit(self):
         ports = (self.producer.host.port, self.producer.host.control_port)
@@ -365,9 +450,17 @@ class CommandProducerTests(unittest.TestCase):
             attempt = row['lookup_attempts'][0]
             self.assertEqual((attempt['status'], attempt['code']), ('UNKNOWN', 'CONNECTION_LOST_LOOKUP'))
             failure = attempt['transport_failure']
-            self.assertEqual(set(failure), {'endpoint', 'stage', 'category', 'elapsed_ms'})
+            self.assertEqual(set(failure), {
+                'endpoint', 'stage', 'category', 'elapsed_ms', 'exception',
+                'errno', 'winerror', 'attempts', 'recovered', 'bytes_sent',
+                'attempt_details',
+            })
             self.assertEqual((failure['endpoint'], failure['stage'], failure['category']),
                              ('lookup', 'getresponse', 'connection'))
+            self.assertEqual(failure['attempts'], 1)
+            self.assertFalse(failure['recovered'])
+            self.assertTrue(failure['bytes_sent'])
+            self.assertEqual(len(failure['attempt_details']), 1)
             self.assertGreaterEqual(failure['elapsed_ms'], 0)
             self.assertLessEqual(failure['elapsed_ms'],
                                  (attempt['ended_mono_us'] - attempt['started_mono_us']) / 1000 + .001001)
@@ -376,6 +469,54 @@ class CommandProducerTests(unittest.TestCase):
             self.assertIn(attempt['ended_mono_us'], report['host_response_mono_us'])
         self.assertNotIn(self.producer.credential.bearer, json.dumps(report))
         self.assertNotIn('transport_failure', report)
+
+    def test_cancel_admission_and_ack_unknowns_reconcile_by_id(self):
+        actual_submit, actual_cancel = FixtureClient.submit, FixtureClient.cancel
+        injected = {'submit': False, 'cancel': False}
+
+        def event(endpoint):
+            detail = {'endpoint': endpoint, 'stage': 'getresponse', 'category': 'connection',
+                      'exception': 'RemoteDisconnected', 'errno': None, 'winerror': None,
+                      'elapsed_ms': .04}
+            return {**detail, 'attempts': 1, 'attempt_details': [dict(detail)],
+                    'recovered': False, 'bytes_sent': True}
+
+        def submit(client, request):
+            result = actual_submit(client, request)
+            if request.command_id.endswith('.cancel') and not injected['submit']:
+                injected['submit'] = True
+                failure = event('commands')
+                client._last_transport_failure = failure
+                client._record_transport_event(failure)
+                return Response(Status.UNKNOWN, 'CONNECTION_LOST_LOOKUP', request.command_id,
+                                postconditions={'next_action': 'lookup'})
+            return result
+
+        def cancel(client, command_id):
+            result = actual_cancel(client, command_id)
+            if command_id.endswith('.cancel') and not injected['cancel']:
+                injected['cancel'] = True
+                failure = event('cancel')
+                client._last_transport_failure = failure
+                client._record_transport_event(failure)
+                return Response(Status.UNKNOWN, 'CONNECTION_LOST_LOOKUP', command_id,
+                                postconditions={'next_action': 'lookup'})
+            return result
+
+        with patch.object(FixtureClient, 'submit', submit), patch.object(FixtureClient, 'cancel', cancel):
+            report = self.producer.run_diagnostic()
+        self.assertEqual(injected, {'submit': True, 'cancel': True})
+        row = report['cancel']
+        self.assertEqual(row['status'], 'CANCELED')
+        self.assertEqual(row['queue_recovery']['receipt_status'], 'UNKNOWN')
+        self.assertEqual(row['queue_recovery']['receipt_code'], 'CONNECTION_LOST_LOOKUP')
+        self.assertEqual(row['queue_recovery']['receipt_transport_failure']['endpoint'], 'commands')
+        self.assertEqual(row['cancel_ack']['response']['status'], 'UNKNOWN')
+        self.assertEqual(row['cancel_ack']['transport_failure']['endpoint'], 'cancel')
+        self.assertTrue(row['queue_recovery']['reconciliation'])
+        self.assertEqual([event['endpoint'] for event in report['transport_recovery']['events']],
+                         ['commands', 'cancel'])
+        self.assertEqual(self.producer.host.fixture.effect_count, 2)
 
     def test_lookup_transport_failure_retained_before_diagnostic_guard(self):
         failure = {'endpoint': 'lookup', 'stage': 'read', 'category': 'timeout', 'elapsed_ms': 0.0}
