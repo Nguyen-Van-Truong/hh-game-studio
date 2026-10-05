@@ -53,7 +53,8 @@ HIỆN TRẠNG (05-10 15:05; coordinator cập nhật khi xong một mốc, tố
   không tick SA-03/SA-04 khi thiếu gate. Export evidence hiện ở product commits `6f2ec9d7`,
   `46794bd0` và `a099b99b`; source closure đầy đủ và runtime resources đã được đóng gói. SA-05
   bullet-time slice provisional ở `7c551274`/`f62b6a7a`/`5db8383b`/`490f3457`, có buffering
-  pressed/released qua nhịp chậm; chưa thay đổi gate.
+  pressed/released qua nhịp chậm; catalog pickup/disarm ở `eb49513c`, hai power pickup 5/10 giây ở
+  `a77d33c9`; chưa thay đổi gate.
 - Chưa có: số đo Y8 A01–A06 và owner side-by-side. Windows/Web build đã tạo được bằng template
   Godot 4.7.2 pinned, nhưng mới là artifact provisional chưa có owner review. Match/aim shell và replay
   đã có guarded live route 41 assertions, combat 73, twin MatchSession/ray 15 assertions ở source
@@ -688,4 +689,10 @@ Q5 Web: dung lượng tải lần đầu và bộ nhớ đo từ SA-04; ngân s�
   slowed fighter's skipped fixed ticks and extends the focused proof to 20 assertions; match route passed 46,
   full regression 2,977, all guarded exits/cleanup/diagnostics clean. SA-02 remains current; weapon catalog,
   second duration, world interactions and owner/critic measurements remain open.
+2026-10-05 SA-05 catalog/disarm: product commit `eb49513c` covers all six authored pickup rows plus a ten-second
+  power fixture in 32 assertions and aiming-melee disarm in 7 assertions; post-change regression remains 2,977.
+  The disarm endpoint records an empty gun slot only; no dropped-weapon pickup or Y8 parity is claimed.
+2026-10-05 SA-05 authored durations: product commit `a77d33c9` adds the real ten-second relay-yard row and requires
+  Down+Punch for both power pickups; item catalog, live match, bullet-time and 2,977-assertion regression all
+  passed with guarded exit 0/cleanup 0/diagnostics empty. Spawn law and reference parity remain open.
 END_OF_SUPERAGENT_PLAN
