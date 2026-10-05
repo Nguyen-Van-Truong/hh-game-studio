@@ -10,7 +10,7 @@ Historical entries below are retained for provenance; they do not override the t
 | M1 / Q01 | DONE (host) | `gt07-jobs-integration-20261004-03`, 46 tests | Repeat only in final frozen matrix |
 | M2 / Q03 | OPEN (partial) | static admission/lease guards; native writer FIFO `gt07-native-writer-fifo-20261005-02` | final frozen repeat and explicit coordinator revoke mapping |
 | M3 / Q05 | OPEN (partial) | Godot edit/save/script and receipt-loss run21; Blender queued export `gt07-native-queue-20261005-06`; all six Godot save crash cuts `gt07-native-godot-20261005-06..11`; queue-level consumer `gt07-cross-app-20261005-07` | queue-level crash/reload/last-good cut and frozen matrix |
-| M4 / Q06 | OPEN (partial) | `gt07-native-editor-conflict-20261005-01` direct diagnostic; governed `gt07-native-godot-20261005-16`/`-17` dry-runs and retained raw | queue lease/manual `.tscn`/`.blend` conflict with no rollback overwrite; native attempts retained (`-16` harness assertion, `-17` validation import INFRA) |
+| M4 / Q06 | OPEN (partial) | governed `gt07-native-godot-20261005-19` native queue conflict PASS (actual child/wrapper 0, Job/tree clean, source unchanged); direct `-01` remains diagnostic | `.blend` conflict and final frozen matrix remain; native `-16`/`-17` failures retained as history |
 | M5 / TX05/TX09 | OPEN | component fault helpers | filelock, cross-volume and injected disk/fsync cuts |
 | M6 / Q04 | OPEN (partial) | Stop drain and native run16 | full queue/cancel/reconnect matrix in final run |
 | M7 / Q07 | OPEN (partial) | 510-record capacity/JOURNAL_FULL | real-clock expiry, compaction/rotation |
@@ -21,7 +21,7 @@ Historical entries below are retained for provenance; they do not override the t
 
 N1: scenario runner, mandatory engine-free dry-run, fixed measurement guard,
 stop-on-first-failure matrix, and opt-in failpoint admission are implemented;
-the 20 focused runner/guard/recovery tests and both Godot/Blender dry-run
+the 21 focused runner/guard/recovery tests and both Godot/Blender dry-run
 contracts pass.
 Native M1–M9 execution remains open and must use fresh IDs after this source
 freeze.  A dry-run validates wiring and contract bounds only; it cannot prove
@@ -61,6 +61,21 @@ blocked during ValidationOwner import because the Docker/Godot profile process
 returned SIGKILL before phase ordering; actual child/Job cleanup is clean. This
 is an infrastructure diagnostic, not M4 proof; do not rerun until the resource
 condition and reproducer review change.
+
+## Checkpoint, 05-10-2026 - M4 native queue conflict PASS slice
+
+After the held-owner inspection and durable generic reconcile fixes, governed
+`godot-conflict` run `gt07-native-godot-20261005-19` passed its engine-free
+dry-run and native Godot queue path. The manual projection changed the live
+root to `[8,8,8]`; the stale owner response was `UNKNOWN` with
+`GODOT_PUBLICATION_RECONCILE_REQUIRED`, `public_ack=false`, and
+`next_action=lookup.reconcile`. The queue recorded `UNKNOWN`, no replay or
+rollback occurred, and editor/owner cleanup was actual exit 0 with a closed,
+zero, unretained Job. Source and frozen snapshot remained equal at closure
+`c52dff82d1b6394065c9b5428130f94291a74a99bd44579182435831bbdddd2b`. The
+61-test focused runner/owner/dispatcher suite also exited 0 (6.101s). This is
+the Godot side of M4 only; Blender `.blend` conflict and the frozen M1-M9
+repeat remain open.
 
 ## Checkpoint, 05-10-2026 — native editor conflict diagnostic
 
