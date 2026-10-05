@@ -50,7 +50,8 @@ HIỆN TRẠNG (05-10 15:05; coordinator cập nhật khi xong một mốc, tố
 - Keymap owner đã áp dụng và có test. Product commits `0659f2ef` (match shell), `0296b860`
   (aim/release), `af085b6b` (ray/replay) và `96365937` (same-tick guard) đã chốt phần kỹ thuật;
   plan vẫn
-  không tick SA-03/SA-04 khi thiếu gate.
+  không tick SA-03/SA-04 khi thiếu gate. Export evidence hiện ở product commits `6f2ec9d7` và
+  `46794bd0` với source closure đầy đủ.
 - Chưa có: số đo Y8 A01–A06 và owner side-by-side. Windows/Web build đã tạo được bằng template
   Godot 4.7.2 pinned, nhưng mới là artifact provisional chưa có owner review. Match/aim shell và replay
   đã có guarded live route 41 assertions, combat 73, twin MatchSession/ray 15 assertions ở source
@@ -677,7 +678,7 @@ Q5 Web: dung lượng tải lần đầu và bộ nhớ đo từ SA-04; ngân s�
   reproduction, final 2,977-assertion guarded regression (`RUN_ID=20261005T063646.437469Z-99cd603941`)
   and guarded Python 23 tests/1 skip (`RUN_ID=20261005T063742.653749Z-492e13eaaa`). SA-02 remains
   CURRENT_VALID_WP; browser research was not converted into parity counts or a checkbox.
-2026-10-05 SA-04 export: pinned 4.7.2 Windows and Web artifacts built successfully with provenance
-  and sizes recorded in product evidence. SA-02 remains CURRENT_VALID_WP; owner Windows/Chrome play
+2026-10-05 SA-04 export: pinned 4.7.2 Windows and Web artifacts built successfully with complete
+  source closure; provenance and sizes are recorded in product evidence. SA-02 remains CURRENT_VALID_WP; owner Windows/Chrome play
   and independent review are still required, so no SA-03/SA-04 tick.
 END_OF_SUPERAGENT_PLAN
