@@ -89,6 +89,16 @@ closure, then perform exactly one bounded Play/capture conflict run before the
 final matrix.  Do not bypass the binding check or convert the static proof to
 acceptance.
 
+## Checkpoint, 05-10-2026 — M7 design boundary
+
+The generic `Journal.compact(now_ms)` and the 510-record capacity run do not
+close M7: `DurableBroker` still binds one append-only hash stream and rejects
+rotation at `BROKER_JOURNAL_FULL`. A safe implementation needs a protected
+segmented log manager with rotate-prepared/active-pointer/rotate-committed
+custody anchors, immutable archive lookup and crash cuts. Until that design
+and real-clock evidence exist, M7 remains OPEN; do not truncate `.events`,
+change stream identity in place, or infer rotation from generic journal tests.
+
 ## Checkpoint, 05-10-2026 — M3 recovery run retained as invalid
 
 `gt07-native-godot-20261005-21` reached the queue recovery harness but failed
