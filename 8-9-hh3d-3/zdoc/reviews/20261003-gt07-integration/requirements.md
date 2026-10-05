@@ -10,7 +10,7 @@ Historical entries below are retained for provenance; they do not override the t
 | M1 / Q01 | DONE (host) | `gt07-jobs-integration-20261004-03`, 46 tests | Repeat only in final frozen matrix |
 | M2 / Q03 | OPEN (partial) | static admission/lease guards; native writer FIFO `gt07-native-writer-fifo-20261005-02` | final frozen repeat and explicit coordinator revoke mapping |
 | M3 / Q05 | OPEN (partial) | Godot edit/save/script and receipt-loss run21; Blender queued export `gt07-native-queue-20261005-06`; all six Godot save crash cuts `gt07-native-godot-20261005-06..11`; queue-level consumer `gt07-cross-app-20261005-07` | queue-level crash/reload/last-good cut and frozen matrix |
-| M4 / Q06 | OPEN | no final native proof | manual edit conflict and no rollback overwrite |
+| M4 / Q06 | OPEN (partial) | `gt07-native-editor-conflict-20261005-01` actual EditorOwner edit/undo/redo plus stale-checkpoint rejection, clean exit | queue lease/manual `.tscn`/`.blend` conflict with no rollback overwrite |
 | M5 / TX05/TX09 | OPEN | component fault helpers | filelock, cross-volume and injected disk/fsync cuts |
 | M6 / Q04 | OPEN (partial) | Stop drain and native run16 | full queue/cancel/reconnect matrix in final run |
 | M7 / Q07 | OPEN (partial) | 510-record capacity/JOURNAL_FULL | real-clock expiry, compaction/rotation |
@@ -39,6 +39,18 @@ queue-level Godot reload/ACK binding, followed by M2/M4, M5/M7, M6/M8/M9 with
 fresh IDs and preserved raw. `RELOAD` is a Godot consumer phase and is rejected
 for the Blender producer route.
 N6: freeze closure once, run the full matrix plus focused regressions, map artifacts, then send the same hash to two independent critics.
+
+## Checkpoint, 05-10-2026 — native editor conflict diagnostic
+
+`gt07-native-editor-conflict-20261005-01` ran the pinned Godot EditorOwner
+fixture with actual edit/create/update/undo/redo/remove/restore operations and
+an intentional same-process manual mutation after capture. All 39 checks passed:
+the stale checkpoint was rejected, the manual mutation remained unchanged,
+UndoRedo semantics and script attachment were preserved, source hashes stayed
+unchanged, and the editor exited 0 with a closed, zero, unretained Job. Raw is
+immutable under `studio/.local/reviews/gt07-native-editor-conflict-20261005-01/`.
+This is an authority-zero editor diagnostic only; it does not close the Q06
+queue lease conflict or prove the Blender `.blend` path, so M4 remains open.
 
 ## Checkpoint, 05-10-2026 — queue-level Blender -> Godot consumer
 
