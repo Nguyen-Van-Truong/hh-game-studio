@@ -9,7 +9,7 @@ Historical entries below are retained for provenance; they do not override the t
 |---|---|---|---|
 | M1 / Q01 | DONE (host) | `gt07-jobs-integration-20261004-03`, 46 tests | Repeat only in final frozen matrix |
 | M2 / Q03 | OPEN (partial) | static admission/lease guards; native writer FIFO `gt07-native-writer-fifo-20261005-02` | final frozen repeat and explicit coordinator revoke mapping |
-| M3 / Q05 | OPEN (partial) | Godot edit/save/script and receipt-loss run21; Blender queued export `gt07-native-queue-20261005-06`; all six Godot save crash cuts `gt07-native-godot-20261005-06..11`; O2 asset readback `o2-publication-blender-handoff-20261005-03` | queue-level Blender→Godot publish/reload/ACK and cross-app last-good binding |
+| M3 / Q05 | OPEN (partial) | Godot edit/save/script and receipt-loss run21; Blender queued export `gt07-native-queue-20261005-06`; all six Godot save crash cuts `gt07-native-godot-20261005-06..11`; queue-level consumer `gt07-cross-app-20261005-07` | queue-level crash/reload/last-good cut and frozen matrix |
 | M4 / Q06 | OPEN | no final native proof | manual edit conflict and no rollback overwrite |
 | M5 / TX05/TX09 | OPEN | component fault helpers | filelock, cross-volume and injected disk/fsync cuts |
 | M6 / Q04 | OPEN (partial) | Stop drain and native run16 | full queue/cancel/reconnect matrix in final run |
@@ -39,6 +39,21 @@ queue-level Godot reload/ACK binding, followed by M2/M4, M5/M7, M6/M8/M9 with
 fresh IDs and preserved raw. `RELOAD` is a Godot consumer phase and is rejected
 for the Blender producer route.
 N6: freeze closure once, run the full matrix plus focused regressions, map artifacts, then send the same hash to two independent critics.
+
+## Checkpoint, 05-10-2026 — queue-level Blender -> Godot consumer
+
+`gt07-cross-app-20261005-07` passed a fresh engine-free admission and one
+native gameplay-source publish using the verified Blender handoff from
+`gt07-native-queue-20261005-06`. The durable queue committed the producer
+receipt first, admitted the Godot consumer with that producer as a dependency,
+and recorded the consumer only after Godot `READBACK_ACK`, CURRENT/journal
+readback and a clean reopen. The native container and owned Job exited cleanly;
+the Godot publish count was exactly one, `public_ack=false`, and the artifact
+hash was `1bb48eb159925ec13f4df7337445a691aac98184580553d81f934d2c674bc87b`.
+Raw is immutable under `studio/.local/reviews/gt07-cross-app-20261005-07/`;
+source closure is `c91bc0d770e9730cb10a3bc9fd8e80729f6db9d3485b024664706658993be51c`.
+This closes the non-crash queue-level publish/readback slice only; a queue-level
+lost-receipt/last-good crash cut and the frozen M3 matrix remain open.
 
 ## Checkpoint, 05-10-2026 — queued Blender publication slice
 
