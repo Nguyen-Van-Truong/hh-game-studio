@@ -8,11 +8,11 @@ Historical entries below are retained for provenance; they do not override the t
 | Matrix | Status | Existing evidence | Remaining proof |
 |---|---|---|---|
 | M1 / Q01 | DONE (host) | `gt07-jobs-integration-20261004-03`, 46 tests | Repeat only in final frozen matrix |
-| M2 / Q03 | OPEN (partial) | static admission/lease guards; native writer FIFO `gt07-native-writer-fifo-20261005-02` and fresh repeat `gt07-native-writer-fifo-20261005-04` | final frozen repeat and explicit coordinator revoke mapping |
+| M2 / Q03 | DIAGNOSTIC COVERED | native writer FIFO `gt07-native-writer-fifo-20261006-05`: two live clients, FIFO/fence handoff, expiry, old/late writer rejection before intent, coordinator Stop, clean Blender Job; source `218f2c3235b4921d6f72d8098b10e8e3da050fe99170d001e7bbf01902b68d47` | final frozen repeat and requirement-map binding |
 | M3 / Q05 | OPEN (partial) | Blender producer cuts plus consumer cuts `gt07-cross-app-20261005-53` (RELOAD: HELD_LAST_GOOD) and `gt07-cross-app-20261005-54` (ACK: COMMITTED_LOOKUP_ONLY); both actual child/recovery exits and owned Jobs clean, one native dispatch, no replay, source/snapshot unchanged | six-phase producer coverage and final frozen matrix |
 | M4 / Q06 | OPEN (partial) | Godot `gt07-native-godot-20261005-26,42`; Blender `gt07-native-queue-20261005-47`: queued stale transform returns UNKNOWN/lookup.reconcile, manual `.blend` state retained, actual child/wrapper exits 0 and owned Job clean | final frozen matrix; previous failed diagnostics remain immutable |
 | M5 / TX05/TX09 | DIAGNOSTIC COVERED | host `gt07-m5-storage-20261005-09`: real lock/cross-volume refusal, INJECTED fsync/diskfull; native `gt07-native-godot-20261006-05`: share=0 during scene.save capture, durable UNKNOWN/lookup.reconcile, last-good file and selection preserved, actual exits/Job clean | final frozen repeat and requirement-map binding; native lock rejects at capture precondition before filesystem publication |
-| M6 / Q04 | OPEN (partial) | Stop drain and native run16 | full queue/cancel/reconnect matrix in final run |
+| M6 / Q04 | DIAGNOSTIC COVERED | host `test_gt07_stop_lifecycle.py` 4/4 plus existing Godot Stop tests; native FIFO `gt07-native-writer-fifo-20261006-05` Stop canceled waiters/prevented new grants in 109ms, and M6 token/reopen cases are covered by the host lifecycle fixture | final frozen repeat and requirement-map binding |
 | M7 / Q07 | OPEN (partial) | 510-record capacity/JOURNAL_FULL; queue-only custody rotation barriers; segmented queue checkpoint/reopen, two-segment archive chain, expired terminal same-ID replay guard, bounded real-clock expiry soak, malformed candidate pointer guard (`test_segmented_journal` 6 tests, `test_segmented_broker_regression` 8 tests, `test_durable_broker` 18 tests; exits 0); opt-in integrated `QueueOwner→DurableBroker→QueueJournalManager` process cuts at PREPARED/ACTIVE_POINTER/COMMITTED passed (actual child exit 73, 1.474s), preserving pending reconciliation and the exact archived receipt | final frozen matrix |
 | M8 / Q08 | OPEN (partial) | host-only repeats `gt07-m8-process-20261005-05`, `-07`, `-08`, and fresh `-10` verify PID/start identity, forged-start refusal, owned-tree timeout and 64 MiB Job memory denial; actual worker exits and Job cleanup recorded. The runner now requires a matching dry-run receipt before native execution (closure `ab498ef2...20c9e8` for `-10`) | final frozen M1–M9 matrix and source-specific manifest |
 | M9 / TX13 | OPEN (partial) | binding refresh02 verified an exact three-file delta, source=233/execution=235; matching dry-run/native `gt06-gt07-m9-playmutation-20261005-03` exit 0 on binding `94552f31…`, preserving stale-capture rejection/UNKNOWN/no-replay | repeat in the final frozen matrix |
@@ -23,6 +23,12 @@ M3 consumer recovery and M7 integrated rotation crash slices are covered
 diagnostically. Before freezing, map explicit M2 revocation, M3 producer cuts,
 and M6 Stop/cancel/reconnect/token-rotation coverage. M5 Godot-save file-lock
 now has native diagnostic proof; repeat it only in the final frozen matrix.
+
+`gt07-native-writer-fifo-20261006-05` is a fresh M2 diagnostic on the current
+source: unit and native wrappers exited 0, two client processes exited 0, all
+19 FIFO/fencing/expiry/revoke/Stop checks passed, Blender Job/tree was clean,
+and Stop completed in 109 ms. It remains authority-zero evidence; the final
+matrix must use one frozen closure rather than mixing this run with older IDs.
 The eight-scenario app runner alone is not the full M1–M9 matrix. Close only
 missing coverage, then freeze one closure and execute the complete matrix plus
 affected regressions. Submit the same hash to two independent critics. Existing slices are
