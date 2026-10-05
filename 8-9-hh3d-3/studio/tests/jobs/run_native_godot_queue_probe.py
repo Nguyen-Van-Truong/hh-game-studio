@@ -506,7 +506,8 @@ def _child(output: Path, binary: Path, run_id: str, operation: str,
         steps.append(f"now_after_advance:{epoch_ms()}")
         if manual_conflict:
             if (response.status is not Status.UNKNOWN
-                    or response.code != "GODOT_EDIT_RECONCILE_REQUIRED"
+                    or response.code not in {"GODOT_EDIT_RECONCILE_REQUIRED",
+                                             "GODOT_PUBLICATION_RECONCILE_REQUIRED"}
                     or response.postconditions.get("public_ack") is not False
                     or response.postconditions.get("next_action") != "lookup.reconcile"):
                 raise RuntimeError("NATIVE_GODOT_CONFLICT_NOT_UNKNOWN")
