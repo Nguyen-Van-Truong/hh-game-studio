@@ -5,7 +5,7 @@ AUTHORITY=0. Branch `codex/o2-authoring-contract`; GT-06 is ACCEPTED and GT-07 i
 ## 2026-10-05 — O10 sync and focused regression
 
 - Synced main's `d3b74251` recovery guard and `76c61196` native Blender scenario into this worktree; merge commit `196aff84` is clean.
-- Fresh merged-tree pure regression passed: `python -B -m unittest -q studio.tests.godot.test_recovery_host studio.tests.jobs.test_native_godot_queue_probe_guards studio.tests.jobs.test_gt07_scenarios studio.tests.jobs.test_gt07_failpoints studio.tests.jobs.test_gt07_crash_process` — **35 tests**, actual exit **0**, 6.172s. No Godot, Blender, Docker, or gameplay-source dispatch occurred.
+- Fresh merged-tree pure regression passed: `python -B -m unittest -q studio.tests.godot.test_recovery_host studio.tests.jobs.test_native_godot_queue_probe_guards studio.tests.jobs.test_gt07_scenarios studio.tests.jobs.test_gt07_failpoints studio.tests.jobs.test_gt07_crash_process` — **37 tests**, actual exit **0**, 6.598s. No Godot, Blender, Docker, or gameplay-source dispatch occurred.
 - Prior worker PID `31468` was no longer running and no host-captured log/exit receipt was found; it is not used as evidence.- Fresh native asset lane `o2-sprite-atlas-20261005-01` passed at authority 0: pinned Blender 5.2.1 created and reopened a 4-cell 128x128 sprite sheet (actual native/reopen exit 0, Job/tree clean), then pinned Godot 4.7.2 performed import, author and fresh-process reload (three actual exits 0, Job/tree clean). Sheet hash `42d342dd4e1f6e6ef9ff31d1370703b83ae76e60ad3756156297478c1e546cf8`; Godot frames hash `989c4fbbab77a00b40f03bc062890a6d0ea7e188346f43034d18ae4bb0314ef2`; source closures are Blender `0b6756764c5f3c64763b5f2c160e4142a6e089764877472c4aa85a6a0f2c936e` and Godot `3e8807ca4f863c85683147844fa60f428d1c5fccb7caec1811acbba49479e9f4`. Raw is immutable under `studio/.local/reviews/o2-sprite-atlas-20261005-01`; this proves the Blender sprite render → Godot import/reload fixture only, not queue-level ACK, AUTH or GT07 acceptance.
 
 ## 2026-10-05 — GT07 Blender producer crash-cut recovery
@@ -521,3 +521,8 @@ Tests cover parser/deadline/cleanup negatives, executor rejection/no-create and 
 drift. New native confirmation pending; last host check14:16 had2.694GiB available/89.122% commit,
 so no engine run was started. Previous failures stay unchanged. Native verification must check
 actual host/container exits, dependency binding, retry/reopen and owned cleanup.
+
+## 2026-10-05 - O2 sync status correction
+
+- Exact target 25907bed1592b19de4ef87c11e25024d89d95488 is now synchronized; the prescribed pure regression records **37 tests**, actual exit **0**, 6.598s. No native run or dispatch occurred.
+- Remaining gap: connect candidate scene/node/resource commands to the registered adapter boundary and complete authored 2D/3D E2E coverage (TileMap/audio/pause/restart/respawn and real 3D avatar/camera/interactions). AUTHORITY=0 remains.
