@@ -52,7 +52,7 @@ HIỆN TRẠNG (05-10 15:05; coordinator cập nhật khi xong một mốc, tố
   plan vẫn
   không tick SA-03/SA-04 khi thiếu gate. Export evidence hiện ở product commits `6f2ec9d7`,
   `46794bd0` và `a099b99b`; source closure đầy đủ và runtime resources đã được đóng gói. SA-05
-  bullet-time slice provisional ở `7c551274`/`f62b6a7a`, chưa thay đổi gate.
+  bullet-time slice provisional ở `7c551274`/`f62b6a7a`/`5db8383b`, chưa thay đổi gate.
 - Chưa có: số đo Y8 A01–A06 và owner side-by-side. Windows/Web build đã tạo được bằng template
   Godot 4.7.2 pinned, nhưng mới là artifact provisional chưa có owner review. Match/aim shell và replay
   đã có guarded live route 41 assertions, combat 73, twin MatchSession/ray 15 assertions ở source
