@@ -55,6 +55,19 @@ source closure is `c91bc0d770e9730cb10a3bc9fd8e80729f6db9d3485b024664706658993be
 This closes the non-crash queue-level publish/readback slice only; a queue-level
 lost-receipt/last-good crash cut and the frozen M3 matrix remain open.
 
+## Checkpoint, 05-10-2026 — native M2 FIFO repeat
+
+`gt07-native-writer-fifo-20261005-03` passed the unit gate and native host
+capture with actual wrapper/child exit 0, clean owned Job/tree and source
+closure `ccc2c3f2f5feac425d358309253f1d5f7be5c375d80d1263d3a3176a050dbae9`.
+The final repeat observed two distinct live writer clients, persisted FIFO
+grants, expiry/cancel handling, fencing and late-writer rejection before
+intent, no stale scene drift, bounded waiter capacity, Stop priority and
+actual GUI exit/zero Job. Raw is immutable under
+`studio/.local/reviews/gt07-native-writer-fifo-20261005-03/`; this remains
+authority-zero diagnostic evidence until the frozen M2/M1–M9 package and
+independent critics.
+
 ## Checkpoint, 05-10-2026 — queued Blender publication slice
 
 `gt07-native-queue-20261005-06` passed its mandatory engine-free dry-run and
