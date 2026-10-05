@@ -29,7 +29,11 @@ def sha(path):return hashlib.sha256(path.read_bytes()).hexdigest()
 
 def sources(root):
     paths=[root/name for name in ('build/bootstrap/run_fixture.py','godot-addon/cli_job.py','toolchain.lock.json')]
-    for name in ('blender-addon','host/blender','host/core','protocol','tests/blender'):
+    # Contract schemas are runtime inputs for the Blender authoring tests and
+    # must be frozen alongside the Python modules.  Omitting them lets the
+    # native child start with an incomplete closure and makes the unit gate
+    # fail before the actual probe.
+    for name in ('blender-addon','contracts','host/blender','host/core','protocol','tests/blender'):
         paths.extend(path for path in (root/name).rglob('*') if path.is_file()
                      and path.suffix in ('.py','.json','.gd','.md','.glb') and '__pycache__' not in path.parts)
     return {path.relative_to(root).as_posix():sha(path) for path in sorted(set(paths))}
