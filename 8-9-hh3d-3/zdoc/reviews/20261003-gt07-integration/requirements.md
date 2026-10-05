@@ -50,7 +50,7 @@ N6: freeze closure once, run the full matrix plus focused regressions, map artif
 
 `gt07-native-editor-conflict-20261005-01` ran the pinned Godot EditorOwner
 fixture with actual edit/create/update/undo/redo/remove/restore operations and
-an intentional same-process manual mutation after capture. All 39 checks passed:
+an intentional same-process manual mutation after capture. All 40 checks passed:
 the stale checkpoint was rejected, the manual mutation remained unchanged,
 UndoRedo semantics and script attachment were preserved, source hashes stayed
 unchanged, and the editor exited 0 with a closed, zero, unretained Job. Raw is
