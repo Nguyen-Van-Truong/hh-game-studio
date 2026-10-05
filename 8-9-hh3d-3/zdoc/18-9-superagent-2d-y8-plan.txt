@@ -36,7 +36,7 @@ PREVIOUS_REVISION=SA4 trong Git 5b2d4c7b; LOG chi tiết (run id, hash, số ass
   routing HH3D nằm ở 8-9-hh3d-3/AGENTS.md.
 - Coordinator game tick WP khi đạt DoD; subagent không tick.
 
-HIỆN TRẠNG (05-10 13:05; coordinator cập nhật khi xong một mốc, tối đa 15 dòng)
+HIỆN TRẠNG (05-10 13:27; coordinator cập nhật khi xong một mốc, tối đa 15 dòng)
 - SA-01 ACCEPTED 03-10 (bootstrap kỹ thuật). CURRENT_VALID_WP=SA-02 từ 03-10.
 - Ledger 79 dòng: 25 OBSERVED, 54 UNVERIFIED, 0 MATCHED. Đã thấy chủ yếu menu, map, mode, phím
   đánh và vài phản ứng vật thể (mục 7.4). Chưa có số đo thời gian hay khoảng cách nào: browser
@@ -47,11 +47,14 @@ HIỆN TRẠNG (05-10 13:05; coordinator cập nhật khi xong một mốc, tố
   Down+Punch pickup, grenade/health, HUD, result/rematch và scene bot riêng. Bản tiếp theo nối
   giữ K/Num2 để ngắm, W/S hoặc Up/Down chỉnh góc, thả nút để bắn và hiển thị tia ngắm. Tất cả vẫn
   là implementation/provisional, không gọi là parity.
-- Keymap owner đã áp dụng và có test. Product commit `0659f2ef` đã chốt match shell; plan vẫn
+- Keymap owner đã áp dụng và có test. Product commits `0659f2ef` (match shell), `0296b860`
+  (aim/release), `af085b6b` (ray/replay) và `96365937` (same-tick guard) đã chốt phần kỹ thuật;
+  plan vẫn
   không tick SA-03/SA-04 khi thiếu gate.
-- Chưa có: số đo Y8 A01–A06, owner side-by-side, build Web/Windows. Match/aim shell đã có test
-  guarded 41 assertions + combat 73 assertions ở source hash `b8ca0dcee9f3da3170214cb63730f649eeac24fe26593390d78faa817f79f1a1`;
-  map/row validation và snapshot immutable đã fail-closed.
+- Chưa có: số đo Y8 A01–A06, owner side-by-side, build Web/Windows. Match/aim shell và replay
+  đã có guarded live route 41 assertions, combat 73, twin MatchSession/ray 15 assertions ở source
+  selection hash `34e96458c3c152eea2e891c72fb02f06e84737e3cac64b29b69475ea204c78f9`; map/row
+  validation, ray hit authority, same-tick input guard và snapshot immutable đã fail-closed.
 - SA5 N1 đã xong: guard kiểm mọi task `HHStudio.*`; ledger 79 dòng có tier A/B/C;
   checker hiểu trạng thái APPROX và giữ fail-closed cho tầng C. Bộ đo A01–A06 còn trống,
   nên inventory vẫn báo thiếu số đo thay vì tự coi là đạt.
@@ -654,11 +657,17 @@ Q5 Web: dung lượng tải lần đầu và bộ nhớ đo từ SA-04; ngân s�
 2026-10-05 SA-04 implementation: product commit `0659f2ef`; guarded match run 37 assertions, host
   exit 0/cleanup 0/diagnostics empty; regression run_all 2,977, movement room 93, N4 16+13, Python 23/1 skip.
   Map validation, Down+Punch pickup, immutable snapshot and bot/2P routes are provisional; no SA-04 tick.
-2026-10-05 SA-04 aim/release pass: product working tree adds explicit held-fire aim state, bounded
+2026-10-05 SA-04 aim/release pass: product commit `0296b860` adds explicit held-fire aim state, bounded
   W/S or Up/Down elevation, release-to-fire semantics, aim-ray presentation and focus/pause input reset.
   Guarded `cmd.sa04.aim.match.1` (`RUN_ID=20261005T060315.567249Z-add7b36f12`) passed 41 assertions;
   `cmd.sa04.aim.combat.1` (`RUN_ID=20261005T060354.972517Z-ac513fdada`) passed 73; both exit 0,
   cleanup 0, diagnostics empty, source hash `b8ca0dcee9f3da3170214cb63730f649eeac24fe26593390d78faa817f79f1a1`.
   Guarded run_all `RUN_ID=20261005T060435.274221Z-60341297ee` passed 2,977. No SA-03/SA-04 tick;
   4.7.2 Windows/Web templates remain unavailable and owner/critic/Y8 measurements remain open.
+2026-10-05 SA-04 audit closure: `af085b6b` adds bounded ray hit authority, post-success TTL mutation,
+  twin MatchSession replay/ray checks and bot-route controls; `96365937` gates same-tick shoot edges
+  away from jump/drop/ladder. Guarded final match `RUN_ID=20261005T062516.394029Z-b678287f2f` and
+  replay `RUN_ID=20261005T062555.566161Z-2ca459b1e4` passed with source selection hash
+  `34e96458c3c152eea2e891c72fb02f06e84737e3cac64b29b69475ea204c78f9`, exit 0/cleanup 0/diagnostics
+  empty. No SA-03/SA-04 tick; this remains technical/provisional proof pending measurements, owner and build.
 END_OF_SUPERAGENT_PLAN
