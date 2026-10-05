@@ -11,18 +11,19 @@ Historical entries below are retained for provenance; they do not override the t
 | M2 / Q03 | OPEN (partial) | static admission/lease guards; native writer FIFO `gt07-native-writer-fifo-20261005-02` | final frozen repeat and explicit coordinator revoke mapping |
 | M3 / Q05 | OPEN (partial) | Godot edit/save/script and receipt-loss run21; Blender queued export `gt07-native-queue-20261005-06`; all six Godot save crash cuts `gt07-native-godot-20261005-06..11`; queue-level consumer `gt07-cross-app-20261005-07` | queue-level crash/reload/last-good cut and frozen matrix |
 | M4 / Q06 | OPEN (partial) | governed `gt07-native-godot-20261005-19` native queue conflict PASS (actual child/wrapper 0, Job/tree clean, source unchanged); direct `-01` remains diagnostic | `.blend` conflict and final frozen matrix remain; native `-16`/`-17` failures retained as history |
-| M5 / TX05/TX09 | OPEN | component fault helpers | filelock, cross-volume and injected disk/fsync cuts |
+| M5 / TX05/TX09 | OPEN (partial) | host-only `gt07-m5-storage-20261005-05` verified exclusive file-lock denial, cross-volume `MoveFileExW` refusal (error 17), and injected fsync/diskfull UNKNOWN with last-good preservation; source closure `78676a84...4174a4` | final frozen repeat, requirement-map binding, and any product-boundary proof beyond the authority-zero host diagnostic |
 | M6 / Q04 | OPEN (partial) | Stop drain and native run16 | full queue/cancel/reconnect matrix in final run |
 | M7 / Q07 | OPEN (partial) | 510-record capacity/JOURNAL_FULL | real-clock expiry, compaction/rotation |
 | M8 / Q08 | OPEN (partial) | host-only `gt07-m8-process-20261005-05` verified PID/start identity, forged-start refusal, owned-tree timeout and 64 MiB Job memory denial; actual worker exits and Job cleanup recorded (closure `e54646f8...58f71`) | final frozen repeat and source-specific manifest |
-| M9 / TX13 | OPEN (partial) | static `play-mutation` lane (`36e8d56b`) binds a generated-state mutation while Play is RUNNING to stale-capture rejection/UNKNOWN/no-replay; 19 focused tests exit 0 | one bounded native Play/capture conflict run on the pinned fixture and final frozen matrix |
+| M9 / TX13 | OPEN (partial) | static `play-mutation` lane (`36e8d56b`) binds a generated-state mutation while Play is RUNNING to stale-capture rejection/UNKNOWN/no-replay; engine-free dry-run contract (`21ddb086`) passes focused tests and rejects backend/native flags | installed execution binding currently fails the real dry-run with `BINDING_MISSING_DEPENDENCY`; repair that binding, then run one bounded native Play/capture conflict on the pinned fixture and repeat in the final frozen matrix |
 
 ## Next
 
 N1: scenario runner, mandatory engine-free dry-run, fixed measurement guard,
 stop-on-first-failure matrix, and opt-in failpoint admission are implemented;
-the 21 focused runner/guard/recovery tests and both Godot/Blender dry-run
-contracts pass.
+the focused runner/guard/recovery suites and both Godot/Blender dry-run
+contracts pass.  Their counts are kept per suite; an aggregate test count is
+not an acceptance signal.
 Native M1–M9 execution remains open and must use fresh IDs after this source
 freeze.  A dry-run validates wiring and contract bounds only; it cannot prove
 runtime IPC, process cleanup, or engine behavior.
@@ -56,6 +57,32 @@ denied `VirtualAlloc` with native error 1455 rather than a Python allocation
 exception. All worker exits, Job membership, cleanup handles and zero active
 counts were captured. This is authority-zero host evidence; a final frozen
 M1–M9 repeat and critic package remain required.
+
+## Checkpoint, 05-10-2026 — M5 storage fault boundary
+
+`gt07-m5-storage-20261005-05` passed its engine-free dry-run and the
+authority-zero host-only matrix after a reproducer repair.  The exclusive
+Windows holder refused `MoveFileExW` with access error 5 while the target
+identity and last-good bytes stayed unchanged; a writable C:→D: pair refused
+the cross-volume replace with error 17 and preserved the destination; and the
+fsync/disk-full injections returned `UNKNOWN` with no receipt and no commit
+proof.  The worker exited 0 and all owned temporary files were cleaned.  The
+report is diagnostic evidence, not product acceptance; the frozen M1–M9
+repeat and requirement-map binding remain open.  Raw is immutable under
+`studio/.local/reviews/gt07-m5-storage-20261005-05/`; source closure is
+`78676a84db15d9d4af7b62cb9b51787e5064e0796212f21d8d8c19ad2d4174a4`.
+
+## Checkpoint, 05-10-2026 — M9 dry-run boundary
+
+Commit `21ddb086` added the engine-free adversary dry-run contract: run ID,
+fixed review root, installed source/driver hashes and forbidden backend/native
+flags are checked before any process can start.  Its focused tests pass, but a
+real CLI dry-run against the installed execution binding stops at
+`BINDING_MISSING_DEPENDENCY`; no Godot/Blender process was started and no
+native M9 evidence is claimed.  Repair that installed binding, freeze a fresh
+closure, then perform exactly one bounded Play/capture conflict run before the
+final matrix.  Do not bypass the binding check or convert the static proof to
+acceptance.
 
 ## Checkpoint, 05-10-2026 — M3 recovery run retained as invalid
 
