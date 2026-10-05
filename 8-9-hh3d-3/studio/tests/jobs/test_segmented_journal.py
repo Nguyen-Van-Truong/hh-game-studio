@@ -4,6 +4,7 @@ import hashlib
 import os
 from pathlib import Path
 import tempfile
+import time
 import unittest
 import uuid
 
@@ -144,6 +145,35 @@ class SegmentedJournalTests(unittest.TestCase):
             with self.assertRaises(BrokerError) as error:
                 owner.broker.enqueue(changed, now_ms=60_006)
             self.assertEqual(str(error.exception), 'BROKER_ID_CONFLICT')
+        finally:
+            owner.close()
+
+    @unittest.skipUnless(os.environ.get('GT07_REAL_CLOCK_SOAK') == '1',
+                         'set GT07_REAL_CLOCK_SOAK=1 for the bounded real-clock evidence run')
+    def test_real_clock_expiry_compacts_terminal_but_keeps_archive_tombstone(self):
+        owner_root = self.root / 'real-clock-owner'
+        owner_root.mkdir()
+        owner = QueueOwner.create(owner_root)
+        command = hashlib.sha256(b'real-clock-command').hexdigest()
+        receipt = hashlib.sha256(b'real-clock-receipt').hexdigest()
+        started = int(time.time_ns() // 1_000_000)
+        request = JobRequest('real-clock-expired', 'project', 'session', started + 120_000,
+                             ('resource',), (), command)
+        try:
+            owner.broker.enqueue(request, now_ms=started)
+            reservation = owner.broker.reserve_next(now_ms=started + 1)
+            owner.broker.record_owner_result(
+                reservation, OwnerResult('COMMITTED', command, receipt,
+                                         completed_at_ms=started + 2))
+            # The manager's minimum test horizon is one minute.  Use host wall
+            # clock, not a mocked timestamp, and wait beyond that boundary.
+            time.sleep(60.25)
+            now = int(time.time_ns() // 1_000_000)
+            owner.rotate_journal(now_ms=now, retry_horizon_ms=60_000)
+            self.assertEqual(owner.broker.snapshot().receipts, ())
+            archived, terminal_ms = owner.journal.lookup_archived('real-clock-expired')
+            self.assertEqual(archived['state'], 'COMMITTED')
+            self.assertEqual(terminal_ms, started + 2)
         finally:
             owner.close()
 
