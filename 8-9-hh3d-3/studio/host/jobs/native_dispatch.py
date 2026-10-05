@@ -12,9 +12,11 @@ from __future__ import annotations
 from contextlib import ExitStack
 from dataclasses import dataclass, field
 import hashlib
+import math
 import sys
 import secrets
 import threading
+import time
 import weakref
 from pathlib import Path
 
@@ -685,19 +687,30 @@ class NativeOwnerDispatcher:
 
     def drain_stop(self, *, timeout=95):
         """Supervisor wait after the priority Stop latch, never a wire call."""
+        _need(type(timeout) in (int, float) and math.isfinite(timeout) and 0 <= timeout <= 95,
+              'NATIVE_STOP_INVALID_TIMEOUT')
         _need(self._stop.is_set() and not self._closed, 'NATIVE_STOP_REQUIRED')
-        with _BIND:
-            owners = tuple(self._owners.values())
-        for owner in owners:
-            if type(owner) is BlenderWriterClientOwner:
-                continue
-            _godot_owner_required(owner)
-            thread = getattr(owner, '_stop_thread', None)
-            _need(thread is not None, 'NATIVE_STOP_REQUIRED')
-            thread.join(timeout=timeout)
-            _need(not thread.is_alive(), 'NATIVE_STOP_DRAIN_REQUIRED')
-            _need(owner._stop_persistence == 'DURABLE'
-                  and owner._journal.snapshot()['stopped'] is True, 'NATIVE_STOP_UNKNOWN')
+        deadline = time.monotonic() + timeout
+        # Both apps may still be executing/collecting a result after Stop.
+        # A timeout preserves the attached owner and its uncertain reservation;
+        # it cannot claim a successful drain or silently detach that work.
+        _need(self._phase.acquire(timeout=timeout), 'NATIVE_STOP_DRAIN_REQUIRED')
+        try:
+            with _BIND:
+                _need(not self._closed, 'NATIVE_DISPATCH_STOPPED')
+                owners = tuple(self._owners.values())
+            for owner in owners:
+                if type(owner) is BlenderWriterClientOwner:
+                    continue  # Synchronous Blender Stop persistence finished in stop().
+                _godot_owner_required(owner)
+                thread = getattr(owner, '_stop_thread', None)
+                _need(thread is not None, 'NATIVE_STOP_REQUIRED')
+                thread.join(timeout=max(0, deadline - time.monotonic()))
+                _need(not thread.is_alive(), 'NATIVE_STOP_DRAIN_REQUIRED')
+                _need(owner._stop_persistence == 'DURABLE'
+                      and owner._journal.snapshot()['stopped'] is True, 'NATIVE_STOP_UNKNOWN')
+        finally:
+            self._phase.release()
 
     def __enter__(self):
         return self

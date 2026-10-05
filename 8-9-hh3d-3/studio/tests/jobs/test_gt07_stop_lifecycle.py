@@ -5,8 +5,8 @@ The reused owner fixture supplies real session/ledger logic but MemoryJournal
 and modeled Blender responses. Production BlenderUIHost.execute supplies its
 polling deadline. These tests prove neither native Blender effects nor kill,
 fsync of owner receipts, or a Stop latency percentile. Dispatcher.drain_stop
-currently skips Blender; the deadline test proves its existing operation bound,
-not a supervisor API that waits for an active Blender phase.
+waits for the active phase with a bounded supervisor deadline; timeout keeps
+the binding/reservation held. Its eventual return is not a native kill proof.
 """
 from __future__ import annotations
 
@@ -272,6 +272,47 @@ class GT07StopLifecycleTests(unittest.TestCase):
         self.assertEqual(self.case.host.execute.call_count, 1)
         self.assertEqual(len(self.case.scene['snapshot']['objects']), 1)
         self.assertEqual(len(self.case.journal._records), 3)
+
+    def test_supervisor_drain_waits_for_active_blender_and_preserves_binding_on_timeout(self):
+        binding, row = self.enqueue('m6.drain')
+        ticket = self.dispatch.reserve()
+        entered, release = threading.Event(), threading.Event()
+        self.releases.append(release)
+        def effect(command, **_):
+            entered.set()
+            if not release.wait(3):
+                raise AssertionError('bounded inert effect not released')
+            return self.case._row(command, None, 'CANCELLED')
+        self.case.host.execute.side_effect = effect
+        worker, results, errors = self.start(ticket)
+        self.assertTrue(entered.wait(1))
+        self.dispatch.stop()
+        started = time.monotonic()
+        with self.assertRaisesRegex(NativeDispatchError, 'NATIVE_STOP_DRAIN_REQUIRED'):
+            self.dispatch.drain_stop(timeout=.02)
+        self.assertLess(time.monotonic() - started, .5)
+        self.assertTrue(worker.is_alive())
+        self.assertIs(self.owner._queue_dispatcher, self.dispatch)
+        self.assertEqual(self.queue.broker.lookup(row.job.job_id).state, 'RESERVED')
+        with self.assertRaisesRegex(NativeDispatchError, 'NATIVE_PHASE_BUSY'):
+            self.dispatch.close()
+        release.set()
+        self.dispatch.drain_stop(timeout=2)
+        worker.join(2)
+        self.assertFalse(worker.is_alive())
+        self.assertEqual(errors, [])
+        self.assertEqual(len(results), 1)
+        self.assertIs(results[0].status, Status.CANCELED)
+        self.assertEqual(self.queue.broker.lookup(row.job.job_id).state, 'CANCELED')
+        self.assertEqual(self.case.host.execute.call_count, 1)
+
+    def test_drain_timeout_argument_cannot_request_unbounded_wait(self):
+        self.dispatch.stop()
+        for value in (True, -1, 96, float('nan'), float('inf'), '1'):
+            with self.subTest(value=value):
+                with self.assertRaisesRegex(NativeDispatchError, 'NATIVE_STOP_INVALID_TIMEOUT'):
+                    self.dispatch.drain_stop(timeout=value)
+        self.dispatch.drain_stop(timeout=0)
 
 
 def fixture_job():

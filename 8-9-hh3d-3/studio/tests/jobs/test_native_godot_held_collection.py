@@ -78,20 +78,8 @@ class HeldCollectionTests(unittest.TestCase):
         self.owner.sessions.halt()
 
     def collect(self, response=None):
-        # unittest discovery loads the recovery fixture twice under the same
-        # dynamic module name. Restore the exact module that owns this object
-        # before exercising the production type guard; this mirrors a single
-        # native process and does not weaken that guard.
-        import sys
-        sys.modules[type(self.owner).__module__] = fixture.owner_module
         return self.fx.dispatch._collect_godot(object(), self.binding,
                                                self.response if response is None else response)
-
-    def tearDown(self):
-        import sys
-        recovery = sys.modules.get('test_native_godot_recovery')
-        if recovery is not None:
-            sys.modules[type(self.owner).__module__] = recovery.owner_module
 
     def test_old_healthy_identity_reproduces_collection_failure(self):
         # Exactly the old check: .identity refuses the held editor before lookup.

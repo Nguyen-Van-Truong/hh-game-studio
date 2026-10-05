@@ -13,7 +13,7 @@ STUDIO = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(STUDIO.parent))
 
 spec = importlib.util.spec_from_file_location(
-    'gt07_native_godot_recovery_owner', STUDIO / 'godot-addon/publication_owner.py')
+    __name__ + '_owner', STUDIO / 'godot-addon/publication_owner.py')
 owner_module = importlib.util.module_from_spec(spec)
 sys.modules[spec.name] = owner_module
 spec.loader.exec_module(owner_module)
