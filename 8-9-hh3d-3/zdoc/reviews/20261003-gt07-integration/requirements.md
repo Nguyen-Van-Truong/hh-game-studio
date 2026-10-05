@@ -9,7 +9,7 @@ Historical entries below are retained for provenance; they do not override the t
 |---|---|---|---|
 | M1 / Q01 | DONE (host) | `gt07-jobs-integration-20261004-03`, 46 tests | Repeat only in final frozen matrix |
 | M2 / Q03 | OPEN (partial) | static admission/lease guards; native writer FIFO `gt07-native-writer-fifo-20261005-02` and fresh repeat `gt07-native-writer-fifo-20261005-04` | final frozen repeat and explicit coordinator revoke mapping |
-| M3 / Q05 | OPEN (partial) | Godot edit/save/script and receipt-loss run21; Blender queued export `gt07-native-queue-20261005-06`; current-source Blender cuts `gt07-native-queue-20261005-12,13,15,16,17` (PREPARED/VALIDATED/COMMITTED/ACK/ACTIVATING) with actual crash recovery; queue consumers `gt07-cross-app-20261005-07,11,13,16,18,19` | queue-level crash/reload/last-good cut and frozen matrix |
+| M3 / Q05 | OPEN (partial) | Godot edit/save/script and receipt-loss run21; Blender queued export `gt07-native-queue-20261005-06`; current-source Blender cuts `gt07-native-queue-20261005-12,13,15,16,17` (PREPARED/VALIDATED/COMMITTED/ACK/ACTIVATING) with actual crash recovery; queue consumers `gt07-cross-app-20261005-07,11,13,16,18,19` plus receipt-loss/reopen `gt07-native-godot-20261005-27` | queue-level crash/reload/last-good cut and frozen matrix |
 | M4 / Q06 | OPEN (partial) | governed `gt07-native-godot-20261005-19` and current-source repeat `gt07-native-godot-20261005-26` native queue conflict PASS (actual child/wrapper 0, Job/tree clean, source unchanged); direct `-01` remains diagnostic | `.blend` conflict and final frozen matrix remain; native `-16`/`-17` failures retained as history |
 | M5 / TX05/TX09 | OPEN (partial) | host-only `gt07-m5-storage-20261005-05` and fresh repeat `gt07-m5-storage-20261005-07` verified exclusive file-lock denial, cross-volume `MoveFileExW` refusal (error 17), and injected fsync/diskfull UNKNOWN with last-good preservation; source closure `308602e8...fd072` for the repaired runner | final frozen repeat, requirement-map binding, and any product-boundary proof beyond the authority-zero host diagnostic |
 | M6 / Q04 | OPEN (partial) | Stop drain and native run16 | full queue/cancel/reconnect matrix in final run |
@@ -217,6 +217,18 @@ exited 0 with clean owned Jobs, but its environment diagnostics still report
 `diagnostic_process_clean=false`/`log_clean=false`; therefore this is
 authority-zero diagnostic evidence, not an M3 acceptance pass. Consumer
 crash/reload/last-good coverage and the frozen matrix remain open.
+
+## Checkpoint, 05-10-2026 — M3 current-source receipt-loss recovery
+
+`gt07-native-godot-20261005-27` passed the mandatory matching dry-run/native
+admission and ran the receipt-loss/reopen lookup-only cut against source
+closure `e733d05e4b54d8a0a2199074885c2ceaefe431764e36b2d38052cb79ec451f18`.
+The receipt was intentionally absent; reopen and lookup/reconcile recovered
+the existing COMMITTED state without a second native effect. Editor and
+validator children exited 0 naturally, owned Jobs/trees closed with zero
+active or retained handles, and source remained unchanged. This is
+authority-zero diagnostic evidence. The six-phase Blender crash matrix,
+consumer last-good proof, and frozen M1–M9 matrix remain open.
 
 ## Checkpoint, 05-10-2026 — M5 dry-run/native handoff repair
 
