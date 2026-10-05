@@ -80,9 +80,21 @@ def main(argv=None) -> int:
     if not args.run_id.startswith("gt07-cross-app-"):
         parser.error("use a fresh gt07-cross-app-* id")
     output = STUDIO / ".local/reviews" / args.run_id
+    admission = None
     if output.exists():
-        raise RuntimeError("CROSS_APP_RUN_ID_USED")
-    output.mkdir(parents=True)
+        if args.dry_run:
+            raise RuntimeError("CROSS_APP_RUN_ID_USED")
+        dry_run_path = output / "dry-run.json"
+        if not dry_run_path.is_file():
+            raise RuntimeError("CROSS_APP_RUN_ID_USED")
+        try:
+            admission = json.loads(dry_run_path.read_text(encoding="utf-8"))
+        except (OSError, ValueError) as error:
+            raise RuntimeError("CROSS_APP_DRY_RUN_INVALID") from error
+        if type(admission) is not dict or admission.get("run_id") != args.run_id:
+            raise RuntimeError("CROSS_APP_DRY_RUN_INVALID")
+    else:
+        output.mkdir(parents=True)
     handoff_dir = args.blender_published.absolute()
     artifact, manifest_raw, handoff = base.read_blender_handoff(handoff_dir)
     fixture_args = SimpleNamespace(fixture="gameplay_source_assets",
@@ -123,6 +135,12 @@ def main(argv=None) -> int:
                "adapter_source_closure_sha256": adapter_closure,
                "adapter_source_files": files,
                "scope": "queue dependency + one gameplay-source publish; diagnostic only"}
+    if admission is not None:
+        if (admission.get("source_closure_sha256") != closure
+                or admission.get("blender_handoff") != handoff
+                or admission.get("adapter_source_closure_sha256") != adapter_closure):
+            raise RuntimeError("CROSS_APP_DRY_RUN_SOURCE_CHANGED")
+        (output / "dry-run.json").replace(output / "admission-dry-run.json")
     _save(output / "binding.json", binding)
     if args.dry_run:
         _save(output / "dry-run.json", {**binding,
