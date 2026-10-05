@@ -24,17 +24,23 @@ STUDIO = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(STUDIO.parent))
 
 
-def _request_for(*, before, lease, project_id, now_ms):
+def _request_for(*, before, lease, project_id, now_ms, operation="mesh.create_box"):
     """Use the same command recipe in dry-run and native admission."""
     from studio.host.blender import client_write_catalog as catalog
     from studio.protocol.core import Request, canonical_bytes
+    if operation not in ("mesh.create_box", "export.publish"):
+        raise ValueError("BLENDER_SCENARIO_UNSUPPORTED")
+    export = operation == "export.publish"
     payload = {"expected_context": before["context"],
-               "arguments": {"object_id": "queue_probe_box", "size": [1, 2, 3]}}
-    return Request("QueueMeshCreate", project_id, "mesh.create_box",
+               "arguments": {} if export else {"object_id": "queue_probe_box", "size": [1, 2, 3]}}
+    maximum = catalog.MAX_LEASE_MS if export else catalog.MAX_UI_MS
+    expires_ms = (lease.expires_ms if hasattr(lease, "expires_ms")
+                  else lease["expires_ms"])
+    return Request("QueueExport" if export else "QueueMeshCreate", project_id, operation,
                    lease["lease_id"], lease["fencing_epoch"], before["revision"],
                    {"stable_id": catalog.TARGET}, payload,
                    "sha256:" + hashlib.sha256(canonical_bytes(payload)).hexdigest(),
-                   now_ms + catalog.MAX_UI_MS - 250)
+                   min(expires_ms, now_ms + maximum - 250))
 
 
 def dry_run_contract(operation="mesh.create_box", recover_after_loss=False):
@@ -50,7 +56,7 @@ def dry_run_contract(operation="mesh.create_box", recover_after_loss=False):
     from studio.host.core.limits import SafetyViolation
     from studio.host.core.transport import epoch_ms
     from studio.protocol.core import parse_json
-    if recover_after_loss or operation != "mesh.create_box":
+    if recover_after_loss or operation not in ("mesh.create_box", "export.publish"):
         raise ValueError("BLENDER_SCENARIO_UNSUPPORTED")
     # Reuse the maintained inert integration fixture, not another mock owner.
     # Its bare test_client_ledger import is resolved only during this import.
@@ -58,9 +64,10 @@ def dry_run_contract(operation="mesh.create_box", recover_after_loss=False):
     try:
         sys.path.insert(0, str(STUDIO / "tests/blender"))
         from studio.tests.blender.test_client_writer_owner import WriterOwnerTests
+        from studio.tests.blender.test_client_writer_publication import PublicationClientTests
     finally:
         sys.path[:] = old_path
-    fixture = WriterOwnerTests()
+    fixture = PublicationClientTests() if operation == "export.publish" else WriterOwnerTests()
     try:
         fixture.setUp()
         owner = fixture.owner
@@ -68,7 +75,9 @@ def dry_run_contract(operation="mesh.create_box", recover_after_loss=False):
                             **fixture.kw)
         now = epoch_ms()
         request = _request_for(before=parse_json(owner._read_owner._baseline), lease=lease,
-                               project_id=owner.project_id, now_ms=now)
+                               project_id=owner.project_id, now_ms=now, operation=operation)
+        if operation not in owner._supported:
+            raise RuntimeError("SCENARIO_PUBLICATION_NOT_CONNECTED")
         checked = catalog.validate_request(request.as_dict(), project_id=owner.project_id,
                                            source_sha256=owner._source_sha256)
         grant = owner.sessions.authorize(fixture.auth, request.operation,
@@ -76,12 +85,13 @@ def dry_run_contract(operation="mesh.create_box", recover_after_loss=False):
                                         catalog_digest=owner.catalog_digest)
         resolved = owner.sessions.resolve_writer_lease(grant, request.lease_id, request.fencing_epoch)
         rejected = []
+        maximum = catalog.MAX_LEASE_MS if operation == "export.publish" else catalog.MAX_UI_MS
         with patch.object(client_session, "epoch_ms", return_value=now), \
                 patch.object(client_writer_session, "epoch_ms", return_value=now):
-            for offset in (1, catalog.MAX_UI_MS, request.deadline_ms - now):
+            for offset in (1, maximum, request.deadline_ms - now):
                 owner.sessions.check_write(grant, resolved, operation=request.operation,
                                             deadline_ms=now + offset)
-            for offset in (0, catalog.MAX_UI_MS + 1):
+            for offset in (0, maximum + 1):
                 try:
                     owner.sessions.check_write(grant, resolved, operation=request.operation,
                                                 deadline_ms=now + offset)
@@ -95,7 +105,7 @@ def dry_run_contract(operation="mesh.create_box", recover_after_loss=False):
         return {"operation": checked.operation, "request_digest": checked.digest,
                 "admission_validated": True, "public_lease_route_validated": True,
                 "deadline_lower_bound_rejected": rejected[0] == 0,
-                "deadline_upper_bound_rejected": rejected[1] == catalog.MAX_UI_MS + 1,
+                "deadline_upper_bound_rejected": rejected[1] == maximum + 1,
                 "synthetic_state": True, "native_effect": False,
                 "modeled_backends": ["native_process", "Job", "writer_journal", "ledger"]}
     finally:
@@ -111,7 +121,8 @@ def _sources(root: Path) -> dict[str, str]:
     names = ["build/bootstrap/run_fixture.py", "godot-addon/cli_job.py",
              "toolchain.lock.json", "tests/replay/measure_window.py",
              "tests/replay/benchmark_job.py", "pipeline/native_job.py",
-             "tests/blender/test_client_writer_owner.py", "tests/blender/test_client_ledger.py"]
+             "tests/blender/test_client_writer_owner.py", "tests/blender/test_client_ledger.py",
+             "tests/blender/test_client_writer_publication.py"]
     paths = [root / name for name in names]
     for name in ("blender-addon", "host/blender", "host/core", "host/jobs",
                  "protocol", "tests/jobs"):
@@ -151,10 +162,11 @@ def _safe_error(error: BaseException) -> dict[str, str]:
 
 
 def _child(output: Path, binary: Path, run_id: str,
-           source: dict[str, str], closure: str) -> int:
+           source: dict[str, str], closure: str, operation="mesh.create_box") -> int:
     """Run inside the frozen snapshot; no source outside it is trusted."""
     from studio.host.blender.ui_host import BlenderUIHost
     from studio.host.blender.durable_session import DurableBlenderSession
+    from studio.host.blender.publication_owner import BlenderPublicationOwner
     from studio.host.blender.client_writer_owner import BlenderWriterClientOwner
     from studio.host.blender import client_write_catalog as catalog
     from studio.host.jobs.native_dispatch import BlenderOwnerBinding, NativeOwnerDispatcher
@@ -163,7 +175,8 @@ def _child(output: Path, binary: Path, run_id: str,
     from studio.protocol.core import Request, Status, canonical_bytes, parse_json
 
     errors: list[dict[str, str]] = []
-    gui = durable = owner = queue = dispatch = None
+    gui = durable = owner = queue = dispatch = publisher = None
+    publication_proof = None
     response = None
     stop_snapshot = None
     cleanup = None
@@ -180,8 +193,14 @@ def _child(output: Path, binary: Path, run_id: str,
         queue_root.mkdir(exist_ok=False)
         gui = BlenderUIHost(output, binary=binary, session_seconds=90)
         durable = DurableBlenderSession(gui.directory / "journal", host=gui)
-        owner = BlenderWriterClientOwner.from_session(durable, publications={})
+        publications = {}
+        if operation == "export.publish":
+            publisher = BlenderPublicationOwner.create(output, session=durable)
+            publications[operation] = publisher
+        owner = BlenderWriterClientOwner.from_session(durable, publications=publications)
         operations = catalog.EDIT_OPERATIONS | {catalog.READ, "control.lookup", "control.stop"}
+        if publisher is not None:
+            operations |= {operation}
         writer = owner.sessions.issue(operations=operations, ttl_ms=60000)
         queue = QueueOwner.create(queue_root)
         dispatch = NativeOwnerDispatcher(queue)
@@ -216,6 +235,48 @@ def _child(output: Path, binary: Path, run_id: str,
                     for i in range(3)] if len(vertices) == 8 else [])
         if box is None or extents != [1, 2, 3]:
             raise RuntimeError("NATIVE_READBACK_GEOMETRY_MISMATCH")
+        if publisher is not None:
+            # The producer setup is an ordinary queued command. Re-admit the
+            # publication against its actual observation and a fresh lease.
+            lease = owner.lease({"project_id": owner.project_id, "access": "write",
+                                 "ttl_ms": 30000}, authorization="Bearer " + writer.bearer,
+                                catalog_digest=owner.catalog_digest)
+            request = _request_for(before=observation["scene"], lease=lease,
+                project_id=owner.project_id, now_ms=epoch_ms(), operation=operation)
+            binding = BlenderOwnerBinding.create(owner, body=request.as_dict(),
+                authorization="Bearer " + writer.bearer, catalog_digest=owner.catalog_digest)
+            dispatch.register(binding)
+            queue_row = dispatch.enqueue(binding)
+            reservation = dispatch.reserve()
+            if reservation is None:
+                raise RuntimeError("QUEUE_EXPORT_RESERVATION_MISSING")
+            response = dispatch.advance(reservation)
+            if response.status is not Status.COMMITTED or binding.lookup() != response:
+                raise RuntimeError("NATIVE_EXPORT_NOT_COMMITTED")
+            manifest, artifacts = publisher.read_selected()
+            if manifest["snapshot"] != observation["scene"]["snapshot"]:
+                raise RuntimeError("NATIVE_EXPORT_SNAPSHOT_CHANGED")
+            captured = output / "published"
+            captured.mkdir()
+            for name, raw in artifacts.items():
+                (captured / name).write_bytes(raw)
+                if _sha(captured / name) != manifest["artifacts"][name]["sha256"]:
+                    raise RuntimeError("NATIVE_EXPORT_CAPTURE_CHANGED")
+            _write(captured / "manifest.json", manifest)
+            publication_proof = {"storage_id": publisher.storage_id,
+                "manifest_sha256": _sha(captured / "manifest.json"),
+                "artifacts": {name: {"sha256": _sha(captured / name), "bytes": len(raw)}
+                              for name, raw in artifacts.items()},
+                "export_cleanup": parse_json(publisher._job._cleanup_result),
+                "godot_import_readback": False, "public_ack": False}
+            cleanup_export = publication_proof["export_cleanup"]
+            if (cleanup_export["actual_process_exit"]["exit_code"] != 0
+                    or cleanup_export["wrapper_exit_code"] != 0
+                    or cleanup_export["cleanup_held"]
+                    or not cleanup_export["job"]["closed"]
+                    or not cleanup_export["job"]["zero_observed"]
+                    or cleanup_export["job"]["handle_retained"]):
+                raise RuntimeError("NATIVE_EXPORT_CLEANUP_UNPROVEN")
         row = queue.broker.lookup(queue_row.job.job_id)
         if row is None or row.state != "COMMITTED":
             raise RuntimeError("DURABLE_RECEIPT_NOT_COMMITTED")
@@ -240,6 +301,11 @@ def _child(output: Path, binary: Path, run_id: str,
                 queue.close()
             except BaseException as error:
                 errors.append(_safe_error(error))
+        if publisher is not None:
+            try:
+                publisher.close()
+            except BaseException as error:
+                errors.append(_safe_error(error))
         if gui is not None:
             try:
                 cleanup = gui.close()
@@ -255,6 +321,7 @@ def _child(output: Path, binary: Path, run_id: str,
         "generation": getattr(gui, "_session", None),
         "queue_job_id": queue_row.job.job_id if queue_row is not None else None,
         "queue_state": queue_state,
+        "operation": operation, "publication": publication_proof,
         "response": response.as_dict() if response is not None else None,
         "stop_snapshot": (asdict(stop_snapshot) if stop_snapshot is not None else None),
         "cleanup": cleanup, "errors": errors,
@@ -266,7 +333,7 @@ def _child(output: Path, binary: Path, run_id: str,
     return 0 if report["passed"] else 1
 
 
-def run(output: Path, binary: Path, run_id: str) -> int:
+def run(output: Path, binary: Path, run_id: str, operation="mesh.create_box") -> int:
     output = output.resolve()
     output.mkdir(parents=True, exist_ok=False)
     source = _sources(STUDIO)
@@ -293,7 +360,7 @@ def run(output: Path, binary: Path, run_id: str) -> int:
     binary = binary.resolve()
     child = [sys.executable, "-B", str(snapshot / "tests/jobs/run_native_blender_queue_probe.py"),
              "--frozen", "--output", str(output), "--binary", str(binary),
-             "--run-id", run_id]
+             "--run-id", run_id, "--operation", operation]
     host = runner.run_process(child, cwd=snapshot, output=output, timeout=120,
                               label="native", env=os.environ.copy())
     child_report = json.loads((output / "native-child.json").read_bytes()) if (output / "native-child.json").is_file() else None
@@ -323,15 +390,17 @@ def main(argv=None) -> int:
     parser.add_argument("--binary", type=Path, required=True)
     parser.add_argument("--run-id", type=_run_id, required=True)
     parser.add_argument("--frozen", action="store_true")
+    parser.add_argument("--operation", choices=("mesh.create_box", "export.publish"), default="mesh.create_box")
     args = parser.parse_args(argv)
     if args.frozen:
         manifest = json.loads((args.output / "source-closure.json").read_bytes())
         return _child(args.output.resolve(), args.binary.resolve(), args.run_id,
-                      manifest["files"], manifest["source_closure_sha256"])
+                      manifest["files"], manifest["source_closure_sha256"], args.operation)
     if args.output.name != args.run_id:
         parser.error("output basename must equal the run ID")
     from studio.tests.jobs.run_gt07_scenarios import main as scenario_main
-    return scenario_main(["--scenario", "blender-box", "--blender-binary", str(args.binary),
+    scenario = "blender-export" if args.operation == "export.publish" else "blender-box"
+    return scenario_main(["--scenario", scenario, "--blender-binary", str(args.binary),
                           "--run-id", args.run_id, "--output-root", str(args.output.parent)])
 
 

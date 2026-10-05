@@ -23,7 +23,8 @@ spec.loader.exec_module(module)
 class GT07ScenarioAdmissionTests(unittest.TestCase):
     def test_matrix_is_explicit_and_deadlines_are_bounded(self):
         self.assertEqual(set(module.SCENARIOS), {
-            "godot-edit", "godot-save", "godot-script", "godot-recovery", "blender-box"})
+            "godot-edit", "godot-save", "godot-script", "godot-recovery",
+            "blender-box", "blender-export"})
         self.assertEqual({row["max_horizon_ms"] for row in module.SCENARIOS.values()},
                          {5_000, 30_000, 90_000})
 

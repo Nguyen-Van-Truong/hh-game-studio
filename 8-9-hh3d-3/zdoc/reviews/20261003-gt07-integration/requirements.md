@@ -9,7 +9,7 @@ Historical entries below are retained for provenance; they do not override the t
 |---|---|---|---|
 | M1 / Q01 | DONE (host) | `gt07-jobs-integration-20261004-03`, 46 tests | Repeat only in final frozen matrix |
 | M2 / Q03 | OPEN | static admission/lease guards | native two-writer, expiry, revoke, late worker |
-| M3 / Q05 | OPEN (partial) | Godot edit/save/script and receipt-loss run21 | six publish crash cuts, reload/ACK, last-good |
+| M3 / Q05 | OPEN (partial) | Godot edit/save/script and receipt-loss run21; Blender queued export `gt07-native-queue-20261005-06` | six publish crash cuts, true Blender→Godot import/reload/ACK, last-good |
 | M4 / Q06 | OPEN | no final native proof | manual edit conflict and no rollback overwrite |
 | M5 / TX05/TX09 | OPEN | component fault helpers | filelock, cross-volume and injected disk/fsync cuts |
 | M6 / Q04 | OPEN (partial) | Stop drain and native run16 | full queue/cancel/reconnect matrix in final run |
@@ -33,6 +33,17 @@ The RELOAD failures in runs 25 and 02 remain immutable diagnostics. PREPARED,
 VALIDATED, ACTIVATING, COMMITTED and ACK cuts still need fresh IDs.
 N2-N5: execute remaining M3 cuts, M2/M4, M5/M7, then M6/M8/M9 with fresh IDs and preserved raw.
 N6: freeze closure once, run the full matrix plus focused regressions, map artifacts, then send the same hash to two independent critics.
+
+## Checkpoint, 05-10-2026 — queued Blender publication slice
+
+`gt07-native-queue-20261005-06` passed its mandatory engine-free dry-run and
+native `export.publish`: pinned Blender created `scene.glb` and
+`checkpoint.blend`, protected manifest/selector readback was byte/hash bound,
+queue receipt was COMMITTED, and both Blender plus wrapper exited 0 with Job
+closed/zero/unretained. This is a diagnostic M3 producer slice only;
+`godot_import_readback=false`, so it does not close Blender→Godot reload/ACK or
+GT07. Raw is immutable at `studio/.local/reviews/gt07-native-queue-20261005-06/`;
+source closure is `9ddb4aff90783f967ffa6700a84a5784a2ed7716ec36f914484067232283bb77`.
 
 ## Historical log (preserved verbatim)
 # GT07 integration map — opened after GT06 acceptance
