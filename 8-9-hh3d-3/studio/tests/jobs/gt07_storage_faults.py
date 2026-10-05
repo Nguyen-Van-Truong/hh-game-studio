@@ -12,6 +12,7 @@ suite) so normal tests remain deterministic and engine-free.
 from __future__ import annotations
 
 import argparse
+from contextlib import contextmanager
 import ctypes
 from ctypes import wintypes
 import hashlib
@@ -193,6 +194,64 @@ def _move_replace(source: Path, target: Path) -> tuple[bool, int | None]:
     if result:
         return True, None
     return False, int(ctypes.get_last_error())
+
+
+@contextmanager
+def exclusive_file_holder(output: Path, target: Path):
+    """Keep a real share=0 holder alive across an admitted native save.
+
+    This fixture inherits the enclosing native probe's Job. It only touches
+    the caller's owned target and closes the exact held process on every path.
+    """
+    output.mkdir(exist_ok=False)
+    before = _identity(target)
+    before_hash = _sha256(target)
+    if before is None:
+        raise DiagnosticError('LOCK_TARGET_IDENTITY_MISSING')
+    worker = _write_lock_worker(output)
+    marker = output / 'lock-holder.json'
+    process = subprocess.Popen([sys.executable, '-B', str(worker), str(target), str(marker)],
+        stdin=subprocess.PIPE, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+        creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
+    report = {'pid': process.pid, 'identity_before': before, 'sha256_before': before_hash,
+              'share_mode': 0, 'native_save_attempted': False}
+    try:
+        held = _read_marker(marker, time.monotonic() + 5)
+        if held != {'opened': True, 'pid': process.pid} or process.poll() is not None:
+            raise DiagnosticError('LOCK_HOLDER_NOT_LIVE')
+        kernel = ctypes.WinDLL('kernel32', use_last_error=True)
+        kernel.CreateFileW.argtypes = [wintypes.LPCWSTR, wintypes.DWORD, wintypes.DWORD,
+                                      wintypes.LPVOID, wintypes.DWORD, wintypes.DWORD, wintypes.HANDLE]
+        kernel.CreateFileW.restype = wintypes.HANDLE
+        kernel.CloseHandle.argtypes = [wintypes.HANDLE]
+        kernel.CloseHandle.restype = wintypes.BOOL
+        handle = kernel.CreateFileW(str(target), GENERIC_READ, 7, None, OPEN_EXISTING, 0, None)
+        if handle != INVALID_HANDLE_VALUE:
+            if not kernel.CloseHandle(handle):
+                raise DiagnosticError('LOCK_PROBE_CLOSE_FAILED')
+            raise DiagnosticError('LOCK_DID_NOT_DENY_READ')
+        report['read_denial_winerror'] = ctypes.get_last_error()
+        if report['read_denial_winerror'] not in {5, 32, 33}:
+            raise DiagnosticError('LOCK_UNEXPECTED_READ_ERROR')
+        yield report
+    finally:
+        report['holder_live_after_save'] = process.poll() is None
+        try:
+            if process.poll() is None:
+                process.stdin.write(b'RELEASE\n')
+                process.stdin.close()
+            report['holder_exit'] = process.wait(timeout=5)
+        finally:
+            if process.poll() is None:
+                process.kill()
+                process.wait(timeout=3)
+            if process.stdin is not None and not process.stdin.closed:
+                process.stdin.close()
+            report['identity_after'] = _identity(target)
+            report['sha256_after'] = _sha256(target)
+            report['last_good_preserved'] = (report['identity_after'] == before
+                                             and report['sha256_after'] == before_hash)
+            _json_write(output / 'held-save.json', report)
 
 
 def run_file_lock(output: Path, worker: Path) -> dict[str, Any]:

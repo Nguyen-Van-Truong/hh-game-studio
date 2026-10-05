@@ -40,6 +40,7 @@ class NativeGodotRecoveryTests(unittest.TestCase):
         self.owner._source_release = ('release', 'b' * 64)
         self.owner.storage_id = 'storage.fixture'
         self.owner._editor = SimpleNamespace(identity={'session_id': 'editor.old', 'pid': 101})
+        self.owner._editor.lookup_identity = self.owner._editor.identity
         self.owner._journal = object()
         self.owner.sessions = SimpleNamespace(
             _check_grant=lambda *_args, **_kwargs: None,

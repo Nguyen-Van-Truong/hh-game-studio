@@ -11,7 +11,7 @@ Historical entries below are retained for provenance; they do not override the t
 | M2 / Q03 | OPEN (partial) | static admission/lease guards; native writer FIFO `gt07-native-writer-fifo-20261005-02` and fresh repeat `gt07-native-writer-fifo-20261005-04` | final frozen repeat and explicit coordinator revoke mapping |
 | M3 / Q05 | OPEN (partial) | Blender producer cuts plus consumer cuts `gt07-cross-app-20261005-53` (RELOAD: HELD_LAST_GOOD) and `gt07-cross-app-20261005-54` (ACK: COMMITTED_LOOKUP_ONLY); both actual child/recovery exits and owned Jobs clean, one native dispatch, no replay, source/snapshot unchanged | six-phase producer coverage and final frozen matrix |
 | M4 / Q06 | OPEN (partial) | Godot `gt07-native-godot-20261005-26,42`; Blender `gt07-native-queue-20261005-47`: queued stale transform returns UNKNOWN/lookup.reconcile, manual `.blend` state retained, actual child/wrapper exits 0 and owned Job clean | final frozen matrix; previous failed diagnostics remain immutable |
-| M5 / TX05/TX09 | OPEN (partial) | host-only `gt07-m5-storage-20261005-05`, `-07`, and fresh `-09` verified exclusive file-lock denial, cross-volume `MoveFileExW` refusal (error 17), and injected fsync/diskfull UNKNOWN with last-good preservation; source closure `308602e8...fd072` for the repaired runner | final frozen repeat, requirement-map binding, and any product-boundary proof beyond the authority-zero host diagnostic |
+| M5 / TX05/TX09 | DIAGNOSTIC COVERED | host `gt07-m5-storage-20261005-09`: real lock/cross-volume refusal, INJECTED fsync/diskfull; native `gt07-native-godot-20261006-05`: share=0 during scene.save capture, durable UNKNOWN/lookup.reconcile, last-good file and selection preserved, actual exits/Job clean | final frozen repeat and requirement-map binding; native lock rejects at capture precondition before filesystem publication |
 | M6 / Q04 | OPEN (partial) | Stop drain and native run16 | full queue/cancel/reconnect matrix in final run |
 | M7 / Q07 | OPEN (partial) | 510-record capacity/JOURNAL_FULL; queue-only custody rotation barriers; segmented queue checkpoint/reopen, two-segment archive chain, expired terminal same-ID replay guard, bounded real-clock expiry soak, malformed candidate pointer guard (`test_segmented_journal` 6 tests, `test_segmented_broker_regression` 8 tests, `test_durable_broker` 18 tests; exits 0); opt-in integrated `QueueOwner→DurableBroker→QueueJournalManager` process cuts at PREPARED/ACTIVE_POINTER/COMMITTED passed (actual child exit 73, 1.474s), preserving pending reconciliation and the exact archived receipt | final frozen matrix |
 | M8 / Q08 | OPEN (partial) | host-only repeats `gt07-m8-process-20261005-05`, `-07`, `-08`, and fresh `-10` verify PID/start identity, forged-start refusal, owned-tree timeout and 64 MiB Job memory denial; actual worker exits and Job cleanup recorded. The runner now requires a matching dry-run receipt before native execution (closure `ab498ef2...20c9e8` for `-10`) | final frozen M1–M9 matrix and source-specific manifest |
@@ -21,13 +21,31 @@ Historical entries below are retained for provenance; they do not override the t
 
 M3 consumer recovery and M7 integrated rotation crash slices are covered
 diagnostically. Before freezing, map explicit M2 revocation, M3 producer cuts,
-M5 Godot-save file-lock, and M6 Stop/cancel/reconnect/token-rotation coverage.
+and M6 Stop/cancel/reconnect/token-rotation coverage. M5 Godot-save file-lock
+now has native diagnostic proof; repeat it only in the final frozen matrix.
 The eight-scenario app runner alone is not the full M1–M9 matrix. Close only
 missing coverage, then freeze one closure and execute the complete matrix plus
 affected regressions. Submit the same hash to two independent critics. Existing slices are
 context; none grants acceptance. Do not replay a completed diagnostic solely
 to refresh its timestamp. Every native launch needs its matching engine-free
 dry-run; source changes invalidate that admission.
+
+## Checkpoint, 06-10-2026 - held-editor receipt collection
+
+`gt07-native-godot-20261006-01..03` - FAIL, child exit 1; the real lock preserved last-good but healthy-editor identity blocked UNKNOWN collection; raw retained.
+`gt07-native-godot-20261006-04` - FAIL, child exit 1, editor exit 0/Job clean; repaired collector returned the journal's canonical UNKNOWN, but the probe expected a transient save-error code.
+`gt07-native-godot-20261006-05` - diagnostic PASS, child/wrapper/editor/lock-holder exits 0, Job/tree/handles clean, source/snapshot unchanged (`d36da7be6f7b701a349eb26ab5e82f13356359d0c808715014da4fbe20514b35`); real share=0 denial 32 at capture precondition, file identity/hash and active selection unchanged, queue UNKNOWN, durable Stop.
+
+Repair: read-only `lookup_identity` permits only the held state while retaining
+source/process/root/security/diagnostic checks; effects and COMMITTED readback
+still require healthy identity. No authentication or journal fallback exists.
+Nine focused regression tests include the old failure, real session rotation/
+revocation, source/identity/phase drift and receipt mismatch. The probe checks
+the actual reducer's durable response, not the owner's pre-journal error code.
+94 focused tests completed, exit 0 (92 passed, 2 environment skips); the added reducer guard and M6
+host tests then passed in a 21-test selection. Installed binding refresh02 is
+historical after these production edits; refresh the exact reviewed delta
+before the final frozen matrix. No benchmark rerun or GT07 acceptance claim.
 
 ## Checkpoint, 06-10-2026 - Blender export Job cap ordering repair
 

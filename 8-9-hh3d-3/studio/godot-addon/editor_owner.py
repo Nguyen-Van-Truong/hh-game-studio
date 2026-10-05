@@ -344,9 +344,24 @@ class EditorOwner:
     def identity(self):
         with self._mutex:
             self._healthy()
-            return {'session_id': self._session, 'pid': self._pid, 'creation_filetime': self._creation,
-                    'root_identity': _identity(self._root_identity), 'engine_sha256': GUI_SHA256,
-                    'installed_source_sha256': _sha(canonical_bytes(self._source))}
+            return self._identity_facts()
+
+    @property
+    def lookup_identity(self):
+        """Identify a live held editor for authenticated receipt collection only.
+
+        Holding an uncertain effect forbids further effects and committed
+        readback. It must not hide its durable UNKNOWN response from the queue.
+        Source, process, root, ACL and diagnostic checks remain mandatory.
+        """
+        with self._mutex:
+            self._healthy(allow_held=True)
+            return self._identity_facts()
+
+    def _identity_facts(self):
+        return {'session_id': self._session, 'pid': self._pid, 'creation_filetime': self._creation,
+                'root_identity': _identity(self._root_identity), 'engine_sha256': GUI_SHA256,
+                'installed_source_sha256': _sha(canonical_bytes(self._source))}
 
     def _drain(self, name, pipe):
         total = 0
@@ -364,8 +379,8 @@ class EditorOwner:
         finally:
             pipe.close()
 
-    def _healthy(self):
-        _need(not self._closed and not self._held and not self._overflow.is_set(), 'EDITOR_OWNER_HELD_OR_CLOSED')
+    def _healthy(self, *, allow_held=False):
+        _need(not self._closed and (allow_held or not self._held) and not self._overflow.is_set(), 'EDITOR_OWNER_HELD_OR_CLOSED')
         _need(_release() == self._source, 'EDITOR_RELEASE_CHANGED')
         _need(self._process.poll() is None and self._job.active_count() not in (None, 0), 'EDITOR_PROCESS_NOT_LIVE')
         current = self._api.inspect(self._root_handle, self.project, directory=True)

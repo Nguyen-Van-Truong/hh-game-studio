@@ -23,7 +23,7 @@ spec.loader.exec_module(module)
 class GT07ScenarioAdmissionTests(unittest.TestCase):
     def test_matrix_is_explicit_and_deadlines_are_bounded(self):
         self.assertEqual(set(module.SCENARIOS), {
-            "godot-edit", "godot-save", "godot-script", "godot-recovery", "godot-conflict",
+            "godot-edit", "godot-save", "godot-save-locked", "godot-script", "godot-recovery", "godot-conflict",
             "blender-box", "blender-conflict", "blender-export"})
         self.assertEqual({row["max_horizon_ms"] for row in module.SCENARIOS.values()},
                          {5_000, 30_000, 90_000})
@@ -34,6 +34,14 @@ class GT07ScenarioAdmissionTests(unittest.TestCase):
         self.assertTrue(result["admission_validated"])
         self.assertTrue(result["public_lease_route_validated"])
         self.assertFalse(result["native_effect"])
+
+    def test_locked_save_admits_real_save_contract_without_engine(self):
+        scenario = module.SCENARIOS['godot-save-locked']
+        with patch('subprocess.Popen', side_effect=AssertionError('unexpected engine')):
+            result = module._contract_dry_run('godot-save-locked', scenario)
+        self.assertEqual(result['operation'], 'scene.save')
+        self.assertTrue(result['public_lease_route_validated'])
+        self.assertEqual(scenario['failpoint_phases'], ())
 
     def test_godot_conflict_contract_is_engine_free(self):
         with patch("subprocess.Popen", side_effect=AssertionError("unexpected engine")):

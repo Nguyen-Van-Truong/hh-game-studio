@@ -14,6 +14,21 @@ from studio.tests.jobs import gt07_storage_faults as module
 
 
 class GT07M5StorageContractTests(unittest.TestCase):
+    @unittest.skipUnless(os.name == 'nt', 'real Windows file sharing')
+    def test_exclusive_holder_releases_exact_process_after_effect_failure(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            target = root / 'owned.tscn'
+            target.write_bytes(b'last-good')
+            with self.assertRaisesRegex(RuntimeError, 'native effect failed'):
+                with module.exclusive_file_holder(root / 'proof', target) as proof:
+                    self.assertIn(proof['read_denial_winerror'], {5, 32, 33})
+                    raise RuntimeError('native effect failed')
+            self.assertTrue(proof['holder_live_after_save'])
+            self.assertEqual(proof['holder_exit'], 0)
+            self.assertTrue(proof['last_good_preserved'])
+            self.assertEqual(target.read_bytes(), b'last-good')
+
     def test_dry_run_is_fresh_engine_free_and_authority_zero(self):
         with tempfile.TemporaryDirectory() as temporary:
             allowed = Path(temporary) / ".local" / "reviews"

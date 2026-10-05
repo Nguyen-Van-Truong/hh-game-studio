@@ -206,7 +206,8 @@ class GodotOwnerBinding:
               and self.owner.storage_id == self.storage_id
               and self.owner._journal is self.journal and self.owner.sessions is self.sessions
               and (control and request.operation == 'script_text.replace'
-                   or canonical_bytes(self.owner._editor.identity) == self.editor_identity),
+                   or canonical_bytes(self.owner._editor.lookup_identity if control
+                                      else self.owner._editor.identity) == self.editor_identity),
               'NATIVE_GODOT_OWNER_BINDING_CHANGED')
         self.owner._same_release()
         grant = self.owner._auth(parse_json(self.body), request.operation,

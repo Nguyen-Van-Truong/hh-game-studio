@@ -33,6 +33,9 @@ SCENARIOS = {
                    "probe": "run_native_godot_queue_probe.py", "suffix": "save",
                    "max_horizon_ms": 90_000,
                    "failpoint_phases": ("PREPARED", "VALIDATED", "ACTIVATING", "COMMITTED", "RELOAD", "ACK")},
+    "godot-save-locked": {"kind": "godot", "operation": "scene.save",
+                          "probe": "run_native_godot_queue_probe.py", "suffix": "save-locked",
+                          "max_horizon_ms": 90_000, "file_lock": True, "failpoint_phases": ()},
     "godot-script": {"kind": "godot", "operation": "script_text.replace",
                      "probe": "run_native_godot_queue_probe.py", "suffix": "script",
                      "max_horizon_ms": 90_000,
@@ -266,7 +269,8 @@ def _run_one(name: str, args: argparse.Namespace, index: int = 0) -> dict[str, o
             exit_code = probe.run(output, binary, output.name, scenario["operation"],
                                   bool(scenario.get("recover_after_loss")),
                                   getattr(args, "failpoint_phase", None),
-                                  bool(scenario.get("manual_conflict")))
+                                  bool(scenario.get("manual_conflict")),
+                                  file_lock=bool(scenario.get("file_lock")))
     return {"scenario": name, "run_id": output.name, "exit_code": exit_code,
             "dry_run": check, "output": str(output)}
 

@@ -19,6 +19,33 @@ _spec.loader.exec_module(_module)
 
 
 class NativeGodotQueueProbeGuardTests(unittest.TestCase):
+    def test_locked_save_uses_reducer_durable_response_not_transient_save_code(self):
+        from studio.tests.godot import test_publication_state_v4 as fixture
+        from studio.protocol.core import Response, parse_json
+        current = fixture.state.replay([fixture.configuration()])
+        current = fixture.state.reduce_event(current, fixture.prepared(current))
+        command = fixture.state.lookup(current, 'command.one')
+        planned = fixture.state.terminal_plan(current.snapshot(), command,
+                                              'UNKNOWN', 'owner.effect.uncertain')['response']
+        current = fixture.state.reduce_event(current, fixture.event(current, 'UNKNOWN',
+            command_id='command.one', digest=fixture.rev('command.one'),
+            reason='owner.effect.uncertain', response=planned))
+        durable = fixture.state.lookup(current, 'command.one')
+        response = Response.from_dict(parse_json(fixture.state.lookup_response(
+            current, 'command.one', fixture.rev('command.one'))))
+        proof = {'editor_error': 'EDITOR_CAPTURE_UNKNOWN',
+                 'native_error': 'EDITOR_STALE_PRECONDITION', 'holder_exit': 0,
+                 'holder_live_after_save': True, 'last_good_preserved': True,
+                 'selection_preserved': True}
+        self.assertTrue(_module._locked_save_complete(response, durable, proof))
+        transient = Response(response.status, 'GODOT_SAVE_RECONCILE_REQUIRED',
+                             response.command_id, postconditions=response.postconditions)
+        self.assertFalse(_module._locked_save_complete(transient, durable, proof))
+        for key, value in (('holder_exit', None), ('holder_exit', False),
+                           ('last_good_preserved', False), ('selection_preserved', False)):
+            self.assertFalse(_module._locked_save_complete(response, durable, {**proof, key: value}))
+        self.assertFalse(_module._locked_save_complete(response, {**durable, 'phase': 'COMMITTED'}, proof))
+
     def test_crash_snapshot_reads_response_only_at_durable_terminal(self):
         # Real reducer histories reproduce run25: RELOAD is SELECTED, where
         # lookup_response must raise rather than return an absent receipt.
@@ -66,6 +93,16 @@ class NativeGodotQueueProbeGuardTests(unittest.TestCase):
                     "failed_operations": [], "native_error": None},
         }
         self.assertTrue(_module._editor_close_proof(clean, identity)["valid"])
+        clean['held'] = True
+        self.assertFalse(_module._editor_close_proof(clean, identity)['valid'])
+        self.assertTrue(_module._editor_close_proof(clean, identity, expected_held=True)['valid'])
+        clean['job']['handle_retained'] = True
+        self.assertFalse(_module._editor_close_proof(clean, identity, expected_held=True)['valid'])
+        clean['job']['handle_retained'] = False
+        clean['actual_process_exit']['exit_code'] = None
+        self.assertFalse(_module._editor_close_proof(clean, identity, expected_held=True)['valid'])
+        clean['actual_process_exit']['exit_code'] = 0
+        clean['held'] = False
         clean["actual_process_exit"]["pid"] = 9999
         self.assertFalse(_module._editor_close_proof(clean, identity)["valid"])
 
