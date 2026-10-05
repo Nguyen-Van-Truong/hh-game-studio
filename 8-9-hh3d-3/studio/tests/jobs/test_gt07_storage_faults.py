@@ -27,6 +27,19 @@ class GT07M5StorageContractTests(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, "RUN_ID_USED"):
                     module.run_diagnostic(allowed, "gt07-m5-static-01", dry_run=True)
 
+    def test_native_run_consumes_matching_dry_run_admission(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            allowed = Path(temporary) / ".local" / "reviews"
+            with patch.object(module, "REVIEWS", allowed):
+                admitted = module.run_diagnostic(allowed, "gt07-m5-static-02", dry_run=True)
+                output = allowed / "gt07-m5-static-02"
+                consumed = module._reuse_dry_run(allowed, "gt07-m5-static-02")
+                self.assertEqual(consumed, output)
+                self.assertTrue((output / "dry-run-report.json").is_file())
+                self.assertEqual(admitted["source_hashes"], module._source_hashes())
+                with self.assertRaisesRegex(ValueError, "RUN_ID_USED"):
+                    module._reuse_dry_run(allowed, "gt07-m5-static-02")
+
     def test_fsync_and_diskfull_fail_closed_keep_last_good(self):
         with tempfile.TemporaryDirectory() as temporary:
             output = Path(temporary)

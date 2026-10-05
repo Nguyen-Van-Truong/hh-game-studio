@@ -388,8 +388,48 @@ def _source_hashes() -> dict[str, str]:
     return values
 
 
+def _reuse_dry_run(output_root: Path, run_id: str) -> Path:
+    """Consume one matching dry-run before the owned host diagnostic.
+
+    O10 requires native work to use the same admitted run ID and source
+    closure as its engine-free dry-run.  The previous implementation created
+    the dry-run directory and then rejected the required follow-up as already
+    used.  Preserve the admission report under a separate immutable name and
+    only continue when its source hash is still current.
+    """
+    allowed = REVIEWS.expanduser().resolve()
+    root = output_root.expanduser().resolve()
+    try:
+        root.relative_to(allowed)
+    except ValueError as error:
+        raise ValueError("OUTPUT_ROOT_FORBIDDEN") from error
+    output = (root / run_id).resolve()
+    try:
+        output.relative_to(allowed)
+    except ValueError as error:
+        raise ValueError("OUTPUT_PATH_TRAVERSAL") from error
+    report_path = output / "report.json"
+    if not output.is_dir() or not report_path.is_file():
+        return _fresh_output(output_root, run_id)
+    try:
+        report = json.loads(report_path.read_text(encoding="utf-8"))
+    except (OSError, ValueError) as error:
+        raise ValueError("RUN_ID_USED") from error
+    if (type(report) is not dict or report.get("run_id") != run_id
+            or report.get("dry_run") is not True):
+        raise ValueError("RUN_ID_USED")
+    if report.get("source_hashes") != _source_hashes():
+        raise ValueError("DRY_RUN_SOURCE_CHANGED")
+    admission = output / "dry-run-report.json"
+    if admission.exists():
+        raise ValueError("RUN_ID_USED")
+    report_path.replace(admission)
+    return output
+
+
 def run_diagnostic(output_root: Path, run_id: str, *, dry_run: bool = False) -> dict[str, Any]:
-    output = _fresh_output(output_root, run_id)
+    output = (_fresh_output(output_root, run_id) if dry_run
+              else _reuse_dry_run(output_root, run_id))
     report: dict[str, Any] = {"schema": SCHEMA, "authority": 0, "diagnostic_only": True,
                               "run_id": run_id, "engine_started": False,
                               "source_hashes": _source_hashes(), "platform": os.name}
