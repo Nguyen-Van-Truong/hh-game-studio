@@ -74,12 +74,14 @@ HIỆN TRẠNG (05-10 15:05; coordinator cập nhật khi xong một mốc, tố
   vẫn chưa coi là nghiệm thu khi chưa có owner chơi.
 - SA-06 implementation slice đã nối bốn prop Relay Yard (hai crate gỗ, một barrel nổ, một kính) vào
   MatchSession: mutable health/active/material, prop hit/destroy events, live melee và held/release
-  shot hit, barrel explosion, nested snapshot/canonical hash và UI draw. Product commits `22b438e1`
-  và `8add4e00`; focused `cmd.sa06.world-props.6` (`RUN_ID=20261005T140140.835072Z-6ad1cfe3ea`)
-  passed 20 assertions; final guarded regression `cmd.sa06.regression.3`
-  (`RUN_ID=20261005T140220.642851Z-5a7d95ec30`) passed 2,977 assertions, exit 0/cleanup 0/diagnostics
-  empty. This is provisional implementation evidence only: fire/doors/debris/dynamic collision/100-object
-  rig and owner review remain open; SA-06 is not ticked and no Y8 parity is claimed.
+  shot hit, barrel explosion, nested snapshot/canonical hash và UI draw. Product commits `22b438e1`,
+  `8add4e00` và `682af521`; focused `cmd.sa06.burning.1`
+  (`RUN_ID=20261005T141012.509654Z-9aeb251a9f`) passed 23 assertions; final guarded regression
+  `cmd.sa06.regression.4` (`RUN_ID=20261005T141049.675932Z-3441b76a50`) passed 2,977 assertions,
+  exit 0/cleanup 0/diagnostics empty. Barrel blast now has a bounded burning/douse prototype, but
+  no measured roll mapping is claimed. This is provisional implementation evidence only: fire spread,
+  doors/debris/dynamic collision/100-object rig and owner review remain open; SA-06 is not ticked and
+  no Y8 parity is claimed.
 
 NEXT (làm theo thứ tự; việc nào phải chờ thì làm việc sau, không ngồi chờ)
 N2 Rig Y8 đã tự kiểm bằng fixture cục bộ nhưng chưa lấy được A01–A06; không lặp lại vòng browser
@@ -703,10 +705,11 @@ Q5 Web: dung lượng tải lần đầu và bộ nhớ đo từ SA-04; ngân s�
 2026-10-05 SA-05 authored durations: product commit `a77d33c9` adds the real ten-second relay-yard row and requires
   Down+Punch for both power pickups; item catalog, live match, bullet-time and 2,977-assertion regression all
   passed with guarded exit 0/cleanup 0/diagnostics empty. Spawn law and reference parity remain open.
-2026-10-05 SA-06 prop slice: product commits `22b438e1`/`8add4e00` add data-driven crate/barrel/glass
-  material and health, deterministic prop hit/destroy events, nested snapshot/hash state, live melee/shot
-  resolution and provisional barrel explosion rendering. Guarded `cmd.sa06.world-props.6` passed 20
-  assertions; `cmd.sa06.regression.3` passed 2,977 assertions with host exit 0, cleanup 0 and empty
-  diagnostics. Static cover is unchanged after prop destruction; fire/door/debris/chain map/100-object
-  and owner gates remain open, so SA-06 and all Classic checkboxes stay unticked.
+2026-10-05 SA-06 prop/hazard slice: product commits `22b438e1`/`8add4e00`/`682af521` add data-driven
+  crate/barrel/glass material and health, deterministic prop hit/destroy events, nested snapshot/hash
+  state, live melee/shot resolution, provisional barrel explosion and bounded burning/douse events.
+  Guarded `cmd.sa06.burning.1` passed 23 assertions; `cmd.sa06.regression.4` passed 2,977 assertions
+  with host exit 0, cleanup 0 and empty diagnostics. Static cover is unchanged after prop destruction;
+  fire spread/true roll mapping/doors/debris/chain map/100-object and owner gates remain open, so SA-06
+  and all Classic checkboxes stay unticked.
 END_OF_SUPERAGENT_PLAN
