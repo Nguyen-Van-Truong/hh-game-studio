@@ -8,6 +8,20 @@ AUTHORITY=0. Branch `codex/o2-authoring-contract`; GT-06 is ACCEPTED and GT-07 i
 - Fresh merged-tree pure regression passed: `python -B -m unittest -q studio.tests.godot.test_recovery_host studio.tests.jobs.test_native_godot_queue_probe_guards studio.tests.jobs.test_gt07_scenarios studio.tests.jobs.test_gt07_failpoints studio.tests.jobs.test_gt07_crash_process` — **35 tests**, actual exit **0**, 6.172s. No Godot, Blender, Docker, or gameplay-source dispatch occurred.
 - Prior worker PID `31468` was no longer running and no host-captured log/exit receipt was found; it is not used as evidence.- Fresh native asset lane `o2-sprite-atlas-20261005-01` passed at authority 0: pinned Blender 5.2.1 created and reopened a 4-cell 128x128 sprite sheet (actual native/reopen exit 0, Job/tree clean), then pinned Godot 4.7.2 performed import, author and fresh-process reload (three actual exits 0, Job/tree clean). Sheet hash `42d342dd4e1f6e6ef9ff31d1370703b83ae76e60ad3756156297478c1e546cf8`; Godot frames hash `989c4fbbab77a00b40f03bc062890a6d0ea7e188346f43034d18ae4bb0314ef2`; source closures are Blender `0b6756764c5f3c64763b5f2c160e4142a6e089764877472c4aa85a6a0f2c936e` and Godot `3e8807ca4f863c85683147844fa60f428d1c5fccb7caec1811acbba49479e9f4`. Raw is immutable under `studio/.local/reviews/o2-sprite-atlas-20261005-01`; this proves the Blender sprite render → Godot import/reload fixture only, not queue-level ACK, AUTH or GT07 acceptance.
 
+## 2026-10-05 — GT07 Blender producer crash-cut recovery
+
+- `gt07-native-queue-20261005-07` is an authority-zero M3 diagnostic. A fresh
+  engine-free dry-run preceded a pinned Blender `export.publish` cut at the
+  `PREPARED`/INTENT boundary. The owned Job intentionally terminated the cut
+  child (exit 1) and verified a closed, zero, unretained tree. A fresh
+  read-only recovery process reopened the producer and queue without Blender
+  or command replay: publication bytes, queue record/head and the held
+  reservation stayed unchanged; no queue ACK or early active selection was
+  created; repeated lookup was side-effect free. Raw is immutable under
+  `studio/.local/reviews/gt07-native-queue-20261005-07/`; source closure is
+  `cf15cb641ef1e54f6a389bd3ded440c10e43ef9924244c97a7d57310237e5914`.
+  This does not close cross-application reload/ACK or GT07 acceptance.
+
 ## 2026-10-03 — Local Godot pin binding restored
 
 - The earlier missing-4.7.2 claim below was based on the global HHGodotAgent

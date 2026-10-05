@@ -33,7 +33,11 @@ tree, and a retained last-good state; these are diagnostic crash-cut proofs,
 not acceptance. The older RELOAD failures in runs 25 and 02 remain immutable.
 The cross-application Blender artifact handoff and queue-level last-good proof
 are still open.
-N2-N5: execute remaining M3 cuts, M2/M4, M5/M7, then M6/M8/M9 with fresh IDs and preserved raw.
+N2-N5: the Blender producer PREPARED cut is recorded above; execute the
+remaining VALIDATED/ACTIVATING/COMMITTED/ACK producer cuts, then the separate
+queue-level Godot reload/ACK binding, followed by M2/M4, M5/M7, M6/M8/M9 with
+fresh IDs and preserved raw. `RELOAD` is a Godot consumer phase and is rejected
+for the Blender producer route.
 N6: freeze closure once, run the full matrix plus focused regressions, map artifacts, then send the same hash to two independent critics.
 
 ## Checkpoint, 05-10-2026 — queued Blender publication slice
@@ -73,6 +77,21 @@ not Blender→Godot import/readback or GT07 acceptance.
 ## Checkpoint, 05-10-2026 — Blender sprite sheet read by Godot fixture
 
 `o2-sprite-atlas-20261005-01` is an authority-zero asset diagnostic. Pinned Blender produced and reopened a 4-cell 128x128 sprite sheet with actual native/reopen exits 0 and clean owned Jobs; pinned Godot then imported, authored, and reloaded it in three fresh processes, all actual exits 0 with clean Jobs. The sheet hash is `42d342dd4e1f6e6ef9ff31d1370703b83ae76e60ad3756156297478c1e546cf8` and the Godot frame artifact hash is `989c4fbbab77a00b40f03bc062890a6d0ea7e188346f43034d18ae4bb0314ef2`. Raw is under `studio/.local/reviews/o2-sprite-atlas-20261005-01/`; this closes only the Blender sprite → Godot fixture import/reload slice. Queue-level cross-app publish/reload/ACK and GT07 acceptance remain open.
+
+## Checkpoint, 05-10-2026 — Blender PREPARED crash recovery cut
+
+`gt07-native-queue-20261005-07` passed a fresh engine-free dry-run and a
+native `export.publish` cut at `PREPARED`. The owned Job terminated the child
+intentionally after the publisher recorded its INTENT state; host evidence
+shows exit 1 for the cut, closed/zero/unretained Job state and a verified
+process tree. A fresh read-only recovery process reopened the producer and
+queue without starting Blender or replaying the command: publication bytes,
+queue record/head and the held reservation were unchanged, uncommitted
+selection was rejected, repeated lookup had no effect, and no queue ACK was
+created. This is a producer-side crash diagnostic only; cross-application
+Godot reload/ACK and GT07 acceptance remain open. Raw is immutable under
+`studio/.local/reviews/gt07-native-queue-20261005-07/`; source closure is
+`cf15cb641ef1e54f6a389bd3ded440c10e43ef9924244c97a7d57310237e5914`.
 ## Historical log (preserved verbatim)
 # GT07 integration map — opened after GT06 acceptance
 

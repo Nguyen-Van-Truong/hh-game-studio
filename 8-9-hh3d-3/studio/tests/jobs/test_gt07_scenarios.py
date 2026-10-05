@@ -122,6 +122,16 @@ class GT07ScenarioAdmissionTests(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, "FAILPOINT_UNSUPPORTED"):
                     module.dry_run("blender-box", args)
 
+    def test_blender_producer_rejects_godot_reload_phase(self):
+        with tempfile.TemporaryDirectory() as root:
+            studio = Path(root) / "studio"
+            args = argparse.Namespace(run_id="gt07-native-queue-20261004-96",
+                                      run_ids=[], output_root=studio / ".local/reviews",
+                                      failpoint_phase="RELOAD")
+            with patch.object(module, "STUDIO", studio):
+                with self.assertRaisesRegex(ValueError, "FAILPOINT_UNSUPPORTED"):
+                    module.dry_run("blender-export", args)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -45,7 +45,8 @@ SCENARIOS = {
                     "max_horizon_ms": 5_000, "failpoint_phases": ()},
     "blender-export": {"kind": "blender", "operation": "export.publish",
                        "probe": "run_native_blender_queue_probe.py", "suffix": "export",
-                       "max_horizon_ms": 30_000, "failpoint_phases": ()},
+                       "max_horizon_ms": 30_000,
+                       "failpoint_phases": ("PREPARED", "VALIDATED", "ACTIVATING", "COMMITTED", "ACK")},
 }
 
 
@@ -252,7 +253,8 @@ def _run_one(name: str, args: argparse.Namespace, index: int = 0) -> dict[str, o
         if _sha(binary) != check["binary_sha256"]:
             raise ValueError("SCENARIO_BINARY_CHANGED_AFTER_DRY_RUN")
         if scenario["kind"] == "blender":
-            exit_code = probe.run(output, binary, output.name, scenario["operation"])
+            exit_code = probe.run(output, binary, output.name, scenario["operation"],
+                                  getattr(args, "failpoint_phase", None))
         else:
             exit_code = probe.run(output, binary, output.name, scenario["operation"],
                                   bool(scenario.get("recover_after_loss")),

@@ -162,7 +162,8 @@ def _safe_error(error: BaseException) -> dict[str, str]:
 
 
 def _child(output: Path, binary: Path, run_id: str,
-           source: dict[str, str], closure: str, operation="mesh.create_box") -> int:
+           source: dict[str, str], closure: str, operation="mesh.create_box",
+           failpoint_phase: str | None = None) -> int:
     """Run inside the frozen snapshot; no source outside it is trusted."""
     from studio.host.blender.ui_host import BlenderUIHost
     from studio.host.blender.durable_session import DurableBlenderSession
@@ -250,6 +251,17 @@ def _child(output: Path, binary: Path, run_id: str,
             reservation = dispatch.reserve()
             if reservation is None:
                 raise RuntimeError("QUEUE_EXPORT_RESERVATION_MISSING")
+            if failpoint_phase is not None:
+                if failpoint_phase not in ("PREPARED", "VALIDATED", "ACTIVATING", "COMMITTED", "ACK"):
+                    raise RuntimeError("BLENDER_FAILPOINT_PHASE_INVALID")
+                from studio.tests.jobs.gt07_blender_recovery import capture
+                original_failpoint = publisher._failpoint
+                def captured_failpoint(phase):
+                    if phase == failpoint_phase:
+                        capture(output, publisher, queue, queue_row.job.job_id,
+                                run_id=run_id, closure=closure, phase=phase)
+                    original_failpoint(phase)
+                publisher._failpoint = captured_failpoint
             response = dispatch.advance(reservation)
             if response.status is not Status.COMMITTED or binding.lookup() != response:
                 raise RuntimeError("NATIVE_EXPORT_NOT_COMMITTED")
@@ -333,7 +345,8 @@ def _child(output: Path, binary: Path, run_id: str,
     return 0 if report["passed"] else 1
 
 
-def run(output: Path, binary: Path, run_id: str, operation="mesh.create_box") -> int:
+def run(output: Path, binary: Path, run_id: str, operation="mesh.create_box",
+        failpoint_phase: str | None = None) -> int:
     output = output.resolve()
     output.mkdir(parents=True, exist_ok=False)
     source = _sources(STUDIO)
@@ -361,21 +374,51 @@ def run(output: Path, binary: Path, run_id: str, operation="mesh.create_box") ->
     child = [sys.executable, "-B", str(snapshot / "tests/jobs/run_native_blender_queue_probe.py"),
              "--frozen", "--output", str(output), "--binary", str(binary),
              "--run-id", run_id, "--operation", operation]
-    host = runner.run_process(child, cwd=snapshot, output=output, timeout=120,
-                              label="native", env=os.environ.copy())
+    if failpoint_phase is not None:
+        if operation != "export.publish":
+            raise ValueError("FAILPOINT_EXPORT_ONLY")
+        from studio.host.core.gt07_failpoints import arm as arm_failpoint, reached_path
+        arm_failpoint(output, run_id=run_id, phase=failpoint_phase)
+        child.extend(["--failpoint-phase", failpoint_phase])
+        environment = os.environ.copy()
+        environment["HH_GT07_FAILPOINT_ROOT"] = str(output)
+        from studio.tests.jobs.gt07_crash_process import run_cut
+        host = run_cut(child, cwd=snapshot, output=output, env=environment,
+                       receipt_path=reached_path(output), run_id=run_id,
+                       phase=failpoint_phase, timeout=240)
+        environment.pop("HH_GT07_FAILPOINT_ROOT", None)
+        recovery_child = child + ["--recover-crash"]
+        recovery_host = runner.run_process(recovery_child, cwd=snapshot, output=output,
+                                           timeout=120, label="crash-recovery", env=environment)
+        _write(output / "crash-recovery-host.json", recovery_host)
+    else:
+        host = runner.run_process(child, cwd=snapshot, output=output, timeout=120,
+                                  label="native", env=os.environ.copy())
+        recovery_host = None
     child_report = json.loads((output / "native-child.json").read_bytes()) if (output / "native-child.json").is_file() else None
+    recovery_report = json.loads((output / "blender-crash-recovery.json").read_bytes()) \
+        if (output / "blender-crash-recovery.json").is_file() else None
+    failpoint_passed = bool(failpoint_phase is not None and host.get("cut_verified") is True
+                            and recovery_host and recovery_host.get("exit_code") == 0
+                            and recovery_host.get("wrapper_exit_code") == 0
+                            and recovery_host.get("tree_verified") is True
+                            and recovery_report and recovery_report.get("passed") is True)
     report = {"schema": "gt07-native-queue-wrapper-2", "run_id": run_id,
               "source_closure_sha256": closure, "authority": 0,
               "formal_acceptance": False, "public_ack": False,
               "host": host, "child": child_report,
+              "failpoint": {"phase": failpoint_phase, "passed": failpoint_passed,
+                            "recovery_host": recovery_host, "recovery": recovery_report}
+                            if failpoint_phase is not None else None,
               "source_unchanged": _sources(STUDIO) == source,
               "snapshot_unchanged": _sources(snapshot) == source,
-              "passed": bool(child_report and child_report.get("passed") is True
+              "passed": (failpoint_passed if failpoint_phase is not None else bool(
+                             child_report and child_report.get("passed") is True
                              and host.get("exit_code") == 0
                              and host.get("wrapper_exit_code") == 0
                              and host.get("tree_verified") is True
                              and _sources(STUDIO) == source
-                             and _sources(snapshot) == source)}
+                             and _sources(snapshot) == source))}
     _write(output / "queue-native.json", report)
     print("GT07_NATIVE_QUEUE_COMPLETE " + json.dumps({
         "run_id": run_id, "passed": report["passed"],
@@ -391,17 +434,27 @@ def main(argv=None) -> int:
     parser.add_argument("--run-id", type=_run_id, required=True)
     parser.add_argument("--frozen", action="store_true")
     parser.add_argument("--operation", choices=("mesh.create_box", "export.publish"), default="mesh.create_box")
+    parser.add_argument("--failpoint-phase", choices=("PREPARED", "VALIDATED", "ACTIVATING", "COMMITTED", "ACK"))
+    parser.add_argument("--recover-crash", action="store_true")
     args = parser.parse_args(argv)
     if args.frozen:
         manifest = json.loads((args.output / "source-closure.json").read_bytes())
+        if args.recover_crash:
+            from studio.tests.jobs.gt07_blender_recovery import recover
+            return recover(args.output.resolve(), run_id=args.run_id,
+                           closure=manifest["source_closure_sha256"])
         return _child(args.output.resolve(), args.binary.resolve(), args.run_id,
-                      manifest["files"], manifest["source_closure_sha256"], args.operation)
+                      manifest["files"], manifest["source_closure_sha256"], args.operation,
+                      args.failpoint_phase)
     if args.output.name != args.run_id:
         parser.error("output basename must equal the run ID")
     from studio.tests.jobs.run_gt07_scenarios import main as scenario_main
     scenario = "blender-export" if args.operation == "export.publish" else "blender-box"
-    return scenario_main(["--scenario", scenario, "--blender-binary", str(args.binary),
-                          "--run-id", args.run_id, "--output-root", str(args.output.parent)])
+    argv = ["--scenario", scenario, "--blender-binary", str(args.binary),
+            "--run-id", args.run_id, "--output-root", str(args.output.parent)]
+    if args.failpoint_phase:
+        argv.extend(["--failpoint-phase", args.failpoint_phase])
+    return scenario_main(argv)
 
 
 if __name__ == "__main__":
