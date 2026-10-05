@@ -86,6 +86,36 @@ def _fresh_output(output_root: Path, run_id: str) -> Path:
     return output
 
 
+def _reuse_dry_run(output_root: Path, run_id: str) -> Path:
+    """Admit native work only through the matching engine-free receipt."""
+    root = output_root.expanduser().resolve()
+    allowed = REVIEWS.expanduser().resolve()
+    try:
+        root.relative_to(allowed)
+    except ValueError as error:
+        raise ValueError("OUTPUT_ROOT_FORBIDDEN") from error
+    output = (root / run_id).resolve()
+    try:
+        output.relative_to(allowed)
+    except ValueError as error:
+        raise ValueError("OUTPUT_PATH_TRAVERSAL") from error
+    receipt = output / "report.json"
+    if not receipt.is_file():
+        raise ValueError("DRY_RUN_REQUIRED")
+    try:
+        report = json.loads(receipt.read_bytes())
+    except (OSError, ValueError) as error:
+        raise ValueError("DRY_RUN_RECEIPT_INVALID") from error
+    if (report.get("schema") != SCHEMA or report.get("run_id") != run_id
+            or report.get("dry_run") is not True or report.get("authority") != 0
+            or report.get("diagnostic_only") is not True
+            or report.get("source_hashes") != _source_hashes()):
+        raise ValueError("DRY_RUN_RECEIPT_INVALID")
+    if report.get("verified") is not None or report.get("scenarios") != []:
+        raise ValueError("DRY_RUN_RECEIPT_CONSUMED")
+    return output
+
+
 def _kernel() -> Any:
     if os.name != "nt":
         raise NativeDiagnosticError("WINDOWS_REQUIRED")
@@ -526,7 +556,8 @@ def _source_hashes() -> dict[str, str]:
 
 
 def run_diagnostic(output_root: Path, run_id: str, *, dry_run: bool = False) -> dict[str, Any]:
-    output = _fresh_output(output_root, run_id)
+    output = (_fresh_output(output_root, run_id) if dry_run
+              else _reuse_dry_run(output_root, run_id))
     report: dict[str, Any] = {"schema": SCHEMA, "authority": 0,
                               "diagnostic_only": True, "run_id": run_id,
                               "source_hashes": _source_hashes(),

@@ -46,6 +46,21 @@ class GT07M8ProcessOwnershipContractTests(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, "RUN_ID_USED"):
                     module.run_diagnostic(allowed, "gt07-m8-static-01", dry_run=True)
 
+    def test_native_run_requires_and_consumes_matching_dry_run(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            allowed = root / ".local" / "reviews"
+            with patch.object(module, "REVIEWS", allowed):
+                module.run_diagnostic(allowed, "gt07-m8-static-02", dry_run=True)
+                with patch.object(module, "_write_worker", side_effect=AssertionError("not native")):
+                    with self.assertRaisesRegex(ValueError, "DRY_RUN_RECEIPT_CONSUMED"):
+                        # A consumed marker is never re-admitted.
+                        receipt = allowed / "gt07-m8-static-02" / "report.json"
+                        data = module.json.loads(receipt.read_bytes())
+                        data["verified"] = False
+                        receipt.write_text(module.json.dumps(data), encoding="utf-8")
+                        module.run_diagnostic(allowed, "gt07-m8-static-02")
+
 
 @unittest.skipUnless(os.name == "nt" and os.environ.get("HH_GT07_M8_NATIVE") == "1",
                      "native M8 run is explicitly scheduled by the coordinator")
