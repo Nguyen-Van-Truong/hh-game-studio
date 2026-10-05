@@ -36,38 +36,36 @@ PREVIOUS_REVISION=SA4 trong Git 5b2d4c7b; LOG chi tiết (run id, hash, số ass
   routing HH3D nằm ở 8-9-hh3d-3/AGENTS.md.
 - Coordinator game tick WP khi đạt DoD; subagent không tick.
 
-HIỆN TRẠNG (05-10 10:48; coordinator cập nhật khi xong một mốc, tối đa 15 dòng)
+HIỆN TRẠNG (05-10 11:32; coordinator cập nhật khi xong một mốc, tối đa 15 dòng)
 - SA-01 ACCEPTED 03-10 (bootstrap kỹ thuật). CURRENT_VALID_WP=SA-02 từ 03-10.
 - Ledger 79 dòng: 25 OBSERVED, 54 UNVERIFIED, 0 MATCHED. Đã thấy chủ yếu menu, map, mode, phím
   đánh và vài phản ứng vật thể (mục 7.4). Chưa có số đo thời gian hay khoảng cách nào: browser
   agent đang dùng chỉ bấm rời và chụp ảnh, không giữ/thả phím, không quay 60 fps. Chưa có video
   owner.
-- Code tạm, chưa nghiệm thu (superagent/main a55c72b0): phòng di chuyển hai người; nhảy, cúi,
-  thang, rơi qua sàn bằng hai lần xuống, hố; sprint/stamina; combat core (đấm, jump kick, bắn,
-  knockdown, miễn thương, lựu đạn). Số đều là seed. Đơn vị nguyên mỗi tick và va chạm AABB tự
-  viết phải đổi (mục 5.3).
-- Keymap owner đã áp dụng và có test. Main đã merge product tới ed3e10a3 (merge 1e5e7e4e);
-  a55c72b0 chưa merge, sẽ merge khi tick WP.
-- Chưa có: rig đo, map trận thật, pickup, bot, HUD, menu trận, build Web/Windows.
+- Code Classic vẫn chưa nghiệm thu (superagent/main đang có WIP N4): phòng di chuyển hai người;
+  nhảy, cúi, thang, rơi qua sàn bằng hai lần xuống, hố; sprint/stamina; combat core (đấm, jump
+  kick, bắn, knockdown, miễn thương, lựu đạn). Số gameplay vẫn là seed cho tới khi có A01–A06.
+  N4 đã chuyển đường chạy sang float và Godot Physics; chưa được gọi là parity.
+- Keymap owner đã áp dụng và có test. Main đã merge product tới ed3e10a3 (merge 1e5e7e4e); WIP N4
+  chưa merge vì SA-03 chưa đạt gate.
+- Chưa có: số đo Y8 A01–A06, map trận thật, pickup, bot, HUD, menu trận, build Web/Windows.
 - SA5 N1 đã xong: guard kiểm mọi task `HHStudio.*`; ledger 79 dòng có tier A/B/C;
   checker hiểu trạng thái APPROX và giữ fail-closed cho tầng C. Bộ đo A01–A06 còn trống,
   nên inventory vẫn báo thiếu số đo thay vì tự coi là đạt.
 - N2 rig đã tự kiểm bằng fixture cục bộ: giữ/thả phím, log timestamp và CDP screencast đều
   chạy sạch. Đây chỉ là kiểm tra công cụ; chưa có số đo Y8, nên SA-02 và A01–A06 vẫn mở.
 - N3 physics spike đã PASS hai lần ở fixed 60 Hz: stack 30 body, nổ đẩy, joint release,
-  CharacterBody2D đứng/đẩy crate và rolling stair đều có postcondition; đây là bằng chứng kỹ thuật,
-  chưa phải SA-03 vì lõi gameplay chưa chuyển sang Godot Physics.
-- N4 seam bounded đã PASS guarded: decoder giữ float cho chuyển động, bộ dựng fixture arena và
-  CharacterBody2D feet-origin đã compile/chạy độc lập; lõi MovementRoom/FighterState vẫn integer/AABB,
-  nên đây chưa phải nghiệm thu SA-03.
-- N4 live tick probe đã PASS trên SceneTree thật: body chạm solid/one-way/bậc thang/biên, drop-through theo từng fighter
-  và readback hữu hạn; probe không ghi ngược state, nên SA-03 vẫn mở.
+  CharacterBody2D đứng/đẩy crate và rolling stair đều có postcondition; đây là bằng chứng kỹ thuật.
+- N4 seam và live tick probe đã PASS guarded; sau đó lõi Simulation/FighterState/MovementRoom đã
+  được nối vào CharacterBody2D/StaticBody2D, float và readback mỗi physics frame. Các test movement,
+  sprint, combat, trace, room và regression đều sạch; đây vẫn là bằng chứng kỹ thuật, SA-03 còn chờ
+  A01–A06 và owner thử phòng di chuyển.
 
 NEXT (làm theo thứ tự; việc nào phải chờ thì làm việc sau, không ngồi chờ)
-N2 Rig đo Y8 (mục 8.2), hạn 4 giờ; đo A01–A06 (mục 7.3). Quá hạn thì gửi owner kịch bản quay
-   (mục 8.4) và làm tiếp N3–N5.
-N4 Chuyển lõi sang float và Godot Physics, giữ state machine và test logic; chỉnh số theo
-   A01–A06; nghiệm thu SA-03.
+N2 Rig Y8 đã tự kiểm bằng fixture cục bộ nhưng chưa lấy được A01–A06; không lặp lại vòng browser
+   không có timed hold/60-fps. Fallback quay owner ở mục 8.4 đã ghi; tiếp tục phần product.
+N4 Chuyển lõi kỹ thuật đã xong; bước kế là nghiệm thu SA-03 sau khi có A01–A06 (hoặc ghi tầng B theo
+   gate) và owner thử phòng di chuyển 5 phút.
 N5 SA-04 bản chơi được; build Windows và Web; gửi owner thử kèm hướng dẫn 5 dòng.
 N6 Trong lúc chờ owner: đo A07–A17; kiểm kê trong trận thật (mục 7.4); thử pipeline art cho
    một nhân vật (SA-10, thư mục art/, subagent riêng).
@@ -647,4 +645,6 @@ Q5 Web: dung lượng tải lần đầu và bộ nhớ đo từ SA-04; ngân s�
   ghi evidence trong product; chưa tick SA-03, tiếp tục đo A01–A06 rồi mới wiring lõi.
 2026-10-05 N4 live tick probe: xác nhận contact solid/one-way/drop-through/bậc thang/biên bằng physics frame thật;
   giữ Simulation/FighterState làm authority, chưa claim SA-03/Y8 parity.
+2026-10-05 N4 migration: nối Simulation/FighterState/MovementRoom vào Godot Physics, đổi chuyển động sang float;
+  focused tests và regression sạch, chưa tick SA-03 vì A01–A06 và owner side-by-side còn thiếu.
 END_OF_SUPERAGENT_PLAN
