@@ -8,7 +8,7 @@ Historical entries below are retained for provenance; they do not override the t
 | Matrix | Status | Existing evidence | Remaining proof |
 |---|---|---|---|
 | M1 / Q01 | DONE (host) | `gt07-jobs-integration-20261004-03`, 46 tests | Repeat only in final frozen matrix |
-| M2 / Q03 | OPEN (partial) | static admission/lease guards; native writer FIFO `gt07-native-writer-fifo-20261005-02` | final frozen repeat and explicit coordinator revoke mapping |
+| M2 / Q03 | OPEN (partial) | static admission/lease guards; native writer FIFO `gt07-native-writer-fifo-20261005-02` and fresh repeat `gt07-native-writer-fifo-20261005-04` | final frozen repeat and explicit coordinator revoke mapping |
 | M3 / Q05 | OPEN (partial) | Godot edit/save/script and receipt-loss run21; Blender queued export `gt07-native-queue-20261005-06`; current-source Blender cuts `gt07-native-queue-20261005-12,13,15,16,17` (PREPARED/VALIDATED/COMMITTED/ACK/ACTIVATING) with actual crash recovery; queue consumers `gt07-cross-app-20261005-07,11,13,16,18` | queue-level crash/reload/last-good cut and frozen matrix |
 | M4 / Q06 | OPEN (partial) | governed `gt07-native-godot-20261005-19` and current-source repeat `gt07-native-godot-20261005-26` native queue conflict PASS (actual child/wrapper 0, Job/tree clean, source unchanged); direct `-01` remains diagnostic | `.blend` conflict and final frozen matrix remain; native `-16`/`-17` failures retained as history |
 | M5 / TX05/TX09 | OPEN (partial) | host-only `gt07-m5-storage-20261005-05` verified exclusive file-lock denial, cross-volume `MoveFileExW` refusal (error 17), and injected fsync/diskfull UNKNOWN with last-good preservation; source closure `78676a84...4174a4` | final frozen repeat, requirement-map binding, and any product-boundary proof beyond the authority-zero host diagnostic |
@@ -180,6 +180,19 @@ Both editor and validator children exited 0 naturally; the owned Job/tree was
 closed with zero active members and no retained handle, and source readback was
 unchanged. This is a fresh authority-zero diagnostic slice; the Blender
 `.blend` conflict and final frozen M1-M9 matrix remain open.
+
+## Checkpoint, 05-10-2026 — fresh M2 writer FIFO repeat
+
+`gt07-native-writer-fifo-20261005-04` completed its source snapshot and
+focused Blender suite with actual wrapper/child exit 0, then ran the native
+writer FIFO host with the pinned Blender binary. Both live client processes
+exited 0; all 19 checks passed, including persisted FIFO grants, expiry and
+fencing rejection, bounded waiter capacity, Stop priority, and no scene drift.
+The owner Job/tree closed with zero active members and no retained handle;
+source closure was
+`ccc2c3f2f5feac425d358309253f1d5f7be5c375d80d1263d3a3176a050dbae9`.
+This remains authority-zero evidence until the final frozen M1-M9 matrix and
+independent critics.
 
 ## Checkpoint, 05-10-2026 — native editor conflict diagnostic
 
