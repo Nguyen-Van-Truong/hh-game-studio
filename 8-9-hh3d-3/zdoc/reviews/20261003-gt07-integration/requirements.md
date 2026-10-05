@@ -9,7 +9,7 @@ Historical entries below are retained for provenance; they do not override the t
 |---|---|---|---|
 | M1 / Q01 | DONE (host) | `gt07-jobs-integration-20261004-03`, 46 tests | Repeat only in final frozen matrix |
 | M2 / Q03 | OPEN (partial) | static admission/lease guards; native writer FIFO `gt07-native-writer-fifo-20261005-02` | final frozen repeat and explicit coordinator revoke mapping |
-| M3 / Q05 | OPEN (partial) | Godot edit/save/script and receipt-loss run21; Blender queued export `gt07-native-queue-20261005-06`; current-source Blender cuts `gt07-native-queue-20261005-12,13,15,16,17` (PREPARED/VALIDATED/COMMITTED/ACK/ACTIVATING) with actual crash recovery; queue consumers `gt07-cross-app-20261005-07,11` | queue-level crash/reload/last-good cut and frozen matrix |
+| M3 / Q05 | OPEN (partial) | Godot edit/save/script and receipt-loss run21; Blender queued export `gt07-native-queue-20261005-06`; current-source Blender cuts `gt07-native-queue-20261005-12,13,15,16,17` (PREPARED/VALIDATED/COMMITTED/ACK/ACTIVATING) with actual crash recovery; queue consumers `gt07-cross-app-20261005-07,11,13,16,18` | queue-level crash/reload/last-good cut and frozen matrix |
 | M4 / Q06 | OPEN (partial) | governed `gt07-native-godot-20261005-19` native queue conflict PASS (actual child/wrapper 0, Job/tree clean, source unchanged); direct `-01` remains diagnostic | `.blend` conflict and final frozen matrix remain; native `-16`/`-17` failures retained as history |
 | M5 / TX05/TX09 | OPEN (partial) | host-only `gt07-m5-storage-20261005-05` verified exclusive file-lock denial, cross-volume `MoveFileExW` refusal (error 17), and injected fsync/diskfull UNKNOWN with last-good preservation; source closure `78676a84...4174a4` | final frozen repeat, requirement-map binding, and any product-boundary proof beyond the authority-zero host diagnostic |
 | M6 / Q04 | OPEN (partial) | Stop drain and native run16 | full queue/cancel/reconnect matrix in final run |
@@ -195,6 +195,21 @@ Raw is immutable under `studio/.local/reviews/gt07-cross-app-20261005-07/`;
 source closure is `c91bc0d770e9730cb10a3bc9fd8e80729f6db9d3485b024664706658993be51c`.
 This closes the non-crash queue-level publish/readback slice only; a queue-level
 lost-receipt/last-good crash cut and the frozen M3 matrix remain open.
+
+`gt07-cross-app-20261005-16` repeats the consumer after repairing a binding gap:
+the producer dependency now uses the exact COMMITTED Blender queue row
+(`native-95fcfd08…`, command and receipt digests read from the producer
+closeout) rather than hashes derived from its run id. The adapter closure also
+includes the cross-app runner and durable queue runtime. Native import/host
+exits and Job cleanup were recorded, but the nested diagnostic reports
+`diagnostic_process_clean=false` because of environment stderr; this remains
+authority-zero evidence and is not an M3 acceptance pass.
+
+`gt07-cross-app-20261005-18` repeats the repaired exact-producer binding after
+an immediate protected-handoff reread before admission. It records one native
+dispatch, COMMITTED queue state, readback ACK and byte-equal reopen. The nested
+consumer still reports environment diagnostic stderr, so this is diagnostic
+only; the consumer crash/reload/last-good cut and frozen matrix remain open.
 
 ## Checkpoint, 05-10-2026 — native M2 FIFO repeat
 

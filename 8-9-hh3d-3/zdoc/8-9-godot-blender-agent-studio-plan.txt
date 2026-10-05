@@ -24,6 +24,14 @@ host-only `gt07-m5-storage-20261005-05` và M8 repeat
 `execution=235`), dry-run `gt06-gt07-m9-playmutation-20261005-01` exit 0 và
 bounded native `...-02` exit 0 với Job/tree sạch; M9 vẫn cần lặp trong gói
 frozen cuối. M3 recovery run23 bị validator Docker timeout trước native effect.
+Fresh M3 consumer runs `gt07-cross-app-20261005-13` and `...-16` now bind the
+exact COMMITTED Blender queue row; `...-16` also hashes the cross-app runner
+and durable queue runtime. They remain authority-zero diagnostics because the
+consumer crash/reload cut and frozen matrix are still open, and `...-16`
+records environment diagnostic stderr.
+Run `gt07-cross-app-20261005-18` repeats this binding with an immediate
+protected-handoff reread before admission; its nested consumer still reports
+environment diagnostic stderr, so it remains diagnostic-only.
 M7 rotation/compaction vẫn mở. Bảng hiện hành và closeout nằm ở
 `zdoc/reviews/20261003-gt07-integration/requirements.md`; không lặp cleanup
 hoặc native run cũ chỉ vì các số lịch sử trong O10.

@@ -33,6 +33,44 @@ def _save(path: Path, value) -> None:
                     encoding="utf-8")
 
 
+def _producer_receipt_from_handoff(handoff_dir: Path, handoff: dict,
+                                   artifact: bytes, manifest_raw: bytes) -> ProducerReceipt:
+    """Bind the consumer to the producer's actual durable queue receipt.
+
+    A producer run is a dependency only when its terminal queue row, command
+    digest and receipt digest are read back from the immutable producer
+    closeout.  Deriving those values from the run id would create a synthetic
+    dependency that could never prove Blender->Godot fencing.
+    """
+    root = handoff_dir.parent
+    wrapper = json.loads((root / "queue-native.json").read_bytes())
+    child = wrapper.get("child")
+    queue_id = child.get("queue_job_id") if isinstance(child, dict) else None
+    rows = child.get("stop_snapshot", {}).get("receipts", []) if isinstance(child, dict) else []
+    row = next((item for item in rows
+                if isinstance(item, dict)
+                and isinstance(item.get("job"), dict)
+                and item["job"].get("job_id") == queue_id), None)
+    if not isinstance(row, dict) or row.get("state") != "COMMITTED":
+        raise RuntimeError("CROSS_APP_PRODUCER_QUEUE_RECEIPT_MISSING")
+    job = row["job"]
+    expected_manifest = handoff["manifest_sha256"]
+    publication = child.get("publication", {})
+    if (publication.get("manifest_sha256") != expected_manifest
+            or publication.get("artifacts", {}).get("scene.glb", {}).get("sha256")
+            != handoff["artifact"]["sha256"]):
+        raise RuntimeError("CROSS_APP_PRODUCER_RECEIPT_BINDING")
+    return ProducerReceipt(
+        job_id=queue_id,
+        project_id=job.get("project_id"),
+        session_id=job.get("session_id"),
+        command_sha256=row.get("command_sha256"),
+        receipt_sha256=row.get("receipt_sha256"),
+        artifact_sha256=handoff["artifact"]["sha256"],
+        artifact_size=handoff["artifact"]["bytes"],
+        manifest_sha256=expected_manifest)
+
+
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--run-id", required=True)
@@ -56,6 +94,18 @@ def main(argv=None) -> int:
     files, closure = base._probe_sources(owner_mod, fixture_args)
     files["tests/jobs/cross_app_publication.py"] = _sha(
         (STUDIO / "tests/jobs/cross_app_publication.py").read_bytes())
+    # The adapter imports the durable queue directly.  Keep those trusted
+    # runtime files in the diagnostic closure instead of hashing only the
+    # gameplay owner fixture and silently allowing queue drift.
+    for name in (
+            "tests/jobs/run_gt07_cross_app_probe.py",
+            "host/jobs/queue_owner.py", "host/jobs/durable_broker.py",
+            "host/jobs/dispatch_policy.py", "host/jobs/native_dispatch.py",
+            "host/core/private_events.py", "host/core/private_store.py",
+            "host/core/custody.py", "host/core/custody_registry.py",
+            "host/core/safe_replace.py", "host/core/safe_open.py",
+            "host/core/limits.py", "host/core/transport.py"):
+        files[name] = _sha((STUDIO / name).read_bytes())
     adapter_closure = _sha(json.dumps(files, sort_keys=True,
                                       separators=(",", ":")).encode())
     case = base._publication_case(fixture_args, owner_mod, fixtures, glb=artifact)
@@ -63,8 +113,13 @@ def main(argv=None) -> int:
     candidate.pop("project.godot")
     owner_mod._copy_source_bundle(owner_mod._load("gameplay_source_profile"),
                                   candidate, entrypoint=owner_mod.ENTRYPOINT)
+    producer = _producer_receipt_from_handoff(
+        handoff_dir, handoff, artifact, manifest_raw)
+    producer_fields = {name: getattr(producer, name)
+                       for name in producer.__dataclass_fields__}
     binding = {"run_id": args.run_id, "authority": 0, "public_ack": False,
                "source_closure_sha256": closure, "blender_handoff": handoff,
+               "producer_queue_receipt": producer_fields,
                "adapter_source_closure_sha256": adapter_closure,
                "adapter_source_files": files,
                "scope": "queue dependency + one gameplay-source publish; diagnostic only"}
@@ -85,19 +140,18 @@ def main(argv=None) -> int:
     import os
     os.environ.setdefault("HH_STUDIO_LINUX_GODOT", str(
         STUDIO / ".local/tooling/godot-4.7.2-stable-linux/Godot_v4.7.2-stable_linux.x86_64"))
+    # Re-read the protected producer immediately before admitting the consumer.
+    # The earlier dry-run/read is only a wiring check; it must not authorize a
+    # changed GLB, manifest, or producer receipt.
+    fresh_artifact, fresh_manifest, fresh_handoff = base.read_blender_handoff(handoff_dir)
+    if (fresh_artifact != artifact or fresh_manifest != manifest_raw
+            or fresh_handoff != handoff):
+        raise RuntimeError("CROSS_APP_HANDOFF_CHANGED")
     queue_parent = output / "queue"
     queue_parent.mkdir()
     queue = QueueOwner.create(queue_parent)
     owner = reopened = None
     try:
-        producer = ProducerReceipt(
-            job_id="producer-" + handoff["producer_run_id"].split("-")[-1],
-            project_id="blender.export", session_id="blender.native",
-            command_sha256=_sha((handoff["producer_run_id"] + ":command").encode()),
-            receipt_sha256=handoff["producer_receipts"]["queue-native.json"],
-            artifact_sha256=handoff["artifact"]["sha256"],
-            artifact_size=handoff["artifact"]["bytes"],
-            manifest_sha256=handoff["manifest_sha256"])
         coordinator = CrossAppPublicationCoordinator(queue)
         coordinator.admit_producer(producer)
         command_sha = _sha((args.run_id + ":consumer").encode())
