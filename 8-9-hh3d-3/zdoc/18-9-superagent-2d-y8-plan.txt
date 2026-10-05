@@ -16,7 +16,7 @@ RUNTIME_ACCEPTANCE=SA-01_TECHNICAL_PASS
 HUMAN_ACCEPTANCE=NONE
 REFERENCE_INVENTORY=NOT_FROZEN
 FUNCTIONAL_PARITY=UNVERIFIED
-RELEASE_STATUS=NOT_BUILT
+RELEASE_STATUS=BUILT_PROVISIONAL
 LEGACY_PROGRESS_INHERITED=NONE
 PREVIOUS_REVISION=SA4 trong Git 5b2d4c7b; LOG chi tiết (run id, hash, số assertion) nằm ở đó
 
@@ -36,7 +36,7 @@ PREVIOUS_REVISION=SA4 trong Git 5b2d4c7b; LOG chi tiết (run id, hash, số ass
   routing HH3D nằm ở 8-9-hh3d-3/AGENTS.md.
 - Coordinator game tick WP khi đạt DoD; subagent không tick.
 
-HIỆN TRẠNG (05-10 13:38; coordinator cập nhật khi xong một mốc, tối đa 15 dòng)
+HIỆN TRẠNG (05-10 15:05; coordinator cập nhật khi xong một mốc, tối đa 15 dòng)
 - SA-01 ACCEPTED 03-10 (bootstrap kỹ thuật). CURRENT_VALID_WP=SA-02 từ 03-10.
 - Ledger 79 dòng: 25 OBSERVED, 54 UNVERIFIED, 0 MATCHED. Đã thấy chủ yếu menu, map, mode, phím
   đánh và vài phản ứng vật thể (mục 7.4). Chưa có số đo thời gian hay khoảng cách nào: browser
@@ -51,7 +51,8 @@ HIỆN TRẠNG (05-10 13:38; coordinator cập nhật khi xong một mốc, tố
   (aim/release), `af085b6b` (ray/replay) và `96365937` (same-tick guard) đã chốt phần kỹ thuật;
   plan vẫn
   không tick SA-03/SA-04 khi thiếu gate.
-- Chưa có: số đo Y8 A01–A06, owner side-by-side, build Web/Windows. Match/aim shell và replay
+- Chưa có: số đo Y8 A01–A06 và owner side-by-side. Windows/Web build đã tạo được bằng template
+  Godot 4.7.2 pinned, nhưng mới là artifact provisional chưa có owner review. Match/aim shell và replay
   đã có guarded live route 41 assertions, combat 73, twin MatchSession/ray 15 assertions ở source
   selection hash `34e96458c3c152eea2e891c72fb02f06e84737e3cac64b29b69475ea204c78f9`; map/row
   validation, ray hit authority, same-tick input guard và snapshot immutable đã fail-closed.
@@ -65,15 +66,16 @@ HIỆN TRẠNG (05-10 13:38; coordinator cập nhật khi xong một mốc, tố
 - N4 seam và live tick probe đã PASS guarded; sau đó lõi Simulation/FighterState/MovementRoom đã
   được nối vào CharacterBody2D/StaticBody2D, float và readback mỗi physics frame. Các test movement,
   sprint, combat, trace, room, match và regression đều sạch; đây vẫn là bằng chứng kỹ thuật, SA-03 còn chờ
-  A01–A06 và owner thử phòng di chuyển. Export template 4.7.2/Web chưa có trong clone.
+  A01–A06 và owner thử phòng di chuyển. Template archive 4.7.2 và cả hai artifact đã được xác nhận;
+  vẫn chưa coi là nghiệm thu khi chưa có owner chơi.
 
 NEXT (làm theo thứ tự; việc nào phải chờ thì làm việc sau, không ngồi chờ)
 N2 Rig Y8 đã tự kiểm bằng fixture cục bộ nhưng chưa lấy được A01–A06; không lặp lại vòng browser
    không có timed hold/60-fps. Fallback quay owner ở mục 8.4 đã ghi; tiếp tục phần product.
 N4 Chuyển lõi kỹ thuật đã xong; bước kế là nghiệm thu SA-03 sau khi có A01–A06 (hoặc ghi tầng B theo
    gate) và owner thử phòng di chuyển 5 phút.
-N5 SA-04 bản chơi được đã có ở commit `0659f2ef`; tiếp tục lấy template/export Windows+Web khi
-   toolchain mở, rồi gửi owner thử kèm hướng dẫn 5 dòng. Không tick SA-04 khi thiếu build/owner.
+N5 SA-04 bản chơi được đã có ở commit `0659f2ef`; Windows/Web artifact provisional đã sẵn sàng,
+   gửi owner thử kèm hướng dẫn 5 dòng. Không tick SA-04 khi thiếu owner/critic/parity gate.
 N6 Trong lúc chờ owner: đo A07–A17; kiểm kê trong trận thật (mục 7.4); thử pipeline art cho
    một nhân vật (SA-10, thư mục art/, subagent riêng).
 
@@ -663,7 +665,8 @@ Q5 Web: dung lượng tải lần đầu và bộ nhớ đo từ SA-04; ngân s�
   `cmd.sa04.aim.combat.1` (`RUN_ID=20261005T060354.972517Z-ac513fdada`) passed 73; both exit 0,
   cleanup 0, diagnostics empty, source hash `b8ca0dcee9f3da3170214cb63730f649eeac24fe26593390d78faa817f79f1a1`.
   Guarded run_all `RUN_ID=20261005T060435.274221Z-60341297ee` passed 2,977. No SA-03/SA-04 tick;
-  4.7.2 Windows/Web templates remain unavailable and owner/critic/Y8 measurements remain open.
+  4.7.2 Windows/Web templates were later sourced from the local archive and exports passed, while
+  owner/critic/Y8 measurements remain open.
 2026-10-05 SA-04 audit closure: `af085b6b` adds bounded ray hit authority, post-success TTL mutation,
   twin MatchSession replay/ray checks and bot-route controls; `96365937` gates same-tick shoot edges
   away from jump/drop/ladder. Guarded final match `RUN_ID=20261005T062516.394029Z-b678287f2f` and
@@ -674,4 +677,7 @@ Q5 Web: dung lượng tải lần đầu và bộ nhớ đo từ SA-04; ngân s�
   reproduction, final 2,977-assertion guarded regression (`RUN_ID=20261005T063646.437469Z-99cd603941`)
   and guarded Python 23 tests/1 skip (`RUN_ID=20261005T063742.653749Z-492e13eaaa`). SA-02 remains
   CURRENT_VALID_WP; browser research was not converted into parity counts or a checkbox.
+2026-10-05 SA-04 export: pinned 4.7.2 Windows and Web artifacts built successfully with provenance
+  and sizes recorded in product evidence. SA-02 remains CURRENT_VALID_WP; owner Windows/Chrome play
+  and independent review are still required, so no SA-03/SA-04 tick.
 END_OF_SUPERAGENT_PLAN
