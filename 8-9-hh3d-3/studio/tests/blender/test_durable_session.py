@@ -71,6 +71,17 @@ class DurableTests(unittest.TestCase):
         self.assertEqual(native.call_count,1);self.assertEqual(json.loads(raw)['status'],'UNKNOWN')
         self.assertEqual(self.session.execute_bytes(command(),self.lease),raw)
         self.assertEqual(DurableBlenderSession(self.root,clock=lambda:self.now).lookup_bytes('create'),raw)
+    def test_late_native_completion_after_lease_expiry_is_unknown_and_held(self):
+        def late(value, *, lease):
+            self.now = self.lease.expires_ms
+            return Host.execute(self.host, value, lease=lease)
+
+        with patch.object(self.host, 'execute', side_effect=late) as native:
+            raw = self.session.execute_bytes(command(), self.lease)
+        self.assertEqual(native.call_count, 1)
+        self.assertEqual(json.loads(raw)['status'], 'UNKNOWN')
+        self.assertTrue(self.session._held)
+        self.assertEqual(self.session.execute_bytes(command(), self.lease), raw)
     def test_death_after_intent_is_lookup_unknown_without_dispatch(self):
         with patch.object(self.host,'execute',side_effect=KeyboardInterrupt):
             with self.assertRaises(KeyboardInterrupt):self.session.execute_bytes(command(),self.lease)

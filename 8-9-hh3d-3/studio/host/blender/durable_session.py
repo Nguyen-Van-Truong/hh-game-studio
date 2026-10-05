@@ -157,6 +157,12 @@ class DurableBlenderSession:
             try:
                 self.journal.check_lease(lease,now_ms=self.clock())
                 native=self.host.execute(value,lease={'fencing_epoch':lease.fencing_epoch,'expires_ms':lease.expires_ms})
+                # A native worker may return after this lease expired or was
+                # fenced by another writer.  Its response is then too late to
+                # attribute to the admitted owner, even when it says
+                # COMPLETED; hold the session and persist UNKNOWN so a later
+                # lookup can reconcile the effect without admitting a retry.
+                self.journal.check_lease(lease,now_ms=self.clock())
                 need(native.get('command_id')==key and native.get('command_digest')==digest
                     and native.get('public_ack') is False,'BLENDER_NATIVE_RESPONSE_BINDING')
                 state=native.get('state')
