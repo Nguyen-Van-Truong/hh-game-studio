@@ -709,7 +709,7 @@ Q5 Web: dung lượng tải lần đầu và bộ nhớ đo từ SA-04; ngân s�
   `cmd.sa06.burning.2` passed 2,977 assertions with host exit 0, cleanup 0 and empty diagnostics.
   Static cover is unchanged after prop destruction; fire spread/true roll mapping/doors/debris/chain
   map/100-object and owner gates remain open, so SA-06 and all Classic checkboxes stay unticked.
-2026-10-05 SA-06 roll/hazard repair: product WIP adds real grounded short-collider roll, roof/pit/hit
+2026-10-05 SA-06 roll/hazard repair: product commit `d1d69eea` adds real grounded short-collider roll, roof/pit/hit
   interruption checks, grounded-only douse, periodic burn expiry and shot/explosion event hash coverage.
   Guarded roll `20261005T155713.910571Z-0c4f0e8617` (188) and props `20261005T155759.206673Z-946c29658f` (66)
   plus replay (15) passed at one source hash; SA-06 remains provisional and unticked.
