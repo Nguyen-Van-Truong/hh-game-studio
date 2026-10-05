@@ -9,7 +9,7 @@ Historical entries below are retained for provenance; they do not override the t
 |---|---|---|---|
 | M1 / Q01 | DONE (host) | `gt07-jobs-integration-20261004-03`, 46 tests | Repeat only in final frozen matrix |
 | M2 / Q03 | OPEN | static admission/lease guards | native two-writer, expiry, revoke, late worker |
-| M3 / Q05 | OPEN (partial) | Godot edit/save/script and receipt-loss run21; Blender queued export `gt07-native-queue-20261005-06`; all six Godot save crash cuts `gt07-native-godot-20261005-06..11`; O2 asset readback `o2-publication-blender-handoff-20261005-02` | queue-level Blender→Godot publish/reload/ACK and cross-app last-good binding |
+| M3 / Q05 | OPEN (partial) | Godot edit/save/script and receipt-loss run21; Blender queued export `gt07-native-queue-20261005-06`; all six Godot save crash cuts `gt07-native-godot-20261005-06..11`; O2 asset readback `o2-publication-blender-handoff-20261005-03` | queue-level Blender→Godot publish/reload/ACK and cross-app last-good binding |
 | M4 / Q06 | OPEN | no final native proof | manual edit conflict and no rollback overwrite |
 | M5 / TX05/TX09 | OPEN | component fault helpers | filelock, cross-volume and injected disk/fsync cuts |
 | M6 / Q04 | OPEN (partial) | Stop drain and native run16 | full queue/cancel/reconnect matrix in final run |
@@ -68,7 +68,7 @@ not Blender→Godot import/readback or GT07 acceptance.
 
 ## Checkpoint, 05-10-2026 — Blender artifact read by Godot fixture
 
-`o2-publication-blender-handoff-20261005-02` is an O2 diagnostic pass. It
+`o2-publication-blender-handoff-20261005-03` is an O2 diagnostic pass. It
 froze the exact `scene.glb` and producer manifest from
 `gt07-native-queue-20261005-06`, rechecked the producer hash immediately before
 dispatch, and loaded that byte through the gameplay-source Godot fixture. The
@@ -77,7 +77,10 @@ readback and reopen was byte-equal, and the observed GLB hash is
 `1bb48eb159925ec13f4df7337445a691aac98184580553d81f934d2c674bc87b`.
 This proves the asset handoff/import readback slice only; it does not prove the
 GT07 queue coordinator's cross-app reload/ACK or grant acceptance. Raw is under
-`studio/.local/reviews/o2-publication-blender-handoff-20261005-02/`, AUTHORITY=0.
+`studio/.local/reviews/o2-publication-blender-handoff-20261005-03/`, AUTHORITY=0.
+The native fixture completed with outer/host/container exit 0 and clean Job
+closeout; source closure is
+`c91bc0d770e9730cb10a3bc9fd8e80729f6db9d3485b024664706658993be51c`.
 
 ## Historical log (preserved verbatim)
 # GT07 integration map — opened after GT06 acceptance

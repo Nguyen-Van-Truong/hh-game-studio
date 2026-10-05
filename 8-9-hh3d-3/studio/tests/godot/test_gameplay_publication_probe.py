@@ -318,6 +318,14 @@ class BlenderHandoffTests(unittest.TestCase):
         self.owner.close.assert_called_once()
         self.assertFalse(self.frozen.exists())
 
+    def test_protected_publication_drift_is_rejected_after_freeze(self):
+        """A producer-side replacement cannot become a Godot candidate after freeze."""
+        _, binding = probe.freeze_blender_handoff(self.published, self.frozen)
+        self.owner.read_selected.return_value = (self.manifest, {'scene.glb': b'other'})
+        with self.assertRaisesRegex(RuntimeError, 'BLENDER_HANDOFF_PROTECTED_READBACK'):
+            probe.verify_blender_handoff(self.published, self.frozen, binding, self.candidate)
+        self.assertEqual(self.reopen.call_count, 2)
+
     def test_no_pass_from_banner_missing_actual_exit_or_wrong_pid(self):
         for changes in ({'exit_code': None}, {'exit_code': 1}, {'target_pid': 9999}):
             with self.subTest(changes=changes):
