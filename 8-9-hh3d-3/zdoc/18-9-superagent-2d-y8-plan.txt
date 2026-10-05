@@ -36,7 +36,7 @@ PREVIOUS_REVISION=SA4 trong Git 5b2d4c7b; LOG chi tiết (run id, hash, số ass
   routing HH3D nằm ở 8-9-hh3d-3/AGENTS.md.
 - Coordinator game tick WP khi đạt DoD; subagent không tick.
 
-HIỆN TRẠNG (04-10 17:30; coordinator cập nhật khi xong một mốc, tối đa 15 dòng)
+HIỆN TRẠNG (05-10 10:03; coordinator cập nhật khi xong một mốc, tối đa 15 dòng)
 - SA-01 ACCEPTED 03-10 (bootstrap kỹ thuật). CURRENT_VALID_WP=SA-02 từ 03-10.
 - Ledger 79 dòng: 25 OBSERVED, 54 UNVERIFIED, 0 MATCHED. Đã thấy chủ yếu menu, map, mode, phím
   đánh và vài phản ứng vật thể (mục 7.4). Chưa có số đo thời gian hay khoảng cách nào: browser
@@ -49,10 +49,13 @@ HIỆN TRẠNG (04-10 17:30; coordinator cập nhật khi xong một mốc, tố
 - Keymap owner đã áp dụng và có test. Main đã merge product tới ed3e10a3 (merge 1e5e7e4e);
   a55c72b0 chưa merge, sẽ merge khi tick WP.
 - Chưa có: rig đo, map trận thật, pickup, bot, HUD, menu trận, build Web/Windows.
+- SA5 N1 đã xong: guard kiểm mọi task `HHStudio.*`; ledger 79 dòng có tier A/B/C;
+  checker hiểu trạng thái APPROX và giữ fail-closed cho tầng C. Bộ đo A01–A06 còn trống,
+  nên inventory vẫn báo thiếu số đo thay vì tự coi là đạt.
+- N2 rig đã tự kiểm bằng fixture cục bộ: giữ/thả phím, log timestamp và CDP screencast đều
+  chạy sạch. Đây chỉ là kiểm tra công cụ; chưa có số đo Y8, nên SA-02 và A01–A06 vẫn mở.
 
 NEXT (làm theo thứ tự; việc nào phải chờ thì làm việc sau, không ngồi chờ)
-N1 Sửa nhỏ: guard đo nhận mọi task HHStudio.* (mục 6); ledger thêm cột tier và trạng thái
-   APPROX; check_ledger/check_parity theo mục 2 và 7.1; gán tier cho 79 dòng.
 N2 Rig đo Y8 (mục 8.2), hạn 4 giờ; đo A01–A06 (mục 7.3). Quá hạn thì gửi owner kịch bản quay
    (mục 8.4) và làm tiếp N3–N5.
 N3 Spike Godot Physics 2D (mục 5.3), hạn 2 giờ.
@@ -626,4 +629,9 @@ Q5 Web: dung lượng tải lần đầu và bộ nhớ đo từ SA-04; ngân s�
   APPROX; cho phép rig Playwright; video owner rút gọn; Godot Physics làm nguồn va chạm, float
   thay đơn vị nguyên; thêm HIỆN TRẠNG/NEXT, D7 đổi phím; bằng chứng chỉ ở mốc; guard HHStudio.*;
   cấm nhân vật có chủ (Goku...). LOG chi tiết SA4 ở Git 5b2d4c7b.
+2026-10-04 SA5 N1: guard đã nhận mọi task `HHStudio.*`, ledger 79 dòng đã gán tier A/B/C,
+  checker đã hiểu APPROX theo tầng C. Bộ số A01–A06 còn trống; NEXT chuyển sang rig đo, không
+  tự nâng trạng thái hay giữ gate bằng số test nội bộ.
+2026-10-05 N2 rig self-check: fixture cục bộ đã xác nhận key down/up/hold, timestamp và CDP
+  screencast; đây chưa phải số đo Y8. Product đã ghi nhận công cụ; A01–A06 vẫn trống.
 END_OF_SUPERAGENT_PLAN
