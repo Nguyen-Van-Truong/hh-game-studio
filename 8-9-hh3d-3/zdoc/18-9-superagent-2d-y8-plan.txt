@@ -52,7 +52,8 @@ HIỆN TRẠNG (05-10 15:05; coordinator cập nhật khi xong một mốc, tố
   plan vẫn
   không tick SA-03/SA-04 khi thiếu gate. Export evidence hiện ở product commits `6f2ec9d7`,
   `46794bd0` và `a099b99b`; source closure đầy đủ và runtime resources đã được đóng gói. SA-05
-  bullet-time slice provisional ở `7c551274`/`f62b6a7a`/`5db8383b`, chưa thay đổi gate.
+  bullet-time slice provisional ở `7c551274`/`f62b6a7a`/`5db8383b`/`490f3457`, có buffering
+  pressed/released qua nhịp chậm; chưa thay đổi gate.
 - Chưa có: số đo Y8 A01–A06 và owner side-by-side. Windows/Web build đã tạo được bằng template
   Godot 4.7.2 pinned, nhưng mới là artifact provisional chưa có owner review. Match/aim shell và replay
   đã có guarded live route 41 assertions, combat 73, twin MatchSession/ray 15 assertions ở source
@@ -683,7 +684,8 @@ Q5 Web: dung lượng tải lần đầu và bộ nhớ đo từ SA-04; ngân s�
   source closure and all-resources runtime packaging; agent localhost smoke reached movement lab and bot match.
   Provenance and sizes are recorded in product evidence; owner Windows/Chrome play and independent review remain required,
   so no SA-03/SA-04 tick.
-2026-10-05 SA-05 provisional: added clean-room five-second Bullet Time pickup, early cancel and owner/other tempo
-  contract with 17-assertion focused proof; full 2,977 regression stayed green. SA-02 remains CURRENT_VALID_WP;
-  weapon catalog, second duration and owner/critic measurements remain open.
+2026-10-05 SA-05 input-safe tempo: product commit `490f3457` buffers pressed/released actions across the
+  slowed fighter's skipped fixed ticks and extends the focused proof to 20 assertions; match route passed 46,
+  full regression 2,977, all guarded exits/cleanup/diagnostics clean. SA-02 remains current; weapon catalog,
+  second duration, world interactions and owner/critic measurements remain open.
 END_OF_SUPERAGENT_PLAN
