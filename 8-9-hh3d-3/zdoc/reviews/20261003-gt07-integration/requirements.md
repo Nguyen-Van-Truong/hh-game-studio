@@ -98,6 +98,14 @@ window and the closeout reported `source_unchanged=false`. Both raw
 directories are immutable and retained; the same scenario must be rerun once
 after the current source freeze with a fresh ID.
 
+`gt07-native-godot-20261005-23` was then admitted from a fresh dry-run and
+stopped before any native effect because the owned Linux validator container
+timed out at its 22-second host start/attach bound (`EXECUTOR_ENGINE_OR_HOST_NOT_CLEAN`).
+The child exit was 1, the container/Job had exit 124 with zero active handles,
+inputs and source stayed unchanged, and the raw closeout is retained.  This is
+an infrastructure diagnostic; do not replay it until Docker/validator startup
+is healthy or a different scoped reproducer is available.
+
 ## Checkpoint, 05-10-2026 - governed M4 conflict admission
 
 The scenario runner now exposes `godot-conflict` with the mandatory engine-free
