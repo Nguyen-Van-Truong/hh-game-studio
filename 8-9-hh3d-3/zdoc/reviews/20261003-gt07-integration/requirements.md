@@ -169,6 +169,18 @@ zero, unretained Job. Source and frozen snapshot remained equal at closure
 the Godot side of M4 only; Blender `.blend` conflict and the frozen M1-M9
 repeat remain open.
 
+## Checkpoint, 05-10-2026 — current-source M4 native repeat
+
+`gt07-native-godot-20261005-26` passed the mandatory dry-run and native
+Godot conflict path on source closure
+`737e6aa2ebbf9a3237fbbbd77d0f900a26ccd3e2014f28cca07b0d9b2430c93c`.
+The manual projection was preserved, the stale owner response remained
+`UNKNOWN` with `lookup.reconcile`, and no replay or public ACK was emitted.
+Both editor and validator children exited 0 naturally; the owned Job/tree was
+closed with zero active members and no retained handle, and source readback was
+unchanged. This is a fresh authority-zero diagnostic slice; the Blender
+`.blend` conflict and final frozen M1-M9 matrix remain open.
+
 ## Checkpoint, 05-10-2026 — native editor conflict diagnostic
 
 `gt07-native-editor-conflict-20261005-01` ran the pinned Godot EditorOwner
