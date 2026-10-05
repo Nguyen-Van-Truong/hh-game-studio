@@ -29,7 +29,7 @@ from studio.host.replay.transport import ReplayTransport
 from studio.host.core.transport import epoch_ms
 from studio.protocol.core import Request, Response, canonical_bytes, parse_json
 
-MODES = ('saturated-stop', 'revoked-result', 'stale-capture')
+MODES = ('saturated-stop', 'revoked-result', 'stale-capture', 'play-mutation')
 MAX_RESPONSE_BYTES = 262144
 OUTER_TIMEOUT_SECONDS = 150
 
@@ -104,6 +104,31 @@ def _mutate_owned_png(backend, output):
         'mutated_sha256': native.sha(actual), 'size_bytes': len(actual),
         'mutation': 'last PNG CRC byte XOR 1 after completed native run',
         'original_copy': 'http-adversary/original-menu.png', 'restored': False}
+
+
+def _mutate_editor_output_while_running(backend, output):
+    """Record a real owned-workspace mutation while the Play process runs.
+
+    ``project/out`` is generated runtime state, deliberately excluded from the
+    immutable source map.  Writing a fresh marker here exercises the editor
+    side's mutation boundary without changing the pinned fixture or pretending
+    that a runtime mutation is an authoring/source commit.  The caller checks
+    the phase both before and after this write.
+    """
+    status = backend.status()
+    native.need(status['phase'] == 'RUNNING', 'ADVERSARY_PLAY_MUTATION_NOT_RUNNING')
+    path = backend.project / 'out/editor-mutation.json'
+    native.need(path.parent == backend.project / 'out' and not path.exists(),
+                'ADVERSARY_PLAY_MUTATION_OUTPUT_EXISTS')
+    facts = {'relative_path': 'project/out/editor-mutation.json',
+        'phase_before': status['phase'], 'runtime_instance_id': status['runtime_instance_id'],
+        'mutation': 'editor-side generated-state marker written while Play was RUNNING'}
+    native.write(path, facts)
+    native.need(path.is_file() and backend.status()['phase'] == 'RUNNING',
+                'ADVERSARY_PLAY_MUTATION_PHASE_DRIFT')
+    facts['sha256'] = native.sha(native.read_regular(path))
+    facts['phase_after'] = backend.status()['phase']
+    return facts
 
 
 def run(run_id, mode):
@@ -198,6 +223,7 @@ def run(run_id, mode):
         initial_worker = backend._thread
         controller = credential
         mutation = None
+        during_play_mutation = None
 
         if mode == 'saturated-stop':
             _wait(lambda: _work_slots(server) == 2, .5, 'ADVERSARY_WORK_INITIAL_DRAIN')
@@ -250,7 +276,12 @@ def run(run_id, mode):
                 'command_id': start.command_id}, using=controller)
             check('ADVERSARY_CONTROL_LOOKUP_STABLE_UNKNOWN', code == 200 and still_unknown == receipt)
 
-        else:
+        elif mode in ('stale-capture', 'play-mutation'):
+            if mode == 'play-mutation':
+                during_play_mutation = _mutate_editor_output_while_running(backend, output)
+                check('ADVERSARY_PLAY_MUTATION_RUNNING', during_play_mutation['phase_before'] == 'RUNNING'
+                    and during_play_mutation['phase_after'] == 'RUNNING'
+                    and backend.status()['phase'] == 'RUNNING')
             receipt = terminal(controller)
             check('ADVERSARY_INITIAL_NATIVE_COMMITTED', receipt['status'] == 'COMMITTED'
                 and receipt['code'] == 'REPLAY_NATIVE_COMPLETED')
@@ -302,10 +333,13 @@ def run(run_id, mode):
         check('ADVERSARY_SOURCE_UNCHANGED', all(native.sha(native.read_regular(native.STUDIO / name)) == digest
             for name, digest in backend.source.items()))
         check('ADVERSARY_DRIVER_UNCHANGED', native.sha(Path(__file__).read_bytes()) == driver_sha)
+        capture_mutation = mutation
+        if during_play_mutation is not None:
+            capture_mutation = {'during_play': during_play_mutation, 'after_completion': mutation}
         result = {'schema': 'HH-GT06-HTTP-ADVERSARY-1', 'run_id': run_id, 'mode': mode, 'checks': checks,
             'binding': binding, 'process': process, 'driver_sha256': driver_sha,
             'runtime_capture_sha256': native.sha(native.read_regular(backend.root / 'runtime-host/capture.json')),
-            'source_unchanged': True, 'capture_mutation': mutation, 'formal_acceptance': False,
+            'source_unchanged': True, 'capture_mutation': capture_mutation, 'formal_acceptance': False,
             'scope': 'bounded hostile HTTP timing/authorization/artifact evidence; not a performance benchmark'}
         record('result.json', result)
         print('HH_GT06_ADVERSARY_COMPLETE ' + json.dumps({'run_id': run_id, 'mode': mode,
