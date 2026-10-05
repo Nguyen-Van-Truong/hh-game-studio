@@ -274,6 +274,31 @@ def _candidate_drives(destination: Path) -> tuple[Path, Path] | None:
     return source, target
 
 
+def _temp_parent_for_drive(drive: Path, destination: Path) -> Path | None:
+    """Choose a writable owned temp parent without assuming a writable root."""
+    wanted = drive.drive.upper()
+    candidates = [Path(os.environ.get("TEMP", "")),
+                  Path(os.environ.get("TMP", "")), destination.parent,
+                  drive / "Temp", drive / "Windows" / "Temp"]
+    seen: set[str] = set()
+    for candidate in candidates:
+        if not str(candidate) or str(candidate) in seen:
+            continue
+        seen.add(str(candidate))
+        try:
+            if os.path.splitdrive(str(candidate.resolve()))[0].upper() != wanted:
+                continue
+            candidate.mkdir(parents=True, exist_ok=True)
+            probe = candidate / (".gt07-m5-write-" + os.urandom(6).hex())
+            with probe.open("xb"):
+                pass
+            probe.unlink()
+            return candidate
+        except OSError:
+            continue
+    return None
+
+
 def run_cross_volume(output: Path) -> dict[str, Any]:
     result: dict[str, Any] = {"scenario": "cross-volume-replace", "verified": False,
                               "errors": [], "native": os.name == "nt"}
@@ -286,8 +311,13 @@ def run_cross_volume(output: Path) -> dict[str, Any]:
         return result
     source_dir = destination_dir = None
     try:
-        source_dir = Path(tempfile.mkdtemp(prefix="gt07-m5-source-", dir=str(pair[0])))
-        destination_dir = Path(tempfile.mkdtemp(prefix="gt07-m5-dest-", dir=str(pair[1])))
+        source_parent = _temp_parent_for_drive(pair[0], output)
+        destination_parent = _temp_parent_for_drive(pair[1], output)
+        if source_parent is None or destination_parent is None:
+            result.update({"status": "SKIPPED", "reason": "TWO_WRITABLE_VOLUMES_UNAVAILABLE"})
+            return result
+        source_dir = Path(tempfile.mkdtemp(prefix="gt07-m5-source-", dir=str(source_parent)))
+        destination_dir = Path(tempfile.mkdtemp(prefix="gt07-m5-dest-", dir=str(destination_parent)))
         source = source_dir / "candidate.bin"
         target = destination_dir / "last-good.bin"
         old = b"cross-volume-last-good\n"
