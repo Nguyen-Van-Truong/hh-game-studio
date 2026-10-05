@@ -19,10 +19,11 @@ RUN_POLICY=FRESH_ID_PER_RUN; DRY_RUN_BEFORE_NATIVE_O10_2; VERIFY_SOURCE_STOP_LAT
 CẬP NHẬT TRẠNG THÁI 05-10-2026: Các số đếm run/harness trong đoạn O10
 "Căn cứ 03-10 → 04-10" bên dưới là lịch sử, không phải tỉ lệ hiện tại. M5
 host-only `gt07-m5-storage-20261005-05` và M8 repeat
-`gt07-m8-process-20261005-07` đã có raw/actual cleanup; M9 đã có dry-run
-contract nhưng installed binding còn `BINDING_MISSING_DEPENDENCY`; M3 recovery
-run23 bị validator Docker timeout trước native effect. M7 rotation/compaction
-vẫn mở. Bảng hiện hành và closeout nằm ở
+`gt07-m8-process-20261005-07` đã có raw/actual cleanup; M9 installed binding
+đã được refresh một lần có rollback và postcheck (`source=233`,
+`execution=235`), dry-run `gt06-gt07-m9-playmutation-20261005-01` exit 0;
+native bounded run vẫn mở. M3 recovery run23 bị validator Docker timeout trước
+native effect. M7 rotation/compaction vẫn mở. Bảng hiện hành và closeout nằm ở
 `zdoc/reviews/20261003-gt07-integration/requirements.md`; không lặp cleanup
 hoặc native run cũ chỉ vì các số lịch sử trong O10.
 S_RECORD_HISTORY_ARCHIVE=8-9-hh3d-3/zdoc/reviews/20260925-plan-s-record-history-s256.txt; SHA256=14e4d00b5f574f9c06c8f4041cf284fa70f7bded09dee6d6d2914cdb1d3c5fdb; AUTHORITY=0; RAW_HEADER_BLOCK_S256_LINES_93_150_BYTE_FOR_BYTE; NO_GATE_CHANGE

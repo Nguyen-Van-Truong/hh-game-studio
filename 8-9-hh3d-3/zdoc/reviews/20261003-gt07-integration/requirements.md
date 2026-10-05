@@ -15,7 +15,7 @@ Historical entries below are retained for provenance; they do not override the t
 | M6 / Q04 | OPEN (partial) | Stop drain and native run16 | full queue/cancel/reconnect matrix in final run |
 | M7 / Q07 | OPEN (partial) | 510-record capacity/JOURNAL_FULL | real-clock expiry, compaction/rotation |
 | M8 / Q08 | OPEN (partial) | host-only repeats `gt07-m8-process-20261005-05` and `-07` verify PID/start identity, forged-start refusal, owned-tree timeout and 64 MiB Job memory denial; actual worker exits and Job cleanup recorded (closure `e54646f8...58f71`) | final frozen M1–M9 matrix and source-specific manifest |
-| M9 / TX13 | OPEN (partial) | static `play-mutation` lane (`36e8d56b`) binds a generated-state mutation while Play is RUNNING to stale-capture rejection/UNKNOWN/no-replay; engine-free dry-run contract (`21ddb086`) passes focused tests and rejects backend/native flags | installed execution binding currently fails the real dry-run with `BINDING_MISSING_DEPENDENCY`; repair that binding, then run one bounded native Play/capture conflict on the pinned fixture and repeat in the final frozen matrix |
+| M9 / TX13 | OPEN (partial) | static `play-mutation` lane (`36e8d56b`) binds a generated-state mutation while Play is RUNNING to stale-capture rejection/UNKNOWN/no-replay; one-use binding refresh `20261005-gt07-binding-refresh` verified source=233/execution=235; fresh engine-free dry-run `gt06-gt07-m9-playmutation-20261005-01` exit 0 | one bounded native Play/capture conflict on the pinned fixture and repeat in the final frozen matrix |
 
 ## Next
 
@@ -81,13 +81,15 @@ repeat and requirement-map binding remain open.  Raw is immutable under
 
 Commit `21ddb086` added the engine-free adversary dry-run contract: run ID,
 fixed review root, installed source/driver hashes and forbidden backend/native
-flags are checked before any process can start.  Its focused tests pass, but a
-real CLI dry-run against the installed execution binding stops at
-`BINDING_MISSING_DEPENDENCY`; no Godot/Blender process was started and no
-native M9 evidence is claimed.  Repair that installed binding, freeze a fresh
-closure, then perform exactly one bounded Play/capture conflict run before the
-final matrix.  Do not bypass the binding check or convert the static proof to
-acceptance.
+flags are checked before any process can start. The one-use refresh in
+`zdoc/reviews/20261005-gt07-binding-refresh/` repaired the stale 215-entry
+generation to a verified 233-entry source map and 235-entry execution map;
+its receipt and read-only postcheck retain the old/new metadata bytes and GT05
+anchor. Fresh `play-mutation` dry-run `gt06-gt07-m9-playmutation-20261005-01`
+then exited 0 with no backend, process, or engine started. This is still
+authority-zero wiring evidence. Perform exactly one bounded native
+Play/capture conflict run before the final matrix; do not bypass the binding or
+convert the dry-run/static proof to acceptance.
 
 ## Checkpoint, 05-10-2026 — M7 design boundary
 
