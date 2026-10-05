@@ -15,7 +15,7 @@ Historical entries below are retained for provenance; they do not override the t
 | M6 / Q04 | OPEN (partial) | Stop drain and native run16 | full queue/cancel/reconnect matrix in final run |
 | M7 / Q07 | OPEN (partial) | 510-record capacity/JOURNAL_FULL | real-clock expiry, compaction/rotation |
 | M8 / Q08 | OPEN (partial) | host-only repeats `gt07-m8-process-20261005-05` and `-07` verify PID/start identity, forged-start refusal, owned-tree timeout and 64 MiB Job memory denial; actual worker exits and Job cleanup recorded (closure `e54646f8...58f71`) | final frozen M1–M9 matrix and source-specific manifest |
-| M9 / TX13 | OPEN (partial) | static `play-mutation` lane (`36e8d56b`) binds a generated-state mutation while Play is RUNNING to stale-capture rejection/UNKNOWN/no-replay; one-use binding refresh `20261005-gt07-binding-refresh` verified source=233/execution=235; fresh engine-free dry-run `gt06-gt07-m9-playmutation-20261005-01` exit 0 | one bounded native Play/capture conflict on the pinned fixture and repeat in the final frozen matrix |
+| M9 / TX13 | OPEN (partial) | static `play-mutation` lane (`36e8d56b`) binds a generated-state mutation while Play is RUNNING to stale-capture rejection/UNKNOWN/no-replay; one-use binding refresh `20261005-gt07-binding-refresh` verified source=233/execution=235; dry-run `...-01` exit 0; native `gt06-gt07-m9-playmutation-20261005-02` exit 0 with actual runtime/import exits, clean Job/tree and 18/18 checks | repeat in the final frozen matrix |
 
 ## Next
 
@@ -90,6 +90,21 @@ then exited 0 with no backend, process, or engine started. This is still
 authority-zero wiring evidence. Perform exactly one bounded native
 Play/capture conflict run before the final matrix; do not bypass the binding or
 convert the dry-run/static proof to acceptance.
+
+## Checkpoint, 05-10-2026 — M9 bounded native play-mutation
+
+Fresh dry-run `gt06-gt07-m9-playmutation-20261005-02` passed with execution
+closure `406a07878af08237ebd04bd0a4b061e0ed12c356d6586961c5e05f5e342287c1`.
+The bounded native run then exited 0. Its HTTP adversary recorded 18/18
+checks: mutation was made while Play was RUNNING, the first capture committed,
+the changed capture was rejected with `REPLAY_CAPTURE_CHANGED`, lookup stayed
+`UNKNOWN` with no artifact or replay, and no second runtime appeared. The
+import/runtime children both exited naturally 0; Job handles closed with zero
+active members and no retained handle; source and driver stayed unchanged.
+Raw evidence is immutable at
+`studio/.local/reviews/gt06-gt07-m9-playmutation-20261005-02/`. This is
+authority-zero diagnostic evidence; M9 still needs the final frozen M1–M9
+matrix and two same-hash critics.
 
 ## Checkpoint, 05-10-2026 — M7 design boundary
 
