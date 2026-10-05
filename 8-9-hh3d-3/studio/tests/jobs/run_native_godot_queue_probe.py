@@ -83,6 +83,26 @@ def _event_head(event_log) -> dict[str, object]:
     return {"sequence": head.sequence, "sha256": head.sha256, "size": head.size}
 
 
+_DURABLE_PHASES = frozenset(("COMMITTED", "FAILED", "UNKNOWN"))
+
+
+def _durable_response(journal, command_id: str, digest: str):
+    """Read a response only after the journal has made it durable.
+
+    ``lookup_response`` deliberately rejects PREPARED/STAGED/SELECTED records.
+    The crash snapshot is also taken at those phases, so probing it eagerly
+    turns a valid failpoint cut into a harness failure before the receipt is
+    written. A nonterminal response is absent; terminal response validation
+    still belongs to the journal and must fail if its receipt is malformed.
+    """
+    command = journal.lookup(command_id, digest)
+    if not isinstance(command, dict):
+        raise RuntimeError("CRASH_SNAPSHOT_COMMAND_MISSING")
+    if command.get("phase") not in _DURABLE_PHASES:
+        return None
+    return journal.lookup_response(command_id, digest)
+
+
 def _load_owner():
     name = "gt07_frozen_publication_owner"
     spec = importlib.util.spec_from_file_location(name, STUDIO / "godot-addon/publication_owner.py")
@@ -356,7 +376,7 @@ def _child(output: Path, binary: Path, run_id: str, operation: str,
             def captured_failpoint(phase):
                 if phase == failpoint_phase:
                     bundle = owner._journal.read_selected_bundle()
-                    terminal_raw = owner._journal.lookup_response(request.command_id, request.digest)
+                    terminal_raw = _durable_response(owner._journal, request.command_id, request.digest)
                     _write(output / "cut-state.json", {"phase": phase,
                         "journal": owner._journal.snapshot(),
                         "command": owner._journal.lookup(request.command_id, request.digest),

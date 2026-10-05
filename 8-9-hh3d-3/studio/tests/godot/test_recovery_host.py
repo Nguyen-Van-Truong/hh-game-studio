@@ -50,6 +50,18 @@ class RecoveryHostTests(unittest.TestCase):
             if thread is not None:thread.join(4)
         self.addCleanup(drain)
 
+    def test_lookup_nonterminal_command_does_not_read_missing_receipt(self):
+        self.value._recovery._journal.lookup.return_value = {
+            'phase': 'SELECTED', 'digest': self.body['digest']}
+        self.value._recovery.original_response.side_effect = AssertionError(
+            'nonterminal receipt must not be read')
+        result = self.value.lookup(
+            {'project_id': self.value.project_id, 'command_id': self.body['command_id']},
+            **self.args)
+        self.assertEqual(result.status, Status.UNKNOWN)
+        self.assertEqual(result.code, 'GODOT_RECOVERY_NOT_TERMINAL')
+        self.value._recovery.original_response.assert_not_called()
+
     def test_new_fence_and_durable_response_retry_after_stop(self):
         self.assertEqual(self.lease['fencing_epoch'],101)
         first=self.value.reconcile(self.body,**self.args)
