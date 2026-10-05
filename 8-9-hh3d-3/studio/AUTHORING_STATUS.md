@@ -1,7 +1,12 @@
-# O2 authoring state — 2026-10-03
+# O2 authoring state — 2026-10-05
 
-AUTHORITY=0. Branch `codex/o2-authoring-contract`; no merge before GT-06 ACCEPTED.
-Tools-plan O1–O9 governs; test counts/native diagnostics do not close AUTH or a WP.
+AUTHORITY=0. Branch `codex/o2-authoring-contract`; GT-06 is ACCEPTED and GT-07 is IN_PROGRESS under O10. O2 runs in parallel under O10.5. Gameplay-source remains disabled; test counts/native diagnostics do not close AUTH or a WP.
+
+## 2026-10-05 — O10 sync and focused regression
+
+- Synced main's `d3b74251` recovery guard and `76c61196` native Blender scenario into this worktree; merge commit `196aff84` is clean.
+- Fresh merged-tree pure regression passed: `python -B -m unittest -q studio.tests.godot.test_recovery_host studio.tests.jobs.test_native_godot_queue_probe_guards studio.tests.jobs.test_gt07_scenarios studio.tests.jobs.test_gt07_failpoints studio.tests.jobs.test_gt07_crash_process` — **35 tests**, actual exit **0**, 6.172s. No Godot, Blender, Docker, or gameplay-source dispatch occurred.
+- Prior worker PID `31468` was no longer running and no host-captured log/exit receipt was found; it is not used as evidence.
 
 ## 2026-10-03 — Local Godot pin binding restored
 
@@ -66,8 +71,8 @@ unknown and no retry is made without a reviewed reproducer.
   now fail closed before a native handoff.
 - The focused closure/path set passed 9 pure tests; the broader O2 pure set
   passed 95 tests with the worktree runtime configured. No native Godot,
-  Blender, Docker or gameplay claim was made; AUTHORITY remains 0 and the
-  branch stays unmerged until GT-06 is accepted.
+  Blender, Docker or gameplay claim was made; AUTHORITY remains 0. GT-06 is
+  accepted in the tools plan; GT-07/O2 acceptance remains open.
 
 ## 2026-10-03 — Saved-room asset identity binding
 
