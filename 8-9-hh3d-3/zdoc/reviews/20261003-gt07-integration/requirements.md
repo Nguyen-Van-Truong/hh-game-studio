@@ -14,7 +14,7 @@ Historical entries below are retained for provenance; they do not override the t
 | M5 / TX05/TX09 | OPEN | component fault helpers | filelock, cross-volume and injected disk/fsync cuts |
 | M6 / Q04 | OPEN (partial) | Stop drain and native run16 | full queue/cancel/reconnect matrix in final run |
 | M7 / Q07 | OPEN (partial) | 510-record capacity/JOURNAL_FULL | real-clock expiry, compaction/rotation |
-| M8 / Q08 | OPEN (partial) | host-only `gt07-m8-process-20261005-03` verified PID/start identity, forged-start refusal, owned-tree timeout and 64 MiB Job memory denial; actual worker exits and Job cleanup recorded | final frozen repeat and source-specific manifest |
+| M8 / Q08 | OPEN (partial) | host-only `gt07-m8-process-20261005-05` verified PID/start identity, forged-start refusal, owned-tree timeout and 64 MiB Job memory denial; actual worker exits and Job cleanup recorded (closure `e54646f8...58f71`) | final frozen repeat and source-specific manifest |
 | M9 / TX13 | OPEN (partial) | static `play-mutation` lane (`36e8d56b`) binds a generated-state mutation while Play is RUNNING to stale-capture rejection/UNKNOWN/no-replay; 19 focused tests exit 0 | one bounded native Play/capture conflict run on the pinned fixture and final frozen matrix |
 
 ## Next
@@ -48,7 +48,7 @@ N6: freeze closure once, run the full matrix plus focused regressions, map artif
 
 ## Checkpoint, 05-10-2026 — M8 host process ownership proof
 
-`gt07-m8-process-20261005-03` passed its dry-run/source binding and all three
+`gt07-m8-process-20261005-05` passed its dry-run/source binding and all three
 host-only scenarios. A forged PID/start-time identity was refused before any
 termination; the owned timeout killed only the gated root and descendant while
 an unrelated sentinel remained alive; and a real 64 MiB Windows Job memory cap
@@ -59,12 +59,17 @@ M1–M9 repeat and critic package remain required.
 
 ## Checkpoint, 05-10-2026 — M3 recovery run retained as invalid
 
-`gt07-native-godot-20261005-20` completed the queue receipt-loss/reopen path
-with actual editor/Job cleanup and the recovery invariants, but it is not
+`gt07-native-godot-20261005-21` reached the queue recovery harness but failed
+at the pinned validation import (`VALIDATION_PHASE_ORDER`) before a native
+effect; its cleanup is retained as an infrastructure diagnostic and must not
+be replayed without a changed resource/reproducer review.
+
+Earlier `gt07-native-godot-20261005-20` completed the queue receipt-loss/reopen
+path with actual editor/Job cleanup and the recovery invariants, but it is not
 usable evidence because a separate M9 source commit landed during the native
-window and the closeout reported `source_unchanged=false`. The raw directory
-is immutable and retained; the same scenario must be rerun once after the
-current source freeze with a fresh ID.
+window and the closeout reported `source_unchanged=false`. Both raw
+directories are immutable and retained; the same scenario must be rerun once
+after the current source freeze with a fresh ID.
 
 ## Checkpoint, 05-10-2026 - governed M4 conflict admission
 
