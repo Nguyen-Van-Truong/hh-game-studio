@@ -10,7 +10,7 @@ Historical entries below are retained for provenance; they do not override the t
 | M1 / Q01 | DONE (host) | `gt07-jobs-integration-20261004-03`, 46 tests | Repeat only in final frozen matrix |
 | M2 / Q03 | OPEN (partial) | static admission/lease guards; native writer FIFO `gt07-native-writer-fifo-20261005-02` | final frozen repeat and explicit coordinator revoke mapping |
 | M3 / Q05 | OPEN (partial) | Godot edit/save/script and receipt-loss run21; Blender queued export `gt07-native-queue-20261005-06`; all six Godot save crash cuts `gt07-native-godot-20261005-06..11`; queue-level consumer `gt07-cross-app-20261005-07` | queue-level crash/reload/last-good cut and frozen matrix |
-| M4 / Q06 | OPEN (partial) | `gt07-native-editor-conflict-20261005-01` actual EditorOwner edit/undo/redo plus stale-checkpoint rejection, clean exit | queue lease/manual `.tscn`/`.blend` conflict with no rollback overwrite |
+| M4 / Q06 | OPEN (partial) | `gt07-native-editor-conflict-20261005-01` direct diagnostic; governed `gt07-native-godot-20261005-16`/`-17` dry-runs and retained raw | queue lease/manual `.tscn`/`.blend` conflict with no rollback overwrite; native attempts retained (`-16` harness assertion, `-17` validation import INFRA) |
 | M5 / TX05/TX09 | OPEN | component fault helpers | filelock, cross-volume and injected disk/fsync cuts |
 | M6 / Q04 | OPEN (partial) | Stop drain and native run16 | full queue/cancel/reconnect matrix in final run |
 | M7 / Q07 | OPEN (partial) | 510-record capacity/JOURNAL_FULL | real-clock expiry, compaction/rotation |
@@ -45,6 +45,22 @@ queue-level Godot reload/ACK binding, followed by M2/M4, M5/M7, M6/M8/M9 with
 fresh IDs and preserved raw. `RELOAD` is a Godot consumer phase and is rejected
 for the Blender producer route.
 N6: freeze closure once, run the full matrix plus focused regressions, map artifacts, then send the same hash to two independent critics.
+
+## Checkpoint, 05-10-2026 - governed M4 conflict admission
+
+The scenario runner now exposes `godot-conflict` with the mandatory engine-free
+dry-run and an opt-in native injection at the queue lease boundary. The injected
+manual editor projection must leave the owner response `UNKNOWN` with
+`lookup.reconcile`, preserve the manual `[8,8,8]` state, and retain the durable
+UNKNOWN journal/queue record without replay. The pure runner/owner/dispatcher
+suite is 61 tests, exit 0. Dry-run `gt07-native-godot-20261005-17` passed
+with source closure `3f84b6e783503d596d19afb1ab6a39bafc81301a299787638e8e2ea6c1ec7e83`.
+Native `-16` reached the intended UNKNOWN response but the first harness version
+incorrectly inspected a held owner; its raw is retained. Native `-17` was then
+blocked during ValidationOwner import because the Docker/Godot profile process
+returned SIGKILL before phase ordering; actual child/Job cleanup is clean. This
+is an infrastructure diagnostic, not M4 proof; do not rerun until the resource
+condition and reproducer review change.
 
 ## Checkpoint, 05-10-2026 — native editor conflict diagnostic
 

@@ -267,7 +267,8 @@ def _native_recovery_state(owner) -> dict[str, object]:
 
 def _child(output: Path, binary: Path, run_id: str, operation: str,
            recover_after_loss: bool, source: dict[str, str], closure: str,
-           failpoint_phase: str | None = None) -> int:
+           failpoint_phase: str | None = None,
+           manual_conflict: bool = False) -> int:
     from studio.host.core.transport import epoch_ms
     from studio.host.jobs.native_dispatch import GodotOwnerBinding, NativeOwnerDispatcher
     from studio.host.jobs.queue_owner import QueueOwner
@@ -480,32 +481,68 @@ def _child(output: Path, binary: Path, run_id: str, operation: str,
                                                          and submit_calls == 1
                                                          and asdict(recovered[0].fence) == reservation_fence)})
         else:
+            if manual_conflict:
+                # M4 boundary: a second writer mutates the editor after the
+                # durable checkpoint and before this owner applies its edit.
+                original_prepare_edit = owner._editor.prepare_edit
+                injected = False
+                def conflict_prepare(*args, **kwargs):
+                    nonlocal injected
+                    if not injected:
+                        injected = True
+                        current = owner.inspect()
+                        owner._editor.apply_projection({
+                            "operation": "scene.node.update",
+                            "command_id": "manual.editor.edit",
+                            "expected_revision": current["revision"],
+                            "expected_generation": current["generation"],
+                            "target_stable_id": "root",
+                            "payload": {"expected_generation": current["generation"],
+                                        "changes": {"position": [8, 8, 8]}}})
+                    return original_prepare_edit(*args, **kwargs)
+                owner._editor.prepare_edit = conflict_prepare
             response = dispatch.advance(reservation)
         steps.append("advanced")
         steps.append(f"now_after_advance:{epoch_ms()}")
-        if response.status is not Status.COMMITTED:
+        if manual_conflict:
+            if (response.status is not Status.UNKNOWN
+                    or response.code != "GODOT_EDIT_RECONCILE_REQUIRED"
+                    or response.postconditions.get("public_ack") is not False
+                    or response.postconditions.get("next_action") != "lookup.reconcile"):
+                raise RuntimeError("NATIVE_GODOT_CONFLICT_NOT_UNKNOWN")
+            after = owner._editor.inspect()
+            root = next(item for item in after["state"]["nodes"] if item["stable_id"] == "root")
+            if root["position"] != [8, 8, 8]:
+                raise RuntimeError("NATIVE_GODOT_MANUAL_STATE_NOT_PRESERVED")
+            durable = owner._journal.lookup(request.command_id, request.digest)
+            if not isinstance(durable, dict) or durable.get("phase") != "UNKNOWN":
+                raise RuntimeError("NATIVE_GODOT_CONFLICT_NOT_DURABLE")
+            passed = True
+        elif response.status is not Status.COMMITTED:
             raise RuntimeError("NATIVE_GODOT_QUEUE_NOT_COMMITTED")
-        after = owner.inspect()
-        root = next(item for item in after["state"]["nodes"] if item["stable_id"] == "root")
-        if operation == "scene.node.update" and root["position"] != [3, 4, 5]:
-            raise RuntimeError("NATIVE_GODOT_READBACK_POSITION_MISMATCH")
-        if operation == "scene.save" and (response.code != "GODOT_MANAGED_SCENE_SAVED"
-                or root["position"] != [6, 7, 8]
-                or after["generation"] <= before["generation"]
-                or after["can_undo"] is not False or after["can_redo"] is not False):
-            raise RuntimeError("NATIVE_GODOT_SCENE_SAVE_READBACK_MISMATCH")
-        if operation == "script_text.replace" and (response.code != "GODOT_MANAGED_SCRIPT_REPLACED"
-                or after["generation"] <= before["generation"]
-                or after["working_files"][owner.contract.SCRIPT_PATH]["sha256"] !=
-                   hashlib.sha256(request.payload["text"].encode("utf-8")).hexdigest()):
-            raise RuntimeError("NATIVE_GODOT_SCRIPT_REPLACE_READBACK_MISMATCH")
+        if not manual_conflict:
+            after = owner.inspect()
+            root = next(item for item in after["state"]["nodes"] if item["stable_id"] == "root")
+            if operation == "scene.node.update" and root["position"] != [3, 4, 5]:
+                raise RuntimeError("NATIVE_GODOT_READBACK_POSITION_MISMATCH")
+            if operation == "scene.save" and (response.code != "GODOT_MANAGED_SCENE_SAVED"
+                    or root["position"] != [6, 7, 8]
+                    or after["generation"] <= before["generation"]
+                    or after["can_undo"] is not False or after["can_redo"] is not False):
+                raise RuntimeError("NATIVE_GODOT_SCENE_SAVE_READBACK_MISMATCH")
+            if operation == "script_text.replace" and (response.code != "GODOT_MANAGED_SCRIPT_REPLACED"
+                    or after["generation"] <= before["generation"]
+                    or after["working_files"][owner.contract.SCRIPT_PATH]["sha256"] !=
+                       hashlib.sha256(request.payload["text"].encode("utf-8")).hexdigest()):
+                raise RuntimeError("NATIVE_GODOT_SCRIPT_REPLACE_READBACK_MISMATCH")
         successor_editor = owner._editor
         successor_identity = successor_editor.identity
         lookup = binding.lookup()
         if lookup.as_dict() != response.as_dict():
             raise RuntimeError("NATIVE_GODOT_LOOKUP_MISMATCH")
         broker_row = queue.broker.lookup(row.job.job_id)
-        if broker_row is None or broker_row.state != "COMMITTED":
+        expected_queue_state = "UNKNOWN" if manual_conflict else "COMMITTED"
+        if broker_row is None or broker_row.state != expected_queue_state:
             raise RuntimeError("DURABLE_GODOT_RECEIPT_NOT_COMMITTED")
         queue_state = broker_row.state
         if recover_after_loss:
@@ -684,7 +721,8 @@ def _recover_crash(output: Path, binary: Path, run_id: str, source: dict, closur
 
 
 def run(output: Path, binary: Path, run_id: str, operation: str,
-        recover_after_loss: bool, failpoint_phase: str | None = None) -> int:
+        recover_after_loss: bool, failpoint_phase: str | None = None,
+        manual_conflict: bool = False) -> int:
     output = output.resolve()
     # The frozen child runs with its snapshot as cwd.  Keep the pinned editor
     # executable absolute so admission cannot silently resolve it under the
@@ -721,6 +759,8 @@ def run(output: Path, binary: Path, run_id: str, operation: str,
              "--run-id", run_id, "--operation", operation]
     if recover_after_loss:
         child.append("--recover-after-loss")
+    if manual_conflict:
+        child.append("--manual-conflict")
     if failpoint_phase is not None:
         child.extend(["--failpoint-phase", failpoint_phase])
     environment = os.environ.copy()
@@ -793,6 +833,7 @@ def main(argv=None) -> int:
                                                  "script_text.replace"),
                         default="scene.node.update")
     parser.add_argument("--recover-after-loss", action="store_true")
+    parser.add_argument("--manual-conflict", action="store_true")
     parser.add_argument("--failpoint-phase", choices=("PREPARED", "VALIDATED", "ACTIVATING",
                                                         "COMMITTED", "RELOAD", "ACK"))
     parser.add_argument("--frozen", action="store_true")
@@ -809,7 +850,8 @@ def main(argv=None) -> int:
                                   manifest["files"], manifest["source_closure_sha256"])
         return _child(args.output.resolve(), args.binary.resolve(), args.run_id,
                       args.operation, args.recover_after_loss,
-                      manifest["files"], manifest["source_closure_sha256"], args.failpoint_phase)
+                      manifest["files"], manifest["source_closure_sha256"], args.failpoint_phase,
+                      args.manual_conflict)
     if args.output.name != args.run_id:
         parser.error("output basename must equal the run ID")
     if args.recover_after_loss and args.operation != "script_text.replace":

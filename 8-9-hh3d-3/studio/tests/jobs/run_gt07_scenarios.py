@@ -40,6 +40,9 @@ SCENARIOS = {
     "godot-recovery": {"kind": "godot", "operation": "script_text.replace",
                        "probe": "run_native_godot_queue_probe.py", "suffix": "recovery",
                    "max_horizon_ms": 90_000, "recover_after_loss": True, "failpoint_phases": ()},
+    "godot-conflict": {"kind": "godot", "operation": "scene.node.update",
+                       "probe": "run_native_godot_queue_probe.py", "suffix": "conflict",
+                       "max_horizon_ms": 30_000, "manual_conflict": True, "failpoint_phases": ()},
     "blender-box": {"kind": "blender", "operation": "mesh.create_box",
                     "probe": "run_native_blender_queue_probe.py", "suffix": "blender",
                     "max_horizon_ms": 5_000, "failpoint_phases": ()},
@@ -258,7 +261,8 @@ def _run_one(name: str, args: argparse.Namespace, index: int = 0) -> dict[str, o
         else:
             exit_code = probe.run(output, binary, output.name, scenario["operation"],
                                   bool(scenario.get("recover_after_loss")),
-                                  getattr(args, "failpoint_phase", None))
+                                  getattr(args, "failpoint_phase", None),
+                                  bool(scenario.get("manual_conflict")))
     return {"scenario": name, "run_id": output.name, "exit_code": exit_code,
             "dry_run": check, "output": str(output)}
 

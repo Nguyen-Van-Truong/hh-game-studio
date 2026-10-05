@@ -23,7 +23,7 @@ spec.loader.exec_module(module)
 class GT07ScenarioAdmissionTests(unittest.TestCase):
     def test_matrix_is_explicit_and_deadlines_are_bounded(self):
         self.assertEqual(set(module.SCENARIOS), {
-            "godot-edit", "godot-save", "godot-script", "godot-recovery",
+            "godot-edit", "godot-save", "godot-script", "godot-recovery", "godot-conflict",
             "blender-box", "blender-export"})
         self.assertEqual({row["max_horizon_ms"] for row in module.SCENARIOS.values()},
                          {5_000, 30_000, 90_000})
@@ -33,6 +33,12 @@ class GT07ScenarioAdmissionTests(unittest.TestCase):
             result = module._contract_dry_run("blender-box", module.SCENARIOS["blender-box"])
         self.assertTrue(result["admission_validated"])
         self.assertTrue(result["public_lease_route_validated"])
+        self.assertFalse(result["native_effect"])
+
+    def test_godot_conflict_contract_is_engine_free(self):
+        with patch("subprocess.Popen", side_effect=AssertionError("unexpected engine")):
+            result = module._contract_dry_run("godot-conflict", module.SCENARIOS["godot-conflict"])
+        self.assertTrue(result["admission_validated"])
         self.assertFalse(result["native_effect"])
 
     def test_blender_publication_contract_uses_exact_owner_deadline(self):
