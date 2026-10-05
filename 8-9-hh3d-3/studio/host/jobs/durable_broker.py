@@ -27,7 +27,8 @@ from ..core.private_events import (EventHead, EventLogError, MAX_EVENT_BYTES,
                                    MAX_LOG_BYTES, MAX_RECORDS, PrivateEventLog)
 from .dispatch_policy import (ActiveJob, Cursor, DispatchPolicyError, PendingJob,
                               QueueLimits, _identifier, _integer, select_next)
-from .segmented_journal import SEGMENT_SCHEMA, QueueJournalManager
+from .segmented_journal import (SEGMENT_SCHEMA, QueueJournalManager,
+                                DEFAULT_RETRY_HORIZON_MS)
 
 _SCHEMA = 'hh-durable-dispatch-1'
 _TERMINAL = frozenset({'COMMITTED', 'REJECTED', 'CANCELED'})
@@ -41,7 +42,9 @@ class BrokerError(SafetyViolation):
         self.next_action = ('Stop admission; preserve the journal and reconcile with its registered owner.'
                             if outcome_unknown else 'Inspect the queue or supply a corrected trusted request.')
         if code == 'BROKER_JOURNAL_FULL':
-            self.next_action = 'Stop new admission; drain/reconcile existing jobs. Journal rotation is not implemented.'
+            self.next_action = 'Stop new admission; drain/reconcile existing jobs, then ask the queue owner to perform journal rotation after eligible receipts expire. Preserve unresolved reservations.'
+        elif code == 'BROKER_RETRY_EXPIRED':
+            self.next_action = 'Read the archived result with lookup; this ID cannot execute again.'
         super().__init__(code)
 
 
@@ -112,6 +115,8 @@ class _Projection:
     generation: int = 0
     now_ms: int = 0
     configured: bool = False
+    stream_id: str | None = None
+    retry_horizon_ms: int = DEFAULT_RETRY_HORIZON_MS
     terminal_ms: dict[str, int] = field(default_factory=dict)
     checkpoint_meta: dict | None = None
     checkpoint_rows: dict[int, dict] = field(default_factory=dict)
@@ -137,7 +142,8 @@ class DurableBroker:
     must provision/reopen that dedicated log through its existing protected
     custody route; this class never provisions a filesystem or recovery anchor.
     """
-    def __init__(self, events: PrivateEventLog, *, limits: QueueLimits = QueueLimits()) -> None:
+    def __init__(self, events: PrivateEventLog, *, limits: QueueLimits = QueueLimits(),
+                 retry_horizon_ms: int | None = None) -> None:
         _need(type(events) is PrivateEventLog, 'BROKER_TRUSTED_LOG_REQUIRED')
         self._validate_policy(_Projection(), limits, 0)
         self._events, self.limits = events, limits
@@ -155,14 +161,21 @@ class DurableBroker:
             binding = events.binding()
             _need(self._custody.binding.witnessed == binding.witnessed,
                   'BROKER_CUSTODY_MISMATCH')
-            # Physical segment identities rotate. Fences use the immutable
-            # custody storage ID so an old reservation remains comparable.
             self._stream_id = f'queue:{self._custody._registry.local_id}'
-            self._head, self._state = events.fold(_Projection(), self._fold)
+            # Old CONFIG records had physical fences. Keep those exact fences
+            # when folding old logs; new CONFIG explicitly records its stream.
+            legacy_stream = f'{binding.stream.volume}:{binding.stream.file_id}'
+            self._head, self._state = events.fold(_Projection(stream_id=legacy_stream), self._fold)
+            _need(self._state.checkpoint_meta is None, 'BROKER_CHECKPOINT_INCOMPLETE')
             self._recovered = {key for key, row in self._state.records.items()
                                if row.state in {'RESERVED', 'UNKNOWN'}}
             if not self._state.configured:
-                self._append({'kind': 'CONFIG', 'limits': asdict(limits)})
+                horizon = DEFAULT_RETRY_HORIZON_MS if retry_horizon_ms is None else retry_horizon_ms
+                self._append({'kind': 'CONFIG', 'limits': asdict(limits),
+                              'stream_id': self._stream_id, 'retry_horizon_ms': horizon})
+            elif retry_horizon_ms is not None:
+                _need(retry_horizon_ms == self._state.retry_horizon_ms,
+                      'BROKER_RETENTION_PROFILE_MISMATCH')
         except BaseException:
             self.close()
             raise
@@ -180,6 +193,21 @@ class DurableBroker:
                                stopped=state.stopped, limits=limits)
         except DispatchPolicyError as exc:
             raise BrokerError(str(exc)) from None
+
+    @property
+    def retry_horizon_ms(self):
+        return self._state.retry_horizon_ms
+
+    @classmethod
+    def project_archive(cls, events, *, limits, logical_stream_id):
+        """Pure bounded fold of one witnessed segment; no writer registration."""
+        reader = object.__new__(cls)
+        reader.limits, reader._stream_id = limits, logical_stream_id
+        binding = events.binding()
+        initial = _Projection(stream_id=f'{binding.stream.volume}:{binding.stream.file_id}')
+        _, state = events.fold(initial, reader._fold)
+        _need(state.configured and state.checkpoint_meta is None, 'BROKER_CHECKPOINT_INCOMPLETE')
+        return reader, state
 
     @contextmanager
     def _locked(self) -> Iterator[None]:
@@ -221,11 +249,19 @@ class DurableBroker:
         state = replace(previous, records=dict(previous.records),
                         terminal_ms=dict(previous.terminal_ms))
         if kind == 'CONFIG':
-            _shape(event, ('schema', 'kind', 'limits'))
+            legacy_keys = {'schema', 'kind', 'limits'}
+            _need(set(event) in (legacy_keys, legacy_keys | {'stream_id', 'retry_horizon_ms'}))
             _need(not state.configured and type(event['limits']) is dict
                   and all(type(v) is int for v in event['limits'].values())
                   and event['limits'] == asdict(self.limits), 'BROKER_PROFILE_MISMATCH')
             state.configured = True
+            if 'stream_id' in event:
+                _need(event['stream_id'] == self._stream_id, 'BROKER_STREAM_MISMATCH')
+                _need(type(event['retry_horizon_ms']) is int and
+                      60_000 <= event['retry_horizon_ms'] <= DEFAULT_RETRY_HORIZON_MS,
+                      'BROKER_RETENTION_INVALID')
+                state.stream_id = event['stream_id']
+                state.retry_horizon_ms = event['retry_horizon_ms']
             return state
         _need(state.configured, 'BROKER_CONFIG_REQUIRED')
         if kind == 'ENQUEUE':
@@ -254,11 +290,17 @@ class DurableBroker:
             state.records[job.job_id] = JobRecord(job, event['command_sha256'], 'QUEUED')
             state.sequence, state.now_ms = job.sequence, event['now_ms']
         elif kind == 'RESERVE':
-            _shape(event, ('schema', 'kind', 'now_ms', 'job_id', 'generation', 'cursor'))
+            keys = {'schema', 'kind', 'now_ms', 'job_id', 'generation', 'cursor'}
+            _need(set(event) in (keys, keys | {'terminal_ms'}))
             _need(not state.stopped, 'BROKER_STOPPED')
             _need(_integer(event['now_ms']) and event['now_ms'] >= state.now_ms,
                   'BROKER_CLOCK_INVALID')
             state = self._expire_pending(state, event['now_ms'])
+            if 'terminal_ms' in event:
+                _need(_integer(event['terminal_ms']), 'BROKER_CLOCK_INVALID')
+                for key, row in previous.records.items():
+                    if row.state == 'QUEUED' and state.records[key].state == 'REJECTED':
+                        state.terminal_ms[key] = event['terminal_ms']
             chosen = self._validate_policy(state, self.limits, state.now_ms)
             _need(event['job_id'] == (chosen.job_id if chosen else None), 'BROKER_SELECTION_INVALID')
             cursor = chosen.next_cursor if chosen else state.cursor
@@ -269,7 +311,7 @@ class DurableBroker:
                 row = state.records[chosen.job_id]
                 state.generation += 1
                 state.records[chosen.job_id] = replace(row, state='RESERVED',
-                                                       fence=Fence(self._stream_id, state.generation))
+                                                       fence=Fence(state.stream_id, state.generation))
                 state.cursor = cursor
             else:
                 _need(event['generation'] is None)
@@ -295,14 +337,30 @@ class DurableBroker:
             if event['outcome'] in _TERMINAL:
                 if 'terminal_ms' in event:
                     _need(_integer(event['terminal_ms']) and _integer(event['expires_ms'])
-                          and event['expires_ms'] >= event['terminal_ms'], 'BROKER_RESULT_INVALID')
+                          and event['expires_ms'] == event['terminal_ms'] + state.retry_horizon_ms,
+                          'BROKER_RESULT_INVALID')
                     state.terminal_ms[row.job.job_id] = event['terminal_ms']
         elif kind == 'STOP':
-            _shape(event, ('schema', 'kind'))
+            _need(set(event) in ({'schema', 'kind'}, {'schema', 'kind', 'terminal_ms'}))
             _need(not state.stopped, 'BROKER_STOPPED')
+            if 'terminal_ms' in event:
+                _need(_integer(event['terminal_ms']), 'BROKER_CLOCK_INVALID')
+                for key, row in state.records.items():
+                    if row.state == 'QUEUED':
+                        state.terminal_ms[key] = event['terminal_ms']
             state.stopped = True
             state.records = {key: replace(row, state='CANCELED') if row.state == 'QUEUED' else row
                              for key, row in state.records.items()}
+        elif kind == 'ARCHIVE_RECEIPT':
+            _shape(event, ('schema', 'kind', 'row'))
+            key, row, terminal = self._record_from(event['row'])
+            _need(row.state in _TERMINAL and key not in state.records
+                  and row.job.sequence <= state.sequence
+                  and len(state.records) < self.limits.receipts,
+                  'BROKER_ARCHIVE_DEPENDENCY_INVALID')
+            state.records[key] = row
+            if terminal is not None:
+                state.terminal_ms[key] = terminal
         else:
             raise BrokerError('BROKER_EVENT_INVALID')
         self._validate_policy(state, self.limits, state.now_ms)
@@ -360,8 +418,11 @@ class DurableBroker:
         terminal = value['terminal_ms']
         _need(terminal is None or _integer(terminal), 'BROKER_CHECKPOINT_ROW_INVALID')
         state = value['state']
-        if state in {'RESERVED', 'UNKNOWN'}:
+        if state == 'RESERVED':
             _need(fence is not None and value['receipt_sha256'] is None and terminal is None,
+                  'BROKER_CHECKPOINT_ROW_INVALID')
+        elif state == 'UNKNOWN':
+            _need(fence is not None and _digest(value['receipt_sha256']) and terminal is None,
                   'BROKER_CHECKPOINT_ROW_INVALID')
         elif state == 'QUEUED':
             _need(fence is None and value['receipt_sha256'] is None and terminal is None,
@@ -384,14 +445,22 @@ class DurableBroker:
                         terminal_ms=dict(previous.terminal_ms),
                         checkpoint_rows=dict(previous.checkpoint_rows))
         if kind == 'CHECKPOINT_BEGIN':
-            _shape(event, ('schema', 'kind', 'generation', 'logical_stream_id',
-                           'previous', 'row_count', 'now_ms', 'cursor', 'stopped',
-                           'logical_generation'))
+            keys = {'schema', 'kind', 'generation', 'logical_stream_id',
+                    'previous', 'row_count', 'now_ms', 'cursor', 'stopped',
+                    'logical_generation'}
+            optional = {'retry_horizon_ms', 'sequence'}
+            _need(set(event) in (keys, keys | {'retry_horizon_ms'},
+                                  keys | {'sequence'}, keys | optional))
             _need(not previous.configured and state.checkpoint_meta is None
                   and _integer(event['generation'], 1) and event['logical_stream_id'] == self._stream_id
                   and type(event['row_count']) is int and 0 <= event['row_count'] <= self.limits.receipts
                   and _integer(event['now_ms']) and type(event['cursor']) is dict
                   and type(event['stopped']) is bool and _integer(event['logical_generation']))
+            if 'retry_horizon_ms' in event:
+                _need(type(event['retry_horizon_ms']) is int
+                      and 60_000 <= event['retry_horizon_ms'] <= DEFAULT_RETRY_HORIZON_MS)
+            if 'sequence' in event:
+                _need(type(event['sequence']) is int and 0 <= event['sequence'] <= (1 << 53) - 1)
             state.checkpoint_meta = event
             state.checkpoint_rows = {}
             return state
@@ -436,8 +505,10 @@ class DurableBroker:
               'BROKER_CHECKPOINT_CURSOR_INVALID')
         state = replace(state, records=records, terminal_ms=terminal_ms,
                         cursor=Cursor(cursor_value.get('last_project'), sessions),
-                        stopped=meta['stopped'], sequence=max((row.job.sequence for row in records.values()), default=0),
+                        stopped=meta['stopped'], sequence=meta.get('sequence', max((row.job.sequence for row in records.values()), default=0)),
                         generation=meta['logical_generation'], now_ms=meta['now_ms'], configured=True,
+                        stream_id=meta['logical_stream_id'],
+                        retry_horizon_ms=meta.get('retry_horizon_ms', state.retry_horizon_ms),
                         checkpoint_meta=None, checkpoint_rows={})
         self._validate_policy(state, self.limits, state.now_ms)
         return state
@@ -494,7 +565,7 @@ class DurableBroker:
                     archived_row, _ = archived
                     _need(archived_row['command_sha256'] == request.command_sha256,
                           'BROKER_ID_CONFLICT')
-                    return self._record_from(archived_row)[1]
+                    raise BrokerError('BROKER_RETRY_EXPIRED')
             job = PendingJob(request.job_id, request.project_id, request.session_id,
                              self._state.sequence + 1, request.deadline_ms,
                              request.resources, request.dependencies)
@@ -517,10 +588,13 @@ class DurableBroker:
                           for row in self._state.records.values())
             if not chosen and not expired:
                 return None
-            self._append({'kind': 'RESERVE', 'now_ms': now_ms,
+            reserve_event = {'kind': 'RESERVE', 'now_ms': now_ms,
                           'job_id': chosen.job_id if chosen else None,
                           'generation': self._state.generation + 1 if chosen else None,
-                          'cursor': self._cursor_value(chosen.next_cursor if chosen else self._state.cursor)})
+                          'cursor': self._cursor_value(chosen.next_cursor if chosen else self._state.cursor)}
+            if expired:
+                reserve_event['terminal_ms'] = now_ms
+            self._append(reserve_event)
             if self._stop_requested:
                 return None
             return self._reservation(self._state.records[chosen.job_id]) if chosen else None
@@ -546,7 +620,7 @@ class DurableBroker:
                           'command_sha256': result.command_sha256,
                           'receipt_sha256': result.receipt_sha256,
                           'terminal_ms': terminal_ms,
-                          'expires_ms': terminal_ms + 24 * 60 * 60 * 1000})
+                          'expires_ms': terminal_ms + self._state.retry_horizon_ms})
             return self._state.records[row.job.job_id]
 
     def _checkpoint_rows(self, *, now_ms: int, retry_horizon_ms: int) -> list[dict]:
@@ -569,11 +643,14 @@ class DurableBroker:
         _need(type(journal) is QueueJournalManager and journal.current is self._events,
               'BROKER_SEGMENT_OWNER_MISMATCH')
         horizon = journal.retry_horizon_ms if retry_horizon_ms is None else retry_horizon_ms
+        _need(horizon == self._state.retry_horizon_ms,
+              'BROKER_RETENTION_PROFILE_MISMATCH')
         with self._locked():
             rows = self._checkpoint_rows(now_ms=now_ms, retry_horizon_ms=horizon)
             state = {'now_ms': now_ms, 'cursor': self._cursor_value(self._state.cursor),
                      'stopped': self._state.stopped,
-                     'logical_generation': self._state.generation}
+                     'logical_generation': self._state.generation,
+                     'sequence': self._state.sequence}
             checkpoint = journal.prepare(rows, state, reserve_records=0)
             try:
                 # Project the exact checkpoint before any custody barrier. If
@@ -598,13 +675,16 @@ class DurableBroker:
                                if row.state in {'RESERVED', 'UNKNOWN'}}
             return checkpoint
 
-    def stop(self) -> BrokerSnapshot:
+    def stop(self, *, now_ms: int | None = None) -> BrokerSnapshot:
         # Set before waiting for the current synchronous storage operation.
         # A failed barrier is UNKNOWN, never a claim of persisted Stop.
         self._stop_requested = True
         with self._locked():
             if not self._state.stopped:
-                self._append({'kind': 'STOP'})
+                terminal_ms = time.time_ns() // 1_000_000 if now_ms is None else now_ms
+                _need(_integer(terminal_ms) and terminal_ms >= self._state.now_ms,
+                      'BROKER_CLOCK_INVALID')
+                self._append({'kind': 'STOP', 'terminal_ms': terminal_ms})
             return self._snapshot()
 
     def lookup(self, job_id: str) -> JobRecord | None:

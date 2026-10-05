@@ -11,7 +11,7 @@ from pathlib import Path
 from ..core.custody import WitnessCustody, binding_from, binding_value, _path, _same_binding
 from ..core.limits import SafetyViolation, canonical_json, parse_json_utf8
 from ..core.private_events import EventHead, PrivateEventLog, MAX_RECORDS, MAX_LOG_BYTES, MAX_EVENT_BYTES
-from .dispatch_policy import _identifier
+from .dispatch_policy import QueueLimits, _identifier
 
 SEGMENT_SCHEMA = 'hh-queue-segment-1'
 DEFAULT_RETRY_HORIZON_MS = 86_400_000
@@ -65,13 +65,23 @@ def inspect_checkpoint(log):
         if record.head.sequence == 2:
             if event.get('schema') != SEGMENT_SCHEMA:
                 return None
-            _need(set(event) == {'schema', 'kind', 'generation', 'logical_stream_id', 'previous', 'row_count', 'now_ms', 'cursor', 'stopped', 'logical_generation'}
+            header_keys = {'schema', 'kind', 'generation', 'logical_stream_id', 'previous', 'row_count', 'now_ms', 'cursor', 'stopped', 'logical_generation'}
+            optional_keys = {'retry_horizon_ms', 'sequence'}
+            _need(set(event) in (header_keys, header_keys | {'retry_horizon_ms'},
+                                  header_keys | {'sequence'}, header_keys | optional_keys)
                   and event['kind'] == 'CHECKPOINT_BEGIN', 'SEGMENT_HEADER_INVALID')
             _need(type(event['generation']) is int and event['generation'] > 0
                   and type(event['row_count']) is int and 0 <= event['row_count'] <= MAX_RECORDS - 3
                   and _identifier(event['logical_stream_id']) and type(event['now_ms']) is int
                   and type(event['cursor']) is dict and type(event['stopped']) is bool
                   and type(event['logical_generation']) is int, 'SEGMENT_HEADER_INVALID')
+            if 'retry_horizon_ms' in event:
+                _need(type(event['retry_horizon_ms']) is int
+                      and 60_000 <= event['retry_horizon_ms'] <= DEFAULT_RETRY_HORIZON_MS,
+                      'SEGMENT_HORIZON_INVALID')
+            if 'sequence' in event:
+                _need(type(event['sequence']) is int and 0 <= event['sequence'] <= (1 << 53) - 1,
+                      'SEGMENT_SEQUENCE_INVALID')
             previous = descriptor_from(event['previous'])
             _need(previous['generation'] + 1 == event['generation'], 'SEGMENT_CHAIN_INVALID')
             begin = event
@@ -140,7 +150,8 @@ class QueueJournalManager:
         generation = 0 if self.checkpoint is None else self.checkpoint.begin['generation']
         previous = {'generation': generation, 'path': str(self.current.root), 'binding': binding_value(old)}
         begin = {'schema': SEGMENT_SCHEMA, 'kind': 'CHECKPOINT_BEGIN',
-                 'generation': generation + 1, 'logical_stream_id': self.logical_stream_id, 'previous': previous, 'row_count': len(rows), 'now_ms': state['now_ms'], 'cursor': state['cursor'], 'stopped': state['stopped'], 'logical_generation': state['logical_generation']}
+                 'generation': generation + 1, 'logical_stream_id': self.logical_stream_id, 'previous': previous, 'row_count': len(rows), 'now_ms': state['now_ms'], 'cursor': state['cursor'], 'stopped': state['stopped'], 'logical_generation': state['logical_generation'], 'retry_horizon_ms': self.retry_horizon_ms}
+        begin['sequence'] = state.get('sequence', 0)
         digest = checkpoint_digest(begin, rows)
         events = [begin] + [{'schema': SEGMENT_SCHEMA, 'kind': 'CHECKPOINT_ROW', 'index': i, 'row': row}
                             for i, row in enumerate(rows)]
@@ -245,32 +256,17 @@ class QueueJournalManager:
                 _need(_same_binding(log.binding(), binding), 'SEGMENT_ARCHIVE_SUFFIX')
                 checkpoint = inspect_checkpoint(log)
                 _need(checkpoint is None or checkpoint.begin['generation'] == previous['generation'], 'SEGMENT_CHAIN_INVALID')
-                enqueue, result, found = [None], [None], [None]
-                enqueue_count = result_count = row_count = 0
-                def reducer(_, record):
-                    nonlocal enqueue_count, result_count, row_count
-                    event = parse_json_utf8(record.event)
-                    if event.get('kind') == 'ENQUEUE' and event.get('job', {}).get('job_id') == job_id:
-                        enqueue_count += 1
-                        enqueue[0] = event
-                    if event.get('kind') == 'OWNER_RESULT' and event.get('job_id') == job_id:
-                        result_count += 1
-                        result[0] = event
-                    if event.get('kind') == 'CHECKPOINT_ROW' and event.get('row', {}).get('job', {}).get('job_id') == job_id:
-                        row_count += 1
-                        found[0] = event['row']
-                    return None
-                log.fold(None, reducer)
-                _need(enqueue_count <= 1 and result_count <= 1 and row_count <= 1,
-                      'SEGMENT_ARCHIVE_DUPLICATE')
-                row = found[0]
-                if row is None and enqueue[0] is not None and result[0] is not None:
-                    event, outcome = enqueue[0], result[0]
-                    row = {'job': event['job'],
-                           'command_sha256': event['command_sha256'],
-                           'state': outcome['outcome'], 'fence': outcome['fence'],
-                           'receipt_sha256': outcome['receipt_sha256'],
-                           'terminal_ms': outcome.get('terminal_ms')}
+                # Reuse the live state machine: UNKNOWN may be followed by a
+                # terminal result, while Stop/expiry only affect queued jobs.
+                # This avoids a second, weaker interpretation of the journal.
+                from .durable_broker import DurableBroker
+                reader, state = DurableBroker.project_archive(
+                    log, limits=QueueLimits() if limits is None else limits,
+                    logical_stream_id=self.logical_stream_id)
+                record = state.records.get(job_id)
+                row = None if record is None else reader._record_value(
+                    record, state.terminal_ms.get(job_id))
+                del reader, state
                 next_previous = None if checkpoint is None else checkpoint.begin['previous']
             except BaseException as exc:
                 cleanup = getattr(exc, 'cleanup_owner', None)

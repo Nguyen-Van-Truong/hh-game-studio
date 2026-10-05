@@ -17,9 +17,10 @@ from studio.host.core.custody_registry import BASE_PATH, RegistryCustody
 from studio.host.core.private_events import PrivateEventLog
 from studio.host.core.private_store import PrivateBlobStore
 from studio.host.core.safe_replace import ProtectedFileRoot
-from studio.host.jobs.segmented_journal import QueueJournalManager, descriptor_from
+from studio.host.jobs.segmented_journal import (QueueJournalManager, SegmentError,
+                                                 SEGMENT_SCHEMA, descriptor_from)
 from studio.host.jobs.queue_owner import QueueOwner
-from studio.host.jobs.durable_broker import BrokerError, JobRequest, OwnerResult
+from studio.host.jobs.durable_broker import BrokerError, DurableBroker, JobRequest, OwnerResult
 
 
 @unittest.skipUnless(os.name == 'nt', 'Windows native custody required')
@@ -43,21 +44,18 @@ class SegmentedJournalTests(unittest.TestCase):
                               blob_root=self.blobs.root, blob_identity=self.blobs.root_identity,
                               event_root=self.old.root, event_binding=self.old.binding())
         self.old.bind_custody(self.custody)
-        self._append({'schema': 'hh-durable-dispatch-1', 'kind': 'ENQUEUE',
-                      'job': {'job_id': 'old-job', 'project_id': 'p', 'session_id': 's',
-                              'sequence': 1, 'deadline_ms': 100000,
-                              'resources': ['r'], 'dependencies': []},
-                      'command_sha256': hashlib.sha256(b'old').hexdigest(), 'now_ms': 1})
-        self._append({'schema': 'hh-durable-dispatch-1', 'kind': 'OWNER_RESULT',
-                      'job_id': 'old-job', 'fence': {'stream_id': 'logical', 'generation': 1},
-                      'outcome': 'COMMITTED',
-                      'command_sha256': hashlib.sha256(b'old').hexdigest(),
-                      'receipt_sha256': hashlib.sha256(b'receipt').hexdigest(),
-                      'terminal_ms': 10, 'expires_ms': 20})
+        command = hashlib.sha256(b'old').hexdigest()
+        with DurableBroker(self.old) as broker:
+            broker.enqueue(JobRequest('old-job', 'p', 's', 100000, ('r',), (), command), now_ms=1)
+            ticket = broker.reserve_next(now_ms=2)
+            terminal = broker.record_owner_result(ticket, OwnerResult(
+                'COMMITTED', command, hashlib.sha256(b'receipt').hexdigest(), completed_at_ms=10))
+            self.old_row = broker._record_value(terminal, 10)
 
     def tearDown(self):
         for manager in getattr(self, '_managers', ()):
             try:
+                manager.close()
                 manager.current.close()
             except Exception:
                 pass
@@ -76,12 +74,11 @@ class SegmentedJournalTests(unittest.TestCase):
 
     def test_rotation_reopen_and_expired_lookup_keeps_old_bytes(self):
         manager = QueueJournalManager(self.old, self.custody,
-                                      logical_stream_id='queue-' + self.storage_id,
+                                      logical_stream_id='queue:' + self.storage_id,
                                       parent=self.root, retry_horizon_ms=60_000)
         self._managers = [manager]
         old_head = self.old.binding().witnessed
-        row = {'job_id': 'active', 'state': 'UNKNOWN', 'fence_generation': 2,
-               'logical_stream_id': manager.logical_stream_id}
+        row = self.old_row
         descriptor = manager.rotate([row], row_count=1, now_ms=1000,
                                     cursor={'last_project': None, 'sessions': []},
                                     stopped=False, logical_generation=2)
@@ -104,13 +101,15 @@ class SegmentedJournalTests(unittest.TestCase):
 
     def test_two_rotations_follow_descriptor_chain_without_ram_catalog(self):
         manager = QueueJournalManager(self.old, self.custody,
-                                      logical_stream_id='queue-' + self.storage_id,
+                                      logical_stream_id='queue:' + self.storage_id,
                                       parent=self.root)
         self._managers = [manager]
-        first = manager.rotate([{'job_id': 'one'}], row_count=1, now_ms=100,
-                               cursor={}, stopped=False, logical_generation=1)
-        second = manager.rotate([{'job_id': 'two'}], row_count=1, now_ms=200,
-                                cursor={}, stopped=False, logical_generation=2)
+        first = manager.rotate([], row_count=0, now_ms=100,
+                               cursor={'last_project': None, 'sessions': []},
+                               stopped=False, logical_generation=1)
+        second = manager.rotate([], row_count=0, now_ms=200,
+                                cursor={'last_project': None, 'sessions': []},
+                                stopped=False, logical_generation=2)
         reopened = QueueJournalManager(manager.current, self.custody,
                                        logical_stream_id=manager.logical_stream_id,
                                        parent=self.root)
@@ -122,7 +121,7 @@ class SegmentedJournalTests(unittest.TestCase):
     def test_expired_terminal_is_archived_and_same_id_never_executes_again(self):
         owner_root = self.root / 'retention-owner'
         owner_root.mkdir()
-        owner = QueueOwner.create(owner_root)
+        owner = QueueOwner.create(owner_root, retry_horizon_ms=60_000)
         command = hashlib.sha256(b'retention-command').hexdigest()
         receipt = hashlib.sha256(b'retention-receipt').hexdigest()
         request = JobRequest('expired', 'project', 'session', 100_000,
@@ -133,13 +132,14 @@ class SegmentedJournalTests(unittest.TestCase):
             self.assertIsNotNone(reservation)
             owner.broker.record_owner_result(
                 reservation, OwnerResult('COMMITTED', command, receipt, completed_at_ms=3))
-            owner.rotate_journal(now_ms=60_004, retry_horizon_ms=60_000)
+            owner.rotate_journal(now_ms=60_004)
             self.assertEqual(owner.broker.snapshot().receipts, ())
             archived, terminal_ms = owner.journal.lookup_archived('expired')
             self.assertEqual(archived['state'], 'COMMITTED')
             self.assertEqual(terminal_ms, 3)
-            replay = owner.broker.enqueue(request, now_ms=60_005)
-            self.assertEqual(replay.state, 'COMMITTED')
+            with self.assertRaises(BrokerError) as replay_error:
+                owner.broker.enqueue(request, now_ms=60_005)
+            self.assertEqual(str(replay_error.exception), 'BROKER_RETRY_EXPIRED')
             changed = JobRequest('expired', 'project', 'session', 100_000,
                                  ('resource',), (), hashlib.sha256(b'changed').hexdigest())
             with self.assertRaises(BrokerError) as error:
@@ -153,7 +153,7 @@ class SegmentedJournalTests(unittest.TestCase):
     def test_real_clock_expiry_compacts_terminal_but_keeps_archive_tombstone(self):
         owner_root = self.root / 'real-clock-owner'
         owner_root.mkdir()
-        owner = QueueOwner.create(owner_root)
+        owner = QueueOwner.create(owner_root, retry_horizon_ms=60_000)
         command = hashlib.sha256(b'real-clock-command').hexdigest()
         receipt = hashlib.sha256(b'real-clock-receipt').hexdigest()
         started = int(time.time_ns() // 1_000_000)
@@ -169,11 +169,35 @@ class SegmentedJournalTests(unittest.TestCase):
             # clock, not a mocked timestamp, and wait beyond that boundary.
             time.sleep(60.25)
             now = int(time.time_ns() // 1_000_000)
-            owner.rotate_journal(now_ms=now, retry_horizon_ms=60_000)
+            owner.rotate_journal(now_ms=now)
             self.assertEqual(owner.broker.snapshot().receipts, ())
             archived, terminal_ms = owner.journal.lookup_archived('real-clock-expired')
             self.assertEqual(archived['state'], 'COMMITTED')
             self.assertEqual(terminal_ms, started + 2)
+        finally:
+            owner.close()
+
+    def test_malformed_candidate_cannot_advance_custody_pointer(self):
+        owner_root = self.root / 'malformed-owner'
+        owner_root.mkdir()
+        owner = QueueOwner.create(owner_root)
+        try:
+            request = JobRequest('malformed-pending', 'project', 'session', 100_000,
+                                 ('resource',), (), hashlib.sha256(b'malformed').hexdigest())
+            owner.broker.enqueue(request, now_ms=1)
+            rows = owner.broker._checkpoint_rows(now_ms=2, retry_horizon_ms=60_000)
+            state = {'now_ms': 2, 'cursor': owner.broker._cursor_value(owner.broker.snapshot().cursor),
+                     'stopped': False, 'logical_generation': 0}
+            checkpoint = owner.journal.prepare(rows, state, reserve_records=0)
+            before_path = owner.custody.record['events']['path']
+            pending_head = owner.journal.pending.binding().witnessed
+            owner.journal.pending.append(
+                {'schema': SEGMENT_SCHEMA, 'kind': 'CHECKPOINT_ROW',
+                 'index': len(rows), 'row': {}}, pending_head)
+            with self.assertRaises(SegmentError):
+                owner.journal.commit(checkpoint)
+            self.assertEqual(owner.custody.record['events']['path'], before_path)
+            self.assertEqual(owner.log.root, Path(before_path))
         finally:
             owner.close()
 

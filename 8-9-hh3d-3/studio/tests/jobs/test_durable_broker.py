@@ -357,7 +357,7 @@ class DurableBrokerTests(unittest.TestCase):
                 self.broker.record_owner_result(active, owner_result(active))
             with self.assertRaisesRegex(BrokerError, 'BROKER_JOURNAL_FULL') as caught:
                 self.admit('full')
-            self.assertIn('rotation is not implemented', caught.exception.next_action)
+            self.assertIn('rotation', caught.exception.next_action)
             self.assertEqual(self.broker.snapshot().head.sequence, 11)
             self.assertTrue(self.broker.stop().stopped)
             self.assertEqual(self.broker.snapshot().head.sequence, 12)

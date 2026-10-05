@@ -40,7 +40,7 @@ class QueueOwner:
         self._cleanup = []
 
     @classmethod
-    def create(cls, parent, *, limits=QueueLimits()):
+    def create(cls, parent, *, limits=QueueLimits(), retry_horizon_ms=None):
         if cls is not QueueOwner or type(limits) is not QueueLimits:
             raise QueueOwnerError('QUEUE_TRUSTED_OWNER_REQUIRED')
         SafePathResolver(parent)
@@ -58,17 +58,18 @@ class QueueOwner:
                                   blob_root=owner.store.root, blob_identity=owner.store.root_identity,
                                   event_root=owner.log.root, event_binding=owner.log.binding())
             owner.log.bind_custody(owner.custody)
-            owner.broker = DurableBroker(owner.log, limits=limits)
+            owner.broker = DurableBroker(owner.log, limits=limits,
+                                         retry_horizon_ms=retry_horizon_ms)
             owner.journal = QueueJournalManager(
                 owner.log, owner.custody, logical_stream_id='queue:' + owner.storage_id,
-                parent=Path(parent))
+                parent=Path(parent), retry_horizon_ms=owner.broker.retry_horizon_ms)
             owner.broker._journal = owner.journal
             return owner
         except BaseException as exc:
             owner._failed(exc)
 
     @classmethod
-    def reopen(cls, storage_id, *, limits=QueueLimits()):
+    def reopen(cls, storage_id, *, limits=QueueLimits(), retry_horizon_ms=None):
         if cls is not QueueOwner or type(limits) is not QueueLimits:
             raise QueueOwnerError('QUEUE_TRUSTED_OWNER_REQUIRED')
         owner = cls()
@@ -87,10 +88,12 @@ class QueueOwner:
             # A suffix without its durable witness is uncertain. Preserve it;
             # never advance custody here just to make startup pass.
             owner.log.bind_custody(owner.custody)
-            owner.broker = DurableBroker(owner.log, limits=limits)
+            owner.broker = DurableBroker(owner.log, limits=limits,
+                                         retry_horizon_ms=retry_horizon_ms)
             owner.journal = QueueJournalManager(
                 owner.log, owner.custody, logical_stream_id='queue:' + storage_id,
-                parent=Path(record['events']['path']).parent)
+                parent=Path(record['events']['path']).parent,
+                retry_horizon_ms=owner.broker.retry_horizon_ms)
             owner.broker._journal = owner.journal
             return owner
         except BaseException as exc:
@@ -152,6 +155,9 @@ class QueueOwner:
             if self.broker is None or self.journal is None:
                 raise QueueOwnerError('QUEUE_NOT_READY')
             try:
+                if (retry_horizon_ms is not None
+                        and retry_horizon_ms != self.broker.retry_horizon_ms):
+                    raise QueueOwnerError('QUEUE_RETENTION_PROFILE_MISMATCH')
                 descriptor = self.broker.rotate(self.journal, now_ms=now_ms,
                                                 retry_horizon_ms=retry_horizon_ms)
                 self.log = self.journal.current
