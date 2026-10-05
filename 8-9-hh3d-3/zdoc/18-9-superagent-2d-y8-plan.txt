@@ -36,7 +36,7 @@ PREVIOUS_REVISION=SA4 trong Git 5b2d4c7b; LOG chi tiết (run id, hash, số ass
   routing HH3D nằm ở 8-9-hh3d-3/AGENTS.md.
 - Coordinator game tick WP khi đạt DoD; subagent không tick.
 
-HIỆN TRẠNG (05-10 15:05; coordinator cập nhật khi xong một mốc, tối đa 15 dòng)
+HIỆN TRẠNG (05-10 16:00; coordinator cập nhật khi xong một mốc, tối đa 15 dòng)
 - SA-01 ACCEPTED 03-10 (bootstrap kỹ thuật). CURRENT_VALID_WP=SA-02 từ 03-10.
 - Ledger 79 dòng: 25 OBSERVED, 54 UNVERIFIED, 0 MATCHED. Đã thấy chủ yếu menu, map, mode, phím
   đánh và vài phản ứng vật thể (mục 7.4). Chưa có số đo thời gian hay khoảng cách nào: browser
@@ -72,16 +72,13 @@ HIỆN TRẠNG (05-10 15:05; coordinator cập nhật khi xong một mốc, tố
   sprint, combat, trace, room, match và regression đều sạch; đây vẫn là bằng chứng kỹ thuật, SA-03 còn chờ
   A01–A06 và owner thử phòng di chuyển. Template archive 4.7.2 và cả hai artifact đã được xác nhận;
   vẫn chưa coi là nghiệm thu khi chưa có owner chơi.
-- SA-06 implementation slice đã nối bốn prop Relay Yard (hai crate gỗ, một barrel nổ, một kính) vào
-  MatchSession: mutable health/active/material, prop hit/destroy events, live melee và held/release
-  shot hit, barrel explosion, nested snapshot/canonical hash và UI draw. Product commits `22b438e1`,
-  `8add4e00`, `682af521` và `aa9d5357`; focused `cmd.sa06.burning.3`
-  (`RUN_ID=20261005T141640.780833Z-b8ed4f9fea`) passed 23 assertions; final guarded regression
-  `cmd.sa06.burning.2` (`RUN_ID=20261005T141615.092179Z-654490c267`) passed 2,977 assertions,
-  exit 0/cleanup 0/diagnostics empty. Barrel blast now has a bounded burning/douse prototype and
-  visible fighter/HUD state, but no measured roll mapping is claimed. This is provisional implementation
-  evidence only: fire spread, doors/debris/dynamic collision/100-object rig and owner review remain open;
-  SA-06 is not ticked and no Y8 parity is claimed.
+- SA-06 implementation slice now covers four Relay Yard props, live melee/shot resolution, barrel
+  explosion, bounded burning, and a real grounded short-collider roll. Roll gravity, pit death, roof
+  headroom readback, hit interruption/knockback, burn cadence/expiry, snapshot/hash events and
+  knockdown-before-roll douse are guarded in `docs/evidence/SA-06.md`; focused runs are PASS at one
+  frozen source hash. Static cover remains unchanged after prop destruction. Fire spread,
+  doors/debris/dynamic collision/100-object rig, measured Y8 roll behavior and owner review remain
+  open. SA-06 is not ticked and no Y8 parity is claimed.
 
 NEXT (làm theo thứ tự; việc nào phải chờ thì làm việc sau, không ngồi chờ)
 N2 Rig Y8 đã tự kiểm bằng fixture cục bộ nhưng chưa lấy được A01–A06; không lặp lại vòng browser
@@ -712,4 +709,8 @@ Q5 Web: dung lượng tải lần đầu và bộ nhớ đo từ SA-04; ngân s�
   `cmd.sa06.burning.2` passed 2,977 assertions with host exit 0, cleanup 0 and empty diagnostics.
   Static cover is unchanged after prop destruction; fire spread/true roll mapping/doors/debris/chain
   map/100-object and owner gates remain open, so SA-06 and all Classic checkboxes stay unticked.
+2026-10-05 SA-06 roll/hazard repair: product WIP adds real grounded short-collider roll, roof/pit/hit
+  interruption checks, grounded-only douse, periodic burn expiry and shot/explosion event hash coverage.
+  Guarded roll `20261005T155713.910571Z-0c4f0e8617` (188) and props `20261005T155759.206673Z-946c29658f` (66)
+  plus replay (15) passed at one source hash; SA-06 remains provisional and unticked.
 END_OF_SUPERAGENT_PLAN
