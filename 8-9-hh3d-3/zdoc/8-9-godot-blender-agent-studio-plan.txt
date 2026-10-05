@@ -13,32 +13,16 @@ OVERALL_PLAN_STATUS=INCOMPLETE; GT01_GT06_ACCEPTED; GT07_IN_PROGRESS; GT08_GT10_
 CONSUMER_PILOT_STATUS=REVALIDATED_PROVISIONAL_AUTHORITY0; NOT_GT06_ACCEPTANCE; NOT_COMPLETE_GAME_CLAIM
 GT06_STATUS=ACCEPTED; FORMAL25_TWO_ACCEPTED_PAIRS; FINAL_MANIFEST=318081a3c71f334cc44aa4542a5fa5fff459b4045006f6daa91559b1ccc4d4d3; DECISION=zdoc/reviews/20261003-gt06-owner-critics/coordinator-acceptance.md
 GT07_NEXT_ACTION=O10_8_NEXT_N0_TO_N6_IN_ORDER; MATRIX_SCOPE=O10_1_M1_M9_LOCKED; M1_M9_EVIDENCE=OPEN; STATUS=zdoc/reviews/20261003-gt07-integration/requirements.md; GT06_NO_BENCHMARK_RERUN
-FAST_PATH_20261005=Close_only_M3_consumer_reload_last-good_and_M4_blend_conflict; then freeze one closure and run one sequential final M1-M9 matrix plus affected regressions; reuse prior diagnostics as context, do not replay them; manifest and two same-hash critics are the only remaining acceptance path.
+FAST_PATH_20261005=Map_all_M1_M9_requirements_before_freeze; close_missing_M2_revoke_M3_producer_cuts_M5_Godot_lock_M6_Stop_coverage; eight_app_scenarios_are_not_full_matrix; then_one_frozen_matrix_and_focused_regressions_manifest_two_same_hash_critics; preserve_prior_diagnostics.
 GT10_SOAK_POLICY=OWNER_O1_10X35_ON_RELEASE_SOURCE; REUSE_ACCEPTED_FORMAL25_MACHINERY; PROFILE_V6=8a2e599c40f927ffaff5ded5e48b6bf2a0f0a6bb3a23de31434a695f4258cb35; FORMAL25_SOURCE64=727f9039c1cc83239f5ef1daff13de5e92e37b5ba442e64be8341ca058800b58
 O2_CANDIDATE_STATUS=AUTHORITY0; BRANCH=codex/o2-authoring-contract; DETAIL=studio/AUTHORING_STATUS.md_AT_BRANCH_HEAD; OPEN=AUTH05_ADAPTER_E2E; SYNC_MAIN_THEN_MERGE_O10_5; POINTER_ONLY_NO_HASH_OR_TEST_COUNT_O7_6
 RUN_POLICY=FRESH_ID_PER_RUN; DRY_RUN_BEFORE_NATIVE_O10_2; VERIFY_SOURCE_STOP_LATCH_AND_O5_6_LOCK_BEFORE_START; PRESERVE_RAW_ON_FAILURE; REPAIR_ONLY_PROVEN_BOUNDARY; FIX_AND_CONTINUE_O6_4; NEVER_TICK_FROM_BANNER_OR_PARTIAL_PREFIX; CRITICS_READONLY_INDEPENDENT_SAME_HASH
-CẬP NHẬT TRẠNG THÁI 05-10-2026: Các số đếm run/harness trong đoạn O10
-"Căn cứ 03-10 → 04-10" bên dưới là lịch sử, không phải tỉ lệ hiện tại. M5
-host-only `gt07-m5-storage-20261005-07` và M8 repeat
-`gt07-m8-process-20261005-08` đã có raw/actual cleanup; M9 installed binding
-đã được refresh một lần có rollback và postcheck (`source=233`,
-`execution=235`), dry-run `gt06-gt07-m9-playmutation-20261005-01` exit 0 và
-bounded native `...-02` exit 0 với Job/tree sạch; M9 vẫn cần lặp trong gói
-frozen cuối. M3 recovery run23 bị validator Docker timeout trước native effect.
-Fresh M3 consumer runs `gt07-cross-app-20261005-13` and `...-16` now bind the
-exact COMMITTED Blender queue row; `...-16` also hashes the cross-app runner
-and durable queue runtime. They remain authority-zero diagnostics because the
-consumer crash/reload cut and frozen matrix are still open, and `...-16`
-records environment diagnostic stderr.
-Run `gt07-cross-app-20261005-18` repeats this binding with an immediate
-protected-handoff reread before admission; its nested consumer still reports
-environment diagnostic stderr, so it remains diagnostic-only.
-Fresh current-source slices `gt07-native-godot-20261005-41,42` and
-`gt07-native-queue-20261005-43,44` passed actual exits and clean owned Jobs;
-the recovery slice validates retention fields and no native replay. They remain
-diagnostic only. M7 rotation/compaction vẫn mở. Bảng hiện hành và closeout nằm ở
-`zdoc/reviews/20261003-gt07-integration/requirements.md`; không lặp cleanup
-hoặc native run cũ chỉ vì các số lịch sử trong O10.
+CẬP NHẬT 05-10: M3 consumer RELOAD/ACK, M4 Blender conflict và M7 rotation
+process-cut đã có diagnostic; M5 host -09, M8 host -10 và M9 native -03 đã đạt.
+Installed binding refresh02 xác minh đúng delta ba file (source=233/execution=235).
+Tám scenario app chưa bao phủ toàn bộ M1–M9; đóng coverage còn thiếu trước freeze,
+không chạy lại chỉ để đổi timestamp. Chi tiết/giới hạn/raw ở
+`zdoc/reviews/20261003-gt07-integration/requirements.md`; các số run trong O10 là lịch sử.
 S_RECORD_HISTORY_ARCHIVE=8-9-hh3d-3/zdoc/reviews/20260925-plan-s-record-history-s256.txt; SHA256=14e4d00b5f574f9c06c8f4041cf284fa70f7bded09dee6d6d2914cdb1d3c5fdb; AUTHORITY=0; RAW_HEADER_BLOCK_S256_LINES_93_150_BYTE_FOR_BYTE; NO_GATE_CHANGE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ

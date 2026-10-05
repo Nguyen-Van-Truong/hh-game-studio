@@ -15,17 +15,39 @@ Historical entries below are retained for provenance; they do not override the t
 | M6 / Q04 | OPEN (partial) | Stop drain and native run16 | full queue/cancel/reconnect matrix in final run |
 | M7 / Q07 | OPEN (partial) | 510-record capacity/JOURNAL_FULL; queue-only custody rotation barriers; segmented queue checkpoint/reopen, two-segment archive chain, expired terminal same-ID replay guard, bounded real-clock expiry soak, malformed candidate pointer guard (`test_segmented_journal` 6 tests, `test_segmented_broker_regression` 8 tests, `test_durable_broker` 18 tests; exits 0); opt-in integrated `QueueOwner→DurableBroker→QueueJournalManager` process cuts at PREPARED/ACTIVE_POINTER/COMMITTED passed (actual child exit 73, 1.474s), preserving pending reconciliation and the exact archived receipt | final frozen matrix |
 | M8 / Q08 | OPEN (partial) | host-only repeats `gt07-m8-process-20261005-05`, `-07`, `-08`, and fresh `-10` verify PID/start identity, forged-start refusal, owned-tree timeout and 64 MiB Job memory denial; actual worker exits and Job cleanup recorded. The runner now requires a matching dry-run receipt before native execution (closure `ab498ef2...20c9e8` for `-10`) | final frozen M1–M9 matrix and source-specific manifest |
-| M9 / TX13 | OPEN (partial) | static `play-mutation` lane (`36e8d56b`) binds a generated-state mutation while Play is RUNNING to stale-capture rejection/UNKNOWN/no-replay; one-use binding refresh `20261005-gt07-binding-refresh` verified source=233/execution=235; dry-run `...-01` exit 0; native `gt06-gt07-m9-playmutation-20261005-02` exit 0 with actual runtime/import exits, clean Job/tree and 18/18 checks | repeat in the final frozen matrix |
+| M9 / TX13 | OPEN (partial) | binding refresh02 verified an exact three-file delta, source=233/execution=235; matching dry-run/native `gt06-gt07-m9-playmutation-20261005-03` exit 0 on binding `94552f31…`, preserving stale-capture rejection/UNKNOWN/no-replay | repeat in the final frozen matrix |
 
 ## Next
 
-M3 consumer recovery and M7 integrated rotation crash slices are now covered
-diagnostically. Freeze one complete closure and execute one sequential M1–M9
-matrix plus affected regressions. Map requirements to artifacts and submit the
-same frozen hash to two independent critics. Existing diagnostic slices are
+M3 consumer recovery and M7 integrated rotation crash slices are covered
+diagnostically. Before freezing, map explicit M2 revocation, M3 producer cuts,
+M5 Godot-save file-lock, and M6 Stop/cancel/reconnect/token-rotation coverage.
+The eight-scenario app runner alone is not the full M1–M9 matrix. Close only
+missing coverage, then freeze one closure and execute the complete matrix plus
+affected regressions. Submit the same hash to two independent critics. Existing slices are
 context; none grants acceptance. Do not replay a completed diagnostic solely
 to refresh its timestamp. Every native launch needs its matching engine-free
 dry-run; source changes invalidate that admission.
+
+## Checkpoint, 06-10-2026 - Blender export Job cap ordering repair
+
+`gt07-export-caps-20261006-02` reproduced a Windows boundary without starting
+Blender: configuring `JOB_OBJECT_LIMIT_JOB_TIME` after a warmed helper had
+already been assigned made the queried 15-second cap include consumed CPU time
+(`150468750` 100-ns units instead of `150000000`). Configuring and verifying the
+same limits while the Job was empty, through the existing `cli_job.create`
+`before_assign` callback, matched the exact CPU, memory, process-count and flag
+caps; both helpers exited 0 and their Jobs closed with zero active members.
+The regression is covered by the focused publication/cleanup/Job tests.
+
+The repaired native export `gt07-native-queue-20261006-01` then passed its
+matching dry-run and completed the pinned Blender path: native child and
+wrapper exited 0, the output GLB preflight matched the snapshot and revision,
+and the owned Job closed with zero active members and no retained handle. Its
+source closure is `124f8423a1cb77bfcbddf7826f618b6ef2d7bb72e06566128c0a0c25cfffd006`.
+The earlier `gt07-native-queue-20261005-82` mismatch remains immutable failure
+history and is not relabeled. This is a diagnostic repair, not GT07 acceptance;
+the final frozen M1-M9 matrix and two same-hash critics remain required.
 
 ## Latest diagnostic checkpoint
 
