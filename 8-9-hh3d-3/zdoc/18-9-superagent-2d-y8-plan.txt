@@ -60,7 +60,7 @@ HIỆN TRẠNG (05-10 10:48; coordinator cập nhật khi xong một mốc, tố
 - N4 seam bounded đã PASS guarded: decoder giữ float cho chuyển động, bộ dựng fixture arena và
   CharacterBody2D feet-origin đã compile/chạy độc lập; lõi MovementRoom/FighterState vẫn integer/AABB,
   nên đây chưa phải nghiệm thu SA-03.
-- N4 live tick probe đã PASS trên SceneTree thật: body chạm solid/one-way, drop-through theo từng fighter
+- N4 live tick probe đã PASS trên SceneTree thật: body chạm solid/one-way/bậc thang/biên, drop-through theo từng fighter
   và readback hữu hạn; probe không ghi ngược state, nên SA-03 vẫn mở.
 
 NEXT (làm theo thứ tự; việc nào phải chờ thì làm việc sau, không ngồi chờ)
@@ -645,6 +645,6 @@ Q5 Web: dung lượng tải lần đầu và bộ nhớ đo từ SA-04; ngân s�
   thật; chưa tick SA-03 vì lõi hiện tại còn integer/AABB và chưa migrate.
 2026-10-05 N4 seam: thêm decoder float/int và adapter PhysicsArena2D/PhysicsFighter2D; guarded run sạch,
   ghi evidence trong product; chưa tick SA-03, tiếp tục đo A01–A06 rồi mới wiring lõi.
-2026-10-05 N4 live tick probe: xác nhận contact solid/one-way/drop-through bằng physics frame thật;
+2026-10-05 N4 live tick probe: xác nhận contact solid/one-way/drop-through/bậc thang/biên bằng physics frame thật;
   giữ Simulation/FighterState làm authority, chưa claim SA-03/Y8 parity.
 END_OF_SUPERAGENT_PLAN
