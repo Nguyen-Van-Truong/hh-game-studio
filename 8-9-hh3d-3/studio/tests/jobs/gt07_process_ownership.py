@@ -355,6 +355,18 @@ def _send_go(process: subprocess.Popen) -> None:
     process.stdin.write(b"GO\n"); process.stdin.flush(); process.stdin.close()
 
 
+def _close_process_handle(process: subprocess.Popen) -> None:
+    handle = getattr(process, "_handle", None)
+    if handle is None:
+        return
+    close = getattr(handle, "Close", None)
+    if close is not None:
+        close()
+    else:
+        _close_handle(handle)
+    process._handle = None
+
+
 def _finish(process: subprocess.Popen, handle: Any, owner: Any | None) -> dict[str, Any]:
     error = None
     exit_code = None
@@ -379,6 +391,11 @@ def _finish(process: subprocess.Popen, handle: Any, owner: Any | None) -> dict[s
         try:
             if process.stdin is not None and not process.stdin.closed:
                 process.stdin.close()
+        except Exception as failure:
+            error = error or str(failure)
+        try:
+            if process.poll() is not None:
+                _close_process_handle(process)
         except Exception as failure:
             error = error or str(failure)
         try:
@@ -519,16 +536,22 @@ def run_diagnostic(output_root: Path, run_id: str, *, dry_run: bool = False) -> 
         report["dry_run"] = True
         _json_write(output / "report.json", report)
         return report
-    if os.name != "nt":
-        raise ValueError("WINDOWS_REQUIRED")
-    worker = _write_worker(output)
-    report["engine_started"] = False
-    from studio.tests.jobs.run_gt07_scenarios import _native_measure_guard
-    with _native_measure_guard():
-        for function in (run_held_identity, run_owned_timeout, run_memory_limit):
-            report["scenarios"].append(function(output, worker))
-    report["verified"] = all(row.get("verified") is True for row in report["scenarios"])
-    report["worker_sha256"] = _sha256(worker)
+    worker = None
+    try:
+        if os.name != "nt":
+            raise ValueError("WINDOWS_REQUIRED")
+        worker = _write_worker(output)
+        from studio.tests.jobs.run_gt07_scenarios import _native_measure_guard
+        with _native_measure_guard():
+            for function in (run_held_identity, run_owned_timeout, run_memory_limit):
+                report["scenarios"].append(function(output, worker))
+    except Exception as error:
+        report["status"] = "ERROR"
+        report["errors"] = [str(error)]
+    report["verified"] = bool(report["scenarios"] and
+                               all(row.get("verified") is True for row in report["scenarios"]))
+    if worker is not None and worker.is_file():
+        report["worker_sha256"] = _sha256(worker)
     _json_write(output / "report.json", report)
     return report
 
