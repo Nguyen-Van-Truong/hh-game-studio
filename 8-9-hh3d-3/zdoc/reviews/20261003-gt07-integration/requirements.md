@@ -13,7 +13,7 @@ Historical entries below are retained for provenance; they do not override the t
 | M4 / Q06 | OPEN (partial) | governed `gt07-native-godot-20261005-19` and current-source repeat `gt07-native-godot-20261005-26` native queue conflict PASS (actual child/wrapper 0, Job/tree clean, source unchanged); direct `-01` remains diagnostic | `.blend` conflict and final frozen matrix remain; native `-16`/`-17` failures retained as history |
 | M5 / TX05/TX09 | OPEN (partial) | host-only `gt07-m5-storage-20261005-05` and fresh repeat `gt07-m5-storage-20261005-07` verified exclusive file-lock denial, cross-volume `MoveFileExW` refusal (error 17), and injected fsync/diskfull UNKNOWN with last-good preservation; source closure `308602e8...fd072` for the repaired runner | final frozen repeat, requirement-map binding, and any product-boundary proof beyond the authority-zero host diagnostic |
 | M6 / Q04 | OPEN (partial) | Stop drain and native run16 | full queue/cancel/reconnect matrix in final run |
-| M7 / Q07 | OPEN (partial) | 510-record capacity/JOURNAL_FULL | real-clock expiry, compaction/rotation |
+| M7 / Q07 | OPEN (partial) | 510-record capacity/JOURNAL_FULL; queue-only custody rotation barriers, 61 focused storage tests exit 0 (05-10) | segmented queue integration, real-clock expiry/archive lookup, final matrix |
 | M8 / Q08 | OPEN (partial) | host-only repeats `gt07-m8-process-20261005-05`, `-07` and fresh `-08` verify PID/start identity, forged-start refusal, owned-tree timeout and 64 MiB Job memory denial; actual worker exits and Job cleanup recorded (closure `e54646f8...58f71`) | final frozen M1–M9 matrix and source-specific manifest |
 | M9 / TX13 | OPEN (partial) | static `play-mutation` lane (`36e8d56b`) binds a generated-state mutation while Play is RUNNING to stale-capture rejection/UNKNOWN/no-replay; one-use binding refresh `20261005-gt07-binding-refresh` verified source=233/execution=235; dry-run `...-01` exit 0; native `gt06-gt07-m9-playmutation-20261005-02` exit 0 with actual runtime/import exits, clean Job/tree and 18/18 checks | repeat in the final frozen matrix |
 
@@ -115,6 +115,8 @@ segmented log manager with rotate-prepared/active-pointer/rotate-committed
 custody anchors, immutable archive lookup and crash cuts. Until that design
 and real-clock evidence exist, M7 remains OPEN; do not truncate `.events`,
 change stream identity in place, or infer rotation from generic journal tests.
+
+05-10: Queue-only PREPARED/ACTIVE_POINTER/COMMITTED custody anchors now preserve old stream bytes; real process cuts, native set-before-flush uncertainty, epoch reserve and append/rotation race checks passed within 61 focused tests (exit 0). Legacy fixture I/O stays unchanged. Queue integration and real-clock retention remain open; no M7 acceptance claim.
 
 ## Checkpoint, 05-10-2026 — M3 recovery run retained as invalid
 
