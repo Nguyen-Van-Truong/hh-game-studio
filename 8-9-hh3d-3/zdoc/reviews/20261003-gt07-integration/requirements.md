@@ -9,7 +9,7 @@ Historical entries below are retained for provenance; they do not override the t
 |---|---|---|---|
 | M1 / Q01 | DONE (host) | `gt07-jobs-integration-20261004-03`, 46 tests | Repeat only in final frozen matrix |
 | M2 / Q03 | OPEN | static admission/lease guards | native two-writer, expiry, revoke, late worker |
-| M3 / Q05 | OPEN (partial) | Godot edit/save/script and receipt-loss run21; Blender queued export `gt07-native-queue-20261005-06` | six publish crash cuts, true Blender→Godot import/reload/ACK, last-good |
+| M3 / Q05 | OPEN (partial) | Godot edit/save/script and receipt-loss run21; Blender queued export `gt07-native-queue-20261005-06`; all six Godot save crash cuts `gt07-native-godot-20261005-06..11`; O2 asset readback `o2-publication-blender-handoff-20261005-02` | queue-level Blender→Godot publish/reload/ACK and cross-app last-good binding |
 | M4 / Q06 | OPEN | no final native proof | manual edit conflict and no rollback overwrite |
 | M5 / TX05/TX09 | OPEN | component fault helpers | filelock, cross-volume and injected disk/fsync cuts |
 | M6 / Q04 | OPEN (partial) | Stop drain and native run16 | full queue/cancel/reconnect matrix in final run |
@@ -26,11 +26,13 @@ contracts pass.
 Native M1–M9 execution remains open and must use fresh IDs after this source
 freeze.  A dry-run validates wiring and contract bounds only; it cannot prove
 runtime IPC, process cleanup, or engine behavior.
-N2: Godot ACK crash cut run `gt07-native-godot-20261004-24` and RELOAD cut run
-`gt07-native-godot-20261005-03` reached their exact phases, were killed by an
-owned handle, and recovered with byte-equal readback; run03 has authority 0.
-The RELOAD failures in runs 25 and 02 remain immutable diagnostics. PREPARED,
-VALIDATED, ACTIVATING, COMMITTED and ACK cuts still need fresh IDs.
+N2: Godot save cuts `gt07-native-godot-20261005-06` through `-11` reached
+PREPARED, VALIDATED, ACTIVATING, COMMITTED, RELOAD and ACK in fresh runs.
+Each intentional child exit 1 was followed by recovery exit 0, clean owned Job
+tree, and a retained last-good state; these are diagnostic crash-cut proofs,
+not acceptance. The older RELOAD failures in runs 25 and 02 remain immutable.
+The cross-application Blender artifact handoff and queue-level last-good proof
+are still open.
 N2-N5: execute remaining M3 cuts, M2/M4, M5/M7, then M6/M8/M9 with fresh IDs and preserved raw.
 N6: freeze closure once, run the full matrix plus focused regressions, map artifacts, then send the same hash to two independent critics.
 
@@ -44,6 +46,38 @@ closed/zero/unretained. This is a diagnostic M3 producer slice only;
 `godot_import_readback=false`, so it does not close Blender→Godot reload/ACK or
 GT07. Raw is immutable at `studio/.local/reviews/gt07-native-queue-20261005-06/`;
 source closure is `9ddb4aff90783f967ffa6700a84a5784a2ed7716ec36f914484067232283bb77`.
+
+## Checkpoint, 05-10-2026 — Godot PREPARED crash cut
+
+`gt07-native-godot-20261005-06` passed the exact-parameter dry-run, reached the
+PREPARED failpoint, and was terminated through its owned Job. The child exit 1
+is intentional for this cut; host Job/tree/handle cleanup is clean, recovery
+returned `GODOT_RECOVERED_LAST_GOOD`, retained the reservation, preserved the
+selection, and verified no redispatch/retry effect. This is diagnostic only;
+raw remains immutable under `studio/.local/reviews/gt07-native-godot-20261005-06/`.
+
+## Checkpoint, 05-10-2026 — Godot save crash matrix
+
+Fresh runs `gt07-native-godot-20261005-07` through `-11` covered VALIDATED,
+ACTIVATING, COMMITTED, RELOAD and ACK. Each passed the matching engine-free
+dry-run, recorded the intentional owned child cut (`exit=1`), then recovered
+with host exit 0, closed/zero/unretained Job state, and all recovery checks
+true. Raw remains immutable in each matching `.local/reviews/` directory;
+AUTHORITY remains 0. This closes only the Godot save-phase diagnostic matrix,
+not Blender→Godot import/readback or GT07 acceptance.
+
+## Checkpoint, 05-10-2026 — Blender artifact read by Godot fixture
+
+`o2-publication-blender-handoff-20261005-02` is an O2 diagnostic pass. It
+froze the exact `scene.glb` and producer manifest from
+`gt07-native-queue-20261005-06`, rechecked the producer hash immediately before
+dispatch, and loaded that byte through the gameplay-source Godot fixture. The
+container/host/child exits and cleanup were verified, publication retry after
+readback and reopen was byte-equal, and the observed GLB hash is
+`1bb48eb159925ec13f4df7337445a691aac98184580553d81f934d2c674bc87b`.
+This proves the asset handoff/import readback slice only; it does not prove the
+GT07 queue coordinator's cross-app reload/ACK or grant acceptance. Raw is under
+`studio/.local/reviews/o2-publication-blender-handoff-20261005-02/`, AUTHORITY=0.
 
 ## Historical log (preserved verbatim)
 # GT07 integration map — opened after GT06 acceptance

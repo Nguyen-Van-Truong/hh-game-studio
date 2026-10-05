@@ -2,6 +2,7 @@
 import copy
 import hashlib
 import json
+import os
 from pathlib import Path
 import tempfile
 import unittest
@@ -248,6 +249,139 @@ class ArenaPublicationFixtureTests(unittest.TestCase):
             with self.subTest(name=name), self.assertRaisesRegex(RuntimeError,
                     'SAVED_ARENA_PROVENANCE_PATH'):
                 probe._provenance_file(self.source, name)
+
+
+class BlenderHandoffTests(unittest.TestCase):
+    """Model custody only; hashes, receipts, paths and candidate checks are real."""
+
+    def setUp(self):
+        temp = tempfile.TemporaryDirectory()
+        self.addCleanup(temp.cleanup)
+        self.root = Path(temp.name)
+        trusted = self.root / 'reviews'
+        self.producer = trusted / 'gt07-native-queue-20261005-06'
+        self.published = self.producer / 'published'
+        self.published.mkdir(parents=True)
+        self.frozen = self.root / 'frozen'
+        self.raw = fixtures.ASSET_AVATAR_GLB
+        self.candidate = {'assets/avatar.glb': self.raw}
+        digest = hashlib.sha256(self.raw).hexdigest()
+        # Real publication blob schema: size is in the identity, not "bytes".
+        identity = {'volume': '1', 'file_id': '11' * 16, 'size': len(self.raw)}
+        descriptor = {'object_id': 'blob-' + '22' * 16, 'identity': identity,
+                      'sha256': digest, 'file_version': {'identity': identity, 'sha256': digest}}
+        self.manifest = {'schema': 'HH-BLENDER-PUBLICATION-1', 'publication_profile': 'export.publish',
+                         'artifacts': {'scene.glb': descriptor, 'checkpoint.blend': descriptor}}
+        self.manifest_raw = json.dumps(self.manifest).encode()
+        (self.published / 'manifest.json').write_bytes(self.manifest_raw)
+        (self.published / 'scene.glb').write_bytes(self.raw)
+        self.child = {'run_id': self.producer.name, 'passed': True, 'queue_state': 'COMMITTED',
+                      'operation': 'export.publish', 'errors': [],
+                      'publication': {'storage_id': '33' * 16,
+                          'manifest_sha256': hashlib.sha256(self.manifest_raw).hexdigest()}}
+        self.host = {'target_pid': 1234, 'exit_code': 0}
+        self.wrapper = {'child': self.child, 'run_id': self.producer.name, 'passed': True,
+                        'source_unchanged': True, 'snapshot_unchanged': True,
+                        'host': {**self.host, 'wrapper_exit_code': 0, 'tree_verified': True,
+                                 'timed_out': False}}
+        self.write_receipts()
+        patcher = mock.patch.object(probe, 'BLENDER_HANDOFF_ROOT', trusted)
+        patcher.start()
+        self.addCleanup(patcher.stop)
+        patcher = mock.patch('studio.host.blender.publication_owner.BlenderPublicationOwner.reopen')
+        self.reopen = patcher.start()
+        self.addCleanup(patcher.stop)
+        self.owner = self.reopen.return_value
+        self.owner.files.root = self.producer / 'protected'
+        self.owner.read_selected.return_value = (self.manifest, {'scene.glb': self.raw})
+
+    def write_receipts(self):
+        for name, value in (('native-child.json', self.child), ('native-host.json', self.host),
+                            ('queue-native.json', self.wrapper)):
+            (self.producer / name).write_text(json.dumps(value), encoding='utf-8')
+
+    def test_protected_bytes_are_rechecked_and_frozen_manifest_is_byte_exact(self):
+        raw, binding = probe.freeze_blender_handoff(self.published, self.frozen)
+        self.assertEqual(raw, self.raw)
+        self.assertEqual(probe.verify_blender_handoff(self.published, self.frozen, binding,
+                                                     self.candidate), self.raw)
+        self.assertEqual(self.reopen.call_count, 2)
+        self.assertEqual(self.owner.close.call_count, 2)
+        (self.frozen / 'manifest.json').write_bytes(self.manifest_raw + b'\n')
+        with self.assertRaisesRegex(RuntimeError, 'BLENDER_HANDOFF_CANDIDATE_CHANGED'):
+            probe.verify_blender_handoff(self.published, self.frozen, binding, self.candidate)
+
+    def test_matching_disk_hashes_do_not_replace_protected_publication(self):
+        self.owner.read_selected.return_value = (self.manifest, {'scene.glb': b'other'})
+        with self.assertRaisesRegex(RuntimeError, 'BLENDER_HANDOFF_PROTECTED_READBACK'):
+            probe.freeze_blender_handoff(self.published, self.frozen)
+        self.owner.close.assert_called_once()
+        self.assertFalse(self.frozen.exists())
+
+    def test_no_pass_from_banner_missing_actual_exit_or_wrong_pid(self):
+        for changes in ({'exit_code': None}, {'exit_code': 1}, {'target_pid': 9999}):
+            with self.subTest(changes=changes):
+                saved = self.host.copy()
+                self.host.update(changes)
+                self.write_receipts()
+                with self.assertRaisesRegex(RuntimeError, 'BLENDER_HANDOFF_RECEIPT'):
+                    probe.read_blender_handoff(self.published)
+                self.host = saved
+        self.reopen.assert_not_called()
+
+    def test_drift_and_hardlinks_reject_before_protected_lookup(self):
+        glb = self.published / 'scene.glb'
+        glb.write_bytes(self.raw + b'changed')
+        with self.assertRaisesRegex(RuntimeError, 'BLENDER_HANDOFF_HASH'):
+            probe.read_blender_handoff(self.published)
+        glb.write_bytes(self.raw)
+        os.link(glb, self.root / 'alias.glb')
+        with self.assertRaisesRegex(RuntimeError, 'BLENDER_HANDOFF_PATH'):
+            probe.read_blender_handoff(self.published)
+        self.reopen.assert_not_called()
+
+    def test_receipt_drift_and_candidate_substitution_reject(self):
+        _, binding = probe.freeze_blender_handoff(self.published, self.frozen)
+        with self.assertRaisesRegex(RuntimeError, 'BLENDER_HANDOFF_CANDIDATE_CHANGED'):
+            probe.verify_blender_handoff(self.published, self.frozen, binding,
+                                         {'assets/avatar.glb': b'other'})
+        path = self.producer / 'native-host.json'
+        path.write_bytes(path.read_bytes() + b'\n')
+        with self.assertRaisesRegex(RuntimeError, 'BLENDER_HANDOFF_CHANGED'):
+            probe.verify_blender_handoff(self.published, self.frozen, binding, self.candidate)
+
+    def test_missing_producer_or_wrong_root_is_not_an_export(self):
+        with self.assertRaisesRegex(RuntimeError, 'BLENDER_HANDOFF_ROOT'):
+            probe.read_blender_handoff(self.root)
+        (self.producer / 'native-host.json').unlink()
+        with self.assertRaises(FileNotFoundError):
+            probe.read_blender_handoff(self.published)
+        self.reopen.assert_not_called()
+
+    def test_cli_dry_run_never_enters_execution(self):
+        with mock.patch('sys.argv', ['probe', '--run-id', 'o2-publication-pure', '--dry-run']), \
+                mock.patch.object(probe, 'dry_run', return_value={'dry_run': True}), \
+                mock.patch.object(probe, '_execute') as execute:
+            self.assertEqual(probe.main(), 0)
+        execute.assert_not_called()
+
+    def test_cli_holds_shared_guard_across_execution(self):
+        from studio.tests.jobs.run_gt07_scenarios import _native_measure_guard
+        from studio.tests.replay.measure_window import default_path
+        def execute(*_):
+            self.assertFalse(default_path().exists())  # Linux rejects the formal marker.
+            with self.assertRaisesRegex(ValueError, 'MEASURE_WINDOW_BUSY'):
+                with _native_measure_guard():
+                    self.fail('second workload admitted')
+            return 0
+        with mock.patch.dict(os.environ, {'LOCALAPPDATA': str(self.root)}), \
+                mock.patch('sys.argv', ['probe', '--run-id', 'o2-publication-pure']), \
+                mock.patch.object(probe, 'dry_run', return_value={'dry_run': True}) as admit, \
+                mock.patch.object(probe, '_execute', side_effect=execute):
+            self.assertEqual(probe.main(), 0)
+            self.assertEqual(admit.call_count, 2)
+            with _native_measure_guard():
+                pass
 
 
 if __name__ == '__main__':
