@@ -1,0 +1,389 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:hh:blender-authoring-catalog:1",
+  "title": "O2 Blender candidate operation body",
+  "description": "Validates operation/target/payload projection only. The shared Request envelope and semantic validator are also required. No runtime capability is registered.",
+  "oneOf": [
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "operation",
+        "target",
+        "payload"
+      ],
+      "properties": {
+        "operation": {
+          "const": "armature.from_template"
+        },
+        "target": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "stable_id"
+          ],
+          "properties": {
+            "stable_id": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9._-]{0,63}$"
+            }
+          }
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "expected_generation",
+            "stable_id",
+            "template_id",
+            "template_sha256"
+          ],
+          "properties": {
+            "expected_generation": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 2147483647
+            },
+            "stable_id": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9._-]{0,63}$"
+            },
+            "template_id": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9._-]{0,63}$"
+            },
+            "template_sha256": {
+              "type": "string",
+              "pattern": "^sha256:[0-9a-f]{64}$"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "operation",
+        "target",
+        "payload"
+      ],
+      "properties": {
+        "operation": {
+          "const": "animation.action.create"
+        },
+        "target": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "stable_id"
+          ],
+          "properties": {
+            "stable_id": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9._-]{0,63}$"
+            }
+          }
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "expected_generation",
+            "stable_id"
+          ],
+          "properties": {
+            "expected_generation": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 2147483647
+            },
+            "stable_id": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9._-]{0,63}$"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "operation",
+        "target",
+        "payload"
+      ],
+      "properties": {
+        "operation": {
+          "const": "animation.keyframe.set"
+        },
+        "target": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "stable_id"
+          ],
+          "properties": {
+            "stable_id": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9._-]{0,63}$"
+            }
+          }
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "expected_generation",
+            "bone_id",
+            "channel",
+            "frame",
+            "values",
+            "interpolation"
+          ],
+          "properties": {
+            "expected_generation": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 2147483647
+            },
+            "bone_id": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9._-]{0,63}$"
+            },
+            "channel": {
+              "enum": [
+                "location",
+                "rotation_euler",
+                "scale"
+              ]
+            },
+            "frame": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10000
+            },
+            "values": {
+              "type": "array",
+              "minItems": 3,
+              "maxItems": 3,
+              "items": {
+                "type": "number",
+                "minimum": -1000,
+                "maximum": 1000
+              }
+            },
+            "interpolation": {
+              "enum": [
+                "CONSTANT",
+                "LINEAR"
+              ]
+            }
+          },
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "channel": {
+                    "const": "rotation_euler"
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "values": {
+                    "type": "array",
+                    "minItems": 3,
+                    "maxItems": 3,
+                    "items": {
+                      "type": "number",
+                      "minimum": -6.283185307179586,
+                      "maximum": 6.283185307179586
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "channel": {
+                    "const": "scale"
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "values": {
+                    "type": "array",
+                    "minItems": 3,
+                    "maxItems": 3,
+                    "items": {
+                      "type": "number",
+                      "minimum": 0.001,
+                      "maximum": 1000
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "x-candidate": {
+    "catalog_version": 1,
+    "profile": "hh-blender-authoring-source-1",
+    "change_request": "CR-BLENDER-AUTHORING-01",
+    "status": "CANDIDATE_ONLY",
+    "native_evidence": "UNVERIFIED",
+    "runtime_enabled": false,
+    "script_enabled": false,
+    "required_native_gates": [
+      "BLEND-AUTH-01",
+      "BLEND-AUTH-02",
+      "BLEND-AUTH-03",
+      "BLEND-AUTH-04"
+    ],
+    "operations": [
+      "armature.from_template",
+      "animation.action.create",
+      "animation.keyframe.set"
+    ],
+    "limits": {
+      "max_armatures": 16,
+      "max_bones": 32,
+      "max_actions": 32,
+      "max_keyframes": 256,
+      "max_frame": 10000
+    },
+    "templates": [
+      {
+        "template_id": "humanoid-lite",
+        "template_sha256": "sha256:1ff594d08ee7b0fffebd7dd9c1fad3c2f7e597a51a77405460f6ab977ddaabbd",
+        "bones": [
+          {
+            "bone_id": "root",
+            "parent_id": null,
+            "head": [
+              0,
+              0,
+              0
+            ],
+            "tail": [
+              0,
+              1,
+              0
+            ]
+          },
+          {
+            "bone_id": "spine",
+            "parent_id": "root",
+            "head": [
+              0,
+              1,
+              0
+            ],
+            "tail": [
+              0,
+              2,
+              0
+            ]
+          },
+          {
+            "bone_id": "arm.l",
+            "parent_id": "spine",
+            "head": [
+              0,
+              1.8,
+              0
+            ],
+            "tail": [
+              -1,
+              1.2,
+              0
+            ]
+          },
+          {
+            "bone_id": "arm.r",
+            "parent_id": "spine",
+            "head": [
+              0,
+              1.8,
+              0
+            ],
+            "tail": [
+              1,
+              1.2,
+              0
+            ]
+          }
+        ]
+      },
+      {
+        "template_id": "quadruped-lite",
+        "template_sha256": "sha256:a9e427092db5f2e57132777c64d0a9e0a5bb913696482db2d97a62ee01b88066",
+        "bones": [
+          {
+            "bone_id": "root",
+            "parent_id": null,
+            "head": [
+              0,
+              0,
+              0
+            ],
+            "tail": [
+              0,
+              0.8,
+              0
+            ]
+          },
+          {
+            "bone_id": "spine",
+            "parent_id": "root",
+            "head": [
+              0,
+              0.8,
+              0
+            ],
+            "tail": [
+              0,
+              1.6,
+              0
+            ]
+          },
+          {
+            "bone_id": "leg.l",
+            "parent_id": "spine",
+            "head": [
+              0,
+              0.8,
+              0
+            ],
+            "tail": [
+              -0.6,
+              0,
+              0
+            ]
+          },
+          {
+            "bone_id": "leg.r",
+            "parent_id": "spine",
+            "head": [
+              0,
+              0.8,
+              0
+            ],
+            "tail": [
+              0.6,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

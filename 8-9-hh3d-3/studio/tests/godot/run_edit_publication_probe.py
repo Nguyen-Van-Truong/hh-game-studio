@@ -1,6 +1,8 @@
 """Actual authenticated editor edits, durable historical receipts, save/reopen.
 
-Every mutation reaches native EditorUndoRedoManager via the public HTTP route.
+Every mutation reaches native EditorUndoRedoManager through the registered owner.
+The private candidate-update variant uses the fixed local typed bridge for one
+update; other commands use the unchanged public HTTP route.
 This candidate does not turn an editor-session receipt into saved-file proof.
 """
 from __future__ import annotations
@@ -36,10 +38,17 @@ def sha(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def frozen(output,binary,closure):
+def frozen(output,binary,closure,*,candidate_update=False):
     sys.path.insert(0,str(STUDIO.parent))
     from studio.protocol.core import Request,canonical_bytes,parse_json
     from studio.host.core.transport import epoch_ms
+    from studio.host.core.custody_registry import RegistryCustody
+    # Trusted fixture setup must run in the actual worker's user context. The
+    # journal deliberately never provisions its own registry parents, and a
+    # scheduler launch cannot depend on setup performed by an earlier shell.
+    created = RegistryCustody.provision_base()
+    save(output/'custody-setup.json',{'created_components':list(created),
+        'existing_acl_rewritten':False,'trusted_fixture_setup':True})
     module = load('s54_edit_publication_owner',STUDIO/'godot-addon/publication_owner.py')
     validation = module._load('validation_owner')
     factory = validation.factory
@@ -102,6 +111,14 @@ def frozen(output,binary,closure):
         commands = []
         snapshots = []
 
+        def submit_edit(value):
+            if candidate_update and value.command_id == 'edit.update':
+                response = owner.submit_candidate_update(value.as_dict(),
+                    authorization='Bearer '+credential.bearer,catalog_digest=owner.contract.CATALOG_DIGEST)
+                body = response.as_dict()
+                return 200,body,canonical_bytes(body)
+            return call('/v1/commands',value.as_dict())
+
         def edit(command,operation,target,payload):
             nonlocal credential,lease
             # Each separately admitted command gets a full lease budget. Native
@@ -114,7 +131,7 @@ def frozen(output,binary,closure):
             before = owner.inspect()
             value = request(command,operation,target,payload,before=before)
             save(output/(command+'-request.json'),value.as_dict())
-            status,result,wire = call('/v1/commands',value.as_dict())
+            status,result,wire = submit_edit(value)
             save(output/(command+'-response.json'),result)
             (output/(command+'-wire.json')).write_bytes(wire)
             if result.get('status')!='COMMITTED' and hasattr(owner,'_last_error'):
@@ -135,7 +152,7 @@ def frozen(output,binary,closure):
             durable = owner._journal.lookup_response(command,value.digest)
             check(command+'_exact_durable_response',durable==canonical_bytes(result))
             events = tuple(owner._journal._state.events)
-            status,retry,retry_wire = call('/v1/commands',value.as_dict())
+            status,retry,retry_wire = submit_edit(value)
             check(command+'_retry_no_effect',status==200 and retry_wire==wire
                 and retry==result and tuple(owner._journal._state.events)==events and owner.inspect()==after)
             commands.append((value,result,wire)); snapshots.append(after)
@@ -146,9 +163,16 @@ def frozen(output,binary,closure):
             'rotation_degrees':[0,15,0],'scale':[1,1,1],'box_size':[2,3,4]})
         check('native_create_observed',any(n['stable_id']=='box.public' and n['box_size']==[2,3,4]
             for n in created['state']['nodes']))
-        updated = edit('edit.update','scene.node.update','box.public',{'changes':{'position':[4,5,6]}})
+        update_changes = {'position':[4,5,6]}
+        if candidate_update:
+            update_changes['scale'] = [1,2,1]
+        updated = edit('edit.update','scene.node.update','box.public',{'changes':update_changes})
         check('native_update_observed',next(n for n in updated['state']['nodes']
             if n['stable_id']=='box.public')['position']==[4,5,6])
+        if candidate_update:
+            check('candidate_bridge_native_scale_observed',next(n for n in updated['state']['nodes']
+                if n['stable_id']=='box.public')['scale']==[1,2,1]
+                and owner._authoring_update_bridge is not None)
         undone = edit('edit.undo','scene.undo','root',{'steps':1})
         check('native_undo_restores_created_state',undone['state']==created['state'] and undone['can_redo'])
         redone = edit('edit.redo','scene.redo','root',{'steps':1})
@@ -217,7 +241,8 @@ def frozen(output,binary,closure):
                 reopened.lookup_response(command.command_id,command.digest)==canonical_bytes(result))
         reopened.close(); reopened=None
         save(output/'publication.json',{'passed':True,'checks':rows,'source_closure_sha256':closure,
-            'candidate_only':True,'gt03_acceptance':False,'authenticated_editor_mutations':True})
+            'candidate_only':True,'gt03_acceptance':False,'authenticated_editor_mutations':True,
+            'private_candidate_update':candidate_update,'auth_profile_enabled':False})
         print('HH_EDIT_PUBLICATION_COMPLETE '+json.dumps({'passed':True,'checks':len(rows)}),flush=True)
         return 0
     finally:
@@ -237,13 +262,22 @@ def main():
     parser.add_argument('--frozen',action='store_true')
     parser.add_argument('--binary',type=Path)
     parser.add_argument('--closure')
+    parser.add_argument('--candidate-update',action='store_true')
     args=parser.parse_args()
     if not re.fullmatch('[A-Za-z0-9_-]{1,80}',args.run_id):parser.error('invalid run ID')
-    if args.frozen:return frozen(args.output,args.binary,args.closure)
-    output=args.output.resolve();output.relative_to(STUDIO.parent/'zdoc/reviews')
+    if args.frozen:return frozen(args.output,args.binary,args.closure,candidate_update=args.candidate_update)
+    output=args.output.resolve()
+    if args.candidate_update:
+        if output.parent != STUDIO/'.local/reviews' or output.name != args.run_id:
+            parser.error('candidate output must be studio/.local/reviews/<run-id>')
+    else:
+        output.relative_to(STUDIO.parent/'zdoc/reviews')
     output.mkdir(parents=True,exist_ok=False)
     inventory=load('edit_inventory',STUDIO/'tests/godot/run_editor_probe.py')
     before=inventory.inputs();source=output/'source/studio'
+    if args.candidate_update:
+        name='contracts/godot-authoring-schema-v1.json'
+        before[name]=sha(STUDIO/name)
     for name,digest in before.items():
         target=source/name;target.parent.mkdir(parents=True,exist_ok=True)
         target.write_bytes((STUDIO/name).read_bytes())
@@ -252,18 +286,25 @@ def main():
     closure=runner.source_closure_sha256(before)
     save(output/'source-closure.json',{'files':before,'source_closure_sha256':closure})
     lock=json.loads((source/'toolchain.lock.json').read_bytes())['godot']
-    local=json.loads((STUDIO/'.local/toolchain.local.json').read_bytes())
-    binary=Path(local['godot_console']).with_name(lock['gui_executable'])
+    if args.candidate_update and args.binary is not None:
+        binary=args.binary.resolve(strict=True)
+    else:
+        local=json.loads((STUDIO/'.local/toolchain.local.json').read_bytes())
+        binary=Path(local['godot_console']).with_name(lock['gui_executable'])
     if sha(binary)!=lock['gui_sha256']:raise ValueError('GUI pin mismatch')
     environment=dict(os.environ)
     environment['HH_STUDIO_LINUX_GODOT']=str(STUDIO/'.local/tooling/godot-4.7.2-stable-linux/Godot_v4.7.2-stable_linux.x86_64')
-    host=runner.run_process([sys.executable,'-B',str(source/'tests/godot/run_edit_publication_probe.py'),
-        '--frozen','--output',str(output),'--run-id',args.run_id,'--binary',str(binary),'--closure',closure],
+    command=[sys.executable,'-B',str(source/'tests/godot/run_edit_publication_probe.py'),
+        '--frozen','--output',str(output),'--run-id',args.run_id,'--binary',str(binary),'--closure',closure]
+    if args.candidate_update:command.append('--candidate-update')
+    host=runner.run_process(command,
         cwd=source,output=output,timeout=360,label='edit-publication',env=environment)
-    unchanged=before==inventory.inputs()
+    after=inventory.inputs()
+    if args.candidate_update:after['contracts/godot-authoring-schema-v1.json']=sha(STUDIO/'contracts/godot-authoring-schema-v1.json')
+    unchanged=before==after
     frozen_unchanged=all(sha(source/name)==digest for name,digest in before.items())
     passed=(host['exit_code']==host['wrapper_exit_code']==0 and host['tree_verified']
-        and not host['timed_out'] and frozen_unchanged)
+        and not host['timed_out'] and frozen_unchanged and unchanged)
     save(output/'capture.json',{'run_id':args.run_id,'host':host,'passed':passed,
         'source_closure_sha256':closure,'origin_source_unchanged':unchanged,'snapshot_unchanged':frozen_unchanged,
         'candidate_only':True,'gt03_acceptance':False})

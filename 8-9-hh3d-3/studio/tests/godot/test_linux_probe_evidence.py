@@ -66,6 +66,40 @@ class LinuxProbeEvidenceTests(unittest.TestCase):
                 self.assertFalse(self.evaluate({'expect': 'untrusted_marker'}, self.result,
                     output, '')['fixture_observed'])
 
+    def test_spawn_attempt_requires_failed_exit_empty_output_and_guard(self):
+        self.result['sandbox_harness_unchanged'] = True
+        self.result['mode'] = 'guarded-parse'
+        guard = 'HH_GAMEPLAY_OS_GUARD fork=EPERM socket=EPERM\n'
+        valid = 'HH_PROBE_SPAWN {"exit":-1,"output":[""]}\n'
+        rejected = 'Cannot create pipe from command: "/usr/bin/printf" "HH_UNEXPECTED_CHILD"'
+        case = {'expect': 'spawn_observation', 'mode': 'guarded-parse'}
+        self.assertTrue(self.evaluate(case, self.result, guard + valid, rejected)['fixture_observed'])
+        for output in (valid, guard + guard + valid, guard + valid.replace('-1', '0'),
+                       guard + valid.replace('[""]', '["HH_UNEXPECTED_CHILD"]')):
+            self.assertFalse(self.evaluate(case, self.result, output, rejected)['fixture_observed'])
+        self.assertFalse(self.evaluate(case, self.result, guard + valid)['fixture_observed'])
+
+    def test_hostile_markers_reject_duplicate_json_keys(self):
+        cases = (
+            ('HH_PROBE_BOUNDARY ',
+             '{"source_denied":true,"source_denied":false}'),
+            ('HH_PROBE_SPAWN ',
+             '{"exit":-1,"output":[""],"output":["HH_UNEXPECTED_CHILD"]}'),
+        )
+        for prefix, payload in cases:
+            with self.subTest(prefix=prefix):
+                self.assertIsNone(probe.marker(prefix + payload + '\n', prefix))
+
+    def test_guarded_play_only_explains_exact_pinned_startup_error(self):
+        self.result.update(mode='guarded-play', sandbox_harness_unchanged=True, diagnostic_process_clean=False)
+        case = {'expect': 'guarded_play', 'mode': 'guarded-play'}
+        stdout = probe.GUARD_MARKER + '\nHH_PROBE_PLAY {"ticks":12,"x":12.0}\n'
+        self.assertTrue(self.evaluate(case, self.result, stdout, probe.GUARDED_STARTUP_ERROR)['fixture_observed'])
+        for stderr in ('', probe.GUARDED_STARTUP_ERROR + 'ERROR: unknown\n'):
+            self.assertFalse(self.evaluate(case, self.result, stdout, stderr)['fixture_observed'])
+        self.result['mode'] = 'parse'
+        self.assertFalse(self.evaluate(case, self.result, stdout, probe.GUARDED_STARTUP_ERROR)['fixture_observed'])
+
     def test_dirty_container_or_changed_inputs_invalidates_fixture_evidence(self):
         for key in ('owned_removed', 'input_unchanged', 'snapshot_unchanged'):
             bad = copy.deepcopy(self.result)
@@ -257,12 +291,13 @@ class LinuxProbeEvidenceTests(unittest.TestCase):
             (case_dir / 'engine-stdout.txt').write_text('', encoding='utf-8')
             (case_dir / 'engine-stderr.txt').write_text('', encoding='utf-8')
             case = {'expect': 'clean_process', 'script': 'extends Node3D\n', 'mode': 'parse', 'timeout': 20,
-                'project': 'fixture project', 'scene': 'fixture scene'}
+                'project': 'fixture project', 'scene': 'fixture scene',
+                'extra_files': {'scripts/shared.gd': 'extends Node3D\n',
+                                'scenes/extra.tscn': '[gd_scene format=3]\n'}}
             manifest = {}
-            for path, key in (('project.godot', 'project'), ('scenes/fixture.tscn', 'scene'), ('scripts/fixture_actor.gd', 'script')):
+            for path, raw in probe.case_files(case).items():
                 target = case_dir / 'snapshot' / path
                 target.parent.mkdir(parents=True, exist_ok=True)
-                raw = case[key].encode('utf-8')
                 target.write_bytes(raw)
                 manifest[path] = hashlib.sha256(raw).hexdigest()
             self.result.update(input_hashes_before=manifest, input_hashes_after=manifest,
@@ -295,9 +330,18 @@ class LinuxProbeEvidenceTests(unittest.TestCase):
             (case_dir / 'unexpected.txt').write_text('additional artifact', encoding='utf-8')
             with self.assertRaises(ValueError):
                 probe.resume_case(case_dir, observation, case, name='valid', binding=binding)
-            for replacement in ({'mode': 'import'}, {'script': 'extends Resource\n'}, {'timeout': 10}):
+            for replacement in ({'mode': 'import'}, {'script': 'extends Resource\n'}, {'timeout': 10},
+                                {'extra_files': {}},
+                                {'extra_files': {'scripts/shared.gd': 'extends Resource\n'}}):
                 with self.assertRaises(ValueError):
                     probe.case_observation(case_dir, {**case, **replacement}, name='transplanted', binding=binding)
+
+    def test_fixture_files_cannot_escape_or_replace_primary_source(self):
+        case = {'project': 'project', 'scene': 'scene', 'script': 'script'}
+        for path in ('../escape.gd', 'scripts/../escape.gd', 'C:/outside.gd',
+                     'scripts/fixture_actor.gd', 'scenes/fixture.tscn', 'project.godot'):
+            with self.subTest(path=path), self.assertRaises(ValueError):
+                probe.case_files({**case, 'extra_files': {path: 'bad'}})
 
 
 if __name__ == '__main__':

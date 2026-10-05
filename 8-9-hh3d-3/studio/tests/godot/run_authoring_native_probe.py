@@ -1,0 +1,705 @@
+"""Bounded native O2 authoring diagnostic on a disposable Godot editor.
+
+The runner freezes the candidate catalog and probe source, copies only those
+inputs into a fresh project, and launches one direct pinned GUI executable under
+the existing owned Job wrapper. It captures actual process exit/tree proof and
+checks native readback/UndoRedo/isolation rows. The result is AUTHORITY=0
+diagnostic evidence: the candidate profile stays disabled and no GT06 closure
+or accepted capability is touched.
+"""
+from __future__ import annotations
+
+import argparse
+import hashlib
+import importlib.util
+import json
+import math
+import os
+from pathlib import Path
+import re
+import shutil
+import sys
+
+STUDIO = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(STUDIO.parent))
+
+_RUNNER_SPEC = importlib.util.spec_from_file_location(
+    "o2_native_run_fixture", STUDIO / "build/bootstrap/run_fixture.py")
+_RUNNER = importlib.util.module_from_spec(_RUNNER_SPEC)
+sys.modules[_RUNNER_SPEC.name] = _RUNNER
+_RUNNER_SPEC.loader.exec_module(_RUNNER)
+
+_CONTRACT_SPEC = importlib.util.spec_from_file_location(
+    "o2_native_authoring_contract", STUDIO / "godot-addon/authoring_contract.py")
+_CONTRACT = importlib.util.module_from_spec(_CONTRACT_SPEC)
+sys.modules[_CONTRACT_SPEC.name] = _CONTRACT
+_CONTRACT_SPEC.loader.exec_module(_CONTRACT)
+
+_EDGE_SPEC = importlib.util.spec_from_file_location(
+    "o2_native_gameplay_edges", STUDIO / "godot-addon/gameplay_edges.py")
+_EDGE = importlib.util.module_from_spec(_EDGE_SPEC)
+sys.modules[_EDGE_SPEC.name] = _EDGE
+_EDGE_SPEC.loader.exec_module(_EDGE)
+from studio.protocol.core import Request, canonical_bytes
+
+_RESOURCE_SPEC = importlib.util.spec_from_file_location(
+    "o2_native_resource_authoring", STUDIO / "godot-addon/resource_authoring.py")
+_RESOURCE = importlib.util.module_from_spec(_RESOURCE_SPEC)
+sys.modules[_RESOURCE_SPEC.name] = _RESOURCE
+_RESOURCE_SPEC.loader.exec_module(_RESOURCE)
+
+_INSTANCE_SPEC = importlib.util.spec_from_file_location(
+    "o2_native_scene_instance", STUDIO / "godot-addon/scene_instance.py")
+_INSTANCE = importlib.util.module_from_spec(_INSTANCE_SPEC)
+sys.modules[_INSTANCE_SPEC.name] = _INSTANCE
+_INSTANCE_SPEC.loader.exec_module(_INSTANCE)
+
+_TILEMAP_SPEC = importlib.util.spec_from_file_location(
+    "o2_native_tilemap_authoring", STUDIO / "godot-addon/tilemap_authoring.py")
+_TILEMAP = importlib.util.module_from_spec(_TILEMAP_SPEC)
+sys.modules[_TILEMAP_SPEC.name] = _TILEMAP
+_TILEMAP_SPEC.loader.exec_module(_TILEMAP)
+
+_ANIMATION_SPEC = importlib.util.spec_from_file_location(
+    "o2_native_animation_authoring", STUDIO / "godot-addon/animation_authoring.py")
+_ANIMATION = importlib.util.module_from_spec(_ANIMATION_SPEC)
+sys.modules[_ANIMATION_SPEC.name] = _ANIMATION
+_ANIMATION_SPEC.loader.exec_module(_ANIMATION)
+
+_BEHAVIOR_SPEC = importlib.util.spec_from_file_location(
+    "o2_native_gameplay_behavior", STUDIO / "godot-addon/gameplay_behavior.py")
+_BEHAVIOR = importlib.util.module_from_spec(_BEHAVIOR_SPEC)
+sys.modules[_BEHAVIOR_SPEC.name] = _BEHAVIOR
+_BEHAVIOR_SPEC.loader.exec_module(_BEHAVIOR)
+
+_SCRIPT_SPEC = importlib.util.spec_from_file_location(
+    "o2_native_script_profile", STUDIO / "godot-addon/script_profile.py")
+_SCRIPT = importlib.util.module_from_spec(_SCRIPT_SPEC)
+sys.modules[_SCRIPT_SPEC.name] = _SCRIPT
+_SCRIPT_SPEC.loader.exec_module(_SCRIPT)
+
+
+def sha(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as stream:
+        for block in iter(lambda: stream.read(1024 * 1024), b""):
+            digest.update(block)
+    return digest.hexdigest()
+
+
+def write_json(path: Path, value: object) -> None:
+    path.write_text(json.dumps(value, indent=2, ensure_ascii=False, sort_keys=True) + "\n",
+                    encoding="utf-8", newline="\n")
+
+
+def source_files() -> dict[str, str]:
+    names = [
+        "build/bootstrap/run_fixture.py",
+        "toolchain.lock.json",
+        "godot-addon/authoring_contract.py",
+        "contracts/godot-authoring-schema-v1.json",
+        "tests/godot/authoring_native_probe.gd",
+        "tests/godot/authoring_native_plugin.gd",
+        "tests/godot/gameplay_edges_native.gd",
+        "tests/godot/animation_native.gd",
+        "tests/godot/behavior_native.gd",
+        "tests/godot/run_authoring_native_probe.py",
+        "godot-addon/gameplay_edges.py",
+        "godot-addon/resource_authoring.py",
+        "godot-addon/scene_instance.py",
+        "godot-addon/tilemap_authoring.py",
+        "godot-addon/animation_authoring.py",
+        "godot-addon/gameplay_behavior.py",
+        "godot-addon/script_profile.py",
+        "protocol/core.py",
+        "protocol/_rfc8785/__init__.py",
+        "protocol/_rfc8785/_impl.py",
+    ]
+    return {name: sha(STUDIO / name) for name in sorted(names)}
+
+
+def closure(manifest: dict[str, str]) -> str:
+    rows = "".join(f"8-9-hh3d-3/studio/{name}\0{digest}\n"
+                    for name, digest in sorted(manifest.items()))
+    return hashlib.sha256(rows.encode("utf-8")).hexdigest()
+
+
+def resolve_gui(binary: Path, lock: dict) -> tuple[Path, str, str]:
+    binary = binary.resolve(strict=True)
+    if sha(binary) == lock["gui_sha256"]:
+        return binary, lock["gui_sha256"], "gui-direct"
+    if sha(binary) == lock["console_sha256"] and binary.name.lower().endswith("_console.exe"):
+        sibling = binary.with_name(binary.name[:-len("_console.exe")] + ".exe")
+        if sibling.is_file() and sha(sibling) == lock["gui_sha256"]:
+            return sibling, lock["gui_sha256"], "console-input-resolved-to-gui-direct"
+    raise ValueError("PIN_HASH")
+
+
+def project_files(project: Path) -> dict[str, str]:
+    return {
+        path.relative_to(project).as_posix(): sha(path)
+        for path in sorted(project.rglob("*"))
+        if path.is_file() and ".godot" not in path.relative_to(project).parts
+        and path.name not in ("o2-native-result.json", "editor.log")
+        and path.suffix != ".uid"
+    }
+
+
+def expected_labels(catalog: dict) -> set[str]:
+    labels = {
+        "actual_editor", "root_scene_loaded", "root_identity", "project_isolation",
+        "user_data_isolation", "run_root_recorded", "native_history_available",
+        "initial_history_empty", "catalog_shape", "InputMap_singleton_readback",
+        "InputMap_node_mutation_rejected", "cleanup_empty_history",
+        "cleanup_temporary_nodes",
+    }
+    for row in catalog["classes"]:
+        prefix = "class_" + row["class_name"]
+        labels.update({prefix + suffix for suffix in (
+            "_classdb_exists", "_classdb_parent", "_reject_unknown_property")})
+        if row.get("kind") == "singleton":
+            labels.update({prefix + "_classdb_instantiable_advisory", prefix + "_singleton_only"})
+        else:
+            labels.update({prefix + suffix for suffix in (
+                "_classdb_instantiable", "_native_construct", "_readback_all_properties",
+                "_undo_do_readback", "_undo_transition", "_undo_readback",
+                "_redo_transition", "_redo_readback")})
+    return labels
+
+
+def expected_edge_labels() -> set[str]:
+    labels = {"edge_proposal_count"}
+    for operation in ("scene.signal.connect", "scene.group.assign", "input.action.define"):
+        prefix = "edge_" + operation.replace(".", "_")
+        labels.update(prefix + suffix for suffix in (
+            "_binding", "_fixture_target", "_before", "_do_readback", "_effect",
+            "_undo_transition", "_undo_readback", "_redo_transition", "_redo_readback",
+            "_redo_effect", "_cleanup_transition", "_cleanup_readback"))
+    return labels
+
+
+def expected_resource_labels() -> set[str]:
+    labels = {"resource_proposal_count"}
+    for resource_type in ("RectangleShape2D", "CapsuleShape2D", "BoxShape3D", "CapsuleShape3D"):
+        prefix = "resource_" + resource_type
+        labels.update(prefix + suffix for suffix in (
+            "_binding", "_classdb", "_node_created", "_before", "_shape_readback", "_do_readback", "_identity",
+            "_undo_transition", "_undo_readback", "_redo_transition",
+            "_redo_readback", "_cleanup_transition", "_cleanup_readback"))
+    return labels
+
+
+def expected_instance_labels() -> set[str]:
+    prefix = "instance_scene"
+    return {prefix + suffix for suffix in (
+        "_proposal_count", "_binding", "_source_loaded", "_parent_created",
+        "_before", "_do_transition", "_do_readback", "_transform_readback",
+        "_undo_transition", "_undo_readback", "_redo_transition",
+        "_redo_readback", "_cleanup_transition", "_cleanup_readback")}
+
+
+def expected_tilemap_labels() -> set[str]:
+    prefix = "tilemap_cell"
+    return {prefix + suffix for suffix in (
+        "_proposal_count", "_binding", "_layer_created", "_before",
+        "_do_transition", "_do_readback", "_atlas_readback", "_undo_transition",
+        "_undo_readback", "_redo_transition", "_redo_readback",
+        "_cleanup_transition", "_cleanup_readback")}
+
+
+def expected_animation_labels() -> set[str]:
+    labels = {"animation_proposal_count"}
+    for proposal in animation_proposals():
+        labels.update("animation_" + proposal["animation_id"] + suffix for suffix in (
+            "_binding", "_native_binding", "_resource_created", "_before",
+            "_do_transition", "_do_readback", "_playback", "_undo_transition", "_undo_readback",
+            "_redo_transition", "_redo_readback", "_redo_playback", "_cleanup_transition",
+            "_cleanup_readback"))
+    return labels
+
+
+def edge_proposals() -> list[dict]:
+    context = _EDGE.EdgeContext(
+        "project.fixture", "sha256:" + "1" * 64, "sha256:" + "2" * 64,
+        3, "lease.fixture", 7, 31000, 1000,
+        (_EDGE.EdgeNode("root"), _EDGE.EdgeNode("actor"), _EDGE.EdgeNode("bot")))
+    rows = (
+        ("scene.signal.connect", {"stable_id": "actor"},
+         {"signal_name": "pressed", "target_stable_id": "bot", "method": "hide"}),
+        ("scene.group.assign", {"stable_id": "actor"},
+         {"group_name": "o2_probe_group"}),
+        ("input.action.define", {"stable_id": "root"},
+         {"action_name": "o2_probe_jump", "physical_key": 32, "deadzone": 0.25}),
+    )
+    result: list[dict] = []
+    for index, (operation, target, body) in enumerate(rows, 1):
+        payload = {"expected_generation": context.generation,
+                   "expected_project_revision": context.project_revision, **body}
+        request = Request(
+            command_id=f"edge.native.{index}", project_id=context.project_id,
+            operation=operation, lease_id=context.lease_id,
+            fencing_epoch=context.fencing_epoch, expected_revision=context.revision,
+            target=target, payload=payload,
+            payload_hash="sha256:" + __import__("hashlib").sha256(canonical_bytes(payload)).hexdigest(),
+            deadline_ms=2000)
+        result.append(_EDGE.validate_request(request, context).projection)
+    return result
+
+
+def resource_proposals() -> list[dict]:
+    context = _RESOURCE.ValidationContext(
+        "project.fixture", "sha256:" + "1" * 64, "sha256:" + "2" * 64,
+        4, "lease.fixture", 9, 31000, 1000,
+        (_RESOURCE.NodeState("root", None, "Node2D", "Root"),
+         _RESOURCE.NodeState("collider", "root", "CollisionShape2D", "Collider"),
+         _RESOURCE.NodeState("collider3d", "root", "CollisionShape3D", "Collider3D")))
+    rows = (
+        ("RectangleShape2D", "collider", {"size": [8, 4]}),
+        ("CapsuleShape2D", "collider", {"radius": 2, "height": 5}),
+        ("BoxShape3D", "collider3d", {"size": [2, 3, 4]}),
+        ("CapsuleShape3D", "collider3d", {"radius": 1.5, "height": 4}),
+    )
+    result: list[dict] = []
+    for index, (resource_type, target_id, properties) in enumerate(rows, 1):
+        payload = {"expected_generation": context.generation,
+                   "expected_project_revision": context.project_revision,
+                   "resource_id": "native." + resource_type.lower(),
+                   "resource_type": resource_type, "properties": properties}
+        request = Request(
+            command_id=f"resource.native.{index}", project_id=context.project_id,
+            operation="scene.resource.create", lease_id=context.lease_id,
+            fencing_epoch=context.fencing_epoch, expected_revision=context.revision,
+            target={"stable_id": target_id}, payload=payload,
+            payload_hash="sha256:" + hashlib.sha256(canonical_bytes(payload)).hexdigest(),
+            deadline_ms=2000)
+        result.append(_RESOURCE.validate_request(request, context).projection)
+    return result
+
+
+def instance_proposals() -> list[dict]:
+    context = _INSTANCE.ValidationContext(
+        "project.fixture", "sha256:" + "1" * 64, "sha256:" + "2" * 64,
+        5, "lease.fixture", 10, 31000, 1000,
+        (_INSTANCE.NodeState("root", None, "Node2D", "Root"),
+         _INSTANCE.NodeState("platforms", "root", "Node2D", "Platforms")),
+        (_INSTANCE.SceneSourceState("arena", "scenes/arena.tscn", "sha256:" + "3" * 64, "Node2D"),))
+    payload = {"expected_generation": context.generation,
+               "expected_project_revision": context.project_revision,
+               "scene_id": "arena", "instance_stable_id": "arena_01",
+               "instance_name": "Arena01", "position": [10, 20],
+               "rotation_degrees": [15], "scale": [1.25, 0.75]}
+    request = Request(
+        command_id="instance.native.1", project_id=context.project_id,
+        operation="scene.instance.create", lease_id=context.lease_id,
+        fencing_epoch=context.fencing_epoch, expected_revision=context.revision,
+        target={"stable_id": "platforms"}, payload=payload,
+        payload_hash="sha256:" + hashlib.sha256(canonical_bytes(payload)).hexdigest(),
+        deadline_ms=2000)
+    return [_INSTANCE.validate_request(request, context).projection]
+
+
+def tilemap_proposals() -> list[dict]:
+    context = _TILEMAP.ValidationContext(
+        "project.fixture", "sha256:" + "1" * 64, "sha256:" + "2" * 64,
+        6, "lease.fixture", 11, 31000, 1000,
+        (_TILEMAP.NodeState("root", None, "Node2D", "Root"),
+         _TILEMAP.NodeState("map", "root", "TileMapLayer", "Map")),
+        (_TILEMAP.TileSourceState(0, "sha256:" + "3" * 64, ((0, 0),), (0,)),))
+    payload = {"expected_generation": context.generation,
+               "expected_project_revision": context.project_revision,
+               "cell": [2, 3], "source_id": 0, "atlas_coords": [0, 0], "alternative": 0}
+    request = Request(
+        command_id="tilemap.native.1", project_id=context.project_id,
+        operation="scene.tilemap.cell.set", lease_id=context.lease_id,
+        fencing_epoch=context.fencing_epoch, expected_revision=context.revision,
+        target={"stable_id": "map"}, payload=payload,
+        payload_hash="sha256:" + hashlib.sha256(canonical_bytes(payload)).hexdigest(),
+        deadline_ms=2000)
+    return [_TILEMAP.validate_request(request, context).projection]
+
+
+def animation_proposals() -> list[dict]:
+    context = _ANIMATION.ValidationContext(
+        "project.fixture", "sha256:" + "1" * 64, "sha256:" + "2" * 64,
+        7, "lease.fixture", 12, 31000, 1000,
+        (_ANIMATION.NodeState("root", None, "Node3D", "Fixture"),
+         _ANIMATION.NodeState("actor2d", "root", "Node2D", "Actor2D"),
+         _ANIMATION.NodeState("actor3d", "root", "Node3D", "Actor3D"),
+         _ANIMATION.NodeState("player", "root", "AnimationPlayer", "Player")))
+    examples = (
+        ("motion2d", "actor2d", 2.0, 0, (
+            ("position", [1, 2], [9, 6]), ("rotation_degrees", 0, 60), ("scale", [1, 1], [2, 3]))),
+        ("motion3d", "actor3d", 4.0, 1, (
+            ("position", [0, 0, 0], [4, 8, 12]),
+            ("rotation_degrees", [0, 0, 0], [10, 40, 80]), ("scale", [1, 1, 1], [2, 3, 4]))),
+    )
+    result = []
+    for animation_id, node_id, length, loop, values in examples:
+        payload = {"expected_generation": context.generation,
+                   "expected_project_revision": context.project_revision,
+                   "animation_id": animation_id, "length": length, "loop_mode": loop,
+                   "tracks": [{"node_stable_id": node_id, "property": prop,
+                               "keys": [[0.0, start], [length, end]]} for prop, start, end in values]}
+        request = Request(
+            command_id="animation.native." + animation_id, project_id=context.project_id,
+            operation="scene.animation.create", lease_id=context.lease_id,
+            fencing_epoch=context.fencing_epoch, expected_revision=context.revision,
+            target={"stable_id": "player"}, payload=payload,
+            payload_hash="sha256:" + hashlib.sha256(canonical_bytes(payload)).hexdigest(),
+            deadline_ms=2000)
+        result.append(_ANIMATION.validate_request(request, context).projection)
+    return result
+
+
+def behavior_proposals() -> list[dict]:
+    context = _BEHAVIOR.ValidationContext(
+        "project.fixture", "sha256:" + "1" * 64, "sha256:" + "2" * 64,
+        8, "lease.fixture", 13, 31000, 1000,
+        (_BEHAVIOR.NodeState("root", "Node3D"),
+         _BEHAVIOR.NodeState("actor", "CharacterBody2D")))
+    payload = {
+        "expected_generation": context.generation,
+        "expected_project_revision": context.project_revision,
+        "behavior_id": "fighter",
+        "states": ["idle", "run", "jump"],
+        "initial_state": "idle",
+        "transitions": [
+            {"from_state": "idle", "action": "move_right", "to_state": "run",
+             "effects": [{"kind": "move", "params": {"speed": 4}},
+                          {"kind": "face", "params": {"angle": 15}},
+                          {"kind": "play_animation", "params": {"animation": "run"}}]},
+            {"from_state": "run", "action": "jump", "to_state": "jump",
+             "effects": [{"kind": "jump", "params": {"velocity_y": -8}},
+                          {"kind": "set_velocity", "params": {"velocity_x": 3, "velocity_y": -8}},
+                          {"kind": "emit_signal", "params": {"signal": "jumped"}},
+                          {"kind": "play_animation", "params": {"animation": "jump"}}]},
+            {"from_state": "jump", "action": "land", "to_state": "idle",
+             "effects": [{"kind": "set_velocity", "params": {"velocity_x": 0, "velocity_y": 0}},
+                          {"kind": "emit_signal", "params": {"signal": "landed"}},
+                          {"kind": "play_animation", "params": {"animation": "idle"}}]},
+        ],
+    }
+    request = Request(
+        command_id="behavior.native.fighter", project_id=context.project_id,
+        operation="scene.behavior.create", lease_id=context.lease_id,
+        fencing_epoch=context.fencing_epoch, expected_revision=context.revision,
+        target={"stable_id": "actor"}, payload=payload,
+        payload_hash="sha256:" + hashlib.sha256(canonical_bytes(payload)).hexdigest(),
+        deadline_ms=2000)
+    return [_BEHAVIOR.validate_request(request, context).projection]
+
+
+def expected_behavior_labels() -> set[str]:
+    return {"behavior_proposal_count", "behavior_binding", "behavior_native_binding",
+            "behavior_dispatch", "behavior_deterministic", "behavior_undo_transition",
+            "behavior_undo_readback", "behavior_redo_transition", "behavior_redo_readback",
+            "behavior_cleanup_readback"}
+
+
+def script_input() -> dict:
+    source = (b"extends Node3D\n"
+              b"@export var fixture_value: int = 23\n"
+              b"@export var move_speed: float = 7.0\n"
+              b"@export var turn_speed: float = 90.125\n"
+              b"@export var enabled: bool = false\n")
+    validated = _SCRIPT.validate_script(source)
+    return {"profile": validated.profile, "sha256": validated.sha256,
+            "source": source.decode("ascii"), "defaults": validated.defaults,
+            "runtime_authorized": False, "changes_applied": False}
+
+
+def expected_script_labels() -> set[str]:
+    return {"script_proposal_shape", "script_temp_write", "script_parse_readback",
+            "script_before", "script_do_transition", "script_do_readback",
+            "script_undo_transition", "script_undo_readback", "script_redo_transition",
+            "script_redo_readback", "script_cleanup_transition", "script_cleanup_readback",
+            "script_temp_removed"}
+
+
+def validate_script_observations(checks: list[dict]) -> str | None:
+    rows = {row["label"]: row.get("details") for row in checks}
+    expected = script_input()
+    for label in ("script_do_readback", "script_redo_readback"):
+        details = rows.get(label)
+        if (type(details) is not dict or details.get("path") != "res://o2_candidate_profile.gd"
+                or details.get("fixture_value") != 23
+                or not numeric_match(details.get("move_speed"), 7.0)
+                or not numeric_match(details.get("turn_speed"), 90.125)
+                or details.get("enabled") is not False):
+            return "script-readback"
+    return None
+
+
+def validate_behavior_observations(checks: list[dict]) -> str | None:
+    rows = {row["label"]: row.get("details") for row in checks}
+    proposal = behavior_proposals()[0]
+    binding = {key: proposal[key] for key in ("command_id", "request_digest")}
+    for label in ("behavior_dispatch", "behavior_deterministic"):
+        details = rows.get(label)
+        if type(details) is not dict or any(details.get(key) != value for key, value in binding.items()):
+            return "behavior-request-binding"
+    expected_sequence = [
+        {"state": "run", "position": [4.0, 0.0], "velocity": [4.0, 0.0],
+         "rotation_degrees": 15.0, "signals": [], "animation": "run"},
+        {"state": "jump", "position": [4.0, 0.0], "velocity": [3.0, -8.0],
+         "rotation_degrees": 15.0, "signals": ["jumped"], "animation": "jump"},
+        {"state": "idle", "position": [4.0, 0.0], "velocity": [0.0, 0.0],
+         "rotation_degrees": 15.0, "signals": ["jumped", "landed"], "animation": "idle"},
+    ]
+    dispatch = rows.get("behavior_dispatch")
+    deterministic = rows.get("behavior_deterministic")
+    if (type(dispatch) is not dict or dispatch.get("sequence") != expected_sequence
+            or type(deterministic) is not dict or deterministic.get("sequence") != expected_sequence
+            or deterministic.get("repeat_sequence") != expected_sequence):
+        return "behavior-dispatch-values"
+    for label in ("behavior_undo_readback", "behavior_redo_readback"):
+        details = rows.get(label)
+        if type(details) is not dict:
+            return "behavior-undo-details"
+    undo = rows["behavior_undo_readback"]
+    expected_before = {"state": "idle", "position": [0.0, 0.0], "velocity": [0.0, 0.0],
+                       "rotation_degrees": 0.0, "signals": [], "animation": ""}
+    if undo.get("before") != expected_before or undo.get("after_undo") != expected_before:
+        return "behavior-undo-values"
+    if rows["behavior_redo_readback"].get("after_redo") != rows["behavior_undo_readback"].get("after_do"):
+        return "behavior-redo-values"
+    return None
+
+
+def numeric_match(observed: object, expected: object) -> bool:
+    """Godot float32 property readback has bounded error; booleans are not numbers."""
+    if type(expected) is list:
+        return (type(observed) is list and len(observed) == len(expected)
+                and all(numeric_match(left, right) for left, right in zip(observed, expected)))
+    return (type(observed) in (int, float) and math.isfinite(observed)
+            and abs(observed - expected) <= 1e-4)
+
+
+def validate_animation_observations(checks: list[dict]) -> str | None:
+    """Independently check raw engine values against the frozen input recipe.
+
+    Never trust the native 'passed' flag or a caller-supplied expected value.
+    This is diagnostic validation, not a public command ACK.
+    """
+    rows = {row["label"]: row.get("details") for row in checks}
+    for proposal in animation_proposals():
+        prefix = "animation_" + proposal["animation_id"]
+        binding = {key: proposal[key] for key in ("command_id", "request_digest")}
+        if rows.get(prefix + "_binding") != binding:
+            return "animation-request-binding"
+        for suffix in ("_do_readback", "_redo_readback"):
+            observed = rows.get(prefix + suffix)
+            if (type(observed) is not dict or observed.get("animation_id") != proposal["animation_id"]
+                    or not numeric_match(observed.get("length"), proposal["length"])
+                    or type(observed.get("loop_mode")) is not int
+                    or observed["loop_mode"] != proposal["loop_mode"]):
+                return "animation-resource-binding"
+            tracks = observed.get("tracks")
+            if type(tracks) is not list or len(tracks) != len(proposal["tracks"]):
+                return "animation-tracks"
+            for actual, spec in zip(tracks, proposal["tracks"]):
+                if (type(actual) is not dict or actual.get("path") != spec["node_path"] + ":" + spec["property"]
+                        or type(actual.get("type")) is not int or actual["type"] != 0
+                        or type(actual.get("interpolation")) is not int or actual["interpolation"] != 1
+                        or not numeric_match(actual.get("keys"), spec["keys"])):
+                    return "animation-track-readback"
+        # The last sample proves wrap on the looping clip; the non-loop clip reaches its end.
+        fractions = (0.0, 0.5, 0.25 if proposal["loop_mode"] else 1.0)
+        for suffix in ("_playback", "_redo_playback"):
+            observed = rows.get(prefix + suffix)
+            if type(observed) is not dict or any(observed.get(key) != value for key, value in binding.items()):
+                return "animation-playback-binding"
+            samples = observed.get("samples")
+            if type(samples) is not list or len(samples) != len(fractions):
+                return "animation-playback-samples"
+            for sample, fraction in zip(samples, fractions):
+                if (type(sample) is not dict or not numeric_match(sample.get("position_seconds"), proposal["length"] * fraction)
+                        or type(sample.get("values")) is not dict):
+                    return "animation-playback-position"
+                expected_keys = {track["node_stable_id"] + ":" + track["property"] for track in proposal["tracks"]}
+                if set(sample["values"]) != expected_keys:
+                    return "animation-playback-properties"
+                for spec in proposal["tracks"]:
+                    start, end = spec["keys"][0][1], spec["keys"][1][1]
+                    expected = ([a + (b - a) * fraction for a, b in zip(start, end)]
+                                if type(start) is list else start + (end - start) * fraction)
+                    if not numeric_match(sample["values"][spec["node_stable_id"] + ":" + spec["property"]], expected):
+                        return "animation-playback-value"
+    return None
+
+
+def validate_result(result: object, catalog: dict, process: dict, run_root: Path) -> tuple[bool, str | None]:
+    if not isinstance(result, dict):
+        return False, "result-not-object"
+    if result.get("schema") != "hh-o2-native-authoring-observation-1":
+        return False, "schema"
+    if result.get("actual_editor") is not True or result.get("runtime_authorized") is not False:
+        return False, "authorization-binding"
+    if result.get("native_mutation") is not True or result.get("formal_acceptance") is not False:
+        return False, "native-diagnostic-binding"
+    if result.get("failures") != []:
+        return False, "probe-failures"
+    checks = result.get("checks")
+    if not isinstance(checks, list) or not checks:
+        return False, "checks"
+    labels = []
+    for row in checks:
+        if not isinstance(row, dict) or not isinstance(row.get("label"), str) or row.get("passed") is not True:
+            return False, "check-failed"
+        labels.append(row["label"])
+    expected = (expected_labels(catalog) | expected_edge_labels()
+                | expected_resource_labels() | expected_instance_labels()
+                | expected_tilemap_labels() | expected_animation_labels()
+                | expected_behavior_labels() | expected_script_labels())
+    if len(labels) != len(set(labels)) or set(labels) != expected:
+        missing = sorted(expected - set(labels))
+        extra = sorted(set(labels) - expected)
+        return False, f"check-label-set missing={missing} extra={extra}"
+    # Presentation candidates carry data-bearing native readback rows. A true
+    # flag without property names/observed values is not evidence for a particle
+    # or HUD contract and must fail closed.
+    rows_by_label = {row["label"]: row for row in checks}
+    for class_name in ("GPUParticles2D", "CPUParticles2D", "AudioStreamPlayer2D", "ProgressBar"):
+        spec = next((row for row in catalog["classes"] if row["class_name"] == class_name), None)
+        if spec is None:
+            continue
+        names = set(spec["properties"])
+        for suffix in ("_readback_all_properties", "_undo_do_readback", "_undo_readback", "_redo_readback"):
+            row = rows_by_label.get("class_" + class_name + suffix)
+            details = row.get("details") if row else None
+            if (type(details) is not list or
+                    {item.get("name") for item in details if type(item) is dict} != names or
+                    any(type(item) is not dict or item.get("passed") is not True
+                        for item in details)):
+                return False, "presentation-readback-details"
+    animation_error = validate_animation_observations(checks)
+    if animation_error:
+        return False, animation_error
+    behavior_error = validate_behavior_observations(checks)
+    if behavior_error:
+        return False, behavior_error
+    script_error = validate_script_observations(checks)
+    if script_error:
+        return False, script_error
+    isolation = result.get("isolation")
+    if not isinstance(isolation, dict) or isolation.get("project_under_run_root") is not True or isolation.get("user_under_run_root") is not True or isolation.get("network_used") is not False or isolation.get("arbitrary_script_loaded") is not False or isolation.get("public_ack") is not False:
+        return False, "isolation"
+    normalized_root = run_root.resolve().as_posix().rstrip("/") + "/"
+    for key in ("project_root", "user_root"):
+        value = result.get(key)
+        if not isinstance(value, str) or not value.replace("\\", "/").startswith(normalized_root):
+            return False, key
+    if result.get("pid") != process.get("target_pid"):
+        return False, "pid-binding"
+    return True, None
+
+
+def run(godot: Path, run_id: str, output: Path) -> dict:
+    if not re.fullmatch(r"o2-native-[a-z0-9-]{1,32}", run_id):
+        raise ValueError("RUN_ID")
+    output = output.resolve()
+    if output.exists() or _RUNNER._within(output, STUDIO):
+        raise ValueError("OUTPUT_SCOPE")
+    output.mkdir(parents=True)
+    lock = json.loads((STUDIO / "toolchain.lock.json").read_text(encoding="utf-8"))["godot"]
+    requested_binary = godot.resolve(strict=True)
+    binary, binary_sha256, binary_mode = resolve_gui(requested_binary, lock)
+    manifest = source_files()
+    source_closure = closure(manifest)
+    catalog = _CONTRACT.load_catalog().as_dict()
+    root = output / "run"
+    project = root / "project"
+    project.mkdir(parents=True)
+    addon = project / "addons/o2_native"
+    tests = project / "tests"
+    scenes = project / "scenes"
+    addon.mkdir(parents=True)
+    tests.mkdir(parents=True)
+    scenes.mkdir(parents=True)
+    shutil.copyfile(STUDIO / "tests/godot/authoring_native_plugin.gd", addon / "plugin.gd")
+    shutil.copyfile(STUDIO / "tests/godot/authoring_native_probe.gd", tests / "authoring_native_probe.gd")
+    shutil.copyfile(STUDIO / "tests/godot/gameplay_edges_native.gd", tests / "gameplay_edges_native.gd")
+    shutil.copyfile(STUDIO / "tests/godot/animation_native.gd", tests / "animation_native.gd")
+    shutil.copyfile(STUDIO / "tests/godot/behavior_native.gd", tests / "behavior_native.gd")
+    shutil.copyfile(STUDIO / "tests/godot/script_native.gd", tests / "script_native.gd")
+    (addon / "plugin.cfg").write_text(
+        '[plugin]\nname="HH O2 Native Diagnostic"\ndescription="Disposable O2 probe"\n'
+        'author="HH Studio"\nversion="0.0-diagnostic"\nscript="plugin.gd"\n',
+        encoding="utf-8", newline="\n")
+    (project / "project.godot").write_text(
+        'config_version=5\n[application]\nconfig/name="HH O2 Native Diagnostic"\n'
+        'run/main_scene="res://scenes/fixture.tscn"\n[editor_plugins]\n'
+        'enabled=PackedStringArray("res://addons/o2_native/plugin.cfg")\n'
+        '[rendering]\nrenderer/rendering_method="gl_compatibility"\n',
+        encoding="utf-8", newline="\n")
+    (scenes / "fixture.tscn").write_text(
+        '[gd_scene format=3]\n\n[node name="Fixture" type="Node3D"]\n'
+        'metadata/hh_o2_native_root = "fixture-root"\n', encoding="utf-8", newline="\n")
+    (project / "catalog-input.json").write_bytes(
+        json.dumps({"catalog_version": catalog["catalog_version"], "classes": catalog["classes"]},
+                   ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8"))
+    write_json(project / "edge-input.json", {"proposals": edge_proposals()})
+    write_json(project / "resource-input.json", {"proposals": resource_proposals()})
+    write_json(project / "instance-input.json", {"proposals": instance_proposals()})
+    write_json(project / "tilemap-input.json", {"proposals": tilemap_proposals()})
+    write_json(project / "animation-input.json", {"proposals": animation_proposals()})
+    write_json(project / "behavior-input.json", {"proposals": behavior_proposals()})
+    write_json(project / "script-input.json", script_input())
+    (scenes / "arena.tscn").write_text(
+        '[gd_scene format=3]\n\n[node name="Arena" type="Node2D"]\n'
+        '\n[node name="Spawn" type="Node2D" parent="."]\n',
+        encoding="utf-8", newline="\n")
+    project_before = project_files(project)
+    write_json(output / "freeze.json", {"run_id": run_id, "source_files": manifest,
+              "source_closure_sha256": source_closure, "binary_sha256": binary_sha256,
+              "binary_mode": binary_mode, "catalog_digest": _CONTRACT.load_catalog().digest,
+              "project_files": project_before, "authority": 0, "formal_acceptance": False})
+    env = _RUNNER._isolated_user_env(root / "godot-user")
+    env["HH_O2_RUN_ROOT"] = root.resolve().as_posix()
+    log = project / "editor.log"
+    process = _RUNNER.run_process(
+        [str(binary), "--headless", "--editor", "--path", str(project),
+         "--log-file", str(log), "res://scenes/fixture.tscn"],
+        cwd=project, output=output, timeout=90, label="editor", env=env)
+    result_path = project / "o2-native-result.json"
+    result = json.loads(result_path.read_text(encoding="utf-8")) if result_path.is_file() else None
+    project_after = project_files(project)
+    source_after = source_files()
+    labels_ok, result_error = validate_result(result, catalog, process, root) if result is not None else (False, "missing-result")
+    project_unchanged = project_before == project_after
+    source_unchanged = manifest == source_after
+    log_text = log.read_text(encoding="utf-8", errors="replace") if log.is_file() else ""
+    clean_log = not re.search(r"(?mi)^(?:SCRIPT ERROR|ERROR:|WARNING:)|ObjectDB instances leaked", log_text)
+    capture = {
+        "schema": "hh-o2-native-authoring-capture-1", "run_id": run_id,
+        "source_closure_sha256": source_closure, "binary_sha256": binary_sha256,
+        "binary_mode": binary_mode, "process": process,
+        "probe": result, "probe_error": result_error, "project_unchanged": project_unchanged,
+        "source_unchanged": source_unchanged, "clean_log": clean_log,
+        "project_files_before": project_before, "project_files_after": project_after,
+        "log_sha256": sha(log) if log.is_file() else None,
+        "raw_artifacts": {path.relative_to(output).as_posix(): sha(path)
+                          for path in sorted(output.rglob("*")) if path.is_file()},
+        "formal_acceptance": False, "authority": 0,
+    }
+    capture["passed"] = bool(process.get("exit_code") == 0 and process.get("wrapper_exit_code") == 0
+                              and process.get("timed_out") is False and process.get("tree_verified") is True
+                              and labels_ok and project_unchanged and source_unchanged and clean_log)
+    write_json(output / "capture.json", capture)
+    # Refresh artifact hashes after capture itself is written.
+    capture["raw_artifacts"] = {path.relative_to(output).as_posix(): sha(path)
+                                for path in sorted(output.rglob("*")) if path.is_file()}
+    write_json(output / "result.json", capture)
+    return capture
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--godot", required=True, type=Path)
+    parser.add_argument("--run-id", required=True)
+    parser.add_argument("--output", required=True, type=Path)
+    args = parser.parse_args()
+    report = run(args.godot, args.run_id, args.output)
+    print(json.dumps({"run_id": report["run_id"], "passed": report["passed"],
+                      "probe_error": report["probe_error"]}))
+    raise SystemExit(0 if report["passed"] else 1)

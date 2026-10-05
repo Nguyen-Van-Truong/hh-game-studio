@@ -22,7 +22,7 @@ BINARY_NAME = 'Godot_v4.7.2-stable_linux.x86_64'
 BINARY_SHA256 = '8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e'
 IMAGE_ID = 'sha256:581429e3df12d76e6af4be5ab7d0e7fc2013eb57dc23d2de691411c8efdbb970'
 OWNED_RUNNER_SHA256 = 'ea522450acc46f90be5e2a7b9257e73ce8b619948105b2c9073aac1f881c7328'
-LOCK_SHA256 = '1441452e54279d94fe4a3bd946f2f494426179301bfe3202ae103b5fb469374d'
+LOCK_SHA256 = 'f8484bcd8d0d7c7df8d469196bd27ac61e79cb3c462637a4eab20055d4f15f8b'
 PROJECT_TEMPLATE = ('config_version=5\n[application]\nconfig/name="HH GT03 Linux validator"\n'
                     '[rendering]\nrenderer/rendering_method="gl_compatibility"\n'
                     '[threading]\nworker_pool/max_threads=4\n')
@@ -31,6 +31,8 @@ FILE_LIMITS = {'project.godot': 4096, 'scenes/fixture.tscn': 1048576, 'scripts/f
 TMPFS = {path: 'rw,nosuid,nodev,noexec,size=' + size + ',nr_inodes=' + str(inodes) + ',uid=65532,gid=65532,mode=0700'
          for path, size, inodes in (('/tmp', '16m', 2048), ('/home/validator', '16m', 2048),
                                    ('/run', '4m', 512), ('/project/.godot', '64m', 8192))}
+ASSET_TMPFS = {'/project/assets': 'rw,nosuid,nodev,noexec,size=4m,nr_inodes=512,uid=65532,gid=65532,mode=0700'}
+ASSET_PATHS = frozenset(('assets/avatar.glb', 'assets/sprite_sheet.png'))
 ENVIRONMENT = {'HOME': '/home/validator', 'TMPDIR': '/tmp', 'XDG_CACHE_HOME': '/home/validator/cache',
                'XDG_CONFIG_HOME': '/home/validator/config', 'XDG_DATA_HOME': '/home/validator/data',
                'XDG_RUNTIME_DIR': '/run'}
@@ -39,6 +41,38 @@ _HELPER = "import subprocess,sys; token=sys.stdin.readline(); sys.exit(125) if t
 _INCOMPLETE_CLI_HOLDS: list = []
 _INCOMPLETE_ADMISSION_HOLDS: list = []
 PROFILE_BOOTSTRAP_SHA256 = 'efde8370a6157ed2f66544ee13b82ee2556b59130f5306e9e0774ed0e3be79a5'
+SANDBOX_BOOTSTRAP_SHA256 = 'ed31974d0bdf659ca8c237db1fa0f2857a3260cbd5e363e6c1c9f248d075fbb0'
+GAMEPLAY_PROFILE_SHA256 = 'aa01428ff26dc56fc20f19f7093bd025685fe9ca509843826ee02fe7acb6485c'
+GUARDED_MODES = ('guarded-parse', 'guarded-import', 'guarded-play')
+GAMEPLAY_MODE = 'gameplay-source'
+SANDBOX_MODES = GUARDED_MODES + (GAMEPLAY_MODE,)
+GAMEPLAY_RUNTIME_FILES = (
+    'godot-addon/gameplay_source_owner.py',
+    'godot-addon/gameplay_runtime.py',
+    'godot-addon/gameplay_source_profile.py',
+    'godot-addon/gameplay_source_eligibility.py',
+    'godot-addon/gameplay_log_policy.py',
+    'godot-addon/gameplay_dependency_observation.py',
+    'godot-addon/gameplay_dependency_evidence.py',
+    'godot-addon/linux_executor.py',
+    'godot-addon/cli_job.py',
+    'godot-addon/gameplay_sandbox.py',
+    'godot-addon/publication_session.py',
+    'godot-addon/contract.py',
+    'godot-addon/operations.json',
+    'protocol/core.py',
+    'protocol/__init__.py',
+    'protocol/_rfc8785/__init__.py',
+    'protocol/_rfc8785/_impl.py',
+    'host/core/journal.py',
+    'host/core/redaction.py',
+    'host/core/transport.py',
+    'host/core/limits.py',
+    'host/core/docker_inventory.py',
+    'host/core/pipe_io.py',
+    'build/bootstrap/run_fixture.py',
+    'godot-addon/validator-toolchain.lock.json',
+)
 _CLI_JOBS = None
 SUPERVISOR_SHA256 = '5ef0eaaaa4220593add7716aad74da927ca3bb10605e964330de64fecc3ef15e'
 EXECUTOR_CONTEXT = 'hh-gt03-linux-desktop-v1'
@@ -92,6 +126,13 @@ def _read_file(path: Path, maximum: int) -> bytes:
     return raw
 
 
+def gameplay_runtime_source_closure() -> tuple[dict[str, str], str]:
+    """Bind the existing adapter/executor inventory; no project dependency inference."""
+    files = {relative: _sha(_read_file(STUDIO / relative, 1048576))
+             for relative in GAMEPLAY_RUNTIME_FILES}
+    return files, _sha(json.dumps(files, sort_keys=True, separators=(',', ':')).encode())
+
+
 def _names(path: Path, maximum: int = 8) -> set[str]:
     _no_links(path)
     _need(path.is_dir(), 'EXECUTOR_DIRECTORY_REQUIRED')
@@ -103,7 +144,7 @@ def _names(path: Path, maximum: int = 8) -> set[str]:
     return names
 
 
-def _project_bytes(project: Path) -> dict[str, bytes]:
+def _project_bytes(project: Path, *, template: str = PROJECT_TEMPLATE) -> dict[str, bytes]:
     names = _names(project)
     _need(names in ({'project.godot', 'scenes', 'scripts'}, {'project.godot', 'scenes', 'scripts', '.godot'}),
           'EXECUTOR_EXTRA_INPUT')
@@ -112,7 +153,7 @@ def _project_bytes(project: Path) -> dict[str, bytes]:
     if '.godot' in names:
         _need(not _names(project / '.godot'), 'EXECUTOR_NONEMPTY_CACHE')
     values = {name: _read_file(project / name, FILE_LIMITS[name]) for name in REQUIRED_FILES}
-    _need(values['project.godot'] == PROJECT_TEMPLATE.encode(), 'EXECUTOR_PROJECT_TEMPLATE')
+    _need(values['project.godot'] == template.encode(), 'EXECUTOR_PROJECT_TEMPLATE')
     return values
 
 
@@ -138,10 +179,10 @@ def _profile_factory():
 
 def _cli_jobs():
     global _CLI_JOBS
+    path = STUDIO / 'godot-addon/cli_job.py'
+    raw = _read_file(path, 65536)
+    key = '_hh_linux_cli_job_' + _sha(str(path).encode() + b'\0' + raw)
     if _CLI_JOBS is None:
-        path = STUDIO / 'godot-addon/cli_job.py'
-        raw = _read_file(path, 65536)
-        key = '_hh_linux_cli_job_' + _sha(str(path).encode() + b'\0' + raw)
         if key not in sys.modules:
             spec = importlib.util.spec_from_file_location(key, path)
             module = importlib.util.module_from_spec(spec)
@@ -152,6 +193,8 @@ def _cli_jobs():
                 del sys.modules[key]
                 raise
         _CLI_JOBS = sys.modules[key]
+    _need(_CLI_JOBS.__name__ == key and _CLI_JOBS.__file__ == str(path),
+          'EXECUTOR_CLI_SOURCE_CHANGED')
     return _CLI_JOBS
 
 
@@ -180,6 +223,8 @@ def _profile_project_bytes(project: Path) -> dict[str, bytes]:
 
 
 def _inputs(project: Path, mode: str) -> dict[str, bytes]:
+    if mode == GAMEPLAY_MODE:
+        return _gameplay_project_bytes(project)
     return _profile_project_bytes(project) if mode == 'profile-validate' else _project_bytes(project)
 
 
@@ -205,10 +250,106 @@ def _profile_driver() -> str:
         ' if code!=0:sys.exit(45)\n')
 
 
+def _sandbox_harness() -> bytes:
+    raw = _read_file(STUDIO / 'godot-addon/gameplay_sandbox.py', 65536)
+    _need(_sha(raw) == SANDBOX_BOOTSTRAP_SHA256, 'EXECUTOR_SANDBOX_HARNESS_PIN')
+    return raw
+
+
+def _gameplay_profile():
+    path = STUDIO / 'godot-addon/gameplay_source_profile.py'
+    raw = _read_file(path, 65536)
+    _need(_sha(raw) == GAMEPLAY_PROFILE_SHA256, 'EXECUTOR_GAMEPLAY_PROFILE_PIN')
+    key = '_hh_gameplay_source_' + _sha(str(path).encode() + b'\0' + raw)
+    if key not in sys.modules:
+        spec = importlib.util.spec_from_file_location(key, path)
+        module = importlib.util.module_from_spec(spec)
+        sys.modules[key] = module
+        try:
+            exec(compile(raw, str(path), 'exec'), module.__dict__)
+        except BaseException:
+            del sys.modules[key]
+            raise
+    return sys.modules[key]
+
+
+def _gameplay_log_policy():
+    # This host-only classifier is part of the independently observed runtime
+    # closure. Load the exact bytes being hashed, never a module from evidence.
+    path = STUDIO / 'godot-addon/gameplay_log_policy.py'
+    raw = _read_file(path, 65536)
+    key = '_hh_gameplay_log_' + _sha(str(path).encode() + b'\0' + raw)
+    if key not in sys.modules:
+        spec = importlib.util.spec_from_file_location(key, path)
+        module = importlib.util.module_from_spec(spec)
+        sys.modules[key] = module
+        try:
+            exec(compile(raw, str(path), 'exec'), module.__dict__)
+        except BaseException:
+            del sys.modules[key]
+            raise
+    return sys.modules[key]
+
+
+def _gameplay_project_bytes(project: Path) -> dict[str, bytes]:
+    """Admit the complete bounded scene/script inventory before Docker.
+
+    The old path admitted only one script even when the scene referenced
+    additional source.  This still does not infer Godot's runtime closure, but
+    it binds every UTF-8 scene/script byte supplied to the diagnostic and
+    prevents an unlisted file from entering the snapshot.
+    """
+    profile = _gameplay_profile()
+    names = _names(project)
+    _need(names in ({'project.godot', 'scenes', 'scripts'},
+                    {'project.godot', 'scenes', 'scripts', 'assets'},
+                    {'project.godot', 'scenes', 'scripts', '.godot'},
+                    {'project.godot', 'scenes', 'scripts', 'assets', '.godot'}),
+          'EXECUTOR_EXTRA_INPUT')
+    if '.godot' in names:
+        _need(not _names(project / '.godot'), 'EXECUTOR_NONEMPTY_CACHE')
+    scene_names = _names(project / 'scenes', maximum=profile.MAX_FILES)
+    script_names = _names(project / 'scripts', maximum=profile.MAX_FILES)
+    asset_names = _names(project / 'assets', maximum=profile.MAX_FILES) if 'assets' in names else set()
+    _need(set('assets/' + name for name in asset_names)
+          <= set(getattr(profile, '_ASSET_FILES', ())), 'EXECUTOR_EXTRA_INPUT')
+    _need('fixture.tscn' in scene_names and 'fixture_actor.gd' in script_names,
+          'EXECUTOR_REQUIRED_FIXTURE')
+    values = {'project.godot': _read_file(project / 'project.godot', FILE_LIMITS['project.godot'])}
+    _need(values['project.godot'] == profile.PROJECT_TEMPLATE.encode(), 'EXECUTOR_PROJECT_TEMPLATE')
+    source_files = {}
+    for directory, names_in_directory in (('scenes', scene_names), ('scripts', script_names)):
+        for name in sorted(names_in_directory):
+            relative = directory + '/' + name
+            maximum = profile.MAX_BYTES
+            raw = _read_file(project / relative, maximum)
+            values[relative] = raw
+            source_files[relative] = raw
+    for name in sorted(asset_names):
+        relative = 'assets/' + name
+        raw = _read_file(project / relative, profile.MAX_ASSET_BYTES)
+        values[relative] = raw
+        source_files[relative] = raw
+    profile.validate_source_bundle(source_files, entrypoint='scripts/fixture_actor.gd')
+    return values
+
+
+def _sandbox_command(phase: str) -> list[str]:
+    _need(phase in ('parse', 'import', 'play', 'readback'), 'EXECUTOR_SANDBOX_PHASE')
+    return ['/usr/local/bin/python3', '-I', '-B', '/harness/gameplay_sandbox.py', phase]
+
+
 def _supervised_command(mode: str, timeout_seconds: int = 20) -> list[str]:
     _need(type(timeout_seconds) is int and 1 <= timeout_seconds <= 20, 'EXECUTOR_TIMEOUT')
-    command = (['/usr/local/bin/python3', '-I', '-B', '-c', _profile_driver()]
-               if mode == 'profile-validate' else ['/tool/' + BINARY_NAME, *_command(mode)])
+    _command(mode)
+    if mode == 'profile-validate':
+        command = ['/usr/local/bin/python3', '-I', '-B', '-c', _profile_driver()]
+    elif mode == 'gameplay-source':
+        command = ['/usr/local/bin/python3', '-I', '-B', '-c', _gameplay_profile().driver()]
+    elif mode in GUARDED_MODES:
+        command = _sandbox_command(mode.removeprefix('guarded-'))
+    else:
+        command = ['/tool/' + BINARY_NAME, *_command(mode)]
     return ['-I', '-B', '-c', SUPERVISOR_BOOTSTRAP, '--signal=TERM', '--kill-after=1s',
             str(max(1, timeout_seconds - 1)) + 's', *command]
 
@@ -281,20 +422,27 @@ def _owner_path() -> Path:
     return root / 'owner.json'
 
 
-def _require_measure_window_clear() -> None:
-    """Refuse Docker create/start while a formal measurement owns the lease."""
-    base = os.environ.get('LOCALAPPDATA')
-    _need(isinstance(base, str) and base, 'EXECUTOR_MEASURE_WINDOW_LOCALAPPDATA')
-    base_path = Path(base)
-    _no_links(base_path)
-    root = base_path / 'HHGodotAgent'
-    if not root.exists():
-        return
+def _measure_window_lock_path() -> Path:
+    """Return the host-wide formal-measurement fence without creating it."""
+    local_appdata = os.environ.get('LOCALAPPDATA')
+    _need(type(local_appdata) is str and bool(local_appdata),
+          'EXECUTOR_LOCALAPPDATA_REQUIRED')
+    root = Path(local_appdata).absolute()
     _no_links(root)
-    marker = root / 'measure-window.lock'
-    if marker.exists():
-        _no_links(marker)
-        info = marker.stat(follow_symlinks=False)
+    owner_root = root / 'HHGodotAgent'
+    if owner_root.exists():
+        _no_links(owner_root)
+    return owner_root / 'measure-window.lock'
+
+
+def _assert_measure_window_clear() -> None:
+    """Refuse Docker mutation while a formal measurement owns this host."""
+    path = _measure_window_lock_path()
+    # is_symlink() also catches a dangling reparse point, which must fail
+    # closed instead of being treated as an absent fence.
+    if path.exists() or path.is_symlink():
+        _no_links(path)
+        info = path.stat(follow_symlinks=False)
         _need(stat.S_ISREG(info.st_mode) and info.st_nlink == 1 and info.st_size <= 4096,
               'EXECUTOR_MEASURE_WINDOW_LOCKED')
         raise ExecutorError('EXECUTOR_MEASURE_WINDOW_LOCKED')
@@ -344,6 +492,30 @@ def _missing(row: dict, output: Path, selector: str) -> bool:
             and ('no such object: ' + selector) in _read_file(output / row['stderr'], 262144).decode(errors='replace').lower())
 
 
+def _inventory_ids(output: Path) -> list[str]:
+    # Lazy import keeps the gameplay runtime's executor bootstrap stdlib-only.
+    from studio.host.core import docker_inventory as inventory
+    started = time.monotonic()
+    deadline = started + 5
+    row = {'schema': 'hh-linux-admission-inventory-1', 'transport': 'named-pipe',
+           'endpoint': inventory.ENDPOINT, 'request': inventory.REQUEST.decode('ascii'),
+           'timeout_seconds': 5, 'status': 'interrupted', 'container_ids': None}
+    try:
+        _need(inventory.EXECUTOR_CONTEXT == EXECUTOR_CONTEXT, 'EXECUTOR_INVENTORY_CONTEXT')
+        identifiers = inventory.query_owned_executor_containers(deadline)
+        inventory.check_deadline(deadline)
+        row.update(status='ok', container_ids=identifiers)
+        return identifiers
+    except inventory.InventoryError as error:
+        row['status'] = error.reason
+        if type(error.detail) is int:
+            row['http_status' if error.reason == 'nonzero' else 'errno'] = error.detail
+        raise ExecutorError('EXECUTOR_INVENTORY_' + error.reason.upper()) from None
+    finally:
+        row['elapsed_seconds'] = round(max(0, time.monotonic() - started), 6)
+        _write(output / 'admission-inventory.json', row)
+
+
 def _reconcile_owner(path: Path, call, output: Path) -> dict:
     record = _read_owner(path)
     recovery = {'previous_owner': record, 'reconciled': False, 'removed': False}
@@ -377,20 +549,23 @@ def _reconcile_owner(path: Path, call, output: Path) -> dict:
             recovery['removed'] = True
         _clear_owner(path)
     # Never clean an unknown container merely because it carries our label.
-    row, raw = call(['ps', '--all', '--no-trunc', '--filter', 'label=hh.gt03.executor=' + EXECUTOR_CONTEXT,
-                     '--format', '{{.ID}}'], 'admission-inventory', timeout=5, cap=4096)
-    _need(_cli_clean(row) and not raw.strip(), 'EXECUTOR_UNRECORDED_CONTAINER')
+    identifiers = _inventory_ids(output)
+    _need(not identifiers, 'EXECUTOR_UNRECORDED_CONTAINER')
     recovery['reconciled'] = True
     return recovery
 
 
 def _command(mode: str) -> list[str]:
-    _need(type(mode) is str and mode in ('parse', 'import', 'profile-validate'), 'EXECUTOR_MODE')
+    _need(type(mode) is str and mode in ('parse', 'import', 'profile-validate', *SANDBOX_MODES), 'EXECUTOR_MODE')
     if mode == 'profile-validate':
         return ['-I', '-B', '-c', _profile_driver()]
-    if mode == 'parse':
+    if mode == GAMEPLAY_MODE:
+        return ['-I', '-B', '-c', _gameplay_profile().driver()]
+    if mode in ('parse', 'guarded-parse'):
         return ['--headless', '--path', '/project', '--log-file', '/tmp/engine.log',
                 '--check-only', '--script', 'res://scripts/fixture_actor.gd']
+    if mode == 'guarded-play':
+        return ['--headless', '--path', '/project', '--log-file', '/tmp/engine.log', 'res://scenes/fixture.tscn']
     return ['--headless', '--editor', '--import', '--path', '/project', '--log-file', '/tmp/engine.log',
             'res://scenes/fixture.tscn']
 
@@ -407,6 +582,7 @@ def _lock() -> dict:
           and value.get('supervisor_sha256') == SUPERVISOR_SHA256
           and value.get('supervisor_bootstrap_sha256') == _sha(SUPERVISOR_BOOTSTRAP.encode())
           and value.get('profile_bootstrap_sha256') == PROFILE_BOOTSTRAP_SHA256
+          and value.get('gameplay_profile_sha256') == GAMEPLAY_PROFILE_SHA256
           and value.get('profile_mode') == 'profile-validate'
           and value.get('docker_context') == 'desktop-linux'
           and value.get('docker_endpoint') == 'npipe:////./pipe/dockerDesktopLinuxEngine', 'EXECUTOR_PIN_MISMATCH')
@@ -425,15 +601,16 @@ def _binary() -> Path:
 
 def _owned_runner():
     path = STUDIO / 'build/bootstrap/run_fixture.py'
-    _need(_sha(_read_file(path, 262144)) == OWNED_RUNNER_SHA256, 'EXECUTOR_RUNNER_PIN')
+    raw = _read_file(path, 262144)
+    _need(_sha(raw) == OWNED_RUNNER_SHA256, 'EXECUTOR_RUNNER_PIN')
     spec = importlib.util.spec_from_file_location('hh_gt03_owned_cli_' + uuid.uuid4().hex, path)
     module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
+    exec(compile(raw, str(path), 'exec', dont_inherit=True), module.__dict__)
     return module
 
 
 def _cli(owned, args: list[str], output: Path, label: str, *, timeout: int = 20,
-         cap: int = 262144) -> tuple[dict, bytes]:
+         cap: int = 262144, jobs=None) -> tuple[dict, bytes]:
     _need(re.fullmatch(r'[a-z0-9-]+', label) is not None, 'EXECUTOR_LABEL')
     argv = [DOCKER, '--context', 'desktop-linux', *args]
     row = {'argv': ['docker.exe', '--context', 'desktop-linux', *args], 'exit_code': None,
@@ -448,6 +625,7 @@ def _cli(owned, args: list[str], output: Path, label: str, *, timeout: int = 20,
     exceeded = threading.Event()
     process = None
     job = None
+    cli_jobs = None
     cancellation = None
     start = time.monotonic()
     def failed(error, prefix=''):
@@ -483,11 +661,12 @@ def _cli(owned, args: list[str], output: Path, label: str, *, timeout: int = 20,
             except BaseException as error:
                 failed(error, 'CLI_READER_JOIN_')
     try:
-        _cli_jobs().require_no_holds()
+        cli_jobs = jobs if jobs is not None else _cli_jobs()
+        cli_jobs.require_no_holds()
         process = subprocess.Popen([sys.executable, '-B', '-c', _HELPER, *argv], stdin=subprocess.PIPE,
                                    stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                                    creationflags=subprocess.CREATE_NO_WINDOW)
-        job = _cli_jobs().create(process)
+        job = cli_jobs.create(process)
         for index, stream in enumerate((process.stdout, process.stderr)):
             thread = threading.Thread(target=drain, args=(stream, index), daemon=True)
             readers.append(thread)
@@ -518,7 +697,7 @@ def _cli(owned, args: list[str], output: Path, label: str, *, timeout: int = 20,
             try:
                 # Also covers interruption after create returned but before the
                 # caller's assignment. Lookup uses exact process object identity.
-                lookup = getattr(_cli_jobs(), 'owner_for_process', None)
+                lookup = getattr(cli_jobs, 'owner_for_process', None)
                 job = lookup(process) if lookup is not None else None
             except BaseException as error:
                 failed(error, 'CLI_JOB_LOOKUP_')
@@ -626,8 +805,23 @@ def _owned_identity(value: dict, name: str, container_id: str | None = None) -> 
             and value.get('Config', {}).get('Labels', {}).get('hh.gt03.owner') == name)
 
 
-def _create_args(name: str, mode: str, tool: Path, snapshot: Path, timeout_seconds: int = 20) -> list[str]:
+def _asset_inventory(asset_files=()):
+    if type(asset_files) is not tuple:
+        raise ExecutorError('EXECUTOR_ASSET_INVENTORY')
+    values = tuple(asset_files)
+    if values != tuple(sorted(values)) or len(set(values)) != len(values):
+        raise ExecutorError('EXECUTOR_ASSET_INVENTORY')
+    if any(type(path) is not str or path not in ASSET_PATHS for path in values):
+        raise ExecutorError('EXECUTOR_ASSET_INVENTORY')
+    return values
+
+
+def _create_args(name: str, mode: str, tool: Path, snapshot: Path, timeout_seconds: int = 20,
+                 *, asset_files=()) -> list[str]:
     _need(re.fullmatch(r'hh-gt03-[0-9a-f]{32}', name) is not None, 'EXECUTOR_OWNER_NAME')
+    assets = _asset_inventory(asset_files)
+    if assets and mode != GAMEPLAY_MODE:
+        raise ExecutorError('EXECUTOR_ASSET_MODE')
     args = ['create', '--pull=never', '--name', name, '--label', 'hh.gt03.owner=' + name,
             '--label', 'hh.gt03.executor=' + EXECUTOR_CONTEXT,
             '--platform', 'linux/amd64', '--read-only', '--network', 'none', '--ipc', 'private',
@@ -644,14 +838,24 @@ def _create_args(name: str, mode: str, tool: Path, snapshot: Path, timeout_secon
         args += ['--tmpfs', destination + ':' + options]
     for source, destination in ((tool, '/tool'), (snapshot, '/project')):
         args += ['--mount', 'type=bind,src=' + str(source) + ',dst=' + destination + ',readonly,bind-propagation=rprivate']
-    if mode == 'profile-validate':
+    if assets:
+        for destination, options in ASSET_TMPFS.items():
+            args += ['--tmpfs', destination + ':' + options]
+        for relative in assets:
+            args += ['--mount', 'type=bind,src=' + str(snapshot / relative)
+                     + ',dst=/project/' + relative + ',readonly,bind-propagation=rprivate']
+    if mode == 'profile-validate' or mode in SANDBOX_MODES:
         args += ['--mount', 'type=bind,src=' + str(snapshot.parent / 'harness')
                  + ',dst=/harness,readonly,bind-propagation=rprivate']
     return args + ['--entrypoint', '/usr/local/bin/python3', IMAGE_ID, *_supervised_command(mode, timeout_seconds)]
 
 
 def _validate_inspect(value: dict, *, name: str, container_id: str, mode: str,
-                      tool: Path, snapshot: Path, image_environment: list[str], timeout_seconds: int = 20) -> None:
+                      tool: Path, snapshot: Path, image_environment: list[str], timeout_seconds: int = 20,
+                      asset_files=()) -> None:
+    assets = _asset_inventory(asset_files)
+    if assets and mode != GAMEPLAY_MODE:
+        raise ExecutorError('EXECUTOR_ASSET_MODE')
     _need(_owned_identity(value, name, container_id), 'EXECUTOR_OWNER_IDENTITY')
     host, config = value['HostConfig'], value['Config']
     expected_environment = dict(entry.split('=', 1) for entry in image_environment)
@@ -677,12 +881,16 @@ def _validate_inspect(value: dict, *, name: str, container_id: str, mode: str,
           and host.get('ShmSize') == 16777216 and host.get('LogConfig') == {'Type': 'none', 'Config': {}}
           and host.get('RestartPolicy', {}).get('Name') == 'no' and host.get('AutoRemove') is False
           and config.get('Healthcheck', {}).get('Test') == ['NONE'], 'EXECUTOR_RESOURCE_CONFIG')
-    _need(host.get('Tmpfs') == TMPFS, 'EXECUTOR_TMPFS_CONFIG')
+    expected_tmpfs = dict(TMPFS)
+    if assets:
+        expected_tmpfs.update(ASSET_TMPFS)
+    _need(host.get('Tmpfs') == expected_tmpfs, 'EXECUTOR_TMPFS_CONFIG')
     limits = host.get('Ulimits', [])
     _need(len(limits) == len(ULIMITS) and {x['Name']: (x['Soft'], x['Hard']) for x in limits}
           == {key: (number, number) for key, number in ULIMITS.items()}, 'EXECUTOR_ULIMITS')
     expected_mounts = {'/tool': str(tool), '/project': str(snapshot)}
-    if mode == 'profile-validate':
+    expected_mounts.update({('/project/' + relative): str(snapshot / relative) for relative in assets})
+    if mode == 'profile-validate' or mode in SANDBOX_MODES:
         expected_mounts['/harness'] = str(snapshot.parent / 'harness')
     mounts = value.get('Mounts', [])
     _need(len(mounts) == len(expected_mounts) and {mount.get('Destination') for mount in mounts} == set(expected_mounts),
@@ -697,7 +905,7 @@ def _validate_inspect(value: dict, *, name: str, container_id: str, mode: str,
           <= set(host.get('MaskedPaths', [])), 'EXECUTOR_SYSTEM_PATHS')
 
 
-def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate'], output: Path, timeout_seconds: int = 20) -> dict:
+def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate', 'guarded-parse', 'guarded-import', 'guarded-play', 'gameplay-source'], output: Path, timeout_seconds: int = 20, source_closure_sha256: str | None = None) -> dict:
     """Run fixed Godot diagnostics; raises only during argument/input/output preflight.
 
     Remote requests must never choose paths, environment or engine modes directly.
@@ -705,13 +913,28 @@ def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate'], 
     """
     _command(mode)
     _need(not _INCOMPLETE_CLI_HOLDS, 'EXECUTOR_UNFINISHED_CLI_HELD')
-    _cli_jobs().require_no_holds()
     _need(not _INCOMPLETE_ADMISSION_HOLDS, 'EXECUTOR_UNFINISHED_ADMISSION_HELD')
     _need(type(timeout_seconds) is int and 1 <= timeout_seconds <= 20, 'EXECUTOR_TIMEOUT')
     _need(isinstance(project, Path) and isinstance(output, Path), 'EXECUTOR_PATH_TYPE')
+    observed_source_closure = None
+    if source_closure_sha256 is not None:
+        _need(type(source_closure_sha256) is str and re.fullmatch(r'[0-9a-f]{64}', source_closure_sha256),
+              'EXECUTOR_SOURCE_CLOSURE')
+        _need(mode == GAMEPLAY_MODE, 'EXECUTOR_SOURCE_CLOSURE_MODE')
+    if mode == GAMEPLAY_MODE:
+        observed_source_closure = gameplay_runtime_source_closure()[1]
+        if source_closure_sha256 is not None:
+            _need(observed_source_closure == source_closure_sha256, 'EXECUTOR_SOURCE_CLOSURE_MISMATCH')
+    cli_jobs = _cli_jobs()
+    cli_jobs.require_no_holds()
     project, output = project.absolute(), output.absolute()
     initial = _inputs(project, mode)
     profile_harness = _profile_harness() if mode == 'profile-validate' else None
+    sandbox_harness = _sandbox_harness() if mode in SANDBOX_MODES else None
+    gameplay_profile = _gameplay_profile() if mode == GAMEPLAY_MODE else None
+    harness_files = {'gameplay_sandbox.py': sandbox_harness} if sandbox_harness is not None else {}
+    if profile_harness is not None:
+        harness_files['validation_bootstrap.gd'] = profile_harness
     _no_links(output.parent)
     _need(not output.exists() and output != project and project not in output.parents and output not in project.parents,
           'EXECUTOR_OUTPUT_SCOPE')
@@ -723,13 +946,16 @@ def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate'], 
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_bytes(raw)
     (snapshot / '.godot').mkdir()
-    if profile_harness is not None:
+    if harness_files:
         (output / 'harness').mkdir()
-        (output / 'harness/validation_bootstrap.gd').write_bytes(profile_harness)
+        for filename, raw in harness_files.items():
+            (output / 'harness' / filename).write_bytes(raw)
     before = _manifest(initial)
     _write(output / 'input-manifest.json', before)
     name = 'hh-gt03-' + uuid.uuid4().hex
     result = {'schema': 'hh-gt03-linux-diagnostic-1', 'run_id': name, 'mode': mode,
+              'source_closure_sha256': observed_source_closure,
+              'source_closure_unchanged': None,
               'public_ack': False, 'sandbox_acceptance': False, 'diagnostic_process_clean': False,
               'container_id': None, 'state': None, 'owned_removed': False, 'input_unchanged': False,
               'snapshot_unchanged': False, 'commandhost': None, 'input_hashes_before': before,
@@ -737,6 +963,12 @@ def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate'], 
               'profile_eligible': profile_harness is not None,
               'profile_harness_sha256': _sha(profile_harness) if profile_harness is not None else None,
               'profile_harness_unchanged': profile_harness is None,
+              'sandbox_bootstrap_sha256': _sha(sandbox_harness) if sandbox_harness is not None else None,
+              'sandbox_harness_unchanged': sandbox_harness is None,
+              'gameplay_profile': gameplay_profile.PROFILE if gameplay_profile is not None else None,
+              'gameplay_profile_sha256': GAMEPLAY_PROFILE_SHA256 if gameplay_profile is not None else None,
+              'gameplay_source_envelope_checked': gameplay_profile is not None,
+              'gameplay_profile_unchanged': gameplay_profile is None,
               'admission': {'acquired': False}, 'owner_record_retained': False,
               'supervisor': {'path': '/usr/bin/timeout', 'sha256': SUPERVISOR_SHA256,
                              'term_after_seconds': max(1, timeout_seconds - 1), 'kill_after_seconds': 1,
@@ -759,7 +991,10 @@ def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate'], 
                 cancellation = error
             result['host_cancelled'] = type(cancellation).__name__
     def call(args, label, timeout=20, cap=262144):
-        return _cli(owned, args, output, label, timeout=timeout, cap=cap)
+        # Finish cleanup with the exact helper admitted before dispatch even
+        # if its source changes. Final closure verification still rejects it;
+        # a subsequent run must pass the source guard again.
+        return _cli(owned, args, output, label, timeout=timeout, cap=cap, jobs=cli_jobs)
     def inspect(selector, label):
         row, raw = call(['inspect', selector], label, timeout=5)
         if not _cli_clean(row):
@@ -773,6 +1008,7 @@ def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate'], 
         result['admission'] = {'acquired': True, 'wait_ms': admission.wait_ms,
                                'abandoned_mutex': admission.abandoned, 'maximum_active': 1}
         binary = _binary()
+        result['tool_mount_source'] = str(binary.parent)
         owned = _owned_runner()
         row, raw = call(['context', 'inspect', 'desktop-linux', '--format', '{{json .Endpoints.docker.Host}}'], 'context')
         _need(_cli_clean(row) and json.loads(raw) == result['toolchain']['docker_endpoint'], 'EXECUTOR_DAEMON_ENDPOINT')
@@ -786,14 +1022,15 @@ def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate'], 
         image_environment = image['Config'].get('Env', [])
         _need({entry.split('=', 1)[0] for entry in image_environment}
               == {'PATH', 'LANG', 'GPG_KEY', 'PYTHON_VERSION', 'PYTHON_SHA256'}, 'EXECUTOR_BASE_ENVIRONMENT')
-        args = _create_args(name, mode, binary.parent, snapshot, timeout_seconds)
+        asset_files = tuple(sorted(path for path in initial if path in ASSET_PATHS))
+        args = _create_args(name, mode, binary.parent, snapshot, timeout_seconds, asset_files=asset_files)
         _write(output / 'create-argv.json', args)
         owner_record = {'schema': 'hh-linux-owner-1', 'context': EXECUTOR_CONTEXT, 'image': IMAGE_ID,
                         'name': name, 'container_id': None, 'phase': 'prepared', 'host_pid': os.getpid()}
         _persist_owner(owner_path, owner_record)
         owner_record['phase'] = 'create_pending'
         _persist_owner(owner_path, owner_record)
-        _require_measure_window_clear()
+        _assert_measure_window_clear()
         create_attempted = True
         row, raw = call(args, 'create', cap=4096)
         candidate = raw.decode('ascii', errors='replace').strip()
@@ -811,16 +1048,16 @@ def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate'], 
         _need(created is not None, 'EXECUTOR_CREATED_INSPECT_UNAVAILABLE')
         _validate_inspect(created, name=name, container_id=container_id, mode=mode,
                           tool=binary.parent, snapshot=snapshot, image_environment=image_environment,
-                          timeout_seconds=timeout_seconds)
+                          timeout_seconds=timeout_seconds, asset_files=asset_files)
         _need(_manifest(_inputs(project, mode)) == before and _manifest(_inputs(snapshot, mode)) == before,
               'EXECUTOR_PRESTART_INPUT_CHANGED')
-        if profile_harness is not None:
-            _need(_names(output / 'harness') == {'validation_bootstrap.gd'} and
-                  _read_file(output / 'harness/validation_bootstrap.gd', 65536) == profile_harness,
+        if harness_files:
+            _need(_names(output / 'harness') == set(harness_files) and all(
+                  _read_file(output / 'harness' / name, 65536) == raw for name, raw in harness_files.items()),
                   'EXECUTOR_PROFILE_HARNESS_CHANGED')
         owner_record['phase'] = 'start_pending'
         _persist_owner(owner_path, owner_record)
-        _require_measure_window_clear()
+        _assert_measure_window_clear()
         row, _ = call(['start', '--attach', container_id], 'engine', timeout=timeout_seconds + 2)
         result['commandhost'] = row
         if not _cli_clean(row):
@@ -860,6 +1097,7 @@ def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate'], 
                 stderr = (output / gone['stderr']).read_text(errors='replace')
                 result['owned_removed'] = (_cli_clean(row) and _cli_done(gone, 1)
                     and ('no such object: ' + container_id) in stderr.lower())
+                _need(result['owned_removed'], 'EXECUTOR_CLEANUP_REMOVAL_UNCONFIRMED')
             if owner_record and (result['owned_removed'] or not create_attempted):
                 _clear_owner(owner_path)
         except BaseException as error:
@@ -898,37 +1136,70 @@ def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate'], 
         if profile_harness is not None:
             try:
                 result['profile_harness_unchanged'] = (
-                    _names(output / 'harness') == {'validation_bootstrap.gd'} and
+                    _names(output / 'harness') == set(harness_files) and
                     _read_file(output / 'harness/validation_bootstrap.gd', 65536) == profile_harness == _profile_harness())
             except BaseException as error:
                 result['profile_harness_unchanged'] = False
                 if not isinstance(error, Exception):
                     failed(error, 'EXECUTOR_HARNESS_FINALIZE_')
+        if sandbox_harness is not None:
+            try:
+                result['sandbox_harness_unchanged'] = (_names(output / 'harness') == set(harness_files) and
+                    _read_file(output / 'harness/gameplay_sandbox.py', 65536) == sandbox_harness == _sandbox_harness())
+            except BaseException as error:
+                result['sandbox_harness_unchanged'] = False
+                failed(error, 'EXECUTOR_SANDBOX_FINALIZE_')
+        if gameplay_profile is not None:
+            try:
+                result['gameplay_profile_unchanged'] = _gameplay_profile() is gameplay_profile
+            except BaseException as error:
+                result['gameplay_profile_unchanged'] = False
+                failed(error, 'EXECUTOR_GAMEPLAY_PROFILE_FINALIZE_')
         try:
             for stream in ('stdout', 'stderr'):
                 log = output / result[stream]
                 if not log.exists():
                     log.write_bytes(b'')
-            combined = b'\n'.join(_read_file(output / result[field], 262144) for field in ('stdout', 'stderr'))
+            logs = [_read_file(output / result[field], 262144) for field in ('stdout', 'stderr')]
+            combined = b'\n'.join(logs)
             result['log_clean'] = re.search(rb'(?m)^(?:SCRIPT ERROR|ERROR|WARNING):|ObjectDB instances leaked', combined) is None
+            if mode == GAMEPLAY_MODE:
+                primary = 'scripts/fixture_actor.gd'
+                scripts = [primary] + sorted(name for name in before if name.startswith('scripts/')
+                                             and name.endswith('.gd') and name != primary)
+                result['log_policy'] = _gameplay_log_policy().classify(logs[0], logs[1], scripts)
         except BaseException as error:
             result['log_clean'] = False
             result['errors'].append('EXECUTOR_EVIDENCE_LOG_UNAVAILABLE')
             if not isinstance(error, Exception):
                 failed(error, 'EXECUTOR_LOG_FINALIZE_')
+        if mode == GAMEPLAY_MODE:
+            try:
+                result['source_closure_unchanged'] = (
+                    gameplay_runtime_source_closure()[1] == observed_source_closure)
+                _need(result['source_closure_unchanged'], 'EXECUTOR_SOURCE_CLOSURE_CHANGED')
+            except BaseException as error:
+                result['source_closure_unchanged'] = False
+                failed(error, 'EXECUTOR_SOURCE_CLOSURE_FINALIZE_')
         state = result['state'] or {}
-        result['diagnostic_process_clean'] = bool(result['commandhost'] and _cli_clean(result['commandhost'])
+        result['diagnostic_execution_complete'] = bool(result['commandhost'] and _cli_clean(result['commandhost'])
             and state.get('ExitCode') == 0 and state.get('Running') is False and state.get('Pid') == 0
             and state.get('OOMKilled') is False and result.get('docker_wait_exit') == 0
             and result['owned_removed'] and result['input_unchanged'] and result['snapshot_unchanged']
-            and result['binary_unchanged'] and result['profile_harness_unchanged']
-            and result['log_clean'] and not result['errors'])
+            and result['binary_unchanged'] and result['profile_harness_unchanged'] and result['sandbox_harness_unchanged']
+            and result['gameplay_profile_unchanged']
+            and (mode != GAMEPLAY_MODE or result['source_closure_unchanged'] is True)
+            and not result['errors'])
+        # Preserve the raw meaning of both existing fields. A known-noise
+        # policy is separate evidence, not a relabeling of ERROR lines as clean.
+        result['diagnostic_process_clean'] = result['diagnostic_execution_complete'] and result['log_clean']
         result['command_host'] = result['commandhost']
         result['container_state'] = result['state']
         try:
             _write(output / 'result.json', result)
         except BaseException as error:
             result['errors'].append('EXECUTOR_RESULT_WRITE_FAILED')
+            result['diagnostic_execution_complete'] = False
             result['diagnostic_process_clean'] = False
             if not isinstance(error, Exception):
                 failed(error, 'EXECUTOR_RESULT_FINALIZE_')

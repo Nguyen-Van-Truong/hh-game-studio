@@ -291,6 +291,20 @@ class GodotPublicationOwner:
             can_redo=inspected['can_redo'], stopped=self.sessions.status()['stopped'])
 
     def submit(self, body, *, authorization, catalog_digest):
+        return self._submit_admitted(body, authorization=authorization, catalog_digest=catalog_digest)
+
+    def submit_candidate_update(self, body, *, authorization, catalog_digest):
+        """Private O2 integration seam; no HTTP route/profile is enabled.
+
+        Only updates already supported by the accepted editor are allowed.
+        The original envelope/digest and all auth/journal/effect checks remain.
+        """
+        request = Request.from_dict(body)
+        _need(request.operation == 'scene.node.update', 'GODOT_CANDIDATE_UPDATE_ONLY')
+        return self._submit_admitted(body, authorization=authorization, catalog_digest=catalog_digest,
+                                     candidate_update=True)
+
+    def _submit_admitted(self, body, *, authorization, catalog_digest, candidate_update=False):
         # Queue collection retains this gate after submit returns, through
         # fresh readback and durable broker accounting. A competing direct
         # request must not edit the scene in that interval.
@@ -302,11 +316,12 @@ class GodotPublicationOwner:
                 admission = self._admission
         _need(admission.acquire(blocking=False), 'GODOT_OWNER_BUSY')
         try:
-            return self._submit(body, authorization=authorization, catalog_digest=catalog_digest)
+            return self._submit(body, authorization=authorization, catalog_digest=catalog_digest,
+                                candidate_update=candidate_update)
         finally:
             admission.release()
 
-    def _submit(self, body, *, authorization, catalog_digest):
+    def _submit(self, body, *, authorization, catalog_digest, candidate_update=False):
         request = Request.from_dict(body)
         _need(request.operation in ('scene.inspect','scene.preview','scene.save','script_text.replace',
               'scene.node.create','scene.node.update','scene.node.remove','scene.undo','scene.redo'),
@@ -334,7 +349,14 @@ class GodotPublicationOwner:
         try:
             self._same_release()
             before = self.inspect()
-            validated = self.contract.validate_request(request, self._context(before, lease))
+            context = self._context(before, lease)
+            validated = self.contract.validate_request(request, context)
+            if candidate_update:
+                bridge = getattr(self, '_authoring_update_bridge', None)
+                if bridge is None:
+                    bridge = _load('authoring_update_bridge').AuthoringUpdateBridge()
+                    self._authoring_update_bridge = bridge
+                bridge.validate(request, context, validated)
             if request.operation == 'scene.inspect':
                 return Response(Status.COMMITTED, 'GODOT_SCENE_INSPECTED', request.command_id,
                                 postconditions=before)

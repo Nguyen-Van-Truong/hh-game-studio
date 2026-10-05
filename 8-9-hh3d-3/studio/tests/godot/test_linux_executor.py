@@ -192,12 +192,47 @@ class PolicyTests(unittest.TestCase):
         self.assertEqual(row['host_error'],'CLI_JOB_OWNERSHIP_UNCERTAIN')
         self.assertTrue(row['job_owner']['handle_retained'])
 
+    def test_source_drift_cannot_block_cleanup_of_an_already_created_job(self):
+        class Process:
+            stdin = io.BytesIO(); stdout = io.BytesIO(); stderr = io.BytesIO()
+            returncode = 0
+            def poll(self): return 0
+            def wait(self, timeout): return 0
+        process = Process()
+        class Owner:
+            closed = False; zero_observed = True; tainted = False
+            looked_up = None
+            def require_no_holds(self): pass
+            def create(self, observed):
+                self.process = observed
+                # Native assignment succeeded; cancellation lost the return
+                # before the caller could store its cleanup owner.
+                raise RuntimeError('interrupted after native assignment')
+            def owner_for_process(self, observed):
+                self.looked_up = observed
+                return self if observed is self.process else None
+            def active_count(self): return 0
+            def close(self): self.closed = True
+            def snapshot(self): return copy.deepcopy(CLEAN_JOB)
+        owner = Owner()
+        with tempfile.TemporaryDirectory() as folder, \
+             patch.object(executor.subprocess, 'Popen', return_value=process), \
+             patch.object(executor, '_cli_jobs', side_effect=[owner,
+                 executor.ExecutorError('EXECUTOR_CLI_SOURCE_CHANGED')]), \
+             patch.object(executor, '_INCOMPLETE_CLI_HOLDS', []) as holds:
+            row, _ = executor._cli(None, ['version'], Path(folder), 'source-drift-cleanup')
+            self.assertEqual(holds, [])
+        self.assertIs(owner.looked_up, process)
+        self.assertTrue(owner.closed)
+        self.assertTrue(row['job_owner']['closed'])
+        self.assertFalse(executor._cli_clean(row))
+
 
 class FakeDocker:
     def __init__(self, scenario):
         self.scenario = scenario; self.state = None; self.calls = []; self.removed = False
 
-    def __call__(self, owned, args, output, label, *, timeout=20, cap=262144):
+    def __call__(self, owned, args, output, label, *, timeout=20, cap=262144, jobs=None):
         self.calls.append(args)
         code, payload, stderr = 0, b'', b''
         if args[:2] == ['context', 'inspect']:
@@ -205,7 +240,7 @@ class FakeDocker:
         elif args[:2] == ['image', 'inspect']:
             payload = json.dumps([{'Id': executor.IMAGE_ID, 'Os': 'linux', 'Architecture': 'amd64', 'Config': {'Env': IMAGE_ENV}}]).encode()
         elif args[0] == 'ps':
-            payload = b''
+            raise AssertionError('admission inventory must not fall back to Docker CLI')
         elif args[0] == 'create':
             name = args[args.index('--name') + 1]
             mounts = [args[i + 1] for i, item in enumerate(args) if item == '--mount']
@@ -228,7 +263,9 @@ class FakeDocker:
         elif args[0] == 'rm':
             if self.state['State']['Running']: raise AssertionError('removed running container without inspection')
             if args != ['rm', CID]: raise AssertionError('removed foreign ID')
-            self.removed = True
+            self.removed = self.scenario not in ('remove_timeout', 'remove_no_effect')
+            if self.scenario in ('remove_timeout', 'remove_uncertain_gone'):
+                code = 2
         else:
             raise AssertionError('unexpected Docker operation')
         row = {'exit_code': code, 'timed_out': False, 'stream_cap_exceeded': self.scenario == 'cap' and args[0] == 'start',
@@ -236,12 +273,63 @@ class FakeDocker:
                'stream_reader_eof': [True, True], 'stream_reader_errors': [None, None],
                'stdout': label + '-stdout.txt', 'stderr': label + '-stderr.txt'}
         row['job_owner']=copy.deepcopy(CLEAN_JOB)
+        if args[0] == 'rm' and self.scenario in ('remove_timeout', 'remove_uncertain_gone'):
+            row['timed_out'] = True
         (output / row['stdout']).write_bytes(payload)
         (output / row['stderr']).write_bytes(stderr)
         return row, payload
 
 
 class LifecycleTests(unittest.TestCase):
+    def run_with_measure_lock(self, *, before_create=False, before_start=False):
+        with tempfile.TemporaryDirectory() as folder:
+            folder = Path(folder); project = folder / 'project'; write_project(project)
+            tool = folder / 'tool'; tool.mkdir(); binary = tool / executor.BINARY_NAME; binary.write_bytes(b'pinned-test-binary')
+            local_appdata = folder / 'localappdata'; local_appdata.mkdir()
+            lock = local_appdata / 'HHGodotAgent' / 'measure-window.lock'
+            if before_create:
+                lock.parent.mkdir()
+                lock.write_text('formal-live\n')
+            fake = FakeDocker('clean')
+            admission = type('Admission', (), {'wait_ms': 0, 'abandoned': False, 'close': lambda self: None})()
+            original_fence = executor._assert_measure_window_clear
+            checks = [0]
+            def fence():
+                checks[0] += 1
+                if before_start and checks[0] == 2:
+                    lock.parent.mkdir()
+                    lock.write_text('formal-live\n')
+                return original_fence()
+            with patch.dict(executor.os.environ, {'LOCALAPPDATA': str(local_appdata)}), \
+                 patch.object(executor, '_assert_measure_window_clear', side_effect=fence), \
+                 patch.object(executor, '_cli', side_effect=fake), patch.object(executor, '_binary', return_value=binary), \
+                 patch.object(executor, '_owned_runner', return_value=object()), \
+                 patch.object(executor, '_Admission', return_value=admission), \
+                 patch.object(executor, '_inventory_ids', return_value=[]), \
+                 patch.object(executor, '_owner_path', return_value=folder / 'owner.json'), \
+                 patch.object(executor, '_lock', return_value={'docker_endpoint': 'npipe:////./pipe/dockerDesktopLinuxEngine'}), \
+                 patch.object(executor, 'BINARY_SHA256', hashlib.sha256(binary.read_bytes()).hexdigest()):
+                result = executor.run(project, mode='parse', output=folder / 'out')
+            return result, fake.calls
+
+    def test_measure_window_lock_absent_allows_fence_check(self):
+        with tempfile.TemporaryDirectory() as folder:
+            local_appdata = Path(folder) / 'localappdata'; local_appdata.mkdir()
+            with patch.dict(executor.os.environ, {'LOCALAPPDATA': str(local_appdata)}):
+                self.assertIsNone(executor._assert_measure_window_clear())
+
+    def test_measure_window_lock_blocks_create(self):
+        result, calls = self.run_with_measure_lock(before_create=True)
+        self.assertIn('EXECUTOR_MEASURE_WINDOW_LOCKED', result['errors'])
+        self.assertFalse(any(args[0] == 'create' for args in calls))
+        self.assertFalse(any(args[0] == 'start' for args in calls))
+
+    def test_measure_window_lock_blocks_start_after_create(self):
+        result, calls = self.run_with_measure_lock(before_start=True)
+        self.assertIn('EXECUTOR_MEASURE_WINDOW_LOCKED', result['errors'])
+        self.assertTrue(any(args[0] == 'create' for args in calls))
+        self.assertFalse(any(args[0] == 'start' for args in calls))
+
     def exercise(self, scenario):
         with tempfile.TemporaryDirectory() as folder:
             folder = Path(folder); project = folder / 'project'; write_project(project)
@@ -252,13 +340,15 @@ class LifecycleTests(unittest.TestCase):
             with patch.object(executor, '_cli', side_effect=fake), patch.object(executor, '_binary', return_value=binary), \
                  patch.object(executor, '_owned_runner', return_value=object()), \
                  patch.object(executor, '_Admission', return_value=admission), \
+                 patch.object(executor, '_inventory_ids', return_value=[]), \
                  patch.object(executor, '_owner_path', return_value=folder / 'owner.json'), \
                  patch.object(executor, '_lock', return_value={'docker_endpoint': 'npipe:////./pipe/dockerDesktopLinuxEngine'}), \
                  patch.dict(os.environ, {'LOCALAPPDATA': str(localappdata)}), \
                  patch.object(executor, 'BINARY_SHA256', hashlib.sha256(binary.read_bytes()).hexdigest()):
                 result = executor.run(project, mode='parse', output=folder / 'out')
-            self.assertFalse((folder / 'owner.json').exists())
-            self.assertTrue(result['owned_removed'])
+            removal_confirmed = not scenario.startswith('remove_')
+            self.assertEqual((folder / 'owner.json').exists(), not removal_confirmed)
+            self.assertIs(result['owned_removed'], removal_confirmed)
             self.assertTrue(result['input_unchanged'])
             self.assertTrue(result['snapshot_unchanged'])
             self.assertFalse(result['public_ack']); self.assertFalse(result['sandbox_acceptance'])
@@ -339,6 +429,15 @@ class LifecycleTests(unittest.TestCase):
         self.assertTrue(result['diagnostic_process_clean'])
         self.assertFalse(result['public_ack']); self.assertFalse(result['sandbox_acceptance'])
 
+    def test_unconfirmed_removal_keeps_owner_and_records_explicit_error(self):
+        for scenario in ('remove_timeout', 'remove_no_effect', 'remove_uncertain_gone'):
+            with self.subTest(scenario=scenario):
+                result, calls = self.exercise(scenario)
+                self.assertFalse(result['diagnostic_process_clean'])
+                self.assertTrue(result['owner_record_retained'])
+                self.assertIn('EXECUTOR_CLEANUP_REMOVAL_UNCONFIRMED', result['errors'])
+                self.assertEqual(calls.count(['rm', CID]), 1)
+
     def test_start_cancellation_propagates_after_owned_container_cleanup_and_result(self):
         for kind in (KeyboardInterrupt,SystemExit):
             with self.subTest(kind=kind),tempfile.TemporaryDirectory() as folder:
@@ -352,6 +451,7 @@ class LifecycleTests(unittest.TestCase):
                 admission=Mock(wait_ms=0,abandoned=False,acquired=True)
                 with patch.object(executor,'_cli',side_effect=cancelled),patch.object(executor,'_binary',return_value=binary), \
                      patch.object(executor,'_owned_runner',return_value=object()),patch.object(executor,'_Admission',return_value=admission), \
+                     patch.object(executor,'_inventory_ids',return_value=[]), \
                      patch.object(executor,'_owner_path',return_value=folder/'owner.json'), \
                      patch.object(executor,'_lock',return_value={'docker_endpoint':'npipe:////./pipe/dockerDesktopLinuxEngine'}), \
                      patch.object(executor,'BINARY_SHA256',hashlib.sha256(b'pin').hexdigest()):
@@ -413,10 +513,20 @@ class AdmissionTests(unittest.TestCase):
             return clean_row(), CID.encode()
         with tempfile.TemporaryDirectory() as folder:
             path = Path(folder) / 'owner.json'
-            with self.assertRaisesRegex(executor.ExecutorError, 'UNRECORDED_CONTAINER'):
+            with patch.object(executor, '_inventory_ids', return_value=[CID]) as inventory, \
+                 self.assertRaisesRegex(executor.ExecutorError, 'UNRECORDED_CONTAINER'):
                 executor._reconcile_owner(path, call, Path(folder))
-        self.assertEqual(len(calls),1)
-        self.assertEqual(calls[0][0],'ps')
+            inventory.assert_called_once_with(Path(folder))
+        self.assertEqual(calls, [])
+
+    def test_inventory_failure_never_admits_or_dispatches_container_cleanup(self):
+        call = Mock()
+        with tempfile.TemporaryDirectory() as folder, \
+             patch.object(executor, '_inventory_ids',
+                          side_effect=executor.ExecutorError('EXECUTOR_INVENTORY_TIMEOUT')):
+            with self.assertRaisesRegex(executor.ExecutorError, 'EXECUTOR_INVENTORY_TIMEOUT'):
+                executor._reconcile_owner(Path(folder) / 'owner.json', call, Path(folder))
+        call.assert_not_called()
 
     def test_missing_create_reply_retains_ambiguity_and_never_admits(self):
         with tempfile.TemporaryDirectory() as folder:
@@ -435,11 +545,13 @@ class AdmissionTests(unittest.TestCase):
             executor._persist_owner(path,self.record('start_pending'))
             fake=FakeDocker('clean'); fake.state=inspected(NAME,CID,'parse',Path('C:/t'),Path('C:/s'))
             fake.state['State'].update(Running=True,Pid=42)
-            result=executor._reconcile_owner(path,lambda args,label,**kwargs:fake(None,args,folder,label,**kwargs),folder)
+            with patch.object(executor,'_inventory_ids',return_value=[]) as inventory:
+                result=executor._reconcile_owner(path,lambda args,label,**kwargs:fake(None,args,folder,label,**kwargs),folder)
+            inventory.assert_called_once_with(folder)
             self.assertTrue(result['reconciled']);self.assertTrue(result['removed'])
             self.assertFalse(path.exists())
             self.assertLess(fake.calls.index(['kill',CID]),fake.calls.index(['rm',CID]))
-            self.assertEqual(fake.calls[-1][0],'ps')
+            self.assertEqual(fake.calls[-1], ['inspect', CID])
 
     def test_native_mutex_create_or_wait_cancellation_retains_ambiguous_owner(self):
         for kind in (KeyboardInterrupt,SystemExit):
