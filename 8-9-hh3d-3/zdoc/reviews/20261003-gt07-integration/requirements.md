@@ -14,7 +14,7 @@ Historical entries below are retained for provenance; they do not override the t
 | M5 / TX05/TX09 | OPEN (partial) | host-only `gt07-m5-storage-20261005-05` verified exclusive file-lock denial, cross-volume `MoveFileExW` refusal (error 17), and injected fsync/diskfull UNKNOWN with last-good preservation; source closure `78676a84...4174a4` | final frozen repeat, requirement-map binding, and any product-boundary proof beyond the authority-zero host diagnostic |
 | M6 / Q04 | OPEN (partial) | Stop drain and native run16 | full queue/cancel/reconnect matrix in final run |
 | M7 / Q07 | OPEN (partial) | 510-record capacity/JOURNAL_FULL | real-clock expiry, compaction/rotation |
-| M8 / Q08 | OPEN (partial) | host-only `gt07-m8-process-20261005-05` verified PID/start identity, forged-start refusal, owned-tree timeout and 64 MiB Job memory denial; actual worker exits and Job cleanup recorded (closure `e54646f8...58f71`) | final frozen repeat and source-specific manifest |
+| M8 / Q08 | OPEN (partial) | host-only repeats `gt07-m8-process-20261005-05` and `-07` verify PID/start identity, forged-start refusal, owned-tree timeout and 64 MiB Job memory denial; actual worker exits and Job cleanup recorded (closure `e54646f8...58f71`) | final frozen M1–M9 matrix and source-specific manifest |
 | M9 / TX13 | OPEN (partial) | static `play-mutation` lane (`36e8d56b`) binds a generated-state mutation while Play is RUNNING to stale-capture rejection/UNKNOWN/no-replay; engine-free dry-run contract (`21ddb086`) passes focused tests and rejects backend/native flags | installed execution binding currently fails the real dry-run with `BINDING_MISSING_DEPENDENCY`; repair that binding, then run one bounded native Play/capture conflict on the pinned fixture and repeat in the final frozen matrix |
 
 ## Next
@@ -57,6 +57,11 @@ denied `VirtualAlloc` with native error 1455 rather than a Python allocation
 exception. All worker exits, Job membership, cleanup handles and zero active
 counts were captured. This is authority-zero host evidence; a final frozen
 M1–M9 repeat and critic package remain required.
+
+The frozen-source host repeat `gt07-m8-process-20261005-07` reproduced all
+three scenarios with actual worker exits, zero active/closed Job handles and
+the same source closure.  It is still authority-zero evidence until the final
+M1–M9 package and two same-hash critics.
 
 ## Checkpoint, 05-10-2026 — M5 storage fault boundary
 
