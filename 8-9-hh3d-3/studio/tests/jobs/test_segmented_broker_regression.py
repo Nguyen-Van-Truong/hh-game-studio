@@ -7,8 +7,10 @@ belongs to the native scenario caller and is intentionally not used here.
 from contextlib import ExitStack
 from dataclasses import asdict
 import hashlib
+import json
 import os
 from pathlib import Path
+import subprocess
 import tempfile
 import unittest
 import uuid
@@ -17,7 +19,7 @@ import sys
 STUDIO = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(STUDIO.parent))
 
-from studio.host.core.custody import WitnessCustody
+from studio.host.core.custody import WitnessCustody, decode_record
 from studio.host.core.custody_registry import BASE_PATH, RegistryCustody
 from studio.host.core.private_events import PrivateEventLog
 from studio.host.core.private_store import PrivateBlobStore
@@ -320,6 +322,116 @@ class SegmentedBrokerRegressionTests(unittest.TestCase):
             self.assertEqual(record.fence.stream_id, physical_stream)
         finally:
             reopened.close()
+
+    @unittest.skipUnless(os.environ.get("GT07_REAL_CLOCK_ROTATION_CUTS") == "1",
+                         "opt-in native QueueOwner rotation process-cut matrix")
+    def test_queue_owner_process_cut_matrix_preserves_recovery_contract(self):
+        """Cut the real QueueOwner path at each custody barrier.
+
+        The older custody test exercises WitnessCustody directly.  This
+        opt-in case runs QueueOwner -> DurableBroker -> QueueJournalManager
+        in a child process and exits immediately after the native PREPARED,
+        ACTIVE_POINTER, or COMMITTED write.  Pending cuts must refuse reopen;
+        COMMITTED must reopen and find the exact terminal receipt through the
+        immutable archive while the old stream bytes remain unchanged.
+        """
+        child = r'''
+import json, os, sys
+from studio.host.core.custody import WitnessCustody
+from studio.host.jobs.queue_owner import QueueOwner
+
+cfg = json.loads(sys.stdin.read())
+original_prepare = WitnessCustody.prepare_queue_rotation
+original_advance = WitnessCustody.advance_queue_rotation
+
+def prepare_cut(self, *, expected, candidate_root, candidate_root_identity,
+                candidate_binding, checkpoint_sha256):
+    result = original_prepare(self, expected=expected,
+                              candidate_root=candidate_root,
+                              candidate_root_identity=candidate_root_identity,
+                              candidate_binding=candidate_binding,
+                              checkpoint_sha256=checkpoint_sha256)
+    if cfg["cut"] == "PREPARED":
+        os._exit(73)
+    return result
+
+def cut_after_barrier(self, *, expected_phase, previous, candidate,
+                      checkpoint_sha256):
+    result = original_advance(self, expected_phase=expected_phase,
+                              previous=previous, candidate=candidate,
+                              checkpoint_sha256=checkpoint_sha256)
+    if ((cfg["cut"] == "ACTIVE_POINTER" and expected_phase == "PREPARED")
+            or (cfg["cut"] == "COMMITTED" and expected_phase == "ACTIVE_POINTER")):
+        os._exit(73)
+    return result
+
+WitnessCustody.prepare_queue_rotation = prepare_cut
+WitnessCustody.advance_queue_rotation = cut_after_barrier
+owner = QueueOwner.reopen(cfg["storage_id"])
+owner.rotate_journal(now_ms=cfg["now_ms"])
+os._exit(0)
+'''
+        for cut in ("PREPARED", "ACTIVE_POINTER", "COMMITTED"):
+            with self.subTest(cut=cut):
+                owner = self._owner(retry_horizon_ms=_HORIZON)
+                job_id = "rotation-cut-" + cut.lower()
+                request = self._request(job_id, "rotation-command-" + cut,
+                                        deadline_ms=1_000_000)
+                owner.broker.enqueue(request, now_ms=1)
+                reservation = owner.broker.reserve_next(now_ms=2)
+                self.assertIsNotNone(reservation)
+                receipt = _digest("rotation-receipt-" + cut)
+                owner.broker.record_owner_result(
+                    reservation,
+                    OwnerResult("COMMITTED", request.command_sha256, receipt,
+                                completed_at_ms=2),
+                )
+                old_path = Path(owner.log.root)
+                old_binding = owner.log.binding()
+                old_bytes = owner.log._read_at(0, old_binding.witnessed.size)
+                storage_id = owner.storage_id
+                owner.close()
+                run = subprocess.run(
+                    [sys.executable, "-B", "-c", child],
+                    input=json.dumps({"storage_id": storage_id,
+                                      "cut": cut,
+                                      "now_ms": _HORIZON + 10}),
+                    capture_output=True, text=True, timeout=30,
+                    cwd=STUDIO.parent,
+                )
+                self.assertEqual(run.returncode, 73, run.stderr)
+                if cut != "COMMITTED":
+                    with self.assertRaisesRegex(QueueOwnerError,
+                                                 "QUEUE_RECONCILIATION_REQUIRED"):
+                        QueueOwner.reopen(storage_id)
+                    registry = RegistryCustody.reopen(storage_id)
+                    try:
+                        raw = registry.read()
+                        self.assertEqual(decode_record(raw)["rotation"]["phase"], cut)
+                    finally:
+                        registry.close()
+                    # A second native read after the handle is reopened proves
+                    # the phase bytes are stable, rather than comparing a
+                    # value to itself through one live registry object.
+                    stable = RegistryCustody.reopen(storage_id)
+                    try:
+                        self.assertEqual(stable.read(), raw)
+                    finally:
+                        stable.close()
+                else:
+                    reopened = QueueOwner.reopen(storage_id)
+                    self._owners.append(reopened)
+                    record = reopened.broker.lookup(job_id)
+                    self.assertIsNotNone(record)
+                    self.assertEqual(record.state, "COMMITTED")
+                    self.assertEqual(record.receipt_sha256, receipt)
+                    self.assertNotIn(job_id,
+                                     {row.job.job_id for row in
+                                      reopened.broker.snapshot().receipts})
+                    with PrivateEventLog.reopen(old_path, old_binding) as old_again:
+                        self.assertEqual(old_again._read_at(0,
+                                                            old_binding.witnessed.size),
+                                         old_bytes)
 
 
 if __name__ == "__main__":

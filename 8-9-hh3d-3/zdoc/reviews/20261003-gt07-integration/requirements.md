@@ -13,14 +13,14 @@ Historical entries below are retained for provenance; they do not override the t
 | M4 / Q06 | OPEN (partial) | Godot `gt07-native-godot-20261005-26,42`; Blender `gt07-native-queue-20261005-47`: queued stale transform returns UNKNOWN/lookup.reconcile, manual `.blend` state retained, actual child/wrapper exits 0 and owned Job clean | final frozen matrix; previous failed diagnostics remain immutable |
 | M5 / TX05/TX09 | OPEN (partial) | host-only `gt07-m5-storage-20261005-05` and fresh repeat `gt07-m5-storage-20261005-07` verified exclusive file-lock denial, cross-volume `MoveFileExW` refusal (error 17), and injected fsync/diskfull UNKNOWN with last-good preservation; source closure `308602e8...fd072` for the repaired runner | final frozen repeat, requirement-map binding, and any product-boundary proof beyond the authority-zero host diagnostic |
 | M6 / Q04 | OPEN (partial) | Stop drain and native run16 | full queue/cancel/reconnect matrix in final run |
-| M7 / Q07 | OPEN (partial) | 510-record capacity/JOURNAL_FULL; queue-only custody rotation barriers; segmented queue checkpoint/reopen, two-segment archive chain, expired terminal same-ID replay guard, bounded real-clock expiry soak, malformed candidate pointer guard (`test_segmented_journal` 6 tests, `test_segmented_broker_regression` 8 tests, `test_durable_broker` 18 tests; exits 0) | crash rotation matrix, final matrix |
+| M7 / Q07 | OPEN (partial) | 510-record capacity/JOURNAL_FULL; queue-only custody rotation barriers; segmented queue checkpoint/reopen, two-segment archive chain, expired terminal same-ID replay guard, bounded real-clock expiry soak, malformed candidate pointer guard (`test_segmented_journal` 6 tests, `test_segmented_broker_regression` 8 tests, `test_durable_broker` 18 tests; exits 0); opt-in integrated `QueueOwner→DurableBroker→QueueJournalManager` process cuts at PREPARED/ACTIVE_POINTER/COMMITTED passed (actual child exit 73, 1.474s), preserving pending reconciliation and the exact archived receipt | final frozen matrix |
 | M8 / Q08 | OPEN (partial) | host-only repeats `gt07-m8-process-20261005-05`, `-07` and fresh `-08` verify PID/start identity, forged-start refusal, owned-tree timeout and 64 MiB Job memory denial; actual worker exits and Job cleanup recorded (closure `e54646f8...58f71`) | final frozen M1–M9 matrix and source-specific manifest |
 | M9 / TX13 | OPEN (partial) | static `play-mutation` lane (`36e8d56b`) binds a generated-state mutation while Play is RUNNING to stale-capture rejection/UNKNOWN/no-replay; one-use binding refresh `20261005-gt07-binding-refresh` verified source=233/execution=235; dry-run `...-01` exit 0; native `gt06-gt07-m9-playmutation-20261005-02` exit 0 with actual runtime/import exits, clean Job/tree and 18/18 checks | repeat in the final frozen matrix |
 
 ## Next
 
-Close the M3 queue-consumer RELOAD/ACK recovery gap and M7 integrated rotation
-crash proof. Then freeze one complete closure and execute one sequential M1–M9
+M3 consumer recovery and M7 integrated rotation crash slices are now covered
+diagnostically. Freeze one complete closure and execute one sequential M1–M9
 matrix plus affected regressions. Map requirements to artifacts and submit the
 same frozen hash to two independent critics. Existing diagnostic slices are
 context; none grants acceptance. Do not replay a completed diagnostic solely
