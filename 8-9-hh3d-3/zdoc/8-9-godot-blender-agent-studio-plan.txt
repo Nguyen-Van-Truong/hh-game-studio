@@ -1,11 +1,11 @@
 HH STUDIO — PLAN 1/3: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Cập nhật 04-10-2026, Asia/Saigon | Revision S259 + quyết định owner O1–O10 | TRIỂN KHAI THEO GATE
+Cập nhật 05-10-2026, Asia/Saigon | Revision S260 + quyết định owner O1–O10 | TRIỂN KHAI THEO GATE
 OWNER_DECISIONS=O1_O3_20260925; O4_20260927; O5_O6_20260930; O7_20261001; O8_20261002; O9_20261003; O10_20261004; BLOCK_BELOW_STATUS_TABLE; LATER_DECISION_WINS; PRECEDENCE=OVER_CONFLICTING_S2XX; FULL_TEXT_IN_GIT=87912523,b0802472,8298c107,fcc1906f,6d8eb81d,d04266e8,091506fa; OLD_VERDICTS_UNCHANGED
-HIỆN HÀNH 04-10 — GT-01..GT-06 ACCEPTED; GT-07 IN_PROGRESS THEO MA TRẬN O10 (M1–M9); O2 CHẠY SONG SONG (O10.5); TOÀN PLAN CHƯA HOÀN TẤT
+HIỆN HÀNH 05-10 — GT-01..GT-06 ACCEPTED; GT-07 IN_PROGRESS THEO MA TRẬN O10 (M1–M9); O2 CHẠY SONG SONG (O10.5); TOÀN PLAN CHƯA HOÀN TẤT
 CURRENT_VALID_WP=GT-07
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S259
+PLAN_REVISION=S260
 EXECUTION_AUTHORIZATION=OWNER_APPROVED_GATED
 EXECUTION_MODE=COORDINATOR_WITH_SCOPED_SUBAGENTS_AND_INDEPENDENT_CRITICS_OWNER_20261003; PREFER_GPT_6_ASTRA_ULTRA; ONE_WRITER_PER_FILE; TWO_DIFFERENT_MODELS_SAME_HASH; O2_PARALLEL_WORKER_O10_5
 GOAL_STATE=ACTIVE; INDEPENDENT_CONSUMER_PILOT_AUTHORIZED; GT07_IMPLEMENTATION_OPEN; O2_PARALLEL_LANE_O10_5; GT08_GT10_UNOPENED; SUPERAGENT_SEPARATE_OWNER_AUTHORIZED_LANE
@@ -18,8 +18,8 @@ O2_CANDIDATE_STATUS=AUTHORITY0; BRANCH=codex/o2-authoring-contract; DETAIL=studi
 RUN_POLICY=FRESH_ID_PER_RUN; DRY_RUN_BEFORE_NATIVE_O10_2; VERIFY_SOURCE_STOP_LATCH_AND_O5_6_LOCK_BEFORE_START; PRESERVE_RAW_ON_FAILURE; REPAIR_ONLY_PROVEN_BOUNDARY; FIX_AND_CONTINUE_O6_4; NEVER_TICK_FROM_BANNER_OR_PARTIAL_PREFIX; CRITICS_READONLY_INDEPENDENT_SAME_HASH
 CẬP NHẬT TRẠNG THÁI 05-10-2026: Các số đếm run/harness trong đoạn O10
 "Căn cứ 03-10 → 04-10" bên dưới là lịch sử, không phải tỉ lệ hiện tại. M5
-host-only `gt07-m5-storage-20261005-05` và M8 repeat
-`gt07-m8-process-20261005-07` đã có raw/actual cleanup; M9 installed binding
+host-only `gt07-m5-storage-20261005-07` và M8 repeat
+`gt07-m8-process-20261005-08` đã có raw/actual cleanup; M9 installed binding
 đã được refresh một lần có rollback và postcheck (`source=233`,
 `execution=235`), dry-run `gt06-gt07-m9-playmutation-20261005-01` exit 0 và
 bounded native `...-02` exit 0 với Job/tree sạch; M9 vẫn cần lặp trong gói
@@ -32,7 +32,10 @@ records environment diagnostic stderr.
 Run `gt07-cross-app-20261005-18` repeats this binding with an immediate
 protected-handoff reread before admission; its nested consumer still reports
 environment diagnostic stderr, so it remains diagnostic-only.
-M7 rotation/compaction vẫn mở. Bảng hiện hành và closeout nằm ở
+Fresh current-source slices `gt07-native-godot-20261005-41,42` and
+`gt07-native-queue-20261005-43,44` passed actual exits and clean owned Jobs;
+the recovery slice validates retention fields and no native replay. They remain
+diagnostic only. M7 rotation/compaction vẫn mở. Bảng hiện hành và closeout nằm ở
 `zdoc/reviews/20261003-gt07-integration/requirements.md`; không lặp cleanup
 hoặc native run cũ chỉ vì các số lịch sử trong O10.
 S_RECORD_HISTORY_ARCHIVE=8-9-hh3d-3/zdoc/reviews/20260925-plan-s-record-history-s256.txt; SHA256=14e4d00b5f574f9c06c8f4041cf284fa70f7bded09dee6d6d2914cdb1d3c5fdb; AUTHORITY=0; RAW_HEADER_BLOCK_S256_LINES_93_150_BYTE_FOR_BYTE; NO_GATE_CHANGE
