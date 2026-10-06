@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 from contextlib import contextmanager
+from datetime import datetime, timezone
 import hashlib
 import importlib.util
 import json
@@ -26,6 +27,7 @@ STUDIO = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(STUDIO.parent))
 from studio.tests.replay.measure_window import default_path, plain
 from studio.host.core.gt07_failpoints import assert_disabled, runtime_root
+from studio.tests.jobs.gt07_failure import failure_boundary
 
 SCENARIOS = {
     "godot-authority": {"kind": "godot", "operation": "scene.node.update",
@@ -405,7 +407,8 @@ def _atomic_json(path: Path, value: object) -> None:
 
 def _append_event(root: Path, event: dict[str, object]) -> None:
     with (root / "events.ndjson").open("a", encoding="utf-8", newline="\n") as stream:
-        stream.write(json.dumps(event, sort_keys=True, separators=(",", ":")) + "\n")
+        stream.write(json.dumps({"recorded_utc": datetime.now(timezone.utc).isoformat(),
+                                 **event}, sort_keys=True, separators=(",", ":")) + "\n")
         stream.flush()
         os.fsync(stream.fileno())
 
@@ -428,7 +431,7 @@ def _terminal_summary(result: dict[str, object], admission: dict[str, object],
         "binary_sha256": admission.get("binary_sha256"),
     }
     for key in ("host", "host_report", "host_test_report", "child", "verified",
-                "passed", "extra_raw_roots"):
+                "passed", "extra_raw_roots", "failure_boundary"):
         if key in result:
             value = result[key]
             if key == "host" and isinstance(value, dict):
@@ -502,6 +505,8 @@ def _admit_matrix(args: argparse.Namespace, names: list[str],
     payload: dict[str, object] = {
         "schema": "gt07-final-matrix-manifest-2", "authority": 0,
         "state": "ADMITTING", "matrix_id": root.name,
+        "coordinator_pid": os.getpid(),
+        "coordinator_started_utc": datetime.now(timezone.utc).isoformat(),
         "matrix_source_closure_sha256": matrix_source_digest,
         "rows": [], "events": str(root / "events.ndjson"),
     }
@@ -885,11 +890,11 @@ def main(argv: list[str] | None = None) -> int:
         parser.error("--failpoint-phase requires one scenario")
     if not args.matrix and (args.run_id is None or args.run_ids):
         parser.error("one --run-id is required, also for --dry-run")
-    matrix_source_digest = None
-    if args.matrix:
-        # Bind the complete source universe before admitting any row. Every
-        # row must still match this digest before it starts.
-        matrix_source_digest = _source_digest(_matrix_sources())
+    if not args.matrix:
+        # A single scenario still uses the same durable admission and source
+        # checks as a matrix, including its one-use coordinator directory.
+        args.run_ids = [args.run_id]
+    matrix_source_digest = _source_digest(_matrix_sources())
     # Check every intended output before starting the first engine in a matrix.
     matrix_root = None
     try:
@@ -940,6 +945,7 @@ def main(argv: list[str] | None = None) -> int:
                 result = {"scenario": name, "run_id": admission["run_id"],
                           "output": admission["output"], "exit_code": None,
                           "error": str(error), "status": "UNKNOWN",
+                          "failure_boundary": failure_boundary(error),
                           "dry_run": admission}
             result["matrix_source_closure_sha256"] = matrix_source_digest
             results.append(result)

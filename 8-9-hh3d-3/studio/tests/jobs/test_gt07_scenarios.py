@@ -5,6 +5,7 @@ import importlib.util
 import argparse
 from contextlib import redirect_stdout
 import io
+import json
 from pathlib import Path
 import sys
 import tempfile
@@ -21,6 +22,39 @@ spec.loader.exec_module(module)
 
 
 class GT07ScenarioAdmissionTests(unittest.TestCase):
+    def test_single_native_scenario_uses_durable_admission(self):
+        with tempfile.TemporaryDirectory() as root:
+            studio = Path(root) / "studio"
+            output_root = studio / ".local/reviews"
+            run_id = "gt07-native-godot-20261007-97"
+            admission = {"scenario": "godot-edit", "run_id": run_id,
+                         "output": str(output_root / run_id),
+                         "source_closure_sha256": "source"}
+            with patch.object(module, "STUDIO", studio), \
+                    patch.object(module, "_matrix_sources", return_value=[]), \
+                    patch.object(module, "_source_digest", return_value="source"), \
+                    patch.object(module, "dry_run", return_value=admission), \
+                    patch.object(module, "_run_one", return_value={"exit_code": 0}) as run, \
+                    redirect_stdout(io.StringIO()):
+                code = module.main(["--scenario", "godot-edit", "--run-id", run_id,
+                                    "--output-root", str(output_root)])
+            manifest = json.loads((output_root / ("gt07-final-matrix-" + run_id) /
+                                   "manifest.json").read_bytes())
+            self.assertEqual(code, 0)
+            self.assertEqual(run.call_count, 1)
+            self.assertEqual(manifest["state"], "COMPLETE")
+            self.assertEqual(manifest["matrix_source_closure_sha256"], "source")
+            self.assertGreater(manifest["coordinator_pid"], 0)
+
+    def test_unknown_terminal_preserves_safe_failure_boundary(self):
+        with tempfile.TemporaryDirectory() as root:
+            boundary = {"type": "RuntimeError", "code": "RuntimeError", "frames": []}
+            result = module._terminal_summary(
+                {"exit_code": None, "failure_boundary": boundary},
+                {"scenario": "godot-edit", "run_id": "unused", "output": root}, 0)
+            self.assertIsNone(result["exit_code"])
+            self.assertEqual(result["failure_boundary"], boundary)
+
     def test_matrix_is_explicit_and_deadlines_are_bounded(self):
         self.assertTrue({
             "godot-edit", "godot-authority", "godot-save", "godot-save-locked", "godot-script", "godot-recovery", "godot-conflict",
