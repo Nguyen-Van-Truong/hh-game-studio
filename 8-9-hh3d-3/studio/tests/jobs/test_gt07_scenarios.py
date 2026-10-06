@@ -171,14 +171,46 @@ class GT07ScenarioAdmissionTests(unittest.TestCase):
 
     def test_matrix_stops_after_first_failure(self):
         output = io.StringIO()
-        with patch.object(module, "_output_for"), \
-                patch.object(module, "_run_one", return_value={"exit_code": 1}) as run, \
-                redirect_stdout(output):
-            result = module.main(["--matrix", "godot-edit,godot-save", "--run-ids",
-                                  "gt07-native-godot-20261004-98,gt07-native-godot-20261004-99"])
+        with tempfile.TemporaryDirectory() as root:
+            matrix_root = Path(root) / "matrix"
+            matrix_root.mkdir()
+            module._write_json(matrix_root / "manifest.json", {
+                "schema": "gt07-final-matrix-manifest-2", "authority": 0,
+                "state": "ADMITTED", "rows": [{}, {}]})
+            admissions = [
+                {"scenario": "godot-edit", "run_id": "gt07-native-godot-20261006-98",
+                 "output": str(Path(root) / "r1"), "source_closure_sha256": "a"},
+                {"scenario": "godot-save", "run_id": "gt07-native-godot-20261006-99",
+                 "output": str(Path(root) / "r2"), "source_closure_sha256": "a"},
+            ]
+            with patch.object(module, "_output_for"), \
+                    patch.object(module, "_admit_matrix",
+                                 return_value=(matrix_root, admissions, "closure")), \
+                    patch.object(module, "_run_one", return_value={"exit_code": 1}) as run, \
+                    patch.object(module, "_source_digest", return_value="closure"), \
+                    redirect_stdout(output):
+                result = module.main(["--matrix", "godot-edit,godot-save", "--run-ids",
+                                      "gt07-native-godot-20261006-98,gt07-native-godot-20261006-99"])
         self.assertEqual(result, 1)
         self.assertEqual(run.call_count, 1)
         self.assertIn("STOP_AFTER_FAILURE", output.getvalue())
+
+    def test_matrix_admission_keeps_native_output_fresh(self):
+        with tempfile.TemporaryDirectory() as root:
+            matrix_root = Path(root) / "matrix"
+            output = Path(root) / "row"
+            admission = {"scenario": "godot-edit", "run_id": "gt07-native-godot-20261006-98",
+                         "output": str(output), "source_closure_sha256": "a"}
+            module._persist_admission(matrix_root, output, admission, 0)
+            self.assertFalse(output.exists())
+            self.assertTrue(Path(admission["admission_path"]).is_file())
+
+    def test_matrix_admission_rejects_path_escape(self):
+        admission = {"scenario": "godot-edit", "run_id": "gt07-native-godot-20261006-98",
+                     "output": str(Path(module.STUDIO).parent / "outside"),
+                     "admission_path": str(Path(module.STUDIO).parent / "outside.json")}
+        with self.assertRaisesRegex(ValueError, "PATH_FORBIDDEN"):
+            module._validate_admitted_row("godot-edit", argparse.Namespace(), 0, admission)
 
     def test_blender_negative_deadlines_use_real_validator(self):
         from studio.host.blender.client_writer_session import BlenderWriterClientSession

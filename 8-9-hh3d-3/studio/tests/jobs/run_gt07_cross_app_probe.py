@@ -476,7 +476,8 @@ def _execute(args):
                "scope": "queue dependency + one gameplay-source publish; diagnostic only"}
     if admission is not None:
         if (admission.get("source_closure_sha256") != closure
-                or admission.get("blender_handoff") != handoff
+                or (admission.get("blender_handoff") is not None
+                    and admission.get("blender_handoff") != handoff)
                 or admission.get("failpoint_phase") != args.failpoint_phase
                 or admission.get("adapter_source_closure_sha256") != adapter_closure):
             raise RuntimeError("CROSS_APP_DRY_RUN_SOURCE_CHANGED")

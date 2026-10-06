@@ -109,7 +109,8 @@ HOST_SCENARIOS = {
                           "studio.tests.jobs.test_native_godot_stop",
                       )},
     "host-m7-tests": {"kind": "host-test", "run_prefix": "gt07-m7-final",
-                      "matrix": "M7", "tests": (
+                      "matrix": "M7", "environment": {
+                          "GT07_REAL_CLOCK_SOAK": "1", "GT07_REAL_CLOCK_ROTATION_CUTS": "1"}, "tests": (
                           "studio.tests.jobs.test_queue_rotation_custody",
                           "studio.tests.jobs.test_segmented_broker_regression",
                           "studio.tests.jobs.test_segmented_journal",
@@ -153,6 +154,22 @@ FINAL_MATRIX = (
     "host-gt02-06-regression-tests",
 )
 MATRIX_ALIASES = {"final": FINAL_MATRIX}
+
+REQUIREMENTS = {
+    "host-m1-tests": ["M1/Q01/TX18"],
+    "godot-fifo": ["M2/Q03/TX06", "M6/Q04/TX14"],
+    "blender-fifo": ["M2/Q03/TX06", "M6/Q04/TX14"],
+    "godot-authority": ["M2/Q03/TX06"], "godot-edit": ["M2/Q03/TX06"],
+    "blender-authority": ["M2/Q03/TX06"], "blender-box": ["M2/Q03/TX06"],
+    "godot-save-locked": ["M5/Q06/TX05/TX09"],
+    "godot-conflict": ["M4/Q06/TX06"], "blender-conflict": ["M4/Q06/TX06"],
+    "host-storage": ["M5/Q06/TX05/TX09"], "host-process": ["M8/TX05"],
+    "host-m6-tests": ["M6/Q04/TX14"], "host-m7-tests": ["M7/Q07/TX11"],
+    "play-mutation": ["M9/TX13"],
+    "host-gt02-06-regression-tests": ["GT02-GT06/FOCUSED_REGRESSION"],
+}
+for _name in FINAL_MATRIX:
+    REQUIREMENTS.setdefault(_name, ["M3/Q05/TQ07/TX09/TX11"])
 
 
 def _sha(path: Path) -> str:
@@ -232,8 +249,12 @@ def _adapter_admission(name, scenario, args, index, output):
         binary = _binary_for(scenario, args)
         base = SCENARIOS["godot-authority" if scenario["app"] == "godot" else "blender-authority"]
         contract = _contract_dry_run(name, base)
+        files = _matrix_sources()
+        runner = _load_probe("../../build/bootstrap/run_fixture.py")
+        fifo_closure = runner.source_closure_sha256(files)
         report.update(binary=str(binary), binary_sha256=_sha(binary), contract=contract,
-                      source_closure_sha256=_source_digest(_matrix_sources()))
+                      source_closure_sha256=fifo_closure,
+                      matrix_source_closure_sha256=_source_digest(files))
     elif scenario["kind"] == "adversary":
         probe = _load_probe("../replay/run_service_adversary.py")
         value = probe.dry_run(output.name, "play-mutation")
@@ -255,10 +276,15 @@ def _adapter_admission(name, scenario, args, index, output):
         executor = owner._load("linux_executor")
         executor._lock()
         binary = executor._binary()
+        adapter_closure = _source_digest(files)
+        handoff = str(fixture.blender_published)
         report.update(source_closure_sha256=closure, source_hashes=files,
                       binary=str(binary), binary_sha256=_sha(binary),
+                      adapter_source_closure_sha256=adapter_closure,
                       failpoint_phase=scenario["phase"], producer_run_id=producer_id,
-                      handoff=str(fixture.blender_published), dependency_receipt_pending=True)
+                      handoff=handoff,
+                      dependency_receipt_pending=True,
+                      dependency_status="PENDING_PRODUCER_TERMINAL", matrix_admission=True)
     return report
 
 
@@ -267,6 +293,10 @@ def _run_fifo(scenario, check):
     output = Path(check["output"])
     output.mkdir(parents=True, exist_ok=False)
     files = _matrix_sources()
+    runner = _load_probe("../../build/bootstrap/run_fixture.py")
+    closure = runner.source_closure_sha256(files)
+    if closure != check.get("source_closure_sha256"):
+        raise ValueError("FIFO_SOURCE_CLOSURE_CHANGED")
     snapshot = output / "source/studio"
     for name, expected in files.items():
         target = snapshot / name
@@ -274,8 +304,6 @@ def _run_fifo(scenario, check):
         shutil.copyfile(STUDIO / name, target)
         if _sha(target) != expected:
             raise ValueError("FIFO_SNAPSHOT_CHANGED")
-    runner = _load_probe("../../build/bootstrap/run_fixture.py")
-    closure = runner.source_closure_sha256(files)
     _write_json(output / "source-closure.json", {"files": files, "source_closure_sha256": closure})
     relative = (Path("tests/jobs") / scenario["probe"]).as_posix()
     command = [sys.executable, "-B", str(snapshot / relative), "--frozen",
@@ -315,9 +343,18 @@ def _run_adapter(scenario, check):
         options = argparse.Namespace(run_id=check["run_id"],
             blender_published=Path(check["handoff"]), dry_run=True,
             failpoint_phase=check["failpoint_phase"])
-        # The real handoff is now available. The probe validates the producer's
-        # durable receipt and payload and consumes this exact dry-run once.
-        probe._execute(options)
+        # Producer bytes can only be bound after that row completes.  This
+        # declared dependency is resolved by one engine-free admission after
+        # the producer terminal handoff, then consumed exactly once.
+        if Path(check["output"]).exists():
+            raise ValueError("CROSS_APP_OUTPUT_ALREADY_EXISTS")
+        if probe._execute(options) != 0:
+            raise ValueError("CROSS_APP_DEPENDENCY_ADMISSION_FAILED")
+        binding = json.loads((Path(check["output"]) / "dry-run.json").read_bytes())
+        for key in ("source_closure_sha256", "adapter_source_closure_sha256",
+                    "binary_sha256", "failpoint_phase"):
+            if binding.get(key) != check.get(key):
+                raise ValueError("CROSS_APP_ADMISSION_CHANGED")
         options.dry_run = False
         return {"exit_code": probe._execute(options)}
 
@@ -325,6 +362,187 @@ def _run_adapter(scenario, check):
 def _write_json(path: Path, value: object) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(value, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+
+def _tree_digest(root: Path) -> str:
+    """Hash a completed evidence tree without hashing the enclosing manifest."""
+    if not root.exists():
+        return ""
+    digest = hashlib.sha256()
+    for path in sorted((item for item in root.rglob("*") if item.is_file()),
+                       key=lambda item: item.relative_to(root).as_posix()):
+        relative = path.relative_to(root).as_posix().encode()
+        digest.update(len(relative).to_bytes(4, "big"))
+        digest.update(relative)
+        digest.update(bytes.fromhex(_sha(path)))
+    return digest.hexdigest()
+
+
+def _matrix_root(args: argparse.Namespace) -> Path:
+    """Return the one-use durable coordinator directory for a matrix run."""
+    if not args.run_ids:
+        raise ValueError("MATRIX_RUN_IDS_REQUIRED")
+    root = (Path(args.output_root).expanduser().resolve() /
+            ("gt07-final-matrix-" + args.run_ids[0]))
+    fixed_root = (STUDIO / ".local" / "reviews").resolve()
+    if root.parent != fixed_root:
+        raise ValueError("SCENARIO_OUTPUT_ROOT_FORBIDDEN")
+    if root.exists():
+        raise ValueError("MATRIX_MANIFEST_ALREADY_EXISTS")
+    return root
+
+
+def _atomic_json(path: Path, value: object) -> None:
+    """Make the coordinator state durable without exposing a half-written JSON."""
+    temporary = path.with_name(path.name + ".tmp")
+    _write_json(temporary, value)
+    os.replace(temporary, path)
+
+
+def _append_event(root: Path, event: dict[str, object]) -> None:
+    with (root / "events.ndjson").open("a", encoding="utf-8", newline="\n") as stream:
+        stream.write(json.dumps(event, sort_keys=True, separators=(",", ":")) + "\n")
+        stream.flush()
+        os.fsync(stream.fileno())
+
+
+def _terminal_summary(result: dict[str, object], admission: dict[str, object],
+                      index: int) -> dict[str, object]:
+    """Keep manifest receipts compact while retaining actual cleanup evidence."""
+    output = Path(str(result.get("output") or admission["output"]))
+    summary: dict[str, object] = {
+        "index": index,
+        "scenario": admission["scenario"],
+        "run_id": admission["run_id"],
+        "requirement": REQUIREMENTS.get(admission["scenario"],
+                                         [_scenario(admission["scenario"]).get("matrix", "REGRESSION")]),
+        "output": str(output),
+        "exit_code": result.get("exit_code"),
+        "raw_tree_sha256": _tree_digest(output),
+        "source_closure_sha256": admission.get("source_closure_sha256") or
+                                 admission.get("matrix_source_closure_sha256"),
+        "binary_sha256": admission.get("binary_sha256"),
+    }
+    for key in ("host", "host_report", "host_test_report", "child", "verified",
+                "passed", "extra_raw_roots"):
+        if key in result:
+            value = result[key]
+            if key == "host" and isinstance(value, dict):
+                summary["host"] = {field: value.get(field) for field in
+                                    ("exit_code", "wrapper_exit_code", "tree_verified",
+                                     "timed_out", "job_closed", "active_processes",
+                                     "retained_handle") if field in value}
+            elif key in ("host_report", "host_test_report") and isinstance(value, dict):
+                summary[key] = {field: value.get(field) for field in
+                                 ("verified", "actual_exit", "exit_code", "wrapper_exit_code",
+                                  "tree_verified", "timed_out", "source_unchanged")
+                                 if field in value}
+            elif key == "child" and isinstance(value, dict):
+                summary["child"] = {field: value.get(field) for field in
+                                     ("passed", "exit_code", "editor_exit", "wrapper_exit_code")
+                                     if field in value}
+            else:
+                summary[key] = value
+    return summary
+
+
+def _persist_admission(matrix_root: Path, output: Path,
+                       admission: dict[str, object], index: int) -> None:
+    """Bind an engine-free row receipt before any native row is launched.
+
+    Ordinary probes require a genuinely fresh output directory.  Their
+    admission is therefore kept in the coordinator directory; host probes
+    which already materialize a dry-run report and cross-app's dependency
+    handoff are the only rows that receive the marker in their own directory.
+    """
+    admission_path = matrix_root / "admissions" / f"row-{index:02d}-{admission['run_id']}.json"
+    admission["admission_path"] = str(admission_path)
+    _write_json(admission_path, admission)
+    scenario = _scenario(str(admission["scenario"]))
+    if scenario["kind"] in ("host", "host-test"):
+        output.mkdir(parents=True, exist_ok=True)
+        _write_json(output / "matrix-admission.json", admission)
+
+
+def _validate_admitted_row(name: str, args: argparse.Namespace, index: int,
+                           admission: dict[str, object]) -> Path:
+    output = Path(str(admission.get("output", ""))).resolve()
+    fixed_root = (STUDIO / ".local" / "reviews").resolve()
+    try:
+        output.relative_to(fixed_root)
+        admission_path = Path(str(admission.get("admission_path", ""))).resolve()
+        admission_path.relative_to(fixed_root)
+    except ValueError as error:
+        raise ValueError("MATRIX_ADMISSION_PATH_FORBIDDEN") from error
+    if admission.get("scenario") != name or admission.get("run_id") != output.name:
+        raise ValueError("MATRIX_ADMISSION_ROW_MISMATCH")
+    if not admission_path.is_file():
+        raise ValueError("MATRIX_ADMISSION_RECEIPT_MISSING")
+    # No second _output_for call here: its old existence check is precisely what
+    # made same-invocation admission impossible.  The one-use receipt is bound
+    # to the exact row and source closure instead.
+    stored = json.loads(admission_path.read_bytes())
+    if stored != admission:
+        raise ValueError("MATRIX_ADMISSION_RECEIPT_CHANGED")
+    return output
+
+
+def _admit_matrix(args: argparse.Namespace, names: list[str],
+                  matrix_source_digest: str) -> tuple[Path, list[dict[str, object]], str]:
+    """Admit every row before row zero can start an engine."""
+    root = _matrix_root(args)
+    root.mkdir(parents=True)
+    payload: dict[str, object] = {
+        "schema": "gt07-final-matrix-manifest-2", "authority": 0,
+        "state": "ADMITTING", "matrix_id": root.name,
+        "matrix_source_closure_sha256": matrix_source_digest,
+        "rows": [], "events": str(root / "events.ndjson"),
+    }
+    _atomic_json(root / "manifest.json", payload)
+    _append_event(root, {"event": "MATRIX_ADMISSION_STARTED", "matrix_id": root.name})
+    admissions: list[dict[str, object]] = []
+    try:
+        for index, name in enumerate(names):
+            if matrix_source_digest != _source_digest(_matrix_sources()):
+                raise ValueError("MATRIX_SOURCE_CHANGED_DURING_ADMISSION")
+            admission = dry_run(name, args, index)
+            admission["matrix_source_closure_sha256"] = matrix_source_digest
+            _persist_admission(root, Path(str(admission["output"])), admission, index)
+            admissions.append(admission)
+            payload["rows"] = [{"index": row_index, "scenario": row["scenario"],
+                                "run_id": row["run_id"],
+                                "status": ("DEFERRED_DEPENDENCY" if row.get("dependency_receipt_pending")
+                                           else "ADMITTED"),
+                                "output": row["output"]}
+                               for row_index, row in enumerate(admissions)]
+            _atomic_json(root / "manifest.json", payload)
+            _append_event(root, {"event": "ROW_ADMITTED", "index": index,
+                                 "scenario": name, "run_id": admission["run_id"]})
+        if matrix_source_digest != _source_digest(_matrix_sources()):
+            raise ValueError("MATRIX_SOURCE_CHANGED_AFTER_ADMISSION")
+        closure = matrix_closure(admissions)
+        payload.update({"state": "ADMITTED", "matrix_closure_sha256": closure,
+                        "rows": [{"index": index, "scenario": row["scenario"],
+                                   "run_id": row["run_id"],
+                                   "status": ("DEFERRED_DEPENDENCY" if row.get("dependency_receipt_pending")
+                                              else "ADMITTED"),
+                                   "output": row["output"]}
+                                  for index, row in enumerate(admissions)]})
+        _atomic_json(root / "manifest.json", payload)
+        _append_event(root, {"event": "MATRIX_ADMITTED", "matrix_closure_sha256": closure,
+                             "rows": len(admissions)})
+        return root, admissions, closure
+    except BaseException as error:
+        payload.update({"state": "ADMISSION_FAILED", "error": str(error),
+                        "rows": [{"index": index, "scenario": row["scenario"],
+                                   "run_id": row["run_id"],
+                                   "status": ("DEFERRED_DEPENDENCY" if row.get("dependency_receipt_pending")
+                                              else "ADMITTED"),
+                                   "output": row["output"]}
+                                  for index, row in enumerate(admissions)]})
+        _atomic_json(root / "manifest.json", payload)
+        _append_event(root, {"event": "MATRIX_ADMISSION_FAILED", "error": str(error)})
+        raise
 
 
 def _binary_for(scenario: dict, args: argparse.Namespace) -> Path | None:
@@ -550,8 +768,10 @@ def _run_one(name: str, args: argparse.Namespace, index: int = 0,
         command = [sys.executable, "-B", "-m", "unittest", "-q", *scenario["tests"]]
         runner = _load_probe("../../build/bootstrap/run_fixture.py")
         with _native_measure_guard():
+            environment = dict(os.environ)
+            environment.update(scenario.get("environment", {}))
             host = runner.run_process(command, cwd=STUDIO.parent, output=Path(check["output"]),
-                                      timeout=600, label="host-tests", env=dict(os.environ))
+                                      timeout=600, label="host-tests", env=environment)
         unchanged = check["source_hashes"] == _host_test_sources(scenario)
         verified = (host.get("exit_code") == host.get("wrapper_exit_code") == 0
                     and host.get("tree_verified") is True and not host.get("timed_out")
@@ -582,7 +802,7 @@ def _run_one(name: str, args: argparse.Namespace, index: int = 0,
     with _native_measure_guard():
         assert_disabled(STUDIO)
         assert_disabled(runtime_root(STUDIO))
-        _output_for(name, args, index)
+        _validate_admitted_row(name, args, index, check)
         if _closure(scenario) != check["source_closure_sha256"]:
             raise ValueError("SCENARIO_SOURCE_CHANGED_AFTER_DRY_RUN")
         if _sha(binary) != check["binary_sha256"]:
@@ -661,6 +881,7 @@ def main(argv: list[str] | None = None) -> int:
         # row must still match this digest before it starts.
         matrix_source_digest = _source_digest(_matrix_sources())
     # Check every intended output before starting the first engine in a matrix.
+    matrix_root = None
     try:
         for index, name in enumerate(names):
             _output_for(name, args, index)
@@ -684,25 +905,80 @@ def main(argv: list[str] | None = None) -> int:
                           "results": results}, sort_keys=True))
         return 0
     try:
+        # F3 admission is one atomic preflight.  Passing each saved receipt to
+        # _run_one prevents a later row from silently taking a new source
+        # generation or turning a lost native handle into a fresh retry.
+        matrix_root, admissions, admitted_closure = _admit_matrix(
+            args, names, matrix_source_digest)
+        manifest_path = matrix_root / "manifest.json"
+        manifest = json.loads(manifest_path.read_bytes())
+        manifest["state"] = "RUNNING"
+        _atomic_json(manifest_path, manifest)
+        _append_event(matrix_root, {"event": "MATRIX_NATIVE_STARTED",
+                                    "matrix_closure_sha256": admitted_closure})
         results = []
-        for index, name in enumerate(names):
-            if args.matrix and matrix_source_digest != _source_digest(_matrix_sources()):
+        for index, (name, admission) in enumerate(zip(names, admissions)):
+            if matrix_source_digest != _source_digest(_matrix_sources()):
                 raise ValueError("MATRIX_SOURCE_CHANGED_BEFORE_NATIVE_ROW")
-            result = _run_one(name, args, index)
+            _append_event(matrix_root, {"event": "ROW_STARTED", "index": index,
+                                        "scenario": name, "run_id": admission["run_id"]})
+            try:
+                result = _run_one(name, args, index, admission=admission)
+            except (OSError, ValueError, RuntimeError) as error:
+                # The row may have launched a child before the Python wrapper
+                # lost its receipt.  Preserve UNKNOWN rather than retrying it.
+                result = {"scenario": name, "run_id": admission["run_id"],
+                          "output": admission["output"], "exit_code": None,
+                          "error": str(error), "status": "UNKNOWN",
+                          "dry_run": admission}
             result["matrix_source_closure_sha256"] = matrix_source_digest
             results.append(result)
-            if result["exit_code"] != 0:
-                print(json.dumps({"native": False, "results": results,
+            terminal = _terminal_summary(result, admission, index)
+            _write_json(matrix_root / f"row-{index:02d}-terminal.json", terminal)
+            _append_event(matrix_root, {"event": "ROW_TERMINAL", **terminal})
+            manifest = json.loads(manifest_path.read_bytes())
+            manifest["rows"][index] = {"index": index, "scenario": name,
+                                       "run_id": admission["run_id"],
+                                       "status": "PASS" if result.get("exit_code") == 0 else
+                                                 ("UNKNOWN" if result.get("exit_code") is None else "FAIL"),
+                                       "terminal": terminal}
+            _atomic_json(manifest_path, manifest)
+            if result.get("exit_code") != 0:
+                manifest["state"] = "INCOMPLETE" if result.get("exit_code") is None else "FAILED"
+                _atomic_json(manifest_path, manifest)
+                _append_event(matrix_root, {"event": "MATRIX_STOPPED_AFTER_ROW",
+                                            "index": index, "status": manifest["state"]})
+                print(json.dumps({"native": False, "matrix_manifest": str(manifest_path),
+                                  "results": [_terminal_summary(item, admissions[i], i)
+                                               for i, item in enumerate(results)],
                                   "error": "SCENARIO_MATRIX_STOP_AFTER_FAILURE"},
                                  sort_keys=True))
                 return 1
-    except (OSError, ValueError, RuntimeError) as error:
+        if matrix_source_digest != _source_digest(_matrix_sources()):
+            raise ValueError("MATRIX_SOURCE_CHANGED_AFTER_NATIVE")
+        manifest = json.loads(manifest_path.read_bytes())
+        manifest["state"] = "COMPLETE"
+        manifest["final_matrix_closure_sha256"] = matrix_closure(results)
+        _atomic_json(manifest_path, manifest)
+        _append_event(matrix_root, {"event": "MATRIX_COMPLETE",
+                                    "matrix_closure_sha256": manifest["final_matrix_closure_sha256"]})
+    except BaseException as error:
+        if matrix_root is not None:
+            manifest_path = matrix_root / "manifest.json"
+            if manifest_path.is_file():
+                manifest = json.loads(manifest_path.read_bytes())
+                manifest["state"] = "INTERRUPTED"
+                manifest["error"] = str(error)
+                _atomic_json(manifest_path, manifest)
+                _append_event(matrix_root, {"event": "MATRIX_INTERRUPTED",
+                                            "error": str(error)})
         print(json.dumps({"native": False, "error": str(error)}, sort_keys=True))
         return 2
     if args.matrix and matrix_source_digest != _source_digest(_matrix_sources()):
         print(json.dumps({"native": False, "error": "MATRIX_SOURCE_CHANGED_AFTER_NATIVE"}, sort_keys=True))
         return 2
     print(json.dumps({"native": True, "matrix_source_closure_sha256": matrix_source_digest,
+                      "matrix_manifest": str(manifest_path),
                       "matrix_closure_sha256": matrix_closure(results),
                       "results": results}, sort_keys=True))
     return 0 if all(item["exit_code"] == 0 for item in results) else 1
