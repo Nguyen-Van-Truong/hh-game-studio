@@ -658,6 +658,11 @@ def _child(output: Path, binary: Path, run_id: str, operation: str,
                     owner_stop_durable = owner._journal.snapshot()['stopped'] is True
             except BaseException as error:
                 errors.append(_safe_error(error))
+            if owner is not None:
+                stop_error = getattr(owner, '_stop_error', None)
+                if stop_error is not None:
+                    errors.append({**_safe_error(stop_error),
+                                   'boundary': 'owner_stop_error'})
             try:
                 dispatch.close()
             except BaseException as error:
