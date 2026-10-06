@@ -19,11 +19,13 @@ Historical entries below are retained for provenance; they do not override the t
 
 ## Next
 
-M9's current-source adversary is now covered after the one-use binding refresh;
-the remaining gate is N6: freeze one complete M1–M9 source/review/raw manifest,
-bind M7/M8 artifacts to that freeze, run affected focused regressions once, and
-send the same frozen hash to two independent read-only critics. `AUTHORITY=0`;
-this row is diagnostic coverage, not self-acceptance.
+M9's current-source adversary is now covered after the one-use binding refresh.
+The N6 candidate package is indexed at
+`zdoc/reviews/20261003-gt07-integration/CRITIC_PACKAGE.md`; its manifest is
+`studio/.local/reviews/gt07-final-matrix-20261006/manifest.json` with SHA
+`7856162377f980d50e1a9987ff49b29cdc174d83a370d37184e38fd423741c19`.
+The remaining gate is two independent read-only critics on that exact hash.
+`AUTHORITY=0`; this package is not self-acceptance.
 
 ## Checkpoint, 06-10-2026 — M9 current-source binding and Play mutation
 
