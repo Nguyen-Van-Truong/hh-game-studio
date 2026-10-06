@@ -94,6 +94,36 @@ HOST_SCENARIOS = {
                           "studio.tests.jobs.test_segmented_broker_regression",
                           "studio.tests.jobs.test_segmented_journal",
                       )},
+    # These rows deliberately cover only the engine-free contract/regression
+    # side of the remaining gates.  They do not stand in for the native FIFO,
+    # cross-app, Play-mutation, or frozen regression rows required by F3/F4.
+    "host-fifo-contract-tests": {"kind": "host-test", "run_prefix": "gt07-fifo-contract",
+                                  "matrix": "M2", "tests": (
+                                      "studio.tests.godot.test_publication_fifo",
+                                      "studio.tests.godot.test_publication_fifo_host",
+                                      "studio.tests.jobs.test_cross_app_publication",
+                                  )},
+    "host-cross-app-contract-tests": {"kind": "host-test", "run_prefix": "gt07-cross-app-contract",
+                                       "matrix": "M3", "tests": (
+                                           "studio.tests.jobs.test_cross_app_publication",
+                                           "studio.tests.godot.test_gameplay_source_owner",
+                                           "studio.tests.godot.test_gameplay_runtime_binding",
+                                       )},
+    "host-m9-contract-tests": {"kind": "host-test", "run_prefix": "gt07-m9-contract",
+                                "matrix": "M9", "tests": (
+                                    "studio.tests.godot.test_gameplay_runtime_binding",
+                                    "studio.tests.godot.test_profile_readback",
+                                    "studio.tests.godot.test_gameplay_source_owner",
+                                )},
+    "host-gt02-06-regression-tests": {"kind": "host-test", "run_prefix": "gt07-gt02-06-regression",
+                                       "matrix": "REGRESSION", "tests": (
+                                           "studio.tests.godot.test_publication_recovery",
+                                           "studio.tests.godot.test_publication_owner",
+                                           "studio.tests.godot.test_publication_journal_v5",
+                                           "studio.tests.jobs.test_native_dispatch",
+                                           "studio.tests.jobs.test_segmented_broker_regression",
+                                           "studio.tests.jobs.test_segmented_journal",
+                                       )},
 }
 ALL_SCENARIOS = {**SCENARIOS, **HOST_SCENARIOS}
 
@@ -106,7 +136,9 @@ FINAL_MATRIX = (
     "godot-script", "godot-recovery", "godot-conflict", "blender-box",
     "blender-authority", "blender-conflict", "blender-export",
     "host-storage", "host-process", "host-m1-tests", "host-m6-tests",
-    "host-m7-tests", "host-m2-tests",
+    "host-m7-tests", "host-m2-tests", "host-fifo-contract-tests",
+    "host-cross-app-contract-tests", "host-m9-contract-tests",
+    "host-gt02-06-regression-tests",
 )
 MATRIX_ALIASES = {"final": FINAL_MATRIX}
 

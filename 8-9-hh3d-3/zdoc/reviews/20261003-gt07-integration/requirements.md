@@ -6,30 +6,34 @@ F1 ACK-cut repair is complete on one frozen closure; F2–F5 remain open.
 
 | Matrix | Status | Current evidence / run IDs | Remaining proof |
 |---|---|---|---|
-| M1 / Q01 | DIAGNOSTIC COVERED | `gt07-jobs-integration-20261004-03` | final frozen matrix |
-| M2 / Q03 | DIAGNOSTIC COVERED; F1 PASS | ACK cuts `gt07-native-godot-20261006-34` (script) and `-36` (scene), same closure `5017cfdf…6f7818f`; matching dry-runs, actual child/editor/wrapper exits 0, clean Jobs/tree, original terminal lookup exact | final frozen matrix + two same-hash critics |
-| M3 / Q05 | DIAGNOSTIC COVERED | producer cuts `gt07-native-queue-20261006-09,11..14`; consumer `gt07-cross-app-20261006-02,03` | final frozen matrix + critics |
+| M1 / Q01 | DIAGNOSTIC COVERED | `gt07-jobs-integration-20261004-03`; host contract row `gt07-m1-final-20261006-05` | final frozen matrix |
+| M2 / Q03 | DIAGNOSTIC COVERED; F1 PASS | ACK cuts `gt07-native-godot-20261006-34` (script) and `-36` (scene), same closure `5017cfdf…6f7818f`; host contract row `gt07-fifo-contract-20261006-02` (24 tests, exit 0) | native writer FIFO + final frozen matrix + two same-hash critics |
+| M3 / Q05 | DIAGNOSTIC COVERED | producer cuts `gt07-native-queue-20261006-09,11..14`; consumer `gt07-cross-app-20261006-02,03`; host contract row `gt07-cross-app-contract-20261006-02` (59 tests, exit 0) | six-phase native matrix + critics |
 | M4 / Q06 | DIAGNOSTIC COVERED | `gt07-native-godot-20261005-26,42`; `gt07-native-queue-20261006-08` | final frozen matrix + critics |
 | M5 / TX05/TX09 | DIAGNOSTIC COVERED | `gt07-m5-storage-20261006-01`; Godot save-lock `gt07-native-godot-20261006-05` | final frozen repeat + map binding |
 | M6 / Q04 | DIAGNOSTIC COVERED | `gt07-m6-host-20261006-01` | final frozen matrix + critics |
 | M7 / Q07 | DIAGNOSTIC COVERED | `gt07-m7-rotation-20261006-01` | final frozen matrix + critics |
 | M8 / Q08 | DIAGNOSTIC COVERED | `gt07-m8-process-20261006-11` | final frozen matrix + critics |
-| M9 / TX13 | DIAGNOSTIC COVERED | `gt06-gt07-m9-playmutation-20261006-01,02` | final frozen matrix + critics |
+| M9 / TX13 | DIAGNOSTIC COVERED | `gt06-gt07-m9-playmutation-20261006-01,02`; host contract row `gt07-m9-contract-20261006-02` (68 tests, exit 0) | final frozen Play-mutation row + critics |
 
 ## Next
 
 1. F2: keep this compact map; old candidate `5f34c0a6…3bce0d` is **SUPERSEDED**.
-2. F3: the existing runner now accepts the ordered `--matrix final`; its latest engine-free dry-run passed for 17 rows on 2026-10-06: 11 Godot/Blender rows, M5/M8 host admissions, and bounded host-test admissions for M1/M2/M6/M7. The host-test rows have actual exit 0: M1 61 tests, M2 20 tests, M6 10 tests, M7 28 tests (2 skips), under the retained `gt07-{m1,m2,m6,m7}-final-20261006-*` receipts. They remain authority-zero host evidence. Writer FIFO native proof, cross-app six phases, M9 Play mutation and focused GT02–GT06 regressions still need explicit adapters and are not silently counted.
+2. F3: the existing runner now accepts the ordered `--matrix final`; its latest engine-free dry-run passed for 21 rows on 2026-10-06: 11 Godot/Blender rows, M5/M8 host admissions, host-test admissions for M1/M2/M6/M7, and explicit engine-free contract/regression rows for FIFO, cross-app, M9 and GT02–GT06. The new host-test rows have actual exit 0: FIFO 24 tests, cross-app 59 tests, M9 68 tests, and focused regression 94 tests (2 skips), under `gt07-{fifo-contract,cross-app-contract,m9-contract,gt02-06-regression}-20261006-02`; the existing M1/M2/M6/M7 receipts remain valid. These rows are authority-zero contract evidence only. Native writer FIFO, six-phase cross-app, M9 Play mutation and the final frozen regression run still must execute on one fresh closure.
 3. F4: after a fresh source freeze and successful dry-run, run one complete M1–M9 matrix with one closure.
 4. F5: build the final source/review/raw manifest, then send that exact hash to two independent read-only critics. Only their explicit same-hash approval can advance GT07.
 
 No critic has been called for the superseded package. Do not merge, tick, or call GT07 accepted from diagnostics alone.
 
-The latest seventeen-row engine-free admission produced matrix closure
-`2337c83fb522bbbfb3fe87937354fa2872ec842c92d601386285e241a2070d6d`.
+The latest twenty-one-row engine-free admission produced matrix closure
+`d5823960a521df2b411c18f973a6a7195b3e0da0ba12c515e0b143321ee31e63`.
 It includes host-test M2; the M2 host execution closure is
 `fe032559fe9f45686847bb82ed8291673f7447d3928d5ad38e9e9d7cf8cdd58b`.
-The previous sixteen-row admission closure
+The four-row host contract/regression execution produced closure
+`45fc7aa939051568a93e8df8cc676e6e8e4429dff170ea1c06b0be592f291484`.
+It is host-test evidence only; it does not authorize native or acceptance.
+The previous seventeen-row admission closure
+`2337c83fb522bbbfb3fe87937354fa2872ec842c92d601386285e241a2070d6d` and the earlier sixteen-row admission closure
 `d5520195b9882db769f6e7f1ba2587324fcfdfec27df0aa50c05d5b1c8138b86`
 is retained as historical evidence.
 The host-test execution closure was
