@@ -66,16 +66,23 @@ SCENARIOS = {
                        "failpoint_phases": ("PREPARED", "VALIDATED", "ACTIVATING", "COMMITTED", "ACK")},
 }
 
-# F3/F4 use one ordered admission for every already-implemented native
-# scenario.  Keep the alias separate from ``SCENARIOS`` so callers that rely
-# on the public per-scenario choices keep the same contract.  Host-only M1/M5
-# through M8 and the cross-app/M9 adapters are added only when their existing
-# probes expose the same dry-run/receipt contract; they must not be silently
-# represented by a Godot/Blender row.
+HOST_SCENARIOS = {
+    "host-storage": {"kind": "host", "probe": "gt07_storage_faults.py",
+                      "run_prefix": "gt07-m5-final", "matrix": "M5"},
+    "host-process": {"kind": "host", "probe": "gt07_process_ownership.py",
+                      "run_prefix": "gt07-m8-final", "matrix": "M8"},
+}
+ALL_SCENARIOS = {**SCENARIOS, **HOST_SCENARIOS}
+
+# F3/F4 use one ordered admission.  Keep the alias separate from ``SCENARIOS``
+# so existing per-scenario callers keep the same contract.  Only host probes
+# with a real dry-run API are admitted here; missing M1/M6/M7/cross-app/M9
+# adapters remain explicit gaps instead of being represented by a fake row.
 FINAL_MATRIX = (
     "godot-authority", "godot-edit", "godot-save", "godot-save-locked",
     "godot-script", "godot-recovery", "godot-conflict", "blender-box",
     "blender-authority", "blender-conflict", "blender-export",
+    "host-storage", "host-process",
 )
 MATRIX_ALIASES = {"final": FINAL_MATRIX}
 
@@ -98,7 +105,16 @@ def _load_probe(name: str):
     return module
 
 
-def _binary_for(scenario: dict, args: argparse.Namespace) -> Path:
+def _scenario(name: str) -> dict:
+    try:
+        return SCENARIOS[name]
+    except KeyError:
+        return HOST_SCENARIOS[name]
+
+
+def _binary_for(scenario: dict, args: argparse.Namespace) -> Path | None:
+    if scenario["kind"] == "host":
+        return None
     value = args.godot_binary if scenario["kind"] == "godot" else args.blender_binary
     if not value:
         raise ValueError("PINNED_BINARY_REQUIRED")
@@ -115,6 +131,8 @@ def _binary_for(scenario: dict, args: argparse.Namespace) -> Path:
 
 
 def _closure(scenario: dict) -> str:
+    if scenario["kind"] == "host":
+        raise ValueError("HOST_CLOSURE_IS_REPORTED_BY_PROBE")
     probe = _load_probe(scenario["probe"])
     source = probe._sources(STUDIO)
     closure = probe._closure(STUDIO, source)
@@ -217,14 +235,17 @@ def _contract_dry_run(name: str, scenario: dict) -> dict[str, object]:
 
 
 def _output_for(name: str, args: argparse.Namespace, index: int = 0) -> Path:
-    scenario = SCENARIOS[name]
+    scenario = _scenario(name)
     run_ids = getattr(args, "run_ids", None) or []
     run_id = args.run_id if index == 0 and args.run_id else (
         run_ids[index] if index < len(run_ids) else None)
     if not run_id:
         raise ValueError("SCENARIO_RUN_ID_REQUIRED")
-    pattern = (r"gt07-native-godot-[0-9]{8}-[0-9]{2}" if scenario["kind"] == "godot"
-               else r"gt07-native-queue-[0-9]{8}-[0-9]{2}")
+    if scenario["kind"] == "host":
+        pattern = re.escape(scenario["run_prefix"]) + r"-[0-9]{8}-[0-9]{2}"
+    else:
+        pattern = (r"gt07-native-godot-[0-9]{8}-[0-9]{2}" if scenario["kind"] == "godot"
+                   else r"gt07-native-queue-[0-9]{8}-[0-9]{2}")
     if not re.fullmatch(pattern, run_id):
         raise ValueError("SCENARIO_RUN_ID_INVALID")
     output_root = Path(args.output_root).expanduser().absolute()
@@ -244,8 +265,17 @@ def _output_for(name: str, args: argparse.Namespace, index: int = 0) -> Path:
 
 
 def dry_run(name: str, args: argparse.Namespace, index: int = 0) -> dict[str, object]:
-    scenario = SCENARIOS[name]
+    scenario = _scenario(name)
     output = _output_for(name, args, index)
+    if scenario["kind"] == "host":
+        probe = _load_probe(scenario["probe"])
+        report = probe.run_diagnostic(Path(args.output_root), output.name, dry_run=True)
+        if report.get("dry_run") is not True or report.get("engine_started") is not False:
+            raise ValueError("HOST_DRY_RUN_INVALID")
+        return {"scenario": name, "kind": "host", "run_id": output.name,
+                "output": str(output), "probe": scenario["probe"],
+                "host_report": report, "source_hashes": report.get("source_hashes"),
+                "engine_started": False, "dry_run": True}
     phase = getattr(args, "failpoint_phase", None)
     if phase is not None and phase not in scenario.get("failpoint_phases", ()):
         raise ValueError("FAILPOINT_UNSUPPORTED_SCENARIO")
@@ -272,7 +302,15 @@ def dry_run(name: str, args: argparse.Namespace, index: int = 0) -> dict[str, ob
 
 
 def _run_one(name: str, args: argparse.Namespace, index: int = 0) -> dict[str, object]:
-    scenario = SCENARIOS[name]
+    scenario = _scenario(name)
+    if scenario["kind"] == "host":
+        check = dry_run(name, args, index)
+        probe = _load_probe(scenario["probe"])
+        report = probe.run_diagnostic(Path(args.output_root), check["run_id"], dry_run=False)
+        return {"scenario": name, "run_id": check["run_id"],
+                "exit_code": 0 if report.get("verified") is True else 1,
+                "dry_run": check, "host_report": report,
+                "output": str(check["output"])}
     # Dry-run is mandatory and intentionally repeated with the exact native
     # arguments immediately before delegation.
     check = dry_run(name, args, index)
@@ -316,7 +354,7 @@ def matrix_closure(results: list[dict[str, object]]) -> str:
         dry = candidate if isinstance(candidate, dict) else result
         rows.append({key: dry.get(key) for key in (
             "scenario", "run_id", "source_closure_sha256", "binary_sha256",
-            "operation", "deadline_ms")})
+            "operation", "deadline_ms", "source_hashes")})
     payload = json.dumps(rows, sort_keys=True, separators=(",", ":")).encode()
     return hashlib.sha256(payload).hexdigest()
 
@@ -341,7 +379,7 @@ def main(argv: list[str] | None = None) -> int:
     names = (MATRIX_ALIASES[matrix_text] if matrix_text in MATRIX_ALIASES else
              [value.strip() for value in matrix_text.split(",") if value.strip()]
              if matrix_text else ([args.scenario] if args.scenario else []))
-    if not names or any(value not in SCENARIOS for value in names):
+    if not names or any(value not in ALL_SCENARIOS for value in names):
         parser.error("one --scenario or a valid --matrix is required")
     args.run_ids = ([value.strip() for value in args.run_ids.split(",") if value.strip()]
                     if args.run_ids else [])
