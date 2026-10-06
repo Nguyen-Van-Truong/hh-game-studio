@@ -19,10 +19,11 @@ Historical entries below are retained for provenance; they do not override the t
 
 ## Next
 
-M3 consumer recovery and M7 integrated rotation crash slices are covered
-diagnostically. Before freezing, close Godot M2 revocation/late replies, map M3 producer cuts,
-and M6 Stop/cancel/reconnect/token-rotation coverage. M5 Godot-save file-lock
-now has native diagnostic proof; repeat it only in the final frozen matrix.
+M2 late/revoked writer, M4 Blender conflict, M5 Godot-save lock, and M6 Stop
+coverage now have current diagnostic receipts. M3 producer/cross-app cuts and
+M7–M9 remain diagnostic partials until one frozen M1–M9 matrix is run. Do not
+repeat completed diagnostics solely to refresh timestamps; build the final
+source/review/raw manifest and then obtain two independent critics on that hash.
 
 `gt07-native-writer-fifo-20261006-05` is a fresh M2 diagnostic on the current
 source: unit and native wrappers exited 0, two client processes exited 0, all
