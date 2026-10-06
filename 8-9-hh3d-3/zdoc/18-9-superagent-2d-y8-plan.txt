@@ -99,6 +99,10 @@ HIỆN TRẠNG (06-10 03:08 UTC; coordinator cập nhật khi xong một mốc, 
   `MatchSession.mode_rules`, resets bot edge history at round continuation, and exposes mode score/stage/
   wave state in the HUD. Guarded menu 8, mode/pause 11 and live match 46 assertions passed cleanly; full
   mode sessions, reference measurements, owner review and critics remain open.
+- Product commits `bbe457de`/`076aa88f` exercise and record complete provisional Stage (12 rounds)
+  and Survival (clear then P2 defeat) sessions through fixed-step `MatchSession`; the focused run passed
+  40 assertions with exit 0/cleanup 0/diagnostics empty. This closes only the implementation seam; input
+  coverage, measured reference behavior, owner review, critics and SA-07 checkbox gates remain open.
 
 NEXT (làm theo thứ tự; việc nào phải chờ thì làm việc sau, không ngồi chờ)
 N2 Rig Y8 đã tự kiểm bằng fixture cục bộ nhưng chưa lấy được A01–A06; không lặp lại vòng browser
@@ -770,4 +774,7 @@ Q5 Web: dung lượng tải lần đầu và bộ nhớ đo từ SA-04; ngân s�
 2026-10-06 SA-07 state/settings follow-up: product commit `b5177cd9` connects settings key events,
   pause snapshots, bot round reset and mode-aware HUD; focused menu/mode/match runs (8/11/46 assertions)
   exited 0 with cleanup 0 and diagnostics empty. No checkbox or parity row was ticked.
+2026-10-06 SA-07 mode-session follow-up: product commits `bbe457de`/`076aa88f` run Stage through all
+  12 slots and Survival clear/defeat via fixed-step sessions; `cmd.sa07.match-modes.6` passed 40 with
+  host exit 0, cleanup 0 and empty diagnostics. No checkbox or parity row was ticked.
 END_OF_SUPERAGENT_PLAN
