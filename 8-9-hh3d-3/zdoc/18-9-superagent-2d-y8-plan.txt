@@ -36,7 +36,7 @@ PREVIOUS_REVISION=SA4 trong Git 5b2d4c7b; LOG chi tiết (run id, hash, số ass
   routing HH3D nằm ở 8-9-hh3d-3/AGENTS.md.
 - Coordinator game tick WP khi đạt DoD; subagent không tick.
 
-HIỆN TRẠNG (06-10 02:50 UTC; coordinator cập nhật khi xong một mốc, tối đa 15 dòng)
+HIỆN TRẠNG (06-10 03:02 UTC; coordinator cập nhật khi xong một mốc, tối đa 15 dòng)
 - SA-01 ACCEPTED 03-10 (bootstrap kỹ thuật). CURRENT_VALID_WP=SA-02 từ 03-10.
 - Ledger 79 dòng: 25 OBSERVED, 54 UNVERIFIED, 0 MATCHED. Đã thấy chủ yếu menu, map, mode, phím
   đánh và vài phản ứng vật thể (mục 7.4). Chưa có số đo thời gian hay khoảng cách nào: browser
@@ -85,6 +85,12 @@ HIỆN TRẠNG (06-10 02:50 UTC; coordinator cập nhật khi xong một mốc, 
   combat-priority pickup routing. Guarded SA-05 catalog passed 27 assertions, SA-04 bot slice 30,
   SA-08 open-floor twin-hash stress passed 100 seeded matches/40,728 assertions before 600 ticks, and
   SA-01 regression passed 2,977. These remain implementation checks, not parity or checkbox acceptance.
+- Product commit `5bb70259` adds a provisional deterministic `ClassicModeRules` seam for the observed
+  VS/Stage/Survival families: seven VS rule labels, round targets, Stage twelve-slot unlock progression,
+  Survival wave/defeat flow, pause state and immutable/canonical snapshots. `MatchSession` keeps the old
+  relay-yard constructor default and includes mode state in its snapshot/hash. Guarded mode rules passed
+  22 assertions; SA-01 and match-room regressions stayed green. Menu input path, settings persistence,
+  full mode bodies, owner play and critic remain open; no parity or checkbox is claimed.
 
 NEXT (làm theo thứ tự; việc nào phải chờ thì làm việc sau, không ngồi chờ)
 N2 Rig Y8 đã tự kiểm bằng fixture cục bộ nhưng chưa lấy được A01–A06; không lặp lại vòng browser
@@ -95,6 +101,8 @@ N5 SA-04 bản chơi được đã có ở commit `0659f2ef`; Windows/Web artifa
    gửi owner thử kèm hướng dẫn 5 dòng. Không tick SA-04 khi thiếu owner/critic/parity gate.
 N6 Trong lúc chờ owner: đo A07–A17; kiểm kê trong trận thật (mục 7.4); thử pipeline art cho
    một nhân vật (SA-10, thư mục art/, subagent riêng).
+N7 Sẵn sàng cho lát cắt map/bot tiếp theo: giữ `relay_yard` mặc định, thêm navigation graph kiểm định
+   trên topology hiện có trước khi mở map catalog. Không tạo map mới hoặc tick SA-09 trước gate Classic.
 
 1. MỤC TIÊU VÀ THỨ TỰ
 Owner 03-10: hoàn thành Classic giống bản Y8 trước; phần kiểu MUGEN chỉ làm sau bằng lệnh mới.
@@ -732,4 +740,9 @@ Q5 Web: dung lượng tải lần đầu và bộ nhớ đo từ SA-04; ngân s�
   full weapon fingerprints. Guarded `cmd.sa05.weapon-catalog.audit.2` (27), `cmd.sa04.bot-controller.audit.4`
   (30), `cmd.sa08.bot-duel.stress.4` (100 matches, 40,728) and `cmd.sa03.sa06.core.audit.regression.1`
   (2,977) all exited 0 with cleanup 0 and empty diagnostics. Fixture scope and owner/Y8 gates remain open.
+2026-10-06 SA-07 provisional mode-flow seam: product commit `5bb70259` adds deterministic VS/Stage/Survival
+  rules and integrates their snapshot/hash into `MatchSession` without changing the relay-yard default.
+  `cmd.sa07.mode-rules.1` passed 22 assertions; `cmd.sa07.mode-rules.regression.1` and
+  `cmd.sa07.match-room.regression.1` exited 0 with cleanup 0 and empty diagnostics. Menu/settings,
+  full mode sessions and SA-02/owner/critic gates remain open; no checkbox or parity row was ticked.
 END_OF_SUPERAGENT_PLAN
