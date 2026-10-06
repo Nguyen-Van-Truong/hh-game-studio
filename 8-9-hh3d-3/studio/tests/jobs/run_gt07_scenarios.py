@@ -490,6 +490,9 @@ def _validate_admitted_row(name: str, args: argparse.Namespace, index: int,
 def _admit_matrix(args: argparse.Namespace, names: list[str],
                   matrix_source_digest: str) -> tuple[Path, list[dict[str, object]], str]:
     """Admit every row before row zero can start an engine."""
+    run_ids = [str(value) for value in args.run_ids]
+    if len(run_ids) != len(names) or len(set(run_ids)) != len(run_ids):
+        raise ValueError("MATRIX_RUN_IDS_NOT_DISTINCT")
     root = _matrix_root(args)
     root.mkdir(parents=True)
     payload: dict[str, object] = {
