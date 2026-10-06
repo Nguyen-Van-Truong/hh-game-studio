@@ -763,39 +763,60 @@ def _recover_crash(output: Path, binary: Path, run_id: str, source: dict, closur
         journal = actor._recovery._journal
         selected = journal.selection_facts()
         check("selected_version_preserved", selected == cut["selection"])
-        if cut["original_response"] is not None:
+        ack_cut = cut["original_response"] is not None
+        if ack_cut:
             check("original_ack_preserved", initial == cut["original_response"])
+            # A valid publication receipt is already the answer. Do not mint
+            # a recovery lease, reopen the editor, or append a receipt.
+            response = initial
+            state_before_reconcile = journal.snapshot()
+            report.update(initial_lookup=initial, response=response,
+                          recovery_route="ORIGINAL_LOOKUP_ONLY")
+            check("expected_terminal", response["status"] == "COMMITTED")
+            check("durable_response", journal.lookup_response(command, digest) == canonical_bytes(response))
+            check("ack_cut_no_recovery_append", journal.snapshot() == state_before_reconcile)
         else:
             check("no_premature_ack", initial["status"] != "COMMITTED")
-        lease = actor.lease({"project_id": actor.project_id, "ttl_ms": 30_000}, **auth)
-        check("new_fencing_epoch", lease["fencing_epoch"] > request["fencing_epoch"])
-        body = {**lookup_body, "digest": digest, "lease_id": lease["lease_id"],
-            "fencing_epoch": lease["fencing_epoch"], "deadline_ms": min(lease["expires_ms"], epoch_ms() + 29_000)}
-        response = actor.reconcile(body, **auth).as_dict()
-        report.update(initial_lookup=initial, response=response)
-        restored = selected == original["selection"] and cut["original_response"] is None
-        check("expected_terminal", response["status"] == ("REJECTED" if restored else "COMMITTED"))
-        check("durable_response", journal.recovered_response(command, digest) == canonical_bytes(response))
-        if cut["original_response"] is not None:
+            lease = actor.lease({"project_id": actor.project_id, "ttl_ms": 30_000}, **auth)
+            check("new_fencing_epoch", lease["fencing_epoch"] > request["fencing_epoch"])
+            body = {**lookup_body, "digest": digest, "lease_id": lease["lease_id"],
+                "fencing_epoch": lease["fencing_epoch"], "deadline_ms": min(lease["expires_ms"], epoch_ms() + 29_000)}
+            state_before_reconcile = journal.snapshot()
+            response = actor.reconcile(body, **auth).as_dict()
+            report.update(initial_lookup=initial, response=response,
+                          recovery_route="REGISTERED_RECOVERY")
+            restored = selected == original["selection"]
+            check("expected_terminal", response["status"] == ("REJECTED" if restored else "COMMITTED"))
+            check("durable_response", journal.recovered_response(command, digest) == canonical_bytes(response))
+        if ack_cut:
             check("same_ack_after_reconcile", response == cut["original_response"])
         editor = actor._recovery._editor
-        observation = editor.script_observation()
-        report["editor_identity"] = editor.identity
-        check("fresh_editor", editor.identity["session_id"] != original["editor_identity"]["session_id"]
-              and (editor.identity["pid"], editor.identity["creation_filetime"]) !=
-                  (original["editor_identity"]["pid"], original["editor_identity"]["creation_filetime"]))
-        check("native_readback_files", observation["snapshot"]["working_files"] == cut["files"])
-        state = journal.snapshot()
-        check("retry_no_effect", actor.reconcile(body, **auth).as_dict() == response
-              and actor._recovery._editor is editor and journal.snapshot() == state)
+        if cut["original_response"] is not None:
+            check("ack_cut_no_editor_reopen", editor is None)
+            check("retry_no_effect", actor.lookup(lookup_body, **auth).as_dict() == response
+                  and actor._recovery._editor is None and journal.snapshot() == state_before_reconcile)
+        else:
+            observation = editor.script_observation()
+            report["editor_identity"] = editor.identity
+            check("fresh_editor", editor.identity["session_id"] != original["editor_identity"]["session_id"]
+                  and (editor.identity["pid"], editor.identity["creation_filetime"]) !=
+                      (original["editor_identity"]["pid"], original["editor_identity"]["creation_filetime"]))
+            check("native_readback_files", observation["snapshot"]["working_files"] == cut["files"])
+            state = journal.snapshot()
+            check("retry_no_effect", actor.reconcile(body, **auth).as_dict() == response
+                  and actor._recovery._editor is editor and journal.snapshot() == state)
+        stable_state = state_before_reconcile if ack_cut else state
         check("lookup_exact", actor.lookup(lookup_body, **auth).as_dict() == response)
         check("selection_unchanged_after_recovery", journal.selection_facts() == selected)
         check("queue_not_redispatched", _event_head(queue.log) == original["queue_head"])
         actor.close()
         actor = None
-        cleanup = _editor_close_proof(editor._cleanup, report["editor_identity"])
-        report["editor_cleanup"] = cleanup
-        check("recovery_editor_clean", cleanup["valid"])
+        if editor is not None:
+            cleanup = _editor_close_proof(editor._cleanup, report["editor_identity"])
+            report["editor_cleanup"] = cleanup
+            check("recovery_editor_clean", cleanup["valid"])
+        else:
+            report["editor_cleanup"] = {"valid": True, "not_started": True}
         restart = output / "lookup-restart"
         restart.mkdir()
         actor = module.GodotRecoveryHost.open(restart, storage_id=original["storage_id"],
@@ -804,10 +825,13 @@ def _recover_crash(output: Path, binary: Path, run_id: str, source: dict, closur
         auth["authorization"] = "Bearer " + credential.bearer
         journal = actor._recovery._journal
         state = journal.snapshot()
+        if ack_cut:
+            reopened = actor.lookup(lookup_body, **auth).as_dict()
+        else:
+            reopened = actor.reconcile(body, **auth).as_dict()
         check("reopen_lookup_and_retry_no_engine", actor.lookup(lookup_body, **auth).as_dict() == response
-              and actor.reconcile(body, **auth).as_dict() == response
-              and actor._recovery._editor is None and journal.snapshot() == state
-              and journal.selection_facts() == selected)
+              and reopened == response and actor._recovery._editor is None
+              and journal.snapshot() == stable_state and journal.selection_facts() == selected)
         report["passed"] = True
     except Exception as error:
         report["errors"].append(_safe_error(error))

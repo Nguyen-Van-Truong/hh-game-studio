@@ -154,6 +154,13 @@ class PublicationRecovery:
             self._view(command_id,digest)
             return self._journal.lookup_response(command_id,digest)
 
+    def terminal_observation(self,command_id,digest=None):
+        """Read a classified original receipt without scheduling recovery."""
+        with self._lock:
+            self._healthy()
+            _need(type(self._journal) is RecoveryJournal,'RECOVERY_JOURNAL_OWNER_REQUIRED')
+            return self._journal.terminal_observation(command_id,digest)
+
     def _original_editor(self,command_id,digest):
         # Original v4 bytes remain immutable. COMMITTED's compact command no
         # longer carries CAPTURE_PREPARED, so derive it from that exact prefix.
@@ -733,6 +740,54 @@ class RecoveryJournal(_v4.PublicationJournalV4):
             snapshot,command,context=parse_json(canonical_bytes([snapshot,command,context]))
             return snapshot,command,bundle,context
 
+    def terminal_observation(self,command_id,digest=None):
+        """Return one fresh terminal classification and its exact receipt.
+
+        The journal view, active selection and receipt are checked under one
+        persistence boundary.  ``None`` is never treated as a success: it
+        means the command is absent or still requires the registered recovery
+        path (including UNKNOWN, blocked COMMITTED and last-good routes).
+        """
+        with self._locked():
+            publication,recovery,selected,bundle=self._refresh_view()
+            snapshot=self._snapshot_value(publication,recovery,selected)
+            command=_model.lookup(publication,command_id,digest)
+            if command is None:
+                return None
+            plan=classify(snapshot,command)
+            result={'command':parse_json(canonical_bytes(command)),
+                    'plan':parse_json(canonical_bytes(plan)),
+                    'response_raw':None}
+            if plan['route'] in ('COMMITTED_ORIGINAL','HISTORICAL_TERMINAL') \
+                    and plan['terminal_response_available']:
+                if plan['route']=='COMMITTED_ORIGINAL':
+                    receipt=command['receipt']
+                    _need(_same(receipt['selection'],selected['selector']['selection'])
+                          and _same(receipt['selector_version'],selected['selector_version'])
+                          and receipt['after_project_revision']==bundle.project_revision
+                          and receipt['scene_revision']==bundle.scene_revision,
+                          'RECOVERY_ORIGINAL_SELECTION_MISMATCH')
+                    self._confirm_selection_barriers(selected)
+                raw=_model.lookup_response(publication,command['command_id'],command['digest'])
+                _need(type(raw) is bytes,'RECOVERY_DURABLE_RESPONSE_REQUIRED')
+                parsed=parse_json(raw)
+                _need(canonical_bytes(parsed)==raw and parsed.get('command_id')==command['command_id'],
+                      'RECOVERY_DURABLE_RESPONSE_MISMATCH')
+                result['response_raw']=raw
+            return result
+
+    def _confirm_selection_barriers(self,selected):
+        """Recheck exact selected file identities/hashes and persistence."""
+        for row in (*selected['selector']['descriptor']['files'].values(),selected['selector']['descriptor']['manifest']):
+            version,raw=self._files.read(row['name'])
+            _need(_v4._version(version)=={k:row[k] for k in ('volume','file_id','size_bytes','sha256')},
+                  'RECOVERY_CONTENT_BARRIER_IDENTITY')
+            self._files.confirm_barrier(row['name'],version)
+        version,raw=self._files.read('active.json')
+        _need(_v4._version(version)==selected['selector_version'] and raw==canonical_bytes(selected['selector']),
+              'RECOVERY_SELECTOR_BARRIER_IDENTITY')
+        self._files.confirm_barrier('active.json',version)
+
     def snapshot(self):
         with self._locked():return self._snapshot_value(*self._refresh())
 
@@ -793,12 +848,7 @@ class RecoveryJournal(_v4.PublicationJournalV4):
                 recovery_id=recovery_id,admission=admission,route=route,selected=selected,native_head=asdict(self._head),editor_generation=editor_generation)
             _fold_recovery(publication,(*tail,canonical_bytes(proposed)))
             # Reapply actual barriers while the immutable project stays readonly.
-            for row in (*selected['selector']['descriptor']['files'].values(),selected['selector']['descriptor']['manifest']):
-                version,raw=self._files.read(row['name']);_need(_v4._version(version)=={k:row[k] for k in ('volume','file_id','size_bytes','sha256')},'RECOVERY_CONTENT_BARRIER_IDENTITY')
-                self._files.confirm_barrier(row['name'],version)
-            version,raw=self._files.read('active.json')
-            _need(_v4._version(version)==selected['selector_version'] and raw==canonical_bytes(selected['selector']),'RECOVERY_SELECTOR_BARRIER_IDENTITY')
-            self._files.confirm_barrier('active.json',version)
+            self._confirm_selection_barriers(selected)
             return self._append_recovery('ADMITTED',max(observed_ms,_now()),command_id=command_id,digest=digest,recovery_id=recovery_id,
                 admission=admission,route=route,selected=selected,native_head=asdict(self._head),editor_generation=editor_generation)
 

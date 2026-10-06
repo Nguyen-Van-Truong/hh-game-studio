@@ -40,6 +40,10 @@ class RecoveryHostTests(unittest.TestCase):
         self.raw=canonical_bytes(self.response.as_dict())
         self.value.model=types.SimpleNamespace(ReconciliationAuthority=Mock(return_value=object()))
         value._recovery=Mock()
+        # This Mock is only the inert engine boundary for HTTP tests. An
+        # unconfigured Mock is not a journal observation and must never enter
+        # the ACK fast path.
+        value._recovery.terminal_observation.return_value = None
         value._recovery._journal.recovered_response.return_value=self.raw
         value._recovery._journal.snapshot.return_value={'stopped':False,'recovery':{'attempts':[]}}
         def persist_stop(**kwargs):
@@ -53,6 +57,10 @@ class RecoveryHostTests(unittest.TestCase):
     def test_lookup_nonterminal_command_does_not_read_missing_receipt(self):
         self.value._recovery._journal.lookup.return_value = {
             'phase': 'SELECTED', 'digest': self.body['digest']}
+        self.value._recovery.terminal_observation.return_value = {
+            'command': {'phase': 'SELECTED', 'digest': self.body['digest']},
+            'plan': {'route': 'SELECTED_REQUIRES_DURABLE_COMPLETION'},
+            'response_raw': None}
         self.value._recovery.original_response.side_effect = AssertionError(
             'nonterminal receipt must not be read')
         result = self.value.lookup(
@@ -88,6 +96,28 @@ class RecoveryHostTests(unittest.TestCase):
         self.assertTrue(self.value._held)
         self.assertEqual(self.value.reconcile(self.body,**self.args),self.response)
         self.value._recovery.reconcile.assert_called_once()
+
+    def test_existing_terminal_ack_short_circuits_reconcile_without_new_effect(self):
+        # An ACK failpoint may lose only the outer queue return after the
+        # publication journal has already committed.  Returning the exact
+        # journal bytes is safe and avoids reopening an editor under the
+        # recovery deadline; no recovery mutation or second receipt is valid.
+        self.value._recovery._journal.lookup.return_value = {
+            'phase': 'COMMITTED', 'command_id': self.body['command_id'],
+            'digest': self.body['digest']}
+        self.value._recovery.terminal_observation.return_value = {
+            'command': {'phase': 'COMMITTED', 'command_id': self.body['command_id'],
+                        'digest': self.body['digest']},
+            'plan': {'route': 'COMMITTED_ORIGINAL',
+                     'terminal_response_available': True},
+            'response_raw': self.raw}
+        self.value._recovery.original_response.return_value = self.raw
+        result = self.value.reconcile(self.body, **self.args)
+        self.assertEqual(result, self.response)
+        self.assertEqual(self.value.reconcile(self.body, **self.args), self.response)
+        self.value._recovery.reconcile.assert_not_called()
+        self.assertEqual(self.value._attempt,
+                         (self.body['command_id'], self.body['digest'], 'TERMINAL_ORIGINAL'))
 
     def test_failed_recovery_without_terminal_is_unknown_and_keeps_owner(self):
         self.value._recovery.reconcile.side_effect=OSError('inert engine start failure')
