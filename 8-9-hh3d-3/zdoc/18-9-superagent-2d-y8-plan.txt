@@ -103,6 +103,11 @@ HIỆN TRẠNG (06-10 03:08 UTC; coordinator cập nhật khi xong một mốc, 
   and Survival (clear then P2 defeat) sessions through fixed-step `MatchSession`; the focused run passed
   40 assertions with exit 0/cleanup 0/diagnostics empty. This closes only the implementation seam; input
   coverage, measured reference behavior, owner review, critics and SA-07 checkbox gates remain open.
+- Product commit `f913e094` applies the requested provisional +15% normal-fighter display height
+  (`char_height=55.2`), fixes the canonical match snapshot format error found by the guarded roll run,
+  and hardens NavigationGraph against malformed numeric/JSON-key input and partial failed builds. Focused
+  roll/replay/mode/full-regression runs and navigation (15 assertions) exited 0 with cleanup 0 and empty
+  diagnostics; this remains implementation evidence, not SA-02 parity or an SA-09/SA-10 acceptance.
 
 NEXT (làm theo thứ tự; việc nào phải chờ thì làm việc sau, không ngồi chờ)
 N2 Rig Y8 đã tự kiểm bằng fixture cục bộ nhưng chưa lấy được A01–A06; không lặp lại vòng browser
@@ -113,10 +118,10 @@ N5 SA-04 bản chơi được đã có ở commit `0659f2ef`; Windows/Web artifa
    gửi owner thử kèm hướng dẫn 5 dòng. Không tick SA-04 khi thiếu owner/critic/parity gate.
 N6 Trong lúc chờ owner: đo A07–A17; kiểm kê trong trận thật (mục 7.4); thử pipeline art cho
    một nhân vật (SA-10, thư mục art/, subagent riêng).
-N7 Đã hoàn tất lát cắt navigation/mode/settings trên topology hiện có trong `da561611`; giữ
-   `relay_yard` mặc định, chưa tạo map mới và chưa tick SA-07/SA-09. Bước kế là nối menu/input thật
-   (đã nối trong `42ef6f85`); tiếp tục hoàn thiện phiên mode/settings UI, sau đó mới mở map catalog
-   khi gate Classic cho phép.
+N7 Đã hoàn tất lát cắt navigation/mode/settings và phiên Stage/Survival trên topology hiện có
+   (`da561611`, `bbe457de`, `076aa88f`, `f913e094`); giữ `relay_yard` mặc định, chưa tạo map mới và
+   chưa tick SA-07/SA-09/SA-10. Menu/input thật, pause, HUD và settings đã có focused proof; tiếp tục
+   map catalog và các gate đo/owner/critic, không chuyển sang biến thể SA-14.
 
 1. MỤC TIÊU VÀ THỨ TỰ
 Owner 03-10: hoàn thành Classic giống bản Y8 trước; phần kiểu MUGEN chỉ làm sau bằng lệnh mới.
@@ -777,4 +782,9 @@ Q5 Web: dung lượng tải lần đầu và bộ nhớ đo từ SA-04; ngân s�
 2026-10-06 SA-07 mode-session follow-up: product commits `bbe457de`/`076aa88f` run Stage through all
   12 slots and Survival clear/defeat via fixed-step sessions; `cmd.sa07.match-modes.6` passed 40 with
   host exit 0, cleanup 0 and empty diagnostics. No checkbox or parity row was ticked.
+2026-10-06 SA-09/SA-10 hardening: product commit `f913e094` raises provisional normal-fighter height to
+  55.2 (+15%), fixes `MatchSession.canonical_snapshot` formatting after a guarded diagnostic, and rejects
+  malformed navigation geometry/partial failed graphs. `cmd.sa09.navigation-graph.10` passed 15 assertions;
+  char-scale roll/replay/mode and `cmd.sa10.run-all.nav-hardening.1` passed with exit 0/cleanup 0/diagnostics
+  empty (full regression 2,977). No checkbox or parity claim was added.
 END_OF_SUPERAGENT_PLAN
