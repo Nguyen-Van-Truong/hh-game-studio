@@ -91,6 +91,10 @@ HIỆN TRẠNG (06-10 03:08 UTC; coordinator cập nhật khi xong một mốc, 
   node rows. Guarded mode/settings/session/match regressions, SA-01 2,977 assertions and navigation
   passed with exit 0/cleanup 0/diagnostics empty. These are implementation checks only; SA-02, menu/input
   path, full mode sessions, map catalog, owner review and critics remain open, with no checkbox/parity claim.
+- Product commit `42ef6f85` wires the real bootstrap key path (1=VS, 2=Stage, 3=Survival) to dedicated
+  scenes and adds Enter/R continuation for finite round-result states. Guarded `cmd.sa07.menu-modes.2`
+  passed 4 assertions with exit 0/cleanup 0/diagnostics empty; settings UI, complete mode sessions,
+  owner play and critics remain open.
 
 NEXT (làm theo thứ tự; việc nào phải chờ thì làm việc sau, không ngồi chờ)
 N2 Rig Y8 đã tự kiểm bằng fixture cục bộ nhưng chưa lấy được A01–A06; không lặp lại vòng browser
@@ -103,7 +107,8 @@ N6 Trong lúc chờ owner: đo A07–A17; kiểm kê trong trận thật (mục 
    một nhân vật (SA-10, thư mục art/, subagent riêng).
 N7 Đã hoàn tất lát cắt navigation/mode/settings trên topology hiện có trong `da561611`; giữ
    `relay_yard` mặc định, chưa tạo map mới và chưa tick SA-07/SA-09. Bước kế là nối menu/input thật
-   và chạy trọn phiên mode, sau đó mới mở map catalog khi gate Classic cho phép.
+   (đã nối trong `42ef6f85`); tiếp tục hoàn thiện phiên mode/settings UI, sau đó mới mở map catalog
+   khi gate Classic cho phép.
 
 1. MỤC TIÊU VÀ THỨ TỰ
 Owner 03-10: hoàn thành Classic giống bản Y8 trước; phần kiểu MUGEN chỉ làm sau bằng lệnh mới.
@@ -755,4 +760,7 @@ Q5 Web: dung lượng tải lần đầu và bộ nhớ đo từ SA-04; ngân s�
   reset and terminal tests, and validated deterministic graph rows/pit spans. Focused mode/settings/session/
   navigation runs (53/17/8/12 assertions), MatchRoom 46, SA-01 2,977 and movement regression all exited
   0 with cleanup 0 and diagnostics empty; no checkbox or parity row was ticked.
+2026-10-06 SA-07 menu seam: product commit `42ef6f85` adds real bootstrap routing for VS/Stage/Survival
+  plus round-result continuation; `cmd.sa07.menu-modes.2` passed 4 assertions with clean exit/cleanup/
+  diagnostics. Settings UI, complete mode sessions, SA-02 evidence, owner review and critics remain open.
 END_OF_SUPERAGENT_PLAN
