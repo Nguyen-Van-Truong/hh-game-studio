@@ -19,14 +19,16 @@ F1 ACK-cut repair is complete on one frozen closure; F2–F5 remain open.
 ## Next
 
 1. F2: keep this compact map; old candidate `5f34c0a6…3bce0d` is **SUPERSEDED**.
-2. F3: the existing runner now accepts the ordered `--matrix final`; its latest engine-free dry-run passed for 21 rows on 2026-10-06: 11 Godot/Blender rows, M5/M8 host admissions, host-test admissions for M1/M2/M6/M7, and explicit engine-free contract/regression rows for FIFO, cross-app, M9 and GT02–GT06. The new host-test rows have actual exit 0: FIFO 24 tests, cross-app 59 tests, M9 68 tests, and focused regression 94 tests (2 skips), under `gt07-{fifo-contract,cross-app-contract,m9-contract,gt02-06-regression}-20261006-02`; the existing M1/M2/M6/M7 receipts remain valid. These rows are authority-zero contract evidence only. Native writer FIFO, six-phase cross-app, M9 Play mutation and the final frozen regression run still must execute on one fresh closure.
+2. F3: the existing runner now accepts the ordered `--matrix final`; its latest engine-free dry-run passed for 21 rows on 2026-10-07: 11 Godot/Blender rows, M5/M8 host admissions, host-test admissions for M1/M2/M6/M7, and explicit engine-free contract/regression rows for FIFO, cross-app, M9 and GT02–GT06. The fresh IDs are `gt07-native-godot-20261007-01..07`, `gt07-native-queue-20261007-08..11`, and `gt07-{m5,m8,m1,m6,m7,m2}-final-20261007-*` plus the four contract rows. The new host-test rows have actual exit 0: FIFO 24 tests, cross-app 59 tests, M9 68 tests, and focused regression 94 tests (2 skips), under the retained 20261006-02 receipts. These rows are authority-zero contract evidence only. Native writer FIFO, six-phase cross-app, M9 Play mutation and the final frozen regression run still must execute on one fresh closure.
 3. F4: after a fresh source freeze and successful dry-run, run one complete M1–M9 matrix with one closure.
 4. F5: build the final source/review/raw manifest, then send that exact hash to two independent read-only critics. Only their explicit same-hash approval can advance GT07.
 
 No critic has been called for the superseded package. Do not merge, tick, or call GT07 accepted from diagnostics alone.
 
 The latest twenty-one-row engine-free admission produced matrix closure
-`d5823960a521df2b411c18f973a6a7195b3e0da0ba12c515e0b143321ee31e63`.
+`1b3e4344bf79250c0386387001660bfa2930e29053e106a0fed26f37e638e3ef`.
+The previous 20261006 admission closure `d5823960a521df2b411c18f973a6a7195b3e0da0ba12c515e0b143321ee31e63`
+is retained as superseded admission evidence.
 It includes host-test M2; the M2 host execution closure is
 `fe032559fe9f45686847bb82ed8291673f7447d3928d5ad38e9e9d7cf8cdd58b`.
 The four-row host contract/regression execution produced closure
