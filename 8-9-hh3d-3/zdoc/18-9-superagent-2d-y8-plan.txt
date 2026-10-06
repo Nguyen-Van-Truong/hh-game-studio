@@ -19,7 +19,8 @@ FUNCTIONAL_PARITY=UNVERIFIED
 RELEASE_STATUS=BUILT_PROVISIONAL
 LEGACY_PROGRESS_INHERITED=NONE
 PREVIOUS_REVISION=SA4 trong Git 5b2d4c7b; LOG chi tiết (run id, hash, số assertion) nằm ở đó
-REPO_MIGRATION=PROPOSED_NOT_EXECUTED
+REPO_MIGRATION=EXECUTED_TO_ARCHIVE
+REPO_ARCHIVE_PATH=D:/dataDiskD/intellji/hoanhaosocial/hoanhaonew-20-6-2025/hh-game-studio-old-archive-6-10/legacy-root
 REPO_KEEP_SCOPE=8-9-hh3d-3/{zdoc,studio,superagent,consumer-pilot,vertical-slice,scripts,AGENTS.md,CLAUDE.md,.gitattributes}
 REPO_POLICY_KEEP=root AGENTS.md + .gitignore until a scoped replacement is reviewed
 REPO_ARCHIVE_SCOPE=all other root paths, linked worktrees and ignored local state remain archived, not deleted
@@ -883,4 +884,10 @@ Q5 Web: dung lượng tải lần đầu và bộ nhớ đo từ SA-04; ngân s�
 2026-10-06 repository split audit: `REPO_MIGRATION=PROPOSED_NOT_EXECUTED`. Keep the complete HH3D scope,
   root ignore/policy until replacement, and archive linked worktrees/WIP before any subtree split or move.
   Clone-plus-delete is not a history cleanup; no delete, rewrite, push or remote switch was performed.
+2026-10-06 repository relocation: unrelated root paths were moved to
+  `D:/dataDiskD/intellji/hoanhaosocial/hoanhaonew-20-6-2025/hh-game-studio-old-archive-6-10/legacy-root`;
+  `8-9-hh3d-3/zdoc`, `studio`, `superagent`, `consumer-pilot`, `vertical-slice`, `scripts`, child policy files,
+  `.local`, root `.gitignore`, root `AGENTS.md`, and Git/worktree metadata were retained. The archive manifest is
+  `hh-game-studio-old-archive-6-10/MIGRATION_MANIFEST_2026-10-06.md`; no linked worktree was moved and the
+  pre-existing GT07 edits were not staged. This is a filesystem relocation, not a history rewrite or parity gate.
 END_OF_SUPERAGENT_PLAN
