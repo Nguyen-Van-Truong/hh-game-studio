@@ -23,7 +23,7 @@ M9's current-source adversary is now covered after the one-use binding refresh.
 The N6 candidate package is indexed at
 `zdoc/reviews/20261003-gt07-integration/CRITIC_PACKAGE.md`; its manifest is
 `studio/.local/reviews/gt07-final-matrix-20261006/manifest.json` with SHA
-`128320aac3e5f66e6debbe1d87f1b95441a7495f8eb005f78fa2592bc70e3a6b`.
+`e203e6dd3f8a345dceceecb18595d8204004f9f232fbdb45d4fea044a6fe7409`.
 The remaining gate is two independent read-only critics on that exact hash.
 `AUTHORITY=0`; this package is not self-acceptance.
 

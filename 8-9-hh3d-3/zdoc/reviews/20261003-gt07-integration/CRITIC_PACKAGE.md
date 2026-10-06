@@ -6,9 +6,9 @@ or infer acceptance from the raw PASS fields.
 
 ## Freeze
 
-- Git source freeze: `a10eb5a7f772d37f0a2dcd31b6932286dfea1dba`.
+- Git source freeze: `909d6efe1a1c71af297d9b2ad99fe5a7a666e150`.
 - Coordinator manifest: `studio/.local/reviews/gt07-final-matrix-20261006/manifest.json`.
-- Manifest SHA-256: `128320aac3e5f66e6debbe1d87f1b95441a7495f8eb005f78fa2592bc70e3a6b`.
+- Manifest SHA-256: `e203e6dd3f8a345dceceecb18595d8204004f9f232fbdb45d4fea044a6fe7409`.
 - Tracked studio closure: `b7b3a4aeadb8add96681179fa9b4b65fef71b2d13d061fbd825a0495f99d4e28`.
 - Godot runtime closure: `9a2c41ff1115950f0057530a69098b5a69c8c8c45bc0e851df81891566401193`.
 - Blender runtime closure: `17f381a0b2078096d9631556620a4cfd0c5552ad0d49b89865f0234078b7a0e2`.
