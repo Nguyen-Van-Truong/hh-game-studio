@@ -12,7 +12,7 @@ Historical entries below are retained for provenance; they do not override the t
 | M3 / Q05 | OPEN (partial) | Blender producer cuts plus consumer cuts `gt07-cross-app-20261005-53` (RELOAD: HELD_LAST_GOOD) and `gt07-cross-app-20261005-54` (ACK: COMMITTED_LOOKUP_ONLY); both actual child/recovery exits and owned Jobs clean, one native dispatch, no replay, source/snapshot unchanged | six-phase producer coverage and final frozen matrix |
 | M4 / Q06 | DIAGNOSTIC COVERED (Godot + Blender) | Godot `gt07-native-godot-20261005-26,42`; Blender `gt07-native-queue-20261005-47` and current-source `gt07-native-queue-20261006-08`: queued stale transform returns UNKNOWN/lookup.reconcile, manual `.blend` state/hash retained, actual child/wrapper/tool exits 0 and owned Jobs clean, source/snapshot unchanged | final frozen matrix and two same-hash critics; previous failed diagnostics remain immutable |
 | M5 / TX05/TX09 | DIAGNOSTIC COVERED | host `gt07-m5-storage-20261005-09`: real lock/cross-volume refusal, INJECTED fsync/diskfull; native `gt07-native-godot-20261006-05`: share=0 during scene.save capture, durable UNKNOWN/lookup.reconcile, last-good file and selection preserved, actual exits/Job clean | final frozen repeat and requirement-map binding; native lock rejects at capture precondition before filesystem publication |
-| M6 / Q04 | OPEN | host `test_gt07_stop_lifecycle.py` 6/6: full queue cancellation, deadline, reopen, token rotation, bounded active-Blender drain and timeout preservation; Godot Stop tests and native run16 | final frozen matrix |
+| M6 / Q04 | DIAGNOSTIC COVERED (host) | `gt07-m6-host-20261006-01` ran `test_gt07_stop_lifecycle.py` + `test_native_godot_stop.py`: 10 tests, actual process exit 0, source closure `32c64698b4cf84f10e60768ff22304823b7417023431c8d92f3b7188e95e0ddc`, no child/Job/handle residue; covers queue-full cancellation, bounded drain, reopen/no-resume, token rotation and durable Stop readback | final frozen matrix and two same-hash critics |
 | M7 / Q07 | OPEN (partial) | 510-record capacity/JOURNAL_FULL; queue-only custody rotation barriers; segmented queue checkpoint/reopen, two-segment archive chain, expired terminal same-ID replay guard, bounded real-clock expiry soak, malformed candidate pointer guard (`test_segmented_journal` 6 tests, `test_segmented_broker_regression` 8 tests, `test_durable_broker` 18 tests; exits 0); opt-in integrated `QueueOwner→DurableBroker→QueueJournalManager` process cuts at PREPARED/ACTIVE_POINTER/COMMITTED passed (actual child exit 73, 1.474s), preserving pending reconciliation and the exact archived receipt | final frozen matrix |
 | M8 / Q08 | OPEN (partial) | host-only repeats `gt07-m8-process-20261005-05`, `-07`, `-08`, and fresh `-10` verify PID/start identity, forged-start refusal, owned-tree timeout and 64 MiB Job memory denial; actual worker exits and Job cleanup recorded. The runner now requires a matching dry-run receipt before native execution (closure `ab498ef2...20c9e8` for `-10`) | final frozen M1–M9 matrix and source-specific manifest |
 | M9 / TX13 | OPEN (partial) | binding refresh02 verified an exact three-file delta, source=233/execution=235; matching dry-run/native `gt06-gt07-m9-playmutation-20261005-03` exit 0 on binding `94552f31…`, preserving stale-capture rejection/UNKNOWN/no-replay | repeat in the final frozen matrix |
@@ -78,6 +78,11 @@ history and is not relabeled. This is a diagnostic repair, not GT07 acceptance;
 the final frozen M1-M9 matrix and two same-hash critics remain required.
 
 ## Latest diagnostic checkpoint
+
+`gt07-m6-host-20261006-01` — engine-free M6/Q04 host receipt: command
+`cmd.gt07.m6.host.20261006.01`, 10 tests, actual process exit 0, source closure
+`32c64698b4cf84f10e60768ff22304823b7417023431c8d92f3b7188e95e0ddc`, no child
+processes/owned Jobs/retained handles. AUTHORITY=0; final matrix/critics remain open.
 
 `gt07-native-queue-20261006-08` — current-source Blender M4 conflict diagnostic
 after its matching dry-run: actual child/wrapper/Blender exits 0, tree verified,
