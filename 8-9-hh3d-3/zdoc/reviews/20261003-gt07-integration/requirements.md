@@ -25,6 +25,11 @@ F1 ACK-cut repair is complete on one frozen closure; F2–F5 remain open.
 
 No critic has been called for the superseded package. Do not merge, tick, or call GT07 accepted from diagnostics alone.
 
+The latest native admission produced matrix closure
+`462522c64b1482f89064ea9af722984b28a15d7016fb54320d8d29ace1b3df2d`.
+It is an admission digest only: no engine was started and it cannot substitute
+for the missing host/cross-app rows or the final frozen run.
+
 ## Checkpoint, 06-10-2026 — M9 current-source binding and Play mutation
 
 The installed selector/binding generation was stale after three committed
