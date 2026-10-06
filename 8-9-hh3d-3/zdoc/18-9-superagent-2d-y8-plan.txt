@@ -36,7 +36,7 @@ PREVIOUS_REVISION=SA4 trong Git 5b2d4c7b; LOG chi tiết (run id, hash, số ass
   routing HH3D nằm ở 8-9-hh3d-3/AGENTS.md.
 - Coordinator game tick WP khi đạt DoD; subagent không tick.
 
-HIỆN TRẠNG (06-10 02:10 UTC; coordinator cập nhật khi xong một mốc, tối đa 15 dòng)
+HIỆN TRẠNG (06-10 02:50 UTC; coordinator cập nhật khi xong một mốc, tối đa 15 dòng)
 - SA-01 ACCEPTED 03-10 (bootstrap kỹ thuật). CURRENT_VALID_WP=SA-02 từ 03-10.
 - Ledger 79 dòng: 25 OBSERVED, 54 UNVERIFIED, 0 MATCHED. Đã thấy chủ yếu menu, map, mode, phím
   đánh và vài phản ứng vật thể (mục 7.4). Chưa có số đo thời gian hay khoảng cách nào: browser
@@ -79,12 +79,12 @@ HIỆN TRẠNG (06-10 02:10 UTC; coordinator cập nhật khi xong một mốc, 
   frozen source hash. Static cover remains unchanged after prop destruction. Fire spread,
   doors/debris/dynamic collision/100-object rig, measured Y8 roll behavior and owner review remain
   open. SA-06 is not ticked and no Y8 parity is claimed.
-- Product commit `e627e86a` adds an airborne Down+direction dive using the live CharacterBody2D path,
-  tackle damage/knockdown, bounded invulnerability, glass destruction and canonical snapshot fields;
-  `cmd.sa03.dive.2` passed 29 assertions. The same commit adds isolated typed weapon catalog data
-  (fists/pipe/knife/pistol/shotgun/grenade/rocket) and a fail-closed snapshot-only bot controller;
-  catalog and bot checks passed 25 and 30 assertions. These are implementation slices, not SA-02
-  parity or SA-03/04/05/06/08 acceptance; current regression remains 2,977 assertions PASS.
+- Product commit `423823ca` hardens the e627 dive/catalog/bot slices: dive entry/reset and stale-attack
+  guards, canonical shot/pickup/bullet-time fields, full catalog fingerprints and weapon-specific
+  projectile lookup, plus bot edge pulses, ladder/drop navigation, finite/exact snapshot validation and
+  combat-priority pickup routing. Guarded SA-05 catalog passed 27 assertions, SA-04 bot slice 30,
+  SA-08 open-floor twin-hash stress passed 100 seeded matches/40,728 assertions before 600 ticks, and
+  SA-01 regression passed 2,977. These remain implementation checks, not parity or checkbox acceptance.
 
 NEXT (làm theo thứ tự; việc nào phải chờ thì làm việc sau, không ngồi chờ)
 N2 Rig Y8 đã tự kiểm bằng fixture cục bộ nhưng chưa lấy được A01–A06; không lặp lại vòng browser
@@ -727,4 +727,9 @@ Q5 Web: dung lượng tải lần đầu và bộ nhớ đo từ SA-04; ngân s�
   current regression `20261006T020446.569263Z-89b9c511b1` (2,977) all exit 0/cleanup 0/diagnostics empty.
   Two initial warning-as-error compile failures were repaired before the passing runs. No checkbox or
   parity row is ticked; SA-02 measurements, owner review, integration and critics remain gates.
+2026-10-06 SA-08/core audit hardening: product commit `423823ca` fixes bot edge/ladder/pickup deadlocks,
+  strict snapshot validation, dive/reset/knockdown stale-state paths, canonical match event coverage and
+  full weapon fingerprints. Guarded `cmd.sa05.weapon-catalog.audit.2` (27), `cmd.sa04.bot-controller.audit.4`
+  (30), `cmd.sa08.bot-duel.stress.4` (100 matches, 40,728) and `cmd.sa03.sa06.core.audit.regression.1`
+  (2,977) all exited 0 with cleanup 0 and empty diagnostics. Fixture scope and owner/Y8 gates remain open.
 END_OF_SUPERAGENT_PLAN
