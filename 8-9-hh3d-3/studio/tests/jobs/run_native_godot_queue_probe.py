@@ -646,6 +646,17 @@ def _child(output: Path, binary: Path, run_id: str, operation: str,
         passed = True
     except BaseException as error:
         errors.append(_safe_error(error))
+        # Preserve the owner's typed failure code when a native edit poisons
+        # its journal before the outer dispatcher can collect a response.
+        # This is diagnostic evidence only; it never turns an UNKNOWN result
+        # into PASS and does not serialize exception text.
+        if owner is not None:
+            cause = getattr(owner, '_last_error', None)
+            code = getattr(cause, 'code', None)
+            if type(code) is not str:
+                code = type(cause).__name__ if cause is not None else None
+            if code is not None:
+                errors.append({'type': 'owner_last_error', 'code': code})
     finally:
         if dispatch is not None:
             try:
