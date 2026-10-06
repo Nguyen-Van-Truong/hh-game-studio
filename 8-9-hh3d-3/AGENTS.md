@@ -1,7 +1,10 @@
 # HH3D-3 — routing hiện hành
 
-Owner steering mới nhất 03-10-2026: coordinator được dùng subagent và audit;
-ưu tiên gpt-6-astra ultra khi hữu ích, gpt-6.1-sol ultra cho việc có phạm vi rõ.
+Owner steering 03-10-2026, giới hạn credit theo O11.7 của tools plan (06-10): subagent chỉ cho
+thiết kế khó, worker O2 và critic cuối; ultra (gpt-6-astra, gpt-6.1-sol) chỉ cho các việc đó.
+Đọc log, chạy test, closeout, status làm trực tiếp; không spawn audit next-step/gap; lệnh dài chờ
+bằng yield dài, không poll vài giây; không kết thúc lượt khi run nền/subagent chưa xong. Credit
+workspace dùng chung cho mọi agent.
 Giữ một writer/file, tuần tự hóa workload đo và tiếp tục từ checkpoint đã kiểm chứng.
 Theo quyền audit mới nhất của owner, coordinator được dispatch hai critic
 độc lập khác model trên cùng hash; giữ nguyên report, kiểm hash trước nghiệm thu.
@@ -16,9 +19,10 @@ người dùng là inventory, không tự đóng. Không thay counter/status-gap
 
 Governance chỉ sửa trên nhánh chính. Nhánh O2 ghi chi tiết vào
 studio/AUTHORING_STATUS.md, làm theo gap của hai fixture; giữ DSL sáu effect.
-GT-07 làm theo ma trận M1–M9 và NEXT của O10 (dry-run trước run native, bằng chứng
-tầng D chỉ ở .local); O2 chạy song song bằng worker riêng theo O10.5. Không tự tick
-WP; nghiệm thu GT-07 cần gói cuối và hai critic cùng hash.
+GT-07 làm theo NEXT F1–F5 của O11 trên ma trận M1–M9 của O10 (dry-run trước run native,
+bằng chứng tầng D chỉ ở .local, gói cuối từ một lần --matrix final trên một closure); O2 chạy
+song song bằng worker riêng theo O10.5 và O11.8. Không tự tick WP; nghiệm thu GT-07 cần gói
+cuối và hai critic cùng hash.
 Đọc CURRENT_VALID_WP và bảng trạng thái
 trong tools plan, không lấy số test/diagnostic làm nguồn tick.
 
