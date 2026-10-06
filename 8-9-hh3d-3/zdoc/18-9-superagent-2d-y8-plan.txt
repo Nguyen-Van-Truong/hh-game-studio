@@ -113,6 +113,10 @@ HIỆN TRẠNG (06-10 03:08 UTC; coordinator cập nhật khi xong một mốc, 
   Product commit `5f813928` adds six original map layouts, immutable `MapCatalog`, map identity in
   `MatchSession` snapshots/hashes and fail-closed map selection; catalog (39 assertions) and regression
   passed cleanly. Mode×map menu wiring, owner play and all Classic gates remain open.
+- Product commit `5ccad55c` wires the catalog through the real bootstrap input path: `M` selects the next
+  original map and `1/2/3` carry it into VS/Stage/Survival. The 18-constructor matrix passed 57 assertions,
+  the menu path passed 9 assertions and the full 2,977-assertion regression passed at one source hash;
+  all exited 0 with cleanup 0 and diagnostics empty. Live mode×map play, Q2, owner review and critics remain.
 
 NEXT (làm theo thứ tự; việc nào phải chờ thì làm việc sau, không ngồi chờ)
 N2 Rig Y8 đã tự kiểm bằng fixture cục bộ nhưng chưa lấy được A01–A06; không lặp lại vòng browser
@@ -123,10 +127,10 @@ N5 SA-04 bản chơi được đã có ở commit `0659f2ef`; Windows/Web artifa
    gửi owner thử kèm hướng dẫn 5 dòng. Không tick SA-04 khi thiếu owner/critic/parity gate.
 N6 Trong lúc chờ owner: đo A07–A17; kiểm kê trong trận thật (mục 7.4); thử pipeline art cho
    một nhân vật (SA-10, thư mục art/, subagent riêng).
-N7 Đã hoàn tất lát cắt navigation/mode/settings, phiên Stage/Survival và map catalog nền tảng
-   (`da561611`, `bbe457de`, `076aa88f`, `f913e094`, `7004e0b0`, `5f813928`); `relay_yard` vẫn mặc định,
-   sáu layout mới chưa qua ma trận mode×map/owner/Q2 và chưa tick SA-07/SA-09/SA-10. Tiếp tục nối
-   menu chọn map và kiểm thử mode×map, rồi quay lại các gate đo/owner/critic; không chuyển SA-14.
+N7 Đã hoàn tất navigation/mode/settings, phiên Stage/Survival, map catalog và seam chọn map thật
+   (`da561611`, `bbe457de`, `076aa88f`, `f913e094`, `7004e0b0`, `5f813928`, `5ccad55c`); `relay_yard`
+   vẫn mặc định, sáu layout mới mới chỉ có constructor/menu proof, chưa tick SA-07/SA-09/SA-10. Tiếp
+   tục live mode×map checks và Q2/owner/critic gates, không chuyển SA-14.
 
 1. MỤC TIÊU VÀ THỨ TỰ
 Owner 03-10: hoàn thành Classic giống bản Y8 trước; phần kiểu MUGEN chỉ làm sau bằng lệnh mới.
@@ -799,4 +803,9 @@ Q5 Web: dung lượng tải lần đầu và bộ nhớ đo từ SA-04; ngân s�
   validated map identity in MatchSession and fail-closed unknown selection. `cmd.sa09.map-catalog.2` passed
   39 assertions and catalog regression passed 2,977 at one source hash, exit 0/cleanup 0/diagnostics empty;
   mode×map wiring and owner/Q2 gates remain open.
+2026-10-06 SA-09/SA-07 map seam: product commit `5ccad55c` adds real `M` catalog cycling and carries the
+  selected map through VS/Stage/Survival. `cmd.sa09.map-mode-matrix.1` passed 57 constructor assertions,
+  `cmd.sa07.menu-map-matrix.1` passed 9 input assertions and the full regression passed 2,977 at source hash
+  `49fead4485bef3caec80b7ef10f792f4f6243486def36c955410e620a623e7c6`, all exit 0/cleanup 0/diagnostics
+  empty. Live mode×map, owner and Q2 gates remain open; no checkbox or parity claim was added.
 END_OF_SUPERAGENT_PLAN
