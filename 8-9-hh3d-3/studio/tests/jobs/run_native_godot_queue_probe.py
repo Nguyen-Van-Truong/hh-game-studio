@@ -69,17 +69,8 @@ def _run_id(value: str) -> str:
 
 
 def _safe_error(error: BaseException) -> dict[str, str]:
-    code = getattr(error, "code", None)
-    value = {"type": type(error).__name__,
-             "code": code if isinstance(code, str) else type(error).__name__}
-    if isinstance(error, FileNotFoundError):
-        value["missing_basename"] = Path(error.filename or "").name
-    # Keep a bounded diagnostic for probe-only failures. This is not an ACK or
-    # acceptance field, and the value is limited to avoid leaking credentials.
-    detail = str(error)
-    if detail:
-        value["detail"] = detail[:240]
-    return value
+    from studio.tests.jobs.gt07_failure import failure_boundary
+    return failure_boundary(error)
 
 
 def _event_head(event_log) -> dict[str, object]:
@@ -656,7 +647,7 @@ def _child(output: Path, binary: Path, run_id: str, operation: str,
             if type(code) is not str:
                 code = type(cause).__name__ if cause is not None else None
             if code is not None:
-                errors.append({'type': 'owner_last_error', 'code': code})
+                errors.append({**_safe_error(cause), 'boundary': 'owner_last_error'})
     finally:
         if dispatch is not None:
             try:

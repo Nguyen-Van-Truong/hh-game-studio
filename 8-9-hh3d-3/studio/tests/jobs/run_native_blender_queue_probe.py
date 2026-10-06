@@ -168,9 +168,8 @@ def _run_id(value: str) -> str:
 
 
 def _safe_error(error: BaseException) -> dict[str, str]:
-    code = getattr(error, "code", None)
-    return {"type": type(error).__name__,
-            "code": code if isinstance(code, str) else type(error).__name__}
+    from studio.tests.jobs.gt07_failure import failure_boundary
+    return failure_boundary(error)
 
 
 def _child(output: Path, binary: Path, run_id: str,
@@ -188,6 +187,7 @@ def _child(output: Path, binary: Path, run_id: str,
     from studio.protocol.core import Request, Status, canonical_bytes, parse_json
 
     errors: list[dict[str, str]] = []
+    publication_failures = []
     gui = durable = owner = queue = dispatch = publisher = None
     publication_proof = None
     authority_proof = None
@@ -211,6 +211,14 @@ def _child(output: Path, binary: Path, run_id: str,
         publications = {}
         if operation == "export.publish":
             publisher = BlenderPublicationOwner.create(output, session=durable)
+            original_publish = publisher.publish
+            def observed_publish(*args, **kwargs):
+                try:
+                    return original_publish(*args, **kwargs)
+                except BaseException as error:
+                    publication_failures.append(_safe_error(error))
+                    raise
+            publisher.publish = observed_publish
             publications[operation] = publisher
         owner = BlenderWriterClientOwner.from_session(durable, publications=publications)
         operations = catalog.EDIT_OPERATIONS | {catalog.READ, "control.lookup", "control.stop"}
@@ -438,6 +446,7 @@ def _child(output: Path, binary: Path, run_id: str,
         "response": response.as_dict() if response is not None else None,
         "stop_snapshot": (asdict(stop_snapshot) if stop_snapshot is not None else None),
         "cleanup": cleanup, "errors": errors,
+        "publication_failures": publication_failures,
     }
     _write(output / "native-child.json", report)
     print("GT07_NATIVE_QUEUE_CHILD " + json.dumps({
