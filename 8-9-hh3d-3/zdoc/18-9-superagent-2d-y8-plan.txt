@@ -24,6 +24,12 @@ REPO_ARCHIVE_PATH=D:/dataDiskD/intellji/hoanhaosocial/hoanhaonew-20-6-2025/hh-ga
 REPO_KEEP_SCOPE=8-9-hh3d-3/{zdoc,studio,superagent,consumer-pilot,vertical-slice,scripts,AGENTS.md,CLAUDE.md,.gitattributes}
 REPO_POLICY_KEEP=root AGENTS.md + .gitignore until a scoped replacement is reviewed
 REPO_ARCHIVE_SCOPE=all other root paths, linked worktrees and ignored local state remain archived, not deleted
+HANDOFF_CANONICAL_PLAN=D:/dataDiskD/intellji/hoanhaosocial/hoanhaonew-20-6-2025/hh-game-studio/8-9-hh3d-3/zdoc/18-9-superagent-2d-y8-plan.txt
+HANDOFF_PRODUCT_WORKTREE=D:/dataDiskD/hh-superagent
+HANDOFF_PRODUCT_BRANCH=superagent/main
+HANDOFF_PRODUCT_HEAD=12f16685
+HANDOFF_GROKDO_STATUS=PLAN_ONLY_NOT_READY_FOR_CODE
+HANDOFF_GROKDO_RULE=Không copy mù vào repo chính; agent mới phải dùng snapshot/worktree Git riêng tại 12f16685
 
 0. ĐỌC NHANH
 - Superagent Classic là game 2D đấu trường, bắn súng trên nền platform. Cơ chế, vũ khí, vật thể,
@@ -164,18 +170,24 @@ N7 Đã hoàn tất navigation/mode/settings, phiên Stage/Survival, map catalog
    `relay_yard` vẫn mặc định, bot graph còn local/provisional, chưa tick SA-07/SA-09/SA-10. Tiếp tục
    combat/feedback coverage, Q2, owner/critic gates, không chuyển SA-14.
 
-REPO MIGRATION DECISION (PROPOSAL — 06-10-2026)
-- Đề xuất “giữ 8-9-hh3d-3/zdoc בלבד” là sai; ba plan còn phụ thuộc runtime `studio`, `superagent`,
-  `consumer-pilot`, `vertical-slice`, `scripts`, child `AGENTS.md`/`CLAUDE.md`, root `.gitignore` và
-  policy của root `AGENTS.md`. `.local`/toolchain là ignored local state, không copy mù sang repo mới.
-- Không chuyển hoặc xóa trong lượt này. Product worktree hiện đã sạch ở commit `12f16685`; main plan
-  vẫn cần commit cập nhật này. Các linked worktree GT/O2/HH World và WIP ngoài product phải được snapshot
-  trước. Các tài liệu Vault Fighters được Superagent tham chiếu chỉ đọc phải được giữ trong archive hoặc
-  thay link có kiểm chứng.
-- Cách đúng: snapshot/archive toàn bộ refs + worktrees trước; sau đó tạo repo HH3D riêng bằng
-  `git subtree split --prefix=8-9-hh3d-3` hoặc fresh snapshot. Clone rồi `git rm` chỉ làm sạch working tree,
-  không làm lịch sử nhẹ và có thể làm mất liên kết worktree. `git filter-repo` chỉ dùng khi owner mở gate
-  rewrite riêng. Chưa push, chưa delete, chưa đổi remote.
+REPO MIGRATION (DONE — 06-10-2026)
+- Repo chính đã giữ scope HH3D; root legacy được chuyển vào
+  `D:/dataDiskD/intellji/hoanhaosocial/hoanhaonew-20-6-2025/hh-game-studio-old-archive-6-10/legacy-root`.
+  Không chuyển `.git`, linked worktree, `.local` đang dùng hoặc code product.
+- Product hiện hành vẫn là `D:/dataDiskD/hh-superagent` ở commit `12f16685`; plan chính chỉ có một
+  writer ở repo chính. Bản `8-9-hh3d-3/superagent-grokdo/zdoc/` hiện mới là bản plan, chưa có source.
+- Khi cần agent cô lập: tạo Git worktree/snapshot mới từ `12f16685`, ghi rõ root mới trong handoff,
+  rồi mới chạy. Không copy code vào repo chính như thư mục untracked; không dùng chung index, `.local`,
+  build hoặc evidence đang ghi. `git filter-repo`/rewrite history không nằm trong route này.
+
+ISOLATED AGENT HANDOFF (GROKDO)
+- Nếu dùng thư mục đúng tên `8-9-hh3d-3/superagent-grokdo`, phải chứa đầy đủ `game/`, `tests/`,
+  `tools/`, `docs/`, `project.godot` và bản plan đã sửa `PLAN_SCOPE`; hiện thư mục đó chưa đủ.
+- Khuyến nghị nhanh và sạch hơn là worktree riêng `D:/dataDiskD/hh-superagent-grokdo`, branch
+  `superagent/grokdo`, bắt đầu từ `12f16685`; giữ plan chính ở `8-9-hh3d-3/zdoc` hoặc copy có ghi
+  `CANONICAL_PLAN` trỏ ngược về đó. Agent chỉ sửa root mới, không sửa product `superagent/main`.
+- Agent mới luôn bắt đầu ở `CURRENT_VALID_WP=SA-02`, đọc `HIỆN TRẠNG`, `NEXT`, `14. BÀI HỌC`,
+  kiểm lock/task trước lệnh nặng, không tick checkbox và không claim parity từ test nội bộ.
 
 1. MỤC TIÊU VÀ THỨ TỰ
 Owner 03-10: hoàn thành Classic giống bản Y8 trước; phần kiểu MUGEN chỉ làm sau bằng lệnh mới.
@@ -881,9 +893,9 @@ Q5 Web: dung lượng tải lần đầu và bộ nhớ đo từ SA-04; ngân s�
   assertions for weapon/combat/items/replay/match/full regression, all exit 0/cleanup 0/diagnostics empty.
   A first compile attempt timed out under warnings-as-errors and was repaired with static types; no checkbox
   or parity claim was added.
-2026-10-06 repository split audit: `REPO_MIGRATION=PROPOSED_NOT_EXECUTED`. Keep the complete HH3D scope,
-  root ignore/policy until replacement, and archive linked worktrees/WIP before any subtree split or move.
-  Clone-plus-delete is not a history cleanup; no delete, rewrite, push or remote switch was performed.
+2026-10-06 repository split audit (historical pre-move note): keep the complete HH3D scope, root
+  ignore/policy and linked worktrees/WIP; clone-plus-delete is not a history cleanup. The later filesystem
+  relocation was performed without rewriting history, pushing, changing remotes or moving linked worktrees.
 2026-10-06 repository relocation: unrelated root paths were moved to
   `D:/dataDiskD/intellji/hoanhaosocial/hoanhaonew-20-6-2025/hh-game-studio-old-archive-6-10/legacy-root`;
   `8-9-hh3d-3/zdoc`, `studio`, `superagent`, `consumer-pilot`, `vertical-slice`, `scripts`, child policy files,
