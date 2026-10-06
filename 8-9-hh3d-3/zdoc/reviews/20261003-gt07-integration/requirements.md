@@ -9,7 +9,7 @@ Historical entries below are retained for provenance; they do not override the t
 |---|---|---|---|
 | M1 / Q01 | DONE (host) | `gt07-jobs-integration-20261004-03`, 46 tests | Repeat only in final frozen matrix |
 | M2 / Q03 | DIAGNOSTIC COVERED (Blender + Godot) | Blender `gt07-native-queue-20261006-07` and Godot `gt07-native-godot-20261006-17`: matching dry-runs, real-clock expiry, native effect before deadline with reply after expiry, overlapping writer refusal, revoke after effect preserves private receipt and blocks lookup/replay; actual child/editor/wrapper exits 0, Jobs/tree clean, source/snapshot unchanged. Earlier FIFO-only runs without matching dry-run stay excluded | final frozen matrix and two same-hash critics; do not mark DONE from diagnostics |
-| M3 / Q05 | OPEN (partial) | Blender producer cuts plus consumer cuts `gt07-cross-app-20261005-53` (RELOAD: HELD_LAST_GOOD) and `gt07-cross-app-20261005-54` (ACK: COMMITTED_LOOKUP_ONLY); both actual child/recovery exits and owned Jobs clean, one native dispatch, no replay, source/snapshot unchanged | six-phase producer coverage and final frozen matrix |
+| M3 / Q05 | DIAGNOSTIC COVERED (producer + consumer) | Blender producer cuts plus consumer cuts `gt07-cross-app-20261005-53` (RELOAD: HELD_LAST_GOOD) and `gt07-cross-app-20261005-54` (ACK: COMMITTED_LOOKUP_ONLY), followed by matching-dry-run native producer failpoint phases `gt07-native-queue-20261006-09` (PREPARED), `-11` (VALIDATED), `-12` (ACTIVATING), `-13` (COMMITTED), and `-14` (ACK); each current-source run has `passed=true`, actual child exit recorded, owned Job closed/zero/no retained handle, source closure `17f381a0b2078096d9631556620a4cfd0c5552ad0d49b89865f0234078b7a0e2`, and raw retained | final frozen matrix and two same-hash critics; failpoint receipts are diagnostics, not product acceptance |
 | M4 / Q06 | DIAGNOSTIC COVERED (Godot + Blender) | Godot `gt07-native-godot-20261005-26,42`; Blender `gt07-native-queue-20261005-47` and current-source `gt07-native-queue-20261006-08`: queued stale transform returns UNKNOWN/lookup.reconcile, manual `.blend` state/hash retained, actual child/wrapper/tool exits 0 and owned Jobs clean, source/snapshot unchanged | final frozen matrix and two same-hash critics; previous failed diagnostics remain immutable |
 | M5 / TX05/TX09 | DIAGNOSTIC COVERED | host `gt07-m5-storage-20261005-09`: real lock/cross-volume refusal, INJECTED fsync/diskfull; native `gt07-native-godot-20261006-05`: share=0 during scene.save capture, durable UNKNOWN/lookup.reconcile, last-good file and selection preserved, actual exits/Job clean | final frozen repeat and requirement-map binding; native lock rejects at capture precondition before filesystem publication |
 | M6 / Q04 | DIAGNOSTIC COVERED (host) | `gt07-m6-host-20261006-01` ran `test_gt07_stop_lifecycle.py` + `test_native_godot_stop.py`: 10 tests, actual process exit 0, source closure `32c64698b4cf84f10e60768ff22304823b7417023431c8d92f3b7188e95e0ddc`, no child/Job/handle residue; covers queue-full cancellation, bounded drain, reopen/no-resume, token rotation and durable Stop readback | final frozen matrix and two same-hash critics |
@@ -19,9 +19,28 @@ Historical entries below are retained for provenance; they do not override the t
 
 ## Next
 
+## Checkpoint, 06-10-2026 - Blender producer phase coverage
+
+The narrow Blender repair in commit `73008c05` gives `export.prepare` the
+remaining portion of the host's existing ten-second ceiling when the ordinary
+six-second UI wait is insufficient; other native operations keep their normal
+wait and the queue lease/deadline is unchanged. The focused timeout guard and
+the existing GT07 failpoint/scenario tests exit 0.
+
+After a matching engine-free dry-run, current-source producer cuts completed
+for `gt07-native-queue-20261006-11` (VALIDATED), `-12` (ACTIVATING), `-13`
+(COMMITTED), and `-14` (ACK), in addition to the retained PREPARED cut `-09`.
+Every wrapper reports `passed=true`, the intentional phase child exit is
+captured, the owned Job is closed with zero active members and no retained
+handle, and the source closure is
+`17f381a0b2078096d9631556620a4cfd0c5552ad0d49b89865f0234078b7a0e2`. These
+failpoint runs are diagnostic evidence; they do not grant acceptance or
+replace the final frozen M1-M9 matrix and two same-hash critics.
+
 M2 late/revoked writer, M4 Blender conflict, M5 Godot-save lock, and M6 Stop
-coverage now have current diagnostic receipts. M3 producer/cross-app cuts and
-M7–M9 remain diagnostic partials until one frozen M1–M9 matrix is run. Do not
+coverage now have current diagnostic receipts. M3 now has producer phase
+coverage and consumer cuts, while M7–M9 remain diagnostic partials until one
+frozen M1–M9 matrix is run. Do not
 repeat completed diagnostics solely to refresh timestamps; build the final
 source/review/raw manifest and then obtain two independent critics on that hash.
 
