@@ -28,6 +28,12 @@ class GT07ScenarioAdmissionTests(unittest.TestCase):
         self.assertEqual({row["max_horizon_ms"] for row in module.SCENARIOS.values()},
                          {5_000, 30_000, 90_000})
 
+    def test_final_alias_is_ordered_and_contains_only_admitted_native_rows(self):
+        self.assertEqual(module.MATRIX_ALIASES["final"], module.FINAL_MATRIX)
+        self.assertGreater(len(module.FINAL_MATRIX), 1)
+        self.assertEqual(len(set(module.FINAL_MATRIX)), len(module.FINAL_MATRIX))
+        self.assertTrue(all(name in module.SCENARIOS for name in module.FINAL_MATRIX))
+
     def test_blender_contract_dry_run_is_engine_free(self):
         with patch("subprocess.Popen", side_effect=AssertionError("unexpected engine")):
             result = module._contract_dry_run("blender-box", module.SCENARIOS["blender-box"])
