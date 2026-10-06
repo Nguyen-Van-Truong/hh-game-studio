@@ -25,6 +25,17 @@ the failures were transient. A repeated failure must be diagnosed from its new
 boundary before another full matrix is attempted. M8's nested measurement guard
 was independently repaired in `a6abdb8e`; no GT06 benchmark rerun is needed.
 
+The first row-1 failure was reproduced under `gt07-godot-fifo-20261007-01`:
+the owned Godot import ended with profile phase `import -9` and the executor
+returned `EXECUTOR_ENGINE_OR_HOST_NOT_CLEAN`; its Job/tree cleanup was clean.
+The same frozen FIFO lane then passed end-to-end under fresh
+`gt07-godot-fifo-20261007-02` (45 checks, actual host exit 0, tree verified,
+source closure `d95fa678bb024fe0f44db1ae2acf4ca23a5835a730548273214a346489493329`).
+This is evidence of a timing/resource-sensitive failure boundary, not proof that
+the failure is harmless. The failed matrix remains FAIL and is not reused; the
+next complete matrix uses fresh IDs and the same source closure after a quiet
+host preflight.
+
 | Matrix | Status | Current evidence / run IDs | Remaining proof |
 |---|---|---|---|
 | M1 / Q01 | DIAGNOSTIC COVERED | `gt07-jobs-integration-20261004-03`; host contract row `gt07-m1-final-20261006-05` | final frozen matrix |
