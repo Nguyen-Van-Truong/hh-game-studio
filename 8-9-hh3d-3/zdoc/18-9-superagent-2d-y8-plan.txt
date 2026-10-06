@@ -36,7 +36,7 @@ PREVIOUS_REVISION=SA4 trong Git 5b2d4c7b; LOG chi tiết (run id, hash, số ass
   routing HH3D nằm ở 8-9-hh3d-3/AGENTS.md.
 - Coordinator game tick WP khi đạt DoD; subagent không tick.
 
-HIỆN TRẠNG (06-10 03:02 UTC; coordinator cập nhật khi xong một mốc, tối đa 15 dòng)
+HIỆN TRẠNG (06-10 03:08 UTC; coordinator cập nhật khi xong một mốc, tối đa 15 dòng)
 - SA-01 ACCEPTED 03-10 (bootstrap kỹ thuật). CURRENT_VALID_WP=SA-02 từ 03-10.
 - Ledger 79 dòng: 25 OBSERVED, 54 UNVERIFIED, 0 MATCHED. Đã thấy chủ yếu menu, map, mode, phím
   đánh và vài phản ứng vật thể (mục 7.4). Chưa có số đo thời gian hay khoảng cách nào: browser
@@ -91,6 +91,11 @@ HIỆN TRẠNG (06-10 03:02 UTC; coordinator cập nhật khi xong một mốc, 
   relay-yard constructor default and includes mode state in its snapshot/hash. Guarded mode rules passed
   22 assertions; SA-01 and match-room regressions stayed green. Menu input path, settings persistence,
   full mode bodies, owner play and critic remain open; no parity or checkbox is claimed.
+- Product commit `ed074db2` adds a provisional deterministic navigation graph over the existing Relay Yard:
+  platform centers, ladder endpoints, bidirectional ladder/platform links, bounded same-level links and
+  pit-crossing rejection. No map data or default constructor changed. Guarded `cmd.sa09.navigation-graph.8`
+  passed 7 assertions with exit 0/cleanup 0/diagnostics empty. Five authored maps, map selection, full
+  bot route behavior and SA-02/owner/critic gates remain open; no SA-09 checkbox or parity is claimed.
 
 NEXT (làm theo thứ tự; việc nào phải chờ thì làm việc sau, không ngồi chờ)
 N2 Rig Y8 đã tự kiểm bằng fixture cục bộ nhưng chưa lấy được A01–A06; không lặp lại vòng browser
@@ -745,4 +750,9 @@ Q5 Web: dung lượng tải lần đầu và bộ nhớ đo từ SA-04; ngân s�
   `cmd.sa07.mode-rules.1` passed 22 assertions; `cmd.sa07.mode-rules.regression.1` and
   `cmd.sa07.match-room.regression.1` exited 0 with cleanup 0 and empty diagnostics. Menu/settings,
   full mode sessions and SA-02/owner/critic gates remain open; no checkbox or parity row was ticked.
+2026-10-06 SA-09 provisional navigation seam: product commit `ed074db2` adds a deterministic graph from
+  the existing `ArenaState`, including ladder reachability and pit-safe edges. `cmd.sa09.navigation-graph.8`
+  passed 7 assertions with host exit 0, cleanup 0 and empty diagnostics after repairing typed-array and
+  reverse-edge diagnostics. No new map/layout or checkbox was added; map selection, full bot navigation,
+  SA-02 measurements, owner review and critics remain open.
 END_OF_SUPERAGENT_PLAN
