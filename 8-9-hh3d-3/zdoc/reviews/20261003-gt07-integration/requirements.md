@@ -19,7 +19,7 @@ F1 ACK-cut repair is complete on one frozen closure; F2–F5 remain open.
 ## Next
 
 1. F2: keep this compact map; old candidate `5f34c0a6…3bce0d` is **SUPERSEDED**.
-2. F3: run the existing `run_gt07_scenarios.py --matrix final` dry-run only; no new runner and no acceptance claim.
+2. F3: the existing runner now accepts the ordered native alias `--matrix final`; its engine-free dry-run passed for 11 admitted Godot/Blender rows on 2026-10-06. This is only the native subset; host M1/M5/M6/M7/M8, cross-app phases, M9 and focused regressions still need explicit adapters and are not silently counted.
 3. F4: after a fresh source freeze and successful dry-run, run one complete M1–M9 matrix with one closure.
 4. F5: build the final source/review/raw manifest, then send that exact hash to two independent read-only critics. Only their explicit same-hash approval can advance GT07.
 
