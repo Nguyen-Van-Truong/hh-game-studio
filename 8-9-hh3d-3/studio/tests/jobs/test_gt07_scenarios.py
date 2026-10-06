@@ -34,6 +34,15 @@ class GT07ScenarioAdmissionTests(unittest.TestCase):
         self.assertEqual(len(set(module.FINAL_MATRIX)), len(module.FINAL_MATRIX))
         self.assertTrue(all(name in module.SCENARIOS for name in module.FINAL_MATRIX))
 
+    def test_matrix_closure_binds_ordered_rows_and_changes_on_row_drift(self):
+        rows = [{"scenario": "godot-edit", "run_id": "r1",
+                 "source_closure_sha256": "a", "binary_sha256": "b",
+                 "operation": "scene.node.update", "deadline_ms": 30_000}]
+        first = module.matrix_closure(rows)
+        self.assertRegex(first, r"^[0-9a-f]{64}$")
+        rows[0]["source_closure_sha256"] = "c"
+        self.assertNotEqual(first, module.matrix_closure(rows))
+
     def test_blender_contract_dry_run_is_engine_free(self):
         with patch("subprocess.Popen", side_effect=AssertionError("unexpected engine")):
             result = module._contract_dry_run("blender-box", module.SCENARIOS["blender-box"])

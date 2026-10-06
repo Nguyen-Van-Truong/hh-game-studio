@@ -302,6 +302,25 @@ def _run_one(name: str, args: argparse.Namespace, index: int = 0) -> dict[str, o
             "dry_run": check, "output": str(output)}
 
 
+def matrix_closure(results: list[dict[str, object]]) -> str:
+    """Bind every admitted row into one immutable matrix-level closure.
+
+    Godot and Blender intentionally have different per-probe dependency
+    closures.  Hashing their ordered admissions together prevents the old
+    mistake of presenting receipts from unrelated runs as one frozen package,
+    while retaining each row's own closure for native readback.
+    """
+    rows = []
+    for result in results:
+        candidate = result.get("dry_run")
+        dry = candidate if isinstance(candidate, dict) else result
+        rows.append({key: dry.get(key) for key in (
+            "scenario", "run_id", "source_closure_sha256", "binary_sha256",
+            "operation", "deadline_ms")})
+    payload = json.dumps(rows, sort_keys=True, separators=(",", ":")).encode()
+    return hashlib.sha256(payload).hexdigest()
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser()
     selection = parser.add_mutually_exclusive_group(required=True)
@@ -348,7 +367,8 @@ def main(argv: list[str] | None = None) -> int:
         except (OSError, ValueError, RuntimeError) as error:
             print(json.dumps({"dry_run": False, "error": str(error)}, sort_keys=True))
             return 2
-        print(json.dumps({"dry_run": True, "results": results}, sort_keys=True))
+        print(json.dumps({"dry_run": True, "matrix_closure_sha256": matrix_closure(results),
+                          "results": results}, sort_keys=True))
         return 0
     try:
         results = []
@@ -363,7 +383,8 @@ def main(argv: list[str] | None = None) -> int:
     except (OSError, ValueError, RuntimeError) as error:
         print(json.dumps({"native": False, "error": str(error)}, sort_keys=True))
         return 2
-    print(json.dumps({"native": True, "results": results}, sort_keys=True))
+    print(json.dumps({"native": True, "matrix_closure_sha256": matrix_closure(results),
+                      "results": results}, sort_keys=True))
     return 0 if all(item["exit_code"] == 0 for item in results) else 1
 
 
