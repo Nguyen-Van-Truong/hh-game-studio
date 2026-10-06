@@ -1,8 +1,18 @@
-# GT07 critic package — frozen diagnostic candidate
+# GT07 critic package — superseded diagnostic candidate
 
-`AUTHORITY=0` and `FORMAL_ACCEPTANCE=false`. This package is ready to be
-handed to two independent read-only critics; the coordinator must not sign it
-or infer acceptance from the raw PASS fields.
+`AUTHORITY=0` and `FORMAL_ACCEPTANCE=false`. This historical package is **not
+ready for critic handoff**. Its freeze predates the ordered 17-row admission
+and later source changes, so it must not be reused, cited as the current
+candidate, or treated as a pending approval request. A new package may be
+created only after F3 is complete, one fresh source freeze is bound to the
+complete matrix, and all actual exits and cleanup receipts are present.
+
+## Supersession record
+
+Superseded on 2026-10-06 by the runner/admission work recorded in
+`requirements.md`. The old manifest SHA below remains immutable historical
+provenance only. No critic was requested for this package and no acceptance
+may be inferred from any raw PASS field.
 
 ## Freeze
 
