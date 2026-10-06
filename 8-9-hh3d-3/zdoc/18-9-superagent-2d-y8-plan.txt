@@ -85,17 +85,12 @@ HIỆN TRẠNG (06-10 03:08 UTC; coordinator cập nhật khi xong một mốc, 
   combat-priority pickup routing. Guarded SA-05 catalog passed 27 assertions, SA-04 bot slice 30,
   SA-08 open-floor twin-hash stress passed 100 seeded matches/40,728 assertions before 600 ticks, and
   SA-01 regression passed 2,977. These remain implementation checks, not parity or checkbox acceptance.
-- Product commit `5bb70259` adds a provisional deterministic `ClassicModeRules` seam for the observed
-  VS/Stage/Survival families: seven VS rule labels, round targets, Stage twelve-slot unlock progression,
-  Survival wave/defeat flow, pause state and immutable/canonical snapshots. `MatchSession` keeps the old
-  relay-yard constructor default and includes mode state in its snapshot/hash. Guarded mode rules passed
-  22 assertions; SA-01 and match-room regressions stayed green. Menu input path, settings persistence,
-  full mode bodies, owner play and critic remain open; no parity or checkbox is claimed.
-- Product commit `ed074db2` adds a provisional deterministic navigation graph over the existing Relay Yard:
-  platform centers, ladder endpoints, bidirectional ladder/platform links, bounded same-level links and
-  pit-crossing rejection. No map data or default constructor changed. Guarded `cmd.sa09.navigation-graph.8`
-  passed 7 assertions with exit 0/cleanup 0/diagnostics empty. Five authored maps, map selection, full
-  bot route behavior and SA-02/owner/critic gates remain open; no SA-09 checkbox or parity is claimed.
+- Product commit `da561611` hardens the provisional mode/settings/navigation seams: VS/Stage/Survival
+  reset and terminal semantics, MatchSession round reset and invalid-state handling, schema-checked local
+  settings (normal actions only), and deterministic navigation validation/order/pit spans with immutable
+  node rows. Guarded mode/settings/session/match regressions, SA-01 2,977 assertions and navigation
+  passed with exit 0/cleanup 0/diagnostics empty. These are implementation checks only; SA-02, menu/input
+  path, full mode sessions, map catalog, owner review and critics remain open, with no checkbox/parity claim.
 
 NEXT (làm theo thứ tự; việc nào phải chờ thì làm việc sau, không ngồi chờ)
 N2 Rig Y8 đã tự kiểm bằng fixture cục bộ nhưng chưa lấy được A01–A06; không lặp lại vòng browser
@@ -106,8 +101,9 @@ N5 SA-04 bản chơi được đã có ở commit `0659f2ef`; Windows/Web artifa
    gửi owner thử kèm hướng dẫn 5 dòng. Không tick SA-04 khi thiếu owner/critic/parity gate.
 N6 Trong lúc chờ owner: đo A07–A17; kiểm kê trong trận thật (mục 7.4); thử pipeline art cho
    một nhân vật (SA-10, thư mục art/, subagent riêng).
-N7 Sẵn sàng cho lát cắt map/bot tiếp theo: giữ `relay_yard` mặc định, thêm navigation graph kiểm định
-   trên topology hiện có trước khi mở map catalog. Không tạo map mới hoặc tick SA-09 trước gate Classic.
+N7 Đã hoàn tất lát cắt navigation/mode/settings trên topology hiện có trong `da561611`; giữ
+   `relay_yard` mặc định, chưa tạo map mới và chưa tick SA-07/SA-09. Bước kế là nối menu/input thật
+   và chạy trọn phiên mode, sau đó mới mở map catalog khi gate Classic cho phép.
 
 1. MỤC TIÊU VÀ THỨ TỰ
 Owner 03-10: hoàn thành Classic giống bản Y8 trước; phần kiểu MUGEN chỉ làm sau bằng lệnh mới.
@@ -755,4 +751,8 @@ Q5 Web: dung lượng tải lần đầu và bộ nhớ đo từ SA-04; ngân s�
   passed 7 assertions with host exit 0, cleanup 0 and empty diagnostics after repairing typed-array and
   reverse-edge diagnostics. No new map/layout or checkbox was added; map selection, full bot navigation,
   SA-02 measurements, owner review and critics remain open.
+2026-10-06 SA-07/SA-09 hardening: product commit `da561611` adds schema-checked settings, mode/session
+  reset and terminal tests, and validated deterministic graph rows/pit spans. Focused mode/settings/session/
+  navigation runs (53/17/8/12 assertions), MatchRoom 46, SA-01 2,977 and movement regression all exited
+  0 with cleanup 0 and diagnostics empty; no checkbox or parity row was ticked.
 END_OF_SUPERAGENT_PLAN
