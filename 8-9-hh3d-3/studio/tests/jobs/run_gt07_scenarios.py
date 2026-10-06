@@ -551,7 +551,7 @@ def _run_one(name: str, args: argparse.Namespace, index: int = 0,
         runner = _load_probe("../../build/bootstrap/run_fixture.py")
         with _native_measure_guard():
             host = runner.run_process(command, cwd=STUDIO.parent, output=Path(check["output"]),
-                                      timeout=900, label="host-tests", env=dict(os.environ))
+                                      timeout=600, label="host-tests", env=dict(os.environ))
         unchanged = check["source_hashes"] == _host_test_sources(scenario)
         verified = (host.get("exit_code") == host.get("wrapper_exit_code") == 0
                     and host.get("tree_verified") is True and not host.get("timed_out")
