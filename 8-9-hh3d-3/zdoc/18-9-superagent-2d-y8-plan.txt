@@ -121,6 +121,10 @@ HIỆN TRẠNG (06-10 03:08 UTC; coordinator cập nhật khi xong một mốc, 
   MatchRoom physics frame and record the post-commit full regression. The live matrix passed 54 assertions;
   the regression passed 2,977, all with exit 0/cleanup 0/diagnostics empty. This is launch/topology proof,
   not complete combat-mode parity or owner acceptance.
+- Product commit `13083acb` adds Easy/Normal/Hard deterministic ClassicBot response profiles while keeping
+  one held-action/InputFrame schema and Normal as the default bot scene. The profile test passed 8 assertions
+  and the full regression 2,977 at one source hash; both exited 0 with cleanup 0 and diagnostics empty.
+  Stress, owner play and measured difficulty behavior remain open.
 
 NEXT (làm theo thứ tự; việc nào phải chờ thì làm việc sau, không ngồi chờ)
 N2 Rig Y8 đã tự kiểm bằng fixture cục bộ nhưng chưa lấy được A01–A06; không lặp lại vòng browser
@@ -131,10 +135,10 @@ N5 SA-04 bản chơi được đã có ở commit `0659f2ef`; Windows/Web artifa
    gửi owner thử kèm hướng dẫn 5 dòng. Không tick SA-04 khi thiếu owner/critic/parity gate.
 N6 Trong lúc chờ owner: đo A07–A17; kiểm kê trong trận thật (mục 7.4); thử pipeline art cho
    một nhân vật (SA-10, thư mục art/, subagent riêng).
-N7 Đã hoàn tất navigation/mode/settings, phiên Stage/Survival, map catalog, seam chọn map và live
+N7 Đã hoàn tất navigation/mode/settings, phiên Stage/Survival, map catalog, seam chọn map, live
    map×mode launch checks (`da561611`, `bbe457de`, `076aa88f`, `f913e094`, `7004e0b0`, `5f813928`,
-   `5ccad55c`, `eb1283b6`, `e810f472`); `relay_yard` vẫn mặc định, chưa tick SA-07/SA-09/SA-10. Tiếp
-   tục combat/feedback coverage, Q2, owner/critic gates, không chuyển SA-14.
+   `5ccad55c`, `eb1283b6`, `e810f472`, `13083acb`); `relay_yard` vẫn mặc định, chưa tick SA-07/SA-09/SA-10.
+   Tiếp tục combat/feedback coverage, bot stress, Q2, owner/critic gates, không chuyển SA-14.
 
 1. MỤC TIÊU VÀ THỨ TỰ
 Owner 03-10: hoàn thành Classic giống bản Y8 trước; phần kiểu MUGEN chỉ làm sau bằng lệnh mới.
@@ -817,4 +821,9 @@ Q5 Web: dung lượng tải lần đầu và bộ nhớ đo từ SA-04; ngân s�
   passed 54 assertions; `cmd.sa09.live-map-mode.regression.1` passed 2,977 at source hash
   `814e5af8540d75489145360be1093341c478283bafcd9486a1b5b00d87fdf407`, all exit 0/cleanup 0/diagnostics
   empty. This remains launch/topology proof; no checkbox or parity claim was added.
+2026-10-06 SA-08 difficulty slice: product commit `13083acb` adds Easy/Normal/Hard deterministic bot
+  response profiles with Normal as the default. `cmd.sa08.bot-difficulty.1` passed 8 assertions and
+  `cmd.sa08.bot-difficulty.regression.1` passed 2,977 at source hash
+  `263c0f917ab3efe4219d9e6990ca0d006635fd91f1450a8a709804bab06cb1ee`, all exit 0/cleanup 0/diagnostics
+  empty. Stress, owner difficulty review and parity remain open; no checkbox was added.
 END_OF_SUPERAGENT_PLAN
