@@ -28,8 +28,11 @@ HANDOFF_CANONICAL_PLAN=D:/dataDiskD/intellji/hoanhaosocial/hoanhaonew-20-6-2025/
 HANDOFF_PRODUCT_WORKTREE=D:/dataDiskD/hh-superagent
 HANDOFF_PRODUCT_BRANCH=superagent/main
 HANDOFF_PRODUCT_HEAD=12f16685
-HANDOFF_GROKDO_STATUS=PLAN_ONLY_NOT_READY_FOR_CODE
-HANDOFF_GROKDO_RULE=Không copy mù vào repo chính; agent mới phải dùng snapshot/worktree Git riêng tại 12f16685
+HANDOFF_GROKDO_STATUS=READY_FOR_CODE_SNAPSHOT
+HANDOFF_GROKDO_ROOT=D:/dataDiskD/intellji/hoanhaosocial/hoanhaonew-20-6-2025/hh-game-studio/8-9-hh3d-3/superagent-grokdo
+HANDOFF_GROKDO_BRANCH=superagent/grokdo
+HANDOFF_GROKDO_HEAD=ef9c93f
+HANDOFF_GROKDO_RULE=Không copy mù vào repo chính; agent mới phải dùng snapshot Git riêng tại 12f16685
 
 0. ĐỌC NHANH
 - Superagent Classic là game 2D đấu trường, bắn súng trên nền platform. Cơ chế, vũ khí, vật thể,
@@ -902,4 +905,8 @@ Q5 Web: dung lượng tải lần đầu và bộ nhớ đo từ SA-04; ngân s�
   `.local`, root `.gitignore`, root `AGENTS.md`, and Git/worktree metadata were retained. The archive manifest is
   `hh-game-studio-old-archive-6-10/MIGRATION_MANIFEST_2026-10-06.md`; no linked worktree was moved and the
   pre-existing GT07 edits were not staged. This is a filesystem relocation, not a history rewrite or parity gate.
+2026-10-06 Grokdo handoff: exact folder `8-9-hh3d-3/superagent-grokdo` now contains a standalone
+  122-file snapshot from product `12f16685`, branch `superagent/grokdo`, setup commit `ef9c93f`.
+  Godot 4.7.2 pin/templates/settings are isolated; import + 2,977-assertion regression passed
+  at source hash `c6d0329779e8c7d9c6a18250ff818e7ac99d608b4a8ff24c62483db6f133368f` (setup only).
 END_OF_SUPERAGENT_PLAN
