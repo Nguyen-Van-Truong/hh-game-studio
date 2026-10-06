@@ -36,7 +36,7 @@ PREVIOUS_REVISION=SA4 trong Git 5b2d4c7b; LOG chi tiết (run id, hash, số ass
   routing HH3D nằm ở 8-9-hh3d-3/AGENTS.md.
 - Coordinator game tick WP khi đạt DoD; subagent không tick.
 
-HIỆN TRẠNG (06-10 04:22 UTC; coordinator cập nhật khi xong một mốc, tối đa 15 dòng)
+HIỆN TRẠNG (06-10 04:33 UTC; coordinator cập nhật khi xong một mốc, tối đa 15 dòng)
 - SA-01 ACCEPTED 03-10 (bootstrap kỹ thuật). CURRENT_VALID_WP=SA-02 từ 03-10.
 - Ledger 79 dòng: 25 OBSERVED, 54 UNVERIFIED, 0 MATCHED. Đã thấy chủ yếu menu, map, mode, phím
   đánh và vài phản ứng vật thể (mục 7.4). Chưa có số đo thời gian hay khoảng cách nào: browser
@@ -124,7 +124,12 @@ HIỆN TRẠNG (06-10 04:22 UTC; coordinator cập nhật khi xong một mốc, 
 - Product commit `13083acb` adds Easy/Normal/Hard deterministic ClassicBot response profiles while keeping
   one held-action/InputFrame schema and Normal as the default bot scene. The profile test passed 8 assertions
   and the full regression 2,977 at one source hash; both exited 0 with cleanup 0 and diagnostics empty.
-  Stress, owner play and measured difficulty behavior remain open.
+- Product commits `20c06c3e`/`0592d743` wire the provisional NavigationGraph into ClassicBot with live
+  canonical-topology caching, fail-closed malformed-world handling and a disconnected-platform jump replan
+  fixture. Guarded `cmd.sa08.bot-nav-stress.1` passed 100 seeded matches/40,728 assertions and
+  `cmd.sa08.bot-nav-difficulty.3` passed 14; `cmd.sa08.run-all.3` passed 2,977, all exit 0/cleanup 0/
+  diagnostics empty at source hash `36aa62cb091c30e400a41152096e2ee1fedaffbee0cc06b44a677661304ef91a`.
+  Navigation remains same-height/local and provisional; owner play and measured difficulty behavior remain open.
 
 NEXT (làm theo thứ tự; việc nào phải chờ thì làm việc sau, không ngồi chờ)
 N2 Rig Y8 đã tự kiểm bằng fixture cục bộ nhưng chưa lấy được A01–A06; không lặp lại vòng browser
@@ -136,9 +141,10 @@ N5 SA-04 bản chơi được đã có ở commit `0659f2ef`; Windows/Web artifa
 N6 Trong lúc chờ owner: đo A07–A17; kiểm kê trong trận thật (mục 7.4); thử pipeline art cho
    một nhân vật (SA-10, thư mục art/, subagent riêng).
 N7 Đã hoàn tất navigation/mode/settings, phiên Stage/Survival, map catalog, seam chọn map, live
-   map×mode launch checks (`da561611`, `bbe457de`, `076aa88f`, `f913e094`, `7004e0b0`, `5f813928`,
-   `5ccad55c`, `eb1283b6`, `e810f472`, `13083acb`); `relay_yard` vẫn mặc định, chưa tick SA-07/SA-09/SA-10.
-   Tiếp tục combat/feedback coverage, bot stress, Q2, owner/critic gates, không chuyển SA-14.
+   map×mode launch checks và bot difficulty/navigation stress (`da561611`, `bbe457de`, `076aa88f`,
+   `f913e094`, `7004e0b0`, `5f813928`, `5ccad55c`, `eb1283b6`, `e810f472`, `13083acb`, `20c06c3e`, `0592d743`);
+   `relay_yard` vẫn mặc định, bot graph còn local/provisional, chưa tick SA-07/SA-09/SA-10. Tiếp tục
+   combat/feedback coverage, Q2, owner/critic gates, không chuyển SA-14.
 
 1. MỤC TIÊU VÀ THỨ TỰ
 Owner 03-10: hoàn thành Classic giống bản Y8 trước; phần kiểu MUGEN chỉ làm sau bằng lệnh mới.
@@ -826,4 +832,10 @@ Q5 Web: dung lượng tải lần đầu và bộ nhớ đo từ SA-04; ngân s�
   `cmd.sa08.bot-difficulty.regression.1` passed 2,977 at source hash
   `263c0f917ab3efe4219d9e6990ca0d006635fd91f1450a8a709804bab06cb1ee`, all exit 0/cleanup 0/diagnostics
   empty. Stress, owner difficulty review and parity remain open; no checkbox was added.
+2026-10-06 SA-08 bot navigation follow-up: product commits `20c06c3e`/`0592d743` add the provisional
+  graph seam, malformed-world fail-closed path and a disconnected-platform replan fixture. Guarded
+  `cmd.sa08.bot-nav-stress.1` passed 100 matches/40,728 assertions, `cmd.sa08.bot-nav-difficulty.3`
+  passed 14 and `cmd.sa08.run-all.3` passed 2,977 at source hash
+  `36aa62cb091c30e400a41152096e2ee1fedaffbee0cc06b44a677661304ef91a`; all exited 0/cleanup 0/diagnostics
+  empty. This is implementation evidence only; navigation is not a full multi-level planner and no checkbox/parity claim was added.
 END_OF_SUPERAGENT_PLAN
