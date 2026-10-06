@@ -112,13 +112,13 @@ class ResourceAuthoringTests(unittest.TestCase):
         update = self.request('scene.resource.update', payload={'resource_id': 'shape.rect',
             'resource_type': 'RectangleShape2D', 'changes': {'size': [4, 5]}})
         self.assertEqual(self.validate(update, context).preview['effective_properties']['size'], [4, 5])
-        self.reject(update, 'AUTHORING_RESOURCE_OWNER_MISMATCH',
+        self.reject(update, 'AUTHORING_RESOURCE_NODE_TYPE',
                     context=replace(context, resources=(resource.ResourceState('shape.rect', 'collider3d',
                         'RectangleShape2D', properties={'size': [1, 2]}),)))
         self.reject(update, 'AUTHORING_RESOURCE_SHARED',
                     context=replace(context, resources=(resource.ResourceState('shape.rect', 'collider',
                         'RectangleShape2D', True, {'size': [1, 2]}),)))
-        self.reject(update, 'AUTHORING_RESOURCE_TYPE_MISMATCH',
+        self.reject(update, 'AUTHORING_RESOURCE_NODE_TYPE',
                     context=replace(context, resources=(resource.ResourceState('shape.rect', 'collider',
                         'BoxShape3D', properties={'size': [1, 2, 3]}),)))
 
@@ -147,6 +147,16 @@ class ResourceAuthoringTests(unittest.TestCase):
                     context=replace(self.context, resources=(duplicate, duplicate)))
         bad_owner = resource.ResourceState('shape', 'missing', 'RectangleShape2D', properties={'size': [1, 2]})
         self.reject(self.request(), 'AUTHORING_RESOURCE_STATE', context=replace(self.context, resources=(bad_owner,)))
+
+    def test_context_rejects_shape_owned_by_wrong_dimension_collider(self):
+        wrong_2d_owner = resource.ResourceState('shape.rect', 'collider3d', 'RectangleShape2D',
+                                                properties={'size': [1, 2]})
+        self.reject(self.request(), 'AUTHORING_RESOURCE_NODE_TYPE',
+                    context=replace(self.context, resources=(wrong_2d_owner,)))
+        wrong_3d_owner = resource.ResourceState('shape.box', 'collider', 'BoxShape3D',
+                                                properties={'size': [1, 2, 3]})
+        self.reject(self.request(target={'stable_id': 'collider'}), 'AUTHORING_RESOURCE_NODE_TYPE',
+                    context=replace(self.context, resources=(wrong_3d_owner,)))
 
     def test_projection_and_preview_are_detached_and_authority_zero(self):
         result = self.validate()

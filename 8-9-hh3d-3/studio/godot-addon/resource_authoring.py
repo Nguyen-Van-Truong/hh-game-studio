@@ -185,6 +185,15 @@ def _context(context: ValidationContext) -> tuple[dict[str, NodeState], dict[str
               and resource.resource_type in _SHAPE_TYPES
               and type(resource.shared) is bool and type(resource.properties) is MappingProxyType,
               'AUTHORING_RESOURCE_STATE')
+        # A host observation must preserve the native shape-node ancestry.  A
+        # resource class alone is insufficient: accepting a 2D shape owned by
+        # a 3D collider (or vice versa) would let a detached fixture snapshot
+        # drift from the node/resource topology the adapter is meant to bind.
+        _need((resource.resource_type.endswith('2D')
+               and nodes[resource.owner_stable_id].node_type == 'CollisionShape2D')
+              or (resource.resource_type.endswith('3D')
+                  and nodes[resource.owner_stable_id].node_type == 'CollisionShape3D'),
+              'AUTHORING_RESOURCE_NODE_TYPE')
         _need(_shape_properties(resource.resource_type, resource.properties, allow_empty=True),
               'AUTHORING_RESOURCE_STATE')
         resources[resource.resource_id] = resource
