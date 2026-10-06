@@ -18,6 +18,7 @@ from pathlib import Path
 import re
 import sys
 import stat
+import subprocess
 
 sys.dont_write_bytecode = True
 STUDIO = Path(__file__).resolve().parents[2]
@@ -71,6 +72,24 @@ HOST_SCENARIOS = {
                       "run_prefix": "gt07-m5-final", "matrix": "M5"},
     "host-process": {"kind": "host", "probe": "gt07_process_ownership.py",
                       "run_prefix": "gt07-m8-final", "matrix": "M8"},
+    "host-m1-tests": {"kind": "host-test", "run_prefix": "gt07-m1-final",
+                      "matrix": "M1", "tests": (
+                          "studio.tests.jobs.test_dispatch_policy",
+                          "studio.tests.jobs.test_durable_broker",
+                          "studio.tests.jobs.test_selector_dispatch",
+                          "studio.tests.jobs.test_native_dispatch",
+                      )},
+    "host-m6-tests": {"kind": "host-test", "run_prefix": "gt07-m6-final",
+                      "matrix": "M6", "tests": (
+                          "studio.tests.jobs.test_gt07_stop_lifecycle",
+                          "studio.tests.jobs.test_native_godot_stop",
+                      )},
+    "host-m7-tests": {"kind": "host-test", "run_prefix": "gt07-m7-final",
+                      "matrix": "M7", "tests": (
+                          "studio.tests.jobs.test_queue_rotation_custody",
+                          "studio.tests.jobs.test_segmented_broker_regression",
+                          "studio.tests.jobs.test_segmented_journal",
+                      )},
 }
 ALL_SCENARIOS = {**SCENARIOS, **HOST_SCENARIOS}
 
@@ -82,7 +101,8 @@ FINAL_MATRIX = (
     "godot-authority", "godot-edit", "godot-save", "godot-save-locked",
     "godot-script", "godot-recovery", "godot-conflict", "blender-box",
     "blender-authority", "blender-conflict", "blender-export",
-    "host-storage", "host-process",
+    "host-storage", "host-process", "host-m1-tests", "host-m6-tests",
+    "host-m7-tests",
 )
 MATRIX_ALIASES = {"final": FINAL_MATRIX}
 
@@ -112,8 +132,26 @@ def _scenario(name: str) -> dict:
         return HOST_SCENARIOS[name]
 
 
+def _host_test_sources(scenario: dict) -> dict[str, str]:
+    values = {}
+    for module_name in scenario["tests"]:
+        relative = Path(*module_name.split(".")).with_suffix(".py")
+        path = STUDIO.parent / relative
+        if not path.is_file():
+            raise ValueError("HOST_TEST_SOURCE_MISSING")
+        values[relative.as_posix()] = _sha(path)
+    values["source_closure_sha256"] = hashlib.sha256(
+        json.dumps(values, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
+    return values
+
+
+def _write_json(path: Path, value: object) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(value, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+
 def _binary_for(scenario: dict, args: argparse.Namespace) -> Path | None:
-    if scenario["kind"] == "host":
+    if scenario["kind"] in ("host", "host-test"):
         return None
     value = args.godot_binary if scenario["kind"] == "godot" else args.blender_binary
     if not value:
@@ -241,7 +279,7 @@ def _output_for(name: str, args: argparse.Namespace, index: int = 0) -> Path:
         run_ids[index] if index < len(run_ids) else None)
     if not run_id:
         raise ValueError("SCENARIO_RUN_ID_REQUIRED")
-    if scenario["kind"] == "host":
+    if scenario["kind"] in ("host", "host-test"):
         pattern = re.escape(scenario["run_prefix"]) + r"-[0-9]{8}-[0-9]{2}"
     else:
         pattern = (r"gt07-native-godot-[0-9]{8}-[0-9]{2}" if scenario["kind"] == "godot"
@@ -267,6 +305,19 @@ def _output_for(name: str, args: argparse.Namespace, index: int = 0) -> Path:
 def dry_run(name: str, args: argparse.Namespace, index: int = 0) -> dict[str, object]:
     scenario = _scenario(name)
     output = _output_for(name, args, index)
+    if scenario["kind"] == "host-test":
+        source_hashes = _host_test_sources(scenario)
+        report = {"schema": "gt07-host-test-admission-1", "authority": 0,
+                  "diagnostic_only": True, "run_id": output.name,
+                  "matrix": scenario["matrix"], "tests": list(scenario["tests"]),
+                  "source_hashes": source_hashes, "dry_run": True,
+                  "engine_started": False}
+        output.mkdir(parents=True)
+        _write_json(output / "dry-run.json", report)
+        return {"scenario": name, "kind": "host-test", "run_id": output.name,
+                "output": str(output), "tests": list(scenario["tests"]),
+                "source_hashes": source_hashes, "engine_started": False,
+                "dry_run": True}
     if scenario["kind"] == "host":
         probe = _load_probe(scenario["probe"])
         report = probe.run_diagnostic(Path(args.output_root), output.name, dry_run=True)
@@ -303,6 +354,23 @@ def dry_run(name: str, args: argparse.Namespace, index: int = 0) -> dict[str, ob
 
 def _run_one(name: str, args: argparse.Namespace, index: int = 0) -> dict[str, object]:
     scenario = _scenario(name)
+    if scenario["kind"] == "host-test":
+        check = dry_run(name, args, index)
+        command = [sys.executable, "-B", "-m", "unittest", "-q", *scenario["tests"]]
+        completed = subprocess.run(command, cwd=STUDIO.parent, capture_output=True,
+                                   text=True, timeout=900, check=False)
+        report = {"schema": "gt07-host-test-result-1", "authority": 0,
+                  "diagnostic_only": True, "run_id": check["run_id"],
+                  "matrix": scenario["matrix"], "tests": list(scenario["tests"]),
+                  "source_hashes": _host_test_sources(scenario),
+                  "actual_exit": completed.returncode,
+                  "stdout": completed.stdout[-12000:],
+                  "stderr": completed.stderr[-12000:],
+                  "verified": completed.returncode == 0}
+        _write_json(Path(check["output"]) / "result.json", report)
+        return {"scenario": name, "run_id": check["run_id"],
+                "exit_code": completed.returncode, "dry_run": check,
+                "host_test_report": report, "output": str(check["output"])}
     if scenario["kind"] == "host":
         check = dry_run(name, args, index)
         probe = _load_probe(scenario["probe"])
