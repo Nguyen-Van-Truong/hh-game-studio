@@ -19,14 +19,14 @@ F1 ACK-cut repair is complete on one frozen closure; F2–F5 remain open.
 ## Next
 
 1. F2: keep this compact map; old candidate `5f34c0a6…3bce0d` is **SUPERSEDED**.
-2. F3: the existing runner now accepts the ordered `--matrix final`; its engine-free dry-run passed for 13 rows on 2026-10-06: 11 Godot/Blender rows plus real host admissions for M5 storage and M8 process ownership. M1/M6/M7, writer FIFO, cross-app phases, M9 and focused regressions still need explicit adapters and are not silently counted.
+2. F3: the existing runner now accepts the ordered `--matrix final`; its engine-free dry-run passed for 16 rows on 2026-10-06: 11 Godot/Blender rows, real host admissions for M5/M8, and bounded host-test admissions for M1/M6/M7. Writer FIFO, cross-app phases, M9 and focused regressions still need explicit adapters and are not silently counted.
 3. F4: after a fresh source freeze and successful dry-run, run one complete M1–M9 matrix with one closure.
 4. F5: build the final source/review/raw manifest, then send that exact hash to two independent read-only critics. Only their explicit same-hash approval can advance GT07.
 
 No critic has been called for the superseded package. Do not merge, tick, or call GT07 accepted from diagnostics alone.
 
 The latest mixed admission produced matrix closure
-`92818005ad53f009a49c6bf077f6e16c557c5005d62f214727c62581a517a7c0`.
+`d5520195b9882db769f6e7f1ba2587324fcfdfec27df0aa50c05d5b1c8138b86`.
 It is an admission digest only: no engine was started and it cannot substitute
 for the missing rows or the final frozen run.
 
