@@ -671,7 +671,7 @@ def main(argv: list[str] | None = None) -> int:
         results = []
         try:
             for index, name in enumerate(names):
-                if matrix_source_digest != _source_digest(_matrix_sources()):
+                if args.matrix and matrix_source_digest != _source_digest(_matrix_sources()):
                     raise ValueError("MATRIX_SOURCE_CHANGED_DURING_DRY_RUN")
                 row = dry_run(name, args, index)
                 row["matrix_source_closure_sha256"] = matrix_source_digest
@@ -686,7 +686,7 @@ def main(argv: list[str] | None = None) -> int:
     try:
         results = []
         for index, name in enumerate(names):
-            if matrix_source_digest != _source_digest(_matrix_sources()):
+            if args.matrix and matrix_source_digest != _source_digest(_matrix_sources()):
                 raise ValueError("MATRIX_SOURCE_CHANGED_BEFORE_NATIVE_ROW")
             result = _run_one(name, args, index)
             result["matrix_source_closure_sha256"] = matrix_source_digest
