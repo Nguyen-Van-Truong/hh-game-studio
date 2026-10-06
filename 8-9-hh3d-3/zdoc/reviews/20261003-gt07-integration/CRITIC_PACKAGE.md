@@ -8,7 +8,7 @@ or infer acceptance from the raw PASS fields.
 
 - Git source freeze: `909d6efe1a1c71af297d9b2ad99fe5a7a666e150`.
 - Coordinator manifest: `studio/.local/reviews/gt07-final-matrix-20261006/manifest.json`.
-- Manifest SHA-256: `d56845bb130c3038cd63a70f48127f08e55c3a41ab1473d79d180a59c06b1d38`.
+- Manifest SHA-256: `ba91458ffebca64743fd0fd00dca85bce65135355942b1123a9ceae9a31a155e`.
 - Tracked studio closure: `b7b3a4aeadb8add96681179fa9b4b65fef71b2d13d061fbd825a0495f99d4e28`.
 - Commits after the source freeze are recorded in the manifest as docs-only
   drift (`fb7b7b03`, `8549ba34`, `91962245`); no file under `studio/` changed.
@@ -17,12 +17,11 @@ or infer acceptance from the raw PASS fields.
 
 ## Evidence scope
 
-The manifest binds the sequential native Godot/Blender matrix, current M3
-producer phase cuts, M7 real-clock rotation suite, M8 process/Job ownership
-run, M9 Play-time mutation adversary, and the affected focused regression
-suite. Raw evidence stays under `studio/.local/reviews/`; this text is only the
+The manifest binds the sequential native Godot/Blender matrix, current M3 producer phase cuts (including the fresh PREPARED cut gt07-native-queue-20261006-19), M7 real-clock rotation suite, M8 process/Job ownership run, M9 Play-time mutation adversary, M1/M5/M6 hash-bound receipts, and the recorded affected focused regression suite. Raw evidence stays under `studio/.local/reviews/`; this text is only the
 review index. Every native record retains its own dry-run, source closure,
 actual child/wrapper exit, Job/tree cleanup and `authority=0` fields.
+
+M3 consumer cuts gt07-cross-app-20261005-53 and -54 are included only as contextual diagnostics: both are hash-bound to closure c91bc0d770e9730cb10a3bc9fd8e80729f6db9d3485b024664706658993be51c, which predates the current producer closure, so the package does not relabel them as current-source acceptance. M5's host storage report explicitly keeps injected fsync/diskfull rows UNKNOWN. M1/M6 and the completed 104-test regression summary are path/hash-bound in the manifest evidence map.
 
 M9's current-source refresh is recorded separately in
 `zdoc/reviews/20261006-gt07-binding-refresh/`; it required the exact prior
