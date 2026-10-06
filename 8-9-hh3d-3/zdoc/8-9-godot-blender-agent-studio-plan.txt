@@ -1,30 +1,21 @@
 HH STUDIO — PLAN 1/3: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Cập nhật 06-10-2026, Asia/Saigon | Revision S261 + quyết định owner O1–O10 | TRIỂN KHAI THEO GATE
-OWNER_DECISIONS=O1_O3_20260925; O4_20260927; O5_O6_20260930; O7_20261001; O8_20261002; O9_20261003; O10_20261004; BLOCK_BELOW_STATUS_TABLE; LATER_DECISION_WINS; PRECEDENCE=OVER_CONFLICTING_S2XX; FULL_TEXT_IN_GIT=87912523,b0802472,8298c107,fcc1906f,6d8eb81d,d04266e8,091506fa; OLD_VERDICTS_UNCHANGED
-HIỆN HÀNH 06-10 — GT-01..GT-06 ACCEPTED; GT-07 ĐÃ ĐÓNG GÓI CHỜ 2 CRITIC ĐỘC LẬP THEO O10 (M1–M9); O2 CHẠY SONG SONG (O10.5); GT08–GT10 CHƯA MỞ; TOÀN PLAN CHƯA HOÀN TẤT
+Cập nhật 06-10-2026, Asia/Saigon | Revision S261 + quyết định owner O1–O11 | TRIỂN KHAI THEO GATE
+OWNER_DECISIONS=O1_O3_20260925; O4_20260927; O5_O6_20260930; O7_20261001; O8_20261002; O9_20261003; O10_20261004; O11_20261006; BLOCK_BELOW_STATUS_TABLE; LATER_WINS_OVER_S2XX; FULL_TEXT_IN_GIT=87912523,b0802472,8298c107,fcc1906f,6d8eb81d,d04266e8,091506fa,a0ab19b8; OLD_VERDICTS_UNCHANGED
+HIỆN HÀNH 06-10 — GT-01..GT-06 ACCEPTED; GT-07 IN_PROGRESS: SỬA ACK CUT GODOT RỒI CHẠY MA TRẬN CUỐI MỘT LỆNH, MỘT CLOSURE (O11); GÓI 06-10 BỊ HAI CRITIC TICK=no; O2 SONG SONG; GT08–GT10 CHƯA MỞ
 CURRENT_VALID_WP=GT-07
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S260
+PLAN_REVISION=S261
 EXECUTION_AUTHORIZATION=OWNER_APPROVED_GATED
-EXECUTION_MODE=COORDINATOR_WITH_SCOPED_SUBAGENTS_AND_INDEPENDENT_CRITICS_OWNER_20261003; PREFER_GPT_6_ASTRA_ULTRA; ONE_WRITER_PER_FILE; TWO_DIFFERENT_MODELS_SAME_HASH; O2_PARALLEL_WORKER_O10_5
-GOAL_STATE=ACTIVE; INDEPENDENT_CONSUMER_PILOT_AUTHORIZED; GT07_CRITIC_REVIEW_PENDING; O2_PARALLEL_LANE_O10_5; GT08_GT10_UNOPENED; SUPERAGENT_SEPARATE_OWNER_AUTHORIZED_LANE
-OVERALL_PLAN_STATUS=INCOMPLETE; GT01_GT06_ACCEPTED; GT07_CRITIC_REVIEW_PENDING; GT08_GT10_PLANNED_UNOPENED
+EXECUTION_MODE=COORDINATOR_WITH_SCOPED_SUBAGENTS_AND_INDEPENDENT_CRITICS_OWNER_20261003; CREDIT_BUDGET_O11_7; ULTRA_ONLY_HARD_DESIGN_O2_WORKER_FINAL_CRITICS; ONE_WRITER_PER_FILE; TWO_DIFFERENT_MODELS_SAME_HASH; O2_PARALLEL_WORKER_O10_5
+GOAL_STATE=ACTIVE; INDEPENDENT_CONSUMER_PILOT_AUTHORIZED; GT07_IN_PROGRESS_O11; O2_PARALLEL_LANE_O10_5; GT08_GT10_UNOPENED; SUPERAGENT_SEPARATE_OWNER_AUTHORIZED_LANE
+OVERALL_PLAN_STATUS=INCOMPLETE; GT01_GT06_ACCEPTED; GT07_IN_PROGRESS; GT08_GT10_PLANNED_UNOPENED
 CONSUMER_PILOT_STATUS=REVALIDATED_PROVISIONAL_AUTHORITY0; NOT_GT06_ACCEPTANCE; NOT_COMPLETE_GAME_CLAIM
 GT06_STATUS=ACCEPTED; FORMAL25_TWO_ACCEPTED_PAIRS; FINAL_MANIFEST=318081a3c71f334cc44aa4542a5fa5fff459b4045006f6daa91559b1ccc4d4d3; DECISION=zdoc/reviews/20261003-gt06-owner-critics/coordinator-acceptance.md
-GT07_NEXT_ACTION=O10_8_SEND_MANIFEST_TO_TWO_CRITICS; MATRIX_SCOPE=O10_1_M1_M9_LOCKED; M1_M9_EVIDENCE=PACKAGE_READY_CRITICS_PENDING; STATUS=zdoc/reviews/20261003-gt07-integration/requirements.md; GT06_NO_BENCHMARK_RERUN
-FAST_PATH_20261006=Bind_M9_current_source_then_N6_freeze_one_M1_M9_manifest_and_focused_regressions; eight_app_scenarios_are_not_full_matrix; preserve_prior_diagnostics_and_send_one_hash_to_two_critics.
+GT07_NEXT_ACTION=O11_6_F1_TO_F5_IN_ORDER; MATRIX=O10_1_M1_M9_UNCHANGED; CRITICS_20261006=TICK_NO_x2_ON_d56845bb; PACKAGE_5f34c0a6=SUPERSEDED_SOURCE_WILL_CHANGE; STATUS=zdoc/reviews/20261003-gt07-integration/requirements.md; GT06_NO_BENCHMARK_RERUN
 GT10_SOAK_POLICY=OWNER_O1_10X35_ON_RELEASE_SOURCE; REUSE_ACCEPTED_FORMAL25_MACHINERY; PROFILE_V6=8a2e599c40f927ffaff5ded5e48b6bf2a0f0a6bb3a23de31434a695f4258cb35; FORMAL25_SOURCE64=727f9039c1cc83239f5ef1daff13de5e92e37b5ba442e64be8341ca058800b58
 O2_CANDIDATE_STATUS=AUTHORITY0; BRANCH=codex/o2-authoring-contract; DETAIL=studio/AUTHORING_STATUS.md_AT_BRANCH_HEAD; OPEN=AUTH05_ADAPTER_E2E; SYNC_MAIN_THEN_MERGE_O10_5; POINTER_ONLY_NO_HASH_OR_TEST_COUNT_O7_6
 RUN_POLICY=FRESH_ID_PER_RUN; DRY_RUN_BEFORE_NATIVE_O10_2; VERIFY_SOURCE_STOP_LATCH_AND_O5_6_LOCK_BEFORE_START; PRESERVE_RAW_ON_FAILURE; REPAIR_ONLY_PROVEN_BOUNDARY; FIX_AND_CONTINUE_O6_4; NEVER_TICK_FROM_BANNER_OR_PARTIAL_PREFIX; CRITICS_READONLY_INDEPENDENT_SAME_HASH
-CẬP NHẬT 06-10: M3 consumer RELOAD/ACK, M4 Blender conflict và M7 rotation
-process-cut đã có diagnostic; M5 host -09, M8 host -10 và M9 current-source
-native `gt06-gt07-m9-playmutation-20261006-02` đã đạt diagnostic (18/18).
-Installed binding refresh03 xác minh đúng delta ba file (source=233/execution=235);
-M7/M8 final-freeze binding và hai critic vẫn mở.
-Tám scenario app chưa bao phủ toàn bộ M1–M9; đóng coverage còn thiếu trước freeze,
-không chạy lại chỉ để đổi timestamp. Chi tiết/giới hạn/raw ở
-`zdoc/reviews/20261003-gt07-integration/requirements.md`; các số run trong O10 là lịch sử.
 S_RECORD_HISTORY_ARCHIVE=8-9-hh3d-3/zdoc/reviews/20260925-plan-s-record-history-s256.txt; SHA256=14e4d00b5f574f9c06c8f4041cf284fa70f7bded09dee6d6d2914cdb1d3c5fdb; AUTHORITY=0; RAW_HEADER_BLOCK_S256_LINES_93_150_BYTE_FOR_BYTE; NO_GATE_CHANGE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
@@ -40,25 +31,95 @@ STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng
 09 | GT-09 | Lõi tạo nội dung O2 + agent conformance trên 2 mini-game 2D/3D | GT-08 hoặc GT-08A (O4.6) | PLANNED
 10 | GT-10 | Gói công cụ v0.1, cài/upgrade/rollback, bàn giao game | GT-09 + GT-08B nếu tách | PLANNED
 
-QUYẾT ĐỊNH OWNER ĐANG HIỆU LỰC O1–O10 — BẢN HỢP NHẤT 04-10-2026 (S259)
-Chỉ giữ luật còn áp dụng sau GT-06 ACCEPTED; O10 mới nhất nên đặt đầu. Nguyên văn O1–O9 trước
+QUYẾT ĐỊNH OWNER ĐANG HIỆU LỰC O1–O11 — BẢN HỢP NHẤT 06-10-2026 (S261)
+Chỉ giữ luật còn áp dụng sau GT-06 ACCEPTED; khối mới nhất đặt đầu. Nguyên văn O1–O9 trước
 tinh gọn: git show 091506fa:8-9-hh3d-3/zdoc/8-9-godot-blender-agent-studio-plan.txt (dòng 40–561);
-bản gốc O1–O3 87912523, O4 b0802472, O5 8298c107, O6 fcc1906f. Mâu thuẫn thì quyết định muộn hơn
-thắng và thắng các dòng S2xx; raw và verdict cũ giữ nguyên, không hồi tố PASS. Số mục cũ (O1.4,
-O4.4, O6.4…) giữ nguyên để tham chiếu.
+bản gốc O1–O3 87912523, O4 b0802472, O5 8298c107, O6 fcc1906f; O10 đầy đủ (S259) ở a0ab19b8.
+Mâu thuẫn thì quyết định muộn hơn thắng và thắng các dòng S2xx; raw và verdict cũ giữ nguyên,
+không hồi tố PASS. Số mục cũ (O1.4, O4.4, O6.4…) giữ nguyên để tham chiếu.
 
-O10 — 04-10-2026, MỚI NHẤT, ĐỌC TRƯỚC (AUTHORITY=OWNER_DELEGATED_20260930; ngưỡng O1/O4.1,
-timeout và DoD GT-07 không đổi; thay GT07_NEXT_ACTION cũ)
-Căn cứ 03-10 21:21 → 04-10 18:00: khoảng 10 giờ làm thật, 10 commit, khoảng 45 run chẩn đoán.
-- Đã có: admission bền + quota project/session (46 test inert, có reproducer race), sức chứa stream
-  mặc định đo thật (510 record, JOURNAL_FULL có next action), năm lát native (Blender queue; Godot
-  edit, save, script; recovery lookup-only sau khi cố ý mất receipt ở run 21), Stop drain bền.
-- Godot native 16/20 run hỏng (01–15, 20), Blender queue chỉ đạt từ run 12; gần như toàn lỗi
-  harness bắt được mà không cần mở engine (bài học 43–46).
-- Mỗi run chép snapshot 2–9,5 MB vào zdoc/reviews (trái O4.4; manifest lại ghi raw ở .local),
-  manifest 1.179–1.595 dòng cho mỗi run chẩn đoán (đã commit 16, 18, 19); requirements.md thành
-  nhật ký 247 dòng.
-- Ma trận còn lại chưa chốt nên mỗi lát cần probe, run, manifest, ghi chú riêng. O2 đứng từ 03-10.
+O11 — 06-10-2026, MỚI NHẤT, ĐỌC TRƯỚC (AUTHORITY=OWNER_DELEGATED_20260930; ma trận M1–M9,
+ngưỡng và DoD GT-07 của O10 không đổi; thay GT07_NEXT_ACTION, FAST_PATH_20261006, NEXT N0–N6)
+Căn cứ 04-10 18:28 → 06-10 14:50:
+- Đã có: runner --scenario/--dry-run/--matrix + failpoint (b48c437e, e8438c81), raw cũ về .local,
+  task GT06 đã dọn; mọi hàng M1–M9 có diagnostic đạt, trừ cut ACK Godot (scene.save, script).
+- Gói critic 06-10 ghép receipt từ khoảng bảy closure. Hai critic (gpt-6-astra, gpt-6.1-sol) cùng
+  TICK=no trên d56845bb: M3 thiếu consumer RELOAD/ACK và PREPARED ở closure cũ; M5 thiếu receipt
+  host crossvolume/fsync/diskfull; M1, M6, regression thiếu hash raw. Gói vá 5f34c0a6 vẫn ghép
+  nhiều closure và sẽ cũ ngay khi sửa ACK.
+- Cut ACK Godot: receipt gốc đã COMMITTED nhưng reconcile mở editor tới hết 30 giây rồi trả
+  UNKNOWN (run 26, 28). Run 29 bật sys.settrace trong run native (11:42 → 14:13), lệch timing.
+  Fast path WIP (chưa commit) qua 22 test Mock + dry-run nhưng run 30 hỏng retry_no_effect vì
+  Mock journal luôn trả recovery receipt.
+- Chậm do credit và vòng lặp, không do máy: khoảng 19/44 giờ không hoạt động; 49 lần hết credit
+  (đứng qua đêm 7,5 và 5,1 giờ), lại hết lúc 14:25 06-10 nên lượt dừng. Luồng chính 3.227 lượt
+  gọi model, mỗi lượt gửi lại khoảng 172 nghìn token (509 triệu token vào); khoảng 650 lượt chỉ
+  để chờ/quản lý (330 poll write_stdin, 90 wait_agent, 83 list_agents); 82 subagent đều ultra,
+  khoảng 40 là audit next-step/gap; 36/82 commit chỉ ghi log, 25 commit rebind/refresh; header
+  plan sửa 10 lần; hai lượt dừng khi run/subagent còn chạy mất 2,4 giờ. Credit workspace dùng
+  chung với các agent khác.
+- O2: 3 commit riêng từ 04-10; 45f5e592 sửa cross_app_publication.py của GT-07 (đã port vào main
+  ở c9d9c871); AUTH-05 và nối adapter chưa đóng.
+1. Sửa cut ACK (F1): giữ WIP, sửa tiếp, không viết lại.
+   - Fast path theo classify() của publication_recovery, không tự liệt kê phase: chỉ khi route là
+     COMMITTED_ORIGINAL hoặc HISTORICAL_TERMINAL và terminal_response_available=true. UNKNOWN
+     (route RESTORE_LAST_GOOD_REQUIRES_EXPLICIT_RECONCILIATION hoặc HOLD_UNKNOWN_OR_STOP) và
+     COMMITTED bị blocked (SELECTED_REQUIRES_DURABLE_COMPLETION) vẫn đi reconcile cũ. WIP hiện
+     nhận cả UNKNOWN nên chặn restore last-good; ca blocked sẽ lỗi ở original_response.
+   - COMMITTED_ORIGINAL kiểm thêm active.json và hash bundle trên đĩa khớp receipt (chỉ đọc, như
+     barrier trong admit), đúng câu "lookup journal/active manifest/hash" của M3.
+   - Trạng thái attempt riêng (ví dụ TERMINAL_ORIGINAL) và một helper đọc + kiểm receipt gốc dùng
+     chung cho fast path, _reply và lookup; bỏ except rộng trong _reply; TERMINAL vẫn chỉ đọc
+     recovered_response, lỗi thì halt như cũ.
+   - Consumer đã lookup được receipt terminal hợp lệ thì hoàn tất bằng đúng bytes đó, không xin
+     lease/reconcile (O6.1); fast path trong reconcile chỉ là lớp idempotent khi retry.
+   - Test bằng RecoveryJournal thật (không Mock journal), dựng từ cut-state run 26/28/30 hoặc qua
+     API journal, đủ năm route trên; mỗi ca gọi reconcile hai lần, lookup, mở lại host, kiểm
+     snapshot journal và editor. Đạt mới chạy hai cut ACK native (save, script) bằng ID mới.
+2. Không trace nặng (sys.settrace, sitecustomize, profiler) trong run native có deadline; cần mã
+   lỗi nội bộ thì đọc raw và log boundary có cấu trúc, hoặc chạy reproducer offline.
+3. Ngừng rebind/repeat: diagnostic đạt không chạy lại khi source đổi; không commit chỉ để
+   refresh, bind hoặc ghi drift. Freeze = hash closure studio + driver + binary pin; commit ngoài
+   studio/ (plan, Superagent) không phải drift. Không báo "chờ critic" trước khi F4 đạt.
+4. Ma trận cuối một lệnh (F3): mở rộng run_gt07_scenarios.py, không viết runner mới. Thêm vào
+   SCENARIOS mọi lệnh diagnostic M1–M9 runner chưa có: host M1/M5/M6/M7/M8, writer FIFO M2,
+   cross-app sáu pha, M9 bằng bộ máy GT-06, regression focused GT-02..GT-06. --matrix final chạy
+   tuần tự đủ M1–M9 sau dry-run toàn ma trận, dừng nếu closure của hàng nào khác closure đã
+   freeze, rồi tự viết một manifest (run id, lệnh, actual exit, Job/tree, hash raw mọi hàng) và
+   bảng requirement→test→artifact.
+5. Freeze và chạy cuối (F4) khi F1 đạt và không còn sửa code: một lần --matrix final (ước tính
+   1–1,5 giờ máy; khóa đo trống, không engine khác; không merge O2 vào main từ freeze tới khi
+   critic trả lời). Hàng nào hỏng: giữ raw, sửa, rồi chạy lại toàn bộ --matrix final bằng ID
+   mới; không ghép kết quả hai lần chạy.
+6. NEXT (giờ làm, không phải ETA toàn plan):
+   F1 mục 1 (1–2 giờ).
+   F2 song song F1, ≤ 30 phút, không cần model mạnh: rút gọn requirements.md theo O10.4 (bảng
+      M1–M9 + Next ở đầu, còn lại xuống lịch sử), ghi gói 5f34c0a6 là SUPERSEDED.
+   F3 mục 4 + dry-run toàn ma trận (2–3 giờ).
+   F4 mục 5 + tự kiểm manifest (1–2 giờ, phần lớn là máy chạy).
+   F5 hai critic khác model cùng manifest; checklist có đủ các điểm TICK=no 06-10 (1–2 giờ).
+      Cả hai TICK=yes thì coordinator nghiệm thu theo O4.3, đổi header rồi mở GT-08A (O10.9).
+7. Ngân sách credit (bắt buộc cho coordinator và worker):
+   - Mở thread Codex mới ngay khi có credit lại; owner dừng thread cũ để chỉ một coordinator ghi.
+     Handoff ≤ 1 trang (O11, requirements.md, git diff WIP); thread mới spawn lại worker O2 bằng
+     brief ngắn. Mỗi WP sau cũng mở thread mới.
+   - Lệnh dài chờ bằng yield dài (bằng timeout cứng của run, mỗi lần vài phút) hoặc chạy qua
+     Scheduled Task có receipt (bài học 33); không poll write_stdin 1–30 giây, không sleep để chờ.
+   - Subagent chỉ cho thiết kế khó (tối đa một audit cho mỗi lỗi mới), worker O2 và hai critic
+     cuối; ultra chỉ cho các việc đó. Đọc log, chạy test, closeout, status làm trực tiếp. Không
+     spawn audit next-step/gap/plan vì O11 đã là next step.
+   - Không kết thúc lượt khi còn run nền hoặc subagent; chờ có trần, đọc kết quả rồi làm tiếp.
+   - Mọi run native có timeout cứng và tự dọn process, để lượt bị cắt vì hết credit không để lại
+     process hoặc khóa mồ côi.
+8. O2 (O10.5 vẫn hiệu lực): worker không sửa file GT-07 đang làm (recovery_host.py,
+   publication_recovery.py, studio/tests/jobs/*gt07*, cross_app_publication.py) và không chạy
+   diagnostic GT-07 trong F1–F5; GT-07 cần thêm người thì giao việc trên main. Log GT-07 chỉ ở
+   requirements.md, không ghi vào AUTHORING_STATUS.md.
+9. WP sau (GT-08..GT-10): trước khi code, viết bảng ma trận nghiệm thu và scenario trong cùng
+   runner; diagnostic chạy từng hàng, nghiệm thu một lần --matrix final; O10.9 vẫn hiệu lực.
+
+O10 — 04-10-2026 (AUTHORITY=OWNER_DELEGATED_20260930; ngưỡng O1/O4.1, timeout và DoD GT-07
+không đổi). Căn cứ S259 và mục 3, 6, 8 đầy đủ ở git a0ab19b8; mục 6 đã xong, NEXT thay bằng O11.6.
 1. Ma trận đóng GT-07 (chốt; thêm hàng chỉ khi có TX mới theo mục 5). Native = Godot/Blender pin
    thật; host = host thật với owner inert và process/filesystem thật.
    M1 Q01/TX18 admission, quota, fairness, flood, không starvation — host (46 test đã có).
@@ -96,11 +157,7 @@ Căn cứ 03-10 21:21 → 04-10 18:00: khoảng 10 giờ làm thật, 10 commit,
 3. Bằng chứng tầng D (O4.4): raw và snapshot chỉ ở studio/.local/reviews/<run_id>/; requirements.md
    một dòng mỗi run (id, kịch bản, exit, kết quả, phát hiện); không manifest/zip riêng và không
    commit cho run chẩn đoán. Chỉ gói cuối GT-07 có manifest + zip + critic package; review closure
-   trong zdoc/reviews chỉ chứa source text như tiền lệ GT-04/GT-05. Một lần, model rẻ: chuyển 22
-   thư mục zdoc/reviews/gt07-* chưa track (godot-publication 01–03, native-godot 01–15 và 18–21,
-   khoảng 110 MB) về studio/.local/reviews/ cùng tên, so hash từng file trước/sau; không xóa; sửa
-   đường output của runner. Manifest 16/18/19 đã commit giữ nguyên; manifest 20/21 chưa commit thì
-   chuyển vào .local cùng raw, không commit.
+   trong zdoc/reviews chỉ chứa source text như tiền lệ GT-04/GT-05. Raw cũ đã chuyển về .local.
 4. requirements.md: đầu file "Hiện trạng" ≤ 15 dòng + bảng M1–M9 (DONE/OPEN, run id) + Next; ghi
    chú checkpoint ≤ 3 dòng; nhật ký dài cũ chuyển xuống mục lịch sử cuối file.
 5. O2 chạy song song từ 04-10 (thay câu "không làm song song" của O4.6 riêng cho O2; GT-07 rồi
@@ -111,23 +168,12 @@ Căn cứ 03-10 21:21 → 04-10 18:00: khoảng 10 giờ làm thật, 10 commit,
    chỉ test công thức + 1–2 negative (O8.4a), không thêm lớp chống giả mạo. Merge O2 → main khi
    suite O2 và suite GT bị ảnh hưởng đạt trên cây đã merge, coordinator duyệt phạm vi diff, profile
    gameplay-source vẫn tắt tới khi AUTH-01..05 đạt; hai critic để dành cho GT-09.
-6. Vệ sinh một lần (model rẻ, ≤ 1 giờ): đóng 48 task HHStudio.GT06.* đang Ready theo O7.6 bằng lệnh
-   closeout chung (export XML và danh sách vào .local, kiểm không instance/process sống, gỡ từng
-   task, một dòng log); thêm 8-9-hh3d-3/.local/ vào .gitignore như studio/.local/ (157 file
-   arm/formal/preflight đang untracked, không file nào đã được track).
+6. Vệ sinh một lần: đã xong (không còn task HHStudio.*, .gitignore có 8-9-hh3d-3/.local/).
 7. Nhịp: không dừng lượt sau mỗi checkpoint; đi hết NEXT tới khi gói GT-07 sẵn sàng critic hoặc gặp
    E1–E4. Commit theo mốc (code + test + dòng log), không commit chỉ để ghi log. Run native hỏng:
    đọc raw, sửa, qua dry-run rồi mới chạy native ID mới; cùng một lỗi lặp hai lần thì dừng native
    và viết reproducer thuần.
-8. NEXT (ước tính giờ làm của agent, không phải ETA toàn plan):
-   N0 vệ sinh mục 3, 4 và 6 (≤ 1 giờ, model rẻ, song song với N1).
-   N1 runner --scenario/--dry-run/--matrix + module failpoint (2–3 giờ).
-   N2 M3 crash matrix (3–4 giờ).
-   N3 M2 và M4 (2–3 giờ).
-   N4 M5 và M7 (khoảng 2 giờ; M7 chạy nền theo đồng hồ thật).
-   N5 M6, M8, M9 (2–3 giờ).
-   N6 gói cuối và hai critic.
-   O2 chạy song song suốt N0–N6.
+8. NEXT N0–N6: N0–N5 đã có diagnostic, trừ cut ACK Godot; phần còn lại theo O11.6.
 9. Chuẩn bị bước sau: owner chuẩn bị máy Android thật bật USB debugging (O3.3) trước GT-08B;
    GT-08A (Windows + Linux headless, Linux qua Docker) mở ngay sau GT-07 ACCEPTED; release soak
    GT-10 10×35 cần khoảng 6 giờ máy yên, chia nhiều khung theo O4.6 bằng bộ máy Formal25.
@@ -427,7 +473,7 @@ GT-06 ACCEPTED — 03-10-2026
   Android hoặc release soak 10×35 của GT10; source sau merge cần evidence riêng.
 
 Phần còn lại để xong plan
-GT-07: scheduling/concurrency/recovery và cross-app activation — ma trận M1–M9 và NEXT ở O10.
+GT-07: scheduling/concurrency/recovery và cross-app activation — ma trận M1–M9 ở O10, NEXT ở O11.
 GT-08: clean Windows/Linux/Android export; máy Android thật là hard gate (O4.6: được tách công khai
 08A Windows/Linux mở GT-09, 08B Android bắt buộc trước GT-10).
 GT-09: lõi tạo nội dung O2 (chạy song song từ 04-10 theo O10.5), full client conformance, MCP spike
@@ -436,7 +482,7 @@ GT-10: package/install/upgrade/rollback/uninstall/handoff, release soak 10×35 t
 sau GT-10. Không suy phần trăm sản phẩm hoặc ETA toàn plan từ số test/gate.
 
 Thực thi và tốc độ
-- Tiêu chí/gate theo khối quyết định owner O1–O10; ưu tiên đường chức năng, focused regression
+- Tiêu chí/gate theo khối quyết định owner O1–O11; ưu tiên đường chức năng, focused regression
   và dependency reuse. Không mở thêm vòng audit/helper không phục vụ requirement còn thiếu;
   không chạy lại lane PASS chỉ vì sửa báo cáo. Gặp lỗi thì sửa và chạy tiếp theo O6.4.
 - Heartbeat (nếu owner bật) chỉ kiểm điều kiện chạy formal; query/readback lịch qua app trước
@@ -533,13 +579,27 @@ Bài học GT-07 (03-10 → 04-10):
     manifest và ghi chú riêng; một runner kịch bản và bảng M chạy được cả ma trận.
 48. Bằng chứng tầng D chỉ để chẩn đoán: snapshot vài MB và manifest hàng nghìn dòng cho mỗi run
     hỏng làm chậm và dễ commit nhầm; gói đầy đủ chỉ lập ở mốc nghiệm thu.
+Bài học GT-07 (04-10 → 06-10):
+49. Gói nghiệm thu chỉ lập từ một lần chạy cả ma trận trên một closure: gói 06-10 ghép receipt từ
+    khoảng bảy closure, hai critic TICK=no, và sửa ACK sau đó làm mọi receipt đã ghép thành cũ.
+50. Mock không được có dữ liệu mà hệ thật không có: Mock journal luôn trả recovery receipt nên 22
+    test + dry-run đạt mà run native 30 vẫn hỏng; lỗi recovery phải tái hiện bằng journal thật.
+51. Không trace nặng trong run native có deadline: run 29 bật sys.settrace kéo 2,5 giờ và đổi
+    timing nên ra lỗi khác; dùng raw, log boundary hoặc reproducer offline.
+52. Credit là tài nguyên chặn tiến độ: thread 688 MB gửi lại khoảng 172 nghìn token mỗi lượt gọi;
+    330 poll write_stdin và 82 subagent ultra trong 44 giờ, 49 lần hết credit, đứng qua đêm
+    khoảng 12,6 giờ.
+53. Không kết thúc lượt khi còn run nền hoặc subagent: ngày 06-10 mất khoảng 2,4 giờ (11:45 →
+    12:25, 12:28 → 14:12) chỉ vì lượt dừng giữa chừng.
+54. Commit chỉ ghi log hoặc rebind là vòng tự gây: 36/82 commit không đổi studio/; freeze theo hash
+    closure studio, không theo git commit, nên commit plan/Superagent không phải drift.
 
 LỊCH SỬ / CÁCH ĐỌC
 Bản S71 đầy đủ trước tinh gọn giữ tại reviews/20260918-plan-history-s71/
 tools-plan-s71.txt, AUTHORITY=0; SHA256 1f3ca50b8a0931a12f8c334ea2e6cf969d8d667d8af659ac22fa523996390963.
 Chi tiết lessons S27–S71, lỗi/giải pháp và các archive/hash cũ giữ trong bản đó
 và Git/reviews, không xóa verdict. Phần requirement/DoD/TQ/TX bên dưới giữ nguyên.
-Đọc theo thứ tự: header và bảng đầu; O10 (mới nhất); spec GT hiện hành ở mục 3 cùng TQ/TX
+Đọc theo thứ tự: header và bảng đầu; O11 rồi O10; spec GT hiện hành ở mục 3 cùng TQ/TX
 nó trỏ tới; mục Hiện trạng của zdoc/reviews/20261003-gt07-integration/requirements.md. O1, O4.1
 và phần ngủ tới GT-10 chỉ đọc khi chuẩn bị release soak. Nguyên văn O1–O9, header S258 và
 GT06_HISTORY_S258 trước tinh gọn S259: git show 091506fa:8-9-hh3d-3/zdoc/
