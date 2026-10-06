@@ -66,6 +66,19 @@ SCENARIOS = {
                        "failpoint_phases": ("PREPARED", "VALIDATED", "ACTIVATING", "COMMITTED", "ACK")},
 }
 
+# F3/F4 use one ordered admission for every already-implemented native
+# scenario.  Keep the alias separate from ``SCENARIOS`` so callers that rely
+# on the public per-scenario choices keep the same contract.  Host-only M1/M5
+# through M8 and the cross-app/M9 adapters are added only when their existing
+# probes expose the same dry-run/receipt contract; they must not be silently
+# represented by a Godot/Blender row.
+FINAL_MATRIX = (
+    "godot-authority", "godot-edit", "godot-save", "godot-save-locked",
+    "godot-script", "godot-recovery", "godot-conflict", "blender-box",
+    "blender-authority", "blender-conflict", "blender-export",
+)
+MATRIX_ALIASES = {"final": FINAL_MATRIX}
+
 
 def _sha(path: Path) -> str:
     digest = hashlib.sha256()
@@ -305,8 +318,10 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--failpoint-phase", choices=("PREPARED", "VALIDATED", "ACTIVATING",
                                                         "COMMITTED", "RELOAD", "ACK"))
     args = parser.parse_args(argv)
-    names = ([value.strip() for value in args.matrix.split(",") if value.strip()]
-             if args.matrix else ([args.scenario] if args.scenario else []))
+    matrix_text = args.matrix.strip() if args.matrix else None
+    names = (MATRIX_ALIASES[matrix_text] if matrix_text in MATRIX_ALIASES else
+             [value.strip() for value in matrix_text.split(",") if value.strip()]
+             if matrix_text else ([args.scenario] if args.scenario else []))
     if not names or any(value not in SCENARIOS for value in names):
         parser.error("one --scenario or a valid --matrix is required")
     args.run_ids = ([value.strip() for value in args.run_ids.split(",") if value.strip()]
