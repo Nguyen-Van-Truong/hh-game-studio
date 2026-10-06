@@ -24,7 +24,7 @@ class GT07ScenarioAdmissionTests(unittest.TestCase):
     def test_matrix_is_explicit_and_deadlines_are_bounded(self):
         self.assertEqual(set(module.SCENARIOS), {
             "godot-edit", "godot-save", "godot-save-locked", "godot-script", "godot-recovery", "godot-conflict",
-            "blender-box", "blender-conflict", "blender-export"})
+            "blender-box", "blender-authority", "blender-conflict", "blender-export"})
         self.assertEqual({row["max_horizon_ms"] for row in module.SCENARIOS.values()},
                          {5_000, 30_000, 90_000})
 
@@ -62,6 +62,22 @@ class GT07ScenarioAdmissionTests(unittest.TestCase):
         self.assertEqual(result["operation"], "object.transform.set")
         self.assertTrue(result["admission_validated"])
         self.assertFalse(result["native_effect"])
+
+    def test_blender_authority_contract_is_engine_free(self):
+        with patch("subprocess.Popen", side_effect=AssertionError("unexpected engine")):
+            result = module._contract_dry_run("blender-authority", module.SCENARIOS["blender-authority"])
+        self.assertEqual(result["operation"], "mesh.create_box")
+        self.assertTrue(result["admission_validated"])
+        self.assertFalse(result["native_effect"])
+
+    def test_authority_dry_run_rejects_invalid_final_native_read_before_launch(self):
+        from studio.tests.jobs import gt07_writer_authority as authority
+        command = authority.final_inspect_command()
+        command['command_id'] = 'M2FinalInspect'
+        with patch.object(authority, 'final_inspect_command', return_value=command), \
+                patch('subprocess.Popen', side_effect=AssertionError('unexpected engine')):
+            with self.assertRaisesRegex(authority.catalog.queue.c.Rejected, 'INVALID_UI_COMMAND'):
+                module._contract_dry_run('blender-authority', module.SCENARIOS['blender-authority'])
 
     def test_lock_is_required_and_bounded(self):
         with tempfile.TemporaryDirectory() as root:

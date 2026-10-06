@@ -18,6 +18,7 @@ from pathlib import Path
 import re
 import shutil
 import sys
+import time
 
 sys.dont_write_bytecode = True
 STUDIO = Path(__file__).resolve().parents[2]
@@ -174,7 +175,7 @@ def _safe_error(error: BaseException) -> dict[str, str]:
 
 def _child(output: Path, binary: Path, run_id: str,
            source: dict[str, str], closure: str, operation="mesh.create_box",
-           failpoint_phase: str | None = None) -> int:
+           failpoint_phase: str | None = None, authority_cases: bool = False) -> int:
     """Run inside the frozen snapshot; no source outside it is trusted."""
     from studio.host.blender.ui_host import BlenderUIHost
     from studio.host.blender.durable_session import DurableBlenderSession
@@ -189,6 +190,7 @@ def _child(output: Path, binary: Path, run_id: str,
     errors: list[dict[str, str]] = []
     gui = durable = owner = queue = dispatch = publisher = None
     publication_proof = None
+    authority_proof = None
     conflict_proof = None
     response = None
     stop_snapshot = None
@@ -220,8 +222,9 @@ def _child(output: Path, binary: Path, run_id: str,
 
         # Set the operation deadline only after the owned queue and GUI are up;
         # setup time can never silently consume the operation horizon.
+        initial_ttl = 2000 if authority_cases else 30000
         lease = owner.lease({"project_id": owner.project_id, "access": "write",
-                             "ttl_ms": 30000}, authorization="Bearer " + writer.bearer,
+                             "ttl_ms": initial_ttl}, authorization="Bearer " + writer.bearer,
                             catalog_digest=owner.catalog_digest)
         before = parse_json(owner._read_owner._baseline)
         request = _request_for(before=before, lease=lease, project_id=owner.project_id, now_ms=epoch_ms())
@@ -248,6 +251,14 @@ def _child(output: Path, binary: Path, run_id: str,
                     for i in range(3)] if len(vertices) == 8 else [])
         if box is None or extents != [1, 2, 3]:
             raise RuntimeError("NATIVE_READBACK_GEOMETRY_MISMATCH")
+        if authority_cases:
+            # Let the real initial writer lease expire before the authority
+            # handoff; no clock patch, renewal, or forced expiry is used.
+            while epoch_ms() <= lease["expires_ms"]:
+                time.sleep(min(.05, max(.001, (lease["expires_ms"] - epoch_ms()) / 1000)))
+            from studio.tests.jobs.gt07_writer_authority import blender_cases
+            authority_proof, _ = blender_cases(
+                owner, gui, dispatch, queue, writer, _request_for, lease_ms=5000)
         if operation == "object.transform.set":
             # The queue request below keeps this owner's pre-edit revision.
             # A direct UI command then edits and saves the native .blend while
@@ -422,6 +433,7 @@ def _child(output: Path, binary: Path, run_id: str,
         "queue_job_id": queue_row.job.job_id if queue_row is not None else None,
         "queue_state": queue_state,
         "operation": operation, "publication": publication_proof,
+        "writer_authority": authority_proof,
         "conflict": conflict_proof,
         "response": response.as_dict() if response is not None else None,
         "stop_snapshot": (asdict(stop_snapshot) if stop_snapshot is not None else None),
@@ -435,7 +447,7 @@ def _child(output: Path, binary: Path, run_id: str,
 
 
 def run(output: Path, binary: Path, run_id: str, operation="mesh.create_box",
-        failpoint_phase: str | None = None) -> int:
+        failpoint_phase: str | None = None, authority_cases: bool = False) -> int:
     output = output.resolve()
     output.mkdir(parents=True, exist_ok=False)
     source = _sources(STUDIO)
@@ -463,6 +475,8 @@ def run(output: Path, binary: Path, run_id: str, operation="mesh.create_box",
     child = [sys.executable, "-B", str(snapshot / "tests/jobs/run_native_blender_queue_probe.py"),
              "--frozen", "--output", str(output), "--binary", str(binary),
              "--run-id", run_id, "--operation", operation]
+    if authority_cases:
+        child.append("--authority-cases")
     if failpoint_phase is not None:
         if operation != "export.publish":
             raise ValueError("FAILPOINT_EXPORT_ONLY")
@@ -524,6 +538,7 @@ def main(argv=None) -> int:
     parser.add_argument("--frozen", action="store_true")
     parser.add_argument("--operation", choices=("mesh.create_box", "object.transform.set", "export.publish"), default="mesh.create_box")
     parser.add_argument("--failpoint-phase", choices=("PREPARED", "VALIDATED", "ACTIVATING", "COMMITTED", "ACK"))
+    parser.add_argument("--authority-cases", action="store_true")
     parser.add_argument("--recover-crash", action="store_true")
     args = parser.parse_args(argv)
     if args.frozen:
@@ -534,7 +549,7 @@ def main(argv=None) -> int:
                            closure=manifest["source_closure_sha256"])
         return _child(args.output.resolve(), args.binary.resolve(), args.run_id,
                       manifest["files"], manifest["source_closure_sha256"], args.operation,
-                      args.failpoint_phase)
+                      args.failpoint_phase, args.authority_cases)
     if args.output.name != args.run_id:
         parser.error("output basename must equal the run ID")
     from studio.tests.jobs.run_gt07_scenarios import main as scenario_main

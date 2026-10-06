@@ -8,7 +8,7 @@ Historical entries below are retained for provenance; they do not override the t
 | Matrix | Status | Existing evidence | Remaining proof |
 |---|---|---|---|
 | M1 / Q01 | DONE (host) | `gt07-jobs-integration-20261004-03`, 46 tests | Repeat only in final frozen matrix |
-| M2 / Q03 | OPEN | native FIFO proves two clients, expiry and stale writer rejection BEFORE intent; `gt07-native-writer-fifo-20261006-05` repeats that subset with clean actual exits but lacked matching O10 dry-run, so is excluded from final evidence | native completion AFTER lease expiry and worker revocation, both apps; then final frozen matrix |
+| M2 / Q03 | OPEN (Blender diagnostic covered) | `gt07-native-queue-20261006-07`: matching dry-run, real-clock expiry, native effect before deadline with reply after expiry, overlapping writer refused, revoke after effect preserves private receipt and blocks lookup/replay; child/wrapper/Blender exits 0, source/Job clean. Earlier FIFO-only run without matching dry-run stays excluded | same late-reply/revocation proof on Godot; final frozen matrix |
 | M3 / Q05 | OPEN (partial) | Blender producer cuts plus consumer cuts `gt07-cross-app-20261005-53` (RELOAD: HELD_LAST_GOOD) and `gt07-cross-app-20261005-54` (ACK: COMMITTED_LOOKUP_ONLY); both actual child/recovery exits and owned Jobs clean, one native dispatch, no replay, source/snapshot unchanged | six-phase producer coverage and final frozen matrix |
 | M4 / Q06 | OPEN (partial) | Godot `gt07-native-godot-20261005-26,42`; Blender `gt07-native-queue-20261005-47`: queued stale transform returns UNKNOWN/lookup.reconcile, manual `.blend` state retained, actual child/wrapper exits 0 and owned Job clean | final frozen matrix; previous failed diagnostics remain immutable |
 | M5 / TX05/TX09 | DIAGNOSTIC COVERED | host `gt07-m5-storage-20261005-09`: real lock/cross-volume refusal, INJECTED fsync/diskfull; native `gt07-native-godot-20261006-05`: share=0 during scene.save capture, durable UNKNOWN/lookup.reconcile, last-good file and selection preserved, actual exits/Job clean | final frozen repeat and requirement-map binding; native lock rejects at capture precondition before filesystem publication |
@@ -20,7 +20,7 @@ Historical entries below are retained for provenance; they do not override the t
 ## Next
 
 M3 consumer recovery and M7 integrated rotation crash slices are covered
-diagnostically. Before freezing, map explicit M2 revocation, M3 producer cuts,
+diagnostically. Before freezing, close Godot M2 revocation/late replies, map M3 producer cuts,
 and M6 Stop/cancel/reconnect/token-rotation coverage. M5 Godot-save file-lock
 now has native diagnostic proof; repeat it only in the final frozen matrix.
 
@@ -38,6 +38,9 @@ to refresh its timestamp. Every native launch needs its matching engine-free
 dry-run; source changes invalidate that admission.
 
 ## Checkpoint, 06-10-2026 - held-editor receipt collection
+
+`gt07-native-queue-20261006-06` - M2 FAIL, child 1/Blender 0/Job clean; final native inspect used an invalid uppercase ID (reproduced offline); raw unchanged.
+`gt07-native-queue-20261006-07` - M2 Blender diagnostic PASS after recipe validation in dry-run; actual child/wrapper/Blender exits 0, source/snapshot unchanged, closure `036c21bf6b77c1ff00fb9730267446a6b9e2293e0c53e722917734d1fd1a33df`; two case effects observed, revoked reservation remains RESERVED, retained receipt is supervisor-only. 17 scenario tests exit 0 include rejection of the old final-read recipe before engine launch; AUTHORITY=0.
 
 `gt07-native-godot-20261006-01..03` - FAIL, child exit 1; the real lock preserved last-good but healthy-editor identity blocked UNKNOWN collection; raw retained.
 `gt07-native-godot-20261006-04` - FAIL, child exit 1, editor exit 0/Job clean; repaired collector returned the journal's canonical UNKNOWN, but the probe expected a transient save-error code.

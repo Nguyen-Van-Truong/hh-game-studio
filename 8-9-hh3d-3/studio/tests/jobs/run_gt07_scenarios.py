@@ -49,6 +49,10 @@ SCENARIOS = {
     "blender-box": {"kind": "blender", "operation": "mesh.create_box",
                     "probe": "run_native_blender_queue_probe.py", "suffix": "blender",
                     "max_horizon_ms": 5_000, "failpoint_phases": ()},
+    "blender-authority": {"kind": "blender", "operation": "mesh.create_box",
+                          "probe": "run_native_blender_queue_probe.py", "suffix": "authority",
+                          "max_horizon_ms": 30_000, "authority_cases": True,
+                          "failpoint_phases": ()},
     "blender-conflict": {"kind": "blender", "operation": "object.transform.set",
                          "probe": "run_native_blender_queue_probe.py", "suffix": "conflict",
                          "max_horizon_ms": 30_000, "manual_conflict": True,
@@ -177,6 +181,9 @@ def _contract_dry_run(name: str, scenario: dict) -> dict[str, object]:
         raise ValueError("SCENARIO_CONTRACT_DRY_RUN_UNAVAILABLE")
     result = checker(operation=scenario["operation"],
                      recover_after_loss=bool(scenario.get("recover_after_loss")))
+    if scenario.get("authority_cases"):
+        from studio.tests.jobs.gt07_writer_authority import validate_native_recipes
+        validate_native_recipes()
     if not isinstance(result, dict):
         raise ValueError("SCENARIO_CONTRACT_DRY_RUN_INVALID")
     required = ("admission_validated",
@@ -264,7 +271,8 @@ def _run_one(name: str, args: argparse.Namespace, index: int = 0) -> dict[str, o
             raise ValueError("SCENARIO_BINARY_CHANGED_AFTER_DRY_RUN")
         if scenario["kind"] == "blender":
             exit_code = probe.run(output, binary, output.name, scenario["operation"],
-                                  getattr(args, "failpoint_phase", None))
+                                  getattr(args, "failpoint_phase", None),
+                                  bool(scenario.get("authority_cases")))
         else:
             exit_code = probe.run(output, binary, output.name, scenario["operation"],
                                   bool(scenario.get("recover_after_loss")),
