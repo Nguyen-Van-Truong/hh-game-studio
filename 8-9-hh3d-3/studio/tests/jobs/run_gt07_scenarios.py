@@ -72,6 +72,10 @@ HOST_SCENARIOS = {
                       "run_prefix": "gt07-m5-final", "matrix": "M5"},
     "host-process": {"kind": "host", "probe": "gt07_process_ownership.py",
                       "run_prefix": "gt07-m8-final", "matrix": "M8"},
+    "host-m2-tests": {"kind": "host-test", "run_prefix": "gt07-m2-final",
+                      "matrix": "M2", "tests": (
+                          "studio.tests.jobs.test_gt07_scenarios",
+                      )},
     "host-m1-tests": {"kind": "host-test", "run_prefix": "gt07-m1-final",
                       "matrix": "M1", "tests": (
                           "studio.tests.jobs.test_dispatch_policy",
@@ -102,7 +106,7 @@ FINAL_MATRIX = (
     "godot-script", "godot-recovery", "godot-conflict", "blender-box",
     "blender-authority", "blender-conflict", "blender-export",
     "host-storage", "host-process", "host-m1-tests", "host-m6-tests",
-    "host-m7-tests",
+    "host-m7-tests", "host-m2-tests",
 )
 MATRIX_ALIASES = {"final": FINAL_MATRIX}
 
