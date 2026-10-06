@@ -95,7 +95,11 @@ HOST_SCENARIOS = {
     "host-storage": {"kind": "host", "probe": "gt07_storage_faults.py",
                       "run_prefix": "gt07-m5-final", "matrix": "M5"},
     "host-process": {"kind": "host", "probe": "gt07_process_ownership.py",
-                      "run_prefix": "gt07-m8-final", "matrix": "M8"},
+                      "run_prefix": "gt07-m8-final", "matrix": "M8",
+                      # M8's probe owns the fixed guard around its three
+                      # process/Job sub-scenarios.  The matrix runner must
+                      # not acquire the same non-reentrant guard outside it.
+                      "owns_measure_guard": True},
     "host-m1-tests": {"kind": "host-test", "run_prefix": "gt07-m1-final",
                       "matrix": "M1", "tests": (
                           "studio.tests.jobs.test_dispatch_policy",
@@ -791,8 +795,11 @@ def _run_one(name: str, args: argparse.Namespace, index: int = 0,
                 "host_test_report": report, "output": str(check["output"])}
     if scenario["kind"] == "host":
         probe = _load_probe(scenario["probe"])
-        with _native_measure_guard():
+        if scenario.get("owns_measure_guard"):
             report = probe.run_diagnostic(Path(args.output_root), check["run_id"], dry_run=False)
+        else:
+            with _native_measure_guard():
+                report = probe.run_diagnostic(Path(args.output_root), check["run_id"], dry_run=False)
         return {"scenario": name, "run_id": check["run_id"],
                 "exit_code": 0 if report.get("verified") is True else 1,
                 "dry_run": check, "host_report": report,

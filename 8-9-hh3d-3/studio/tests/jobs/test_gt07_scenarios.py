@@ -205,6 +205,10 @@ class GT07ScenarioAdmissionTests(unittest.TestCase):
             self.assertFalse(output.exists())
             self.assertTrue(Path(admission["admission_path"]).is_file())
 
+    def test_m8_probe_owns_measure_guard(self):
+        self.assertTrue(module.HOST_SCENARIOS["host-process"]["owns_measure_guard"])
+        self.assertFalse(module.HOST_SCENARIOS["host-storage"].get("owns_measure_guard", False))
+
     def test_matrix_admission_rejects_path_escape(self):
         admission = {"scenario": "godot-edit", "run_id": "gt07-native-godot-20261006-98",
                      "output": str(Path(module.STUDIO).parent / "outside"),
