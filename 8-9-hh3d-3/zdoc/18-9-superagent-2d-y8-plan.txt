@@ -19,6 +19,10 @@ FUNCTIONAL_PARITY=UNVERIFIED
 RELEASE_STATUS=BUILT_PROVISIONAL
 LEGACY_PROGRESS_INHERITED=NONE
 PREVIOUS_REVISION=SA4 trong Git 5b2d4c7b; LOG chi tiết (run id, hash, số assertion) nằm ở đó
+REPO_MIGRATION=PROPOSED_NOT_EXECUTED
+REPO_KEEP_SCOPE=8-9-hh3d-3/{zdoc,studio,superagent,consumer-pilot,vertical-slice,scripts,AGENTS.md,CLAUDE.md,.gitattributes}
+REPO_POLICY_KEEP=root AGENTS.md + .gitignore until a scoped replacement is reviewed
+REPO_ARCHIVE_SCOPE=all other root paths, linked worktrees and ignored local state remain archived, not deleted
 
 0. ĐỌC NHANH
 - Superagent Classic là game 2D đấu trường, bắn súng trên nền platform. Cơ chế, vũ khí, vật thể,
@@ -36,7 +40,7 @@ PREVIOUS_REVISION=SA4 trong Git 5b2d4c7b; LOG chi tiết (run id, hash, số ass
   routing HH3D nằm ở 8-9-hh3d-3/AGENTS.md.
 - Coordinator game tick WP khi đạt DoD; subagent không tick.
 
-HIỆN TRẠNG (06-10 04:33 UTC; coordinator cập nhật khi xong một mốc, tối đa 15 dòng)
+HIỆN TRẠNG (06-10 11:06 UTC; coordinator cập nhật khi xong một mốc, tối đa 15 dòng)
 - SA-01 ACCEPTED 03-10 (bootstrap kỹ thuật). CURRENT_VALID_WP=SA-02 từ 03-10.
 - Ledger 79 dòng: 25 OBSERVED, 54 UNVERIFIED, 0 MATCHED. Đã thấy chủ yếu menu, map, mode, phím
   đánh và vài phản ứng vật thể (mục 7.4). Chưa có số đo thời gian hay khoảng cách nào: browser
@@ -130,6 +134,18 @@ HIỆN TRẠNG (06-10 04:33 UTC; coordinator cập nhật khi xong một mốc, 
   `cmd.sa08.bot-nav-difficulty.3` passed 14; `cmd.sa08.run-all.3` passed 2,977, all exit 0/cleanup 0/
   diagnostics empty at source hash `36aa62cb091c30e400a41152096e2ee1fedaffbee0cc06b44a677661304ef91a`.
   Navigation remains same-height/local and provisional; owner play and measured difficulty behavior remain open.
+- Product commit `12f16685` makes the typed weapon catalog authoritative for MatchSession reset, pickup,
+  melee/firearm resolution and grenade fuse/radius/damage; unknown gun IDs fail closed and the catalog
+  fingerprint is included in snapshots/hashes. Final guarded runs at source hash
+  `f330cfa707e2d869615cb8a6688fcecaedeaec33a484b7904113d20c52c09c43` passed weapon live 35, combat 73,
+  items 42, replay 15, match room 46 and full regression 2,977 with exit 0/cleanup 0/diagnostics empty.
+  The initial authority attempt timed out on warnings-as-errors; static types were repaired before the final runs.
+  This is implementation evidence only; weapon roster, spawn law, timing and owner/Y8 gates remain open.
+- Product commit `b6af6be2` extends the live item-catalog fixture through the P2 pickup path (pistol,
+  contact healing and five-second power). `cmd.sa05.item-catalog.p2.1` passed 42 assertions with
+  exit 0/cleanup 0/diagnostics empty; `cmd.sa05.run-all.p2.1` passed the 2,977-assertion regression
+  at source hash `dc1d053ea0983032107125b4bffbeea104727da5610381324e882e5fc671f8a8`, same clean result.
+  This is shared-route evidence only; spawn law, timing, owner review and SA-02 remain open.
 
 NEXT (làm theo thứ tự; việc nào phải chờ thì làm việc sau, không ngồi chờ)
 N2 Rig Y8 đã tự kiểm bằng fixture cục bộ nhưng chưa lấy được A01–A06; không lặp lại vòng browser
@@ -141,10 +157,24 @@ N5 SA-04 bản chơi được đã có ở commit `0659f2ef`; Windows/Web artifa
 N6 Trong lúc chờ owner: đo A07–A17; kiểm kê trong trận thật (mục 7.4); thử pipeline art cho
    một nhân vật (SA-10, thư mục art/, subagent riêng).
 N7 Đã hoàn tất navigation/mode/settings, phiên Stage/Survival, map catalog, seam chọn map, live
-   map×mode launch checks và bot difficulty/navigation stress (`da561611`, `bbe457de`, `076aa88f`,
-   `f913e094`, `7004e0b0`, `5f813928`, `5ccad55c`, `eb1283b6`, `e810f472`, `13083acb`, `20c06c3e`, `0592d743`);
+   map×mode launch checks, bot difficulty/navigation stress, P2 pickup route và weapon catalog authority
+   (`da561611`, `bbe457de`, `076aa88f`, `f913e094`, `7004e0b0`, `5f813928`, `5ccad55c`, `eb1283b6`,
+   `e810f472`, `13083acb`, `20c06c3e`, `0592d743`, `b6af6be2`, `12f16685`);
    `relay_yard` vẫn mặc định, bot graph còn local/provisional, chưa tick SA-07/SA-09/SA-10. Tiếp tục
    combat/feedback coverage, Q2, owner/critic gates, không chuyển SA-14.
+
+REPO MIGRATION DECISION (PROPOSAL — 06-10-2026)
+- Đề xuất “giữ 8-9-hh3d-3/zdoc בלבד” là sai; ba plan còn phụ thuộc runtime `studio`, `superagent`,
+  `consumer-pilot`, `vertical-slice`, `scripts`, child `AGENTS.md`/`CLAUDE.md`, root `.gitignore` và
+  policy của root `AGENTS.md`. `.local`/toolchain là ignored local state, không copy mù sang repo mới.
+- Không chuyển hoặc xóa trong lượt này. Product worktree hiện đã sạch ở commit `12f16685`; main plan
+  vẫn cần commit cập nhật này. Các linked worktree GT/O2/HH World và WIP ngoài product phải được snapshot
+  trước. Các tài liệu Vault Fighters được Superagent tham chiếu chỉ đọc phải được giữ trong archive hoặc
+  thay link có kiểm chứng.
+- Cách đúng: snapshot/archive toàn bộ refs + worktrees trước; sau đó tạo repo HH3D riêng bằng
+  `git subtree split --prefix=8-9-hh3d-3` hoặc fresh snapshot. Clone rồi `git rm` chỉ làm sạch working tree,
+  không làm lịch sử nhẹ và có thể làm mất liên kết worktree. `git filter-repo` chỉ dùng khi owner mở gate
+  rewrite riêng. Chưa push, chưa delete, chưa đổi remote.
 
 1. MỤC TIÊU VÀ THỨ TỰ
 Owner 03-10: hoàn thành Classic giống bản Y8 trước; phần kiểu MUGEN chỉ làm sau bằng lệnh mới.
@@ -838,4 +868,19 @@ Q5 Web: dung lượng tải lần đầu và bộ nhớ đo từ SA-04; ngân s�
   passed 14 and `cmd.sa08.run-all.3` passed 2,977 at source hash
   `36aa62cb091c30e400a41152096e2ee1fedaffbee0cc06b44a677661304ef91a`; all exited 0/cleanup 0/diagnostics
   empty. This is implementation evidence only; navigation is not a full multi-level planner and no checkbox/parity claim was added.
+2026-10-06 SA-05 P2 pickup follow-up: product commit `b6af6be2` extends the live catalog fixture to
+  player 2 pistol, contact-healing and five-second power interactions. Guarded `cmd.sa05.item-catalog.p2.1`
+  passed 42 assertions; `cmd.sa05.run-all.p2.1` passed 2,977 at source hash
+  `dc1d053ea0983032107125b4bffbeea104727da5610381324e882e5fc671f8a8`; both exited 0/cleanup 0/diagnostics
+  empty. Shared implementation evidence only; no SA-05/SA-02 checkbox or parity claim was added.
+2026-10-06 SA-05 catalog authority: product commit `12f16685` makes typed weapon definitions the
+  MatchSession authority for range/damage/knockback, pickup/rematch ammo and grenade fuse/radius/damage;
+  snapshots/hashes carry the catalog fingerprint and unknown guns fail closed. Final guarded runs at source
+  hash `f330cfa707e2d869615cb8a6688fcecaedeaec33a484b7904113d20c52c09c43` passed 35/73/42/15/46/2,977
+  assertions for weapon/combat/items/replay/match/full regression, all exit 0/cleanup 0/diagnostics empty.
+  A first compile attempt timed out under warnings-as-errors and was repaired with static types; no checkbox
+  or parity claim was added.
+2026-10-06 repository split audit: `REPO_MIGRATION=PROPOSED_NOT_EXECUTED`. Keep the complete HH3D scope,
+  root ignore/policy until replacement, and archive linked worktrees/WIP before any subtree split or move.
+  Clone-plus-delete is not a history cleanup; no delete, rewrite, push or remote switch was performed.
 END_OF_SUPERAGENT_PLAN
