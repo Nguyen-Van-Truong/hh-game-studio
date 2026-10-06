@@ -16,6 +16,7 @@ import json
 import os
 from pathlib import Path
 import re
+import shutil
 import sys
 import stat
 import subprocess
@@ -67,15 +68,34 @@ SCENARIOS = {
                        "failpoint_phases": ("PREPARED", "VALIDATED", "ACTIVATING", "COMMITTED", "ACK")},
 }
 
+# A phase is part of the row definition, never a matrix-wide CLI override.
+for _base, _phases in (("godot-save", ("RELOAD", "ACK")),
+                       ("godot-script", ("RELOAD", "ACK")),
+                       ("blender-export", ("PREPARED", "VALIDATED", "ACTIVATING", "COMMITTED"))):
+    for _phase in _phases:
+        SCENARIOS[_base + "-cut-" + _phase.lower()] = {
+            **SCENARIOS[_base], "phase": _phase}
+
+ADAPTER_SCENARIOS = {
+    "godot-fifo": {"kind": "fifo", "app": "godot", "matrix": "M2",
+                   "probe": "../godot/run_fifo_publication_probe.py", "timeout": 210,
+                   "run_prefix": "gt07-godot-fifo"},
+    "blender-fifo": {"kind": "fifo", "app": "blender", "matrix": "M2",
+                     "probe": "../blender/run_writer_fifo_probe.py", "timeout": 60,
+                     "run_prefix": "gt07-blender-fifo"},
+    "cross-app-reload": {"kind": "cross-app", "phase": "RELOAD", "matrix": "M3",
+                         "producer": "blender-export", "run_prefix": "gt07-cross-app"},
+    "cross-app-ack": {"kind": "cross-app", "phase": "ACK", "matrix": "M3",
+                      "producer": "blender-export", "run_prefix": "gt07-cross-app"},
+    "play-mutation": {"kind": "adversary", "matrix": "M9",
+                      "run_prefix": "gt06-gt07-m9-playmutation"},
+}
+
 HOST_SCENARIOS = {
     "host-storage": {"kind": "host", "probe": "gt07_storage_faults.py",
                       "run_prefix": "gt07-m5-final", "matrix": "M5"},
     "host-process": {"kind": "host", "probe": "gt07_process_ownership.py",
                       "run_prefix": "gt07-m8-final", "matrix": "M8"},
-    "host-m2-tests": {"kind": "host-test", "run_prefix": "gt07-m2-final",
-                      "matrix": "M2", "tests": (
-                          "studio.tests.jobs.test_gt07_scenarios",
-                      )},
     "host-m1-tests": {"kind": "host-test", "run_prefix": "gt07-m1-final",
                       "matrix": "M1", "tests": (
                           "studio.tests.jobs.test_dispatch_policy",
@@ -94,51 +114,42 @@ HOST_SCENARIOS = {
                           "studio.tests.jobs.test_segmented_broker_regression",
                           "studio.tests.jobs.test_segmented_journal",
                       )},
-    # These rows deliberately cover only the engine-free contract/regression
-    # side of the remaining gates.  They do not stand in for the native FIFO,
-    # cross-app, Play-mutation, or frozen regression rows required by F3/F4.
-    "host-fifo-contract-tests": {"kind": "host-test", "run_prefix": "gt07-fifo-contract",
-                                  "matrix": "M2", "tests": (
-                                      "studio.tests.godot.test_publication_fifo",
-                                      "studio.tests.godot.test_publication_fifo_host",
-                                      "studio.tests.jobs.test_cross_app_publication",
-                                  )},
-    "host-cross-app-contract-tests": {"kind": "host-test", "run_prefix": "gt07-cross-app-contract",
-                                       "matrix": "M3", "tests": (
-                                           "studio.tests.jobs.test_cross_app_publication",
-                                           "studio.tests.godot.test_gameplay_source_owner",
-                                           "studio.tests.godot.test_gameplay_runtime_binding",
-                                       )},
-    "host-m9-contract-tests": {"kind": "host-test", "run_prefix": "gt07-m9-contract",
-                                "matrix": "M9", "tests": (
-                                    "studio.tests.godot.test_gameplay_runtime_binding",
-                                    "studio.tests.godot.test_profile_readback",
-                                    "studio.tests.godot.test_gameplay_source_owner",
-                                )},
     "host-gt02-06-regression-tests": {"kind": "host-test", "run_prefix": "gt07-gt02-06-regression",
                                        "matrix": "REGRESSION", "tests": (
+                                           "studio.tests.godot.test_contract",
+                                           "studio.tests.godot.test_publication_fifo",
+                                           "studio.tests.godot.test_publication_fifo_host",
                                            "studio.tests.godot.test_publication_recovery",
+                                           "studio.tests.godot.test_recovery_host",
+                                           "studio.tests.godot.test_recovery_journal_native",
                                            "studio.tests.godot.test_publication_owner",
                                            "studio.tests.godot.test_publication_journal_v5",
+                                           "studio.tests.blender.test_client_writer_publication",
+                                           "studio.tests.blender.test_publication",
+                                           "studio.tests.replay.test_contract",
+                                           "studio.tests.replay.test_service_adversary",
+                                           "studio.tests.jobs.test_cross_app_publication",
+                                           "studio.tests.jobs.test_gt07_scenarios",
                                            "studio.tests.jobs.test_native_dispatch",
                                            "studio.tests.jobs.test_segmented_broker_regression",
                                            "studio.tests.jobs.test_segmented_journal",
                                        )},
 }
-ALL_SCENARIOS = {**SCENARIOS, **HOST_SCENARIOS}
+ALL_SCENARIOS = {**SCENARIOS, **HOST_SCENARIOS, **ADAPTER_SCENARIOS}
 
-# F3/F4 use one ordered admission.  Keep the alias separate from ``SCENARIOS``
-# so existing per-scenario callers keep the same contract.  Host rows below
-# are explicit contract/regression admissions where a native adapter is not
-# yet available; their reports carry authority=0 and cannot masquerade as
-# native proof.
+# Host tests supplement the native rows. Cross-app consumer rows depend only
+# on the fresh export in this same invocation, never a historical handoff.
 FINAL_MATRIX = (
+    "host-m1-tests", "godot-fifo", "blender-fifo",
     "godot-authority", "godot-edit", "godot-save", "godot-save-locked",
     "godot-script", "godot-recovery", "godot-conflict", "blender-box",
     "blender-authority", "blender-conflict", "blender-export",
-    "host-storage", "host-process", "host-m1-tests", "host-m6-tests",
-    "host-m7-tests", "host-m2-tests", "host-fifo-contract-tests",
-    "host-cross-app-contract-tests", "host-m9-contract-tests",
+    "blender-export-cut-prepared", "blender-export-cut-validated",
+    "blender-export-cut-activating", "blender-export-cut-committed",
+    "cross-app-reload", "cross-app-ack",
+    "godot-save-cut-reload", "godot-save-cut-ack",
+    "godot-script-cut-reload", "godot-script-cut-ack",
+    "host-storage", "host-process", "host-m6-tests", "host-m7-tests", "play-mutation",
     "host-gt02-06-regression-tests",
 )
 MATRIX_ALIASES = {"final": FINAL_MATRIX}
@@ -163,14 +174,12 @@ def _load_probe(name: str):
 
 
 def _scenario(name: str) -> dict:
-    try:
-        return SCENARIOS[name]
-    except KeyError:
-        return HOST_SCENARIOS[name]
+    return ALL_SCENARIOS[name]
 
 
 def _host_test_sources(scenario: dict) -> dict[str, str]:
-    values = {}
+    # Test-module hashes alone miss changes in the implementation they import.
+    values = _matrix_sources()
     for module_name in scenario["tests"]:
         relative = Path(*module_name.split(".")).with_suffix(".py")
         path = STUDIO.parent / relative
@@ -182,6 +191,137 @@ def _host_test_sources(scenario: dict) -> dict[str, str]:
     return values
 
 
+def _matrix_sources() -> dict[str, str]:
+    """One source universe for the whole run, including drivers and fixtures.
+
+    Tracked files plus the explicit runtime trees include local new source;
+    generated evidence, caches, credentials and installed binaries are excluded.
+    Pins are bound separately. Per-probe maps remain useful as subsets, not as
+    independent freezes taken after earlier matrix rows have already executed.
+    """
+    raw = subprocess.check_output(["git", "ls-files", "-z", "--", "studio"],
+                                  cwd=STUDIO.parent)
+    paths = {STUDIO.parent / name for name in raw.decode().split("\0") if name}
+    for folder in ("godot-addon", "blender-addon", "host", "protocol", "pipeline",
+                   "contracts", "tests", "build/bootstrap"):
+        paths.update(path for path in (STUDIO / folder).rglob("*")
+                     if path.is_file() and "__pycache__" not in path.parts
+                     and ".godot" not in path.parts
+                     and path.suffix in (".py", ".gd", ".json", ".godot", ".cfg",
+                                         ".tscn", ".tres", ".uid", ".glb", ".png", ".md"))
+    result = {}
+    for path in sorted(paths):
+        plain(path)
+        result[path.relative_to(STUDIO).as_posix()] = _sha(path)
+    return result
+
+
+def _source_digest(files: dict) -> str:
+    return hashlib.sha256(json.dumps(files, sort_keys=True,
+                                     separators=(",", ":")).encode()).hexdigest()
+
+
+def _adapter_admission(name, scenario, args, index, output):
+    _check_lock(args.measure_lock, native=True)
+    assert_disabled(STUDIO)
+    assert_disabled(runtime_root(STUDIO))
+    report = {"scenario": name, "kind": scenario["kind"], "run_id": output.name,
+              "output": str(output), "matrix": scenario["matrix"],
+              "dry_run": True, "engine_started": False, "authority": 0}
+    if scenario["kind"] == "fifo":
+        binary = _binary_for(scenario, args)
+        base = SCENARIOS["godot-authority" if scenario["app"] == "godot" else "blender-authority"]
+        contract = _contract_dry_run(name, base)
+        report.update(binary=str(binary), binary_sha256=_sha(binary), contract=contract,
+                      source_closure_sha256=_source_digest(_matrix_sources()))
+    elif scenario["kind"] == "adversary":
+        probe = _load_probe("../replay/run_service_adversary.py")
+        value = probe.dry_run(output.name, "play-mutation")
+        report.update(adversary=value, source_closure_sha256=value["source_closure_sha256"],
+                      driver_sha256=value["driver_sha256"])
+    else:
+        # Output bytes do not exist until the preceding producer completes.
+        # Bind the edge now; validate the actual receipt/GLB before consumption.
+        names = getattr(args, "matrix_names", ())
+        if scenario["producer"] not in names[:index]:
+            raise ValueError("CROSS_APP_SAME_MATRIX_PRODUCER_REQUIRED")
+        producer_index = names.index(scenario["producer"])
+        producer_id = args.run_ids[producer_index]
+        probe = _load_probe("run_gt07_cross_app_probe.py")
+        owner = probe.base.load("gt07_matrix_gameplay_owner", STUDIO / "godot-addon/gameplay_source_owner.py")
+        fixture = argparse.Namespace(fixture="gameplay_source_assets", saved_arena=None,
+                                     blender_published=Path(args.output_root) / producer_id / "published")
+        files, closure = probe._probe_sources(owner, fixture)
+        executor = owner._load("linux_executor")
+        executor._lock()
+        binary = executor._binary()
+        report.update(source_closure_sha256=closure, source_hashes=files,
+                      binary=str(binary), binary_sha256=_sha(binary),
+                      failpoint_phase=scenario["phase"], producer_run_id=producer_id,
+                      handoff=str(fixture.blender_published), dependency_receipt_pending=True)
+    return report
+
+
+def _run_fifo(scenario, check):
+    """Reuse the existing frozen FIFO entrypoint and owned Job wrapper."""
+    output = Path(check["output"])
+    output.mkdir(parents=True, exist_ok=False)
+    files = _matrix_sources()
+    snapshot = output / "source/studio"
+    for name, expected in files.items():
+        target = snapshot / name
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(STUDIO / name, target)
+        if _sha(target) != expected:
+            raise ValueError("FIFO_SNAPSHOT_CHANGED")
+    runner = _load_probe("../../build/bootstrap/run_fixture.py")
+    closure = runner.source_closure_sha256(files)
+    _write_json(output / "source-closure.json", {"files": files, "source_closure_sha256": closure})
+    relative = (Path("tests/jobs") / scenario["probe"]).as_posix()
+    command = [sys.executable, "-B", str(snapshot / relative), "--frozen",
+               "--output", str(output), "--binary", check["binary"]]
+    if scenario["app"] == "godot":
+        command += ["--run-id", output.name, "--closure", closure]
+    env = dict(os.environ)
+    env["HH_STUDIO_LINUX_GODOT"] = str(STUDIO / ".local/tooling/godot-4.7.2-stable-linux/Godot_v4.7.2-stable_linux.x86_64")
+    host = runner.run_process(command, cwd=snapshot, output=output,
+                              timeout=scenario["timeout"], label="fifo", env=env)
+    receipt = output / ("fifo-publication.json" if scenario["app"] == "godot" else "native.json")
+    child = json.loads(receipt.read_bytes()) if receipt.is_file() else {}
+    passed = (host.get("exit_code") == host.get("wrapper_exit_code") == 0
+              and host.get("tree_verified") is True and not host.get("timed_out")
+              and child.get("passed") is True and files == _matrix_sources()
+              and all(_sha(snapshot / n) == d for n, d in files.items()))
+    report = {"command": command, "host": host, "child": child, "passed": passed,
+              "authority": 0, "source_closure_sha256": closure}
+    _write_json(output / "capture.json", report)
+    return {"exit_code": 0 if passed else 1, "host": host, "command": command}
+
+
+def _run_adapter(scenario, check):
+    with _native_measure_guard():
+        if scenario["kind"] == "fifo":
+            return _run_fifo(scenario, check)
+        if scenario["kind"] == "adversary":
+            probe = _load_probe("../replay/run_service_adversary.py")
+            fresh = probe.dry_run(check["run_id"], "play-mutation",
+                expected_source_closure_sha256=check["source_closure_sha256"],
+                expected_driver_sha256=check["driver_sha256"])
+            if fresh != check["adversary"]:
+                raise ValueError("ADVERSARY_ADMISSION_CHANGED")
+            code = probe.bounded_run(check["run_id"], "play-mutation")
+            return {"exit_code": code, "extra_raw_roots": [check["output"] + "-outer"]}
+        probe = _load_probe("run_gt07_cross_app_probe.py")
+        options = argparse.Namespace(run_id=check["run_id"],
+            blender_published=Path(check["handoff"]), dry_run=True,
+            failpoint_phase=check["failpoint_phase"])
+        # The real handoff is now available. The probe validates the producer's
+        # durable receipt and payload and consumes this exact dry-run once.
+        probe._execute(options)
+        options.dry_run = False
+        return {"exit_code": probe._execute(options)}
+
+
 def _write_json(path: Path, value: object) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(value, indent=2, sort_keys=True) + "\n", encoding="utf-8")
@@ -190,14 +330,15 @@ def _write_json(path: Path, value: object) -> None:
 def _binary_for(scenario: dict, args: argparse.Namespace) -> Path | None:
     if scenario["kind"] in ("host", "host-test"):
         return None
-    value = args.godot_binary if scenario["kind"] == "godot" else args.blender_binary
+    app = scenario.get("app", scenario["kind"])
+    value = args.godot_binary if app == "godot" else args.blender_binary
     if not value:
         raise ValueError("PINNED_BINARY_REQUIRED")
     path = Path(value).expanduser().resolve()
     if not path.is_file():
         raise ValueError("PINNED_BINARY_MISSING")
     lock = json.loads((STUDIO / "toolchain.lock.json").read_bytes())
-    expected = (lock["godot"]["gui_sha256"] if scenario["kind"] == "godot"
+    expected = (lock["godot"]["gui_sha256"] if app == "godot"
                 else lock["blender"]["executable_sha256"])
     observed = _sha(path)
     if observed.lower() != expected.lower():
@@ -316,8 +457,12 @@ def _output_for(name: str, args: argparse.Namespace, index: int = 0) -> Path:
         run_ids[index] if index < len(run_ids) else None)
     if not run_id:
         raise ValueError("SCENARIO_RUN_ID_REQUIRED")
-    if scenario["kind"] in ("host", "host-test"):
+    if scenario["kind"] == "cross-app":
+        pattern = r"gt07-cross-app-[a-z0-9-]{1,64}"
+    elif "run_prefix" in scenario:
         pattern = re.escape(scenario["run_prefix"]) + r"-[0-9]{8}-[0-9]{2}"
+    elif scenario["kind"] == "adversary":
+        pattern = r"gt06-gt07-m9-playmutation-[0-9]{8}-[0-9]{2}"
     else:
         pattern = (r"gt07-native-godot-[0-9]{8}-[0-9]{2}" if scenario["kind"] == "godot"
                    else r"gt07-native-queue-[0-9]{8}-[0-9]{2}")
@@ -342,6 +487,8 @@ def _output_for(name: str, args: argparse.Namespace, index: int = 0) -> Path:
 def dry_run(name: str, args: argparse.Namespace, index: int = 0) -> dict[str, object]:
     scenario = _scenario(name)
     output = _output_for(name, args, index)
+    if scenario["kind"] in ("fifo", "cross-app", "adversary"):
+        return _adapter_admission(name, scenario, args, index, output)
     if scenario["kind"] == "host-test":
         source_hashes = _host_test_sources(scenario)
         report = {"schema": "gt07-host-test-admission-1", "authority": 0,
@@ -364,7 +511,7 @@ def dry_run(name: str, args: argparse.Namespace, index: int = 0) -> dict[str, ob
                 "output": str(output), "probe": scenario["probe"],
                 "host_report": report, "source_hashes": report.get("source_hashes"),
                 "engine_started": False, "dry_run": True}
-    phase = getattr(args, "failpoint_phase", None)
+    phase = scenario.get("phase", getattr(args, "failpoint_phase", None))
     if phase is not None and phase not in scenario.get("failpoint_phases", ()):
         raise ValueError("FAILPOINT_UNSUPPORTED_SCENARIO")
     assert_disabled(STUDIO)
@@ -389,36 +536,46 @@ def dry_run(name: str, args: argparse.Namespace, index: int = 0) -> dict[str, ob
             "engine_started": False, "dry_run": True}
 
 
-def _run_one(name: str, args: argparse.Namespace, index: int = 0) -> dict[str, object]:
+def _run_one(name: str, args: argparse.Namespace, index: int = 0,
+             admission: dict | None = None) -> dict[str, object]:
     scenario = _scenario(name)
+    check = admission if admission is not None else dry_run(name, args, index)
+    if scenario["kind"] in ("fifo", "cross-app", "adversary"):
+        result = _run_adapter(scenario, check)
+        return {**result, "scenario": name, "run_id": check["run_id"],
+                "dry_run": check, "output": check["output"]}
     if scenario["kind"] == "host-test":
-        check = dry_run(name, args, index)
+        if check["source_hashes"] != _host_test_sources(scenario):
+            raise ValueError("HOST_TEST_SOURCE_CHANGED")
         command = [sys.executable, "-B", "-m", "unittest", "-q", *scenario["tests"]]
-        completed = subprocess.run(command, cwd=STUDIO.parent, capture_output=True,
-                                   text=True, timeout=900, check=False)
+        runner = _load_probe("../../build/bootstrap/run_fixture.py")
+        with _native_measure_guard():
+            host = runner.run_process(command, cwd=STUDIO.parent, output=Path(check["output"]),
+                                      timeout=900, label="host-tests", env=dict(os.environ))
+        unchanged = check["source_hashes"] == _host_test_sources(scenario)
+        verified = (host.get("exit_code") == host.get("wrapper_exit_code") == 0
+                    and host.get("tree_verified") is True and not host.get("timed_out")
+                    and unchanged)
         report = {"schema": "gt07-host-test-result-1", "authority": 0,
                   "diagnostic_only": True, "run_id": check["run_id"],
                   "matrix": scenario["matrix"], "tests": list(scenario["tests"]),
-                  "source_hashes": _host_test_sources(scenario),
-                  "actual_exit": completed.returncode,
-                  "stdout": completed.stdout[-12000:],
-                  "stderr": completed.stderr[-12000:],
-                  "verified": completed.returncode == 0}
+                  "source_hashes": check["source_hashes"], "source_unchanged": unchanged,
+                  "actual_exit": host.get("exit_code"), "host": host,
+                  "command": command, "verified": verified}
         _write_json(Path(check["output"]) / "result.json", report)
         return {"scenario": name, "run_id": check["run_id"],
-                "exit_code": completed.returncode, "dry_run": check,
+                "exit_code": 0 if verified else 1, "dry_run": check,
                 "host_test_report": report, "output": str(check["output"])}
     if scenario["kind"] == "host":
-        check = dry_run(name, args, index)
         probe = _load_probe(scenario["probe"])
-        report = probe.run_diagnostic(Path(args.output_root), check["run_id"], dry_run=False)
+        with _native_measure_guard():
+            report = probe.run_diagnostic(Path(args.output_root), check["run_id"], dry_run=False)
         return {"scenario": name, "run_id": check["run_id"],
                 "exit_code": 0 if report.get("verified") is True else 1,
                 "dry_run": check, "host_report": report,
                 "output": str(check["output"])}
-    # Dry-run is mandatory and intentionally repeated with the exact native
-    # arguments immediately before delegation.
-    check = dry_run(name, args, index)
+    # The whole matrix was admitted before row 0. Recheck frozen facts without
+    # creating a second admission or taking a fresh source generation per row.
     output = Path(check["output"])
     probe = _load_probe(scenario["probe"])
     binary = Path(check["binary"])
@@ -432,12 +589,12 @@ def _run_one(name: str, args: argparse.Namespace, index: int = 0) -> dict[str, o
             raise ValueError("SCENARIO_BINARY_CHANGED_AFTER_DRY_RUN")
         if scenario["kind"] == "blender":
             exit_code = probe.run(output, binary, output.name, scenario["operation"],
-                                  getattr(args, "failpoint_phase", None),
+                                  check.get("failpoint_phase"),
                                   bool(scenario.get("authority_cases")))
         else:
             exit_code = probe.run(output, binary, output.name, scenario["operation"],
                                   bool(scenario.get("recover_after_loss")),
-                                  getattr(args, "failpoint_phase", None),
+                                  check.get("failpoint_phase"),
                                   bool(scenario.get("manual_conflict")),
                                   file_lock=bool(scenario.get("file_lock")),
                                   authority_cases=bool(scenario.get("authority_cases")))
@@ -459,7 +616,9 @@ def matrix_closure(results: list[dict[str, object]]) -> str:
         dry = candidate if isinstance(candidate, dict) else result
         rows.append({key: dry.get(key) for key in (
             "scenario", "run_id", "source_closure_sha256", "binary_sha256",
-            "operation", "deadline_ms", "source_hashes")})
+            "operation", "deadline_ms", "source_hashes", "failpoint_phase",
+            "producer_run_id", "driver_sha256", "tests", "kind", "contract",
+            "matrix_source_closure_sha256")})
     payload = json.dumps(rows, sort_keys=True, separators=(",", ":")).encode()
     return hashlib.sha256(payload).hexdigest()
 
@@ -484,6 +643,7 @@ def main(argv: list[str] | None = None) -> int:
     names = (MATRIX_ALIASES[matrix_text] if matrix_text in MATRIX_ALIASES else
              [value.strip() for value in matrix_text.split(",") if value.strip()]
              if matrix_text else ([args.scenario] if args.scenario else []))
+    args.matrix_names = tuple(names)
     if not names or any(value not in ALL_SCENARIOS for value in names):
         parser.error("one --scenario or a valid --matrix is required")
     args.run_ids = ([value.strip() for value in args.run_ids.split(",") if value.strip()]
@@ -495,6 +655,11 @@ def main(argv: list[str] | None = None) -> int:
         parser.error("--failpoint-phase requires one scenario")
     if not args.matrix and (args.run_id is None or args.run_ids):
         parser.error("one --run-id is required, also for --dry-run")
+    matrix_source_digest = None
+    if args.matrix:
+        # Bind the complete source universe before admitting any row. Every
+        # row must still match this digest before it starts.
+        matrix_source_digest = _source_digest(_matrix_sources())
     # Check every intended output before starting the first engine in a matrix.
     try:
         for index, name in enumerate(names):
@@ -506,17 +671,25 @@ def main(argv: list[str] | None = None) -> int:
         results = []
         try:
             for index, name in enumerate(names):
-                results.append(dry_run(name, args, index))
+                if matrix_source_digest != _source_digest(_matrix_sources()):
+                    raise ValueError("MATRIX_SOURCE_CHANGED_DURING_DRY_RUN")
+                row = dry_run(name, args, index)
+                row["matrix_source_closure_sha256"] = matrix_source_digest
+                results.append(row)
         except (OSError, ValueError, RuntimeError) as error:
             print(json.dumps({"dry_run": False, "error": str(error)}, sort_keys=True))
             return 2
-        print(json.dumps({"dry_run": True, "matrix_closure_sha256": matrix_closure(results),
+        print(json.dumps({"dry_run": True, "matrix_source_closure_sha256": matrix_source_digest,
+                          "matrix_closure_sha256": matrix_closure(results),
                           "results": results}, sort_keys=True))
         return 0
     try:
         results = []
         for index, name in enumerate(names):
+            if matrix_source_digest != _source_digest(_matrix_sources()):
+                raise ValueError("MATRIX_SOURCE_CHANGED_BEFORE_NATIVE_ROW")
             result = _run_one(name, args, index)
+            result["matrix_source_closure_sha256"] = matrix_source_digest
             results.append(result)
             if result["exit_code"] != 0:
                 print(json.dumps({"native": False, "results": results,
@@ -526,7 +699,11 @@ def main(argv: list[str] | None = None) -> int:
     except (OSError, ValueError, RuntimeError) as error:
         print(json.dumps({"native": False, "error": str(error)}, sort_keys=True))
         return 2
-    print(json.dumps({"native": True, "matrix_closure_sha256": matrix_closure(results),
+    if args.matrix and matrix_source_digest != _source_digest(_matrix_sources()):
+        print(json.dumps({"native": False, "error": "MATRIX_SOURCE_CHANGED_AFTER_NATIVE"}, sort_keys=True))
+        return 2
+    print(json.dumps({"native": True, "matrix_source_closure_sha256": matrix_source_digest,
+                      "matrix_closure_sha256": matrix_closure(results),
                       "results": results}, sort_keys=True))
     return 0 if all(item["exit_code"] == 0 for item in results) else 1
 

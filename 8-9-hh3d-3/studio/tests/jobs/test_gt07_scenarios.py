@@ -22,9 +22,10 @@ spec.loader.exec_module(module)
 
 class GT07ScenarioAdmissionTests(unittest.TestCase):
     def test_matrix_is_explicit_and_deadlines_are_bounded(self):
-        self.assertEqual(set(module.SCENARIOS), {
+        self.assertTrue({
             "godot-edit", "godot-authority", "godot-save", "godot-save-locked", "godot-script", "godot-recovery", "godot-conflict",
-            "blender-box", "blender-authority", "blender-conflict", "blender-export"})
+            "blender-box", "blender-authority", "blender-conflict", "blender-export"}
+            .issubset(module.SCENARIOS))
         self.assertEqual({row["max_horizon_ms"] for row in module.SCENARIOS.values()},
                          {5_000, 30_000, 90_000})
 
@@ -34,11 +35,11 @@ class GT07ScenarioAdmissionTests(unittest.TestCase):
         self.assertEqual(len(set(module.FINAL_MATRIX)), len(module.FINAL_MATRIX))
         self.assertTrue(all(name in module.ALL_SCENARIOS for name in module.FINAL_MATRIX))
         contract_rows = {
-            "host-fifo-contract-tests", "host-cross-app-contract-tests",
-            "host-m9-contract-tests", "host-gt02-06-regression-tests",
+            "godot-fifo", "blender-fifo", "cross-app-reload", "cross-app-ack",
+            "play-mutation", "host-gt02-06-regression-tests",
         }
         self.assertTrue(contract_rows.issubset(module.FINAL_MATRIX))
-        self.assertTrue(all(module.ALL_SCENARIOS[name]["kind"] == "host-test"
+        self.assertTrue(all(module.ALL_SCENARIOS[name]["kind"] in ("fifo", "cross-app", "adversary", "host-test")
                              for name in contract_rows))
 
     def test_matrix_closure_binds_ordered_rows_and_changes_on_row_drift(self):

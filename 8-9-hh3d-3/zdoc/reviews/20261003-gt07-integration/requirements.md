@@ -7,20 +7,20 @@ F1 ACK-cut repair is complete on one frozen closure; F2–F5 remain open.
 | Matrix | Status | Current evidence / run IDs | Remaining proof |
 |---|---|---|---|
 | M1 / Q01 | DIAGNOSTIC COVERED | `gt07-jobs-integration-20261004-03`; host contract row `gt07-m1-final-20261006-05` | final frozen matrix |
-| M2 / Q03 | DIAGNOSTIC COVERED; F1 PASS | ACK cuts `gt07-native-godot-20261006-34` (script) and `-36` (scene), same closure `5017cfdf…6f7818f`; host contract row `gt07-fifo-contract-20261006-02` (24 tests, exit 0) | native writer FIFO + final frozen matrix + two same-hash critics |
-| M3 / Q05 | DIAGNOSTIC COVERED | producer cuts `gt07-native-queue-20261006-09,11..14`; consumer `gt07-cross-app-20261006-02,03`; host contract row `gt07-cross-app-contract-20261006-02` (59 tests, exit 0) | six-phase native matrix + critics |
+| M2 / Q03 | DIAGNOSTIC COVERED; F1 PASS | ACK cuts `gt07-native-godot-20261006-34` (script) and `-36` (scene), same closure `5017cfdf…6f7818f`; host contract row `gt07-fifo-contract-20261006-02` (24 tests, exit 0) | native writer FIFO in the frozen 30-row matrix + two same-hash critics |
+| M3 / Q05 | DIAGNOSTIC COVERED | producer cuts `gt07-native-queue-20261006-09,11..14`; consumer `gt07-cross-app-20261006-02,03`; host contract row `gt07-cross-app-contract-20261006-02` (59 tests, exit 0) | six-phase native matrix in the frozen 30-row matrix + critics |
 | M4 / Q06 | DIAGNOSTIC COVERED | `gt07-native-godot-20261005-26,42`; `gt07-native-queue-20261006-08` | final frozen matrix + critics |
 | M5 / TX05/TX09 | DIAGNOSTIC COVERED | `gt07-m5-storage-20261006-01`; Godot save-lock `gt07-native-godot-20261006-05` | final frozen repeat + map binding |
 | M6 / Q04 | DIAGNOSTIC COVERED | `gt07-m6-host-20261006-01` | final frozen matrix + critics |
 | M7 / Q07 | DIAGNOSTIC COVERED | `gt07-m7-rotation-20261006-01` | final frozen matrix + critics |
 | M8 / Q08 | DIAGNOSTIC COVERED | `gt07-m8-process-20261006-11` | final frozen matrix + critics |
-| M9 / TX13 | DIAGNOSTIC COVERED | `gt06-gt07-m9-playmutation-20261006-01,02`; host contract row `gt07-m9-contract-20261006-02` (68 tests, exit 0) | final frozen Play-mutation row + critics |
+| M9 / TX13 | DIAGNOSTIC COVERED | `gt06-gt07-m9-playmutation-20261006-01,02`; host contract row `gt07-m9-contract-20261006-02` (68 tests, exit 0) | final frozen Play-mutation row in the 30-row matrix + critics |
 
 ## Next
 
 1. F2: keep this compact map; old candidate `5f34c0a6…3bce0d` is **SUPERSEDED**.
-2. F3: the existing runner now accepts the ordered `--matrix final`; its latest engine-free dry-run passed for 21 rows on 2026-10-07: 11 Godot/Blender rows, M5/M8 host admissions, host-test admissions for M1/M2/M6/M7, and explicit engine-free contract/regression rows for FIFO, cross-app, M9 and GT02–GT06. The fresh IDs are `gt07-native-godot-20261007-01..07`, `gt07-native-queue-20261007-08..11`, and `gt07-{m5,m8,m1,m6,m7,m2}-final-20261007-*` plus the four contract rows. The new host-test rows have actual exit 0: FIFO 24 tests, cross-app 59 tests, M9 68 tests, and focused regression 94 tests (2 skips), under the retained 20261006-02 receipts. These rows are authority-zero contract evidence only. Native writer FIFO, six-phase cross-app, M9 Play mutation and the final frozen regression run still must execute on one fresh closure.
-3. F4: after a fresh source freeze and successful dry-run, run one complete M1–M9 matrix with one closure.
+2. F3: the runner now accepts the ordered `--matrix final`; the latest engine-free dry-run passed for 30 rows on 2026-10-07 with matrix closure `a72f27f531222c93d3ae87410336c7848ea891b0586692b2c29b396d8d88b10c` and matrix-source closure `8568e81099e0cf004f69dca1f365816798b0a88ee69d97f00eee9c96a4febba2f`. It includes native Godot/Blender phases and cuts, FIFO adapters, cross-app reload/ACK, Play mutation, host storage/process/regression rows, and the existing contract suites. The installed binding refresh is separately recorded under `zdoc/reviews/20261007-gt07-binding-refresh/` (source closure `923700fc7a5e39b968273785d098dee51e7e8a016defb19fa2b8421c23ebb5b8`, engine runs `0`). All rows remain authority-zero dry-run evidence; no native matrix row is accepted yet.
+3. F4: after committing and freezing this exact source, run one complete 30-row M1–M9 matrix with fresh IDs and one source closure. Capture actual child/editor/wrapper exits, Job/tree/handle cleanup, and immutable raw receipts; any failure is reviewed and repaired with a reproducer before a new matrix.
 4. F5: build the final source/review/raw manifest, then send that exact hash to two independent read-only critics. Only their explicit same-hash approval can advance GT07.
 
 No critic has been called for the superseded package. Do not merge, tick, or call GT07 accepted from diagnostics alone.
