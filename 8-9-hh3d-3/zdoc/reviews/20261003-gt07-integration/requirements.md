@@ -1,31 +1,29 @@
-# GT07 integration map — current status (O10)
+# GT07 integration map — current status (O11)
 
 AUTHORITY=0; GT07=IN_PROGRESS; GT01-GT06=ACCEPTED; GT08-GT10=PLANNED.
-This file records the fixed M1-M9 scope and evidence status; it is not an acceptance signature. The manifest evidence map is authoritative for path/hash binding.
-All raw diagnostic evidence remains immutable and is stored under `studio/.local/reviews/` for new runs.
-Historical entries below are retained for provenance; they do not override the table above.
+This map is evidence bookkeeping, not an acceptance signature; raw evidence is immutable under `studio/.local/reviews/`.
+F1 ACK-cut repair is complete on one frozen closure; F2–F5 remain open.
 
-| Matrix | Status | Existing evidence | Remaining proof |
+| Matrix | Status | Current evidence / run IDs | Remaining proof |
 |---|---|---|---|
-| M1 / Q01 | DONE (host) | gt07-jobs-integration-20261004-03, 46 tests; verification hash a3a9c429a0130846357a8f129ce4d2c690954d720785bd5b08172987259dc212, actual exit 0, source unchanged | Repeat only in final frozen matrix |
-| M2 / Q03 | DIAGNOSTIC COVERED (Blender + Godot) | Blender `gt07-native-queue-20261006-07` and Godot `gt07-native-godot-20261006-17`: matching dry-runs, real-clock expiry, native effect before deadline with reply after expiry, overlapping writer refusal, revoke after effect preserves private receipt and blocks lookup/replay; actual child/editor/wrapper exits 0, Jobs/tree clean, source/snapshot unchanged. Earlier FIFO-only runs without matching dry-run stay excluded | final frozen matrix and two same-hash critics; do not mark DONE from diagnostics |
-| M3 / Q05 | DIAGNOSTIC COVERED (current producer + consumer) | Current-source Blender producer cuts gt07-native-queue-20261006-19 (PREPARED), -11 (VALIDATED), -12 (ACTIVATING), -13 (COMMITTED), -14 (ACK), closure 17f381a0b2078096d9631556620a4cfd0c5552ad0d49b89865f0234078b7a0e2; current-source consumer cuts gt07-cross-app-20261006-02 (RELOAD: HELD_LAST_GOOD) and -03 (ACK: COMMITTED_LOOKUP_ONLY), closure c91bc0d770e9730cb10a3bc9fd8e80729f6db9d3485b024664706658993be51c; actual failpoint child exit 1, recovery exit 0, Job/tree clean, source/snapshot unchanged | final frozen matrix and two same-hash critics; failpoint receipts are diagnostics, not product acceptance |
-| M4 / Q06 | DIAGNOSTIC COVERED (Godot + Blender) | Godot `gt07-native-godot-20261005-26,42`; Blender `gt07-native-queue-20261005-47` and current-source `gt07-native-queue-20261006-08`: queued stale transform returns UNKNOWN/lookup.reconcile, manual `.blend` state/hash retained, actual child/wrapper/tool exits 0 and owned Jobs clean, source/snapshot unchanged | final frozen matrix and two same-hash critics; previous failed diagnostics remain immutable |
-| M5 / TX05/TX09 | DIAGNOSTIC COVERED (current source) | current host gt07-m5-storage-20261006-01/report.json, source closure 8434fd8dc204a12590fd6d789be3ccbed1465585efee77cd594101acd2a86474, source file 9547c4efc2474414ee184f892af5e58ece991957699cbc7dc2b3dafc952b2600, wrapper exit 0 and explicit terminal zero child/Job/handle; real lock/cross-volume refusal and explicitly UNKNOWN injected fsync/diskfull; native gt07-native-godot-20261006-05 remains a separate save-lock diagnostic | final frozen repeat and requirement-map binding; no COMMITTED claim for UNKNOWN rows |
-| M6 / Q04 | DIAGNOSTIC COVERED (host) | gt07-m6-host-20261006-01/report.json hash 7ff2782dbed075364510015c5ac25081fe8cd43d933a774659a7493587ea62f2, 10 tests, actual process exit 0, source closure 32c64698b4cf84f10e60768ff22304823b7417023431c8d92f3b7188e95e0ddc, no child/Job/handle residue; covers queue-full cancellation, bounded drain, reopen/no-resume, token rotation and durable Stop readback | final frozen matrix and two same-hash critics |
-| M7 / Q07 | DIAGNOSTIC COVERED (current source) | fresh `gt07-m7-rotation-20261006-01` ran the real-clock expiry and PREPARED/ACTIVE_POINTER/COMMITTED QueueOwner cuts: 33 tests, actual exit 0, capacity 169 jobs/510 records, pending/archive recovery preserved, no engine process | final frozen matrix and two same-hash critics |
-| M8 / Q08 | DIAGNOSTIC COVERED (current source) | matching dry-run/native `gt07-m8-process-20261006-11`: held identity, forged-start refusal, owned-tree timeout with live sentinel, and 64 MiB Job memory denial; all three verified, actual workers exited, Jobs closed/zero/unretained; source closure `ab498ef2…c9e8` | final frozen matrix and two same-hash critics |
-| M9 / TX13 | DIAGNOSTIC COVERED (current source) | one-use refresh03 verified the exact three-file delta (`godot-addon/editor_owner.py`, `host/blender/export_job.py`, `host/blender/publication_owner.py`), source=233/execution=235; matching dry-run `gt06-gt07-m9-playmutation-20261006-01` and native `-02` exit 0 on runtime closure `630124fd…20f10`, with 18/18 checks, Play-time generated-state mutation, stale capture rejection/UNKNOWN/no-replay, natural child exit and clean Job/tree/handles | repeat in the final frozen matrix; two same-hash critics |
+| M1 / Q01 | DIAGNOSTIC COVERED | `gt07-jobs-integration-20261004-03` | final frozen matrix |
+| M2 / Q03 | DIAGNOSTIC COVERED; F1 PASS | ACK cuts `gt07-native-godot-20261006-34` (script) and `-36` (scene), same closure `5017cfdf…6f7818f`; matching dry-runs, actual child/editor/wrapper exits 0, clean Jobs/tree, original terminal lookup exact | final frozen matrix + two same-hash critics |
+| M3 / Q05 | DIAGNOSTIC COVERED | producer cuts `gt07-native-queue-20261006-09,11..14`; consumer `gt07-cross-app-20261006-02,03` | final frozen matrix + critics |
+| M4 / Q06 | DIAGNOSTIC COVERED | `gt07-native-godot-20261005-26,42`; `gt07-native-queue-20261006-08` | final frozen matrix + critics |
+| M5 / TX05/TX09 | DIAGNOSTIC COVERED | `gt07-m5-storage-20261006-01`; Godot save-lock `gt07-native-godot-20261006-05` | final frozen repeat + map binding |
+| M6 / Q04 | DIAGNOSTIC COVERED | `gt07-m6-host-20261006-01` | final frozen matrix + critics |
+| M7 / Q07 | DIAGNOSTIC COVERED | `gt07-m7-rotation-20261006-01` | final frozen matrix + critics |
+| M8 / Q08 | DIAGNOSTIC COVERED | `gt07-m8-process-20261006-11` | final frozen matrix + critics |
+| M9 / TX13 | DIAGNOSTIC COVERED | `gt06-gt07-m9-playmutation-20261006-01,02` | final frozen matrix + critics |
 
 ## Next
 
-M9's current-source adversary is now covered after the one-use binding refresh.
-The N6 candidate package is indexed at
-`zdoc/reviews/20261003-gt07-integration/CRITIC_PACKAGE.md`; its manifest is
-`studio/.local/reviews/gt07-final-matrix-20261006/manifest.json` with SHA
-`5f34c0a616c27070779344e65800f9d353666dfab81ae46e1789a7be303bce0d`.
-The remaining gate is two independent read-only critics on that exact hash. The manifest now binds M1/M3/M5/M6 paths and the recorded 104-test regression summary; M3 RELOAD/ACK now have current-source receipts and are mapped in the manifest evidence map; historical contextual cuts remain retained separately.
-`AUTHORITY=0`; this package is not self-acceptance.
+1. F2: keep this compact map; old candidate `5f34c0a6…3bce0d` is **SUPERSEDED**.
+2. F3: run the existing `run_gt07_scenarios.py --matrix final` dry-run only; no new runner and no acceptance claim.
+3. F4: after a fresh source freeze and successful dry-run, run one complete M1–M9 matrix with one closure.
+4. F5: build the final source/review/raw manifest, then send that exact hash to two independent read-only critics. Only their explicit same-hash approval can advance GT07.
+
+No critic has been called for the superseded package. Do not merge, tick, or call GT07 accepted from diagnostics alone.
 
 ## Checkpoint, 06-10-2026 — M9 current-source binding and Play mutation
 
