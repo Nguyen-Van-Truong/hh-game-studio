@@ -2,7 +2,9 @@
 
 AUTHORITY=0; GT07=IN_PROGRESS; GT01-GT06=ACCEPTED; GT08-GT10=PLANNED.
 This map is evidence bookkeeping, not an acceptance signature; raw evidence is immutable under `studio/.local/reviews/`.
-F1 ACK-cut repair is complete on one frozen closure; F2–F5 remain open.
+F1 ACK-cut repair and F2 compact map are complete; F3 engine-free admission is
+complete for the current source; F4–F5 remain open. The prior interrupted
+native attempt is UNKNOWN and its raw is immutable.
 
 | Matrix | Status | Current evidence / run IDs | Remaining proof |
 |---|---|---|---|
@@ -19,7 +21,7 @@ F1 ACK-cut repair is complete on one frozen closure; F2–F5 remain open.
 ## Next
 
 1. F2: keep this compact map; old candidate `5f34c0a6…3bce0d` is **SUPERSEDED**.
-2. F3: the runner now accepts the ordered `--matrix final`; the latest engine-free dry-run passed for 30 rows on 2026-10-07 with matrix closure `a72f27f531222c93d3ae87410336c7848ea891b0586692b2c29b396d8d88b10c` and matrix-source closure `8568e81099e0cf004f69dca1f365816798b0a88ee69d97f00eee9c96a4febba2f`. It includes native Godot/Blender phases and cuts, FIFO adapters, cross-app reload/ACK, Play mutation, host storage/process/regression rows, and the existing contract suites. The installed binding refresh is separately recorded under `zdoc/reviews/20261007-gt07-binding-refresh/` (source closure `923700fc7a5e39b968273785d098dee51e7e8a016defb19fa2b8421c23ebb5b8`, engine runs `0`). All rows remain authority-zero dry-run evidence; no native matrix row is accepted yet.
+2. F3: commit `dcb522d1` makes admission one durable coordinator step, keeps ordinary native output paths fresh, records row events/terminal summaries, and marks interruption UNKNOWN. The current engine-free dry-run passed all 30 rows on 2026-10-06 with matrix closure `89dee841ba8fd8335d1bf1f6395a12354458769a334a54704ba30dbfbb8b9b44` and matrix-source closure `c09865e93d89cfbce73afb045d54839110be1a37944d06e62bfaa96b8079c899`. It includes native Godot/Blender phases and cuts, FIFO adapters, cross-app reload/ACK, Play mutation, host storage/process/regression rows, and the existing contract suites. The installed binding refresh is separately recorded under `zdoc/reviews/20261007-gt07-binding-refresh/` (source closure `923700fc7a5e39b968273785d098dee51e7e8a016defb19fa2b8421c23ebb5b8`, engine runs `0`). All rows remain authority-zero dry-run evidence; no native matrix row is accepted yet.
 3. F4: after committing and freezing this exact source, run one complete 30-row M1–M9 matrix with fresh IDs and one source closure. Capture actual child/editor/wrapper exits, Job/tree/handle cleanup, and immutable raw receipts; any failure is reviewed and repaired with a reproducer before a new matrix.
 4. F5: build the final source/review/raw manifest, then send that exact hash to two independent read-only critics. Only their explicit same-hash approval can advance GT07.
 
