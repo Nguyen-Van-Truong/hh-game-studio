@@ -15,9 +15,35 @@ Historical entries below are retained for provenance; they do not override the t
 | M6 / Q04 | DIAGNOSTIC COVERED (host) | `gt07-m6-host-20261006-01` ran `test_gt07_stop_lifecycle.py` + `test_native_godot_stop.py`: 10 tests, actual process exit 0, source closure `32c64698b4cf84f10e60768ff22304823b7417023431c8d92f3b7188e95e0ddc`, no child/Job/handle residue; covers queue-full cancellation, bounded drain, reopen/no-resume, token rotation and durable Stop readback | final frozen matrix and two same-hash critics |
 | M7 / Q07 | OPEN (partial) | 510-record capacity/JOURNAL_FULL; queue-only custody rotation barriers; segmented queue checkpoint/reopen, two-segment archive chain, expired terminal same-ID replay guard, bounded real-clock expiry soak, malformed candidate pointer guard (`test_segmented_journal` 6 tests, `test_segmented_broker_regression` 8 tests, `test_durable_broker` 18 tests; exits 0); opt-in integrated `QueueOwner→DurableBroker→QueueJournalManager` process cuts at PREPARED/ACTIVE_POINTER/COMMITTED passed (actual child exit 73, 1.474s), preserving pending reconciliation and the exact archived receipt | final frozen matrix |
 | M8 / Q08 | OPEN (partial) | host-only repeats `gt07-m8-process-20261005-05`, `-07`, `-08`, and fresh `-10` verify PID/start identity, forged-start refusal, owned-tree timeout and 64 MiB Job memory denial; actual worker exits and Job cleanup recorded. The runner now requires a matching dry-run receipt before native execution (closure `ab498ef2...20c9e8` for `-10`) | final frozen M1–M9 matrix and source-specific manifest |
-| M9 / TX13 | OPEN (partial) | binding refresh02 verified an exact three-file delta, source=233/execution=235; matching dry-run/native `gt06-gt07-m9-playmutation-20261005-03` exit 0 on binding `94552f31…`, preserving stale-capture rejection/UNKNOWN/no-replay | repeat in the final frozen matrix |
+| M9 / TX13 | DIAGNOSTIC COVERED (current source) | one-use refresh03 verified the exact three-file delta (`godot-addon/editor_owner.py`, `host/blender/export_job.py`, `host/blender/publication_owner.py`), source=233/execution=235; matching dry-run `gt06-gt07-m9-playmutation-20261006-01` and native `-02` exit 0 on runtime closure `630124fd…20f10`, with 18/18 checks, Play-time generated-state mutation, stale capture rejection/UNKNOWN/no-replay, natural child exit and clean Job/tree/handles | repeat in the final frozen matrix; two same-hash critics |
 
 ## Next
+
+M9's current-source adversary is now covered after the one-use binding refresh;
+the remaining gate is N6: freeze one complete M1–M9 source/review/raw manifest,
+bind M7/M8 artifacts to that freeze, run affected focused regressions once, and
+send the same frozen hash to two independent read-only critics. `AUTHORITY=0`;
+this row is diagnostic coverage, not self-acceptance.
+
+## Checkpoint, 06-10-2026 — M9 current-source binding and Play mutation
+
+The installed selector/binding generation was stale after three committed
+source edits. A new one-use refresh in
+`zdoc/reviews/20261006-gt07-binding-refresh/` required the exact old metadata
+hashes, exact three-file delta, and source count 233, replaced both metadata
+files atomically with rollback, and verified `load_installed` (235 execution
+files). No engine ran during the refresh; old/new bytes and postcheck are
+retained in the review directory.
+
+After the matching dry-run `gt06-gt07-m9-playmutation-20261006-01`, native
+`gt06-gt07-m9-playmutation-20261006-02` exited 0 with 18/18 checks. The owned
+generated marker was written while Play was RUNNING; the first capture
+committed; the changed capture was rejected as `REPLAY_CAPTURE_CHANGED`,
+lookup remained `UNKNOWN` without artifact/replay, and the child exited
+naturally with a closed zero-member Job and no retained handle. Runtime source
+closure was `630124fd17a2e2306408fbd8f6f22bb4214b056b9b6f03696933ee227c820f10`.
+This remains authority-zero diagnostic evidence until the final frozen matrix
+and two critics.
 
 ## Checkpoint, 06-10-2026 - Blender producer phase coverage
 
