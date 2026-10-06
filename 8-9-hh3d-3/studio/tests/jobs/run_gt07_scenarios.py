@@ -26,6 +26,9 @@ from studio.tests.replay.measure_window import default_path, plain
 from studio.host.core.gt07_failpoints import assert_disabled, runtime_root
 
 SCENARIOS = {
+    "godot-authority": {"kind": "godot", "operation": "scene.node.update",
+                       "probe": "run_native_godot_queue_probe.py", "suffix": "authority",
+                       "max_horizon_ms": 30_000, "authority_cases": True, "failpoint_phases": ()},
     "godot-edit": {"kind": "godot", "operation": "scene.node.update",
                    "probe": "run_native_godot_queue_probe.py", "suffix": "edit",
                    "max_horizon_ms": 30_000, "failpoint_phases": ()},
@@ -180,8 +183,10 @@ def _contract_dry_run(name: str, scenario: dict) -> dict[str, object]:
     if not callable(checker):
         raise ValueError("SCENARIO_CONTRACT_DRY_RUN_UNAVAILABLE")
     result = checker(operation=scenario["operation"],
-                     recover_after_loss=bool(scenario.get("recover_after_loss")))
-    if scenario.get("authority_cases"):
+                     recover_after_loss=bool(scenario.get("recover_after_loss")),
+                     **({'authority_cases': True} if scenario["kind"] == "godot"
+                        and scenario.get("authority_cases") else {}))
+    if scenario["kind"] == "blender" and scenario.get("authority_cases"):
         from studio.tests.jobs.gt07_writer_authority import validate_native_recipes
         validate_native_recipes()
     if not isinstance(result, dict):
@@ -278,7 +283,8 @@ def _run_one(name: str, args: argparse.Namespace, index: int = 0) -> dict[str, o
                                   bool(scenario.get("recover_after_loss")),
                                   getattr(args, "failpoint_phase", None),
                                   bool(scenario.get("manual_conflict")),
-                                  file_lock=bool(scenario.get("file_lock")))
+                                  file_lock=bool(scenario.get("file_lock")),
+                                  authority_cases=bool(scenario.get("authority_cases")))
     return {"scenario": name, "run_id": output.name, "exit_code": exit_code,
             "dry_run": check, "output": str(output)}
 

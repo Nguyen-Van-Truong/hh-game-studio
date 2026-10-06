@@ -74,6 +74,11 @@ def _safe_error(error: BaseException) -> dict[str, str]:
              "code": code if isinstance(code, str) else type(error).__name__}
     if isinstance(error, FileNotFoundError):
         value["missing_basename"] = Path(error.filename or "").name
+    # Keep a bounded diagnostic for probe-only failures. This is not an ACK or
+    # acceptance field, and the value is limited to avoid leaking credentials.
+    detail = str(error)
+    if detail:
+        value["detail"] = detail[:240]
     return value
 
 
@@ -139,7 +144,7 @@ def _request_for(operation, *, before, lease, contract, default_script, now_ms,
                    min(lease["expires_ms"], now_ms + horizon))
 
 
-def dry_run_contract(operation, recover_after_loss=False):
+def dry_run_contract(operation, recover_after_loss=False, authority_cases=False):
     """Exercise public lease registration and exact request recipe, no engine.
 
     The editor state is explicitly synthetic. This checks harness wiring,
@@ -161,7 +166,8 @@ def dry_run_contract(operation, recover_after_loss=False):
         try:
             credential = owner.sessions.issue()
             authorization = "Bearer " + credential.bearer
-            lease = owner.lease({"project_id": owner.project_id, "access": "write", "ttl_ms": 90_000},
+            lease = owner.lease({"project_id": owner.project_id, "access": "write",
+                                "ttl_ms": 5000 if authority_cases else 90_000},
                                 authorization=authorization, catalog_digest=contract.CATALOG_DIGEST)
             before = {"revision": "sha256:" + "1" * 64, "project_revision": "sha256:" + "2" * 64,
                       "generation": 1, "can_undo": False, "can_redo": False,
@@ -174,6 +180,14 @@ def dry_run_contract(operation, recover_after_loss=False):
                         project_id=owner.project_id, catalog_digest=contract.CATALOG_DIGEST)
             context = owner._context(before, owner._leases[grant.session_id])
             result = contract.validate_request(request, context)
+            if authority_cases:
+                from studio.tests.jobs.gt07_godot_authority import request_for_case
+                if operation != 'scene.node.update' or recover_after_loss:
+                    raise ValueError('M2_GODOT_EDIT_ONLY')
+                for revoked in (False, True):
+                    case = request_for_case(_request_for, owner, before, lease,
+                                            factory.DEFAULT_SCRIPT, revoked=revoked)
+                    contract.validate_request(case, context)
             maximum = 30_000 if operation == "scene.node.update" else 90_000
             # A longer synthetic lease keeps the upper-bound test specific to
             # the operation limit rather than merely exceeding lease expiry.
@@ -306,7 +320,8 @@ def _native_recovery_state(owner) -> dict[str, object]:
 def _child(output: Path, binary: Path, run_id: str, operation: str,
            recover_after_loss: bool, source: dict[str, str], closure: str,
            failpoint_phase: str | None = None,
-           manual_conflict: bool = False, file_lock: bool = False) -> int:
+           manual_conflict: bool = False, file_lock: bool = False,
+           authority_cases: bool = False) -> int:
     from studio.host.core.transport import epoch_ms
     from studio.host.jobs.native_dispatch import GodotOwnerBinding, NativeOwnerDispatcher
     from studio.host.jobs.queue_owner import QueueOwner
@@ -327,6 +342,7 @@ def _child(output: Path, binary: Path, run_id: str, operation: str,
     passed = False
     recovery_proof = None
     file_lock_proof = None
+    authority_proof = None
     editor_cleanup_proof = []
     journal_before_loss = journal_after_loss = journal_after_reconcile = None
     queue_before_loss = queue_after_loss = queue_after_reconcile = None
@@ -372,8 +388,13 @@ def _child(output: Path, binary: Path, run_id: str, operation: str,
         steps.append("dispatch")
         credential = owner.sessions.issue()
         authorization = "Bearer " + credential.bearer
+        # Authority cases add a second real-clock expiry sequence after the
+        # ordinary edit. The base native edit must also survive validator
+        # startup; a five-second lease turns that setup cost into a false
+        # NATIVE_GODOT_QUEUE_NOT_COMMITTED before the authority probe begins.
         lease = owner.lease(
-            {"project_id": owner.project_id, "access": "write", "ttl_ms": 90_000},
+            {"project_id": owner.project_id, "access": "write",
+             "ttl_ms": 30_000 if authority_cases else 90_000},
             authorization=authorization, catalog_digest=owner.contract.CATALOG_DIGEST)
         if operation == "scene.save":
             changed = owner._editor.apply_projection({"operation": "scene.node.update",
@@ -616,6 +637,12 @@ def _child(output: Path, binary: Path, run_id: str, operation: str,
         if recover_after_loss:
             if response.status is not Status.COMMITTED or response.code != "GODOT_MANAGED_SCRIPT_REPLACED":
                 raise RuntimeError("RECOVERY_TERMINAL_READBACK_MISMATCH")
+        if authority_cases:
+            if operation != 'scene.node.update' or recover_after_loss or file_lock or manual_conflict or failpoint_phase:
+                raise RuntimeError('M2_GODOT_EDIT_ONLY')
+            from studio.tests.jobs.gt07_godot_authority import godot_cases
+            authority_proof = godot_cases(owner, dispatch, _request_for, credential, lease,
+                                          default_script=factory.DEFAULT_SCRIPT)
         passed = True
     except BaseException as error:
         errors.append(_safe_error(error))
@@ -679,6 +706,7 @@ def _child(output: Path, binary: Path, run_id: str, operation: str,
         "queue_state": queue_state,
         "recovery_proof": recovery_proof,
         "file_lock_proof": file_lock_proof,
+        "writer_authority": authority_proof,
         "response": response.as_dict() if response is not None else None,
         "stop_snapshot": asdict(stop_snapshot) if stop_snapshot is not None else None,
         "errors": errors,
@@ -798,7 +826,8 @@ def _recover_crash(output: Path, binary: Path, run_id: str, source: dict, closur
 
 def run(output: Path, binary: Path, run_id: str, operation: str,
         recover_after_loss: bool, failpoint_phase: str | None = None,
-        manual_conflict: bool = False, *, file_lock: bool = False) -> int:
+        manual_conflict: bool = False, *, file_lock: bool = False,
+        authority_cases: bool = False) -> int:
     output = output.resolve()
     # The frozen child runs with its snapshot as cwd.  Keep the pinned editor
     # executable absolute so admission cannot silently resolve it under the
@@ -839,6 +868,8 @@ def run(output: Path, binary: Path, run_id: str, operation: str,
         child.append("--manual-conflict")
     if file_lock:
         child.append("--file-lock")
+    if authority_cases:
+        child.append("--authority-cases")
     if failpoint_phase is not None:
         child.extend(["--failpoint-phase", failpoint_phase])
     environment = os.environ.copy()
@@ -913,6 +944,7 @@ def main(argv=None) -> int:
     parser.add_argument("--recover-after-loss", action="store_true")
     parser.add_argument("--manual-conflict", action="store_true")
     parser.add_argument("--file-lock", action="store_true")
+    parser.add_argument("--authority-cases", action="store_true")
     parser.add_argument("--failpoint-phase", choices=("PREPARED", "VALIDATED", "ACTIVATING",
                                                         "COMMITTED", "RELOAD", "ACK"))
     parser.add_argument("--frozen", action="store_true")
@@ -930,7 +962,7 @@ def main(argv=None) -> int:
         return _child(args.output.resolve(), args.binary.resolve(), args.run_id,
                       args.operation, args.recover_after_loss,
                       manifest["files"], manifest["source_closure_sha256"], args.failpoint_phase,
-                      args.manual_conflict, args.file_lock)
+                      args.manual_conflict, args.file_lock, args.authority_cases)
     if args.output.name != args.run_id:
         parser.error("output basename must equal the run ID")
     if args.recover_after_loss and args.operation != "script_text.replace":
@@ -943,6 +975,10 @@ def main(argv=None) -> int:
         if args.operation != 'scene.save' or args.failpoint_phase or args.manual_conflict:
             parser.error('file lock requires scene.save without other fault modes')
         scenario = 'godot-save-locked'
+    if args.authority_cases:
+        if args.operation != 'scene.node.update' or args.failpoint_phase or args.manual_conflict or args.file_lock:
+            parser.error('authority cases require scene.node.update without other fault modes')
+        scenario = 'godot-authority'
     return scenario_main(["--scenario", scenario, "--godot-binary", str(args.binary),
                           "--run-id", args.run_id, "--output-root", str(args.output.parent),
                           *( ["--failpoint-phase", args.failpoint_phase] if args.failpoint_phase else [] )])

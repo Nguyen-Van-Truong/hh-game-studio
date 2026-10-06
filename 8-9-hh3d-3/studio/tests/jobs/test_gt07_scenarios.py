@@ -23,7 +23,7 @@ spec.loader.exec_module(module)
 class GT07ScenarioAdmissionTests(unittest.TestCase):
     def test_matrix_is_explicit_and_deadlines_are_bounded(self):
         self.assertEqual(set(module.SCENARIOS), {
-            "godot-edit", "godot-save", "godot-save-locked", "godot-script", "godot-recovery", "godot-conflict",
+            "godot-edit", "godot-authority", "godot-save", "godot-save-locked", "godot-script", "godot-recovery", "godot-conflict",
             "blender-box", "blender-authority", "blender-conflict", "blender-export"})
         self.assertEqual({row["max_horizon_ms"] for row in module.SCENARIOS.values()},
                          {5_000, 30_000, 90_000})
@@ -69,6 +69,16 @@ class GT07ScenarioAdmissionTests(unittest.TestCase):
         self.assertEqual(result["operation"], "mesh.create_box")
         self.assertTrue(result["admission_validated"])
         self.assertFalse(result["native_effect"])
+
+    def test_godot_authority_recipes_validate_short_public_lease_without_engine(self):
+        from studio.tests.jobs import gt07_godot_authority as authority
+        with patch('subprocess.Popen', side_effect=AssertionError('unexpected engine')), \
+                patch.object(authority, 'request_for_case', wraps=authority.request_for_case) as recipe:
+            result = module._contract_dry_run('godot-authority', module.SCENARIOS['godot-authority'])
+        self.assertEqual(recipe.call_count, 2)
+        self.assertTrue(result['admission_validated'])
+        self.assertTrue(result['public_lease_route_validated'])
+        self.assertFalse(result['native_effect'])
 
     def test_authority_dry_run_rejects_invalid_final_native_read_before_launch(self):
         from studio.tests.jobs import gt07_writer_authority as authority

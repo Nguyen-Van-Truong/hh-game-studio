@@ -8,7 +8,7 @@ Historical entries below are retained for provenance; they do not override the t
 | Matrix | Status | Existing evidence | Remaining proof |
 |---|---|---|---|
 | M1 / Q01 | DONE (host) | `gt07-jobs-integration-20261004-03`, 46 tests | Repeat only in final frozen matrix |
-| M2 / Q03 | OPEN (Blender diagnostic covered) | `gt07-native-queue-20261006-07`: matching dry-run, real-clock expiry, native effect before deadline with reply after expiry, overlapping writer refused, revoke after effect preserves private receipt and blocks lookup/replay; child/wrapper/Blender exits 0, source/Job clean. Earlier FIFO-only run without matching dry-run stays excluded | same late-reply/revocation proof on Godot; final frozen matrix |
+| M2 / Q03 | DIAGNOSTIC COVERED (Blender + Godot) | Blender `gt07-native-queue-20261006-07` and Godot `gt07-native-godot-20261006-17`: matching dry-runs, real-clock expiry, native effect before deadline with reply after expiry, overlapping writer refusal, revoke after effect preserves private receipt and blocks lookup/replay; actual child/editor/wrapper exits 0, Jobs/tree clean, source/snapshot unchanged. Earlier FIFO-only runs without matching dry-run stay excluded | final frozen matrix and two same-hash critics; do not mark DONE from diagnostics |
 | M3 / Q05 | OPEN (partial) | Blender producer cuts plus consumer cuts `gt07-cross-app-20261005-53` (RELOAD: HELD_LAST_GOOD) and `gt07-cross-app-20261005-54` (ACK: COMMITTED_LOOKUP_ONLY); both actual child/recovery exits and owned Jobs clean, one native dispatch, no replay, source/snapshot unchanged | six-phase producer coverage and final frozen matrix |
 | M4 / Q06 | OPEN (partial) | Godot `gt07-native-godot-20261005-26,42`; Blender `gt07-native-queue-20261005-47`: queued stale transform returns UNKNOWN/lookup.reconcile, manual `.blend` state retained, actual child/wrapper exits 0 and owned Job clean | final frozen matrix; previous failed diagnostics remain immutable |
 | M5 / TX05/TX09 | DIAGNOSTIC COVERED | host `gt07-m5-storage-20261005-09`: real lock/cross-volume refusal, INJECTED fsync/diskfull; native `gt07-native-godot-20261006-05`: share=0 during scene.save capture, durable UNKNOWN/lookup.reconcile, last-good file and selection preserved, actual exits/Job clean | final frozen repeat and requirement-map binding; native lock rejects at capture precondition before filesystem publication |
@@ -78,6 +78,12 @@ history and is not relabeled. This is a diagnostic repair, not GT07 acceptance;
 the final frozen M1-M9 matrix and two same-hash critics remain required.
 
 ## Latest diagnostic checkpoint
+
+`gt07-native-godot-20261006-17` — Godot M2 diagnostic PASS after the matching
+engine-free dry-run: actual child/editor/wrapper exits 0, owned Jobs/tree clean,
+no retained handles, source/snapshot unchanged, and the authority proof records
+late COMMITTED reply-after-expiry, contender fencing, and revoke-after-effect
+UNKNOWN with `public_ack=false`; AUTHORITY=0 and final matrix/critics remain open.
 
 `gt07-native-queue-20261005-47` — Blender manual conflict PASS; child/wrapper 0,
 source unchanged (`0eff6f0d…137172`), manual checkpoint retained. Runs 45/46 remain
