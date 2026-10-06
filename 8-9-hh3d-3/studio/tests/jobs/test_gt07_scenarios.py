@@ -33,6 +33,13 @@ class GT07ScenarioAdmissionTests(unittest.TestCase):
         self.assertGreater(len(module.FINAL_MATRIX), 1)
         self.assertEqual(len(set(module.FINAL_MATRIX)), len(module.FINAL_MATRIX))
         self.assertTrue(all(name in module.ALL_SCENARIOS for name in module.FINAL_MATRIX))
+        contract_rows = {
+            "host-fifo-contract-tests", "host-cross-app-contract-tests",
+            "host-m9-contract-tests", "host-gt02-06-regression-tests",
+        }
+        self.assertTrue(contract_rows.issubset(module.FINAL_MATRIX))
+        self.assertTrue(all(module.ALL_SCENARIOS[name]["kind"] == "host-test"
+                             for name in contract_rows))
 
     def test_matrix_closure_binds_ordered_rows_and_changes_on_row_drift(self):
         rows = [{"scenario": "godot-edit", "run_id": "r1",

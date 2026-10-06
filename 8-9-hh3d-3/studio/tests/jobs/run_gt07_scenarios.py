@@ -128,9 +128,10 @@ HOST_SCENARIOS = {
 ALL_SCENARIOS = {**SCENARIOS, **HOST_SCENARIOS}
 
 # F3/F4 use one ordered admission.  Keep the alias separate from ``SCENARIOS``
-# so existing per-scenario callers keep the same contract.  Only host probes
-# with a real dry-run API are admitted here; missing M1/M6/M7/cross-app/M9
-# adapters remain explicit gaps instead of being represented by a fake row.
+# so existing per-scenario callers keep the same contract.  Host rows below
+# are explicit contract/regression admissions where a native adapter is not
+# yet available; their reports carry authority=0 and cannot masquerade as
+# native proof.
 FINAL_MATRIX = (
     "godot-authority", "godot-edit", "godot-save", "godot-save-locked",
     "godot-script", "godot-recovery", "godot-conflict", "blender-box",
