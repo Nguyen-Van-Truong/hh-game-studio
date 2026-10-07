@@ -28,6 +28,9 @@ var wall_contacts: int = 0
 var stopped_x: float = 0.0
 var max_wall_x: float = 0.0
 var bullet_active: bool = false
+var avatar_asset_loaded: bool = false
+var sprite_asset_loaded: bool = false
+var imported_avatar: Node = null
 
 func _sha256(path: String) -> String:
 	var context := HashingContext.new()
@@ -103,6 +106,15 @@ func _ready() -> void:
 	_action("left", KEY_A)
 	_action("jump", KEY_SPACE)
 	_action("shoot", KEY_F)
+	var avatar_scene := load("res://assets/avatar.glb") as PackedScene
+	var sprite := load("res://assets/sprite_sheet.png") as Texture2D
+	avatar_asset_loaded = avatar_scene != null
+	sprite_asset_loaded = sprite != null
+	if avatar_asset_loaded:
+		imported_avatar = avatar_scene.instantiate()
+		add_child(imported_avatar)
+	if not avatar_asset_loaded or not sprite_asset_loaded:
+		push_error("arena fixture asset readback failed")
 	if not _build_world():
 		get_tree().quit(32)
 		return
@@ -296,7 +308,9 @@ func _finish() -> void:
 			and not Input.is_action_pressed("jump") and not Input.is_action_pressed("shoot"),
 		"stopped": absf(player.position.x - stopped_x) < 0.01,
 		"camera_follow": camera.position.is_equal_approx(player.position),
-		"hud_win": hud.text == "WON", "round_won": bot_health == 0 and hits == 1}
+		"hud_win": hud.text == "WON", "round_won": bot_health == 0 and hits == 1,
+		"avatar_asset_loaded": avatar_asset_loaded,
+		"sprite_asset_loaded": sprite_asset_loaded}
 	if saved_world != null:
 		state["saved_world_instantiated"] = arena.scene_file_path == saved_world.resource_path \
 			and player.get_parent() == arena and wall.get_parent() == arena
@@ -306,6 +320,8 @@ func _finish() -> void:
 		state["saved_hud_resolved"] = saved_hud_resolved and hud.owner == arena \
 			and str(arena.get_path_to(hud)) == "HUD/Status"
 	_event("finish")
+	print("HH_PROBE_ASSET_READBACK " + JSON.stringify({"avatar_loaded": avatar_asset_loaded,
+		"sprite_loaded": sprite_asset_loaded}))
 	print("HH_PROBE_DEPENDENCY " + JSON.stringify(_dependency_observation()))
 	print("HH_PROBE_FIXTURE " + JSON.stringify(state))
 	var ok: bool = health == 4 and bot_health == 0 and pickups == 1 and hits == 1

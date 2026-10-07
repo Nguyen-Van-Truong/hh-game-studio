@@ -289,6 +289,7 @@ FIXTURES['gameplay_arena_physics'] = {
         'jump_started': True, 'apex_seen': True, 'landed': True,
         'wall_blocked': True, 'input_released': True, 'stopped': True,
         'camera_follow': True, 'hud_win': True, 'round_won': True,
+        'avatar_asset_loaded': False, 'sprite_asset_loaded': False,
     },
     'script': (_physics_source / 'arena_physics.gd').read_text(encoding='utf-8'),
     'extra_files': {

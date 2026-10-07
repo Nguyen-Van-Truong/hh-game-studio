@@ -341,8 +341,14 @@ def _publication_case(args, owner_mod, fixtures, *, saved_arena_raw=None, glb=No
     if saved_arena_raw is not None:
         case = saved_arena_case(args.fixture, case, saved_arena_raw)
     if glb is not None:
-        case = {**case, 'extra_binary_files': {**case.get('extra_binary_files', {}),
-                                             'assets/avatar.glb': glb}}
+        case = {**case,
+                'asset_readback': True,
+                'expected_state': {**case['expected_state'],
+                                   'avatar_asset_loaded': True,
+                                   'sprite_asset_loaded': True},
+                'extra_binary_files': {**case.get('extra_binary_files', {}),
+                                       'assets/avatar.glb': glb,
+                                       'assets/sprite_sheet.png': fixtures.ASSET_SPRITE_SHEET}}
     return case
 
 
