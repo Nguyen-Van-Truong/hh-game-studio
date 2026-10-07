@@ -31,6 +31,7 @@ FIXTURE = STUDIO / "fixtures" / "sample-game"
 TOOLING = STUDIO / ".local" / "tooling"
 SCHEMA = "HH-GT08A-MATRIX-1"
 PROFILE = "gt08a-fixture-v1"
+LINUX_IMAGE = "python@sha256:581429e3df12d76e6af4be5ab7d0e7fc2013eb57dc23d2de691411c8efdbb970"
 SCENARIOS = (
     ("W01", "clean_checkout", "Windows", False),
     ("W02", "windows_import", "Windows", True),
@@ -255,19 +256,29 @@ def matrix_run(run_id: str, output: Path) -> dict:
     fail(export_win.is_file() and export_win.stat().st_size > 0, "Windows export artifact missing")
     rows.append({"id": "W03", "status": r["status"] if export_win.is_file() else "FAIL", "artifact_sha256": digest_file(export_win) if export_win.is_file() else None, "process": r,
                  "source_closure": source, "cache_key": cache_key(source, tools, "Windows")})
-    # Linux execution is attempted through WSL only when a working WSL command exists.
-    # A missing/failed Linux runtime is a hard GT08A gap, never silently PASS.
-    wsl = shutil.which("wsl.exe")
-    if not wsl:
-        raise MatrixError("Linux headless target unavailable: wsl.exe")
+    # Linux execution uses a locally present, digest-pinned glibc fixture image.
+    # Docker is only used for this owned child, with no network and no access to
+    # user containers. If Docker is unavailable, WSL is attempted and the row
+    # remains a hard failure rather than being relabeled as a pass.
     linux_dir = output / "L01"; linux_dir.mkdir()
-    linux_path = str(Path(tools["linux"]).resolve()).replace("\\", "/")
-    drive = linux_path[0].lower(); linux_path = "/mnt/" + drive + linux_path[2:]
-    proj_path = str(project.resolve()).replace("\\", "/")
-    drive = proj_path[0].lower(); proj_path = "/mnt/" + drive + proj_path[2:]
-    cmd = [wsl, "--", linux_path, "--headless", "--path", proj_path, "--editor", "--quit"]
+    docker = shutil.which("docker")
+    if docker:
+        cmd = [docker, "run", "--rm", "--network", "none", "--tmpfs", "/tmp", "--tmpfs", "/root",
+               "-v", f"{Path(tools['linux']).resolve()}:/mnt/godot:ro",
+               "-v", f"{project.resolve()}:/mnt/project:rw", "-v", f"{linux_dir.resolve()}:/mnt/out:rw",
+               LINUX_IMAGE, "/mnt/godot", "--headless", "--path", "/mnt/project", "--quit-after", "1"]
+    else:
+        wsl = shutil.which("wsl.exe")
+        if not wsl:
+            cmd = ["gt08a-missing-linux-runtime"]
+        else:
+            linux_path = str(Path(tools["linux"]).resolve()).replace("\\", "/")
+            drive = linux_path[0].lower(); linux_path = "/mnt/" + drive + linux_path[2:]
+            proj_path = str(project.resolve()).replace("\\", "/")
+            drive = proj_path[0].lower(); proj_path = "/mnt/" + drive + proj_path[2:]
+            cmd = [wsl, "--", linux_path, "--headless", "--path", proj_path, "--quit-after", "1"]
     r = run_process(cmd, STUDIO, env, 120, linux_dir)
-    rows.append({"id": "L01", "status": r["status"], "process": r, "source_closure": source,
+    rows.append({"id": "L01", "status": r["status"], "process": r, "container_image": LINUX_IMAGE if docker else None, "source_closure": source,
                  "cache_key": cache_key(source, tools, "Linux-headless")})
     linux_dir2 = output / "L02"; linux_dir2.mkdir()
     export_linux = linux_dir2 / "fixture.x86_64"
