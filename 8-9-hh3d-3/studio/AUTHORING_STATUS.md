@@ -1,6 +1,23 @@
-# O2 authoring state — 2026-10-05
+# O2 authoring state — 2026-10-07
 
 AUTHORITY=0. Branch `codex/o2-authoring-contract`; GT-06 is ACCEPTED and GT-07 is IN_PROGRESS under O10. O2 runs in parallel under O10.5. Gameplay-source remains disabled; test counts/native diagnostics do not close AUTH or a WP.
+
+## 2026-10-07 — PC AUTH-05 adapter contract
+
+- Commit `8504ae2372f586028b13b63f4c7e904cec1485c9` adds the typed PC adapter
+  `studio/godot-addon/gameplay_source_adapter.py`. Discovery remains empty until
+  measured evidence matches the pinned protocol/schema/profile, and unsupported
+  client versions are rejected before owner use.
+- The adapter keeps reconnect/context reset lookup-only, binds retries to the
+  owner readback, rejects same-command different-hash conflicts, preserves an
+  owner edit before retry, and requires two distinct source-job IDs. It does not
+  grant public authority or enable gameplay-source.
+- Verification: adapter tests **8/8**, combined owner/profile/sandbox/failure
+  suite **82/82**, and `py_compile` exit **0**. No Godot, Blender, Docker or
+  native dispatch was used. `AUTHORITY=0` remains.
+- Remaining gap is native AUTH-05 attribution and full authored fixture E2E;
+  these require a reviewed fixture path and fresh native evidence, not a blind
+  replay of completed diagnostics.
 
 ## 2026-10-05 — O10 sync and focused regression
 
