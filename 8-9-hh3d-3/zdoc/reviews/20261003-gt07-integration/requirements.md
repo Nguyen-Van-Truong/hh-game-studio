@@ -2,11 +2,24 @@
 
 AUTHORITY=0; GT07=IN_PROGRESS; GT01-GT06=ACCEPTED; GT08-GT10=PLANNED.
 This map is evidence bookkeeping, not an acceptance signature; raw evidence is immutable under `studio/.local/reviews/`.
-F1 ACK-cut repair and F2 compact map are complete; F3 runner is implemented;
-F4–F5 remain open. No complete 30-row matrix has passed. Native failures and
-interrupted attempts remain immutable, including their original verdicts.
+F1 ACK-cut repair, F2 compact map, F3 runner, and F4 final matrix are complete;
+F5 remains open for the two independent critics. The fresh final matrix
+`gt07-final-matrix-gt07-m1-final-20261007-04` has 30/30 PASS with actual
+supervisor exit 0, row exits 0, and clean Job/tree/handle closeout. Native
+failures and interrupted attempts remain immutable, including their original
+verdicts.
 
-Current checkpoint, 07-10-2026: the `20261011-63` matrix ID was minted with a
+Latest current checkpoint, 07-10-2026: final matrix
+`gt07-final-matrix-gt07-m1-final-20261007-04` is terminal COMPLETE with 30/30
+PASS. Its source freeze is `e48e936933540e1a518310636919ebe7e27a6d230d98c0aeed5cac3bf0afa85d`,
+matrix closure is `f8221ec248c6c75e00a5d385b09e5ba8e9ef0cf1ca2acfa6353f50a40a371692`,
+and supervisor `gt07-final-supervisor-20261007-06` recorded actual exit 0,
+helper exit 0, tree verified and closed handles. The exact Scheduler task was
+removed after terminal closeout; XML and receipts remain under `.local/reviews`.
+This is still AUTHORITY=0 until the final manifest receives two independent
+same-hash critic reports.
+
+Historical checkpoint, 07-10-2026: the `20261011-63` matrix ID was minted with a
 future date, but ran on 07-10. Its manifest remains RUNNING after its coordinator
 disappeared: two rows have terminal PASS receipts; row 2 has source material only,
 no capture or independently recorded exit. Process/Scheduler inspection on 07-10
@@ -38,22 +51,26 @@ host preflight.
 
 | Matrix | Status | Current evidence / run IDs | Remaining proof |
 |---|---|---|---|
-| M1 / Q01 | DIAGNOSTIC COVERED | `gt07-jobs-integration-20261004-03`; host contract row `gt07-m1-final-20261006-05` | final frozen matrix |
-| M2 / Q03 | DIAGNOSTIC COVERED; F1 PASS | ACK cuts `gt07-native-godot-20261006-34` (script) and `-36` (scene), same closure `5017cfdf…6f7818f`; host contract row `gt07-fifo-contract-20261006-02` (24 tests, exit 0) | native writer FIFO in the frozen 30-row matrix + two same-hash critics |
-| M3 / Q05 | DIAGNOSTIC COVERED | producer cuts `gt07-native-queue-20261006-09,11..14`; consumer `gt07-cross-app-20261006-02,03`; host contract row `gt07-cross-app-contract-20261006-02` (59 tests, exit 0) | six-phase native matrix in the frozen 30-row matrix + critics |
-| M4 / Q06 | DIAGNOSTIC COVERED | `gt07-native-godot-20261005-26,42`; `gt07-native-queue-20261006-08` | final frozen matrix + critics |
-| M5 / TX05/TX09 | DIAGNOSTIC COVERED | `gt07-m5-storage-20261006-01`; Godot save-lock `gt07-native-godot-20261006-05` | final frozen repeat + map binding |
-| M6 / Q04 | DIAGNOSTIC COVERED | `gt07-m6-host-20261006-01` | final frozen matrix + critics |
-| M7 / Q07 | DIAGNOSTIC COVERED | `gt07-m7-rotation-20261006-01` | final frozen matrix + critics |
-| M8 / Q08 | DIAGNOSTIC COVERED | `gt07-m8-process-20261006-11` | final frozen matrix + critics |
-| M9 / TX13 | DIAGNOSTIC COVERED | `gt06-gt07-m9-playmutation-20261006-01,02`; host contract row `gt07-m9-contract-20261006-02` (68 tests, exit 0) | final frozen Play-mutation row in the 30-row matrix + critics |
+| M1 / Q01 | FINAL MATRIX PASS | `gt07-m1-final-20261007-04`; row 00, actual exit 0 | two same-hash critics |
+| M2 / Q03 | FINAL MATRIX PASS | rows 01–02 and 03–04, actual exits 0 | two same-hash critics |
+| M3 / Q05 | FINAL MATRIX PASS | rows 05–23, 30/30 matrix closure | two same-hash critics |
+| M4 / Q06 | FINAL MATRIX PASS | rows 09, 12 and 20–23, actual exits 0 | two same-hash critics |
+| M5 / TX05/TX09 | FINAL MATRIX PASS | row 24 plus Godot save cuts, actual exit 0 | two same-hash critics |
+| M6 / Q04 | FINAL MATRIX PASS | row 26, actual exit 0 | two same-hash critics |
+| M7 / Q07 | FINAL MATRIX PASS | row 27, actual exit 0 | two same-hash critics |
+| M8 / Q08 | FINAL MATRIX PASS | row 25, supervisor/Job/tree closeout | two same-hash critics |
+| M9 / TX13 | FINAL MATRIX PASS | row 28, actual exit 0 | two same-hash critics |
 
 ## Next
 
 1. F2: keep this compact map; old candidate `5f34c0a6…3bce0d` is **SUPERSEDED**.
-2. F3: admission is one durable coordinator step before native work. Use its in-command all-row dry-run with fresh IDs; a separate dry-run can consume output directories. Historical closure digests below are not the current source. Freeze once, keep native output paths fresh, and retain both supervisor and row receipts.
-3. F4: after committing and freezing this exact source, run one complete 30-row M1–M9 matrix with fresh IDs and one source closure. Capture actual child/editor/wrapper exits, Job/tree/handle cleanup, and immutable raw receipts; any failure is reviewed and repaired with a reproducer before a new matrix.
-4. F5: build the final source/review/raw manifest, then send that exact hash to two independent read-only critics. Only their explicit same-hash approval can advance GT07.
+2. F3: admission is one durable coordinator step before native work. The final
+   matrix used one fresh source freeze and retained supervisor/row receipts.
+3. F4: complete. The frozen matrix has 30/30 PASS, actual exits and clean
+   Job/tree/handle closeout; raw evidence is immutable under `.local/reviews`.
+4. F5: build the final source/review/raw manifest, then send that exact hash to
+   two independent read-only critics. Only their explicit same-hash approval can
+   advance GT07.
 
 No critic has been called for the superseded package. Do not merge, tick, or call GT07 accepted from diagnostics alone.
 
