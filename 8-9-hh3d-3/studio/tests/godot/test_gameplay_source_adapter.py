@@ -79,32 +79,13 @@ class GameplaySourceAdapterTests(unittest.TestCase):
             entrypoint=owner_mod.ENTRYPOINT,
             source_closure_sha256=owner_mod.runtime_source_closure()[1], runner=runner)
         self.addCleanup(self.owner.close)
-        credential = self.owner.issue()
+        credential = self.credential = self.owner.issue()
         self.grant = self.owner.authorize("Bearer " + credential.bearer, "scene.save")
         self.lease = self.owner.lease(self.grant)
         self.initial_revision = self.owner.inspect()["project_revision"]
         self.adapter = adapter_mod.GameplaySourceAdapter(self.owner)
 
-    def evidence(self, **changes):
-        value = dict(
-            client_version=adapter_mod.SUPPORTED_CLIENT_VERSION,
-            protocol_version=adapter_mod.PROTOCOL_VERSION,
-            schema_version=adapter_mod.SCHEMA_VERSION,
-            profile=adapter_mod.PROFILE,
-            source_closure_sha256=self.owner.source_closure_sha256,
-            source_job_ids=("source.job.1", "source.job.2"),
-            readback_ack=True, reconnect_lookup_only=True,
-            context_reset_lookup_only=True, owner_edit_preserved=True,
-            no_duplicate_mutation=True, public_ack=False, authority=0,
-        )
-        value.update(changes)
-        return adapter_mod.CapabilityEvidence(**value)
-
-    def measured(self):
-        return self.adapter.measure_capability(self.evidence())
-
     def publish(self, *, command="source.job.1", files=None, expected=None):
-        self.measured()
         files = self.source if files is None else files
         expected = self.owner.inspect()["project_revision"] if expected is None else expected
         return self.adapter.publish_source(
@@ -112,13 +93,16 @@ class GameplaySourceAdapterTests(unittest.TestCase):
             expected_project_revision=expected, grant=self.grant,
             lease=self.lease, deadline_ms=self.lease.expires_ms)
 
-    def test_discovery_stays_empty_until_measured(self):
+    def lookup(self, command="source.job.1", *, adapter=None):
+        return (adapter or self.adapter).lookup(command, grant=self.grant,
+                    lease=self.lease, deadline_ms=self.lease.expires_ms)
+
+    def test_private_diagnostics_never_advertise_public_capabilities(self):
         self.assertEqual(self.adapter.discovery().capabilities, ())
-        self.assertFalse(self.adapter.measured)
-        self.measured()
+        self.publish()
         discovered = self.adapter.discovery()
-        self.assertTrue(discovered.supports(adapter_mod.PUBLISH_OPERATION))
-        self.assertTrue(discovered.supports(adapter_mod.READ_OPERATION))
+        self.assertFalse(discovered.supports(adapter_mod.PUBLISH_OPERATION))
+        self.assertFalse(discovered.supports(adapter_mod.READ_OPERATION))
         self.assertEqual(discovered.schema_digest, adapter_mod.SCHEMA_DIGEST)
 
     def test_unsupported_client_version_rejected_before_owner_use(self):
@@ -130,24 +114,17 @@ class GameplaySourceAdapterTests(unittest.TestCase):
             adapter_mod.GameplaySourceAdapter.check_client_version("future")
         self.assertEqual(self.runs, [])
 
-    def test_measurement_requires_two_distinct_source_jobs_and_matching_closure(self):
-        with self.assertRaisesRegex(adapter_mod.GameplaySourceAdapterError,
-                                    "SOURCE_JOBS_INCOMPLETE"):
-            self.adapter.measure_capability(self.evidence(source_job_ids=("source.job.1",)))
-        with self.assertRaisesRegex(adapter_mod.GameplaySourceAdapterError,
-                                    "SOURCE_JOB_DUPLICATE"):
-            self.adapter.measure_capability(self.evidence(
-                source_job_ids=("source.job.1", "source.job.1")))
-        with self.assertRaisesRegex(adapter_mod.GameplaySourceAdapterError,
-                                    "SOURCE_CLOSURE_MISMATCH"):
-            self.adapter.measure_capability(self.evidence(source_closure_sha256="0" * 64))
-        self.assertFalse(self.adapter.measured)
+    def test_caller_measurement_cannot_enable_capability(self):
+        with self.assertRaises(TypeError):
+            adapter_mod.GameplaySourceAdapter(self.owner, measurement={"accepted": True})
+        self.assertEqual(self.adapter.discovery().capabilities, ())
+        self.assertEqual(self.runs, [])
 
     def test_publish_ack_is_bound_to_owner_readback(self):
         receipt = self.publish()
         self.assertEqual(receipt["status"], "READBACK_ACK")
         self.assertFalse(receipt["public_ack"])
-        self.assertEqual(self.adapter.lookup("source.job.1"), receipt)
+        self.assertEqual(self.lookup(), receipt)
         self.assertEqual(len(self.runs), 1)
 
     def test_context_reset_and_reconnect_retry_do_not_duplicate_mutation(self):
@@ -161,7 +138,7 @@ class GameplaySourceAdapterTests(unittest.TestCase):
         replacement = self.adapter.reconnect()
         self.assertFalse(self.adapter._connected)
         self.assertTrue(replacement._connected)
-        self.assertEqual(replacement.lookup("source.job.1"), receipt)
+        self.assertEqual(self.lookup(adapter=replacement), receipt)
         self.assertEqual(replacement.publish_source(
             command_id="source.job.1", source_files=self.source,
             expected_project_revision=receipt["project_revision"], grant=self.grant,
@@ -186,7 +163,7 @@ class GameplaySourceAdapterTests(unittest.TestCase):
         selected.write_bytes(selected.read_bytes() + b"\n# owner edit\n")
         replacement = self.adapter.reconnect()
         with self.assertRaisesRegex(adapter_mod.GameplaySourceAdapterError,
-                                    "OWNER_EDIT_CONFLICT"):
+                                    "EXECUTOR_FILE_SHAPE"):
             replacement.publish_source(
                 command_id="source.job.1", source_files=self.source,
                 expected_project_revision=receipt["project_revision"], grant=self.grant,
@@ -203,6 +180,61 @@ class GameplaySourceAdapterTests(unittest.TestCase):
         self.assertNotEqual(first["project_revision"], second["project_revision"])
         self.assertEqual(len(self.runs), 2)
         self.assertEqual(self.owner.inspect()["generation"], 3)
+
+    def test_historical_retry_after_new_publish_preserves_current(self):
+        first = self.publish()
+        second_files = dict(self.source)
+        second_files[owner_mod.ENTRYPOINT] += b"\n# newer revision\n"
+        self.publish(command="source.job.2", files=second_files)
+        before = self.owner.inspect()
+        durable = ((self.owner._root / "CURRENT").read_bytes(),
+                   (self.owner._root / "journal.jsonl").read_bytes())
+        self.adapter = self.adapter.reconnect()
+        retried = self.publish(expected=self.initial_revision)
+        self.assertEqual(retried, first)
+        self.assertEqual(self.lookup(), first)
+        self.assertEqual(self.owner.inspect(), before)
+        self.assertEqual(durable, ((self.owner._root / "CURRENT").read_bytes(),
+                                  (self.owner._root / "journal.jsonl").read_bytes()))
+        self.assertEqual(len(self.runs), 2)
+
+    def test_lookup_does_not_return_cached_ack_after_evidence_tamper(self):
+        self.publish()
+        path = self.owner._root / "runs" / "source.job.1" / "result.json"
+        path.write_bytes(b"{}")
+        with self.assertRaisesRegex(adapter_mod.GameplaySourceAdapterError,
+                                    "GAMEPLAY_OWNER_NATIVE_SCHEMA"):
+            self.lookup()
+        self.assertEqual(len(self.runs), 1)
+
+    def test_lookup_requires_current_writer_grant_and_lease(self):
+        self.publish()
+        self.owner._session.revoke(self.credential)
+        with self.assertRaisesRegex(adapter_mod.GameplaySourceAdapterError,
+                                    "GODOT_GRANT_REQUIRED"):
+            self.lookup()
+        self.assertEqual(len(self.runs), 1)
+
+    def test_closed_owner_lookup_is_not_an_ack_cache(self):
+        self.publish()
+        self.owner.close()
+        with self.assertRaisesRegex(adapter_mod.GameplaySourceAdapterError,
+                                    "GAMEPLAY_OWNER_CLOSED"):
+            self.lookup()
+
+    def test_lookup_unknown_command_has_no_native_effect(self):
+        self.assertIsNone(self.lookup("source.absent"))
+        self.assertEqual(self.runs, [])
+
+    def test_empty_client_context_still_uses_durable_identity(self):
+        self.publish()
+        self.adapter.context_reset()
+        changed = dict(self.source)
+        changed[owner_mod.ENTRYPOINT] += b"\n# conflicting bytes\n"
+        with self.assertRaisesRegex(adapter_mod.GameplaySourceAdapterError,
+                                    "GAMEPLAY_OWNER_COMMAND_CONFLICT"):
+            self.publish(files=changed, expected=self.initial_revision)
+        self.assertEqual(len(self.runs), 1)
 
 
 if __name__ == "__main__":

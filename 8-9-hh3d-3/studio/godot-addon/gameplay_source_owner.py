@@ -627,6 +627,32 @@ class GameplaySourcePublicationOwner:
             self._check_selected()
             return self._readback(self._files, self._project_revision, self._generation)
 
+    def lookup(self, command_id: str, *, grant, lease, deadline_ms: int):
+        """Authenticated private writer lookup; revalidate durable evidence, no dispatch.
+
+        This candidate uses the same writer grant/lease as publication. It is
+        not a new public read capability or permission to reselect old source.
+        """
+        _need(type(command_id) is str and _ID.fullmatch(command_id), "GAMEPLAY_OWNER_COMMAND")
+        _need(self._work.acquire(blocking=False), "GAMEPLAY_OWNER_BUSY")
+        try:
+            with self._lock:
+                _need(not self._closed and not self._held, "GAMEPLAY_OWNER_CLOSED")
+                _need(runtime_source_closure()[1] == self.source_closure_sha256,
+                      "GAMEPLAY_OWNER_SOURCE_CLOSURE_MISMATCH")
+                self._session.check(grant, lease, deadline_ms=deadline_ms, operation="scene.save")
+                self._read_current_journal()
+                self._check_selected()
+                previous = self._jobs.get(command_id)
+                if previous is None:
+                    return None
+                files = self._read_revision(previous["project_revision"])
+                self._recheck_native_evidence(command_id, files, previous["native_run_id"])
+                self._session.check(grant, lease, deadline_ms=deadline_ms, operation="scene.save")
+                return dict(previous)
+        finally:
+            self._work.release()
+
     def _readback(self, files, revision, generation) -> dict:
         return {"schema": "hh-gameplay-source-readback-1", "profile": PROFILE,
                     "project_id": self.project_id, "entrypoint": ENTRYPOINT,
