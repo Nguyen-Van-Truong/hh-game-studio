@@ -29,9 +29,12 @@ from studio.host.replay.transport import ReplayTransport
 from studio.host.core.transport import epoch_ms
 from studio.protocol.core import Request, Response, canonical_bytes, parse_json
 
-MODES = ('saturated-stop', 'revoked-result', 'stale-capture')
+MODES = ('saturated-stop', 'revoked-result', 'stale-capture', 'play-mutation')
 MAX_RESPONSE_BYTES = 262144
 OUTER_TIMEOUT_SECONDS = 150
+REVIEWS = STUDIO / '.local' / 'reviews'
+DRY_RUN_SCHEMA = 'HH-GT07-HTTP-ADVERSARY-DRY-RUN-1'
+_DIGEST_RE = re.compile(r'[0-9a-f]{64}')
 
 
 def _safe_code(error):
@@ -44,6 +47,89 @@ def _safe_code(error):
 def _validate_arguments(run_id, mode):
     native.need(type(run_id) is str and re.fullmatch(r'gt06-[a-z0-9-]{1,50}', run_id), 'ADVERSARY_RUN_ID')
     native.need(mode in MODES, 'ADVERSARY_MODE')
+
+
+def _reject_reparse_ancestors(path):
+    """Reject symlink/reparse components before accepting the review root."""
+    absolute = Path(os.path.abspath(os.fspath(path)))
+    current = absolute
+    while True:
+        try:
+            info = current.lstat()
+        except FileNotFoundError:
+            info = None
+        except OSError as error:
+            raise native.ReplayError('ADVERSARY_REVIEW_ROOT') from error
+        if info is not None:
+            native.need(not current.is_symlink()
+                        and not getattr(info, 'st_file_attributes', 0) & 0x400,
+                        'ADVERSARY_REVIEW_ROOT')
+        parent = current.parent
+        if parent == current:
+            return
+        current = parent
+
+
+def _review_output(run_id, output_root=None):
+    """Return a fresh run path under the one coordinator-owned review root."""
+    allowed = Path(REVIEWS).absolute()
+    requested = allowed if output_root is None else Path(output_root).expanduser().absolute()
+    native.need(requested == allowed, 'ADVERSARY_REVIEW_ROOT')
+    _reject_reparse_ancestors(allowed)
+    native.need(allowed.is_dir() and not allowed.is_symlink(), 'ADVERSARY_REVIEW_ROOT')
+    target = allowed / run_id
+    native.need(target.parent == allowed, 'ADVERSARY_REVIEW_ROOT')
+    # Check broken links as well as ordinary existing output.  Dry-run never
+    # creates a directory, so this is safe for a subsequent native admission.
+    native.need(not target.exists() and not target.is_symlink(), 'ADVERSARY_OUTPUT_EXISTS')
+    return target
+
+
+def _digest(value, code):
+    native.need(type(value) is str and _DIGEST_RE.fullmatch(value.lower()) is not None, code)
+    return value.lower()
+
+
+def _source_binding():
+    """Read the pinned installed source map without preparing a backend.
+
+    ``accepted_inputs`` and ``sources`` only read the frozen manifest and
+    installed bytes.  In particular, this function does not call
+    ``PreparedPlay.prepare`` or any process-launching helper.
+    """
+    _inputs, accepted = native.accepted_inputs()
+    native.need(type(accepted) is dict, 'ADVERSARY_SOURCE_MANIFEST')
+    source = native.sources(accepted)
+    native.need(type(source) is dict and bool(source), 'ADVERSARY_SOURCE_MANIFEST')
+    native.need(all(type(name) is str and type(value) is str and _DIGEST_RE.fullmatch(value.lower())
+                    for name, value in source.items()), 'ADVERSARY_SOURCE_MANIFEST')
+    return source, _digest(native.closure(source), 'ADVERSARY_SOURCE_CLOSURE')
+
+
+def dry_run(run_id, mode, *, output_root=None, expected_source_closure_sha256=None,
+            expected_driver_sha256=None):
+    """Validate the exact adversary admission without backend or child launch.
+
+    The result is a frozen binding for a later native invocation.  No review
+    directory is created and no ``PreparedPlay`` or process helper is called.
+    """
+    _validate_arguments(run_id, mode)
+    output = _review_output(run_id, output_root)
+    source, source_closure = _source_binding()
+    driver_sha = _digest(native.sha(native.read_regular(Path(__file__))),
+                          'ADVERSARY_DRIVER_HASH')
+    if expected_source_closure_sha256 is not None:
+        native.need(_digest(expected_source_closure_sha256, 'ADVERSARY_EXPECTED_SOURCE_CLOSURE')
+                    == source_closure, 'ADVERSARY_SOURCE_CLOSURE_MISMATCH')
+    if expected_driver_sha256 is not None:
+        native.need(_digest(expected_driver_sha256, 'ADVERSARY_EXPECTED_DRIVER_HASH')
+                    == driver_sha, 'ADVERSARY_DRIVER_HASH_MISMATCH')
+    return {'schema': DRY_RUN_SCHEMA, 'run_id': run_id, 'mode': mode,
+        'review_root': str(Path(REVIEWS).absolute()), 'output': str(output),
+        'source_files': len(source), 'source_closure_sha256': source_closure,
+        'driver_sha256': driver_sha, 'commands_started': False,
+        'backend_started': False, 'native_process_started': False,
+        'engine_started': False, 'dry_run': True, 'formal_acceptance': False}
 
 
 def _work_slots(server):
@@ -104,6 +190,31 @@ def _mutate_owned_png(backend, output):
         'mutated_sha256': native.sha(actual), 'size_bytes': len(actual),
         'mutation': 'last PNG CRC byte XOR 1 after completed native run',
         'original_copy': 'http-adversary/original-menu.png', 'restored': False}
+
+
+def _mutate_editor_output_while_running(backend, output):
+    """Record a real owned-workspace mutation while the Play process runs.
+
+    ``project/out`` is generated runtime state, deliberately excluded from the
+    immutable source map.  Writing a fresh marker here exercises the editor
+    side's mutation boundary without changing the pinned fixture or pretending
+    that a runtime mutation is an authoring/source commit.  The caller checks
+    the phase both before and after this write.
+    """
+    status = backend.status()
+    native.need(status['phase'] == 'RUNNING', 'ADVERSARY_PLAY_MUTATION_NOT_RUNNING')
+    path = backend.project / 'out/editor-mutation.json'
+    native.need(path.parent == backend.project / 'out' and not path.exists(),
+                'ADVERSARY_PLAY_MUTATION_OUTPUT_EXISTS')
+    facts = {'relative_path': 'project/out/editor-mutation.json',
+        'phase_before': status['phase'], 'runtime_instance_id': status['runtime_instance_id'],
+        'mutation': 'editor-side generated-state marker written while Play was RUNNING'}
+    native.write(path, facts)
+    native.need(path.is_file() and backend.status()['phase'] == 'RUNNING',
+                'ADVERSARY_PLAY_MUTATION_PHASE_DRIFT')
+    facts['sha256'] = native.sha(native.read_regular(path))
+    facts['phase_after'] = backend.status()['phase']
+    return facts
 
 
 def run(run_id, mode):
@@ -198,6 +309,7 @@ def run(run_id, mode):
         initial_worker = backend._thread
         controller = credential
         mutation = None
+        during_play_mutation = None
 
         if mode == 'saturated-stop':
             _wait(lambda: _work_slots(server) == 2, .5, 'ADVERSARY_WORK_INITIAL_DRAIN')
@@ -250,7 +362,12 @@ def run(run_id, mode):
                 'command_id': start.command_id}, using=controller)
             check('ADVERSARY_CONTROL_LOOKUP_STABLE_UNKNOWN', code == 200 and still_unknown == receipt)
 
-        else:
+        elif mode in ('stale-capture', 'play-mutation'):
+            if mode == 'play-mutation':
+                during_play_mutation = _mutate_editor_output_while_running(backend, output)
+                check('ADVERSARY_PLAY_MUTATION_RUNNING', during_play_mutation['phase_before'] == 'RUNNING'
+                    and during_play_mutation['phase_after'] == 'RUNNING'
+                    and backend.status()['phase'] == 'RUNNING')
             receipt = terminal(controller)
             check('ADVERSARY_INITIAL_NATIVE_COMMITTED', receipt['status'] == 'COMMITTED'
                 and receipt['code'] == 'REPLAY_NATIVE_COMPLETED')
@@ -302,10 +419,13 @@ def run(run_id, mode):
         check('ADVERSARY_SOURCE_UNCHANGED', all(native.sha(native.read_regular(native.STUDIO / name)) == digest
             for name, digest in backend.source.items()))
         check('ADVERSARY_DRIVER_UNCHANGED', native.sha(Path(__file__).read_bytes()) == driver_sha)
+        capture_mutation = mutation
+        if during_play_mutation is not None:
+            capture_mutation = {'during_play': during_play_mutation, 'after_completion': mutation}
         result = {'schema': 'HH-GT06-HTTP-ADVERSARY-1', 'run_id': run_id, 'mode': mode, 'checks': checks,
             'binding': binding, 'process': process, 'driver_sha256': driver_sha,
             'runtime_capture_sha256': native.sha(native.read_regular(backend.root / 'runtime-host/capture.json')),
-            'source_unchanged': True, 'capture_mutation': mutation, 'formal_acceptance': False,
+            'source_unchanged': True, 'capture_mutation': capture_mutation, 'formal_acceptance': False,
             'scope': 'bounded hostile HTTP timing/authorization/artifact evidence; not a performance benchmark'}
         record('result.json', result)
         print('HH_GT06_ADVERSARY_COMPLETE ' + json.dumps({'run_id': run_id, 'mode': mode,
@@ -379,7 +499,26 @@ def main():
     parser.add_argument('--run-id', required=True)
     parser.add_argument('--mode', required=True, choices=MODES)
     parser.add_argument('--child', action='store_true', help=argparse.SUPPRESS)
+    parser.add_argument('--dry-run', action='store_true',
+                        help='validate the frozen admission without starting a backend or process')
+    parser.add_argument('--output-root', type=Path, default=REVIEWS,
+                        help=argparse.SUPPRESS)
+    parser.add_argument('--source-closure-sha256', help=argparse.SUPPRESS)
+    parser.add_argument('--driver-sha256', help=argparse.SUPPRESS)
     args = parser.parse_args()
+    if args.dry_run and args.child:
+        parser.error('--dry-run cannot be combined with --child')
+    if args.dry_run:
+        try:
+            result = dry_run(args.run_id, args.mode, output_root=args.output_root,
+                             expected_source_closure_sha256=args.source_closure_sha256,
+                             expected_driver_sha256=args.driver_sha256)
+        except BaseException as error:
+            print(json.dumps({'dry_run': False, 'error': _safe_code(error),
+                              'formal_acceptance': False}, sort_keys=True), flush=True)
+            return 2
+        print(json.dumps(result, sort_keys=True), flush=True)
+        return 0
     if args.child:
         try:
             run(args.run_id, args.mode)

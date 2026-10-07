@@ -7,7 +7,7 @@ Torn/corrupt history is preserved and quarantined; there is no tail repair.
 """
 from __future__ import annotations
 
-from contextlib import contextmanager
+from contextlib import contextmanager, ExitStack
 import ctypes as C
 from ctypes import wintypes as W
 from dataclasses import dataclass
@@ -357,10 +357,20 @@ class PrivateEventLog:
         # Canonicalize/copy input before I/O: later caller mutation cannot alter
         # the bytes whose checksum and size were validated.
         body, frame = self._encode(event, expected.sequence + 1, expected.sha256)
-        with self._locked():
+        with self._locked(), ExitStack() as barriers:
             self._scan()
             if self._index[-1][2] != expected:
                 raise EventLogError('EVENT_HEAD_CONFLICT')
+            if self._custody is not None:
+                # A rotation suspends ordinary writes before switching the
+                # durable pointer. Refuse here, before appending/flushing any
+                # bytes; discovering pending custody only at the post-write
+                # barrier would destroy the exact old recovery witness.
+                try:
+                    barriers.enter_context(self._custody.append_guard(
+                        EventBinding(self._store.root_identity, self._identity, expected)))
+                except (SafetyViolation, OSError) as exc:
+                    raise EventLogError('EVENT_CUSTODY_NOT_READY', outcome_unknown=True) from exc
             if (expected.sequence + 1 + reserve_records > MAX_RECORDS
                     or expected.size + len(frame) + reserve_bytes > MAX_LOG_BYTES):
                 raise EventLogError('EVENT_CAPACITY')

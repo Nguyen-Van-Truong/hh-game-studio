@@ -324,6 +324,12 @@ def evaluate(case: dict, result: dict, stdout: str, stderr: str) -> dict:
         observed = (completed and type(details) is dict and bool(case.get('expected_state'))
                     and typed_equal(details, case.get('expected_state'))
                     and type(case.get('fixture_kind')) is str and physics_trace(case, stdout))
+        asset_details = marker(stdout, 'HH_PROBE_ASSET_READBACK ')
+        asset_import_observed = (case.get('asset_readback') is True
+            and type(asset_details) is dict
+            and asset_details.get('avatar_loaded') is True
+            and asset_details.get('sprite_loaded') is True)
+        observed = observed and (not case.get('asset_readback') or asset_import_observed)
     elif kind == 'watchdog':
         observed = supervisor_watchdog
     elif kind == 'stream_cap':

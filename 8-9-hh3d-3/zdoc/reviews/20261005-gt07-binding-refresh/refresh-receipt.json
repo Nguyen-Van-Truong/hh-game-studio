@@ -1,0 +1,53 @@
+{
+  "accepted_gt05_manifest_sha256": "fd0b4a984c7bee261c083c07d461baf55325e936d66df2eeab897b422ee0a02b",
+  "atomic_each_metadata_file": true,
+  "authority": 0,
+  "engine_runs": 0,
+  "formal_acceptance": false,
+  "new_metadata_sha256": {
+    "host/replay/execution-current.json": "3948c161f96771b60e8b00ef41724ed8d65e50286595a7356aacbf05cc244685",
+    "host/replay/execution-source.json": "8e7bf80e9c625f0b2106cea1e37cde688d1245896ee0b86b2c11ff2a0a6b4bff"
+  },
+  "old_metadata_sha256": {
+    "host/replay/execution-current.json": "a6628a5c4c8a1bcade12b82ea594e7076d9e2e933cafd23972766d289e81cf5d",
+    "host/replay/execution-source.json": "7bd657381817fe873214272f96e296f93a04d9f1608147399742a91bb36eda1c"
+  },
+  "operation": "GT07_INSTALLED_BINDING_REFRESH",
+  "rollback_available": true,
+  "source_closure_sha256": "5a701d981862fe02520f9755bd0b2443bb3119327e65bb164d0e1880d379878e",
+  "source_count": 233,
+  "source_delta": [
+    "godot-addon/animation_authoring.py",
+    "godot-addon/authoring_contract.py",
+    "godot-addon/authoring_update_bridge.py",
+    "godot-addon/contract.py",
+    "godot-addon/gameplay_behavior.py",
+    "godot-addon/gameplay_dependency_evidence.py",
+    "godot-addon/gameplay_dependency_observation.py",
+    "godot-addon/gameplay_edges.py",
+    "godot-addon/gameplay_log_policy.py",
+    "godot-addon/gameplay_runtime.py",
+    "godot-addon/gameplay_sandbox.py",
+    "godot-addon/gameplay_source_eligibility.py",
+    "godot-addon/gameplay_source_owner.py",
+    "godot-addon/gameplay_source_profile.py",
+    "godot-addon/linux_executor.py",
+    "godot-addon/publication_journal_v4.py",
+    "godot-addon/publication_owner.py",
+    "godot-addon/publication_transport.py",
+    "godot-addon/recovery_host.py",
+    "godot-addon/resource_authoring.py",
+    "godot-addon/scene_instance.py",
+    "godot-addon/tilemap_authoring.py",
+    "godot-addon/validator-toolchain.lock.json",
+    "host/blender/client_writer_owner.py",
+    "host/blender/client_writer_transport.py",
+    "host/blender/durable_session.py",
+    "host/blender/publication_owner.py",
+    "host/blender/ui_host.py",
+    "host/core/docker_inventory.py",
+    "host/core/gt07_failpoints.py",
+    "host/core/transport.py"
+  ],
+  "verified_execution_files": 235
+}

@@ -396,7 +396,10 @@ class ExportDeadlineTests(unittest.TestCase):
         self.popen = self.enterContext(patch.object(export_job.subprocess, 'Popen', return_value=self.process))
         from studio.host.blender import ui_host
         self.native_job = SimpleNamespace(snapshot=lambda: {'closed': True})
-        self.enterContext(patch.object(ui_host.cli_job, 'create', return_value=self.native_job))
+        def create_job(process, *, before_assign):
+            before_assign(self.native_job)
+            return self.native_job
+        self.enterContext(patch.object(ui_host.cli_job, 'create', side_effect=create_job))
         self.configure = self.enterContext(patch.object(export_job, 'configure_limits', return_value={}))
         self.enterContext(patch.object(export_job.threading, 'Thread', side_effect=lambda **options: InertThread()))
         self.inspect_glb = self.enterContext(patch.object(export_job, 'inspect_glb', return_value={
@@ -499,6 +502,17 @@ class ExportDeadlineTests(unittest.TestCase):
         self.assertEqual(self.process.gate.getvalue(), b'')
         self.assertIs(job._job, self.native_job)
         job._cleanup.assert_called_once()
+
+    def test_limit_configuration_failure_never_releases_export_gate(self):
+        job = self.job(deadline_ms=1001000)
+        self.configure.side_effect = ValueError('EXPORT_NATIVE_CAPS_MISMATCH')
+        with self.assertRaisesRegex(ValueError, 'EXPORT_NATIVE_CAPS_MISMATCH'):
+            job.run()
+        self.assertEqual(self.process.gate.getvalue(), b'')
+        self.assertFalse(job._gate_released)
+        self.inspect_glb.assert_not_called()
+        job._cleanup.assert_called_once()
+        self.assertFalse(parse_json((job.directory / 'host-result.json').read_bytes())['completed'])
 
     def test_expiry_after_wrapper_creation_blocks_gate(self):
         job = self.job(deadline_ms=1001000)

@@ -69,12 +69,8 @@ def _run_id(value: str) -> str:
 
 
 def _safe_error(error: BaseException) -> dict[str, str]:
-    code = getattr(error, "code", None)
-    value = {"type": type(error).__name__,
-             "code": code if isinstance(code, str) else type(error).__name__}
-    if isinstance(error, FileNotFoundError):
-        value["missing_basename"] = Path(error.filename or "").name
-    return value
+    from studio.tests.jobs.gt07_failure import failure_boundary
+    return failure_boundary(error)
 
 
 def _event_head(event_log) -> dict[str, object]:
@@ -139,7 +135,7 @@ def _request_for(operation, *, before, lease, contract, default_script, now_ms,
                    min(lease["expires_ms"], now_ms + horizon))
 
 
-def dry_run_contract(operation, recover_after_loss=False):
+def dry_run_contract(operation, recover_after_loss=False, authority_cases=False):
     """Exercise public lease registration and exact request recipe, no engine.
 
     The editor state is explicitly synthetic. This checks harness wiring,
@@ -161,7 +157,8 @@ def dry_run_contract(operation, recover_after_loss=False):
         try:
             credential = owner.sessions.issue()
             authorization = "Bearer " + credential.bearer
-            lease = owner.lease({"project_id": owner.project_id, "access": "write", "ttl_ms": 90_000},
+            lease = owner.lease({"project_id": owner.project_id, "access": "write",
+                                "ttl_ms": 5000 if authority_cases else 90_000},
                                 authorization=authorization, catalog_digest=contract.CATALOG_DIGEST)
             before = {"revision": "sha256:" + "1" * 64, "project_revision": "sha256:" + "2" * 64,
                       "generation": 1, "can_undo": False, "can_redo": False,
@@ -174,6 +171,14 @@ def dry_run_contract(operation, recover_after_loss=False):
                         project_id=owner.project_id, catalog_digest=contract.CATALOG_DIGEST)
             context = owner._context(before, owner._leases[grant.session_id])
             result = contract.validate_request(request, context)
+            if authority_cases:
+                from studio.tests.jobs.gt07_godot_authority import request_for_case
+                if operation != 'scene.node.update' or recover_after_loss:
+                    raise ValueError('M2_GODOT_EDIT_ONLY')
+                for revoked in (False, True):
+                    case = request_for_case(_request_for, owner, before, lease,
+                                            factory.DEFAULT_SCRIPT, revoked=revoked)
+                    contract.validate_request(case, context)
             maximum = 30_000 if operation == "scene.node.update" else 90_000
             # A longer synthetic lease keeps the upper-bound test specific to
             # the operation limit rather than merely exceeding lease expiry.
@@ -199,11 +204,30 @@ def dry_run_contract(operation, recover_after_loss=False):
             owner.sessions.halt()
 
 
-def _editor_close_proof(cleanup: object, identity: object) -> dict[str, object]:
+def _locked_save_complete(response, durable, proof) -> bool:
+    from studio.protocol.core import Status
+    # Once CAPTURE_PREPARED is durable, the journal terminal response replaces
+    # the transient save-error response. Compare the persisted contract.
+    return bool(isinstance(durable, dict) and isinstance(proof, dict)
+        and response.status is Status.UNKNOWN
+        and response.code == 'GODOT_PUBLICATION_RECONCILE_REQUIRED'
+        and response.postconditions.get('public_ack') is False
+        and response.postconditions.get('next_action') == 'lookup.reconcile'
+        and response.postconditions.get('reason') == 'owner.effect.uncertain'
+        and durable.get('phase') == 'UNKNOWN'
+        and proof.get('editor_error') == 'EDITOR_CAPTURE_UNKNOWN'
+        and proof.get('native_error') == 'EDITOR_STALE_PRECONDITION'
+        and type(proof.get('holder_exit')) is int and proof['holder_exit'] == 0
+        and proof.get('holder_live_after_save') is True
+        and proof.get('last_good_preserved') is True
+        and proof.get('selection_preserved') is True)
+
+
+def _editor_close_proof(cleanup: object, identity: object, *, expected_held: bool = False) -> dict[str, object]:
     """Validate the host/editor close receipt independently of its banner."""
     result = {"present": isinstance(cleanup, dict), "identity": identity,
               "pid_match": False, "actual_exit": None, "wrapper_exit": None,
-              "job_clean": False, "valid": False}
+              "job_clean": False, "valid": False, "expected_held": expected_held}
     if not isinstance(cleanup, dict) or not isinstance(identity, dict):
         return result
     actual = cleanup.get("actual_process_exit")
@@ -223,7 +247,7 @@ def _editor_close_proof(cleanup: object, identity: object) -> dict[str, object]:
                            and job.get("failed_operations") == []
                            and job.get("native_error") is None)
     result["valid"] = (cleanup.get("closed") is True
-                        and cleanup.get("held") is False
+                        and type(expected_held) is bool and cleanup.get("held") is expected_held
                         and cleanup.get("logs_overflow") is False
                         and result["pid_match"]
                         and isinstance(actual, dict) and type(actual.get("exit_code")) is int
@@ -242,6 +266,26 @@ def _recovery_evidence_complete(recover_after_loss: bool,
     if not isinstance(proof, dict):
         return False
     try:
+        actual_event = proof["queue_result_event"]
+        expected_event = proof["expected_queue_result_event"]
+        if not isinstance(actual_event, dict) or not isinstance(expected_event, dict):
+            return False
+        if any(actual_event.get(key) != value
+               for key, value in expected_event.items()):
+            return False
+        extra_event_keys = set(actual_event) - set(expected_event)
+        if extra_event_keys:
+            if extra_event_keys != {"terminal_ms", "expires_ms"}:
+                return False
+            terminal_ms = actual_event["terminal_ms"]
+            expires_ms = actual_event["expires_ms"]
+            if type(terminal_ms) is not int or type(expires_ms) is not int:
+                return False
+            horizon_ms = proof.get("retry_horizon_ms")
+            if (horizon_ms is not None
+                    and (type(horizon_ms) is not int
+                         or expires_ms != terminal_ms + horizon_ms)):
+                return False
         return (proof["receipt_boundary"] == "record_owner_result"
                 and proof["injection_count"] == 1
                 and proof["reconciled_status"] == "COMMITTED"
@@ -251,7 +295,6 @@ def _recovery_evidence_complete(recover_after_loss: bool,
                 and proof["fence_before"] == proof["fence_after"]
                 and proof["queue_before_loss"] == proof["queue_after_loss"] == proof["queue_reopened"]
                 and proof["queue_after_reconcile"]["sequence"] == proof["queue_after_loss"]["sequence"] + 1
-                and proof["queue_result_event"] == proof["expected_queue_result_event"]
                 and proof["journal_after_loss"]["sequence"] > proof["journal_before_loss"]["sequence"]
                 and proof["journal_after_reconcile"] == proof["journal_after_loss"]
                 and proof["native_before_reconcile"] == proof["native_after_reconcile"])
@@ -267,7 +310,9 @@ def _native_recovery_state(owner) -> dict[str, object]:
 
 def _child(output: Path, binary: Path, run_id: str, operation: str,
            recover_after_loss: bool, source: dict[str, str], closure: str,
-           failpoint_phase: str | None = None) -> int:
+           failpoint_phase: str | None = None,
+           manual_conflict: bool = False, file_lock: bool = False,
+           authority_cases: bool = False) -> int:
     from studio.host.core.transport import epoch_ms
     from studio.host.jobs.native_dispatch import GodotOwnerBinding, NativeOwnerDispatcher
     from studio.host.jobs.queue_owner import QueueOwner
@@ -287,6 +332,8 @@ def _child(output: Path, binary: Path, run_id: str, operation: str,
     queue_state = None
     passed = False
     recovery_proof = None
+    file_lock_proof = None
+    authority_proof = None
     editor_cleanup_proof = []
     journal_before_loss = journal_after_loss = journal_after_reconcile = None
     queue_before_loss = queue_after_loss = queue_after_reconcile = None
@@ -332,8 +379,13 @@ def _child(output: Path, binary: Path, run_id: str, operation: str,
         steps.append("dispatch")
         credential = owner.sessions.issue()
         authorization = "Bearer " + credential.bearer
+        # Authority cases add a second real-clock expiry sequence after the
+        # ordinary edit. The base native edit must also survive validator
+        # startup; a five-second lease turns that setup cost into a false
+        # NATIVE_GODOT_QUEUE_NOT_COMMITTED before the authority probe begins.
         lease = owner.lease(
-            {"project_id": owner.project_id, "access": "write", "ttl_ms": 90_000},
+            {"project_id": owner.project_id, "access": "write",
+             "ttl_ms": 30_000 if authority_cases else 90_000},
             authorization=authorization, catalog_digest=owner.contract.CATALOG_DIGEST)
         if operation == "scene.save":
             changed = owner._editor.apply_projection({"operation": "scene.node.update",
@@ -360,6 +412,27 @@ def _child(output: Path, binary: Path, run_id: str, operation: str,
         if reservation is None:
             raise RuntimeError("QUEUE_RESERVATION_MISSING")
         reservation_fence = asdict(reservation.fence)
+        if file_lock:
+            if operation != 'scene.save' or failpoint_phase or recover_after_loss or manual_conflict:
+                raise RuntimeError('FILE_LOCK_SCENE_SAVE_ONLY')
+            from studio.tests.jobs.gt07_storage_faults import exclusive_file_holder
+            original_capture = owner._editor.capture
+            selection_before = owner._journal.selection_facts()
+            def locked_capture(intent):
+                nonlocal file_lock_proof
+                # Admission and durable CAPTURE_PREPARED already happened. The
+                # real editor must reject unreadable working bytes before saving.
+                with exclusive_file_holder(output / 'save-lock',
+                        owner._editor.project / owner.contract.SCENE_PATH) as proof:
+                    file_lock_proof = proof
+                    proof['native_save_attempted'] = True
+                    try:
+                        return original_capture(intent)
+                    except BaseException as error:
+                        proof['editor_error'] = getattr(error, 'code', type(error).__name__)
+                        proof['native_error'] = getattr(error.__cause__, 'code', None)
+                        raise
+            owner._editor.capture = locked_capture
         steps.append("reserved")
         steps.append(f"deadline:{request.deadline_ms}")
         steps.append(f"now_before_advance:{epoch_ms()}")
@@ -463,6 +536,7 @@ def _child(output: Path, binary: Path, run_id: str, operation: str,
                                    "queue_after_reconcile": queue_after_reconcile,
                                    "queue_unchanged_during_reopen": queue_reopened == queue_after_loss,
                                    "queue_result_event": queue_result_event,
+                                   "retry_horizon_ms": queue.broker.retry_horizon_ms,
                                    "expected_queue_result_event": {"schema": "hh-durable-dispatch-1",
                                                                     "kind": "OWNER_RESULT",
                                                                     "job_id": row.job.job_id,
@@ -480,40 +554,100 @@ def _child(output: Path, binary: Path, run_id: str, operation: str,
                                                          and submit_calls == 1
                                                          and asdict(recovered[0].fence) == reservation_fence)})
         else:
+            if manual_conflict:
+                # M4 boundary: a second writer mutates the editor after the
+                # durable checkpoint and before this owner applies its edit.
+                original_prepare_edit = owner._editor.prepare_edit
+                injected = False
+                def conflict_prepare(*args, **kwargs):
+                    nonlocal injected
+                    if not injected:
+                        injected = True
+                        current = owner.inspect()
+                        owner._editor.apply_projection({
+                            "operation": "scene.node.update",
+                            "command_id": "manual.editor.edit",
+                            "expected_revision": current["revision"],
+                            "expected_generation": current["generation"],
+                            "target_stable_id": "root",
+                            "payload": {"expected_generation": current["generation"],
+                                        "changes": {"position": [8, 8, 8]}}})
+                    return original_prepare_edit(*args, **kwargs)
+                owner._editor.prepare_edit = conflict_prepare
             response = dispatch.advance(reservation)
         steps.append("advanced")
         steps.append(f"now_after_advance:{epoch_ms()}")
-        if response.status is not Status.COMMITTED:
+        if file_lock:
+            file_lock_proof['selection_preserved'] = owner._journal.selection_facts() == selection_before
+            durable = owner._journal.lookup(request.command_id, request.digest)
+            if not _locked_save_complete(response, durable, file_lock_proof):
+                raise RuntimeError('NATIVE_GODOT_LOCK_PROOF_INCOMPLETE')
+        elif manual_conflict:
+            if (response.status is not Status.UNKNOWN
+                    or response.code not in {"GODOT_EDIT_RECONCILE_REQUIRED",
+                                             "GODOT_PUBLICATION_RECONCILE_REQUIRED"}
+                    or response.postconditions.get("public_ack") is not False
+                    or response.postconditions.get("next_action") != "lookup.reconcile"):
+                raise RuntimeError("NATIVE_GODOT_CONFLICT_NOT_UNKNOWN")
+            after = owner._editor.inspect()
+            root = next(item for item in after["state"]["nodes"] if item["stable_id"] == "root")
+            if root["position"] != [8, 8, 8]:
+                raise RuntimeError("NATIVE_GODOT_MANUAL_STATE_NOT_PRESERVED")
+            durable = owner._journal.lookup(request.command_id, request.digest)
+            if not isinstance(durable, dict) or durable.get("phase") != "UNKNOWN":
+                raise RuntimeError("NATIVE_GODOT_CONFLICT_NOT_DURABLE")
+            passed = True
+        elif response.status is not Status.COMMITTED:
             raise RuntimeError("NATIVE_GODOT_QUEUE_NOT_COMMITTED")
-        after = owner.inspect()
-        root = next(item for item in after["state"]["nodes"] if item["stable_id"] == "root")
-        if operation == "scene.node.update" and root["position"] != [3, 4, 5]:
-            raise RuntimeError("NATIVE_GODOT_READBACK_POSITION_MISMATCH")
-        if operation == "scene.save" and (response.code != "GODOT_MANAGED_SCENE_SAVED"
-                or root["position"] != [6, 7, 8]
-                or after["generation"] <= before["generation"]
-                or after["can_undo"] is not False or after["can_redo"] is not False):
-            raise RuntimeError("NATIVE_GODOT_SCENE_SAVE_READBACK_MISMATCH")
-        if operation == "script_text.replace" and (response.code != "GODOT_MANAGED_SCRIPT_REPLACED"
-                or after["generation"] <= before["generation"]
-                or after["working_files"][owner.contract.SCRIPT_PATH]["sha256"] !=
-                   hashlib.sha256(request.payload["text"].encode("utf-8")).hexdigest()):
-            raise RuntimeError("NATIVE_GODOT_SCRIPT_REPLACE_READBACK_MISMATCH")
-        successor_editor = owner._editor
-        successor_identity = successor_editor.identity
+        if not manual_conflict and not file_lock:
+            after = owner.inspect()
+            root = next(item for item in after["state"]["nodes"] if item["stable_id"] == "root")
+            if operation == "scene.node.update" and root["position"] != [3, 4, 5]:
+                raise RuntimeError("NATIVE_GODOT_READBACK_POSITION_MISMATCH")
+            if operation == "scene.save" and (response.code != "GODOT_MANAGED_SCENE_SAVED"
+                    or root["position"] != [6, 7, 8]
+                    or after["generation"] <= before["generation"]
+                    or after["can_undo"] is not False or after["can_redo"] is not False):
+                raise RuntimeError("NATIVE_GODOT_SCENE_SAVE_READBACK_MISMATCH")
+            if operation == "script_text.replace" and (response.code != "GODOT_MANAGED_SCRIPT_REPLACED"
+                    or after["generation"] <= before["generation"]
+                    or after["working_files"][owner.contract.SCRIPT_PATH]["sha256"] !=
+                       hashlib.sha256(request.payload["text"].encode("utf-8")).hexdigest()):
+                raise RuntimeError("NATIVE_GODOT_SCRIPT_REPLACE_READBACK_MISMATCH")
+        if not manual_conflict and not file_lock:
+            successor_editor = owner._editor
+            successor_identity = successor_editor.identity
         lookup = binding.lookup()
         if lookup.as_dict() != response.as_dict():
             raise RuntimeError("NATIVE_GODOT_LOOKUP_MISMATCH")
         broker_row = queue.broker.lookup(row.job.job_id)
-        if broker_row is None or broker_row.state != "COMMITTED":
+        expected_queue_state = "UNKNOWN" if manual_conflict or file_lock else "COMMITTED"
+        if broker_row is None or broker_row.state != expected_queue_state:
             raise RuntimeError("DURABLE_GODOT_RECEIPT_NOT_COMMITTED")
         queue_state = broker_row.state
         if recover_after_loss:
             if response.status is not Status.COMMITTED or response.code != "GODOT_MANAGED_SCRIPT_REPLACED":
                 raise RuntimeError("RECOVERY_TERMINAL_READBACK_MISMATCH")
+        if authority_cases:
+            if operation != 'scene.node.update' or recover_after_loss or file_lock or manual_conflict or failpoint_phase:
+                raise RuntimeError('M2_GODOT_EDIT_ONLY')
+            from studio.tests.jobs.gt07_godot_authority import godot_cases
+            authority_proof = godot_cases(owner, dispatch, _request_for, credential, lease,
+                                          default_script=factory.DEFAULT_SCRIPT)
         passed = True
     except BaseException as error:
         errors.append(_safe_error(error))
+        # Preserve the owner's typed failure code when a native edit poisons
+        # its journal before the outer dispatcher can collect a response.
+        # This is diagnostic evidence only; it never turns an UNKNOWN result
+        # into PASS and does not serialize exception text.
+        if owner is not None:
+            cause = getattr(owner, '_last_error', None)
+            code = getattr(cause, 'code', None)
+            if type(code) is not str:
+                code = type(cause).__name__ if cause is not None else None
+            if code is not None:
+                errors.append({**_safe_error(cause), 'boundary': 'owner_last_error'})
     finally:
         if dispatch is not None:
             try:
@@ -524,6 +658,11 @@ def _child(output: Path, binary: Path, run_id: str, operation: str,
                     owner_stop_durable = owner._journal.snapshot()['stopped'] is True
             except BaseException as error:
                 errors.append(_safe_error(error))
+            if owner is not None:
+                stop_error = getattr(owner, '_stop_error', None)
+                if stop_error is not None:
+                    errors.append({**_safe_error(stop_error),
+                                   'boundary': 'owner_stop_error'})
             try:
                 dispatch.close()
             except BaseException as error:
@@ -531,9 +670,12 @@ def _child(output: Path, binary: Path, run_id: str, operation: str,
         if owner is not None:
             # Retain the current editor even when an earlier verifier raised.
             # Owner.close() clears its references as each resource drains.
-            if owner._editor is not None:
+            if owner._editor is not None and owner._editor is not editor:
                 successor_editor = owner._editor
-                successor_identity = successor_editor.identity
+                try:
+                    successor_identity = successor_editor.identity
+                except BaseException as error:
+                    errors.append(_safe_error(error))
             try:
                 owner.close()
             except BaseException as error:
@@ -542,7 +684,11 @@ def _child(output: Path, binary: Path, run_id: str, operation: str,
                     [("original", editor, editor_identity)]
                     + ([("successor", successor_editor, successor_identity)]
                        if successor_editor is not None and successor_editor is not editor else [])):
-                proof = _editor_close_proof(getattr(resource, "_cleanup", None), identity)
+                # Only the fully verified negative lock scenario expects a
+                # held command. Natural exits and every Job/handle check stay
+                # mandatory; an arbitrary held editor is not a clean success.
+                proof = _editor_close_proof(getattr(resource, "_cleanup", None), identity,
+                    expected_held=bool(file_lock and passed and resource is editor))
                 proof["role"] = role
                 editor_cleanup_proof.append(proof)
         if queue is not None:
@@ -566,6 +712,8 @@ def _child(output: Path, binary: Path, run_id: str, operation: str,
         "queue_job_id": row.job.job_id if row is not None else None,
         "queue_state": queue_state,
         "recovery_proof": recovery_proof,
+        "file_lock_proof": file_lock_proof,
+        "writer_authority": authority_proof,
         "response": response.as_dict() if response is not None else None,
         "stop_snapshot": asdict(stop_snapshot) if stop_snapshot is not None else None,
         "errors": errors,
@@ -622,39 +770,60 @@ def _recover_crash(output: Path, binary: Path, run_id: str, source: dict, closur
         journal = actor._recovery._journal
         selected = journal.selection_facts()
         check("selected_version_preserved", selected == cut["selection"])
-        if cut["original_response"] is not None:
+        ack_cut = cut["original_response"] is not None
+        if ack_cut:
             check("original_ack_preserved", initial == cut["original_response"])
+            # A valid publication receipt is already the answer. Do not mint
+            # a recovery lease, reopen the editor, or append a receipt.
+            response = initial
+            state_before_reconcile = journal.snapshot()
+            report.update(initial_lookup=initial, response=response,
+                          recovery_route="ORIGINAL_LOOKUP_ONLY")
+            check("expected_terminal", response["status"] == "COMMITTED")
+            check("durable_response", journal.lookup_response(command, digest) == canonical_bytes(response))
+            check("ack_cut_no_recovery_append", journal.snapshot() == state_before_reconcile)
         else:
             check("no_premature_ack", initial["status"] != "COMMITTED")
-        lease = actor.lease({"project_id": actor.project_id, "ttl_ms": 30_000}, **auth)
-        check("new_fencing_epoch", lease["fencing_epoch"] > request["fencing_epoch"])
-        body = {**lookup_body, "digest": digest, "lease_id": lease["lease_id"],
-            "fencing_epoch": lease["fencing_epoch"], "deadline_ms": min(lease["expires_ms"], epoch_ms() + 29_000)}
-        response = actor.reconcile(body, **auth).as_dict()
-        report.update(initial_lookup=initial, response=response)
-        restored = selected == original["selection"] and cut["original_response"] is None
-        check("expected_terminal", response["status"] == ("REJECTED" if restored else "COMMITTED"))
-        check("durable_response", journal.recovered_response(command, digest) == canonical_bytes(response))
-        if cut["original_response"] is not None:
+            lease = actor.lease({"project_id": actor.project_id, "ttl_ms": 30_000}, **auth)
+            check("new_fencing_epoch", lease["fencing_epoch"] > request["fencing_epoch"])
+            body = {**lookup_body, "digest": digest, "lease_id": lease["lease_id"],
+                "fencing_epoch": lease["fencing_epoch"], "deadline_ms": min(lease["expires_ms"], epoch_ms() + 29_000)}
+            state_before_reconcile = journal.snapshot()
+            response = actor.reconcile(body, **auth).as_dict()
+            report.update(initial_lookup=initial, response=response,
+                          recovery_route="REGISTERED_RECOVERY")
+            restored = selected == original["selection"]
+            check("expected_terminal", response["status"] == ("REJECTED" if restored else "COMMITTED"))
+            check("durable_response", journal.recovered_response(command, digest) == canonical_bytes(response))
+        if ack_cut:
             check("same_ack_after_reconcile", response == cut["original_response"])
         editor = actor._recovery._editor
-        observation = editor.script_observation()
-        report["editor_identity"] = editor.identity
-        check("fresh_editor", editor.identity["session_id"] != original["editor_identity"]["session_id"]
-              and (editor.identity["pid"], editor.identity["creation_filetime"]) !=
-                  (original["editor_identity"]["pid"], original["editor_identity"]["creation_filetime"]))
-        check("native_readback_files", observation["snapshot"]["working_files"] == cut["files"])
-        state = journal.snapshot()
-        check("retry_no_effect", actor.reconcile(body, **auth).as_dict() == response
-              and actor._recovery._editor is editor and journal.snapshot() == state)
+        if cut["original_response"] is not None:
+            check("ack_cut_no_editor_reopen", editor is None)
+            check("retry_no_effect", actor.lookup(lookup_body, **auth).as_dict() == response
+                  and actor._recovery._editor is None and journal.snapshot() == state_before_reconcile)
+        else:
+            observation = editor.script_observation()
+            report["editor_identity"] = editor.identity
+            check("fresh_editor", editor.identity["session_id"] != original["editor_identity"]["session_id"]
+                  and (editor.identity["pid"], editor.identity["creation_filetime"]) !=
+                      (original["editor_identity"]["pid"], original["editor_identity"]["creation_filetime"]))
+            check("native_readback_files", observation["snapshot"]["working_files"] == cut["files"])
+            state = journal.snapshot()
+            check("retry_no_effect", actor.reconcile(body, **auth).as_dict() == response
+                  and actor._recovery._editor is editor and journal.snapshot() == state)
+        stable_state = state_before_reconcile if ack_cut else state
         check("lookup_exact", actor.lookup(lookup_body, **auth).as_dict() == response)
         check("selection_unchanged_after_recovery", journal.selection_facts() == selected)
         check("queue_not_redispatched", _event_head(queue.log) == original["queue_head"])
         actor.close()
         actor = None
-        cleanup = _editor_close_proof(editor._cleanup, report["editor_identity"])
-        report["editor_cleanup"] = cleanup
-        check("recovery_editor_clean", cleanup["valid"])
+        if editor is not None:
+            cleanup = _editor_close_proof(editor._cleanup, report["editor_identity"])
+            report["editor_cleanup"] = cleanup
+            check("recovery_editor_clean", cleanup["valid"])
+        else:
+            report["editor_cleanup"] = {"valid": True, "not_started": True}
         restart = output / "lookup-restart"
         restart.mkdir()
         actor = module.GodotRecoveryHost.open(restart, storage_id=original["storage_id"],
@@ -663,10 +832,13 @@ def _recover_crash(output: Path, binary: Path, run_id: str, source: dict, closur
         auth["authorization"] = "Bearer " + credential.bearer
         journal = actor._recovery._journal
         state = journal.snapshot()
+        if ack_cut:
+            reopened = actor.lookup(lookup_body, **auth).as_dict()
+        else:
+            reopened = actor.reconcile(body, **auth).as_dict()
         check("reopen_lookup_and_retry_no_engine", actor.lookup(lookup_body, **auth).as_dict() == response
-              and actor.reconcile(body, **auth).as_dict() == response
-              and actor._recovery._editor is None and journal.snapshot() == state
-              and journal.selection_facts() == selected)
+              and reopened == response and actor._recovery._editor is None
+              and journal.snapshot() == stable_state and journal.selection_facts() == selected)
         report["passed"] = True
     except Exception as error:
         report["errors"].append(_safe_error(error))
@@ -684,7 +856,9 @@ def _recover_crash(output: Path, binary: Path, run_id: str, source: dict, closur
 
 
 def run(output: Path, binary: Path, run_id: str, operation: str,
-        recover_after_loss: bool, failpoint_phase: str | None = None) -> int:
+        recover_after_loss: bool, failpoint_phase: str | None = None,
+        manual_conflict: bool = False, *, file_lock: bool = False,
+        authority_cases: bool = False) -> int:
     output = output.resolve()
     # The frozen child runs with its snapshot as cwd.  Keep the pinned editor
     # executable absolute so admission cannot silently resolve it under the
@@ -721,6 +895,12 @@ def run(output: Path, binary: Path, run_id: str, operation: str,
              "--run-id", run_id, "--operation", operation]
     if recover_after_loss:
         child.append("--recover-after-loss")
+    if manual_conflict:
+        child.append("--manual-conflict")
+    if file_lock:
+        child.append("--file-lock")
+    if authority_cases:
+        child.append("--authority-cases")
     if failpoint_phase is not None:
         child.extend(["--failpoint-phase", failpoint_phase])
     environment = os.environ.copy()
@@ -793,6 +973,9 @@ def main(argv=None) -> int:
                                                  "script_text.replace"),
                         default="scene.node.update")
     parser.add_argument("--recover-after-loss", action="store_true")
+    parser.add_argument("--manual-conflict", action="store_true")
+    parser.add_argument("--file-lock", action="store_true")
+    parser.add_argument("--authority-cases", action="store_true")
     parser.add_argument("--failpoint-phase", choices=("PREPARED", "VALIDATED", "ACTIVATING",
                                                         "COMMITTED", "RELOAD", "ACK"))
     parser.add_argument("--frozen", action="store_true")
@@ -809,7 +992,8 @@ def main(argv=None) -> int:
                                   manifest["files"], manifest["source_closure_sha256"])
         return _child(args.output.resolve(), args.binary.resolve(), args.run_id,
                       args.operation, args.recover_after_loss,
-                      manifest["files"], manifest["source_closure_sha256"], args.failpoint_phase)
+                      manifest["files"], manifest["source_closure_sha256"], args.failpoint_phase,
+                      args.manual_conflict, args.file_lock, args.authority_cases)
     if args.output.name != args.run_id:
         parser.error("output basename must equal the run ID")
     if args.recover_after_loss and args.operation != "script_text.replace":
@@ -818,6 +1002,14 @@ def main(argv=None) -> int:
     scenario = "godot-recovery" if args.recover_after_loss else {
         "scene.node.update": "godot-edit", "scene.save": "godot-save",
         "script_text.replace": "godot-script"}[args.operation]
+    if args.file_lock:
+        if args.operation != 'scene.save' or args.failpoint_phase or args.manual_conflict:
+            parser.error('file lock requires scene.save without other fault modes')
+        scenario = 'godot-save-locked'
+    if args.authority_cases:
+        if args.operation != 'scene.node.update' or args.failpoint_phase or args.manual_conflict or args.file_lock:
+            parser.error('authority cases require scene.node.update without other fault modes')
+        scenario = 'godot-authority'
     return scenario_main(["--scenario", scenario, "--godot-binary", str(args.binary),
                           "--run-id", args.run_id, "--output-root", str(args.output.parent),
                           *( ["--failpoint-phase", args.failpoint_phase] if args.failpoint_phase else [] )])

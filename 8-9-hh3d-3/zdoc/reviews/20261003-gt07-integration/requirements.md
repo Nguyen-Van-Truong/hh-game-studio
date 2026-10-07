@@ -1,50 +1,481 @@
-# GT07 integration map — current status (O10)
+# GT07 integration map — current status (O11)
 
 AUTHORITY=0; GT07=IN_PROGRESS; GT01-GT06=ACCEPTED; GT08-GT10=PLANNED.
-This file records the fixed M1-M9 scope and evidence status; it is not an acceptance signature.
-All raw diagnostic evidence remains immutable and is stored under `studio/.local/reviews/` for new runs.
-Historical entries below are retained for provenance; they do not override the table above.
+This map is evidence bookkeeping, not an acceptance signature; raw evidence is immutable under `studio/.local/reviews/`.
+F1 ACK-cut repair, F2 compact map, F3 runner, and F4 final matrix are complete;
+F5 remains open for the two independent critics. The fresh final matrix
+`gt07-final-matrix-gt07-m1-final-20261007-04` has 30/30 PASS with actual
+supervisor exit 0, row exits 0, and clean Job/tree/handle closeout. Native
+failures and interrupted attempts remain immutable, including their original
+verdicts.
 
-| Matrix | Status | Existing evidence | Remaining proof |
+Latest current checkpoint, 07-10-2026: final matrix
+`gt07-final-matrix-gt07-m1-final-20261007-04` is terminal COMPLETE with 30/30
+PASS. Its source freeze is `e48e936933540e1a518310636919ebe7e27a6d230d98c0aeed5cac3bf0afa85d`,
+matrix closure is `f8221ec248c6c75e00a5d385b09e5ba8e9ef0cf1ca2acfa6353f50a40a371692`,
+and supervisor `gt07-final-supervisor-20261007-06` recorded actual exit 0,
+helper exit 0, tree verified and closed handles. The exact Scheduler task was
+removed after terminal closeout; XML and receipts remain under `.local/reviews`.
+This is still AUTHORITY=0 until the final manifest receives two independent
+same-hash critic reports.
+
+Historical checkpoint, 07-10-2026: the `20261011-63` matrix ID was minted with a
+future date, but ran on 07-10. Its manifest remains RUNNING after its coordinator
+disappeared: two rows have terminal PASS receipts; row 2 has source material only,
+no capture or independently recorded exit. Process/Scheduler inspection on 07-10
+found no measurement process/task. Treat the attempt as INTERRUPTED/UNKNOWN;
+do not resume its IDs or infer cleanup from the absence of a process. The next
+launch uses a demand task and supervisor exit receipt, independent of the tool
+session, and actual local-date IDs. The runner now records PID/time and safe error
+boundaries; single-scenario native admission uses the same frozen coordinator path.
+Focused runner/failure/process tests: 35 run, 32 passed, 3 skipped, exit 0.
+
+Earlier native failures remain unresolved: save journal held/recovery-required,
+Blender publication UNKNOWN, and recovery Stop UNKNOWN. Instrumentation commits
+`4e648fa8`/`748dd23f` preserve nested failure locations and Stop persistence errors;
+they do not prove a product repair. Targeted passing probes do not establish that
+the failures were transient. A repeated failure must be diagnosed from its new
+boundary before another full matrix is attempted. M8's nested measurement guard
+was independently repaired in `a6abdb8e`; no GT06 benchmark rerun is needed.
+
+The first row-1 failure was reproduced under `gt07-godot-fifo-20261007-01`:
+the owned Godot import ended with profile phase `import -9` and the executor
+returned `EXECUTOR_ENGINE_OR_HOST_NOT_CLEAN`; its Job/tree cleanup was clean.
+The same frozen FIFO lane then passed end-to-end under fresh
+`gt07-godot-fifo-20261007-02` (45 checks, actual host exit 0, tree verified,
+source closure `d95fa678bb024fe0f44db1ae2acf4ca23a5835a730548273214a346489493329`).
+This is evidence of a timing/resource-sensitive failure boundary, not proof that
+the failure is harmless. The failed matrix remains FAIL and is not reused; the
+next complete matrix uses fresh IDs and the same source closure after a quiet
+host preflight.
+
+| Matrix | Status | Current evidence / run IDs | Remaining proof |
 |---|---|---|---|
-| M1 / Q01 | DONE (host) | `gt07-jobs-integration-20261004-03`, 46 tests | Repeat only in final frozen matrix |
-| M2 / Q03 | OPEN (partial) | static admission/lease guards; native writer FIFO `gt07-native-writer-fifo-20261005-02` | final frozen repeat and explicit coordinator revoke mapping |
-| M3 / Q05 | OPEN (partial) | Godot edit/save/script and receipt-loss run21; Blender queued export `gt07-native-queue-20261005-06`; all six Godot save crash cuts `gt07-native-godot-20261005-06..11`; queue-level consumer `gt07-cross-app-20261005-07` | queue-level crash/reload/last-good cut and frozen matrix |
-| M4 / Q06 | OPEN (partial) | `gt07-native-editor-conflict-20261005-01` actual EditorOwner edit/undo/redo plus stale-checkpoint rejection, clean exit | queue lease/manual `.tscn`/`.blend` conflict with no rollback overwrite |
-| M5 / TX05/TX09 | OPEN | component fault helpers | filelock, cross-volume and injected disk/fsync cuts |
-| M6 / Q04 | OPEN (partial) | Stop drain and native run16 | full queue/cancel/reconnect matrix in final run |
-| M7 / Q07 | OPEN (partial) | 510-record capacity/JOURNAL_FULL | real-clock expiry, compaction/rotation |
-| M8 / Q08 | OPEN | host cleanup helpers | PID reuse, timeout ownership, OOM Job evidence |
-| M9 / TX13 | OPEN | no native Play mutation proof | Play/capture conflict on pinned fixture |
+| M1 / Q01 | FINAL MATRIX PASS | `gt07-m1-final-20261007-04`; row 00, actual exit 0 | two same-hash critics |
+| M2 / Q03 | FINAL MATRIX PASS | rows 01–02 and 03–04, actual exits 0 | two same-hash critics |
+| M3 / Q05 | FINAL MATRIX PASS | rows 05–23, 30/30 matrix closure | two same-hash critics |
+| M4 / Q06 | FINAL MATRIX PASS | rows 09, 12 and 20–23, actual exits 0 | two same-hash critics |
+| M5 / TX05/TX09 | FINAL MATRIX PASS | row 24 plus Godot save cuts, actual exit 0 | two same-hash critics |
+| M6 / Q04 | FINAL MATRIX PASS | row 26, actual exit 0 | two same-hash critics |
+| M7 / Q07 | FINAL MATRIX PASS | row 27, actual exit 0 | two same-hash critics |
+| M8 / Q08 | FINAL MATRIX PASS | row 25, supervisor/Job/tree closeout | two same-hash critics |
+| M9 / TX13 | FINAL MATRIX PASS | row 28, actual exit 0 | two same-hash critics |
 
 ## Next
 
-N1: scenario runner, mandatory engine-free dry-run, fixed measurement guard,
-stop-on-first-failure matrix, and opt-in failpoint admission are implemented;
-the 20 focused runner/guard/recovery tests and both Godot/Blender dry-run
-contracts pass.
-Native M1–M9 execution remains open and must use fresh IDs after this source
-freeze.  A dry-run validates wiring and contract bounds only; it cannot prove
-runtime IPC, process cleanup, or engine behavior.
+1. F2: keep this compact map; old candidate `5f34c0a6…3bce0d` is **SUPERSEDED**.
+2. F3: admission is one durable coordinator step before native work. The final
+   matrix used one fresh source freeze and retained supervisor/row receipts.
+3. F4: complete. The frozen matrix has 30/30 PASS, actual exits and clean
+   Job/tree/handle closeout; raw evidence is immutable under `.local/reviews`.
+4. F5: build the final source/review/raw manifest, then send that exact hash to
+   two independent read-only critics. Only their explicit same-hash approval can
+   advance GT07.
 
-The fresh six-scenario dry-run matrix on 05-10 (`godot-edit`, `godot-save`,
-`godot-script`, `godot-recovery`, `blender-box`, `blender-export`; IDs
-`gt07-native-godot-20261005-12..15` and `gt07-native-queue-20261005-12..13`)
-passed with both pinned binary hashes, source closures and the shared lock
-checked. No engine started and no native acceptance is implied.
-N2: Godot save cuts `gt07-native-godot-20261005-06` through `-11` reached
-PREPARED, VALIDATED, ACTIVATING, COMMITTED, RELOAD and ACK in fresh runs.
-Each intentional child exit 1 was followed by recovery exit 0, clean owned Job
-tree, and a retained last-good state; these are diagnostic crash-cut proofs,
-not acceptance. The older RELOAD failures in runs 25 and 02 remain immutable.
-The cross-application Blender artifact handoff and queue-level last-good proof
-are still open.
-N2-N5: the Blender producer PREPARED cut is recorded above; execute the
-remaining VALIDATED/ACTIVATING/COMMITTED/ACK producer cuts, then the separate
-queue-level Godot reload/ACK binding, followed by M2/M4, M5/M7, M6/M8/M9 with
-fresh IDs and preserved raw. `RELOAD` is a Godot consumer phase and is rejected
-for the Blender producer route.
-N6: freeze closure once, run the full matrix plus focused regressions, map artifacts, then send the same hash to two independent critics.
+No critic has been called for the superseded package. Do not merge, tick, or call GT07 accepted from diagnostics alone.
+
+Checkpoint 2026-10-07: host regression row `gt07-gt02-06-regression-20261007-12` now passes all 17
+focused modules with separate module Job/actual-exit receipts and source closure
+`e48e936933540e1a518310636919ebe7e27a6d230d98c0aeed5cac3bf0afa85d`. The runner binds test
+import roots explicitly and stops at the first module boundary; this host-only diagnostic does
+not replace the required one-closure 30-row native matrix. The native recovery test now asserts
+the O11 explicit-reconciliation route for an UNKNOWN command whose selection is still last-good.
+
+The latest twenty-one-row engine-free admission produced matrix closure
+`1b3e4344bf79250c0386387001660bfa2930e29053e106a0fed26f37e638e3ef`.
+The previous 20261006 admission closure `d5823960a521df2b411c18f973a6a7195b3e0da0ba12c515e0b143321ee31e63`
+is retained as superseded admission evidence.
+It includes host-test M2; the M2 host execution closure is
+`fe032559fe9f45686847bb82ed8291673f7447d3928d5ad38e9e9d7cf8cdd58b`.
+The four-row host contract/regression execution produced closure
+`45fc7aa939051568a93e8df8cc676e6e8e4429dff170ea1c06b0be592f291484`.
+It is host-test evidence only; it does not authorize native or acceptance.
+The previous seventeen-row admission closure
+`2337c83fb522bbbfb3fe87937354fa2872ec842c92d601386285e241a2070d6d` and the earlier sixteen-row admission closure
+`d5520195b9882db769f6e7f1ba2587324fcfdfec27df0aa50c05d5b1c8138b86`
+is retained as historical evidence.
+The host-test execution closure was
+`1ada0175e15dda19810d4344056accba9871a518c904c3ff044dbb1bb9300954`.
+It is an admission digest only: no engine was started and it cannot substitute
+for the missing rows or the final frozen run.
+
+## Checkpoint, 06-10-2026 — M9 current-source binding and Play mutation
+
+The installed selector/binding generation was stale after three committed
+source edits. A new one-use refresh in
+`zdoc/reviews/20261006-gt07-binding-refresh/` required the exact old metadata
+hashes, exact three-file delta, and source count 233, replaced both metadata
+files atomically with rollback, and verified `load_installed` (235 execution
+files). No engine ran during the refresh; old/new bytes and postcheck are
+retained in the review directory.
+
+After the matching dry-run `gt06-gt07-m9-playmutation-20261006-01`, native
+`gt06-gt07-m9-playmutation-20261006-02` exited 0 with 18/18 checks. The owned
+generated marker was written while Play was RUNNING; the first capture
+committed; the changed capture was rejected as `REPLAY_CAPTURE_CHANGED`,
+lookup remained `UNKNOWN` without artifact/replay, and the child exited
+naturally with a closed zero-member Job and no retained handle. Runtime source
+closure was `630124fd17a2e2306408fbd8f6f22bb4214b056b9b6f03696933ee227c820f10`.
+This remains authority-zero diagnostic evidence until the final frozen matrix
+and two critics.
+
+## Checkpoint, 06-10-2026 - Blender producer phase coverage
+
+The narrow Blender repair in commit `73008c05` gives `export.prepare` the
+remaining portion of the host's existing ten-second ceiling when the ordinary
+six-second UI wait is insufficient; other native operations keep their normal
+wait and the queue lease/deadline is unchanged. The focused timeout guard and
+the existing GT07 failpoint/scenario tests exit 0.
+
+After a matching engine-free dry-run, current-source producer cuts completed
+for `gt07-native-queue-20261006-11` (VALIDATED), `-12` (ACTIVATING), `-13`
+(COMMITTED), and `-14` (ACK), in addition to the retained PREPARED cut `-09`.
+Every wrapper reports `passed=true`, the intentional phase child exit is
+captured, the owned Job is closed with zero active members and no retained
+handle, and the source closure is
+`17f381a0b2078096d9631556620a4cfd0c5552ad0d49b89865f0234078b7a0e2`. These
+failpoint runs are diagnostic evidence; they do not grant acceptance or
+replace the final frozen M1-M9 matrix and two same-hash critics.
+
+M2 late/revoked writer, M4 Blender conflict, M5 Godot-save lock, and M6 Stop
+coverage now have current diagnostic receipts. M3 now has producer phase
+coverage and consumer cuts; M7, M8 and M9 now have current-source diagnostic
+receipts. They remain authority-zero until one frozen M1–M9 matrix is bound and
+reviewed. Do not
+repeat completed diagnostics solely to refresh timestamps; build the final
+source/review/raw manifest and then obtain two independent critics on that hash.
+
+`gt07-native-writer-fifo-20261006-05` is a fresh M2 diagnostic on the current
+source: unit and native wrappers exited 0, two client processes exited 0, all
+19 FIFO/fencing/expiry/Stop checks passed, Blender Job/tree was clean,
+and Stop completed in 109 ms. Correction: there was no revoke-during-effect or
+late-completion check, and no matching O10 dry-run; this redundant diagnostic
+does not close M2 and is excluded from final evidence. No rerun of this subset.
+The eight-scenario app runner alone is not the full M1–M9 matrix. Close only
+missing coverage, then freeze one closure and execute the complete matrix plus
+affected regressions. Submit the same hash to two independent critics. Existing slices are
+context; none grants acceptance. Do not replay a completed diagnostic solely
+to refresh its timestamp. Every native launch needs its matching engine-free
+dry-run; source changes invalidate that admission.
+
+## Checkpoint, 06-10-2026 - held-editor receipt collection
+
+`gt07-native-queue-20261006-06` - M2 FAIL, child 1/Blender 0/Job clean; final native inspect used an invalid uppercase ID (reproduced offline); raw unchanged.
+`gt07-native-queue-20261006-07` - M2 Blender diagnostic PASS after recipe validation in dry-run; actual child/wrapper/Blender exits 0, source/snapshot unchanged, closure `036c21bf6b77c1ff00fb9730267446a6b9e2293e0c53e722917734d1fd1a33df`; two case effects observed, revoked reservation remains RESERVED, retained receipt is supervisor-only. 17 scenario tests exit 0 include rejection of the old final-read recipe before engine launch; AUTHORITY=0.
+
+`gt07-native-godot-20261006-01..03` - FAIL, child exit 1; the real lock preserved last-good but healthy-editor identity blocked UNKNOWN collection; raw retained.
+`gt07-native-godot-20261006-04` - FAIL, child exit 1, editor exit 0/Job clean; repaired collector returned the journal's canonical UNKNOWN, but the probe expected a transient save-error code.
+`gt07-native-godot-20261006-05` - diagnostic PASS, child/wrapper/editor/lock-holder exits 0, Job/tree/handles clean, source/snapshot unchanged (`d36da7be6f7b701a349eb26ab5e82f13356359d0c808715014da4fbe20514b35`); real share=0 denial 32 at capture precondition, file identity/hash and active selection unchanged, queue UNKNOWN, durable Stop.
+
+Repair: read-only `lookup_identity` permits only the held state while retaining
+source/process/root/security/diagnostic checks; effects and COMMITTED readback
+still require healthy identity. No authentication or journal fallback exists.
+Nine focused regression tests include the old failure, real session rotation/
+revocation, source/identity/phase drift and receipt mismatch. The probe checks
+the actual reducer's durable response, not the owner's pre-journal error code.
+94 focused tests completed, exit 0 (92 passed, 2 environment skips); the added reducer guard and M6
+host tests then passed in a 21-test selection. Installed binding refresh02 is
+historical after these production edits; refresh the exact reviewed delta
+before the final frozen matrix. No benchmark rerun or GT07 acceptance claim.
+
+## Checkpoint, 06-10-2026 - Blender export Job cap ordering repair
+
+`gt07-export-caps-20261006-02` reproduced a Windows boundary without starting
+Blender: configuring `JOB_OBJECT_LIMIT_JOB_TIME` after a warmed helper had
+already been assigned made the queried 15-second cap include consumed CPU time
+(`150468750` 100-ns units instead of `150000000`). Configuring and verifying the
+same limits while the Job was empty, through the existing `cli_job.create`
+`before_assign` callback, matched the exact CPU, memory, process-count and flag
+caps; both helpers exited 0 and their Jobs closed with zero active members.
+The regression is covered by the focused publication/cleanup/Job tests.
+
+The repaired native export `gt07-native-queue-20261006-01` then passed its
+matching dry-run and completed the pinned Blender path: native child and
+wrapper exited 0, the output GLB preflight matched the snapshot and revision,
+and the owned Job closed with zero active members and no retained handle. Its
+source closure is `124f8423a1cb77bfcbddf7826f618b6ef2d7bb72e06566128c0a0c25cfffd006`.
+The earlier `gt07-native-queue-20261005-82` mismatch remains immutable failure
+history and is not relabeled. This is a diagnostic repair, not GT07 acceptance;
+the final frozen M1-M9 matrix and two same-hash critics remain required.
+
+## Latest diagnostic checkpoint
+
+`gt07-m6-host-20261006-01` — engine-free M6/Q04 host receipt: command
+`cmd.gt07.m6.host.20261006.01`, 10 tests, actual process exit 0, source closure
+`32c64698b4cf84f10e60768ff22304823b7417023431c8d92f3b7188e95e0ddc`, no child
+processes/owned Jobs/retained handles. AUTHORITY=0; final matrix/critics remain open.
+
+`gt07-native-queue-20261006-08` — current-source Blender M4 conflict diagnostic
+after its matching dry-run: actual child/wrapper/Blender exits 0, tree verified,
+Job closed with zero active members and no retained handle; manual edit and hash
+were preserved, queue remained `UNKNOWN` with `lookup.reconcile`, source and
+snapshot stayed unchanged. AUTHORITY=0; final matrix/critics remain open.
+
+`gt07-native-godot-20261006-17` — Godot M2 diagnostic PASS after the matching
+engine-free dry-run: actual child/editor/wrapper exits 0, owned Jobs/tree clean,
+no retained handles, source/snapshot unchanged, and the authority proof records
+late COMMITTED reply-after-expiry, contender fencing, and revoke-after-effect
+UNKNOWN with `public_ack=false`; AUTHORITY=0 and final matrix/critics remain open.
+
+`gt07-native-queue-20261005-47` — Blender manual conflict PASS; child/wrapper 0,
+source unchanged (`0eff6f0d…137172`), manual checkpoint retained. Runs 45/46 remain
+failed harness history (missing import, then wrong expected terminal state).
+
+`gt07-cross-app-20261005-53` and `-54` close the previously missing consumer
+cuts diagnostically on source closure `c91bc0d770e9730cb10a3bc9fd8e80729f6db9d3485b024664706658993be51c`:
+RELOAD retains the exact last-good CURRENT/journal and refuses ambiguous staging;
+ACK reopens the durable owner and reconciles the queue lookup-only with no second
+native dispatch. Authority remains zero; the final frozen M1–M9 matrix and critics
+are still required.
+
+`gt07-native-godot-20261005-60..64` and `gt07-native-queue-20261005-60..62`
+passed the eight-scenario sequential runner after matching engine-free dry-runs:
+actual editor/Blender children and wrappers exited 0, owned Jobs closed cleanly,
+and source closures were recorded separately for each pinned tool. These are
+current-source diagnostic slices; the final package must rerun the complete
+M1–M9 map after its single freeze.
+
+## Historical checkpoints
+
+## Checkpoint, 05-10-2026 — M8 host process ownership proof
+
+`gt07-m8-process-20261005-05` passed its dry-run/source binding and all three
+host-only scenarios. A forged PID/start-time identity was refused before any
+termination; the owned timeout killed only the gated root and descendant while
+an unrelated sentinel remained alive; and a real 64 MiB Windows Job memory cap
+denied `VirtualAlloc` with native error 1455 rather than a Python allocation
+exception. All worker exits, Job membership, cleanup handles and zero active
+counts were captured. This is authority-zero host evidence; a final frozen
+M1–M9 repeat and critic package remain required.
+
+The frozen-source host repeat `gt07-m8-process-20261005-07` reproduced all
+three scenarios with actual worker exits, zero active/closed Job handles and
+the same source closure.  It is still authority-zero evidence until the final
+M1–M9 package and two same-hash critics.
+
+## Checkpoint, 05-10-2026 — M5 storage fault boundary
+
+`gt07-m5-storage-20261005-05` passed its engine-free dry-run and the
+authority-zero host-only matrix after a reproducer repair.  The exclusive
+Windows holder refused `MoveFileExW` with access error 5 while the target
+identity and last-good bytes stayed unchanged; a writable C:→D: pair refused
+the cross-volume replace with error 17 and preserved the destination; and the
+fsync/disk-full injections returned `UNKNOWN` with no receipt and no commit
+proof.  The worker exited 0 and all owned temporary files were cleaned.  The
+report is diagnostic evidence, not product acceptance; the frozen M1–M9
+repeat and requirement-map binding remain open.  Raw is immutable under
+`studio/.local/reviews/gt07-m5-storage-20261005-05/`; source closure is
+`78676a84db15d9d4af7b62cb9b51787e5064e0796212f21d8d8c19ad2d4174a4`.
+
+## Checkpoint, 05-10-2026 — M9 dry-run boundary
+
+Commit `21ddb086` added the engine-free adversary dry-run contract: run ID,
+fixed review root, installed source/driver hashes and forbidden backend/native
+flags are checked before any process can start. The one-use refresh in
+`zdoc/reviews/20261005-gt07-binding-refresh/` repaired the stale 215-entry
+generation to a verified 233-entry source map and 235-entry execution map;
+its receipt and read-only postcheck retain the old/new metadata bytes and GT05
+anchor. Fresh `play-mutation` dry-run `gt06-gt07-m9-playmutation-20261005-01`
+then exited 0 with no backend, process, or engine started. This is still
+authority-zero wiring evidence. Perform exactly one bounded native
+Play/capture conflict run before the final matrix; do not bypass the binding or
+convert the dry-run/static proof to acceptance.
+
+## Checkpoint, 05-10-2026 — M9 bounded native play-mutation
+
+Fresh dry-run `gt06-gt07-m9-playmutation-20261005-02` passed with execution
+closure `406a07878af08237ebd04bd0a4b061e0ed12c356d6586961c5e05f5e342287c1`.
+The bounded native run then exited 0. Its HTTP adversary recorded 18/18
+checks: mutation was made while Play was RUNNING, the first capture committed,
+the changed capture was rejected with `REPLAY_CAPTURE_CHANGED`, lookup stayed
+`UNKNOWN` with no artifact or replay, and no second runtime appeared. The
+import/runtime children both exited naturally 0; Job handles closed with zero
+active members and no retained handle; source and driver stayed unchanged.
+Raw evidence is immutable at
+`studio/.local/reviews/gt06-gt07-m9-playmutation-20261005-02/`. This is
+authority-zero diagnostic evidence; M9 still needs the final frozen M1–M9
+matrix and two same-hash critics.
+
+## Checkpoint, 05-10-2026 — M7 design boundary
+
+The generic `Journal.compact(now_ms)` and the 510-record capacity run do not
+close M7: `DurableBroker` still binds one append-only hash stream and rejects
+rotation at `BROKER_JOURNAL_FULL`. A safe implementation needs a protected
+segmented log manager with rotate-prepared/active-pointer/rotate-committed
+custody anchors, immutable archive lookup and crash cuts. Until that design
+and real-clock evidence exist, M7 remains OPEN; do not truncate `.events`,
+change stream identity in place, or infer rotation from generic journal tests.
+
+05-10: Queue-only PREPARED/ACTIVE_POINTER/COMMITTED custody anchors now preserve old stream bytes; real process cuts, native set-before-flush uncertainty, epoch reserve and append/rotation race checks passed within 61 focused tests (exit 0). Legacy fixture I/O stays unchanged. Queue integration and real-clock retention remain open; no M7 acceptance claim.
+
+## Checkpoint, 05-10-2026 — M7 segmented queue implementation (authority zero)
+
+The coordinator added a queue-only `QueueJournalManager` integrated with
+`DurableBroker`/`QueueOwner`. Checkpoints hash their metadata and rows, validate
+the logical stream and trusted parent, and are projected before custody barriers;
+failed projection closes the uncommitted candidate without selecting it. Reopen
+follows witnessed previous descriptors one segment at a time and detects cycles,
+duplicate archive IDs and parent escapes. Expired terminal rows leave an
+immutable archive tombstone: an identical command returns the old terminal row,
+while a changed payload is rejected as `BROKER_ID_CONFLICT`.
+
+Evidence: `studio/tests/jobs/test_segmented_journal.py` (5 selected tests, native custody
+guard, actual exit 0) and `studio/tests/jobs/test_durable_broker.py` (18 tests,
+actual exit 0; 90.315s). This is an implementation/regression checkpoint only;
+M7 remains OPEN until real-clock native soak, crash cuts and the final M1–M9
+matrix are reviewed.
+
+The opt-in real-clock case was then run with `GT07_REAL_CLOCK_SOAK=1`: one
+selected test, actual exit 0 in 60.545s, using wall-clock epoch timestamps and
+a 60-second fixture horizon. The terminal receipt disappeared from the active
+projection after rotation while the archive tombstone remained readable. This
+closes the bounded expiry observation only; malformed checkpoint and crash-cut
+coverage remains open.
+
+The malformed-candidate case was also run under the custody guard (one selected
+test, actual exit 0). An extra checkpoint row made the candidate invalid; commit
+was rejected and the registry event pointer remained on the old witnessed log.
+This closes validation-before-pointer-switch for this cut only, not process
+crash cuts at each custody barrier.
+
+## Checkpoint, 05-10-2026 — M7 retention and archive recovery hardening
+
+M7 now persists logical stream, retry horizon, and global enqueue sequence in
+the checkpoint metadata. Reopen preserves the logical fence and sequence after
+compaction; archive lookup uses the same broker projection for terminal results,
+UNKNOWN-to-terminal suffixes, queued expiry, and Stop cancellation. Same-ID
+retry after the horizon returns `BROKER_RETRY_EXPIRED`; a changed command remains
+`BROKER_ID_CONFLICT`. Focused Windows custody coverage is green: six segmented
+journal tests (one opt-in wall-clock case skipped), eight retention/archive
+regressions, and eighteen durable-broker regressions. This is still authority
+zero and does not close crash cuts or the final M1–M9 matrix.
+
+## Checkpoint, 05-10-2026 — M3 recovery run retained as invalid
+
+`gt07-native-godot-20261005-21` reached the queue recovery harness but failed
+at the pinned validation import (`VALIDATION_PHASE_ORDER`) before a native
+effect; its cleanup is retained as an infrastructure diagnostic and must not
+be replayed without a changed resource/reproducer review.
+
+Earlier `gt07-native-godot-20261005-20` completed the queue receipt-loss/reopen
+path with actual editor/Job cleanup and the recovery invariants, but it is not
+usable evidence because a separate M9 source commit landed during the native
+window and the closeout reported `source_unchanged=false`. Both raw
+directories are immutable and retained; the same scenario must be rerun once
+after the current source freeze with a fresh ID.
+
+`gt07-native-godot-20261005-23` was then admitted from a fresh dry-run and
+stopped before any native effect because the owned Linux validator container
+timed out at its 22-second host start/attach bound (`EXECUTOR_ENGINE_OR_HOST_NOT_CLEAN`).
+The child exit was 1, the container/Job had exit 124 with zero active handles,
+inputs and source stayed unchanged, and the raw closeout is retained.  This is
+an infrastructure diagnostic; do not replay it until Docker/validator startup
+is healthy or a different scoped reproducer is available.
+
+## Checkpoint, 05-10-2026 - governed M4 conflict admission
+
+The scenario runner now exposes `godot-conflict` with the mandatory engine-free
+dry-run and an opt-in native injection at the queue lease boundary. The injected
+manual editor projection must leave the owner response `UNKNOWN` with
+`lookup.reconcile`, preserve the manual `[8,8,8]` state, and retain the durable
+UNKNOWN journal/queue record without replay. The pure runner/owner/dispatcher
+suite is 61 tests, exit 0. Dry-run `gt07-native-godot-20261005-17` passed
+with source closure `3f84b6e783503d596d19afb1ab6a39bafc81301a299787638e8e2ea6c1ec7e83`.
+Native `-16` reached the intended UNKNOWN response but the first harness version
+incorrectly inspected a held owner; its raw is retained. Native `-17` was then
+blocked during ValidationOwner import because the Docker/Godot profile process
+returned SIGKILL before phase ordering; actual child/Job cleanup is clean. This
+is an infrastructure diagnostic, not M4 proof; do not rerun until the resource
+condition and reproducer review change.
+
+## Checkpoint, 05-10-2026 - M4 native queue conflict PASS slice
+
+After the held-owner inspection and durable generic reconcile fixes, governed
+`godot-conflict` run `gt07-native-godot-20261005-19` passed its engine-free
+dry-run and native Godot queue path. The manual projection changed the live
+root to `[8,8,8]`; the stale owner response was `UNKNOWN` with
+`GODOT_PUBLICATION_RECONCILE_REQUIRED`, `public_ack=false`, and
+`next_action=lookup.reconcile`. The queue recorded `UNKNOWN`, no replay or
+rollback occurred, and editor/owner cleanup was actual exit 0 with a closed,
+zero, unretained Job. Source and frozen snapshot remained equal at closure
+`c52dff82d1b6394065c9b5428130f94291a74a99bd44579182435831bbdddd2b`. The
+61-test focused runner/owner/dispatcher suite also exited 0 (6.101s). This is
+the Godot side of M4 only; Blender `.blend` conflict and the frozen M1-M9
+repeat remain open.
+
+## Checkpoint, 05-10-2026 — current-source M4 native repeat
+
+`gt07-native-godot-20261005-26` passed the mandatory dry-run and native
+Godot conflict path on source closure
+`737e6aa2ebbf9a3237fbbbd77d0f900a26ccd3e2014f28cca07b0d9b2430c93c`.
+The manual projection was preserved, the stale owner response remained
+`UNKNOWN` with `lookup.reconcile`, and no replay or public ACK was emitted.
+Both editor and validator children exited 0 naturally; the owned Job/tree was
+closed with zero active members and no retained handle, and source readback was
+unchanged. This is a fresh authority-zero diagnostic slice; the Blender
+`.blend` conflict and final frozen M1-M9 matrix remain open.
+
+## Checkpoint, 05-10-2026 — fresh M2 writer FIFO repeat
+
+`gt07-native-writer-fifo-20261005-04` completed its source snapshot and
+focused Blender suite with actual wrapper/child exit 0, then ran the native
+writer FIFO host with the pinned Blender binary. Both live client processes
+exited 0; all 19 checks passed, including persisted FIFO grants, expiry and
+fencing rejection, bounded waiter capacity, Stop priority, and no scene drift.
+The owner Job/tree closed with zero active members and no retained handle;
+source closure was
+`ccc2c3f2f5feac425d358309253f1d5f7be5c375d80d1263d3a3176a050dbae9`.
+This remains authority-zero evidence until the final frozen M1-M9 matrix and
+independent critics.
+
+## Checkpoint, 05-10-2026 — fresh M8 process ownership repeat
+
+`gt07-m8-process-20261005-08` ran without an engine and verified all three
+owned-process cases: forged PID/start-time termination was refused, the owned
+timeout removed only the gated tree while the sentinel stayed alive, and a
+64 MiB Job memory limit caused native `VirtualAlloc` denial (1455) rather than
+a Python allocation error. Actual worker exits were captured and every Job
+closed with zero active members and no retained handle. Source closure remained
+`e54646f8ca640cc465231ddecd204adc233df3aefbf96e39d9376697b7b58f71`.
+This is authority-zero host evidence; the final frozen matrix is still open.
+
+## Checkpoint, 05-10-2026 — M3 consumer handoff after dry-run repair
+
+The cross-app runner now consumes a matching `dry-run.json` admission with
+source, adapter closure and protected Blender handoff bytes unchanged; it
+retains the admission report before native dispatch. Run
+`gt07-cross-app-20261005-19` then performed one native consumer dispatch from
+the exact COMMITTED producer row, observed Godot readback ACK, queue
+`COMMITTED`, and byte-equal reopen. The nested validator and editor children
+exited 0 with clean owned Jobs, but its environment diagnostics still report
+`diagnostic_process_clean=false`/`log_clean=false`; therefore this is
+authority-zero diagnostic evidence, not an M3 acceptance pass. Consumer
+crash/reload/last-good coverage and the frozen matrix remain open.
+
+## Checkpoint, 05-10-2026 — M3 current-source receipt-loss recovery
+
+`gt07-native-godot-20261005-27` passed the mandatory matching dry-run/native
+admission and ran the receipt-loss/reopen lookup-only cut against source
+closure `e733d05e4b54d8a0a2199074885c2ceaefe431764e36b2d38052cb79ec451f18`.
+The receipt was intentionally absent; reopen and lookup/reconcile recovered
+the existing COMMITTED state without a second native effect. Editor and
+validator children exited 0 naturally, owned Jobs/trees closed with zero
+active or retained handles, and source remained unchanged. This is
+authority-zero diagnostic evidence. The six-phase Blender crash matrix,
+consumer last-good proof, and frozen M1–M9 matrix remain open.
+
+## Checkpoint, 05-10-2026 — M5 dry-run/native handoff repair
+
+The M5 storage runner now consumes a matching engine-free dry-run instead of
+rejecting the required follow-up with `RUN_ID_USED`; it preserves the
+admission report as `dry-run-report.json` and fails closed if the source hash
+changes. Focused M5 contract tests pass (5 active, 2 platform-gated skips).
+`gt07-m5-storage-20261005-07` then ran the same admitted ID: file-lock
+replacement returned UNKNOWN with error 5 and unchanged identity, cross-volume
+replacement returned UNKNOWN with error 17, and injected fsync/diskfull paths
+kept last-good bytes with no receipt. The diagnostic verified all four cases;
+source closure was `308602e88500224bda8f3a045f7bb24d9da0d6c81b332f2506f73566d03fd072`.
+This remains authority-zero evidence and does not close the final frozen matrix.
 
 ## Checkpoint, 05-10-2026 — native editor conflict diagnostic
 
@@ -72,6 +503,21 @@ Raw is immutable under `studio/.local/reviews/gt07-cross-app-20261005-07/`;
 source closure is `c91bc0d770e9730cb10a3bc9fd8e80729f6db9d3485b024664706658993be51c`.
 This closes the non-crash queue-level publish/readback slice only; a queue-level
 lost-receipt/last-good crash cut and the frozen M3 matrix remain open.
+
+`gt07-cross-app-20261005-16` repeats the consumer after repairing a binding gap:
+the producer dependency now uses the exact COMMITTED Blender queue row
+(`native-95fcfd08…`, command and receipt digests read from the producer
+closeout) rather than hashes derived from its run id. The adapter closure also
+includes the cross-app runner and durable queue runtime. Native import/host
+exits and Job cleanup were recorded, but the nested diagnostic reports
+`diagnostic_process_clean=false` because of environment stderr; this remains
+authority-zero evidence and is not an M3 acceptance pass.
+
+`gt07-cross-app-20261005-18` repeats the repaired exact-producer binding after
+an immediate protected-handoff reread before admission. It records one native
+dispatch, COMMITTED queue state, readback ACK and byte-equal reopen. The nested
+consumer still reports environment diagnostic stderr, so this is diagnostic
+only; the consumer crash/reload/last-good cut and frozen matrix remain open.
 
 ## Checkpoint, 05-10-2026 — native M2 FIFO repeat
 

@@ -27,7 +27,14 @@ ARENA_SOURCE_FILES = {
     'scripts/fixture_actor.gd': 'tests/godot/gameplay_fixture/arena_physics.gd',
     'scenes/projectile.tscn': 'tests/godot/gameplay_fixture/projectile.tscn',
 }
-BLENDER_HANDOFF_ROOT = STUDIO / '.local' / 'reviews'
+_HANDOFF_ROOT_OVERRIDE = os.environ.get('HH_GT07_HANDOFF_ROOT')
+if _HANDOFF_ROOT_OVERRIDE:
+    _HANDOFF_PATH = Path(_HANDOFF_ROOT_OVERRIDE).expanduser()
+    if not _HANDOFF_PATH.is_absolute() or '..' in _HANDOFF_PATH.parts:
+        raise RuntimeError('BLENDER_HANDOFF_ROOT_UNSAFE')
+    BLENDER_HANDOFF_ROOT = _HANDOFF_PATH.absolute()
+else:
+    BLENDER_HANDOFF_ROOT = STUDIO / '.local' / 'reviews'
 BLENDER_GLTF_NAME = 'scene.glb'
 
 
@@ -334,8 +341,14 @@ def _publication_case(args, owner_mod, fixtures, *, saved_arena_raw=None, glb=No
     if saved_arena_raw is not None:
         case = saved_arena_case(args.fixture, case, saved_arena_raw)
     if glb is not None:
-        case = {**case, 'extra_binary_files': {**case.get('extra_binary_files', {}),
-                                             'assets/avatar.glb': glb}}
+        case = {**case,
+                'asset_readback': True,
+                'expected_state': {**case['expected_state'],
+                                   'avatar_asset_loaded': True,
+                                   'sprite_asset_loaded': True},
+                'extra_binary_files': {**case.get('extra_binary_files', {}),
+                                       'assets/avatar.glb': glb,
+                                       'assets/sprite_sheet.png': fixtures.ASSET_SPRITE_SHEET}}
     return case
 
 
@@ -387,10 +400,14 @@ def main():
         parser.error('use a fresh o2-publication-<id>')
     if args.saved_arena is not None and args.fixture != ARENA_FIXTURE:
         parser.error('--saved-arena requires --fixture gameplay_arena_physics')
-    if args.blender_published is not None and args.fixture != 'gameplay_source_assets':
-        parser.error('--blender-published requires --fixture gameplay_source_assets')
-    if args.saved_arena is not None and args.blender_published is not None:
-        parser.error('--saved-arena and --blender-published are mutually exclusive')
+    if args.blender_published is not None and args.fixture not in (
+            'gameplay_source_assets', ARENA_FIXTURE, 'gameplay_source_room_3d_native'):
+        parser.error('--blender-published requires an asset-capable gameplay fixture')
+    # A saved arena and a published Blender handoff are deliberately composable:
+    # GT09 must exercise the real path "saved Godot scene + imported Blender
+    # asset" in one bounded fixture.  Each input is frozen and verified
+    # independently below; rejecting the combination would test two isolated
+    # halves instead of the authoring path the plan requires.
     admission = dry_run(args)
     if args.dry_run:
         print(json.dumps(admission, sort_keys=True))

@@ -16,9 +16,23 @@ RUNTIME_ACCEPTANCE=SA-01_TECHNICAL_PASS
 HUMAN_ACCEPTANCE=NONE
 REFERENCE_INVENTORY=NOT_FROZEN
 FUNCTIONAL_PARITY=UNVERIFIED
-RELEASE_STATUS=NOT_BUILT
+RELEASE_STATUS=BUILT_PROVISIONAL
 LEGACY_PROGRESS_INHERITED=NONE
 PREVIOUS_REVISION=SA4 trong Git 5b2d4c7b; LOG chi tiết (run id, hash, số assertion) nằm ở đó
+REPO_MIGRATION=EXECUTED_TO_ARCHIVE
+REPO_ARCHIVE_PATH=D:/dataDiskD/intellji/hoanhaosocial/hoanhaonew-20-6-2025/hh-game-studio-old-archive-6-10/legacy-root
+REPO_KEEP_SCOPE=8-9-hh3d-3/{zdoc,studio,superagent,consumer-pilot,vertical-slice,scripts,AGENTS.md,CLAUDE.md,.gitattributes}
+REPO_POLICY_KEEP=root AGENTS.md + .gitignore until a scoped replacement is reviewed
+REPO_ARCHIVE_SCOPE=all other root paths, linked worktrees and ignored local state remain archived, not deleted
+HANDOFF_CANONICAL_PLAN=D:/dataDiskD/intellji/hoanhaosocial/hoanhaonew-20-6-2025/hh-game-studio/8-9-hh3d-3/zdoc/18-9-superagent-2d-y8-plan.txt
+HANDOFF_PRODUCT_WORKTREE=D:/dataDiskD/hh-superagent
+HANDOFF_PRODUCT_BRANCH=superagent/main
+HANDOFF_PRODUCT_HEAD=12f16685
+HANDOFF_GROKDO_STATUS=READY_FOR_CODE_SNAPSHOT
+HANDOFF_GROKDO_ROOT=D:/dataDiskD/intellji/hoanhaosocial/hoanhaonew-20-6-2025/hh-game-studio/8-9-hh3d-3/superagent-grokdo
+HANDOFF_GROKDO_BRANCH=superagent/grokdo
+HANDOFF_GROKDO_HEAD=ef9c93f
+HANDOFF_GROKDO_RULE=Không copy mù vào repo chính; agent mới phải dùng snapshot Git riêng tại 12f16685
 
 0. ĐỌC NHANH
 - Superagent Classic là game 2D đấu trường, bắn súng trên nền platform. Cơ chế, vũ khí, vật thể,
@@ -36,41 +50,147 @@ PREVIOUS_REVISION=SA4 trong Git 5b2d4c7b; LOG chi tiết (run id, hash, số ass
   routing HH3D nằm ở 8-9-hh3d-3/AGENTS.md.
 - Coordinator game tick WP khi đạt DoD; subagent không tick.
 
-HIỆN TRẠNG (05-10 10:48; coordinator cập nhật khi xong một mốc, tối đa 15 dòng)
+HIỆN TRẠNG (06-10 11:06 UTC; coordinator cập nhật khi xong một mốc, tối đa 15 dòng)
 - SA-01 ACCEPTED 03-10 (bootstrap kỹ thuật). CURRENT_VALID_WP=SA-02 từ 03-10.
 - Ledger 79 dòng: 25 OBSERVED, 54 UNVERIFIED, 0 MATCHED. Đã thấy chủ yếu menu, map, mode, phím
   đánh và vài phản ứng vật thể (mục 7.4). Chưa có số đo thời gian hay khoảng cách nào: browser
   agent đang dùng chỉ bấm rời và chụp ảnh, không giữ/thả phím, không quay 60 fps. Chưa có video
   owner.
-- Code tạm, chưa nghiệm thu (superagent/main a55c72b0): phòng di chuyển hai người; nhảy, cúi,
-  thang, rơi qua sàn bằng hai lần xuống, hố; sprint/stamina; combat core (đấm, jump kick, bắn,
-  knockdown, miễn thương, lựu đạn). Số đều là seed. Đơn vị nguyên mỗi tick và va chạm AABB tự
-  viết phải đổi (mục 5.3).
-- Keymap owner đã áp dụng và có test. Main đã merge product tới ed3e10a3 (merge 1e5e7e4e);
-  a55c72b0 chưa merge, sẽ merge khi tick WP.
-- Chưa có: rig đo, map trận thật, pickup, bot, HUD, menu trận, build Web/Windows.
+- Code Classic vẫn chưa nghiệm thu: phòng di chuyển hai người và lõi N4 đã chuyển sang float/Godot
+  Physics; commit `0659f2ef` bổ sung map greybox relay yard, match 2P/bot, pistol/shotgun,
+  Down+Punch pickup, grenade/health, HUD, result/rematch và scene bot riêng. Bản tiếp theo nối
+  giữ K/Num2 để ngắm, W/S hoặc Up/Down chỉnh góc, thả nút để bắn và hiển thị tia ngắm. Tất cả vẫn
+  là implementation/provisional, không gọi là parity.
+- Keymap owner đã áp dụng và có test. Product commits `0659f2ef` (match shell), `0296b860`
+  (aim/release), `af085b6b` (ray/replay) và `96365937` (same-tick guard) đã chốt phần kỹ thuật;
+  plan vẫn
+  không tick SA-03/SA-04 khi thiếu gate. Export evidence hiện ở product commits `6f2ec9d7`,
+  `46794bd0` và `a099b99b`; source closure đầy đủ và runtime resources đã được đóng gói. SA-05
+  bullet-time slice provisional ở `7c551274`/`f62b6a7a`/`5db8383b`/`490f3457`, có buffering
+  pressed/released qua nhịp chậm; catalog pickup/disarm ở `eb49513c`, hai power pickup 5/10 giây ở
+  `a77d33c9`; chưa thay đổi gate.
+- Chưa có: số đo Y8 A01–A06 và owner side-by-side. Windows/Web build đã tạo được bằng template
+  Godot 4.7.2 pinned, nhưng mới là artifact provisional chưa có owner review. Match/aim shell và replay
+  đã có guarded live route 41 assertions, combat 73, twin MatchSession/ray 15 assertions ở source
+  selection hash `34e96458c3c152eea2e891c72fb02f06e84737e3cac64b29b69475ea204c78f9`; map/row
+  validation, ray hit authority, same-tick input guard và snapshot immutable đã fail-closed.
 - SA5 N1 đã xong: guard kiểm mọi task `HHStudio.*`; ledger 79 dòng có tier A/B/C;
   checker hiểu trạng thái APPROX và giữ fail-closed cho tầng C. Bộ đo A01–A06 còn trống,
   nên inventory vẫn báo thiếu số đo thay vì tự coi là đạt.
 - N2 rig đã tự kiểm bằng fixture cục bộ: giữ/thả phím, log timestamp và CDP screencast đều
   chạy sạch. Đây chỉ là kiểm tra công cụ; chưa có số đo Y8, nên SA-02 và A01–A06 vẫn mở.
 - N3 physics spike đã PASS hai lần ở fixed 60 Hz: stack 30 body, nổ đẩy, joint release,
-  CharacterBody2D đứng/đẩy crate và rolling stair đều có postcondition; đây là bằng chứng kỹ thuật,
-  chưa phải SA-03 vì lõi gameplay chưa chuyển sang Godot Physics.
-- N4 seam bounded đã PASS guarded: decoder giữ float cho chuyển động, bộ dựng fixture arena và
-  CharacterBody2D feet-origin đã compile/chạy độc lập; lõi MovementRoom/FighterState vẫn integer/AABB,
-  nên đây chưa phải nghiệm thu SA-03.
-- N4 live tick probe đã PASS trên SceneTree thật: body chạm solid/one-way/bậc thang/biên, drop-through theo từng fighter
-  và readback hữu hạn; probe không ghi ngược state, nên SA-03 vẫn mở.
+  CharacterBody2D đứng/đẩy crate và rolling stair đều có postcondition; đây là bằng chứng kỹ thuật.
+- N4 seam và live tick probe đã PASS guarded; sau đó lõi Simulation/FighterState/MovementRoom đã
+  được nối vào CharacterBody2D/StaticBody2D, float và readback mỗi physics frame. Các test movement,
+  sprint, combat, trace, room, match và regression đều sạch; đây vẫn là bằng chứng kỹ thuật, SA-03 còn chờ
+  A01–A06 và owner thử phòng di chuyển. Template archive 4.7.2 và cả hai artifact đã được xác nhận;
+  vẫn chưa coi là nghiệm thu khi chưa có owner chơi.
+- SA-06 implementation slice now covers four Relay Yard props, live melee/shot resolution, barrel
+  explosion, bounded burning, and a real grounded short-collider roll. Roll gravity, pit death, roof
+  headroom readback, hit interruption/knockback, burn cadence/expiry, snapshot/hash events and
+  knockdown-before-roll douse are guarded in `docs/evidence/SA-06.md`; focused runs are PASS at one
+  frozen source hash. Static cover remains unchanged after prop destruction. Fire spread,
+  doors/debris/dynamic collision/100-object rig, measured Y8 roll behavior and owner review remain
+  open. SA-06 is not ticked and no Y8 parity is claimed.
+- Product commit `423823ca` hardens the e627 dive/catalog/bot slices: dive entry/reset and stale-attack
+  guards, canonical shot/pickup/bullet-time fields, full catalog fingerprints and weapon-specific
+  projectile lookup, plus bot edge pulses, ladder/drop navigation, finite/exact snapshot validation and
+  combat-priority pickup routing. Guarded SA-05 catalog passed 27 assertions, SA-04 bot slice 30,
+  SA-08 open-floor twin-hash stress passed 100 seeded matches/40,728 assertions before 600 ticks, and
+  SA-01 regression passed 2,977. These remain implementation checks, not parity or checkbox acceptance.
+- Product commit `da561611` hardens the provisional mode/settings/navigation seams: VS/Stage/Survival
+  reset and terminal semantics, MatchSession round reset and invalid-state handling, schema-checked local
+  settings (normal actions only), and deterministic navigation validation/order/pit spans with immutable
+  node rows. Guarded mode/settings/session/match regressions, SA-01 2,977 assertions and navigation
+  passed with exit 0/cleanup 0/diagnostics empty. These are implementation checks only; SA-02, menu/input
+  path, full mode sessions, map catalog, owner review and critics remain open, with no checkbox/parity claim.
+- Product commit `42ef6f85` wires the real bootstrap key path (1=VS, 2=Stage, 3=Survival) to dedicated
+  scenes and adds Enter/R continuation for finite round-result states. Guarded `cmd.sa07.menu-modes.2`
+  passed 4 assertions with exit 0/cleanup 0/diagnostics empty; settings UI, complete mode sessions,
+  owner play and critics remain open.
+- Product commit `b5177cd9` connects the settings store to menu key events, synchronizes pause with
+  `MatchSession.mode_rules`, resets bot edge history at round continuation, and exposes mode score/stage/
+  wave state in the HUD. Guarded menu 8, mode/pause 11 and live match 46 assertions passed cleanly; full
+  mode sessions, reference measurements, owner review and critics remain open.
+- Product commits `bbe457de`/`076aa88f` exercise and record complete provisional Stage (12 rounds)
+  and Survival (clear then P2 defeat) sessions through fixed-step `MatchSession`; the focused run passed
+  40 assertions with exit 0/cleanup 0/diagnostics empty. This closes only the implementation seam; input
+  coverage, measured reference behavior, owner review, critics and SA-07 checkbox gates remain open.
+- Product commit `f913e094` applies the requested provisional +15% normal-fighter display height
+  (`char_height=55.2`), fixes the canonical match snapshot format error found by the guarded roll run,
+  and hardens NavigationGraph against malformed numeric/JSON-key input and partial failed builds. Focused
+  roll/replay/mode/full-regression runs and navigation (15 assertions) exited 0 with cleanup 0 and empty
+  diagnostics; this remains implementation evidence, not SA-02 parity or an SA-09/SA-10 acceptance.
+- Product commit `7004e0b0` adds an original procedural fighter pose presenter and `art/LICENSES.tsv`;
+  visual-profile (9 assertions) and full regression (2,977) exited 0 with cleanup 0 and diagnostics empty.
+  Product commit `5f813928` adds six original map layouts, immutable `MapCatalog`, map identity in
+  `MatchSession` snapshots/hashes and fail-closed map selection; catalog (39 assertions) and regression
+  passed cleanly. Mode×map menu wiring, owner play and all Classic gates remain open.
+- Product commit `5ccad55c` wires the catalog through the real bootstrap input path: `M` selects the next
+  original map and `1/2/3` carry it into VS/Stage/Survival. The 18-constructor matrix passed 57 assertions,
+  the menu path passed 9 assertions and the full 2,977-assertion regression passed at one source hash;
+  all exited 0 with cleanup 0 and diagnostics empty. Live mode×map play, Q2, owner review and critics remain.
+- Product commits `eb1283b6`/`e810f472` run all 18 catalog map×mode scene combinations through a real
+  MatchRoom physics frame and record the post-commit full regression. The live matrix passed 54 assertions;
+  the regression passed 2,977, all with exit 0/cleanup 0/diagnostics empty. This is launch/topology proof,
+  not complete combat-mode parity or owner acceptance.
+- Product commit `13083acb` adds Easy/Normal/Hard deterministic ClassicBot response profiles while keeping
+  one held-action/InputFrame schema and Normal as the default bot scene. The profile test passed 8 assertions
+  and the full regression 2,977 at one source hash; both exited 0 with cleanup 0 and diagnostics empty.
+- Product commits `20c06c3e`/`0592d743` wire the provisional NavigationGraph into ClassicBot with live
+  canonical-topology caching, fail-closed malformed-world handling and a disconnected-platform jump replan
+  fixture. Guarded `cmd.sa08.bot-nav-stress.1` passed 100 seeded matches/40,728 assertions and
+  `cmd.sa08.bot-nav-difficulty.3` passed 14; `cmd.sa08.run-all.3` passed 2,977, all exit 0/cleanup 0/
+  diagnostics empty at source hash `36aa62cb091c30e400a41152096e2ee1fedaffbee0cc06b44a677661304ef91a`.
+  Navigation remains same-height/local and provisional; owner play and measured difficulty behavior remain open.
+- Product commit `12f16685` makes the typed weapon catalog authoritative for MatchSession reset, pickup,
+  melee/firearm resolution and grenade fuse/radius/damage; unknown gun IDs fail closed and the catalog
+  fingerprint is included in snapshots/hashes. Final guarded runs at source hash
+  `f330cfa707e2d869615cb8a6688fcecaedeaec33a484b7904113d20c52c09c43` passed weapon live 35, combat 73,
+  items 42, replay 15, match room 46 and full regression 2,977 with exit 0/cleanup 0/diagnostics empty.
+  The initial authority attempt timed out on warnings-as-errors; static types were repaired before the final runs.
+  This is implementation evidence only; weapon roster, spawn law, timing and owner/Y8 gates remain open.
+- Product commit `b6af6be2` extends the live item-catalog fixture through the P2 pickup path (pistol,
+  contact healing and five-second power). `cmd.sa05.item-catalog.p2.1` passed 42 assertions with
+  exit 0/cleanup 0/diagnostics empty; `cmd.sa05.run-all.p2.1` passed the 2,977-assertion regression
+  at source hash `dc1d053ea0983032107125b4bffbeea104727da5610381324e882e5fc671f8a8`, same clean result.
+  This is shared-route evidence only; spawn law, timing, owner review and SA-02 remain open.
 
 NEXT (làm theo thứ tự; việc nào phải chờ thì làm việc sau, không ngồi chờ)
-N2 Rig đo Y8 (mục 8.2), hạn 4 giờ; đo A01–A06 (mục 7.3). Quá hạn thì gửi owner kịch bản quay
-   (mục 8.4) và làm tiếp N3–N5.
-N4 Chuyển lõi sang float và Godot Physics, giữ state machine và test logic; chỉnh số theo
-   A01–A06; nghiệm thu SA-03.
-N5 SA-04 bản chơi được; build Windows và Web; gửi owner thử kèm hướng dẫn 5 dòng.
+N2 Rig Y8 đã tự kiểm bằng fixture cục bộ nhưng chưa lấy được A01–A06; không lặp lại vòng browser
+   không có timed hold/60-fps. Fallback quay owner ở mục 8.4 đã ghi; tiếp tục phần product.
+N4 Chuyển lõi kỹ thuật đã xong; bước kế là nghiệm thu SA-03 sau khi có A01–A06 (hoặc ghi tầng B theo
+   gate) và owner thử phòng di chuyển 5 phút.
+N5 SA-04 bản chơi được đã có ở commit `0659f2ef`; Windows/Web artifact provisional đã sẵn sàng,
+   gửi owner thử kèm hướng dẫn 5 dòng. Không tick SA-04 khi thiếu owner/critic/parity gate.
 N6 Trong lúc chờ owner: đo A07–A17; kiểm kê trong trận thật (mục 7.4); thử pipeline art cho
    một nhân vật (SA-10, thư mục art/, subagent riêng).
+N7 Đã hoàn tất navigation/mode/settings, phiên Stage/Survival, map catalog, seam chọn map, live
+   map×mode launch checks, bot difficulty/navigation stress, P2 pickup route và weapon catalog authority
+   (`da561611`, `bbe457de`, `076aa88f`, `f913e094`, `7004e0b0`, `5f813928`, `5ccad55c`, `eb1283b6`,
+   `e810f472`, `13083acb`, `20c06c3e`, `0592d743`, `b6af6be2`, `12f16685`);
+   `relay_yard` vẫn mặc định, bot graph còn local/provisional, chưa tick SA-07/SA-09/SA-10. Tiếp tục
+   combat/feedback coverage, Q2, owner/critic gates, không chuyển SA-14.
+
+REPO MIGRATION (DONE — 06-10-2026)
+- Repo chính đã giữ scope HH3D; root legacy được chuyển vào
+  `D:/dataDiskD/intellji/hoanhaosocial/hoanhaonew-20-6-2025/hh-game-studio-old-archive-6-10/legacy-root`.
+  Không chuyển `.git`, linked worktree, `.local` đang dùng hoặc code product.
+- Product hiện hành vẫn là `D:/dataDiskD/hh-superagent` ở commit `12f16685`; plan chính chỉ có một
+  writer ở repo chính. Bản `8-9-hh3d-3/superagent-grokdo/zdoc/` hiện mới là bản plan, chưa có source.
+- Khi cần agent cô lập: tạo Git worktree/snapshot mới từ `12f16685`, ghi rõ root mới trong handoff,
+  rồi mới chạy. Không copy code vào repo chính như thư mục untracked; không dùng chung index, `.local`,
+  build hoặc evidence đang ghi. `git filter-repo`/rewrite history không nằm trong route này.
+
+ISOLATED AGENT HANDOFF (GROKDO)
+- Nếu dùng thư mục đúng tên `8-9-hh3d-3/superagent-grokdo`, phải chứa đầy đủ `game/`, `tests/`,
+  `tools/`, `docs/`, `project.godot` và bản plan đã sửa `PLAN_SCOPE`; hiện thư mục đó chưa đủ.
+- Khuyến nghị nhanh và sạch hơn là worktree riêng `D:/dataDiskD/hh-superagent-grokdo`, branch
+  `superagent/grokdo`, bắt đầu từ `12f16685`; giữ plan chính ở `8-9-hh3d-3/zdoc` hoặc copy có ghi
+  `CANONICAL_PLAN` trỏ ngược về đó. Agent chỉ sửa root mới, không sửa product `superagent/main`.
+- Agent mới luôn bắt đầu ở `CURRENT_VALID_WP=SA-02`, đọc `HIỆN TRẠNG`, `NEXT`, `14. BÀI HỌC`,
+  kiểm lock/task trước lệnh nặng, không tick checkbox và không claim parity từ test nội bộ.
 
 1. MỤC TIÊU VÀ THỨ TỰ
 Owner 03-10: hoàn thành Classic giống bản Y8 trước; phần kiểu MUGEN chỉ làm sau bằng lệnh mới.
@@ -647,4 +767,146 @@ Q5 Web: dung lượng tải lần đầu và bộ nhớ đo từ SA-04; ngân s�
   ghi evidence trong product; chưa tick SA-03, tiếp tục đo A01–A06 rồi mới wiring lõi.
 2026-10-05 N4 live tick probe: xác nhận contact solid/one-way/drop-through/bậc thang/biên bằng physics frame thật;
   giữ Simulation/FighterState làm authority, chưa claim SA-03/Y8 parity.
+2026-10-05 N4 migration: nối Simulation/FighterState/MovementRoom vào Godot Physics, đổi chuyển động sang float;
+  focused tests và regression sạch, chưa tick SA-03 vì A01–A06 và owner side-by-side còn thiếu.
+2026-10-05 SA-04 implementation: product commit `0659f2ef`; guarded match run 37 assertions, host
+  exit 0/cleanup 0/diagnostics empty; regression run_all 2,977, movement room 93, N4 16+13, Python 23/1 skip.
+  Map validation, Down+Punch pickup, immutable snapshot and bot/2P routes are provisional; no SA-04 tick.
+2026-10-05 SA-04 aim/release pass: product commit `0296b860` adds explicit held-fire aim state, bounded
+  W/S or Up/Down elevation, release-to-fire semantics, aim-ray presentation and focus/pause input reset.
+  Guarded `cmd.sa04.aim.match.1` (`RUN_ID=20261005T060315.567249Z-add7b36f12`) passed 41 assertions;
+  `cmd.sa04.aim.combat.1` (`RUN_ID=20261005T060354.972517Z-ac513fdada`) passed 73; both exit 0,
+  cleanup 0, diagnostics empty, source hash `b8ca0dcee9f3da3170214cb63730f649eeac24fe26593390d78faa817f79f1a1`.
+  Guarded run_all `RUN_ID=20261005T060435.274221Z-60341297ee` passed 2,977. No SA-03/SA-04 tick;
+  4.7.2 Windows/Web templates were later sourced from the local archive and exports passed, while
+  owner/critic/Y8 measurements remain open.
+2026-10-05 SA-04 audit closure: `af085b6b` adds bounded ray hit authority, post-success TTL mutation,
+  twin MatchSession replay/ray checks and bot-route controls; `96365937` gates same-tick shoot edges
+  away from jump/drop/ladder. Guarded final match `RUN_ID=20261005T062516.394029Z-b678287f2f` and
+  replay `RUN_ID=20261005T062555.566161Z-2ca459b1e4` passed with source selection hash
+  `34e96458c3c152eea2e891c72fb02f06e84737e3cac64b29b69475ea204c78f9`, exit 0/cleanup 0/diagnostics
+  empty. No SA-03/SA-04 tick; this remains technical/provisional proof pending measurements, owner and build.
+2026-10-05 SA-04 regression close: product docs commits `f5123dd2`/`3b75b28a` record replay
+  reproduction, final 2,977-assertion guarded regression (`RUN_ID=20261005T063646.437469Z-99cd603941`)
+  and guarded Python 23 tests/1 skip (`RUN_ID=20261005T063742.653749Z-492e13eaaa`). SA-02 remains
+  CURRENT_VALID_WP; browser research was not converted into parity counts or a checkbox.
+2026-10-05 SA-04 export: pinned 4.7.2 Windows and Web artifacts built successfully with complete
+  source closure and all-resources runtime packaging; agent localhost smoke reached movement lab and bot match.
+  Provenance and sizes are recorded in product evidence; owner Windows/Chrome play and independent review remain required,
+  so no SA-03/SA-04 tick.
+2026-10-05 SA-05 input-safe tempo: product commit `490f3457` buffers pressed/released actions across the
+  slowed fighter's skipped fixed ticks and extends the focused proof to 20 assertions; match route passed 46,
+  full regression 2,977, all guarded exits/cleanup/diagnostics clean. SA-02 remains current; weapon catalog,
+  second duration, world interactions and owner/critic measurements remain open.
+2026-10-05 SA-05 catalog/disarm: product commit `eb49513c` covers all six authored pickup rows plus a ten-second
+  power fixture in 32 assertions and aiming-melee disarm in 7 assertions; post-change regression remains 2,977.
+  The disarm endpoint records an empty gun slot only; no dropped-weapon pickup or Y8 parity is claimed.
+2026-10-05 SA-05 authored durations: product commit `a77d33c9` adds the real ten-second relay-yard row and requires
+  Down+Punch for both power pickups; item catalog, live match, bullet-time and 2,977-assertion regression all
+  passed with guarded exit 0/cleanup 0/diagnostics empty. Spawn law and reference parity remain open.
+2026-10-05 SA-06 prop/hazard slice: product commits `22b438e1`/`8add4e00`/`682af521`/`aa9d5357`
+  add data-driven crate/barrel/glass material and health, deterministic prop hit/destroy events, nested
+  snapshot/hash state, live melee/shot resolution, provisional barrel explosion, bounded burning/douse
+  events and visible burning state. Guarded `cmd.sa06.burning.3` passed 23 assertions;
+  `cmd.sa06.burning.2` passed 2,977 assertions with host exit 0, cleanup 0 and empty diagnostics.
+  Static cover is unchanged after prop destruction; fire spread/true roll mapping/doors/debris/chain
+  map/100-object and owner gates remain open, so SA-06 and all Classic checkboxes stay unticked.
+2026-10-05 SA-06 roll/hazard repair: product commit `d1d69eea` adds real grounded short-collider roll, roof/pit/hit
+  interruption checks, grounded-only douse, periodic burn expiry and shot/explosion event hash coverage.
+  Guarded roll `20261005T155713.910571Z-0c4f0e8617` (188) and props `20261005T155759.206673Z-946c29658f` (66)
+  plus replay (15) passed at one source hash; SA-06 remains provisional and unticked.
+2026-10-06 SA-03/05/06 implementation slices: product commit `e627e86a` adds live airborne dive/tackle
+  and dive-through-authored-glass, typed clean-room weapon catalog and isolated snapshot bot controller;
+  guarded dive `20261005T162930.200742Z-10bb3860fc` (29), roll `20261005T162934.800729Z-49a2072b49` (188),
+  props `20261005T162942.768892Z-e9e117a58f` (66), replay `20261005T162946.552091Z-53c71fd4e5` (15),
+  weapon `20261006T020039.920203Z-72a37e660a` (25), bot `20261006T020222.258191Z-96480a802e` (30) and
+  current regression `20261006T020446.569263Z-89b9c511b1` (2,977) all exit 0/cleanup 0/diagnostics empty.
+  Two initial warning-as-error compile failures were repaired before the passing runs. No checkbox or
+  parity row is ticked; SA-02 measurements, owner review, integration and critics remain gates.
+2026-10-06 SA-08/core audit hardening: product commit `423823ca` fixes bot edge/ladder/pickup deadlocks,
+  strict snapshot validation, dive/reset/knockdown stale-state paths, canonical match event coverage and
+  full weapon fingerprints. Guarded `cmd.sa05.weapon-catalog.audit.2` (27), `cmd.sa04.bot-controller.audit.4`
+  (30), `cmd.sa08.bot-duel.stress.4` (100 matches, 40,728) and `cmd.sa03.sa06.core.audit.regression.1`
+  (2,977) all exited 0 with cleanup 0 and empty diagnostics. Fixture scope and owner/Y8 gates remain open.
+2026-10-06 SA-07 provisional mode-flow seam: product commit `5bb70259` adds deterministic VS/Stage/Survival
+  rules and integrates their snapshot/hash into `MatchSession` without changing the relay-yard default.
+  `cmd.sa07.mode-rules.1` passed 22 assertions; `cmd.sa07.mode-rules.regression.1` and
+  `cmd.sa07.match-room.regression.1` exited 0 with cleanup 0 and empty diagnostics. Menu/settings,
+  full mode sessions and SA-02/owner/critic gates remain open; no checkbox or parity row was ticked.
+2026-10-06 SA-09 provisional navigation seam: product commit `ed074db2` adds a deterministic graph from
+  the existing `ArenaState`, including ladder reachability and pit-safe edges. `cmd.sa09.navigation-graph.8`
+  passed 7 assertions with host exit 0, cleanup 0 and empty diagnostics after repairing typed-array and
+  reverse-edge diagnostics. No new map/layout or checkbox was added; map selection, full bot navigation,
+  SA-02 measurements, owner review and critics remain open.
+2026-10-06 SA-07/SA-09 hardening: product commit `da561611` adds schema-checked settings, mode/session
+  reset and terminal tests, and validated deterministic graph rows/pit spans. Focused mode/settings/session/
+  navigation runs (53/17/8/12 assertions), MatchRoom 46, SA-01 2,977 and movement regression all exited
+  0 with cleanup 0 and diagnostics empty; no checkbox or parity row was ticked.
+2026-10-06 SA-07 menu seam: product commit `42ef6f85` adds real bootstrap routing for VS/Stage/Survival
+  plus round-result continuation; `cmd.sa07.menu-modes.2` passed 4 assertions with clean exit/cleanup/
+  diagnostics. Settings UI, complete mode sessions, SA-02 evidence, owner review and critics remain open.
+2026-10-06 SA-07 state/settings follow-up: product commit `b5177cd9` connects settings key events,
+  pause snapshots, bot round reset and mode-aware HUD; focused menu/mode/match runs (8/11/46 assertions)
+  exited 0 with cleanup 0 and diagnostics empty. No checkbox or parity row was ticked.
+2026-10-06 SA-07 mode-session follow-up: product commits `bbe457de`/`076aa88f` run Stage through all
+  12 slots and Survival clear/defeat via fixed-step sessions; `cmd.sa07.match-modes.6` passed 40 with
+  host exit 0, cleanup 0 and empty diagnostics. No checkbox or parity row was ticked.
+2026-10-06 SA-09/SA-10 hardening: product commit `f913e094` raises provisional normal-fighter height to
+  55.2 (+15%), fixes `MatchSession.canonical_snapshot` formatting after a guarded diagnostic, and rejects
+  malformed navigation geometry/partial failed graphs. `cmd.sa09.navigation-graph.10` passed 15 assertions;
+  char-scale roll/replay/mode and `cmd.sa10.run-all.nav-hardening.1` passed with exit 0/cleanup 0/diagnostics
+  empty (full regression 2,977). No checkbox or parity claim was added.
+2026-10-06 SA-10 visual slice: product commit `7004e0b0` adds the original procedural pose presenter,
+  LICENSES row and 9-assertion profile test; full regression remained 2,977 with exit 0/cleanup 0/diagnostics
+  empty. This is owner-reviewable prototype art only; no SA-10 checkbox or parity claim.
+2026-10-06 SA-09 map catalog: product commit `5f813928` adds five original layouts plus immutable registry,
+  validated map identity in MatchSession and fail-closed unknown selection. `cmd.sa09.map-catalog.2` passed
+  39 assertions and catalog regression passed 2,977 at one source hash, exit 0/cleanup 0/diagnostics empty;
+  mode×map wiring and owner/Q2 gates remain open.
+2026-10-06 SA-09/SA-07 map seam: product commit `5ccad55c` adds real `M` catalog cycling and carries the
+  selected map through VS/Stage/Survival. `cmd.sa09.map-mode-matrix.1` passed 57 constructor assertions,
+  `cmd.sa07.menu-map-matrix.1` passed 9 input assertions and the full regression passed 2,977 at source hash
+  `49fead4485bef3caec80b7ef10f792f4f6243486def36c955410e620a623e7c6`, all exit 0/cleanup 0/diagnostics
+  empty. Live mode×map, owner and Q2 gates remain open; no checkbox or parity claim was added.
+2026-10-06 SA-09 live matrix: product commits `eb1283b6`/`e810f472` load every catalog map through the
+  actual VS/Stage/Survival MatchRoom and record the post-commit regression. `cmd.sa09.live-map-mode.2`
+  passed 54 assertions; `cmd.sa09.live-map-mode.regression.1` passed 2,977 at source hash
+  `814e5af8540d75489145360be1093341c478283bafcd9486a1b5b00d87fdf407`, all exit 0/cleanup 0/diagnostics
+  empty. This remains launch/topology proof; no checkbox or parity claim was added.
+2026-10-06 SA-08 difficulty slice: product commit `13083acb` adds Easy/Normal/Hard deterministic bot
+  response profiles with Normal as the default. `cmd.sa08.bot-difficulty.1` passed 8 assertions and
+  `cmd.sa08.bot-difficulty.regression.1` passed 2,977 at source hash
+  `263c0f917ab3efe4219d9e6990ca0d006635fd91f1450a8a709804bab06cb1ee`, all exit 0/cleanup 0/diagnostics
+  empty. Stress, owner difficulty review and parity remain open; no checkbox was added.
+2026-10-06 SA-08 bot navigation follow-up: product commits `20c06c3e`/`0592d743` add the provisional
+  graph seam, malformed-world fail-closed path and a disconnected-platform replan fixture. Guarded
+  `cmd.sa08.bot-nav-stress.1` passed 100 matches/40,728 assertions, `cmd.sa08.bot-nav-difficulty.3`
+  passed 14 and `cmd.sa08.run-all.3` passed 2,977 at source hash
+  `36aa62cb091c30e400a41152096e2ee1fedaffbee0cc06b44a677661304ef91a`; all exited 0/cleanup 0/diagnostics
+  empty. This is implementation evidence only; navigation is not a full multi-level planner and no checkbox/parity claim was added.
+2026-10-06 SA-05 P2 pickup follow-up: product commit `b6af6be2` extends the live catalog fixture to
+  player 2 pistol, contact-healing and five-second power interactions. Guarded `cmd.sa05.item-catalog.p2.1`
+  passed 42 assertions; `cmd.sa05.run-all.p2.1` passed 2,977 at source hash
+  `dc1d053ea0983032107125b4bffbeea104727da5610381324e882e5fc671f8a8`; both exited 0/cleanup 0/diagnostics
+  empty. Shared implementation evidence only; no SA-05/SA-02 checkbox or parity claim was added.
+2026-10-06 SA-05 catalog authority: product commit `12f16685` makes typed weapon definitions the
+  MatchSession authority for range/damage/knockback, pickup/rematch ammo and grenade fuse/radius/damage;
+  snapshots/hashes carry the catalog fingerprint and unknown guns fail closed. Final guarded runs at source
+  hash `f330cfa707e2d869615cb8a6688fcecaedeaec33a484b7904113d20c52c09c43` passed 35/73/42/15/46/2,977
+  assertions for weapon/combat/items/replay/match/full regression, all exit 0/cleanup 0/diagnostics empty.
+  A first compile attempt timed out under warnings-as-errors and was repaired with static types; no checkbox
+  or parity claim was added.
+2026-10-06 repository split audit (historical pre-move note): keep the complete HH3D scope, root
+  ignore/policy and linked worktrees/WIP; clone-plus-delete is not a history cleanup. The later filesystem
+  relocation was performed without rewriting history, pushing, changing remotes or moving linked worktrees.
+2026-10-06 repository relocation: unrelated root paths were moved to
+  `D:/dataDiskD/intellji/hoanhaosocial/hoanhaonew-20-6-2025/hh-game-studio-old-archive-6-10/legacy-root`;
+  `8-9-hh3d-3/zdoc`, `studio`, `superagent`, `consumer-pilot`, `vertical-slice`, `scripts`, child policy files,
+  `.local`, root `.gitignore`, root `AGENTS.md`, and Git/worktree metadata were retained. The archive manifest is
+  `hh-game-studio-old-archive-6-10/MIGRATION_MANIFEST_2026-10-06.md`; no linked worktree was moved and the
+  pre-existing GT07 edits were not staged. This is a filesystem relocation, not a history rewrite or parity gate.
+2026-10-06 Grokdo handoff: exact folder `8-9-hh3d-3/superagent-grokdo` now contains a standalone
+  122-file snapshot from product `12f16685`, branch `superagent/grokdo`, setup commit `ef9c93f`.
+  Godot 4.7.2 pin/templates/settings are isolated; import + 2,977-assertion regression passed
+  at source hash `c6d0329779e8c7d9c6a18250ff818e7ac99d608b4a8ff24c62483db6f133368f` (setup only).
 END_OF_SUPERAGENT_PLAN

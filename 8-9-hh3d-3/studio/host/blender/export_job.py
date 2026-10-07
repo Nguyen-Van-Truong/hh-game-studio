@@ -175,7 +175,13 @@ class ExportJob:
                 stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,cwd=self.directory,env=env,
                 creationflags=subprocess.CREATE_NO_WINDOW)
             process=self._process
-            self._job=cli_job.create(process);limits=configure_limits(self._job)
+            # Windows adds already-consumed process CPU time when JOB_TIME is
+            # set on a populated Job. Configure and read back the exact caps
+            # while empty; the existing constructor owns failure cleanup.
+            def configure_empty(owner):
+                nonlocal limits
+                limits=configure_limits(owner)
+            self._job=cli_job.create(process,before_assign=configure_empty)
             (self.directory/'limits.json').write_bytes(canonical_bytes(limits))
             for name,pipe in (('stdout',process.stdout),('stderr',process.stderr)):
                 thread=threading.Thread(target=self._drain,args=(name,pipe),daemon=True);self._threads.append(thread);thread.start()

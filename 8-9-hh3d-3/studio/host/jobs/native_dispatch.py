@@ -12,9 +12,11 @@ from __future__ import annotations
 from contextlib import ExitStack
 from dataclasses import dataclass, field
 import hashlib
+import math
 import sys
 import secrets
 import threading
+import time
 import weakref
 from pathlib import Path
 
@@ -206,7 +208,8 @@ class GodotOwnerBinding:
               and self.owner.storage_id == self.storage_id
               and self.owner._journal is self.journal and self.owner.sessions is self.sessions
               and (control and request.operation == 'script_text.replace'
-                   or canonical_bytes(self.owner._editor.identity) == self.editor_identity),
+                   or canonical_bytes(self.owner._editor.lookup_identity if control
+                                      else self.owner._editor.identity) == self.editor_identity),
               'NATIVE_GODOT_OWNER_BINDING_CHANGED')
         self.owner._same_release()
         grant = self.owner._auth(parse_json(self.body), request.operation,
@@ -516,7 +519,16 @@ class NativeOwnerDispatcher:
         _need(raw == saved.response and (response is None or raw == canonical_bytes(response.as_dict())),
               'NATIVE_OWNER_LOOKUP_MISMATCH')
         _need(actual.command_id == request.command_id and actual.status in {
-            Status.COMMITTED, Status.REJECTED, Status.CANCELED}, 'NATIVE_OWNER_NOT_TERMINAL')
+            Status.COMMITTED, Status.REJECTED, Status.CANCELED, Status.UNKNOWN},
+              'NATIVE_OWNER_NOT_TERMINAL')
+        if actual.status is Status.UNKNOWN:
+            post = actual.postconditions
+            _need(post.get('public_ack') is False
+                  and post.get('ledger_receipt_only') is True
+                  and post.get('next_action') == 'lookup.reconcile'
+                  and post.get('manual_state_preserved') is True
+                  and isinstance(post.get('manual_revision'), str),
+                  'NATIVE_BLENDER_UNKNOWN_MISMATCH')
         if actual.status is Status.COMMITTED:
             post = actual.postconditions
             _need(post.get('public_ack') is False and post.get('ledger_receipt_only') is True,
@@ -675,19 +687,30 @@ class NativeOwnerDispatcher:
 
     def drain_stop(self, *, timeout=95):
         """Supervisor wait after the priority Stop latch, never a wire call."""
+        _need(type(timeout) in (int, float) and math.isfinite(timeout) and 0 <= timeout <= 95,
+              'NATIVE_STOP_INVALID_TIMEOUT')
         _need(self._stop.is_set() and not self._closed, 'NATIVE_STOP_REQUIRED')
-        with _BIND:
-            owners = tuple(self._owners.values())
-        for owner in owners:
-            if type(owner) is BlenderWriterClientOwner:
-                continue
-            _godot_owner_required(owner)
-            thread = getattr(owner, '_stop_thread', None)
-            _need(thread is not None, 'NATIVE_STOP_REQUIRED')
-            thread.join(timeout=timeout)
-            _need(not thread.is_alive(), 'NATIVE_STOP_DRAIN_REQUIRED')
-            _need(owner._stop_persistence == 'DURABLE'
-                  and owner._journal.snapshot()['stopped'] is True, 'NATIVE_STOP_UNKNOWN')
+        deadline = time.monotonic() + timeout
+        # Both apps may still be executing/collecting a result after Stop.
+        # A timeout preserves the attached owner and its uncertain reservation;
+        # it cannot claim a successful drain or silently detach that work.
+        _need(self._phase.acquire(timeout=timeout), 'NATIVE_STOP_DRAIN_REQUIRED')
+        try:
+            with _BIND:
+                _need(not self._closed, 'NATIVE_DISPATCH_STOPPED')
+                owners = tuple(self._owners.values())
+            for owner in owners:
+                if type(owner) is BlenderWriterClientOwner:
+                    continue  # Synchronous Blender Stop persistence finished in stop().
+                _godot_owner_required(owner)
+                thread = getattr(owner, '_stop_thread', None)
+                _need(thread is not None, 'NATIVE_STOP_REQUIRED')
+                thread.join(timeout=max(0, deadline - time.monotonic()))
+                _need(not thread.is_alive(), 'NATIVE_STOP_DRAIN_REQUIRED')
+                _need(owner._stop_persistence == 'DURABLE'
+                      and owner._journal.snapshot()['stopped'] is True, 'NATIVE_STOP_UNKNOWN')
+        finally:
+            self._phase.release()
 
     def __enter__(self):
         return self

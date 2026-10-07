@@ -18,6 +18,7 @@ from ..core.private_store import PrivateBlobStore
 from ..core.safe_replace import ProtectedFileRoot
 from .dispatch_policy import QueueLimits
 from .durable_broker import DurableBroker
+from .segmented_journal import QueueJournalManager
 
 
 class QueueOwnerError(SafetyViolation):
@@ -35,10 +36,11 @@ class QueueOwner:
         self._lifecycle = threading.RLock()
         self.registry = self.custody = self.files = self.store = self.log = None
         self.broker = self._dispatcher = None
+        self.journal = None
         self._cleanup = []
 
     @classmethod
-    def create(cls, parent, *, limits=QueueLimits()):
+    def create(cls, parent, *, limits=QueueLimits(), retry_horizon_ms=None):
         if cls is not QueueOwner or type(limits) is not QueueLimits:
             raise QueueOwnerError('QUEUE_TRUSTED_OWNER_REQUIRED')
         SafePathResolver(parent)
@@ -56,13 +58,18 @@ class QueueOwner:
                                   blob_root=owner.store.root, blob_identity=owner.store.root_identity,
                                   event_root=owner.log.root, event_binding=owner.log.binding())
             owner.log.bind_custody(owner.custody)
-            owner.broker = DurableBroker(owner.log, limits=limits)
+            owner.broker = DurableBroker(owner.log, limits=limits,
+                                         retry_horizon_ms=retry_horizon_ms)
+            owner.journal = QueueJournalManager(
+                owner.log, owner.custody, logical_stream_id='queue:' + owner.storage_id,
+                parent=Path(parent), retry_horizon_ms=owner.broker.retry_horizon_ms)
+            owner.broker._journal = owner.journal
             return owner
         except BaseException as exc:
             owner._failed(exc)
 
     @classmethod
-    def reopen(cls, storage_id, *, limits=QueueLimits()):
+    def reopen(cls, storage_id, *, limits=QueueLimits(), retry_horizon_ms=None):
         if cls is not QueueOwner or type(limits) is not QueueLimits:
             raise QueueOwnerError('QUEUE_TRUSTED_OWNER_REQUIRED')
         owner = cls()
@@ -81,7 +88,13 @@ class QueueOwner:
             # A suffix without its durable witness is uncertain. Preserve it;
             # never advance custody here just to make startup pass.
             owner.log.bind_custody(owner.custody)
-            owner.broker = DurableBroker(owner.log, limits=limits)
+            owner.broker = DurableBroker(owner.log, limits=limits,
+                                         retry_horizon_ms=retry_horizon_ms)
+            owner.journal = QueueJournalManager(
+                owner.log, owner.custody, logical_stream_id='queue:' + storage_id,
+                parent=Path(record['events']['path']).parent,
+                retry_horizon_ms=owner.broker.retry_horizon_ms)
+            owner.broker._journal = owner.journal
             return owner
         except BaseException as exc:
             owner._failed(exc)
@@ -100,6 +113,16 @@ class QueueOwner:
         with self._lifecycle:
             if self._dispatcher is not None:
                 raise QueueOwnerError('QUEUE_DISPATCHER_ACTIVE', cleanup_owner=self)
+            journal = self.journal
+            if journal is not None:
+                try:
+                    # The owner closes the current log below; the journal only
+                    # releases pending/forensic handles and never closes that
+                    # shared current handle twice.
+                    journal.close()
+                except BaseException as exc:
+                    raise QueueOwnerError('QUEUE_CLOSE_UNCERTAIN', cleanup_owner=self) from exc
+                self.journal = None
             for key in ('broker', 'log', 'store', 'files', 'registry'):
                 component = getattr(self, key)
                 if component is None:
@@ -116,6 +139,32 @@ class QueueOwner:
                 except BaseException as exc:
                     raise QueueOwnerError('QUEUE_CLOSE_UNCERTAIN', cleanup_owner=self) from exc
                 self._cleanup.pop(0)
+
+    def rotate_journal(self, *, now_ms: int, retry_horizon_ms: int | None = None):
+        """Rotate only while the QueueOwner and dispatcher are quiesced.
+
+        This is a trusted local maintenance operation; callers must provide a
+        real epoch timestamp. It never runs a queued command or selects a
+        candidate after an interrupted custody transition.
+        """
+        if type(now_ms) is not int or now_ms < 0:
+            raise QueueOwnerError('QUEUE_CLOCK_INVALID')
+        with self._lifecycle:
+            if self._dispatcher is not None:
+                raise QueueOwnerError('QUEUE_DISPATCHER_ACTIVE', cleanup_owner=self)
+            if self.broker is None or self.journal is None:
+                raise QueueOwnerError('QUEUE_NOT_READY')
+            try:
+                if (retry_horizon_ms is not None
+                        and retry_horizon_ms != self.broker.retry_horizon_ms):
+                    raise QueueOwnerError('QUEUE_RETENTION_PROFILE_MISMATCH')
+                descriptor = self.broker.rotate(self.journal, now_ms=now_ms,
+                                                retry_horizon_ms=retry_horizon_ms)
+                self.log = self.journal.current
+                return descriptor
+            except BaseException as exc:
+                raise QueueOwnerError('QUEUE_ROTATION_RECONCILIATION_REQUIRED',
+                                      cleanup_owner=self) from exc
 
     def __enter__(self):
         return self

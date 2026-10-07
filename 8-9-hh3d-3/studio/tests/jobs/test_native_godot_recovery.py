@@ -13,7 +13,7 @@ STUDIO = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(STUDIO.parent))
 
 spec = importlib.util.spec_from_file_location(
-    'gt07_native_godot_recovery_owner', STUDIO / 'godot-addon/publication_owner.py')
+    __name__ + '_owner', STUDIO / 'godot-addon/publication_owner.py')
 owner_module = importlib.util.module_from_spec(spec)
 sys.modules[spec.name] = owner_module
 spec.loader.exec_module(owner_module)
@@ -40,6 +40,7 @@ class NativeGodotRecoveryTests(unittest.TestCase):
         self.owner._source_release = ('release', 'b' * 64)
         self.owner.storage_id = 'storage.fixture'
         self.owner._editor = SimpleNamespace(identity={'session_id': 'editor.old', 'pid': 101})
+        self.owner._editor.lookup_identity = self.owner._editor.identity
         self.owner._journal = object()
         self.owner.sessions = SimpleNamespace(
             _check_grant=lambda *_args, **_kwargs: None,

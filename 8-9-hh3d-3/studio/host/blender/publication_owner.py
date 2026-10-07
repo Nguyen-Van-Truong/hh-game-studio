@@ -145,6 +145,16 @@ class BlenderPublicationOwner:
                 if operation in ('export.prepare','checkpoint.save') else {}}
         options={'lease':{'fencing_epoch':lease.fencing_epoch,'expires_ms':lease.expires_ms}}
         if deadline_ms is not None:options['deadline_ms']=deadline_ms
+        # Saving the owned Blender fixture can exceed the ordinary 6-second
+        # result wait on a loaded host.  Keep the normal timeout for reads and
+        # other UI commands, but allow this bounded preparation to use the
+        # host's hard 10-second ceiling.  The absolute request deadline still
+        # limits the effective wait; this does not extend the writer lease or
+        # the queue's admission horizon.
+        if operation == 'export.prepare':
+            remaining = (10.0 if deadline_ms is None else
+                         max(0.001, min(10.0, (deadline_ms - epoch_ms()) / 1000)))
+            options['timeout'] = remaining
         return self.host.execute(command,**options)
 
     def _owned_bytes(self,path,expected):

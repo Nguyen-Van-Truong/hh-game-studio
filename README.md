@@ -1,25 +1,14 @@
-# HH Game Studio
+# HH Game Studio — HH3D scope
 
-IDE làm game AI-native. **20-8-2026:** reboot sang Godot stock + Agent Autopilot.
-Engine Rust/`gs-*` đã đóng băng; không mở WP M6/M7/M8 cũ.
+Repo này giữ phạm vi đang phát triển trong `8-9-hh3d-3/`:
 
-## Chạy trên máy này (Windows)
+- `zdoc/`: ba plan và review/evidence điều phối.
+- `studio/`: Godot/Blender agent studio theo plan công cụ.
+- `superagent/`: sản phẩm Superagent/Vault Fighters clean-room theo plan game.
+- `consumer-pilot/`, `vertical-slice/`, `scripts/`: fixture và script hỗ trợ được các plan tham chiếu.
+- `.local/`: trạng thái tooling cục bộ, không commit.
 
-1. Cài pin (một lần): `tools\godot\doctor.ps1 -Install`
-2. **Bấm** [`hh-godot-editor.bat`](hh-godot-editor.bat) — mở Godot **4.7.1-stable** trên fixture `godot/test-projects/minimal-2d`.
+Các nội dung legacy/platform đã chuyển sang:
+`D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio-old-archive-6-10\legacy-root`.
 
-Đó chưa phải game chơi được. Chưa có plugin agent / MCP (R2, khóa đến G1).
-
-R1-WP3 bake-off (A vs C Lite, disposable copies only):
-[`tests/e2e/bakeoff/README.md`](tests/e2e/bakeoff/README.md) ·
-[`tests/e2e/bakeoff/SCORECARD.md`](tests/e2e/bakeoff/SCORECARD.md).
-Không enable MCP trong `godot/plugin-project/`.
-
-## Agent mới bắt đầu từ đây
-
-1. Đọc [AGENTS.md](AGENTS.md)
-2. Đọc [zdocs/20-8-godot-agent-autopilot-plan.txt](zdocs/20-8-godot-agent-autopilot-plan.txt) — bảng tổng quan, rồi WP chưa tick đầu tiên (**R0-WP4**)
-3. Quyết định: [docs/DECISIONS.md](docs/DECISIONS.md) — `GODOT-REBOOT-2026-08-20`
-
-Hai file `zdocs/16-8-game-studio-*.txt` là **LEGACY / NON-AUTHORITATIVE**. Không lấy WP mới từ chúng.
-Khôi phục engine cũ: [legacy/README.md](legacy/README.md).
+Archive không phải product source hiện hành. Không xóa hoặc rewrite lịch sử Git; linked worktree Superagent vẫn ở `D:\dataDiskD\hh-superagent`.

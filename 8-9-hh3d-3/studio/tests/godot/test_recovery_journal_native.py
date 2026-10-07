@@ -86,6 +86,9 @@ class RecoveryJournalNativeTests(unittest.TestCase):
     def test_before_cas_load_plan_restores_only_unchanged_last_good(self):
         owner=self.create();old=owner.selection_facts();self.activate(owner);owner.close()
         recovered=self.open_recovery();self.assertEqual(recovered.selection_facts(),old)
+        observation=recovered.terminal_observation('command.one',helpers.fixtures.rev('command.one'))
+        self.assertEqual(observation['plan']['route'],'RESTORE_LAST_GOOD')
+        self.assertIsNone(observation['response_raw'])
         snapshot,command,bundle,context=recovered.inspect_command('command.one',helpers.fixtures.rev('command.one'))
         self.assertEqual(snapshot['selected'],context['selected'])
         self.assertEqual(bundle.manifest_bytes,canonical_bytes(snapshot['selected']['bundle_manifest']))
@@ -112,6 +115,30 @@ class RecoveryJournalNativeTests(unittest.TestCase):
         # A previous successful inspection cannot mask a lost native owner.
         stopped._blobs.close()
         with self.assertRaises(ValueError):stopped.inspect_command('command.one',helpers.fixtures.rev('command.one'))
+
+    def test_terminal_observation_original_is_fresh_barrier_checked_and_readonly(self):
+        owner=self.create();self.activate(owner,'scene.save')
+        owner.select_prepared('command.one',helpers.fixtures.rev('command.one'),observed_ms=clock())
+        t=clock();owner.readback('command.one',helpers.fixtures.rev('command.one'),
+            helpers.fixtures.adoption_facts(self.command(owner),t),observed_ms=t)
+        owner.commit('command.one',helpers.fixtures.rev('command.one'),observed_ms=clock())
+        expected=owner.lookup_response('command.one',helpers.fixtures.rev('command.one'));owner.close()
+        recovered=self.open_recovery();head=recovered._head
+        observation=recovered.terminal_observation('command.one',helpers.fixtures.rev('command.one'))
+        self.assertEqual(observation['plan']['route'],'COMMITTED_ORIGINAL')
+        self.assertEqual(observation['response_raw'],expected);self.assertEqual(recovered._head,head)
+        second=recovered.terminal_observation('command.one',helpers.fixtures.rev('command.one'))
+        self.assertEqual(second,observation);self.assertEqual(recovered._head,head)
+        recovered.close();reopened=self.open_recovery()
+        self.assertEqual(reopened.terminal_observation('command.one',helpers.fixtures.rev('command.one')),observation)
+
+    def test_terminal_observation_unknown_requires_explicit_reconciliation(self):
+        owner=self.create();self.activate(owner)
+        owner.unknown('command.one',helpers.fixtures.rev('command.one'),reason='host-crash',observed_ms=clock())
+        owner.close();recovered=self.open_recovery();head=recovered._head
+        observation=recovered.terminal_observation('command.one',helpers.fixtures.rev('command.one'))
+        self.assertEqual(observation['plan']['route'],'RESTORE_LAST_GOOD_REQUIRES_EXPLICIT_RECONCILIATION')
+        self.assertIsNone(observation['response_raw']);self.assertEqual(recovered._head,head)
 
     def test_after_actual_cas_missing_selected_is_recorded_without_another_selector_write(self):
         owner=self.create();self.activate(owner);actual=owner._store.select
@@ -156,6 +183,9 @@ class RecoveryJournalNativeTests(unittest.TestCase):
         recovered=self.open_recovery();tail=recovered._events[len(recovered._state.events):]
         self.assertEqual([parse_json(row)['kind'] for row in tail],['HOLD'])
         self.assertEqual(recovered.snapshot()['recovery']['blocked_original_commands'],['command.one'])
+        observation=recovered.terminal_observation('command.one',helpers.fixtures.rev('command.one'))
+        self.assertEqual(observation['plan']['route'],'SELECTED_REQUIRES_DURABLE_COMPLETION')
+        self.assertIsNone(observation['response_raw'])
         with self.assertRaisesRegex(recovery.RecoveryError,'NOT_WITNESSED'):recovered.original_response('command.one',helpers.fixtures.rev('command.one'))
         selected=recovered.selection_facts();response=self.reconcile_synthetic(recovered)
         self.assertEqual(parse_json(response)['status'],'COMMITTED');self.assertIs(parse_json(response)['postconditions']['reconciled'],True)

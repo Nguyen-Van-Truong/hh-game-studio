@@ -119,6 +119,18 @@ class GodotRecoveryHost:
               'RECOVERY_DURABLE_RESPONSE_MISMATCH')
         return response
 
+    def _original_terminal(self,command,digest=None):
+        observation=self._recovery.terminal_observation(command,digest)
+        if observation is None:return None
+        _need(type(observation) is dict,'RECOVERY_TERMINAL_OBSERVATION_REQUIRED')
+        if observation.get('response_raw') is None:return None
+        raw=observation['response_raw']
+        _need(type(raw) is bytes,'RECOVERY_DURABLE_RESPONSE_REQUIRED')
+        response=Response.from_dict(parse_json(raw))
+        _need(canonical_bytes(response.as_dict())==raw and response.command_id==command,
+              'RECOVERY_DURABLE_RESPONSE_MISMATCH')
+        return response
+
     def _restore_terminal(self):
         """Read verified custody first; a fresh process is not fresh work."""
         snapshot=self._recovery._journal.snapshot()
@@ -153,6 +165,14 @@ class GodotRecoveryHost:
                 self._attempt=(command,digest,'PENDING')
         if previous is not None:return self._reply(previous)
         try:
+            # Classify a fresh verified journal view. Only witnessed original
+            # terminals can skip recovery; UNKNOWN and blocked COMMITTED still
+            # need the existing recovery path. Disk I/O holds no control lock.
+            response=self._original_terminal(command,digest)
+            if response is not None:
+                self.sessions.check(grant,lease,deadline_ms=deadline,operation='project.reconcile')
+                with self._lock:self._attempt=(command,digest,'TERMINAL_ORIGINAL')
+                return response
             authority=self.model.ReconciliationAuthority(self.sessions,grant,lease)
             self._recovery.reconcile(authority,command,digest,editor_parent=self._editor_parent,
                 editor_binary=self._binary,deadline_ms=deadline)
@@ -177,10 +197,19 @@ class GodotRecoveryHost:
 
     def _reply(self,attempt):
         command,digest,state=attempt
-        if state=='TERMINAL':
-            try:return self._terminal(command,digest)
-            except Exception:
-                self._held=True;self.sessions.halt()
+        if state in ('TERMINAL_ORIGINAL','TERMINAL'):
+            try:
+                if state=='TERMINAL_ORIGINAL':
+                    response=self._original_terminal(command,digest)
+                    _need(response is not None,'RECOVERY_DURABLE_RESPONSE_REQUIRED')
+                    return response
+                return self._terminal(command,digest)
+            except Exception as error:
+                # Validation and I/O failures all fail closed. Never fall
+                # back to an older original receipt when the recovered one is
+                # absent or corrupt; KeyboardInterrupt/SystemExit still
+                # propagate because they are BaseException, not Exception.
+                self._held=True;self.sessions.halt();self._last_error=error
         return Response(Status.ACCEPTED_PENDING if state=='PENDING' else Status.UNKNOWN,
             'GODOT_RECOVERY_PENDING' if state=='PENDING' else 'GODOT_RECOVERY_RECONCILE_REQUIRED',command,
             postconditions={'request_digest':digest,'public_ack':False,'new_mutation_permitted':False})
@@ -190,22 +219,12 @@ class GodotRecoveryHost:
         self.sessions.validate_public_identifier(body['command_id'])
         with self._lock:
             attempt=self._attempt
-        if attempt is not None and attempt[0]==body['command_id']:return self._reply(attempt)
-        command=self._recovery._journal.lookup(body['command_id'])
-        if command is not None:
-            # A crash cut at RELOAD/SELECTED has a valid command record but no
-            # durable response yet.  Do not call the strict receipt reader for
-            # that nonterminal phase; recovery.reconcile owns completion.
-            if command.get('phase') not in ('COMMITTED','FAILED','UNKNOWN'):
-                return Response(Status.UNKNOWN,'GODOT_RECOVERY_NOT_TERMINAL',body['command_id'],
-                    postconditions={'public_ack':False,'new_mutation_permitted':False})
-            raw=self._recovery.original_response(body['command_id'],command['digest'])
-            if raw is not None:
-                response=Response.from_dict(parse_json(raw))
-                _need(canonical_bytes(response.as_dict())==raw and response.command_id==body['command_id'],
-                      'RECOVERY_DURABLE_RESPONSE_MISMATCH')
-                return response
-        return Response(Status.UNKNOWN,'GODOT_RECOVERY_NOT_REQUESTED',body['command_id'])
+        if attempt is not None and attempt[0]==body['command_id']:
+            return self._reply(attempt)
+        response=self._original_terminal(body['command_id'])
+        if response is not None:return response
+        return Response(Status.UNKNOWN,'GODOT_RECOVERY_NOT_TERMINAL',body['command_id'],
+            postconditions={'public_ack':False,'new_mutation_permitted':False})
 
     def stop(self,body,*,authorization,catalog_digest):
         grant=self._auth(body,'control.stop',authorization,catalog_digest,{'project_id','command_id'})

@@ -230,6 +230,32 @@ class WriterOwnerTests(unittest.TestCase):
         self.assertTrue(result.postconditions['live_edits_unsaved'])
         self.assertEqual(len(self.scene['snapshot']['objects']), 1)
 
+    def test_direct_manual_revision_conflict_is_unknown_and_preserves_state(self):
+        # Establish the owner's baseline through the normal queue, then model
+        # a direct Blender UI edit that bypasses this owner's ledger while its
+        # writer lease remains active.
+        self.assertEqual(self.submit().status, Status.COMMITTED)
+        manual = self.scene['snapshot']['objects'][0]
+        manual['location'] = [8, 8, 8]
+        self._revision()
+        stale = self.body(command_id='Client:Transform/ManualConflict',
+                          operation='object.transform.set',
+                          payload={'expected_context': copy.deepcopy(self.scene['context']),
+                                   'arguments': {'object_id': 'box', 'location': [3, 4, 5],
+                                                 'rotation': [0, 0, 0], 'scale': [1, 1, 1]}})
+        # The direct edit must not alter the owner's captured baseline or let a
+        # stale request overwrite the manual state.
+        stale['expected_revision'] = self.owner.revision
+        stale['payload_hash'] = module.digest(canonical_bytes(stale['payload']))
+        result = self.submit(stale)
+        self.assertIs(result.status, Status.UNKNOWN)
+        self.assertEqual(result.code, 'BLENDER_MANUAL_EDIT_RECONCILE_REQUIRED')
+        self.assertEqual(result.postconditions['next_action'], 'lookup.reconcile')
+        self.assertTrue(result.postconditions['manual_state_preserved'])
+        self.assertEqual(self.lookup('Client:Transform/ManualConflict'), result)
+        self.assertEqual(self.scene['snapshot']['objects'][0]['location'], [8, 8, 8])
+        self.assertFalse(result.postconditions['public_ack'])
+
     def test_exact_duplicate_own_lookup_and_retry_after_lease_deadline_do_not_dispatch(self):
         body = self.body(); original = self.submit(body); wire = canonical_bytes(original.as_dict())
         retry = dict(body, lease_id='write.expired-or-replaced', fencing_epoch=999, deadline_ms=1)

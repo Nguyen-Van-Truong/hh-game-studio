@@ -1,0 +1,26 @@
+{
+  "accepted_gt05_manifest_sha256": "fd0b4a984c7bee261c083c07d461baf55325e936d66df2eeab897b422ee0a02b",
+  "atomic_each_metadata_file": true,
+  "authority": 0,
+  "engine_runs": 0,
+  "formal_acceptance": false,
+  "new_metadata_sha256": {
+    "host/replay/execution-current.json": "2e0db9516c51bfd17d77410f0d96fdd44a7aebf469aedff8fe0b1573892a1067",
+    "host/replay/execution-source.json": "bfe99e111c2473813efb7f2675e2eee65cf362b2a50fc6597ade0f9c2a670eca"
+  },
+  "old_metadata_sha256": {
+    "host/replay/execution-current.json": "01aa5950f5d545f6055cea39a343879309eef06552cd5477bd798655c176d928",
+    "host/replay/execution-source.json": "94552f317dce70fba077139af613fad2aa7806b67517c435a67f820d8462c39e"
+  },
+  "operation": "GT07_INSTALLED_BINDING_REFRESH",
+  "rollback_available": true,
+  "source_closure_sha256": "07a1a931b84874acd8dbcfe0f32e93a0d5eafa425980283794c2c43f9557cf31",
+  "source_count": 233,
+  "source_delta": [
+    "godot-addon/editor_owner.py",
+    "host/blender/export_job.py",
+    "host/blender/publication_owner.py"
+  ],
+  "source_generation": "20261006",
+  "verified_execution_files": 235
+}
