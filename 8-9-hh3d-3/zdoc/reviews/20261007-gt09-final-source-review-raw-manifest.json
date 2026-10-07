@@ -3,16 +3,17 @@
   "generated_by": "coordinator-readonly-closeout",
   "generated_at": "2026-10-07",
   "plan": "8-9-hh3d-3/zdoc/8-9-godot-blender-agent-studio-plan.txt",
-  "source_commit": "edd197adc9f19a97165e5c3bdde11fc91614820a",
+  "source_commit": "5afb6386f084ad4527fe508a924c677b043bb3b6",
   "runtime_repair_commits": [
     "85f3feed",
     "376fe26d",
-    "4cbb8e20"
+    "4cbb8e20",
+    "5afb6386"
   ],
   "fixture_source_closure_sha256": "c91bc0d770e9730cb10a3bc9fd8e80729f6db9d3485b024664706658993be51c",
   "report": {
-    "relative": "8-9-hh3d-3/studio/.local/reviews/gt09-conformance-20261007-06/report.json",
-    "sha256": "5443e7cddfb1a56b1c3fe95e8af947f143c056733a36ad85e52a1c121177fc57",
+    "relative": "8-9-hh3d-3/studio/.local/reviews/gt09-conformance-20261007-07/report.json",
+    "sha256": "fc49943c16be35597d055fefac8fb1b304c8cbb0ac8f395a3f80608a9a955d91",
     "status": "CANDIDATE_PASS",
     "acceptance": false,
     "authority": 0
@@ -26,12 +27,12 @@
   },
   "fixtures": {
     "arena": {
-      "run_id": "o2-publication-gt09-arena-save-20261007-17",
-      "raw_relative": "8-9-hh3d-3/studio/.local/reviews/o2-publication-gt09-arena-save-20261007-17",
-      "wrapper_result_sha256": "cbd1eb5c1f2b1736e131c25160db966ef15ff7f8729cf05b6781044e8949b541",
-      "native_result_relative": "8-9-hh3d-3/studio/.local/reviews/o2-publication-gt09-arena-save-20261007-17/gameplay-owner-4b6d15e6f6794b78b05d37e021beb304/runs/command.publication.1/result.json",
-      "native_result_sha256": "88ebcf25d17da3aadbf63b1d2667a32fc134f33efb96828ab7e75e106ab74930",
-      "observation_sha256": "29e5c52f234d6c047873c45fb6209ba5d3b06698ed285beae0f280b5b811df74",
+      "run_id": "o2-publication-gt09-arena-effects-20261007-18",
+      "raw_relative": "8-9-hh3d-3/studio/.local/reviews/o2-publication-gt09-arena-effects-20261007-18/",
+      "wrapper_result_sha256": "60d45ecf1f188f546e254d023ab8d4aca09b95135b88517145d61175645f4a54",
+      "native_result_relative": "8-9-hh3d-3/studio/.local/reviews/o2-publication-gt09-arena-effects-20261007-18/gameplay-owner-4c042d76775349b7881dd19f5c1361e8/runs/command.publication.1/result.json",
+      "native_result_sha256": "b063eb67721fa5fb805ecc10736c4bd56bedfe7748bef23c6bf4f579fe89fc18",
+      "observation_sha256": "c08b88083998f417ba10d9d8c474e807382289a89e46bacdd2a18eae328c8222",
       "status": "DIAGNOSTIC_PASS",
       "authority": 0,
       "public_ack": false,
@@ -43,12 +44,12 @@
       "source_closure_sha256": "c91bc0d770e9730cb10a3bc9fd8e80729f6db9d3485b024664706658993be51c"
     },
     "room": {
-      "run_id": "o2-publication-gt09-room-native-20261007-15",
-      "raw_relative": "8-9-hh3d-3/studio/.local/reviews/o2-publication-gt09-room-native-20261007-15",
-      "wrapper_result_sha256": "16f581db877f4adad1667c52bbc0f35e5f00ae037f6d6dd794dcddfd89b5e7fa",
-      "native_result_relative": "8-9-hh3d-3/studio/.local/reviews/o2-publication-gt09-room-native-20261007-15/gameplay-owner-966c124d26494f598facf8da8587f7de/runs/command.publication.1/result.json",
-      "native_result_sha256": "db4e3aa51779b4981f291307b2954e206c5f09c5802f3d0b3d1c8662c83932d5",
-      "observation_sha256": "a683195bd1fc48fdd0ad5218e47a74ea6aad79684c4f5cf7a7515af883cc3169",
+      "run_id": "o2-publication-gt09-room-effects-20261007-19",
+      "raw_relative": "8-9-hh3d-3/studio/.local/reviews/o2-publication-gt09-room-effects-20261007-19/",
+      "wrapper_result_sha256": "a32a1b3b3ac1d8d481a4424005745ca1b002fdb2a9c7af739ae9fd154600251b",
+      "native_result_relative": "8-9-hh3d-3/studio/.local/reviews/o2-publication-gt09-room-effects-20261007-19/gameplay-owner-4c95441b5e114a5fbd451b264937bcd5/runs/command.publication.1/result.json",
+      "native_result_sha256": "4a157cc02217b0e8dad48ae21ec5f1d997a3c6c78511076c35821c7669fcee39",
+      "observation_sha256": "9bd15a97cc74b668a55e9f12db855952d06096cffdb8f8c9313c937a24353b36",
       "status": "DIAGNOSTIC_PASS",
       "authority": 0,
       "public_ack": false,
@@ -79,5 +80,5 @@
     "gt10_package_lifecycle": false,
     "gt10_release_soak_10x35": false
   },
-  "interpretation": "AUTHORITY=0 diagnostic candidate; no GT09/GT10 acceptance or complete-game/Y8-parity claim."
+  "interpretation": "AUTHORITY=0 diagnostic candidate; native combined saved-arena + Blender handoff and four bounded arena effects observed; no GT09/GT10 acceptance or complete-game/Y8-parity claim."
 }
