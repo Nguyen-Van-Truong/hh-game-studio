@@ -148,6 +148,7 @@ def dry_run(args):
          and all(files.get(name) == digest for name, digest in admitted['files'].items()),
          'ADAPTER_ADMISSION_CHANGED')
     return {**admitted, 'files': files, 'candidate_sha256': hashes,
+            'authenticated': getattr(args, 'authenticated', False),
             'client_version': adapter.SUPPORTED_CLIENT_VERSION,
             'commands': list(COMMANDS), 'native_run_limit': 2,
             'authority': 0, 'public_ack': False,
@@ -242,7 +243,8 @@ def _execute(args, admission):
                         lambda: publish(contender, 1, initial_readback['project_revision'], grant, lease))
                     need(len(calls) == 1, 'ADAPTER_CONTENDER_DISPATCHED')
                 # Return exactly the native executor result, never fabricated exits.
-                observed = owner_mod._load('linux_executor').run(project, **kwargs)
+                observed = owner_mod._load('linux_executor').run(
+                    project, **kwargs, authenticated=admission['authenticated'])
                 exits.append(native_exit_observation(observed))
                 unchanged()
                 return observed
@@ -376,6 +378,8 @@ def main():
     parser.add_argument('--saved-arena', type=Path)
     parser.add_argument('--blender-published', type=Path)
     parser.add_argument('--dry-run', action='store_true')
+    parser.add_argument('--authenticated', action='store_true',
+                        help='use the private parent-attributed driver; no public capability grant')
     args = parser.parse_args()
     if not _RUN_ID.fullmatch(args.run_id):
         parser.error('use a fresh o2-adapter-<id>')

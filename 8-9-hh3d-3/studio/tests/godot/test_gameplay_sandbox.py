@@ -1,6 +1,8 @@
 """Filter-policy regressions; native denial proof belongs to the Linux probe."""
 import errno
 import importlib.util
+import json
+import os
 from pathlib import Path
 import unittest
 from unittest.mock import patch
@@ -76,6 +78,38 @@ class GameplaySandboxTests(unittest.TestCase):
         with patch.object(sandbox.sys, 'platform', 'win32'):
             with self.assertRaisesRegex(RuntimeError, 'PLATFORM'):
                 sandbox.install()
+
+    def test_private_guard_pipe_is_closed_before_exec_and_on_invalid_command(self):
+        facts = {'no_new_privileges': 1, 'seccomp_mode': 2}
+        denials = dict(fork_errno=1, socket_ipv4_errno=1, socket_ipv6_errno=1, socket_unix_errno=1)
+        for phase in ('play', 'invalid'):
+            read_fd, write_fd = os.pipe()
+            os.set_inheritable(write_fd, True)
+            def exec_checked(*_):
+                with self.assertRaises(OSError):
+                    os.fstat(write_fd)
+            try:
+                with patch.object(sandbox.sys, 'argv', ['guard', phase, '--guard-fd', str(write_fd)]), \
+                     patch.object(sandbox, 'install', return_value=facts) as install, \
+                     patch.object(sandbox, 'verify_denials', return_value=denials), \
+                     patch.object(sandbox.os, 'execv', side_effect=exec_checked) as execute, \
+                     patch('builtins.print'):
+                    if phase == 'play':
+                        sandbox.main()
+                        execute.assert_called_once()
+                        self.assertEqual(json.loads(os.read(read_fd, 1024)), {**facts, **denials})
+                    else:
+                        with self.assertRaisesRegex(ValueError, 'PHASE'):
+                            sandbox.main()
+                        install.assert_not_called()
+                        execute.assert_not_called()
+                    self.assertEqual(os.read(read_fd, 1024), b'')
+            finally:
+                os.close(read_fd)
+                try:
+                    os.close(write_fd)
+                except OSError:
+                    pass
 
 
 if __name__ == '__main__':

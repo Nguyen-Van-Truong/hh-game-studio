@@ -695,6 +695,8 @@ class GameplaySourcePublicationOwner:
             _need(canonical_bytes(parse_json(native_raw)) == canonical_bytes(result),
                   "GAMEPLAY_OWNER_NATIVE_RESULT_BINDING")
             stdout = executor._read_file(evidence_directory / "engine-stdout.txt", 262144)
+            if result.get("attribution_enabled") is True:
+                stdout = executor.read_attribution(evidence_directory, result)["child_stdout"]
             marker = _load("gameplay_dependency_observation")
             report = marker.parse_dependency_observation(stdout, expected_files)
         except GameplaySourceOwnerError:
@@ -751,13 +753,19 @@ class GameplaySourcePublicationOwner:
                 executor = _load("linux_executor")
                 stdout = executor._read_file(evidence_directory / "engine-stdout.txt", 262144)
                 stderr = executor._read_file(evidence_directory / "engine-stderr.txt", 262144)
+                attribution = None
+                if result.get("attribution_enabled") is True:
+                    attribution = executor.read_attribution(evidence_directory, result)
+                    stdout, stderr = attribution["child_stdout"], attribution["child_stderr"]
                 combined = (stdout + b'\n' + stderr).decode('utf-8', errors='strict')
                 raw_clean = (result.get("diagnostic_process_clean") is True
                     and result.get("log_clean") is True and '\x00' not in combined
                     and re.search(r'ERROR|WARNING|leaked', combined, re.IGNORECASE) is None)
                 scripts = [ENTRYPOINT] + sorted(name for name in expected_input_hashes
                     if name.startswith("scripts/") and name.endswith(".gd") and name != ENTRYPOINT)
-                observed_policy = _load('gameplay_log_policy').classify(stdout, stderr, scripts)
+                policy = _load('gameplay_log_policy')
+                observed_policy = (policy.classify_attributed(attribution, scripts)
+                                   if attribution is not None else policy.classify(stdout, stderr, scripts))
                 # Recompute from retained raw on publish AND reopen. Caller
                 # flags or an earlier persisted verdict cannot substitute.
                 explained_startup = (result.get("diagnostic_process_clean") is False

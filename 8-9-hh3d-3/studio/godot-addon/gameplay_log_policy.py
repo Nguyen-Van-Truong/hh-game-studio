@@ -74,3 +74,33 @@ def classify(stdout: bytes, stderr: bytes, scripts: list[str]) -> dict:
     errors = GUARDED_STARTUP_ERROR * (len(scripts) - 1) + GAMEPLAY_STARTUP_ERRORS
     verdict['accepted'] = events == tuple(expected) and err == errors
     return verdict
+
+
+def classify_attributed(observation: dict, scripts: list[str]) -> dict:
+    """Explain child noise after the caller verifies the parent wire.
+
+    Phase markers from candidate text do not contribute to this decision.
+    This classifier is not itself an attribution verifier.
+    """
+    stdout, stderr = observation['child_stdout'], observation['child_stderr']
+    verdict = {'policy': 'hh-gameplay-attributed-startup-log-1', 'accepted': False,
+               'stdout_sha256': hashlib.sha256(stdout).hexdigest(),
+               'stderr_sha256': hashlib.sha256(stderr).hexdigest(),
+               'wire_sha256': observation['wire_sha256']}
+    if not _script_inventory(scripts) or observation.get('driver_returncode') != 0:
+        return verdict
+    phases = observation.get('phase_results', [])
+    expected = [('parse', script) for script in scripts] + [('import', None), ('play', None)]
+    if ([(row.get('phase'), row.get('script')) for row in phases] != expected
+            or any(type(row.get('returncode')) is not int or row['returncode'] != 0
+                   or type(row.get('guard')) is not dict for row in phases)):
+        return verdict
+    try:
+        out = stdout.decode('utf-8', errors='strict')
+        err = stderr.decode('utf-8', errors='strict').replace('\r\n', '\n')
+    except UnicodeDecodeError:
+        return verdict
+    errors = GUARDED_STARTUP_ERROR * (len(scripts) - 1) + GAMEPLAY_STARTUP_ERRORS
+    verdict['accepted'] = ('\x00' not in out and '\x00' not in err
+        and not re.search(r'ERROR|WARNING|leaked', out, re.IGNORECASE) and err == errors)
+    return verdict

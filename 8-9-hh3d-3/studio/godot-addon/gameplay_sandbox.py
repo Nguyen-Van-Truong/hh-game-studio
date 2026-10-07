@@ -8,10 +8,12 @@ from __future__ import annotations
 
 import ctypes
 import errno
+import json
 import os
 from pathlib import Path, PurePosixPath
 import platform
 import socket
+import stat
 import sys
 
 ARCH_X86_64 = 0xC000003E
@@ -60,29 +62,56 @@ def install():
         raise OSError(ctypes.get_errno(), 'GAMEPLAY_NO_NEW_PRIVILEGES')
     if libc.prctl(22, 2, ctypes.byref(program), 0, 0) != 0:
         raise OSError(ctypes.get_errno(), 'GAMEPLAY_SECCOMP_INSTALL')
+    observed = {'no_new_privileges': libc.prctl(39, 0, 0, 0, 0),
+                'seccomp_mode': libc.prctl(21, 0, 0, 0, 0)}
+    if observed != {'no_new_privileges': 1, 'seccomp_mode': 2}:
+        raise RuntimeError('GAMEPLAY_SECCOMP_READBACK')
+    return observed
 
 
 def verify_denials():
     """Fixed trusted OS probes, executed before any candidate code is loaded."""
+    observed = {}
     try:
         pid = os.fork()
     except OSError as error:
         if error.errno != errno.EPERM:
             raise RuntimeError('GAMEPLAY_FORK_WRONG_ERRNO') from error
+        observed['fork_errno'] = error.errno
     else:
         if pid == 0:
             os._exit(91)
         os.waitpid(pid, 0)
         raise RuntimeError('GAMEPLAY_FORK_NOT_BLOCKED')
-    for family in (socket.AF_INET, socket.AF_INET6, socket.AF_UNIX):
+    for key, family in (('socket_ipv4_errno', socket.AF_INET),
+                        ('socket_ipv6_errno', socket.AF_INET6),
+                        ('socket_unix_errno', socket.AF_UNIX)):
         try:
             channel = socket.socket(family, socket.SOCK_STREAM)
         except OSError as error:
             if error.errno != errno.EPERM:
                 raise RuntimeError('GAMEPLAY_SOCKET_WRONG_ERRNO') from error
+            observed[key] = error.errno
         else:
             channel.close()
             raise RuntimeError('GAMEPLAY_SOCKET_NOT_BLOCKED')
+    return observed
+
+
+def guard_descriptor(arguments):
+    """Only the trusted parent supplies this private pre-exec pipe."""
+    args = list(arguments)
+    fd = None
+    if len(args) >= 2 and args[-2] == '--guard-fd':
+        text = args.pop()
+        args.pop()
+        if not text.isdecimal() or not 3 <= int(text) <= 255:
+            raise ValueError('GAMEPLAY_GUARD_DESCRIPTOR')
+        fd = int(text)
+        if not stat.S_ISFIFO(os.fstat(fd).st_mode):
+            raise ValueError('GAMEPLAY_GUARD_PIPE_REQUIRED')
+        os.set_inheritable(fd, False)
+    return args, fd
 
 
 def command(phase, *, parse_script=None):
@@ -106,13 +135,22 @@ def command(phase, *, parse_script=None):
 
 
 def main():
-    if len(sys.argv) not in (2, 3):
-        raise ValueError('GAMEPLAY_SANDBOX_ARGUMENTS')
-    phase = sys.argv[1]
-    parse_script = sys.argv[2] if len(sys.argv) == 3 else None
-    argv = command(phase, parse_script=parse_script)
-    install()
-    verify_denials()
+    guard_fd = None
+    try:
+        args, guard_fd = guard_descriptor(sys.argv[1:])
+        if len(args) not in (1, 2):
+            raise ValueError('GAMEPLAY_SANDBOX_ARGUMENTS')
+        phase = args[0]
+        parse_script = args[1] if len(args) == 2 else None
+        argv = command(phase, parse_script=parse_script)
+        facts = {**install(), **verify_denials()}
+        if guard_fd is not None:
+            packet = (json.dumps(facts, sort_keys=True, separators=(',', ':')) + '\n').encode()
+            if len(packet) > 1024 or os.write(guard_fd, packet) != len(packet):
+                raise RuntimeError('GAMEPLAY_GUARD_WRITE')
+    finally:
+        if guard_fd is not None:
+            os.close(guard_fd)
     print('HH_GAMEPLAY_OS_GUARD fork=EPERM socket=EPERM', flush=True)
     os.execv(argv[0], argv)
 

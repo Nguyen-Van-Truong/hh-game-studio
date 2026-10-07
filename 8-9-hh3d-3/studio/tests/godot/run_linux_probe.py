@@ -40,7 +40,7 @@ GAMEPLAY_STARTUP_ERRORS = log_policy.GAMEPLAY_STARTUP_ERRORS
 GAMEPLAY_PHASE_EVENTS = log_policy.GAMEPLAY_PHASE_EVENTS
 
 
-def gameplay_transcript(case: dict, stdout: str, stderr: str) -> bool:
+def gameplay_transcript(case: dict, stdout: str, stderr: str, *, attribution=None) -> bool:
     """Recognize the full fixture transcript, never attest untrusted gameplay."""
     kind = case['expect']
     primary = 'scripts/fixture_actor.gd'
@@ -48,6 +48,8 @@ def gameplay_transcript(case: dict, stdout: str, stderr: str) -> bool:
                                 if name.startswith('scripts/') and name.endswith('.gd'))
     if kind in ('gameplay_source', 'fixture_state'):
         try:
+            if attribution is not None:
+                return log_policy.classify_attributed(attribution, scripts)['accepted']
             return log_policy.classify(stdout.encode('utf-8'), stderr.encode('utf-8'), scripts)['accepted']
         except UnicodeEncodeError:
             return False
@@ -225,7 +227,7 @@ def physics_trace(case: dict, stdout: str) -> bool:
         return False
 
 
-def evaluate(case: dict, result: dict, stdout: str, stderr: str) -> dict:
+def evaluate(case: dict, result: dict, stdout: str, stderr: str, *, attribution=None) -> dict:
     """Diagnostic assertions, deliberately not a publication PASS predicate."""
     host = _object(result.get('command_host'))
     state = _object(result.get('container_state'))
@@ -349,7 +351,7 @@ def evaluate(case: dict, result: dict, stdout: str, stderr: str) -> dict:
             and stdout.startswith(GUARD_MARKER + '\n'))
     transcript_ok = True
     if case.get('mode') == 'gameplay-source':
-        transcript_ok = gameplay_transcript(case, stdout, stderr)
+        transcript_ok = gameplay_transcript(case, stdout, stderr, attribution=attribution)
         if kind == 'engine_rejection':
             # The trusted parent returns 45 only after a nonzero phase exit.
             # A crash, watchdog or banner must not impersonate this rejection.
@@ -392,6 +394,13 @@ def sandbox_binding(destination: Path, case: dict, result: dict, binding: dict) 
             or result.get('sandbox_bootstrap_sha256') != expected_guard):
         raise ValueError('guarded bootstrap source changed')
     executor = load('gt03_probe_bound_executor', STUDIO / 'godot-addon/linux_executor.py')
+    attribution_context = None
+    if result.get('attribution_enabled') is True:
+        for path in ('godot-addon/gameplay_attribution.py', 'godot-addon/gameplay_attributed_driver.py'):
+            if files.get(path) != sha(STUDIO / path):
+                raise ValueError('attribution requires matching trusted source')
+        attribution_context = executor._attribution_context(
+            result['run_id'], result['source_closure_sha256'], result['input_hashes_before'])
     if case['mode'] == 'gameplay-source':
         expected_profile = files['godot-addon/gameplay_source_profile.py']
         if (expected_profile != executor.GAMEPLAY_PROFILE_SHA256
@@ -419,7 +428,8 @@ def sandbox_binding(destination: Path, case: dict, result: dict, binding: dict) 
     expected_tool = result.get('tool_mount_source')
     if (inspected.get('Id') != result['container_id']
             or config.get('Entrypoint') != ['/usr/local/bin/python3']
-            or config.get('Cmd') != executor._supervised_command(case['mode'], case['timeout'])
+            or config.get('Cmd') != executor._supervised_command(case['mode'], case['timeout'],
+                                                               attribution_context=attribution_context)
             or host.get('Tmpfs') != expected_tmpfs
             or type(expected_tool) is not str
             or type(mounts) is not list
@@ -480,7 +490,16 @@ def case_observation(destination: Path, case: dict, *, name: str, binding: dict)
         sandbox_binding(destination, case, result, binding)
     stdout = (destination / 'engine-stdout.txt').read_text(encoding='utf-8', errors='replace')
     stderr = (destination / 'engine-stderr.txt').read_text(encoding='utf-8', errors='replace')
-    row = evaluate(case, result, stdout, stderr)
+    attribution = None
+    if result.get('attribution_enabled') is True:
+        executor = load('gt03_probe_attributed_executor', STUDIO / 'godot-addon/linux_executor.py')
+        attribution = executor.read_attribution(destination, result)
+        stdout = attribution['child_stdout'].decode('utf-8', errors='strict')
+        stderr = attribution['child_stderr'].decode('utf-8', errors='strict')
+    row = evaluate(case, result, stdout, stderr, attribution=attribution)
+    if attribution is not None:
+        row['parent_attribution'] = {key: value for key, value in attribution.items()
+                                    if key not in ('child_stdout', 'child_stderr')}
     if case.get('dependency_observation'):
         # This is deliberately a candidate report.  The helper binds every
         # node/hash/edge to the immutable fixture bytes but never raises

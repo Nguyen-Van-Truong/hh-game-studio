@@ -106,6 +106,18 @@ class GameplayLogPolicyTests(unittest.TestCase):
                          (self.stdout + b'x' * policy.MAX_LOG_BYTES, self.stderr)):
             self.assertIs(policy.classify(out, err, self.scripts)['accepted'], False)
 
+    def test_attributed_policy_uses_wait_facts_never_candidate_phase_markers(self):
+        phases = [{'phase': p, 'script': s, 'returncode': 0, 'guard': {'seccomp_mode': 2}}
+                  for p, s in [('parse', self.scripts[0]), ('import', None), ('play', None)]]
+        observation = {'child_stdout': self.stdout, 'child_stderr': self.stderr,
+                       'phase_results': phases, 'driver_returncode': 0, 'wire_sha256': 'a'*64}
+        self.assertTrue(policy.classify_attributed(observation, self.scripts)['accepted'])
+        phases[-1]['returncode'] = 17
+        self.assertFalse(policy.classify_attributed(observation, self.scripts)['accepted'])
+        phases[-1]['returncode'] = 0
+        observation['child_stdout'] += b'ERROR: cannot hide in base64\n'
+        self.assertFalse(policy.classify_attributed(observation, self.scripts)['accepted'])
+
 
 if __name__ == '__main__':
     unittest.main()

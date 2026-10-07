@@ -16,7 +16,9 @@ class GuardedExecutorTests(unittest.TestCase):
         # Load the trusted CLI helper before simulating a disk change. The
         # admission check must notice even dependencies already in memory.
         executor._cli_jobs()
-        for dependency in ('godot-addon/cli_job.py', 'godot-addon/gameplay_log_policy.py', 'host/core/journal.py',
+        for dependency in ('godot-addon/cli_job.py', 'godot-addon/gameplay_log_policy.py',
+                           'godot-addon/gameplay_attribution.py', 'godot-addon/gameplay_attributed_driver.py',
+                           'host/core/journal.py',
                            'host/core/redaction.py', 'protocol/__init__.py',
                            'protocol/_rfc8785/__init__.py', 'protocol/_rfc8785/_impl.py'):
             target = executor.STUDIO / dependency
@@ -107,6 +109,29 @@ class GuardedExecutorTests(unittest.TestCase):
         for mode in ('guarded-exec', 'guarded-readback', '', None):
             with self.assertRaises(executor.ExecutorError):
                 executor._supervised_command(mode)
+
+    def test_attributed_driver_binds_input_run_and_original_deadline(self):
+        context = executor._attribution_context(NAME, 'a' * 64, {'scripts/fixture_actor.gd': 'b' * 64})
+        argv = executor._supervised_command('gameplay-source', attribution_context=context)
+        self.assertEqual(argv[-2], '/harness/gameplay_attributed_driver.py')
+        self.assertEqual(json.loads(argv[-1]), context)
+        self.assertEqual(argv[4:7], ['--signal=TERM', '--kill-after=1s', '19s'])
+        with self.assertRaisesRegex(executor.ExecutorError, 'ATTRIBUTION_MODE'):
+            executor._supervised_command('parse', attribution_context=context)
+        with self.assertRaisesRegex(executor.ExecutorError, 'ATTRIBUTION_RUN'):
+            executor._create_args('hh-gt03-' + 'b'*32, 'gameplay-source', Path('tool'), Path('snapshot'),
+                                  attribution_context=context)
+        tool, snapshot = Path('C:/tool'), Path('C:/out/snapshot')
+        row = inspected(NAME, CID, 'gameplay-source', tool, snapshot)
+        row['Mounts'].append({'Type': 'bind', 'Source': str(snapshot.parent / 'harness'),
+                             'Destination': '/harness', 'RW': False, 'Propagation': 'rprivate'})
+        row['Config']['Cmd'] = argv
+        params = dict(name=NAME, container_id=CID, mode='gameplay-source', tool=tool,
+                      snapshot=snapshot, image_environment=IMAGE_ENV, attribution_context=context)
+        executor._validate_inspect(row, **params)
+        row['Config']['Cmd'] = executor._supervised_command('gameplay-source')
+        with self.assertRaisesRegex(executor.ExecutorError, 'EXECUTOR_COMMAND'):
+            executor._validate_inspect(row, **params)
 
     def test_guarded_bootstrap_is_pinned_before_any_daemon_call(self):
         self.assertEqual(executor._sha(executor._sandbox_harness()), executor.SANDBOX_BOOTSTRAP_SHA256)

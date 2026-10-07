@@ -41,7 +41,7 @@ _HELPER = "import subprocess,sys; token=sys.stdin.readline(); sys.exit(125) if t
 _INCOMPLETE_CLI_HOLDS: list = []
 _INCOMPLETE_ADMISSION_HOLDS: list = []
 PROFILE_BOOTSTRAP_SHA256 = 'efde8370a6157ed2f66544ee13b82ee2556b59130f5306e9e0774ed0e3be79a5'
-SANDBOX_BOOTSTRAP_SHA256 = 'ed31974d0bdf659ca8c237db1fa0f2857a3260cbd5e363e6c1c9f248d075fbb0'
+SANDBOX_BOOTSTRAP_SHA256 = 'f813292aac0d33f866d906412856f9887500b594e1222592e00ddfeaf40ebdf8'
 GAMEPLAY_PROFILE_SHA256 = 'aa01428ff26dc56fc20f19f7093bd025685fe9ca509843826ee02fe7acb6485c'
 GUARDED_MODES = ('guarded-parse', 'guarded-import', 'guarded-play')
 GAMEPLAY_MODE = 'gameplay-source'
@@ -57,6 +57,8 @@ GAMEPLAY_RUNTIME_FILES = (
     'godot-addon/linux_executor.py',
     'godot-addon/cli_job.py',
     'godot-addon/gameplay_sandbox.py',
+    'godot-addon/gameplay_attribution.py',
+    'godot-addon/gameplay_attributed_driver.py',
     'godot-addon/publication_session.py',
     'godot-addon/contract.py',
     'godot-addon/operations.json',
@@ -291,6 +293,71 @@ def _gameplay_log_policy():
     return sys.modules[key]
 
 
+def _attribution_codec():
+    path = STUDIO / 'godot-addon/gameplay_attribution.py'
+    raw = _read_file(path, 65536)
+    key = '_hh_gameplay_attribution_' + _sha(str(path).encode() + b'\0' + raw)
+    if key not in sys.modules:
+        spec = importlib.util.spec_from_file_location(key, path)
+        module = importlib.util.module_from_spec(spec)
+        exec(compile(raw, str(path), 'exec'), module.__dict__)
+        sys.modules[key] = module
+    return sys.modules[key]
+
+
+def _attribution_context(run_id, closure, inputs):
+    context = {'run_id': run_id, 'source_closure_sha256': closure,
+               'input_manifest_sha256': _sha(json.dumps(
+                   inputs, sort_keys=True, separators=(',', ':')).encode())}
+    _attribution_codec()._context(context)
+    return context
+
+
+def read_attribution(output: Path, result: dict) -> dict:
+    """Re-derive authenticated phase facts from retained wire and host receipts.
+
+    Never execute a helper from evidence. Native publication/reopen callers
+    separately bind the expected source/input closure, and check ownership.
+    Child gameplay/dependency text remains untrusted.
+    """
+    _need(result.get('attribution_enabled') is True
+          and result.get('mode') == GAMEPLAY_MODE, 'EXECUTOR_ATTRIBUTION_REQUIRED')
+    context = _attribution_context(result['run_id'], result['source_closure_sha256'],
+                                   result['input_hashes_before'])
+    for name in ('gameplay_sandbox.py', 'gameplay_attribution.py', 'gameplay_attributed_driver.py'):
+        _need(_read_file(output / 'harness' / name, 65536)
+              == _read_file(STUDIO / 'godot-addon' / name, 65536),
+              'EXECUTOR_ATTRIBUTION_HARNESS')
+    _need(_read_file(output / 'engine-stderr.txt', 262144) == b'',
+          'EXECUTOR_ATTRIBUTION_OUTER_STDERR')
+    primary = 'scripts/fixture_actor.gd'
+    scripts = [primary] + sorted(name for name in result['input_hashes_before']
+        if name.startswith('scripts/') and name.endswith('.gd') and name != primary)
+    parsed = _attribution_codec().verify(
+        _read_file(output / 'engine-stdout.txt', 262144), context=context, scripts=scripts)
+    host = json.loads(_read_file(output / 'engine-host.json', 262144))
+    _need(_cli_done(host, parsed['driver_returncode'])
+          and host == result.get('commandhost') == result.get('command_host'),
+          'EXECUTOR_ATTRIBUTION_HOST_RECEIPT')
+    inspected = json.loads(_read_file(output / 'created-inspect-stdout.txt', 262144))
+    image = json.loads(_read_file(output / 'image-stdout.txt', 262144))
+    exited = json.loads(_read_file(output / 'exited-inspect-stdout.txt', 262144))
+    _need(len(inspected) == len(image) == len(exited) == 1
+          and exited[0]['State'] == result.get('state')
+          and exited[0]['State']['ExitCode'] == parsed['driver_returncode']
+          and result.get('docker_wait_exit') == parsed['driver_returncode'],
+          'EXECUTOR_ATTRIBUTION_CONTAINER_RECEIPT')
+    _validate_inspect(inspected[0], name=result['run_id'], container_id=result['container_id'],
+        mode=GAMEPLAY_MODE, tool=Path(result['tool_mount_source']), snapshot=output / 'snapshot',
+        image_environment=image[0]['Config']['Env'],
+        timeout_seconds=result['supervisor']['total_deadline_seconds'],
+        asset_files=tuple(sorted(name for name in result['input_hashes_before'] if name in ASSET_PATHS)),
+        attribution_context=context)
+    _need({k: v for k, v in parsed.items() if k not in ('child_stdout', 'child_stderr')}
+          == result.get('attribution'), 'EXECUTOR_ATTRIBUTION_RESULT_BINDING')
+    return parsed
+
+
 def _gameplay_project_bytes(project: Path) -> dict[str, bytes]:
     """Admit the complete bounded scene/script inventory before Docker.
 
@@ -339,13 +406,22 @@ def _sandbox_command(phase: str) -> list[str]:
     return ['/usr/local/bin/python3', '-I', '-B', '/harness/gameplay_sandbox.py', phase]
 
 
-def _supervised_command(mode: str, timeout_seconds: int = 20) -> list[str]:
+def _supervised_command(mode: str, timeout_seconds: int = 20, *, attribution_context=None) -> list[str]:
     _need(type(timeout_seconds) is int and 1 <= timeout_seconds <= 20, 'EXECUTOR_TIMEOUT')
     _command(mode)
+    if attribution_context is not None:
+        _need(mode == GAMEPLAY_MODE, 'EXECUTOR_ATTRIBUTION_MODE')
+        _attribution_codec()._context(attribution_context)
     if mode == 'profile-validate':
         command = ['/usr/local/bin/python3', '-I', '-B', '-c', _profile_driver()]
     elif mode == 'gameplay-source':
-        command = ['/usr/local/bin/python3', '-I', '-B', '-c', _gameplay_profile().driver()]
+        if attribution_context is not None:
+            _need(type(attribution_context) is dict, 'EXECUTOR_ATTRIBUTION_CONTEXT')
+            command = ['/usr/local/bin/python3', '-I', '-B',
+                       '/harness/gameplay_attributed_driver.py',
+                       json.dumps(attribution_context, sort_keys=True, separators=(',', ':'))]
+        else:
+            command = ['/usr/local/bin/python3', '-I', '-B', '-c', _gameplay_profile().driver()]
     elif mode in GUARDED_MODES:
         command = _sandbox_command(mode.removeprefix('guarded-'))
     else:
@@ -817,8 +893,10 @@ def _asset_inventory(asset_files=()):
 
 
 def _create_args(name: str, mode: str, tool: Path, snapshot: Path, timeout_seconds: int = 20,
-                 *, asset_files=()) -> list[str]:
+                 *, asset_files=(), attribution_context=None) -> list[str]:
     _need(re.fullmatch(r'hh-gt03-[0-9a-f]{32}', name) is not None, 'EXECUTOR_OWNER_NAME')
+    if attribution_context is not None:
+        _need(attribution_context.get('run_id') == name, 'EXECUTOR_ATTRIBUTION_RUN')
     assets = _asset_inventory(asset_files)
     if assets and mode != GAMEPLAY_MODE:
         raise ExecutorError('EXECUTOR_ASSET_MODE')
@@ -847,12 +925,14 @@ def _create_args(name: str, mode: str, tool: Path, snapshot: Path, timeout_secon
     if mode == 'profile-validate' or mode in SANDBOX_MODES:
         args += ['--mount', 'type=bind,src=' + str(snapshot.parent / 'harness')
                  + ',dst=/harness,readonly,bind-propagation=rprivate']
-    return args + ['--entrypoint', '/usr/local/bin/python3', IMAGE_ID, *_supervised_command(mode, timeout_seconds)]
+    return args + ['--entrypoint', '/usr/local/bin/python3', IMAGE_ID,
+                   *_supervised_command(mode, timeout_seconds,
+                                        attribution_context=attribution_context)]
 
 
 def _validate_inspect(value: dict, *, name: str, container_id: str, mode: str,
                       tool: Path, snapshot: Path, image_environment: list[str], timeout_seconds: int = 20,
-                      asset_files=()) -> None:
+                      asset_files=(), attribution_context=None) -> None:
     assets = _asset_inventory(asset_files)
     if assets and mode != GAMEPLAY_MODE:
         raise ExecutorError('EXECUTOR_ASSET_MODE')
@@ -866,7 +946,8 @@ def _validate_inspect(value: dict, *, name: str, container_id: str, mode: str,
           'EXECUTOR_ENVIRONMENT')
     _need(config.get('User') == '65532:65532' and config.get('WorkingDir') == '/project'
           and config.get('Entrypoint') == ['/usr/local/bin/python3']
-          and config.get('Cmd') == _supervised_command(mode, timeout_seconds)
+          and config.get('Cmd') == _supervised_command(mode, timeout_seconds,
+                                                       attribution_context=attribution_context)
           and config.get('Labels', {}).get('hh.gt03.executor') == EXECUTOR_CONTEXT,
           'EXECUTOR_COMMAND')
     _need(host.get('ReadonlyRootfs') is True and host.get('NetworkMode') == 'none'
@@ -905,7 +986,7 @@ def _validate_inspect(value: dict, *, name: str, container_id: str, mode: str,
           <= set(host.get('MaskedPaths', [])), 'EXECUTOR_SYSTEM_PATHS')
 
 
-def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate', 'guarded-parse', 'guarded-import', 'guarded-play', 'gameplay-source'], output: Path, timeout_seconds: int = 20, source_closure_sha256: str | None = None) -> dict:
+def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate', 'guarded-parse', 'guarded-import', 'guarded-play', 'gameplay-source'], output: Path, timeout_seconds: int = 20, source_closure_sha256: str | None = None, authenticated: bool = False) -> dict:
     """Run fixed Godot diagnostics; raises only during argument/input/output preflight.
 
     Remote requests must never choose paths, environment or engine modes directly.
@@ -917,6 +998,11 @@ def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate', '
     _need(type(timeout_seconds) is int and 1 <= timeout_seconds <= 20, 'EXECUTOR_TIMEOUT')
     _need(isinstance(project, Path) and isinstance(output, Path), 'EXECUTOR_PATH_TYPE')
     observed_source_closure = None
+    _need(type(authenticated) is bool, 'EXECUTOR_ATTRIBUTION_MODE')
+    attribution_enabled = authenticated
+    attribution_context = None
+    if attribution_enabled:
+        _need(mode == GAMEPLAY_MODE, 'EXECUTOR_ATTRIBUTION_MODE')
     if source_closure_sha256 is not None:
         _need(type(source_closure_sha256) is str and re.fullmatch(r'[0-9a-f]{64}', source_closure_sha256),
               'EXECUTOR_SOURCE_CLOSURE')
@@ -933,6 +1019,11 @@ def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate', '
     sandbox_harness = _sandbox_harness() if mode in SANDBOX_MODES else None
     gameplay_profile = _gameplay_profile() if mode == GAMEPLAY_MODE else None
     harness_files = {'gameplay_sandbox.py': sandbox_harness} if sandbox_harness is not None else {}
+    if attribution_enabled:
+        harness_files['gameplay_attribution.py'] = _read_file(
+            STUDIO / 'godot-addon/gameplay_attribution.py', 65536)
+        harness_files['gameplay_attributed_driver.py'] = _read_file(
+            STUDIO / 'godot-addon/gameplay_attributed_driver.py', 65536)
     if profile_harness is not None:
         harness_files['validation_bootstrap.gd'] = profile_harness
     _no_links(output.parent)
@@ -953,6 +1044,8 @@ def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate', '
     before = _manifest(initial)
     _write(output / 'input-manifest.json', before)
     name = 'hh-gt03-' + uuid.uuid4().hex
+    if attribution_enabled:
+        attribution_context = _attribution_context(name, observed_source_closure, before)
     result = {'schema': 'hh-gt03-linux-diagnostic-1', 'run_id': name, 'mode': mode,
               'source_closure_sha256': observed_source_closure,
               'source_closure_unchanged': None,
@@ -965,6 +1058,9 @@ def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate', '
               'profile_harness_unchanged': profile_harness is None,
               'sandbox_bootstrap_sha256': _sha(sandbox_harness) if sandbox_harness is not None else None,
               'sandbox_harness_unchanged': sandbox_harness is None,
+              'attribution_enabled': attribution_enabled,
+              'attribution_verified': None if not attribution_enabled else False,
+              'attribution_harness_unchanged': not attribution_enabled,
               'gameplay_profile': gameplay_profile.PROFILE if gameplay_profile is not None else None,
               'gameplay_profile_sha256': GAMEPLAY_PROFILE_SHA256 if gameplay_profile is not None else None,
               'gameplay_source_envelope_checked': gameplay_profile is not None,
@@ -1023,7 +1119,8 @@ def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate', '
         _need({entry.split('=', 1)[0] for entry in image_environment}
               == {'PATH', 'LANG', 'GPG_KEY', 'PYTHON_VERSION', 'PYTHON_SHA256'}, 'EXECUTOR_BASE_ENVIRONMENT')
         asset_files = tuple(sorted(path for path in initial if path in ASSET_PATHS))
-        args = _create_args(name, mode, binary.parent, snapshot, timeout_seconds, asset_files=asset_files)
+        args = _create_args(name, mode, binary.parent, snapshot, timeout_seconds,
+                            asset_files=asset_files, attribution_context=attribution_context)
         _write(output / 'create-argv.json', args)
         owner_record = {'schema': 'hh-linux-owner-1', 'context': EXECUTOR_CONTEXT, 'image': IMAGE_ID,
                         'name': name, 'container_id': None, 'phase': 'prepared', 'host_pid': os.getpid()}
@@ -1048,7 +1145,8 @@ def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate', '
         _need(created is not None, 'EXECUTOR_CREATED_INSPECT_UNAVAILABLE')
         _validate_inspect(created, name=name, container_id=container_id, mode=mode,
                           tool=binary.parent, snapshot=snapshot, image_environment=image_environment,
-                          timeout_seconds=timeout_seconds, asset_files=asset_files)
+                          timeout_seconds=timeout_seconds, asset_files=asset_files,
+                          attribution_context=attribution_context)
         _need(_manifest(_inputs(project, mode)) == before and _manifest(_inputs(snapshot, mode)) == before,
               'EXECUTOR_PRESTART_INPUT_CHANGED')
         if harness_files:
@@ -1149,6 +1247,18 @@ def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate', '
             except BaseException as error:
                 result['sandbox_harness_unchanged'] = False
                 failed(error, 'EXECUTOR_SANDBOX_FINALIZE_')
+        if attribution_enabled:
+            try:
+                result['attribution_harness_unchanged'] = (
+                    _names(output / 'harness') == set(harness_files)
+                    and all(_read_file(output / 'harness' / name, 65536) == raw
+                            == _read_file(STUDIO / 'godot-addon' / name, 65536)
+                            for name, raw in ((name, harness_files[name])
+                                              for name in ('gameplay_attribution.py',
+                                                           'gameplay_attributed_driver.py'))))
+            except BaseException as error:
+                result['attribution_harness_unchanged'] = False
+                failed(error, 'EXECUTOR_ATTRIBUTION_HARNESS_')
         if gameplay_profile is not None:
             try:
                 result['gameplay_profile_unchanged'] = _gameplay_profile() is gameplay_profile
@@ -1167,7 +1277,22 @@ def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate', '
                 primary = 'scripts/fixture_actor.gd'
                 scripts = [primary] + sorted(name for name in before if name.startswith('scripts/')
                                              and name.endswith('.gd') and name != primary)
-                result['log_policy'] = _gameplay_log_policy().classify(logs[0], logs[1], scripts)
+                if attribution_enabled:
+                    _need(logs[1] == b'', 'EXECUTOR_ATTRIBUTION_OUTER_STDERR')
+                    codec = _attribution_codec()
+                    parsed = codec.verify(logs[0], context=attribution_context, scripts=scripts)
+                    _need(parsed['driver_returncode'] == result.get('docker_wait_exit')
+                          and _cli_done(result['commandhost'], parsed['driver_returncode']),
+                          'EXECUTOR_ATTRIBUTION_ACTUAL_EXIT')
+                    result['attribution'] = {key: value for key, value in parsed.items()
+                                             if key not in ('child_stdout', 'child_stderr')}
+                    result['attribution_verified'] = parsed['attribution_verified'] is True
+                    result['log_clean'] = re.search(
+                        rb'(?m)^(?:SCRIPT ERROR|ERROR|WARNING):|ObjectDB instances leaked',
+                        parsed['child_stdout'] + b'\n' + parsed['child_stderr']) is None
+                    result['log_policy'] = _gameplay_log_policy().classify_attributed(parsed, scripts)
+                else:
+                    result['log_policy'] = _gameplay_log_policy().classify(logs[0], logs[1], scripts)
         except BaseException as error:
             result['log_clean'] = False
             result['errors'].append('EXECUTOR_EVIDENCE_LOG_UNAVAILABLE')
@@ -1188,6 +1313,8 @@ def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate', '
             and result['owned_removed'] and result['input_unchanged'] and result['snapshot_unchanged']
             and result['binary_unchanged'] and result['profile_harness_unchanged'] and result['sandbox_harness_unchanged']
             and result['gameplay_profile_unchanged']
+            and (not attribution_enabled or (result['attribution_verified'] is True
+                                              and result['attribution_harness_unchanged']))
             and (mode != GAMEPLAY_MODE or result['source_closure_unchanged'] is True)
             and not result['errors'])
         # Preserve the raw meaning of both existing fields. A known-noise
