@@ -394,8 +394,9 @@ def main():
         parser.error('use a fresh o2-publication-<id>')
     if args.saved_arena is not None and args.fixture != ARENA_FIXTURE:
         parser.error('--saved-arena requires --fixture gameplay_arena_physics')
-    if args.blender_published is not None and args.fixture != 'gameplay_source_assets':
-        parser.error('--blender-published requires --fixture gameplay_source_assets')
+    if args.blender_published is not None and args.fixture not in (
+            'gameplay_source_assets', ARENA_FIXTURE, 'gameplay_source_room_3d_native'):
+        parser.error('--blender-published requires an asset-capable gameplay fixture')
     if args.saved_arena is not None and args.blender_published is not None:
         parser.error('--saved-arena and --blender-published are mutually exclusive')
     admission = dry_run(args)
