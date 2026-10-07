@@ -1,15 +1,15 @@
 HH STUDIO — PLAN 1/3: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Cập nhật 07-10-2026, Asia/Saigon | Revision S263 + quyết định owner O1–O11 | TRIỂN KHAI THEO GATE
-OWNER_DECISIONS=O1_O3_20260925; O4_20260927; O5_O6_20260930; O7_20261001; O8_20261002; O9_20261003; O10_20261004; O11_20261006; BLOCK_BELOW_STATUS_TABLE; LATER_WINS_OVER_S2XX; FULL_TEXT_IN_GIT=87912523,b0802472,8298c107,fcc1906f,6d8eb81d,d04266e8,091506fa,a0ab19b8; OLD_VERDICTS_UNCHANGED
-HIỆN HÀNH 07-10 — GT-01..GT-08A ACCEPTED; GT-09 IN_PROGRESS: O2 CONTENT AUTHORING + 2 MINI-GAME FIXTURE CONFORMANCE; GT-08B ANDROID HARD GATE; GT-10 CHƯA MỞ
+Cập nhật 07-10-2026, Asia/Saigon | Revision S264 + quyết định owner O1–O12 | TRIỂN KHAI THEO GATE
+OWNER_DECISIONS=O1_O3_20260925; O4_20260927; O5_O6_20260930; O7_20261001; O8_20261002; O9_20261003; O10_20261004; O11_20261006; O12_20261007; BLOCK_BELOW_STATUS_TABLE; LATER_WINS_OVER_S2XX; FULL_TEXT_IN_GIT=87912523,b0802472,8298c107,fcc1906f,6d8eb81d,d04266e8,091506fa,a0ab19b8; OLD_VERDICTS_UNCHANGED
+HIỆN HÀNH 07-10 — GT-01..GT-08A ACCEPTED; GT-09 IN_PROGRESS: O2 CONTENT AUTHORING + 2 MINI-GAME FIXTURE CONFORMANCE; GT-08B DEFERRED_OWNER_NO_ANDROID; GT-10-PC CHƯA MỞ SAU GT-09; GT-10 FULL CHƯA MỞ
 CURRENT_VALID_WP=GT-09
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S263
+PLAN_REVISION=S264
 EXECUTION_AUTHORIZATION=OWNER_APPROVED_GATED
 EXECUTION_MODE=COORDINATOR_WITH_SCOPED_SUBAGENTS_AND_INDEPENDENT_CRITICS_OWNER_20261003; CREDIT_BUDGET_O11_7; ULTRA_ONLY_HARD_DESIGN_O2_WORKER_FINAL_CRITICS; ONE_WRITER_PER_FILE; TWO_DIFFERENT_MODELS_SAME_HASH; O2_PARALLEL_WORKER_O10_5
-GOAL_STATE=ACTIVE; INDEPENDENT_CONSUMER_PILOT_AUTHORIZED; GT07_ACCEPTED; GT08A_ACCEPTED_O4_6; GT09_IN_PROGRESS; GT08B_ANDROID_HARD_GATE; GT10_PLANNED; SUPERAGENT_SEPARATE_OWNER_AUTHORIZED_LANE
-OVERALL_PLAN_STATUS=INCOMPLETE; GT01_GT08A_ACCEPTED; GT09_IN_PROGRESS; GT08B_ANDROID_HARD_GATE; GT10_PLANNED
+GOAL_STATE=ACTIVE; INDEPENDENT_CONSUMER_PILOT_AUTHORIZED; GT07_ACCEPTED; GT08A_ACCEPTED_O4_6; GT09_IN_PROGRESS; GT08B_DEFERRED_OWNER_NO_ANDROID; GT10_PC_PLANNED_AFTER_GT09; GT10_FULL_BLOCKED_BY_GT08B; SUPERAGENT_SEPARATE_OWNER_AUTHORIZED_LANE
+OVERALL_PLAN_STATUS=INCOMPLETE; GT01_GT08A_ACCEPTED; GT09_IN_PROGRESS; GT08B_DEFERRED_OWNER_NO_ANDROID; GT10_PC_PLANNED; GT10_FULL_BLOCKED_BY_GT08B
 CONSUMER_PILOT_STATUS=REVALIDATED_PROVISIONAL_AUTHORITY0; NOT_GT06_ACCEPTANCE; NOT_COMPLETE_GAME_CLAIM
 GT06_STATUS=ACCEPTED; FORMAL25_TWO_ACCEPTED_PAIRS; FINAL_MANIFEST=318081a3c71f334cc44aa4542a5fa5fff459b4045006f6daa91559b1ccc4d4d3; DECISION=zdoc/reviews/20261003-gt06-owner-critics/coordinator-acceptance.md
 GT07_NEXT_ACTION=ACCEPTED_O11; GT08A_ACCEPTANCE=ACCEPTED; GT08A_FINAL_MANIFEST=49834d31db4996b18c15d9cada4ef030efb30d95f1e68e934251f9a5baafe675; CRITICS=TICK_YES_x2; ACCEPTANCE=zdoc/reviews/20261007-gt08a-coordinator-acceptance.md; NEXT=GT-09_O2_CONFORMANCE
@@ -29,16 +29,35 @@ STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng
 07 | GT-07 | Đa agent, publish, lease/fencing và recovery | GT-05, GT-06 | ACCEPTED
 08 | GT-08A | Clean Windows/Linux import/export/CI, target và cache matrix (O4.6) | GT-07 | ACCEPTED (GT-08B Android hard gate pending)
 09 | GT-09 | Lõi tạo nội dung O2 + agent conformance trên 2 mini-game 2D/3D | GT-08A | IN_PROGRESS
-10 | GT-10 | Gói công cụ v0.1, cài/upgrade/rollback, bàn giao game | GT-09 + GT-08B nếu tách | PLANNED
+10 | GT-10 | Gói công cụ v0.1, cài/upgrade/rollback, bàn giao game | GT-09; GT-10-PC sau GT-09, GT-10 đầy đủ còn cần GT-08B | PLANNED (PC-ONLY SLICE DEFERRED)
 
-QUYẾT ĐỊNH OWNER ĐANG HIỆU LỰC O1–O11 — BẢN HỢP NHẤT 06-10-2026 (S261)
+QUYẾT ĐỊNH OWNER ĐANG HIỆU LỰC O1–O12 — BẢN HỢP NHẤT 07-10-2026 (S264)
 Chỉ giữ luật còn áp dụng sau GT-06 ACCEPTED; khối mới nhất đặt đầu. Nguyên văn O1–O9 trước
 tinh gọn: git show 091506fa:8-9-hh3d-3/zdoc/8-9-godot-blender-agent-studio-plan.txt (dòng 40–561);
 bản gốc O1–O3 87912523, O4 b0802472, O5 8298c107, O6 fcc1906f; O10 đầy đủ (S259) ở a0ab19b8.
 Mâu thuẫn thì quyết định muộn hơn thắng và thắng các dòng S2xx; raw và verdict cũ giữ nguyên,
 không hồi tố PASS. Số mục cũ (O1.4, O4.4, O6.4…) giữ nguyên để tham chiếu.
 
-O11 — 06-10-2026, MỚI NHẤT, ĐỌC TRƯỚC (AUTHORITY=OWNER_DELEGATED_20260930; ma trận M1–M9,
+O12 — 07-10-2026, MỚI NHẤT, OWNER PC-ONLY (AUTHORITY=OWNER_DELEGATED_20261007)
+- GT-08B Android thật được **DEFERRED**, vì owner hiện không có thiết bị Android và
+  không cần Android cho giai đoạn làm game PC. Đây là trạng thái hoãn có chủ đích,
+  không phải ACCEPTED và không được tạo claim Android hoặc supported_targets=Android.
+- Tiếp tục GT-09 theo đầy đủ gate PC hiện hành. Sau khi GT-09 ACCEPTED, mở
+  **GT-10-PC** gồm package v0.1, cài/upgrade/rollback/uninstall/handoff và release
+  soak 10×35 trên nguồn Windows/Linux đã freeze. GT-10-PC dùng cùng ngưỡng O1/O4,
+  không hạ timeout, không bỏ critic hay manifest; chỉ giới hạn supported_targets
+  ở Windows/Linux/Linux-headless.
+- GT-10-PC là một lát cắt phát hành PC, không tự biến thành GT-10 đầy đủ. Full
+  GT-10 vẫn giữ dependency GT-08B và chỉ được ACCEPTED khi có bằng chứng Android
+  thật, nếu owner mở lại mục tiêu Android. Không được gộp, đổi tên hoặc hồi tố
+  evidence PC thành evidence Android.
+- Không chạy GT-10 trước GT-09 ACCEPTED; không dùng việc thiếu Android để tick
+  GT-08B hoặc bỏ qua các yêu cầu package, rollback, handoff, soak và hai critic.
+- Owner cho phép tiếp tục static/native PC work trong GT-09 và chuẩn bị ma trận
+  GT-10-PC ngay khi không có measurement live. O12 thắng các dòng cũ nói GT-08B
+  là hard gate cho lát cắt PC, nhưng không xóa lịch sử hoặc nới gate full plan.
+
+O11 — 06-10-2026, MỚI NHẤT TRƯỚC O12 (AUTHORITY=OWNER_DELEGATED_20260930; ma trận M1–M9,
 ngưỡng và DoD GT-07 của O10 không đổi; thay GT07_NEXT_ACTION, FAST_PATH_20261006, NEXT N0–N6)
 Căn cứ 04-10 18:28 → 06-10 14:50:
 - Đã có: runner --scenario/--dry-run/--matrix + failpoint (b48c437e, e8438c81), raw cũ về .local,
@@ -1180,8 +1199,12 @@ không đưa `capacity_claims` vào package công cụ. Bất kỳ monetization 
 này cần contract/WP và package ký mới.
 MONETIZATION_POLICY=OFF_ARTIFACT_SCAN_REQUIRED
 CAPACITY_CLAIMS=NOT_APPLICABLE_TO_TOOLS
-Dependency GT-08/09 ACCEPTED gồm physical Android fixture; manifest ghi đúng
-supported_targets Windows/Android/Linux-headless, không partial ACCEPT ngầm.
+O12 PC-ONLY OVERRIDE: GT-10-PC may consume GT-09 plus GT-08A and may publish
+only `supported_targets=Windows/Linux/Linux-headless`; its package manifest must
+say `android=DEFERRED_NO_DEVICE` and must not claim Android compatibility. The
+full GT-10 dependency still includes GT-08B physical Android evidence and its
+manifest must list Android only after that evidence exists. This split is a
+scoped release slice, not a partial ACCEPT of the full GT-10.
 Không cần closed alpha của game và không claim tool sửa được mọi thể loại.
 4. TQ — GATE CHẤT LƯỢNG CÔNG CỤ (MỤC TIÊU, CHƯA CÓ KẾT QUẢ)
 
