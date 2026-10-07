@@ -34,6 +34,11 @@ ARENA_REQUIRED = {
     'camera_follow': True, 'hud_win': True, 'round_won': True,
     'avatar_asset_loaded': True, 'sprite_asset_loaded': True,
     'replay_hash_equal': True, 'checkpoint_reload_observed': True,
+    'muzzle_flash_count': 1, 'hit_ray_count': 1,
+    'dust_burst_count': 1, 'explosion_count': 1,
+    'effect_kind_count': 4, 'effect_emitters_readback': True,
+    'effect_particles_peak': 30, 'effect_particle_limit': 64,
+    'effect_budget_ok': True,
     'perf_samples': 150, 'perf_budget_ms': 33.333,
     'perf_budget_ok': True,
 }

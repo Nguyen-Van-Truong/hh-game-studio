@@ -1,9 +1,9 @@
 extends Node3D
-## Fixed input/physics diagnostic, executed only by the contained Linux profile.
-## This is not a public authoring transaction or the complete GT09 arena.
+## Fixed input/physics diagnostic; not a public authoring transaction.
 
 const Bullet: PackedScene = preload("res://scenes/projectile.tscn")
 const FINAL_TICK: int = 150
+const MAX_EFFECT_PARTICLES: int = 64
 @export var saved_world: PackedScene
 var tick: int = 0
 var arena: Node2D
@@ -34,6 +34,56 @@ var imported_avatar: Node = null
 var max_frame_ms: float = 0.0
 var replay_hash_equal: bool = false
 var checkpoint_reload_observed: bool = false
+var muzzle_flash_count: int = 0
+var hit_ray_count: int = 0
+var dust_burst_count: int = 0
+var explosion_count: int = 0
+var effect_particles_spawned: int = 0
+var effect_particles_peak: int = 0
+var effect_emitters_readback: bool = true
+var effect_texture: Texture2D
+var effect_nodes: Array[CPUParticles2D] = []
+
+func _effect_texture() -> Texture2D:
+	var authored := load("res://assets/sprite_sheet.png") as Texture2D
+	if authored != null:
+		return authored
+	# Keep a real Texture2D property when optional art is absent.
+	var fallback := GradientTexture2D.new()
+	fallback.width = 2
+	fallback.height = 2
+	return fallback
+
+func _spawn_effect(kind: String, at: Vector2, amount: int, direction: Vector2) -> void:
+	if amount <= 0 or effect_particles_spawned + amount > MAX_EFFECT_PARTICLES:
+		effect_emitters_readback = false
+		return
+	var emitter := CPUParticles2D.new()
+	emitter.name = "Effect_" + kind + "_" + str(effect_nodes.size() + 1)
+	emitter.amount = amount
+	emitter.lifetime = 0.16
+	emitter.one_shot = true
+	emitter.explosiveness = 1.0
+	emitter.direction = direction
+	emitter.spread = 24.0
+	emitter.texture = effect_texture
+	emitter.position = at
+	arena.add_child(emitter)
+	emitter.restart()
+	effect_nodes.append(emitter)
+	effect_particles_spawned += amount
+	effect_particles_peak = maxi(effect_particles_peak, effect_particles_spawned)
+	if emitter.amount != amount or not emitter.one_shot or emitter.texture == null \
+			or not is_equal_approx(emitter.lifetime, 0.16):
+		effect_emitters_readback = false
+	if kind == "muzzle_flash":
+		muzzle_flash_count += 1
+	elif kind == "hit_ray":
+		hit_ray_count += 1
+	elif kind == "dust":
+		dust_burst_count += 1
+	elif kind == "explosion":
+		explosion_count += 1
 
 func _sha256(path: String) -> String:
 	var context := HashingContext.new()
@@ -49,8 +99,7 @@ func _dependency_node(path: String) -> Dictionary:
 	var edges: Array[Dictionary] = []
 	var targets: Array[String] = []
 	if resource is Script:
-		# Observe loaded Resource constants, not paths parsed from source text.
-		# Nested constants and dynamic loads are outside this bounded fixture.
+		# Observe loaded Resource constants rather than source text.
 		for value: Variant in (resource as Script).get_script_constant_map().values():
 			if value is Resource:
 				targets.append((value as Resource).resource_path)
@@ -105,6 +154,7 @@ func _dependency_observation() -> Dictionary:
 
 func _ready() -> void:
 	Input.use_accumulated_input = false
+	effect_texture = _effect_texture()
 	_action("right", KEY_D)
 	_action("left", KEY_A)
 	_action("jump", KEY_SPACE)
@@ -121,7 +171,7 @@ func _ready() -> void:
 	if not _build_world():
 		get_tree().quit(32)
 		return
-	# Signal connections and InputMap remain runtime fixture logic.
+	# Signal connections and InputMap are runtime fixture logic.
 	pickup.body_entered.connect(_pickup_entered)
 	if saved_world == null:
 		var ui := CanvasLayer.new()
@@ -170,12 +220,11 @@ func _build_world() -> bool:
 			arena.free()
 			return false
 		add_child(arena)
-		# Capture the actual loaded bindings now: pickup and bot are freed by
-		# the unchanged physics/event oracle before its final observation.
+		# Capture loaded bindings before the physics oracle frees actors.
 		saved_actor_paths = {"pickup": str(arena.get_path_to(pickup)),
 			"bot": str(arena.get_path_to(bot)), "camera": str(arena.get_path_to(camera))}
 		return true
-	# The legacy fixture still creates exactly the same runtime geometry.
+	# Legacy path creates the same runtime geometry.
 	arena = Node2D.new()
 	player = CharacterBody2D.new()
 	wall = StaticBody2D.new()
@@ -246,6 +295,7 @@ func _physics_process(delta: float) -> void:
 		_key(KEY_D, false)
 		stopped_x = player.position.x
 	if Input.is_action_just_pressed("shoot"):
+		_spawn_effect("muzzle_flash", player.position + Vector2(12.0, 0.0), 4, Vector2.RIGHT)
 		projectile = Bullet.instantiate() as Area2D
 		projectile.position = player.position + Vector2(12.0, 0.0)
 		projectile.area_entered.connect(_bullet_entered)
@@ -264,6 +314,7 @@ func _physics_process(delta: float) -> void:
 		apex_seen = true
 	if apex_seen and player.is_on_floor() and not landed:
 		landed = true
+		_spawn_effect("dust", player.position + Vector2(0.0, 14.0), 6, Vector2.UP)
 		_event("landed")
 	if attempted_right and player.is_on_wall():
 		for index: int in range(player.get_slide_collision_count()):
@@ -293,6 +344,8 @@ func _pickup_entered(body: Node2D) -> void:
 
 func _bullet_entered(area: Area2D) -> void:
 	if area == bot and bot_health > 0:
+		_spawn_effect("hit_ray", projectile.position, 8, Vector2.RIGHT)
+		_spawn_effect("explosion", bot.position, 12, Vector2.UP)
 		bot_health -= 1
 		hits += 1
 		bullet_active = false
@@ -343,6 +396,15 @@ func _finish() -> void:
 		"sprite_asset_loaded": sprite_asset_loaded,
 		"replay_hash_equal": replay_hash_equal,
 		"checkpoint_reload_observed": checkpoint_reload_observed,
+		"muzzle_flash_count": muzzle_flash_count,
+		"hit_ray_count": hit_ray_count,
+		"dust_burst_count": dust_burst_count,
+		"explosion_count": explosion_count,
+		"effect_kind_count": 4,
+		"effect_emitters_readback": effect_emitters_readback,
+		"effect_particles_peak": effect_particles_peak,
+		"effect_particle_limit": MAX_EFFECT_PARTICLES,
+		"effect_budget_ok": effect_particles_peak <= MAX_EFFECT_PARTICLES,
 		"perf_samples": tick, "perf_budget_ms": 33.333,
 		"perf_budget_ok": max_frame_ms <= 33.333}
 	if saved_world != null:

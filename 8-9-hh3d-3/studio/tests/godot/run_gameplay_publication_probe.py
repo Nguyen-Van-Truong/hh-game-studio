@@ -403,8 +403,11 @@ def main():
     if args.blender_published is not None and args.fixture not in (
             'gameplay_source_assets', ARENA_FIXTURE, 'gameplay_source_room_3d_native'):
         parser.error('--blender-published requires an asset-capable gameplay fixture')
-    if args.saved_arena is not None and args.blender_published is not None:
-        parser.error('--saved-arena and --blender-published are mutually exclusive')
+    # A saved arena and a published Blender handoff are deliberately composable:
+    # GT09 must exercise the real path "saved Godot scene + imported Blender
+    # asset" in one bounded fixture.  Each input is frozen and verified
+    # independently below; rejecting the combination would test two isolated
+    # halves instead of the authoring path the plan requires.
     admission = dry_run(args)
     if args.dry_run:
         print(json.dumps(admission, sort_keys=True))
