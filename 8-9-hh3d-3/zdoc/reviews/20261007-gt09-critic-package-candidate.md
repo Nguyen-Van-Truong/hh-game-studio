@@ -10,6 +10,9 @@ not change the checkbox or the `CURRENT_VALID_WP` header.
 - offline conformance report:
   `studio/.local/reviews/gt09-conformance-20261007-06/report.json`
 - conformance report SHA256: `5443e7cddfb1a56b1c3fe95e8af947f143c056733a36ad85e52a1c121177fc57`
+- final source/review/raw manifest:
+  `20261007-gt09-final-source-review-raw-manifest.json`
+- manifest SHA256: `b04ce6fc04adf1d3d100d598d7149b1ec7c6e266566be75affd6998e9312635a`
 - native 2D fixture:
   `studio/.local/reviews/o2-publication-gt09-arena-save-20261007-17/`
 - native 3D fixture:
