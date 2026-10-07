@@ -1,0 +1,106 @@
+{
+  "acceptance": false,
+  "authority": 0,
+  "generated_by": "gt09_mcp_compatibility.py",
+  "interpretation": "Private adapter reconnect and rejection facts are measured; no external MCP compatibility or public capability is claimed.",
+  "private_receipt": {
+    "native_run_count": 2,
+    "path": "studio/.local/reviews/o2-adapter-gt09-arena-20261007-01/result.json",
+    "run_id": "o2-adapter-gt09-arena-20261007-01",
+    "sha256": "7fb0c2fa9d40b0d75c557b4a465f5470dc168d5e33498ddb831774d4fe7d5001",
+    "source_closure_sha256": "d9bda850561fcd56132a96965657ddee4d456b803042bc1df6da488d72509e53"
+  },
+  "requirements": {
+    "external_pinned_mcp_spike": "OPEN",
+    "model_host_capability_matrix": "OPEN",
+    "two_critics_same_final_hash": "OPEN"
+  },
+  "rows": [
+    {
+      "authority": 0,
+      "capabilities": {
+        "context_reset_lookup_only": true,
+        "duplicate_native_dispatch": false,
+        "owner_edit_conflict_preserved": true,
+        "private_publish": true,
+        "private_readback": true,
+        "public_discovery": false,
+        "reconnect_lookup_only": true,
+        "unsupported_client_rejected": true
+      },
+      "client": "hh-gameplay-source-adapter-1",
+      "client_version": "pc-godot-4.7.2",
+      "host": "UNSPECIFIED",
+      "id": "hh-private-python-adapter",
+      "limits": [
+        "private adapter is not an MCP server/client compatibility claim",
+        "public catalog remains disabled",
+        "model and host were not recorded by this probe"
+      ],
+      "model": "UNSPECIFIED",
+      "receipt": {
+        "native_run_count": 2,
+        "path": "studio/.local/reviews/o2-adapter-gt09-arena-20261007-01/result.json",
+        "run_id": "o2-adapter-gt09-arena-20261007-01",
+        "sha256": "7fb0c2fa9d40b0d75c557b4a465f5470dc168d5e33498ddb831774d4fe7d5001",
+        "source_closure_sha256": "d9bda850561fcd56132a96965657ddee4d456b803042bc1df6da488d72509e53"
+      },
+      "status": "MEASURED_PRIVATE",
+      "transport": "in-process-private-owner"
+    },
+    {
+      "authority": 0,
+      "capabilities": {
+        "arbitrary_code_denial": "UNMEASURED",
+        "authenticated_transport": "UNMEASURED",
+        "postcondition_readback": "UNMEASURED",
+        "read_only_default": "UNMEASURED",
+        "reconnect_retry": "UNMEASURED",
+        "unsupported_client_rejection": "UNMEASURED"
+      },
+      "id": "NPGameDev/godot-mcp-toolkit",
+      "limits": [
+        "pinned documentation is not a native fixture run",
+        "not installed or executed by this package",
+        "no HH lease/journal/command-ID mapping established"
+      ],
+      "pin": "10a4508e880244c66a3f04861b2e22872c307247",
+      "status": "UNMEASURED",
+      "transport": "external-mcp"
+    },
+    {
+      "authority": 0,
+      "capabilities": {
+        "arbitrary_code_denial": "UNMEASURED",
+        "authenticated_transport": "UNMEASURED",
+        "postcondition_readback": "UNMEASURED",
+        "read_only_default": "UNMEASURED",
+        "reconnect_retry": "UNMEASURED",
+        "unsupported_client_rejection": "UNMEASURED"
+      },
+      "id": "hybridindie/godot-mcp",
+      "limits": [
+        "pinned documentation is not a native fixture run",
+        "not installed or executed by this package",
+        "no HH lease/journal/command-ID mapping established"
+      ],
+      "pin": "48f34e7d28d65cfea456cc2641e13c3058caa3d6",
+      "status": "UNMEASURED",
+      "transport": "external-mcp"
+    },
+    {
+      "authority": 0,
+      "capabilities": {
+        "public_discovery": false
+      },
+      "id": "hh-public-catalog",
+      "limits": [
+        "adapter discovery returned an empty public capability tuple"
+      ],
+      "status": "DISABLED",
+      "transport": "catalog"
+    }
+  ],
+  "schema": "hh-gt09-mcp-capability-matrix-1",
+  "status": "INCOMPLETE_EXTERNAL_SPIKE"
+}
