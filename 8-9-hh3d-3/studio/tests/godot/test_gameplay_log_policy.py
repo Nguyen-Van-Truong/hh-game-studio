@@ -118,6 +118,26 @@ class GameplayLogPolicyTests(unittest.TestCase):
         observation['child_stdout'] += b'ERROR: cannot hide in base64\n'
         self.assertFalse(policy.classify_attributed(observation, self.scripts)['accepted'])
 
+    def test_attributed_policy_orders_dependency_diagnostics(self):
+        phases = [{'phase': p, 'script': s, 'returncode': 0, 'guard': {'seccomp_mode': 2}}
+                  for p, s in [('dependencies', None),
+                               ('parse', self.scripts[0]),
+                               ('import', None),
+                               ('dependencies_reopen', None),
+                               ('play', None)]]
+        startup = policy.GUARDED_STARTUP_ERROR
+        stderr = (startup * (len(self.scripts) + 2)
+                  + (policy.GUARDED_SOCKET_ERROR + policy.GUARDED_LISTEN_ERROR) * 2
+                  + startup * 2).encode()
+        observation = {'child_stdout': self.stdout, 'child_stderr': stderr,
+                       'phase_results': phases, 'driver_returncode': 0,
+                       'wire_sha256': 'a' * 64}
+        self.assertTrue(policy.classify_attributed(observation, self.scripts)['accepted'])
+        # The same diagnostic count in legacy order must not pass the new
+        # dependency transcript.
+        observation['child_stderr'] = self.stderr
+        self.assertFalse(policy.classify_attributed(observation, self.scripts)['accepted'])
+
 
 if __name__ == '__main__':
     unittest.main()
