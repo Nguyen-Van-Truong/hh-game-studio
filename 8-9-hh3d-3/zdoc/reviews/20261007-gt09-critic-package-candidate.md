@@ -29,9 +29,17 @@ report is `CANDIDATE_PASS` and `acceptance=false` by design.
 
 Earlier failed attempts remain in their original raw directories and are not
 relabeled as passes. Existing critic records are historical; the next two
-independent read-only reviews must inspect this exact package/source hash.
+independent read-only reviews must inspect the exact final package/source hash.
+The raw arena dependency observation is retained as candidate evidence
+(`dependency_closure_verified=false`), and accepted startup stderr noise is
+not a clean formal log. Runtime native results remain diagnostic `AUTHORITY=0`.
 
 ## Requirements still open
+
+0. AUTH-05 adapter E2E is still open on the O2 branch. The measured pinned MCP
+compatibility spike, client/model/host/version capability matrix, unsupported
+client-version rejection, reconnect/retry/context-reset no-duplicate proof,
+and owner-edit plus two parallel source-job evidence are not present.
 
 1. Owner must play each fixture for about 15 minutes and record OK/not-OK plus
    notes. Synthetic input and agent observations do not satisfy this row.

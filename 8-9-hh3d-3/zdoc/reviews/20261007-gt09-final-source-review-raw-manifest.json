@@ -78,7 +78,15 @@
     "owner_video_trace_source_readback": false,
     "gt08b_physical_android_usb_debugging": false,
     "gt10_package_lifecycle": false,
-    "gt10_release_soak_10x35": false
+    "gt10_release_soak_10x35": false,
+    "mcp_compatibility_spike": false,
+    "capability_matrix_measured": false,
+    "unsupported_client_version_check": false,
+    "reconnect_retry_context_reset_no_duplicate": false,
+    "owner_edit_parallel_source_jobs": false,
+    "auth05_adapter_e2e": false,
+    "native_dependency_closure_verified": false
   },
-  "interpretation": "AUTHORITY=0 diagnostic candidate; native combined saved-arena + Blender handoff and four bounded arena effects observed; no GT09/GT10 acceptance or complete-game/Y8-parity claim."
+  "interpretation": "AUTHORITY=0 diagnostic candidate; combined saved-arena + Blender handoff and four bounded arena effects observed, while MCP/AUTH-05/dependency-closure/owner evidence and later release gates remain open.",
+  "candidate_package_commit": "0c3caad3541d2091d306c2cac89750e45b5470bf"
 }
