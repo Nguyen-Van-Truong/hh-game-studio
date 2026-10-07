@@ -1144,14 +1144,15 @@ VERIFY: missing LFS/blob/texture/wrong template/cache poison/unsupported addon
 fail. Launch Windows+Linux headless; Android install/launch fixture trên ít
 nhất một máy thật hỗ trợ đã ghi SKU/OS. Không emulator thay GPU proof.
 DoD: TQ08-B/TX16-C/TX08/10 và TX12 pin/ABI,2 critics; build recipe/artifact hashes/exits/limits.
-Android máy thật là hard gate của GT-08 cho toàn gói v0.1 (Windows/Android/
-Linux headless). Thiếu máy ghi GAP, có thể chuẩn bị/test phần độc lập nhưng
-không ACCEPT GT-08, GT-09, GT-10 hoặc dispatch source H2-P0-01. Không có
-desktop-only ACCEPT hay partial package unlock ngầm; cần bố trí thiết bị.
-OWNER O4.6: ngoại lệ công khai duy nhất — chưa có máy Android khi phần Windows/Linux đạt thì
-tách GT-08A (clean checkout + export Windows/Linux, 2 critics) mở khóa GT-09; GT-08B (Android
-máy thật) vẫn bắt buộc trước GT-10 và H2-P0-01. Clean checkout dùng sparse checkout bỏ
-zdoc/reviews/**, ghi core.longpaths; không xóa hay viết lại lịch sử evidence cũ.
+Android máy thật là hard gate của GT-08 cho **full** gói v0.1
+(Windows/Android/Linux headless). Thiếu máy ghi GAP, có thể chuẩn bị/test phần
+độc lập nhưng không ACCEPT GT-08B, full GT-10 hoặc dispatch source H2-P0-01.
+O12 là ngoại lệ có tên: sau GT-09 ACCEPTED được mở GT-10-PC cho
+Windows/Linux/Linux-headless; manifest phải ghi `android=DEFERRED_NO_DEVICE`.
+OWNER O4.6: GT-08A (clean checkout + export Windows/Linux, 2 critics) mở khóa
+GT-09; GT-08B (Android máy thật) vẫn là dependency riêng của full GT-10 và
+H2-P0-01. Clean checkout dùng sparse checkout bỏ zdoc/reviews/**, ghi
+core.longpaths; không xóa hay viết lại lịch sử evidence cũ.
 TQ08-B/TX16-C là closure GT-08; install/upgrade consumer closure ở GT-10.
 
 ### GT-09 — Agent conformance toàn tuyến
