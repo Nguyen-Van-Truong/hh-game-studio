@@ -290,6 +290,9 @@ FIXTURES['gameplay_arena_physics'] = {
         'wall_blocked': True, 'input_released': True, 'stopped': True,
         'camera_follow': True, 'hud_win': True, 'round_won': True,
         'avatar_asset_loaded': False, 'sprite_asset_loaded': False,
+        'replay_hash_equal': True, 'checkpoint_reload_observed': True,
+        'perf_samples': 150, 'perf_budget_ms': 33.333,
+        'perf_budget_ok': True,
     },
     'script': (_physics_source / 'arena_physics.gd').read_text(encoding='utf-8'),
     'extra_files': {
@@ -518,6 +521,7 @@ FIXTURES['gameplay_source_room_3d_native'] = {
         'ticks': 60, 'movement_observed': True, 'camera_follow': True,
         'switch_used': True, 'pickup_collected': True, 'ui_visible': True,
         'input_trace_ok': True, 'replay_hash_equal': True,
+        'checkpoint_reload_observed': True,
         'avatar_asset_loaded': True, 'sprite_asset_loaded': True,
         'perf_samples': 60, 'perf_budget_ms': 33.333,
         'perf_budget_ok': True, 'topology_ok': True,
@@ -546,6 +550,7 @@ var avatar_asset_loaded: bool = false
 var sprite_asset_loaded: bool = false
 var max_frame_ms: float = 0.0
 var replay_hash_equal: bool = false
+var checkpoint_reload_observed: bool = false
 var replay_values: Array[float] = []
 var topology_components: Dictionary = {}
 
@@ -679,10 +684,23 @@ func _physics_process(delta: float) -> void:
 \t\t\tsecond.append(float(value) * 0.5)
 \t\treplay_values = first
 \t\treplay_hash_equal = first == second
+\t\tvar checkpoint := {"tick": tick, "switch_used": switch_used,
+\t\t\t"pickup_collected": pickup_collected}
+\t\tvar checkpoint_path := "user://gt09-room-checkpoint.json"
+\t\tvar writer := FileAccess.open(checkpoint_path, FileAccess.WRITE)
+\t\tif writer != null:
+\t\t\twriter.store_string(JSON.stringify(checkpoint))
+\t\t\twriter.close()
+\t\t\tvar reader := FileAccess.open(checkpoint_path, FileAccess.READ)
+\t\t\tif reader != null:
+\t\t\t\tvar restored: Variant = JSON.parse_string(reader.get_as_text())
+\t\t\t\treader.close()
+\t\t\t\tcheckpoint_reload_observed = type(restored) == TYPE_DICTIONARY and restored == checkpoint
 \t\tvar state := {"ticks": tick, "movement_observed": avatar.position.x > 2.0,
 \t\t\t"camera_follow": camera_follow, "switch_used": switch_used,
 \t\t\t"pickup_collected": pickup_collected, "ui_visible": hud.visible,
 \t\t\t"input_trace_ok": input_trace_ok, "replay_hash_equal": replay_hash_equal,
+\t\t\t"checkpoint_reload_observed": checkpoint_reload_observed,
 \t\t\t"avatar_asset_loaded": avatar_asset_loaded,
 \t\t\t"sprite_asset_loaded": sprite_asset_loaded,
 \t\t\t"perf_samples": tick, "perf_budget_ms": 33.333,

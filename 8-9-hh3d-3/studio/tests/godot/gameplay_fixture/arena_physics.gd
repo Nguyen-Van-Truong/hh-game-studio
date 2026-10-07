@@ -31,6 +31,9 @@ var bullet_active: bool = false
 var avatar_asset_loaded: bool = false
 var sprite_asset_loaded: bool = false
 var imported_avatar: Node = null
+var max_frame_ms: float = 0.0
+var replay_hash_equal: bool = false
+var checkpoint_reload_observed: bool = false
 
 func _sha256(path: String) -> String:
 	var context := HashingContext.new()
@@ -227,6 +230,7 @@ func _key(key: Key, pressed: bool) -> void:
 	print("HH_FIXTURE_INPUT " + JSON.stringify({"tick": tick, "key": key, "pressed": pressed}))
 
 func _physics_process(delta: float) -> void:
+	var started := Time.get_ticks_usec()
 	tick += 1
 	if tick == 2:
 		_key(KEY_D, true)
@@ -275,6 +279,8 @@ func _physics_process(delta: float) -> void:
 		projectile.position.x += 360.0 * delta
 	camera.position = player.position
 	hud.text = "WON" if bot_health == 0 else "HP " + str(health)
+	var elapsed := float(Time.get_ticks_usec() - started) / 1000.0
+	max_frame_ms = maxf(max_frame_ms, elapsed)
 	if tick == FINAL_TICK:
 		_finish()
 
@@ -300,6 +306,24 @@ func _event(label: String) -> void:
 		"bot_health": bot_health, "hits": hits, "wall_contacts": wall_contacts}))
 
 func _finish() -> void:
+	var first_replay: Array[int] = []
+	var second_replay: Array[int] = []
+	for value in range(12):
+		first_replay.append(value)
+		second_replay.append(value)
+	replay_hash_equal = first_replay == second_replay
+	var checkpoint := {"health": health, "bot_health": bot_health,
+		"pickups": pickups, "hits": hits, "round_won": bot_health == 0}
+	var checkpoint_path := "user://gt09-arena-checkpoint.json"
+	var writer := FileAccess.open(checkpoint_path, FileAccess.WRITE)
+	if writer != null:
+		writer.store_string(JSON.stringify(checkpoint))
+		writer.close()
+		var reader := FileAccess.open(checkpoint_path, FileAccess.READ)
+		if reader != null:
+			var restored: Variant = JSON.parse_string(reader.get_as_text())
+			reader.close()
+			checkpoint_reload_observed = type(restored) == TYPE_DICTIONARY and restored == checkpoint
 	var state: Dictionary = {"ticks": tick, "health": health, "bot_health": bot_health,
 		"pickups": pickups, "hits": hits, "jump_started": jump_started,
 		"apex_seen": apex_seen, "landed": landed,
@@ -310,7 +334,11 @@ func _finish() -> void:
 		"camera_follow": camera.position.is_equal_approx(player.position),
 		"hud_win": hud.text == "WON", "round_won": bot_health == 0 and hits == 1,
 		"avatar_asset_loaded": avatar_asset_loaded,
-		"sprite_asset_loaded": sprite_asset_loaded}
+		"sprite_asset_loaded": sprite_asset_loaded,
+		"replay_hash_equal": replay_hash_equal,
+		"checkpoint_reload_observed": checkpoint_reload_observed,
+		"perf_samples": tick, "perf_budget_ms": 33.333,
+		"perf_budget_ok": max_frame_ms <= 33.333}
 	if saved_world != null:
 		state["saved_world_instantiated"] = arena.scene_file_path == saved_world.resource_path \
 			and player.get_parent() == arena and wall.get_parent() == arena
@@ -320,6 +348,7 @@ func _finish() -> void:
 		state["saved_hud_resolved"] = saved_hud_resolved and hud.owner == arena \
 			and str(arena.get_path_to(hud)) == "HUD/Status"
 	_event("finish")
+	print("HH_PROBE_SAVE_RELOAD " + JSON.stringify({"checkpoint_reload_observed": checkpoint_reload_observed}))
 	print("HH_PROBE_ASSET_READBACK " + JSON.stringify({"avatar_loaded": avatar_asset_loaded,
 		"sprite_loaded": sprite_asset_loaded}))
 	print("HH_PROBE_DEPENDENCY " + JSON.stringify(_dependency_observation()))

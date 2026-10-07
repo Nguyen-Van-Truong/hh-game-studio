@@ -27,6 +27,17 @@ ROOM_REQUIRED = {
     },
 }
 
+ARENA_REQUIRED = {
+    'ticks': 150, 'health': 4, 'bot_health': 0, 'pickups': 1, 'hits': 1,
+    'jump_started': True, 'apex_seen': True, 'landed': True,
+    'wall_blocked': True, 'input_released': True, 'stopped': True,
+    'camera_follow': True, 'hud_win': True, 'round_won': True,
+    'avatar_asset_loaded': True, 'sprite_asset_loaded': True,
+    'replay_hash_equal': True, 'checkpoint_reload_observed': True,
+    'perf_samples': 150, 'perf_budget_ms': 33.333,
+    'perf_budget_ok': True,
+}
+
 
 def _load(path: Path) -> dict:
     value = json.loads(path.read_text(encoding='utf-8'))
@@ -70,7 +81,7 @@ def _check(name: str, row: dict) -> list[str]:
             errors.append(f'{name}:result_{key}')
     required_observations = ('fixture_observed', 'confinement_lifecycle_observed',
                              'supervisor_binding_verified')
-    if name == 'room_3d':
+    if name in ('arena_2d', 'room_3d'):
         required_observations += ('asset_import_observed',)
     for key in required_observations:
         if observation.get(key) is not True:
@@ -80,6 +91,10 @@ def _check(name: str, row: dict) -> list[str]:
         errors.append(f'{name}:child_details_missing')
     elif name == 'room_3d':
         for key, expected in ROOM_REQUIRED.items():
+            if details.get(key) != expected:
+                errors.append(f'{name}:state_{key}')
+    elif name == 'arena_2d':
+        for key, expected in ARENA_REQUIRED.items():
             if details.get(key) != expected:
                 errors.append(f'{name}:state_{key}')
     return errors

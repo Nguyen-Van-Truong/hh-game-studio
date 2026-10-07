@@ -5,7 +5,7 @@ from pathlib import Path
 import tempfile
 import unittest
 
-from gt09_fixture_conformance import build_report
+from gt09_fixture_conformance import ARENA_REQUIRED, build_report
 
 
 def write_row(root: Path, name: str, *, room: bool, closure: str = 'same') -> Path:
@@ -25,7 +25,7 @@ def write_row(root: Path, name: str, *, room: bool, closure: str = 'same') -> Pa
         },
     }
     if not room:
-        details = {'ticks': 12}
+        details = dict(ARENA_REQUIRED)
     (path / 'result.json').write_text(json.dumps({
         'run_id': name, 'status': 'DIAGNOSTIC_PASS', 'authority': 0,
         'public_ack': False, 'source_closure_sha256': source,
@@ -47,7 +47,7 @@ def write_row(root: Path, name: str, *, room: bool, closure: str = 'same') -> Pa
     (path / 'native-observation.json').write_text(json.dumps({
         'fixture_observed': True, 'confinement_lifecycle_observed': True,
         'supervisor_binding_verified': True,
-        'asset_import_observed': room,
+        'asset_import_observed': True,
         'untrusted_child_observation': details,
     }), encoding='utf-8')
     return path
