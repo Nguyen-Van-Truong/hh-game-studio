@@ -61,6 +61,23 @@ class GameplayAdapterProbeTests(unittest.TestCase):
                     probe.dry_run(argparse.Namespace(run_id=run_id))
                 check.assert_not_called()
 
+    def test_final_fixture_variants_keep_assets_and_oracles(self):
+        for name in probe.FIXTURES[1:]:
+            original = copy.deepcopy(fixtures.FIXTURES[name])
+            first, second = probe.source_cases(original)
+            self.assertEqual(first, original)
+            self.assertEqual({k: v for k, v in first.items() if k != 'script'},
+                             {k: v for k, v in second.items() if k != 'script'})
+            self.assertTrue(second['script'].startswith(first['script']))
+
+    def test_fixture_options_keep_provenance_and_reject_wrong_scene(self):
+        args = argparse.Namespace(run_id='o2-adapter-fixture-test',
+            fixture=probe.publication.ARENA_FIXTURE, saved_arena='saved', blender_published='published')
+        self.assertEqual(vars(probe._publication_args(args)), vars(args))
+        args.fixture = 'gameplay_source_room_3d_native'
+        with self.assertRaisesRegex(RuntimeError, 'SAVED_ARENA_FIXTURE_REQUIRED'):
+            probe._publication_args(args)
+
 
 if __name__ == '__main__':
     unittest.main()

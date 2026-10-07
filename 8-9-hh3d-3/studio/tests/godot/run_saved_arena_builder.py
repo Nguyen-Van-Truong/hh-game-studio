@@ -90,16 +90,29 @@ def _bound_file(root, name, digest):
     return raw
 
 
-def verify_saved_arena(root: Path) -> bytes:
-    """Re-derive current/frozen bytes, native semantics and real process cleanup.
+def verify_saved_arena(root: Path, *, require_current_source: bool = True) -> bytes:
+    """Re-derive frozen bytes, native semantics and real process cleanup.
 
     A caller's PASS boolean, generated text or result.json alone is insufficient.
     This is a local diagnostic evidence chain, not a cryptographic attestation.
+    Consumers may reuse the immutable artifact from an older producer closure;
+    they still check its original source, actual native receipts and recipe
+    against today's semantic contract. They never execute that retained source
+    or attribute the historical run to the current producer.
     """
-    return _verify_saved_arena(root.absolute(), json.loads(raw_file(root / 'result.json')))
+    return _verify_saved_arena(root.absolute(), json.loads(raw_file(root / 'result.json')),
+                              require_current_source=require_current_source)
 
 
-def _verify_saved_arena(root, result):
+def verify_source_binding(root, files, *, require_current_source):
+    need(type(require_current_source) is bool, 'BUILDER_SOURCE_POLICY')
+    for name, digest in files.items():
+        _bound_file(root / 'source', name, digest)
+        if require_current_source:
+            _bound_file(STUDIO, name, digest)
+
+
+def _verify_saved_arena(root, result, *, require_current_source=True):
     binding = json.loads(raw_file(root / 'binding.json'))
     need(binding.get('schema') == 'hh-o2-saved-arena-binding-1'
          and result.get('schema') == 'hh-o2-saved-arena-result-1'
@@ -110,9 +123,7 @@ def _verify_saved_arena(root, result):
     required = set(source_paths()) | {'tests/godot/run_saved_arena_builder.py',
                                    'tests/godot/saved_arena_builder.gd', 'toolchain.lock.json'}
     need(required <= set(binding['source_files']), 'BUILDER_SOURCE_SET')
-    for name, digest in binding['source_files'].items():
-        _bound_file(STUDIO, name, digest)
-        _bound_file(root / 'source', name, digest)
+    verify_source_binding(root, binding['source_files'], require_current_source=require_current_source)
     need(set(binding.get('project_files', {})) == {'project.godot', 'scenes/workbench.tscn',
         'addons/builder/plugin.cfg', 'addons/builder/plugin.gd', 'recipe.json'}, 'BUILDER_PROJECT_SET')
     for name, digest in binding['project_files'].items():
@@ -151,8 +162,8 @@ def _verify_saved_arena(root, result):
     return scene_bytes
 
 
-def saved_arena_provenance(root: Path) -> dict:
-    verify_saved_arena(root)
+def saved_arena_provenance(root: Path, *, require_current_source: bool = True) -> dict:
+    verify_saved_arena(root, require_current_source=require_current_source)
     result = json.loads(raw_file(root / 'result.json'))
     files = {name: sha(raw_file(root / name)) for name in
              ('binding.json', 'result.json', *result['artifacts'])}

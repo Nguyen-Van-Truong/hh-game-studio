@@ -1,7 +1,10 @@
 """Fail-closed semantic/native evidence boundary; no engine execution."""
 from copy import deepcopy
 import json
+from pathlib import Path
+import tempfile
 import unittest
+from unittest import mock
 
 from studio.tests.godot import run_saved_arena_builder as builder
 
@@ -61,6 +64,22 @@ class SavedArenaEvidenceTests(unittest.TestCase):
             self.verify(scene=self.scene_bytes + b'\n')
         with self.assertRaisesRegex(ValueError, 'BUILDER_NATIVE_BINDING'):
             self.verify(pid=74)
+
+    def test_historical_source_retains_original_hash_without_requiring_live_producer(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / 'source').mkdir()
+            frozen = root / 'source/producer.py'
+            frozen.write_bytes(b'old source\n')
+            (root / 'producer.py').write_bytes(b'new source\n')
+            files = {'producer.py': builder.sha(frozen.read_bytes())}
+            with mock.patch.object(builder, 'STUDIO', root):
+                builder.verify_source_binding(root, files, require_current_source=False)
+                with self.assertRaisesRegex(ValueError, 'BUILDER_BOUND_HASH'):
+                    builder.verify_source_binding(root, files, require_current_source=True)
+                frozen.write_bytes(b'tampered old source\n')
+                with self.assertRaisesRegex(ValueError, 'BUILDER_BOUND_HASH'):
+                    builder.verify_source_binding(root, files, require_current_source=False)
 
 
 if __name__ == '__main__':

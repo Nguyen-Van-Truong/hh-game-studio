@@ -22,6 +22,7 @@ sys.path.insert(0, str(STUDIO.parent))
 from studio.tests.godot import run_gameplay_publication_probe as publication
 
 FIXTURE = 'gameplay_source_multifile'
+FIXTURES = (FIXTURE, publication.ARENA_FIXTURE, 'gameplay_source_room_3d_native')
 COMMANDS = ('command.adapter.1', 'command.adapter.2')
 CONTENDER_TIMEOUT_SECONDS = 5
 _RUN_ID = re.compile(r'o2-adapter-[a-z0-9-]{1,48}\Z')
@@ -31,9 +32,10 @@ need, save = publication.need, publication.save
 def source_cases(case):
     """Keep the existing runtime oracle and dependency graph for both inputs."""
     need(case.get('mode') == 'gameplay-source'
-         and case.get('dependency_observation') is True
          and type(case.get('script')) is str, 'ADAPTER_FIXTURE_REQUIRED')
-    first = {**case, 'extra_files': dict(case.get('extra_files', {}))}
+    first = dict(case)
+    if 'extra_files' in case:
+        first['extra_files'] = dict(case['extra_files'])
     second = {**first, 'script': first['script'] + '\n# Adapter source revision two.\n'}
     return first, second
 
@@ -84,8 +86,15 @@ def busy_contender(effect):
 
 def _publication_args(args):
     need(type(args.run_id) is str and _RUN_ID.fullmatch(args.run_id), 'ADAPTER_RUN_ID_INVALID')
-    return argparse.Namespace(run_id=args.run_id, fixture=FIXTURE,
-                              saved_arena=None, blender_published=None)
+    fixture = getattr(args, 'fixture', FIXTURE)
+    saved_arena = getattr(args, 'saved_arena', None)
+    blender_published = getattr(args, 'blender_published', None)
+    need(fixture in FIXTURES, 'ADAPTER_FIXTURE_REQUIRED')
+    need(saved_arena is None or fixture == publication.ARENA_FIXTURE,
+         'SAVED_ARENA_FIXTURE_REQUIRED')
+    need(blender_published is None or fixture != FIXTURE, 'ADAPTER_ASSET_FIXTURE_REQUIRED')
+    return argparse.Namespace(run_id=args.run_id, fixture=fixture,
+                              saved_arena=saved_arena, blender_published=blender_published)
 
 
 def _modules():
@@ -105,7 +114,15 @@ def _sources(owner, args):
 
 
 def _inputs(owner, fixtures, probe, args):
-    case = publication._publication_case(_publication_args(args), owner, fixtures)
+    options = _publication_args(args)
+    saved_raw = glb = None
+    if options.saved_arena is not None:
+        builder = publication.load('o2_adapter_saved_builder', STUDIO / 'tests/godot/run_saved_arena_builder.py')
+        saved_raw = builder.verify_saved_arena(options.saved_arena, require_current_source=False)
+    if options.blender_published is not None:
+        glb, _, _ = publication.read_blender_handoff(options.blender_published)
+    case = publication._publication_case(options, owner, fixtures,
+                                         saved_arena_raw=saved_raw, glb=glb)
     cases = source_cases(case)
     candidates = []
     for item in cases:
@@ -146,9 +163,23 @@ def _execute(args, admission):
     files, closure = _sources(owner_mod, args)
     need(files == admission['files'] and closure == admission['source_closure_sha256'],
          'ADAPTER_ADMISSION_CHANGED')
+    options = _publication_args(args)
+    builder = saved_binding = handoff_binding = None
+    if options.saved_arena is not None:
+        builder = publication.load('o2_adapter_saved_builder', STUDIO / 'tests/godot/run_saved_arena_builder.py')
+        _, saved_binding = publication.freeze_saved_arena(
+            options.fixture, options.saved_arena, output / 'saved-arena', builder)
+    if options.blender_published is not None:
+        _, handoff_binding = publication.freeze_blender_handoff(
+            options.blender_published, output / 'blender-handoff')
+        need(handoff_binding == admission['blender_handoff'], 'BLENDER_HANDOFF_CHANGED')
     binding = {'run_id': args.run_id, 'files': files, 'source_closure_sha256': closure,
                'authority': 0, 'public_ack': False,
                'scope': 'Declared owner runtime closure plus private adapter and diagnostic harness.'}
+    if saved_binding is not None:
+        binding['saved_arena'] = saved_binding
+    if handoff_binding is not None:
+        binding['blender_handoff'] = handoff_binding
     save(output / 'binding.json', binding)
     for name, digest in files.items():
         raw = (STUDIO / name).read_bytes()
@@ -166,7 +197,7 @@ def _execute(args, admission):
     owner = reopened = client = contender = None
     contender_observation = None
     active = threading.Lock()
-    result = {'run_id': args.run_id, 'authority': 0, 'public_ack': False,
+    result = {'run_id': args.run_id, 'fixture': options.fixture, 'authority': 0, 'public_ack': False,
               'sandbox_acceptance': False, 'full_mcp_conformance': False,
               'parallel_native_conformance': False,
               'source_closure_sha256': closure, 'status': 'INCOMPLETE'}
@@ -175,6 +206,14 @@ def _execute(args, admission):
         need(all(probe.sha(STUDIO / name) == digest
                  and probe.sha(output / 'source' / name) == digest
                  for name, digest in files.items()), 'ADAPTER_SOURCE_CHANGED')
+        publication.verify_fixture_sources(options.fixture, cases[0], candidates[0], files,
+                                           source_root=STUDIO, frozen_root=output / 'source')
+        if saved_binding is not None:
+            publication.verify_saved_arena_binding(options.saved_arena, output / 'saved-arena',
+                                                   saved_binding, builder, candidates[0])
+        if handoff_binding is not None:
+            publication.verify_blender_handoff(options.blender_published, output / 'blender-handoff',
+                                               handoff_binding, candidates[0])
 
     def publish(target, index, expected, grant, lease):
         return target.publish_source(command_id=COMMANDS[index], source_files=candidates[index],
@@ -210,7 +249,8 @@ def _execute(args, admission):
             finally:
                 active.release()
 
-        policy = publication.publication_dependency_policy(FIXTURE, cases[0])
+        policy = publication.publication_dependency_policy(options.fixture, cases[0],
+                                                          saved_arena=saved_binding is not None)
         owner = owner_mod.GameplaySourcePublicationOwner.create(output,
             project_id='project.adapter', source_files=initial, entrypoint=owner_mod.ENTRYPOINT,
             source_closure_sha256=closure, runner=run_native, **policy)
@@ -240,9 +280,10 @@ def _execute(args, admission):
              'ADAPTER_SECOND_PUBLICATION_FAILED')
         for index, case in enumerate(cases):
             directory = owner._root / 'runs' / COMMANDS[index]
-            observation = probe.case_observation(directory, case, name=FIXTURE, binding=binding)
+            observation = probe.case_observation(directory, case, name=options.fixture, binding=binding)
             save(output / ('native-observation-' + str(index + 1) + '.json'), observation)
-            publication.verify_fixture_observation(FIXTURE, observation)
+            publication.verify_fixture_observation(options.fixture, observation,
+                                                   saved_arena=saved_binding is not None)
             observations.append(observation)
         root = owner._root
         state, raw = durable_state(root), native_inventory(root)
@@ -306,6 +347,11 @@ def _execute(args, admission):
             unsupported_client_rejected=True, public_discovery_empty=client.discovery().capabilities == (),
             owner_edit_preserved=True, owner_edit_sha256=hashlib.sha256(edited_bytes).hexdigest(),
             owner_edit_path=str(edited.relative_to(output)), owner_edit_conflicts=edit_conflicts)
+        if saved_binding is not None:
+            result.update(saved_arena_scene_sha256=saved_binding['scene_sha256'],
+                          saved_arena_provenance_unchanged=True)
+        if handoff_binding is not None:
+            result.update(blender_handoff=handoff_binding, blender_handoff_verified=True)
     except Exception as error:
         result.update(status='DIAGNOSTIC_FAIL', error_class=type(error).__name__,
                       native_exits=exits, contender=contender_observation)
@@ -326,6 +372,9 @@ def _execute(args, admission):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--run-id', required=True)
+    parser.add_argument('--fixture', choices=FIXTURES, default=FIXTURE)
+    parser.add_argument('--saved-arena', type=Path)
+    parser.add_argument('--blender-published', type=Path)
     parser.add_argument('--dry-run', action='store_true')
     args = parser.parse_args()
     if not _RUN_ID.fullmatch(args.run_id):

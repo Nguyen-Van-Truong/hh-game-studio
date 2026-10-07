@@ -233,9 +233,9 @@ def verify_blender_handoff(directory, frozen_root, binding, candidate):
 
 def freeze_saved_arena(name, directory, frozen_root, builder):
     need(name == ARENA_FIXTURE, 'SAVED_ARENA_FIXTURE_REQUIRED')
-    raw = builder.verify_saved_arena(directory)
+    raw = builder.verify_saved_arena(directory, require_current_source=False)
     need(type(raw) is bytes and 0 < len(raw) <= 1_048_576, 'SAVED_ARENA_BYTES_REQUIRED')
-    provenance = builder.saved_arena_provenance(directory)
+    provenance = builder.saved_arena_provenance(directory, require_current_source=False)
     need(type(provenance) is dict and type(provenance.get('files')) is dict
          and provenance['files'], 'SAVED_ARENA_PROVENANCE_REQUIRED')
     binding = {'scene_sha256': hashlib.sha256(raw).hexdigest(), 'scene_size_bytes': len(raw),
@@ -256,8 +256,8 @@ def freeze_saved_arena(name, directory, frozen_root, builder):
 
 def verify_saved_arena_binding(directory, frozen_root, binding, builder, candidate):
     """Recheck trusted native proof and every frozen byte immediately before use."""
-    raw = builder.verify_saved_arena(directory)
-    need(builder.saved_arena_provenance(directory) == binding['provenance'],
+    raw = builder.verify_saved_arena(directory, require_current_source=False)
+    need(builder.saved_arena_provenance(directory, require_current_source=False) == binding['provenance'],
          'SAVED_ARENA_PROVENANCE_CHANGED')
     need(json.loads((frozen_root / 'binding.json').read_text(encoding='utf-8')) == binding,
          'SAVED_ARENA_BINDING_CHANGED')
@@ -366,7 +366,7 @@ def dry_run(args):
     saved_raw = glb = handoff = None
     if args.saved_arena is not None:
         builder = load('o2_admission_builder', STUDIO / 'tests/godot/run_saved_arena_builder.py')
-        saved_raw = builder.verify_saved_arena(args.saved_arena)
+        saved_raw = builder.verify_saved_arena(args.saved_arena, require_current_source=False)
     if args.blender_published is not None:
         glb, _, handoff = read_blender_handoff(args.blender_published)
     case = _publication_case(args, owner_mod, fixtures, saved_arena_raw=saved_raw, glb=glb)

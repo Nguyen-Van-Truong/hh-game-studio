@@ -4,6 +4,27 @@ AUTHORITY=0. Branch `codex/o2-authoring-contract`. Read the main tools plan for
 current WP/acceptance; historical entries below do not override it. Public
 gameplay-source remains disabled; tests/native diagnostics do not close AUTH.
 
+## 2026-10-07 — O10.5 integration with current GT09 fixtures
+
+- Synced main through `e3984927` at `256224b5`; reviewed the resulting O2-only
+  diff (private adapter, durable lookup, 2D/3D shape binding and their tests).
+  The old instruction to wait until GT09 before merging O2 was stale: O10.5
+  permits integration after affected suites pass, with gameplay-source disabled.
+- Merged-tree regression: initial 478 tests completed with nine setup errors
+  (six missing test-module paths and three missing worktree-local toolchain
+  references), no assertion failures. Corrected module paths and explicitly
+  bound the CI test module to the existing hash-checked main toolchain; the
+  affected 44 + 6 tests then exited 0. Existing passed tests were not rerun.
+- Extended the existing native adapter runner to the final arena/room cases,
+  including saved-scene and Blender handoff provenance. Immutable saved arenas
+  retain their original producer source/exit hashes and must still satisfy the
+  current recipe; reading them no longer requires rerunning an unchanged scene
+  merely because the producer code changed. New/current producer verification
+  still checks current source. Focused harness/provenance tests: 35, exit 0.
+- Next: native adapter runs on both final fixtures, then close dependency,
+  sandbox attribution, MCP compatibility and delegated playtest gaps. This
+  integration does not accept GT09 or advertise a public source capability.
+
 ## 2026-10-07 — Native private adapter recovery and overlap proof
 
 - Source `d5e6982a` removes caller-supplied capability flags as authority and
