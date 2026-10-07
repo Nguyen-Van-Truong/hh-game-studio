@@ -22,6 +22,13 @@ Current frozen GT‑09 evidence remains the candidate package
 playtests, native AUTH‑05/E2E and dependency-closure evidence, measured MCP
 capability/reconnect checks, and two independent critics on the final hash.
 
-The next safe action is to close those GT‑09 gates. Do not start GT‑10‑PC while
-GT‑09 is still `IN_PROGRESS`, and do not dispatch native work while a competing
-owner Docker/WSL workload holds the host.
+The next action is to close those GT‑09 gates. Do not start GT‑10‑PC while
+GT‑09 is still `IN_PROGRESS`. Docker/WSL process presence is inventory, not
+proof of competing measurement. Check actual engine/workload ownership and the
+kernel measurement guard before native work; keep O4.1 for formal/soak.
+
+The owner's subsequent 07-10 request explicitly delegates fixture playtesting
+to the agent (O12 amendment). Record it as delegated agent testing with actual
+duration/input/video/readback and findings, never as a human signature. The
+earlier unsigned owner form and frozen candidate remain historical; final
+independent critics must review the new evidence before acceptance.

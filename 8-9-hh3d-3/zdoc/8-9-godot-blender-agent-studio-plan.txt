@@ -56,6 +56,14 @@ O12 — 07-10-2026, MỚI NHẤT, OWNER PC-ONLY (AUTHORITY=OWNER_DELEGATED_20261
 - Owner cho phép tiếp tục static/native PC work trong GT-09 và chuẩn bị ma trận
   GT-10-PC ngay khi không có measurement live. O12 thắng các dòng cũ nói GT-08B
   là hard gate cho lát cắt PC, nhưng không xóa lịch sử hoặc nới gate full plan.
+- Owner giao trực tiếp 07-10: “làm giúp tôi luôn” các mục playtest hai fixture,
+  native AUTH-05/E2E, dependency closure, MCP/reconnect và hai critic. Với gate
+  playtest fixture công cụ PC, agent được thực hiện thay và ghi `performed_by=agent`,
+  `delegated_by=owner`, source hash, input/trace/video/readback, thời lượng khoảng
+  15 phút mỗi fixture và lỗi quan sát được. Không ký tên owner, không ghi người
+  dùng đã chơi; kết quả human playtest cũ vẫn NOT_PERFORMED. Đây không phải
+  nghiệm thu chất lượng game thương mại. Hai critic độc lập vẫn phải kiểm cùng
+  gói cuối và cho TICK=yes; không bỏ kiểm chứng, tự ký hay dùng lại chữ ký cũ.
 
 O11 — 06-10-2026, MỚI NHẤT TRƯỚC O12 (AUTHORITY=OWNER_DELEGATED_20260930; ma trận M1–M9,
 ngưỡng và DoD GT-07 của O10 không đổi; thay GT07_NEXT_ACTION, FAST_PATH_20261006, NEXT N0–N6)

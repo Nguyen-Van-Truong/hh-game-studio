@@ -1,0 +1,47 @@
+{
+  "schema": "hh-o2-adapter-native-closeout-1",
+  "authority": 0,
+  "run_id": "o2-adapter-20261007-native-01",
+  "source_commit": "d5e6982a",
+  "source_closure_sha256": "d9bda850561fcd56132a96965657ddee4d456b803042bc1df6da488d72509e53",
+  "driver_file_count": 34,
+  "binding_sha256": "64255e777207948542214aa4f8d15d5142c640fda0e7b5569562211f2fd4fde8",
+  "wrapper_result_sha256": "26f46c1177a5cbba079a8484e549811c4c23e26052c7081f8fad3d170719f225",
+  "outer_exit_sha256": "27cfaf1fdac6976c6d25d78ab41b84a78df3f12c21483cd10946546e942ad940",
+  "actual_outer_exit": 0,
+  "raw_worktree": "codex/o2-authoring-contract",
+  "raw_relative": ".local/reviews/o2-adapter-20261007-native-01",
+  "native": [
+    {
+      "relative": "gameplay-owner-b256d953af4048e7becc172b0f0f4051/runs/command.adapter.1",
+      "result_sha256": "ac816ea77af050bc43abc488635f1f3329e4141db19e0c358617b70086595809",
+      "engine_host_sha256": "a99f28c44d1b1cb5065cd8d68492bbe6c7093056ee985b25b82ba95295575960",
+      "actual_host_exit": 0,
+      "actual_container_exit": 0,
+      "removed": true,
+      "job_zero_closed_unretained": true
+    },
+    {
+      "relative": "gameplay-owner-b256d953af4048e7becc172b0f0f4051/runs/command.adapter.2",
+      "result_sha256": "c08eee2545023a3da58eda633fb19e75a31feb2839567eda9c962741961b4f75",
+      "engine_host_sha256": "c4a009d31d1619be6a36fa6477cd51e6e9d9fb40c87fc54b545b4b03e070f5f1",
+      "actual_host_exit": 0,
+      "actual_container_exit": 0,
+      "removed": true,
+      "job_zero_closed_unretained": true
+    }
+  ],
+  "offline_observations_byte_equal": true,
+  "archive_relative": ".local/reviews/o2-adapter-20261007-native-01-closeout/o2-adapter-20261007-native-01.zip",
+  "archive_sha256": "ec05c2a661e818da946a1a8970ccc09dc2090c9d10f131bf971edfbe12f77eb5",
+  "archived_file_count": 153,
+  "closeout_script_sha256": "e6a947664ee06906c9fb9bfb1cac5669a9ca873e313d64eee85cd6972accf51e",
+  "limits": [
+    "AUTHORITY=0",
+    "NO_PUBLIC_CAPABILITY",
+    "NO_FULL_MCP_CONFORMANCE",
+    "NO_GENERAL_DEPENDENCY_CLOSURE",
+    "NO_PARALLEL_NATIVE_PROOF",
+    "SIMULATED_OWNER_EDIT_NOT_HUMAN_PLAYTEST"
+  ]
+}
