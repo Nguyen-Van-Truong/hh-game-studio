@@ -323,7 +323,7 @@ func _finish() -> void:
 		if reader != null:
 			var restored: Variant = JSON.parse_string(reader.get_as_text())
 			reader.close()
-			checkpoint_reload_observed = type(restored) == TYPE_DICTIONARY and restored == checkpoint
+			checkpoint_reload_observed = typeof(restored) == TYPE_DICTIONARY and restored == checkpoint
 	var state: Dictionary = {"ticks": tick, "health": health, "bot_health": bot_health,
 		"pickups": pickups, "hits": hits, "jump_started": jump_started,
 		"apex_seen": apex_seen, "landed": landed,

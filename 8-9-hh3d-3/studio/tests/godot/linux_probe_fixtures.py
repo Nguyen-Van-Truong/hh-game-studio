@@ -695,7 +695,7 @@ func _physics_process(delta: float) -> void:
 \t\t\tif reader != null:
 \t\t\t\tvar restored: Variant = JSON.parse_string(reader.get_as_text())
 \t\t\t\treader.close()
-\t\t\t\tcheckpoint_reload_observed = type(restored) == TYPE_DICTIONARY and restored == checkpoint
+			\t\t\t\tcheckpoint_reload_observed = typeof(restored) == TYPE_DICTIONARY and restored == checkpoint
 \t\tvar state := {"ticks": tick, "movement_observed": avatar.position.x > 2.0,
 \t\t\t"camera_follow": camera_follow, "switch_used": switch_used,
 \t\t\t"pickup_collected": pickup_collected, "ui_visible": hud.visible,
