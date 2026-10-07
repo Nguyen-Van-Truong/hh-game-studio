@@ -5,15 +5,15 @@ not change the checkbox or the `CURRENT_VALID_WP` header.
 
 ## Frozen evidence
 
-- coordinator source commit: `d72c1d6b90308e53036a76ad03d97fd7a363b61f`
+- coordinator source commit: `4cbb8e208d0529d67ca7d99d3ba10560961e65c9`
 - fixture source closure: `c91bc0d770e9730cb10a3bc9fd8e80729f6db9d3485b024664706658993be51c`
 - offline conformance report:
-  `studio/.local/reviews/gt09-conformance-20261007-05/report.json`
-- conformance report SHA256: `ee36fde0e20f442c15b78fadf6ce3195d9c29f5855e881f69109250abcdfa166`
+  `studio/.local/reviews/gt09-conformance-20261007-06/report.json`
+- conformance report SHA256: `5443e7cddfb1a56b1c3fe95e8af947f143c056733a36ad85e52a1c121177fc57`
 - native 2D fixture:
-  `studio/.local/reviews/o2-publication-gt09-arena-asset-20261007-13/`
+  `studio/.local/reviews/o2-publication-gt09-arena-save-20261007-17/`
 - native 3D fixture:
-  `studio/.local/reviews/o2-publication-gt09-room-native-20261007-14/`
+  `studio/.local/reviews/o2-publication-gt09-room-native-20261007-15/`
 - Blender producer:
   `studio/.local/reviews/gt07-native-queue-20261007-25/`
 - Blender handoff manifest SHA256:
@@ -25,7 +25,11 @@ Both native fixture runs report `DIAGNOSTIC_PASS`, `native_run_count=1`, clean
 owned-process lifecycle, durable retry/reopen equality, and
 `blender_handoff_verified=true`. The 2D run now also records
 `asset_import_observed=true` for the Blender GLB and sprite readback. The
-conformance report is `CANDIDATE_PASS` and `acceptance=false` by design.
+arena also records replay equality, checkpoint save/readback, and a bounded
+150-sample frame budget; the room records the corresponding 60-sample result.
+The conformance report is `CANDIDATE_PASS` and `acceptance=false` by design.
+Earlier failed attempts remain in their original raw directories and are not
+relabeled as passes.
 
 ## Requirements still open
 

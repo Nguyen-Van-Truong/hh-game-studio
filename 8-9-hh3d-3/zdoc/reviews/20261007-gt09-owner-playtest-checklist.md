@@ -8,8 +8,8 @@ playtest result.
 
 - Candidate package: `20261007-gt09-critic-package-candidate.md`
 - Fixture closure: `c91bc0d770e9730cb10a3bc9fd8e80729f6db9d3485b024664706658993be51c`
-- 2D raw: `studio/.local/reviews/o2-publication-gt09-arena-asset-20261007-13/`
-- 3D raw: `studio/.local/reviews/o2-publication-gt09-room-native-20261007-14/`
+- 2D raw: `studio/.local/reviews/o2-publication-gt09-arena-save-20261007-17/`
+- 3D raw: `studio/.local/reviews/o2-publication-gt09-room-native-20261007-15/`
 
 ## Owner run A — 2D arena (about 15 minutes)
 
