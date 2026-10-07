@@ -5,14 +5,15 @@ not change the checkbox or the `CURRENT_VALID_WP` header.
 
 ## Frozen evidence
 
-- coordinator source commit: `929f6b568d1b28d553f998388abcf223b340e4c7`
+- coordinator source commit: `d72c1d6b90308e53036a76ad03d97fd7a363b61f`
 - fixture source closure: `c91bc0d770e9730cb10a3bc9fd8e80729f6db9d3485b024664706658993be51c`
 - offline conformance report:
-  `studio/.local/reviews/gt09-conformance-20261007-04/report.json`
+  `studio/.local/reviews/gt09-conformance-20261007-05/report.json`
+- conformance report SHA256: `ee36fde0e20f442c15b78fadf6ce3195d9c29f5855e881f69109250abcdfa166`
 - native 2D fixture:
-  `studio/.local/reviews/o2-publication-gt09-arena-20261007-09/`
+  `studio/.local/reviews/o2-publication-gt09-arena-asset-20261007-13/`
 - native 3D fixture:
-  `studio/.local/reviews/o2-publication-gt09-room-native-20261007-12/`
+  `studio/.local/reviews/o2-publication-gt09-room-native-20261007-14/`
 - Blender producer:
   `studio/.local/reviews/gt07-native-queue-20261007-25/`
 - Blender handoff manifest SHA256:
@@ -22,8 +23,9 @@ not change the checkbox or the `CURRENT_VALID_WP` header.
 
 Both native fixture runs report `DIAGNOSTIC_PASS`, `native_run_count=1`, clean
 owned-process lifecycle, durable retry/reopen equality, and
-`blender_handoff_verified=true`. The conformance report is `CANDIDATE_PASS` and
-`acceptance=false` by design.
+`blender_handoff_verified=true`. The 2D run now also records
+`asset_import_observed=true` for the Blender GLB and sprite readback. The
+conformance report is `CANDIDATE_PASS` and `acceptance=false` by design.
 
 ## Requirements still open
 
