@@ -57,6 +57,13 @@ host preflight.
 
 No critic has been called for the superseded package. Do not merge, tick, or call GT07 accepted from diagnostics alone.
 
+Checkpoint 2026-10-07: host regression row `gt07-gt02-06-regression-20261007-12` now passes all 17
+focused modules with separate module Job/actual-exit receipts and source closure
+`e48e936933540e1a518310636919ebe7e27a6d230d98c0aeed5cac3bf0afa85d`. The runner binds test
+import roots explicitly and stops at the first module boundary; this host-only diagnostic does
+not replace the required one-closure 30-row native matrix. The native recovery test now asserts
+the O11 explicit-reconciliation route for an UNKNOWN command whose selection is still last-good.
+
 The latest twenty-one-row engine-free admission produced matrix closure
 `1b3e4344bf79250c0386387001660bfa2930e29053e106a0fed26f37e638e3ef`.
 The previous 20261006 admission closure `d5823960a521df2b411c18f973a6a7195b3e0da0ba12c515e0b143321ee31e63`

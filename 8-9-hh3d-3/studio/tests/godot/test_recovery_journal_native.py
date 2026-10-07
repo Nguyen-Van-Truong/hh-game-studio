@@ -132,12 +132,12 @@ class RecoveryJournalNativeTests(unittest.TestCase):
         recovered.close();reopened=self.open_recovery()
         self.assertEqual(reopened.terminal_observation('command.one',helpers.fixtures.rev('command.one')),observation)
 
-    def test_terminal_observation_unknown_is_hold_without_receipt(self):
+    def test_terminal_observation_unknown_requires_explicit_reconciliation(self):
         owner=self.create();self.activate(owner)
         owner.unknown('command.one',helpers.fixtures.rev('command.one'),reason='host-crash',observed_ms=clock())
         owner.close();recovered=self.open_recovery();head=recovered._head
         observation=recovered.terminal_observation('command.one',helpers.fixtures.rev('command.one'))
-        self.assertEqual(observation['plan']['route'],'HOLD_UNKNOWN_OR_STOP')
+        self.assertEqual(observation['plan']['route'],'RESTORE_LAST_GOOD_REQUIRES_EXPLICIT_RECONCILIATION')
         self.assertIsNone(observation['response_raw']);self.assertEqual(recovered._head,head)
 
     def test_after_actual_cas_missing_selected_is_recorded_without_another_selector_write(self):

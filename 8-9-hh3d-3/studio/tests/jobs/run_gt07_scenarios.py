@@ -766,6 +766,28 @@ def dry_run(name: str, args: argparse.Namespace, index: int = 0) -> dict[str, ob
             "engine_started": False, "dry_run": True}
 
 
+def _host_test_environment(scenario: dict) -> dict[str, str]:
+    """Bind module-local imports without changing the admitted source closure.
+
+    Several focused regression modules intentionally import sibling fixtures by
+    their short module name.  The old single-process invocation happened to
+    inherit those paths from earlier imports, which made the result order
+    dependent and allowed a later native test to hide the real boundary.  Keep
+    the exact same interpreter and test modules, but make the import roots an
+    explicit part of the host-test process environment.
+    """
+    environment = dict(os.environ)
+    environment.update(scenario.get("environment", {}))
+    roots = [STUDIO.parent, STUDIO / "tests" / "godot",
+             STUDIO / "tests" / "blender", STUDIO / "tests" / "replay",
+             STUDIO / "tests" / "jobs"]
+    existing = [item for item in environment.get("PYTHONPATH", "").split(os.pathsep)
+                if item]
+    environment["PYTHONPATH"] = os.pathsep.join(
+        [str(item) for item in roots] + existing)
+    return environment
+
+
 def _run_one(name: str, args: argparse.Namespace, index: int = 0,
              admission: dict | None = None) -> dict[str, object]:
     scenario = _scenario(name)
@@ -777,23 +799,58 @@ def _run_one(name: str, args: argparse.Namespace, index: int = 0,
     if scenario["kind"] == "host-test":
         if check["source_hashes"] != _host_test_sources(scenario):
             raise ValueError("HOST_TEST_SOURCE_CHANGED")
-        command = [sys.executable, "-B", "-m", "unittest", "-q", *scenario["tests"]]
         runner = _load_probe("../../build/bootstrap/run_fixture.py")
-        with _native_measure_guard():
-            environment = dict(os.environ)
-            environment.update(scenario.get("environment", {}))
-            host = runner.run_process(command, cwd=STUDIO.parent, output=Path(check["output"]),
-                                      timeout=600, label="host-tests", env=environment)
+        root = Path(check["output"])
+        module_reports = []
+        commands = []
+        environment = _host_test_environment(scenario)
+        for module_index, module_name in enumerate(scenario["tests"]):
+            module_slug = re.sub(r"[^a-zA-Z0-9_.-]+", "_", module_name)
+            module_output = root / "modules" / f"{module_index:02d}-{module_slug}"
+            module_output.mkdir(parents=True, exist_ok=False)
+            command = [sys.executable, "-B", "-m", "unittest", "-q", module_name]
+            commands.append(command)
+            with _native_measure_guard():
+                host = runner.run_process(command, cwd=STUDIO.parent, output=module_output,
+                                          timeout=600, label=f"host-tests-{module_index:02d}",
+                                          env=environment)
+            verified_module = (host.get("exit_code") == host.get("wrapper_exit_code") == 0
+                               and host.get("tree_verified") is True
+                               and not host.get("timed_out"))
+            module_reports.append({"index": module_index, "module": module_name,
+                                   "command": command, "host": host,
+                                   "actual_exit": host.get("exit_code"),
+                                   "verified": verified_module,
+                                   "output": str(module_output)})
+            if not verified_module:
+                break
         unchanged = check["source_hashes"] == _host_test_sources(scenario)
-        verified = (host.get("exit_code") == host.get("wrapper_exit_code") == 0
-                    and host.get("tree_verified") is True and not host.get("timed_out")
-                    and unchanged)
+        verified = bool(module_reports) and all(row["verified"] for row in module_reports) \
+            and len(module_reports) == len(scenario["tests"]) and unchanged
+        aggregate = {
+            "exit_code": 0 if verified else next(
+                (row["actual_exit"] for row in module_reports if not row["verified"]), 1),
+            "wrapper_exit_code": 0 if verified else next(
+                (row["host"].get("wrapper_exit_code") for row in module_reports
+                 if not row["verified"]), 2),
+            "tree_verified": all(row["host"].get("tree_verified") is True
+                                  for row in module_reports),
+            "timed_out": any(row["host"].get("timed_out") for row in module_reports),
+            "job_closed": all(row["host"].get("job_closed") is True
+                              for row in module_reports),
+            "active_processes": sum(row["host"].get("active_processes", 0)
+                                     for row in module_reports),
+            "retained_handle": any(row["host"].get("retained_handle")
+                                    for row in module_reports),
+            "module_reports": module_reports,
+        }
         report = {"schema": "gt07-host-test-result-1", "authority": 0,
                   "diagnostic_only": True, "run_id": check["run_id"],
                   "matrix": scenario["matrix"], "tests": list(scenario["tests"]),
                   "source_hashes": check["source_hashes"], "source_unchanged": unchanged,
-                  "actual_exit": host.get("exit_code"), "host": host,
-                  "command": command, "verified": verified}
+                  "actual_exit": aggregate["exit_code"], "host": aggregate,
+                  "module_reports": module_reports, "command": commands,
+                  "verified": verified}
         _write_json(Path(check["output"]) / "result.json", report)
         return {"scenario": name, "run_id": check["run_id"],
                 "exit_code": 0 if verified else 1, "dry_run": check,
