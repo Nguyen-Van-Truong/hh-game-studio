@@ -52,10 +52,30 @@ child output is still checked; encoding cannot make an error log clean.
   guard-pipe and log-policy tests 30 actual tests passed (two mistaken module
   names were invocation errors, not passing tests); correct owner/probe/adapter
   regression 107 tests exit 0. Native timing limits/resources were unchanged.
-- Remaining: hostile native spoof/proc-descriptor checks, trusted dependency
+- Remaining at that checkpoint: hostile native spoof/proc-descriptor checks, trusted dependency
   observation, and enforcement through the public catalog. This run authenticates
   phase waits/pre-exec OS probes only. It does not authenticate child gameplay
   or dependency claims, accept AUTH05, or advertise public source execution.
+
+## Native hostile phase rejection
+
+- `gt09-attribution-hostile-20261007-01` completed with actual outer exit 0.
+  Happy fixture host/container/wait exits were 0. The hostile fixture printed
+  fake play-success/public-ACK markers but actually exited play with 17; the
+  trusted driver and host/container returned 45 and rejected it as expected.
+- Each trusted pre-exec guard observed parent memory/FD access denied (errno 13),
+  project write denied (30), root-file write denied (13), guard FD close-on-exec,
+  and the existing process/network seccomp denials. File probes opened without
+  truncate and never wrote. Candidate output remains untrusted.
+- Runtime closure `5761a7630b36ec38227f39b08a1e455e62e7ef455dcfdecf2a227e50912f0e8b`;
+  267 frozen source files, actual exits, exact inspected commands, raw hashes,
+  removed containers and closed/zero/unretained Jobs reverified offline.
+  Receipt `studio/.local/reviews/gt09-attribution-hostile-20261007-launch/verified-native.json`,
+  SHA256 `3459fd462318e51c94060e1aefd9738df9ad70f85e300bbdda0958483681bdbe`.
+  Focused regression: 61 tests, exit 0.
+- This proves rejection of forged child phase banners and the measured OS
+  boundaries, not full gameplay/dependency closure or AUTH05 acceptance.
+  Next: trusted dependency observation, public catalog and lifecycle evidence.
 
 ## Frozen evidence
 
@@ -94,7 +114,7 @@ not a clean formal log. Runtime native results remain diagnostic `AUTHORITY=0`.
 present above. Still open: independently attributed AUTH02/05 native evidence,
 public catalog integration, full fixture lifecycle and measured pinned external
 MCP comparison/client capability matrix. BUSY overlap is not parallel native
-source-job completion. Next code work addresses trusted phase/OS attribution;
+source-job completion. Next code work addresses trusted dependency observation;
 do not rerun existing fixtures solely to refresh hashes.
 
 1. O12 records owner's direct delegation: agent performs each fixture playtest

@@ -53,6 +53,11 @@ def gameplay_transcript(case: dict, stdout: str, stderr: str, *, attribution=Non
             return log_policy.classify(stdout.encode('utf-8'), stderr.encode('utf-8'), scripts)['accepted']
         except UnicodeEncodeError:
             return False
+    if kind == 'attributed_forgery':
+        return (attribution is not None and attribution['driver_returncode'] == 45
+            and [(row['phase'], row['returncode']) for row in attribution['phase_results']]
+                == [('parse', 0), ('import', 0), ('play', 17)]
+            and stderr.replace('\r\n', '\n') == GAMEPLAY_STARTUP_ERRORS)
     rejected_path = case.get('parse_error_path', primary) if kind == 'engine_rejection' else None
     if rejected_path is not None and rejected_path not in scripts:
         return False
@@ -341,6 +346,12 @@ def evaluate(case: dict, result: dict, stdout: str, stderr: str, *, attribution=
     elif kind == 'untrusted_marker':
         details = marker(stdout, 'HH_ENGINE_VALIDATED ')
         observed = completed and details is not None and details.get('public_ack') is True
+    elif kind == 'attributed_forgery':
+        details = marker(stdout, 'HH_ENGINE_VALIDATED ')
+        observed = (details == {'public_ack': True}
+            and stdout.splitlines().count('HH_GAMEPLAY_PHASE_END play 0') == 1
+            and _integer(host.get('exit_code'), 45) and _integer(state.get('ExitCode'), 45)
+            and result.get('diagnostic_execution_complete') is False)
     else:
         raise ValueError('unknown fixture expectation')
     guarded = str(case.get('mode', '')).startswith('guarded-')
@@ -539,6 +550,8 @@ def main() -> int:
     parser.add_argument('--run-id', required=True)
     parser.add_argument('--resume', action='store_true')
     parser.add_argument('--cases', nargs='+')
+    parser.add_argument('--authenticated', action='store_true')
+    parser.add_argument('--dry-run', action='store_true')
     args = parser.parse_args()
     if not re.fullmatch(r'[A-Za-z0-9_-]{1,80}', args.run_id):
         parser.error('invalid run ID')
@@ -552,12 +565,39 @@ def main() -> int:
         parser.error('new evidence must be below studio/.local/reviews')
     freezer = load('gt03_linux_freezer', STUDIO / 'tests/godot/run_editor_probe.py')
     current = freezer.inputs()
+    installed_executor = load('gt03_admission_executor', STUDIO / 'godot-addon/linux_executor.py')
+    installed_fixtures = load('gt03_admission_fixtures', STUDIO / 'tests/godot/linux_probe_fixtures.py')
+    cases = ([name for name, case in installed_fixtures.FIXTURES.items()
+              if (case['mode'] == 'gameplay-source' if args.authenticated
+                  else case['expect'] != 'attributed_forgery')]
+             if args.cases is None else args.cases)
+    if len(set(cases)) != len(cases) or not set(cases) <= set(installed_fixtures.FIXTURES):
+        parser.error('duplicate or unknown case')
+    if (args.authenticated and any(installed_fixtures.FIXTURES[name]['mode'] != 'gameplay-source'
+                                   for name in cases)):
+        parser.error('authenticated cases must use gameplay-source')
+    if 'gameplay_source_forged_phase' in cases and not args.authenticated:
+        parser.error('forgery case requires authenticated driver')
+    if args.dry_run:
+        if output.exists() or args.resume:
+            parser.error('dry-run needs a fresh output and no resume')
+        installed_executor._assert_measure_window_clear()
+        installed_executor._lock()
+        installed_executor._binary()
+        installed_executor._sandbox_harness()
+        if args.authenticated:
+            for name in ('gameplay_attribution.py', 'gameplay_attributed_driver.py'):
+                compile((STUDIO / 'godot-addon' / name).read_bytes(), name, 'exec')
+        print(json.dumps({'run_id': args.run_id, 'cases': cases, 'authenticated': args.authenticated,
+                          'dry_run': True, 'engine_started': False}))
+        return 0
     owned = load('gt03_linux_owned', STUDIO / 'build/bootstrap/run_fixture.py')
     closure = owned.source_closure_sha256(current)
     if args.resume:
         binding = json.loads((output / 'source-closure.json').read_text(encoding='utf-8'))
         if (binding['files'] != current or binding['run_id'] != args.run_id
-                or binding['source_closure_sha256'] != closure):
+                or binding['source_closure_sha256'] != closure
+                or binding.get('authenticated', False) != args.authenticated):
             raise ValueError('resume requires identical source and run ID')
     else:
         output.mkdir(parents=True, exist_ok=False)
@@ -568,7 +608,7 @@ def main() -> int:
             if sha(path) != digest:
                 raise ValueError('source changed during freeze')
         binding = {'run_id': args.run_id, 'files': current,
-            'source_closure_sha256': closure}
+            'source_closure_sha256': closure, 'authenticated': args.authenticated}
         save(output / 'source-closure.json', binding)
     source = output / 'source/studio'
     if any(sha(source / name) != digest for name, digest in current.items()):
@@ -579,7 +619,6 @@ def main() -> int:
     sys.path.insert(0, str(source.parent))
     fixtures = load('gt03_linux_fixtures', source / 'tests/godot/linux_probe_fixtures.py')
     executor = load('gt03_linux_executor', source / 'godot-addon/linux_executor.py')
-    cases = list(fixtures.FIXTURES) if args.cases is None else args.cases
     if len(set(cases)) != len(cases) or not set(cases) <= set(fixtures.FIXTURES):
         parser.error('duplicate or unknown case')
     results = {}
@@ -604,7 +643,8 @@ def main() -> int:
         (project / '.godot').mkdir()
         for path, raw in case_files(case).items():
             (project / path).write_bytes(raw)
-        result = executor.run(project, mode=case['mode'], output=destination, timeout_seconds=case['timeout'])
+        result = executor.run(project, mode=case['mode'], output=destination,
+                              timeout_seconds=case['timeout'], authenticated=args.authenticated)
         row = case_observation(destination, case, name=name, binding=binding)
         save(observation, row)
         results[name] = row

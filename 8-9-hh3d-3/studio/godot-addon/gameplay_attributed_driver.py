@@ -58,8 +58,7 @@ def run_child(codec, recorder, phase, script):
                         codec.need(len(guard) <= 1024 and guard.endswith(b'\n')
                                    and guard.count(b'\n') == 1, 'ATTRIBUTION_GUARD_PACKET')
                         facts = json.loads(guard, object_pairs_hook=codec._pairs)
-                        codec.need(type(facts) is dict and facts == codec.GUARD_FACTS
-                                   and all(type(v) is int for v in facts.values()), 'ATTRIBUTION_GUARD_PACKET')
+                        codec.need(codec.valid_guard(facts), 'ATTRIBUTION_GUARD_PACKET')
                         recorder.guard(process.pid, facts)
                 elif index == 2:
                     guard.extend(chunk)

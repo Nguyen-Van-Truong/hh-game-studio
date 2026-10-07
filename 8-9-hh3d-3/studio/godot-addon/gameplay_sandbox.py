@@ -114,6 +114,29 @@ def guard_descriptor(arguments):
     return args, fd
 
 
+def verify_parent_boundary(guard_fd):
+    """Fixed no-write OS checks, before any candidate is parsed or executed."""
+    observed = {'guard_cloexec': int(not os.get_inheritable(guard_fd))}
+    parent = os.getppid()
+    for key, path, flags, allowed in (
+        ('parent_mem_errno', f'/proc/{parent}/mem', os.O_RDONLY, (errno.EACCES,)),
+        ('parent_fd_errno', f'/proc/{parent}/fd/1', os.O_WRONLY, (errno.EACCES,)),
+        ('project_write_errno', '/project/project.godot', os.O_WRONLY, (errno.EACCES, errno.EROFS)),
+        ('root_write_errno', '/etc/passwd', os.O_WRONLY, (errno.EACCES, errno.EROFS))):
+        try:
+            fd = os.open(path, flags)
+        except OSError as error:
+            if error.errno not in allowed:
+                raise RuntimeError('GAMEPLAY_BOUNDARY_WRONG_ERRNO') from error
+            observed[key] = error.errno
+        else:
+            os.close(fd)
+            raise RuntimeError('GAMEPLAY_BOUNDARY_ACCESSIBLE')
+    if observed['guard_cloexec'] != 1:
+        raise RuntimeError('GAMEPLAY_GUARD_INHERITED')
+    return observed
+
+
 def command(phase, *, parse_script=None):
     common = [BINARY, '--headless', '--path', '/project', '--log-file', '/tmp/engine.log']
     if parse_script is not None:
@@ -145,6 +168,7 @@ def main():
         argv = command(phase, parse_script=parse_script)
         facts = {**install(), **verify_denials()}
         if guard_fd is not None:
+            facts.update(verify_parent_boundary(guard_fd))
             packet = (json.dumps(facts, sort_keys=True, separators=(',', ':')) + '\n').encode()
             if len(packet) > 1024 or os.write(guard_fd, packet) != len(packet):
                 raise RuntimeError('GAMEPLAY_GUARD_WRITE')

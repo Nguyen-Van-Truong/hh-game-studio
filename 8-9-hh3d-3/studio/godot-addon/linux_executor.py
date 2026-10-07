@@ -41,7 +41,7 @@ _HELPER = "import subprocess,sys; token=sys.stdin.readline(); sys.exit(125) if t
 _INCOMPLETE_CLI_HOLDS: list = []
 _INCOMPLETE_ADMISSION_HOLDS: list = []
 PROFILE_BOOTSTRAP_SHA256 = 'efde8370a6157ed2f66544ee13b82ee2556b59130f5306e9e0774ed0e3be79a5'
-SANDBOX_BOOTSTRAP_SHA256 = 'f813292aac0d33f866d906412856f9887500b594e1222592e00ddfeaf40ebdf8'
+SANDBOX_BOOTSTRAP_SHA256 = '0d6ac2b6defbac007feb00938e6d447c6f95c4acf1a9ac637a25312dd78b99bb'
 GAMEPLAY_PROFILE_SHA256 = 'aa01428ff26dc56fc20f19f7093bd025685fe9ca509843826ee02fe7acb6485c'
 GUARDED_MODES = ('guarded-parse', 'guarded-import', 'guarded-play')
 GAMEPLAY_MODE = 'gameplay-source'

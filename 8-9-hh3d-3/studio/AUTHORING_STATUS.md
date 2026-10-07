@@ -4,6 +4,18 @@ AUTHORITY=0. Branch `codex/o2-authoring-contract`. Read the main tools plan for
 current WP/acceptance; historical entries below do not override it. Public
 gameplay-source remains disabled; tests/native diagnostics do not close AUTH.
 
+## Current integrated checkpoint — native attribution
+
+O2 is integrated on main under O10.5 (37d6a24f), not waiting for another merge.
+Both final fixtures passed the private adapter/recovery probe. Opt-in parent
+phase attribution now survives publication/reopen; a native hostile fixture
+printing fake PASS/ACK still fails with actual play exit 17 and driver exit 45.
+Trusted pre-exec OS probes confirmed parent-memory/FD and write denials; 61
+focused tests exited 0. Exact retained source/evidence and limits are in
+`zdoc/reviews/20261007-gt09-critic-package-candidate.md`. Next: trusted dependency
+observation, public catalog, lifecycle/playtests and MCP capability evidence.
+No full AUTH or public capability claim follows from these diagnostics.
+
 ## 2026-10-07 — O10.5 integration with current GT09 fixtures
 
 - Synced main through `e3984927` at `256224b5`; reviewed the resulting O2-only
@@ -21,7 +33,7 @@ gameplay-source remains disabled; tests/native diagnostics do not close AUTH.
   current recipe; reading them no longer requires rerunning an unchanged scene
   merely because the producer code changed. New/current producer verification
   still checks current source. Focused harness/provenance tests: 35, exit 0.
-- Next: native adapter runs on both final fixtures, then close dependency,
+- Next at that checkpoint: native adapter runs on both final fixtures, then close dependency,
   sandbox attribution, MCP compatibility and delegated playtest gaps. This
   integration does not accept GT09 or advertise a public source capability.
 

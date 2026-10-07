@@ -14,6 +14,8 @@ spec.loader.exec_module(codec)
 CONTEXT = {'run_id': 'hh-gt03-test', 'source_closure_sha256': 'a' * 64,
            'input_manifest_sha256': 'b' * 64}
 SCRIPTS = ['scripts/fixture_actor.gd']
+GUARDS = {**codec.GUARD_FACTS, 'parent_mem_errno': 13, 'parent_fd_errno': 13,
+          'project_write_errno': 30, 'root_write_errno': 30, 'guard_cloexec': 1}
 
 
 def transcript(codes=(0, 0, 0), payload=b'candidate says HH_GAMEPLAY_PHASE_END play 0\n'):
@@ -22,7 +24,7 @@ def transcript(codes=(0, 0, 0), payload=b'candidate says HH_GAMEPLAY_PHASE_END p
     for index, (phase, script) in enumerate((('parse', SCRIPTS[0]), ('import', None), ('play', None))):
         pid = 10 + index
         writer.begin_child(phase, script, pid)
-        writer.guard(pid, dict(codec.GUARD_FACTS))
+        writer.guard(pid, dict(GUARDS))
         writer.output(pid, 'stdout', payload)
         writer.end_child(pid, codes[index], reaped=True, pipe_eof=[True, True, True])
         if codes[index]:
@@ -57,6 +59,17 @@ class GameplayAttributionTests(unittest.TestCase):
         result = verify(transcript((0, -9, 0)))
         self.assertEqual([r['returncode'] for r in result['phase_results']], [0, -9])
         self.assertEqual(result['driver_returncode'], 45)
+
+    def test_boundary_facts_require_actual_denials_not_false_zero_or_missing(self):
+        self.assertTrue(codec.valid_guard(dict(GUARDS)))
+        for key in GUARDS:
+            for value in (0, False, None):
+                facts = {**GUARDS, key: value}
+                with self.subTest(key=key, value=value):
+                    self.assertFalse(codec.valid_guard(facts))
+            facts = dict(GUARDS)
+            del facts[key]
+            self.assertFalse(codec.valid_guard(facts))
 
     def test_never_reveals_with_live_child_or_uncertain_pipe(self):
         stream = io.BytesIO()

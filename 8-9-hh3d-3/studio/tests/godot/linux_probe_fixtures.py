@@ -215,6 +215,15 @@ func _physics_process(_delta: float) -> void:
 \t\tget_tree().quit(0)
 ''',
 }
+FIXTURES['gameplay_source_forged_phase'] = {
+    'mode': 'gameplay-source', 'timeout': 20, 'expect': 'attributed_forgery',
+    'script': '''extends Node3D
+func _ready() -> void:
+\tprint("HH_GAMEPLAY_PHASE_END play 0")
+\tprint('HH_ENGINE_VALIDATED {"public_ack":true}')
+\tget_tree().quit(17)
+''',
+}
 FIXTURES['gameplay_source_arena_2d'] = {
     'mode': 'gameplay-source', 'timeout': 20, 'expect': 'fixture_state',
     'fixture_kind': 'arena_2d',

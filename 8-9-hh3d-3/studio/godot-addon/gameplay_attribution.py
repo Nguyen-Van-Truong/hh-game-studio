@@ -31,6 +31,18 @@ GUARD_FACTS = {
     'fork_errno': 1, 'socket_ipv4_errno': 1,
     'socket_ipv6_errno': 1, 'socket_unix_errno': 1,
 }
+BOUNDARY_FACTS = {'parent_mem_errno', 'parent_fd_errno', 'project_write_errno',
+                  'root_write_errno', 'guard_cloexec'}
+
+
+def valid_guard(facts):
+    if (type(facts) is not dict or set(facts) != set(GUARD_FACTS) | BOUNDARY_FACTS
+            or any(type(v) is not int for v in facts.values())
+            or any(facts[k] != v for k, v in GUARD_FACTS.items())):
+        return False
+    return (facts['parent_mem_errno'] == facts['parent_fd_errno'] == 13
+            and facts['project_write_errno'] in (13, 30)
+            and facts['root_write_errno'] in (13, 30) and facts['guard_cloexec'] == 1)
 
 
 class AttributionError(ValueError):
@@ -201,8 +213,7 @@ def verify(wire, *, context, scripts):
                  and event['pid'] == active['pid'], 'ATTRIBUTION_CHILD_ID')
             if kind == 'guard':
                 need(set(event) == {'kind', 'pid', 'facts'} and active['guard'] is None
-                     and type(event['facts']) is dict and event['facts'] == GUARD_FACTS
-                     and all(_integer(v) for v in event['facts'].values()), 'ATTRIBUTION_GUARD')
+                     and valid_guard(event['facts']), 'ATTRIBUTION_GUARD')
                 active['guard'] = event['facts']
             elif kind == 'output':
                 need(set(event) == {'kind', 'pid', 'channel', 'base64'}

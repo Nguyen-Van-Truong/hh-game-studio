@@ -92,6 +92,7 @@ class GameplaySandboxTests(unittest.TestCase):
                 with patch.object(sandbox.sys, 'argv', ['guard', phase, '--guard-fd', str(write_fd)]), \
                      patch.object(sandbox, 'install', return_value=facts) as install, \
                      patch.object(sandbox, 'verify_denials', return_value=denials), \
+                     patch.object(sandbox, 'verify_parent_boundary', return_value={}), \
                      patch.object(sandbox.os, 'execv', side_effect=exec_checked) as execute, \
                      patch('builtins.print'):
                     if phase == 'play':
