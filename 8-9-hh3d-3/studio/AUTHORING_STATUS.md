@@ -1,8 +1,35 @@
 # O2 authoring state — 2026-10-07
 
-AUTHORITY=0. Branch `codex/o2-authoring-contract`; GT-06 is ACCEPTED and GT-07 is IN_PROGRESS under O10. O2 runs in parallel under O10.5. Gameplay-source remains disabled; test counts/native diagnostics do not close AUTH or a WP.
+AUTHORITY=0. Branch `codex/o2-authoring-contract`. Read the main tools plan for
+current WP/acceptance; historical entries below do not override it. Public
+gameplay-source remains disabled; tests/native diagnostics do not close AUTH.
 
-## 2026-10-07 — PC AUTH-05 adapter contract
+## 2026-10-07 — Native private adapter recovery and overlap proof
+
+- Source `d5e6982a` removes caller-supplied capability flags as authority and
+  keeps public Discovery empty. The private adapter uses actual owner grants.
+  Lookup now validates the writer grant/lease, journal, selected source and
+  retained native evidence; retrying a historical command preserves a later
+  committed revision. Regression: 79 owner/adapter/dependency/runtime tests
+  exit 0; four harness tests exit 0; compilation exit 0.
+- Fresh dry-run then `o2-adapter-20261007-native-01` completed at 20:45 Asia/Saigon:
+  two distinct multifile source publications, actual outer/host/container exit 0,
+  native count exactly 2, Jobs closed/zero/unretained, containers removed and
+  admissions released. Reconnect, context reset, historical retry and reopened
+  retry preserved CURRENT/journal/raw and caused no additional native dispatch.
+  A competing request received BUSY while the first runner callback was active;
+  the second native job ran only after the first. Simulated owner source edits
+  caused READBACK_HASH rejection and remained intact.
+- Runtime closure `d9bda850561fcd56132a96965657ddee4d456b803042bc1df6da488d72509e53`;
+  34 frozen/current driver files and both rebuilt native observations verified
+  offline. Raw/launcher/closeout under `studio/.local/reviews/<run-id>{,-launch,-closeout}`;
+  archive SHA256 `ec05c2a661e818da946a1a8970ccc09dc2090c9d10f131bf971edfbe12f77eb5`.
+- This is private Python-client conformance with a multifile fixture. It does
+  not close external MCP, general dependency attribution, final 2D/3D authored
+  fixture integration, delegated playtests or GT09. Do not rerun this proof just
+  to refresh hashes; next integrate the proven client path with the final fixtures.
+
+## 2026-10-07 — Initial PC adapter contract (superseded above)
 
 - Commit `8504ae2372f586028b13b63f4c7e904cec1485c9` adds the typed PC adapter
   `studio/godot-addon/gameplay_source_adapter.py`. Discovery remains empty until
