@@ -31,6 +31,13 @@ The conformance report is `CANDIDATE_PASS` and `acceptance=false` by design.
 Earlier failed attempts remain in their original raw directories and are not
 relabeled as passes.
 
+The two independent read-only reviews are recorded in
+`20261007-gt09-critic-astra-final.md` and
+`20261007-gt09-critic-sol-final.md`; both explicitly return `TICK=no` for this
+hash. The versioned Godot startup-noise classifier accepts the exact captured
+stderr transcript, but this does not grant acceptance or turn the AUTHORITY=0
+diagnostic into a product signature.
+
 ## Requirements still open
 
 1. Owner must play each fixture for about 15 minutes and record OK/not-OK plus
