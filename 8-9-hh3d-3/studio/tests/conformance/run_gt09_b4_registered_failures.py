@@ -103,8 +103,11 @@ def _raw_receipts(root: Path) -> list[dict[str, Any]]:
         state = value.get("container_state")
         if not isinstance(host, dict) or not isinstance(state, dict):
             continue
+        source_run = next((parent.name for parent in path.parents
+                           if parent.name.startswith("o2-publication-gt09-auth05-")),
+                          path.parent.name)
         rows.append({"run_id": value.get("run_id"),
-                     "source_run": path.parent.parent.parent.name,
+                     "source_run": source_run,
                      "status": value.get("diagnostic_process_clean"),
                      "actual_exit": host.get("exit_code"),
                      "container_exit": state.get("ExitCode"),
