@@ -111,8 +111,7 @@ class GameplaySourceAdapter:
         self._require_connected()
         return Discovery(PROTOCOL_VERSION, SCHEMA_VERSION, SCHEMA_DIGEST,
                          "hh-gameplay-source", ADAPTER_BUILD, self.project_id,
-                         (), {"native_timeout_seconds": 30,
-                              "native_timeout_scope": "authenticated-gameplay-source"})
+                         (), {"native_timeout_seconds": 30})
 
     def _require_connected(self) -> None:
         _need(self._connected, "ADAPTER_DISCONNECTED")
