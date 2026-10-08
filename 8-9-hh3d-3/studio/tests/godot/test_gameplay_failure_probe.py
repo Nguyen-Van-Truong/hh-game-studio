@@ -23,7 +23,8 @@ class GameplayFailureProbeMappingTests(unittest.TestCase):
         busy = linux_probe_fixtures.FIXTURES[probe.failure_case_name('busy')]
         wall = linux_probe_fixtures.FIXTURES[probe.failure_case_name('wall')]
         prefix = ('extends Node3D\nfunc _ready() -> void:\n'
-                  '\tprint("HH_PROBE_BUSY_ENTERED")\n\twhile true:\n')
+                  '\tprint("HH_PROBE_BUSY_ENTERED")\n'
+                  '\tprint("HH_HOSTILE_BEHAVIOR_BEGIN watchdog_loop")\n\twhile true:\n')
         self.assertEqual(busy['script'], prefix + '\t\tpass\n')
         self.assertEqual(wall['script'], prefix + '\t\tOS.delay_msec(1000)\n')
         for fixture in (busy, wall):
