@@ -1,0 +1,14 @@
+{
+  "schema": "hh-gameplay-fixture-host-config-1",
+  "profile": "hh-godot-gameplay-source-1",
+  "version": 1,
+  "authority": 0,
+  "script_enabled": true,
+  "public_runtime_enabled": false,
+  "client_versions": ["pc-godot-4.7.2"],
+  "operations": ["scene.node.create", "scene.node.update", "scene.resource.create", "gameplay-source.inspect", "gameplay-source.publish"],
+  "projects": {
+    "project.registered.arena": {"root_type": "Node2D"},
+    "project.registered.room": {"root_type": "Node3D"}
+  }
+}

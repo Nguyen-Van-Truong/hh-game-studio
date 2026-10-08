@@ -1,7 +1,7 @@
 """Build a fail-closed GT09 MCP/client capability matrix.
 
 This verifier consumes an already completed private-adapter receipt and an
-optional measured external-stdio receipt.  It does not start Godot, Blender,
+optional measured external-stdio/native receipts. It does not start Godot, Blender,
 Docker, an MCP server, or a network client.  The
 private Python adapter is deliberately kept separate from the two pinned
 external MCP repositories: their README/security material is sequencing
@@ -15,13 +15,21 @@ import argparse
 import hashlib
 import json
 from pathlib import Path
+import re
 from typing import Any
+from urllib.parse import urlparse
 
 
 SCHEMA = "hh-gt09-mcp-capability-matrix-1"
 PRIVATE_ADAPTER_SCHEMA = "hh-gameplay-source-adapter-1"
 EXTERNAL_SPIKE_SCHEMA = "hh-gt09-mcp-external-spike-1"
 NATIVE_ATTEMPT_SCHEMA = "hh-gt09-mcp-native-attempt-1"
+NATIVE_SPIKE_SCHEMA = "hh-gt09-mcp-native-spike-2"
+NATIVE_OPERATIONS = {
+    "godot_health_check", "godot_get_server_info",
+    "godot_inspection_get_project_info", "godot_inspection_get_scene_tree",
+    "godot_inspection_get_active_scene", "godot_inspection_get_node_property",
+}
 PINNED_EXTERNAL = (
     {
         "name": "NPGameDev/godot-mcp-toolkit",
@@ -261,6 +269,206 @@ def verify_native_attempt(path: Path) -> dict[str, Any]:
     }
 
 
+def verify_native_receipt(path: Path) -> dict[str, Any]:
+    """Re-derive the v2 spike from raw wire, frozen files, and host Job receipt.
+
+    This admits a measured external limitation, never SUPPORTED. The old v1
+    disconnected attempt remains historical and cannot enter this native lane.
+    ``native.json`` contains child exits captured by the frozen worker; the
+    independent helper sidecar binds that worker's actual exit/PID to its Job.
+    """
+    root = path.absolute().parent
+
+    def artifact(name: str) -> Path:
+        relative = Path(name)
+        _need(not relative.is_absolute() and ".." not in relative.parts,
+              "native_receipt_artifact_path")
+        candidate = root / relative
+        _need(candidate.is_file() and not candidate.is_symlink()
+              and candidate.resolve().is_relative_to(root.resolve()),
+              "native_receipt_raw_missing:" + name)
+        return candidate
+
+    _need(path.name == "native.json", "native_receipt_filename")
+    result = _load(artifact("native.json"))
+    final = _load(artifact("result.json"))
+    job = _load(artifact("host-job.json"))
+    host_exit = _load(artifact("native-host.json"))
+    dry = _load(artifact("dry-run.json"))
+    frozen = _load(artifact("project-freeze.json"))
+    for label, value in (("native", result), ("result", final), ("dry", dry)):
+        _need(value.get("schema") == NATIVE_SPIKE_SCHEMA and value.get("authority") == 0,
+              "native_receipt_schema:" + label)
+        _need(value.get("run_id") == result.get("run_id") and type(value.get("run_id")) is str
+              and bool(value["run_id"]), "native_receipt_run_id:" + label)
+    _need(result.get("acceptance") is False and final.get("acceptance") is False
+          and dry.get("dry_run") is True, "native_receipt_authority")
+    _need(result.get("status") == final.get("status") == "MEASURED_EXTERNAL_NATIVE_LIMIT",
+          "native_receipt_status")
+    _need(final.get("native_sha256") == _sha256(path), "native_receipt_native_hash")
+    _need(final.get("host_job") == job, "native_receipt_job_binding")
+    _need(job.get("host") == "native-host.json" and job.get("stdout") == "native-stdout.txt"
+          and job.get("stderr") == "native-stderr.txt", "native_receipt_host_names")
+    for key in ("target_pid", "wrapper_pid"):
+        _need(type(job.get(key)) is int and job[key] > 0, "native_receipt_job_pid")
+    _need(type(host_exit.get("target_pid")) is int and host_exit["target_pid"] == job["target_pid"]
+          and type(host_exit.get("exit_code")) is int and host_exit["exit_code"] == 0
+          and type(job.get("exit_code")) is int and job["exit_code"] == 0
+          and type(job.get("wrapper_exit_code")) is int and job["wrapper_exit_code"] == 0
+          and job.get("timed_out") is False and job.get("tree_verified") is True
+          and job.get("ownership") == "gated_job_kill_on_close", "native_receipt_host_exit")
+    _need(job.get("argv", [])[1:] == ["run_gt09_mcp_native.py", "--worker", "$SNAPSHOT/dry-run.json"],
+          "native_receipt_worker_command")
+    source_hashes = dry.get("source_hashes")
+    _need(type(source_hashes) is dict and bool(source_hashes), "native_receipt_sources")
+    closure = hashlib.sha256(json.dumps(source_hashes, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
+    _need(result.get("source_closure_sha256") == final.get("source_closure_sha256")
+          == dry.get("source_closure_sha256") == closure, "native_receipt_closure")
+    # These are original run inputs, not the current repository-wide closure.
+    # A subsequent unrelated implementation change cannot relabel this spike.
+    for name, expected in source_hashes.items():
+        source = Path(name)
+        _need(source.is_file() and not source.is_symlink() and _sha256(source) == expected,
+              "native_receipt_source_hash:" + name)
+    pin = _load(Path(__file__).resolve().parents[2] / "toolchain.lock.json")["godot"]
+    _need(dry.get("godot_pin") == result.get("host", {}).get("godot") == pin
+          and pin["version"] == "4.7.2-stable"
+          and source_hashes.get(dry.get("godot")) == pin["gui_sha256"], "native_receipt_godot_pin")
+    external_pin = next(item["pin"] for item in PINNED_EXTERNAL if item["name"] == "hybridindie/godot-mcp")
+    _need(result.get("server_pin") == external_pin, "native_receipt_addon_pin")
+    addon_source = Path(dry["repo"]) / "godot/addons/godot_mcp"
+    _need(any(Path(name).is_relative_to(addon_source) for name in source_hashes), "native_receipt_addon_sources")
+    for name, expected in frozen.items():
+        _need(_sha256(artifact("project/" + name)) == expected, "native_receipt_scratch_hash:" + name)
+        if name.startswith("addons/godot_mcp/"):
+            source = addon_source / name.removeprefix("addons/godot_mcp/")
+            _need(source_hashes.get(str(source)) == expected, "native_receipt_addon_copy:" + name)
+    _need(result.get("scratch_source_unchanged") is True and result.get("input_source_unchanged") is True
+          and result.get("errors") == [], "native_receipt_source_claim")
+    _need(result.get("host_adapter_started") is False and dry.get("host_adapter_started") is False,
+          "native_receipt_route")
+    _need(dry.get("operation_allowlist") == sorted(NATIVE_OPERATIONS), "native_receipt_allowlist")
+    client = result.get("client", {})
+    _need(client == {"name": "hh-k13-native-read-client", "version": "0.2.0", "model": "UNSPECIFIED",
+                     "protocol": "2025-11-25"}, "native_receipt_client")
+    adapter = result.get("adapter", {})
+    bridge = urlparse(adapter.get("bridge_url", ""))
+    _need(adapter.get("name") == "hybridindie/godot-mcp" and bridge.scheme == "ws"
+          and bridge.hostname == "127.0.0.1" and bridge.port is not None, "native_receipt_adapter")
+    _need(Path(adapter.get("fixture", "")).resolve() == (Path(dry["output"]) / "project").resolve(),
+          "native_receipt_scratch_binding")
+    raw_names = {f"{stage}-{stream}.txt" for stage in ("godot", "mcp", "import", "native")
+                 for stream in ("stdout", "stderr")}
+    _need(type(result.get("raw_logs")) is dict and set(result["raw_logs"]) == raw_names,
+          "native_receipt_raw_set")
+    for name, expected in result["raw_logs"].items():
+        _need(_sha256(artifact(name)) == expected, "native_receipt_raw_hash:" + name)
+    for name in ("godot", "mcp"):
+        process = result.get(name, {})
+        _need(type(process.get("pid")) is int and process["pid"] > 0
+              and type(process.get("exit_code")) is int and process["exit_code"] == 0
+              and process.get("forced") is False, "native_receipt_child_exit:" + name)
+    _need(type(result.get("import_exit")) is int and result["import_exit"] == 0
+          and result["mcp"].get("output_cap_exceeded") is False, "native_receipt_import_exit")
+    for stream in ("stdout", "stderr"):
+        _need(result["mcp"].get(stream + "_sha256") == result["raw_logs"]["mcp-" + stream + ".txt"],
+              "native_receipt_mcp_hash")
+
+    # The response stored alongside a request must be byte-content-equivalent
+    # to the independently drained raw MCP stream; banner flags do not count.
+    wire = [json.loads(line) for line in artifact("mcp-stdout.txt").read_text(encoding="utf-8").splitlines() if line.strip()]
+    raw_responses = [message for message in wire if "id" in message]
+    calls = result.get("calls")
+    _need(type(calls) is list and len(calls) >= 9, "native_receipt_calls")
+    _need([row.get("response") for row in calls] == raw_responses, "native_receipt_wire_binding")
+    _need([row.get("request", {}).get("id") for row in calls] == list(range(1, len(calls) + 1)),
+          "native_receipt_request_ids")
+    tool_calls: dict[str, list[dict]] = {}
+    operations = []
+    for row in calls:
+        request, response = row["request"], row["response"]
+        _need(request.get("jsonrpc") == response.get("jsonrpc") == "2.0"
+              and response.get("id") == request["id"] and "error" not in response,
+              "native_receipt_response")
+        _need(row.get("lease_traversed") is False and row.get("journal_traversed") is False,
+              "native_receipt_operation_ownership")
+        method = request.get("method")
+        _need(method in {"initialize", "tools/list", "tools/call"}, "native_receipt_method")
+        if method == "tools/call":
+            params = request.get("params", {})
+            name = params.get("name")
+            _need(name in NATIVE_OPERATIONS and response.get("result", {}).get("isError") is False,
+                  "native_receipt_operation")
+            expected_arguments = ({"max_depth": 1, "lightweight": True}
+                                  if name == "godot_inspection_get_scene_tree" else
+                                  {"node_path": "HUD/Status", "property": "text"}
+                                  if name == "godot_inspection_get_node_property" else {})
+            _need(params.get("arguments") == expected_arguments, "native_receipt_operation_arguments")
+            value = response["result"].get("structuredContent")
+            _need(type(value) is dict, "native_receipt_structured_readback")
+            tool_calls.setdefault(name, []).append(value)
+            operations.append({"request_id": request["id"], "operation": name,
+                               "lease_traversed": False, "journal_traversed": False})
+    _need(calls[0]["request"]["method"] == "initialize" and calls[1]["request"]["method"] == "tools/list",
+          "native_receipt_initialize")
+    _need(all(row["request"]["method"] == "tools/call" for row in calls[2:]), "native_receipt_call_sequence")
+    _need(calls[0]["request"]["params"].get("clientInfo") == {"name": client["name"], "version": client["version"]}
+          and calls[0]["request"]["params"].get("protocolVersion") == client["protocol"]
+          and calls[0]["response"]["result"].get("protocolVersion") == client["protocol"], "native_receipt_protocol")
+    expected_tail = ["godot_get_server_info", "godot_inspection_get_project_info", "godot_inspection_get_active_scene",
+                     "godot_inspection_get_scene_tree", "godot_inspection_get_node_property", "godot_inspection_get_scene_tree"]
+    names = [row["operation"] for row in operations]
+    _need(names[-6:] == expected_tail and names[:-6] and set(names[:-6]) == {"godot_health_check"},
+          "native_receipt_fixed_operations")
+    health = tool_calls["godot_health_check"][-1]
+    _need(health.get("bridge_connected") is True and health.get("bridge_url") == adapter["bridge_url"],
+          "native_receipt_bridge")
+    info = tool_calls["godot_inspection_get_project_info"][0]
+    _need(info.get("godot_version") == pin["version"] + " (official)"
+          and Path(info.get("project_path", "")).resolve() == Path(adapter["fixture"]).resolve()
+          and info.get("main_scene") == "res://scenes/arena.tscn", "native_receipt_project_readback")
+    active = tool_calls["godot_inspection_get_active_scene"][0]
+    _need(active.get("is_open") is True and active.get("path") == "res://scenes/arena.tscn",
+          "native_receipt_active_readback")
+    trees = [value.get("tree", {}) for value in tool_calls["godot_inspection_get_scene_tree"]]
+    children = {node.get("name"): node.get("type") for node in trees[0].get("children", [])}
+    _need(trees[0] == trees[1] and trees[0].get("name") == "Arena" and trees[0].get("type") == "Node2D"
+          and children.get("Player") == "CharacterBody2D" and children.get("Floor") == "StaticBody2D",
+          "native_receipt_scene_readback")
+    prop = tool_calls["godot_inspection_get_node_property"][0]
+    _need(prop.get("exists") is True and prop.get("value") == "HP 3", "native_receipt_property_readback")
+    tools = calls[1]["response"]["result"].get("tools", [])
+    _need(type(tools) is list and tools, "native_receipt_tools")
+    tool_by_name = {tool.get("name"): tool for tool in tools}
+    _need(all(name in tool_by_name and tool_by_name[name].get("annotations", {}).get("readOnlyHint") is True
+              for name in NATIVE_OPERATIONS), "native_receipt_read_only_tools")
+    readonly = all(tool.get("annotations", {}).get("readOnlyHint") is True for tool in tools)
+    fields = {name for tool in tools for name in tool.get("inputSchema", {}).get("properties", {})}
+    ownership_fields = sorted(fields & {"lease", "lease_id", "fencing_epoch", "command_id", "journal"})
+    observed = {key: True for key in ("active_scene", "bridge_connected", "native_readback", "node_property",
+                                    "project_info", "repeat_readback", "scene_tree")}
+    observed.update(server_read_only_surface=readonly, discovery_ownership_fields=ownership_fields,
+                    lease="NOT_TRAVERSED_EXTERNAL_DIRECT_ROUTE", journal="NOT_TRAVERSED_EXTERNAL_DIRECT_ROUTE",
+                    command_id="MCP_REQUEST_ID_ONLY_NO_HH_COMMAND_ID")
+    _need(result.get("observation") == observed, "native_receipt_observation_claim")
+    native_text = artifact("godot-stdout.txt").read_text(encoding="utf-8") + "\n" + artifact("godot-stderr.txt").read_text(encoding="utf-8")
+    _need("Godot Engine v" + pin["observed_version"] + " - " in native_text
+          and result.get("native_pin_banner") is True, "native_receipt_pin_banner")
+    warnings = [line for line in native_text.splitlines() if re.match(r"^(WARNING:|ERROR:|SCRIPT ERROR:)", line)]
+    _need(result.get("native_warning_error_lines") == warnings, "native_receipt_warning_claim")
+    gate = "INCOMPATIBLE" if warnings else "UNSUPPORTED"
+    _need(result.get("native_gate") == gate, "native_receipt_gate_claim")
+    return {"path": path.as_posix(), "sha256": _sha256(path), "run_id": result["run_id"],
+            "server": adapter["name"], "server_pin": external_pin, "client": client, "host": result["host"],
+            "fixture": adapter["fixture"], "source_closure_sha256": closure, "observations": observed,
+            "operations": operations, "native_gate": gate, "supported": False,
+            "warnings": warnings, "host_job_sha256": _sha256(artifact("host-job.json")),
+            "host_exit_sha256": _sha256(artifact("native-host.json")), "result_sha256": _sha256(artifact("result.json")),
+            "limits": ["The measured read operations use the external bridge without HH lease/journal/semantic command_id gates."]
+                      + (["Native editor cleanup emitted warnings/errors; raw logs are retained."] if warnings else []),
+            "client_scope": "SCRIPTED_READ_ONLY_SPIKE_ONLY; K8_K12_MODEL_MATRIX_NOT_TESTED"}
+
+
 def verify_private_receipt(path: Path) -> dict[str, Any]:
     """Check measured private-adapter facts without trusting status banners.
 
@@ -354,9 +562,30 @@ def _external_row(item: dict[str, Any], external: dict[str, Any]) -> dict[str, A
     }
 
 
-def build_matrix(receipt: Path, external_receipt: Path | None = None) -> dict[str, Any]:
+def _native_external_row(native: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "id": native["server"], "status": native["native_gate"], "authority": 0,
+        "transport": "stdio", "pin": native["server_pin"], "supported": False,
+        "client": native["client"], "host": native["host"], "native_receipt": native,
+        "capabilities": {
+            "stdio_initialize": True, "tools_list": True,
+            "read_only_lookup_surface": native["observations"]["server_read_only_surface"],
+            "client_read_only_allowlist": True, "native_postcondition_readback": True,
+            "repeat_readback": True, "native_cleanup_clean": not native["warnings"],
+            "hh_lease": False, "hh_journal": False, "hh_semantic_command_id": False,
+            "native_reconnect_retry": "NOT_TESTED", "context_reset": "NOT_TESTED",
+            "unsupported_client_rejection": "NOT_TESTED", "arbitrary_code_denial": "NOT_TESTED",
+            "k8_k12_client_model_matrix": "NOT_TESTED",
+        },
+        "limits": native["limits"],
+    }
+
+
+def build_matrix(receipt: Path, external_receipt: Path | None = None,
+                 native_receipt: Path | None = None) -> dict[str, Any]:
     private = verify_private_receipt(receipt)
     external = verify_external_receipt(external_receipt) if external_receipt else None
+    native = verify_native_receipt(native_receipt) if native_receipt else None
     rows: list[dict[str, Any]] = [{
         "id": "hh-private-python-adapter",
         "status": "MEASURED_PRIVATE",
@@ -375,7 +604,9 @@ def build_matrix(receipt: Path, external_receipt: Path | None = None) -> dict[st
         ],
     }]
     for item in PINNED_EXTERNAL:
-        if external:
+        if native and item["name"] == native["server"]:
+            rows.append(_native_external_row(native))
+        elif external:
             rows.append(_external_row(item, external))
         else:
             rows.append({
@@ -411,18 +642,22 @@ def build_matrix(receipt: Path, external_receipt: Path | None = None) -> dict[st
         "schema": SCHEMA,
         "authority": 0,
         "acceptance": False,
-        "status": "COMPLETE" if complete else (
+        "status": "EXTERNAL_NATIVE_LIMITS_MEASURED_CLIENT_OPEN" if native else "COMPLETE" if complete else (
             "EXTERNAL_TRANSPORT_MEASURED_NATIVE_OPEN" if external else "INCOMPLETE_EXTERNAL_SPIKE"
         ),
         "generated_by": "gt09_mcp_compatibility.py",
         "private_receipt": private,
         "rows": rows,
         "requirements": {
-            "external_pinned_mcp_spike": "MEASURED_TRANSPORT_ONLY" if external else "OPEN",
+            "external_pinned_mcp_spike": ("HYBRID_NATIVE_LIMIT_MEASURED_OTHER_NATIVE_OPEN" if native
+                                           else "MEASURED_TRANSPORT_ONLY" if external else "OPEN"),
             "model_host_capability_matrix": "OPEN",
             "two_critics_same_final_hash": "OPEN",
         },
         "interpretation": (
+            "Hybridindie native readback and limitations are measured. This scripted client/model "
+            "has no K8-K12 conformance claim; the other external native row remains untested."
+            if native else
             ("Private adapter and pinned external stdio transport facts are measured; native "
              "fixture compatibility and public capability remain unclaimed.") if external else
             "Private adapter reconnect and rejection facts are measured; no external MCP "
@@ -447,8 +682,15 @@ def verify_matrix(matrix: dict[str, Any]) -> list[str]:
     for row in rows:
         if type(row) is not dict or row.get("authority") != 0:
             errors.append("row_authority")
-        if row.get("id") != "hh-private-python-adapter" and row.get("id") in {item["name"] for item in PINNED_EXTERNAL} and row.get("status") not in {"UNMEASURED", "MEASURED_TRANSPORT_ONLY"}:
+        if row.get("id") != "hh-private-python-adapter" and row.get("id") in {item["name"] for item in PINNED_EXTERNAL} and row.get("status") not in {"UNMEASURED", "MEASURED_TRANSPORT_ONLY", "UNSUPPORTED", "INCOMPATIBLE"}:
             errors.append("external_status")
+        if row.get("status") in {"UNSUPPORTED", "INCOMPATIBLE"}:
+            try:
+                native = verify_native_receipt(Path(row["native_receipt"]["path"]))
+                if row != _native_external_row(native):
+                    errors.append("native_row_binding")
+            except (OSError, ValueError, KeyError, TypeError):
+                errors.append("native_row_evidence")
     return errors
 
 
@@ -456,9 +698,10 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--receipt", type=Path, required=True)
     parser.add_argument("--external-receipt", type=Path)
+    parser.add_argument("--native-receipt", type=Path)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args(argv)
-    matrix = build_matrix(args.receipt, args.external_receipt)
+    matrix = build_matrix(args.receipt, args.external_receipt, args.native_receipt)
     errors = verify_matrix(matrix)
     if errors:
         raise SystemExit("invalid_matrix:" + ",".join(errors))

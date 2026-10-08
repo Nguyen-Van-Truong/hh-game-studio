@@ -347,7 +347,92 @@ class RegisteredAuthoringOwner:
         return _copy(result)
 
 
+def _fixture_module():
+    path = HERE / "gameplay_fixture_profile.py"
+    raw = _safe_file(path, maximum=65536)
+    key = "_hh_gameplay_fixture_profile_" + hashlib.sha256(str(path).encode() + b"\0" + raw).hexdigest()
+    if key not in sys.modules:
+        spec = importlib.util.spec_from_file_location(key, path)
+        _need(spec is not None, "REGISTERED_PROFILE_IMPORT")
+        module = importlib.util.module_from_spec(spec)
+        sys.modules[key] = module
+        try:
+            exec(compile(raw, str(path), "exec", dont_inherit=True), module.__dict__)
+        except BaseException:
+            del sys.modules[key]
+            raise
+    return sys.modules[key]
+
+
+def load_fixture_host_profile(project_id: str):
+    return _fixture_module().load_fixture_profile(project_id)
+
+
+class RegisteredAuthoringAdapter:
+    """Fixture-only request route backed by the existing trusted owner.
+
+    The host injects the observed inventory and frozen policy. Requests can
+    choose neither; they carry only the protocol/catalog identity and commands.
+    Default discovery remains empty until an explicit host registration exists.
+    """
+
+    def __init__(self, owner: RegisteredAuthoringOwner, *, inventory, source_files,
+                 host_profile=None):
+        _need(type(owner) is RegisteredAuthoringOwner, "REGISTERED_OWNER_REQUIRED")
+        self.owner = owner
+        self._inventory = inventory
+        self._source_files = dict(source_files)
+        self._profile = host_profile
+        if host_profile is not None:
+            self._descriptor()
+
+    def _descriptor(self):
+        _need(self._profile is not None, "FIXTURE_PROFILE_DISABLED")
+        try:
+            result = _fixture_module().validate_fixture_profile(self._profile,
+                project_id=self.owner.admission.project_id, source_files=self._source_files)
+        except ValueError as exc:
+            raise RegisteredAuthoringOwnerError(getattr(exc, "code", "REGISTERED_PROFILE_INVALID")) from exc
+        # Registration identity and the node/resource allowlist are distinct.
+        result["node_catalog_digest"] = self.owner.profile.catalog_digest
+        result["operations"] = list(self.owner.profile.operations)
+        return result
+
+    def discovery(self, *, project_id=None, protocol_version=PROTOCOL_VERSION, profile=PROFILE):
+        _need(protocol_version == PROTOCOL_VERSION, "UNSUPPORTED_CLIENT_VERSION")
+        _need(profile == PROFILE, "REGISTERED_PROFILE_UNKNOWN")
+        project_id = project_id or self.owner.admission.project_id
+        descriptor = self._descriptor() if self._profile is not None else None
+        enabled = descriptor is not None and project_id == self.owner.admission.project_id
+        return {"schema": SCHEMA, "protocol_version": PROTOCOL_VERSION, "project_id": project_id,
+                "profiles": [descriptor] if enabled else [], "fixture_enabled": enabled,
+                "public_runtime_enabled": False, "authority": 0, "public_ack": False}
+
+    def prepare(self, requests, *, protocol_version=PROTOCOL_VERSION, profile=PROFILE,
+                profile_version=PROFILE_VERSION, profile_digest):
+        _need(protocol_version == PROTOCOL_VERSION, "UNSUPPORTED_CLIENT_VERSION")
+        _need(profile == PROFILE, "REGISTERED_PROFILE_UNKNOWN")
+        descriptor = self._descriptor()
+        _need(type(profile_version) is int and profile_version == descriptor["version"],
+              "FIXTURE_PROFILE_VERSION")
+        _need(profile_digest == descriptor["catalog_digest"], "FIXTURE_PROFILE_DIGEST")
+        return self.owner.prepare(requests, inventory=self._inventory)
+
+    def execute(self, requests, **identity):
+        transaction = self.prepare(requests, **identity)
+        receipt = self.owner.apply(transaction)
+        _need(receipt.get("readback_ack") is True, "REGISTERED_READBACK_REQUIRED")
+        rows = receipt.get("catalog_commands_executed")
+        _need(type(rows) is list and len(rows) == len(transaction.commands), "REGISTERED_COMMAND_READBACK")
+        for row, command in zip(rows, transaction.commands):
+            _need(row.get("command_id") == command.command_id
+                  and row.get("projection_sha256") == command.projection_sha256
+                  and row.get("verified") is True and isinstance(row.get("readback"), dict),
+                  "REGISTERED_COMMAND_READBACK")
+        return receipt
+
+
 __all__ = ["PROFILE", "SCHEMA", "AUTHORITY", "STATE_KIND", "RegisteredProfile",
            "OwnerAdmission", "BlenderHandoff", "RegisteredAuthoringOwner",
            "RegisteredAuthoringOwnerError", "register_profile", "make_admission",
-           "inspect_blender_handoff"]
+           "inspect_blender_handoff", "RegisteredAuthoringAdapter", "load_fixture_host_profile"]

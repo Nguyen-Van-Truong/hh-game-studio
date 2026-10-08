@@ -1,9 +1,8 @@
 """Bounded registered O2 owner probe using the pinned Godot editor.
 
-The owner admits the real saved-room recipe, checks a published Blender GLB
-and then invokes the existing editor/UndoRedo/save/reload diagnostic.  The
-outer receipt binds that native evidence to the exact transaction, lease,
-fencing epoch and Blender manifest.  Everything remains authority zero.
+The owner admits fixture recipe requests and sends their actual validated
+transactions to the reusable catalog addon. Builders remain detached oracles;
+they are never dispatched to construct the native project.
 """
 from __future__ import annotations
 
@@ -19,6 +18,7 @@ from typing import Any
 
 STUDIO = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(STUDIO.parent))
+from studio.protocol.core import canonical_bytes
 
 
 def _load(name: str, relative: str):
@@ -35,8 +35,7 @@ def _load(name: str, relative: str):
 _OWNER = _load("hh_registered_authoring_owner_probe", "godot-addon/registered_authoring_owner.py")
 _ROOM = _load("hh_registered_room_recipe", "tests/godot/saved_room_recipe.py")
 _ARENA = _load("hh_registered_arena_recipe", "tests/godot/saved_arena_recipe.py")
-_ROOM_BUILDER = _load("hh_registered_room_builder", "tests/godot/run_saved_room_builder.py")
-_ARENA_BUILDER = _load("hh_registered_arena_builder", "tests/godot/run_saved_arena_builder.py")
+_NATIVE = _load("hh_registered_catalog_native", "godot-addon/catalog_native_host.py")
 
 
 def _need(value: object, code: str) -> None:
@@ -49,17 +48,11 @@ def _copy(value: Any) -> Any:
 
 
 def _sha(value: Any) -> str:
-    raw = json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode()
-    return "sha256:" + hashlib.sha256(raw).hexdigest()
+    return "sha256:" + hashlib.sha256(canonical_bytes(value)).hexdigest()
 
 
-def _source_manifest(recipe_module, builder) -> tuple[dict[str, str], str]:
-    """Freeze the owner/recipe/runner bytes around the native child.
-
-    The saved-scene builder records its own closure, but the registered owner
-    and this dispatcher sit one layer above it. Bind those bytes too so a
-    receipt cannot be reused after the admission boundary changes.
-    """
+def _source_manifest(*_args) -> tuple[dict[str, str], str]:
+    """One shared room/arena closure, including the actual native executor."""
     names = {
         "godot-addon/registered_authoring_owner.py",
         "godot-addon/authoring_owner.py",
@@ -67,26 +60,20 @@ def _source_manifest(recipe_module, builder) -> tuple[dict[str, str], str]:
         "godot-addon/resource_authoring.py",
         "contracts/godot-authoring-schema-v1.json",
         "tests/godot/run_registered_authoring_probe.py",
-        "tests/godot/run_saved_room_builder.py" if builder is _ROOM_BUILDER
-        else "tests/godot/run_saved_arena_builder.py",
-        "tests/godot/saved_room_builder.gd" if builder is _ROOM_BUILDER
-        else "tests/godot/saved_arena_builder.gd",
-        "tests/godot/saved_room_recipe.py" if recipe_module is _ROOM
-        else "tests/godot/saved_arena_recipe.py",
+        "tests/godot/saved_room_recipe.py",
+        "tests/godot/saved_arena_recipe.py",
+        "godot-addon/gameplay_fixture_profile.py",
+        "godot-addon/fixture_profile.json",
         "toolchain.lock.json",
     }
-    files = {}
-    for name in sorted(names):
-        path = STUDIO / name
-        files[name] = _OWNER._sha_bytes(_OWNER._safe_file(path, maximum=2 * 1024 * 1024))
-    return files, _sha(files)
+    return _NATIVE.source_manifest(names)
 
 
 def _recipe_modules(fixture: str):
     _need(fixture in {"room", "arena"}, "REGISTERED_FIXTURE")
     if fixture == "arena":
-        return _ARENA, _ARENA_BUILDER, "arena"
-    return _ROOM, _ROOM_BUILDER, "room"
+        return _ARENA, _NATIVE, "arena"
+    return _ROOM, _NATIVE, "room"
 
 
 def _inventory(recipe: dict[str, Any], admission: _OWNER.OwnerAdmission):
@@ -119,11 +106,8 @@ def _bound_requests(recipe: dict[str, Any], admission: _OWNER.OwnerAdmission,
 def _verify_native(native_root: Path, transaction, handoff: _OWNER.BlenderHandoff,
                    recipe: dict[str, Any], fixture: str, builder,
                    source_closure_sha256: str) -> dict[str, Any]:
-    # These existing verifiers parse the actual host capture, source/project
-    # bindings, saved bytes and semantic readback. Never infer exit 0 from a
-    # callback return or a child PASS flag.
-    verify = builder.verify_saved_arena if fixture == "arena" else builder.verify_saved_room
-    scene_raw = verify(native_root)
+    _NATIVE.verify_native(native_root)
+    scene_raw = _NATIVE.read(native_root / "project/scenes/authored.tscn")
     result_path = native_root / "result.json"
     _need(result_path.is_file(), "REGISTERED_NATIVE_RESULT_MISSING")
     result = json.loads(result_path.read_text(encoding="utf-8"))
@@ -132,28 +116,11 @@ def _verify_native(native_root: Path, transaction, handoff: _OWNER.BlenderHandof
     observation = json.loads((native_root / "native-observation.json").read_text(encoding="utf-8"))
     _need(observation.get("failures") == [] and observation.get("authority") == 0
           and observation.get("public_ack") is False, "REGISTERED_NATIVE_OBSERVATION")
-    expected_ids = [row["command_id"] for row in recipe["node_commands"]
-                    if row["operation"] == "scene.node.create"]
-    expected_ids += [row["command_id"] for row in recipe["resource_commands"]]
-    expected_ids += [row["command_id"] for row in recipe["node_commands"]
-                     if row["operation"] == "scene.node.update"]
-    _need(list(transaction.command_ids) == expected_ids, "REGISTERED_NATIVE_COMMAND_BINDING")
-    ordered = [row for row in recipe["node_commands"] if row["operation"] == "scene.node.create"]
-    ordered += recipe["resource_commands"]
-    ordered += [row for row in recipe["node_commands"] if row["operation"] == "scene.node.update"]
-    for command, expected in zip(transaction.commands, ordered):
-        proposed = _copy(command.projection)
-        baseline = _copy(expected)
-        for value in (proposed, baseline):
-            value.pop("expected_revision", None)
-            value.pop("expected_generation", None)
-            value["payload"].pop("expected_generation", None)
-        _need(proposed == baseline, "REGISTERED_NATIVE_PROJECTION_BINDING")
-    _need(json.loads((native_root / "recipe.json").read_bytes()) == recipe,
-          "REGISTERED_NATIVE_RECIPE_BINDING")
-    scene_name = "arena.tscn" if fixture == "arena" else "room.tscn"
-    _need((native_root / "project/scenes" / scene_name).is_file(), "REGISTERED_NATIVE_SCENE")
-    return {"native_run_id": result["run_id"],
+    data = json.loads((native_root / "project/catalog-input.json").read_bytes())
+    _need(data["transaction"] == transaction.as_dict(), "REGISTERED_NATIVE_TRANSACTION_BINDING")
+    _need(_NATIVE.semantic_equal(observation["snapshots"]["after_reload"], recipe["expected_snapshot"]),
+          "REGISTERED_RECIPE_ORACLE")
+    return {"native_run_id": native_root.name,
             "native_result_sha256": hashlib.sha256(result_path.read_bytes()).hexdigest(),
             "native_observation_sha256": hashlib.sha256(
                 (native_root / "native-observation.json").read_bytes()).hexdigest(),
@@ -161,7 +128,20 @@ def _verify_native(native_root: Path, transaction, handoff: _OWNER.BlenderHandof
             "native_process": json.loads((native_root / "editor-host/process-exit.json").read_bytes()),
             "source_closure_sha256": source_closure_sha256,
             "blender_handoff": handoff.as_dict(),
+            "catalog_commands_executed": observation["commands"],
+            "readback_ack": True,
             "editor_diagnostic_pass": True}
+
+
+def _bind_handoff(recipe: dict, handoff: _OWNER.BlenderHandoff) -> None:
+    for asset in recipe.get("asset_bindings", ()):
+        asset.update(sha256=handoff.glb_sha256, manifest_sha256=handoff.manifest_sha256)
+
+
+def _native_input(transaction, admission, recipe, handoff, fixture):
+    assets = {"mesh.avatar": {"path": "assets/avatar.glb", "sha256": handoff.glb_sha256}} \
+        if fixture == "room" else {}
+    return _NATIVE.make_input(transaction, admission, recipe["root"], _OWNER._NODE.load_catalog(), assets)
 
 
 def run(*, run_id: str, godot: Path, blender_published: Path,
@@ -183,10 +163,10 @@ def run(*, run_id: str, godot: Path, blender_published: Path,
                                        lease_id="lease.registered." + project_suffix,
                                        fencing_epoch=1, now_ms=now, ttl_ms=120_000)
     handoff = _OWNER.inspect_blender_handoff(blender_published)
+    _bind_handoff(recipe, handoff)
     source_files, source_closure_sha256 = _source_manifest(recipe_module, builder)
     profile_catalog_digest = _OWNER.register_profile().catalog_digest
-    native_prefix = "o2-saved-arena-registered-" if fixture == "arena" \
-        else "o2-saved-room-registered-"
+    native_prefix = "o2-catalog-" + fixture + "-"
     native_run_id = native_prefix + run_id.removeprefix("o2-registered-authoring-")
     _need(len(native_run_id) < 80, "REGISTERED_NATIVE_RUN_ID")
 
@@ -194,9 +174,10 @@ def run(*, run_id: str, godot: Path, blender_published: Path,
         _need(transaction.fencing_epoch == live_admission.fencing_epoch,
               "REGISTERED_APPLY_FENCE")
         _need(transaction.lease_id == live_admission.lease_id, "REGISTERED_APPLY_LEASE")
-        code = builder.run(native_run_id, godot)
-        _need(code == 0, "REGISTERED_GODOT_EXIT")
         native_root = STUDIO / ".local/reviews" / native_run_id
+        _NATIVE.execute(output=native_root, godot=godot,
+            data=_native_input(transaction, live_admission, recipe, live_handoff, fixture),
+            source_files=source_files, blender=live_handoff)
         live_files, live_closure = _source_manifest(recipe_module, builder)
         _need(live_files == source_files and live_closure == source_closure_sha256,
               "REGISTERED_SOURCE_CHANGED")
@@ -219,19 +200,21 @@ def run(*, run_id: str, godot: Path, blender_published: Path,
                                             native_apply=native_apply)
     try:
         requests = _bound_requests(recipe, admission, recipe_module)
-        discovery = owner.discovery(project_id=admission.project_id)
+        adapter = _OWNER.RegisteredAuthoringAdapter(owner, inventory=_inventory(recipe, admission),
+            source_files=source_files, host_profile=_OWNER.load_fixture_host_profile(admission.project_id))
+        discovery = adapter.discovery(project_id=admission.project_id)
         _need(discovery["fixture_enabled"] and len(discovery["profiles"]) == 1,
               "REGISTERED_FIXTURE_DISCOVERY")
-        _need(owner.discovery(project_id="project.ungranted")["profiles"] == [],
+        _need(adapter.discovery(project_id="project.ungranted")["profiles"] == [],
               "REGISTERED_DISCOVERY_LEAK")
-        transaction = owner.prepare(requests, inventory=_inventory(recipe, admission))
-        receipt = owner.apply(transaction)
-        _need(owner.prepare(requests, inventory=_inventory(recipe, admission)).digest == transaction.digest
-              and owner.apply(transaction) == receipt, "REGISTERED_RETRY_CHANGED")
+        identity = {"profile_digest": discovery["profiles"][0]["catalog_digest"]}
+        transaction = adapter.prepare(requests, **identity)
+        receipt = adapter.execute(requests, **identity)
+        _need(adapter.execute(requests, **identity) == receipt, "REGISTERED_RETRY_CHANGED")
         envelope = {"schema": _OWNER.SCHEMA, "run_id": run_id,
                     "authority": _OWNER.AUTHORITY, "public_ack": False,
                     "status": "DIAGNOSTIC_PASS", "fixture": fixture,
-                    "profile": owner.profile.as_dict(),
+                    "profile": discovery["profiles"][0],
                     "discovery": discovery, "same_request_same_receipt": True,
                     "source_files": source_files,
                     "source_closure_sha256": source_closure_sha256,
@@ -267,6 +250,7 @@ def dry_run(*, run_id: str, godot: Path, blender_published: Path, fixture: str =
         revision=_sha(recipe["initial_snapshot"]), project_revision=recipe["planned_project_revision"],
         lease_id="lease.registered." + fixture)
     handoff = _OWNER.inspect_blender_handoff(blender_published)
+    _bind_handoff(recipe, handoff)
     source_files, source_closure_sha256 = _source_manifest(recipe_module, builder)
     pin = json.loads((STUDIO / "toolchain.lock.json").read_bytes())["godot"]["gui_sha256"]
     _need(hashlib.sha256(_OWNER._safe_file(godot.resolve(strict=True), maximum=200 * 1024**2)).hexdigest() == pin,
@@ -274,13 +258,19 @@ def dry_run(*, run_id: str, godot: Path, blender_published: Path, fixture: str =
     actor = _OWNER.RegisteredAuthoringOwner(admission=admission, blender=handoff,
         native_apply=lambda *_args: (_ for _ in ()).throw(AssertionError("dry run native dispatch")))
     try:
-        transaction = actor.prepare(_bound_requests(recipe, admission, recipe_module),
-                                    inventory=_inventory(recipe, admission))
+        adapter = _OWNER.RegisteredAuthoringAdapter(actor, inventory=_inventory(recipe, admission),
+            source_files=source_files, host_profile=_OWNER.load_fixture_host_profile(admission.project_id))
+        discovered = adapter.discovery(project_id=admission.project_id)
+        transaction = adapter.prepare(_bound_requests(recipe, admission, recipe_module),
+            profile_digest=discovered["profiles"][0]["catalog_digest"])
+        data = _native_input(transaction, admission, recipe, handoff, fixture)
+        _need(_NATIVE.semantic_equal(_NATIVE.expected_readbacks(data)[1], recipe["expected_snapshot"]),
+              "REGISTERED_RECIPE_ORACLE")
         return {"schema": _OWNER.SCHEMA, "run_id": run_id, "fixture": fixture,
                 "dry_run": True, "authority": 0, "public_ack": False,
                 "commands": len(transaction.commands), "binary_sha256": pin,
                 "source_files": source_files, "source_closure_sha256": source_closure_sha256,
-                "discovery": actor.discovery(project_id=admission.project_id)}
+                "discovery": discovered}
     finally:
         actor.close()
 

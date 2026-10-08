@@ -233,6 +233,74 @@ class RegisteredOwnerTests(unittest.TestCase):
             self.assertEqual(actor._transactions, {})
         callback.assert_not_called()
 
+    def adapter(self, actor=None, *, enabled=True, files=None):
+        actor = actor or self.actor()
+        profile = owner.load_fixture_host_profile(self.admission.project_id)
+        files = files if files is not None else {
+            'godot-addon/fixture_profile.json': profile.config_sha256,
+            'godot-addon/gameplay_fixture_profile.py': profile.module_sha256}
+        return owner.RegisteredAuthoringAdapter(actor, inventory=self.inventory,
+            source_files=files, host_profile=profile if enabled else None)
+
+    def test_registered_adapter_requires_host_policy_and_binds_both_catalogs(self):
+        hidden = self.adapter(enabled=False)
+        self.assertEqual(hidden.discovery()['profiles'], [])
+        with self.assertRaisesRegex(owner.RegisteredAuthoringOwnerError, 'FIXTURE_PROFILE_DISABLED'):
+            hidden.prepare(self.requests, profile_digest='sha256:' + '0' * 64)
+        client = self.adapter()
+        discovery = client.discovery()
+        profile = discovery['profiles'][0]
+        self.assertTrue(discovery['fixture_enabled'])
+        self.assertFalse(discovery['public_runtime_enabled'])
+        self.assertTrue(profile['script_enabled'])
+        self.assertEqual(profile['node_catalog_digest'], client.owner.profile.catalog_digest)
+        self.assertNotEqual(profile['catalog_digest'], profile['node_catalog_digest'])
+        self.assertEqual(client.discovery(project_id='project.other')['profiles'], [])
+        self.assertEqual(len(client.prepare(self.requests,
+            profile_digest=profile['catalog_digest']).commands), 14)
+
+    def test_registered_adapter_rejects_unbound_config_and_request_identity(self):
+        with self.assertRaisesRegex(owner.RegisteredAuthoringOwnerError, 'FIXTURE_PROFILE_CLOSURE'):
+            self.adapter(files={})
+        callback = Mock(side_effect=AssertionError('unexpected native effect'))
+        client = self.adapter(self.actor(callback))
+        digest = client.discovery()['profiles'][0]['catalog_digest']
+        for override, code in (
+                ({'profile_digest': 'sha256:' + '0' * 64}, 'FIXTURE_PROFILE_DIGEST'),
+                ({'profile_version': True}, 'FIXTURE_PROFILE_VERSION'),
+                ({'profile': 'unknown'}, 'REGISTERED_PROFILE_UNKNOWN'),
+                ({'protocol_version': '2.0'}, 'UNSUPPORTED_CLIENT_VERSION')):
+            with self.subTest(code=code), self.assertRaisesRegex(owner.RegisteredAuthoringOwnerError, code):
+                client.execute(self.requests, **({'profile_digest': digest} | override))
+        callback.assert_not_called()
+
+    def test_registered_adapter_requires_every_readback_and_caches_retry(self):
+        calls = []
+
+        def apply(transaction, admission, handoff):
+            calls.append(transaction.digest)
+            data = runner._NATIVE.make_input(transaction, admission, self.recipe['root'],
+                                            owner._NODE.load_catalog(), {})
+            rows, _ = runner._NATIVE.expected_readbacks(data)
+            return {'transaction_digest': transaction.digest,
+                    'command_ids': list(transaction.command_ids),
+                    'authority': 0, 'public_ack': False, 'native_observed': True,
+                    'state_kind': owner.STATE_KIND, 'lease_id': admission.lease_id,
+                    'fencing_epoch': admission.fencing_epoch, 'blender_handoff': handoff.as_dict(),
+                    'readback_ack': True, 'catalog_commands_executed': rows}
+
+        actor = self.actor(apply)
+        client = self.adapter(actor)
+        identity = {'profile_digest': client.discovery()['profiles'][0]['catalog_digest']}
+        receipt = client.execute(self.requests, **identity)
+        self.assertEqual(client.execute(self.requests, **identity), receipt)
+        self.assertEqual(len(calls), 1)
+        stored = actor._receipts[calls[0]]
+        stored['catalog_commands_executed'][0]['verified'] = False
+        with self.assertRaisesRegex(owner.RegisteredAuthoringOwnerError, 'REGISTERED_COMMAND_READBACK'):
+            client.execute(self.requests, **identity)
+        self.assertEqual(len(calls), 1)
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
