@@ -73,6 +73,24 @@ capability from these diagnostics.
   independent critics on one frozen hash. No checkbox or acceptance marker was
   changed.
 
+## 2026-10-08 — trusted authoring transaction seam (AUTHORITY=0)
+
+- Commit `6fb3ff39` adds `godot-addon/authoring_owner.py` and focused tests.
+  `AuthoringOwner` binds scene.node and scene.resource requests to one coherent
+  trusted node/resource inventory, revision, project revision, generation,
+  lease and fencing epoch. It deduplicates exact command IDs and rejects stale
+  or conflicting retries before producing an immutable transaction digest and
+  projection hashes.
+- The native callback receives only that transaction and its receipt must echo
+  the digest/command IDs while remaining `authority=0`, `public_ack=false` and
+  `native_observed=false`. The seam deliberately does not register a profile,
+  perform Godot UndoRedo/save/reload/readback, or grant AUTH; those remain the
+  next integration gate. 43 focused authoring/resource tests and py_compile
+  passed.
+- Lesson: a typed transaction seam is useful only when its callback is wired to
+  the real owner; a passing planner test must never be promoted to native E2E.
+  Keep this distinction explicit in every package and critic request.
+
 ## 2026-10-08 — Native saved-room repair record
 
 - `29978f8b` added the isolated room builder and its 14 focused tests. The first
