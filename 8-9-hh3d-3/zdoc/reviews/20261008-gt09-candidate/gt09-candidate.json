@@ -1,7 +1,7 @@
 {
   "acceptance": false,
   "authority": 0,
-  "final_frozen_source_hash": "4805cd37f87ab682c3ded46eb9726b31d3276b3bf2378ae148d3398d257f4c54",
+  "final_frozen_source_hash": "38c01d56596434d4738af9ad87e75dfbe312e4241d2eac03f4fd3247efcbfdff",
   "generated_by": "coordinator",
   "lessons": [
     "Freeze verifier and fixture source before long runs.",
@@ -12,7 +12,7 @@
   ],
   "open_gaps": [
     "Connect candidate scene/node/resource commands to registered adapter boundary for real authoring E2E.",
-    "Measure the two pinned external MCP clients on an exact host/model/version matrix or keep support unclaimed.",
+    "Complete the exact model/host capability matrix and keep native/public MCP capability unclaimed until measured.",
     "Repair native adapter environment/perf boundary and prove dependency closure with clean process/log/readback.",
     "Run two read-only independent critics on this exact package hash; no self-acceptance."
   ],
@@ -43,9 +43,9 @@
       "status": "CANDIDATE_PASS"
     },
     "mcp_matrix": {
-      "path": "studio/.local/reviews/gt09-mcp-20261008-02.json",
-      "sha256": "f8fdf9e82883df514de27bf6d54e338dd2873b0b41653dd2f23c6de96a0677f4",
-      "status": "INCOMPLETE_EXTERNAL_SPIKE"
+      "path": "studio/.local/reviews/gt09-mcp-capability-matrix-20261008.json",
+      "sha256": "b3b411442544ac34916a0686bfc3f25c3428783a962adb58ba7b037a5624ed68",
+      "status": "EXTERNAL_TRANSPORT_MEASURED_NATIVE_OPEN"
     },
     "plan_sha256": "944291aa3698f8db0b7cd40404121c76bcbd16dc074985fe32e3d87c210563dc",
     "room": {
@@ -56,11 +56,17 @@
       "source_closure_sha256": "a0ea0ec124cb5a8e4fcc0b722345143802c496603e543f82eed9ed97f1de2529",
       "status": "PLAYTEST_EVIDENCE_READY"
     },
-    "status_sha256": "1312db78b705df447b80d34c8d1a83290c329df43d64733a27c46af740d534af"
+    "status_sha256": "27920293c156508f9a531b5a26520cfd8f922addfe08fc96fb92c39e356031b6",
+    "mcp_external_spike": {
+      "path": "studio/.local/reviews/gt09-mcp-spike-20261008.json",
+      "sha256": "5615048a9f1381883cd65a3093db13ae0c2e33eb1905a0ff16418fb04fd9f81b",
+      "status": "MEASURED_TRANSPORT_ONLY",
+      "run_id": "gt09-mcp-spike-20261008-01"
+    }
   },
   "requirements": {
     "dependency_closure": "OPEN_DIAGNOSTIC",
-    "external_pinned_mcp_spike": "OPEN",
+    "external_pinned_mcp_spike": "MEASURED_TRANSPORT_ONLY",
     "historical_native_fixture_conformance": "CANDIDATE_PASS_STALE_CLOSURE",
     "human_playtest": "NOT_PERFORMED",
     "model_host_capability_matrix": "OPEN",
@@ -74,6 +80,6 @@
   "source_binder": {
     "path": "zdoc/reviews/20261008-gt09-candidate/source-manifest.json",
     "schema": "hh-gt09-source-binder-1",
-    "sha256": "78d6a7b9e99db6ae99f101e09e9a9782ae55660ff17556228fe7cfc1c80817da"
+    "sha256": "048069f3a3e9b63c90040b879d637ce3a5b1d7f305416b6eeef6e926e69f4f2e"
   }
 }

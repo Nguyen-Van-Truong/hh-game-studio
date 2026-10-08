@@ -6,7 +6,6 @@
     "godot_console": "c8f0a6bc45a19b33541501e57f6f7cd972ab18453743266339d495cbbe846643",
     "godot_gui": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424"
   },
-  "binder_payload_sha256": "4805cd37f87ab682c3ded46eb9726b31d3276b3bf2378ae148d3398d257f4c54",
   "evidence_refs": {
     "arena_manifest": "f4d33b6dd674987eed0b3a5ea5b615c025a5512bafde9dfbd7d4c88611f94bb4",
     "historical_native_conformance": {
@@ -15,8 +14,17 @@
       "source_closure_sha256": "c91bc0d770e9730cb10a3bc9fd8e80729f6db9d3485b024664706658993be51c",
       "status": "CANDIDATE_PASS_STALE_CLOSURE"
     },
-    "mcp_matrix": "f8fdf9e82883df514de27bf6d54e338dd2873b0b41653dd2f23c6de96a0677f4",
-    "room_manifest": "91c5338b8ee154ab25545d803e41f0c4e0d684ed3c039e495ed0e48d7fa33900"
+    "mcp_matrix": {
+      "path": "studio/.local/reviews/gt09-mcp-capability-matrix-20261008.json",
+      "sha256": "b3b411442544ac34916a0686bfc3f25c3428783a962adb58ba7b037a5624ed68",
+      "status": "EXTERNAL_TRANSPORT_MEASURED_NATIVE_OPEN"
+    },
+    "room_manifest": "91c5338b8ee154ab25545d803e41f0c4e0d684ed3c039e495ed0e48d7fa33900",
+    "mcp_external_spike": {
+      "path": "studio/.local/reviews/gt09-mcp-spike-20261008.json",
+      "sha256": "5615048a9f1381883cd65a3093db13ae0c2e33eb1905a0ff16418fb04fd9f81b",
+      "status": "MEASURED_TRANSPORT_ONLY"
+    }
   },
   "fixtures": {
     "arena": {
@@ -48,12 +56,13 @@
       }
     }
   },
-  "git_head": "814270dee06706fea667b4258330b0244e637bf9",
+  "git_head": "7175739fe39d39acab069840ec1b8ef873e09bc0",
   "lessons": [
     "Freeze verifier and fixture source before long runs.",
     "Use prepare then dry-run then one host worker per fixture path.",
     "Keep raw failures and never hand-edit evidence.",
-    "Any source change invalidates closure-bound evidence."
+    "Any source change invalidates closure-bound evidence.",
+    "Measure pinned external transport separately; never promote stdio facts to native fixture support."
   ],
   "schema": "hh-gt09-source-binder-1",
   "shared_host_files": {
@@ -303,6 +312,10 @@
     "studio/tests/godot/gameplay_fixture/fixture_dependencies.gd": "4e4536e2bc8d1e3f00c0530b063fca99d3ae100daea5dfb632981bc36e41d1f3",
     "studio/tests/godot/gameplay_fixture/fixture_lifecycle.gd": "efb22d68ee515c867f554945b3b800b49e9f1f43ddbbccd6fe6ddab5f404120a",
     "studio/tests/godot/gameplay_fixture/room3d_native.gd": "b25779167f746167b004c3b9c3808f208d423f08e06c9a46bd32fa294edd5a2a",
-    "studio/tests/godot/run_delegated_playtest.py": "998f043e6bdf4f9d75f0b46399bb1b469da35c65bd03b1cc73e99a4ab5891345"
-  }
+    "studio/tests/godot/run_delegated_playtest.py": "998f043e6bdf4f9d75f0b46399bb1b469da35c65bd03b1cc73e99a4ab5891345",
+    "studio/tests/conformance/gt09_mcp_compatibility.py": "99dace2ff0594c2ecc0e2176f81d89003185cb83999980df324a92a9b08c431f",
+    "studio/tests/conformance/run_gt09_mcp_spike.py": "f3e877df676131b3e2db5920a912ca222ecc141e6c5d9da2f5c9f0d6c8e9441a",
+    "studio/tests/conformance/test_gt09_mcp_compatibility.py": "f8ea0c95ba08d8748a5bbb81c97ea557146931c4da93bee57749af01bc831cb4"
+  },
+  "binder_payload_sha256": "38c01d56596434d4738af9ad87e75dfbe312e4241d2eac03f4fd3247efcbfdff"
 }
