@@ -1,20 +1,59 @@
-# O2 authoring state — 2026-10-07
+# O2 authoring state — 2026-10-08
 
-AUTHORITY=0. Branch `codex/o2-authoring-contract`. Read the main tools plan for
+AUTHORITY=0. Branch `codex/hh3d-s14-bootstrap`. Read the main tools plan for
 current WP/acceptance; historical entries below do not override it. Public
 gameplay-source remains disabled; tests/native diagnostics do not close AUTH.
 
-## Current integrated checkpoint — native attribution
+## Current integrated checkpoint — authenticated native diagnostics (2026-10-08)
 
-O2 is integrated on main under O10.5 (37d6a24f), not waiting for another merge.
-Both final fixtures passed the private adapter/recovery probe. Opt-in parent
-phase attribution now survives publication/reopen; a native hostile fixture
-printing fake PASS/ACK still fails with actual play exit 17 and driver exit 45.
-Trusted pre-exec OS probes confirmed parent-memory/FD and write denials; 61
-focused tests exited 0. Exact retained source/evidence and limits are in
-`zdoc/reviews/20261007-gt09-critic-package-candidate.md`. Next: trusted dependency
-observation, public catalog, lifecycle/playtests and MCP capability evidence.
-No full AUTH or public capability claim follows from these diagnostics.
+O2 is integrated on the current line (`f4884d19`, branch
+`codex/hh3d-s14-bootstrap`). The authenticated native publication probe
+`o2-publication-gt09-20261008-07` and the two-job adapter probe
+`o2-adapter-gt09-20261008-06` both have actual host/container exit 0, clean
+owned cleanup, and `DIAGNOSTIC_PASS` with runtime closure
+`c138f013280fbbe1fb56e65b61034d1f03b7abbc986283b5cacac1f75d758159`.
+The publication result records a real saved-arena readback and Blender handoff;
+the adapter result records retry/reconnect/context-reset, owner-edit preservation,
+and BUSY overlap. These are private diagnostics only: `AUTHORITY=0`,
+`public_ack=false`, `sandbox_acceptance=false`, and full external MCP/parallel
+native conformance remain false.
+
+The trusted loader now binds the complete admitted resource/scene/script inventory
+without treating `project.godot` as a loader node. The scoped literal-resource
+inventory contract is covered by focused fail-closed tests, while generic
+`dependency_closure_verified=false` and `dynamic_dependencies_verified=false`
+remain honest until a complete native closure is proven.
+The interrupted delegated arena run `gt09-playtest-20261008-15` has no host result
+and is incomplete; its raw logs remain untouched. The old room/arena delegated
+runs remain valid only as delegated lifecycle evidence on their own closures.
+
+The typed native saved-room path now has a fresh verified run
+`o2-saved-room-20261008-05`: Godot 4.7.2 actual exit 0, clean Job/tree, typed
+Node3D/CharacterBody3D/StaticBody3D/Area3D/Camera3D resources, UndoRedo
+do/undo/redo, PackedScene save/reload, canonical numeric readback, and Blender
+asset-resource provenance. It remains `AUTHORITY=0` and metadata-only for GLB
+import (`asset_import_verified=false`); it does not close gameplay fixture
+conformance. Runs `-01..-04` are retained as raw failure/repair history.
+
+Next work is binding this room proof into the two-fixture conformance package,
+then the current-source arena/room final evidence, dependency/MCP gaps and two
+critics. Do not reuse the stale candidate hash, do not rerun long playtests
+before that source/evidence freeze, and do not claim GT-09 or public
+gameplay-source capability from these diagnostics.
+
+## 2026-10-08 — Native saved-room repair record
+
+- `29978f8b` added the isolated room builder and its 14 focused tests. The first
+  native run exposed float serialization drift and missing asset inventory in
+  the snapshot; the second exposed the verifier's empty-snapshot contract; the
+  third exposed phase-check key drift. Each failure was preserved under a fresh
+  run ID and repaired in place. `f4884d19` aligns the verifier with the typed
+  resource-bind phase. Run `o2-saved-room-20261008-05` then passed with real
+  process exit and byte-bound scene/recipe/observation artifacts.
+- Lesson: keep candidate-level asset inventory separate from node-create
+  properties, normalize native floats at the evidence boundary, and make the
+  verifier's expected check set derive from the command phases rather than
+  assuming every final property was present in the initial create command.
 
 ## 2026-10-07 — O10.5 integration with current GT09 fixtures
 
