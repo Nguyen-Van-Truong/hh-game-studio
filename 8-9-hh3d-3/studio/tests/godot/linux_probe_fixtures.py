@@ -326,6 +326,7 @@ FIXTURES['gameplay_source_spawn'] = {
     'script': '''extends Node3D
 func _ready() -> void:
 \tvar output: Array = []
+\tprint("HH_HOSTILE_BEHAVIOR_BEGIN spawn")
 \tvar status: int = OS.execute("/usr/bin/printf", PackedStringArray(["HH_UNEXPECTED_CHILD"]), output, true)
 \tprint("HH_PROBE_SPAWN " + JSON.stringify({"exit": status, "output": output}))
 \tget_tree().quit(0)
@@ -335,10 +336,14 @@ FIXTURES['gameplay_source_boundary'] = {
     'mode': 'gameplay-source', 'timeout': 20, 'expect': 'boundary_observation',
     'script': '''extends Node3D
 func _ready() -> void:
+\tprint("HH_HOSTILE_BEHAVIOR_BEGIN source_write")
 \tvar source_file: FileAccess = FileAccess.open("res://scripts/fixture_actor.gd", FileAccess.WRITE)
+\tprint("HH_HOSTILE_BEHAVIOR_BEGIN root_write")
 \tvar root_file: FileAccess = FileAccess.open("/escape-at-root", FileAccess.WRITE)
+\tprint("HH_HOSTILE_BEHAVIOR_BEGIN docker_socket")
 \tvar docker_socket: bool = FileAccess.file_exists("/var/run/docker.sock")
 \tvar network: StreamPeerTCP = StreamPeerTCP.new()
+\tprint("HH_HOSTILE_BEHAVIOR_BEGIN network_connect")
 \tvar status: int = network.connect_to_host("192.0.2.1", 443)
 \tprint("HH_PROBE_BOUNDARY " + JSON.stringify({"source_denied": source_file == null, "root_denied": root_file == null, "docker_socket_absent": not docker_socket, "external_connect_status": status}))
 \tif source_file != null:
@@ -360,6 +365,7 @@ FIXTURES['gameplay_source_busy'] = {
     'script': '''extends Node3D
 func _ready() -> void:
 \tprint("HH_PROBE_BUSY_ENTERED")
+\tprint("HH_HOSTILE_BEHAVIOR_BEGIN watchdog_loop")
 \twhile true:
 \t\tpass
 ''',
@@ -374,6 +380,7 @@ FIXTURES['gameplay_source_wall_wait'] = {
     'script': '''extends Node3D
 func _ready() -> void:
 \tprint("HH_PROBE_BUSY_ENTERED")
+\tprint("HH_HOSTILE_BEHAVIOR_BEGIN watchdog_loop")
 \twhile true:
 \t\tOS.delay_msec(1000)
 ''',
