@@ -59,9 +59,19 @@ def expected_checks(recipe):
     for row in recipe['expected_snapshot']['nodes']:
         names.update(('class_' + row['node_type'], 'unknown_property_rejected_' + row['node_type']))
         for prop in row['properties']:
+            # `shape` is attached by a later typed resource-bind command.  It
+            # is not part of the node-create payload and therefore must not be
+            # expected as a create-phase property check.
+            if prop == 'shape':
+                continue
             names.update((f"property_exists_{row['stable_id']}_{prop}", f"set_{row['stable_id']}_{prop}"))
     for kind in ('node', 'resource'):
         names.update(kind + '_operation_' + row['command_id'] for row in recipe[kind + '_commands'])
+    # Resource bindings are a second typed phase after node creation.  Keep
+    # their readback checks in the verifier's exact expected key set.
+    names.update('bind_resource_' + row['command_id']
+                 for row in recipe['node_commands']
+                 if row['operation'] == 'scene.node.update')
     return names
 
 
