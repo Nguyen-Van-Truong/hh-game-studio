@@ -2,11 +2,15 @@
 
 AUTHORITY=0; GT09=IN_PROGRESS; no public gameplay-source or acceptance claim.
 Source-of-truth plan: `zdoc/8-9-godot-blender-agent-studio-plan.txt` S270.
-Current source head: `8e896100`; old detailed log is archived in
+Current source head: `ddcbce73`; old detailed log is archived in
 `AUTHORING_STATUS_HISTORY_20261008.md` and remains historical evidence.
-Native registered-owner diagnostic `o2-registered-authoring-20261008-02` is real
-Godot Editor/UndoRedo/save/reload/readback with 14 IDs, exit 0 and Blender hash
-binding, but profile is CANDIDATE_ONLY/runtime_enabled=false/public_ack=false.
+Registered-owner diagnostics now cover room and arena (18 catalog-bound commands,
+actual Godot exit 0, Blender hash binding), but their closures predate the current
+head and remain diagnostic only; profile is CANDIDATE_ONLY/runtime_enabled=false/public_ack=false.
+K4 has a fail-closed literal dependency admission/binding API and focused tests;
+K13 has a native MCP attempt verifier, while the measured bridge-disconnected
+attempt remains UNSUPPORTED_LEASE with Godot exit 1. B4 hostile markers are bound
+to raw evidence, but K3–K7 remain OPEN.
 Delegated 15-minute arena/room runs are current-source lifecycle evidence only;
 human playtest remains NOT_PERFORMED and no owner signature is claimed.
 S270/O13 requires K1–K15 on one final closure, then self-check, one package and
@@ -17,28 +21,29 @@ matrix until that self-check passes.
 
 | K | State | Evidence / next boundary |
 |---|---|---|
-| K1 | OPEN | Registered profile is candidate-only; public discovery/fixture-only owner route still required. |
-| K2 | REUSE_ONLY | Static fail-closed authoring tests and native room diagnostic; final registered allowlist matrix pending. |
+| K1 | REUSE_ONLY | Fixture-scoped discovery/version/digest and room/arena admission tests pass; final-closure native run pending. |
+| K2 | REUSE_ONLY | Registered allowlist, root/revision checks, idempotency/conflict and uncertain-apply tests pass; final-closure native run pending. |
 | K3 | OPEN | Registered catalog script/controller behavior change and replay proof pending. |
-| K4 | OPEN | Authenticated static dependency graph, UID/import and rejection cases pending. |
+| K4 | OPEN | Static literal admission/binding API and tests pass; registered final closure, UID/import readback and rejection run pending. |
 | K5 | OPEN | Registered-path syntax/type/timeout/stop preservation matrix pending. |
 | K6 | OPEN | Registered publish cut/retry/reopen and owner-edit recovery matrix pending. |
-| K7 | OPEN | AUTH-05 executor hostile cases need final registered-source closure. |
+| K7 | OPEN | Hostile markers and raw receipt verifier pass; registered-source executor rerun on current closure pending. |
 | K8 | OPEN | Both fixtures must be authored through catalog commands; builder remains oracle only. |
 | K9 | OPEN | Seeded scene/resource/script repair through catalog batch and replay pending. |
 | K10 | REUSE_ONLY | Native conformance/playtest shows gameplay/replay/save/perf, but not catalog-authored final closure. |
 | K11 | REUSE_ONLY | Adapter reconnect/retry/context-reset/BUSY evidence exists; final matrix binding pending. |
 | K12 | OPEN | Prompt-injection metadata/log/URL boundary must be bound to final fixture closure. |
-| K13 | OPEN | Pinned MCP transport measured; native fixture/model/host operation matrix pending. |
+| K13 | OPEN | Pinned transport and native attempt are measured; bridge disconnected, Godot exit=1, lease/journal unmeasured, so native matrix remains unsupported. |
 | K14 | OPEN | Single final regression matrix and GT-08A/TX15 closure pending. |
 | K15 | REUSE_ONLY | Delegated 15-minute runs exist; rerun only in final matrix after catalog authoring is frozen. |
 
 ## Next (O13.5)
 
-B2 is complete: `run_gt09_matrix.py` and its 3-test contract pass; `--dry-run`
-enumerates all 15 rows without launching an engine. Then B3–B5 close K1–K10, B6 closes K11–K15 and freezes one
-closure, B7 runs two critics only after self-check. Preserve raw failures and use
-fresh IDs; do not tick GT09 or promote any diagnostic flag.
+B2 is complete. B3/K1–K2, K4 static admission, K13 failure-preserving verification,
+and B4 hostile-marker binding are implemented with focused tests, but no row has a
+final-closure PASS. Next is B5: catalog-author the two fixtures, seed/repair/replay
+their defects, and bind K3/K5/K6/K7 to one new closure; then B6 runs K11–K15.
+Preserve raw failures and use fresh IDs; do not tick GT09 or promote any diagnostic flag.
 
 ## Lessons carried forward
 
@@ -48,6 +53,7 @@ fresh IDs; do not tick GT09 or promote any diagnostic flag.
 - A timeout without host-captured exit is incomplete; keep raw evidence and remint only after a bounded repair.
 - Transport-only MCP and delegated lifecycle output do not prove native/public capability; record client/model/host/version for each measured row.
 - One writer/file, one Godot worker per path, dry-run before native, and no critic before O13 self-check.
+- A diagnostic verifier must reject stale closure and malformed raw receipts itself; a child PASS banner or MCP request ID is never a host command receipt.
 
 History archive: `AUTHORING_STATUS_HISTORY_20261008.md`.
 
