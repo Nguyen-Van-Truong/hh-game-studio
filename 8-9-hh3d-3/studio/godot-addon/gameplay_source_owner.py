@@ -10,6 +10,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from dataclasses import dataclass, asdict
+import base64
 import hashlib
 import importlib.util
 import os
@@ -694,11 +695,37 @@ class GameplaySourcePublicationOwner:
             native_raw = executor._read_file(evidence_directory / "result.json", 512 * 1024)
             _need(canonical_bytes(parse_json(native_raw)) == canonical_bytes(result),
                   "GAMEPLAY_OWNER_NATIVE_RESULT_BINDING")
-            stdout = executor._read_file(evidence_directory / "engine-stdout.txt", 262144)
             if result.get("attribution_enabled") is True:
-                stdout = executor.read_attribution(evidence_directory, result)["child_stdout"]
-            marker = _load("gameplay_dependency_observation")
-            report = marker.parse_dependency_observation(stdout, expected_files)
+                attribution = executor.read_attribution(evidence_directory, result)
+                observer = _load("gameplay_native_dependencies")
+                rows = {row["phase"]: row for row in attribution.get("dependency_observations", [])}
+                _need(set(rows) == {"dependencies", "dependencies_reopen"},
+                      "GAMEPLAY_OWNER_DEPENDENCY_PHASES")
+                _need(all(type(row.get("returncode")) is int and row["returncode"] == 0
+                          for row in rows.values()), "GAMEPLAY_OWNER_DEPENDENCY_EXIT")
+                first = base64.b64decode(rows["dependencies"]["stdout_base64"], validate=True)
+                reopened = base64.b64decode(rows["dependencies_reopen"]["stdout_base64"], validate=True)
+                all_files = {}
+                for name in result.get("input_hashes_before", {}):
+                    if name == "project.godot" or name.startswith(".godot/"):
+                        continue
+                    raw = executor._read_file(evidence_directory / "snapshot" / name, 2 * 1024 * 1024)
+                    _need(_sha(raw) == result["input_hashes_before"][name],
+                          "GAMEPLAY_OWNER_DEPENDENCY_INPUT_HASH")
+                    all_files[name] = raw
+                report = observer.validate(all_files, first, reopened_raw=reopened,
+                                           validator=_load("gameplay_dependency_evidence"))
+                report["native_observation_verified"] = True
+                _need(all(all_files.get(name) == raw for name, raw in expected_files.items()),
+                      "GAMEPLAY_OWNER_DEPENDENCY_POLICY_FILES")
+                graph_paths = {row["path"] for row in observer.parse(first)["nodes"]}
+                _need(set(expected_files).issubset(graph_paths),
+                      "GAMEPLAY_OWNER_DEPENDENCY_POLICY_GRAPH")
+                stdout = first
+            else:
+                stdout = executor._read_file(evidence_directory / "engine-stdout.txt", 262144)
+                marker = _load("gameplay_dependency_observation")
+                report = marker.parse_dependency_observation(stdout, expected_files)
         except GameplaySourceOwnerError:
             raise
         except (OSError, ValueError, SafetyViolation):
@@ -922,9 +949,11 @@ class GameplaySourcePublicationOwner:
             # directory exercises the real Docker/Godot executor before ACK.
             expected_native_inputs = self._native_inputs(candidate)
             def run_stage():
-                observed = self._runner(self._safe_revision(candidate_revision) / "project",
-                                         mode="gameplay-source", output=run_dir, timeout_seconds=20,
-                                         source_closure_sha256=self.source_closure_sha256)
+                run_kwargs = dict(mode="gameplay-source", output=run_dir, timeout_seconds=20,
+                                  source_closure_sha256=self.source_closure_sha256)
+                if self._dependency_observation_required and self._runner == self._executor.run:
+                    run_kwargs["authenticated"] = True
+                observed = self._runner(self._safe_revision(candidate_revision) / "project", **run_kwargs)
                 observed = self._read_native_result(run_dir, observed)
                 # Diagnose executor failures before requiring its dependency output.
                 self._validate_native(observed, expected_input_hashes=expected_native_inputs,

@@ -1,6 +1,8 @@
 extends Node3D
 ## Fixed input/physics diagnostic; not a public authoring transaction.
 
+const Dependencies = preload("res://scripts/fixture_dependencies.gd")
+const Lifecycle = preload("res://scripts/fixture_lifecycle.gd")
 const Bullet: PackedScene = preload("res://scenes/projectile.tscn")
 const FINAL_TICK: int = 150
 const MAX_EFFECT_PARTICLES: int = 64
@@ -85,72 +87,8 @@ func _spawn_effect(kind: String, at: Vector2, amount: int, direction: Vector2) -
 	elif kind == "explosion":
 		explosion_count += 1
 
-func _sha256(path: String) -> String:
-	var context := HashingContext.new()
-	context.start(HashingContext.HASH_SHA256)
-	context.update(FileAccess.get_file_as_bytes(path))
-	return context.finish().hex_encode()
-
-func _dependency_node(path: String) -> Dictionary:
-	var resource: Resource = ResourceLoader.load("res://" + path)
-	if resource == null:
-		return {}
-	var kind: String = "script" if resource is Script else "scene"
-	var edges: Array[Dictionary] = []
-	var targets: Array[String] = []
-	if resource is Script:
-		# Observe loaded Resource constants rather than source text.
-		for value: Variant in (resource as Script).get_script_constant_map().values():
-			if value is Resource:
-				targets.append((value as Resource).resource_path)
-	else:
-		for dependency: String in ResourceLoader.get_dependencies("res://" + path):
-			var parts: PackedStringArray = dependency.split("::", true)
-			if parts.size() == 1:
-				targets.append(parts[0])
-			elif parts.size() == 3 and parts[1].is_empty():
-				var uid: int = ResourceUID.text_to_id(parts[0])
-				if ResourceUID.has_id(uid) and ResourceUID.get_id_path(uid) != parts[2]:
-					return {}
-				targets.append(parts[2])
-			else:
-				return {}
-	var seen: Dictionary = {}
-	for target: String in targets:
-		if not target.begins_with("res://") or target.contains("::"):
-			return {}
-		if not seen.has(target):
-			seen[target] = true
-			edges.append({"kind": "script_preload" if resource is Script else "scene_ext_resource",
-				"target": target.trim_prefix("res://")})
-	var node: Dictionary = {"path": path, "kind": kind,
-		"size_bytes": FileAccess.get_file_as_bytes("res://" + path).size(),
-		"sha256": _sha256("res://" + path), "edges": edges}
-	var resource_uid: int = ResourceLoader.get_resource_uid("res://" + path)
-	if resource_uid != ResourceUID.INVALID_ID:
-		node["uid"] = ResourceUID.id_to_text(resource_uid)
-	return node
-
 func _dependency_observation() -> Dictionary:
-	var entry: String = get_tree().current_scene.scene_file_path.trim_prefix("res://")
-	var pending: Array[String] = [entry]
-	var seen: Dictionary = {}
-	var nodes: Array[Dictionary] = []
-	while not pending.is_empty():
-		var path: String = pending.pop_front()
-		if seen.has(path):
-			continue
-		seen[path] = true
-		if seen.size() > 256:
-			return {}
-		var node: Dictionary = _dependency_node(path)
-		if node.is_empty():
-			return {}
-		nodes.append(node)
-		for edge: Dictionary in node["edges"]:
-			pending.append(edge["target"])
-	return {"schema": "hh-gameplay-dependency-observation-1", "version": 1,
-		"entrypoint": entry, "nodes": nodes}
+	return Dependencies.observe(get_tree().current_scene.scene_file_path.trim_prefix("res://"))
 
 func _ready() -> void:
 	Input.use_accumulated_input = false
@@ -171,6 +109,7 @@ func _ready() -> void:
 	if not _build_world():
 		get_tree().quit(32)
 		return
+	Lifecycle.paint_arena(arena)
 	# Signal connections and InputMap are runtime fixture logic.
 	pickup.body_entered.connect(_pickup_entered)
 	if saved_world == null:
@@ -179,6 +118,10 @@ func _ready() -> void:
 		ui.add_child(hud)
 		add_child(ui)
 	_event("boot")
+	if Lifecycle.requested():
+		var lifecycle := Lifecycle.new()
+		add_child(lifecycle)
+		lifecycle.begin(Callable(self, "_lifecycle_state"), Callable(self, "_lifecycle_reset"), "Arena fixture")
 
 func _build_world() -> bool:
 	if saved_world != null:
@@ -281,17 +224,17 @@ func _key(key: Key, pressed: bool) -> void:
 func _physics_process(delta: float) -> void:
 	var started := Time.get_ticks_usec()
 	tick += 1
-	if tick == 2:
+	if tick == 2 and not Lifecycle.requested():
 		_key(KEY_D, true)
-	if tick == 25:
+	if tick == 25 and not Lifecycle.requested():
 		_key(KEY_F, true)
-	if tick == 26:
+	if tick == 26 and not Lifecycle.requested():
 		_key(KEY_F, false)
-	if tick == 28:
+	if tick == 28 and not Lifecycle.requested():
 		_key(KEY_SPACE, true)
-	if tick == 29:
+	if tick == 29 and not Lifecycle.requested():
 		_key(KEY_SPACE, false)
-	if tick == 120:
+	if tick == 120 and not Lifecycle.requested():
 		_key(KEY_D, false)
 		stopped_x = player.position.x
 	if Input.is_action_just_pressed("shoot"):
@@ -332,8 +275,46 @@ func _physics_process(delta: float) -> void:
 	hud.text = "WON" if bot_health == 0 else "HP " + str(health)
 	var elapsed := float(Time.get_ticks_usec() - started) / 1000.0
 	max_frame_ms = maxf(max_frame_ms, elapsed)
-	if tick == FINAL_TICK:
+	if tick == FINAL_TICK and not Lifecycle.requested():
 		_finish()
+
+func _lifecycle_state() -> Dictionary:
+	return {"tick": tick, "player_x": player.position.x if is_instance_valid(player) else -1.0,
+		"player_y": player.position.y if is_instance_valid(player) else -1.0,
+		"health": health, "bot_health": bot_health, "pickups": pickups, "hits": hits,
+		"avatar_asset_loaded": avatar_asset_loaded, "sprite_asset_loaded": sprite_asset_loaded,
+		"input_right": Input.is_action_pressed("right"),
+		"input_jump": Input.is_action_pressed("jump"), "input_shoot": Input.is_action_pressed("shoot")}
+
+func _lifecycle_reset() -> bool:
+	if is_instance_valid(arena):
+		arena.free()
+	effect_nodes.clear()
+	effect_particles_spawned = 0
+	effect_particles_peak = 0
+	effect_emitters_readback = true
+	muzzle_flash_count = 0
+	hit_ray_count = 0
+	dust_burst_count = 0
+	explosion_count = 0
+	tick = 0
+	health = 3
+	bot_health = 1
+	pickups = 0
+	hits = 0
+	jump_started = false
+	apex_seen = false
+	landed = false
+	wall_contacts = 0
+	stopped_x = 0.0
+	max_wall_x = 0.0
+	bullet_active = false
+	projectile = null
+	if not _build_world():
+		return false
+	if pickup != null and not pickup.body_entered.is_connected(_pickup_entered):
+		pickup.body_entered.connect(_pickup_entered)
+	return true
 
 func _pickup_entered(body: Node2D) -> void:
 	if body == player and pickups == 0:

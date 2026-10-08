@@ -20,12 +20,15 @@ STUDIO = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(STUDIO.parent))
 ARENA_FIXTURE = 'gameplay_arena_physics'
 ARENA_DEPENDENCY_FILES = ('scenes/fixture.tscn', 'scripts/fixture_actor.gd',
-                          'scenes/projectile.tscn')
+                          'scenes/projectile.tscn', 'scripts/fixture_dependencies.gd',
+                          'scripts/fixture_lifecycle.gd')
 SAVED_ARENA_PATH = 'scenes/arena.tscn'
 SAVED_ARENA_DEPENDENCY_FILES = ARENA_DEPENDENCY_FILES + (SAVED_ARENA_PATH,)
 ARENA_SOURCE_FILES = {
     'scripts/fixture_actor.gd': 'tests/godot/gameplay_fixture/arena_physics.gd',
     'scenes/projectile.tscn': 'tests/godot/gameplay_fixture/projectile.tscn',
+    'scripts/fixture_dependencies.gd': 'tests/godot/gameplay_fixture/fixture_dependencies.gd',
+    'scripts/fixture_lifecycle.gd': 'tests/godot/gameplay_fixture/fixture_lifecycle.gd',
 }
 _HANDOFF_ROOT_OVERRIDE = os.environ.get('HH_GT07_HANDOFF_ROOT')
 if _HANDOFF_ROOT_OVERRIDE:
@@ -287,7 +290,8 @@ def verify_fixture_sources(name, case, candidate, hashes, *, source_root, frozen
              and hashlib.sha256(current).hexdigest() == hashes[source],
              'ARENA_SOURCE_CHANGED')
         expected = frozen.decode('utf-8').replace('\r\n', '\n').replace('\r', '\n').encode('utf-8')
-        loaded = case.get('script') if target.endswith('.gd') else case.get('extra_files', {}).get(target)
+        loaded = (case.get('script') if target == 'scripts/fixture_actor.gd'
+                  else case.get('extra_files', {}).get(target))
         need(type(loaded) is str and loaded.encode('utf-8') == expected
              and candidate.get(target) == expected, 'ARENA_TEMPLATE_FREEZE_MISMATCH')
 
@@ -296,16 +300,42 @@ def verify_fixture_observation(name, observation, *, saved_arena=False):
     need(observation['fixture_observed'] is True, 'NATIVE_FIXTURE_NOT_OBSERVED')
     if name != ARENA_FIXTURE:
         return
-    graph = observation.get('dependency_observation', {}).get('observation', {})
+    report = observation.get('dependency_observation', {})
+    graph = report.get('observation', {})
+    trusted = report.get('loader_graph_bound') is True
+    scene_kind = 'loader_reference' if trusted else 'scene_ext_resource'
     nodes = graph.get('nodes', [])
     expected = {
-        'scenes/fixture.tscn': [{'kind': 'scene_ext_resource', 'target': 'scripts/fixture_actor.gd'}],
-        'scripts/fixture_actor.gd': [{'kind': 'script_preload', 'target': 'scenes/projectile.tscn'}],
+        'scenes/fixture.tscn': [{'kind': scene_kind, 'target': 'scripts/fixture_actor.gd'}],
+        'scripts/fixture_actor.gd': [
+            {'kind': 'script_preload', 'target': 'scenes/projectile.tscn'},
+            {'kind': 'script_preload', 'target': 'scripts/fixture_dependencies.gd'},
+            {'kind': 'script_preload', 'target': 'scripts/fixture_lifecycle.gd'},
+        ],
         'scenes/projectile.tscn': [],
+        'scripts/fixture_dependencies.gd': [],
+        'scripts/fixture_lifecycle.gd': [],
     }
+    # The trusted observer reports the actual saved scene edge and complete
+    # source/asset inventory. Candidate reports intentionally omit those.
     if saved_arena:
-        expected['scenes/fixture.tscn'].append({'kind': 'scene_ext_resource', 'target': SAVED_ARENA_PATH})
+        expected['scenes/fixture.tscn'] = [
+            {'kind': scene_kind, 'target': SAVED_ARENA_PATH},
+            {'kind': scene_kind, 'target': 'scripts/fixture_actor.gd'},
+        ]
         expected[SAVED_ARENA_PATH] = []
+    if trusted:
+        # The trusted observer inventories the complete admitted asset bundle;
+        # candidate self-reports intentionally retain their separate contract.
+        expected['scripts/fixture_actor.gd'].extend(
+            {'kind': 'dynamic_load', 'target': path}
+            for path in ('assets/avatar.glb', 'assets/sprite_sheet.png')
+            if path in {node.get('path') for node in nodes})
+        for path in ('assets/avatar.glb', 'assets/sprite_sheet.png'):
+            if path in {node.get('path') for node in nodes}:
+                expected[path] = []
+        if saved_arena:
+            expected['scenes/arena.tscn'] = []
     # Dependency order is not semantic; the bound graph parser rejects duplicates.
     normalize = lambda rows: sorted((row['kind'], row['target']) for row in rows)
     need(graph.get('entrypoint') == 'scenes/fixture.tscn' and len(nodes) == len(expected)
@@ -499,6 +529,11 @@ def _execute(args, admission):
                                        output / 'blender-handoff',
                                        blender_handoff_binding, candidate)
             calls.append(str(kwargs['output'].relative_to(output)))
+            # AUTH-05 dependency policy requires the authenticated parent
+            # transcript even when the owner receives an injected runner.
+            # The wrapper remains the single native dispatch authority.
+            if dependency_policy['dependency_observation_required']:
+                kwargs['authenticated'] = True
             return owner_mod._load('linux_executor').run(project, **kwargs)
 
         owner = owner_mod.GameplaySourcePublicationOwner.create(output,

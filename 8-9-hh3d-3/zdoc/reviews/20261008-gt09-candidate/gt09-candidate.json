@@ -1,0 +1,65 @@
+{
+  "acceptance": false,
+  "authority": 0,
+  "final_frozen_source_hash": "9ae35ed987061ba5fe0948bb3f81231539a1e1fe42609a94d79d8f73c7d1230c",
+  "generated_by": "coordinator",
+  "lessons": [
+    "Freeze verifier and fixture source before long runs.",
+    "Use prepare then dry-run then one host worker per fixture path.",
+    "Keep raw failures and never hand-edit evidence.",
+    "Allow only bounded clock jitter with strict type and adjacent evidence binding.",
+    "Any source change invalidates prior closure-bound evidence."
+  ],
+  "open_gaps": [
+    "Connect candidate scene/node/resource commands to registered adapter boundary for real authoring E2E.",
+    "Measure the two pinned external MCP clients on an exact host/model/version matrix or keep support unclaimed.",
+    "Repair native adapter environment/perf boundary and prove dependency closure with clean process/log/readback.",
+    "Run two read-only independent critics on this exact package hash; no self-acceptance."
+  ],
+  "refs": {
+    "adapter_diagnostic": {
+      "path": "studio/.local/reviews/o2-adapter-gt09-20261008-02",
+      "result_sha256": null,
+      "status": "DIAGNOSTIC_FAIL"
+    },
+    "arena": {
+      "host_result_sha256": "4ccb8874656063b5d59e443c261cb06f348198b6d7bdb69bdf7a0563dc4fda7c",
+      "manifest": "studio/.local/reviews/gt09-playtest-20261008-13/arena/manifest.json",
+      "manifest_sha256": "f4d33b6dd674987eed0b3a5ea5b615c025a5512bafde9dfbd7d4c88611f94bb4",
+      "run_id": "gt09-playtest-20261008-13",
+      "source_closure_sha256": "af2e73605f5594269b5beec6ecec4be9ba156645e594e1a435164f6765d529b5",
+      "status": "PLAYTEST_EVIDENCE_READY"
+    },
+    "dependency_diagnostic": {
+      "path": "studio/.local/reviews/gt09-dependency-20261008-08",
+      "result_sha256": null,
+      "status": "DIAGNOSTIC_OPEN"
+    },
+    "mcp_matrix": {
+      "path": "studio/.local/reviews/gt09-mcp-20261008-02.json",
+      "sha256": "f8fdf9e82883df514de27bf6d54e338dd2873b0b41653dd2f23c6de96a0677f4",
+      "status": "INCOMPLETE_EXTERNAL_SPIKE"
+    },
+    "plan_sha256": "944291aa3698f8db0b7cd40404121c76bcbd16dc074985fe32e3d87c210563dc",
+    "room": {
+      "host_result_sha256": "56ff8449f0296f3b64894a81dabb3fba47440d4b71fa81f3d6779fce210ac376",
+      "manifest": "studio/.local/reviews/gt09-playtest-20261008-12/room/manifest.json",
+      "manifest_sha256": "91c5338b8ee154ab25545d803e41f0c4e0d684ed3c039e495ed0e48d7fa33900",
+      "run_id": "gt09-playtest-20261008-12",
+      "source_closure_sha256": "a0ea0ec124cb5a8e4fcc0b722345143802c496603e543f82eed9ed97f1de2529",
+      "status": "PLAYTEST_EVIDENCE_READY"
+    },
+    "status_sha256": "0d5c501226e540b4d37928e7c7c0435d6216947ae20a28c2d190804e344fdf3a"
+  },
+  "requirements": {
+    "dependency_closure": "OPEN_DIAGNOSTIC",
+    "external_pinned_mcp_spike": "OPEN",
+    "human_playtest": "NOT_PERFORMED",
+    "model_host_capability_matrix": "OPEN",
+    "native_adapter_e2e": "OPEN_DIAGNOSTIC_FAIL",
+    "playtest_fixtures": "READY_CANDIDATE",
+    "two_critics_same_final_hash": "PENDING"
+  },
+  "schema": "hh-gt09-candidate-package-1",
+  "scope": "GT-09 PC O2 content authoring + 2 mini-game fixture conformance"
+}

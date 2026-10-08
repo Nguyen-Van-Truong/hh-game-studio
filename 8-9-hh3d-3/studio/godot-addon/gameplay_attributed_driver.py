@@ -96,7 +96,13 @@ def main():
                      for p in Path('/project/scripts').rglob('*.gd') if p.is_file())
     codec.need(primary in scripts and len(scripts) <= 64, 'ATTRIBUTION_SCRIPT_INVENTORY')
     scripts = [primary] + [script for script in scripts if script != primary]
-    for phase, script in [('parse', s) for s in scripts] + [('import', None), ('play', None)]:
+    # Both trusted dependency observations must finish before any candidate
+    # parse/import/play child is launched.  Keeping the reopen immediately
+    # after the first observation prevents a later candidate phase from
+    # contaminating the second graph read.
+    phases = [('dependencies', None), ('dependencies_reopen', None)]
+    phases += [('parse', s) for s in scripts] + [('import', None), ('play', None)]
+    for phase, script in phases:
         code = run_child(codec, recorder, phase, script)
         if code != 0:
             recorder.finish(45)

@@ -19,7 +19,7 @@ SCHEMA = "hh-gameplay-dependency-observation-1"
 VERSION = 1
 _ROOTS = frozenset(("scripts", "scenes", "assets"))
 _EDGE_KINDS = frozenset(("scene_ext_resource", "script_preload",
-                         "dynamic_load", "asset_load"))
+                         "dynamic_load", "asset_load", "loader_reference"))
 _HASH = re.compile(r"[0-9a-f]{64}\Z")
 _UID = re.compile(r"uid://[a-z0-9_-]{1,127}\Z")
 MAX_NODES = 256

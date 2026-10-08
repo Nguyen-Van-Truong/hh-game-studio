@@ -40,6 +40,24 @@ class LinuxProbeEvidenceTests(unittest.TestCase):
     def setUp(self):
         self.result = self.clean_result()
 
+    def test_missing_dependency_marker_preserves_failed_process_observation(self):
+        row = self.evaluate({'expect': 'clean_process'}, self.watchdog_result(45))
+        original = dict(row)
+        probe.attach_candidate_dependency(row, '', {'scripts/main.gd': b'extends Node\n'})
+        self.assertFalse(row['fixture_observed'])
+        self.assertIsNone(row['dependency_observation'])
+        self.assertEqual(row['dependency_observation_error'], 'DEPENDENCY_MARKER_MISSING')
+        for key, value in original.items():
+            self.assertEqual(row[key], value)
+
+    def test_malformed_dependency_cannot_promote_a_clean_process(self):
+        row = {'fixture_observed': True, 'authority': 0, 'public_ack': False}
+        probe.attach_candidate_dependency(row, 'HH_PROBE_DEPENDENCY {bad}\n', {})
+        self.assertFalse(row['fixture_observed'])
+        self.assertIn('dependency_observation_error', row)
+        self.assertEqual(row['authority'], 0)
+        self.assertIs(row['public_ack'], False)
+
     @staticmethod
     def evaluate(case, result, stdout='', stderr=''):
         return probe.evaluate({'timeout': 20, **case}, result, stdout, stderr)

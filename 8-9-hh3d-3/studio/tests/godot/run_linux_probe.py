@@ -6,6 +6,7 @@ truth of a publication validation report emitted from the same process.
 from __future__ import annotations
 
 import argparse
+import base64
 import hashlib
 import importlib.util
 import json
@@ -488,7 +489,24 @@ def case_files(case: dict) -> dict[str, bytes]:
     return values
 
 
-def case_observation(destination: Path, case: dict, *, name: str, binding: dict) -> dict:
+def attach_candidate_dependency(row: dict, stdout: str, files: dict) -> None:
+    """Retain an explicit failed observation when native execution ends early.
+
+    Missing/malformed candidate output never overrides the process result and
+    must not prevent the harness from writing the aggregate failure receipt.
+    """
+    row['dependency_observation_candidate'] = True
+    try:
+        row['dependency_observation'] = dependency_observation.parse_dependency_observation(
+            stdout, files)
+    except ValueError as error:
+        row['fixture_observed'] = False
+        row['dependency_observation'] = None
+        row['dependency_observation_error'] = str(error)
+
+
+def case_observation(destination: Path, case: dict, *, name: str, binding: dict,
+                     attribution: dict | None = None) -> dict:
     result = json.loads((destination / 'result.json').read_text(encoding='utf-8'))
     expected = {path: hashlib.sha256(raw).hexdigest() for path, raw in case_files(case).items()}
     actual = {path: sha(destination / 'snapshot' / path) for path in expected}
@@ -524,9 +542,32 @@ def case_observation(destination: Path, case: dict, *, name: str, binding: dict)
                             if path in all_files}
         if len(dependency_files) != len(dependency_paths):
             raise ValueError('dependency observation file is not in fixture')
-        row['dependency_observation'] = dependency_observation.parse_dependency_observation(
-            stdout, dependency_files)
-        row['dependency_observation_candidate'] = True
+        if attribution is not None:
+            observations = {item.get('phase'): item
+                            for item in attribution.get('dependency_observations', [])}
+            first = observations.get('dependencies')
+            reopened = observations.get('dependencies_reopen')
+            if first is not None and reopened is not None:
+                try:
+                    first_raw = base64.b64decode(first['stdout_base64'], validate=True)
+                    reopened_raw = base64.b64decode(reopened['stdout_base64'], validate=True)
+                    native_dependencies = load('gt09_trusted_dependency_observation',
+                        STUDIO / 'godot-addon/gameplay_native_dependencies.py')
+                    # Trusted loader inventory covers the complete admitted
+                    # snapshot (including imported assets and saved scenes).
+                    # Candidate observation remains narrowed to the explicit
+                    # fixture dependency set below.
+                    row['dependency_observation'] = native_dependencies.validate(
+                        all_files, first_raw, reopened_raw)
+                    row['dependency_observation_candidate'] = False
+                except (ValueError, TypeError, KeyError) as error:
+                    row['fixture_observed'] = False
+                    row['dependency_observation'] = None
+                    row['dependency_observation_error'] = str(error)
+            else:
+                attach_candidate_dependency(row, stdout, dependency_files)
+        else:
+            attach_candidate_dependency(row, stdout, dependency_files)
     row.update(case_name=name, run_id=binding['run_id'],
         source_closure_sha256=binding['source_closure_sha256'],
         fixture_script_sha256=hashlib.sha256(case['script'].encode('utf-8')).hexdigest(),

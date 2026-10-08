@@ -74,43 +74,48 @@ func _initialize() -> void:
 				node["uid"] = ResourceUID.id_to_text(uid)
 			var targets: Array[String] = []
 			var preload_targets: Array[String] = []
+			var dynamic_targets: Array[String] = []
 			for reference: String in ResourceLoader.get_dependencies("res://" + path):
 				var target: String = target_path(reference)
 				if not target.is_empty() and not targets.has(target):
 					targets.append(target)
-			# Godot's generic dependency API reports PackedScene ext_resources,
-			# but does not expose a GDScript preload edge on the pinned runtime.
-			# Load the script as a Resource and inspect the compiled constant map so
-			# the trusted observer records the resource paths actually resolved by
-			# the loader.  This is still inside the pre-exec sandbox; no candidate
-			# code is instantiated and no source text is parsed by this observer.
+			# The pinned 4.7.2 GDScript loader does not expose script preload
+			# dependencies through ResourceLoader.get_dependencies(). Loading a
+			# candidate Script here is forbidden: it executes static initializers.
+			# Instead, inspect immutable source bytes with a deliberately narrow,
+			# fail-closed literal scanner. This never compiles, loads or instantiates
+			# candidate code. Computed paths, malformed literals and non-literal
+			# resource expressions remain outside this observation's scope.
 			if kind == "script":
-				var script_resource: Script = ResourceLoader.load(
-					"res://" + path, "Script", ResourceLoader.CACHE_MODE_IGNORE_DEEP) as Script
-				if script_resource == null:
-					reject("SCRIPT_LOAD")
-				else:
-					for value: Variant in script_resource.get_script_constant_map().values():
-						if not (value is Resource):
-							continue
-						var resource_path: String = (value as Resource).resource_path
-						if resource_path.is_empty():
-							continue
-						var preload_target: String = target_path(resource_path)
-						if not preload_target.is_empty():
-							if not targets.has(preload_target):
-								targets.append(preload_target)
-							if not preload_targets.has(preload_target):
-								preload_targets.append(preload_target)
+				var source: String = FileAccess.get_file_as_string("res://" + path)
+				var preload_re: RegEx = RegEx.new()
+				var load_re: RegEx = RegEx.new()
+				if preload_re.compile("preload\\s*\\(\\s*[\\\"'](res://[^\\\"'\\n]+)[\\\"']\\s*\\)") != OK:
+					reject("SCANNER_INIT")
+				if load_re.compile("(?<!pre)load\\s*\\(\\s*[\\\"'](res://[^\\\"'\\n]+)[\\\"']\\s*\\)") != OK:
+					reject("SCANNER_INIT")
+				for match: RegExMatch in preload_re.search_all(source):
+					var preload_target: String = target_path(match.get_string(1))
+					if not preload_target.is_empty():
+						if not targets.has(preload_target):
+							targets.append(preload_target)
+						if not preload_targets.has(preload_target):
+							preload_targets.append(preload_target)
+				for match: RegExMatch in load_re.search_all(source):
+					var dynamic_target: String = target_path(match.get_string(1))
+					if not dynamic_target.is_empty():
+						if not targets.has(dynamic_target):
+							targets.append(dynamic_target)
+						if not dynamic_targets.has(dynamic_target):
+							dynamic_targets.append(dynamic_target)
 			targets.sort()
 			for target: String in targets:
 				var edge_kind: String = "loader_reference"
 				if kind == "script":
-				# Constant-map paths are authoritative loader preloads for this
-				# node; generic loader references remain compatible with the
-				# schema and are retained when no constant exposed the edge.
-				if preload_targets.has(target):
+					if preload_targets.has(target):
 						edge_kind = "script_preload"
+					elif dynamic_targets.has(target):
+						edge_kind = "dynamic_load"
 				edges.append({"kind": edge_kind, "target": target})
 		nodes.append(node)
 	if failed or not files.has("scenes/fixture.tscn"):

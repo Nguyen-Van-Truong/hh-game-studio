@@ -292,7 +292,8 @@ FIXTURES['gameplay_arena_physics'] = {
     'fixture_kind': 'arena_physics',
     'dependency_observation': True,
     'dependency_files': ('scenes/fixture.tscn', 'scripts/fixture_actor.gd',
-                         'scenes/projectile.tscn'),
+                         'scenes/projectile.tscn', 'scripts/fixture_dependencies.gd',
+                         'scripts/fixture_lifecycle.gd'),
     'expected_state': {
         'ticks': 150, 'health': 4, 'bot_health': 0, 'pickups': 1, 'hits': 1,
         'jump_started': True, 'apex_seen': True, 'landed': True,
@@ -311,6 +312,8 @@ FIXTURES['gameplay_arena_physics'] = {
     'script': (_physics_source / 'arena_physics.gd').read_text(encoding='utf-8'),
     'extra_files': {
         'scenes/projectile.tscn': (_physics_source / 'projectile.tscn').read_text(encoding='utf-8'),
+        'scripts/fixture_dependencies.gd': (_physics_source / 'fixture_dependencies.gd').read_text(encoding='utf-8'),
+        'scripts/fixture_lifecycle.gd': (_physics_source / 'fixture_lifecycle.gd').read_text(encoding='utf-8'),
     },
     'input_trace': ((2, 68, True), (25, 70, True), (26, 70, False),
                     (28, 32, True), (29, 32, False), (120, 68, False)),

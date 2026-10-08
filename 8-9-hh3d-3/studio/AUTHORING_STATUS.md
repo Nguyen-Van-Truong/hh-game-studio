@@ -603,3 +603,16 @@ actual host/container exits, dependency binding, retry/reopen and owned cleanup.
 
 - Exact target 25907bed1592b19de4ef87c11e25024d89d95488 is now synchronized; the prescribed pure regression records **37 tests**, actual exit **0**, 6.598s. No native run or dispatch occurred.
 - Remaining gap: connect candidate scene/node/resource commands to the registered adapter boundary and complete authored 2D/3D E2E coverage (TileMap/audio/pause/restart/respawn and real 3D avatar/camera/interactions). AUTHORITY=0 remains.
+
+## 2026-10-08 — GT-09 delegated fixture remint / verifier repair (AUTHORITY=0)
+
+- Fixed a real verifier boundary: Godot can emit the final lifecycle state and the following summary one clock millisecond apart. `fixture_lifecycle_manifest.py` now allows a bounded 100 ms state↔summary binding tolerance, keeps type checks, and rejects larger gaps. Regression suite covers both sides of the boundary.
+- Fresh delegated scripted runs were reminted after the verifier change, with one Godot process per fixture path and no source edits during execution:
+  - `gt09-playtest-20261008-12` (`room`): source closure `a0ea0ec124cb5a8e4fcc0b722345143802c496603e543f82eed9ed97f1de2529`, actual exit0, 901005 ms lifecycle, 29 input edges, 192 state observations, pause frames122, switch/pickup readback true, import/video/cleanup verified. Manifest `PLAYTEST_EVIDENCE_READY`.
+  - `gt09-playtest-20261008-13` (`arena`): source closure `af2e73605f5594269b5beec6ecec4be9ba156645e594e1a435164f6765d529b5`, actual exit0, 901006 ms lifecycle, 29 input edges, 192 state observations, pause frames121, projectile/hit/bot defeat/pickup readback true, import/video/cleanup verified. Manifest `PLAYTEST_EVIDENCE_READY`.
+- Focused regression: 74 tests exit0; manifest/runner py_compile and `git diff --check` pass. Human playtest remains `NOT_PERFORMED`; delegated evidence is not an owner signature.
+- MCP matrix remint `gt09-mcp-20261008-02` remains `INCOMPLETE_EXTERNAL_SPIKE`: private adapter facts measured, two pinned external MCP clients unmeasured, model/host capability matrix open, critic pair open. Do not claim public or external MCP compatibility.
+- Native adapter diagnostic `o2-adapter-gt09-20261008-02` remains `DIAGNOSTIC_FAIL` (environment/perf boundary); dependency probes remain diagnostic with `dependency_closure_verified=false`, `diagnostic_process_clean=false`, `log_clean=false`. Raw evidence is preserved; no blind retry.
+- GT-09 is still `IN_PROGRESS`; no plan checkbox or acceptance marker changed. GT-10-PC remains closed until GT-09 has two independent same-hash critic decisions and all mandatory gaps are resolved.
+
+Lessons carried forward: freeze every verifier and fixture source before the 15-minute runs; run prepare→dry-run→one host worker; keep raw failed runs; never repair a manifest by hand; treat clock jitter as a bounded transport boundary only when types and adjacent evidence still bind; any source change invalidates prior closure-bound evidence.

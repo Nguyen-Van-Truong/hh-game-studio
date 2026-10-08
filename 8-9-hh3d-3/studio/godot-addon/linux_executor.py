@@ -41,7 +41,7 @@ _HELPER = "import subprocess,sys; token=sys.stdin.readline(); sys.exit(125) if t
 _INCOMPLETE_CLI_HOLDS: list = []
 _INCOMPLETE_ADMISSION_HOLDS: list = []
 PROFILE_BOOTSTRAP_SHA256 = 'efde8370a6157ed2f66544ee13b82ee2556b59130f5306e9e0774ed0e3be79a5'
-SANDBOX_BOOTSTRAP_SHA256 = '0d6ac2b6defbac007feb00938e6d447c6f95c4acf1a9ac637a25312dd78b99bb'
+SANDBOX_BOOTSTRAP_SHA256 = '333e9230400d92c4303b0fc2d4faa27d402fd02b533b93900dcf8cc7f7046a7a'
 GAMEPLAY_PROFILE_SHA256 = 'aa01428ff26dc56fc20f19f7093bd025685fe9ca509843826ee02fe7acb6485c'
 GUARDED_MODES = ('guarded-parse', 'guarded-import', 'guarded-play')
 GAMEPLAY_MODE = 'gameplay-source'
@@ -59,6 +59,8 @@ GAMEPLAY_RUNTIME_FILES = (
     'godot-addon/gameplay_sandbox.py',
     'godot-addon/gameplay_attribution.py',
     'godot-addon/gameplay_attributed_driver.py',
+    'godot-addon/gameplay_dependencies.gd',
+    'godot-addon/gameplay_native_dependencies.py',
     'godot-addon/publication_session.py',
     'godot-addon/contract.py',
     'godot-addon/operations.json',
@@ -324,7 +326,8 @@ def read_attribution(output: Path, result: dict) -> dict:
           and result.get('mode') == GAMEPLAY_MODE, 'EXECUTOR_ATTRIBUTION_REQUIRED')
     context = _attribution_context(result['run_id'], result['source_closure_sha256'],
                                    result['input_hashes_before'])
-    for name in ('gameplay_sandbox.py', 'gameplay_attribution.py', 'gameplay_attributed_driver.py'):
+    for name in ('gameplay_sandbox.py', 'gameplay_attribution.py', 'gameplay_attributed_driver.py',
+                 'gameplay_dependencies.gd'):
         _need(_read_file(output / 'harness' / name, 65536)
               == _read_file(STUDIO / 'godot-addon' / name, 65536),
               'EXECUTOR_ATTRIBUTION_HARNESS')
@@ -1024,6 +1027,8 @@ def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate', '
             STUDIO / 'godot-addon/gameplay_attribution.py', 65536)
         harness_files['gameplay_attributed_driver.py'] = _read_file(
             STUDIO / 'godot-addon/gameplay_attributed_driver.py', 65536)
+        harness_files['gameplay_dependencies.gd'] = _read_file(
+            STUDIO / 'godot-addon/gameplay_dependencies.gd', 65536)
     if profile_harness is not None:
         harness_files['validation_bootstrap.gd'] = profile_harness
     _no_links(output.parent)
@@ -1255,7 +1260,8 @@ def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate', '
                             == _read_file(STUDIO / 'godot-addon' / name, 65536)
                             for name, raw in ((name, harness_files[name])
                                               for name in ('gameplay_attribution.py',
-                                                           'gameplay_attributed_driver.py'))))
+                                                           'gameplay_attributed_driver.py',
+                                                           'gameplay_dependencies.gd'))))
             except BaseException as error:
                 result['attribution_harness_unchanged'] = False
                 failed(error, 'EXECUTOR_ATTRIBUTION_HARNESS_')

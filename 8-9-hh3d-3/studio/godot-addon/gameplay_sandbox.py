@@ -152,6 +152,8 @@ def command(phase, *, parse_script=None):
         return common + ['--editor', '--import', 'res://scenes/fixture.tscn']
     if phase == 'play':
         return common + ['res://scenes/fixture.tscn']
+    if phase in ('dependencies', 'dependencies_reopen'):
+        return common + ['--script', '/harness/gameplay_dependencies.gd']
     if phase == 'readback':
         return common + ['--script', '/harness/validation_bootstrap.gd']
     raise ValueError('GAMEPLAY_SANDBOX_PHASE')

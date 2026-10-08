@@ -19,7 +19,8 @@ import re
 import secrets
 import sys
 
-SCHEMA = 'hh-gameplay-attribution-1'
+SCHEMA = 'hh-gameplay-attribution-2'
+LEGACY_SCHEMA = 'hh-gameplay-attribution-1'
 MAX_WIRE_BYTES = 262_144  # Framing overhead counts toward the existing cap.
 MAX_FRAMES = 2048
 MAX_CHUNK_BYTES = 8192
@@ -173,7 +174,8 @@ def verify(wire, *, context, scripts):
     need(4 <= len(lines) <= MAX_FRAMES + 2, 'ATTRIBUTION_FRAME_COUNT')
     rows = [_json(line) for line in lines]
     header, reveal = rows[0], rows[-1]
-    need(set(header) == {'schema', 'context', 'key_commitment'} and header['schema'] == SCHEMA
+    need(set(header) == {'schema', 'context', 'key_commitment'}
+         and header['schema'] in (SCHEMA, LEGACY_SCHEMA)
          and header['context'] == context, 'ATTRIBUTION_HEADER')
     need(set(reveal) == {'reveal'} and type(reveal['reveal']) is str
          and _HEX.fullmatch(reveal['reveal']), 'ATTRIBUTION_REVEAL')
@@ -186,9 +188,18 @@ def verify(wire, *, context, scripts):
          and scripts[0] == 'scripts/fixture_actor.gd'
          and scripts[1:] == sorted(scripts[1:]) and len(set(scripts)) == len(scripts),
          'ATTRIBUTION_SCRIPT_INVENTORY')
+    legacy = header['schema'] == LEGACY_SCHEMA
     expected = [('parse', script) for script in scripts] + [('import', None), ('play', None)]
+    if not legacy:
+        # Capture both trusted graph observations before any candidate phase.
+        # This must mirror gameplay_attributed_driver exactly.
+        expected = [('dependencies', None), ('dependencies_reopen', None)] \
+            + [('parse', script) for script in scripts] \
+            + [('import', None), ('play', None)]
     active, completed, pids, terminal = None, [], set(), None
     logs = {'stdout': bytearray(), 'stderr': bytearray()}
+    observations = []
+    observer_output = None
     for index, row in enumerate(rows[1:-1]):
         need(set(row) == {'seq', 'event', 'mac'} and _integer(row['seq']) and row['seq'] == index
              and type(row['event']) is dict and type(row['mac']) is str
@@ -197,6 +208,9 @@ def verify(wire, *, context, scripts):
         need(hmac.compare_digest(row['mac'], hmac.new(key, DOMAIN + canonical(body),
              hashlib.sha256).hexdigest()), 'ATTRIBUTION_MAC')
         event = row['event']
+        if index == 0 and event.get('kind') == 'begin' and event.get('phase') != 'dependencies':
+            legacy = True
+            expected = [('parse', script) for script in scripts] + [('import', None), ('play', None)]
         kind = event.get('kind')
         need(terminal is None, 'ATTRIBUTION_AFTER_TERMINAL')
         if kind == 'begin':
@@ -208,6 +222,7 @@ def verify(wire, *, context, scripts):
             pids.add(event['pid'])
             active = {k: event[k] for k in ('phase', 'script', 'pid')}
             active['guard'] = None
+            observer_output = bytearray() if event['phase'] in ('dependencies', 'dependencies_reopen') else None
         elif kind in ('guard', 'output', 'exit'):
             need(active is not None and _integer(event.get('pid'))
                  and event['pid'] == active['pid'], 'ATTRIBUTION_CHILD_ID')
@@ -228,6 +243,8 @@ def verify(wire, *, context, scripts):
                 need(0 < len(raw) <= MAX_CHUNK_BYTES
                      and base64.b64encode(raw).decode('ascii') == event['base64'], 'ATTRIBUTION_BASE64')
                 logs[event['channel']].extend(raw)
+                if observer_output is not None and event['channel'] == 'stdout':
+                    observer_output.extend(raw)
             else:
                 need(set(event) == {'kind', 'pid', 'returncode', 'reaped', 'pipe_eof'}
                      and _integer(event['returncode']) and -255 <= event['returncode'] <= 255
@@ -235,6 +252,10 @@ def verify(wire, *, context, scripts):
                      and len(event['pipe_eof']) == 3 and all(v is True for v in event['pipe_eof'])
                      and (event['returncode'] != 0 or active['guard'] is not None), 'ATTRIBUTION_EXIT')
                 completed.append({**active, 'returncode': event['returncode']})
+                if observer_output is not None:
+                    observations.append({'phase': active['phase'], 'pid': active['pid'],
+                        'returncode': event['returncode'],
+                        'stdout_base64': base64.b64encode(observer_output).decode('ascii')})
                 active = None
         elif kind == 'terminal':
             need(set(event) == {'kind', 'returncode', 'children'} and active is None
@@ -250,6 +271,7 @@ def verify(wire, *, context, scripts):
     return {'schema': SCHEMA, 'context': context, 'attribution_verified': True,
             'scope': ['phase_wait', 'trusted_preexec_os_probes'],
             'phase_results': completed, 'driver_returncode': terminal['returncode'],
+            'dependency_observations': observations,
             'wire_sha256': hashlib.sha256(wire).hexdigest(),
             'child_stdout': bytes(logs['stdout']), 'child_stderr': bytes(logs['stderr']),
             'child_claims_authenticated': False, 'dependency_closure_verified': False,

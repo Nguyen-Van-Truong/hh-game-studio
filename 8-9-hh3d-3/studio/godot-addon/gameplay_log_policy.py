@@ -91,8 +91,9 @@ def classify_attributed(observation: dict, scripts: list[str]) -> dict:
         return verdict
     phases = observation.get('phase_results', [])
     expected_old = [('parse', script) for script in scripts] + [('import', None), ('play', None)]
-    expected_new = [('dependencies', None)] + [('parse', script) for script in scripts]
-    expected_new += [('import', None), ('dependencies_reopen', None), ('play', None)]
+    expected_new = [('dependencies', None), ('dependencies_reopen', None)]
+    expected_new += [('parse', script) for script in scripts]
+    expected_new += [('import', None), ('play', None)]
     observed = [(row.get('phase'), row.get('script')) for row in phases]
     expected = expected_new if observed == expected_new else expected_old
     if (observed != expected
@@ -105,14 +106,13 @@ def classify_attributed(observation: dict, scripts: list[str]) -> dict:
     except UnicodeDecodeError:
         return verdict
     if expected is expected_new:
-        # Each Godot child emits one startup diagnostic.  The new trusted
-        # dependency and reopen phases surround the import socket diagnostics:
-        # dependency + all parses + import, socket/listen x2, reopen + play.
+        # Each Godot child emits one startup diagnostic.  The trusted
+        # dependency and reopen phases both precede candidate parse/import/play.
         # Keep this order exact; a count-only check would accept a phase stream
         # whose diagnostics came from a different child.
-        errors = (GUARDED_STARTUP_ERROR * (len(scripts) + 2)
+        errors = (GUARDED_STARTUP_ERROR * (len(scripts) + 3)
                   + (GUARDED_SOCKET_ERROR + GUARDED_LISTEN_ERROR) * 2
-                  + GUARDED_STARTUP_ERROR * 2)
+                  + GUARDED_STARTUP_ERROR)
     else:
         errors = GUARDED_STARTUP_ERROR * (len(scripts) - 1) + GAMEPLAY_STARTUP_ERRORS
     verdict['accepted'] = ('\x00' not in out and '\x00' not in err

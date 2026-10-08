@@ -96,8 +96,14 @@ class ArenaPublicationFixtureTests(unittest.TestCase):
         edges = {'scenes/fixture.tscn': [{'kind': 'scene_ext_resource',
                                         'target': 'scripts/fixture_actor.gd'}],
                  'scripts/fixture_actor.gd': [{'kind': 'script_preload',
-                                             'target': 'scenes/projectile.tscn'}],
-                 'scenes/projectile.tscn': []}
+                                             'target': 'scenes/projectile.tscn'},
+                                            {'kind': 'script_preload',
+                                             'target': 'scripts/fixture_dependencies.gd'},
+                                            {'kind': 'script_preload',
+                                             'target': 'scripts/fixture_lifecycle.gd'}],
+                 'scenes/projectile.tscn': [],
+                 'scripts/fixture_dependencies.gd': [],
+                 'scripts/fixture_lifecycle.gd': []}
         if probe.SAVED_ARENA_PATH in self.candidate:
             edges['scenes/fixture.tscn'].append({'kind': 'scene_ext_resource',
                                                'target': probe.SAVED_ARENA_PATH})
@@ -137,6 +143,42 @@ class ArenaPublicationFixtureTests(unittest.TestCase):
                 node['sha256'] = '0' * 64
             with self.subTest(defect=defect), self.assertRaises(ValueError):
                 self.parse_graph(graph)
+
+    def test_trusted_graph_includes_assets_without_promoting_candidate_graph(self):
+        graph = self.graph()
+        for row in graph['nodes']:
+            for edge in row['edges']:
+                if edge['kind'] == 'scene_ext_resource':
+                    edge['kind'] = 'loader_reference'
+        actor = next(row for row in graph['nodes'] if row['path'] == 'scripts/fixture_actor.gd')
+        for path, raw in (('assets/avatar.glb', fixtures.ASSET_AVATAR_GLB),
+                          ('assets/sprite_sheet.png', fixtures.ASSET_SPRITE_SHEET)):
+            self.candidate[path] = raw
+            actor['edges'].append({'kind': 'dynamic_load', 'target': path})
+            graph['nodes'].append({'path': path, 'kind': 'asset', 'size_bytes': len(raw),
+                                  'sha256': hashlib.sha256(raw).hexdigest(), 'edges': []})
+        native = probe.load('test_native_dependencies',
+                            probe.STUDIO / 'godot-addon/gameplay_native_dependencies.py')
+        raw = b'HH_LOADER_DEPENDENCIES ' + json.dumps(graph).encode() + b'\n'
+        report = native.validate(self.candidate, raw, raw)
+        observation = {'fixture_observed': True, 'dependency_observation': report}
+        probe.verify_fixture_observation(probe.ARENA_FIXTURE, observation)
+        self.assertTrue(report['reopen_match'])
+        self.assertFalse(report['dependency_closure_verified'])
+        for defect in ('missing_asset_edge', 'extra_edge', 'candidate_promotion'):
+            bad = copy.deepcopy(observation)
+            dependency = bad['dependency_observation']
+            node = next(row for row in dependency['observation']['nodes']
+                        if row['path'] == 'scripts/fixture_actor.gd')
+            if defect == 'missing_asset_edge':
+                node['edges'] = [edge for edge in node['edges'] if edge['target'] != 'assets/avatar.glb']
+            elif defect == 'extra_edge':
+                node['edges'].append({'kind': 'dynamic_load', 'target': 'scenes/fixture.tscn'})
+            else:
+                dependency['loader_graph_bound'] = False
+            with self.subTest(defect=defect), self.assertRaisesRegex(
+                    RuntimeError, 'ARENA_DEPENDENCY_GRAPH_MISMATCH'):
+                probe.verify_fixture_observation(probe.ARENA_FIXTURE, bad)
 
     def saved_case(self):
         # Opaque verifier output, deliberately not a hand-authored runnable arena.

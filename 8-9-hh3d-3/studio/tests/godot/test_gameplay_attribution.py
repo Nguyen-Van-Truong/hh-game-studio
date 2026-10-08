@@ -47,6 +47,29 @@ def reencode(rows, *, resign=False):
 
 
 class GameplayAttributionTests(unittest.TestCase):
+    def test_two_observations_must_precede_candidate_execution(self):
+        def wire(phases):
+            stream = io.BytesIO()
+            writer = codec.Recorder(stream, CONTEXT)
+            for index, (phase, script) in enumerate(phases):
+                pid = index + 10
+                writer.begin_child(phase, script, pid)
+                writer.guard(pid, dict(GUARDS))
+                writer.output(pid, 'stdout', b'observer' if phase.startswith('dependencies') else b'candidate')
+                writer.end_child(pid, 0, reaped=True, pipe_eof=[True] * 3)
+            writer.finish(0)
+            return stream.getvalue()
+        candidate = [('parse', SCRIPTS[0]), ('import', None), ('play', None)]
+        safe = [('dependencies', None), ('dependencies_reopen', None)] + candidate
+        result = verify(wire(safe))
+        self.assertEqual([r['phase'] for r in result['dependency_observations']],
+                         ['dependencies', 'dependencies_reopen'])
+        for unsafe in ([safe[0]] + candidate[:2] + [safe[1], candidate[2]],
+                       [safe[0], candidate[0], safe[1]] + candidate[1:]):
+            with self.subTest(unsafe=unsafe), self.assertRaisesRegex(codec.AttributionError,
+                                                                     'ATTRIBUTION_PHASE_ORDER'):
+                verify(wire(unsafe))
+
     def test_roundtrip_does_not_promote_child_markers(self):
         result = verify(transcript())
         self.assertEqual([r['phase'] for r in result['phase_results']], ['parse', 'import', 'play'])
