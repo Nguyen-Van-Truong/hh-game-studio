@@ -19,12 +19,14 @@ khi source và điều kiện không đổi. Preflight/watchdog O4.1 chỉ cho f
 người dùng là inventory, không tự đóng. Không thay counter/status-gap/timeout của O1.
 
 Governance (plan, AGENTS.md) chỉ coordinator sửa; chi tiết run ghi vào
-studio/AUTHORING_STATUS.md (Hiện trạng ≤ 15 dòng + bảng K1–K15 + Next); giữ DSL sáu effect.
-GT-09 làm theo NEXT B1–B7 của O13 trên ma trận K1–K15 (dry-run trước run native, bằng chứng
-tầng D chỉ ở .local, một runner run_gt09_matrix.py, gói cuối từ một lần --matrix final trên một
-closure). Không lập gói hay gọi critic trước self-check O13.3; không tự tick WP; nghiệm thu GT-09
-cần gói cuối và hai critic cùng hash. AGENTS.md ở gốc repo (Vault Fighters) không áp dụng cho
-tools plan.
+studio/AUTHORING_STATUS.md (Hiện trạng ≤ 15 dòng + bảng K1–K15 + Next), sửa trong cùng commit
+mốc; giữ DSL sáu effect. GT-09 làm theo NEXT của O13 (B6a sửa runner, B6b một --matrix final,
+B7 critic theo checklist O13.9) trên ma trận K1–K15: dry-run trước run native, bằng chứng tầng D
+chỉ ở .local, một runner run_gt09_matrix.py. Final chỉ nhận source đã freeze và tự chạy mọi
+producer (O13.3a), dừng ở hàng FAIL đầu; validator chạy --verify-only trên raw thật trước final;
+freeze gồm cả subagent, không có writer khi final chạy; commit WIP trước run dài. Không lập gói
+hay gọi critic trước self-check O13.3; không tự tick WP; nghiệm thu GT-09 cần gói cuối và hai
+critic cùng hash. AGENTS.md ở gốc repo (Vault Fighters) không áp dụng cho tools plan.
 Đọc CURRENT_VALID_WP và bảng trạng thái
 trong tools plan, không lấy số test/diagnostic làm nguồn tick.
 
