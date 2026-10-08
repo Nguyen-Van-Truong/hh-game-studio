@@ -35,11 +35,43 @@ asset-resource provenance. It remains `AUTHORITY=0` and metadata-only for GLB
 import (`asset_import_verified=false`); it does not close gameplay fixture
 conformance. Runs `-01..-04` are retained as raw failure/repair history.
 
-Next work is binding this room proof into the two-fixture conformance package,
-then the current-source arena/room final evidence, dependency/MCP gaps and two
-critics. Do not reuse the stale candidate hash, do not rerun long playtests
-before that source/evidence freeze, and do not claim GT-09 or public
-gameplay-source capability from these diagnostics.
+Next work is the current-source package/binder and its read-only critic pair.
+The registered public authoring gap remains open: the saved-room builder is
+still a private diagnostic path, and the fixed managed-scene profile cannot
+accept its CharacterBody3D/StaticBody3D/Area3D/Camera3D/resource graph without
+a new registered profile, lease, native readback and AUTH-01..05 evidence.
+Do not reuse the stale candidate hash or claim GT-09/public gameplay-source
+capability from these diagnostics.
+
+## 2026-10-08 — current-source fixture conformance and delegated playtest closure
+
+- Native conformance `gt09-conformance-20261008-03.json` is `CANDIDATE_PASS`
+  on closure `4694c30df237394526da78e4ab142ac3d96b91de1dd54ed75d977b48dd8f33f6`.
+  Both arena and room have real Godot exit 0, current-source closure, native
+  input/replay/save-readback/perf observations and the same verified Blender
+  handoff. It remains authority0 and does not satisfy the registered catalog
+  gate.
+- Fresh delegated arena `gt09-playtest-20261008-18` and room
+  `gt09-playtest-20261008-19` were run sequentially from prepare→dry-run→one
+  host worker. Each ran about 15 minutes (`901008`/`901010` ms), produced 192
+  state observations, 29 input edges, pause/restart/resume/quit transitions,
+  final phase `QUIT`, `freeze_errors=0`, actual Godot exit 0, decoded video,
+  closed process tree and no errors. Their source closures are respectively
+  `b133a26c849c7c3a08f3071a91abd75eb75d422ebddb82fc4b7ea5c694dadcf2` and
+  `e2b874f52659451e4b79e00a197fa995064b56645dfcccb3dd6f10c1e64bd36e`.
+  They are agent-delegated evidence (`performed_by=agent`,
+  `delegated_by=owner`), not a human playtest or acceptance signature.
+- Lesson from the first arena attempt: after the loader inventory was tightened,
+  a run without the matching Blender-published assets failed closed as
+  `GAMEPLAY_OWNER_NATIVE_NOT_CLEAN`. The corrected run binds the same published
+  handoff to both fixtures; never omit asset provenance when a loader observes
+  dynamic asset edges. Lesson from arena run `-16`: a wall deadline without a
+  host exit is incomplete even when gameplay logs look healthy; preserve it and
+  remint only with a bounded longer deadline.
+- The exact package still has open native registered-catalog E2E, generic
+  dependency closure, full external MCP/model-host capability coverage and two
+  independent critics on one frozen hash. No checkbox or acceptance marker was
+  changed.
 
 ## 2026-10-08 — Native saved-room repair record
 
