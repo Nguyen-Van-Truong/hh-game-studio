@@ -1,6 +1,8 @@
 """Focused contract checks for the private registered O2 owner."""
 from __future__ import annotations
 
+import copy
+from dataclasses import replace
 import hashlib
 import importlib.util
 import json
@@ -9,6 +11,7 @@ import sys
 import tempfile
 import time
 import unittest
+from unittest.mock import Mock
 
 STUDIO = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(STUDIO.parent))
@@ -27,6 +30,7 @@ def _load(name: str, relative: str):
 owner = _load("hh_registered_owner_test", "godot-addon/registered_authoring_owner.py")
 runner = _load("hh_registered_owner_runner_test", "tests/godot/run_registered_authoring_probe.py")
 recipe = _load("hh_registered_owner_recipe_test", "tests/godot/saved_room_recipe.py")
+from studio.protocol.core import PROTOCOL_VERSION, ValidationError, canonical_bytes
 
 
 class RegisteredOwnerTests(unittest.TestCase):
@@ -113,6 +117,121 @@ class RegisteredOwnerTests(unittest.TestCase):
         (self.root / "scene.glb").write_bytes(b"changed")
         with self.assertRaisesRegex(owner.RegisteredAuthoringOwnerError, "REGISTERED_HANDOFF_GLB_HASH"):
             owner.inspect_blender_handoff(self.root)
+
+    def actor(self, callback=None, admission=None):
+        callback = callback or Mock(side_effect=AssertionError("unexpected native effect"))
+        actor = owner.RegisteredAuthoringOwner(admission=admission or self.admission,
+                                               blender=self.handoff, native_apply=callback)
+        self.addCleanup(actor.close)
+        return actor
+
+    def test_discovery_is_fixture_scoped_with_profile_version_and_digest(self):
+        actor = self.actor()
+        discovered = actor.discovery(project_id=self.admission.project_id)
+        self.assertTrue(discovered["fixture_enabled"])
+        self.assertFalse(discovered["public_runtime_enabled"])
+        self.assertEqual(discovered["protocol_version"], PROTOCOL_VERSION)
+        self.assertEqual(discovered["profiles"][0]["version"], 1)
+        self.assertEqual(discovered["profiles"][0]["catalog_digest"], actor.profile.catalog_digest)
+        self.assertEqual(actor.discovery(project_id="project.ungranted")["profiles"], [])
+        with self.assertRaisesRegex(owner.RegisteredAuthoringOwnerError, "UNSUPPORTED_CLIENT_VERSION"):
+            actor.discovery(project_id=self.admission.project_id, protocol_version="unsupported")
+        with self.assertRaisesRegex(owner.RegisteredAuthoringOwnerError, "REGISTERED_PROFILE_UNKNOWN"):
+            actor.discovery(project_id=self.admission.project_id, profile="other")
+        with self.assertRaisesRegex(owner.RegisteredAuthoringOwnerError, "REGISTERED_FIXTURE_PROJECT"):
+            self.actor(admission=replace(self.admission, project_id="project.other"))
+
+    def test_arena_catalog_admission_has_18_ordered_commands(self):
+        module = runner._ARENA
+        arena = module.build_recipe()
+        admission = replace(self.admission, project_id="project.registered.arena",
+            lease_id="lease.registered.arena", revision=runner._sha(arena["initial_snapshot"]),
+            project_revision=arena["planned_project_revision"])
+        actor = self.actor(admission=admission)
+        requests = runner._bound_requests(arena, admission, module)
+        transaction = actor.prepare(requests, inventory=runner._inventory(arena, admission))
+        self.assertEqual(len(transaction.commands), 18)
+        self.assertEqual(transaction.commands[0].projection["payload"]["node_type"], "CharacterBody2D")
+        self.assertEqual(transaction.commands[-1].projection["payload"]["resource_type"], "RectangleShape2D")
+        self.assertEqual(actor.prepare(requests, inventory=runner._inventory(arena, admission)).digest,
+                         transaction.digest)
+
+    def test_inventory_revision_or_root_cannot_select_a_different_fixture(self):
+        actor = self.actor()
+        for field, value in (("revision", "sha256:" + "9" * 64), ("generation", 8)):
+            changed = owner._PLANNER.TrustedInventory(
+                replace(self.inventory.node_context, **{field: value}),
+                replace(self.inventory.resource_context, **{field: value}))
+            with self.subTest(field=field), self.assertRaisesRegex(
+                    owner.RegisteredAuthoringOwnerError, "REGISTERED_INVENTORY_ADMISSION"):
+                actor.prepare(self.requests, inventory=changed)
+        root = owner._NODE.NodeState("root", None, "Node2D", "Arena")
+        resource_root = owner._RESOURCE.NodeState("root", None, "Node2D", "Arena")
+        changed = owner._PLANNER.TrustedInventory(
+            replace(self.inventory.node_context, nodes=(root,)),
+            replace(self.inventory.resource_context, nodes=(resource_root,)))
+        with self.assertRaisesRegex(owner.RegisteredAuthoringOwnerError, "REGISTERED_FIXTURE_ROOT"):
+            actor.prepare(self.requests, inventory=changed)
+
+    def test_retry_cannot_reorder_truncate_extend_or_change_a_batch(self):
+        actor = self.actor()
+        first = actor.prepare(self.requests, inventory=self.inventory)
+        self.assertEqual(actor.prepare(self.requests, inventory=self.inventory), first)
+        changed = copy.deepcopy(self.requests)
+        changed[0]["payload"]["name"] = "Different"
+        changed[0]["payload_hash"] = "sha256:" + hashlib.sha256(
+            canonical_bytes(changed[0]["payload"])).hexdigest()
+        # ``digest`` is a derived readback field; remove it so the trusted
+        # parser recomputes the changed request identity.
+        changed[0].pop("digest", None)
+        for batch in (list(reversed(self.requests)), self.requests[:-1], changed):
+            with self.subTest(batch=batch[0]["command_id"]), self.assertRaisesRegex(
+                    owner.RegisteredAuthoringOwnerError, "AUTHORING_COMMAND_CONFLICT"):
+                actor.prepare(batch, inventory=self.inventory)
+
+    def test_callback_failure_is_uncertain_and_never_replayed(self):
+        callback = Mock(side_effect=RuntimeError("lost native response"))
+        actor = self.actor(callback)
+        transaction = actor.prepare(self.requests, inventory=self.inventory)
+        with self.assertRaisesRegex(owner.RegisteredAuthoringOwnerError, "REGISTERED_NATIVE_CALLBACK_FAILED"):
+            actor.apply(transaction)
+        with self.assertRaisesRegex(owner.RegisteredAuthoringOwnerError, "REGISTERED_RECONCILE_REQUIRED"):
+            actor.apply(transaction)
+        self.assertEqual(callback.call_count, 1)
+
+    def test_malformed_receipt_is_uncertain_and_never_replayed(self):
+        callback = Mock(return_value={"transaction_digest": "wrong"})
+        actor = self.actor(callback)
+        transaction = actor.prepare(self.requests, inventory=self.inventory)
+        with self.assertRaisesRegex(owner.RegisteredAuthoringOwnerError, "REGISTERED_NATIVE_TRANSACTION_MISMATCH"):
+            actor.apply(transaction)
+        with self.assertRaisesRegex(owner.RegisteredAuthoringOwnerError, "REGISTERED_RECONCILE_REQUIRED"):
+            actor.apply(transaction)
+        self.assertEqual(callback.call_count, 1)
+
+    def test_unknown_operations_classes_properties_and_bad_values_have_no_native_effect(self):
+        callback = Mock(side_effect=AssertionError("unexpected native effect"))
+        actor = self.actor(callback)
+        mutations = [
+            lambda row: row.update(operation="script_text.replace"),
+            lambda row: row["payload"].update(node_type="EditorPlugin"),
+            lambda row: row["payload"]["properties"].update(unknown_property=1),
+            lambda row: row["payload"]["properties"].update(position="wrong"),
+            lambda row: row["payload"]["properties"].update(position=[100000000, 0, 0]),
+            lambda row: row["payload"]["properties"].update(position=[0, 0]),
+            lambda row: row.update(expected_revision="sha256:" + "8" * 64),
+            lambda row: row.update(target={"stable_id": "outside"}),
+            lambda row: row["payload"]["properties"].update(motion_mode=99),
+        ]
+        for index, mutate in enumerate(mutations):
+            requests = copy.deepcopy(self.requests)
+            mutate(requests[0])
+            requests[0]["payload_hash"] = "sha256:" + hashlib.sha256(
+                canonical_bytes(requests[0]["payload"])).hexdigest()
+            with self.subTest(index=index), self.assertRaises(ValidationError):
+                actor.prepare(requests, inventory=self.inventory)
+            self.assertEqual(actor._transactions, {})
+        callback.assert_not_called()
 
 
 if __name__ == "__main__":

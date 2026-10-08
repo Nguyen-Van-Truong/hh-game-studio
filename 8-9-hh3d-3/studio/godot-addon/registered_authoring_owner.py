@@ -18,16 +18,23 @@ import json
 from pathlib import Path
 import re
 import sys
+import threading
 import time
 from typing import Any, Callable, Mapping, Sequence
 
-from studio.protocol.core import Request, ValidationError, canonical_bytes, parse_json
+from studio.protocol.core import PROTOCOL_VERSION, Request, ValidationError, canonical_bytes, parse_json
 
 HERE = Path(__file__).resolve().parent
 PROFILE = "hh-godot-gameplay-source-1"
 SCHEMA = "hh-godot-registered-authoring-owner-1"
 AUTHORITY = 0
 STATE_KIND = "NATIVE_OBSERVED_AUTHORITY0"
+PROFILE_VERSION = 1
+# Trusted host policy, never selected by a request. This module is captured in
+# the native source closure. Other projects cannot acquire this fixture route.
+FIXTURE_PROJECTS = {"project.registered.room": "Node3D",
+                    "project.registered.arena": "Node2D"}
+OPERATIONS = ("scene.node.create", "scene.node.update", "scene.resource.create")
 _ID = re.compile(r"[a-z][a-z0-9._-]{0,63}\Z")
 _REV = re.compile(r"sha256:[0-9a-f]{64}\Z")
 _HEX = re.compile(r"[0-9a-f]{64}\Z")
@@ -97,13 +104,14 @@ class RegisteredProfile:
     authority: int = AUTHORITY
     runtime_enabled: bool = False
     script_enabled: bool = False
+    version: int = PROFILE_VERSION
 
     def as_dict(self) -> dict[str, Any]:
         return {"schema": SCHEMA, "profile": self.profile,
                 "catalog_digest": self.catalog_digest,
                 "operations": list(self.operations), "status": self.status,
                 "authority": self.authority, "runtime_enabled": self.runtime_enabled,
-                "script_enabled": self.script_enabled}
+                "script_enabled": self.script_enabled, "version": self.version}
 
 
 def register_profile() -> RegisteredProfile:
@@ -111,8 +119,12 @@ def register_profile() -> RegisteredProfile:
     catalog = _NODE.load_catalog()
     _need(catalog.digest.startswith("sha256:") and _HEX.fullmatch(catalog.digest[7:]),
           "REGISTERED_CATALOG_DIGEST")
-    return RegisteredProfile(PROFILE, catalog.digest,
-                             ("scene.node.create", "scene.node.update", "scene.resource.create"))
+    digest = _sha({"schema": SCHEMA, "profile": PROFILE, "version": PROFILE_VERSION,
+                   "node_catalog_digest": catalog.digest, "operations": list(OPERATIONS),
+                   "fixture_projects": FIXTURE_PROJECTS,
+                   "resource_contract_sha256": _sha_bytes(
+                       (HERE / "resource_authoring.py").read_bytes())})
+    return RegisteredProfile(PROFILE, digest, OPERATIONS)
 
 
 @dataclass(frozen=True, slots=True)
@@ -195,6 +207,7 @@ class RegisteredAuthoringOwner:
         _need(type(admission) is OwnerAdmission and type(blender) is BlenderHandoff,
               "REGISTERED_OWNER_CONTEXT")
         _need(callable(native_apply), "REGISTERED_NATIVE_CALLBACK")
+        _need(admission.project_id in FIXTURE_PROJECTS, "REGISTERED_FIXTURE_PROJECT")
         self.profile = register_profile()
         self.admission = admission
         self.blender = blender
@@ -203,6 +216,21 @@ class RegisteredAuthoringOwner:
         self._receipts: dict[str, dict[str, Any]] = {}
         self._planner = _PLANNER.AuthoringOwner(self._inventory, self._planned_compiler)
         self._native_apply = native_apply
+        self._work = threading.Lock()
+        self._uncertain: set[str] = set()
+        self._batches: dict[tuple[str, ...], str] = {}
+
+    def discovery(self, *, project_id: str, protocol_version: str = PROTOCOL_VERSION,
+                  profile: str = PROFILE) -> dict[str, Any]:
+        """Fixture-scoped API discovery; it never enables global runtime code."""
+        _need(not self._closed, "REGISTERED_OWNER_CLOSED")
+        _need(protocol_version == PROTOCOL_VERSION, "UNSUPPORTED_CLIENT_VERSION")
+        _need(profile == PROFILE, "REGISTERED_PROFILE_UNKNOWN")
+        enabled = project_id == self.admission.project_id and project_id in FIXTURE_PROJECTS
+        return {"schema": SCHEMA, "protocol_version": PROTOCOL_VERSION,
+                "project_id": project_id, "profiles": [self.profile.as_dict()] if enabled else [],
+                "fixture_enabled": enabled, "public_runtime_enabled": False,
+                "authority": AUTHORITY, "public_ack": False}
 
     def _inventory(self):
         raise RegisteredAuthoringOwnerError("REGISTERED_INVENTORY_NOT_BOUND")
@@ -235,22 +263,64 @@ class RegisteredAuthoringOwner:
         """Bind requests to the supplied trusted live inventory exactly once."""
         self._check_live()
         _need(type(inventory) is _PLANNER.TrustedInventory, "REGISTERED_INVENTORY_REQUIRED")
+        try:
+            node, resource = _PLANNER._coherent(inventory)
+        except _PLANNER.AuthoringOwnerError as exc:
+            raise RegisteredAuthoringOwnerError(exc.code) from exc
+        fields = ("project_id", "revision", "project_revision", "generation", "lease_id",
+                  "fencing_epoch", "lease_expires_ms", "now_ms")
+        _need(all(getattr(node, name) == getattr(self.admission, name)
+                  for name in fields), "REGISTERED_INVENTORY_ADMISSION")
+        roots = [row for row in node.nodes if row.parent_id is None]
+        _need(len(roots) == 1 and roots[0].stable_id == "root"
+              and roots[0].node_type == FIXTURE_PROJECTS[self.admission.project_id],
+              "REGISTERED_FIXTURE_ROOT")
+        _need(isinstance(requests, Sequence) and not isinstance(requests, (str, bytes))
+              and 0 < len(requests) <= 128, "REGISTERED_REQUESTS")
+        try:
+            checked = tuple(_PLANNER._request(value) for value in requests)
+        except _PLANNER.AuthoringOwnerError as exc:
+            raise RegisteredAuthoringOwnerError(exc.code) from exc
+        _need(all(value.operation in self.profile.operations for value in checked),
+              "REGISTERED_OPERATION_DISABLED")
+        ids = tuple(value.command_id for value in checked)
+        _need(len(set(ids)) == len(ids), "AUTHORING_COMMAND_DUPLICATE")
+        batch_digest = _sha([_PLANNER._identity(value) for value in checked])
+        known = [value for value in ids if value in self._transactions]
+        if known:
+            _need(self._batches.get(ids) == batch_digest,
+                  "AUTHORING_COMMAND_CONFLICT")
         # The inventory callback is set only for this synchronous admission.
         self._planner._read_inventory = lambda: inventory
-        transaction = self._planner.prepare(requests)
+        try:
+            transaction = self._planner.prepare(checked)
+        except _PLANNER.AuthoringOwnerError as exc:
+            raise RegisteredAuthoringOwnerError(exc.code) from exc
         self._check_live(transaction)
         for command_id in transaction.command_ids:
             self._transactions[command_id] = transaction
+        self._batches[ids] = batch_digest
         return transaction
 
     def apply(self, transaction: Any) -> dict[str, Any]:
         """Apply once through the trusted native callback and validate readback."""
+        _need(self._work.acquire(blocking=False), "REGISTERED_OWNER_BUSY")
+        try:
+            return self._apply(transaction)
+        finally:
+            self._work.release()
+
+    def _apply(self, transaction: Any) -> dict[str, Any]:
         self._check_live(transaction)
         _need(transaction.digest in {row.digest for row in self._transactions.values()},
               "REGISTERED_TRANSACTION_UNKNOWN")
         cached = self._receipts.get(transaction.digest)
         if cached is not None:
             return _copy(cached)
+        # Once native dispatch starts, any failed/malformed reply is uncertain.
+        # A retry must not invoke the callback a second time.
+        _need(transaction.digest not in self._uncertain, "REGISTERED_RECONCILE_REQUIRED")
+        self._uncertain.add(transaction.digest)
         try:
             result = self._native_apply(transaction, self.admission, self.blender)
         except RegisteredAuthoringOwnerError:
@@ -273,6 +343,7 @@ class RegisteredAuthoringOwner:
         handoff = result.get("blender_handoff")
         _need(handoff == self.blender.as_dict(), "REGISTERED_NATIVE_HANDOFF")
         self._receipts[transaction.digest] = result
+        self._uncertain.remove(transaction.digest)
         return _copy(result)
 
 
