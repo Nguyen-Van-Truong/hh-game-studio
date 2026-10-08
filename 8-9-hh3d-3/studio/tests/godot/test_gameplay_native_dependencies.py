@@ -111,5 +111,78 @@ class TrustedLiteralLoaderScopeTests(unittest.TestCase):
             native.validate(FILES, raw(), raw(), validator=SpoofedValidator)
 
 
+STATIC_FILES = {
+    "scenes/main.tscn": b"[gd_scene load_steps=2 format=3]\n"
+        b"[ext_resource type=\"Script\" path=\"res://scripts/main.gd\" id=\"1\"]\n",
+    "scripts/main.gd": b"extends Node\n"
+        b"const Helper = preload(\"res://scripts/helper.gd\")\n"
+        b"var Avatar = ResourceLoader.load(\"res://assets/avatar.glb\")\n"
+        b"# load(\"res://scripts/missing.gd\")\n"
+        b"var note = \"load(\\\"res://scripts/missing.gd\\\")\"\n",
+    "scripts/helper.gd": b"extends Node\n",
+    "assets/avatar.glb": b"glb-static-fixture\n",
+}
+
+
+def static_graph():
+    admitted = native.admit_static_literals(STATIC_FILES, validator=evidence)
+    nodes = []
+    for path, raw_bytes in STATIC_FILES.items():
+        kind = "script" if path.endswith(".gd") else ("scene" if path.endswith(".tscn") else "asset")
+        nodes.append({"path": path, "kind": kind, "size_bytes": len(raw_bytes),
+                      "sha256": hashlib.sha256(raw_bytes).hexdigest(),
+                      "edges": admitted["script_edges"].get(path, [])})
+    return {"schema": evidence.SCHEMA, "version": evidence.VERSION,
+            "entrypoint": "scenes/main.tscn", "nodes": nodes}
+
+
+def static_raw(graph=None):
+    return native.PREFIX + json.dumps(static_graph() if graph is None else graph,
+                                      separators=(",", ":")).encode() + b"\n"
+
+
+class StaticLiteralDependencyAdmissionTests(unittest.TestCase):
+    def test_literals_bind_scene_and_script_edges_after_reopen(self):
+        report = native.validate_static_literals(STATIC_FILES, static_raw(), static_raw(),
+                                                 validator=evidence)
+        self.assertEqual(report["static_literal_scope"], native.STATIC_LITERAL_SCOPE)
+        self.assertTrue(report["static_literal_script_graph_bound"])
+        self.assertTrue(report["literal_loader_scope_verified"])
+        self.assertIs(report["native_observation_verified"], False)
+        self.assertIs(report["dependency_closure_verified"], False)
+        self.assertIs(report["dynamic_dependencies_verified"], False)
+        self.assertEqual({node["path"] for node in report["observation"]["nodes"]}, set(STATIC_FILES))
+
+    def test_comments_and_strings_are_inert_but_computed_load_is_rejected(self):
+        accepted = dict(STATIC_FILES)
+        accepted["scripts/main.gd"] = (
+            b"extends Node\n# ResourceLoader.get_dependencies(\"res://missing\")\n"
+            b"var note = \"ResourceLoader.get_dependencies(\\\"res://missing\\\")\"\n")
+        self.assertEqual(native.admit_static_literals(accepted, validator=evidence)["script_edges"]["scripts/main.gd"], [])
+        for text, code in ((
+                b"extends Node\nvar path = \"res://scripts/helper.gd\"\nvar x = load(path)\n",
+                "STATIC_DEPENDENCY_NONLITERAL_LOAD"),
+                (b"extends Node\nvar x = load(\"res://scripts/\" + suffix)\n",
+                 "STATIC_DEPENDENCY_NONLITERAL_LOAD"),
+                (b"extends Node\nvar x = ResourceLoader.get_dependencies(\"res://scripts/helper.gd\")\n",
+                 "STATIC_DEPENDENCY_LOADER_ALIAS")):
+            candidate = dict(STATIC_FILES)
+            candidate["scripts/main.gd"] = text
+            with self.subTest(code=code):
+                with self.assertRaisesRegex(ValueError, "^" + code + "$"):
+                    native.admit_static_literals(candidate, validator=evidence)
+
+    def test_static_graph_mismatch_and_scene_missing_path_fail_closed(self):
+        graph = static_graph()
+        graph["nodes"][1]["edges"] = []
+        with self.assertRaisesRegex(ValueError, "^STATIC_DEPENDENCY_SCRIPT_GRAPH_MISMATCH$"):
+            native.validate_static_literals(STATIC_FILES, static_raw(graph), static_raw(graph),
+                                            validator=evidence)
+        candidate = dict(STATIC_FILES)
+        candidate["scenes/main.tscn"] = b"[ext_resource type=\"Script\" id=\"1\"]\n"
+        with self.assertRaisesRegex(ValueError, "^STATIC_DEPENDENCY_EXT_RESOURCE$"):
+            native.admit_static_literals(candidate, validator=evidence)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
