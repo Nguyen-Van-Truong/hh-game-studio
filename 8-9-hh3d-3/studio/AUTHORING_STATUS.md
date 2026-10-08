@@ -2,7 +2,7 @@
 
 AUTHORITY=0; GT09=IN_PROGRESS; no public gameplay-source or acceptance claim.
 Source-of-truth plan: `zdoc/8-9-godot-blender-agent-studio-plan.txt` S270.
-Current source head: `8b37a2fd`; old detailed log is archived in
+Current source head: `8e896100`; old detailed log is archived in
 `AUTHORING_STATUS_HISTORY_20261008.md` and remains historical evidence.
 Native registered-owner diagnostic `o2-registered-authoring-20261008-02` is real
 Godot Editor/UndoRedo/save/reload/readback with 14 IDs, exit 0 and Blender hash
@@ -35,8 +35,8 @@ matrix until that self-check passes.
 
 ## Next (O13.5)
 
-B2: add `studio/tests/conformance/run_gt09_matrix.py` with `--dry-run`, `--row Kx`,
-and `--matrix final`; then B3–B5 close K1–K10, B6 closes K11–K15 and freezes one
+B2 is complete: `run_gt09_matrix.py` and its 3-test contract pass; `--dry-run`
+enumerates all 15 rows without launching an engine. Then B3–B5 close K1–K10, B6 closes K11–K15 and freezes one
 closure, B7 runs two critics only after self-check. Preserve raw failures and use
 fresh IDs; do not tick GT09 or promote any diagnostic flag.
 
