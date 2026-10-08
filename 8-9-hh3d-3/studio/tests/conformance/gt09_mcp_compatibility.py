@@ -103,10 +103,18 @@ def verify_external_receipt(path: Path) -> dict[str, Any]:
             _need(run.get("lookup_only") is True, f"external_receipt_lookup:{name}:{index}")
             _need(run.get("unsupported_client") == "NOT_RUN_IN_MUTATING_SESSION",
                   f"external_receipt_unsupported_scope:{name}:{index}")
+            wire = run.get("wire")
+            _need(type(wire) is dict and type(wire.get("initialize_response")) is dict
+                  and type(wire.get("tools_list_response")) is dict,
+                  f"external_receipt_wire:{name}:{index}")
+            _need(wire["tools_list_response"].get("response_sha256") == run.get("tools_response_sha256"),
+                  f"external_receipt_wire_hash:{name}:{index}")
         negative = server.get("negative")
         _need(type(negative) is dict and negative.get("outcome") in {"NEGOTIATED", "REJECTED"}
               and negative.get("exit_code") == 0 and negative.get("timed_out") is False,
               f"external_receipt_negative:{name}")
+        _need(type(negative.get("response")) is dict,
+              f"external_receipt_negative_wire:{name}")
         summary = server.get("summary")
         _need(type(summary) is dict, f"external_receipt_summary:{name}")
         for key in ("initialize", "tools_list", "reconnect", "context_reset_lookup_only"):

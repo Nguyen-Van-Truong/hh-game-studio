@@ -213,6 +213,9 @@ def _run_once(spec: dict[str, Any], run_index: int) -> dict[str, Any]:
                 "requests": [{"id": m.get("id"), "method": m["method"],
                               "protocolVersion": m.get("params", {}).get("protocolVersion")}
                              for m in requests],
+                "initialize_response": init_response,
+                "tools_list_response": {"tool_names": tool_names,
+                                         "response_sha256": _json_hash(list_response)},
                 "responses": [
                     {"id": m.get("id"), "has_result": "result" in m, "has_error": "error" in m,
                      "protocolVersion": m.get("result", {}).get("protocolVersion") if isinstance(m.get("result"), dict) else None,
@@ -255,6 +258,8 @@ def _run_negative(spec: dict[str, Any]) -> dict[str, Any]:
     return {
         "request_protocol": UNSUPPORTED_PROTOCOL, "outcome": outcome,
         "response_protocol": protocol, "response_sha256": _json_hash(response),
+        "response": {"has_result": "result" in response, "has_error": "error" in response,
+                      "protocolVersion": protocol},
         "exit_code": exit_code, "timed_out": timed_out,
         "duration_ms": round((time.monotonic() - started) * 1000, 2),
         "stderr_sha256": _sha(bytes(peer.stderr)),
