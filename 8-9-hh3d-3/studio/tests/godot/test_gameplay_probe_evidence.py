@@ -108,11 +108,21 @@ class GameplayProbeEvidenceTests(unittest.TestCase):
                    'hits': 0 if i < 4 else 1, 'wall_contacts': 0 if i < 6 else (1 if i == 6 else 30)}
                   for i, (label, tick, x) in enumerate(zip(self.case['event_trace'], ticks, xs))]
         def transcript(trace_inputs, trace_events):
-            lines = [*probe.GAMEPLAY_PHASE_EVENTS[:-1]]
+            scripts = ['scripts/fixture_actor.gd'] + sorted(
+                name for name in self.case['extra_files']
+                if name.startswith('scripts/') and name.endswith('.gd'))
+            self.stderr = probe.GUARDED_STARTUP_ERROR * (len(scripts) - 1) \
+                + probe.GAMEPLAY_STARTUP_ERRORS
+            lines = ['HH_GAMEPLAY_PHASE_BEGIN parse', probe.log_policy.GUARD_MARKER]
+            for script in scripts[1:]:
+                lines += ['HH_GAMEPLAY_MODULE_BEGIN ' + script,
+                          probe.log_policy.GUARD_MARKER,
+                          'HH_GAMEPLAY_MODULE_END ' + script + ' 0']
+            lines.append('HH_GAMEPLAY_PHASE_END parse 0')
+            lines += list(probe.GAMEPLAY_PHASE_EVENTS[3:])
             lines += ['HH_FIXTURE_INPUT ' + json.dumps(row) for row in trace_inputs]
             lines += ['HH_FIXTURE_EVENT ' + json.dumps(row) for row in trace_events]
-            lines += ['HH_PROBE_FIXTURE ' + json.dumps(self.case['expected_state']),
-                      probe.GAMEPLAY_PHASE_EVENTS[-1]]
+            lines += ['HH_PROBE_FIXTURE ' + json.dumps(self.case['expected_state'])]
             return '\n'.join(lines) + '\n'
         self.assertTrue(self.check(stdout=transcript(inputs, events))['fixture_observed'])
         bad_events = copy.deepcopy(events)

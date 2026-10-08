@@ -240,6 +240,18 @@ class LinuxProbeEvidenceTests(unittest.TestCase):
                 bad['command_host']['timeout_seconds'] = timeout
             self.assertFalse(self.evaluate({'expect': 'clean_process'}, bad)['fixture_observed'])
 
+    def test_extended_deadline_requires_authenticated_gameplay_binding(self):
+        result = copy.deepcopy(self.result)
+        result['mode'] = 'gameplay-source'
+        result['command_host']['timeout_seconds'] = 32
+        result['supervisor'].update(term_after_seconds=29, total_deadline_seconds=30)
+        case = {'expect': 'clean_process', 'mode': 'gameplay-source', 'timeout': 30}
+        self.assertFalse(self.evaluate(case, result)['fixture_observed'])
+        case['authenticated_timeout'] = True
+        # The synthetic result is otherwise a normal completed process; the
+        # binding flag is the only difference tested here.
+        self.assertTrue(self.evaluate(case, result)['supervisor_binding_verified'])
+
     def test_fixed_supervisor_bootstrap_and_context_must_match_attached_container(self):
         for key in ('supervisor_path', 'supervisor_sha256', 'supervisor_bootstrap_sha256',
                     'docker_context', 'docker_endpoint'):

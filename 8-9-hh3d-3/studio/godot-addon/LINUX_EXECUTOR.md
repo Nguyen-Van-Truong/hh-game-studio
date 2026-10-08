@@ -11,7 +11,7 @@ result = linux_executor.run(
     project: Path,
     mode="parse",             # "parse", "import", or "profile-validate"
     output=fresh_output_path,
-    timeout_seconds=20,        # integer 1..20
+    timeout_seconds=20,        # legacy integer 1..20; authenticated gameplay-source 1..30
 )
 ```
 
@@ -103,8 +103,8 @@ image, environment, mounts, system masks and limits before start.
 | Memory / swap | 1 GiB memory; memory-plus-swap also 1 GiB, prohibiting container swap |
 | CPU / PIDs | One CPU quota; 64 PIDs; per-process CPU time 10 seconds |
 | Regular file / core / descriptors / message queue | 8 MiB per file; no core dump; 256 descriptors; 8192-byte POSIX queue limit |
-| Container supervisor | TERM after `max(1, timeout_seconds-1)` seconds, KILL one second later; configured total 2..20 seconds |
-| Host attach wait | Caller-selected integer 1..20 seconds plus 2 seconds to observe the supervisor |
+| Container supervisor | TERM after `max(1, timeout_seconds-1)` seconds, KILL one second later; legacy modes 2..20 seconds, authenticated gameplay-source 2..30 seconds |
+| Host attach wait | Caller-selected integer (legacy 1..20, authenticated gameplay-source 1..30) plus 2 seconds to observe the supervisor |
 | Host stdout and stderr | 256 KiB each, then stop; `--log-driver none` |
 
 Writable data tmpfs mounts are nodev/nosuid/noexec and owned by 65532 with mode

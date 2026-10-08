@@ -949,9 +949,11 @@ class GameplaySourcePublicationOwner:
             # directory exercises the real Docker/Godot executor before ACK.
             expected_native_inputs = self._native_inputs(candidate)
             def run_stage():
-                run_kwargs = dict(mode="gameplay-source", output=run_dir, timeout_seconds=20,
+                authenticated = self._dependency_observation_required
+                run_kwargs = dict(mode="gameplay-source", output=run_dir,
+                                  timeout_seconds=30 if authenticated else 20,
                                   source_closure_sha256=self.source_closure_sha256)
-                if self._dependency_observation_required and self._runner == self._executor.run:
+                if authenticated and self._runner == self._executor.run:
                     run_kwargs["authenticated"] = True
                 observed = self._runner(self._safe_revision(candidate_revision) / "project", **run_kwargs)
                 observed = self._read_native_result(run_dir, observed)

@@ -501,6 +501,11 @@ def _execute(args, admission):
          == admission['candidate_sha256'], 'PUBLICATION_ADMISSION_CHANGED')
     dependency_policy = publication_dependency_policy(fixture_name, case,
                                                      saved_arena=saved_arena_binding is not None)
+    if dependency_policy['dependency_observation_required']:
+        # The authenticated parent-attributed driver has seven bounded Godot
+        # launches. Bind its 30s budget into the observation case so command,
+        # supervisor, and cleanup receipts all verify the same contract.
+        case = {**case, 'timeout': 30, 'authenticated_timeout': True}
     verify_fixture_sources(fixture_name, case, candidate, files,
                            source_root=STUDIO, frozen_root=output / 'source')
     if saved_arena_binding is not None:

@@ -192,6 +192,11 @@ def _execute(args, admission):
     cases, candidates = _inputs(owner_mod, fixtures, probe, args)
     need([{name: hashlib.sha256(raw).hexdigest() for name, raw in candidate.items()}
           for candidate in candidates] == admission['candidate_sha256'], 'ADAPTER_ADMISSION_CHANGED')
+    policy = publication.publication_dependency_policy(
+        options.fixture, cases[0], saved_arena=saved_binding is not None)
+    if admission['authenticated'] and policy['dependency_observation_required']:
+        cases = tuple({**case, 'timeout': 30, 'authenticated_timeout': True}
+                      for case in cases)
     initial = dict(candidates[0])
     initial[owner_mod.ENTRYPOINT] += b'\n# Initial unpublished adapter revision.\n'
     calls, exits, observations = [], [], []
@@ -251,8 +256,6 @@ def _execute(args, admission):
             finally:
                 active.release()
 
-        policy = publication.publication_dependency_policy(options.fixture, cases[0],
-                                                          saved_arena=saved_binding is not None)
         owner = owner_mod.GameplaySourcePublicationOwner.create(output,
             project_id='project.adapter', source_files=initial, entrypoint=owner_mod.ENTRYPOINT,
             source_closure_sha256=closure, runner=run_native, **policy)

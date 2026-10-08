@@ -482,6 +482,17 @@ class AdmissionTests(unittest.TestCase):
         self.assertIn('os.execv', executor.SUPERVISOR_BOOTSTRAP)
         self.assertNotIn('--foreground', executor._supervised_command('parse'))
 
+    def test_authenticated_gameplay_timeout_is_narrowly_bounded(self):
+        context = executor._attribution_context(
+            'gt09-test', '0' * 64, '1' * 64)
+        with self.assertRaisesRegex(executor.ExecutorError, 'EXECUTOR_TIMEOUT'):
+            executor._supervised_command('parse', 30)
+        with self.assertRaisesRegex(executor.ExecutorError, 'EXECUTOR_TIMEOUT'):
+            executor._supervised_command('gameplay-source', 30)
+        command = executor._supervised_command(
+            'gameplay-source', 30, attribution_context=context)
+        self.assertIn('29s', command)
+
     def test_durable_owner_roundtrip_rejects_identity_drift(self):
         with tempfile.TemporaryDirectory() as folder:
             path = Path(folder) / 'owner.json'

@@ -122,7 +122,9 @@ def _integer(value, expected: int) -> bool:
 def supervisor_binding(case: dict, result: dict) -> bool:
     """Bind recorded configuration; native inspect remains a separate audit."""
     timeout = case.get('timeout')
-    if type(timeout) is not int or not 1 <= timeout <= 20:
+    authenticated_timeout = case.get('authenticated_timeout') is True
+    limit = 30 if case.get('mode') == 'gameplay-source' and authenticated_timeout else 20
+    if type(timeout) is not int or not 1 <= timeout <= limit:
         return False
     host = _object(result.get('command_host'))
     supervisor = _object(result.get('supervisor'))

@@ -45,6 +45,11 @@ SANDBOX_BOOTSTRAP_SHA256 = '333e9230400d92c4303b0fc2d4faa27d402fd02b533b93900dcf
 GAMEPLAY_PROFILE_SHA256 = 'aa01428ff26dc56fc20f19f7093bd025685fe9ca509843826ee02fe7acb6485c'
 GUARDED_MODES = ('guarded-parse', 'guarded-import', 'guarded-play')
 GAMEPLAY_MODE = 'gameplay-source'
+# The authenticated O2 driver must observe dependencies, reopen them, parse
+# each admitted script, import, and play under one outer deadline. Keep all
+# legacy/hostile diagnostics at 20s; only this source-bound mode may use 30s.
+LEGACY_TIMEOUT_MAX_SECONDS = 20
+AUTHENTICATED_GAMEPLAY_TIMEOUT_SECONDS = 30
 SANDBOX_MODES = GUARDED_MODES + (GAMEPLAY_MODE,)
 GAMEPLAY_RUNTIME_FILES = (
     'godot-addon/gameplay_source_owner.py',
@@ -98,6 +103,13 @@ class ExecutorError(ValueError):
 def _need(condition: object, code: str) -> None:
     if not condition:
         raise ExecutorError(code)
+
+
+def _timeout_max(mode: str, *, authenticated: bool = False) -> int:
+    _need(mode in ('parse', 'import', 'profile-validate', *SANDBOX_MODES),
+          'EXECUTOR_MODE')
+    return (AUTHENTICATED_GAMEPLAY_TIMEOUT_SECONDS
+            if mode == GAMEPLAY_MODE and authenticated else LEGACY_TIMEOUT_MAX_SECONDS)
 
 
 def _sha(raw: bytes) -> str:
@@ -410,7 +422,8 @@ def _sandbox_command(phase: str) -> list[str]:
 
 
 def _supervised_command(mode: str, timeout_seconds: int = 20, *, attribution_context=None) -> list[str]:
-    _need(type(timeout_seconds) is int and 1 <= timeout_seconds <= 20, 'EXECUTOR_TIMEOUT')
+    _need(type(timeout_seconds) is int and 1 <= timeout_seconds <= _timeout_max(
+        mode, authenticated=attribution_context is not None), 'EXECUTOR_TIMEOUT')
     _command(mode)
     if attribution_context is not None:
         _need(mode == GAMEPLAY_MODE, 'EXECUTOR_ATTRIBUTION_MODE')
@@ -998,11 +1011,15 @@ def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate', '
     _command(mode)
     _need(not _INCOMPLETE_CLI_HOLDS, 'EXECUTOR_UNFINISHED_CLI_HELD')
     _need(not _INCOMPLETE_ADMISSION_HOLDS, 'EXECUTOR_UNFINISHED_ADMISSION_HELD')
-    _need(type(timeout_seconds) is int and 1 <= timeout_seconds <= 20, 'EXECUTOR_TIMEOUT')
+    _need(type(timeout_seconds) is int and 1 <= timeout_seconds <= _timeout_max(
+        mode, authenticated=authenticated), 'EXECUTOR_TIMEOUT')
     _need(isinstance(project, Path) and isinstance(output, Path), 'EXECUTOR_PATH_TYPE')
     observed_source_closure = None
     _need(type(authenticated) is bool, 'EXECUTOR_ATTRIBUTION_MODE')
     attribution_enabled = authenticated
+    _need(not (timeout_seconds > LEGACY_TIMEOUT_MAX_SECONDS)
+          or (authenticated and mode == GAMEPLAY_MODE and source_closure_sha256 is not None),
+          'EXECUTOR_AUTHENTICATED_TIMEOUT_REQUIRED')
     attribution_context = None
     if attribution_enabled:
         _need(mode == GAMEPLAY_MODE, 'EXECUTOR_ATTRIBUTION_MODE')
