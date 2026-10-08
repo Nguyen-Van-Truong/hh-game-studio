@@ -15,3 +15,5 @@ This package records the latest coordinator checkpoint. It is not a GT-09 accept
 ## Review gate
 
 Two read-only critics using different models must inspect this exact package and return explicit `TICK=yes` or `TICK=no`. Any source change requires a new package hash and fresh fixture evidence.
+
+The 2026-10-08 pair both returned `TICK=no`: [critic-astra.md](critic-astra.md) and [critic-sol.md](critic-sol.md). Their reports preserve the blockers: no package-wide source binder, external MCP still unmeasured, native adapter/dependency closure not clean, and missing replay/save-reload/perf/command-ID proof. GT-09 remains `IN_PROGRESS`; no checkbox was changed.
