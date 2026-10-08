@@ -556,11 +556,16 @@ def case_observation(destination: Path, case: dict, *, name: str, binding: dict,
                     native_dependencies = load('gt09_trusted_dependency_observation',
                         STUDIO / 'godot-addon/gameplay_native_dependencies.py')
                     # Trusted loader inventory covers the complete admitted
-                    # snapshot (including imported assets and saved scenes).
-                    # Candidate observation remains narrowed to the explicit
-                    # fixture dependency set below.
+                    # runtime snapshot (including imported assets and saved
+                    # scenes).  ``project.godot`` is a control input, not a
+                    # loader node, so do not pass it to the path-bound
+                    # dependency validator.  The candidate observation below
+                    # remains narrowed to the explicit fixture dependency set.
+                    native_files = {
+                        path: raw for path, raw in all_files.items()
+                        if path != 'project.godot'}
                     row['dependency_observation'] = native_dependencies.validate(
-                        all_files, first_raw, reopened_raw)
+                        native_files, first_raw, reopened_raw)
                     row['dependency_observation_candidate'] = False
                 except (ValueError, TypeError, KeyError) as error:
                     row['fixture_observed'] = False
