@@ -1,15 +1,16 @@
 # HH3D-3 — routing hiện hành
 
-Owner steering 03-10-2026, giới hạn credit theo O11.7 của tools plan (06-10): subagent chỉ cho
-thiết kế khó, worker O2 và critic cuối; ultra (gpt-6-astra, gpt-6.1-sol) chỉ cho các việc đó.
-Đọc log, chạy test, closeout, status làm trực tiếp; không spawn audit next-step/gap; lệnh dài chờ
-bằng yield dài, không poll vài giây; không kết thúc lượt khi run nền/subagent chưa xong. Credit
-workspace dùng chung cho mọi agent.
+Owner steering 03-10-2026, credit và lượt theo O13.6 của tools plan (08-10): một coordinator, một
+thread; subagent chỉ cho thiết kế khó, worker K13 và hai critic cuối, fork_turns=none với brief
+≤ 1 trang; ultra (gpt-6-astra, gpt-6.1-sol) chỉ cho thiết kế khó và critic. Đọc log, chạy test,
+closeout, status làm trực tiếp; không spawn audit trạng thái/gói/next-step; không tự tạo
+heartbeat/automation; lệnh dài chờ bằng yield dài, không poll dưới 60 giây; không kết thúc lượt
+khi run nền/subagent chưa xong. Credit workspace dùng chung cho mọi agent.
 Giữ một writer/file, tuần tự hóa workload đo và tiếp tục từ checkpoint đã kiểm chứng.
 Theo quyền audit mới nhất của owner, coordinator được dispatch hai critic
 độc lập khác model trên cùng hash; giữ nguyên report, kiểm hash trước nghiệm thu.
-Không tự ký thay critic hoặc tái dùng chữ ký hash cũ. Quyết định GT06:
-zdoc/reviews/20261003-gt06-owner-critics/coordinator-acceptance.md.
+Không tự ký thay critic hoặc tái dùng chữ ký hash cũ. Quyết định nghiệm thu GT-06, GT-07,
+GT-08A: mục Đã nghiệm thu của tools plan.
 
 Resume đúng checkpoint; không làm lại phần đã chứng minh. Một Godot/Blender mỗi
 project path; không chạy engine hay test nặng cạnh formal/soak đang giữ khóa đo.
@@ -17,12 +18,13 @@ Giữ actual exits, source/evidence hash và raw lỗi. Không rerun test/commit
 khi source và điều kiện không đổi. Preflight/watchdog O4.1 chỉ cho formal/soak; app
 người dùng là inventory, không tự đóng. Không thay counter/status-gap/timeout của O1.
 
-Governance chỉ sửa trên nhánh chính. Nhánh O2 ghi chi tiết vào
-studio/AUTHORING_STATUS.md, làm theo gap của hai fixture; giữ DSL sáu effect.
-GT-07 làm theo NEXT F1–F5 của O11 trên ma trận M1–M9 của O10 (dry-run trước run native,
-bằng chứng tầng D chỉ ở .local, gói cuối từ một lần --matrix final trên một closure); O2 chạy
-song song bằng worker riêng theo O10.5 và O11.8. Không tự tick WP; nghiệm thu GT-07 cần gói
-cuối và hai critic cùng hash.
+Governance (plan, AGENTS.md) chỉ coordinator sửa; chi tiết run ghi vào
+studio/AUTHORING_STATUS.md (Hiện trạng ≤ 15 dòng + bảng K1–K15 + Next); giữ DSL sáu effect.
+GT-09 làm theo NEXT B1–B7 của O13 trên ma trận K1–K15 (dry-run trước run native, bằng chứng
+tầng D chỉ ở .local, một runner run_gt09_matrix.py, gói cuối từ một lần --matrix final trên một
+closure). Không lập gói hay gọi critic trước self-check O13.3; không tự tick WP; nghiệm thu GT-09
+cần gói cuối và hai critic cùng hash. AGENTS.md ở gốc repo (Vault Fighters) không áp dụng cho
+tools plan.
 Đọc CURRENT_VALID_WP và bảng trạng thái
 trong tools plan, không lấy số test/diagnostic làm nguồn tick.
 
