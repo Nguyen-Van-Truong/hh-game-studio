@@ -1,0 +1,58 @@
+{
+  "acceptance": false,
+  "authority": 0,
+  "final_frozen_source_hash": "f2fefbfb1bfb6323bfae566db90cdbb41e4c6b4aa7bfee3118b45c52375ace16",
+  "fixtures": {
+    "arena": {
+      "manifest": "studio/.local/reviews/gt09-playtest-20261008-18/arena/manifest.json",
+      "manifest_sha256": "98715fdccacc970be3b92bbfe2d77c6a0cf79a887e0d7d203fc033ab2896e3e5",
+      "run_id": "gt09-playtest-20261008-18",
+      "source_closure_sha256": "b133a26c849c7c3a08f3071a91abd75eb75d422ebddb82fc4b7ea5c694dadcf2",
+      "status": "PLAYTEST_EVIDENCE_READY"
+    },
+    "room": {
+      "manifest": "studio/.local/reviews/gt09-playtest-20261008-19/room/manifest.json",
+      "manifest_sha256": "b2479c899a566305ab3d5c41171e84fad8c848d5e9223b2ca6147a87cf44d5bc",
+      "run_id": "gt09-playtest-20261008-19",
+      "source_closure_sha256": "e2b874f52659451e4b79e00a197fa995064b56645dfcccb3dd6f10c1e64bd36e",
+      "status": "PLAYTEST_EVIDENCE_READY"
+    }
+  },
+  "generated_by": "coordinator",
+  "lessons": [
+    "Freeze verifier, fixture source, plan and status before long runs; any source change invalidates closure-bound evidence.",
+    "Use prepare then dry-run then one host worker per fixture path; preserve raw timeout/failure and never hand-edit evidence.",
+    "Bind the same Blender-published artifact to every fixture that observes dynamic asset edges; missing provenance must fail closed.",
+    "A wall deadline without host-captured exit is incomplete even when gameplay logs look healthy; remint only with a bounded longer deadline.",
+    "Transport-only MCP measurements cannot be promoted to native fixture/model-host capability.",
+    "Private diagnostic saved-room builder is not registered catalog E2E; do not toggle runtime flags to bypass that gate."
+  ],
+  "native_conformance": {
+    "path": "studio/.local/reviews/gt09-conformance-20261008-03.json",
+    "sha256": "16cacf413a2966ca91d962b196a7c8d2cd83fda0db8eabe2c01b3c22fe09a2a2",
+    "status": "CANDIDATE_PASS"
+  },
+  "open_gaps": [
+    "The new authoring_owner.py is a planned transaction seam only; no native callback has yet been connected to the registered Godot owner.",
+    "Registered catalog E2E remains open: authoring_contract is candidate-only and saved-room builder has no registered profile/lease/ACK path for its 3D/resource graph.",
+    "Generic dependency closure remains false; scoped loader literal inventory is narrower evidence only.",
+    "External MCP transport is measured, but native fixture and exact model/host capability matrix remain open.",
+    "Two independent read-only critics must inspect this exact package hash; no self-acceptance."
+  ],
+  "requirements": {
+    "authoring_transaction_seam": "PLANNED_NOT_NATIVE",
+    "dependency_closure": "OPEN_DIAGNOSTIC",
+    "external_mcp": "MEASURED_TRANSPORT_ONLY_NATIVE_OPEN",
+    "native_fixture_conformance": "CANDIDATE_PASS_CURRENT_SOURCE",
+    "playtest_fixtures": "READY_CURRENT_SOURCE",
+    "registered_catalog_e2e": "OPEN",
+    "two_critics_same_final_hash": "PENDING"
+  },
+  "schema": "hh-gt09-candidate-package-4",
+  "scope": "GT-09 PC O2 content authoring + 2 mini-game fixture conformance",
+  "source_binder": {
+    "path": "zdoc/reviews/20261008-gt09-candidate-v4/source-manifest.json",
+    "schema": "hh-gt09-source-binder-1",
+    "sha256": "36456e41faf57a6b72872783a2b76e09b6f59752439957838c78393f19880f2b"
+  }
+}
