@@ -93,6 +93,51 @@ def load_rows(path: Path) -> dict[str, Any]:
     return value
 
 
+def _safe_review_path(path: Path, *, root: Path) -> Path:
+    """Resolve a receipt only inside this matrix's review directory."""
+    value = path if path.is_absolute() else root / path
+    value = value.resolve()
+    _need(value.is_relative_to(root.resolve()), "evidence_path_outside_review")
+    _need(value.is_file(), f"evidence_missing:{value.name}")
+    return value
+
+
+def _load_json(path: Path) -> dict[str, Any]:
+    try:
+        value = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError) as exc:
+        raise MatrixError(f"evidence_json_invalid:{path.name}") from exc
+    _need(type(value) is dict, f"evidence_json_shape:{path.name}")
+    return value
+
+
+def _verify_row(row: dict[str, Any], *, matrix_root: Path, closure: str | None) -> str:
+    """Verify raw child receipts; caller fields cannot manufacture a PASS."""
+    ident = row.get("id")
+    _need(ident in ROWS, f"unknown_row:{ident}")
+    raw_path = _safe_review_path(Path(str(row.get("evidence_path", ""))), root=matrix_root)
+    raw = _load_json(raw_path)
+    _need(raw.get("schema") in ("hh-gt09-row-result-1", "hh-gt09-evidence-1"),
+          f"{ident}:evidence_schema")
+    _need(raw.get("row_id") == ident, f"{ident}:evidence_row_id")
+    _need(raw.get("status") == "PASS", f"{ident}:evidence_status")
+    child_closure = raw.get("source_closure_sha256")
+    _need(type(child_closure) is str and child_closure.startswith("sha256:")
+          and len(child_closure) == 71, f"{ident}:evidence_closure")
+    if closure is not None:
+        _need(child_closure == closure, f"{ident}:source_closure_mismatch")
+    exit_path = _safe_review_path(Path(str(row.get("exit_evidence_path", ""))), root=matrix_root)
+    receipt = _load_json(exit_path)
+    _need(receipt.get("schema") == "hh-process-exit-1", f"{ident}:exit_schema")
+    _need(receipt.get("row_id") == ident and receipt.get("actual_exit") == 0
+          and receipt.get("timed_out") is False and receipt.get("owned_tree_zero") is True,
+          f"{ident}:actual_exit")
+    _need(row.get("evidence_sha256") == _sha(raw_path)
+          and row.get("exit_evidence_sha256") == _sha(exit_path),
+          f"{ident}:receipt_hash")
+    return child_closure
+
+
 def final_matrix(row_evidence: Path | None, output: Path | None, run_id: str) -> int:
     _need(row_evidence is not None, "final_requires_row_evidence")
     manifest = load_rows(row_evidence)
@@ -101,16 +146,13 @@ def final_matrix(row_evidence: Path | None, output: Path | None, run_id: str) ->
           "final_requires_all_rows")
     errors: list[str] = []
     closures: set[str] = set()
+    matrix_root = row_evidence.parent.resolve()
     for row in rows:
-        if row.get("status") != "PASS":
-            errors.append(f"{row.get('id')}:status:{row.get('status')}")
-        closure = row.get("source_closure_sha256")
-        if not isinstance(closure, str) or len(closure) != 64:
-            errors.append(f"{row.get('id')}:source_closure")
-        else:
-            closures.add(closure)
-        if row.get("actual_exit") != 0:
-            errors.append(f"{row.get('id')}:actual_exit")
+        try:
+            closures.add(_verify_row(row, matrix_root=matrix_root,
+                                     closure=next(iter(closures), None)))
+        except MatrixError as exc:
+            errors.append(str(exc))
     if len(closures) != 1:
         errors.append("source_closure_mismatch")
     result = {"schema": SCHEMA, "run_id": run_id, "authority": 0,
