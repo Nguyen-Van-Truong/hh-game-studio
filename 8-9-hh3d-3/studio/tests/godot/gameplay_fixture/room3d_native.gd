@@ -54,6 +54,24 @@ func _key(key: Key, pressed: bool) -> void:
 	if key == KEY_D and pressed:
 		input_trace_ok = true
 
+func _read_avatar_asset() -> Node:
+	if not FileAccess.file_exists("res://assets/avatar.glb"):
+		return null
+	var bytes := FileAccess.get_file_as_bytes("res://assets/avatar.glb")
+	var document := GLTFDocument.new()
+	var state := GLTFState.new()
+	if document.append_from_buffer(bytes, "", state) != OK:
+		return null
+	return document.generate_scene(state)
+
+func _read_sprite_image() -> Image:
+	if not FileAccess.file_exists("res://assets/sprite_sheet.png"):
+		return null
+	var image := Image.new()
+	if image.load_png_from_buffer(FileAccess.get_file_as_bytes("res://assets/sprite_sheet.png")) != OK:
+		return null
+	return image
+
 func _ready() -> void:
 	_action("move_forward", KEY_D)
 	_action("move_back", KEY_A)
@@ -97,14 +115,12 @@ func _ready() -> void:
 	hud.text = "ROOM READY"
 	layer.add_child(hud)
 	add_child(layer)
-	var avatar_scene := load("res://assets/avatar.glb") as PackedScene
-	avatar_asset_loaded = avatar_scene != null
+	var imported := _read_avatar_asset()
+	avatar_asset_loaded = imported != null
 	if avatar_asset_loaded:
-		var imported := avatar_scene.instantiate()
 		imported.name = "BlenderAvatar"
 		avatar.add_child(imported)
-	var sprite := load("res://assets/sprite_sheet.png") as Texture2D
-	sprite_asset_loaded = sprite != null
+	sprite_asset_loaded = _read_sprite_image() != null
 	if not avatar_asset_loaded or not sprite_asset_loaded:
 		push_error("native room asset readback failed")
 	topology_components = {"avatar_shape": _has_shape(avatar),

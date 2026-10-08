@@ -226,6 +226,11 @@ def run_process(command: list[str], cwd: Path, env: dict[str, str], timeout: int
 
 
 def matrix_run(run_id: str, output: Path) -> dict:
+    # Godot rejects a relative project path when the working directory is the
+    # project itself (and the Unicode fixture path makes the failure easy to
+    # miss in the captured stdout).  Freeze the review root before constructing
+    # any child command so every engine path is absolute and stable.
+    output = output.resolve()
     tools = toolchain()
     source_tree = checked_tree(FIXTURE)
     source = closure_hash(source_tree)

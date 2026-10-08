@@ -64,6 +64,10 @@ def _source_manifest(*_args) -> tuple[dict[str, str], str]:
         "tests/godot/saved_arena_recipe.py",
         "godot-addon/gameplay_fixture_profile.py",
         "godot-addon/fixture_profile.json",
+        "host/blender/fixture_content.py",
+        "host/blender/fixture_content_job.py",
+        "host/blender/fixture_content_native.py",
+        "tests/blender/sprite_sheet_pixels.py",
         "toolchain.lock.json",
     }
     return _NATIVE.source_manifest(names)
@@ -139,8 +143,10 @@ def _bind_handoff(recipe: dict, handoff: _OWNER.BlenderHandoff) -> None:
 
 
 def _native_input(transaction, admission, recipe, handoff, fixture):
-    assets = {"mesh.avatar": {"path": "assets/avatar.glb", "sha256": handoff.glb_sha256}} \
-        if fixture == "room" else {}
+    _need(handoff.sprite_sha256 is not None, "REGISTERED_SPRITE_HANDOFF_REQUIRED")
+    assets = {"mesh.avatar": {"path": "assets/avatar.glb", "sha256": handoff.glb_sha256,
+                               "sprite_path": "assets/sprite_sheet.png",
+                               "sprite_sha256": handoff.sprite_sha256}}
     return _NATIVE.make_input(transaction, admission, recipe["root"], _OWNER._NODE.load_catalog(), assets)
 
 

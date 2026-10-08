@@ -35,6 +35,14 @@ PROFILE_VERSION = 1
 FIXTURE_PROJECTS = {"project.registered.room": "Node3D",
                     "project.registered.arena": "Node2D"}
 OPERATIONS = ("scene.node.create", "scene.node.update", "scene.resource.create")
+# The fixture host profile also admits the durable gameplay-source operations.
+# They intentionally live behind a separate route: the scene/resource owner
+# above emits catalog projections, while this route delegates source changes to
+# the already authenticated GameplaySourcePublicationOwner.  Keeping the two
+# transaction shapes separate prevents a source publish from being mistaken
+# for a scene projection or from bypassing the source owner's journal.
+SCRIPT_OPERATIONS = ("gameplay-source.inspect", "gameplay-source.publish")
+SCRIPT_ROUTE_SCHEMA = "hh-godot-registered-script-route-1"
 _ID = re.compile(r"[a-z][a-z0-9._-]{0,63}\Z")
 _REV = re.compile(r"sha256:[0-9a-f]{64}\Z")
 _HEX = re.compile(r"[0-9a-f]{64}\Z")
@@ -169,11 +177,21 @@ class BlenderHandoff:
     manifest_sha256: str
     manifest_schema: str
     command_id: str
+    sprite_sha256: str | None = None
+    content_schema: str | None = None
+    source_closure_sha256: str | None = None
 
     def as_dict(self) -> dict[str, Any]:
-        return {"published_root": self.published_root, "glb_sha256": self.glb_sha256,
-                "manifest_sha256": self.manifest_sha256, "manifest_schema": self.manifest_schema,
-                "command_id": self.command_id}
+        result = {"published_root": self.published_root, "glb_sha256": self.glb_sha256,
+                  "manifest_sha256": self.manifest_sha256, "manifest_schema": self.manifest_schema,
+                  "command_id": self.command_id}
+        if self.sprite_sha256 is not None:
+            result["sprite_sha256"] = self.sprite_sha256
+        if self.content_schema is not None:
+            result["content_schema"] = self.content_schema
+        if self.source_closure_sha256 is not None:
+            result["source_closure_sha256"] = self.source_closure_sha256
+        return result
 
 
 def inspect_blender_handoff(published_root: Path) -> BlenderHandoff:
@@ -188,15 +206,38 @@ def inspect_blender_handoff(published_root: Path) -> BlenderHandoff:
         manifest = parse_json(manifest_raw)
     except Exception as exc:
         raise RegisteredAuthoringOwnerError("REGISTERED_HANDOFF_MANIFEST_JSON") from exc
-    _need(type(manifest) is dict and manifest.get("schema") == "HH-BLENDER-PUBLICATION-1",
-          "REGISTERED_HANDOFF_MANIFEST_SCHEMA")
-    expected = manifest.get("native", {}).get("glb_sha256")
+    schema = manifest.get("schema") if type(manifest) is dict else None
+    if schema == "HH-BLENDER-PUBLICATION-1":
+        expected = manifest.get("native", {}).get("glb_sha256")
+        command_id = manifest.get("command_id")
+        sprite_sha256 = None
+        content_schema = None
+        source_closure_sha256 = None
+    elif schema == "HH-BLENDER-FIXTURE-CONTENT-1":
+        _need(manifest.get("authority") == 0 and manifest.get("public_ack") is False
+              and manifest.get("external_inputs") == [], "REGISTERED_HANDOFF_CONTENT_AUTHORITY")
+        artifacts = manifest.get("artifacts", {})
+        expected = artifacts.get("scene.glb")
+        sprite_sha256 = artifacts.get("sprite_sheet.png")
+        command_id = manifest.get("run_id")
+        content_schema = schema
+        source_closure_sha256 = manifest.get("source_closure_sha256")
+        _need(type(source_closure_sha256) is str and _REV.fullmatch(source_closure_sha256),
+              "REGISTERED_HANDOFF_SOURCE_CLOSURE")
+        body = dict(manifest)
+        body_hash = body.pop("manifest_body_sha256", None)
+        _need(type(body_hash) is str and body_hash == _sha_bytes(canonical_bytes(body)),
+              "REGISTERED_HANDOFF_MANIFEST_HASH")
+        _need(type(sprite_sha256) is str and _HEX.fullmatch(sprite_sha256),
+              "REGISTERED_HANDOFF_SPRITE_HASH")
+    else:
+        raise RegisteredAuthoringOwnerError("REGISTERED_HANDOFF_MANIFEST_SCHEMA")
     _need(type(expected) is str and _HEX.fullmatch(expected) and expected == _sha_bytes(glb_raw),
           "REGISTERED_HANDOFF_GLB_HASH")
-    _need(type(manifest.get("command_id")) is str and _ID.fullmatch(manifest["command_id"].replace("-", ".")),
+    _need(type(command_id) is str and _ID.fullmatch(command_id.replace("-", ".")),
           "REGISTERED_HANDOFF_COMMAND")
-    return BlenderHandoff(str(root), expected, _sha_bytes(manifest_raw), manifest["schema"],
-                          manifest["command_id"])
+    return BlenderHandoff(str(root), expected, _sha_bytes(manifest_raw), schema,
+                          command_id, sprite_sha256, content_schema, source_closure_sha256)
 
 
 class RegisteredAuthoringOwner:
@@ -432,7 +473,134 @@ class RegisteredAuthoringAdapter:
         return receipt
 
 
-__all__ = ["PROFILE", "SCHEMA", "AUTHORITY", "STATE_KIND", "RegisteredProfile",
+class RegisteredScriptRoute:
+    """Fixture-scoped registered route for real controller source changes.
+
+    ``GameplaySourceAdapter`` already owns the durable journal, grant/lease
+    checks, native executor and postcondition readback.  This class is the
+    catalog registration seam around that owner.  It accepts only typed
+    protocol requests and a trusted adapter/grant/lease supplied by the host;
+    paths, projects and capability flags remain host-owned.  Exact retries
+    return the cached owner receipt, while a changed request with the same
+    command id is rejected before a second native dispatch.
+    """
+
+    def __init__(self, owner: RegisteredAuthoringOwner, *, adapter: Any,
+                 grant: Any, lease: Any, host_profile: Any):
+        _need(type(owner) is RegisteredAuthoringOwner, "REGISTERED_OWNER_REQUIRED")
+        _need(adapter is not None and callable(getattr(adapter, "execute", None)),
+              "REGISTERED_SCRIPT_ADAPTER_REQUIRED")
+        _need(grant is not None and lease is not None, "REGISTERED_SCRIPT_CREDENTIALS_REQUIRED")
+        _need(host_profile is not None and getattr(host_profile, "script_enabled", False) is True,
+              "REGISTERED_SCRIPT_PROFILE_DISABLED")
+        _need(tuple(getattr(host_profile, "operations", ())) ==
+              tuple(_fixture_module().OPERATIONS), "REGISTERED_SCRIPT_PROFILE_OPERATIONS")
+        _need(owner.admission.project_id == getattr(host_profile, "project_id", None),
+              "REGISTERED_SCRIPT_PROJECT")
+        self.owner = owner
+        self.adapter = adapter
+        self.grant = grant
+        self.lease = lease
+        self.host_profile = host_profile
+        self._requests: dict[str, str] = {}
+        self._receipts: dict[str, dict[str, Any]] = {}
+
+    def _check_request(self, request: Request | Mapping[str, Any]) -> Request:
+        try:
+            wire = request.as_dict() if isinstance(request, Request) else request
+            checked = Request.from_dict(parse_json(canonical_bytes(wire)))
+        except (ValidationError, TypeError, ValueError) as exc:
+            code = getattr(exc, "code", "REGISTERED_SCRIPT_REQUEST_INVALID")
+            raise RegisteredAuthoringOwnerError(code) from exc
+        _need(checked.project_id == self.owner.admission.project_id,
+              "REGISTERED_SCRIPT_PROJECT")
+        _need(checked.operation in SCRIPT_OPERATIONS, "REGISTERED_SCRIPT_OPERATION_DISABLED")
+        _need(checked.lease_id == self.owner.admission.lease_id and
+              checked.fencing_epoch == self.owner.admission.fencing_epoch,
+              "REGISTERED_SCRIPT_FENCE")
+        # The source owner, rather than this registration seam, decides
+        # whether the expected revision is current.  Keeping that check in
+        # one place is required for an exact retry: after a successful publish
+        # the selected revision advances, yet the original command must still
+        # reconcile to its durable receipt without a second native run.
+        return checked
+
+    def discovery(self) -> dict[str, Any]:
+        """Return the host profile only after revalidating its policy bytes."""
+        try:
+            descriptor = self.adapter.profile_discovery(
+                project_id=self.owner.admission.project_id)
+        except Exception as exc:
+            raise RegisteredAuthoringOwnerError(
+                getattr(exc, "code", "REGISTERED_SCRIPT_DISCOVERY")) from exc
+        _need(descriptor.get("fixture_enabled") is True and
+              descriptor.get("public_runtime_enabled") is False and
+              descriptor.get("authority") == 0 and descriptor.get("public_ack") is False,
+              "REGISTERED_SCRIPT_DISCOVERY")
+        return {"schema": SCRIPT_ROUTE_SCHEMA, "profile": descriptor,
+                "operations": list(SCRIPT_OPERATIONS), "authority": 0,
+                "public_ack": False}
+
+    def execute(self, request: Request | Mapping[str, Any]) -> dict[str, Any]:
+        """Dispatch one registered source request and bind its readback."""
+        checked = self._check_request(request)
+        command_id = checked.command_id
+        digest = checked.digest
+        prior = self._requests.get(command_id)
+        _need(prior is None or prior == digest, "REGISTERED_SCRIPT_COMMAND_CONFLICT")
+        cached = self._receipts.get(digest)
+        if cached is not None:
+            return _copy(cached)
+        try:
+            receipt = self.adapter.execute(checked, grant=self.grant, lease=self.lease)
+        except Exception as exc:
+            code = getattr(exc, "code", "REGISTERED_SCRIPT_NATIVE_FAILED")
+            raise RegisteredAuthoringOwnerError(code) from exc
+        _need(isinstance(receipt, Mapping), "REGISTERED_SCRIPT_RECEIPT_SHAPE")
+        receipt = _copy(receipt)
+        if checked.operation == "gameplay-source.inspect":
+            # Inspection is a read-only command: the source owner has already
+            # authenticated the lease and revalidated its selected revision,
+            # but there is no new native process/run id to acknowledge.  Wrap
+            # that durable readback in the same typed route envelope so the
+            # advertised inspect operation cannot accidentally be treated as
+            # a publish or force a fabricated native receipt.
+            _need(receipt.get("public_ack") is False
+                  and receipt.get("project_id") == checked.project_id
+                  and isinstance(receipt.get("project_revision"), str)
+                  and receipt.get("selected_revision") == receipt.get("project_revision")
+                  and isinstance(receipt.get("source_sha256"), str),
+                  "REGISTERED_SCRIPT_INSPECT_READBACK_REQUIRED")
+            receipt = {"status": "READBACK_ACK", "command_id": command_id,
+                       "request_digest": digest, "readback_ack": True,
+                       "public_ack": False, "readback": receipt}
+            native_observed = False
+        else:
+            _need(receipt.get("status") == "READBACK_ACK" and
+                  receipt.get("readback_ack") is True and receipt.get("public_ack") is False,
+                  "REGISTERED_SCRIPT_READBACK_REQUIRED")
+            _need(receipt.get("command_id") == command_id,
+                  "REGISTERED_SCRIPT_COMMAND_MISMATCH")
+            _need(type(receipt.get("native_run_id")) is str and receipt["native_run_id"],
+                  "REGISTERED_SCRIPT_NATIVE_RUN_MISSING")
+            native_observed = True
+        envelope = {"schema": SCRIPT_ROUTE_SCHEMA, "authority": 0,
+                    "public_ack": False, "native_observed": native_observed,
+                    "readback_observed": True,
+                    "registered_route": True, "command_id": command_id,
+                    "request_digest": digest, "project_id": checked.project_id,
+                    "lease_id": checked.lease_id,
+                    "fencing_epoch": checked.fencing_epoch,
+                    "status": receipt.get("status"),
+                    "receipt": receipt}
+        self._requests[command_id] = digest
+        self._receipts[digest] = envelope
+        return _copy(envelope)
+
+
+__all__ = ["PROFILE", "SCHEMA", "AUTHORITY", "STATE_KIND", "SCRIPT_OPERATIONS",
+           "SCRIPT_ROUTE_SCHEMA", "RegisteredProfile",
            "OwnerAdmission", "BlenderHandoff", "RegisteredAuthoringOwner",
            "RegisteredAuthoringOwnerError", "register_profile", "make_admission",
-           "inspect_blender_handoff", "RegisteredAuthoringAdapter", "load_fixture_host_profile"]
+           "inspect_blender_handoff", "RegisteredAuthoringAdapter", "RegisteredScriptRoute",
+           "load_fixture_host_profile"]

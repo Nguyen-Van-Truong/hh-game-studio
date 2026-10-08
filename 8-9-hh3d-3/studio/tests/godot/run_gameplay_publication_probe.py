@@ -71,13 +71,20 @@ def publication_fixture_allowed(name, catalog):
     return name in catalog and (name.startswith('gameplay_source_') or name == ARENA_FIXTURE)
 
 
-def publication_dependency_policy(name, case, *, saved_arena=False):
+def publication_dependency_policy(name, case, *, saved_arena=False, catalog_arena=False):
     need(not saved_arena or name == ARENA_FIXTURE, 'SAVED_ARENA_FIXTURE_REQUIRED')
+    need(not catalog_arena or name in (ARENA_FIXTURE, 'gameplay_source_room_3d_native'),
+         'CATALOG_ARENA_FIXTURE_REQUIRED')
+    need(not (saved_arena and catalog_arena), 'ARENA_INPUTS_EXCLUSIVE')
     if name == ARENA_FIXTURE:
-        expected = SAVED_ARENA_DEPENDENCY_FILES if saved_arena else ARENA_DEPENDENCY_FILES
+        expected = (SAVED_ARENA_DEPENDENCY_FILES if (saved_arena or catalog_arena)
+                    else ARENA_DEPENDENCY_FILES)
         need(case.get('dependency_observation') is True
              and case.get('dependency_files') == expected,
              'ARENA_DEPENDENCY_POLICY_REQUIRED')
+    if name == 'gameplay_source_room_3d_native' and catalog_arena:
+        need(case.get('extra_files', {}).get('scenes/room.tscn') is not None,
+             'CATALOG_ROOM_DEPENDENCY_REQUIRED')
     return {'dependency_observation_required': case.get('dependency_observation') is True,
             'dependency_observation_files': tuple(case.get('dependency_files', ()))}
 
@@ -106,6 +113,126 @@ def saved_arena_case(name, case, raw):
                 'saved_world_path': 'res://scenes/arena.tscn',
                 'saved_actor_paths': {'pickup': 'Pickup', 'bot': 'Bot', 'camera': 'Camera'}},
             'dependency_files': SAVED_ARENA_DEPENDENCY_FILES}
+
+
+def catalog_arena_case(name, case, raw):
+    """Bind a catalog-produced scene without invoking the legacy builder."""
+    need(name == ARENA_FIXTURE, 'CATALOG_ARENA_FIXTURE_REQUIRED')
+    need(type(raw) is bytes and 0 < len(raw) <= 1_048_576,
+         'CATALOG_ARENA_BYTES_REQUIRED')
+    scene = case['scene']
+    replacements = (
+        ('[gd_scene load_steps=2 format=3]', '[gd_scene load_steps=3 format=3]'),
+        ('[node name="Fixture" type="Node3D"]',
+         '[ext_resource type="PackedScene" path="res://scenes/arena.tscn" id="2_world"]\n\n'
+         '[node name="Fixture" type="Node3D"]'),
+        ('script = ExtResource("1_script")',
+         'script = ExtResource("1_script")\nsaved_world = ExtResource("2_world")'),
+    )
+    for old, new in replacements:
+        need(scene.count(old) == 1, 'CATALOG_ARENA_FIXTURE_TEMPLATE')
+        scene = scene.replace(old, new, 1)
+    return {**case, 'scene': scene,
+            'extra_files': {**case.get('extra_files', {}), SAVED_ARENA_PATH: raw.decode('utf-8')},
+            'expected_state': {**case['expected_state'], 'saved_world_instantiated': True,
+                'saved_actors_resolved': True, 'saved_hud_resolved': True,
+                'saved_world_path': 'res://scenes/arena.tscn',
+                'saved_actor_paths': {'pickup': 'Pickup', 'bot': 'Bot', 'camera': 'Camera'}},
+            'dependency_files': SAVED_ARENA_DEPENDENCY_FILES}
+
+
+def catalog_room_case(name, case, raw):
+    """Use the catalog-authored room as the runtime topology.
+
+    The existing room fixture's dynamic builder is retained as a compatibility
+    oracle.  This adapter replaces only its world-construction callback with a
+    thin binding to the verified PackedScene, then adds the two gameplay nodes
+    that the catalog recipe intentionally does not own (pickup and HUD).
+    """
+    need(name == 'gameplay_source_room_3d_native', 'CATALOG_ROOM_FIXTURE_REQUIRED')
+    need(type(raw) is bytes and 0 < len(raw) <= 1_048_576,
+         'CATALOG_ROOM_BYTES_REQUIRED')
+    script = case['script']
+    start = script.index('func _ready() -> void:')
+    end = script.index('func _physics_process', start)
+    ready = '''func _ready() -> void:
+\t_action("move_forward", KEY_D)
+\t_action("interact", KEY_E)
+\tvar authored := load("res://scenes/room.tscn") as PackedScene
+\tif authored == null:
+\t\tpush_error("catalog room scene readback failed")
+\t\treturn
+\tvar world := authored.instantiate()
+\tadd_child(world)
+\tavatar = world.get_node_or_null("Avatar") as CharacterBody3D
+\tplatform = world.get_node_or_null("Platform") as StaticBody3D
+\ttrigger = world.get_node_or_null("Trigger") as Area3D
+\tcamera = world.get_node_or_null("Camera") as Camera3D
+\tif avatar == null or platform == null or trigger == null or camera == null:
+\t\tpush_error("catalog room topology readback failed")
+\t\treturn
+\ttrigger.position = Vector3(2.0, 1.0, 0.0)
+\tpickup = Area3D.new()
+\tpickup.name = "Pickup"
+\tpickup.position = Vector3(5.0, 1.0, 0.0)
+\tpickup.monitoring = true
+\t_box(pickup, Vector3(1.0, 1.0, 1.0))
+\tworld.add_child(pickup)
+\tvar layer := CanvasLayer.new()
+\tlayer.name = "HUD"
+\thud = Label.new()
+\thud.name = "Status"
+\thud.text = "ROOM READY"
+\tlayer.add_child(hud)
+\tworld.add_child(layer)
+\tvar imported := _read_avatar_asset()
+\tavatar_asset_loaded = imported != null
+\tif avatar_asset_loaded:
+\t\timported.name = "BlenderAvatar"
+\t\tavatar.add_child(imported)
+\tsprite_asset_loaded = _read_sprite_image() != null
+\tif not avatar_asset_loaded or not sprite_asset_loaded:
+\t\tpush_error("catalog room asset readback failed")
+\ttopology_components = {"avatar_shape": _has_shape(avatar),
+\t\t"trigger_shape": _has_shape(trigger), "pickup_shape": _has_shape(pickup),
+\t\t"camera": camera is Camera3D, "hud": hud is Label}
+\ttopology_ok = (avatar is CharacterBody3D and platform is StaticBody3D
+\t\tand trigger is Area3D and pickup is Area3D and topology_components["camera"]
+\t\tand topology_components["hud"] and topology_components["avatar_shape"]
+\t\tand topology_components["trigger_shape"] and topology_components["pickup_shape"])
+
+'''
+    helpers = '''func _read_avatar_asset() -> Node:
+\tif not FileAccess.file_exists("res://assets/avatar.glb"):
+\t\treturn null
+\tvar bytes := FileAccess.get_file_as_bytes("res://assets/avatar.glb")
+\tvar document := GLTFDocument.new()
+\tvar state := GLTFState.new()
+\tif document.append_from_buffer(bytes, "", state) != OK:
+\t\treturn null
+\treturn document.generate_scene(state)
+
+func _read_sprite_image() -> Image:
+\tif not FileAccess.file_exists("res://assets/sprite_sheet.png"):
+\t\treturn null
+\tvar image := Image.new()
+\tif image.load_png_from_buffer(FileAccess.get_file_as_bytes("res://assets/sprite_sheet.png")) != OK:
+\t\treturn null
+\treturn image
+
+'''
+    # The delegated playtest consumes the exact native publication snapshot.
+    # Preserve its lifecycle/dependency scripts beside the catalog-authored
+    # scene so the later runner never needs to rewrite the frozen project.
+    fixture_root = STUDIO / 'tests' / 'godot' / 'gameplay_fixture'
+    extra = {**case.get('extra_files', {}),
+             'scenes/room.tscn': raw.decode('utf-8'),
+             'scripts/fixture_dependencies.gd': (fixture_root / 'fixture_dependencies.gd').read_text(encoding='utf-8'),
+             'scripts/fixture_lifecycle.gd': (fixture_root / 'fixture_lifecycle.gd').read_text(encoding='utf-8')}
+    return {**case, 'script': script[:start] + helpers + ready + script[end:],
+            'extra_files': extra,
+            'extra_binary_files': {**case.get('extra_binary_files', {})},
+            'asset_readback': True}
 
 
 def _provenance_file(root, name):
@@ -270,8 +397,106 @@ def verify_saved_arena_binding(directory, frozen_root, binding, builder, candida
          and hashlib.sha256(raw).hexdigest() == binding['scene_sha256'], 'SAVED_ARENA_SOURCE_CHANGED')
     for name, digest in binding['provenance']['files'].items():
         need(all(hashlib.sha256(_provenance_file(root, name).read_bytes()).hexdigest() == digest
-                 for root in (directory, frozen_root / 'provenance')),
+             for root in (directory, frozen_root / 'provenance')),
              'SAVED_ARENA_PROVENANCE_CHANGED')
+
+
+def _catalog_handoff_module():
+    name = 'o2_catalog_gameplay_handoff'
+    # ``load`` intentionally captures a fresh source generation for normal
+    # probes.  The handoff carries a dataclass, so reloading it between
+    # verification calls would make an otherwise valid handoff fail an
+    # ``isinstance`` check.  Keep one module instance for this run.
+    if name in sys.modules:
+        return sys.modules[name]
+    return load(name, STUDIO / 'tests/godot/catalog_gameplay_handoff.py')
+
+
+def freeze_catalog_arena(catalog_root, registered_root, frozen_root):
+    """Freeze the verified catalog scene and its producer chain."""
+    module = _catalog_handoff_module()
+    handoff = module.verify_catalog_gameplay_handoff(catalog_root, registered_root)
+    frozen_root.mkdir(exist_ok=False)
+    with (frozen_root / 'arena.tscn').open('xb') as stream:
+        stream.write(handoff.scene_bytes)
+    save(frozen_root / 'handoff.json', handoff.as_dict())
+    return handoff.scene_bytes, handoff.as_dict()
+
+
+def verify_catalog_arena_binding(catalog_root, registered_root, frozen_root,
+                                 binding, candidate):
+    module = _catalog_handoff_module()
+    handoff = module.verify_catalog_gameplay_handoff(catalog_root, registered_root)
+    need(handoff.as_dict() == json.loads((frozen_root / 'handoff.json').read_text(encoding='utf-8')),
+         'CATALOG_HANDOFF_CHANGED')
+    frozen = (frozen_root / 'arena.tscn').read_bytes()
+    need(frozen == handoff.scene_bytes == candidate.get(SAVED_ARENA_PATH)
+         and hashlib.sha256(frozen).hexdigest() == binding['scene_sha256'],
+         'CATALOG_SCENE_CHANGED')
+
+
+def freeze_catalog_room(catalog_root, registered_root, frozen_root):
+    module = _catalog_handoff_module()
+    handoff = module.verify_catalog_room_handoff(catalog_root, registered_root)
+    frozen_root.mkdir(exist_ok=False)
+    with (frozen_root / 'room.tscn').open('xb') as stream:
+        stream.write(handoff.scene_bytes)
+    save(frozen_root / 'handoff.json', handoff.as_dict())
+    return handoff.scene_bytes, handoff.as_dict()
+
+
+def verify_catalog_room_binding(catalog_root, registered_root, frozen_root,
+                                binding, candidate):
+    module = _catalog_handoff_module()
+    handoff = module.verify_catalog_room_handoff(catalog_root, registered_root)
+    need(handoff.as_dict() == json.loads((frozen_root / 'handoff.json').read_text(encoding='utf-8')),
+         'CATALOG_ROOM_HANDOFF_CHANGED')
+    frozen = (frozen_root / 'room.tscn').read_bytes()
+    need(frozen == handoff.scene_bytes == candidate.get('scenes/room.tscn', b'')
+         and hashlib.sha256(frozen).hexdigest() == binding['scene_sha256'],
+         'CATALOG_ROOM_SCENE_CHANGED')
+    need(binding == handoff.as_dict(), 'CATALOG_ROOM_HANDOFF_BINDING_CHANGED')
+    need(binding == handoff.as_dict(), 'CATALOG_HANDOFF_BINDING_CHANGED')
+
+
+def read_catalog_content(publication_root, handoff):
+    module = _catalog_handoff_module()
+    return module.read_blender_content_artifacts(publication_root, handoff)
+
+
+def freeze_catalog_content(publication_root, handoff, frozen_root):
+    artifacts = read_catalog_content(publication_root, handoff)
+    frozen_root.mkdir(exist_ok=False)
+    for name, key in (('scene.glb', 'scene_glb_bytes'),
+                      ('sprite_sheet.png', 'sprite_sheet_bytes')):
+        with (frozen_root / name).open('xb') as stream:
+            stream.write(artifacts[key])
+    save(frozen_root / 'binding.json', {
+        'published_root': artifacts['published_root'],
+        'manifest_sha256': artifacts['manifest_sha256'],
+        'artifact_sha256': artifacts['artifact_sha256'],
+        'authority': 0, 'public_ack': False})
+    return artifacts['scene_glb_bytes'], artifacts['sprite_sheet_bytes'], {
+        'published_root': artifacts['published_root'],
+        'manifest_sha256': artifacts['manifest_sha256'],
+        'artifact_sha256': artifacts['artifact_sha256'],
+        'authority': 0, 'public_ack': False}
+
+
+def verify_catalog_content_binding(publication_root, handoff, frozen_root,
+                                   binding, candidate):
+    artifacts = read_catalog_content(publication_root, handoff)
+    frozen_binding = json.loads((frozen_root / 'binding.json').read_text(encoding='utf-8'))
+    need(frozen_binding == binding, 'CATALOG_CONTENT_BINDING_CHANGED')
+    need(artifacts['published_root'] == binding['published_root']
+         and artifacts['manifest_sha256'] == binding['manifest_sha256']
+         and artifacts['artifact_sha256'] == binding['artifact_sha256'],
+         'CATALOG_CONTENT_CHANGED')
+    need((frozen_root / 'scene.glb').read_bytes() == artifacts['scene_glb_bytes']
+         and (frozen_root / 'sprite_sheet.png').read_bytes() == artifacts['sprite_sheet_bytes']
+         and candidate.get('assets/avatar.glb') == artifacts['scene_glb_bytes']
+         and candidate.get('assets/sprite_sheet.png') == artifacts['sprite_sheet_bytes'],
+         'CATALOG_CONTENT_CANDIDATE_CHANGED')
 
 
 def verify_fixture_sources(name, case, candidate, hashes, *, source_root, frozen_root):
@@ -327,10 +552,22 @@ def verify_fixture_observation(name, observation, *, saved_arena=False):
     if trusted:
         # The trusted observer inventories the complete admitted asset bundle;
         # candidate self-reports intentionally retain their separate contract.
-        expected['scripts/fixture_actor.gd'].extend(
-            {'kind': 'dynamic_load', 'target': path}
-            for path in ('assets/avatar.glb', 'assets/sprite_sheet.png')
-            if path in {node.get('path') for node in nodes})
+        # Codec readback is the headless-safe asset path.  Its immutable
+        # fixture source hash is present in native observations; synthetic
+        # reports without that binding must still prove the legacy dynamic
+        # loader edges, so a missing edge remains a rejected defect there.
+        codec_source = (observation.get('fixture_script_sha256') ==
+                        hashlib.sha256((STUDIO / ARENA_SOURCE_FILES['scripts/fixture_actor.gd'])
+                                       .read_bytes()).hexdigest()
+                        and 'GLTFDocument.new()' in
+                        (STUDIO / ARENA_SOURCE_FILES['scripts/fixture_actor.gd']).read_text(encoding='utf-8')
+                        and 'load_png_from_buffer' in
+                        (STUDIO / ARENA_SOURCE_FILES['scripts/fixture_actor.gd']).read_text(encoding='utf-8'))
+        if not codec_source:
+            expected['scripts/fixture_actor.gd'].extend(
+                {'kind': 'dynamic_load', 'target': path}
+                for path in ('assets/avatar.glb', 'assets/sprite_sheet.png')
+                if path in {node.get('path') for node in nodes})
         for path in ('assets/avatar.glb', 'assets/sprite_sheet.png'):
             if path in {node.get('path') for node in nodes}:
                 expected[path] = []
@@ -353,9 +590,19 @@ def _probe_sources(owner_mod, args):
              'tests/replay/benchmark_job.py', 'host/core/gt07_failpoints.py']
     if args.fixture == ARENA_FIXTURE:
         names.extend(ARENA_SOURCE_FILES.values())
+    if args.catalog_arena is not None:
+        names.extend(('tests/godot/catalog_gameplay_handoff.py',
+                      'godot-addon/catalog_native_host.py',
+                      'godot-addon/catalog_scene_adapter.gd',
+                      'godot-addon/registered_authoring_owner.py'))
+    if args.catalog_room is not None:
+        names.extend(('tests/godot/catalog_gameplay_handoff.py',
+                      'godot-addon/catalog_native_host.py',
+                      'godot-addon/catalog_scene_adapter.gd',
+                      'godot-addon/registered_authoring_owner.py'))
     if args.saved_arena is not None:
         names.append('tests/godot/run_saved_arena_builder.py')
-    if args.blender_published is not None:
+    if args.blender_published is not None or args.blender_content_published is not None:
         for folder in ('host/blender', 'host/core', 'blender-addon'):
             names.extend(path.relative_to(STUDIO).as_posix()
                          for path in (STUDIO / folder).rglob('*.py'))
@@ -364,12 +611,18 @@ def _probe_sources(owner_mod, args):
     return files, closure
 
 
-def _publication_case(args, owner_mod, fixtures, *, saved_arena_raw=None, glb=None):
+def _publication_case(args, owner_mod, fixtures, *, saved_arena_raw=None,
+                      catalog_arena_raw=None, catalog_room_raw=None,
+                      glb=None, sprite=None):
     need(publication_fixture_allowed(args.fixture, fixtures.FIXTURES), 'PUBLICATION_FIXTURE_REQUIRED')
     case = {**fixtures.FIXTURES[args.fixture], 'scene': fixtures.SCENE,
             'project': owner_mod._load('gameplay_source_profile').PROJECT_TEMPLATE}
     if saved_arena_raw is not None:
         case = saved_arena_case(args.fixture, case, saved_arena_raw)
+    if catalog_arena_raw is not None:
+        case = catalog_arena_case(args.fixture, case, catalog_arena_raw)
+    if catalog_room_raw is not None:
+        case = catalog_room_case(args.fixture, case, catalog_room_raw)
     if glb is not None:
         case = {**case,
                 'asset_readback': True,
@@ -378,7 +631,8 @@ def _publication_case(args, owner_mod, fixtures, *, saved_arena_raw=None, glb=No
                                    'sprite_asset_loaded': True},
                 'extra_binary_files': {**case.get('extra_binary_files', {}),
                                        'assets/avatar.glb': glb,
-                                       'assets/sprite_sheet.png': fixtures.ASSET_SPRITE_SHEET}}
+                                       'assets/sprite_sheet.png': (sprite if sprite is not None
+                                                                    else fixtures.ASSET_SPRITE_SHEET)}}
     return case
 
 
@@ -393,18 +647,43 @@ def dry_run(args):
     fixtures = load('o2_admission_fixtures', STUDIO / 'tests/godot/linux_probe_fixtures.py')
     probe = load('o2_admission_probe', STUDIO / 'tests/godot/run_linux_probe.py')
     files, closure = _probe_sources(owner_mod, args)
-    saved_raw = glb = handoff = None
+    saved_raw = catalog_raw = catalog_room_raw = glb = sprite = handoff = None
+    catalog_handoff = catalog_room_handoff = content_binding = None
     if args.saved_arena is not None:
         builder = load('o2_admission_builder', STUDIO / 'tests/godot/run_saved_arena_builder.py')
         saved_raw = builder.verify_saved_arena(args.saved_arena, require_current_source=False)
+    if args.catalog_arena is not None:
+        need(args.registered_arena is not None, 'CATALOG_REGISTERED_ROOT_REQUIRED')
+        module = _catalog_handoff_module()
+        catalog_handoff = module.verify_catalog_gameplay_handoff(
+            args.catalog_arena, args.registered_arena)
+        catalog_raw = catalog_handoff.scene_bytes
+    if args.catalog_room is not None:
+        need(args.registered_room is not None, 'CATALOG_REGISTERED_ROOT_REQUIRED')
+        module = _catalog_handoff_module()
+        catalog_room_handoff = module.verify_catalog_room_handoff(
+            args.catalog_room, args.registered_room)
+        catalog_room_raw = catalog_room_handoff.scene_bytes
     if args.blender_published is not None:
         glb, _, handoff = read_blender_handoff(args.blender_published)
-    case = _publication_case(args, owner_mod, fixtures, saved_arena_raw=saved_raw, glb=glb)
+    if args.blender_content_published is not None:
+        need(catalog_handoff is not None or catalog_room_handoff is not None,
+             'CATALOG_HANDOFF_REQUIRED_FOR_CONTENT')
+        content_handoff = catalog_handoff or catalog_room_handoff
+        artifacts = read_catalog_content(args.blender_content_published, content_handoff)
+        glb, sprite = artifacts['scene_glb_bytes'], artifacts['sprite_sheet_bytes']
+        content_binding = {key: artifacts[key] for key in
+                           ('published_root', 'manifest_sha256', 'artifact_sha256')}
+        content_binding.update(authority=0, public_ack=False)
+    case = _publication_case(args, owner_mod, fixtures, saved_arena_raw=saved_raw,
+                             catalog_arena_raw=catalog_raw,
+                             catalog_room_raw=catalog_room_raw, glb=glb, sprite=sprite)
     candidate = probe.case_files(case)
     candidate.pop('project.godot')
     owner_mod._copy_source_bundle(owner_mod._load('gameplay_source_profile'), candidate,
                                  entrypoint=owner_mod.ENTRYPOINT)
-    publication_dependency_policy(args.fixture, case, saved_arena=saved_raw is not None)
+    publication_dependency_policy(args.fixture, case, saved_arena=saved_raw is not None,
+                                  catalog_arena=(catalog_raw is not None or catalog_room_raw is not None))
     executor = owner_mod._load('linux_executor')
     executor._lock()
     binary = executor._binary()
@@ -413,7 +692,11 @@ def dry_run(args):
             'fixture': args.fixture, 'source_closure_sha256': closure,
             'files': files, 'binary': str(binary), 'binary_sha256': executor.BINARY_SHA256,
             'candidate_sha256': {name: hashlib.sha256(raw).hexdigest() for name, raw in candidate.items()},
-            'blender_handoff': handoff}
+            'blender_handoff': handoff,
+            'catalog_handoff': (catalog_handoff.as_dict() if catalog_handoff is not None else None),
+            'catalog_room_handoff': (catalog_room_handoff.as_dict()
+                                     if catalog_room_handoff is not None else None),
+            'blender_content': content_binding}
 
 
 def main():
@@ -422,17 +705,42 @@ def main():
     parser.add_argument('--fixture', default='gameplay_source_multifile')
     parser.add_argument('--saved-arena', type=Path,
                         help='verified native saved-arena builder run directory; arena fixture only')
+    parser.add_argument('--catalog-arena', type=Path,
+                        help='verified registered catalog arena run directory; arena fixture only')
+    parser.add_argument('--registered-arena', type=Path,
+                        help='registered-owner arena result paired with --catalog-arena')
+    parser.add_argument('--catalog-room', type=Path,
+                        help='verified registered catalog room run directory; room fixture only')
+    parser.add_argument('--registered-room', type=Path,
+                        help='registered-owner room result paired with --catalog-room')
     parser.add_argument('--blender-published', type=Path,
                         help='completed native Blender export/published directory; assets fixture only')
+    parser.add_argument('--blender-content-published', type=Path,
+                        help='protected GT09 content publication paired with --catalog-arena')
     parser.add_argument('--dry-run', action='store_true')
     args = parser.parse_args()
     if not re.fullmatch(r'o2-publication-[a-z0-9-]{1,48}', args.run_id):
         parser.error('use a fresh o2-publication-<id>')
     if args.saved_arena is not None and args.fixture != ARENA_FIXTURE:
         parser.error('--saved-arena requires --fixture gameplay_arena_physics')
+    if args.catalog_arena is not None and args.fixture != ARENA_FIXTURE:
+        parser.error('--catalog-arena requires --fixture gameplay_arena_physics')
+    if (args.catalog_arena is None) != (args.registered_arena is None):
+        parser.error('--catalog-arena and --registered-arena must be supplied together')
+    if args.catalog_room is not None and args.fixture != 'gameplay_source_room_3d_native':
+        parser.error('--catalog-room requires --fixture gameplay_source_room_3d_native')
+    if (args.catalog_room is None) != (args.registered_room is None):
+        parser.error('--catalog-room and --registered-room must be supplied together')
+    if args.saved_arena is not None and args.catalog_arena is not None:
+        parser.error('--saved-arena and --catalog-arena are mutually exclusive')
+    if args.catalog_arena is not None and args.catalog_room is not None:
+        parser.error('--catalog-arena and --catalog-room are mutually exclusive')
     if args.blender_published is not None and args.fixture not in (
             'gameplay_source_assets', ARENA_FIXTURE, 'gameplay_source_room_3d_native'):
         parser.error('--blender-published requires an asset-capable gameplay fixture')
+    if args.blender_content_published is not None and args.catalog_arena is None \
+            and args.catalog_room is None:
+        parser.error('--blender-content-published requires a catalog handoff')
     # A saved arena and a published Blender handoff are deliberately composable:
     # GT09 must exercise the real path "saved Godot scene + imported Blender
     # asset" in one bounded fixture.  Each input is frozen and verified
@@ -463,6 +771,15 @@ def _execute(args, admission):
     builder = None
     saved_arena_binding = None
     saved_arena_raw = None
+    catalog_arena_binding = None
+    catalog_arena_raw = None
+    catalog_handoff = None
+    catalog_room_binding = None
+    catalog_room_raw = None
+    catalog_room_handoff = None
+    catalog_content_binding = None
+    catalog_glb_raw = None
+    catalog_sprite_raw = None
     blender_handoff_binding = None
     blender_handoff_raw = None
     if args.saved_arena is not None:
@@ -471,17 +788,45 @@ def _execute(args, admission):
         builder = load('o2_publication_saved_arena_builder', STUDIO / builder_name)
         saved_arena_raw, saved_arena_binding = freeze_saved_arena(
             args.fixture, args.saved_arena, output / 'saved-arena', builder)
+    if args.catalog_arena is not None:
+        catalog_arena_raw, catalog_arena_binding = freeze_catalog_arena(
+            args.catalog_arena, args.registered_arena, output / 'catalog-arena')
+        catalog_handoff = _catalog_handoff_module().verify_catalog_gameplay_handoff(
+            args.catalog_arena, args.registered_arena)
+        need(catalog_arena_binding == admission['catalog_handoff'],
+             'CATALOG_HANDOFF_CHANGED')
+    if args.catalog_room is not None:
+        catalog_room_raw, catalog_room_binding = freeze_catalog_room(
+            args.catalog_room, args.registered_room, output / 'catalog-room')
+        catalog_room_handoff = _catalog_handoff_module().verify_catalog_room_handoff(
+            args.catalog_room, args.registered_room)
+        need(catalog_room_binding == admission['catalog_room_handoff'],
+             'CATALOG_ROOM_HANDOFF_CHANGED')
     if args.blender_published is not None:
         blender_handoff_raw, blender_handoff_binding = freeze_blender_handoff(
             args.blender_published, output / 'blender-handoff')
         need(blender_handoff_binding == admission['blender_handoff'], 'BLENDER_HANDOFF_CHANGED')
+    if args.blender_content_published is not None:
+        need(catalog_handoff is not None or catalog_room_handoff is not None,
+             'CATALOG_HANDOFF_REQUIRED_FOR_CONTENT')
+        content_handoff = catalog_handoff or catalog_room_handoff
+        catalog_glb_raw, catalog_sprite_raw, catalog_content_binding = freeze_catalog_content(
+            args.blender_content_published, content_handoff, output / 'catalog-content')
+        need(catalog_content_binding == admission['blender_content'],
+             'BLENDER_CONTENT_CHANGED')
     binding = {'run_id': args.run_id, 'source_closure_sha256': closure,
                'files': files, 'authority': 0, 'public_ack': False,
                'scope': 'Declared adapter closure plus diagnostic harness; not arbitrary dependencies.'}
     if saved_arena_binding is not None:
         binding['saved_arena'] = saved_arena_binding
+    if catalog_arena_binding is not None:
+        binding['catalog_handoff'] = catalog_arena_binding
+    if catalog_room_binding is not None:
+        binding['catalog_room_handoff'] = catalog_room_binding
     if blender_handoff_binding is not None:
         binding['blender_handoff'] = blender_handoff_binding
+    if catalog_content_binding is not None:
+        binding['blender_content'] = catalog_content_binding
     save(output / 'binding.json', binding)
     for name, digest in files.items():
         raw = (STUDIO / name).read_bytes()
@@ -494,13 +839,19 @@ def _execute(args, admission):
         '.local/tooling/godot-4.7.2-stable-linux/Godot_v4.7.2-stable_linux.x86_64'))
     fixture_name = args.fixture
     case = _publication_case(args, owner_mod, fixtures,
-                            saved_arena_raw=saved_arena_raw, glb=blender_handoff_raw)
+                            saved_arena_raw=saved_arena_raw,
+                            catalog_arena_raw=catalog_arena_raw,
+                            catalog_room_raw=catalog_room_raw,
+                            glb=(catalog_glb_raw if catalog_glb_raw is not None else blender_handoff_raw),
+                            sprite=catalog_sprite_raw)
     candidate = probe.case_files(case)
     candidate.pop('project.godot')
     need({name: hashlib.sha256(raw).hexdigest() for name, raw in candidate.items()}
          == admission['candidate_sha256'], 'PUBLICATION_ADMISSION_CHANGED')
     dependency_policy = publication_dependency_policy(fixture_name, case,
-                                                     saved_arena=saved_arena_binding is not None)
+                                                     saved_arena=saved_arena_binding is not None,
+                                                     catalog_arena=(catalog_arena_binding is not None
+                                                                    or catalog_room_binding is not None))
     if dependency_policy['dependency_observation_required']:
         # The authenticated parent-attributed driver has seven bounded Godot
         # launches. Bind its 30s budget into the observation case so command,
@@ -511,6 +862,19 @@ def _execute(args, admission):
     if saved_arena_binding is not None:
         verify_saved_arena_binding(args.saved_arena, output / 'saved-arena',
                                   saved_arena_binding, builder, candidate)
+    if catalog_arena_binding is not None:
+        verify_catalog_arena_binding(args.catalog_arena, args.registered_arena,
+                                     output / 'catalog-arena', catalog_arena_binding,
+                                     candidate)
+    if catalog_room_binding is not None:
+        verify_catalog_room_binding(args.catalog_room, args.registered_room,
+                                    output / 'catalog-room', catalog_room_binding,
+                                    candidate)
+    if catalog_content_binding is not None:
+        verify_catalog_content_binding(args.blender_content_published,
+                                       catalog_handoff or catalog_room_handoff,
+                                       output / 'catalog-content',
+                                       catalog_content_binding, candidate)
     initial = dict(candidate)
     initial[owner_mod.ENTRYPOINT] += b'\n# Initial unpublished fixture revision.\n'
     calls = []
@@ -528,11 +892,24 @@ def _execute(args, admission):
                  'SOURCE_CHANGED_BEFORE_DISPATCH')
             if saved_arena_binding is not None:
                 verify_saved_arena_binding(args.saved_arena, output / 'saved-arena',
-                                          saved_arena_binding, builder, candidate)
+                                  saved_arena_binding, builder, candidate)
+            if catalog_arena_binding is not None:
+                verify_catalog_arena_binding(args.catalog_arena, args.registered_arena,
+                                             output / 'catalog-arena', catalog_arena_binding,
+                                             candidate)
+            if catalog_room_binding is not None:
+                verify_catalog_room_binding(args.catalog_room, args.registered_room,
+                                            output / 'catalog-room', catalog_room_binding,
+                                            candidate)
             if blender_handoff_binding is not None:
                 verify_blender_handoff(args.blender_published,
                                        output / 'blender-handoff',
                                        blender_handoff_binding, candidate)
+            if catalog_content_binding is not None:
+                verify_catalog_content_binding(args.blender_content_published,
+                                               catalog_handoff or catalog_room_handoff,
+                                               output / 'catalog-content',
+                                               catalog_content_binding, candidate)
             calls.append(str(kwargs['output'].relative_to(output)))
             # AUTH-05 dependency policy requires the authenticated parent
             # transcript even when the owner receives an injected runner.
@@ -570,7 +947,9 @@ def _execute(args, admission):
             name=fixture_name, binding=binding)
         save(output / 'native-observation.json', observation)
         verify_fixture_observation(fixture_name, observation,
-                                   saved_arena=saved_arena_binding is not None)
+                                   saved_arena=(saved_arena_binding is not None
+                                                or catalog_arena_binding is not None
+                                                or catalog_room_binding is not None))
         root = owner._root
         owner.close()
         reopened = owner_mod.GameplaySourcePublicationOwner.reopen(root,
@@ -590,6 +969,19 @@ def _execute(args, admission):
         if saved_arena_binding is not None:
             verify_saved_arena_binding(args.saved_arena, output / 'saved-arena',
                                       saved_arena_binding, builder, candidate)
+        if catalog_arena_binding is not None:
+            verify_catalog_arena_binding(args.catalog_arena, args.registered_arena,
+                                         output / 'catalog-arena', catalog_arena_binding,
+                                         candidate)
+        if catalog_room_binding is not None:
+            verify_catalog_room_binding(args.catalog_room, args.registered_room,
+                                        output / 'catalog-room', catalog_room_binding,
+                                        candidate)
+        if catalog_content_binding is not None:
+            verify_catalog_content_binding(args.blender_content_published,
+                                           catalog_handoff or catalog_room_handoff,
+                                           output / 'catalog-content',
+                                           catalog_content_binding, candidate)
         if blender_handoff_binding is not None:
             verify_blender_handoff(args.blender_published,
                                    output / 'blender-handoff',
@@ -603,10 +995,26 @@ def _execute(args, admission):
                           saved_arena_provenance_unchanged=True,
                           saved_arena_instantiation_observed=True,
                           saved_arena_scope='Player/Floor/Wall/Pickup/Bot and shapes plus Camera/HUD/Status; input/signals remain runtime')
+        if catalog_arena_binding is not None:
+            result.update(catalog_handoff=catalog_arena_binding,
+                          catalog_scene_sha256=catalog_arena_binding['scene_sha256'],
+                          catalog_scene_provenance_unchanged=True,
+                          catalog_scene_instantiation_observed=True,
+                          catalog_scene_scope='Registered catalog authored arena scene; builder detached')
+        if catalog_room_binding is not None:
+            result.update(catalog_room_handoff=catalog_room_binding,
+                          catalog_room_scene_sha256=catalog_room_binding['scene_sha256'],
+                          catalog_room_scene_provenance_unchanged=True,
+                          catalog_room_scene_instantiation_observed=True,
+                          catalog_room_scene_scope='Registered catalog authored room scene; dynamic builder detached')
         if blender_handoff_binding is not None:
             result.update(blender_handoff=blender_handoff_binding,
                           blender_handoff_verified=True,
                           blender_handoff_scope='Blender scene.glb bytes loaded by the Godot gameplay-source fixture; queue/editor reload remains separate')
+        if catalog_content_binding is not None:
+            result.update(blender_content=catalog_content_binding,
+                          blender_content_verified=True,
+                          blender_content_scope='Protected Blender fixture GLB and sprite bytes mounted into candidate')
     except Exception as error:
         # Native raw remains at its original location; never log credentials or
         # arbitrary exception text. The class and phase evidence locate failure.

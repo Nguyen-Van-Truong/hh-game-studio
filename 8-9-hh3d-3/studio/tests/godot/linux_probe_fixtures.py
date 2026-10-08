@@ -376,7 +376,7 @@ FIXTURES['gameplay_source_wall_wait'] = {
     # deadline can be observed without a tight loop exhausting the CPU budget.
     # The generic entry marker proves loop entry, not a CPU-limit cause.
     # Keep the existing watchdog oracle and all executor resource/deadline caps.
-    'mode': 'gameplay-source', 'timeout': 20, 'expect': 'watchdog',
+    'mode': 'gameplay-source', 'timeout': 20, 'expect': 'watchdog', 'wall_watchdog': True,
     'script': '''extends Node3D
 func _ready() -> void:
 \tprint("HH_PROBE_BUSY_ENTERED")

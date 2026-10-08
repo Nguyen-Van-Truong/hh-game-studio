@@ -46,10 +46,28 @@ var effect_emitters_readback: bool = true
 var effect_texture: Texture2D
 var effect_nodes: Array[CPUParticles2D] = []
 
+func _read_avatar_asset() -> Node:
+	if not FileAccess.file_exists("res://assets/avatar.glb"):
+		return null
+	var bytes := FileAccess.get_file_as_bytes("res://assets/avatar.glb")
+	var document := GLTFDocument.new()
+	var state := GLTFState.new()
+	if document.append_from_buffer(bytes, "", state) != OK:
+		return null
+	return document.generate_scene(state)
+
+func _read_sprite_image() -> Image:
+	if not FileAccess.file_exists("res://assets/sprite_sheet.png"):
+		return null
+	var image := Image.new()
+	if image.load_png_from_buffer(FileAccess.get_file_as_bytes("res://assets/sprite_sheet.png")) != OK:
+		return null
+	return image
+
 func _effect_texture() -> Texture2D:
-	var authored := load("res://assets/sprite_sheet.png") as Texture2D
-	if authored != null:
-		return authored
+	var image := _read_sprite_image()
+	if image != null and not image.is_empty():
+		return ImageTexture.create_from_image(image)
 	# Keep a real Texture2D property when optional art is absent.
 	var fallback := GradientTexture2D.new()
 	fallback.width = 2
@@ -97,12 +115,10 @@ func _ready() -> void:
 	_action("left", KEY_A)
 	_action("jump", KEY_SPACE)
 	_action("shoot", KEY_F)
-	var avatar_scene := load("res://assets/avatar.glb") as PackedScene
-	var sprite := load("res://assets/sprite_sheet.png") as Texture2D
-	avatar_asset_loaded = avatar_scene != null
-	sprite_asset_loaded = sprite != null
+	imported_avatar = _read_avatar_asset()
+	avatar_asset_loaded = imported_avatar != null
+	sprite_asset_loaded = _read_sprite_image() != null
 	if avatar_asset_loaded:
-		imported_avatar = avatar_scene.instantiate()
 		add_child(imported_avatar)
 	if not avatar_asset_loaded or not sprite_asset_loaded:
 		push_error("arena fixture asset readback failed")

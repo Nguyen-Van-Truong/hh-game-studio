@@ -64,9 +64,9 @@ class GameplayLogPolicyTests(unittest.TestCase):
         for error in (b'', self.stderr + b'\n', self.stderr + policy.GUARDED_STARTUP_ERROR.encode(),
                       self.stderr[len(policy.GUARDED_STARTUP_ERROR):],
                       self.stderr.replace(b'os_unix.cpp:899', b'os_unix.cpp:900'),
-                      (policy.GAMEPLAY_STARTUP_ERRORS.replace(
-                          policy.GUARDED_SOCKET_ERROR + policy.GUARDED_LISTEN_ERROR,
-                          policy.GUARDED_LISTEN_ERROR + policy.GUARDED_SOCKET_ERROR, 1)).encode()):
+                      self.stderr.replace(policy.GUARDED_STARTUP_ERROR.encode(), b'', 1),
+                      self.stderr + policy.GUARDED_SOCKET_ERROR.encode(),
+                      self.stderr + policy.GUARDED_LISTEN_ERROR.encode()):
             with self.subTest(stderr=error):
                 self.assertIs(self.classify(stderr=error)['accepted'], False)
 
@@ -121,14 +121,12 @@ class GameplayLogPolicyTests(unittest.TestCase):
     def test_attributed_policy_orders_dependency_diagnostics(self):
         phases = [{'phase': p, 'script': s, 'returncode': 0, 'guard': {'seccomp_mode': 2}}
                   for p, s in [('dependencies', None),
+                               ('dependencies_reopen', None),
                                ('parse', self.scripts[0]),
                                ('import', None),
-                               ('dependencies_reopen', None),
                                ('play', None)]]
         startup = policy.GUARDED_STARTUP_ERROR
-        stderr = (startup * (len(self.scripts) + 2)
-                  + (policy.GUARDED_SOCKET_ERROR + policy.GUARDED_LISTEN_ERROR) * 2
-                  + startup * 2).encode()
+        stderr = (startup * (len(self.scripts) + 4)).encode()
         observation = {'child_stdout': self.stdout, 'child_stderr': stderr,
                        'phase_results': phases, 'driver_returncode': 0,
                        'wire_sha256': 'a' * 64}

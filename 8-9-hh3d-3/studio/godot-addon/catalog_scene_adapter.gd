@@ -514,7 +514,11 @@ func _snapshot(root: Node) -> Dictionary:
 			return row
 		resources.append(row)
 	var result := {"nodes": nodes, "resources": resources}
-	if not _asset_order.is_empty():
+	# A Blender mesh is mounted in both registered fixtures, but only the 3D
+	# authoring scene owns a Mesh resource in its semantic catalog snapshot.
+	# The 2D arena consumes the immutable asset later in gameplay; including it
+	# here would change the baseline revision without a catalog command.
+	if not _asset_order.is_empty() and _authored is Node3D:
 		var assets: Array[Dictionary] = []
 		for resource_id: String in _asset_order:
 			var resource: Resource = _assets[resource_id]

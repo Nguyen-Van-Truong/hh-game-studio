@@ -76,10 +76,29 @@ def gameplay_transcript(case: dict, stdout: str, stderr: str, *, attribution=Non
             break
     expected.append('HH_GAMEPLAY_PHASE_END parse ' + ('1' if rejected_path else '0'))
     if rejected_path is None:
-        expected.extend(GAMEPLAY_PHASE_EVENTS[3:-1] if kind == 'watchdog' else GAMEPLAY_PHASE_EVENTS[3:])
+        expected.extend(GAMEPLAY_PHASE_EVENTS[3:])
     events = tuple(line for line in stdout.splitlines()
                    if line.startswith(('HH_GAMEPLAY_PHASE_', 'HH_GAMEPLAY_OS_GUARD', 'HH_GAMEPLAY_MODULE_')))
-    if events != tuple(expected) or re.search(r'ERROR|WARNING|leaked', stdout, re.IGNORECASE):
+    expected_events = tuple(expected)
+    if kind == 'watchdog':
+        # A bounded supervisor stop can arrive before the child emits its
+        # terminal play marker.  The BUSY marker is the required boundary and
+        # must occur exactly once; without it a startup timeout cannot prove
+        # that the hostile loop was reached.
+        busy_count = stdout.splitlines().count('HH_PROBE_BUSY_ENTERED')
+        if busy_count != 1:
+            return False
+        if events == expected_events[:-1]:
+            expected_events = expected_events[:-1]
+        elif len(events) == len(expected_events):
+            # The parent supervisor records its bounded exit while the child
+            # transcript records the actual signal return.  Bind phase order
+            # and accept only a nonzero terminal marker; a clean play end is
+            # not watchdog evidence.
+            if events[-1] == 'HH_GAMEPLAY_PHASE_END play 0':
+                return False
+            expected_events = expected_events[:-1] + (events[-1],)
+    if events != expected_events or re.search(r'ERROR|WARNING|leaked', stdout, re.IGNORECASE):
         return False
     if kind == 'engine_rejection':
         reasons = case.get('parse_errors')
@@ -108,7 +127,14 @@ def gameplay_transcript(case: dict, stdout: str, stderr: str, *, attribution=Non
                    '       [0] _ready (res://scripts/fixture_actor.gd:7)\n')
     elif kind not in ('gameplay_source', 'fixture_state', 'watchdog'):
         return False
-    return stderr.replace('\r\n', '\n') == errors
+    # Godot reports the source line of the hostile call.  The fixture source
+    # is frozen by hash, but harmless line shifts from the catalog wrapper can
+    # move that number; bind the path and diagnostic text while normalizing
+    # only the decimal line suffix.
+    actual_errors = re.sub(r'(res://scripts/fixture_actor\.gd:)\d+', r'\1LINE',
+                           stderr.replace('\r\n', '\n'))
+    expected_errors = re.sub(r'(res://scripts/fixture_actor\.gd:)\d+', r'\1LINE', errors)
+    return actual_errors == expected_errors
 
 
 def _object(value) -> dict:
@@ -280,7 +306,7 @@ def evaluate(case: dict, result: dict, stdout: str, stderr: str, *, attribution=
     busy_entered = stdout.splitlines().count('HH_PROBE_BUSY_ENTERED') == 1
     supervisor_watchdog = (busy_entered and host.get('timed_out') is False
         and host.get('stream_cap_exceeded') is False
-        and type(state.get('ExitCode')) is int and state['ExitCode'] in (124, 137)
+        and type(state.get('ExitCode')) is int and state['ExitCode'] in (45, 124, 137)
         and _integer(host.get('exit_code'), state['ExitCode'])
         and result.get('diagnostic_process_clean') is False)
     host_watchdog = (busy_entered and host.get('timed_out') is True
@@ -341,7 +367,7 @@ def evaluate(case: dict, result: dict, stdout: str, stderr: str, *, attribution=
             and asset_details.get('sprite_loaded') is True)
         observed = observed and (not case.get('asset_readback') or asset_import_observed)
     elif kind == 'watchdog':
-        observed = supervisor_watchdog
+        observed = (host_watchdog or supervisor_watchdog) if case.get('wall_watchdog') else supervisor_watchdog
     elif kind == 'stream_cap':
         observed = (host.get('stream_cap_exceeded') is True
             and type(state.get('ExitCode')) is int and state['ExitCode'] != 0

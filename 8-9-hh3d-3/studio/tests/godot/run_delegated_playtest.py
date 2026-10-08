@@ -182,11 +182,140 @@ def _metadata_path(run_id: str, fixture: str) -> Path:
     return RAW_ROOT / run_id / fixture / "metadata.json"
 
 
-def prepare(run_id: str, fixture: str) -> dict[str, Any]:
+def _safe_publication_root(value: Path) -> Path:
+    """Resolve a publication directory while keeping it below review roots."""
+    root = Path(value).expanduser().resolve()
+    try:
+        root.relative_to(RAW_ROOT.resolve())
+    except ValueError as error:
+        raise ValueError("PUBLICATION_ROOT_OUTSIDE_REVIEWS") from error
+    if not root.is_dir():
+        raise FileNotFoundError(root)
+    return root
+
+
+def _json_object(path: Path, error: str) -> dict[str, Any]:
+    try:
+        def pairs(items: list[tuple[str, Any]]) -> dict[str, Any]:
+            result: dict[str, Any] = {}
+            for key, item in items:
+                if key in result:
+                    raise ValueError("duplicate_key")
+                result[key] = item
+            return result
+        value = json.loads(path.read_bytes(), object_pairs_hook=pairs,
+                          parse_constant=lambda value: (_ for _ in ()).throw(ValueError("nonfinite")))
+    except (OSError, ValueError, TypeError) as exc:
+        raise ValueError(error) from exc
+    if type(value) is not dict:
+        raise ValueError(error)
+    return value
+
+
+def _relative_publication_path(raw: Any) -> Path:
+    if not isinstance(raw, str) or not raw or Path(raw).is_absolute():
+        raise ValueError("NATIVE_PATH_INVALID")
+    parts = [part for part in raw.replace("\\", "/").split("/") if part]
+    if not parts or any(part in (".", "..") for part in parts):
+        raise ValueError("NATIVE_PATH_TRAVERSAL")
+    return Path(*parts)
+
+
+def _publication_project(publication_root: Path, fixture: str) -> tuple[Path, dict[str, Any]]:
+    """Select and verify the immutable project snapshot used by native Godot."""
+    root = _safe_publication_root(publication_root)
+    publication = _json_object(root / "result.json", "PUBLICATION_RESULT_INVALID")
+    observation = _json_object(root / "native-observation.json", "PUBLICATION_OBSERVATION_INVALID")
+    try:
+        expected_case = {"arena": "gameplay_arena_physics", "room": "gameplay_source_room_3d_native"}[fixture]
+    except KeyError as error:
+        raise ValueError("FIXTURE") from error
+    if observation.get("case_name") != expected_case:
+        raise ValueError("PUBLICATION_FIXTURE_MISMATCH")
+    if publication.get("status") != "DIAGNOSTIC_PASS" or publication.get("authority") != 0:
+        raise ValueError("PUBLICATION_NOT_DIAGNOSTIC_PASS")
+    if publication.get("native_fixture_observed") is not True or publication.get("source_unchanged") is not True:
+        raise ValueError("PUBLICATION_NATIVE_OBSERVATION_MISSING")
+    if observation.get("fixture_observed") is not True or observation.get("source_closure_sha256") != publication.get("source_closure_sha256"):
+        raise ValueError("PUBLICATION_OBSERVATION_BINDING")
+    native_paths = publication.get("native_paths")
+    if publication.get("native_run_count") != 1 or type(native_paths) is not list or len(native_paths) != 1:
+        raise ValueError("PUBLICATION_NATIVE_PATH_COUNT")
+    run_relative = _relative_publication_path(native_paths[0])
+    run_root = (root / run_relative).resolve()
+    try:
+        run_root.relative_to(root)
+    except ValueError as error:
+        raise ValueError("NATIVE_PATH_TRAVERSAL") from error
+    run_result = _json_object(run_root / "result.json", "NATIVE_RESULT_INVALID")
+    if run_result.get("schema") != "hh-gt03-linux-diagnostic-1" or run_result.get("snapshot_unchanged") is not True:
+        raise ValueError("NATIVE_SNAPSHOT_UNVERIFIED")
+    receipt = publication.get("receipt") if type(publication.get("receipt")) is dict else {}
+    if receipt.get("native_run_id") != run_result.get("run_id"):
+        raise ValueError("NATIVE_RUN_BINDING")
+    expected = run_result.get("snapshot_hashes_after")
+    if type(expected) is not dict or not expected:
+        raise ValueError("NATIVE_SNAPSHOT_HASHES_MISSING")
+    snapshot = run_root / "snapshot"
+    if not snapshot.is_dir():
+        raise ValueError("NATIVE_SNAPSHOT_MISSING")
+    actual = _source_files(snapshot)
+    normalized_expected = {str(key).replace("\\", "/"): value for key, value in expected.items()}
+    if actual != normalized_expected:
+        raise ValueError("NATIVE_SNAPSHOT_HASH_MISMATCH")
+    dependency = observation.get("dependency_observation")
+    nodes = dependency.get("observation", {}).get("nodes") if type(dependency) is dict else None
+    if isinstance(nodes, list):
+        observed_files = {
+            item.get("path"): item.get("sha256")
+            for item in nodes if type(item) is dict and isinstance(item.get("path"), str)
+        }
+        if observed_files != {key: value for key, value in actual.items() if key != "project.godot"}:
+            raise ValueError("NATIVE_DEPENDENCY_SNAPSHOT_MISMATCH")
+    actor_hash = observation.get("fixture_script_sha256")
+    if actor_hash != actual.get("scripts/fixture_actor.gd"):
+        raise ValueError("NATIVE_FIXTURE_SCRIPT_BINDING")
+    if not (snapshot / "scripts" / "fixture_lifecycle.gd").is_file():
+        raise ValueError("PUBLICATION_LIFECYCLE_MISSING")
+    selected = publication.get("selected") if type(publication.get("selected")) is dict else {}
+    selected_files = selected.get("files") if type(selected.get("files")) is dict else {}
+    selected_hashes = {}
+    for key, value in selected_files.items():
+        if type(value) is dict:
+            value = value.get("sha256")
+        if isinstance(value, str):
+            selected_hashes[str(key).replace("\\", "/")] = value
+    comparable_snapshot = {key: value for key, value in actual.items() if key != "project.godot"}
+    provenance = {
+        "publication_root": str(root),
+        "native_run_root": str(run_root),
+        "executed_snapshot": str(snapshot),
+        "executed_snapshot_files": actual,
+        "executed_snapshot_closure_sha256": _closure_sha(actual),
+        "executed_fixture_script_sha256": actor_hash,
+        "selected_revision": selected.get("selected_revision"),
+        "selected_source_sha256": selected.get("source_sha256"),
+        "selected_matches_executed_snapshot": selected_hashes == comparable_snapshot,
+        "publication_run_id": publication.get("run_id"),
+        "native_run_id": run_result.get("run_id"),
+    }
+    return snapshot, provenance
+
+
+def prepare(run_id: str, fixture: str, project_source: Path | None = None,
+            publication_root: Path | None = None) -> dict[str, Any]:
     """Create one immutable run copy and record its complete source closure."""
     metadata_path = _metadata_path(run_id, fixture)
     spec = FIXTURES[fixture]
-    source_project = spec["project_source"]
+    if publication_root is not None and project_source is not None:
+        raise ValueError("PUBLICATION_AND_PROJECT_SOURCE_MUTUALLY_EXCLUSIVE")
+    provenance: dict[str, Any] | None = None
+    legacy_copy_mode = publication_root is None
+    if publication_root is not None:
+        source_project, provenance = _publication_project(publication_root, fixture)
+    else:
+        source_project = (project_source.resolve() if project_source is not None
+                          else spec["project_source"])
     if not source_project.is_dir():
         raise FileNotFoundError(source_project)
     root = metadata_path.parent
@@ -197,31 +326,32 @@ def prepare(run_id: str, fixture: str) -> dict[str, Any]:
     shutil.copytree(source_project, project)
     video_dir.mkdir()
 
-    # These are the already-reviewed fixture sources.  No screenshot helper is
-    # injected into them after the copy/freeze.
-    _write(project / "scripts" / "fixture_actor.gd", spec["source"].read_bytes())
-    lifecycle = STUDIO / "tests" / "godot" / "gameplay_fixture" / "fixture_lifecycle.gd"
-    _write(project / "scripts" / "fixture_lifecycle.gd", lifecycle.read_bytes())
-    deps = STUDIO / "tests" / "godot" / "gameplay_fixture" / "fixture_dependencies.gd"
-    _write(project / "scripts" / "fixture_dependencies.gd", deps.read_bytes())
-    if fixture == "arena":
-        projectile = STUDIO / "tests" / "godot" / "gameplay_fixture" / "projectile.tscn"
-        if projectile.is_file():
-            _write(project / "scenes" / "projectile.tscn", projectile.read_bytes())
+    if legacy_copy_mode:
+        # Compatibility diagnostic only.  These writes sever catalog
+        # provenance and are explicitly marked unaccepted in metadata.
+        _write(project / "scripts" / "fixture_actor.gd", spec["source"].read_bytes())
+        lifecycle = STUDIO / "tests" / "godot" / "gameplay_fixture" / "fixture_lifecycle.gd"
+        _write(project / "scripts" / "fixture_lifecycle.gd", lifecycle.read_bytes())
+        deps = STUDIO / "tests" / "godot" / "gameplay_fixture" / "fixture_dependencies.gd"
+        _write(project / "scripts" / "fixture_dependencies.gd", deps.read_bytes())
+        if fixture == "arena":
+            projectile = STUDIO / "tests" / "godot" / "gameplay_fixture" / "projectile.tscn"
+            if projectile.is_file():
+                _write(project / "scenes" / "projectile.tscn", projectile.read_bytes())
 
-    project_file = project / "project.godot"
-    config = _upsert_project_sections(project_file.read_text(encoding="utf-8"), {
-        "display": {
-            "window/size/viewport_width": "960",
-            "window/size/viewport_height": "540",
-            "window/size/window_width_override": "960",
-            "window/size/window_height_override": "540",
-            "window/stretch/mode": '"canvas_items"',
-        },
-        "application": {"config/name": json.dumps(spec["title"]),
-                        "run/main_scene": '"res://scenes/fixture.tscn"'},
-    })
-    project_file.write_text(config, encoding="utf-8", newline="\n")
+        project_file = project / "project.godot"
+        config = _upsert_project_sections(project_file.read_text(encoding="utf-8"), {
+            "display": {
+                "window/size/viewport_width": "960",
+                "window/size/viewport_height": "540",
+                "window/size/window_width_override": "960",
+                "window/size/window_height_override": "540",
+                "window/stretch/mode": '"canvas_items"',
+            },
+            "application": {"config/name": json.dumps(spec["title"]),
+                            "run/main_scene": '"res://scenes/fixture.tscn"'},
+        })
+        project_file.write_text(config, encoding="utf-8", newline="\n")
     files = _source_files(project)
     host_files, pins = _host_sources(), _binary_pins()
     metadata = {
@@ -233,6 +363,9 @@ def prepare(run_id: str, fixture: str) -> dict[str, Any]:
         "source_closure_sha256": _full_closure(files, host_files, pins), "project": str(project),
         "video_dir": str(video_dir), "created_unix": time.time(), "authority": 0,
         "acceptance": False, "playtest_claim": False,
+        "source_mode": "legacy-copy" if legacy_copy_mode else "native-publication-snapshot",
+        "legacy_unaccepted": legacy_copy_mode,
+        "publication_provenance": provenance,
     }
     metadata_path.write_text(json.dumps(metadata, indent=2, sort_keys=True) + "\n",
                              encoding="utf-8", newline="\n")
@@ -260,6 +393,20 @@ def _load_metadata(metadata: dict[str, Any]) -> tuple[Path, Path]:
     files = _source_files(project)
     if metadata.get("source_files") != files:
         raise ValueError("SOURCE_CLOSURE_CHANGED")
+    source_mode = metadata.get("source_mode")
+    if source_mode not in (None, "legacy-copy", "native-publication-snapshot"):
+        raise ValueError("SOURCE_MODE_INVALID")
+    if source_mode == "legacy-copy" and metadata.get("legacy_unaccepted") is not True:
+        raise ValueError("LEGACY_COPY_MUST_BE_UNACCEPTED")
+    if source_mode == "native-publication-snapshot":
+        provenance = metadata.get("publication_provenance")
+        if type(provenance) is not dict or provenance.get("executed_snapshot_files") != files:
+            raise ValueError("PUBLICATION_PROVENANCE_CHANGED")
+        snapshot = Path(provenance.get("executed_snapshot", "")).expanduser().resolve()
+        try:
+            snapshot.relative_to(RAW_ROOT.resolve())
+        except ValueError as error:
+            raise ValueError("PUBLICATION_PROVENANCE_PATH") from error
     host_files, pins = _host_sources(), _binary_pins()
     if metadata.get("host_files") != host_files or metadata.get("binary_pins") != pins:
         raise ValueError("HOST_SOURCE_OR_BINARY_CHANGED")
@@ -740,9 +887,14 @@ def main() -> int:
     parser.add_argument("--deadline-seconds", type=float)
     parser.add_argument("--video", type=Path)
     parser.add_argument("--mode", choices=("scripted", "smoke"), default="scripted")
+    parser.add_argument("--project-source", type=Path,
+                        help="legacy diagnostic project copy (unaccepted; use --publication-root)")
+    parser.add_argument("--publication-root", type=Path,
+                        help="publication evidence root whose native snapshot is consumed verbatim")
     args = parser.parse_args()
     if args.prepare:
-        print(json.dumps(prepare(args.run_id, args.fixture), indent=2, sort_keys=True))
+        print(json.dumps(prepare(args.run_id, args.fixture, args.project_source, args.publication_root),
+                         indent=2, sort_keys=True))
         return 0
     metadata = json.loads(_metadata_path(args.run_id, args.fixture).read_bytes())
     if args.dry_run:

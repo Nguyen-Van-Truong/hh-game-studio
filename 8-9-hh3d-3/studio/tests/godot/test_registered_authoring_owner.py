@@ -301,6 +301,93 @@ class RegisteredOwnerTests(unittest.TestCase):
             client.execute(self.requests, **identity)
         self.assertEqual(len(calls), 1)
 
+    def test_registered_script_route_is_typed_idempotent_and_native_bound(self):
+        """The fixture script seam delegates to a durable source owner."""
+        profile = owner.load_fixture_host_profile(self.admission.project_id)
+        current = self.admission.project_revision
+        calls = []
+
+        class SourceOwner:
+            _project_revision = current
+            project_id = "project.registered.room"
+
+        class SourceAdapter:
+            _owner = SourceOwner()
+
+            def profile_discovery(self, **_kwargs):
+                return {"fixture_enabled": True, "public_runtime_enabled": False,
+                        "authority": 0, "public_ack": False,
+                        "profiles": [profile.as_dict()]}
+
+            def execute(self, request, *, grant, lease):
+                calls.append(request.digest)
+                if request.operation == "gameplay-source.inspect":
+                    return {"schema": "hh-gameplay-source-readback-1",
+                            "project_id": self._owner.project_id,
+                            "project_revision": current,
+                            "selected_revision": current,
+                            "source_sha256": "sha256:" + "1" * 64,
+                            "public_ack": False}
+                return {"status": "READBACK_ACK", "command_id": request.command_id,
+                        "request_digest": request.digest, "readback_ack": True,
+                        "public_ack": False, "native_run_id": "source-native-1"}
+
+        actor = self.actor()
+        route = owner.RegisteredScriptRoute(actor, adapter=SourceAdapter(),
+                                            grant=object(), lease=object(),
+                                            host_profile=profile)
+        discovered = route.discovery()
+        self.assertEqual(discovered["schema"], owner.SCRIPT_ROUTE_SCHEMA)
+        self.assertEqual(discovered["operations"], list(owner.SCRIPT_OPERATIONS))
+        self.assertEqual(discovered["authority"], 0)
+        self.assertFalse(discovered["public_ack"])
+        payload = {"profile": owner.PROFILE, "profile_version": profile.version,
+                   "profile_digest": profile.as_dict()["catalog_digest"],
+                   "entrypoint": "scripts/fixture_actor.gd",
+                   "expected_project_revision": current,
+                   "source_files": {"scripts/fixture_actor.gd": "ZXh0ZW5kcyBOb2RlMwo="}}
+        request = {
+            "command_id": "registered.script.1",
+            "project_id": self.admission.project_id,
+            "operation": "gameplay-source.publish",
+            "lease_id": self.admission.lease_id,
+            "fencing_epoch": self.admission.fencing_epoch,
+            "expected_revision": current,
+            "target": {"path": "scripts/fixture_actor.gd"},
+            "payload": payload,
+            "payload_hash": "sha256:" + hashlib.sha256(canonical_bytes(payload)).hexdigest(),
+            "deadline_ms": self.admission.lease_expires_ms,
+            "schema_version": self.requests[0]["schema_version"],
+        }
+        first = route.execute(request)
+        self.assertTrue(first["native_observed"])
+        self.assertEqual(first["status"], "READBACK_ACK")
+        self.assertEqual(first["command_id"], request["command_id"])
+        self.assertEqual(route.execute(request), first)
+        self.assertEqual(len(calls), 1)
+        inspect_payload = {"profile": owner.PROFILE,
+                           "profile_version": profile.version,
+                           "profile_digest": profile.as_dict()["catalog_digest"]}
+        inspect_request = {**request, "command_id": "registered.script.inspect",
+                           "operation": "gameplay-source.inspect",
+                           "payload": inspect_payload,
+                           "payload_hash": "sha256:" + hashlib.sha256(
+                               canonical_bytes(inspect_payload)).hexdigest()}
+        inspected = route.execute(inspect_request)
+        self.assertEqual(inspected["status"], "READBACK_ACK")
+        self.assertFalse(inspected["native_observed"])
+        self.assertTrue(inspected["readback_observed"])
+        self.assertEqual(route.execute(inspect_request), inspected)
+        self.assertEqual(len(calls), 2)
+        changed = dict(request)
+        changed["payload"] = {**payload, "source_files": {
+            "scripts/fixture_actor.gd": "ZXh0ZW5kcyBOb2RlMgo="}}
+        changed["payload_hash"] = "sha256:" + hashlib.sha256(
+            canonical_bytes(changed["payload"])).hexdigest()
+        with self.assertRaisesRegex(owner.RegisteredAuthoringOwnerError,
+                                    "REGISTERED_SCRIPT_COMMAND_CONFLICT"):
+            route.execute(changed)
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)

@@ -19,10 +19,13 @@ GUARDED_STARTUP_ERROR = ('ERROR: Cannot create pipe from command: "xdg-user-dir"
                          '   at: execute (drivers/unix/os_unix.cpp:899)\n')
 GUARDED_SOCKET_ERROR = ('ERROR: Condition "_sock == -1" is true. Returning: FAILED\n'
                         '   at: _inet_open (drivers/unix/net_socket_unix.cpp:288)\n')
+# Gameplay import uses a headless ResourceLoader readback script.  It avoids
+# editor startup, so no socket/listener diagnostics belong to the accepted
+# transcript.  Each parse/import/play child still emits the fixed xdg-user-dir
+# probe error under the sandbox.
 GUARDED_LISTEN_ERROR = ('ERROR: Condition "err != OK" is true. Returning: ERR_CANT_CREATE\n'
                         '   at: listen (core/io/tcp_server.cpp:56)\n')
-GAMEPLAY_STARTUP_ERRORS = (GUARDED_STARTUP_ERROR * 2
-    + (GUARDED_SOCKET_ERROR + GUARDED_LISTEN_ERROR) * 2 + GUARDED_STARTUP_ERROR)
+GAMEPLAY_STARTUP_ERRORS = GUARDED_STARTUP_ERROR * 3
 GAMEPLAY_PHASE_EVENTS = tuple(event for phase in ('parse', 'import', 'play')
     for event in (f'HH_GAMEPLAY_PHASE_BEGIN {phase}', GUARD_MARKER,
                   f'HH_GAMEPLAY_PHASE_END {phase} 0'))
@@ -110,11 +113,9 @@ def classify_attributed(observation: dict, scripts: list[str]) -> dict:
         # dependency and reopen phases both precede candidate parse/import/play.
         # Keep this order exact; a count-only check would accept a phase stream
         # whose diagnostics came from a different child.
-        errors = (GUARDED_STARTUP_ERROR * (len(scripts) + 3)
-                  + (GUARDED_SOCKET_ERROR + GUARDED_LISTEN_ERROR) * 2
-                  + GUARDED_STARTUP_ERROR)
+        errors = GUARDED_STARTUP_ERROR * (len(scripts) + 4)
     else:
-        errors = GUARDED_STARTUP_ERROR * (len(scripts) - 1) + GAMEPLAY_STARTUP_ERRORS
+        errors = GUARDED_STARTUP_ERROR * (len(scripts) + 2)
     verdict['accepted'] = ('\x00' not in out and '\x00' not in err
         and not re.search(r'ERROR|WARNING|leaked', out, re.IGNORECASE) and err == errors)
     return verdict

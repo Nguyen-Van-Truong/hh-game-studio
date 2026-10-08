@@ -70,6 +70,9 @@ class GameplaySandboxTests(unittest.TestCase):
     def test_launcher_does_not_offer_arbitrary_program_or_arguments(self):
         for phase in ('parse', 'import', 'play', 'readback'):
             self.assertEqual(sandbox.command(phase)[0], sandbox.BINARY)
+        import_argv = sandbox.command('import')
+        self.assertEqual(import_argv[-2:], ['--script', '/harness/gameplay_import_readback.gd'])
+        self.assertNotIn('--editor', import_argv)
         for phase in ('run', '/bin/sh', '--script=evil', None):
             with self.assertRaisesRegex(ValueError, 'PHASE'):
                 sandbox.command(phase)

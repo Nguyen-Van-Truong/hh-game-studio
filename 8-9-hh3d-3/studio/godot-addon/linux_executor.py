@@ -41,7 +41,7 @@ _HELPER = "import subprocess,sys; token=sys.stdin.readline(); sys.exit(125) if t
 _INCOMPLETE_CLI_HOLDS: list = []
 _INCOMPLETE_ADMISSION_HOLDS: list = []
 PROFILE_BOOTSTRAP_SHA256 = 'efde8370a6157ed2f66544ee13b82ee2556b59130f5306e9e0774ed0e3be79a5'
-SANDBOX_BOOTSTRAP_SHA256 = '333e9230400d92c4303b0fc2d4faa27d402fd02b533b93900dcf8cc7f7046a7a'
+SANDBOX_BOOTSTRAP_SHA256 = '445c92b54113cfdd0e956992f74e67308ef77058aa63a1fa8472756bcb118892'
 GAMEPLAY_PROFILE_SHA256 = 'aa01428ff26dc56fc20f19f7093bd025685fe9ca509843826ee02fe7acb6485c'
 GUARDED_MODES = ('guarded-parse', 'guarded-import', 'guarded-play')
 GAMEPLAY_MODE = 'gameplay-source'
@@ -65,6 +65,7 @@ GAMEPLAY_RUNTIME_FILES = (
     'godot-addon/gameplay_attribution.py',
     'godot-addon/gameplay_attributed_driver.py',
     'godot-addon/gameplay_dependencies.gd',
+    'godot-addon/gameplay_import_readback.gd',
     'godot-addon/gameplay_native_dependencies.py',
     'godot-addon/gameplay_fixture_profile.py',
     'godot-addon/fixture_profile.json',
@@ -342,7 +343,7 @@ def read_attribution(output: Path, result: dict) -> dict:
     context = _attribution_context(result['run_id'], result['source_closure_sha256'],
                                    result['input_hashes_before'])
     for name in ('gameplay_sandbox.py', 'gameplay_attribution.py', 'gameplay_attributed_driver.py',
-                 'gameplay_dependencies.gd'):
+                 'gameplay_dependencies.gd', 'gameplay_import_readback.gd'):
         _need(_read_file(output / 'harness' / name, 65536)
               == _read_file(STUDIO / 'godot-addon' / name, 65536),
               'EXECUTOR_ATTRIBUTION_HARNESS')
@@ -1042,6 +1043,11 @@ def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate', '
     sandbox_harness = _sandbox_harness() if mode in SANDBOX_MODES else None
     gameplay_profile = _gameplay_profile() if mode == GAMEPLAY_MODE else None
     harness_files = {'gameplay_sandbox.py': sandbox_harness} if sandbox_harness is not None else {}
+    import_readback_harness = None
+    if mode == GAMEPLAY_MODE:
+        import_readback_harness = _read_file(
+            STUDIO / 'godot-addon/gameplay_import_readback.gd', 65536)
+        harness_files['gameplay_import_readback.gd'] = import_readback_harness
     if attribution_enabled:
         harness_files['gameplay_attribution.py'] = _read_file(
             STUDIO / 'godot-addon/gameplay_attribution.py', 65536)
@@ -1083,6 +1089,9 @@ def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate', '
               'profile_harness_unchanged': profile_harness is None,
               'sandbox_bootstrap_sha256': _sha(sandbox_harness) if sandbox_harness is not None else None,
               'sandbox_harness_unchanged': sandbox_harness is None,
+              'import_readback_harness_sha256': (_sha(import_readback_harness)
+                  if import_readback_harness is not None else None),
+              'import_readback_harness_unchanged': import_readback_harness is None,
               'attribution_enabled': attribution_enabled,
               'attribution_verified': None if not attribution_enabled else False,
               'attribution_harness_unchanged': not attribution_enabled,
@@ -1272,6 +1281,16 @@ def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate', '
             except BaseException as error:
                 result['sandbox_harness_unchanged'] = False
                 failed(error, 'EXECUTOR_SANDBOX_FINALIZE_')
+        if import_readback_harness is not None:
+            try:
+                result['import_readback_harness_unchanged'] = (
+                    _names(output / 'harness') == set(harness_files)
+                    and _read_file(output / 'harness/gameplay_import_readback.gd', 65536)
+                    == import_readback_harness
+                    == _read_file(STUDIO / 'godot-addon/gameplay_import_readback.gd', 65536))
+            except BaseException as error:
+                result['import_readback_harness_unchanged'] = False
+                failed(error, 'EXECUTOR_IMPORT_READBACK_FINALIZE_')
         if attribution_enabled:
             try:
                 result['attribution_harness_unchanged'] = (
@@ -1281,7 +1300,8 @@ def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate', '
                             for name, raw in ((name, harness_files[name])
                                               for name in ('gameplay_attribution.py',
                                                            'gameplay_attributed_driver.py',
-                                                           'gameplay_dependencies.gd'))))
+                                                           'gameplay_dependencies.gd',
+                                                           'gameplay_import_readback.gd'))))
             except BaseException as error:
                 result['attribution_harness_unchanged'] = False
                 failed(error, 'EXECUTOR_ATTRIBUTION_HARNESS_')
@@ -1342,6 +1362,7 @@ def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate', '
             and (not attribution_enabled or (result['attribution_verified'] is True
                                               and result['attribution_harness_unchanged']))
             and (mode != GAMEPLAY_MODE or result['source_closure_unchanged'] is True)
+            and result['import_readback_harness_unchanged']
             and not result['errors'])
         # Preserve the raw meaning of both existing fields. A known-noise
         # policy is separate evidence, not a relabeling of ERROR lines as clean.

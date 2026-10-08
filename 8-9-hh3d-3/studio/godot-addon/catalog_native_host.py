@@ -145,7 +145,12 @@ def expected_readbacks(data: dict) -> tuple[list[dict], dict]:
                      "target_stable_id": target, "projection_sha256": command["projection_sha256"],
                      "verified": True, "readback": copy(row)})
     snapshot = {"nodes": list(nodes.values()), "resources": list(resources.values())}
-    if data["assets"]:
+    # A Node3D room recipe owns a typed mesh resource in its authoring
+    # snapshot.  The Node2D arena still mounts the same immutable Blender
+    # assets for gameplay consumption, but its scene projection intentionally
+    # has no mesh resource, so asset mounting must not invent one in the
+    # catalog oracle.
+    if data["assets"] and data.get("root_spec", {}).get("node_type") == "Node3D":
         snapshot["asset_resources"] = [{"resource_id": name, "base": "Mesh"}
                                        for name in data["assets"]]
     return rows, snapshot
@@ -263,6 +268,19 @@ def execute(*, output: Path, godot: Path, data: dict, source_files: dict[str, st
         raw = read(Path(blender.published_root) / "scene.glb")
         need(sha(raw) == asset["sha256"], "CATALOG_ASSET_CHANGED")
         project_files[asset["path"]] = raw
+        # The registered room recipe carries the companion sprite provenance
+        # in the same trusted Blender handoff.  Mount it beside the GLB so the
+        # later gameplay consumer can prove both imports came from one
+        # immutable publication; it does not alter the scene projection oracle.
+        sprite_path = asset.get("sprite_path")
+        sprite_sha = asset.get("sprite_sha256")
+        if sprite_path is not None:
+            need(sprite_path == "assets/sprite_sheet.png" and
+                 type(sprite_sha) is str and re.fullmatch(r"[0-9a-f]{64}", sprite_sha),
+                 "CATALOG_SPRITE_BINDING")
+            sprite = read(Path(blender.published_root) / "sprite_sheet.png")
+            need(sha(sprite) == sprite_sha, "CATALOG_SPRITE_CHANGED")
+            project_files[sprite_path] = sprite
     for name, raw in project_files.items():
         write(project / name, raw)
     for name, digest in source_files.items():

@@ -1,67 +1,61 @@
-# O2 authoring state — 2026-10-08 (O13 matrix)
+# O2 authoring state — 2026-10-09 (O13/S271)
 
 AUTHORITY=0; GT09=IN_PROGRESS; no public gameplay-source or acceptance claim.
-Source-of-truth plan: `zdoc/8-9-godot-blender-agent-studio-plan.txt` S270.
-Resume baseline: `4bd32e72`; this milestone adds actual transaction-driven native catalog execution.
-Room14 and arena18 commands ran through the registered fixture adapter; builders were not invoked.
-Per-command readback, UndoRedo, save/reload, actual host exit0 and natural Job tree0 passed.
-Trusted host config enables only registered room/arena; default and other projects remain hidden.
-Gameplay publication registration is implemented and unit-tested; native K3–K7 integration remains open.
-K13 connected to native Godot and observed arena/HUD; cleanup errors and missing HH lease/journal
-make the measured external route INCOMPATIBLE, not SUPPORTED. Client K8–K12 is still NOT_TESTED.
-Old playtests used earlier builder fixtures and are reuse-only; human playtest is NOT_PERFORMED.
-No final row PASS, package or critic until K1–K15 execute together on the final frozen closure.
-Detailed history remains in `AUTHORING_STATUS_HISTORY_20261008.md`.
+Source-of-truth plan: `zdoc/8-9-godot-blender-agent-studio-plan.txt` S271.
+WIP milestone is frozen for commit before the next long run; final closure is
+computed by `run_gt09_matrix.py` and excludes `.local` and caches.
+GT08A remains accepted; GT08B Android remains deferred by owner.
+K1–K9 and K11–K14 have diagnostic implementations/evidence, but no final row
+is accepted until one frozen K1–K15 run and two independent critics share its hash.
+The five earlier final attempts are historical; -04 had source drift, -05 had
+watchdog parser failures, and -06 was stopped after schema/closure failures.
+Human playtest remains NOT_PERFORMED and authority stays 0.
 
 ## K1–K15 acceptance matrix (current)
 
 | K | State | Evidence / next boundary |
 |---|---|---|
-| K1 | IMPLEMENTED | Trusted host registration/config closure; default hidden; room/arena discovery and native route exercised. Final matrix pending. |
-| K2 | IMPLEMENTED | Allowlist, identity, root/revision, idempotency/conflict and per-command readback verified; final matrix pending. |
-| K3 | OPEN | Registered catalog script/controller behavior change and replay proof pending. |
-| K4 | OPEN | Static literal admission/binding API and tests pass; registered final closure, UID/import readback and rejection run pending. |
-| K5 | OPEN | Registered-path syntax/type/timeout/stop preservation matrix pending. |
-| K6 | OPEN | Registered publish cut/retry/reopen and owner-edit recovery matrix pending. |
-| K7 | OPEN | Hostile markers and raw receipt verifier pass; registered-source executor rerun on current closure pending. |
-| K8 | OPEN | Actual catalog builds room14/arena18 pass. Connect saved scenes to gameplay; Blender sprite/armature/walk and complete content pending. |
-| K9 | OPEN | Seeded scene/resource/script repair through catalog batch and replay pending. |
-| K10 | REUSE_ONLY | Native conformance/playtest shows gameplay/replay/save/perf, but not catalog-authored final closure. |
-| K11 | REUSE_ONLY | Adapter reconnect/retry/context-reset/BUSY evidence exists; final matrix binding pending. |
-| K12 | OPEN | Prompt-injection metadata/log/URL boundary must be bound to final fixture closure. |
-| K13 | OPEN | Connected native08 readback measured, host exits0/tree0; external cleanup limits => INCOMPATIBLE. Raw verifier passes; client/model K8–K12 unmeasured. |
-| K14 | OPEN | Single final regression matrix and GT-08A/TX15 closure pending. |
-| K15 | REUSE_ONLY | Delegated 15-minute runs exist; rerun only in final matrix after catalog authoring is frozen. |
+| K1 | IMPLEMENTED | Trusted fixture registration and discovery tests; final native row pending. |
+| K2 | IMPLEMENTED | Allowlist, identity, root/revision, idempotency/conflict and readback tests; final native row pending. |
+| K3 | DIAGNOSTIC_PASS | Fresh registered script route changes controller behavior and replay reads it back; final closure row pending. |
+| K4 | DIAGNOSTIC_PASS | Static dependency, UID/import and lifecycle admission tests; final closure row pending. |
+| K5 | DIAGNOSTIC_PASS | Fresh syntax/type failure probes retain raw rejection and prior revision; final closure row pending. |
+| K6 | DIAGNOSTIC_PASS | Publication retry/reopen and owner recovery evidence; final closure row pending. |
+| K7 | DIAGNOSTIC_PASS | Fresh boundary/spawn/busy/wall probes and executor tests; final closure row pending. |
+| K8 | DIAGNOSTIC_PASS | Catalog-authored room/arena publication and Blender handoff candidate pass; final in-run producers required. |
+| K9 | DIAGNOSTIC_PASS | Seeded defect, durable reopen, typed repair and native replay/checkpoint route; final closure row pending. |
+| K10 | DIAGNOSTIC_PASS | Native conformance and lifecycle fixtures; final publication-bound matrix row pending. |
+| K11 | IMPLEMENTED | Adapter reconnect/retry/context reset tests; final in-run two-source concurrency evidence pending. |
+| K12 | IMPLEMENTED | Attribution and scope rejection tests; final in-run hostile metadata evidence pending. |
+| K13 | MEASURED_LIMIT | External native route is INCOMPATIBLE with measured cleanup/lease limits; final client/model row must be bound. |
+| K14 | DIAGNOSTIC_PASS | GT08A 18/18 diagnostic matrix and focused regression tests; final validator must bind real schema. |
+| K15 | REUSE_ONLY | Delegated runner and fail-closed packer exist; two 15-minute runs only in final matrix. |
 
-## Next (O13.5)
+## Next (O13.5/S271)
 
-B2 scaffold is present but final runner still must execute and verify child raw evidence.
-Next: reuse catalog-authored scenes in registered gameplay publication, controller change/repair
-and AUTH cases; complete bounded Blender content. Then K9–K14, final K15 and self-check.
-Preserve raw failures and use fresh IDs; do not tick GT09 or promote any diagnostic flag.
+B6a: finish the final runner contract: in-run K8 producers, closure start/end,
+native/host evidence labels, K1/K2/K11/K12/K13 client rows, verify-only and
+fail-fast behavior. Run verify-only and changed-row checks on historical raw.
+B6b: commit this WIP, dry-run, then one fresh final K1–K15 run with no writers.
+B7: only after self-check, dispatch two different-model read-only critics on the
+same manifest hash. Do not tick GT09 or open GT10-PC before both TICK=yes.
 
 ## Milestone run log (raw under .local/reviews)
 
-- o2-catalog-room-catalogroom01: wall limit; addon parse failure, raw retained.
-- o2-catalog-room-catalogroom02: wall limit; same parser boundary, raw retained.
-- catalog-syntax-20261008-01: captured exit1 reserved class_name; syntax02/03 exit0 after correction.
-- o2-catalog-room-catalogroom03: script runtime failure; host rejected missing saved scene despite plugin exit0; plugin checks repaired.
-- o2-registered-authoring-catalogroom04 / o2-catalog-room-catalogroom04: DIAGNOSTIC_PASS, room14, native host exit0/tree0, exact retry cached.
-- o2-registered-authoring-catalogarena01 / o2-catalog-arena-catalogarena01: DIAGNOSTIC_PASS, arena18, native host exit0/tree0, exact retry cached.
-- gt09-mcp-native-hybrid-20261008-08: MEASURED_EXTERNAL_NATIVE_LIMIT; arena/HUD readback, exits0/tree0, 68 ObjectDB/33 resource cleanup errors; earlier06/07 retained.
+- `gt09-matrix-final-20261009-01`: historical incomplete; multiple rows failed but later playtests ran.
+- `gt09-matrix-final-20261009-02`: historical invalid; static/stale evidence and overwritten playtest provenance.
+- `gt09-matrix-final-20261009-04`: stopped after source drift during the run.
+- `gt09-matrix-final-20261009-05`: stopped after watchdog test failures in K9/K10; raw retained.
+- `gt09-matrix-final-20261009-06`: stopped after K10/K14 failures; raw retained and not evidence.
+- `gt09-registered-script-20261009-routefix`: diagnostic native K3/K9 route pass, authority 0.
+- `gt09-fixture-conformance-20261009-finalprep`: candidate pass, authority 0.
 
 ## Lessons carried forward
 
 - Freeze source, verifier, plan and status before every long run; any source change invalidates closure-bound evidence.
-- Use the host-owned fixture profile for native AUTH; request flags cannot enable it. Global discovery remains hidden until acceptance.
-- Bind the same Blender GLB/manifest to every fixture that reads dynamic assets; missing provenance must fail closed.
-- A timeout without host-captured exit is incomplete; keep raw evidence and remint only after a bounded repair.
-- Transport-only MCP and delegated lifecycle output do not prove native/public capability; record client/model/host/version for each measured row.
-- One writer/file, one Godot worker per path, dry-run before native, and no critic before O13 self-check.
-- A diagnostic verifier must reject stale closure and malformed raw receipts itself; a child PASS banner or MCP request ID is never a host command receipt.
-- Windows GUI Godot launched directly by PowerShell may return before it exits; use bounded Python subprocess capture for parse checks and the Job host for native evidence.
-- Parse-check GDScript before editor launch. A plugin must exit nonzero for missing save/reload/readback, even when its explicit failures list is empty.
-- A successful diagnostic is reused as an input after later source edits; do not rerun solely to refresh metadata. Final matrix proves the final closure.
-
-History archive: `AUTHORING_STATUS_HISTORY_20261008.md`.
-
+- Final producers must run inside the matrix; evidence from older publication, attribution or adapter directories cannot satisfy a final row.
+- A validator must run on real raw output before the final run and must match the producer schema exactly; a child banner never supplies a host exit.
+- Stop at the first failed row; do not spend the long playtest budget on an already invalid matrix.
+- Keep one coordinator and one writer per file, no audit subagents, one Godot/Blender worker per path, and preserve actual exits/tree cleanup.
+- Native, host and unit steps are labeled separately; a unit-only row cannot pass.
+- Authority remains zero until two independent critics explicitly accept the same frozen manifest.

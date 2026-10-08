@@ -65,21 +65,52 @@ def _check(name: str, row: dict) -> list[str]:
         errors.append(f'{name}:result_status:{result.get("status")}')
     if result.get('authority') != 0 or result.get('public_ack') is not False:
         errors.append(f'{name}:authority_or_ack')
+    # Early GT09 evidence used the explicit hh-blender-godot-handoff-1
+    # envelope.  Current catalog publication evidence carries the same
+    # protected handoff as blender_content, with a manifest plus both native
+    # artifacts.  Normalize both forms here so this offline checker does not
+    # reject the current producer contract merely because its field names
+    # evolved.
     handoff = result.get('blender_handoff')
-    if result.get('blender_handoff_verified') is not True:
-        errors.append(f'{name}:result_blender_handoff_verified')
-    elif (type(handoff) is not dict or handoff.get('schema') != 'hh-blender-godot-handoff-1'
-          or handoff.get('authority') != 0 or handoff.get('public_ack') is not False
-          or not isinstance(handoff.get('producer_run_id'), str)
-          or not isinstance(handoff.get('manifest_sha256'), str)
-          or type(handoff.get('artifact')) is not dict
-          or handoff['artifact'].get('path') != 'scene.glb'
-          or not isinstance(handoff['artifact'].get('sha256'), str)
-          or not isinstance(handoff['artifact'].get('bytes'), int)
-          or type(handoff.get('producer_receipts')) is not dict
-          or set(handoff['producer_receipts']) != {
-              'queue-native.json', 'native-child.json', 'native-host.json'}):
-        errors.append(f'{name}:blender_handoff_receipt')
+    if handoff is not None:
+        valid_handoff = (
+            type(handoff) is dict
+            and handoff.get('schema') == 'hh-blender-godot-handoff-1'
+            and handoff.get('authority') == 0
+            and handoff.get('public_ack') is False
+            and isinstance(handoff.get('producer_run_id'), str)
+            and isinstance(handoff.get('manifest_sha256'), str)
+            and type(handoff.get('artifact')) is dict
+            and handoff['artifact'].get('path') == 'scene.glb'
+            and isinstance(handoff['artifact'].get('sha256'), str)
+            and isinstance(handoff['artifact'].get('bytes'), int)
+            and type(handoff.get('producer_receipts')) is dict
+            and set(handoff['producer_receipts']) == {
+                'queue-native.json', 'native-child.json', 'native-host.json'})
+        if result.get('blender_handoff_verified') is not True:
+            errors.append(f'{name}:result_blender_handoff_verified')
+        elif not valid_handoff:
+            errors.append(f'{name}:blender_handoff_receipt')
+    else:
+        content = result.get('blender_content')
+        artifacts = content.get('artifact_sha256') if type(content) is dict else None
+        valid_content = (
+            result.get('blender_content_verified') is True
+            and type(content) is dict
+            and content.get('authority') == 0
+            and content.get('public_ack') is False
+            and isinstance(content.get('manifest_sha256'), str)
+            and type(artifacts) is dict
+            and isinstance(artifacts.get('scene.glb'), str)
+            and isinstance(artifacts.get('sprite_sheet.png'), str))
+        if not valid_content:
+            errors.append(f'{name}:result_blender_handoff_verified')
+        else:
+            handoff = {
+                'producer_run_id': Path(content.get('published_root', '')).parent.name,
+                'manifest_sha256': content['manifest_sha256'],
+                'artifact': {'path': 'scene.glb', 'sha256': artifacts['scene.glb']},
+            }
     for key in ('native_run_count', 'native_fixture_observed', 'live_retry_equal',
                 'reopened_retry_equal', 'durable_state_unchanged', 'source_unchanged'):
         if result.get(key) != (1 if key == 'native_run_count' else True):
@@ -111,7 +142,21 @@ def build_report(arena: Path, room: Path) -> dict:
     closures = {row['result'].get('source_closure_sha256') for row in rows.values()}
     if len(closures) != 1 or None in closures:
         errors.append('source_closure_mismatch')
-    handoffs = [rows[name]['result'].get('blender_handoff')
+    def normalized_handoff(result: dict) -> dict | None:
+        legacy = result.get('blender_handoff')
+        if type(legacy) is dict:
+            return legacy
+        content = result.get('blender_content')
+        artifacts = content.get('artifact_sha256') if type(content) is dict else None
+        if type(content) is not dict or type(artifacts) is not dict:
+            return None
+        return {
+            'producer_run_id': Path(content.get('published_root', '')).parent.name,
+            'manifest_sha256': content.get('manifest_sha256'),
+            'artifact': {'sha256': artifacts.get('scene.glb')},
+        }
+
+    handoffs = [normalized_handoff(rows[name]['result'])
                 for name in ('arena_2d', 'room_3d')]
     if any(type(value) is not dict for value in handoffs):
         errors.append('blender_handoff_missing')

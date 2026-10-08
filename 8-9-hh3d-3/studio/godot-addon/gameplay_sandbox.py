@@ -149,7 +149,11 @@ def command(phase, *, parse_script=None):
     if phase == 'parse':
         return common + ['--check-only', '--script', 'res://' + (parse_script or 'scripts/fixture_actor.gd')]
     if phase == 'import':
-        return common + ['--editor', '--import', 'res://scenes/fixture.tscn']
+        # Editor startup opens a TCP listener and is incompatible with the
+        # deliberately socket-denied gameplay sandbox.  The trusted readback
+        # script exercises the same ResourceLoader/importer path without
+        # starting the editor or executing the candidate scene.
+        return common + ['--script', '/harness/gameplay_import_readback.gd']
     if phase == 'play':
         return common + ['res://scenes/fixture.tscn']
     if phase in ('dependencies', 'dependencies_reopen'):
