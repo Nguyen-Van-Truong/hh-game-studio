@@ -1,7 +1,7 @@
 {
   "acceptance": false,
   "authority": 0,
-  "final_frozen_source_hash": "9ae35ed987061ba5fe0948bb3f81231539a1e1fe42609a94d79d8f73c7d1230c",
+  "final_frozen_source_hash": "143e8c2e691290b68cda1c6d39cd86ea058eaed0b824875ba87ee2e719ade941",
   "generated_by": "coordinator",
   "lessons": [
     "Freeze verifier and fixture source before long runs.",
@@ -49,7 +49,7 @@
       "source_closure_sha256": "a0ea0ec124cb5a8e4fcc0b722345143802c496603e543f82eed9ed97f1de2529",
       "status": "PLAYTEST_EVIDENCE_READY"
     },
-    "status_sha256": "0d5c501226e540b4d37928e7c7c0435d6216947ae20a28c2d190804e344fdf3a"
+    "status_sha256": "cd4180952d4900c94f3f2cf2e64346f9fa0ec17ffc7a2ec3d8651deb3ea1d6ac"
   },
   "requirements": {
     "dependency_closure": "OPEN_DIAGNOSTIC",
@@ -57,9 +57,15 @@
     "human_playtest": "NOT_PERFORMED",
     "model_host_capability_matrix": "OPEN",
     "native_adapter_e2e": "OPEN_DIAGNOSTIC_FAIL",
+    "package_source_binding": "BOUND_TO_SOURCE_MANIFEST",
     "playtest_fixtures": "READY_CANDIDATE",
     "two_critics_same_final_hash": "PENDING"
   },
   "schema": "hh-gt09-candidate-package-1",
-  "scope": "GT-09 PC O2 content authoring + 2 mini-game fixture conformance"
+  "scope": "GT-09 PC O2 content authoring + 2 mini-game fixture conformance",
+  "source_binder": {
+    "path": "zdoc/reviews/20261008-gt09-candidate/source-manifest.json",
+    "schema": "hh-gt09-source-binder-1",
+    "sha256": "aca4c680a69c66b6b1ad3f3a7e7d61ddeb2da4a0e326e9ed09a5ca10909332c6"
+  }
 }

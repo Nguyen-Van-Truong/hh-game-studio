@@ -616,3 +616,9 @@ actual host/container exits, dependency binding, retry/reopen and owned cleanup.
 - GT-09 is still `IN_PROGRESS`; no plan checkbox or acceptance marker changed. GT-10-PC remains closed until GT-09 has two independent same-hash critic decisions and all mandatory gaps are resolved.
 
 Lessons carried forward: freeze every verifier and fixture source before the 15-minute runs; run prepare→dry-run→one host worker; keep raw failed runs; never repair a manifest by hand; treat clock jitter as a bounded transport boundary only when types and adjacent evidence still bind; any source change invalidates prior closure-bound evidence.
+
+## 2026-10-08 — follow-up source binder and native retry boundary
+
+- Added `zdoc/reviews/20261008-gt09-candidate/source-manifest.json` (`schema=hh-gt09-source-binder-1`) binding both fixture source closures, shared host files, binary pins, verifier files, and evidence hashes. Candidate frozen payload hash remains `143e8c2e691290b68cda1c6d39cd86ea058eaed0b824875ba87ee2e719ade941`.
+- A bounded native retry after a measured warm-up-only code experiment did not produce clean evidence: `o2-publication-gt09-20261008-03` timed out at the existing 20-second owner budget (`ExitCode=124`). The warm-up change was reverted before any candidate remint; no prior manifest was rebound. This confirms the repair needs an isolated timing fix or a separately approved budget change, not repeated blind runs.
+- The source binder closes the package-hash bookkeeping gap, but it does not change authority or acceptance and does not prove dynamic dependency closure, external MCP compatibility, or native adapter E2E.
