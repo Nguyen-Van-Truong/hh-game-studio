@@ -1,7 +1,8 @@
 """Build a fail-closed GT09 MCP/client capability matrix.
 
-This verifier consumes an already completed private-adapter receipt.  It does
-not start Godot, Blender, Docker, an MCP server, or a network client.  The
+This verifier consumes an already completed private-adapter receipt and an
+optional measured external-stdio receipt.  It does not start Godot, Blender,
+Docker, an MCP server, or a network client.  The
 private Python adapter is deliberately kept separate from the two pinned
 external MCP repositories: their README/security material is sequencing
 input, not compatibility evidence.  Consequently this command normally
@@ -19,6 +20,7 @@ from typing import Any
 
 SCHEMA = "hh-gt09-mcp-capability-matrix-1"
 PRIVATE_ADAPTER_SCHEMA = "hh-gameplay-source-adapter-1"
+EXTERNAL_SPIKE_SCHEMA = "hh-gt09-mcp-external-spike-1"
 PINNED_EXTERNAL = (
     {
         "name": "NPGameDev/godot-mcp-toolkit",
@@ -47,6 +49,78 @@ def _sha256(path: Path) -> str:
 def _need(condition: bool, message: str) -> None:
     if not condition:
         raise ValueError(message)
+
+
+def verify_external_receipt(path: Path) -> dict[str, Any]:
+    """Validate a bounded, transport-only external MCP probe.
+
+    This deliberately does *not* turn a successful stdio handshake into product
+    support.  Both pinned repositories must have real process exits and a
+    reconnect/context-reset lookup, while the native fixture and lease gates
+    remain explicitly open.  The receipt is produced by
+    ``run_gt09_mcp_spike.py`` and contains no raw environment secrets.
+    """
+    result = _load(path)
+    required = {"schema", "run_id", "authority", "transport", "engine_launched",
+                "host", "client", "servers", "scope"}
+    _need(required <= set(result), "external_receipt_missing:" + ",".join(sorted(required - set(result))))
+    _need(result["schema"] == EXTERNAL_SPIKE_SCHEMA, "external_receipt_schema")
+    _need(result["authority"] == 0, "external_receipt_authority")
+    _need(result["transport"] == "stdio", "external_receipt_transport")
+    _need(result["engine_launched"] is False, "external_receipt_engine")
+    _need(result["scope"] == "transport_only_no_native_fixture", "external_receipt_scope")
+    _need(type(result["run_id"]) is str and result["run_id"], "external_receipt_run_id")
+    client = result["client"]
+    _need(type(client) is dict and client.get("name") and client.get("version")
+          and client.get("model") == "UNSPECIFIED", "external_receipt_client")
+    host = result["host"]
+    _need(type(host) is dict and host.get("os") and host.get("architecture")
+          and host.get("python_version") and host.get("node_version"), "external_receipt_host")
+    servers = result["servers"]
+    _need(type(servers) is list and len(servers) == 2, "external_receipt_servers")
+    expected = {item["name"]: item["pin"] for item in PINNED_EXTERNAL}
+    seen: set[str] = set()
+    summaries: list[dict[str, Any]] = []
+    for server in servers:
+        _need(type(server) is dict, "external_receipt_server_type")
+        name = server.get("name")
+        _need(name in expected and name not in seen, "external_receipt_server_id")
+        seen.add(name)
+        _need(server.get("pin") == expected[name], f"external_receipt_pin:{name}")
+        _need(server.get("server_version"), f"external_receipt_version:{name}")
+        _need(server.get("transport") == "stdio", f"external_receipt_server_transport:{name}")
+        _need(server.get("mutation_calls") == [], f"external_receipt_mutations:{name}")
+        runs = server.get("runs")
+        _need(type(runs) is list and len(runs) == 2, f"external_receipt_runs:{name}")
+        for index, run in enumerate(runs):
+            _need(type(run) is dict, f"external_receipt_run_type:{name}:{index}")
+            _need(run.get("timed_out") is False and run.get("exit_code") == 0,
+                  f"external_receipt_exit:{name}:{index}")
+            _need(type(run.get("duration_ms")) in (int, float) and run["duration_ms"] >= 0,
+                  f"external_receipt_duration:{name}:{index}")
+            _need(run.get("initialize_ok") is True and run.get("tools_list_ok") is True,
+                  f"external_receipt_protocol:{name}:{index}")
+            _need(run.get("lookup_only") is True, f"external_receipt_lookup:{name}:{index}")
+            _need(run.get("unsupported_client") == "NOT_RUN_IN_MUTATING_SESSION",
+                  f"external_receipt_unsupported_scope:{name}:{index}")
+        negative = server.get("negative")
+        _need(type(negative) is dict and negative.get("outcome") in {"NEGOTIATED", "REJECTED"}
+              and negative.get("exit_code") == 0 and negative.get("timed_out") is False,
+              f"external_receipt_negative:{name}")
+        summary = server.get("summary")
+        _need(type(summary) is dict, f"external_receipt_summary:{name}")
+        for key in ("initialize", "tools_list", "reconnect", "context_reset_lookup_only"):
+            _need(summary.get(key) is True, f"external_receipt_summary:{name}:{key}")
+        _need(type(summary.get("read_only_surface")) is bool,
+              f"external_receipt_summary:{name}:read_only_surface")
+        _need(summary.get("unsupported_outcome") in {"NEGOTIATED", "REJECTED"},
+              f"external_receipt_summary:{name}:unsupported")
+        summaries.append({"name": name, "pin": server["pin"], "summary": summary,
+                          "server_version": server["server_version"],
+                          "tool_count": server.get("tool_count", 0)})
+    _need(seen == set(expected), "external_receipt_server_set")
+    return {"path": path.as_posix(), "sha256": _sha256(path), "run_id": result["run_id"],
+            "servers": summaries, "client": client, "host": host}
 
 
 def verify_private_receipt(path: Path) -> dict[str, Any]:
@@ -111,8 +185,40 @@ def _capabilities(private: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-def build_matrix(receipt: Path) -> dict[str, Any]:
+def _external_row(item: dict[str, Any], external: dict[str, Any]) -> dict[str, Any]:
+    measured = next(server for server in external["servers"] if server["name"] == item["name"])
+    return {
+        "id": item["name"],
+        "status": "MEASURED_TRANSPORT_ONLY",
+        "authority": 0,
+        "transport": "stdio",
+        "pin": item["pin"],
+        "server_version": measured["server_version"],
+        "client": external["client"],
+        "host": external["host"],
+        "receipt": {"path": external["path"], "sha256": external["sha256"],
+                    "run_id": external["run_id"]},
+        "capabilities": {
+            "stdio_initialize": True,
+            "tools_list": True,
+            "read_only_lookup_surface": measured["summary"].get("read_only_surface", False),
+            "reconnect_retry": True,
+            "context_reset_lookup_only": True,
+            "unsupported_client_rejected": False,
+            "native_postcondition_readback": "UNMEASURED",
+            "arbitrary_code_denial": "UNMEASURED",
+        },
+        "limits": [
+            "transport handshake/list/reconnect only; no Godot editor or fixture",
+            "unsupported protocol was negotiated by the server, not rejected",
+            "native postcondition, lease, hash and critic gates remain open",
+        ],
+    }
+
+
+def build_matrix(receipt: Path, external_receipt: Path | None = None) -> dict[str, Any]:
     private = verify_private_receipt(receipt)
+    external = verify_external_receipt(external_receipt) if external_receipt else None
     rows: list[dict[str, Any]] = [{
         "id": "hh-private-python-adapter",
         "status": "MEASURED_PRIVATE",
@@ -131,26 +237,29 @@ def build_matrix(receipt: Path) -> dict[str, Any]:
         ],
     }]
     for item in PINNED_EXTERNAL:
-        rows.append({
-            "id": item["name"],
-            "status": "UNMEASURED",
-            "authority": 0,
-            "transport": item["transport"],
-            "pin": item["pin"],
-            "capabilities": {
-                "read_only_default": "UNMEASURED",
-                "authenticated_transport": "UNMEASURED",
-                "postcondition_readback": "UNMEASURED",
-                "reconnect_retry": "UNMEASURED",
-                "unsupported_client_rejection": "UNMEASURED",
-                "arbitrary_code_denial": "UNMEASURED",
-            },
-            "limits": [
-                "pinned documentation is not a native fixture run",
-                "not installed or executed by this package",
-                "no HH lease/journal/command-ID mapping established",
-            ],
-        })
+        if external:
+            rows.append(_external_row(item, external))
+        else:
+            rows.append({
+                "id": item["name"],
+                "status": "UNMEASURED",
+                "authority": 0,
+                "transport": item["transport"],
+                "pin": item["pin"],
+                "capabilities": {
+                    "read_only_default": "UNMEASURED",
+                    "authenticated_transport": "UNMEASURED",
+                    "postcondition_readback": "UNMEASURED",
+                    "reconnect_retry": "UNMEASURED",
+                    "unsupported_client_rejection": "UNMEASURED",
+                    "arbitrary_code_denial": "UNMEASURED",
+                },
+                "limits": [
+                    "pinned documentation is not a native fixture run",
+                    "not installed or executed by this package",
+                    "no HH lease/journal/command-ID mapping established",
+                ],
+            })
     rows.append({
         "id": "hh-public-catalog",
         "status": "DISABLED",
@@ -164,16 +273,20 @@ def build_matrix(receipt: Path) -> dict[str, Any]:
         "schema": SCHEMA,
         "authority": 0,
         "acceptance": False,
-        "status": "COMPLETE" if complete else "INCOMPLETE_EXTERNAL_SPIKE",
+        "status": "COMPLETE" if complete else (
+            "EXTERNAL_TRANSPORT_MEASURED_NATIVE_OPEN" if external else "INCOMPLETE_EXTERNAL_SPIKE"
+        ),
         "generated_by": "gt09_mcp_compatibility.py",
         "private_receipt": private,
         "rows": rows,
         "requirements": {
-            "external_pinned_mcp_spike": "OPEN",
+            "external_pinned_mcp_spike": "MEASURED_TRANSPORT_ONLY" if external else "OPEN",
             "model_host_capability_matrix": "OPEN",
             "two_critics_same_final_hash": "OPEN",
         },
         "interpretation": (
+            ("Private adapter and pinned external stdio transport facts are measured; native "
+             "fixture compatibility and public capability remain unclaimed.") if external else
             "Private adapter reconnect and rejection facts are measured; no external MCP "
             "compatibility or public capability is claimed."
         ),
@@ -196,7 +309,7 @@ def verify_matrix(matrix: dict[str, Any]) -> list[str]:
     for row in rows:
         if type(row) is not dict or row.get("authority") != 0:
             errors.append("row_authority")
-        if row.get("id") != "hh-private-python-adapter" and row.get("status") != "UNMEASURED" and row.get("id") != "hh-public-catalog":
+        if row.get("id") != "hh-private-python-adapter" and row.get("id") in {item["name"] for item in PINNED_EXTERNAL} and row.get("status") not in {"UNMEASURED", "MEASURED_TRANSPORT_ONLY"}:
             errors.append("external_status")
     return errors
 
@@ -204,9 +317,10 @@ def verify_matrix(matrix: dict[str, Any]) -> list[str]:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--receipt", type=Path, required=True)
+    parser.add_argument("--external-receipt", type=Path)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args(argv)
-    matrix = build_matrix(args.receipt)
+    matrix = build_matrix(args.receipt, args.external_receipt)
     errors = verify_matrix(matrix)
     if errors:
         raise SystemExit("invalid_matrix:" + ",".join(errors))
