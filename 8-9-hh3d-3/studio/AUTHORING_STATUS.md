@@ -4,7 +4,34 @@ AUTHORITY=0. Branch `codex/hh3d-s14-bootstrap`. Read the main tools plan for
 current WP/acceptance; historical entries below do not override it. Public
 gameplay-source remains disabled; tests/native diagnostics do not close AUTH.
 
-## Current integrated checkpoint — authenticated native diagnostics (2026-10-08)
+## Current integrated checkpoint — registered native authoring diagnostic (2026-10-08)
+
+Commit `e18e2b9f` adds a registered-owner candidate seam and a real native probe.
+`o2-registered-authoring-20261008-02` calls the Godot Editor/UndoRedo/save/reload
+runner through the owner transaction, records 14 unique command IDs, checks the
+transaction digest, lease/fencing epoch, native scene readback, and the pinned
+Blender GLB plus `HH-BLENDER-PUBLICATION-1` manifest hashes. The outer result and
+child `o2-saved-room-registered-20261008-01` both have actual editor exit 0 and
+clean owned cleanup; the child scene/native-observation hash is
+`f4e0c6bae6bce51d95bfbce4283b19bde435d1e419b9f73b6c04de3e9ad2e088` and the
+transaction digest is `sha256:8cb86b9e41a8156af813d8d0ac7adc5c6004387b37499fdac05de9f318ae278d`.
+This is `DIAGNOSTIC_PASS` with `state_kind=NATIVE_OBSERVED_AUTHORITY0`,
+`public_ack=false`, and a candidate-only catalog profile (`runtime_enabled=false`);
+it is native observation, not a registered public capability or GT-09 acceptance.
+The focused registered-owner/authoring-owner regression is 12 tests with actual
+exit 0; the broader agent run reported 26 focused tests and `py_compile` exit 0.
+
+Lessons: a private native callback must still bind the full transaction and the
+same Blender handoff, and a concrete Godot resource (Box/Capsule) must be mapped
+to its catalog base class before inventory validation. Keep candidate-only profile
+and public runtime flags explicit so native evidence cannot silently become AUTH.
+
+The remaining registered public authoring gap is open: this probe is not a public
+catalog registration and does not prove runtime-enabled AUTH-01..05. Generic
+dependency closure, full external MCP/model-host capability coverage, and two
+independent critics on one frozen source hash also remain open.
+
+## Previous integrated checkpoint — authenticated native diagnostics (2026-10-08)
 
 O2 is integrated on the current line (`f4884d19`, branch
 `codex/hh3d-s14-bootstrap`). The authenticated native publication probe
