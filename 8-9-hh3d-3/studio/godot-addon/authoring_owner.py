@@ -316,10 +316,21 @@ class AuthoringOwner:
                     properties=payload["properties"])
                 resource_context = _append_resource_context(resource_context, row)
                 # The node validator only needs resource identity/base for a
-                # later property reference; shape resources are catalog bases.
+                # later property reference.  Resource authoring validates
+                # concrete classes (for example ``BoxShape3D``), while the
+                # node catalog intentionally stores their abstract bases
+                # (``Shape3D``).  Keep that mapping here so a real room
+                # transaction can bind a typed shape to ``CollisionShape3D``
+                # without leaking a concrete class into the node contract.
+                resource_base = payload["resource_type"]
+                if resource_base not in catalog.resource_bases:
+                    if resource_base.endswith("Shape2D"):
+                        resource_base = "Shape2D"
+                    elif resource_base.endswith("Shape3D"):
+                        resource_base = "Shape3D"
                 node_context = replace(
                     node_context, resources=node_context.resources +
-                    (_NODE.ResourceState(payload["resource_id"], payload["resource_type"]),))
+                    (_NODE.ResourceState(payload["resource_id"], resource_base),))
             elif request.operation == "scene.resource.update":
                 state = next(row for row in resource_context.resources
                              if row.resource_id == payload["resource_id"])
