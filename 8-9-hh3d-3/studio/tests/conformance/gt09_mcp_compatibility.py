@@ -21,6 +21,7 @@ from typing import Any
 SCHEMA = "hh-gt09-mcp-capability-matrix-1"
 PRIVATE_ADAPTER_SCHEMA = "hh-gameplay-source-adapter-1"
 EXTERNAL_SPIKE_SCHEMA = "hh-gt09-mcp-external-spike-1"
+NATIVE_ATTEMPT_SCHEMA = "hh-gt09-mcp-native-attempt-1"
 PINNED_EXTERNAL = (
     {
         "name": "NPGameDev/godot-mcp-toolkit",
@@ -129,6 +130,135 @@ def verify_external_receipt(path: Path) -> dict[str, Any]:
     _need(seen == set(expected), "external_receipt_server_set")
     return {"path": path.as_posix(), "sha256": _sha256(path), "run_id": result["run_id"],
             "servers": summaries, "client": client, "host": host}
+
+
+def verify_native_attempt(path: Path) -> dict[str, Any]:
+    """Validate a bounded external-server/native-editor attempt.
+
+    This is intentionally a *failure-preserving* verifier.  A successful MCP
+    request is only a native observation when the editor bridge reports a
+    connected editor and a read-only operation returns a non-error result.  A
+    scripted stdio client does not own HH Studio's lease, journal, or semantic
+    command-id protocol; those fields therefore must remain explicit
+    ``UNMEASURED`` markers.  In particular, this function never promotes an
+    MCP request id, process exit, or model label into a native command id.
+    """
+    result = _load(path)
+    required = {
+        "schema", "authority", "acceptance", "run_id", "server", "server_pin",
+        "transport", "client", "host", "adapter", "source_closure", "calls",
+        "native_observation", "godot", "mcp", "status",
+    }
+    _need(required <= set(result), "native_attempt_missing:" + ",".join(
+        sorted(required - set(result))))
+    _need(result["schema"] == NATIVE_ATTEMPT_SCHEMA, "native_attempt_schema")
+    _need(result["authority"] == 0 and result["acceptance"] is False,
+          "native_attempt_authority")
+    _need(type(result["run_id"]) is str and result["run_id"],
+          "native_attempt_run_id")
+    _need(result["server"] == "hybridindie/godot-mcp",
+          "native_attempt_server")
+    expected_pin = next(item["pin"] for item in PINNED_EXTERNAL
+                        if item["name"] == result["server"])
+    _need(result["server_pin"] == expected_pin, "native_attempt_pin")
+    _need(result["transport"] == "stdio", "native_attempt_transport")
+
+    client = result["client"]
+    _need(type(client) is dict and client.get("name") and client.get("version")
+          and client.get("protocol") and client.get("model") == "UNSPECIFIED",
+          "native_attempt_client")
+    host = result["host"]
+    _need(type(host) is dict and host.get("os") and host.get("platform")
+          and host.get("python") and host.get("godot_binary"),
+          "native_attempt_host")
+    adapter = result["adapter"]
+    _need(type(adapter) is dict and adapter.get("addon") == result["server"]
+          and adapter.get("bridge_url", "").startswith("ws://127.0.0.1:")
+          and adapter.get("fixture"), "native_attempt_adapter")
+
+    closure = result["source_closure"]
+    _need(type(closure) is dict and closure.get("addon_commit") == expected_pin,
+          "native_attempt_closure_pin")
+    for field in ("probe_sha256", "fixture_project_sha256", "sha256"):
+        _need(type(closure.get(field)) is str and len(closure[field]) == 64,
+              f"native_attempt_closure:{field}")
+
+    calls = result["calls"]
+    _need(type(calls) is list and calls, "native_attempt_calls")
+    allowed = {
+        "godot_health_check", "godot_get_server_info",
+        "godot_inspection_get_project_info", "godot_inspection_get_scene_tree",
+    }
+    request_ids: set[int] = set()
+    readback_success = False
+    for index, item in enumerate(calls):
+        _need(type(item) is dict and type(item.get("request")) is dict
+              and type(item.get("response")) is dict,
+              f"native_attempt_call:{index}")
+        request = item["request"]
+        _need(type(request.get("id")) is int and request["id"] not in request_ids,
+              f"native_attempt_request:{index}")
+        request_ids.add(request["id"])
+        method = request.get("method")
+        _need(method in {"initialize", "tools/list", "tools/call"},
+              f"native_attempt_method:{index}")
+        params = request.get("params")
+        if method == "tools/call":
+            _need(type(params) is dict and params.get("name") in allowed,
+                  f"native_attempt_operation:{index}")
+        response = item["response"]
+        _need(response.get("jsonrpc") == "2.0"
+              and response.get("id") == request["id"],
+              f"native_attempt_response:{index}")
+        # FastMCP wraps tool outcomes in a JSON-RPC result.  Error results are
+        # useful raw evidence but cannot count as a readback postcondition.
+        if (method == "tools/call"
+                and params["name"] == "godot_inspection_get_project_info"
+                and type(response.get("result")) is dict
+                and response["result"].get("isError") is False
+                and type(response["result"].get("structuredContent")) is dict):
+            readback_success = True
+
+    native = result["native_observation"]
+    _need(type(native) is dict and type(native.get("bridge_connected_observed")) is bool,
+          "native_attempt_observation")
+    _need(native.get("lease") == "UNMEASURED"
+          and native.get("journal") == "UNMEASURED"
+          and native.get("command_id") == "MCP_REQUEST_ID_ONLY_NO_HH_COMMAND_ID",
+          "native_attempt_ownership_markers")
+    if native["bridge_connected_observed"]:
+        _need(readback_success and native.get("postcondition_readback")
+              == "MEASURED_FOR_READ_ONLY_PROJECT_AND_SCENE",
+              "native_attempt_readback")
+    else:
+        _need(not readback_success and native.get("postcondition_readback") == "UNMEASURED",
+              "native_attempt_unconnected_readback")
+
+    for name in ("godot", "mcp"):
+        process = result[name]
+        _need(type(process) is dict and type(process.get("exit_code")) is int
+              and type(process.get("stdout_sha256")) is str
+              and len(process["stdout_sha256"]) == 64
+              and type(process.get("stderr_sha256")) is str
+              and len(process["stderr_sha256"]) == 64,
+              f"native_attempt_process:{name}")
+    _need(result["mcp"].get("timed_out") is False,
+          "native_attempt_mcp_timeout")
+    _need(result["status"] == "NATIVE_READONLY_ATTEMPT_UNSUPPORTED_LEASE",
+          "native_attempt_status")
+    return {
+        "path": path.as_posix(), "sha256": _sha256(path),
+        "run_id": result["run_id"], "server": result["server"],
+        "server_pin": result["server_pin"], "client": client, "host": host,
+        "fixture": adapter["fixture"],
+        "bridge_connected": native["bridge_connected_observed"],
+        "readback": native["postcondition_readback"],
+        "lease": native["lease"], "journal": native["journal"],
+        "command_id": native["command_id"],
+        "godot_exit": result["godot"]["exit_code"],
+        "mcp_exit": result["mcp"]["exit_code"],
+        "status": result["status"],
+    }
 
 
 def verify_private_receipt(path: Path) -> dict[str, Any]:
