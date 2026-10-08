@@ -11,7 +11,7 @@ Commit `e18e2b9f` adds a registered-owner candidate seam and a real native probe
 runner through the owner transaction, records 14 unique command IDs, checks the
 transaction digest, lease/fencing epoch, native scene readback, and the pinned
 Blender GLB plus `HH-BLENDER-PUBLICATION-1` manifest hashes. The outer result and
-child `o2-saved-room-registered-20261008-01` both have actual editor exit 0 and
+child `o2-saved-room-registered-20261008-02` both have actual editor exit 0 and
 clean owned cleanup; the child scene/native-observation hash is
 `f4e0c6bae6bce51d95bfbce4283b19bde435d1e419b9f73b6c04de3e9ad2e088` and the
 transaction digest is `sha256:8cb86b9e41a8156af813d8d0ac7adc5c6004387b37499fdac05de9f318ae278d`.
