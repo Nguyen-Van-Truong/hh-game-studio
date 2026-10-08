@@ -1,7 +1,7 @@
 {
   "acceptance": false,
   "authority": 0,
-  "final_frozen_source_hash": "143e8c2e691290b68cda1c6d39cd86ea058eaed0b824875ba87ee2e719ade941",
+  "final_frozen_source_hash": "4805cd37f87ab682c3ded46eb9726b31d3276b3bf2378ae148d3398d257f4c54",
   "generated_by": "coordinator",
   "lessons": [
     "Freeze verifier and fixture source before long runs.",
@@ -35,6 +35,13 @@
       "result_sha256": null,
       "status": "DIAGNOSTIC_OPEN"
     },
+    "historical_native_conformance": {
+      "path": "studio/.local/reviews/gt09-fixture-conformance-20261008-03.json",
+      "sha256": "531ce4312fbeed16c3c33494b4ed098fa358f173edbc95fb162455229e50c0a5",
+      "source_closure_sha256": "c91bc0d770e9730cb10a3bc9fd8e80729f6db9d3485b024664706658993be51c",
+      "stale_against_current_binder": true,
+      "status": "CANDIDATE_PASS"
+    },
     "mcp_matrix": {
       "path": "studio/.local/reviews/gt09-mcp-20261008-02.json",
       "sha256": "f8fdf9e82883df514de27bf6d54e338dd2873b0b41653dd2f23c6de96a0677f4",
@@ -49,11 +56,12 @@
       "source_closure_sha256": "a0ea0ec124cb5a8e4fcc0b722345143802c496603e543f82eed9ed97f1de2529",
       "status": "PLAYTEST_EVIDENCE_READY"
     },
-    "status_sha256": "cd4180952d4900c94f3f2cf2e64346f9fa0ec17ffc7a2ec3d8651deb3ea1d6ac"
+    "status_sha256": "1312db78b705df447b80d34c8d1a83290c329df43d64733a27c46af740d534af"
   },
   "requirements": {
     "dependency_closure": "OPEN_DIAGNOSTIC",
     "external_pinned_mcp_spike": "OPEN",
+    "historical_native_fixture_conformance": "CANDIDATE_PASS_STALE_CLOSURE",
     "human_playtest": "NOT_PERFORMED",
     "model_host_capability_matrix": "OPEN",
     "native_adapter_e2e": "OPEN_DIAGNOSTIC_FAIL",
@@ -66,6 +74,6 @@
   "source_binder": {
     "path": "zdoc/reviews/20261008-gt09-candidate/source-manifest.json",
     "schema": "hh-gt09-source-binder-1",
-    "sha256": "aca4c680a69c66b6b1ad3f3a7e7d61ddeb2da4a0e326e9ed09a5ca10909332c6"
+    "sha256": "78d6a7b9e99db6ae99f101e09e9a9782ae55660ff17556228fe7cfc1c80817da"
   }
 }

@@ -6,9 +6,15 @@
     "godot_console": "c8f0a6bc45a19b33541501e57f6f7cd972ab18453743266339d495cbbe846643",
     "godot_gui": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424"
   },
-  "binder_payload_sha256": "143e8c2e691290b68cda1c6d39cd86ea058eaed0b824875ba87ee2e719ade941",
+  "binder_payload_sha256": "4805cd37f87ab682c3ded46eb9726b31d3276b3bf2378ae148d3398d257f4c54",
   "evidence_refs": {
     "arena_manifest": "f4d33b6dd674987eed0b3a5ea5b615c025a5512bafde9dfbd7d4c88611f94bb4",
+    "historical_native_conformance": {
+      "path": "studio/.local/reviews/gt09-fixture-conformance-20261008-03.json",
+      "sha256": "531ce4312fbeed16c3c33494b4ed098fa358f173edbc95fb162455229e50c0a5",
+      "source_closure_sha256": "c91bc0d770e9730cb10a3bc9fd8e80729f6db9d3485b024664706658993be51c",
+      "status": "CANDIDATE_PASS_STALE_CLOSURE"
+    },
     "mcp_matrix": "f8fdf9e82883df514de27bf6d54e338dd2873b0b41653dd2f23c6de96a0677f4",
     "room_manifest": "91c5338b8ee154ab25545d803e41f0c4e0d684ed3c039e495ed0e48d7fa33900"
   },
