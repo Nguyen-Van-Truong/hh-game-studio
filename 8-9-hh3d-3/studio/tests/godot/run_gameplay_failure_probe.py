@@ -95,6 +95,7 @@ def main():
     # deadline; bind the hostile transcript validator to that same observed
     # value instead of the legacy fixture default.
     bad_case['timeout'] = 30
+    bad_case['authenticated_timeout'] = True
     files, closure = owner_mod.runtime_source_closure()
     for name in ('tests/godot/run_gameplay_failure_probe.py', 'tests/godot/run_linux_probe.py',
                  'tests/godot/linux_probe_fixtures.py', 'godot-addon/gameplay_dependency_observation.py'):
