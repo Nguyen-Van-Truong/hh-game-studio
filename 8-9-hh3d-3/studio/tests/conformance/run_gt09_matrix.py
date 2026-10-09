@@ -270,7 +270,7 @@ def _conformance_semantics(path: Path, *, closure: str | None = None) -> bool:
 
 
 def _host_playtest_semantics(run_id: str, *, fixture: str,
-                             expected_source_closure: str | None = None,
+                             expected_publication: Path | None = None,
                              minimum_seconds: float = 900.0) -> bool:
     """Require owned import/native/video exits and immutable publication provenance."""
     root = STUDIO / ".local" / "reviews" / run_id / fixture
@@ -294,8 +294,10 @@ def _host_playtest_semantics(run_id: str, *, fixture: str,
             and manifest.get("run_id") == run_id
             and manifest.get("fixture") == fixture
             and manifest.get("source_closure_sha256") == metadata.get("source_closure_sha256")
-            and (expected_source_closure is None
-                 or metadata.get("source_closure_sha256") == expected_source_closure)
+            and (expected_publication is None
+                 or (isinstance(provenance.get("publication_root"), str)
+                     and Path(provenance["publication_root"]).resolve()
+                         == expected_publication.resolve()))
             and summary.get("mode") == "scripted"
             and summary.get("reason") == "input_quit"
             and summary.get("lifecycle_complete") is True
@@ -1293,9 +1295,8 @@ def final_matrix_orchestrated(*, output: Path, run_id: str, k13: Path | None,
         if step["actual_exit"] != 0 or step["timed_out"] or not step["owned_tree_zero"]:
             finish_row("K15", play_steps, "delegated 2 x 15-minute final-closure playtest", False)
             raise MatrixError("K15:FAIL")
-        expected = json_result(pub / "result.json").get("source_closure_sha256")
         if not _host_playtest_semantics(play_id, fixture=fixture,
-                                        expected_source_closure=expected):
+                                        expected_publication=pub):
             finish_row("K15", play_steps, "delegated 2 x 15-minute final-closure playtest", False)
             raise MatrixError("K15:FAIL")
     finish_row("K15", play_steps, "delegated 2 x 15-minute final-closure playtest",
