@@ -671,11 +671,15 @@ def _source_tree_closure() -> tuple[str, dict[str, str]]:
     """
     ignored = {".local", ".godot", "__pycache__", ".pytest_cache", ".mypy_cache"}
     files: dict[str, str] = {}
-    for path in STUDIO.rglob("*"):
-        if not path.is_file() or any(part in ignored for part in path.parts):
-            continue
-        rel = path.relative_to(STUDIO).as_posix()
-        files[rel] = _sha(path)
+    for directory, subdirs, filenames in os.walk(STUDIO):
+        # Prune generated evidence before traversal; .local may contain many
+        # gigabytes of historical native runs, none of which is in this hash.
+        subdirs[:] = [name for name in subdirs if name not in ignored]
+        for name in filenames:
+            path = Path(directory) / name
+            if path.is_file() and not any(part in ignored for part in path.parts):
+                rel = path.relative_to(STUDIO).as_posix()
+                files[rel] = _sha(path)
     payload = dict(sorted(files.items()))
     return "sha256:" + _sha_bytes(_canonical(payload)), payload
 

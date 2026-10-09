@@ -1,13 +1,13 @@
-# O2 authoring state — 2026-10-09 (O13/S276)
+# O2 authoring state — 2026-10-09 (O13/S277)
 
 AUTHORITY=0; GT09=IN_PROGRESS; no public gameplay-source or acceptance claim.
-Source-of-truth plan: `zdoc/8-9-godot-blender-agent-studio-plan.txt` S276.
+Source-of-truth plan: `zdoc/8-9-godot-blender-agent-studio-plan.txt` S277.
 WIP milestone is frozen for commit before the next long run; final closure is
 computed by `run_gt09_matrix.py` and excludes `.local` and caches.
 GT08A remains accepted; GT08B Android remains deferred by owner.
 K1–K9 and K11–K14 have diagnostic implementations/evidence, but no final row
 is accepted until one frozen K1–K15 run and two independent critics share its hash.
-The five earlier final attempts are historical; -04 had source drift, -05 had
+Earlier final attempts are historical; -04 had source drift, -05 had
 watchdog parser failures, and -06 was stopped after schema/closure failures.
 Human playtest remains NOT_PERFORMED and authority stays 0. A delegated room
 probe `gt09-playtest-20261009-03` passed on its own frozen publication with
@@ -22,7 +22,11 @@ Final `gt09-matrix-final-20261009-23` reported PASS K1–K15, but the required
 verify-only self-check rejected K6 because its persisted row contained only a
 unit step. This was a runner/verifier gap, not acceptance; K6 now records a
 native durable-publication step and `_write_row` serializes evidence types
-before hashing. A fresh final run is required; no critic was dispatched.
+before hashing. Fresh `-24` reached K1–K14 and its room native Godot capture
+exited 0 with Job/tree zero, but the outer room host ended 1 without
+`host-result.json`; it is retained as INFRA and cannot be combined. A
+demand-only GT09 Scheduled Task launcher now pins source closure and records
+task/supervisor start, terminal and delete receipts; fresh final is required.
 
 ## K1–K15 acceptance matrix (current)
 
@@ -44,14 +48,17 @@ before hashing. A fresh final run is required; no critic was dispatched.
 | K14 | DIAGNOSTIC_PASS | GT08A 18/18 diagnostic matrix and focused regression tests; final validator must bind real schema. |
 | K15 | REUSE_ONLY | Delegated runner and fail-closed packer exist; two 15-minute runs only in final matrix. |
 
-## Next (O13.5/S271)
+## Next (O13.5/S277)
 
-B6a: finish the final runner contract: in-run K8 producers, closure start/end,
-native/host evidence labels, K1/K2/K11/K12/K13 client rows, verify-only and
-fail-fast behavior. Run verify-only and changed-row checks on historical raw.
-B6b: commit this WIP, dry-run, then one fresh final K1–K15 run with no writers.
-B7: only after self-check, dispatch two different-model read-only critics on the
-same manifest hash. Do not tick GT09 or open GT10-PC before both TICK=yes.
+B6a/B6b: runner contract and K6 verifier repair are committed; `-23` is
+rejected by verify-only and `-24` is INFRA because its outer room host had no
+receipt. The new `gt09_task.ps1`/`run_gt09_task.py` demand-only launcher was
+tested through register/status/delete with source and definition hashes.
+B7: freeze the source, prepare one new Scheduled Task final, start it with
+`start-run`, wait for independent Scheduler/return/matrix receipts, then run
+verify-only. Only after self-check, dispatch two different-model read-only
+critics on the same manifest hash. Do not tick GT09 or open GT10-PC before
+both TICK=yes.
 
 ## Milestone run log (raw under .local/reviews)
 
@@ -68,6 +75,7 @@ same manifest hash. Do not tick GT09 or open GT10-PC before both TICK=yes.
 - `gt09-matrix-final-20261009-22`: stopped at K7; wall child exited before result.json, invalid and retained.
 - `o2-auth05-native-k7wall-repro-20261009-01`: diagnostic PASS after the K7 boundary; no source or deadline change.
 - `gt09-matrix-final-20261009-23`: runner PASS K1–K15 but verify-only rejected K6 unit-only evidence; not critic-ready.
+- `gt09-matrix-final-20261009-24`: K1–K14 PASS; K15 arena ran, room native Godot exited 0 with clean Job/tree, but host exited 1 without host-result; INFRA raw retained, no rows combined.
 - `o2-publication-gt09-k6-repro-20261009-01`: native AUTH-04 publication diagnostic PASS used to validate the K6 repair.
 
 ## Lessons carried forward
