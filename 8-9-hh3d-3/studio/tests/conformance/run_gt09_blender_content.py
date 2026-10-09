@@ -90,6 +90,9 @@ def run(*, run_id: str, output: Path, binary: Path) -> dict:
         wire = {key: value for key, value in report.items()
                 if key != "_publication_handle"}
         published_root = Path(wire["publication"]["published_root"])
+        if publication is not None:
+            publication.close()
+            publication = None
         observed = job.inspect_publication(published_root)
         wire.update({"schema": "hh-gt09-content-run-1", "status": "DIAGNOSTIC_PASS",
                      "authority": 0, "acceptance": False,
@@ -99,8 +102,6 @@ def run(*, run_id: str, output: Path, binary: Path) -> dict:
                      "public_ack": False})
         (output / "result.json").write_text(
             json.dumps(wire, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-        if publication is not None:
-            publication.close()
         return wire
     finally:
         source_owner.close()
