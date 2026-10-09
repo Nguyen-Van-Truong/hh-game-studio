@@ -93,8 +93,17 @@ def _publication_args(args):
     need(saved_arena is None or fixture == publication.ARENA_FIXTURE,
          'SAVED_ARENA_FIXTURE_REQUIRED')
     need(blender_published is None or fixture != FIXTURE, 'ADAPTER_ASSET_FIXTURE_REQUIRED')
-    return argparse.Namespace(run_id=args.run_id, fixture=fixture,
-                              saved_arena=saved_arena, blender_published=blender_published)
+    # Publication's source admission is shared with the catalog probe and
+    # reads optional catalog bindings.  Keep the historical Namespace shape
+    # for callers while resolving those absent fields as explicit None.
+    class _AdapterArgs(argparse.Namespace):
+        def __getattr__(self, name):
+            if name in {"catalog_arena", "registered_arena", "catalog_room",
+                        "registered_room", "blender_content_published"}:
+                return None
+            raise AttributeError(name)
+    return _AdapterArgs(run_id=args.run_id, fixture=fixture,
+                        saved_arena=saved_arena, blender_published=blender_published)
 
 
 def _modules():
