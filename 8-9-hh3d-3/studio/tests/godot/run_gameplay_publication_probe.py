@@ -154,9 +154,10 @@ def catalog_room_case(name, case, raw):
          'CATALOG_ROOM_BYTES_REQUIRED')
     script = case['script']
     start = script.index('func _ready() -> void:')
-    end = script.index('func _physics_process', start)
+    end = script.index('\nfunc ', start + 1) + 1
     ready = '''func _ready() -> void:
 \t_action("move_forward", KEY_D)
+\t_action("move_back", KEY_A)
 \t_action("interact", KEY_E)
 \tvar authored := load("res://scenes/room.tscn") as PackedScene
 \tif authored == null:
@@ -200,25 +201,7 @@ def catalog_room_case(name, case, raw):
 \t\tand trigger is Area3D and pickup is Area3D and topology_components["camera"]
 \t\tand topology_components["hud"] and topology_components["avatar_shape"]
 \t\tand topology_components["trigger_shape"] and topology_components["pickup_shape"])
-
-'''
-    helpers = '''func _read_avatar_asset() -> Node:
-\tif not FileAccess.file_exists("res://assets/avatar.glb"):
-\t\treturn null
-\tvar bytes := FileAccess.get_file_as_bytes("res://assets/avatar.glb")
-\tvar document := GLTFDocument.new()
-\tvar state := GLTFState.new()
-\tif document.append_from_buffer(bytes, "", state) != OK:
-\t\treturn null
-\treturn document.generate_scene(state)
-
-func _read_sprite_image() -> Image:
-\tif not FileAccess.file_exists("res://assets/sprite_sheet.png"):
-\t\treturn null
-\tvar image := Image.new()
-\tif image.load_png_from_buffer(FileAccess.get_file_as_bytes("res://assets/sprite_sheet.png")) != OK:
-\t\treturn null
-\treturn image
+\t_begin_lifecycle()
 
 '''
     # The delegated playtest consumes the exact native publication snapshot.
@@ -229,7 +212,8 @@ func _read_sprite_image() -> Image:
              'scenes/room.tscn': raw.decode('utf-8'),
              'scripts/fixture_dependencies.gd': (fixture_root / 'fixture_dependencies.gd').read_text(encoding='utf-8'),
              'scripts/fixture_lifecycle.gd': (fixture_root / 'fixture_lifecycle.gd').read_text(encoding='utf-8')}
-    return {**case, 'script': script[:start] + helpers + ready + script[end:],
+    # Keep lifecycle and asset helpers from the shared controller unchanged.
+    return {**case, 'script': script[:start] + ready + script[end:],
             'extra_files': extra,
             'extra_binary_files': {**case.get('extra_binary_files', {})},
             'asset_readback': True}
@@ -590,6 +574,10 @@ def _probe_sources(owner_mod, args):
              'tests/replay/benchmark_job.py', 'host/core/gt07_failpoints.py']
     if args.fixture == ARENA_FIXTURE:
         names.extend(ARENA_SOURCE_FILES.values())
+    if args.fixture == 'gameplay_source_room_3d_native':
+        names.extend(('tests/godot/gameplay_fixture/room3d_native.gd',
+                      'tests/godot/gameplay_fixture/fixture_lifecycle.gd',
+                      'tests/godot/gameplay_fixture/fixture_dependencies.gd'))
     if args.catalog_arena is not None:
         names.extend(('tests/godot/catalog_gameplay_handoff.py',
                       'godot-addon/catalog_native_host.py',

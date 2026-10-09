@@ -9,7 +9,10 @@ K1–K9 and K11–K14 have diagnostic implementations/evidence, but no final row
 is accepted until one frozen K1–K15 run and two independent critics share its hash.
 The five earlier final attempts are historical; -04 had source drift, -05 had
 watchdog parser failures, and -06 was stopped after schema/closure failures.
-Human playtest remains NOT_PERFORMED and authority stays 0.
+Human playtest remains NOT_PERFORMED and authority stays 0. A delegated room
+probe `gt09-playtest-20261009-03` passed on its own frozen publication with
+901.003 seconds, actual Godot exit 0, lifecycle_complete=true, all scripted
+transitions and freeze_errors=0; it is diagnostic until a fresh final matrix.
 
 ## K1–K15 acceptance matrix (current)
 
@@ -51,6 +54,7 @@ same manifest hash. Do not tick GT09 or open GT10-PC before both TICK=yes.
 - `gt09-matrix-final-20261009-08`: stopped at K1; stale dead measurement-window marker was recovered, raw retained.
 - `gt09-registered-script-20261009-routefix`: diagnostic native K3/K9 route pass, authority 0.
 - `gt09-fixture-conformance-20261009-finalprep`: candidate pass, authority 0.
+- `gt09-playtest-20261009-03`: room lifecycle diagnostic pass; not final matrix evidence.
 
 ## Lessons carried forward
 
@@ -63,3 +67,5 @@ same manifest hash. Do not tick GT09 or open GT10-PC before both TICK=yes.
 - Final preflight now recovers a marker only after the recorded PID is proven dead; a live or uncertain lock fails closed.
 - K12 uses a real host subprocess and adapter scope rejection; K13 hashes exact in-run K8/K9 receipts plus the external incompatibility measurement.
 - Authority remains zero until two independent critics explicitly accept the same frozen manifest.
+- Room publication now reuses the shared native controller and opts into lifecycle only for the
+  delegated trace; the short tick-60 probe remains bounded. Any source change invalidates this run.

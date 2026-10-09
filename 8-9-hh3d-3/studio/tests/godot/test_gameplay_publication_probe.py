@@ -434,5 +434,28 @@ class BlenderHandoffTests(unittest.TestCase):
                 pass
 
 
+class RoomPublicationLifecycleTests(unittest.TestCase):
+    def test_catalog_binding_preserves_shared_controller_and_opt_in_lifecycle(self):
+        case = copy.deepcopy(fixtures.FIXTURES['gameplay_source_room_3d_native'])
+        controller = (probe.STUDIO / 'tests/godot/gameplay_fixture/room3d_native.gd').read_text(encoding='utf-8')
+        self.assertEqual(case['script'], controller)
+        raw = b'[gd_scene format=3]\n[node name="Room" type="Node3D"]\n'
+        adapted = probe.catalog_room_case('gameplay_source_room_3d_native', case, raw)
+        script = adapted['script']
+        self.assertEqual(script.split('func _begin_lifecycle()', 1)[1],
+                         controller.split('func _begin_lifecycle()', 1)[1])
+        self.assertEqual(script.count('func _read_avatar_asset()'), 1)
+        self.assertEqual(script.count('func _lifecycle_reset()'), 1)
+        self.assertIn('\t_begin_lifecycle()', script)
+        self.assertIn('\t_action("move_back", KEY_A)', script)
+        self.assertIn('if tick == 60 and not Lifecycle.requested():', script)
+        self.assertIn('avatar.position = _avatar_start', script)
+        self.assertNotIn('avatar = CharacterBody3D.new()', script)
+        self.assertEqual(adapted['extra_files']['scenes/room.tscn'].encode(), raw)
+        self.assertEqual(adapted['extra_files']['scripts/fixture_lifecycle.gd'],
+                         case['extra_files']['scripts/fixture_lifecycle.gd'])
+        self.assertLessEqual(len(script.encode()), 16384)
+
+
 if __name__ == '__main__':
     unittest.main()

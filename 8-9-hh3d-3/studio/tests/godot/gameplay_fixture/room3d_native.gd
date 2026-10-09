@@ -22,6 +22,8 @@ var replay_hash_equal: bool = false
 var checkpoint_reload_observed: bool = false
 var replay_values: Array[float] = []
 var topology_components: Dictionary = {}
+var _avatar_start: Vector3 = Vector3.ZERO
+var _camera_start: Vector3 = Vector3.ZERO
 
 func _box(parent: Node3D, size: Vector3) -> CollisionShape3D:
 	var shape := CollisionShape3D.new()
@@ -131,6 +133,11 @@ func _ready() -> void:
 		and trigger is Area3D and pickup is Area3D and topology_components["camera"]
 		and topology_components["hud"] and topology_components["avatar_shape"]
 		and topology_components["trigger_shape"] and topology_components["pickup_shape"])
+	_begin_lifecycle()
+
+func _begin_lifecycle() -> void:
+	_avatar_start = avatar.position
+	_camera_start = camera.position
 	if Lifecycle.requested():
 		var lifecycle := Lifecycle.new()
 		add_child(lifecycle)
@@ -218,9 +225,9 @@ func _lifecycle_reset() -> bool:
 	if not is_instance_valid(avatar) or not is_instance_valid(camera):
 		return false
 	tick = 0
-	avatar.position = Vector3.ZERO
+	avatar.position = _avatar_start
 	avatar.velocity = Vector3.ZERO
-	camera.position = Vector3(0.0, 3.0, 8.0)
+	camera.position = _camera_start
 	switch_used = false
 	pickup_collected = false
 	input_trace_ok = false
