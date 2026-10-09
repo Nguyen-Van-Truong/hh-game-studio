@@ -4,7 +4,8 @@ Owner steering 03-10-2026, credit và lượt theo O13.6 của tools plan (08-10
 thread; subagent chỉ cho thiết kế khó, worker K13 và hai critic cuối, fork_turns=none với brief
 ≤ 1 trang; ultra (gpt-6-astra, gpt-6.1-sol) chỉ cho thiết kế khó và critic. Đọc log, chạy test,
 closeout, status làm trực tiếp; không spawn audit trạng thái/gói/next-step; không tự tạo
-heartbeat/automation; lệnh dài chờ bằng yield dài, không poll dưới 60 giây; không kết thúc lượt
+heartbeat/automation; final, diễn tập và soak chạy qua Scheduled Task có receipt, không là con của
+shell agent (O13.6); chờ bằng lệnh chặn 5–10 phút, không poll dưới 60 giây; không kết thúc lượt
 khi run nền/subagent chưa xong. Credit workspace dùng chung cho mọi agent.
 Giữ một writer/file, tuần tự hóa workload đo và tiếp tục từ checkpoint đã kiểm chứng.
 Theo quyền audit mới nhất của owner, coordinator được dispatch hai critic
@@ -20,13 +21,14 @@ người dùng là inventory, không tự đóng. Không thay counter/status-gap
 
 Governance (plan, AGENTS.md) chỉ coordinator sửa; chi tiết run ghi vào
 studio/AUTHORING_STATUS.md (Hiện trạng ≤ 15 dòng + bảng K1–K15 + Next), sửa trong cùng commit
-mốc; giữ DSL sáu effect. GT-09 làm theo NEXT của O13 (B6a sửa runner, B6b một --matrix final,
-B7 critic theo checklist O13.9) trên ma trận K1–K15: dry-run trước run native, bằng chứng tầng D
-chỉ ở .local, một runner run_gt09_matrix.py. Final chỉ nhận source đã freeze và tự chạy mọi
-producer (O13.3a), dừng ở hàng FAIL đầu; validator chạy --verify-only trên raw thật trước final;
-freeze gồm cả subagent, không có writer khi final chạy; commit WIP trước run dài. Không lập gói
-hay gọi critic trước self-check O13.3; không tự tick WP; nghiệm thu GT-09 cần gói cuối và hai
-critic cùng hash. AGENTS.md ở gốc repo (Vault Fighters) không áp dụng cho tools plan.
+mốc; giữ DSL sáu effect. GT-09 làm theo NEXT của O13 (B6a xong, B6b final, B7 critic theo
+checklist O13.9) trên ma trận K1–K15: dry-run trước run native, bằng chứng tầng D chỉ ở .local,
+một runner run_gt09_matrix.py. Final chỉ nhận source đã freeze và tự chạy mọi producer (O13.3a),
+dừng ở hàng FAIL đầu; mỗi FAIL ghi loại PRODUCT/VERIFIER/INFRA (O13.4); bản sửa kiểm bằng hàng
+đó hoặc smoke ngắn (O13.3f) và --verify-only trên raw thật trước final; playtest 15 phút chỉ
+trong final; freeze gồm cả subagent, không có writer khi final chạy; commit WIP trước run dài.
+Không lập gói hay gọi critic trước self-check O13.3; không tự tick WP; nghiệm thu GT-09 cần gói
+cuối và hai critic cùng hash. AGENTS.md ở gốc repo (Vault Fighters) không áp dụng cho tools plan.
 Đọc CURRENT_VALID_WP và bảng trạng thái
 trong tools plan, không lấy số test/diagnostic làm nguồn tick.
 
