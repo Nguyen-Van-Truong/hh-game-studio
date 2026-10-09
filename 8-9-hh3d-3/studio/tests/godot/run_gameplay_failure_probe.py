@@ -155,8 +155,8 @@ def main():
         owner = owner_mod.GameplaySourcePublicationOwner.create(
             output, project_id='project.publication', source_files=initial,
             entrypoint=owner_mod.ENTRYPOINT, source_closure_sha256=closure,
-            runner=run_native, dependency_observation_required=True,
-            dependency_observation_files=dependency_files)
+            runner=run_native, dependency_observation_required=not auth05,
+            dependency_observation_files=dependency_files if not auth05 else ())
         initial_readback = owner.inspect()
         credential = owner.issue()
         grant = owner.authorize('Bearer ' + credential.bearer, 'scene.save')
@@ -195,8 +195,8 @@ def main():
         owner.close()
         reopened = owner_mod.GameplaySourcePublicationOwner.reopen(
             root, project_id='project.publication', source_closure_sha256=closure,
-            runner=run_native, dependency_observation_required=True,
-            dependency_observation_files=dependency_files)
+            runner=run_native, dependency_observation_required=not auth05,
+            dependency_observation_files=dependency_files if not auth05 else ())
         need(reopened.inspect() == selected, 'REOPEN_LAST_GOOD_CHANGED')
         fresh = reopened.issue()
         grant = reopened.authorize('Bearer ' + fresh.bearer, 'scene.save')
