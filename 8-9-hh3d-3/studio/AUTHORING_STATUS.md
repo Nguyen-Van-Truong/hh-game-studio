@@ -1,7 +1,7 @@
-# O2 authoring state — 2026-10-09 (O13/S277)
+# O2 authoring state — 2026-10-09 (O13/S278)
 
 AUTHORITY=0; GT09=IN_PROGRESS; no public gameplay-source or acceptance claim.
-Source-of-truth plan: `zdoc/8-9-godot-blender-agent-studio-plan.txt` S277.
+Source-of-truth plan: `zdoc/8-9-godot-blender-agent-studio-plan.txt` S278.
 WIP milestone is frozen for commit before the next long run; final closure is
 computed by `run_gt09_matrix.py` and excludes `.local` and caches.
 GT08A remains accepted; GT08B Android remains deferred by owner.
@@ -28,6 +28,13 @@ exited 0 with Job/tree zero, but the outer room host ended 1 without
 demand-only GT09 Scheduled Task launcher now pins source closure and records
 task/supervisor start, terminal and delete receipts; fresh final is required.
 
+Final `gt09-matrix-final-20261009-27` stopped at K1 with
+`CONTENT_DEADLINE_OR_LOG_CAP`; the native Blender output had valid partial
+artifacts but no process-exit receipt. Sixteen sequential diagnostic content
+runs measured one cold timeout and successful host walls up to 23.596 s, so
+the bounded producer watchdog is now 30 s (p95 plus margin); raw measurement
+is under `.local/reviews/gt09-content-deadline-measure-20261009`.
+
 ## K1–K15 acceptance matrix (current)
 
 | K | State | Evidence / next boundary |
@@ -48,11 +55,11 @@ task/supervisor start, terminal and delete receipts; fresh final is required.
 | K14 | DIAGNOSTIC_PASS | GT08A 18/18 diagnostic matrix and focused regression tests; final validator must bind real schema. |
 | K15 | REUSE_ONLY | Delegated runner and fail-closed packer exist; two 15-minute runs only in final matrix. |
 
-## Next (O13.5/S277)
+## Next (O13.5/S278)
 
 B6a/B6b: runner contract and K6 verifier repair are committed; `-23` is
 rejected by verify-only and `-24` is INFRA because its outer room host had no
-receipt. The new `gt09_task.ps1`/`run_gt09_task.py` demand-only launcher was
+receipt. `-27` is a separate INFRA K1 deadline boundary. The new `gt09_task.ps1`/`run_gt09_task.py` demand-only launcher was
 tested through register/status/delete with source and definition hashes.
 B7: freeze the source, prepare one new Scheduled Task final, start it with
 `start-run`, wait for independent Scheduler/return/matrix receipts, then run
@@ -76,6 +83,7 @@ both TICK=yes.
 - `o2-auth05-native-k7wall-repro-20261009-01`: diagnostic PASS after the K7 boundary; no source or deadline change.
 - `gt09-matrix-final-20261009-23`: runner PASS K1–K15 but verify-only rejected K6 unit-only evidence; not critic-ready.
 - `gt09-matrix-final-20261009-24`: K1–K14 PASS; K15 arena ran, room native Godot exited 0 with clean Job/tree, but host exited 1 without host-result; INFRA raw retained, no rows combined.
+- `gt09-matrix-final-20261009-27`: stopped at K1; Blender content hit the measured 20-second watchdog boundary before process-exit receipt; INFRA raw retained, no later rows ran.
 - `o2-publication-gt09-k6-repro-20261009-01`: native AUTH-04 publication diagnostic PASS used to validate the K6 repair.
 
 ## Lessons carried forward

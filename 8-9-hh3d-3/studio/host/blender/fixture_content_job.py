@@ -27,7 +27,12 @@ from . import fixture_content as content
 from .export_job import configure_limits
 from .ui_host import BLENDER_SHA256, HELPER, STUDIO, cli_job, need
 
-WALL_SECONDS = 20
+# Measured on the pinned Windows host with 16 sequential diagnostic runs
+# (2026-10-09): one cold run crossed 20 s and failed before process-exit was
+# durable; successful wall samples reached 23.596 s. Keep a bounded p95+
+# margin so Blender's final flush is observed instead of killing a valid
+# native export at the old boundary.
+WALL_SECONDS = 30
 LOG_BYTES = 262144
 MAX_TOTAL = 6 * 1024 * 1024
 ARTIFACTS = ("scene.glb", "sprite_sheet.png", "checkpoint.blend", "transcript.json")
