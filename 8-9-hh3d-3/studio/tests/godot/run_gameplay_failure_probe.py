@@ -211,7 +211,8 @@ def main():
             durable_state_unchanged=True, source_unchanged=True)
     except Exception as error:
         result.update(status='DIAGNOSTIC_FAIL', error_class=type(error).__name__,
-                      native_paths=calls, native_run_count=len(calls))
+                      error_message=str(error), native_paths=calls,
+                      native_run_count=len(calls))
         code = str(error)
         if re.fullmatch(r'[A-Z][A-Z0-9_]{0,95}', code):
             result['error_code'] = code
