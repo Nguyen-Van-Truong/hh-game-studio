@@ -64,6 +64,17 @@ native replay on closure `sha256:0d45ffec5c5544444f9885a4543e7353acfd23979f4a981
 it remains rehearsal-only, and its raw baseline still records the diagnostic
 log/process-clean distinction explicitly.
 
+Final `gt09-matrix-final-20261010-45` reached K3 with the native K3 child
+exiting 0, then the registered script's seeded K9 fault behaved as expected
+but its repair play child stopped at the authenticated inner supervisor
+boundary (`ExitCode=124`, host attach exit 124, 21.094 seconds). The outer
+Scheduled Task captured exit 2, the process tree was clean, and the task was
+deleted with a terminal receipt. Exact repro
+`gt09-registered-script-k3-k9-repro-20261010-45` on the unchanged source
+passed with K3 exit 0, expected seed exit 45, repair exit 0 and replay/readback
+PASS; `-45` is therefore retained as INFRA and cannot be combined with a later
+final.
+
 Final `gt09-matrix-final-20261009-28` reached K1–K4, then stopped at K5 after
 the syntax fixture's Linux/Docker native publication returned actual container
 `ExitCode=124` at the authenticated `/usr/bin/timeout 29s` boundary during the
@@ -104,8 +115,10 @@ an unproven content CPU-boundary diagnostic; `-31` is a room catalog host
 transient with an exact repro PASS; `-32` is the K3 inner deadline boundary;
 `-35` is a K3 rehearsal PASS only. The 2-CPU and 4-CPU K3 rehearsals (`-42`,
 `-43`) reproduced the inner Docker boundary; the 8-CPU rehearsal `-44` passed
-K3 on its own frozen closure. The new `--rows` rehearsal, measured quota and
-gated process-tree receipts are ready for the next final.
+K3 on its own frozen closure. Final `-45` is an INFRA K9 repair exit-124 with
+an exact registered-script repro PASS on unchanged source. The new `--rows`
+rehearsal, measured quota and gated process-tree receipts are ready for the
+next final.
 B7: freeze the source, prepare one new Scheduled Task final, start it with
 `start-run`, wait for independent Scheduler/return/matrix receipts, then run
 verify-only. Only after self-check, dispatch two different-model read-only
@@ -140,6 +153,8 @@ both TICK=yes.
 - `gt09-rehearsal-20261009-42`: 2-CPU K3 rehearsal; native baseline hit the same inner Docker boundary; rehearsal-only.
 - `gt09-rehearsal-20261009-43`: 4-CPU K3 rehearsal; native baseline hit the same inner Docker boundary; rehearsal-only.
 - `gt09-rehearsal-20261009-44`: 8-CPU K3 unit/native/replay PASS on closure `0d45ffec…`; rehearsal-only.
+- `gt09-matrix-final-20261010-45`: K3 native passed, then K9 repair hit inner Docker exit 124; outer exit 2, clean tree, INFRA only.
+- `gt09-registered-script-k3-k9-repro-20261010-45`: exact registered-script repro PASS; seed exit 45 expected, repair exit 0, replay/readback PASS.
 - `gt09-content-cap60-series-20261009-37`: ten sequential cap-60 content runs PASS; diagnostic only.
 - `gt09-content-cap15-series-20261009-38`: ten sequential cap-15 content runs PASS; supports retaining the generic cap.
 
