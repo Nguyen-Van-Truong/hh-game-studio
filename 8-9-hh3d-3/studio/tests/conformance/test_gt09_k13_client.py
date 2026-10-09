@@ -60,6 +60,41 @@ def _external(path: Path) -> Path:
                          "limits": ["lease boundary absent"]})
 
 
+def _author(path: Path, arena: Path, room: Path, registered: Path, closure: str) -> Path:
+    arena_doc = json.loads(arena.read_text(encoding="utf-8"))
+    room_doc = json.loads(room.read_text(encoding="utf-8"))
+    registered_doc = json.loads(registered.read_text(encoding="utf-8"))
+    events = [
+        {"kind": "recipe", "fixture": "arena",
+         "payload": {"command_ids": arena_doc["catalog_handoff"]["command_ids"],
+                     "transaction_digest": arena_doc["catalog_handoff"]["transaction_digest"]},
+         "receipt_sha256": probe._sha(arena)},
+        {"kind": "recipe", "fixture": "room",
+         "payload": {"command_ids": room_doc["catalog_room_handoff"]["command_ids"],
+                     "transaction_digest": room_doc["catalog_room_handoff"]["transaction_digest"]},
+         "receipt_sha256": probe._sha(room)},
+        {"kind": "repair_batch", "fixture": "room",
+         "payload": {"command_ids": [registered_doc["registered_route"]["command_id"],
+                                       registered_doc["repair_route"]["command_id"]],
+                     "repair_batch_applied": True, "repair_replay_observed": True,
+                     "checkpoint_verified": True},
+         "receipt_sha256": probe._sha(registered)},
+    ]
+    for event in events:
+        event["payload_sha256"] = probe._canonical_sha(event["payload"])
+    author = {"client": {"name": "Codex", "version": "desktop", "protocol": "codex-task"},
+              "model": "gpt-6-astra", "reasoning_effort": "xhigh", "task_id": "test-k13"}
+    transcript = {"author": author, "events": events, "source_closure_sha256": closure}
+    return _write(path, {"schema": probe.AUTHOR_SCHEMA, "authority": 0, "public_ack": False,
+                         "acceptance": False, "author": author,
+                         "source_closure_sha256": closure, "events": events,
+                         "receipt_bindings": {"arena": {"sha256": probe._sha(arena)},
+                                              "room": {"sha256": probe._sha(room)},
+                                              "registered": {"sha256": probe._sha(registered)}},
+                         "transcript": transcript,
+                         "transcript_sha256": probe._canonical_sha(transcript)})
+
+
 class K13ClientProvenanceTests(unittest.TestCase):
     def test_missing_k8_or_k9_provenance_fails_closed(self):
         with tempfile.TemporaryDirectory() as temp:
@@ -72,6 +107,23 @@ class K13ClientProvenanceTests(unittest.TestCase):
             self.assertFalse(report["recipe_observed"])
             self.assertFalse(report["batch_observed"])
 
+    def test_k8_k9_without_current_author_transcript_is_incomplete(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            closure = "sha256:" + "e" * 64
+            arena = _publication(root / "arena.json", closure, "arena")
+            room = _publication(root / "room.json", closure, "room")
+            registered = _registered(root / "registered.json", closure)
+            external = _external(root / "external.json")
+            out = root / "client.json"
+            code = probe.main([
+                "--run-id", "gt09-k13-client-test", "--arena-publication", str(arena),
+                "--room-publication", str(room), "--registered-result", str(registered),
+                "--k13-evidence", str(external), "--output", str(out)])
+            self.assertEqual(code, 2)
+            self.assertEqual(json.loads(out.read_text(encoding="utf-8"))["error_code"],
+                             "K13_AUTHOR_PROVENANCE_REQUIRED")
+
     def test_measured_row_hashes_exact_receipts_and_metadata(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
@@ -80,14 +132,18 @@ class K13ClientProvenanceTests(unittest.TestCase):
             room = _publication(root / "room.json", closure, "room")
             registered = _registered(root / "registered.json", closure)
             external = _external(root / "external.json")
+            author = _author(root / "author.json", arena, room, registered, closure)
             out = root / "client.json"
             self.assertEqual(probe.main([
                 "--run-id", "gt09-k13-client-test", "--arena-publication", str(arena),
                 "--room-publication", str(room), "--registered-result", str(registered),
+                "--author-provenance", str(author),
                 "--k13-evidence", str(external), "--output", str(out)]), 0)
             report = json.loads(out.read_text(encoding="utf-8"))
             self.assertEqual(report["status"], "MEASURED_INCOMPATIBLE")
-            self.assertEqual(report["client"]["name"], "measured-client")
+            self.assertEqual(report["client"]["name"], "Codex")
+            self.assertEqual(report["model"], "gpt-6-astra")
+            self.assertEqual(report["external_client"]["name"], "measured-client")
             self.assertTrue(len(report["transcript_sha256"]) == 64)
             self.assertTrue(report["recipe_observed"])
             self.assertTrue(report["batch_observed"])
@@ -100,6 +156,7 @@ class K13ClientProvenanceTests(unittest.TestCase):
             room = _publication(root / "room.json", closure, "room")
             registered = _registered(root / "registered.json", closure)
             external = _external(root / "external.json")
+            author = _author(root / "author.json", arena, room, registered, closure)
             value = json.loads(arena.read_text(encoding="utf-8"))
             value["catalog_handoff"]["command_ids"] = ["caller.claimed.recipe"]
             arena.write_text(json.dumps(value), encoding="utf-8")
@@ -107,6 +164,7 @@ class K13ClientProvenanceTests(unittest.TestCase):
             self.assertEqual(probe.main([
                 "--run-id", "gt09-k13-client-test", "--arena-publication", str(arena),
                 "--room-publication", str(room), "--registered-result", str(registered),
+                "--author-provenance", str(author),
                 "--k13-evidence", str(external), "--output", str(out)]), 2)
             self.assertEqual(json.loads(out.read_text())["error_code"], "K8_ARENA_RECIPE_COMMAND_IDS")
 
@@ -119,6 +177,7 @@ class K13ClientProvenanceTests(unittest.TestCase):
             room = _publication(root / "room.json", closure, "room")
             registered = _registered(root / "registered.json", closure)
             external = _external(root / "external.json")
+            author = _author(root / "author.json", arena, room, registered, closure)
             value = json.loads(room.read_text(encoding="utf-8"))
             value["catalog_handoff"] = value.pop("catalog_room_handoff")
             room.write_text(json.dumps(value), encoding="utf-8")
@@ -126,9 +185,31 @@ class K13ClientProvenanceTests(unittest.TestCase):
             self.assertEqual(probe.main([
                 "--run-id", "gt09-k13-client-test", "--arena-publication", str(arena),
                 "--room-publication", str(room), "--registered-result", str(registered),
+                "--author-provenance", str(author),
                 "--k13-evidence", str(external), "--output", str(out)]), 2)
             self.assertEqual(json.loads(out.read_text(encoding="utf-8"))["error_code"],
                              "K8_ROOM_CATALOG_HANDOFF_MISSING")
+
+    def test_author_transcript_payload_hash_is_required(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            closure = "sha256:" + "d" * 64
+            arena = _publication(root / "arena.json", closure, "arena")
+            room = _publication(root / "room.json", closure, "room")
+            registered = _registered(root / "registered.json", closure)
+            external = _external(root / "external.json")
+            author = _author(root / "author.json", arena, room, registered, closure)
+            value = json.loads(author.read_text(encoding="utf-8"))
+            value["events"][0]["payload"]["command_ids"] = ["recipe.tampered"]
+            author.write_text(json.dumps(value), encoding="utf-8")
+            out = root / "client.json"
+            self.assertEqual(probe.main([
+                "--run-id", "gt09-k13-client-test", "--arena-publication", str(arena),
+                "--room-publication", str(room), "--registered-result", str(registered),
+                "--author-provenance", str(author), "--k13-evidence", str(external),
+                "--output", str(out)]), 2)
+            self.assertEqual(json.loads(out.read_text(encoding="utf-8"))["error_code"],
+                             "K13_AUTHOR_EVENT_PAYLOAD_HASH")
 
 
 if __name__ == "__main__":

@@ -62,6 +62,46 @@ def gameplay_transcript(case: dict, stdout: str, stderr: str, *, attribution=Non
     rejected_path = case.get('parse_error_path', primary) if kind == 'engine_rejection' else None
     if rejected_path is not None and rejected_path not in scripts:
         return False
+
+    # A secondary source failure is discovered by the authenticated dependency
+    # readback before the gameplay phase starts.  In that path the child
+    # transcript has no gameplay phase markers, but the trusted parent still
+    # records the exact per-script parse boundary and the raw diagnostic.  Keep
+    # this acceptance narrow: the phase order, return codes, loader readback
+    # count, and pinned parse text must all agree before it can explain the
+    # owner rejection.
+    if kind == 'engine_rejection' and attribution is not None and rejected_path != primary:
+        phases = attribution.get('phase_results')
+        expected_phases = ([('dependencies', None), ('dependencies_reopen', None)]
+                           + [('parse', script) for script in scripts])
+        observed_phases = ([(row.get('phase'), row.get('script')) for row in phases]
+                           if type(phases) is list and all(type(row) is dict for row in phases)
+                           else [])
+        returns_ok = (type(phases) is list and len(phases) == len(expected_phases)
+                      and all(type(row.get('returncode')) is int for row in phases)
+                      and all(row['returncode'] == 0 for row in phases[:-1])
+                      and phases[-1]['returncode'] == 1)
+        loader_count = stdout.splitlines().count('HH_LOADER_DEPENDENCIES ' +
+            next((line[len('HH_LOADER_DEPENDENCIES '):] for line in stdout.splitlines()
+                  if line.startswith('HH_LOADER_DEPENDENCIES ')), ''))
+        reasons = case.get('parse_errors')
+        if (observed_phases == expected_phases and returns_ok and loader_count == 2
+                and type(reasons) is tuple and reasons):
+            parse_text = ''.join(
+                'SCRIPT ERROR: Parse Error: ' + reason + '\n'
+                '          at: GDScript::reload (res://' + rejected_path + ':2)\n'
+                for reason in reasons)
+            parse_text += ('ERROR: Failed to load script "res://' + rejected_path
+                           + '" with error "Parse error".\n'
+                           '   at: load (modules/gdscript/gdscript_resource_format.cpp:46)\n')
+            actual_errors = re.sub(r'(res://scripts/fixture_actor\.gd:)\d+', r'\1LINE',
+                                   stderr.replace('\r\n', '\n'))
+            expected_errors = (GUARDED_STARTUP_ERROR * (len(scripts) + 2)
+                               + parse_text)
+            expected_errors = re.sub(r'(res://scripts/fixture_actor\.gd:)\d+', r'\1LINE',
+                                     expected_errors)
+            return (attribution.get('driver_returncode') == 45
+                    and actual_errors == expected_errors)
     expected = ['HH_GAMEPLAY_PHASE_BEGIN parse']
     parsed = 0
     for script in scripts:

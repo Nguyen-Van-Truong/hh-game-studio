@@ -15,6 +15,7 @@ from typing import Any
 
 STUDIO = Path(__file__).resolve().parents[2]
 SCHEMA = "hh-gt09-mcp-client-receipt-1"
+AUTHOR_SCHEMA = "hh-gt09-k13-author-provenance-1"
 HEX64 = re.compile(r"^(?:sha256:)?[0-9a-f]{64}$")
 RUN_ID = re.compile(r"^gt09-k13-client-[a-z0-9-]{1,80}$")
 DEFAULT_EXTERNAL = STUDIO / ".local" / "reviews" / "gt09-mcp-capability-matrix-20261009-k13.json"
@@ -59,6 +60,11 @@ def _need(value: Any, code: str) -> None:
 def _hex(value: Any, code: str) -> str:
     _need(isinstance(value, str) and HEX64.fullmatch(value) is not None, code)
     return value.removeprefix("sha256:")
+
+
+def _hash_equals(value: Any, expected: str, code: str) -> None:
+    """Require a digest field to bind exactly to an observed input."""
+    _need(_hex(value, code) == expected.removeprefix("sha256:"), code)
 
 
 def _publication(path: Path, label: str) -> tuple[dict[str, Any], bytes]:
@@ -171,12 +177,106 @@ def _external(path: Path) -> tuple[dict[str, Any], bytes, dict[str, Any]]:
     return doc, raw, row
 
 
+def _author_provenance(path: Path, *, arena_path: Path, room_path: Path,
+                       registered_path: Path, source_closure: str) -> tuple[dict[str, Any], dict[str, Any]]:
+    """Validate the *actual* author transcript for K8/K9.
+
+    The MCP spike is an adapter observation and cannot identify the client that
+    authored K8/K9.  This separately supplied receipt is therefore mandatory
+    for a measured client row.  Every event carries a canonical payload hash,
+    and its input receipt hash is checked against the files supplied to this
+    run.  No client/model value is inferred from the external spike.
+    """
+    doc, _ = _read_json(path, "K13_AUTHOR_PROVENANCE")
+    _need(doc.get("schema") == AUTHOR_SCHEMA, "K13_AUTHOR_SCHEMA")
+    _need(doc.get("authority") == 0 and doc.get("public_ack") is False and
+          doc.get("acceptance") is False, "K13_AUTHOR_AUTHORITY")
+    _hash_equals(doc.get("source_closure_sha256"), source_closure,
+                 "K13_AUTHOR_SOURCE_CLOSURE")
+    author = doc.get("author")
+    _need(isinstance(author, dict), "K13_AUTHOR_MISSING")
+    client = author.get("client")
+    _need(isinstance(client, dict), "K13_AUTHOR_CLIENT_MISSING")
+    for field in ("name", "version", "protocol"):
+        _need(isinstance(client.get(field), str) and client[field].strip(),
+              "K13_AUTHOR_CLIENT_" + field.upper())
+    model = author.get("model")
+    _need(isinstance(model, str) and model.strip() and model.upper() != "UNSPECIFIED",
+          "K13_AUTHOR_MODEL_MISSING")
+    _need(isinstance(author.get("reasoning_effort"), str) and
+          author["reasoning_effort"].strip() and
+          isinstance(author.get("task_id"), str) and author["task_id"].strip(),
+          "K13_AUTHOR_IDENTITY_INCOMPLETE")
+
+    bindings = doc.get("receipt_bindings")
+    _need(isinstance(bindings, dict), "K13_AUTHOR_RECEIPT_BINDINGS_MISSING")
+    paths = {"arena": arena_path, "room": room_path, "registered": registered_path}
+    for label, input_path in paths.items():
+        binding = bindings.get(label)
+        _need(isinstance(binding, dict), "K13_AUTHOR_" + label.upper() + "_BINDING_MISSING")
+        _hash_equals(binding.get("sha256"), _sha(input_path),
+                     "K13_AUTHOR_" + label.upper() + "_BINDING_HASH")
+
+    events = doc.get("events")
+    _need(isinstance(events, list) and len(events) == 3, "K13_AUTHOR_EVENTS")
+    by_kind: dict[tuple[str, str], dict[str, Any]] = {}
+    for event in events:
+        _need(isinstance(event, dict), "K13_AUTHOR_EVENT_OBJECT")
+        kind, fixture = event.get("kind"), event.get("fixture")
+        _need((kind, fixture) in (("recipe", "arena"), ("recipe", "room"),
+                                  ("repair_batch", "room")),
+              "K13_AUTHOR_EVENT_KIND")
+        key = (kind, fixture)
+        _need(key not in by_kind, "K13_AUTHOR_EVENT_DUPLICATE")
+        payload = event.get("payload")
+        _need(isinstance(payload, dict), "K13_AUTHOR_EVENT_PAYLOAD")
+        payload_hash = _canonical_sha(payload)
+        _hash_equals(event.get("payload_sha256"), payload_hash,
+                     "K13_AUTHOR_EVENT_PAYLOAD_HASH")
+        receipt_label = "arena" if fixture == "arena" else "room" if kind == "recipe" else "registered"
+        _hash_equals(event.get("receipt_sha256"), bindings[receipt_label]["sha256"],
+                     "K13_AUTHOR_EVENT_RECEIPT_HASH")
+        by_kind[key] = event
+
+    arena_event = by_kind[("recipe", "arena")]
+    room_event = by_kind[("recipe", "room")]
+    repair_event = by_kind[("repair_batch", "room")]
+    # Bind event payloads to the exact command/transaction receipts.  A
+    # caller cannot label arbitrary text as a recipe or repair batch.
+    for event, result, handoff_key in ((arena_event, _publication(arena_path, "K8_ARENA")[0], "catalog_handoff"),
+                                       (room_event, _publication(room_path, "K8_ROOM")[0], "catalog_room_handoff")):
+        payload = event["payload"]
+        handoff = result[handoff_key]
+        _need(payload.get("command_ids") == handoff["command_ids"] and
+              payload.get("transaction_digest") == handoff["transaction_digest"],
+              "K13_AUTHOR_RECIPE_BINDING")
+    registered = _registered(registered_path)[0]
+    repair_payload = repair_event["payload"]
+    _need(repair_payload.get("command_ids") == [registered["registered_route"]["command_id"],
+                                                   registered["repair_route"]["command_id"]] and
+          repair_payload.get("repair_batch_applied") is True and
+          repair_payload.get("repair_replay_observed") is True and
+          repair_payload.get("checkpoint_verified") is True,
+          "K13_AUTHOR_REPAIR_BINDING")
+    transcript = doc.get("transcript")
+    _need(isinstance(transcript, dict) and transcript.get("events") == events and
+          transcript.get("author") == author and
+          transcript.get("source_closure_sha256") == doc.get("source_closure_sha256"),
+          "K13_AUTHOR_TRANSCRIPT")
+    _hash_equals(doc.get("transcript_sha256"), _canonical_sha(transcript),
+                 "K13_AUTHOR_TRANSCRIPT_HASH")
+    return doc, author
+
+
 def _measure(*, run_id: str, arena_path: Path | None, room_path: Path | None,
-             registered_path: Path | None, external_path: Path | None) -> dict[str, Any]:
+             registered_path: Path | None, external_path: Path | None,
+             author_path: Path | None) -> dict[str, Any]:
     if RUN_ID.fullmatch(run_id) is None:
         raise ProvenanceError("K13_RUN_ID")
     if not arena_path or not room_path or not registered_path:
         raise ProvenanceError("K13_CLIENT_PROVENANCE_ARGS_REQUIRED")
+    if not author_path:
+        raise ProvenanceError("K13_AUTHOR_PROVENANCE_REQUIRED")
     arena, _ = _publication(arena_path, "K8_ARENA")
     room, _ = _publication(room_path, "K8_ROOM")
     registered, _ = _registered(registered_path)
@@ -186,11 +286,21 @@ def _measure(*, run_id: str, arena_path: Path | None, room_path: Path | None,
                 registered["source_closure_sha256"]}
     _need(len(closures) == 1, "K13_SOURCE_CLOSURE_MISMATCH")
     source_closure = next(iter(closures))
-    client = dict(external["client"])
+    author_doc, author = _author_provenance(
+        author_path, arena_path=arena_path, room_path=room_path,
+        registered_path=registered_path, source_closure=source_closure)
+    # The external spike describes only the transport adapter.  It is kept in
+    # a separate field so its model cannot be mistaken for the K8/K9 author.
+    client = dict(author["client"])
+    client["model"] = author["model"]
     host = dict(external["host"])
     adapter = external.get("id") or (external.get("adapter") or {}).get("name")
     protocol = client["protocol"]
     transcript = {
+        "author_transcript_sha256": _hex(author_doc["transcript_sha256"],
+                                          "K13_AUTHOR_TRANSCRIPT_HASH"),
+        "author_events": author_doc["events"],
+        "author": author,
         "arena_receipt": arena["receipt"],
         "room_receipt": room["receipt"],
         "registered_receipts": {
@@ -204,9 +314,12 @@ def _measure(*, run_id: str, arena_path: Path | None, room_path: Path | None,
     return {
         "schema": SCHEMA, "run_id": run_id, "status": "MEASURED_INCOMPATIBLE",
         "authority": 0, "public_ack": False, "acceptance": False,
-        "client": client, "model": client["model"], "host": host,
+        "client": client, "model": author["model"], "author": author,
+        "external_client": external["client"], "host": host,
         "adapter": adapter, "protocol": protocol,
+        "external_protocol": external["client"].get("protocol"),
         "external_status": external.get("status") or external.get("native_gate"),
+        "external_limits": list(external["limits"]),
         "external_evidence_sha256": _sha(external_path),
         "external_evidence": str(external_path.resolve()),
         "source_closure_sha256": source_closure,
@@ -225,14 +338,25 @@ def _measure(*, run_id: str, arena_path: Path | None, room_path: Path | None,
             "repair_batch_applied": registered["repair_batch_applied"],
             "repair_replay_observed": registered["repair_replay_observed"],
         },
+        "author_provenance": {
+            "path": str(author_path.resolve()), "sha256": _sha(author_path),
+            "transcript_sha256": _hex(author_doc["transcript_sha256"],
+                                       "K13_AUTHOR_TRANSCRIPT_HASH"),
+        },
         "transcript_sha256": _canonical_sha(transcript), "transcript": transcript,
         "input_sha256": {
             "arena_publication": _sha(arena_path), "room_publication": _sha(room_path),
             "registered_result": _sha(registered_path), "external_evidence": _sha(external_path),
+            "author_provenance": _sha(author_path),
         },
         "limitations": [
             "External adapter is measured INCOMPATIBLE because its native spike lacks the HH lease/journal/semantic command boundary.",
             "This authority-zero row binds producer receipts; it does not promote K8/K9 acceptance or claim public compatibility.",
+        ],
+        "remaining_native_external_work": [
+            "NPGameDev/godot-mcp-toolkit remains transport-only; run its pinned native fixture with HH lease, journal, semantic command-ID and postcondition gates.",
+            "The hybridindie/godot-mcp native row needs a clean rerun if compatibility is required, including the K8-K12 client/model matrix and cleanup proof.",
+            "Record a non-UNSPECIFIED model and host transcript for each external native run; transport metadata cannot serve as authorship provenance.",
         ],
     }
 
@@ -242,7 +366,7 @@ def _failure(run_id: str, error: Exception) -> dict[str, Any]:
     return {"schema": SCHEMA, "run_id": run_id, "status": "DIAGNOSTIC_FAIL",
             "authority": 0, "public_ack": False, "acceptance": False,
             "recipe_observed": False, "batch_observed": False, "error_code": code,
-            "reason": "K13 client row requires hashed K8 recipe and K9 repair provenance; provide the missing receipt or fix the reported binding."}
+            "reason": "K13 client row requires a current-task author transcript plus hashed K8 recipe and K9 repair provenance; provide the missing receipt or fix the reported binding."}
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -251,6 +375,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--arena-publication", type=Path)
     parser.add_argument("--room-publication", type=Path)
     parser.add_argument("--registered-result", type=Path)
+    parser.add_argument("--author-provenance", type=Path,
+                        help="hashed current-task transcript binding K8 recipes and K9 repair")
     parser.add_argument("--k13-evidence", "--external-evidence", dest="external_evidence", type=Path)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args(argv)
@@ -261,7 +387,8 @@ def main(argv: list[str] | None = None) -> int:
     try:
         report = _measure(run_id=args.run_id, arena_path=args.arena_publication,
                           room_path=args.room_publication, registered_path=args.registered_result,
-                          external_path=args.external_evidence)
+                          external_path=args.external_evidence,
+                          author_path=args.author_provenance)
         code = 0
     except Exception as error:
         report, code = _failure(args.run_id, error), 2

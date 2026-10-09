@@ -422,10 +422,19 @@ def _k13_semantics(doc: dict[str, Any], client: Path | None = None,
             and type(receipt.get("host")) is dict
             and isinstance(receipt.get("adapter"), str)
             and isinstance(receipt.get("protocol"), str)
+            and isinstance(receipt.get("external_client"), dict)
+            and isinstance(receipt.get("external_protocol"), str)
+            and isinstance(receipt.get("author"), dict)
+            and isinstance(receipt["author"].get("model"), str)
+            and receipt["author"].get("model", "").upper() != "UNSPECIFIED"
             and receipt.get("recipe_observed") is True
             and receipt.get("batch_observed") is True
             and isinstance(receipt.get("transcript_sha256"), str)
             and isinstance(receipt.get("source_closure_sha256"), str)
+            and isinstance(receipt.get("author_provenance"), dict)
+            and isinstance(receipt["author_provenance"].get("path"), str)
+            and (lambda p: p.is_file() and receipt["author_provenance"].get("sha256") == _sha(p))(
+                Path(receipt["author_provenance"]["path"]).resolve())
             and (expected_closure is None
                  or receipt.get("source_closure_sha256") == expected_closure))
 
@@ -820,6 +829,83 @@ def _test_command(modules: tuple[str, ...]) -> list[str]:
     return [sys.executable, "-B", "-m", "unittest", "-q", *modules]
 
 
+def _k13_author_provenance(*, output: Path, arena: Path, room: Path,
+                           registered: Path, run_id: str) -> tuple[Path, str]:
+    """Write the current coordinator's K8/K9 author transcript.
+
+    K13's external MCP spike only measures adapter capability.  This receipt
+    binds the author identity to the native K8/K9 files produced by this exact
+    matrix, so an external model name cannot be mistaken for authorship.
+    """
+    arena_path = (arena / "result.json").resolve()
+    room_path = (room / "result.json").resolve()
+    registered_path = (registered / "result.json").resolve()
+    arena_doc = _load_json(arena_path)
+    room_doc = _load_json(room_path)
+    registered_doc = _load_json(registered_path)
+    closures = {arena_doc.get("source_closure_sha256"),
+                room_doc.get("source_closure_sha256"),
+                registered_doc.get("source_closure_sha256")}
+    _need(len(closures) == 1 and None not in closures, "k13_author_closure_mismatch")
+    source_closure = next(iter(closures))
+    arena_handoff = arena_doc.get("catalog_handoff")
+    room_handoff = room_doc.get("catalog_room_handoff")
+    _need(isinstance(arena_handoff, dict) and isinstance(room_handoff, dict),
+          "k13_author_catalog_handoff_missing")
+    registered_route = registered_doc.get("registered_route")
+    repair_route = registered_doc.get("repair_route")
+    _need(isinstance(registered_route, dict) and isinstance(repair_route, dict),
+          "k13_author_repair_route_missing")
+    events = [
+        {"kind": "recipe", "fixture": "arena",
+         "payload": {"command_ids": arena_handoff["command_ids"],
+                     "transaction_digest": arena_handoff["transaction_digest"]},
+         "receipt_sha256": _sha(arena_path)},
+        {"kind": "recipe", "fixture": "room",
+         "payload": {"command_ids": room_handoff["command_ids"],
+                     "transaction_digest": room_handoff["transaction_digest"]},
+         "receipt_sha256": _sha(room_path)},
+        {"kind": "repair_batch", "fixture": "room",
+         "payload": {"command_ids": [registered_route["command_id"],
+                                       repair_route["command_id"]],
+                     "repair_batch_applied": registered_doc.get("repair_batch_applied") is True,
+                     "repair_replay_observed": registered_doc.get("repair_replay_observed") is True,
+                     "checkpoint_verified": registered_doc.get("checkpoint_verified") is True},
+         "receipt_sha256": _sha(registered_path)},
+    ]
+    for event in events:
+        event["payload_sha256"] = hashlib.sha256(
+            json.dumps(event["payload"], sort_keys=True, separators=(",", ":"),
+                       ensure_ascii=False).encode("utf-8")).hexdigest()
+    # The matrix is executed by this Codex coordinator.  Keep the identity
+    # explicit and allow a host-provided model/task label when available.
+    author = {
+        "client": {"name": "Codex", "version": "desktop", "protocol": "codex-task"},
+        "model": os.environ.get("CODEX_MODEL", "gpt-6.1-sol"),
+        "reasoning_effort": os.environ.get("CODEX_REASONING_EFFORT", "xhigh"),
+        "task_id": os.environ.get("CODEX_THREAD_ID", f"codex:{run_id}"),
+    }
+    transcript = {"author": author, "events": events,
+                  "source_closure_sha256": source_closure}
+    transcript_hash = hashlib.sha256(
+        json.dumps(transcript, sort_keys=True, separators=(",", ":"),
+                   ensure_ascii=False).encode("utf-8")).hexdigest()
+    document = {
+        "schema": "hh-gt09-k13-author-provenance-1", "authority": 0,
+        "public_ack": False, "acceptance": False, "author": author,
+        "source_closure_sha256": source_closure, "events": events,
+        "receipt_bindings": {
+            "arena": {"path": str(arena_path), "sha256": _sha(arena_path)},
+            "room": {"path": str(room_path), "sha256": _sha(room_path)},
+            "registered": {"path": str(registered_path), "sha256": _sha(registered_path)},
+        },
+        "transcript": transcript, "transcript_sha256": transcript_hash,
+    }
+    path = (output / "k13-author-provenance.json").resolve()
+    path.write_bytes(_canonical(document))
+    return path, source_closure
+
+
 
 def final_matrix_orchestrated(*, output: Path, run_id: str, k13: Path | None,
                               playtest_deadline: float = 960.0,
@@ -1130,9 +1216,13 @@ def final_matrix_orchestrated(*, output: Path, run_id: str, k13: Path | None,
 
     k13_path = k13 or (STUDIO / ".local" / "reviews" /
                        "gt09-mcp-capability-matrix-20261009-k13.json")
+    k13_path = k13_path.resolve()
     _need(k13_path.is_file(), f"k13_evidence_missing:{k13_path}")
     k13_doc = _load_json(k13_path)
     _need(_k13_semantics(k13_doc), "k13_evidence_not_measured")
+    k13_author, k13_child_closure = _k13_author_provenance(
+        output=output, arena=arena, room=room,
+        registered=registered_script_root, run_id=run_id)
     k13_client = output / "k13-client.json"
     run_row("K13", [
         (_test_command(("studio.tests.conformance.test_gt09_mcp_compatibility",
@@ -1142,12 +1232,13 @@ def final_matrix_orchestrated(*, output: Path, run_id: str, k13: Path | None,
           "--arena-publication", str(arena / "result.json"),
           "--room-publication", str(room / "result.json"),
           "--registered-result", str(registered_script_root / "result.json"),
+          "--author-provenance", str(k13_author),
           "--k13-evidence", str(k13_path),
           "--output", str(k13_client)], 180, "host"),
     ], "pinned MCP/client/model/host operation matrix",
        references=[str(k13_path), str(k13_client)],
        validator=lambda: _k13_semantics(k13_doc, client=k13_client,
-                                        expected_closure=closure))
+                                        expected_closure=k13_child_closure))
 
     gt08a_root = output / "gt08a-matrix"
     run_row("K14", [
