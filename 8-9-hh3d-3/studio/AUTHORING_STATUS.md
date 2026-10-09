@@ -82,6 +82,12 @@ ownership/tree receipts. Exact repro
 `o2-auth05-native-k7busy-repro-20261010-46` passed on the unchanged source;
 `-46` is retained as INFRA and its rows are not combined with another final.
 
+Final `gt09-matrix-final-20261010-47` passed K1–K6, then K7 stopped on the
+boundary hostile case with `GAMEPLAY_OWNER_NATIVE_NOT_CLEAN` after the first
+good publication. Exact repro
+`o2-auth05-native-k7boundary-repro-20261010-47` passed with native run count 2;
+`-47` is retained as a second K7 scheduling INFRA run and cannot be combined.
+
 Final `gt09-matrix-final-20261009-28` reached K1–K4, then stopped at K5 after
 the syntax fixture's Linux/Docker native publication returned actual container
 `ExitCode=124` at the authenticated `/usr/bin/timeout 29s` boundary during the
@@ -128,6 +134,8 @@ rehearsal, measured quota and gated process-tree receipts are ready for the
 next final.
 Final `-46` is an INFRA K7 busy-observation boundary with an exact repro PASS;
 the next final must use a fresh closure and ID.
+Final `-47` is an INFRA K7 boundary-publication observation with an exact repro
+PASS; a short sequential K7 diagnostic is required before the next final.
 B7: freeze the source, prepare one new Scheduled Task final, start it with
 `start-run`, wait for independent Scheduler/return/matrix receipts, then run
 verify-only. Only after self-check, dispatch two different-model read-only
@@ -166,6 +174,8 @@ both TICK=yes.
 - `gt09-registered-script-k3-k9-repro-20261010-45`: exact registered-script repro PASS; seed exit 45 expected, repair exit 0, replay/readback PASS.
 - `gt09-matrix-final-20261010-46`: K1–K6 PASS; K7 busy returned `BAD_FIXTURE_NOT_OBSERVED`; outer exit 2, clean tree, INFRA only.
 - `o2-auth05-native-k7busy-repro-20261010-46`: exact busy hostile repro PASS; native run count 2, authority 0.
+- `gt09-matrix-final-20261010-47`: K1–K6 PASS; K7 boundary returned `GAMEPLAY_OWNER_NATIVE_NOT_CLEAN`; outer exit 2, clean tree, INFRA only.
+- `o2-auth05-native-k7boundary-repro-20261010-47`: exact boundary hostile repro PASS; native run count 2.
 - `gt09-content-cap60-series-20261009-37`: ten sequential cap-60 content runs PASS; diagnostic only.
 - `gt09-content-cap15-series-20261009-38`: ten sequential cap-15 content runs PASS; supports retaining the generic cap.
 
