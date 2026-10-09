@@ -47,6 +47,8 @@ same manifest hash. Do not tick GT09 or open GT10-PC before both TICK=yes.
 - `gt09-matrix-final-20261009-04`: stopped after source drift during the run.
 - `gt09-matrix-final-20261009-05`: stopped after watchdog test failures in K9/K10; raw retained.
 - `gt09-matrix-final-20261009-06`: stopped after K10/K14 failures; raw retained and not evidence.
+- `gt09-matrix-final-20261009-07`: stopped at K1; Blender wrapper relative import failed, fixed in `b667474c`.
+- `gt09-matrix-final-20261009-08`: stopped at K1; stale dead measurement-window marker was recovered, raw retained.
 - `gt09-registered-script-20261009-routefix`: diagnostic native K3/K9 route pass, authority 0.
 - `gt09-fixture-conformance-20261009-finalprep`: candidate pass, authority 0.
 
@@ -58,4 +60,6 @@ same manifest hash. Do not tick GT09 or open GT10-PC before both TICK=yes.
 - Stop at the first failed row; do not spend the long playtest budget on an already invalid matrix.
 - Keep one coordinator and one writer per file, no audit subagents, one Godot/Blender worker per path, and preserve actual exits/tree cleanup.
 - Native, host and unit steps are labeled separately; a unit-only row cannot pass.
+- Final preflight now recovers a marker only after the recorded PID is proven dead; a live or uncertain lock fails closed.
+- K12 uses a real host subprocess and adapter scope rejection; K13 hashes exact in-run K8/K9 receipts plus the external incompatibility measurement.
 - Authority remains zero until two independent critics explicitly accept the same frozen manifest.
