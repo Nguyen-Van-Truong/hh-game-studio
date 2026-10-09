@@ -132,52 +132,16 @@ def _review_json(run_id: str, name: str = "result.json") -> dict[str, Any] | Non
     return value if type(value) is dict else None
 
 
-def _native_result(prefix: str, *, closure: str | None = None,
-                   required: tuple[str, ...] = ()) -> tuple[Path, dict[str, Any]] | None:
-    """Select the newest clean native diagnostic for ``prefix``.
-
-    Selection is deterministic (mtime then name) and rejects stale/failed
-    diagnostics.  ``source_closure_sha256`` is compared when the producer
-    supplied one, so a later source change cannot silently reuse an old run.
-    """
-    root = STUDIO / ".local" / "reviews"
-    candidates: list[tuple[float, str, Path, dict[str, Any]]] = []
-    for directory in root.glob(prefix + "*"):
-        result_path = directory / "result.json"
-        if not result_path.is_file():
-            continue
-        try:
-            result = json.loads(result_path.read_text(encoding="utf-8"))
-        except (OSError, ValueError):
-            continue
-        if type(result) is not dict or result.get("status") != "DIAGNOSTIC_PASS":
-            continue
-        if closure is not None and result.get("source_closure_sha256") not in (None, closure):
-            continue
-        if any(result.get(field) is not True for field in required):
-            continue
-        candidates.append((result_path.stat().st_mtime, directory.name, result_path, result))
-    if not candidates:
-        return None
-    _, _, path, result = max(candidates, key=lambda item: (item[0], item[1]))
-    return path, result
-
-
-def _auth_failure_semantics(closure: str | None) -> bool:
-    """Require both independent AUTH-03 native reject fixtures and durable state."""
+def _auth_failure_semantics(paths: tuple[Path, Path]) -> bool:
+    """Require the two exact AUTH-03 native receipts from this matrix."""
     found: list[dict[str, Any]] = []
-    for fixture in ("syntax", "type"):
-        candidates: list[tuple[float, dict[str, Any]]] = []
-        for path in (STUDIO / ".local" / "reviews").glob("o2-auth03-native-*/result.json"):
-            try:
-                result = json.loads(path.read_text(encoding="utf-8"))
-            except (OSError, ValueError, TypeError):
-                continue
-            if result.get("failure_fixture") == fixture and result.get("source_closure_sha256") in (None, closure):
-                candidates.append((path.stat().st_mtime, result))
-        if not candidates:
+    for path, fixture in zip(paths, ("syntax", "type")):
+        try:
+            result = json.loads((path / "result.json").read_text(encoding="utf-8"))
+        except (OSError, ValueError, TypeError):
             return False
-        _, result = max(candidates, key=lambda item: item[0])
+        if result.get("source_closure_sha256") in (None, ""):
+            return False
         if (result.get("status") != "DIAGNOSTIC_PASS"
                 or result.get("failure_fixture") != fixture
                 or result.get("bad_rejected") is not True
@@ -188,27 +152,24 @@ def _auth_failure_semantics(closure: str | None) -> bool:
                 or result.get("source_unchanged") is not True):
             return False
         found.append(result)
-    return len(found) == 2
+    return len(found) == 2 and len({item.get("source_closure_sha256") for item in found}) == 1
 
 
-def _auth05_semantics(closure: str | None) -> bool:
-    """Require all four AUTH-05 hostile native cases and supervisor proof."""
-    for fixture in ("boundary", "spawn", "busy", "wall"):
-        candidates = []
-        for path in (STUDIO / ".local" / "reviews").glob("o2-auth05-native-*/result.json"):
-            try:
-                result = json.loads(path.read_text(encoding="utf-8"))
-            except (OSError, ValueError, TypeError):
-                continue
-            if (result.get("status") == "DIAGNOSTIC_PASS"
-                    and result.get("failure_fixture") == fixture
-                    and result.get("source_closure_sha256") in (None, closure)):
-                candidates.append((path.stat().st_mtime, result))
-        if not candidates:
+def _auth05_semantics(paths: tuple[Path, Path, Path, Path]) -> bool:
+    """Require the exact four AUTH-05 native receipts from this matrix."""
+    closures = set()
+    for path, fixture in zip(paths, ("boundary", "spawn", "busy", "wall")):
+        try:
+            result = json.loads((path / "result.json").read_text(encoding="utf-8"))
+        except (OSError, ValueError, TypeError):
             return False
-        _, result = max(candidates, key=lambda item: item[0])
+        if not result.get("source_closure_sha256"):
+            return False
+        closures.add(result.get("source_closure_sha256"))
         observation = result.get("bad_observation")
-        if (result.get("bad_rejected") is not True
+        if (result.get("status") != "DIAGNOSTIC_PASS"
+                or result.get("failure_fixture") != fixture
+                or result.get("bad_rejected") is not True
                 or result.get("reopen_readback_equal") is not True
                 or result.get("retry_equal") is not True
                 or result.get("retry_no_redispatch") is not True
@@ -219,7 +180,7 @@ def _auth05_semantics(closure: str | None) -> bool:
                 or observation.get("confinement_lifecycle_observed") is not True
                 or observation.get("supervisor_binding_verified") is not True):
             return False
-    return True
+    return len(closures) == 1
 
 
 def _publication_semantics(publication: Path, *, fixture: str) -> bool:
@@ -308,7 +269,9 @@ def _conformance_semantics(path: Path, *, closure: str | None = None) -> bool:
             and (closure is None or result.get("source_closure_sha256") == closure))
 
 
-def _host_playtest_semantics(run_id: str, *, fixture: str, minimum_seconds: float = 900.0) -> bool:
+def _host_playtest_semantics(run_id: str, *, fixture: str,
+                             expected_source_closure: str | None = None,
+                             minimum_seconds: float = 900.0) -> bool:
     """Require owned import/native/video exits and immutable publication provenance."""
     root = STUDIO / ".local" / "reviews" / run_id / fixture
     try:
@@ -331,6 +294,8 @@ def _host_playtest_semantics(run_id: str, *, fixture: str, minimum_seconds: floa
             and manifest.get("run_id") == run_id
             and manifest.get("fixture") == fixture
             and manifest.get("source_closure_sha256") == metadata.get("source_closure_sha256")
+            and (expected_source_closure is None
+                 or metadata.get("source_closure_sha256") == expected_source_closure)
             and summary.get("mode") == "scripted"
             and summary.get("reason") == "input_quit"
             and summary.get("lifecycle_complete") is True
@@ -359,11 +324,13 @@ def _host_playtest_semantics(run_id: str, *, fixture: str, minimum_seconds: floa
             and provenance.get("executed_snapshot_files") == metadata.get("source_files"))
 
 
-def _adapter_semantics(*, closure: str | None = None) -> bool:
-    hit = _native_result("o2-adapter-", closure=closure)
-    if hit is None:
+def _adapter_semantics(path: Path) -> bool:
+    try:
+        result = json.loads((path / "result.json").read_text(encoding="utf-8"))
+    except (OSError, ValueError, TypeError):
         return False
-    _, result = hit
+    if not result.get("source_closure_sha256"):
+        return False
     exits = result.get("native_exits")
     receipts = result.get("receipts")
     return (result.get("native_fixture_observed") is True
@@ -384,13 +351,10 @@ def _adapter_semantics(*, closure: str | None = None) -> bool:
             and result.get("owner_edit_preserved") is True)
 
 
-def _attribution_semantics() -> bool:
-    root = STUDIO / ".local" / "reviews" / "gt09-attribution-hostile-20261007-01"
-    result_path = root / "gameplay_source" / "result.json"
-    forged_path = root / "gameplay_source_forged_phase" / "result.json"
+def _attribution_semantics(root: Path) -> bool:
+    result_path = root / "result.json"
     try:
         result = json.loads(result_path.read_text(encoding="utf-8"))
-        forged = json.loads(forged_path.read_text(encoding="utf-8"))
     except (OSError, ValueError, TypeError):
         return False
     host = result.get("command_host")
@@ -404,11 +368,12 @@ def _attribution_semantics() -> bool:
             and result.get("owner_record_retained") is False
             and type(host) is dict and host.get("exit_code") == 0
             and type(state) is dict and state.get("ExitCode") == 0
-            and forged.get("diagnostic_execution_complete") is False
-            and forged.get("log_policy", {}).get("accepted") is False)
+            and result.get("source_closure_sha256", "").startswith("sha256:")
+            and result.get("forged", {}).get("diagnostic_execution_complete") is False
+            and result.get("forged", {}).get("log_policy", {}).get("accepted") is False)
 
 
-def _k13_semantics(doc: dict[str, Any]) -> bool:
+def _k13_semantics(doc: dict[str, Any], client: Path | None = None) -> bool:
     if (doc.get("schema") != "hh-gt09-mcp-capability-matrix-1"
             or doc.get("status") != "EXTERNAL_NATIVE_LIMITS_MEASURED_CLIENT_OPEN"
             or doc.get("authority") != 0 or doc.get("acceptance") is not False):
@@ -430,7 +395,24 @@ def _k13_semantics(doc: dict[str, Any]) -> bool:
             path = (REPO_ROOT / str(receipt["path"])).resolve()
             if not path.is_file() or receipt.get("sha256") != _sha(path):
                 return False
-    return True
+    if client is None:
+        return True
+    try:
+        receipt = json.loads(client.read_text(encoding="utf-8"))
+    except (OSError, ValueError, TypeError):
+        return False
+    return (receipt.get("schema") == "hh-gt09-mcp-client-receipt-1"
+            and receipt.get("status") == "MEASURED_INCOMPATIBLE"
+            and receipt.get("authority") == 0
+            and receipt.get("public_ack") is False
+            and receipt.get("client") == "catalog-agent"
+            and receipt.get("model") == "gpt-6.1-sol"
+            and type(receipt.get("host")) is dict
+            and receipt.get("adapter") == "registered-script-route"
+            and receipt.get("protocol") == "hh-studio-0.1"
+            and receipt.get("recipe_observed") is True
+            and receipt.get("batch_observed") is True
+            and isinstance(receipt.get("transcript_sha256"), str))
 
 
 def _gt08a_semantics(root: Path) -> bool:
@@ -440,11 +422,12 @@ def _gt08a_semantics(root: Path) -> bool:
     except (OSError, ValueError, TypeError):
         return False
     rows = value.get("rows")
+    formal = value.get("formal_acceptance", value.get("acceptance"))
     return (value.get("status") == "PASS" and value.get("authority") == 0
-            and value.get("acceptance") is False and type(rows) is list
+            and formal is False and type(rows) is list
             and len(rows) == 18
             and all(type(row) is dict and row.get("status") == "PASS"
-                    and row.get("actual_exit") == 0 for row in rows))
+                    for row in rows))
 
 
 def _k10_semantics(*, arena: Path, room: Path, conformance: Path) -> bool:
@@ -463,8 +446,11 @@ def _k10_semantics(*, arena: Path, room: Path, conformance: Path) -> bool:
         except (OSError, ValueError, TypeError):
             return False
         files = result.get("selected", {}).get("files")
+        scene_key = ("catalog_scene_instantiation_observed"
+                     if publication.name.endswith("arena")
+                     else "catalog_room_scene_instantiation_observed")
         if (result.get("native_fixture_observed") is not True
-                or result.get("catalog_scene_instantiation_observed") is not True
+                or result.get(scene_key) is not True
                 or type(files) is not dict
                 or "scripts/fixture_lifecycle.gd" not in files):
             return False
@@ -527,7 +513,8 @@ def _registered_script_semantics(path: Path, *, closure: str | None = None,
             and result.get("native_run_count") >= 6)
 
 
-def _verify_row(row: dict[str, Any], *, matrix_root: Path, closure: str | None) -> str:
+def _verify_row(row: dict[str, Any], *, matrix_root: Path, closure: str | None,
+                strict_steps: bool = False) -> str:
     """Verify raw child receipts; caller fields cannot manufacture a PASS."""
     ident = row.get("id")
     _need(ident in ROWS, f"unknown_row:{ident}")
@@ -551,6 +538,18 @@ def _verify_row(row: dict[str, Any], *, matrix_root: Path, closure: str | None) 
     _need(row.get("evidence_sha256") == _sha(raw_path)
           and row.get("exit_evidence_sha256") == _sha(exit_path),
           f"{ident}:receipt_hash")
+    steps = raw.get("steps")
+    if strict_steps:
+        _need(type(steps) is list and steps, f"{ident}:steps_missing")
+        evidence_types = {step.get("evidence_type") for step in steps if type(step) is dict}
+        _need("host" in evidence_types or "native" in evidence_types,
+              f"{ident}:evidence_type_missing")
+        _need(all(type(step) is dict and isinstance(step.get("command"), list)
+                  and isinstance(step.get("actual_exit"), int)
+                  and step.get("actual_exit") == 0
+                  and step.get("timed_out") is False
+                  and step.get("owned_tree_zero") is True
+                  for step in steps), f"{ident}:step_exit")
     return child_closure
 
 
@@ -583,8 +582,101 @@ def final_matrix(row_evidence: Path | None, output: Path | None, run_id: str) ->
     return 0 if result["status"] == "PASS" else 2
 
 
+def verify_only(root: Path) -> int:
+    """Audit an existing package without writing a PASS or changing evidence."""
+    root = root.resolve()
+    errors: list[str] = []
+    try:
+        manifest = _load_json(root / "manifest.json")
+        closure = manifest.get("source_closure_sha256")
+        _need(manifest.get("schema") == SCHEMA, "manifest_schema")
+        _need(isinstance(closure, str) and closure.startswith("sha256:"), "manifest_closure")
+        rows = manifest.get("rows")
+        _need(type(rows) is list, "manifest_rows")
+        for row in rows:
+            try:
+                _verify_row(row, matrix_root=root, closure=closure, strict_steps=True)
+            except MatrixError as exc:
+                errors.append(str(exc))
+        _need(manifest.get("status") == "PASS", "manifest_not_pass")
+        _need(manifest.get("closure_start") == manifest.get("closure_end") == closure,
+              "closure_boundary")
+        _need({row.get("id") for row in rows if isinstance(row, dict)} == set(ROW_IDS),
+              "row_set")
+    except MatrixError as exc:
+        errors.append(str(exc))
+    result = {"schema": "hh-gt09-verify-only-1", "status": "DIAGNOSTIC_OK" if not errors else "DIAGNOSTIC_FAIL",
+              "authority": 0, "acceptance": False, "root": str(root), "errors": errors}
+    print(json.dumps(result, sort_keys=True))
+    return 0 if not errors else 2
+
+
 def _sha_bytes(value: bytes) -> str:
     return hashlib.sha256(value).hexdigest()
+
+
+def _source_tree_closure() -> tuple[str, dict[str, str]]:
+    """Hash the committed studio tree consumed by the final coordinator.
+
+    Review output, Godot import caches and Python bytecode are deliberately
+    excluded.  The plan and sibling game scopes are outside this closure.
+    """
+    ignored = {".local", ".godot", "__pycache__", ".pytest_cache", ".mypy_cache"}
+    files: dict[str, str] = {}
+    for path in STUDIO.rglob("*"):
+        if not path.is_file() or any(part in ignored for part in path.parts):
+            continue
+        rel = path.relative_to(STUDIO).as_posix()
+        files[rel] = _sha(path)
+    payload = dict(sorted(files.items()))
+    return "sha256:" + _sha_bytes(_canonical(payload)), payload
+
+
+def _registered_probe_semantics(path: Path, *, fixture: str) -> bool:
+    try:
+        result = json.loads((path / "registered-owner-result.json").read_text(encoding="utf-8"))
+    except (OSError, ValueError, TypeError):
+        return False
+    discovery = result.get("discovery")
+    profile = result.get("profile")
+    receipt = result.get("receipt")
+    transaction = result.get("transaction")
+    return (result.get("schema") == "hh-godot-registered-authoring-owner-1"
+            and result.get("status") == "DIAGNOSTIC_PASS"
+            and result.get("fixture") == fixture
+            and result.get("authority") == 0
+            and result.get("public_ack") is False
+            and isinstance(result.get("source_closure_sha256"), str)
+            and isinstance(discovery, dict)
+            and discovery.get("fixture_enabled") is True
+            and discovery.get("public_runtime_enabled") is False
+            and isinstance(profile, dict)
+            and profile.get("profile") == "hh-godot-gameplay-source-1"
+            and profile.get("script_enabled") is True
+            and isinstance(transaction, dict)
+            and isinstance(transaction.get("command_ids"), list)
+            and len(transaction["command_ids"]) >= 3
+            and isinstance(receipt, dict)
+            and receipt.get("readback_ack") is True
+            and receipt.get("native_observed") is True
+            and receipt.get("native_process", {}).get("exit_code") == 0)
+
+
+def _content_semantics(path: Path) -> tuple[bool, Path | None]:
+    try:
+        result = json.loads((path / "result.json").read_text(encoding="utf-8"))
+    except (OSError, ValueError, TypeError):
+        return False, None
+    published = result.get("published_root")
+    return (result.get("schema") == "hh-gt09-content-run-1"
+            and result.get("status") == "DIAGNOSTIC_PASS"
+            and result.get("authority") == 0
+            and result.get("public_ack") is False
+            and isinstance(result.get("source_closure_sha256"), str)
+            and isinstance(published, str)
+            and Path(published).is_dir()
+            and isinstance(result.get("publication_readback"), dict)
+            and result["publication_readback"].get("public_ack") is False), Path(published) if isinstance(published, str) else None
 
 
 def _matrix_closure(*, arena: Path, room: Path, blender: Path,
@@ -683,6 +775,8 @@ def _write_row(root: Path, row_id: str, *, closure: str,
         "requirement": requirement, "steps": steps,
         "references": references or [],
     }
+    for step in steps:
+        step.setdefault("evidence_type", "host")
     result_path = row_root / "result.json"
     result_path.write_bytes(_canonical(result))
     exit_receipt = {
@@ -711,274 +805,397 @@ def _test_command(modules: tuple[str, ...]) -> list[str]:
     return [sys.executable, "-B", "-m", "unittest", "-q", *modules]
 
 
-def final_matrix_orchestrated(*, output: Path, run_id: str,
-                              arena: Path, room: Path,
-                              blender: Path, k13: Path | None,
+
+def final_matrix_orchestrated(*, output: Path, run_id: str, k13: Path | None,
                               playtest_deadline: float = 960.0,
                               playtest_start: int = 16) -> int:
-    """Run K1-K15 sequentially against one coordinator-frozen package."""
+    """Own every GT-09 producer and stop at the first failed row."""
     output = output.resolve()
-    arena, room, blender = arena.resolve(), room.resolve(), blender.resolve()
-    if k13 is not None:
-        k13 = k13.resolve()
     _need(not output.exists(), f"matrix_output_exists:{output}")
-    _need(arena.is_dir() and room.is_dir() and blender.is_dir(),
-          "final_requires_publications")
     output.mkdir(parents=True)
-    # The dry-run is a required barrier and is retained in the package.
     dry = dry_run()
     (output / "dry-run.json").write_bytes(_canonical(dry))
-    closure, closure_payload = _matrix_closure(arena=arena, room=room,
-                                                blender=blender, k13=k13)
+    closure, closure_payload = _source_tree_closure()
     conformance = STUDIO / "tests" / "conformance" / "gt09_fixture_conformance.py"
-    blender_root = blender
-    godot_gui = STUDIO / ".local" / "tooling" / "godot-4.7.2-stable" / \
-        "Godot_v4.7.2-stable_win64.exe"
-    blender_arg = str(blender_root)
-    arena_arg, room_arg = str(arena), str(room)
-    common = {"arena": arena_arg, "room": room_arg}
+    godot_gui = STUDIO / ".local" / "tooling" / "godot-4.7.2-stable" / "Godot_v4.7.2-stable_win64.exe"
+    blender_bin = STUDIO / ".local" / "tooling" / "blender-5.2.1-windows-x64" / "blender.exe"
+    nonce = hashlib.sha256((run_id + ":" + closure).encode()).hexdigest()[:10]
     rows: list[dict[str, Any]] = []
-    producer = {"arena": json.loads((arena / "result.json").read_text(encoding="utf-8")).get("source_closure_sha256"),
-                "room": json.loads((room / "result.json").read_text(encoding="utf-8")).get("source_closure_sha256"),
-                "blender_manifest": json.loads((arena / "result.json").read_text(encoding="utf-8")).get("blender_content", {}).get("manifest_sha256")}
+    producer: dict[str, Any] = {
+        "matrix_source_closure": closure,
+        "content_root": str(output / "blender-content"),
+    }
+
+    def owned(command: list[str], raw_name: str, timeout: float) -> dict[str, Any]:
+        return _run_owned(command, cwd=REPO_ROOT,
+                          raw_dir=output / "raw" / raw_name,
+                          timeout=timeout)
+
+    def finish_row(row_id: str, steps: list[dict[str, Any]], requirement: str,
+                   semantic: bool = True, references: list[str] | None = None,
+                   fail_fast: bool = True) -> dict[str, Any]:
+        row = _write_row(output, row_id, closure=closure,
+                         producer_closures=producer, steps=steps,
+                         semantic_pass=semantic, requirement=requirement,
+                         references=references)
+        rows.append(row)
+        if fail_fast and row["status"] != "PASS":
+            raise MatrixError(f"{row_id}:FAIL")
+        return row
+
+    def run_row(row_id: str, specs: list[tuple[list[str], float, str]],
+                requirement: str, validator=None,
+                references: list[str] | None = None) -> dict[str, Any]:
+        steps: list[dict[str, Any]] = []
+        for index, (command, timeout, evidence_type) in enumerate(specs, 1):
+            step = owned(command, f"{row_id}/{index}", timeout)
+            step["evidence_type"] = evidence_type
+            steps.append(step)
+            if step["actual_exit"] != 0 or step["timed_out"] or not step["owned_tree_zero"]:
+                return finish_row(row_id, steps, requirement, False, references)
+        try:
+            semantic = bool(validator()) if validator is not None else True
+        except Exception:
+            semantic = False
+        return finish_row(row_id, steps, requirement, semantic, references)
+
+    def json_result(path: Path) -> dict[str, Any]:
+        return _load_json(path)
+
+    _need(blender_bin.is_file(), f"blender_binary_missing:{blender_bin}")
+    content_root = output / "blender-content"
+    content_cmd = [sys.executable, "-B", "studio/tests/conformance/run_gt09_blender_content.py",
+                   "--run-id", f"gt09-content-{nonce}", "--output", str(content_root),
+                   "--binary", str(blender_bin)]
+    k1_steps: list[dict[str, Any]] = []
+    step = owned(content_cmd, "K1/1-content", 600)
+    step["evidence_type"] = "native"
+    k1_steps.append(step)
+    if step["actual_exit"] != 0 or step["timed_out"] or not step["owned_tree_zero"]:
+        finish_row("K1", k1_steps, "registered discovery/profile isolation and native Blender producer", False)
+        raise MatrixError("K1:FAIL")
+    content_ok, published_root = _content_semantics(content_root)
+    _need(content_ok and published_root is not None, "content_producer_not_observed")
+    producer["published_root"] = str(published_root)
+    producer["content_result"] = str(content_root / "result.json")
+    content_result = json_result(content_root / "result.json")
+    producer["content_source_closure"] = content_result.get("source_closure_sha256")
+
+    registered_roots: dict[str, Path] = {}
+    native_roots: dict[str, Path] = {}
+    for index, fixture in enumerate(("arena", "room"), 2):
+        reg_id = f"o2-registered-authoring-gt09m-{nonce}-{fixture}"
+        reg_root = STUDIO / ".local" / "reviews" / reg_id
+        reg_cmd = [sys.executable, "-B", "studio/tests/godot/run_registered_authoring_probe.py",
+                   "--run-id", reg_id, "--godot", str(godot_gui),
+                   "--blender-published", str(published_root), "--fixture", fixture]
+        step = owned(reg_cmd, f"K1/{index}-{fixture}", 900)
+        step["evidence_type"] = "native"
+        k1_steps.append(step)
+        registered_roots[fixture] = reg_root
+        if step["actual_exit"] != 0 or step["timed_out"] or not step["owned_tree_zero"]:
+            finish_row("K1", k1_steps, "registered discovery/profile isolation and native Blender producer", False,
+                       [str(content_root / "result.json"), str(reg_root / "registered-owner-result.json")])
+            raise MatrixError("K1:FAIL")
+        if not _registered_probe_semantics(reg_root, fixture=fixture):
+            finish_row("K1", k1_steps, "registered discovery/profile isolation and native Blender producer", False,
+                       [str(content_root / "result.json"), str(reg_root / "registered-owner-result.json")])
+            raise MatrixError("K1:FAIL")
+        owner = json_result(reg_root / "registered-owner-result.json")
+        native_run_id = owner.get("native_run_id")
+        _need(isinstance(native_run_id, str), f"native_run_id_missing:{fixture}")
+        native_roots[fixture] = STUDIO / ".local" / "reviews" / native_run_id
+    producer["registered_roots"] = {key: str(value) for key, value in registered_roots.items()}
+    producer["native_roots"] = {key: str(value) for key, value in native_roots.items()}
+    finish_row("K1", k1_steps, "registered discovery/profile isolation and native Blender producer",
+               True, [str(content_root / "result.json")] +
+               [str(value / "registered-owner-result.json") for value in registered_roots.values()])
+
+    check_root = output / "registered-check.json"
+    run_row("K2", [
+        (_test_command(("studio.tests.godot.test_registered_authoring_owner",
+                        "studio.tests.godot.test_authoring_contract")), 180, "unit"),
+        ([sys.executable, "-B", "studio/tests/conformance/run_gt09_registered_check.py",
+          "--run-id", f"gt09-registered-check-{nonce}",
+          "--arena-root", str(registered_roots["arena"]),
+          "--room-root", str(registered_roots["room"]), "--output", str(check_root)], 180, "host"),
+    ], "allowlist/identity/idempotency/conflict", references=[str(check_root)])
+
+    registered_script_root = output / "registered-script"
+    registered_script_cmd = [sys.executable, "-B", "studio/tests/conformance/run_gt09_registered_script.py",
+                             "--run-id", f"gt09-registered-script-{nonce}",
+                             "--output", str(registered_script_root)]
+    run_row("K3", [
+        (_test_command(("studio.tests.godot.test_gameplay_behavior",
+                        "studio.tests.godot.test_gameplay_source_adapter")), 240, "unit"),
+        ([sys.executable, "-B", str(conformance),
+          "--arena", str(native_roots["arena"]), "--room", str(native_roots["room"])], 180, "host"),
+        (registered_script_cmd, 600, "native"),
+    ], "registered AUTH-01 authored behavior and replay",
+       references=[str(registered_script_root / "result.json")],
+       validator=lambda: _registered_script_semantics(registered_script_root))
 
     def publication_project(publication: Path) -> Path:
-        result = json.loads((publication / "result.json").read_text(encoding="utf-8"))
+        result = json_result(publication / "result.json")
         selected = result.get("selected") or {}
         revision = selected.get("selected_revision") or selected.get("project_revision")
-        _need(isinstance(revision, str) and revision.startswith("sha256:"),
-              f"publication_revision_missing:{publication}")
+        _need(isinstance(revision, str) and revision.startswith("sha256:"), "publication_revision_missing")
         revision_id = revision.split(":", 1)[1]
         matches = list(publication.glob(f"gameplay-owner-*/revisions/{revision_id}/project"))
-        _need(len(matches) == 1 and matches[0].is_dir(),
-              f"publication_project_missing:{publication}")
+        _need(len(matches) == 1 and matches[0].is_dir(), "publication_project_missing")
         return matches[0]
 
-    arena_project = publication_project(arena)
-    room_project = publication_project(room)
+    run_row("K4", [
+        (_test_command(("studio.tests.godot.test_gameplay_dependency_evidence",
+                        "studio.tests.godot.test_gameplay_dependency_observation",
+                        "studio.tests.godot.test_gameplay_native_dependencies")), 240, "unit"),
+        ([sys.executable, "-B", str(conformance),
+          "--arena", str(native_roots["arena"]), "--room", str(native_roots["room"])], 180, "host"),
+    ], "AUTH-02 dependency graph, UID/import and rejects",
+       references=[str(native_roots["arena"] / "result.json"),
+                   str(native_roots["room"] / "result.json")],
+       validator=lambda: all(
+           isinstance(json_result(root / "result.json").get("selected", {}).get("files"), dict)
+           and {"scripts/fixture_actor.gd", "scripts/fixture_dependencies.gd",
+                "scripts/fixture_lifecycle.gd"}.issubset(
+                    json_result(root / "result.json").get("selected", {}).get("files", {}))
+           for root in native_roots.values()))
 
-    def run_steps(row_id: str, commands: list[tuple[list[str], float]],
-                  requirement: str, semantic_pass: bool = True,
-                  references: list[str] | None = None,
-                  validator=None) -> None:
-        steps = []
-        for index, (command, timeout) in enumerate(commands, 1):
-            steps.append(_run_owned(command, cwd=REPO_ROOT,
-                                    raw_dir=output / "raw" / row_id / str(index),
-                                    timeout=timeout))
-        try:
-            semantic_ok = bool(validator()) if validator is not None else bool(semantic_pass)
-        except Exception:
-            semantic_ok = False
-        rows.append(_write_row(output, row_id, closure=closure,
-                               producer_closures=producer, steps=steps,
-                               semantic_pass=bool(semantic_pass) and semantic_ok,
-                               requirement=requirement, references=references))
-
-    # Native failure probes write their own immutable review roots.  Derive a
-    # fresh, bounded identifier from this matrix run so retries cannot reuse a
-    # prior receipt while keeping the runner's strict ID grammar.
-    probe_nonce = hashlib.sha256(run_id.encode("utf-8")).hexdigest()[:10]
     def failure_probe_id(kind: str, fixture: str) -> str:
-        value = f"o2-auth{kind}-native-gt09m-{probe_nonce}-{fixture}"
+        value = f"o2-auth{kind}-native-gt09m-{nonce}-{fixture}"
         _need(re.fullmatch(r"o2-auth0[35]-native-[a-z0-9-]{1,40}", value) is not None,
               "failure_probe_id_invalid")
         return value
 
-    # K1/K2 are exercised through the registered public route and its focused
-    # contract suites.  Dry-run output is a real runner result, not a forged
-    # caller field.
-    registered = [sys.executable, "-B", "studio/tests/godot/run_registered_authoring_probe.py",
-                  "--run-id", f"o2-registered-authoring-gt09m-{probe_nonce}",
-                  "--godot", str(godot_gui), "--blender-published", blender_arg,
-                  "--fixture", "room", "--dry-run"]
-    registered_script_root = output / "registered-script"
-    registered_script_id = f"gt09-registered-script-{probe_nonce}"
-    registered_script = [sys.executable, "-B", "studio/tests/conformance/run_gt09_registered_script.py",
-                         "--run-id", registered_script_id,
-                         "--output", str(registered_script_root)]
-    run_steps("K1", [(_test_command(("studio.tests.godot.test_registered_authoring_owner",)), 120),
-                     (registered, 120)], "registered discovery/profile isolation",
-               validator=lambda: _registered_semantics(room, fixture="room"))
-    run_steps("K2", [(_test_command(("studio.tests.godot.test_registered_authoring_owner",
-                                      "studio.tests.godot.test_authoring_contract")), 120)],
-               "allowlist/identity/idempotency/conflict",
-               validator=lambda: _registered_semantics(arena, fixture="arena"))
-    run_steps("K3", [(_test_command(("studio.tests.godot.test_gameplay_behavior",
-                                      "studio.tests.godot.test_gameplay_source_adapter")), 180),
-                     ([sys.executable, "-B", str(conformance), "--arena", arena_arg,
-                       "--room", room_arg], 120),
-                     (registered_script, 420)], "registered behavior/replay",
-               references=[str(registered_script_root / "result.json")],
-               validator=lambda: _registered_script_semantics(
-                   registered_script_root, closure=producer.get("arena")))
-    run_steps("K4", [(_test_command(("studio.tests.godot.test_gameplay_dependency_evidence",
-                                      "studio.tests.godot.test_gameplay_dependency_observation",
-                                      "studio.tests.godot.test_gameplay_native_dependencies")), 180)],
-               "static dependency/import/UID admission",
-               references=[str(arena / "result.json"), str(room / "result.json")],
-               validator=lambda: all(
-                   isinstance(json.loads((pub / "result.json").read_text(encoding="utf-8")).get("selected", {}).get("files"), dict)
-                   and {"scripts/fixture_actor.gd", "scripts/fixture_dependencies.gd", "scripts/fixture_lifecycle.gd"}
-                   .issubset(json.loads((pub / "result.json").read_text(encoding="utf-8")).get("selected", {}).get("files", {}))
-                   for pub in (arena, room)))
-    k5_commands = [(_test_command(("studio.tests.godot.test_gameplay_failure_probe",
-                                   "studio.tests.godot.test_gameplay_source_eligibility",
-                                   "studio.tests.godot.test_gameplay_sandbox")), 180)]
-    for failure in ("syntax", "type"):
-        k5_commands.append(([sys.executable, "-B", "studio/tests/godot/run_gameplay_failure_probe.py",
-                             "--run-id", failure_probe_id("03", failure),
-                             "--failure-fixture", failure], 180))
-    run_steps("K5", k5_commands,
-               "failure preservation and hostile rejection",
-               references=[failure_probe_id("03", fixture) for fixture in ("syntax", "type")],
-               validator=lambda: _auth_failure_semantics(producer.get("arena")))
-    run_steps("K6", [(_test_command(("studio.tests.godot.test_gameplay_publication_probe",
-                                      "studio.tests.godot.test_publication_recovery",
-                                      "studio.tests.godot.test_publication_stop_latency")), 240)],
-               "durable publish/retry/reopen",
-               references=[str(arena / "result.json"), str(room / "result.json")],
-               validator=lambda: _publication_semantics(arena, fixture="arena")
-               and _publication_semantics(room, fixture="room"))
-    linux_out = output / "k7-linux-dry-run.json"
-    k7_commands = [(_test_command(("studio.tests.godot.test_linux_guarded",
-                                   "studio.tests.godot.test_linux_executor",
-                                   "studio.tests.godot.test_linux_probe_evidence")), 240),
-                     ([sys.executable, "-B", "studio/tests/godot/run_linux_probe.py",
-                       "--output", str(linux_out), "--run-id", "gt09-matrix-k7",
-                       "--dry-run"], 180)]
-    for failure in ("boundary", "spawn", "busy", "wall"):
-        k7_commands.append(([sys.executable, "-B", "studio/tests/godot/run_gameplay_failure_probe.py",
-                             "--run-id", failure_probe_id("05", failure),
-                             "--failure-fixture", failure], 180))
-    run_steps("K7", k7_commands, "executor isolation/hostile cases",
-               references=[failure_probe_id("05", fixture)
-                           for fixture in ("boundary", "spawn", "busy", "wall")],
-               validator=lambda: _auth05_semantics(producer.get("arena")))
+    auth3_paths = tuple(STUDIO / ".local" / "reviews" / failure_probe_id("03", item)
+                        for item in ("syntax", "type"))
+    run_row("K5", [
+        (_test_command(("studio.tests.godot.test_gameplay_failure_probe",
+                        "studio.tests.godot.test_gameplay_source_eligibility",
+                        "studio.tests.godot.test_gameplay_sandbox")), 240, "unit"),
+        ([sys.executable, "-B", "studio/tests/godot/run_gameplay_failure_probe.py",
+          "--run-id", failure_probe_id("03", "syntax"), "--failure-fixture", "syntax"], 240, "native"),
+        ([sys.executable, "-B", "studio/tests/godot/run_gameplay_failure_probe.py",
+          "--run-id", failure_probe_id("03", "type"), "--failure-fixture", "type"], 240, "native"),
+    ], "AUTH-03 failure preserves last good",
+       references=[str(path / "result.json") for path in auth3_paths],
+       validator=lambda: _auth_failure_semantics(auth3_paths))
+
+    publication_roots: dict[str, Path] = {}
+    for fixture, native_key, reg_key, run_fixture, index in (
+            ("arena", "arena", "arena", "gameplay_arena_physics", 1),
+            ("room", "room", "room", "gameplay_source_room_3d_native", 2)):
+        pub_id = f"o2-publication-gt09-final-{nonce}-{fixture}"
+        pub_root = STUDIO / ".local" / "reviews" / pub_id
+        args = ["--run-id", pub_id, "--fixture", run_fixture]
+        if fixture == "arena":
+            args += ["--catalog-arena", str(native_roots[native_key]),
+                     "--registered-arena", str(registered_roots[reg_key])]
+        else:
+            args += ["--catalog-room", str(native_roots[native_key]),
+                     "--registered-room", str(registered_roots[reg_key])]
+        args += ["--blender-content-published", str(published_root)]
+        cmd = [sys.executable, "-B", "studio/tests/godot/run_gameplay_publication_probe.py", *args]
+        step = owned(cmd, f"K8/{index}-{fixture}", 1200)
+        step["evidence_type"] = "native"
+        publication_roots[fixture] = pub_root
+        if step["actual_exit"] != 0 or step["timed_out"] or not step["owned_tree_zero"]:
+            finish_row("K8", [step], "two fixtures authored through catalog commands", False)
+            raise MatrixError("K8:FAIL")
+    arena, room = publication_roots["arena"], publication_roots["room"]
     conf_out = output / "fixture-conformance.json"
-    run_steps("K8", [([sys.executable, "-B", str(conformance), "--arena", arena_arg,
-                       "--room", room_arg, "--output", str(conf_out)], 120),
-                      (_test_command(("studio.tests.godot.test_catalog_gameplay_handoff",
-                                      "studio.tests.conformance.test_gt09_fixture_conformance")), 180)],
-               "catalog authored room/arena and Blender handoff",
-               references=[str(conf_out), str(arena / "result.json"), str(room / "result.json")],
-               validator=lambda: _conformance_semantics(conf_out)
-               and _publication_semantics(arena, fixture="arena")
-               and _publication_semantics(room, fixture="room"))
-    run_steps("K9", [(_test_command(("studio.tests.godot.test_gameplay_adapter_probe",
-                                      "studio.tests.godot.test_gameplay_failure_probe",
-                                      "studio.tests.godot.test_gameplay_probe_evidence")), 240),
-                     ([sys.executable, "-B", str(conformance), "--arena", arena_arg,
-                       "--room", room_arg], 120)], "seeded repair/batch/replay/checkpoint",
-               references=[str(registered_script_root / "result.json")],
-               validator=lambda: _registered_script_semantics(
-                   registered_script_root, closure=producer.get("arena"),
-                   require_repair=True))
-    k10_conf_out = output / "k10-fixture-conformance.json"
-    run_steps("K10", [(_test_command(("studio.tests.godot.test_gameplay_log_policy",
-                                       "studio.tests.godot.test_gameplay_probe_evidence",
-                                       "studio.tests.godot.test_gameplay_runtime_binding")), 180),
-                      ([sys.executable, "-B", str(conformance), "--arena", arena_arg,
-                        "--room", room_arg, "--output", str(k10_conf_out)], 120)],
-               "input/pause/save/reload/perf final fixtures",
-               references=[str(k10_conf_out), str(arena / "result.json"), str(room / "result.json")],
-               validator=lambda: _k10_semantics(arena=arena, room=room,
-                                                conformance=k10_conf_out))
-    run_steps("K11", [(_test_command(("studio.tests.godot.test_gameplay_adapter_probe",
-                                       "studio.tests.godot.test_publication_session",
-                                       "studio.tests.godot.test_publication_transport")), 240)],
-               "reconnect/retry/context reset/lease",
-               validator=lambda: _adapter_semantics())
-    run_steps("K12", [(_test_command(("studio.tests.godot.test_gameplay_attribution",
-                                       "studio.tests.godot.test_gameplay_source_eligibility")), 180)],
-               "prompt injection and out-of-scope rejection",
-               validator=_attribution_semantics)
+    k8_steps = [
+        {"command": [str(sys.executable), "-B", str(conformance), "--arena", str(arena),
+                     "--room", str(room), "--output", str(conf_out)],
+         "cwd": str(REPO_ROOT), "actual_exit": 0, "timed_out": False,
+         "owned_tree_zero": True, "duration_seconds": 0, "stdout_sha256": "",
+         "stderr_sha256": "", "evidence_type": "host"},
+    ]
+    # Preserve actual host receipt for conformance instead of fabricating it.
+    k8_steps[0] = owned(k8_steps[0]["command"], "K8/3-conformance", 240)
+    k8_steps[0]["evidence_type"] = "host"
+    k8_steps.append(owned(_test_command(("studio.tests.godot.test_catalog_gameplay_handoff",
+                                          "studio.tests.conformance.test_gt09_fixture_conformance")),
+                          "K8/4-unit", 240))
+    k8_steps[-1]["evidence_type"] = "unit"
+    k8_semantic = _conformance_semantics(conf_out, closure=None) and \
+        _publication_semantics(arena, fixture="arena") and \
+        _publication_semantics(room, fixture="room")
+    finish_row("K8", k8_steps, "two fixtures authored through catalog commands",
+               k8_semantic, [str(conf_out), str(arena / "result.json"), str(room / "result.json")])
+
+    run_row("K6", [
+        (_test_command(("studio.tests.godot.test_gameplay_publication_probe",
+                        "studio.tests.godot.test_publication_recovery",
+                        "studio.tests.godot.test_publication_stop_latency")), 240, "unit"),
+    ], "AUTH-04 durable publish/retry/reopen and owner edit",
+       references=[str(arena / "result.json"), str(room / "result.json")],
+       validator=lambda: _publication_semantics(arena, fixture="arena")
+       and _publication_semantics(room, fixture="room"))
+
+    auth5_paths = tuple(STUDIO / ".local" / "reviews" / failure_probe_id("05", item)
+                        for item in ("boundary", "spawn", "busy", "wall"))
+    linux_out = output / "k7-linux-dry-run.json"
+    k7_specs: list[tuple[list[str], float, str]] = [
+        (_test_command(("studio.tests.godot.test_linux_guarded",
+                        "studio.tests.godot.test_linux_executor",
+                        "studio.tests.godot.test_linux_probe_evidence")), 240, "unit"),
+        ([sys.executable, "-B", "studio/tests/godot/run_linux_probe.py",
+          "--output", str(linux_out), "--run-id", f"gt09-k7-{nonce}", "--dry-run"], 180, "host"),
+    ]
+    for fixture in ("boundary", "spawn", "busy", "wall"):
+        k7_specs.append(([sys.executable, "-B", "studio/tests/godot/run_gameplay_failure_probe.py",
+                         "--run-id", failure_probe_id("05", fixture),
+                         "--failure-fixture", fixture], 240, "native"))
+    run_row("K7", k7_specs, "AUTH-05 executor isolation and hostile cases",
+       references=[str(path / "result.json") for path in auth5_paths],
+       validator=lambda: _auth05_semantics(auth5_paths))
+
+    k10_conf = output / "k10-fixture-conformance.json"
+    run_row("K9", [
+        (_test_command(("studio.tests.godot.test_gameplay_adapter_probe",
+                        "studio.tests.godot.test_gameplay_failure_probe",
+                        "studio.tests.godot.test_gameplay_probe_evidence")), 300, "unit"),
+        ([sys.executable, "-B", str(conformance), "--arena", str(arena),
+          "--room", str(room)], 180, "host"),
+    ], "seeded defect repair through catalog batch and replay",
+       references=[str(registered_script_root / "result.json")],
+       validator=lambda: _registered_script_semantics(registered_script_root,
+                                                       require_repair=True))
+
+    run_row("K10", [
+        (_test_command(("studio.tests.godot.test_gameplay_log_policy",
+                        "studio.tests.godot.test_gameplay_probe_evidence",
+                        "studio.tests.godot.test_gameplay_runtime_binding")), 240, "unit"),
+        ([sys.executable, "-B", str(conformance), "--arena", str(arena),
+          "--room", str(room), "--output", str(k10_conf)], 180, "host"),
+    ], "input/pause/save/reload/perf on final catalog fixtures",
+       references=[str(k10_conf), str(arena / "result.json"), str(room / "result.json")],
+       validator=lambda: _k10_semantics(arena=arena, room=room, conformance=k10_conf))
+
+    adapter_id = f"o2-adapter-gt09-final-{nonce}"
+    adapter_root = STUDIO / ".local" / "reviews" / adapter_id
+    run_row("K11", [
+        (_test_command(("studio.tests.godot.test_gameplay_adapter_probe",
+                        "studio.tests.godot.test_publication_session",
+                        "studio.tests.godot.test_publication_transport")), 300, "unit"),
+        ([sys.executable, "-B", "studio/tests/godot/run_gameplay_adapter_probe.py",
+          "--run-id", adapter_id, "--fixture", "gameplay_source_room_3d_native",
+          "--blender-published", str(published_root), "--authenticated"], 900, "native"),
+    ], "reconnect/retry/context reset/owner edit/parallel source jobs",
+       references=[str(adapter_root / "result.json")],
+       validator=lambda: _adapter_semantics(adapter_root))
+
+    attribution_root = output / "attribution"
+    run_row("K12", [
+        (_test_command(("studio.tests.godot.test_gameplay_attribution",
+                        "studio.tests.godot.test_gameplay_source_eligibility")), 240, "unit"),
+        ([sys.executable, "-B", "studio/tests/conformance/run_gt09_attribution_hostile.py",
+          "--run-id", f"gt09-attribution-{nonce}", "--output", str(attribution_root)], 180, "host"),
+    ], "prompt injection and out-of-scope command rejection",
+       references=[str(attribution_root / "result.json")],
+       validator=lambda: _attribution_semantics(attribution_root))
+
     k13_path = k13 or (STUDIO / ".local" / "reviews" /
                        "gt09-mcp-capability-matrix-20261009-k13.json")
     _need(k13_path.is_file(), f"k13_evidence_missing:{k13_path}")
     k13_doc = _load_json(k13_path)
     _need(_k13_semantics(k13_doc), "k13_evidence_not_measured")
-    run_steps("K13", [(_test_command(("studio.tests.conformance.test_gt09_mcp_compatibility",
-                                       "studio.tests.conformance.test_gt09_mcp_native")), 240)],
-               "MCP/client/model/host capability matrix", references=[str(k13_path)])
-    gt08a_root = output / "gt08a-matrix"
-    run_steps("K14", [([sys.executable, "-B", "studio/build/ci/gt08a_matrix.py",
-                        "--matrix", "--run-id", "gt09-k14-gt08a",
-                        "--output-root", str(gt08a_root)], 900),
-                      (_test_command(("studio.tests.conformance.test_gt09_mcp_native",
-                                      "studio.tests.godot.test_contract",
-                                      "studio.tests.godot.test_validation_owner")), 240)],
-               "GT-08A/TX15/focused regression",
-               references=[str(gt08a_root / "manifest.json")],
-               validator=lambda: _gt08a_semantics(gt08a_root))
+    k13_client = output / "k13-client.json"
+    run_row("K13", [
+        (_test_command(("studio.tests.conformance.test_gt09_mcp_compatibility",
+                        "studio.tests.conformance.test_gt09_mcp_native")), 240, "unit"),
+        ([sys.executable, "-B", "studio/tests/conformance/run_gt09_k13_client.py",
+          "--run-id", f"gt09-k13-client-{nonce}",
+          "--registered-result", str(registered_script_root / "result.json"),
+          "--output", str(k13_client)], 180, "host"),
+    ], "pinned MCP/client/model/host operation matrix",
+       references=[str(k13_path), str(k13_client)],
+       validator=lambda: _k13_semantics(k13_doc, client=k13_client))
 
-    # K15 is deliberately last.  It is the only long-running row; host runs
-    # are owned by the delegated runner and each gets its own fresh run ID.
+    gt08a_root = output / "gt08a-matrix"
+    run_row("K14", [
+        ([sys.executable, "-B", "studio/build/ci/gt08a_matrix.py",
+          "--matrix", "--run-id", f"gt09-k14-{nonce}",
+          "--output-root", str(gt08a_root)], 1200, "native"),
+        (_test_command(("studio.tests.conformance.test_gt09_mcp_native",
+                        "studio.tests.godot.test_contract",
+                        "studio.tests.godot.test_validation_owner")), 240, "unit"),
+    ], "GT-08A/TX15/focused regression on final closure",
+       references=[str(gt08a_root / "manifest.json")],
+       validator=lambda: _gt08a_semantics(gt08a_root))
+
     _need(0 <= playtest_start <= 98, "playtest_start_range")
-    # The matrix run id is the freshness boundary; never reuse a consumed
-    # playtest root merely because a caller picked an old numeric suffix.
-    play_nonce = int(hashlib.sha256((run_id + ":playtest").encode("utf-8")).hexdigest()[:8], 16) % 99
+    play_nonce = int(hashlib.sha256((run_id + ":playtest").encode()).hexdigest()[:8], 16) % 99
     play_date_match = re.search(r"20\d{6}", run_id)
     play_date = play_date_match.group(0) if play_date_match else "20261009"
-    # Reserve two adjacent numeric suffixes that have not already been
-    # consumed.  The delegated runner intentionally accepts only this compact
-    # date/suffix grammar; matrix freshness comes from the hash plus the
-    # collision scan inside the review root.
-    chosen: tuple[str, str] | None = None
+    chosen = None
     for offset in range(99):
         first = (play_nonce + offset) % 99
         second = (first + 1) % 99
         candidates = (f"gt09-playtest-{play_date}-{first:02d}",
                       f"gt09-playtest-{play_date}-{second:02d}")
-        if all(not (STUDIO / ".local" / "reviews" / candidate).exists()
-               for candidate in candidates):
+        if all(not (STUDIO / ".local" / "reviews" / candidate).exists() for candidate in candidates):
             chosen = candidates
             break
     _need(chosen is not None, "playtest_id_space_exhausted")
+    play_steps: list[dict[str, Any]] = []
     for fixture, play_id in zip(("arena", "room"), chosen):
-        run_steps("K15B" if fixture == "room" else "K15A", [
-            ([sys.executable, "-B", "studio/tests/godot/run_delegated_playtest.py",
-              "--run-id", play_id, "--fixture", fixture, "--prepare",
-              "--publication-root", str(arena if fixture == "arena" else room)], 180),
-            ([sys.executable, "-B", "studio/tests/godot/run_delegated_playtest.py",
-              "--run-id", play_id, "--fixture", fixture, "--dry-run",
-              "--deadline-seconds", str(playtest_deadline)], 180),
-            ([sys.executable, "-B", "studio/tests/godot/run_delegated_playtest.py",
-              "--run-id", play_id, "--fixture", fixture, "--host",
-              "--deadline-seconds", str(playtest_deadline), "--mode", "scripted"],
-             playtest_deadline + 120),
-            ([sys.executable, "-B", "studio/tests/conformance/run_gt09_playtest_evidence.py",
-              "--run-id", play_id, "--fixture", fixture,
-              "--minimum-duration-seconds", "900"], 180)],
-            f"delegated 15-minute {fixture} playtest", references=[play_id],
-            validator=lambda play_id=play_id, fixture=fixture: _host_playtest_semantics(
-                play_id, fixture=fixture))
-    # Collapse K15A/K15 into the required single K15 row only after both host
-    # sessions have real exits.  Preserve both raw child rows in the package.
-    k15a = rows.pop(-2); k15b = rows.pop(-1)
-    k15_steps = k15a["steps"] + k15b["steps"]
-    rows.append(_write_row(output, "K15", closure=closure,
-                           producer_closures=producer, steps=k15_steps,
-                           semantic_pass=(k15a["status"] == "PASS" and k15b["status"] == "PASS"),
-                           requirement="delegated 2 x 15-minute final-closure playtest",
-                           references=["K15A", "K15B"]))
+        pub = arena if fixture == "arena" else room
+        for suffix, args, timeout, evidence_type in (
+            ("prepare", ["--prepare", "--publication-root", str(pub)], 180, "host"),
+            ("dry-run", ["--dry-run", "--deadline-seconds", str(playtest_deadline)], 180, "host"),
+            ("host", ["--host", "--deadline-seconds", str(playtest_deadline), "--mode", "scripted"],
+             playtest_deadline + 180, "native"),
+        ):
+            cmd = [sys.executable, "-B", "studio/tests/godot/run_delegated_playtest.py",
+                   "--run-id", play_id, "--fixture", fixture, *args]
+            step = owned(cmd, f"K15/{fixture}-{suffix}", timeout)
+            step["evidence_type"] = evidence_type
+            play_steps.append(step)
+            if step["actual_exit"] != 0 or step["timed_out"] or not step["owned_tree_zero"]:
+                finish_row("K15", play_steps, "delegated 2 x 15-minute final-closure playtest", False,
+                           [str(arena / "result.json"), str(room / "result.json")])
+                raise MatrixError("K15:FAIL")
+        evidence_cmd = [sys.executable, "-B", "studio/tests/conformance/run_gt09_playtest_evidence.py",
+                        "--run-id", play_id, "--fixture", fixture,
+                        "--minimum-duration-seconds", "900"]
+        step = owned(evidence_cmd, f"K15/{fixture}-evidence", 240)
+        step["evidence_type"] = "host"
+        play_steps.append(step)
+        if step["actual_exit"] != 0 or step["timed_out"] or not step["owned_tree_zero"]:
+            finish_row("K15", play_steps, "delegated 2 x 15-minute final-closure playtest", False)
+            raise MatrixError("K15:FAIL")
+        expected = json_result(pub / "result.json").get("source_closure_sha256")
+        if not _host_playtest_semantics(play_id, fixture=fixture,
+                                        expected_source_closure=expected):
+            finish_row("K15", play_steps, "delegated 2 x 15-minute final-closure playtest", False)
+            raise MatrixError("K15:FAIL")
+    finish_row("K15", play_steps, "delegated 2 x 15-minute final-closure playtest",
+               True, [str(arena / "result.json"), str(room / "result.json")])
 
+    closure_end, closure_end_payload = _source_tree_closure()
+    _need(closure_end == closure, "source_changed_during_final")
     manifest = {
-        "schema": SCHEMA, "run_id": run_id, "authority": 0,
-        "acceptance": False,
-        "status": "PASS" if all(row["status"] == "PASS" for row in rows)
-        and {row["id"] for row in rows} == set(ROW_IDS) else "INCOMPLETE",
-        "source_closure_sha256": closure, "closure_payload": closure_payload,
+        "schema": SCHEMA, "run_id": run_id, "authority": 0, "acceptance": False,
+        "status": "PASS" if {row["id"] for row in rows} == set(ROW_IDS)
+        and all(row["status"] == "PASS" for row in rows) else "INCOMPLETE",
+        "source_closure_sha256": closure, "closure_start": closure,
+        "closure_end": closure_end, "closure_payload": closure_payload,
+        "closure_end_payload": closure_end_payload, "producer": producer,
         "rows": rows, "requirements": {row["id"]: row["requirement"] for row in rows},
         "engine_launched": True, "network_used": False,
+        "requirement_test_artifact": {
+            row["id"]: {"requirement": row["requirement"], "references": row.get("references", [])}
+            for row in rows
+        },
     }
     (output / "manifest.json").write_bytes(_canonical(manifest))
     (output / "manifest.sha256").write_text(_sha(output / "manifest.json") + "\n", encoding="ascii")
-    print(json.dumps({"schema": SCHEMA, "run_id": run_id,
-                      "status": manifest["status"], "manifest": str(output / "manifest.json"),
+    print(json.dumps({"schema": SCHEMA, "run_id": run_id, "status": manifest["status"],
+                      "manifest": str(output / "manifest.json"),
                       "source_closure_sha256": closure}, sort_keys=True))
     return 0 if manifest["status"] == "PASS" else 2
-
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser()
@@ -988,12 +1205,10 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--row-evidence", type=Path)
     parser.add_argument("--output", type=Path)
     parser.add_argument("--run-id", default="gt09-matrix-local")
-    parser.add_argument("--arena-publication", type=Path)
-    parser.add_argument("--room-publication", type=Path)
-    parser.add_argument("--blender-publication", type=Path)
     parser.add_argument("--k13-evidence", type=Path)
     parser.add_argument("--playtest-deadline", type=float, default=960.0)
     parser.add_argument("--playtest-start", type=int, default=16)
+    parser.add_argument("--verify-only", type=Path)
     args = parser.parse_args(argv)
     if args.dry_run and args.matrix:
         parser.error("choose --dry-run or --matrix final")
@@ -1001,15 +1216,12 @@ def main(argv: list[str] | None = None) -> int:
         if args.dry_run:
             print(json.dumps(dry_run(args.row), sort_keys=True, separators=(",", ":")))
             return 0
+        if args.verify_only:
+            return verify_only(args.verify_only)
         if args.matrix == "final":
-            if args.arena_publication or args.room_publication or args.blender_publication:
-                _need(args.arena_publication is not None and args.room_publication is not None
-                      and args.blender_publication is not None and args.output is not None,
-                      "orchestrated_final_requires_publications_and_output")
+            if args.output is not None and args.row_evidence is None:
                 return final_matrix_orchestrated(
-                    output=args.output, run_id=args.run_id,
-                    arena=args.arena_publication, room=args.room_publication,
-                    blender=args.blender_publication, k13=args.k13_evidence,
+                    output=args.output, run_id=args.run_id, k13=args.k13_evidence,
                     playtest_deadline=args.playtest_deadline,
                     playtest_start=args.playtest_start)
             return final_matrix(args.row_evidence, args.output, args.run_id)
