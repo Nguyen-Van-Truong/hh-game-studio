@@ -91,6 +91,10 @@ def main():
                  'project': owner_mod._load('gameplay_source_profile').PROJECT_TEMPLATE}
     bad_case = {**fixtures.FIXTURES[bad_case_name], 'scene': fixtures.SCENE,
                 'project': good_case['project']}
+    # The authenticated owner path deliberately uses the extended gameplay
+    # deadline; bind the hostile transcript validator to that same observed
+    # value instead of the legacy fixture default.
+    bad_case['timeout'] = 30
     files, closure = owner_mod.runtime_source_closure()
     for name in ('tests/godot/run_gameplay_failure_probe.py', 'tests/godot/run_linux_probe.py',
                  'tests/godot/linux_probe_fixtures.py', 'godot-addon/gameplay_dependency_observation.py'):
