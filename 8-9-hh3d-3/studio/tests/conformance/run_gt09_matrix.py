@@ -218,6 +218,28 @@ def _publication_semantics(publication: Path, *, fixture: str) -> bool:
             and all(isinstance(value, str) for value in blender["artifact_sha256"].values()))
 
 
+def _generic_publication_semantics(publication: Path) -> bool:
+    """Validate the native AUTH-04 publication used by K6.
+
+    K6 is deliberately separate from the catalog-specific K8 receipts, but it
+    must still carry a native publication and durable retry/readback proof.
+    """
+    try:
+        result = json.loads((publication / "result.json").read_text(encoding="utf-8"))
+    except (OSError, ValueError, TypeError):
+        return False
+    return (result.get("status") == "DIAGNOSTIC_PASS"
+            and result.get("authority") == 0
+            and result.get("public_ack") is False
+            and result.get("native_fixture_observed") is True
+            and result.get("native_run_count") == 1
+            and result.get("live_retry_equal") is True
+            and result.get("reopened_retry_equal") is True
+            and result.get("durable_state_unchanged") is True
+            and result.get("source_unchanged") is True
+            and isinstance(result.get("source_closure_sha256"), str))
+
+
 def _registered_semantics(publication: Path, *, fixture: str) -> bool:
     """Validate registered discovery/transaction readback embedded by publication."""
     try:
@@ -793,6 +815,11 @@ def _write_row(root: Path, row_id: str, *, closure: str,
     row_root.mkdir(parents=True, exist_ok=False)
     actual_ok = all(step["actual_exit"] == 0 and not step["timed_out"]
                     and step["owned_tree_zero"] for step in steps)
+    # Normalize step evidence before serializing.  The verify-only path audits
+    # the persisted JSON, so mutating the in-memory list after the write would
+    # make a final PASS unverifiable.
+    for step in steps:
+        step.setdefault("evidence_type", "host")
     result = {
         "schema": "hh-gt09-row-result-1", "row_id": row_id,
         "status": "PASS" if actual_ok and semantic_pass else "FAIL",
@@ -801,8 +828,6 @@ def _write_row(root: Path, row_id: str, *, closure: str,
         "requirement": requirement, "steps": steps,
         "references": references or [],
     }
-    for step in steps:
-        step.setdefault("evidence_type", "host")
     result_path = row_root / "result.json"
     result_path.write_bytes(_canonical(result))
     exit_receipt = {
@@ -1144,13 +1169,20 @@ def final_matrix_orchestrated(*, output: Path, run_id: str, k13: Path | None,
     finish_row("K8", k8_steps, "two fixtures authored through catalog commands",
                k8_semantic, [str(conf_out), str(arena / "result.json"), str(room / "result.json")])
 
+    k6_native_run_id = f"o2-publication-gt09m-{nonce}-k6"
+    k6_native_root = STUDIO / ".local" / "reviews" / k6_native_run_id
     run_row("K6", [
         (_test_command(("studio.tests.godot.test_gameplay_publication_probe",
                         "studio.tests.godot.test_publication_recovery",
                         "studio.tests.godot.test_publication_stop_latency")), 240, "unit"),
+        ([sys.executable, "-B", "studio/tests/godot/run_gameplay_publication_probe.py",
+          "--run-id", k6_native_run_id, "--fixture", "gameplay_source_multifile"],
+         1200, "native"),
     ], "AUTH-04 durable publish/retry/reopen and owner edit",
-       references=[str(arena / "result.json"), str(room / "result.json")],
-       validator=lambda: _publication_semantics(arena, fixture="arena")
+       references=[str(arena / "result.json"), str(room / "result.json"),
+                   str(k6_native_root / "result.json")],
+       validator=lambda: _generic_publication_semantics(k6_native_root)
+       and _publication_semantics(arena, fixture="arena")
        and _publication_semantics(room, fixture="room"))
 
     auth5_paths = tuple(STUDIO / ".local" / "reviews" / failure_probe_id("05", item)

@@ -1,7 +1,7 @@
-# O2 authoring state — 2026-10-09 (O13/S272)
+# O2 authoring state — 2026-10-09 (O13/S276)
 
 AUTHORITY=0; GT09=IN_PROGRESS; no public gameplay-source or acceptance claim.
-Source-of-truth plan: `zdoc/8-9-godot-blender-agent-studio-plan.txt` S272.
+Source-of-truth plan: `zdoc/8-9-godot-blender-agent-studio-plan.txt` S276.
 WIP milestone is frozen for commit before the next long run; final closure is
 computed by `run_gt09_matrix.py` and excludes `.local` and caches.
 GT08A remains accepted; GT08B Android remains deferred by owner.
@@ -18,6 +18,11 @@ exited before writing `result.json`; raw evidence has no hostile result and is
 invalid. Fresh `o2-auth05-native-k7wall-repro-20261009-01` passed with two
 native calls and unchanged source, so this is retained as a transient Docker/
 CLI boundary; no deadline or hostile acceptance rule was changed.
+Final `gt09-matrix-final-20261009-23` reported PASS K1–K15, but the required
+verify-only self-check rejected K6 because its persisted row contained only a
+unit step. This was a runner/verifier gap, not acceptance; K6 now records a
+native durable-publication step and `_write_row` serializes evidence types
+before hashing. A fresh final run is required; no critic was dispatched.
 
 ## K1–K15 acceptance matrix (current)
 
@@ -28,7 +33,7 @@ CLI boundary; no deadline or hostile acceptance rule was changed.
 | K3 | DIAGNOSTIC_PASS | Fresh registered script route changes controller behavior and replay reads it back; final closure row pending. |
 | K4 | DIAGNOSTIC_PASS | Static dependency, UID/import and lifecycle admission tests; final closure row pending. |
 | K5 | DIAGNOSTIC_PASS | Fresh syntax/type failure probes retain raw rejection and prior revision; final closure row pending. |
-| K6 | DIAGNOSTIC_PASS | Publication retry/reopen and owner recovery evidence; final closure row pending. |
+| K6 | DIAGNOSTIC_PASS | Publication retry/reopen and owner recovery evidence; -23 was verifier-rejected for unit-only row, runner fixed with native step; final closure row pending. |
 | K7 | DIAGNOSTIC_PASS | Fresh boundary/spawn/busy/wall probes and executor tests; `-22` had a transient wall child-exit boundary, independent repro passed; final closure row pending. |
 | K8 | DIAGNOSTIC_PASS | Catalog-authored room/arena publication and Blender handoff candidate pass; final in-run producers required. |
 | K9 | DIAGNOSTIC_PASS | Seeded defect, durable reopen, typed repair and native replay/checkpoint route; final closure row pending. |
@@ -62,6 +67,8 @@ same manifest hash. Do not tick GT09 or open GT10-PC before both TICK=yes.
 - `gt09-playtest-20261009-03`: room lifecycle diagnostic pass; not final matrix evidence.
 - `gt09-matrix-final-20261009-22`: stopped at K7; wall child exited before result.json, invalid and retained.
 - `o2-auth05-native-k7wall-repro-20261009-01`: diagnostic PASS after the K7 boundary; no source or deadline change.
+- `gt09-matrix-final-20261009-23`: runner PASS K1–K15 but verify-only rejected K6 unit-only evidence; not critic-ready.
+- `o2-publication-gt09-k6-repro-20261009-01`: native AUTH-04 publication diagnostic PASS used to validate the K6 repair.
 
 ## Lessons carried forward
 
