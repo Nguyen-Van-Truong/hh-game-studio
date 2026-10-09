@@ -1,7 +1,7 @@
-# O2 authoring state — 2026-10-09 (O13/S278)
+# O2 authoring state — 2026-10-09 (O13/S279)
 
 AUTHORITY=0; GT09=IN_PROGRESS; no public gameplay-source or acceptance claim.
-Source-of-truth plan: `zdoc/8-9-godot-blender-agent-studio-plan.txt` S278.
+Source-of-truth plan: `zdoc/8-9-godot-blender-agent-studio-plan.txt` S279.
 WIP milestone is frozen for commit before the next long run; final closure is
 computed by `run_gt09_matrix.py` and excludes `.local` and caches.
 GT08A remains accepted; GT08B Android remains deferred by owner.
@@ -35,6 +35,16 @@ runs measured one cold timeout and successful host walls up to 23.596 s, so
 the bounded producer watchdog is now 30 s (p95 plus margin); raw measurement
 is under `.local/reviews/gt09-content-deadline-measure-20261009`.
 
+Final `gt09-matrix-final-20261009-28` reached K1–K4, then stopped at K5 after
+the syntax fixture's Linux/Docker native publication returned actual container
+`ExitCode=124` at the authenticated `/usr/bin/timeout 29s` boundary during the
+play phase. The container was removed cleanly and the source closure was
+unchanged, so this is an INFRA boundary, not a product acceptance result. An
+independent exact-fixture repro `o2-auth03-native-k5syntax-repro-20261009-01`
+passed with two native calls, durable bad rejection, retry equality and source
+unchanged. The `-28` Scheduled Task was observed and deleted with terminal
+receipts; its raw matrix remains preserved.
+
 ## K1–K15 acceptance matrix (current)
 
 | K | State | Evidence / next boundary |
@@ -59,7 +69,8 @@ is under `.local/reviews/gt09-content-deadline-measure-20261009`.
 
 B6a/B6b: runner contract and K6 verifier repair are committed; `-23` is
 rejected by verify-only and `-24` is INFRA because its outer room host had no
-receipt. `-27` is a separate INFRA K1 deadline boundary. The new `gt09_task.ps1`/`run_gt09_task.py` demand-only launcher was
+receipt. `-27` is a separate INFRA K1 deadline boundary; `-28` is a K5
+Docker exit-124 boundary with an exact independent repro PASS. The new `gt09_task.ps1`/`run_gt09_task.py` demand-only launcher was
 tested through register/status/delete with source and definition hashes.
 B7: freeze the source, prepare one new Scheduled Task final, start it with
 `start-run`, wait for independent Scheduler/return/matrix receipts, then run
@@ -84,6 +95,8 @@ both TICK=yes.
 - `gt09-matrix-final-20261009-23`: runner PASS K1–K15 but verify-only rejected K6 unit-only evidence; not critic-ready.
 - `gt09-matrix-final-20261009-24`: K1–K14 PASS; K15 arena ran, room native Godot exited 0 with clean Job/tree, but host exited 1 without host-result; INFRA raw retained, no rows combined.
 - `gt09-matrix-final-20261009-27`: stopped at K1; Blender content hit the measured 20-second watchdog boundary before process-exit receipt; INFRA raw retained, no later rows ran.
+- `gt09-matrix-final-20261009-28`: reached K1–K4; K5 syntax native Docker returned exit 124 at the authenticated 29-second boundary; INFRA raw retained, task terminal/delete receipts captured.
+- `o2-auth03-native-k5syntax-repro-20261009-01`: exact K5 syntax repro PASS with two native calls, durable rejection and unchanged source.
 - `o2-publication-gt09-k6-repro-20261009-01`: native AUTH-04 publication diagnostic PASS used to validate the K6 repair.
 
 ## Lessons carried forward
@@ -97,5 +110,6 @@ both TICK=yes.
 - Final preflight now recovers a marker only after the recorded PID is proven dead; a live or uncertain lock fails closed.
 - K12 uses a real host subprocess and adapter scope rejection; K13 hashes exact in-run K8/K9 receipts plus the external incompatibility measurement.
 - Authority remains zero until two independent critics explicitly accept the same frozen manifest.
+- Treat a native timeout as a host boundary only after the raw exit, cleanup/tree state and an exact independent repro agree; never relax the fixture or acceptance rule to make one final run pass.
 - Room publication now reuses the shared native controller and opts into lifecycle only for the
   delegated trace; the short tick-60 probe remains bounded. Any source change invalidates this run.
