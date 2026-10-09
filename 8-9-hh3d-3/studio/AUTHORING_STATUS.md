@@ -1,7 +1,7 @@
-# O2 authoring state — 2026-10-09 (O13/S279)
+# O2 authoring state — 2026-10-09 (O13/S280)
 
 AUTHORITY=0; GT09=IN_PROGRESS; no public gameplay-source or acceptance claim.
-Source-of-truth plan: `zdoc/8-9-godot-blender-agent-studio-plan.txt` S279.
+Source-of-truth plan: `zdoc/8-9-godot-blender-agent-studio-plan.txt` S280.
 WIP milestone is frozen for commit before the next long run; final closure is
 computed by `run_gt09_matrix.py` and excludes `.local` and caches.
 GT08A remains accepted; GT08B Android remains deferred by owner.
@@ -34,6 +34,16 @@ artifacts but no process-exit receipt. Sixteen sequential diagnostic content
 runs measured one cold timeout and successful host walls up to 23.596 s, so
 the bounded producer watchdog is now 30 s (p95 plus margin); raw measurement
 is under `.local/reviews/gt09-content-deadline-measure-20261009`.
+
+Final `gt09-matrix-final-20261009-30` stopped at K1 with the same content
+deadline shape after Blender had written durable partial artifacts but before
+the transcript/process-exit. Direct Blender completed normally, and a bounded
+diagnostic that raised only the shared Job CPU cap to 60 s passed full native
+render/export/checkpoint reopen, Job cleanup and publication readback. The
+repair therefore adds `CONTENT_CPU_SECONDS=60` only to the content producer;
+the generic export cap remains unchanged. `gt09-content-debug-30` passed with
+the repaired cap. The `-30` task was observed and deleted with receipts; raw
+matrix evidence remains non-acceptance.
 
 Final `gt09-matrix-final-20261009-28` reached K1–K4, then stopped at K5 after
 the syntax fixture's Linux/Docker native publication returned actual container
@@ -70,7 +80,9 @@ receipts; its raw matrix remains preserved.
 B6a/B6b: runner contract and K6 verifier repair are committed; `-23` is
 rejected by verify-only and `-24` is INFRA because its outer room host had no
 receipt. `-27` is a separate INFRA K1 deadline boundary; `-28` is a K5
-Docker exit-124 boundary with an exact independent repro PASS. The new `gt09_task.ps1`/`run_gt09_task.py` demand-only launcher was
+Docker exit-124 boundary with an exact independent repro PASS; `-30` exposed
+the shared 15-second Job CPU cap on the content route and is repaired with a
+content-only 60-second cap. The new `gt09_task.ps1`/`run_gt09_task.py` demand-only launcher was
 tested through register/status/delete with source and definition hashes.
 B7: freeze the source, prepare one new Scheduled Task final, start it with
 `start-run`, wait for independent Scheduler/return/matrix receipts, then run
@@ -97,6 +109,8 @@ both TICK=yes.
 - `gt09-matrix-final-20261009-27`: stopped at K1; Blender content hit the measured 20-second watchdog boundary before process-exit receipt; INFRA raw retained, no later rows ran.
 - `gt09-matrix-final-20261009-28`: reached K1–K4; K5 syntax native Docker returned exit 124 at the authenticated 29-second boundary; INFRA raw retained, task terminal/delete receipts captured.
 - `o2-auth03-native-k5syntax-repro-20261009-01`: exact K5 syntax repro PASS with two native calls, durable rejection and unchanged source.
+- `gt09-matrix-final-20261009-30`: stopped at K1; content producer hit the shared 15-second Job CPU cap before transcript/process-exit; INFRA raw retained, task terminal/delete receipts captured.
+- `gt09-content-debug-30`: content-only CPU-cap repair diagnostic PASS with native Blender exit, Job cleanup and publication readback.
 - `o2-publication-gt09-k6-repro-20261009-01`: native AUTH-04 publication diagnostic PASS used to validate the K6 repair.
 
 ## Lessons carried forward
@@ -111,5 +125,6 @@ both TICK=yes.
 - K12 uses a real host subprocess and adapter scope rejection; K13 hashes exact in-run K8/K9 receipts plus the external incompatibility measurement.
 - Authority remains zero until two independent critics explicitly accept the same frozen manifest.
 - Treat a native timeout as a host boundary only after the raw exit, cleanup/tree state and an exact independent repro agree; never relax the fixture or acceptance rule to make one final run pass.
+- Keep resource caps scoped to the producer that measured the boundary; do not widen the generic Blender export cap to make the content fixture pass.
 - Room publication now reuses the shared native controller and opts into lifecycle only for the
   delegated trace; the short tick-60 probe remains bounded. Any source change invalidates this run.

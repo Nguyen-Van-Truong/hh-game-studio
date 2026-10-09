@@ -24,10 +24,12 @@ LOG_BYTES=262144
 PROCESS_LIMIT=4
 
 
-def configure_limits(job):
+def configure_limits(job, *, cpu_seconds=CPU_SECONDS):
+    if type(cpu_seconds) is not int or cpu_seconds < 1:
+        raise ValueError('EXPORT_CPU_CAP')
     native=job._native;limits=native.ExtendedLimit()
     limits.basic.flags=0x2000|0x200|0x8|0x4
-    limits.basic.active_limit=PROCESS_LIMIT;limits.basic.job_time=CPU_SECONDS*10_000_000
+    limits.basic.active_limit=PROCESS_LIMIT;limits.basic.job_time=cpu_seconds*10_000_000
     limits.job_memory=MEMORY_BYTES
     kernel=ctypes.WinDLL('kernel32',use_last_error=True)
     kernel.SetInformationJobObject.argtypes=[w.HANDLE,w.INT,ctypes.c_void_p,w.DWORD]

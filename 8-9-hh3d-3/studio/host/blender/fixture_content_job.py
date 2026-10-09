@@ -33,6 +33,12 @@ from .ui_host import BLENDER_SHA256, HELPER, STUDIO, cli_job, need
 # margin so Blender's final flush is observed instead of killing a valid
 # native export at the old boundary.
 WALL_SECONDS = 30
+# The content producer does a GUI render, GLB export and checkpoint reopen.
+# Two native runs reached the 15-second shared export CPU cap after durable
+# artifacts existed but before transcript/process-exit. Keep the generic export
+# cap unchanged and give this measured fixture route its own bounded 60-second
+# CPU cap; the wall watchdog remains 30 seconds.
+CONTENT_CPU_SECONDS = 60
 LOG_BYTES = 262144
 MAX_TOTAL = 6 * 1024 * 1024
 ARTIFACTS = ("scene.glb", "sprite_sheet.png", "checkpoint.blend", "transcript.json")
@@ -261,7 +267,7 @@ def run_content(*, run_id: str, binary: Path, parent: Path, lease, lease_checker
     handed_off = False
     try:
         def configure(owner):
-            configure_limits(owner)
+            configure_limits(owner, cpu_seconds=CONTENT_CPU_SECONDS)
         job = cli_job.create(process, before_assign=configure)
         process.stdin.write(b"{}\n")
         process.stdin.close()
