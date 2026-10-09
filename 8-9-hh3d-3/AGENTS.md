@@ -21,7 +21,7 @@ người dùng là inventory, không tự đóng. Không thay counter/status-gap
 
 Governance (plan, AGENTS.md) chỉ coordinator sửa; chi tiết run ghi vào
 studio/AUTHORING_STATUS.md (Hiện trạng ≤ 15 dòng + bảng K1–K15 + Next), sửa trong cùng commit
-mốc; giữ DSL sáu effect. GT-09 làm theo NEXT của O13 (B6a xong, B6b final, B7 critic theo
+mốc; giữ DSL sáu effect. GT-09 làm theo NEXT của O13 (B6 xong, final -23 PASS; B7 critic theo
 checklist O13.9) trên ma trận K1–K15: dry-run trước run native, bằng chứng tầng D chỉ ở .local,
 một runner run_gt09_matrix.py. Final chỉ nhận source đã freeze và tự chạy mọi producer (O13.3a),
 dừng ở hàng FAIL đầu; mỗi FAIL ghi loại PRODUCT/VERIFIER/INFRA (O13.4); bản sửa kiểm bằng hàng
