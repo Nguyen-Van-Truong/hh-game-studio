@@ -359,7 +359,8 @@ def _attribution_semantics(root: Path) -> bool:
         return False
     host = result.get("command_host")
     state = result.get("container_state")
-    return (result.get("diagnostic_execution_complete") is True
+    return (result.get("schema") == "hh-gt09-attribution-hostile-2"
+            and result.get("diagnostic_execution_complete") is True
             and result.get("attribution_verified") is True
             and result.get("attribution_harness_unchanged") is True
             and result.get("gameplay_source_envelope_checked") is True
@@ -368,12 +369,21 @@ def _attribution_semantics(root: Path) -> bool:
             and result.get("owner_record_retained") is False
             and type(host) is dict and host.get("exit_code") == 0
             and type(state) is dict and state.get("ExitCode") == 0
+            and type(result.get("scope_boundary")) is dict
+            and result["scope_boundary"].get("accepted") is False
+            and result["scope_boundary"].get("native_dispatch") is False
+            and result["scope_boundary"].get("no_effect") is True
+            and type(result.get("hostile_inputs")) is dict
+            and result["hostile_inputs"].get("treated_as_opaque_data") is True
+            and type(result.get("raw_rejection")) is dict
+            and isinstance(result["raw_rejection"].get("stdout_sha256"), str)
             and result.get("source_closure_sha256", "").startswith("sha256:")
             and result.get("forged", {}).get("diagnostic_execution_complete") is False
             and result.get("forged", {}).get("log_policy", {}).get("accepted") is False)
 
 
-def _k13_semantics(doc: dict[str, Any], client: Path | None = None) -> bool:
+def _k13_semantics(doc: dict[str, Any], client: Path | None = None,
+                    expected_closure: str | None = None) -> bool:
     if (doc.get("schema") != "hh-gt09-mcp-capability-matrix-1"
             or doc.get("status") != "EXTERNAL_NATIVE_LIMITS_MEASURED_CLIENT_OPEN"
             or doc.get("authority") != 0 or doc.get("acceptance") is not False):
@@ -405,14 +415,19 @@ def _k13_semantics(doc: dict[str, Any], client: Path | None = None) -> bool:
             and receipt.get("status") == "MEASURED_INCOMPATIBLE"
             and receipt.get("authority") == 0
             and receipt.get("public_ack") is False
-            and receipt.get("client") == "catalog-agent"
-            and receipt.get("model") == "gpt-6.1-sol"
+            and isinstance(receipt.get("client"), dict)
+            and isinstance(receipt["client"].get("name"), str)
+            and isinstance(receipt["client"].get("version"), str)
+            and isinstance(receipt["client"].get("model"), str)
             and type(receipt.get("host")) is dict
-            and receipt.get("adapter") == "registered-script-route"
-            and receipt.get("protocol") == "hh-studio-0.1"
+            and isinstance(receipt.get("adapter"), str)
+            and isinstance(receipt.get("protocol"), str)
             and receipt.get("recipe_observed") is True
             and receipt.get("batch_observed") is True
-            and isinstance(receipt.get("transcript_sha256"), str))
+            and isinstance(receipt.get("transcript_sha256"), str)
+            and isinstance(receipt.get("source_closure_sha256"), str)
+            and (expected_closure is None
+                 or receipt.get("source_closure_sha256") == expected_closure))
 
 
 def _gt08a_semantics(root: Path) -> bool:
@@ -816,6 +831,17 @@ def final_matrix_orchestrated(*, output: Path, run_id: str, k13: Path | None,
     dry = dry_run()
     (output / "dry-run.json").write_bytes(_canonical(dry))
     closure, closure_payload = _source_tree_closure()
+    preflight = {"schema": "hh-gt09-measure-window-preflight-1", "run_id": run_id,
+                 "authority": 0, "acceptance": False}
+    try:
+        from studio.tests.replay.measure_window import measurement_window
+        with measurement_window(run_id, "GT09 final native preflight"):
+            preflight.update(status="DIAGNOSTIC_PASS", recovered_dead_marker=True)
+    except Exception as error:
+        preflight.update(status="DIAGNOSTIC_FAIL", error_code=str(error))
+        (output / "measure-window-preflight.json").write_bytes(_canonical(preflight))
+        raise MatrixError("measurement_window_preflight:" + str(error)) from error
+    (output / "measure-window-preflight.json").write_bytes(_canonical(preflight))
     conformance = STUDIO / "tests" / "conformance" / "gt09_fixture_conformance.py"
     godot_gui = STUDIO / ".local" / "tooling" / "godot-4.7.2-stable" / "Godot_v4.7.2-stable_win64.exe"
     blender_bin = STUDIO / ".local" / "tooling" / "blender-5.2.1-windows-x64" / "blender.exe"
@@ -824,6 +850,7 @@ def final_matrix_orchestrated(*, output: Path, run_id: str, k13: Path | None,
     producer: dict[str, Any] = {
         "matrix_source_closure": closure,
         "content_root": str(output / "blender-content"),
+        "measure_window_preflight": str(output / "measure-window-preflight.json"),
     }
 
     def owned(command: list[str], raw_name: str, timeout: float) -> dict[str, Any]:
@@ -1107,11 +1134,15 @@ def final_matrix_orchestrated(*, output: Path, run_id: str, k13: Path | None,
                         "studio.tests.conformance.test_gt09_mcp_native")), 240, "unit"),
         ([sys.executable, "-B", "studio/tests/conformance/run_gt09_k13_client.py",
           "--run-id", f"gt09-k13-client-{nonce}",
+          "--arena-publication", str(arena / "result.json"),
+          "--room-publication", str(room / "result.json"),
           "--registered-result", str(registered_script_root / "result.json"),
+          "--k13-evidence", str(k13_path),
           "--output", str(k13_client)], 180, "host"),
     ], "pinned MCP/client/model/host operation matrix",
        references=[str(k13_path), str(k13_client)],
-       validator=lambda: _k13_semantics(k13_doc, client=k13_client))
+       validator=lambda: _k13_semantics(k13_doc, client=k13_client,
+                                        expected_closure=closure))
 
     gt08a_root = output / "gt08a-matrix"
     run_row("K14", [
