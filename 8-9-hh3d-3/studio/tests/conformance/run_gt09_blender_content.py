@@ -69,11 +69,16 @@ def run(*, run_id: str, output: Path, binary: Path) -> dict:
         source_closure_sha256=closure)
     credential = source_owner.issue()
     grant = source_owner.authorize("Bearer " + credential.bearer, "scene.save")
-    lease = source_owner.lease(grant, ttl_ms=90_000)
+    session_lease = source_owner.lease(grant, ttl_ms=90_000)
+    # The Blender host consumes the journal Lease shape while the gameplay
+    # owner keeps the session-specific GodotLease for its own check routine.
+    from host.core.journal import Lease as HostLease
+    lease = HostLease(source_owner.project_id, "scene.save", "gt09-content",
+                      session_lease.fencing_epoch, session_lease.expires_ms)
 
     def check(current):
         deadline = min(current.expires_ms, int(time.time() * 1000) + 5_000)
-        source_owner._session.check(grant, current, deadline_ms=deadline,
+        source_owner._session.check(grant, session_lease, deadline_ms=deadline,
                                     operation="scene.save")
 
     job = _load("gt09_content_job", "host/blender/fixture_content_job.py")
