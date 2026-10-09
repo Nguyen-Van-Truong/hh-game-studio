@@ -1,7 +1,7 @@
-# O2 authoring state — 2026-10-09 (O13/S280)
+# O2 authoring state — 2026-10-09 (O13/S281)
 
 AUTHORITY=0; GT09=IN_PROGRESS; no public gameplay-source or acceptance claim.
-Source-of-truth plan: `zdoc/8-9-godot-blender-agent-studio-plan.txt` S280.
+Source-of-truth plan: `zdoc/8-9-godot-blender-agent-studio-plan.txt` S281.
 WIP milestone is frozen for commit before the next long run; final closure is
 computed by `run_gt09_matrix.py` and excludes `.local` and caches.
 GT08A remains accepted; GT08B Android remains deferred by owner.
@@ -45,6 +45,14 @@ the generic export cap remains unchanged. `gt09-content-debug-30` passed with
 the repaired cap. The `-30` task was observed and deleted with receipts; raw
 matrix evidence remains non-acceptance.
 
+Final `gt09-matrix-final-20261009-31` passed the content producer and arena
+catalog probe, then the room catalog probe returned `CATALOG_RESULT` with
+actual exit 1. Its exact room repro
+`o2-registered-authoring-k1room-repro-20261009-01` passed on the same frozen
+published content, so `-31` is retained as a room host transient and cannot be
+combined with later evidence. The `-31` task was observed and deleted with
+terminal receipts.
+
 Final `gt09-matrix-final-20261009-28` reached K1–K4, then stopped at K5 after
 the syntax fixture's Linux/Docker native publication returned actual container
 `ExitCode=124` at the authenticated `/usr/bin/timeout 29s` boundary during the
@@ -75,14 +83,15 @@ receipts; its raw matrix remains preserved.
 | K14 | DIAGNOSTIC_PASS | GT08A 18/18 diagnostic matrix and focused regression tests; final validator must bind real schema. |
 | K15 | REUSE_ONLY | Delegated runner and fail-closed packer exist; two 15-minute runs only in final matrix. |
 
-## Next (O13.5/S278)
+## Next (O13.5/S281)
 
 B6a/B6b: runner contract and K6 verifier repair are committed; `-23` is
 rejected by verify-only and `-24` is INFRA because its outer room host had no
 receipt. `-27` is a separate INFRA K1 deadline boundary; `-28` is a K5
 Docker exit-124 boundary with an exact independent repro PASS; `-30` exposed
 the shared 15-second Job CPU cap on the content route and is repaired with a
-content-only 60-second cap. The new `gt09_task.ps1`/`run_gt09_task.py` demand-only launcher was
+content-only 60-second cap; `-31` is a room catalog host transient with an
+exact repro PASS. The new `gt09_task.ps1`/`run_gt09_task.py` demand-only launcher was
 tested through register/status/delete with source and definition hashes.
 B7: freeze the source, prepare one new Scheduled Task final, start it with
 `start-run`, wait for independent Scheduler/return/matrix receipts, then run
@@ -111,6 +120,8 @@ both TICK=yes.
 - `o2-auth03-native-k5syntax-repro-20261009-01`: exact K5 syntax repro PASS with two native calls, durable rejection and unchanged source.
 - `gt09-matrix-final-20261009-30`: stopped at K1; content producer hit the shared 15-second Job CPU cap before transcript/process-exit; INFRA raw retained, task terminal/delete receipts captured.
 - `gt09-content-debug-30`: content-only CPU-cap repair diagnostic PASS with native Blender exit, Job cleanup and publication readback.
+- `gt09-matrix-final-20261009-31`: K1 content and arena passed; room catalog returned `CATALOG_RESULT`/exit 1; INFRA raw retained, task terminal/delete receipts captured.
+- `o2-registered-authoring-k1room-repro-20261009-01`: exact room catalog repro PASS on the same publication root.
 - `o2-publication-gt09-k6-repro-20261009-01`: native AUTH-04 publication diagnostic PASS used to validate the K6 repair.
 
 ## Lessons carried forward
@@ -126,5 +137,6 @@ both TICK=yes.
 - Authority remains zero until two independent critics explicitly accept the same frozen manifest.
 - Treat a native timeout as a host boundary only after the raw exit, cleanup/tree state and an exact independent repro agree; never relax the fixture or acceptance rule to make one final run pass.
 - Keep resource caps scoped to the producer that measured the boundary; do not widen the generic Blender export cap to make the content fixture pass.
+- Keep catalog fixture probes independently reproducible; a single room host exit cannot be promoted to a source defect without the same publication failing an exact rerun.
 - Room publication now reuses the shared native controller and opts into lifecycle only for the
   delegated trace; the short tick-60 probe remains bounded. Any source change invalidates this run.
