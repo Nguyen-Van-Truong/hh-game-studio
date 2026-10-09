@@ -137,10 +137,15 @@ def main():
             calls.append(str(kwargs['output'].relative_to(output)))
             # The owner uses this wrapper to retain the per-run call ledger,
             # so the owner cannot identity-compare it with executor.run when
-            # forwarding the authenticated gameplay deadline. Preserve that
-            # explicit trust mode only for AUTH-03; AUTH-05 retains its
-            # legacy hostile-fixture transcript and deadline.
-            kwargs['authenticated'] = not auth05
+            # forwarding the authenticated gameplay deadline. AUTH-03 uses it
+            # for both calls. AUTH-05 keeps the hostile fixture at its legacy
+            # 20 s boundary, while its good baseline may use the authenticated
+            # 30 s envelope so three Godot startup phases do not flake before
+            # the hostile behavior is dispatched.
+            good_baseline = str(kwargs['output']).endswith('command.publication.good')
+            kwargs['authenticated'] = (not auth05) or good_baseline
+            if auth05 and good_baseline:
+                kwargs['timeout_seconds'] = 30
             return owner_mod._load('linux_executor').run(project, **kwargs)
 
         # AUTH-03 is a source bundle parse gate.  Keep the dependency observer
