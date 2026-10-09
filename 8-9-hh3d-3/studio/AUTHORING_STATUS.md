@@ -1,7 +1,7 @@
-# O2 authoring state — 2026-10-10 (O13/S282)
+# O2 authoring state — 2026-10-10 (O13/S283)
 
 AUTHORITY=0; GT09=IN_PROGRESS; no public gameplay-source or acceptance claim.
-Source-of-truth plan: `zdoc/8-9-godot-blender-agent-studio-plan.txt` S282.
+Source-of-truth plan: `zdoc/8-9-godot-blender-agent-studio-plan.txt` S283.
 Current WIP is the runner/process-boundary repair plus a measured Docker CPU
 quota repair; commit it before the next long run. Final closure is computed by `run_gt09_matrix.py` and excludes
 `.local` and caches.
@@ -88,6 +88,13 @@ good publication. Exact repro
 `o2-auth05-native-k7boundary-repro-20261010-47` passed with native run count 2;
 `-47` is retained as a second K7 scheduling INFRA run and cannot be combined.
 
+Sequential K7 boundary diagnostics `o2-auth05-native-k7seq-20261010-48` then
+ran boundary, spawn, busy and wall in one worker, in that order; all four
+returned `DIAGNOSTIC_PASS` with native run count 2 and authority 0. This adds
+evidence that the `-46/-47` observations are cumulative scheduling transients,
+not a reproducible fixture or acceptance gap. No deadline, watchdog or
+acceptance rule was widened; the measured 8-CPU worker quota remains in force.
+
 Final `gt09-matrix-final-20261009-28` reached K1–K4, then stopped at K5 after
 the syntax fixture's Linux/Docker native publication returned actual container
 `ExitCode=124` at the authenticated `/usr/bin/timeout 29s` boundary during the
@@ -118,7 +125,7 @@ receipts; its raw matrix remains preserved.
 | K14 | DIAGNOSTIC_PASS | GT08A 18/18 diagnostic matrix and focused regression tests; final validator must bind real schema. |
 | K15 | REUSE_ONLY | Delegated runner and fail-closed packer exist; two 15-minute runs only in final matrix. |
 
-## Next (O13.5/S282)
+## Next (O13.5/S283)
 
 B6a/B6b: runner contract and K6 verifier repair are committed; `-23` is
 rejected by verify-only and `-24` is INFRA because its outer room host had no
@@ -135,7 +142,8 @@ next final.
 Final `-46` is an INFRA K7 busy-observation boundary with an exact repro PASS;
 the next final must use a fresh closure and ID.
 Final `-47` is an INFRA K7 boundary-publication observation with an exact repro
-PASS; a short sequential K7 diagnostic is required before the next final.
+PASS; the required sequential K7 diagnostic `-48` passed boundary, spawn, busy
+and wall on one worker, so the next action is a fresh Scheduled Task final.
 B7: freeze the source, prepare one new Scheduled Task final, start it with
 `start-run`, wait for independent Scheduler/return/matrix receipts, then run
 verify-only. Only after self-check, dispatch two different-model read-only
@@ -176,6 +184,7 @@ both TICK=yes.
 - `o2-auth05-native-k7busy-repro-20261010-46`: exact busy hostile repro PASS; native run count 2, authority 0.
 - `gt09-matrix-final-20261010-47`: K1–K6 PASS; K7 boundary returned `GAMEPLAY_OWNER_NATIVE_NOT_CLEAN`; outer exit 2, clean tree, INFRA only.
 - `o2-auth05-native-k7boundary-repro-20261010-47`: exact boundary hostile repro PASS; native run count 2.
+- `o2-auth05-native-k7seq-20261010-48`: sequential boundary/spawn/busy/wall diagnostic; all four PASS, native run count 2, authority 0.
 - `gt09-content-cap60-series-20261009-37`: ten sequential cap-60 content runs PASS; diagnostic only.
 - `gt09-content-cap15-series-20261009-38`: ten sequential cap-15 content runs PASS; supports retaining the generic cap.
 
