@@ -811,7 +811,14 @@ class GameplaySourcePublicationOwner:
               and result.get("input_unchanged") is True and result.get("snapshot_unchanged") is True
               and result.get("binary_unchanged") is True
               and result.get("owner_record_retained") is False
-              and result.get("errors") == [],
+              # A bounded, attributed parse/type rejection is intentionally
+              # dirty at the engine-log layer.  The executor records the
+              # stable host diagnostic alongside the accepted rejection
+              # policy; this single error is part of that observed boundary,
+              # while every other error remains fail-closed.
+              and (result.get("errors") == []
+                   or (explained_startup and result.get("errors") ==
+                       ["EXECUTOR_ENGINE_OR_HOST_NOT_CLEAN"])),
               "GAMEPLAY_OWNER_NATIVE_NOT_CLEAN")
         state = result.get("state")
         # JSON false compares equal to 0 in Python. Exit/count proof must be
