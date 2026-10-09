@@ -957,8 +957,6 @@ def final_matrix_orchestrated(*, output: Path, run_id: str, k13: Path | None,
     run_row("K3", [
         (_test_command(("studio.tests.godot.test_gameplay_behavior",
                         "studio.tests.godot.test_gameplay_source_adapter")), 240, "unit"),
-        ([sys.executable, "-B", str(conformance),
-          "--arena", str(native_roots["arena"]), "--room", str(native_roots["room"])], 180, "host"),
         (registered_script_cmd, 600, "native"),
     ], "registered AUTH-01 authored behavior and replay",
        references=[str(registered_script_root / "result.json")],
@@ -974,21 +972,26 @@ def final_matrix_orchestrated(*, output: Path, run_id: str, k13: Path | None,
         _need(len(matches) == 1 and matches[0].is_dir(), "publication_project_missing")
         return matches[0]
 
+    k4_check = output / "k4-catalog-native-check.json"
     run_row("K4", [
         (_test_command(("studio.tests.godot.test_gameplay_dependency_evidence",
                         "studio.tests.godot.test_gameplay_dependency_observation",
                         "studio.tests.godot.test_gameplay_native_dependencies")), 240, "unit"),
-        ([sys.executable, "-B", str(conformance),
-          "--arena", str(native_roots["arena"]), "--room", str(native_roots["room"])], 180, "host"),
+        ([sys.executable, "-B", "studio/tests/conformance/run_gt09_catalog_native_check.py",
+          "--run-id", f"gt09-k4-check-{nonce}",
+          "--arena-native", str(native_roots["arena"]),
+          "--room-native", str(native_roots["room"]),
+          "--arena-registered", str(registered_roots["arena"]),
+          "--room-registered", str(registered_roots["room"]),
+          "--output", str(k4_check)], 180, "host"),
     ], "AUTH-02 dependency graph, UID/import and rejects",
-       references=[str(native_roots["arena"] / "result.json"),
-                   str(native_roots["room"] / "result.json")],
-       validator=lambda: all(
-           isinstance(json_result(root / "result.json").get("selected", {}).get("files"), dict)
-           and {"scripts/fixture_actor.gd", "scripts/fixture_dependencies.gd",
-                "scripts/fixture_lifecycle.gd"}.issubset(
-                    json_result(root / "result.json").get("selected", {}).get("files", {}))
-           for root in native_roots.values()))
+       references=[str(k4_check), str(native_roots["arena"] / "native-observation.json"),
+                   str(native_roots["room"] / "native-observation.json")],
+       validator=lambda: (json_result(k4_check).get("schema") == "hh-gt09-catalog-native-check-1"
+                          and json_result(k4_check).get("status") == "DIAGNOSTIC_PASS"
+                          and isinstance(json_result(k4_check).get("source_closure_sha256"), str)
+                          and json_result(k4_check).get("dependency_readback") is True
+                          and json_result(k4_check).get("uid_import_checks") is True))
 
     def failure_probe_id(kind: str, fixture: str) -> str:
         value = f"o2-auth{kind}-native-gt09m-{nonce}-{fixture}"
