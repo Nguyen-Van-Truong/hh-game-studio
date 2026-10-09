@@ -15,16 +15,19 @@ def _publication(path: Path, closure: str, name: str) -> Path:
     receipt = {"command_id": f"command.{name}", "status": "READBACK_ACK",
                "readback_ack": True, "public_ack": False}
     transaction = "sha256:" + (("a" if name == "arena" else "b") * 64)
+    command_prefix = "recipe." if name == "arena" else "room."
     handoff = {"schema": "hh-catalog-gameplay-handoff-1", "authority": 0,
                "public_ack": False, "transaction_digest": transaction,
-               "command_ids": [f"recipe.node.{name}"],
+               "command_ids": [f"{command_prefix}node.{name}"],
                "provenance": {"transaction_digest": transaction, "authority": 0,
                               "public_ack": False}}
+    handoff_key = "catalog_handoff" if name == "arena" else "catalog_room_handoff"
+    scene_prefix = "catalog_room_scene" if name == "room" else "catalog_scene"
     return _write(path, {"status": "DIAGNOSTIC_PASS", "authority": 0,
                          "public_ack": False, "source_closure_sha256": closure,
-                         "catalog_handoff": handoff,
-                         "catalog_scene_instantiation_observed": True,
-                         "catalog_scene_provenance_unchanged": True,
+                         handoff_key: handoff,
+                         scene_prefix + "_instantiation_observed": True,
+                         scene_prefix + "_provenance_unchanged": True,
                          "receipt": receipt})
 
 
@@ -106,6 +109,26 @@ class K13ClientProvenanceTests(unittest.TestCase):
                 "--room-publication", str(room), "--registered-result", str(registered),
                 "--k13-evidence", str(external), "--output", str(out)]), 2)
             self.assertEqual(json.loads(out.read_text())["error_code"], "K8_ARENA_RECIPE_COMMAND_IDS")
+
+    def test_room_publication_requires_room_handoff_field(self):
+        """A room result must use the fixture-specific K8 publication field."""
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            closure = "sha256:" + "c" * 64
+            arena = _publication(root / "arena.json", closure, "arena")
+            room = _publication(root / "room.json", closure, "room")
+            registered = _registered(root / "registered.json", closure)
+            external = _external(root / "external.json")
+            value = json.loads(room.read_text(encoding="utf-8"))
+            value["catalog_handoff"] = value.pop("catalog_room_handoff")
+            room.write_text(json.dumps(value), encoding="utf-8")
+            out = root / "client.json"
+            self.assertEqual(probe.main([
+                "--run-id", "gt09-k13-client-test", "--arena-publication", str(arena),
+                "--room-publication", str(room), "--registered-result", str(registered),
+                "--k13-evidence", str(external), "--output", str(out)]), 2)
+            self.assertEqual(json.loads(out.read_text(encoding="utf-8"))["error_code"],
+                             "K8_ROOM_CATALOG_HANDOFF_MISSING")
 
 
 if __name__ == "__main__":

@@ -67,16 +67,26 @@ def _publication(path: Path, label: str) -> tuple[dict[str, Any], bytes]:
     _need(result.get("authority") == 0 and result.get("public_ack") is False,
           label + "_AUTHORITY")
     _hex(result.get("source_closure_sha256"), label + "_SOURCE_CLOSURE")
-    handoff = result.get("catalog_handoff")
+    # K8 emits fixture-specific publication fields.  Arena retains the
+    # original ``catalog_handoff`` field, while the room publication is
+    # intentionally namespaced as ``catalog_room_handoff``.  Select the
+    # expected field explicitly so a room receipt cannot be accidentally
+    # satisfied by an arena-shaped alias.
+    handoff_key = {"K8_ARENA": "catalog_handoff",
+                   "K8_ROOM": "catalog_room_handoff"}.get(label)
+    _need(handoff_key is not None, label + "_CATALOG_HANDOFF_LABEL")
+    handoff = result.get(handoff_key)
     _need(isinstance(handoff, dict), label + "_CATALOG_HANDOFF_MISSING")
     _need(handoff.get("schema") == "hh-catalog-gameplay-handoff-1",
           label + "_CATALOG_HANDOFF_SCHEMA")
     _need(handoff.get("authority") == 0 and handoff.get("public_ack") is False,
           label + "_HANDOFF_AUTHORITY")
     command_ids = handoff.get("command_ids")
+    command_prefix = {"K8_ARENA": "recipe.", "K8_ROOM": "room."}.get(label)
+    _need(command_prefix is not None, label + "_CATALOG_HANDOFF_LABEL")
     _need(isinstance(command_ids, list) and command_ids and
           len(command_ids) == len(set(command_ids)) and
-          all(isinstance(item, str) and item.startswith("recipe.") for item in command_ids),
+          all(isinstance(item, str) and item.startswith(command_prefix) for item in command_ids),
           label + "_RECIPE_COMMAND_IDS")
     transaction = handoff.get("transaction_digest")
     _hex(transaction, label + "_TRANSACTION_DIGEST")
@@ -85,8 +95,9 @@ def _publication(path: Path, label: str) -> tuple[dict[str, Any], bytes]:
     _need(provenance.get("transaction_digest") == transaction and
           provenance.get("authority") == 0 and provenance.get("public_ack") is False,
           label + "_PROVENANCE_BINDING")
-    _need(result.get("catalog_scene_instantiation_observed") is True and
-          result.get("catalog_scene_provenance_unchanged") is True,
+    scene_prefix = "catalog_room_scene" if label == "K8_ROOM" else "catalog_scene"
+    _need(result.get(scene_prefix + "_instantiation_observed") is True and
+          result.get(scene_prefix + "_provenance_unchanged") is True,
           label + "_RECIPE_READBACK")
     receipt = result.get("receipt")
     _need(isinstance(receipt, dict) and receipt.get("status") == "READBACK_ACK" and
@@ -203,9 +214,9 @@ def _measure(*, run_id: str, arena_path: Path | None, room_path: Path | None,
         "recipe_provenance": {
             "arena_result_sha256": _sha(arena_path), "room_result_sha256": _sha(room_path),
             "arena_transaction_digest": arena["catalog_handoff"]["transaction_digest"],
-            "room_transaction_digest": room["catalog_handoff"]["transaction_digest"],
+            "room_transaction_digest": room["catalog_room_handoff"]["transaction_digest"],
             "arena_command_ids": arena["catalog_handoff"]["command_ids"],
-            "room_command_ids": room["catalog_handoff"]["command_ids"],
+            "room_command_ids": room["catalog_room_handoff"]["command_ids"],
         },
         "batch_provenance": {
             "registered_result_sha256": _sha(registered_path),
