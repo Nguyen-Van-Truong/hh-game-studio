@@ -61,6 +61,19 @@ class GT09MatrixTests(unittest.TestCase):
             self.assertEqual(matrix.final_matrix(manifest_path, output, 'gt09-matrix-good'), 0)
             self.assertEqual(json.loads(output.read_text())['status'], 'PASS')
 
+    def test_rehearsal_requires_wired_dependencies_and_is_not_final(self):
+        with tempfile.TemporaryDirectory(prefix='gt09-rehearsal-') as temp:
+            with self.assertRaisesRegex(matrix.MatrixError, "rehearsal_dependencies_not_wired:K4"):
+                matrix.rehearsal_rows(output=Path(temp) / 'unsupported',
+                                      run_id='gt09-rehearsal-test', selected=('K4',))
+            root = Path(temp) / 'rehearsal'
+            root.mkdir()
+            (root / 'manifest.json').write_text(json.dumps({
+                'schema': matrix.SCHEMA, 'mode': 'REHEARSAL',
+                'source_closure_sha256': 'sha256:' + 'a' * 64,
+                'rows': [], 'status': 'PASS'}), encoding='utf-8')
+            self.assertEqual(matrix.verify_only(root), 2)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -2,8 +2,9 @@
 
 AUTHORITY=0; GT09=IN_PROGRESS; no public gameplay-source or acceptance claim.
 Source-of-truth plan: `zdoc/8-9-godot-blender-agent-studio-plan.txt` S281.
-WIP milestone is frozen for commit before the next long run; final closure is
-computed by `run_gt09_matrix.py` and excludes `.local` and caches.
+Current WIP is the runner/process-boundary repair; commit it before the next
+long run. Final closure is computed by `run_gt09_matrix.py` and excludes
+`.local` and caches.
 GT08A remains accepted; GT08B Android remains deferred by owner.
 K1–K9 and K11–K14 have diagnostic implementations/evidence, but no final row
 is accepted until one frozen K1–K15 run and two independent critics share its hash.
@@ -37,13 +38,10 @@ is under `.local/reviews/gt09-content-deadline-measure-20261009`.
 
 Final `gt09-matrix-final-20261009-30` stopped at K1 with the same content
 deadline shape after Blender had written durable partial artifacts but before
-the transcript/process-exit. Direct Blender completed normally, and a bounded
-diagnostic that raised only the shared Job CPU cap to 60 s passed full native
-render/export/checkpoint reopen, Job cleanup and publication readback. The
-repair therefore adds `CONTENT_CPU_SECONDS=60` only to the content producer;
-the generic export cap remains unchanged. `gt09-content-debug-30` passed with
-the repaired cap. The `-30` task was observed and deleted with receipts; raw
-matrix evidence remains non-acceptance.
+the transcript/process-exit. A controlled comparison now has ten sequential
+cap-15 passes and ten cap-60 passes, so the content route keeps the generic
+15 s CPU cap; `-30` remains an INFRA diagnostic and its raw evidence is not
+acceptance evidence.
 
 Final `gt09-matrix-final-20261009-31` passed the content producer and arena
 catalog probe, then the room catalog probe returned `CATALOG_RESULT` with
@@ -52,6 +50,12 @@ actual exit 1. Its exact room repro
 published content, so `-31` is retained as a room host transient and cannot be
 combined with later evidence. The `-31` task was observed and deleted with
 terminal receipts.
+
+Final `gt09-matrix-final-20261009-32` stopped at K3 in the registered-script
+native child after the inner Docker/Godot deadline; its host Job/tree cleanup
+was eventually reconciled and it is retained as INFRA. Rehearsal
+`gt09-rehearsal-20261009-35` then passed K3 unit plus native replay on the new
+closure using the gated outer process runner. It is rehearsal-only.
 
 Final `gt09-matrix-final-20261009-28` reached K1–K4, then stopped at K5 after
 the syntax fixture's Linux/Docker native publication returned actual container
@@ -88,11 +92,11 @@ receipts; its raw matrix remains preserved.
 B6a/B6b: runner contract and K6 verifier repair are committed; `-23` is
 rejected by verify-only and `-24` is INFRA because its outer room host had no
 receipt. `-27` is a separate INFRA K1 deadline boundary; `-28` is a K5
-Docker exit-124 boundary with an exact independent repro PASS; `-30` exposed
-the shared 15-second Job CPU cap on the content route and is repaired with a
-content-only 60-second cap; `-31` is a room catalog host transient with an
-exact repro PASS. The new `gt09_task.ps1`/`run_gt09_task.py` demand-only launcher was
-tested through register/status/delete with source and definition hashes.
+Docker exit-124 boundary with an exact independent repro PASS; `-30` remains
+an unproven content CPU-boundary diagnostic; `-31` is a room catalog host
+transient with an exact repro PASS; `-32` is the K3 inner deadline boundary;
+`-35` is a K3 rehearsal PASS only. The new `--rows` rehearsal and gated
+process-tree receipts are ready for the next final.
 B7: freeze the source, prepare one new Scheduled Task final, start it with
 `start-run`, wait for independent Scheduler/return/matrix receipts, then run
 verify-only. Only after self-check, dispatch two different-model read-only
@@ -123,6 +127,9 @@ both TICK=yes.
 - `gt09-matrix-final-20261009-31`: K1 content and arena passed; room catalog returned `CATALOG_RESULT`/exit 1; INFRA raw retained, task terminal/delete receipts captured.
 - `o2-registered-authoring-k1room-repro-20261009-01`: exact room catalog repro PASS on the same publication root.
 - `o2-publication-gt09-k6-repro-20261009-01`: native AUTH-04 publication diagnostic PASS used to validate the K6 repair.
+- `gt09-rehearsal-20261009-35`: K3 unit/native/replay PASS on the current closure; rehearsal-only.
+- `gt09-content-cap60-series-20261009-37`: ten sequential cap-60 content runs PASS; diagnostic only.
+- `gt09-content-cap15-series-20261009-38`: ten sequential cap-15 content runs PASS; supports retaining the generic cap.
 
 ## Lessons carried forward
 
@@ -137,6 +144,7 @@ both TICK=yes.
 - Authority remains zero until two independent critics explicitly accept the same frozen manifest.
 - Treat a native timeout as a host boundary only after the raw exit, cleanup/tree state and an exact independent repro agree; never relax the fixture or acceptance rule to make one final run pass.
 - Keep resource caps scoped to the producer that measured the boundary; do not widen the generic Blender export cap to make the content fixture pass.
+- A cap change needs a controlled comparison: ten sequential cap-15 and cap-60 content runs passed, so the generic 15 s cap remains sufficient for this source.
 - Keep catalog fixture probes independently reproducible; a single room host exit cannot be promoted to a source defect without the same publication failing an exact rerun.
 - Room publication now reuses the shared native controller and opts into lifecycle only for the
   delegated trace; the short tick-60 probe remains bounded. Any source change invalidates this run.

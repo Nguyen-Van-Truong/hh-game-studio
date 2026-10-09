@@ -315,11 +315,18 @@ def main(argv: list[str] | None = None) -> int:
     try:
         report = run(run_id=args.run_id, output=args.output)
     except Exception as error:
+        detail = str(error).strip()
+        # Keep a bounded, path-free diagnostic detail in authority-zero output.
+        # The previous type-only ``ValueError`` made a boundary failure
+        # indistinguishable from a malformed fixture and forced a rerun with
+        # a traceback.  Never include credentials or arbitrary host paths.
+        if len(detail) > 160 or "\\" in detail or "/" in detail:
+            detail = type(error).__name__
         result = {"schema": SCHEMA, "run_id": args.run_id, "authority": 0,
                   "public_ack": False, "status": "DIAGNOSTIC_FAIL",
                   "acceptance": False, "error_code": str(error)
                   if re.fullmatch(r"[A-Z][A-Z0-9_]{0,95}", str(error))
-                  else type(error).__name__}
+                  else type(error).__name__, "error_detail": detail}
         if args.output:
             args.output.mkdir(parents=True, exist_ok=True)
             _write(args.output / "result.json", result)

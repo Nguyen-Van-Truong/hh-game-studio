@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import importlib.util
 import json
 import os
 from pathlib import Path
@@ -17,6 +18,8 @@ import subprocess
 import sys
 import time
 from typing import Any
+
+_RUN_FIXTURE_MODULE: Any | None = None
 
 STUDIO = Path(__file__).resolve().parents[2]
 REPO_ROOT = STUDIO.parent
@@ -630,12 +633,75 @@ def final_matrix(row_evidence: Path | None, output: Path | None, run_id: str) ->
     return 0 if result["status"] == "PASS" else 2
 
 
+def rehearsal_rows(*, output: Path, run_id: str, selected: tuple[str, ...]) -> int:
+    """Run selected short rows on the current source without making a final.
+
+    This is intentionally a real producer/validator path, rather than the
+    old ``--row`` plan printer.  K3 is independent of the Blender/publication
+    chain and is the first useful rehearsal after a registered-script failure;
+    adding another row requires its producer dependencies to be wired here.
+    The resulting manifest is explicitly rehearsal-only and can never satisfy
+    ``final`` or ``verify-only``.
+    """
+    output = output.resolve()
+    _need(not output.exists(), f"rehearsal_output_exists:{output}")
+    _need(selected and len(set(selected)) == len(selected), "rehearsal_rows_empty_or_duplicate")
+    for row_id in selected:
+        _need(row_id in ROW_IDS, f"unknown_row:{row_id}")
+    unsupported = [row_id for row_id in selected if row_id != "K3"]
+    _need(not unsupported, "rehearsal_dependencies_not_wired:" + ",".join(unsupported))
+    output.mkdir(parents=True)
+    closure, closure_payload = _source_tree_closure()
+    nonce = hashlib.sha256((run_id + ":" + closure).encode()).hexdigest()[:10]
+    rows: list[dict[str, Any]] = []
+    producer = {"matrix_source_closure": closure, "mode": "REHEARSAL"}
+    script_root = output / "registered-script"
+    script_cmd = [sys.executable, "-B", "studio/tests/conformance/run_gt09_registered_script.py",
+                  "--run-id", f"gt09-registered-script-{nonce}", "--output", str(script_root)]
+    unit_cmd = _test_command(("studio.tests.godot.test_gameplay_behavior",
+                              "studio.tests.godot.test_gameplay_source_adapter"))
+    steps: list[dict[str, Any]] = []
+    for index, (command, timeout, evidence_type) in enumerate(
+            ((unit_cmd, 240, "unit"), (script_cmd, 600, "native")), 1):
+        step = _run_owned(command, cwd=REPO_ROOT,
+                          raw_dir=output / "raw" / f"K3/{index}", timeout=timeout)
+        step["evidence_type"] = evidence_type
+        steps.append(step)
+        if step.get("actual_exit") != 0 or step.get("timed_out") or not step.get("owned_tree_zero"):
+            break
+    semantic = (all(step.get("actual_exit") == 0 and not step.get("timed_out")
+                    and step.get("owned_tree_zero") for step in steps)
+                and _registered_script_semantics(script_root))
+    row = _write_row(output, "K3", closure=closure, producer_closures=producer,
+                     steps=steps, semantic_pass=semantic,
+                     requirement="registered AUTH-01 authored behavior and replay",
+                     references=[str(script_root / "result.json")])
+    rows.append(row)
+    closure_end, closure_end_payload = _source_tree_closure()
+    _need(closure_end == closure, "source_changed_during_rehearsal")
+    manifest = {"schema": SCHEMA, "mode": "REHEARSAL", "run_id": run_id,
+                "authority": 0, "acceptance": False,
+                "status": "PASS" if semantic else "INCOMPLETE",
+                "source_closure_sha256": closure, "closure_start": closure,
+                "closure_end": closure_end, "closure_payload": closure_payload,
+                "closure_end_payload": closure_end_payload, "producer": producer,
+                "rows": rows, "required_rows": list(selected),
+                "engine_launched": True, "network_used": False}
+    (output / "manifest.json").write_bytes(_canonical(manifest))
+    (output / "manifest.sha256").write_text(_sha(output / "manifest.json") + "\n", encoding="ascii")
+    print(json.dumps({"schema": SCHEMA, "mode": "REHEARSAL", "run_id": run_id,
+                      "status": manifest["status"], "manifest": str(output / "manifest.json"),
+                      "source_closure_sha256": closure}, sort_keys=True))
+    return 0 if semantic else 2
+
+
 def verify_only(root: Path) -> int:
     """Audit an existing package without writing a PASS or changing evidence."""
     root = root.resolve()
     errors: list[str] = []
     try:
         manifest = _load_json(root / "manifest.json")
+        _need(manifest.get("mode") != "REHEARSAL", "rehearsal_not_acceptable")
         closure = manifest.get("source_closure_sha256")
         _need(manifest.get("schema") == SCHEMA, "manifest_schema")
         _need(isinstance(closure, str) and closure.startswith("sha256:"), "manifest_closure")
@@ -778,36 +844,129 @@ def _matrix_closure(*, arena: Path, room: Path, blender: Path,
 
 def _run_owned(command: list[str], *, cwd: Path, raw_dir: Path,
                timeout: float) -> dict[str, Any]:
-    """Run one child, retaining raw stdout/stderr and the real host exit."""
-    raw_dir.mkdir(parents=True, exist_ok=True)
-    started = time.time()
+    """Run one child behind the repository's gated process-tree runner.
+
+    The previous implementation used ``communicate()`` on anonymous pipes and
+    killed only the immediate wrapper on a deadline.  A verbose child or a
+    descendant that outlived its parent could therefore produce a false
+    ``owned_tree_zero`` receipt.  ``run_fixture.run_process`` launches through
+    the pinned helper, assigns the helper to a Windows Job Object (or a Linux
+    process group), drains to files, and records target and wrapper exits
+    independently.
+    """
+    global _RUN_FIXTURE_MODULE
+    raw_dir = raw_dir.resolve()
+    _need(not raw_dir.exists(), f"owned_output_exists:{raw_dir}")
+    raw_dir.mkdir(parents=True)
+    if _RUN_FIXTURE_MODULE is None:
+        path = STUDIO / "build" / "bootstrap" / "run_fixture.py"
+        spec = importlib.util.spec_from_file_location("gt09_owned_runner", path)
+        _need(spec is not None and spec.loader is not None, "owned_runner_import")
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        _RUN_FIXTURE_MODULE = module
+    started = time.monotonic()
     env = os.environ.copy()
     pythonpath = os.pathsep.join((str(REPO_ROOT), str(STUDIO),
                                   str(STUDIO / "tests" / "conformance"),
                                   str(STUDIO / "tests" / "godot")))
     env["PYTHONPATH"] = pythonpath + os.pathsep + env.get("PYTHONPATH", "")
-    proc = subprocess.Popen(command, cwd=cwd, env=env, stdout=subprocess.PIPE,
-                            stderr=subprocess.PIPE, text=True, encoding="utf-8",
-                            errors="replace", creationflags=getattr(subprocess,
-                            "CREATE_NO_WINDOW", 0))
-    timed_out = False
-    try:
-        stdout, stderr = proc.communicate(timeout=timeout)
-    except subprocess.TimeoutExpired:
-        timed_out = True
-        proc.kill()
-        stdout, stderr = proc.communicate(timeout=20)
-    (raw_dir / "stdout.txt").write_text(stdout, encoding="utf-8")
-    (raw_dir / "stderr.txt").write_text(stderr, encoding="utf-8")
+    label = "child"
+    bounded_timeout = max(1, int(timeout + 0.999))
+    if bounded_timeout <= 600:
+        result = _RUN_FIXTURE_MODULE.run_process(
+            command, cwd=cwd, output=raw_dir, timeout=bounded_timeout,
+            label=label, env=env)
+    else:
+        # The pinned bootstrap runner deliberately caps ordinary probes at
+        # 600s.  K15/K14 have longer, separately bounded windows; keep their
+        # same helper + Job Object/process-group semantics here without
+        # changing the hash-pinned bootstrap file used by the Linux executor.
+        host_path = raw_dir / "child-host.json"
+        stdout_path, stderr_path = raw_dir / "child-stdout.txt", raw_dir / "child-stderr.txt"
+        helper = ("import subprocess,sys,json,datetime; token=sys.stdin.readline(); "
+                  "sys.exit(125) if token != 'GO\\n' else None; "
+                  "started=datetime.datetime.now(datetime.timezone.utc).isoformat(); "
+                  "p=subprocess.Popen(sys.argv[2:]); code=p.wait(); "
+                  "f=open(sys.argv[1],'x',encoding='utf-8'); "
+                  "json.dump({'target_pid':p.pid,'started_at':started,'exit_code':code},f); f.close()")
+        flags = getattr(subprocess, "CREATE_NO_WINDOW", 0)
+        process = None
+        job_state = None
+        started = time.monotonic()
+        timed_out = False
+        tree_verified = False
+        wrapper_exit = None
+        try:
+            with stdout_path.open("xb") as stdout, stderr_path.open("xb") as stderr:
+                process = subprocess.Popen(
+                    [sys.executable, "-c", helper, str(host_path), *command],
+                    cwd=cwd, env=env, stdout=stdout, stderr=stderr,
+                    stdin=subprocess.PIPE, creationflags=flags,
+                    start_new_session=os.name != "nt")
+                if os.name == "nt":
+                    job_state = _RUN_FIXTURE_MODULE._job_for_process(process)
+                process.stdin.write(b"GO\n")
+                process.stdin.close()
+                try:
+                    wrapper_exit = process.wait(timeout=bounded_timeout)
+                except subprocess.TimeoutExpired:
+                    timed_out = True
+                    if job_state:
+                        _RUN_FIXTURE_MODULE._terminate_job(job_state)
+                    elif os.name != "nt":
+                        import signal
+                        os.killpg(process.pid, signal.SIGKILL)
+                    wrapper_exit = process.wait(timeout=10)
+                deadline = time.monotonic() + 3
+                while time.monotonic() < deadline:
+                    if os.name == "nt":
+                        tree_verified = _RUN_FIXTURE_MODULE._job_active_count(job_state) == 0
+                    else:
+                        try:
+                            os.killpg(process.pid, 0)
+                        except ProcessLookupError:
+                            tree_verified = True
+                    if tree_verified:
+                        break
+                    time.sleep(0.02)
+        finally:
+            if process is not None and process.poll() is None:
+                process.kill()
+                process.wait(timeout=10)
+            if not tree_verified:
+                if job_state:
+                    _RUN_FIXTURE_MODULE._terminate_job(job_state)
+                elif os.name != "nt" and process is not None:
+                    import signal
+                    try:
+                        os.killpg(process.pid, signal.SIGKILL)
+                    except ProcessLookupError:
+                        pass
+            if job_state:
+                _RUN_FIXTURE_MODULE._close_job(job_state)
+        host = _load_json(host_path) if host_path.is_file() else {}
+        result = {"exit_code": host.get("exit_code"), "wrapper_exit_code": wrapper_exit,
+                  "timed_out": timed_out, "tree_verified": tree_verified,
+                  "ownership": "gated_job_kill_on_close" if os.name == "nt" else "process_group",
+                  "host": host_path.name, "stdout": stdout_path.name, "stderr": stderr_path.name,
+                  "duration_seconds": round(time.monotonic() - started, 3)}
+    stdout_path = raw_dir / result["stdout"]
+    stderr_path = raw_dir / result["stderr"]
+    stdout = stdout_path.read_bytes() if stdout_path.is_file() else b""
+    stderr = stderr_path.read_bytes() if stderr_path.is_file() else b""
     return {
         "command": command,
         "cwd": str(cwd),
-        "actual_exit": proc.returncode,
-        "timed_out": timed_out,
-        "owned_tree_zero": proc.poll() is not None,
-        "duration_seconds": round(time.time() - started, 3),
-        "stdout_sha256": _sha_bytes(stdout.encode("utf-8")),
-        "stderr_sha256": _sha_bytes(stderr.encode("utf-8")),
+        "actual_exit": result.get("exit_code"),
+        "wrapper_exit": result.get("wrapper_exit_code"),
+        "timed_out": result.get("timed_out") is True,
+        "owned_tree_zero": result.get("tree_verified") is True,
+        "ownership": result.get("ownership"),
+        "host_receipt": result.get("host"),
+        "duration_seconds": round(time.monotonic() - started, 3),
+        "stdout_sha256": _sha_bytes(stdout),
+        "stderr_sha256": _sha_bytes(stderr),
     }
 
 
@@ -1366,6 +1525,7 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--row", choices=ROW_IDS)
+    parser.add_argument("--rows", help="comma-separated rehearsal rows (requires --output)")
     parser.add_argument("--matrix", choices=("final",))
     parser.add_argument("--row-evidence", type=Path)
     parser.add_argument("--output", type=Path)
@@ -1377,12 +1537,19 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
     if args.dry_run and args.matrix:
         parser.error("choose --dry-run or --matrix final")
+    if args.row and args.rows:
+        parser.error("choose --row or --rows")
     try:
         if args.dry_run:
             print(json.dumps(dry_run(args.row), sort_keys=True, separators=(",", ":")))
             return 0
         if args.verify_only:
             return verify_only(args.verify_only)
+        if args.rows:
+            if args.output is None:
+                parser.error("--rows requires --output")
+            selected = tuple(item.strip() for item in args.rows.split(",") if item.strip())
+            return rehearsal_rows(output=args.output, run_id=args.run_id, selected=selected)
         if args.matrix == "final":
             if args.output is not None and args.row_evidence is None:
                 return final_matrix_orchestrated(
