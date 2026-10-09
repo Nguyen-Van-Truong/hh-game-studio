@@ -1113,7 +1113,7 @@ def final_matrix_orchestrated(*, output: Path, run_id: str, k13: Path | None,
                         "studio.tests.godot.test_publication_transport")), 300, "unit"),
         ([sys.executable, "-B", "studio/tests/godot/run_gameplay_adapter_probe.py",
           "--run-id", adapter_id, "--fixture", "gameplay_source_room_3d_native",
-          "--blender-published", str(published_root), "--authenticated"], 900, "native"),
+          "--authenticated"], 900, "native"),
     ], "reconnect/retry/context reset/owner edit/parallel source jobs",
        references=[str(adapter_root / "result.json")],
        validator=lambda: _adapter_semantics(adapter_root))
