@@ -128,6 +128,11 @@ def main():
             idle_window()
             need(len(calls) < 2, 'UNEXPECTED_NATIVE_REDISPATCH')
             calls.append(str(kwargs['output'].relative_to(output)))
+            # The owner uses this wrapper to retain the per-run call ledger,
+            # so the owner cannot identity-compare it with executor.run when
+            # forwarding the authenticated gameplay deadline. Preserve that
+            # explicit trust mode at the wrapper boundary.
+            kwargs['authenticated'] = True
             return owner_mod._load('linux_executor').run(project, **kwargs)
 
         # AUTH-03 is a source bundle parse gate.  Keep the dependency observer
