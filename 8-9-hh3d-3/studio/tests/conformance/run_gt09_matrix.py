@@ -1176,6 +1176,7 @@ def final_matrix_orchestrated(*, output: Path, run_id: str, k13: Path | None,
 
     closure_end, closure_end_payload = _source_tree_closure()
     _need(closure_end == closure, "source_changed_during_final")
+    rows.sort(key=lambda row: ROW_IDS.index(row["id"]))
     manifest = {
         "schema": SCHEMA, "run_id": run_id, "authority": 0, "acceptance": False,
         "status": "PASS" if {row["id"] for row in rows} == set(ROW_IDS)
