@@ -37,6 +37,11 @@ ENVIRONMENT = {'HOME': '/home/validator', 'TMPDIR': '/tmp', 'XDG_CACHE_HOME': '/
                'XDG_CONFIG_HOME': '/home/validator/config', 'XDG_DATA_HOME': '/home/validator/data',
                'XDG_RUNTIME_DIR': '/run'}
 ULIMITS = {'fsize': 8388608, 'core': 0, 'cpu': 10, 'nofile': 256, 'msgqueue': 8192}
+# The host has twelve logical CPUs. Give the isolated GT-03 worker eight
+# CPU shares so Godot import/play startup is not serialized behind Docker Desktop,
+# while retaining the per-process CPU-time, memory, PID and wall watchdogs.
+CONTAINER_CPUS = 8
+CONTAINER_NANO_CPUS = CONTAINER_CPUS * 1_000_000_000
 _HELPER = "import subprocess,sys; token=sys.stdin.readline(); sys.exit(125) if token != 'GO\\n' else None; p=subprocess.Popen(sys.argv[1:],stdin=subprocess.DEVNULL); sys.exit(p.wait())"
 _INCOMPLETE_CLI_HOLDS: list = []
 _INCOMPLETE_ADMISSION_HOLDS: list = []
@@ -925,7 +930,7 @@ def _create_args(name: str, mode: str, tool: Path, snapshot: Path, timeout_secon
             '--platform', 'linux/amd64', '--read-only', '--network', 'none', '--ipc', 'private',
             '--cgroupns', 'private', '--user', '65532:65532', '--cap-drop', 'ALL',
             '--security-opt', 'no-new-privileges=true', '--security-opt', 'seccomp=builtin',
-            '--memory', '1g', '--memory-swap', '1g', '--cpus', '1', '--pids-limit', '64',
+            '--memory', '1g', '--memory-swap', '1g', '--cpus', str(CONTAINER_CPUS), '--pids-limit', '64',
             '--log-driver', 'none', '--restart', 'no', '--no-healthcheck', '--stop-timeout', '2',
             '--shm-size', '16m', '--workdir', '/project']
     for name_, limit in ULIMITS.items():
@@ -978,7 +983,7 @@ def _validate_inspect(value: dict, *, name: str, container_id: str, mode: str,
           and not host.get('Devices') and not host.get('DeviceRequests')
           and set(host.get('SecurityOpt', [])) == {'no-new-privileges=true', 'seccomp=builtin'}, 'EXECUTOR_CONFINEMENT')
     _need(host.get('Memory') == 1073741824 and host.get('MemorySwap') == 1073741824
-          and host.get('NanoCpus') == 1000000000 and host.get('PidsLimit') == 64
+          and host.get('NanoCpus') == CONTAINER_NANO_CPUS and host.get('PidsLimit') == 64
           and host.get('ShmSize') == 16777216 and host.get('LogConfig') == {'Type': 'none', 'Config': {}}
           and host.get('RestartPolicy', {}).get('Name') == 'no' and host.get('AutoRemove') is False
           and config.get('Healthcheck', {}).get('Test') == ['NONE'], 'EXECUTOR_RESOURCE_CONFIG')

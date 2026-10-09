@@ -1,9 +1,9 @@
-# O2 authoring state — 2026-10-09 (O13/S281)
+# O2 authoring state — 2026-10-10 (O13/S282)
 
 AUTHORITY=0; GT09=IN_PROGRESS; no public gameplay-source or acceptance claim.
-Source-of-truth plan: `zdoc/8-9-godot-blender-agent-studio-plan.txt` S281.
-Current WIP is the runner/process-boundary repair; commit it before the next
-long run. Final closure is computed by `run_gt09_matrix.py` and excludes
+Source-of-truth plan: `zdoc/8-9-godot-blender-agent-studio-plan.txt` S282.
+Current WIP is the runner/process-boundary repair plus a measured Docker CPU
+quota repair; commit it before the next long run. Final closure is computed by `run_gt09_matrix.py` and excludes
 `.local` and caches.
 GT08A remains accepted; GT08B Android remains deferred by owner.
 K1–K9 and K11–K14 have diagnostic implementations/evidence, but no final row
@@ -55,7 +55,14 @@ Final `gt09-matrix-final-20261009-32` stopped at K3 in the registered-script
 native child after the inner Docker/Godot deadline; its host Job/tree cleanup
 was eventually reconciled and it is retained as INFRA. Rehearsal
 `gt09-rehearsal-20261009-35` then passed K3 unit plus native replay on the new
-closure using the gated outer process runner. It is rehearsal-only.
+closure using the gated outer process runner. It is rehearsal-only. Controlled
+quota rehearsals `-42` (2 CPUs) and `-43` (4 CPUs) reproduced the same inner
+Docker boundary. With the host reporting 12 logical CPUs, the isolated GT-03
+worker quota was raised to 8 CPUs while retaining the 1 GiB, 64-PID, network
+none and watchdog limits. `gt09-rehearsal-20261009-44` then passed K3 unit plus
+native replay on closure `sha256:0d45ffec5c5544444f9885a4543e7353acfd23979f4a98159285ab3785c37478`;
+it remains rehearsal-only, and its raw baseline still records the diagnostic
+log/process-clean distinction explicitly.
 
 Final `gt09-matrix-final-20261009-28` reached K1–K4, then stopped at K5 after
 the syntax fixture's Linux/Docker native publication returned actual container
@@ -87,7 +94,7 @@ receipts; its raw matrix remains preserved.
 | K14 | DIAGNOSTIC_PASS | GT08A 18/18 diagnostic matrix and focused regression tests; final validator must bind real schema. |
 | K15 | REUSE_ONLY | Delegated runner and fail-closed packer exist; two 15-minute runs only in final matrix. |
 
-## Next (O13.5/S281)
+## Next (O13.5/S282)
 
 B6a/B6b: runner contract and K6 verifier repair are committed; `-23` is
 rejected by verify-only and `-24` is INFRA because its outer room host had no
@@ -95,8 +102,10 @@ receipt. `-27` is a separate INFRA K1 deadline boundary; `-28` is a K5
 Docker exit-124 boundary with an exact independent repro PASS; `-30` remains
 an unproven content CPU-boundary diagnostic; `-31` is a room catalog host
 transient with an exact repro PASS; `-32` is the K3 inner deadline boundary;
-`-35` is a K3 rehearsal PASS only. The new `--rows` rehearsal and gated
-process-tree receipts are ready for the next final.
+`-35` is a K3 rehearsal PASS only. The 2-CPU and 4-CPU K3 rehearsals (`-42`,
+`-43`) reproduced the inner Docker boundary; the 8-CPU rehearsal `-44` passed
+K3 on its own frozen closure. The new `--rows` rehearsal, measured quota and
+gated process-tree receipts are ready for the next final.
 B7: freeze the source, prepare one new Scheduled Task final, start it with
 `start-run`, wait for independent Scheduler/return/matrix receipts, then run
 verify-only. Only after self-check, dispatch two different-model read-only
@@ -128,6 +137,9 @@ both TICK=yes.
 - `o2-registered-authoring-k1room-repro-20261009-01`: exact room catalog repro PASS on the same publication root.
 - `o2-publication-gt09-k6-repro-20261009-01`: native AUTH-04 publication diagnostic PASS used to validate the K6 repair.
 - `gt09-rehearsal-20261009-35`: K3 unit/native/replay PASS on the current closure; rehearsal-only.
+- `gt09-rehearsal-20261009-42`: 2-CPU K3 rehearsal; native baseline hit the same inner Docker boundary; rehearsal-only.
+- `gt09-rehearsal-20261009-43`: 4-CPU K3 rehearsal; native baseline hit the same inner Docker boundary; rehearsal-only.
+- `gt09-rehearsal-20261009-44`: 8-CPU K3 unit/native/replay PASS on closure `0d45ffec…`; rehearsal-only.
 - `gt09-content-cap60-series-20261009-37`: ten sequential cap-60 content runs PASS; diagnostic only.
 - `gt09-content-cap15-series-20261009-38`: ten sequential cap-15 content runs PASS; supports retaining the generic cap.
 
@@ -146,5 +158,10 @@ both TICK=yes.
 - Keep resource caps scoped to the producer that measured the boundary; do not widen the generic Blender export cap to make the content fixture pass.
 - A cap change needs a controlled comparison: ten sequential cap-15 and cap-60 content runs passed, so the generic 15 s cap remains sufficient for this source.
 - Keep catalog fixture probes independently reproducible; a single room host exit cannot be promoted to a source defect without the same publication failing an exact rerun.
+- Treat the Docker CPU quota as a bounded scheduling repair: compare fixed short
+  rehearsals before raising it, keep memory/PID/network/watchdog limits fixed,
+  and record the selected quota in source, docs and the next closure. The
+  8-CPU quota is the measured choice on this 12-CPU host; do not widen it again
+  without new raw boundary evidence.
 - Room publication now reuses the shared native controller and opts into lifecycle only for the
   delegated trace; the short tick-60 probe remains bounded. Any source change invalidates this run.
