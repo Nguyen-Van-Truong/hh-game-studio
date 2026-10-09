@@ -834,6 +834,8 @@ def final_matrix_orchestrated(*, output: Path, run_id: str, k13: Path | None,
     preflight = {"schema": "hh-gt09-measure-window-preflight-1", "run_id": run_id,
                  "authority": 0, "acceptance": False}
     try:
+        if str(REPO_ROOT) not in sys.path:
+            sys.path.insert(0, str(REPO_ROOT))
         from studio.tests.replay.measure_window import measurement_window
         with measurement_window(run_id, "GT09 final native preflight"):
             preflight.update(status="DIAGNOSTIC_PASS", recovered_dead_marker=True)
