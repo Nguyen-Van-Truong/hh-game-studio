@@ -10,6 +10,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import importlib.util
+import importlib
 import json
 from pathlib import Path
 import sys
@@ -20,6 +21,10 @@ REPO_ROOT = STUDIO.parent
 
 
 def _load(name: str, relative: str):
+    if relative.startswith("host/blender/"):
+        if str(STUDIO) not in sys.path:
+            sys.path.insert(0, str(STUDIO))
+        return importlib.import_module("host.blender." + Path(relative).stem)
     path = STUDIO / relative
     spec = importlib.util.spec_from_file_location(name, path)
     if spec is None or spec.loader is None:
