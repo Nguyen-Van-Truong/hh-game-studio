@@ -91,11 +91,13 @@ def main():
                  'project': owner_mod._load('gameplay_source_profile').PROJECT_TEMPLATE}
     bad_case = {**fixtures.FIXTURES[bad_case_name], 'scene': fixtures.SCENE,
                 'project': good_case['project']}
-    # The authenticated owner path deliberately uses the extended gameplay
-    # deadline; bind the hostile transcript validator to that same observed
-    # value instead of the legacy fixture default.
-    bad_case['timeout'] = 30
-    bad_case['authenticated_timeout'] = True
+    # AUTH-03 uses the authenticated extended deadline because its dependency
+    # readback can drain a secondary parse failure.  AUTH-05 intentionally
+    # remains on the legacy 20 s hostile-fixture contract; applying the
+    # attribution driver there changes its watchdog boundary and transcript.
+    if not auth05:
+        bad_case['timeout'] = 30
+        bad_case['authenticated_timeout'] = True
     files, closure = owner_mod.runtime_source_closure()
     for name in ('tests/godot/run_gameplay_failure_probe.py', 'tests/godot/run_linux_probe.py',
                  'tests/godot/linux_probe_fixtures.py', 'godot-addon/gameplay_dependency_observation.py'):
@@ -136,8 +138,9 @@ def main():
             # The owner uses this wrapper to retain the per-run call ledger,
             # so the owner cannot identity-compare it with executor.run when
             # forwarding the authenticated gameplay deadline. Preserve that
-            # explicit trust mode at the wrapper boundary.
-            kwargs['authenticated'] = True
+            # explicit trust mode only for AUTH-03; AUTH-05 retains its
+            # legacy hostile-fixture transcript and deadline.
+            kwargs['authenticated'] = not auth05
             return owner_mod._load('linux_executor').run(project, **kwargs)
 
         # AUTH-03 is a source bundle parse gate.  Keep the dependency observer
