@@ -37,10 +37,11 @@ ENVIRONMENT = {'HOME': '/home/validator', 'TMPDIR': '/tmp', 'XDG_CACHE_HOME': '/
                'XDG_CONFIG_HOME': '/home/validator/config', 'XDG_DATA_HOME': '/home/validator/data',
                'XDG_RUNTIME_DIR': '/run'}
 ULIMITS = {'fsize': 8388608, 'core': 0, 'cpu': 10, 'nofile': 256, 'msgqueue': 8192}
-# The host has twelve logical CPUs. Give the isolated GT-03 worker eight
-# CPU shares so Godot import/play startup is not serialized behind Docker Desktop,
-# while retaining the per-process CPU-time, memory, PID and wall watchdogs.
-CONTAINER_CPUS = 8
+# The host has twelve logical CPUs. Give the isolated GT-03 worker the full
+# twelve-CPU host quota so Godot import/play startup is not serialized behind
+# Docker Desktop, while retaining the per-process CPU-time, memory, PID and
+# wall watchdogs.
+CONTAINER_CPUS = 12
 CONTAINER_NANO_CPUS = CONTAINER_CPUS * 1_000_000_000
 _HELPER = "import subprocess,sys; token=sys.stdin.readline(); sys.exit(125) if token != 'GO\\n' else None; p=subprocess.Popen(sys.argv[1:],stdin=subprocess.DEVNULL); sys.exit(p.wait())"
 _INCOMPLETE_CLI_HOLDS: list = []

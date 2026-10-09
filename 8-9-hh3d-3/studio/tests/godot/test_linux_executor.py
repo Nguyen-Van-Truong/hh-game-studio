@@ -39,7 +39,7 @@ def inspected(name, cid, mode, tool, snapshot):
                            'PidMode': '', 'UsernsMode': '', 'CapDrop': ['ALL'], 'CapAdd': None, 'Privileged': False,
                            'Devices': [], 'DeviceRequests': None,
                            'SecurityOpt': ['no-new-privileges=true', 'seccomp=builtin'], 'Memory': 1073741824,
-                           'MemorySwap': 1073741824, 'NanoCpus': 8000000000, 'PidsLimit': 64, 'ShmSize': 16777216,
+                           'MemorySwap': 1073741824, 'NanoCpus': 12000000000, 'PidsLimit': 64, 'ShmSize': 16777216,
                            'LogConfig': {'Type': 'none', 'Config': {}}, 'RestartPolicy': {'Name': 'no'}, 'AutoRemove': False,
                            'Tmpfs': dict(executor.TMPFS),
                            'Ulimits': [{'Name': key, 'Soft': value, 'Hard': value} for key, value in executor.ULIMITS.items()],

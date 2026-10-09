@@ -1,7 +1,7 @@
-# O2 authoring state — 2026-10-10 (O13/S283)
+# O2 authoring state — 2026-10-10 (O13/S284)
 
 AUTHORITY=0; GT09=IN_PROGRESS; no public gameplay-source or acceptance claim.
-Source-of-truth plan: `zdoc/8-9-godot-blender-agent-studio-plan.txt` S283.
+Source-of-truth plan: `zdoc/8-9-godot-blender-agent-studio-plan.txt` S284.
 Current WIP is the runner/process-boundary repair plus a measured Docker CPU
 quota repair; commit it before the next long run. Final closure is computed by `run_gt09_matrix.py` and excludes
 `.local` and caches.
@@ -93,7 +93,20 @@ ran boundary, spawn, busy and wall in one worker, in that order; all four
 returned `DIAGNOSTIC_PASS` with native run count 2 and authority 0. This adds
 evidence that the `-46/-47` observations are cumulative scheduling transients,
 not a reproducible fixture or acceptance gap. No deadline, watchdog or
-acceptance rule was widened; the measured 8-CPU worker quota remains in force.
+acceptance rule was widened at that point; the subsequent -49 attach boundary
+provided the new evidence for the separate 12-CPU quota repair below.
+
+Final `gt09-matrix-final-20261010-49` reached K1–K2, then K3's registered
+script route hit the authenticated Docker `start --attach` boundary with
+actual inner exit 124 after 22 seconds; Scheduler observed outer exit 2 and a
+clean process tree. Exact repro
+`gt09-registered-script-k3-boundary-repro-20261010-49` passed on the unchanged
+8-CPU source, so `-49` is INFRA and its rows are not combined. The controlled
+repair raises only the measured worker CPU quota from 8 to 12 (the host's 12
+logical CPUs); memory, PID, network, per-process CPU and wall watchdogs remain
+unchanged. Executor/guarded/matrix tests pass, and fresh
+`gt09-registered-script-k3-cpu12-repro-20261010-50` passes on the changed
+source.
 
 Final `gt09-matrix-final-20261009-28` reached K1–K4, then stopped at K5 after
 the syntax fixture's Linux/Docker native publication returned actual container
@@ -143,7 +156,9 @@ Final `-46` is an INFRA K7 busy-observation boundary with an exact repro PASS;
 the next final must use a fresh closure and ID.
 Final `-47` is an INFRA K7 boundary-publication observation with an exact repro
 PASS; the required sequential K7 diagnostic `-48` passed boundary, spawn, busy
-and wall on one worker, so the next action is a fresh Scheduled Task final.
+and wall on one worker. Final `-49` is an INFRA K3 authenticated attach
+boundary with exact repro PASS. The source repair is committed at the 12-CPU
+quota and the next action is a fresh Scheduled Task final.
 B7: freeze the source, prepare one new Scheduled Task final, start it with
 `start-run`, wait for independent Scheduler/return/matrix receipts, then run
 verify-only. Only after self-check, dispatch two different-model read-only
@@ -185,6 +200,9 @@ both TICK=yes.
 - `gt09-matrix-final-20261010-47`: K1–K6 PASS; K7 boundary returned `GAMEPLAY_OWNER_NATIVE_NOT_CLEAN`; outer exit 2, clean tree, INFRA only.
 - `o2-auth05-native-k7boundary-repro-20261010-47`: exact boundary hostile repro PASS; native run count 2.
 - `o2-auth05-native-k7seq-20261010-48`: sequential boundary/spawn/busy/wall diagnostic; all four PASS, native run count 2, authority 0.
+- `gt09-matrix-final-20261010-49`: K1–K2 PASS; K3 registered route hit authenticated Docker exit 124, outer exit 2, clean tree; INFRA only.
+- `gt09-registered-script-k3-boundary-repro-20261010-49`: exact K3 registered-route repro PASS on unchanged 8-CPU source.
+- `gt09-registered-script-k3-cpu12-repro-20261010-50`: exact K3 registered-route repro PASS after controlled 12-CPU quota repair.
 - `gt09-content-cap60-series-20261009-37`: ten sequential cap-60 content runs PASS; diagnostic only.
 - `gt09-content-cap15-series-20261009-38`: ten sequential cap-15 content runs PASS; supports retaining the generic cap.
 

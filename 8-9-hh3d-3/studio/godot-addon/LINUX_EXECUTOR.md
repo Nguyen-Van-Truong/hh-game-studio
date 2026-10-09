@@ -101,7 +101,7 @@ image, environment, mounts, system masks and limits before start.
 | `/run` tmpfs | 4 MiB, 512 inodes |
 | `/dev/shm` | 16 MiB |
 | Memory / swap | 1 GiB memory; memory-plus-swap also 1 GiB, prohibiting container swap |
-| CPU / PIDs | Eight CPU quota for the isolated GT-03 worker; 64 PIDs; per-process CPU time 10 seconds |
+| CPU / PIDs | Twelve CPU quota (full measured host quota) for the isolated GT-03 worker; 64 PIDs; per-process CPU time 10 seconds |
 | Regular file / core / descriptors / message queue | 8 MiB per file; no core dump; 256 descriptors; 8192-byte POSIX queue limit |
 | Container supervisor | TERM after `max(1, timeout_seconds-1)` seconds, KILL one second later; legacy modes 2..20 seconds, authenticated gameplay-source 2..30 seconds |
 | Host attach wait | Caller-selected integer (legacy 1..20, authenticated gameplay-source 1..30) plus 2 seconds to observe the supervisor |
