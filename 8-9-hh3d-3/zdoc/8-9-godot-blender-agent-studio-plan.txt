@@ -1,21 +1,21 @@
 HH STUDIO — PLAN 1/3: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Cập nhật 10-10-2026, Asia/Saigon | Revision S286 + quyết định owner O1–O13 | TRIỂN KHAI THEO GATE
+Cập nhật 10-10-2026, Asia/Saigon | Revision S287 + quyết định owner O1–O13 | TRIỂN KHAI THEO GATE
 OWNER_DECISIONS=O1_O3_20260925; O4_20260927; O5_O6_20260930; O7_20261001; O8_20261002; O9_20261003; O10_20261004; O11_20261006; O12_20261007; O13_20261008; BLOCK_BELOW_STATUS_TABLE; LATER_WINS_OVER_S2XX; OLD_VERDICTS_UNCHANGED
 OWNER_DECISIONS_FULL_TEXT_IN_GIT=87912523,b0802472,8298c107,fcc1906f,6d8eb81d,d04266e8,091506fa,a0ab19b8,fd5ad2be,add82689,7f97d3f8
-HIỆN HÀNH 10-10 — GT-01..GT-08A ACCEPTED; GT-09 IN_PROGRESS. Final -60 K1–K15 PASS, Scheduled Task actual exit0, verify-only exit0; Sol TICK=yes, Astra TICK=no vì K9 chỉ chứng minh room. Bản sửa K9 dùng hai publication K8 thật đã PASS diagnostic -72, raw verifier và K13 provenance; chưa nghiệm thu. Tiếp: freeze source, Scheduled Task rehearsal K9, final mới, verify-only và hai critic cùng hash. GT-08B DEFERRED_OWNER; GT-10-PC sau GT-09.
-CURRENT_VALID_WP=GT-09
+HIỆN HÀNH 10-10 — GT-01..GT-08A ACCEPTED; GT-09 ACCEPTED trên final -74. K1–K15 PASS, Scheduled Task exit thật 0 (2487.203s), verify-only exit0; Astra xhigh và Sol ultra đều TICK=yes trên cùng manifest/closure. K9 đã chứng minh cả arena và room bằng native Play, catalog repair/replay và durable reopen/checkpoint. GT-08B DEFERRED_OWNER; mở GT-10-PC P1–P12; full GT-10 vẫn cần GT-08B.
+CURRENT_VALID_WP=GT-10-PC
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S286
+PLAN_REVISION=S287
 EXECUTION_AUTHORIZATION=OWNER_APPROVED_GATED
 EXECUTION_MODE=COORDINATOR_WITH_SCOPED_SUBAGENTS_AND_INDEPENDENT_CRITICS_OWNER_20261003; CREDIT_TURN_BUDGET_O13_6; ONE_COORDINATOR_THREAD; ULTRA_ONLY_HARD_DESIGN_AND_FINAL_CRITICS; FORK_TURNS_NONE_DEFAULT; NO_SELF_CREATED_HEARTBEAT; ONE_WRITER_PER_FILE; TWO_DIFFERENT_MODELS_SAME_HASH
-GOAL_STATE=ACTIVE; INDEPENDENT_CONSUMER_PILOT_AUTHORIZED; GT07_ACCEPTED; GT08A_ACCEPTED_O4_6; GT09_IN_PROGRESS; GT08B_DEFERRED_OWNER_NO_ANDROID; GT10_PC_PLANNED_AFTER_GT09; GT10_FULL_BLOCKED_BY_GT08B; SUPERAGENT_SEPARATE_OWNER_AUTHORIZED_LANE
-OVERALL_PLAN_STATUS=INCOMPLETE; GT01_GT08A_ACCEPTED; GT09_IN_PROGRESS; GT08B_DEFERRED_OWNER_NO_ANDROID; GT10_PC_PLANNED; GT10_FULL_BLOCKED_BY_GT08B; GT11_PLANNED_AFTER_GT10PC_O13_10
+GOAL_STATE=ACTIVE; INDEPENDENT_CONSUMER_PILOT_AUTHORIZED; GT07_ACCEPTED; GT08A_ACCEPTED_O4_6; GT09_ACCEPTED_20261010; GT08B_DEFERRED_OWNER_NO_ANDROID; GT10_PC_OPEN; GT10_FULL_BLOCKED_BY_GT08B; SUPERAGENT_SEPARATE_OWNER_AUTHORIZED_LANE
+OVERALL_PLAN_STATUS=INCOMPLETE; GT01_GT09_ACCEPTED; GT08B_DEFERRED_OWNER_NO_ANDROID; GT10_PC_IN_PROGRESS; GT10_FULL_BLOCKED_BY_GT08B; GT11_PLANNED_AFTER_GT10PC_O13_10
 CONSUMER_PILOT_STATUS=REVALIDATED_PROVISIONAL_AUTHORITY0; NOT_GT06_ACCEPTANCE; NOT_COMPLETE_GAME_CLAIM
 GT06_STATUS=ACCEPTED; FORMAL25_TWO_ACCEPTED_PAIRS; FINAL_MANIFEST=318081a3c71f334cc44aa4542a5fa5fff459b4045006f6daa91559b1ccc4d4d3; DECISION=zdoc/reviews/20261003-gt06-owner-critics/coordinator-acceptance.md
 GT07_STATUS=ACCEPTED_20261007; MATRIX=gt07-final-matrix-gt07-m1-final-20261007-04_30_OF_30; FINAL_MANIFEST=5d97343e7262e4c54f70f0135ffda1045b71c6cf13223321cf4b373e6f1714cc; DECISION=zdoc/reviews/20261003-gt07-integration/coordinator-acceptance-20261007.md
 GT08A_STATUS=ACCEPTED_20261007; MATRIX=gt08a-matrix-20261007-05_18_OF_18; FINAL_MANIFEST=49834d31db4996b18c15d9cada4ef030efb30d95f1e68e934251f9a5baafe675; DECISION=zdoc/reviews/20261007-gt08a-coordinator-acceptance.md; GT08B=DEFERRED_O12
-GT09_FINAL_20261010_60=K1_K15_PASS_SCHEDULED_TASK_EXIT0_2613.844S_VERIFY_EXIT0_CLOSURE_4e7534af; K9_DIAGNOSTIC_20261010_72=PASS_BOTH_REAL_FIXTURES_REPAIR_REPLAY_REOPEN; GT09_REHEARSAL_20261010_73=PASS_K1_K9_SCHEDULED_TASK_EXIT0_466.36S_CLOSURE_7d8014b7; GT09_NEXT_ACTION=FRESH_FINAL_K1_K15_VERIFY_ONLY_THEN_TWO_CRITICS; LAST_FULL_RUN=GT09_FINAL_20261010_60_HISTORICAL_AFTER_K9_GAP; CURRENT_BOUNDARY=FINAL_60_BLOCKED_ASTRA_K9_ROOM_ONLY; K13=MEASURED_INCOMPATIBLE_FOUR_AUTHOR_EVENTS; RAW_HISTORY=STUDIO_LOCAL_REVIEWS; STATUS_DETAIL=studio/AUTHORING_STATUS.md; ACCEPTANCE=FRESH_FINAL_VERIFY_ONLY_AND_TWO_DIFFERENT_MODEL_CRITICS_SAME_HASH
+GT09_FINAL_20261010_74=K1_K15_PASS_SCHEDULED_TASK_EXIT0_2487.203S_VERIFY_EXIT0_MANIFEST_8d9a2ec6_CLOSURE_6b7b5231; CRITICS=ASTRA_XHIGH_TICK_YES,SOL_ULTRA_TICK_YES; DECISION=zdoc/reviews/20261010-gt09-b7-74/coordinator-acceptance.md; GT09_NEXT_ACTION=OPEN_GT10_PC_P1_P12; K13=MEASURED_INCOMPATIBLE_FOUR_AUTHOR_EVENTS; RAW_HISTORY=STUDIO_LOCAL_REVIEWS; STATUS_DETAIL=studio/AUTHORING_STATUS.md; ACCEPTANCE=COORDINATOR_ACCEPTED_20261010
 GT10_SOAK_POLICY=OWNER_O1_10X35_ON_RELEASE_SOURCE; REUSE_ACCEPTED_FORMAL25_MACHINERY; PROFILE_V6=8a2e599c40f927ffaff5ded5e48b6bf2a0f0a6bb3a23de31434a695f4258cb35; FORMAL25_SOURCE64=727f9039c1cc83239f5ef1daff13de5e92e37b5ba442e64be8341ca058800b58
 O2_CANDIDATE_STATUS=AUTHORITY0; BRANCH=codex/hh3d-s14-bootstrap; DETAIL=studio/AUTHORING_STATUS.md (Hiện trạng + bảng K1–K15); DIAGNOSTIC_RUNS=REFERENCE_ONLY_NOT_FINAL_INPUT_O13_3; NO_AUTH_OR_PUBLIC_CLAIM
 RUN_POLICY=FRESH_ID_PER_RUN; DRY_RUN_BEFORE_NATIVE_O10_2; VERIFY_SOURCE_STOP_LATCH_AND_O5_6_LOCK_BEFORE_START; PRESERVE_RAW_ON_FAILURE; REPAIR_ONLY_PROVEN_BOUNDARY; FIX_AND_CONTINUE_O6_4; NEVER_TICK_FROM_BANNER_OR_PARTIAL_PREFIX; CRITICS_READONLY_INDEPENDENT_SAME_HASH
@@ -31,8 +31,8 @@ STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng
 06 | GT-06 | Play/input/pause/stop/observe/capture qua công cụ | GT-05 | ACCEPTED
 07 | GT-07 | Đa agent, publish, lease/fencing và recovery | GT-05, GT-06 | ACCEPTED
 08 | GT-08A | Clean Windows/Linux import/export/CI, target và cache matrix (O4.6) | GT-07 | ACCEPTED (GT-08B Android DEFERRED theo O12)
-09 | GT-09 | Lõi tạo nội dung O2 + agent conformance trên 2 mini-game 2D/3D | GT-08A | IN_PROGRESS (ma trận K1–K15, O13)
-10 | GT-10 | Gói công cụ v0.1, cài/upgrade/rollback, bàn giao game | GT-09; GT-10-PC sau GT-09, GT-10 đầy đủ còn cần GT-08B | PLANNED (GT-10-PC mở sau GT-09 ACCEPTED)
+09 | GT-09 | Lõi tạo nội dung O2 + agent conformance trên 2 mini-game 2D/3D | GT-08A | ACCEPTED (final -74, hai critic cùng hash)
+10 | GT-10 | Gói công cụ v0.1, cài/upgrade/rollback, bàn giao game | GT-09; GT-10-PC sau GT-09, GT-10 đầy đủ còn cần GT-08B | IN_PROGRESS (GT-10-PC P1–P12 đang mở)
 11 | GT-11 | Mở rộng lõi dùng chung để làm game: asset/license, catalog, kiểm hình, hiệu năng, bot, kit (O13.10) | GT-10-PC ACCEPTED; change request của game | PLANNED (chưa mở)
 
 QUYẾT ĐỊNH OWNER ĐANG HIỆU LỰC O1–O13 — BẢN HỢP NHẤT 09-10-2026 (S275)
@@ -185,17 +185,12 @@ Căn cứ 09-10 06:30 → 18:40:
    - Deadline hay watchdog mới hoặc vừa sửa: đo ít nhất 10 lần chạy ngắn, đặt theo p95 cộng biên
      ghi trong runner; không nới deadline sau một lần đo (K7 ở -19).
 5. NEXT (giờ làm, không phải ETA toàn plan):
-   B1–B6 đã giải quyết trong final -60: runner tự sinh producer, dừng ở FAIL đầu,
-      self-check `--verify-only` exit0, toàn bộ K1–K15 có native/host evidence theo loại.
-   B7 gap còn lại là K9: critic Astra đánh `TICK=no` vì final -60 chỉ có room repair;
-      đây là gap bằng chứng K9, chưa chứng minh đủ DoD. Đã đổi K9 sang hai publication K8 thật:
-      arena seed health 3→4 và room seed switch false→true, mỗi ca native Play thấy lỗi,
-      catalog batch repair, retry idempotent, durable reopen/checkpoint và replay native.
-      Diagnostic -72 verify-only + K13 provenance bốn event PASS; raw giữ nguyên, chưa nghiệm thu.
-   B7 (tiếp theo): freeze source/commit, chạy Scheduled Task rehearsal K9 (tự chạy K1–K9),
-      kiểm actual exit/rows/closure. Final ID mới K1–K15, verify-only
-      exit0, rồi hai critic khác model cùng frozen source hash; chỉ hai `TICK=yes` mới mở
-      GT-10-PC theo mục 8. TICK=no thì giữ GT09, phân loại gap và remint ID mới.
+   B7 đã đóng: final `gt09-matrix-final-20261010-74` PASS K1–K15, Scheduled Task exit thật 0,
+      verify-only exit0, và hai critic khác model TICK=yes trên cùng manifest/closure. Coordinator
+      acceptance lưu tại `zdoc/reviews/20261010-gt09-b7-74/coordinator-acceptance.md`.
+   B8 (đang mở): GT-10-PC theo mục 8. Viết `run_gt10pc_matrix.py` cạnh runner GT-09 với bảng
+      P1–P12, loại evidence và DoD trước code; sau đó dry-run, rehearsal có --rows, verify-only,
+      rồi final Scheduled Task. Không mở full GT-10 khi GT-08B Android còn DEFERRED.
 6. Credit và lượt (thay O11.7):
    - Một coordinator, một thread; WP mới thì thread mới với handoff ≤ 1 trang. Coordinator effort
      high; ultra chỉ cho subagent thiết kế khó và hai critic cuối.

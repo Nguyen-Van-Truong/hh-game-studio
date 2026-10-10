@@ -1,44 +1,43 @@
-# O2 authoring state — 2026-10-10 (O13/S286)
+# O2 authoring state — 2026-10-10 (O13/S287)
 
-AUTHORITY=0; GT09=IN_PROGRESS; public gameplay-source remains disabled.
+AUTHORITY=0; GT09=ACCEPTED; GT10_PC=OPEN; public gameplay-source remains disabled.
 Progress authority: `zdoc/8-9-godot-blender-agent-studio-plan.txt`.
-Final -60: K1–K15 PASS, verify-only exit0, Scheduled Task exit0 (2613.844s).
-B7: Sol TICK=yes, Astra TICK=no: K9 only covered room; no acceptance.
-Current repair uses both actual K8 publications, native Play faults and catalog commands.
-Diagnostic `k9-real-72` and rehearsal `gt09-matrix-rehearsal-20261010-73` PASS; rehearsal actual exit0, 466.36s, closure 7d8014b7.
-Arena health 3→4 and room switch false→true, native replay, durable reopen/checkpoint observed.
-K3 keeps controller-change proof; removed its misleading synthetic K9/checkpoint claims.
-Protocol uses existing bounded base64 chunks for GLB/PNG; no limit or sandbox relaxation.
-K9 shallow raw layout avoids reproduced Docker Desktop per-file bind EIO in deeper paths.
-46 focused tests PASS, including raw replay, missing-fixture and false-symptom rejects.
+Final `gt09-matrix-final-20261010-74`: K1–K15 PASS, manifest `8d9a2ec6…`, closure `6b7b5231…`.
+Scheduled Task actual exit0, 2487.203s, zero remaining instances; verify-only `DIAGNOSTIC_OK` exit0.
+Critics: Astra xhigh `TICK=yes`; Sol ultra `TICK=yes`, same manifest and closure.
+Coordinator acceptance: `zdoc/reviews/20261010-gt09-b7-74/coordinator-acceptance.md`.
+K9: arena health 3→4 and room switch false→true through native Play, catalog repair, replay and reopen/checkpoint.
+K13 remains measured `INCOMPATIBLE` with reason; no external compatibility claim.
 GT08A accepted; GT08B Android deferred; human playtest NOT_PERFORMED.
-Next: fresh Scheduled Task final K1–K15, verify-only, then two critics on its frozen closure.
+Next gate: GT-10-PC P1–P12; write `run_gt10pc_matrix.py` matrix/DoD before implementation.
+Full GT-10 remains blocked by deferred GT08B; GT-11 opens only after GT-10-PC acceptance.
 
 ## K1–K15 acceptance matrix
 
-| K | State | Evidence / next boundary |
+| K | State | Evidence |
 |---|---|---|
-| K1 | HISTORICAL_PASS | -60 registered discovery + Blender native; refresh on final closure. |
-| K2 | HISTORICAL_PASS | -60 allowlist/idempotency/readback; refresh on final closure. |
-| K3 | UPDATED | Controller change retained; synthetic K9 removed; rehearsal -73 covers new runner. |
-| K4 | HISTORICAL_PASS | -60 native dependency/UID/import; refresh on final closure. |
-| K5 | HISTORICAL_PASS | -60 native parse/type failure and revision preservation. |
-| K6 | HISTORICAL_PASS | -60 native publish/reopen/recovery, not unit-only. |
-| K7 | HISTORICAL_PASS | -60 attributed hostile execution/confinement. |
-| K8 | HISTORICAL_PASS | -60 two catalog publications plus native Blender assets. |
-| K9 | DIAGNOSTIC_PASS | `k9-real-72`: both actual mini-games, Play symptom→catalog repair→native replay→durable reopen. Fresh final required. |
-| K10 | HISTORICAL_PASS | -60 lifecycle/replay/performance on catalog publications. |
-| K11 | HISTORICAL_PASS | -60 two-source concurrency + retry/owner edit. |
-| K12 | HISTORICAL_PASS | -60 hostile metadata and scope rejection. |
-| K13 | UPDATED | Native adapters remain measured INCOMPATIBLE; client now binds committed recipe and both exact repair commands/raw. |
-| K14 | HISTORICAL_PASS | -60 GT08A 18/18 and focused regression. |
-| K15 | HISTORICAL_PASS | -60 delegated arena/room each >900s with exit0; rerun only in new final. |
+| K1 | ACCEPTED | Final -74 registered discovery, profile isolation and Blender native producer. |
+| K2 | ACCEPTED | Final -74 allowlist, identity, idempotency, conflict and readback. |
+| K3 | ACCEPTED | Final -74 controller change and native replay. |
+| K4 | ACCEPTED | Final -74 dependency, UID/import and rejection checks. |
+| K5 | ACCEPTED | Final -74 native syntax/type failure and revision preservation. |
+| K6 | ACCEPTED | Final -74 durable publish/reopen/recovery and owner edit. |
+| K7 | ACCEPTED | Final -74 attributed hostile execution and confinement. |
+| K8 | ACCEPTED | Final -74 two catalog publications with native Blender assets and readback. |
+| K9 | ACCEPTED | Final -74 arena and room seeded defects repaired through catalog commands and replayed natively. |
+| K10 | ACCEPTED | Final -74 input/pause/save/reload/performance conformance on both publications. |
+| K11 | ACCEPTED | Final -74 reconnect/retry/context reset, owner edit and two-source concurrency. |
+| K12 | ACCEPTED | Final -74 hostile metadata and out-of-scope command rejection. |
+| K13 | ACCEPTED | Final -74 measured adapter matrix, four provenance events and explicit INCOMPATIBLE result. |
+| K14 | ACCEPTED | Final -74 GT08A regression and focused suite. |
+| K15 | ACCEPTED | Final -74 delegated arena/room playtests, each over 900s with exit0. |
 
 ## Next
 
-Rehearsal `gt09-matrix-rehearsal-20261010-73` PASS and task deleted with receipt.
-Run one fresh Scheduled Task final K1–K15, verify-only exit0, then B7 critics
-on that same closure. GT10-PC remains closed until both TICK=yes.
+GT-09 is accepted by two independent critics on the same frozen manifest/closure.
+Open GT-10-PC: define P1–P12 and evidence classes in `run_gt10pc_matrix.py`, then run
+its dry-run/rehearsal before any final Scheduled Task. Keep GT08B deferred and do not
+claim full GT-10 or Android support.
 
 ## Retained evidence and lessons
 
