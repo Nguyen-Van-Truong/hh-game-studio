@@ -12,6 +12,7 @@ Scheduled Task now supports K3 rehearsal; every row self-checks persisted raw be
 K13 v3 measures both pinned external adapters as INCOMPATIBLE with native readback.
 GT08A remains accepted; GT08B Android deferred. Human playtest NOT_PERFORMED.
 No final acceptance or GT10-PC opening until a current final and two different-model critics.
+Rehearsal `gt09-matrix-rehearsal-20261010-59` PASS via Scheduled Task: actual exit 0, 171.969s, K3 native+unit, closure `sha256:531bfbd1…`; task terminal/delete receipts retained.
 
 ## K1–K15 acceptance matrix
 
