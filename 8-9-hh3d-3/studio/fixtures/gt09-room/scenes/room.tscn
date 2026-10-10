@@ -1,0 +1,90 @@
+[gd_scene format=4 uid="uid://bagalvv2n07dm"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_2nno2"]
+resource_name = "shape.avatar"
+radius = 0.35
+height = 1.8
+metadata/hh_catalog_resource_id = "shape.avatar"
+metadata/hh_saved_resource_id = "shape.avatar"
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ro3cx"]
+resource_name = "torso.material"
+cull_mode = 2
+albedo_color = Color(0.9546871, 0.3491902, 0.3491902, 1)
+roughness = 0.65
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_rekhf"]
+resource_name = "mesh.avatar"
+_surfaces = [{
+"aabb": AABB(-0.42, -0.24, -1.6, 0.84, 0.48, 1),
+"bone_aabbs": [AABB(0, 0, 0, -1, -1, -1), AABB(-0.42, -0.24, -1.6, 0.84, 0.48, 1.00001)],
+"format": 34359745543,
+"index_count": 36,
+"index_data": PackedByteArray("AAABAAIAAAADAAEABAAFAAYABAAHAAUACAAJAAoACAALAAkADAANAA4ADAAPAA0AEAARABIAEAATABEAFAAVABYAFAAXABUA"),
+"material": SubResource("StandardMaterial3D_ro3cx"),
+"name": "torso.material",
+"primitive": 3,
+"skin_data": PackedByteArray("AQAAAAAAAAD//wAAAAAAAAEAAAAAAAAA//8AAAAAAAABAAAAAAAAAP//AAAAAAAAAQAAAAAAAAD//wAAAAAAAAEAAAAAAAAA//8AAAAAAAABAAAAAAAAAP//AAAAAAAAAQAAAAAAAAD//wAAAAAAAAEAAAAAAAAA//8AAAAAAAABAAAAAAAAAP//AAAAAAAAAQAAAAAAAAD//wAAAAAAAAEAAAAAAAAA//8AAAAAAAABAAAAAAAAAP//AAAAAAAAAQAAAAAAAAD//wAAAAAAAAEAAAAAAAAA//8AAAAAAAABAAAAAAAAAP//AAAAAAAAAQAAAAAAAAD//wAAAAAAAAEAAAAAAAAA//8AAAAAAAABAAAAAAAAAP//AAAAAAAAAQAAAAAAAAD//wAAAAAAAAEAAAAAAAAA//8AAAAAAAABAAAAAAAAAP//AAAAAAAAAQAAAAAAAAD//wAAAAAAAAEAAAAAAAAA//8AAAAAAAABAAAAAAAAAP//AAAAAAAA"),
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 24,
+"vertex_data": PackedByteArray("PQrXvo/Cdb6amRm/PQrXPo/Cdb7NzMy/PQrXvo/Cdb7NzMy/PQrXPo/Cdb6amRm/PQrXvo/CdT6amRm/PQrXPo/CdT7NzMy/PQrXPo/CdT6amRm/PQrXvo/CdT7NzMy/PQrXvo/Cdb6amRm/PQrXPo/CdT6amRm/PQrXPo/Cdb6amRm/PQrXvo/CdT6amRm/PQrXPo/Cdb6amRm/PQrXPo/CdT7NzMy/PQrXPo/Cdb7NzMy/PQrXPo/CdT6amRm/PQrXPo/Cdb7NzMy/PQrXvo/CdT7NzMy/PQrXvo/Cdb7NzMy/PQrXPo/CdT7NzMy/PQrXvo/Cdb7NzMy/PQrXvo/CdT6amRm/PQrXvo/Cdb6amRm/PQrXvo/CdT7NzMy//38AAAAA/7//fwAAAAD/v/9/AAAAAP+//38AAAAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9//3//fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA////f/9//7////9//3//v////3//f/+/////f/9//7///////38AgP//////fwCA//////9/AID//////38AgAAA/3//f/+/AAD/f/9//78AAP9//3//vwAA/3//f/+/")
+}]
+blend_shape_mode = 0
+metadata/hh_catalog_resource_id = "mesh.avatar"
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_re8pt"]
+resource_name = "shape.platform"
+size = Vector3(8, 0.4, 4)
+metadata/hh_catalog_resource_id = "shape.platform"
+metadata/hh_saved_resource_id = "shape.platform"
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_clvud"]
+resource_name = "shape.trigger"
+size = Vector3(2, 1, 0.5)
+metadata/hh_catalog_resource_id = "shape.trigger"
+metadata/hh_saved_resource_id = "shape.trigger"
+
+[node name="Room" type="Node3D" unique_id=108927797]
+metadata/hh_catalog_stable_id = "root"
+metadata/hh_saved_id = "root"
+
+[node name="Avatar" type="CharacterBody3D" parent="." unique_id=2031965310]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+metadata/hh_catalog_stable_id = "avatar"
+metadata/hh_saved_id = "avatar"
+
+[node name="AvatarShape" type="CollisionShape3D" parent="Avatar" unique_id=2055716884]
+shape = SubResource("CapsuleShape3D_2nno2")
+metadata/hh_catalog_stable_id = "avatar_shape"
+metadata/hh_saved_id = "avatar_shape"
+
+[node name="AvatarMesh" type="MeshInstance3D" parent="Avatar" unique_id=713717003]
+mesh = SubResource("ArrayMesh_rekhf")
+metadata/hh_catalog_stable_id = "avatar_mesh"
+metadata/hh_saved_id = "avatar_mesh"
+
+[node name="Platform" type="StaticBody3D" parent="." unique_id=1500436948]
+metadata/hh_catalog_stable_id = "platform"
+metadata/hh_saved_id = "platform"
+
+[node name="PlatformShape" type="CollisionShape3D" parent="Platform" unique_id=1714277012]
+shape = SubResource("BoxShape3D_re8pt")
+metadata/hh_catalog_stable_id = "platform_shape"
+metadata/hh_saved_id = "platform_shape"
+
+[node name="Trigger" type="Area3D" parent="." unique_id=127792156]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -3)
+metadata/hh_catalog_stable_id = "trigger"
+metadata/hh_saved_id = "trigger"
+
+[node name="TriggerShape" type="CollisionShape3D" parent="Trigger" unique_id=1504871893]
+shape = SubResource("BoxShape3D_clvud")
+metadata/hh_catalog_stable_id = "trigger_shape"
+metadata/hh_saved_id = "trigger_shape"
+
+[node name="Camera" type="Camera3D" parent="." unique_id=1545595610]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 6)
+current = true
+fov = 65.0
+metadata/hh_catalog_stable_id = "camera"
+metadata/hh_saved_id = "camera"

@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/fixture_actor.gd" id="1_script"]
+
+[ext_resource type="PackedScene" path="res://scenes/arena.tscn" id="2_world"]
+
+[node name="Fixture" type="Node3D"]
+script = ExtResource("1_script")
+saved_world = ExtResource("2_world")
+metadata/hh_studio_id = "root"

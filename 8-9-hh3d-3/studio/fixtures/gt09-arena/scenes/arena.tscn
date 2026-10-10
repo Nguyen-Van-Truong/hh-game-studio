@@ -1,0 +1,107 @@
+[gd_scene format=3 uid="uid://bagalvv2n07dm"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2nno2"]
+resource_name = "shape.player"
+size = Vector2(16, 32)
+metadata/hh_catalog_resource_id = "shape.player"
+metadata/hh_saved_resource_id = "shape.player"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_re8pt"]
+resource_name = "shape.floor"
+size = Vector2(400, 20)
+metadata/hh_catalog_resource_id = "shape.floor"
+metadata/hh_saved_resource_id = "shape.floor"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_clvud"]
+resource_name = "shape.wall"
+size = Vector2(20, 160)
+metadata/hh_catalog_resource_id = "shape.wall"
+metadata/hh_saved_resource_id = "shape.wall"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ce3tw"]
+resource_name = "shape.pickup"
+size = Vector2(16, 16)
+metadata/hh_catalog_resource_id = "shape.pickup"
+metadata/hh_saved_resource_id = "shape.pickup"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cqave"]
+resource_name = "shape.bot"
+size = Vector2(20, 28)
+metadata/hh_catalog_resource_id = "shape.bot"
+metadata/hh_saved_resource_id = "shape.bot"
+
+[node name="Arena" type="Node2D" unique_id=1270247539]
+metadata/hh_catalog_stable_id = "root"
+metadata/hh_saved_id = "root"
+
+[node name="Player" type="CharacterBody2D" parent="." unique_id=96090944]
+position = Vector2(32, 174)
+collision_layer = 2
+metadata/hh_catalog_stable_id = "player"
+metadata/hh_saved_id = "player"
+
+[node name="Shape" type="CollisionShape2D" parent="Player" unique_id=981817909]
+shape = SubResource("RectangleShape2D_2nno2")
+metadata/hh_catalog_stable_id = "player_shape"
+metadata/hh_saved_id = "player_shape"
+
+[node name="Floor" type="StaticBody2D" parent="." unique_id=610938541]
+position = Vector2(200, 200)
+metadata/hh_catalog_stable_id = "floor"
+metadata/hh_saved_id = "floor"
+
+[node name="Shape" type="CollisionShape2D" parent="Floor" unique_id=316302426]
+shape = SubResource("RectangleShape2D_re8pt")
+metadata/hh_catalog_stable_id = "floor_shape"
+metadata/hh_saved_id = "floor_shape"
+
+[node name="Wall" type="StaticBody2D" parent="." unique_id=1016948362]
+position = Vector2(300, 110)
+metadata/hh_catalog_stable_id = "wall"
+metadata/hh_saved_id = "wall"
+
+[node name="Shape" type="CollisionShape2D" parent="Wall" unique_id=1594493379]
+shape = SubResource("RectangleShape2D_clvud")
+metadata/hh_catalog_stable_id = "wall_shape"
+metadata/hh_saved_id = "wall_shape"
+
+[node name="Pickup" type="Area2D" parent="." unique_id=298215160]
+position = Vector2(70, 174)
+collision_layer = 4
+collision_mask = 2
+metadata/hh_catalog_stable_id = "pickup"
+metadata/hh_saved_id = "pickup"
+
+[node name="Shape" type="CollisionShape2D" parent="Pickup" unique_id=511307488]
+shape = SubResource("RectangleShape2D_ce3tw")
+metadata/hh_catalog_stable_id = "pickup_shape"
+metadata/hh_saved_id = "pickup_shape"
+
+[node name="Bot" type="Area2D" parent="." unique_id=1929386441]
+position = Vector2(220, 174)
+collision_layer = 8
+collision_mask = 16
+metadata/hh_catalog_stable_id = "bot"
+metadata/hh_saved_id = "bot"
+
+[node name="Shape" type="CollisionShape2D" parent="Bot" unique_id=5414829]
+shape = SubResource("RectangleShape2D_cqave")
+metadata/hh_catalog_stable_id = "bot_shape"
+metadata/hh_saved_id = "bot_shape"
+
+[node name="Camera" type="Camera2D" parent="." unique_id=1505283107]
+metadata/hh_catalog_stable_id = "camera"
+metadata/hh_saved_id = "camera"
+
+[node name="HUD" type="CanvasLayer" parent="." unique_id=1688892828]
+metadata/hh_catalog_stable_id = "hud_layer"
+metadata/hh_saved_id = "hud_layer"
+
+[node name="Status" type="Label" parent="HUD" unique_id=1507831615]
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 8.0
+offset_bottom = 8.0
+text = "HP 3"
+metadata/hh_catalog_stable_id = "hud_label"
+metadata/hh_saved_id = "hud_label"

@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3]
+
+[sub_resource type="CircleShape2D" id="Circle"]
+radius = 4.0
+
+[node name="Projectile" type="Area2D"]
+collision_layer = 16
+collision_mask = 8
+
+[node name="Shape" type="CollisionShape2D" parent="."]
+shape = SubResource("Circle")

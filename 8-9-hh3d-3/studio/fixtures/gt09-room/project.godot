@@ -1,0 +1,10 @@
+config_version=5
+[application]
+config/name="HH gameplay source diagnostic"
+[rendering]
+renderer/rendering_method="gl_compatibility"
+[threading]
+worker_pool/max_threads=4
+[debug]
+gdscript/warnings/untyped_declaration=2
+gdscript/warnings/inference_on_variant=2

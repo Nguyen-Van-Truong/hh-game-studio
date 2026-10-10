@@ -1,20 +1,15 @@
-# O2 authoring state — 2026-10-10 (O13/S288)
+# O2 authoring state — 2026-10-10 (O13/S289)
 
-AUTHORITY=0; GT09=ACCEPTED; GT10_PC=IMPLEMENTED_REHEARSAL_PASS_FINAL_CANDIDATE_PENDING_SOAK_AND_CRITICS; public gameplay-source remains disabled.
+AUTHORITY=0; GT09=ACCEPTED; GT10_PC=IN_PROGRESS_PROTOTYPE_REPAIR.
 Progress authority: `zdoc/8-9-godot-blender-agent-studio-plan.txt`.
-Final `gt09-matrix-final-20261010-74`: K1–K15 PASS, manifest `8d9a2ec6…`, closure `6b7b5231…`.
-Scheduled Task actual exit0, 2487.203s, zero remaining instances; verify-only `DIAGNOSTIC_OK` exit0.
-Critics: Astra xhigh `TICK=yes`; Sol ultra `TICK=yes`, same manifest and closure.
-Coordinator acceptance: `zdoc/reviews/20261010-gt09-b7-74/coordinator-acceptance.md`.
-K9: arena health 3→4 and room switch false→true through native Play, catalog repair, replay and reopen/checkpoint.
-K13 remains measured `INCOMPATIBLE` with reason; no external compatibility claim.
-GT08A accepted; GT08B Android deferred; human playtest NOT_PERFORMED.
-Next gate: GT-10-PC P1–P12; the runner/package contract and Scheduled Task supervisor now exist.
-Dry-run PASS; rehearsal
-P1–P11 PASS; candidate final `gt10pc-final-20261010-194341-27108` P1–P11 PASS, P12
-PENDING_CRITICS, verify-only `DIAGNOSTIC_OK`. Next: freeze source, run Scheduled Task 350
-batches (10×35), verify-only, then obtain two independent critic TICK=yes records.
-Full GT-10 remains blocked by deferred GT08B; GT-11 opens only after GT-10-PC acceptance.
+GT09 final -74 accepted: K1–K15, actual Scheduled Task exit0, two critics same hash.
+GT10-PC prototype 6b3e0f77 claims are VOID_DIAGNOSTIC: host file I/O was mislabeled native.
+No GT10-PC P row is accepted; old matrix schema 1 and its verify-only PASS are invalid.
+Run 350a stopped with observed exit 4294967295; raw and void receipt retained in .local.
+Final/rehearsal entry is disabled until real installed-package native producers are wired.
+Next: signed artifact + full closure, durable installer, native P2–P7/P9–P11 and raw verifiers.
+Then Scheduled Task rehearsal/final formal25 soak 10×35 and independent critics.
+GT08B Android deferred; full GT10 blocked; GT11 unopened. No complete-game claim.
 
 ## K1–K15 acceptance matrix
 
@@ -38,10 +33,9 @@ Full GT-10 remains blocked by deferred GT08B; GT-11 opens only after GT-10-PC ac
 
 ## Next
 
-GT-09 is accepted by two independent critics on the same frozen manifest/closure.
-Open GT-10-PC: define P1–P12 and evidence classes in `run_gt10pc_matrix.py`, then run
-its dry-run/rehearsal before any final Scheduled Task. Keep GT08B deferred and do not
-claim full GT-10 or Android support.
+GT09 accepted. Repair GT10-PC prototype without reusing synthetic PASS evidence.
+Use external test signing key, complete runtime closure and raw native postconditions.
+Keep candidate runs diagnostic until full gate evidence and two critics exist.
 
 ## Retained evidence and lessons
 

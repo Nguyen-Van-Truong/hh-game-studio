@@ -24,6 +24,8 @@ REPO_ROOT = STUDIO.parent
 MATRIX = STUDIO / "tests" / "conformance" / "run_gt10pc_matrix.py"
 RUN_RE = re.compile(r"gt10pc-(?:final|rehearsal)-20\d{6}-[a-z0-9-]{1,24}\Z")
 SCHEMA = "HH-GT10PC-TASK-REQUEST-1"
+TRUST = STUDIO / ".local" / "gt10pc-publisher-v2" / "trust.json"
+PRIVATE = STUDIO / ".local" / "gt10pc-publisher-v2" / "private.raw"
 
 
 def sha(path: Path) -> str:
@@ -43,7 +45,8 @@ def write_new(path: Path, value: object) -> None:
 
 def source_closure() -> str:
     files: list[tuple[str, str]] = []
-    roots = [STUDIO / "package", STUDIO / "tests" / "conformance" / "run_gt10pc_matrix.py", Path(__file__).resolve()]
+    roots = [STUDIO / "package", STUDIO / "tests" / "conformance" / "run_gt10pc_matrix.py",
+             STUDIO / "tests" / "conformance" / "run_gt10pc_native_probe.py", Path(__file__).resolve()]
     for root in roots:
         candidates = [root] if root.is_file() else sorted(p for p in root.rglob("*") if p.is_file())
         for path in candidates:
@@ -62,7 +65,11 @@ def paths(run_id: str) -> tuple[Path, Path]:
     return root, task
 
 
-def prepare(run_id: str) -> Path:
+def prepare(run_id: str, mode: str = "rehearsal") -> Path:
+    if mode not in ("rehearsal", "final"):
+        raise ValueError("GT10PC_TASK_MODE")
+    if not TRUST.is_file() or not PRIVATE.is_file():
+        raise ValueError("GT10PC_EXTERNAL_TRUST_MISSING")
     matrix_root, task = paths(run_id)
     if matrix_root.exists() or task.exists():
         raise FileExistsError("GT10PC_TASK_OUTPUT_ALREADY_EXISTS")
@@ -71,8 +78,10 @@ def prepare(run_id: str) -> Path:
         console = Path(sys.executable).resolve().with_name("python.exe")
         windowed = Path(sys.executable).resolve().with_name("pythonw.exe")
         write_new(task / "request.json", {
-            "schema": SCHEMA, "run_id": run_id, "mode": "final",
+            "schema": SCHEMA, "run_id": run_id, "mode": mode,
             "matrix_sha256": sha(MATRIX), "supervisor_sha256": sha(Path(__file__).resolve()),
+            "producer_sha256": sha(STUDIO / "tests" / "conformance" / "run_gt10pc_native_probe.py"),
+            "trust_sha256": sha(TRUST), "private_sha256": sha(PRIVATE),
             "python_sha256": sha(console), "pythonw_sha256": sha(windowed),
             "source_closure_sha256": source_closure(), "prepared_utc": datetime.now(timezone.utc).isoformat(),
         })
@@ -91,11 +100,13 @@ def load_request(run_id: str) -> tuple[Path, Path, dict[str, object]]:
     console = Path(sys.executable).resolve().with_name("python.exe")
     windowed = Path(sys.executable).resolve().with_name("pythonw.exe")
     expected = {
-        "schema": SCHEMA, "run_id": run_id, "mode": "final", "matrix_sha256": sha(MATRIX),
+        "schema": SCHEMA, "run_id": run_id, "mode": request.get("mode"), "matrix_sha256": sha(MATRIX),
         "supervisor_sha256": sha(Path(__file__).resolve()), "python_sha256": sha(console),
         "pythonw_sha256": sha(windowed), "source_closure_sha256": request.get("source_closure_sha256"),
         "prepared_utc": request.get("prepared_utc"),
     }
+    expected["producer_sha256"] = sha(STUDIO / "tests" / "conformance" / "run_gt10pc_native_probe.py")
+    expected["trust_sha256"] = sha(TRUST); expected["private_sha256"] = sha(PRIVATE)
     if request != expected or source_closure() != request["source_closure_sha256"]:
         raise ValueError("GT10PC_TASK_SOURCE_CHANGED")
     return matrix_root, task, request
@@ -103,31 +114,44 @@ def load_request(run_id: str) -> tuple[Path, Path, dict[str, object]]:
 
 def run(run_id: str) -> int:
     matrix_root, task, request = load_request(run_id)
-    started = time.monotonic(); stdout_path, stderr_path = task / "stdout.txt", task / "stderr.txt"
-    code = 1
+    started = time.monotonic(); code = 1
+    stdout_path, stderr_path = task / "stdout.txt", task / "stderr.txt"
     try:
+        if request["mode"] == "final":
+            raise ValueError("GT10PC_FINAL_DISABLED_UNTIL_NATIVE_P1_P10")
         console = Path(sys.executable).resolve().with_name("python.exe")
-        command = [str(console), "-B", str(MATRIX), "--matrix", "final", "--run-id", run_id,
-                   "--output", str(matrix_root), "--soak-batches", "350"]
+        producer = STUDIO / "tests" / "conformance" / "run_gt10pc_native_probe.py"
+        command = [str(console), "-B", str(producer), "--output", str(matrix_root),
+                   "--trust", str(TRUST), "--trust-sha256", request["trust_sha256"],
+                   "--private-key", str(PRIVATE)]
+        env = os.environ.copy(); env["PYTHONPATH"] = str(STUDIO) + os.pathsep + env.get("PYTHONPATH", "")
         with stdout_path.open("xb") as stdout, stderr_path.open("xb") as stderr:
-            proc = subprocess.run(command, cwd=REPO_ROOT, stdout=stdout, stderr=stderr, check=False)
+            proc = subprocess.run(command, cwd=REPO_ROOT, stdout=stdout, stderr=stderr,
+                                  env=env, check=False)
             code = int(proc.returncode)
+        if code == 0:
+            verify = subprocess.run([str(console), "-B", str(MATRIX), "--verify-only", str(matrix_root)],
+                                    cwd=REPO_ROOT, env=env, capture_output=True, text=True, check=False)
+            (task / "verify-stdout.txt").write_text(verify.stdout, encoding="utf-8")
+            (task / "verify-stderr.txt").write_text(verify.stderr, encoding="utf-8")
+            code = int(verify.returncode)
     except BaseException:
         with stderr_path.open("ab") as stderr: stderr.write(traceback.format_exc().encode())
     finally:
-        write_new(task / "return.json", {"schema": "HH-GT10PC-TASK-RETURN-1", "run_id": run_id,
+        write_new(task / "return.json", {"schema": "HH-GT10PC-TASK-RETURN-2", "run_id": run_id,
             "returned_exit_code": code, "matrix_root": str(matrix_root),
             "source_closure_sha256": request["source_closure_sha256"],
             "elapsed_seconds": time.monotonic() - started, "actual_process_exit_observed": True,
-            "formal_acceptance": False})
+            "formal_acceptance": False, "mode": request["mode"]})
     return code
 
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(); parser.add_argument("--prepare", action="store_true"); parser.add_argument("--run-id", required=True)
+    parser.add_argument("--mode", choices=("rehearsal", "final"), default="rehearsal")
     args = parser.parse_args(argv)
     if args.prepare:
-        print(json.dumps({"schema": SCHEMA, "task": str(prepare(args.run_id))}, sort_keys=True)); return 0
+        print(json.dumps({"schema": SCHEMA, "task": str(prepare(args.run_id, args.mode))}, sort_keys=True)); return 0
     if Path(sys.executable).name.lower() != "pythonw.exe": raise ValueError("GT10PC_TASK_WINDOWED_INTERPRETER_REQUIRED")
     return run(args.run_id)
 
