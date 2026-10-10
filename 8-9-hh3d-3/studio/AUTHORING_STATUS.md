@@ -4,14 +4,18 @@ AUTHORITY=0; GT09=IN_PROGRESS; no public gameplay-source or acceptance claim.
 Source-of-truth plan: `zdoc/8-9-godot-blender-agent-studio-plan.txt` S284.
 Current WIP is the runner/process-boundary repair plus the K13 native adapter
 receipt hardening; the 12-CPU Docker quota repair is already measured. Commit
-this WIP before the next long run. Final closure is computed by `run_gt09_matrix.py` and excludes
-`.local` and caches.
+`8d50949c` pins the final runner to measured K13 v3. Rehearsal
+`gt09-rehearsal-20261010-27` passed K3 on closure
+`sha256:3fb5fb70a0cca863f36895cee0940c6f8958094d58cf684250bd3dd33b02bc3b`.
+Final closure is computed by `run_gt09_matrix.py` and excludes `.local` and caches.
 GT08A remains accepted; GT08B Android remains deferred by owner.
 K1–K9 and K11–K14 have diagnostic implementations/evidence, but no final row
 is accepted until one frozen K1–K15 run and two independent critics share its hash.
 Earlier final attempts are historical; -04 had source drift, -05 had
 watchdog parser failures, and -06 was stopped after schema/closure failures.
-Human playtest remains NOT_PERFORMED and authority stays 0. A delegated room
+Human playtest remains NOT_PERFORMED and authority stays 0. Next action is one
+fresh GT09 final through the demand-only Scheduled Task with no writers running.
+A delegated room
 probe `gt09-playtest-20261009-03` passed on its own frozen publication with
 901.003 seconds, actual Godot exit 0, lifecycle_complete=true, all scripted
 transitions and freeze_errors=0; it is diagnostic until a fresh final matrix.
