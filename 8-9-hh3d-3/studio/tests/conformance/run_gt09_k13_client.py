@@ -18,7 +18,7 @@ SCHEMA = "hh-gt09-mcp-client-receipt-1"
 AUTHOR_SCHEMA = "hh-gt09-k13-author-provenance-1"
 HEX64 = re.compile(r"^(?:sha256:)?[0-9a-f]{64}$")
 RUN_ID = re.compile(r"^gt09-k13-client-[a-z0-9-]{1,80}$")
-DEFAULT_EXTERNAL = STUDIO / ".local" / "reviews" / "gt09-mcp-capability-matrix-20261009-k13.json"
+DEFAULT_EXTERNAL = STUDIO / ".local" / "reviews" / "gt09-mcp-capability-matrix-20261010-k13-v3.json"
 
 
 class ProvenanceError(ValueError):

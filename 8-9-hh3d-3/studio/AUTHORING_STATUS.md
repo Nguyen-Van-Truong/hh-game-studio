@@ -2,8 +2,9 @@
 
 AUTHORITY=0; GT09=IN_PROGRESS; no public gameplay-source or acceptance claim.
 Source-of-truth plan: `zdoc/8-9-godot-blender-agent-studio-plan.txt` S284.
-Current WIP is the runner/process-boundary repair plus a measured Docker CPU
-quota repair; commit it before the next long run. Final closure is computed by `run_gt09_matrix.py` and excludes
+Current WIP is the runner/process-boundary repair plus the K13 native adapter
+receipt hardening; the 12-CPU Docker quota repair is already measured. Commit
+this WIP before the next long run. Final closure is computed by `run_gt09_matrix.py` and excludes
 `.local` and caches.
 GT08A remains accepted; GT08B Android remains deferred by owner.
 K1–K9 and K11–K14 have diagnostic implementations/evidence, but no final row
@@ -134,13 +135,18 @@ receipts; its raw matrix remains preserved.
 | K10 | DIAGNOSTIC_PASS | Native conformance and lifecycle fixtures; final publication-bound matrix row pending. |
 | K11 | IMPLEMENTED | Adapter reconnect/retry/context reset tests; final in-run two-source concurrency evidence pending. |
 | K12 | IMPLEMENTED | Attribution and scope rejection tests; final in-run hostile metadata evidence pending. |
-| K13 | MEASURED_LIMIT | External native route is INCOMPATIBLE with measured cleanup/lease limits; final client/model row must be bound. |
+| K13 | MEASURED_LIMIT | Both pinned native receipts verify as INCOMPATIBLE with native readback and measured cleanup/lease limits; final client/model row must be bound. |
 | K14 | DIAGNOSTIC_PASS | GT08A 18/18 diagnostic matrix and focused regression tests; final validator must bind real schema. |
 | K15 | REUSE_ONLY | Delegated runner and fail-closed packer exist; two 15-minute runs only in final matrix. |
 
 ## Next (O13.5/S283)
 
-B6a/B6b: runner contract and K6 verifier repair are committed; `-23` is
+B6a/B6b: runner contract and K6 verifier repair plus K13 native receipt
+hardening are ready to commit; fresh toolkit `gt09-mcp-native-toolkit-20261010-25`
+and hybrid `gt09-mcp-native-hybrid-20261010-25` both verify as measured native
+limits. The K13 matrix is `gt09-mcp-capability-matrix-20261010-k13-v3.json`;
+it is authority 0 and not a final matrix row until the client is run in the
+same final closure. `-23` is
 rejected by verify-only and `-24` is INFRA because its outer room host had no
 receipt. `-27` is a separate INFRA K1 deadline boundary; `-28` is a K5
 Docker exit-124 boundary with an exact independent repro PASS; `-30` remains

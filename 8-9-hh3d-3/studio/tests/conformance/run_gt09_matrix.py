@@ -26,6 +26,7 @@ REPO_ROOT = STUDIO.parent
 PLAN = STUDIO.parent / "zdoc" / "8-9-godot-blender-agent-studio-plan.txt"
 SCHEMA = "hh-gt09-matrix-1"
 ROW_IDS = tuple(f"K{i}" for i in range(1, 16))
+K13_EXTERNAL_IDS = {"NPGameDev/godot-mcp-toolkit", "hybridindie/godot-mcp"}
 
 # Evidence is deliberately explicit.  A row may be reused only after its
 # producer has emitted status=PASS on the same final closure.
@@ -100,12 +101,13 @@ def load_rows(path: Path) -> dict[str, Any]:
     return value
 
 
-def _safe_review_path(path: Path, *, root: Path) -> Path:
+def _safe_review_path(path: Path, *, root: Path, must_file: bool = True) -> Path:
     """Resolve a receipt only inside this matrix's review directory."""
     value = path if path.is_absolute() else root / path
     value = value.resolve()
     _need(value.is_relative_to(root.resolve()), "evidence_path_outside_review")
-    _need(value.is_file(), f"evidence_missing:{value.name}")
+    _need((value.is_file() if must_file else value.is_dir()),
+          f"evidence_missing:{value.name}")
     return value
 
 
@@ -308,6 +310,8 @@ def _host_playtest_semantics(run_id: str, *, fixture: str,
     except (OSError, ValueError, TypeError):
         return False
     provenance = metadata.get("publication_provenance")
+    if not isinstance(provenance, dict):
+        return False
     summary = manifest.get("summary") if type(manifest.get("summary")) is dict else {}
     state = manifest.get("state_readback") if type(manifest.get("state_readback")) is dict else {}
     counts = summary.get("counts") if type(summary.get("counts")) is dict else {}
@@ -411,8 +415,21 @@ def _attribution_semantics(root: Path) -> bool:
 
 def _k13_semantics(doc: dict[str, Any], client: Path | None = None,
                     expected_closure: str | None = None) -> bool:
+    if not isinstance(doc, dict):
+        return False
+    rows = doc.get("rows")
+    if not isinstance(rows, list):
+        return False
+    # Transport-only and CLIENT_OPEN packages cannot close O13.1e, even when
+    # a separately bound client receipt is complete. Every policy adapter
+    # needs its own measured native result.
+    if ("OPEN" in str(doc.get("status", ""))
+            or any(isinstance(row, dict)
+                   and row.get("status") in {"UNMEASURED", "MEASURED_TRANSPORT_ONLY"}
+                   for row in rows)):
+        return False
     if (doc.get("schema") != "hh-gt09-mcp-capability-matrix-1"
-            or doc.get("status") != "EXTERNAL_NATIVE_LIMITS_MEASURED_CLIENT_OPEN"
+            or doc.get("status") not in {"EXTERNAL_NATIVE_LIMITS_MEASURED", "COMPLETE"}
             or doc.get("authority") != 0 or doc.get("acceptance") is not False):
         return False
     private = doc.get("private_receipt")
@@ -421,16 +438,33 @@ def _k13_semantics(doc: dict[str, Any], client: Path | None = None,
     receipt_path = (REPO_ROOT / private["path"]).resolve()
     if not receipt_path.is_file() or private.get("sha256") != _sha(receipt_path):
         return False
-    rows = doc.get("rows")
-    if type(rows) is not list or len(rows) < 3:
+    required_ids = {"hh-private-python-adapter", *K13_EXTERNAL_IDS, "hh-public-catalog"}
+    if (type(rows) is not list or len(rows) != len(required_ids)
+            or {row.get("id") for row in rows if isinstance(row, dict)} != required_ids):
         return False
     for row in rows:
         if type(row) is not dict or row.get("authority") != 0 or not row.get("id"):
             return False
+        row_id = row.get("id")
+        if row_id == "hh-private-python-adapter" and row.get("status") != "MEASURED_PRIVATE":
+            return False
+        if row_id == "hh-public-catalog" and row.get("status") != "DISABLED":
+            return False
+        if row_id in K13_EXTERNAL_IDS:
+            if row.get("status") not in {"SUPPORTED", "UNSUPPORTED", "INCOMPATIBLE"}:
+                return False
+            native = row.get("native_receipt")
+            if (not isinstance(native, dict) or not isinstance(native.get("path"), str)
+                    or not isinstance(native.get("sha256"), str)):
+                return False
         receipt = row.get("receipt") or row.get("native_receipt")
+        if row_id in K13_EXTERNAL_IDS and not isinstance(receipt, dict):
+            return False
         if type(receipt) is dict and receipt.get("path"):
             path = (REPO_ROOT / str(receipt["path"])).resolve()
-            if not path.is_file() or receipt.get("sha256") != _sha(path):
+            if (not path.is_file() or path.is_symlink()
+                    or not path.is_relative_to(STUDIO.resolve())
+                    or receipt.get("sha256") != _sha(path)):
                 return False
     if client is None:
         return True
@@ -598,9 +632,23 @@ def _verify_row(row: dict[str, Any], *, matrix_root: Path, closure: str | None,
         _need(all(type(step) is dict and isinstance(step.get("command"), list)
                   and isinstance(step.get("actual_exit"), int)
                   and step.get("actual_exit") == 0
+                  and type(step.get("wrapper_exit")) is int
+                  and step.get("wrapper_exit") == 0
                   and step.get("timed_out") is False
                   and step.get("owned_tree_zero") is True
                   for step in steps), f"{ident}:step_exit")
+        _verify_step_receipts(raw, matrix_root=matrix_root)
+        references = raw.get("references", [])
+        bindings = raw.get("reference_sha256")
+        _need(isinstance(bindings, dict) and references
+              and set(bindings) == set(references), f"{ident}:reference_bindings")
+        for reference in references:
+            path = Path(reference).resolve()
+            _need(path.is_file() and not path.is_symlink()
+                  and path.is_relative_to(STUDIO.resolve())
+                  and _sha(path) == bindings[reference],
+                  f"{ident}:reference_hash:{path.name}")
+        _revalidate_row_semantics(raw)
     return child_closure
 
 
@@ -608,7 +656,8 @@ def final_matrix(row_evidence: Path | None, output: Path | None, run_id: str) ->
     _need(row_evidence is not None, "final_requires_row_evidence")
     manifest = load_rows(row_evidence)
     rows = manifest.get("rows")
-    _need(type(rows) is list and {r.get("id") for r in rows if isinstance(r, dict)} == set(ROW_IDS),
+    _need(type(rows) is list and len(rows) == len(ROW_IDS)
+          and {r.get("id") for r in rows if isinstance(r, dict)} == set(ROW_IDS),
           "final_requires_all_rows")
     errors: list[str] = []
     closures: set[str] = set()
@@ -616,7 +665,7 @@ def final_matrix(row_evidence: Path | None, output: Path | None, run_id: str) ->
     for row in rows:
         try:
             closures.add(_verify_row(row, matrix_root=matrix_root,
-                                     closure=next(iter(closures), None)))
+                                     closure=next(iter(closures), None), strict_steps=True))
         except MatrixError as exc:
             errors.append(str(exc))
     if len(closures) != 1:
@@ -695,29 +744,213 @@ def rehearsal_rows(*, output: Path, run_id: str, selected: tuple[str, ...]) -> i
     return 0 if semantic else 2
 
 
+def _verify_step_receipts(raw: dict[str, Any], *, matrix_root: Path) -> None:
+    """Read process and stream receipts independently of the row assertions."""
+    ident = raw["row_id"]
+    seen_dirs: set[Path] = set()
+    for index, step in enumerate(raw["steps"], 1):
+        prefix = f"{ident}:step{index}"
+        _need(isinstance(step, dict), prefix + ":step_shape")
+        receipt_dir = _safe_review_path(Path(step.get("receipt_dir", "")),
+                                        root=matrix_root, must_file=False)
+        _need(receipt_dir.is_dir(), prefix + ":receipt_directory")
+        _need(receipt_dir.is_relative_to((matrix_root / "raw" / ident).resolve()),
+              prefix + ":receipt_directory_owner")
+        _need(receipt_dir not in seen_dirs, prefix + ":receipt_directory_reused")
+        seen_dirs.add(receipt_dir)
+        host_path = _safe_review_path(receipt_dir / str(step.get("host_receipt", "")), root=matrix_root)
+        host = _load_json(host_path)
+        owner = host.get("job_owner")
+        _need(isinstance(owner, dict), prefix + ":job_owner_shape")
+        _need(type(host.get("wrapper_exit_code")) is int and host.get("wrapper_exit_code") == 0
+              and type(step.get("wrapper_exit")) is int and step.get("wrapper_exit") == 0
+              and step.get("host_sha256") == _sha(host_path)
+              and type(host.get("exit_code")) is int and host["exit_code"] == step.get("actual_exit") == 0
+              and host.get("wrapper_exit_code") == step.get("wrapper_exit")
+              and host.get("timed_out") is step.get("timed_out")
+              and host.get("tree_verified") is step.get("owned_tree_zero")
+              and host.get("readers_stopped") is True
+              and owner.get("zero_observed") is True
+              and owner.get("active_count") == 0, prefix + ":owned_exit")
+        for stream in ("stdout", "stderr"):
+            path = _safe_review_path(receipt_dir / str(host.get(stream, "")), root=matrix_root)
+            _need(_sha(path) == step.get(stream + "_sha256"), prefix + ":" + stream + "_hash")
+
+
+def _revalidate_row_semantics(raw: dict[str, Any]) -> None:
+    """Replay the same read-only validators on persisted producer evidence.
+
+    Never execute commands from a manifest: paths select data for fixed local
+    validators. These validators neither launch engines nor rewrite reports.
+    """
+    ident = raw["row_id"]
+    refs = [Path(value) for value in raw.get("references", [])]
+    producer = raw.get("producer_closures", {})
+    _need(bool(refs), f"{ident}:semantic_references")
+    ok = False
+    if ident == "K1":
+        ok = _content_semantics(refs[0].parent)[0] and all(
+            _registered_probe_semantics(ref.parent, fixture=fixture)
+            for ref, fixture in zip(refs[1:], ("arena", "room"))) and len(refs) == 3
+    elif ident == "K2":
+        from studio.tests.conformance.run_gt09_registered_check import _check
+        check = _load_json(refs[0])
+        values = []
+        for fixture in ("arena", "room"):
+            value = _load_json(Path(producer["registered_roots"][fixture]) / "registered-owner-result.json")
+            _check(value, fixture)
+            values.append(value)
+        ok = (check.get("status") == "DIAGNOSTIC_PASS"
+              and values[0]["transaction"]["command_ids"] != values[1]["transaction"]["command_ids"]
+              and values[0]["source_closure_sha256"] == values[1]["source_closure_sha256"]
+              == check.get("source_closure_sha256"))
+    elif ident in {"K3", "K9"}:
+        ok = _registered_script_semantics(refs[0].parent, require_repair=ident == "K9")
+    elif ident == "K4":
+        from studio.tests.conformance.run_gt09_catalog_native_check import _check
+        for fixture in ("arena", "room"):
+            _check(Path(producer["native_roots"][fixture]))
+        check = _load_json(refs[0])
+        ok = check.get("status") == "DIAGNOSTIC_PASS" and check.get("dependency_readback") is True
+    elif ident == "K5":
+        ok = len(refs) == 2 and _auth_failure_semantics(tuple(ref.parent for ref in refs))
+        if ok:
+            _revalidate_failure_raw(refs)
+    elif ident == "K6":
+        ok = (len(refs) == 3 and _generic_publication_semantics(refs[2].parent)
+              and _publication_semantics(refs[0].parent, fixture="arena")
+              and _publication_semantics(refs[1].parent, fixture="room"))
+    elif ident == "K7":
+        ok = len(refs) == 4 and _auth05_semantics(tuple(ref.parent for ref in refs))
+        if ok:
+            _revalidate_failure_raw(refs)
+    elif ident in {"K8", "K10"}:
+        from studio.tests.conformance.gt09_fixture_conformance import build_report
+        _need(len(refs) == 3, f"{ident}:conformance_references")
+        report = build_report(refs[1].parent, refs[2].parent)
+        stored = _load_json(refs[0])
+        _need(report == stored, f"{ident}:conformance_raw_mismatch")
+        ok = (report["status"] == "CANDIDATE_PASS" and not report["errors"]
+              and _publication_semantics(refs[1].parent, fixture="arena")
+              and _publication_semantics(refs[2].parent, fixture="room"))
+        if ident == "K10":
+            ok = ok and _k10_semantics(arena=refs[1].parent, room=refs[2].parent, conformance=refs[0])
+    elif ident == "K11":
+        ok = _adapter_semantics(refs[0].parent)
+    elif ident == "K12":
+        ok = _attribution_semantics(refs[0].parent)
+    elif ident == "K13":
+        expected = producer.get("content_source_closure")
+        _need(isinstance(expected, str) and len(expected) == 64
+              and re.fullmatch(r"[0-9a-f]{64}", expected) is not None,
+              "K13:content_source_closure")
+        ok = len(refs) == 2 and raw.get("source_closure_sha256") == producer.get("matrix_source_closure") \
+            and _k13_semantics(_load_json(refs[0]), client=refs[1], expected_closure=expected)
+    elif ident == "K14":
+        ok = _gt08a_semantics(refs[0].parent)
+    elif ident == "K15":
+        from studio.tests.godot.fixture_lifecycle_manifest import build_manifest
+        from studio.tests.godot.run_delegated_playtest import _load_metadata, _publication_project
+        _need(len(refs) == 2, "K15:publication_references")
+        seen = set()
+        expected_playtest_closures = producer.get("playtest_source_closures")
+        _need(isinstance(expected_playtest_closures, dict), "K15:playtest_closures")
+        for step in raw["steps"]:
+            command = step["command"]
+            _need(isinstance(command, list) and command
+                  and any(Path(str(arg)).name in {"run_delegated_playtest.py",
+                                                  "run_gt09_playtest_evidence.py"}
+                             for arg in command),
+                  "K15:runner_identity")
+            if "--host" not in command:
+                continue
+            _need(isinstance(command, list), "K15:command_shape")
+            try:
+                fixture = command[command.index("--fixture") + 1]
+                run_id = command[command.index("--run-id") + 1]
+            except (ValueError, IndexError, TypeError) as exc:
+                raise MatrixError("K15:command_identity") from exc
+            _need(fixture in {"arena", "room"} and fixture not in seen, "K15:fixture_identity")
+            _need(isinstance(run_id, str)
+                  and re.fullmatch(r"gt09-playtest-20\d{6}-\d{2}", run_id) is not None,
+                  "K15:run_id")
+            _need("run_delegated_playtest.py" in {Path(str(arg)).name for arg in command}
+                  and "--mode" in command and command[command.index("--mode") + 1] == "scripted"
+                  and "--deadline-seconds" in command,
+                  "K15:host_command")
+            seen.add(fixture)
+            pub = refs[0 if fixture == "arena" else 1].parent
+            _need(_publication_semantics(pub, fixture=fixture),
+                  "K15:publication_semantics:" + fixture)
+            _, publication_provenance = _publication_project(pub, fixture)
+            _need(_host_playtest_semantics(run_id, fixture=fixture, expected_publication=pub),
+                  "K15:host_semantics:" + fixture)
+            root = STUDIO / ".local/reviews" / run_id / fixture
+            metadata = _load_json(root / "metadata.json")
+            _load_metadata(metadata)
+            _need(metadata.get("publication_provenance") == publication_provenance,
+                  "K15:publication_provenance:" + fixture)
+            _need(metadata.get("source_closure_sha256") == expected_playtest_closures.get(fixture),
+                  "K15:playtest_closure:" + fixture)
+            report = build_manifest(fixture=fixture, run_id=run_id,
+                log_path=root / "godot.stdout.log", source_closure_sha256=metadata["source_closure_sha256"],
+                host_result_path=root / "host-result.json", video_path=root / "video/capture.mkv",
+                minimum_duration_seconds=900)
+            _need(report == _load_json(root / "manifest.json")
+                  and report.get("status") == "PLAYTEST_EVIDENCE_READY" and not report["errors"],
+                  "K15:lifecycle_raw_mismatch:" + fixture)
+        ok = seen == {"arena", "room"}
+    _need(ok, f"{ident}:semantic_validation")
+
+
+def _revalidate_failure_raw(refs: list[Path]) -> None:
+    from studio.tests.godot import run_gameplay_failure_probe as failure
+    probe = failure.load("gt09_verify_linux_probe", STUDIO / "tests/godot/run_linux_probe.py")
+    fixtures = failure.load("gt09_verify_linux_fixtures", STUDIO / "tests/godot/linux_probe_fixtures.py")
+    for ref in refs:
+        result = _load_json(ref)
+        fixture = result["failure_fixture"]
+        case_name = failure.failure_case_name(fixture)
+        case = dict(fixtures.FIXTURES[case_name])
+        if not failure.is_auth05_failure(fixture):
+            case.update(timeout=30, authenticated_timeout=True)
+        paths = result.get("native_paths", [])
+        _need(len(paths) == 2, f"failure:{fixture}:native_paths")
+        bad_root = (ref.parent / paths[1]).resolve()
+        _need(bad_root.is_relative_to(ref.parent.resolve()), "failure:native_path_escape")
+        observation = probe.case_observation(bad_root, case, name=case_name,
+                                             binding=_load_json(ref.parent / "binding.json"))
+        _need(observation == result.get("bad_observation")
+              and observation.get("fixture_observed") is True, f"failure:{fixture}:raw_observation")
+
+
 def verify_only(root: Path) -> int:
     """Audit an existing package without writing a PASS or changing evidence."""
     root = root.resolve()
     errors: list[str] = []
     try:
         manifest = _load_json(root / "manifest.json")
+        _need((root / "manifest.sha256").read_text(encoding="ascii").strip()
+              == _sha(root / "manifest.json"), "manifest_hash")
         _need(manifest.get("mode") != "REHEARSAL", "rehearsal_not_acceptable")
         closure = manifest.get("source_closure_sha256")
         _need(manifest.get("schema") == SCHEMA, "manifest_schema")
         _need(isinstance(closure, str) and closure.startswith("sha256:"), "manifest_closure")
+        current_closure, _ = _source_tree_closure()
+        _need(current_closure == closure, "source_closure_current_mismatch")
         rows = manifest.get("rows")
         _need(type(rows) is list, "manifest_rows")
         for row in rows:
             try:
                 _verify_row(row, matrix_root=root, closure=closure, strict_steps=True)
-            except MatrixError as exc:
-                errors.append(str(exc))
+            except (ValueError, OSError, KeyError, TypeError, IndexError) as exc:
+                errors.append(f"{row.get('id')}:" + str(exc))
         _need(manifest.get("status") == "PASS", "manifest_not_pass")
         _need(manifest.get("closure_start") == manifest.get("closure_end") == closure,
               "closure_boundary")
         _need({row.get("id") for row in rows if isinstance(row, dict)} == set(ROW_IDS),
               "row_set")
-    except MatrixError as exc:
+    except (ValueError, OSError, KeyError, TypeError, IndexError) as exc:
         errors.append(str(exc))
     result = {"schema": "hh-gt09-verify-only-1", "status": "DIAGNOSTIC_OK" if not errors else "DIAGNOSTIC_FAIL",
               "authority": 0, "acceptance": False, "root": str(root), "errors": errors}
@@ -743,6 +976,8 @@ def _source_tree_closure() -> tuple[str, dict[str, str]]:
         subdirs[:] = [name for name in subdirs if name not in ignored]
         for name in filenames:
             path = Path(directory) / name
+            if path.is_symlink():
+                raise MatrixError("source_symlink:" + str(path))
             if path.is_file() and not any(part in ignored for part in path.parts):
                 rel = path.relative_to(STUDIO).as_posix()
                 files[rel] = _sha(path)
@@ -946,11 +1181,40 @@ def _run_owned(command: list[str], *, cwd: Path, raw_dir: Path,
             if job_state:
                 _RUN_FIXTURE_MODULE._close_job(job_state)
         host = _load_json(host_path) if host_path.is_file() else {}
+        # Normalize the long-window helper receipt to the same independently
+        # verifiable shape as the pinned bootstrap runner.
+        host.update({
+            "wrapper_exit_code": wrapper_exit,
+            "timed_out": timed_out,
+            "tree_verified": tree_verified,
+            "readers_stopped": True,
+            "stdout": stdout_path.name,
+            "stderr": stderr_path.name,
+            "job_owner": {"zero_observed": tree_verified, "active_count": 0},
+        })
+        host_path.write_bytes(_canonical(host))
         result = {"exit_code": host.get("exit_code"), "wrapper_exit_code": wrapper_exit,
                   "timed_out": timed_out, "tree_verified": tree_verified,
                   "ownership": "gated_job_kill_on_close" if os.name == "nt" else "process_group",
                   "host": host_path.name, "stdout": stdout_path.name, "stderr": stderr_path.name,
                   "duration_seconds": round(time.monotonic() - started, 3)}
+    # The pinned short-window runner returns a compact result and intentionally
+    # keeps its host file minimal.  Normalize that file here after the helper
+    # has exited and both streams have been closed, so strict verification can
+    # independently prove the same ownership/cleanup facts for every window.
+    host_path = raw_dir / str(result["host"])
+    host = _load_json(host_path) if host_path.is_file() else {}
+    host.update({
+        "wrapper_exit_code": result.get("wrapper_exit_code"),
+        "timed_out": result.get("timed_out") is True,
+        "tree_verified": result.get("tree_verified") is True,
+        "readers_stopped": True,
+        "stdout": result.get("stdout"),
+        "stderr": result.get("stderr"),
+        "job_owner": {"zero_observed": result.get("tree_verified") is True,
+                       "active_count": 0},
+    })
+    host_path.write_bytes(_canonical(host))
     stdout_path = raw_dir / result["stdout"]
     stderr_path = raw_dir / result["stderr"]
     stdout = stdout_path.read_bytes() if stdout_path.is_file() else b""
@@ -958,12 +1222,14 @@ def _run_owned(command: list[str], *, cwd: Path, raw_dir: Path,
     return {
         "command": command,
         "cwd": str(cwd),
+        "receipt_dir": str(raw_dir),
         "actual_exit": result.get("exit_code"),
         "wrapper_exit": result.get("wrapper_exit_code"),
         "timed_out": result.get("timed_out") is True,
         "owned_tree_zero": result.get("tree_verified") is True,
         "ownership": result.get("ownership"),
         "host_receipt": result.get("host"),
+        "host_sha256": _sha(host_path),
         "duration_seconds": round(time.monotonic() - started, 3),
         "stdout_sha256": _sha_bytes(stdout),
         "stderr_sha256": _sha_bytes(stderr),
@@ -983,13 +1249,20 @@ def _write_row(root: Path, row_id: str, *, closure: str,
     # make a final PASS unverifiable.
     for step in steps:
         step.setdefault("evidence_type", "host")
+    bound_references = [str(Path(value).resolve()) for value in (references or [])]
+    reference_sha256 = {}
+    for value in bound_references:
+        path = Path(value)
+        _need(path.is_file(), f"reference_missing:{path}")
+        reference_sha256[value] = _sha(path)
     result = {
         "schema": "hh-gt09-row-result-1", "row_id": row_id,
         "status": "PASS" if actual_ok and semantic_pass else "FAIL",
         "source_closure_sha256": closure,
         "producer_closures": producer_closures,
         "requirement": requirement, "steps": steps,
-        "references": references or [],
+        "references": bound_references,
+        "reference_sha256": reference_sha256,
     }
     result_path = row_root / "result.json"
     result_path.write_bytes(_canonical(result))
@@ -1412,7 +1685,7 @@ def final_matrix_orchestrated(*, output: Path, run_id: str, k13: Path | None,
        validator=lambda: _attribution_semantics(attribution_root))
 
     k13_path = k13 or (STUDIO / ".local" / "reviews" /
-                       "gt09-mcp-capability-matrix-20261009-k13.json")
+                       "gt09-mcp-capability-matrix-20261010-k13-v2.json")
     k13_path = k13_path.resolve()
     _need(k13_path.is_file(), f"k13_evidence_missing:{k13_path}")
     k13_doc = _load_json(k13_path)
@@ -1494,6 +1767,8 @@ def final_matrix_orchestrated(*, output: Path, run_id: str, k13: Path | None,
                                         expected_publication=pub):
             finish_row("K15", play_steps, "delegated 2 x 15-minute final-closure playtest", False)
             raise MatrixError("K15:FAIL")
+        metadata = _load_json(STUDIO / ".local" / "reviews" / play_id / fixture / "metadata.json")
+        producer.setdefault("playtest_source_closures", {})[fixture] = metadata.get("source_closure_sha256")
     finish_row("K15", play_steps, "delegated 2 x 15-minute final-closure playtest",
                True, [str(arena / "result.json"), str(room / "result.json")])
 

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import io
+import json
 from pathlib import Path
 import queue
 import tempfile
@@ -80,6 +81,20 @@ class NativeMcpTests(unittest.TestCase):
             calls[1]["response"]["result"]["structuredContent"]["godot_version"] = "4.7.2-stable (official)"
             calls[-1]["response"]["result"]["isError"] = True
             self.assertFalse(classify(calls, project, pin)["native_readback"])
+
+    def test_toolkit_textual_payload_decodes_untrusted_tree(self):
+        response = {"jsonrpc": "2.0", "id": 1, "result": {"content": [{
+            "type": "text", "text": json.dumps({"success": True, "tree":
+                '<untrusted-ab12cd34 kind="scene_tree" source="res://scenes/arena.tscn">'
+                '{"name":"Arena","class":"Node2D","children":[]}'
+                '</untrusted-ab12cd34>'})
+        }]}}
+        self.assertEqual(payload(response)["tree"]["name"], "Arena")
+
+    def test_toolkit_error_text_does_not_count_as_readback(self):
+        response = {"jsonrpc": "2.0", "id": 1, "result": {"isError": True,
+            "content": [{"type": "text", "text": json.dumps({"success": False})}]}}
+        self.assertEqual(payload(response), {})
 
 
 if __name__ == "__main__":

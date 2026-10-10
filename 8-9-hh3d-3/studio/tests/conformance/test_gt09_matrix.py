@@ -37,7 +37,7 @@ class GT09MatrixTests(unittest.TestCase):
             path.write_text(json.dumps(manifest), encoding='utf-8')
             self.assertEqual(matrix.final_matrix(path, None, 'gt09-matrix-forged'), 2)
 
-    def test_final_accepts_only_matching_hashed_raw_receipts(self):
+    def test_final_rejects_rows_without_strict_owned_receipts(self):
         with tempfile.TemporaryDirectory(prefix='gt09-matrix-') as temp:
             root = Path(temp)
             closure = 'sha256:' + 'a' * 64
@@ -58,8 +58,8 @@ class GT09MatrixTests(unittest.TestCase):
             manifest_path = root / 'manifest.json'
             manifest_path.write_text(json.dumps({"schema": matrix.SCHEMA, "rows": rows}), encoding='utf-8')
             output = root / 'final.json'
-            self.assertEqual(matrix.final_matrix(manifest_path, output, 'gt09-matrix-good'), 0)
-            self.assertEqual(json.loads(output.read_text())['status'], 'PASS')
+            self.assertEqual(matrix.final_matrix(manifest_path, output, 'gt09-matrix-good'), 2)
+            self.assertEqual(json.loads(output.read_text())['status'], 'INCOMPLETE')
 
     def test_rehearsal_requires_wired_dependencies_and_is_not_final(self):
         with tempfile.TemporaryDirectory(prefix='gt09-rehearsal-') as temp:
