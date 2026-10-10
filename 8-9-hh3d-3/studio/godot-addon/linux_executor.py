@@ -20,9 +20,10 @@ STUDIO = Path(__file__).resolve().parent.parent
 DOCKER = 'C:/Program Files/Docker/Docker/resources/bin/docker.exe'
 BINARY_NAME = 'Godot_v4.7.2-stable_linux.x86_64'
 BINARY_SHA256 = '8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e'
-IMAGE_ID = 'sha256:581429e3df12d76e6af4be5ab7d0e7fc2013eb57dc23d2de691411c8efdbb970'
+IMAGE_ID = 'sha256:7e51d8b09fe7e3778402d55ca7bfd05a1a02cf4dbc4a7308b4a0b3cb607ae8e7'
+BASE_IMAGE = 'python@sha256:581429e3df12d76e6af4be5ab7d0e7fc2013eb57dc23d2de691411c8efdbb970'
 OWNED_RUNNER_SHA256 = 'ea522450acc46f90be5e2a7b9257e73ce8b619948105b2c9073aac1f881c7328'
-LOCK_SHA256 = 'f8484bcd8d0d7c7df8d469196bd27ac61e79cb3c462637a4eab20055d4f15f8b'
+LOCK_SHA256 = '0707ba55bb3584ac2864192479577a80929be5ce92aea9395300ee9918664157'
 PROJECT_TEMPLATE = ('config_version=5\n[application]\nconfig/name="HH GT03 Linux validator"\n'
                     '[rendering]\nrenderer/rendering_method="gl_compatibility"\n'
                     '[threading]\nworker_pool/max_threads=4\n')
@@ -38,9 +39,8 @@ ENVIRONMENT = {'HOME': '/home/validator', 'TMPDIR': '/tmp', 'XDG_CACHE_HOME': '/
                'XDG_RUNTIME_DIR': '/run'}
 ULIMITS = {'fsize': 8388608, 'core': 0, 'cpu': 10, 'nofile': 256, 'msgqueue': 8192}
 # The host has twelve logical CPUs. Give the isolated GT-03 worker the full
-# twelve-CPU host quota so Godot import/play startup is not serialized behind
-# Docker Desktop, while retaining the per-process CPU-time, memory, PID and
-# wall watchdogs.
+# twelve-CPU ceiling; this does not reserve CPU from other services. Keep
+# per-process CPU-time, memory, PID and wall watchdogs unchanged.
 CONTAINER_CPUS = 12
 CONTAINER_NANO_CPUS = CONTAINER_CPUS * 1_000_000_000
 _HELPER = "import subprocess,sys; token=sys.stdin.readline(); sys.exit(125) if token != 'GO\\n' else None; p=subprocess.Popen(sys.argv[1:],stdin=subprocess.DEVNULL); sys.exit(p.wait())"
@@ -91,6 +91,7 @@ GAMEPLAY_RUNTIME_FILES = (
     'host/core/pipe_io.py',
     'build/bootstrap/run_fixture.py',
     'godot-addon/validator-toolchain.lock.json',
+    'build/validator/Dockerfile',
 )
 _CLI_JOBS = None
 SUPERVISOR_SHA256 = '5ef0eaaaa4220593add7716aad74da927ca3bb10605e964330de64fecc3ef15e'
@@ -103,6 +104,20 @@ SUPERVISOR_BOOTSTRAP = (
     "assert pathlib.Path('/proc/sys/kernel/yama/ptrace_scope').read_text().strip() in ('1','2','3'); "
     "assert hashlib.sha256(pathlib.Path('/usr/bin/timeout').read_bytes()).hexdigest()=='" + SUPERVISOR_SHA256 + "'; "
     "os.execv('/usr/bin/timeout',['/usr/bin/timeout',*sys.argv[1:]])"
+)
+# Runs inside the existing PID-1 deadline. The image layer is immutable and
+# root-owned, but verify its actual bytes before executing any candidate.
+# Silent success preserves the authenticated driver's first-frame contract.
+TOOL_BOOTSTRAP = (
+    "import os,pathlib,hashlib,stat,sys\n"
+    "p=pathlib.Path('/tool/" + BINARY_NAME + "')\n"
+    "s=p.lstat()\n"
+    "assert stat.S_ISREG(s.st_mode) and s.st_uid==0 and not s.st_mode&0o222\n"
+    "h=hashlib.sha256()\n"
+    "with p.open('rb') as f:\n"
+    " for b in iter(lambda:f.read(1048576),b''):h.update(b)\n"
+    "assert h.hexdigest()=='" + BINARY_SHA256 + "'\n"
+    "os.execv(sys.argv[1],sys.argv[1:])\n"
 )
 
 
@@ -373,7 +388,7 @@ def read_attribution(output: Path, result: dict) -> dict:
           and result.get('docker_wait_exit') == parsed['driver_returncode'],
           'EXECUTOR_ATTRIBUTION_CONTAINER_RECEIPT')
     _validate_inspect(inspected[0], name=result['run_id'], container_id=result['container_id'],
-        mode=GAMEPLAY_MODE, tool=Path(result['tool_mount_source']), snapshot=output / 'snapshot',
+        mode=GAMEPLAY_MODE, tool=Path(result['tool_host_source']), snapshot=output / 'snapshot',
         image_environment=image[0]['Config']['Env'],
         timeout_seconds=result['supervisor']['total_deadline_seconds'],
         asset_files=tuple(sorted(name for name in result['input_hashes_before'] if name in ASSET_PATHS)),
@@ -453,7 +468,8 @@ def _supervised_command(mode: str, timeout_seconds: int = 20, *, attribution_con
     else:
         command = ['/tool/' + BINARY_NAME, *_command(mode)]
     return ['-I', '-B', '-c', SUPERVISOR_BOOTSTRAP, '--signal=TERM', '--kill-after=1s',
-            str(max(1, timeout_seconds - 1)) + 's', *command]
+            str(max(1, timeout_seconds - 1)) + 's',
+            '/usr/local/bin/python3', '-I', '-B', '-c', TOOL_BOOTSTRAP, *command]
 
 
 class _Admission:
@@ -679,7 +695,9 @@ def _lock() -> dict:
     value = json.loads(raw)
     _need(value.get('schema') == 'hh-gt03-linux-validator-1' and value.get('status') == 'diagnostic_only'
           and value.get('binary_name') == BINARY_NAME and value.get('binary_sha256') == BINARY_SHA256
-          and value.get('image_id') == IMAGE_ID and value.get('image_repo_digest') == 'python@' + IMAGE_ID
+          and value.get('image_id') == IMAGE_ID and value.get('base_image_repo_digest') == BASE_IMAGE
+          and value.get('image_build_recipe_sha256') == _sha(_read_file(STUDIO / 'build/validator/Dockerfile', 16384))
+          and value.get('tool_verifier_sha256') == _sha(TOOL_BOOTSTRAP.encode())
           and value.get('owned_runner_sha256') == OWNED_RUNNER_SHA256
           and value.get('supervisor_sha256') == SUPERVISOR_SHA256
           and value.get('supervisor_bootstrap_sha256') == _sha(SUPERVISOR_BOOTSTRAP.encode())
@@ -940,7 +958,7 @@ def _create_args(name: str, mode: str, tool: Path, snapshot: Path, timeout_secon
         args += ['--env', name_ + '=' + value]
     for destination, options in TMPFS.items():
         args += ['--tmpfs', destination + ':' + options]
-    for source, destination in ((tool, '/tool'), (snapshot, '/project')):
+    for source, destination in ((snapshot, '/project'),):
         args += ['--mount', 'type=bind,src=' + str(source) + ',dst=' + destination + ',readonly,bind-propagation=rprivate']
     if assets:
         for destination, options in ASSET_TMPFS.items():
@@ -995,7 +1013,7 @@ def _validate_inspect(value: dict, *, name: str, container_id: str, mode: str,
     limits = host.get('Ulimits', [])
     _need(len(limits) == len(ULIMITS) and {x['Name']: (x['Soft'], x['Hard']) for x in limits}
           == {key: (number, number) for key, number in ULIMITS.items()}, 'EXECUTOR_ULIMITS')
-    expected_mounts = {'/tool': str(tool), '/project': str(snapshot)}
+    expected_mounts = {'/project': str(snapshot)}
     expected_mounts.update({('/project/' + relative): str(snapshot / relative) for relative in assets})
     if mode == 'profile-validate' or mode in SANDBOX_MODES:
         expected_mounts['/harness'] = str(snapshot.parent / 'harness')
@@ -1144,7 +1162,8 @@ def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate', '
         result['admission'] = {'acquired': True, 'wait_ms': admission.wait_ms,
                                'abandoned_mutex': admission.abandoned, 'maximum_active': 1}
         binary = _binary()
-        result['tool_mount_source'] = str(binary.parent)
+        result['tool_host_source'] = str(binary.parent)
+        result['tool_image_id'] = IMAGE_ID
         owned = _owned_runner()
         row, raw = call(['context', 'inspect', 'desktop-linux', '--format', '{{json .Endpoints.docker.Host}}'], 'context')
         _need(_cli_clean(row) and json.loads(raw) == result['toolchain']['docker_endpoint'], 'EXECUTOR_DAEMON_ENDPOINT')

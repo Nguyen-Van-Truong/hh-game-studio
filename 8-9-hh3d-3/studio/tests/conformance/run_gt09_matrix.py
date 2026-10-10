@@ -652,6 +652,24 @@ def _verify_row(row: dict[str, Any], *, matrix_root: Path, closure: str | None,
     return child_closure
 
 
+def _self_check_row(row: dict[str, Any], *, root: Path, closure: str) -> None:
+    """Check persisted evidence before spending time on the next native row."""
+    if row["status"] != "PASS":
+        return
+    try:
+        _verify_row(row, matrix_root=root, closure=closure, strict_steps=True)
+    except Exception as error:
+        # Preserve producer/exit receipts; the separate diagnostic records why
+        # the persisted PASS was not sufficient to continue this matrix.
+        row["status"] = "FAIL"
+        row["failure_class"] = "VERIFIER"
+        row["self_check_error"] = type(error).__name__ + ":" + str(error)
+        (root / "rows" / row["id"] / "self-check-failure.json").write_bytes(_canonical({
+            "row_id": row["id"], "authority": 0, "status": "FAIL",
+            "failure_class": "VERIFIER", "error": row["self_check_error"],
+        }))
+
+
 def final_matrix(row_evidence: Path | None, output: Path | None, run_id: str) -> int:
     _need(row_evidence is not None, "final_requires_row_evidence")
     manifest = load_rows(row_evidence)
@@ -725,6 +743,8 @@ def rehearsal_rows(*, output: Path, run_id: str, selected: tuple[str, ...]) -> i
                      steps=steps, semantic_pass=semantic,
                      requirement="registered AUTH-01 authored behavior and replay",
                      references=[str(script_root / "result.json")])
+    _self_check_row(row, root=output, closure=closure)
+    semantic = row["status"] == "PASS"
     rows.append(row)
     closure_end, closure_end_payload = _source_tree_closure()
     _need(closure_end == closure, "source_changed_during_rehearsal")
@@ -1422,6 +1442,7 @@ def final_matrix_orchestrated(*, output: Path, run_id: str, k13: Path | None,
                          producer_closures=producer, steps=steps,
                          semantic_pass=semantic, requirement=requirement,
                          references=references)
+        _self_check_row(row, root=output, closure=closure)
         rows.append(row)
         if fail_fast and row["status"] != "PASS":
             raise MatrixError(f"{row_id}:FAIL")

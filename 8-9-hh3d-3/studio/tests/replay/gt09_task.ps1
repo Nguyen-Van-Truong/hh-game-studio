@@ -1,4 +1,4 @@
-# Demand-only GT-09 final launcher.  The task action is fixed to the trusted
+# Demand-only GT-09 matrix launcher. The task action is fixed to the trusted
 # supervisor and one prepared run id; it has no trigger and no arbitrary argv.
 [CmdletBinding()]
 param(
@@ -6,8 +6,10 @@ param(
     [ValidateSet('register-run','start-run','status','delete')]
     [string]$Command,
     [Parameter(Mandatory=$true)]
-    [ValidatePattern('^gt09-matrix-(final|probe)-20\d{6}-[a-z0-9-]{1,24}$')]
-    [string]$RunId
+    [ValidatePattern('^gt09-matrix-(final|rehearsal)-20\d{6}-[a-z0-9-]{1,24}$')]
+    [string]$RunId,
+    [ValidateSet('K3')]
+    [string]$Rows
 )
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
@@ -91,10 +93,12 @@ if ($Command -eq 'register-run') {
     if ($null -ne (Get-Task)) { throw 'GT09_TASK_ALREADY_EXISTS' }
     Plain $studio; Plain (Join-Path $studio '.local\reviews')
     if (Test-Path -LiteralPath $supervisor) { throw 'GT09_TASK_OUTPUT_ALREADY_EXISTS' }
-    & $python -B $script --prepare --run-id $RunId | Out-Null
+    $prepareArgs = @('-B', $script, '--prepare', '--run-id', $RunId)
+    if ($Rows) { $prepareArgs += @('--rows', $Rows) }
+    & $python @prepareArgs | Out-Null
     Require ($LASTEXITCODE -eq 0) 'GT09_TASK_PREPARE_FAILED'
     $definition = $service.NewTask(0)
-    $definition.RegistrationInfo.Description = 'HH Studio GT-09 final matrix (demand-only, pinned source)'
+    $definition.RegistrationInfo.Description = 'HH Studio GT-09 matrix (demand-only, pinned source and selection)'
     $definition.Principal.UserId = [Security.Principal.WindowsIdentity]::GetCurrent().Name
     $definition.Principal.Id = 'HHStudioCurrentUser'
     $definition.Principal.LogonType = 3

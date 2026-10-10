@@ -263,7 +263,7 @@ class GameplayProbeEvidenceTests(unittest.TestCase):
         binding = {'files': files}
         result = {**self.result, 'sandbox_bootstrap_sha256': files['godot-addon/gameplay_sandbox.py'],
             'gameplay_profile_sha256': files['godot-addon/gameplay_source_profile.py'],
-            'tool_mount_source': 'C:/tool',
+            'tool_image_id': executor.IMAGE_ID,
             'toolchain': {'gameplay_profile_sha256': files['godot-addon/gameplay_source_profile.py']}}
         with tempfile.TemporaryDirectory(prefix='hh-gameplay-evidence-') as temp:
             root = Path(temp)
@@ -271,13 +271,11 @@ class GameplayProbeEvidenceTests(unittest.TestCase):
             guard = root / 'harness/gameplay_sandbox.py'
             guard.write_bytes((probe.STUDIO / 'godot-addon/gameplay_sandbox.py').read_bytes())
             inspect_file = root / 'created-inspect-stdout.txt'
-            row = {'Id': result['container_id'], 'Config': {
+            row = {'Id': result['container_id'], 'Image': executor.IMAGE_ID, 'Config': {
                 'Entrypoint': ['/usr/local/bin/python3'],
                 'Cmd': executor._supervised_command('gameplay-source', 20)},
                 'HostConfig': {'Tmpfs': dict(executor.TMPFS)},
                 'Mounts': [
-                    {'Destination': '/tool', 'Source': 'C:/tool',
-                     'Type': 'bind', 'RW': False, 'Propagation': 'rprivate'},
                     {'Destination': '/project', 'Source': str(root / 'snapshot'),
                      'Type': 'bind', 'RW': False, 'Propagation': 'rprivate'},
                     {'Destination': '/harness', 'Source': str(root / 'harness'),
@@ -290,6 +288,7 @@ class GameplayProbeEvidenceTests(unittest.TestCase):
 
             verify()
             mutations = (
+                lambda r: r.update(Image='sha256:' + '0' * 64),
                 lambda r: r.update(Id='d' * 64),
                 lambda r: r['Config'].update(Entrypoint=['/bin/sh']),
                 lambda r: r['Config']['Cmd'].__setitem__(-1, '# ' + r['Config']['Cmd'][-1]),
@@ -305,7 +304,7 @@ class GameplayProbeEvidenceTests(unittest.TestCase):
                 mutate(bad)
                 with self.assertRaises(ValueError):
                     verify(inspected=bad)
-            for key in ('gameplay_profile_sha256', 'sandbox_bootstrap_sha256'):
+            for key in ('gameplay_profile_sha256', 'sandbox_bootstrap_sha256', 'tool_image_id'):
                 with self.subTest(key=key), self.assertRaises(ValueError):
                     verify(actual={**result, key: '0' * 64})
             with self.assertRaises(ValueError):

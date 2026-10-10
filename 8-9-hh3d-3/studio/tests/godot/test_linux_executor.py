@@ -47,7 +47,7 @@ def inspected(name, cid, mode, tool, snapshot):
                            'ReadonlyPaths': ['/proc/bus', '/proc/fs', '/proc/irq', '/proc/sys', '/proc/sysrq-trigger'],
                            'MaskedPaths': ['/proc/acpi', '/proc/kcore', '/proc/keys', '/proc/scsi', '/sys/firmware']},
             'Mounts': [{'Type': 'bind', 'Source': str(source), 'Destination': target, 'RW': False, 'Propagation': 'rprivate'}
-                       for source, target in ((tool, '/tool'), (snapshot, '/project'))],
+                       for source, target in ((snapshot, '/project'),)],
             'State': {'Running': False, 'Pid': 0, 'ExitCode': 0, 'OOMKilled': False}}
 
 
@@ -61,6 +61,21 @@ def write_project(root):
 
 
 class PolicyTests(unittest.TestCase):
+    def test_image_binary_is_verified_inside_existing_deadline_without_tool_bind(self):
+        command = executor._supervised_command('parse')
+        self.assertEqual(command[3], executor.SUPERVISOR_BOOTSTRAP)
+        self.assertEqual(command[6], '19s')
+        self.assertEqual(command[7:12], ['/usr/local/bin/python3', '-I', '-B', '-c', executor.TOOL_BOOTSTRAP])
+        self.assertEqual(command[12], '/tool/' + executor.BINARY_NAME)
+        argv = executor._create_args(NAME, 'parse', Path('C:/tool'), Path('C:/snapshot'))
+        self.assertFalse(any('dst=/tool' in item for item in argv))
+        valid = inspected(NAME, CID, 'parse', Path('C:/tool'), Path('C:/snapshot'))
+        valid['Mounts'].append({'Type': 'bind', 'Source': 'C:/tool',
+                               'Destination': '/tool', 'RW': False, 'Propagation': 'rprivate'})
+        with self.assertRaisesRegex(executor.ExecutorError, 'EXECUTOR_MOUNTS'):
+            executor._validate_inspect(valid, name=NAME, container_id=CID, mode='parse',
+                tool=Path('C:/tool'), snapshot=Path('C:/snapshot'), image_environment=IMAGE_ENV)
+
     def test_fixed_commands_reject_modes_and_never_accept_caller_argv(self):
         self.assertEqual(executor._command('parse')[-3:], ['--check-only', '--script', 'res://scripts/fixture_actor.gd'])
         self.assertEqual(executor._command('import')[-1], 'res://scenes/fixture.tscn')
@@ -246,7 +261,7 @@ class FakeDocker:
             mounts = [args[i + 1] for i, item in enumerate(args) if item == '--mount']
             sources = {dict(part.split('=', 1) for part in item.split(',') if '=' in part)['dst']:
                        dict(part.split('=', 1) for part in item.split(',') if '=' in part)['src'] for item in mounts}
-            self.state = inspected(name, CID, 'parse', Path(sources['/tool']), Path(sources['/project']))
+            self.state = inspected(name, CID, 'parse', Path('unused-image-tool'), Path(sources['/project']))
             payload = b'LOST_REPLY' if self.scenario == 'lost_create' else CID.encode()
         elif args[0] == 'inspect':
             if self.removed:

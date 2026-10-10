@@ -1,7 +1,7 @@
-"""Demand-only Scheduled Task supervisor for a GT-09 final matrix run.
+"""Demand-only Scheduled Task supervisor for a GT-09 final or rehearsal.
 
 The supervisor deliberately exposes one operation: run one pre-bound matrix
-ID from a request prepared by the coordinator.  It does not accept an
+ID and row selection from a request prepared by the coordinator. It does not accept an
 arbitrary command or resume a partial matrix.  The Task Scheduler process is
 the durable parent of the matrix, while the matrix continues to own every
 Godot/Blender/ffmpeg child with its existing checked job wrappers.
@@ -25,7 +25,7 @@ import traceback
 STUDIO = Path(__file__).resolve().parents[2]
 REPO_ROOT = STUDIO.parent
 MATRIX = STUDIO / "tests" / "conformance" / "run_gt09_matrix.py"
-RUN_RE = re.compile(r"gt09-matrix-final-20\d{6}-[a-z0-9-]{1,24}\Z")
+RUN_RE = re.compile(r"gt09-matrix-(final|rehearsal)-20\d{6}-[a-z0-9-]{1,24}\Z")
 SCHEMA = "HH-GT09-TASK-REQUEST-1"
 
 
@@ -82,8 +82,24 @@ def process_observation() -> dict[str, object]:
     }
 
 
-def prepare(run_id: str) -> Path:
+def _selection(run_id: str, rows: list[str]) -> list[str]:
+    """Only the implemented rehearsal dependency graph may be scheduled."""
+    match = RUN_RE.fullmatch(run_id)
+    if match is None or rows != (["K3"] if match[1] == "rehearsal" else []):
+        raise ValueError("GT09_TASK_ROW_SELECTION")
+    return rows
+
+
+def _command(console: Path, run_id: str, matrix_root: Path, rows: list[str]) -> list[str]:
+    _selection(run_id, rows)
+    mode = ["--rows", ",".join(rows)] if rows else ["--matrix", "final"]
+    return [str(console), "-B", str(MATRIX), *mode,
+            "--run-id", run_id, "--output", str(matrix_root)]
+
+
+def prepare(run_id: str, rows: list[str] | None = None) -> Path:
     matrix_root, supervisor = _paths(run_id)
+    rows = _selection(run_id, rows or [])
     if matrix_root.exists() or supervisor.exists():
         raise FileExistsError("GT09_TASK_OUTPUT_ALREADY_EXISTS")
     console = Path(sys.executable).resolve().with_name("python.exe")
@@ -91,6 +107,7 @@ def prepare(run_id: str) -> Path:
     request = {
         "schema": SCHEMA,
         "run_id": run_id,
+        "rows": rows,
         "matrix_script_sha256": sha(MATRIX),
         "supervisor_script_sha256": sha(Path(__file__).resolve()),
         "python_sha256": sha(console),
@@ -122,6 +139,7 @@ def _load_request(run_id: str) -> tuple[Path, Path, dict[str, object]]:
     expected = {
         "schema": SCHEMA,
         "run_id": run_id,
+        "rows": _selection(run_id, request.get("rows")),
         "matrix_script_sha256": sha(MATRIX),
         "supervisor_script_sha256": sha(Path(__file__).resolve()),
         "python_sha256": sha(Path(sys.executable).resolve().with_name("python.exe")),
@@ -149,8 +167,7 @@ def run(run_id: str) -> int:
     try:
         console = Path(sys.executable).resolve().with_name("python.exe")
         with stdout_path.open("xb") as stdout, stderr_path.open("xb") as stderr:
-            command = [str(console), "-B", str(MATRIX), "--matrix", "final",
-                       "--run-id", run_id, "--output", str(matrix_root)]
+            command = _command(console, run_id, matrix_root, request["rows"])
             proc = subprocess.run(command, cwd=REPO_ROOT, stdout=stdout, stderr=stderr,
                                   check=False)
             code = int(proc.returncode)
@@ -172,13 +189,17 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--prepare", action="store_true")
     parser.add_argument("--run-id", required=True)
+    parser.add_argument("--rows", help="prepare-only rehearsal selection; currently K3")
     args = parser.parse_args(argv)
+    if args.rows and not args.prepare:
+        parser.error("--rows is prepare-only; execution uses the pinned request")
     # --prepare is coordinator-side console work; the scheduled action is the
     # only path allowed to execute without it.
     if not args.prepare and Path(sys.executable).name.lower() != "pythonw.exe":
         raise ValueError("GT09_TASK_WINDOWED_INTERPRETER_REQUIRED")
     if args.prepare:
-        print(json.dumps({"schema": SCHEMA, "supervisor": str(prepare(args.run_id))}, sort_keys=True))
+        rows = args.rows.split(",") if args.rows else []
+        print(json.dumps({"schema": SCHEMA, "supervisor": str(prepare(args.run_id, rows))}, sort_keys=True))
         return 0
     return run(args.run_id)
 

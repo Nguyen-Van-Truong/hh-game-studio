@@ -3,11 +3,27 @@ from pathlib import Path
 import unittest
 import tempfile
 import hashlib
+from unittest.mock import patch
 
 from tests.conformance import run_gt09_matrix as matrix
 
 
 class GT09MatrixTests(unittest.TestCase):
+    def test_self_check_stops_on_persisted_receipt_gap_without_rewriting_raw(self):
+        with tempfile.TemporaryDirectory(prefix='gt09-self-check-') as temp:
+            root = Path(temp)
+            folder = root / 'rows' / 'K5'
+            folder.mkdir(parents=True)
+            raw = folder / 'result.json'
+            raw.write_bytes(b'original raw')
+            row = {'id': 'K5', 'status': 'PASS'}
+            with patch.object(matrix, '_verify_row', side_effect=KeyError('project')):
+                matrix._self_check_row(row, root=root, closure='sha256:' + 'a' * 64)
+            self.assertEqual(row['status'], 'FAIL')
+            self.assertEqual(row['failure_class'], 'VERIFIER')
+            self.assertEqual(raw.read_bytes(), b'original raw')
+            self.assertTrue((folder / 'self-check-failure.json').is_file())
+
     def test_row_table_is_complete_and_runners_exist(self):
         report = matrix.dry_run()
         self.assertEqual(report["schema"], matrix.SCHEMA)

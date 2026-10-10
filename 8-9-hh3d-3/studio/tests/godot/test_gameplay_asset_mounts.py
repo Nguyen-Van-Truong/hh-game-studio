@@ -92,7 +92,6 @@ class GameplayAssetMountTests(unittest.TestCase):
         self.assertEqual(
             set(by_destination),
             {
-                "/tool",
                 "/project",
                 "/harness",
                 "/project/assets/avatar.glb",

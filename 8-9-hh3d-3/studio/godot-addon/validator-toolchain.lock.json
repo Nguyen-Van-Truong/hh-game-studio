@@ -9,8 +9,7 @@
   "archive_sha256": "cadd3204e728a35d3f13adb7fd0d7902636b79f6b95c40c265eb73b6c35329e4",
   "archive_sha512": "9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65",
   "official_sums_sha256": "b8bdff6704f833e7a021df16ec08e1478edd5a285c1f894929b91a7f74a5c7c0",
-  "image_id": "sha256:581429e3df12d76e6af4be5ab7d0e7fc2013eb57dc23d2de691411c8efdbb970",
-  "image_repo_digest": "python@sha256:581429e3df12d76e6af4be5ab7d0e7fc2013eb57dc23d2de691411c8efdbb970",
+  "image_id": "sha256:7e51d8b09fe7e3778402d55ca7bfd05a1a02cf4dbc4a7308b4a0b3cb607ae8e7",
   "docker_context": "desktop-linux",
   "docker_endpoint": "npipe:////./pipe/dockerDesktopLinuxEngine",
   "owned_runner_sha256": "ea522450acc46f90be5e2a7b9257e73ce8b619948105b2c9073aac1f881c7328",
@@ -25,5 +24,9 @@
   ],
   "profile_bootstrap_sha256": "efde8370a6157ed2f66544ee13b82ee2556b59130f5306e9e0774ed0e3be79a5",
   "gameplay_profile_sha256": "aa01428ff26dc56fc20f19f7093bd025685fe9ca509843826ee02fe7acb6485c",
-  "profile_mode": "profile-validate"
+  "profile_mode": "profile-validate",
+  "base_image_repo_digest": "python@sha256:581429e3df12d76e6af4be5ab7d0e7fc2013eb57dc23d2de691411c8efdbb970",
+  "image_build_recipe_sha256": "399eea86521c2235f0009e017c6ec5682aada31b98964628ad9256add56aef0a",
+  "tool_verifier_sha256": "7559369c7514379fb2739a2d30565c4fdfdf595bd40f998705cf1d20d04a2d17",
+  "derived_image": true
 }

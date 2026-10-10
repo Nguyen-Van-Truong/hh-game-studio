@@ -503,19 +503,18 @@ def sandbox_binding(destination: Path, case: dict, result: dict, binding: dict) 
                if type(mounts) is list else [])
     mount_map = ({row.get('Destination'): row for row in mounts}
                  if type(mounts) is list and all(type(row) is dict for row in mounts) else {})
-    expected_destinations = {'/tool', '/project', '/harness'} | {
+    expected_destinations = {'/project', '/harness'} | {
         '/project/' + path for path in assets}
-    expected_tool = result.get('tool_mount_source')
     if (inspected.get('Id') != result['container_id']
+            or inspected.get('Image') != executor.IMAGE_ID
+            or result.get('tool_image_id') != executor.IMAGE_ID
             or config.get('Entrypoint') != ['/usr/local/bin/python3']
             or config.get('Cmd') != executor._supervised_command(case['mode'], case['timeout'],
                                                                attribution_context=attribution_context)
             or host.get('Tmpfs') != expected_tmpfs
-            or type(expected_tool) is not str
             or type(mounts) is not list
             or len(mounts) != len(expected_destinations)
             or set(mount_map) != expected_destinations
-            or mount_map.get('/tool', {}).get('Source') != expected_tool
             or mount_map.get('/project', {}).get('Source') != str(destination / 'snapshot')
             or any(mount_map.get(destination, {}).get('Type') != 'bind'
                    or mount_map.get(destination, {}).get('RW') is not False
