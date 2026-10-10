@@ -1,6 +1,6 @@
-# O2 authoring state — 2026-10-10 (O13/S287)
+# O2 authoring state — 2026-10-10 (O13/S288)
 
-AUTHORITY=0; GT09=ACCEPTED; GT10_PC=OPEN; public gameplay-source remains disabled.
+AUTHORITY=0; GT09=ACCEPTED; GT10_PC=IMPLEMENTED_REHEARSAL_PASS_FINAL_CANDIDATE_PENDING_SOAK_AND_CRITICS; public gameplay-source remains disabled.
 Progress authority: `zdoc/8-9-godot-blender-agent-studio-plan.txt`.
 Final `gt09-matrix-final-20261010-74`: K1–K15 PASS, manifest `8d9a2ec6…`, closure `6b7b5231…`.
 Scheduled Task actual exit0, 2487.203s, zero remaining instances; verify-only `DIAGNOSTIC_OK` exit0.
@@ -9,7 +9,11 @@ Coordinator acceptance: `zdoc/reviews/20261010-gt09-b7-74/coordinator-acceptance
 K9: arena health 3→4 and room switch false→true through native Play, catalog repair, replay and reopen/checkpoint.
 K13 remains measured `INCOMPATIBLE` with reason; no external compatibility claim.
 GT08A accepted; GT08B Android deferred; human playtest NOT_PERFORMED.
-Next gate: GT-10-PC P1–P12; write `run_gt10pc_matrix.py` matrix/DoD before implementation.
+Next gate: GT-10-PC P1–P12; the runner/package contract and Scheduled Task supervisor now exist.
+Dry-run PASS; rehearsal
+P1–P11 PASS; candidate final `gt10pc-final-20261010-194341-27108` P1–P11 PASS, P12
+PENDING_CRITICS, verify-only `DIAGNOSTIC_OK`. Next: freeze source, run Scheduled Task 350
+batches (10×35), verify-only, then obtain two independent critic TICK=yes records.
 Full GT-10 remains blocked by deferred GT08B; GT-11 opens only after GT-10-PC acceptance.
 
 ## K1–K15 acceptance matrix
