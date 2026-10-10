@@ -1684,8 +1684,12 @@ def final_matrix_orchestrated(*, output: Path, run_id: str, k13: Path | None,
        references=[str(attribution_root / "result.json")],
        validator=lambda: _attribution_semantics(attribution_root))
 
+    # The latest measured external-native matrix is the only default accepted
+    # by the final scheduled runner.  Keep an explicit --k13-evidence escape
+    # hatch for historical diagnostics, but never silently fall back to the
+    # superseded v2 authority-0 artifact.
     k13_path = k13 or (STUDIO / ".local" / "reviews" /
-                       "gt09-mcp-capability-matrix-20261010-k13-v2.json")
+                       "gt09-mcp-capability-matrix-20261010-k13-v3.json")
     k13_path = k13_path.resolve()
     _need(k13_path.is_file(), f"k13_evidence_missing:{k13_path}")
     k13_doc = _load_json(k13_path)
