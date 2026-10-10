@@ -4,17 +4,23 @@ AUTHORITY=0; GT09=IN_PROGRESS; no public gameplay-source or acceptance claim.
 Source-of-truth plan: `zdoc/8-9-godot-blender-agent-studio-plan.txt` S284.
 Current WIP is the runner/process-boundary repair plus the K13 native adapter
 receipt hardening; the 12-CPU Docker quota repair is already measured. Commit
-`8d50949c` pins the final runner to measured K13 v3. Rehearsal
+`8d50949c` pins the final runner to measured K13 v3. Commit `69da19c3`
+repairs verify-only's K5/K7 fixture-envelope reconstruction. Rehearsal
 `gt09-rehearsal-20261010-27` passed K3 on closure
 `sha256:3fb5fb70a0cca863f36895cee0940c6f8958094d58cf684250bd3dd33b02bc3b`.
+Final -52 stopped at K3 on a Docker attach timeout (raw preserved); exact
+reproducer `gt09-registered-script-k3-repro-20261010-53` passed. Final -54
+passed K1–K15 with host exit 0, then verify-only found only the K5/K7 validator
+gap now repaired; it is historical because the source hash changed.
 Final closure is computed by `run_gt09_matrix.py` and excludes `.local` and caches.
 GT08A remains accepted; GT08B Android remains deferred by owner.
 K1–K9 and K11–K14 have diagnostic implementations/evidence, but no final row
 is accepted until one frozen K1–K15 run and two independent critics share its hash.
 Earlier final attempts are historical; -04 had source drift, -05 had
 watchdog parser failures, and -06 was stopped after schema/closure failures.
-Human playtest remains NOT_PERFORMED and authority stays 0. Next action is one
-fresh GT09 final through the demand-only Scheduled Task with no writers running.
+Human playtest remains NOT_PERFORMED and authority stays 0. Next action is a
+fresh K3 rehearsal on the repaired verifier, then one final through the
+demand-only Scheduled Task with no writers running.
 A delegated room
 probe `gt09-playtest-20261009-03` passed on its own frozen publication with
 901.003 seconds, actual Godot exit 0, lifecycle_complete=true, all scripted
