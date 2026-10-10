@@ -5,14 +5,14 @@ Progress authority: `zdoc/8-9-godot-blender-agent-studio-plan.txt`.
 Final -60: K1–K15 PASS, verify-only exit0, Scheduled Task exit0 (2613.844s).
 B7: Sol TICK=yes, Astra TICK=no: K9 only covered room; no acceptance.
 Current repair uses both actual K8 publications, native Play faults and catalog commands.
-K9 `k9-real-72` diagnostic PASS; read-only raw verifier and K13 four-event binding pass.
+Diagnostic `k9-real-72` and rehearsal `gt09-matrix-rehearsal-20261010-73` PASS; rehearsal actual exit0, 466.36s, closure 7d8014b7.
 Arena health 3→4 and room switch false→true, native replay, durable reopen/checkpoint observed.
 K3 keeps controller-change proof; removed its misleading synthetic K9/checkpoint claims.
 Protocol uses existing bounded base64 chunks for GLB/PNG; no limit or sandbox relaxation.
 K9 shallow raw layout avoids reproduced Docker Desktop per-file bind EIO in deeper paths.
 46 focused tests PASS, including raw replay, missing-fixture and false-symptom rejects.
 GT08A accepted; GT08B Android deferred; human playtest NOT_PERFORMED.
-Next: Scheduled Task K9 rehearsal with fresh producers, then final and two critics.
+Next: fresh Scheduled Task final K1–K15, verify-only, then two critics on its frozen closure.
 
 ## K1–K15 acceptance matrix
 
@@ -20,7 +20,7 @@ Next: Scheduled Task K9 rehearsal with fresh producers, then final and two criti
 |---|---|---|
 | K1 | HISTORICAL_PASS | -60 registered discovery + Blender native; refresh on final closure. |
 | K2 | HISTORICAL_PASS | -60 allowlist/idempotency/readback; refresh on final closure. |
-| K3 | UPDATED | Controller change retained; synthetic K9 removed; rehearsal covers new runner. |
+| K3 | UPDATED | Controller change retained; synthetic K9 removed; rehearsal -73 covers new runner. |
 | K4 | HISTORICAL_PASS | -60 native dependency/UID/import; refresh on final closure. |
 | K5 | HISTORICAL_PASS | -60 native parse/type failure and revision preservation. |
 | K6 | HISTORICAL_PASS | -60 native publish/reopen/recovery, not unit-only. |
@@ -36,9 +36,9 @@ Next: Scheduled Task K9 rehearsal with fresh producers, then final and two criti
 
 ## Next
 
-Freeze this source, run Scheduled Task `--rows K9` with its fresh K1–K8 producers.
-After rehearsal PASS, run one new Scheduled Task final, `--verify-only`, then
-B7 critics on that same closure. GT10-PC remains closed until both TICK=yes.
+Rehearsal `gt09-matrix-rehearsal-20261010-73` PASS and task deleted with receipt.
+Run one fresh Scheduled Task final K1–K15, verify-only exit0, then B7 critics
+on that same closure. GT10-PC remains closed until both TICK=yes.
 
 ## Retained evidence and lessons
 
