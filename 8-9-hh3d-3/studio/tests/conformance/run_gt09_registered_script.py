@@ -96,6 +96,11 @@ def _case(speed: float) -> tuple[dict[str, Any], dict[str, bytes]]:
     case = {**base, "script": script, "expected_state": expected,
             "scene": _FIXTURES.SCENE,
             "project": _OWNER._load("gameplay_source_profile").PROJECT_TEMPLATE}
+    # Registered source publication is an authenticated gameplay route.  Give
+    # its native Godot startup the same bounded 30 s envelope as AUTH-03 so a
+    # Docker cold start cannot consume the legacy 20 s attach window.
+    case["timeout"] = 30
+    case["authenticated_timeout"] = True
     values = _PROBE.case_files(case)
     values.pop("project.godot", None)
     return case, values
@@ -130,7 +135,8 @@ def _run_native(*, case: dict[str, Any], files: dict[str, bytes], output: Path,
     executor = _OWNER._load("linux_executor")
     observed = executor.run(project, mode=case["mode"], output=output,
                             timeout_seconds=case["timeout"],
-                            source_closure_sha256=closure)
+                            source_closure_sha256=closure,
+                            authenticated=bool(case.get("authenticated_timeout")))
     row = _PROBE.case_observation(output, case, name="gameplay_source_room_3d",
                                   binding=_binding(run_id, closure, source_manifest))
     row["native_result_sha256"] = hashlib.sha256((output / "result.json").read_bytes()).hexdigest()
