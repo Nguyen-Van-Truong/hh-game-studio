@@ -5,11 +5,14 @@ Source-of-truth plan: `zdoc/8-9-godot-blender-agent-studio-plan.txt` S284.
 Current WIP is the runner/process-boundary repair plus the K13 native adapter
 receipt hardening; the 12-CPU Docker quota repair is already measured. Commit
 `8d50949c` pins the final runner to measured K13 v3. Commit `69da19c3`
-repairs verify-only's K5/K7 fixture-envelope reconstruction. Rehearsal
+repairs verify-only's K5/K7 fixture-envelope reconstruction; `7a7c1502`
+gives registered K3/K9 the bounded authenticated 30 s startup envelope after
+two Docker attach boundary failures. Rehearsal
 `gt09-rehearsal-20261010-27` passed K3 on closure
 `sha256:3fb5fb70a0cca863f36895cee0940c6f8958094d58cf684250bd3dd33b02bc3b`.
-Final -52 stopped at K3 on a Docker attach timeout (raw preserved); exact
-reproducer `gt09-registered-script-k3-repro-20261010-53` passed. Final -54
+Final -52 and -55 stopped at K3 on Docker attach timeout (raw preserved);
+exact reproducers `gt09-registered-script-k3-repro-20261010-53` and
+`gt09-registered-script-k3-auth30-repro-20261010-56` passed. Final -54
 passed K1–K15 with host exit 0, then verify-only found only the K5/K7 validator
 gap now repaired; it is historical because the source hash changed.
 Final closure is computed by `run_gt09_matrix.py` and excludes `.local` and caches.
