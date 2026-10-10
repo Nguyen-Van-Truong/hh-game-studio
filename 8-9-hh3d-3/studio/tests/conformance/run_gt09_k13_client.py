@@ -114,6 +114,13 @@ def _publication(path: Path, label: str) -> tuple[dict[str, Any], bytes]:
 
 def _registered(path: Path) -> tuple[dict[str, Any], bytes]:
     result, raw = _read_json(path, "K9_REGISTERED")
+    if result.get('schema') == 'hh-gt09-fixture-repair-1':
+        from studio.tests.conformance.run_gt09_fixture_repair import verify
+        try:
+            verify(path.parent)
+        except (ValueError, KeyError, OSError, TypeError) as exc:
+            raise ProvenanceError('K9_REAL_FIXTURE_REPAIR_INVALID') from exc
+        return result, raw
     _need(result.get("schema") == "hh-gt09-registered-script-result-1" and
           result.get("status") == "DIAGNOSTIC_PASS" and
           result.get("authority") == 0 and result.get("public_ack") is False,
@@ -218,13 +225,13 @@ def _author_provenance(path: Path, *, arena_path: Path, room_path: Path,
                      "K13_AUTHOR_" + label.upper() + "_BINDING_HASH")
 
     events = doc.get("events")
-    _need(isinstance(events, list) and len(events) == 3, "K13_AUTHOR_EVENTS")
+    _need(isinstance(events, list) and len(events) in (3, 4), "K13_AUTHOR_EVENTS")
     by_kind: dict[tuple[str, str], dict[str, Any]] = {}
     for event in events:
         _need(isinstance(event, dict), "K13_AUTHOR_EVENT_OBJECT")
         kind, fixture = event.get("kind"), event.get("fixture")
         _need((kind, fixture) in (("recipe", "arena"), ("recipe", "room"),
-                                  ("repair_batch", "room")),
+                                  ("repair_batch", "room"), ("repair_batch", "arena")),
               "K13_AUTHOR_EVENT_KIND")
         key = (kind, fixture)
         _need(key not in by_kind, "K13_AUTHOR_EVENT_DUPLICATE")
@@ -233,7 +240,7 @@ def _author_provenance(path: Path, *, arena_path: Path, room_path: Path,
         payload_hash = _canonical_sha(payload)
         _hash_equals(event.get("payload_sha256"), payload_hash,
                      "K13_AUTHOR_EVENT_PAYLOAD_HASH")
-        receipt_label = "arena" if fixture == "arena" else "room" if kind == "recipe" else "registered"
+        receipt_label = fixture if kind == 'recipe' else 'registered'
         _hash_equals(event.get("receipt_sha256"), bindings[receipt_label]["sha256"],
                      "K13_AUTHOR_EVENT_RECEIPT_HASH")
         by_kind[key] = event
@@ -252,12 +259,26 @@ def _author_provenance(path: Path, *, arena_path: Path, room_path: Path,
               "K13_AUTHOR_RECIPE_BINDING")
     registered = _registered(registered_path)[0]
     repair_payload = repair_event["payload"]
-    _need(repair_payload.get("command_ids") == [registered["registered_route"]["command_id"],
+    if registered.get('schema') == 'hh-gt09-fixture-repair-1':
+        _need(set(by_kind) == {('recipe', 'arena'), ('recipe', 'room'),
+                               ('repair_batch', 'arena'), ('repair_batch', 'room')},
+              'K13_BOTH_REPAIR_EVENTS')
+        for fixture in ('arena', 'room'):
+            payload = by_kind[('repair_batch', fixture)]['payload']
+            row = registered['fixtures'][fixture]
+            _need(payload == {'command_ids': [row['repair_route']['command_id']],
+                    'command_sha256': row['command_sha256'],
+                    'recipe_sha256': registered['recipe_sha256'],
+                    'observed_fault_sha256': row['seed']['result_sha256'],
+                    'repair_replay_sha256': row['replay']['result_sha256']},
+                  'K13_AUTHOR_REPAIR_BINDING')
+    else:
+        _need(repair_payload.get("command_ids") == [registered["registered_route"]["command_id"],
                                                    registered["repair_route"]["command_id"]] and
           repair_payload.get("repair_batch_applied") is True and
           repair_payload.get("repair_replay_observed") is True and
           repair_payload.get("checkpoint_verified") is True,
-          "K13_AUTHOR_REPAIR_BINDING")
+              "K13_AUTHOR_REPAIR_BINDING")
     transcript = doc.get("transcript")
     _need(isinstance(transcript, dict) and transcript.get("events") == events and
           transcript.get("author") == author and
@@ -303,7 +324,9 @@ def _measure(*, run_id: str, arena_path: Path | None, room_path: Path | None,
         "author": author,
         "arena_receipt": arena["receipt"],
         "room_receipt": room["receipt"],
-        "registered_receipts": {
+        "registered_receipts": {fixture: row['repair_route']['receipt']
+            for fixture, row in registered['fixtures'].items()}
+            if 'fixtures' in registered else {
             "registered": registered["registered_route"]["receipt"],
             "repair": registered["repair_route"]["receipt"],
         },
@@ -332,6 +355,12 @@ def _measure(*, run_id: str, arena_path: Path | None, room_path: Path | None,
             "room_command_ids": room["catalog_room_handoff"]["command_ids"],
         },
         "batch_provenance": {
+            'registered_result_sha256': _sha(registered_path),
+            'fixtures': {fixture: {'command_id': row['repair_route']['command_id'],
+                                   'command_sha256': row['command_sha256']}
+                         for fixture, row in registered['fixtures'].items()},
+            'recipe_sha256': registered['recipe_sha256'],
+        } if 'fixtures' in registered else {
             "registered_result_sha256": _sha(registered_path),
             "command_ids": [registered["registered_route"]["command_id"],
                             registered["repair_route"]["command_id"]],

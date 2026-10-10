@@ -1,0 +1,29 @@
+{
+  "schema": "hh-gt09-authored-repair-recipe-1",
+  "authority": 0,
+  "purpose": "Replay the authored K9 repairs against both real K8 catalog publications. Runtime lease/revision fields are host-bound after observation, never authored credentials.",
+  "fixtures": {
+    "arena": {
+      "command_id": "repair.arena",
+      "operation": "gameplay-source.publish",
+      "target": "scripts/fixture_actor.gd",
+      "good": "\t\thealth += 1",
+      "seeded": "\t\thealth += 0",
+      "symptom": {"health": 3},
+      "repaired": {"health": 4},
+      "play_exit": 31,
+      "diagnosis": "The pickup is collected but health stays at 3. Restore its health increment; preserve the scene, assets, input trace and all other controller bytes."
+    },
+    "room": {
+      "command_id": "repair.room",
+      "operation": "gameplay-source.publish",
+      "target": "scripts/fixture_actor.gd",
+      "good": "\t\tswitch_used = true",
+      "seeded": "\t\tswitch_used = false",
+      "symptom": {"switch_used": false},
+      "repaired": {"switch_used": true},
+      "play_exit": 0,
+      "diagnosis": "Input reaches the trigger but the switch remains off. Restore the state transition; preserve the catalog room, assets and movement trace."
+    }
+  }
+}

@@ -85,7 +85,7 @@ def process_observation() -> dict[str, object]:
 def _selection(run_id: str, rows: list[str]) -> list[str]:
     """Only the implemented rehearsal dependency graph may be scheduled."""
     match = RUN_RE.fullmatch(run_id)
-    if match is None or rows != (["K3"] if match[1] == "rehearsal" else []):
+    if match is None or (rows not in (["K3"], ["K9"]) if match[1] == "rehearsal" else rows != []):
         raise ValueError("GT09_TASK_ROW_SELECTION")
     return rows
 
@@ -189,7 +189,7 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--prepare", action="store_true")
     parser.add_argument("--run-id", required=True)
-    parser.add_argument("--rows", help="prepare-only rehearsal selection; currently K3")
+    parser.add_argument("--rows", help="prepare-only rehearsal selection: K3 or K9 with its producers")
     args = parser.parse_args(argv)
     if args.rows and not args.prepare:
         parser.error("--rows is prepare-only; execution uses the pinned request")

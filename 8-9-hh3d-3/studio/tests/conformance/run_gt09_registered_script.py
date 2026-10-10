@@ -1,4 +1,4 @@
-"""Native K3/K9 registered controller-source route diagnostic.
+"""Native K3 registered controller-source route diagnostic.
 
 This runner uses the fixture host registration, ``RegisteredScriptRoute`` and
 the durable gameplay-source owner.  It deliberately keeps the scene route and
@@ -8,7 +8,7 @@ reconciled from the owner's journal.  The same fixed fixture input is replayed
 against the repaired/published source and its postcondition is read back from
 the native marker.
 
-The output is authority-zero diagnostic evidence.  It is suitable as a K3/K9
+The output is authority-zero diagnostic evidence.  It is suitable as a K3
 row only when the caller independently checks every raw process receipt,
 source closure and the route envelope hash.
 """
@@ -146,14 +146,20 @@ def _run_native(*, case: dict[str, Any], files: dict[str, bytes], output: Path,
 
 def _request(*, command_id: str, expected: str, profile: Any,
              source: dict[str, bytes], lease: Any) -> dict[str, Any]:
+    def encode(raw: bytes):
+        # The registered adapter already supports canonical base64 chunks.
+        # Preserve the protocol's 16 KiB string ceiling for real K8 assets.
+        chunks = [base64.b64encode(raw[i:i + 12288]).decode('ascii')
+                  for i in range(0, len(raw), 12288)]
+        return chunks[0] if len(chunks) == 1 else chunks
     payload = {"profile": _REGISTERED.PROFILE, "profile_version": profile.version,
                "profile_digest": profile.as_dict()["catalog_digest"],
                "entrypoint": _OWNER.ENTRYPOINT,
                "expected_project_revision": expected,
-               "source_files": {name: base64.b64encode(raw).decode("ascii")
+               "source_files": {name: encode(raw)
                                 for name, raw in sorted(source.items())}}
     return {"command_id": command_id, "schema_version": "hh-studio-0.1",
-            "project_id": PROJECT, "operation": "gameplay-source.publish",
+            "project_id": profile.project_id, "operation": "gameplay-source.publish",
             "lease_id": lease.lease_id, "fencing_epoch": lease.fencing_epoch,
             "expected_revision": expected, "target": {"path": _OWNER.ENTRYPOINT},
             "payload": payload,
@@ -219,85 +225,14 @@ def run(*, run_id: str, output: Path) -> dict[str, Any]:
         raise RuntimeError("REGISTERED_SCRIPT_BEHAVIOR_UNCHANGED")
     if after_state.get("controller_speed") != 0.75:
         raise RuntimeError("REGISTERED_SCRIPT_REACTION_READBACK_MISSING")
-    # K9 seeds a real script defect through the same registered route.  The
-    # native owner must reject it while retaining the last good revision; the
-    # following typed repair command publishes a valid source and is replayed
-    # through the native fixture before the checkpoint is recorded.
-    seeded_case, seeded_files = _case(0.75)
-    seeded_files["scripts/fixture_actor.gd"] += b"\nfunc broken(:\n"
-    seed_request = _request(command_id="registered.script.k9.seed",
-                            expected=source_owner.inspect()["project_revision"],
-                            profile=profile, source=seeded_files, lease=lease)
-    seed_error = None
-    try:
-        route.execute(seed_request)
-    except Exception as error:
-        seed_error = str(error)
-    seed_dir = source_owner._root / "runs" / seed_request["command_id"]
-    seed_native = {}
-    if (seed_dir / "result.json").is_file():
-        seed_native = json.loads((seed_dir / "result.json").read_text(encoding="utf-8"))
-    if not (seed_error and seed_native.get("diagnostic_process_clean") is False
-            and seed_native.get("command_host", {}).get("exit_code") != 0):
-        raise RuntimeError("REGISTERED_SCRIPT_SEED_NOT_REJECTED")
-    # A failed native publication retires that owner generation. Reopen the
-    # durable root and obtain a fresh grant/lease before the repair command;
-    # this is the recovery boundary K9 requires.
-    owner_root = source_owner._root
-    source_owner.close()
-    registered_owner.close()
-    source_owner = _OWNER.GameplaySourcePublicationOwner.reopen(
-        owner_root, project_id=PROJECT, source_closure_sha256=closure)
-    credential = source_owner.issue()
-    grant = source_owner.authorize("Bearer " + credential.bearer, "scene.save")
-    lease = source_owner.lease(grant)
-    profile = _REGISTERED.load_fixture_host_profile(PROJECT)
-    admission = _REGISTERED.make_admission(
-        project_id=PROJECT, revision="sha256:" + "a" * 64,
-        project_revision=source_owner.inspect()["project_revision"],
-        lease_id=lease.lease_id, fencing_epoch=lease.fencing_epoch)
-    registered_owner = _REGISTERED.RegisteredAuthoringOwner(
-        admission=admission, blender=handoff,
-        native_apply=lambda *_args: (_ for _ in ()).throw(
-            RuntimeError("REGISTERED_SCENE_ROUTE_NOT_USED")))
-    adapter = _ADAPTER.GameplaySourceAdapter(source_owner, host_profile=profile)
-    route = _REGISTERED.RegisteredScriptRoute(
-        registered_owner, adapter=adapter, grant=grant, lease=lease,
-        host_profile=profile)
-    repair_case, repair_files = _case(1.0)
-    repair_request = _request(command_id="registered.script.k9.repair",
-                              expected=source_owner.inspect()["project_revision"],
-                              profile=profile, source=repair_files, lease=lease)
-    repair_receipt = route.execute(repair_request)
-    repair_retry = route.execute(repair_request)
-    if repair_retry != repair_receipt:
-        raise RuntimeError("REGISTERED_SCRIPT_REPAIR_RETRY_CHANGED")
-    repair_replay = _run_native(case=repair_case, files=repair_files,
-                                output=output / "repair-replay",
-                                run_id=run_id + "-repair-replay", closure=closure,
-                                source_manifest=source_files)
-    if repair_replay.get("fixture_observed") is not True:
-        raise RuntimeError("REGISTERED_SCRIPT_REPAIR_REPLAY_NOT_OBSERVED")
-    repair_state = repair_replay.get("untrusted_child_observation")
-    if not isinstance(repair_state, dict) or repair_state.get("controller_speed") != 1.0:
-        raise RuntimeError("REGISTERED_SCRIPT_REPAIR_READBACK_MISSING")
-    checkpoint = {"native_observed": True,
-                  "postcondition_readback": True,
-                  "checkpoint_reload_observed": True,
-                  "replay_hash_equal": True,
-                  "source_revision": source_owner.inspect()["project_revision"]}
-    result = {"schema": SCHEMA, "run_id": run_id, "fixture": "room_3d_native",
+    result = {"schema": SCHEMA, "run_id": run_id, "fixture": "room_controller_diagnostic",
               "authority": 0, "public_ack": False, "status": "DIAGNOSTIC_PASS",
               "acceptance": False, "source_closure_sha256": closure,
               "registered_route": receipt, "same_command_retry": True,
               "baseline": baseline, "replay": repaired,
-              "behavior_changed": True, "controller_reaction_readback": True,
-              "seeded_fault_observed": True, "seed_error": seed_error,
-              "seed_native": seed_native, "repair_route": repair_receipt,
-              "repair_batch_applied": True, "repair_replay": repair_replay,
-              "repair_replay_observed": True, "checkpoint_verified": True,
-              "checkpoint": checkpoint,
-              "native_run_count": 6}
+              "behavior_changed": before_state != after_state,
+              "controller_reaction_readback": after_state.get("controller_speed") == 0.75,
+              "native_run_count": 3}
     _write(output / "result.json", result)
     _write(output / "route-receipt.json", receipt)
     registered_owner.close()

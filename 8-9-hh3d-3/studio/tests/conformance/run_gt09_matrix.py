@@ -39,7 +39,7 @@ ROWS: dict[str, dict[str, Any]] = {
     "K6": {"gate": "AUTH-04 durable publish retry/reopen and owner edit", "runner": "tests/godot/run_gameplay_publication_probe.py", "status": "OPEN"},
     "K7": {"gate": "AUTH-05 executor isolation and hostile cases", "runner": "tests/godot/run_linux_probe.py", "status": "OPEN"},
     "K8": {"gate": "two fixtures authored through catalog commands", "runner": "tests/godot/run_registered_authoring_probe.py", "status": "OPEN"},
-    "K9": {"gate": "seeded defect repair through catalog batch and replay", "runner": "tests/godot/run_registered_authoring_probe.py", "status": "OPEN"},
+    "K9": {"gate": "seeded defect repair through catalog batch and replay", "runner": "tests/conformance/run_gt09_fixture_repair.py", "status": "OPEN"},
     "K10": {"gate": "input/pause/save/reload/perf on final catalog fixtures", "runner": "tests/godot/run_delegated_playtest.py", "status": "OPEN"},
     "K11": {"gate": "reconnect/retry/context reset/owner edit/parallel source jobs", "runner": "tests/godot/run_gameplay_adapter_probe.py", "status": "OPEN"},
     "K12": {"gate": "prompt injection and out-of-scope command rejection", "runner": "tests/godot/test_gameplay_attribution.py", "status": "OPEN"},
@@ -542,60 +542,25 @@ def _k10_semantics(*, arena: Path, room: Path, conformance: Path) -> bool:
     return True
 
 
-def _registered_script_semantics(path: Path, *, closure: str | None = None,
-                                 require_repair: bool = False) -> bool:
-    """Validate the native registered controller route and replay checkpoint.
-
-    K3 proves the ordinary registered source publication.  K9 additionally
-    requires a deliberately broken source to be rejected by the native host,
-    followed by a durable reopen, typed repair and a fresh native replay.
-    Those fields are checked from the child receipt rather than inferred from
-    the final status banner.
-    """
-    result_path = path / "result.json"
+def _registered_script_semantics(path: Path, *, closure: str | None = None) -> bool:
+    """K3 controller change only; K9 validates both real publications separately."""
     try:
-        result = json.loads(result_path.read_text(encoding="utf-8"))
-    except (OSError, ValueError, TypeError):
+        result = _load_json(path / "result.json")
+        before = result["baseline"]
+        after = result["replay"]
+        route = result["registered_route"]
+        return (result.get("schema") == "hh-gt09-registered-script-result-1"
+                and result.get("status") == "DIAGNOSTIC_PASS"
+                and result.get("authority") == 0 and result.get("acceptance") is False
+                and (closure is None or result.get("source_closure_sha256") == closure)
+                and before.get("fixture_observed") is True and after.get("fixture_observed") is True
+                and before["untrusted_child_observation"] != after["untrusted_child_observation"]
+                and after["untrusted_child_observation"].get("controller_speed") == 0.75
+                and route.get("status") in ("READBACK_ACK", "APPLIED")
+                and route["receipt"].get("readback_ack") is True
+                and result.get("same_command_retry") is True)
+    except (OSError, ValueError, TypeError, KeyError):
         return False
-    checkpoint = result.get("checkpoint")
-    route = result.get("registered_route")
-    valid = (result.get("schema") == "hh-gt09-registered-script-result-1"
-            and result.get("status") == "DIAGNOSTIC_PASS"
-            and result.get("authority") == 0 and result.get("acceptance") is False
-            and (closure is None or result.get("source_closure_sha256") == closure)
-            and result.get("behavior_changed") is True
-            and result.get("controller_reaction_readback") is True
-            and result.get("same_command_retry") is True
-            and result.get("native_run_count") >= 3
-            and type(result.get("baseline")) is dict
-            and result["baseline"].get("fixture_observed") is True
-            and type(result.get("replay")) is dict
-            and result["replay"].get("fixture_observed") is True
-            and type(route) is dict and route.get("status") in ("READBACK_ACK", "APPLIED")
-            and type(checkpoint) is dict
-            and checkpoint.get("native_observed") is True
-            and checkpoint.get("postcondition_readback") is True
-            and checkpoint.get("checkpoint_reload_observed") is True
-            and checkpoint.get("replay_hash_equal") is True)
-    if not valid or not require_repair:
-        return valid
-    seed_native = result.get("seed_native")
-    repair_route = result.get("repair_route")
-    repair_replay = result.get("repair_replay")
-    return (result.get("seeded_fault_observed") is True
-            and isinstance(result.get("seed_error"), str)
-            and isinstance(seed_native, dict)
-            and seed_native.get("diagnostic_process_clean") is False
-            and isinstance(seed_native.get("command_host"), dict)
-            and seed_native["command_host"].get("exit_code") not in (None, 0)
-            and result.get("repair_batch_applied") is True
-            and result.get("repair_replay_observed") is True
-            and result.get("checkpoint_verified") is True
-            and isinstance(repair_route, dict)
-            and repair_route.get("status") in ("READBACK_ACK", "APPLIED")
-            and isinstance(repair_replay, dict)
-            and repair_replay.get("fixture_observed") is True
-            and result.get("native_run_count") >= 6)
 
 
 def _verify_row(row: dict[str, Any], *, matrix_root: Path, closure: str | None,
@@ -710,6 +675,9 @@ def rehearsal_rows(*, output: Path, run_id: str, selected: tuple[str, ...]) -> i
     The resulting manifest is explicitly rehearsal-only and can never satisfy
     ``final`` or ``verify-only``.
     """
+    if selected == ('K9',):
+        return final_matrix_orchestrated(output=output, run_id=run_id, k13=None,
+                                         rehearsal_through_k9=True)
     output = output.resolve()
     _need(not output.exists(), f"rehearsal_output_exists:{output}")
     _need(selected and len(set(selected)) == len(selected), "rehearsal_rows_empty_or_duplicate")
@@ -824,8 +792,13 @@ def _revalidate_row_semantics(raw: dict[str, Any]) -> None:
               and values[0]["transaction"]["command_ids"] != values[1]["transaction"]["command_ids"]
               and values[0]["source_closure_sha256"] == values[1]["source_closure_sha256"]
               == check.get("source_closure_sha256"))
-    elif ident in {"K3", "K9"}:
-        ok = _registered_script_semantics(refs[0].parent, require_repair=ident == "K9")
+    elif ident == "K3":
+        ok = _registered_script_semantics(refs[0].parent)
+    elif ident == "K9":
+        from studio.tests.conformance.run_gt09_fixture_repair import verify
+        doc = verify(refs[0].parent)
+        ok = all(doc['fixtures'][fixture]['publication'] == producer['publication_roots'][fixture]
+                 for fixture in ('arena', 'room'))
     elif ident == "K4":
         from studio.tests.conformance.run_gt09_catalog_native_check import _check
         for fixture in ("arena", "room"):
@@ -1341,10 +1314,9 @@ def _k13_author_provenance(*, output: Path, arena: Path, room: Path,
     room_handoff = room_doc.get("catalog_room_handoff")
     _need(isinstance(arena_handoff, dict) and isinstance(room_handoff, dict),
           "k13_author_catalog_handoff_missing")
-    registered_route = registered_doc.get("registered_route")
-    repair_route = registered_doc.get("repair_route")
-    _need(isinstance(registered_route, dict) and isinstance(repair_route, dict),
-          "k13_author_repair_route_missing")
+    _need(registered_doc.get('schema') == 'hh-gt09-fixture-repair-1'
+          and set(registered_doc.get('fixtures', {})) == {'arena', 'room'},
+          'k13_author_both_repairs_missing')
     events = [
         {"kind": "recipe", "fixture": "arena",
          "payload": {"command_ids": arena_handoff["command_ids"],
@@ -1354,14 +1326,16 @@ def _k13_author_provenance(*, output: Path, arena: Path, room: Path,
          "payload": {"command_ids": room_handoff["command_ids"],
                      "transaction_digest": room_handoff["transaction_digest"]},
          "receipt_sha256": _sha(room_path)},
-        {"kind": "repair_batch", "fixture": "room",
-         "payload": {"command_ids": [registered_route["command_id"],
-                                       repair_route["command_id"]],
-                     "repair_batch_applied": registered_doc.get("repair_batch_applied") is True,
-                     "repair_replay_observed": registered_doc.get("repair_replay_observed") is True,
-                     "checkpoint_verified": registered_doc.get("checkpoint_verified") is True},
-         "receipt_sha256": _sha(registered_path)},
     ]
+    for fixture in ('arena', 'room'):
+        row = registered_doc['fixtures'][fixture]
+        events.append({'kind': 'repair_batch', 'fixture': fixture,
+            'payload': {'command_ids': [row['repair_route']['command_id']],
+                'command_sha256': row['command_sha256'],
+                'recipe_sha256': registered_doc['recipe_sha256'],
+                'observed_fault_sha256': row['seed']['result_sha256'],
+                'repair_replay_sha256': row['replay']['result_sha256']},
+            'receipt_sha256': _sha(registered_path)})
     for event in events:
         event["payload_sha256"] = hashlib.sha256(
             json.dumps(event["payload"], sort_keys=True, separators=(",", ":"),
@@ -1398,7 +1372,8 @@ def _k13_author_provenance(*, output: Path, arena: Path, room: Path,
 
 def final_matrix_orchestrated(*, output: Path, run_id: str, k13: Path | None,
                               playtest_deadline: float = 960.0,
-                              playtest_start: int = 16) -> int:
+                              playtest_start: int = 16,
+                              rehearsal_through_k9: bool = False) -> int:
     """Own every GT-09 producer and stop at the first failed row."""
     output = output.resolve()
     _need(not output.exists(), f"matrix_output_exists:{output}")
@@ -1611,6 +1586,7 @@ def final_matrix_orchestrated(*, output: Path, run_id: str, k13: Path | None,
             finish_row("K8", [step], "two fixtures authored through catalog commands", False)
             raise MatrixError("K8:FAIL")
     arena, room = publication_roots["arena"], publication_roots["room"]
+    producer['publication_roots'] = {key: str(value.resolve()) for key, value in publication_roots.items()}
     conf_out = output / "fixture-conformance.json"
     k8_steps = [
         {"command": [str(sys.executable), "-B", str(conformance), "--arena", str(arena),
@@ -1667,16 +1643,36 @@ def final_matrix_orchestrated(*, output: Path, run_id: str, k13: Path | None,
        validator=lambda: _auth05_semantics(auth5_paths))
 
     k10_conf = output / "k10-fixture-conformance.json"
+    k9_root = STUDIO / '.local' / 'reviews' / ('k9-' + nonce)
+    from studio.tests.conformance.run_gt09_fixture_repair import verify as verify_k9
     run_row("K9", [
         (_test_command(("studio.tests.godot.test_gameplay_adapter_probe",
                         "studio.tests.godot.test_gameplay_failure_probe",
-                        "studio.tests.godot.test_gameplay_probe_evidence")), 300, "unit"),
-        ([sys.executable, "-B", str(conformance), "--arena", str(arena),
-          "--room", str(room)], 180, "host"),
+                        "studio.tests.godot.test_gameplay_probe_evidence",
+                        "studio.tests.conformance.test_gt09_fixture_repair")), 300, "unit"),
+        ([sys.executable, '-B', 'studio/tests/conformance/run_gt09_fixture_repair.py',
+          '--arena', str(arena), '--room', str(room), '--output', str(k9_root),
+          '--run-id', 'gt09-k9-' + nonce, '--dry-run'], 180, 'host'),
+        ([sys.executable, '-B', 'studio/tests/conformance/run_gt09_fixture_repair.py',
+          '--arena', str(arena), '--room', str(room), '--output', str(k9_root),
+          '--run-id', 'gt09-k9-' + nonce], 600, 'native'),
     ], "seeded defect repair through catalog batch and replay",
-       references=[str(registered_script_root / "result.json")],
-       validator=lambda: _registered_script_semantics(registered_script_root,
-                                                       require_repair=True))
+       references=[str(k9_root / 'result.json')], validator=lambda: bool(verify_k9(k9_root)))
+
+    if rehearsal_through_k9:
+        closure_end, closure_end_payload = _source_tree_closure()
+        _need(closure_end == closure, 'source_changed_during_rehearsal')
+        manifest = {'schema': SCHEMA, 'mode': 'REHEARSAL', 'run_id': run_id,
+            'authority': 0, 'acceptance': False, 'status': 'PASS',
+            'source_closure_sha256': closure, 'closure_start': closure, 'closure_end': closure_end,
+            'closure_payload': closure_payload, 'closure_end_payload': closure_end_payload,
+            'rows': rows, 'producer': producer, 'required_rows': ['K9'],
+            'dependency_rows': [row['id'] for row in rows],
+            'engine_launched': True, 'network_used': False}
+        (output / 'manifest.json').write_bytes(_canonical(manifest))
+        (output / 'manifest.sha256').write_text(_sha(output / 'manifest.json') + '\n', encoding='ascii')
+        print(json.dumps({'mode': 'REHEARSAL', 'status': 'PASS', 'run_id': run_id}))
+        return 0
 
     run_row("K10", [
         (_test_command(("studio.tests.godot.test_gameplay_log_policy",
@@ -1723,7 +1719,7 @@ def final_matrix_orchestrated(*, output: Path, run_id: str, k13: Path | None,
     _need(_k13_semantics(k13_doc), "k13_evidence_not_measured")
     k13_author, k13_child_closure = _k13_author_provenance(
         output=output, arena=arena, room=room,
-        registered=registered_script_root, run_id=run_id)
+        registered=k9_root, run_id=run_id)
     k13_client = output / "k13-client.json"
     run_row("K13", [
         (_test_command(("studio.tests.conformance.test_gt09_mcp_compatibility",
@@ -1732,7 +1728,7 @@ def final_matrix_orchestrated(*, output: Path, run_id: str, k13: Path | None,
           "--run-id", f"gt09-k13-client-{nonce}",
           "--arena-publication", str(arena / "result.json"),
           "--room-publication", str(room / "result.json"),
-          "--registered-result", str(registered_script_root / "result.json"),
+          "--registered-result", str(k9_root / "result.json"),
           "--author-provenance", str(k13_author),
           "--k13-evidence", str(k13_path),
           "--output", str(k13_client)], 180, "host"),
