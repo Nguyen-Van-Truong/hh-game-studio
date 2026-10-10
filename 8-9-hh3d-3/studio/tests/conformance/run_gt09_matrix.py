@@ -907,11 +907,17 @@ def _revalidate_failure_raw(refs: list[Path]) -> None:
     from studio.tests.godot import run_gameplay_failure_probe as failure
     probe = failure.load("gt09_verify_linux_probe", STUDIO / "tests/godot/run_linux_probe.py")
     fixtures = failure.load("gt09_verify_linux_fixtures", STUDIO / "tests/godot/linux_probe_fixtures.py")
+    # The producer adds the canonical scene/project envelope before calling
+    # case_files().  Reconstruct that same envelope during verify-only; the
+    # raw fixture table intentionally stores only the failure-specific fields.
+    profile = failure.load("gt09_verify_gameplay_profile",
+                          STUDIO / "godot-addon/gameplay_source_profile.py")
     for ref in refs:
         result = _load_json(ref)
         fixture = result["failure_fixture"]
         case_name = failure.failure_case_name(fixture)
         case = dict(fixtures.FIXTURES[case_name])
+        case.update(scene=fixtures.SCENE, project=profile.PROJECT_TEMPLATE)
         if not failure.is_auth05_failure(fixture):
             case.update(timeout=30, authenticated_timeout=True)
         paths = result.get("native_paths", [])
