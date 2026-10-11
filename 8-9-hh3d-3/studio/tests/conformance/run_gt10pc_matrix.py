@@ -1,6 +1,6 @@
 """GT-10-PC requirement table and fail-closed evidence entry point.
 
-Schema 1 was a host-only prototype mislabeled as native. Its generated PASS
+Schema 1/2 were host-only prototypes mislabeled as native. Their generated PASS
 rows, self-written exit.json and short install loop are invalid release proof.
 Keep that raw for diagnosis, but never upgrade it to schema 2 or acceptance.
 """
@@ -18,7 +18,7 @@ import time
 import traceback
 from pathlib import Path
 
-SCHEMA = "hh-gt10pc-matrix-2"
+SCHEMA = "hh-gt10pc-matrix-3"
 ROW_DEFS = {
     "P1": ("host", "Signed v0.1 artifact, complete runtime closure, real schema/lock digests, SBOM/license/notice, flags and support docs"),
     "P2": ("host+native", "External pinned test public key; tamper/truncate/version/target rejected before unpack; native rejection preserves source"),

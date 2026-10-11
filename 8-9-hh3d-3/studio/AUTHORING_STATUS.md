@@ -7,7 +7,7 @@ P10 now uses a short bind root; durable input/harness bytes are hash-checked bef
 Staging cleanup is fail-closed: uncertain container removal retains the tree and rejects completion.
 P11 has a real-Godot one-cycle producer; p11a passed but predates the verify-only fix and is retained diagnostic.
 Focused executor/probe suite: 73 tests passed; dry-run native path budget max 73/200 characters.
-P10 p10fix5 raw, task receipt and deletion receipt remain retained; no prior raw is reused after drift.
+P10 p10a passed natively (278s); its verify-only read found a schema-constant gap, so p10a stays diagnostic and C3 will remint.
 Next: run P11 short through Scheduled Task, then C3 rehearsal P1–P11, pre-review, final 10×35, critics.
 GT10-PC P1–P12 remain unaccepted; AUTHORITY stays 0 until final package and two critics agree.
 GT08B Android deferred; full GT10 waits for it; GT11 remains unopened. No complete-game claim.
