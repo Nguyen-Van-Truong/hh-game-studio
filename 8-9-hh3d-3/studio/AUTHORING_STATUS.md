@@ -3,13 +3,12 @@
 AUTHORITY=0; GT09=ACCEPTED; GT10_PC=IN_PROGRESS_NATIVE_DIAGNOSTIC.
 Progress authority: `zdoc/8-9-godot-blender-agent-studio-plan.txt`.
 GT09 final -74 accepted: K1–K15, actual Scheduled Task exit0, two critics same hash.
-GT10-PC prototype 6b3e0f77 claims remain VOID_DIAGNOSTIC; no P row accepted.
-Checkpoint 51ce380e: external Ed25519 trust, immutable releases and native lane.
-Diagnostic 20261011-04: arena+room exit0; sched01 exited0 in 60.032s (older source).
-Current source adds addon dependency/layout repair, WAL recovery and strict raw verifier.
-Five host tests passed, including four actual addon worker kills (118.408s).
-Current-source Scheduled Task native parse/lifecycle verification is NEXT; prior runs are historical.
-Remaining: P1/P2 adversarial receipts, Linux/P4/P6–P10, formal25 10×35, two final critics.
+GT10-PC P1–P12 remain unaccepted; no checkbox or acceptance claim is changed here.
+Current source includes immutable Ed25519 package trust, compatibility lock, WAL selector/addon recovery, raw evidence verifier, native P2 worker and task-bound rehearsal rows.
+Diagnostic Linux `gt10pc-linux-current-20261011-08` and Windows `gt10pc-win-current-20261011-09` are historical because their source closure predates the current P2/P8/P9/task changes.
+Rehearsal `gt10pc-rehearsal-20261011-r02` is authority-zero: P1 host pass; P2 host attacks only; P7 pending; P8 pending; P9 docs-only; P11/P12 deferred.
+Focused validation: package/lifecycle/P2 tests pass after the compatibility-lock changes; a fresh rehearsal is required before any row is treated as current evidence.
+Remaining: native P2 Scheduled Task run, P3–P7/P9–P10 native matrix, P8/P9 current rehearsal, formal25 10×35, two final critics.
 GT08B Android deferred; full GT10 blocked; GT11 unopened. No complete-game claim.
 
 ## K1–K15 acceptance matrix
@@ -34,8 +33,8 @@ GT08B Android deferred; full GT10 blocked; GT11 unopened. No complete-game claim
 
 ## Next
 
-Run Scheduled Task diagnostic with schema-3 producer and external trust arguments.
-Then extend native P4/P6/P7 and Linux; P7 host kill tests alone do not satisfy the native row.
+Freeze current writers, run one fresh Scheduled Task rehearsal with selected P1/P2/P8/P9 first, then integrate P7 native lifecycle and P3–P6/P10 regression before a whole-matrix rehearsal.
+P2 native rejection must retain independent worker/host/Godot receipts and unchanged install/project/state ledgers. P9 consumer helper is host smoke only until a native installed fixture is captured.
 Final is explicitly disabled until all row producers and raw verifiers are complete.
 
 ## Retained evidence and lessons

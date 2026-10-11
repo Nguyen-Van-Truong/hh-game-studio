@@ -17,7 +17,6 @@ from unittest import mock
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 from package.consumer_install import ConsumerInstall
 from package import addon_transaction as addon
-from package import lifecycle_transaction as lifecycle
 
 
 @contextmanager
@@ -35,11 +34,15 @@ def instrument(installer, command_id, callback):
         callback("before-selector")
         return result
 
+    published_count = 0
+
     def published(state, expected):
+        nonlocal published_count
         result = publish(state, expected)
-        if command_id not in state["commands"]:
+        published_count += 1
+        if published_count == 1:
             callback("selector-before-addon-intent")
-        else:
+        elif published_count == 2:
             callback("journal-published")
         return result
 
@@ -71,18 +74,44 @@ def main() -> int:
     installer = ConsumerInstall(Path(request["install"]),
                                 trusted_keys={request["key_id"]: bytes.fromhex(request["public_key"])})
     phase = request["phase"]
+    action = request.get("action", "install")
+    stop_mode = request.get("disposition", "kill") == "stop"
 
     def cut(reached: str) -> None:
         if reached == phase:
             marker = Path(request["marker"])
-            marker.write_text(json.dumps({"phase": reached, "pid": os.getpid()}), encoding="utf-8")
+            marker.parent.mkdir(parents=True, exist_ok=True)
+            temporary = marker.with_name(marker.name + ".tmp")
+            with temporary.open("w", encoding="utf-8") as stream:
+                json.dump({"phase": reached, "pid": os.getpid(), "action": action,
+                           "disposition": "stop" if stop_mode else "kill"}, stream,
+                          sort_keys=True)
+                stream.flush()
+                os.fsync(stream.fileno())
+            os.replace(temporary, marker)
+            if stop_mode:
+                receipt = ConsumerInstall.stop_existing(
+                    Path(request["install"]), command_id=request.get("stop_command_id", "p7.stop"))
+                stop_path = marker.with_name(marker.stem + ".stop.json")
+                with stop_path.open("x", encoding="utf-8") as stream:
+                    json.dump(receipt, stream, sort_keys=True)
+                    stream.flush()
+                    os.fsync(stream.fileno())
+                return
             while True:
-                time.sleep(1)  # The parent must kill the actual worker process.
+                time.sleep(1)  # Parent must kill the actual worker process.
 
     with instrument(installer, request["command_id"], cut):
-        installer.install_lifecycle(Path(request["project"]), Path(request["package"]),
-                                    command_id=request["command_id"],
-                                    expected_state_sha256=request["state"])
+        if action == "install":
+            installer.install_lifecycle(Path(request["project"]), Path(request["package"]),
+                                        command_id=request["command_id"],
+                                        expected_state_sha256=request["state"])
+        elif action == "rollback":
+            installer.rollback_lifecycle(Path(request["project"]), destination=request["destination"],
+                                         command_id=request["command_id"],
+                                         expected_state_sha256=request["state"])
+        else:
+            raise ValueError("unsupported lifecycle action")
     return 0
 
 

@@ -8,7 +8,7 @@ param(
     [Parameter(Mandatory=$true)]
     [ValidatePattern('^gt10pc-(final|rehearsal)-20\d{6}-[a-z0-9-]{1,24}$')]
     [string]$RunId,
-    [ValidateSet('P3','P5')]
+    [ValidatePattern('^P(1[0-2]|[1-9])(?:,(?:P(1[0-2]|[1-9])))*$')]
     [string]$Rows
 )
 Set-StrictMode -Version Latest

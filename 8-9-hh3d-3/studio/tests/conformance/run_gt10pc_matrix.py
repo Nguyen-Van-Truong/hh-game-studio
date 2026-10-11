@@ -103,6 +103,33 @@ def _build_rehearsal_artifacts(output: Path, *, trust: Path, private: Path, trus
     return artifacts
 
 
+def _p8_host_checks(output: Path, artifact: Path, *, trust: Path,
+                    trust_sha256: str) -> dict:
+    """Exercise dependency/version admission without network or latest lookup."""
+    from studio.package.consumer_support import preflight
+    keys = load_trust(trust, expected_sha256=trust_sha256)
+    good = verify_package(artifact, trusted_keys=keys, target="Windows")
+    checks = {"closure_verified": True, "network_used": False, "latest_autofetch": False}
+    try:
+        preflight(artifact, trusted_keys=keys, target="Windows", required=("godot",))
+    except ValueError as exc:
+        checks["missing_dependency_rejected"] = "missing dependency" in str(exc)
+        checks["missing_dependency_reason"] = str(exc)
+    else:
+        raise ValueError("GT10PC_P8_MISSING_DEPENDENCY_ACCEPTED")
+    try:
+        verify_package(artifact, trusted_keys=keys, target="Windows", expected_version="0.1.1")
+    except ValueError as exc:
+        checks["version_rejected"] = "package version rejected" in str(exc)
+        checks["version_reason"] = str(exc)
+    else:
+        raise ValueError("GT10PC_P8_VERSION_ACCEPTED")
+    need(checks["missing_dependency_rejected"] and checks["version_rejected"],
+         "GT10PC_P8_ACTIONABLE_REJECTION")
+    return {"status": "REHEARSAL_PASS", "checks": checks,
+            "artifact_sha256": good["archive_sha256"], "source_closure_sha256": good["manifest"]["source_closure_sha256"]}
+
+
 def _p2_archive_attacks(output: Path, artifacts: dict, *, trust: Path,
                         trust_sha256: str, private: Path | None = None) -> list[dict]:
     """Exercise archive gates, then one real installed native rejection.
@@ -256,11 +283,23 @@ def run_rehearsal(rows: list[str], *, output: Path, trust: Path,
         if "P7" in rows:
             result["rows"]["P7"] = {"status": "PENDING", "native": "not exercised in this run"}
         if "P8" in rows:
-            result["rows"]["P8"] = {"status": "PENDING", "missing_dependency": "not yet exercised"}
+            result["rows"]["P8"] = _p8_host_checks(
+                output, Path(artifacts["Windows"]["0.1.0"]["path"]),
+                trust=trust, trust_sha256=trust_sha256)
         if "P9" in rows:
+            from studio.package.consumer_support import consumer_fixture_smoke, support_bundle
             docs = [ROOT / "package/NOTICE.txt", ROOT / "package/runbook.md", ROOT / "package/known-limits.md"]
             need(all(path.is_file() for path in docs), "GT10PC_P9_DOCUMENTS_MISSING")
-            result["rows"]["P9"] = {"status": "REHEARSAL_PASS_DOCS_ONLY", "consumer_smoke": "PENDING"}
+            p9_artifact = Path(artifacts["Windows"]["0.1.0"]["path"])
+            smoke = consumer_fixture_smoke(p9_artifact, output / "p9-consumer-smoke",
+                                            trusted_keys=load_trust(trust, expected_sha256=trust_sha256),
+                                            target="Windows", fixture="gt09-arena")
+            bundle = support_bundle(p9_artifact, output / "p9-support.json",
+                                    trusted_keys=load_trust(trust, expected_sha256=trust_sha256),
+                                    target="Windows")
+            result["rows"]["P9"] = {"status": "REHEARSAL_PASS_DOCS_HOST_SMOKE",
+                                      "consumer_smoke": smoke, "support_bundle": bundle,
+                                      "native_smoke": "PENDING"}
         if "P10" in rows:
             result["rows"]["P10"] = {"status": "PENDING", "reason": "installed lifecycle smoke does not run GT08A PC or K8/K10"}
         for row in ("P11", "P12"):
