@@ -242,9 +242,14 @@ def run_content(*, run_id: str, binary: Path, parent: Path, lease, lease_checker
     run_dir.mkdir()
     native_output = run_dir / "native"
     native_output.mkdir()
+    # Blender is launched with ``cwd=run_dir`` below.  Keep the native output
+    # argument relative so Blender/OpenImageIO does not receive a long
+    # absolute Windows path (the same directory is already created and bound
+    # by the host at ``run_dir/native``).  The host continues to read the
+    # canonical absolute path after exit; no evidence is moved or omitted.
     args = [str(binary), "--factory-startup", "--disable-autoexec", "--offline-mode", "--threads", "1",
             "--python-exit-code", "17", "--python", str(source_root / "host/blender/fixture_content_native.py"),
-            "--", "--output", str(native_output), "--recipe-sha256", recipe_check["recipe_sha256"]]
+            "--", "--output", "native", "--recipe-sha256", recipe_check["recipe_sha256"]]
     env = {key: value for key, value in os.environ.items()
            if not key.upper().startswith(("PYTHON", "BLENDER_", "HH_BLENDER_"))}
     env["PYTHONDONTWRITEBYTECODE"] = "1"
