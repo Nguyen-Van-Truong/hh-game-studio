@@ -221,8 +221,16 @@ class ConsumerInstall:
         self._read_release(identity)
         return identity
 
-    def install(self, package_path: Path, *, command_id: str, expected_state_sha256: str) -> dict:
-        verified = verify_package(package_path, trusted_keys=self.trusted_keys, target=self.target)
+    def install(self, package_path: Path, *, command_id: str, expected_state_sha256: str,
+                expected_version: str | None = None) -> dict:
+        """Verify an artifact completely before entering the install mutation.
+
+        ``expected_version`` is optional for the normal selector path.  The
+        release/upgrade coordinator can bind a requested version at the same
+        pre-unpack boundary, so a valid but stale package cannot reach staging.
+        """
+        verified = verify_package(package_path, trusted_keys=self.trusted_keys,
+                                  target=self.target, expected_version=expected_version)
         request = {"action": "install", "archive_sha256": verified["archive_sha256"],
                    "release": verified["manifest_sha256"], "target": self.target}
         with mutation_guard(self.root):

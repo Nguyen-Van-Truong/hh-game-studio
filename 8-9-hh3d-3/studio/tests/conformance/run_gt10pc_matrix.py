@@ -51,31 +51,28 @@ from studio.package.trust import load_trust
 
 def _child(output: Path, label: str, command: list[str], *, timeout: int = 900) -> dict:
     """Run a producer as an owned child and retain independent host exit."""
+    from studio.build.bootstrap.run_fixture import run_process
     output.mkdir(parents=True, exist_ok=True)
-    stdout_path, stderr_path = output / (label + "-stdout.txt"), output / (label + "-stderr.txt")
     started = time.time()
-    timed_out = False
-    code = None
-    try:
-        with stdout_path.open("xb") as stdout, stderr_path.open("xb") as stderr:
-            try:
-                completed = subprocess.run(command, cwd=ROOT.parent, stdout=stdout,
-                                           stderr=stderr, timeout=timeout, check=False)
-                code = int(completed.returncode)
-            except subprocess.TimeoutExpired:
-                timed_out = True
-                code = None
-    except OSError as exc:
-        (stderr_path.parent).mkdir(parents=True, exist_ok=True)
-        stderr_path.write_text(type(exc).__name__ + ": " + str(exc), encoding="utf-8")
+    process = run_process(command, cwd=ROOT.parent, output=output,
+                          timeout=timeout, label=label)
+    stdout_path, stderr_path = output / process["stdout"], output / process["stderr"]
     receipt = {"schema": "hh-gt10pc-matrix-child-1", "label": label,
-               "command": command, "exit_code": code, "timed_out": timed_out,
+               "command": command, **process,
                "started_epoch": started, "finished_epoch": time.time(),
                "stdout": stdout_path.name, "stderr": stderr_path.name,
                "stdout_sha256": digest_file(stdout_path) if stdout_path.is_file() else None,
                "stderr_sha256": digest_file(stderr_path) if stderr_path.is_file() else None}
     (output / (label + "-receipt.json")).write_text(json.dumps(receipt, sort_keys=True) + "\n", encoding="utf-8")
     return receipt
+
+
+def rehearsal_status(rows: dict, requested: list[str]) -> str:
+    """Only complete selected rows may turn a rehearsal green."""
+    if set(rows) != set(requested):
+        return "REHEARSAL_INCOMPLETE"
+    return ("REHEARSAL_PASS" if all(row.get("status") == "REHEARSAL_PASS"
+                                   for row in rows.values()) else "REHEARSAL_INCOMPLETE")
 
 
 def _signer(trust: Path, private: Path, trust_sha256: str):
@@ -107,8 +104,14 @@ def _build_rehearsal_artifacts(output: Path, *, trust: Path, private: Path, trus
 
 
 def _p2_archive_attacks(output: Path, artifacts: dict, *, trust: Path,
-                        trust_sha256: str) -> list[dict]:
-    """Exercise archive gates before unpack, preserving the source tree."""
+                        trust_sha256: str, private: Path | None = None) -> list[dict]:
+    """Exercise archive gates, then one real installed native rejection.
+
+    The host checks remain useful for both targets.  The native worker runs
+    once on the Windows fixture (the PC release slice), and its parent receipt
+    independently captures the worker/host exit before the worker's Godot
+    readback is accepted.
+    """
     keys = load_trust(trust, expected_sha256=trust_sha256)
     checks = []
     for target in ("Windows", "Linux-headless"):
@@ -133,6 +136,69 @@ def _p2_archive_attacks(output: Path, artifacts: dict, *, trust: Path,
             else:
                 raise ValueError("GT10PC_P2_ARCHIVE_ATTACK_ACCEPTED:" + target + ":" + name)
         need(path.read_bytes() == original, "GT10PC_P2_SOURCE_ARTIFACT_CHANGED")
+    if private is None or os.name != "nt":
+        checks.append({"native": "NOT_RUN", "reason": "Windows native P2 worker required"})
+        return checks
+    native_root = output / "p2-native"
+    worker = ROOT / "tests/conformance/gt10pc_p2_native_rejection.py"
+    from studio.build.bootstrap.run_fixture import run_process
+    child_root = output / "children"
+    child_root.mkdir(parents=True, exist_ok=True)
+    child = run_process([
+        sys.executable, "-B", str(worker), "--output", str(native_root),
+        "--trust", str(trust), "--trust-sha256", trust_sha256,
+        "--private-key", str(private), "--target", "Windows",
+        "--artifact", str(artifacts["Windows"]["0.1.0"]["path"]),
+    ], cwd=ROOT.parent, output=child_root, label="p2-native-rejection", timeout=180)
+    (child_root / "p2-native-rejection-receipt.json").write_text(
+        json.dumps(child, sort_keys=True) + "\n", encoding="utf-8")
+    need(child["exit_code"] == 0 and child["wrapper_exit_code"] == 0
+         and child["timed_out"] is False and child["tree_verified"] is True,
+         "GT10PC_P2_NATIVE_WORKER_EXIT")
+    report = _read(native_root / "p2.json")
+    need(report.get("schema") == "hh-gt10pc-p2-native-rejection-1"
+         and report.get("acceptance") is False and report.get("authority") == 0
+         and len(report.get("attacks", [])) == 4,
+         "GT10PC_P2_NATIVE_REPORT")
+    evidence = report.get("evidence")
+    need(isinstance(evidence, dict) and evidence, "GT10PC_P2_NATIVE_EVIDENCE_MISSING")
+    for name, expected_hash in evidence.items():
+        _safe_member(name)
+        need(isinstance(expected_hash, str) and HEX.fullmatch(expected_hash)
+             and digest_file(native_root / name) == expected_hash,
+             "GT10PC_P2_NATIVE_EVIDENCE_CHANGED:" + name)
+    for pair in (("install-before.json", "install-after.json"),
+                 ("project-before.json", "project-after.json"),
+                 ("state-before.json", "state-after.json")):
+        need(_read(native_root / pair[0]) == _read(native_root / pair[1]),
+             "GT10PC_P2_REJECTION_MUTATION:" + pair[0])
+    need([row.get("attack") for row in report["attacks"]] ==
+         ["tamper", "truncate", "wrong-target", "wrong-version"]
+         and all(row.get("rejected") is True for row in report["attacks"]),
+         "GT10PC_P2_NATIVE_ATTACK_SET")
+    selected = verify_package(Path(artifacts["Windows"]["0.1.0"]["path"]),
+                              trusted_keys=keys, target="Windows")
+    need(report.get("artifact_sha256") == selected["archive_sha256"]
+         and report.get("last_good_active") == selected["manifest_sha256"]
+         and report.get("source_closure_sha256") == selected["manifest"]["source_closure_sha256"],
+         "GT10PC_P2_NATIVE_ARTIFACT_BINDING")
+    native_receipt = _read(native_root / "native/receipt.json")
+    need(native_receipt.get("active_release") == selected["manifest_sha256"]
+         and native_receipt.get("version") == selected["manifest"]["version"]
+         and native_receipt.get("probe_sha256") == selected["manifest"]["files"][
+             "payload/studio/package/installed_probe.py"]["sha256"],
+         "GT10PC_P2_NATIVE_LAST_GOOD_BINDING")
+    _process(native_root / "driver", "driver", report.get("driver"))
+    _process(native_root / "native", "parse", native_receipt.get("parse"))
+    _lifecycle(_process(native_root / "native", "godot", native_receipt.get("process")))
+    need(report.get("godot_exit", {}).get("exit_code") == 0
+         and report.get("godot_exit", {}).get("wrapper_exit_code") == 0
+         and report.get("godot_exit", {}).get("tree_verified") is True
+         and report.get("godot_exit", {}).get("timed_out") is False,
+         "GT10PC_P2_NATIVE_GODOT_READBACK")
+    checks.append({"native": "PASS", "worker_exit": child["exit_code"],
+                   "godot_exit": report["godot_exit"],
+                   "attacks": report["attacks"]})
     return checks
 
 
@@ -148,7 +214,7 @@ def run_rehearsal(rows: list[str], *, output: Path, trust: Path,
               "acceptance": False, "rows": {}, "source_closure_sha256": frozen,
               "artifacts": artifacts}
     try:
-        if any(row in rows for row in ("P3", "P4", "P5", "P6", "P10")):
+        if any(row in rows for row in ("P3", "P4", "P5", "P6")):
             win = output / "windows"
             child = _child(output / "children", "windows-producer", [
                 sys.executable, "-B", str(ROOT / "tests/conformance/run_gt10pc_native_probe.py"),
@@ -156,11 +222,11 @@ def run_rehearsal(rows: list[str], *, output: Path, trust: Path,
                 "--private-key", str(private)])
             need(child["exit_code"] == 0 and not child["timed_out"], "GT10PC_WINDOWS_PRODUCER_EXIT")
             verify_only(win, trust=trust, trust_sha256=trust_sha256)
-            for row in ("P3", "P4", "P5", "P6", "P10"):
+            for row in ("P3", "P4", "P5", "P6"):
                 if row in rows:
                     result["rows"][row] = {"status": "REHEARSAL_PASS", "target": "Windows",
                                            "producer": "windows-producer"}
-        if any(row in rows for row in ("P3", "P4", "P5", "P6", "P10")):
+        if any(row in rows for row in ("P3", "P4", "P5", "P6")):
             from studio.tests.conformance.gt10pc_linux_producer import run_linux
             from studio.tests.conformance.gt10pc_linux_verify import verify_linux
             linux = output / "linux"
@@ -169,7 +235,7 @@ def run_rehearsal(rows: list[str], *, output: Path, trust: Path,
                         trust=trust, trust_sha256=trust_sha256)
             run_linux(linux, **args)
             verify_linux(linux, **args)
-            for row in ("P3", "P4", "P5", "P6", "P10"):
+            for row in ("P3", "P4", "P5", "P6"):
                 if row in rows:
                     result["rows"][row]["linux"] = "REHEARSAL_PASS"
         if "P1" in rows:
@@ -181,17 +247,22 @@ def run_rehearsal(rows: list[str], *, output: Path, trust: Path,
                                    target=target, expected_version=version)
             result["rows"]["P1"] = {"status": "REHEARSAL_PASS", "targets": ["Windows", "Linux-headless"]}
         if "P2" in rows:
-            checks = _p2_archive_attacks(output, artifacts, trust=trust, trust_sha256=trust_sha256)
-            result["rows"]["P2"] = {"status": "REHEARSAL_PASS_HOST_ONLY",
-                                      "host_archive_attacks": checks, "native_rejection": "PENDING"}
+            checks = _p2_archive_attacks(output, artifacts, trust=trust,
+                                         trust_sha256=trust_sha256, private=private)
+            native = next((row for row in checks if "native" in row), {})
+            need(native.get("native") == "PASS", "GT10PC_P2_NATIVE_REJECTION_PENDING")
+            result["rows"]["P2"] = {"status": "REHEARSAL_PASS_NATIVE_DIAGNOSTIC",
+                                      "archive_and_native_attacks": checks}
         if "P7" in rows:
-            result["rows"]["P7"] = {"status": "DIAGNOSTIC_HOST_PASS", "native": "PENDING"}
+            result["rows"]["P7"] = {"status": "PENDING", "native": "not exercised in this run"}
         if "P8" in rows:
             result["rows"]["P8"] = {"status": "PENDING", "missing_dependency": "not yet exercised"}
         if "P9" in rows:
             docs = [ROOT / "package/NOTICE.txt", ROOT / "package/runbook.md", ROOT / "package/known-limits.md"]
             need(all(path.is_file() for path in docs), "GT10PC_P9_DOCUMENTS_MISSING")
             result["rows"]["P9"] = {"status": "REHEARSAL_PASS_DOCS_ONLY", "consumer_smoke": "PENDING"}
+        if "P10" in rows:
+            result["rows"]["P10"] = {"status": "PENDING", "reason": "installed lifecycle smoke does not run GT08A PC or K8/K10"}
         for row in ("P11", "P12"):
             if row in rows:
                 result["rows"][row] = {"status": "DEFERRED", "reason": "requires frozen final and critics"}
@@ -199,7 +270,7 @@ def run_rehearsal(rows: list[str], *, output: Path, trust: Path,
         result["error"] = type(exc).__name__ + ": " + str(exc)
         result["status"] = "DIAGNOSTIC_FAIL"
     else:
-        result["status"] = "REHEARSAL_PASS"
+        result["status"] = rehearsal_status(result["rows"], rows)
     need(_payload_digest(_source_files(ROOT)) == frozen, "GT10PC_REHEARSAL_SOURCE_DRIFT")
     result["rows_requested"] = rows
     (output / "matrix.json").write_text(json.dumps(result, sort_keys=True, indent=2) + "\n", encoding="utf-8")
