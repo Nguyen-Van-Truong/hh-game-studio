@@ -73,3 +73,7 @@ Final is explicitly disabled until all row producers and raw verifiers are compl
 - GT10PC INFRA 11-10: rehearsal r05 stopped at the first native P7 kill because the nested
   worker job was sampled immediately after wait(); no process remained, but the receipt was
   correctly rejected. P7 now polls the independent job count for a bounded 3s before failing.
+- GT10PC PRODUCT/INFRA 11-10: rehearsal r06 proved the worker/tree fix, then P7 native launch
+  hit WinError 267 while using a mutable installed-release parent as cwd. The direct probe on
+  the same snapshot succeeds; native launchers now use the stable consumer project cwd with
+  explicit installed-payload PYTHONPATH, preserving the source binding.

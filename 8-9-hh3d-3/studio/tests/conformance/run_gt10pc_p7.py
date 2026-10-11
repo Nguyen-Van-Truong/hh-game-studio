@@ -205,13 +205,19 @@ def native_probe(case: Path, installer: ConsumerInstall, project: Path, *, godot
     driver = case / "native-driver"
     driver.mkdir(parents=True)
     env = os.environ.copy()
-    env["PYTHONPATH"] = str(installer.active_path().parent)
+    active_parent = installer.active_path().parent
+    need(active_parent.is_dir() and project.is_dir(), "P7_NATIVE_WORKDIR_MISSING")
+    env["PYTHONPATH"] = str(active_parent)
     env["PYTHONDONTWRITEBYTECODE"] = "1"
     command = [sys.executable, "-B", "-m", "studio.package.installed_probe",
                "--install-root", str(installer.root), "--project", str(project),
                "--godot", str(godot), "--output", str(native), "--fixture", fixture,
                "--target", "Windows", "--trust", str(trust), "--trust-sha256", trust_sha256]
-    process = run_process(command, cwd=installer.active_path().parent, output=driver,
+    # Run from the consumer project, whose path is stable across lifecycle
+    # recovery.  The installed payload remains the imported module via the
+    # explicit PYTHONPATH binding; using the mutable release parent as cwd can
+    # produce WinError 267 when this producer is nested in a gated job.
+    process = run_process(command, cwd=project, output=driver,
                           timeout=100, label="driver", env=env)
     need(process["exit_code"] == 0 and process["wrapper_exit_code"] == 0
          and process["tree_verified"] is True and process["timed_out"] is False,

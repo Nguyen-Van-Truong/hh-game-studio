@@ -66,7 +66,10 @@ def native_phase(output: Path, fixture: str, phase: str, install: ConsumerInstal
     env = os.environ.copy()
     env["PYTHONPATH"] = str(install.active_path().parent)
     env["PYTHONDONTWRITEBYTECODE"] = "1"
-    driver = run_process(command, cwd=install.active_path().parent, output=driver_output,
+    # The installed payload is bound through PYTHONPATH.  Keep the process cwd
+    # on the consumer project so a lifecycle selector/recovery cannot make the
+    # launch directory transient while the native child is starting.
+    driver = run_process(command, cwd=project, output=driver_output,
                          timeout=90, label="driver", env=env)
     write_json(driver_output / "receipt.json", driver)
     need(driver["exit_code"] == 0 and driver["wrapper_exit_code"] == 0
