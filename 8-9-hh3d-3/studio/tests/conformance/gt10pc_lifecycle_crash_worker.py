@@ -76,6 +76,7 @@ def main() -> int:
     phase = request["phase"]
     action = request.get("action", "install")
     stop_mode = request.get("disposition", "kill") == "stop"
+    unpark = Path(request.get("unpark", str(Path(request["marker"]).with_suffix(".unpark"))))
 
     def cut(reached: str) -> None:
         if reached == phase:
@@ -90,16 +91,20 @@ def main() -> int:
                 os.fsync(stream.fileno())
             os.replace(temporary, marker)
             if stop_mode:
-                receipt = ConsumerInstall.stop_existing(
-                    Path(request["install"]), command_id=request.get("stop_command_id", "p7.stop"))
-                stop_path = marker.with_name(marker.stem + ".stop.json")
-                with stop_path.open("x", encoding="utf-8") as stream:
-                    json.dump(receipt, stream, sort_keys=True)
-                    stream.flush()
-                    os.fsync(stream.fileno())
+                # The parent owns the external Stop command.  Parking here
+                # keeps the cut between two real filesystem phases and lets
+                # the parent record the stop receipt independently before
+                # releasing this worker.
+                deadline = time.monotonic() + float(request.get("park_seconds", 60))
+                while not unpark.exists() and time.monotonic() < deadline:
+                    time.sleep(0.05)
+                if not unpark.exists():
+                    raise TimeoutError("P7 stop unpark deadline")
                 return
-            while True:
-                time.sleep(1)  # Parent must kill the actual worker process.
+            deadline = time.monotonic() + float(request.get("park_seconds", 60))
+            while time.monotonic() < deadline:
+                time.sleep(0.1)  # Parent must kill the actual worker process.
+            raise TimeoutError("P7 kill deadline")
 
     with instrument(installer, request["command_id"], cut):
         if action == "install":

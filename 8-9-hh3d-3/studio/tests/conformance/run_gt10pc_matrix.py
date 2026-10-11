@@ -278,7 +278,7 @@ def run_rehearsal(rows: list[str], *, output: Path, trust: Path,
                                          trust_sha256=trust_sha256, private=private)
             native = next((row for row in checks if "native" in row), {})
             need(native.get("native") == "PASS", "GT10PC_P2_NATIVE_REJECTION_PENDING")
-            result["rows"]["P2"] = {"status": "REHEARSAL_PASS_NATIVE_DIAGNOSTIC",
+            result["rows"]["P2"] = {"status": "REHEARSAL_PASS", "evidence_kind": "host+native",
                                       "archive_and_native_attacks": checks}
         if "P7" in rows:
             result["rows"]["P7"] = {"status": "PENDING", "native": "not exercised in this run"}

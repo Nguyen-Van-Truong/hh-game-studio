@@ -6,6 +6,7 @@ The bundle is a support aid, not native or release acceptance evidence.
 from __future__ import annotations
 
 import os
+import re
 from pathlib import Path
 from typing import Mapping
 
@@ -13,6 +14,15 @@ from .release_contract import (
     PackageError, canonical, digest_bytes, digest_file, need, safe_path,
     strict_json, verify_package,
 )
+
+
+def _consumer_fixture_files(package: dict, fixture: str) -> dict[str, bytes]:
+    prefix = "payload/studio/fixtures/" + fixture + "/"
+    files = {name[len(prefix):]: data for name, data in package["members"].items()
+             if name.startswith(prefix)}
+    need("project.godot" in files and "scenes/fixture.tscn" in files,
+         "consumer fixture is incomplete; restore the signed fixture closure")
+    return files
 
 
 def verify_local_dependencies(package: dict, paths: Mapping[str, Path], *,
@@ -50,18 +60,51 @@ def verify_local_dependencies(package: dict, paths: Mapping[str, Path], *,
             "latest_autofetch": False, "dependencies": observed}
 
 
+def verify_addon_version(package: dict, addon: Path | None) -> None:
+    """Reject an existing incompatible consumer addon before changing it."""
+    if addon is None:
+        return
+    config = safe_path(addon / "plugin.cfg")
+    expected = strict_json(package["members"]["docs/compatibility-lock.json"])["addon"]["version"]
+    action = ("preserve the existing addon and select a matching pinned package, or explicitly "
+              "repair the owned addon; latest/network auto-fetch is disabled")
+    need(config.is_file(), "addon version missing; " + action)
+    need(config.stat().st_size <= 65536, "addon config oversized; " + action)
+    try:
+        match = re.search(r'(?m)^version="([^"]+)"\s*$', config.read_text(encoding="utf-8"))
+    except UnicodeError as exc:
+        raise PackageError("addon version unreadable; " + action) from exc
+    need(match is not None and match.group(1) == expected,
+         "addon version mismatch (expected " + expected + "); " + action)
+
+
 def preflight(artifact: Path, *, trusted_keys: Mapping[str, bytes], target: str,
               expected_version: str | None = None, paths: Mapping[str, Path] | None = None,
-              required: tuple[str, ...] = ()) -> dict:
+              required: tuple[str, ...] = (), addon: Path | None = None) -> dict:
     """Verify artifact and closure before examining external tools or installing."""
     package = verify_package(artifact, trusted_keys=trusted_keys, target=target,
                              expected_version=expected_version)
     dependencies = verify_local_dependencies(package, paths or {}, required=required)
+    verify_addon_version(package, addon)
     return {"schema": "hh-studio-consumer-preflight-1", "authority": 0,
             "acceptance": False, "artifact_sha256": package["archive_sha256"],
             "manifest_sha256": package["manifest_sha256"],
             "source_closure_sha256": package["manifest"]["source_closure_sha256"],
-            **dependencies}
+            "dependencies": dependencies["dependencies"], "network_used": False,
+            "latest_autofetch": False}
+
+
+def install_checked(artifact: Path, root: Path, *, trusted_keys: Mapping[str, bytes],
+                    target: str, command_id: str, expected_state_sha256: str,
+                    paths: Mapping[str, Path] | None = None,
+                    required: tuple[str, ...] = (), addon: Path | None = None) -> dict:
+    """Perform intake before constructing or mutating an installer root."""
+    from .consumer_install import ConsumerInstall
+    preflight(artifact, trusted_keys=trusted_keys, target=target, paths=paths,
+              required=required, addon=addon)
+    install = ConsumerInstall(root, trusted_keys=trusted_keys, target=target)
+    return install.install(artifact, command_id=command_id,
+                           expected_state_sha256=expected_state_sha256)
 
 
 def support_bundle(artifact: Path, output: Path, *, trusted_keys: Mapping[str, bytes],
@@ -113,11 +156,7 @@ def consumer_fixture_smoke(artifact: Path, root: Path, *,
     from .consumer_install import ConsumerInstall
 
     package = verify_package(artifact, trusted_keys=trusted_keys, target=target)
-    members = package["members"]
-    prefix = "payload/studio/fixtures/" + fixture + "/"
-    fixture_files = {name[len(prefix):]: data for name, data in members.items()
-                     if name.startswith(prefix)}
-    need("project.godot" in fixture_files, "consumer fixture missing project.godot")
+    fixture_files = _consumer_fixture_files(package, fixture)
     root = safe_path(root)
     need(not root.exists(), "consumer smoke root already exists; use a fresh root")
     project = safe_path(root / "project")

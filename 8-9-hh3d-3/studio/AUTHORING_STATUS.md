@@ -4,9 +4,9 @@ AUTHORITY=0; GT09=ACCEPTED; GT10_PC=IN_PROGRESS_NATIVE_DIAGNOSTIC.
 Progress authority: `zdoc/8-9-godot-blender-agent-studio-plan.txt`.
 GT09 final -74 accepted: K1–K15, actual Scheduled Task exit0, two critics same hash.
 GT10-PC P1–P12 remain unaccepted; no checkbox or acceptance claim is changed here.
-Current source includes immutable Ed25519 package trust, compatibility lock, WAL selector/addon recovery, raw evidence verifier, native P2 worker and task-bound rehearsal rows.
+Current source includes immutable Ed25519 package trust, compatibility lock, WAL selector/addon recovery, raw evidence verifier, native P2 worker and task-bound rehearsal rows. Fresh Scheduled Task `gt10pc-rehearsal-20261011-p2c` passed P1/P2 on the current source (authority=0; native Windows rejection + Godot readback captured).
 Diagnostic Linux `gt10pc-linux-current-20261011-08` and Windows `gt10pc-win-current-20261011-09` are historical because their source closure predates the current P2/P8/P9/task changes.
-Fresh rehearsal `gt10pc-rehearsal-20261011-r03` is authority-zero and correctly exits incomplete: P1 host pass; P8 actionable dependency/version rejects pass; P9 docs + host consumer smoke pass but native smoke pending. P2/P7/P10/P11/P12 were not requested.
+Fresh rehearsal `gt10pc-rehearsal-20261011-r03` is historical authority-zero. Current `gt10pc-rehearsal-20261011-p2c` is authority-zero and passed selected P1/P2, including native Windows rejection and Godot readback with actual Scheduled Task exit 0. P7/P10/P11/P12 were not requested; P9 native smoke remains pending.
 Focused validation: package/lifecycle/P2 tests pass after the compatibility-lock changes; a fresh rehearsal is required before any row is treated as current evidence.
 Remaining: native P2 Scheduled Task run, P3–P7/P9–P10 native matrix, P8/P9 current rehearsal, formal25 10×35, two final critics.
 GT08B Android deferred; full GT10 blocked; GT11 unopened. No complete-game claim.
