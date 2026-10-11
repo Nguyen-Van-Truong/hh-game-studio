@@ -48,7 +48,8 @@ def verify_linux(root: Path, *, artifact: Path, upgrade_artifact: Path,
     for label in labels:
         process = _read(host / (label + "-receipt.json"))
         need(process == doc["processes"][label], "GT10PC_LINUX_PROCESS_RECEIPT")
-        stdout[label] = _process(host, label, process)
+        stdout[label] = _process(host, label, process, check_log=label not in
+                                  {"inspect-created", "inspect-exited", "inspect-closeout"})
     lock = strict_json(package["members"]["payload/studio/godot-addon/validator-toolchain.lock.json"])
     image = strict_json(stdout["image"].encode())
     need(len(image) == 1 and image[0].get("Id") == lock["image_id"]

@@ -109,7 +109,8 @@ finally:
   # private owner state stay in Linux tmpfs and are never evidence inputs.
   output=pathlib.Path('/output')
   for directory,dirs,files in os.walk(output):
-    dirs[:]=[d for d in dirs if d not in ('install','project','profile-owner','godot-user') and not d.startswith('.hh-studio-addon-')]
+    if pathlib.Path(directory).relative_to(output).parts == ():
+      dirs[:]=[d for d in dirs if d not in ('install','project','profile-owner','godot-user') and not d.startswith('.hh-studio-addon-')]
     for name in files:
       path=pathlib.Path(directory)/name
       target=pathlib.Path('/evidence')/path.relative_to(output)

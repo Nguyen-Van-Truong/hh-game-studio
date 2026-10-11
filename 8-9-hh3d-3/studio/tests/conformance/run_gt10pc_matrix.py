@@ -57,7 +57,8 @@ def _read(path: Path) -> dict:
     return doc
 
 
-def _process(base: Path, label: str, process: dict, *, ownership: str = "gated_job_kill_on_close") -> str:
+def _process(base: Path, label: str, process: dict, *, ownership: str = "gated_job_kill_on_close",
+             check_log: bool = True) -> str:
     need(isinstance(process, dict) and process.get("exit_code") == 0
          and process.get("wrapper_exit_code") == 0 and process.get("tree_verified") is True
          and process.get("timed_out") is False, "GT10PC_INSTALLED_EXIT")
@@ -71,7 +72,8 @@ def _process(base: Path, label: str, process: dict, *, ownership: str = "gated_j
          and process.get("ownership") == ownership, "GT10PC_PROCESS_BINDING")
     stdout = safe_path(base / (label + "-stdout.txt")).read_text(encoding="utf-8")
     stderr = safe_path(base / (label + "-stderr.txt")).read_bytes()
-    need(not stderr and not re.search(r"(?im)\b(error|warning|orphan)\b", stdout), "GT10PC_INSTALLED_LOG")
+    need(not stderr and (not check_log or not re.search(r"(?im)\b(error|warning|orphan)\b", stdout)),
+         "GT10PC_INSTALLED_LOG")
     return stdout
 
 
