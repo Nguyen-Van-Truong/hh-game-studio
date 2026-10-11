@@ -5,7 +5,7 @@ GT09 final -74 is accepted with Scheduled Task exit0 and two critics on one hash
 P1–P9 are rehearsal PASS only; P10 p10fix5 is rehearsal PASS on both native producers.
 P10 now uses a short bind root; durable input/harness bytes are hash-checked before and after use.
 Staging cleanup is fail-closed: uncertain container removal retains the tree and rejects completion.
-P11 now has a real-Godot one-cycle rehearsal producer; full formal25 remains final-only.
+P11 has a real-Godot one-cycle producer; p11a passed but predates the verify-only fix and is retained diagnostic.
 Focused executor/probe suite: 73 tests passed; dry-run native path budget max 73/200 characters.
 P10 p10fix5 raw, task receipt and deletion receipt remain retained; no prior raw is reused after drift.
 Next: run P11 short through Scheduled Task, then C3 rehearsal P1–P11, pre-review, final 10×35, critics.
