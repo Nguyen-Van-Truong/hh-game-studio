@@ -731,7 +731,8 @@ def verify_only(path: Path, *, trust: Path, trust_sha256: str,
     need(target == "Windows" and artifact is None and upgrade_artifact is None,
          "GT10PC_WINDOWS_ARTIFACTS_ARE_RUN_LOCAL")
     doc = _read(path / "matrix.json")
-    need(doc.get("schema") == SCHEMA and doc.get("acceptance") is False
+    need(doc.get("schema") in ("hh-gt10pc-matrix-2", SCHEMA)
+         and doc.get("acceptance") is False
          and doc.get("authority") == 0 and doc.get("producer") == "producer.json"
          and doc.get("mode") == "DIAGNOSTIC", "GT10PC_LEGACY_SYNTHETIC_EVIDENCE_VOID")
     need(doc.get("producer_sha256") == digest_file(path / "producer.json"), "GT10PC_PRODUCER_HASH")
