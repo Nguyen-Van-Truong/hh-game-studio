@@ -283,7 +283,13 @@ def run_rehearsal(rows: list[str], *, output: Path, trust: Path,
         if "P7" in rows:
             from studio.tests.conformance.run_gt10pc_native_probe import GODOT_WINDOWS
             p7_reports = []
-            for suffix, group in (("a", "first"), ("b", "second")):
+            # Four native cases can exceed the shared 600 s child bound when
+            # the rollback cases are cold.  Three bounded producers (3+3+2)
+            # still cover the exact eight-case contract without shortening
+            # any per-case deadline or weakening the verifier.
+            for suffix, group, expected_cases in (("a", "first", 3),
+                                                   ("b", "second", 3),
+                                                   ("c", "third", 2)):
                 p7 = output / ("p7-native-" + suffix)
                 child = _child(output / "children", "p7-native-" + suffix, [
                     sys.executable, "-B", str(ROOT / "tests/conformance/run_gt10pc_p7.py"),
@@ -299,10 +305,10 @@ def run_rehearsal(rows: list[str], *, output: Path, trust: Path,
                      and p7_report.get("acceptance") is False
                      and p7_report.get("native_required") is True
                      and p7_report.get("case_group") == group
-                     and len(p7_report.get("cases", [])) == 4,
+                     and len(p7_report.get("cases", [])) == expected_cases,
                      "GT10PC_P7_NATIVE_REPORT:" + group)
                 p7_reports.append({"group": group, "producer": "p7-native-" + suffix,
-                                   "cases": 4, "child": child})
+                                   "cases": expected_cases, "child": child})
             result["rows"]["P7"] = {"status": "REHEARSAL_PASS", "evidence_kind": "native",
                                       "producers": p7_reports, "cases": 8}
         if "P8" in rows:
