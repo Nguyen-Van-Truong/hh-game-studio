@@ -35,7 +35,7 @@ GT08B Android deferred; full GT10 blocked; GT11 unopened. No complete-game claim
 
 ## Next
 
-Freeze current writers, run a fresh whole-matrix rehearsal covering P1–P10 from one frozen source closure, and only then prepare formal25. P7 host diagnostic 09 remains the recovery-boundary baseline; r08 supplies the last accepted rehearsal for the earlier rows.
+Freeze current writers, remint a fresh whole-matrix rehearsal covering P1–P10 from one frozen source closure after the bounded Windows P3–P6 producer repair, and only then prepare formal25. P7 host diagnostic 09 remains the recovery-boundary baseline; r08 supplies the last accepted rehearsal for the earlier rows.
 P2 native rejection must retain independent worker/host/Godot receipts and unchanged install/project/state ledgers. P9 r08 now captures an installed fixture through an independent archive-backed consumer, but remains rehearsal-only until final manifest/critic gates.
 Final is explicitly disabled until all row producers and raw verifiers are complete.
 
