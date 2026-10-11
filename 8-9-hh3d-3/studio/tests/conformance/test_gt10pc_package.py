@@ -12,6 +12,7 @@ from pathlib import Path
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 from package.release_contract import PackageError, build_package, verify_package
 from package.consumer_install import ConsumerInstall
+from package.consumer_support import consumer_fixture_smoke, preflight, support_bundle
 
 class GT10PCPackageTests(unittest.TestCase):
     def setUp(self):
@@ -37,6 +38,51 @@ class GT10PCPackageTests(unittest.TestCase):
                     if info.filename != "manifest.json": data = data + b"tamper"
                     target.writestr(info, data)
             with self.assertRaises(PackageError): verify_package(tampered, trusted_keys=self.keys)
+
+    def test_missing_pinned_dependency_is_actionable(self):
+        with tempfile.TemporaryDirectory() as td:
+            artifact = Path(td) / "release.hhpkg"
+            self.make(artifact)
+            broken = Path(td) / "missing-lock.hhpkg"
+            with zipfile.ZipFile(artifact) as source, zipfile.ZipFile(broken, "w") as target:
+                for info in source.infolist():
+                    if info.filename == "docs/compatibility-lock.json":
+                        continue
+                    target.writestr(info, source.read(info.filename))
+            with self.assertRaisesRegex(PackageError, "missing pinned dependency"):
+                verify_package(broken, trusted_keys=self.keys)
+
+    def test_preflight_dependency_template_and_hash_fail_closed(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td); artifact = root / "release.hhpkg"
+            self.make(artifact)
+            with self.assertRaisesRegex(PackageError, "missing dependency godot"):
+                preflight(artifact, trusted_keys=self.keys, target="Windows",
+                          required=("godot",), paths={})
+            bad_godot = root / "godot.exe"; bad_godot.write_bytes(b"wrong")
+            with self.assertRaisesRegex(PackageError, "dependency version/hash mismatch for godot"):
+                preflight(artifact, trusted_keys=self.keys, target="Windows",
+                          required=("godot",), paths={"godot": bad_godot})
+            bad_templates = root / "templates.tpz"; bad_templates.write_bytes(b"wrong")
+            with self.assertRaisesRegex(PackageError, "dependency version/hash mismatch for export_templates"):
+                preflight(artifact, trusted_keys=self.keys, target="Windows",
+                          required=("export_templates",), paths={"export_templates": bad_templates})
+
+    def test_independent_consumer_smoke_and_scrubbed_support_bundle(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td); artifact = root / "release.hhpkg"
+            self.make(artifact)
+            result = consumer_fixture_smoke(artifact, root / "consumer", trusted_keys=self.keys)
+            self.assertFalse(result["acceptance"])
+            self.assertTrue(result["consumer_save_preserved"])
+            bundle_path = root / "support.json"
+            summary = support_bundle(artifact, bundle_path, trusted_keys=self.keys,
+                                     target="Windows")
+            raw = bundle_path.read_text(encoding="utf-8")
+            self.assertEqual(summary["scrub_policy"], "allowlist-no-raw-values-v1")
+            self.assertNotIn("PRIVATE", raw)
+            self.assertNotIn("TOKEN", raw)
+            self.assertNotIn("consumer-owned-save", raw)
 
     def test_immutable_upgrade_rollback_dedup_and_consumer_files(self):
         with tempfile.TemporaryDirectory() as td:

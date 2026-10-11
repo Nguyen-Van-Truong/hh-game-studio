@@ -1,0 +1,20 @@
+{
+  "schema": "hh-studio-compatibility-1",
+  "package_version_series": "0.1",
+  "engine": {
+    "name": "Godot",
+    "version": "4.7.2-stable",
+    "template_policy": "pinned-local-only"
+  },
+  "addon": {
+    "name": "hh_studio",
+    "version": "0.1.0",
+    "profile": "hh-godot-gameplay-source-1",
+    "profile_version": 1
+  },
+  "supported_targets": ["Windows", "Linux", "Linux-headless"],
+  "android": "DEFERRED_NO_DEVICE",
+  "network_policy": "offline-only",
+  "latest_autofetch": false,
+  "upgrade_policy": "same-schema-series-only"
+}

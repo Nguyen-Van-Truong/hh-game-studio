@@ -37,6 +37,18 @@ SOURCE_DOMAINS = ("host", "protocol", "contracts", "godot-addon", "blender-addon
 EXCLUDED_DIRS = {".local", ".godot", ".git", "__pycache__", ".pytest_cache", ".mypy_cache"}
 EXCLUDED_FILES = {"tests/conformance/gt10pc_signing.py"}
 
+# These are the small, executable pieces that every consumer needs.  Keeping
+# the list here (rather than discovering files at install time) makes a
+# missing dependency failure actionable and keeps the installer offline.
+REQUIRED_RUNTIME_MEMBERS = (
+    "payload/studio/toolchain.lock.json",
+    "payload/studio/host/replay/execution-source.json",
+    "payload/studio/host/replay/execution-current.json",
+    "payload/studio/godot-addon/addons/hh_studio/plugin.cfg",
+    "payload/studio/godot-addon/fixture_profile.json",
+    "docs/compatibility-lock.json",
+)
+
 
 class PackageError(ValueError):
     pass
@@ -45,6 +57,47 @@ class PackageError(ValueError):
 def need(condition: Any, message: str) -> None:
     if not condition:
         raise PackageError(message)
+
+
+def _missing_dependency(name: str) -> str:
+    return ("missing pinned dependency '" + name + "'; restore the exact "
+            "artifact/closure and retry (latest/network auto-fetch is disabled)")
+
+
+def _verify_compatibility_lock(members: Mapping[str, bytes]) -> None:
+    """Validate consumer-facing compatibility declarations before install."""
+    for name in REQUIRED_RUNTIME_MEMBERS:
+        need(name in members, _missing_dependency(name))
+    lock = strict_json(members["docs/compatibility-lock.json"])
+    need(isinstance(lock, dict) and lock.get("schema") == "hh-studio-compatibility-1",
+         "incompatible compatibility lock; use the package's pinned lock")
+    need(lock.get("supported_targets") == list(TARGETS),
+         "compatibility target mismatch; select a package built for this target")
+    addon = lock.get("addon")
+    need(isinstance(addon, dict) and addon.get("name") == "hh_studio"
+         and isinstance(addon.get("version"), str),
+         "addon compatibility declaration missing; restore the pinned addon")
+    try:
+        plugin = members["payload/studio/godot-addon/addons/hh_studio/plugin.cfg"].decode("utf-8")
+    except UnicodeDecodeError as exc:
+        raise PackageError("addon version cannot be read; restore the pinned addon") from exc
+    match = re.search(r"(?m)^version=\"([^\"]+)\"\s*$", plugin)
+    need(match is not None, "addon version missing; install the pinned addon from this artifact")
+    need(match.group(1) == addon["version"],
+         "addon version mismatch (expected " + addon["version"] + "); use a matching pinned package")
+    engine = lock.get("engine")
+    need(isinstance(engine, dict) and isinstance(engine.get("version"), str),
+         "engine/template compatibility declaration missing; use the pinned toolchain")
+    tools = strict_json(members["payload/studio/toolchain.lock.json"])
+    need(isinstance(tools, dict) and isinstance(tools.get("godot"), dict)
+         and tools["godot"].get("version") == engine["version"],
+         "engine version mismatch; restore the exact Godot version from the pinned toolchain")
+    template = tools.get("export_templates")
+    need(isinstance(template, dict) and template.get("version") == engine["version"]
+         and isinstance(template.get("sha256"), str) and HEX.fullmatch(template["sha256"]),
+         "export template missing or version mismatch; supply the matching pinned local template (no latest fetch)")
+    need(lock.get("network_policy") == "offline-only" and lock.get("latest_autofetch") is False,
+         "unsupported dependency policy; latest/network auto-fetch must remain disabled")
 
 
 def canonical(value: Any) -> bytes:
@@ -156,7 +209,8 @@ def build_package(source_root: Path, output: Path, *, signer: Callable[[bytes], 
     closure = _payload_digest(files)
     identity = {"version": version, "target": target, "source_closure_sha256": closure}
     package_id = "hh-studio-" + digest_bytes(canonical(identity))
-    for name in ("NOTICE.txt", "runbook.md", "known-limits.md", "requirements.txt"):
+    for name in ("NOTICE.txt", "runbook.md", "known-limits.md", "requirements.txt",
+                 "compatibility-lock.json"):
         files["docs/" + name] = files["payload/studio/package/" + name]
     files["docs/SBOM.json"] = canonical({"schema": "hh-file-sbom-1", "package_id": package_id,
         "components": {"runtime": [d for d in SOURCE_DOMAINS if d not in ("tests", "reviewer")],
@@ -232,6 +286,9 @@ def verify_manifest(manifest: Any, *, trusted_keys: Mapping[str, bytes], target:
 
 
 def verify_contents(manifest: dict, members: Mapping[str, bytes]) -> None:
+    # Semantic dependency checks run before the generic ledger comparison so
+    # a consumer gets a repair path instead of an opaque hash error.
+    _verify_compatibility_lock(members)
     need(file_ledger(members) == manifest["files"], "package closure hash mismatch")
     need(_payload_digest(members) == manifest["content_sha256"], "package content mismatch")
     source = {k: v for k, v in members.items() if k.startswith("payload/studio/")}
@@ -263,7 +320,14 @@ def verify_package(path: Path, *, trusted_keys: Mapping[str, bytes], target: str
             need("manifest.json" in names and archive.getinfo("manifest.json").file_size <= MAX_MANIFEST, "manifest missing/oversized")
             manifest = strict_json(archive.read("manifest.json"))
             verify_manifest(manifest, trusted_keys=trusted_keys, target=target, expected_version=expected_version)
-            need(set(names) == set(manifest["files"]) | {"manifest.json"}, "undeclared/missing ZIP member")
+            declared = set(manifest["files"])
+            missing = sorted(declared - set(names))
+            extra = sorted(set(names) - declared - {"manifest.json"})
+            if missing:
+                raise PackageError(_missing_dependency(missing[0]))
+            if extra:
+                raise PackageError("undeclared package member '" + extra[0] +
+                                   "'; rebuild from the pinned closure")
             members = {}
             for name, row in manifest["files"].items():
                 need(archive.getinfo(name).file_size == row["size"], "ZIP length disagrees with ledger")
