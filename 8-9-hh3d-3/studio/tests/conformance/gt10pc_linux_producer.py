@@ -1,6 +1,6 @@
 """Host owner for the bounded offline Linux installed-artifact diagnostic."""
 from __future__ import annotations
-import json, os, re, shutil, uuid
+import inspect, json, os, re, shutil, uuid
 from pathlib import Path
 
 from studio.build.bootstrap.run_fixture import run_process
@@ -12,6 +12,35 @@ DOCKER = Path("C:/Program Files/Docker/Docker/resources/bin/docker.exe")
 CONTEXT = "desktop-linux"
 IMAGE = "sha256:7e51d8b09fe7e3778402d55ca7bfd05a1a02cf4dbc4a7308b4a0b3cb607ae8e7"
 BINARY = "Godot_v4.7.2-stable_linux.x86_64"
+
+def export_public_evidence(output, destination):
+    """Export bounded raw observations, never recurse into consumer/private state."""
+    candidates = [output / "linux.json"]
+    for fixture in ("gt09-arena", "gt09-room"):
+        consumer = output / "consumer" / fixture
+        candidates.extend(consumer / name for name in (
+            "project-before.json", "project-before-play.json", "project-after-play.json",
+            "project-after-uninstall.json", "project-after-reinstall.json",
+            "native-phases.json", "install-state.json"))
+        for phase in ("install", "upgrade", "rollback", "reinstall"):
+            for domain, labels in (("drivers", ("driver",)), ("native", ("parse", "godot"))):
+                folder = consumer / domain / phase
+                candidates.append(folder / "receipt.json")
+                candidates.extend(folder / (label + suffix) for label in labels
+                                  for suffix in ("-host.json", "-stdout.txt", "-stderr.txt"))
+    for path in candidates:
+        relative = path.relative_to(output)
+        current = output
+        for part in relative.parts:
+            current = current / part
+            if current.is_symlink():
+                raise ValueError("Linux evidence path is a symlink")
+        if path.is_file():
+            if path.stat().st_size > 16 * 1024 * 1024:
+                raise ValueError("Linux evidence file exceeds bound")
+            target = destination / relative
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(path, target)
 
 def _write(path: Path, value: object) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -102,21 +131,15 @@ os.environ['HOME']='/tmp'
 os.environ['XDG_CACHE_HOME']='/tmp/cache'
 os.environ['PIP_CACHE_DIR']='/tmp/pip-cache'
 pathlib.Path('/tmp/pip-cache').mkdir(parents=True,exist_ok=True)
+__EXPORT_FUNCTION__
 try:
   runpy.run_path(str(worker),run_name='__main__')
 finally:
   # Export only raw observations, including on failure. Releases, caches and
   # private owner state stay in Linux tmpfs and are never evidence inputs.
-  output=pathlib.Path('/output')
-  for directory,dirs,files in os.walk(output):
-    if pathlib.Path(directory).relative_to(output).parts == ():
-      dirs[:]=[d for d in dirs if d not in ('install','project','profile-owner','godot-user') and not d.startswith('.hh-studio-addon-')]
-    for name in files:
-      path=pathlib.Path(directory)/name
-      target=pathlib.Path('/evidence')/path.relative_to(output)
-      target.parent.mkdir(parents=True,exist_ok=True)
-      shutil.copyfile(path,target)
+  export_public_evidence(pathlib.Path('/output'), pathlib.Path('/evidence'))
 """
+    bootstrap = bootstrap.replace("__EXPORT_FUNCTION__", inspect.getsource(export_public_evidence))
     compile(bootstrap, "gt10pc-linux-bootstrap", "exec")
     (inputs / "bootstrap.py").write_text(bootstrap, encoding="utf-8", newline="\n")
     request = {"schema": "hh-gt10pc-linux-request-1", "trust_sha256": trust_sha256, "artifact_sha256": package["archive_sha256"], "manifest_sha256": package["manifest_sha256"], "source_closure_sha256": package["manifest"]["source_closure_sha256"], "upgrade_artifact_sha256": None if upgraded is None else upgraded["archive_sha256"], "upgrade_manifest_sha256": None if upgraded is None else upgraded["manifest_sha256"], "wheel_lock_sha256": digest_file(inputs / "wheels/wheel-lock.json"), "binary_name": lock["binary_name"], "binary_sha256": lock["binary_sha256"], "worker_sha256": worker}
