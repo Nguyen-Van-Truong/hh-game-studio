@@ -319,6 +319,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--trust-sha256", required=True)
     parser.add_argument("--private-key", type=Path, required=True)
     parser.add_argument("--godot", type=Path)
+    parser.add_argument("--case-group", choices=("all", "first", "second"), default="all")
     args = parser.parse_args(argv)
     need(os.name == "nt", "P7_WINDOWS_NATIVE_HOST_REQUIRED")
     output = safe_path(args.output)
@@ -334,7 +335,9 @@ def main(argv: list[str] | None = None) -> int:
     if args.godot is not None:
         need(safe_path(args.godot).is_file(), "P7_GODOT_PIN_REQUIRED")
     rows = []
-    for name, action, phase, disposition in CASES:
+    selected_cases = CASES if args.case_group == "all" else (
+        CASES[:4] if args.case_group == "first" else CASES[4:])
+    for name, action, phase, disposition in selected_cases:
         rows.append(run_case(output, old, new, keys, name=name, action=action,
                              phase=phase, disposition=disposition, old_path=old_path,
                              new_path=new_path, trust=safe_path(args.trust),
@@ -342,6 +345,7 @@ def main(argv: list[str] | None = None) -> int:
                              godot=safe_path(args.godot) if args.godot else None))
     report = {"schema": "hh-gt10pc-p7-native-recovery-1", "authority": 0,
               "acceptance": False, "cases": rows,
+              "case_group": args.case_group,
               "old_artifact_sha256": digest_file(old_path),
               "new_artifact_sha256": digest_file(new_path),
               "old_manifest_sha256": old["manifest_sha256"],

@@ -282,24 +282,29 @@ def run_rehearsal(rows: list[str], *, output: Path, trust: Path,
                                       "archive_and_native_attacks": checks}
         if "P7" in rows:
             from studio.tests.conformance.run_gt10pc_native_probe import GODOT_WINDOWS
-            p7 = output / "p7-native"
-            child = _child(output / "children", "p7-native", [
-                sys.executable, "-B", str(ROOT / "tests/conformance/run_gt10pc_p7.py"),
-                "--output", str(p7), "--trust", str(trust),
-                "--trust-sha256", trust_sha256, "--private-key", str(private),
-                "--godot", str(GODOT_WINDOWS)], timeout=600)
-            need(child["exit_code"] == 0 and child["wrapper_exit_code"] == 0
-                 and child["tree_verified"] and not child["timed_out"],
-                 "GT10PC_P7_NATIVE_PRODUCER_EXIT")
-            p7_report = _read(p7 / "p7.json")
-            need(p7_report.get("schema") == "hh-gt10pc-p7-native-recovery-1"
-                 and p7_report.get("authority") == 0
-                 and p7_report.get("acceptance") is False
-                 and p7_report.get("native_required") is True
-                 and len(p7_report.get("cases", [])) == 8,
-                 "GT10PC_P7_NATIVE_REPORT")
+            p7_reports = []
+            for suffix, group in (("a", "first"), ("b", "second")):
+                p7 = output / ("p7-native-" + suffix)
+                child = _child(output / "children", "p7-native-" + suffix, [
+                    sys.executable, "-B", str(ROOT / "tests/conformance/run_gt10pc_p7.py"),
+                    "--output", str(p7), "--trust", str(trust),
+                    "--trust-sha256", trust_sha256, "--private-key", str(private),
+                    "--godot", str(GODOT_WINDOWS), "--case-group", group], timeout=600)
+                need(child["exit_code"] == 0 and child["wrapper_exit_code"] == 0
+                     and child["tree_verified"] and not child["timed_out"],
+                     "GT10PC_P7_NATIVE_PRODUCER_EXIT:" + group)
+                p7_report = _read(p7 / "p7.json")
+                need(p7_report.get("schema") == "hh-gt10pc-p7-native-recovery-1"
+                     and p7_report.get("authority") == 0
+                     and p7_report.get("acceptance") is False
+                     and p7_report.get("native_required") is True
+                     and p7_report.get("case_group") == group
+                     and len(p7_report.get("cases", [])) == 4,
+                     "GT10PC_P7_NATIVE_REPORT:" + group)
+                p7_reports.append({"group": group, "producer": "p7-native-" + suffix,
+                                   "cases": 4, "child": child})
             result["rows"]["P7"] = {"status": "REHEARSAL_PASS", "evidence_kind": "native",
-                                      "producer": "p7-native", "cases": 8}
+                                      "producers": p7_reports, "cases": 8}
         if "P8" in rows:
             result["rows"]["P8"] = _p8_host_checks(
                 output, Path(artifacts["Windows"]["0.1.0"]["path"]),

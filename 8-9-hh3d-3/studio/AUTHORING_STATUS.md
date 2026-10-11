@@ -77,3 +77,6 @@ Final is explicitly disabled until all row producers and raw verifiers are compl
   hit WinError 267 while using a mutable installed-release parent as cwd. The direct probe on
   the same snapshot succeeds; native launchers now use the stable consumer project cwd with
   explicit installed-payload PYTHONPATH, preserving the source binding.
+- GT10PC INFRA 11-10: rehearsal r07 ran clean through six P7 cases but the single 8-case
+  producer exceeded the launcher’s 600s child limit; actual task exit was 2 with no leftover
+  process. P7 rehearsal is split into two 4-case producers and the matrix requires both reports.
