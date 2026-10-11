@@ -13,6 +13,7 @@ Fresh whole-matrix `gt10pc-rehearsal-20261011-r12` ended with actual Scheduled T
 Fresh whole-matrix `gt10pc-rehearsal-20261011-r13` reached P1–P9 `REHEARSAL_PASS` (P7 8/8 native cases) and actual Scheduled Task exit 2; P10 GT08A passed but catalog Blender failed because the installed-runtime evidence path exceeded Blender's legacy path handling. Raw evidence is retained and the task was deleted after idle/exit receipt. The P10 catalog root is now a shorter sibling under `installed-runtime`, still inside the runtime binding boundary; remint after this source change.
 Focused `gt10pc-rehearsal-20261011-p10fix1` also exited 2: the shorter root reached Blender render, but OpenImageIO still rejected the absolute output path. The host now passes the pre-created `run_dir/native` as a relative `native` argument while retaining the same canonical evidence path; remint after this source change.
 Focused `gt10pc-rehearsal-20261011-p10fix2` confirmed Blender still canonicalized that relative path against the deep cwd and exited 17 at render. The native producer now uses a short-lived private staging cwd/TEMP, then fsync-copies the four bounded artifacts into canonical `run_dir/native` before readback/publication; staging is not evidence or closure.
+Focused `gt10pc-rehearsal-20261011-p10fix3` hit the existing 30s watchdog (`CONTENT_DEADLINE_OR_LOG_CAP`) after staging began; its deleted staging tree left no completion proof. Installed-runtime reproducers pass (10.8s prior, 17.1s current source); the producer keeps the 30s deadline, scans the complete workspace at a bounded cadence, and retains failed staging. P10 also now reads registered/publication output from the probe's actual `.local/reviews` root while keeping Blender content in the short sibling root.
 Remaining: fresh native P1–P10 rehearsal from one frozen source, then formal25 10×35 and two final critics. No row is accepted or ticked by this status file.
 GT08B Android deferred; full GT10 blocked; GT11 unopened. No complete-game claim.
 
@@ -38,7 +39,7 @@ GT08B Android deferred; full GT10 blocked; GT11 unopened. No complete-game claim
 
 ## Next
 
-Freeze current writers, rerun focused P10 catalog with the short staging cwd, then remint a fresh whole-matrix rehearsal covering P1–P10 from one frozen source closure; only then prepare formal25. P7 host diagnostic 09 remains the recovery-boundary baseline; r08 supplies the last accepted rehearsal for the earlier rows.
+Freeze current writers, rerun focused P10 catalog with the bounded workspace scan and split probe roots, then remint a fresh whole-matrix rehearsal covering P1–P10 from one frozen source closure; only then prepare formal25. P7 host diagnostic 09 remains the recovery-boundary baseline; r08 supplies the last accepted rehearsal for the earlier rows.
 P2 native rejection must retain independent worker/host/Godot receipts and unchanged install/project/state ledgers. P9 r08 now captures an installed fixture through an independent archive-backed consumer, but remains rehearsal-only until final manifest/critic gates.
 Final is explicitly disabled until all row producers and raw verifiers are complete.
 

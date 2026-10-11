@@ -44,6 +44,11 @@ CONTENT_CPU_SECONDS = 15
 LOG_BYTES = 262144
 MAX_TOTAL = 6 * 1024 * 1024
 ARTIFACTS = ("scene.glb", "sprite_sheet.png", "checkpoint.blend", "transcript.json")
+# The native child may create several temporary files while rendering.  A full
+# recursive walk on every 20 ms poll made the watchdog itself the dominant
+# cost on Windows.  Keep the same hard cap, but sample the complete private
+# workspace at a bounded cadence and perform one exact scan before handoff.
+WORKSPACE_SCAN_SECONDS = 0.25
 
 
 @dataclass(frozen=True)
@@ -126,6 +131,66 @@ def _read_logs(directory: Path):
         path = directory / name
         rows[name] = path.read_text(encoding="utf-8", errors="replace") if path.is_file() else ""
     return rows
+
+
+def _workspace_size(*roots: Path) -> int:
+    """Return the bounded byte count for owned trees, rejecting reparse links."""
+    total = 0
+    pending = list(roots)
+    while pending:
+        directory = pending.pop()
+        try:
+            entries = list(os.scandir(directory))
+        except FileNotFoundError:
+            continue
+        for entry in entries:
+            if entry.is_symlink():
+                raise ContentJobError("CONTENT_WORKSPACE_REPARSE")
+            if entry.is_dir(follow_symlinks=False):
+                pending.append(Path(entry.path))
+            elif entry.is_file(follow_symlinks=False):
+                total += entry.stat(follow_symlinks=False).st_size
+    return total
+
+
+def _preserve_staging(run_dir: Path, staging_root: Path, *, reason: str) -> dict:
+    """Keep failed native bytes or an exact pointer to them for diagnosis.
+
+    ``tempfile`` can be on another volume from the product tree, so rename is
+    attempted first and a bounded copy is used only when necessary.  The
+    original is never removed unless the copied tree has been retained.
+    """
+    receipt = {"schema": "HH-BLENDER-CONTENT-STAGING-1", "reason": reason,
+               "source": str(staging_root), "retained": False, "destination": None,
+               "copy": None}
+    if not staging_root.exists():
+        receipt["copy"] = "missing"
+        (run_dir / "staging-preservation.json").write_bytes(canonical_bytes(receipt))
+        return receipt
+    destination = run_dir / "staging-failure"
+    try:
+        os.replace(staging_root, destination)
+        receipt.update({"retained": True, "destination": str(destination), "copy": "rename"})
+    except OSError:
+        try:
+            need(_workspace_size(staging_root) <= MAX_TOTAL, "CONTENT_WORKSPACE_CAP")
+            shutil.copytree(staging_root, destination, symlinks=False)
+            need(_workspace_size(destination) == _workspace_size(staging_root),
+                 "CONTENT_STAGING_PRESERVE_READBACK")
+            receipt.update({"retained": True, "destination": str(destination), "copy": "copy"})
+            try:
+                shutil.rmtree(staging_root)
+            except OSError:
+                receipt["copy_cleanup"] = "left_source"
+        except BaseException as error:
+            receipt["copy"] = type(error).__name__
+    try:
+        (run_dir / "staging-preservation.json").write_bytes(canonical_bytes(receipt))
+    except OSError:
+        # The original staging path remains in the receipt's in-memory raw
+        # field; do not replace the native failure with a metadata failure.
+        pass
+    return receipt
 
 
 def _drain(path: Path, pipe, overflow: threading.Event):
@@ -266,7 +331,8 @@ def run_content(*, run_id: str, binary: Path, parent: Path, lease, lease_checker
         env[key] = str(path)
     launch = {"schema": "HH-BLENDER-CONTENT-LAUNCH-1", "argv": args,
               "source_files": source_files, "source_closure_sha256": source_closure,
-              "binary_sha256": BLENDER_SHA256, "public_ack": False}
+              "binary_sha256": BLENDER_SHA256, "staging_root": str(staging_root),
+              "public_ack": False}
     (run_dir / "launch.json").write_bytes(canonical_bytes(launch))
     process = subprocess.Popen([sys.executable, "-B", "-c", HELPER, str(run_dir / "process"), *args],
                                stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
@@ -275,6 +341,7 @@ def run_content(*, run_id: str, binary: Path, parent: Path, lease, lease_checker
     overflow = threading.Event()
     threads = []
     started = time.monotonic()
+    last_workspace_scan = 0.0
     publication = None
     handed_off = False
     try:
@@ -291,9 +358,11 @@ def run_content(*, run_id: str, binary: Path, parent: Path, lease, lease_checker
             _lease_check(lease, lease_checker)
             if overflow.is_set() or time.monotonic() - started > timeout:
                 raise ContentJobError("CONTENT_DEADLINE_OR_LOG_CAP")
-            if (sum(path.stat().st_size for path in run_dir.rglob("*") if path.is_file())
-                    + sum(path.stat().st_size for path in staging_root.rglob("*") if path.is_file())) > MAX_TOTAL:
-                raise ContentJobError("CONTENT_WORKSPACE_CAP")
+            now = time.monotonic()
+            if now - last_workspace_scan >= WORKSPACE_SCAN_SECONDS:
+                if _workspace_size(run_dir, staging_root) > MAX_TOTAL:
+                    raise ContentJobError("CONTENT_WORKSPACE_CAP")
+                last_workspace_scan = now
             time.sleep(0.02)
         for thread in threads:
             thread.join(2)
@@ -302,6 +371,7 @@ def run_content(*, run_id: str, binary: Path, parent: Path, lease, lease_checker
         if process.returncode != 0 or not actual or actual.get("exit_code") != process.returncode:
             raise ContentJobError("CONTENT_NATIVE_EXIT", raw={"wrapper_exit": process.returncode, "actual": actual,
                                                                "logs": _read_logs(run_dir)})
+        need(_workspace_size(run_dir, staging_root) <= MAX_TOTAL, "CONTENT_WORKSPACE_CAP")
         # Close the owned Job before constructing the publication manifest.
         # The pre-close snapshot only proves that a handle was assigned; it
         # cannot support a clean-handoff claim.  ``Owner.close`` performs the
@@ -380,14 +450,24 @@ def run_content(*, run_id: str, binary: Path, parent: Path, lease, lease_checker
         elif process.poll() is None:
             process.kill()
             process.wait(timeout=3)
-        try:
-            shutil.rmtree(staging_root)
-        except OSError:
-            # Staging is diagnostic-only and outside the publication root; a
-            # failed cleanup must not turn a valid native handoff into a false
-            # product failure, while the normal job/tree receipt remains the
-            # authority for process cleanup.
-            pass
+        if handed_off:
+            try:
+                shutil.rmtree(staging_root)
+            except OSError as error:
+                # A successful handoff must not hide a leaked private tree.
+                # Preserve it under the run root and fail closed if cleanup is
+                # uncertain; the caller can then retain the raw descriptor.
+                _preserve_staging(run_dir, staging_root, reason="cleanup-failed")
+                if publication is not None:
+                    try:
+                        publication.close()
+                    except BaseException:
+                        pass
+                raise ContentJobError("CONTENT_STAGING_CLEANUP",
+                                      raw={"error": type(error).__name__})
+        elif staging_root.exists():
+            _preserve_staging(run_dir, staging_root,
+                              reason="native-failure-or-validation")
 
 
 def inspect_publication(publication_root: Path) -> dict:
