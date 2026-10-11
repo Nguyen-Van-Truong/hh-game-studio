@@ -88,3 +88,6 @@ Final is explicitly disabled until all row producers and raw verifiers are compl
   defects; ID04 exposed the installed Blender producer's missing `host` path. ID05 was invalidated
   by source drift because verifier edits were made during the run. Freeze first, then run a new ID;
   a live matrix must never be edited or reused.
+- GT10PC INFRA 11-10: r09 stopped before rows because the Windows P3–P6 producer requested a
+  900-second child timeout while the shared launcher caps every child at 600 seconds. The raw
+  task exit was 2 with no worker left; the matrix now binds that producer to the 600-second cap.

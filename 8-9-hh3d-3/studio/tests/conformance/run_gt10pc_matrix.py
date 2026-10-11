@@ -246,7 +246,7 @@ def run_rehearsal(rows: list[str], *, output: Path, trust: Path,
             child = _child(output / "children", "windows-producer", [
                 sys.executable, "-B", str(ROOT / "tests/conformance/run_gt10pc_native_probe.py"),
                 "--output", str(win), "--trust", str(trust), "--trust-sha256", trust_sha256,
-                "--private-key", str(private)])
+                "--private-key", str(private)], timeout=600)
             need(child["exit_code"] == 0 and not child["timed_out"], "GT10PC_WINDOWS_PRODUCER_EXIT")
             verify_only(win, trust=trust, trust_sha256=trust_sha256)
             for row in ("P3", "P4", "P5", "P6"):
