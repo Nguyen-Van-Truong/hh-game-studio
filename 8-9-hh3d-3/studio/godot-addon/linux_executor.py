@@ -7,9 +7,11 @@ import json
 import os
 from pathlib import Path
 import re
+import shutil
 import stat
 import subprocess
 import sys
+import tempfile
 import threading
 import time
 from typing import Literal
@@ -392,7 +394,11 @@ def read_attribution(output: Path, result: dict) -> dict:
         image_environment=image[0]['Config']['Env'],
         timeout_seconds=result['supervisor']['total_deadline_seconds'],
         asset_files=tuple(sorted(name for name in result['input_hashes_before'] if name in ASSET_PATHS)),
-        attribution_context=context)
+        attribution_context=context,
+        bind_snapshot=(Path(result['bind_snapshot']) if isinstance(result.get('bind_snapshot'), str)
+                       else None),
+        bind_harness=(Path(result['bind_harness']) if isinstance(result.get('bind_harness'), str)
+                      else None))
     _need({k: v for k, v in parsed.items() if k not in ('child_stdout', 'child_stderr')}
           == result.get('attribution'), 'EXECUTOR_ATTRIBUTION_RESULT_BINDING')
     return parsed
@@ -937,7 +943,8 @@ def _asset_inventory(asset_files=()):
 
 
 def _create_args(name: str, mode: str, tool: Path, snapshot: Path, timeout_seconds: int = 20,
-                 *, asset_files=(), attribution_context=None) -> list[str]:
+                 *, asset_files=(), attribution_context=None, bind_snapshot: Path | None = None,
+                 bind_harness: Path | None = None) -> list[str]:
     _need(re.fullmatch(r'hh-gt03-[0-9a-f]{32}', name) is not None, 'EXECUTOR_OWNER_NAME')
     if attribution_context is not None:
         _need(attribution_context.get('run_id') == name, 'EXECUTOR_ATTRIBUTION_RUN')
@@ -958,16 +965,18 @@ def _create_args(name: str, mode: str, tool: Path, snapshot: Path, timeout_secon
         args += ['--env', name_ + '=' + value]
     for destination, options in TMPFS.items():
         args += ['--tmpfs', destination + ':' + options]
-    for source, destination in ((snapshot, '/project'),):
+    bind_snapshot = snapshot if bind_snapshot is None else bind_snapshot
+    bind_harness = (snapshot.parent / 'harness' if bind_harness is None else bind_harness)
+    for source, destination in ((bind_snapshot, '/project'),):
         args += ['--mount', 'type=bind,src=' + str(source) + ',dst=' + destination + ',readonly,bind-propagation=rprivate']
     if assets:
         for destination, options in ASSET_TMPFS.items():
             args += ['--tmpfs', destination + ':' + options]
         for relative in assets:
-            args += ['--mount', 'type=bind,src=' + str(snapshot / relative)
+            args += ['--mount', 'type=bind,src=' + str(bind_snapshot / relative)
                      + ',dst=/project/' + relative + ',readonly,bind-propagation=rprivate']
     if mode == 'profile-validate' or mode in SANDBOX_MODES:
-        args += ['--mount', 'type=bind,src=' + str(snapshot.parent / 'harness')
+        args += ['--mount', 'type=bind,src=' + str(bind_harness)
                  + ',dst=/harness,readonly,bind-propagation=rprivate']
     return args + ['--entrypoint', '/usr/local/bin/python3', IMAGE_ID,
                    *_supervised_command(mode, timeout_seconds,
@@ -976,7 +985,8 @@ def _create_args(name: str, mode: str, tool: Path, snapshot: Path, timeout_secon
 
 def _validate_inspect(value: dict, *, name: str, container_id: str, mode: str,
                       tool: Path, snapshot: Path, image_environment: list[str], timeout_seconds: int = 20,
-                      asset_files=(), attribution_context=None) -> None:
+                      asset_files=(), attribution_context=None, bind_snapshot: Path | None = None,
+                      bind_harness: Path | None = None) -> None:
     assets = _asset_inventory(asset_files)
     if assets and mode != GAMEPLAY_MODE:
         raise ExecutorError('EXECUTOR_ASSET_MODE')
@@ -1013,10 +1023,12 @@ def _validate_inspect(value: dict, *, name: str, container_id: str, mode: str,
     limits = host.get('Ulimits', [])
     _need(len(limits) == len(ULIMITS) and {x['Name']: (x['Soft'], x['Hard']) for x in limits}
           == {key: (number, number) for key, number in ULIMITS.items()}, 'EXECUTOR_ULIMITS')
-    expected_mounts = {'/project': str(snapshot)}
-    expected_mounts.update({('/project/' + relative): str(snapshot / relative) for relative in assets})
+    bind_snapshot = snapshot if bind_snapshot is None else bind_snapshot
+    bind_harness = (snapshot.parent / 'harness' if bind_harness is None else bind_harness)
+    expected_mounts = {'/project': str(bind_snapshot)}
+    expected_mounts.update({('/project/' + relative): str(bind_snapshot / relative) for relative in assets})
     if mode == 'profile-validate' or mode in SANDBOX_MODES:
-        expected_mounts['/harness'] = str(snapshot.parent / 'harness')
+        expected_mounts['/harness'] = str(bind_harness)
     mounts = value.get('Mounts', [])
     _need(len(mounts) == len(expected_mounts) and {mount.get('Destination') for mount in mounts} == set(expected_mounts),
           'EXECUTOR_MOUNTS')
@@ -1097,6 +1109,29 @@ def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate', '
         for filename, raw in harness_files.items():
             (output / 'harness' / filename).write_bytes(raw)
     before = _manifest(initial)
+    bind_root = None
+    bind_snapshot = snapshot
+    bind_harness = output / 'harness'
+    # Docker Desktop on Windows can return EIO when a read-only bind source is
+    # nested under the deep evidence path. Keep durable evidence in `output`,
+    # but bind an exact private copy from the short system temp path. The copy
+    # is hash-checked before dispatch and removed after container cleanup; it
+    # is never used as evidence.
+    if mode == GAMEPLAY_MODE and os.name == 'nt':
+        bind_root = Path(tempfile.mkdtemp(prefix='hh-gt03-'))
+        _no_links(bind_root)
+        bind_snapshot = bind_root / 'snapshot'
+        shutil.copytree(snapshot, bind_snapshot)
+        if harness_files:
+            bind_harness = bind_root / 'harness'
+            shutil.copytree(output / 'harness', bind_harness)
+        _need(_manifest(_inputs(bind_snapshot, mode)) == before,
+              'EXECUTOR_BIND_STAGING_HASH')
+        if harness_files:
+            _need(_names(bind_harness) == set(harness_files)
+                  and all(_read_file(bind_harness / name, 65536) == raw
+                          for name, raw in harness_files.items()),
+                  'EXECUTOR_BIND_STAGING_HARNESS')
     _write(output / 'input-manifest.json', before)
     name = 'hh-gt03-' + uuid.uuid4().hex
     if attribution_enabled:
@@ -1123,6 +1158,7 @@ def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate', '
               'gameplay_profile_sha256': GAMEPLAY_PROFILE_SHA256 if gameplay_profile is not None else None,
               'gameplay_source_envelope_checked': gameplay_profile is not None,
               'gameplay_profile_unchanged': gameplay_profile is None,
+              'bind_snapshot': str(bind_snapshot), 'bind_harness': str(bind_harness),
               'admission': {'acquired': False}, 'owner_record_retained': False,
               'supervisor': {'path': '/usr/bin/timeout', 'sha256': SUPERVISOR_SHA256,
                              'term_after_seconds': max(1, timeout_seconds - 1), 'kill_after_seconds': 1,
@@ -1179,7 +1215,8 @@ def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate', '
               == {'PATH', 'LANG', 'GPG_KEY', 'PYTHON_VERSION', 'PYTHON_SHA256'}, 'EXECUTOR_BASE_ENVIRONMENT')
         asset_files = tuple(sorted(path for path in initial if path in ASSET_PATHS))
         args = _create_args(name, mode, binary.parent, snapshot, timeout_seconds,
-                            asset_files=asset_files, attribution_context=attribution_context)
+                            asset_files=asset_files, attribution_context=attribution_context,
+                            bind_snapshot=bind_snapshot, bind_harness=bind_harness)
         _write(output / 'create-argv.json', args)
         owner_record = {'schema': 'hh-linux-owner-1', 'context': EXECUTOR_CONTEXT, 'image': IMAGE_ID,
                         'name': name, 'container_id': None, 'phase': 'prepared', 'host_pid': os.getpid()}
@@ -1205,7 +1242,8 @@ def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate', '
         _validate_inspect(created, name=name, container_id=container_id, mode=mode,
                           tool=binary.parent, snapshot=snapshot, image_environment=image_environment,
                           timeout_seconds=timeout_seconds, asset_files=asset_files,
-                          attribution_context=attribution_context)
+                          attribution_context=attribution_context, bind_snapshot=bind_snapshot,
+                          bind_harness=bind_harness)
         _need(_manifest(_inputs(project, mode)) == before and _manifest(_inputs(snapshot, mode)) == before,
               'EXECUTOR_PRESTART_INPUT_CHANGED')
         if harness_files:
@@ -1336,6 +1374,15 @@ def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate', '
             except BaseException as error:
                 result['gameplay_profile_unchanged'] = False
                 failed(error, 'EXECUTOR_GAMEPLAY_PROFILE_FINALIZE_')
+        if bind_root is not None:
+            try:
+                shutil.rmtree(bind_root)
+                result['bind_staging_removed'] = True
+            except BaseException as error:
+                result['bind_staging_removed'] = False
+                failed(error, 'EXECUTOR_BIND_STAGING_')
+        else:
+            result['bind_staging_removed'] = True
         try:
             for stream in ('stdout', 'stderr'):
                 log = output / result[stream]
@@ -1383,6 +1430,7 @@ def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate', '
             and state.get('OOMKilled') is False and result.get('docker_wait_exit') == 0
             and result['owned_removed'] and result['input_unchanged'] and result['snapshot_unchanged']
             and result['binary_unchanged'] and result['profile_harness_unchanged'] and result['sandbox_harness_unchanged']
+            and result['bind_staging_removed']
             and result['gameplay_profile_unchanged']
             and (not attribution_enabled or (result['attribution_verified'] is True
                                               and result['attribution_harness_unchanged']))

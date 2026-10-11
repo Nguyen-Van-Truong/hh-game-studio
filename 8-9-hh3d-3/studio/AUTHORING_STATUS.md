@@ -13,6 +13,9 @@ p10fix3 hit the 30s watchdog; p10fix4 hit one installer WinError 5; direct Blend
 p10a passed GT08A and Blender, then exposed a registered-probe publication-root wiring bug; p10b hit WinError 5 again.
 P10 now passes the real publication root to registered probes and retries only transient Windows rename locks for 2s.
 The retry boundary has a focused test; the full package/lifecycle suite passed 15/15 after this source change.
+Docker gameplay publication hit a real deep-path Windows bind EIO; executor now hash-checks a shallow snapshot/harness staging copy.
+The native result records those mount paths so readback and case observation validate the actual bind, not a guessed path.
+Fresh direct attributed gameplay publication passed with staging; old P10 evidence remains raw and is not reused after this source change.
 Next: remint focused P10, then whole P1–P10 rehearsal, P11 measurement, pre-review, formal25, final and critics.
 GT08B Android deferred; full GT10 blocked; GT11 unopened. No complete-game claim.
 

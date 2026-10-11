@@ -503,6 +503,14 @@ def sandbox_binding(destination: Path, case: dict, result: dict, binding: dict) 
                if type(mounts) is list else [])
     mount_map = ({row.get('Destination'): row for row in mounts}
                  if type(mounts) is list and all(type(row) is dict for row in mounts) else {})
+    bind_snapshot = (Path(result['bind_snapshot'])
+                     if isinstance(result.get('bind_snapshot'), str)
+                     else destination / 'snapshot')
+    bind_harness = (Path(result['bind_harness'])
+                    if isinstance(result.get('bind_harness'), str)
+                    else destination / 'harness')
+    if not bind_snapshot.is_absolute() or not bind_harness.is_absolute():
+        raise ValueError('guarded bind staging path is not absolute')
     expected_destinations = {'/project', '/harness'} | {
         '/project/' + path for path in assets}
     if (inspected.get('Id') != result['container_id']
@@ -515,7 +523,7 @@ def sandbox_binding(destination: Path, case: dict, result: dict, binding: dict) 
             or type(mounts) is not list
             or len(mounts) != len(expected_destinations)
             or set(mount_map) != expected_destinations
-            or mount_map.get('/project', {}).get('Source') != str(destination / 'snapshot')
+            or mount_map.get('/project', {}).get('Source') != str(bind_snapshot)
             or any(mount_map.get(destination, {}).get('Type') != 'bind'
                    or mount_map.get(destination, {}).get('RW') is not False
                    or mount_map.get(destination, {}).get('Propagation') != 'rprivate'
@@ -523,10 +531,10 @@ def sandbox_binding(destination: Path, case: dict, result: dict, binding: dict) 
             or len(harness) != 1
             or harness[0].get('Type') != 'bind' or harness[0].get('RW') is not False
             or harness[0].get('Propagation') != 'rprivate'
-            or harness[0].get('Source') != str(destination / 'harness')
+            or harness[0].get('Source') != str(bind_harness)
             or any('/project/' + path not in mount_map
                    or mount_map['/project/' + path].get('Type') != 'bind'
-                   or mount_map['/project/' + path].get('Source') != str(destination / 'snapshot' / path)
+                   or mount_map['/project/' + path].get('Source') != str(bind_snapshot / path)
                    or mount_map['/project/' + path].get('RW') is not False
                    or mount_map['/project/' + path].get('Propagation') != 'rprivate'
                    for path in assets)):
