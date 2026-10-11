@@ -315,7 +315,41 @@ def run_rehearsal(rows: list[str], *, output: Path, trust: Path,
             result["rows"]["P9"] = run_consumer(output / "p9-consumer", p9_artifact,
                                                  trust=trust, trust_sha256=trust_sha256)
         if "P10" in rows:
-            result["rows"]["P10"] = {"status": "PENDING", "reason": "installed lifecycle smoke does not run GT08A PC or K8/K10"}
+            # P10 is a fresh installed-artifact regression.  The producer
+            # snapshots the signed payload, then executes GT08A Windows rows
+            # and new K8/K10 catalog publications from that snapshot; old
+            # GT09 evidence is never accepted as a substitute.
+            from studio.tests.conformance.gt10pc_p10 import verify as verify_p10
+            tooling = ROOT / ".local" / "tooling"
+            godot_root = tooling / "godot-4.7.2-stable"
+            blender = tooling / "blender-5.2.1-windows-x64" / "blender.exe"
+            producers = []
+            for phase in ("gt08a", "catalog"):
+                p10 = output / ("p10-" + phase)
+                label = "p10-installed-" + phase
+                child = _child(output / "children", label, [
+                    sys.executable, "-B", str(ROOT / "tests/conformance/gt10pc_p10.py"),
+                    "--output", str(p10), "--artifact", str(artifacts["Windows"]["0.1.0"]["path"]),
+                    "--trust", str(trust), "--trust-sha256", trust_sha256,
+                    "--tooling", str(tooling),
+                    "--godot-console", str(godot_root / "Godot_v4.7.2-stable_win64_console.exe"),
+                    "--godot-gui", str(godot_root / "Godot_v4.7.2-stable_win64.exe"),
+                    "--blender", str(blender), "--phase", phase], timeout=600)
+                need(child["exit_code"] == 0 and child["wrapper_exit_code"] == 0
+                     and child["tree_verified"] and not child["timed_out"],
+                     "GT10PC_P10_NATIVE_PRODUCER_EXIT:" + phase)
+                p10_report = verify_p10(p10)
+                expected_row = "GT08A_PC" if phase == "gt08a" else "K8_K10"
+                need(p10_report.get("phase") == phase
+                     and set(p10_report.get("rows", {})) == {expected_row},
+                     "GT10PC_P10_NATIVE_REPORT:" + phase)
+                producers.append({"phase": phase, "path": str(p10), "child": child,
+                                  "manifest_sha256": p10_report["manifest_sha256"]})
+            need(len({item["manifest_sha256"] for item in producers}) == 1,
+                 "GT10PC_P10_MANIFEST_SPLIT_BINDING")
+            result["rows"]["P10"] = {"status": "REHEARSAL_PASS", "evidence_kind": "native",
+                                       "producer": "p10-installed", "producers": producers,
+                                       "manifest_sha256": producers[0]["manifest_sha256"]}
         for row in ("P11", "P12"):
             if row in rows:
                 result["rows"][row] = {"status": "DEFERRED", "reason": "requires frozen final and critics"}

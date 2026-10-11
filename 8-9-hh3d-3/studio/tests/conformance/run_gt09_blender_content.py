@@ -18,6 +18,11 @@ import time
 
 STUDIO = Path(__file__).resolve().parents[2]
 REPO_ROOT = STUDIO.parent
+# The installed package has sibling ``host`` and ``studio`` namespaces.  Add
+# the payload root explicitly so the native Blender producer works when run
+# from an installed snapshot, not only from the repository checkout.
+if str(STUDIO) not in sys.path:
+    sys.path.insert(0, str(STUDIO))
 
 
 def _load(name: str, relative: str):
