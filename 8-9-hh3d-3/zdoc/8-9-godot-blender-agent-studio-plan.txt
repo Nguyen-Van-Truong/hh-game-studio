@@ -1,12 +1,12 @@
 HH STUDIO — PLAN 1/3: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Cập nhật 10-10-2026, Asia/Saigon | Revision S289 + quyết định owner O1–O13 | TRIỂN KHAI THEO GATE
+Cập nhật 11-10-2026, Asia/Saigon | Revision S290 + quyết định owner O1–O13 | TRIỂN KHAI THEO GATE
 OWNER_DECISIONS=O1_O3_20260925; O4_20260927; O5_O6_20260930; O7_20261001; O8_20261002; O9_20261003; O10_20261004; O11_20261006; O12_20261007; O13_20261008; BLOCK_BELOW_STATUS_TABLE; LATER_WINS_OVER_S2XX; OLD_VERDICTS_UNCHANGED
 OWNER_DECISIONS_FULL_TEXT_IN_GIT=87912523,b0802472,8298c107,fcc1906f,6d8eb81d,d04266e8,091506fa,a0ab19b8,fd5ad2be,add82689,7f97d3f8
-HIỆN HÀNH 10-10 — GT-01..GT-08A ACCEPTED; GT-09 ACCEPTED trên final -74. K1–K15 PASS, Scheduled Task exit thật 0 (2487.203s), verify-only exit0; Astra xhigh và Sol ultra đều TICK=yes trên cùng manifest/closure. K9 đã chứng minh cả arena và room bằng native Play, catalog repair/replay và durable reopen/checkpoint. GT-08B DEFERRED_OWNER; GT-10-PC đang sửa prototype 6b3e0f77: các nhãn PASS/native trước đó không có engine/crash/soak thật nên VOID_DIAGNOSTIC; chưa hàng P nào được nghiệm thu. Final bị khóa tới khi có producer và verifier raw native. Full GT-10 vẫn cần GT-08B.
+HIỆN HÀNH 11-10 — GT-01..GT-08A và GT-09 ACCEPTED (final -74, K1–K15, hai critic cùng hash). GT-10-PC đang triển khai native diagnostic; checkpoint 51ce380e sửa trust/installer. Run -04 và Scheduled Task sched01 đã có Godot exit0 trên hai fixture nhưng chỉ AUTHORITY=0 và source cũ. Source mới sửa addon layout/dependency, WAL recovery (5 host tests PASS, gồm 4 process kill thật) và verifier schema-3; tiếp theo kiểm native cùng source. Chưa hàng P nào nghiệm thu; final khóa tới khi P1–P10 đủ producer/verifier. GT-08B DEFERRED_OWNER; full GT-10 vẫn cần GT-08B.
 CURRENT_VALID_WP=GT-10-PC
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S289
+PLAN_REVISION=S290
 EXECUTION_AUTHORIZATION=OWNER_APPROVED_GATED
 EXECUTION_MODE=COORDINATOR_WITH_SCOPED_SUBAGENTS_AND_INDEPENDENT_CRITICS_OWNER_20261003; CREDIT_TURN_BUDGET_O13_6; ONE_COORDINATOR_THREAD; ULTRA_ONLY_HARD_DESIGN_AND_FINAL_CRITICS; FORK_TURNS_NONE_DEFAULT; NO_SELF_CREATED_HEARTBEAT; ONE_WRITER_PER_FILE; TWO_DIFFERENT_MODELS_SAME_HASH
 GOAL_STATE=ACTIVE; INDEPENDENT_CONSUMER_PILOT_AUTHORIZED; GT07_ACCEPTED; GT08A_ACCEPTED_O4_6; GT09_ACCEPTED_20261010; GT08B_DEFERRED_OWNER_NO_ANDROID; GT10_PC_OPEN; GT10_FULL_BLOCKED_BY_GT08B; SUPERAGENT_SEPARATE_OWNER_AUTHORIZED_LANE
@@ -16,7 +16,7 @@ GT06_STATUS=ACCEPTED; FORMAL25_TWO_ACCEPTED_PAIRS; FINAL_MANIFEST=318081a3c71f33
 GT07_STATUS=ACCEPTED_20261007; MATRIX=gt07-final-matrix-gt07-m1-final-20261007-04_30_OF_30; FINAL_MANIFEST=5d97343e7262e4c54f70f0135ffda1045b71c6cf13223321cf4b373e6f1714cc; DECISION=zdoc/reviews/20261003-gt07-integration/coordinator-acceptance-20261007.md
 GT08A_STATUS=ACCEPTED_20261007; MATRIX=gt08a-matrix-20261007-05_18_OF_18; FINAL_MANIFEST=49834d31db4996b18c15d9cada4ef030efb30d95f1e68e934251f9a5baafe675; DECISION=zdoc/reviews/20261007-gt08a-coordinator-acceptance.md; GT08B=DEFERRED_O12
 GT09_FINAL_20261010_74=K1_K15_PASS_SCHEDULED_TASK_EXIT0_2487.203S_VERIFY_EXIT0_MANIFEST_8d9a2ec6_CLOSURE_6b7b5231; CRITICS=ASTRA_XHIGH_TICK_YES,SOL_ULTRA_TICK_YES; DECISION=zdoc/reviews/20261010-gt09-b7-74/coordinator-acceptance.md; GT09_NEXT_ACTION=OPEN_GT10_PC_P1_P12; K13=MEASURED_INCOMPATIBLE_FOUR_AUTHOR_EVENTS; RAW_HISTORY=STUDIO_LOCAL_REVIEWS; STATUS_DETAIL=studio/AUTHORING_STATUS.md; ACCEPTANCE=COORDINATOR_ACCEPTED_20261010
-GT10_SOAK_POLICY=OWNER_O1_10X35_ON_RELEASE_SOURCE; REUSE_ACCEPTED_FORMAL25_MACHINERY; GT10PC_CONTRACT=PROTOTYPE_INVALID_NATIVE_CLAIMS_VOID; GT10PC_NEXT=REPAIR_TRUST_CLOSURE_INSTALLER_NATIVE_PRODUCERS; FINAL_DISABLED_UNTIL_NATIVE_REHEARSAL; PROFILE_V6=8a2e599c40f927ffaff5ded5e48b6bf2a0f0a6bb3a23de31434a695f4258cb35; FORMAL25_SOURCE64=727f9039c1cc83239f5ef1daff13de5e92e37b5ba442e64be8341ca058800b58
+GT10_SOAK_POLICY=OWNER_O1_10X35_ON_RELEASE_SOURCE; REUSE_ACCEPTED_FORMAL25_MACHINERY; GT10PC_CONTRACT=PROTOTYPE_INVALID_NATIVE_CLAIMS_VOID; GT10PC_NEXT=VERIFY_SCHEMA3_NATIVE_THEN_P4_P6_P7_LINUX; FINAL_DISABLED_UNTIL_NATIVE_REHEARSAL; PROFILE_V6=8a2e599c40f927ffaff5ded5e48b6bf2a0f0a6bb3a23de31434a695f4258cb35; FORMAL25_SOURCE64=727f9039c1cc83239f5ef1daff13de5e92e37b5ba442e64be8341ca058800b58
 O2_CANDIDATE_STATUS=AUTHORITY0; BRANCH=codex/hh3d-s14-bootstrap; DETAIL=studio/AUTHORING_STATUS.md (Hiện trạng + bảng K1–K15); DIAGNOSTIC_RUNS=REFERENCE_ONLY_NOT_FINAL_INPUT_O13_3; NO_AUTH_OR_PUBLIC_CLAIM
 RUN_POLICY=FRESH_ID_PER_RUN; DRY_RUN_BEFORE_NATIVE_O10_2; VERIFY_SOURCE_STOP_LATCH_AND_O5_6_LOCK_BEFORE_START; PRESERVE_RAW_ON_FAILURE; REPAIR_ONLY_PROVEN_BOUNDARY; FIX_AND_CONTINUE_O6_4; NEVER_TICK_FROM_BANNER_OR_PARTIAL_PREFIX; CRITICS_READONLY_INDEPENDENT_SAME_HASH
 S_RECORD_HISTORY_ARCHIVE=8-9-hh3d-3/zdoc/reviews/20260925-plan-s-record-history-s256.txt; SHA256=14e4d00b5f574f9c06c8f4041cf284fa70f7bded09dee6d6d2914cdb1d3c5fdb; AUTHORITY=0; RAW_HEADER_BLOCK_S256_LINES_93_150_BYTE_FOR_BYTE; NO_GATE_CHANGE
@@ -191,8 +191,10 @@ Căn cứ 09-10 06:30 → 18:40:
    B8 (đang mở): prototype 6b3e0f77 sai tầng bằng chứng. P3–P11 chỉ chạy Python file I/O,
       không Godot/Linux/crash/soak; P12/verify-only tin cờ và exit tự ghi. Run 350a đã dừng,
       raw giữ VOID_DIAGNOSTIC; Start-Process pythonw không phải Scheduled Task. Không hồi tố PASS.
-      Tiếp: sửa trust key/chữ ký và closure đầy đủ; installer durable + ownership ledger;
-      nối producer native từng hàng và parser raw, rehearsal qua Scheduled Task thật. Chỉ sau
+      Checkpoint 51ce380e có trust Ed25519 ngoài gói, closure, immutable install và native smoke.
+      11-10: bổ sung addon đúng layout + JCS, WAL recovery, ownership theo project; 5 host tests
+      PASS gồm 4 kill process thật. Verifier schema-3 kiểm trust/artifact/evidence/host exit/lifecycle.
+      Tiếp: native schema-3 qua Task; P4/P6/P7/Linux và P1/P2/P8/P9/P10 còn thiếu. Chỉ sau
       đó freeze, final 10×35 dùng formal25 machinery, verify-only và hai critic cùng hash.
       Bài học: bảng P ghi yêu cầu, không là bằng chứng; host smoke không đổi nhãn native;
       số vòng copy file không là soak, tên folder Linux không chứng minh chạy Linux.

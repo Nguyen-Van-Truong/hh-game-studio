@@ -12,7 +12,7 @@ import os
 from pathlib import Path
 from typing import Mapping
 import uuid
-import shutil
+from . import addon_transaction
 
 from .release_contract import (
     PackageError, SCHEMA, HEX, canonical, digest_bytes, digest_file, need,
@@ -23,7 +23,7 @@ try:
 except ModuleNotFoundError:
     from studio.build.bootstrap.install_toolchain import safe_path, mutation_guard, sync_directory
 
-STATE_SCHEMA = "hh-studio-install-3"
+STATE_SCHEMA = "hh-studio-install-4"
 MAX_STATE = 16 * 1024**2
 MAX_COMMANDS = 8192
 
@@ -53,6 +53,7 @@ class ConsumerInstall:
         with mutation_guard(self.root):
             self.versions.mkdir(exist_ok=True)
             self.stages.mkdir(exist_ok=True)
+            addon_transaction.recover(self)
 
     def _state(self) -> tuple[dict, str]:
         path = safe_path(self.state_path)
@@ -71,6 +72,13 @@ class ConsumerInstall:
              and isinstance(state["commands"], dict) and len(state["commands"]) <= MAX_COMMANDS,
              "install state invalid")
         need(isinstance(state["owned_components"], dict), "install ownership invalid")
+        for component, owned in state["owned_components"].items():
+            need(isinstance(component, str) and component.endswith("::addons/hh_studio")
+                 and isinstance(owned, dict), "install ownership component invalid")
+            for relative, digest in owned.items():
+                need(isinstance(relative, str) and relative and not Path(relative).is_absolute()
+                     and ".." not in Path(relative).parts and "\\" not in relative and ":" not in relative
+                     and isinstance(digest, str) and HEX.fullmatch(digest), "install ownership path invalid")
         for field in ("active", "previous"):
             need(state[field] is None or isinstance(state[field], str) and HEX.fullmatch(state[field]),
                  "install state release identity invalid")
@@ -84,12 +92,14 @@ class ConsumerInstall:
 
     def snapshot(self) -> dict:
         with mutation_guard(self.root):
+            addon_transaction.recover(self)
             state, token = self._state()
             return {**state, "state_sha256": token}
 
     def lookup(self, command_id: str) -> dict | None:
         self._command_id(command_id)
         with mutation_guard(self.root):
+            addon_transaction.recover(self)
             state, _ = self._state()
             row = state["commands"].get(command_id)
             return None if row is None else row["receipt"]
@@ -100,6 +110,7 @@ class ConsumerInstall:
              and all(32 < ord(c) < 127 for c in command_id), "invalid command_id")
 
     def _begin(self, command_id: str, request: dict, expected_state_sha256: str) -> tuple:
+        addon_transaction.recover(self)
         self._command_id(command_id)
         need(expected_state_sha256 == "ABSENT" or isinstance(expected_state_sha256, str)
              and HEX.fullmatch(expected_state_sha256), "expected state token required")
@@ -129,6 +140,12 @@ class ConsumerInstall:
 
     def _commit(self, state: dict, command_id: str, digest: str, expected: str,
                 action: str, manifest: dict | None) -> dict:
+        receipt = self._record(state, command_id, digest, action, manifest)
+        self._publish(state, expected)
+        return receipt
+
+    def _record(self, state: dict, command_id: str, digest: str,
+                action: str, manifest: dict | None) -> dict:
         state["revision"] += 1
         receipt = {"status": "COMMITTED", "action": action, "command_id": command_id,
                    "revision": state["revision"], "active": state["active"], "previous": state["previous"],
@@ -136,7 +153,6 @@ class ConsumerInstall:
                    "version": None if manifest is None else manifest["version"],
                    "source_closure_sha256": None if manifest is None else manifest["source_closure_sha256"]}
         state["commands"][command_id] = {"request_digest": digest, "receipt": receipt}
-        self._publish(state, expected)
         return receipt
 
     def _read_release(self, identity: str) -> dict:
@@ -168,6 +184,7 @@ class ConsumerInstall:
 
     def active_path(self) -> Path:
         with mutation_guard(self.root):
+            addon_transaction.recover(self)
             state, _ = self._state()
             need(state["active"] is not None, "no active release")
             self._read_release(state["active"])
@@ -233,112 +250,72 @@ class ConsumerInstall:
 
     @staticmethod
     def _ownership_key(project: Path) -> str:
-        return project.resolve().as_posix() + "::addons/hh_studio"
+        return os.path.normcase(str(project)) + "::addons/hh_studio"
+
+    def addon_files(self, release: str) -> dict[str, bytes]:
+        """Complete project addon, including its protocol preload dependency."""
+        self._read_release(release)
+        studio = self.versions / release / "payload/studio"
+        files = addon_transaction.tree_bytes(studio / "godot-addon/addons/hh_studio")
+        need(files is not None, "addon source unavailable")
+        files["jcs_godot.gd"] = safe_path(studio / "protocol/jcs_godot.gd").read_bytes()
+        return files
 
     def install_addon(self, project: Path, *, command_id: str, expected_state_sha256: str,
-                      repair: bool = False) -> dict:
-        """Install the package-owned addon into a pre-existing consumer project."""
+                      repair: bool = False, release: str) -> dict:
+        """Install/repair an explicitly selected trusted release's addon.
+
+        An unowned collision is rejected before mutation, even if bytes match.
+        A repair explicitly authorizes replacing changed files already owned by
+        this installer. Other manual content and deleted-package edits survive.
+        """
         project = safe_path(project)
+        need(project.is_dir() and (project / "project.godot").is_file(), "consumer project required")
         with mutation_guard(self.root):
-            state, _ = self._state()
             action = "repair-addon" if repair else "install-addon"
-            request = {"action": action, "project": project.as_posix(), "release": state["active"]}
+            request = {"action": action, "project": str(project), "release": release}
             state, digest, prior = self._begin(command_id, request, expected_state_sha256)
-            if prior is not None: return prior
-            need(state["active"] is not None, "no active release")
-            source = safe_path(self.versions / state["active"] / "payload/studio/godot-addon")
+            if prior is not None:
+                return prior
+            need(state["active"] == release, "addon release is not active")
+            manifest = self._read_release(release)
+            source = self.addon_files(release)
             destination = safe_path(project / "addons/hh_studio")
-            need(source.is_dir(), "addon source unavailable")
             ownership_key = self._ownership_key(project)
             prior_owned = state["owned_components"].get(ownership_key)
-            need(prior_owned is None or repair, "addon already installed")
-            if prior_owned is None:
-                prior_owned = {}
-            stage = safe_path(project / (".hh-studio-addon-" + uuid.uuid4().hex + ".stage"))
-            destination.parent.mkdir(parents=True, exist_ok=True)
-            stage.mkdir()
+            need(prior_owned is None or repair, "addon already installed; use explicit repair")
+            prior_owned = prior_owned or {}
+            original = addon_transaction.tree_bytes(destination)
+            before = addon_transaction.files_hash(original)
+            files = dict(original or {})
             owned = {}
-            preexisting = set()
-            try:
-                if destination.exists():
-                    need(destination.is_dir(), "addon destination is not a directory")
-                    for existing_path in destination.rglob("*"):
-                        rel = existing_path.relative_to(destination)
-                        target = stage / rel
-                        if existing_path.is_dir():
-                            target.mkdir(parents=True, exist_ok=True)
-                        elif existing_path.is_file():
-                            target.parent.mkdir(parents=True, exist_ok=True)
-                            shutil.copyfile(existing_path, target)
-                            preexisting.add((destination / rel).relative_to(project).as_posix())
-                source_names = set()
-                for src in sorted(source.rglob("*")):
-                    rel = src.relative_to(source)
-                    dst = safe_path(stage / rel)
-                    if src.is_dir(): dst.mkdir(parents=True, exist_ok=True); continue
-                    need(src.is_file(), "addon contains nonregular member")
-                    dst.parent.mkdir(parents=True, exist_ok=True)
-                    project_relative = (destination / rel).relative_to(project).as_posix()
-                    source_names.add(project_relative)
-                    # A first install never takes ownership of a colliding
-                    # consumer file.  A repair may replace only a path that
-                    # this install journal already owns.
-                    if project_relative in preexisting and project_relative not in prior_owned:
-                        continue
-                    shutil.copyfile(src, dst)
-                    owned[project_relative] = digest_file(dst)
-                # Remove package files deleted from a newer release only when
-                # they still contain the bytes this journal installed.
-                for project_relative, expected in prior_owned.items():
-                    if project_relative in source_names:
-                        continue
-                    old_path = safe_path(project / project_relative)
-                    staged_path = safe_path(stage / Path(project_relative).relative_to(destination.relative_to(project)))
-                    if old_path.is_file() and digest_file(old_path) == expected and staged_path.is_file():
-                        staged_path.unlink()
-                if destination.exists():
-                    backup = safe_path(project / (".hh-studio-addon-" + uuid.uuid4().hex + ".backup"))
-                    os.replace(destination, backup)
-                    try:
-                        os.replace(stage, destination)
-                    except BaseException:
-                        if not destination.exists() and backup.exists(): os.replace(backup, destination)
-                        raise
-                    shutil.rmtree(backup, ignore_errors=True)
-                else:
-                    os.replace(stage, destination)
-            except BaseException:
-                shutil.rmtree(stage, ignore_errors=True); raise
+            for relative, data in source.items():
+                need(relative not in files or relative in prior_owned,
+                     "unowned addon file conflict: " + relative + "; preserve it and reconcile before install")
+                files[relative] = data
+                owned[relative] = digest_bytes(data)
+            for relative, expected in prior_owned.items():
+                if relative not in source and relative in files and digest_bytes(files[relative]) == expected:
+                    del files[relative]
             state["owned_components"][ownership_key] = owned
-            return self._commit(state, command_id, digest, expected_state_sha256, action, None)
+            return addon_transaction.replace(self, project, files, state, expected_state_sha256,
+                                             command_id, digest, action, manifest, before)
 
     def uninstall_addon(self, project: Path, *, command_id: str, expected_state_sha256: str) -> dict:
         project = safe_path(project)
         with mutation_guard(self.root):
-            state, _ = self._state()
-            request = {"action": "uninstall-addon", "project": project.as_posix()}
+            request = {"action": "uninstall-addon", "project": str(project)}
             state, digest, prior = self._begin(command_id, request, expected_state_sha256)
-            if prior is not None: return prior
-            preserved = []
+            if prior is not None:
+                return prior
+            destination = safe_path(project / "addons/hh_studio")
+            original = addon_transaction.tree_bytes(destination)
+            before = addon_transaction.files_hash(original)
+            files = dict(original or {})
             ownership_key = self._ownership_key(project)
-            for component, files in list(state["owned_components"].items()):
-                if component != ownership_key: continue
-                for relative, expected in files.items():
-                    path = safe_path(project / relative)
-                    if path.is_file() and digest_file(path) == expected:
-                        path.unlink()
-                    elif path.exists():
-                        preserved.append(relative)
-                root = safe_path(project / "addons/hh_studio")
-                if root.is_dir():
-                    for directory, dirs, names in os.walk(root, topdown=False):
-                        for name in names:
-                            pass
-                        for name in dirs:
-                            try: (Path(directory) / name).rmdir()
-                            except OSError: pass
-                    try: root.rmdir()
-                    except OSError: pass
-                state["owned_components"].pop(component, None)
-            return self._commit(state, command_id, digest, expected_state_sha256, "uninstall-addon", None)
-
+            for relative, expected in state["owned_components"].get(ownership_key, {}).items():
+                if relative in files and digest_bytes(files[relative]) == expected:
+                    del files[relative]
+            state["owned_components"].pop(ownership_key, None)
+            return addon_transaction.replace(self, project, files, state, expected_state_sha256,
+                                             command_id, digest, "uninstall-addon", None, before)

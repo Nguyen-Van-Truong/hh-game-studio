@@ -44,17 +44,12 @@ def write_new(path: Path, value: object) -> None:
 
 
 def source_closure() -> str:
-    files: list[tuple[str, str]] = []
-    roots = [STUDIO / "package", STUDIO / "tests" / "conformance" / "run_gt10pc_matrix.py",
-             STUDIO / "tests" / "conformance" / "run_gt10pc_native_probe.py", Path(__file__).resolve()]
-    for root in roots:
-        candidates = [root] if root.is_file() else sorted(p for p in root.rglob("*") if p.is_file())
-        for path in candidates:
-            rel = path.relative_to(REPO_ROOT).as_posix()
-            if "__pycache__" in rel or ".local" in rel:
-                continue
-            files.append((rel, sha(path)))
-    return hashlib.sha256(json.dumps(files, separators=(",", ":"), sort_keys=True).encode()).hexdigest()
+    sys.path.insert(0, str(REPO_ROOT))
+    from studio.package.release_contract import _source_files, _payload_digest
+    return hashlib.sha256(json.dumps({
+        "payload": _payload_digest(_source_files(STUDIO)),
+        "publisher": sha(STUDIO / "tests/conformance/gt10pc_signing.py"),
+    }, sort_keys=True).encode()).hexdigest()
 
 
 def paths(run_id: str) -> tuple[Path, Path]:
@@ -66,7 +61,7 @@ def paths(run_id: str) -> tuple[Path, Path]:
 
 
 def prepare(run_id: str, mode: str = "rehearsal") -> Path:
-    if mode not in ("rehearsal", "final"):
+    if mode not in ("rehearsal", "final") or not run_id.startswith("gt10pc-" + mode + "-"):
         raise ValueError("GT10PC_TASK_MODE")
     if not TRUST.is_file() or not PRIVATE.is_file():
         raise ValueError("GT10PC_EXTERNAL_TRUST_MISSING")
@@ -97,6 +92,8 @@ def load_request(run_id: str) -> tuple[Path, Path, dict[str, object]]:
     if not request_path.is_file() or matrix_root.exists():
         raise ValueError("GT10PC_TASK_REQUEST_BINDING")
     request = json.loads(request_path.read_text(encoding="utf-8"))
+    if request.get("mode") not in ("rehearsal", "final") or not run_id.startswith("gt10pc-" + request["mode"] + "-"):
+        raise ValueError("GT10PC_TASK_MODE_BINDING")
     console = Path(sys.executable).resolve().with_name("python.exe")
     windowed = Path(sys.executable).resolve().with_name("pythonw.exe")
     expected = {
@@ -114,7 +111,7 @@ def load_request(run_id: str) -> tuple[Path, Path, dict[str, object]]:
 
 def run(run_id: str) -> int:
     matrix_root, task, request = load_request(run_id)
-    started = time.monotonic(); code = 1
+    started = time.monotonic(); code = 1; process_observed = False
     stdout_path, stderr_path = task / "stdout.txt", task / "stderr.txt"
     try:
         if request["mode"] == "final":
@@ -129,19 +126,24 @@ def run(run_id: str) -> int:
             proc = subprocess.run(command, cwd=REPO_ROOT, stdout=stdout, stderr=stderr,
                                   env=env, check=False)
             code = int(proc.returncode)
+            process_observed = True
         if code == 0:
-            verify = subprocess.run([str(console), "-B", str(MATRIX), "--verify-only", str(matrix_root)],
+            verify = subprocess.run([str(console), "-B", str(MATRIX), "--verify-only", str(matrix_root),
+                                     "--trust", str(TRUST), "--trust-sha256", request["trust_sha256"]],
                                     cwd=REPO_ROOT, env=env, capture_output=True, text=True, check=False)
             (task / "verify-stdout.txt").write_text(verify.stdout, encoding="utf-8")
             (task / "verify-stderr.txt").write_text(verify.stderr, encoding="utf-8")
             code = int(verify.returncode)
+        if source_closure() != request["source_closure_sha256"]:
+            raise ValueError("GT10PC_TASK_SOURCE_CHANGED_DURING_RUN")
     except BaseException:
+        code = 2
         with stderr_path.open("ab") as stderr: stderr.write(traceback.format_exc().encode())
     finally:
         write_new(task / "return.json", {"schema": "HH-GT10PC-TASK-RETURN-2", "run_id": run_id,
             "returned_exit_code": code, "matrix_root": str(matrix_root),
             "source_closure_sha256": request["source_closure_sha256"],
-            "elapsed_seconds": time.monotonic() - started, "actual_process_exit_observed": True,
+            "elapsed_seconds": time.monotonic() - started, "actual_process_exit_observed": process_observed,
             "formal_acceptance": False, "mode": request["mode"]})
     return code
 

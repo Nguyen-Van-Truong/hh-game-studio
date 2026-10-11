@@ -23,12 +23,19 @@ def main() -> int:
     lock = json.loads((STUDIO / "toolchain.lock.json").read_bytes())
     need(digest_file(args.godot) == lock["godot"]["console_sha256"], "Godot pin mismatch")
     args.output.mkdir(parents=True, exist_ok=False)
+    parse = run_process([str(args.godot), "--headless", "--path", str(args.project),
+                         "--check-only", "--script", "res://addons/hh_studio/plugin.gd"],
+                        cwd=args.project, output=args.output, timeout=30, label="parse",
+                        env=_isolated_user_env(args.output))
+    need(parse["exit_code"] == 0 and parse["wrapper_exit_code"] == 0
+         and parse["tree_verified"] and not parse["timed_out"], "installed addon failed Godot parse")
     invocation = [str(args.godot), "--headless", "--path", str(args.project),
                   "--scene", "scenes/fixture.tscn", "--max-fps", "60",
                   "--", "--fixture-lifecycle-smoke"]
     result = run_process(invocation, cwd=args.project, output=args.output,
                          timeout=60, label="godot", env=_isolated_user_env(args.output))
-    receipt = {"schema": "hh-installed-native-probe-1", "studio": str(STUDIO),
+    receipt = {"schema": "hh-installed-native-probe-2", "studio": str(STUDIO),
+               "active_release": install.snapshot()["active"], "parse": parse,
                "probe_sha256": digest_file(Path(__file__)),
                "launcher_sha256": digest_file(STUDIO / "build/bootstrap/run_fixture.py"),
                "godot_sha256": digest_file(args.godot), "process": result}

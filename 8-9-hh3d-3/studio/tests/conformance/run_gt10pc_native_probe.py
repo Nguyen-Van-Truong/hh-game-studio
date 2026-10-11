@@ -22,7 +22,7 @@ from studio.package.trust import load_trust
 from studio.build.bootstrap.run_fixture import run_process
 
 GODOT = ROOT / ".local/tooling/godot-4.7.2-stable/Godot_v4.7.2-stable_win64_console.exe"
-SCHEMA = "HH-GT10PC-NATIVE-PRODUCER-2"
+SCHEMA = "HH-GT10PC-NATIVE-PRODUCER-3"
 
 
 def write_json(path: Path, value: object) -> None:
@@ -83,7 +83,7 @@ def main(argv: list[str] | None = None) -> int:
         install = ConsumerInstall(consumer_root / "install", trusted_keys=keys)
         installed = install.install(artifact, command_id="install." + fixture,
                                     expected_state_sha256=install.snapshot()["state_sha256"])
-        addon_installed = install.install_addon(project, command_id="install-addon." + fixture,
+        addon_installed = install.install_addon(project, release=installed["active"], command_id="install-addon." + fixture,
                                                 expected_state_sha256=install.snapshot()["state_sha256"])
         manual = project / "addons" / "hh_studio" / "owner-manual-note.txt"
         manual.write_text("owner edit must survive uninstall\n", encoding="utf-8")
@@ -122,18 +122,16 @@ def main(argv: list[str] | None = None) -> int:
         need(before == after_uninstall and manual.is_file(), "consumer source/save/manual changed on addon uninstall")
         # Reinstall demonstrates that manual content survives and missing
         # package-owned files are restored into the same project.
-        reinstall_addon = install.install_addon(project, command_id="reinstall-addon." + fixture,
+        reinstall_addon = install.install_addon(project, release=installed["active"], command_id="reinstall-addon." + fixture,
                                                  expected_state_sha256=install.snapshot()["state_sha256"])
         need(manual.is_file(), "manual addon edit lost during reinstall")
         after_reinstall = project_state(project)
         need(after_reinstall == before, "consumer source/save changed on reinstall")
         after_reinstall_ledger = project_ledger(project)
-        addon_source = safe_path(install.active_path() / "godot-addon")
         expected_after_reinstall = dict(before_ledger)
-        for source_file in addon_source.rglob("*"):
-            if source_file.is_file():
-                relative = (Path("addons/hh_studio") / source_file.relative_to(addon_source)).as_posix()
-                expected_after_reinstall[relative] = {"sha256": digest_file(source_file), "size": source_file.stat().st_size}
+        from studio.package.release_contract import digest_bytes
+        for name, data in install.addon_files(installed["active"]).items():
+            expected_after_reinstall["addons/hh_studio/" + name] = {"sha256": digest_bytes(data), "size": len(data)}
         expected_after_reinstall[manual_rel] = {"sha256": digest_file(manual), "size": manual.stat().st_size}
         need(after_reinstall_ledger == expected_after_reinstall,
              "reinstall did not restore package-owned addon closure")
@@ -177,7 +175,8 @@ def main(argv: list[str] | None = None) -> int:
                               "formal25 soak", "final critics"]}
     write_json(output / "producer.json", manifest)
     write_json(output / "matrix.json", {"schema": "hh-gt10pc-matrix-2", "authority": 0,
-               "acceptance": False, "mode": "DIAGNOSTIC", "producer": "producer.json"})
+               "acceptance": False, "mode": "DIAGNOSTIC", "producer": "producer.json",
+               "producer_sha256": digest_file(output / "producer.json")})
     print(json.dumps({"status": "DIAGNOSTIC_COMPLETE", "authority": 0,
                       "artifact_sha256": manifest["artifact_sha256"], "output": str(output)}))
     return 0

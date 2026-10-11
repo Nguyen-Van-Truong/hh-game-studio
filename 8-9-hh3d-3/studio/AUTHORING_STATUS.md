@@ -1,14 +1,15 @@
-# O2 authoring state — 2026-10-10 (O13/S289)
+# O2 authoring state — 2026-10-11 (O13/S290)
 
-AUTHORITY=0; GT09=ACCEPTED; GT10_PC=IN_PROGRESS_PROTOTYPE_REPAIR.
+AUTHORITY=0; GT09=ACCEPTED; GT10_PC=IN_PROGRESS_NATIVE_DIAGNOSTIC.
 Progress authority: `zdoc/8-9-godot-blender-agent-studio-plan.txt`.
 GT09 final -74 accepted: K1–K15, actual Scheduled Task exit0, two critics same hash.
-GT10-PC prototype 6b3e0f77 claims are VOID_DIAGNOSTIC: host file I/O was mislabeled native.
-No GT10-PC P row is accepted; old matrix schema 1 and its verify-only PASS are invalid.
-Run 350a stopped with observed exit 4294967295; raw and void receipt retained in .local.
-Final/rehearsal entry is disabled until real installed-package native producers are wired.
-Next: signed artifact + full closure, durable installer, native P2–P7/P9–P11 and raw verifiers.
-Then Scheduled Task rehearsal/final formal25 soak 10×35 and independent critics.
+GT10-PC prototype 6b3e0f77 claims remain VOID_DIAGNOSTIC; no P row accepted.
+Checkpoint 51ce380e: external Ed25519 trust, immutable releases and native lane.
+Diagnostic 20261011-04: arena+room exit0; sched01 exited0 in 60.032s (older source).
+Current source adds addon dependency/layout repair, WAL recovery and strict raw verifier.
+Five host tests passed, including four actual addon worker kills (118.408s).
+Current-source Scheduled Task native parse/lifecycle verification is NEXT; prior runs are historical.
+Remaining: P1/P2 adversarial receipts, Linux/P4/P6–P10, formal25 10×35, two final critics.
 GT08B Android deferred; full GT10 blocked; GT11 unopened. No complete-game claim.
 
 ## K1–K15 acceptance matrix
@@ -33,9 +34,9 @@ GT08B Android deferred; full GT10 blocked; GT11 unopened. No complete-game claim
 
 ## Next
 
-GT09 accepted. Repair GT10-PC prototype without reusing synthetic PASS evidence.
-Use external test signing key, complete runtime closure and raw native postconditions.
-Keep candidate runs diagnostic until full gate evidence and two critics exist.
+Run Scheduled Task diagnostic with schema-3 producer and external trust arguments.
+Then extend native P4/P6/P7 and Linux; P7 host kill tests alone do not satisfy the native row.
+Final is explicitly disabled until all row producers and raw verifiers are complete.
 
 ## Retained evidence and lessons
 
@@ -57,3 +58,13 @@ Keep candidate runs diagnostic until full gate evidence and two critics exist.
 - The 12-CPU cap already equals host logical CPUs; it is a ceiling, not reserved capacity.
 - Final/rehearsal/soak use Scheduled Task. Freeze all writers, run persisted-row checks
   before later rows, and retain actual exits. Never combine finals or reuse old signatures.
+
+- GT10PC VERIFIER 11-10: compare Play to the post-install ledger, not pre-install;
+  installation intentionally adds addon files. Keep distinct receipt names for each phase.
+- GT10PC PRODUCT: addon source is godot-addon/addons/hh_studio plus protocol/jcs_godot.gd;
+  a lifecycle Play that never parses the addon cannot prove addon installation. Parse it explicitly.
+- GT10PC PRODUCT: preserve unowned collisions by rejecting before mutation; repair only journal-owned
+  paths. Ownership is per project. Intent precedes directory replacement; recover forward from WAL
+  after process death. Retain backup outside project rather than deleting during commit.
+- GT10PC VERIFIER: schema-3 requires external trust, signed artifact binding, every evidence hash,
+  independent host exit/PID receipt, complete fixture ledger and exact lifecycle transitions.

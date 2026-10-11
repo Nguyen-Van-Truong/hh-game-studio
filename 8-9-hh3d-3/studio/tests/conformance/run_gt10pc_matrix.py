@@ -35,84 +35,170 @@ def table() -> dict:
                   "implementation": "INCOMPLETE"} for key, value in ROW_DEFS.items()}
 
 
-def _digest(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT.parent))
+from studio.package.release_contract import (
+    verify_package, digest_file, digest_bytes, safe_path, strict_json, need, HEX, _safe_member,
+)
+from studio.package.trust import load_trust
+
+FIXTURES = ("gt09-arena", "gt09-room")
+LEDGERS = ("project-before.json", "project-before-play.json", "project-after-play.json",
+           "project-after-uninstall.json", "project-after-reinstall.json", "project-after-deactivate.json")
 
 
-def _verify_native_producer(path: Path) -> dict:
-    """Parse host receipts and raw Godot logs; never trust caller booleans."""
-    producer_path = path / "producer.json"
-    if not producer_path.is_file():
-        raise ValueError("GT10PC_NATIVE_PRODUCER_MISSING")
-    producer = json.loads(producer_path.read_text(encoding="utf-8"))
-    if producer.get("schema") not in ("HH-GT10PC-NATIVE-PRODUCER-1", "HH-GT10PC-NATIVE-PRODUCER-2") or producer.get("authority") != 0:
-        raise ValueError("GT10PC_NATIVE_PRODUCER_SCHEMA")
+def _read(path: Path) -> dict:
+    with safe_path(path).open("rb") as stream:
+        raw = stream.read(16 * 1024**2 + 1)
+    need(len(raw) <= 16 * 1024**2, "GT10PC_EVIDENCE_OVERSIZE")
+    doc = strict_json(raw)
+    need(isinstance(doc, dict), "GT10PC_EVIDENCE_OBJECT")
+    return doc
+
+
+def _process(base: Path, label: str, process: dict) -> str:
+    need(isinstance(process, dict) and process.get("exit_code") == 0
+         and process.get("wrapper_exit_code") == 0 and process.get("tree_verified") is True
+         and process.get("timed_out") is False, "GT10PC_INSTALLED_EXIT")
+    host = _read(base / (label + "-host.json"))
+    need(type(host.get("target_pid")) is int and host["target_pid"] > 0
+         and host["target_pid"] == process.get("target_pid") and type(host.get("exit_code")) is int
+         and host["exit_code"] == 0, "GT10PC_HOST_EXIT_DISAGREES")
+    need(process.get("host") == label + "-host.json"
+         and process.get("stdout") == label + "-stdout.txt"
+         and process.get("stderr") == label + "-stderr.txt"
+         and process.get("ownership") == "gated_job_kill_on_close", "GT10PC_PROCESS_BINDING")
+    stdout = safe_path(base / (label + "-stdout.txt")).read_text(encoding="utf-8")
+    stderr = safe_path(base / (label + "-stderr.txt")).read_bytes()
+    need(not stderr and not re.search(r"(?im)\b(error|warning|orphan)\b", stdout), "GT10PC_INSTALLED_LOG")
+    return stdout
+
+
+def _lifecycle(stdout: str) -> int:
+    states, summaries, inputs = [], [], []
+    for line in stdout.splitlines():
+        for marker, rows in (("HH_FIXTURE_LIFECYCLE_STATE ", states),
+                             ("HH_FIXTURE_LIFECYCLE_SUMMARY ", summaries),
+                             ("HH_FIXTURE_LIFECYCLE_INPUT ", inputs)):
+            if line.startswith(marker):
+                rows.append(strict_json(line[len(marker):].encode()))
+    expected = ["menu", "start", "pause", "resume", "restart", "pause", "resume", "quit"]
+    need([r.get("event") for r in states] == expected and len(summaries) == 1,
+         "GT10PC_LIFECYCLE_TRANSITIONS")
+    summary = summaries[0]
+    need(summary.get("transitions") == expected[1:] and summary.get("lifecycle_complete") is True
+         and summary.get("freeze_errors") == 0 and summary.get("seed") == 90127
+         and summary.get("pause_frames", 0) > 0 and summary.get("mode") == "smoke"
+         and summary.get("reason") == "input_quit" and summary.get("input_edges") == len(inputs)
+         and len(inputs) >= 20 and summary.get("state_observations") == 8,
+         "GT10PC_LIFECYCLE_SUMMARY")
+    need(all(r.get("freeze_errors") == 0 and r.get("seed") == 90127 for r in states),
+         "GT10PC_LIFECYCLE_STATE")
+    for i in (2, 5):
+        pause, resume = states[i:i+2]
+        need(pause.get("tree_paused") is True and resume.get("tree_paused") is False
+             and pause.get("phase") == "PAUSED" and resume.get("phase") == "PLAYING"
+             and pause["world"] == resume["world"], "GT10PC_PAUSE_WORLD_MUTATION")
+    need(all(r["world"].get("avatar_asset_loaded") is True and r["world"].get("sprite_asset_loaded") is True
+             for r in states), "GT10PC_FIXTURE_ASSETS")
+    return len(states)
+
+
+def _verify_native_producer(path: Path, *, trust: Path, trust_sha256: str) -> dict:
+    path = safe_path(path)
+    producer = _read(path / "producer.json")
+    need(producer.get("schema") == "HH-GT10PC-NATIVE-PRODUCER-3"
+         and producer.get("authority") == 0 and producer.get("acceptance") is False
+         and producer.get("mode") == "DIAGNOSTIC", "GT10PC_NATIVE_PRODUCER_SCHEMA")
+    keys = load_trust(trust, expected_sha256=trust_sha256)
+    need(producer.get("trust_sha256") == trust_sha256, "GT10PC_EXTERNAL_TRUST_BINDING")
+    package = verify_package(path / "release.hhpkg", trusted_keys=keys, target="Windows")
+    manifest = package["manifest"]
+    need(package["archive_sha256"] == producer.get("artifact_sha256")
+         and package["manifest_sha256"] == producer.get("manifest_sha256")
+         and manifest["source_closure_sha256"] == producer.get("source_closure_sha256"),
+         "GT10PC_ARTIFACT_BINDING")
+    evidence = producer.get("evidence")
+    need(isinstance(evidence, dict), "GT10PC_EVIDENCE_LEDGER")
+    required = set()
+    for fixture in FIXTURES:
+        required.update("consumer/" + fixture + "/" + name for name in LEDGERS)
+        for domain, labels in (("drivers", ("driver",)), ("godot", ("parse", "godot"))):
+            required.add(domain + "/" + fixture + "/receipt.json")
+            required.update(domain + "/" + fixture + "/" + label + suffix
+                            for label in labels for suffix in ("-host.json", "-stdout.txt", "-stderr.txt"))
+    need(required <= set(evidence), "GT10PC_EVIDENCE_MISSING")
+    for name, expected in evidence.items():
+        _safe_member(name)
+        need(isinstance(expected, str) and HEX.fullmatch(expected)
+             and digest_file(path / name) == expected, "GT10PC_EVIDENCE_CHANGED:" + name)
     fixtures = producer.get("fixtures")
-    if not isinstance(fixtures, list) or {row.get("fixture") for row in fixtures} != {"gt09-arena", "gt09-room"}:
-        raise ValueError("GT10PC_NATIVE_FIXTURE_SET")
+    need(isinstance(fixtures, list) and len(fixtures) == 2
+         and {r.get("fixture") for r in fixtures} == set(FIXTURES), "GT10PC_NATIVE_FIXTURE_SET")
+    lock = strict_json(package["members"]["payload/studio/toolchain.lock.json"])
+    addon_prefix = "payload/studio/godot-addon/addons/hh_studio/"
+    addon = {"addons/hh_studio/" + k[len(addon_prefix):]: v for k, v in manifest["files"].items()
+             if k.startswith(addon_prefix)}
+    addon["addons/hh_studio/jcs_godot.gd"] = manifest["files"]["payload/studio/protocol/jcs_godot.gd"]
     checked = []
     for row in fixtures:
         fixture = row["fixture"]
-        for key in ("before", "after_play", "after_uninstall"):
-            if key not in row:
-                raise ValueError("GT10PC_NATIVE_RECEIPT_FIELD:" + key)
-        if producer["schema"] == "HH-GT10PC-NATIVE-PRODUCER-2":
-            install = row.get("install_receipt", {})
-            reinstall = row.get("reinstall_receipt", {})
-            if install.get("status") != "COMMITTED" or install.get("action") != "install" or reinstall.get("status") != "COMMITTED":
-                raise ValueError("GT10PC_INSTALL_RECEIPT")
-            if install.get("active") != reinstall.get("active") or not install.get("package_id"):
-                raise ValueError("GT10PC_IMMUTABLE_REINSTALL")
-            if row.get("deactivate_receipt", {}).get("action") != "deactivate":
-                raise ValueError("GT10PC_DEACTIVATE_RECEIPT")
-        for phase in ("after_play", "after_uninstall"):
-            if row["before"]["source"] != row[phase]["source"] or row["before"]["save"] != row[phase]["save"]:
-                raise ValueError("GT10PC_CONSUMER_DATA_CHANGED")
-        ledger_names = ("project-before.json", "project-before-play.json", "project-after-play.json", "project-after-uninstall.json",
-                        "project-after-reinstall.json", "project-after-deactivate.json")
+        for key in ("install_receipt", "reinstall_receipt"):
+            receipt = row.get(key, {})
+            need(receipt.get("status") == "COMMITTED" and receipt.get("action") == "install"
+                 and receipt.get("active") == package["manifest_sha256"]
+                 and receipt.get("package_id") == manifest["package_id"]
+                 and receipt.get("source_closure_sha256") == manifest["source_closure_sha256"],
+                 "GT10PC_INSTALL_RECEIPT_BINDING")
+        need(row.get("deactivate_receipt", {}).get("active") is None, "GT10PC_DEACTIVATE_RECEIPT")
         ledger_hashes = row.get("ledger_sha256")
-        if not isinstance(ledger_hashes, dict) or set(ledger_hashes) != set(ledger_names):
-            raise ValueError("GT10PC_CONSUMER_LEDGER_RECEIPT")
+        need(isinstance(ledger_hashes, dict) and set(ledger_hashes) == set(LEDGERS), "GT10PC_CONSUMER_LEDGER_RECEIPT")
         ledgers = {}
-        for name in ledger_names:
-            ledger_path = path / "consumer" / fixture / name
-            if not ledger_path.is_file() or _digest(ledger_path) != ledger_hashes[name]:
-                raise ValueError("GT10PC_CONSUMER_LEDGER_HASH")
-            ledgers[name] = json.loads(ledger_path.read_bytes())
-        if ledgers["project-before-play.json"] != ledgers["project-after-play.json"]:
-            raise ValueError("GT10PC_CONSUMER_LEDGER_PLAY_MUTATION")
-        if ledgers["project-before.json"].get("project.godot") != ledgers["project-after-uninstall.json"].get("project.godot"):
-            raise ValueError("GT10PC_CONSUMER_LEDGER_UNINSTALL_SOURCE")
-        if ledgers["project-after-reinstall.json"] != ledgers["project-after-deactivate.json"]:
-            raise ValueError("GT10PC_CONSUMER_LEDGER_DEACTIVATE_MUTATION")
-        receipt_path = path / "godot" / fixture / "receipt.json"
-        if not receipt_path.is_file():
-            raise ValueError("GT10PC_INSTALLED_RECEIPT_MISSING")
-        receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
-        process = receipt.get("process", {})
-        if process.get("exit_code") != 0 or process.get("wrapper_exit_code") != 0 or process.get("tree_verified") is not True or process.get("timed_out") is not False:
-            raise ValueError("GT10PC_INSTALLED_EXIT")
-        stdout = path / "godot" / fixture / "godot-stdout.txt"
-        stderr = path / "godot" / fixture / "godot-stderr.txt"
-        if not stdout.is_file() or not stderr.is_file() or stderr.read_text(encoding="utf-8"):
-            raise ValueError("GT10PC_INSTALLED_LOG")
-        raw_stdout = stdout.read_text(encoding="utf-8")
-        lifecycle = raw_stdout.count("HH_FIXTURE_LIFECYCLE_STATE")
-        if lifecycle < 2 or re.search(r"(?im)\b(error|warning|orphan)\b", raw_stdout):
-            raise ValueError("GT10PC_INSTALLED_PLAY")
-        checked.append({"fixture": fixture, "exit": process["exit_code"], "lifecycle": lifecycle, "authority": 0})
-    return {"status": "DIAGNOSTIC_NATIVE_VERIFIED", "authority": 0, "fixtures": checked}
+        for name in LEDGERS:
+            rel = "consumer/" + fixture + "/" + name
+            need(ledger_hashes[name] == evidence[rel], "GT10PC_CONSUMER_LEDGER_HASH")
+            ledgers[name] = _read(path / rel)
+        baseline = ledgers["project-before.json"]
+        # Bind the baseline to fixture files inside the signed artifact, plus
+        # the explicit consumer save. Do not let two equal empty ledgers pass.
+        fixture_prefix = "payload/studio/fixtures/" + fixture + "/"
+        expected_baseline = {k[len(fixture_prefix):]: v for k, v in manifest["files"].items() if k.startswith(fixture_prefix)}
+        save = b"consumer-save-before-install\n"
+        expected_baseline["owner-save.dat"] = {"sha256": digest_bytes(save), "size": len(save)}
+        need(baseline == expected_baseline, "GT10PC_CONSUMER_BASELINE")
+        manual_bytes = b"owner edit must survive uninstall\n"
+        manual = {"addons/hh_studio/owner-manual-note.txt":
+                  {"sha256": digest_bytes(manual_bytes), "size": len(manual_bytes)}}
+        installed = {**baseline, **addon, **manual}
+        for name in ("project-before-play.json", "project-after-play.json", "project-after-reinstall.json", "project-after-deactivate.json"):
+            need(ledgers[name] == installed, "GT10PC_CONSUMER_LEDGER_MUTATION:" + name)
+        need(ledgers["project-after-uninstall.json"] == {**baseline, **manual}, "GT10PC_CONSUMER_UNINSTALL_MUTATION")
+        driver_base, native_base = path / "drivers" / fixture, path / "godot" / fixture
+        _process(driver_base, "driver", _read(driver_base / "receipt.json"))
+        receipt = _read(native_base / "receipt.json")
+        need(receipt.get("schema") == "hh-installed-native-probe-2"
+             and receipt.get("active_release") == package["manifest_sha256"]
+             and receipt.get("godot_sha256") == lock["godot"]["console_sha256"]
+             and receipt.get("probe_sha256") == manifest["files"]["payload/studio/package/installed_probe.py"]["sha256"]
+             and receipt.get("launcher_sha256") == manifest["files"]["payload/studio/build/bootstrap/run_fixture.py"]["sha256"],
+             "GT10PC_INSTALLED_SOURCE_BINDING")
+        expected_studio = path / "consumer" / fixture / "install/releases" / package["manifest_sha256"] / "payload/studio"
+        need(safe_path(Path(receipt.get("studio", ""))) == expected_studio, "GT10PC_INSTALLED_LOCATION")
+        _process(native_base, "parse", receipt.get("parse"))
+        stdout = _process(native_base, "godot", receipt.get("process"))
+        lifecycle = _lifecycle(stdout)
+        checked.append({"fixture": fixture, "exit": 0, "lifecycle": lifecycle, "authority": 0})
+    return {"status": "DIAGNOSTIC_NATIVE_VERIFIED", "authority": 0, "fixtures": checked,
+            "artifact_sha256": package["archive_sha256"], "evidence_files": len(evidence)}
 
 
-def verify_only(path: Path) -> int:
-    """Reject legacy banners; parse only raw native receipts for diagnostics."""
-    document_path = path / "matrix.json"
-    if not document_path.is_file():
-        raise ValueError("GT10PC_MATRIX_MISSING")
-    doc = json.loads(document_path.read_bytes())
-    if doc.get("schema") != SCHEMA:
-        raise ValueError("GT10PC_LEGACY_SYNTHETIC_EVIDENCE_VOID")
-    raw = _verify_native_producer(path)
+def verify_only(path: Path, *, trust: Path, trust_sha256: str) -> int:
+    doc = _read(path / "matrix.json")
+    need(doc.get("schema") == SCHEMA and doc.get("acceptance") is False
+         and doc.get("authority") == 0 and doc.get("producer") == "producer.json"
+         and doc.get("mode") == "DIAGNOSTIC", "GT10PC_LEGACY_SYNTHETIC_EVIDENCE_VOID")
+    need(doc.get("producer_sha256") == digest_file(path / "producer.json"), "GT10PC_PRODUCER_HASH")
+    raw = _verify_native_producer(path, trust=trust, trust_sha256=trust_sha256)
     print(json.dumps({"schema": SCHEMA, "authority": 0, "acceptance": False, "raw": raw}, sort_keys=True))
     return 0
 
@@ -123,6 +209,8 @@ def main(argv: list[str] | None = None) -> int:
     mode.add_argument("--dry-run", action="store_true")
     mode.add_argument("--verify-only", type=Path)
     mode.add_argument("--matrix", choices=("rehearsal", "final"))
+    parser.add_argument("--trust", type=Path)
+    parser.add_argument("--trust-sha256")
     parser.add_argument("--rows")
     parser.add_argument("--run-id")
     parser.add_argument("--output", type=Path)
@@ -138,7 +226,8 @@ def main(argv: list[str] | None = None) -> int:
         return 0
     try:
         if args.verify_only:
-            return verify_only(args.verify_only)
+            need(args.trust is not None and args.trust_sha256 is not None, "GT10PC_EXTERNAL_TRUST_REQUIRED")
+            return verify_only(args.verify_only, trust=args.trust, trust_sha256=args.trust_sha256)
         raise ValueError("GT10PC_PRODUCERS_INCOMPLETE_FINAL_AND_REHEARSAL_DISABLED")
     except (ValueError, OSError) as exc:
         print(json.dumps({"schema": SCHEMA, "status": "DIAGNOSTIC_FAIL",
