@@ -281,6 +281,26 @@ def run_rehearsal(rows: list[str], *, output: Path, trust: Path,
             result["rows"]["P2"] = {"status": "REHEARSAL_PASS", "evidence_kind": "host+native",
                                       "archive_and_native_attacks": checks}
         if "P7" in rows:
+            from studio.tests.conformance.run_gt10pc_native_probe import GODOT_WINDOWS
+            p7 = output / "p7-native"
+            child = _child(output / "children", "p7-native", [
+                sys.executable, "-B", str(ROOT / "tests/conformance/run_gt10pc_p7.py"),
+                "--output", str(p7), "--trust", str(trust),
+                "--trust-sha256", trust_sha256, "--private-key", str(private),
+                "--godot", str(GODOT_WINDOWS)], timeout=600)
+            need(child["exit_code"] == 0 and child["wrapper_exit_code"] == 0
+                 and child["tree_verified"] and not child["timed_out"],
+                 "GT10PC_P7_NATIVE_PRODUCER_EXIT")
+            p7_report = _read(p7 / "p7.json")
+            need(p7_report.get("schema") == "hh-gt10pc-p7-native-recovery-1"
+                 and p7_report.get("authority") == 0
+                 and p7_report.get("acceptance") is False
+                 and p7_report.get("native_required") is True
+                 and len(p7_report.get("cases", [])) == 8,
+                 "GT10PC_P7_NATIVE_REPORT")
+            result["rows"]["P7"] = {"status": "REHEARSAL_PASS", "evidence_kind": "native",
+                                      "producer": "p7-native", "cases": 8}
+        if "P7" in rows:
             result["rows"]["P7"] = {"status": "PENDING", "native": "not exercised in this run"}
         if "P8" in rows:
             result["rows"]["P8"] = _p8_host_checks(
@@ -291,15 +311,45 @@ def run_rehearsal(rows: list[str], *, output: Path, trust: Path,
             docs = [ROOT / "package/NOTICE.txt", ROOT / "package/runbook.md", ROOT / "package/known-limits.md"]
             need(all(path.is_file() for path in docs), "GT10PC_P9_DOCUMENTS_MISSING")
             p9_artifact = Path(artifacts["Windows"]["0.1.0"]["path"])
-            smoke = consumer_fixture_smoke(p9_artifact, output / "p9-consumer-smoke",
+            p9_root = output / "p9-consumer-smoke"
+            smoke = consumer_fixture_smoke(p9_artifact, p9_root,
                                             trusted_keys=load_trust(trust, expected_sha256=trust_sha256),
                                             target="Windows", fixture="gt09-arena")
             bundle = support_bundle(p9_artifact, output / "p9-support.json",
                                     trusted_keys=load_trust(trust, expected_sha256=trust_sha256),
                                     target="Windows")
-            result["rows"]["P9"] = {"status": "REHEARSAL_PASS_DOCS_HOST_SMOKE",
+            from studio.build.bootstrap.run_fixture import _isolated_user_env, run_process
+            from studio.tests.conformance.run_gt10pc_native_probe import GODOT_WINDOWS
+            need(GODOT_WINDOWS.is_file(), "GT10PC_P9_GODOT_PIN_MISSING")
+            install_root = p9_root / "install"
+            project = p9_root / "project"
+            native = output / "p9-native"
+            driver = output / "p9-native-driver"
+            driver.mkdir(parents=True)
+            active = next((install_root / "releases").iterdir())
+            command = [sys.executable, "-B", "-m", "studio.package.installed_probe",
+                       "--install-root", str(install_root), "--project", str(project),
+                       "--godot", str(GODOT_WINDOWS), "--output", str(native),
+                       "--fixture", "gt09-arena", "--target", "Windows",
+                       "--trust", str(trust), "--trust-sha256", trust_sha256]
+            native_process = run_process(command, cwd=active / "payload", output=driver,
+                                         timeout=120, label="installed-probe",
+                                         env={**_isolated_user_env(driver),
+                                              "PYTHONPATH": str(active / "payload")})
+            need(native_process["exit_code"] == 0 and native_process["wrapper_exit_code"] == 0
+                 and native_process["tree_verified"] is True
+                 and native_process["timed_out"] is False, "GT10PC_P9_NATIVE_EXIT")
+            native_receipt = _read(native / "receipt.json")
+            for label in ("parse", "process"):
+                row = native_receipt.get(label)
+                need(isinstance(row, dict) and row.get("exit_code") == 0
+                     and row.get("wrapper_exit_code") == 0
+                     and row.get("tree_verified") is True
+                     and row.get("timed_out") is False, "GT10PC_P9_NATIVE_" + label.upper())
+            result["rows"]["P9"] = {"status": "REHEARSAL_PASS", "evidence_kind": "docs+native",
                                       "consumer_smoke": smoke, "support_bundle": bundle,
-                                      "native_smoke": "PENDING"}
+                                      "native_process": native_process,
+                                      "native_receipt_sha256": digest_file(native / "receipt.json")}
         if "P10" in rows:
             result["rows"]["P10"] = {"status": "PENDING", "reason": "installed lifecycle smoke does not run GT08A PC or K8/K10"}
         for row in ("P11", "P12"):
