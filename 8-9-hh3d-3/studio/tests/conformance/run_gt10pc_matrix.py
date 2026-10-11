@@ -107,7 +107,7 @@ def _lifecycle(stdout: str) -> int:
 def _verify_native_producer(path: Path, *, trust: Path, trust_sha256: str) -> dict:
     path = safe_path(path)
     producer = _read(path / "producer.json")
-    need(producer.get("schema") == "HH-GT10PC-NATIVE-PRODUCER-3"
+    need(producer.get("schema") == "HH-GT10PC-NATIVE-PRODUCER-4"
          and producer.get("authority") == 0 and producer.get("acceptance") is False
          and producer.get("mode") == "DIAGNOSTIC", "GT10PC_NATIVE_PRODUCER_SCHEMA")
     keys = load_trust(trust, expected_sha256=trust_sha256)
@@ -118,15 +118,23 @@ def _verify_native_producer(path: Path, *, trust: Path, trust_sha256: str) -> di
          and package["manifest_sha256"] == producer.get("manifest_sha256")
          and manifest["source_closure_sha256"] == producer.get("source_closure_sha256"),
          "GT10PC_ARTIFACT_BINDING")
+    upgrade = verify_package(path / "upgrade.hhpkg", trusted_keys=keys, target="Windows", expected_version="0.1.1")
+    need(upgrade["archive_sha256"] == producer.get("upgrade_artifact_sha256")
+         and upgrade["manifest_sha256"] == producer.get("upgrade_manifest_sha256")
+         and upgrade["manifest"]["source_closure_sha256"] == manifest["source_closure_sha256"]
+         and manifest["version"] == "0.1.0" and upgrade["manifest_sha256"] != package["manifest_sha256"],
+         "GT10PC_UPGRADE_ARTIFACT_BINDING")
     evidence = producer.get("evidence")
     need(isinstance(evidence, dict), "GT10PC_EVIDENCE_LEDGER")
     required = set()
     for fixture in FIXTURES:
         required.update("consumer/" + fixture + "/" + name for name in LEDGERS)
-        for domain, labels in (("drivers", ("driver",)), ("godot", ("parse", "godot"))):
-            required.add(domain + "/" + fixture + "/receipt.json")
-            required.update(domain + "/" + fixture + "/" + label + suffix
-                            for label in labels for suffix in ("-host.json", "-stdout.txt", "-stderr.txt"))
+        required.add("consumer/" + fixture + "/native-phases.json")
+        for suffix in ("", "-upgrade", "-rollback"):
+            for domain, labels in (("drivers", ("driver",)), ("godot", ("parse", "godot"))):
+                required.add(domain + "/" + fixture + suffix + "/receipt.json")
+                required.update(domain + "/" + fixture + suffix + "/" + label + extension
+                                for label in labels for extension in ("-host.json", "-stdout.txt", "-stderr.txt"))
     need(required <= set(evidence), "GT10PC_EVIDENCE_MISSING")
     for name, expected in evidence.items():
         _safe_member(name)
@@ -166,28 +174,45 @@ def _verify_native_producer(path: Path, *, trust: Path, trust_sha256: str) -> di
         save = b"consumer-save-before-install\n"
         expected_baseline["owner-save.dat"] = {"sha256": digest_bytes(save), "size": len(save)}
         need(baseline == expected_baseline, "GT10PC_CONSUMER_BASELINE")
-        manual_bytes = b"owner edit must survive uninstall\n"
+        # Producer uses text-mode write_text on the declared Windows target.
+        # Match those actual bytes; do not normalize before comparing hashes.
+        manual_bytes = b"owner edit must survive uninstall\r\n"
         manual = {"addons/hh_studio/owner-manual-note.txt":
                   {"sha256": digest_bytes(manual_bytes), "size": len(manual_bytes)}}
         installed = {**baseline, **addon, **manual}
         for name in ("project-before-play.json", "project-after-play.json", "project-after-reinstall.json", "project-after-deactivate.json"):
             need(ledgers[name] == installed, "GT10PC_CONSUMER_LEDGER_MUTATION:" + name)
         need(ledgers["project-after-uninstall.json"] == {**baseline, **manual}, "GT10PC_CONSUMER_UNINSTALL_MUTATION")
-        driver_base, native_base = path / "drivers" / fixture, path / "godot" / fixture
-        _process(driver_base, "driver", _read(driver_base / "receipt.json"))
-        receipt = _read(native_base / "receipt.json")
-        need(receipt.get("schema") == "hh-installed-native-probe-2"
-             and receipt.get("active_release") == package["manifest_sha256"]
-             and receipt.get("godot_sha256") == lock["godot"]["console_sha256"]
-             and receipt.get("probe_sha256") == manifest["files"]["payload/studio/package/installed_probe.py"]["sha256"]
-             and receipt.get("launcher_sha256") == manifest["files"]["payload/studio/build/bootstrap/run_fixture.py"]["sha256"],
-             "GT10PC_INSTALLED_SOURCE_BINDING")
-        expected_studio = path / "consumer" / fixture / "install/releases" / package["manifest_sha256"] / "payload/studio"
-        need(safe_path(Path(receipt.get("studio", ""))) == expected_studio, "GT10PC_INSTALLED_LOCATION")
-        _process(native_base, "parse", receipt.get("parse"))
-        stdout = _process(native_base, "godot", receipt.get("process"))
-        lifecycle = _lifecycle(stdout)
-        checked.append({"fixture": fixture, "exit": 0, "lifecycle": lifecycle, "authority": 0})
+        need(row.get("upgrade_receipt", {}).get("active") == upgrade["manifest_sha256"]
+             and row.get("rollback_receipt", {}).get("active") == package["manifest_sha256"]
+             and row.get("rollback_receipt", {}).get("previous") is None, "GT10PC_UPGRADE_ROLLBACK_RECEIPT")
+        phases = _read(path / "consumer" / fixture / "native-phases.json").get("phases")
+        need(isinstance(phases, list) and [p.get("phase") for p in phases] == ["install", "upgrade", "rollback"],
+             "GT10PC_NATIVE_PHASE_SET")
+        for phase in phases:
+            phase_name = phase["phase"]
+            label = fixture if phase_name == "install" else fixture + "-" + phase_name
+            selected = upgrade if phase_name == "upgrade" else package
+            need(phase.get("label") == label and phase.get("active") == selected["manifest_sha256"]
+                 and phase.get("project_ledger") == installed, "GT10PC_NATIVE_PHASE_BINDING")
+            driver_base, native_base = path / "drivers" / label, path / "godot" / label
+            _process(driver_base, "driver", _read(driver_base / "receipt.json"))
+            receipt = _read(native_base / "receipt.json")
+            need(receipt.get("schema") == "hh-installed-native-probe-2"
+                 and receipt.get("active_release") == selected["manifest_sha256"]
+                 and receipt.get("version") == selected["manifest"]["version"]
+                 and receipt.get("package_schema") == selected["manifest"]["schema"]
+                 and receipt.get("godot_sha256") == lock["godot"]["console_sha256"]
+                 and receipt.get("probe_sha256") == manifest["files"]["payload/studio/package/installed_probe.py"]["sha256"]
+                 and receipt.get("launcher_sha256") == manifest["files"]["payload/studio/build/bootstrap/run_fixture.py"]["sha256"],
+                 "GT10PC_INSTALLED_SOURCE_BINDING")
+            expected_studio = path / "consumer" / fixture / "install/releases" / selected["manifest_sha256"] / "payload/studio"
+            need(safe_path(Path(receipt.get("studio", ""))) == expected_studio, "GT10PC_INSTALLED_LOCATION")
+            _process(native_base, "parse", receipt.get("parse"))
+            stdout = _process(native_base, "godot", receipt.get("process"))
+            lifecycle = _lifecycle(stdout)
+            checked.append({"fixture": fixture, "phase": phase_name, "version": receipt["version"],
+                            "exit": 0, "lifecycle": lifecycle, "authority": 0})
     return {"status": "DIAGNOSTIC_NATIVE_VERIFIED", "authority": 0, "fixtures": checked,
             "artifact_sha256": package["archive_sha256"], "evidence_files": len(evidence)}
 

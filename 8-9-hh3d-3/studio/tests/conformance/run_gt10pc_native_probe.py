@@ -22,7 +22,7 @@ from studio.package.trust import load_trust
 from studio.build.bootstrap.run_fixture import run_process
 
 GODOT = ROOT / ".local/tooling/godot-4.7.2-stable/Godot_v4.7.2-stable_win64_console.exe"
-SCHEMA = "HH-GT10PC-NATIVE-PRODUCER-3"
+SCHEMA = "HH-GT10PC-NATIVE-PRODUCER-4"
 
 
 def write_json(path: Path, value: object) -> None:
@@ -51,6 +51,28 @@ def project_state(project: Path) -> dict:
             "save": digest_file(project / "owner-save.dat")}
 
 
+def native_phase(output: Path, fixture: str, phase: str, install: ConsumerInstall,
+                 project: Path, args) -> dict:
+    label = fixture if phase == "install" else fixture + "-" + phase
+    driver_output = output / "drivers" / label
+    driver_output.mkdir(parents=True)
+    native_output = output / "godot" / label
+    command = [sys.executable, "-B", "-m", "studio.package.installed_probe",
+               "--install-root", str(install.root), "--project", str(project),
+               "--godot", str(GODOT), "--output", str(native_output),
+               "--trust", str(safe_path(args.trust)), "--trust-sha256", args.trust_sha256]
+    env = os.environ.copy()
+    env["PYTHONPATH"] = str(install.active_path().parent)
+    env["PYTHONDONTWRITEBYTECODE"] = "1"
+    driver = run_process(command, cwd=install.active_path().parent, output=driver_output,
+                         timeout=90, label="driver", env=env)
+    write_json(driver_output / "receipt.json", driver)
+    need(driver["exit_code"] == 0 and driver["wrapper_exit_code"] == 0
+         and driver["tree_verified"] and not driver["timed_out"], "installed native driver failed")
+    return {"phase": phase, "label": label, "active": install.snapshot()["active"],
+            "project_ledger": project_ledger(project)}
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", type=Path, required=True)
@@ -70,6 +92,8 @@ def main(argv: list[str] | None = None) -> int:
     artifact = output / "release.hhpkg"
     package = build_package(ROOT, artifact, signer=signer, key_id=key_id)
     need(package["manifest"]["source_closure_sha256"] == before_closure, "build source drift")
+    upgrade_artifact = output / "upgrade.hhpkg"
+    upgrade_package = build_package(ROOT, upgrade_artifact, signer=signer, key_id=key_id, version="0.1.1")
     records = []
     for fixture in ("gt09-arena", "gt09-room"):
         consumer_root = output / "consumer" / fixture
@@ -89,26 +113,25 @@ def main(argv: list[str] | None = None) -> int:
         manual.write_text("owner edit must survive uninstall\n", encoding="utf-8")
         before_play_ledger = project_ledger(project)
         write_json(consumer_root / "project-before-play.json", before_play_ledger)
-        driver_output = output / "drivers" / fixture
-        driver_output.mkdir(parents=True)
-        native_output = output / "godot" / fixture
-        command = [sys.executable, "-B", "-m", "studio.package.installed_probe",
-                   "--install-root", str(install.root), "--project", str(project),
-                   "--godot", str(GODOT), "--output", str(native_output),
-                   "--trust", str(safe_path(args.trust)), "--trust-sha256", args.trust_sha256]
-        env = os.environ.copy()
-        env["PYTHONPATH"] = str(install.active_path().parent)
-        env["PYTHONDONTWRITEBYTECODE"] = "1"
-        driver = run_process(command, cwd=install.active_path().parent, output=driver_output,
-                             timeout=90, label="driver", env=env)
-        write_json(driver_output / "receipt.json", driver)
-        need(driver["exit_code"] == 0 and driver["wrapper_exit_code"] == 0
-             and driver["tree_verified"] and not driver["timed_out"], "installed native driver failed")
+        phases = [native_phase(output, fixture, "install", install, project, args)]
         after_play = project_state(project)
         after_play_ledger = project_ledger(project)
         need(before_play_ledger == after_play_ledger, "consumer project ledger changed during Play")
         write_json(consumer_root / "project-after-play.json", after_play_ledger)
         need(before == after_play, "consumer source/save changed during Play")
+        upgraded = install.install(upgrade_artifact, command_id="upgrade." + fixture,
+                                    expected_state_sha256=install.snapshot()["state_sha256"])
+        upgrade_addon = install.install_addon(project, release=upgraded["active"], repair=True,
+                         command_id="upgrade-addon." + fixture, expected_state_sha256=install.snapshot()["state_sha256"])
+        phases.append(native_phase(output, fixture, "upgrade", install, project, args))
+        rolled_back = install.rollback(command_id="rollback." + fixture, destination=installed["active"],
+                                       expected_state_sha256=install.snapshot()["state_sha256"])
+        rollback_addon = install.install_addon(project, release=rolled_back["active"], repair=True,
+                         command_id="rollback-addon." + fixture, expected_state_sha256=install.snapshot()["state_sha256"])
+        phases.append(native_phase(output, fixture, "rollback", install, project, args))
+        for phase in phases:
+            need(phase["project_ledger"] == before_play_ledger, "upgrade/rollback mutated consumer project")
+        write_json(consumer_root / "native-phases.json", {"phases": phases})
         addon_removed = install.uninstall_addon(project, command_id="uninstall-addon." + fixture,
                                                 expected_state_sha256=install.snapshot()["state_sha256"])
         after_uninstall = project_state(project)
@@ -152,6 +175,8 @@ def main(argv: list[str] | None = None) -> int:
                             ("project-before.json", "project-before-play.json", "project-after-play.json", "project-after-uninstall.json",
                              "project-after-reinstall.json", "project-after-deactivate.json")},
                         "after_uninstall": after_uninstall, "install_receipt": installed,
+                        "upgrade_receipt": upgraded, "rollback_receipt": rolled_back,
+                        "upgrade_addon_receipt": upgrade_addon, "rollback_addon_receipt": rollback_addon,
                         "addon_install_receipt": addon_installed, "addon_uninstall_receipt": addon_removed,
                         "addon_reinstall_receipt": reinstall_addon, "deactivate_receipt": deactivated,
                         "reinstall_receipt": reinstalled})
@@ -163,12 +188,16 @@ def main(argv: list[str] | None = None) -> int:
             if path.is_file() and "godot-user" not in path.parts:
                 evidence[path.relative_to(output).as_posix()] = digest_file(path)
     for row in records:
+        path = output / "consumer" / row["fixture"] / "native-phases.json"
+        evidence[path.relative_to(output).as_posix()] = digest_file(path)
         for name in ("project-before.json", "project-before-play.json", "project-after-play.json", "project-after-uninstall.json",
                      "project-after-reinstall.json", "project-after-deactivate.json"):
             path = output / "consumer" / row["fixture"] / name
             evidence[path.relative_to(output).as_posix()] = digest_file(path)
     manifest = {"schema": SCHEMA, "mode": "DIAGNOSTIC", "authority": 0, "acceptance": False,
                 "artifact_sha256": digest_file(artifact), "manifest_sha256": package["manifest_sha256"],
+                "upgrade_artifact_sha256": digest_file(upgrade_artifact),
+                "upgrade_manifest_sha256": upgrade_package["manifest_sha256"],
                 "source_closure_sha256": before_closure, "trust_sha256": args.trust_sha256,
                 "fixtures": records, "evidence": evidence,
                 "remaining": ["Linux", "AUTH07", "crash/Stop", "GT08A/K8/K10",

@@ -34,8 +34,11 @@ def main() -> int:
                   "--", "--fixture-lifecycle-smoke"]
     result = run_process(invocation, cwd=args.project, output=args.output,
                          timeout=60, label="godot", env=_isolated_user_env(args.output))
+    state = install.snapshot()
+    release = install._read_release(state["active"])
     receipt = {"schema": "hh-installed-native-probe-2", "studio": str(STUDIO),
-               "active_release": install.snapshot()["active"], "parse": parse,
+               "active_release": state["active"], "parse": parse,
+               "version": release["version"], "package_schema": release["schema"],
                "probe_sha256": digest_file(Path(__file__)),
                "launcher_sha256": digest_file(STUDIO / "build/bootstrap/run_fixture.py"),
                "godot_sha256": digest_file(args.godot), "process": result}
