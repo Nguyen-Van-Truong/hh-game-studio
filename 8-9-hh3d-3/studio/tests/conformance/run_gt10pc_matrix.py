@@ -191,6 +191,63 @@ def _p11_short_rehearsal(output: Path) -> dict:
             'source_closure_sha256': capture['binding']['source_closure_sha256']}
 
 
+def _verify_p11_short_row(root: Path, row: dict) -> dict:
+    need(isinstance(row, dict) and row.get('status') == 'REHEARSAL_PASS'
+         and row.get('evidence_kind') == 'native'
+         and row.get('coverage') == 'one-real-Godot-cycle'
+         and row.get('full_benchmark') is False,
+         'GT10PC_P11_VERIFY_ROW')
+    capture_path = Path(row.get('capture', ''))
+    review_root = (ROOT / '.local' / 'reviews').resolve()
+    capture_path = capture_path.resolve()
+    need(review_root in capture_path.parents and capture_path.name == 'capture.json',
+         'GT10PC_P11_VERIFY_CAPTURE_SCOPE')
+    capture = _read(capture_path)
+    need(capture.get('schema_id') == 'hh-studio.native-cycle-diagnostic-capture'
+         and capture.get('run_id') == row.get('run_id')
+         and capture.get('completed_diagnostic') is True
+         and capture.get('full_benchmark') is False
+         and capture.get('formal_acceptance') is False
+         and capture.get('source_unchanged') is True,
+         'GT10PC_P11_VERIFY_CAPTURE')
+    exits = capture.get('actual_exits')
+    need(isinstance(exits, dict) and set(exits) == {'import', 'editor'}
+         and all(isinstance(v, dict) and v.get('exit_code') == 0
+                 and isinstance(v.get('pid'), int) and v['pid'] > 0 for v in exits.values()),
+         'GT10PC_P11_VERIFY_EXITS')
+    jobs = capture.get('jobs')
+    need(isinstance(jobs, dict) and set(jobs) == {'import', 'editor'}
+         and all(v.get('closed') is True and v.get('zero_observed') is True
+                 and v.get('handle_retained') is False for v in jobs.values()),
+         'GT10PC_P11_VERIFY_JOBS')
+    return {'run_id': capture['run_id'], 'profile_sha256': capture.get('profile_sha256'),
+            'capture_sha256': digest_file(capture_path), 'actual_exits': exits}
+
+
+def _verify_rehearsal_matrix(path: Path) -> dict:
+    doc = _read(path / 'matrix.json')
+    need(doc.get('schema') == SCHEMA and doc.get('mode') == 'REHEARSAL'
+         and doc.get('authority') == 0 and doc.get('acceptance') is False
+         and doc.get('status') == 'REHEARSAL_PASS', 'GT10PC_REHEARSAL_VERIFY_SCHEMA')
+    requested = doc.get('rows_requested')
+    rows = doc.get('rows')
+    need(isinstance(requested, list) and requested and isinstance(rows, dict)
+         and set(rows) == set(requested)
+         and all(row in ROW_DEFS for row in requested),
+         'GT10PC_REHEARSAL_VERIFY_ROWS')
+    need(doc.get('source_closure_sha256') == _payload_digest(_source_files(ROOT)),
+         'GT10PC_REHEARSAL_VERIFY_SOURCE')
+    checked = {}
+    if 'P11' in rows:
+        checked['P11'] = _verify_p11_short_row(path, rows['P11'])
+    for row in requested:
+        if row != 'P11':
+            need(rows[row].get('status') == 'REHEARSAL_PASS',
+                 'GT10PC_REHEARSAL_VERIFY_STATUS:' + row)
+    return {'schema': SCHEMA, 'authority': 0, 'acceptance': False,
+            'mode': 'REHEARSAL', 'status': 'REHEARSAL_PASS', 'rows': checked}
+
+
 def _p2_archive_attacks(output: Path, artifacts: dict, *, trust: Path,
                         trust_sha256: str, private: Path | None = None) -> list[dict]:
     """Exercise archive gates, then one real installed native rejection.
@@ -654,6 +711,10 @@ def _verify_native_producer(path: Path, *, trust: Path, trust_sha256: str) -> di
 def verify_only(path: Path, *, trust: Path, trust_sha256: str,
                 target: str = "Windows", artifact: Path | None = None,
                 upgrade_artifact: Path | None = None) -> int:
+    if safe_path(path / 'matrix.json').is_file():
+        raw = _verify_rehearsal_matrix(safe_path(path))
+        print(json.dumps(raw, sort_keys=True))
+        return 0
     if target == "Linux-headless":
         from studio.tests.conformance.gt10pc_linux_verify import verify_linux
         need(artifact is not None and upgrade_artifact is not None,
