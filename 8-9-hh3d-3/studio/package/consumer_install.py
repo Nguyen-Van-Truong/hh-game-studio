@@ -13,6 +13,7 @@ from pathlib import Path
 from typing import Mapping
 import uuid
 from . import addon_transaction
+from . import lifecycle_transaction
 
 from .release_contract import (
     PackageError, SCHEMA, HEX, canonical, digest_bytes, digest_file, need,
@@ -54,6 +55,13 @@ class ConsumerInstall:
             self.versions.mkdir(exist_ok=True)
             self.stages.mkdir(exist_ok=True)
             addon_transaction.recover(self)
+            lifecycle_transaction.recover(self)
+
+    def _recover_pending(self) -> None:
+        # Ordinary addon WALs predate the combined lifecycle record. Recover
+        # them first, then reconcile a selector/addon intent if one exists.
+        addon_transaction.recover(self)
+        lifecycle_transaction.recover(self)
 
     def _state(self) -> tuple[dict, str]:
         path = safe_path(self.state_path)
@@ -92,14 +100,14 @@ class ConsumerInstall:
 
     def snapshot(self) -> dict:
         with mutation_guard(self.root):
-            addon_transaction.recover(self)
+            self._recover_pending()
             state, token = self._state()
             return {**state, "state_sha256": token}
 
     def lookup(self, command_id: str) -> dict | None:
         self._command_id(command_id)
         with mutation_guard(self.root):
-            addon_transaction.recover(self)
+            self._recover_pending()
             state, _ = self._state()
             row = state["commands"].get(command_id)
             return None if row is None else row["receipt"]
@@ -110,7 +118,7 @@ class ConsumerInstall:
              and all(32 < ord(c) < 127 for c in command_id), "invalid command_id")
 
     def _begin(self, command_id: str, request: dict, expected_state_sha256: str) -> tuple:
-        addon_transaction.recover(self)
+        self._recover_pending()
         self._command_id(command_id)
         need(expected_state_sha256 == "ABSENT" or isinstance(expected_state_sha256, str)
              and HEX.fullmatch(expected_state_sha256), "expected state token required")
@@ -122,6 +130,7 @@ class ConsumerInstall:
         if existing is not None:
             need(existing["request_digest"] == digest, "command_id conflict")
             return state, digest, existing["receipt"]
+        need(not lifecycle_transaction.stopped(self), "lifecycle stop latch is durable")
         need(token == expected_state_sha256, "install state CAS mismatch")
         need(len(state["commands"]) < MAX_COMMANDS, "install journal full")
         return state, digest, None
@@ -184,7 +193,7 @@ class ConsumerInstall:
 
     def active_path(self) -> Path:
         with mutation_guard(self.root):
-            addon_transaction.recover(self)
+            self._recover_pending()
             state, _ = self._state()
             need(state["active"] is not None, "no active release")
             self._read_release(state["active"])
@@ -228,6 +237,22 @@ class ConsumerInstall:
                 state["previous"], state["active"] = state["active"], identity
             return self._commit(state, command_id, digest, expected_state_sha256, "install", verified["manifest"])
 
+    def _verify_package(self, package_path: Path) -> dict:
+        """Package verification hook used by the combined lifecycle API."""
+        return verify_package(package_path, trusted_keys=self.trusted_keys, target=self.target)
+
+    def install_lifecycle(self, project: Path, package_path: Path, *, command_id: str,
+                          expected_state_sha256: str, stop_event=None) -> dict:
+        """Atomically reconcile a trusted release selector and project addon.
+
+        ``stop_event`` requests cancellation before intent or a drain after
+        intent. Recovery on the next process invocation uses the same durable
+        lifecycle record. This API exposes no diagnostic failure hooks.
+        """
+        return lifecycle_transaction.install(
+            self, safe_path(project), safe_path(package_path), command_id=command_id,
+            expected_state_sha256=expected_state_sha256, stop_event=stop_event)
+
     def rollback(self, *, command_id: str, destination: str, expected_state_sha256: str) -> dict:
         request = {"action": "rollback", "destination": destination, "target": self.target}
         with mutation_guard(self.root):
@@ -238,6 +263,41 @@ class ConsumerInstall:
             manifest = self._read_release(destination)  # Signature/closure/compatibility before effect.
             state["active"], state["previous"] = destination, None
             return self._commit(state, command_id, digest, expected_state_sha256, "rollback", manifest)
+
+    def rollback_lifecycle(self, project: Path, *, command_id: str, destination: str,
+                           expected_state_sha256: str, stop_event=None) -> dict:
+        """Rollback selector and addon as one durable lifecycle transaction."""
+        return lifecycle_transaction.rollback(
+            self, safe_path(project), destination, command_id=command_id,
+            expected_state_sha256=expected_state_sha256, stop_event=stop_event)
+
+    def stop(self, *, command_id: str = "lifecycle.stop") -> dict:
+        """Durably stop new lifecycle admissions and drain a pending intent."""
+        return lifecycle_transaction.stop(self, command_id=command_id)
+
+    @staticmethod
+    def stop_existing(root: Path, *, command_id: str = "lifecycle.stop") -> dict:
+        """Stop through the independent control lock without opening work state."""
+        from types import SimpleNamespace
+        root = safe_path(root)
+        need(root.is_dir(), "install root required for Stop")
+        control = SimpleNamespace(root=root, _command_id=ConsumerInstall._command_id)
+        return lifecycle_transaction.stop(control, command_id=command_id)
+
+    def resume(self, *, command_id: str = "lifecycle.resume") -> dict:
+        """Explicitly clear a durable Stop latch after recovery is complete."""
+        return lifecycle_transaction.resume(self, command_id=command_id)
+
+    def lifecycle_status(self) -> dict:
+        """Read the durable lifecycle Stop/pending state for a coordinator."""
+        with mutation_guard(self.root):
+            self._recover_pending()
+            return lifecycle_transaction.status(self)
+
+    # Descriptive aliases used by coordinator workers.
+    apply_lifecycle = install_lifecycle
+    install_upgrade = install_lifecycle
+    rollback_release = rollback_lifecycle
 
     def deactivate(self, *, command_id: str, expected_state_sha256: str) -> dict:
         request = {"action": "deactivate", "target": self.target}

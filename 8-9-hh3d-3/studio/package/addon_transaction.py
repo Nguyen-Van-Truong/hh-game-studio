@@ -132,6 +132,35 @@ def finish(owner, record: dict, work: Path, wal: Path) -> None:
     sync_directory(owner.root)
 
 
+def prepare(owner, project: Path, files: dict[str, bytes], state: dict, expected: str,
+            expected_tree: str | None) -> dict:
+    """Stage a complete addon before lifecycle intent; no destination mutation.
+
+    The combined lifecycle WAL retains this record even if the process dies
+    before the standalone addon WAL is published. A returned record remains
+    provisional until the caller publishes its durable lifecycle intent.
+    """
+    with project_guard(owner, project) as work:
+        destination = safe_path(project / "addons/hh_studio")
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        txid = uuid.uuid4().hex
+        txdir = safe_path(work / txid)
+        stage = safe_path(txdir / "stage")
+        stage.mkdir(parents=True)
+        before = tree_hash(destination)
+        need(before == expected_tree, "addon owner edit before staging")
+        for relative, data in files.items():
+            target = safe_path(stage / relative)
+            need(target.is_relative_to(stage), "addon stage path outside root")
+            write_file(target, data)
+        for directory, _, _ in os.walk(stage, topdown=False):
+            sync_directory(Path(directory))
+        sync_directory(txdir)
+        return {"schema": "hh-addon-transaction-1", "project": str(project), "txid": txid,
+                "before": before, "after": tree_hash(stage), "expected_state": expected,
+                "state": state}
+
+
 def replace(owner, project: Path, files: dict[str, bytes], state: dict, expected: str,
             command_id: str, digest: str, action: str, manifest: dict | None, expected_tree: str | None) -> dict:
     """Stage -> durable intent -> directory rename -> journal/readback -> ACK."""
