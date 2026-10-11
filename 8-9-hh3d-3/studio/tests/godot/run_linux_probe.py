@@ -511,6 +511,28 @@ def sandbox_binding(destination: Path, case: dict, result: dict, binding: dict) 
                     else destination / 'harness')
     if not bind_snapshot.is_absolute() or not bind_harness.is_absolute():
         raise ValueError('guarded bind staging path is not absolute')
+    # The executor's short bind tree is transport-only.  Validate its
+    # retained receipt independently of the mount rows so a caller cannot
+    # replace the path fields with a guessed directory and still pass
+    # attribution readback.
+    if case['mode'] == 'gameplay-source' and os.name == 'nt':
+        bind_root = Path(result['bind_staging_root']) if isinstance(result.get('bind_staging_root'), str) else None
+        if (result.get('bind_staging_root') is None
+                or result.get('bind_staging_removed') is not True
+                or result.get('bind_staging_retained') is not False
+                or result.get('bind_staging_input_hashes_before') != result.get('input_hashes_before')
+                or result.get('bind_staging_input_hashes_after') != result.get('input_hashes_after')
+                or result.get('bind_staging_harness_hashes_before') != result.get('bind_staging_harness_hashes_after')
+                or (result.get('bind_staging_harness_hashes_before') is not None
+                    and not isinstance(result.get('bind_staging_harness_hashes_before'), dict))):
+            raise ValueError('guarded bind staging receipt mismatch')
+        if (bind_root is None or not bind_root.is_absolute()
+                or bind_snapshot != bind_root / 'snapshot'
+                or bind_harness != bind_root / 'harness'
+                or len(str(bind_root)) > 200
+                or len(str(bind_snapshot)) > 200
+                or len(str(bind_harness)) > 200):
+            raise ValueError('guarded bind staging path mismatch')
     expected_destinations = {'/project', '/harness'} | {
         '/project/' + path for path in assets}
     if (inspected.get('Id') != result['container_id']

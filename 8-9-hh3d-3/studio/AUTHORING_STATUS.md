@@ -1,23 +1,16 @@
-# O2 authoring state — 2026-10-11 (O13/S291)
-
+# O2 authoring state — 2026-10-12 (O13/S291)
 AUTHORITY=0; GT09=ACCEPTED; GT10_PC=IN_PROGRESS_NATIVE_DIAGNOSTIC.
-Progress authority: `zdoc/8-9-godot-blender-agent-studio-plan.txt`.
-GT09 final -74 accepted: K1–K15, actual Scheduled Task exit0, two critics same hash.
-GT10-PC P1–P12 remain unaccepted; no checkbox or acceptance claim is changed here.
-Source has package trust, WAL recovery, raw verifiers, native P2/P7/P9/P10 workers and task-bound rows.
-r08 is authority-zero rehearsal PASS for P1/P2/P7/P8/P9; P7 covers 8/8 native cases.
-Package/lifecycle/P2 tests pass; P9 uses an archive-backed independent consumer; P10 remains diagnostic.
-r11 failed at P7 producer timeout; r12 failed at aggregate producer timeout; raw and exits are retained.
-r13 reached P1–P9 PASS; P10 failed at Blender/OpenImageIO path depth and was reminted through p10fix3.
-p10fix3 hit the 30s watchdog; p10fix4 hit one installer WinError 5; direct Blender/deep install reproducers passed.
-p10a passed GT08A and Blender, then exposed a registered-probe publication-root wiring bug; p10b hit WinError 5 again.
-P10 now passes the real publication root to registered probes and retries only transient Windows rename locks for 2s.
-The retry boundary has a focused test; the full package/lifecycle suite passed 15/15 after this source change.
-Docker gameplay publication hit a real deep-path Windows bind EIO; executor now hash-checks a shallow snapshot/harness staging copy.
-The native result records those mount paths so readback and case observation validate the actual bind, not a guessed path.
-Fresh direct attributed gameplay publication passed with staging; old P10 evidence remains raw and is not reused after this source change.
-Next: remint focused P10, then whole P1–P10 rehearsal, P11 measurement, pre-review, formal25, final and critics.
-GT08B Android deferred; full GT10 blocked; GT11 unopened. No complete-game claim.
+Progress authority: `zdoc/8-9-godot-blender-agent-studio-plan.txt`; no checkbox changed here.
+GT09 final -74 is accepted with Scheduled Task exit0 and two critics on one hash.
+P1–P9 are rehearsal PASS only; P10 p10fix5 is rehearsal PASS on both native producers.
+P10 now uses a short bind root; durable input/harness bytes are hash-checked before and after use.
+Staging cleanup is fail-closed: uncertain container removal retains the tree and rejects completion.
+P11 now has a real-Godot one-cycle rehearsal producer; full formal25 remains final-only.
+Focused executor/probe suite: 73 tests passed; dry-run native path budget max 73/200 characters.
+P10 p10fix5 raw, task receipt and deletion receipt remain retained; no prior raw is reused after drift.
+Next: run P11 short through Scheduled Task, then C3 rehearsal P1–P11, pre-review, final 10×35, critics.
+GT10-PC P1–P12 remain unaccepted; AUTHORITY stays 0 until final package and two critics agree.
+GT08B Android deferred; full GT10 waits for it; GT11 remains unopened. No complete-game claim.
 
 ## K1–K15 acceptance matrix
 

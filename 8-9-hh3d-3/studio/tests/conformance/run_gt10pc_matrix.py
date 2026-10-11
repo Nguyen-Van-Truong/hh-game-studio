@@ -40,6 +40,23 @@ def table() -> dict:
                   "implementation": "INCOMPLETE"} for key, value in ROW_DEFS.items()}
 
 
+def _path_budget() -> dict:
+    """Check the short native roots required by O13.3g without dispatching."""
+    local = Path(os.environ.get('LOCALAPPDATA', str(ROOT / '.local')))
+    root = local / 'HHS' / '00000000'
+    paths = {
+        'blender_output': root / 'content' / 'native' / 'sprite_sheet.png',
+        'godot_project': root / 'project' / 'project.godot',
+        'docker_bind_snapshot': root / 'snapshot',
+        'docker_bind_harness': root / 'harness',
+    }
+    lengths = {name: len(str(path)) for name, path in paths.items()}
+    maximum = max(lengths.values())
+    need(maximum <= 200, 'GT10PC_NATIVE_PATH_BUDGET')
+    return {'limit': 200, 'max_length': maximum, 'paths': {k: str(v) for k, v in paths.items()},
+            'lengths': lengths, 'status': 'PASS'}
+
+
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT.parent))
 from studio.package.release_contract import (
@@ -128,6 +145,50 @@ def _p8_host_checks(output: Path, artifact: Path, *, trust: Path,
          "GT10PC_P8_ACTIONABLE_REJECTION")
     return {"status": "REHEARSAL_PASS", "checks": checks,
             "artifact_sha256": good["archive_sha256"], "source_closure_sha256": good["manifest"]["source_closure_sha256"]}
+
+
+def _p11_short_rehearsal(output: Path) -> dict:
+    """Run one real Godot cycle through the accepted benchmark machinery.
+
+    This is intentionally diagnostic: it proves the native editor/import
+    boundary and receipts on the current release source, but never edits the
+    frozen 2x35 profile or presents a short run as a soak result.
+    """
+    short_id = 'gt06-p11-short-' + hashlib.sha256(str(output).encode()).hexdigest()[:8]
+    child_root = output / 'p11-short-child'
+    child = _child(child_root, 'p11-short', [
+        sys.executable, '-B', str(ROOT / 'tests/replay/run_native_benchmark.py'),
+        '--run-id', short_id], timeout=300)
+    need(child.get('exit_code') == 0 and child.get('wrapper_exit_code') == 0
+         and child.get('tree_verified') is True and child.get('timed_out') is False,
+         'GT10PC_P11_SHORT_NATIVE_EXIT')
+    capture_path = ROOT / '.local' / 'reviews' / short_id / 'capture.json'
+    need(capture_path.is_file(), 'GT10PC_P11_SHORT_CAPTURE_MISSING')
+    capture = _read(capture_path)
+    need(capture.get('schema_id') == 'hh-studio.native-cycle-diagnostic-capture'
+         and capture.get('run_id') == short_id
+         and capture.get('completed_diagnostic') is True
+         and capture.get('full_benchmark') is False
+         and capture.get('formal_acceptance') is False
+         and capture.get('source_unchanged') is True
+         and capture.get('host_integrated') is False,
+         'GT10PC_P11_SHORT_CAPTURE')
+    exits = capture.get('actual_exits')
+    need(isinstance(exits, dict) and set(exits) == {'import', 'editor'}
+         and all(isinstance(row, dict) and row.get('exit_code') == 0
+                 and isinstance(row.get('pid'), int) and row['pid'] > 0
+                 for row in exits.values()),
+         'GT10PC_P11_SHORT_EXITS')
+    jobs = capture.get('jobs')
+    need(isinstance(jobs, dict) and set(jobs) == {'import', 'editor'}
+         and all(row.get('closed') is True and row.get('zero_observed') is True
+                 and row.get('handle_retained') is False for row in jobs.values()),
+         'GT10PC_P11_SHORT_JOBS')
+    return {'status': 'REHEARSAL_PASS', 'evidence_kind': 'native',
+            'coverage': 'one-real-Godot-cycle', 'full_benchmark': False,
+            'run_id': short_id, 'capture': str(capture_path), 'child': child,
+            'profile_sha256': capture.get('profile_sha256'),
+            'source_closure_sha256': capture['binding']['source_closure_sha256']}
 
 
 def _p2_archive_attacks(output: Path, artifacts: dict, *, trust: Path,
@@ -356,9 +417,10 @@ def run_rehearsal(rows: list[str], *, output: Path, trust: Path,
             result["rows"]["P10"] = {"status": "REHEARSAL_PASS", "evidence_kind": "native",
                                        "producer": "p10-installed", "producers": producers,
                                        "manifest_sha256": producers[0]["manifest_sha256"]}
-        for row in ("P11", "P12"):
-            if row in rows:
-                result["rows"][row] = {"status": "DEFERRED", "reason": "requires frozen final and critics"}
+        if "P11" in rows:
+            result["rows"]["P11"] = _p11_short_rehearsal(output)
+        if "P12" in rows:
+            result["rows"]["P12"] = {"status": "DEFERRED", "reason": "requires frozen final and critics"}
     except (ValueError, OSError, subprocess.SubprocessError) as exc:
         result["error"] = type(exc).__name__ + ": " + str(exc)
         result["status"] = "DIAGNOSTIC_FAIL"
@@ -636,8 +698,10 @@ def main(argv: list[str] | None = None) -> int:
     if args.matrix == "final" and args.rows:
         parser.error("final must run the entire frozen matrix")
     if args.dry_run:
+        budget = _path_budget()
         print(json.dumps({"schema": SCHEMA, "authority": 0, "acceptance": False,
-                          "status": "PLAN_ONLY", "rows": table()}, sort_keys=True))
+                          "status": "PLAN_ONLY", "rows": table(),
+                          "path_budget": budget}, sort_keys=True))
         return 0
     try:
         if args.verify_only:

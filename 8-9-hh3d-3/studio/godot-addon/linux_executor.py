@@ -204,6 +204,45 @@ def _manifest(values: dict[str, bytes]) -> dict[str, str]:
     return {name: _sha(value) for name, value in values.items()}
 
 
+def _stage_bind_root(snapshot: Path, output: Path, mode: str,
+                     harness_files: dict[str, bytes], before: dict[str, str]):
+    """Create a short, byte-bound Docker bind root or fail closed.
+
+    The staging tree is disposable transport state, never evidence.  Its
+    manifest is nevertheless retained by the caller so a verifier can tell
+    that the bytes actually mounted were the bytes admitted into the durable
+    snapshot.  A partially-created tree is removed before the error escapes.
+    """
+    root = Path(tempfile.mkdtemp(prefix='hh-gt03-'))
+    try:
+        _no_links(root)
+        bind_snapshot = root / 'snapshot'
+        shutil.copytree(snapshot, bind_snapshot)
+        bind_harness = output / 'harness'
+        if harness_files:
+            bind_harness = root / 'harness'
+            shutil.copytree(output / 'harness', bind_harness)
+        _need(_manifest(_inputs(bind_snapshot, mode)) == before,
+              'EXECUTOR_BIND_STAGING_HASH')
+        harness_before = None
+        if harness_files:
+            _need(_names(bind_harness) == set(harness_files)
+                  and all(_read_file(bind_harness / name, 65536) == raw
+                          for name, raw in harness_files.items()),
+                  'EXECUTOR_BIND_STAGING_HARNESS')
+            harness_before = {name: _sha(raw) for name, raw in harness_files.items()}
+        return root, bind_snapshot, bind_harness, _manifest(_inputs(bind_snapshot, mode)), harness_before
+    except BaseException:
+        try:
+            shutil.rmtree(root)
+        except BaseException:
+            # Keep the original admission error; the caller has no container
+            # to reconcile yet, so the failed cleanup is surfaced by the
+            # staging boundary itself on the next run.
+            pass
+        raise
+
+
 def _profile_factory():
     path = STUDIO / 'godot-addon/fixture_profile.py'
     raw = _read_file(path, 65536)
@@ -1112,26 +1151,17 @@ def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate', '
     bind_root = None
     bind_snapshot = snapshot
     bind_harness = output / 'harness'
+    bind_staging_before = None
+    bind_staging_harness_before = None
     # Docker Desktop on Windows can return EIO when a read-only bind source is
     # nested under the deep evidence path. Keep durable evidence in `output`,
     # but bind an exact private copy from the short system temp path. The copy
     # is hash-checked before dispatch and removed after container cleanup; it
     # is never used as evidence.
     if mode == GAMEPLAY_MODE and os.name == 'nt':
-        bind_root = Path(tempfile.mkdtemp(prefix='hh-gt03-'))
-        _no_links(bind_root)
-        bind_snapshot = bind_root / 'snapshot'
-        shutil.copytree(snapshot, bind_snapshot)
-        if harness_files:
-            bind_harness = bind_root / 'harness'
-            shutil.copytree(output / 'harness', bind_harness)
-        _need(_manifest(_inputs(bind_snapshot, mode)) == before,
-              'EXECUTOR_BIND_STAGING_HASH')
-        if harness_files:
-            _need(_names(bind_harness) == set(harness_files)
-                  and all(_read_file(bind_harness / name, 65536) == raw
-                          for name, raw in harness_files.items()),
-                  'EXECUTOR_BIND_STAGING_HARNESS')
+        (bind_root, bind_snapshot, bind_harness, bind_staging_before,
+         bind_staging_harness_before) = _stage_bind_root(
+             snapshot, output, mode, harness_files, before)
     _write(output / 'input-manifest.json', before)
     name = 'hh-gt03-' + uuid.uuid4().hex
     if attribution_enabled:
@@ -1159,6 +1189,12 @@ def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate', '
               'gameplay_source_envelope_checked': gameplay_profile is not None,
               'gameplay_profile_unchanged': gameplay_profile is None,
               'bind_snapshot': str(bind_snapshot), 'bind_harness': str(bind_harness),
+              'bind_staging_root': str(bind_root) if bind_root is not None else None,
+              'bind_staging_input_hashes_before': bind_staging_before,
+              'bind_staging_harness_hashes_before': bind_staging_harness_before,
+              'bind_staging_input_hashes_after': None,
+              'bind_staging_harness_hashes_after': None,
+              'bind_staging_retained': False,
               'admission': {'acquired': False}, 'owner_record_retained': False,
               'supervisor': {'path': '/usr/bin/timeout', 'sha256': SUPERVISOR_SHA256,
                              'term_after_seconds': max(1, timeout_seconds - 1), 'kill_after_seconds': 1,
@@ -1246,6 +1282,10 @@ def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate', '
                           bind_harness=bind_harness)
         _need(_manifest(_inputs(project, mode)) == before and _manifest(_inputs(snapshot, mode)) == before,
               'EXECUTOR_PRESTART_INPUT_CHANGED')
+        if bind_root is not None:
+            _need(_manifest(_inputs(bind_snapshot, mode)) == before
+                  and bind_staging_before == before,
+                  'EXECUTOR_BIND_STAGING_PRESTART_HASH')
         if harness_files:
             _need(_names(output / 'harness') == set(harness_files) and all(
                   _read_file(output / 'harness' / name, 65536) == raw for name, raw in harness_files.items()),
@@ -1376,10 +1416,27 @@ def run(project: Path, *, mode: Literal['parse', 'import', 'profile-validate', '
                 failed(error, 'EXECUTOR_GAMEPLAY_PROFILE_FINALIZE_')
         if bind_root is not None:
             try:
+                result['bind_staging_input_hashes_after'] = _manifest(
+                    _inputs(bind_snapshot, mode))
+                _need(result['bind_staging_input_hashes_after'] == before,
+                      'EXECUTOR_BIND_STAGING_POSTRUN_HASH')
+                if harness_files:
+                    result['bind_staging_harness_hashes_after'] = {
+                        name: _sha(_read_file(bind_harness / name, 65536))
+                        for name in sorted(harness_files)}
+                    _need(result['bind_staging_harness_hashes_after']
+                          == bind_staging_harness_before,
+                          'EXECUTOR_BIND_STAGING_POSTRUN_HARNESS')
+                # Never remove a staging tree while Docker cleanup is
+                # uncertain. Retaining it makes the failed boundary
+                # inspectable and prevents a false cleanup PASS.
+                _need(result.get('owned_removed') is True,
+                      'EXECUTOR_BIND_STAGING_CONTAINER_NOT_REMOVED')
                 shutil.rmtree(bind_root)
                 result['bind_staging_removed'] = True
             except BaseException as error:
                 result['bind_staging_removed'] = False
+                result['bind_staging_retained'] = bind_root.exists()
                 failed(error, 'EXECUTOR_BIND_STAGING_')
         else:
             result['bind_staging_removed'] = True
