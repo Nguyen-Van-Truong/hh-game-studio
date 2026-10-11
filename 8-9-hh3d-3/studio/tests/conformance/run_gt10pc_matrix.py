@@ -104,6 +104,32 @@ def _lifecycle(stdout: str) -> int:
     return len(states)
 
 
+def verify_profile(receipt: dict, manifest: dict, fixture: str) -> str:
+    profile = receipt.get("profile", {})
+    files = profile.get("runtime_files")
+    need(isinstance(files, dict) and files, "GT10PC_PROFILE_RUNTIME_FILES")
+    for name, digest in files.items():
+        need(manifest["files"].get("payload/studio/" + name, {}).get("sha256") == digest,
+             "GT10PC_PROFILE_SOURCE_BINDING")
+    closure = digest_bytes(json.dumps(files, sort_keys=True, separators=(",", ":")).encode())
+    need(closure == profile.get("runtime_source_closure_sha256"), "GT10PC_PROFILE_CLOSURE")
+    own = profile.get("own", {})
+    profiles = own.get("profiles")
+    need(own.get("fixture_enabled") is True and isinstance(profiles, list) and len(profiles) == 1
+         and own.get("project_id") == "project.registered." + fixture.removeprefix("gt09-"),
+         "GT10PC_PROFILE_DISCOVERY")
+    descriptor = profiles[0]
+    need(descriptor.get("profile") == "hh-godot-gameplay-source-1" and descriptor.get("version") == 1
+         and descriptor.get("config_sha256") == files.get("godot-addon/fixture_profile.json")
+         and descriptor.get("module_sha256") == files.get("godot-addon/gameplay_fixture_profile.py")
+         and descriptor.get("project_id") == own["project_id"]
+         and descriptor.get("script_enabled") is True, "GT10PC_PROFILE_DESCRIPTOR")
+    for hidden in (profile.get("other", {}), profile.get("default", {})):
+        need(hidden.get("profiles") == [] and hidden.get("fixture_enabled") is False,
+             "GT10PC_PROFILE_ISOLATION")
+    return descriptor["catalog_digest"]
+
+
 def _verify_native_producer(path: Path, *, trust: Path, trust_sha256: str) -> dict:
     path = safe_path(path)
     producer = _read(path / "producer.json")
@@ -189,6 +215,7 @@ def _verify_native_producer(path: Path, *, trust: Path, trust_sha256: str) -> di
         phases = _read(path / "consumer" / fixture / "native-phases.json").get("phases")
         need(isinstance(phases, list) and [p.get("phase") for p in phases] == ["install", "upgrade", "rollback"],
              "GT10PC_NATIVE_PHASE_SET")
+        profile_digest = None
         for phase in phases:
             phase_name = phase["phase"]
             label = fixture if phase_name == "install" else fixture + "-" + phase_name
@@ -208,6 +235,9 @@ def _verify_native_producer(path: Path, *, trust: Path, trust_sha256: str) -> di
                  "GT10PC_INSTALLED_SOURCE_BINDING")
             expected_studio = path / "consumer" / fixture / "install/releases" / selected["manifest_sha256"] / "payload/studio"
             need(safe_path(Path(receipt.get("studio", ""))) == expected_studio, "GT10PC_INSTALLED_LOCATION")
+            observed_profile = verify_profile(receipt, selected["manifest"], fixture)
+            need(profile_digest is None or observed_profile == profile_digest, "GT10PC_PROFILE_CHANGED_ON_ROLLBACK")
+            profile_digest = observed_profile
             _process(native_base, "parse", receipt.get("parse"))
             stdout = _process(native_base, "godot", receipt.get("process"))
             lifecycle = _lifecycle(stdout)

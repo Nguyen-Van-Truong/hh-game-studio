@@ -21,7 +21,7 @@ from studio.package.release_contract import (
 from studio.package.trust import load_trust
 from studio.build.bootstrap.run_fixture import run_process
 
-GODOT = ROOT / ".local/tooling/godot-4.7.2-stable/Godot_v4.7.2-stable_win64_console.exe"
+GODOT_WINDOWS = ROOT / ".local/tooling/godot-4.7.2-stable/Godot_v4.7.2-stable_win64_console.exe"
 SCHEMA = "HH-GT10PC-NATIVE-PRODUCER-4"
 
 
@@ -52,14 +52,16 @@ def project_state(project: Path) -> dict:
 
 
 def native_phase(output: Path, fixture: str, phase: str, install: ConsumerInstall,
-                 project: Path, args) -> dict:
+                 project: Path, args, *, godot: Path, target: str) -> dict:
     label = fixture if phase == "install" else fixture + "-" + phase
     driver_output = output / "drivers" / label
     driver_output.mkdir(parents=True)
     native_output = output / "godot" / label
     command = [sys.executable, "-B", "-m", "studio.package.installed_probe",
                "--install-root", str(install.root), "--project", str(project),
-               "--godot", str(GODOT), "--output", str(native_output),
+               "--godot", str(godot), "--output", str(native_output),
+               "--fixture", fixture,
+               "--target", target,
                "--trust", str(safe_path(args.trust)), "--trust-sha256", args.trust_sha256]
     env = os.environ.copy()
     env["PYTHONPATH"] = str(install.active_path().parent)
@@ -79,10 +81,14 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--trust", type=Path, required=True)
     parser.add_argument("--trust-sha256", required=True)
     parser.add_argument("--private-key", type=Path, required=True)
+    parser.add_argument("--target", choices=("Windows", "Linux-headless"), default="Windows")
+    parser.add_argument("--godot", type=Path)
     args = parser.parse_args(argv)
     output = safe_path(args.output)
     need(not output.exists(), "GT10PC_PROBE_OUTPUT_EXISTS")
-    need(os.name == "nt" and GODOT.is_file(), "GT10PC_WINDOWS_GODOT_PIN_REQUIRED")
+    godot = safe_path(args.godot or GODOT_WINDOWS)
+    need((args.target == "Windows") == (os.name == "nt"), "GT10PC_NATIVE_TARGET_OS_MISMATCH")
+    need(godot.is_file(), "GT10PC_GODOT_PIN_REQUIRED")
     keys = load_trust(args.trust, expected_sha256=args.trust_sha256)
     key_id, public = next(iter(keys.items()))
     from studio.tests.conformance.gt10pc_signing import load_signer
@@ -90,10 +96,11 @@ def main(argv: list[str] | None = None) -> int:
     before_closure = _payload_digest(_source_files(ROOT))
     output.mkdir(parents=True)
     artifact = output / "release.hhpkg"
-    package = build_package(ROOT, artifact, signer=signer, key_id=key_id)
+    package = build_package(ROOT, artifact, signer=signer, key_id=key_id, target=args.target)
     need(package["manifest"]["source_closure_sha256"] == before_closure, "build source drift")
     upgrade_artifact = output / "upgrade.hhpkg"
-    upgrade_package = build_package(ROOT, upgrade_artifact, signer=signer, key_id=key_id, version="0.1.1")
+    upgrade_package = build_package(ROOT, upgrade_artifact, signer=signer, key_id=key_id,
+                                    version="0.1.1", target=args.target)
     records = []
     for fixture in ("gt09-arena", "gt09-room"):
         consumer_root = output / "consumer" / fixture
@@ -104,7 +111,7 @@ def main(argv: list[str] | None = None) -> int:
         before_ledger = project_ledger(project)
         before = project_state(project)
         write_json(consumer_root / "project-before.json", before_ledger)
-        install = ConsumerInstall(consumer_root / "install", trusted_keys=keys)
+        install = ConsumerInstall(consumer_root / "install", trusted_keys=keys, target=args.target)
         installed = install.install(artifact, command_id="install." + fixture,
                                     expected_state_sha256=install.snapshot()["state_sha256"])
         addon_installed = install.install_addon(project, release=installed["active"], command_id="install-addon." + fixture,
@@ -113,7 +120,8 @@ def main(argv: list[str] | None = None) -> int:
         manual.write_text("owner edit must survive uninstall\n", encoding="utf-8")
         before_play_ledger = project_ledger(project)
         write_json(consumer_root / "project-before-play.json", before_play_ledger)
-        phases = [native_phase(output, fixture, "install", install, project, args)]
+        phases = [native_phase(output, fixture, "install", install, project, args,
+                               godot=godot, target=args.target)]
         after_play = project_state(project)
         after_play_ledger = project_ledger(project)
         need(before_play_ledger == after_play_ledger, "consumer project ledger changed during Play")
@@ -123,12 +131,14 @@ def main(argv: list[str] | None = None) -> int:
                                     expected_state_sha256=install.snapshot()["state_sha256"])
         upgrade_addon = install.install_addon(project, release=upgraded["active"], repair=True,
                          command_id="upgrade-addon." + fixture, expected_state_sha256=install.snapshot()["state_sha256"])
-        phases.append(native_phase(output, fixture, "upgrade", install, project, args))
+        phases.append(native_phase(output, fixture, "upgrade", install, project, args,
+                                   godot=godot, target=args.target))
         rolled_back = install.rollback(command_id="rollback." + fixture, destination=installed["active"],
                                        expected_state_sha256=install.snapshot()["state_sha256"])
         rollback_addon = install.install_addon(project, release=rolled_back["active"], repair=True,
                          command_id="rollback-addon." + fixture, expected_state_sha256=install.snapshot()["state_sha256"])
-        phases.append(native_phase(output, fixture, "rollback", install, project, args))
+        phases.append(native_phase(output, fixture, "rollback", install, project, args,
+                                   godot=godot, target=args.target))
         for phase in phases:
             need(phase["project_ledger"] == before_play_ledger, "upgrade/rollback mutated consumer project")
         write_json(consumer_root / "native-phases.json", {"phases": phases})
@@ -199,6 +209,7 @@ def main(argv: list[str] | None = None) -> int:
                 "upgrade_artifact_sha256": digest_file(upgrade_artifact),
                 "upgrade_manifest_sha256": upgrade_package["manifest_sha256"],
                 "source_closure_sha256": before_closure, "trust_sha256": args.trust_sha256,
+                "target": args.target, "godot_sha256": digest_file(godot),
                 "fixtures": records, "evidence": evidence,
                 "remaining": ["Linux", "AUTH07", "crash/Stop", "GT08A/K8/K10",
                               "formal25 soak", "final critics"]}
