@@ -16,6 +16,8 @@ import os
 from pathlib import Path
 import subprocess
 import sys
+import shutil
+import tempfile
 import threading
 import time
 
@@ -242,11 +244,16 @@ def run_content(*, run_id: str, binary: Path, parent: Path, lease, lease_checker
     run_dir.mkdir()
     native_output = run_dir / "native"
     native_output.mkdir()
-    # Blender is launched with ``cwd=run_dir`` below.  Keep the native output
-    # argument relative so Blender/OpenImageIO does not receive a long
-    # absolute Windows path (the same directory is already created and bound
-    # by the host at ``run_dir/native``).  The host continues to read the
-    # canonical absolute path after exit; no evidence is moved or omitted.
+    # Blender/OpenImageIO on Windows still canonicalizes a relative path
+    # against its cwd.  The evidence run_dir is necessarily deep inside the
+    # product tree, so even ``native`` can exceed Blender's legacy MAX_PATH.
+    # Run the native child from a private short-lived staging cwd, then copy
+    # the four bounded artifacts into the canonical host-owned evidence path
+    # after the child/job has exited.  The published evidence remains under
+    # `run_dir`; staging is never part of the handoff or source closure.
+    staging_root = Path(tempfile.mkdtemp(prefix="hh-content-"))
+    staging_native = staging_root / "native"
+    staging_native.mkdir()
     args = [str(binary), "--factory-startup", "--disable-autoexec", "--offline-mode", "--threads", "1",
             "--python-exit-code", "17", "--python", str(source_root / "host/blender/fixture_content_native.py"),
             "--", "--output", "native", "--recipe-sha256", recipe_check["recipe_sha256"]]
@@ -254,7 +261,7 @@ def run_content(*, run_id: str, binary: Path, parent: Path, lease, lease_checker
            if not key.upper().startswith(("PYTHON", "BLENDER_", "HH_BLENDER_"))}
     env["PYTHONDONTWRITEBYTECODE"] = "1"
     for key in ("TEMP", "TMP"):
-        path = run_dir / key.lower()
+        path = staging_root / key.lower()
         path.mkdir()
         env[key] = str(path)
     launch = {"schema": "HH-BLENDER-CONTENT-LAUNCH-1", "argv": args,
@@ -263,7 +270,7 @@ def run_content(*, run_id: str, binary: Path, parent: Path, lease, lease_checker
     (run_dir / "launch.json").write_bytes(canonical_bytes(launch))
     process = subprocess.Popen([sys.executable, "-B", "-c", HELPER, str(run_dir / "process"), *args],
                                stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                               cwd=run_dir, env=env, creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
+                               cwd=staging_root, env=env, creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
     job = None
     overflow = threading.Event()
     threads = []
@@ -284,7 +291,8 @@ def run_content(*, run_id: str, binary: Path, parent: Path, lease, lease_checker
             _lease_check(lease, lease_checker)
             if overflow.is_set() or time.monotonic() - started > timeout:
                 raise ContentJobError("CONTENT_DEADLINE_OR_LOG_CAP")
-            if sum(path.stat().st_size for path in run_dir.rglob("*") if path.is_file()) > MAX_TOTAL:
+            if (sum(path.stat().st_size for path in run_dir.rglob("*") if path.is_file())
+                    + sum(path.stat().st_size for path in staging_root.rglob("*") if path.is_file())) > MAX_TOTAL:
                 raise ContentJobError("CONTENT_WORKSPACE_CAP")
             time.sleep(0.02)
         for thread in threads:
@@ -306,6 +314,16 @@ def run_content(*, run_id: str, binary: Path, parent: Path, lease, lease_checker
              and job_snapshot.get("zero_observed") is True
              and job_snapshot.get("active_count") == 0
              and job_snapshot.get("failed_operations") == [], "CONTENT_JOB_CLEANUP")
+        for name in ARTIFACTS:
+            source = staging_native / name
+            need(source.is_file() and not (native_output / name).exists(),
+                 "CONTENT_NATIVE_STAGE_ARTIFACT")
+            temporary = native_output / (name + ".tmp")
+            with source.open("rb") as source_stream, temporary.open("xb") as target_stream:
+                shutil.copyfileobj(source_stream, target_stream, length=1024 * 1024)
+                target_stream.flush()
+                os.fsync(target_stream.fileno())
+            os.replace(temporary, native_output / name)
         _lease_check(lease, lease_checker)
         transcript = parse_json((native_output / "transcript.json").read_bytes())
         need(transcript.get("public_ack") is False and transcript.get("native_finished") is True,
@@ -362,6 +380,14 @@ def run_content(*, run_id: str, binary: Path, parent: Path, lease, lease_checker
         elif process.poll() is None:
             process.kill()
             process.wait(timeout=3)
+        try:
+            shutil.rmtree(staging_root)
+        except OSError:
+            # Staging is diagnostic-only and outside the publication root; a
+            # failed cleanup must not turn a valid native handoff into a false
+            # product failure, while the normal job/tree receipt remains the
+            # authority for process cleanup.
+            pass
 
 
 def inspect_publication(publication_root: Path) -> dict:
