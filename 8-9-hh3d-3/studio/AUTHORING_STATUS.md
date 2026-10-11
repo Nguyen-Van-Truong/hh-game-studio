@@ -6,9 +6,9 @@ GT09 final -74 accepted: K1–K15, actual Scheduled Task exit0, two critics same
 GT10-PC P1–P12 remain unaccepted; no checkbox or acceptance claim is changed here.
 Current source includes immutable Ed25519 package trust, compatibility lock, WAL selector/addon recovery, raw evidence verifier, native P2 worker and task-bound rehearsal rows. Fresh Scheduled Task `gt10pc-rehearsal-20261011-p2c` passed P1/P2 on the current source (authority=0; native Windows rejection + Godot readback captured).
 Diagnostic Linux `gt10pc-linux-current-20261011-08` and Windows `gt10pc-win-current-20261011-09` are historical because their source closure predates the current P2/P8/P9/task changes.
-Fresh rehearsal `gt10pc-rehearsal-20261011-r03` is historical authority-zero. Current `gt10pc-rehearsal-20261011-p2c` is authority-zero and passed selected P1/P2, including native Windows rejection and Godot readback with actual Scheduled Task exit 0. P7/P10/P11/P12 were not requested; P9 native smoke remains pending.
+Fresh rehearsal `gt10pc-rehearsal-20261011-r03` is historical authority-zero. Current `gt10pc-rehearsal-20261011-p2c` is authority-zero and passed selected P1/P2, including native Windows rejection and Godot readback with actual Scheduled Task exit 0. Fresh P7 host diagnostic `gt10pc-p7-host-20261011-09` passed all 8/8 crash/Stop cuts; it is not native acceptance evidence. P10/P11/P12 were not requested; P9 native smoke remains pending.
 Focused validation: package/lifecycle/P2 tests pass after the compatibility-lock changes; a fresh rehearsal is required before any row is treated as current evidence.
-Remaining: native P2 Scheduled Task run, P3–P7/P9–P10 native matrix, P8/P9 current rehearsal, formal25 10×35, two final critics.
+Remaining: P3–P7/P9–P10 native matrix (P7 host diagnostic is not a substitute), current P8/P9 rehearsal, formal25 10×35, two final critics.
 GT08B Android deferred; full GT10 blocked; GT11 unopened. No complete-game claim.
 
 ## K1–K15 acceptance matrix
@@ -33,7 +33,7 @@ GT08B Android deferred; full GT10 blocked; GT11 unopened. No complete-game claim
 
 ## Next
 
-Freeze current writers, run one fresh Scheduled Task rehearsal with selected P1/P2/P8/P9 first, then integrate P7 native lifecycle and P3–P6/P10 regression before a whole-matrix rehearsal.
+Freeze current writers, run one fresh Scheduled Task rehearsal with selected P1/P2/P8/P9 first, then integrate the P7 native lifecycle producer and P3–P6/P10 regression before a whole-matrix rehearsal. P7 host diagnostic 09 is retained as the recovery-boundary baseline.
 P2 native rejection must retain independent worker/host/Godot receipts and unchanged install/project/state ledgers. P9 consumer helper is host smoke only until a native installed fixture is captured.
 Final is explicitly disabled until all row producers and raw verifiers are complete.
 

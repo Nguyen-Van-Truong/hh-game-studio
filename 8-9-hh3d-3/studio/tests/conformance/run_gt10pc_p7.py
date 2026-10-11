@@ -223,6 +223,10 @@ def run_case(root: Path, old: dict, new: dict, keys: dict[str, bytes], *, name: 
     case.mkdir(parents=True)
     installer, project, before, project_before, old_id = seed_case(
         case, old_path, new_path, keys=keys, action=action)
+    project_core_before = {name: row for name, row in project_before.items()
+                           if not name.startswith("addons/hh_studio/")}
+    manual_path = project / "addons/hh_studio/owner-manual-note.txt"
+    manual_bytes = manual_path.read_bytes()
     selected = old_id if action == "rollback" else installer.snapshot()["active"]
     if action == "rollback":
         selected = old_id
@@ -246,8 +250,19 @@ def run_case(root: Path, old: dict, new: dict, keys: dict[str, bytes], *, name: 
     recovered = ConsumerInstall(installer.root, trusted_keys=keys, target="Windows")
     after = recovered.snapshot()
     project_after = ledger(project)
-    lookup = recovered.lookup(command_id)
-    need(lookup is not None, "P7_LOOKUP_MISSING:" + name)
+    # Cuts before the final selector publish are intentionally non-terminal:
+    # the durable lifecycle WAL (or terminal command row for Stop) is the
+    # recovery boundary.  A release rename or addon directory move alone must
+    # therefore have no lookup yet; later cuts must retain one.
+    lookup_before_retry = recovered.lookup(command_id)
+    # Before the lifecycle WAL exists, a killed worker has no command lookup;
+    # once that WAL is durable, reopening the installer completes it before
+    # returning, even when the selector/addon directory cut itself was hit.
+    early_cut = disposition == "kill" and phase in {
+        "staged", "before-selector", "release-renamed"
+    }
+    need((lookup_before_retry is None) == early_cut,
+         "P7_LOOKUP_BOUNDARY:" + name)
     retry_token = after["state_sha256"]
     if action == "rollback":
         retry = recovered.rollback_lifecycle(project, destination=selected,
@@ -255,11 +270,18 @@ def run_case(root: Path, old: dict, new: dict, keys: dict[str, bytes], *, name: 
     else:
         retry = recovered.install_lifecycle(project, new_path, command_id=command_id,
                                             expected_state_sha256=retry_token)
-    need(retry == lookup, "P7_RETRY_RECEIPT_DIFFERENT:" + name)
-    need(recovered.snapshot()["revision"] == after["revision"], "P7_RETRY_EFFECT_DUPLICATED:" + name)
+    lookup = recovered.lookup(command_id)
+    need(lookup is not None and retry == lookup,
+         "P7_RETRY_RECEIPT_DIFFERENT:" + name)
+    revision_after_retry = recovered.snapshot()["revision"]
+    expected_revision = after["revision"] + (1 if lookup_before_retry is None else 0)
+    need(revision_after_retry == expected_revision, "P7_RETRY_EFFECT_DUPLICATED:" + name)
     if disposition == "stop":
         recovered.resume(command_id="resume." + name)
-    need(ledger(project) == project_after == project_before,
+    project_core_after = {name: row for name, row in ledger(project).items()
+                          if not name.startswith("addons/hh_studio/")}
+    need(project_core_after == project_core_before and
+         manual_path.is_file() and manual_path.read_bytes() == manual_bytes,
          "P7_PROJECT_SOURCE_SAVE_CHANGED:" + name)
     final_state = recovered.snapshot()
     need(state_digest(final_state) == final_state["state_sha256"], "P7_STATE_HASH:" + name)
