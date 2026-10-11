@@ -98,6 +98,10 @@ if sha(worker) != request['worker_sha256']: raise RuntimeError('Linux worker cha
 os.environ['PYTHONDONTWRITEBYTECODE']='1'
 os.environ['PIP_NO_INDEX']='1'
 os.environ['PIP_NO_CACHE_DIR']='1'
+os.environ['HOME']='/tmp'
+os.environ['XDG_CACHE_HOME']='/tmp/cache'
+os.environ['PIP_CACHE_DIR']='/tmp/pip-cache'
+pathlib.Path('/tmp/pip-cache').mkdir(parents=True,exist_ok=True)
 try:
   runpy.run_path(str(worker),run_name='__main__')
 finally:
