@@ -1,6 +1,6 @@
 """Host owner for the bounded offline Linux installed-artifact diagnostic."""
 from __future__ import annotations
-import inspect, json, os, re, shutil, uuid
+import inspect as inspect_module, json, os, re, shutil, uuid
 from pathlib import Path
 
 from studio.build.bootstrap.run_fixture import run_process
@@ -139,7 +139,7 @@ finally:
   # private owner state stay in Linux tmpfs and are never evidence inputs.
   export_public_evidence(pathlib.Path('/output'), pathlib.Path('/evidence'))
 """
-    bootstrap = bootstrap.replace("__EXPORT_FUNCTION__", inspect.getsource(export_public_evidence))
+    bootstrap = bootstrap.replace("__EXPORT_FUNCTION__", inspect_module.getsource(export_public_evidence))
     compile(bootstrap, "gt10pc-linux-bootstrap", "exec")
     (inputs / "bootstrap.py").write_text(bootstrap, encoding="utf-8", newline="\n")
     request = {"schema": "hh-gt10pc-linux-request-1", "trust_sha256": trust_sha256, "artifact_sha256": package["archive_sha256"], "manifest_sha256": package["manifest_sha256"], "source_closure_sha256": package["manifest"]["source_closure_sha256"], "upgrade_artifact_sha256": None if upgraded is None else upgraded["archive_sha256"], "upgrade_manifest_sha256": None if upgraded is None else upgraded["manifest_sha256"], "wheel_lock_sha256": digest_file(inputs / "wheels/wheel-lock.json"), "binary_name": lock["binary_name"], "binary_sha256": lock["binary_sha256"], "worker_sha256": worker}
