@@ -8,7 +8,8 @@ Current source includes immutable Ed25519 package trust, compatibility lock, WAL
 Diagnostic Linux `gt10pc-linux-current-20261011-08` and Windows `gt10pc-win-current-20261011-09` are historical because their source closure predates the current P2/P8/P9/task changes.
 Fresh rehearsal `gt10pc-rehearsal-20261011-r08` is current but authority-zero: P1/P2/P7/P8/P9 are `REHEARSAL_PASS`, with independent child receipts and a captured Scheduled Task return receipt. P7 is split into two bounded 4-case producers to respect the 600-second launcher limit; both groups pass and combine to 8/8. P10/P11/P12 remain unaccepted.
 Focused validation: package/lifecycle/P2 tests pass after the compatibility-lock changes; P7 host diagnostic 09 and native diagnostic `gt10pc-p7-native-20261011-01` are 8/8; r08 is the current scheduled rehearsal. P9 now has an archive-backed native consumer producer/verifier, and P7 native producer is protected from stale pending overwrite. P10's installed-artifact producer/verifier is now integrated, but its focused runs remain diagnostic and must be reminted after the source freeze.
-Remaining: fresh native P3–P6/P10 rehearsal from one frozen source, then formal25 10×35 and two final critics. No row is accepted or ticked by this status file.
+Fresh whole-matrix `gt10pc-rehearsal-20261011-r10` ended with actual Scheduled Task exit 2: P1 and P3–P6 passed, P2 native worker timed out before producing `p2.json`, so P7–P10 were not run. Raw evidence is retained and the task was deleted only after idle/exit receipt. A bounded P2 worker fix removes a duplicate per-file `safe_path` walk while preserving streaming hashes and all ledger checks; commit/freeze before a new ID.
+Remaining: fresh native P1–P10 rehearsal from one frozen source, then formal25 10×35 and two final critics. No row is accepted or ticked by this status file.
 GT08B Android deferred; full GT10 blocked; GT11 unopened. No complete-game claim.
 
 ## K1–K15 acceptance matrix
@@ -91,3 +92,8 @@ Final is explicitly disabled until all row producers and raw verifiers are compl
 - GT10PC INFRA 11-10: r09 stopped before rows because the Windows P3–P6 producer requested a
   900-second child timeout while the shared launcher caps every child at 600 seconds. The raw
   task exit was 2 with no worker left; the matrix now binds that producer to the 600-second cap.
+- GT10PC INFRA/VERIFIER 11-10: r10 reached P2 after P1 and P3–P6, then the native rejection
+  worker hit its 180-second bound before writing `p2.json`. The last-good install and addon were
+  intact; profiling showed `tree_ledger()` passed every file through `safe_path()` twice, causing
+  repeated Windows ancestor `lstat` walks. The repair hashes the already-validated path once with
+  streaming `hashlib.file_digest`; it does not relax archive, link, ledger, native, or timeout gates.

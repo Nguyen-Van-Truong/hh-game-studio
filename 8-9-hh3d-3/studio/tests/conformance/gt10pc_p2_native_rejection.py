@@ -10,6 +10,7 @@ it never asserts GT-10 acceptance.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -48,8 +49,16 @@ def tree_ledger(root: Path) -> dict:
         dirs[:] = sorted(dirs)
         for name in sorted(files):
             path = safe_path(Path(directory) / name)
+            # ``safe_path`` already performed the complete reparse/device/
+            # hard-link check for this file.  Calling ``digest_file`` here
+            # would repeat that check (including an lstat walk for every
+            # ancestor) and made the native worker miss its 180 s bound on a
+            # cold Windows filesystem.  Hash the checked path directly while
+            # retaining the same size/readback fields used by the ledger.
+            with path.open("rb") as stream:
+                digest = hashlib.file_digest(stream, "sha256").hexdigest()
             result[path.relative_to(root).as_posix()] = {
-                "sha256": digest_file(path), "size": path.stat().st_size
+                "sha256": digest, "size": path.stat().st_size
             }
     return result
 
