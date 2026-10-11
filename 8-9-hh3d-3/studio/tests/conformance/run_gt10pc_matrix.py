@@ -263,7 +263,21 @@ def _verify_native_producer(path: Path, *, trust: Path, trust_sha256: str) -> di
             "artifact_sha256": package["archive_sha256"], "evidence_files": len(evidence)}
 
 
-def verify_only(path: Path, *, trust: Path, trust_sha256: str) -> int:
+def verify_only(path: Path, *, trust: Path, trust_sha256: str,
+                target: str = "Windows", artifact: Path | None = None,
+                upgrade_artifact: Path | None = None) -> int:
+    if target == "Linux-headless":
+        from studio.tests.conformance.gt10pc_linux_verify import verify_linux
+        need(artifact is not None and upgrade_artifact is not None,
+             "GT10PC_LINUX_EXPLICIT_ARTIFACTS_REQUIRED")
+        raw = verify_linux(safe_path(path), artifact=safe_path(artifact),
+                           upgrade_artifact=safe_path(upgrade_artifact),
+                           trust=trust, trust_sha256=trust_sha256)
+        print(json.dumps({"schema": SCHEMA, "authority": 0, "acceptance": False,
+                          "target": target, "raw": raw}, sort_keys=True))
+        return 0
+    need(target == "Windows" and artifact is None and upgrade_artifact is None,
+         "GT10PC_WINDOWS_ARTIFACTS_ARE_RUN_LOCAL")
     doc = _read(path / "matrix.json")
     need(doc.get("schema") == SCHEMA and doc.get("acceptance") is False
          and doc.get("authority") == 0 and doc.get("producer") == "producer.json"
@@ -282,6 +296,9 @@ def main(argv: list[str] | None = None) -> int:
     mode.add_argument("--matrix", choices=("rehearsal", "final"))
     parser.add_argument("--trust", type=Path)
     parser.add_argument("--trust-sha256")
+    parser.add_argument("--target", choices=("Windows", "Linux-headless"), default="Windows")
+    parser.add_argument("--artifact", type=Path)
+    parser.add_argument("--upgrade-artifact", type=Path)
     parser.add_argument("--rows")
     parser.add_argument("--run-id")
     parser.add_argument("--output", type=Path)
@@ -298,7 +315,9 @@ def main(argv: list[str] | None = None) -> int:
     try:
         if args.verify_only:
             need(args.trust is not None and args.trust_sha256 is not None, "GT10PC_EXTERNAL_TRUST_REQUIRED")
-            return verify_only(args.verify_only, trust=args.trust, trust_sha256=args.trust_sha256)
+            return verify_only(args.verify_only, trust=args.trust, trust_sha256=args.trust_sha256,
+                               target=args.target, artifact=args.artifact,
+                               upgrade_artifact=args.upgrade_artifact)
         raise ValueError("GT10PC_PRODUCERS_INCOMPLETE_FINAL_AND_REHEARSAL_DISABLED")
     except (ValueError, OSError) as exc:
         print(json.dumps({"schema": SCHEMA, "status": "DIAGNOSTIC_FAIL",
