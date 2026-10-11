@@ -277,7 +277,8 @@ def _run_catalog_processes(output: Path, runtime: Path, *, blender: Path, godot_
         rid = "o2-registered-authoring-" + output.name[-12:] + "-" + fixture
         root = review / rid
         command = [str(py), "-B", str(runtime / "tests/godot/run_registered_authoring_probe.py"),
-                   "--run-id", rid, "--godot", str(godot_gui), "--blender-published", str(content),
+                   "--run-id", rid, "--godot", str(godot_gui),
+                   "--blender-published", str(content_publication),
                    "--fixture", fixture]
         key = "registered-" + fixture
         receipts[key] = _child(output / "children", command, cwd=runtime.parent, env=env,

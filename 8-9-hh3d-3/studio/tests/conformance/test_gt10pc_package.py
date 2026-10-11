@@ -9,6 +9,7 @@ import subprocess
 import sys
 import time
 from pathlib import Path
+from unittest import mock
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 from package.release_contract import PackageError, build_package, verify_package
 from package.consumer_install import ConsumerInstall
@@ -104,6 +105,28 @@ class GT10PCPackageTests(unittest.TestCase):
             self.assertEqual(source.read_text(), "owner source"); self.assertEqual(save.read_text(), "owner save")
             self.assertTrue((install.versions / a["active"]).is_dir())
             self.assertTrue((install.versions / b["active"]).is_dir())
+
+    @unittest.skipUnless(os.name == "nt", "Windows rename sharing-lock boundary")
+    def test_windows_stage_publish_retries_transient_sharing_lock(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td); artifact = root / "release.hhpkg"
+            self.make(artifact)
+            install = ConsumerInstall(root / "install", trusted_keys=self.keys)
+            real_rename = os.rename
+            attempts = []
+
+            def flaky_rename(source, destination):
+                attempts.append((source, destination))
+                if len(attempts) <= 2:
+                    raise PermissionError(13, "simulated antivirus share lock")
+                return real_rename(source, destination)
+
+            with mock.patch("package.consumer_install.os.rename", side_effect=flaky_rename):
+                receipt = install.install(artifact, command_id="retry-stage",
+                                          expected_state_sha256="ABSENT")
+            self.assertEqual(receipt["status"], "COMMITTED")
+            self.assertEqual(len(attempts), 3)
+            self.assertTrue((install.versions / receipt["active"] / "manifest.json").is_file())
 
     def test_addon_repair_restores_owned_bytes_and_keeps_manual_file(self):
         with tempfile.TemporaryDirectory() as td:

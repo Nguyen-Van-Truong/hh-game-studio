@@ -8,10 +8,12 @@ writers and Windows power-loss durability are outside this process-crash claim.
 """
 from __future__ import annotations
 
+import errno
 import os
 from pathlib import Path
 from typing import Mapping
 import uuid
+import time
 from . import addon_transaction
 from . import lifecycle_transaction
 
@@ -27,6 +29,8 @@ except ModuleNotFoundError:
 STATE_SCHEMA = "hh-studio-install-4"
 MAX_STATE = 16 * 1024**2
 MAX_COMMANDS = 8192
+WINDOWS_RENAME_RETRY_SECONDS = 2.0
+WINDOWS_RENAME_RETRY_INTERVAL_SECONDS = 0.05
 
 
 def _new_file(path: Path, data: bytes) -> None:
@@ -36,6 +40,30 @@ def _new_file(path: Path, data: bytes) -> None:
         stream.write(data)
         stream.flush()
         os.fsync(stream.fileno())
+
+
+def _publish_stage(stage: Path, final: Path) -> None:
+    """Atomically publish a staged directory, tolerating short AV share locks.
+
+    Windows scanners can briefly hold a just-written file in the staging tree.
+    The operation remains one atomic rename; only the bounded transient sharing
+    errors are retried.  A real permission/configuration failure still escapes
+    with the original exception after the measured two-second window.
+    """
+    deadline = time.monotonic() + WINDOWS_RENAME_RETRY_SECONDS
+    while True:
+        try:
+            os.rename(stage, final)
+            return
+        except PermissionError as error:
+            transient = (getattr(error, "winerror", None) in (5, 32)
+                         or error.errno in (errno.EACCES, errno.EBUSY))
+            if os.name != "nt" or not transient:
+                raise
+            remaining = deadline - time.monotonic()
+            if remaining <= 0:
+                raise
+            time.sleep(min(WINDOWS_RENAME_RETRY_INTERVAL_SECONDS, remaining))
 
 
 class ConsumerInstall:
@@ -216,7 +244,7 @@ class ConsumerInstall:
             need(digest_file(stage / name) == digest_bytes(data), "staged readback mismatch")
         sync_directory(stage)
         need(not final.exists(), "release appeared during staging")
-        os.rename(stage, final)
+        _publish_stage(stage, final)
         sync_directory(self.versions)
         self._read_release(identity)
         return identity

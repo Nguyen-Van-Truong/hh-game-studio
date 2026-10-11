@@ -1,20 +1,19 @@
-# O2 authoring state — 2026-10-11 (O13/S290)
+# O2 authoring state — 2026-10-11 (O13/S291)
 
 AUTHORITY=0; GT09=ACCEPTED; GT10_PC=IN_PROGRESS_NATIVE_DIAGNOSTIC.
 Progress authority: `zdoc/8-9-godot-blender-agent-studio-plan.txt`.
 GT09 final -74 accepted: K1–K15, actual Scheduled Task exit0, two critics same hash.
 GT10-PC P1–P12 remain unaccepted; no checkbox or acceptance claim is changed here.
-Current source includes immutable Ed25519 package trust, compatibility lock, WAL selector/addon recovery, raw evidence verifier, native P2/P7/P9/P10 workers and task-bound rehearsal rows. Fresh Scheduled Task `gt10pc-rehearsal-20261011-r08` passed selected P1/P2/P7/P8/P9 on the frozen source (authority=0; actual task exit 0; P7 native 8/8 cuts; P9 archive-backed independent consumer).
-Diagnostic Linux `gt10pc-linux-current-20261011-08` and Windows `gt10pc-win-current-20261011-09` are historical because their source closure predates the current P2/P8/P9/task changes.
-Fresh rehearsal `gt10pc-rehearsal-20261011-r08` is current but authority-zero: P1/P2/P7/P8/P9 are `REHEARSAL_PASS`, with independent child receipts and a captured Scheduled Task return receipt. P7 is split into two bounded 4-case producers to respect the 600-second launcher limit; both groups pass and combine to 8/8. P10/P11/P12 remain unaccepted.
-Focused validation: package/lifecycle/P2 tests pass after the compatibility-lock changes; P7 host diagnostic 09 and native diagnostic `gt10pc-p7-native-20261011-01` are 8/8; r08 is the current scheduled rehearsal. P9 now has an archive-backed native consumer producer/verifier, and P7 native producer is protected from stale pending overwrite. P10's installed-artifact producer/verifier is now integrated, but its focused runs remain diagnostic and must be reminted after the source freeze.
-Fresh whole-matrix `gt10pc-rehearsal-20261011-r11` ended with actual Scheduled Task exit 2: P1–P6 passed, P2 native passed, and P7 producer A passed 4/4; producer B timed out at the shared 600-second child bound during its fourth native case, so P7–P10 were not accepted or run. Raw evidence is retained and the task was deleted only after idle/exit receipt. P7 remains an eight-case contract; its rehearsal is now split 3+3+2 to keep each producer bounded without weakening any case deadline.
-Fresh whole-matrix `gt10pc-rehearsal-20261011-r12` ended with actual Scheduled Task exit 2: all six Windows driver/Godot host receipts reached exit 0, but the aggregate producer timed out at the shared 600-second child bound before writing `producer.json`; therefore no new P1–P6 rows were emitted. Raw evidence is retained and the task was deleted only after idle/exit receipt. `project_ledger()` now hashes already-validated paths with streaming `hashlib.file_digest` to remove duplicate ancestor validation while preserving every ledger check; a new run ID is required after this source change.
-Fresh whole-matrix `gt10pc-rehearsal-20261011-r13` reached P1–P9 `REHEARSAL_PASS` (P7 8/8 native cases) and actual Scheduled Task exit 2; P10 GT08A passed but catalog Blender failed because the installed-runtime evidence path exceeded Blender's legacy path handling. Raw evidence is retained and the task was deleted after idle/exit receipt. The P10 catalog root is now a shorter sibling under `installed-runtime`, still inside the runtime binding boundary; remint after this source change.
-Focused `gt10pc-rehearsal-20261011-p10fix1` also exited 2: the shorter root reached Blender render, but OpenImageIO still rejected the absolute output path. The host now passes the pre-created `run_dir/native` as a relative `native` argument while retaining the same canonical evidence path; remint after this source change.
-Focused `gt10pc-rehearsal-20261011-p10fix2` confirmed Blender still canonicalized that relative path against the deep cwd and exited 17 at render. The native producer now uses a short-lived private staging cwd/TEMP, then fsync-copies the four bounded artifacts into canonical `run_dir/native` before readback/publication; staging is not evidence or closure.
-Focused `gt10pc-rehearsal-20261011-p10fix3` hit the existing 30s watchdog (`CONTENT_DEADLINE_OR_LOG_CAP`) after staging began; its deleted staging tree left no completion proof. Installed-runtime reproducers pass (10.8s prior, 17.1s current source); the producer keeps the 30s deadline, scans the complete workspace at a bounded cadence, and retains failed staging. P10 also now reads registered/publication output from the probe's actual `.local/reviews` root while keeping Blender content in the short sibling root.
-Remaining: fresh native P1–P10 rehearsal from one frozen source, then formal25 10×35 and two final critics. No row is accepted or ticked by this status file.
+Source has package trust, WAL recovery, raw verifiers, native P2/P7/P9/P10 workers and task-bound rows.
+r08 is authority-zero rehearsal PASS for P1/P2/P7/P8/P9; P7 covers 8/8 native cases.
+Package/lifecycle/P2 tests pass; P9 uses an archive-backed independent consumer; P10 remains diagnostic.
+r11 failed at P7 producer timeout; r12 failed at aggregate producer timeout; raw and exits are retained.
+r13 reached P1–P9 PASS; P10 failed at Blender/OpenImageIO path depth and was reminted through p10fix3.
+p10fix3 hit the 30s watchdog; p10fix4 hit one installer WinError 5; direct Blender/deep install reproducers passed.
+p10a passed GT08A and Blender, then exposed a registered-probe publication-root wiring bug; p10b hit WinError 5 again.
+P10 now passes the real publication root to registered probes and retries only transient Windows rename locks for 2s.
+The retry boundary has a focused test; the full package/lifecycle suite passed 15/15 after this source change.
+Next: remint focused P10, then whole P1–P10 rehearsal, P11 measurement, pre-review, formal25, final and critics.
 GT08B Android deferred; full GT10 blocked; GT11 unopened. No complete-game claim.
 
 ## K1–K15 acceptance matrix
@@ -94,6 +93,10 @@ Final is explicitly disabled until all row producers and raw verifiers are compl
   defects; ID04 exposed the installed Blender producer's missing `host` path. ID05 was invalidated
   by source drift because verifier edits were made during the run. Freeze first, then run a new ID;
   a live matrix must never be edited or reused.
+- GT10PC P10 11-10: p10a proved GT08A and Blender native output, then the registered probe
+  rejected the publication parent instead of its protected `published_root`; p10b confirmed that
+  wiring repair but reproduced WinError 5 while atomically renaming a staged release. A bounded
+  Windows sharing-lock retry was added and covered by a focused test; other errors still fail closed.
 - GT10PC INFRA 11-10: r09 stopped before rows because the Windows P3–P6 producer requested a
   900-second child timeout while the shared launcher caps every child at 600 seconds. The raw
   task exit was 2 with no worker left; the matrix now binds that producer to the 600-second cap.
