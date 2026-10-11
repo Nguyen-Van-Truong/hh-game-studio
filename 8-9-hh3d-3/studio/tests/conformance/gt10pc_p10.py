@@ -251,7 +251,14 @@ def _run_catalog_processes(output: Path, runtime: Path, *, blender: Path, godot_
                            env: dict[str, str]) -> dict[str, Any]:
     """Generate fresh Blender/catalog/publication/K8/K10 evidence."""
     py = Path(sys.executable)
-    review = runtime / ".local/reviews"
+    # Keep native Blender/Godot evidence under the installed-runtime boundary
+    # but outside the copied payload tree.  The payload-relative path used by
+    # r13 nested `.local/reviews` below `installed-runtime/studio`, pushing the
+    # Windows path past Blender's legacy MAX_PATH handling; Blender then saw
+    # its already-created output directory as missing.  This shorter sibling
+    # root preserves the runtime binding verifier while remaining accessible
+    # to the pinned native binary.
+    review = runtime.parent / "reviews"
     review.mkdir(parents=True, exist_ok=True)
     content_id = "gt09-content-p10-" + output.name[-12:]
     content = review / content_id
