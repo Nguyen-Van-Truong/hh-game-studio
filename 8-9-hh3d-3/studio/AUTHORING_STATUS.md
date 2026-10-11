@@ -70,3 +70,6 @@ Final is explicitly disabled until all row producers and raw verifiers are compl
 - GT10PC INFRA 11-10: rehearsal r04 stopped before P7 because the child launcher rejects
   timeouts above 600s; raw is retained and the task was deleted after its actual exit. Keep
   Scheduled Task timeout within the launcher contract; do not reuse a failed run id.
+- GT10PC INFRA 11-10: rehearsal r05 stopped at the first native P7 kill because the nested
+  worker job was sampled immediately after wait(); no process remained, but the receipt was
+  correctly rejected. P7 now polls the independent job count for a bounded 3s before failing.

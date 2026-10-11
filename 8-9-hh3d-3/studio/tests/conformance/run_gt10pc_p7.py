@@ -171,7 +171,18 @@ def launch_worker(request: Path, marker: Path, *, disposition: str,
         (output / "worker-stdout.txt").write_bytes(stdout)
         (output / "worker-stderr.txt").write_bytes(stderr)
         need(not stderr, "P7_WORKER_STDERR")
-        tree_verified = _job_active_count(job) == 0 if job else process.poll() is not None
+        # Windows can report the terminated worker in the job briefly after
+        # wait() returns, especially when the producer itself is in a gated
+        # outer job.  Poll the independent job count for a bounded interval;
+        # a non-zero count still fails closed and is never treated as proof.
+        tree_verified = False
+        deadline = time.monotonic() + 3
+        while time.monotonic() < deadline:
+            tree_verified = (_job_active_count(job) == 0 if job
+                             else process.poll() is not None)
+            if tree_verified:
+                break
+            time.sleep(0.02)
         need(tree_verified, "P7_WORKER_TREE_NOT_ZERO")
         host = {"schema": "hh-gt10pc-p7-worker-host-1", "pid": process.pid,
                 "actual_exit": code, "started_epoch": started, "finished_epoch": time.time(),
