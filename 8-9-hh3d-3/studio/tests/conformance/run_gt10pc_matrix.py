@@ -711,10 +711,13 @@ def _verify_native_producer(path: Path, *, trust: Path, trust_sha256: str) -> di
 def verify_only(path: Path, *, trust: Path, trust_sha256: str,
                 target: str = "Windows", artifact: Path | None = None,
                 upgrade_artifact: Path | None = None) -> int:
-    if safe_path(path / 'matrix.json').is_file():
-        raw = _verify_rehearsal_matrix(safe_path(path))
-        print(json.dumps(raw, sort_keys=True))
-        return 0
+    matrix_path = safe_path(path / 'matrix.json')
+    if matrix_path.is_file():
+        candidate = _read(matrix_path)
+        if candidate.get('schema') == SCHEMA and candidate.get('mode') == 'REHEARSAL':
+            raw = _verify_rehearsal_matrix(safe_path(path))
+            print(json.dumps(raw, sort_keys=True))
+            return 0
     if target == "Linux-headless":
         from studio.tests.conformance.gt10pc_linux_verify import verify_linux
         need(artifact is not None and upgrade_artifact is not None,
