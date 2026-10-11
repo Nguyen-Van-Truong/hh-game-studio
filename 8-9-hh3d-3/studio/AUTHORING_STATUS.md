@@ -4,11 +4,11 @@ AUTHORITY=0; GT09=ACCEPTED; GT10_PC=IN_PROGRESS_NATIVE_DIAGNOSTIC.
 Progress authority: `zdoc/8-9-godot-blender-agent-studio-plan.txt`.
 GT09 final -74 accepted: K1–K15, actual Scheduled Task exit0, two critics same hash.
 GT10-PC P1–P12 remain unaccepted; no checkbox or acceptance claim is changed here.
-Current source includes immutable Ed25519 package trust, compatibility lock, WAL selector/addon recovery, raw evidence verifier, native P2 worker and task-bound rehearsal rows. Fresh Scheduled Task `gt10pc-rehearsal-20261011-p2c` passed P1/P2 on the current source (authority=0; native Windows rejection + Godot readback captured).
+Current source includes immutable Ed25519 package trust, compatibility lock, WAL selector/addon recovery, raw evidence verifier, native P2/P7/P9 workers and task-bound rehearsal rows. Fresh Scheduled Task `gt10pc-rehearsal-20261011-r08` passed selected P1/P2/P7/P8/P9 on the frozen source (authority=0; actual task exit 0; P7 native 8/8 cuts; P9 archive-backed independent consumer).
 Diagnostic Linux `gt10pc-linux-current-20261011-08` and Windows `gt10pc-win-current-20261011-09` are historical because their source closure predates the current P2/P8/P9/task changes.
-Fresh rehearsal `gt10pc-rehearsal-20261011-r03` is historical authority-zero. Current `gt10pc-rehearsal-20261011-p2c` is authority-zero and passed selected P1/P2, including native Windows rejection and Godot readback with actual Scheduled Task exit 0. Fresh P7 host diagnostic `gt10pc-p7-host-20261011-09` passed all 8/8 crash/Stop cuts; it is not native acceptance evidence. P10/P11/P12 were not requested; P9 native smoke remains pending.
-Focused validation: package/lifecycle/P2 tests pass after the compatibility-lock changes; P7 host diagnostic 09 and native diagnostic `gt10pc-p7-native-20261011-01` are 8/8; a fresh Scheduled Task rehearsal is required before any row is treated as current evidence. P9 now has a separate archive-backed native consumer producer/verifier, and P7 native producer no longer gets overwritten by a stale pending branch.
-Remaining: P3–P7/P9–P10 native matrix (P7 host diagnostic is not a substitute), current P8/P9 rehearsal, formal25 10×35, two final critics.
+Fresh rehearsal `gt10pc-rehearsal-20261011-r08` is current but authority-zero: P1/P2/P7/P8/P9 are `REHEARSAL_PASS`, with independent child receipts and a captured Scheduled Task return receipt. P7 is split into two bounded 4-case producers to respect the 600-second launcher limit; both groups pass and combine to 8/8. P10/P11/P12 remain unaccepted.
+Focused validation: package/lifecycle/P2 tests pass after the compatibility-lock changes; P7 host diagnostic 09 and native diagnostic `gt10pc-p7-native-20261011-01` are 8/8; r08 is the current scheduled rehearsal. P9 now has an archive-backed native consumer producer/verifier, and P7 native producer is protected from stale pending overwrite.
+Remaining: P3–P6 and P10 native producers/verifiers, then formal25 10×35 and two final critics. No row is accepted or ticked by this status file.
 GT08B Android deferred; full GT10 blocked; GT11 unopened. No complete-game claim.
 
 ## K1–K15 acceptance matrix
@@ -33,8 +33,8 @@ GT08B Android deferred; full GT10 blocked; GT11 unopened. No complete-game claim
 
 ## Next
 
-Freeze current writers, run one fresh Scheduled Task rehearsal with selected P1/P2/P8/P9 first, then integrate the P7 native lifecycle producer and P3–P6/P10 regression before a whole-matrix rehearsal. P7 host diagnostic 09 is retained as the recovery-boundary baseline.
-P2 native rejection must retain independent worker/host/Godot receipts and unchanged install/project/state ledgers. P9 consumer helper is host smoke only until a native installed fixture is captured.
+Freeze current writers, integrate P3–P6 and P10 native producers/verifiers, then run a fresh whole-matrix rehearsal from one frozen source closure. P7 host diagnostic 09 remains the recovery-boundary baseline; r08 supplies the current native rehearsal.
+P2 native rejection must retain independent worker/host/Godot receipts and unchanged install/project/state ledgers. P9 r08 now captures an installed fixture through an independent archive-backed consumer, but remains rehearsal-only until final manifest/critic gates.
 Final is explicitly disabled until all row producers and raw verifiers are complete.
 
 ## Retained evidence and lessons
@@ -80,3 +80,7 @@ Final is explicitly disabled until all row producers and raw verifiers are compl
 - GT10PC INFRA 11-10: rehearsal r07 ran clean through six P7 cases but the single 8-case
   producer exceeded the launcher’s 600s child limit; actual task exit was 2 with no leftover
   process. P7 rehearsal is split into two 4-case producers and the matrix requires both reports.
+- GT10PC REHEARSAL 11-10: rehearsal r08 completed with actual Scheduled Task exit 0 on the
+  frozen source closure. P1/P2/P7/P8/P9 were `REHEARSAL_PASS`; P7 had two native 4-case
+  producers (8/8 total), and P9 used the independent archive-backed consumer. Authority remains
+  zero; do not treat this as acceptance or reuse its identifiers after any source change.
