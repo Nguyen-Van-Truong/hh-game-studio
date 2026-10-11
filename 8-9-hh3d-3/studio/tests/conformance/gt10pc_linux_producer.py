@@ -59,19 +59,16 @@ def run_linux(output: Path, *, artifact: Path, trust: Path, trust_sha256: str, u
     host.mkdir()
     scratch = safe_path(Path(STUDIO.anchor) / ("hh-g10-" + uuid.uuid4().hex))
     scratch.mkdir()
-    inputs, raw, tools = scratch / "input", scratch / "output", scratch / "tool"
-    inputs.mkdir(); raw.mkdir(); tools.mkdir()
+    inputs, raw = scratch / "input", scratch / "evidence"
+    inputs.mkdir(); raw.mkdir()
     package, upgraded, lock = frozen["package"], frozen["upgrade"], frozen["lock"]
     shutil.copyfile(artifact, inputs / "release.hhpkg")
     if upgrade_artifact is not None:
         shutil.copyfile(upgrade_artifact, inputs / "upgrade.hhpkg")
     shutil.copyfile(trust, inputs / "trust.json")
-    shutil.copyfile(frozen["tool"], tools / lock["binary_name"])
-    try: (tools / lock["binary_name"]).chmod(0o755)
-    except OSError: pass
     shutil.copytree(frozen["wheel_root"], inputs / "wheels")
     worker = package["manifest"]["files"]["payload/studio/tests/conformance/gt10pc_linux_worker.py"]["sha256"]
-    bootstrap = """import hashlib,json,os,pathlib,runpy,subprocess,sys,zipfile
+    bootstrap = """import hashlib,json,os,pathlib,runpy,shutil,subprocess,sys,zipfile
 source=pathlib.Path('/input')
 request=json.loads((source/'request.json').read_bytes())
 if sys.version_info[:2] != (3,12): raise RuntimeError('Linux Python pin mismatch')
@@ -79,13 +76,14 @@ def sha(path):
   with path.open('rb') as stream: return hashlib.file_digest(stream,'sha256').hexdigest()
 if sha(source/'release.hhpkg') != request['artifact_sha256']: raise RuntimeError('Linux artifact changed')
 if sha(source/'trust.json') != request['trust_sha256']: raise RuntimeError('Linux trust changed')
+if sha(source/'wheels/wheel-lock.json') != request['wheel_lock_sha256']: raise RuntimeError('Linux wheel lock changed')
 lock=json.loads((source/'wheels/wheel-lock.json').read_bytes())
 wheels=[]
 for name,row in lock['files'].items():
   path=source/'wheels'/name
   if '/' in name or '\\\\' in name or sha(path) != row['sha256'] or path.stat().st_size != row['size']: raise RuntimeError('Linux wheel pin mismatch')
   wheels.append(str(path))
-subprocess.run([sys.executable,'-B','-m','pip','install','--no-index','--no-deps','--no-compile','--disable-pip-version-check','--target','/tmp/deps',*wheels],check=True)
+subprocess.run([sys.executable,'-B','-m','pip','install','--no-index','--no-deps','--no-cache-dir','--no-compile','--disable-pip-version-check','--target','/tmp/deps',*wheels],check=True)
 sys.path.insert(0,'/tmp/deps')
 base=pathlib.Path('/tmp/bootstrap')
 with zipfile.ZipFile(source/'release.hhpkg') as archive:
@@ -99,11 +97,29 @@ worker=base/'studio/tests/conformance/gt10pc_linux_worker.py'
 if sha(worker) != request['worker_sha256']: raise RuntimeError('Linux worker changed')
 os.environ['PYTHONDONTWRITEBYTECODE']='1'
 os.environ['PIP_NO_INDEX']='1'
-runpy.run_path(str(worker),run_name='__main__')
+os.environ['PIP_NO_CACHE_DIR']='1'
+try:
+  runpy.run_path(str(worker),run_name='__main__')
+finally:
+  # Export only raw observations, including on failure. Releases, caches and
+  # private owner state stay in Linux tmpfs and are never evidence inputs.
+  output=pathlib.Path('/output')
+  for directory,dirs,files in os.walk(output):
+    dirs[:]=[d for d in dirs if d not in ('install','project','profile-owner','godot-user') and not d.startswith('.hh-studio-addon-')]
+    for name in files:
+      path=pathlib.Path(directory)/name
+      target=pathlib.Path('/evidence')/path.relative_to(output)
+      target.parent.mkdir(parents=True,exist_ok=True)
+      shutil.copyfile(path,target)
 """
+    compile(bootstrap, "gt10pc-linux-bootstrap", "exec")
     (inputs / "bootstrap.py").write_text(bootstrap, encoding="utf-8", newline="\n")
     request = {"schema": "hh-gt10pc-linux-request-1", "trust_sha256": trust_sha256, "artifact_sha256": package["archive_sha256"], "manifest_sha256": package["manifest_sha256"], "source_closure_sha256": package["manifest"]["source_closure_sha256"], "upgrade_artifact_sha256": None if upgraded is None else upgraded["archive_sha256"], "upgrade_manifest_sha256": None if upgraded is None else upgraded["manifest_sha256"], "wheel_lock_sha256": digest_file(inputs / "wheels/wheel-lock.json"), "binary_name": lock["binary_name"], "binary_sha256": lock["binary_sha256"], "worker_sha256": worker}
     _write(inputs / "request.json", request)
+    for name in ("request.json", "bootstrap.py", "wheels/wheel-lock.json"):
+        target = output / "input" / name
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(inputs / name, target)
     name = "hh-gt10pc-linux-" + uuid.uuid4().hex
     rows, inspected, container_id, removed = {}, {}, None, False
 
@@ -128,8 +144,9 @@ runpy.run_path(str(worker),run_name='__main__')
         row, image_raw = cli(["image", "inspect", IMAGE], "image")
         images = strict_json(image_raw)
         need(_clean(row) and isinstance(images, list) and len(images) == 1 and images[0].get("Id") == IMAGE and images[0].get("Os") == "linux" and images[0].get("Architecture") == "amd64", "GT10PC_LINUX_PINNED_IMAGE_MISSING")
-        create = ["create", "--pull=never", "--name", name, "--label", "hh.gt10pc.owner=" + name, "--platform", "linux/amd64", "--read-only", "--network", "none", "--ipc", "private", "--cgroupns", "private", "--user", "65532:65532", "--cap-drop", "ALL", "--security-opt", "no-new-privileges=true", "--security-opt", "seccomp=builtin", "--memory", "1g", "--memory-swap", "1g", "--cpus", "12", "--pids-limit", "64", "--log-driver", "none", "--restart", "no", "--no-healthcheck", "--stop-timeout", "2", "--tmpfs", "/tmp:rw,nosuid,nodev,exec,size=768m,mode=1777", "--workdir", "/output", "--env", "PYTHONDONTWRITEBYTECODE=1", "--env", "PIP_NO_INDEX=1", "--env", "PIP_DISABLE_PIP_VERSION_CHECK=1"]
-        for folder, destination, readonly in ((inputs, "/input", True), (tools, "/tool", True), (raw, "/output", False)):
+        create = ["create", "--pull=never", "--name", name, "--label", "hh.gt10pc.owner=" + name, "--platform", "linux/amd64", "--read-only", "--network", "none", "--ipc", "private", "--cgroupns", "private", "--user", "65532:65532", "--cap-drop", "ALL", "--security-opt", "no-new-privileges=true", "--security-opt", "seccomp=builtin", "--memory", "1g", "--memory-swap", "1g", "--cpus", "12", "--pids-limit", "64", "--log-driver", "none", "--restart", "no", "--no-healthcheck", "--stop-timeout", "2", "--tmpfs", "/tmp:rw,nosuid,nodev,exec,size=768m,mode=1777", "--workdir", "/output", "--env", "PYTHONDONTWRITEBYTECODE=1", "--env", "PIP_NO_INDEX=1", "--env", "PIP_NO_CACHE_DIR=1", "--env", "PIP_DISABLE_PIP_VERSION_CHECK=1"]
+        create += ["--tmpfs", "/output:rw,nosuid,nodev,exec,size=512m,mode=1777"]
+        for folder, destination, readonly in ((inputs, "/input", True), (raw, "/evidence", False)):
             create += ["--mount", "type=bind,src=" + str(folder) + ",dst=" + destination + (",readonly" if readonly else "") + ",bind-propagation=rprivate"]
         create += ["--entrypoint", "/usr/local/bin/python3", IMAGE, "-B", "/input/bootstrap.py"]
         row, stdout = cli(create, "create")
@@ -140,7 +157,7 @@ runpy.run_path(str(worker),run_name='__main__')
         config = created["HostConfig"]
         need(config.get("NetworkMode") == "none" and config.get("ReadonlyRootfs") is True and config.get("CapDrop") == ["ALL"] and config.get("Privileged") is False and config.get("Memory") == 1073741824 and config.get("MemorySwap") == 1073741824 and config.get("NanoCpus") == 12000000000 and config.get("PidsLimit") == 64 and set(config.get("SecurityOpt", [])) == {"no-new-privileges=true", "seccomp=builtin"}, "GT10PC_LINUX_CONFINEMENT")
         mounts = created.get("Mounts", [])
-        need(len(mounts) == 3 and {m.get("Destination"): m.get("RW") for m in mounts} == {"/input": False, "/tool": False, "/output": True}, "GT10PC_LINUX_MOUNTS")
+        need(len(mounts) == 2 and {m.get("Destination"): m.get("RW") for m in mounts} == {"/input": False, "/evidence": True}, "GT10PC_LINUX_MOUNTS")
         row, _ = cli(["start", "--attach", container_id], "run", timeout=590)
         ended = inspect("inspect-exited")
         state = ended["State"]

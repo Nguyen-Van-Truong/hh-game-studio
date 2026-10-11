@@ -26,6 +26,7 @@ def native_phase(consumer: Path, fixture: str, phase: str, installer: ConsumerIn
     driver_out = consumer / "drivers" / phase
     driver_out.mkdir(parents=True)
     native_out = consumer / "native" / phase
+    native_out.parent.mkdir(parents=True, exist_ok=True)
     env = os.environ.copy()
     env["PYTHONPATH"] = str(installer.active_path().parent) + ":/tmp/deps"
     env["PYTHONDONTWRITEBYTECODE"] = "1"
@@ -73,7 +74,9 @@ def main() -> None:
          and package["manifest_sha256"] == request["manifest_sha256"], "Linux artifact pin mismatch")
     need(digest_file(Path(__file__)) == package["manifest"]["files"][
          "payload/studio/tests/conformance/gt10pc_linux_worker.py"]["sha256"], "Linux bootstrap worker mismatch")
-    need(digest_file(Path("/tool") / request["binary_name"]) == request["binary_sha256"], "Linux Godot pin mismatch")
+    tool_binary = Path("/tool") / request["binary_name"]
+    need(digest_file(tool_binary) == request["binary_sha256"], "Linux Godot pin mismatch")
+    need(os.access(tool_binary, os.X_OK), "Linux image Godot is not executable")
     upgrade = None
     if request.get("upgrade_artifact_sha256"):
         upgrade = verify_package(source / "upgrade.hhpkg", trusted_keys=keys, target="Linux-headless",
@@ -97,6 +100,7 @@ def main() -> None:
                     expected_state_sha256=installer.snapshot()["state_sha256"])
         manual = project / "addons/hh_studio/owner-manual-note.txt"
         manual.write_bytes(b"owner edit must survive uninstall\n")
+        manual_before = project_ledger(project)["addons/hh_studio/owner-manual-note.txt"]
         ready = project_ledger(project)
         write_json(consumer / "project-before-play.json", ready)
         phases = [native_phase(consumer, fixture, "install", installer, project, request, package)]
@@ -119,6 +123,8 @@ def main() -> None:
         after_uninstall = project_ledger(project)
         need(set(after_uninstall) == set(before) | {"addons/hh_studio/owner-manual-note.txt"},
              "Linux uninstall changed consumer files")
+        need(after_uninstall["addons/hh_studio/owner-manual-note.txt"] == manual_before,
+             "Linux uninstall changed manual edit")
         write_json(consumer / "project-after-uninstall.json", after_uninstall)
         reinstall = installer.install_addon(project, release=installed["active"], command_id="reinstall." + fixture,
                     expected_state_sha256=installer.snapshot()["state_sha256"])
@@ -136,9 +142,16 @@ def main() -> None:
             "uninstall_receipt": uninstall, "reinstall_receipt": reinstall,
             "phases": phases})
     evidence = {}
-    for path in output.rglob("*"):
-        if path.is_file() and path.name != "linux.json":
+    for fixture in FIXTURES:
+        consumer = output / "consumer" / fixture
+        for name in (*LEDGERS, "native-phases.json", "install-state.json"):
+            path = consumer / name
             evidence[path.relative_to(output).as_posix()] = digest_file(path)
+        for phase in records[FIXTURES.index(fixture)]["phases"]:
+            for domain in ("drivers", "native"):
+                for path in (consumer / domain / phase["phase"]).iterdir():
+                    if path.is_file():
+                        evidence[path.relative_to(output).as_posix()] = digest_file(path)
     write_json(output / "linux.json", {"schema": "hh-gt10pc-linux-native-2", "authority": 0, "acceptance": False,
         "mode": "DIAGNOSTIC", "system": platform.system(), "python": platform.python_version(),
         "target": "Linux-headless", "records": records, "evidence": evidence,

@@ -7,6 +7,7 @@ Keep that raw for diagnosis, but never upgrade it to schema 2 or acceptance.
 from __future__ import annotations
 
 import argparse
+import ast
 import hashlib
 import json
 import re
@@ -56,7 +57,7 @@ def _read(path: Path) -> dict:
     return doc
 
 
-def _process(base: Path, label: str, process: dict) -> str:
+def _process(base: Path, label: str, process: dict, *, ownership: str = "gated_job_kill_on_close") -> str:
     need(isinstance(process, dict) and process.get("exit_code") == 0
          and process.get("wrapper_exit_code") == 0 and process.get("tree_verified") is True
          and process.get("timed_out") is False, "GT10PC_INSTALLED_EXIT")
@@ -67,7 +68,7 @@ def _process(base: Path, label: str, process: dict) -> str:
     need(process.get("host") == label + "-host.json"
          and process.get("stdout") == label + "-stdout.txt"
          and process.get("stderr") == label + "-stderr.txt"
-         and process.get("ownership") == "gated_job_kill_on_close", "GT10PC_PROCESS_BINDING")
+         and process.get("ownership") == ownership, "GT10PC_PROCESS_BINDING")
     stdout = safe_path(base / (label + "-stdout.txt")).read_text(encoding="utf-8")
     stderr = safe_path(base / (label + "-stderr.txt")).read_bytes()
     need(not stderr and not re.search(r"(?im)\b(error|warning|orphan)\b", stdout), "GT10PC_INSTALLED_LOG")
@@ -104,10 +105,15 @@ def _lifecycle(stdout: str) -> int:
     return len(states)
 
 
-def verify_profile(receipt: dict, manifest: dict, fixture: str) -> str:
+def verify_profile(receipt: dict, manifest: dict, fixture: str, members: dict | None = None) -> str:
     profile = receipt.get("profile", {})
     files = profile.get("runtime_files")
     need(isinstance(files, dict) and files, "GT10PC_PROFILE_RUNTIME_FILES")
+    if members is not None:
+        declarations = ast.parse(members["payload/studio/godot-addon/linux_executor.py"])
+        inventories = [ast.literal_eval(node.value) for node in declarations.body if isinstance(node, ast.Assign)
+                       and any(isinstance(t, ast.Name) and t.id == "GAMEPLAY_RUNTIME_FILES" for t in node.targets)]
+        need(len(inventories) == 1 and set(files) == set(inventories[0]), "GT10PC_PROFILE_RUNTIME_INVENTORY")
     for name, digest in files.items():
         need(manifest["files"].get("payload/studio/" + name, {}).get("sha256") == digest,
              "GT10PC_PROFILE_SOURCE_BINDING")
@@ -124,6 +130,14 @@ def verify_profile(receipt: dict, manifest: dict, fixture: str) -> str:
          and descriptor.get("module_sha256") == files.get("godot-addon/gameplay_fixture_profile.py")
          and descriptor.get("project_id") == own["project_id"]
          and descriptor.get("script_enabled") is True, "GT10PC_PROFILE_DESCRIPTOR")
+    need(descriptor.get("root_type") == ("Node2D" if fixture == "gt09-arena" else "Node3D")
+         and descriptor.get("authority") == 0 and descriptor.get("public_runtime_enabled") is False,
+         "GT10PC_PROFILE_SCOPE")
+    body = {key: descriptor.get(key) for key in ("schema", "profile", "version", "authority", "project_id",
+                                                "root_type", "operations", "client_versions")}
+    expected_digest = digest_bytes(json.dumps(body, sort_keys=True, separators=(",", ":")).encode())
+    need(descriptor.get("profile_digest") == expected_digest
+         and descriptor.get("catalog_digest") == "sha256:" + expected_digest, "GT10PC_PROFILE_DIGEST")
     for hidden in (profile.get("other", {}), profile.get("default", {})):
         need(hidden.get("profiles") == [] and hidden.get("fixture_enabled") is False,
              "GT10PC_PROFILE_ISOLATION")
@@ -235,7 +249,7 @@ def _verify_native_producer(path: Path, *, trust: Path, trust_sha256: str) -> di
                  "GT10PC_INSTALLED_SOURCE_BINDING")
             expected_studio = path / "consumer" / fixture / "install/releases" / selected["manifest_sha256"] / "payload/studio"
             need(safe_path(Path(receipt.get("studio", ""))) == expected_studio, "GT10PC_INSTALLED_LOCATION")
-            observed_profile = verify_profile(receipt, selected["manifest"], fixture)
+            observed_profile = verify_profile(receipt, selected["manifest"], fixture, selected["members"])
             need(profile_digest is None or observed_profile == profile_digest, "GT10PC_PROFILE_CHANGED_ON_ROLLBACK")
             profile_digest = observed_profile
             _process(native_base, "parse", receipt.get("parse"))
