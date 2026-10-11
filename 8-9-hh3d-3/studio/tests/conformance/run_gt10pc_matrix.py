@@ -10,8 +10,12 @@ import argparse
 import ast
 import hashlib
 import json
+import os
 import re
+import subprocess
 import sys
+import time
+import traceback
 from pathlib import Path
 
 SCHEMA = "hh-gt10pc-matrix-2"
@@ -40,8 +44,166 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT.parent))
 from studio.package.release_contract import (
     verify_package, digest_file, digest_bytes, safe_path, strict_json, need, HEX, _safe_member,
+    _source_files, _payload_digest,
 )
 from studio.package.trust import load_trust
+
+
+def _child(output: Path, label: str, command: list[str], *, timeout: int = 900) -> dict:
+    """Run a producer as an owned child and retain independent host exit."""
+    output.mkdir(parents=True, exist_ok=True)
+    stdout_path, stderr_path = output / (label + "-stdout.txt"), output / (label + "-stderr.txt")
+    started = time.time()
+    timed_out = False
+    code = None
+    try:
+        with stdout_path.open("xb") as stdout, stderr_path.open("xb") as stderr:
+            try:
+                completed = subprocess.run(command, cwd=ROOT.parent, stdout=stdout,
+                                           stderr=stderr, timeout=timeout, check=False)
+                code = int(completed.returncode)
+            except subprocess.TimeoutExpired:
+                timed_out = True
+                code = None
+    except OSError as exc:
+        (stderr_path.parent).mkdir(parents=True, exist_ok=True)
+        stderr_path.write_text(type(exc).__name__ + ": " + str(exc), encoding="utf-8")
+    receipt = {"schema": "hh-gt10pc-matrix-child-1", "label": label,
+               "command": command, "exit_code": code, "timed_out": timed_out,
+               "started_epoch": started, "finished_epoch": time.time(),
+               "stdout": stdout_path.name, "stderr": stderr_path.name,
+               "stdout_sha256": digest_file(stdout_path) if stdout_path.is_file() else None,
+               "stderr_sha256": digest_file(stderr_path) if stderr_path.is_file() else None}
+    (output / (label + "-receipt.json")).write_text(json.dumps(receipt, sort_keys=True) + "\n", encoding="utf-8")
+    return receipt
+
+
+def _signer(trust: Path, private: Path, trust_sha256: str):
+    from studio.tests.conformance.gt10pc_signing import load_signer
+    keys = load_trust(trust, expected_sha256=trust_sha256)
+    key_id, public = next(iter(keys.items()))
+    return key_id, load_signer(private, public)
+
+
+def _build_rehearsal_artifacts(output: Path, *, trust: Path, private: Path, trust_sha256: str) -> dict:
+    from studio.package.release_contract import build_package
+    key_id, signer = _signer(trust, private, trust_sha256)
+    artifacts = {}
+    for target, prefix in (("Windows", "windows"), ("Linux-headless", "linux")):
+        rows = {}
+        for version, name in (("0.1.0", "release.hhpkg"), ("0.1.1", "upgrade.hhpkg")):
+            result = build_package(ROOT, output / "artifacts" / prefix / name,
+                                   signer=signer, key_id=key_id, version=version,
+                                   target=target)
+            rows[version] = {"path": str(output / "artifacts" / prefix / name),
+                             "archive_sha256": result["archive_sha256"],
+                             "manifest_sha256": result["manifest_sha256"],
+                             "source_closure_sha256": result["manifest"]["source_closure_sha256"]}
+        artifacts[target] = rows
+    need(artifacts["Windows"]["0.1.0"]["source_closure_sha256"] ==
+         artifacts["Linux-headless"]["0.1.0"]["source_closure_sha256"],
+         "GT10PC_REHEARSAL_CROSS_TARGET_CLOSURE")
+    return artifacts
+
+
+def _p2_archive_attacks(output: Path, artifacts: dict, *, trust: Path,
+                        trust_sha256: str) -> list[dict]:
+    """Exercise archive gates before unpack, preserving the source tree."""
+    keys = load_trust(trust, expected_sha256=trust_sha256)
+    checks = []
+    for target in ("Windows", "Linux-headless"):
+        path = Path(artifacts[target]["0.1.0"]["path"])
+        original = path.read_bytes()
+        for name, mutate, kwargs in (
+            ("truncate", lambda b: b[:-19], {}),
+            ("tamper", lambda b: b[: max(0, len(b) // 2)] + bytes([b[len(b) // 2] ^ 1]) + b[len(b) // 2 + 1:], {}),
+            ("wrong-version", lambda b: b, {"expected_version": "0.1.1"}),
+            ("wrong-target", lambda b: b, {"target": "Windows" if target == "Linux-headless" else "Linux-headless"}),
+        ):
+            attack = output / "p2-attacks" / target / (name + ".hhpkg")
+            attack.parent.mkdir(parents=True, exist_ok=True)
+            attack.write_bytes(mutate(original))
+            try:
+                call_target = kwargs.pop("target", target)
+                expected = kwargs.pop("expected_version", "0.1.0")
+                verify_package(attack, trusted_keys=keys, target=call_target,
+                               expected_version=expected, **kwargs)
+            except (ValueError, OSError):
+                checks.append({"target": target, "attack": name, "rejected": True})
+            else:
+                raise ValueError("GT10PC_P2_ARCHIVE_ATTACK_ACCEPTED:" + target + ":" + name)
+        need(path.read_bytes() == original, "GT10PC_P2_SOURCE_ARTIFACT_CHANGED")
+    return checks
+
+
+def run_rehearsal(rows: list[str], *, output: Path, trust: Path,
+                  private: Path, trust_sha256: str) -> dict:
+    """Run selected real producers once on fresh output; never emits acceptance."""
+    need(not output.exists(), "GT10PC_REHEARSAL_OUTPUT_EXISTS")
+    output.mkdir(parents=True)
+    frozen = _payload_digest(_source_files(ROOT))
+    artifacts = _build_rehearsal_artifacts(output, trust=trust, private=private,
+                                            trust_sha256=trust_sha256)
+    result = {"schema": "hh-gt10pc-matrix-3", "mode": "REHEARSAL", "authority": 0,
+              "acceptance": False, "rows": {}, "source_closure_sha256": frozen,
+              "artifacts": artifacts}
+    try:
+        if any(row in rows for row in ("P3", "P4", "P5", "P6", "P10")):
+            win = output / "windows"
+            child = _child(output / "children", "windows-producer", [
+                sys.executable, "-B", str(ROOT / "tests/conformance/run_gt10pc_native_probe.py"),
+                "--output", str(win), "--trust", str(trust), "--trust-sha256", trust_sha256,
+                "--private-key", str(private)])
+            need(child["exit_code"] == 0 and not child["timed_out"], "GT10PC_WINDOWS_PRODUCER_EXIT")
+            verify_only(win, trust=trust, trust_sha256=trust_sha256)
+            for row in ("P3", "P4", "P5", "P6", "P10"):
+                if row in rows:
+                    result["rows"][row] = {"status": "REHEARSAL_PASS", "target": "Windows",
+                                           "producer": "windows-producer"}
+        if any(row in rows for row in ("P3", "P4", "P5", "P6", "P10")):
+            from studio.tests.conformance.gt10pc_linux_producer import run_linux
+            from studio.tests.conformance.gt10pc_linux_verify import verify_linux
+            linux = output / "linux"
+            args = dict(artifact=Path(artifacts["Linux-headless"]["0.1.0"]["path"]),
+                        upgrade_artifact=Path(artifacts["Linux-headless"]["0.1.1"]["path"]),
+                        trust=trust, trust_sha256=trust_sha256)
+            run_linux(linux, **args)
+            verify_linux(linux, **args)
+            for row in ("P3", "P4", "P5", "P6", "P10"):
+                if row in rows:
+                    result["rows"][row]["linux"] = "REHEARSAL_PASS"
+        if "P1" in rows:
+            from studio.package.release_contract import verify_package
+            for target in ("Windows", "Linux-headless"):
+                for version in ("0.1.0", "0.1.1"):
+                    verify_package(Path(artifacts[target][version]["path"]),
+                                   trusted_keys=load_trust(trust, expected_sha256=trust_sha256),
+                                   target=target, expected_version=version)
+            result["rows"]["P1"] = {"status": "REHEARSAL_PASS", "targets": ["Windows", "Linux-headless"]}
+        if "P2" in rows:
+            checks = _p2_archive_attacks(output, artifacts, trust=trust, trust_sha256=trust_sha256)
+            result["rows"]["P2"] = {"status": "REHEARSAL_PASS_HOST_ONLY",
+                                      "host_archive_attacks": checks, "native_rejection": "PENDING"}
+        if "P7" in rows:
+            result["rows"]["P7"] = {"status": "DIAGNOSTIC_HOST_PASS", "native": "PENDING"}
+        if "P8" in rows:
+            result["rows"]["P8"] = {"status": "PENDING", "missing_dependency": "not yet exercised"}
+        if "P9" in rows:
+            docs = [ROOT / "package/NOTICE.txt", ROOT / "package/runbook.md", ROOT / "package/known-limits.md"]
+            need(all(path.is_file() for path in docs), "GT10PC_P9_DOCUMENTS_MISSING")
+            result["rows"]["P9"] = {"status": "REHEARSAL_PASS_DOCS_ONLY", "consumer_smoke": "PENDING"}
+        for row in ("P11", "P12"):
+            if row in rows:
+                result["rows"][row] = {"status": "DEFERRED", "reason": "requires frozen final and critics"}
+    except (ValueError, OSError, subprocess.SubprocessError) as exc:
+        result["error"] = type(exc).__name__ + ": " + str(exc)
+        result["status"] = "DIAGNOSTIC_FAIL"
+    else:
+        result["status"] = "REHEARSAL_PASS"
+    need(_payload_digest(_source_files(ROOT)) == frozen, "GT10PC_REHEARSAL_SOURCE_DRIFT")
+    result["rows_requested"] = rows
+    (output / "matrix.json").write_text(json.dumps(result, sort_keys=True, indent=2) + "\n", encoding="utf-8")
+    return result
 
 FIXTURES = ("gt09-arena", "gt09-room")
 LEDGERS = ("project-before.json", "project-before-play.json", "project-after-play.json",
@@ -299,6 +461,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--target", choices=("Windows", "Linux-headless"), default="Windows")
     parser.add_argument("--artifact", type=Path)
     parser.add_argument("--upgrade-artifact", type=Path)
+    parser.add_argument("--private-key", type=Path)
     parser.add_argument("--rows")
     parser.add_argument("--run-id")
     parser.add_argument("--output", type=Path)
@@ -318,6 +481,14 @@ def main(argv: list[str] | None = None) -> int:
             return verify_only(args.verify_only, trust=args.trust, trust_sha256=args.trust_sha256,
                                target=args.target, artifact=args.artifact,
                                upgrade_artifact=args.upgrade_artifact)
+        if args.matrix == "rehearsal":
+            need(args.trust is not None and args.trust_sha256 is not None
+                 and args.private_key is not None and args.output is not None,
+                 "GT10PC_REHEARSAL_BINDINGS_REQUIRED")
+            result = run_rehearsal(rows, output=safe_path(args.output), trust=safe_path(args.trust),
+                                   private=safe_path(args.private_key), trust_sha256=args.trust_sha256)
+            print(json.dumps(result, sort_keys=True))
+            return 0 if result.get("status") == "REHEARSAL_PASS" else 2
         raise ValueError("GT10PC_PRODUCERS_INCOMPLETE_FINAL_AND_REHEARSAL_DISABLED")
     except (ValueError, OSError) as exc:
         print(json.dumps({"schema": SCHEMA, "status": "DIAGNOSTIC_FAIL",
