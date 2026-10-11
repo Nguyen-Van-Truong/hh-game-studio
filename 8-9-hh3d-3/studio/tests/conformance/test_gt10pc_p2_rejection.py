@@ -2,6 +2,8 @@
 from pathlib import Path
 import tempfile
 import unittest
+import struct
+import zipfile
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 
 from studio.package.consumer_install import ConsumerInstall
@@ -10,6 +12,26 @@ from studio.tests.conformance.gt10pc_p2_native_rejection import tree_ledger
 
 
 class P2VersionBoundaryTests(unittest.TestCase):
+    def test_invalid_deflate_payload_is_a_controlled_package_rejection(self):
+        source = Path(__file__).resolve().parents[2]
+        key = Ed25519PrivateKey.generate()
+        keys = {"deflate-test": key.public_key().public_bytes_raw()}
+        from studio.package.release_contract import verify_package
+        with tempfile.TemporaryDirectory() as directory:
+            artifact = Path(directory) / "invalid-deflate.hhpkg"
+            build_package(source, artifact, signer=key.sign, key_id="deflate-test")
+            with zipfile.ZipFile(artifact) as archive:
+                member = next(i for i in archive.infolist() if i.filename.startswith("payload/") and i.file_size > 0)
+            raw = bytearray(artifact.read_bytes())
+            filename_length, extra_length = struct.unpack_from("<HH", raw, member.header_offset + 26)
+            payload_offset = member.header_offset + 30 + filename_length + extra_length
+            # Final DEFLATE block with reserved BTYPE=3. The signed manifest
+            # stays intact; decompression must fail before any unpack/stage.
+            raw[payload_offset] = 7
+            artifact.write_bytes(raw)
+            with self.assertRaisesRegex(PackageError, "package unreadable"):
+                verify_package(artifact, trusted_keys=keys)
+
     def test_wrong_version_preserves_existing_installer_root_before_unpack(self):
         source = Path(__file__).resolve().parents[2]
         key = Ed25519PrivateKey.generate()

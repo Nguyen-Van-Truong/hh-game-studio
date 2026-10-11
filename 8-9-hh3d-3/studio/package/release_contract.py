@@ -15,6 +15,7 @@ import stat
 from typing import Any, Callable, Mapping
 import uuid
 import zipfile
+import zlib
 
 from cryptography.exceptions import InvalidSignature
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PublicKey
@@ -338,7 +339,7 @@ def verify_package(path: Path, *, trusted_keys: Mapping[str, bytes], target: str
             verify_contents(manifest, members)
             return {"manifest": manifest, "manifest_sha256": digest_bytes(canonical(manifest)),
                     "archive_sha256": digest_bytes(raw), "members": members}
-    except (zipfile.BadZipFile, EOFError, OSError, RuntimeError) as exc:
+    except (zipfile.BadZipFile, zlib.error, EOFError, OSError, RuntimeError) as exc:
         raise PackageError("package unreadable") from exc
 
 

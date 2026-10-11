@@ -6,7 +6,7 @@ GT09 final -74 accepted: K1–K15, actual Scheduled Task exit0, two critics same
 GT10-PC P1–P12 remain unaccepted; no checkbox or acceptance claim is changed here.
 Current source includes immutable Ed25519 package trust, compatibility lock, WAL selector/addon recovery, raw evidence verifier, native P2 worker and task-bound rehearsal rows.
 Diagnostic Linux `gt10pc-linux-current-20261011-08` and Windows `gt10pc-win-current-20261011-09` are historical because their source closure predates the current P2/P8/P9/task changes.
-Rehearsal `gt10pc-rehearsal-20261011-r02` is authority-zero: P1 host pass; P2 host attacks only; P7 pending; P8 pending; P9 docs-only; P11/P12 deferred.
+Fresh rehearsal `gt10pc-rehearsal-20261011-r03` is authority-zero and correctly exits incomplete: P1 host pass; P8 actionable dependency/version rejects pass; P9 docs + host consumer smoke pass but native smoke pending. P2/P7/P10/P11/P12 were not requested.
 Focused validation: package/lifecycle/P2 tests pass after the compatibility-lock changes; a fresh rehearsal is required before any row is treated as current evidence.
 Remaining: native P2 Scheduled Task run, P3–P7/P9–P10 native matrix, P8/P9 current rehearsal, formal25 10×35, two final critics.
 GT08B Android deferred; full GT10 blocked; GT11 unopened. No complete-game claim.
