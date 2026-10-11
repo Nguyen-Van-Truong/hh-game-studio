@@ -11,7 +11,7 @@ Giữ một writer/file, tuần tự hóa workload đo và tiếp tục từ che
 Theo quyền audit mới nhất của owner, coordinator được dispatch hai critic
 độc lập khác model trên cùng hash; giữ nguyên report, kiểm hash trước nghiệm thu.
 Không tự ký thay critic hoặc tái dùng chữ ký hash cũ. Quyết định nghiệm thu GT-06, GT-07,
-GT-08A: mục Đã nghiệm thu của tools plan.
+GT-08A, GT-09: mục Đã nghiệm thu của tools plan.
 
 Resume đúng checkpoint; không làm lại phần đã chứng minh. Một Godot/Blender mỗi
 project path; không chạy engine hay test nặng cạnh formal/soak đang giữ khóa đo.
@@ -19,15 +19,18 @@ Giữ actual exits, source/evidence hash và raw lỗi. Không rerun test/commit
 khi source và điều kiện không đổi. Preflight/watchdog O4.1 chỉ cho formal/soak; app
 người dùng là inventory, không tự đóng. Không thay counter/status-gap/timeout của O1.
 
-Governance (plan, AGENTS.md) chỉ coordinator sửa; chi tiết run ghi vào
-studio/AUTHORING_STATUS.md (Hiện trạng ≤ 15 dòng + bảng K1–K15 + Next), sửa trong cùng commit
-mốc; giữ DSL sáu effect. GT-09 làm theo NEXT của O13 trong plan hiện hành (B7 critic theo checklist O13.9) trên ma trận K1–K15: dry-run trước run native, bằng chứng tầng D chỉ ở .local,
-một runner run_gt09_matrix.py. Final chỉ nhận source đã freeze và tự chạy mọi producer (O13.3a),
-dừng ở hàng FAIL đầu; mỗi FAIL ghi loại PRODUCT/VERIFIER/INFRA (O13.4); bản sửa kiểm bằng hàng
-đó hoặc smoke ngắn (O13.3f) và --verify-only trên raw thật trước final; playtest 15 phút chỉ
-trong final; freeze gồm cả subagent, không có writer khi final chạy; commit WIP trước run dài.
-Không lập gói hay gọi critic trước self-check O13.3; không tự tick WP; nghiệm thu GT-09 cần gói
-cuối và hai critic cùng hash. AGENTS.md ở gốc repo (Vault Fighters) không áp dụng cho tools plan.
+Governance (plan, AGENTS.md) do coordinator và reviewer owner giao ở O13 sửa, đọc HEAD trước khi
+sửa; chi tiết run ghi vào studio/AUTHORING_STATUS.md (Hiện trạng ≤ 15 dòng ≤ 160 ký tự, bảng hàng
+của gate đang mở, Next), sửa cùng commit code, không commit chỉ để ghi sổ; giữ DSL sáu effect.
+GT-09 đã nghiệm thu. GT-10-PC làm theo NEXT C1–C6 ở O13.5 trên ma trận P1–P12 (O13.8), một runner
+run_gt10pc_matrix.py, bằng chứng tầng D chỉ ở .local. Final chỉ nhận source đã freeze và tự chạy
+mọi producer (O13.3a), dừng ở hàng FAIL đầu; mỗi FAIL ghi loại PRODUCT/VERIFIER/INFRA (O13.4).
+Lỗi một bước native: reproducer gọi thẳng lệnh đó tới khi qua, rồi mới chạy hàng qua Scheduled
+Task; timeout từng producer lấy từ số đo, không trần chung; tool native chạy ở gốc ngắn trong
+ngân sách đường dẫn (O13.3g). Final dài chỉ sau diễn tập toàn ma trận và pre-review (O13.3h),
+khởi chạy buổi tối qua Scheduled Task; freeze gồm cả subagent; commit WIP trước run dài. Không
+lập gói hay gọi critic trước self-check O13.3; không tự tick WP; nghiệm thu cần gói final và hai
+critic cùng hash. AGENTS.md ở gốc repo (Vault Fighters) không áp dụng cho tools plan.
 Đọc CURRENT_VALID_WP và bảng trạng thái
 trong tools plan, không lấy số test/diagnostic làm nguồn tick.
 
