@@ -6,6 +6,7 @@ installed package runs the native launcher in a separate Python process.
 """
 from __future__ import annotations
 import argparse
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -42,7 +43,14 @@ def project_ledger(root: Path) -> dict:
             safe_path(Path(directory) / name)
         for name in files:
             path = safe_path(Path(directory) / name)
-            result[path.relative_to(root).as_posix()] = {"sha256": digest_file(path), "size": path.stat().st_size}
+            # `safe_path` has already validated this exact path.  Hash the
+            # opened file directly so every ledger walk does not repeat the
+            # full ancestor/reparse validation performed by `digest_file`.
+            # The streaming digest preserves the ledger's memory and content
+            # semantics while keeping the native producer within its bound.
+            with path.open("rb") as stream:
+                digest = hashlib.file_digest(stream, "sha256").hexdigest()
+            result[path.relative_to(root).as_posix()] = {"sha256": digest, "size": path.stat().st_size}
     return result
 
 

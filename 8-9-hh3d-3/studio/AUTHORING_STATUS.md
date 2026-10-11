@@ -9,6 +9,7 @@ Diagnostic Linux `gt10pc-linux-current-20261011-08` and Windows `gt10pc-win-curr
 Fresh rehearsal `gt10pc-rehearsal-20261011-r08` is current but authority-zero: P1/P2/P7/P8/P9 are `REHEARSAL_PASS`, with independent child receipts and a captured Scheduled Task return receipt. P7 is split into two bounded 4-case producers to respect the 600-second launcher limit; both groups pass and combine to 8/8. P10/P11/P12 remain unaccepted.
 Focused validation: package/lifecycle/P2 tests pass after the compatibility-lock changes; P7 host diagnostic 09 and native diagnostic `gt10pc-p7-native-20261011-01` are 8/8; r08 is the current scheduled rehearsal. P9 now has an archive-backed native consumer producer/verifier, and P7 native producer is protected from stale pending overwrite. P10's installed-artifact producer/verifier is now integrated, but its focused runs remain diagnostic and must be reminted after the source freeze.
 Fresh whole-matrix `gt10pc-rehearsal-20261011-r11` ended with actual Scheduled Task exit 2: P1–P6 passed, P2 native passed, and P7 producer A passed 4/4; producer B timed out at the shared 600-second child bound during its fourth native case, so P7–P10 were not accepted or run. Raw evidence is retained and the task was deleted only after idle/exit receipt. P7 remains an eight-case contract; its rehearsal is now split 3+3+2 to keep each producer bounded without weakening any case deadline.
+Fresh whole-matrix `gt10pc-rehearsal-20261011-r12` ended with actual Scheduled Task exit 2: all six Windows driver/Godot host receipts reached exit 0, but the aggregate producer timed out at the shared 600-second child bound before writing `producer.json`; therefore no new P1–P6 rows were emitted. Raw evidence is retained and the task was deleted only after idle/exit receipt. `project_ledger()` now hashes already-validated paths with streaming `hashlib.file_digest` to remove duplicate ancestor validation while preserving every ledger check; a new run ID is required after this source change.
 Remaining: fresh native P1–P10 rehearsal from one frozen source, then formal25 10×35 and two final critics. No row is accepted or ticked by this status file.
 GT08B Android deferred; full GT10 blocked; GT11 unopened. No complete-game claim.
 
@@ -102,3 +103,7 @@ Final is explicitly disabled until all row producers and raw verifiers are compl
   No leftover process remained and the worker receipts are retained. The producer is partitioned
   into first/second/third groups of 3/3/2; all eight cases and their exact native checks remain
   required, and each child stays within the existing 600-second launcher contract.
+- GT10PC INFRA 11-10: r12 reached exit 0 for all six Windows lifecycle drivers and Godot
+  processes, then timed out only while finalizing the sequential producer before its manifest.
+  This is a producer wall-clock issue, not a product PASS or acceptance. Hash only after the
+  existing `safe_path()` validation and keep the 600-second bound; never raise the launcher cap.
