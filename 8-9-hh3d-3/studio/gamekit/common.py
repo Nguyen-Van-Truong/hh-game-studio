@@ -16,6 +16,7 @@ import os
 import re
 import secrets
 import shutil
+import stat
 import subprocess
 import sys
 import time
@@ -184,31 +185,39 @@ def is_within(child: Path, parent: Path) -> bool:
         return False
 
 
+_REPARSE_POINT = getattr(stat, "FILE_ATTRIBUTE_REPARSE_POINT", 0x400)
+
+
+def _is_junction(path: Path) -> bool:
+    """True when ``path`` is a symlink or junction, even if the target is missing.
+
+    ``os.lstat`` does not follow the last component. A missing entry is not a link.
+    """
+    try:
+        st = os.lstat(path)
+    except OSError:
+        return False
+    if stat.S_ISLNK(st.st_mode):
+        return True
+    return bool(getattr(st, "st_file_attributes", 0) & _REPARSE_POINT)
+
+
 def _has_reparse_point(path: Path, stop: Path | None = None) -> bool:
-    """True if ``path`` or one of its parents (down to ``stop``) is a symlink or junction."""
+    """True if ``path`` or one of its parents (down to ``stop``) is a symlink or junction.
+
+    Every component is tested with ``lstat``, so a dangling junction still counts.
+    """
     current = Path(os.path.abspath(str(path)))
     stop_norm = _norm(stop) if stop else None
     while True:
-        if current.exists() or current.is_symlink():
-            if current.is_symlink() or _is_junction(current):
-                return True
+        if _is_junction(current):
+            return True
         if stop_norm and _norm(current) == stop_norm:
             return False
         parent = current.parent
         if parent == current:
             return False
         current = parent
-
-
-def _is_junction(path: Path) -> bool:
-    is_junction = getattr(os.path, "isjunction", None)
-    if is_junction is not None:
-        return bool(is_junction(path))
-    try:
-        st = os.lstat(path)
-    except OSError:
-        return False
-    return bool(getattr(st, "st_file_attributes", 0) & 0x400)
 
 
 def forbidden_reason(path: Path) -> str | None:
@@ -230,11 +239,11 @@ def refuse_unsafe_host_path(
 ) -> Path:
     """Return a resolved host path, or raise ``FORBIDDEN_PATH``.
 
-    The path and every existing ancestor must be a real directory entry: a symlink or
-    junction is refused before ``resolve`` can follow it. The resolved path must not be
-    named ``private.raw`` and must not lie under ``studio/.local``. When
-    ``must_be_outside_project`` is set, it also must not lie inside ``project.root``
-    (resolved paths, case-insensitive on Windows).
+    The path and every ancestor are tested with ``lstat`` (no follow). A symlink or
+    junction is refused even when its target is missing, before ``resolve`` can follow
+    it. The resolved path must not be named ``private.raw`` and must not lie under
+    ``studio/.local``. When ``must_be_outside_project`` is set, it also must not lie
+    inside ``project.root`` (resolved paths, case-insensitive on Windows).
     """
     if must_be_outside_project and project is None:
         raise GamekitError("BAD_REQUEST", f"{what} requires a project")

@@ -57,8 +57,8 @@ def parse_expect_color(spec: str) -> tuple[int, int, tuple[int, int, int], int]:
     return x, y, rgb, tol
 
 
-def _load(path: str | Path) -> pngio.Image:
-    file = Path(path)
+def _load(path: str | Path, *, what: str = "png") -> pngio.Image:
+    file = C.refuse_unsafe_host_path(Path(path), what=what)
     if not file.is_file():
         raise C.GamekitError("NOT_FOUND", f"png not found: {file}")
     size = file.stat().st_size
@@ -273,7 +273,7 @@ def compare_files(
 
 
 def blank_file(path: str | Path, expect_color: list[str] | None = None) -> dict[str, Any]:
-    image = _load(path)
+    image = _load(path, what="--blank")
     info = blank(image)
     colors = check_colors(image, list(expect_color or []))
     color_ok = all(row["ok"] for row in colors) if colors else True

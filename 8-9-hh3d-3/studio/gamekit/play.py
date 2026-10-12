@@ -235,8 +235,14 @@ def play(
     return _finish(played, out, project)
 
 
+def _load_trace(path: str) -> Any:
+    """Read ``--trace`` after refusing junctions, ``studio/.local``, and ``private.raw``."""
+    safe = C.refuse_unsafe_host_path(Path(path), what="--trace")
+    return C.read_json(safe)
+
+
 def _cmd_play(args: argparse.Namespace) -> dict[str, Any]:
-    trace = C.read_json(Path(args.trace)) if args.trace else None
+    trace = _load_trace(args.trace) if args.trace else None
     return play(
         C.get_project(args.project),
         scene=args.scene,

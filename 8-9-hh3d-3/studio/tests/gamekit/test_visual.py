@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import os
 import struct
+import subprocess
 import tempfile
 import unittest
 import zlib
@@ -301,6 +302,80 @@ class ShotHostTest(unittest.TestCase):
                 )
             self.assertEqual(conflict.exception.code, "CONFLICT")
         self.assertFalse(out.exists())
+
+    def test_load_trace_refuses_live_junction_into_patched_local_and_private_raw(self) -> None:
+        if os.name != "nt":
+            self.skipTest("Windows junction checks")
+        studio = self.root / "fakestudio"
+        local = studio / ".local"
+        local.mkdir(parents=True)
+        (local / "trace.json").write_text(
+            '{"fps":60,"events":[{"frame":0,"action":"junctionread","pressed":true}]}',
+            encoding="utf-8",
+        )
+        link = self.root / "link-local"
+        subprocess.run(
+            ["cmd", "/c", "mklink", "/J", str(link), str(local)],
+            check=True,
+            capture_output=True,
+        )
+        try:
+            with mock.patch.object(C, "STUDIO_DIR", studio):
+                with self.assertRaises(C.GamekitError) as via_link:
+                    shot._load_trace(str(link / "trace.json"))
+                self.assertEqual(via_link.exception.code, "FORBIDDEN_PATH")
+                with self.assertRaises(C.GamekitError) as direct:
+                    shot._load_trace(str(local / "trace.json"))
+                self.assertEqual(direct.exception.code, "FORBIDDEN_PATH")
+            named = self.root / "elsewhere" / "private.raw"
+            named.parent.mkdir()
+            with self.assertRaises(C.GamekitError) as raw:
+                shot._load_trace(str(named))
+            self.assertEqual(raw.exception.code, "FORBIDDEN_PATH")
+            self.assertFalse(named.exists())
+        finally:
+            if os.path.lexists(link):
+                os.rmdir(link)
+
+    def test_baseline_readback_mismatch_restores_previous_bytes(self) -> None:
+        image = pngio.Image(1, 1, "RGB", bytes([1, 2, 3]))
+        png_bytes = pngio.encode(image)
+        res = "res://tests/visual/stage.png"
+        path = self.project.res_to_path(res)
+        path.parent.mkdir(parents=True)
+        previous = b"OLD-BASELINE"
+        path.write_bytes(previous)
+        receipt: dict[str, object] = {}
+
+        def mismatch(_path: Path, **_kwargs: object) -> dict[str, object]:
+            return {"sha256": "0" * 64, "width": 1, "height": 1}
+
+        with mock.patch.object(shot, "_fresh_png_readback", mismatch):
+            with self.assertRaises(C.GamekitError) as cm:
+                shot._commit_baseline(
+                    self.project, "w5.base.bad", "c" * 64, res, png_bytes, image, receipt,
+                )
+        self.assertEqual(cm.exception.code, "READBACK_MISMATCH")
+        self.assertEqual(path.read_bytes(), previous)
+        self.assertIsNone(C.Journal(self.project).find("w5.base.bad"))
+
+    def test_baseline_fresh_process_readback_commits(self) -> None:
+        image = pngio.Image(1, 1, "RGB", bytes([9, 8, 7]))
+        png_bytes = pngio.encode(image)
+        res = "res://tests/visual/ok.png"
+        path = self.project.res_to_path(res)
+        path.parent.mkdir(parents=True)
+        previous = b"PREVIOUS-BYTES"
+        path.write_bytes(previous)
+        receipt: dict[str, object] = {}
+        got = shot._commit_baseline(
+            self.project, "w5.base.ok", "d" * 64, res, png_bytes, image, receipt,
+        )
+        self.assertEqual(got["readback"], "FRESH_PROCESS_SHA256_PNG")
+        self.assertEqual(got["after_sha256"], C.sha256_bytes(png_bytes))
+        self.assertEqual(path.read_bytes(), png_bytes)
+        self.assertEqual(pngio.read(path).width, 1)
+        self.assertEqual(pngio.read(path).height, 1)
 
 
 if __name__ == "__main__":

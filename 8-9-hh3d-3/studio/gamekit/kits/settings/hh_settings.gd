@@ -1,6 +1,6 @@
-# HH gamekit kit settings v1 - MIT License
+# HH gamekit kit settings v1 - self-made (HH Studio)
 extends Node
-## Bus volumes, window, and locale persisted in user://settings.cfg (MIT).
+## Bus volumes, window, and locale persisted in user://settings.cfg.
 
 signal changed(key: String)
 

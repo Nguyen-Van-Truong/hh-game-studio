@@ -5,15 +5,19 @@ framebuffer). ``--out`` is an absolute png outside the project. ``--baseline``
 either copies that png into the project (missing file or ``--update-baseline``,
 status BASELINE_WRITTEN, ``--command-id`` required) or compares it with vcheck
 (PASS / FAIL). A baseline write follows the mutating contract: journal, lock,
-editor check, checkpoint, atomic replace, byte readback.
+editor check, checkpoint, atomic replace, then a fresh process
+reports the file sha256 and PNG width/height.
 """
 
 from __future__ import annotations
 
 import argparse
+import json
 import math
 import os
 import re
+import subprocess
+import sys
 from pathlib import Path
 from typing import Any
 
@@ -127,14 +131,7 @@ def validate_trace(data: Any) -> dict[str, Any]:
 
 
 def _load_trace(path: str) -> dict[str, Any]:
-    file = Path(path)
-    if not file.is_absolute():
-        file = Path.cwd() / file
-    file = Path(os.path.abspath(str(file)))
-    if file.name.lower() == "private.raw":
-        raise C.GamekitError("FORBIDDEN_PATH", "refusing private.raw")
-    if C.is_within(file, C.STUDIO_DIR / ".local"):
-        raise C.GamekitError("FORBIDDEN_PATH", "refusing studio/.local")
+    file = C.refuse_unsafe_host_path(Path(path), what="--trace")
     reason = C.forbidden_reason(file)
     if reason:
         raise C.GamekitError("FORBIDDEN_PATH", reason)
@@ -292,6 +289,51 @@ def _decode_capture(path: Path, reported_w: int, reported_h: int) -> tuple[bytes
     return data, image
 
 
+_FRESH_READBACK_TIMEOUT = 20.0
+_FRESH_PNG_SCRIPT = """\
+import hashlib, json, struct, sys
+from pathlib import Path
+data = Path(sys.argv[1]).read_bytes()
+if len(data) < 24 or data[:8] != bytes([137, 80, 78, 71, 13, 10, 26, 10]):
+    raise SystemExit(2)
+length = struct.unpack(">I", data[8:12])[0]
+if length != 13 or data[12:16] != b"IHDR":
+    raise SystemExit(2)
+width, height = struct.unpack(">II", data[16:24])
+if width < 1 or height < 1:
+    raise SystemExit(2)
+json.dump({"sha256": hashlib.sha256(data).hexdigest(), "width": width, "height": height}, sys.stdout)
+"""
+
+
+def _fresh_png_readback(path: Path, *, timeout: float = _FRESH_READBACK_TIMEOUT) -> dict[str, Any]:
+    """Sha256 and PNG size from a new interpreter. Fail closed; do not echo file bytes."""
+    try:
+        completed = subprocess.run(
+            [sys.executable, "-B", "-c", _FRESH_PNG_SCRIPT, os.path.abspath(str(path))],
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+            timeout=timeout,
+            check=False,
+            stdin=subprocess.DEVNULL,
+        )
+    except subprocess.TimeoutExpired as exc:
+        raise C.GamekitError("READBACK_MISMATCH", "baseline readback timed out") from exc
+    except OSError as exc:
+        raise C.GamekitError("READBACK_MISMATCH", "baseline readback could not start") from exc
+    if completed.returncode != 0 or not (completed.stdout or "").strip():
+        raise C.GamekitError("READBACK_MISMATCH", "baseline readback process failed")
+    try:
+        payload = json.loads(completed.stdout)
+    except json.JSONDecodeError as exc:
+        raise C.GamekitError("READBACK_MISMATCH", "baseline readback was not JSON") from exc
+    if not isinstance(payload, dict):
+        raise C.GamekitError("READBACK_MISMATCH", "baseline readback was not an object")
+    return payload
+
+
 def _commit_baseline(
     project: C.Project,
     command_id: str,
@@ -307,20 +349,26 @@ def _commit_baseline(
     receipt["before_sha256"] = C.sha256_bytes(before) if before is not None else None
     receipt["status"] = "BASELINE_WRITTEN"
     receipt["ok"] = True
-    receipt["readback"] = "BYTES_AND_PNG_DECODE"
+    receipt["readback"] = "FRESH_PROCESS_SHA256_PNG"
     C.checkpoint(project, command_id, [path])
     try:
         C.atomic_write_bytes(path, png_bytes)
-        written = path.read_bytes()
-        if written != png_bytes:
-            raise C.GamekitError("READBACK_MISMATCH", "baseline bytes differ after write")
-        try:
-            back = pngio.decode(written)
-        except pngio.PngError as exc:
-            raise C.GamekitError("READBACK_MISMATCH", f"baseline png does not decode: {exc}") from exc
-        if (back.width, back.height, back.mode, back.pixels) != (image.width, image.height, image.mode, image.pixels):
-            raise C.GamekitError("READBACK_MISMATCH", "baseline pixels differ after write")
-        receipt["after_sha256"] = C.sha256_bytes(written)
+        fresh = _fresh_png_readback(path)
+        sha = fresh.get("sha256")
+        width = fresh.get("width")
+        height = fresh.get("height")
+        if (
+            not isinstance(sha, str)
+            or sha != C.sha256_bytes(png_bytes)
+            or isinstance(width, bool)
+            or isinstance(height, bool)
+            or not isinstance(width, int)
+            or not isinstance(height, int)
+            or width != image.width
+            or height != image.height
+        ):
+            raise C.GamekitError("READBACK_MISMATCH", "baseline fresh-process sha256 or png size does not match")
+        receipt["after_sha256"] = sha
         C.Journal(project).append(command_id, request_digest, receipt)
     except Exception:
         try:

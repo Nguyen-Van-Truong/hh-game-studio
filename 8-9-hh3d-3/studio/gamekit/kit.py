@@ -39,7 +39,7 @@ AUDIO_BUSES: list[dict[str, str]] = [
 
 
 def license_line(name: str) -> str:
-    return f"# HH gamekit kit {name} v1 - MIT License"
+    return f"# HH gamekit kit {name} v1 - self-made (HH Studio)"
 
 
 def dest_res(kit_name: str, rel: str) -> str:
@@ -145,12 +145,15 @@ def validate_manifest(data: Any, directory: Path, *, folder_name: str | None = N
             raise C.GamekitError("VALIDATION_FAILED", f"bad required kit name {req!r}")
         if req == name:
             raise C.GamekitError("VALIDATION_FAILED", "a kit cannot require itself")
+    from . import asset as asset_mod
+    asset_mod.check_license("self-made", "HH Studio")
     return {
         "name": name,
         "version": version,
         "files": list(files),
         "autoloads": normalized,
         "requires": list(requires),
+        "license": "self-made",
     }
 
 
@@ -566,6 +569,7 @@ def _commit_add(
         "project": project.project_id,
         "kit": kit["name"],
         "version": kit["version"],
+        "license": "self-made",
         "files": [item["res"] for item in plan["files"]],
         "autoloads": plan["autoloads"],
         "replaced": bool(replace),

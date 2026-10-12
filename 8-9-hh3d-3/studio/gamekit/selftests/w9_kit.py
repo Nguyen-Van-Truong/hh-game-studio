@@ -418,8 +418,12 @@ def run(ctx: Ctx) -> None:
 
 
 def _body(ctx: Ctx, project: C.Project, name: str) -> None:
-    names = {kit["name"] for kit in K.list_kits()}
-    ctx.check("list has the five kits", names == {"save", "settings", "rebind", "pause", "audio"})
+    rows = K.list_kits()
+    names = {kit["name"] for kit in rows}
+    ctx.check(
+        "list has the five kits",
+        names == {"save", "settings", "rebind", "pause", "audio"} and all(kit.get("license") == "self-made" for kit in rows),
+    )
     commands = [
         ("save", "w9.add.save"),
         ("settings", "w9.add.settings"),
@@ -431,8 +435,10 @@ def _body(ctx: Ctx, project: C.Project, name: str) -> None:
         receipt = ctx.guard(f"add {kit_name}", lambda kit_name=kit_name, command_id=command_id: K.add_kit(project, kit_name, command_id))
         ctx.check(
             f"{kit_name} committed",
-            isinstance(receipt, dict) and receipt.get("status") == "COMMITTED" and receipt.get("readback") == "FRESH_PROCESS_MATCH",
+            isinstance(receipt, dict) and receipt.get("status") == "COMMITTED" and receipt.get("readback") == "FRESH_PROCESS_MATCH"
+            and receipt.get("license") == "self-made",
             status=None if not isinstance(receipt, dict) else receipt.get("status"),
+            license=None if not isinstance(receipt, dict) else receipt.get("license"),
         )
     expected = [
         "res://addons/hh_kits/save/hh_save.gd",

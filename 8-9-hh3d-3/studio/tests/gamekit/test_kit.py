@@ -62,10 +62,13 @@ class ManifestTest(unittest.TestCase):
         for kit in kits:
             self.assertEqual(kit["version"], "1")
             self.assertEqual(kit["requires"], [])
+            self.assertEqual(kit["license"], "self-made")
             for rel in kit["files"]:
                 text = (K.KITS_DIR / kit["name"] / rel).read_text(encoding="utf-8")
                 if rel.endswith(".gd"):
                     self.assertTrue(text.startswith(K.license_line(kit["name"]) + "\n") or text.startswith(K.license_line(kit["name"]) + "\r\n"))
+                    self.assertNotIn("MIT License", text)
+                    self.assertNotIn("(MIT)", text)
                 if rel.endswith(".tscn"):
                     self.assertTrue(text.startswith("[gd_scene"))
                     self.assertIn(f"res://addons/hh_kits/{kit['name']}/", text)
@@ -97,6 +100,11 @@ class ManifestTest(unittest.TestCase):
             reject({**good, "autoloads": {"HHSave": "*res://addons/hh_kits/bad/a.gd"}})
             script.write_text("extends Node\n", encoding="utf-8")
             reject(good)
+            script.write_text("# HH gamekit kit bad v1 - MIT License\nextends Node\n", encoding="utf-8")
+            with self.assertRaises(C.GamekitError) as mit:
+                K.validate_manifest(good, folder, folder_name="bad")
+            self.assertEqual(mit.exception.code, "VALIDATION_FAILED")
+            self.assertIn("self-made (HH Studio)", mit.exception.detail)
         finally:
             script = folder / "a.gd"
             if script.exists():
@@ -111,6 +119,8 @@ class ManifestTest(unittest.TestCase):
         payload = json.loads(buf.getvalue())
         self.assertTrue(payload["ok"])
         self.assertIn("save", [kit["name"] for kit in payload["kits"]])
+        self.assertTrue(payload["kits"])
+        self.assertTrue(all(kit.get("license") == "self-made" for kit in payload["kits"]))
         parser = hh.build_parser()
         args = parser.parse_args(["kit", "add", "game", "save", "--command-id", "cmd.kit.1", "--replace", "--allow-open-editor"])
         self.assertEqual(args.kit, "save")

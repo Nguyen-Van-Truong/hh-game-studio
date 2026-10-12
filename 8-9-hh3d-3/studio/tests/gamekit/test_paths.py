@@ -11,13 +11,16 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+from types import SimpleNamespace
 from unittest import mock
 
 from studio.gamekit import asset as A
 from studio.gamekit import blender_recipe as B
 from studio.gamekit import common as C
+from studio.gamekit import inputmap as IM
 from studio.gamekit import perf as P
 from studio.gamekit import play as Play
+from studio.gamekit import scene as Scene
 from studio.gamekit import shot
 from studio.gamekit import vcheck
 
@@ -63,10 +66,18 @@ class PathSafetyTests(unittest.TestCase):
         self._old_state = os.environ.get("HH_GAMEKIT_STATE")
         os.environ["HH_GAMEKIT_STATE"] = str(self.root / "state")
 
+    def _make_dangling(self, link: Path, target: Path) -> None:
+        target.mkdir()
+        _make_junction(link, target)
+        self._junctions.append(link)
+        shutil.rmtree(target)
+
     def tearDown(self) -> None:
         for link in getattr(self, "_junctions", []):
-            if link.exists() or link.is_symlink():
+            try:
                 os.rmdir(link)
+            except OSError:
+                pass
         if hasattr(self, "_old_state"):
             if self._old_state is None:
                 os.environ.pop("HH_GAMEKIT_STATE", None)
@@ -158,6 +169,11 @@ class PathSafetyTests(unittest.TestCase):
         with self.assertRaises(runner.RecipeFailure):
             json.loads('{"size": -Infinity}', parse_constant=runner._reject_non_finite)
         self.assertEqual(json.loads('{"size": 1}', parse_constant=runner._reject_non_finite), {"size": 1})
+        with self.assertRaises(runner.RecipeFailure):
+            json.loads('{"size": 1e309}', parse_float=runner._parse_float)
+        with self.assertRaises(runner.RecipeFailure):
+            runner._parse_float("1e309")
+        self.assertEqual(runner._parse_float("1.25"), 1.25)
 
     def test_output_helpers_refuse_junction_and_keep_inside_code(self) -> None:
         project = C.Project("game", self.target)
@@ -180,6 +196,100 @@ class PathSafetyTests(unittest.TestCase):
         self.assertEqual(perf_cm.exception.code, "FORBIDDEN_PATH")
         accepted = P._outside_project(project, self.root / "report.json")
         self.assertFalse(C.is_within(accepted, self.target))
+
+    def test_dangling_junction_is_refused_and_creates_nothing(self) -> None:
+        link, target = self.root / "dangling", self.root / "dangling-target"
+        self._make_dangling(link, target)
+        self.assertFalse(link.exists())
+        self.assertTrue(C._is_junction(link))
+        with self.assertRaises(C.GamekitError) as direct:
+            C.refuse_unsafe_host_path(link, what="probe")
+        self.assertEqual(direct.exception.code, "FORBIDDEN_PATH")
+        with self.assertRaises(C.GamekitError) as child:
+            C.refuse_unsafe_host_path(link / "secret.txt", what="probe")
+        self.assertEqual(child.exception.code, "FORBIDDEN_PATH")
+        project = C.Project("game", self.target)
+        with self.assertRaises(C.GamekitError) as play_cm:
+            Play._checked_out(project, str(link / "play-out.json"))
+        self.assertEqual(play_cm.exception.code, "FORBIDDEN_PATH")
+        with self.assertRaises(C.GamekitError) as prep:
+            B._prepare_out_dir(link)
+        self.assertEqual(prep.exception.code, "FORBIDDEN_PATH")
+        with self.assertRaises(C.GamekitError):
+            B._prepare_out_dir(link / "nested-out")
+        runner = _load_runner()
+        with self.assertRaises(runner.RecipeFailure):
+            runner._out_file(link, "crate.glb")
+        with self.assertRaises(runner.RecipeFailure):
+            runner._out_file(link / "sub", "crate.glb")
+        self.assertFalse(target.exists())
+        self.assertFalse((target / "play-out.json").exists())
+        self.assertFalse((target / "crate.glb").exists())
+        self.assertFalse((target / "nested-out").exists())
+        game = self.root / "proj"
+        game.mkdir()
+        (game / "project.godot").write_text("config_version=5\n", encoding="utf-8")
+        inside = game / "addons"
+        inside_target = self.root / "addons-target"
+        self._make_dangling(inside, inside_target)
+        with self.assertRaises(C.GamekitError) as res_cm:
+            C.Project("proj", game).res_to_path("res://addons/plugin.gd")
+        self.assertEqual(res_cm.exception.code, "FORBIDDEN_PATH")
+        self.assertFalse(inside_target.exists())
+
+    def test_readers_refuse_local_junction_and_private_raw(self) -> None:
+        studio = self.root / "fakestudio"
+        local = studio / ".local"
+        local.mkdir(parents=True)
+        trace = {"fps": 60, "events": [{"frame": 0, "action": "junctionread", "pressed": True}]}
+        (local / "trace.json").write_text(json.dumps(trace), encoding="utf-8")
+        (local / "budget.json").write_text('{"frame_ms_p95": 1.0}\n', encoding="utf-8")
+        recipe = {"schema": B.SCHEMA, "name": "x", "steps": [{"op": "clear"}]}
+        (local / "recipe.json").write_text(json.dumps(recipe), encoding="utf-8")
+        (local / "ops.json").write_text("[]\n", encoding="utf-8")
+        (local / "actions.json").write_text('{"move": {"events": []}}\n', encoding="utf-8")
+        link = self.root / "via-local"
+        _make_junction(link, local)
+        self._junctions.append(link)
+        readers = (
+            ("trace", lambda path: P.load_trace(path)),
+            ("budget", lambda path: P.load_budget(path)),
+            ("recipe", lambda path: B.load_recipe(path)),
+            ("play", lambda path: Play._load_trace(str(path))),
+            ("ops", lambda path: Scene._load_ops(str(path))),
+            ("actions", lambda path: IM._load_actions(str(path))),
+            ("png", lambda path: vcheck._load(path, what="png")),
+            ("blank", lambda path: vcheck._load(path, what="--blank")),
+        )
+        names = {
+            "trace": "trace.json",
+            "budget": "budget.json",
+            "recipe": "recipe.json",
+            "play": "trace.json",
+            "ops": "ops.json",
+            "actions": "actions.json",
+            "png": "trace.json",
+            "blank": "trace.json",
+        }
+        with mock.patch.object(C, "STUDIO_DIR", studio):
+            for label, call in readers:
+                with self.subTest(label):
+                    with self.assertRaises(C.GamekitError) as cm:
+                        call(link / names[label])
+                    self.assertEqual(cm.exception.code, "FORBIDDEN_PATH")
+            missing = self.root / "private.raw"
+            for label, call in readers:
+                with self.subTest(label + "-name"):
+                    with self.assertRaises(C.GamekitError) as cm:
+                        call(missing)
+                    self.assertEqual(cm.exception.code, "FORBIDDEN_PATH")
+            with self.assertRaises(C.GamekitError) as cli:
+                Play._cmd_play(SimpleNamespace(trace=str(missing)))
+            self.assertEqual(cli.exception.code, "FORBIDDEN_PATH")
+            self.assertFalse(missing.exists())
+        plain = self.root / "ok-trace.json"
+        plain.write_text(json.dumps(trace), encoding="utf-8")
+        self.assertEqual(P.load_trace(plain)["events"][0]["action"], "junctionread")
 
     def test_editor_check_fails_closed_and_allows_no_editor(self) -> None:
         project = C.Project("game", self.target)

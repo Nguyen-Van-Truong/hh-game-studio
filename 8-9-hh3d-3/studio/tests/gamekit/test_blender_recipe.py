@@ -184,6 +184,22 @@ class RecipeValidationTest(unittest.TestCase):
                 B.run_recipe(nan, self.dir / "out")
             self.assertEqual(caught.exception.code, "BAD_REQUEST")
             self.assertEqual(called, [])
+            overflow = self.dir / "overflow.json"
+            overflow.write_text(
+                '{"schema":"hh-blender-recipe-1","name":"bad","steps":[{"op":"primitive","type":"cube","name":"Box","size":1e309}]}',
+                encoding="utf-8",
+            )
+            with self.assertRaises(ValueError):
+                B._parse_float("1e309")
+            self.assertEqual(B._parse_float("1.25"), 1.25)
+            with self.assertRaises(C.GamekitError) as caught:
+                B.load_recipe(overflow)
+            self.assertEqual(caught.exception.code, "BAD_REQUEST")
+            self.assertIn("non-finite", caught.exception.detail)
+            finite = self.dir / "finite.json"
+            finite.write_text(json.dumps(_recipe([{"op": "primitive", "type": "cube", "name": "Box", "size": 1.5}])), encoding="utf-8")
+            _loaded, data = B.load_recipe(finite)
+            self.assertEqual(data["steps"][0]["size"], 1.5)
         finally:
             C.run_blender = original
 

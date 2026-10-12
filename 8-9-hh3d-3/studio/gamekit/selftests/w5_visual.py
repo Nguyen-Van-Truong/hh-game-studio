@@ -147,8 +147,10 @@ def run(ctx: Ctx) -> None:
     wrote = ctx.guard("baseline write", lambda: shot.capture(project, out, command_id="w5.base.1", **common))
     if not ctx.check(
         "baseline written",
-        isinstance(wrote, dict) and wrote.get("ok") is True and wrote.get("status") == "BASELINE_WRITTEN",
+        isinstance(wrote, dict) and wrote.get("ok") is True and wrote.get("status") == "BASELINE_WRITTEN"
+        and wrote.get("readback") == "FRESH_PROCESS_SHA256_PNG",
         status=None if not isinstance(wrote, dict) else wrote.get("status"),
+        readback=None if not isinstance(wrote, dict) else wrote.get("readback"),
         blank=None if not isinstance(wrote, dict) else wrote.get("blank"),
         size=None if not isinstance(wrote, dict) else wrote.get("size"),
         errors=None if not isinstance(wrote, dict) else wrote.get("process", {}).get("errors", [])[:8],

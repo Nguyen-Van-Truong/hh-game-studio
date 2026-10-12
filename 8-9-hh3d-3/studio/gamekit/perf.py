@@ -105,7 +105,8 @@ def merge_budget(override: dict[str, Any] | None = None, base: dict[str, float] 
 def load_budget(path: Path | None) -> dict[str, float]:
     if path is None:
         return default_budget()
-    raw = C.read_json(Path(path))
+    safe = C.refuse_unsafe_host_path(Path(path), what="--budget")
+    raw = C.read_json(safe)
     if not isinstance(raw, dict):
         raise C.GamekitError("BAD_REQUEST", "budget file must be a JSON object")
     return merge_budget(raw)
@@ -123,7 +124,8 @@ def _budget_number(key: str, value: Any, *, corrupt: bool) -> float:
 
 def load_trace(path: Path) -> dict[str, Any]:
     """Validate ``{"fps": 60, "events": [{"frame": 0, "action": "x", "pressed": true}]}``."""
-    data = C.read_json(Path(path))
+    safe = C.refuse_unsafe_host_path(Path(path), what="--trace")
+    data = C.read_json(safe)
     if not isinstance(data, dict):
         raise C.GamekitError("BAD_REQUEST", "trace must be a JSON object")
     fps = data.get("fps")

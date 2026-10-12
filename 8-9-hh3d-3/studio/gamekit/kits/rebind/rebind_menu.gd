@@ -1,6 +1,6 @@
-# HH gamekit kit rebind v1 - MIT License
+# HH gamekit kit rebind v1 - self-made (HH Studio)
 extends Control
-## Lists InputMap actions. Each button captures the next key or joypad event (MIT).
+## Lists InputMap actions. Each button captures the next key or joypad event.
 
 var _listening: String = ""
 var _buttons: Dictionary = {}

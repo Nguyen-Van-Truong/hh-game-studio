@@ -8,6 +8,7 @@ re-hashes every listed output and only then returns ok.
 from __future__ import annotations
 
 import argparse
+import json
 import math
 import os
 import re
@@ -510,16 +511,42 @@ def validate_recipe(data: Any, recipe_dir: Path) -> dict[str, Any]:
     return data
 
 
+def _reject_constant(name: str) -> Any:
+    raise ValueError(f"non-finite number {name} is not allowed")
+
+
+def _parse_float(text: str) -> float:
+    """Reject overflow such as ``1e309``. ``parse_constant`` never sees those strings."""
+    number = float(text)
+    if not math.isfinite(number):
+        raise ValueError(f"non-finite number {text} is not allowed")
+    return number
+
+
+def _read_recipe_json(path: Path) -> Any:
+    """Parse one recipe file. ``C.read_json`` stays unchanged for every other caller."""
+    if not path.is_file():
+        raise C.GamekitError("NOT_FOUND", f"json file missing: {path}")
+    size = path.stat().st_size
+    if size > C.MAX_JSON_BYTES:
+        raise C.GamekitError("BAD_REQUEST", f"json file too large ({size} bytes): {path}")
+    try:
+        return json.loads(
+            path.read_bytes().decode("utf-8-sig"),
+            parse_float=_parse_float,
+            parse_constant=_reject_constant,
+        )
+    except (ValueError, UnicodeDecodeError) as exc:
+        raise C.GamekitError("BAD_REQUEST", f"invalid json in {path}: {exc}") from exc
+
+
 def load_recipe(path: str | Path) -> tuple[Path, dict[str, Any]]:
-    recipe_path = Path(path)
-    if not recipe_path.is_absolute():
-        recipe_path = Path(os.path.abspath(str(recipe_path)))
-    if recipe_path.is_symlink():
-        raise C.GamekitError("BAD_PATH", "recipe path is a symlink")
+    """Load a recipe. Junctions, ``studio/.local`` and ``private.raw`` are refused before open."""
+    recipe_path = C.refuse_unsafe_host_path(Path(path), what="recipe")
     reason = C.forbidden_reason(recipe_path)
     if reason:
         raise C.GamekitError("BAD_PATH", reason)
-    data = C.read_json(recipe_path)
+    data = _read_recipe_json(recipe_path)
     validate_recipe(data, recipe_path.parent)
     return recipe_path, data
 

@@ -13,6 +13,7 @@ import json
 import math
 import os
 import shutil
+import stat
 import struct
 import sys
 import tempfile
@@ -73,25 +74,26 @@ def _safe_name(name: str) -> None:
         _fail(f"unsafe name {name!r}")
 
 
+_REPARSE_POINT = getattr(stat, "FILE_ATTRIBUTE_REPARSE_POINT", 0x400)
+
+
 def _is_junction(path: Path) -> bool:
-    """Match the host helper. A directory junction is not ``Path.is_symlink()``."""
-    is_junction = getattr(os.path, "isjunction", None)
-    if is_junction is not None:
-        return bool(is_junction(path))
+    """True when ``path`` is a symlink or junction, even if the target is missing."""
     try:
         st = os.lstat(path)
     except OSError:
         return False
-    return bool(getattr(st, "st_file_attributes", 0) & 0x400)
+    if stat.S_ISLNK(st.st_mode):
+        return True
+    return bool(getattr(st, "st_file_attributes", 0) & _REPARSE_POINT)
 
 
 def _has_reparse_point(path: Path) -> bool:
-    """True if ``path`` or an existing ancestor is a symlink or junction."""
+    """True if ``path`` or an ancestor is a symlink or junction, including a dangling one."""
     current = Path(os.path.abspath(str(path)))
     while True:
-        if current.exists() or current.is_symlink():
-            if current.is_symlink() or _is_junction(current):
-                return True
+        if _is_junction(current):
+            return True
         parent = current.parent
         if parent == current:
             return False
@@ -115,6 +117,24 @@ def _literal_parent_is(out_dir: Path, path: Path, name: str) -> None:
 
 def _reject_non_finite(name: str) -> None:
     _fail(f"non-finite number {name} is not allowed")
+
+
+def _parse_float(text: str) -> float:
+    """Reject overflow such as ``1e309``. ``parse_constant`` never sees those strings."""
+    number = float(text)
+    if not math.isfinite(number):
+        _reject_non_finite(text)
+    return number
+
+
+def _refuse_recipe(path: Path) -> Path:
+    """Refuse a junction, symlink, or ``private.raw`` before the recipe file is opened."""
+    path = Path(os.path.abspath(str(path)))
+    if path.name.lower() == "private.raw":
+        _fail("refusing to use private.raw")
+    if _has_reparse_point(path):
+        _fail(f"recipe passes through a symlink or junction: {path}")
+    return path
 
 
 def _out_file(out_dir: Path, name: str) -> Path:
@@ -990,12 +1010,17 @@ def _run() -> None:
     import bpy
 
     recipe_path, out_dir = _parse_args(sys.argv)
+    recipe_path = _refuse_recipe(recipe_path)
     if not recipe_path.is_file():
         _fail(f"recipe missing: {recipe_path}")
     out_dir = _refuse_out_dir(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
     out_dir = _refuse_out_dir(out_dir)
-    recipe = json.loads(recipe_path.read_text(encoding="utf-8-sig"), parse_constant=_reject_non_finite)
+    recipe = json.loads(
+        recipe_path.read_text(encoding="utf-8-sig"),
+        parse_float=_parse_float,
+        parse_constant=_reject_non_finite,
+    )
     if not isinstance(recipe, dict) or not isinstance(recipe.get("steps"), list):
         _fail("recipe has no steps")
     state = RunState()

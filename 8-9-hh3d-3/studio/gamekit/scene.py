@@ -416,7 +416,8 @@ def check(project: C.Project, timeout: float = 300.0) -> dict[str, Any]:
 
 
 def _load_ops(path: str) -> list[dict[str, Any]]:
-    data = C.read_json(Path(path))
+    safe = C.refuse_unsafe_host_path(Path(path), what="--ops")
+    data = C.read_json(safe)
     if isinstance(data, dict):
         data = data.get("ops")
     if not isinstance(data, list):

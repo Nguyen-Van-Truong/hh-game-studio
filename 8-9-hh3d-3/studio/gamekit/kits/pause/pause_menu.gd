@@ -1,6 +1,6 @@
-# HH gamekit kit pause v1 - MIT License
+# HH gamekit kit pause v1 - self-made (HH Studio)
 extends CanvasLayer
-## Pause overlay. Instance this scene in the game; it is not an autoload (MIT).
+## Pause overlay. Instance this scene in the game; it is not an autoload.
 
 func _enter_tree() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS

@@ -1,6 +1,6 @@
-# HH gamekit kit rebind v1 - MIT License
+# HH gamekit kit rebind v1 - self-made (HH Studio)
 extends Node
-## Remembers InputMap overrides in user://input_map.cfg and applies them on start (MIT).
+## Remembers InputMap overrides in user://input_map.cfg and applies them on start.
 
 const _PATH: String = "user://input_map.cfg"
 const _BAK: String = "user://.input_map.cfg.bak"

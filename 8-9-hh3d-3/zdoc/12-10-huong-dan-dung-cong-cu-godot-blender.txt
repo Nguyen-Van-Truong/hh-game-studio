@@ -279,14 +279,21 @@ lệnh ghi số W khác là đang làm, chưa gọi. Code ở studio/gamekit/. K
     python -B -m studio.gamekit.hh <nhóm> <lệnh> ...      (cần $env:PYTHONPATH như mục 2)
   Kết quả là một JSON trên stdout. Exit 0 = ok; 1 = chạy xong nhưng báo hỏng (check thấy lỗi);
   2 = bị từ chối, JSON có "error": VALIDATION_FAILED, CONFLICT, LOCKED, STALE, EDITOR_OPEN,
-  FORBIDDEN_PATH, BAD_PATH, NOT_FOUND, READBACK_MISMATCH, BAD_REQUEST.
+  EDITOR_CHECK_FAILED, FORBIDDEN_PATH, BAD_PATH, NOT_FOUND, READBACK_MISMATCH, BAD_REQUEST,
+  LICENSE_REJECTED, GODOT_FAILED.
+- Đường dẫn trên máy (file nguồn asset, --trace, --budget, file recipe, --out, --out-dir,
+  --diff-out) không được đi qua symlink hay junction ở bất kỳ thư mục cha nào (kể cả junction
+  trỏ tới thư mục không còn), không trỏ vào studio/.local hay file private.raw; các đường dẫn ra
+  phải ở ngoài project. Vi phạm là FORBIDDEN_PATH.
 - Đăng ký project một lần: hh project add <thư mục có project.godot> --id <id>; sau đó dùng <id>
-  hoặc đường dẫn. Thư mục Kho Bí Ẩn, Snake, Vault Fighters bị từ chối.
+  hoặc đường dẫn. Thư mục Kho Bí Ẩn, Snake, Vault Fighters bị từ chối. project add không có
+  command_id; gọi lại với cùng thư mục cho cùng kết quả nên gửi lại an toàn.
 - Lệnh ghi đi qua: kiểm hợp lệ ở host trước khi chạy Godot; command_id duy nhất (gửi lại cùng
   nội dung trả receipt cũ với "replayed": true, đổi nội dung là CONFLICT); một khóa ghi mỗi
   project (lệnh chạy song song nhận LOCKED); từ chối khi editor Godot đang mở project
-  (EDITOR_OPEN); checkpoint trước khi ghi; ghi file tạm rồi thay atomic; file bị sửa giữa chừng
-  là STALE; đọc lại trong process Godot mới, lệch thì tự khôi phục checkpoint; receipt vào journal.
+  (EDITOR_OPEN; không kiểm được process cũng từ chối: EDITOR_CHECK_FAILED); checkpoint trước
+  khi ghi; ghi file tạm rồi thay atomic; file bị sửa giữa chừng là STALE; đọc lại trong process
+  Godot mới, lệch thì tự khôi phục checkpoint; receipt vào journal.
 - Mỗi giá trị được đọc lại ngay sau khi đặt. Godot tự kẹp hay bỏ qua giá trị thì lệnh bị từ chối
   và file không đổi (ví dụ size ProgressBar nhỏ hơn tối thiểu của theme; metallic của
   ORMMaterial3D đang ẩn). Thứ tự khóa trong props được giữ: đặt emission_shape trước
@@ -351,7 +358,8 @@ Ghi chú W5 (shot, vcheck):
   của từng node --expect (exists, visible_in_tree, on_screen, screen_rect) và errors của Godot;
   có lỗi script thì ok false.
 - Baseline nằm trong project (res://...png). Chưa có baseline hoặc có --update-baseline thì ghi
-  mới (BASELINE_WRITTEN, cần --command-id, có checkpoint); có rồi thì so: PASS hoặc FAIL kèm ảnh
+  mới (BASELINE_WRITTEN, cần --command-id, có checkpoint, một process mới đọc lại sha256 và kích
+  thước PNG, lệch thì khôi phục); có rồi thì so: PASS hoặc FAIL kèm ảnh
   diff. Điểm đổi là điểm có kênh RGBA lệch quá --pixel-tolerance; FAIL khi tỉ lệ điểm đổi vượt
   --threshold. Khác kích thước là FAIL.
 - Giới hạn: PNG 8 bit, không interlace, tối đa 3840×2160. Ảnh có particle hoặc chuyển động ngẫu
@@ -370,7 +378,7 @@ Ghi chú W7 (asset):
   GPL/LGPL/AGPL, CC-BY-SA, proprietary, unknown luôn bị từ chối. Sổ là res://hh_assets.json.
 - Nhận png, jpg, webp, svg, glb, gltf, wav, ogg, mp3, ttf, otf, woff2 (tối đa 128 MB). Kiểm theo
   loại: kích thước ảnh; WAV peak và độ lớn LUFS (120 giây đầu); OGG thời lượng; GLB tam giác,
-  xương, clip (glTF có file ngoài bị từ chối, dùng .glb). Godot import ngay sau khi chép.
+  xương, clip (.gltf hay .glb trỏ tới file ngoài đều bị từ chối). Godot import ngay sau khi chép.
 - verify báo file thiếu, sai hash, license không còn hợp lệ, và file trong res://assets/ chưa có
   trong sổ. credits ghi CREDITS.md theo license và mục nội dung AI cho trang store.
 Ghi chú W8 (blender):
@@ -384,7 +392,8 @@ Ghi chú W8 (blender):
 - Giới hạn: mỗi action gắn một object; tự gán trọng số cần mesh chồng lên xương; tối đa 128 ô
   sprite; selftest render bằng Workbench, đường EEVEE và Cycles có code nhưng chưa chạy thử.
 Ghi chú W9 (kit):
-- Kit là GDScript tự viết (MIT), chép vào res://addons/hh_kits/<kit>/; autoload cài qua Godot.
+- Kit là GDScript tự viết (license self-made, HH Studio; dòng đầu mỗi script ghi rõ), chép vào
+  res://addons/hh_kits/<kit>/; autoload cài qua Godot.
   save: autoload HHSave (save_game, load_game, list_slots, delete_slot), file
   user://saves/<slot>.json có version và sha256; gán HHSave.migrate để nâng save bản cũ.
   settings: HHSettings (âm lượng bus, fullscreen, vsync, max_fps, ui_scale, locale), lưu
@@ -402,7 +411,9 @@ Ghi chú W10 (export):
 - hh export templates --install cài template từ file .tpz đã pin (kiểm SHA256, chỉ file cần) vào
   %APPDATA%\Godot\export_templates\4.7.2.stable; lần đầu khoảng 7 giây, máy này đã cài 12-10.
 - export run thêm preset HH Windows, HH Linux hoặc HH Web vào export_presets.cfg, giữ preset có
-  sẵn, checkpoint trước khi ghi; out-dir phải ở ngoài project. Bản Windows được chạy thử headless.
+  sẵn, checkpoint trước khi ghi; out-dir phải ở ngoài project. Godot export vào thư mục tạm cạnh
+  out-dir; bản Windows chạy thử headless ở đó; chỉ khi đạt mới chuyển file vào out-dir, lỗi thì
+  out-dir giữ nguyên. Template luôn được kiểm SHA256 trước khi cài.
 - Giới hạn: chưa có macOS, Android, iOS; Web dùng template không thread; bản Linux chưa chạy thử
   trên máy Windows này.
 
@@ -445,11 +456,10 @@ Mẫu chạy thật để chép (dựng xong, đọc lại, chạy 60 frame khô
     NavigationAgent3D, Path3D, camera SpringArm3D, AnimationTree, method track.
   studio/gamekit/selftests/w1_scene.py   các ca từ chối, replay, CONFLICT, STALE, undo.
 Selftest nhanh (project tạm trong %TEMP%, không đụng game):
-    python -B -m studio.gamekit.selftest w1 w2 w3     (12-10: w1 29/29 lúc 16:10; w2 21/21, w3 16/16)
-    python -B -m studio.gamekit.selftest w5 w6 w9     (12-10 16:47: 27/27, 16/16; w9 47/47 17:20)
-    python -B -m studio.gamekit.selftest w4 w7 w8 w10   (12-10 16:30: 20/20, 19/19, 19/19, 12/12)
-    python -B -m unittest discover -s studio/tests/gamekit -p "test_*.py"
-      (12-10: scene_core 12, play 8, asset 14, blender_recipe 4, export 16; dưới 2 giây)
+    python -B -m studio.gamekit.selftest all      (hoặc w1 ... w10 riêng)
+      12-10 18:12, 148 giây, 226/226: w1 29, w2 21, w3 16, w4 20, w5 27, w6 16, w7 19, w8 19,
+      w9 47, w10 12
+    python -B -m unittest discover -s studio/tests/gamekit -p "test_*.py"   (12-10: 113 ca, 4 giây)
 
 Trong lúc GT-11 còn làm:
 - Dùng ngay các lệnh DONE ở trên và công cụ ở mục 2–7. Plan game của bạn quyết định có bắt buộc

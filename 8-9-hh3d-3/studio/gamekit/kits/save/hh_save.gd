@@ -1,6 +1,6 @@
-# HH gamekit kit save v1 - MIT License
+# HH gamekit kit save v1 - self-made (HH Studio)
 extends Node
-## Versioned JSON saves in user://saves/<slot>.json (MIT). Assign `migrate` to upgrade older files.
+## Versioned JSON saves in user://saves/<slot>.json. Assign `migrate` to upgrade older files.
 
 const SAVE_VERSION: int = 1
 

@@ -277,7 +277,8 @@ def set_actions(
 
 
 def _load_actions(path: str) -> Any:
-    data = C.read_json(Path(path))
+    safe = C.refuse_unsafe_host_path(Path(path), what="--actions")
+    data = C.read_json(safe)
     if not isinstance(data, dict):
         raise C.GamekitError("BAD_REQUEST", "actions file must be a JSON object")
     return data
