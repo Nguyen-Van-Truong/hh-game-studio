@@ -6,7 +6,7 @@ Verify-only RAW_VERIFIED (coordinator rerun 14:25, 45 s); source 744a9f61, studi
 Windows 0.1.0 manifest 3bb561df; archives in `.local/reviews/gt10pc-rehearsal-20261012-c3h/artifacts/`.
 P11 is one real Godot cycle, not a soak: memory, handle and object growth over long sessions is unmeasured.
 P12: two independent grok-4.7-xhigh critics gave TICK=yes on the same package (O14.7).
-Open verifier gaps, raw agrees: P11 short exits come from capture.json; P4 refusals have no per-case host receipt.
+Verifier gaps G1/G2 fixed in code by GT-11 W11 (8a9d5407); proven only at the next packaging run. c3h raw predates G2.
 Finals f1–f4 are VOID (f4 stopped at P7 under O14); their raw stays in `.local/reviews`.
 Usage guide for game agents: `zdoc/12-10-huong-dan-dung-cong-cu-godot-blender.txt`.
 Tool bugs found while making games: fix in `studio/` with the short related tests (O14.5), no long soak.
@@ -62,7 +62,7 @@ Not inside the signed .hhpkg yet; the GT-09 fixture route is unchanged. Usage: g
 | W2 | DONE_PART | 9eae7686, 2d129056; w2 19/19 (2D arena, two rejects keep bytes, 60 frames clean); image check waits for W5. |
 | W3 | DONE_PART | 9b742f6d, 2d129056; w3 14/14 (3D room, method track, 60 frames clean); image check waits for W5. |
 | W4–W10 | IN_PROGRESS | input/play/bot, shot/vcheck, perf, asset, blender, kit, export. |
-| W11 | IN_PROGRESS | verifier G1 (P11 exits from process-exit.json) and G2 (per-case P4 receipts). |
+| W11 | DONE | 8a9d5407; G1 P11 exits bound to host process-exit.json (c3h row reads pids 37680, 20620; tampered copy refused); G2 per-case P4 child receipts (missing dir → P4_NEG_RECEIPTS_ABSENT); test_gt10pc_g1_g2 8/8, test_gt10pc* 43 ok, package 9/9. |
 | W12 | PLANNED | guide, this file, one Grok read-only critic, close ACCEPTED_O15_QUICK. |
 
 ## Next
