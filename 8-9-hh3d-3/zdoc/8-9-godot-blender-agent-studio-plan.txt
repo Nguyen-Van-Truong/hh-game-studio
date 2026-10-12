@@ -1,12 +1,12 @@
 HH STUDIO — PLAN 1/3: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Cập nhật 12-10-2026, Asia/Saigon | Revision S305 + quyết định owner O1–O15 | TRIỂN KHAI THEO GATE
+Cập nhật 12-10-2026, Asia/Saigon | Revision S306 + quyết định owner O1–O15 | TRIỂN KHAI THEO GATE
 OWNER_DECISIONS=O1_O3_20260925; O4_20260927; O5_O6_20260930; O7_20261001; O8_20261002; O9_20261003; O10_20261004; O11_20261006; O12_20261007; O13_20261008; O14_20261012; O15_20261012; BLOCK_BELOW_STATUS_TABLE; LATER_WINS_OVER_S2XX; OLD_VERDICTS_UNCHANGED
 OWNER_DECISIONS_FULL_TEXT_IN_GIT=87912523,b0802472,8298c107,fcc1906f,6d8eb81d,d04266e8,091506fa,a0ab19b8,fd5ad2be,add82689,7f97d3f8,5992d9f2,5ff3885e,054c0611
-HIỆN HÀNH 12-10 18:35 — GT-01..GT-09, GT-10-PC VÀ GT-11 ACCEPTED (GT-10-PC THEO O14; GT-11 ACCEPTED_O15_QUICK: W1–W12 XONG, SELFTEST ALL 226/226, CRITIC GROK VÒNG CUỐI 2 TICK=yes TRÊN 2a03cc2f); PLAN CÔNG CỤ XONG CHO PC; AGENT GAME DÙNG LỆNH hh VÀ CÔNG CỤ THEO zdoc/12-10-huong-dan-dung-cong-cu-godot-blender.txt; LỖI CÔNG CỤ DO AGENT GAME SỬA (O14.5); GT-08B DEFERRED_OWNER_NO_ANDROID; GT-10 ĐẦY ĐỦ CHỜ GT-08B
+HIỆN HÀNH 12-10 19:45 — GT-01..GT-09, GT-10-PC VÀ GT-11 ACCEPTED (GT-10-PC THEO O14; GT-11 ACCEPTED_O15_QUICK: W1–W12 XONG, SELFTEST ALL 226/226, CRITIC GROK VÒNG CUỐI 2 TICK=yes TRÊN 2a03cc2f; 19:45 THỬ GAME THẬT SUPERAGENT TRÊN BẢN SAO: LỖI CẢNH BÁO STRICT SỬA Ở fa64f3df, SELFTEST ALL 246/246, 15/15 BƯỚC OK); PLAN CÔNG CỤ XONG CHO PC; AGENT GAME DÙNG LỆNH hh VÀ CÔNG CỤ THEO zdoc/12-10-huong-dan-dung-cong-cu-godot-blender.txt; LỖI CÔNG CỤ DO AGENT GAME SỬA (O14.5); GT-08B DEFERRED_OWNER_NO_ANDROID; GT-10 ĐẦY ĐỦ CHỜ GT-08B
 CURRENT_VALID_WP=NONE_GAMEKIT_COMPLETE_O15
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S305
+PLAN_REVISION=S306
 EXECUTION_AUTHORIZATION=OWNER_APPROVED_GATED
 EXECUTION_MODE=COORDINATOR_WITH_SCOPED_SUBAGENTS_AND_INDEPENDENT_CRITICS_OWNER_20261003; CREDIT_TURN_BUDGET_O13_6; ONE_COORDINATOR_THREAD; ULTRA_ONLY_HARD_DESIGN_AND_FINAL_CRITICS; FORK_TURNS_NONE_DEFAULT; NO_SELF_CREATED_HEARTBEAT; ONE_WRITER_PER_FILE; TWO_INDEPENDENT_CRITICS_SAME_HASH_GROK47_O14_7
 GOAL_STATE=PC_TOOLS_DONE_O14; GT11_ACCEPTED_O15_QUICK_20261012; INDEPENDENT_CONSUMER_PILOT_AUTHORIZED; GT07_ACCEPTED; GT08A_ACCEPTED_O4_6; GT09_ACCEPTED_20261010; GT08B_DEFERRED_OWNER_NO_ANDROID; GT10_PC_ACCEPTED_O14_20261012; GT10_FULL_BLOCKED_BY_GT08B; SUPERAGENT_SEPARATE_OWNER_AUTHORIZED_LANE
@@ -805,6 +805,11 @@ GT-11 ACCEPTED_O15_QUICK — 12-10-2026 (O15, kiểm nhanh; không phải soak h
   lại: project add không có journal (thêm lại cùng thư mục cho cùng kết quả).
 - Chưa kiểm: soak dài, rò qua phiên sửa dài, EEVEE/Cycles của công thức Blender (selftest dùng
   Workbench), máy sạch khác. gamekit chưa vào gói .hhpkg đã ký. Cách dùng: mục 13 của hướng dẫn.
+- Thử game thật 12-10 18:47–19:45 (superagent-grokdo, bản sao trong %TEMP%, agent grok CLI): lần 1
+  mọi runner lỗi parse vì game bật cảnh báo GDScript thành lỗi. Sửa ở fa64f3df: runner typed, kit,
+  selftest strict 20/20, trace_hash null khi crash; selftest all 246/246 (218 giây), unit 113.
+  Lần 2: 15/15 bước WORKED (check, inspect, input, play, bot, shot, perf, apply, undo khớp sha),
+  bản gốc không bị ghi. Game 3D thật chưa thử; shot mặc định 640×360, HUD 1280×720 cần --resolution.
 
 Phần còn lại để xong plan
 GT-08B: Android thật DEFERRED theo O12; chỉ mở lại khi owner có thiết bị và cần Android.
@@ -1109,6 +1114,10 @@ Bài học GT-09 và GT-10-PC (08-10 17:15 → 12-10 10:30):
     mới commit. PowerShell 5.1 ghi log UTF-16; đọc bằng -Encoding Unicode.
 99. Code tự viết chép vào game cũng theo luật license của owner: kit ghi self-made, không ghi MIT
     khi MIT còn ở owner_review.
+100. Selftest trên project tự dựng không thấy cấu hình của game thật: 226/226 xanh nhưng Superagent
+    bật untyped_declaration và unsafe_* thành lỗi nên mọi runner lỗi parse. Script chạy trong game
+    người khác phải sạch ở mức cảnh báo cao nhất (selftest strict); trước khi báo xong, thử trên
+    bản sao một game thật của agent khác.
 
 LỊCH SỬ / CÁCH ĐỌC
 Bản S71 đầy đủ trước tinh gọn giữ tại reviews/20260918-plan-history-s71/
