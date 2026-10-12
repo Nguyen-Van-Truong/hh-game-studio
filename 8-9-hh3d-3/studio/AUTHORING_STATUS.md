@@ -61,13 +61,17 @@ Not inside the signed .hhpkg yet; the GT-09 fixture route is unchanged. Usage: g
 | W1 | DONE | a0833df7; selftest w1 29/29, unit 12/12; hh.cmd real run 12-10 16:05 (add, new, apply, replay, inspect, check). |
 | W2 | DONE_PART | 9eae7686, 2d129056; w2 19/19 (2D arena, two rejects keep bytes, 60 frames clean); image check waits for W5. |
 | W3 | DONE_PART | 9b742f6d, 2d129056; w3 14/14 (3D room, method track, 60 frames clean); image check waits for W5. |
-| W4–W10 | IN_PROGRESS | input/play/bot, shot/vcheck, perf, asset, blender, kit, export. |
+| W4 | DONE | 83cbc6ad; w4 20/20 (walk right on held key, replay same trace_hash, bot stuck report, script error → ok false, bad key keeps bytes, input set keeps other project settings); unit 8/8. |
+| W5, W6, W9 | IN_PROGRESS | shot/vcheck, perf, kit. |
+| W7 | DONE | 1541e4b8; w7 19/19, unit 14/14; owner rule 09-10: only CC0-1.0 or self-made, other free licenses refused until the owner allows them (E3); verify re-checks every ledger license. |
+| W8 | DONE | b440340a; w8 19/19 (bad recipes refused before Blender, crate GLB, walker GLB with one skin + Walk clip, 8×6 sprite sheet, GLB through the W7 gate, import, instance); unit 4/4. |
+| W10 | DONE | cc1cffaf; w10 12/12 (templates from the pinned .tpz, Windows exe smoke exit 0, Web and Linux files, user preset bytes kept, out-dir inside project refused); unit 16/16. |
 | W11 | DONE | 8a9d5407; G1 P11 exits bound to host process-exit.json (c3h row reads pids 37680, 20620; tampered copy refused); G2 per-case P4 child receipts (missing dir → P4_NEG_RECEIPTS_ABSENT); test_gt10pc_g1_g2 8/8, test_gt10pc* 43 ok, package 9/9. |
 | W12 | PLANNED | guide, this file, one Grok read-only critic, close ACCEPTED_O15_QUICK. |
 
 ## Next
 
-GT-11 W4–W12 under O15 (above). Game agents use the guide now and each `hh` command once its W is DONE.
+GT-11 W5, W6, W9, then W12 under O15 (above). Game agents use the guide now and each `hh` command once its W is DONE.
 Requests for gamekit go to `zdoc/12-10-gt11-yeu-cau-tu-agent-game.txt` (append-only).
 
 ## Retained evidence and lessons
