@@ -1,15 +1,15 @@
 HH STUDIO — PLAN 1/3: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Cập nhật 12-10-2026, Asia/Saigon | Revision S306 + quyết định owner O1–O15 | TRIỂN KHAI THEO GATE
-OWNER_DECISIONS=O1_O3_20260925; O4_20260927; O5_O6_20260930; O7_20261001; O8_20261002; O9_20261003; O10_20261004; O11_20261006; O12_20261007; O13_20261008; O14_20261012; O15_20261012; BLOCK_BELOW_STATUS_TABLE; LATER_WINS_OVER_S2XX; OLD_VERDICTS_UNCHANGED
+Cập nhật 12-10-2026, Asia/Saigon | Revision S307 + quyết định owner O1–O16 | TRIỂN KHAI THEO GATE
+OWNER_DECISIONS=O1_O3_20260925; O4_20260927; O5_O6_20260930; O7_20261001; O8_20261002; O9_20261003; O10_20261004; O11_20261006; O12_20261007; O13_20261008; O14_20261012; O15_20261012; O16_20261012; BLOCK_BELOW_STATUS_TABLE; LATER_WINS_OVER_S2XX; OLD_VERDICTS_UNCHANGED
 OWNER_DECISIONS_FULL_TEXT_IN_GIT=87912523,b0802472,8298c107,fcc1906f,6d8eb81d,d04266e8,091506fa,a0ab19b8,fd5ad2be,add82689,7f97d3f8,5992d9f2,5ff3885e,054c0611
-HIỆN HÀNH 12-10 19:45 — GT-01..GT-09, GT-10-PC VÀ GT-11 ACCEPTED (GT-10-PC THEO O14; GT-11 ACCEPTED_O15_QUICK: W1–W12 XONG, SELFTEST ALL 226/226, CRITIC GROK VÒNG CUỐI 2 TICK=yes TRÊN 2a03cc2f; 19:45 THỬ GAME THẬT SUPERAGENT TRÊN BẢN SAO: LỖI CẢNH BÁO STRICT SỬA Ở fa64f3df, SELFTEST ALL 246/246, 15/15 BƯỚC OK); PLAN CÔNG CỤ XONG CHO PC; AGENT GAME DÙNG LỆNH hh VÀ CÔNG CỤ THEO zdoc/12-10-huong-dan-dung-cong-cu-godot-blender.txt; LỖI CÔNG CỤ DO AGENT GAME SỬA (O14.5); GT-08B DEFERRED_OWNER_NO_ANDROID; GT-10 ĐẦY ĐỦ CHỜ GT-08B
+HIỆN HÀNH 12-10 20:35 — GT-01..GT-09, GT-10-PC VÀ GT-11 ACCEPTED (GT-10-PC THEO O14; GT-11 ACCEPTED_O15_QUICK: W1–W12 XONG, SELFTEST ALL 226/226, CRITIC GROK VÒNG CUỐI 2 TICK=yes TRÊN 2a03cc2f; 19:45 THỬ GAME THẬT SUPERAGENT TRÊN BẢN SAO: LỖI CẢNH BÁO STRICT SỬA Ở fa64f3df, SELFTEST ALL 246/246, 15/15 BƯỚC OK); PLAN CÔNG CỤ XONG CHO PC; AGENT GAME DÙNG LỆNH hh VÀ CÔNG CỤ THEO zdoc/12-10-huong-dan-dung-cong-cu-godot-blender.txt; LỖI CÔNG CỤ DO AGENT GAME SỬA (O14.5); GT-08B DEFERRED_OWNER_NO_ANDROID; GT-10 ĐẦY ĐỦ CHỜ GT-08B; HH WORLD: LANE THỬ PC O16 Ở 8-9-hh3d-3/12-10-hh-world-grokdo (PLAN HH WORLD S24, KẾT QUẢ CANDIDATE)
 CURRENT_VALID_WP=NONE_GAMEKIT_COMPLETE_O15
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S306
+PLAN_REVISION=S307
 EXECUTION_AUTHORIZATION=OWNER_APPROVED_GATED
 EXECUTION_MODE=COORDINATOR_WITH_SCOPED_SUBAGENTS_AND_INDEPENDENT_CRITICS_OWNER_20261003; CREDIT_TURN_BUDGET_O13_6; ONE_COORDINATOR_THREAD; ULTRA_ONLY_HARD_DESIGN_AND_FINAL_CRITICS; FORK_TURNS_NONE_DEFAULT; NO_SELF_CREATED_HEARTBEAT; ONE_WRITER_PER_FILE; TWO_INDEPENDENT_CRITICS_SAME_HASH_GROK47_O14_7
-GOAL_STATE=PC_TOOLS_DONE_O14; GT11_ACCEPTED_O15_QUICK_20261012; INDEPENDENT_CONSUMER_PILOT_AUTHORIZED; GT07_ACCEPTED; GT08A_ACCEPTED_O4_6; GT09_ACCEPTED_20261010; GT08B_DEFERRED_OWNER_NO_ANDROID; GT10_PC_ACCEPTED_O14_20261012; GT10_FULL_BLOCKED_BY_GT08B; SUPERAGENT_SEPARATE_OWNER_AUTHORIZED_LANE
+GOAL_STATE=PC_TOOLS_DONE_O14; GT11_ACCEPTED_O15_QUICK_20261012; INDEPENDENT_CONSUMER_PILOT_AUTHORIZED; GT07_ACCEPTED; GT08A_ACCEPTED_O4_6; GT09_ACCEPTED_20261010; GT08B_DEFERRED_OWNER_NO_ANDROID; GT10_PC_ACCEPTED_O14_20261012; GT10_FULL_BLOCKED_BY_GT08B; SUPERAGENT_SEPARATE_OWNER_AUTHORIZED_LANE; HHWORLD_PC_TRIAL_O16_20261012
 OVERALL_PLAN_STATUS=COMPLETE_FOR_PC_O15; GT01_GT09_ACCEPTED; GT10_PC_ACCEPTED_O14_SHORT_CHECKS; GT11_ACCEPTED_O15_QUICK; GT08B_DEFERRED_OWNER_NO_ANDROID; GT10_FULL_BLOCKED_BY_GT08B
 CONSUMER_PILOT_STATUS=REVALIDATED_PROVISIONAL_AUTHORITY0; NOT_GT06_ACCEPTANCE; NOT_COMPLETE_GAME_CLAIM
 GT06_STATUS=ACCEPTED; FORMAL25_TWO_ACCEPTED_PAIRS; FINAL_MANIFEST=318081a3c71f334cc44aa4542a5fa5fff459b4045006f6daa91559b1ccc4d4d3; DECISION=zdoc/reviews/20261003-gt06-owner-critics/coordinator-acceptance.md
@@ -36,7 +36,7 @@ STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng
 10 | GT-10 | Gói công cụ v0.1, cài/upgrade/rollback, bàn giao game | GT-09; GT-10-PC sau GT-09, GT-10 đầy đủ còn cần GT-08B | GT-10-PC ACCEPTED theo O14 (kiểm ngắn, gói c3h, hai critic); GT-10 đầy đủ chờ GT-08B
 11 | GT-11 | Mở rộng lõi dùng chung để làm game: asset/license, catalog, kiểm hình, hiệu năng, bot, kit (O13.10) | GT-10-PC ACCEPTED; O15 | ACCEPTED_O15_QUICK 12-10 18:35 (gamekit W1–W12; selftest all 226/226; critic Grok vòng cuối 2 TICK=yes trên 2a03cc2f)
 
-QUYẾT ĐỊNH OWNER ĐANG HIỆU LỰC O1–O15 — BẢN HỢP NHẤT 12-10-2026 (S301; O15 thêm ở S304)
+QUYẾT ĐỊNH OWNER ĐANG HIỆU LỰC O1–O16 — BẢN HỢP NHẤT 12-10-2026 (S301; O15 ở S304; O16 ở S307)
 Chỉ giữ luật còn áp dụng sau GT-08A ACCEPTED; khối mới nhất đặt đầu. Nguyên văn O1–O9 trước
 tinh gọn: git show 091506fa:8-9-hh3d-3/zdoc/8-9-godot-blender-agent-studio-plan.txt (dòng 40–561);
 bản gốc O1–O3 87912523, O4 b0802472, O5 8298c107, O6 fcc1906f; O10 đầy đủ (S259) ở a0ab19b8;
@@ -45,7 +45,20 @@ O10 và O11 trước khi rút gọn ở S270: git show fd5ad2be (cùng file, dò
 Mâu thuẫn thì quyết định muộn hơn thắng và thắng các dòng S2xx; raw và verdict cũ giữ nguyên,
 không hồi tố PASS. Số mục cũ (O1.4, O4.4, O6.4…) giữ nguyên để tham chiếu.
 
-O15 — 12-10-2026 15:16, MỚI NHẤT, OWNER MỞ GT-11 NGAY, KIỂM NHANH, SỬA PHẠM VI PLAN LẦN CUỐI
+O16 — 12-10-2026 20:24, MỚI NHẤT, OWNER CHO THỬ HH WORLD 3D TRÊN PC BẰNG CURSOR CLI GROK
+(AUTHORITY=OWNER_DIRECT_20261012; chỉ mở lane thử; không đổi gate GT hay bảng H2)
+Owner: "tạo 1 folder trong đây rồi cho grok cursor cli làm thử game hh 3d world trước theo plan
+thử xem"; 20:29: plan cần cải thiện gì thì sửa plan gốc, xóa bản mới rồi copy qua, cho grok CLI
+làm xem có tốt không.
+1. Lane thử ở 8-9-hh3d-3/12-10-hh-world-grokdo/ (git riêng, không remote, exclude ở repo cha);
+   bản copy plan HH World S24 nằm ở gốc folder. Bảng H2 trong plan HH World vẫn là nguồn tiến độ;
+   lane ghi TRIAL_STATUS.md, kết quả là CANDIDATE nhãn PC_TRIAL, không ACCEPTED.
+2. GT-10 đầy đủ vẫn chờ GT-08B. Lane dùng phần PC: GT-10-PC, gamekit GT-11, hướng dẫn mục 13.
+   Android, máy thật khác, human, legal, WAN ghi DEFERRED hoặc UNVERIFIED.
+3. Worker Cursor CLI grok-4.7-xhigh. Lane không sửa studio/, zdoc/ hay repo cha; lỗi công cụ ghi
+   docs/tool-gaps.md trong folder, coordinator sửa theo O14.5 kèm test và selftest.
+
+O15 — 12-10-2026 15:16, OWNER MỞ GT-11 NGAY, KIỂM NHANH, SỬA PHẠM VI PLAN LẦN CUỐI
 (AUTHORITY=OWNER_DIRECT_20261012; thắng O13.10 và O14.5 về thời điểm mở và cách kiểm GT-11)
 Owner hỏi công cụ đã đủ để agent làm game tốt, hoàn chỉnh như Superfighters 2D (Y8) hay HH World
 chưa. Coordinator trả lời là chưa: lệnh sửa scene mới chạy trên hai fixture; chưa có kiểm hình,
@@ -814,8 +827,9 @@ GT-11 ACCEPTED_O15_QUICK — 12-10-2026 (O15, kiểm nhanh; không phải soak h
 Phần còn lại để xong plan
 GT-08B: Android thật DEFERRED theo O12; chỉ mở lại khi owner có thiết bị và cần Android.
 GT-10-PC: ACCEPTED 12-10 theo O14 (kiểm ngắn); phần PC của plan công cụ đã xong. GT-10 đầy đủ còn
-cần GT-08B. HH World là plan riêng (H2-P0-01 trên PC do plan đó quyết theo O14.4). Không suy
-phần trăm sản phẩm hoặc ETA toàn plan từ số test/gate.
+cần GT-08B. HH World là plan riêng (H2-P0-01 trên PC do plan đó quyết theo O14.4); từ O16 có lane
+thử PC ở 8-9-hh3d-3/12-10-hh-world-grokdo theo plan HH World S24. Không suy phần trăm sản phẩm
+hoặc ETA toàn plan từ số test/gate.
 GT-11 (ACCEPTED_O15_QUICK 12-10 18:35, mở 12-10 15:16 theo O15): gamekit cho game thật 2D và 3D,
 kiểm nhanh (O15.3).
 Không phải bảng tiến độ thứ hai: hàng 11 ở bảng đầu là trạng thái; W chỉ DONE khi commit có
