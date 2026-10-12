@@ -1,4 +1,4 @@
-# O2 authoring state — 2026-10-12 (O14/S303; GT-11 under O15/S304)
+# O2 authoring state — 2026-10-12 (O14/S303; GT-11 ACCEPTED_O15_QUICK under O15/S305)
 AUTHORITY=0; GT09=ACCEPTED; GT10_PC=ACCEPTED_O14_SHORT_CHECKS (owner waived the 10×35 soak at 14:05).
 Progress authority: `zdoc/8-9-godot-blender-agent-studio-plan.txt`; no checkbox changed here.
 Accepted package: rehearsal gt10pc-rehearsal-20261012-c3h, P1–P11 through Scheduled Task, exit 0 in 1276 s.
@@ -54,6 +54,8 @@ GT08B Android deferred; full GT10 waits for it. GT11 IN_PROGRESS under owner O15
 `studio/gamekit/` is a host CLI (`hh`) that edits real Godot 4.7 projects, 2D and 3D, without the addon or CR-1.
 Contract: host validation, command_id journal (replay/CONFLICT), one project lock, EDITOR_OPEN refusal, checkpoint,
 temp save + atomic replace, fresh-process readback with auto-restore, per-set immediate readback (silent clamps refused).
+Host paths: every read and write refuses a symlink or junction in any component (dangling ones too, via lstat), `studio/.local`
+and `private.raw`; outputs must be outside the project; the editor check fails closed (EDITOR_CHECK_FAILED).
 Not inside the signed .hhpkg yet; the GT-09 fixture route is unchanged. Usage: guide section 13.
 
 | W | State | Evidence |
@@ -62,19 +64,22 @@ Not inside the signed .hhpkg yet; the GT-09 fixture route is unchanged. Usage: g
 | W2 | DONE | 9eae7686, 2d129056, 3cfcb276; w2 21/21 (2D arena, two rejects keep bytes, 60 frames clean, windowed shot not blank with the player sprite on screen). |
 | W3 | DONE | 9b742f6d, 2d129056, 3cfcb276; w3 16/16 (3D room, method track, 60 frames clean, windowed shot not blank with pillar and orb on screen). |
 | W4 | DONE | 83cbc6ad; w4 20/20 (walk right on held key, replay same trace_hash, bot stuck report, script error → ok false, bad key keeps bytes, input set keeps other project settings); unit 8/8. |
-| W5 | DONE | 231ea7ea, bfe7e735; w5 27/27, unit 11/11 (windowed shot, presence, blank, baseline write/compare, vcheck); fix: AnimatedSprite2D presence, Godot errors make a shot ok false. |
+| W5 | DONE | 231ea7ea, bfe7e735, 2a03cc2f; w5 27/27, unit 11/11 (windowed shot, presence, blank, baseline write/compare, vcheck); fix: AnimatedSprite2D presence, Godot errors make a shot ok false, baseline read back by a fresh process (FRESH_PROCESS_SHA256_PNG). |
 | W6 | DONE | 3afd3fa9; w6 16/16, unit 16/16 (budget pass, node-leak script and zero draw-call budget fail, headless GPU not_measured). |
 | W7 | DONE | 1541e4b8; w7 19/19, unit 14/14; owner rule 09-10: only CC0-1.0 or self-made, other free licenses refused until the owner allows them (E3); verify re-checks every ledger license. |
 | W8 | DONE | b440340a; w8 19/19 (bad recipes refused before Blender, crate GLB, walker GLB with one skin + Walk clip, 8×6 sprite sheet, GLB through the W7 gate, import, instance); unit 4/4. |
-| W9 | DONE | 0872cd1a; w9 40/40, unit 9/9 (save/settings/rebind/pause/audio kits; remove refuses game-changed kit files or bus layouts unless --force). |
+| W9 | DONE | 0872cd1a, 7297e684, 2a03cc2f; w9 47/47, unit 9/9 (save/settings/rebind/pause/audio kits, header `self-made (HH Studio)`; remove refuses game-changed kit files or bus layouts unless --force; save files replace through a .bak so both copies are never lost). |
 | W10 | DONE | cc1cffaf; w10 12/12 (templates from the pinned .tpz, Windows exe smoke exit 0, Web and Linux files, user preset bytes kept, out-dir inside project refused); unit 16/16. |
 | W11 | DONE | 8a9d5407; G1 P11 exits bound to host process-exit.json (c3h row reads pids 37680, 20620; tampered copy refused); G2 per-case P4 child receipts (missing dir → P4_NEG_RECEIPTS_ABSENT); test_gt10pc_g1_g2 8/8, test_gt10pc* 43 ok, package 9/9. |
-| W12 | PLANNED | guide, this file, one Grok read-only critic, close ACCEPTED_O15_QUICK. |
+| W12 | DONE | 12-10 18:35; guide section 13; selftest all 226/226 (148 s, 18:12) and unit 113 on 2a03cc2f; Grok read-only critics: phase 1 and final round 1 TICK=no (editor check fail-open, undo before readback, GLB external URI, template SHA skip, partial export, dangling junction writes, junction reads into `.local`, MIT kit header), fixed in 7297e684, 606e6fc4, b566ea54, 2a03cc2f; final round 2 TICK=yes on 2a03cc2f. Known MINOR: `project add` has no journal (re-adding the same folder is idempotent). |
+
+GT-11 is ACCEPTED_O15_QUICK (plan S305): quick selftests and one adversarial critic, not a soak or final PASS.
 
 ## Next
 
-GT-11 W12 under O15 (above): selftest all, one read-only critic, close. Game agents use the guide now and each `hh` command once its W is DONE.
-Requests for gamekit go to `zdoc/12-10-gt11-yeu-cau-tu-agent-game.txt` (append-only).
+Tools plan is complete for PC. Game agents use the guide (section 13 for `hh`). Tool bugs follow O14.5: fix in `studio/` with a
+short test plus the affected selftest, keep the contract, one change request per commit, and add a row here if behaviour changes.
+Requests a game agent cannot fix go to `zdoc/12-10-gt11-yeu-cau-tu-agent-game.txt` (append-only). GT-08B waits for an Android device.
 
 ## Retained evidence and lessons
 

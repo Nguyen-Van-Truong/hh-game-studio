@@ -1,15 +1,17 @@
 HƯỚNG DẪN CHO AGENT LÀM GAME: DÙNG BỘ CÔNG CỤ HH STUDIO (GODOT + BLENDER) TRÊN PC
-Cập nhật 12-10-2026 16:35, Asia/Saigon. Viết cho agent khác dùng ngay, không cần đọc lịch sử.
-Nguồn tiến độ: zdoc/8-9-godot-blender-agent-studio-plan.txt (S304, quyết định owner O14, O15).
+Cập nhật 12-10-2026 18:35, Asia/Saigon. Viết cho agent khác dùng ngay, không cần đọc lịch sử.
+Nguồn tiến độ: zdoc/8-9-godot-blender-agent-studio-plan.txt (S305, quyết định owner O14, O15).
 Mọi đường dẫn tính từ thư mục 8-9-hh3d-3/. Đường dẫn ngắn như godot-addon/, host/, package/,
 blender-addon/, pipeline/, protocol/, contracts/ nằm dưới studio/. Lệnh viết cho PowerShell.
 Nếu file này lệch với code thì code và plan đúng; sửa file này trong cùng commit sửa code.
 
 0. TÓM TẮT (đọc trước)
 - HH Studio là bộ thư viện Python, addon Godot hh_studio và adapter Blender. Không phải game.
-- MỚI (GT-11, O15): gamekit có CLI hh sửa scene trên project game thật, 2D và 3D, không cần
-  addon hay CR-1. Đọc mục 13 trước khi sửa scene. Phần còn lại vẫn là hàm Python.
-- GT-01..GT-09 và GT-10-PC đã nghiệm thu. GT-10-PC theo O14: kiểm ngắn, soak dài được miễn.
+- MỚI (GT-11, O15): gamekit có CLI hh trên project game thật, 2D và 3D, không cần addon hay
+  CR-1: scene, input, play, bot, shot, vcheck, perf, asset, blender, kit, export. Đọc mục 13
+  trước khi sửa scene. Phần còn lại vẫn là hàm Python.
+- GT-01..GT-09, GT-10-PC và GT-11 đã nghiệm thu. GT-10-PC theo O14: kiểm ngắn, soak dài được
+  miễn. GT-11 ACCEPTED_O15_QUICK 12-10 18:35: selftest nhanh và critic, không phải soak.
   Chỉ PC (Windows, Linux, Linux-headless). Android hoãn (GT-08B).
 - Dùng ngay được trên project game của bạn:
   a) Godot 4.7.2 và Blender 5.2.1 đã pin hash (mục 2).
@@ -272,8 +274,8 @@ CR-1 (lịch sử; đã được thay bằng gamekit ở mục 13 theo O15, khô
   Linux thật ngoài container của ma trận.
 
 13. GAMEKIT: LỆNH hh TRÊN PROJECT GAME THẬT (GT-11, O15)
-Mở 12-10 15:16, làm từng phần W1–W12 (plan công cụ, mục GT-11). Lệnh ghi DONE dùng được ngay;
-lệnh ghi số W khác là đang làm, chưa gọi. Code ở studio/gamekit/. Không cần addon hay CR-1.
+Mở 12-10 15:16, đóng 12-10 18:35 (ACCEPTED_O15_QUICK, plan công cụ mục GT-11). Mọi lệnh dưới đây
+ghi DONE, dùng được ngay. Code ở studio/gamekit/. Không cần addon hay CR-1.
 - Gọi từ 8-9-hh3d-3/ (hh.cmd tự đặt PYTHONPATH):
     studio\gamekit\hh.cmd <nhóm> <lệnh> ...
     python -B -m studio.gamekit.hh <nhóm> <lệnh> ...      (cần $env:PYTHONPATH như mục 2)
@@ -304,7 +306,7 @@ lệnh ghi số W khác là đang làm, chưa gọi. Code ở studio/gamekit/. K
   apply (readback FRESH_PROCESS_MATCH), gửi lại cùng command_id (replayed), inspect, check: mọi
   lệnh exit 0, tổng 10 giây.
 
-Lệnh (P = id project, F = file JSON; [DONE Wn] dùng được, [Wn] đang làm):
+Lệnh (P = id project, F = file JSON; [DONE Wn] là phần W làm ra lệnh đó, mọi lệnh dùng được):
   [DONE W1] hh project add <dir> [--id P] [--no-import] | hh project list | hh project import P
   [DONE W1] hh scene inspect P res://x.tscn [--sha]
   [DONE W1] hh scene new P res://x.tscn --root Node2D [--name N] [--props JSON] [--ops F]
@@ -461,12 +463,14 @@ Selftest nhanh (project tạm trong %TEMP%, không đụng game):
       w9 47, w10 12
     python -B -m unittest discover -s studio/tests/gamekit -p "test_*.py"   (12-10: 113 ca, 4 giây)
 
-Trong lúc GT-11 còn làm:
-- Dùng ngay các lệnh DONE ở trên và công cụ ở mục 2–7. Plan game của bạn quyết định có bắt buộc
-  dùng hh không; sửa tay file .tscn hay .gd vẫn được, chạy hh check sau khi sửa.
-- Không sửa file coordinator đang giữ: studio/gamekit/**, studio/tests/gamekit/**, file này, plan
-  công cụ. Cần thêm op hay class, hoặc gặp lỗi gamekit: thêm một khối vào cuối
-  zdoc/12-10-gt11-yeu-cau-tu-agent-game.txt, kèm lệnh, input và JSON lỗi.
+Sau khi GT-11 đóng (12-10 18:35):
+- Dùng các lệnh ở trên và công cụ ở mục 2–7. Plan game của bạn quyết định có bắt buộc dùng hh
+  không; sửa tay file .tscn hay .gd vẫn được, chạy hh check sau khi sửa.
+- Lỗi gamekit hoặc cần thêm op, class: tự sửa theo O14.5 (mục 8, 9) trong studio/gamekit/ kèm
+  unit test ngắn và selftest của nhóm lệnh đó (python -B -m studio.gamekit.selftest wN); giữ
+  contract ở trên; mỗi change request một commit; đổi hành vi thì ghi một dòng vào
+  studio/AUTHORING_STATUS.md và sửa file này trong cùng commit. Không tự sửa được thì thêm một
+  khối vào cuối zdoc/12-10-gt11-yeu-cau-tu-agent-game.txt, kèm lệnh, input và JSON lỗi.
 - Đóng editor Godot trước lệnh ghi trên project đó. --allow-open-editor chỉ dùng khi chắc editor
   không mở scene đó, vì editor có thể ghi đè file khi lưu.
 - Mỗi lệnh ghi chạy Godot hai lần (áp op, rồi đọc lại): khoảng 2–5 giây. Gom nhiều op vào một
