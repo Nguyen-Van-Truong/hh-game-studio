@@ -1,4 +1,4 @@
-# O2 authoring state — 2026-10-12 (O14/S303; GT-11 ACCEPTED_O15_QUICK under O15/S305)
+# O2 authoring state — 2026-10-12 (O14/S303; GT-11 ACCEPTED_O15_QUICK under O15/S305; S306 dogfood)
 AUTHORITY=0; GT09=ACCEPTED; GT10_PC=ACCEPTED_O14_SHORT_CHECKS (owner waived the 10×35 soak at 14:05).
 Progress authority: `zdoc/8-9-godot-blender-agent-studio-plan.txt`; no checkbox changed here.
 Accepted package: rehearsal gt10pc-rehearsal-20261012-c3h, P1–P11 through Scheduled Task, exit 0 in 1276 s.
@@ -73,7 +73,9 @@ Not inside the signed .hhpkg yet; the GT-09 fixture route is unchanged. Usage: g
 | W11 | DONE | 8a9d5407; G1 P11 exits bound to host process-exit.json (c3h row reads pids 37680, 20620; tampered copy refused); G2 per-case P4 child receipts (missing dir → P4_NEG_RECEIPTS_ABSENT); test_gt10pc_g1_g2 8/8, test_gt10pc* 43 ok, package 9/9. |
 | W12 | DONE | 12-10 18:35; guide section 13; selftest all 226/226 (148 s, 18:12) and unit 113 on 2a03cc2f; Grok read-only critics: phase 1 and final round 1 TICK=no (editor check fail-open, undo before readback, GLB external URI, template SHA skip, partial export, dangling junction writes, junction reads into `.local`, MIT kit header), fixed in 7297e684, 606e6fc4, b566ea54, 2a03cc2f; final round 2 TICK=yes on 2a03cc2f. Known MINOR: `project add` has no journal (re-adding the same folder is idempotent). |
 
-GT-11 is ACCEPTED_O15_QUICK (plan S305): quick selftests and one adversarial critic, not a soak or final PASS.
+| Strict | DONE | fa64f3df; found by dogfooding a copy of `superagent-grokdo`, which turns GDScript warnings into errors so every runner failed to parse. Runners typed without `@warning_ignore`, kits strict-clean, selftest `strict` 20/20 (all 49 int warnings at error, `res://addons` included), `trace_hash` null on crash or zero frames; selftest all 246/246 (218 s), unit 113. Rerun on the copy: 15/15 steps worked. |
+
+GT-11 is ACCEPTED_O15_QUICK (plan S305; real-game dogfood recorded in S306): quick selftests and one adversarial critic, not a soak or final PASS.
 
 ## Next
 
