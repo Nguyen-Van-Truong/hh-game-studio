@@ -2,11 +2,10 @@
 
 LEASE 12-10-2026 10:00 (owner): reviewer Claude là coordinator GT-10-PC tới nghiệm thu; Codex chỉ
 đọc, không ghi `studio/`, plan hay chạy run GT-10-PC khi lease còn. WIP 08:57 được tiếp quản.
-FINAL 12-10 13:14: run gt10pc-final-20261012-f3 (Scheduled Task, closure 86dc9f1c, commit
-744a9f61) chạy tới khoảng 19:40; f1 VOID (dừng sau audit C4b), f2 VOID (P11 hỏng vì Docker
-backend tự quay CPU). Trong lúc đó không ai sửa `studio/`, chạy Godot, Blender, Docker hay test
-nặng; sửa source là run hỏng (source drift), máy bận là watchdog P11 hỏng. Coordinator tắt Docker
-Desktop từ cuối P10 tới hết final; đừng bật lại.
+FINAL 12-10: f1, f2, f3 VOID (f2 vì Docker backend tự quay CPU ở P11; f3 vì hạn mức INFRA trong
+ngày đã hết). Không có final đang chạy. f4 cùng closure 86dc9f1c (commit 744a9f61) chạy qua đêm,
+P11 sau 00:00 13-10, trong cửa sổ owner xác nhận máy rảnh (Docker tắt, không build). Khi f4 chạy,
+không ai sửa `studio/`, chạy Godot, Blender, Docker hay test nặng.
 
 Owner steering 03-10-2026, credit và lượt theo O13.6 của tools plan (08-10): một coordinator, một
 thread; subagent chỉ cho thiết kế khó, worker K13 và hai critic cuối, fork_turns=none với brief
