@@ -63,7 +63,10 @@ def paths(run_id: str) -> tuple[Path, Path]:
 
 
 def normalize_rows(rows: str | None, mode: str) -> list[str]:
-    selected = list(ROWS) if rows is None else rows.split(",")
+    # P12 is an external critic gate, never a matrix producer row.  Keeping
+    # it out of the default rehearsal selection prevents a green native run
+    # from being downgraded to INCOMPLETE by a deliberately deferred critic.
+    selected = list(FINAL_ROWS) if rows is None else rows.split(",")
     if not selected or any(row not in ROWS for row in selected) or len(selected) != len(set(selected)):
         raise ValueError("GT10PC_TASK_ROWS")
     if mode == "final" and selected != list(FINAL_ROWS):
