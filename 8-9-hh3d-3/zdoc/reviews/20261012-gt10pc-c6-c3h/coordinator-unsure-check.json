@@ -1,0 +1,81 @@
+{
+    "checked_at":  "2026-10-12T14:41:11+07:00",
+    "command":  "python -B %TEMP%\\hh_unsure.py (read-only; zipfile namelist + sha256 of P11 source-files.json entries)",
+    "script_exit":  1,
+    "note":  "exit 1 only from the broad private/raw name filter: hits are source modules private_events/private_store, no .raw member",
+    "result":  {
+                   "archives":  {
+                                    "windows/release":  {
+                                                            "members":  809,
+                                                            "bad_segment_hits":  [
+
+                                                                                 ],
+                                                            "bad_segment_count":  0,
+                                                            "private_or_raw":  [
+                                                                                   "payload/studio/host/core/PRIVATE_EVENTS.md",
+                                                                                   "payload/studio/host/core/PRIVATE_STORE.md",
+                                                                                   "payload/studio/host/core/private_events.py",
+                                                                                   "payload/studio/host/core/private_store.py",
+                                                                                   "payload/studio/tests/protocol/test_private_events.py",
+                                                                                   "payload/studio/tests/protocol/test_private_store.py"
+                                                                               ]
+                                                        },
+                                    "windows/upgrade":  {
+                                                            "members":  809,
+                                                            "bad_segment_hits":  [
+
+                                                                                 ],
+                                                            "bad_segment_count":  0,
+                                                            "private_or_raw":  [
+                                                                                   "payload/studio/host/core/PRIVATE_EVENTS.md",
+                                                                                   "payload/studio/host/core/PRIVATE_STORE.md",
+                                                                                   "payload/studio/host/core/private_events.py",
+                                                                                   "payload/studio/host/core/private_store.py",
+                                                                                   "payload/studio/tests/protocol/test_private_events.py",
+                                                                                   "payload/studio/tests/protocol/test_private_store.py"
+                                                                               ]
+                                                        },
+                                    "linux/release":  {
+                                                          "members":  809,
+                                                          "bad_segment_hits":  [
+
+                                                                               ],
+                                                          "bad_segment_count":  0,
+                                                          "private_or_raw":  [
+                                                                                 "payload/studio/host/core/PRIVATE_EVENTS.md",
+                                                                                 "payload/studio/host/core/PRIVATE_STORE.md",
+                                                                                 "payload/studio/host/core/private_events.py",
+                                                                                 "payload/studio/host/core/private_store.py",
+                                                                                 "payload/studio/tests/protocol/test_private_events.py",
+                                                                                 "payload/studio/tests/protocol/test_private_store.py"
+                                                                             ]
+                                                      },
+                                    "linux/upgrade":  {
+                                                          "members":  809,
+                                                          "bad_segment_hits":  [
+
+                                                                               ],
+                                                          "bad_segment_count":  0,
+                                                          "private_or_raw":  [
+                                                                                 "payload/studio/host/core/PRIVATE_EVENTS.md",
+                                                                                 "payload/studio/host/core/PRIVATE_STORE.md",
+                                                                                 "payload/studio/host/core/private_events.py",
+                                                                                 "payload/studio/host/core/private_store.py",
+                                                                                 "payload/studio/tests/protocol/test_private_events.py",
+                                                                                 "payload/studio/tests/protocol/test_private_store.py"
+                                                                             ]
+                                                      }
+                                },
+                   "p11_sources":  {
+                                       "files":  39,
+                                       "mismatch":  [
+
+                                                    ],
+                                       "missing":  [
+
+                                                   ],
+                                       "capture_source_closure":  null,
+                                       "source_files_json_sha256":  "17ed3841b7ea9b493eca5426915eed183a3aa316e4d4a31f608cdcbf91ed1010"
+                                   }
+               }
+}

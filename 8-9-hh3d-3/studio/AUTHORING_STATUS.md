@@ -1,18 +1,33 @@
-# O2 authoring state — 2026-10-12 (O13/S291)
-AUTHORITY=0; GT09=ACCEPTED; GT10_PC=IN_PROGRESS_NATIVE_DIAGNOSTIC.
+# O2 authoring state — 2026-10-12 (O14/S303)
+AUTHORITY=0; GT09=ACCEPTED; GT10_PC=ACCEPTED_O14_SHORT_CHECKS (owner waived the 10×35 soak at 14:05).
 Progress authority: `zdoc/8-9-godot-blender-agent-studio-plan.txt`; no checkbox changed here.
-GT09 final -74 is accepted with Scheduled Task exit0 and two critics on one hash.
-P1–P9 are rehearsal PASS only; P10 p10fix5 is rehearsal PASS on both native producers.
-P10 now uses a short bind root; durable input/harness bytes are hash-checked before and after use.
-Staging cleanup is fail-closed: uncertain container removal retains the tree and rejects completion.
-P11 has a real-Godot one-cycle producer; p11a passed but predates the verify-only fix and is retained diagnostic.
-Focused executor/probe suite: 73 tests passed; dry-run native path budget max 73/200 characters.
-P10 p10a passed natively (278s); its verify-only read found a schema-constant gap, so p10a stays diagnostic and C3 will remint.
-C3 c3c passed Scheduled Task and verify-only on one closure; C4 pre-review found only the disabled FINAL path and shallow full-campaign verifier.
-FINAL now binds P1–P11, reopens signed archives, and verifies the real 2×35 campaign dataset and run captures; fresh C3 is required after this source change.
-Next: remint C3 P1–P11, verify-only, then C5 final soak and C6 critics.
-GT10-PC P1–P12 remain unaccepted; AUTHORITY stays 0 until final package and two critics agree.
-GT08B Android deferred; full GT10 waits for it; GT11 remains unopened. No complete-game claim.
+Accepted package: rehearsal gt10pc-rehearsal-20261012-c3h, P1–P11 through Scheduled Task, exit 0 in 1276 s.
+Verify-only RAW_VERIFIED (coordinator rerun 14:25, 45 s); source 744a9f61, studio closure 86dc9f1c, package a6280d76.
+Windows 0.1.0 manifest 3bb561df; archives in `.local/reviews/gt10pc-rehearsal-20261012-c3h/artifacts/`.
+P11 is one real Godot cycle, not a soak: memory, handle and object growth over long sessions is unmeasured.
+P12: two independent grok-4.7-xhigh critics gave TICK=yes on the same package (O14.7).
+Open verifier gaps, raw agrees: P11 short exits come from capture.json; P4 refusals have no per-case host receipt.
+Finals f1–f4 are VOID (f4 stopped at P7 under O14); their raw stays in `.local/reviews`.
+Usage guide for game agents: `zdoc/12-10-huong-dan-dung-cong-cu-godot-blender.txt`.
+Tool bugs found while making games: fix in `studio/` with the short related tests (O14.5), no long soak.
+GT08B Android deferred; full GT10 waits for it; GT11 opens per game change request. No complete-game claim.
+
+## P1–P12 acceptance matrix (GT-10-PC, O14)
+
+| P | State | Evidence |
+|---|---|---|
+| P1 | ACCEPTED | Four archives (Windows, Linux-headless × 0.1.0, 0.1.1) rescanned: 809 members, no monetization, 0 armed failpoints. |
+| P2 | ACCEPTED | Eight archive attacks and four native attacks rejected before unpack; install, project and state ledgers unchanged. |
+| P3 | ACCEPTED | Install into clean copies of both fixtures on Windows and Linux headless; roundtrip and Play read back. |
+| P4 | ACCEPTED | Upgrade and rollback; incompatible schema and untrusted rollback refused (recomputed, no per-case host receipt). |
+| P5 | ACCEPTED | Uninstall keeps art, game, source and save; reinstall works. |
+| P6 | ACCEPTED | Profile hh-godot-gameplay-source-1 kept across install, upgrade and rollback; other projects do not see it. |
+| P7 | ACCEPTED | Eight native kill/Stop cases with killer and victim receipts; retry unchanged; last-good trees match signed manifests. |
+| P8 | ACCEPTED | Five host cases (dependency, template, addon version, archive, closure) give actionable errors; no latest. |
+| P9 | ACCEPTED | Independent consumer child installed release.hhpkg and ran smoke, exit 0; known limits carry the P2/P9 terms. |
+| P10 | ACCEPTED | Installed copies pass GT-08A W01–W03, L01–L02 and K8/K10 on both fixtures (three producers, exit 0). |
+| P11 | ACCEPTED_SHORT | One real Godot cycle gt06-p11-short-ad57e858 (import 37680, editor 20620, exit 0); 10×35 waived by O14. |
+| P12 | ACCEPTED | `zdoc/reviews/20261012-gt10pc-c6-c3h/critic-a-grok.md` and `critic-b-grok.md`, TICK=yes, same package. |
 
 ## K1–K15 acceptance matrix
 
@@ -36,9 +51,9 @@ GT08B Android deferred; full GT10 waits for it; GT11 remains unopened. No comple
 
 ## Next
 
-Freeze current writers, rerun focused P10 catalog with the bounded workspace scan and split probe roots, then remint a fresh whole-matrix rehearsal covering P1–P10 from one frozen source closure; only then prepare formal25. P7 host diagnostic 09 remains the recovery-boundary baseline; r08 supplies the last accepted rehearsal for the earlier rows.
-P2 native rejection must retain independent worker/host/Godot receipts and unchanged install/project/state ledgers. P9 r08 now captures an installed fixture through an independent archive-backed consumer, but remains rehearsal-only until final manifest/critic gates.
-Final is explicitly disabled until all row producers and raw verifiers are complete.
+Tools lane is stopped for PC (O14). Game agents follow the usage guide and fix tool bugs with short related tests.
+First fix candidates: bind P11 short exits to process-exit.json; give each P4 refusal its own host receipt.
+GT-11 items open only from a game change request (first candidates: Superagent SA-T01..SA-T06).
 
 ## Retained evidence and lessons
 
