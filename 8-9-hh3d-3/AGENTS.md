@@ -7,15 +7,16 @@ gói diễn tập gt10pc-rehearsal-20261012-c3h (closure 86dc9f1c, commit 744a9f
 đang chạy. Tới khi nghiệm thu xong không ai sửa `studio/` (đổi closure là hỏng gói c3h).
 
 Owner steering 03-10-2026, credit và lượt theo O13.6 của tools plan (08-10): một coordinator, một
-thread; subagent chỉ cho thiết kế khó, worker K13 và hai critic cuối, fork_turns=none với brief
-≤ 1 trang; ultra (gpt-6-astra, gpt-6.1-sol) chỉ cho thiết kế khó và critic. Đọc log, chạy test,
+thread; subagent dùng khi cần (audit, research, việc không quá khó, hai critic), fork_turns=none,
+brief ≤ 1 trang; owner 12-10 (O14.7): mọi subagent và critic dùng grok-4.7-xhigh. Đọc log, chạy test,
 closeout, status làm trực tiếp; không spawn audit trạng thái/gói/next-step; không tự tạo
 heartbeat/automation; final, diễn tập và soak chạy qua Scheduled Task có receipt, không là con của
 shell agent (O13.6); chờ bằng lệnh chặn 5–10 phút, không poll dưới 60 giây; không kết thúc lượt
 khi run nền/subagent chưa xong. Credit workspace dùng chung cho mọi agent.
 Giữ một writer/file, tuần tự hóa workload đo và tiếp tục từ checkpoint đã kiểm chứng.
 Theo quyền audit mới nhất của owner, coordinator được dispatch hai critic
-độc lập khác model trên cùng hash; giữ nguyên report, kiểm hash trước nghiệm thu.
+độc lập trên cùng hash (O14.7: hai instance grok-4.7-xhigh); giữ nguyên report, kiểm hash trước
+nghiệm thu.
 Không tự ký thay critic hoặc tái dùng chữ ký hash cũ. Quyết định nghiệm thu GT-06, GT-07,
 GT-08A, GT-09: mục Đã nghiệm thu của tools plan.
 
