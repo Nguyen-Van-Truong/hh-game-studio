@@ -823,7 +823,9 @@ W3 Catalog 3D: đèn Directional/Omni/Spot, WorldEnvironment (sky, fog, glow, to
 W4 InputMap set/list; play theo trace 60 Hz (pressed/held/released, seed) có quan sát; bot gray-box:
    input ngẫu nhiên theo seed, bắt crash, lỗi script, kẹt, đo phủ vùng (SA-T02, mục e) | hh input,
    hh play, hh bot | nhân vật đi phải khi giữ phím; hai lần replay cùng hash; bot báo kẹt ở map bị
-   chặn | PLANNED
+   chặn | DONE 83cbc6ad (w4 20/20: đi phải khi giữ phím, replay cùng trace_hash, bot báo kẹt, lỗi
+   script cho ok false, phím sai bị chặn và file giữ byte, input set giữ mọi cài đặt khác của
+   project.godot; unit 8/8)
 W5 Ảnh chuẩn (cửa sổ, độ phân giải, frame cố định); so với baseline theo ngưỡng; bắt ảnh trống;
    kiểm có mặt (node nằm trong khung hình) (mục c) | hh shot, hh vcheck | cùng scene diff 0; đổi
    màu bị bắt; ảnh trống bị bắt | PLANNED
@@ -832,17 +834,23 @@ W6 Hiệu năng: fps, ms process/physics, GPU ms, draw call, VRAM, object, orpha
    cố ý rò bị FAIL | PLANNED
 W7 Cổng nhập asset, sổ license, CREDITS, cờ nội dung AI; chặn NC/ND/không rõ license; kiểm glTF (tam
    giác, xương, clip, kích thước), ảnh, WAV (LUFS, peak) (mục a, f) | hh asset | nhập PNG/GLB/WAV
-   tạm vào sổ; license NC bị chặn; CREDITS sinh đúng | PLANNED
+   tạm vào sổ; license NC bị chặn; CREDITS sinh đúng | DONE 1541e4b8 (w7 19/19, unit 14/14; theo
+   luật owner 09-10 chỉ nhận CC0-1.0 hoặc self-made, license miễn phí khác bị từ chối đến khi owner
+   chuyển vào allowed (E3); verify kiểm lại license từng dòng sổ)
 W8 Công thức Blender JSON: primitive, modifier, vật liệu, import, armature mẫu và skin tự động,
    keyframe, render sprite sheet (camera ortho, nhiều hướng × frame, nền trong), export GLB (SA-T04,
    H2-T03) | hh blender | công thức mẫu ra GLB có clip và sprite sheet; nhập vào project tạm qua W7
-   | PLANNED
+   | DONE b440340a (w8 19/19: recipe sai bị chặn trước khi mở Blender; crate.glb có bevel;
+   walker.glb một skin và clip Walk; sprite sheet 8 hướng × 6 frame; GLB qua cổng W7, Godot import,
+   instance; unit 4/4)
 W9 Kit GDScript tự viết (MIT): save/load atomic có version, settings (âm lượng, màn hình), đổi phím
    lưu file, pause menu, audio bus Master/Music/SFX; cài autoload qua ProjectSettings (mục f,
    H2-T04) | hh kit | cài vào project tạm; chạy không lỗi; save rồi load khớp | PLANNED
 W10 Export Windows/Linux/Web bằng template pin (cài từ gói .tpz đã kiểm SHA, chỉ file cần), tạo
    preset nếu thiếu (SA-T05) | hh export | export project tạm ra exe và web; exe chạy headless
-   thoát 0 | PLANNED
+   thoát 0 | DONE cc1cffaf (w10 12/12: template cài từ .tpz, exe Windows chạy headless thoát 0, Web
+   có index.html, wasm, pck, js, Linux có binary và pck, preset sẵn có giữ byte, out-dir trong
+   project bị chặn; unit 16/16)
 W11 Verifier gói: G1 (P11 ngắn đọc exit từ process-exit.json của host), G2 (P4 ghi receipt host
    từng ca) | unit test | unit test xanh; G2 chỉ chứng minh đủ ở lần đóng gói sau (known limit) |
    DONE 8a9d5407 (test_gt10pc_g1_g2 8/8, test_gt10pc* 43 ok, package 9/9; hàng P11 c3h đọc lại
