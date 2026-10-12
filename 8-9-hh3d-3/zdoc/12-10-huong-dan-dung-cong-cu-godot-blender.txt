@@ -347,6 +347,9 @@ Ghi chú W4 (input, play, bot):
   chối, file không đổi. input set ghi lại project.godot qua Godot: file được định dạng lại nhưng
   giữ mọi cài đặt khác (12-10 đã kiểm autoload, display, section riêng). Action ui_* giữ mặc định
   của engine nếu không ghi đè. --replace bỏ action không có trong file (trừ ui_*).
+  LỖI ĐANG MỞ (12-10 21:00, lane HH World): input set làm mất [display] và [internationalization]
+  của một project. Tới khi sửa: sao lưu project.godot trước input set, so lại sau đó và chạy
+  hh check; repro ở 8-9-hh3d-3/12-10-hh-world-grokdo/docs/tool-gaps.md.
 - File trace: {"fps": 60, "events": [{"frame": 0, "action": "move_right", "pressed": true,
   "strength": 1.0}, {"frame": 60, "action": "move_right", "pressed": false}]}. Play chạy frame
   0..N-1, nên event ở frame N không được áp. Hai lần chạy cùng trace và seed cho cùng trace_hash
