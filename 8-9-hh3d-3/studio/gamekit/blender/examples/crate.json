@@ -1,0 +1,30 @@
+{
+  "schema": "hh-blender-recipe-1",
+  "name": "crate",
+  "steps": [
+    {"op": "clear"},
+    {
+      "op": "primitive",
+      "type": "cube",
+      "name": "Crate",
+      "size": 1.0,
+      "location": [0.0, 0.0, 0.5]
+    },
+    {
+      "op": "modifier",
+      "object": "Crate",
+      "type": "bevel",
+      "params": {"width": 0.08, "segments": 2, "affect": "EDGES"}
+    },
+    {"op": "apply_modifiers", "object": "Crate"},
+    {
+      "op": "material",
+      "object": "Crate",
+      "name": "CrateWood",
+      "base_color": [0.45, 0.26, 0.12, 1.0],
+      "metallic": 0.0,
+      "roughness": 0.72
+    },
+    {"op": "export_gltf", "out": "crate.glb", "animations": false}
+  ]
+}

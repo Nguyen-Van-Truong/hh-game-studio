@@ -1,0 +1,87 @@
+{
+  "schema": "hh-blender-recipe-1",
+  "name": "walker",
+  "steps": [
+    {"op": "clear"},
+    {
+      "op": "primitive",
+      "type": "cube",
+      "name": "Torso",
+      "size": 0.5,
+      "location": [0.0, 0.0, 1.15],
+      "scale": [1.0, 0.55, 1.2]
+    },
+    {
+      "op": "primitive",
+      "type": "uv_sphere",
+      "name": "Head",
+      "radius": 0.2,
+      "segments": 12,
+      "location": [0.0, 0.0, 1.7]
+    },
+    {
+      "op": "primitive",
+      "type": "cylinder",
+      "name": "LegL",
+      "radius": 0.09,
+      "depth": 0.72,
+      "segments": 8,
+      "location": [-0.16, 0.0, 0.4]
+    },
+    {
+      "op": "primitive",
+      "type": "cylinder",
+      "name": "LegR",
+      "radius": 0.09,
+      "depth": 0.72,
+      "segments": 8,
+      "location": [0.16, 0.0, 0.4]
+    },
+    {"op": "join", "objects": ["Torso", "Head", "LegL", "LegR"], "name": "Body"},
+    {
+      "op": "material",
+      "object": "Body",
+      "name": "WalkerCloth",
+      "base_color": [0.2, 0.35, 0.55, 1.0],
+      "metallic": 0.0,
+      "roughness": 0.6
+    },
+    {
+      "op": "armature",
+      "name": "Rig",
+      "bones": [
+        {"name": "Root", "head": [0.0, 0.0, 0.05], "tail": [0.0, 0.0, 0.8]},
+        {"name": "Spine", "head": [0.0, 0.0, 0.8], "tail": [0.0, 0.0, 1.48], "parent": "Root"},
+        {"name": "Head", "head": [0.0, 0.0, 1.48], "tail": [0.0, 0.0, 1.95], "parent": "Spine"}
+      ]
+    },
+    {"op": "skin", "mesh": "Body", "armature": "Rig"},
+    {
+      "op": "keyframes",
+      "object": "Rig",
+      "bone": "Spine",
+      "action": "Walk",
+      "fps": 24,
+      "interpolation": "LINEAR",
+      "keys": [
+        {"frame": 1, "rotation_deg": [25.0, 0.0, 0.0]},
+        {"frame": 12, "rotation_deg": [-25.0, 0.0, 0.0]},
+        {"frame": 24, "rotation_deg": [25.0, 0.0, 0.0]}
+      ]
+    },
+    {"op": "export_gltf", "out": "walker.glb", "animations": true},
+    {
+      "op": "render_sprites",
+      "target": "Body",
+      "action": "Walk",
+      "directions": 8,
+      "frames": [1, 21, 4],
+      "size": [64, 64],
+      "ortho_scale": 3.2,
+      "elevation_deg": 18,
+      "engine": "workbench",
+      "transparent": true,
+      "out": "walker_walk.png"
+    }
+  ]
+}
