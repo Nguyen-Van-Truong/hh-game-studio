@@ -8,8 +8,9 @@ Staging cleanup is fail-closed: uncertain container removal retains the tree and
 P11 has a real-Godot one-cycle producer; p11a passed but predates the verify-only fix and is retained diagnostic.
 Focused executor/probe suite: 73 tests passed; dry-run native path budget max 73/200 characters.
 P10 p10a passed natively (278s); its verify-only read found a schema-constant gap, so p10a stays diagnostic and C3 will remint.
-C3 c3a/c3b stopped at verifier routing/schema gaps after Windows; raw and task receipts retained, fixes f372e09c/a72e469e.
-Next: remint C3 P1–P11 on the fixed verifier, then pre-review, final 10×35, and critics.
+C3 c3c passed Scheduled Task and verify-only on one closure; C4 pre-review found only the disabled FINAL path and shallow full-campaign verifier.
+FINAL now binds P1–P11, reopens signed archives, and verifies the real 2×35 campaign dataset and run captures; fresh C3 is required after this source change.
+Next: remint C3 P1–P11, verify-only, then C5 final soak and C6 critics.
 GT10-PC P1–P12 remain unaccepted; AUTHORITY stays 0 until final package and two critics agree.
 GT08B Android deferred; full GT10 waits for it; GT11 remains unopened. No complete-game claim.
 

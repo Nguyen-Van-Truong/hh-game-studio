@@ -33,6 +33,7 @@ ROW_DEFS = {
     "P11": ("native", "Accepted formal25 machinery: 10x35 on frozen release, O5.6 lock and actual host exits; rehearsal one short iteration"),
     "P12": ("external", "Two independent different-model critics TICK=yes on the same frozen final manifest"),
 }
+FINAL_ROWS = tuple(row for row in ROW_DEFS if row != "P12")
 
 
 def table() -> dict:
@@ -224,6 +225,155 @@ def _verify_p11_short_row(root: Path, row: dict) -> dict:
             'capture_sha256': digest_file(capture_path), 'actual_exits': exits}
 
 
+def _read_large_json(path: Path, *, limit: int = 64 * 1024 * 1024) -> dict:
+    """Read a campaign artifact with the benchmark's larger evidence bound."""
+    path = safe_path(path)
+    raw = path.read_bytes()
+    need(len(raw) <= limit, 'GT10PC_EVIDENCE_OVERSIZE')
+    value = strict_json(raw)
+    need(isinstance(value, dict), 'GT10PC_EVIDENCE_OBJECT')
+    return value
+
+
+def _p11_full_final(output: Path) -> dict:
+    """Run the frozen formal 2x35 campaign through its real machinery.
+
+    The campaign owns its own source closure and native process receipts.  It
+    is deliberately called in the Scheduled-Task matrix process, so the outer
+    task records the matrix exit while the campaign records each Godot exit.
+    """
+    from studio.tests.replay import benchmark_profile as profile
+    from studio.tests.replay import run_benchmark_campaign as campaign
+    campaign_id = 'gt06-gt10pc-final-' + hashlib.sha256(str(output).encode()).hexdigest()[:8]
+    matrix_source = _payload_digest(_source_files(ROOT))
+    campaign_root = ROOT / '.local' / 'reviews' / campaign_id
+    need(not campaign_root.exists(), 'GT10PC_P11_FINAL_OUTPUT_EXISTS')
+    result = campaign.run_campaign(campaign_id, campaign_root)
+    need(result == 0, 'GT10PC_P11_FINAL_CAMPAIGN_EXIT')
+    capture_path = campaign_root / 'campaign-capture.json'
+    campaign_path = campaign_root / 'campaign.json'
+    profile_path = campaign_root / 'benchmark-profile.json'
+    dataset_path = campaign_root / 'dataset.json'
+    summary_path = campaign_root / 'summary.json'
+    capture = _read_large_json(capture_path)
+    frozen = _read_large_json(campaign_path)
+    saved_profile = _read_large_json(profile_path)
+    dataset = _read_large_json(dataset_path)
+    summary = _read_large_json(summary_path)
+    need(capture.get('schema_id') == 'hh-studio.benchmark-campaign-capture'
+         and capture.get('campaign_id') == campaign_id
+         and capture.get('completed') is True
+         and capture.get('formal_acceptance') is False
+         and capture.get('measurement_acceptance') == 'REQUIRES_STRICT_ASSEMBLY_AND_REVIEW'
+         and frozen.get('campaign_id') == campaign_id
+         and frozen.get('formal_acceptance') is False
+         and frozen.get('run_count') == profile.PROFILE.process_runs
+         and frozen.get('batches_per_run') == profile.PROFILE.warmup_batches + profile.PROFILE.measured_batches
+         and saved_profile == profile.asdict(profile.PROFILE),
+         'GT10PC_P11_FINAL_CAMPAIGN_SCHEMA')
+    need(capture.get('source_closure_sha256') == frozen.get('source_closure_sha256')
+         and capture.get('profile_sha256') == profile.PROFILE_SHA256
+         and frozen.get('profile_sha256') == profile.PROFILE_SHA256,
+         'GT10PC_P11_FINAL_CAMPAIGN_BINDING')
+    validated = profile.validate_dataset(dataset)
+    recalculated = profile.summarize_dataset(validated)
+    need(summary == recalculated and summary.get('status') == 'PASS'
+         and summary.get('measured_batches') == 60
+         and summary.get('measured_commands') == 60000
+         and summary.get('measured_cycles') == 6000,
+         'GT10PC_P11_FINAL_DATASET')
+    runs = capture.get('runs')
+    need(isinstance(runs, list) and len(runs) == profile.PROFILE.process_runs,
+         'GT10PC_P11_FINAL_RUN_COUNT')
+    verified_runs = []
+    for index, row in enumerate(runs):
+        need(isinstance(row, dict) and row.get('index') == index, 'GT10PC_P11_FINAL_RUN_INDEX')
+        ref = row.get('capture')
+        need(isinstance(ref, dict) and isinstance(ref.get('file'), str)
+             and isinstance(ref.get('sha256'), str), 'GT10PC_P11_FINAL_RUN_REF')
+        run_capture = campaign_root / ref['file']
+        need(run_capture.resolve().is_file() and run_capture.resolve().parent.parent == campaign_root.resolve()
+             and digest_file(run_capture) == ref['sha256'], 'GT10PC_P11_FINAL_RUN_CAPTURE_HASH')
+        captured = _read_large_json(run_capture)
+        attempt = int(run_capture.parent.name.rsplit('-attempt-', 1)[1])
+        child = campaign.verify_run_capture(
+            run_capture.parent, captured, frozen['source_closure_sha256'],
+            campaign_id=campaign_id, index=index, attempt=attempt,
+            campaign_sha256=capture['campaign_sha256'])
+        verified_runs.append({'index': index, 'run_id': captured['run_id'],
+                              'host_pid': child['processes']['host']['pid'],
+                              'editor_pid': child['processes']['editor']['pid'],
+                              'actual_exit': child.get('actual_process_exit')})
+    return {'status': 'FINAL_PASS', 'evidence_kind': 'native',
+            'coverage': 'formal-2x35', 'full_benchmark': True,
+            'run_id': campaign_id, 'campaign': str(capture_path),
+            'campaign_sha256': digest_file(capture_path),
+            'matrix_source_closure_sha256': matrix_source,
+            'source_closure_sha256': frozen['source_closure_sha256'],
+            'profile_sha256': profile.PROFILE_SHA256, 'summary_sha256': digest_file(summary_path),
+            'dataset_sha256': digest_file(dataset_path), 'runs': verified_runs}
+
+
+def _verify_p11_final_row(row: dict, *, matrix_source_closure: str) -> dict:
+    need(isinstance(row, dict) and row.get('status') == 'FINAL_PASS'
+         and row.get('evidence_kind') == 'native'
+         and row.get('coverage') == 'formal-2x35'
+         and row.get('full_benchmark') is True
+         and row.get('matrix_source_closure_sha256') == matrix_source_closure,
+         'GT10PC_P11_FINAL_VERIFY_ROW')
+    campaign_path = Path(row.get('campaign', '')).resolve()
+    review_root = (ROOT / '.local' / 'reviews').resolve()
+    need(review_root in campaign_path.parents and campaign_path.name == 'campaign-capture.json',
+         'GT10PC_P11_FINAL_VERIFY_SCOPE')
+    root = campaign_path.parent
+    capture = _read_large_json(campaign_path)
+    frozen = _read_large_json(root / 'campaign.json')
+    dataset = _read_large_json(root / 'dataset.json')
+    summary = _read_large_json(root / 'summary.json')
+    from studio.tests.replay import benchmark_profile as profile
+    from studio.tests.replay import run_benchmark_campaign as campaign
+    need(capture.get('schema_id') == 'hh-studio.benchmark-campaign-capture'
+         and capture.get('campaign_id') == row.get('run_id')
+         and capture.get('completed') is True and capture.get('formal_acceptance') is False
+         and capture.get('profile_sha256') == profile.PROFILE_SHA256
+         and frozen.get('source_closure_sha256') == row.get('source_closure_sha256')
+         and frozen.get('profile_sha256') == profile.PROFILE_SHA256,
+         'GT10PC_P11_FINAL_VERIFY_CAPTURE')
+    need(profile.summarize_dataset(profile.validate_dataset(dataset)) == summary
+         and summary.get('status') == 'PASS'
+         and summary.get('measured_batches') == 60
+         and summary.get('measured_commands') == 60000
+         and summary.get('measured_cycles') == 6000,
+         'GT10PC_P11_FINAL_VERIFY_DATASET')
+    need(digest_file(campaign_path) == row.get('campaign_sha256')
+         and digest_file(root / 'dataset.json') == row.get('dataset_sha256')
+         and digest_file(root / 'summary.json') == row.get('summary_sha256'),
+         'GT10PC_P11_FINAL_VERIFY_HASHES')
+    runs = capture.get('runs')
+    need(isinstance(runs, list) and len(runs) == profile.PROFILE.process_runs,
+         'GT10PC_P11_FINAL_VERIFY_RUN_COUNT')
+    actual = []
+    for index, ref in enumerate(runs):
+        need(isinstance(ref, dict) and ref.get('index') == index
+             and isinstance(ref.get('capture'), dict), 'GT10PC_P11_FINAL_VERIFY_RUN_REF')
+        capture_ref = ref['capture']
+        run_capture = root / capture_ref['file']
+        need(run_capture.resolve().parent.parent == root.resolve()
+             and digest_file(run_capture) == capture_ref['sha256'],
+             'GT10PC_P11_FINAL_VERIFY_RUN_HASH')
+        captured = _read_large_json(run_capture)
+        attempt = int(run_capture.parent.name.rsplit('-attempt-', 1)[1])
+        child = campaign.verify_run_capture(
+            run_capture.parent, captured, frozen['source_closure_sha256'],
+            campaign_id=row['run_id'], index=index, attempt=attempt,
+            campaign_sha256=capture['campaign_sha256'])
+        actual.append({'index': index, 'run_id': captured['run_id'],
+                       'host_pid': child['processes']['host']['pid'],
+                       'editor_pid': child['processes']['editor']['pid']})
+    return {'run_id': row['run_id'], 'profile_sha256': profile.PROFILE_SHA256,
+            'campaign_sha256': digest_file(campaign_path), 'actual_runs': actual}
+
+
 def _verify_rehearsal_matrix(path: Path) -> dict:
     doc = _read(path / 'matrix.json')
     need(doc.get('schema') == SCHEMA and doc.get('mode') == 'REHEARSAL'
@@ -246,6 +396,95 @@ def _verify_rehearsal_matrix(path: Path) -> dict:
                  'GT10PC_REHEARSAL_VERIFY_STATUS:' + row)
     return {'schema': SCHEMA, 'authority': 0, 'acceptance': False,
             'mode': 'REHEARSAL', 'status': 'REHEARSAL_PASS', 'rows': checked}
+
+
+def _verify_final_matrix(path: Path, *, trust: Path, trust_sha256: str) -> dict:
+    doc = _read(path / 'matrix.json')
+    need(doc.get('schema') == SCHEMA and doc.get('mode') == 'FINAL'
+         and doc.get('authority') == 0 and doc.get('acceptance') is False
+         and doc.get('status') == 'FINAL_PASS', 'GT10PC_FINAL_VERIFY_SCHEMA')
+    requested = doc.get('rows_requested')
+    rows = doc.get('rows')
+    need(requested == list(FINAL_ROWS) and isinstance(rows, dict)
+         and set(rows) == set(FINAL_ROWS), 'GT10PC_FINAL_VERIFY_ROWS')
+    need(doc.get('source_closure_sha256') == _payload_digest(_source_files(ROOT)),
+         'GT10PC_FINAL_VERIFY_SOURCE')
+    # Re-open the exact archives produced by this matrix.  A row status alone
+    # is not allowed to stand in for archive signature/manifest verification.
+    artifacts = doc.get('artifacts')
+    need(isinstance(artifacts, dict) and set(artifacts) == {'Windows', 'Linux-headless'},
+         'GT10PC_FINAL_VERIFY_ARTIFACTS')
+    keys = load_trust(trust, expected_sha256=trust_sha256)
+    for target in ('Windows', 'Linux-headless'):
+        versions = artifacts[target]
+        need(isinstance(versions, dict) and set(versions) == {'0.1.0', '0.1.1'},
+             'GT10PC_FINAL_VERIFY_VERSIONS:' + target)
+        for version in ('0.1.0', '0.1.1'):
+            item = versions[version]
+            archive = Path(item.get('path', '')).resolve()
+            need(archive.is_file() and path.resolve() in archive.parents,
+                 'GT10PC_FINAL_VERIFY_ARCHIVE_SCOPE:' + target + ':' + version)
+            selected = verify_package(archive, trusted_keys=keys, target=target,
+                                      expected_version=version)
+            need(selected['archive_sha256'] == item.get('archive_sha256')
+                 and selected['manifest_sha256'] == item.get('manifest_sha256')
+                 and selected['manifest']['source_closure_sha256'] == item.get('source_closure_sha256'),
+                 'GT10PC_FINAL_VERIFY_ARCHIVE_BINDING:' + target + ':' + version)
+    checked = {'P11': _verify_p11_final_row(rows['P11'],
+                                            matrix_source_closure=doc['source_closure_sha256'])}
+    for row in FINAL_ROWS:
+        if row != 'P11':
+            need(rows[row].get('status') == 'FINAL_PASS', 'GT10PC_FINAL_VERIFY_STATUS:' + row)
+    p1 = rows['P1']
+    need(p1.get('targets') == ['Windows', 'Linux-headless'], 'GT10PC_FINAL_VERIFY_P1')
+    p2 = rows['P2']
+    attacks = p2.get('archive_and_native_attacks')
+    need(p2.get('evidence_kind') == 'host+native' and isinstance(attacks, list)
+         and all(item.get('rejected') is True for item in attacks[:8]),
+         'GT10PC_FINAL_VERIFY_P2_HOST')
+    native = next((item for item in attacks if item.get('native') == 'PASS'), None)
+    need(isinstance(native, dict) and native.get('worker_exit') == 0
+         and isinstance(native.get('attacks'), list) and len(native['attacks']) == 4
+         and all(item.get('rejected') is True for item in native['attacks'])
+         and native.get('godot_exit', {}).get('exit_code') == 0
+         and native.get('godot_exit', {}).get('tree_verified') is True
+         and native.get('godot_exit', {}).get('timed_out') is False,
+         'GT10PC_FINAL_VERIFY_P2_NATIVE')
+    for row in ('P3', 'P4', 'P5', 'P6'):
+        need(rows[row].get('target') == 'Windows'
+             and rows[row].get('producer') == 'windows-producer'
+             and rows[row].get('linux') == 'FINAL_PASS',
+             'GT10PC_FINAL_VERIFY_' + row)
+    p7 = rows['P7']
+    need(p7.get('evidence_kind') == 'native' and p7.get('cases') == 8
+         and isinstance(p7.get('producers'), list) and len(p7['producers']) == 3
+         and sum(item.get('cases', 0) for item in p7['producers']) == 8,
+         'GT10PC_FINAL_VERIFY_P7')
+    for item in p7['producers']:
+        child = item.get('child', {})
+        need(child.get('exit_code') == 0 and child.get('wrapper_exit_code') == 0
+             and child.get('tree_verified') is True and child.get('timed_out') is False,
+             'GT10PC_FINAL_VERIFY_P7_CHILD')
+    p8 = rows['P8'].get('checks', {})
+    need(rows['P8'].get('status') == 'FINAL_PASS'
+         and p8.get('closure_verified') is True and p8.get('network_used') is False
+         and p8.get('latest_autofetch') is False and p8.get('missing_dependency_rejected') is True
+         and p8.get('version_rejected') is True, 'GT10PC_FINAL_VERIFY_P8')
+    need(rows['P9'].get('evidence_kind') == 'docs+native'
+         and rows['P9'].get('acceptance') is False
+         and rows['P9'].get('authority') == 0, 'GT10PC_FINAL_VERIFY_P9')
+    p10 = rows['P10']
+    producers = p10.get('producers')
+    need(p10.get('evidence_kind') == 'native' and isinstance(producers, list)
+         and len(producers) == 2 and len({item.get('manifest_sha256') for item in producers}) == 1,
+         'GT10PC_FINAL_VERIFY_P10')
+    for item in producers:
+        child = item.get('child', {})
+        need(child.get('exit_code') == 0 and child.get('wrapper_exit_code') == 0
+             and child.get('tree_verified') is True and child.get('timed_out') is False,
+             'GT10PC_FINAL_VERIFY_P10_CHILD')
+    return {'schema': SCHEMA, 'authority': 0, 'acceptance': False,
+            'mode': 'FINAL', 'status': 'FINAL_PASS', 'rows': checked}
 
 
 def _p2_archive_attacks(output: Path, artifacts: dict, *, trust: Path,
@@ -348,14 +587,19 @@ def _p2_archive_attacks(output: Path, artifacts: dict, *, trust: Path,
 
 
 def run_rehearsal(rows: list[str], *, output: Path, trust: Path,
-                  private: Path, trust_sha256: str) -> dict:
-    """Run selected real producers once on fresh output; never emits acceptance."""
-    need(not output.exists(), "GT10PC_REHEARSAL_OUTPUT_EXISTS")
+                  private: Path, trust_sha256: str, mode: str = 'REHEARSAL') -> dict:
+    """Run selected real producers once on fresh output; never emits acceptance.
+
+    FINAL reuses the same producers and adds the full native 2x35 campaign for
+    P11.  The result remains authority=0 until the external critic gate.
+    """
+    need(mode in ('REHEARSAL', 'FINAL'), 'GT10PC_MATRIX_MODE')
+    need(not output.exists(), 'GT10PC_' + mode + '_OUTPUT_EXISTS')
     output.mkdir(parents=True)
     frozen = _payload_digest(_source_files(ROOT))
     artifacts = _build_rehearsal_artifacts(output, trust=trust, private=private,
                                             trust_sha256=trust_sha256)
-    result = {"schema": "hh-gt10pc-matrix-3", "mode": "REHEARSAL", "authority": 0,
+    result = {"schema": "hh-gt10pc-matrix-3", "mode": mode, "authority": 0,
               "acceptance": False, "rows": {}, "source_closure_sha256": frozen,
               "artifacts": artifacts}
     try:
@@ -475,14 +719,26 @@ def run_rehearsal(rows: list[str], *, output: Path, trust: Path,
                                        "producer": "p10-installed", "producers": producers,
                                        "manifest_sha256": producers[0]["manifest_sha256"]}
         if "P11" in rows:
-            result["rows"]["P11"] = _p11_short_rehearsal(output)
+            result["rows"]["P11"] = (_p11_full_final(output) if mode == 'FINAL'
+                                      else _p11_short_rehearsal(output))
         if "P12" in rows:
             result["rows"]["P12"] = {"status": "DEFERRED", "reason": "requires frozen final and critics"}
     except (ValueError, OSError, subprocess.SubprocessError) as exc:
         result["error"] = type(exc).__name__ + ": " + str(exc)
         result["status"] = "DIAGNOSTIC_FAIL"
     else:
-        result["status"] = rehearsal_status(result["rows"], rows)
+        if mode == 'FINAL':
+            for row in result['rows'].values():
+                if row.get('status') == 'REHEARSAL_PASS':
+                    row['status'] = 'FINAL_PASS'
+                if row.get('linux') == 'REHEARSAL_PASS':
+                    row['linux'] = 'FINAL_PASS'
+            result['status'] = ('FINAL_PASS' if set(result['rows']) == set(rows)
+                                and all(row.get('status') == 'FINAL_PASS'
+                                        for row in result['rows'].values())
+                                else 'FINAL_INCOMPLETE')
+        else:
+            result["status"] = rehearsal_status(result["rows"], rows)
     need(_payload_digest(_source_files(ROOT)) == frozen, "GT10PC_REHEARSAL_SOURCE_DRIFT")
     result["rows_requested"] = rows
     (output / "matrix.json").write_text(json.dumps(result, sort_keys=True, indent=2) + "\n", encoding="utf-8")
@@ -718,6 +974,10 @@ def verify_only(path: Path, *, trust: Path, trust_sha256: str,
             raw = _verify_rehearsal_matrix(safe_path(path))
             print(json.dumps(raw, sort_keys=True))
             return 0
+        if candidate.get('schema') == SCHEMA and candidate.get('mode') == 'FINAL':
+            raw = _verify_final_matrix(safe_path(path), trust=trust, trust_sha256=trust_sha256)
+            print(json.dumps(raw, sort_keys=True))
+            return 0
     if target == "Linux-headless":
         from studio.tests.conformance.gt10pc_linux_verify import verify_linux
         need(artifact is not None and upgrade_artifact is not None,
@@ -757,7 +1017,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--run-id")
     parser.add_argument("--output", type=Path)
     args = parser.parse_args(argv)
-    rows = args.rows.split(",") if args.rows else list(ROW_DEFS)
+    rows = args.rows.split(",") if args.rows else (list(FINAL_ROWS) if args.matrix == 'final' else list(ROW_DEFS))
     if any(row not in ROW_DEFS for row in rows) or len(rows) != len(set(rows)):
         parser.error("unknown or duplicate row")
     if args.matrix == "final" and args.rows:
@@ -774,15 +1034,16 @@ def main(argv: list[str] | None = None) -> int:
             return verify_only(args.verify_only, trust=args.trust, trust_sha256=args.trust_sha256,
                                target=args.target, artifact=args.artifact,
                                upgrade_artifact=args.upgrade_artifact)
-        if args.matrix == "rehearsal":
+        if args.matrix in ("rehearsal", "final"):
             need(args.trust is not None and args.trust_sha256 is not None
                  and args.private_key is not None and args.output is not None,
-                 "GT10PC_REHEARSAL_BINDINGS_REQUIRED")
+                 "GT10PC_MATRIX_BINDINGS_REQUIRED")
             result = run_rehearsal(rows, output=safe_path(args.output), trust=safe_path(args.trust),
-                                   private=safe_path(args.private_key), trust_sha256=args.trust_sha256)
+                                   private=safe_path(args.private_key), trust_sha256=args.trust_sha256,
+                                   mode='FINAL' if args.matrix == 'final' else 'REHEARSAL')
             print(json.dumps(result, sort_keys=True))
-            return 0 if result.get("status") == "REHEARSAL_PASS" else 2
-        raise ValueError("GT10PC_PRODUCERS_INCOMPLETE_FINAL_AND_REHEARSAL_DISABLED")
+            return 0 if result.get("status") in ("REHEARSAL_PASS", "FINAL_PASS") else 2
+        raise ValueError("GT10PC_MATRIX_MODE_REQUIRED")
     except (ValueError, OSError) as exc:
         print(json.dumps({"schema": SCHEMA, "status": "DIAGNOSTIC_FAIL",
                           "authority": 0, "acceptance": False, "error": str(exc)}))

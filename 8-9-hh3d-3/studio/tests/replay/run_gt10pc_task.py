@@ -24,6 +24,7 @@ REPO_ROOT = STUDIO.parent
 MATRIX = STUDIO / "tests" / "conformance" / "run_gt10pc_matrix.py"
 RUN_RE = re.compile(r"gt10pc-(?:final|rehearsal)-20\d{6}-[a-z0-9-]{1,24}\Z")
 ROWS = tuple("P" + str(index) for index in range(1, 13))
+FINAL_ROWS = tuple("P" + str(index) for index in range(1, 12))
 SCHEMA = "HH-GT10PC-TASK-REQUEST-2"
 TRUST = STUDIO / ".local" / "gt10pc-publisher-v2" / "trust.json"
 PRIVATE = STUDIO / ".local" / "gt10pc-publisher-v2" / "private.raw"
@@ -65,7 +66,7 @@ def normalize_rows(rows: str | None, mode: str) -> list[str]:
     selected = list(ROWS) if rows is None else rows.split(",")
     if not selected or any(row not in ROWS for row in selected) or len(selected) != len(set(selected)):
         raise ValueError("GT10PC_TASK_ROWS")
-    if mode == "final" and selected != list(ROWS):
+    if mode == "final" and selected != list(FINAL_ROWS):
         raise ValueError("GT10PC_FINAL_REQUIRES_ALL_ROWS")
     return selected
 
@@ -131,13 +132,14 @@ def run(run_id: str) -> int:
     started = time.monotonic(); code = 1; process_observed = False
     stdout_path, stderr_path = task / "stdout.txt", task / "stderr.txt"
     try:
-        if request["mode"] == "final":
-            raise ValueError("GT10PC_FINAL_DISABLED_UNTIL_NATIVE_P1_P10")
         console = Path(sys.executable).resolve().with_name("python.exe")
-        command = [str(console), "-B", str(MATRIX), "--matrix", "rehearsal",
-                   "--rows", ",".join(request["rows"]), "--output", str(matrix_root),
+        command = [str(console), "-B", str(MATRIX), "--matrix", request["mode"],
+                   "--output", str(matrix_root),
                    "--trust", str(TRUST), "--trust-sha256", request["trust_sha256"],
                    "--private-key", str(PRIVATE)]
+        if request["mode"] == "rehearsal":
+            command[command.index("--output"):command.index("--output")] = [
+                "--rows", ",".join(request["rows"])]
         env = os.environ.copy(); env["PYTHONPATH"] = str(STUDIO) + os.pathsep + env.get("PYTHONPATH", "")
         with stdout_path.open("xb") as stdout, stderr_path.open("xb") as stderr:
             proc = subprocess.run(command, cwd=REPO_ROOT, stdout=stdout, stderr=stderr,
