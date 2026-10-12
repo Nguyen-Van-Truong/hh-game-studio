@@ -46,6 +46,14 @@ func _initialize() -> void:
 		_fail_setup("BAD_REQUEST", "missing or invalid --request file")
 		return
 	var body: Dictionary = req
+	var profile: String = str(body.get("user_profile", "")).replace("\\", "/").simplify_path().trim_suffix("/")
+	var user_dir: String = OS.get_user_data_dir().replace("\\", "/").simplify_path()
+	if OS.get_name() == "Windows":
+		profile = profile.to_lower()
+		user_dir = user_dir.to_lower()
+	if profile.is_empty() or not user_dir.begins_with(profile + "/"):
+		_fail_setup("USER_DATA_ISOLATION_FAILED", "user:// is outside the requested run profile")
+		return
 	target = HH.variant_int(body.get("frames", 60))
 	every = maxi(HH.variant_int(body.get("every", 1)), 1)
 	observe = body.get("observe", [])
@@ -137,12 +145,52 @@ func _sample(frame: int) -> void:
 			continue
 		var spec: Dictionary = item
 		var label: String = str(spec.get("label", ""))
-		var node: Node = current.get_node_or_null(NodePath(str(spec.get("node", ""))))
+		var node: Node = _observe_node(str(spec.get("node", "")))
 		if node == null:
 			values[label] = null
 		else:
-			values[label] = HH.to_json(node.get(str(spec.get("prop", ""))))
+			values[label] = _observe_value(node, str(spec.get("prop", "")))
 	observations.append({"frame": frame, "values": values})
+
+
+## Resolve a probe relative to the instantiated scene.  The instantiated
+## scene itself is a valid target, so both ``Root:flag`` and ``.:flag``
+## observe the root instead of looking for a child named Root.  Accepting a
+## root-name prefix also makes probes copied from editor paths stable.
+func _observe_node(path: String) -> Node:
+	if current == null:
+		return null
+	if path.is_empty() or path == "." or path == str(current.name):
+		return current
+	var relative: String = path
+	var root_prefix: String = str(current.name) + "/"
+	if relative.begins_with(root_prefix):
+		relative = relative.substr(root_prefix.length())
+	if relative.is_empty() or relative == ".":
+		return current
+	return current.get_node_or_null(NodePath(relative))
+
+
+## Godot exposes AnimationTree parameters as property names containing '/'.
+## Native const boolean queries (for example is_on_floor) are also probes;
+## arbitrary script methods and methods that accept arguments are not called.
+func _observe_value(node: Node, prop: String) -> Variant:
+	if prop.is_empty():
+		return null
+	if not prop.contains("/") and node.has_method(prop):
+		for method: Dictionary in ClassDB.class_get_method_list(node.get_class()):
+			if str(method.get("name", "")) != prop:
+				continue
+			var args: Array = method.get("args", [])
+			var returns: Dictionary = method.get("return", {})
+			var flags: int = HH.variant_int(method.get("flags", 0))
+			if args.is_empty() and HH.variant_int(returns.get("type", TYPE_NIL)) == TYPE_BOOL and (flags & METHOD_FLAG_CONST) != 0:
+				return HH.to_json(node.call(prop))
+		# A script method is deliberately not read through Object.get: Godot
+		# exposes it as a Callable, which would make an arbitrary mutator look
+		# like a successful observation.  Probes stay read-only.
+		return null
+	return HH.to_json(node.get(prop))
 
 
 func _finish() -> void:
@@ -151,6 +199,7 @@ func _finish() -> void:
 		"frames": steps,
 		"observations": observations,
 		"errors": sink.messages,
+		"user_data_dir": OS.get_user_data_dir(),
 	}
 	HH.emit(result)
 	quit(0)

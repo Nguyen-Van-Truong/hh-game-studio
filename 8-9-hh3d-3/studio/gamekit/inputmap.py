@@ -1,8 +1,9 @@
 """hh input: list and replace InputMap actions stored in a game's project.godot.
 
 ``input set`` validates on the host, asks Godot to reject unknown keys before it writes, checkpoints
-``project.godot``, swaps in the temp file Godot saved, and journals the command only after a fresh
-process lists the same actions back.
+``project.godot``, merges only requested input keys from the temp file Godot saved, and journals
+the command only after a fresh process lists the same actions back and unrelated source stays
+unchanged.
 """
 
 from __future__ import annotations
@@ -15,6 +16,7 @@ from pathlib import Path
 from typing import Any
 
 from . import common as C
+from . import project_config as PC
 
 MAX_ACTIONS = 128
 MAX_EVENTS = 16
@@ -189,6 +191,24 @@ def _file_has_action(data: bytes, action: str) -> bool:
     return any(line.strip().startswith(needle) for line in data.splitlines())
 
 
+def _project_drop_keys(before: list[dict[str, Any]], requested: dict[str, dict[str, Any]], replace: bool) -> set[str]:
+    """Return the explicit ``project.godot`` keys this command owns.
+
+    The Godot helper serializes the complete ProjectSettings database.  The host
+    merges that output back into the original file, so only input actions in the
+    command's write set may be replaced or removed.  Built-in UI actions are
+    changed only when explicitly requested, never by the replace sweep.
+    """
+    names = set(requested)
+    if replace:
+        names.update(
+            str(item.get("name"))
+            for item in before
+            if isinstance(item, dict) and item.get("name") and not _is_ui(str(item.get("name")))
+        )
+    return {f"input/{name}" for name in names if name}
+
+
 def _list(project: C.Project, include_all: bool, timeout: float) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     run = C.run_godot_tool(project.root, "inputmap_tool.gd", {"mode": "list", "all": include_all}, timeout=timeout)
     result = C.require_result(run, "input list")
@@ -223,6 +243,7 @@ def set_actions(
                 return prior
             C.refuse_if_editor_open(project, allow_open_editor)
             before_sha = C.sha256_file(godot_file)
+            original_project_bytes = godot_file.read_bytes()
             C.checkpoint(project, command_id, [godot_file])
             try:
                 run = C.run_godot_tool(
@@ -236,22 +257,28 @@ def set_actions(
                 applied = C.require_result(run, "input set")
                 if not temp.is_file():
                     raise C.GamekitError("GODOT_FAILED", "input set reported ok but wrote no project file")
-                data = temp.read_bytes()
+                generated = temp.read_bytes()
                 before = _coerce_actions(applied.get("before"))
                 written = _coerce_actions(applied.get("written"))
                 echo = diff_request(normalized, written)
                 if echo:
                     raise C.GamekitError("GODOT_FAILED", "; ".join(echo[:6]), problems=echo[:40])
+                data = PC.merge_project_godot(
+                    original_project_bytes,
+                    generated,
+                    drop_keys=_project_drop_keys(before, normalized, bool(replace)),
+                )
                 missing = [item["name"] for item in written if not _file_has_action(data, item["name"])]
                 if b"config_version=" not in data or b"[application]" not in data or missing:
                     raise C.GamekitError("GODOT_FAILED", "saved project file failed host checks", missing=missing)
                 C.atomic_write_bytes(godot_file, data)
                 temp.unlink()
                 fresh, fresh_summary = _list(project, True, timeout)
+                PC.require_preserved(original_project_bytes, godot_file.read_bytes(), _project_drop_keys(before, normalized, bool(replace)))
                 problems = diff_readback(before, written, fresh, bool(replace))
                 if problems:
                     raise C.GamekitError("READBACK_MISMATCH", "; ".join(problems[:6]), problems=problems[:40])
-            except C.GamekitError:
+            except Exception:
                 C.restore_checkpoint(project, command_id)
                 raise
             receipt = {

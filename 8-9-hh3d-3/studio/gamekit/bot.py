@@ -3,7 +3,8 @@
 The trace is replayable through ``hh play``. ``ok`` means the scene did not crash and reported no
 script errors. A stuck interval is a finding, not a failure: the tracked body stayed within
 ``stuck_dist`` of the interval start for at least ``stuck_frames`` physics frames while an action
-was held.
+was held. Coverage and stuck distance use XY for Vector2 and the XZ ground plane for Vector3;
+``--plane`` can select a different projection for a side-view 3D game.
 """
 
 from __future__ import annotations
@@ -18,6 +19,7 @@ from . import common as C
 from . import play as P
 
 _NAME_RE_OK = re.compile(r"^[A-Za-z_][A-Za-z0-9_]{0,63}$")
+_PLANES = {"xy": (0, 1), "xz": (0, 2), "yz": (1, 2)}
 
 
 def _fail(detail: str) -> None:
@@ -85,8 +87,24 @@ def _dist(a: tuple[float, float], b: tuple[float, float]) -> float:
     return math.hypot(a[0] - b[0], a[1] - b[1])
 
 
-def _positions(observations: list[dict[str, Any]], label: str) -> dict[int, tuple[float, float]]:
+def _plane(observations: list[dict[str, Any]], label: str, plane: str) -> str:
+    if plane not in ("auto", *_PLANES):
+        _fail("plane must be auto, xy, xz, or yz")
+    if plane != "auto":
+        return plane
+    for row in observations:
+        values = row.get("values") if isinstance(row, dict) else None
+        value = values.get(label) if isinstance(values, dict) else None
+        if isinstance(value, list) and len(value) in (2, 3) and all(
+            not isinstance(v, bool) and isinstance(v, (int, float)) and math.isfinite(float(v)) for v in value
+        ):
+            return "xz" if len(value) == 3 else "xy"
+    return "xy"
+
+
+def _positions(observations: list[dict[str, Any]], label: str, plane: str = "xy") -> dict[int, tuple[float, float]]:
     found: dict[int, tuple[float, float]] = {}
+    axes = _PLANES[plane]
     for row in observations:
         if not isinstance(row, dict):
             continue
@@ -94,14 +112,17 @@ def _positions(observations: list[dict[str, Any]], label: str) -> dict[int, tupl
         if not isinstance(values, dict) or label not in values:
             continue
         value = values[label]
-        if not isinstance(value, list) or len(value) < 2:
+        if not isinstance(value, list) or len(value) not in (2, 3) or len(value) <= max(axes):
             continue
-        x, y = value[0], value[1]
+        x, y = value[axes[0]], value[axes[1]]
         if isinstance(x, bool) or isinstance(y, bool) or not isinstance(x, (int, float)) or not isinstance(y, (int, float)):
             continue
         if not math.isfinite(float(x)) or not math.isfinite(float(y)):
             continue
-        found[int(row["frame"])] = (float(x), float(y))
+        frame = row.get("frame")
+        if isinstance(frame, bool) or not isinstance(frame, int) or frame < 0:
+            continue
+        found[frame] = (float(x), float(y))
     return found
 
 
@@ -154,8 +175,10 @@ def analyze(
     stuck_frames: int,
     stuck_dist: float,
     cell: int,
+    plane: str = "auto",
 ) -> dict[str, Any]:
-    positions = _positions(observations, label)
+    selected_plane = _plane(observations, label, plane)
+    positions = _positions(observations, label, selected_plane)
     held = held_during(trace, frames)
     stuck = find_stuck(positions, held, stuck_frames, stuck_dist)
     cells: set[tuple[int, int]] = set()
@@ -166,7 +189,7 @@ def analyze(
         xs.append(x)
         ys.append(y)
     bbox = None if not xs else {"min": [min(xs), min(ys)], "max": [max(xs), max(ys)]}
-    return {"stuck": stuck, "coverage": len(cells), "bbox": bbox, "samples": len(positions)}
+    return {"stuck": stuck, "coverage": len(cells), "bbox": bbox, "samples": len(positions), "plane": selected_plane}
 
 
 def run_bot(
@@ -182,6 +205,8 @@ def run_bot(
     stuck_frames: int = 120,
     stuck_dist: float = 4.0,
     cell: int = 32,
+    plane: str = "auto",
+    out: str | None = None,
     timeout: float | None = None,
 ) -> dict[str, Any]:
     frames_n = P._frames(frames)
@@ -199,6 +224,8 @@ def run_bot(
         _fail("stuck-dist must be a finite number > 0")
     if isinstance(cell, bool) or not isinstance(cell, int) or cell < 1 or cell > 1_000_000:
         _fail("cell must be an integer 1..1000000")
+    _plane([], "", plane)
+    out = P._checked_out(project, out)
     probes = P.parse_observe(f"{track}:global_position")
     label = probes[0]["label"]
     trace = build_trace(names, frames_n, seed_n, low, high)
@@ -213,18 +240,19 @@ def run_bot(
         timeout=timeout,
     )
     observations = played.get("observations") if isinstance(played.get("observations"), list) else []
-    report = analyze(observations, trace, label, frames_n, stuck_frames, float(stuck_dist), cell)
+    report = analyze(observations, trace, label, frames_n, stuck_frames, float(stuck_dist), cell, plane)
     errors = list(played.get("errors") or [])
-    if observations and report["samples"] == 0:
+    if report["samples"] == 0:
         errors.append(f"no positions observed for {label}")
     crashed = bool(played.get("crashed"))
-    return {
-        "ok": (not crashed) and not errors,
+    result = {
+        "ok": bool(played.get("ok")) and (not crashed) and not errors,
         "crashed": crashed,
         "errors": errors,
         "stuck": report["stuck"],
         "coverage": report["coverage"],
         "bbox": report["bbox"],
+        "plane": report["plane"],
         "trace": trace,
         "frames": frames_n,
         "seed": seed_n,
@@ -238,9 +266,11 @@ def run_bot(
             "stuck_frames": stuck_frames,
             "stuck_dist": float(stuck_dist),
             "cell": cell,
+            "plane": plane,
         },
         "process": played.get("process"),
     }
+    return P._finish(result, out, project)
 
 
 def _cmd_bot(args: argparse.Namespace) -> dict[str, Any]:
@@ -256,6 +286,8 @@ def _cmd_bot(args: argparse.Namespace) -> dict[str, Any]:
         stuck_frames=args.stuck_frames,
         stuck_dist=args.stuck_dist,
         cell=args.cell,
+        plane=args.plane,
+        out=args.out,
     )
 
 
@@ -272,4 +304,7 @@ def register(sub: argparse._SubParsersAction) -> None:
     parser.add_argument("--stuck-frames", type=int, default=120)
     parser.add_argument("--stuck-dist", type=float, default=4.0)
     parser.add_argument("--cell", type=int, default=32)
+    parser.add_argument("--plane", choices=("auto", "xy", "xz", "yz"), default="auto",
+                        help="coverage/stuck plane: auto uses XY for 2D, XZ for 3D")
+    parser.add_argument("--out", default=None, help="also write the bot report JSON outside the project")
     parser.set_defaults(func=_cmd_bot)

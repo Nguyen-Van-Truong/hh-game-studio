@@ -144,7 +144,12 @@ class ManifestTest(unittest.TestCase):
             self.assertIn(bak, text)
             self.assertIn("loaded backup", text)
             self.assertNotIn("remove_absolute(final_abs)", text)
-            self.assertIn("rename_absolute(final_abs, bak_abs)", text)
+            if name == "save":
+                # Save quarantines a corrupt live file instead of replacing a
+                # known-good backup; valid replacements still rotate to bak_abs.
+                self.assertIn("rename_absolute(final_abs, park_path)", text)
+            else:
+                self.assertIn("rename_absolute(final_abs, bak_abs)", text)
             self.assertIn("rename_absolute(temp_abs, final_abs)", text)
             self.assertIn("rename_absolute(bak_abs, final_abs)", text)
 

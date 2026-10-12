@@ -1,6 +1,7 @@
 # HH gamekit kit save v1 - self-made (HH Studio)
 extends Node
 ## Versioned JSON saves in user://saves/<slot>.json. Assign `migrate` to upgrade older files.
+## A successful replacement retains the previous valid save as .<slot>.json.bak.
 
 const SAVE_VERSION: int = 1
 
@@ -37,10 +38,14 @@ func save_game(slot: String, data: Dictionary) -> Error:
 	var fa: FileAccess = FileAccess.open(temp_abs, FileAccess.WRITE)
 	if fa == null:
 		return FileAccess.get_open_error()
-	@warning_ignore("return_value_discarded") # a short write is still published by the atomic rename
-	fa.store_string(text)
+	var stored: bool = fa.store_string(text)
 	fa.flush()
+	var write_error: Error = fa.get_error()
 	fa.close()
+	if not stored or write_error != OK or FileAccess.get_file_as_string(temp_abs) != text or not _is_valid_save(temp_abs):
+		@warning_ignore("return_value_discarded") # failed staging must not replace live or backup
+		DirAccess.remove_absolute(temp_abs)
+		return write_error if write_error != OK else ERR_FILE_CORRUPT
 	return _replace(temp_abs, final_abs)
 
 
@@ -51,7 +56,11 @@ func load_game(slot: String) -> Dictionary:
 	var path: String = _resolve_path(slot)
 	if path.is_empty():
 		return {}
-	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
+	var parser: JSON = JSON.new()
+	if parser.parse(FileAccess.get_file_as_string(path)) != OK:
+		push_warning("HHSave: corrupt save (invalid JSON): " + slot)
+		return {}
+	var parsed: Variant = parser.data
 	if not (parsed is Dictionary):
 		push_warning("HHSave: corrupt save (not an object): " + slot)
 		return {}
@@ -143,6 +152,15 @@ func _slot_ok(slot: String) -> bool:
 func _resolve_path(slot: String) -> String:
 	var path: String = "user://saves/%s.json" % slot
 	if FileAccess.file_exists(path):
+		# Prefer the live file when its envelope/hash is valid. If a previous
+		# interrupted write left a corrupt live file, fall back to the last-good
+		# backup instead of silently losing progress.
+		if _is_valid_save(ProjectSettings.globalize_path(path)):
+			return path
+		var backup: String = "user://saves/.%s.json.bak" % slot
+		if FileAccess.file_exists(backup) and _is_valid_save(ProjectSettings.globalize_path(backup)):
+			push_warning("HHSave: live save is corrupt; loaded last-good backup for slot " + slot)
+			return backup
 		return path
 	var bak: String = "user://saves/.%s.json.bak" % slot
 	if FileAccess.file_exists(bak):
@@ -158,35 +176,76 @@ func _backup_abs(final_abs: String) -> String:
 	return folder + hidden
 
 
+func _is_valid_save(path_abs: String) -> bool:
+	if not FileAccess.file_exists(path_abs):
+		return false
+	var parser: JSON = JSON.new()
+	if parser.parse(FileAccess.get_file_as_string(path_abs)) != OK:
+		return false
+	var parsed: Variant = parser.data
+	if not (parsed is Dictionary):
+		return false
+	var body: Dictionary = parsed
+	if not body.has("version") or not body.has("sha256") or not (body.get("data") is Dictionary):
+		return false
+	var raw_version: Variant = body.get("version")
+	if not (raw_version is int or raw_version is float):
+		return false
+	var version: int = _to_int(raw_version)
+	if version < 0 or raw_version != version:
+		return false
+	var errs: Array = []
+	var normalized: Variant = _normalize(body["data"], 0, errs)
+	if not errs.is_empty() or not (normalized is Dictionary):
+		return false
+	var canon: String = JSON.stringify(normalized, "", true, true)
+	return not canon.is_empty() and canon.sha256_text() == str(body["sha256"])
+
+
 ## Move the live file aside, then put the temp file in its place.
 ## Never delete the live file until the new bytes have its name.
 func _replace(temp_abs: String, final_abs: String) -> Error:
 	var bak_abs: String = _backup_abs(final_abs)
 	var backed_up: bool = false
+	var quarantined_abs: String = final_abs + ".hhtmp-bad"
+	if FileAccess.file_exists(quarantined_abs):
+		@warning_ignore("return_value_discarded")
+		DirAccess.remove_absolute(quarantined_abs)
 	if FileAccess.file_exists(final_abs):
-		if FileAccess.file_exists(bak_abs):
+		# Never replace an existing last-good backup with a corrupt live file.
+		# Quarantine the bad live bytes while publishing, then remove them only
+		# after the new file has its final name.
+		var park_path: String = bak_abs
+		if not _is_valid_save(final_abs):
+			park_path = quarantined_abs
+		elif FileAccess.file_exists(bak_abs):
 			var cleared: Error = DirAccess.remove_absolute(bak_abs)
 			if cleared != OK:
 				@warning_ignore("return_value_discarded") # publish failed; drop the temp file
 				DirAccess.remove_absolute(temp_abs)
 				return cleared
-		var parked: Error = DirAccess.rename_absolute(final_abs, bak_abs)
+		var parked: Error = DirAccess.rename_absolute(final_abs, park_path)
 		if parked != OK:
 			@warning_ignore("return_value_discarded") # publish failed; drop the temp file
 			DirAccess.remove_absolute(temp_abs)
 			return parked
-		backed_up = true
+		backed_up = park_path == bak_abs
 	var placed: Error = DirAccess.rename_absolute(temp_abs, final_abs)
 	if placed != OK:
 		if backed_up:
 			@warning_ignore("return_value_discarded") # put the previous file back and still return the rename error
 			DirAccess.rename_absolute(bak_abs, final_abs)
+		elif FileAccess.file_exists(quarantined_abs):
+			@warning_ignore("return_value_discarded")
+			DirAccess.rename_absolute(quarantined_abs, final_abs)
 		@warning_ignore("return_value_discarded") # publish failed; drop the temp file
 		DirAccess.remove_absolute(temp_abs)
 		return placed
-	if FileAccess.file_exists(bak_abs):
-		@warning_ignore("return_value_discarded") # the new file is in place; a leftover backup is not fatal
-		DirAccess.remove_absolute(bak_abs)
+	if FileAccess.file_exists(quarantined_abs):
+		@warning_ignore("return_value_discarded") # corrupt bytes are no longer recoverable
+		DirAccess.remove_absolute(quarantined_abs)
+	# Keep bak_abs intentionally: it is the last-good recovery point for a
+	# later interrupted/corrupt write. The next valid save rotates it.
 	return OK
 
 

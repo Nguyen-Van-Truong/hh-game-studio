@@ -289,6 +289,10 @@ def apply(
         if expect_sha256 and expect_sha256 != before_sha:
             raise C.GamekitError("STALE", "scene changed since it was inspected", current_sha256=before_sha)
         C.refuse_if_editor_open(project, allow_open_editor)
+        # ``scene new res://levels/intro/main.tscn`` should work on a fresh
+        # project.  Godot writes the temporary scene beneath this directory,
+        # so create the validated parent before launching it.
+        scene_path.parent.mkdir(parents=True, exist_ok=True)
         imported = refresh_import(project.root)
         temp_res = scene.rsplit("/", 1)[0] + f"/.{scene_path.stem}.hhtmp-{secrets.token_hex(3)}.tscn"
         temp_path = project.res_to_path(temp_res)

@@ -574,8 +574,12 @@ def op_keyframes(bpy, step: dict, state: RunState) -> None:
         _bind_slot(ad, existing)
     elif ad.action is not None and ad.action.name != action_name:
         ad.action = None
-        if hasattr(ad, "action_slot"):
-            ad.action_slot = None
+        # Blender 5.x clears the slot with the Action assignment.  Setting
+        # ``action_slot`` to None after clearing the Action raises
+        # ``Cannot set slot without an assigned Action`` and prevents a
+        # second clip from being authored on the same armature.  Leave the
+        # slot untouched; ``_bind_slot`` selects the new Action's slot after
+        # keyframe insertion.
     scene = bpy.context.scene
     scene.render.fps = int(step["fps"])
     scene.render.fps_base = 1.0
@@ -903,6 +907,7 @@ def op_export_gltf(bpy, step: dict, out_dir: Path, state: RunState) -> None:
         scene.frame_end = int(state.frame_end)
     selected = step.get("objects")
     use_selection = selected is not None
+    wanted = {obj.name for obj in scene.objects}
     if use_selection:
         wanted = set(selected)
         for name in list(wanted):
@@ -912,9 +917,11 @@ def op_export_gltf(bpy, step: dict, out_dir: Path, state: RunState) -> None:
                 wanted.add(arm.name)
             if obj.parent is not None and obj.parent.type == "ARMATURE":
                 wanted.add(obj.parent.name)
+        # _activate clears the previous selection; do it before applying the
+        # complete export set so the companion meshes and armature survive.
+        _activate(bpy, _require(bpy, selected[0]))
         for obj in scene.objects:
             obj.select_set(obj.name in wanted)
-        _activate(bpy, _require(bpy, selected[0]))
     rna = bpy.ops.export_scene.gltf.get_rna_type().properties
     animations = bool(step.get("animations", True))
     mode_items = {item.identifier for item in rna["export_animation_mode"].enum_items}
@@ -945,14 +952,14 @@ def op_export_gltf(bpy, step: dict, out_dir: Path, state: RunState) -> None:
     doc = _read_glb(path)
     if animations and state.owners:
         names = [anim.get("name") for anim in doc.get("animations", [])]
-        missing_actions = [name for name in state.owners if name not in names]
+        missing_actions = [name for name, owner in state.owners.items() if owner in wanted and name not in names]
         if missing_actions:
             _fail(f"GLB animations {names} missing {missing_actions}")
     skinned = False
     for obj in scene.objects:
         if obj.type != "MESH":
             continue
-        if use_selection and not obj.select_get():
+        if obj.name not in wanted:
             continue
         if any(mod.type == "ARMATURE" for mod in obj.modifiers):
             skinned = True

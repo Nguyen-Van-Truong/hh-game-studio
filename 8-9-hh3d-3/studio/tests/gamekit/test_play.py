@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import unittest
+import tempfile
 from pathlib import Path
 
 from studio.gamekit import bot as B
@@ -142,6 +143,38 @@ class TraceAndPlayValidationTest(unittest.TestCase):
         with self.assertRaises(C.GamekitError) as cm3:
             B.run_bot(project, actions="move_left", track="Player", hold_min=8, hold_max=2)
         self.assertEqual(cm3.exception.code, "VALIDATION_FAILED")
+
+    def test_play_uses_a_fresh_disposable_user_profile_per_run(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "project.godot").write_text("config_version=5\n", encoding="utf-8")
+            project = C.Project("isolated", root)
+            seen: list[dict[str, str]] = []
+
+            def fake_tool(_root: Path, _tool: str, _request: dict, **kwargs):
+                env = kwargs.get("env")
+                self.assertIsInstance(env, dict)
+                seen.append({key: str(env[key]) for key in ("APPDATA", "LOCALAPPDATA", "USERPROFILE")})
+                for value in seen[-1].values():
+                    self.assertTrue(Path(value).exists())
+                return C.ProcessRun(
+                    argv=["godot"], exit_code=0, seconds=0.01, stdout="", stderr="",
+                    result={"ok": True, "frames": 1, "observations": [{"frame": 0, "values": {}}], "errors": [],
+                            "user_data_dir": str(Path(env["APPDATA"]) / "Godot" / "isolated")},
+                )
+
+            original = C.run_godot_tool
+            C.run_godot_tool = fake_tool
+            try:
+                first = P.play(project, frames=1)
+                second = P.play(project, frames=1)
+            finally:
+                C.run_godot_tool = original
+            self.assertTrue(first.get("ok") and second.get("ok"))
+            self.assertTrue(first.get("user_data_isolated") and second.get("user_data_isolated"))
+            self.assertEqual(len(seen), 2)
+            self.assertNotEqual(seen[0]["APPDATA"], seen[1]["APPDATA"])
+            self.assertTrue(all(not Path(value).exists() for row in seen for value in row.values()))
 
 
 class BotTraceTest(unittest.TestCase):

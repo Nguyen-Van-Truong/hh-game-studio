@@ -55,6 +55,7 @@ func _run(result: Dictionary) -> void:
 	_migrate_check(save, result)
 	var err2: int = int(save.call("save_game", "slot1", {"hp": 3, "pos": [1, 2]}))
 	result["resave_err"] = err2
+	result["backup_rotate_err"] = int(save.call("save_game", "slot1", {"hp": 3, "pos": [1, 2]}))
 	settings.call("set_bus_volume", "Music", 0.25)
 	result["settings_err"] = int(settings.call("save_settings"))
 	var key: InputEventKey = InputEventKey.new()
@@ -125,6 +126,7 @@ func _process(_delta: float) -> bool:
 		return true
 	var loaded: Variant = save.call("load_game", "slot1")
 	result["loaded_empty"] = loaded is Dictionary and (loaded as Dictionary).is_empty()
+	result["backup_hp"] = int((loaded as Dictionary).get("hp", -1)) if loaded is Dictionary else -1
 	result["music"] = float(settings.call("get_bus_volume", "Music"))
 	var found: bool = false
 	var events: Array = InputMap.action_get_events(&"ui_accept")
@@ -175,12 +177,12 @@ func _save_crash(save: Node, result: Dictionary) -> void:
 	result["save_err"] = int(save.call("save_game", "a", payload))
 	result["marker_err"] = _plant("user://saves/.a.json.bak")
 	result["resave_err"] = int(save.call("save_game", "a", payload))
-	result["stale_bak_removed"] = not FileAccess.file_exists("user://saves/.a.json.bak")
-	result["final_before_crash"] = FileAccess.file_exists("user://saves/a.json")
-	result["save_rename"] = _crash_rename("user://saves/a.json", "user://saves/.a.json.bak")
+	result["stale_bak_replaced"] = FileAccess.file_exists("user://saves/.a.json.bak")
+	result["final_before_corruption"] = FileAccess.file_exists("user://saves/a.json")
+	result["save_corrupt"] = _corrupt("user://saves/a.json")
 	var loaded: Variant = save.call("load_game", "a")
 	result["bak_match"] = loaded is Dictionary and JSON.stringify(loaded, "", true, true) == want
-	result["save_final_missing"] = not FileAccess.file_exists("user://saves/a.json")
+	result["save_final_exists"] = FileAccess.file_exists("user://saves/a.json")
 	result["save_bak_exists"] = FileAccess.file_exists("user://saves/.a.json.bak")
 	var slots: Variant = save.call("list_slots")
 	var listed: Array = []
@@ -188,7 +190,7 @@ func _save_crash(save: Node, result: Dictionary) -> void:
 	if slots is PackedStringArray:
 		for slot_name: String in slots:
 			listed.append(slot_name)
-			if slot_name == "a" or slot_name.begins_with(".") or slot_name.find("bak") >= 0:
+			if slot_name.begins_with(".") or slot_name.find("bak") >= 0:
 				bak_listed = true
 	result["slots"] = listed
 	result["bak_not_listed"] = not bak_listed
@@ -237,6 +239,16 @@ func _plant(res_path: String) -> int:
 	if fa == null:
 		return int(FileAccess.get_open_error())
 	fa.store_string("stale")
+	fa.flush()
+	fa.close()
+	return 0
+
+
+func _corrupt(res_path: String) -> int:
+	var fa: FileAccess = FileAccess.open(res_path, FileAccess.WRITE)
+	if fa == null:
+		return int(FileAccess.get_open_error())
+	fa.store_string("{corrupt")
 	fa.flush()
 	fa.close()
 	return 0
@@ -313,7 +325,8 @@ def _after_drive(ctx: Ctx, project: C.Project, name: str, result: dict) -> None:
     )
     if isinstance(again, dict):
         music = again.get("music")
-        ctx.check("corrupt save loads empty", again.get("loaded_empty") is True, result=again)
+        ctx.check("corrupt save loads last-good backup", again.get("loaded_empty") is False and again.get("backup_hp") == 3,
+                  result=again)
         ctx.check("music volume restored", isinstance(music, (int, float)) and abs(float(music) - 0.25) < 1e-4, music=music)
         ctx.check("rebind survived restart", again.get("key_j") is True, result=again)
     _backup_recovery(ctx, project, name)
@@ -340,18 +353,18 @@ def _backup_recovery(ctx: Ctx, project: C.Project, name: str) -> None:
         result.get("save_err") == 0
         and result.get("marker_err") == 0
         and result.get("resave_err") == 0
-        and result.get("stale_bak_removed") is True
-        and result.get("final_before_crash") is True
-        and result.get("save_rename") == 0
+        and result.get("stale_bak_replaced") is True
+        and result.get("final_before_corruption") is True
+        and result.get("save_corrupt") == 0
         and result.get("bak_match") is True
-        and result.get("save_final_missing") is True
+        and result.get("save_final_exists") is True
         and result.get("save_bak_exists") is True,
         result=result,
     )
     slots = result.get("slots") or []
     ctx.check(
         "list_slots ignores backup",
-        result.get("bak_not_listed") is True and "a" not in slots and "slot1" in slots,
+        result.get("bak_not_listed") is True and "a" in slots and "slot1" in slots,
         slots=slots,
     )
     music = result.get("music")
@@ -395,7 +408,7 @@ def _backup_recovery(ctx: Ctx, project: C.Project, name: str) -> None:
     ctx.check(
         "backup files sit in userdata",
         (user / "saves" / ".a.json.bak").is_file()
-        and not (user / "saves" / "a.json").is_file()
+        and (user / "saves" / "a.json").is_file()
         and (user / ".settings.cfg.bak").is_file()
         and not (user / "settings.cfg").is_file()
         and (user / ".input_map.cfg.bak").is_file()

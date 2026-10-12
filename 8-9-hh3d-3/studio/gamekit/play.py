@@ -9,7 +9,10 @@ reports ``trace_hash`` null so two empty traces do not share a digest.
 from __future__ import annotations
 
 import argparse
+import os
 import re
+import shutil
+import tempfile
 from pathlib import Path
 from typing import Any
 
@@ -18,7 +21,12 @@ from . import common as C
 MAX_FRAMES = 36_000
 MAX_EVENTS = 100_000
 _NODE_RE = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*$")
-_PROP_RE = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*$")
+# Godot properties such as AnimationTree parameters use an indexed path
+# (``parameters/Speed/scale``).  Keep each segment identifier-safe so the
+# runner never evaluates arbitrary expressions or traverses a surprising
+# path.  A method name is one segment and is invoked as a zero-argument
+# observer by the runner when the node exposes it.
+_PROP_RE = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*(?:/[A-Za-z_][A-Za-z0-9_]*)*$")
 _SEED_MIN = -9_223_372_036_854_775_808
 _SEED_MAX = 9_223_372_036_854_775_807
 
@@ -40,7 +48,7 @@ def _frames(value: Any, name: str = "frames") -> int:
 
 
 def parse_observe(text: str) -> list[dict[str, str]]:
-    """Parse ``Player:position,Player:velocity`` into runner probe records."""
+    """Parse safe property paths and native bool probes into runner records."""
     if text is None or not str(text).strip():
         return []
     out = []
@@ -51,10 +59,12 @@ def parse_observe(text: str) -> list[dict[str, str]]:
         if ":" not in item:
             _fail(f"observe entry {item!r} must be Node:property")
         node, prop = item.rsplit(":", 1)
-        if not node or not prop or not _PROP_RE.match(prop):
+        if not node or not prop or not _PROP_RE.fullmatch(prop):
             _fail(f"observe entry {item!r} has an empty node or bad property")
         for segment in node.split("/"):
-            if not _NODE_RE.match(segment):
+            if segment == "." and node == ".":
+                continue
+            if not _NODE_RE.fullmatch(segment):
                 _fail(f"observe node path {node!r} is not safe")
         out.append({"node": node, "prop": prop, "label": f"{node}:{prop}"})
     if len(out) > 32:
@@ -172,6 +182,7 @@ def _crashed(run: C.ProcessRun, errors: list[str]) -> dict[str, Any]:
         "errors": errors,
         "trace_hash": trace_hash_for_run([], crashed=True, frames=0),
         "process": run.summary(),
+        "user_data_isolated": False,
     }
 
 
@@ -206,16 +217,41 @@ def play(
         "observe": probes,
         "events": body["events"],
     }
-    with C.project_lock(project, "play", wait_seconds=30):
-        run = C.run_godot_tool(
-            project.root,
-            "play_runner.gd",
-            request,
-            headless=not windowed,
-            windowed=windowed,
-            fixed_fps=60,
-            timeout=timeout,
-        )
+    # Godot's ``user://`` resolves through the process-wide APPDATA location on
+    # Windows.  Give every replay a disposable profile so a previous run's save,
+    # settings, or cache cannot change the next run's trace hash.  This also
+    # keeps a game run from mutating the developer's real Godot profile.
+    run_profile = Path(tempfile.mkdtemp(prefix="hh-play-user-"))
+    run_env = os.environ.copy()
+    try:
+        appdata = run_profile / "Roaming"
+        localappdata = run_profile / "Local"
+        user_home = run_profile / "Home"
+        for directory in (appdata, localappdata, user_home):
+            directory.mkdir(parents=True, exist_ok=True)
+        run_env.update({
+            "APPDATA": str(appdata),
+            "LOCALAPPDATA": str(localappdata),
+            "USERPROFILE": str(run_profile),
+            "HOME": str(user_home),
+            "XDG_CONFIG_HOME": str(run_profile / "config"),
+            "XDG_DATA_HOME": str(run_profile / "data"),
+            "XDG_CACHE_HOME": str(run_profile / "cache"),
+        })
+        request["user_profile"] = run_profile.as_posix()
+        with C.project_lock(project, "play", wait_seconds=30):
+            run = C.run_godot_tool(
+                project.root,
+                "play_runner.gd",
+                request,
+                headless=not windowed,
+                windowed=windowed,
+                fixed_fps=60,
+                timeout=timeout,
+                env=run_env,
+            )
+    finally:
+        shutil.rmtree(run_profile, ignore_errors=True)
     if run.timed_out:
         return _finish(_crashed(run, ["TIMEOUT"]), out, project)
     if not isinstance(run.result, dict):
@@ -227,6 +263,13 @@ def play(
                              process=run.summary())
     observations = result.get("observations") if isinstance(result.get("observations"), list) else []
     errors = merge_errors(result.get("errors") if isinstance(result.get("errors"), list) else [], run.errors)
+    user_dir = result.get("user_data_dir")
+    isolated = isinstance(user_dir, str) and bool(user_dir) and C.is_within(Path(user_dir).resolve(), run_profile.resolve())
+    cleaned = not run_profile.exists()
+    if not isolated:
+        errors = merge_errors(errors, ["user:// isolation was not confirmed by Godot"])
+    if not cleaned:
+        errors = merge_errors(errors, ["temporary user profile cleanup failed"])
     crashed = run.exit_code not in (0, None) and "frames" not in result
     frames_done = int(result.get("frames") or 0)
     ok = (not crashed) and not errors and bool(result.get("ok")) and run.exit_code == 0
@@ -236,10 +279,13 @@ def play(
         "frames": frames_done,
         "observations": observations,
         "errors": errors,
-        "trace_hash": trace_hash_for_run(observations, crashed=crashed, frames=frames_done),
+        "trace_hash": trace_hash_for_run(observations, crashed=crashed or not isolated, frames=frames_done),
         "process": run.summary(),
         "scene": scene or "",
         "seed": seed_n,
+        "user_data_isolated": isolated,
+        "user_data_dir": user_dir,
+        "user_data_cleaned": cleaned,
     }
     return _finish(played, out, project)
 
@@ -272,7 +318,7 @@ def register(sub: argparse._SubParsersAction) -> None:
     parser.add_argument("--trace", default=None, help="JSON {fps: 60, events: [{frame, action, pressed, strength}]}")
     parser.add_argument("--frames", type=int, default=60)
     parser.add_argument("--seed", type=int, default=0)
-    parser.add_argument("--observe", default="", help="comma-separated Node:property probes, e.g. Player:position")
+    parser.add_argument("--observe", default="", help="comma-separated Node:property probes (slash paths and native bool methods allowed), e.g. Player:position")
     parser.add_argument("--every", type=int, default=1, help="record a probe every K physics frames, plus the last frame")
     parser.add_argument("--windowed", action="store_true")
     parser.add_argument("--out", default=None, help="also write the result JSON to this path")

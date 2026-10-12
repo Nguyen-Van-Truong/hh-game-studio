@@ -3,8 +3,9 @@
 ``kit add`` validates the manifest on the host, refuses to overwrite a different file unless
 ``--replace``, checkpoints ``project.godot`` and every file it will write, then asks Godot to
 compile autoload scripts and ``ProjectSettings.save_custom`` a temp project file. The host
-replaces ``project.godot`` atomically and acknowledges only after a fresh process reads the
-autoloads back and ``scene`` check is clean. A failed readback restores the checkpoint.
+merges only the kit's owned keys into ``project.godot`` atomically and acknowledges only after a
+fresh process reads the autoloads back, unrelated source stays unchanged and ``scene`` check is
+clean. A failed readback restores the checkpoint.
 
 ``kit remove`` deletes the kit files and clears its autoloads. If the game has changed a kit
 file since install, remove raises CONFLICT and writes nothing unless ``--force``.
@@ -20,6 +21,7 @@ from pathlib import Path
 from typing import Any
 
 from . import common as C
+from . import project_config as PC
 
 KITS_DIR = C.GAMEKIT_DIR / "kits"
 KIT_NAME_RE = re.compile(r"^[a-z][a-z0-9_]{0,31}$")
@@ -301,7 +303,7 @@ def plan_remove(project: C.Project, kit: dict[str, Any]) -> dict[str, Any]:
         "modified": modified,
         "autoloads_clear": list(kit["autoloads"]),
         "audio_dest": audio_dest,
-        "touch_project": bool(kit["autoloads"]),
+        "touch_project": bool(kit["autoloads"]) or kit["name"] == AUDIO_KIT,
     }
 
 
@@ -432,6 +434,24 @@ def _expect_buses(got: list[dict[str, Any]]) -> list[str]:
     return problems
 
 
+def _project_drop_keys(plan: dict[str, Any], *, removing: bool = False) -> set[str]:
+    """Keys owned by a kit transaction when merging Godot's project output.
+
+    ``ProjectSettings.save_custom`` can omit unrelated sections (notably custom
+    display/i18n/physics settings).  The host therefore overlays the generated
+    file onto the pre-command source and only lets the kit's explicit autoload
+    and setting keys change.
+    """
+    keys = {f"autoload/{name}" for name in (plan.get("autoloads") or {})}
+    keys.update(f"autoload/{name}" for name in (plan.get("autoloads_clear") or []))
+    keys.update(str(key) for key in (plan.get("settings") or {}))
+    if removing and plan.get("kit") == AUDIO_KIT:
+        # The audio layout file is deleted below, so its project pointer must
+        # be owned by the remove transaction as well.
+        keys.add(AUDIO_SETTING)
+    return keys
+
+
 # ---------------------------------------------------------------- commands
 
 
@@ -489,6 +509,7 @@ def _commit_add(
             unique.append(path)
     temps: list[Path] = []
     checkpointed = False
+    original_project_bytes = (project.root / "project.godot").read_bytes()
     try:
         C.checkpoint(project, command_id, unique)
         checkpointed = True
@@ -519,7 +540,13 @@ def _commit_add(
             settings_path = project.res_to_path(settings_res)
             if not settings_path.is_file():
                 raise C.GamekitError("GODOT_FAILED", "settings tool wrote no project file")
-            project_bytes = settings_path.read_bytes()
+            if (project.root / "project.godot").read_bytes() != original_project_bytes:
+                raise C.GamekitError("GODOT_FAILED", "settings tool modified project.godot directly")
+            project_bytes = PC.merge_project_godot(
+                original_project_bytes,
+                settings_path.read_bytes(),
+                drop_keys=_project_drop_keys(plan),
+            )
             if b"config_version=" not in project_bytes:
                 raise C.GamekitError("GODOT_FAILED", "saved project file has no config_version")
             if plan["audio_write"]:
@@ -551,6 +578,7 @@ def _commit_add(
         if problems:
             raise C.GamekitError("READBACK_MISMATCH", "; ".join(problems[:8]), problems=problems[:40])
         _scene_clean(project, timeout)
+        PC.require_preserved(original_project_bytes, (project.root / "project.godot").read_bytes(), _project_drop_keys(plan))
     except C.GamekitError:
         if checkpointed:
             C.restore_checkpoint(project, command_id)
@@ -643,10 +671,11 @@ def _commit_remove(
             unique.append(path)
     temps: list[Path] = []
     checkpointed = False
+    original_project_bytes = (project.root / "project.godot").read_bytes()
     try:
         C.checkpoint(project, command_id, unique)
         checkpointed = True
-        if plan["autoloads_clear"]:
+        if plan["touch_project"]:
             settings_res = _temp_res("settings", ".godot")
             temps.append(project.res_to_path(settings_res))
             _apply_settings_tool(project, {
@@ -655,14 +684,18 @@ def _commit_remove(
                 "autoloads_set": {},
                 "autoloads_clear": plan["autoloads_clear"],
                 "settings": {},
+                "settings_clear": [AUDIO_SETTING] if kit["name"] == AUDIO_KIT else [],
             }, timeout)
             settings_path = project.res_to_path(settings_res)
-            project_bytes = settings_path.read_bytes()
+            if (project.root / "project.godot").read_bytes() != original_project_bytes:
+                raise C.GamekitError("GODOT_FAILED", "settings tool modified project.godot directly")
+            project_bytes = PC.merge_project_godot(
+                original_project_bytes,
+                settings_path.read_bytes(),
+                drop_keys=_project_drop_keys(plan, removing=True),
+            )
             if b"config_version=" not in project_bytes:
                 raise C.GamekitError("GODOT_FAILED", "saved project file has no config_version")
-            for name in plan["autoloads_clear"]:
-                if name.encode("utf-8") in project_bytes:
-                    raise C.GamekitError("GODOT_FAILED", f"autoload {name} still present after clear")
             C.atomic_write_bytes(project.root / "project.godot", project_bytes)
         for item in plan["files"]:
             if item["dest"].is_file():
@@ -685,6 +718,7 @@ def _commit_remove(
         if problems:
             raise C.GamekitError("READBACK_MISMATCH", "; ".join(problems[:8]), problems=problems[:40])
         _scene_clean(project, timeout)
+        PC.require_preserved(original_project_bytes, (project.root / "project.godot").read_bytes(), _project_drop_keys(plan, removing=True))
     except C.GamekitError:
         if checkpointed:
             C.restore_checkpoint(project, command_id)

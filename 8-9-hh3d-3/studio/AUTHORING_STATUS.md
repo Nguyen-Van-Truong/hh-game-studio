@@ -1,16 +1,12 @@
-# O2 authoring state — 2026-10-12 (O14/S303; GT-11 ACCEPTED_O15_QUICK under O15/S305; S306 dogfood)
-AUTHORITY=0; GT09=ACCEPTED; GT10_PC=ACCEPTED_O14_SHORT_CHECKS (owner waived the 10×35 soak at 14:05).
-Progress authority: `zdoc/8-9-godot-blender-agent-studio-plan.txt`; no checkbox changed here.
-Accepted package: rehearsal gt10pc-rehearsal-20261012-c3h, P1–P11 through Scheduled Task, exit 0 in 1276 s.
-Verify-only RAW_VERIFIED (coordinator rerun 14:25, 45 s); source 744a9f61, studio closure 86dc9f1c, package a6280d76.
-Windows 0.1.0 manifest 3bb561df; archives in `.local/reviews/gt10pc-rehearsal-20261012-c3h/artifacts/`.
-P11 is one real Godot cycle, not a soak: memory, handle and object growth over long sessions is unmeasured.
-P12: two independent grok-4.7-xhigh critics gave TICK=yes on the same package (O14.7).
-Verifier gaps G1/G2 fixed in code by GT-11 W11 (8a9d5407); proven only at the next packaging run. c3h raw predates G2.
-Finals f1–f4 are VOID (f4 stopped at P7 under O14); their raw stays in `.local/reviews`.
-Usage guide for game agents: `zdoc/12-10-huong-dan-dung-cong-cu-godot-blender.txt`.
-Tool bugs found while making games: fix in `studio/` with the short related tests (O14.5), no long soak.
-GT08B Android deferred; full GT10 waits for it. GT11 IN_PROGRESS under owner O15 (opened 12-10 15:16). No complete-game claim.
+# O2 authoring state — 2026-10-13 (S310 maintenance)
+AUTHORITY=0; progress authority: `zdoc/8-9-godot-blender-agent-studio-plan.txt`.
+GT09=ACCEPTED; GT10_PC=ACCEPTED_O14_SHORT_CHECKS; GT11=ACCEPTED_O15_QUICK.
+GT08B=DEFERRED_OWNER_NO_ANDROID; GT10_FULL=BLOCKED_BY_GT08B; no complete-game claim.
+PC tool maintenance is QUICK_VERIFIED under O14.5; no gate or checkbox was reopened.
+Accepted package: `gt10pc-rehearsal-20261012-c3h`, P1–P12; c3h raw predates later maintenance.
+The complete S309 plan is archived at `zdoc/reviews/20261013-tools-plan-s309-archive.txt` (AUTHORITY=0).
+Usage guide: `zdoc/12-10-huong-dan-dung-cong-cu-godot-blender.txt`.
+HH World trial is CANDIDATE only; the tools do not prove a complete game or AAA quality.
 
 ## P1–P12 acceptance matrix (GT-10-PC, O14)
 
@@ -75,12 +71,29 @@ Not inside the signed .hhpkg yet; the GT-09 fixture route is unchanged. Usage: g
 
 | Strict | DONE | fa64f3df; found by dogfooding a copy of `superagent-grokdo`, which turns GDScript warnings into errors so every runner failed to parse. Runners typed without `@warning_ignore`, kits strict-clean, selftest `strict` 20/20 (all 49 int warnings at error, `res://addons` included), `trace_hash` null on crash or zero frames; selftest all 246/246 (218 s), unit 113. Rerun on the copy: 15/15 steps worked. |
 
-GT-11 is ACCEPTED_O15_QUICK (plan S305; real-game dogfood recorded in S306): quick selftests and one adversarial critic, not a soak or final PASS.
+GT-11 is ACCEPTED_O15_QUICK (plan S310; real-game dogfood recorded in S306): quick selftests and one adversarial critic, not a soak or final PASS.
+
+## 13-10 maintenance quick verification (O14.5)
+
+| Area | Change | Result |
+|---|---|---|
+| Settings, observe, bot, save | surgical settings merge/readback; safe observe paths; plane/output bot; staged save and valid `.bak` recovery | focused unit and `selftest config save_bot observe` pass |
+| Blender, visual, receipt | selected export keeps companion rig/mesh; multi-action clips; coarse 3D AABB; receipt/out-dir confinement | `selftest clips w5 w8` pass |
+| Isolation and paths | per-run Godot user profile; nested scene dirs; no-follow junction checks | `selftest replay`; path/transaction/export units pass |
+| Strict regression | explicit `String` types in runner and consumed `store_string` result | `selftest strict` 20/20, 76.3 s |
+
+The maintenance run found and repaired a Windows dangling-junction WinError448
+before recording PASS. It did not run the long matrix, soak, Android or a new
+critic package. The AABB result is a geometric bound, not pixel/occlusion proof;
+per-run save isolation is not a persistence-across-launches test.
 
 ## Next
 
-Tools plan is complete for PC. Game agents use the guide (section 13 for `hh`). Tool bugs follow O14.5: fix in `studio/` with a
-short test plus the affected selftest, keep the contract, one change request per commit, and add a row here if behaviour changes.
+Tools plan S310 is complete for PC. Game agents use the guide (section 13 for
+`hh`). Tool bugs follow O14.5: fix in `studio/` with a short test plus the
+affected selftest, keep the contract, one change request per commit, and add a
+row here if behaviour changes. Do not start another WP or rerun a long matrix
+unless owner reopens a gate.
 Requests a game agent cannot fix go to `zdoc/12-10-gt11-yeu-cau-tu-agent-game.txt` (append-only). GT-08B waits for an Android device.
 
 ## Retained evidence and lessons

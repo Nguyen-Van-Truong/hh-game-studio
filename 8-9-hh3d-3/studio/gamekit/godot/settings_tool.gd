@@ -44,6 +44,9 @@ func _apply(r: Dictionary) -> Dictionary:
 	var setting_err: String = _apply_settings(r.get("settings", {}))
 	if not setting_err.is_empty():
 		return HH.fail("VALIDATION_FAILED", setting_err)
+	var clear_setting_err: String = _clear_settings(r.get("settings_clear", []))
+	if not clear_setting_err.is_empty():
+		return HH.fail("VALIDATION_FAILED", clear_setting_err)
 	var bus_temp: String = str(r.get("bus_temp_out", ""))
 	if not bus_temp.is_empty():
 		var bus_path_err: String = _res_ok(bus_temp, ".tres")
@@ -113,6 +116,18 @@ func _apply_settings(settings: Variant) -> String:
 		var err: String = _set_typed(name, table[key])
 		if not err.is_empty():
 			return err
+	return ""
+
+
+func _clear_settings(settings: Variant) -> String:
+	if not (settings is Array):
+		return "settings_clear must be a list"
+	for item: Variant in settings:
+		var key: String = str(item)
+		if not _setting_name_ok(key):
+			return "bad setting name " + key
+		if ProjectSettings.has_setting(key):
+			ProjectSettings.clear(key)
 	return ""
 
 

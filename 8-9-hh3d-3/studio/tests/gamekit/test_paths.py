@@ -200,7 +200,10 @@ class PathSafetyTests(unittest.TestCase):
     def test_dangling_junction_is_refused_and_creates_nothing(self) -> None:
         link, target = self.root / "dangling", self.root / "dangling-target"
         self._make_dangling(link, target)
-        self.assertFalse(link.exists())
+        # exists() follows the junction and can raise WinError 448 on Windows.
+        # Test the missing target and the link's own no-follow metadata instead.
+        self.assertFalse(target.exists())
+        self.assertTrue(os.lstat(link).st_file_attributes & C._REPARSE_POINT)
         self.assertTrue(C._is_junction(link))
         with self.assertRaises(C.GamekitError) as direct:
             C.refuse_unsafe_host_path(link, what="probe")

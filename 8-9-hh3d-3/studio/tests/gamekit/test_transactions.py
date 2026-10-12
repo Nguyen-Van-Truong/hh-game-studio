@@ -237,8 +237,23 @@ class OutDirReparseTest(_TempState):
                 E.validate_out_dir(self.project, link / "dist")
             self.assertEqual(nested.exception.code, "FORBIDDEN_PATH")
         finally:
-            if link.exists():
+            # Do not follow a junction just to remove it during cleanup.
+            try:
                 os.rmdir(link)
+            except FileNotFoundError:
+                pass
+
+    def test_junction_is_checked_before_realpath(self) -> None:
+        with patch.object(E, "_path_or_ancestor_reparse", return_value=True), patch.object(E.os.path, "realpath", side_effect=AssertionError("followed a junction")):
+            with self.assertRaises(C.GamekitError) as caught:
+                E.validate_out_dir(self.project, self.root / "junction")
+        self.assertEqual(caught.exception.code, "FORBIDDEN_PATH")
+
+    def test_unresolvable_out_dir_returns_stable_error(self) -> None:
+        with patch.object(E, "_path_or_ancestor_reparse", return_value=False), patch.object(E.os.path, "realpath", side_effect=OSError(448, "reparse resolution failed")):
+            with self.assertRaises(C.GamekitError) as caught:
+                E.validate_out_dir(self.project, self.root / "dist")
+        self.assertEqual(caught.exception.code, "FORBIDDEN_PATH")
 
 
 if __name__ == "__main__":

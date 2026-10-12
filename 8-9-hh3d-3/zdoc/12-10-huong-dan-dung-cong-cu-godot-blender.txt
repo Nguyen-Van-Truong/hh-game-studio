@@ -1,6 +1,6 @@
 HƯỚNG DẪN CHO AGENT LÀM GAME: DÙNG BỘ CÔNG CỤ HH STUDIO (GODOT + BLENDER) TRÊN PC
-Cập nhật 12-10-2026 18:35, Asia/Saigon. Viết cho agent khác dùng ngay, không cần đọc lịch sử.
-Nguồn tiến độ: zdoc/8-9-godot-blender-agent-studio-plan.txt (S305, quyết định owner O14, O15).
+Cập nhật 13-10-2026, Asia/Saigon. Viết cho agent khác dùng ngay, không cần đọc lịch sử.
+Nguồn tiến độ: zdoc/8-9-godot-blender-agent-studio-plan.txt (S310; chi tiết cũ ở archive AUTHORITY=0).
 Mọi đường dẫn tính từ thư mục 8-9-hh3d-3/. Đường dẫn ngắn như godot-addon/, host/, package/,
 blender-addon/, pipeline/, protocol/, contracts/ nằm dưới studio/. Lệnh viết cho PowerShell.
 Nếu file này lệch với code thì code và plan đúng; sửa file này trong cùng commit sửa code.
@@ -10,8 +10,9 @@ Nếu file này lệch với code thì code và plan đúng; sửa file này tro
 - MỚI (GT-11, O15): gamekit có CLI hh trên project game thật, 2D và 3D, không cần addon hay
   CR-1: scene, input, play, bot, shot, vcheck, perf, asset, blender, kit, export. Đọc mục 13
   trước khi sửa scene. Phần còn lại vẫn là hàm Python.
-- GT-01..GT-09, GT-10-PC và GT-11 đã nghiệm thu. GT-10-PC theo O14: kiểm ngắn, soak dài được
-  miễn. GT-11 ACCEPTED_O15_QUICK 12-10 18:35: selftest nhanh và critic, không phải soak.
+- GT-01..GT-09, GT-10-PC và GT-11 đã nghiệm thu theo phạm vi của plan. GT-10-PC theo O14:
+  kiểm ngắn, soak dài được miễn. GT-11 ACCEPTED_O15_QUICK: selftest nhanh và critic,
+  không phải soak; maintenance mới nhất chỉ QUICK_VERIFIED.
   Chỉ PC (Windows, Linux, Linux-headless). Android hoãn (GT-08B).
 - Dùng ngay được trên project game của bạn:
   a) Godot 4.7.2 và Blender 5.2.1 đã pin hash (mục 2).
@@ -21,7 +22,8 @@ Nếu file này lệch với code thì code và plan đúng; sửa file này tro
 - Đường GT-09 (EditorOwner, catalog 27 class, publish script, recipe Blender, playtest/observe)
   vẫn chỉ chạy trên hai fixture mẫu. Sửa scene trên project game thật thì dùng hh (mục 13);
   CR-1 ở mục 8 được thay bằng gamekit, không cần làm nữa.
-- Gặp lỗi công cụ khi làm game: sửa trong studio/ bằng test ngắn liên quan (mục 9, O14.5).
+- Gặp lỗi công cụ khi làm game: sửa trong studio/ bằng test ngắn liên quan (mục 9, O14.5),
+  rồi ghi một dòng vào AUTHORING_STATUS.md.
 - Plan game của bạn quyết định có bắt buộc dùng công cụ không. Plan công cụ không cấm sửa trực
   tiếp file của project game.
 
@@ -168,6 +170,12 @@ Chỉ chạy trên fixture (cần CR-1 ở mục 8):
   --background --factory-startup --disable-autoexec --offline-mode với run_blender.py, ra
   fixture.blend, fixture.glb, producer-report.json. Godot nhập qua studio/pipeline/godot/
   consumer.py (prepare, command, verify_binding; README cùng thư mục).
+- Gamekit recipe có thể tạo nhiều Action trên cùng armature. Khi export có selection, runner
+  activate object set trước rồi mới chọn; vì vậy armature/mesh companion không bị mất. Manifest
+  chỉ kiểm clip và skin thuộc tập object thực sự xuất.
+- `hh blender run recipe.json --out-dir <asset-dir> --out <receipt.json>`: `--out-dir` chứa
+  GLB/PNG/manifest; receipt tùy chọn phải là JSON ngoài project, không trùng recipe, asset,
+  manifest hay sidecar. Host kiểm tra symlink/junction trước khi chạy và trước khi ghi receipt.
 - Không mở file .blend của artist; recipe cố định. Asset của game cần recipe mới (CR, mục 8).
 
 7. CHẠY THỬ VÀ QUAN SÁT
@@ -178,7 +186,13 @@ Chỉ chạy trên fixture (cần CR-1 ở mục 8):
   --fixture arena|room với --dry-run, --prepare hoặc --host.
 - Observe GT-06 (studio/godot-addon/observe/README.md): trace hh-studio.input-trace 1.0.0 ở 60 Hz
   (seed uint32, tick, pressed/held/released), báo cáo hh-studio.play-observation 1.0.0; ảnh chụp
-  cần cửa sổ thật, headless thì captures rỗng. trace_bridge.gd là mẫu để làm replay cho game.
+  cần cửa sổ thật, headless thì captures rỗng. Với `hh play`, probe có dạng
+  `Node:property`, phân cách bằng dấu phẩy; `.` hoặc tên root là root, prefix root-name/ được
+  chấp nhận, property có `/` dùng được cho AnimationTree. Native const bool không tham số như
+  `is_on_floor` được đọc; method script tùy ý không được gọi. trace_bridge.gd là mẫu replay.
+- Mỗi `hh play` chạy bằng user directory tạm riêng, kiểm tra `OS.get_user_data_dir()` trước khi
+  load scene rồi dọn sau run. Do đó hai run sạch và có thể so trace hash; đây không phải kiểm
+  persistence qua nhiều lần mở game, muốn kiểm persistence phải viết bài test save riêng.
 
 8. CHANGE REQUEST (GT-11) VÀ CR-1
 Theo O14.5, agent game tự mở và làm change request, mỗi CR một commit kèm test ngắn, giữ
@@ -252,8 +266,8 @@ CR-1 (lịch sử; đã được thay bằng gamekit ở mục 13 theo O15, khô
   shader; giới hạn riêng của gamekit ghi ở cuối mục 13.
 - MCP Godot bên ngoài là INCOMPATIBLE (K13): nó ghi thẳng vào Godot, không lease, journal hay
   command_id. Không dùng nó thay đường lệnh của công cụ.
-- G1, G2 đã sửa trong code (W11, mục 8) nhưng chỉ chứng minh đủ ở lần đóng gói sau; raw của gói
-  c3h đã được đối chiếu tay và khớp.
+- G1, G2 đã sửa trong code (W11, mục 8). Gói c3h là bằng chứng lịch sử; sau mọi sửa thuộc
+  closure phải tạo run/package mới nếu cần nghiệm thu lại, không tái dùng receipt cũ.
 - Android: GT-08B DEFERRED_OWNER_NO_ANDROID; GT-10 đầy đủ chờ GT-08B.
 
 11. KHÔNG ĐƯỢC LÀM
@@ -267,14 +281,15 @@ CR-1 (lịch sử; đã được thay bằng gamekit ở mục 13 theo O15, khô
 - Không đụng Kho Bí Ẩn, Snake, Vault Fighters khi sửa công cụ.
 
 12. CHƯA XÁC MINH TRONG HƯỚNG DẪN NÀY
-- Đã chạy 12-10: smoke cài/gỡ ở mục 3, editor headless có plugin không host, lệnh test mẫu ở
-  mục 9, verify-only của gói c3h. Các lệnh Blender, playtest và observe lấy từ code và README,
-  đã chạy trong ma trận GT-06/GT-09 nhưng chưa chạy lại riêng cho hướng dẫn này.
+- Đã chạy: smoke cài/gỡ ở mục 3, editor headless có plugin không host, các lệnh test mẫu ở
+  mục 9 và verify-only của gói c3h. Maintenance 13-10 chạy selective selftests và strict.
+  Các lệnh Blender, playtest và observe lấy từ code/README và đã có bằng chứng trong GT-06/GT-09;
+  không tự suy ra nghiệm thu mới chỉ từ hướng dẫn này.
 - Chưa thử cài lên project game thật có scene và script; chưa thử bản Linux-headless trên máy
   Linux thật ngoài container của ma trận.
 
 13. GAMEKIT: LỆNH hh TRÊN PROJECT GAME THẬT (GT-11, O15)
-Mở 12-10 15:16, đóng 12-10 18:35 (ACCEPTED_O15_QUICK, plan công cụ mục GT-11). Mọi lệnh dưới đây
+GT-11 mở/đóng trong lịch sử O15 (ACCEPTED_O15_QUICK, plan công cụ mục GT-11). Mọi lệnh dưới đây
 ghi DONE, dùng được ngay. Code ở studio/gamekit/. Không cần addon hay CR-1.
 - Gọi từ 8-9-hh3d-3/ (hh.cmd tự đặt PYTHONPATH):
     studio\gamekit\hh.cmd <nhóm> <lệnh> ...
@@ -319,8 +334,9 @@ Lệnh (P = id project, F = file JSON; [DONE Wn] là phần W làm ra lệnh đ�
   [DONE W4] hh input list P [--all] | hh input set P --actions F --command-id ID [--replace]
   [DONE W4] hh play P [--scene res://x.tscn] [--trace F] [--frames 60] [--seed 0]
             [--observe Node/Con:prop,...] [--every 1] [--windowed] [--out F]
-  [DONE W4] hh bot P --actions a,b --track Node [--scene ...] [--frames 1800] [--seed 1]
+[DONE W4] hh bot P --actions a,b --track Node [--scene ...] [--frames 1800] [--seed 1]
             [--hold-min 6 --hold-max 30] [--stuck-frames 120 --stuck-dist 4] [--cell 32]
+            [--plane auto|xy|xz|yz] [--out F]
   [DONE W5] hh shot P --out <file .png ngoài project> [--scene ...] [--frames 10] [--at 5,30]
             [--resolution 640x360] [--seed N] [--trace F] [--expect Node,Cha/Con]
             [--baseline res://baseline/x.png [--update-baseline] --command-id ID]
@@ -333,7 +349,7 @@ Lệnh (P = id project, F = file JSON; [DONE Wn] là phần W làm ra lệnh đ�
             --author TÊN [--source-url URL] [--ai-generated] [--notes ...] --command-id ID
             [--replace]   |   hh asset list P   |   hh asset verify P
   [DONE W7] hh asset credits P [--out res://CREDITS.md] --command-id ID
-  [DONE W8] hh blender validate recipe.json | hh blender run recipe.json --out-dir <thư mục>
+  [DONE W8] hh blender validate recipe.json | hh blender run recipe.json --out-dir <thư mục> [--out <receipt.json>]
   [DONE W9] hh kit list | hh kit add P save|settings|rebind|pause|audio --command-id ID
             [--replace] | hh kit remove P <kit> --command-id ID [--force]
   [DONE W10] hh export templates [--install] [--platform windows|linux|web|all]
@@ -347,9 +363,9 @@ Ghi chú W4 (input, play, bot):
   chối, file không đổi. input set ghi lại project.godot qua Godot: file được định dạng lại nhưng
   giữ mọi cài đặt khác (12-10 đã kiểm autoload, display, section riêng). Action ui_* giữ mặc định
   của engine nếu không ghi đè. --replace bỏ action không có trong file (trừ ui_*).
-  LỖI ĐANG MỞ (12-10 21:00, lane HH World): input set làm mất [display] và [internationalization]
-  của một project. Tới khi sửa: sao lưu project.godot trước input set, so lại sau đó và chạy
-  hh check; repro ở 8-9-hh3d-3/12-10-hh-world-grokdo/docs/tool-gaps.md.
+- `input set` hiện merge đúng các action được yêu cầu và đọc lại `project.godot`; các section
+  không liên quan như `[display]` và `[internationalization]` được giữ nguyên. Nếu thay đổi
+  khác xuất hiện, giữ raw receipt và mở change request, không tự sửa bằng workaround.
 - File trace: {"fps": 60, "events": [{"frame": 0, "action": "move_right", "pressed": true,
   "strength": 1.0}, {"frame": 60, "action": "move_right", "pressed": false}]}. Play chạy frame
   0..N-1, nên event ở frame N không được áp. Hai lần chạy cùng trace và seed cho cùng trace_hash
@@ -357,12 +373,18 @@ Ghi chú W4 (input, play, bot):
   --windowed mở cửa sổ thật.
 - Lỗi script khi chạy cho "ok": false kèm danh sách lỗi; process vẫn chạy hết số frame.
 - bot giữ ngẫu nhiên một action mỗi lúc theo seed; báo đoạn kẹt (node đi không quá --stuck-dist
-  trong --stuck-frames) và số ô --cell đã đi qua. Kẹt là phát hiện, không tự làm ok false.
+  trong --stuck-frames) và số ô --cell đã đi qua. `--plane auto` chọn XY cho Vector2 và XZ
+  cho Vector3; 3D thường bắt đầu bằng `--cell 1 --stuck-dist 0.2`. `--out` lưu JSON receipt
+  ngoài project. Kẹt là phát hiện, không tự làm ok false; Play lỗi hoặc không có position thì
+  bot fail closed.
 Ghi chú W5 (shot, vcheck):
 - shot mở cửa sổ thật (cần màn hình), chờ --frames rồi chụp; --at chụp nhiều frame thành
   <tên>_f<frame>.png. Mặc định 640×360; game có HUD theo 1280×720 thì thêm --resolution 1280x720.
   Receipt có blank (độ lệch sáng dưới 2 hoặc 99,5% điểm cùng màu), presence
   của từng node --expect (exists, visible_in_tree, on_screen, screen_rect) và errors của Godot;
+  Với VisualInstance3D, presence dùng projection của AABB hình học (có camera layer mask),
+  còn Node3D rỗng dùng origin point. Đây là bounds coarse; không chứng minh pixel visible,
+  occlusion hay clipping near/far chính xác.
   có lỗi script thì ok false.
 - Baseline nằm trong project (res://...png). Chưa có baseline hoặc có --update-baseline thì ghi
   mới (BASELINE_WRITTEN, cần --command-id, có checkpoint, một process mới đọc lại sha256 và kích
@@ -398,6 +420,7 @@ Ghi chú W8 (blender):
   spriteframes.from_sheet. Trong sprite sheet, mỗi hàng là một hướng (từ trên xuống), cột là frame.
 - Giới hạn: mỗi action gắn một object; tự gán trọng số cần mesh chồng lên xương; tối đa 128 ô
   sprite; selftest render bằng Workbench, đường EEVEE và Cycles có code nhưng chưa chạy thử.
+  Receipt recipe là provenance/output evidence, không thay cho review art hay kiểm gameplay.
 Ghi chú W9 (kit):
 - Kit là GDScript tự viết (license self-made, HH Studio; dòng đầu mỗi script ghi rõ), chép vào
   res://addons/hh_kits/<kit>/; autoload cài qua Godot.
@@ -409,8 +432,10 @@ Ghi chú W9 (kit):
   pause: pause_menu.tscn (CanvasLayer, không phải autoload); instance vào scene, bật tắt bằng
   action "pause" nếu có, không thì ui_cancel. audio: bus Master, Music, SFX trong
   res://default_bus_layout.tres, không có script.
-- save, settings, rebind ghi file tạm rồi đổi tên; bản cũ được giữ ở file .bak ẩn cạnh đó cho tới
-  khi bản mới vào chỗ. Nếu game tắt giữa chừng, lần load sau dùng .bak và push_warning.
+- save, settings, rebind ghi file tạm rồi đổi tên; bản cũ hợp lệ được giữ ở file `.bak` ẩn cạnh
+  đó cho tới khi bản mới vào chỗ. Nếu primary thiếu/hỏng, lần load sau dùng `.bak` và
+  `push_warning`; primary hỏng không được xoay đè backup tốt. Save version mới hơn bị từ chối,
+  không âm thầm quay về bản cũ.
 - add từ chối ghi đè file khác nội dung nếu thiếu --replace. remove từ chối khi game đã sửa file
   kit hoặc layout bus (thêm bus, thêm effect); --force mới xóa. Đổi âm lượng hay mute trong
   layout không tính là sửa.
@@ -466,15 +491,17 @@ Mẫu chạy thật để chép (dựng xong, đọc lại, chạy 60 frame khô
     NavigationAgent3D, Path3D, camera SpringArm3D, AnimationTree, method track.
   studio/gamekit/selftests/w1_scene.py   các ca từ chối, replay, CONFLICT, STALE, undo.
 Selftest nhanh (project tạm trong %TEMP%, không đụng game):
-    python -B -m studio.gamekit.selftest all      (hoặc w1 ... w10, strict riêng)
-      12-10 19:32, 218 giây, 246/246: w1 29, w2 21, w3 16, w4 20, w5 27, w6 16, w7 19, w8 19,
-      w9 47, w10 12, strict 20
-    python -B -m unittest discover -s studio/tests/gamekit -p "test_*.py"   (12-10: 113 ca, 4 giây)
+    python -B -m studio.gamekit.selftest config save_bot clips w4 w5 w8 w9 --keep
+    python -B -m studio.gamekit.selftest strict --keep
+  Đây là lựa chọn mặc định cho sửa nhỏ. `selftest all` và discovery toàn bộ chỉ dùng khi
+  owner mở lại gate hoặc source thay đổi diện rộng; không cần chạy soak/ma trận dài cho
+  một lỗi cục bộ. Kết quả maintenance 13-10: strict 20/20; config, save_bot, clips, w4,
+  w5, w8, w9 đều pass. Các số liệu lịch sử 246/246 và 113 unit vẫn ở Git/archive.
   strict: project tạm bật mọi cảnh báo GDScript thành lỗi, kể cả res://addons; runner và kit phải
   chạy sạch. Game bật cảnh báo thành lỗi (vd. untyped_declaration=2) vẫn chạy được scene, input,
   play, bot, shot, perf, kit và check.
 
-Sau khi GT-11 đóng (12-10 18:35):
+Sau khi GT-11 đóng:
 - Dùng các lệnh ở trên và công cụ ở mục 2–7. Plan game của bạn quyết định có bắt buộc dùng hh
   không; sửa tay file .tscn hay .gd vẫn được, chạy hh check sau khi sửa.
 - Lỗi gamekit hoặc cần thêm op, class: tự sửa theo O14.5 (mục 8, 9) trong studio/gamekit/ kèm
@@ -493,3 +520,20 @@ Giới hạn gamekit hiện tại:
 - scene apply không tự kiểm hình ảnh hay gameplay; sau khi sửa, chạy hh play, hh bot, hh shot,
   hh vcheck và hh perf.
 - Gamekit chưa nằm trong gói .hhpkg đã ký; chạy từ source của repo này.
+
+14. QUY TRÌNH LÀM GAME ĐỂ ĐẠT CHẤT LƯỢNG
+- Chuẩn bị một brief và design docs (world, mechanics, camera, UI, art style, scale, audio,
+  save) làm nguồn sự thật; agent xây và agent review nên là hai vai trò khác nhau.
+- Làm một slice nhỏ chơi được trước: movement, camera, một tương tác, HUD, âm thanh và save.
+  Mỗi feature đi qua implement → Play thật → observe/shot hoặc bot → sửa → receipt ngắn.
+- Blender phụ trách model, rig, animation, material và cleanup; Godot phụ trách scene, physics,
+  input, UI, audio, save và export. Giữ scale, naming, pivot và texture budget nhất quán.
+- Sau slice mới mở rộng quest, NPC, map, multiplayer, day/night và streaming. `hh perf` dùng
+  để so trước/sau trên cùng máy; `hh shot`/`vcheck` bắt lỗi hình; người thật vẫn cần review
+  cảm giác chơi, camera, UX và nội dung.
+- Bộ công cụ tăng khả năng lặp lại và giảm lỗi thao tác, nhưng không tự biến game thành
+  Play Together hay GTA V. Chất lượng cuối phụ thuộc scope, art direction, gameplay tuning,
+  âm thanh, tối ưu và thời gian playtest.
+- Làng/đảo nhỏ thường dùng mesh modular hoặc heightmap Blender là đủ. Chỉ thêm Terrain3D
+  khi cần sculpt/paint/LOD/streaming diện rộng; chỉ dùng voxel khi xây/phá block là mechanic
+  cốt lõi. Không cài thêm terrain tool chỉ vì game là 3D.

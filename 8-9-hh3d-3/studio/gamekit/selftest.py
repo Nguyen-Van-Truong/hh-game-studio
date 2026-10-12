@@ -30,6 +30,11 @@ SELFTESTS = {
     "w9": "w9_kit",
     "w10": "w10_export",
     "strict": "strict",
+    "config": "config",
+    "observe": "observe",
+    "clips": "blender_clips",
+    "replay": "replay",
+    "save_bot": "save_bot",
 }
 
 

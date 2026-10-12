@@ -114,10 +114,10 @@ def _path_or_ancestor_reparse(path: Path) -> bool:
     current = Path(os.path.abspath(str(path)))
     while True:
         try:
-            st = os.stat(current, follow_symlinks=False)
+            st = os.lstat(current)
         except OSError:
             st = None
-        if st is not None and getattr(st, "st_file_attributes", 0) & _REPARSE_POINT:
+        if st is not None and (stat.S_ISLNK(st.st_mode) or getattr(st, "st_file_attributes", 0) & _REPARSE_POINT):
             return True
         parent = current.parent
         if parent == current:
@@ -136,8 +136,16 @@ def validate_out_dir(project: C.Project, out_dir: str | Path) -> Path:
     if raw.strip() == "" or any(ch in raw for ch in ("\n", "\r", "\x00")):
         raise C.GamekitError("BAD_REQUEST", "out-dir is empty or contains a control character")
     resolved = Path(os.path.abspath(raw))
-    real = Path(os.path.realpath(resolved))
-    if _path_or_ancestor_reparse(resolved) or _path_or_ancestor_reparse(real):
+    # Inspect the lexical path without following links first. Windows may raise
+    # WinError 448 while resolving even an existing junction; a dangling link
+    # must still be refused with our stable path error, before traversal.
+    if _path_or_ancestor_reparse(resolved):
+        raise C.GamekitError("FORBIDDEN_PATH", "out-dir or an ancestor is a junction or symlink")
+    try:
+        real = Path(os.path.realpath(resolved))
+    except OSError as exc:
+        raise C.GamekitError("FORBIDDEN_PATH", f"out-dir cannot be resolved: {exc}") from exc
+    if _path_or_ancestor_reparse(real):
         raise C.GamekitError("FORBIDDEN_PATH", "out-dir or an ancestor is a junction or symlink")
     for candidate in (resolved, real):
         if C.is_within(candidate, project.root):

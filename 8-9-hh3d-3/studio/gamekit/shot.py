@@ -269,6 +269,10 @@ def _presence(raw: Any, expect: list[str]) -> list[dict[str, Any]]:
             if not isinstance(row["class"], str):
                 raise C.GamekitError("GODOT_FAILED", f"presence.class is not a string for {want}")
             cleaned["class"] = row["class"]
+        if "presence_basis" in row:
+            if row["presence_basis"] not in ("aabb_projection", "origin_point"):
+                raise C.GamekitError("GODOT_FAILED", f"presence_basis is invalid for {want}")
+            cleaned["presence_basis"] = row["presence_basis"]
         out.append(cleaned)
     return out
 

@@ -314,8 +314,48 @@ func _fill_node3d(row: Dictionary, node: Node3D, visible: bool) -> void:
 		row["on_screen"] = false
 		row["screen_rect"] = null
 		return
+	# A Node3D's origin can be off-screen while its mesh is visible (and the
+	# origin can be on-screen while the mesh is entirely outside the viewport).
+	# Project every corner of a VisualInstance3D's local AABB after applying its
+	# global transform. Keep the origin-point fallback for empty/non-visual nodes.
+	if node is VisualInstance3D:
+		var visual: VisualInstance3D = node as VisualInstance3D
+		var aabb: AABB = visual.get_aabb()
+		if aabb.size.length_squared() > 0.0:
+			row["presence_basis"] = "aabb_projection"
+			var projected: Array[Vector2] = _project_aabb(cam, node.global_transform, aabb)
+			if not projected.is_empty():
+				var min_x: float = projected[0].x
+				var min_y: float = projected[0].y
+				var max_x: float = projected[0].x
+				var max_y: float = projected[0].y
+				for point: Vector2 in projected:
+					min_x = minf(min_x, point.x)
+					min_y = minf(min_y, point.y)
+					max_x = maxf(max_x, point.x)
+					max_y = maxf(max_y, point.y)
+				var mesh_rect: Rect2 = Rect2(min_x, min_y, max_x - min_x, max_y - min_y)
+				row["screen_rect"] = _rect_json(mesh_rect)
+				var layer_visible: bool = (visual.layers & cam.cull_mask) != 0
+				row["on_screen"] = _rect_on_screen(mesh_rect, visible and layer_visible)
+				return
+			# A non-empty visual entirely behind the camera has no screen bounds.
+			row["screen_rect"] = null
+			row["on_screen"] = false
+			return
+	# Empty AABB or a plain Node3D: report the origin as a point.
 	var world: Vector3 = node.global_position
 	var behind: bool = cam.is_position_behind(world)
 	var screen: Vector2 = cam.unproject_position(world)
 	row["screen_rect"] = [screen.x, screen.y, 0.0, 0.0]
 	row["on_screen"] = visible and not behind and _point_on_screen(screen, true)
+	row["presence_basis"] = "origin_point"
+
+
+func _project_aabb(cam: Camera3D, transform: Transform3D, box: AABB) -> Array[Vector2]:
+	var points: Array[Vector2] = []
+	for i: int in range(8):
+		var world_corner: Vector3 = transform * box.get_endpoint(i)
+		if not cam.is_position_behind(world_corner):
+			points.append(cam.unproject_position(world_corner))
+	return points

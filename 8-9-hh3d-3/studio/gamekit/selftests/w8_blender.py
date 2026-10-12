@@ -91,7 +91,10 @@ def _rejects(ctx: Ctx, calls: dict) -> None:
 
 def _crate(ctx: Ctx) -> Path | None:
     out = ctx.root / "crate-out"
-    result = ctx.guard("run crate recipe", lambda: B.run_recipe(EXAMPLES / "crate.json", out))
+    receipt_path = ctx.root / "crate-receipt.json"
+    result = ctx.guard("run crate recipe", lambda: B.run_recipe(EXAMPLES / "crate.json", out, receipt_out=receipt_path))
+    ctx.check("receipt is separate from assets and matches stdout", receipt_path.is_file()
+              and C.read_json(receipt_path) == result)
     if not isinstance(result, dict):
         return None
     glb = out / "crate.glb"

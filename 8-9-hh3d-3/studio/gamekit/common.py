@@ -643,6 +643,7 @@ def run_godot(
     fixed_fps: int | None = None,
     timeout: float = 180.0,
     extra: Sequence[str] = (),
+    env: dict[str, str] | None = None,
 ) -> ProcessRun:
     exe = godot_exe()
     if not exe.is_file():
@@ -665,7 +666,7 @@ def run_godot(
     if args:
         argv.append("--")
         argv += [str(a) for a in args]
-    return run_process(argv, timeout=timeout, cwd=project_root)
+    return run_process(argv, timeout=timeout, cwd=project_root, env=env)
 
 
 def run_godot_tool(project_root: Path, tool: str, request: dict[str, Any], **kwargs: Any) -> ProcessRun:

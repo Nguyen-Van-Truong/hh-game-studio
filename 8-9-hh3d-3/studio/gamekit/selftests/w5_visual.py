@@ -12,7 +12,7 @@ from .. import vcheck
 from ..hh import build_parser
 from . import Ctx
 
-EXPECT = ["Backdrop", "Mark", "Score", "Pin", "Away", "Sparks", "Marker", "Behind", "Nope"]
+EXPECT = ["Backdrop", "Mark", "Score", "Pin", "Away", "Sparks", "Marker", "Behind", "WideMesh", "Slope", "MeshBehind", "Nope"]
 
 DRIVER = """extends Node
 
@@ -23,10 +23,16 @@ func _process(_delta: float) -> void:
 			backdrop.color = Color(0.95, 0.2, 0.15, 1)
 """
 
-STAGE = """[gd_scene load_steps=3 format=3 uid="uid://bshotw5stage1"]
+STAGE = """[gd_scene load_steps=5 format=3 uid="uid://bshotw5stage1"]
 
 [ext_resource type="Texture2D" path="res://art/mark.png" id="1_mark"]
 [ext_resource type="Script" path="res://driver.gd" id="2_drv"]
+
+[sub_resource type="BoxMesh" id="Box_wide"]
+size = Vector3(10, 1, 1)
+
+[sub_resource type="PlaneMesh" id="Plane_slope"]
+size = Vector2(10, 2)
 
 [node name="Stage" type="Node"]
 script = ExtResource("2_drv")
@@ -68,6 +74,19 @@ current = true
 
 [node name="Behind" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 12)
+
+[node name="WideMesh" type="MeshInstance3D" parent="."]
+position = Vector3(7, 0, 0)
+mesh = SubResource("Box_wide")
+
+[node name="Slope" type="MeshInstance3D" parent="."]
+position = Vector3(7, -1, 0)
+rotation = Vector3(0.6, 0, 0.2)
+mesh = SubResource("Plane_slope")
+
+[node name="MeshBehind" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0, 12)
+mesh = SubResource("Box_wide")
 """
 
 EMPTY = """[gd_scene format=3 uid="uid://bshotw5empty01"]
@@ -182,6 +201,14 @@ def run(ctx: Ctx) -> None:
               row=presence["Marker"])
     ctx.check("node3d behind camera is off screen", presence["Behind"]["exists"] and presence["Behind"]["on_screen"] is False,
               row=presence["Behind"])
+    wide = presence["WideMesh"]
+    ctx.check("mesh AABB reaches the viewport", wide["exists"] and wide["on_screen"] is True
+              and isinstance(wide.get("screen_rect"), list) and wide["screen_rect"][2] > 0.0
+              and wide["screen_rect"][3] > 0.0, row=wide)
+    ctx.check("sloped flat mesh uses its projected bounds", presence["Slope"]["on_screen"] is True
+              and presence["Slope"].get("presence_basis") == "aabb_projection", row=presence["Slope"])
+    ctx.check("mesh behind camera has no projected bounds", presence["MeshBehind"]["on_screen"] is False
+              and presence["MeshBehind"]["screen_rect"] is None, row=presence["MeshBehind"])
     ctx.check("missing node", presence["Nope"]["exists"] is False and presence["Nope"]["on_screen"] is False)
     script_errors = [err for err in wrote.get("process", {}).get("errors", []) if "SCRIPT ERROR" in err or "Parse Error" in err]
     ctx.check("no script errors", not script_errors, errors=script_errors[:8])

@@ -7,6 +7,7 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 from studio.gamekit import blender_recipe as B
 from studio.gamekit import common as C
@@ -212,9 +213,30 @@ class RecipeValidationTest(unittest.TestCase):
         args = parser.parse_args(["blender", "validate", str(path)])
         result = args.func(args)
         self.assertEqual(result, {"ok": True, "name": "Demo", "steps": 1})
-        run_args = parser.parse_args(["blender", "run", str(path), "--out-dir", str(self.dir / "out"), "--timeout", "12"])
+        run_args = parser.parse_args(["blender", "run", str(path), "--out-dir", str(self.dir / "out"),
+                                      "--out", str(self.dir / "receipt.json"), "--timeout", "12"])
         self.assertEqual(run_args.timeout, 12.0)
+        self.assertEqual(Path(run_args.out), self.dir / "receipt.json")
         self.assertTrue(callable(run_args.func))
+
+    def test_receipt_cannot_overwrite_recipe_assets_or_project(self) -> None:
+        recipe = self.dir / "recipe.json"
+        data = _recipe([
+            {"op": "render_sprites", "target": "Box", "directions": 1, "frames": [1, 1, 1],
+             "size": [8, 8], "ortho_scale": 1, "elevation_deg": 0, "out": "sprite.png"},
+        ])
+        recipe.write_text(json.dumps(data), encoding="utf-8")
+        out = self.dir / "assets"
+        project = self.dir / "project"
+        project.mkdir()
+        (project / "project.godot").write_text("config_version=5\n", encoding="utf-8")
+        with patch.object(C, "run_blender") as native:
+            for path in (recipe, out / "manifest.json", out / "sprite.json", project / "receipt.json"):
+                with self.subTest(path=str(path)), self.assertRaises(C.GamekitError):
+                    B.run_recipe(recipe, out, receipt_out=path)
+            native.assert_not_called()
+        self.assertFalse(out.exists())
+        self.assertEqual(json.loads(recipe.read_text(encoding="utf-8")), data)
 
 
 if __name__ == "__main__":

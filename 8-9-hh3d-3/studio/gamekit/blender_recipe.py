@@ -2,7 +2,8 @@
 
 ``hh blender run <recipe.json> --out-dir <dir>`` validates the recipe on the host
 before Blender starts. The runner writes ``<out-dir>/manifest.json``; the host
-re-hashes every listed output and only then returns ok.
+re-hashes every listed output and only then returns ok. ``--out <file>`` is an
+optional atomic copy of the verified receipt, kept separate from asset outputs.
 """
 
 from __future__ import annotations
@@ -621,10 +622,43 @@ def _verify_manifest(out_dir: Path, manifest: Any, recipe_name: str) -> list[dic
     return verified
 
 
-def run_recipe(recipe: str | Path, out_dir: str | Path, timeout: float = 600) -> dict[str, Any]:
+def _receipt_path(path: str | Path, recipe_path: Path, data: dict[str, Any], out_dir: Path) -> Path:
+    safe = C.refuse_unsafe_host_path(Path(path), what="--out")
+    reason = C.forbidden_reason(safe)
+    if reason:
+        raise C.GamekitError("FORBIDDEN_PATH", reason)
+    if safe.exists() and not safe.is_file():
+        raise C.GamekitError("BAD_PATH", "--out must be a JSON file")
+    if safe.suffix.lower() != ".json":
+        raise C.GamekitError("BAD_PATH", "--out must end with .json")
+    if any((parent / "project.godot").is_file() for parent in safe.parents):
+        raise C.GamekitError("FORBIDDEN_PATH", "--out must be outside a Godot project")
+    protected = [recipe_path, out_dir / MANIFEST_NAME]
+    for step in data["steps"]:
+        if "out" in step:
+            protected.append(out_dir / step["out"])
+            if step["op"] == "render_sprites":
+                protected.append(out_dir / (Path(step["out"]).stem + ".json"))
+        if step["op"] == "import":
+            protected.append(recipe_path.parent / step["path"])
+    normalized = os.path.normcase(str(safe))
+    if any(normalized == os.path.normcase(str(item.resolve())) for item in protected):
+        raise C.GamekitError("CONFLICT", "--out would overwrite the recipe, an input, or a generated asset/manifest")
+    return safe
+
+
+def run_recipe(
+    recipe: str | Path,
+    out_dir: str | Path,
+    timeout: float = 600,
+    receipt_out: str | Path | None = None,
+) -> dict[str, Any]:
     """Validate ``recipe``, run it in pinned Blender, and re-hash the outputs."""
     recipe_path, data = load_recipe(recipe)
     timeout = _check_timeout(timeout)
+    # Validate receipt before creating assets, and again just before publishing.
+    receipt_path = None if receipt_out is None else _receipt_path(
+        receipt_out, recipe_path, data, Path(out_dir).resolve())
     out = _prepare_out_dir(out_dir)
     script = C.GAMEKIT_DIR / "blender" / "recipe_runner.py"
     if not script.is_file():
@@ -659,11 +693,15 @@ def run_recipe(recipe: str | Path, out_dir: str | Path, timeout: float = 600) ->
     declared = run.result.get("outputs")
     if isinstance(declared, list) and sorted(declared) != sorted(item["file"] for item in outputs):
         raise C.GamekitError("VALIDATION_FAILED", "runner output list does not match the manifest")
-    return {"ok": True, "outputs": outputs, "manifest": manifest, "process": run.summary()}
+    receipt = {"ok": True, "outputs": outputs, "manifest": manifest, "process": run.summary()}
+    if receipt_path is not None:
+        receipt_path = _receipt_path(receipt_path, recipe_path, data, out)
+        C.atomic_write_json(receipt_path, receipt)
+    return receipt
 
 
 def _cmd_run(args: argparse.Namespace) -> dict[str, Any]:
-    return run_recipe(args.recipe, args.out_dir, timeout=args.timeout)
+    return run_recipe(args.recipe, args.out_dir, timeout=args.timeout, receipt_out=args.out)
 
 
 def _cmd_validate(args: argparse.Namespace) -> dict[str, Any]:
@@ -677,6 +715,7 @@ def register(sub: argparse._SubParsersAction) -> None:
     run = commands.add_parser("run", help="validate a recipe, run Blender, rehash outputs")
     run.add_argument("recipe", help="path to a hh-blender-recipe-1 JSON file")
     run.add_argument("--out-dir", required=True, help="directory for GLB, PNG, and manifest.json")
+    run.add_argument("--out", default=None, help="optional receipt JSON outside the project")
     run.add_argument("--timeout", type=float, default=600, help="seconds before the Blender process is killed")
     run.set_defaults(func=_cmd_run)
     validate = commands.add_parser("validate", help="validate a recipe without launching Blender")
