@@ -1,0 +1,264 @@
+HƯỚNG DẪN CHO AGENT LÀM GAME: DÙNG BỘ CÔNG CỤ HH STUDIO (GODOT + BLENDER) TRÊN PC
+Cập nhật 12-10-2026 15:10, Asia/Saigon. Viết cho agent khác dùng ngay, không cần đọc lịch sử.
+Nguồn tiến độ: zdoc/8-9-godot-blender-agent-studio-plan.txt (S303, quyết định owner O14).
+Mọi đường dẫn tính từ thư mục 8-9-hh3d-3/. Đường dẫn ngắn như godot-addon/, host/, package/,
+blender-addon/, pipeline/, protocol/, contracts/ nằm dưới studio/. Lệnh viết cho PowerShell.
+Nếu file này lệch với code thì code và plan đúng; sửa file này trong cùng commit sửa code.
+
+0. TÓM TẮT (đọc trước)
+- HH Studio là bộ thư viện Python, addon Godot hh_studio và adapter Blender. Không phải game.
+  Không có CLI chung hay nút bấm: agent gọi hàm Python và chạy Godot/Blender đã pin.
+- GT-01..GT-09 và GT-10-PC đã nghiệm thu. GT-10-PC theo O14: kiểm ngắn, soak dài được miễn.
+  Chỉ PC (Windows, Linux, Linux-headless). Android hoãn (GT-08B).
+- Dùng ngay được trên project game của bạn:
+  a) Godot 4.7.2 và Blender 5.2.1 đã pin hash (mục 2).
+  b) Cài, nâng cấp, rollback, gỡ addon hh_studio có receipt, không đụng source/save (mục 3).
+  c) Thư viện lệnh: Request có command_id, journal, lease, đọc lại trước ACK (mục 5).
+  d) Mẫu đã chạy thật để chép: catalog 27 class, Blender → GLB → Godot, trace input 60 Hz.
+- Hiện chỉ chạy trên hai fixture mẫu (arena 2D, room 3D): sửa scene bằng lệnh có ACK, publish
+  script gameplay, recipe Blender, playtest/observe. Dùng trên project game thật cần change
+  request đầu tiên CR-1 (mục 8). Đây là giới hạn thật của công cụ, không phải lỗi cài đặt.
+- Gặp lỗi công cụ khi làm game: sửa trong studio/ bằng test ngắn liên quan (mục 9, O14.5).
+- Plan game của bạn quyết định có bắt buộc dùng công cụ không. Plan công cụ không cấm sửa trực
+  tiếp file của project game.
+
+1. GÓI VÀ TRẠNG THÁI
+- Gói 0.1.0 (release) và 0.1.1 (upgrade, để thử nâng cấp), ký bằng khóa test local:
+    studio/.local/reviews/gt10pc-rehearsal-20261012-c3h/artifacts/windows/release.hhpkg
+    studio/.local/reviews/gt10pc-rehearsal-20261012-c3h/artifacts/windows/upgrade.hhpkg
+    studio/.local/reviews/gt10pc-rehearsal-20261012-c3h/artifacts/linux/release.hhpkg
+    studio/.local/reviews/gt10pc-rehearsal-20261012-c3h/artifacts/linux/upgrade.hhpkg
+  Thư mục .local không vào git: gói chỉ có trên máy này. Bản linux là target Linux-headless.
+- Trust store (chỉ public key): studio/.local/gt10pc-publisher-v2/trust.json
+  SHA256 2d19e3e90a719ead39cd1874193f90f98e9f8b2e2b71fb9d0ea451c7336af2e0
+- Tài liệu đi kèm gói: studio/package/runbook.md, studio/package/known-limits.md,
+  studio/package/compatibility-lock.json.
+- Biên bản nghiệm thu: zdoc/reviews/20261012-gt10pc-c6-c3h/coordinator-acceptance.md.
+  Trạng thái chi tiết của studio: studio/AUTHORING_STATUS.md.
+
+2. MÁY, PHIÊN BẢN, CÁCH CHẠY
+- Godot 4.7.2-stable (khác Godot 4.7.1 của Vault Fighters; không trộn hai bản):
+    studio/.local/tooling/godot-4.7.2-stable/Godot_v4.7.2-stable_win64.exe
+    studio/.local/tooling/godot-4.7.2-stable/Godot_v4.7.2-stable_win64_console.exe
+    studio/.local/tooling/godot-4.7.2-stable-linux/Godot_v4.7.2-stable_linux.x86_64
+  Bản GUI dùng cho --editor theo các runner; bản console in log ra stdout.
+- Blender 5.2.1: studio/.local/tooling/blender-5.2.1-windows-x64/blender.exe
+- Hash và chính sách: studio/toolchain.lock.json (offline-only, không tự lấy bản latest).
+- Python 3.11. Chạy từ 8-9-hh3d-3/, PYTHONPATH trỏ vào đó, cờ -B để không ghi .pyc:
+    cd 8-9-hh3d-3
+    $env:PYTHONPATH = (Get-Location).Path
+    python -B <script.py>
+  Trong code import theo gói: from studio.package.consumer_install import ConsumerInstall.
+- Một Godot hoặc Blender cho mỗi đường dẫn project tại một thời điểm.
+- File %LOCALAPPDATA%\HHGodotAgent\measure-window.lock có mặt nghĩa là đang có đợt đo hiệu năng:
+  không chạy Godot/Blender nặng; catalog_native_host.py từ chối chạy khi file này có mặt. Chỉ
+  người mở đợt đo được xóa nó. 12-10 15:05 file này không có.
+- Publish/kiểm script gameplay (đường C ở mục 5) chạy Godot Linux trong Docker Desktop, context
+  desktop-linux (godot-addon/LINUX_EXECUTOR.md). Docker phải đang chạy. Không prune image/volume.
+
+3. BẮT ĐẦU NHANH: CÀI ADDON VÀO PROJECT GAME
+Đã chạy thật 12-10 14:58 trên một project trống trong %TEMP%: cài COMMITTED, gửi lại cùng
+command_id trả đúng receipt cũ, addon 5 file, project.godot và file save không đổi, gỡ COMMITTED.
+Luồng giống hàng P9 của gói (studio/tests/conformance/gt10pc_p9_consumer.py:45-60).
+
+    from pathlib import Path
+    from studio.package.trust import load_trust
+    from studio.package.release_contract import verify_package
+    from studio.package.consumer_install import ConsumerInstall
+
+    ART = Path("studio/.local/reviews/gt10pc-rehearsal-20261012-c3h/artifacts/windows")
+    keys = load_trust(Path("studio/.local/gt10pc-publisher-v2/trust.json"),
+        expected_sha256="2d19e3e90a719ead39cd1874193f90f98e9f8b2e2b71fb9d0ea451c7336af2e0")
+    verify_package(ART / "release.hhpkg", trusted_keys=keys, target="Windows")
+    installer = ConsumerInstall(Path(r"D:\...\mygame-hh-install"), trusted_keys=keys)
+    receipt = installer.install_lifecycle(Path(r"D:\...\mygame"), ART / "release.hhpkg",
+        command_id="mygame.hh.install.1", expected_state_sha256="ABSENT")
+    state = installer.snapshot()        # state["state_sha256"] là token cho lệnh kế tiếp
+
+- Dùng đường dẫn tuyệt đối, không symlink. Install root là thư mục riêng ngoài project; nó giữ
+  các release đã cài và journal trạng thái (schema hh-studio-install-4). Không xóa tay.
+- Lần cài đầu expected_state_sha256 là "ABSENT"; lần sau dùng state["state_sha256"] mới nhất.
+- Gửi lại cùng command_id với cùng yêu cầu thì nhận lại receipt cũ; giữ id mà đổi nội dung là
+  conflict. installer.lookup(command_id) đọc receipt đã có.
+- Addon được chép vào <project>/addons/hh_studio/ (plugin.cfg, plugin.gd, scene_commands.gd,
+  jcs_godot.gd, SCENE_COMMANDS.md). Hàm cài không sửa project.godot. Muốn bật plugin thì thêm:
+    [editor_plugins]
+    enabled=PackedStringArray("res://addons/hh_studio/plugin.cfg")
+  Khi không có host (biến HH_EDITOR_TOKEN rỗng) plugin không làm gì: editor headless mở bình
+  thường, stderr rỗng (đã thử 12-10 14:59). Plugin chỉ gắn lệnh vào scene có root là Node3D
+  (godot-addon/addons/hh_studio/plugin.gd:42).
+- Nâng cấp: installer.install_upgrade(project, ART / "upgrade.hhpkg", command_id=...,
+  expected_state_sha256=token). Hàm này chính là install_lifecycle.
+- Rollback: installer.rollback_lifecycle(project, command_id=..., destination=state["previous"],
+  expected_state_sha256=token). Chỉ về release trusted đã cài trước đó.
+- Gỡ addon: installer.uninstall_addon(project, command_id=..., expected_state_sha256=token).
+  Xóa file addon, giữ art/game/source/save; còn lại thư mục rỗng addons/hh_studio và release
+  vẫn active (tắt bằng installer.deactivate(command_id=..., expected_state_sha256=token)).
+  Gỡ dòng [editor_plugins] trước khi gỡ addon để editor không báo thiếu plugin.
+- Sửa addon bị lệch: installer.install_addon(project, command_id=..., expected_state_sha256=token,
+  repair=True, release=<id release>). File không do installer sở hữu bị từ chối, không ghi đè.
+- Dừng khẩn: installer.stop(); sau khi phục hồi xong: installer.resume().
+- Báo lỗi kèm gói support đã lọc secret: studio.package.consumer_support.support_bundle(artifact,
+  output, trusted_keys=keys, target="Windows", install=installer); output phải chưa tồn tại.
+- gt10pc_p9_consumer.py và run_gt10pc_matrix.py là harness kiểm gói, không phải trình cài.
+
+4. DÙNG NGAY TRÊN GAME VÀ CHỈ CHẠY TRÊN FIXTURE
+Dùng ngay trên project game:
+- Godot/Blender pin; cài/nâng cấp/rollback/gỡ addon (mục 3).
+- studio/protocol/core.py (Request, canonical JSON, hash), host/core/journal.py, lease và
+  transport HTTP loopback có token: làm nền cho driver riêng của game.
+- Chạy Godot pin headless trên project game, đọc stdout/stderr và exit code của process thật.
+Chỉ chạy trên fixture (cần CR-1 ở mục 8):
+- EditorOwner sửa scene có undo: nhận bundle scene fixture, root Node3D
+  (godot-addon/editor_owner.py).
+- Catalog GT-09 (scene.node.create/update, scene.resource.create): RegisteredAuthoringAdapter ghi
+  "Fixture-only request route"; host profile chỉ có project.registered.arena (Node2D) và
+  project.registered.room (Node3D); native host dựng scene vào thư mục output do host cấp.
+- Publish script gameplay (gameplay-source.publish), recipe Blender, delegated playtest, observe
+  GT-06 (--fixture arena|room, gt09-arena|gt09-room).
+
+5. GỬI LỆNH: ENVELOPE, READBACK, UNDO, LEASE
+- Mọi mutation là một Request (studio/protocol/core.py), schema_version "hh-studio-0.1", gồm
+  command_id, project_id, operation, lease_id, fencing_epoch, expected_revision, target, payload,
+  payload_hash ("sha256:" + sha256 của canonical JSON payload), deadline_ms.
+- ACK chỉ có sau khi đọc lại trạng thái thật từ Godot. Dòng PASS trong log không phải ACK.
+- command_id là duy nhất; gửi lại là idempotent. Lệnh mang fencing_epoch cũ bị từ chối.
+- Ba đường đã có, không trộn:
+  A) EditorOwner (godot-addon/editor_owner.py): mở editor headless có addon, bridge 127.0.0.1
+     với token một lần qua env HH_EDITOR_*; prepare_edit rồi apply_edit, đọc lại inspect().
+     Thay đổi nằm trong bộ nhớ editor, lưu file là bước riêng; undo/redo một bước (scene.undo,
+     scene.redo, xem studio/tests/godot/test_contract.py).
+  B) HTTP (host/core/transport.py, godot-addon/publication_transport.py): POST /v1/commands,
+     /v1/lease, /v1/lease/enqueue, /v1/lease/poll, /v1/lease/cancel; cổng control /v1/lookup,
+     /v1/stop; header Authorization: Bearer. Writer FIFO tối đa 8 người chờ, 64 ticket; ticket
+     không còn sau khi host restart (godot-addon/operations.json).
+  C) Gameplay-source GT-09 (godot-addon/gameplay_source_owner.py, gameplay_source_adapter.py):
+       owner = GameplaySourcePublicationOwner.create(parent, project_id=..., source_files=...,
+           entrypoint=..., source_closure_sha256=...)
+       credential = owner.issue()
+       grant = owner.authorize("Bearer " + credential.bearer, "scene.save")
+       lease = owner.lease(grant)
+       adapter = GameplaySourceAdapter(owner, host_profile=profile)
+     Operation của profile hh-godot-gameplay-source-1: scene.node.create, scene.node.update,
+     scene.resource.create, gameplay-source.inspect, gameplay-source.publish. Đọc lại bằng
+     owner.inspect(). Mẫu chạy thật: studio/tests/conformance/run_gt09_registered_script.py:190-215.
+- Catalog class (studio/contracts/godot-authoring-schema-v1.json, x-candidate, 27 mục): Node2D,
+  Node3D, Sprite2D, AnimatedSprite2D, MeshInstance3D, CharacterBody2D/3D, StaticBody2D/3D,
+  Area2D/3D, CollisionShape2D/3D, Camera2D/3D, TileMapLayer, GPUParticles2D, CPUParticles2D,
+  CanvasLayer, Control, Label, ProgressBar, Button, AudioStreamPlayer, AudioStreamPlayer2D,
+  AnimationPlayer, InputMap (singleton). Chưa có RigidBody2D và shader.
+- Mẫu dựng scene qua catalog: studio/tests/godot/run_registered_authoring_probe.py cùng
+  saved_arena_recipe.py và saved_room_recipe.py.
+- Nhiều agent: mỗi lệnh có lease_id và fencing_epoch, kiểm lại trước effect; một writer mỗi file;
+  Stop chặn admission mới. Chọn job giữa nhiều project: host/jobs/README.md (dispatch_policy).
+
+6. BLENDER → GLB → GODOT
+- Adapter Blender (blender-addon/adapter.py, ui_adapter.py; blender-addon/README.md): lệnh
+  HH-BLENDER-FIXTURE-COMMAND-1 tối đa 4096 byte; scene.inspect, mesh.create_box,
+  object.transform.set; hàng đợi UI thêm history.undo, history.redo, checkpoint.save.
+- Recipe GT-09 (studio/host/blender/fixture_content.py): mesh.create_box, material.set_principled,
+  sprite_sheet.render, armature.from_template, animation.action.create, animation.keyframe.set,
+  avatar.bind, content.export → scene.glb, sprite_sheet.png, checkpoint.blend, transcript.json.
+    python -B studio/tests/conformance/run_gt09_blender_content.py --run-id <id> --output <dir>
+- Producer cố định (studio/pipeline/producer/CONTRACT.md): Blender pin chạy
+  --background --factory-startup --disable-autoexec --offline-mode với run_blender.py, ra
+  fixture.blend, fixture.glb, producer-report.json. Godot nhập qua studio/pipeline/godot/
+  consumer.py (prepare, command, verify_binding; README cùng thư mục).
+- Không mở file .blend của artist; recipe cố định. Asset của game cần recipe mới (CR, mục 8).
+
+7. CHẠY THỬ VÀ QUAN SÁT
+- Trên game: chạy Godot pin trực tiếp, ví dụ
+    <Godot_console.exe> --headless --path <project game> --quit-after 600
+  Lấy exit code từ process thật; banner hay log PASS không đủ.
+- Trên fixture: python -B studio/tests/godot/run_delegated_playtest.py --run-id <id>
+  --fixture arena|room với --dry-run, --prepare hoặc --host.
+- Observe GT-06 (studio/godot-addon/observe/README.md): trace hh-studio.input-trace 1.0.0 ở 60 Hz
+  (seed uint32, tick, pressed/held/released), báo cáo hh-studio.play-observation 1.0.0; ảnh chụp
+  cần cửa sổ thật, headless thì captures rỗng. trace_bridge.gd là mẫu để làm replay cho game.
+
+8. CHANGE REQUEST (GT-11) VÀ CR-1
+Theo O14.5, agent game tự mở và làm change request, mỗi CR một commit kèm test ngắn, giữ
+contract. Ghi CR trong plan game của bạn và trong commit; plan công cụ do coordinator/owner sửa.
+Mẫu CR (plan công cụ, phần change request):
+    CR-ID: CR-<game>-<n>        WP game dùng đầu: ...
+    Năng lực tối thiểu (operation/schema/profile): ...
+    File trong studio/ bị chạm: ...        Test chấp nhận ngắn: ...
+    Cần gói mới không (0.1.x): ...
+CR-1 đề xuất, để sửa scene bằng lệnh trên project game thật:
+- Đăng ký project game ở ba chỗ, root_type Node2D hoặc Node3D:
+    studio/godot-addon/gameplay_fixture_profile.py:30 (FIXTURE_PROJECTS)
+    studio/godot-addon/fixture_profile.json:11 (projects)
+    studio/godot-addon/registered_authoring_owner.py:35 (FIXTURE_PROJECTS)
+  Thêm vào JSON mà không sửa hằng số thì bị từ chối có chủ ý; sửa test
+  studio/tests/godot/test_gameplay_fixture_profile.py (đang khóa đúng hai project).
+- Cho native host (godot-addon/catalog_native_host.py) áp transaction vào scene có sẵn của
+  game, có checkpoint trước khi ghi, ghi atomic, đọc lại trước ACK.
+- BlenderHandoff đang bắt buộc trong RegisteredAuthoringOwner; game 2D không có GLB cần nhánh
+  không Blender.
+- Plugin editor đang đòi root Node3D (plugin.gd:42); game 2D cần nhận Node2D.
+Ứng viên CR khác đã ghi trong các plan game:
+- Superagent (zdoc/18-9-superagent-2d-y8-plan.txt mục 13; project game ở superagent-grokdo/, repo
+  git riêng, bản plan trong superagent-grokdo/zdoc/): SA-T01 scene 2D (thêm RigidBody2D),
+  SA-T02 InputMap và replay input 60 Hz, SA-T03 trình bày 2D (particle, shader, âm thanh, UI),
+  SA-T04 sprite sheet từ Blender, SA-T05 export Web, SA-T06 headless và Performance monitor.
+- HH World (zdoc/8-9-hh-world-gameplay-viet-nam-plan.txt): H2-T01..H2-T04.
+- Khoảng trống của verifier gói: G1 (P11 ngắn đọc exit Godot từ capture.json, chưa từ
+  process-exit.json), G2 (từ chối ở P4 chưa có receipt host riêng từng ca).
+
+9. KHI CÔNG CỤ LỖI: SỬA, TEST NGẮN, ĐÓNG GÓI LẠI
+- Sửa trong studio/. Giữ schema, command_id, đọc lại trước ACK, UndoRedo, journal. Mỗi sửa một
+  commit có test; ghi một dòng vào studio/AUTHORING_STATUS.md trong cùng commit nếu đổi hành vi.
+- Không chạy soak 10×35 hay --matrix final để kiểm một sửa nhỏ (O14). Test ngắn theo phần:
+    gói và cài: studio/tests/conformance/test_gt10pc_package.py
+    protocol, journal: studio/tests/protocol/test_core.py, test_journal.py
+    Godot: studio/tests/godot/test_contract.py, test_publication_fifo.py,
+      test_gameplay_fixture_profile.py, test_gameplay_source_adapter.py,
+      test_registered_authoring_owner.py
+    Blender: studio/tests/blender/test_contract.py, test_authoring_contract.py
+    nhập GLB: studio/tests/pipeline/test_godot_import_contract.py
+    hàng đợi job: studio/tests/jobs/test_dispatch_policy.py
+  Lệnh mẫu (đã chạy 12-10: 8 test, 0,05 giây):
+    python -B -m unittest discover -s studio/tests/godot -p test_gameplay_fixture_profile.py -v
+- Chỉ cần đóng gói lại khi game dùng addon từ gói. Diễn tập P1–P11 qua Scheduled Task (khoảng
+  21 phút; P11 là một vòng Godot ngắn). $T = "studio/tests/replay/gt10pc_task.ps1":
+    powershell -NoProfile -File $T -Command register-run -RunId <id>
+    powershell -NoProfile -File $T -Command start-run -RunId <id>
+    powershell -NoProfile -File $T -Command status -RunId <id>
+  <id> dạng gt10pc-rehearsal-<yyyymmdd>-<tên ngắn>. Xong thì kiểm lại từ raw:
+    python -B studio/tests/conformance/run_gt10pc_matrix.py --verify-only
+      studio/.local/reviews/<id> --trust studio/.local/gt10pc-publisher-v2/trust.json
+      --trust-sha256 2d19e3e90a719ead39cd1874193f90f98e9f8b2e2b71fb9d0ea451c7336af2e0
+  Cần status RAW_VERIFIED, exit 0. Rồi xóa task (ghi task-deleted.json):
+    powershell -NoProfile -File $T -Command delete -RunId <id>
+  Gói c3h chỉ khớp file đóng gói ở commit 744a9f61; sửa một
+  file thuộc gói (host/, godot-addon/, package/, tests/...) thì verify-only của c3h báo
+  DIAGNOSTIC_SOURCE_DRIFT (exit 2) đúng thiết kế. Tài liệu ở gốc studio/ không thuộc gói.
+
+10. GIỚI HẠN ĐÃ BIẾT
+- Chưa đo rò bộ nhớ, handle, object qua phiên sửa dài (soak 10×35 được miễn theo O14). Nâng cấp
+  và rollback mới kiểm trong phiên ngắn.
+- Khóa ký là khóa test local; chưa có kênh phát hành công khai, revoke, expiry hay xoay khóa.
+  Mất hoặc lộ khóa thì tạo trust store mới và install root mới (studio/package/known-limits.md).
+- Lệnh sửa scene, catalog, publish script, recipe Blender, playtest chỉ chứng minh trên hai
+  fixture (mục 4). Chưa có RigidBody2D, shader, export Web.
+- MCP Godot bên ngoài là INCOMPATIBLE (K13): nó ghi thẳng vào Godot, không lease, journal hay
+  command_id. Không dùng nó thay đường lệnh của công cụ.
+- Hai khoảng trống verifier G1, G2 (mục 8); raw của gói c3h đã được đối chiếu tay và khớp.
+- Android: GT-08B DEFERRED_OWNER_NO_ANDROID; GT-10 đầy đủ chờ GT-08B.
+
+11. KHÔNG ĐƯỢC LÀM
+- Không mở, chép, log hay commit khóa ký (studio/.local/**/private.raw), bearer, token, secret.
+- Không commit .godot, .local, cache, binary hay gói .hhpkg.
+- Không xóa journal, install root, raw evidence; không prune image/volume Docker.
+- Không chạy hai Godot/Blender trên cùng đường dẫn project; không lấy bản latest; không fork
+  Godot; không rip asset.
+- Không coi banner PASS là ACK hay nghiệm thu; không tự tick WP; không đổi gate hay evidence để
+  cho qua; không claim Android, gói phát hành công khai hay game hoàn chỉnh.
+- Không đụng Kho Bí Ẩn, Snake, Vault Fighters khi sửa công cụ.
+
+12. CHƯA XÁC MINH TRONG HƯỚNG DẪN NÀY
+- Đã chạy 12-10: smoke cài/gỡ ở mục 3, editor headless có plugin không host, lệnh test mẫu ở
+  mục 9, verify-only của gói c3h. Các lệnh Blender, playtest và observe lấy từ code và README,
+  đã chạy trong ma trận GT-06/GT-09 nhưng chưa chạy lại riêng cho hướng dẫn này.
+- Chưa thử cài lên project game thật có scene và script; chưa thử bản Linux-headless trên máy
+  Linux thật ngoài container của ma trận.
