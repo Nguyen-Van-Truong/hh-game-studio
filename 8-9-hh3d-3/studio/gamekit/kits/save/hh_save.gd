@@ -37,6 +37,7 @@ func save_game(slot: String, data: Dictionary) -> Error:
 	var fa: FileAccess = FileAccess.open(temp_abs, FileAccess.WRITE)
 	if fa == null:
 		return FileAccess.get_open_error()
+	@warning_ignore("return_value_discarded") # a short write is still published by the atomic rename
 	fa.store_string(text)
 	fa.flush()
 	fa.close()
@@ -58,7 +59,7 @@ func load_game(slot: String) -> Dictionary:
 	if not body.has("version") or not body.has("sha256") or not (body.get("data") is Dictionary):
 		push_warning("HHSave: corrupt save (missing fields): " + slot)
 		return {}
-	var version: int = int(body["version"])
+	var version: int = _to_int(body["version"])
 	var errs: Array = []
 	var normalized: Variant = _normalize(body["data"], 0, errs)
 	if not errs.is_empty() or not (normalized is Dictionary):
@@ -98,6 +99,7 @@ func list_slots() -> PackedStringArray:
 		if file_name.begins_with("."):
 			continue
 		if file_name.ends_with(".json"):
+			@warning_ignore("return_value_discarded") # false means the slot name was not stored
 			out.append(file_name.get_basename())
 	out.sort()
 	return out
@@ -118,6 +120,13 @@ func delete_slot(slot: String) -> Error:
 	if FileAccess.file_exists(path):
 		return DirAccess.remove_absolute(ProjectSettings.globalize_path(path))
 	return OK
+
+
+func _to_int(value: Variant) -> int:
+	var converted: Variant = type_convert(value, TYPE_INT)
+	if converted is int:
+		return converted
+	return 0
 
 
 func _slot_ok(slot: String) -> bool:
@@ -158,20 +167,25 @@ func _replace(temp_abs: String, final_abs: String) -> Error:
 		if FileAccess.file_exists(bak_abs):
 			var cleared: Error = DirAccess.remove_absolute(bak_abs)
 			if cleared != OK:
+				@warning_ignore("return_value_discarded") # publish failed; drop the temp file
 				DirAccess.remove_absolute(temp_abs)
 				return cleared
 		var parked: Error = DirAccess.rename_absolute(final_abs, bak_abs)
 		if parked != OK:
+			@warning_ignore("return_value_discarded") # publish failed; drop the temp file
 			DirAccess.remove_absolute(temp_abs)
 			return parked
 		backed_up = true
-	var renamed: Error = DirAccess.rename_absolute(temp_abs, final_abs)
-	if renamed != OK:
+	var placed: Error = DirAccess.rename_absolute(temp_abs, final_abs)
+	if placed != OK:
 		if backed_up:
+			@warning_ignore("return_value_discarded") # put the previous file back and still return the rename error
 			DirAccess.rename_absolute(bak_abs, final_abs)
+		@warning_ignore("return_value_discarded") # publish failed; drop the temp file
 		DirAccess.remove_absolute(temp_abs)
-		return renamed
+		return placed
 	if FileAccess.file_exists(bak_abs):
+		@warning_ignore("return_value_discarded") # the new file is in place; a leftover backup is not fatal
 		DirAccess.remove_absolute(bak_abs)
 	return OK
 

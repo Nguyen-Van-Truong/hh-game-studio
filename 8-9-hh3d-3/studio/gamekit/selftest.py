@@ -29,6 +29,7 @@ SELFTESTS = {
     "w8": "w8_blender",
     "w9": "w9_kit",
     "w10": "w10_export",
+    "strict": "strict",
 }
 
 

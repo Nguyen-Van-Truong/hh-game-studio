@@ -3,7 +3,6 @@ extends SceneTree
 ## input trace, and node paths. Each capture is saved after that frame has been processed
 ## and rendered. Return false from _process to keep running.
 
-var HH: GDScript
 var _scene_path: String = ""
 var _scene_root: Node = null
 var _expect: PackedStringArray = PackedStringArray()
@@ -20,14 +19,10 @@ var _width: int = 640
 var _height: int = 360
 
 
+const HH = preload("hhgk.gd")
+
+
 func _initialize() -> void:
-	var helper: Variant = load(get_script().resource_path.get_base_dir().path_join("hhgk.gd"))
-	HH = helper as GDScript
-	if HH == null:
-		push_error("hhgk.gd missing")
-		_done = true
-		quit(3)
-		return
 	var req_v: Variant = HH.read_request()
 	if req_v == null or not (req_v is Dictionary):
 		_fail("BAD_REQUEST", "missing or invalid --request file")
@@ -40,8 +35,10 @@ func _initialize() -> void:
 	if not ResourceLoader.exists(_scene_path):
 		_fail("NOT_FOUND", "cannot load scene " + _scene_path)
 		return
-	var packed_v: Variant = ResourceLoader.load(_scene_path, "PackedScene", ResourceLoader.CACHE_MODE_IGNORE)
-	var packed: PackedScene = packed_v as PackedScene
+	var packed_v: Resource = ResourceLoader.load(_scene_path, "PackedScene", ResourceLoader.CACHE_MODE_IGNORE)
+	var packed: PackedScene = null
+	if packed_v is PackedScene:
+		packed = packed_v
 	if packed == null:
 		_fail("NOT_FOUND", "not a packed scene " + _scene_path)
 		return
@@ -49,8 +46,8 @@ func _initialize() -> void:
 	if _scene_root == null:
 		_fail("GODOT_FAILED", "cannot instantiate " + _scene_path)
 		return
-	_width = int(req.get("width", 640))
-	_height = int(req.get("height", 360))
+	_width = HH.variant_int(req.get("width", 640))
+	_height = HH.variant_int(req.get("height", 360))
 	root.mode = Window.MODE_WINDOWED
 	root.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
 	root.content_scale_factor = 1.0
@@ -59,21 +56,26 @@ func _initialize() -> void:
 	root.add_child(_scene_root)
 	current_scene = _scene_root
 	if req.has("seed"):
-		seed(int(req["seed"]))
+		seed(HH.variant_int(req["seed"]))
 	var expect_v: Variant = req.get("expect", [])
 	if expect_v is Array:
-		for item: Variant in expect_v:
-			_expect.append(str(item))
+		var expect_list: Array = expect_v
+		for item: Variant in expect_list:
+			var _added: bool = _expect.append(str(item))
 	var caps: Variant = req.get("captures", [])
-	if not (caps is Array) or (caps as Array).is_empty():
+	if not (caps is Array):
 		_fail("BAD_REQUEST", "no captures")
 		return
-	for cap_v: Variant in caps:
+	var cap_list: Array = caps
+	if cap_list.is_empty():
+		_fail("BAD_REQUEST", "no captures")
+		return
+	for cap_v: Variant in cap_list:
 		if not (cap_v is Dictionary):
 			_fail("BAD_REQUEST", "capture entry must be an object")
 			return
 		var entry: Dictionary = cap_v
-		var frame_i: int = int(entry.get("frame", -1))
+		var frame_i: int = HH.variant_int(entry.get("frame", -1))
 		var path: String = str(entry.get("path", ""))
 		if frame_i < 0 or path.is_empty():
 			_fail("BAD_REQUEST", "capture needs frame and path")
@@ -84,16 +86,19 @@ func _initialize() -> void:
 	_capture_count = _captures.size()
 	var trace_v: Variant = req.get("trace", {})
 	if trace_v is Dictionary:
-		var evs: Variant = (trace_v as Dictionary).get("events", [])
+		var trace_d: Dictionary = trace_v
+		var evs: Variant = trace_d.get("events", [])
 		if evs is Array:
-			for ev_v: Variant in evs:
+			var ev_list: Array = evs
+			for ev_v: Variant in ev_list:
 				if not (ev_v is Dictionary):
 					continue
 				var ev: Dictionary = ev_v
-				var fr: int = int(ev.get("frame", 0))
+				var fr: int = HH.variant_int(ev.get("frame", 0))
 				if not _events.has(fr):
 					_events[fr] = []
-				(_events[fr] as Array).append(ev)
+				var bucket: Array = _events[fr]
+				bucket.append(ev)
 
 
 func _process(_delta: float) -> bool:
@@ -127,9 +132,9 @@ func _apply_trace(frame_i: int) -> void:
 		var ev: Dictionary = item
 		var action_ev: InputEventAction = InputEventAction.new()
 		action_ev.action = StringName(str(ev.get("action", "")))
-		action_ev.pressed = bool(ev.get("pressed", false))
+		action_ev.pressed = HH.variant_bool(ev.get("pressed", false))
 		if ev.has("strength"):
-			action_ev.strength = float(ev["strength"])
+			action_ev.strength = HH.variant_float(ev["strength"])
 		Input.parse_input_event(action_ev)
 		Input.flush_buffered_events()
 
@@ -211,35 +216,44 @@ func _presence(path: String) -> Dictionary:
 	var vis: bool = _is_visible(node)
 	row["visible_in_tree"] = vis
 	if node is GPUParticles2D:
-		row["emitting"] = (node as GPUParticles2D).emitting
+		var particles_2d: GPUParticles2D = node
+		row["emitting"] = particles_2d.emitting
 	elif node is GPUParticles3D:
-		row["emitting"] = (node as GPUParticles3D).emitting
+		var particles_3d: GPUParticles3D = node
+		row["emitting"] = particles_3d.emitting
 	if node is Sprite2D:
-		var sprite_rect: Rect2 = _canvas_rect(node as CanvasItem, (node as Sprite2D).get_rect())
+		var sprite: Sprite2D = node
+		var sprite_rect: Rect2 = _canvas_rect(sprite, sprite.get_rect())
 		row["screen_rect"] = _rect_json(sprite_rect)
 		row["on_screen"] = _rect_on_screen(sprite_rect, vis)
 	elif node is AnimatedSprite2D:
-		var anim_rect: Rect2 = _canvas_rect(node as CanvasItem, _animated_rect(node as AnimatedSprite2D))
+		var anim_sprite: AnimatedSprite2D = node
+		var anim_rect: Rect2 = _canvas_rect(anim_sprite, _animated_rect(anim_sprite))
 		row["screen_rect"] = _rect_json(anim_rect)
 		row["on_screen"] = _rect_on_screen(anim_rect, vis)
 	elif node is Control:
-		var control_rect: Rect2 = (node as Control).get_global_rect()
+		var control: Control = node
+		var control_rect: Rect2 = control.get_global_rect()
 		row["screen_rect"] = _rect_json(control_rect)
 		row["on_screen"] = _rect_on_screen(control_rect, vis)
 	elif node is CanvasItem:
-		var point: Vector2 = (node as CanvasItem).get_global_transform_with_canvas().origin
+		var canvas_item: CanvasItem = node
+		var point: Vector2 = canvas_item.get_global_transform_with_canvas().origin
 		row["screen_rect"] = [point.x, point.y, 0.0, 0.0]
 		row["on_screen"] = _point_on_screen(point, vis)
 	elif node is Node3D:
-		_fill_node3d(row, node as Node3D, vis)
+		var node_3d: Node3D = node
+		_fill_node3d(row, node_3d, vis)
 	return row
 
 
 func _is_visible(node: Node) -> bool:
 	if node is CanvasItem:
-		return (node as CanvasItem).is_visible_in_tree()
+		var canvas_item: CanvasItem = node
+		return canvas_item.is_visible_in_tree()
 	if node is Node3D:
-		return (node as Node3D).is_visible_in_tree()
+		var node_3d: Node3D = node
+		return node_3d.is_visible_in_tree()
 	return true
 
 

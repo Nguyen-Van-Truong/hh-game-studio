@@ -3,7 +3,7 @@ extends SceneTree
 ## The host (studio/gamekit/scene.py) validates first, checkpoints, renames the temp file into
 ## place and acknowledges only after a fresh process running mode=readback matches.
 
-var HH: GDScript
+const HH = preload("hhgk.gd")
 var classes: Array = []
 var resources: Array = []
 var root_node: Node = null
@@ -12,7 +12,6 @@ var touched: Array = []
 
 
 func _initialize() -> void:
-	HH = load(get_script().resource_path.get_base_dir().path_join("hhgk.gd"))
 	var req: Variant = HH.read_request()
 	var result: Dictionary
 	if req == null:
@@ -37,7 +36,8 @@ func _initialize() -> void:
 	if root_node != null and is_instance_valid(root_node):
 		root_node.free()
 	HH.emit(result)
-	quit(0 if bool(result.get("ok", false)) else 3)
+	var ok_flag: bool = result.get("ok", false)
+	quit(0 if ok_flag else 3)
 
 
 # ------------------------------------------------------------------ inspect / readback
@@ -47,7 +47,10 @@ func _load_packed(path: String) -> PackedScene:
 	if not ResourceLoader.exists(path):
 		return null
 	var res: Resource = ResourceLoader.load(path, "PackedScene", ResourceLoader.CACHE_MODE_IGNORE)
-	return res as PackedScene
+	if res is PackedScene:
+		var packed: PackedScene = res
+		return packed
+	return null
 
 
 func dump_state(packed: PackedScene) -> Dictionary:
@@ -61,12 +64,18 @@ func dump_state(packed: PackedScene) -> Dictionary:
 		var groups: Array = []
 		for g: String in st.get_node_groups(i):
 			groups.append(g)
+		var parent_v: Variant = null
+		if i > 0:
+			parent_v = _clean_path(str(st.get_node_path(i, true)))
+		var instance_v: Variant = null
+		if inst != null:
+			instance_v = inst.resource_path
 		nodes.append({
 			"path": _clean_path(str(st.get_node_path(i))),
-			"parent": _clean_path(str(st.get_node_path(i, true))) if i > 0 else null,
+			"parent": parent_v,
 			"type": str(st.get_node_type(i)),
 			"name": str(st.get_node_name(i)),
-			"instance": inst.resource_path if inst != null else null,
+			"instance": instance_v,
 			"groups": groups,
 			"index": st.get_node_index(i),
 			"props": props,
@@ -141,11 +150,13 @@ func _apply(r: Dictionary) -> Dictionary:
 		root_node = ClassDB.instantiate(rtype)
 		root_node.name = rname
 		var rprops: Variant = cd.get("props", {})
-		if rprops is Dictionary and not (rprops as Dictionary).is_empty():
-			var e0: String = HH.set_props(root_node, rprops, _ctx())
-			if not e0.is_empty():
-				return HH.fail("VALIDATION_FAILED", e0, {"op_index": -1})
-			_expect(root_node, rprops)
+		if rprops is Dictionary:
+			var rprops_d: Dictionary = rprops
+			if not rprops_d.is_empty():
+				var e0: String = HH.set_props(root_node, rprops_d, _ctx())
+				if not e0.is_empty():
+					return HH.fail("VALIDATION_FAILED", e0, {"op_index": -1})
+				_expect(root_node, rprops_d)
 	else:
 		var packed: PackedScene = _load_packed(scene_path)
 		if packed == null:
@@ -211,10 +222,12 @@ func _final_touched() -> Array:
 	for t: Variant in touched:
 		if t is String:
 			out.append(t)
-		elif _alive(t):
-			var p: String = _rel(t)
-			if not out.has(p):
-				out.append(p)
+		elif t is Node:
+			var touched_node: Node = t
+			if _alive(touched_node):
+				var p: String = _rel(touched_node)
+				if not out.has(p):
+					out.append(p)
 	return out
 
 
@@ -337,15 +350,16 @@ func _op_create(op: Dictionary) -> String:
 	parent.add_child(node)
 	node.owner = root_node
 	if op.has("index"):
-		parent.move_child(node, int(op["index"]))
-	if bool(op.get("unique", false)):
+		parent.move_child(node, HH.variant_int(op["index"]))
+	if HH.variant_bool(op.get("unique", false)):
 		node.unique_name_in_owner = true
 	var props: Variant = op.get("props", {})
 	if props is Dictionary:
-		var perr: String = HH.set_props(node, props, _ctx())
+		var props_d: Dictionary = props
+		var perr: String = HH.set_props(node, props_d, _ctx())
 		if not perr.is_empty():
 			return perr
-		_expect(node, props)
+		_expect(node, props_d)
 	touched.append(node)
 	return ""
 
@@ -355,12 +369,15 @@ func _op_update(op: Dictionary) -> String:
 	if node == null:
 		return "node not found or inside an instance: " + str(op.get("path", ""))
 	var props: Variant = op.get("props", {})
-	if not (props is Dictionary) or (props as Dictionary).is_empty():
+	if not (props is Dictionary):
 		return "props must be a non-empty object"
-	var perr: String = HH.set_props(node, props, _ctx())
+	var props_d: Dictionary = props
+	if props_d.is_empty():
+		return "props must be a non-empty object"
+	var perr: String = HH.set_props(node, props_d, _ctx())
 	if not perr.is_empty():
 		return perr
-	_expect(node, props)
+	_expect(node, props_d)
 	touched.append(node)
 	return ""
 
@@ -394,7 +411,7 @@ func _op_move(op: Dictionary) -> String:
 		parent.add_child(node)
 		_set_owner_tree(node, owned)
 	if op.has("index"):
-		parent.move_child(node, int(op["index"]))
+		parent.move_child(node, HH.variant_int(op["index"]))
 	touched.append(node)
 	return ""
 
@@ -432,11 +449,13 @@ func _op_duplicate(op: Dictionary) -> String:
 	dup.owner = root_node
 	_own_like(node, dup)
 	var props: Variant = op.get("props", {})
-	if props is Dictionary and not (props as Dictionary).is_empty():
-		var perr: String = HH.set_props(dup, props, _ctx())
-		if not perr.is_empty():
-			return perr
-		_expect(dup, props)
+	if props is Dictionary:
+		var props_d: Dictionary = props
+		if not props_d.is_empty():
+			var perr: String = HH.set_props(dup, props_d, _ctx())
+			if not perr.is_empty():
+				return perr
+			_expect(dup, props_d)
 	touched.append(dup)
 	return ""
 
@@ -462,9 +481,12 @@ func _op_resource_update(op: Dictionary) -> String:
 	if not r.resource_path.is_empty() and not r.resource_path.contains("::"):
 		return "%s is an external resource file (%s); edit that file instead" % [prop, r.resource_path]
 	var props: Variant = op.get("props", {})
-	if not (props is Dictionary) or (props as Dictionary).is_empty():
+	if not (props is Dictionary):
 		return "props must be a non-empty object"
-	var perr: String = HH.set_props(r, props, _ctx())
+	var props_d: Dictionary = props
+	if props_d.is_empty():
+		return "props must be a non-empty object"
+	var perr: String = HH.set_props(r, props_d, _ctx())
 	if not perr.is_empty():
 		return perr
 	expected.append([node, prop])
@@ -487,11 +509,13 @@ func _op_script(op: Dictionary) -> String:
 		return "script extends %s but node is %s" % [base, node.get_class()]
 	node.set_script(load(spath))
 	var props: Variant = op.get("props", {})
-	if props is Dictionary and not (props as Dictionary).is_empty():
-		var perr: String = HH.set_props(node, props, _ctx())
-		if not perr.is_empty():
-			return perr
-		_expect(node, props)
+	if props is Dictionary:
+		var props_d: Dictionary = props
+		if not props_d.is_empty():
+			var perr: String = HH.set_props(node, props_d, _ctx())
+			if not perr.is_empty():
+				return perr
+			_expect(node, props_d)
 	touched.append(node)
 	return ""
 
@@ -503,7 +527,10 @@ func _op_instance(op: Dictionary) -> String:
 	var spath: String = str(op.get("scene", ""))
 	if not ResourceLoader.exists(spath):
 		return "scene to instance does not exist (import the project?): " + spath
-	var packed: PackedScene = ResourceLoader.load(spath) as PackedScene
+	var loaded: Resource = ResourceLoader.load(spath)
+	var packed: PackedScene = null
+	if loaded is PackedScene:
+		packed = loaded
 	if packed == null:
 		return "not a scene: " + spath
 	var name: String = str(op.get("name", spath.get_file().get_basename()))
@@ -517,11 +544,13 @@ func _op_instance(op: Dictionary) -> String:
 	parent.add_child(inst)
 	inst.owner = root_node
 	var props: Variant = op.get("props", {})
-	if props is Dictionary and not (props as Dictionary).is_empty():
-		var perr: String = HH.set_props(inst, props, _ctx())
-		if not perr.is_empty():
-			return perr
-		_expect(inst, props)
+	if props is Dictionary:
+		var props_d: Dictionary = props
+		if not props_d.is_empty():
+			var perr: String = HH.set_props(inst, props_d, _ctx())
+			if not perr.is_empty():
+				return perr
+			_expect(inst, props_d)
 	touched.append(inst)
 	return ""
 
@@ -544,7 +573,7 @@ func _op_connect(op: Dictionary, connect_it: bool) -> String:
 			callable = callable.bindv(binds)
 		if src.is_connected(sig, callable):
 			return "already connected"
-		var cerr: int = src.connect(sig, callable, CONNECT_PERSIST | int(op.get("flags", 0)))
+		var cerr: int = src.connect(sig, callable, CONNECT_PERSIST | HH.variant_int(op.get("flags", 0)))
 		if cerr != OK:
 			return "connect failed: " + error_string(cerr)
 	else:
@@ -558,7 +587,11 @@ func _op_connect(op: Dictionary, connect_it: bool) -> String:
 func _texture(path: String) -> Texture2D:
 	if not ResourceLoader.exists(path):
 		return null
-	return load(path) as Texture2D
+	var loaded: Resource = load(path)
+	if loaded is Texture2D:
+		var tex: Texture2D = loaded
+		return tex
+	return null
 
 
 func _op_tileset(op: Dictionary) -> String:
@@ -569,9 +602,12 @@ func _op_tileset(op: Dictionary) -> String:
 	if tex == null:
 		return "texture missing (import the project?): " + str(op.get("texture", ""))
 	var size: Variant = op.get("tile_size", [16, 16])
-	if not HH._nums(size, 2) or int(size[0]) < 1 or int(size[1]) < 1:
+	if not HH._nums(size, 2):
 		return "tile_size must be [w, h]"
-	var ts_size: Vector2i = Vector2i(int(size[0]), int(size[1]))
+	var size_a: Array = size
+	if HH.variant_int(size_a[0]) < 1 or HH.variant_int(size_a[1]) < 1:
+		return "tile_size must be [w, h]"
+	var ts_size: Vector2i = Vector2i(HH.variant_int(size_a[0]), HH.variant_int(size_a[1]))
 	var ts: TileSet = TileSet.new()
 	ts.tile_size = ts_size
 	var src: TileSetAtlasSource = TileSetAtlasSource.new()
@@ -580,10 +616,12 @@ func _op_tileset(op: Dictionary) -> String:
 	var margins: Variant = op.get("margins", [0, 0])
 	var sep: Variant = op.get("separation", [0, 0])
 	if HH._nums(margins, 2):
-		src.margins = Vector2i(int(margins[0]), int(margins[1]))
+		var margins_a: Array = margins
+		src.margins = Vector2i(HH.variant_int(margins_a[0]), HH.variant_int(margins_a[1]))
 	if HH._nums(sep, 2):
-		src.separation = Vector2i(int(sep[0]), int(sep[1]))
-	ts.add_source(src, 0)
+		var sep_a: Array = sep
+		src.separation = Vector2i(HH.variant_int(sep_a[0]), HH.variant_int(sep_a[1]))
+	var _source_id: int = ts.add_source(src, 0)
 	var grid: Vector2i = src.get_atlas_grid_size()
 	for y: int in grid.y:
 		for x: int in grid.x:
@@ -591,7 +629,7 @@ func _op_tileset(op: Dictionary) -> String:
 	var collide: Variant = op.get("collision", "none")
 	if collide is String and collide == "all" or collide is Array:
 		ts.add_physics_layer()
-		var bits: int = int(op.get("collision_layer", 1))
+		var bits: int = HH.variant_int(op.get("collision_layer", 1))
 		ts.set_physics_layer_collision_layer(0, bits)
 		var hw: float = ts_size.x / 2.0
 		var hh: float = ts_size.y / 2.0
@@ -599,8 +637,10 @@ func _op_tileset(op: Dictionary) -> String:
 		for y2: int in grid.y:
 			for x2: int in grid.x:
 				var coords: Vector2i = Vector2i(x2, y2)
-				if collide is Array and not _has_coord(collide, coords):
-					continue
+				if collide is Array:
+					var collide_a: Array = collide
+					if not _has_coord(collide_a, coords):
+						continue
 				var td: TileData = src.get_tile_data(coords, 0)
 				td.add_collision_polygon(0)
 				td.set_collision_polygon_points(0, 0, square)
@@ -612,8 +652,10 @@ func _op_tileset(op: Dictionary) -> String:
 
 func _has_coord(list: Array, c: Vector2i) -> bool:
 	for item: Variant in list:
-		if HH._nums(item, 2) and int(item[0]) == c.x and int(item[1]) == c.y:
-			return true
+		if HH._nums(item, 2):
+			var pair: Array = item
+			if HH.variant_int(pair[0]) == c.x and HH.variant_int(pair[1]) == c.y:
+				return true
 	return false
 
 
@@ -637,17 +679,25 @@ func _op_cells(op: Dictionary) -> String:
 	if cells.size() + erase.size() > 20000:
 		return "too many cells in one op (max 20000)"
 	for c: Variant in cells:
-		if not (c is Array) or (c as Array).size() < 5 or not HH._nums((c as Array).slice(0, 5), 5):
+		if not (c is Array):
 			return "cell must be [x, y, source, atlas_x, atlas_y(, alt)]"
-		var atlas: Vector2i = Vector2i(int(c[3]), int(c[4]))
-		var cerr: String = _cell_ok(layer, int(c[2]), atlas)
+		var cell: Array = c
+		if cell.size() < 5 or not HH._nums(cell.slice(0, 5), 5):
+			return "cell must be [x, y, source, atlas_x, atlas_y(, alt)]"
+		var atlas: Vector2i = Vector2i(HH.variant_int(cell[3]), HH.variant_int(cell[4]))
+		var cell_source: int = HH.variant_int(cell[2])
+		var cerr: String = _cell_ok(layer, cell_source, atlas)
 		if not cerr.is_empty():
 			return cerr
-		layer.set_cell(Vector2i(int(c[0]), int(c[1])), int(c[2]), atlas, int(c[5]) if (c as Array).size() > 5 else 0)
+		var alt: int = 0
+		if cell.size() > 5:
+			alt = HH.variant_int(cell[5])
+		layer.set_cell(Vector2i(HH.variant_int(cell[0]), HH.variant_int(cell[1])), cell_source, atlas, alt)
 	for e: Variant in erase:
 		if not HH._nums(e, 2):
 			return "erase entries must be [x, y]"
-		layer.erase_cell(Vector2i(int(e[0]), int(e[1])))
+		var erase_at: Array = e
+		layer.erase_cell(Vector2i(HH.variant_int(erase_at[0]), HH.variant_int(erase_at[1])))
 	expected.append([layer, "tile_map_data"])
 	touched.append(layer)
 	return ""
@@ -661,16 +711,23 @@ func _op_fill(op: Dictionary) -> String:
 	var atlas_v: Variant = op.get("atlas", [0, 0])
 	if not HH._nums(rect, 4) or not HH._nums(atlas_v, 2):
 		return "fill_rect needs rect [x, y, w, h] and atlas [ax, ay]"
-	if int(rect[2]) * int(rect[3]) > 20000 or int(rect[2]) < 1 or int(rect[3]) < 1:
+	var rect_a: Array = rect
+	var atlas_a: Array = atlas_v
+	var rect_w: int = HH.variant_int(rect_a[2])
+	var rect_h: int = HH.variant_int(rect_a[3])
+	if rect_w * rect_h > 20000 or rect_w < 1 or rect_h < 1:
 		return "rect must be 1..20000 cells"
-	var source: int = int(op.get("source", 0))
-	var atlas: Vector2i = Vector2i(int(atlas_v[0]), int(atlas_v[1]))
+	var source: int = HH.variant_int(op.get("source", 0))
+	var atlas: Vector2i = Vector2i(HH.variant_int(atlas_a[0]), HH.variant_int(atlas_a[1]))
 	var cerr: String = _cell_ok(layer, source, atlas)
 	if not cerr.is_empty():
 		return cerr
-	for y: int in int(rect[3]):
-		for x: int in int(rect[2]):
-			layer.set_cell(Vector2i(int(rect[0]) + x, int(rect[1]) + y), source, atlas, int(op.get("alt", 0)))
+	var origin_x: int = HH.variant_int(rect_a[0])
+	var origin_y: int = HH.variant_int(rect_a[1])
+	var alt: int = HH.variant_int(op.get("alt", 0))
+	for y: int in rect_h:
+		for x: int in rect_w:
+			layer.set_cell(Vector2i(origin_x + x, origin_y + y), source, atlas, alt)
 	expected.append([layer, "tile_map_data"])
 	touched.append(layer)
 	return ""
@@ -683,17 +740,19 @@ func _op_spriteframes(op: Dictionary) -> String:
 	var tex: Texture2D = _texture(str(op.get("texture", "")))
 	if tex == null:
 		return "texture missing (import the project?): " + str(op.get("texture", ""))
-	var hf: int = int(op.get("hframes", 1))
-	var vf: int = int(op.get("vframes", 1))
+	var hf: int = HH.variant_int(op.get("hframes", 1))
+	var vf: int = HH.variant_int(op.get("vframes", 1))
 	if hf < 1 or vf < 1 or hf * vf > 4096:
 		return "hframes and vframes must be >= 1"
-	var fw: float = float(tex.get_width()) / hf
-	var fh: float = float(tex.get_height()) / vf
+	var fw: float = float(tex.get_width()) / float(hf)
+	var fh: float = float(tex.get_height()) / float(vf)
 	var anims: Variant = op.get("animations", {})
-	if not (anims is Dictionary) or (anims as Dictionary).is_empty():
+	if not (anims is Dictionary):
+		return "animations must map name -> {frames, fps, loop}"
+	var ad: Dictionary = anims
+	if ad.is_empty():
 		return "animations must map name -> {frames, fps, loop}"
 	var sf: SpriteFrames = SpriteFrames.new()
-	var ad: Dictionary = anims
 	if not ad.has("default"):
 		sf.remove_animation("default")
 	for aname: Variant in ad.keys():
@@ -701,22 +760,27 @@ func _op_spriteframes(op: Dictionary) -> String:
 			return "animation %s must be {frames, fps, loop}" % aname
 		var spec: Dictionary = ad[aname]
 		var frames_v: Variant = spec.get("frames", [])
-		if not (frames_v is Array) or (frames_v as Array).is_empty() or not HH._nums(frames_v, (frames_v as Array).size()):
+		if not (frames_v is Array):
 			return "animation %s needs frames: [index, ...]" % aname
-		if not HH._is_num(spec.get("fps", 10.0)) or float(spec.get("fps", 10.0)) <= 0.0:
+		var frames_a: Array = frames_v
+		if frames_a.is_empty() or not HH._nums(frames_v, frames_a.size()):
+			return "animation %s needs frames: [index, ...]" % aname
+		var fps: float = HH.variant_float(spec.get("fps", 10.0))
+		if not HH._is_num(spec.get("fps", 10.0)) or fps <= 0.0:
 			return "animation %s fps must be > 0" % aname
 		var an: StringName = StringName(str(aname))
 		if not sf.has_animation(an):
 			sf.add_animation(an)
-		sf.set_animation_speed(an, float(spec.get("fps", 10.0)))
-		sf.set_animation_loop(an, bool(spec.get("loop", true)))
-		for f: Variant in frames_v:
-			var idx: int = int(f)
+		sf.set_animation_speed(an, fps)
+		sf.set_animation_loop(an, HH.variant_bool(spec.get("loop", true)))
+		for f: Variant in frames_a:
+			var idx: int = HH.variant_int(f)
 			if idx < 0 or idx >= hf * vf:
 				return "frame %d outside sheet (%d frames)" % [idx, hf * vf]
 			var at: AtlasTexture = AtlasTexture.new()
 			at.atlas = tex
-			at.region = Rect2((idx % hf) * fw, (idx / hf) * fh, fw, fh)
+			var row: int = int(float(idx) / float(hf))
+			at.region = Rect2((idx % hf) * fw, float(row) * fh, fw, fh)
 			sf.add_frame(an, at)
 	node.set("sprite_frames", sf)
 	var auto: String = str(op.get("autoplay", ""))
@@ -758,8 +822,8 @@ func _op_animation(op: Dictionary) -> String:
 	if name.is_empty() or name.contains("/"):
 		return "animation name required (no /)"
 	var anim: Animation = Animation.new()
-	anim.length = maxf(float(op.get("length", 1.0)), 0.001)
-	anim.step = float(op.get("step", 0.0333333))
+	anim.length = maxf(HH.variant_float(op.get("length", 1.0)), 0.001)
+	anim.step = HH.variant_float(op.get("step", 0.0333333))
 	match str(op.get("loop", "none")):
 		"linear":
 			anim.loop_mode = Animation.LOOP_LINEAR
@@ -767,28 +831,39 @@ func _op_animation(op: Dictionary) -> String:
 			anim.loop_mode = Animation.LOOP_PINGPONG
 		_:
 			anim.loop_mode = Animation.LOOP_NONE
-	for tv: Variant in op.get("tracks", []):
-		if not (tv is Dictionary) or not (tv as Dictionary).has("path") or not ((tv as Dictionary).get("keys") is Array):
+	var tracks_v: Variant = op.get("tracks", [])
+	if not (tracks_v is Array):
+		return "each track must be {path, keys, type?, interp?, update?}"
+	var tracks: Array = tracks_v
+	for tv: Variant in tracks:
+		if not (tv is Dictionary):
 			return "each track must be {path, keys, type?, interp?, update?}"
-		var tr: Dictionary = tv
-		var tpath: String = str(tr.get("path", ""))
-		var ttype: String = str(tr.get("type", "value"))
+		var track: Dictionary = tv
+		var keys_v: Variant = track.get("keys", [])
+		if not track.has("path") or not (keys_v is Array):
+			return "each track must be {path, keys, type?, interp?, update?}"
+		var tpath: String = str(track.get("path", ""))
+		var ttype: String = str(track.get("type", "value"))
+		var keys: Array = keys_v
 		if ttype == "method":
 			var target: Node = base.get_node_or_null(NodePath(tpath))
 			if target == null:
 				return "method track path does not resolve to a node: " + tpath
 			var mi: int = anim.add_track(Animation.TYPE_METHOD)
 			anim.track_set_path(mi, NodePath(tpath))
-			for k: Variant in tr["keys"]:
-				if not (k is Array) or (k as Array).size() != 2 or not HH._is_num(k[0]) or not (k[1] is Dictionary):
+			for k: Variant in keys:
+				if not (k is Array):
 					return "method keys must be [[time, {\"method\": name, \"args\": [...]}], ...]"
-				var call: Dictionary = k[1]
-				var mname: String = str(call.get("method", ""))
+				var pair: Array = k
+				if pair.size() != 2 or not HH._is_num(pair[0]) or not (pair[1] is Dictionary):
+					return "method keys must be [[time, {\"method\": name, \"args\": [...]}], ...]"
+				var method_call: Dictionary = pair[1]
+				var mname: String = str(method_call.get("method", ""))
 				if mname.is_empty() or not target.has_method(mname):
 					return "method track: %s has no method %s" % [tpath, mname]
-				if not (call.get("args", []) is Array):
+				if not (method_call.get("args", []) is Array):
 					return "method track args must be a list"
-				anim.track_insert_key(mi, float(k[0]), {"method": mname, "args": call.get("args", [])})
+				var _method_key: int = anim.track_insert_key(mi, HH.variant_float(pair[0]), {"method": mname, "args": method_call.get("args", [])})
 			continue
 		if ttype != "value":
 			return "track type must be value or method: " + ttype
@@ -797,22 +872,25 @@ func _op_animation(op: Dictionary) -> String:
 			return "track path does not resolve to a property: " + tpath
 		var ti: int = anim.add_track(Animation.TYPE_VALUE)
 		anim.track_set_path(ti, NodePath(tpath))
-		match str(tr.get("interp", "linear")):
+		match str(track.get("interp", "linear")):
 			"nearest":
 				anim.track_set_interpolation_type(ti, Animation.INTERPOLATION_NEAREST)
 			"cubic":
 				anim.track_set_interpolation_type(ti, Animation.INTERPOLATION_CUBIC)
 			_:
 				anim.track_set_interpolation_type(ti, Animation.INTERPOLATION_LINEAR)
-		if str(tr.get("update", "continuous")) == "discrete":
+		if str(track.get("update", "continuous")) == "discrete":
 			anim.value_track_set_update_mode(ti, Animation.UPDATE_DISCRETE)
-		for k2: Variant in tr.get("keys", []):
-			if not (k2 is Array) or (k2 as Array).size() != 2 or not HH._is_num(k2[0]):
+		for k2: Variant in keys:
+			if not (k2 is Array):
 				return "keys must be [[time, value], ...]"
-			var conv: Dictionary = HH.from_json(k2[1], info, _ctx())
+			var pair2: Array = k2
+			if pair2.size() != 2 or not HH._is_num(pair2[0]):
+				return "keys must be [[time, value], ...]"
+			var conv: Dictionary = HH.from_json(pair2[1], info, _ctx())
 			if not conv["ok"]:
 				return "%s key: %s" % [tpath, conv["error"]]
-			anim.track_insert_key(ti, float(k2[0]), conv["value"])
+			var _value_key: int = anim.track_insert_key(ti, HH.variant_float(pair2[0]), conv["value"])
 	var lib_name: StringName = StringName(str(op.get("library", "")))
 	var lib: AnimationLibrary
 	if player.has_animation_library(lib_name):
@@ -821,13 +899,17 @@ func _op_animation(op: Dictionary) -> String:
 			return "animation library is an external file; edit it separately"
 	else:
 		lib = AnimationLibrary.new()
-		player.add_animation_library(lib_name, lib)
+		var lib_err: Error = player.add_animation_library(lib_name, lib)
+		if lib_err != OK:
+			return "add animation library failed: " + error_string(lib_err)
 	if lib.has_animation(StringName(name)):
-		if not bool(op.get("replace", false)):
+		if not HH.variant_bool(op.get("replace", false)):
 			return "animation already exists (pass replace: true): " + name
 		lib.remove_animation(StringName(name))
-	lib.add_animation(StringName(name), anim)
-	if bool(op.get("autoplay", false)):
+	var add_err: Error = lib.add_animation(StringName(name), anim)
+	if add_err != OK:
+		return "add animation failed: " + error_string(add_err)
+	if HH.variant_bool(op.get("autoplay", false)):
 		player.autoplay = name if str(lib_name).is_empty() else str(lib_name) + "/" + name
 	expected.append([player, "libraries"])
 	touched.append(player)
@@ -874,7 +956,7 @@ func _walk(dir: String, out: Array, limit: int) -> void:
 
 func _check(r: Dictionary) -> Dictionary:
 	var files: Array = []
-	var limit: int = int(r.get("limit", 3000))
+	var limit: int = HH.variant_int(r.get("limit", 3000))
 	_walk("res://", files, limit)
 	var bad: Array = []
 	for f: Variant in files:

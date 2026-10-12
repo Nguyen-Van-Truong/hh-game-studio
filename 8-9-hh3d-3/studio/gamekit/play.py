@@ -2,7 +2,8 @@
 
 The runner applies an input trace with InputEventAction on the named physics frame. ``trace_hash``
 is the sha256 of the canonical JSON of the observation list, so a second run of the same trace
-matches when physics stays deterministic.
+matches when physics stays deterministic. A crashed run, or a run that completed zero frames,
+reports ``trace_hash`` null so two empty traces do not share a digest.
 """
 
 from __future__ import annotations
@@ -115,6 +116,13 @@ def trace_hash(observations: Any) -> str:
     return C.sha256_bytes(C.canonical_json(observations).encode("utf-8"))
 
 
+def trace_hash_for_run(observations: Any, *, crashed: bool, frames: int) -> str | None:
+    """Null when the run crashed or no physics frame ran."""
+    if crashed or frames <= 0:
+        return None
+    return trace_hash(observations)
+
+
 def _fmt_error(item: Any) -> str:
     if isinstance(item, str):
         return item.strip()[:400]
@@ -162,7 +170,7 @@ def _crashed(run: C.ProcessRun, errors: list[str]) -> dict[str, Any]:
         "frames": 0,
         "observations": [],
         "errors": errors,
-        "trace_hash": trace_hash([]),
+        "trace_hash": trace_hash_for_run([], crashed=True, frames=0),
         "process": run.summary(),
     }
 
@@ -220,14 +228,15 @@ def play(
     observations = result.get("observations") if isinstance(result.get("observations"), list) else []
     errors = merge_errors(result.get("errors") if isinstance(result.get("errors"), list) else [], run.errors)
     crashed = run.exit_code not in (0, None) and "frames" not in result
+    frames_done = int(result.get("frames") or 0)
     ok = (not crashed) and not errors and bool(result.get("ok")) and run.exit_code == 0
     played = {
         "ok": ok,
         "crashed": crashed,
-        "frames": int(result.get("frames") or 0),
+        "frames": frames_done,
         "observations": observations,
         "errors": errors,
-        "trace_hash": trace_hash(observations),
+        "trace_hash": trace_hash_for_run(observations, crashed=crashed, frames=frames_done),
         "process": run.summary(),
         "scene": scene or "",
         "seed": seed_n,

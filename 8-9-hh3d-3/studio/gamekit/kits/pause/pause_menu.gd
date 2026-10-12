@@ -8,9 +8,11 @@ func _enter_tree() -> void:
 	_hide_panel()
 	var resume_button: Button = get_node_or_null("Panel/Resume") as Button
 	if resume_button != null and not resume_button.pressed.is_connected(_on_resume):
+		@warning_ignore("return_value_discarded") # a missed signal leaves Resume on its default action
 		resume_button.pressed.connect(_on_resume)
 	var quit_button: Button = get_node_or_null("Panel/Quit") as Button
 	if quit_button != null and not quit_button.pressed.is_connected(_on_quit):
+		@warning_ignore("return_value_discarded") # a missed signal leaves Quit on its default action
 		quit_button.pressed.connect(_on_quit)
 
 

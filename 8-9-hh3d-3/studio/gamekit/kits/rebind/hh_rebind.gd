@@ -14,6 +14,7 @@ func _enter_tree() -> void:
 		return
 	_booted = true
 	_capture_defaults()
+	@warning_ignore("return_value_discarded") # a missing input_map.cfg keeps the engine defaults
 	load_bindings()
 
 
@@ -25,7 +26,7 @@ func remap(action: String, event: InputEvent) -> void:
 		push_warning("HHRebind: null event")
 		return
 	InputMap.action_erase_events(action)
-	InputMap.action_add_event(action, event.duplicate())
+	InputMap.action_add_event(action, _dup_event(event))
 
 
 func reset(action: String) -> void:
@@ -35,9 +36,11 @@ func reset(action: String) -> void:
 	InputMap.action_erase_events(action)
 	var raw: Variant = _defaults.get(action, [])
 	if raw is Array:
-		for ev: Variant in raw:
+		var saved: Array = raw
+		for ev: Variant in saved:
 			if ev is InputEvent:
-				InputMap.action_add_event(action, (ev as InputEvent).duplicate())
+				var event: InputEvent = ev
+				InputMap.action_add_event(action, _dup_event(event))
 
 
 func reset_all() -> void:
@@ -73,9 +76,11 @@ func load_bindings() -> Error:
 		InputMap.action_erase_events(aname)
 		var rows: Variant = cfg.get_value("bindings", aname, [])
 		if rows is Array:
-			for row: Variant in rows:
+			var saved: Array = rows
+			for row: Variant in saved:
 				if row is Dictionary:
-					var ev: InputEvent = _deserialize_event(row)
+					var body: Dictionary = row
+					var ev: InputEvent = _deserialize_event(body)
 					if ev != null:
 						InputMap.action_add_event(aname, ev)
 	return OK
@@ -95,7 +100,8 @@ func _matches_default(action_name: String) -> bool:
 	var base_rows: Array = []
 	var raw: Variant = _defaults.get(action_name, [])
 	if raw is Array:
-		base_rows = _serialize_list(raw)
+		var saved: Array = raw
+		base_rows = _serialize_list(saved)
 	return current == JSON.stringify(base_rows, "", true, true)
 
 
@@ -103,7 +109,8 @@ func _serialize_list(events: Array) -> Array:
 	var out: Array = []
 	for ev: Variant in events:
 		if ev is InputEvent:
-			var row: Dictionary = _serialize_event(ev)
+			var event: InputEvent = ev
+			var row: Dictionary = _serialize_event(event)
 			if not row.is_empty():
 				out.append(row)
 	return out
@@ -138,32 +145,60 @@ func _deserialize_event(row: Dictionary) -> InputEvent:
 	match str(row.get("type", "")):
 		"key":
 			var key: InputEventKey = InputEventKey.new()
-			key.keycode = int(row.get("keycode", 0)) as Key
-			key.physical_keycode = int(row.get("physical_keycode", 0)) as Key
-			key.unicode = int(row.get("unicode", 0))
-			key.alt_pressed = bool(row.get("alt", false))
-			key.shift_pressed = bool(row.get("shift", false))
-			key.ctrl_pressed = bool(row.get("ctrl", false))
-			key.meta_pressed = bool(row.get("meta", false))
+			key.keycode = _to_int(row.get("keycode", 0)) as Key
+			key.physical_keycode = _to_int(row.get("physical_keycode", 0)) as Key
+			key.unicode = _to_int(row.get("unicode", 0))
+			key.alt_pressed = _to_bool(row.get("alt", false))
+			key.shift_pressed = _to_bool(row.get("shift", false))
+			key.ctrl_pressed = _to_bool(row.get("ctrl", false))
+			key.meta_pressed = _to_bool(row.get("meta", false))
 			return key
 		"joy_button":
 			var btn: InputEventJoypadButton = InputEventJoypadButton.new()
-			btn.button_index = int(row.get("button", 0)) as JoyButton
-			btn.device = int(row.get("device", -1))
+			btn.button_index = _to_int(row.get("button", 0)) as JoyButton
+			btn.device = _to_int(row.get("device", -1))
 			return btn
 		"joy_motion":
 			var motion: InputEventJoypadMotion = InputEventJoypadMotion.new()
-			motion.axis = int(row.get("axis", 0)) as JoyAxis
-			motion.axis_value = float(row.get("value", 0.0))
-			motion.device = int(row.get("device", -1))
+			motion.axis = _to_int(row.get("axis", 0)) as JoyAxis
+			motion.axis_value = _to_float(row.get("value", 0.0))
+			motion.device = _to_int(row.get("device", -1))
 			return motion
 		"mouse_button":
 			var mouse: InputEventMouseButton = InputEventMouseButton.new()
-			mouse.button_index = int(row.get("button", 0)) as MouseButton
-			mouse.device = int(row.get("device", -1))
+			mouse.button_index = _to_int(row.get("button", 0)) as MouseButton
+			mouse.device = _to_int(row.get("device", -1))
 			return mouse
 		_:
 			return null
+
+
+func _to_int(value: Variant) -> int:
+	var converted: Variant = type_convert(value, TYPE_INT)
+	if converted is int:
+		return converted
+	return 0
+
+
+func _to_float(value: Variant) -> float:
+	var converted: Variant = type_convert(value, TYPE_FLOAT)
+	if converted is float:
+		return converted
+	return 0.0
+
+
+func _to_bool(value: Variant) -> bool:
+	var converted: Variant = type_convert(value, TYPE_BOOL)
+	if converted is bool:
+		return converted
+	return false
+
+
+func _dup_event(ev: InputEvent) -> InputEvent:
+	var copy: Resource = ev.duplicate()
+	if copy is InputEvent:
+		return copy
+	return ev
 
 
 func _save_cfg(cfg: ConfigFile, res_path: String) -> Error:
@@ -200,19 +235,24 @@ func _replace(temp_abs: String, final_abs: String) -> Error:
 		if FileAccess.file_exists(bak_abs):
 			var cleared: Error = DirAccess.remove_absolute(bak_abs)
 			if cleared != OK:
+				@warning_ignore("return_value_discarded") # publish failed; drop the temp file
 				DirAccess.remove_absolute(temp_abs)
 				return cleared
 		var parked: Error = DirAccess.rename_absolute(final_abs, bak_abs)
 		if parked != OK:
+			@warning_ignore("return_value_discarded") # publish failed; drop the temp file
 			DirAccess.remove_absolute(temp_abs)
 			return parked
 		backed_up = true
-	var renamed: Error = DirAccess.rename_absolute(temp_abs, final_abs)
-	if renamed != OK:
+	var placed: Error = DirAccess.rename_absolute(temp_abs, final_abs)
+	if placed != OK:
 		if backed_up:
+			@warning_ignore("return_value_discarded") # put the previous file back and still return the rename error
 			DirAccess.rename_absolute(bak_abs, final_abs)
+		@warning_ignore("return_value_discarded") # publish failed; drop the temp file
 		DirAccess.remove_absolute(temp_abs)
-		return renamed
+		return placed
 	if FileAccess.file_exists(bak_abs):
+		@warning_ignore("return_value_discarded") # the new file is in place; a leftover backup is not fatal
 		DirAccess.remove_absolute(bak_abs)
 	return OK

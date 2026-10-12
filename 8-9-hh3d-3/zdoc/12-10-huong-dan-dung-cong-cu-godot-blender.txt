@@ -350,7 +350,8 @@ Ghi chú W4 (input, play, bot):
 - File trace: {"fps": 60, "events": [{"frame": 0, "action": "move_right", "pressed": true,
   "strength": 1.0}, {"frame": 60, "action": "move_right", "pressed": false}]}. Play chạy frame
   0..N-1, nên event ở frame N không được áp. Hai lần chạy cùng trace và seed cho cùng trace_hash
-  là bằng chứng tất định. --windowed mở cửa sổ thật.
+  là bằng chứng tất định. Lượt crash hoặc không chạy frame nào cho trace_hash null.
+  --windowed mở cửa sổ thật.
 - Lỗi script khi chạy cho "ok": false kèm danh sách lỗi; process vẫn chạy hết số frame.
 - bot giữ ngẫu nhiên một action mỗi lúc theo seed; báo đoạn kẹt (node đi không quá --stuck-dist
   trong --stuck-frames) và số ô --cell đã đi qua. Kẹt là phát hiện, không tự làm ok false.
@@ -421,7 +422,10 @@ Ghi chú W10 (export):
 
 Op của scene new/apply. File F là list op hoặc {"ops": [...]}; đường dẫn node tính từ root
 ("." là root); đủ field xem hh scene ops. Một lệnh là một transaction: một op lỗi thì cả lệnh bị
-từ chối, file không đổi.
+từ chối, file không đổi. Mỗi op là một object có khóa "op", ví dụ:
+  [{"op": "node.create", "parent": ".", "name": "Coin", "type": "Area2D",
+    "props": {"position": [64, 32]}},
+   {"op": "script.attach", "path": "Coin", "script": "res://coin.gd"}]
   node.create {parent, name, type, props?, index?, unique?}   node.update {path, props}
   node.delete {path}   node.move {path, parent, index?}   node.rename {path, name}
   node.duplicate {path, name, props?}   instance.add {parent, scene, name?, props?}
@@ -458,10 +462,13 @@ Mẫu chạy thật để chép (dựng xong, đọc lại, chạy 60 frame khô
     NavigationAgent3D, Path3D, camera SpringArm3D, AnimationTree, method track.
   studio/gamekit/selftests/w1_scene.py   các ca từ chối, replay, CONFLICT, STALE, undo.
 Selftest nhanh (project tạm trong %TEMP%, không đụng game):
-    python -B -m studio.gamekit.selftest all      (hoặc w1 ... w10 riêng)
-      12-10 18:12, 148 giây, 226/226: w1 29, w2 21, w3 16, w4 20, w5 27, w6 16, w7 19, w8 19,
-      w9 47, w10 12
+    python -B -m studio.gamekit.selftest all      (hoặc w1 ... w10, strict riêng)
+      12-10 19:32, 218 giây, 246/246: w1 29, w2 21, w3 16, w4 20, w5 27, w6 16, w7 19, w8 19,
+      w9 47, w10 12, strict 20
     python -B -m unittest discover -s studio/tests/gamekit -p "test_*.py"   (12-10: 113 ca, 4 giây)
+  strict: project tạm bật mọi cảnh báo GDScript thành lỗi, kể cả res://addons; runner và kit phải
+  chạy sạch. Game bật cảnh báo thành lỗi (vd. untyped_declaration=2) vẫn chạy được scene, input,
+  play, bot, shot, perf, kit và check.
 
 Sau khi GT-11 đóng (12-10 18:35):
 - Dùng các lệnh ở trên và công cụ ở mục 2–7. Plan game của bạn quyết định có bắt buộc dùng hh

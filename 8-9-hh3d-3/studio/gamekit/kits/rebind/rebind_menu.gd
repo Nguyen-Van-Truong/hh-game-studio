@@ -21,6 +21,7 @@ func build() -> void:
 	add_child(box)
 	var names: PackedStringArray = PackedStringArray()
 	for action_name: StringName in InputMap.get_actions():
+		@warning_ignore("return_value_discarded") # false means that action name was not stored
 		names.append(String(action_name))
 	names.sort()
 	for aname: String in names:
@@ -30,6 +31,7 @@ func build() -> void:
 		label.custom_minimum_size = Vector2(180, 0)
 		var button: Button = Button.new()
 		button.text = _event_text(aname)
+		@warning_ignore("return_value_discarded") # a missed signal leaves the button on its label
 		button.pressed.connect(_on_listen.bind(aname))
 		row.add_child(label)
 		row.add_child(button)
@@ -44,14 +46,16 @@ func _event_text(action_name: String) -> String:
 		return "(none)"
 	var first: Variant = events[0]
 	if first is InputEvent:
-		return (first as InputEvent).as_text()
+		var event: InputEvent = first
+		return event.as_text()
 	return "(none)"
 
 
 func _on_listen(action_name: String) -> void:
 	_listening = action_name
-	var button: Button = _buttons.get(action_name) as Button
-	if button != null:
+	var found: Variant = _buttons.get(action_name)
+	if found is Button:
+		var button: Button = found
 		button.text = "..."
 
 
@@ -68,8 +72,9 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	node.call("remap", _listening, stored)
 	node.call("save_bindings")
-	var button: Button = _buttons.get(_listening) as Button
-	if button != null:
+	var found_button: Variant = _buttons.get(_listening)
+	if found_button is Button:
+		var button: Button = found_button
 		button.text = stored.as_text()
 	_listening = ""
 	get_viewport().set_input_as_handled()

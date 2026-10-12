@@ -22,6 +22,7 @@ func _enter_tree() -> void:
 	if _booted:
 		return
 	_booted = true
+	@warning_ignore("return_value_discarded") # a missing settings.cfg keeps the in-memory defaults
 	load_settings()
 	apply()
 
@@ -40,7 +41,7 @@ func set_bus_volume(bus: String, linear: float) -> void:
 
 
 func get_bus_volume(bus: String) -> float:
-	return float(bus_volume.get(bus, 1.0))
+	return _to_float(bus_volume.get(bus, 1.0))
 
 
 func set_fullscreen(on: bool) -> void:
@@ -81,7 +82,7 @@ func set_locale(code: String) -> void:
 
 func apply() -> void:
 	for bus: String in BUS_NAMES:
-		_apply_bus(bus, float(bus_volume.get(bus, 1.0)))
+		_apply_bus(bus, _to_float(bus_volume.get(bus, 1.0)))
 	_apply_display()
 	_apply_ui()
 	TranslationServer.set_locale(locale)
@@ -89,9 +90,9 @@ func apply() -> void:
 
 func save_settings() -> Error:
 	var cfg: ConfigFile = ConfigFile.new()
-	cfg.set_value("audio", "Master", float(bus_volume.get("Master", 1.0)))
-	cfg.set_value("audio", "Music", float(bus_volume.get("Music", 1.0)))
-	cfg.set_value("audio", "SFX", float(bus_volume.get("SFX", 1.0)))
+	cfg.set_value("audio", "Master", _to_float(bus_volume.get("Master", 1.0)))
+	cfg.set_value("audio", "Music", _to_float(bus_volume.get("Music", 1.0)))
+	cfg.set_value("audio", "SFX", _to_float(bus_volume.get("SFX", 1.0)))
 	cfg.set_value("display", "fullscreen", fullscreen)
 	cfg.set_value("display", "vsync", vsync)
 	cfg.set_value("display", "max_fps", max_fps)
@@ -112,10 +113,10 @@ func load_settings() -> Error:
 	bus_volume["Master"] = _unit(cfg.get_value("audio", "Master", 1.0))
 	bus_volume["Music"] = _unit(cfg.get_value("audio", "Music", 1.0))
 	bus_volume["SFX"] = _unit(cfg.get_value("audio", "SFX", 1.0))
-	fullscreen = bool(cfg.get_value("display", "fullscreen", false))
-	vsync = bool(cfg.get_value("display", "vsync", true))
-	max_fps = maxi(int(cfg.get_value("display", "max_fps", 0)), 0)
-	ui_scale = clampf(float(cfg.get_value("interface", "ui_scale", 1.0)), 0.25, 4.0)
+	fullscreen = _to_bool(cfg.get_value("display", "fullscreen", false))
+	vsync = _to_bool(cfg.get_value("display", "vsync", true))
+	max_fps = maxi(_to_int(cfg.get_value("display", "max_fps", 0)), 0)
+	ui_scale = clampf(_to_float(cfg.get_value("interface", "ui_scale", 1.0)), 0.25, 4.0)
 	var code: String = str(cfg.get_value("interface", "locale", "en"))
 	locale = code if _locale_ok(code) else "en"
 	return OK
@@ -152,10 +153,31 @@ func _headless() -> bool:
 
 
 func _unit(value: Variant) -> float:
-	var f: float = float(value)
+	var f: float = _to_float(value)
 	if is_nan(f) or is_inf(f):
 		return 1.0
 	return clampf(f, 0.0, 1.0)
+
+
+func _to_int(value: Variant) -> int:
+	var converted: Variant = type_convert(value, TYPE_INT)
+	if converted is int:
+		return converted
+	return 0
+
+
+func _to_float(value: Variant) -> float:
+	var converted: Variant = type_convert(value, TYPE_FLOAT)
+	if converted is float:
+		return converted
+	return 0.0
+
+
+func _to_bool(value: Variant) -> bool:
+	var converted: Variant = type_convert(value, TYPE_BOOL)
+	if converted is bool:
+		return converted
+	return false
 
 
 func _locale_ok(code: String) -> bool:
@@ -203,19 +225,24 @@ func _replace(temp_abs: String, final_abs: String) -> Error:
 		if FileAccess.file_exists(bak_abs):
 			var cleared: Error = DirAccess.remove_absolute(bak_abs)
 			if cleared != OK:
+				@warning_ignore("return_value_discarded") # publish failed; drop the temp file
 				DirAccess.remove_absolute(temp_abs)
 				return cleared
 		var parked: Error = DirAccess.rename_absolute(final_abs, bak_abs)
 		if parked != OK:
+			@warning_ignore("return_value_discarded") # publish failed; drop the temp file
 			DirAccess.remove_absolute(temp_abs)
 			return parked
 		backed_up = true
-	var renamed: Error = DirAccess.rename_absolute(temp_abs, final_abs)
-	if renamed != OK:
+	var placed: Error = DirAccess.rename_absolute(temp_abs, final_abs)
+	if placed != OK:
 		if backed_up:
+			@warning_ignore("return_value_discarded") # put the previous file back and still return the rename error
 			DirAccess.rename_absolute(bak_abs, final_abs)
+		@warning_ignore("return_value_discarded") # publish failed; drop the temp file
 		DirAccess.remove_absolute(temp_abs)
-		return renamed
+		return placed
 	if FileAccess.file_exists(bak_abs):
+		@warning_ignore("return_value_discarded") # the new file is in place; a leftover backup is not fatal
 		DirAccess.remove_absolute(bak_abs)
 	return OK

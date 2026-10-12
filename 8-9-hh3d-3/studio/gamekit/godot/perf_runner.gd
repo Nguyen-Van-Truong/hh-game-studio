@@ -10,7 +10,7 @@ const SENTINEL_SRC: String = "extends Node\nsignal pulse\nsignal phys_pulse\n\nf
 const LEAK_ALIVE_FRAMES: int = 10
 const LEAK_WAIT_FRAMES: int = 3
 
-var HH: GDScript
+const HH = preload("hhgk.gd")
 var boot_error: String = ""
 var finished: bool = false
 
@@ -60,28 +60,23 @@ var physics_3d_s: Array[float] = []
 
 
 func _initialize() -> void:
-	var hh_res: Resource = load(get_script().resource_path.get_base_dir().path_join("hhgk.gd"))
-	HH = hh_res as GDScript
-	if HH == null:
-		print("HHGK_RESULT {\"ok\":false,\"error\":\"TOOL_MISSING\",\"detail\":\"hhgk.gd missing\"}")
-		finished = true
-		quit(3)
-		return
 	var req: Variant = HH.read_request()
 	if req == null or not (req is Dictionary):
 		boot_error = "missing or invalid --request file"
 		return
 	var r: Dictionary = req
 	scene_path = str(r.get("scene", ""))
-	measure_frames = int(r.get("frames", 300))
-	warmup_frames = int(r.get("warmup", 60))
-	leak_cycles = int(r.get("leak_cycles", 5))
-	headless = bool(r.get("headless", false))
-	var tr: Variant = r.get("trace", {})
-	if tr is Dictionary:
-		var evs: Variant = (tr as Dictionary).get("events", [])
+	measure_frames = HH.variant_int(r.get("frames", 300))
+	warmup_frames = HH.variant_int(r.get("warmup", 60))
+	leak_cycles = HH.variant_int(r.get("leak_cycles", 5))
+	headless = HH.variant_bool(r.get("headless", false))
+	var trace_body: Variant = r.get("trace", {})
+	if trace_body is Dictionary:
+		var trace_d: Dictionary = trace_body
+		var evs: Variant = trace_d.get("events", [])
 		if evs is Array:
-			trace_events = evs
+			var ev_list: Array = evs
+			trace_events = ev_list
 	if scene_path.is_empty():
 		boot_error = "scene missing"
 	elif measure_frames < 1 or warmup_frames < 0 or leak_cycles < 1:
@@ -299,22 +294,35 @@ func _counts() -> Dictionary:
 
 func _push(process_ms: float) -> void:
 	var c: Dictionary = armed_counts
+	var process_monitor_ms: float = c["process_monitor_ms"]
+	var physics_monitor_ms: float = c["physics_monitor_ms"]
+	var render_cpu_ms: float = c["render_cpu_ms"]
+	var render_gpu_ms: float = c["render_gpu_ms"]
+	var draw_calls: float = c["draw_calls"]
+	var primitives: float = c["primitives"]
+	var vram_bytes: float = c["vram_bytes"]
+	var objects: float = c["objects"]
+	var nodes: float = c["nodes"]
+	var orphans: float = c["orphans"]
+	var memory_static: float = c["memory_static"]
+	var physics_2d: float = c["physics_2d"]
+	var physics_3d: float = c["physics_3d"]
 	frame_ms_s.append(_finite(armed_frame_ms))
 	process_measured_s.append(process_ms)
-	process_monitor_s.append(_finite(float(c["process_monitor_ms"])))
+	process_monitor_s.append(_finite(process_monitor_ms))
 	physics_measured_s.append(_finite(armed_physics_ms))
-	physics_monitor_s.append(_finite(float(c["physics_monitor_ms"])))
-	render_cpu_s.append(_finite(float(c["render_cpu_ms"])))
-	render_gpu_s.append(_finite(float(c["render_gpu_ms"])))
-	draw_calls_s.append(_finite(float(c["draw_calls"])))
-	primitives_s.append(_finite(float(c["primitives"])))
-	vram_s.append(_finite(float(c["vram_bytes"])))
-	objects_s.append(_finite(float(c["objects"])))
-	nodes_s.append(_finite(float(c["nodes"])))
-	orphans_s.append(_finite(float(c["orphans"])))
-	memory_s.append(_finite(float(c["memory_static"])))
-	physics_2d_s.append(_finite(float(c["physics_2d"])))
-	physics_3d_s.append(_finite(float(c["physics_3d"])))
+	physics_monitor_s.append(_finite(physics_monitor_ms))
+	render_cpu_s.append(_finite(render_cpu_ms))
+	render_gpu_s.append(_finite(render_gpu_ms))
+	draw_calls_s.append(_finite(draw_calls))
+	primitives_s.append(_finite(primitives))
+	vram_s.append(_finite(vram_bytes))
+	objects_s.append(_finite(objects))
+	nodes_s.append(_finite(nodes))
+	orphans_s.append(_finite(orphans))
+	memory_s.append(_finite(memory_static))
+	physics_2d_s.append(_finite(physics_2d))
+	physics_3d_s.append(_finite(physics_3d))
 
 
 func _leak_row(cycle: int) -> Dictionary:
@@ -332,11 +340,12 @@ func _apply_trace(frame: int) -> void:
 		if not (item is Dictionary):
 			continue
 		var ev: Dictionary = item
-		if int(ev.get("frame", -1)) != frame:
+		var frame_n: int = ev.get("frame", -1)
+		if frame_n != frame:
 			continue
 		var action_ev: InputEventAction = InputEventAction.new()
 		action_ev.action = StringName(str(ev.get("action", "")))
-		action_ev.pressed = bool(ev.get("pressed", false))
+		action_ev.pressed = HH.variant_bool(ev.get("pressed", false))
 		action_ev.strength = 1.0 if action_ev.pressed else 0.0
 		Input.parse_input_event(action_ev)
 		trace_applied += 1
@@ -398,4 +407,5 @@ func _finish(result: Dictionary) -> void:
 		return
 	finished = true
 	HH.emit(result)
-	quit(0 if bool(result.get("ok", false)) else 3)
+	var ok_flag: bool = result.get("ok", false)
+	quit(0 if ok_flag else 3)

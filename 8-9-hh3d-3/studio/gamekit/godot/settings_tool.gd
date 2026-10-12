@@ -4,15 +4,15 @@ extends SceneTree
 ## script writes via ProjectSettings.save_custom. Bus layouts are saved to a temp .tres
 ## the host renames into place.
 
-var HH: GDScript
+const HH = preload("hhgk.gd")
 
 
 func _initialize() -> void:
-	HH = load(get_script().resource_path.get_base_dir().path_join("hhgk.gd"))
 	var req: Variant = HH.read_request()
 	var result: Dictionary = _dispatch(req)
 	HH.emit(result)
-	quit(0 if bool(result.get("ok", false)) else 3)
+	var ok_flag: bool = result.get("ok", false)
+	quit(0 if ok_flag else 3)
 
 
 func _dispatch(req: Variant) -> Dictionary:
@@ -52,7 +52,8 @@ func _apply(r: Dictionary) -> Dictionary:
 		var buses: Variant = r.get("buses", [])
 		if not (buses is Array):
 			return HH.fail("VALIDATION_FAILED", "buses must be a list")
-		var berr: String = _write_buses(buses, bus_temp)
+		var bus_list: Array = buses
+		var berr: String = _write_buses(bus_list, bus_temp)
 		if not berr.is_empty():
 			return HH.fail("GODOT_FAILED", berr)
 	var abs_out: String = ProjectSettings.globalize_path(temp_out)
@@ -80,7 +81,10 @@ func _apply_autoloads(r: Dictionary) -> String:
 		if not FileAccess.file_exists(script_path):
 			return "autoload script missing " + script_path
 		var res: Resource = ResourceLoader.load(script_path, "Script", ResourceLoader.CACHE_MODE_IGNORE)
-		if not (res is Script) or not (res as Script).can_instantiate():
+		if not (res is Script):
+			return "autoload script does not compile " + script_path
+		var script_res: Script = res
+		if not script_res.can_instantiate():
 			return "autoload script does not compile " + script_path
 		var stored: String = raw if raw.begins_with("*") else "*" + raw
 		ProjectSettings.set_setting("autoload/" + name, stored)
@@ -139,14 +143,18 @@ func _set_typed(key: String, value: Variant) -> String:
 			if typeof(value) != TYPE_BOOL:
 				return key + " expects bool"
 		TYPE_INT:
-			if typeof(value) == TYPE_FLOAT and _whole(float(value)):
-				stored = int(value)
+			if typeof(value) == TYPE_FLOAT:
+				var as_float: float = value
+				if _whole(as_float):
+					stored = int(as_float)
+				else:
+					return key + " expects int"
 			elif typeof(value) != TYPE_INT:
 				return key + " expects int"
 		TYPE_FLOAT:
 			if typeof(value) != TYPE_FLOAT and typeof(value) != TYPE_INT:
 				return key + " expects float"
-			stored = float(value)
+			stored = HH.variant_float(value)
 		TYPE_STRING:
 			if typeof(value) != TYPE_STRING:
 				return key + " expects string"
@@ -155,8 +163,10 @@ func _set_typed(key: String, value: Variant) -> String:
 				# initial value in this process so the explicit assignment is written.
 				ProjectSettings.set_initial_value(key, "")
 		TYPE_NIL:
-			if typeof(value) == TYPE_FLOAT and _whole(float(value)):
-				stored = int(value)
+			if typeof(value) == TYPE_FLOAT:
+				var nil_float: float = value
+				if _whole(nil_float):
+					stored = int(nil_float)
 			elif typeof(value) != TYPE_BOOL and typeof(value) != TYPE_INT and typeof(value) != TYPE_FLOAT and typeof(value) != TYPE_STRING:
 				return key + " supports bool, int, float, or string"
 		_:
@@ -168,7 +178,10 @@ func _set_typed(key: String, value: Variant) -> String:
 func _write_buses(buses: Array, temp_out: String) -> String:
 	if buses.is_empty():
 		return "bus list is empty"
-	if not (buses[0] is Dictionary) or str((buses[0] as Dictionary).get("name", "")) != "Master":
+	if not (buses[0] is Dictionary):
+		return "first bus must be Master"
+	var first: Dictionary = buses[0]
+	if str(first.get("name", "")) != "Master":
 		return "first bus must be Master"
 	while AudioServer.bus_count > 1:
 		AudioServer.remove_bus(AudioServer.bus_count - 1)
@@ -205,7 +218,10 @@ func _readback(r: Dictionary) -> Dictionary:
 			var res: Resource = null
 			if FileAccess.file_exists(path):
 				res = ResourceLoader.load(path, "Script", ResourceLoader.CACHE_MODE_IGNORE)
-			var compiles: bool = res is Script and (res as Script).can_instantiate()
+			var compiles: bool = false
+			if res is Script:
+				var script_res: Script = res
+				compiles = script_res.can_instantiate()
 			scripts.append({"path": path, "compiles": compiles})
 	var scenes: Array = []
 	var scene_list: Variant = r.get("scenes", [])
@@ -215,7 +231,10 @@ func _readback(r: Dictionary) -> Dictionary:
 			var packed: Resource = null
 			if FileAccess.file_exists(spath):
 				packed = ResourceLoader.load(spath, "PackedScene", ResourceLoader.CACHE_MODE_IGNORE)
-			var scene_ok: bool = packed is PackedScene and (packed as PackedScene).can_instantiate()
+			var scene_ok: bool = false
+			if packed is PackedScene:
+				var packed_scene: PackedScene = packed
+				scene_ok = packed_scene.can_instantiate()
 			scenes.append({"path": spath, "compiles": scene_ok})
 	var buses: Array = []
 	for i: int in AudioServer.bus_count:
