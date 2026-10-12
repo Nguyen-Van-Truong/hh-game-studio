@@ -1,5 +1,8 @@
 # HH3D-3 — routing hiện hành
 
+LEASE 12-10-2026 10:00 (owner): reviewer Claude là coordinator GT-10-PC tới nghiệm thu; Codex chỉ
+đọc, không ghi `studio/`, plan hay chạy run GT-10-PC khi lease còn. WIP 08:57 được tiếp quản.
+
 Owner steering 03-10-2026, credit và lượt theo O13.6 của tools plan (08-10): một coordinator, một
 thread; subagent chỉ cho thiết kế khó, worker K13 và hai critic cuối, fork_turns=none với brief
 ≤ 1 trang; ultra (gpt-6-astra, gpt-6.1-sol) chỉ cho thiết kế khó và critic. Đọc log, chạy test,
