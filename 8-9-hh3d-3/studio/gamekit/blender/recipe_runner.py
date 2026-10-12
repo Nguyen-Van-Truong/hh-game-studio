@@ -73,13 +73,57 @@ def _safe_name(name: str) -> None:
         _fail(f"unsafe name {name!r}")
 
 
+def _is_junction(path: Path) -> bool:
+    """Match the host helper. A directory junction is not ``Path.is_symlink()``."""
+    is_junction = getattr(os.path, "isjunction", None)
+    if is_junction is not None:
+        return bool(is_junction(path))
+    try:
+        st = os.lstat(path)
+    except OSError:
+        return False
+    return bool(getattr(st, "st_file_attributes", 0) & 0x400)
+
+
+def _has_reparse_point(path: Path) -> bool:
+    """True if ``path`` or an existing ancestor is a symlink or junction."""
+    current = Path(os.path.abspath(str(path)))
+    while True:
+        if current.exists() or current.is_symlink():
+            if current.is_symlink() or _is_junction(current):
+                return True
+        parent = current.parent
+        if parent == current:
+            return False
+        current = parent
+
+
+def _refuse_out_dir(out_dir: Path) -> Path:
+    out_dir = Path(os.path.abspath(str(out_dir)))
+    if _has_reparse_point(out_dir):
+        _fail(f"out dir passes through a symlink or junction: {out_dir}")
+    return out_dir
+
+
+def _literal_parent_is(out_dir: Path, path: Path, name: str) -> None:
+    """Require ``path`` to sit in ``out_dir`` by literal path, without following links."""
+    parent_lit = os.path.normcase(os.path.abspath(str(path.parent)))
+    out_lit = os.path.normcase(os.path.abspath(str(out_dir)))
+    if parent_lit != out_lit:
+        _fail(f"output {name!r} escapes the out dir")
+
+
+def _reject_non_finite(name: str) -> None:
+    _fail(f"non-finite number {name} is not allowed")
+
+
 def _out_file(out_dir: Path, name: str) -> Path:
     _safe_name(name)
     if ".." in name or name == "manifest.json" or name.startswith("."):
         _fail(f"unsafe output name {name!r}")
+    out_dir = _refuse_out_dir(out_dir)
     path = out_dir / name
-    if path.parent.resolve() != out_dir.resolve():
-        _fail(f"output {name!r} escapes the out dir")
+    _literal_parent_is(out_dir, path, name)
     return path
 
 
@@ -948,8 +992,10 @@ def _run() -> None:
     recipe_path, out_dir = _parse_args(sys.argv)
     if not recipe_path.is_file():
         _fail(f"recipe missing: {recipe_path}")
+    out_dir = _refuse_out_dir(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
-    recipe = json.loads(recipe_path.read_text(encoding="utf-8-sig"))
+    out_dir = _refuse_out_dir(out_dir)
+    recipe = json.loads(recipe_path.read_text(encoding="utf-8-sig"), parse_constant=_reject_non_finite)
     if not isinstance(recipe, dict) or not isinstance(recipe.get("steps"), list):
         _fail("recipe has no steps")
     state = RunState()
@@ -1002,7 +1048,9 @@ def _run() -> None:
         "stats": _stats(bpy, state),
     }
     text = json.dumps(manifest, indent=2, sort_keys=True) + "\n"
+    out_dir = _refuse_out_dir(out_dir)
     target = out_dir / "manifest.json"
+    _literal_parent_is(out_dir, target, "manifest.json")
     tmp = target.with_name(f".manifest.{os.getpid()}.tmp")
     tmp.write_text(text, encoding="utf-8", newline="\n")
     os.replace(tmp, target)

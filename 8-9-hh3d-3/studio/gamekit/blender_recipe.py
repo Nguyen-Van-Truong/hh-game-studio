@@ -525,18 +525,16 @@ def load_recipe(path: str | Path) -> tuple[Path, dict[str, Any]]:
 
 
 def _prepare_out_dir(path: str | Path) -> Path:
-    out = Path(path)
-    if not out.is_absolute():
-        out = Path(os.path.abspath(str(out)))
-    if out.is_symlink():
-        raise C.GamekitError("BAD_PATH", "out-dir is a symlink")
+    """Create ``out-dir`` only when it is a real directory, not a symlink or junction."""
+    out = C.refuse_unsafe_host_path(Path(path), what="out-dir")
     reason = C.forbidden_reason(out)
     if reason:
         raise C.GamekitError("BAD_PATH", reason)
     if out.exists() and not out.is_dir():
         raise C.GamekitError("BAD_PATH", "out-dir is not a directory")
+    out = C.refuse_unsafe_host_path(out, what="out-dir")
     out.mkdir(parents=True, exist_ok=True)
-    return out
+    return C.refuse_unsafe_host_path(out, what="out-dir")
 
 
 def _check_timeout(timeout: float) -> float:

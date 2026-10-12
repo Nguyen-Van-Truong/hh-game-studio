@@ -213,32 +213,33 @@ def compare(
     }
 
 
-def _refuse_project_write(path: Path) -> None:
-    if path.name.lower() == "private.raw":
-        raise C.GamekitError("FORBIDDEN_PATH", "refusing private.raw")
-    if C.is_within(path, C.STUDIO_DIR / ".local"):
-        raise C.GamekitError("FORBIDDEN_PATH", "refusing to write under studio/.local")
-    reason = C.forbidden_reason(path)
+def _refuse_project_write(path: Path) -> Path:
+    """Refuse junctions, ``private.raw``, ``studio/.local``, and any Godot project tree."""
+    resolved = C.refuse_unsafe_host_path(Path(path), what="diff output")
+    reason = C.forbidden_reason(path) or C.forbidden_reason(resolved)
     if reason:
         raise C.GamekitError("FORBIDDEN_PATH", reason)
-    current = path.parent
+    current = resolved.parent
     for _ in range(12):
         if (current / "project.godot").is_file():
             raise C.GamekitError(
                 "FORBIDDEN_PATH",
-                f"{path} is inside a Godot project; write the diff outside the project",
+                f"{resolved} is inside a Godot project; write the diff outside the project",
             )
         parent = current.parent
         if parent == current:
             break
         current = parent
+    return resolved
 
 
-def _write_diff(path: Path, image: pngio.Image) -> None:
-    _refuse_project_write(path)
-    if path.suffix.lower() != ".png":
+def _write_diff(path: Path, image: pngio.Image) -> Path:
+    resolved = _refuse_project_write(path)
+    if resolved.suffix.lower() != ".png":
         raise C.GamekitError("BAD_PATH", "diff output must be a .png file")
-    C.atomic_write_bytes(path, pngio.encode(image))
+    resolved = _refuse_project_write(resolved)
+    C.atomic_write_bytes(resolved, pngio.encode(image))
+    return resolved
 
 
 def compare_files(
@@ -267,8 +268,7 @@ def compare_files(
         target = Path(diff_out)
         if not target.is_absolute():
             target = Path(os.path.abspath(str(target)))
-        _write_diff(target, diff_image(left, right))
-        result["diff"] = str(target)
+        result["diff"] = str(_write_diff(target, diff_image(left, right)))
     return result
 
 

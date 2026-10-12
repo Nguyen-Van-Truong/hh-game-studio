@@ -140,9 +140,18 @@ def merge_errors(*groups: list[Any]) -> list[str]:
     return out
 
 
-def _finish(result: dict[str, Any], out: str | None) -> dict[str, Any]:
-    if out:
-        C.atomic_write_json(Path(out), result)
+def _checked_out(project: C.Project, out: str | None) -> str | None:
+    """Refuse a junction, ``studio/.local``, ``private.raw``, or an in-project ``--out``."""
+    if not out:
+        return None
+    safe = C.refuse_unsafe_host_path(Path(out), what="--out", project=project, must_be_outside_project=True)
+    return str(safe)
+
+
+def _finish(result: dict[str, Any], out: str | None, project: C.Project) -> dict[str, Any]:
+    safe = _checked_out(project, out)
+    if safe:
+        C.atomic_write_json(Path(safe), result)
     return result
 
 
@@ -178,6 +187,7 @@ def play(
     body = validate_trace(trace)
     if scene:
         project.res_to_path(scene, must_exist=True)
+    out = _checked_out(project, out)
     if timeout is None:
         timeout = max(45.0, 20.0 + frames_n * 0.05)
     request = {
@@ -199,10 +209,10 @@ def play(
             timeout=timeout,
         )
     if run.timed_out:
-        return _finish(_crashed(run, ["TIMEOUT"]), out)
+        return _finish(_crashed(run, ["TIMEOUT"]), out, project)
     if not isinstance(run.result, dict):
         errors = merge_errors(run.errors, ["play produced no result"])
-        return _finish(_crashed(run, errors), out)
+        return _finish(_crashed(run, errors), out, project)
     result = run.result
     if result.get("error") and "frames" not in result:
         raise C.GamekitError(str(result.get("error") or "GODOT_FAILED"), str(result.get("detail") or "play failed"),
@@ -222,7 +232,7 @@ def play(
         "scene": scene or "",
         "seed": seed_n,
     }
-    return _finish(played, out)
+    return _finish(played, out, project)
 
 
 def _cmd_play(args: argparse.Namespace) -> dict[str, Any]:

@@ -221,6 +221,50 @@ def forbidden_reason(path: Path) -> str | None:
     return None
 
 
+def refuse_unsafe_host_path(
+    path: Path,
+    *,
+    what: str,
+    project: Project | None = None,
+    must_be_outside_project: bool = False,
+) -> Path:
+    """Return a resolved host path, or raise ``FORBIDDEN_PATH``.
+
+    The path and every existing ancestor must be a real directory entry: a symlink or
+    junction is refused before ``resolve`` can follow it. The resolved path must not be
+    named ``private.raw`` and must not lie under ``studio/.local``. When
+    ``must_be_outside_project`` is set, it also must not lie inside ``project.root``
+    (resolved paths, case-insensitive on Windows).
+    """
+    if must_be_outside_project and project is None:
+        raise GamekitError("BAD_REQUEST", f"{what} requires a project")
+    raw = Path(os.path.abspath(str(path)))
+    if raw.name.lower() == "private.raw":
+        raise GamekitError("FORBIDDEN_PATH", "refusing to use private.raw")
+    local = STUDIO_DIR / ".local"
+    if is_within(raw, local):
+        raise GamekitError("FORBIDDEN_PATH", "refusing a path under studio/.local")
+    if _has_reparse_point(raw):
+        raise GamekitError("FORBIDDEN_PATH", f"{what} passes through a symlink or junction: {raw}")
+    try:
+        resolved = raw.resolve()
+    except OSError as exc:
+        raise GamekitError("FORBIDDEN_PATH", f"{what} cannot be resolved: {exc}") from exc
+    if resolved.name.lower() == "private.raw":
+        raise GamekitError("FORBIDDEN_PATH", "refusing to use private.raw")
+    if _has_reparse_point(resolved) or is_within(resolved, local):
+        raise GamekitError("FORBIDDEN_PATH", f"{what} resolves to a forbidden path: {resolved}")
+    if must_be_outside_project:
+        assert project is not None
+        try:
+            root = Path(project.root).resolve()
+        except OSError as exc:
+            raise GamekitError("FORBIDDEN_PATH", f"project root cannot be resolved: {exc}") from exc
+        if is_within(resolved, root):
+            raise GamekitError("FORBIDDEN_PATH", f"{what} must be outside the project")
+    return resolved
+
+
 @dataclass(frozen=True)
 class Project:
     project_id: str
@@ -310,16 +354,24 @@ def register_project(root: str | Path, project_id: str | None = None) -> Project
     return Project(pid, resolved, entry["registered_at"])
 
 
+def _project_from_entry(project_id: str, entry: dict[str, Any]) -> Project:
+    """Load one registry row. A root replaced by a symlink or junction is refused."""
+    project = Project(project_id, Path(entry["root"]), entry.get("registered_at", ""))
+    if _has_reparse_point(project.root):
+        raise GamekitError("FORBIDDEN_PATH", f"project path uses a symlink or junction: {project.root}")
+    return project
+
+
 def get_project(ref: str) -> Project:
     reg = load_registry()
     entry = reg["projects"].get(ref)
     if entry:
-        return Project(ref, Path(entry["root"]), entry.get("registered_at", ""))
+        return _project_from_entry(ref, entry)
     if any(sep in ref for sep in ("/", "\\", ":")):
         target = _norm(Path(ref))
         for pid, entry in reg["projects"].items():
             if _norm(Path(entry["root"])) == target:
-                return Project(pid, Path(entry["root"]), entry.get("registered_at", ""))
+                return _project_from_entry(pid, entry)
     raise GamekitError("NOT_FOUND", f"unknown project {ref!r}; run: hh project add <path> --id <id>")
 
 
@@ -664,31 +716,69 @@ def run_blender(script: Path, args: Sequence[str] = (), *, timeout: float = 600.
     return run_process(argv, timeout=timeout)
 
 
+_EDITOR_CHECK_DETAIL = (
+    "could not check for an open Godot editor; close it and retry, or pass --allow-open-editor"
+)
+
+
+def _editor_check_failed(exc: BaseException | None = None) -> GamekitError:
+    err = GamekitError("EDITOR_CHECK_FAILED", _EDITOR_CHECK_DETAIL)
+    if exc is not None:
+        err.__cause__ = exc
+    return err
+
+
+def _decode_process_query(data: bytes) -> str:
+    """Decode a PowerShell process listing. Empty bytes are a failed query, not 'no editor'."""
+    if not data or not data.strip():
+        return ""
+    if data.startswith((b"\xff\xfe", b"\xfe\xff")):
+        return data.decode("utf-16", errors="replace").strip()
+    if data.count(b"\x00") > len(data) // 4:
+        return data.decode("utf-16-le", errors="replace").strip()
+    return data.decode("utf-8-sig", errors="replace").strip()
+
+
 def godot_processes_for(project_root: Path) -> list[dict[str, Any]]:
-    """Godot processes whose command line mentions the project (e.g. an open editor)."""
+    """Godot processes whose command line mentions the project (e.g. an open editor).
+
+    A timeout, ``OSError``, empty stdout, or unreadable JSON raises ``EDITOR_CHECK_FAILED``.
+    A successful query that lists no matching process returns an empty list.
+    """
     if os.name != "nt":
         return []
+    # Always emit JSON, including ``[]`` when no Godot process exists. PowerShell's default
+    # pipe encoding is UTF-16; force UTF-8 so an empty editor list stays parseable.
     ps = (
-        "Get-CimInstance Win32_Process -Filter \"Name like 'Godot%'\" | "
-        "Select-Object ProcessId,CommandLine | ConvertTo-Json -Compress"
+        "$OutputEncoding = [Console]::OutputEncoding = [System.Text.UTF8Encoding]::new($false); "
+        "$ProgressPreference = 'SilentlyContinue'; "
+        "$ErrorActionPreference = 'Stop'; "
+        "$items = @(Get-CimInstance Win32_Process -Filter \"Name like 'Godot%'\" | "
+        "Select-Object -Property ProcessId,CommandLine); "
+        "if ($items.Count -eq 0) { '[]' } else { ConvertTo-Json -InputObject @($items) -Compress }"
     )
     try:
-        out = subprocess.run(
+        completed = subprocess.run(
             ["powershell", "-NoProfile", "-NonInteractive", "-Command", ps],
             capture_output=True, timeout=20, check=False, creationflags=0x08000000,
-        ).stdout.decode("utf-8", errors="replace").strip()
-    except (OSError, subprocess.TimeoutExpired):
-        return []
-    if not out:
-        return []
+        )
+    except (OSError, subprocess.TimeoutExpired) as exc:
+        raise _editor_check_failed(exc) from exc
+    text = _decode_process_query(completed.stdout)
+    if not text:
+        raise _editor_check_failed()
     try:
-        data = json.loads(out)
-    except ValueError:
-        return []
+        data = json.loads(text)
+    except ValueError as exc:
+        raise _editor_check_failed(exc) from exc
+    if data is None or not isinstance(data, (list, dict)):
+        raise _editor_check_failed()
     rows = data if isinstance(data, list) else [data]
     root_variants = {_norm(project_root), _norm(project_root).replace("\\", "/")}
     hits = []
     for row in rows:
+        if not isinstance(row, dict):
+            raise _editor_check_failed()
         cmd = os.path.normcase(str(row.get("CommandLine") or ""))
         if any(v in cmd or v in cmd.replace("\\", "/") for v in root_variants):
             hits.append({"pid": row.get("ProcessId"), "command_line": str(row.get("CommandLine"))[:300]})
@@ -698,7 +788,12 @@ def godot_processes_for(project_root: Path) -> list[dict[str, Any]]:
 def refuse_if_editor_open(project: Project, allow: bool = False) -> None:
     if allow:
         return
-    hits = godot_processes_for(project.root)
+    try:
+        hits = godot_processes_for(project.root)
+    except GamekitError:
+        raise
+    except (OSError, subprocess.TimeoutExpired) as exc:
+        raise _editor_check_failed(exc) from exc
     if hits:
         raise GamekitError(
             "EDITOR_OPEN",

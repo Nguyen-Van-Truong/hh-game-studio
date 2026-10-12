@@ -430,9 +430,11 @@ def _outside_project(project: C.Project, out: Path) -> Path:
     path = Path(out)
     if not path.is_absolute():
         path = Path(os.path.abspath(str(path)))
-    if C.is_within(path, project.root) or os.path.normcase(os.path.abspath(str(path))) == os.path.normcase(os.path.abspath(str(project.root))):
+    folded = os.path.normcase(os.path.abspath(str(path)))
+    root = os.path.normcase(os.path.abspath(str(project.root)))
+    if C.is_within(path, project.root) or folded == root:
         raise C.GamekitError("BAD_REQUEST", "--out must be outside the project")
-    return path
+    return C.refuse_unsafe_host_path(path, what="--out", project=project, must_be_outside_project=True)
 
 
 def _timeout_for(frames: int, warmup: int, leak_cycles: int) -> float:
@@ -531,6 +533,7 @@ def run_report(
     if trace is not None:
         report["trace_fps"] = trace["fps"]
     if out is not None:
+        out = _outside_project(project, out)
         C.atomic_write_json(out, report)
         report["out"] = str(out)
     return report

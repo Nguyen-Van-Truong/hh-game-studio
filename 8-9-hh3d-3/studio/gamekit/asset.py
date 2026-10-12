@@ -114,19 +114,9 @@ def _require_bool(value: bool, name: str) -> bool:
     return value
 
 
-def _refuse_source(source: Path) -> None:
-    if source.name.lower() == "private.raw":
-        raise C.GamekitError("FORBIDDEN_PATH", "refusing to read private.raw")
-    local = C.STUDIO_DIR / ".local"
-    if C.is_within(source, local):
-        raise C.GamekitError("FORBIDDEN_PATH", "refusing to read a file under studio/.local")
-    if source.is_symlink():
-        try:
-            resolved = source.resolve()
-        except OSError as exc:
-            raise C.GamekitError("FORBIDDEN_PATH", f"source symlink cannot be resolved: {exc}") from exc
-        if resolved.name.lower() == "private.raw" or C.is_within(resolved, local):
-            raise C.GamekitError("FORBIDDEN_PATH", "refusing to read private.raw or studio/.local through a symlink")
+def _refuse_source(source: Path) -> Path:
+    """Refuse a junction, symlink, ``private.raw``, or ``studio/.local`` source. Returns the resolved path."""
+    return C.refuse_unsafe_host_path(Path(source), what="asset source")
 
 
 def _dest_pair(project: C.Project, dest: str) -> tuple[str, Path]:
@@ -243,8 +233,7 @@ def add(
     ai_generated = _require_bool(ai_generated, "ai_generated")
     replace = _require_bool(replace, "replace")
     allow_open_editor = _require_bool(allow_open_editor, "allow_open_editor")
-    src = Path(source)
-    _refuse_source(src)
+    src = _refuse_source(Path(source))
     if not src.exists():
         raise C.GamekitError("NOT_FOUND", f"source file not found: {src}")
     if not src.is_file():
@@ -278,6 +267,7 @@ def add(
         prior = journal.replay_or_conflict(command_id, request_digest)
         if prior is not None:
             return prior
+        src = _refuse_source(src)
         fresh = src.read_bytes()
         if C.sha256_bytes(fresh) != source_sha:
             raise C.GamekitError("STALE", "source file changed before the write")

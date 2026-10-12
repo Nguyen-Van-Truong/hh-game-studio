@@ -166,20 +166,20 @@ def _external_png(project: C.Project, raw: str | Path, what: str) -> Path:
     path = Path(os.path.abspath(str(path)))
     if path.suffix.lower() != ".png":
         raise C.GamekitError("BAD_PATH", f"{what} must be a .png file")
-    if path.name.lower() == "private.raw":
-        raise C.GamekitError("FORBIDDEN_PATH", "refusing private.raw")
     if C.is_within(path, project.root):
-        raise C.GamekitError("FORBIDDEN_PATH", f"{what} must be outside the project; use --baseline to store a png inside it")
-    if C.is_within(path, C.STUDIO_DIR / ".local"):
-        raise C.GamekitError("FORBIDDEN_PATH", "refusing to write under studio/.local")
-    reason = C.forbidden_reason(path)
+        raise C.GamekitError(
+            "FORBIDDEN_PATH",
+            f"{what} must be outside the project; use --baseline to store a png inside it",
+        )
+    resolved = C.refuse_unsafe_host_path(path, what=what, project=project, must_be_outside_project=True)
+    if resolved.suffix.lower() != ".png":
+        raise C.GamekitError("BAD_PATH", f"{what} must be a .png file")
+    reason = C.forbidden_reason(path) or C.forbidden_reason(resolved)
     if reason:
         raise C.GamekitError("FORBIDDEN_PATH", reason)
-    if path.exists() and not path.is_file():
+    if resolved.exists() and not resolved.is_file():
         raise C.GamekitError("BAD_PATH", f"{what} exists and is not a file")
-    if path.is_symlink():
-        raise C.GamekitError("FORBIDDEN_PATH", f"{what} is a symlink")
-    return path
+    return resolved
 
 
 def frame_paths(out: Path, frames: list[int], use_at: bool) -> dict[int, Path]:
@@ -376,9 +376,9 @@ def capture(
     paths = frame_paths(out_path, capture_at, use_at)
     for path in paths.values():
         _external_png(project, path, "--out")
-    diff_text = str(Path(os.path.abspath(str(diff_out)))) if diff_out else None
-    if diff_text:
-        _external_png(project, diff_text, "--diff-out")
+    diff_text = None
+    if diff_out:
+        diff_text = str(_external_png(project, Path(os.path.abspath(str(diff_out))), "--diff-out"))
     baseline_res = baseline
     if baseline_res is not None:
         if not baseline_res.endswith(".png"):
@@ -407,14 +407,17 @@ def capture(
     last_frame = max(capture_at)
     run_timeout = timeout if timeout is not None else max(90.0, 40.0 + last_frame)
     fps = int(trace["fps"]) if trace else 60
-    for path in paths.values():
-        path.parent.mkdir(parents=True, exist_ok=True)
 
     with C.project_lock(project, "shot", wait_seconds=30):
         if command_id is not None:
             prior = C.Journal(project).replay_or_conflict(command_id, request_digest)
             if prior is not None:
                 return prior
+        for path in paths.values():
+            _external_png(project, path, "--out")
+            path.parent.mkdir(parents=True, exist_ok=True)
+        if diff_text:
+            _external_png(project, diff_text, "--diff-out")
         writing = False
         if baseline_res is not None:
             baseline_path = project.res_to_path(baseline_res)
