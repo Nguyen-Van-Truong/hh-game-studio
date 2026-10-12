@@ -1,12 +1,12 @@
 HH STUDIO — PLAN 1/3: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Cập nhật 12-10-2026, Asia/Saigon | Revision S297 + quyết định owner O1–O13 | TRIỂN KHAI THEO GATE
+Cập nhật 12-10-2026, Asia/Saigon | Revision S298 + quyết định owner O1–O13 | TRIỂN KHAI THEO GATE
 OWNER_DECISIONS=O1_O3_20260925; O4_20260927; O5_O6_20260930; O7_20261001; O8_20261002; O9_20261003; O10_20261004; O11_20261006; O12_20261007; O13_20261008; BLOCK_BELOW_STATUS_TABLE; LATER_WINS_OVER_S2XX; OLD_VERDICTS_UNCHANGED
 OWNER_DECISIONS_FULL_TEXT_IN_GIT=87912523,b0802472,8298c107,fcc1906f,6d8eb81d,d04266e8,091506fa,a0ab19b8,fd5ad2be,add82689,7f97d3f8,5992d9f2,5ff3885e,054c0611
-HIỆN HÀNH 12-10 — GT-01..GT-09 ACCEPTED; GT-10-PC IN_PROGRESS THEO NEXT C1–C6 Ở O13.5: f1 VOID (DỪNG SAU AUDIT C4b, SỬA Ở 744a9f61); C3 c3h ĐẠT (RAW_VERIFIED), ĐANG CHẠY FINAL f2 P1–P11 (P11 10 PAIR × 35) TỪ 12:47 TỚI KHOẢNG 19:00 (REVIEWER LÀ COORDINATOR, LEASE AGENTS.md), RỒI HAI CRITIC; GT-08B DEFERRED_OWNER_NO_ANDROID; GT-10 FULL CHỜ GT-08B
+HIỆN HÀNH 12-10 — GT-01..GT-09 ACCEPTED; GT-10-PC IN_PROGRESS THEO NEXT C1–C6 Ở O13.5: f1 VOID (DỪNG SAU AUDIT C4b, SỬA Ở 744a9f61); f2 VOID (P11 HỎNG VÌ DOCKER BACKEND TỰ QUAY CPU); C3 c3h ĐẠT (RAW_VERIFIED), ĐANG CHẠY FINAL f3 P1–P11 (P11 10 PAIR × 35) TỪ 13:14 TỚI KHOẢNG 19:40, DOCKER TẮT SUỐT P11 (REVIEWER LÀ COORDINATOR, LEASE AGENTS.md), RỒI HAI CRITIC; GT-08B DEFERRED_OWNER_NO_ANDROID; GT-10 FULL CHỜ GT-08B
 CURRENT_VALID_WP=GT-10-PC
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S297
+PLAN_REVISION=S298
 EXECUTION_AUTHORIZATION=OWNER_APPROVED_GATED
 EXECUTION_MODE=COORDINATOR_WITH_SCOPED_SUBAGENTS_AND_INDEPENDENT_CRITICS_OWNER_20261003; CREDIT_TURN_BUDGET_O13_6; ONE_COORDINATOR_THREAD; ULTRA_ONLY_HARD_DESIGN_AND_FINAL_CRITICS; FORK_TURNS_NONE_DEFAULT; NO_SELF_CREATED_HEARTBEAT; ONE_WRITER_PER_FILE; TWO_DIFFERENT_MODELS_SAME_HASH
 GOAL_STATE=ACTIVE; INDEPENDENT_CONSUMER_PILOT_AUTHORIZED; GT07_ACCEPTED; GT08A_ACCEPTED_O4_6; GT09_ACCEPTED_20261010; GT08B_DEFERRED_OWNER_NO_ANDROID; GT10_PC_OPEN; GT10_FULL_BLOCKED_BY_GT08B; SUPERAGENT_SEPARATE_OWNER_AUTHORIZED_LANE
@@ -215,10 +215,14 @@ Căn cứ 11-10 18:30 → 12-10 09:30:
       sửa và kiểm bằng --verify-only trước.
    C4b (xong 12-10 12:00 trên c3g): P10 K8 tin nhãn status, P7 không kiểm nội dung last-good,
       known limits thiếu 1c và K13. Sửa ở 744a9f61, verifier mới qua trên raw c3g; f1 VOID.
-   C5 (đang chạy f2 từ 12:47, closure 86dc9f1c, commit 744a9f61): final P1–P11 qua
-      Scheduled Task (P11 năm campaign 2 pair, mỗi campaign khoảng 70 phút). Trước khi bấm, đo
-      CPU 60 giây bằng snapshot của watchdog: trung bình process ngoài dưới 25%, không process nào trên
-      10%; Docker bận vô cớ thì restart Docker Desktop (owner cho phép 12-10). Xong là --verify-only
+   C5 (đang chạy f3 từ 13:14, closure 86dc9f1c, commit 744a9f61; f2 VOID vì P11): final P1–P11
+      qua Scheduled Task (P11 năm campaign 2 pair, mỗi campaign khoảng 70 phút). Trước khi bấm, đo
+      CPU 60 giây bằng snapshot của watchdog: trung bình process ngoài dưới 25%, không process nào
+      trên 10%. Docker Desktop 4.61 có backend tự quay khoảng 75% CPU (sau container và cả vài phút
+      sau restart); P11 cắt attempt sau 60 giây CPU ngoài từ 50% trở lên, hai attempt là hết. Nên khi
+      có children/p10-installed-linux-receipt.json (dòng Docker cuối): tạm dừng runner, tắt hẳn Docker
+      Desktop (không process docker, pipe mất thì inventory rỗng), đo 30 giây bằng snapshot watchdog,
+      chạy tiếp; Docker tắt suốt P11, bật lại sau final; log thao tác đưa critic. Xong là --verify-only
       và self-check mục 3 luôn. Hỏng INFRA giữa soak thì chạy lại ID mới trên cùng closure (O1.7).
    C6 (1–2 giờ): P12 hai critic khác model cùng manifest; cả hai TICK=yes thì nghiệm thu theo
       O4.3, ghi mục Đã nghiệm thu, đổi header. Sau đó lane công cụ dừng: GT-11 chỉ mở khi plan
@@ -902,9 +906,13 @@ Bài học GT-09 và GT-10-PC (08-10 17:15 → 12-10 10:30):
 88. Audit C4b song song final chỉ rẻ khi dừng sớm: f1 dừng ở phút 18 vì ba gap critic sẽ bác
     (P10 K8 tin nhãn, P7 last-good, known limits). Chạy C4b trên gói diễn tập trước khi bấm final.
 89. Diễn tập không thấy tải ngoài kéo dài: P11 ngắn 24 giây, dưới cửa sổ 60 giây của watchdog.
-    Docker Desktop backend quay khoảng 75% CPU từ 07:03 dù không có container, nên f1 chắc chắn
-    hỏng ở lượt quan sát 60 giây của cặp P11 đầu, khoảng phút 25. Restart Docker hết quay; đo CPU
-    bằng snapshot watchdog trước final (bước C5).
+    Docker Desktop backend quay khoảng 75% CPU từ 07:03 dù không có container. Restart chỉ yên tới
+    container kế tiếp hoặc vài phút: f2 restart 13:07 ở giữa P10 và P11, nóng lại 13:08, hai attempt
+    P11 đầu INFRA_ABORT EXTERNAL_CPU_PRESSURE, f2 hỏng 13:10. Trước P11 tắt hẳn Docker (bước C5).
+90. Sửa môi trường giữa run phải bền suốt phần còn lại, không chỉ qua một phép đo ngắn: restart
+    qua phép đo 10 giây rồi hỏng sau 80 giây. Tắt hẳn Docker đo 30 giây QUIET (ngoài 5,6%). Khi
+    Docker còn cần, ghim affinity backend vào 2 lõi (tối đa 2/12 CPU); lỗi inventory giữa pair là
+    HARNESS_FAIL nên không tắt Docker lúc pair đang chạy.
 
 LỊCH SỬ / CÁCH ĐỌC
 Bản S71 đầy đủ trước tinh gọn giữ tại reviews/20260918-plan-history-s71/
