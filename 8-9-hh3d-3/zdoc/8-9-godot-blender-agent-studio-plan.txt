@@ -1,12 +1,12 @@
 HH STUDIO — PLAN 1/3: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Cập nhật 11-10-2026, Asia/Saigon | Revision S291 + quyết định owner O1–O13 | TRIỂN KHAI THEO GATE
+Cập nhật 12-10-2026, Asia/Saigon | Revision S292 + quyết định owner O1–O13 | TRIỂN KHAI THEO GATE
 OWNER_DECISIONS=O1_O3_20260925; O4_20260927; O5_O6_20260930; O7_20261001; O8_20261002; O9_20261003; O10_20261004; O11_20261006; O12_20261007; O13_20261008; BLOCK_BELOW_STATUS_TABLE; LATER_WINS_OVER_S2XX; OLD_VERDICTS_UNCHANGED
-OWNER_DECISIONS_FULL_TEXT_IN_GIT=87912523,b0802472,8298c107,fcc1906f,6d8eb81d,d04266e8,091506fa,a0ab19b8,fd5ad2be,add82689,7f97d3f8,5992d9f2
-HIỆN HÀNH 11-10 — GT-01..GT-09 ACCEPTED; GT-10-PC IN_PROGRESS THEO NEXT C1–C6 Ở O13.5, MA TRẬN P1–P12 Ở O13.8: P1–P9 ĐẠT DIỄN TẬP, P10 HỎNG VÌ ĐƯỜNG DẪN QUÁ SÂU CHO BLENDER; SAU ĐÓ P11 NGẮN, PRE-REVIEW, FINAL BUỔI TỐI, HAI CRITIC; GT-08B DEFERRED_OWNER_NO_ANDROID; GT-10 FULL CHỜ GT-08B
+OWNER_DECISIONS_FULL_TEXT_IN_GIT=87912523,b0802472,8298c107,fcc1906f,6d8eb81d,d04266e8,091506fa,a0ab19b8,fd5ad2be,add82689,7f97d3f8,5992d9f2,5ff3885e
+HIỆN HÀNH 12-10 — GT-01..GT-09 ACCEPTED; GT-10-PC IN_PROGRESS THEO NEXT C1–C6 Ở O13.5: P1–P11 ĐẠT DIỄN TẬP, PRE-REVIEW C4 ĐÃ CÓ GAP LIST; SỬA MỘT LƯỢT, DIỄN TẬP LẠI, FINAL P1–P11 (P11 10 PAIR × 35) TỪ 19:30, HAI CRITIC; GT-08B DEFERRED_OWNER_NO_ANDROID; GT-10 FULL CHỜ GT-08B
 CURRENT_VALID_WP=GT-10-PC
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S291
+PLAN_REVISION=S292
 EXECUTION_AUTHORIZATION=OWNER_APPROVED_GATED
 EXECUTION_MODE=COORDINATOR_WITH_SCOPED_SUBAGENTS_AND_INDEPENDENT_CRITICS_OWNER_20261003; CREDIT_TURN_BUDGET_O13_6; ONE_COORDINATOR_THREAD; ULTRA_ONLY_HARD_DESIGN_AND_FINAL_CRITICS; FORK_TURNS_NONE_DEFAULT; NO_SELF_CREATED_HEARTBEAT; ONE_WRITER_PER_FILE; TWO_DIFFERENT_MODELS_SAME_HASH
 GOAL_STATE=ACTIVE; INDEPENDENT_CONSUMER_PILOT_AUTHORIZED; GT07_ACCEPTED; GT08A_ACCEPTED_O4_6; GT09_ACCEPTED_20261010; GT08B_DEFERRED_OWNER_NO_ANDROID; GT10_PC_OPEN; GT10_FULL_BLOCKED_BY_GT08B; SUPERAGENT_SEPARATE_OWNER_AUTHORIZED_LANE
@@ -35,7 +35,7 @@ STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng
 10 | GT-10 | Gói công cụ v0.1, cài/upgrade/rollback, bàn giao game | GT-09; GT-10-PC sau GT-09, GT-10 đầy đủ còn cần GT-08B | IN_PROGRESS (GT-10-PC P1–P12 đang mở)
 11 | GT-11 | Mở rộng lõi dùng chung để làm game: asset/license, catalog, kiểm hình, hiệu năng, bot, kit (O13.10) | GT-10-PC ACCEPTED; change request của game | PLANNED (chưa mở)
 
-QUYẾT ĐỊNH OWNER ĐANG HIỆU LỰC O1–O13 — BẢN HỢP NHẤT 11-10-2026 (S291)
+QUYẾT ĐỊNH OWNER ĐANG HIỆU LỰC O1–O13 — BẢN HỢP NHẤT 12-10-2026 (S292)
 Chỉ giữ luật còn áp dụng sau GT-08A ACCEPTED; khối mới nhất đặt đầu. Nguyên văn O1–O9 trước
 tinh gọn: git show 091506fa:8-9-hh3d-3/zdoc/8-9-godot-blender-agent-studio-plan.txt (dòng 40–561);
 bản gốc O1–O3 87912523, O4 b0802472, O5 8298c107, O6 fcc1906f; O10 đầy đủ (S259) ở a0ab19b8;
@@ -44,7 +44,7 @@ O10 và O11 trước khi rút gọn ở S270: git show fd5ad2be (cùng file, dò
 Mâu thuẫn thì quyết định muộn hơn thắng và thắng các dòng S2xx; raw và verdict cũ giữ nguyên,
 không hồi tố PASS. Số mục cũ (O1.4, O4.4, O6.4…) giữ nguyên để tham chiếu.
 
-O13 — 08-10-2026, cập nhật 11-10 (S271–S291), MỚI NHẤT, GT-09 ĐÃ NGHIỆM THU, GT-10-PC THEO MA TRẬN P
+O13 — 08-10-2026, cập nhật 12-10 (S271–S292), MỚI NHẤT, GT-09 ĐÃ NGHIỆM THU, GT-10-PC THEO MA TRẬN P
 (AUTHORITY=OWNER_DELEGATED_20261008; owner giao reviewer toàn quyền sửa plan; ngưỡng O1/O4,
 DoD GT-09, GT-10-PC và O12 không hạ)
 Căn cứ 07-10 → 08-10 17:15 (nguyên văn ở add82689):
@@ -69,6 +69,15 @@ Căn cứ 09-10 18:40 → 11-10 18:30:
   Blender và OpenImageIO không mở được đường dài quá 260 ký tự (bài 78, 79); p10fix3 chuyển
   sang hết deadline không output.
 - Máy không chạy qua hai đêm (bài 81); ghi sổ phình lại (bài 80).
+Căn cứ 11-10 18:30 → 12-10 09:30:
+- P10 qua ở p10fix5 (21:44) và p10a nhờ gốc ngắn; dry-run đo đường native dài nhất 73/200 ký
+  tự. Task cũ đã xóa, còn HHStudio.GT09.gt09-matrix-final-20261010-49. Đêm 21:44 → 06:02 máy
+  lại không chạy (bài 85).
+- 06:15–08:12: p11a (33 giây, một vòng), p10a, c3a–c3e (5–27 phút mỗi lần); c3a, c3b, c3d hỏng
+  ở schema verifier, evidence cũ và P12 (bài 83); c3c, c3e đạt P1–P11; máy chạy khoảng 92 phút.
+- Agent tự pre-review cùng model chỉ thấy FINAL tắt và verifier nông, sau đó tự thấy P11 nối
+  benchmark GT-06 2×35 (bài 82), P8 thiếu checker, hàng chỉ kiểm nhãn. Pre-review C4 của
+  reviewer trên c3e (c32dced1): 6 BLOCKER, 4 MAJOR, 6 MINOR (bài 84).
 1. Làm rõ DoD (thắng câu mơ hồ ở spec GT-09, O2 và O4.6; không hạ ngưỡng):
    a) GT-09 nghiệm thu AUTH-01..06; AUTH-07 (install/upgrade/rollback) thuộc GT-10-PC/GT-10.
    b) Catalog đăng ký = profile hh-godot-gameplay-source-1 cùng allowlist node/resource 2D/3D, bật
@@ -149,7 +158,8 @@ Căn cứ 09-10 18:40 → 11-10 18:30:
    d) Manifest: run id, lệnh, actual exit, Job/tree, hash raw, loại bằng chứng từng bước và bảng
       requirement → test → artifact.
    e) --verify-only chạy mọi validator trên raw của một run có sẵn, chỉ để chẩn đoán, không bao giờ
-      ghi PASS; test của runner chạy validator trên raw thật của run gần nhất và trên mẫu âm.
+      ghi PASS; source hay closure lệch thì ghi SOURCE_DRIFT, vẫn chạy hết validator, exit khác 0.
+      Test của runner chạy validator trên raw thật của run gần nhất và trên mẫu âm.
    f) Diễn tập (rehearsal): cùng runner, producer, validator và packer trên source hiện tại, chọn
       được hàng (--rows, kèm producer hàng đó cần), K15 còn 60–120 giây mỗi fixture; manifest ghi
       mode=REHEARSAL, AUTHORITY=0, packer và critic từ chối. Runner GT-10-PC có chế độ này từ đầu,
@@ -195,19 +205,17 @@ Căn cứ 09-10 18:40 → 11-10 18:30:
      toàn ma trận (bài 79). matrix.json ghi mã lỗi và dòng lỗi đầu của tool trong cùng, không
      chỉ mã của producer ngoài.
 5. NEXT (giờ làm, không phải ETA toàn plan):
-   GT-09 xong (Căn cứ, mục Đã nghiệm thu). Prototype GT-10-PC 6b3e0f77 và run 350a VOID, không
-   hồi tố. P1–P9 đã đạt ở diễn tập; P10 hỏng vì đường dẫn quá sâu (Căn cứ, bài 78).
-   C1 (1–2 giờ): P10 theo 3g: id ngắn, Blender và OpenImageIO ghi ở gốc ngắn; reproducer gọi
-      thẳng lệnh Blender content của P10 trên bản cài (mục 4) tới khi qua, rồi P10 qua Scheduled
-      Task. Chưa qua P10 thì không chạy toàn ma trận. Thêm kiểm ngân sách đường dẫn vào dry-run.
-   C2 (khoảng 1 giờ): P11 một vòng ngắn trên gói của cùng source, đo thời gian từng pha để đặt
-      timeout P11 theo mục 4; song song viết checklist mục 9 thành validator của verifier.
-   C3 (khoảng 1 giờ máy): commit, diễn tập toàn ma trận P1–P11 (P11 ngắn) qua Scheduled Task
-      trên đúng source định freeze, rồi --verify-only trên raw.
-   C4 (1–2 giờ): pre-review theo 3h trên gói C3, trong lúc đó làm việc ngoài studio/. Có gap
-      thì sửa, kiểm hàng đổi bằng diễn tập --rows, rồi chạy lại C3.
-   C5 (một đêm): freeze; final P1–P11 đầy đủ khởi chạy buổi tối qua Scheduled Task; sáng sau
-      đọc receipt, --verify-only, self-check mục 3.
+   GT-09 xong (Căn cứ, mục Đã nghiệm thu). Prototype GT-10-PC 6b3e0f77 và run 350a VOID. C1 (P10)
+   và C2 (P11 một vòng) xong; c3c, c3e đạt P1–P11 ở diễn tập nhưng source đã đổi sau đó.
+   C4a (sáng 12-10): sửa một lượt mọi BLOCKER và MAJOR của pre-review
+      zdoc/reviews/20261012-gt10pc-c4-prereview/prereview.md; thử validator trên raw c3e bằng
+      --verify-only đã sửa theo 3e (chỉ hàng c3e thiếu bằng chứng được hỏng), không remint để dò.
+   C3 (khoảng 30 phút máy): commit, diễn tập lại P1–P11 (P11 một vòng) qua Scheduled Task trên
+      đúng source định freeze, rồi --verify-only. Hỏng thì sửa và kiểm bằng --verify-only trước.
+   C4b (tùy chọn, 30 phút): reviewer đối chiếu gói C3 mới với gap list; không đổi tiêu chí.
+   C5 (tối 12-10): freeze; final P1–P11 đầy đủ qua Scheduled Task khởi chạy trước 19:30 (P11
+      năm campaign 2 pair, tổng khoảng 6 giờ 20 phút, xong khoảng 02:00); sáng sau --verify-only
+      và self-check mục 3. Hỏng INFRA giữa soak thì chạy lại ID mới trên cùng closure (O1.7).
    C6 (1–2 giờ): P12 hai critic khác model cùng manifest; cả hai TICK=yes thì nghiệm thu theo
       O4.3, ghi mục Đã nghiệm thu, đổi header. Sau đó lane công cụ dừng: GT-11 chỉ mở khi plan
       game gửi change request, GT-08B khi owner có Android (O12).
@@ -270,27 +278,29 @@ Căn cứ 09-10 18:40 → 11-10 18:30:
    P9  Handoff: compatibility lock, support runbook, known limits (1c, journal, hàng K13), support
        bundle đã scrub secret; một consumer fixture độc lập cài từ gói và chạy smoke.
    P10 Regression: hàng PC của GT-08A và K8/K10 trên bản cài từ gói, đủ cả hai fixture.
-   P11 Release soak 10×35 theo O1/O4.1 trên đúng hash release (khoảng 6 giờ máy yên; diễn tập
-       chỉ một vòng ngắn); mỗi vòng là run Godot thật có receipt, không phải vòng chép file. Đây
-       là hàng cuối nên final khởi chạy buổi tối qua Scheduled Task, giữ khóa đo O5.6; trong lúc
-       soak không sửa studio/, chỉ làm việc ngoài cây này (plan, GT-11).
+   P11 Release soak theo O1.6: 10 fresh host/editor pair × 35 batch trên đúng hash release, gate
+       O1.4–O1.5, không phải benchmark GT-06 2 pair × 35; chạy bằng năm campaign 2 pair của bộ
+       máy Formal25 (khoảng 71 phút mỗi campaign), chia được nhiều cửa sổ trên cùng hash. Diễn
+       tập chỉ một vòng ngắn; mỗi vòng là run Godot thật có receipt host. Hàng cuối nên final
+       khởi chạy buổi tối qua Scheduled Task, giữ khóa đo O5.6; trong lúc soak không sửa studio/.
    P12 Hai critic khác model cùng manifest như B7.
    Đọc dòng cũ: các câu đòi Android (owner chuẩn bị máy Android, ANDROID_POLICY, phần Android của
    TQ08-B, "Windows/Android/Linux-headless", "ít nhất 1 Android thật") chỉ áp cho GT-08B và GT-10
    đầy đủ. PROOF_CLASS RELEASE của GT-10-PC = cài từ artifact gói cục bộ ký test key, không kênh
    publish công khai. H2-P0-01 vẫn cần GT-08B theo O4.6/O12; muốn HH World bắt đầu trên PC trước
    thì owner quyết định riêng (E4).
-9. Checklist critic GT-10-PC (pre-review 3h và C6; checklist K1–K15 của GT-09 đã đóng, nguyên
-   văn ở 5992d9f2). Bắt buộc, kiểm trên gói cuối: P1 manifest và quét chạy trên chính archive;
-   P2 gói hỏng bị từ chối trước unpack ở ca native, install/project/state không đổi; P3–P6 trên
-   bản sao sạch của cả hai fixture, Linux là run thật trong container pin (tên thư mục không
-   chứng minh Linux), roundtrip + Play đọc lại; P7 đủ 8 ca native, mỗi ca có receipt process
-   tree; P8 lỗi có hướng sửa, không tự lấy latest; P9 consumer độc lập cài từ archive và chạy
-   smoke; P10 cả hai fixture; P11 vòng Godot thật trên hash release; mỗi bước native có receipt
-   exit và PID do host ghi; cả gói một closure từ một final qua Scheduled Task, không ghép diễn
-   tập hay run khác; hai critic cùng hash. Đã thu hẹp, critic không đòi lại: revoke, expiry,
-   security floor và mất key (GT-10 đầy đủ, ghi known limit ở P2); Android/GT-08B; kênh publish
-   công khai; AUTHORITY=0 trước nghiệm thu; claim game hoàn chỉnh hay giống Y8.
+9. Checklist critic GT-10-PC (C4 và C6; K1–K15 của GT-09 đã đóng, nguyên văn ở 5992d9f2). Bắt
+   buộc trên gói cuối, mọi hàng tính lại từ raw, không tin trường PASS do producer ghi: P1
+   manifest và quét byte của chính archive (MONETIZATION_POLICY, failpoint, không zdoc/reviews);
+   P2 gói hỏng bị từ chối trước unpack ở ca native, ledger install/project/state không đổi; P3–P6
+   trên bản sao sạch cả hai fixture, Windows và Linux (container pin, receipt docker của host),
+   roundtrip + Play, P4 có ca schema không tương thích và rollback bị từ chối; P7 đủ 8 ca native,
+   receipt host cho bên kill và process bị kill, retry lần hai không đổi state, NOT_APPLICABLE
+   có lý do; P8 chạy đủ checker; P9 consumer độc lập là child riêng; P10 cả hai fixture và đủ
+   hàng PC của GT-08A (W01–W03, L01–L02); P11 10 pair × 35 với gate O1.4–O1.5; một closure từ
+   một final qua Scheduled Task, không ghép diễn tập; hai critic cùng hash. Đã thu hẹp, không
+   đòi lại: revoke, expiry, security floor, mất key (GT-10 đầy đủ, ghi known limit ở P2);
+   Android/GT-08B; kênh publish công khai; claim game hoàn chỉnh hay giống Y8.
 10. Sau GT-10-PC: GT-11 mở rộng lõi dùng chung để làm game (owner 09-10; PLANNED, chưa mở).
    Mở khi GT-10-PC ACCEPTED; không thêm hàng vào K1–K15 hay P1–P12, không đổi NEXT của GT-10-PC.
    Mỗi mục là một change request theo phần 6 (HANDOFF) có consumer test của Superagent (SA-T0x)
@@ -827,7 +837,7 @@ Bài học GT-07 → GT-09 (06-10 → 08-10):
     hết hạn mức, mở thread mới với handoff ngắn nhanh hơn cố cứu thread hỏng.
 62. Ghi sổ vẫn phình: 32/58 commit từ 07-10 chỉ ghi sổ; dòng O2 của header dài 716 ký tự với run
     id dù O4.4 giới hạn 300; chi tiết run thuộc AUTHORING_STATUS.md.
-Bài học GT-09 và GT-10-PC (08-10 17:15 → 11-10 18:30):
+Bài học GT-09 và GT-10-PC (08-10 17:15 → 12-10 09:30):
 63. Validator của ma trận phải chạy trên output thật trước final (lặp bài 43): K14 của -06 hỏng
     vì validator đòi acceptance và actual_exit mà manifest GT-08A không có; --verify-only trên raw
     có sẵn tìm ra lỗi này trong vài giây thay vì một final gần 40 phút.
@@ -872,6 +882,14 @@ Bài học GT-09 và GT-10-PC (08-10 17:15 → 11-10 18:30):
     dòng dài.
 81. Đêm là giờ máy: 10-10 02:09 → 07:39 và 21:58 → 11-10 06:42 máy không chạy gì; trước khi dừng
     phiên, khởi chạy một việc dài có ích qua Scheduled Task. Bốn task HHStudio.* cũ còn đăng ký.
+82. Đọc nguyên câu DoD trước khi nối hàng: P11 ghi "10×35 theo O1" nhưng code gọi benchmark
+    GT-06 2×35; O1.6 viết rõ 10 fresh pair × 35. Bảng P trong runner trích nguyên câu DoD.
+83. --verify-only dừng ngay khi source lệch nên không thử được validator mới trên raw cũ: c3a,
+    c3b, c3d mỗi lần 5–22 phút chỉ để lộ một lỗi schema hay evidence (O13.3e đã sửa).
+84. Tự review cùng model không thay critic: pre-review của agent chỉ thấy hai điểm; critic khác
+    model trên cùng gói c3e thấy 6 BLOCKER (verdict tin nhãn, P1 quét byte, P8, P7, P10, P11).
+85. Lặp bài 81: đêm 11-10 21:44 → 06:02 máy không chạy. Lượt cuối ngày phải khởi chạy diễn tập
+    hoặc final qua Scheduled Task trước khi dừng.
 
 LỊCH SỬ / CÁCH ĐỌC
 Bản S71 đầy đủ trước tinh gọn giữ tại reviews/20260918-plan-history-s71/
