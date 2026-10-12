@@ -2,10 +2,9 @@
 
 LEASE 12-10-2026 10:00 (owner): reviewer Claude là coordinator GT-10-PC tới nghiệm thu; Codex chỉ
 đọc, không ghi `studio/`, plan hay chạy run GT-10-PC khi lease còn. WIP 08:57 được tiếp quản.
-FINAL 12-10 14:00: run gt10pc-final-20261012-f4 (Scheduled Task, closure 86dc9f1c, commit 744a9f61)
-đang chạy; f1, f2, f3 VOID. Runner dừng ở khoảng nghỉ P10→P11 (Docker tắt) tới 00:00:30 13-10 vì
-hạn mức INFRA trong ngày đã hết, rồi P11 chạy tới khoảng 06:30. Tới lúc đó không ai sửa `studio/`,
-chạy Godot, Blender hay test nặng, và không bật Docker từ 23:50 tới hết final.
+O14 12-10 14:05 (owner): bỏ soak dài P11 và final; f4 dừng 14:07 (VOID). GT-10-PC nghiệm thu bằng
+gói diễn tập gt10pc-rehearsal-20261012-c3h (closure 86dc9f1c, commit 744a9f61) cộng hai critic C6
+đang chạy. Tới khi nghiệm thu xong không ai sửa `studio/` (đổi closure là hỏng gói c3h).
 
 Owner steering 03-10-2026, credit và lượt theo O13.6 của tools plan (08-10): một coordinator, một
 thread; subagent chỉ cho thiết kế khó, worker K13 và hai critic cuối, fork_turns=none với brief
@@ -37,7 +36,8 @@ Task; timeout từng producer lấy từ số đo, không trần chung; tool nat
 ngân sách đường dẫn (O13.3g). Final dài chỉ sau diễn tập toàn ma trận và pre-review (O13.3h),
 khởi chạy buổi tối qua Scheduled Task; freeze gồm cả subagent; commit WIP trước run dài. Không
 lập gói hay gọi critic trước self-check O13.3; không tự tick WP; nghiệm thu cần gói final và hai
-critic cùng hash. AGENTS.md ở gốc repo (Vault Fighters) không áp dụng cho tools plan.
+critic cùng hash (GT-10-PC dùng gói diễn tập c3h theo O14). AGENTS.md ở gốc repo (Vault
+Fighters) không áp dụng cho tools plan.
 Đọc CURRENT_VALID_WP và bảng trạng thái
 trong tools plan, không lấy số test/diagnostic làm nguồn tick.
 
