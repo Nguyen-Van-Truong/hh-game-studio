@@ -1,12 +1,12 @@
 HH STUDIO — PLAN 1/3: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Cập nhật 12-10-2026, Asia/Saigon | Revision S300 + quyết định owner O1–O13 | TRIỂN KHAI THEO GATE
-OWNER_DECISIONS=O1_O3_20260925; O4_20260927; O5_O6_20260930; O7_20261001; O8_20261002; O9_20261003; O10_20261004; O11_20261006; O12_20261007; O13_20261008; BLOCK_BELOW_STATUS_TABLE; LATER_WINS_OVER_S2XX; OLD_VERDICTS_UNCHANGED
+Cập nhật 12-10-2026, Asia/Saigon | Revision S301 + quyết định owner O1–O14 | TRIỂN KHAI THEO GATE
+OWNER_DECISIONS=O1_O3_20260925; O4_20260927; O5_O6_20260930; O7_20261001; O8_20261002; O9_20261003; O10_20261004; O11_20261006; O12_20261007; O13_20261008; O14_20261012; BLOCK_BELOW_STATUS_TABLE; LATER_WINS_OVER_S2XX; OLD_VERDICTS_UNCHANGED
 OWNER_DECISIONS_FULL_TEXT_IN_GIT=87912523,b0802472,8298c107,fcc1906f,6d8eb81d,d04266e8,091506fa,a0ab19b8,fd5ad2be,add82689,7f97d3f8,5992d9f2,5ff3885e,054c0611
-HIỆN HÀNH 12-10 — GT-01..GT-09 ACCEPTED; GT-10-PC IN_PROGRESS THEO NEXT C1–C6 Ở O13.5: f1 VOID (DỪNG SAU AUDIT C4b, SỬA Ở 744a9f61); f2 VOID (P11 HỎNG VÌ DOCKER BACKEND TỰ QUAY CPU), f3 VOID (P11 DEFERRED CAMPAIGN_INFRA_DAILY_LIMIT); C3 c3h ĐẠT (RAW_VERIFIED); ĐANG CHẠY FINAL f4 CÙNG CLOSURE TỪ 14:00: P1–P10 NGAY, RUNNER DỪNG Ở P10→P11 (DOCKER TẮT, HASH THƯ MỤC RUN) TỚI 00:00:30 13-10, P11 TỚI KHOẢNG 06:30 (REVIEWER LÀ COORDINATOR, LEASE AGENTS.md), RỒI HAI CRITIC; GT-08B DEFERRED_OWNER_NO_ANDROID; GT-10 FULL CHỜ GT-08B
+HIỆN HÀNH 12-10 14:10 — GT-01..GT-09 ACCEPTED; O14 (OWNER 14:05): BỎ SOAK DÀI P11 VÀ FINAL, GT-10-PC NGHIỆM THU BẰNG DIỄN TẬP c3h (RAW_VERIFIED, CLOSURE 86dc9f1c) CỘNG HAI CRITIC C6 ĐANG CHẠY; f1–f4 VOID (f4 DỪNG 14:07); REVIEWER LÀ COORDINATOR (LEASE AGENTS.md); GT-08B DEFERRED_OWNER_NO_ANDROID; GT-10 FULL CHỜ GT-08B
 CURRENT_VALID_WP=GT-10-PC
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S300
+PLAN_REVISION=S301
 EXECUTION_AUTHORIZATION=OWNER_APPROVED_GATED
 EXECUTION_MODE=COORDINATOR_WITH_SCOPED_SUBAGENTS_AND_INDEPENDENT_CRITICS_OWNER_20261003; CREDIT_TURN_BUDGET_O13_6; ONE_COORDINATOR_THREAD; ULTRA_ONLY_HARD_DESIGN_AND_FINAL_CRITICS; FORK_TURNS_NONE_DEFAULT; NO_SELF_CREATED_HEARTBEAT; ONE_WRITER_PER_FILE; TWO_DIFFERENT_MODELS_SAME_HASH
 GOAL_STATE=ACTIVE; INDEPENDENT_CONSUMER_PILOT_AUTHORIZED; GT07_ACCEPTED; GT08A_ACCEPTED_O4_6; GT09_ACCEPTED_20261010; GT08B_DEFERRED_OWNER_NO_ANDROID; GT10_PC_OPEN; GT10_FULL_BLOCKED_BY_GT08B; SUPERAGENT_SEPARATE_OWNER_AUTHORIZED_LANE
@@ -16,7 +16,7 @@ GT06_STATUS=ACCEPTED; FORMAL25_TWO_ACCEPTED_PAIRS; FINAL_MANIFEST=318081a3c71f33
 GT07_STATUS=ACCEPTED_20261007; MATRIX=gt07-final-matrix-gt07-m1-final-20261007-04_30_OF_30; FINAL_MANIFEST=5d97343e7262e4c54f70f0135ffda1045b71c6cf13223321cf4b373e6f1714cc; DECISION=zdoc/reviews/20261003-gt07-integration/coordinator-acceptance-20261007.md
 GT08A_STATUS=ACCEPTED_20261007; MATRIX=gt08a-matrix-20261007-05_18_OF_18; FINAL_MANIFEST=49834d31db4996b18c15d9cada4ef030efb30d95f1e68e934251f9a5baafe675; DECISION=zdoc/reviews/20261007-gt08a-coordinator-acceptance.md; GT08B=DEFERRED_O12
 GT09_STATUS=ACCEPTED_20261010; MATRIX=gt09-matrix-final-20261010-74_K1_K15; FINAL_MANIFEST=8d9a2ec6de47bace6390d7320ed3cc256010b4b352c21c66c8600095abe3d5be; DECISION=zdoc/reviews/20261010-gt09-b7-74/coordinator-acceptance.md; K13=MEASURED_INCOMPATIBLE
-GT10_SOAK_POLICY=OWNER_O1_10X35_ON_RELEASE_SOURCE; REUSE_ACCEPTED_FORMAL25_MACHINERY; GT10PC_NEXT=O13_5_C1_C6; PROFILE_V6=8a2e599c40f927ffaff5ded5e48b6bf2a0f0a6bb3a23de31434a695f4258cb35; FORMAL25_SOURCE64=727f9039c1cc83239f5ef1daff13de5e92e37b5ba442e64be8341ca058800b58
+GT10_SOAK_POLICY=WAIVED_OWNER_O14_20261012_SHORT_CHECKS_C3H; WAS_OWNER_O1_10X35_ON_RELEASE_SOURCE; REUSE_ACCEPTED_FORMAL25_MACHINERY; GT10PC_NEXT=O13_5_C1_C6; PROFILE_V6=8a2e599c40f927ffaff5ded5e48b6bf2a0f0a6bb3a23de31434a695f4258cb35; FORMAL25_SOURCE64=727f9039c1cc83239f5ef1daff13de5e92e37b5ba442e64be8341ca058800b58
 O2_STATUS=ACCEPTED_IN_GT09_20261010; BRANCH=codex/hh3d-s14-bootstrap; DETAIL=studio/AUTHORING_STATUS.md; DIAGNOSTIC_RUNS=REFERENCE_ONLY_NOT_FINAL_INPUT_O13_3; NO_AUTH_OR_PUBLIC_CLAIM
 RUN_POLICY=FRESH_ID_PER_RUN; DRY_RUN_BEFORE_NATIVE_O10_2; VERIFY_SOURCE_STOP_LATCH_AND_O5_6_LOCK_BEFORE_START; PRESERVE_RAW_ON_FAILURE; REPAIR_ONLY_PROVEN_BOUNDARY; FIX_AND_CONTINUE_O6_4; NEVER_TICK_FROM_BANNER_OR_PARTIAL_PREFIX; CRITICS_READONLY_INDEPENDENT_SAME_HASH
 S_RECORD_HISTORY_ARCHIVE=8-9-hh3d-3/zdoc/reviews/20260925-plan-s-record-history-s256.txt; SHA256=14e4d00b5f574f9c06c8f4041cf284fa70f7bded09dee6d6d2914cdb1d3c5fdb; AUTHORITY=0; RAW_HEADER_BLOCK_S256_LINES_93_150_BYTE_FOR_BYTE; NO_GATE_CHANGE
@@ -32,10 +32,10 @@ STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng
 07 | GT-07 | Đa agent, publish, lease/fencing và recovery | GT-05, GT-06 | ACCEPTED
 08 | GT-08A | Clean Windows/Linux import/export/CI, target và cache matrix (O4.6) | GT-07 | ACCEPTED (GT-08B Android DEFERRED theo O12)
 09 | GT-09 | Lõi tạo nội dung O2 + agent conformance trên 2 mini-game 2D/3D | GT-08A | ACCEPTED (final -74, hai critic cùng hash)
-10 | GT-10 | Gói công cụ v0.1, cài/upgrade/rollback, bàn giao game | GT-09; GT-10-PC sau GT-09, GT-10 đầy đủ còn cần GT-08B | IN_PROGRESS (GT-10-PC P1–P12 đang mở)
+10 | GT-10 | Gói công cụ v0.1, cài/upgrade/rollback, bàn giao game | GT-09; GT-10-PC sau GT-09, GT-10 đầy đủ còn cần GT-08B | IN_PROGRESS (GT-10-PC theo O14: gói c3h + P12 hai critic)
 11 | GT-11 | Mở rộng lõi dùng chung để làm game: asset/license, catalog, kiểm hình, hiệu năng, bot, kit (O13.10) | GT-10-PC ACCEPTED; change request của game | PLANNED (chưa mở)
 
-QUYẾT ĐỊNH OWNER ĐANG HIỆU LỰC O1–O13 — BẢN HỢP NHẤT 12-10-2026 (S292)
+QUYẾT ĐỊNH OWNER ĐANG HIỆU LỰC O1–O14 — BẢN HỢP NHẤT 12-10-2026 (S301)
 Chỉ giữ luật còn áp dụng sau GT-08A ACCEPTED; khối mới nhất đặt đầu. Nguyên văn O1–O9 trước
 tinh gọn: git show 091506fa:8-9-hh3d-3/zdoc/8-9-godot-blender-agent-studio-plan.txt (dòng 40–561);
 bản gốc O1–O3 87912523, O4 b0802472, O5 8298c107, O6 fcc1906f; O10 đầy đủ (S259) ở a0ab19b8;
@@ -44,7 +44,34 @@ O10 và O11 trước khi rút gọn ở S270: git show fd5ad2be (cùng file, dò
 Mâu thuẫn thì quyết định muộn hơn thắng và thắng các dòng S2xx; raw và verdict cũ giữ nguyên,
 không hồi tố PASS. Số mục cũ (O1.4, O4.4, O6.4…) giữ nguyên để tham chiếu.
 
-O13 — 08-10-2026, cập nhật 12-10 (S271–S292), MỚI NHẤT, GT-09 ĐÃ NGHIỆM THU, GT-10-PC THEO MA TRẬN P
+O14 — 12-10-2026 14:05, MỚI NHẤT, OWNER BỎ KIỂM DÀI, XONG PLAN PC NGAY
+(AUTHORITY=OWNER_DIRECT_20261012; thắng O1.6, O12 và O13 ở P11, C5 và gói nghiệm thu GT-10-PC)
+Owner đọc giải thích về P11 (10 cặp × 35 đợt, khoảng 6 giờ máy yên; bắt rò bộ nhớ, handle, object
+sau phiên sửa dài; lỗi journal từng chỉ lộ ở đợt 26; thiếu P11 thì không có bằng chứng gói cài chịu
+phiên dài) rồi quyết: "bỏ qua mấy cái chạy kiểm tra lâu rườm rà, có thể chạy mấy cái kiểm tra ngắn …
+hoàn thành nhanh hết plan trừ mấy cái android điện thoại vì tôi chỉ làm game pc trước … để agent khác
+dùng công cụ godot này ngay … sau này nếu lỗi ở đâu khi làm game thì agent khác có thể tiếp tục sửa
+công cụ này"; xong plan thì tạo file txt hướng dẫn agent khác dùng, đặt ở zdoc.
+1. Bỏ P11 soak 10×35 và final dài (C5). Gói nghiệm thu là diễn tập gt10pc-rehearsal-20261012-c3h:
+   P1–P11 qua Scheduled Task, 1276 giây, exit 0, --verify-only RAW_VERIFIED; closure studio
+   86dc9f1c, commit 744a9f61, closure gói a6280d76, manifest Windows 0.1.0 3bb561df. P11 ở đó là
+   một vòng Godot thật có receipt host, không phải soak. Nhãn REHEARSAL_PASS giữ nguyên, không
+   remint, không gọi là FINAL hay soak PASS.
+2. P12 giữ: hai critic khác model, read-only, cùng gói c3h, theo checklist mục 9 của O13 (trừ ý
+   P11 10×35 và "một final, không ghép diễn tập"). Hai TICK=yes thì GT-10-PC ACCEPTED theo O14.
+3. Known limit ghi ở nghiệm thu và hướng dẫn: chưa đo rò bộ nhớ, handle, object qua phiên sửa dài
+   của gói cài; upgrade và rollback chỉ kiểm ở phiên ngắn. Giới hạn trong known-limits.md giữ nguyên.
+4. Android: GT-08B giữ DEFERRED (O12), GT-10 đầy đủ chờ GT-08B, không claim Android. Câu "chỉ làm
+   game pc trước" là căn cứ để plan HH World quyết mở H2-P0-01 trên PC (E4 ở O13.8).
+5. Sau nghiệm thu plan công cụ xong cho PC. Lỗi công cụ lộ ra khi làm game: agent game sửa trong
+   studio/, kiểm bằng test ngắn liên quan (unit, conformance, --rows của hàng chạm tới), không soak
+   dài; giữ contract schema, command_id, readback, UndoRedo, journal; mỗi sửa một commit có test,
+   ghi known limit mới nếu có. GT-11 không làm trước, mở theo change request của game (O13.10),
+   phần kiểm dài thay bằng test ngắn như trên.
+6. f4 dừng 14:07 theo O14 lúc ở P7 (driver, runner, task đã xóa; raw giữ; VOID). Hướng dẫn dùng:
+   zdoc/12-10-huong-dan-dung-cong-cu-godot-blender.txt.
+
+O13 — 08-10-2026, cập nhật 12-10 (S271–S292), TRƯỚC O14, GT-09 ĐÃ NGHIỆM THU, GT-10-PC THEO MA TRẬN P
 (AUTHORITY=OWNER_DELEGATED_20261008; owner giao reviewer toàn quyền sửa plan; ngưỡng O1/O4,
 DoD GT-09, GT-10-PC và O12 không hạ)
 Căn cứ 07-10 → 08-10 17:15 (nguyên văn ở add82689):
@@ -215,7 +242,7 @@ Căn cứ 11-10 18:30 → 12-10 09:30:
       sửa và kiểm bằng --verify-only trước.
    C4b (xong 12-10 12:00 trên c3g): P10 K8 tin nhãn status, P7 không kiểm nội dung last-good,
       known limits thiếu 1c và K13. Sửa ở 744a9f61, verifier mới qua trên raw c3g; f1 VOID.
-   C5 (đang chạy f4 từ 14:00; closure 86dc9f1c, commit 744a9f61; f2, f3 VOID ở P11): final P1–P11
+   C5 (BỎ theo O14; f4 dừng 14:07 lúc ở P7, VOID; f1–f3 VOID; đoạn dưới là lịch sử): final P1–P11
       qua Scheduled Task (P11 năm campaign 2 pair, mỗi campaign khoảng 70 phút). Trước khi bấm, đo
       CPU 60 giây bằng snapshot của watchdog: trung bình process ngoài dưới 25%, không process nào
       trên 10%. Docker Desktop 4.61 có backend tự quay khoảng 75% CPU (sau container và cả vài phút
@@ -231,9 +258,9 @@ Căn cứ 11-10 18:30 → 12-10 09:30:
       rồi mới cho P11 chạy; power request giữ máy không ngủ; không yên tới 03:00 thì hủy run trước
       P11 để giữ hạn mức. Stack dev Hoàn Hảo (toolstart-egui, 8 container, rustc) làm CPU ngoài
       39–86% lúc 13:35; owner tắt hết service lúc 13:46 và giao toàn quyền tắt thứ cần tắt.
-   C6 (1–2 giờ): P12 hai critic khác model cùng manifest; cả hai TICK=yes thì nghiệm thu theo
-      O4.3, ghi mục Đã nghiệm thu, đổi header. Sau đó lane công cụ dừng: GT-11 chỉ mở khi plan
-      game gửi change request, GT-08B khi owner có Android (O12).
+   C6 (theo O14, trên gói diễn tập c3h): P12 hai critic khác model cùng manifest; cả hai TICK=yes
+      thì nghiệm thu theo O4.3, ghi mục Đã nghiệm thu, đổi header. Sau đó lane công cụ dừng: GT-11
+      chỉ mở khi plan game gửi change request (O14.5), GT-08B khi owner có Android (O12).
 6. Credit và lượt (thay O11.7):
    - Một coordinator, một thread; WP mới thì thread mới với handoff ≤ 1 trang. Coordinator effort
      high; ultra chỉ cho subagent thiết kế khó và hai critic cuối.
@@ -316,6 +343,8 @@ Căn cứ 11-10 18:30 → 12-10 09:30:
    một final qua Scheduled Task, không ghép diễn tập; hai critic cùng hash. Đã thu hẹp, không
    đòi lại: revoke, expiry, security floor, mất key (GT-10 đầy đủ, ghi known limit ở P2);
    Android/GT-08B; kênh publish công khai; claim game hoàn chỉnh hay giống Y8.
+   Theo O14: gói là diễn tập c3h (một closure, một run qua Scheduled Task), P11 là một vòng Godot
+   thật của c3h; bỏ ý P11 10 pair × 35 và "một final, không ghép diễn tập"; ý khác giữ nguyên.
 10. Sau GT-10-PC: GT-11 mở rộng lõi dùng chung để làm game (owner 09-10; PLANNED, chưa mở).
    Mở khi GT-10-PC ACCEPTED; không thêm hàng vào K1–K15 hay P1–P12, không đổi NEXT của GT-10-PC.
    Mỗi mục là một change request theo phần 6 (HANDOFF) có consumer test của Superagent (SA-T0x)
@@ -929,6 +958,8 @@ Bài học GT-09 và GT-10-PC (08-10 17:15 → 12-10 10:30):
 93. Máy Balanced cắm điện ngủ sau 180 phút không có người dùng: P11 qua đêm cần power request
     (SetThreadExecutionState ES_SYSTEM_REQUIRED) suốt run. Lỗi ở khoảng nghỉ không được thả runner
     sớm. Hash 24 nghìn file lần đầu mất 3 phút vì Defender quét khi mở, lần sau 21 giây.
+94. Gate dài bị hạn mức đẩy sang ngày sau thì báo owner ngay chi phí (giờ máy, giờ chờ) và rủi ro
+    của phương án ngắn; owner chọn kiểm ngắn ở O14. Hạ gate là quyền owner, agent không tự hạ.
 
 LỊCH SỬ / CÁCH ĐỌC
 Bản S71 đầy đủ trước tinh gọn giữ tại reviews/20260918-plan-history-s71/
