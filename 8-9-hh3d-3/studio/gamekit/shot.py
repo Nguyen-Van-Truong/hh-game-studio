@@ -500,14 +500,20 @@ def capture(
             },
             "presence": presence,
             "import": imported,
+            "errors": list(run.errors[:20]),
             "process": run.summary(),
             "at": C.now_iso(),
         }
+        if run.errors:
+            receipt["ok"] = False
         if command_id is not None:
             receipt["command_id"] = command_id
         if writing:
             if command_id is None or baseline_res is None:
                 raise C.GamekitError("BAD_REQUEST", "--command-id is required to write a baseline")
+            if run.errors:
+                raise C.GamekitError("GODOT_FAILED", "script errors during capture; baseline not written",
+                                     errors=run.errors[:20])
             return _commit_baseline(project, command_id, request_digest, baseline_res, primary_bytes, primary_image, receipt)
         if baseline_res is not None:
             baseline_path = project.res_to_path(baseline_res, must_exist=True)
@@ -525,7 +531,7 @@ def capture(
             receipt["baseline"] = baseline_res
             receipt["compare"] = compared
             receipt["status"] = compared["status"]
-            receipt["ok"] = bool(compared["ok"])
+            receipt["ok"] = bool(compared["ok"]) and not run.errors
             if compared.get("diff"):
                 receipt["diff"] = compared["diff"]
         return receipt

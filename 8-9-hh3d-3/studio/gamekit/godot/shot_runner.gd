@@ -219,7 +219,7 @@ func _presence(path: String) -> Dictionary:
 		row["screen_rect"] = _rect_json(sprite_rect)
 		row["on_screen"] = _rect_on_screen(sprite_rect, vis)
 	elif node is AnimatedSprite2D:
-		var anim_rect: Rect2 = _canvas_rect(node as CanvasItem, (node as AnimatedSprite2D).get_rect())
+		var anim_rect: Rect2 = _canvas_rect(node as CanvasItem, _animated_rect(node as AnimatedSprite2D))
 		row["screen_rect"] = _rect_json(anim_rect)
 		row["on_screen"] = _rect_on_screen(anim_rect, vis)
 	elif node is Control:
@@ -257,6 +257,23 @@ func _point_on_screen(point: Vector2, visible: bool) -> bool:
 	if not visible:
 		return false
 	return _view().has_point(point)
+
+
+# AnimatedSprite2D has no get_rect() in 4.7; mirror its internal rect from the current frame.
+func _animated_rect(sprite: AnimatedSprite2D) -> Rect2:
+	var frames: SpriteFrames = sprite.sprite_frames
+	if frames == null or not frames.has_animation(sprite.animation):
+		return Rect2()
+	if sprite.frame < 0 or sprite.frame >= frames.get_frame_count(sprite.animation):
+		return Rect2()
+	var tex: Texture2D = frames.get_frame_texture(sprite.animation, sprite.frame)
+	if tex == null:
+		return Rect2()
+	var size: Vector2 = tex.get_size()
+	var pos: Vector2 = sprite.offset
+	if sprite.centered:
+		pos -= size / 2.0
+	return Rect2(pos, size)
 
 
 func _canvas_rect(item: CanvasItem, local: Rect2) -> Rect2:
