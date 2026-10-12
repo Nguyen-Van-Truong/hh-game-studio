@@ -1,10 +1,11 @@
 # HH3D-3 — routing hiện hành
 
-LEASE 12-10-2026 10:00 (owner): reviewer Claude là coordinator GT-10-PC tới nghiệm thu; Codex chỉ
-đọc, không ghi `studio/`, plan hay chạy run GT-10-PC khi lease còn. WIP 08:57 được tiếp quản.
-O14 12-10 14:05 (owner): bỏ soak dài P11 và final; f4 dừng 14:07 (VOID). GT-10-PC nghiệm thu bằng
-gói diễn tập gt10pc-rehearsal-20261012-c3h (closure 86dc9f1c, commit 744a9f61) cộng hai critic C6
-đang chạy. Tới khi nghiệm thu xong không ai sửa `studio/` (đổi closure là hỏng gói c3h).
+LEASE 12-10-2026 10:00 → 14:47 (owner): reviewer Claude làm coordinator GT-10-PC tới nghiệm thu; lease
+đã hết khi GT-10-PC ACCEPTED.
+GT-10-PC ACCEPTED 12-10 14:47 theo O14 (kiểm ngắn: gói diễn tập c3h, hai critic Grok); plan công cụ
+xong cho PC. Agent làm game dùng công cụ theo
+[12-10-huong-dan-dung-cong-cu-godot-blender.txt](zdoc/12-10-huong-dan-dung-cong-cu-godot-blender.txt).
+Lỗi công cụ lộ ra khi làm game: sửa trong `studio/` bằng test ngắn liên quan, không soak dài (O14.5).
 
 Owner steering 03-10-2026, credit và lượt theo O13.6 của tools plan (08-10): một coordinator, một
 thread; subagent dùng khi cần (audit, research, việc không quá khó, hai critic), fork_turns=none,
@@ -29,7 +30,7 @@ người dùng là inventory, không tự đóng. Không thay counter/status-gap
 Governance (plan, AGENTS.md) do coordinator và reviewer owner giao ở O13 sửa, đọc HEAD trước khi
 sửa; chi tiết run ghi vào studio/AUTHORING_STATUS.md (Hiện trạng ≤ 15 dòng ≤ 160 ký tự, bảng hàng
 của gate đang mở, Next), sửa cùng commit code, không commit chỉ để ghi sổ; giữ DSL sáu effect.
-GT-09 đã nghiệm thu. GT-10-PC làm theo NEXT C1–C6 ở O13.5 trên ma trận P1–P12 (O13.8), một runner
+GT-09, GT-10-PC đã nghiệm thu. Chạy lại ma trận P1–P12 (O13.8) khi sửa gói thì dùng một runner
 run_gt10pc_matrix.py, bằng chứng tầng D chỉ ở .local. Final chỉ nhận source đã freeze và tự chạy
 mọi producer (O13.3a), dừng ở hàng FAIL đầu; mỗi FAIL ghi loại PRODUCT/VERIFIER/INFRA (O13.4).
 Lỗi một bước native: reproducer gọi thẳng lệnh đó tới khi qua, rồi mới chạy hàng qua Scheduled
@@ -52,7 +53,7 @@ Ba plan TXT có scope riêng theo lệnh owner 18-09-2026:
 fixture độc lập; plan game kiểm lại trên workload thật. Không tạo master plan thứ tư. Các file 5-9 và unified cũ chỉ lịch sử/routing, không tick và không bổ sung
 DoD. Review/static evidence nằm trong zdoc/reviews/, không phải nguồn tiến độ.
 
-Thứ tự ưu tiên hiện tại: GT-01→GT-10. HH World đi H2-P0-01→H2-P9-02;
+Plan công cụ xong cho PC (GT-01→GT-10-PC, O14). HH World đi H2-P0-01→H2-P9-02;
 Superagent đi SA-01→SA-13 (SA-14 khóa sau Classic), owner mở 03-10 cho agent riêng; coordinator công cụ
 không kiêm. Hai game độc lập, không là dependency của nhau; research/plan không
 tự mở triển khai game khác. Không fork lõi Godot lúc đầu;
