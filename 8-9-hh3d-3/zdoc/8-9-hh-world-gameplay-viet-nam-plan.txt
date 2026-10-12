@@ -1,5 +1,5 @@
 HH WORLD — PLAN 2/3: GAMEPLAY, SOCIAL MULTIPLAYER, VIỆT NAM
-Ngày 18-09-2026, Asia/Saigon | Revision S23 | TRIỂN KHAI THEO GATE
+Cập nhật 12-10-2026, Asia/Saigon | Revision S24 | TRIỂN KHAI THEO GATE | LANE THỬ PC O16
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO GAME
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -37,19 +37,50 @@ STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng
 32 | H2-P9-02 | Quan sát vận hành và quyết định mở rộng | H2-P9-01 | PLANNED
 
 CURRENT_VALID_WP=H2-P0-01
-DISPATCHABLE=NO_UNTIL_GT10_ACCEPTED
-EXECUTION_AUTHORIZATION=OWNER_APPROVED_GATED
-IMPLEMENTATION=NOT_STARTED
+DISPATCHABLE=PC_TRIAL_LANE_O16_ONLY; FULL_DISPATCH_NO_UNTIL_GT10_ACCEPTED
+EXECUTION_AUTHORIZATION=OWNER_APPROVED_GATED; PC_TRIAL_OWNER_O16_20261012
+IMPLEMENTATION=PC_TRIAL_STARTED_20261012; RESULTS_CANDIDATE_ONLY
 PLAN_DESIGN_CRITICS=NO_ACCEPTED_VERDICT_S6_TO_S23
 RUNTIME_ACCEPTANCE=NONE
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/game-and-services
 PLAN_ROLE=GAME_SOURCE_OF_PROGRESS
-PLAN_REVISION=S23
+PLAN_REVISION=S24
+TRIAL_ROOT=8-9-hh3d-3/12-10-hh-world-grokdo
+TRIAL_STATUS=8-9-hh3d-3/12-10-hh-world-grokdo/TRIAL_STATUS.md
 REVIEW_BASE_COMMIT=b4195ca
 HISTORICAL_REJECTED_COMMIT=54d0c7c
 HISTORICAL_STUDIO_COMMIT=3cc7a85f730c99963a5a64079a0e02dc20edbd40
 HISTORICAL_SOCIAL_COMMIT=71629923641178171ec4339143b3cf1472618adc
+
+CẬP NHẬT S24 — 12-10-2026, LANE THỬ PC (OWNER O16)
+Công cụ: GT-01..GT-09 và GT-10-PC ACCEPTED (O14, kiểm ngắn); gamekit GT-11 ACCEPTED_O15_QUICK
+(lệnh hh, mục 13 của 8-9-hh3d-3/zdoc/12-10-huong-dan-dung-cong-cu-godot-blender.txt); Godot
+4.7.2 và Blender 5.2.1 là bản pin của công cụ. GT-08B Android DEFERRED (O12, chưa có máy) nên
+GT-10 toàn gói chưa ACCEPTED và dispatch đầy đủ vẫn NO.
+Owner O16 (12-10 20:24, ghi ở plan công cụ): thử làm HH World 3D trên PC bằng Cursor CLI
+grok-4.7-xhigh trong TRIAL_ROOT (git riêng, không remote, exclude ở repo cha). Luật lane thử:
+1. Không đổi 32 WP, dependency, Q00–Q06, EX, LEGAL-VN hay DoD. Kết quả là CANDIDATE, nhãn
+   PC_TRIAL, PROOF_CLASS theo mục 8.3; không ACCEPTED, không tick. Hàng Android, máy thật khác,
+   human, legal/counsel, WAN, ký và phát hành ghi DEFERRED hoặc UNVERIFIED, không chặn việc PC.
+2. Thứ tự: P0-01 phần PC (lock Godot/Blender pin, phiên bản và hash công cụ, capability matrix
+   nhu cầu game → lệnh hh → SUPPORTED_TESTED/UNVERIFIED/UNSUPPORTED; gói ký GT-10-PC nằm trong
+   studio/.local và chưa gồm gamekit nên ghi GAP, coordinator nhận gói sau) → P0-02 tối thiểu
+   (quality-profile của máy PC này, identity-content stub; release profile và legal là
+   BLOCKED_OWNER_COUNSEL, chỉ INTERNAL_ONLY với dữ liệu giả) → P0-03 → P2-01 → P2-02 → P2-03 →
+   P2-04, mỗi bước là lane độc lập theo 8.1, chưa nghiệm thu trước dependency. P1-02 loopback và
+   phần Windows của P1-03 làm khi slice Solo chạy được. P3 trở đi và bản đồ thật (P7) chưa mở.
+3. Đường dẫn game/, assets-src/, contracts/, tools/, tests/, evidence/ tính từ TRIAL_ROOT. Chỉ
+   đọc studio/, zdoc/ và repo cha; không sửa Superagent, Kho Bí Ẩn, Snake, Vault Fighters, Hoàn
+   Hảo. Đường dẫn ./ trong file này là 8-9-hh3d-3/zdoc/, kể cả trong bản copy ở TRIAL_ROOT.
+4. Dùng công cụ qua lệnh hh (chạy từ 8-9-hh3d-3) với HH_GAMEKIT_STATE=TRIAL_ROOT/.local/hh-state.
+   Lỗi hoặc thiếu capability: minimal repro vào TRIAL_ROOT/docs/tool-gaps.md; coordinator sửa
+   studio/ theo O14.5. Không sửa addon sinh ra, không eval tùy ý để lách.
+5. Asset chỉ CC0 hoặc tự làm (ngân sách owner bằng 0). Chữ tiếng Việt dùng font mặc định của
+   engine hoặc SystemFont, không thêm file font có license khác.
+6. Mỗi WP hoặc phần WP một commit trong git của TRIAL_ROOT; evidence ở evidence/<WP>/<run_id>/
+   gồm lệnh, exit thật, source hash, ảnh. Tiến độ lane ghi ở TRIAL_STATUS; bản copy plan trong
+   TRIAL_ROOT chỉ đọc, coordinator sửa plan ở zdoc rồi copy lại.
 
 CẬP NHẬT S23 — PHẠM VI GAME, CHƯA TRIỂN KHAI
 Làm rõ kit kiến trúc P5, source geometry thực tại P7-01 trước converter,
@@ -91,8 +122,8 @@ Không cho phép sửa các dịch vụ xã hội/địa lý đang vận hành.
 Bản gộp U2 và mọi master HH2 cũ chỉ lịch sử. Các yêu cầu sản phẩm/quality/
 ngoại lệ/server tự chứa ở file này; schema/lock/evidence không là nguồn tiến độ bổ sung.
 Mâu thuẫn schema/plan phải reconcile đúng scope, không đổi acceptance để hợp
-code đã lỡ làm. Lượt này chỉ tạo plan: chưa làm game/server, cài engine, lấy
-map, thuê máy hay phát hành.
+code đã lỡ làm. S23 chỉ tạo plan; từ S24 có lane thử PC (O16, đầu file). Chưa
+lấy map, thuê máy hay phát hành.
 
 Mục lục: 1 Lựa chọn; 2 Consumer contract; 3 Game/online/durability/geo/
 LEGAL-VN; 4 Q00–Q06; 5 Specs 32 H2; 6 EX01–EX53; 7 Server/cost; 8 Workflow;
@@ -2565,8 +2596,8 @@ cạnh nhiều Blender UI khi máy thiếu RAM. Queue/backpressure tốt hơn OO
 8.2 Giao việc đủ chi tiết, model đúng yêu cầu hiện hành
 
 Coordinator viết/sửa plan, chia việc, kiểm result và quyết định. Model/effort
-worker và critic theo lệnh owner mới nhất/nested AGENTS.md; hiện cho phép ba
-Codex Astra ultra có scope độc lập. Routing Grok-only/cấm Codex ngày10-09 là
+worker và critic theo lệnh owner mới nhất/nested AGENTS.md; lane thử O16 dùng
+Cursor CLI grok-4.7-xhigh (owner 12-10). Routing Grok-only/cấm Codex ngày10-09 là
 lịch sử, không yêu cầu đăng nhập Grok hoặc chặn việc đã được owner cho phép.
 Không tự chuyển model khi gặp quota/auth; giữ lỗi thực và tiếp tục lane độc
 lập có quyền. Không in tokens; không giả hỗ trợ fast hoặc kết quả subagent.
@@ -2828,6 +2859,10 @@ S23 (18-09): cụ thể hóa producer kit P5→consumer P7, dời mẫu geometry
 vào P7-01 trước converter, social feedback sớm và H2-T01–04. Giữ32WP, không
 claim runtime/human/rights acceptance; sửa tài liệu không là final critic.
 
+S24 (12-10): ghi trạng thái công cụ (GT-10-PC, gamekit GT-11, GT-08B DEFERRED) và lane thử PC
+theo owner O16 trong 8-9-hh3d-3/12-10-hh-world-grokdo; không đổi 32 WP, dependency hay DoD, kết
+quả lane chỉ là CANDIDATE.
+
 9.3 Kiểm bàn giao và giới hạn
 Bảng32H2/32spec, dependency một chiều GT-10→H2-P0-01, không vòng; Q00–06,
 EX01–EX53, P01–P08/A/DB/G/LEGAL-VN/SCALE-LOCKS và sizing tự chứa. H2-P2-04 kiểm workflow asset-to-
@@ -2851,4 +2886,4 @@ rollback=quay về bản tốt đã kiểm, không đè thay đổi mới chưa 
 
 
 END_OF_GAME_PLAN
-DATE=2026-09-18 Asia/Saigon
+DATE=2026-10-12 Asia/Saigon
