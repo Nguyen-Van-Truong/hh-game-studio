@@ -1,12 +1,12 @@
 HH STUDIO — PLAN 1/3: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Cập nhật 12-10-2026, Asia/Saigon | Revision S299 + quyết định owner O1–O13 | TRIỂN KHAI THEO GATE
+Cập nhật 12-10-2026, Asia/Saigon | Revision S300 + quyết định owner O1–O13 | TRIỂN KHAI THEO GATE
 OWNER_DECISIONS=O1_O3_20260925; O4_20260927; O5_O6_20260930; O7_20261001; O8_20261002; O9_20261003; O10_20261004; O11_20261006; O12_20261007; O13_20261008; BLOCK_BELOW_STATUS_TABLE; LATER_WINS_OVER_S2XX; OLD_VERDICTS_UNCHANGED
 OWNER_DECISIONS_FULL_TEXT_IN_GIT=87912523,b0802472,8298c107,fcc1906f,6d8eb81d,d04266e8,091506fa,a0ab19b8,fd5ad2be,add82689,7f97d3f8,5992d9f2,5ff3885e,054c0611
-HIỆN HÀNH 12-10 — GT-01..GT-09 ACCEPTED; GT-10-PC IN_PROGRESS THEO NEXT C1–C6 Ở O13.5: f1 VOID (DỪNG SAU AUDIT C4b, SỬA Ở 744a9f61); f2 VOID (P11 HỎNG VÌ DOCKER BACKEND TỰ QUAY CPU), f3 VOID (P11 DEFERRED CAMPAIGN_INFRA_DAILY_LIMIT); C3 c3h ĐẠT (RAW_VERIFIED); FINAL f4 CÙNG CLOSURE CHẠY QUA ĐÊM, P11 SAU 00:00 13-10 TRONG CỬA SỔ OWNER XÁC NHẬN MÁY RẢNH (DOCKER TẮT, KHÔNG BUILD) (REVIEWER LÀ COORDINATOR, LEASE AGENTS.md), RỒI HAI CRITIC; GT-08B DEFERRED_OWNER_NO_ANDROID; GT-10 FULL CHỜ GT-08B
+HIỆN HÀNH 12-10 — GT-01..GT-09 ACCEPTED; GT-10-PC IN_PROGRESS THEO NEXT C1–C6 Ở O13.5: f1 VOID (DỪNG SAU AUDIT C4b, SỬA Ở 744a9f61); f2 VOID (P11 HỎNG VÌ DOCKER BACKEND TỰ QUAY CPU), f3 VOID (P11 DEFERRED CAMPAIGN_INFRA_DAILY_LIMIT); C3 c3h ĐẠT (RAW_VERIFIED); ĐANG CHẠY FINAL f4 CÙNG CLOSURE TỪ 14:00: P1–P10 NGAY, RUNNER DỪNG Ở P10→P11 (DOCKER TẮT, HASH THƯ MỤC RUN) TỚI 00:00:30 13-10, P11 TỚI KHOẢNG 06:30 (REVIEWER LÀ COORDINATOR, LEASE AGENTS.md), RỒI HAI CRITIC; GT-08B DEFERRED_OWNER_NO_ANDROID; GT-10 FULL CHỜ GT-08B
 CURRENT_VALID_WP=GT-10-PC
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S299
+PLAN_REVISION=S300
 EXECUTION_AUTHORIZATION=OWNER_APPROVED_GATED
 EXECUTION_MODE=COORDINATOR_WITH_SCOPED_SUBAGENTS_AND_INDEPENDENT_CRITICS_OWNER_20261003; CREDIT_TURN_BUDGET_O13_6; ONE_COORDINATOR_THREAD; ULTRA_ONLY_HARD_DESIGN_AND_FINAL_CRITICS; FORK_TURNS_NONE_DEFAULT; NO_SELF_CREATED_HEARTBEAT; ONE_WRITER_PER_FILE; TWO_DIFFERENT_MODELS_SAME_HASH
 GOAL_STATE=ACTIVE; INDEPENDENT_CONSUMER_PILOT_AUTHORIZED; GT07_ACCEPTED; GT08A_ACCEPTED_O4_6; GT09_ACCEPTED_20261010; GT08B_DEFERRED_OWNER_NO_ANDROID; GT10_PC_OPEN; GT10_FULL_BLOCKED_BY_GT08B; SUPERAGENT_SEPARATE_OWNER_AUTHORIZED_LANE
@@ -215,7 +215,7 @@ Căn cứ 11-10 18:30 → 12-10 09:30:
       sửa và kiểm bằng --verify-only trước.
    C4b (xong 12-10 12:00 trên c3g): P10 K8 tin nhãn status, P7 không kiểm nội dung last-good,
       known limits thiếu 1c và K13. Sửa ở 744a9f61, verifier mới qua trên raw c3g; f1 VOID.
-   C5 (chưa đạt; closure 86dc9f1c, commit 744a9f61; f2, f3 VOID ở P11): final P1–P11
+   C5 (đang chạy f4 từ 14:00; closure 86dc9f1c, commit 744a9f61; f2, f3 VOID ở P11): final P1–P11
       qua Scheduled Task (P11 năm campaign 2 pair, mỗi campaign khoảng 70 phút). Trước khi bấm, đo
       CPU 60 giây bằng snapshot của watchdog: trung bình process ngoài dưới 25%, không process nào
       trên 10%. Docker Desktop 4.61 có backend tự quay khoảng 75% CPU (sau container và cả vài phút
@@ -225,10 +225,12 @@ Căn cứ 11-10 18:30 → 12-10 09:30:
       chạy tiếp; Docker tắt suốt P11, bật lại sau final; log thao tác đưa critic. Xong là --verify-only
       và self-check mục 3 luôn. Hỏng INFRA giữa soak thì chạy lại ID mới trên cùng closure (O1.7).
       Hạn mức INFRA_ABORT là 2 lần mỗi ngày local trên mọi campaign gt06-* (require_infra_budget);
-      hết hạn mức thì mọi campaign ngày đó DEFERRED, nên f4 bấm khoảng 23:45 để P11 sang ngày mới.
-      P11 cần khoảng 6 giờ máy yên; stack dev Hoàn Hảo của owner (toolstart-egui, 8 container,
-      rustc) làm CPU ngoài 39–86% lúc 13:35. Agent không tự tắt dịch vụ Hoàn Hảo: owner xác nhận
-      cửa sổ rảnh, ngay trước khoảng nghỉ P10→P11 agent kiểm lại process của owner.
+      hết hạn mức thì mọi campaign ngày đó DEFERRED. Owner 12-10 13:50: việc tới lượt thì chạy ngay,
+      nên f4 chạy P1–P10 ngay; driver hh_night.py (pythonw, ngoài Cursor) giữ runner ở khoảng nghỉ,
+      Docker tắt, hash thư mục run lúc dừng và trước khi chạy tiếp, tới 00:00:30; đo yên hai lần liền
+      rồi mới cho P11 chạy; power request giữ máy không ngủ; không yên tới 03:00 thì hủy run trước
+      P11 để giữ hạn mức. Stack dev Hoàn Hảo (toolstart-egui, 8 container, rustc) làm CPU ngoài
+      39–86% lúc 13:35; owner tắt hết service lúc 13:46 và giao toàn quyền tắt thứ cần tắt.
    C6 (1–2 giờ): P12 hai critic khác model cùng manifest; cả hai TICK=yes thì nghiệm thu theo
       O4.3, ghi mục Đã nghiệm thu, đổi header. Sau đó lane công cụ dừng: GT-11 chỉ mở khi plan
       game gửi change request, GT-08B khi owner có Android (O12).
@@ -924,6 +926,9 @@ Bài học GT-09 và GT-10-PC (08-10 17:15 → 12-10 10:30):
 92. Máy dùng chung với owner: 13:26–13:32 owner mở cockpit-tools, toolstart-egui và stack dev Hoàn
     Hảo (Docker bật lại 8 giây sau khi agent tắt), cùng rustc build. P11 chỉ chạy trong cửa sổ owner
     xác nhận máy rảnh; trước khi bấm final hỏi owner nếu thấy process của owner đang chạy.
+93. Máy Balanced cắm điện ngủ sau 180 phút không có người dùng: P11 qua đêm cần power request
+    (SetThreadExecutionState ES_SYSTEM_REQUIRED) suốt run. Lỗi ở khoảng nghỉ không được thả runner
+    sớm. Hash 24 nghìn file lần đầu mất 3 phút vì Defender quét khi mở, lần sau 21 giây.
 
 LỊCH SỬ / CÁCH ĐỌC
 Bản S71 đầy đủ trước tinh gọn giữ tại reviews/20260918-plan-history-s71/
