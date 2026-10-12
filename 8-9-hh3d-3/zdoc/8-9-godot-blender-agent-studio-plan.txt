@@ -845,7 +845,9 @@ W10 Export Windows/Linux/Web bằng template pin (cài từ gói .tpz đã kiể
    thoát 0 | PLANNED
 W11 Verifier gói: G1 (P11 ngắn đọc exit từ process-exit.json của host), G2 (P4 ghi receipt host
    từng ca) | unit test | unit test xanh; G2 chỉ chứng minh đủ ở lần đóng gói sau (known limit) |
-   PLANNED
+   DONE 8a9d5407 (test_gt10pc_g1_g2 8/8, test_gt10pc* 43 ok, package 9/9; hàng P11 c3h đọc lại
+   được pid 37680, 20620, bản sửa exit bị từ chối; raw c3h không có receipt P4 nên verify-only c3h
+   báo thêm P4_NEG_RECEIPTS_ABSENT, đúng thiết kế)
 W12 Hướng dẫn thêm mục gamekit và bảng lệnh; AUTHORING_STATUS; một critic Grok read-only cuối đợt;
    đóng GT-11 ACCEPTED_O15_QUICK | — | selftest all xanh; critic TICK=yes | PLANNED
 
