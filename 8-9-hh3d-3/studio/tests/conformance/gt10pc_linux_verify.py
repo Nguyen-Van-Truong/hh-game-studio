@@ -178,5 +178,69 @@ def verify_linux(root: Path, *, artifact: Path, upgrade_artifact: Path,
             _process(native_base, "parse", receipt.get("parse"), ownership="process_group")
             lifecycle = _lifecycle(_process(native_base, "godot", receipt.get("process"), ownership="process_group"))
             checked.append({"fixture": fixture, "phase": name, "lifecycle": lifecycle, "exit": 0})
+    from studio.tests.conformance.gt10pc_p4_negative import verify_negative
+    negative = verify_negative(native_root / "negative", keys)
+    need(negative.get("status") == "P4_NEG_VERIFIED" and negative.get("acceptance") is False,
+         "GT10PC_LINUX_P4_NEGATIVE")
+    need(digest_file(native_root / "negative" / "incompatible-schema.hhpkg")
+         == request.get("negative_incompatible_sha256")
+         and negative["cases"]["untrusted-rollback"]["manifest_sha256"]
+         == request.get("negative_manifest_sha256"), "GT10PC_LINUX_P4_NEGATIVE_PIN")
     return {"status": "DIAGNOSTIC_LINUX_VERIFIED", "authority": 0, "acceptance": False,
-            "fixtures": checked, "evidence_files": len(doc["evidence"]), "artifact_sha256": package["archive_sha256"]}
+            "fixtures": checked, "negative": negative, "evidence_files": len(doc["evidence"]),
+            "artifact_sha256": package["archive_sha256"]}
+
+
+def verify_p10_container(root: Path) -> dict:
+    """Re-read purpose=p10 host receipts. Lifecycle trees do not satisfy this."""
+    from studio.tests.conformance.gt10pc_linux_producer import CONTEXT, IMAGE
+    root = Path(root)
+    doc = _read(root / "producer.json")
+    need(doc.get("schema") == "hh-gt10pc-linux-producer-1" and doc.get("purpose") == "p10"
+         and doc.get("authority") == 0 and doc.get("acceptance") is False
+         and doc.get("mode") == "DIAGNOSTIC" and doc.get("status") == "DIAGNOSTIC_PASS"
+         and doc.get("error") is None and doc.get("target") == "Linux-headless"
+         and doc.get("image_id") == IMAGE and doc.get("context") == CONTEXT,
+         "GT10PC_P10_LINUX_PRODUCER")
+    host = root / "host"
+
+    def receipt(label: str) -> tuple[dict, str]:
+        row = _read(host / (label + "-receipt.json"))
+        host_json = _read(host / (label + "-host.json"))
+        stdout = host / (label + "-stdout.txt")
+        stderr = host / (label + "-stderr.txt")
+        need(row.get("stdout") == stdout.name and row.get("stderr") == stderr.name
+             and stdout.is_file() and stderr.is_file(), "GT10PC_P10_LINUX_STREAM:" + label)
+        pid = host_json.get("target_pid")
+        need(type(pid) is int and pid > 0 and row.get("target_pid") == pid
+             and host_json.get("exit_code") == 0 and row.get("exit_code") == 0
+             and row.get("wrapper_exit_code") == 0 and row.get("timed_out") is False
+             and row.get("tree_verified") is True, "GT10PC_P10_LINUX_HOST:" + label)
+        return host_json, stdout.read_text(encoding="utf-8")
+
+    _, image_text = receipt("image")
+    images = strict_json(image_text.encode())
+    need(isinstance(images, list) and len(images) == 1 and images[0].get("Id") == IMAGE
+         and images[0].get("Os") == "linux" and images[0].get("Architecture") == "amd64",
+         "GT10PC_P10_LINUX_IMAGE")
+    _, create_text = receipt("create")
+    _, created_text = receipt("inspect-created")
+    _, exited_text = receipt("inspect-exited")
+    need(not (host / "run-stderr.txt").read_bytes(), "GT10PC_P10_LINUX_RUN_STDERR")
+    receipt("run")
+    created = strict_json(created_text.encode())
+    exited = strict_json(exited_text.encode())
+    container_id = create_text.strip()
+    need(isinstance(created, list) and isinstance(exited, list) and len(created) == 1 and len(exited) == 1,
+         "GT10PC_P10_LINUX_INSPECT")
+    for observed in (created[0], exited[0]):
+        need(observed.get("Id") == container_id and observed.get("Image") == IMAGE,
+             "GT10PC_P10_LINUX_INSPECT")
+        mounts = observed.get("Mounts", [])
+        need(len(mounts) == 2 and {item.get("Destination"): item.get("RW") for item in mounts}
+             == {"/input": False, "/evidence": True}, "GT10PC_P10_LINUX_MOUNTS")
+    state = exited[0].get("State", {})
+    need(state.get("ExitCode") == 0 and state.get("OOMKilled") is False
+         and state.get("Running") is False and state.get("Status") == "exited",
+         "GT10PC_P10_LINUX_EXIT")
+    return {"image_id": IMAGE, "container_id": container_id, "exit_code": 0}

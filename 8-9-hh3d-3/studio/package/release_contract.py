@@ -135,7 +135,7 @@ def _safe_member(name: str) -> None:
         need(SEGMENT.fullmatch(part) and part not in (".", "..")
              and not part.endswith(".") and part.split(".")[0].upper() not in DEVICES,
              "nonportable package member")
-    need(not any(p.casefold() in EXCLUDED_DIRS for p in parts)
+    need(not any(p.casefold() in EXCLUDED_DIRS or p.casefold() in ("zdoc", "reviews") for p in parts)
          and not name.casefold().startswith(("zdoc/", "evidence/", "payload/studio/evidence/")),
          "generated evidence/cache cannot ship")
 

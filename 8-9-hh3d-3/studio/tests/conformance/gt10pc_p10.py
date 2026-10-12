@@ -3,7 +3,9 @@
 P10 is deliberately separate from the historical GT-09 matrix.  It installs
 the signed package into a disposable consumer, snapshots the exact installed
 ``payload/studio`` tree, and executes the GT-08A PC rows plus fresh K8/K10
-catalog publications from that snapshot.  No retained GT-09 evidence is used
+catalog publications from that snapshot.  Phase ``linux`` is a second start of
+the pinned GT-10-PC container (``purpose=p10``) for L01/L02 and the K10 smoke
+trace.  No retained GT-09 evidence is used
 as a substitute.  The producer and verifier only emit authority-zero
 diagnostics; the coordinator owns acceptance.
 """
@@ -137,6 +139,96 @@ def _verify_child_receipt(root: Path, row: dict[str, Any]) -> None:
               "GT10PC_P10_CHILD_STREAM_HASH")
 
 
+def verify_engine_host(directory: Path, label: str, code: str = "GT10PC_P10_ENGINE_HOST") -> dict[str, Any]:
+    """Re-read ``*-host.json`` and rehash the streams named by the receipt."""
+    host = _json(directory / (label + "-host.json"))
+    receipt = _json(directory / (label + "-receipt.json"))
+    pid = host.get("target_pid")
+    _need(type(pid) is int and pid > 0 and receipt.get("target_pid") == pid, code)
+    _need(host.get("exit_code") == 0 and receipt.get("exit_code") == 0, code)
+    _need(receipt.get("wrapper_exit_code") == 0 and receipt.get("timed_out") is False
+          and receipt.get("tree_verified") is True, code)
+    for field in ("stdout", "stderr"):
+        name = receipt.get(field)
+        _need(isinstance(name, str) and name == label + "-" + field + ".txt", code)
+        stream = directory / name
+        _need(stream.is_file() and _sha(stream) == receipt.get(field + "_sha256"), code)
+    _need(not (directory / (label + "-stderr.txt")).read_bytes(), code + "_STDERR")
+    return host
+
+
+def _simulation_world(world: dict[str, Any]) -> dict[str, Any]:
+    return {key: value for key, value in world.items() if not str(key).startswith("input_")}
+
+
+def _held_interval(inputs: list[dict[str, Any]], states: list[dict[str, Any]], key: int,
+                   *, require_sample: bool) -> None:
+    press = next((edge for edge in inputs if edge.get("key") == key and edge.get("state") == "pressed"), None)
+    release = next((edge for edge in inputs
+                    if edge.get("key") == key and edge.get("state") == "released"
+                    and press is not None and type(edge.get("wall_tick")) is int
+                    and type(press.get("wall_tick")) is int and edge["wall_tick"] > press["wall_tick"]), None)
+    _need(press is not None and release is not None, "GT10PC_P10_K10_HELD_EDGE")
+    start, stop = press["wall_tick"], release["wall_tick"]
+    middles = [state for state in states if type(state.get("wall_tick")) is int
+               and start < state["wall_tick"] < stop]
+    if require_sample:
+        _need(bool(middles), "GT10PC_P10_K10_HELD_SAMPLE")
+    for state in middles:
+        held = state.get("held_keys")
+        _need(isinstance(held, list) and key in held, "GT10PC_P10_K10_HELD_KEYS")
+
+
+def verify_k10_trace(stdout_text: str) -> None:
+    """Check a fixture-lifecycle smoke log. Does not accept a 15-minute playtest pack."""
+    from studio.tests.godot.fixture_lifecycle_manifest import parse_log
+    summary, states, inputs = parse_log(stdout_text)
+    _need(summary.get("seed") == 90127, "GT10PC_P10_K10_SEED")
+    _need(summary.get("mode") == "smoke", "GT10PC_P10_K10_MODE")
+    _need(summary.get("freeze_errors") == 0, "GT10PC_P10_K10_FREEZE")
+    _need(type(summary.get("pause_frames")) is int and summary["pause_frames"] > 1,
+          "GT10PC_P10_K10_PAUSE_FRAMES")
+    _need(summary.get("lifecycle_complete") is True, "GT10PC_P10_K10_COMPLETE")
+    counts = summary.get("counts")
+    _need(isinstance(counts, dict), "GT10PC_P10_K10_COUNTS")
+    for command in ("start", "pause", "resume", "restart", "quit"):
+        _need(type(counts.get(command)) is int and counts[command] >= 1, "GT10PC_P10_K10_COUNTS")
+    for state in states:
+        _need(state.get("seed") == 90127, "GT10PC_P10_K10_STATE_SEED")
+    pressed: set[int] = set()
+    for edge in inputs:
+        key = edge.get("key")
+        state_name = edge.get("state")
+        _need(type(key) is int and state_name in ("pressed", "released"), "GT10PC_P10_K10_EDGE")
+        if state_name == "pressed" and key not in pressed:
+            pressed.add(key)
+        elif state_name == "released" and key in pressed:
+            pressed.remove(key)
+        else:
+            _need(False, "GT10PC_P10_K10_EDGE_PAIR")
+    # KEY_D is held across many physics ticks. KEY_E is a one-tick press/release.
+    _held_interval(inputs, states, 68, require_sample=True)
+    _held_interval(inputs, states, 69, require_sample=False)
+    events = [state.get("event") for state in states]
+    for name in ("menu", "start", "pause", "resume", "quit"):
+        _need(name in events, "GT10PC_P10_K10_EVENT")
+    pauses = [state for state in states if state.get("event") == "pause"]
+    _need(pauses, "GT10PC_P10_K10_PAUSE")
+    pause = pauses[0]
+    resumes = [state for state in states[states.index(pause) + 1:] if state.get("event") == "resume"]
+    _need(resumes, "GT10PC_P10_K10_RESUME")
+    resume = resumes[0]
+    _need(pause.get("tree_paused") is True and resume.get("tree_paused") is False,
+          "GT10PC_P10_K10_TREE_PAUSED")
+    _need(type(pause.get("wall_tick")) is int and type(resume.get("wall_tick")) is int
+          and resume["wall_tick"] > pause["wall_tick"], "GT10PC_P10_K10_WALL_TICK")
+    pause_world = pause.get("world")
+    resume_world = resume.get("world")
+    _need(isinstance(pause_world, dict) and isinstance(resume_world, dict)
+          and _simulation_world(pause_world) == _simulation_world(resume_world),
+          "GT10PC_P10_K10_PAUSE_WORLD")
+
+
 def _environment(runtime_parent: Path) -> dict[str, str]:
     env = os.environ.copy()
     env["PYTHONPATH"] = str(runtime_parent)
@@ -221,17 +313,18 @@ def run_gt08a(output: Path, runtime: Path, manifest: dict, *, tooling: Path,
     _need(win.resolve() == godot_console.resolve()
           and _sha(win) == lock["godot"]["console_sha256"], "GT10PC_P10_GT08A_BINARY")
     import_dir = output / "gt08a" / "W02"; import_dir.mkdir(parents=True)
-    imported = mod.run_process([str(win), "--headless", "--path", str(project), "--editor", "--quit"],
-                               project, env, 90, import_dir)
-    _need(imported["status"] == "PASS" and not (import_dir / "stderr.txt").read_bytes(),
-          "GT10PC_P10_GT08A_W02")
+    imported = _child(import_dir, [str(win), "--headless", "--path", str(project), "--editor", "--quit"],
+                      cwd=project, env=env, timeout=90, label="w02")
+    _need(_clean(imported), "GT10PC_P10_GT08A_W02")
+    verify_engine_host(import_dir, "w02", "GT10PC_P10_GT08A_W02_HOST")
     rows.append({"id": "W02", "status": "PASS", "source_closure": source, "process": imported,
                  "cache_key": mod.cache_key(source, tools, "Windows")})
     export_dir = output / "gt08a" / "W03"; export_dir.mkdir(parents=True)
     export = export_dir / "fixture.exe"
-    exported = mod.run_process([str(win), "--headless", "--path", str(project), "--export-release",
-                                "Windows Desktop", str(export)], project, env, 180, export_dir)
-    _need(exported["status"] == "PASS" and export.is_file() and export.stat().st_size > 0,
+    exported = _child(export_dir, [str(win), "--headless", "--path", str(project), "--export-release",
+                                   "Windows Desktop", str(export)],
+                      cwd=project, env=env, timeout=180, label="w03")
+    _need(_clean(exported) and export.is_file() and export.stat().st_size > 0,
           "GT10PC_P10_GT08A_W03")
     rows.append({"id": "W03", "status": "PASS", "source_closure": source, "process": exported,
                  "artifact_sha256": _sha(export), "cache_key": mod.cache_key(source, tools, "Windows")})
@@ -321,12 +414,55 @@ def _run_catalog_processes(output: Path, runtime: Path, *, blender: Path, godot_
             "blender": str(content), "registered": {k: str(v) for k, v in registered.items()},
             "publications": {k: str(v) for k, v in pubs.items()},
             "conformance": str(report_path), "conformance_sha256": _sha(report_path),
-            "receipts": receipts}
+            "k10_trace": "linux-phase", "receipts": receipts}
+
+
+def _extract_sample_game(artifact: Path, trust: Path, trust_sha256: str, dest: Path) -> None:
+    """Write the package's sample-game bytes so verify can hash them itself."""
+    from studio.package.trust import load_trust
+    from studio.package.release_contract import verify_package
+    keys = load_trust(trust, expected_sha256=trust_sha256)
+    package = verify_package(artifact, trusted_keys=keys, target="Linux-headless", expected_version="0.1.0")
+    prefix = "payload/studio/fixtures/sample-game/"
+    wrote = False
+    for name, data in package["members"].items():
+        if not name.startswith(prefix):
+            continue
+        relative = name[len(prefix):]
+        _need(relative and ".." not in Path(relative).parts and "\\" not in relative,
+              "GT10PC_P10_SAMPLE_GAME_PATH")
+        target = dest / relative
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_bytes(data)
+        wrote = True
+    _need(wrote, "GT10PC_P10_SAMPLE_GAME_MISSING")
+
+
+def _run_linux_phase(output: Path, artifact: Path, trust: Path, trust_sha256: str) -> dict[str, Any]:
+    from studio.tests.conformance.gt10pc_linux_producer import run_linux
+    _need(not output.exists(), "GT10PC_P10_OUTPUT_EXISTS")
+    output.mkdir(parents=True)
+    _extract_sample_game(artifact, trust, trust_sha256, output / "sample-game")
+    started = time.time()
+    receipt = run_linux(output / "linux", artifact=artifact, trust=trust, trust_sha256=trust_sha256,
+                        purpose="p10")
+    result = {"schema": SCHEMA, "authority": 0, "acceptance": False, "mode": "DIAGNOSTIC",
+              "status": "DIAGNOSTIC_PASS", "phase": "linux",
+              "active_release": receipt["manifest_sha256"],
+              "manifest_sha256": receipt["manifest_sha256"],
+              "source_closure_sha256": receipt["source_closure_sha256"],
+              "rows": {"GT08A_LINUX": {"status": "DIAGNOSTIC_PASS", "authority": 0, "acceptance": False,
+                                       "container": "linux",
+                                       "duration_s": round(time.time() - started, 3)}}}
+    (output / "p10.json").write_text(json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    return result
 
 
 def run_p10(output: Path, artifact: Path, *, trust: Path, trust_sha256: str,
             tooling: Path, godot_console: Path, godot_gui: Path, blender: Path,
             phase: str = "all") -> dict[str, Any]:
+    if phase == "linux":
+        return _run_linux_phase(output, artifact, trust, trust_sha256)
     _need(not output.exists(), "GT10PC_P10_OUTPUT_EXISTS")
     output.mkdir(parents=True)
     install, project, _keys = _installed_setup(output, artifact, trust, trust_sha256)
@@ -355,17 +491,65 @@ def run_p10(output: Path, artifact: Path, *, trust: Path, trust_sha256: str,
     return result
 
 
+def _verify_linux_phase(path: Path, report: dict[str, Any]) -> None:
+    from studio.tests.conformance.gt10pc_linux_verify import verify_p10_container
+    digest = report.get("manifest_sha256")
+    _need(isinstance(digest, str) and len(digest) == 64 and digest == report.get("active_release")
+          and all(c in "0123456789abcdef" for c in digest), "GT10PC_P10_LINUX_MANIFEST")
+    linux = path / "linux"
+    verify_p10_container(linux)
+    native = linux / "native"
+    closure = _json(native / "gt08a" / "closure.json")
+    module = _load("gt10pc_p10_closure", ROOT / "build/ci/gt08a_matrix.py")
+    tree = module.checked_tree(path / "sample-game")
+    _need(closure.get("files") == tree and module.closure_hash(tree) == closure.get("source_closure"),
+          "GT10PC_P10_LINUX_CLOSURE")
+    document = _json(native / "linux.json")
+    _need(document.get("schema") == "hh-gt10pc-linux-p10-1" and document.get("purpose") == "p10"
+          and document.get("artifact_sha256") == _json(linux / "producer.json").get("artifact_sha256"),
+          "GT10PC_P10_LINUX_NATIVE")
+    rows = document.get("rows")
+    _need(isinstance(rows, list) and [row.get("id") for row in rows] == ["L01", "L02"]
+          and all(row.get("status") == "PASS" and row.get("source_closure") == closure.get("source_closure")
+                  for row in rows), "GT10PC_P10_LINUX_ROWS")
+    verify_engine_host(native / "gt08a" / "L01", "l01", "GT10PC_P10_L01_HOST")
+    l01_argv = _json(native / "gt08a" / "L01" / "l01-receipt.json").get("argv")
+    _need(isinstance(l01_argv, list) and l01_argv[:1] == ["Godot_v4.7.2-stable_linux.x86_64"]
+          and "--quit-after" in l01_argv and "1" in l01_argv, "GT10PC_P10_L01_ARGV")
+    l02_dir = native / "gt08a" / "L02"
+    verify_engine_host(l02_dir, "l02", "GT10PC_P10_L02_HOST")
+    l02_argv = _json(l02_dir / "l02-receipt.json").get("argv")
+    _need(isinstance(l02_argv, list) and l02_argv[:1] == ["Godot_v4.7.2-stable_linux.x86_64"]
+          and "--export-release" in l02_argv and "Linux/X11" in l02_argv, "GT10PC_P10_L02_ARGV")
+    _need(rows[1].get("editor_os") == "linux" and "Windows editor" in str(rows[1].get("delta")),
+          "GT10PC_P10_L02_DELTA")
+    artifact = l02_dir / "fixture.x86_64"
+    _need(artifact.is_file() and artifact.stat().st_size > 0
+          and _sha(artifact) == rows[1].get("artifact_sha256"), "GT10PC_P10_L02_ARTIFACT")
+    _need(document.get("k10_fixtures") == ["gt09-arena", "gt09-room"], "GT10PC_P10_K10_FIXTURES")
+    for fixture in ("gt09-arena", "gt09-room"):
+        folder = native / "k10" / fixture
+        verify_engine_host(folder, "godot", "GT10PC_P10_K10_HOST")
+        argv = _json(folder / "godot-receipt.json").get("argv")
+        _need(isinstance(argv, list) and "--max-fps" in argv and "60" in argv
+              and "--fixture-lifecycle-smoke" in argv, "GT10PC_P10_K10_ARGV")
+        verify_k10_trace((folder / "godot-stdout.txt").read_text(encoding="utf-8"))
+
+
 def verify(path: Path) -> dict[str, Any]:
     path = path.resolve(); report = _json(path / "p10.json")
     _need(report.get("schema") == SCHEMA and report.get("authority") == 0
           and report.get("acceptance") is False and report.get("status") == "DIAGNOSTIC_PASS",
           "GT10PC_P10_REPORT")
     phase = report.get("phase")
-    _need(phase in ("gt08a", "catalog", "all"), "GT10PC_P10_PHASE")
-    expected_rows = {"gt08a": {"GT08A_PC"}, "catalog": {"K8_K10"},
+    _need(phase in ("gt08a", "catalog", "all", "linux"), "GT10PC_P10_PHASE")
+    expected_rows = {"gt08a": {"GT08A_PC"}, "catalog": {"K8_K10"}, "linux": {"GT08A_LINUX"},
                      "all": {"GT08A_PC", "K8_K10"}}[phase]
     _need(isinstance(report.get("rows"), dict)
           and set(report["rows"]) == expected_rows, "GT10PC_P10_ROW_SET")
+    if phase == "linux":
+        _verify_linux_phase(path, report)
+        return report
     _need(isinstance(report.get("active_release"), str)
           and len(report["active_release"]) == 64
           and all(c in "0123456789abcdef" for c in report["active_release"]),
@@ -407,16 +591,19 @@ def verify(path: Path) -> dict[str, Any]:
         _need(isinstance(gt.get("runtime_gt08a_module_sha256"), str)
               and _sha(runtime / "build/ci/gt08a_matrix.py") == gt["runtime_gt08a_module_sha256"],
               "GT10PC_P10_GT08A_BINDING")
-        for row in gt["rows"][1:]:
-            process = row.get("process")
-            _need(isinstance(process, dict) and process.get("status") == "PASS"
-                  and process.get("exit_code") == 0 and process.get("timed_out") is False
-                  and process.get("tree_verified") is True,
-                  "GT10PC_P10_GT08A_PROCESS")
+        verify_engine_host(path / "gt08a" / "W02", "w02", "GT10PC_P10_GT08A_W02_HOST")
+        w03_dir = path / "gt08a" / "W03"
+        verify_engine_host(w03_dir, "w03", "GT10PC_P10_GT08A_W03_HOST")
+        executable = w03_dir / "fixture.exe"
+        _need(executable.is_file() and executable.stat().st_size > 0
+              and _sha(executable) == gt["rows"][2].get("artifact_sha256"),
+              "GT10PC_P10_GT08A_W03_ARTIFACT")
     if "K8_K10" in report.get("rows", {}):
         row = report["rows"]["K8_K10"]
         _need(row.get("status") == "DIAGNOSTIC_PASS" and row.get("authority") == 0
-              and row.get("acceptance") is False and _json(path / "k10-conformance.json").get("status") == "CANDIDATE_PASS",
+              and row.get("acceptance") is False
+              and _json(path / "k10-conformance.json").get("status") == "CANDIDATE_PASS"
+              and row.get("k10_trace") == "linux-phase",
               "GT10PC_P10_K8_K10_REPORT")
         children = path / "children"
         receipts = row.get("receipts")
@@ -463,7 +650,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--godot-console", type=Path, required=True)
     parser.add_argument("--godot-gui", type=Path, required=True)
     parser.add_argument("--blender", type=Path, required=True)
-    parser.add_argument("--phase", choices=("all", "gt08a", "catalog"), default="all")
+    parser.add_argument("--phase", choices=("all", "gt08a", "catalog", "linux"), default="all")
     parser.add_argument("--verify-only", action="store_true")
     args = parser.parse_args(argv)
     if args.verify_only:

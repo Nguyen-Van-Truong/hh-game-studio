@@ -203,6 +203,24 @@ def main(argv: list[str] | None = None) -> int:
                         "reinstall_receipt": reinstalled})
     after_closure = _payload_digest(_source_files(ROOT))
     need(after_closure == before_closure, "source changed during diagnostic")
+    # Side root only: incompatible schema and untrusted rollback, no Play.
+    from studio.tests.conformance.gt10pc_p4_negative import (
+        build_bad_artifacts, run_negative, verify_negative,
+    )
+    side_root = output / "consumer" / "negative"
+    side = ConsumerInstall(side_root, trusted_keys=keys, target=args.target)
+    side.install(artifact, command_id="negative.install",
+                 expected_state_sha256=side.snapshot()["state_sha256"])
+    side.install(upgrade_artifact, command_id="negative.upgrade",
+                 expected_state_sha256=side.snapshot()["state_sha256"])
+    negative_dir = output / "negative"
+    bad = build_bad_artifacts(artifact, signer, negative_dir)
+
+    def open_side() -> ConsumerInstall:
+        return ConsumerInstall(side_root, trusted_keys=keys, target=args.target)
+
+    run_negative(side_root, open_side, bad, negative_dir)
+    negative_report = verify_negative(negative_dir, keys)
     evidence = {}
     for base in (output / "drivers", output / "godot"):
         for path in sorted(base.rglob("*")):
@@ -215,13 +233,16 @@ def main(argv: list[str] | None = None) -> int:
                      "project-after-reinstall.json", "project-after-deactivate.json"):
             path = output / "consumer" / row["fixture"] / name
             evidence[path.relative_to(output).as_posix()] = digest_file(path)
+    for path in sorted(negative_dir.rglob("*")):
+        if path.is_file():
+            evidence[path.relative_to(output).as_posix()] = digest_file(path)
     manifest = {"schema": SCHEMA, "mode": "DIAGNOSTIC", "authority": 0, "acceptance": False,
                 "artifact_sha256": digest_file(artifact), "manifest_sha256": package["manifest_sha256"],
                 "upgrade_artifact_sha256": digest_file(upgrade_artifact),
                 "upgrade_manifest_sha256": upgrade_package["manifest_sha256"],
                 "source_closure_sha256": before_closure, "trust_sha256": args.trust_sha256,
                 "target": args.target, "godot_sha256": digest_file(godot),
-                "fixtures": records, "evidence": evidence,
+                "fixtures": records, "negative": negative_report, "evidence": evidence,
                 "remaining": ["Linux", "AUTH07", "crash/Stop", "GT08A/K8/K10",
                               "formal25 soak", "final critics"]}
     write_json(output / "producer.json", manifest)

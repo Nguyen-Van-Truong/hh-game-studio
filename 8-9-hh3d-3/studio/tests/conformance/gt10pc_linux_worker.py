@@ -64,6 +64,147 @@ def native_phase(consumer: Path, fixture: str, phase: str, installer: ConsumerIn
             "native": "native/" + phase + "/receipt.json"}
 
 
+L02_DELTA = ("Accepted GT-08A L02 used the Windows editor to export Linux/X11. "
+             "This row uses the Linux editor with the same template bytes.")
+P10_FIXTURE_NAME = "fixture Ñé with spaces"
+
+
+def _load_gt08a(studio: Path):
+    import importlib.util
+    path = studio / "build/ci/gt08a_matrix.py"
+    spec = importlib.util.spec_from_file_location("gt10pc_p10_installed_gt08a", path)
+    need(spec is not None and spec.loader is not None, "installed GT-08A module missing")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def _capture(command: list[str], cwd: Path, output: Path, timeout: int, label: str,
+             env: dict[str, str]) -> dict:
+    output.mkdir(parents=True, exist_ok=True)
+    row = run_process(command, cwd=cwd, output=output, timeout=timeout, label=label, env=env)
+    row["stdout_sha256"] = digest_file(output / row["stdout"])
+    row["stderr_sha256"] = digest_file(output / row["stderr"])
+    write_json(output / (label + "-receipt.json"), row)
+    host = strict_json((output / (label + "-host.json")).read_bytes())
+    need(row["exit_code"] == 0 and row["wrapper_exit_code"] == 0 and row["tree_verified"]
+         and not row["timed_out"], label + " process failed")
+    need(not (output / row["stderr"]).read_bytes(), label + " stderr is not empty")
+    need(type(host.get("target_pid")) is int and host["target_pid"] > 0
+         and host["target_pid"] == row.get("target_pid") and host.get("exit_code") == 0,
+         label + " host receipt mismatch")
+    return row
+
+
+def run_p10_rows(source: Path, output: Path, request: dict, package: dict, tool: Path,
+                 keys: dict) -> None:
+    """L01/L02 and per-fixture K10 smoke inside the existing pinned container."""
+    installer = ConsumerInstall(Path("/tmp/p10-install"), trusted_keys=keys, target="Linux-headless")
+    installed = installer.install(source / "release.hhpkg", command_id="p10.install",
+                                  expected_state_sha256="ABSENT")
+    gt08a = _load_gt08a(installer.active_path())
+    fixture_src = installer.active_path() / "fixtures" / "sample-game"
+    source_tree = gt08a.checked_tree(fixture_src)
+    source_hash = gt08a.closure_hash(source_tree)
+    need(not any("zdoc" in path for path in source_tree), "sample-game closure contains zdoc")
+    write_json(output / "gt08a" / "closure.json", {
+        "schema": "hh-gt10pc-p10-fixture-closure-1", "authority": 0, "acceptance": False,
+        "source_closure": source_hash, "files": source_tree})
+    work = Path("/tmp/gt08a")
+    project = work / P10_FIXTURE_NAME
+    shutil.copytree(fixture_src, project)
+    gt08a.write_presets(project)
+    need(P10_FIXTURE_NAME in str(project), "unicode fixture path missing")
+    template_dest = Path("/tmp/xdg/godot/export_templates/4.7.2.stable")
+    template_dest.mkdir(parents=True)
+    for filename in ("version.txt", "linux_release.x86_64", "linux_debug.x86_64"):
+        shutil.copyfile(source / "export-templates" / filename, template_dest / filename)
+    env = os.environ.copy()
+    env.update({"HOME": "/tmp", "XDG_CACHE_HOME": "/tmp/cache", "XDG_DATA_HOME": "/tmp/xdg"})
+    godot = str(tool)
+    l01 = _capture([godot, "--headless", "--path", str(project), "--quit-after", "1"],
+                   work, output / "gt08a" / "L01", 120, "l01", env)
+    export_path = Path("/tmp/gt08a/L02/fixture.x86_64")
+    export_path.parent.mkdir(parents=True)
+    l02 = _capture([godot, "--headless", "--path", str(project), "--export-release", "Linux/X11",
+                    str(export_path)], work, output / "gt08a" / "L02", 180, "l02", env)
+    need(export_path.is_file() and export_path.stat().st_size > 0, "L02 export artifact missing")
+    evidence_artifact = Path("/evidence/gt08a/L02/fixture.x86_64")
+    evidence_artifact.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copyfile(export_path, evidence_artifact)
+    rows = [
+        {"id": "L01", "status": "PASS", "source_closure": source_hash, "process": l01},
+        {"id": "L02", "status": "PASS", "editor_os": "linux", "delta": L02_DELTA,
+         "source_closure": source_hash, "artifact_sha256": digest_file(evidence_artifact),
+         "artifact_bytes": evidence_artifact.stat().st_size, "process": l02},
+    ]
+    for fixture in FIXTURES:
+        consumer_project = Path("/tmp/k10") / fixture
+        shutil.copytree(installer.active_path() / "fixtures" / fixture, consumer_project)
+        installer.install_addon(consumer_project, release=installed["active"],
+                                command_id="p10.addon." + fixture,
+                                expected_state_sha256=installer.snapshot()["state_sha256"])
+        _capture([godot, "--headless", "--path", str(consumer_project), "--scene", "scenes/fixture.tscn",
+                  "--max-fps", "60", "--", "--fixture-lifecycle-smoke"],
+                 consumer_project, output / "k10" / fixture, 90, "godot", env)
+    write_json(output / "linux.json", {
+        "schema": "hh-gt10pc-linux-p10-1", "authority": 0, "acceptance": False,
+        "purpose": "p10", "rows": rows, "k10_fixtures": list(FIXTURES),
+        "artifact_sha256": request["artifact_sha256"], "manifest_sha256": package["manifest_sha256"],
+        "source_closure_sha256": package["manifest"]["source_closure_sha256"]})
+    print("GT10PC_LINUX_P10_COMPLETE", flush=True)
+
+
+def bind_negative_inputs(source: Path, request: dict) -> dict[str, dict[str, str]]:
+    """Check host-built P4 artifacts before any install uses them."""
+    root = source / "negative"
+    archive = root / "incompatible-schema.hhpkg"
+    release_root = root / "untrusted-release"
+    need(archive.is_file() and release_root.is_dir(), "Linux negative inputs missing")
+    children = sorted(path for path in release_root.iterdir() if path.is_dir())
+    need(len(children) == 1, "Linux negative manifest set")
+    manifest = children[0] / "manifest.json"
+    need(manifest.is_file(), "Linux negative manifest missing")
+    archive_sha = digest_file(archive)
+    manifest_sha = digest_file(manifest)
+    need(archive_sha == request.get("negative_incompatible_sha256"), "Linux negative archive pin")
+    need(manifest_sha == request.get("negative_manifest_sha256") == children[0].name,
+         "Linux negative manifest pin")
+    return {"incompatible-schema.hhpkg": {"path": str(archive), "sha256": archive_sha},
+            "untrusted-manifest": {"path": str(manifest), "sha256": manifest_sha}}
+
+
+def stage_negative_evidence(source: Path, output: Path, request: dict, keys: dict) -> None:
+    """Side install of 0.1.0 then 0.1.1, then the two refusals. No Play."""
+    from studio.tests.conformance.gt10pc_p4_negative import run_negative
+    pinned = bind_negative_inputs(source, request)
+    out = output / "negative"
+    out.mkdir()
+    archive = out / "incompatible-schema.hhpkg"
+    shutil.copyfile(pinned["incompatible-schema.hhpkg"]["path"], archive)
+    manifest_src = Path(pinned["untrusted-manifest"]["path"])
+    manifest_dest = out / "untrusted-release" / manifest_src.parent.name / "manifest.json"
+    manifest_dest.parent.mkdir(parents=True)
+    shutil.copyfile(manifest_src, manifest_dest)
+    need(digest_file(archive) == pinned["incompatible-schema.hhpkg"]["sha256"],
+         "Linux negative archive copy")
+    need(digest_file(manifest_dest) == pinned["untrusted-manifest"]["sha256"],
+         "Linux negative manifest copy")
+    side = Path("/tmp/p4-negative")
+    installer = ConsumerInstall(side, trusted_keys=keys, target="Linux-headless")
+    installer.install(source / "release.hhpkg", command_id="negative.install",
+                      expected_state_sha256=installer.snapshot()["state_sha256"])
+    installer.install(source / "upgrade.hhpkg", command_id="negative.upgrade",
+                      expected_state_sha256=installer.snapshot()["state_sha256"])
+    copied = {"incompatible-schema.hhpkg": {"path": str(archive), "sha256": digest_file(archive)},
+              "untrusted-manifest": {"path": str(manifest_dest), "sha256": digest_file(manifest_dest)}}
+
+    def open_consumer() -> ConsumerInstall:
+        return ConsumerInstall(side, trusted_keys=keys, target="Linux-headless")
+
+    run_negative(side, open_consumer, copied, out)
+
+
 def main() -> None:
     need(platform.system() == "Linux", "Linux native OS required")
     source, output = Path("/input"), Path("/output")
@@ -77,6 +218,10 @@ def main() -> None:
     tool_binary = Path("/tool") / request["binary_name"]
     need(digest_file(tool_binary) == request["binary_sha256"], "Linux Godot pin mismatch")
     need(os.access(tool_binary, os.X_OK), "Linux image Godot is not executable")
+    if request.get("purpose") == "p10":
+        need(not request.get("upgrade_artifact_sha256"), "p10 container does not take an upgrade")
+        run_p10_rows(source, output, request, package, tool_binary, keys)
+        return
     upgrade = None
     if request.get("upgrade_artifact_sha256"):
         upgrade = verify_package(source / "upgrade.hhpkg", trusted_keys=keys, target="Linux-headless",
@@ -85,6 +230,7 @@ def main() -> None:
              and upgrade["manifest_sha256"] == request["upgrade_manifest_sha256"]
              and upgrade["manifest"]["source_closure_sha256"] == package["manifest"]["source_closure_sha256"],
              "Linux upgrade pin mismatch")
+        bind_negative_inputs(source, request)
     records = []
     for fixture in FIXTURES:
         consumer = output / "consumer" / fixture
@@ -141,6 +287,8 @@ def main() -> None:
             "upgrade_addon_receipt": upgrade_addon, "rollback_addon_receipt": rollback_addon,
             "uninstall_receipt": uninstall, "reinstall_receipt": reinstall,
             "phases": phases})
+    if upgrade is not None:
+        stage_negative_evidence(source, output, request, keys)
     evidence = {}
     for fixture in FIXTURES:
         consumer = output / "consumer" / fixture
@@ -152,6 +300,11 @@ def main() -> None:
                 for path in (consumer / domain / phase["phase"]).iterdir():
                     if path.is_file():
                         evidence[path.relative_to(output).as_posix()] = digest_file(path)
+    negative_root = output / "negative"
+    if negative_root.is_dir():
+        for path in sorted(negative_root.rglob("*")):
+            if path.is_file():
+                evidence[path.relative_to(output).as_posix()] = digest_file(path)
     write_json(output / "linux.json", {"schema": "hh-gt10pc-linux-native-2", "authority": 0, "acceptance": False,
         "mode": "DIAGNOSTIC", "system": platform.system(), "python": platform.python_version(),
         "target": "Linux-headless", "records": records, "evidence": evidence,

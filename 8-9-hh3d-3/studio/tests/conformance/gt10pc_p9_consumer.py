@@ -1,9 +1,13 @@
 """Independent archive-only consumer smoke and read-only native verification."""
 from __future__ import annotations
 
+import argparse
+import json
+import sys
 from pathlib import Path
 from types import SimpleNamespace
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[3]))
 from studio.package.consumer_install import ConsumerInstall
 from studio.package.consumer_support import _consumer_fixture_files, support_bundle
 from studio.package.release_contract import (
@@ -157,3 +161,19 @@ def verify_consumer(output: Path, artifact: Path, *, trust: Path, trust_sha256: 
     return {"status": "REHEARSAL_PASS", "authority": 0, "acceptance": False,
             "evidence_kind": "docs+native", "artifact_sha256": package["archive_sha256"],
             "report_sha256": digest_file(output / "p9.json")}
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--artifact", type=Path, required=True)
+    parser.add_argument("--trust", type=Path, required=True)
+    parser.add_argument("--trust-sha256", required=True)
+    args = parser.parse_args(argv)
+    result = run_consumer(args.output, args.artifact, trust=args.trust, trust_sha256=args.trust_sha256)
+    print(json.dumps(result, sort_keys=True))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

@@ -75,6 +75,57 @@ def state_digest(state: dict) -> str:
     return digest_bytes(canonical(body) + b"\n")
 
 
+def _job_process_tree(job_state) -> list[int]:
+    """PIDs assigned to this job. JobObjectBasicProcessIdList = 3.
+
+    The job handle comes from ``_job_for_process``. The query stays here so
+    the shared runner is not edited.
+    """
+    if not job_state:
+        return []
+    import ctypes
+    from ctypes import wintypes
+    handle = job_state[1]
+    kernel = ctypes.WinDLL("kernel32", use_last_error=True)
+    ulong_ptr = ctypes.c_ulonglong if ctypes.sizeof(ctypes.c_void_p) == 8 else ctypes.c_ulong
+    kernel.QueryInformationJobObject.argtypes = [
+        wintypes.HANDLE, wintypes.DWORD, ctypes.c_void_p, wintypes.DWORD,
+        ctypes.POINTER(wintypes.DWORD)]
+    kernel.QueryInformationJobObject.restype = wintypes.BOOL
+
+    def query(slots: int):
+        class ProcessList(ctypes.Structure):
+            _fields_ = [("assigned", wintypes.DWORD), ("listed", wintypes.DWORD),
+                        ("pids", ulong_ptr * slots)]
+        value, returned = ProcessList(), wintypes.DWORD()
+        ok = kernel.QueryInformationJobObject(
+            handle, 3, ctypes.byref(value), ctypes.sizeof(value), ctypes.byref(returned))
+        return ok, value
+
+    ok, value = query(32)
+    if not ok:
+        error = ctypes.get_last_error()
+        # ERROR_MORE_DATA: assigned is the count that did not fit.
+        if error != 234:
+            raise OSError(error, "QueryInformationJobObject")
+        ok, value = query(max(int(value.assigned), 1))
+        if not ok:
+            raise OSError(ctypes.get_last_error(), "QueryInformationJobObject")
+    return [int(value.pids[index]) for index in range(int(value.listed))]
+
+
+NOT_APPLICABLE = {
+    "network_loss": {
+        "status": "NOT_APPLICABLE",
+        "reason": "local lifecycle WAL; no network client in this phase",
+    },
+    "token_rotation": {
+        "status": "NOT_APPLICABLE",
+        "reason": "no session token; state_sha256 is a local CAS digest, not a rotated credential",
+    },
+}
+
+
 def variant_source(tag: str, parent: Path) -> Path:
     """Make a disposable source closure with one signed addon marker byte."""
     target = parent / ("source-" + tag)
@@ -155,11 +206,18 @@ def launch_worker(request: Path, marker: Path, *, disposition: str,
         need(marker.exists(), "P7_CUT_MARKER_TIMEOUT")
         cut = json.loads(marker.read_bytes())
         need(cut.get("pid") == process.pid and process.poll() is None, "P7_CUT_PID_MISMATCH")
+        # Query while the victim is still alive, immediately before the cut.
+        process_tree = _job_process_tree(job)
+        need(process.pid in process_tree, "P7_VICTIM_NOT_IN_TREE")
+        killer_pid = os.getpid()
+        kill_epoch = stop_epoch = None
         if disposition == "kill":
+            kill_epoch = time.time()
             process.kill()
             code = process.wait(timeout=20)
             need(code != 0, "P7_KILLED_WORKER_EXITED_ZERO")
         else:
+            stop_epoch = time.time()
             stop = ConsumerInstall.stop_existing(installer_root, command_id="stop." + cut["action"] + "." + cut["phase"])
             need(stop.get("durable") is True and stop.get("stopped") is True,
                  "P7_STOP_NOT_DURABLE")
@@ -184,12 +242,18 @@ def launch_worker(request: Path, marker: Path, *, disposition: str,
                 break
             time.sleep(0.02)
         need(tree_verified, "P7_WORKER_TREE_NOT_ZERO")
-        host = {"schema": "hh-gt10pc-p7-worker-host-1", "pid": process.pid,
-                "actual_exit": code, "started_epoch": started, "finished_epoch": time.time(),
-                "tree_verified": tree_verified, "disposition": disposition,
+        host = {"schema": "hh-gt10pc-p7-worker-host-2",
+                "victim_pid": process.pid, "killer_pid": killer_pid,
+                "process_tree": process_tree, "kill_epoch": kill_epoch, "stop_epoch": stop_epoch,
+                "exit_code": code, "disposition": disposition,
+                "pid": process.pid, "actual_exit": code,
+                "started_epoch": started, "finished_epoch": time.time(),
+                "tree_verified": tree_verified,
                 "stdout_sha256": digest_bytes(stdout), "stderr_sha256": digest_bytes(stderr)}
         write_new(output / "worker-host.json", host)
-        return {"disposition": disposition, "pid": process.pid, "exit_code": code,
+        return {"disposition": disposition, "pid": process.pid, "victim_pid": process.pid,
+                "killer_pid": killer_pid, "process_tree": process_tree, "exit_code": code,
+                "kill_epoch": kill_epoch, "stop_epoch": stop_epoch,
                 "cut": cut, "stop": stop, "host_sha256": digest_file(output / "worker-host.json")}
     finally:
         if process.poll() is None:
@@ -238,6 +302,7 @@ def run_case(root: Path, old: dict, new: dict, keys: dict[str, bytes], *, name: 
              trust: Path, trust_sha256: str, godot: Path | None) -> dict:
     case = root / "cases" / name
     case.mkdir(parents=True)
+    write_new(case / "applicability.json", NOT_APPLICABLE)
     installer, project, before, project_before, old_id = seed_case(
         case, old_path, new_path, keys=keys, action=action)
     project_core_before = {name: row for name, row in project_before.items()
@@ -264,6 +329,14 @@ def run_case(root: Path, old: dict, new: dict, keys: dict[str, bytes], *, name: 
     write_new(case / "request.json", request)
     worker = launch_worker(case / "request.json", marker, disposition=disposition,
                            installer_root=installer.root, output=case)
+    # Last-good bytes after the cut and before reopen runs recovery.
+    state_file = safe_path(installer.root / ".install.json")
+    raw_install = state_file.read_bytes()
+    with (case / "install-before-reopen.json").open("xb") as stream:
+        stream.write(raw_install)
+        stream.flush()
+        os.fsync(stream.fileno())
+    before_reopen_sha256 = digest_bytes(raw_install)
     recovered = ConsumerInstall(installer.root, trusted_keys=keys, target="Windows")
     after = recovered.snapshot()
     project_after = ledger(project)
@@ -293,6 +366,31 @@ def run_case(root: Path, old: dict, new: dict, keys: dict[str, bytes], *, name: 
     revision_after_retry = recovered.snapshot()["revision"]
     expected_revision = after["revision"] + (1 if lookup_before_retry is None else 0)
     need(revision_after_retry == expected_revision, "P7_RETRY_EFFECT_DUPLICATED:" + name)
+    # Prove dedup after recovery, not only the first retry completing an
+    # interrupted transaction. Preserve the exact install/project bytes too.
+    retry_state = recovered.snapshot()
+    retry_install = ledger(recovered.root)
+    retry_project_full = ledger(project)
+    # project-final.json skips .godot. Record the same view here.
+    retry_project = project_ledger(project)
+    if action == "rollback":
+        second_retry = recovered.rollback_lifecycle(project, destination=selected,
+            command_id=command_id, expected_state_sha256=retry_token)
+    else:
+        second_retry = recovered.install_lifecycle(project, new_path,
+            command_id=command_id, expected_state_sha256=retry_token)
+    need(second_retry == retry and recovered.snapshot() == retry_state
+         and ledger(recovered.root) == retry_install
+         and ledger(project) == retry_project_full
+         and project_ledger(project) == retry_project,
+         "P7_SECOND_RETRY_EFFECT:" + name)
+    write_new(case / "retry-proof.json", {
+        "lookup_before_retry": lookup_before_retry, "state": retry_state,
+        "state_after_second_retry": recovered.snapshot(),
+        "first": retry, "second": second_retry,
+        "install_before": retry_install, "install_after": ledger(recovered.root),
+        "project_before": retry_project, "project_after": project_ledger(project),
+    })
     if disposition == "stop":
         recovered.resume(command_id="resume." + name)
     project_core_after = {name: row for name, row in ledger(project).items()
@@ -302,13 +400,29 @@ def run_case(root: Path, old: dict, new: dict, keys: dict[str, bytes], *, name: 
          "P7_PROJECT_SOURCE_SAVE_CHANGED:" + name)
     final_state = recovered.snapshot()
     need(state_digest(final_state) == final_state["state_sha256"], "P7_STATE_HASH:" + name)
+    selected_package = old if final_state["active"] == old["manifest_sha256"] else new
+    need(final_state["active"] == selected_package["manifest_sha256"], "P7_SELECTED_RELEASE")
+    addon_prefix = "payload/studio/godot-addon/addons/hh_studio/"
+    addon = {"addons/hh_studio/" + key[len(addon_prefix):]: value
+             for key, value in selected_package["manifest"]["files"].items()
+             if key.startswith(addon_prefix)}
+    addon["addons/hh_studio/jcs_godot.gd"] = selected_package["manifest"]["files"]["payload/studio/protocol/jcs_godot.gd"]
+    addon["addons/hh_studio/owner-manual-note.txt"] = {
+        "sha256": digest_bytes(manual_bytes), "size": len(manual_bytes)}
+    final_project = project_ledger(project)
+    need(final_project == {**project_core_before, **addon}, "P7_SELECTED_ADDON_BYTES:" + name)
+    write_new(case / "project-before.json", {
+        key: value for key, value in project_before.items() if ".godot" not in Path(key).parts})
+    write_new(case / "project-final.json", final_project)
     native = None
     if godot is not None:
         native = native_probe(case, recovered, project, godot=godot, trust=trust,
                               trust_sha256=trust_sha256, fixture="gt09-arena")
+        need(project_ledger(project) == final_project, "P7_NATIVE_PROJECT_CHANGED")
     return {"name": name, "action": action, "phase": phase, "disposition": disposition,
             "worker": worker, "before": before, "after_recovery": after,
             "final": final_state, "lookup": lookup, "retry": retry,
+            "install_before_reopen_sha256": before_reopen_sha256,
             "project_ledger_sha256": digest_bytes(canonical(project_after)), "native": native}
 
 
@@ -346,14 +460,19 @@ def main(argv: list[str] | None = None) -> int:
                              new_path=new_path, trust=safe_path(args.trust),
                              trust_sha256=args.trust_sha256,
                              godot=safe_path(args.godot) if args.godot else None))
-    report = {"schema": "hh-gt10pc-p7-native-recovery-1", "authority": 0,
+    report = {"schema": "hh-gt10pc-p7-native-recovery-2", "authority": 0,
               "acceptance": False, "cases": rows,
               "case_group": args.case_group,
               "old_artifact_sha256": digest_file(old_path),
               "new_artifact_sha256": digest_file(new_path),
               "old_manifest_sha256": old["manifest_sha256"],
               "new_manifest_sha256": new["manifest_sha256"],
-              "native_required": args.godot is not None}
+              "native_required": args.godot is not None,
+              "evidence": {p.relative_to(output).as_posix(): digest_file(p)
+                  for case in (output / "cases").iterdir()
+                  for p in list(case.glob("*.json")) + list(case.glob("worker-*.txt"))
+                  + list((case / "native").glob("*")) + list((case / "native-driver").glob("*"))
+                  if p.is_file()}}
     write_new(output / "p7.json", report)
     print(json.dumps({"status": "P7_DIAGNOSTIC_PASS", "authority": 0,
                       "acceptance": False, "cases": len(rows),

@@ -28,6 +28,21 @@ def export_public_evidence(output, destination):
                 candidates.append(folder / "receipt.json")
                 candidates.extend(folder / (label + suffix) for label in labels
                                   for suffix in ("-host.json", "-stdout.txt", "-stderr.txt"))
+    # Purpose p10 writes these only for that start. Missing files are skipped,
+    # so a lifecycle export stays the same set the evidence test locks.
+    candidates.append(output / "gt08a" / "closure.json")
+    for label, folder in (("l01", "L01"), ("l02", "L02")):
+        base = output / "gt08a" / folder
+        candidates.extend(base / (label + suffix) for suffix in
+                          ("-host.json", "-receipt.json", "-stdout.txt", "-stderr.txt"))
+    for fixture in ("gt09-arena", "gt09-room"):
+        base = output / "k10" / fixture
+        candidates.extend(base / ("godot" + suffix) for suffix in
+                          ("-host.json", "-receipt.json", "-stdout.txt", "-stderr.txt"))
+    # Lifecycle P4 refusals. Absent on a p10 export, so that allowlist is unchanged.
+    negative = output / "negative"
+    if negative.is_dir():
+        candidates.extend(path for path in sorted(negative.rglob("*")) if path.is_file())
     for path in candidates:
         relative = path.relative_to(output)
         current = output
@@ -78,9 +93,61 @@ def dry_run(*, artifact: Path, trust: Path, trust_sha256: str, upgrade_artifact:
     frozen = _preflight(safe_path(artifact), safe_path(trust), trust_sha256, None if upgrade_artifact is None else safe_path(upgrade_artifact))
     return {"schema": "hh-gt10pc-linux-plan-1", "authority": 0, "acceptance": False, "target": "Linux-headless", "image_id": IMAGE, "network": "none", "cpus": 12, "artifact_sha256": frozen["package"]["archive_sha256"], "source_closure_sha256": frozen["package"]["manifest"]["source_closure_sha256"]}
 
-def run_linux(output: Path, *, artifact: Path, trust: Path, trust_sha256: str, upgrade_artifact: Path | None = None) -> dict:
+def _host_path(path: Path) -> str:
+    """Docker bind sources need a resolved absolute path and an uppercase drive."""
+    resolved = str(path.resolve())
+    if os.name == "nt" and len(resolved) >= 2 and resolved[1] == ":":
+        resolved = resolved[0].upper() + resolved[1:]
+    return resolved
+
+
+def _stage_negative(inputs: Path, artifact: Path, trust: Path, trust_sha256: str) -> dict[str, str]:
+    """Re-sign the two P4 refusals on the host. The private key is not copied."""
+    from studio.tests.conformance.gt10pc_p4_negative import build_bad_artifacts
+    from studio.tests.conformance.gt10pc_signing import load_signer
+    keys = load_trust(trust, expected_sha256=trust_sha256)
+    _key_id, public = next(iter(keys.items()))
+    private = safe_path(trust.parent / "private.raw")
+    need(private.is_file(), "GT10PC_LINUX_P4_PRIVATE_KEY")
+    built = build_bad_artifacts(artifact, load_signer(private, public), inputs / "negative")
+    need(not any(path.name == "private.raw" for path in (inputs / "negative").rglob("*")),
+         "GT10PC_LINUX_P4_PRIVATE_KEY_STAGED")
+    return {"negative_incompatible_sha256": built["incompatible-schema.hhpkg"]["sha256"],
+            "negative_manifest_sha256": built["untrusted-manifest"]["sha256"]}
+
+
+def _stage_p10_templates(inputs: Path) -> None:
+    """Copy the pinned Linux export templates into the existing /input mount.
+
+    ``stage_templates`` writes the Windows ``Godot/`` layout. The container
+    copies the Linux files to ``$XDG_DATA_HOME/godot/...`` itself. The 1.2 GiB
+    archive is not mounted; only the extracted Linux template files are.
+    """
+    import importlib.util
+    lock = strict_json((STUDIO / "toolchain.lock.json").read_bytes())
+    templates = lock.get("export_templates")
+    need(isinstance(templates, dict) and isinstance(templates.get("name"), str), "GT10PC_LINUX_EXPORT_TEMPLATES_LOCK")
+    tpz = safe_path(STUDIO / ".local" / "tooling" / templates["name"])
+    need(tpz.is_file() and digest_file(tpz) == templates.get("sha256"), "GT10PC_LINUX_EXPORT_TEMPLATES_PIN")
+    module_path = STUDIO / "build" / "ci" / "gt08a_matrix.py"
+    spec = importlib.util.spec_from_file_location("gt10pc_p10_templates", module_path)
+    need(spec is not None and spec.loader is not None, "GT10PC_LINUX_GT08A_IMPORT")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    module.stage_templates(tpz, inputs / "template-stage")
+    staged = inputs / "template-stage" / "Godot" / "export_templates" / "4.7.2.stable"
+    dest = inputs / "export-templates"
+    dest.mkdir()
+    for filename in ("version.txt", "linux_release.x86_64", "linux_debug.x86_64"):
+        shutil.copyfile(staged / filename, dest / filename)
+
+def run_linux(output: Path, *, artifact: Path, trust: Path, trust_sha256: str,
+              upgrade_artifact: Path | None = None, purpose: str = "lifecycle") -> dict:
+    need(purpose in ("lifecycle", "p10"), "GT10PC_LINUX_PURPOSE")
     artifact, trust, output = safe_path(artifact), safe_path(trust), safe_path(output)
     upgrade_artifact = None if upgrade_artifact is None else safe_path(upgrade_artifact)
+    if purpose == "p10":
+        need(upgrade_artifact is None, "GT10PC_LINUX_P10_UPGRADE")
     frozen = _preflight(artifact, trust, trust_sha256, upgrade_artifact)
     need(not output.exists(), "GT10PC_LINUX_OUTPUT_EXISTS")
     output.mkdir(parents=True)
@@ -96,6 +163,7 @@ def run_linux(output: Path, *, artifact: Path, trust: Path, trust_sha256: str, u
         shutil.copyfile(upgrade_artifact, inputs / "upgrade.hhpkg")
     shutil.copyfile(trust, inputs / "trust.json")
     shutil.copytree(frozen["wheel_root"], inputs / "wheels")
+    negative_pins = _stage_negative(inputs, artifact, trust, trust_sha256) if upgrade_artifact is not None else None
     worker = package["manifest"]["files"]["payload/studio/tests/conformance/gt10pc_linux_worker.py"]["sha256"]
     bootstrap = """import hashlib,json,os,pathlib,runpy,shutil,subprocess,sys,zipfile
 source=pathlib.Path('/input')
@@ -142,7 +210,9 @@ finally:
     bootstrap = bootstrap.replace("__EXPORT_FUNCTION__", inspect_module.getsource(export_public_evidence))
     compile(bootstrap, "gt10pc-linux-bootstrap", "exec")
     (inputs / "bootstrap.py").write_text(bootstrap, encoding="utf-8", newline="\n")
-    request = {"schema": "hh-gt10pc-linux-request-1", "trust_sha256": trust_sha256, "artifact_sha256": package["archive_sha256"], "manifest_sha256": package["manifest_sha256"], "source_closure_sha256": package["manifest"]["source_closure_sha256"], "upgrade_artifact_sha256": None if upgraded is None else upgraded["archive_sha256"], "upgrade_manifest_sha256": None if upgraded is None else upgraded["manifest_sha256"], "wheel_lock_sha256": digest_file(inputs / "wheels/wheel-lock.json"), "binary_name": lock["binary_name"], "binary_sha256": lock["binary_sha256"], "worker_sha256": worker}
+    request = {"schema": "hh-gt10pc-linux-request-1", "purpose": purpose, "trust_sha256": trust_sha256, "artifact_sha256": package["archive_sha256"], "manifest_sha256": package["manifest_sha256"], "source_closure_sha256": package["manifest"]["source_closure_sha256"], "upgrade_artifact_sha256": None if upgraded is None else upgraded["archive_sha256"], "upgrade_manifest_sha256": None if upgraded is None else upgraded["manifest_sha256"], "wheel_lock_sha256": digest_file(inputs / "wheels/wheel-lock.json"), "binary_name": lock["binary_name"], "binary_sha256": lock["binary_sha256"], "worker_sha256": worker}
+    if negative_pins is not None:
+        request.update(negative_pins)
     _write(inputs / "request.json", request)
     for name in ("request.json", "bootstrap.py", "wheels/wheel-lock.json"):
         target = output / "input" / name
@@ -169,13 +239,15 @@ finally:
 
     error = None
     try:
+        if purpose == "p10":
+            _stage_p10_templates(inputs)
         row, image_raw = cli(["image", "inspect", IMAGE], "image")
         images = strict_json(image_raw)
         need(_clean(row) and isinstance(images, list) and len(images) == 1 and images[0].get("Id") == IMAGE and images[0].get("Os") == "linux" and images[0].get("Architecture") == "amd64", "GT10PC_LINUX_PINNED_IMAGE_MISSING")
         create = ["create", "--pull=never", "--name", name, "--label", "hh.gt10pc.owner=" + name, "--platform", "linux/amd64", "--read-only", "--network", "none", "--ipc", "private", "--cgroupns", "private", "--user", "65532:65532", "--cap-drop", "ALL", "--security-opt", "no-new-privileges=true", "--security-opt", "seccomp=builtin", "--memory", "1g", "--memory-swap", "1g", "--cpus", "12", "--pids-limit", "64", "--log-driver", "none", "--restart", "no", "--no-healthcheck", "--stop-timeout", "2", "--tmpfs", "/tmp:rw,nosuid,nodev,exec,size=768m,mode=1777", "--workdir", "/output", "--env", "PYTHONDONTWRITEBYTECODE=1", "--env", "PIP_NO_INDEX=1", "--env", "PIP_NO_CACHE_DIR=1", "--env", "PIP_DISABLE_PIP_VERSION_CHECK=1"]
         create += ["--tmpfs", "/output:rw,nosuid,nodev,exec,size=512m,mode=1777"]
         for folder, destination, readonly in ((inputs, "/input", True), (raw, "/evidence", False)):
-            create += ["--mount", "type=bind,src=" + str(folder) + ",dst=" + destination + (",readonly" if readonly else "") + ",bind-propagation=rprivate"]
+            create += ["--mount", "type=bind,src=" + _host_path(folder) + ",dst=" + destination + (",readonly" if readonly else "") + ",bind-propagation=rprivate"]
         create += ["--entrypoint", "/usr/local/bin/python3", IMAGE, "-B", "/input/bootstrap.py"]
         row, stdout = cli(create, "create")
         need(_clean(row), "GT10PC_LINUX_CREATE_EXIT")
@@ -217,7 +289,7 @@ finally:
             target.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(source, target)
     evidence = {p.relative_to(output).as_posix(): digest_file(p) for p in output.rglob("*") if p.is_file()}
-    receipt = {"schema": "hh-gt10pc-linux-producer-1", "authority": 0, "acceptance": False, "mode": "DIAGNOSTIC", "target": "Linux-headless", "status": "DIAGNOSTIC_PASS" if error is None else "DIAGNOSTIC_FAIL", "error": error, "run_id": name, "container_id": container_id, "image_id": IMAGE, "context": CONTEXT, "artifact_sha256": package["archive_sha256"], "manifest_sha256": package["manifest_sha256"], "source_closure_sha256": package["manifest"]["source_closure_sha256"], "trust_sha256": trust_sha256, "upgrade_artifact_sha256": request["upgrade_artifact_sha256"], "upgrade_manifest_sha256": request["upgrade_manifest_sha256"], "wheel_lock_sha256": request["wheel_lock_sha256"], "processes": rows, "inspections": inspected, "owned_removed": removed, "evidence": evidence, "native": "native/linux.json" if (output / "native/linux.json").is_file() else None}
+    receipt = {"schema": "hh-gt10pc-linux-producer-1", "authority": 0, "acceptance": False, "mode": "DIAGNOSTIC", "purpose": purpose, "target": "Linux-headless", "status": "DIAGNOSTIC_PASS" if error is None else "DIAGNOSTIC_FAIL", "error": error, "run_id": name, "container_id": container_id, "image_id": IMAGE, "context": CONTEXT, "artifact_sha256": package["archive_sha256"], "manifest_sha256": package["manifest_sha256"], "source_closure_sha256": package["manifest"]["source_closure_sha256"], "trust_sha256": trust_sha256, "upgrade_artifact_sha256": request["upgrade_artifact_sha256"], "upgrade_manifest_sha256": request["upgrade_manifest_sha256"], "wheel_lock_sha256": request["wheel_lock_sha256"], "processes": rows, "inspections": inspected, "owned_removed": removed, "evidence": evidence, "native": "native/linux.json" if (output / "native/linux.json").is_file() else None}
     _write(output / "producer.json", receipt)
     need(error is None, "GT10PC_LINUX_DIAGNOSTIC_FAILED:" + str(error))
     return receipt
