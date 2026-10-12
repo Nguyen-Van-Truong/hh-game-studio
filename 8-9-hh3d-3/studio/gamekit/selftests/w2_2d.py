@@ -140,6 +140,19 @@ def run(ctx: Ctx) -> None:
               and props("Anim").get("autoplay") == "torch_flicker", keys=sorted(props("Anim")))
     ctx.check("HUD and pickup group", "HUD/Score" in nodes and "pickups" in nodes.get("Pickup", {}).get("groups", []))
 
+    before = C.sha256_file(project.res_to_path("res://arena.tscn"))
+    bad_ops = {
+        "missing method": [{"op": "animation.create", "player": "Anim", "name": "bad", "tracks": [
+            {"type": "method", "path": "Torch", "keys": [[0.1, {"method": "nope", "args": []}]]}]}],
+        "frames not a list": [{"op": "spriteframes.from_sheet", "path": "Player/Sprite", "texture": "res://art/hero.png",
+                               "hframes": 4, "vframes": 2, "animations": {"idle": {"frames": "0,1"}}}],
+    }
+    for label, ops in bad_ops.items():
+        err = ctx.expect_error(f"rejects {label}", "VALIDATION_FAILED",
+                               lambda ops=ops, label=label: S.apply(project, "res://arena.tscn", ops, f"w2.bad.{len(label)}"))
+        ctx.check(f"{label}: scene bytes unchanged", C.sha256_file(project.res_to_path("res://arena.tscn")) == before,
+                  detail=err.detail[:200] if err else None)
+
     run = C.run_godot(project.root, None, (), headless=True, timeout=90, extra=("--quit-after", "60"))
     ctx.check("arena runs 60 frames without errors", run.exit_code == 0 and not run.errors,
               exit_code=run.exit_code, errors=run.errors[:8])

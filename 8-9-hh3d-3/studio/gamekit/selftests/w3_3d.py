@@ -15,6 +15,8 @@ TRIGGER_GD = (
     "extends Area3D\n\n"
     "var hits: int = 0\n\n\n"
     "func _on_body_entered(_body: Node3D) -> void:\n"
+    "\thits += 1\n\n\n"
+    "func ping() -> void:\n"
     "\thits += 1\n"
 )
 
@@ -99,7 +101,8 @@ def room_ops() -> list[dict]:
          "autoplay": True, "tracks": [
              {"path": "Lamp:light_energy", "keys": [[0.0, 1.0], [1.0, 2.5], [2.0, 1.0]]},
              {"path": "Rail/Cart:progress_ratio", "keys": [[0.0, 0.0], [2.0, 1.0]]},
-             {"path": "Pillar:rotation_degrees", "keys": [[0.0, [0, 0, 0]], [2.0, [0, 90, 0]]]}]},
+             {"path": "Pillar:rotation_degrees", "keys": [[0.0, [0, 0, 0]], [2.0, [0, 90, 0]]]},
+             {"type": "method", "path": "Trigger", "keys": [[0.5, {"method": "ping", "args": []}]]}]},
         {"op": "node.create", "parent": ".", "name": "Tree", "type": "AnimationTree",
          "props": {"anim_player": "../Anim", "active": False,
                    "tree_root": {"$type": "AnimationNodeAnimation", "props": {"animation": "pulse"}}}},

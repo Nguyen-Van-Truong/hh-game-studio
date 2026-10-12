@@ -697,13 +697,20 @@ func _op_spriteframes(op: Dictionary) -> String:
 	if not ad.has("default"):
 		sf.remove_animation("default")
 	for aname: Variant in ad.keys():
+		if not (ad[aname] is Dictionary):
+			return "animation %s must be {frames, fps, loop}" % aname
 		var spec: Dictionary = ad[aname]
+		var frames_v: Variant = spec.get("frames", [])
+		if not (frames_v is Array) or (frames_v as Array).is_empty() or not HH._nums(frames_v, (frames_v as Array).size()):
+			return "animation %s needs frames: [index, ...]" % aname
+		if not HH._is_num(spec.get("fps", 10.0)) or float(spec.get("fps", 10.0)) <= 0.0:
+			return "animation %s fps must be > 0" % aname
 		var an: StringName = StringName(str(aname))
 		if not sf.has_animation(an):
 			sf.add_animation(an)
 		sf.set_animation_speed(an, float(spec.get("fps", 10.0)))
 		sf.set_animation_loop(an, bool(spec.get("loop", true)))
-		for f: Variant in spec.get("frames", []):
+		for f: Variant in frames_v:
 			var idx: int = int(f)
 			if idx < 0 or idx >= hf * vf:
 				return "frame %d outside sheet (%d frames)" % [idx, hf * vf]
@@ -761,17 +768,30 @@ func _op_animation(op: Dictionary) -> String:
 		_:
 			anim.loop_mode = Animation.LOOP_NONE
 	for tv: Variant in op.get("tracks", []):
+		if not (tv is Dictionary) or not (tv as Dictionary).has("path") or not ((tv as Dictionary).get("keys") is Array):
+			return "each track must be {path, keys, type?, interp?, update?}"
 		var tr: Dictionary = tv
 		var tpath: String = str(tr.get("path", ""))
 		var ttype: String = str(tr.get("type", "value"))
 		if ttype == "method":
+			var target: Node = base.get_node_or_null(NodePath(tpath))
+			if target == null:
+				return "method track path does not resolve to a node: " + tpath
 			var mi: int = anim.add_track(Animation.TYPE_METHOD)
 			anim.track_set_path(mi, NodePath(tpath))
-			for k: Variant in tr.get("keys", []):
-				var kd: Array = k
-				var call: Dictionary = kd[1]
-				anim.track_insert_key(mi, float(kd[0]), {"method": str(call.get("method", "")), "args": call.get("args", [])})
+			for k: Variant in tr["keys"]:
+				if not (k is Array) or (k as Array).size() != 2 or not HH._is_num(k[0]) or not (k[1] is Dictionary):
+					return "method keys must be [[time, {\"method\": name, \"args\": [...]}], ...]"
+				var call: Dictionary = k[1]
+				var mname: String = str(call.get("method", ""))
+				if mname.is_empty() or not target.has_method(mname):
+					return "method track: %s has no method %s" % [tpath, mname]
+				if not (call.get("args", []) is Array):
+					return "method track args must be a list"
+				anim.track_insert_key(mi, float(k[0]), {"method": mname, "args": call.get("args", [])})
 			continue
+		if ttype != "value":
+			return "track type must be value or method: " + ttype
 		var info: Dictionary = _track_info(base, tpath)
 		if info.is_empty():
 			return "track path does not resolve to a property: " + tpath
