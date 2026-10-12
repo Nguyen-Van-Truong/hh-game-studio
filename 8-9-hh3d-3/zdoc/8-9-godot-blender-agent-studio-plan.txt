@@ -1,16 +1,16 @@
 HH STUDIO — PLAN 1/3: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Cập nhật 12-10-2026, Asia/Saigon | Revision S303 + quyết định owner O1–O14 | TRIỂN KHAI THEO GATE
-OWNER_DECISIONS=O1_O3_20260925; O4_20260927; O5_O6_20260930; O7_20261001; O8_20261002; O9_20261003; O10_20261004; O11_20261006; O12_20261007; O13_20261008; O14_20261012; BLOCK_BELOW_STATUS_TABLE; LATER_WINS_OVER_S2XX; OLD_VERDICTS_UNCHANGED
+Cập nhật 12-10-2026, Asia/Saigon | Revision S304 + quyết định owner O1–O15 | TRIỂN KHAI THEO GATE
+OWNER_DECISIONS=O1_O3_20260925; O4_20260927; O5_O6_20260930; O7_20261001; O8_20261002; O9_20261003; O10_20261004; O11_20261006; O12_20261007; O13_20261008; O14_20261012; O15_20261012; BLOCK_BELOW_STATUS_TABLE; LATER_WINS_OVER_S2XX; OLD_VERDICTS_UNCHANGED
 OWNER_DECISIONS_FULL_TEXT_IN_GIT=87912523,b0802472,8298c107,fcc1906f,6d8eb81d,d04266e8,091506fa,a0ab19b8,fd5ad2be,add82689,7f97d3f8,5992d9f2,5ff3885e,054c0611
-HIỆN HÀNH 12-10 14:47 — GT-01..GT-09 VÀ GT-10-PC ACCEPTED (GT-10-PC THEO O14: KIỂM NGẮN, SOAK DÀI MIỄN); PLAN CÔNG CỤ XONG CHO PC; CÁCH DÙNG Ở zdoc/12-10-huong-dan-dung-cong-cu-godot-blender.txt; LỖI CÔNG CỤ DO AGENT GAME SỬA (O14.5); GT-08B DEFERRED_OWNER_NO_ANDROID; GT-10 ĐẦY ĐỦ CHỜ GT-08B; GT-11 THEO CHANGE REQUEST CỦA GAME
-CURRENT_VALID_WP=NONE_TOOLS_PC_COMPLETE_O14
+HIỆN HÀNH 12-10 15:45 — GT-01..GT-09 VÀ GT-10-PC ACCEPTED (GT-10-PC THEO O14); GT-11 IN_PROGRESS THEO O15: MỞ NGAY, W1–W12 Ở MỤC GT-11 (PHẦN CÒN LẠI ĐỂ XONG PLAN), KIỂM NHANH BẰNG SELFTEST, SUBAGENT GROK-4.7-XHIGH; TRONG LÚC LÀM AGENT GAME DÙNG PHẦN ĐÃ CÓ THEO zdoc/12-10-huong-dan-dung-cong-cu-godot-blender.txt VÀ LỆNH hh NGAY KHI W ĐÓ COMMIT; GT-08B DEFERRED_OWNER_NO_ANDROID; GT-10 ĐẦY ĐỦ CHỜ GT-08B
+CURRENT_VALID_WP=GT-11_O15_W1_W12
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S303
+PLAN_REVISION=S304
 EXECUTION_AUTHORIZATION=OWNER_APPROVED_GATED
 EXECUTION_MODE=COORDINATOR_WITH_SCOPED_SUBAGENTS_AND_INDEPENDENT_CRITICS_OWNER_20261003; CREDIT_TURN_BUDGET_O13_6; ONE_COORDINATOR_THREAD; ULTRA_ONLY_HARD_DESIGN_AND_FINAL_CRITICS; FORK_TURNS_NONE_DEFAULT; NO_SELF_CREATED_HEARTBEAT; ONE_WRITER_PER_FILE; TWO_INDEPENDENT_CRITICS_SAME_HASH_GROK47_O14_7
-GOAL_STATE=PC_TOOLS_DONE_O14; INDEPENDENT_CONSUMER_PILOT_AUTHORIZED; GT07_ACCEPTED; GT08A_ACCEPTED_O4_6; GT09_ACCEPTED_20261010; GT08B_DEFERRED_OWNER_NO_ANDROID; GT10_PC_ACCEPTED_O14_20261012; GT10_FULL_BLOCKED_BY_GT08B; SUPERAGENT_SEPARATE_OWNER_AUTHORIZED_LANE
-OVERALL_PLAN_STATUS=COMPLETE_FOR_PC_O14; GT01_GT09_ACCEPTED; GT10_PC_ACCEPTED_O14_SHORT_CHECKS; GT08B_DEFERRED_OWNER_NO_ANDROID; GT10_FULL_BLOCKED_BY_GT08B; GT11_ON_GAME_CHANGE_REQUEST_O14_5
+GOAL_STATE=PC_TOOLS_DONE_O14; GT11_IN_PROGRESS_O15_GAMEKIT; INDEPENDENT_CONSUMER_PILOT_AUTHORIZED; GT07_ACCEPTED; GT08A_ACCEPTED_O4_6; GT09_ACCEPTED_20261010; GT08B_DEFERRED_OWNER_NO_ANDROID; GT10_PC_ACCEPTED_O14_20261012; GT10_FULL_BLOCKED_BY_GT08B; SUPERAGENT_SEPARATE_OWNER_AUTHORIZED_LANE
+OVERALL_PLAN_STATUS=GT11_IN_PROGRESS_O15; GT01_GT09_ACCEPTED; GT10_PC_ACCEPTED_O14_SHORT_CHECKS; GT08B_DEFERRED_OWNER_NO_ANDROID; GT10_FULL_BLOCKED_BY_GT08B; GT11_OPEN_O15_QUICK_SELFTESTS
 CONSUMER_PILOT_STATUS=REVALIDATED_PROVISIONAL_AUTHORITY0; NOT_GT06_ACCEPTANCE; NOT_COMPLETE_GAME_CLAIM
 GT06_STATUS=ACCEPTED; FORMAL25_TWO_ACCEPTED_PAIRS; FINAL_MANIFEST=318081a3c71f334cc44aa4542a5fa5fff459b4045006f6daa91559b1ccc4d4d3; DECISION=zdoc/reviews/20261003-gt06-owner-critics/coordinator-acceptance.md
 GT07_STATUS=ACCEPTED_20261007; MATRIX=gt07-final-matrix-gt07-m1-final-20261007-04_30_OF_30; FINAL_MANIFEST=5d97343e7262e4c54f70f0135ffda1045b71c6cf13223321cf4b373e6f1714cc; DECISION=zdoc/reviews/20261003-gt07-integration/coordinator-acceptance-20261007.md
@@ -34,9 +34,9 @@ STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng
 08 | GT-08A | Clean Windows/Linux import/export/CI, target và cache matrix (O4.6) | GT-07 | ACCEPTED (GT-08B Android DEFERRED theo O12)
 09 | GT-09 | Lõi tạo nội dung O2 + agent conformance trên 2 mini-game 2D/3D | GT-08A | ACCEPTED (final -74, hai critic cùng hash)
 10 | GT-10 | Gói công cụ v0.1, cài/upgrade/rollback, bàn giao game | GT-09; GT-10-PC sau GT-09, GT-10 đầy đủ còn cần GT-08B | GT-10-PC ACCEPTED theo O14 (kiểm ngắn, gói c3h, hai critic); GT-10 đầy đủ chờ GT-08B
-11 | GT-11 | Mở rộng lõi dùng chung để làm game: asset/license, catalog, kiểm hình, hiệu năng, bot, kit (O13.10) | GT-10-PC ACCEPTED; change request của game | PLANNED (mở theo change request của game, O14.5)
+11 | GT-11 | Mở rộng lõi dùng chung để làm game: asset/license, catalog, kiểm hình, hiệu năng, bot, kit (O13.10) | GT-10-PC ACCEPTED; O15 | IN_PROGRESS theo O15 (mở 12-10 15:16; gamekit W1–W12, kiểm nhanh selftest)
 
-QUYẾT ĐỊNH OWNER ĐANG HIỆU LỰC O1–O14 — BẢN HỢP NHẤT 12-10-2026 (S301)
+QUYẾT ĐỊNH OWNER ĐANG HIỆU LỰC O1–O15 — BẢN HỢP NHẤT 12-10-2026 (S301; O15 thêm ở S304)
 Chỉ giữ luật còn áp dụng sau GT-08A ACCEPTED; khối mới nhất đặt đầu. Nguyên văn O1–O9 trước
 tinh gọn: git show 091506fa:8-9-hh3d-3/zdoc/8-9-godot-blender-agent-studio-plan.txt (dòng 40–561);
 bản gốc O1–O3 87912523, O4 b0802472, O5 8298c107, O6 fcc1906f; O10 đầy đủ (S259) ở a0ab19b8;
@@ -45,7 +45,44 @@ O10 và O11 trước khi rút gọn ở S270: git show fd5ad2be (cùng file, dò
 Mâu thuẫn thì quyết định muộn hơn thắng và thắng các dòng S2xx; raw và verdict cũ giữ nguyên,
 không hồi tố PASS. Số mục cũ (O1.4, O4.4, O6.4…) giữ nguyên để tham chiếu.
 
-O14 — 12-10-2026 14:05, MỚI NHẤT, OWNER BỎ KIỂM DÀI, XONG PLAN PC NGAY
+O15 — 12-10-2026 15:16, MỚI NHẤT, OWNER MỞ GT-11 NGAY, KIỂM NHANH, SỬA PHẠM VI PLAN LẦN CUỐI
+(AUTHORITY=OWNER_DIRECT_20261012; thắng O13.10 và O14.5 về thời điểm mở và cách kiểm GT-11)
+Owner hỏi công cụ đã đủ để agent làm game tốt, hoàn chỉnh như Superfighters 2D (Y8) hay HH World
+chưa. Coordinator trả lời là chưa: lệnh sửa scene mới chạy trên hai fixture; chưa có kiểm hình,
+đo hiệu năng, bot, cổng asset và license, công thức Blender cho model/sprite, kit, export Web.
+Owner quyết: "xem còn gì cần cải thiện để làm game 2d và 3d tốt thì cải thiện plan … lần cuối,
+xong rồi làm hết các việc đó luôn … Bỏ qua hết các việc kiểm tra, test, kiểm thử lâu và rườm ra
+… nếu có thể nghĩ ra cách kiểm tra nhanh thì tốt"; hỏi agent game dùng công cụ thế nào trong lúc
+làm; dùng subagent grok-4.7-xhigh nhiều hơn.
+1. GT-11 mở ngay, không chờ change request. Phạm vi là W1–W12 ở mục GT-11 (phần "Phần còn lại để
+   xong plan"), gồm CR-1, phần công cụ của SA-T01..SA-T06 và H2-T01..H2-T04, G1/G2. Đây là lần
+   sửa phạm vi cuối; sau đó plan chỉ cập nhật trạng thái, known limit và bài học.
+2. Kiến trúc: gói studio/gamekit, lệnh `python -B -m studio.gamekit.hh <lệnh>`, chạy trên project
+   Godot thật đã đăng ký (không phải hai fixture). Giữ contract: validate trước khi sửa; command_id
+   và journal (lặp cùng nội dung trả cùng receipt, khác nội dung là CONFLICT); checkpoint trước
+   khi ghi; ghi file tạm rồi rename; ACK chỉ khi một process Godot mới đọc lại khớp; undo theo
+   checkpoint; path nằm trong project; một writer mỗi project; một Godot mỗi path. Route fixture
+   GT-09 giữ nguyên, không mở rộng (catalog_scene_adapter.gd gắn scene cố định và
+   EditorUndoRedoManager). Godot 4.7.2 và Blender 5.2.1 dùng bản pin trong studio/.local/tooling.
+3. Kiểm nhanh thay kiểm dài: mỗi W có selftest `python -B -m studio.gamekit.selftest <w>` trên
+   project tạm trong %TEMP% bằng Godot/Blender pin, dưới 3 phút, exit 0, in JSON; cộng unit test
+   liên quan. Không soak, không ma trận final, không rehearsal 21 phút cho W1–W11. Cuối đợt một
+   critic grok-4.7-xhigh read-only đọc code và output selftest; coordinator tự chạy lại selftest
+   trước khi ghi DONE. Kết quả ghi ACCEPTED_O15_QUICK, không gọi là soak hay final PASS.
+4. Trong lúc làm: agent game dùng ngay phần đã có theo hướng dẫn (Godot/Blender pin, addon, play,
+   observe, Blender job) và sửa project game trực tiếp theo plan game. Mỗi lệnh hh dùng được ngay
+   khi commit của W đó xong; hướng dẫn có bảng trạng thái từng lệnh. Lease GT-11 của coordinator:
+   studio/gamekit/**, studio/tests/gamekit/**, hướng dẫn và plan này. Khi lease còn, agent game
+   không sửa các file đó; lỗi và yêu cầu ghi vào zdoc/12-10-gt11-yeu-cau-tu-agent-game.txt (chỉ
+   thêm dòng mới, ghi ngày giờ, game, lệnh, lỗi thấy).
+5. Subagent dùng grok-4.7-xhigh (effort cao nhất có). Mỗi subagent sở hữu tập file riêng, brief
+   ≤ 1 trang, không đọc private.raw, không chạm Kho Bí Ẩn, Snake, Vault Fighters, Hoàn Hảo, không
+   commit. Coordinator review, chạy selftest và commit từng W.
+6. Ngoài GT-11: art direction, level design, nội dung game; Android (GT-08B); addon bên thứ ba cần
+   tải mạng (LimboAI, Dialogic chỉ ghi ứng viên vì toolchain offline); VLM không là điều kiện PASS.
+   gamekit chưa vào gói .hhpkg ký; dùng từ repo trên máy này cho tới bản phát hành sau.
+
+O14 — 12-10-2026 14:05, TRƯỚC O15, OWNER BỎ KIỂM DÀI, XONG PLAN PC NGAY
 (AUTHORITY=OWNER_DIRECT_20261012; thắng O1.6, O12 và O13 ở P11, C5 và gói nghiệm thu GT-10-PC)
 Owner đọc giải thích về P11 (10 cặp × 35 đợt, khoảng 6 giờ máy yên; bắt rò bộ nhớ, handle, object
 sau phiên sửa dài; lỗi journal từng chỉ lộ ở đợt 26; thiếu P11 thì không có bằng chứng gói cài chịu
@@ -265,6 +302,7 @@ Căn cứ 11-10 18:30 → 12-10 09:30:
    C6 (xong 12-10 14:47): hai critic Grok độc lập TICK=yes cùng gói c3h (O14.7); GT-10-PC ACCEPTED
       theo O14 (mục Đã nghiệm thu). Lane công cụ dừng: lỗi công cụ do agent game sửa (O14.5), GT-11
       theo change request của game, GT-08B khi owner có Android (O12).
+   C7 (O15, từ 12-10 15:16): GT-11 mở ngay; W1–W12 ở mục GT-11, kiểm nhanh theo O15.3.
 6. Credit và lượt (thay O11.7):
    - Một coordinator, một thread; WP mới thì thread mới với handoff ≤ 1 trang. Coordinator effort
      high; ultra chỉ cho subagent thiết kế khó và hai critic cuối.
@@ -761,8 +799,51 @@ GT-08B: Android thật DEFERRED theo O12; chỉ mở lại khi owner có thiết
 GT-10-PC: ACCEPTED 12-10 theo O14 (kiểm ngắn); phần PC của plan công cụ đã xong. GT-10 đầy đủ còn
 cần GT-08B. HH World là plan riêng (H2-P0-01 trên PC do plan đó quyết theo O14.4). Không suy
 phần trăm sản phẩm hoặc ETA toàn plan từ số test/gate.
-GT-11 (PLANNED; O13.10, O14.5): mở theo change request của game (ứng viên đầu: SA-T01..SA-T06 của
-Superagent); lỗi công cụ do agent game sửa bằng test ngắn; không phải bảng tiến độ thứ hai.
+GT-11 (IN_PROGRESS theo O15, mở 12-10 15:16): gamekit cho game thật 2D và 3D, kiểm nhanh (O15.3).
+Không phải bảng tiến độ thứ hai: hàng 11 ở bảng đầu là trạng thái; W chỉ DONE khi commit có
+selftest và unit test xanh, coordinator tự chạy lại. Thứ tự W1 → W2/W3 → W4–W10 song song → W11 →
+W12. Mỗi dòng: việc | lệnh | kiểm nhanh | trạng thái.
+W1 Đăng ký project; scene inspect/apply/undo trên mọi .tscn; tạo scene mới; op node create/update/
+   delete/move/rename, resource new/load, script attach, instance, signal, group; kiểm script và
+   scene toàn project (CR-1, H2-T01) | hh project, hh scene, hh check | project tạm 2D và 3D: apply
+   rồi process mới đọc lại khớp; lặp cùng id ra cùng receipt; khác nội dung là CONFLICT; sai
+   type/property/path bị chặn và file không đổi; undo trả đúng byte | PLANNED
+W2 Catalog 2D và op 2D: TileSet từ atlas, tô cell, SpriteFrames từ sprite sheet, animation (track,
+   key), particle, đèn 2D, shader canvas, parallax, Path2D, Navigation2D, RigidBody2D và joint,
+   Camera2D (SA-T01, SA-T03) | hh scene apply | dựng arena 2D tạm: tile có va chạm, player, crate
+   rigid, đèn, hạt; đọc lại khớp; ảnh không trống | PLANNED
+W3 Catalog 3D: đèn Directional/Omni/Spot, WorldEnvironment (sky, fog, glow, tonemap, SDFGI), vật
+   liệu Standard/ORM/shader 3D, GPUParticles3D, CSG gray-box, RigidBody3D, Area3D, Navigation3D,
+   Path3D, AnimationTree, camera rig SpringArm3D, ReflectionProbe (H2-T02) | hh scene apply | dựng
+   phòng 3D tạm; đọc lại khớp; ảnh không trống | PLANNED
+W4 InputMap set/list; play theo trace 60 Hz (pressed/held/released, seed) có quan sát; bot gray-box:
+   input ngẫu nhiên theo seed, bắt crash, lỗi script, kẹt, đo phủ vùng (SA-T02, mục e) | hh input,
+   hh play, hh bot | nhân vật đi phải khi giữ phím; hai lần replay cùng hash; bot báo kẹt ở map bị
+   chặn | PLANNED
+W5 Ảnh chuẩn (cửa sổ, độ phân giải, frame cố định); so với baseline theo ngưỡng; bắt ảnh trống;
+   kiểm có mặt (node nằm trong khung hình) (mục c) | hh shot, hh vcheck | cùng scene diff 0; đổi
+   màu bị bắt; ảnh trống bị bắt | PLANNED
+W6 Hiệu năng: fps, ms process/physics, GPU ms, draw call, VRAM, object, orphan; vòng nạp/giải phóng
+   scene để bắt rò; ngân sách JSON, vượt là FAIL (mục d, SA-T06) | hh perf | scene tạm qua; script
+   cố ý rò bị FAIL | PLANNED
+W7 Cổng nhập asset, sổ license, CREDITS, cờ nội dung AI; chặn NC/ND/không rõ license; kiểm glTF (tam
+   giác, xương, clip, kích thước), ảnh, WAV (LUFS, peak) (mục a, f) | hh asset | nhập PNG/GLB/WAV
+   tạm vào sổ; license NC bị chặn; CREDITS sinh đúng | PLANNED
+W8 Công thức Blender JSON: primitive, modifier, vật liệu, import, armature mẫu và skin tự động,
+   keyframe, render sprite sheet (camera ortho, nhiều hướng × frame, nền trong), export GLB (SA-T04,
+   H2-T03) | hh blender | công thức mẫu ra GLB có clip và sprite sheet; nhập vào project tạm qua W7
+   | PLANNED
+W9 Kit GDScript tự viết (MIT): save/load atomic có version, settings (âm lượng, màn hình), đổi phím
+   lưu file, pause menu, audio bus Master/Music/SFX; cài autoload qua ProjectSettings (mục f,
+   H2-T04) | hh kit | cài vào project tạm; chạy không lỗi; save rồi load khớp | PLANNED
+W10 Export Windows/Linux/Web bằng template pin (cài từ gói .tpz đã kiểm SHA, chỉ file cần), tạo
+   preset nếu thiếu (SA-T05) | hh export | export project tạm ra exe và web; exe chạy headless
+   thoát 0 | PLANNED
+W11 Verifier gói: G1 (P11 ngắn đọc exit từ process-exit.json của host), G2 (P4 ghi receipt host
+   từng ca) | unit test | unit test xanh; G2 chỉ chứng minh đủ ở lần đóng gói sau (known limit) |
+   PLANNED
+W12 Hướng dẫn thêm mục gamekit và bảng lệnh; AUTHORING_STATUS; một critic Grok read-only cuối đợt;
+   đóng GT-11 ACCEPTED_O15_QUICK | — | selftest all xanh; critic TICK=yes | PLANNED
 
 Thực thi và tốc độ
 - Tiêu chí/gate theo khối quyết định owner O1–O14; ưu tiên đường chức năng, focused regression
@@ -977,6 +1058,11 @@ Bài học GT-09 và GT-10-PC (08-10 17:15 → 12-10 10:30):
 95. Tài liệu ở gốc studio/ không vào gói (gốc payload chỉ có toolchain.lock.json): sửa
     AUTHORING_STATUS.md lúc nghiệm thu không làm verify-only drift (14:46 vẫn RAW_VERIFIED). Hash
     báo cáo critic tính trên bản CRLF của máy (core.autocrlf=true); ghi thêm hash blob LF đã commit.
+96. Gate đóng không có nghĩa là agent game dùng được: GT-10-PC ACCEPTED nhưng lệnh scene chỉ chạy
+    trên fixture. Trước khi báo xong cho owner, thử dùng công cụ trên một project game thật và nói
+    thẳng phần chưa dùng được. Thử nhanh 12-10: Godot pin chạy --script tuyệt đối ngoài project,
+    autoload của game có nạp, pack/save scene được (2 giây; file tạm mất uid nên phải chép lại uid
+    vào header); chụp viewport cửa sổ và đo GPU ms được (13 giây).
 
 LỊCH SỬ / CÁCH ĐỌC
 Bản S71 đầy đủ trước tinh gọn giữ tại reviews/20260918-plan-history-s71/
@@ -1577,8 +1663,8 @@ manifest must list Android only after that evidence exists. This split is a
 scoped release slice, not a partial ACCEPT of the full GT-10.
 OWNER O13 (09-10): ma trận khung GT-10-PC P1–P12 và cách đọc dòng Android/RELEASE cũ ở O13.8.
 Không cần closed alpha của game và không claim tool sửa được mọi thể loại.
-GT-11 (PLANNED, owner 09-10): phạm vi, thứ tự và luật ở O13.10; spec chi tiết và ma trận
-chỉ viết khi mở GT-11 sau GT-10-PC ACCEPTED.
+GT-11 (IN_PROGRESS theo O15): phạm vi gốc ở O13.10; spec W1–W12 và cách kiểm nhanh ở mục GT-11
+phần "Phần còn lại để xong plan" và O15.
 4. TQ — GATE CHẤT LƯỢNG CÔNG CỤ (MỤC TIÊU, CHƯA CÓ KẾT QUẢ)
 
 TQ00: bảng dependency đầu file + spec GT + mục2 + TQ/TX được spec trỏ tới
