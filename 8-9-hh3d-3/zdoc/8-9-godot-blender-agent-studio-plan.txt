@@ -812,14 +812,15 @@ W1 Đăng ký project; scene inspect/apply/undo trên mọi .tscn; tạo scene m
 W2 Catalog 2D và op 2D: TileSet từ atlas, tô cell, SpriteFrames từ sprite sheet, animation (track,
    key), particle, đèn 2D, shader canvas, parallax, Path2D, Navigation2D, RigidBody2D và joint,
    Camera2D (SA-T01, SA-T03) | hh scene apply | dựng arena 2D tạm: tile có va chạm, player, crate
-   rigid, đèn, hạt; đọc lại khớp; ảnh không trống | DONE_PART 9eae7686, 2d129056 (w2 19/19: dựng,
-   đọc lại, 2 ca từ chối giữ byte, chạy 60 frame không lỗi; catalog 173 node + 112 resource có đủ
-   trong 4.7.2); kiểm ảnh không trống chờ W5
+   rigid, đèn, hạt; đọc lại khớp; ảnh không trống | DONE 9eae7686, 2d129056, 3cfcb276 (w2 21/21:
+   dựng, đọc lại, 2 ca từ chối giữ byte, chạy 60 frame không lỗi, hh shot cửa sổ thật không trống
+   và sprite nhân vật trong khung; catalog 173 node + 112 resource có đủ trong 4.7.2)
 W3 Catalog 3D: đèn Directional/Omni/Spot, WorldEnvironment (sky, fog, glow, tonemap, SDFGI), vật
    liệu Standard/ORM/shader 3D, GPUParticles3D, CSG gray-box, RigidBody3D, Area3D, Navigation3D,
    Path3D, AnimationTree, camera rig SpringArm3D, ReflectionProbe (H2-T02) | hh scene apply | dựng
-   phòng 3D tạm; đọc lại khớp; ảnh không trống | DONE_PART 9b742f6d, 2d129056 (w3 14/14: dựng,
-   đọc lại, method track, chạy 60 frame không lỗi); kiểm ảnh không trống chờ W5
+   phòng 3D tạm; đọc lại khớp; ảnh không trống | DONE 9b742f6d, 2d129056, 3cfcb276 (w3 16/16:
+   dựng, đọc lại, method track, chạy 60 frame không lỗi, hh shot không trống, cột và quả cầu
+   trong khung)
 W4 InputMap set/list; play theo trace 60 Hz (pressed/held/released, seed) có quan sát; bot gray-box:
    input ngẫu nhiên theo seed, bắt crash, lỗi script, kẹt, đo phủ vùng (SA-T02, mục e) | hh input,
    hh play, hh bot | nhân vật đi phải khi giữ phím; hai lần replay cùng hash; bot báo kẹt ở map bị
@@ -828,10 +829,13 @@ W4 InputMap set/list; play theo trace 60 Hz (pressed/held/released, seed) có qu
    project.godot; unit 8/8)
 W5 Ảnh chuẩn (cửa sổ, độ phân giải, frame cố định); so với baseline theo ngưỡng; bắt ảnh trống;
    kiểm có mặt (node nằm trong khung hình) (mục c) | hh shot, hh vcheck | cùng scene diff 0; đổi
-   màu bị bắt; ảnh trống bị bắt | PLANNED
+   màu bị bắt; ảnh trống bị bắt | DONE 231ea7ea, bfe7e735 (w5 27/27, unit 11/11; sửa 12-10:
+   presence cho AnimatedSprite2D vì 4.7 không có get_rect, lỗi Godot khi chụp cho ok false và
+   không ghi baseline)
 W6 Hiệu năng: fps, ms process/physics, GPU ms, draw call, VRAM, object, orphan; vòng nạp/giải phóng
    scene để bắt rò; ngân sách JSON, vượt là FAIL (mục d, SA-T06) | hh perf | scene tạm qua; script
-   cố ý rò bị FAIL | PLANNED
+   cố ý rò bị FAIL | DONE 3afd3fa9 (w6 16/16: scene 50 sprite qua ngân sách, script rò node bị
+   ok false, draw_calls_max 0 là vi phạm, headless ghi GPU not_measured; unit 16/16)
 W7 Cổng nhập asset, sổ license, CREDITS, cờ nội dung AI; chặn NC/ND/không rõ license; kiểm glTF (tam
    giác, xương, clip, kích thước), ảnh, WAV (LUFS, peak) (mục a, f) | hh asset | nhập PNG/GLB/WAV
    tạm vào sổ; license NC bị chặn; CREDITS sinh đúng | DONE 1541e4b8 (w7 19/19, unit 14/14; theo
@@ -845,7 +849,9 @@ W8 Công thức Blender JSON: primitive, modifier, vật liệu, import, armatur
    instance; unit 4/4)
 W9 Kit GDScript tự viết (MIT): save/load atomic có version, settings (âm lượng, màn hình), đổi phím
    lưu file, pause menu, audio bus Master/Music/SFX; cài autoload qua ProjectSettings (mục f,
-   H2-T04) | hh kit | cài vào project tạm; chạy không lỗi; save rồi load khớp | PLANNED
+   H2-T04) | hh kit | cài vào project tạm; chạy không lỗi; save rồi load khớp | DONE 0872cd1a (w9
+   40/40: save/load khớp, settings, rebind, bus, replay, CONFLICT, remove; remove từ chối file kit
+   hoặc layout bus game đã sửa nếu thiếu --force; unit 9/9)
 W10 Export Windows/Linux/Web bằng template pin (cài từ gói .tpz đã kiểm SHA, chỉ file cần), tạo
    preset nếu thiếu (SA-T05) | hh export | export project tạm ra exe và web; exe chạy headless
    thoát 0 | DONE cc1cffaf (w10 12/12: template cài từ .tpz, exe Windows chạy headless thoát 0, Web
