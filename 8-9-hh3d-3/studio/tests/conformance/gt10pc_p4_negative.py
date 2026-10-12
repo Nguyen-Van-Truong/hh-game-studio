@@ -3,18 +3,24 @@
 The same module is imported by the Windows probe now and by the Linux worker
 later. It uses the stdlib plus the package modules that worker already imports.
 Signing material is a caller-supplied signer; this file never loads a key.
+
+Each refusal case runs in its own child interpreter. The parent writes
+receipts/<case>.json from that child's pid, exit, and stdout.
 """
 from __future__ import annotations
 
 import os
 import stat
+import subprocess
+import sys
 import zipfile
 from collections.abc import Callable
+from datetime import datetime, timezone
 from pathlib import Path
 
 from studio.package.consumer_install import ConsumerInstall
 from studio.package.release_contract import (
-    DOMAIN, SCHEMA, canonical, digest_bytes, digest_file, PackageError, strict_json,
+    DOMAIN, SCHEMA, canonical, digest_bytes, digest_file, PackageError, safe_path, strict_json,
     verify_manifest, verify_package,
 )
 
@@ -24,6 +30,14 @@ BAD_SCHEMA = "hh-studio-package-incompatible"
 ABSENT_KEY_ID = "hh-untrusted-absent"
 SCHEMA_ERROR = "unsupported package schema"
 ROLLBACK_ERROR = "untrusted signing key"
+RECEIPT_SCHEMA = "hh-gt10pc-p4-negative-receipt-1"
+CASE_EXIT_CODE = {"incompatible-schema": 0, "untrusted-rollback": 0}
+CASE_ERROR = {"incompatible-schema": SCHEMA_ERROR, "untrusted-rollback": ROLLBACK_ERROR}
+CASE_TIMEOUT_SECONDS = 120
+RECEIPT_KEYS = {
+    "schema", "case", "pid", "exit_code", "started_at", "ended_at",
+    "stdout_sha256", "stdout_file", "refused", "error_code",
+}
 
 
 def _fail(code: str) -> None:
@@ -128,33 +142,164 @@ def _arm_untrusted_previous(install_root: Path, manifest_bytes: bytes, digest: s
     return digest_bytes(raw)
 
 
+def _repo_root() -> Path:
+    return Path(__file__).resolve().parents[3]
+
+
+def _child_base(install_root: Path, open_consumer: Callable[[], ConsumerInstall],
+                out_dir: Path) -> dict[str, object]:
+    consumer = open_consumer()
+    if safe_path(install_root) != consumer.root:
+        _fail("ROOT")
+    if not isinstance(consumer.target, str) or not consumer.trusted_keys:
+        _fail("TRUST")
+    keys = {}
+    for key_id, value in consumer.trusted_keys.items():
+        if not isinstance(key_id, str) or not isinstance(value, bytes) or len(value) != 32:
+            _fail("TRUST")
+        keys[key_id] = value.hex()
+    return {"install_root": str(consumer.root), "target": consumer.target,
+            "trusted_keys": keys, "out_dir": str(safe_path(out_dir))}
+
+
+def _trusted_keys(request: dict) -> dict[str, bytes]:
+    raw = request.get("trusted_keys")
+    if not isinstance(raw, dict) or not raw:
+        _fail("TRUST")
+    keys = {}
+    for key_id, hex_key in raw.items():
+        if not isinstance(key_id, str) or not isinstance(hex_key, str) or len(hex_key) != 64:
+            _fail("TRUST")
+        try:
+            value = bytes.fromhex(hex_key)
+        except ValueError:
+            _fail("TRUST")
+        if len(value) != 32:
+            _fail("TRUST")
+        keys[key_id] = value
+    return keys
+
+
+def _request_path(request: dict, name: str) -> Path:
+    value = request.get(name)
+    if not isinstance(value, str) or not value:
+        _fail("PATH")
+    return Path(value)
+
+
+def _execute_case(request: dict) -> str:
+    """Run one refusal inside the child. Return the observed error text."""
+    case = request.get("case")
+    if case not in CASE_EXIT_CODE or not isinstance(request, dict):
+        _fail("CASE")
+    install_root = _request_path(request, "install_root")
+    out_dir = _request_path(request, "out_dir")
+    target = request.get("target")
+    if not isinstance(target, str):
+        _fail("TARGET")
+    keys = _trusted_keys(request)
+
+    def open_consumer() -> ConsumerInstall:
+        return ConsumerInstall(install_root, trusted_keys=keys, target=target)
+
+    if case == "incompatible-schema":
+        package = _request_path(request, "package")
+
+        def reject_schema() -> None:
+            consumer = open_consumer()
+            consumer.install(package, command_id=SCHEMA_COMMAND_ID,
+                             expected_state_sha256=consumer.snapshot()["state_sha256"])
+
+        _refuse(install_root, out_dir / "incompatible-schema", SCHEMA_COMMAND_ID,
+                SCHEMA_ERROR, "SCHEMA", reject_schema)
+        return SCHEMA_ERROR
+    destination = request.get("destination")
+    if not isinstance(destination, str) or not destination:
+        _fail("DESTINATION")
+
+    def reject_rollback() -> None:
+        consumer = open_consumer()
+        consumer.rollback(command_id=ROLLBACK_COMMAND_ID, destination=destination,
+                          expected_state_sha256=consumer.snapshot()["state_sha256"])
+
+    _refuse(install_root, out_dir / "untrusted-rollback", ROLLBACK_COMMAND_ID,
+            ROLLBACK_ERROR, "ROLLBACK", reject_rollback)
+    return ROLLBACK_ERROR
+
+
+def _spawn_case(case: str, request: dict, out_dir: Path) -> None:
+    """Run one refusal child and write receipts/<case>.json from the parent."""
+    if case not in CASE_EXIT_CODE:
+        _fail("CASE")
+    receipt_dir = out_dir / "receipts"
+    receipt_dir.mkdir(parents=True, exist_ok=True)
+    stdout_path = receipt_dir / (case + ".stdout")
+    stderr_path = receipt_dir / (case + ".stderr")
+    receipt_path = receipt_dir / (case + ".json")
+    if stdout_path.exists() or stderr_path.exists() or receipt_path.exists():
+        _fail("RECEIPT")
+    env = os.environ.copy()
+    repo = str(_repo_root())
+    prior = env.get("PYTHONPATH")
+    env["PYTHONPATH"] = repo if not prior else repo + os.pathsep + prior
+    command = [sys.executable, "-B", "-m", "studio.tests.conformance.gt10pc_p4_negative"]
+    flags = subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0
+    started_at = datetime.now(timezone.utc).isoformat()
+    timed_out = False
+    try:
+        with stdout_path.open("xb") as stdout, stderr_path.open("xb") as stderr:
+            proc = subprocess.Popen(command, cwd=repo, env=env, stdin=subprocess.PIPE,
+                                    stdout=stdout, stderr=stderr, creationflags=flags)
+            try:
+                proc.communicate(canonical(request), timeout=CASE_TIMEOUT_SECONDS)
+            except subprocess.TimeoutExpired:
+                timed_out = True
+                proc.kill()
+                proc.wait(timeout=30)
+    except OSError:
+        _fail("CASE_CHILD")
+    ended_at = datetime.now(timezone.utc).isoformat()
+    stdout_bytes = stdout_path.read_bytes()
+    expected_stdout = (CASE_ERROR[case] + "\n").encode("ascii")
+    code = proc.returncode if type(proc.returncode) is int else -1
+    pid = proc.pid if type(proc.pid) is int else 0
+    matched = stdout_bytes == expected_stdout
+    refused = (not timed_out) and code == CASE_EXIT_CODE[case] and matched and pid > 0
+    receipt = {"schema": RECEIPT_SCHEMA, "case": case, "pid": pid, "exit_code": code,
+               "started_at": started_at, "ended_at": ended_at,
+               "stdout_sha256": digest_file(stdout_path), "stdout_file": "receipts/" + stdout_path.name,
+               "refused": refused, "error_code": CASE_ERROR[case] if matched else ""}
+    _write_new(receipt_path, canonical(receipt) + b"\n")
+    if timed_out or not refused:
+        tail = stderr_path.read_bytes()[-1000:] if stderr_path.is_file() else b""
+        text = "P4_NEG_" + ("CASE_TIMEOUT" if timed_out else "CASE_CHILD")
+        text += " exit=" + str(code)
+        if tail:
+            text += "\n" + tail.decode("utf-8", errors="replace")
+        raise ValueError(text)
+
+
 def run_negative(install_root: Path, open_consumer: Callable[[], ConsumerInstall],
                  artifacts: dict[str, dict[str, str]], out_dir: Path) -> dict[str, str]:
-    """Refuse one incompatible install and one untrusted rollback. No Play."""
+    """Refuse one incompatible install and one untrusted rollback. No Play.
+
+    Each refusal runs in its own child Python process. A completed refusal
+    child exits with that case's contract code (0). The parent writes one
+    receipt per case under receipts/.
+    """
     package = Path(artifacts["incompatible-schema.hhpkg"]["path"])
     manifest_path = Path(artifacts["untrusted-manifest"]["path"])
     manifest_bytes = manifest_path.read_bytes()
     if digest_bytes(manifest_bytes) != artifacts["untrusted-manifest"]["sha256"]:
         _fail("MANIFEST_HASH")
-
-    def reject_schema() -> None:
-        consumer = open_consumer()
-        consumer.install(package, command_id=SCHEMA_COMMAND_ID,
-                         expected_state_sha256=consumer.snapshot()["state_sha256"])
-
-    _refuse(install_root, out_dir / "incompatible-schema", SCHEMA_COMMAND_ID,
-            SCHEMA_ERROR, "SCHEMA", reject_schema)
+    base = _child_base(install_root, open_consumer, out_dir)
+    _spawn_case("incompatible-schema", {**base, "case": "incompatible-schema",
+                                       "package": str(safe_path(package))}, out_dir)
     state_sha256 = _arm_untrusted_previous(install_root, manifest_bytes, digest_bytes(manifest_bytes))
     _write_new(out_dir / "untrusted-rollback" / "setup.json", canonical({
         "previous": digest_bytes(manifest_bytes), "state_sha256": state_sha256}) + b"\n")
-
-    def reject_rollback() -> None:
-        consumer = open_consumer()
-        consumer.rollback(command_id=ROLLBACK_COMMAND_ID, destination=digest_bytes(manifest_bytes),
-                          expected_state_sha256=consumer.snapshot()["state_sha256"])
-
-    _refuse(install_root, out_dir / "untrusted-rollback", ROLLBACK_COMMAND_ID,
-            ROLLBACK_ERROR, "ROLLBACK", reject_rollback)
+    _spawn_case("untrusted-rollback", {**base, "case": "untrusted-rollback",
+                                       "destination": digest_bytes(manifest_bytes)}, out_dir)
     return {"incompatible-schema": SCHEMA_ERROR, "untrusted-rollback": ROLLBACK_ERROR}
 
 
@@ -198,8 +343,77 @@ def _exception_text(case_dir: Path, expected: str) -> None:
         _fail("EXCEPTION")
 
 
-def verify_negative(out_dir: Path, trust: dict[str, bytes]) -> dict:
-    """Recompute both refusals from raw files. Ignore any producer rejected flag."""
+def _relative_stdout(out_dir: Path, relative: object) -> Path:
+    if not isinstance(relative, str) or not relative or Path(relative).is_absolute():
+        _fail("RECEIPT")
+    parts = Path(relative).parts
+    if not parts or any(part in ("", ".", "..") for part in parts):
+        _fail("RECEIPT")
+    try:
+        return safe_path(out_dir.joinpath(*parts))
+    except ValueError:
+        _fail("RECEIPT")
+
+
+def _bind_receipt(out_dir: Path, case: str, refusal: str) -> None:
+    try:
+        path = safe_path(out_dir / "receipts" / (case + ".json"))
+    except ValueError:
+        _fail("RECEIPT")
+    receipt = _json_object(_read_exact(path, "RECEIPT"), "RECEIPT")
+    if (set(receipt) != RECEIPT_KEYS or receipt.get("schema") != RECEIPT_SCHEMA
+            or receipt.get("case") != case or receipt.get("refused") is not True):
+        _fail("RECEIPT")
+    pid, exit_code = receipt.get("pid"), receipt.get("exit_code")
+    if type(pid) is not int or pid <= 0 or type(exit_code) is not int or exit_code != CASE_EXIT_CODE[case]:
+        _fail("RECEIPT")
+    if receipt.get("error_code") != refusal:
+        _fail("RECEIPT")
+    started, ended = receipt.get("started_at"), receipt.get("ended_at")
+    if not isinstance(started, str) or not started or not isinstance(ended, str) or ended < started:
+        _fail("RECEIPT")
+    stdout_path = _relative_stdout(out_dir, receipt.get("stdout_file"))
+    if not stdout_path.is_file():
+        _fail("RECEIPT")
+    try:
+        if (stdout_path.read_bytes() != (refusal + "\n").encode("ascii")
+                or digest_file(stdout_path) != receipt.get("stdout_sha256")):
+            _fail("RECEIPT")
+    except (OSError, ValueError):
+        _fail("RECEIPT")
+
+
+def _require_receipts(out_dir: Path, refusals: dict[str, str], *,
+                      legacy_ok_without_receipts: bool) -> None:
+    """Require one receipt per case. Skip only when historical raw has no directory."""
+    receipt_dir = out_dir / "receipts"
+    if not receipt_dir.exists():
+        if legacy_ok_without_receipts is True:
+            return
+        # Raw produced before per-case receipts (for example c3h); a new packaging run writes them.
+        _fail("RECEIPTS_ABSENT")
+    if not receipt_dir.is_dir() or set(refusals) != set(CASE_EXIT_CODE):
+        _fail("RECEIPT")
+    names = sorted(path.name for path in receipt_dir.iterdir() if path.is_file() and path.suffix == ".json")
+    if names != sorted(case + ".json" for case in CASE_EXIT_CODE):
+        _fail("RECEIPT")
+    for case, refusal in refusals.items():
+        _bind_receipt(out_dir, case, refusal)
+
+
+def verify_negative(out_dir: Path, trust: dict[str, bytes], *,
+                    legacy_ok_without_receipts: bool = False) -> dict:
+    """Recompute both refusals from raw files. Ignore any producer rejected flag.
+
+    New runs require exactly one host receipt per case at receipts/<case>.json
+    (pid > 0, the case contract exit code, stdout_sha256 matching the saved
+    stdout file, and error_code equal to the refusal recomputed here). Pass
+    legacy_ok_without_receipts=True only to verify historical raw that has no
+    receipts directory. No caller passes that keyword by default. When the
+    directory is absent and the keyword is true, receipt binding is skipped.
+    A receipts directory that exists is always bound, including when the
+    keyword is true.
+    """
     if not isinstance(trust, dict) or not trust:
         _fail("TRUST")
     schema_before, _schema_after, schema_state = _case_state(
@@ -254,6 +468,10 @@ def verify_negative(out_dir: Path, trust: dict[str, bytes]) -> dict:
         _fail("ROLLBACK_ACCEPTED")
     if schema_before.get("active") != rollback_after.get("active"):
         _fail("SELECTOR")
+    _require_receipts(out_dir, {
+        "incompatible-schema": SCHEMA_ERROR,
+        "untrusted-rollback": ROLLBACK_ERROR,
+    }, legacy_ok_without_receipts=legacy_ok_without_receipts)
     return {
         "status": "P4_NEG_VERIFIED", "authority": 0, "acceptance": False,
         "cases": {
@@ -269,3 +487,27 @@ def verify_negative(out_dir: Path, trust: dict[str, bytes]) -> dict:
             },
         },
     }
+
+
+def main() -> int:
+    """Child entry: one refusal request on stdin, the refusal text on stdout."""
+    raw = sys.stdin.buffer.read(1024 * 1024 + 1)
+    if len(raw) > 1024 * 1024:
+        return 2
+    try:
+        request = strict_json(raw)
+    except PackageError:
+        return 2
+    if not isinstance(request, dict):
+        return 2
+    try:
+        observed = _execute_case(request)
+    except ValueError as exc:
+        sys.stderr.write(str(exc) + "\n")
+        return 1
+    sys.stdout.buffer.write(observed.encode("ascii") + b"\n")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

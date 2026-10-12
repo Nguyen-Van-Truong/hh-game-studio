@@ -201,8 +201,31 @@ def _verify_p11_short_row(root: Path, row: dict) -> dict:
          and all(v.get('closed') is True and v.get('zero_observed') is True
                  and v.get('handle_retained') is False for v in jobs.values()),
          'GT10PC_P11_VERIFY_JOBS')
+    # Host-owned exits are the helper receipts next to each stage, not capture.actual_exits.
+    process_exit_sha256 = {}
+    run_dir = capture_path.parent
+    for job, host_name in (('import', 'import-host'), ('editor', 'editor-host')):
+        receipt_path = run_dir / host_name / 'process-exit.json'
+        try:
+            resolved = receipt_path.resolve()
+        except OSError:
+            need(False, 'GT10PC_P11_VERIFY_PROCESS_EXIT')
+        need(resolved.is_file() and resolved.parent.parent == run_dir
+             and resolved.parent.name == host_name and resolved.name == 'process-exit.json'
+             and review_root in resolved.parents,
+             'GT10PC_P11_VERIFY_PROCESS_EXIT')
+        try:
+            observed = _read(resolved)
+            digest = digest_file(resolved)
+        except (OSError, ValueError):
+            need(False, 'GT10PC_P11_VERIFY_PROCESS_EXIT')
+        need(type(observed.get('exit_code')) is int and observed['exit_code'] == 0
+             and type(observed.get('pid')) is int and observed['pid'] == exits[job]['pid'],
+             'GT10PC_P11_VERIFY_PROCESS_EXIT')
+        process_exit_sha256[job] = digest
     return {'run_id': capture['run_id'], 'profile_sha256': capture.get('profile_sha256'),
-            'capture_sha256': digest_file(capture_path), 'actual_exits': exits}
+            'capture_sha256': digest_file(capture_path), 'actual_exits': exits,
+            'process_exit_sha256': process_exit_sha256}
 
 
 def _read_large_json(path: Path, *, limit: int = 64 * 1024 * 1024) -> dict:
