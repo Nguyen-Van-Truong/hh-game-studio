@@ -1,12 +1,12 @@
 HH STUDIO — PLAN 1/3: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Cập nhật 12-10-2026, Asia/Saigon | Revision S295 + quyết định owner O1–O13 | TRIỂN KHAI THEO GATE
+Cập nhật 12-10-2026, Asia/Saigon | Revision S296 + quyết định owner O1–O13 | TRIỂN KHAI THEO GATE
 OWNER_DECISIONS=O1_O3_20260925; O4_20260927; O5_O6_20260930; O7_20261001; O8_20261002; O9_20261003; O10_20261004; O11_20261006; O12_20261007; O13_20261008; BLOCK_BELOW_STATUS_TABLE; LATER_WINS_OVER_S2XX; OLD_VERDICTS_UNCHANGED
 OWNER_DECISIONS_FULL_TEXT_IN_GIT=87912523,b0802472,8298c107,fcc1906f,6d8eb81d,d04266e8,091506fa,a0ab19b8,fd5ad2be,add82689,7f97d3f8,5992d9f2,5ff3885e,054c0611
-HIỆN HÀNH 12-10 — GT-01..GT-09 ACCEPTED; GT-10-PC IN_PROGRESS THEO NEXT C1–C6 Ở O13.5: GAP LIST C4 ĐÃ SỬA (7de2c1aa, 4ea5739f), ĐANG DIỄN TẬP C3 c3g (REVIEWER LÀ COORDINATOR, LEASE AGENTS.md), RỒI FINAL P1–P11 (P11 10 PAIR × 35) NGAY KHI ĐẠT, HAI CRITIC; GT-08B DEFERRED_OWNER_NO_ANDROID; GT-10 FULL CHỜ GT-08B
+HIỆN HÀNH 12-10 — GT-01..GT-09 ACCEPTED; GT-10-PC IN_PROGRESS THEO NEXT C1–C6 Ở O13.5: C3 c3g ĐẠT (RAW_VERIFIED), ĐANG CHẠY FINAL f1 TỪ 11:40 TỚI KHOẢNG 18:10 (REVIEWER LÀ COORDINATOR, LEASE AGENTS.md), RỒI FINAL P1–P11 (P11 10 PAIR × 35) NGAY KHI ĐẠT, HAI CRITIC; GT-08B DEFERRED_OWNER_NO_ANDROID; GT-10 FULL CHỜ GT-08B
 CURRENT_VALID_WP=GT-10-PC
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S295
+PLAN_REVISION=S296
 EXECUTION_AUTHORIZATION=OWNER_APPROVED_GATED
 EXECUTION_MODE=COORDINATOR_WITH_SCOPED_SUBAGENTS_AND_INDEPENDENT_CRITICS_OWNER_20261003; CREDIT_TURN_BUDGET_O13_6; ONE_COORDINATOR_THREAD; ULTRA_ONLY_HARD_DESIGN_AND_FINAL_CRITICS; FORK_TURNS_NONE_DEFAULT; NO_SELF_CREATED_HEARTBEAT; ONE_WRITER_PER_FILE; TWO_DIFFERENT_MODELS_SAME_HASH
 GOAL_STATE=ACTIVE; INDEPENDENT_CONSUMER_PILOT_AUTHORIZED; GT07_ACCEPTED; GT08A_ACCEPTED_O4_6; GT09_ACCEPTED_20261010; GT08B_DEFERRED_OWNER_NO_ANDROID; GT10_PC_OPEN; GT10_FULL_BLOCKED_BY_GT08B; SUPERAGENT_SEPARATE_OWNER_AUTHORIZED_LANE
@@ -210,11 +210,11 @@ Căn cứ 11-10 18:30 → 12-10 09:30:
    C4a (xong 12-10 10:58, commit 7de2c1aa): sửa một lượt mọi BLOCKER và MAJOR của pre-review
       zdoc/reviews/20261012-gt10pc-c4-prereview/prereview.md; thử validator trên raw c3e bằng
       --verify-only đã sửa theo 3e (chỉ hàng c3e thiếu bằng chứng được hỏng), không remint để dò.
-   C3 (c3f hỏng P1 tự quét; c3g chạy từ 11:11): diễn tập lại P1–P11 (P11 một vòng) qua Scheduled Task trên
+   C3 (xong; c3g đạt, RAW_VERIFIED): diễn tập lại P1–P11 (P11 một vòng) qua Scheduled Task trên
       đúng source định freeze, rồi --verify-only. Hỏng thì sửa và kiểm bằng --verify-only trước.
    C4b (tùy chọn, 30 phút): reviewer đối chiếu gói C3 mới với gap list; không đổi tiêu chí.
-   C5 (ngay khi C3 đạt): freeze; final P1–P11 đầy đủ qua Scheduled Task khởi chạy ngay (P11
-      năm campaign 2 pair, tổng khoảng 6 giờ 20 phút); xong là --verify-only và self-check
+   C5 (đang chạy f1 từ 11:40, closure 3ec865d4, commit 4ea5739f): final P1–P11 qua Scheduled
+      Task (P11 năm campaign 2 pair, tổng khoảng 6 giờ 20 phút); xong là --verify-only và self-check
       mục 3 luôn. Hỏng INFRA giữa soak thì chạy lại ID mới trên cùng closure (O1.7).
    C6 (1–2 giờ): P12 hai critic khác model cùng manifest; cả hai TICK=yes thì nghiệm thu theo
       O4.3, ghi mục Đã nghiệm thu, đổi header. Sau đó lane công cụ dừng: GT-11 chỉ mở khi plan
