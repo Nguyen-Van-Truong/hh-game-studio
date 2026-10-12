@@ -1,15 +1,13 @@
 # HH3D-3 — routing hiện hành
 
-LEASE GT-11 12-10-2026 15:16 → khi GT-11 đóng (owner O15): reviewer Claude làm coordinator GT-11
-(gamekit W1–W12, kiểm nhanh selftest, subagent grok-4.7-xhigh). Trong lease chỉ coordinator và
-subagent được giao sửa `studio/gamekit/**`, `studio/tests/gamekit/**`, hướng dẫn và plan công cụ.
-Agent game không sửa các file đó; lỗi/yêu cầu ghi thêm dòng vào
-`zdoc/12-10-gt11-yeu-cau-tu-agent-game.txt` (ngày giờ, game, lệnh, lỗi thấy).
-GT-10-PC ACCEPTED 12-10 14:47 theo O14 (kiểm ngắn: gói diễn tập c3h, hai critic Grok). Agent làm game
-dùng công cụ theo
-[12-10-huong-dan-dung-cong-cu-godot-blender.txt](zdoc/12-10-huong-dan-dung-cong-cu-godot-blender.txt):
-phần đã có dùng ngay; lệnh `hh` của từng W dùng được khi commit W đó xong (bảng trạng thái trong
-hướng dẫn). Lỗi công cụ ngoài lease: sửa trong `studio/` bằng test ngắn liên quan (O14.5).
+GT-11 ACCEPTED_O15_QUICK 12-10-2026 18:35 (gamekit W1–W12, selftest all 226/226, critic Grok vòng
+cuối 2 TICK=yes trên 2a03cc2f); lease GT-11 đã hết. GT-10-PC ACCEPTED 12-10 14:47 theo O14 (kiểm
+ngắn: gói diễn tập c3h, hai critic Grok). Plan công cụ xong cho PC; GT-08B (Android) hoãn theo O12.
+Agent làm game dùng công cụ và lệnh `hh` theo
+[12-10-huong-dan-dung-cong-cu-godot-blender.txt](zdoc/12-10-huong-dan-dung-cong-cu-godot-blender.txt)
+(mục 13 cho gamekit). Lỗi công cụ: sửa trong `studio/` bằng test ngắn liên quan và selftest của
+lệnh đó, giữ contract, mỗi change request một commit (O14.5); không tự sửa được thì ghi thêm dòng
+vào `zdoc/12-10-gt11-yeu-cau-tu-agent-game.txt` (ngày giờ, game, lệnh, lỗi thấy).
 
 Owner steering 03-10-2026, credit và lượt theo O13.6 của tools plan (08-10): một coordinator, một
 thread; subagent dùng khi cần (audit, research, việc không quá khó, hai critic), fork_turns=none,
@@ -57,7 +55,7 @@ Ba plan TXT có scope riêng theo lệnh owner 18-09-2026:
 fixture độc lập; plan game kiểm lại trên workload thật. Không tạo master plan thứ tư. Các file 5-9 và unified cũ chỉ lịch sử/routing, không tick và không bổ sung
 DoD. Review/static evidence nằm trong zdoc/reviews/, không phải nguồn tiến độ.
 
-Plan công cụ: GT-01→GT-10-PC xong cho PC (O14); GT-11 đang làm theo O15. HH World đi H2-P0-01→H2-P9-02;
+Plan công cụ: GT-01→GT-10-PC xong cho PC (O14); GT-11 ACCEPTED_O15_QUICK 12-10. HH World đi H2-P0-01→H2-P9-02;
 Superagent đi SA-01→SA-13 (SA-14 khóa sau Classic), owner mở 03-10 cho agent riêng; coordinator công cụ
 không kiêm. Hai game độc lập, không là dependency của nhau; research/plan không
 tự mở triển khai game khác. Không fork lõi Godot lúc đầu;
