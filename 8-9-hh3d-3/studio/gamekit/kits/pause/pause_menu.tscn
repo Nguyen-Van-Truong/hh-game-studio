@@ -1,0 +1,30 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://addons/hh_kits/pause/pause_menu.gd" id="1_pause"]
+
+[node name="PauseMenu" type="CanvasLayer"]
+process_mode = 3
+script = ExtResource("1_pause")
+
+[node name="Panel" type="Panel" parent="."]
+visible = false
+offset_left = 220.0
+offset_top = 100.0
+offset_right = 540.0
+offset_bottom = 340.0
+
+[node name="Resume" type="Button" parent="Panel"]
+layout_mode = 0
+offset_left = 30.0
+offset_top = 40.0
+offset_right = 290.0
+offset_bottom = 80.0
+text = "Resume"
+
+[node name="Quit" type="Button" parent="Panel"]
+layout_mode = 0
+offset_left = 30.0
+offset_top = 100.0
+offset_right = 290.0
+offset_bottom = 140.0
+text = "Quit"
