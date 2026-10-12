@@ -204,14 +204,18 @@ CR-1 (lịch sử; đã được thay bằng gamekit ở mục 13 theo O15, khô
   SA-T02 InputMap và replay input 60 Hz, SA-T03 trình bày 2D (particle, shader, âm thanh, UI),
   SA-T04 sprite sheet từ Blender, SA-T05 export Web, SA-T06 headless và Performance monitor.
 - HH World (zdoc/8-9-hh-world-gameplay-viet-nam-plan.txt): H2-T01..H2-T04.
-- Khoảng trống của verifier gói: G1 (P11 ngắn đọc exit Godot từ capture.json, chưa từ
-  process-exit.json), G2 (từ chối ở P4 chưa có receipt host riêng từng ca).
+- Khoảng trống verifier G1, G2 đã sửa trong code ở W11 (8a9d5407): P11 ngắn đòi process-exit.json
+  của host khớp pid và exit 0; mỗi ca từ chối P4 chạy trong process con riêng, có receipt. Chỉ
+  chứng minh đủ ở lần đóng gói sau. Raw c3h có trước G2, nên verify-only của c3h giờ báo thêm
+  P4_NEG_RECEIPTS_ABSENT ở P3–P6, cùng DIAGNOSTIC_SOURCE_DRIFT; nghiệm thu c3h giữ theo biên bản.
 
 9. KHI CÔNG CỤ LỖI: SỬA, TEST NGẮN, ĐÓNG GÓI LẠI
 - Sửa trong studio/. Giữ schema, command_id, đọc lại trước ACK, UndoRedo, journal. Mỗi sửa một
   commit có test; ghi một dòng vào studio/AUTHORING_STATUS.md trong cùng commit nếu đổi hành vi.
 - Không chạy soak 10×35 hay --matrix final để kiểm một sửa nhỏ (O14). Test ngắn theo phần:
-    gói và cài: studio/tests/conformance/test_gt10pc_package.py
+    gói và cài: studio/tests/conformance/test_gt10pc_package.py (cần thêm studio vào
+      PYTHONPATH: $env:PYTHONPATH = "$PWD;$PWD\studio"; 12-10: 9 test, 107 giây)
+    verifier G1, G2: studio/tests/conformance/test_gt10pc_g1_g2.py (12-10: 8 test, 16 giây)
     protocol, journal: studio/tests/protocol/test_core.py, test_journal.py
     Godot: studio/tests/godot/test_contract.py, test_publication_fifo.py,
       test_gameplay_fixture_profile.py, test_gameplay_source_adapter.py,
@@ -246,7 +250,8 @@ CR-1 (lịch sử; đã được thay bằng gamekit ở mục 13 theo O15, khô
   shader; giới hạn riêng của gamekit ghi ở cuối mục 13.
 - MCP Godot bên ngoài là INCOMPATIBLE (K13): nó ghi thẳng vào Godot, không lease, journal hay
   command_id. Không dùng nó thay đường lệnh của công cụ.
-- Hai khoảng trống verifier G1, G2 (mục 8); raw của gói c3h đã được đối chiếu tay và khớp.
+- G1, G2 đã sửa trong code (W11, mục 8) nhưng chỉ chứng minh đủ ở lần đóng gói sau; raw của gói
+  c3h đã được đối chiếu tay và khớp.
 - Android: GT-08B DEFERRED_OWNER_NO_ANDROID; GT-10 đầy đủ chờ GT-08B.
 
 11. KHÔNG ĐƯỢC LÀM
