@@ -1,12 +1,12 @@
 HH STUDIO — PLAN 1/3: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Cập nhật 12-10-2026, Asia/Saigon | Revision S292 + quyết định owner O1–O13 | TRIỂN KHAI THEO GATE
+Cập nhật 12-10-2026, Asia/Saigon | Revision S293 + quyết định owner O1–O13 | TRIỂN KHAI THEO GATE
 OWNER_DECISIONS=O1_O3_20260925; O4_20260927; O5_O6_20260930; O7_20261001; O8_20261002; O9_20261003; O10_20261004; O11_20261006; O12_20261007; O13_20261008; BLOCK_BELOW_STATUS_TABLE; LATER_WINS_OVER_S2XX; OLD_VERDICTS_UNCHANGED
-OWNER_DECISIONS_FULL_TEXT_IN_GIT=87912523,b0802472,8298c107,fcc1906f,6d8eb81d,d04266e8,091506fa,a0ab19b8,fd5ad2be,add82689,7f97d3f8,5992d9f2,5ff3885e
-HIỆN HÀNH 12-10 — GT-01..GT-09 ACCEPTED; GT-10-PC IN_PROGRESS THEO NEXT C1–C6 Ở O13.5: P1–P11 ĐẠT DIỄN TẬP, PRE-REVIEW C4 ĐÃ CÓ GAP LIST; SỬA MỘT LƯỢT, DIỄN TẬP LẠI, FINAL P1–P11 (P11 10 PAIR × 35) TỪ 19:30, HAI CRITIC; GT-08B DEFERRED_OWNER_NO_ANDROID; GT-10 FULL CHỜ GT-08B
+OWNER_DECISIONS_FULL_TEXT_IN_GIT=87912523,b0802472,8298c107,fcc1906f,6d8eb81d,d04266e8,091506fa,a0ab19b8,fd5ad2be,add82689,7f97d3f8,5992d9f2,5ff3885e,054c0611
+HIỆN HÀNH 12-10 — GT-01..GT-09 ACCEPTED; GT-10-PC IN_PROGRESS THEO NEXT C1–C6 Ở O13.5: ĐANG SỬA GAP LIST C4 (REVIEWER LÀ COORDINATOR, LEASE AGENTS.md), DIỄN TẬP LẠI, RỒI FINAL P1–P11 (P11 10 PAIR × 35) NGAY KHI ĐẠT, HAI CRITIC; GT-08B DEFERRED_OWNER_NO_ANDROID; GT-10 FULL CHỜ GT-08B
 CURRENT_VALID_WP=GT-10-PC
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S292
+PLAN_REVISION=S293
 EXECUTION_AUTHORIZATION=OWNER_APPROVED_GATED
 EXECUTION_MODE=COORDINATOR_WITH_SCOPED_SUBAGENTS_AND_INDEPENDENT_CRITICS_OWNER_20261003; CREDIT_TURN_BUDGET_O13_6; ONE_COORDINATOR_THREAD; ULTRA_ONLY_HARD_DESIGN_AND_FINAL_CRITICS; FORK_TURNS_NONE_DEFAULT; NO_SELF_CREATED_HEARTBEAT; ONE_WRITER_PER_FILE; TWO_DIFFERENT_MODELS_SAME_HASH
 GOAL_STATE=ACTIVE; INDEPENDENT_CONSUMER_PILOT_AUTHORIZED; GT07_ACCEPTED; GT08A_ACCEPTED_O4_6; GT09_ACCEPTED_20261010; GT08B_DEFERRED_OWNER_NO_ANDROID; GT10_PC_OPEN; GT10_FULL_BLOCKED_BY_GT08B; SUPERAGENT_SEPARATE_OWNER_AUTHORIZED_LANE
@@ -207,15 +207,15 @@ Căn cứ 11-10 18:30 → 12-10 09:30:
 5. NEXT (giờ làm, không phải ETA toàn plan):
    GT-09 xong (Căn cứ, mục Đã nghiệm thu). Prototype GT-10-PC 6b3e0f77 và run 350a VOID. C1 (P10)
    và C2 (P11 một vòng) xong; c3c, c3e đạt P1–P11 ở diễn tập nhưng source đã đổi sau đó.
-   C4a (sáng 12-10): sửa một lượt mọi BLOCKER và MAJOR của pre-review
+   C4a (đang làm, reviewer là coordinator): sửa một lượt mọi BLOCKER và MAJOR của pre-review
       zdoc/reviews/20261012-gt10pc-c4-prereview/prereview.md; thử validator trên raw c3e bằng
       --verify-only đã sửa theo 3e (chỉ hàng c3e thiếu bằng chứng được hỏng), không remint để dò.
    C3 (khoảng 30 phút máy): commit, diễn tập lại P1–P11 (P11 một vòng) qua Scheduled Task trên
       đúng source định freeze, rồi --verify-only. Hỏng thì sửa và kiểm bằng --verify-only trước.
    C4b (tùy chọn, 30 phút): reviewer đối chiếu gói C3 mới với gap list; không đổi tiêu chí.
-   C5 (tối 12-10): freeze; final P1–P11 đầy đủ qua Scheduled Task khởi chạy trước 19:30 (P11
-      năm campaign 2 pair, tổng khoảng 6 giờ 20 phút, xong khoảng 02:00); sáng sau --verify-only
-      và self-check mục 3. Hỏng INFRA giữa soak thì chạy lại ID mới trên cùng closure (O1.7).
+   C5 (ngay khi C3 đạt): freeze; final P1–P11 đầy đủ qua Scheduled Task khởi chạy ngay (P11
+      năm campaign 2 pair, tổng khoảng 6 giờ 20 phút); xong là --verify-only và self-check
+      mục 3 luôn. Hỏng INFRA giữa soak thì chạy lại ID mới trên cùng closure (O1.7).
    C6 (1–2 giờ): P12 hai critic khác model cùng manifest; cả hai TICK=yes thì nghiệm thu theo
       O4.3, ghi mục Đã nghiệm thu, đổi header. Sau đó lane công cụ dừng: GT-11 chỉ mở khi plan
       game gửi change request, GT-08B khi owner có Android (O12).
@@ -487,8 +487,8 @@ O4 — 27-09-2026 (owner giao toàn quyền sửa plan cho reviewer; AUTHORITY=O
    PASS; host/editor tự gây áp lực bộ nhớ là product FAIL (tiêu chí O9.3); mọi ngưỡng nghiệm thu O1
    giữ nguyên; FAIL không kèm watchdog là product FAIL.
    Sửa preflight/watchdog không cần critic trước khi chạy: có unit test, freeze closure mới, hai
-   critic cuối kiểm cả closure; critic cuối bắt lỗi harness thì chạy lại bằng ID mới. Ưu tiên chạy
-   soak/formal ban đêm hoặc lúc owner vắng.
+   critic cuối kiểm cả closure; critic cuối bắt lỗi harness thì chạy lại bằng ID mới. Soak/formal
+   chạy ngay khi tới lượt; owner 12-10: máy luôn sẵn sàng, không chờ đêm hay giờ cố định.
 2. Owner xác nhận luật phụ retained-handle v5 (O1-OWNER-RESOLUTION.md) là một phần của O1, và xác
    nhận việc kiểm status gap cả 5 batch warmup (chặt hơn bản cũ, khớp yêu cầu status ≤ 2 giây).
 3. Critic: owner 03-10 cho phép subagent audit, thay đường chuyển review của chế độ solo cũ.
@@ -837,7 +837,7 @@ Bài học GT-07 → GT-09 (06-10 → 08-10):
     hết hạn mức, mở thread mới với handoff ngắn nhanh hơn cố cứu thread hỏng.
 62. Ghi sổ vẫn phình: 32/58 commit từ 07-10 chỉ ghi sổ; dòng O2 của header dài 716 ký tự với run
     id dù O4.4 giới hạn 300; chi tiết run thuộc AUTHORING_STATUS.md.
-Bài học GT-09 và GT-10-PC (08-10 17:15 → 12-10 09:30):
+Bài học GT-09 và GT-10-PC (08-10 17:15 → 12-10 10:30):
 63. Validator của ma trận phải chạy trên output thật trước final (lặp bài 43): K14 của -06 hỏng
     vì validator đòi acceptance và actual_exit mà manifest GT-08A không có; --verify-only trên raw
     có sẵn tìm ra lỗi này trong vài giây thay vì một final gần 40 phút.
@@ -890,6 +890,8 @@ Bài học GT-09 và GT-10-PC (08-10 17:15 → 12-10 09:30):
     model trên cùng gói c3e thấy 6 BLOCKER (verdict tin nhãn, P1 quét byte, P8, P7, P10, P11).
 85. Lặp bài 81: đêm 11-10 21:44 → 06:02 máy không chạy. Lượt cuối ngày phải khởi chạy diễn tập
     hoặc final qua Scheduled Task trước khi dừng.
+86. Hẹn giờ cố định làm mất giờ máy: NEXT ghi final "trước 19:30" và verify "sáng sau" khi máy
+    rảnh. Owner 12-10: việc nào tới lượt thì chạy ngay; chờ run dài bằng lịch đánh thức.
 
 LỊCH SỬ / CÁCH ĐỌC
 Bản S71 đầy đủ trước tinh gọn giữ tại reviews/20260918-plan-history-s71/
