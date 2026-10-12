@@ -1,9 +1,10 @@
-"""W2 selftest: build a small 2D arena with the 2D catalog and ops, read it back, run it 60 frames."""
+"""W2 selftest: build a small 2D arena with the 2D catalog and ops, read it back, run it 60 frames, shoot it."""
 
 from __future__ import annotations
 
 from .. import common as C
 from .. import scene as S
+from .. import shot as SH
 from . import Ctx, make_png
 
 PALETTE = [(90, 160, 70, 255), (120, 90, 60, 255), (150, 150, 160, 255), (200, 180, 60, 255)]
@@ -159,3 +160,12 @@ def run(ctx: Ctx) -> None:
     clean = S.check(project)
     ctx.check("project check clean", clean.get("clean") is True, problems=clean.get("problems"),
               errors=clean.get("godot_errors"))
+
+    shots = ctx.root / "shots"
+    shots.mkdir(exist_ok=True)
+    shot = ctx.guard("arena windowed shot", lambda: SH.capture(
+        project, shots / "arena.png", scene="res://arena.tscn", frames=20, expect=["Player/Sprite"]))
+    if isinstance(shot, dict):
+        sprite = (shot.get("presence") or [{}])[0]
+        ctx.check("arena frame is not blank", shot.get("blank") is False, metrics=shot.get("blank_metrics"))
+        ctx.check("player sprite is on screen", sprite.get("on_screen") is True, presence=sprite)

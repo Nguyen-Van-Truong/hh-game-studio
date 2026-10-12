@@ -1,9 +1,10 @@
-"""W3 selftest: build a small 3D room with the 3D catalog and ops, read it back, run it 60 frames."""
+"""W3 selftest: build a small 3D room with the 3D catalog and ops, read it back, run it 60 frames, shoot it."""
 
 from __future__ import annotations
 
 from .. import common as C
 from .. import scene as S
+from .. import shot as SH
 from . import Ctx
 
 ORB_SHADER = (
@@ -150,3 +151,13 @@ def run(ctx: Ctx) -> None:
     clean = S.check(project)
     ctx.check("project check clean", clean.get("clean") is True, problems=clean.get("problems"),
               errors=clean.get("godot_errors"))
+
+    shots = ctx.root / "shots"
+    shots.mkdir(exist_ok=True)
+    shot = ctx.guard("room windowed shot", lambda: SH.capture(
+        project, shots / "room.png", scene="res://room.tscn", frames=20, expect=["Pillar", "Orb"]))
+    if isinstance(shot, dict):
+        seen = {row.get("path"): row for row in shot.get("presence") or []}
+        ctx.check("room frame is not blank", shot.get("blank") is False, metrics=shot.get("blank_metrics"))
+        ctx.check("pillar and orb are on screen", all(seen.get(p, {}).get("on_screen") is True for p in ("Pillar", "Orb")),
+                  presence=list(seen.values()))
