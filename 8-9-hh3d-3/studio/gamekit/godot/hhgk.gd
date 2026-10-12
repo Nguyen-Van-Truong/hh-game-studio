@@ -15,7 +15,6 @@ const DENIED_PROPS: PackedStringArray = [
 const ALIAS_PROPS: PackedStringArray = ["rotation_degrees", "quaternion", "basis", "skew"]
 
 static var _defaults_cache: Dictionary = {}
-static var _props_cache: Dictionary = {}
 
 
 static func emit(result: Dictionary) -> void:
@@ -196,17 +195,14 @@ static func stored_props(obj: Object, depth: int = 0) -> Dictionary:
 
 
 static func find_property(obj: Object, pname: String) -> Dictionary:
-	var key: String = obj.get_class() + "|" + str(obj.get_script().resource_path if obj.get_script() != null else "")
-	if not _props_cache.has(key):
-		var table: Dictionary = {}
-		for info: Dictionary in obj.get_property_list():
-			table[str(info["name"])] = info
-		_props_cache[key] = table
-	var t: Dictionary = _props_cache[key]
-	if not t.has(pname) and ALIAS_PROPS.has(pname) and obj.get(pname) != null:
+	# Never cache: usage depends on other values (emission_shape, Curve2D point_count, ...).
+	for info: Dictionary in obj.get_property_list():
+		if str(info["name"]) == pname:
+			return info
+	if ALIAS_PROPS.has(pname) and obj.get(pname) != null:
 		return {"name": pname, "type": typeof(obj.get(pname)), "hint": 0, "hint_string": "",
 			"usage": PROPERTY_USAGE_EDITOR, "class_name": ""}
-	return t.get(pname, {})
+	return {}
 
 
 static func settable(info: Dictionary) -> bool:

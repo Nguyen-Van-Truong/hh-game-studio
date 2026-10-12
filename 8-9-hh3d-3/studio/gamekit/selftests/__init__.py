@@ -4,12 +4,29 @@ from __future__ import annotations
 
 import datetime as _dt
 import os
+import struct
 import tempfile
 import traceback
+import zlib
 from pathlib import Path
 from typing import Any, Callable
 
 from .. import common as C
+
+
+def make_png(width: int, height: int, rgba: Callable[[int, int], tuple[int, int, int, int]]) -> bytes:
+    """Tiny RGBA8 PNG encoder for selftest fixtures."""
+    rows = bytearray()
+    for y in range(height):
+        rows.append(0)
+        for x in range(width):
+            rows.extend(bytes(rgba(x, y)))
+
+    def chunk(kind: bytes, data: bytes) -> bytes:
+        return struct.pack(">I", len(data)) + kind + data + struct.pack(">I", zlib.crc32(kind + data) & 0xFFFFFFFF)
+
+    ihdr = struct.pack(">IIBBBBB", width, height, 8, 6, 0, 0, 0)
+    return b"\x89PNG\r\n\x1a\n" + chunk(b"IHDR", ihdr) + chunk(b"IDAT", zlib.compress(bytes(rows), 9)) + chunk(b"IEND", b"")
 
 
 class Ctx:

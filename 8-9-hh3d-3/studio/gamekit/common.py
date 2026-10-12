@@ -143,8 +143,8 @@ def atomic_write_text(path: Path, text: str) -> None:
     atomic_write_bytes(path, text.encode("utf-8"))
 
 
-def atomic_write_json(path: Path, value: Any) -> None:
-    text = json.dumps(value, indent=2, sort_keys=True, ensure_ascii=False, allow_nan=False) + "\n"
+def atomic_write_json(path: Path, value: Any, *, sort_keys: bool = True) -> None:
+    text = json.dumps(value, indent=2, sort_keys=sort_keys, ensure_ascii=False, allow_nan=False) + "\n"
     atomic_write_text(path, text)
 
 
@@ -615,7 +615,8 @@ def run_godot_tool(project_root: Path, tool: str, request: dict[str, Any], **kwa
     req_dir = state_dir() / "requests"
     req_dir.mkdir(parents=True, exist_ok=True)
     req_path = req_dir / f"{new_id('req')}.json"
-    atomic_write_json(req_path, request)
+    # Keep the caller's key order: Godot applies props in order (Curve2D point_count before point_N/*).
+    atomic_write_json(req_path, request, sort_keys=False)
     try:
         return run_godot(project_root, script, ["--request", str(req_path)], **kwargs)
     finally:

@@ -30,6 +30,8 @@ func _initialize() -> void:
 				result = _readback(r)
 			"check":
 				result = _check(r)
+			"catalog":
+				result = _catalog()
 			_:
 				result = HH.fail("BAD_REQUEST", "unknown mode")
 	if root_node != null and is_instance_valid(root_node):
@@ -812,7 +814,26 @@ func _op_animation(op: Dictionary) -> String:
 	return ""
 
 
-# ------------------------------------------------------------------ check
+# ------------------------------------------------------------------ catalog / check
+
+
+func _catalog() -> Dictionary:
+	var missing: Array = []
+	var wrong_kind: Array = []
+	for c: Variant in classes:
+		var cls: String = str(c)
+		if not ClassDB.class_exists(cls):
+			missing.append(cls)
+		elif not ClassDB.can_instantiate(cls) or not ClassDB.is_parent_class(cls, "Node"):
+			wrong_kind.append(cls)
+	for c2: Variant in resources:
+		var rcls: String = str(c2)
+		if not ClassDB.class_exists(rcls):
+			missing.append(rcls)
+		elif not ClassDB.can_instantiate(rcls) or not ClassDB.is_parent_class(rcls, "Resource"):
+			wrong_kind.append(rcls)
+	return {"ok": true, "missing": missing, "wrong_kind": wrong_kind, "node_classes": classes.size(),
+		"resource_classes": resources.size(), "godot": Engine.get_version_info().get("string", "")}
 
 
 func _walk(dir: String, out: Array, limit: int) -> void:

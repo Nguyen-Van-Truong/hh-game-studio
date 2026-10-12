@@ -375,6 +375,15 @@ def undo(project: C.Project, command_id: str, *, allow_open_editor: bool = False
         return out
 
 
+def catalog_check(project: C.Project) -> dict[str, Any]:
+    """Confirm every catalog class exists and is instantiable in the pinned Godot."""
+    catalog = load_catalog()
+    run = C.run_godot_tool(project.root, "scene_tool.gd", {"mode": "catalog", **catalog}, timeout=120)
+    result = C.require_result(run, "catalog check")
+    result["ok"] = not result.get("missing") and not result.get("wrong_kind")
+    return result
+
+
 def check(project: C.Project, timeout: float = 300.0) -> dict[str, Any]:
     with C.project_lock(project, "check", wait_seconds=30):
         imported = refresh_import(project.root)
@@ -445,8 +454,12 @@ def _cmd_undo(a: argparse.Namespace) -> dict[str, Any]:
 
 
 def _cmd_ops(a: argparse.Namespace) -> dict[str, Any]:
-    return {"ok": True, "ops": {k: {"required": sorted(v["req"]), "optional": sorted(v["opt"])} for k, v in OPS.items()},
-            "catalog": load_catalog()}
+    out = {"ok": True, "ops": {k: {"required": sorted(v["req"]), "optional": sorted(v["opt"])} for k, v in OPS.items()},
+           "catalog": load_catalog()}
+    if a.project:
+        out["catalog_check"] = catalog_check(C.get_project(a.project))
+        out["ok"] = out["catalog_check"]["ok"]
+    return out
 
 
 def _cmd_check(a: argparse.Namespace) -> dict[str, Any]:
@@ -500,6 +513,7 @@ def register(sub: argparse._SubParsersAction) -> None:
     su.add_argument("--allow-open-editor", action="store_true")
     su.set_defaults(func=_cmd_undo)
     so = ss.add_parser("ops", help="list op kinds, fields and the class catalog")
+    so.add_argument("--project", default=None, help="also check the catalog against the pinned Godot")
     so.set_defaults(func=_cmd_ops)
 
     c = sub.add_parser("check", help="load every script/scene/resource of a project and report problems")
