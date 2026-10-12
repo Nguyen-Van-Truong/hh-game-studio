@@ -334,7 +334,7 @@ Lệnh (P = id project, F = file JSON; [DONE Wn] là phần W làm ra lệnh đ�
   [DONE W4] hh input list P [--all] | hh input set P --actions F --command-id ID [--replace]
   [DONE W4] hh play P [--scene res://x.tscn] [--trace F] [--frames 60] [--seed 0]
             [--observe Node/Con:prop,...] [--every 1] [--windowed] [--out F]
-[DONE W4] hh bot P --actions a,b --track Node [--scene ...] [--frames 1800] [--seed 1]
+  [DONE W4] hh bot P --actions a,b --track Node [--scene ...] [--frames 1800] [--seed 1]
             [--hold-min 6 --hold-max 30] [--stuck-frames 120 --stuck-dist 4] [--cell 32]
             [--plane auto|xy|xz|yz] [--out F]
   [DONE W5] hh shot P --out <file .png ngoài project> [--scene ...] [--frames 10] [--at 5,30]
@@ -360,8 +360,9 @@ Lệnh ghi có thêm --allow-open-editor (xem dòng "Đóng editor Godot" ở d�
 Ghi chú W4 (input, play, bot):
 - File actions: {"move_right": {"deadzone": 0.5, "events": [{"key": "D"}, {"physical_key": "D"},
   {"joy_button": 0}, {"joy_axis": 0, "value": 1.0}, {"mouse_button": 1}]}}. Tên phím sai bị từ
-  chối, file không đổi. input set ghi lại project.godot qua Godot: file được định dạng lại nhưng
-  giữ mọi cài đặt khác (12-10 đã kiểm autoload, display, section riêng). Action ui_* giữ mặc định
+  chối, file không đổi. input set nhờ Godot ghi file tạm, rồi host merge surgical các action
+  được yêu cầu vào project.godot; section không liên quan được giữ nguyên (autoload, display,
+  section riêng). Action ui_* giữ mặc định
   của engine nếu không ghi đè. --replace bỏ action không có trong file (trừ ui_*).
 - `input set` hiện merge đúng các action được yêu cầu và đọc lại `project.godot`; các section
   không liên quan như `[display]` và `[internationalization]` được giữ nguyên. Nếu thay đổi
@@ -432,10 +433,11 @@ Ghi chú W9 (kit):
   pause: pause_menu.tscn (CanvasLayer, không phải autoload); instance vào scene, bật tắt bằng
   action "pause" nếu có, không thì ui_cancel. audio: bus Master, Music, SFX trong
   res://default_bus_layout.tres, không có script.
-- save, settings, rebind ghi file tạm rồi đổi tên; bản cũ hợp lệ được giữ ở file `.bak` ẩn cạnh
-  đó cho tới khi bản mới vào chỗ. Nếu primary thiếu/hỏng, lần load sau dùng `.bak` và
-  `push_warning`; primary hỏng không được xoay đè backup tốt. Save version mới hơn bị từ chối,
-  không âm thầm quay về bản cũ.
+- save, settings và rebind ghi file tạm rồi đổi tên. Chỉ HHSave fallback `.bak` hợp lệ khi
+  primary thiếu hoặc hỏng: lần load sau dùng `.bak` và `push_warning`; primary hỏng không
+  được xoay đè backup tốt. Save version mới hơn bị từ chối, không âm thầm quay về bản cũ.
+  settings và rebind chỉ fallback khi primary vắng mặt; sau replace thành công chúng có thể
+  xoá `.bak`.
 - add từ chối ghi đè file khác nội dung nếu thiếu --replace. remove từ chối khi game đã sửa file
   kit hoặc layout bus (thêm bus, thêm effect); --force mới xóa. Đổi âm lượng hay mute trong
   layout không tính là sửa.
@@ -491,7 +493,7 @@ Mẫu chạy thật để chép (dựng xong, đọc lại, chạy 60 frame khô
     NavigationAgent3D, Path3D, camera SpringArm3D, AnimationTree, method track.
   studio/gamekit/selftests/w1_scene.py   các ca từ chối, replay, CONFLICT, STALE, undo.
 Selftest nhanh (project tạm trong %TEMP%, không đụng game):
-    python -B -m studio.gamekit.selftest config save_bot clips w4 w5 w8 w9 --keep
+    python -B -m studio.gamekit.selftest config save_bot clips observe replay w4 w5 w8 w9 --keep
     python -B -m studio.gamekit.selftest strict --keep
   Đây là lựa chọn mặc định cho sửa nhỏ. `selftest all` và discovery toàn bộ chỉ dùng khi
   owner mở lại gate hoặc source thay đổi diện rộng; không cần chạy soak/ma trận dài cho

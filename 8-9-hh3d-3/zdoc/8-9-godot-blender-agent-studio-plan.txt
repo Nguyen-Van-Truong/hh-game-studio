@@ -46,7 +46,7 @@ test liên quan và ghi vào `studio/AUTHORING_STATUS.md`.
 |---|---|---|
 | Settings | merge `project.godot` theo tập khóa yêu cầu, giữ section/entry không liên quan, đọc lại và rollback khi lỗi | `test_project_config`, `selftest config` |
 | Blender clips/selection | giữ nhiều Action trên cùng armature; activate trước khi chọn; chỉ kiểm owners được xuất | `test_blender_recipe`, `selftest clips` |
-| Observe | hỗ trợ `.`, root-name prefix, property có `/`, native const bool; không gọi method script tùy ý | `test_play`, `selftest observe/replay` |
+| Observe | hỗ trợ `.`, root-name prefix, property có `/`, native const bool; không gọi method script tùy ý | `test_play`, `selftest observe`, `selftest replay` |
 | Bot | `--out`, `--plane auto|xy|xz|yz`; auto Vector2→XY, Vector3→XZ; fail nếu Play/position không có | `test_bot_hardening`, `selftest save_bot` |
 | Save | ghi temp và đọc lại trước replace; giữ `.bak` hợp lệ; fallback khi primary hỏng/thiếu; không fallback âm thầm với version mới | `selftest save_bot`, W9 |
 | Visual | project AABB của VisualInstance3D, mask camera và mesh phẳng/dốc/behind-camera; trả basis rõ ràng | W5 visual |
@@ -76,7 +76,7 @@ Chạy từ `8-9-hh3d-3/`; không chạy đồng thời hai engine trên cùng p
 
 ```powershell
 python -B -m unittest studio.tests.gamekit.test_project_config studio.tests.gamekit.test_bot_hardening studio.tests.gamekit.test_play studio.tests.gamekit.test_blender_recipe studio.tests.gamekit.test_kit studio.tests.gamekit.test_visual studio.tests.gamekit.test_scene_core studio.tests.gamekit.test_asset studio.tests.gamekit.test_export studio.tests.gamekit.test_perf studio.tests.gamekit.test_paths studio.tests.gamekit.test_transactions
-python -B -m studio.gamekit.selftest config save_bot clips w4 w5 w8 w9 --keep
+python -B -m studio.gamekit.selftest config save_bot clips observe replay w4 w5 w8 w9 --keep
 python -B -m studio.gamekit.selftest strict --keep
 ```
 
