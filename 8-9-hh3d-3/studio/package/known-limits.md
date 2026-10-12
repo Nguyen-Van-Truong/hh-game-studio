@@ -19,6 +19,19 @@ Godot/template and `hh_studio` addon versions in `compatibility-lock.json` are
 supported. Consumer projects must use a matching addon version; mixed or
 manually upgraded addon trees require explicit repair.
 
+Dependency validation is static (AUTH-02): literal `preload`/`load`,
+`ext_resource`, script and scene bindings, UIDs and imports inside the project
+root are checked again after save, close and reopen. Dependencies built at run
+time, such as `load()` with a computed path, are not traced; the fields
+`dynamic_dependencies_verified` and `validation_attribution_proven` stay false.
+
+External MCP adapters are not a supported route (K13). In the GT-09 final the
+pinned external Godot MCP server was measured `INCOMPATIBLE`: its tools reach
+Godot directly without the `hh_studio` lease, journal or `command_id`, so a
+retry cannot be deduplicated or acknowledged after readback, and its native run
+logged Godot warning or error lines. Agents use the bundled `hh_studio`
+adapter; any other adapter needs its own measured gate first.
+
 Support bundles are diagnostic and scrubbed. They omit private keys, bearer
 tokens, environment values, and raw consumer source/save content. A bundle
 cannot prove public release acceptance or native Android compatibility.

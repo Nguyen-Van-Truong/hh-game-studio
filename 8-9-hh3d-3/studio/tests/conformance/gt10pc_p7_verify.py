@@ -25,6 +25,17 @@ def _addon_on_disk(case: Path) -> dict:
     return found
 
 
+def _release_intact(root: Path, identity: str, package: dict) -> None:
+    """A last-good release tree must still equal its signed manifest, byte for byte."""
+    need((root / "manifest.json").is_file() and digest_file(root / "manifest.json") == identity,
+         "P7_VERIFY_LAST_GOOD_MANIFEST")
+    files = package["manifest"]["files"]
+    found = sorted(path.relative_to(root).as_posix() for path in root.rglob("*") if path.is_file())
+    need(found == sorted([*files, "manifest.json"]), "P7_VERIFY_LAST_GOOD_TREE")
+    for name, entry in files.items():
+        need(digest_file(root / name) == entry["sha256"], "P7_VERIFY_LAST_GOOD_FILE")
+
+
 def verify_p7(root: Path, *, trust: Path, trust_sha256: str, group: str,
               release: dict, group_host: dict | None = None) -> dict:
     from studio.tests.conformance.run_gt10pc_matrix import _read, _process, _lifecycle, verify_profile
@@ -107,6 +118,18 @@ def verify_p7(root: Path, *, trust: Path, trust_sha256: str, group: str,
         reopen_sha = digest_file(case / "install-before-reopen.json")
         need(isinstance(row.get("install_before_reopen_sha256"), str)
              and reopen_sha == row["install_before_reopen_sha256"], "P7_VERIFY_BEFORE_REOPEN")
+        # The selector on disk right after the cut is the last-good; recovery must keep it
+        # and its release trees must still match their signed manifests.
+        snapshot = strict_json((case / "install-before-reopen.json").read_bytes())
+        recovered = row["after_recovery"]
+        need(isinstance(snapshot, dict) and snapshot.get("schema") == "hh-studio-install-4"
+             and snapshot.get("target") == "Windows"
+             and (snapshot.get("active"), snapshot.get("previous"))
+             == (recovered.get("active"), recovered.get("previous")), "P7_VERIFY_LAST_GOOD_SELECTOR")
+        for identity in (snapshot.get("active"), snapshot.get("previous")):
+            if identity is not None:
+                need(identity in packages, "P7_VERIFY_LAST_GOOD_RELEASE")
+                _release_intact(case / "install" / "releases" / identity, identity, packages[identity])
         for stream in ("stdout", "stderr"):
             need(digest_file(case / ("worker-" + stream + ".txt")) == worker.get(stream + "_sha256"),
                  "P7_VERIFY_WORKER_LOG")

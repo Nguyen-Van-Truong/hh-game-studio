@@ -21,6 +21,9 @@ from studio.tests.conformance.run_gt10pc_native_probe import (
 FIXTURE = "gt09-arena"
 SAVE = b"p9-independent-consumer-save\n"
 LEDGERS = ("project-before.json", "project-installed.json", "project-after.json")
+# P2 deferred items and the P9 handoff items (1c, journal, K13) the shipped known limits must name.
+KNOWN_LIMIT_TERMS = ("rotation", "revocation", "expiry", "security floor", "is lost", "leaks",
+                     "journal", "dynamic_dependencies_verified", "K13", "INCOMPATIBLE")
 
 
 def prepare_consumer(package: dict, root: Path) -> Path:
@@ -158,6 +161,8 @@ def verify_consumer(output: Path, artifact: Path, *, trust: Path, trust_sha256: 
          "P9_SUPPORT_ALLOWLIST")
     for name in ("docs/NOTICE.txt", "docs/runbook.md", "docs/known-limits.md", "docs/compatibility-lock.json"):
         need(bool(package["members"].get(name)), "P9_PACKAGE_DOCUMENTS_MISSING")
+    limits = package["members"]["docs/known-limits.md"].decode("utf-8")
+    need(all(term in limits for term in KNOWN_LIMIT_TERMS), "P9_KNOWN_LIMITS_CONTENT")
     return {"status": "REHEARSAL_PASS", "authority": 0, "acceptance": False,
             "evidence_kind": "docs+native", "artifact_sha256": package["archive_sha256"],
             "report_sha256": digest_file(output / "p9.json")}

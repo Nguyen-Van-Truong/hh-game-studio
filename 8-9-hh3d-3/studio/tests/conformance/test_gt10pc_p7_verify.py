@@ -8,6 +8,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+import zipfile
 from pathlib import Path
 
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
@@ -167,6 +168,12 @@ class VerifyP7Tests(unittest.TestCase):
             (case / "install").mkdir(parents=True)
             (case / "install" / ".install.json").write_bytes(raw)
             (case / "install-before-reopen.json").write_bytes(raw)
+            last_good = case / "install" / "releases" / cls.old["manifest_sha256"]
+            with zipfile.ZipFile(cls.old_path) as archive:
+                for member in archive.namelist():
+                    target = last_good / member
+                    target.parent.mkdir(parents=True, exist_ok=True)
+                    target.write_bytes(archive.read(member))
             _dump(case / "applicability.json", {
                 "network_loss": {"reason": "local lifecycle WAL; no network client in this phase",
                                  "status": "NOT_APPLICABLE"},
@@ -218,7 +225,7 @@ class VerifyP7Tests(unittest.TestCase):
                           "phase": phase, "retry": receipt,
                           "worker": {"cut": cut, "host_sha256": digest_file(case / "worker-host.json")}})
         for path in root.rglob("*"):
-            if path.is_file():
+            if path.is_file() and "releases" not in path.relative_to(root).parts:
                 evidence[path.relative_to(root).as_posix()] = digest_file(path)
         _dump(root / "p7.json", {
             "acceptance": False, "authority": 0, "case_group": "third", "cases": cases,
@@ -319,6 +326,27 @@ class VerifyP7Tests(unittest.TestCase):
         with self.assertRaises(ValueError) as caught:
             self._verify()
         self.assertIn("P7_VERIFY_BEFORE_REOPEN", str(caught.exception))
+
+    def test_last_good_release_file_tampered_is_rejected(self) -> None:
+        release = self.root / "cases" / TARGET / "install" / "releases" / self.old["manifest_sha256"]
+        (release / PLUGIN).write_bytes((release / PLUGIN).read_bytes() + b"\n# tampered\n")
+        with self.assertRaises(ValueError) as caught:
+            self._verify()
+        self.assertIn("P7_VERIFY_LAST_GOOD_FILE", str(caught.exception))
+
+    def test_last_good_selector_moved_is_rejected(self) -> None:
+        key = "cases/" + TARGET + "/install-before-reopen.json"
+        body = json.loads((self.root / key).read_bytes())
+        body["active"] = self.new["manifest_sha256"]
+        raw = canonical(body) + b"\n"
+        (self.root / key).write_bytes(raw)
+        doc = self._doc()
+        doc["evidence"][key] = digest_bytes(raw)
+        doc["cases"][0]["install_before_reopen_sha256"] = digest_bytes(raw)
+        self._save(doc)
+        with self.assertRaises(ValueError) as caught:
+            self._verify()
+        self.assertIn("P7_VERIFY_LAST_GOOD_SELECTOR", str(caught.exception))
 
     def test_wrong_addon_hash_is_rejected(self) -> None:
         plugin = self.root / "cases" / TARGET / "project/addons/hh_studio/plugin.gd"

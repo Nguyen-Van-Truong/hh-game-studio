@@ -127,18 +127,6 @@ def _under(path: Path, root: Path) -> bool:
     return True
 
 
-def _verify_child_receipt(root: Path, row: dict[str, Any]) -> None:
-    """Re-read the captured streams; a self-written receipt is not enough."""
-    _need(_clean(row), "GT10PC_P10_CHILD_EXIT")
-    for field in ("stdout", "stderr"):
-        name = row.get(field)
-        _need(isinstance(name, str) and Path(name).name == name,
-              "GT10PC_P10_CHILD_STREAM_NAME")
-        stream = root / name
-        _need(stream.is_file() and _sha(stream) == row.get(field + "_sha256"),
-              "GT10PC_P10_CHILD_STREAM_HASH")
-
-
 def verify_engine_host(directory: Path, label: str, code: str = "GT10PC_P10_ENGINE_HOST") -> dict[str, Any]:
     """Re-read ``*-host.json`` and rehash the streams named by the receipt."""
     host = _json(directory / (label + "-host.json"))
@@ -599,42 +587,48 @@ def verify(path: Path) -> dict[str, Any]:
               and _sha(executable) == gt["rows"][2].get("artifact_sha256"),
               "GT10PC_P10_GT08A_W03_ARTIFACT")
     if "K8_K10" in report.get("rows", {}):
+        # The accepted GT-09 K8/K9/K10 validators, applied to the fresh installed-copy run.
+        from studio.tests.conformance.run_gt09_matrix import (
+            _conformance_semantics, _publication_semantics, _registered_semantics)
         row = report["rows"]["K8_K10"]
         _need(row.get("status") == "DIAGNOSTIC_PASS" and row.get("authority") == 0
-              and row.get("acceptance") is False
-              and _json(path / "k10-conformance.json").get("status") == "CANDIDATE_PASS"
-              and row.get("k10_trace") == "linux-phase",
+              and row.get("acceptance") is False and row.get("k10_trace") == "linux-phase",
               "GT10PC_P10_K8_K10_REPORT")
         children = path / "children"
         receipts = row.get("receipts")
-        _need(isinstance(receipts, dict)
-              and set(receipts) == {"blender", "registered-arena", "registered-room",
-                                    "publication-arena", "publication-room", "conformance"},
-              "GT10PC_P10_RECEIPT_SET")
-        for receipt in receipts.values():
-            _verify_child_receipt(children, receipt)
+        labels = {"blender": "blender-content", "registered-arena": "registered-arena",
+                  "registered-room": "registered-room", "publication-arena": "publication-arena",
+                  "publication-room": "publication-room", "conformance": "k10-conformance"}
+        _need(isinstance(receipts, dict) and set(receipts) == set(labels), "GT10PC_P10_RECEIPT_SET")
+        for key, label in labels.items():
+            _need(isinstance(receipts[key], dict) and receipts[key].get("label") == label
+                  and _json(children / (label + "-receipt.json")) == receipts[key],
+                  "GT10PC_P10_CATALOG_RECEIPT")
+            verify_engine_host(children, label, "GT10PC_P10_CATALOG_HOST")
         runtime_root = path / "installed-runtime"
         blender_root = Path(row.get("blender", ""))
         _need(_under(blender_root, runtime_root)
               and _json(blender_root / "result.json").get("status") == "DIAGNOSTIC_PASS"
               and _json(blender_root / "result.json").get("public_ack") is False,
               "GT10PC_P10_BLENDER_BINDING")
+        closures = set()
         for fixture in ("arena", "room"):
             registered_root = Path(row["registered"][fixture])
-            _need(_under(registered_root, runtime_root), "GT10PC_P10_REGISTERED_ROOT")
-            registered_doc = _json(registered_root / "registered-owner-result.json")
-            _need(registered_doc.get("status") == "DIAGNOSTIC_PASS"
-                  and registered_doc.get("public_ack") is False
-                  and registered_doc.get("receipt", {}).get("native_process", {}).get("exit_code") == 0,
-                  "GT10PC_P10_REGISTERED_BINDING")
-        for name in ("arena", "room"):
-            root = Path(row["publications"][name])
-            _need(_under(root, runtime_root), "GT10PC_P10_PUBLICATION_ROOT")
-            result = _json(root / "result.json")
-            _need(result.get("status") == "DIAGNOSTIC_PASS" and result.get("authority") == 0
-                  and result.get("public_ack") is False and result.get("native_fixture_observed") is True,
-                  "GT10PC_P10_PUBLICATION_BINDING")
+            publication_root = Path(row["publications"][fixture])
+            _need(_under(registered_root, runtime_root) and _under(publication_root, runtime_root),
+                  "GT10PC_P10_CATALOG_ROOT")
+            _need(_publication_semantics(publication_root, fixture=fixture),
+                  "GT10PC_P10_PUBLICATION_SEMANTICS")
+            _need(_registered_semantics(publication_root, fixture=fixture),
+                  "GT10PC_P10_REGISTERED_SEMANTICS")
+            result = _json(publication_root / "result.json")
+            handoff = result["catalog_handoff" if fixture == "arena" else "catalog_room_handoff"]
+            _need(Path(handoff["registered_root"]).resolve() == registered_root.resolve(),
+                  "GT10PC_P10_REGISTERED_HANDOFF")
+            closures.add(result.get("source_closure_sha256"))
         conformance = path / "k10-conformance.json"
+        _need(len(closures) == 1 and _conformance_semantics(conformance, closure=next(iter(closures))),
+              "GT10PC_P10_K8_K10_CONFORMANCE")
         _need(_sha(conformance) == row.get("conformance_sha256"),
               "GT10PC_P10_CONFORMANCE_HASH")
     return report
