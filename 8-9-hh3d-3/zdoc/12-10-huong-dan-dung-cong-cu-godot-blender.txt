@@ -357,7 +357,8 @@ Ghi chú W4 (input, play, bot):
   trong --stuck-frames) và số ô --cell đã đi qua. Kẹt là phát hiện, không tự làm ok false.
 Ghi chú W5 (shot, vcheck):
 - shot mở cửa sổ thật (cần màn hình), chờ --frames rồi chụp; --at chụp nhiều frame thành
-  <tên>_f<frame>.png. Mặc định 640×360; game có HUD theo 1280×720 thì thêm --resolution 1280x720. Receipt có blank (độ lệch sáng dưới 2 hoặc 99,5% điểm cùng màu), presence
+  <tên>_f<frame>.png. Mặc định 640×360; game có HUD theo 1280×720 thì thêm --resolution 1280x720.
+  Receipt có blank (độ lệch sáng dưới 2 hoặc 99,5% điểm cùng màu), presence
   của từng node --expect (exists, visible_in_tree, on_screen, screen_rect) và errors của Godot;
   có lỗi script thì ok false.
 - Baseline nằm trong project (res://...png). Chưa có baseline hoặc có --update-baseline thì ghi
