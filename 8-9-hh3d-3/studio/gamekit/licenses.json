@@ -1,0 +1,114 @@
+{
+  "schema": "hh-gamekit-licenses-1",
+  "owner_budget": 0,
+  "note": "Owner rule 09-10 (budget 0): only CC0 or self-made assets ship. owner_review ids are free licenses that are still refused until the owner moves them into allowed (E3 legal decision). NC, ND, proprietary, editorial, unknown, copyleft, and share-alike ids are rejected.",
+  "allowed": [
+    {
+      "id": "CC0-1.0",
+      "name": "CC0 1.0 Universal",
+      "attribution_required": false,
+      "requires_author": false
+    },
+    {
+      "id": "self-made",
+      "name": "Self-made",
+      "attribution_required": false,
+      "requires_author": true,
+      "attribution": "Original work named by the author. Owner budget is 0; this is not a third-party license."
+    }
+  ],
+  "owner_review": [
+    {
+      "id": "CC-BY-3.0",
+      "name": "Creative Commons Attribution 3.0",
+      "attribution_required": true,
+      "requires_author": false,
+      "attribution": "Attribution is required. Licensed under Creative Commons Attribution 3.0 (https://creativecommons.org/licenses/by/3.0/). Credit the author, link the license, and indicate if changes were made."
+    },
+    {
+      "id": "CC-BY-4.0",
+      "name": "Creative Commons Attribution 4.0",
+      "attribution_required": true,
+      "requires_author": false,
+      "attribution": "Attribution is required. Licensed under Creative Commons Attribution 4.0 (https://creativecommons.org/licenses/by/4.0/). Credit the author, link the license, and indicate if changes were made."
+    },
+    {
+      "id": "OFL-1.1",
+      "name": "SIL Open Font License 1.1",
+      "attribution_required": true,
+      "requires_author": false,
+      "attribution": "Attribution is required. Licensed under the SIL Open Font License 1.1 (https://openfontlicense.org/). Do not sell the font by itself and do not use a reserved font name for a modified version. Keep this notice with the font."
+    },
+    {
+      "id": "MIT",
+      "name": "MIT License",
+      "attribution_required": true,
+      "requires_author": false,
+      "attribution": "Attribution is required. Licensed under the MIT License (https://opensource.org/license/mit/). Include the copyright notice and the permission notice with the software."
+    },
+    {
+      "id": "Apache-2.0",
+      "name": "Apache License 2.0",
+      "attribution_required": true,
+      "requires_author": false,
+      "attribution": "Attribution is required. Licensed under the Apache License 2.0 (https://www.apache.org/licenses/LICENSE-2.0). Include the copyright notice, a copy of the license, and any NOTICE file, and mark modified files."
+    },
+    {
+      "id": "BSD-2-Clause",
+      "name": "BSD 2-Clause License",
+      "attribution_required": true,
+      "requires_author": false,
+      "attribution": "Attribution is required. Licensed under the BSD 2-Clause License. Include the copyright notice and the disclaimer."
+    },
+    {
+      "id": "BSD-3-Clause",
+      "name": "BSD 3-Clause License",
+      "attribution_required": true,
+      "requires_author": false,
+      "attribution": "Attribution is required. Licensed under the BSD 3-Clause License. Include the copyright notice and the disclaimer, and do not use the author's name to endorse a derived product without permission."
+    },
+    {
+      "id": "Unlicense",
+      "name": "The Unlicense",
+      "attribution_required": false,
+      "requires_author": false
+    }
+  ],
+  "reject_rules": [
+    {
+      "op": "contains",
+      "value": "NC",
+      "reason": "non-commercial (NC) licenses are rejected"
+    },
+    {
+      "op": "contains",
+      "value": "ND",
+      "reason": "no-derivatives (ND) licenses are rejected"
+    },
+    {
+      "op": "equals",
+      "value": "proprietary",
+      "reason": "proprietary licenses are rejected"
+    },
+    {
+      "op": "equals",
+      "value": "unknown",
+      "reason": "unknown license is rejected"
+    },
+    {
+      "op": "equals",
+      "value": "editorial",
+      "reason": "editorial-use licenses are rejected"
+    },
+    {
+      "op": "contains_any",
+      "value": ["AGPL", "LGPL", "GPL"],
+      "reason": "copyleft (GPL/LGPL/AGPL): owner review required"
+    },
+    {
+      "op": "prefix",
+      "value": "CC-BY-SA",
+      "reason": "share-alike (CC-BY-SA): owner review required"
+    }
+  ]
+}
