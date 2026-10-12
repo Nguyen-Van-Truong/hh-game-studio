@@ -61,6 +61,12 @@ Artifacts (machine-local, not in git):
 2. `critic-b-grok.md`, grok-4.7-xhigh, `TICK=yes`, SHA256
    `d28bec69501c0bc4b137d1bc960fc853df8a421f74c4060b301d5546a8933808`.
 
+These SHA256 values are of the CRLF working copies on this machine (`core.autocrlf=true`).
+The committed LF blobs (commit `2d960ab8`) hash to:
+- critic A `88e14366b4fb1c746814110fbc95d72736c2985ecebef19f7796fcd1170159a6`
+- critic B `a011dbbff338e2510fd8987117a505e3e58665a038af560379b9b656c0c03fc0`
+- Sol `c2e9e4bd3b5c49b80a8bdfbb82b60daabf092514f1a019e41e92c96605c9c5fe`
+
 Disclosed and not counted: `critic-b-sol.md` (GPT-5.6 Sol, SHA256
 `c5851da05091da4495bf5d00d22abdd6a8ed30a9e4552d2ddb56d53c03f3b13e`). The owner stopped that run at
 14:17 (O14.7) after it wrote `TICK=no` with two MAJORs:
