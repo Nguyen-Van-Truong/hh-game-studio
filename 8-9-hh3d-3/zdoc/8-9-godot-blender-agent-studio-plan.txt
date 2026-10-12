@@ -1,12 +1,12 @@
 HH STUDIO — PLAN 1/3: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Cập nhật 12-10-2026, Asia/Saigon | Revision S307 + quyết định owner O1–O16 | TRIỂN KHAI THEO GATE
+Cập nhật 12-10-2026, Asia/Saigon | Revision S308 + quyết định owner O1–O16 | TRIỂN KHAI THEO GATE
 OWNER_DECISIONS=O1_O3_20260925; O4_20260927; O5_O6_20260930; O7_20261001; O8_20261002; O9_20261003; O10_20261004; O11_20261006; O12_20261007; O13_20261008; O14_20261012; O15_20261012; O16_20261012; BLOCK_BELOW_STATUS_TABLE; LATER_WINS_OVER_S2XX; OLD_VERDICTS_UNCHANGED
 OWNER_DECISIONS_FULL_TEXT_IN_GIT=87912523,b0802472,8298c107,fcc1906f,6d8eb81d,d04266e8,091506fa,a0ab19b8,fd5ad2be,add82689,7f97d3f8,5992d9f2,5ff3885e,054c0611
-HIỆN HÀNH 12-10 20:35 — GT-01..GT-09, GT-10-PC VÀ GT-11 ACCEPTED (GT-10-PC THEO O14; GT-11 ACCEPTED_O15_QUICK: W1–W12 XONG, SELFTEST ALL 226/226, CRITIC GROK VÒNG CUỐI 2 TICK=yes TRÊN 2a03cc2f; 19:45 THỬ GAME THẬT SUPERAGENT TRÊN BẢN SAO: LỖI CẢNH BÁO STRICT SỬA Ở fa64f3df, SELFTEST ALL 246/246, 15/15 BƯỚC OK); PLAN CÔNG CỤ XONG CHO PC; AGENT GAME DÙNG LỆNH hh VÀ CÔNG CỤ THEO zdoc/12-10-huong-dan-dung-cong-cu-godot-blender.txt; LỖI CÔNG CỤ DO AGENT GAME SỬA (O14.5); GT-08B DEFERRED_OWNER_NO_ANDROID; GT-10 ĐẦY ĐỦ CHỜ GT-08B; HH WORLD: LANE THỬ PC O16 Ở 8-9-hh3d-3/12-10-hh-world-grokdo (PLAN HH WORLD S24, KẾT QUẢ CANDIDATE)
+HIỆN HÀNH 12-10 20:35 — GT-01..GT-09, GT-10-PC VÀ GT-11 ACCEPTED (GT-10-PC THEO O14; GT-11 ACCEPTED_O15_QUICK: W1–W12 XONG, SELFTEST ALL 226/226, CRITIC GROK VÒNG CUỐI 2 TICK=yes TRÊN 2a03cc2f; 19:45 THỬ GAME THẬT SUPERAGENT TRÊN BẢN SAO: LỖI CẢNH BÁO STRICT SỬA Ở fa64f3df, SELFTEST ALL 246/246, 15/15 BƯỚC OK); PLAN CÔNG CỤ XONG CHO PC; AGENT GAME DÙNG LỆNH hh VÀ CÔNG CỤ THEO zdoc/12-10-huong-dan-dung-cong-cu-godot-blender.txt; LỖI CÔNG CỤ DO AGENT GAME SỬA (O14.5); GT-08B DEFERRED_OWNER_NO_ANDROID; GT-10 ĐẦY ĐỦ CHỜ GT-08B; HH WORLD: LANE THỬ PC O16 Ở 8-9-hh3d-3/12-10-hh-world-grokdo (PLAN HH WORLD S24, KẾT QUẢ CANDIDATE); 3D GODOT+BLENDER CHƯA XÁC NHẬN TRÊN GAME THẬT VÀ BUG hh input set: VIỆC LÀM SAU (MỤC "PHẦN CÒN LẠI ĐỂ XONG PLAN")
 CURRENT_VALID_WP=NONE_GAMEKIT_COMPLETE_O15
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S307
+PLAN_REVISION=S308
 EXECUTION_AUTHORIZATION=OWNER_APPROVED_GATED
 EXECUTION_MODE=COORDINATOR_WITH_SCOPED_SUBAGENTS_AND_INDEPENDENT_CRITICS_OWNER_20261003; CREDIT_TURN_BUDGET_O13_6; ONE_COORDINATOR_THREAD; ULTRA_ONLY_HARD_DESIGN_AND_FINAL_CRITICS; FORK_TURNS_NONE_DEFAULT; NO_SELF_CREATED_HEARTBEAT; ONE_WRITER_PER_FILE; TWO_INDEPENDENT_CRITICS_SAME_HASH_GROK47_O14_7
 GOAL_STATE=PC_TOOLS_DONE_O14; GT11_ACCEPTED_O15_QUICK_20261012; INDEPENDENT_CONSUMER_PILOT_AUTHORIZED; GT07_ACCEPTED; GT08A_ACCEPTED_O4_6; GT09_ACCEPTED_20261010; GT08B_DEFERRED_OWNER_NO_ANDROID; GT10_PC_ACCEPTED_O14_20261012; GT10_FULL_BLOCKED_BY_GT08B; SUPERAGENT_SEPARATE_OWNER_AUTHORIZED_LANE; HHWORLD_PC_TRIAL_O16_20261012
@@ -830,6 +830,23 @@ GT-10-PC: ACCEPTED 12-10 theo O14 (kiểm ngắn); phần PC của plan công c�
 cần GT-08B. HH World là plan riêng (H2-P0-01 trên PC do plan đó quyết theo O14.4); từ O16 có lane
 thử PC ở 8-9-hh3d-3/12-10-hh-world-grokdo theo plan HH World S24. Không suy phần trăm sản phẩm
 hoặc ETA toàn plan từ số test/gate.
+VIỆC LÀM SAU — 3D GODOT + BLENDER (owner 12-10 21:04: "3d ... chưa oke thì note lại ... làm sau")
+Hiện trạng: 2D dùng được trên PC (game thật Superagent 15/15 bước, selftest all 246/246 gồm
+strict). 3D mới qua selftest (w3 phòng 3D 16/16, w8 Blender ra GLB có skin và clip 19/19, shot,
+perf), chưa xác nhận trên game 3D thật. Lane thử HH World run 1 (lease tới 21:55): lúc 21:05 đã
+có project, menu, player, contracts và đang dựng scene làng bằng hh scene apply; chưa commit,
+chưa có ảnh.
+1. Đọc kết quả run 1: 12-10-hh-world-grokdo/TRIAL_STATUS.md, %TEMP%\hh-cli-tasks\
+   hhworld-trial1.log và evidence/; tự chạy lại tools/check.ps1 và tools/smoke.ps1 trước khi tin.
+2. Bug hh input set (lane HH World 21:00): ghi lại project.godot làm mất [display] và
+   [internationalization]; selftest w4 không bắt được. Repro ở 12-10-hh-world-grokdo/docs/
+   tool-gaps.md. Sửa theo O14.5 kèm unit test và thêm ca w4 có translations và stretch mode.
+3. Chuỗi Blender → GLB → hh asset add → instance → AnimationTree trong scene game thật (H2-P2-02):
+   kiểm skin, clip, scale, LOD và va chạm của avatar khi điều khiển.
+4. Hướng dẫn cho 3D: field observe và expect của node 3D (agent thử phải đọc play_runner.gd và
+   shot_runner.gd), mẫu camera theo người chơi, chọn renderer mobile hay forward_plus.
+5. Đo perf 3D có avatar rig thật trên PC; chạy thử EEVEE và Cycles của recipe Blender.
+6. Android (GT-08B) vẫn DEFERRED theo O12.
 GT-11 (ACCEPTED_O15_QUICK 12-10 18:35, mở 12-10 15:16 theo O15): gamekit cho game thật 2D và 3D,
 kiểm nhanh (O15.3).
 Không phải bảng tiến độ thứ hai: hàng 11 ở bảng đầu là trạng thái; W chỉ DONE khi commit có
