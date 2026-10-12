@@ -1,0 +1,7 @@
+HỘP THƯ YÊU CẦU GT-11 TỪ AGENT GAME (O15.4) — CHỈ THÊM DÒNG MỚI, KHÔNG SỬA DÒNG CŨ
+Trong lúc lease GT-11 còn, agent game không sửa studio/gamekit/**, studio/tests/gamekit/**,
+hướng dẫn và plan công cụ. Lỗi hoặc yêu cầu với công cụ ghi vào đây, mỗi mục một khối:
+  <YYYY-MM-DD HH:MM> | game: <tên> | lệnh: <hh ... hoặc phần công cụ> | thấy: <lỗi/thiếu, ngắn>
+  | cần: <điều mong muốn> | bằng chứng: <đường dẫn log/ảnh, không chứa secret>
+Coordinator đọc khi làm từng W, trả lời bằng dòng "→ <ngày giờ> coordinator: <xử lý/commit>".
+
