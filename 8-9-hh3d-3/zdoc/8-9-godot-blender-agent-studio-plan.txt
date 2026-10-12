@@ -807,15 +807,19 @@ W1 Đăng ký project; scene inspect/apply/undo trên mọi .tscn; tạo scene m
    delete/move/rename, resource new/load, script attach, instance, signal, group; kiểm script và
    scene toàn project (CR-1, H2-T01) | hh project, hh scene, hh check | project tạm 2D và 3D: apply
    rồi process mới đọc lại khớp; lặp cùng id ra cùng receipt; khác nội dung là CONFLICT; sai
-   type/property/path bị chặn và file không đổi; undo trả đúng byte | PLANNED
+   type/property/path bị chặn và file không đổi; undo trả đúng byte | DONE a0833df7 (selftest w1
+   29/29, unit 12/12; hh.cmd chạy thật 12-10 16:05: add, new, apply, replay, inspect, check exit 0)
 W2 Catalog 2D và op 2D: TileSet từ atlas, tô cell, SpriteFrames từ sprite sheet, animation (track,
    key), particle, đèn 2D, shader canvas, parallax, Path2D, Navigation2D, RigidBody2D và joint,
    Camera2D (SA-T01, SA-T03) | hh scene apply | dựng arena 2D tạm: tile có va chạm, player, crate
-   rigid, đèn, hạt; đọc lại khớp; ảnh không trống | PLANNED
+   rigid, đèn, hạt; đọc lại khớp; ảnh không trống | DONE_PART 9eae7686, 2d129056 (w2 19/19: dựng,
+   đọc lại, 2 ca từ chối giữ byte, chạy 60 frame không lỗi; catalog 173 node + 112 resource có đủ
+   trong 4.7.2); kiểm ảnh không trống chờ W5
 W3 Catalog 3D: đèn Directional/Omni/Spot, WorldEnvironment (sky, fog, glow, tonemap, SDFGI), vật
    liệu Standard/ORM/shader 3D, GPUParticles3D, CSG gray-box, RigidBody3D, Area3D, Navigation3D,
    Path3D, AnimationTree, camera rig SpringArm3D, ReflectionProbe (H2-T02) | hh scene apply | dựng
-   phòng 3D tạm; đọc lại khớp; ảnh không trống | PLANNED
+   phòng 3D tạm; đọc lại khớp; ảnh không trống | DONE_PART 9b742f6d, 2d129056 (w3 14/14: dựng,
+   đọc lại, method track, chạy 60 frame không lỗi); kiểm ảnh không trống chờ W5
 W4 InputMap set/list; play theo trace 60 Hz (pressed/held/released, seed) có quan sát; bot gray-box:
    input ngẫu nhiên theo seed, bắt crash, lỗi script, kẹt, đo phủ vùng (SA-T02, mục e) | hh input,
    hh play, hh bot | nhân vật đi phải khi giữ phím; hai lần replay cùng hash; bot báo kẹt ở map bị
