@@ -10,9 +10,9 @@ import re
 import zipfile
 from pathlib import Path, PurePosixPath
 
-from studio.package.release_contract import digest_file, need
+from studio.package.release_contract import digest_bytes, digest_file, need
 
-SCHEMA = "hh-gt10pc-p1-scan-1"
+SCHEMA = "hh-gt10pc-p1-scan-2"
 PAYMENT = re.compile(rb"(?i)voucher|refund|chargeback|purchase|payment|billing|storekit|stripe|paypal|"
                      rb"admob|unityads|ironsource|applovin|wallet|subscription|in[-_]app[-_]?(?:purchase|billing)")
 # The policy gate itself names the flag; nothing else may mention it.
@@ -20,6 +20,18 @@ POLICY_MEMBERS = frozenset({"manifest.json", "payload/studio/package/release_con
 MONETIZATION = re.compile(rb"(?i)monetiz")
 FAILPOINT_FILES = re.compile(r"(?i)gt07-failpoint(?:-reached)?\.json")
 ARM_SCHEMAS = frozenset({"HH-GT07-FAILPOINT-1", "HH-GT07-FAILPOINT-REACHED-1"})
+# The scan and its unit test must spell the terms they reject. Each is exempt
+# from the term checks only while byte-identical to the copy running the scan.
+_HERE = Path(__file__).resolve()
+SELF_MEMBERS = {
+    "payload/studio/tests/conformance/" + _HERE.name: _HERE,
+    "payload/studio/tests/conformance/test_gt10pc_p1_scan.py": _HERE.with_name("test_gt10pc_p1_scan.py"),
+}
+
+
+def _self_member(name: str, data: bytes) -> bool:
+    source = SELF_MEMBERS.get(name)
+    return source is not None and source.is_file() and source.read_bytes() == data
 
 
 def _arm_config(name: str, data: bytes) -> bool:
@@ -34,15 +46,18 @@ def _arm_config(name: str, data: bytes) -> bool:
 
 
 def scan_archive(path: Path) -> dict:
-    payment, monetization, armed = [], [], []
+    payment, monetization, armed, exempt = [], [], [], {}
     with zipfile.ZipFile(path) as archive:
         names = archive.namelist()
         for name in names:
             data = archive.read(name)
-            if PAYMENT.search(data):
-                payment.append(name)
-            if MONETIZATION.search(data) and name not in POLICY_MEMBERS:
-                monetization.append(name)
+            if _self_member(name, data):
+                exempt[name] = digest_bytes(data)
+            else:
+                if PAYMENT.search(data):
+                    payment.append(name)
+                if MONETIZATION.search(data) and name not in POLICY_MEMBERS:
+                    monetization.append(name)
             parts = PurePosixPath(name).parts
             if FAILPOINT_FILES.fullmatch(parts[-1]) or ".local" in parts or _arm_config(name, data):
                 armed.append(name)
@@ -51,4 +66,4 @@ def scan_archive(path: Path) -> dict:
     need(not armed, "GT10PC_P1_FAILPOINT_ARMED:" + ",".join(armed[:5]))
     return {"schema": SCHEMA, "archive_sha256": digest_file(path), "members": len(names),
             "payment_members": 0, "monetization_members": 0, "armed_failpoints": 0,
-            "status": "PASS"}
+            "exempt_self": exempt, "status": "PASS"}

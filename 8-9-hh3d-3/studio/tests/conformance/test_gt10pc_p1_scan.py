@@ -46,6 +46,21 @@ class P1ScanTests(unittest.TestCase):
         with self.assertRaisesRegex(PackageError, "GT10PC_P1_FAILPOINT_ARMED"):
             scan_archive(self.archive({"payload/studio/gt07-failpoint-reached.json": b"{}"}))
 
+    def test_scanner_sources_exempt_only_when_identical(self) -> None:
+        scanner = Path(__file__).resolve().with_name("gt10pc_p1_scan.py")
+        own = {"payload/studio/tests/conformance/gt10pc_p1_scan.py": scanner.read_bytes(),
+               "payload/studio/tests/conformance/test_gt10pc_p1_scan.py": Path(__file__).resolve().read_bytes()}
+        result = scan_archive(self.archive(own))
+        self.assertEqual(sorted(result["exempt_self"]), sorted(own))
+        tampered = {"payload/studio/tests/conformance/gt10pc_p1_scan.py": scanner.read_bytes() + b"\n# x\n"}
+        with self.assertRaisesRegex(PackageError, "GT10PC_P1_PAYMENT_SURFACE"):
+            scan_archive(self.archive(tampered))
+
+    def test_scanner_bytes_at_other_path_rejected(self) -> None:
+        scanner = Path(__file__).resolve().with_name("gt10pc_p1_scan.py").read_bytes()
+        with self.assertRaisesRegex(PackageError, "GT10PC_P1_PAYMENT_SURFACE"):
+            scan_archive(self.archive({"payload/studio/game/shop_terms.py": scanner}))
+
     def test_row_guard_records_failure_and_continues(self) -> None:
         errors: dict[str, str] = {}
         with _row(errors, "P1"):
