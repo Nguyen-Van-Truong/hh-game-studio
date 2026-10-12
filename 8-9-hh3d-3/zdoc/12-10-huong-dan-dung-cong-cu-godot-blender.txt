@@ -1,5 +1,5 @@
 HƯỚNG DẪN CHO AGENT LÀM GAME: DÙNG BỘ CÔNG CỤ HH STUDIO (GODOT + BLENDER) TRÊN PC
-Cập nhật 12-10-2026 16:20, Asia/Saigon. Viết cho agent khác dùng ngay, không cần đọc lịch sử.
+Cập nhật 12-10-2026 16:35, Asia/Saigon. Viết cho agent khác dùng ngay, không cần đọc lịch sử.
 Nguồn tiến độ: zdoc/8-9-godot-blender-agent-studio-plan.txt (S304, quyết định owner O14, O15).
 Mọi đường dẫn tính từ thư mục 8-9-hh3d-3/. Đường dẫn ngắn như godot-addon/, host/, package/,
 blender-addon/, pipeline/, protocol/, contracts/ nằm dưới studio/. Lệnh viết cho PowerShell.
@@ -307,13 +307,63 @@ Lệnh (P = id project, F = file JSON; [DONE Wn] dùng được, [Wn] đang làm
   [DONE W1] hh scene undo P --command-id ID   (về trước lệnh ID; file phải chưa bị sửa sau đó)
   [DONE W2] hh scene ops [--project P]   op, field, catalog; có --project thì kiểm với Godot
   [DONE W1] hh check P   load mọi .gd/.tscn/.tres, main scene, autoload; exit 1 nếu có lỗi
-  [W4] input, play, bot: InputMap, chạy main scene, trace input 60 Hz, bot chơi thử
+  [DONE W4] hh input list P [--all] | hh input set P --actions F --command-id ID [--replace]
+  [DONE W4] hh play P [--scene res://x.tscn] [--trace F] [--frames 60] [--seed 0]
+            [--observe Node/Con:prop,...] [--every 1] [--windowed] [--out F]
+  [DONE W4] hh bot P --actions a,b --track Node [--scene ...] [--frames 1800] [--seed 1]
+            [--hold-min 6 --hold-max 30] [--stuck-frames 120 --stuck-dist 4] [--cell 32]
   [W5] shot, vcheck: chụp ảnh cửa sổ thật, kiểm ảnh trống hoặc khác ảnh mẫu
   [W6] perf: FPS, thời gian frame, bộ nhớ, draw call so với ngân sách
-  [W7] asset: nhập PNG/WAV/OGG/GLB/font, sổ giấy phép (CC0 hoặc tự làm)
-  [W8] blender: recipe JSON ra GLB hoặc sprite sheet qua Blender pin
+  [DONE W7] hh asset add P <file> --dest res://assets/x.png --license CC0-1.0|self-made
+            --author TÊN [--source-url URL] [--ai-generated] [--notes ...] --command-id ID
+            [--replace]   |   hh asset list P   |   hh asset verify P
+  [DONE W7] hh asset credits P [--out res://CREDITS.md] --command-id ID
+  [DONE W8] hh blender validate recipe.json | hh blender run recipe.json --out-dir <thư mục>
   [W9] kit: khung game 2D/3D dựng sẵn, settings project
-  [W10] export: bản Windows/Linux/Web từ export templates offline
+  [DONE W10] hh export templates [--install] [--platform windows|linux|web|all]
+  [DONE W10] hh export run P --preset windows|linux|web --out-dir <thư mục ngoài project>
+             [--debug] [--name Game] --command-id ID
+Lệnh ghi có thêm --allow-open-editor (xem dòng "Đóng editor Godot" ở dưới).
+
+Ghi chú W4 (input, play, bot):
+- File actions: {"move_right": {"deadzone": 0.5, "events": [{"key": "D"}, {"physical_key": "D"},
+  {"joy_button": 0}, {"joy_axis": 0, "value": 1.0}, {"mouse_button": 1}]}}. Tên phím sai bị từ
+  chối, file không đổi. input set ghi lại project.godot qua Godot: file được định dạng lại nhưng
+  giữ mọi cài đặt khác (12-10 đã kiểm autoload, display, section riêng). Action ui_* giữ mặc định
+  của engine nếu không ghi đè. --replace bỏ action không có trong file (trừ ui_*).
+- File trace: {"fps": 60, "events": [{"frame": 0, "action": "move_right", "pressed": true,
+  "strength": 1.0}, {"frame": 60, "action": "move_right", "pressed": false}]}. Play chạy frame
+  0..N-1, nên event ở frame N không được áp. Hai lần chạy cùng trace và seed cho cùng trace_hash
+  là bằng chứng tất định. --windowed mở cửa sổ thật.
+- Lỗi script khi chạy cho "ok": false kèm danh sách lỗi; process vẫn chạy hết số frame.
+- bot giữ ngẫu nhiên một action mỗi lúc theo seed; báo đoạn kẹt (node đi không quá --stuck-dist
+  trong --stuck-frames) và số ô --cell đã đi qua. Kẹt là phát hiện, không tự làm ok false.
+Ghi chú W7 (asset):
+- Luật owner 09-10 (ngân sách 0): chỉ CC0-1.0 hoặc self-made (bắt buộc --author). License miễn
+  phí khác (CC-BY, OFL, MIT, Apache, BSD, Unlicense) bị từ chối đến khi owner cho phép; NC, ND,
+  GPL/LGPL/AGPL, CC-BY-SA, proprietary, unknown luôn bị từ chối. Sổ là res://hh_assets.json.
+- Nhận png, jpg, webp, svg, glb, gltf, wav, ogg, mp3, ttf, otf, woff2 (tối đa 128 MB). Kiểm theo
+  loại: kích thước ảnh; WAV peak và độ lớn LUFS (120 giây đầu); OGG thời lượng; GLB tam giác,
+  xương, clip (glTF có file ngoài bị từ chối, dùng .glb). Godot import ngay sau khi chép.
+- verify báo file thiếu, sai hash, license không còn hợp lệ, và file trong res://assets/ chưa có
+  trong sổ. credits ghi CREDITS.md theo license và mục nội dung AI cho trang store.
+Ghi chú W8 (blender):
+- Recipe JSON, mẫu ở studio/gamekit/blender/examples/crate.json và walker.json. Op: clear,
+  primitive, modifier, apply_modifiers, material, transform, join, parent, import, armature,
+  skin (tự gán trọng số), keyframes, render_sprites (camera ortho, nhiều hướng, nền trong),
+  export_gltf, save_blend. Host kiểm recipe trước khi chạy Blender; output chỉ ghi vào
+  --out-dir; host băm lại từng file theo manifest.json. File import phải nằm trong thư mục recipe.
+- Đưa GLB hoặc PNG vào game bằng hh asset add (license self-made), rồi instance.add hoặc
+  spriteframes.from_sheet. Trong sprite sheet, mỗi hàng là một hướng (từ trên xuống), cột là frame.
+- Giới hạn: mỗi action gắn một object; tự gán trọng số cần mesh chồng lên xương; tối đa 128 ô
+  sprite; selftest render bằng Workbench, đường EEVEE và Cycles có code nhưng chưa chạy thử.
+Ghi chú W10 (export):
+- hh export templates --install cài template từ file .tpz đã pin (kiểm SHA256, chỉ file cần) vào
+  %APPDATA%\Godot\export_templates\4.7.2.stable; lần đầu khoảng 7 giây, máy này đã cài 12-10.
+- export run thêm preset HH Windows, HH Linux hoặc HH Web vào export_presets.cfg, giữ preset có
+  sẵn, checkpoint trước khi ghi; out-dir phải ở ngoài project. Bản Windows được chạy thử headless.
+- Giới hạn: chưa có macOS, Android, iOS; Web dùng template không thread; bản Linux chưa chạy thử
+  trên máy Windows này.
 
 Op của scene new/apply. File F là list op hoặc {"ops": [...]}; đường dẫn node tính từ root
 ("." là root); đủ field xem hh scene ops. Một lệnh là một transaction: một op lỗi thì cả lệnh bị
@@ -355,7 +405,9 @@ Mẫu chạy thật để chép (dựng xong, đọc lại, chạy 60 frame khô
   studio/gamekit/selftests/w1_scene.py   các ca từ chối, replay, CONFLICT, STALE, undo.
 Selftest nhanh (project tạm trong %TEMP%, không đụng game):
     python -B -m studio.gamekit.selftest w1 w2 w3     (12-10 16:10: 29/29, 19/19, 14/14)
-    python -B -m unittest discover -s studio/tests/gamekit -p test_scene_core.py    (12/12)
+    python -B -m studio.gamekit.selftest w4 w7 w8 w10   (12-10 16:30: 20/20, 19/19, 19/19, 12/12)
+    python -B -m unittest discover -s studio/tests/gamekit -p "test_*.py"
+      (12-10: scene_core 12, play 8, asset 14, blender_recipe 4, export 16; dưới 2 giây)
 
 Trong lúc GT-11 còn làm:
 - Dùng ngay các lệnh DONE ở trên và công cụ ở mục 2–7. Plan game của bạn quyết định có bắt buộc
@@ -371,5 +423,6 @@ Trong lúc GT-11 còn làm:
 Giới hạn gamekit hiện tại:
 - Chỉ sửa scene text .tscn. Resource ngoài (.tres) chỉ load và tham chiếu, chưa sửa qua lệnh.
 - Undo chỉ về trước một lệnh khi file chưa bị sửa sau lệnh đó; chưa có redo.
-- scene apply không kiểm hình ảnh hay gameplay; dùng play, shot, vcheck khi W4, W5 DONE.
+- scene apply không kiểm hình ảnh hay gameplay; dùng hh play và hh bot, còn shot, vcheck khi W5
+  DONE.
 - Gamekit chưa nằm trong gói .hhpkg đã ký; chạy từ source của repo này.
