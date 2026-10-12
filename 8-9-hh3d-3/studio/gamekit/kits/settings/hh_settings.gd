@@ -6,6 +6,7 @@ signal changed(key: String)
 
 const BUS_NAMES: PackedStringArray = ["Master", "Music", "SFX"]
 const _PATH: String = "user://settings.cfg"
+const _BAK: String = "user://.settings.cfg.bak"
 
 var bus_volume: Dictionary = {"Master": 1.0, "Music": 1.0, "SFX": 1.0}
 var fullscreen: bool = false
@@ -100,10 +101,11 @@ func save_settings() -> Error:
 
 
 func load_settings() -> Error:
-	if not FileAccess.file_exists(_PATH):
+	var path: String = _resolve_path()
+	if path.is_empty():
 		return ERR_FILE_NOT_FOUND
 	var cfg: ConfigFile = ConfigFile.new()
-	var err: Error = cfg.load(_PATH)
+	var err: Error = cfg.load(path)
 	if err != OK:
 		push_warning("HHSettings: cannot read settings.cfg")
 		return err
@@ -174,12 +176,46 @@ func _save_cfg(cfg: ConfigFile, res_path: String) -> Error:
 		return err
 	var temp_abs: String = ProjectSettings.globalize_path(temp_res)
 	var final_abs: String = ProjectSettings.globalize_path(res_path)
+	return _replace(temp_abs, final_abs)
+
+func _resolve_path() -> String:
+	if FileAccess.file_exists(_PATH):
+		return _PATH
+	if FileAccess.file_exists(_BAK):
+		push_warning("HHSettings: loaded backup settings.cfg")
+		return _BAK
+	return ""
+
+func _backup_abs(final_abs: String) -> String:
+	var slash: int = maxi(final_abs.rfind("/"), final_abs.rfind("\\"))
+	var file_name: String = final_abs.substr(slash + 1)
+	var folder: String = final_abs.substr(0, slash + 1)
+	var hidden: String = "." + file_name + ".bak"
+	return folder + hidden
+
+
+## Move the live file aside, then put the temp file in its place.
+## Never delete the live file until the new bytes have its name.
+func _replace(temp_abs: String, final_abs: String) -> Error:
+	var bak_abs: String = _backup_abs(final_abs)
+	var backed_up: bool = false
 	if FileAccess.file_exists(final_abs):
-		var removed: Error = DirAccess.remove_absolute(final_abs)
-		if removed != OK:
+		if FileAccess.file_exists(bak_abs):
+			var cleared: Error = DirAccess.remove_absolute(bak_abs)
+			if cleared != OK:
+				DirAccess.remove_absolute(temp_abs)
+				return cleared
+		var parked: Error = DirAccess.rename_absolute(final_abs, bak_abs)
+		if parked != OK:
 			DirAccess.remove_absolute(temp_abs)
-			return removed
+			return parked
+		backed_up = true
 	var renamed: Error = DirAccess.rename_absolute(temp_abs, final_abs)
 	if renamed != OK:
+		if backed_up:
+			DirAccess.rename_absolute(bak_abs, final_abs)
 		DirAccess.remove_absolute(temp_abs)
-	return renamed
+		return renamed
+	if FileAccess.file_exists(bak_abs):
+		DirAccess.remove_absolute(bak_abs)
+	return OK

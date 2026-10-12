@@ -123,6 +123,21 @@ class ManifestTest(unittest.TestCase):
         forced = parser.parse_args(["kit", "remove", "game", "pause", "--command-id", "cmd.kit.rm", "--force"])
         self.assertTrue(forced.force)
 
+    def test_persist_kits_keep_a_backup(self) -> None:
+        expected = {
+            "save": "user://saves/.%s.json.bak",
+            "settings": "user://.settings.cfg.bak",
+            "rebind": "user://.input_map.cfg.bak",
+        }
+        for name, bak in expected.items():
+            text = (K.KITS_DIR / name / f"hh_{name}.gd").read_text(encoding="utf-8")
+            self.assertIn(bak, text)
+            self.assertIn("loaded backup", text)
+            self.assertNotIn("remove_absolute(final_abs)", text)
+            self.assertIn("rename_absolute(final_abs, bak_abs)", text)
+            self.assertIn("rename_absolute(temp_abs, final_abs)", text)
+            self.assertIn("rename_absolute(bak_abs, final_abs)", text)
+
 
 class FilePlanTest(_TempState):
     def test_new_files_are_writes(self) -> None:

@@ -1,4 +1,4 @@
-"""W9 selftest: install gameplay kits, round-trip save/settings/rebind, replay, remove."""
+"""W9 selftest: install gameplay kits, round-trip save/settings/rebind, recover a backup after a crash, replay, remove."""
 
 from __future__ import annotations
 
@@ -140,6 +140,115 @@ func _process(_delta: float) -> bool:
 	return true
 """
 
+_RECOVER = r"""extends SceneTree
+
+var _done: bool = false
+
+
+func _process(_delta: float) -> bool:
+	if _done:
+		return true
+	_done = true
+	var result: Dictionary = {"ok": false, "user_dir": OS.get_user_data_dir()}
+	_run(result)
+	print("HHGK_RESULT " + JSON.stringify(result))
+	quit(0)
+	return true
+
+
+func _run(result: Dictionary) -> void:
+	var save: Node = root.get_node_or_null("HHSave")
+	var settings: Node = root.get_node_or_null("HHSettings")
+	var rebind: Node = root.get_node_or_null("HHRebind")
+	if save == null or settings == null or rebind == null:
+		result["detail"] = "missing autoload"
+		return
+	_save_crash(save, result)
+	_settings_crash(settings, result)
+	_rebind_crash(rebind, result)
+	result["ok"] = true
+
+
+func _save_crash(save: Node, result: Dictionary) -> void:
+	var payload: Dictionary = {"flag": "kept", "hp": 7}
+	var want: String = JSON.stringify(payload, "", true, true)
+	result["save_err"] = int(save.call("save_game", "a", payload))
+	result["marker_err"] = _plant("user://saves/.a.json.bak")
+	result["resave_err"] = int(save.call("save_game", "a", payload))
+	result["stale_bak_removed"] = not FileAccess.file_exists("user://saves/.a.json.bak")
+	result["final_before_crash"] = FileAccess.file_exists("user://saves/a.json")
+	result["save_rename"] = _crash_rename("user://saves/a.json", "user://saves/.a.json.bak")
+	var loaded: Variant = save.call("load_game", "a")
+	result["bak_match"] = loaded is Dictionary and JSON.stringify(loaded, "", true, true) == want
+	result["save_final_missing"] = not FileAccess.file_exists("user://saves/a.json")
+	result["save_bak_exists"] = FileAccess.file_exists("user://saves/.a.json.bak")
+	var slots: Variant = save.call("list_slots")
+	var listed: Array = []
+	var bak_listed: bool = false
+	if slots is PackedStringArray:
+		for slot_name: String in slots:
+			listed.append(slot_name)
+			if slot_name == "a" or slot_name.begins_with(".") or slot_name.find("bak") >= 0:
+				bak_listed = true
+	result["slots"] = listed
+	result["bak_not_listed"] = not bak_listed
+
+
+func _settings_crash(settings: Node, result: Dictionary) -> void:
+	settings.call("set_bus_volume", "Music", 0.25)
+	result["settings_err"] = int(settings.call("save_settings"))
+	result["settings_marker_err"] = _plant("user://.settings.cfg.bak")
+	result["settings_resave"] = int(settings.call("save_settings"))
+	result["settings_stale_removed"] = not FileAccess.file_exists("user://.settings.cfg.bak")
+	settings.call("set_bus_volume", "Music", 0.9)
+	result["settings_rename"] = _crash_rename("user://settings.cfg", "user://.settings.cfg.bak")
+	result["settings_load"] = int(settings.call("load_settings"))
+	result["music"] = float(settings.call("get_bus_volume", "Music"))
+	result["settings_final_missing"] = not FileAccess.file_exists("user://settings.cfg")
+	result["settings_bak_exists"] = FileAccess.file_exists("user://.settings.cfg.bak")
+
+
+func _rebind_crash(rebind: Node, result: Dictionary) -> void:
+	result["rebind_marker_err"] = _plant("user://.input_map.cfg.bak")
+	result["rebind_resave"] = int(rebind.call("save_bindings"))
+	result["rebind_stale_removed"] = not FileAccess.file_exists("user://.input_map.cfg.bak")
+	var other: InputEventKey = InputEventKey.new()
+	other.keycode = KEY_K
+	rebind.call("remap", "ui_accept", other)
+	result["rebind_rename"] = _crash_rename("user://input_map.cfg", "user://.input_map.cfg.bak")
+	result["rebind_load"] = int(rebind.call("load_bindings"))
+	var found_j: bool = false
+	var found_k: bool = false
+	var events: Array = InputMap.action_get_events(&"ui_accept")
+	for ev: Variant in events:
+		if ev is InputEventKey:
+			var key: InputEventKey = ev as InputEventKey
+			if key != null and (key.keycode == KEY_J or key.physical_keycode == KEY_J):
+				found_j = true
+			if key != null and (key.keycode == KEY_K or key.physical_keycode == KEY_K):
+				found_k = true
+	result["rebind_restored"] = found_j and not found_k
+	result["rebind_final_missing"] = not FileAccess.file_exists("user://input_map.cfg")
+	result["rebind_bak_exists"] = FileAccess.file_exists("user://.input_map.cfg.bak")
+
+
+func _plant(res_path: String) -> int:
+	var fa: FileAccess = FileAccess.open(res_path, FileAccess.WRITE)
+	if fa == null:
+		return int(FileAccess.get_open_error())
+	fa.store_string("stale")
+	fa.flush()
+	fa.close()
+	return 0
+
+
+func _crash_rename(final_res: String, bak_res: String) -> int:
+	var final_abs: String = ProjectSettings.globalize_path(final_res)
+	var bak_abs: String = ProjectSettings.globalize_path(bak_res)
+	var err: Error = DirAccess.rename_absolute(final_abs, bak_abs)
+	return int(err)
+"""
+
 
 def _userdata(name: str) -> Path:
     return Path(os.environ.get("APPDATA", "")) / "Godot" / "app_userdata" / name
@@ -207,6 +316,91 @@ def _after_drive(ctx: Ctx, project: C.Project, name: str, result: dict) -> None:
         ctx.check("corrupt save loads empty", again.get("loaded_empty") is True, result=again)
         ctx.check("music volume restored", isinstance(music, (int, float)) and abs(float(music) - 0.25) < 1e-4, music=music)
         ctx.check("rebind survived restart", again.get("key_j") is True, result=again)
+    _backup_recovery(ctx, project, name)
+
+
+def _backup_recovery(ctx: Ctx, project: C.Project, name: str) -> None:
+    script = ctx.root / "w9_backup.gd"
+    script.write_text(_RECOVER, encoding="utf-8", newline="\n")
+    run = ctx.guard("backup recovery", lambda: _run_script(project, script))
+    result = run.result if isinstance(run, C.ProcessRun) else None
+    warnings = run.warnings if isinstance(run, C.ProcessRun) else []
+    ctx.check(
+        "backup recovery finished",
+        isinstance(run, C.ProcessRun) and run.exit_code == 0 and isinstance(result, dict) and result.get("ok") is True and not run.errors,
+        exit=None if not isinstance(run, C.ProcessRun) else run.exit_code,
+        errors=None if not isinstance(run, C.ProcessRun) else run.errors[:8],
+        warnings=warnings[:8],
+        tail="" if not isinstance(run, C.ProcessRun) else (run.stdout + run.stderr)[-1200:],
+    )
+    if not isinstance(result, dict):
+        return
+    ctx.check(
+        "save backup restores slot a",
+        result.get("save_err") == 0
+        and result.get("marker_err") == 0
+        and result.get("resave_err") == 0
+        and result.get("stale_bak_removed") is True
+        and result.get("final_before_crash") is True
+        and result.get("save_rename") == 0
+        and result.get("bak_match") is True
+        and result.get("save_final_missing") is True
+        and result.get("save_bak_exists") is True,
+        result=result,
+    )
+    slots = result.get("slots") or []
+    ctx.check(
+        "list_slots ignores backup",
+        result.get("bak_not_listed") is True and "a" not in slots and "slot1" in slots,
+        slots=slots,
+    )
+    music = result.get("music")
+    ctx.check(
+        "settings backup restores value",
+        result.get("settings_err") == 0
+        and result.get("settings_marker_err") == 0
+        and result.get("settings_resave") == 0
+        and result.get("settings_stale_removed") is True
+        and result.get("settings_rename") == 0
+        and result.get("settings_load") == 0
+        and result.get("settings_final_missing") is True
+        and result.get("settings_bak_exists") is True
+        and isinstance(music, (int, float))
+        and abs(float(music) - 0.25) < 1e-4,
+        music=music,
+        result=result,
+    )
+    ctx.check(
+        "rebind backup restores binding",
+        result.get("rebind_marker_err") == 0
+        and result.get("rebind_resave") == 0
+        and result.get("rebind_stale_removed") is True
+        and result.get("rebind_rename") == 0
+        and result.get("rebind_load") == 0
+        and result.get("rebind_restored") is True
+        and result.get("rebind_final_missing") is True
+        and result.get("rebind_bak_exists") is True,
+        result=result,
+    )
+    noise = [w for w in warnings if "backup" not in w.lower()]
+    ctx.check(
+        "backup load warns",
+        any("HHSave" in w for w in warnings)
+        and any("HHSettings" in w for w in warnings)
+        and any("HHRebind" in w for w in warnings)
+        and not noise,
+        warnings=warnings[:8],
+    )
+    user = _userdata(name)
+    ctx.check(
+        "backup files sit in userdata",
+        (user / "saves" / ".a.json.bak").is_file()
+        and not (user / "saves" / "a.json").is_file()
+        and (user / ".settings.cfg.bak").is_file()
+        and not (user / "settings.cfg").is_file()
+        and (user / ".input_map.cfg.bak").is_file()
+        and not (user / "input_map.cfg").is_file(),
+    )
 
 
 def run(ctx: Ctx) -> None:
