@@ -12,11 +12,13 @@ from __future__ import annotations
 
 import argparse
 import contextlib
+import hashlib
 import json
 import os
 import re
 import secrets
 import shutil
+import stat
 import time
 import zipfile
 from pathlib import Path
@@ -104,6 +106,25 @@ def output_filenames(preset: str, name: str) -> list[str]:
     return ["index.html", "index.js", "index.wasm", "index.pck"]
 
 
+_REPARSE_POINT = getattr(stat, "FILE_ATTRIBUTE_REPARSE_POINT", 0x400)
+
+
+def _path_or_ancestor_reparse(path: Path) -> bool:
+    """True when ``path`` or an existing ancestor is a symlink or junction."""
+    current = Path(os.path.abspath(str(path)))
+    while True:
+        try:
+            st = os.stat(current, follow_symlinks=False)
+        except OSError:
+            st = None
+        if st is not None and getattr(st, "st_file_attributes", 0) & _REPARSE_POINT:
+            return True
+        parent = current.parent
+        if parent == current:
+            return False
+        current = parent
+
+
 def validate_out_dir(project: C.Project, out_dir: str | Path) -> Path:
     """Absolute directory outside the project. Relative paths resolve from the cwd."""
     if isinstance(out_dir, Path):
@@ -116,6 +137,8 @@ def validate_out_dir(project: C.Project, out_dir: str | Path) -> Path:
         raise C.GamekitError("BAD_REQUEST", "out-dir is empty or contains a control character")
     resolved = Path(os.path.abspath(raw))
     real = Path(os.path.realpath(resolved))
+    if _path_or_ancestor_reparse(resolved) or _path_or_ancestor_reparse(real):
+        raise C.GamekitError("FORBIDDEN_PATH", "out-dir or an ancestor is a junction or symlink")
     for candidate in (resolved, real):
         if C.is_within(candidate, project.root):
             raise C.GamekitError("FORBIDDEN_PATH", "out-dir must be outside the project")
@@ -128,6 +151,7 @@ def validate_out_dir(project: C.Project, out_dir: str | Path) -> Path:
 
 
 def cache_matches(cache: dict[str, Any] | None, size: int, mtime_ns: int) -> bool:
+    """Cheap status hint. Install and extract never treat this as proof of the archive bytes."""
     if not isinstance(cache, dict):
         return False
     try:
@@ -307,7 +331,8 @@ def _read_cache(path: Path) -> dict[str, Any] | None:
     return data if isinstance(data, dict) else None
 
 
-def _verify_archive() -> dict[str, Any]:
+def _verify_archive(*, must_hash: bool) -> dict[str, Any]:
+    """Hash the pinned archive before install. A status check may skip the hash and say so."""
     archive = _archive_path()
     if not archive.is_file():
         raise C.GamekitError("TOOL_MISSING", f"export templates archive missing: {archive}")
@@ -316,12 +341,13 @@ def _verify_archive() -> dict[str, Any]:
     mtime_ns = int(st.st_mtime_ns)
     started = time.monotonic()
     cache = _read_cache(_cache_path())
-    if cache_matches(cache, size, mtime_ns):
+    if not must_hash and cache_matches(cache, size, mtime_ns):
         return {
             "archive": str(archive),
-            "archive_sha256": ARCHIVE_SHA256,
+            "archive_sha256": None if not isinstance(cache, dict) else cache.get("sha256"),
             "archive_size": size,
             "archive_cached": True,
+            "archive_verified": False,
             "verify_seconds": round(time.monotonic() - started, 3),
         }
     digest = C.sha256_file(archive)
@@ -349,6 +375,7 @@ def _verify_archive() -> dict[str, Any]:
         "archive_sha256": digest,
         "archive_size": size,
         "archive_cached": False,
+        "archive_verified": True,
         "verify_seconds": round(time.monotonic() - started, 3),
     }
 
@@ -454,12 +481,25 @@ def _extract_member(zf: zipfile.ZipFile, info: zipfile.ZipInfo, dest: Path) -> N
         raise C.GamekitError("VALIDATION_FAILED", f"extracted size mismatch for {dest.name}")
 
 
-def _needs_extract(dest: Path, info: zipfile.ZipInfo) -> bool:
-    if not dest.is_file() or dest.stat().st_size != info.file_size:
+def _member_sha256(zf: zipfile.ZipFile, info: zipfile.ZipInfo) -> str:
+    digest = hashlib.sha256()
+    with zf.open(info, "r") as src:
+        for chunk in iter(lambda: src.read(1 << 20), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def _needs_extract(dest: Path, zf: zipfile.ZipFile, info: zipfile.ZipInfo) -> bool:
+    """Re-extract unless the file on disk has the same size and sha256 as the archive member."""
+    if not dest.is_file():
         return True
-    if dest.name == "version.txt":
-        return not _version_ok(dest.parent)
-    return False
+    try:
+        size = dest.stat().st_size
+    except OSError:
+        return True
+    if size != info.file_size:
+        return True
+    return C.sha256_file(dest) != _member_sha256(zf, info)
 
 
 def _install_members(platform: str) -> tuple[list[str], list[str]]:
@@ -471,7 +511,7 @@ def _install_members(platform: str) -> tuple[list[str], list[str]]:
         for member, filename in select_template_members(names, platform):
             info = zf.getinfo(member)
             dest = templates_dir() / filename
-            if _needs_extract(dest, info):
+            if _needs_extract(dest, zf, info):
                 _extract_member(zf, info, dest)
                 extracted.append(filename)
             else:
@@ -504,7 +544,7 @@ def templates(*, install: bool = False, platform: str = "all") -> dict[str, Any]
     started = time.monotonic()
     try:
         with _templates_lock():
-            verified = _verify_archive()
+            verified = _verify_archive(must_hash=install)
             extracted: list[str] = []
             skipped: list[str] = []
             extract_started = time.monotonic()
@@ -660,6 +700,81 @@ def _smoke_windows(exe: Path) -> dict[str, Any]:
     raise C.GamekitError("GODOT_FAILED", f"windows export smoke could not start: {last_error}")
 
 
+def _stage_dir(out_dir: Path) -> Path:
+    """Fresh folder beside ``out_dir`` (same drive) so a failed export does not touch it."""
+    parent = out_dir.parent
+    parent.mkdir(parents=True, exist_ok=True)
+    path = parent / f".hh-export-{os.getpid()}-{secrets.token_hex(4)}"
+    path.mkdir()
+    return path
+
+
+def _rollback_publish(info: dict[str, Any]) -> None:
+    """Put back files this publish moved and delete products it created."""
+    out_dir: Path = info["out_dir"]
+    for bak, dest in reversed(info["backups"]):
+        if dest.exists():
+            dest.unlink()
+        if bak.exists():
+            _atomic_replace(bak, dest)
+    for path in info["new_files"]:
+        if path.is_file():
+            path.unlink()
+    if info["created_dir"] and out_dir.is_dir() and not any(out_dir.iterdir()):
+        with contextlib.suppress(OSError):
+            out_dir.rmdir()
+    backup_dir: Path = info["backup_dir"]
+    if backup_dir.exists():
+        shutil.rmtree(backup_dir, ignore_errors=True)
+
+
+def _commit_publish(info: dict[str, Any]) -> None:
+    backup_dir: Path = info["backup_dir"]
+    if backup_dir.exists():
+        shutil.rmtree(backup_dir, ignore_errors=True)
+
+
+def _publish_stage(stage: Path, out_dir: Path) -> dict[str, Any]:
+    """Move staged products into ``out_dir`` with ``os.replace``. Rolls back if a move fails."""
+    children = list(stage.iterdir())
+    if any(p.is_dir() for p in children):
+        raise C.GamekitError("GODOT_FAILED", "export stage contains a subdirectory")
+    files = sorted((p for p in children if p.is_file()), key=lambda p: p.name)
+    if not files:
+        raise C.GamekitError("GODOT_FAILED", "export stage is empty")
+    digests = {p.name: C.sha256_file(p) for p in files}
+    created_dir = not out_dir.exists()
+    out_dir.mkdir(parents=True, exist_ok=True)
+    new_files: list[Path] = []
+    backups: list[tuple[Path, Path]] = []
+    backup_dir = stage.parent / f"{stage.name}.bak"
+    info = {
+        "backup_dir": backup_dir,
+        "backups": backups,
+        "new_files": new_files,
+        "out_dir": out_dir,
+        "created_dir": created_dir,
+    }
+    try:
+        for src in files:
+            dest = out_dir / src.name
+            existed = dest.exists()
+            if existed:
+                backup_dir.mkdir(parents=True, exist_ok=True)
+                bak = backup_dir / src.name
+                _atomic_replace(dest, bak)
+                backups.append((bak, dest))
+            _atomic_replace(src, dest)
+            if not existed:
+                new_files.append(dest)
+            if not dest.is_file() or C.sha256_file(dest) != digests[src.name]:
+                raise C.GamekitError("STATE_CORRUPT", f"moved {dest.name} does not match the staged bytes")
+    except Exception:
+        _rollback_publish(info)
+        raise
+    return info
+
+
 def export_run(
     project: C.Project,
     preset: str,
@@ -671,7 +786,11 @@ def export_run(
     allow_open_editor: bool = False,
     timeout: float = EXPORT_TIMEOUT,
 ) -> dict[str, Any]:
-    """Export ``preset`` into ``out_dir`` (outside the project) under the mutating contract."""
+    """Export ``preset`` into ``out_dir`` (outside the project) under the mutating contract.
+
+    Godot writes a sibling temp folder. Products move into ``out_dir`` only after smoke and
+    readback succeed. A failure deletes that temp folder and leaves ``out_dir`` as it was.
+    """
     from . import scene as scene_mod
 
     command_id = C.validate_command_id(command_id)
@@ -703,13 +822,16 @@ def export_run(
         desired, changed = merge_presets(_decode_presets(old_bytes), preset, str(target))
         desired_bytes = desired.encode("utf-8")
         C.checkpoint(project, command_id, [presets_path])
+        stage: Path | None = None
+        published: dict[str, Any] | None = None
         try:
             if presets_path.is_file() and presets_path.read_bytes() != old_bytes:
                 raise C.GamekitError("CONFLICT", "export_presets.cfg changed while the export lock was taken")
             if desired_bytes != old_bytes:
                 _write_exact(presets_path, desired)
             imported = scene_mod.refresh_import(project.root)
-            out_dir.mkdir(parents=True, exist_ok=True)
+            stage = _stage_dir(out_dir)
+            stage_target = _export_target(preset, stage, name)
             flag = "--export-debug" if debug else "--export-release"
             run = C.run_godot(
                 project.root,
@@ -717,16 +839,28 @@ def export_run(
                 (),
                 headless=True,
                 timeout=timeout,
-                extra=(flag, spec["name"], str(target)),
+                extra=(flag, spec["name"], str(stage_target)),
             )
             _require_export_process(run, f"export {spec['name']}")
             # Godot fills missing preset options by rewriting the whole cfg. Put our text back so
             # presets this command did not create stay byte-for-byte as they were.
             if _read_presets(presets_path) != desired_bytes:
                 _write_exact(presets_path, desired)
+            files, extra_files = _collect_outputs(preset, stage, name, run)
+            smoke = _smoke_windows(stage_target) if preset == "windows" else None
+            published = _publish_stage(stage, out_dir)
             files, extra_files = _collect_outputs(preset, out_dir, name, run)
-            smoke = _smoke_windows(target) if preset == "windows" else None
+            _commit_publish(published)
+            published = None
         except Exception as original:
+            if published is not None:
+                try:
+                    _rollback_publish(published)
+                except Exception as exc:
+                    raise C.GamekitError(
+                        "STATE_CORRUPT",
+                        f"export failed ({original}) and out-dir cleanup failed ({exc})",
+                    ) from original
             try:
                 C.restore_checkpoint(project, command_id)
             except Exception as exc:
@@ -735,6 +869,9 @@ def export_run(
                     f"export failed ({original}) and checkpoint restore failed ({exc})",
                 ) from original
             raise
+        finally:
+            if stage is not None and stage.exists():
+                shutil.rmtree(stage, ignore_errors=True)
         receipt = {
             "ok": True,
             "status": "COMMITTED",

@@ -344,6 +344,7 @@ def apply(
 
 
 def undo(project: C.Project, command_id: str, *, allow_open_editor: bool = False) -> dict[str, Any]:
+    """Undo one committed scene apply. The journal row is written only after readback."""
     C.validate_command_id(command_id)
     journal = C.Journal(project)
     undo_id = f"undo.{command_id}"[:96]
@@ -362,13 +363,27 @@ def undo(project: C.Project, command_id: str, *, allow_open_editor: bool = False
             raise C.GamekitError("UNDO_CONFLICT", "scene changed after that command; undo newer commands first",
                                  current_sha256=current, expected_sha256=receipt["after_sha256"])
         C.refuse_if_editor_open(project, allow_open_editor)
-        C.restore_checkpoint(project, command_id)
-        restored = C.sha256_file(scene_path) if scene_path.exists() else None
-        if restored != receipt["before_sha256"]:
-            raise C.GamekitError("STATE_CORRUPT", "restored bytes do not match the checkpoint")
-        if restored is not None:
-            rb = C.run_godot_tool(project.root, "scene_tool.gd", {"mode": "inspect", "scene": receipt["scene"]})
-            C.require_result(rb, "undo readback")
+        # Keep the live bytes under the undo id. A failed readback puts them back and writes no
+        # journal row, so the same undo id can be retried.
+        C.checkpoint(project, undo_id, [scene_path])
+        restored: str | None = None
+        try:
+            C.restore_checkpoint(project, command_id)
+            restored = C.sha256_file(scene_path) if scene_path.exists() else None
+            if restored != receipt["before_sha256"]:
+                raise C.GamekitError("STATE_CORRUPT", "restored bytes do not match the checkpoint")
+            if restored is not None:
+                rb = C.run_godot_tool(project.root, "scene_tool.gd", {"mode": "inspect", "scene": receipt["scene"]})
+                C.require_result(rb, "undo readback")
+        except Exception as original:
+            try:
+                C.restore_checkpoint(project, undo_id)
+            except Exception as exc:
+                raise C.GamekitError(
+                    "STATE_CORRUPT",
+                    f"undo failed ({original}) and the current scene could not be restored ({exc})",
+                ) from original
+            raise
         out = {"ok": True, "status": "UNDONE", "kind": "scene.undo", "command_id": undo_id, "undo_of": command_id,
                "scene": receipt["scene"], "sha256": restored, "at": C.now_iso()}
         journal.append(undo_id, request_digest, out)

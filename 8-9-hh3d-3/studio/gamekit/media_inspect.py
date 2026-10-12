@@ -832,10 +832,10 @@ def _summarize_gltf(doc: dict[str, Any], *, fmt: str, binary: bytes) -> dict[str
 def _inspect_model(data: bytes, ext: str) -> dict[str, Any]:
     if ext == ".glb":
         doc, binary = _gltf_document_from_glb(data)
-        checks = _summarize_gltf(doc, fmt="glb", binary=binary)
-        if checks["external_uris"]:
-            checks["warnings"] = list(checks["warnings"]) + ["glb still references an external URI"]
-        return checks
+        external = external_gltf_uris(doc, glb=True)
+        if external:
+            _fail("glb has external buffer or image URIs; v1 only allows data: URIs: " + "; ".join(external[:5]))
+        return _summarize_gltf(doc, fmt="glb", binary=binary)
     doc = _gltf_document_from_json(data)
     external = external_gltf_uris(doc, glb=False)
     if external:
