@@ -1,4 +1,4 @@
-# O2 authoring state — 2026-10-12 (O14/S303)
+# O2 authoring state — 2026-10-12 (O14/S303; GT-11 under O15/S304)
 AUTHORITY=0; GT09=ACCEPTED; GT10_PC=ACCEPTED_O14_SHORT_CHECKS (owner waived the 10×35 soak at 14:05).
 Progress authority: `zdoc/8-9-godot-blender-agent-studio-plan.txt`; no checkbox changed here.
 Accepted package: rehearsal gt10pc-rehearsal-20261012-c3h, P1–P11 through Scheduled Task, exit 0 in 1276 s.
@@ -10,7 +10,7 @@ Open verifier gaps, raw agrees: P11 short exits come from capture.json; P4 refus
 Finals f1–f4 are VOID (f4 stopped at P7 under O14); their raw stays in `.local/reviews`.
 Usage guide for game agents: `zdoc/12-10-huong-dan-dung-cong-cu-godot-blender.txt`.
 Tool bugs found while making games: fix in `studio/` with the short related tests (O14.5), no long soak.
-GT08B Android deferred; full GT10 waits for it; GT11 opens per game change request. No complete-game claim.
+GT08B Android deferred; full GT10 waits for it. GT11 IN_PROGRESS under owner O15 (opened 12-10 15:16). No complete-game claim.
 
 ## P1–P12 acceptance matrix (GT-10-PC, O14)
 
@@ -49,11 +49,26 @@ GT08B Android deferred; full GT10 waits for it; GT11 opens per game change reque
 | K14 | ACCEPTED | Final -74 GT08A regression and focused suite. |
 | K15 | ACCEPTED | Final -74 delegated arena/room playtests, each over 900s with exit0. |
 
+## GT-11 gamekit (O15, quick checks)
+
+`studio/gamekit/` is a host CLI (`hh`) that edits real Godot 4.7 projects, 2D and 3D, without the addon or CR-1.
+Contract: host validation, command_id journal (replay/CONFLICT), one project lock, EDITOR_OPEN refusal, checkpoint,
+temp save + atomic replace, fresh-process readback with auto-restore, per-set immediate readback (silent clamps refused).
+Not inside the signed .hhpkg yet; the GT-09 fixture route is unchanged. Usage: guide section 13.
+
+| W | State | Evidence |
+|---|---|---|
+| W1 | DONE | a0833df7; selftest w1 29/29, unit 12/12; hh.cmd real run 12-10 16:05 (add, new, apply, replay, inspect, check). |
+| W2 | DONE_PART | 9eae7686, 2d129056; w2 19/19 (2D arena, two rejects keep bytes, 60 frames clean); image check waits for W5. |
+| W3 | DONE_PART | 9b742f6d, 2d129056; w3 14/14 (3D room, method track, 60 frames clean); image check waits for W5. |
+| W4–W10 | IN_PROGRESS | input/play/bot, shot/vcheck, perf, asset, blender, kit, export. |
+| W11 | IN_PROGRESS | verifier G1 (P11 exits from process-exit.json) and G2 (per-case P4 receipts). |
+| W12 | PLANNED | guide, this file, one Grok read-only critic, close ACCEPTED_O15_QUICK. |
+
 ## Next
 
-Tools lane is stopped for PC (O14). Game agents follow the usage guide and fix tool bugs with short related tests.
-First fix candidates: bind P11 short exits to process-exit.json; give each P4 refusal its own host receipt.
-GT-11 items open only from a game change request (first candidates: Superagent SA-T01..SA-T06).
+GT-11 W4–W12 under O15 (above). Game agents use the guide now and each `hh` command once its W is DONE.
+Requests for gamekit go to `zdoc/12-10-gt11-yeu-cau-tu-agent-game.txt` (append-only).
 
 ## Retained evidence and lessons
 
