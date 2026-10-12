@@ -1,14 +1,14 @@
 HH STUDIO — PLAN 1/3: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Cập nhật 12-10-2026, Asia/Saigon | Revision S301 + quyết định owner O1–O14 | TRIỂN KHAI THEO GATE
+Cập nhật 12-10-2026, Asia/Saigon | Revision S302 + quyết định owner O1–O14 | TRIỂN KHAI THEO GATE
 OWNER_DECISIONS=O1_O3_20260925; O4_20260927; O5_O6_20260930; O7_20261001; O8_20261002; O9_20261003; O10_20261004; O11_20261006; O12_20261007; O13_20261008; O14_20261012; BLOCK_BELOW_STATUS_TABLE; LATER_WINS_OVER_S2XX; OLD_VERDICTS_UNCHANGED
 OWNER_DECISIONS_FULL_TEXT_IN_GIT=87912523,b0802472,8298c107,fcc1906f,6d8eb81d,d04266e8,091506fa,a0ab19b8,fd5ad2be,add82689,7f97d3f8,5992d9f2,5ff3885e,054c0611
 HIỆN HÀNH 12-10 14:10 — GT-01..GT-09 ACCEPTED; O14 (OWNER 14:05): BỎ SOAK DÀI P11 VÀ FINAL, GT-10-PC NGHIỆM THU BẰNG DIỄN TẬP c3h (RAW_VERIFIED, CLOSURE 86dc9f1c) CỘNG HAI CRITIC C6 ĐANG CHẠY; f1–f4 VOID (f4 DỪNG 14:07); REVIEWER LÀ COORDINATOR (LEASE AGENTS.md); GT-08B DEFERRED_OWNER_NO_ANDROID; GT-10 FULL CHỜ GT-08B
 CURRENT_VALID_WP=GT-10-PC
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S301
+PLAN_REVISION=S302
 EXECUTION_AUTHORIZATION=OWNER_APPROVED_GATED
-EXECUTION_MODE=COORDINATOR_WITH_SCOPED_SUBAGENTS_AND_INDEPENDENT_CRITICS_OWNER_20261003; CREDIT_TURN_BUDGET_O13_6; ONE_COORDINATOR_THREAD; ULTRA_ONLY_HARD_DESIGN_AND_FINAL_CRITICS; FORK_TURNS_NONE_DEFAULT; NO_SELF_CREATED_HEARTBEAT; ONE_WRITER_PER_FILE; TWO_DIFFERENT_MODELS_SAME_HASH
+EXECUTION_MODE=COORDINATOR_WITH_SCOPED_SUBAGENTS_AND_INDEPENDENT_CRITICS_OWNER_20261003; CREDIT_TURN_BUDGET_O13_6; ONE_COORDINATOR_THREAD; ULTRA_ONLY_HARD_DESIGN_AND_FINAL_CRITICS; FORK_TURNS_NONE_DEFAULT; NO_SELF_CREATED_HEARTBEAT; ONE_WRITER_PER_FILE; TWO_INDEPENDENT_CRITICS_SAME_HASH_GROK47_O14_7
 GOAL_STATE=ACTIVE; INDEPENDENT_CONSUMER_PILOT_AUTHORIZED; GT07_ACCEPTED; GT08A_ACCEPTED_O4_6; GT09_ACCEPTED_20261010; GT08B_DEFERRED_OWNER_NO_ANDROID; GT10_PC_OPEN; GT10_FULL_BLOCKED_BY_GT08B; SUPERAGENT_SEPARATE_OWNER_AUTHORIZED_LANE
 OVERALL_PLAN_STATUS=INCOMPLETE; GT01_GT09_ACCEPTED; GT08B_DEFERRED_OWNER_NO_ANDROID; GT10_PC_IN_PROGRESS; GT10_FULL_BLOCKED_BY_GT08B; GT11_PLANNED_AFTER_GT10PC_O13_10
 CONSUMER_PILOT_STATUS=REVALIDATED_PROVISIONAL_AUTHORITY0; NOT_GT06_ACCEPTANCE; NOT_COMPLETE_GAME_CLAIM
@@ -57,7 +57,7 @@ công cụ này"; xong plan thì tạo file txt hướng dẫn agent khác dùng
    86dc9f1c, commit 744a9f61, closure gói a6280d76, manifest Windows 0.1.0 3bb561df. P11 ở đó là
    một vòng Godot thật có receipt host, không phải soak. Nhãn REHEARSAL_PASS giữ nguyên, không
    remint, không gọi là FINAL hay soak PASS.
-2. P12 giữ: hai critic khác model, read-only, cùng gói c3h, theo checklist mục 9 của O13 (trừ ý
+2. P12 giữ: hai critic độc lập, read-only, cùng gói c3h, theo checklist mục 9 của O13 (trừ ý
    P11 10×35 và "một final, không ghép diễn tập"). Hai TICK=yes thì GT-10-PC ACCEPTED theo O14.
 3. Known limit ghi ở nghiệm thu và hướng dẫn: chưa đo rò bộ nhớ, handle, object qua phiên sửa dài
    của gói cài; upgrade và rollback chỉ kiểm ở phiên ngắn. Giới hạn trong known-limits.md giữ nguyên.
@@ -70,6 +70,9 @@ công cụ này"; xong plan thì tạo file txt hướng dẫn agent khác dùng
    phần kiểm dài thay bằng test ngắn như trên.
 6. f4 dừng 14:07 theo O14 lúc ở P7 (driver, runner, task đã xóa; raw giữ; VOID). Hướng dẫn dùng:
    zdoc/12-10-huong-dan-dung-cong-cu-godot-blender.txt.
+7. Owner 14:17 dừng critic GPT-5.6 Sol: mọi subagent dùng grok-4.7-xhigh (effort cao nhất có), giao
+   việc không quá khó, audit, research. P12 là hai instance Grok độc lập (ngữ cảnh riêng, không đọc
+   report của nhau) thay cho hai model khác nhau; coordinator tự --verify-only, soi raw trước khi nhận.
 
 O13 — 08-10-2026, cập nhật 12-10 (S271–S292), TRƯỚC O14, GT-09 ĐÃ NGHIỆM THU, GT-10-PC THEO MA TRẬN P
 (AUTHORITY=OWNER_DELEGATED_20261008; owner giao reviewer toàn quyền sửa plan; ngưỡng O1/O4,
@@ -258,7 +261,7 @@ Căn cứ 11-10 18:30 → 12-10 09:30:
       rồi mới cho P11 chạy; power request giữ máy không ngủ; không yên tới 03:00 thì hủy run trước
       P11 để giữ hạn mức. Stack dev Hoàn Hảo (toolstart-egui, 8 container, rustc) làm CPU ngoài
       39–86% lúc 13:35; owner tắt hết service lúc 13:46 và giao toàn quyền tắt thứ cần tắt.
-   C6 (theo O14, trên gói diễn tập c3h): P12 hai critic khác model cùng manifest; cả hai TICK=yes
+   C6 (theo O14, trên gói diễn tập c3h): P12 hai critic Grok độc lập cùng manifest (O14.7); hai TICK=yes
       thì nghiệm thu theo O4.3, ghi mục Đã nghiệm thu, đổi header. Sau đó lane công cụ dừng: GT-11
       chỉ mở khi plan game gửi change request (O14.5), GT-08B khi owner có Android (O12).
 6. Credit và lượt (thay O11.7):
