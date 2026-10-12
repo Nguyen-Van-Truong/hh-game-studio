@@ -1,0 +1,290 @@
+extends SceneTree
+## Capture viewport frames of a scene. The host (shot.py) passes captures, an optional
+## input trace, and node paths. Each capture is saved after that frame has been processed
+## and rendered. Return false from _process to keep running.
+
+var HH: GDScript
+var _scene_path: String = ""
+var _scene_root: Node = null
+var _expect: PackedStringArray = PackedStringArray()
+var _captures: Dictionary = {}
+var _capture_count: int = 0
+var _last_frame: int = 0
+var _events: Dictionary = {}
+var _tick: int = 0
+var _capture_next: String = ""
+var _capture_frame: int = -1
+var _file_rows: Array = []
+var _done: bool = false
+var _width: int = 640
+var _height: int = 360
+
+
+func _initialize() -> void:
+	var helper: Variant = load(get_script().resource_path.get_base_dir().path_join("hhgk.gd"))
+	HH = helper as GDScript
+	if HH == null:
+		push_error("hhgk.gd missing")
+		_done = true
+		quit(3)
+		return
+	var req_v: Variant = HH.read_request()
+	if req_v == null or not (req_v is Dictionary):
+		_fail("BAD_REQUEST", "missing or invalid --request file")
+		return
+	var req: Dictionary = req_v
+	_scene_path = str(req.get("scene", ""))
+	if _scene_path.is_empty():
+		_fail("BAD_REQUEST", "scene missing")
+		return
+	if not ResourceLoader.exists(_scene_path):
+		_fail("NOT_FOUND", "cannot load scene " + _scene_path)
+		return
+	var packed_v: Variant = ResourceLoader.load(_scene_path, "PackedScene", ResourceLoader.CACHE_MODE_IGNORE)
+	var packed: PackedScene = packed_v as PackedScene
+	if packed == null:
+		_fail("NOT_FOUND", "not a packed scene " + _scene_path)
+		return
+	_scene_root = packed.instantiate()
+	if _scene_root == null:
+		_fail("GODOT_FAILED", "cannot instantiate " + _scene_path)
+		return
+	_width = int(req.get("width", 640))
+	_height = int(req.get("height", 360))
+	root.mode = Window.MODE_WINDOWED
+	root.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
+	root.content_scale_factor = 1.0
+	root.size = Vector2i(_width, _height)
+	DisplayServer.window_set_size(Vector2i(_width, _height))
+	root.add_child(_scene_root)
+	current_scene = _scene_root
+	if req.has("seed"):
+		seed(int(req["seed"]))
+	var expect_v: Variant = req.get("expect", [])
+	if expect_v is Array:
+		for item: Variant in expect_v:
+			_expect.append(str(item))
+	var caps: Variant = req.get("captures", [])
+	if not (caps is Array) or (caps as Array).is_empty():
+		_fail("BAD_REQUEST", "no captures")
+		return
+	for cap_v: Variant in caps:
+		if not (cap_v is Dictionary):
+			_fail("BAD_REQUEST", "capture entry must be an object")
+			return
+		var entry: Dictionary = cap_v
+		var frame_i: int = int(entry.get("frame", -1))
+		var path: String = str(entry.get("path", ""))
+		if frame_i < 0 or path.is_empty():
+			_fail("BAD_REQUEST", "capture needs frame and path")
+			return
+		_captures[frame_i] = path
+		if frame_i > _last_frame:
+			_last_frame = frame_i
+	_capture_count = _captures.size()
+	var trace_v: Variant = req.get("trace", {})
+	if trace_v is Dictionary:
+		var evs: Variant = (trace_v as Dictionary).get("events", [])
+		if evs is Array:
+			for ev_v: Variant in evs:
+				if not (ev_v is Dictionary):
+					continue
+				var ev: Dictionary = ev_v
+				var fr: int = int(ev.get("frame", 0))
+				if not _events.has(fr):
+					_events[fr] = []
+				(_events[fr] as Array).append(ev)
+
+
+func _process(_delta: float) -> bool:
+	if _done:
+		return true
+	if _capture_next != "":
+		var save_path: String = _capture_next
+		var save_frame: int = _capture_frame
+		_capture_next = ""
+		if not _save(save_path, save_frame):
+			return true
+		if _file_rows.size() == _capture_count:
+			_emit_ok()
+			return true
+	if _tick > _last_frame:
+		_fail("GODOT_FAILED", "ended before every frame was captured")
+		return true
+	if _captures.has(_tick):
+		_capture_next = str(_captures[_tick])
+		_capture_frame = _tick
+	_apply_trace(_tick)
+	_tick += 1
+	return false
+
+
+func _apply_trace(frame_i: int) -> void:
+	if not _events.has(frame_i):
+		return
+	var list: Array = _events[frame_i]
+	for item: Variant in list:
+		var ev: Dictionary = item
+		var action_ev: InputEventAction = InputEventAction.new()
+		action_ev.action = StringName(str(ev.get("action", "")))
+		action_ev.pressed = bool(ev.get("pressed", false))
+		if ev.has("strength"):
+			action_ev.strength = float(ev["strength"])
+		Input.parse_input_event(action_ev)
+		Input.flush_buffered_events()
+
+
+func _save(path: String, frame_i: int) -> bool:
+	var tex: ViewportTexture = root.get_texture()
+	if tex == null:
+		_fail("GODOT_FAILED", "viewport has no texture")
+		return false
+	var img: Image = tex.get_image()
+	if img == null or img.is_empty() or img.get_width() < 1 or img.get_height() < 1:
+		_fail("GODOT_FAILED", "viewport image is empty")
+		return false
+	var err: int = img.save_png(path)
+	if err != OK:
+		_fail("GODOT_FAILED", "save_png failed: " + error_string(err))
+		return false
+	_file_rows.append({
+		"frame": frame_i,
+		"path": path,
+		"width": img.get_width(),
+		"height": img.get_height(),
+	})
+	return true
+
+
+func _emit_ok() -> void:
+	if _done:
+		return
+	_done = true
+	var presence: Array = _collect_presence()
+	_free_scene()
+	var out: Dictionary = {
+		"ok": true,
+		"scene": _scene_path,
+		"files": _file_rows,
+		"presence": presence,
+	}
+	HH.emit(out)
+	quit(0)
+
+
+func _fail(code: String, detail: String) -> void:
+	if _done:
+		return
+	_done = true
+	_free_scene()
+	HH.emit(HH.fail(code, detail))
+	quit(3)
+
+
+func _free_scene() -> void:
+	current_scene = null
+	if _scene_root != null and is_instance_valid(_scene_root):
+		var node: Node = _scene_root
+		_scene_root = null
+		node.free()
+
+
+func _collect_presence() -> Array:
+	var out: Array = []
+	for path: String in _expect:
+		out.append(_presence(path))
+	return out
+
+
+func _presence(path: String) -> Dictionary:
+	var node: Node = null if _scene_root == null else _scene_root.get_node_or_null(NodePath(path))
+	var row: Dictionary = {
+		"path": path,
+		"exists": node != null,
+		"visible_in_tree": false,
+		"on_screen": false,
+		"screen_rect": null,
+	}
+	if node == null:
+		return row
+	row["class"] = node.get_class()
+	var vis: bool = _is_visible(node)
+	row["visible_in_tree"] = vis
+	if node is GPUParticles2D:
+		row["emitting"] = (node as GPUParticles2D).emitting
+	elif node is GPUParticles3D:
+		row["emitting"] = (node as GPUParticles3D).emitting
+	if node is Sprite2D:
+		var sprite_rect: Rect2 = _canvas_rect(node as CanvasItem, (node as Sprite2D).get_rect())
+		row["screen_rect"] = _rect_json(sprite_rect)
+		row["on_screen"] = _rect_on_screen(sprite_rect, vis)
+	elif node is AnimatedSprite2D:
+		var anim_rect: Rect2 = _canvas_rect(node as CanvasItem, (node as AnimatedSprite2D).get_rect())
+		row["screen_rect"] = _rect_json(anim_rect)
+		row["on_screen"] = _rect_on_screen(anim_rect, vis)
+	elif node is Control:
+		var control_rect: Rect2 = (node as Control).get_global_rect()
+		row["screen_rect"] = _rect_json(control_rect)
+		row["on_screen"] = _rect_on_screen(control_rect, vis)
+	elif node is CanvasItem:
+		var point: Vector2 = (node as CanvasItem).get_global_transform_with_canvas().origin
+		row["screen_rect"] = [point.x, point.y, 0.0, 0.0]
+		row["on_screen"] = _point_on_screen(point, vis)
+	elif node is Node3D:
+		_fill_node3d(row, node as Node3D, vis)
+	return row
+
+
+func _is_visible(node: Node) -> bool:
+	if node is CanvasItem:
+		return (node as CanvasItem).is_visible_in_tree()
+	if node is Node3D:
+		return (node as Node3D).is_visible_in_tree()
+	return true
+
+
+func _view() -> Rect2:
+	return root.get_visible_rect()
+
+
+func _rect_on_screen(rect: Rect2, visible: bool) -> bool:
+	if not visible or rect.size.x <= 0.0 or rect.size.y <= 0.0:
+		return false
+	return rect.intersects(_view())
+
+
+func _point_on_screen(point: Vector2, visible: bool) -> bool:
+	if not visible:
+		return false
+	return _view().has_point(point)
+
+
+func _canvas_rect(item: CanvasItem, local: Rect2) -> Rect2:
+	var xf: Transform2D = item.get_global_transform_with_canvas()
+	var p0: Vector2 = xf * local.position
+	var p1: Vector2 = xf * Vector2(local.position.x + local.size.x, local.position.y)
+	var p2: Vector2 = xf * (local.position + local.size)
+	var p3: Vector2 = xf * Vector2(local.position.x, local.position.y + local.size.y)
+	var min_x: float = minf(minf(p0.x, p1.x), minf(p2.x, p3.x))
+	var min_y: float = minf(minf(p0.y, p1.y), minf(p2.y, p3.y))
+	var max_x: float = maxf(maxf(p0.x, p1.x), maxf(p2.x, p3.x))
+	var max_y: float = maxf(maxf(p0.y, p1.y), maxf(p2.y, p3.y))
+	return Rect2(min_x, min_y, max_x - min_x, max_y - min_y)
+
+
+func _rect_json(rect: Rect2) -> Array:
+	var out: Array = [rect.position.x, rect.position.y, rect.size.x, rect.size.y]
+	return out
+
+
+func _fill_node3d(row: Dictionary, node: Node3D, visible: bool) -> void:
+	var cam: Camera3D = root.get_camera_3d()
+	if cam == null:
+		row["on_screen"] = false
+		row["screen_rect"] = null
+		return
+	var world: Vector3 = node.global_position
+	var behind: bool = cam.is_position_behind(world)
+	var screen: Vector2 = cam.unproject_position(world)
+	row["screen_rect"] = [screen.x, screen.y, 0.0, 0.0]
+	row["on_screen"] = visible and not behind and _point_on_screen(screen, true)
