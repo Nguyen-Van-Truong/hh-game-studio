@@ -1,13 +1,14 @@
 HƯỚNG DẪN CHO AGENT LÀM GAME: DÙNG BỘ CÔNG CỤ HH STUDIO (GODOT + BLENDER) TRÊN PC
-Cập nhật 12-10-2026 15:10, Asia/Saigon. Viết cho agent khác dùng ngay, không cần đọc lịch sử.
-Nguồn tiến độ: zdoc/8-9-godot-blender-agent-studio-plan.txt (S303, quyết định owner O14).
+Cập nhật 12-10-2026 16:20, Asia/Saigon. Viết cho agent khác dùng ngay, không cần đọc lịch sử.
+Nguồn tiến độ: zdoc/8-9-godot-blender-agent-studio-plan.txt (S304, quyết định owner O14, O15).
 Mọi đường dẫn tính từ thư mục 8-9-hh3d-3/. Đường dẫn ngắn như godot-addon/, host/, package/,
 blender-addon/, pipeline/, protocol/, contracts/ nằm dưới studio/. Lệnh viết cho PowerShell.
 Nếu file này lệch với code thì code và plan đúng; sửa file này trong cùng commit sửa code.
 
 0. TÓM TẮT (đọc trước)
 - HH Studio là bộ thư viện Python, addon Godot hh_studio và adapter Blender. Không phải game.
-  Không có CLI chung hay nút bấm: agent gọi hàm Python và chạy Godot/Blender đã pin.
+- MỚI (GT-11, O15): gamekit có CLI hh sửa scene trên project game thật, 2D và 3D, không cần
+  addon hay CR-1. Đọc mục 13 trước khi sửa scene. Phần còn lại vẫn là hàm Python.
 - GT-01..GT-09 và GT-10-PC đã nghiệm thu. GT-10-PC theo O14: kiểm ngắn, soak dài được miễn.
   Chỉ PC (Windows, Linux, Linux-headless). Android hoãn (GT-08B).
 - Dùng ngay được trên project game của bạn:
@@ -15,9 +16,9 @@ Nếu file này lệch với code thì code và plan đúng; sửa file này tro
   b) Cài, nâng cấp, rollback, gỡ addon hh_studio có receipt, không đụng source/save (mục 3).
   c) Thư viện lệnh: Request có command_id, journal, lease, đọc lại trước ACK (mục 5).
   d) Mẫu đã chạy thật để chép: catalog 27 class, Blender → GLB → Godot, trace input 60 Hz.
-- Hiện chỉ chạy trên hai fixture mẫu (arena 2D, room 3D): sửa scene bằng lệnh có ACK, publish
-  script gameplay, recipe Blender, playtest/observe. Dùng trên project game thật cần change
-  request đầu tiên CR-1 (mục 8). Đây là giới hạn thật của công cụ, không phải lỗi cài đặt.
+- Đường GT-09 (EditorOwner, catalog 27 class, publish script, recipe Blender, playtest/observe)
+  vẫn chỉ chạy trên hai fixture mẫu. Sửa scene trên project game thật thì dùng hh (mục 13);
+  CR-1 ở mục 8 được thay bằng gamekit, không cần làm nữa.
 - Gặp lỗi công cụ khi làm game: sửa trong studio/ bằng test ngắn liên quan (mục 9, O14.5).
 - Plan game của bạn quyết định có bắt buộc dùng công cụ không. Plan công cụ không cấm sửa trực
   tiếp file của project game.
@@ -104,6 +105,7 @@ Luồng giống hàng P9 của gói (studio/tests/conformance/gt10pc_p9_consumer
 
 4. DÙNG NGAY TRÊN GAME VÀ CHỈ CHẠY TRÊN FIXTURE
 Dùng ngay trên project game:
+- Gamekit hh: sửa scene, kiểm project và các lệnh ghi DONE ở mục 13.
 - Godot/Blender pin; cài/nâng cấp/rollback/gỡ addon (mục 3).
 - studio/protocol/core.py (Request, canonical JSON, hash), host/core/journal.py, lease và
   transport HTTP loopback có token: làm nền cho driver riêng của game.
@@ -184,7 +186,7 @@ Mẫu CR (plan công cụ, phần change request):
     Năng lực tối thiểu (operation/schema/profile): ...
     File trong studio/ bị chạm: ...        Test chấp nhận ngắn: ...
     Cần gói mới không (0.1.x): ...
-CR-1 đề xuất, để sửa scene bằng lệnh trên project game thật:
+CR-1 (lịch sử; đã được thay bằng gamekit ở mục 13 theo O15, không cần làm):
 - Đăng ký project game ở ba chỗ, root_type Node2D hoặc Node3D:
     studio/godot-addon/gameplay_fixture_profile.py:30 (FIXTURE_PROJECTS)
     studio/godot-addon/fixture_profile.json:11 (projects)
@@ -239,8 +241,9 @@ CR-1 đề xuất, để sửa scene bằng lệnh trên project game thật:
   và rollback mới kiểm trong phiên ngắn.
 - Khóa ký là khóa test local; chưa có kênh phát hành công khai, revoke, expiry hay xoay khóa.
   Mất hoặc lộ khóa thì tạo trust store mới và install root mới (studio/package/known-limits.md).
-- Lệnh sửa scene, catalog, publish script, recipe Blender, playtest chỉ chứng minh trên hai
-  fixture (mục 4). Chưa có RigidBody2D, shader, export Web.
+- Đường GT-09 (sửa scene, catalog 27 class, publish script, recipe Blender, playtest) chỉ chứng
+  minh trên hai fixture (mục 4). Gamekit (mục 13) chạy trên project thật, có RigidBody2D, joint,
+  shader; giới hạn riêng của gamekit ghi ở cuối mục 13.
 - MCP Godot bên ngoài là INCOMPATIBLE (K13): nó ghi thẳng vào Godot, không lease, journal hay
   command_id. Không dùng nó thay đường lệnh của công cụ.
 - Hai khoảng trống verifier G1, G2 (mục 8); raw của gói c3h đã được đối chiếu tay và khớp.
@@ -262,3 +265,106 @@ CR-1 đề xuất, để sửa scene bằng lệnh trên project game thật:
   đã chạy trong ma trận GT-06/GT-09 nhưng chưa chạy lại riêng cho hướng dẫn này.
 - Chưa thử cài lên project game thật có scene và script; chưa thử bản Linux-headless trên máy
   Linux thật ngoài container của ma trận.
+
+13. GAMEKIT: LỆNH hh TRÊN PROJECT GAME THẬT (GT-11, O15)
+Mở 12-10 15:16, làm từng phần W1–W12 (plan công cụ, mục GT-11). Lệnh ghi DONE dùng được ngay;
+lệnh ghi số W khác là đang làm, chưa gọi. Code ở studio/gamekit/. Không cần addon hay CR-1.
+- Gọi từ 8-9-hh3d-3/ (hh.cmd tự đặt PYTHONPATH):
+    studio\gamekit\hh.cmd <nhóm> <lệnh> ...
+    python -B -m studio.gamekit.hh <nhóm> <lệnh> ...      (cần $env:PYTHONPATH như mục 2)
+  Kết quả là một JSON trên stdout. Exit 0 = ok; 1 = chạy xong nhưng báo hỏng (check thấy lỗi);
+  2 = bị từ chối, JSON có "error": VALIDATION_FAILED, CONFLICT, LOCKED, STALE, EDITOR_OPEN,
+  FORBIDDEN_PATH, BAD_PATH, NOT_FOUND, READBACK_MISMATCH, BAD_REQUEST.
+- Đăng ký project một lần: hh project add <thư mục có project.godot> --id <id>; sau đó dùng <id>
+  hoặc đường dẫn. Thư mục Kho Bí Ẩn, Snake, Vault Fighters bị từ chối.
+- Lệnh ghi đi qua: kiểm hợp lệ ở host trước khi chạy Godot; command_id duy nhất (gửi lại cùng
+  nội dung trả receipt cũ với "replayed": true, đổi nội dung là CONFLICT); một khóa ghi mỗi
+  project (lệnh chạy song song nhận LOCKED); từ chối khi editor Godot đang mở project
+  (EDITOR_OPEN); checkpoint trước khi ghi; ghi file tạm rồi thay atomic; file bị sửa giữa chừng
+  là STALE; đọc lại trong process Godot mới, lệch thì tự khôi phục checkpoint; receipt vào journal.
+- Mỗi giá trị được đọc lại ngay sau khi đặt. Godot tự kẹp hay bỏ qua giá trị thì lệnh bị từ chối
+  và file không đổi (ví dụ size ProgressBar nhỏ hơn tối thiểu của theme; metallic của
+  ORMMaterial3D đang ẩn). Thứ tự khóa trong props được giữ: đặt emission_shape trước
+  emission_box_extents, point_count trước point_N/position.
+- State (journal, checkpoint, khóa) ở studio/.local/gamekit/, không vào git; HH_GAMEKIT_STATE đổi
+  chỗ. HH_GODOT, HH_BLENDER đổi bản chạy; mặc định là bản pin ở mục 2.
+- Đã chạy 12-10 16:05 qua hh.cmd trên project trống trong %TEMP%: project add, scene new, scene
+  apply (readback FRESH_PROCESS_MATCH), gửi lại cùng command_id (replayed), inspect, check: mọi
+  lệnh exit 0, tổng 10 giây.
+
+Lệnh (P = id project, F = file JSON; [DONE Wn] dùng được, [Wn] đang làm):
+  [DONE W1] hh project add <dir> [--id P] [--no-import] | hh project list | hh project import P
+  [DONE W1] hh scene inspect P res://x.tscn [--sha]
+  [DONE W1] hh scene new P res://x.tscn --root Node2D [--name N] [--props JSON] [--ops F]
+            --command-id ID
+  [DONE W1] hh scene apply P res://x.tscn --ops F (hoặc --ops-json "[...]") --command-id ID
+            [--expect-sha256 SHA]
+  [DONE W1] hh scene undo P --command-id ID   (về trước lệnh ID; file phải chưa bị sửa sau đó)
+  [DONE W2] hh scene ops [--project P]   op, field, catalog; có --project thì kiểm với Godot
+  [DONE W1] hh check P   load mọi .gd/.tscn/.tres, main scene, autoload; exit 1 nếu có lỗi
+  [W4] input, play, bot: InputMap, chạy main scene, trace input 60 Hz, bot chơi thử
+  [W5] shot, vcheck: chụp ảnh cửa sổ thật, kiểm ảnh trống hoặc khác ảnh mẫu
+  [W6] perf: FPS, thời gian frame, bộ nhớ, draw call so với ngân sách
+  [W7] asset: nhập PNG/WAV/OGG/GLB/font, sổ giấy phép (CC0 hoặc tự làm)
+  [W8] blender: recipe JSON ra GLB hoặc sprite sheet qua Blender pin
+  [W9] kit: khung game 2D/3D dựng sẵn, settings project
+  [W10] export: bản Windows/Linux/Web từ export templates offline
+
+Op của scene new/apply. File F là list op hoặc {"ops": [...]}; đường dẫn node tính từ root
+("." là root); đủ field xem hh scene ops. Một lệnh là một transaction: một op lỗi thì cả lệnh bị
+từ chối, file không đổi.
+  node.create {parent, name, type, props?, index?, unique?}   node.update {path, props}
+  node.delete {path}   node.move {path, parent, index?}   node.rename {path, name}
+  node.duplicate {path, name, props?}   instance.add {parent, scene, name?, props?}
+  resource.new {path, prop, type, props?}   resource.load {path, prop, res}
+  resource.update {path, prop, props}   (chỉ sub-resource nằm trong scene)
+  script.attach {path, script, props?}   script.detach {path}
+  signal.connect {from, signal, to, method, binds?, flags?}   signal.disconnect (4 field đầu)
+  group.add {path, group}   group.remove {path, group}
+  tileset.from_atlas {path, texture, tile_size, margins?, separation?,
+    collision?: "all" hoặc [[ax, ay], ...], collision_layer?}
+  tilemap.set_cells {path, cells?: [[x, y, source, ax, ay, alt?], ...], erase?: [[x, y], ...]}
+  tilemap.fill_rect {path, rect: [x, y, w, h], atlas: [ax, ay], source?, alt?}
+  spriteframes.from_sheet {path, texture, hframes, vframes,
+    animations: {tên: {frames: [i, ...], fps, loop}}, autoplay?}
+  animation.create {player, name, tracks, length?, step?, loop?: none|linear|pingpong,
+    library?, replace?, autoplay?}. Track giá trị: {path: "Node:prop", keys: [[t, giá trị], ...],
+    interp?: linear|nearest|cubic, update?: discrete}. Track method: {type: "method",
+    path: "Node", keys: [[t, {"method": tên, "args": [...]}], ...]}; node và method phải có thật.
+Giá trị trong props: số, chuỗi, bool; vector và rect là mảng; màu là [r, g, b, a], "#rrggbb" hoặc
+tên màu; enum theo tên ("Sky", "Subtraction"; không phân biệt hoa thường); layer và mask là danh
+sách số lớp ([1, 2]); resource có sẵn {"$res": "res://..."}; resource mới
+{"$type": "Class", "props": {...}}; node {"$node": "Path"}. Góc dùng rotation_degrees.
+Class: studio/gamekit/catalog.json (173 node, 112 resource); 12-10 đã kiểm đủ trong Godot 4.7.2
+bằng hh scene ops --project. Class ngoài catalog bị từ chối; cần thêm thì ghi yêu cầu (dưới).
+Script gameplay: agent tự viết file .gd (typed GDScript) trong project, rồi script.attach và
+hh check. Gamekit không sinh code gameplay.
+
+Mẫu chạy thật để chép (dựng xong, đọc lại, chạy 60 frame không lỗi):
+  studio/gamekit/selftests/w2_2d.py   arena 2D: tile có va chạm, nhân vật sprite sheet, camera,
+    RigidBody2D và PinJoint2D, PointLight2D, particle, shader canvas_item, Parallax2D, Path2D,
+    navigation, Area2D nhặt đồ, HUD, AnimationPlayer.
+  studio/gamekit/selftests/w3_3d.py   phòng 3D: sky, fog, glow, SDFGI, 3 loại đèn, cửa CSG khoét,
+    vật liệu ORM và shader spatial, GPUParticles3D, RigidBody3D, Area3D nối signal vào script,
+    NavigationAgent3D, Path3D, camera SpringArm3D, AnimationTree, method track.
+  studio/gamekit/selftests/w1_scene.py   các ca từ chối, replay, CONFLICT, STALE, undo.
+Selftest nhanh (project tạm trong %TEMP%, không đụng game):
+    python -B -m studio.gamekit.selftest w1 w2 w3     (12-10 16:10: 29/29, 19/19, 14/14)
+    python -B -m unittest discover -s studio/tests/gamekit -p test_scene_core.py    (12/12)
+
+Trong lúc GT-11 còn làm:
+- Dùng ngay các lệnh DONE ở trên và công cụ ở mục 2–7. Plan game của bạn quyết định có bắt buộc
+  dùng hh không; sửa tay file .tscn hay .gd vẫn được, chạy hh check sau khi sửa.
+- Không sửa file coordinator đang giữ: studio/gamekit/**, studio/tests/gamekit/**, file này, plan
+  công cụ. Cần thêm op hay class, hoặc gặp lỗi gamekit: thêm một khối vào cuối
+  zdoc/12-10-gt11-yeu-cau-tu-agent-game.txt, kèm lệnh, input và JSON lỗi.
+- Đóng editor Godot trước lệnh ghi trên project đó. --allow-open-editor chỉ dùng khi chắc editor
+  không mở scene đó, vì editor có thể ghi đè file khi lưu.
+- Mỗi lệnh ghi chạy Godot hai lần (áp op, rồi đọc lại): khoảng 2–5 giây. Gom nhiều op vào một
+  file thay vì gọi từng op.
+
+Giới hạn gamekit hiện tại:
+- Chỉ sửa scene text .tscn. Resource ngoài (.tres) chỉ load và tham chiếu, chưa sửa qua lệnh.
+- Undo chỉ về trước một lệnh khi file chưa bị sửa sau lệnh đó; chưa có redo.
+- scene apply không kiểm hình ảnh hay gameplay; dùng play, shot, vcheck khi W4, W5 DONE.
+- Gamekit chưa nằm trong gói .hhpkg đã ký; chạy từ source của repo này.
