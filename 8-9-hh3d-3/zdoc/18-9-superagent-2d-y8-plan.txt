@@ -1,24 +1,25 @@
-SUPERAGENT — PLAN GAME 2D THEO SUPERFIGHTERS TRÊN Y8 (SA5, CLASSIC-FIRST, 04-10-2026)
+SUPERAGENT — PLAN GAME 2D THEO SUPERFIGHTERS TRÊN Y8 (SA6, CLASSIC-FIRST, 13-10-2026)
 
 PRODUCT_NAME=Superagent
 PLAN_ROLE=SUPERAGENT_PRODUCT_SOURCE_OF_PROGRESS
 PLAN_SCOPE=8-9-hh3d-3/superagent
-PLAN_REVISION=SA5
+PLAN_REVISION=SA6
 CLASSIC_FIRST_POLICY=CLASSIC_PARITY_BEFORE_VARIANTS
 CLASSIC_RELEASE_SCOPE=SA-01..SA-13_ONLY
 VARIANT_SCOPE=SA-14_SA-V1_SA-V3_LOCKED_BY_OWNER
-PARITY_MODEL=SA5_TIER_A_MEASURED_B_BEHAVIOR_C_APPROX_OWNER_OK
+PARITY_MODEL=SA6_TIER_A_MEASURED_B_BEHAVIOR_C_APPROX_OWNER_OK
 CURRENT_VALID_WP=SA-02
 EXECUTION_AUTHORIZATION=OWNER_OPENED_2026_10_03
 DISPATCHABLE=YES_SEPARATE_AGENT_RESPECT_MEASURE_LOCK
 IMPLEMENTATION=IN_PROGRESS
+PRESENTATION_POLICY=ORIGINAL_EVENT_DRIVEN_FX_SFX_COMPATIBILITY_FALLBACK_FIRST
 RUNTIME_ACCEPTANCE=SA-01_TECHNICAL_PASS
 HUMAN_ACCEPTANCE=NONE
 REFERENCE_INVENTORY=NOT_FROZEN
 FUNCTIONAL_PARITY=UNVERIFIED
 RELEASE_STATUS=BUILT_PROVISIONAL
 LEGACY_PROGRESS_INHERITED=NONE
-PREVIOUS_REVISION=SA4 trong Git 5b2d4c7b; LOG chi tiết (run id, hash, số assertion) nằm ở đó
+PREVIOUS_REVISION=SA5; lịch sử run/hash/assertion chỉ giữ ở Git và product evidence
 REPO_MIGRATION=EXECUTED_TO_ARCHIVE
 REPO_ARCHIVE_PATH=D:/dataDiskD/intellji/hoanhaosocial/hoanhaonew-20-6-2025/hh-game-studio-old-archive-6-10/legacy-root
 REPO_KEEP_SCOPE=8-9-hh3d-3/{zdoc,studio,superagent,consumer-pilot,vertical-slice,scripts,AGENTS.md,CLAUDE.md,.gitattributes}
@@ -27,8 +28,8 @@ REPO_ARCHIVE_SCOPE=all other root paths, linked worktrees and ignored local stat
 HANDOFF_CANONICAL_PLAN=D:/dataDiskD/intellji/hoanhaosocial/hoanhaonew-20-6-2025/hh-game-studio/8-9-hh3d-3/zdoc/18-9-superagent-2d-y8-plan.txt
 HANDOFF_PRODUCT_WORKTREE=D:/dataDiskD/hh-superagent
 HANDOFF_PRODUCT_BRANCH=superagent/main
-HANDOFF_PRODUCT_HEAD=12f16685
-HANDOFF_GROKDO_STATUS=READY_FOR_CODE_SNAPSHOT
+HANDOFF_PRODUCT_HEAD=86d36167
+HANDOFF_GROKDO_STATUS=ISOLATED_ACTIVE_REFERENCE_ONLY
 HANDOFF_GROKDO_ROOT=D:/dataDiskD/intellji/hoanhaosocial/hoanhaonew-20-6-2025/hh-game-studio/8-9-hh3d-3/superagent-grokdo
 HANDOFF_GROKDO_BRANCH=superagent/grokdo
 HANDOFF_GROKDO_HEAD=ef9c93f
@@ -50,7 +51,7 @@ HANDOFF_GROKDO_RULE=Không copy mù vào repo chính; agent mới phải dùng s
   routing HH3D nằm ở 8-9-hh3d-3/AGENTS.md.
 - Coordinator game tick WP khi đạt DoD; subagent không tick.
 
-HIỆN TRẠNG (06-10 11:06 UTC; coordinator cập nhật khi xong một mốc, tối đa 15 dòng)
+HIỆN TRẠNG (13-10 14:15 UTC; coordinator cập nhật khi xong một mốc, tối đa 15 dòng; log chi tiết ở product evidence)
 - SA-01 ACCEPTED 03-10 (bootstrap kỹ thuật). CURRENT_VALID_WP=SA-02 từ 03-10.
 - Ledger 79 dòng: 25 OBSERVED, 54 UNVERIFIED, 0 MATCHED. Đã thấy chủ yếu menu, map, mode, phím
   đánh và vài phản ứng vật thể (mục 7.4). Chưa có số đo thời gian hay khoảng cách nào: browser
@@ -156,6 +157,8 @@ HIỆN TRẠNG (06-10 11:06 UTC; coordinator cập nhật khi xong một mốc, 
   exit 0/cleanup 0/diagnostics empty; `cmd.sa05.run-all.p2.1` passed the 2,977-assertion regression
   at source hash `dc1d053ea0983032107125b4bffbeea104727da5610381324e882e5fc671f8a8`, same clean result.
   This is shared-route evidence only; spawn law, timing, owner review and SA-02 remain open.
+- SA-10 presentation slice is implemented in `game/presentation/` as original event-driven CanvasItem FX and procedural positional SFX, product commit `86d36167`. Focused smoke and live `match_room.tscn` load pass; no parity or owner acceptance claim.
+- Tool plan `8-9-godot-blender-agent-studio-plan.txt` is gamekit-complete (`NONE_GAMEKIT_COMPLETE`); the 12-10 guide is the short operating reference. No game work waits on GT-10.
 
 NEXT (làm theo thứ tự; việc nào phải chờ thì làm việc sau, không ngồi chờ)
 N2 Rig Y8 đã tự kiểm bằng fixture cục bộ nhưng chưa lấy được A01–A06; không lặp lại vòng browser
@@ -172,6 +175,9 @@ N7 Đã hoàn tất navigation/mode/settings, phiên Stage/Survival, map catalog
    `e810f472`, `13083acb`, `20c06c3e`, `0592d743`, `b6af6be2`, `12f16685`);
    `relay_yard` vẫn mặc định, bot graph còn local/provisional, chưa tick SA-07/SA-09/SA-10. Tiếp tục
    combat/feedback coverage, Q2, owner/critic gates, không chuyển SA-14.
+N8 Presentation lane: giữ `game/presentation/` tách khỏi hash mô phỏng; hoàn tất smoke/scene check,
+   sau đó làm một pass art/audio có nguồn gốc rõ ràng và đo headroom Web/Compatibility. Không thêm
+   runtime thư viện ngoài nếu chưa có license/provenance; owner review vẫn là gate SA-10.
 
 REPO MIGRATION (DONE — 06-10-2026)
 - Repo chính đã giữ scope HH3D; root legacy được chuyển vào
@@ -346,6 +352,13 @@ D7 Đổi phím. Mặc định: SA-07 thêm màn đổi phím trong Cài đặt 
     - Sự kiện chung theo tick: damage, impulse, ignite, break, explode. Vật liệu (gỗ, kim loại,
       kính, người) là bảng dữ liệu. Nổ dây chuyền, cháy lan, đồ rơi đè phải tự xảy ra từ hệ
       thống, không viết kịch bản riêng cho từng tình huống.
+    - Presentation đọc snapshot/event sau khi tick commit: `game/presentation/` được phép tạo FX/SFX
+      ngắn hạn nhưng không ghi ngược simulation, snapshot hoặc replay hash. Event row nên có `event_id`
+      và `tick`; cho tới khi simulation phát hành hai trường này, presentation dùng identity fallback
+      ổn định và TTL dedup. Giới hạn mặc định là 4 tín hiệu âm thanh/tick, 24 voice, 128 effect.
+    - Với Compatibility/Web/mobile, CanvasItem draw và CPUParticles2D là đường cơ sở; không phụ thuộc
+      `GPUParticles2D.emit_particle()` hoặc API chỉ có ở Forward+. Mọi authored flipbook/shader/audio
+      sau này phải có fallback cùng event boundary.
     - RNG tách stream spawn, crit/spread, AI; seed theo trận. Bot đi qua cùng InputFrame.
     - Mọi số chỉnh nằm trong data/*.json, mỗi số có mã dòng sổ.
     - Spike trước khi chuyển (hạn 2 giờ, scene riêng): 30 vật thể chồng nhau, nổ đẩy, đồ treo bị
@@ -359,6 +372,9 @@ D7 Đổi phím. Mặc định: SA-07 thêm màn đổi phím trong Cài đặt 
     - Log có SCRIPT ERROR, WARNING hoặc leaked object là fail. Chỉ tin exit code thật.
     - Test gameplay dùng input trace 60 Hz (tick, người chơi, action, nhấn/giữ/thả) kèm seed; lỗi
       nào cũng có trace tái hiện. Test luồng menu đi qua input event thật.
+    - Presentation thay đổi chỉ cần smoke tập trung (event dedup, snapshot bất biến, PCM/SFX cache,
+      scene load, cleanup); chạy full regression ở checkpoint hoặc khi simulation boundary đổi. Không
+      dùng pixel/sound test nội bộ làm bằng chứng parity.
     - Số tầng A của game mình: chạy bản Web của mình trong cùng rig (mục 8.2) và phân tích bằng
       cùng script như với reference, để hai bên so cùng một cách đo.
 5.5 Commit và bằng chứng
@@ -538,7 +554,7 @@ trạng thái Running.
   game/ai        bot, đồ thị di chuyển, mức khó
   game/modes     VS, Stage, Survival, luật trận
   game/ui        menu, HUD, kết quả, cài đặt, nút cảm ứng
-  game/fx        particle, rung màn hình, âm thanh (chỉ phần trình bày)
+  game/presentation  FX, rung màn hình, âm thanh và fallback (chỉ phần trình bày; ngoài hash)
   data/          nhân vật, vũ khí, map, số chỉnh
   art/, audio/   asset của mình và LICENSES.tsv (nguồn, tác giả, giấy phép, ngày)
   tests/         run_all.gd, unit test, trace, kịch bản
@@ -643,9 +659,12 @@ DoD: checklist topology mỗi map kèm ghi chú khác biệt layout; mọi tổ 
 SA-10 Art, animation, âm thanh, UI (trang phục cố định)
 Làm: pipeline theo D2; nhân vật cao hơn tỉ lệ Y8 khoảng 15%; đủ animation cho mọi trạng thái;
 tile, vật thể, hiệu ứng, UI, font có giấy phép (ví dụ OFL); SFX và nhạc tự làm hoặc CC0. Thử
-pipeline với một nhân vật ngay sau SA-03, song song, trong art/.
+pipeline với một nhân vật ngay sau SA-03, song song, trong art/. Presentation FX/SFX phải đọc
+event sau tick, có dedup và giới hạn voice/effect; Compatibility/Web/mobile luôn có fallback.
 DoD: mỗi asset có dòng LICENSES.tsv, không có asset từ reference; owner duyệt hình; hitbox, tầm
-đánh, thang, sàn và camera vẫn đúng sau khi đổi cỡ.
+đánh, thang, sàn và camera vẫn đúng sau khi đổi cỡ; smoke FX/SFX + scene load sạch, không warning,
+không leaked object; không có presentation field trong snapshot/replay hash; owner duyệt visual/audio
+ở build chạy thật. Đây là gate SA-10, không suy ra từ test nội bộ hoặc placeholder.
 
 SA-11 Điện thoại, Web, Windows, hiệu năng
 Làm: nút cảm ứng theo bố cục bản Y8 trên điện thoại (xem trên điện thoại thật của owner; không
@@ -685,6 +704,8 @@ Q2 Cảnh nặng nhất trên máy owner (Windows, Chrome): khung hình p95 ≤ 
 Q3 Test và bản export không có SCRIPT ERROR/WARNING, không leaked object khi thoát.
 Q4 Lệnh bấm có hiệu lực ở tick kế tiếp; hai người bấm cùng lúc không mất lệnh.
 Q5 Web: dung lượng tải lần đầu và bộ nhớ đo từ SA-04; ngân sách chốt ở SA-11 theo nơi phát hành.
+Q6 Presentation: mỗi tick tối đa 4 signal, 24 voice và 128 effect; dedup event không lặp TTL; FX/SFX
+   ngoài hash; Compatibility/Web/mobile có fallback; pause/mute/headless không crash và scene thoát sạch.
 
 12. PHÁP LÝ, THƯƠNG HIỆU, PHÁT HÀNH (E2/E3)
 - Không dùng "Superfighters" hay "Super Fighter" trong tên, logo, mô tả, tag hay metadata.
@@ -697,9 +718,9 @@ Q5 Web: dung lượng tải lần đầu và bộ nhớ đo từ SA-04; ngân s�
   hệt.
 
 13. QUAN HỆ VỚI PLAN KHÁC
-- Plan công cụ (./8-9-godot-blender-agent-studio-plan.txt) độc lập: GT-06 đã ACCEPTED, đang làm
-  GT-07. Superagent không thêm gate vào GT, không chờ GT-10; hai bên chỉ chung máy (mục 6) và
-  chung Godot pin.
+- Plan công cụ (./8-9-godot-blender-agent-studio-plan.txt) độc lập và đã hoàn tất gamekit
+  (`CURRENT_VALID_WP=NONE_GAMEKIT_COMPLETE`, maintenance quick-verified). Superagent không thêm
+  gate vào GT, không chờ GT-10; dùng Godot pin chung và hướng dẫn 12-10 làm quick reference.
 - Yêu cầu năng lực gửi plan công cụ (không chặn game; khi GT-10 có gói thì dùng để dogfood):
   SA-T01 dựng scene 2D qua tool (Node2D, CharacterBody2D, RigidBody2D, Area2D, CollisionShape2D,
   TileMapLayer, AnimatedSprite2D, Camera2D); SA-T02 InputMap và replay input 60 Hz; SA-T03 gói
@@ -739,6 +760,14 @@ Q5 Web: dung lượng tải lần đầu và bộ nhớ đo từ SA-04; ngân s�
 17. Test: assertion phải so với trạng thái bắt đầu thật (một test rơi từng so y > 520 trong khi
     bắt đầu ở 572 nên luôn đúng); import headless trước khi dùng class global mới; lấy mẫu sau
     tín hiệu fixed-step của chính scene.
+18. Compatibility không đảm bảo API phát particle của GPUParticles2D; dùng CanvasItem/CPU fallback
+    trước, chỉ thêm GPU path khi có capability check và đường rơi tương đương.
+19. Presentation phải có event boundary rõ: dedup theo event_id/tick khi có, fallback ổn định khi chưa
+    có; voice/effect cap và headless/mute cleanup là gate kỹ thuật riêng, không trộn vào hash.
+20. SFX tự sinh vẫn là asset authored: ghi provenance trong LICENSES.tsv, không gọi là CC0 và không
+    thêm thư viện/runtime sample bên ngoài nếu chưa có license kiểm chứng.
+21. `.import`/cache có thể làm hash thay đổi sau lần chạy đầu; evidence phải ghi source hash trước/sau
+    và không rerun chỉ vì metadata đổi nếu không có source hoặc điều kiện đo thay đổi.
 
 15. LOG (tối đa 3 dòng mỗi mốc; chi tiết ở docs/evidence/ và trong Git)
 2026-10-03 SA3 (reviewer theo lệnh owner): viết lại plan; làm ngay, không chờ GT-10; worktree
@@ -909,4 +938,6 @@ Q5 Web: dung lượng tải lần đầu và bộ nhớ đo từ SA-04; ngân s�
   122-file snapshot from product `12f16685`, branch `superagent/grokdo`, setup commit `ef9c93f`.
   Godot 4.7.2 pin/templates/settings are isolated; import + 2,977-assertion regression passed
   at source hash `c6d0329779e8c7d9c6a18250ff818e7ac99d608b4a8ff24c62483db6f133368f` (setup only).
+2026-10-13 SA6: original event-driven FX/SFX slice in `game/presentation/`; focused smoke and scene load
+  passed; added Compatibility fallback, event dedup/caps, provenance and short evidence policy. No gate tick.
 END_OF_SUPERAGENT_PLAN
