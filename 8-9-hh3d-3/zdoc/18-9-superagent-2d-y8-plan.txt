@@ -1,9 +1,9 @@
-SUPERAGENT — PLAN GAME 2D THEO SUPERFIGHTERS TRÊN Y8 (SA6.2, CLASSIC-FIRST, 13-10-2026)
+SUPERAGENT — PLAN GAME 2D THEO SUPERFIGHTERS TRÊN Y8 (SA6.3, CLASSIC-FIRST, 13-10-2026)
 
 PRODUCT_NAME=Superagent
 PLAN_ROLE=SUPERAGENT_PRODUCT_SOURCE_OF_PROGRESS
 PLAN_SCOPE=8-9-hh3d-3/superagent
-PLAN_REVISION=SA6.2-CHARACTER-PIPELINE
+PLAN_REVISION=SA6.3-VISUAL-AUDIT
 CLASSIC_FIRST_POLICY=CLASSIC_PARITY_BEFORE_VARIANTS
 CLASSIC_RELEASE_SCOPE=SA-01..SA-13_ONLY
 VARIANT_SCOPE=SA-14_SA-V1_SA-V3_LOCKED_BY_OWNER
@@ -14,10 +14,11 @@ DISPATCHABLE=NO_MAIN_PRODUCT_PAUSED_BY_OWNER_2026_10_13
 IMPLEMENTATION=PAUSED_BY_OWNER_2026_10_13
 DOCUMENTATION_SCOPE=GROKDO_VISUAL_PLAN_AND_MAIN_LESSONS_ONLY
 VISUAL_REVIEW_BRIEF=reviews/13-10-superagent-visual-quality-brief.md
+VISUAL_AUDIT_BRIEF=reviews/13-10-superagent-visual-audit-20261013.md
 CHARACTER_DESIGN_BRIEF=reviews/13-10-superagent-character-pipeline.md
 CHARACTER_PIPELINE=ORIGINAL_LAYERED_PIXEL_ATLAS_SHARED_POSE_CONTRACT
 CHARACTER_PIPELINE_STATUS=DESIGN_ONLY_NOT_RUNTIME_VERIFIED
-VISUAL_ACCEPTANCE=NOT_REVIEWED_IN_RUNTIME
+VISUAL_ACCEPTANCE=BLOCKED_BY_OWNER_SCREENSHOT_20261013
 PRESENTATION_POLICY=ORIGINAL_EVENT_DRIVEN_FX_SFX_COMPATIBILITY_FALLBACK_FIRST
 RUNTIME_ACCEPTANCE=SA-01_TECHNICAL_PASS
 HUMAN_ACCEPTANCE=NONE
@@ -25,7 +26,7 @@ REFERENCE_INVENTORY=NOT_FROZEN
 FUNCTIONAL_PARITY=UNVERIFIED
 RELEASE_STATUS=BUILT_PROVISIONAL
 LEGACY_PROGRESS_INHERITED=NONE
-PREVIOUS_REVISION=SA6; lịch sử trạng thái/LOG dài ở history/2026-10-13-main-pre-visual-status-log.txt
+PREVIOUS_REVISION=SA6.2; lịch sử trạng thái/LOG dài ở history/2026-10-13-main-pre-visual-status-log.txt
 REPO_MIGRATION=EXECUTED_TO_ARCHIVE
 REPO_ARCHIVE_PATH=D:/dataDiskD/intellji/hoanhaosocial/hoanhaonew-20-6-2025/hh-game-studio-old-archive-6-10/legacy-root
 REPO_KEEP_SCOPE=8-9-hh3d-3/{zdoc,studio,superagent,consumer-pilot,vertical-slice,scripts,AGENTS.md,CLAUDE.md,.gitattributes}
@@ -51,8 +52,9 @@ HANDOFF_GROKDO_RULE=Repo độc lập đang hoạt động; đọc Git hiện t�
 - Đã có lõi input/physics/combat, catalog/pickup, bot, map/mode/menu và build provisional.
 - Bản chính có FX/SFX/camera/HUD trong game/presentation; smoke/load đã chạy, thẩm mỹ chưa duyệt.
 - Grokdo là repo độc lập đang phát triển ở đúng 8-9-hh3d-3/superagent-grokdo; đọc plan riêng.
-- Ảnh Grok owner gửi còn thô: dáng người/item, bối cảnh và HUD cần cải thiện; tiếng chưa đánh giá.
-- Chuẩn cải thiện: pixel art anime nguyên bản; một Relay Yard, hai fighter chứng minh reuse trước roster.
+- Ảnh runtime owner gửi ngày 13-10 vẫn là blocker: fighter còn khối, prop lặp, nền rỗng và HUD dày/có nguy cơ cắt; tiếng chưa đánh giá.
+- Audit mới nhất `reviews/13-10-superagent-visual-audit-20261013.md` kết luận 64×64 sheet/test không thay thế art authored; generator chỉ được pack/validate.
+- Chuẩn cải thiện: một Relay Yard có chiều sâu, item/weapon có identity, hai fighter pixel anime nguyên bản qua cùng renderer, rồi mới mở roster.
 - Phím thường vẫn WASD + J/K/L/; và mũi tên + Numpad 1–4; power là đồ nhặt, không là chiêu riêng.
 - SA-14, nội tại hero và online vẫn khóa. Plan công cụ đã xong cho PC; không cần đổi engine.
 - Run/hash và trạng thái dài cũ: docs/evidence trong product; history/2026-10-13-main-pre-visual-status-log.txt.
@@ -61,7 +63,8 @@ NEXT — BẢN CHÍNH TẠM HOÃN, CHỈ RESUME KHI OWNER YÊU CẦU
 1. Trong thời gian hoãn: hỗ trợ tài liệu/review Grokdo; không tự chạy tiếp N2–N8 hay SA-10 bản chính.
 2. Khi được resume: kiểm Git/lock/task mới, đọc SA-02 và phần đã thay đổi; không làm lại setup/physics.
 3. Áp dụng bài học từ màn mẫu Grokdo bằng review cụ thể; không copy code/asset hoặc chữ ký nghiệm thu.
-4. Làm lane trình bày theo SA-10 khi đủ scope, tiếp tục số đo/owner gates song song; không mở SA-14.
+4. Khi Grokdo xong màn mẫu, review đúng audit mới: camera/HUD → art fighter/prop authored → Relay Yard → clip có tiếng → owner review; không mở SA-14.
+5. Không gọi ảnh near/far, test pixel, số frame, số particle hoặc file PNG/WAV là đạt hình/tiếng; thiếu clip nghe thật thì ghi GAP.
 
 REPO/HANDOFF — TRẠNG THÁI HIỆN HÀNH
 - Migration 06-10 đã xong theo REPO_ARCHIVE_PATH; không chuyển thêm file hay rewrite history.
@@ -639,6 +642,11 @@ Q7 Âm thanh/chuyển động: có clip runtime đã xem/nghe; pose/chuyển c�
 
 14. BÀI HỌC
 14.0 BÀI HỌC ƯU TIÊN TỪ REVIEW HÌNH 13-10 (áp dụng trước log lịch sử)
+- Ảnh runtime mới nhất vẫn là blocker: 64×64 chỉ thêm vùng vẽ/padding, còn generator `rect`/`paint`, world tile 16×16 và nền `draw_rect` vẫn đọc như placeholder. Không thêm particle để che; phải thay source art.
+- Trang tác giả ghi đã từng cải thiện độ rõ của player/vũ khí; đó là mục tiêu readability. Y8/Steam chỉ dùng để học bố cục, vật liệu và độ tương phản, không dùng screenshot/asset làm chuẩn pixel-diff.
+- HUD/camera phải được xem ở far và near; lỗi cắt P2 hoặc khoảng trống lớn là blocker độc lập với physics/test. Dùng container/safe margin và art layers, không dời collider để sửa ảnh.
+- Item/weapon cần icon/silhouette authored và cùng identity trên sàn, tay và HUD; chữ chỉ là debug/accessibility phụ, không phải hình cuối.
+- Chỉ sau khi một fighter A, fighter B và Relay Yard có ảnh runtime/clip nghe được mới mở roster/map; source PNG/test/pass không thay owner visual review.
 - Reuse quy ước pose/source/anchor và renderer trước; tóc/áo/dáng khác vẫn cần vẽ, không chỉ đổi màu.
 - Source có layer không buộc runtime ghép toàn thân bằng skeleton; thử hai fighter rồi mới mở rộng roster.
 - Scale theo thân đứng, không theo canvas có padding; giữ source editable, export không đè ngược hình đã sửa.
@@ -694,6 +702,9 @@ Bài học kỹ thuật còn hiệu lực:
 2026-10-13: SA6.2 nghiên cứu sprite/atlas/Resource và Aseprite/Pixelorama; chọn pipeline nhân vật
   pixel anime có source layer, pose/anchor chung, hai mẫu proof trước roster. Chỉ sửa tài liệu;
   chưa có asset/pipeline runtime mới, bản chính tiếp tục hoãn; keymap, SA-02, tick và SA-14 giữ nguyên.
+2026-10-13: SA6.3 audit ảnh runtime owner và source Grokdo: fighter vẫn dùng pixel hình chữ nhật,
+  world kit 16×16/flat fill, pickup/HUD còn đọc như prototype. Thêm audit `reviews/13-10-superagent-visual-audit-20261013.md`,
+  chốt thứ tự sửa camera/HUD → authored fighter/prop → Relay Yard → clip có tiếng; không tick SA-10.
 2026-10-13: checkpoint bản chính c5ce696a giữ nguyên; FX/SFX/HUD mới đạt smoke kỹ thuật, chưa duyệt hình/tiếng.
 2026-10-13: owner tạm hoãn bản chính, yêu cầu nghiên cứu và hỗ trợ plan đồ họa Grokdo; không sửa product.
 2026-10-13: SA6.1 chọn một Relay Yard hoàn thiện trước; sửa D2, SA-10, tiêu chí hình/tiếng và handoff stale.

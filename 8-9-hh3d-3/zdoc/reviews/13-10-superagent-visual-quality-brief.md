@@ -1,6 +1,6 @@
 # Superagent — hướng nâng chất lượng hình và tiếng, 13-10-2026
 
-Tài liệu thiết kế hỗ trợ hai plan, **không phải nguồn tick hay plan thứ tư**. Owner đang tạm hoãn phát triển bản chính; Grokdo là nơi thực hiện màn mẫu trước. Đây là kết quả đọc hai ảnh owner gửi, đọc code trình bày hiện có và nghiên cứu nguồn công khai. Chưa chạy game, chưa nghe audio, chưa có ảnh sau cải thiện trong đợt này.
+Tài liệu thiết kế hỗ trợ hai plan, **không phải nguồn tick hay plan thứ tư**. Owner đang tạm hoãn phát triển bản chính; Grokdo là nơi thực hiện màn mẫu trước. Đây là kết quả đọc hai ảnh owner gửi, đọc code trình bày hiện có và nghiên cứu nguồn công khai. Chưa chạy game, chưa nghe audio, chưa có ảnh sau cải thiện trong đợt này. Bản audit sau ảnh runtime ngày 13-10 nằm ở [13-10-superagent-visual-audit-20261013.md](13-10-superagent-visual-audit-20261013.md); nếu có khác nhau, audit mới nhất quyết định thứ tự sửa hình, còn file này giữ nguyên hướng tổng quát.
 
 ## Quyết định
 
