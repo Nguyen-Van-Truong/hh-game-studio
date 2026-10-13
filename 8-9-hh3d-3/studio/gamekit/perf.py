@@ -477,15 +477,18 @@ def run_report(
         request["trace"] = trace
     limit = float(timeout) if timeout is not None else _timeout_for(frames_i, warmup_i, leak_i)
     with C.project_lock(project, "perf", wait_seconds=30):
-        run = C.run_godot_tool(
-            project.root,
-            "perf_runner.gd",
-            request,
-            headless=bool(headless),
-            windowed=not bool(headless),
-            resolution=None if headless else res,
-            timeout=limit,
-        )
+        # Holds the legacy measurement marker for the Godot workload only.
+        # Judging the samples happens after this block so the reservation is released.
+        with C.measure_window("perf", wait_seconds=30):
+            run = C.run_godot_tool(
+                project.root,
+                "perf_runner.gd",
+                request,
+                headless=bool(headless),
+                windowed=not bool(headless),
+                resolution=None if headless else res,
+                timeout=limit,
+            )
     result = C.require_result(run, "perf")
     norm = normalize_result(result, frames=frames_i, leak_cycles=leak_i)
     judged = judge(norm["samples"], norm["leak_samples"], budget, gpu_measured=bool(norm["gpu_measured"]))

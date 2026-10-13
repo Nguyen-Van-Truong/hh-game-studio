@@ -173,10 +173,11 @@ func _set_typed(key: String, value: Variant) -> String:
 		TYPE_STRING:
 			if typeof(value) != TYPE_STRING:
 				return key + " expects string"
-			if str(existing) == str(value):
-				# Equal to the engine default, so save_custom would omit it. Shift the
-				# initial value in this process so the explicit assignment is written.
-				ProjectSettings.set_initial_value(key, "")
+			# save_custom omits a string when it equals the engine default. Renderer
+			# profiles must preserve both methods explicitly, including a transition
+			# from Compatibility to the default Mobile string, so shift the initial
+			# value for every managed string assignment.
+			ProjectSettings.set_initial_value(key, "__hh_gamekit_explicit__")
 		TYPE_NIL:
 			if typeof(value) == TYPE_FLOAT:
 				var nil_float: float = value

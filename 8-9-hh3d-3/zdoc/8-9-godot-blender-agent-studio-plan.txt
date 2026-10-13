@@ -52,6 +52,7 @@ test liên quan và ghi vào `studio/AUTHORING_STATUS.md`.
 | Visual | project AABB của VisualInstance3D, mask camera và mesh phẳng/dốc/behind-camera; trả basis rõ ràng | W5 visual |
 | Receipt | `--out` receipt ngoài project; chặn symlink/junction, collision và đường unsafe trước tạo asset và trước ghi | `test_blender_recipe`, W8 |
 | Run/path isolation | profile user riêng cho từng Play, kiểm user_data_dir trước load; scene tạo nested dirs; junction kiểm tra bằng `lstat` trước resolve | `selftest replay`, path/transaction/export units |
+| Quality và effects | profile Compatibility/Mobile/Desktop; WAV tổng hợp có seed; VFX 2D/3D có `seed` + `use_fixed_seed`, scene apply và readback | `test_quality`, `test_sfx`, `test_vfx`, `selftest quality effects` |
 
 Các thay đổi trên không sửa pin Godot/Blender, schema command, journal,
 UndoRedo, lease hay đường cài package. Không thêm asset/reference có bản quyền.
@@ -96,6 +97,16 @@ trước, rồi chạy lại đúng hàng bị chạm.
 - Receipt Blender là bằng chứng đầu ra và provenance, không thay cho review
   mỹ thuật. Game chất lượng cao còn cần gameplay feel, camera, UI, audio,
   animation, performance, build và playtest người thật.
+- SFX trong gamekit là WAV PCM tổng hợp deterministic để làm placeholder/prototype.
+  Nó không phải thư viện Foley, nhạc, voice hay giấy phép nội dung; muốn phát hành
+  vẫn phải đưa file thật qua `hh asset add` và ghi provenance.
+- VFX preset dùng core GPUParticles2D/3D và có thể khóa bằng `--seed` (unsigned 32-bit);
+  `hh` tự đặt cả `use_fixed_seed` và `seed`. Core particles có trên Compatibility,
+  Mobile và Forward+; các tính năng nâng cao như trails, SDF collision và `emit_particle`
+  khác nhau theo renderer, nên phải kiểm target renderer khi dùng chúng.
+- Quality profile chỉ ghi một tập ProjectSettings đã biết và đọc lại từ process
+  Godot mới. Nó không bật SSAO/glow/fog/AA, không sửa art/material và không bảo đảm
+  FPS hay hình đẹp hơn.
 - Terrain3D/voxel không bắt buộc cho làng/đảo nhỏ: ưu tiên mesh modular hoặc
   heightmap trong Blender. Chỉ thêm Terrain3D khi cần sculpt/paint/LOD/streaming
   diện rộng; chỉ dùng voxel khi xây phá block là mechanic cốt lõi.
@@ -115,6 +126,10 @@ trước, rồi chạy lại đúng hàng bị chạm.
 - Strict warnings-as-errors có thể quay lại sau khi dọn cũ: khai báo type rõ và
   tiêu thụ return value của API.
 - TSCN phải khai báo subresource trước node dùng nó.
+- Không suy luận API particle từ trí nhớ: phải hỏi `ClassDB.class_get_property_list()`
+  trên đúng Godot pin. Audit 13-10 phát hiện seed tồn tại ở cả GPUParticles2D và
+  GPUParticles3D; claim cũ “không có seed” đã được sửa thành `use_fixed_seed + seed`
+  và kiểm readback native.
 - Trên Windows phải `lstat` metadata không follow trước `realpath`/`exists`,
   nếu không dangling junction gây WinError448 hoặc lọt path.
 - Tập trung reproducer ngắn trước; khi đã pass và source không đổi thì không
@@ -140,3 +155,19 @@ placeholder chờ owner; không bịa chữ ký, license hay nghiệm thu.
 S309 đầy đủ được giữ nguyên trong archive AUTHORITY=0 để tra cứu lịch sử. Bản
 S310 này chỉ giữ quyết định còn hiệu lực, thao tác hiện tại, giới hạn và bài học;
 không hồi tố verdict cũ và không tự tick WP.
+
+## 9. CHANGE REQUEST S310-CR-02 — profile chất lượng và effects (13-10-2026)
+
+- `hh quality` có ba profile rõ mục đích: `compatibility` cho 2D/thiết bị cũ,
+  `mobile` cho 3D nhẹ, `desktop` dùng Forward+. Renderer string được serialize
+  tường minh khi đổi profile, merge chỉ khóa sở hữu, đọc lại từ process mới và
+  rollback byte-for-byte nếu lệch.
+- `hh sfx` tạo WAV mono 16-bit tổng hợp deterministic (`presets`, `generate`).
+  File phải nằm ngoài project lúc tạo; dùng `hh asset add` để đưa vào game và
+  ghi ledger. Đây là placeholder có kiểm tra peak/clipping, không phải audio
+  library chất lượng phát hành.
+- `hh vfx` có tám preset sparks/impact/smoke/burst cho 2D và 3D. `--seed 0..4294967295`
+  bật `use_fixed_seed` + `seed`; bỏ `--seed` giữ random sequence của Godot.
+  Preset dùng core GPU particles; tính năng particle nâng cao vẫn phụ thuộc renderer.
+- Verify nhanh đã chạy tuần tự trên project tạm: unit VFX/quality, `quality` 9/9
+  và `effects` 41/41. Không chạy soak, Android, matrix dài hoặc game repo thật.

@@ -81,11 +81,20 @@ GT-11 is ACCEPTED_O15_QUICK (plan S310; real-game dogfood recorded in S306): qui
 | Blender, visual, receipt | selected export keeps companion rig/mesh; multi-action clips; coarse 3D AABB; receipt/out-dir confinement | `selftest clips w5 w8` pass |
 | Isolation and paths | per-run Godot user profile; nested scene dirs; no-follow junction checks | `selftest replay`; path/transaction/export units pass |
 | Strict regression | explicit `String` types in runner and consumed `store_string` result | `selftest strict` 20/20, 76.3 s |
+| Quality/effects S310-CR-02 | renderer profiles; deterministic WAV placeholder; seeded GPUParticles2D/3D presets with native readback | unit VFX/quality pass; `selftest quality` 9/9; `selftest effects` 41/41 |
 
 The maintenance run found and repaired a Windows dangling-junction WinError448
 before recording PASS. It did not run the long matrix, soak, Android or a new
 critic package. The AABB result is a geometric bound, not pixel/occlusion proof;
 per-run save isolation is not a persistence-across-launches test.
+
+S310-CR-02 is a maintenance change, not a reopened gate. The particle seed
+contract was corrected after querying `ClassDB` on the pinned Godot 4.7.2:
+both `GPUParticles2D` and `GPUParticles3D` expose `use_fixed_seed` and `seed`.
+The old “seed unsupported” wording was stale and is not an acceptance verdict.
+SFX remains synthetic prototype audio. Core particles work across renderers;
+advanced particle features vary by renderer. Quality profiles do not claim
+better art, FPS, Unity/Unreal parity or AAA output.
 
 ## Next
 

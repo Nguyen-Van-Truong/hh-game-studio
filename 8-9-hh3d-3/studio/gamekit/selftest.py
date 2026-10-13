@@ -35,6 +35,10 @@ SELFTESTS = {
     "clips": "blender_clips",
     "replay": "replay",
     "save_bot": "save_bot",
+    # Short native quality/effects smokes are opt-in by name. They are not
+    # folded into the historical W12 acceptance counts or long matrices.
+    "quality": "quality_smoke",
+    "effects": "effects_smoke",
 }
 
 

@@ -240,6 +240,8 @@ def play(
         })
         request["user_profile"] = run_profile.as_posix()
         with C.project_lock(project, "play", wait_seconds=30):
+            # Play has no --allow-open-editor. An open editor is EDITOR_OPEN.
+            C.refuse_if_editor_open(project, hint_allow=False)
             run = C.run_godot_tool(
                 project.root,
                 "play_runner.gd",

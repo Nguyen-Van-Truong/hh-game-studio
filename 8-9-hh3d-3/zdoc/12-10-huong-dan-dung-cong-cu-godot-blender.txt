@@ -19,6 +19,9 @@ Nếu file này lệch với code thì code và plan đúng; sửa file này tro
   b) Cài, nâng cấp, rollback, gỡ addon hh_studio có receipt, không đụng source/save (mục 3).
   c) Thư viện lệnh: Request có command_id, journal, lease, đọc lại trước ACK (mục 5).
   d) Mẫu đã chạy thật để chép: catalog 27 class, Blender → GLB → Godot, trace input 60 Hz.
+- S310-CR-02: `quality` chọn renderer profile; `sfx` tạo WAV placeholder deterministic;
+  `vfx` tạo preset particle 2D/3D và nhận `--seed` để lặp lại. Các lệnh này tăng khả năng
+  lặp và kiểm tra, không tự biến art prototype thành chất lượng Unity/Unreal/AAA.
 - Đường GT-09 (EditorOwner, catalog 27 class, publish script, recipe Blender, playtest/observe)
   vẫn chỉ chạy trên hai fixture mẫu. Sửa scene trên project game thật thì dùng hh (mục 13);
   CR-1 ở mục 8 được thay bằng gamekit, không cần làm nữa.
@@ -355,6 +358,15 @@ Lệnh (P = id project, F = file JSON; [DONE Wn] là phần W làm ra lệnh đ�
   [DONE W10] hh export templates [--install] [--platform windows|linux|web|all]
   [DONE W10] hh export run P --preset windows|linux|web --out-dir <thư mục ngoài project>
              [--debug] [--name Game] --command-id ID
+  [DONE S310] hh quality profiles | hh quality inspect --project P
+             | hh quality apply --project P --profile compatibility|mobile|desktop
+               --command-id ID [--dry-run] [--allow-open-editor]
+  [DONE S310] hh sfx presets | hh sfx generate --preset impact --out <wav ngoài project>
+             [--seed N] [--sample-rate 44100] [--duration S] [--peak-dbfs -6] [--replace]
+  [DONE S310] hh vfx presets | hh vfx create --project P --scene res://effects/x.tscn
+             --preset sparks_2d|impact_2d|smoke_2d|burst_2d|sparks_3d|impact_3d|smoke_3d|burst_3d
+             --command-id ID [--count N] [--intensity F] [--color #rrggbb[aa]]
+             [--lifetime S] [--seed N]
 Lệnh ghi có thêm --allow-open-editor (xem dòng "Đóng editor Godot" ở dưới).
 
 Ghi chú W4 (input, play, bot):
@@ -450,6 +462,25 @@ Ghi chú W10 (export):
   out-dir giữ nguyên. Template luôn được kiểm SHA256 trước khi cài.
 - Giới hạn: chưa có macOS, Android, iOS; Web dùng template không thread; bản Linux chưa chạy thử
   trên máy Windows này.
+
+Ghi chú S310 (quality, SFX, VFX):
+- `quality profiles` chỉ liệt kê ba profile conservative. `compatibility` phù hợp 2D/thiết bị
+  cũ, `mobile` cho 3D nhẹ, `desktop` dùng Forward+. `quality apply` merge đúng các khóa nó sở
+  hữu, serialize rõ hai renderer string, đọc lại từ process Godot mới và khôi phục file nếu lệch.
+  Profile không bật SSAO, glow, fog hay AA và không bảo đảm game đẹp/FPS cao hơn.
+- `sfx generate` tạo WAV mono PCM 16-bit deterministic ngoài project. Đây là âm tổng hợp để
+  prototype; không phải Foley, nhạc, voice hoặc thư viện có quyền phát hành. Sau khi nghe/duyệt,
+  dùng `hh asset add P <wav> --dest res://assets/sfx/x.wav --license self-made --author <tên>
+  --command-id ID` với thông tin tác giả thật.
+- `vfx presets` có sparks, impact, smoke, burst cho 2D/3D. `vfx create` dùng `scene.apply`,
+  không tự ghi text TSCN. Có `--seed 0..4294967295` thì tool đặt `use_fixed_seed=true` và
+  `seed=N`; bỏ seed thì Godot dùng sequence random bình thường. Khi instance vào game, tắt hoặc
+  xóa `PreviewCamera`, rồi gọi `restart(true)` để phát lại mà vẫn giữ seed (dùng `restart()` nếu
+  muốn seed mới). Preset dùng core GPU
+  particles có trên cả Compatibility, Mobile và Forward+; trails, SDF collision và `emit_particle`
+  là tính năng phụ thuộc renderer, nên phải kiểm target renderer trước khi dùng.
+- Verify ngắn 13-10: unit VFX/quality pass, selftest `quality` 9/9 và `effects` 41/41 trên
+  project tạm. Không suy ra nghiệm thu game thật, Android, soak hay thư viện audio/art.
 
 Op của scene new/apply. File F là list op hoặc {"ops": [...]}; đường dẫn node tính từ root
 ("." là root); đủ field xem hh scene ops. Một lệnh là một transaction: một op lỗi thì cả lệnh bị

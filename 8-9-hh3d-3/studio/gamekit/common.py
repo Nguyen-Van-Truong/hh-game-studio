@@ -9,7 +9,9 @@ reads the result back.
 from __future__ import annotations
 
 import contextlib
+import contextvars
 import datetime as _dt
+import errno
 import hashlib
 import json
 import os
@@ -19,6 +21,7 @@ import shutil
 import stat
 import subprocess
 import sys
+import threading
 import time
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -393,68 +396,666 @@ def list_projects() -> list[Project]:
 
 
 def _pid_alive(pid: int) -> bool:
-    if pid <= 0:
+    """True unless this pid is proven dead. Access denied stays occupied.
+
+    ``os.kill(pid, 0)`` terminates a process on Windows, so liveness uses a
+    synchronize handle. Unknown failures are treated as alive so a lock is not
+    stolen from a process we cannot observe.
+    """
+    if type(pid) is not int or pid <= 0:
         return False
     if os.name == "nt":
         import ctypes
+        from ctypes import wintypes
 
-        kernel32 = ctypes.windll.kernel32  # type: ignore[attr-defined]
-        handle = kernel32.OpenProcess(0x1000, False, pid)  # PROCESS_QUERY_LIMITED_INFORMATION
+        kernel = ctypes.WinDLL("kernel32", use_last_error=True)
+        kernel.OpenProcess.argtypes = [wintypes.DWORD, wintypes.BOOL, wintypes.DWORD]
+        kernel.OpenProcess.restype = wintypes.HANDLE
+        kernel.WaitForSingleObject.argtypes = [wintypes.HANDLE, wintypes.DWORD]
+        kernel.WaitForSingleObject.restype = wintypes.DWORD
+        kernel.CloseHandle.argtypes = [wintypes.HANDLE]
+        kernel.CloseHandle.restype = wintypes.BOOL
+        handle = kernel.OpenProcess(0x00100000, False, pid)  # SYNCHRONIZE
         if not handle:
-            return False
+            return ctypes.get_last_error() != 87  # ERROR_INVALID_PARAMETER
         try:
-            code = ctypes.c_ulong()
-            if not kernel32.GetExitCodeProcess(handle, ctypes.byref(code)):
-                return False
-            return code.value == 259  # STILL_ACTIVE
+            return kernel.WaitForSingleObject(handle, 0) != 0  # signaled = exited
         finally:
-            kernel32.CloseHandle(handle)
+            kernel.CloseHandle(handle)
     try:
         os.kill(pid, 0)
+    except ProcessLookupError:
+        return False
+    except OSError:
+        return True
+    return True
+
+
+_GUARD_HELD: set[str] = set()
+_GUARD_META = threading.Lock()
+_measure_hold: contextvars.ContextVar[str | None] = contextvars.ContextVar(
+    "hh_gamekit_measure_hold", default=None
+)
+_LOCK_SCHEMA = "hh-gamekit-lock-1"
+_MEASURE_SCHEMA = "HH-MEASURE-WINDOW-1"
+
+
+def _guard_key(path: Path) -> str:
+    return os.path.normcase(os.path.normpath(os.path.abspath(str(path))))
+
+
+def _lexists(path: Path) -> bool:
+    try:
+        os.lstat(path)
     except OSError:
         return False
     return True
 
 
+def _lock_busy(exc: OSError) -> bool:
+    winerror = getattr(exc, "winerror", None)
+    if winerror in (33, 36):  # ERROR_LOCK_VIOLATION / lock conflict
+        return True
+    return exc.errno in (errno.EACCES, errno.EAGAIN, errno.EDEADLK)
+
+
+def _kernel_lock_region(fd: int) -> None:
+    if os.name == "nt":
+        import msvcrt
+
+        os.lseek(fd, 0, os.SEEK_SET)
+        msvcrt.locking(fd, msvcrt.LK_NBLCK, 1)
+        return
+    import fcntl
+
+    fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+
+
+def _kernel_unlock_region(fd: int) -> None:
+    if os.name == "nt":
+        import msvcrt
+
+        os.lseek(fd, 0, os.SEEK_SET)
+        msvcrt.locking(fd, msvcrt.LK_UNLCK, 1)
+        return
+    import fcntl
+
+    fcntl.flock(fd, fcntl.LOCK_UN)
+
+
 @contextlib.contextmanager
-def _lock_file(path: Path, purpose: str, wait_seconds: float) -> Iterator[None]:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    deadline = time.monotonic() + wait_seconds
-    body = json.dumps({"pid": os.getpid(), "purpose": purpose, "at": now_iso()}).encode("utf-8")
-    while True:
-        try:
-            fd = os.open(str(path), os.O_CREAT | os.O_EXCL | os.O_WRONLY)
-        except FileExistsError:
-            holder: dict[str, Any] = {}
-            with contextlib.suppress(OSError, ValueError):
-                holder = json.loads(path.read_text(encoding="utf-8") or "{}")
-            if holder and not _pid_alive(int(holder.get("pid", 0))):
-                with contextlib.suppress(OSError):
-                    path.unlink()
-                continue
-            if time.monotonic() >= deadline:
-                raise GamekitError("LOCKED", f"{path.name} is held", holder=holder)
-            time.sleep(0.2)
-            continue
-        try:
-            os.write(fd, body)
-        finally:
-            os.close(fd)
-        break
+def _kernel_file_lock(guard: Path) -> Iterator[None]:
+    """Exclusive kernel lock on a permanent guard file.
+
+    The guard is never unlinked: replacing that inode would let two owners
+    lock two different files at the same path. Same-process reentry fails
+    without locking again, because a Windows byte-range unlock is process-wide
+    and a nested unlock would drop the outer owner's lock.
+    """
+    key = _guard_key(guard)
+    with _GUARD_META:
+        if key in _GUARD_HELD:
+            raise GamekitError("LOCKED", f"{guard.name} is held by this process", same_process=True)
+        _GUARD_HELD.add(key)
+    fd: int | None = None
+    held = False
     try:
+        if _has_reparse_point(guard.parent) or _is_junction(guard):
+            raise GamekitError("FORBIDDEN_PATH", f"lock path is a symlink or junction: {guard}")
+        guard.parent.mkdir(parents=True, exist_ok=True)
+        if _is_junction(guard) or _is_junction(guard.parent):
+            raise GamekitError("FORBIDDEN_PATH", f"lock path is a symlink or junction: {guard}")
+        flags = os.O_CREAT | os.O_RDWR | getattr(os, "O_BINARY", 0) | getattr(os, "O_NOFOLLOW", 0)
+        try:
+            fd = _open_private(guard, flags, 0o600)
+        except OSError as exc:
+            if _is_junction(guard):
+                raise GamekitError("FORBIDDEN_PATH", f"lock path is a symlink or junction: {guard}") from exc
+            raise GamekitError("LOCK_UNSAFE", f"cannot open lock guard {guard}: {exc}") from exc
+        info = os.fstat(fd)
+        attrs = getattr(info, "st_file_attributes", 0)
+        if not stat.S_ISREG(info.st_mode) or info.st_nlink != 1 or attrs & _REPARSE_POINT:
+            raise GamekitError("LOCK_UNSAFE", f"lock guard is not a regular file: {guard}")
+        if info.st_size < 1:
+            try:
+                os.write(fd, b"\0")
+                os.fsync(fd)
+            except OSError as exc:
+                # A holder that locked the empty guard (the legacy measurement
+                # window does this) denies the padding write. That is contention.
+                if _lock_busy(exc):
+                    raise GamekitError("LOCKED", f"{guard.name} is held") from exc
+                raise GamekitError("LOCK_UNSAFE", f"cannot prepare lock guard {guard}: {exc}") from exc
+        try:
+            _kernel_lock_region(fd)
+            held = True
+        except OSError as exc:
+            if _lock_busy(exc):
+                raise GamekitError("LOCKED", f"{guard.name} is held") from exc
+            raise GamekitError("LOCK_UNSAFE", f"cannot lock {guard}: {exc}") from exc
         yield
     finally:
-        with contextlib.suppress(OSError):
-            path.unlink()
+        if held and fd is not None:
+            with contextlib.suppress(OSError):
+                _kernel_unlock_region(fd)
+        if fd is not None:
+            os.close(fd)
+        with _GUARD_META:
+            _GUARD_HELD.discard(key)
+
+
+def _retryable_lock(exc: GamekitError, deadline: float) -> bool:
+    if exc.code != "LOCKED" or exc.extra.get("same_process"):
+        return False
+    return time.monotonic() < deadline
+
+
+def _holder_public(data: dict[str, Any]) -> dict[str, Any]:
+    out: dict[str, Any] = {"pid": data["pid"]}
+    for key in ("purpose", "run_id"):
+        value = data.get(key)
+        if isinstance(value, str) and value:
+            out[key] = value[:200]
+    return out
+
+
+def _mark_non_inheritable(fd: int) -> None:
+    """Best-effort. Engine spawns also pass ``close_fds=True``."""
+    try:
+        target: int = fd
+        if os.name == "nt":
+            import msvcrt
+
+            target = msvcrt.get_osfhandle(fd)
+        os.set_handle_inheritable(target, False)
+    except OSError:
+        return
+
+
+def _open_nofollow_windows(path: Path, flags: int) -> int:
+    """Open ``path`` without following a symlink or junction.
+
+    This interpreter has no ``os.O_NOFOLLOW``. ``CreateFileW`` with
+    ``FILE_FLAG_OPEN_REPARSE_POINT`` returns the reparse point itself; a
+    reparse point is refused instead of being followed.
+    """
+    import ctypes
+    from ctypes import wintypes
+    import msvcrt
+
+    kernel = ctypes.WinDLL("kernel32", use_last_error=True)
+    kernel.CreateFileW.argtypes = [
+        wintypes.LPCWSTR, wintypes.DWORD, wintypes.DWORD, ctypes.c_void_p,
+        wintypes.DWORD, wintypes.DWORD, wintypes.HANDLE,
+    ]
+    kernel.CreateFileW.restype = ctypes.c_void_p
+    kernel.CloseHandle.argtypes = [wintypes.HANDLE]
+    kernel.CloseHandle.restype = wintypes.BOOL
+
+    class _FileTime(ctypes.Structure):
+        _fields_ = [("lo", wintypes.DWORD), ("hi", wintypes.DWORD)]
+
+    class _FileInfo(ctypes.Structure):
+        _fields_ = [
+            ("attr", wintypes.DWORD),
+            ("created", _FileTime),
+            ("accessed", _FileTime),
+            ("written", _FileTime),
+            ("volume", wintypes.DWORD),
+            ("size_high", wintypes.DWORD),
+            ("size_low", wintypes.DWORD),
+            ("links", wintypes.DWORD),
+            ("index_high", wintypes.DWORD),
+            ("index_low", wintypes.DWORD),
+        ]
+
+    kernel.GetFileInformationByHandle.argtypes = [wintypes.HANDLE, ctypes.POINTER(_FileInfo)]
+    kernel.GetFileInformationByHandle.restype = wintypes.BOOL
+    if flags & os.O_RDWR:
+        access = 0x80000000 | 0x40000000
+        crt = os.O_RDWR
+    elif flags & os.O_WRONLY:
+        access = 0x40000000
+        crt = os.O_WRONLY
+    else:
+        access = 0x80000000
+        crt = os.O_RDONLY
+    if (flags & os.O_CREAT) and (flags & os.O_EXCL):
+        disposition = 1  # CREATE_NEW
+    elif flags & os.O_CREAT:
+        disposition = 4  # OPEN_ALWAYS
+    else:
+        disposition = 3  # OPEN_EXISTING
+    handle = kernel.CreateFileW(
+        str(path), access, 0x1 | 0x2 | 0x4, None, disposition, 0x80 | 0x00200000, None,
+    )
+    invalid = ctypes.c_void_p(-1).value
+    if not handle or handle == invalid:
+        err = ctypes.get_last_error()
+        if err == 80:  # ERROR_FILE_EXISTS
+            raise FileExistsError(err, os.strerror(err) if hasattr(os, "strerror") else "file exists", str(path))
+        raise OSError(0, f"winerror {err}", str(path))
+    info = _FileInfo()
+    if not kernel.GetFileInformationByHandle(handle, ctypes.byref(info)):
+        kernel.CloseHandle(handle)
+        raise OSError(0, f"winerror {ctypes.get_last_error()}", str(path))
+    if info.attr & (_REPARSE_POINT | 0x10) or info.links != 1:
+        kernel.CloseHandle(handle)
+        raise OSError(0, "reparse point or extra link", str(path))
+    try:
+        os.set_handle_inheritable(handle, False)
+    except OSError:
+        pass
+    try:
+        return msvcrt.open_osfhandle(handle, os.O_BINARY | crt)
+    except OSError:
+        kernel.CloseHandle(handle)
+        raise
+
+
+def _open_private(path: Path, flags: int, mode: int | None = None) -> int:
+    """Open a lock file without following a reparse point."""
+    nofollow = getattr(os, "O_NOFOLLOW", 0) or 0
+    if os.name == "nt" and not nofollow:
+        fd = _open_nofollow_windows(path, flags)
+    elif mode is None:
+        fd = os.open(str(path), flags | int(nofollow))
+    else:
+        fd = os.open(str(path), flags | int(nofollow), mode)
+    _mark_non_inheritable(fd)
+    return fd
+
+
+def _read_lock_bytes(path: Path, *, unsafe_code: str, malformed_code: str) -> bytes:
+    flags = os.O_RDONLY | getattr(os, "O_BINARY", 0) | getattr(os, "O_NOFOLLOW", 0)
+    try:
+        fd = _open_private(path, flags)
+    except OSError as exc:
+        if _is_junction(path):
+            raise GamekitError("FORBIDDEN_PATH", f"lock path is a symlink or junction: {path}") from exc
+        raise GamekitError(unsafe_code, f"cannot read lock {path}: {exc}") from exc
+    try:
+        info = os.fstat(fd)
+        attrs = getattr(info, "st_file_attributes", 0)
+        if not stat.S_ISREG(info.st_mode) or info.st_nlink != 1 or attrs & _REPARSE_POINT:
+            raise GamekitError(unsafe_code, f"lock path is not a single regular file: {path}")
+        if info.st_size > 4096:
+            raise GamekitError(malformed_code, f"lock marker is too large: {path.name}")
+        return os.read(fd, 4097)
+    finally:
+        os.close(fd)
+
+
+def _create_marker(path: Path, body: bytes) -> None:
+    if len(body) > 4096:
+        raise GamekitError("LOCK_UNSAFE", "lock marker exceeds 4096 bytes")
+    flags = os.O_CREAT | os.O_EXCL | os.O_WRONLY | getattr(os, "O_BINARY", 0) | getattr(os, "O_NOFOLLOW", 0)
+    try:
+        fd = _open_private(path, flags, 0o600)
+    except FileExistsError as exc:
+        raise GamekitError("LOCKED", f"{path.name} is held") from exc
+    except OSError as exc:
+        if _is_junction(path):
+            raise GamekitError("FORBIDDEN_PATH", f"lock path is a symlink or junction: {path}") from exc
+        raise GamekitError("LOCK_UNSAFE", f"cannot create lock {path}: {exc}") from exc
+    try:
+        os.write(fd, body)
+        os.fsync(fd)
+    finally:
+        os.close(fd)
+    readback = _read_lock_bytes(path, unsafe_code="LOCK_UNSAFE", malformed_code="LOCK_MALFORMED")
+    if readback != body:
+        raise GamekitError("LOCK_UNSAFE", f"lock readback mismatch for {path.name}")
+
+
+def _release_marker_if_ours(path: Path, body: bytes, *, quiet: bool) -> None:
+    """Unlink ``path`` only when its bytes are still the marker this owner wrote."""
+    try:
+        if _is_junction(path) or not _lexists(path):
+            return
+        raw = _read_lock_bytes(path, unsafe_code="LOCK_UNSAFE", malformed_code="LOCK_MALFORMED")
+    except (GamekitError, OSError):
+        return
+    if raw != body:
+        return
+    try:
+        os.unlink(path)
+    except OSError as exc:
+        if not quiet:
+            raise GamekitError("LOCK_UNSAFE", f"could not release lock {path}: {exc}") from exc
+
+
+def _parse_lock_marker(raw: bytes) -> dict[str, Any] | None:
+    """Accept the current marker and the older ``pid``/``purpose``/``at`` marker."""
+    if not raw or len(raw) > 4096:
+        return None
+    try:
+        data = json.loads(raw.decode("utf-8"))
+    except (UnicodeDecodeError, ValueError):
+        return None
+    if type(data) is not dict:
+        return None
+    schema = data.get("schema")
+    if schema is not None and schema != _LOCK_SCHEMA:
+        return None
+    pid = data.get("pid")
+    if type(pid) is not int or pid <= 0:
+        return None
+    return data
+
+
+def _parse_measure_marker(raw: bytes) -> dict[str, Any] | None:
+    if not raw or len(raw) > 4096:
+        return None
+    try:
+        data = json.loads(raw.decode("utf-8"))
+    except (UnicodeDecodeError, ValueError):
+        return None
+    if type(data) is not dict:
+        return None
+    schema = data.get("schema")
+    if schema is not None and schema != _MEASURE_SCHEMA:
+        return None
+    pid = data.get("pid")
+    if type(pid) is not int or pid <= 0:
+        return None
+    return data
+
+
+def _claim_marker(path: Path, body: bytes, *, malformed_code: str, parse: Any) -> None:
+    """Create ``path`` or replace a proven-dead marker. Caller holds the guard."""
+    if _is_junction(path):
+        raise GamekitError("FORBIDDEN_PATH", f"lock path is a symlink or junction: {path}")
+    if not _lexists(path):
+        _create_marker(path, body)
+        return
+    unsafe = "MEASURE_WINDOW" if malformed_code == "MEASURE_WINDOW" else "LOCK_UNSAFE"
+    raw = _read_lock_bytes(path, unsafe_code=unsafe, malformed_code=malformed_code)
+    holder = parse(raw)
+    if holder is None:
+        raise GamekitError(malformed_code, f"lock marker is malformed: {path.name}")
+    if _pid_alive(holder["pid"]):
+        raise GamekitError("LOCKED", f"{path.name} is held", holder=_holder_public(holder))
+    raw2 = _read_lock_bytes(path, unsafe_code=unsafe, malformed_code=malformed_code)
+    if raw2 != raw:
+        raise GamekitError("LOCKED", f"{path.name} changed while recovering a stale lock")
+    try:
+        os.unlink(path)
+    except FileNotFoundError:
+        pass
+    except OSError as exc:
+        raise GamekitError("LOCK_UNSAFE", f"cannot recover stale lock {path}: {exc}") from exc
+    _create_marker(path, body)
+
+
+def _lock_body(purpose: str, root: str | None) -> bytes:
+    payload: dict[str, Any] = {
+        "schema": _LOCK_SCHEMA,
+        "pid": os.getpid(),
+        "purpose": purpose,
+        "at": now_iso(),
+        "nonce": secrets.token_hex(16),
+    }
+    if root is not None:
+        payload["root"] = root
+    body = (json.dumps(payload, sort_keys=True) + "\n").encode("utf-8")
+    if len(body) > 4096:
+        raise GamekitError("LOCK_UNSAFE", "lock marker exceeds 4096 bytes")
+    return body
+
+
+def _enter_kernel_when_ready(guard: Path, claim: Any, deadline: float) -> contextlib.AbstractContextManager[None]:
+    while True:
+        lock = _kernel_file_lock(guard)
+        entered = False
+        try:
+            lock.__enter__()
+            entered = True
+            claim()
+            return lock
+        except GamekitError as exc:
+            if entered:
+                lock.__exit__(None, None, None)
+            if not _retryable_lock(exc, deadline):
+                raise
+        time.sleep(min(0.05, max(0.0, deadline - time.monotonic())))
+
+
+class _HeldLock:
+    """Kernel guard plus a marker file. Release deletes the marker only if it is still ours."""
+
+    def __init__(self, path: Path, purpose: str, wait_seconds: float, root: str | None) -> None:
+        self.path = Path(path)
+        self.guard = self.path.with_name(self.path.name + ".guard")
+        self.body = _lock_body(purpose, root)
+        self.wait_seconds = max(0.0, float(wait_seconds))
+        self._lock: contextlib.AbstractContextManager[None] | None = None
+
+    def __enter__(self) -> "_HeldLock":
+        if _has_reparse_point(self.path.parent):
+            raise GamekitError(
+                "FORBIDDEN_PATH",
+                f"lock directory passes through a symlink or junction: {self.path.parent}",
+            )
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        deadline = time.monotonic() + self.wait_seconds
+
+        def claim() -> None:
+            _claim_marker(self.path, self.body, malformed_code="LOCK_MALFORMED", parse=_parse_lock_marker)
+
+        self._lock = _enter_kernel_when_ready(self.guard, claim, deadline)
+        return self
+
+    def __exit__(self, exc_type: Any, exc: Any, tb: Any) -> bool:
+        try:
+            _release_marker_if_ours(self.path, self.body, quiet=exc_type is not None)
+        finally:
+            lock = self._lock
+            self._lock = None
+            if lock is not None:
+                lock.__exit__(None, None, None)
+        return False
+
+
+def _lock_file(path: Path, purpose: str, wait_seconds: float) -> contextlib.AbstractContextManager[None]:
+    return _HeldLock(Path(path), purpose, wait_seconds, None)
 
 
 def state_lock(name: str, wait_seconds: float = 10.0) -> contextlib.AbstractContextManager[None]:
     return _lock_file(state_dir() / "locks" / f"{name}.lock", name, wait_seconds)
 
 
+def canonical_project_root(root: Path) -> str:
+    """Absolute, case-folded project root. Symlinks and junctions are refused."""
+    raw = Path(os.path.abspath(str(root)))
+    if _has_reparse_point(raw):
+        raise GamekitError("FORBIDDEN_PATH", f"project path uses a symlink or junction: {raw}")
+    return os.path.normcase(os.path.normpath(str(raw)))
+
+
+def shared_lock_dir() -> Path:
+    """Machine-local lock directory, outside the project and outside git.
+
+    ``HH_GAMEKIT_SHARED_LOCK_DIR`` overrides the default
+    ``%LOCALAPPDATA%/HHGodotAgent/gamekit-project-locks`` so tests do not use
+    the real directory. The override is still refused when it is a reparse path.
+    """
+    override = os.environ.get("HH_GAMEKIT_SHARED_LOCK_DIR")
+    if override:
+        directory = Path(os.path.abspath(override))
+    else:
+        base = os.environ.get("LOCALAPPDATA")
+        if not isinstance(base, str) or not base.strip():
+            raise GamekitError("LOCK_UNAVAILABLE", "LOCALAPPDATA is required for the shared project lock")
+        directory = Path(base) / "HHGodotAgent" / "gamekit-project-locks"
+    if _has_reparse_point(directory):
+        raise GamekitError(
+            "FORBIDDEN_PATH",
+            f"shared lock directory passes through a symlink or junction: {directory}",
+        )
+    return directory
+
+
+def shared_project_lock_path(root: Path) -> Path:
+    """Lock file for one physical project root, independent of state dir and project id."""
+    key = hashlib.sha256(canonical_project_root(root).encode("utf-8")).hexdigest()
+    return shared_lock_dir() / f"{key}.lock"
+
+
 def project_lock(project: Project, purpose: str, wait_seconds: float = 0.0) -> contextlib.AbstractContextManager[None]:
-    """One writer and one gamekit-launched Godot per project at a time."""
-    return _lock_file(project.state / "project.lock", purpose, wait_seconds)
+    """One writer for a physical project root, then the per-state project lock.
+
+    Agents that use different ``HH_GAMEKIT_STATE`` directories or project ids
+    still share the physical lock. The per-state ``project.lock`` remains next
+    to that state's journal. Nested acquisition in this process raises ``LOCKED``.
+    Distinct roots take distinct shared locks. Wait is bounded by ``wait_seconds``.
+    """
+    shared = shared_project_lock_path(project.root)
+    state = project.state / "project.lock"
+    root_key = canonical_project_root(project.root)
+
+    @contextlib.contextmanager
+    def _held() -> Iterator[None]:
+        with _HeldLock(shared, purpose, wait_seconds, root_key):
+            with _HeldLock(state, purpose, wait_seconds, None):
+                yield
+
+    return _held()
+
+
+def measure_window_lock_path() -> Path:
+    """Legacy measurement marker. ``HH_GAMEKIT_MEASURE_LOCK`` overrides it for tests."""
+    override = os.environ.get("HH_GAMEKIT_MEASURE_LOCK")
+    if override:
+        return Path(os.path.abspath(override))
+    base = os.environ.get("LOCALAPPDATA")
+    if not isinstance(base, str) or not base.strip():
+        raise GamekitError("MEASURE_WINDOW", "LOCALAPPDATA is required")
+    return Path(base) / "HHGodotAgent" / "measure-window.lock"
+
+
+def _new_measure_payload(purpose: str, run_id: str | None) -> dict[str, Any]:
+    if not isinstance(purpose, str) or not purpose.strip() or len(purpose) > 200:
+        raise GamekitError("BAD_REQUEST", "measurement purpose must be a short non-empty string")
+    if run_id is not None and (not isinstance(run_id, str) or not run_id.strip() or len(run_id) > 200):
+        raise GamekitError("BAD_REQUEST", "measurement run_id must be a short string")
+    now = _dt.datetime.now(_dt.timezone.utc)
+    return {
+        "schema": _MEASURE_SCHEMA,
+        "owner": "hh-gamekit",
+        "pid": os.getpid(),
+        "run_id": run_id or new_id("measure"),
+        "purpose": purpose,
+        "claimed_utc": now.isoformat(),
+        "expires_utc": (now + _dt.timedelta(hours=24)).isoformat(),
+        "nonce": secrets.token_hex(16),
+    }
+
+
+def _require_our_measure_marker(path: Path, nonce: str) -> None:
+    if _is_junction(path) or not _lexists(path):
+        raise GamekitError("MEASURE_WINDOW", "measurement marker disappeared while this process held it")
+    raw = _read_lock_bytes(path, unsafe_code="MEASURE_WINDOW", malformed_code="MEASURE_WINDOW")
+    holder = _parse_measure_marker(raw)
+    if holder is None or holder.get("nonce") != nonce or holder.get("pid") != os.getpid():
+        raise GamekitError("MEASURE_WINDOW", "measurement marker is no longer owned by this process")
+
+
+def _raise_if_measure_blocks(path: Path) -> None:
+    """Refuse a live or malformed marker. A proven-dead marker is left untouched."""
+    if _is_junction(path):
+        raise GamekitError("FORBIDDEN_PATH", f"measurement lock is a symlink or junction: {path}")
+    if not _lexists(path):
+        return
+    raw = _read_lock_bytes(path, unsafe_code="MEASURE_WINDOW", malformed_code="MEASURE_WINDOW")
+    holder = _parse_measure_marker(raw)
+    if holder is None:
+        raise GamekitError("MEASURE_WINDOW", "measurement lock is malformed")
+    if _pid_alive(holder["pid"]):
+        raise GamekitError(
+            "MEASURE_WINDOW",
+            "a measurement reservation is held",
+            holder=_holder_public(holder),
+        )
+
+
+def assert_measure_window_clear() -> None:
+    """Refuse an engine launch when a measurement reservation is held.
+
+    The check takes the legacy ``measure-window.guard`` only when this process
+    does not already hold ``measure_window``, so ``hh perf`` does not deadlock
+    on its own guard. A matching nonce is the proof of our hold; a live pid
+    alone is not, because pids are reused. Proven-dead markers do not block and
+    are not deleted here.
+    """
+    path = measure_window_lock_path()
+    nonce = _measure_hold.get()
+    if nonce is not None:
+        _require_our_measure_marker(path, nonce)
+        return
+    if _has_reparse_point(path.parent):
+        raise GamekitError(
+            "FORBIDDEN_PATH",
+            f"measurement lock directory passes through a symlink or junction: {path.parent}",
+        )
+    path.parent.mkdir(parents=True, exist_ok=True)
+    guard = path.with_suffix(".guard")
+    try:
+        with _kernel_file_lock(guard):
+            _raise_if_measure_blocks(path)
+    except GamekitError as exc:
+        if exc.code == "LOCKED":
+            raise GamekitError("MEASURE_WINDOW", "measurement guard is held") from exc
+        raise
+
+
+@contextlib.contextmanager
+def measure_window(
+    purpose: str,
+    *,
+    run_id: str | None = None,
+    wait_seconds: float = 0.0,
+) -> Iterator[dict[str, Any]]:
+    """Acquire the legacy measurement marker and always release it from ``finally``.
+
+    The guard file and schema match ``studio/tests/replay/measure_window.py``.
+    A live owner is not stolen when ``expires_utc`` has passed. A proven-dead
+    marker is replaced only while this process holds the guard, and only after
+    a second read shows the same bytes. Wait is bounded by ``wait_seconds``.
+    """
+    if _measure_hold.get() is not None:
+        raise GamekitError("MEASURE_WINDOW", "this process already holds the measurement reservation")
+    path = measure_window_lock_path()
+    if _has_reparse_point(path.parent):
+        raise GamekitError(
+            "FORBIDDEN_PATH",
+            f"measurement lock directory passes through a symlink or junction: {path.parent}",
+        )
+    path.parent.mkdir(parents=True, exist_ok=True)
+    value = _new_measure_payload(purpose, run_id)
+    body = (json.dumps(value, sort_keys=True) + "\n").encode("utf-8")
+    guard = path.with_suffix(".guard")
+    deadline = time.monotonic() + max(0.0, float(wait_seconds))
+
+    def claim() -> None:
+        _claim_marker(path, body, malformed_code="MEASURE_WINDOW", parse=_parse_measure_marker)
+
+    try:
+        lock = _enter_kernel_when_ready(guard, claim, deadline)
+    except GamekitError as exc:
+        if exc.code == "LOCKED":
+            extra = {key: item for key, item in exc.extra.items() if key != "same_process"}
+            raise GamekitError("MEASURE_WINDOW", exc.detail, **extra) from exc
+        raise
+    token = _measure_hold.set(str(value["nonce"]))
+    try:
+        yield value
+    finally:
+        _measure_hold.reset(token)
+        try:
+            _release_marker_if_ours(path, body, quiet=sys.exc_info()[0] is not None)
+        finally:
+            lock.__exit__(None, None, None)
 
 
 def validate_command_id(command_id: str) -> str:
@@ -589,6 +1190,10 @@ def _kill_tree(pid: int) -> None:
 
 
 def run_process(argv: Sequence[str], *, timeout: float, cwd: Path | None = None, env: dict[str, str] | None = None) -> ProcessRun:
+    # Engine entry points also check before building argv. Checking again here
+    # keeps the reservation test next to the spawn. hh perf already holds the
+    # marker, so this call observes that nonce and does not lock the guard twice.
+    assert_measure_window_clear()
     flags = 0x08000000 if os.name == "nt" else 0  # CREATE_NO_WINDOW for the console wrapper only
     started = time.monotonic()
     proc = subprocess.Popen(
@@ -598,6 +1203,7 @@ def run_process(argv: Sequence[str], *, timeout: float, cwd: Path | None = None,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         stdin=subprocess.DEVNULL,
+        close_fds=True,
         creationflags=flags,
     )
     timed_out = False
@@ -645,6 +1251,7 @@ def run_godot(
     extra: Sequence[str] = (),
     env: dict[str, str] | None = None,
 ) -> ProcessRun:
+    assert_measure_window_clear()
     exe = godot_exe()
     if not exe.is_file():
         raise GamekitError("TOOL_MISSING", f"pinned Godot not found: {exe}")
@@ -713,6 +1320,7 @@ def ensure_imported(project_root: Path) -> ProcessRun | None:
 
 
 def run_blender(script: Path, args: Sequence[str] = (), *, timeout: float = 600.0, blend: Path | None = None) -> ProcessRun:
+    assert_measure_window_clear()
     exe = blender_exe()
     if not exe.is_file():
         raise GamekitError("TOOL_MISSING", f"pinned Blender not found: {exe}")
@@ -795,7 +1403,7 @@ def godot_processes_for(project_root: Path) -> list[dict[str, Any]]:
     return hits
 
 
-def refuse_if_editor_open(project: Project, allow: bool = False) -> None:
+def refuse_if_editor_open(project: Project, allow: bool = False, *, hint_allow: bool = True) -> None:
     if allow:
         return
     try:
@@ -805,12 +1413,14 @@ def refuse_if_editor_open(project: Project, allow: bool = False) -> None:
     except (OSError, subprocess.TimeoutExpired) as exc:
         raise _editor_check_failed(exc) from exc
     if hits:
-        raise GamekitError(
-            "EDITOR_OPEN",
-            "a Godot process has this project open; close it (or pass --allow-open-editor and reload "
-            "the scene in the editor afterwards) so two writers do not race",
-            processes=hits,
-        )
+        if hint_allow:
+            detail = (
+                "a Godot process has this project open; close it (or pass --allow-open-editor and reload "
+                "the scene in the editor afterwards) so two writers do not race"
+            )
+        else:
+            detail = "a Godot process has this project open; close it before hh play so the play run does not race the editor"
+        raise GamekitError("EDITOR_OPEN", detail, processes=hits)
 
 
 def copy_tree(src: Path, dst: Path) -> None:

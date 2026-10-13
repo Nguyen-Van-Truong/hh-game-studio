@@ -1,0 +1,55 @@
+{
+  "schema": "hh-sfx-presets-1",
+  "origin": "Original synthetic game-stylized prototypes generated in Python. Not recordings, not Foley, and not a licensed sample pack.",
+  "limits": {
+    "sample_rates": [22050, 44100, 48000],
+    "duration_seconds": {"min": 0.02, "max": 2.0},
+    "peak_dbfs": {"min": -24.0, "max": -1.0, "default": -6.0},
+    "seed": {"min": 0, "max": 2147483647},
+    "channels": 1,
+    "bits_per_sample": 16,
+    "max_bytes": 262144
+  },
+  "presets": [
+    {
+      "id": "ui_click",
+      "description": "Synthetic game-stylized UI click. Not a recording.",
+      "default_seed": 1001,
+      "duration": 0.05,
+      "duration_min": 0.03,
+      "duration_max": 0.12
+    },
+    {
+      "id": "pickup",
+      "description": "Synthetic game-stylized two-note pickup blip. Not a recording.",
+      "default_seed": 2002,
+      "duration": 0.24,
+      "duration_min": 0.12,
+      "duration_max": 0.4
+    },
+    {
+      "id": "jump",
+      "description": "Synthetic game-stylized rising jump whoop. Not a recording.",
+      "default_seed": 3003,
+      "duration": 0.18,
+      "duration_min": 0.08,
+      "duration_max": 0.35
+    },
+    {
+      "id": "impact",
+      "description": "Synthetic game-stylized soft impact thud. Not a recording.",
+      "default_seed": 4004,
+      "duration": 0.22,
+      "duration_min": 0.08,
+      "duration_max": 0.45
+    },
+    {
+      "id": "explosion",
+      "description": "Synthetic game-stylized short explosion rumble. Not a recording.",
+      "default_seed": 5005,
+      "duration": 0.8,
+      "duration_min": 0.35,
+      "duration_max": 2.0
+    }
+  ]
+}
