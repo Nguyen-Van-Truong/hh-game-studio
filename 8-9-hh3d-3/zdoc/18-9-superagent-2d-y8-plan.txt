@@ -1,9 +1,9 @@
-SUPERAGENT — PLAN GAME 2D THEO SUPERFIGHTERS TRÊN Y8 (SA6.1, CLASSIC-FIRST, 13-10-2026)
+SUPERAGENT — PLAN GAME 2D THEO SUPERFIGHTERS TRÊN Y8 (SA6.2, CLASSIC-FIRST, 13-10-2026)
 
 PRODUCT_NAME=Superagent
 PLAN_ROLE=SUPERAGENT_PRODUCT_SOURCE_OF_PROGRESS
 PLAN_SCOPE=8-9-hh3d-3/superagent
-PLAN_REVISION=SA6.1-VISUAL-SLICE
+PLAN_REVISION=SA6.2-CHARACTER-PIPELINE
 CLASSIC_FIRST_POLICY=CLASSIC_PARITY_BEFORE_VARIANTS
 CLASSIC_RELEASE_SCOPE=SA-01..SA-13_ONLY
 VARIANT_SCOPE=SA-14_SA-V1_SA-V3_LOCKED_BY_OWNER
@@ -14,6 +14,9 @@ DISPATCHABLE=NO_MAIN_PRODUCT_PAUSED_BY_OWNER_2026_10_13
 IMPLEMENTATION=PAUSED_BY_OWNER_2026_10_13
 DOCUMENTATION_SCOPE=GROKDO_VISUAL_PLAN_AND_MAIN_LESSONS_ONLY
 VISUAL_REVIEW_BRIEF=reviews/13-10-superagent-visual-quality-brief.md
+CHARACTER_DESIGN_BRIEF=reviews/13-10-superagent-character-pipeline.md
+CHARACTER_PIPELINE=ORIGINAL_LAYERED_PIXEL_ATLAS_SHARED_POSE_CONTRACT
+CHARACTER_PIPELINE_STATUS=DESIGN_ONLY_NOT_RUNTIME_VERIFIED
 VISUAL_ACCEPTANCE=NOT_REVIEWED_IN_RUNTIME
 PRESENTATION_POLICY=ORIGINAL_EVENT_DRIVEN_FX_SFX_COMPATIBILITY_FALLBACK_FIRST
 RUNTIME_ACCEPTANCE=SA-01_TECHNICAL_PASS
@@ -49,7 +52,7 @@ HANDOFF_GROKDO_RULE=Repo độc lập đang hoạt động; đọc Git hiện t�
 - Bản chính có FX/SFX/camera/HUD trong game/presentation; smoke/load đã chạy, thẩm mỹ chưa duyệt.
 - Grokdo là repo độc lập đang phát triển ở đúng 8-9-hh3d-3/superagent-grokdo; đọc plan riêng.
 - Ảnh Grok owner gửi còn thô: dáng người/item, bối cảnh và HUD cần cải thiện; tiếng chưa đánh giá.
-- Chuẩn cải thiện: một Relay Yard hoàn thiện trước, đọc brief và SA-10/mục 11 dưới đây.
+- Chuẩn cải thiện: pixel art anime nguyên bản; một Relay Yard, hai fighter chứng minh reuse trước roster.
 - Phím thường vẫn WASD + J/K/L/; và mũi tên + Numpad 1–4; power là đồ nhặt, không là chiêu riêng.
 - SA-14, nội tại hero và online vẫn khóa. Plan công cụ đã xong cho PC; không cần đổi engine.
 - Run/hash và trạng thái dài cũ: docs/evidence trong product; history/2026-10-13-main-pre-visual-status-log.txt.
@@ -71,7 +74,7 @@ REPO/HANDOFF — TRẠNG THÁI HIỆN HÀNH
 Owner 03-10: hoàn thành Classic giống bản Y8 trước; phần kiểu MUGEN chỉ làm sau bằng lệnh mới.
 1) Classic: phím (theo keymap owner), cảm giác di chuyển, đấm/bắn/ném, vũ khí, item, vật thể,
    bot, chế độ, luồng menu và nhịp trận như bản Y8. Đây là bản phát hành đầu tiên.
-2) Phần của mình trong Classic: nhân vật và trang phục cố định mới (to hơn Y8 một chút, mức thử
+2) Phần của mình trong Classic: nhân vật pixel art anime và trang phục cố định mới (mức thử
    +15% chiều cao hiển thị), map mới cùng chức năng (D1), art, âm thanh, UI. Không làm hệ chỉnh
    trang phục trong Classic.
 3) Sau Classic, chỉ khi owner mở: Hero mode kiểu MUGEN (SA-14), trang phục tùy biến (SA-V1),
@@ -126,6 +129,8 @@ POST_CLASSIC_VARIANTS (LOCKED_BY_OWNER, chỉ mở bằng lệnh owner sau SA-13
 3. QUYẾT ĐỊNH OWNER
 Đã có:
 - 13-10: tạm hoãn phát triển bản chính; nghiên cứu và cập nhật plan Grokdo + bài học bản chính.
+- 13-10: owner muốn hướng nhân vật như ảnh Naruto vs Bleach và tái sử dụng cho nhiều nhân vật.
+  Chọn tạo hình pixel art anime nguyên bản; chỉ đổi lớp hình, không mở chiêu riêng/nội tại hay SA-14.
 - 18-09: tên Superagent; parity chức năng với bản Y8; nhân vật mới.
 - 03-10: làm ngay, không chờ GT-10; Classic trước; hình và trang phục nguyên bản cố định; kiểu
   MUGEN và hệ tùy biến làm sau Classic.
@@ -143,10 +148,12 @@ POST_CLASSIC_VARIANTS (LOCKED_BY_OWNER, chỉ mở bằng lệnh owner sau SA-13
 Cần owner chọn; agent dùng mặc định cho tới khi owner đổi, không dừng việc để chờ:
 D1 (E3) Map. Mặc định: layout mới cùng chức năng. Map gần y hệt chỉ khi owner chọn và luật sư
    duyệt trước khi phát hành.
-D2 (E1 nếu tốn tiền) Art. Chọn pixel art nguyên bản, style/scale/palette chung và một Relay Yard
-   hoàn thiện trước. Tận dụng sprite/atlas/presenter hiện có, sửa dáng và animation có chủ đích.
-   Blender tùy chọn cho prop/pose blockout nếu nhanh hơn; không mặc định low-poly render + quantize
-   là đủ đẹp. Ảnh concept không là sprite dùng được hay bằng chứng game chạy. Xem brief SA-10.
+D2 (E1 nếu tốn tiền) Art. Chọn nhân vật pixel art anime nguyên bản vẽ theo frame, source có layer,
+   atlas + metadata dùng chung pose/anchor contract. Tận dụng presenter hiện có; hoàn thiện một
+   fighter rồi một fighter khác silhouette trong Relay Yard để kiểm reuse trước khi nhân roster.
+   Pixelorama là đường ngân sách 0; Aseprite nếu đã có bản dùng hợp lệ. Blender tùy chọn cho
+   pose/blockout/prop, không bắt toàn roster qua low-poly render + quantize. Xem CHARACTER_DESIGN_BRIEF.
+   Source layer phục vụ làm bộ trang phục cố định, không mở editor trang phục SA-V1 trong game.
 D3 (E3) Tên. Kiểm thương hiệu "Superagent" (USPTO, EUIPO, WIPO, Cục SHTT Việt Nam) trước SA-13.
 D4 Vault Fighters. Mặc định: chỉ đọc sổ đối chiếu và bài học, không port code hay asset.
 D5 (E2) Nơi phát hành, chọn ở SA-13 (portal web, itch.io, Steam...). Y8 đang có bản gốc nên có
@@ -200,7 +207,7 @@ D7 Đổi phím. Mặc định: SA-07 thêm màn đổi phím trong Cài đặt 
 5.2 Engine. Godot 4.7.2-stable theo 8-9-hh3d-3/studio/toolchain.lock.json, đã chép vào
     superagent/.local/tooling/godot-4.7.2-stable/ (có file _sc_). Template Web/Windows lấy từ
     Godot_v4.7.2-stable_export_templates.tpz trong studio/.local/tooling (chỉ đọc; chỉ giải nén
-    template cần dùng). Blender 5.2.1 zip ở cùng chỗ, dùng cho SA-10. Không ghi vào studio/.local.
+    template cần dùng). Blender 5.2.1 zip ở cùng chỗ, tùy chọn cho SA-10. Không ghi vào studio/.local.
 5.3 Project và kiến trúc
     - Renderer Compatibility; 60 tick vật lý/giây; typed GDScript; cảnh báo untyped/unsafe là
       lỗi; CPUParticles2D cho Web và điện thoại.
@@ -529,8 +536,20 @@ DoD: checklist topology mỗi map kèm ghi chú khác biệt layout; mọi tổ 
 
 SA-10 Art, animation, âm thanh, UI (trang phục cố định)
 Làm theo thứ tự: HUD + scale/camera → một fighter/vũ khí/item → Relay Yard → animation/VFX/SFX
-→ review màn mẫu → các map/menu/result còn lại. Bộ hình nguyên bản có vật liệu và lớp nền rõ;
+→ fighter thứ hai qua cùng template/renderer → review màn mẫu → roster/map/menu/result còn lại.
+Bộ hình nguyên bản có vật liệu và lớp nền rõ; nhân vật theo hướng pixel art anime ở D2;
 nhân vật giữ seed hiển thị +15%, pivot chân ổn định, pose thấp không bị co canvas hai lần.
+Gói hình có source editable (.pxo hoặc .aseprite), atlas PNG, metadata và provenance; source có
+layer nhưng runtime bake body/trang phục cố định, chỉ tách tay/vũ khí/FX khi cần. Dùng chung pose ID,
+không buộc cùng số frame; metadata versioned chứa canvas/thân đứng/scale, frame rect/duration,
+foot/grip/head/FX anchors, flip/layer/mask màu đội; vũ khí có grip/muzzle riêng. Giữ offset nếu trim.
+Pilot chọn một metadata canonical (JSON + sidecar anchor mặc định); `.tres` nếu cần chỉ được sinh một
+chiều từ đó. Validator fail-closed khi thiếu frame/tag/trim_offset/anchor/facing/source/license;
+ghi tool/version/options/hash thật và không tự tải công cụ authoring.
+Pose tối thiểu bao phủ hành động Classic, phân biệt đấm/đá nhảy/bắn/ném với fallback attack cũ;
+phase theo state/tick/event, không để animation callback đổi combat timing, damage hoặc replay hash.
+Thêm character bằng source/data qua presenter chung; không thêm nhánh ID trong controller. Hai mẫu
+khác silhouette dùng cùng luật/chỉ số Classic, không phải hero. Không hứa đổi màu là đủ tạo roster.
 Item và HUD dùng icon nhận diện theo ID; nhân vật cầm đúng vũ khí/góc ngắm, không chỉ một line.
 HUD dùng Control root + containers; hai người đều thấy HP/stamina và bốn slot, không tràn mép.
 Scale là contract art pixel/world unit/camera; không chỉ hạ viewport hoặc đổi collider để khớp sprite.
@@ -538,12 +557,14 @@ Giữ simulation/input/catalog/map topology; presentation đọc event sau tick,
 và voice, có đường Compatibility/Web. Thêm FX có vật liệu và cue, không dùng nhiều hạt để che art thô.
 Giữ audio hook, thêm biến thể chọn lọc và mix rõ; Web không phụ thuộc bus effects mới nghe được.
 Asset mới theo guide 12-10: CC0 hoặc self-made có tác giả/nguồn, ghi LICENSES.tsv và sổ hh nếu dùng.
-Tham khảo VISUAL_REVIEW_BRIEF (tài liệu thiết kế, không tạo gate/checkbox riêng).
+Tham khảo VISUAL_REVIEW_BRIEF và CHARACTER_DESIGN_BRIEF (không tạo gate/checkbox riêng).
 Verify nhanh: import/parse khi cần, một Play 45–60 giây có hai người/pose/pickup/combat/pause;
 ảnh cùng framing trước/sau, HUD ở 960×540/1280×720/1366×768, clip có tiếng; xem/nghe thật.
 Chạy test liên quan phần sửa và perf ngắn trước/sau khi thêm lớp/đèn/FX; không full suite art-only.
 DoD: Q6–Q7 đạt trong build thật, assets có nguồn; hitbox/tầm đánh/thang/sàn/camera không đổi sai;
 owner duyệt hình/tiếng. Import/headless PASS, ảnh concept hoặc file asset tồn tại không thay DoD.
+Hai package có source tái xuất được, cùng renderer, pose/pivot/anchor đúng ở hai hướng; khi cùng
+skin vẫn phân biệt P1/P2. Review hai mẫu trước khi mở rộng; tăng frame/đổi layer không thay kiểm runtime.
 Màn mẫu qua tự review cho phép tiếp tục hoàn thiện; không giả owner OK, parity hoặc tick SA-10.
 
 SA-11 Điện thoại, Web, Windows, hiệu năng
@@ -585,9 +606,11 @@ Q3 Test và bản export không có SCRIPT ERROR/WARNING, không leaked object k
 Q4 Lệnh bấm có hiệu lực ở tick kế tiếp; hai người bấm cùng lúc không mất lệnh.
 Q5 Web: dung lượng tải lần đầu và bộ nhớ đo từ SA-04; ngân sách chốt ở SA-11 theo nơi phát hành.
 Q6 Trình bày: pixel/pose/pivot ổn định ở camera gần/xa; người, vũ khí, vật nhặt và hazard đọc rõ;
+   hai fighter khác silhouette qua cùng renderer; grip/muzzle/layer đúng khi quay mặt, P1/P2 rõ cả cùng skin.
    Relay Yard có kiến trúc/phân lớp nguyên bản; HUD hai người không cắt chữ hay đè nhau ở ba cỡ SA-10.
    Low vẫn báo gameplay cues. FX không che mục tiêu hoặc làm đổi mô phỏng; giữ cap/dedup/cleanup.
 Q7 Âm thanh/chuyển động: có clip runtime đã xem/nghe; pose/chuyển cảnh/FX/SFX khớp hành động,
+   frame theo phase của state, pause/bullet time đúng; không giật anchor, không ép gameplay theo clip.
    mix không clipping/lặp gắt, pause/mute đúng. Ảnh tĩnh không chứng minh animation/SFX; thiếu capability
    ghi GAP. Mẫu review ngắn không thay Q2, đo Y8 hay owner approval. Không chấm đẹp bằng pixel-diff Y8.
 
@@ -616,6 +639,9 @@ Q7 Âm thanh/chuyển động: có clip runtime đã xem/nghe; pose/chuyển c�
 
 14. BÀI HỌC
 14.0 BÀI HỌC ƯU TIÊN TỪ REVIEW HÌNH 13-10 (áp dụng trước log lịch sử)
+- Reuse quy ước pose/source/anchor và renderer trước; tóc/áo/dáng khác vẫn cần vẽ, không chỉ đổi màu.
+- Source có layer không buộc runtime ghép toàn thân bằng skeleton; thử hai fighter rồi mới mở rộng roster.
+- Scale theo thân đứng, không theo canvas có padding; giữ source editable, export không đè ngược hình đã sửa.
 - Asset có file, nhiều assertion hay export thành công chưa chứng minh chất lượng hình/tiếng.
 - Một màn hoàn thiện trước sáu map: sửa silhouette, palette, kiến trúc, HUD trước khi tăng VFX.
 - Pose đã thấp trong sheet không co cả canvas thêm lần nữa; scale/pivot và collider là hai contract.
@@ -665,6 +691,9 @@ Bài học kỹ thuật còn hiệu lực:
     và không rerun chỉ vì metadata đổi nếu không có source hoặc điều kiện đo thay đổi.
 
 15. LOG (mốc hiện hành; lịch sử chi tiết ở product evidence và history/)
+2026-10-13: SA6.2 nghiên cứu sprite/atlas/Resource và Aseprite/Pixelorama; chọn pipeline nhân vật
+  pixel anime có source layer, pose/anchor chung, hai mẫu proof trước roster. Chỉ sửa tài liệu;
+  chưa có asset/pipeline runtime mới, bản chính tiếp tục hoãn; keymap, SA-02, tick và SA-14 giữ nguyên.
 2026-10-13: checkpoint bản chính c5ce696a giữ nguyên; FX/SFX/HUD mới đạt smoke kỹ thuật, chưa duyệt hình/tiếng.
 2026-10-13: owner tạm hoãn bản chính, yêu cầu nghiên cứu và hỗ trợ plan đồ họa Grokdo; không sửa product.
 2026-10-13: SA6.1 chọn một Relay Yard hoàn thiện trước; sửa D2, SA-10, tiêu chí hình/tiếng và handoff stale.

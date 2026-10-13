@@ -6,6 +6,8 @@ Tài liệu thiết kế hỗ trợ hai plan, **không phải nguồn tick hay p
 
 Giữ Godot stock/Compatibility và gameplay hiện có. Làm **một Relay Yard hoàn chỉnh về hình, chuyển động và tiếng** trước khi nhân bộ art sang sáu map. Hướng hình: pixel art công nghiệp nguyên bản, nhân vật nhỏ nhưng có dáng rõ, nền có kiến trúc và chiều sâu, tương tác dễ nhận biết. Không đổi engine, không dựng lại lõi và không lấy số particle làm thước đo đẹp.
 
+Yêu cầu nhân vật bổ sung 13-10: tạo hình **pixel art anime nguyên bản** theo cảm giác trong ảnh owner, dùng source có layer và atlas với pose/anchor contract chung. [Brief pipeline nhân vật](13-10-superagent-character-pipeline.md) chốt phương pháp, dữ liệu và hai nhân vật thử trước khi nhân roster. Phần này cụ thể hóa nhân vật trong màn mẫu; không mở chiêu hero hoặc đổi thể loại/gameplay Classic.
+
 Khả năng đạt mức chăm chút tương đương reference là mục tiêu khả thi với công cụ hiện có, không phải kết luận game đã đạt. Điểm còn thiếu chủ yếu nằm ở cách tạo và phối hợp asset, bố cục, animation, UI và kiểm tra bản đang chạy. Hướng dẫn công cụ tại [12-10](../12-10-huong-dan-dung-cong-cu-godot-blender.txt), mục 13–14, cũng yêu cầu Play/quan sát sau khi dựng scene.
 
 ## Chẩn đoán có căn cứ
@@ -47,7 +49,8 @@ Khả năng đạt mức chăm chút tương đương reference là mục tiêu 
 | Lựa chọn | Quyết định cho Classic |
 |---|---|
 | Godot SpriteFrames/AnimationPlayer, tile atlas, Control, audio, CPU particles | Dùng sẵn; chưa cần addon runtime mới |
-| Sprite/atlas hiện có và generator | Giữ đường import và các pose/state ID; thay art có chủ đích, không tiếp tục sinh rectangle ngẫu nhiên rồi coi là hoàn thiện |
+| Sprite/atlas hiện có và generator | Giữ pose/state ID qua adapter; source có layer → atlas/metadata. Generator chuyển sang pack/validate, không đè lại art bằng placeholder |
+| Pixelorama / Aseprite | Pixelorama là đường ngân sách 0; Aseprite nếu đã có. Giữ nguồn editable và sidecar anchor; không buộc addon runtime mới |
 | Blender | Tùy chọn cho prop khó hoặc pose blockout nếu nhanh hơn; render góc/ánh sáng cố định rồi sửa pixel. Không bắt buộc chuyển toàn bộ nhân vật sang low-poly |
 | Gói art/SFX ngoài | Chọn từng asset hợp style; nguồn, license và tác giả trong sổ. Theo guide hiện hành: asset mới CC0 hoặc self-made, không gom nhiều pack lệch phong cách |
 | AI concept | Chỉ tham khảo phong cách/ý tưởng nếu hữu ích; không coi ảnh concept là sprite sheet dùng được hay là ảnh game chạy |
@@ -62,12 +65,12 @@ Theo guide 12-10, scene mutation `hh` không tự đánh giá hình. Dùng `hh c
 | Bước | Đầu ra xem được | Đường sửa Grokdo dự kiến |
 |---|---|---|
 | 1. HUD + hợp đồng scale | Hai player panel không tràn; ảnh camera gần/xa cùng thông số scale | `game/ui/match_room.tscn`, `fighter_hud.gd`, `match_camera.gd`, `project.godot` nếu thật sự cần |
-| 2. Một fighter + item kit | Pose sheet, một nhân vật nhìn rõ, vũ khí đúng tay/góc, item khác nhau | `game/fighter/fighter_view.gd`, `fighter_visual_profile.gd`, `art/`, `tools/make_fighter_sheet.py`, `_draw_pickups()` trong `match_room.gd` |
+| 2. Fighter A + item kit | Source có layer, pose sheet pixel anime, nhân vật nhìn rõ, vũ khí đúng tay/góc, item khác nhau | `game/fighter/fighter_view.gd`, `fighter_visual_profile.gd`, `art/`, `tools/make_fighter_sheet.py`, `_draw_pickups()` trong `match_room.gd` |
 | 3. Relay Yard | Một cảnh có khối kiến trúc/vật liệu/độ sâu và đường chơi rõ | Presenter trong `game/ui/`, `art/`, `tools/make_world_sheet.py`; giữ map/collider |
 | 4. Cảm giác trận | Clip có animation, âm thanh và phản hồi va chạm đồng bộ | Hook FX/audio hiện có; tách module nhỏ khi cần, không dồn mọi thứ vào `match_room.gd` |
-| 5. Review rồi mở rộng | Sửa lỗi thấy trong clip, áp cùng kit cho các map còn lại và menu/result | Ghi một receipt gọn trong `docs/evidence/SA-10.md`, không thêm micro-log vào đầu plan |
+| 5. Fighter B + review rồi mở rộng | Nhân vật khác silhouette qua cùng renderer/data, sửa clip rồi mở rộng roster/map/menu/result | Theo brief nhân vật; ghi một receipt gọn trong `docs/evidence/SA-10.md`, không thêm micro-log vào đầu plan |
 
-Kiểm nhanh sau một nhóm thay đổi: import/parse cần thiết và một lượt Play 45–60 giây với input thật ở Relay Yard. Kịch bản gồm hai người di chuyển gần/xa, ngắm trái/phải/lên/xuống, cúi/lăn/lặn, nhặt đồ, bắn/trúng/nổ/cháy, pause/resume. Giữ ba still cùng framing: toàn cảnh, nhân vật/item, HUD/resize; kèm clip có tiếng. Quay qua capability được phép; tool không thu audio thì ghi rõ GAP, không lấy waveform hay exit code để giả là đã nghe. 60 fps cần cho đo timing, không ép đủ ma trận timing mới được sửa hình.
+Kiểm nhanh sau một nhóm thay đổi: import/parse cần thiết và một lượt Play 45–60 giây với input thật ở Relay Yard. Kịch bản gồm hai người di chuyển gần/xa, ngắm trái/phải/lên/xuống, cúi/lăn/lặn, nhặt đồ, bắn/trúng/nổ/cháy, bật/tắt power đã nhặt, pause/resume. Giữ ba still cùng framing: toàn cảnh, nhân vật/item, HUD/resize; kèm clip có tiếng. Quay qua capability được phép; tool không thu audio thì ghi rõ GAP, không lấy waveform hay exit code để giả là đã nghe. 60 fps cần cho đo timing, không ép đủ ma trận timing mới được sửa hình.
 
 Review màn mẫu đạt khi: (1) hình nhận ra người/vũ khí/item ở kích thước chơi; (2) pixel/pivot không biến dạng hay rung rõ khi camera đổi; (3) nền có chủ đề, đường đi và hazard rõ; (4) HUD không clip; (5) hành động và phản hồi đọc được khi hai người giao chiến; (6) tiếng có phân biệt, không lặp gắt/clipping hay trễ thấy rõ; (7) nguồn asset rõ, không làm đổi gameplay. Mục chưa xem/nghe được ghi **chưa kiểm**, không tự PASS. Không bù điểm đẹp cho một lỗi blocker như HUD mất thông tin.
 
