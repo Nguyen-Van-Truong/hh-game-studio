@@ -28,7 +28,7 @@ REPO_ARCHIVE_SCOPE=all other root paths, linked worktrees and ignored local stat
 HANDOFF_CANONICAL_PLAN=D:/dataDiskD/intellji/hoanhaosocial/hoanhaonew-20-6-2025/hh-game-studio/8-9-hh3d-3/zdoc/18-9-superagent-2d-y8-plan.txt
 HANDOFF_PRODUCT_WORKTREE=D:/dataDiskD/hh-superagent
 HANDOFF_PRODUCT_BRANCH=superagent/main
-HANDOFF_PRODUCT_HEAD=6d482abb
+HANDOFF_PRODUCT_HEAD=c5ce696a
 HANDOFF_GROKDO_STATUS=ISOLATED_ACTIVE_REFERENCE_ONLY
 HANDOFF_GROKDO_ROOT=D:/dataDiskD/intellji/hoanhaosocial/hoanhaonew-20-6-2025/hh-game-studio/8-9-hh3d-3/superagent-grokdo
 HANDOFF_GROKDO_BRANCH=superagent/grokdo
@@ -157,7 +157,7 @@ HIỆN TRẠNG (13-10 14:15 UTC; coordinator cập nhật khi xong một mốc, 
   exit 0/cleanup 0/diagnostics empty; `cmd.sa05.run-all.p2.1` passed the 2,977-assertion regression
   at source hash `dc1d053ea0983032107125b4bffbeea104727da5610381324e882e5fc671f8a8`, same clean result.
   This is shared-route evidence only; spawn law, timing, owner review and SA-02 remain open.
-- SA-10 presentation slice is implemented in `game/presentation/` as original event-driven CanvasItem FX and procedural positional SFX, product commits `86d36167`/`dc1bfebe`/`6d482abb`. Focused smoke and live `match_room.tscn` load pass; no parity or owner acceptance claim.
+- SA-10 presentation slice is implemented in `game/presentation/` as original event-driven CanvasItem FX, procedural positional SFX, camera/depth feedback and view-only HUD meters, product commits `86d36167`/`dc1bfebe`/`6d482abb`/`c5ce696a`. Focused smoke and live `match_room.tscn` load pass; no parity or owner acceptance claim.
 - Tool plan `8-9-godot-blender-agent-studio-plan.txt` is gamekit-complete (`NONE_GAMEKIT_COMPLETE`); the 12-10 guide is the short operating reference. No game work waits on GT-10.
 
 NEXT (làm theo thứ tự; việc nào phải chờ thì làm việc sau, không ngồi chờ)
@@ -939,5 +939,5 @@ Q6 Presentation: mỗi tick tối đa 4 signal, 24 voice và 128 effect; dedup e
   Godot 4.7.2 pin/templates/settings are isolated; import + 2,977-assertion regression passed
   at source hash `c6d0329779e8c7d9c6a18250ff818e7ac99d608b4a8ff24c62483db6f133368f` (setup only).
 2026-10-13 SA6: original event-driven FX/SFX slice in `game/presentation/`; focused smoke and scene load
-  passed; added Compatibility fallback, event dedup/caps, camera feedback, depth pass and provenance. No gate tick.
+  passed; added Compatibility fallback, event dedup/caps, camera/depth/HUD feedback and provenance. No gate tick.
 END_OF_SUPERAGENT_PLAN
