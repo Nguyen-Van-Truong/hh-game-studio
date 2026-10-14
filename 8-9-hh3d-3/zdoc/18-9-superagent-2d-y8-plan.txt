@@ -718,6 +718,7 @@ Bài học kỹ thuật còn hiệu lực:
 2026-10-14: SA-10 authored Relay Yard visual slice/runtime review/control correction ở fbf996dd/44b80994/dee2ba3f; bounded F6 near-camera code/evidence ở fae498de/00356a8c có fit-cap, HUD safe-margin và 16 assertion fixture; audio/owner approval còn mở.
 2026-10-14: guarded y8rig arrow trial cmd.sa02.y8rig.a01-arrow.7 / 20261014T023256.341583Z-bea2a19897 captured 986 frames at 23.79 FPS (max gap 3.35s); child exit 0 but cadence below 30 FPS and wrapper rename failed, so A01–A06 remain unmeasured.
 2026-10-14: SA-02 measurement fallback and y8rig guard-path docs tightened in product commit 839fb0ae; no owner recording, A01–A06 or checkbox promotion.
+2026-10-14: final guarded SA-10 regression cmd.sa10.final.regression.1 / 20261014T033150.015713Z-6138a2212a exited 0 with cleanup 0 and empty diagnostics at source hash 247b311813ef14083b7ccecb2cb359e05b91d1ae4dc76f857f4612adef94992; ledger check passes, inventory remains fail-closed on 20 missing A01–A06 measurements.
 2026-10-13: owner tạm hoãn bản chính, yêu cầu nghiên cứu và hỗ trợ plan đồ họa Grokdo; không sửa product trong thời gian đó.
 2026-10-13: SA6.1 chọn một Relay Yard hoàn thiện trước; sửa D2, SA-10, tiêu chí hình/tiếng và handoff stale.
   Nghiên cứu và advisory audit static đã xong; chưa có màn mẫu mới. SA-02/tick/parity/release không đổi.
