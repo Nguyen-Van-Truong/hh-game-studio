@@ -35,7 +35,7 @@ REPO_ARCHIVE_SCOPE=all other root paths, linked worktrees and ignored local stat
 HANDOFF_CANONICAL_PLAN=D:/dataDiskD/intellji/hoanhaosocial/hoanhaonew-20-6-2025/hh-game-studio/8-9-hh3d-3/zdoc/18-9-superagent-2d-y8-plan.txt
 HANDOFF_PRODUCT_WORKTREE=D:/dataDiskD/hh-superagent
 HANDOFF_PRODUCT_BRANCH=superagent/main
-HANDOFF_PRODUCT_HEAD=fbf996dd
+HANDOFF_PRODUCT_HEAD=44b80994
 HANDOFF_GROKDO_STATUS=ISOLATED_ACTIVE_REFERENCE_ONLY
 HANDOFF_GROKDO_ROOT=D:/dataDiskD/intellji/hoanhaosocial/hoanhaonew-20-6-2025/hh-game-studio/8-9-hh3d-3/superagent-grokdo
 HANDOFF_GROKDO_BRANCH=superagent/grokdo
@@ -50,7 +50,7 @@ HANDOFF_GROKDO_RULE=Repo độc lập đang hoạt động; đọc Git hiện t�
 - CURRENT_VALID_WP giữ SA-02; ledger 79 dòng: 25 OBSERVED / 54 UNVERIFIED / 0 MATCHED.
 - Thiếu số Y8 A01–A06, owner side-by-side và các gate còn lại; test nội bộ không là parity.
 - Đã có lõi input/physics/combat, catalog/pickup, bot, map/mode/menu và build provisional.
-- Bản chính có FX/SFX/camera/HUD trong game/presentation; Relay Yard visual slice đã vào HEAD fbf996dd, smoke/load pass, runtime far/near và thẩm mỹ vẫn chưa duyệt.
+- Bản chính có FX/SFX/camera/HUD trong game/presentation; Relay Yard visual slice và runtime review đã vào HEAD 44b80994; full-map frame pass, near/cropped view, audio và thẩm mỹ vẫn chưa duyệt.
 - Grokdo là repo độc lập đang phát triển ở đúng 8-9-hh3d-3/superagent-grokdo; đọc plan riêng.
 - Ảnh runtime owner gửi ngày 13-10 là baseline triage lịch sử; phiên browser live ngày 14-10 đã xác nhận topology/HUD/traversal ở mức quan sát, nhưng cadence dưới 30 FPS và hình/tiếng vẫn chờ review.
 - Audit mới nhất `reviews/13-10-superagent-visual-audit-20261013.md` kết luận 64×64 sheet/test không thay thế art authored; generator chỉ được pack/validate.
@@ -715,7 +715,7 @@ Bài học kỹ thuật còn hiệu lực:
 2026-10-13: checkpoint bản chính c5ce696a giữ nguyên; FX/SFX/HUD mới đạt smoke kỹ thuật, chưa duyệt hình/tiếng.
 2026-10-14: owner resume bản chính từ c5ce696a; giữ SA-02 là WP hiện hành, chạy kiểm lock/guard trước mọi workload nặng.
 2026-10-14: live browser/CUA probe vào được 2P arena, thấy GET READY/FIGHT, HUD/inventory, ladder/cover và movement/camera causal; ghi OBS-2026-10-14-02. Cadence dưới 30 FPS, combat/pickup/pause chưa đủ nhân quả, không đổi ledger/tick.
-2026-10-14: SA-10 authored Relay Yard visual slice (prop/pickup silhouettes, skyline/cables, platform/ladder detail) đã commit ở fbf996dd; smoke/regression pass, chưa có runtime still/audio/owner approval.
+2026-10-14: SA-10 authored Relay Yard visual slice (prop/pickup silhouettes, skyline/cables, platform/ladder detail) đã commit ở 44b80994; full-map movie review pass, near/cropped view/audio/owner approval còn mở.
 2026-10-13: owner tạm hoãn bản chính, yêu cầu nghiên cứu và hỗ trợ plan đồ họa Grokdo; không sửa product trong thời gian đó.
 2026-10-13: SA6.1 chọn một Relay Yard hoàn thiện trước; sửa D2, SA-10, tiêu chí hình/tiếng và handoff stale.
   Nghiên cứu và advisory audit static đã xong; chưa có màn mẫu mới. SA-02/tick/parity/release không đổi.
