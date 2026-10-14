@@ -1,0 +1,67 @@
+:root {
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #eaf7ff;
+  background: #070a18;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+
+html, body, #app { margin: 0; min-height: 100%; width: 100%; }
+body { overflow: hidden; background: #070a18; }
+
+#game-shell {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100vw;
+  min-height: 100vh;
+  padding: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+  background:
+    radial-gradient(circle at 15% 20%, rgba(38, 120, 255, 0.15), transparent 38%),
+    radial-gradient(circle at 82% 74%, rgba(241, 50, 181, 0.12), transparent 38%),
+    #070a18;
+}
+
+#game-root {
+  position: relative;
+  width: min(1280px, 100vw - 24px);
+  aspect-ratio: 16 / 9;
+  max-height: calc(100vh - 24px);
+  overflow: hidden;
+  border: 1px solid rgba(122, 226, 255, 0.32);
+  border-radius: 18px;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.05), 0 26px 90px rgba(0, 0, 0, 0.58), 0 0 42px rgba(49, 170, 255, 0.12);
+  touch-action: none;
+}
+
+#game-root canvas { display: block; width: 100%; height: 100%; image-rendering: auto; }
+
+.start-gate {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 22px;
+  background: linear-gradient(135deg, rgba(5, 8, 24, 0.78), rgba(7, 11, 29, 0.46));
+  backdrop-filter: blur(8px);
+  transition: opacity 220ms ease, visibility 220ms ease;
+}
+.start-gate.is-hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+.start-card { width: min(520px, 94%); padding: 28px 28px 24px; border: 1px solid rgba(130, 226, 255, 0.4); border-radius: 22px; background: rgba(8, 15, 39, 0.84); box-shadow: 0 20px 70px rgba(0, 0, 0, 0.45); }
+.eyebrow { margin: 0 0 10px; color: #6de6ff; font-size: 0.72rem; font-weight: 800; letter-spacing: 0.16em; }
+h1 { margin: 0; color: #f3fbff; font-size: clamp(2.6rem, 8vw, 5.8rem); line-height: 0.9; letter-spacing: -0.08em; text-shadow: 0 0 30px rgba(86, 224, 255, 0.55); }
+.start-copy { max-width: 40ch; margin: 20px 0; color: #b5c7dc; line-height: 1.55; }
+.start-button { border: 0; border-radius: 11px; padding: 14px 18px; color: #04101a; background: linear-gradient(135deg, #77efff, #ffc56d); font-weight: 900; letter-spacing: 0.08em; cursor: pointer; box-shadow: 0 8px 25px rgba(87, 219, 255, 0.25); }
+.start-button:hover { filter: brightness(1.08); transform: translateY(-1px); }
+.hint { margin: 18px 0 0; color: #7185a2; font-size: 0.78rem; line-height: 1.5; }
+#status-line { position: absolute; left: 20px; bottom: 14px; color: rgba(192, 223, 244, 0.7); font-size: 0.7rem; letter-spacing: 0.08em; pointer-events: none; }
+
+#touch-controls { position: absolute; inset: auto 0 20px; display: none; justify-content: space-between; padding: 0 22px; pointer-events: none; }
+.touch-cluster { display: grid; gap: 9px; pointer-events: auto; }
+.touch-move { grid-template-columns: repeat(2, 52px); }
+.touch-actions { grid-template-columns: repeat(2, 52px); }
+.touch-cluster button { width: 52px; height: 52px; border: 1px solid rgba(150, 231, 255, 0.4); border-radius: 16px; color: #e9f8ff; background: rgba(10, 24, 52, 0.72); font-size: 1.15rem; touch-action: none; user-select: none; -webkit-user-select: none; }
+.touch-cluster button:active, .touch-cluster button.is-held { background: rgba(62, 173, 219, 0.75); }
+@media (pointer: coarse) and (max-width: 900px) { #touch-controls { display: flex; } .start-card { padding: 22px; } #status-line { bottom: 5px; left: 10px; } }
+@media (max-width: 640px) { #game-shell { padding: 0; } #game-root { width: 100vw; max-height: 100vh; border-radius: 0; border-left: 0; border-right: 0; } }

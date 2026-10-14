@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#070a18" />
+    <meta name="description" content="Superagent: Neon Relay — a clean-room 2D arena shooter vertical slice." />
+    <title>Superagent // Neon Relay</title>
+  </head>
+  <body>
+    <main id="app" aria-label="Superagent Neon Relay">
+      <div id="game-shell">
+        <div id="game-root"></div>
+        <div id="touch-controls" aria-hidden="true">
+          <div class="touch-cluster touch-move">
+            <button data-action="left" aria-label="Move left">◀</button>
+            <button data-action="right" aria-label="Move right">▶</button>
+          </div>
+          <div class="touch-cluster touch-actions">
+            <button data-action="jump" aria-label="Jump">▲</button>
+            <button data-action="melee" aria-label="Strike">✦</button>
+            <button data-action="shoot" aria-label="Shoot">●</button>
+            <button data-action="throw" aria-label="Throw">◆</button>
+          </div>
+        </div>
+        <div id="start-gate" class="start-gate">
+          <div class="start-card">
+            <p class="eyebrow">SUPERAGENT // WEB VERTICAL SLICE</p>
+            <h1>NEON RELAY</h1>
+            <p class="start-copy">A fast two-lane arena duel. Grab the shard, break the cover, and own the relay.</p>
+            <button id="start-button" class="start-button">CLICK TO DEPLOY</button>
+            <p class="hint">P1: WASD + J/K/L · P2: arrows + Numpad 1–4 · P to pause</p>
+          </div>
+        </div>
+        <div id="status-line" role="status" aria-live="polite">Awaiting deployment</div>
+      </div>
+    </main>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

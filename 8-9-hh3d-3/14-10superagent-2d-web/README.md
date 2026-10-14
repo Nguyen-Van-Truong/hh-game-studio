@@ -1,6 +1,6 @@
 # Superagent 2D Web — phạm vi tài liệu
 
-Đây là nhánh nghiên cứu và đề xuất kiến trúc cho phiên bản chơi trực tiếp trên trình duyệt. Tài liệu này có `AUTHORITY=0`: không thay thế, không tick và không đổi `CURRENT_VALID_WP` của [kế hoạch gốc](../zdoc/18-9-superagent-2d-y8-plan.txt). Kế hoạch gốc hiện vẫn là nguồn tiến độ Classic của sản phẩm Godot và đang ở SA-02.
+Đây là nhánh Web độc lập. Plan riêng hiện hành là [14-10-superagent-2d-web-plan.md](zdoc/14-10-superagent-2d-web-plan.md). Tài liệu này có `AUTHORITY=0`: không thay thế, không tick và không đổi `CURRENT_VALID_WP` của [kế hoạch gốc](../../zdoc/18-9-superagent-2d-y8-plan.txt). Kế hoạch gốc hiện vẫn là nguồn tiến độ Classic của sản phẩm Godot và đang ở SA-02.
 
 Khuyến nghị hiện tại:
 
