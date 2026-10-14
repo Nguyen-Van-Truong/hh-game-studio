@@ -35,7 +35,7 @@ REPO_ARCHIVE_SCOPE=all other root paths, linked worktrees and ignored local stat
 HANDOFF_CANONICAL_PLAN=D:/dataDiskD/intellji/hoanhaosocial/hoanhaonew-20-6-2025/hh-game-studio/8-9-hh3d-3/zdoc/18-9-superagent-2d-y8-plan.txt
 HANDOFF_PRODUCT_WORKTREE=D:/dataDiskD/hh-superagent
 HANDOFF_PRODUCT_BRANCH=superagent/main
-HANDOFF_PRODUCT_HEAD=bfa7b38e
+HANDOFF_PRODUCT_HEAD=4abb9eee
 HANDOFF_GROKDO_STATUS=ISOLATED_ACTIVE_REFERENCE_ONLY
 HANDOFF_GROKDO_ROOT=D:/dataDiskD/intellji/hoanhaosocial/hoanhaonew-20-6-2025/hh-game-studio/8-9-hh3d-3/superagent-grokdo
 HANDOFF_GROKDO_BRANCH=superagent/grokdo
@@ -46,11 +46,11 @@ HANDOFF_GROKDO_RULE=Repo độc lập đang hoạt động; đọc Git hiện t�
 - Owner đã cho phép resume bản chính ngày 14-10; ưu tiên gate SA-02 và màn mẫu hình/tiếng.
 - Có thể sửa code, chạy test và export tuần tự; không bỏ qua measurement, visual review hoặc critic.
 - Product vẫn ở D:/dataDiskD/hh-superagent/8-9-hh3d-3/superagent, branch superagent/main.
-- Checkpoint c5ce696a đã kiểm; product sạch ở HEAD bfa7b38e sau Relay Yard backdrop, two authored pilot sheets, pose-manifest validator, near-camera review, fresh two-player browser route, measurement fallback docs và launcher chơi 2 người. SA-01 technical accepted; SA-02..SA-13 chưa tick.
+- Checkpoint c5ce696a đã kiểm; product sạch ở HEAD 4abb9eee sau Relay Yard backdrop, two authored pilot sheets, pose-manifest validator, near-camera review, fresh two-player browser route, measurement fallback docs và launcher chơi 2 người. SA-01 technical accepted; SA-02..SA-13 chưa tick.
 - CURRENT_VALID_WP giữ SA-02; ledger 79 dòng: 25 OBSERVED / 54 UNVERIFIED / 0 MATCHED.
 - Thiếu số Y8 A01–A06, owner side-by-side và các gate còn lại; test nội bộ không là parity.
 - Đã có lõi input/physics/combat, catalog/pickup, bot, map/mode/menu và build provisional.
-- Bản chính có FX/SFX/camera/HUD trong game/presentation; Relay Yard visual slice/runtime review/control correction ở fbf996dd/44b80994/dee2ba3f, backdrop ở b5593344, two-pilot pose sheets và sidecar validator ở 3b8266a8, fresh two-player browser route ở 7a255466, bounded near-camera code/evidence ở fae498de/00356a8c, launcher chơi 2 người ở bfa7b38e; full-map/near/action runtime frame pass, audio và thẩm mỹ vẫn chưa duyệt.
+- Bản chính có FX/SFX/camera/HUD trong game/presentation; Relay Yard visual slice/runtime review/control correction ở fbf996dd/44b80994/dee2ba3f, backdrop ở b5593344, two-pilot pose sheets và sidecar validator ở 3b8266a8, fresh two-player browser route ở 7a255466, bounded near-camera code/evidence ở fae498de/00356a8c, launcher chơi 2 người ở 4abb9eee; full-map/near/action runtime frame pass, audio và thẩm mỹ vẫn chưa duyệt.
 - Grokdo là repo độc lập đang phát triển ở đúng 8-9-hh3d-3/superagent-grokdo; đọc plan riêng.
 - Ảnh runtime owner gửi ngày 13-10 là baseline triage lịch sử; phiên browser live ngày 14-10 đã xác nhận topology/HUD/traversal ở mức quan sát, nhưng cadence dưới 30 FPS và hình/tiếng vẫn chờ review.
 - Audit mới nhất `reviews/13-10-superagent-visual-audit-20261013.md` kết luận 64×64 sheet/test không thay thế art authored; generator chỉ được pack/validate.
@@ -720,6 +720,7 @@ Bài học kỹ thuật còn hiệu lực:
 2026-10-14: SA-02 measurement fallback and y8rig guard-path docs tightened in product commit 839fb0ae; no owner recording, A01–A06 or checkbox promotion.
 2026-10-14: fresh live browser route replayed and recorded in product commit 7a255466: 2 PLAYERS → VS → 0 bots → player cards → tutorial dismissal → GET READY/FIGHT; D and ArrowLeft movement were visible. Cadence remained qualitative/unstable, no damage metric or ledger promotion.
 2026-10-14: product commit bfa7b38e added `tools/play_two_player.bat`, which creates a fresh command id and launches the pinned Godot two-player Relay Yard window through `run_guarded.py`; README and controls now point to this entry point.
+2026-10-14: owner reported the first launcher was invisible and blocked by a stale lease. Product commit 4abb9eee added `--visible` to the guarded child path and reclaim of a lease only when its recorded PID is definitely dead; the launcher was then verified with a responsive `Superagent (DEBUG)` window and the stale-lock recovery test passed.
 2026-10-14: SA-10 visual pilot pass committed at 61e2fad8 with evidence follow-up 3b8266a8; profile manifest test cmd.sa10.character.profile.5 passed 26 assertions, live two-player match cmd.sa10.character.match-room.2 passed 46 assertions after one transient retry, presentation/camera/full regression passed (2,977 assertions), and action movie cmd.sa10.character.action-movie.1 wrote 120 frames. Runtime stills were reviewed for Relay Yard, two fighter silhouettes, HUD/pickups/ladder and VFX readability; Dummy audio means no owner listening approval. No SA checkbox ticked; SA-02 A01-A06 remain fail-closed on 20 missing reference measurements.
 2026-10-14: final guarded SA-10 regression cmd.sa10.final.regression.1 / 20261014T033150.015713Z-6138a2212a exited 0 with cleanup 0 and empty diagnostics at source hash 247b311813ef14083b7ccecb2cb359e05b91d1ae4dc76f857f4612adef94992; ledger check passes, inventory remains fail-closed on 20 missing A01–A06 measurements.
 2026-10-13: owner tạm hoãn bản chính, yêu cầu nghiên cứu và hỗ trợ plan đồ họa Grokdo; không sửa product trong thời gian đó.
