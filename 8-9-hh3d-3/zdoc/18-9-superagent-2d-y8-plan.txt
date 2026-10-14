@@ -716,6 +716,7 @@ Bài học kỹ thuật còn hiệu lực:
 2026-10-14: owner resume bản chính từ c5ce696a; giữ SA-02 là WP hiện hành, chạy kiểm lock/guard trước mọi workload nặng.
 2026-10-14: live browser/CUA probe vào được 2P arena, thấy GET READY/FIGHT, HUD/inventory, ladder/cover và movement/camera causal; ghi OBS-2026-10-14-02. Cadence dưới 30 FPS, combat/pickup/pause chưa đủ nhân quả, không đổi ledger/tick.
 2026-10-14: SA-10 authored Relay Yard visual slice ở fbf996dd, runtime review ở 44b80994 và control observation correction ở dee2ba3f; full-map movie review pass, near/cropped view/audio/owner approval còn mở.
+2026-10-14: guarded y8rig arrow trial cmd.sa02.y8rig.a01-arrow.7 / 20261014T023256.341583Z-bea2a19897 captured 986 frames at 23.79 FPS (max gap 3.35s); child exit 0 but cadence below 30 FPS and wrapper rename failed, so A01–A06 remain unmeasured.
 2026-10-13: owner tạm hoãn bản chính, yêu cầu nghiên cứu và hỗ trợ plan đồ họa Grokdo; không sửa product trong thời gian đó.
 2026-10-13: SA6.1 chọn một Relay Yard hoàn thiện trước; sửa D2, SA-10, tiêu chí hình/tiếng và handoff stale.
   Nghiên cứu và advisory audit static đã xong; chưa có màn mẫu mới. SA-02/tick/parity/release không đổi.
