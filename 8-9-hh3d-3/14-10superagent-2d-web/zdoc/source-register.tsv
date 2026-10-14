@@ -1,0 +1,28 @@
+id	source	url	checked	claim_used	decision_impact
+S01	Phaser overview	https://docs.phaser.io/	2026-10-14	HTML5-first framework, WebGL/Canvas, JS/TS, desktop/mobile	Supports Phaser as 2D Web runtime
+S02	Phaser input	https://docs.phaser.io/phaser/concepts/input	2026-10-14	Unified keyboard, mouse, touch and gamepad input	Use adapters but keep device-independent InputFrame
+S03	Phaser physics	https://docs.phaser.io/phaser/concepts/physics	2026-10-14	Arcade is light rectangles/circles; Matter is full-body and more complex	Arcade for MVP; Matter only after a physics spike
+S04	Phaser scale manager	https://docs.phaser.io/phaser/concepts/scale-manager	2026-10-14	Canvas can keep a fixed internal size and scale responsively	Use responsive canvas plus DOM HUD
+S05	Phaser v4.2.1 release	https://github.com/phaserjs/phaser/releases/tag/v4.2.1	2026-10-14	Official release page marks v4.2.1 latest and records 09-07-2026 fixes	Pin exact version, do not use latest
+S06	Vite getting started	https://vite.dev/guide/	2026-10-14	Dev server, HMR and typed extensible build tooling	Use Vite as build tool, not engine
+S07	Vite production build	https://vite.dev/guide/build	2026-10-14	vite build outputs static assets suitable for static hosting; browser target has defaults	Static HTTPS deployment and explicit browser target
+S08	MDN WebGL API	https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API	2026-10-14	WebGL supports accelerated 2D/3D and is present in modern browsers with GPU support	WebGL2 baseline before WebGPU
+S09	MDN WebGPU API	https://developer.mozilla.org/en-US/docs/Web/API/WebGPU_API	2026-10-14	Limited availability and secure-context requirement	Do not make WebGPU MVP baseline
+S10	MDN requestAnimationFrame	https://developer.mozilla.org/en-US/docs/Web/API/Window/requestAnimationFrame	2026-10-14	Cadence follows display refresh; background tabs are paused/throttled	Separate fixed simulation from render
+S11	MDN Pointer Events	https://developer.mozilla.org/en-US/docs/Web/API/Pointer_events	2026-10-14	One model for mouse, pen and touch; pointer capture/cancel matter	Use touch overlay and pointer lifecycle handling
+S12	MDN multi-touch	https://developer.mozilla.org/en-US/docs/Web/API/Pointer_events/Multi-touch_interaction	2026-10-14	Multi-pointer handling and touch-action none	Support multi-touch controls
+S13	MDN Gamepad API	https://developer.mozilla.org/en-US/docs/Web/API/Gamepad_API	2026-10-14	Gamepad state is queried from the page	Treat gamepad as optional adapter
+S14	MDN Web Audio best practices	https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Best_practices	2026-10-14	AudioContext usually needs resume after user gesture	Use click/tap Start gate
+S15	Godot web export	https://docs.godotengine.org/en/4.5/tutorials/export/exporting_for_web.html	2026-10-14	WebGL2/Compatibility; threads use SharedArrayBuffer/headers; Web networking is constrained	Keep Godot as reuse/secondary path
+S16	Unity WebGL browser compatibility	https://docs.unity3d.com/kr/2018.3/Manual/webgl-browsercompatibility.html	2026-10-14	Unity docs warn mobile WebGL is not supported as a reliable target	Do not choose Unity for desktop+mobile MVP
+S17	PixiJS renderers	https://pixijs.com/8.x/guides/components/renderers	2026-10-14	WebGL/WebGL2 stable; WebGPU available but maturing; Canvas fallback not production baseline	Use only for future custom renderer
+S18	PlayCanvas browsers	https://developer.playcanvas.com/user-manual/engine/supported-browsers/	2026-10-14	WebGL2 default with optional WebGPU fallback and browser matrix	Good 2.5D/3D option, overkill for first 2D Classic
+S19	Construct scripting/worker	https://www.construct.net/en/make-games/manuals/construct-3/scripting/using-scripting/coding-in-construct	2026-10-14	Worker mode trades DOM access for performance; scripting changes constraints	Prototype/editor option, not deterministic core
+S20	GDevelop HTML5 export	https://wiki.gdevelop.io/gdevelop5/publishing/html5_game_in_a_local_folder/	2026-10-14	Direct HTML5 export and upload workflow	Useful for mechanic spike, not primary runtime
+S21	Defold HTML5	https://defold.com/manuals/html5/	2026-10-14	WebAssembly bundle needs HTTP server; threads need cross-origin isolation	Alternative engine, not selected
+S22	MDN PWA caching	https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Guides/Caching	2026-10-14	Service Worker + Cache API support offline/responsive loading with freshness trade-offs	Add PWA after MVP with versioned caches
+S23	MDN service workers	https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers	2026-10-14	Service workers require HTTPS except localhost and can intercept fetch	Deploy static build over HTTPS
+S24	MDN WebSocket	https://developer.mozilla.org/en-US/docs/Web/API/WebSocket	2026-10-14	Browser WebSocket available for client networking but has no backpressure	Use later for authoritative rooms, cap queues
+S25	MDN WebTransport	https://developer.mozilla.org/en-US/docs/Web/API/WebTransport_API	2026-10-14	Secure, newer transport with streams/datagrams but not universal legacy baseline	Keep as post-Classic experiment
+S26	MDN ScreenOrientation lock	https://developer.mozilla.org/en-US/docs/Web/API/ScreenOrientation/lock	2026-10-14	Limited availability and context restrictions	Use rotate hint/responsive layout, not hard lock
+S27	MDN Page Visibility	https://developer.mozilla.org/en-US/docs/Web/API/Page_Visibility_API	2026-10-14	visibilitychange helps react to hidden tabs and throttling	Pause/resync simulation on hide/show
