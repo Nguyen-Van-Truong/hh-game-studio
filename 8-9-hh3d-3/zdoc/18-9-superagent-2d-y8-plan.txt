@@ -1,9 +1,9 @@
-SUPERAGENT — PLAN GAME 2D THEO SUPERFIGHTERS TRÊN Y8 (SA6.3, CLASSIC-FIRST, 13-10-2026)
+SUPERAGENT — PLAN GAME 2D THEO SUPERFIGHTERS TRÊN Y8 (SA6.5, CLASSIC-FIRST, 14-10-2026)
 
 PRODUCT_NAME=Superagent
 PLAN_ROLE=SUPERAGENT_PRODUCT_SOURCE_OF_PROGRESS
 PLAN_SCOPE=8-9-hh3d-3/superagent
-PLAN_REVISION=SA6.4-OWNER-RESUMED-VISUAL-AUDIT
+PLAN_REVISION=SA6.5-OWNER-RESUMED-CUA-AUDIT
 CLASSIC_FIRST_POLICY=CLASSIC_PARITY_BEFORE_VARIANTS
 CLASSIC_RELEASE_SCOPE=SA-01..SA-13_ONLY
 VARIANT_SCOPE=SA-14_SA-V1_SA-V3_LOCKED_BY_OWNER
@@ -17,8 +17,8 @@ VISUAL_REVIEW_BRIEF=reviews/13-10-superagent-visual-quality-brief.md
 VISUAL_AUDIT_BRIEF=reviews/13-10-superagent-visual-audit-20261013.md
 CHARACTER_DESIGN_BRIEF=reviews/13-10-superagent-character-pipeline.md
 CHARACTER_PIPELINE=ORIGINAL_LAYERED_PIXEL_ATLAS_SHARED_POSE_CONTRACT
-CHARACTER_PIPELINE_STATUS=DESIGN_ONLY_NOT_RUNTIME_VERIFIED
-VISUAL_ACCEPTANCE=BLOCKED_BY_OWNER_SCREENSHOT_20261013
+CHARACTER_PIPELINE_STATUS=RUNTIME_LAYERED_FIGHTER_SMOKE_ONLY_PENDING_RELAY_YARD_REVIEW
+VISUAL_ACCEPTANCE=PENDING_OWNER_REVIEW_LIVE_BROWSER_20261014
 PRESENTATION_POLICY=ORIGINAL_EVENT_DRIVEN_FX_SFX_COMPATIBILITY_FALLBACK_FIRST
 RUNTIME_ACCEPTANCE=SA-01_TECHNICAL_PASS
 HUMAN_ACCEPTANCE=NONE
@@ -35,24 +35,24 @@ REPO_ARCHIVE_SCOPE=all other root paths, linked worktrees and ignored local stat
 HANDOFF_CANONICAL_PLAN=D:/dataDiskD/intellji/hoanhaosocial/hoanhaonew-20-6-2025/hh-game-studio/8-9-hh3d-3/zdoc/18-9-superagent-2d-y8-plan.txt
 HANDOFF_PRODUCT_WORKTREE=D:/dataDiskD/hh-superagent
 HANDOFF_PRODUCT_BRANCH=superagent/main
-HANDOFF_PRODUCT_HEAD=c5ce696a
+HANDOFF_PRODUCT_HEAD=ae88ec79
 HANDOFF_GROKDO_STATUS=ISOLATED_ACTIVE_REFERENCE_ONLY
 HANDOFF_GROKDO_ROOT=D:/dataDiskD/intellji/hoanhaosocial/hoanhaonew-20-6-2025/hh-game-studio/8-9-hh3d-3/superagent-grokdo
 HANDOFF_GROKDO_BRANCH=superagent/grokdo
 HANDOFF_GROKDO_SETUP_HEAD=ef9c93f
 HANDOFF_GROKDO_RULE=Repo độc lập đang hoạt động; đọc Git hiện tại, không reset về snapshot setup và không đồng bộ code tự động
 
-0. ĐỌC NHANH / HIỆN TRẠNG (13-10-2026; tối đa 15 dòng trạng thái)
+0. ĐỌC NHANH / HIỆN TRẠNG (14-10-2026; tối đa 15 dòng trạng thái)
 - Owner đã cho phép resume bản chính ngày 14-10; ưu tiên gate SA-02 và màn mẫu hình/tiếng.
 - Có thể sửa code, chạy test và export tuần tự; không bỏ qua measurement, visual review hoặc critic.
 - Product vẫn ở D:/dataDiskD/hh-superagent/8-9-hh3d-3/superagent, branch superagent/main.
-- Checkpoint c5ce696a đã kiểm, product sạch. SA-01 technical accepted; SA-02..SA-13 chưa tick.
+- Checkpoint c5ce696a đã kiểm; product sạch ở HEAD ae88ec79 sau các commit SA-10/SA-02. SA-01 technical accepted; SA-02..SA-13 chưa tick.
 - CURRENT_VALID_WP giữ SA-02; ledger 79 dòng: 25 OBSERVED / 54 UNVERIFIED / 0 MATCHED.
 - Thiếu số Y8 A01–A06, owner side-by-side và các gate còn lại; test nội bộ không là parity.
 - Đã có lõi input/physics/combat, catalog/pickup, bot, map/mode/menu và build provisional.
 - Bản chính có FX/SFX/camera/HUD trong game/presentation; smoke/load đã chạy, thẩm mỹ chưa duyệt.
 - Grokdo là repo độc lập đang phát triển ở đúng 8-9-hh3d-3/superagent-grokdo; đọc plan riêng.
-- Ảnh runtime owner gửi ngày 13-10 vẫn là blocker: fighter còn khối, prop lặp, nền rỗng và HUD dày/có nguy cơ cắt; tiếng chưa đánh giá.
+- Ảnh runtime owner gửi ngày 13-10 là baseline triage lịch sử; phiên browser live ngày 14-10 đã xác nhận topology/HUD/traversal ở mức quan sát, nhưng cadence dưới 30 FPS và hình/tiếng vẫn chờ review.
 - Audit mới nhất `reviews/13-10-superagent-visual-audit-20261013.md` kết luận 64×64 sheet/test không thay thế art authored; generator chỉ được pack/validate.
 - Chuẩn cải thiện: một Relay Yard có chiều sâu, item/weapon có identity, hai fighter pixel anime nguyên bản qua cùng renderer, rồi mới mở roster.
 - Phím thường vẫn WASD + J/K/L/; và mũi tên + Numpad 1–4; power là đồ nhặt, không là chiêu riêng.
@@ -60,11 +60,12 @@ HANDOFF_GROKDO_RULE=Repo độc lập đang hoạt động; đọc Git hiện t�
 - Run/hash và trạng thái dài cũ: docs/evidence trong product; history/2026-10-13-main-pre-visual-status-log.txt.
 
 NEXT — BẢN CHÍNH ĐÃ RESUME TỪ CHECKPOINT C5CE696A
-1. Kiểm lock/task và chạy SA-02 rig hoặc fallback video; không giả số đo và không tick khi inventory còn UNVERIFIED.
-2. Sửa tiếp màn mẫu theo thứ tự camera/HUD → authored fighter/prop → Relay Yard → clip có tiếng; giữ gameplay/collider/replay hash.
-3. Chỉ mở WP theo thứ tự; mỗi gate cần evidence, source hash và critic tương ứng. Không mở SA-14.
-4. Áp dụng bài học Grokdo bằng review cụ thể; không copy code/asset hoặc chữ ký nghiệm thu giữa hai repo.
-5. Không gọi ảnh near/far, test pixel, số frame, số particle hoặc file PNG/WAV là đạt hình/tiếng; thiếu clip nghe thật thì ghi GAP.
+1. Từ browser live ngày 14-10, chạy tiếp causal trial từng hành động sau tutorial: hold/release, jump/ladder, pickup/use, shoot/throw và pause; chỉ ghi OBS qualitative.
+2. Sau trial, chạy SA-02 rig hoặc video owner cho A01–A17; không giả số đo, không lấy cadence CUA làm A-tier và không tick khi inventory còn UNVERIFIED.
+3. Sửa màn mẫu theo thứ tự camera/HUD → authored fighter/prop → Relay Yard → clip có tiếng; giữ gameplay/collider/replay hash.
+4. Chỉ mở WP theo thứ tự; mỗi gate cần evidence, source hash và critic tương ứng. Không mở SA-14.
+5. Áp dụng bài học Grokdo bằng review cụ thể; không copy code/asset hoặc chữ ký nghiệm thu giữa hai repo.
+6. Không gọi ảnh near/far, test pixel, số frame, số particle hoặc file PNG/WAV là đạt hình/tiếng; thiếu clip nghe thật thì ghi GAP.
 
 REPO/HANDOFF — TRẠNG THÁI HIỆN HÀNH
 - Migration 06-10 đã xong theo REPO_ARCHIVE_PATH; không chuyển thêm file hay rewrite history.
@@ -424,6 +425,11 @@ trạng thái Running.
     bằng ffprobe trước khi đo.
 8.5 Owner biết game: mỗi lần thử build, owner chơi song song Y8 vài phút và ghi giống/khác. Đây
     là bằng chứng tầng B/C, không thay số đo tầng A.
+8.5a Exploratory browser play (manual/CUA): được chơi trực tiếp trong khung Y8 hiện tại để tìm
+    causal beat và ghi OBS-*.md (session, hành động, hậu quả, overlay/cadence caveat). Chỉ dùng
+    screenshot và phím bấm bình thường; không đọc DOM/canvas/JS/network/memory của game. Đây là
+    qualitative only: không lấy CUA screenshot/cadence làm A-tier, không suy timing/size, không
+    chuyển OBSERVED thành MATCHED. Khi cần số A01–A17 phải quay lại rig 8.2 hoặc video owner 8.4.
 
 9. CẤU TRÚC 8-9-hh3d-3/superagent/
   project.godot, export_presets.cfg (không chứa secret), AGENTS.md (trỏ plan này), NOTICE.md
@@ -456,7 +462,8 @@ Làm:
 - Đo A01–A06 trước, rồi A07–A17.
 - Chơi trận thật (1P VS bot mức giữa trên vài map, 2P không bot) để chuyển mục "cần tìm" ở 7.4
   sang OBSERVED hoặc NOT_IN_CURRENT: nhặt vũ khí, item, vật thể, hazard, chết, hết hiệp. Không
-  lặp lại việc vào menu và chọn map nữa; phần đó đã đủ.
+  lặp lại menu chỉ để đo; menu vẫn được vào lại cho một exploratory session mới, nhưng chỉ ghi
+  quan sát phân loại và không thăng hạng số đo.
 - Gán tier A/B/C cho mọi dòng ledger.
 DoD:
 - Rig chạy lại được bằng một lệnh và có README ngắn; hoặc có video owner đã kiểm fps.
@@ -707,6 +714,7 @@ Bài học kỹ thuật còn hiệu lực:
   chốt thứ tự sửa camera/HUD → authored fighter/prop → Relay Yard → clip có tiếng; không tick SA-10.
 2026-10-13: checkpoint bản chính c5ce696a giữ nguyên; FX/SFX/HUD mới đạt smoke kỹ thuật, chưa duyệt hình/tiếng.
 2026-10-14: owner resume bản chính từ c5ce696a; giữ SA-02 là WP hiện hành, chạy kiểm lock/guard trước mọi workload nặng.
+2026-10-14: live browser/CUA probe vào được 2P arena, thấy GET READY/FIGHT, HUD/inventory, ladder/cover và movement/camera causal; ghi OBS-2026-10-14-02. Cadence dưới 30 FPS, combat/pickup/pause chưa đủ nhân quả, không đổi ledger/tick.
 2026-10-13: owner tạm hoãn bản chính, yêu cầu nghiên cứu và hỗ trợ plan đồ họa Grokdo; không sửa product trong thời gian đó.
 2026-10-13: SA6.1 chọn một Relay Yard hoàn thiện trước; sửa D2, SA-10, tiêu chí hình/tiếng và handoff stale.
   Nghiên cứu và advisory audit static đã xong; chưa có màn mẫu mới. SA-02/tick/parity/release không đổi.
