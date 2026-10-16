@@ -33,7 +33,7 @@ REPO_KEEP_SCOPE=8-9-hh3d-3/{zdoc,studio,superagent,consumer-pilot,vertical-slice
 REPO_POLICY_KEEP=root AGENTS.md + .gitignore until a scoped replacement is reviewed
 REPO_ARCHIVE_SCOPE=all other root paths, linked worktrees and ignored local state remain archived, not deleted
 HANDOFF_CANONICAL_PLAN=D:/dataDiskD/intellji/hoanhaosocial/hoanhaonew-20-6-2025/hh-game-studio/8-9-hh3d-3/zdoc/18-9-superagent-2d-y8-plan.txt
-HANDOFF_PRODUCT_WORKTREE=D:/dataDiskD/hh-superagent
+HANDOFF_PRODUCT_WORKTREE=D:/dataDiskD/intellji/hoanhaosocial/hoanhaonew-20-6-2025/hh-game-studio
 HANDOFF_PRODUCT_BRANCH=superagent/main
 HANDOFF_PRODUCT_HEAD=4abb9eee
 HANDOFF_GROKDO_STATUS=ISOLATED_ACTIVE_REFERENCE_ONLY
@@ -45,7 +45,7 @@ HANDOFF_GROKDO_RULE=Repo độc lập đang hoạt động; đọc Git hiện t�
 0. ĐỌC NHANH / HIỆN TRẠNG (14-10-2026; tối đa 15 dòng trạng thái)
 - Owner đã cho phép resume bản chính ngày 14-10; ưu tiên gate SA-02 và màn mẫu hình/tiếng.
 - Có thể sửa code, chạy test và export tuần tự; không bỏ qua measurement, visual review hoặc critic.
-- Product vẫn ở D:/dataDiskD/hh-superagent/8-9-hh3d-3/superagent, branch superagent/main.
+- Product nằm ở 8-9-hh3d-3/superagent trong repo hh-game-studio. Owner chuyển vào đây ngày 16-10-2026 từ worktree D:/dataDiskD/hh-superagent (mốc nguồn ad98eef5). Chơi bằng 8-9-hh3d-3/superagent/choigame.bat hoặc tools/play_two_player.bat.
 - Checkpoint c5ce696a đã kiểm; product sạch ở HEAD 4abb9eee sau Relay Yard backdrop, two authored pilot sheets, pose-manifest validator, near-camera review, fresh two-player browser route, measurement fallback docs và launcher chơi 2 người. SA-01 technical accepted; SA-02..SA-13 chưa tick.
 - CURRENT_VALID_WP giữ SA-02; ledger 79 dòng: 25 OBSERVED / 54 UNVERIFIED / 0 MATCHED.
 - Thiếu số Y8 A01–A06, owner side-by-side và các gate còn lại; test nội bộ không là parity.
@@ -197,11 +197,9 @@ D7 Đổi phím. Mặc định: SA-07 thêm màn đổi phím trong Cài đặt 
 - SA-11 tới SA-13: khoảng 1–2 tuần.
 
 5. CÁCH LÀM
-5.1 Chỗ làm. Worktree sparse D:\dataDiskD\hh-superagent, nhánh superagent/main, chỉ checkout
-    8-9-hh3d-3/superagent (đã tạo 03-10). Tạo lại trên máy khác:
-      git worktree add --no-checkout -b superagent/main D:\dataDiskD\hh-superagent
-      git -C D:\dataDiskD\hh-superagent sparse-checkout set --cone 8-9-hh3d-3/superagent
-      git -C D:\dataDiskD\hh-superagent checkout superagent/main
+5.1 Chỗ làm. Từ 16-10-2026, bản chơi và code nằm ngay
+    D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\superagent.
+    Worktree sparse D:\dataDiskD\hh-superagent chỉ còn bản nguồn cũ, không sửa tiếp ở đó.
     - Code, test, build dưới 8-9-hh3d-3/superagent/. Không checkout 8-9-hh3d-3/zdoc (0,9 GB).
     - Merge về nhánh chính khi tick một WP, không merge sau từng bước: merge commit thường, không
       rebase, không force, không push. Git tự chặn merge khi index của repo chính có file staged;
@@ -736,3 +734,4 @@ Bài học kỹ thuật còn hiệu lực:
 2026-10-16: visible review cmd.sa.classic-actions.visible.2 / 20261015T222656.668304Z-4dfd3c41bc completed 3,000 fixed frames with exit 0, cleanup 0 and no diagnostics at source hash 0a0cd9a217f56aa84a28a52478d3af479403688fa877ee97bb16d58b6d82f790; stills are in product .local/review/play-1792103221 and show Relay Yard, parachute cargo, pistol tracer/casings and the larger authored pilots. Two later visual remints visible.3/.4 were blocked before launch by scheduled-task-query timeout and are diagnostic only. SA-02 remains current; A01-A06 measurements, owner side-by-side action/audio review, editable layers and full in-between animation remain open.
 2026-10-16: post-visual source audit at hash e1ad19e1ad2ed3340d35065f25c55c371e10c159066a64e1bbe3eb7c885dde72 passed full regression cmd.sa.classic-actions.full-regression.4 / 20261015T223241.568176Z-58b7a24b37 (2,977 assertions), Python suite cmd.sa.classic-actions.python-regression.1 / 20261015T223254.725921Z-5e8970725a (27 tests, 1 skipped), causal slice cmd.sa.classic-actions.slice.4 / 20261015T223316.306900Z-795aaecadd (270 assertions), item catalog cmd.sa.classic-actions.item-catalog.3 / 20261015T223338.837359Z-9ada63fbcf (42), sprint cmd.sa.classic-actions.sprint.3 / 20261015T223353.323170Z-4ea4eb3388 (183), fighter visual profile cmd.sa.classic-actions.visual-profile.3 / 20261015T223411.154237Z-35cf7ac659 (31), replay cmd.sa.classic-actions.replay.3 / 20261015T223427.521909Z-13cbbe60a0 (15), and ledger cmd.sa.classic-actions.ledger.1 / 20261015T223444.960896Z-a586291fba; all exited 0 with cleanup 0 and empty diagnostics. Inventory cmd.sa.classic-actions.inventory.1 / 20261015T223457.412887Z-c6ccef5e74 intentionally remained fail-closed on 20 missing A01-A06 reference measurements, so CURRENT_VALID_WP=SA-02 and every plan checkbox remains unchanged.
 END_OF_SUPERAGENT_PLAN
+2026-10-16: product commit a398af28 completed the next classic-action/UI slice. Added four explicit inventory slots with Q/NumPad5 cycling and action gating (firearm aim/fire, explosive throw, slow-time power), separate authored melee/firearm state, deterministic safe platform landing for slow parachute drops, and an eight-entry drop cycle covering firearm/melee/bomb/slow-time crates. The HUD now uses a readable four-slot strip with original silhouettes, larger identity labels, ammo pips, and separated meter band; pistol rendering adds sights/slide detail and the procedural pistol report has a longer crack/body/slide tail. Runtime source hash fb5b84daeb11308628fd458100de912fa9e276be89fd8cea396eea2ac3982e6f was exercised by visible run cmd.sa.weapon-ui.visible.2 / 20261016T141514.273738Z-64c306d6c2, exit 0, cleanup 0, 3,001 fixed frames, empty diagnostics; stills at .local/review/play-1792160120 were inspected at falling, landing and ground pickup frames. Godot tests passed: run_all 3,685, classic-action 291, item catalog 42, weapon catalog 35, presentation FX 12. The asset-superfighter folder was inspected; it contains only a notice, URL manifest and one public reference sheet, so no copyrighted source asset was copied or bundled. SA-02 remains current; no checkbox, Y8 parity or owner acceptance claim changed.
