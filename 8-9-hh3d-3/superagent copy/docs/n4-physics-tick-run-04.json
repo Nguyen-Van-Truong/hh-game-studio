@@ -1,0 +1,51 @@
+{
+  "schema": 1,
+  "run_id": "20261005T035803.949533Z-1f28c307fb",
+  "command_id": "cmd.sa5-n4.physics-tick.5",
+  "source_hash": "f7748a8404d60eead59e35f9e4219faedd2e4bbc46fbf933de309db8f7372f6a",
+  "source_hash_after": "f7748a8404d60eead59e35f9e4219faedd2e4bbc46fbf933de309db8f7372f6a",
+  "seed": "23",
+  "map": "movement-room",
+  "mode": "headless",
+  "command": [
+    ".local/tooling/godot-4.7.2-stable/Godot_v4.7.2-stable_win64_console.exe",
+    "--headless",
+    "--fixed-fps",
+    "60",
+    "--path",
+    ".",
+    "--script",
+    "tests/n4_physics_tick.gd"
+  ],
+  "cwd": "D:\\dataDiskD\\hh-superagent\\8-9-hh3d-3\\superagent",
+  "started_utc": "2026-10-05T03:58:03.950Z",
+  "finished_utc": "2026-10-05T03:58:09.209Z",
+  "duration_seconds": 2.453,
+  "status": "PASS",
+  "assertions": 13,
+  "observations": [
+    "solid floor landing at authored top",
+    "solid floor grounded state and upward normal",
+    "one-way deck landing at authored top within 0.05 px",
+    "one-way deck grounded state",
+    "per-fighter drop-through descends below deck",
+    "finite physics readback",
+    "stair top contact",
+    "left boundary containment"
+  ],
+  "actual_exit_code": 0,
+  "host_exit_code": 0,
+  "diagnostics": [],
+  "active_processes_after_cleanup": 0,
+  "source_files": [
+    "project.godot",
+    "data/tuning.json",
+    "data/movement_room.json",
+    "game/world/arena_state.gd",
+    "game/world/physics_arena.gd",
+    "game/fighter/physics_fighter.gd",
+    "tests/n4_physics_tick.gd"
+  ],
+  "repro_command": "python tools/run_guarded.py --project-root . --timeout 60 --command-id cmd.sa5-n4.physics-tick.5 --seed 23 --map movement-room --mode headless --source project.godot --source data/tuning.json --source data/movement_room.json --source game/world/arena_state.gd --source game/world/physics_arena.gd --source game/fighter/physics_fighter.gd --source tests/n4_physics_tick.gd -- .local/tooling/godot-4.7.2-stable/Godot_v4.7.2-stable_win64_console.exe --headless --fixed-fps 60 --path . --script tests/n4_physics_tick.gd",
+  "notes": "Adapter tick probe only. Simulation, FighterState, and MovementRoom remain authoritative; this is not SA-03 acceptance or a Y8 parity claim."
+}

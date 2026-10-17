@@ -1,0 +1,77 @@
+SUPERAGENT COPY — SHIP TOÀN BỘ ASSET + LOGIC SUPERFIGHTERS CLASSIC (SAC)
+Ngày: 2026-10-17
+PLAN_SCOPE=8-9-hh3d-3/superagent copy
+PARENT_WAIVER=../zdoc/16-10-owner-reference-asset-waiver.txt
+PARENT_SA_PLAN=../zdoc/18-9-superagent-2d-y8-plan.txt (tham chiếu parity; không tick thay plan chính)
+CURRENT_VALID_WP=SAC-WP0
+DISPATCHABLE=YES_OWNER_DIRECTIVE_2026_10_17
+
+0. MỤC TIÊU OWNER
+- Gắn **toàn bộ** bundle khôi phục classic (599 AS3, XFL, ~5850 sprite PNG, sound, SWF) vào worktree
+  `superagent copy` để game Godot chạy được **trước**, retouch/replace **sau**.
+- Không thay thế Vault Fighters (`godot/dogfood/superfighters/`); SAC là sandbox riêng.
+- Ship/store metadata vẫn **không** dùng tên Superfighters (waiver §3).
+
+1. BUNDLE ĐÃ GẮN (SAC-WP0) [x]
+| Path trong superagent copy | Nguồn |
+|----------------------------|--------|
+| reference/sf-classic-restored/ | Junction → asset-superfighter/.../restored-project |
+| reference/sf-classic-ffdec-export/ | Junction → asset-superfighter/.../full-ffdec-export |
+
+Nội dung restored: 01-actionscript … 10-morphshapes, xfl-export, 00-original.swf,
+package-index.json, play-local.html, chay-game.bat, README-RESTORED.md.
+
+Ghi chú: Junction = toàn bộ cây asset/logic **có trong project** không nhân đôi disk.
+Owner có thể yêu cầu SAC-WP0b robocopy vật lý nếu cần offline/USB (chưa chạy).
+
+2. GIỚI HẠN KỸ THUẬT (đọc trước khi tick WP sau)
+- AS3 **không chạy** trong Godot → port sang GDScript theo từng module (SAC-WP3+).
+- PNG sprite Flash là **frame rời theo DefineSprite**, không phải atlas Godot sẵn →
+  cần rig/parser (SAC-WP2) trước khi gán vào fighter_view.
+- Import ~6000 PNG vào Godot cùng lúc → editor chậm → dùng .gdignore + import theo lô.
+
+3. WORK PACKAGES
+
+[ ] SAC-WP1 — Manifest & provenance
+- Tạo reference/sf-classic-restored/MANIFEST-SAC.json (hash 00-original.swf, đếm file).
+- Bổ sung art/LICENSES.tsv: một dòng bundle + từng lô import runtime (owner-waiver-reference).
+- reference/NOTICE-SF-REFERENCE.md (MythoLogic, decompile NG 575163, chỉ dev nội bộ).
+
+[ ] SAC-WP2 — Asset bridge (tools)
+- tools/sf_bridge/parse_symbols.py — đọc 09-symbolClass/symbols.csv + package-index.json.
+- tools/sf_bridge/sprite_catalog.tsv — characterId, class, path PNG mẫu.
+- reference/.gdignore (Godot bỏ qua cả cây junction; load runtime qua tools/sf_bridge).
+
+[ ] SAC-WP3 — Logic port (ưu tiên)
+- Port constants + state từ Code/PlayerState.as, tuning vũ khí từ wpn_*.as → data/sf_tuning.json.
+- Map combat loop: beat, hurt, weapon pickup — đối chiếu game/ hiện có superagent copy.
+
+[ ] SAC-WP4 — Presentation hook
+- fighter_view.gd: mode `use_sf_reference_sprites` (dev flag) load subset catalog SAC-WP2.
+- Không xóa art authored HH; reference layer song song.
+
+[ ] SAC-WP5 — Verify
+- Headless smoke + một scene P1/P2 với subset sprite (idle/run/jump/shoot).
+- Evidence: run_id, source hash manifest, screenshot — **không** claim Y8 parity (SA-02).
+
+[ ] SAC-WP6 — Replace track (sau khi chạy ổn)
+- Lịch thay từng nhóm asset reference → HH original; cập nhật LICENSES.tsv status.
+
+4. KHÔNG LÀM TRONG SAC (trừ owner mở gate)
+- Merge SAC vào Vault Fighters product tree.
+- Commit binary hàng GB nếu owner chưa chọn physical mirror (junction đủ cho dev).
+- Tick checkbox plan 18-9-superagent-2d-y8-plan.txt từ SAC.
+
+5. LỆNH THAM CHIẾU
+- Chơi SWF gốc trong bundle: reference/sf-classic-restored/chay-game.bat
+- Entry AS3: reference/sf-classic-restored/01-actionscript/Code/Main.as
+- XFL Animate: reference/sf-classic-restored/xfl-export/Superfighters/
+
+6. TIẾN ĐỘ
+SAC-WP0 done 2026-10-17 (junction bundle).
+2026-10-17 runtime hook (chưa tick WP vì chưa đủ evidence SA-02):
+- game/presentation/sf_classic_bank.gd đọc sprite + mp3 từ bundle.
+- FighterView vẽ player_johnny / player_agent theo nhãn IDLE/RUN/AIM_*.
+- Pickup, đạo cụ, nổ, lửa, súng dùng PNG classic; CombatAudio ưu tiên MP3 classic.
+- data/tuning.json lấy run 1.7, gravity 0.6, jump 5, jump-kick 4 từ PlayerState.
+Giới hạn: mỗi nhãn animation là 1 frame export của movie clip cha, chưa phải full timeline con (chạy/đấm chưa đủ chu kỳ). Map Godot vẫn là layout Relay Yard, phủ prop classic chứ chưa phải layout map Flash.

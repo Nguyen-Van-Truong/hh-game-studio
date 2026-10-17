@@ -1,0 +1,104 @@
+Cách agent khác giao việc cho Codex trên máy này
+Kiểm tra 2026-10-13. Không ghi API key, access token, refresh token vào log, evidence hay file này.
+
+1. Đường đang chạy
+Codex CLI đã được Cockpit Tools trỏ vào Codex API Service local.
+File: C:\Users\truon\.codex\config.toml
+- model_provider = codex_local_access
+- base_url = http://localhost:53452/v1
+- wire_api = responses
+- auth.json ở chế độ apikey của gateway này
+Gateway: cockpit-cliproxy, chỉ localhost, cổng 53452.
+Không có key thì /v1/models trả 401. Có key thì chat và codex exec đi qua pool account.
+codex exec không cần thêm cờ để chọn Cockpit. Đừng set CODEX_API_KEY khác trong môi trường, key đó sẽ đè key Cockpit.
+
+Binary đã chạy được: codex-cli 0.162.0-alpha.17.2
+C:\Users\truon\AppData\Local\OpenAI\Codex\bin\2e5e00daee91c61d\codex.exe
+Thư mục hash đổi khi Codex cập nhật. Nếu path này mất, lấy CODEX_CLI_PATH trong config hoặc chạy `codex --version`.
+
+2. Agent khác giao việc bằng codex exec
+`codex` không kèm subcommand chỉ mở TUI cho người gõ. Agent khác dùng exec.
+
+Việc một lần, đọc được bằng máy:
+codex exec --json --sandbox workspace-write -m gpt-6-luna -c model_reasoning_effort=low "mô tả việc"
+
+Chỉ xem, không sửa file:
+codex exec --json --sandbox read-only -m gpt-6-luna -c model_reasoning_effort=low "câu hỏi"
+
+Tiếp cùng session, lấy thread_id từ dòng JSON thread.started:
+codex exec resume --last "việc tiếp theo"
+codex exec resume <THREAD_ID> "việc tiếp theo"
+
+JSON cuối cùng đúng schema:
+codex exec --output-schema schema.json -o ket-qua.json "trả đúng schema"
+
+Review diff hiện tại:
+codex review --uncommitted
+
+Kiểm tra login còn:
+codex login status
+
+Quy ước output:
+- stderr: tiến trình
+- stdout: câu trả lời cuối
+- --json: stdout là JSONL. Việc có ích: thread.started, turn.completed, item.completed, error
+- Prompt truyền bằng đối số. Stdin đang mở thì Codex coi đó là context thêm và có thể chờ.
+- Cần git repo, hoặc thêm --skip-git-repo-check khi cố ý chạy ngoài repo.
+- config.toml máy này đang sandbox danger-full-access và approval never. Agent luôn truyền --sandbox rõ trên lệnh.
+- Model mặc định trong config là gpt-6-astra, reasoning high, tốn quota. Việc nhẹ dùng -m gpt-6-luna và model_reasoning_effort=low.
+
+Đã thử 2026-10-13: lệnh exec gpt-6-luna trả "pong". Log Cockpit cùng lúc: gpt-6-luna, HTTP 200, 18441 token vào, 5 token ra.
+
+3. Pool account
+14 account trong pool: 11 Plus, 3 K-12.
+Key mặc định tên Default, inheritAccountPool = true, nên mỗi request được pool chọn.
+Ba account được đánh dấu preferred. Không có header để chỉ định email trên từng request.
+X-Cockpit-Instance-Id là id client, không phải id account.
+
+Muốn mọi request đi một account: trong Cockpit tạo hoặc sửa API key, tắt kế thừa pool, gắn đúng một account id.
+Id nằm ở C:\Users\truon\.cockpit_tools\codex_local_access_sidecar\manifest.json, trường accounts[].id và accounts[].email.
+Ví dụ đã thấy tmireles@onick.tech là gói k12, id codex_49ed4e4d0a92e6bf491c709e904f199f. Đừng ghi token trong manifest ra ngoài.
+
+Đổi profile Codex app sang một account là việc của UI Cockpit. Agent không tự sửa auth.json của profile đang dùng.
+
+4. Xem quota 5 giờ và 7 ngày
+Nguồn đúng là usage từng account, không phải số remainingQuota cũ trong manifest.
+
+Với mỗi file trong
+C:\Users\truon\.cockpit_tools\codex_local_access_sidecar\auths\*.json
+đọc access_token và account_id, gọi:
+GET https://chatgpt.com/backend-api/wham/usage
+Header:
+- Authorization: Bearer <access_token>
+- ChatGPT-Account-Id: <account_id>
+- Accept: application/json
+
+Đọc rate_limit:
+- primary_window = cửa sổ 5 giờ (limit_window_seconds 18000). used_percent là phần đã dùng.
+- secondary_window = cửa sổ 7 ngày (604800). used_percent là phần đã dùng.
+- allowed = false và limit_reached = true nghĩa là account đang bị chặn, thường do đầy 5 giờ.
+- Còn lại của một account = 100 - used_percent.
+- Tổng pool = cộng phần còn lại của từng account. Mỗi account là một cửa sổ 100%, không phải một bể token chung. Plus và K-12 cùng đơn vị phần trăm nhưng hạn mức tuyệt đối khác nhau.
+
+Snapshot 2026-10-13 khoảng 17:50 giờ Việt Nam, 14/14 gọi được:
+- 5 giờ: dùng 669/1400 điểm, còn 731. 5 account Plus đang đầy 5 giờ.
+- 7 ngày: dùng 166/1400 điểm, còn 1234.
+- Plus 11: 5 giờ còn 431/1100, tuần còn 985/1100, 5 account bị chặn.
+- K-12 3: 5 giờ còn 300/300, tuần còn 249/300, không account nào bị chặn.
+
+Log request đã đi qua gateway:
+C:\Users\truon\.cockpit_tools\codex_local_access_logs.sqlite
+Bảng request_logs có email, model_id, success, http_status, input_tokens, output_tokens, timestamp.
+
+5. Không dùng những đường này để giao việc
+- TUI `codex` và slash /agent, /subagents: cho người ngồi terminal.
+- codex app: chỉ mở app desktop.
+- codex mcp-server: deprecated cho automation mới.
+- SDK và app-server chỉ khi cần giữ thread rồi steer giữa chừng:
+  https://developers.openai.com/codex/sdk
+  https://developers.openai.com/codex/app-server
+
+6. Tài liệu lệnh
+https://developers.openai.com/codex/noninteractive
+https://developers.openai.com/codex/cli/reference
+Trên máy: codex --help và codex exec --help

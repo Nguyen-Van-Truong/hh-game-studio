@@ -1,0 +1,32 @@
+asset-superfighter — index (2026-10-16)
+
+reference/
+  y8-dev-tips-18panels.jpg          18 dev tips (props fire roll disarm …)
+  y8-html5-bundle/                  Y8 GD wrapper + Superfighters.js (~21MB)
+  src-superfighter/restored-project/  khôi phục src: AS3 + XFL + SWF + chay-game.bat
+  src-superfighter/                 SWF mirrors + full-ffdec-export (8017 files)
+  swf-extract/                      superfighters.swf + exported sprite PNGs
+  third-party-repos/                open/community clones (see docs/OPEN-SOURCE-INDEX.md)
+  tools/ffdec.jar                   JPEXS decompiler (export scripts/sprites)
+
+catalog/
+  download-manifest.csv             weapons items map props URLs
+  character-actions-manifest.csv    movement melee ranged fire hazard URLs
+
+docs/
+  SOURCE-INDEX.md                   where Y8 bundle + SWF + decompile live (2026-10-17)
+  OPEN-SOURCE-INDEX.md              GitHub open repos cloned + what does NOT exist (2026-10-17)
+  PRE-BUILD-SOURCES.md              full pre-build map: SWF mirrors, Y8, decompile (2026-10-17)
+  MELEE-AIM-PARITY.md               fix cung đấm + ngắm ngược (2026-10-17)
+  TECHNICAL-HANDBOOK.md             mechanics controls fire props (main doc)
+  ANIMATION-POSE-CHECKLIST.md       Y8 actions vs Superagent pilot clips
+  TEST-SCENARIOS.csv                QA scenario matrix
+  Y8-OBSERVATION-INDEX.txt          pointers to OBS markdown in superagent/
+  wiki-text-snapshots/              plain-text wiki excerpts
+  from-superagent/                  copied reference-research control-bindings
+
+NOTICE.txt                          owner 16-10: reference downloads OK
+zdoc/16-10-owner-reference-asset-waiver.txt (via ../zdoc/)
+
+Sprite PNGs for Y8 fighters/weapons: open wiki URLs in catalog/ or capture in-game.
+Product-original art stays in superagent/art/ (not duplicated here).

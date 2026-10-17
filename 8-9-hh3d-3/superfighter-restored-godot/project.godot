@@ -1,0 +1,50 @@
+; Engine and project identity
+config_version=5
+
+[application]
+config/name="Restored Fighters"
+config/description="Godot port of the restored classic fighter loop. Flash extract lives in reference/flash."
+run/main_scene="res://main.tscn"
+config/features=PackedStringArray("4.7", "GL Compatibility")
+
+[display]
+window/size/viewport_width=1280
+window/size/viewport_height=720
+window/stretch/mode="canvas_items"
+window/stretch/aspect="keep"
+
+[physics]
+common/physics_ticks_per_second=60
+
+[rendering]
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+environment/defaults/default_clear_color=Color(0.04, 0.05, 0.07, 1)
+
+2d/shadow_atlas/size=1024
+lights_and_shadows/directional_shadow/size=1024
+lights_and_shadows/directional_shadow/size.mobile=1024
+lights_and_shadows/directional_shadow/soft_shadow_filter_quality=0
+lights_and_shadows/positional_shadow/atlas_size=1024
+lights_and_shadows/positional_shadow/atlas_size.mobile=1024
+[debug]
+gdscript/warnings/untyped_declaration=2
+gdscript/warnings/unsafe_method_access=2
+gdscript/warnings/unsafe_property_access=2
+gdscript/warnings/unsafe_cast=2
+
+[input]
+p1_left={"deadzone":0.5,"events":[Object(InputEventKey,"keycode":65)]}
+p1_right={"deadzone":0.5,"events":[Object(InputEventKey,"keycode":68)]}
+p1_up={"deadzone":0.5,"events":[Object(InputEventKey,"keycode":87)]}
+p1_down={"deadzone":0.5,"events":[Object(InputEventKey,"keycode":83)]}
+p1_punch={"deadzone":0.5,"events":[Object(InputEventKey,"keycode":74)]}
+p1_shoot={"deadzone":0.5,"events":[Object(InputEventKey,"keycode":75)]}
+p2_left={"deadzone":0.5,"events":[Object(InputEventKey,"keycode":4194319)]}
+p2_right={"deadzone":0.5,"events":[Object(InputEventKey,"keycode":4194321)]}
+p2_up={"deadzone":0.5,"events":[Object(InputEventKey,"keycode":4194320)]}
+p2_down={"deadzone":0.5,"events":[Object(InputEventKey,"keycode":4194322)]}
+p2_punch={"deadzone":0.5,"events":[Object(InputEventKey,"keycode":4194439)]}
+p2_shoot={"deadzone":0.5,"events":[Object(InputEventKey,"keycode":4194440)]}
+ui_accept={"deadzone":0.5,"events":[Object(InputEventKey,"keycode":4194309)]}
+ui_cancel={"deadzone":0.5,"events":[Object(InputEventKey,"keycode":4194305)]}

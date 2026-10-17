@@ -26,13 +26,13 @@ class InputHarness extends Node:
 
 const EXPECTED_CODES: Dictionary = {
 	&"p1_left": KEY_A, &"p1_right": KEY_D, &"p1_up": KEY_W, &"p1_down": KEY_S,
-	&"p1_punch": KEY_J, &"p1_shoot": KEY_K, &"p1_throw": KEY_L, &"p1_power": KEY_SEMICOLON,
+	&"p1_punch": KEY_J, &"p1_shoot": KEY_K, &"p1_throw": KEY_L, &"p1_power": KEY_SEMICOLON, &"p1_switch": KEY_Q,
 	&"p2_left": KEY_LEFT, &"p2_right": KEY_RIGHT, &"p2_up": KEY_UP, &"p2_down": KEY_DOWN,
-	&"p2_punch": KEY_KP_1, &"p2_shoot": KEY_KP_2, &"p2_throw": KEY_KP_3, &"p2_power": KEY_KP_4,
+	&"p2_punch": KEY_KP_1, &"p2_shoot": KEY_KP_2, &"p2_throw": KEY_KP_3, &"p2_power": KEY_KP_4, &"p2_switch": KEY_KP_5,
 }
 const UNBOUND_CODES: Array[int] = [
 	KEY_1, KEY_2, KEY_3, KEY_4,
-	KEY_U, KEY_I, KEY_O, KEY_P, KEY_KP_5, KEY_KP_6, KEY_KP_7, KEY_KP_8,
+	KEY_U, KEY_I, KEY_O, KEY_P, KEY_KP_6, KEY_KP_7, KEY_KP_8,
 ]
 
 var _failures: int = 0

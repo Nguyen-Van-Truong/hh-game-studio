@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="PackedScene" path="res://game/ui/match_room.tscn" id="1_match"]
+
+[node name="MatchRoom" instance=ExtResource("1_match")]
+mode = &"survival"
+rule = &"infinite"

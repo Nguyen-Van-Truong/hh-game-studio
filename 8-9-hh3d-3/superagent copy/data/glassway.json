@@ -1,0 +1,31 @@
+{
+  "schema": "sa03.room.v1", "status": "PROVISIONAL_GREYBOX", "width": 1650, "height": 920,
+  "floor_y": 750, "pit_death_y": 1030, "ladder_margin": 18,
+  "spawns": [{"player_id": 1, "x": 190, "y": 750}, {"player_id": 2, "x": 1460, "y": 750}],
+  "platforms": [
+    {"id": "glassway_floor", "left": 140, "right": 1510, "y": 750, "one_way": false},
+    {"id": "glassway_west", "left": 220, "right": 540, "y": 580, "one_way": true},
+    {"id": "glassway_center", "left": 620, "right": 1040, "y": 500, "one_way": true},
+    {"id": "glassway_east", "left": 1130, "right": 1430, "y": 600, "one_way": true},
+    {"id": "glassway_roof", "left": 690, "right": 940, "y": 300, "one_way": true}
+  ],
+  "solids": [
+    {"id": "glassway_west_cover", "left": 330, "right": 410, "top": 686, "bottom": 750},
+    {"id": "glassway_center_cover", "left": 800, "right": 880, "top": 686, "bottom": 750},
+    {"id": "glassway_east_cover", "left": 1220, "right": 1300, "top": 686, "bottom": 750}
+  ],
+  "ladders": [{"id": "glassway_west_ladder", "x": 450, "top": 580, "bottom": 750}, {"id": "glassway_roof_ladder", "x": 760, "top": 300, "bottom": 500}, {"id": "glassway_east_ladder", "x": 1240, "top": 600, "bottom": 750}],
+  "pits": [{"id": "glassway_west_pit", "left": 0, "right": 140}, {"id": "glassway_east_pit", "left": 1510, "right": 1650}],
+  "pickups": [
+    {"id": "glassway_pistol", "kind": "pistol", "x": 480, "y": 750, "active": true},
+    {"id": "glassway_shotgun", "kind": "shotgun", "x": 1190, "y": 750, "active": true},
+    {"id": "glassway_pill", "kind": "pill", "x": 830, "y": 500, "active": true},
+    {"id": "glassway_bullet_time", "kind": "bullet_time_5", "duration_ticks": 300, "x": 820, "y": 300, "active": true}
+  ],
+  "props": [
+    {"id": "glassway_crate_left", "kind": "crate", "material": "wood", "health": 30, "x": 370, "y": 718},
+    {"id": "glassway_barrel_center", "kind": "barrel", "material": "steel", "explosive": true, "health": 20, "x": 840, "y": 718},
+    {"id": "glassway_panel_east", "kind": "glass", "material": "glass", "health": 10, "x": 1270, "y": 718}
+  ],
+  "notes": "Original glassway layout with a roof shelf, three ladders and protected edge spawn lanes."
+}

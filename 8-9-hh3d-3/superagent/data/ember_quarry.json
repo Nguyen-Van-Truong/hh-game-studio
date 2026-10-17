@@ -1,0 +1,31 @@
+{
+  "schema": "sa03.room.v1", "status": "PROVISIONAL_GREYBOX", "width": 1700, "height": 960,
+  "floor_y": 790, "pit_death_y": 1080, "ladder_margin": 18,
+  "spawns": [{"player_id": 1, "x": 180, "y": 790}, {"player_id": 2, "x": 1520, "y": 790}],
+  "platforms": [
+    {"id": "quarry_west_floor", "left": 100, "right": 760, "y": 790, "one_way": false},
+    {"id": "quarry_east_floor", "left": 940, "right": 1600, "y": 790, "one_way": false},
+    {"id": "quarry_west_shelf", "left": 220, "right": 560, "y": 560, "one_way": true},
+    {"id": "quarry_east_shelf", "left": 1140, "right": 1510, "y": 540, "one_way": true},
+    {"id": "quarry_high_shelf", "left": 690, "right": 1010, "y": 380, "one_way": true}
+  ],
+  "solids": [
+    {"id": "quarry_west_cover", "left": 380, "right": 470, "top": 726, "bottom": 790},
+    {"id": "quarry_east_cover", "left": 1250, "right": 1340, "top": 726, "bottom": 790},
+    {"id": "quarry_high_cover", "left": 810, "right": 890, "top": 316, "bottom": 380}
+  ],
+  "ladders": [{"id": "quarry_west_ladder", "x": 480, "top": 560, "bottom": 790}, {"id": "quarry_east_ladder", "x": 1210, "top": 540, "bottom": 790}],
+  "pits": [{"id": "quarry_ember_gap", "left": 760, "right": 940}],
+  "pickups": [
+    {"id": "quarry_pistol", "kind": "pistol", "x": 500, "y": 790, "active": true},
+    {"id": "quarry_shotgun", "kind": "shotgun", "x": 1280, "y": 790, "active": true},
+    {"id": "quarry_medkit", "kind": "medkit", "x": 390, "y": 560, "active": true},
+    {"id": "quarry_bullet_time", "kind": "bullet_time_5", "duration_ticks": 300, "x": 850, "y": 380, "active": true}
+  ],
+  "props": [
+    {"id": "quarry_crate_west", "kind": "crate", "material": "wood", "health": 30, "x": 425, "y": 758},
+    {"id": "quarry_barrel_east", "kind": "barrel", "material": "steel", "explosive": true, "health": 20, "x": 1295, "y": 758},
+    {"id": "quarry_glass_high", "kind": "glass", "material": "glass", "health": 10, "x": 960, "y": 348}
+  ],
+  "notes": "Original quarry layout split by a central ember gap with a high bridge shelf."
+}

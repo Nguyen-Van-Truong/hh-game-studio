@@ -1,0 +1,16 @@
+Batch: 2026-10-17 (owner request — reference study)
+
+superfighters-classic.swf
+  URL: https://github.com/BinBashBanana/gstore/raw/master/superfighters.swf
+  Size: 3039889 bytes
+  SHA256: 150507DA0A48644858AE9743C00777B8BC5AD29ED4848A3AF58C79AC9A4E05D0
+
+decompiled/scripts/ (594 x .as)
+  Tool: JPEXS Free Flash Decompiler 21.1.0 (reference/tools/ffdec.jar)
+  Command:
+    java --enable-native-access=ALL-UNNAMED -jar reference/tools/ffdec.jar ^
+      -onerror ignore -export script,symbolClass,binaryData ^
+      reference/src-superfighter/decompiled ^
+      reference/src-superfighter/superfighters-classic.swf
+
+Legal: MythoLogic Interactive — reference only per asset-superfighter/NOTICE.txt

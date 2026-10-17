@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import re
 import sys
 from dataclasses import dataclass
 from pathlib import Path
@@ -24,9 +25,11 @@ STATUSES = {
     "GAP",
     "EXEMPT_BY_OWNER",
     "NOT_IN_CURRENT",
+    "APPROX",
 }
+TIERS = {"A", "B", "C"}
 HEADERS = [
-    "id", "group", "item", "source", "observation", "samples", "error",
+    "id", "group", "item", "tier", "source", "observation", "samples", "error",
     "tolerance", "implementation", "test", "status", "notes",
 ]
 
@@ -51,6 +54,10 @@ class Row:
     @property
     def item(self) -> str:
         return self.values["item"]
+
+    @property
+    def tier(self) -> str:
+        return self.values["tier"]
 
 
 def _clean(value: str | None) -> str:
@@ -85,6 +92,22 @@ def _positive_samples(value: str) -> bool:
 def _is_nonfunctional_exemption(row: Row) -> bool:
     notes = row.values.get("notes", "").lower()
     return "scope=nonfunctional" in notes or "nonfunctional" in notes
+
+
+_OWNER_APPROVAL_RE = re.compile(
+    r"(?:^|[\s;,])owner_ok\s*[:=]\s*([^\s;,]+)", re.IGNORECASE
+)
+
+
+def _owner_approval_reference(notes: str) -> str | None:
+    """Return an explicit owner record token, rejecting negative/empty claims."""
+    match = _OWNER_APPROVAL_RE.search(notes or "")
+    if not match:
+        return None
+    reference = match.group(1).strip()
+    if reference.lower() in {"", "no", "none", "false", "0", "pending", "tbd"}:
+        return None
+    return reference
 
 
 def load_ledger(path: str | Path) -> tuple[list[Row], list[str]]:
@@ -129,6 +152,8 @@ def load_ledger(path: str | Path) -> tuple[list[Row], list[str]]:
             errors.append(f"line {row.line}: unsupported status {row.status!r}")
         if not row.item:
             errors.append(f"line {row.line}: empty item")
+        if row.tier not in TIERS:
+            errors.append(f"line {row.line}: tier must be A, B or C")
         # Claims are evidence gated.  UNVERIFIED is intentionally the only
         # state allowed to carry no proof in the seed ledger.
         if row.status in {"OBSERVED", "NOT_IN_CURRENT"}:
@@ -147,6 +172,8 @@ def load_ledger(path: str | Path) -> tuple[list[Row], list[str]]:
                 if not row.values[field]:
                     errors.append(f"line {row.line}: {row.status} requires {field}")
         elif row.status == "MATCHED":
+            if row.tier == "C":
+                errors.append(f"line {row.line}: tier C cannot be MATCHED; use APPROX")
             missing = _proof(row)
             if missing:
                 errors.append(
@@ -158,6 +185,10 @@ def load_ledger(path: str | Path) -> tuple[list[Row], list[str]]:
             for field in ("implementation", "test"):
                 if not row.values[field]:
                     errors.append(f"line {row.line}: MATCHED requires {field}")
+            if row.tier == "B" and not _owner_approval_reference(row.values["notes"]):
+                errors.append(
+                    f"line {row.line}: tier B MATCHED requires notes owner_ok=<record>"
+                )
         elif row.status == "GAP":
             if not row.values["notes"]:
                 errors.append(f"line {row.line}: GAP requires a reason in notes")
@@ -169,6 +200,24 @@ def load_ledger(path: str | Path) -> tuple[list[Row], list[str]]:
                 )
             if not row.values["notes"]:
                 errors.append(f"line {row.line}: EXEMPT_BY_OWNER requires notes")
+        elif row.status == "APPROX":
+            if row.tier != "C":
+                errors.append(f"line {row.line}: APPROX is only valid for tier C")
+            missing = _proof(row)
+            if missing:
+                errors.append(
+                    f"line {row.line}: APPROX requires proof fields: "
+                    + ", ".join(missing)
+                )
+            elif not _positive_samples(row.values["samples"]):
+                errors.append(f"line {row.line}: samples must contain a positive count")
+            for field in ("implementation", "test"):
+                if not row.values[field]:
+                    errors.append(f"line {row.line}: APPROX requires {field}")
+            if not _owner_approval_reference(row.values["notes"]):
+                errors.append(
+                    f"line {row.line}: tier C APPROX requires notes owner_ok=<record>"
+                )
     missing_groups = REQUIRED_GROUPS - groups
     if missing_groups:
         errors.append("missing required groups: " + ", ".join(sorted(missing_groups)))

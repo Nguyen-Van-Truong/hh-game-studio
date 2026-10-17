@@ -1,0 +1,27 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://game/ui/movement_room.gd" id="1_room"]
+[ext_resource type="Script" path="res://game/fighter/fighter_view.gd" id="2_view"]
+
+[node name="MovementRoom" type="Node2D"]
+script = ExtResource("1_room")
+
+[node name="Fighter1" type="Node2D" parent="."]
+script = ExtResource("2_view")
+
+[node name="Fighter2" type="Node2D" parent="."]
+script = ExtResource("2_view")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Status" type="Label" parent="CanvasLayer"]
+offset_left = 18.0
+offset_top = 14.0
+offset_right = 760.0
+offset_bottom = 92.0
+theme_override_colors/font_color = Color(0.85, 0.94, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.75)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 16
+text = "SA-03 MOVEMENT LAB  |  PROVISIONAL TUNING"

@@ -5,15 +5,19 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc --noEmit && vite build",
+    "build": "tsc --noEmit && vite build && node scripts/write-release-manifest.mjs",
     "preview": "vite preview",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test:sim": "tsx scripts/sim-contract.test.ts",
+    "test": "npm run typecheck && npm run test:sim",
+    "verify:dist": "node scripts/verify-dist.mjs"
   },
   "dependencies": {
     "phaser": "4.2.1"
   },
   "devDependencies": {
     "typescript": "5.9.3",
-    "vite": "8.3.4"
+    "vite": "8.3.4",
+    "tsx": "4.20.6"
   }
 }

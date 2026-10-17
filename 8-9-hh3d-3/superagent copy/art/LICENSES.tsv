@@ -1,0 +1,16 @@
+asset_id	kind	license	source	status
+fighter_visual_profile	procedural_GDScript	Original HH Game Studio	Authored in repository; no reference assets	approved-for-prototype
+arena_fx	procedural_GDScript	Original HH Game Studio	Authored in repository; no reference assets	approved-for-prototype
+combat_audio	procedural_runtime_WAV	Original HH Game Studio	Procedurally synthesized in repository; no third-party sample	approved-for-prototype
+hud_bars	procedural_GDScript	Original HH Game Studio	Authored in repository; no reference assets	approved-for-prototype
+relay_yard_world_pass	procedural_GDScript	Original HH Game Studio	Authored in repository; no reference assets	approved-for-prototype
+relay_yard_backdrop	generated_raster_png	Original HH Game Studio + OpenAI ImageGen	Generated for this project; no reference assets; composited view-only	approved-for-prototype
+fighter_courier_pose_sheet	generated_raster_png	Original HH Game Studio + OpenAI ImageGen	Generated for this project; transparent 4x4 pilot sheet; no reference assets	approved-for-prototype
+fighter_mechanic_pose_sheet	generated_raster_png	Original HH Game Studio + OpenAI ImageGen	Generated for this project; transparent 4x4 pilot sheet; no reference assets	approved-for-prototype
+weapon_visuals	procedural_GDScript	Original HH Game Studio	Shared held/pickup/HUD weapon renderer authored in repository	approved-for-prototype
+fighter_action_extension_v2	generated_raster_png	Original HH Game Studio + OpenAI ImageGen	Generated 2026-10-15 from original courier/mechanic identity sheets; prompts in art/production-v2.md	provisional-runtime-review
+relay_hall_v2	generated_raster_png	Original HH Game Studio + OpenAI ImageGen	Generated 2026-10-15; original industrial hall; no reference assets; prompts in art/production-v2.md	provisional-runtime-review
+relay_objects_v2	generated_raster_png	Original HH Game Studio + OpenAI ImageGen	Generated 2026-10-15; original props; prompts in art/production-v2.md	provisional-runtime-review
+sf_classic_restored_bundle	junction_tree	MythoLogic / FFDec decompile (NG 575163)	reference/sf-classic-restored → asset-superfighter restored-project; owner-waiver SAC-WP0	owner-waiver-reference
+sf_classic_ffdec_export	junction_tree	MythoLogic / FFDec export	reference/sf-classic-ffdec-export → full-ffdec-export; owner-waiver SAC-WP0	owner-waiver-reference
+sf_classic_runtime_sprites	runtime_png_mp3	MythoLogic / FFDec decompile (NG 575163)	SfClassicBank loads player/weapon/prop/fx/sfx from reference/sf-classic-restored at play time; owner directive 2026-10-17	owner-waiver-reference

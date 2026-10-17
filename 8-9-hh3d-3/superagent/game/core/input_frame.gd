@@ -8,8 +8,8 @@ extends RefCounted
 
 const SCHEMA_VERSION: int = 1
 const ACTIONS: Array[StringName] = [
-	&"p1_left", &"p1_right", &"p1_up", &"p1_down", &"p1_punch", &"p1_shoot", &"p1_throw", &"p1_power",
-	&"p2_left", &"p2_right", &"p2_up", &"p2_down", &"p2_punch", &"p2_shoot", &"p2_throw", &"p2_power",
+	&"p1_left", &"p1_right", &"p1_up", &"p1_down", &"p1_punch", &"p1_shoot", &"p1_throw", &"p1_power", &"p1_switch",
+	&"p2_left", &"p2_right", &"p2_up", &"p2_down", &"p2_punch", &"p2_shoot", &"p2_throw", &"p2_power", &"p2_switch",
 ]
 const EDGE_PRESSED: StringName = &"pressed"
 const EDGE_RELEASED: StringName = &"released"

@@ -1,0 +1,31 @@
+{
+  "schema": "sa03.room.v1", "status": "PROVISIONAL_GREYBOX", "width": 1680, "height": 920,
+  "floor_y": 760, "pit_death_y": 1010, "ladder_margin": 18,
+  "spawns": [{"player_id": 1, "x": 180, "y": 760}, {"player_id": 2, "x": 1500, "y": 760}],
+  "platforms": [
+    {"id": "forge_floor", "left": 120, "right": 1560, "y": 760, "one_way": false},
+    {"id": "forge_west", "left": 250, "right": 560, "y": 570, "one_way": true},
+    {"id": "forge_center", "left": 660, "right": 990, "y": 640, "one_way": true},
+    {"id": "forge_east", "left": 1120, "right": 1450, "y": 520, "one_way": true},
+    {"id": "forge_service", "left": 40, "right": 150, "y": 690, "one_way": true}
+  ],
+  "solids": [
+    {"id": "forge_west_cover", "left": 360, "right": 450, "top": 696, "bottom": 760},
+    {"id": "forge_center_cover", "left": 790, "right": 870, "top": 696, "bottom": 760},
+    {"id": "forge_east_cover", "left": 1190, "right": 1280, "top": 696, "bottom": 760}
+  ],
+  "ladders": [{"id": "forge_west_ladder", "x": 500, "top": 570, "bottom": 760}, {"id": "forge_east_ladder", "x": 1260, "top": 520, "bottom": 760}],
+  "pits": [{"id": "forge_service_pit", "left": 0, "right": 120}],
+  "pickups": [
+    {"id": "forge_pistol", "kind": "pistol", "x": 520, "y": 760, "active": true},
+    {"id": "forge_shotgun", "kind": "shotgun", "x": 1180, "y": 760, "active": true},
+    {"id": "forge_medkit", "kind": "medkit", "x": 310, "y": 570, "active": true},
+    {"id": "forge_bullet_time", "kind": "bullet_time_5", "duration_ticks": 300, "x": 830, "y": 640, "active": true}
+  ],
+  "props": [
+    {"id": "forge_crate_west", "kind": "crate", "material": "wood", "health": 30, "x": 400, "y": 728},
+    {"id": "forge_barrel_center", "kind": "barrel", "material": "steel", "explosive": true, "health": 20, "x": 830, "y": 728},
+    {"id": "forge_glass_east", "kind": "glass", "material": "glass", "health": 10, "x": 1350, "y": 728}
+  ],
+  "notes": "Original forge layout with offset upper lanes, a service edge pit and three cover stations."
+}

@@ -1,0 +1,31 @@
+{
+  "schema": 1,
+  "run_id": "20261005T042212.084449Z-eedd883fc4",
+  "command_id": "cmd.sa5-migration.run-all.1",
+  "source_hash": "fdf19c9361082477134f710b7f8c0115f0338635f1aa4bb09dca2e2fab7e2af6",
+  "source_hash_after": "fdf19c9361082477134f710b7f8c0115f0338635f1aa4bb09dca2e2fab7e2af6",
+  "seed": "1",
+  "map": "movement-room",
+  "mode": "headless",
+  "godot": "4.7.2-stable",
+  "actual_exit_code": 0,
+  "host_exit_code": 0,
+  "active_processes_after_cleanup": 0,
+  "diagnostics": [],
+  "assertions": {
+    "movement_states": 474,
+    "sprint_states": 183,
+    "combat_core": 70,
+    "trace_core": 120,
+    "movement_room": 92,
+    "run_all": 2977
+  },
+  "focused_runs": [
+    "cmd.sa5-migration.movement-states.1",
+    "cmd.sa5-migration.sprint-states.1",
+    "cmd.sa5-migration.combat-core.1",
+    "cmd.sa5-migration.trace-core.1",
+    "cmd.sa5-migration.movement-room.1"
+  ],
+  "notes": "Historical implementation run recorded before documentation-only follow-up; source_hash identifies the runtime closure. Current source is covered by commit 83d6e8f6. This remains technical implementation evidence only; SA-02 reference measurements and SA-03 owner review remain open."
+}

@@ -34,7 +34,7 @@ func _run() -> void:
 		return
 
 	var initial: Dictionary = movement_room.read_snapshot()
-	_expect(initial.get(&"schema", &"") == &"sa03.simulation.v3", "room exposes v3 simulation snapshot")
+	_expect(initial.get(&"schema", &"") == &"sa05.simulation.v1", "room exposes live physics simulation snapshot")
 	_expect(int(initial.get(&"fixed_hz", 0)) == 60, "room simulation is fixed at 60 Hz")
 	var world: Dictionary = initial.get(&"world", {})
 	_expect(world.get(&"schema", &"") == &"sa03.arena.v2", "room exposes arena v2")
@@ -43,7 +43,7 @@ func _run() -> void:
 	_expect(movement_room.get_node_or_null("Fighter1") is FighterView, "P1 view is visual-only FighterView")
 	_expect(movement_room.get_node_or_null("Fighter2") is FighterView, "P2 view is visual-only FighterView")
 
-	var p1_before_x: int = _fighter_x(initial, 0)
+	var p1_before_x: float = _fighter_x(initial, 0)
 	_parse_key(KEY_D, true)
 	var p1_frame: InputFrame = await _sample_step(movement_room, &"p1-right-pressed")
 	var p1_right: Dictionary = _record_for(p1_frame, &"p1_right", 1)
@@ -58,7 +58,7 @@ func _run() -> void:
 	_expect(bool(p1_held.get(&"initial_held", false)), "P1 held state carries across ticks")
 	_expect(bool(p1_held.get(&"held", false)), "P1 remains held without a repeat keydown")
 
-	var p2_before_x: int = _fighter_x(movement_room.read_snapshot(), 1)
+	var p2_before_x: float = _fighter_x(movement_room.read_snapshot(), 1)
 	_parse_key(KEY_RIGHT, true)
 	var p2_frame: InputFrame = await _sample_step(movement_room, &"p2-right-pressed")
 	var p2_right: Dictionary = _record_for(p2_frame, &"p2_right", 2)
@@ -98,27 +98,47 @@ func _run() -> void:
 	var reset_held_frame: InputFrame = await _sample_step(movement_room, &"reset-held")
 	_expect(bool(_record_for(reset_held_frame, &"p1_right", 1).get(&"held", false)), "P1 held state exists before reset")
 	_expect(bool(_record_for(reset_held_frame, &"p2_right", 2).get(&"held", false)), "P2 held state exists before reset")
+	var prior_simulation: Simulation = movement_room.simulation
 	_parse_key(KEY_R, true)
-	await process_frame
-	await process_frame
+	var reset_seen: bool = false
+	for _attempt: int in range(30):
+		await process_frame
+		if movement_room.simulation != prior_simulation:
+			reset_seen = true
+			break
+	_expect(reset_seen, "R resets the room through its input path")
 	var reset_snapshot: Dictionary = movement_room.read_snapshot()
-	_expect(int(reset_snapshot.get(&"tick", -1)) == 0, "R resets the room through its input path")
-	_expect(movement_room.read_last_frame() == null, "reset clears the previous frame")
+	_expect(int(reset_snapshot.get(&"seed", 0)) == 1, "reset restores the deterministic seed")
+	_expect(int(reset_snapshot.get(&"tick", -1)) < 3, "reset starts a fresh tick sequence before new play advances")
 	_parse_key(KEY_R, false)
 	var reset_first_frame: InputFrame = await _sample_step(movement_room, &"reset-first-tick")
-	_expect(int(reset_first_frame.tick()) == 0, "reset first tick starts at zero")
+	_expect(int(reset_first_frame.tick()) < 3, "reset first observed tick belongs to the new sequence")
 	_expect(_frame_is_idle(reset_first_frame), "reset cancels held input without stale first-tick edges")
+
+	_parse_key(KEY_D, true)
+	_parse_key(KEY_RIGHT, true)
+	await _sample_step(movement_room, &"sprint-first-press")
+	_parse_key(KEY_D, false)
+	_parse_key(KEY_RIGHT, false)
+	await _sample_step(movement_room, &"sprint-first-release")
+	_parse_key(KEY_D, true)
+	_parse_key(KEY_RIGHT, true)
+	await _sample_step(movement_room, &"sprint-second-press")
+	var sprint_snapshot: Dictionary = movement_room.read_snapshot()
+	for player_index: int in range(2):
+		var sprint_row: Dictionary = _fighter_sprint(sprint_snapshot, player_index)
+		_expect(int(sprint_row.get(&"direction", 0)) == 1, "P%d double tap starts sprint through SceneTree" % (player_index + 1))
+		_expect(int(sprint_row.get(&"stamina", 0)) < int(movement_room.simulation.tuning[&"max_stamina"]), "P%d sprint spends stamina" % (player_index + 1))
+	movement_room.notification(NOTIFICATION_APPLICATION_FOCUS_OUT)
+	await _sample_step(movement_room, &"sprint-focus-release")
+	for player_index: int in range(2):
+		_expect(int(_fighter_sprint(movement_room.read_snapshot(), player_index).get(&"direction", 1)) == 0, "focus loss stops P%d sprint" % (player_index + 1))
 
 	# Use the live SceneTree input path for the seeded one-way-platform gesture.
 	# This fixture places both fighters on the authored deck so the two players'
 	# independent down actions can be observed without relying on traversal luck.
-	var p1_fixture: FighterState = movement_room.simulation.fighters[0]
-	var p2_fixture: FighterState = movement_room.simulation.fighters[1]
-	for fixture: FighterState in [p1_fixture, p2_fixture]:
-		fixture.position = Vector2i(1100 if fixture.player_id == 1 else 1200, 572)
-		fixture.velocity = Vector2i.ZERO
-		fixture.grounded = true
-		fixture.locomotion = FighterState.Locomotion.GROUNDED
+	for fighter_index: int in range(2):
+		movement_room.simulation.place_fighter(fighter_index, Vector2(1100 if fighter_index == 0 else 1200, 572))
 	var deck_first_frame: InputFrame
 	_parse_key(KEY_S, true)
 	_parse_key(KEY_DOWN, true)
@@ -133,7 +153,7 @@ func _run() -> void:
 	var after_p1_drop: Dictionary = movement_room.read_snapshot()
 	_expect(bool(_record_for(p1_drop_frame, &"p1_down", 1).get(&"pressed", false)), "P1 second down tap reaches room")
 	_expect(not _fighter_grounded(after_p1_drop, 0) and _fighter_drop_ticks(after_p1_drop, 0) > 0, "P1 arms drop-through at the second tap")
-	_expect(_fighter_y(after_p1_drop, 1) == 572 and _fighter_grounded(after_p1_drop, 1), "P2 remains on the deck while P1 drops")
+	_expect(absf(_fighter_y(after_p1_drop, 1) - 572.0) <= 0.1 and _fighter_grounded(after_p1_drop, 1), "P2 remains on the deck while P1 drops")
 	_parse_key(KEY_S, false)
 	await _sample_step(movement_room, &"p1-drop-release")
 	_expect(_fighter_y(movement_room.read_snapshot(), 0) > 572, "P1 descends below the deck on the following tick")
@@ -227,7 +247,7 @@ func _array_size(container: Dictionary, key: StringName) -> int:
 		return -1
 	return Array(value).size()
 
-func _fighter_x(snapshot: Dictionary, index: int) -> int:
+func _fighter_x(snapshot: Dictionary, index: int) -> float:
 	var value: Variant = snapshot.get(&"fighters", [])
 	if typeof(value) != TYPE_ARRAY:
 		return 0
@@ -235,9 +255,9 @@ func _fighter_x(snapshot: Dictionary, index: int) -> int:
 	if index < 0 or index >= fighters.size() or typeof(fighters[index]) != TYPE_DICTIONARY:
 		return 0
 	var fighter: Dictionary = Dictionary(fighters[index])
-	return int(fighter.get(&"x", 0))
+	return float(fighter.get(&"x", 0.0))
 
-func _fighter_y(snapshot: Dictionary, index: int) -> int:
+func _fighter_y(snapshot: Dictionary, index: int) -> float:
 	var value: Variant = snapshot.get(&"fighters", [])
 	if typeof(value) != TYPE_ARRAY:
 		return 0
@@ -245,7 +265,7 @@ func _fighter_y(snapshot: Dictionary, index: int) -> int:
 	if index < 0 or index >= fighters.size() or typeof(fighters[index]) != TYPE_DICTIONARY:
 		return 0
 	var fighter: Dictionary = Dictionary(fighters[index])
-	return int(fighter.get(&"y", 0))
+	return float(fighter.get(&"y", 0.0))
 
 func _fighter_grounded(snapshot: Dictionary, index: int) -> bool:
 	var value: Variant = snapshot.get(&"fighters", [])
@@ -266,6 +286,13 @@ func _fighter_drop_ticks(snapshot: Dictionary, index: int) -> int:
 		return 0
 	var fighter: Dictionary = Dictionary(fighters[index])
 	return int(fighter.get(&"drop_through_ticks", 0))
+
+func _fighter_sprint(snapshot: Dictionary, index: int) -> Dictionary:
+	var fighters: Array = snapshot.get(&"fighters", [])
+	if index < 0 or index >= fighters.size():
+		return {}
+	var fighter: Dictionary = fighters[index]
+	return fighter.get(&"sprint", {})
 
 func _expect(condition: bool, message: String) -> void:
 	_assertions += 1

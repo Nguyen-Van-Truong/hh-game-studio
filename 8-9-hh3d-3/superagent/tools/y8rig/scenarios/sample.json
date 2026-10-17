@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "url": "https://example.invalid/replace-with-the-configured-y8-url?keep=this-query",
+  "focus_click": true,
+  "actions": [
+    {"type": "wait", "duration_ms": 1000},
+    {"type": "key_down", "key": "ArrowRight"},
+    {"type": "wait", "duration_ms": 750},
+    {"type": "key_up", "key": "ArrowRight"},
+    {"type": "hold", "key": "ArrowUp", "duration_ms": 250},
+    {"type": "click", "x": 640, "y": 360}
+  ]
+}

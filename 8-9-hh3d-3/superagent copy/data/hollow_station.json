@@ -1,0 +1,30 @@
+{
+  "schema": "sa03.room.v1", "status": "PROVISIONAL_GREYBOX", "width": 1480, "height": 860,
+  "floor_y": 700, "pit_death_y": 950, "ladder_margin": 18,
+  "spawns": [{"player_id": 1, "x": 180, "y": 700}, {"player_id": 2, "x": 1300, "y": 700}],
+  "platforms": [
+    {"id": "station_floor", "left": 100, "right": 1380, "y": 700, "one_way": false},
+    {"id": "station_west", "left": 180, "right": 480, "y": 520, "one_way": true},
+    {"id": "station_mid", "left": 560, "right": 880, "y": 590, "one_way": true},
+    {"id": "station_east", "left": 960, "right": 1300, "y": 460, "one_way": true}
+  ],
+  "solids": [
+    {"id": "station_left_block", "left": 270, "right": 350, "top": 636, "bottom": 700},
+    {"id": "station_mid_block", "left": 680, "right": 760, "top": 636, "bottom": 700},
+    {"id": "station_right_block", "left": 1110, "right": 1190, "top": 636, "bottom": 700}
+  ],
+  "ladders": [{"id": "station_west_ladder", "x": 390, "top": 520, "bottom": 700}, {"id": "station_east_ladder", "x": 1080, "top": 460, "bottom": 700}],
+  "pits": [{"id": "station_west_pit", "left": 0, "right": 100}, {"id": "station_east_pit", "left": 1380, "right": 1480}],
+  "pickups": [
+    {"id": "station_pistol", "kind": "pistol", "x": 430, "y": 700, "active": true},
+    {"id": "station_grenades", "kind": "grenades", "x": 1040, "y": 460, "active": true},
+    {"id": "station_pill", "kind": "pill", "x": 720, "y": 590, "active": true},
+    {"id": "station_bullet_time", "kind": "bullet_time_10", "duration_ticks": 600, "x": 1220, "y": 700, "active": true}
+  ],
+  "props": [
+    {"id": "station_crate_left", "kind": "crate", "material": "wood", "health": 30, "x": 310, "y": 668},
+    {"id": "station_barrel_mid", "kind": "barrel", "material": "steel", "explosive": true, "health": 20, "x": 720, "y": 668},
+    {"id": "station_glass_right", "kind": "glass", "material": "glass", "health": 10, "x": 1210, "y": 668}
+  ],
+  "notes": "Original station layout with two edge pits and a high offset east platform."
+}

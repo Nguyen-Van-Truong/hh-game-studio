@@ -26,6 +26,13 @@ table alone is not evidence of a mechanic.
 
 ## Reserved special-character layout
 
+The provisional movement lab uses double-tap left/right then hold to sprint
+and double-tap down to drop through a one-way platform. Direction release,
+reversal, crouch, ladder entry or interruption ends sprint. Shared stamina is
+spent by sprint and regenerates faster while stationary; it is not a hero
+resource or passive. The tap window, speed and stamina rates are engineering
+seeds awaiting reference calibration.
+
 The following keys are reserved and remain inactive in Classic:
 
 | Player | Reserved four-skill keys |

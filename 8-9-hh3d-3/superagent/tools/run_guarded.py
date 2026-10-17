@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Bounded runner for project commands behind the shared GT-06 guard.
+"""Bounded runner for project commands behind the shared HHStudio guard.
 
 Windows children are created suspended and assigned to a Job Object with
 KILL_ON_JOB_CLOSE before resume.  The machine measurement lock is observed but
@@ -49,22 +49,22 @@ def lock_path() -> Path:
     return Path(local) / "HHGodotAgent" / "measure-window.lock"
 
 
-def _startupinfo() -> subprocess.STARTUPINFO | None:
+def _startupinfo(*, visible: bool = False) -> subprocess.STARTUPINFO | None:
     if os.name != "nt":
         return None
     startup = subprocess.STARTUPINFO()
     startup.dwFlags |= subprocess.STARTF_USESHOWWINDOW
-    startup.wShowWindow = 0
+    startup.wShowWindow = 1 if visible else 0
     return startup
 
 
-def scheduled_gt06_running(*, timeout: float = 5.0) -> tuple[bool, str | None]:
+def scheduled_hhstudio_running(*, timeout: float = 5.0) -> tuple[bool, str | None]:
     """Return (running, detail), with a bounded one-shot Task Scheduler query."""
     if os.name != "nt":
         return False, None
     script = (
         "$ErrorActionPreference='Stop'; "
-        "$x=Get-ScheduledTask | Where-Object { $_.TaskName -like 'HHStudio.GT06.*' -and $_.State -eq 'Running' }; "
+        "$x=Get-ScheduledTask | Where-Object { $_.TaskName -like 'HHStudio.*' -and $_.State -eq 'Running' }; "
         "if ($null -ne $x) { $x | ForEach-Object { $_.TaskName } }"
     )
     try:
@@ -86,7 +86,7 @@ def measurement_guard_status() -> tuple[bool, str | None, bool]:
     path = lock_path()
     if path.exists():
         return True, f"measure-lock:{path}", False
-    running, detail = scheduled_gt06_running()
+    running, detail = scheduled_hhstudio_running()
     if detail and detail.startswith("scheduled-task-query-"):
         return True, detail, True
     if running:
@@ -153,6 +153,10 @@ def _hash_sources(paths: Sequence[Path], root: Path, command: Sequence[str] = ()
     digest = hashlib.sha256()
     files: set[Path] = set()
     excluded = {".git", ".godot", ".local", "__pycache__"}
+    # Godot sidecar imports are generated cache, just like .godot/imported.
+    # They must not turn a successful first-launch import into a stale-source
+    # failure or change the source hash used by a later run.
+    excluded_suffixes = {".pyc", ".pyo", ".uid", ".import"}
     paths = paths or [root]
     for original in sorted(paths, key=lambda p: os.fspath(p).lower()):
         resolved = original.resolve()
@@ -175,7 +179,7 @@ def _hash_sources(paths: Sequence[Path], root: Path, command: Sequence[str] = ()
         selected = 0
         for original_file in candidates:
             relative = original_file.relative_to(root)
-            if any(part.lower() in excluded for part in relative.parts) or original_file.suffix.lower() in {".pyc", ".pyo", ".uid"}:
+            if any(part.lower() in excluded for part in relative.parts) or original_file.suffix.lower() in excluded_suffixes:
                 continue
             path = original_file.resolve()
             if not _inside(path, root):
@@ -231,9 +235,10 @@ class _Accounting(ctypes.Structure):
 
 class _ProcessContainer:
     """Windows job with no breakaway flags and verified active-process count."""
-    def __init__(self) -> None:
+    def __init__(self, *, visible: bool = False) -> None:
         self.handle = None
         self.assigned = False
+        self.visible = visible
         if not _IS_WINDOWS:
             raise RuntimeError("guarded execution requires Windows Job Objects")
         self._open_job()
@@ -277,7 +282,7 @@ class _ProcessContainer:
         # documented Toolhelp/OpenThread APIs after Job assignment, before any
         # child user code can run. Do not use the nonexistent Popen._thread.
         return {"creationflags": _WIN_CREATE_NEW_PROCESS_GROUP | _WIN_CREATE_SUSPENDED,
-                "startupinfo": _startupinfo()}
+                "startupinfo": _startupinfo(visible=self.visible)}
 
     def attach_and_resume(self, proc: subprocess.Popen) -> None:
         kernel = self._kernel32
@@ -351,18 +356,72 @@ class _ProcessContainer:
             self.handle = None
 
 
+def _owner_is_gone(pid: int) -> bool:
+    """Prove a Windows process is gone without sending it any signal.
+
+    os.kill(pid, 0) is not a liveness probe on Windows: it can terminate the
+    process. SYNCHRONIZE grants only waiting, never termination rights.
+    Unknown/access-denied/reused PIDs remain a hard stop.
+    """
+    if not _IS_WINDOWS or not 0 < pid <= 0xFFFFFFFF:
+        return False
+    kernel = ctypes.WinDLL("kernel32", use_last_error=True)
+    kernel.OpenProcess.argtypes = [wintypes.DWORD, wintypes.BOOL, wintypes.DWORD]
+    kernel.OpenProcess.restype = wintypes.HANDLE
+    kernel.WaitForSingleObject.argtypes = [wintypes.HANDLE, wintypes.DWORD]
+    kernel.WaitForSingleObject.restype = wintypes.DWORD
+    kernel.CloseHandle.argtypes = [wintypes.HANDLE]
+    kernel.CloseHandle.restype = wintypes.BOOL
+    handle = kernel.OpenProcess(0x00100000, False, pid)  # SYNCHRONIZE only
+    if not handle:
+        return ctypes.get_last_error() == 87  # ERROR_INVALID_PARAMETER: no PID
+    try:
+        return kernel.WaitForSingleObject(handle, 0) == 0  # signalled = exited
+    finally:
+        kernel.CloseHandle(handle)
+
+
 class ProjectLock:
     def __init__(self, path: Path, payload: dict):
         self.path, self.payload, self.owned = path, payload, False
+        self._gate = None
 
     def acquire(self) -> None:
         self.path.parent.mkdir(parents=True, exist_ok=True)
+        # The OS byte lock is held for the whole run and released even if the
+        # wrapper dies. It serializes stale recovery as well as normal writers;
+        # a second launcher cannot unlink a lease another contender just took.
+        if _IS_WINDOWS:
+            import msvcrt
+            gate = self.path.with_suffix(self.path.suffix + ".gate").open("a+b")
+            try:
+                gate.seek(0)
+                msvcrt.locking(gate.fileno(), msvcrt.LK_NBLCK, 1)
+            except OSError as exc:
+                gate.close()
+                raise RuntimeError(f"project writer lock exists: {self.path}") from exc
+            self._gate = gate
         try:
+            if self.path.exists():
+                try:
+                    current = json.loads(self.path.read_text(encoding="utf-8"))
+                    owner_pid = current.get("pid")
+                except (OSError, ValueError, AttributeError) as exc:
+                    raise RuntimeError(f"project writer lock exists: {self.path}") from exc
+                if type(owner_pid) is not int or not _owner_is_gone(owner_pid):
+                    raise RuntimeError(f"project writer lock exists: {self.path}")
+                self.path.unlink()
             with self.path.open("x", encoding="utf-8") as handle:
                 json.dump(self.payload, handle, separators=(",", ":")); handle.write("\n")
             self.owned = True
-        except FileExistsError as exc:
-            raise RuntimeError(f"project writer lock exists: {self.path}") from exc
+        except BaseException:
+            self._close_gate()
+            raise
+
+    def _close_gate(self) -> None:
+        if self._gate is not None:
+            self._gate.close()  # Closing releases the OS byte lock.
+            self._gate = None
 
     def release(self) -> None:
         if not self.owned: return
@@ -373,6 +432,7 @@ class ProjectLock:
         except (OSError, ValueError, json.JSONDecodeError):
             pass
         self.owned = False
+        self._close_gate()
 
 
 def _write_json(path: Path, value: dict) -> None:
@@ -388,6 +448,7 @@ def run(argv: Sequence[str]) -> tuple[int, dict]:
     parser.add_argument("--project-root", type=Path, default=Path.cwd())
     parser.add_argument("--source", type=Path, action="append", default=[])
     parser.add_argument("--command-id")
+    parser.add_argument("--visible", action="store_true", help="show the child window instead of hiding it")
     parser.add_argument("--seed"); parser.add_argument("--map"); parser.add_argument("--mode")
     parser.add_argument("--task-poll-seconds", type=float, default=DEFAULT_TASK_POLL_SECONDS)
     parser.add_argument("command", nargs=argparse.REMAINDER)
@@ -428,7 +489,7 @@ def run(argv: Sequence[str]) -> tuple[int, dict]:
         if blocked: result.update(status="MEASURE_GUARD_BLOCKED", guard_reason=reason); return EXIT_GUARD, result
         blocked, reason, _ = measurement_guard_status()
         if blocked: result.update(status="MEASURE_GUARD_BLOCKED", guard_reason=reason); return EXIT_GUARD, result
-        container = _ProcessContainer(); proc = None; threads: list[threading.Thread] = []
+        container = _ProcessContainer(visible=args.visible); proc = None; threads: list[threading.Thread] = []
         started = time.monotonic(); guard_reason = None; timed_out = False
         try:
             proc = subprocess.Popen(list(command), cwd=str(root), stdin=subprocess.DEVNULL, stdout=subprocess.PIPE, stderr=subprocess.PIPE, **container.popen_kwargs())

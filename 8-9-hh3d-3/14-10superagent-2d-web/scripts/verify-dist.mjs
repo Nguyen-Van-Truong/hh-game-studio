@@ -1,0 +1,15 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const required = ['dist/index.html', 'dist/manifest.webmanifest', 'dist/sw.js', 'dist/release-manifest.json'];
+for (const file of required) if (!fs.existsSync(path.join(root, file))) throw new Error(`Missing release file: ${file}`);
+const html = fs.readFileSync(path.join(root, 'dist/index.html'), 'utf8');
+if (!html.includes('manifest.webmanifest') || !html.includes('/assets/')) throw new Error('Static shell does not reference manifest and hashed assets');
+const assetFiles = fs.readdirSync(path.join(root, 'dist/assets'));
+if (!assetFiles.some(file => file.endsWith('.js')) || !assetFiles.some(file => file.endsWith('.css'))) throw new Error('Hashed JS/CSS assets missing');
+const sw = fs.readFileSync(path.join(root, 'dist/sw.js'), 'utf8');
+if (!sw.includes('superagent-neon-relay-v1') || !sw.includes('skipWaiting')) throw new Error('Service worker cache contract missing');
+const manifest = JSON.parse(fs.readFileSync(path.join(root, 'dist/release-manifest.json'), 'utf8'));
+if (manifest.schema !== 1 || !Array.isArray(manifest.source) || manifest.source.length < 5) throw new Error('Release source manifest is incomplete');
+console.log(`DIST_VERIFY_PASS files=${required.length} assets=${assetFiles.length} source=${manifest.source.length}`);

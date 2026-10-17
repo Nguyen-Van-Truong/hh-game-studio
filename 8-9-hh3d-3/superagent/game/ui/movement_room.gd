@@ -1,6 +1,6 @@
 class_name MovementRoom
 extends Node2D
-## Provisional two-player SA-03 room. Simulation is the only movement authority.
+## Two-player room. Simulation owns physics; camera transforms presentation only.
 
 const FIXED_STEP: float = 1.0 / 60.0
 const WORLD_SIZE := Vector2(1600.0, 900.0)
@@ -12,7 +12,7 @@ signal fixed_step_completed(frame: InputFrame)
 var simulation: Simulation
 var input_buffer: InputBuffer
 var _last_frame: InputFrame
-var _accumulator: float = 0.0
+var _camera: Camera2D
 var _label: Label
 var _p1: FighterView
 var _p2: FighterView
@@ -22,16 +22,21 @@ func _ready() -> void:
 	# Keep the room's semantic input path explicit in headless and windowed runs.
 	set_process_input(true)
 	simulation = SIMULATION_SCRIPT.new(1)
+	add_child(simulation)
 	input_buffer = BUFFER_SCRIPT.new()
 	_p1 = get_node("Fighter1") as FighterView
 	_p2 = get_node("Fighter2") as FighterView
-	var char_width: int = int(simulation.tuning.get(&"char_width", 28))
-	var char_height: int = int(simulation.tuning.get(&"char_height", 48))
-	_p1.configure(1, char_width, char_height)
-	_p2.configure(2, char_width, char_height)
+	var char_width: float = float(simulation.tuning.get(&"char_width", 28))
+	var char_height: float = float(simulation.tuning.get(&"char_height", 48))
+	var stamina_capacity: int = int(simulation.tuning[&"max_stamina"])
+	_p1.configure(1, char_width, char_height, stamina_capacity)
+	_p2.configure(2, char_width, char_height, stamina_capacity)
 	_label = get_node("CanvasLayer/Status") as Label
 	_update_world()
 	_update_views()
+	_camera = Camera2D.new()
+	add_child(_camera)
+	_camera.position = WORLD_SIZE * 0.5
 	_update_transform()
 
 func _input(event: InputEvent) -> void:
@@ -49,16 +54,15 @@ func _notification(what: int) -> void:
 	if what == NOTIFICATION_APPLICATION_FOCUS_OUT and input_buffer != null:
 		input_buffer.cancel_all()
 
-func _physics_process(delta: float) -> void:
-	_accumulator = minf(_accumulator + delta, 0.25)
-	while _accumulator >= FIXED_STEP:
-		_last_frame = input_buffer.build_frame(simulation.tick)
-		if not simulation.step(_last_frame):
-			push_error("Movement room rejected its fixed-step input frame")
-			return
-		_accumulator -= FIXED_STEP
-		_update_views()
-		fixed_step_completed.emit(_last_frame)
+func _physics_process(_delta: float) -> void:
+	# One gameplay step per Godot physics frame. An accumulator could call
+	# move_and_slide twice with the same engine delta after a render stall.
+	_last_frame = input_buffer.build_frame(simulation.tick)
+	if not simulation.step(_last_frame):
+		push_error("Movement room rejected its fixed-step input frame")
+		return
+	_update_views()
+	fixed_step_completed.emit(_last_frame)
 
 func _process(_delta: float) -> void:
 	_update_transform()
@@ -74,8 +78,10 @@ func _reset_room() -> void:
 	# Reset starts a fresh input session. Drop cancellation edges from the old
 	# session so the first new simulation tick cannot replay stale held input.
 	input_buffer = BUFFER_SCRIPT.new()
+	remove_child(simulation)
+	simulation.queue_free()
 	simulation = SIMULATION_SCRIPT.new(1)
-	_accumulator = 0.0
+	add_child(simulation)
 	_last_frame = null
 	_update_world()
 	_update_views()
@@ -87,25 +93,27 @@ func _update_world() -> void:
 func _update_views() -> void:
 	if simulation == null or simulation.fighters.size() < 2:
 		return
-	_p1.apply_state(simulation.fighters[0].snapshot())
-	_p2.apply_state(simulation.fighters[1].snapshot())
+	_p1.apply_state(simulation.fighters[0].snapshot(), simulation.tick)
+	_p2.apply_state(simulation.fighters[1].snapshot(), simulation.tick)
 	_world_snapshot = simulation.snapshot().get(&"world", {})
 	if _label != null:
 		var state_1: Dictionary = simulation.fighters[0].snapshot()
 		var state_2: Dictionary = simulation.fighters[1].snapshot()
 		_label.text = "SA-03 MOVEMENT LAB  |  PROVISIONAL TUNING\n" + \
 			"P1 WASD  •  P2 arrows  •  R reset lab  •  Esc menu\n" + \
+			"Sprint: double-tap Left/Right then hold  •  Drop: double-tap Down\n" + \
 			"Punch / Shoot / Throw / Power: P1 J / K / L / ;  •  P2 NumPad 1 / 2 / 3 / 4 (Num Lock on)\n" + \
-			"tick %d   P1 %s (%d,%d)   P2 %s (%d,%d)" % [
+			"tick %d   P1 %s (%d,%d)   P2 %s (%d,%d)   Stamina %d / %d" % [
 				simulation.tick, String(state_1.get(&"action", &"idle")), int(state_1.get(&"x", 0)), int(state_1.get(&"y", 0)),
-				String(state_2.get(&"action", &"idle")), int(state_2.get(&"x", 0)), int(state_2.get(&"y", 0))]
+				String(state_2.get(&"action", &"idle")), int(state_2.get(&"x", 0)), int(state_2.get(&"y", 0)),
+				simulation.fighters[0].sprint.stamina, simulation.fighters[1].sprint.stamina]
 	queue_redraw()
 
 func _update_transform() -> void:
 	var viewport_size: Vector2 = get_viewport_rect().size
 	var scale_factor: float = minf(viewport_size.x / WORLD_SIZE.x, viewport_size.y / WORLD_SIZE.y)
-	scale = Vector2.ONE * scale_factor
-	position = (viewport_size - WORLD_SIZE * scale_factor) * 0.5
+	if _camera != null:
+		_camera.zoom = Vector2.ONE * scale_factor
 
 func _draw() -> void:
 	draw_rect(Rect2(Vector2.ZERO, WORLD_SIZE), Color("#0b1220"), true)

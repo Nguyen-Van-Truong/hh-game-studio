@@ -1,0 +1,17 @@
+Batch: 2026-10-17
+
+Outer shell (ads/SDK iframe loader):
+  https://html5.gamedistribution.com/a7a878d376bf4223adc51d2ba04fb77c/index.html
+  manifest_1.5.18.json (local)
+
+Inner game (iframe target from index.html):
+  //html5.gamedistribution.com/rvvASMiM/a7a878d376bf4223adc51d2ba04fb77c/index.html
+
+Downloaded into game-rvvASMiM/:
+  index.html, sdk.1.2.js, Superfighters.js (~20792689 bytes)
+  GDConfig.json (required for local play; api_key for GameDistribution SDK)
+
+GameDistribution SDK:
+  https://html5.api.gamedistribution.com/main.min.js -> gamedistribution-sdk/main.min.js
+
+Note: sw_1.5.18.js on CDN returned 404 at download time; not required for local study of game JS.

@@ -5,8 +5,37 @@
 `SCOPE=8-9-hh3d-3/14-10superagent-2d-web`
 `SOURCE_PLAN=8-9-hh3d-3/zdoc/18-9-superagent-2d-y8-plan.txt`
 `SOURCE_CURRENT_VALID_WP=SA-02`
-`DATE=2026-10-14`
-`STATUS=WEB-01_WEB-02_IMPLEMENTED_VERTICAL_SLICE_RUNNING`
+`DATE=2026-10-15`
+`STATUS=IN_PROGRESS`
+`CURRENT_GATE=WEB-03_WITH_LOCAL_2P_PRESENTATION_PRIORITY`
+
+## Trạng thái thật — cập nhật 15-10
+
+Owner cho phép tự thực hiện, tinh gọn plan và sửa lỗi; làm trực tiếp, không subagent.
+Steering mới 15-10: **chỉ mode 2 người cùng máy trước**, hoàn thiện cơ chế và nhân vật/map đẹp để owner chơi thử. Không mở thêm bot/mode online lúc này. Ưu tiên review ảnh runtime sau mỗi thay đổi art lớn, SFX/VFX phải khớp sự kiện thật. Không tự claim “đẹp bằng/hơn reference” từ ảnh/code.
+Baseline game: `7d8da341`; workspace còn thay đổi HH World/Unity của người khác, không đưa vào commit Web.
+
+| Gate | Trạng thái | Việc cần đóng |
+|---|---|---|
+| WEB-01/02 | Đã có bản chạy | Giữ regression qua refactor |
+| WEB-03 | Đang kiểm | World thuần TS đã tách; thay mô phỏng phụ bằng chính runtime, cần trace từ UI và 60/120/144 Hz tests |
+| WEB-04 | Code WIP | Kính/thùng nổ/lửa/drop/weapon đã có; còn test tương tác và chỉnh bot |
+| WEB-05 | WIP | Có touch source ownership/mute/motion; cần atlas, menu 2P, UI/mobile và browser evidence |
+| WEB-06 | Chưa đạt | R01–R15 phải có ledger Web; chưa có số đo/owner side-by-side, không tự ký MATCHED |
+| WEB-07 | WIP | Static build PASS; cache version cố định/HTML fallback sai cần sửa; chưa có HTTPS deployment |
+
+Không xem bảng này là nghiệm thu. `npm test` ban đầu chỉ là smoke, chưa đủ gate.
+Sites connector bị gỡ khỏi session trong khi làm; đóng gói local tiếp tục, không bịa deploy receipt.
+
+### Quyết định và lỗi cần tránh
+
+- Một nguồn mô phỏng duy nhất `src/sim/world.ts`; hash của mô phỏng phụ không chứng minh game thật.
+- Pause đổi phase/hash một lần, sau đó body/tick/hash đứng yên; test phải chụp sau transition.
+- Không dùng exit của lệnh build cuối để che test fail trước; chạy/check exit từng producer.
+- Renderer không vẽ hố giả dưới sàn liền; collision, visual và test phải dùng cùng map data.
+- Chọn bounded AABB/impulse hiện có, không thêm Arcade/Matter khi không có nhu cầu rigid-body. Ghi rõ khác biệt với reference.
+- PWA không xóa cache của app khác, không trả HTML cho JS/ảnh thiếu, không tự kích hoạt build mới giữa trận.
+- Chỉ một plan hoạt động; tài liệu advisory cũ là research lịch sử, không dùng làm thứ tự gate.
 
 ## Mục tiêu
 

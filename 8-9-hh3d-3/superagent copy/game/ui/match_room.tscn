@@ -1,0 +1,129 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://game/ui/match_room.gd" id="1_room"]
+[ext_resource type="Script" path="res://game/fighter/fighter_view.gd" id="2_view"]
+[ext_resource type="Script" path="res://game/presentation/arena_fx.gd" id="3_fx"]
+[ext_resource type="Script" path="res://game/presentation/combat_audio.gd" id="4_audio"]
+[ext_resource type="Script" path="res://game/presentation/hud_bars.gd" id="5_hud"]
+
+[node name="MatchRoom" type="Node2D"]
+script = ExtResource("1_room")
+
+[node name="Fighter1" type="Node2D" parent="."]
+script = ExtResource("2_view")
+
+[node name="Fighter2" type="Node2D" parent="."]
+script = ExtResource("2_view")
+
+[node name="ArenaFx" type="Node2D" parent="."]
+script = ExtResource("3_fx")
+
+[node name="CombatAudio" type="Node" parent="."]
+script = ExtResource("4_audio")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Header" type="Label" parent="CanvasLayer"]
+offset_left = 24.0
+offset_top = 16.0
+offset_right = 580.0
+offset_bottom = 48.0
+theme_override_colors/font_color = Color(0.82, 0.93, 0.95, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.8)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 20
+text = "SUPERAGENT  •  CLASSIC ARENA"
+
+[node name="Status" type="Label" parent="CanvasLayer"]
+offset_left = 24.0
+offset_top = 48.0
+offset_right = 580.0
+offset_bottom = 72.0
+theme_override_colors/font_color = Color(0.52, 0.69, 0.74, 1)
+theme_override_font_sizes/font_size = 13
+text = "ROUND 01   •   PLAYING   •   TICK 000000"
+
+[node name="P1Panel" type="Label" parent="CanvasLayer"]
+offset_left = 24.0
+offset_top = 82.0
+offset_right = 360.0
+offset_bottom = 174.0
+theme_override_colors/font_color = Color(0.45, 0.84, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.8)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 14
+text = "P1  BLUE\nHEALTH 100    STAMINA 600\nSIDEARM  •  AMMO 06    GRENADES 3"
+
+[node name="P2Panel" type="Label" parent="CanvasLayer"]
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -360.0
+offset_top = 82.0
+offset_right = -24.0
+offset_bottom = 174.0
+theme_override_colors/font_color = Color(1, 0.75, 0.39, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.8)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 14
+horizontal_alignment = 2
+text = "P2  ORANGE\nHEALTH 100    STAMINA 600\nSIDEARM  •  AMMO 06    GRENADES 3"
+
+[node name="Controls" type="Label" parent="CanvasLayer"]
+offset_left = 24.0
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -92.0
+offset_right = 960.0
+offset_bottom = -38.0
+theme_override_colors/font_color = Color(0.62, 0.7, 0.73, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.85)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 12
+text = "P1  A / D move   W / S aim while K is held   J punch   K hold aim / release fire   L grenade   ; power\nP2  Arrow keys move   Up / Down aim while NumPad 2 is held   NumPad 1 punch   NumPad 2 hold aim / release fire   NumPad 3 grenade   NumPad 4 power"
+
+[node name="Footer" type="Label" parent="CanvasLayer"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -330.0
+offset_top = -32.0
+offset_right = -24.0
+offset_bottom = -12.0
+theme_override_colors/font_color = Color(0.41, 0.51, 0.55, 1)
+theme_override_font_sizes/font_size = 11
+horizontal_alignment = 2
+text = "Prototype • tuning in progress"
+
+[node name="HudBars" type="Node2D" parent="CanvasLayer"]
+script = ExtResource("5_hud")
+
+[node name="OverlayBackdrop" type="ColorRect" parent="CanvasLayer"]
+visible = false
+offset_right = 1280.0
+offset_bottom = 720.0
+color = Color(0.02, 0.04, 0.06, 0.78)
+mouse_filter = 2
+
+[node name="Overlay" type="Label" parent="CanvasLayer"]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -220.0
+offset_top = -110.0
+offset_right = 220.0
+offset_bottom = 110.0
+theme_override_colors/font_color = Color(0.9, 0.96, 0.95, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.95)
+theme_override_constants/shadow_offset_x = 3
+theme_override_constants/shadow_offset_y = 3
+theme_override_font_sizes/font_size = 24
+horizontal_alignment = 1
+vertical_alignment = 1
+text = "PAUSED\n\nENTER  resume\nBACKSPACE  main menu"

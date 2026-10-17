@@ -1,0 +1,17 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://game/core/bootstrap.gd" id="1_bootstrap"]
+
+[node name="SuperagentBootstrap" type="Node2D"]
+script = ExtResource("1_bootstrap")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Status" type="Label" parent="CanvasLayer"]
+offset_left = 48.0
+offset_top = 48.0
+offset_right = 1232.0
+offset_bottom = 672.0
+theme_override_colors/font_color = Color(0.84, 0.9, 1, 1)
+theme_override_font_sizes/font_size = 24
+text = "Superagent\n\nSA-01 bootstrap\nInput contract ready; gameplay follows observation (SA-02)."

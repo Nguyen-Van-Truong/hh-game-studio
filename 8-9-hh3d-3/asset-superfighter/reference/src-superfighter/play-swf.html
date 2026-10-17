@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Superfighters classic SWF</title>
+<script src="ruffle/ruffle.js"></script>
+<style>
+html, body { margin: 0; background: #111; height: 100%; }
+#container, ruffle-player { width: 100vw; height: 100vh; }
+</style>
+</head>
+<body>
+<div id="container"></div>
+<script>
+window.addEventListener("DOMContentLoaded", function () {
+  var ruffle = window.RufflePlayer.newest();
+  var player = ruffle.createPlayer();
+  player.style.width = "100%";
+  player.style.height = "100%";
+  document.getElementById("container").appendChild(player);
+  player.load({ url: "superfighters-classic.swf", autoplay: "on", unmuteOverlay: "hidden" });
+});
+</script>
+</body>
+</html>

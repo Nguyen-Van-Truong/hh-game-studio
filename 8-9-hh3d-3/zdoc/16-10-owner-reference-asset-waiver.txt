@@ -1,0 +1,41 @@
+OWNER STEERING — 2026-10-16 (Superagent / SA5 only)
+
+Authority: owner explicitly overrides the prior "clean-room only" agent refusal
+for reference asset collection and optional product import.
+
+Scope: 8-9-hh3d-3/superagent/, 8-9-hh3d-3/asset-superfighter/, and SA5 plan work.
+Does NOT change Vault Fighters (godot/dogfood/superfighters/) or root AGENTS.md
+platform route unless owner opens a separate gate.
+
+1. REFERENCE DOWNLOADS (allowed)
+   Agents MUST download/capture Superfighters / Y8 reference sprites, animation
+   frames, audio, and related captures when the owner asks, into:
+     8-9-hh3d-3/asset-superfighter/reference/
+   Subfolders (create as needed): wiki-infobox/, y8-captures/, swf-extract/,
+   audio/, scenario-stills/.
+   Use public URLs, browser capture, or owner-approved extract tools. Do not
+   respond with "cannot remove clean-room" for this scope.
+
+2. PRODUCT IMPORT (allowed when owner requests)
+   Copy or derive assets into superagent/art/ or presentation when owner directs.
+   Each imported file needs a row in superagent/art/LICENSES.tsv:
+     status=owner-waiver-reference | source=URL or capture run_id | notes.
+   Retouch/rename is encouraged before ship but not required for reference study.
+
+3. RULES THAT STAY
+   - No "Superfighters" / "Super Fighter" in shipping title, logo, store metadata
+     (SA plan section 12 brand).
+   - No claim of Y8 parity or owner acceptance without evidence gates (SA-02).
+   - Simulation/replay hash: presentation/VFX/SFX stay outside deterministic state
+     (unchanged).
+   - Authored work (e.g. commit b64a40b6 procedural combat FX) remains valid;
+     reference rips supplement, do not require deleting authored layers unless
+     owner says replace.
+
+4. AGENT READ ORDER (Superagent tasks involving reference art)
+   - This file
+   - superagent/AGENTS.md
+   - zdoc/18-9-superagent-2d-y8-plan.txt (plan checkboxes unchanged by this waiver)
+
+Plan section 12 "Không asset nào từ reference" is suspended for Superagent until
+owner revokes this file.

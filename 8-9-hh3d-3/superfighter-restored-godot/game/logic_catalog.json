@@ -1,0 +1,2401 @@
+{
+  "count": 599,
+  "classes": [
+    {
+      "class": "accept_02",
+      "path": "res://reference/flash/scripts/accept_02.as"
+    },
+    {
+      "class": "aim_big",
+      "path": "res://reference/flash/scripts/aim_big.as"
+    },
+    {
+      "class": "aim_small",
+      "path": "res://reference/flash/scripts/aim_small.as"
+    },
+    {
+      "class": "ambient_loop_1",
+      "path": "res://reference/flash/scripts/ambient_loop_1.as"
+    },
+    {
+      "class": "APIConnector_fla.NewgroundsAPIAsset_API_Conencted_4",
+      "path": "res://reference/flash/scripts/APIConnector_fla/NewgroundsAPIAsset_API_Conencted_4.as"
+    },
+    {
+      "class": "APIConnector_fla.NewgroundsAPIAsset_ConnectingAPI_2",
+      "path": "res://reference/flash/scripts/APIConnector_fla/NewgroundsAPIAsset_ConnectingAPI_2.as"
+    },
+    {
+      "class": "APIConnector_fla.NewgroundsAPIAsset_Connection_Error_7",
+      "path": "res://reference/flash/scripts/APIConnector_fla/NewgroundsAPIAsset_Connection_Error_7.as"
+    },
+    {
+      "class": "APIConnector_fla.NewgroundsAPIAsset_Load_Indicator_3",
+      "path": "res://reference/flash/scripts/APIConnector_fla/NewgroundsAPIAsset_Load_Indicator_3.as"
+    },
+    {
+      "class": "APIConnector_fla.NewgroundsAPIAsset_Login_Warning_5",
+      "path": "res://reference/flash/scripts/APIConnector_fla/NewgroundsAPIAsset_Login_Warning_5.as"
+    },
+    {
+      "class": "barrel_01",
+      "path": "res://reference/flash/scripts/barrel_01.as"
+    },
+    {
+      "class": "barrel_02",
+      "path": "res://reference/flash/scripts/barrel_02.as"
+    },
+    {
+      "class": "barrel_03",
+      "path": "res://reference/flash/scripts/barrel_03.as"
+    },
+    {
+      "class": "barrel_debris_01",
+      "path": "res://reference/flash/scripts/barrel_debris_01.as"
+    },
+    {
+      "class": "barrel_debris_02",
+      "path": "res://reference/flash/scripts/barrel_debris_02.as"
+    },
+    {
+      "class": "barrel_debris_03",
+      "path": "res://reference/flash/scripts/barrel_debris_03.as"
+    },
+    {
+      "class": "bazooka",
+      "path": "res://reference/flash/scripts/bazooka.as"
+    },
+    {
+      "class": "bazooka_aim",
+      "path": "res://reference/flash/scripts/bazooka_aim.as"
+    },
+    {
+      "class": "bazooka_rocket",
+      "path": "res://reference/flash/scripts/bazooka_rocket.as"
+    },
+    {
+      "class": "beachball",
+      "path": "res://reference/flash/scripts/beachball.as"
+    },
+    {
+      "class": "beat",
+      "path": "res://reference/flash/scripts/beat.as"
+    },
+    {
+      "class": "bg_noise",
+      "path": "res://reference/flash/scripts/bg_noise.as"
+    },
+    {
+      "class": "blank_mc",
+      "path": "res://reference/flash/scripts/blank_mc.as"
+    },
+    {
+      "class": "blood_1",
+      "path": "res://reference/flash/scripts/blood_1.as"
+    },
+    {
+      "class": "blood_2",
+      "path": "res://reference/flash/scripts/blood_2.as"
+    },
+    {
+      "class": "blood_3",
+      "path": "res://reference/flash/scripts/blood_3.as"
+    },
+    {
+      "class": "blood_particle_big",
+      "path": "res://reference/flash/scripts/blood_particle_big.as"
+    },
+    {
+      "class": "blood_particle_small",
+      "path": "res://reference/flash/scripts/blood_particle_small.as"
+    },
+    {
+      "class": "bubble",
+      "path": "res://reference/flash/scripts/bubble.as"
+    },
+    {
+      "class": "bullet",
+      "path": "res://reference/flash/scripts/bullet.as"
+    },
+    {
+      "class": "bullet_effect_normal",
+      "path": "res://reference/flash/scripts/bullet_effect_normal.as"
+    },
+    {
+      "class": "bullet_hit_1",
+      "path": "res://reference/flash/scripts/bullet_hit_1.as"
+    },
+    {
+      "class": "bullet_hit_2",
+      "path": "res://reference/flash/scripts/bullet_hit_2.as"
+    },
+    {
+      "class": "bullet_hit_3",
+      "path": "res://reference/flash/scripts/bullet_hit_3.as"
+    },
+    {
+      "class": "bullet_hitmetal_01",
+      "path": "res://reference/flash/scripts/bullet_hitmetal_01.as"
+    },
+    {
+      "class": "bullet_hitmetal_02",
+      "path": "res://reference/flash/scripts/bullet_hitmetal_02.as"
+    },
+    {
+      "class": "bullet_hitmetal_03",
+      "path": "res://reference/flash/scripts/bullet_hitmetal_03.as"
+    },
+    {
+      "class": "bullet_hitmetal_04",
+      "path": "res://reference/flash/scripts/bullet_hitmetal_04.as"
+    },
+    {
+      "class": "bullet_hitmetal_05",
+      "path": "res://reference/flash/scripts/bullet_hitmetal_05.as"
+    },
+    {
+      "class": "bullet_impact",
+      "path": "res://reference/flash/scripts/bullet_impact.as"
+    },
+    {
+      "class": "bullet_magnum",
+      "path": "res://reference/flash/scripts/bullet_magnum.as"
+    },
+    {
+      "class": "bullet_pistol",
+      "path": "res://reference/flash/scripts/bullet_pistol.as"
+    },
+    {
+      "class": "bullet_rifle",
+      "path": "res://reference/flash/scripts/bullet_rifle.as"
+    },
+    {
+      "class": "bullet_shotgun",
+      "path": "res://reference/flash/scripts/bullet_shotgun.as"
+    },
+    {
+      "class": "bullet_sniper",
+      "path": "res://reference/flash/scripts/bullet_sniper.as"
+    },
+    {
+      "class": "bullet_trace_slomo",
+      "path": "res://reference/flash/scripts/bullet_trace_slomo.as"
+    },
+    {
+      "class": "bullet_uzi",
+      "path": "res://reference/flash/scripts/bullet_uzi.as"
+    },
+    {
+      "class": "bustwood_1",
+      "path": "res://reference/flash/scripts/bustwood_1.as"
+    },
+    {
+      "class": "bustwood_2",
+      "path": "res://reference/flash/scripts/bustwood_2.as"
+    },
+    {
+      "class": "button_01",
+      "path": "res://reference/flash/scripts/button_01.as"
+    },
+    {
+      "class": "cancel_02",
+      "path": "res://reference/flash/scripts/cancel_02.as"
+    },
+    {
+      "class": "chair",
+      "path": "res://reference/flash/scripts/chair.as"
+    },
+    {
+      "class": "char_gib_01",
+      "path": "res://reference/flash/scripts/char_gib_01.as"
+    },
+    {
+      "class": "char_gib_02",
+      "path": "res://reference/flash/scripts/char_gib_02.as"
+    },
+    {
+      "class": "char_gib_03",
+      "path": "res://reference/flash/scripts/char_gib_03.as"
+    },
+    {
+      "class": "char_gib_04",
+      "path": "res://reference/flash/scripts/char_gib_04.as"
+    },
+    {
+      "class": "char_gib_05",
+      "path": "res://reference/flash/scripts/char_gib_05.as"
+    },
+    {
+      "class": "Code.Box2D.Collision.b2AABB",
+      "path": "res://reference/flash/scripts/Code/Box2D/Collision/b2AABB.as"
+    },
+    {
+      "class": "Code.Box2D.Collision.b2Bound",
+      "path": "res://reference/flash/scripts/Code/Box2D/Collision/b2Bound.as"
+    },
+    {
+      "class": "Code.Box2D.Collision.b2BoundValues",
+      "path": "res://reference/flash/scripts/Code/Box2D/Collision/b2BoundValues.as"
+    },
+    {
+      "class": "Code.Box2D.Collision.b2BroadPhase",
+      "path": "res://reference/flash/scripts/Code/Box2D/Collision/b2BroadPhase.as"
+    },
+    {
+      "class": "Code.Box2D.Collision.b2BufferedPair",
+      "path": "res://reference/flash/scripts/Code/Box2D/Collision/b2BufferedPair.as"
+    },
+    {
+      "class": "Code.Box2D.Collision.b2Collision",
+      "path": "res://reference/flash/scripts/Code/Box2D/Collision/b2Collision.as"
+    },
+    {
+      "class": "Code.Box2D.Collision.b2ContactID",
+      "path": "res://reference/flash/scripts/Code/Box2D/Collision/b2ContactID.as"
+    },
+    {
+      "class": "Code.Box2D.Collision.b2ContactPoint",
+      "path": "res://reference/flash/scripts/Code/Box2D/Collision/b2ContactPoint.as"
+    },
+    {
+      "class": "Code.Box2D.Collision.b2Distance",
+      "path": "res://reference/flash/scripts/Code/Box2D/Collision/b2Distance.as"
+    },
+    {
+      "class": "Code.Box2D.Collision.b2Manifold",
+      "path": "res://reference/flash/scripts/Code/Box2D/Collision/b2Manifold.as"
+    },
+    {
+      "class": "Code.Box2D.Collision.b2ManifoldPoint",
+      "path": "res://reference/flash/scripts/Code/Box2D/Collision/b2ManifoldPoint.as"
+    },
+    {
+      "class": "Code.Box2D.Collision.b2OBB",
+      "path": "res://reference/flash/scripts/Code/Box2D/Collision/b2OBB.as"
+    },
+    {
+      "class": "Code.Box2D.Collision.b2Pair",
+      "path": "res://reference/flash/scripts/Code/Box2D/Collision/b2Pair.as"
+    },
+    {
+      "class": "Code.Box2D.Collision.b2PairCallback",
+      "path": "res://reference/flash/scripts/Code/Box2D/Collision/b2PairCallback.as"
+    },
+    {
+      "class": "Code.Box2D.Collision.b2PairManager",
+      "path": "res://reference/flash/scripts/Code/Box2D/Collision/b2PairManager.as"
+    },
+    {
+      "class": "Code.Box2D.Collision.b2Point",
+      "path": "res://reference/flash/scripts/Code/Box2D/Collision/b2Point.as"
+    },
+    {
+      "class": "Code.Box2D.Collision.b2Proxy",
+      "path": "res://reference/flash/scripts/Code/Box2D/Collision/b2Proxy.as"
+    },
+    {
+      "class": "Code.Box2D.Collision.b2Segment",
+      "path": "res://reference/flash/scripts/Code/Box2D/Collision/b2Segment.as"
+    },
+    {
+      "class": "Code.Box2D.Collision.b2TimeOfImpact",
+      "path": "res://reference/flash/scripts/Code/Box2D/Collision/b2TimeOfImpact.as"
+    },
+    {
+      "class": "Code.Box2D.Collision.ClipVertex",
+      "path": "res://reference/flash/scripts/Code/Box2D/Collision/ClipVertex.as"
+    },
+    {
+      "class": "Code.Box2D.Collision.Features",
+      "path": "res://reference/flash/scripts/Code/Box2D/Collision/Features.as"
+    },
+    {
+      "class": "Code.Box2D.Collision.Shapes.b2CircleDef",
+      "path": "res://reference/flash/scripts/Code/Box2D/Collision/Shapes/b2CircleDef.as"
+    },
+    {
+      "class": "Code.Box2D.Collision.Shapes.b2CircleShape",
+      "path": "res://reference/flash/scripts/Code/Box2D/Collision/Shapes/b2CircleShape.as"
+    },
+    {
+      "class": "Code.Box2D.Collision.Shapes.b2FilterData",
+      "path": "res://reference/flash/scripts/Code/Box2D/Collision/Shapes/b2FilterData.as"
+    },
+    {
+      "class": "Code.Box2D.Collision.Shapes.b2MassData",
+      "path": "res://reference/flash/scripts/Code/Box2D/Collision/Shapes/b2MassData.as"
+    },
+    {
+      "class": "Code.Box2D.Collision.Shapes.b2PolygonDef",
+      "path": "res://reference/flash/scripts/Code/Box2D/Collision/Shapes/b2PolygonDef.as"
+    },
+    {
+      "class": "Code.Box2D.Collision.Shapes.b2PolygonShape",
+      "path": "res://reference/flash/scripts/Code/Box2D/Collision/Shapes/b2PolygonShape.as"
+    },
+    {
+      "class": "Code.Box2D.Collision.Shapes.b2Shape",
+      "path": "res://reference/flash/scripts/Code/Box2D/Collision/Shapes/b2Shape.as"
+    },
+    {
+      "class": "Code.Box2D.Collision.Shapes.b2ShapeDef",
+      "path": "res://reference/flash/scripts/Code/Box2D/Collision/Shapes/b2ShapeDef.as"
+    },
+    {
+      "class": "Code.Box2D.Common.b2Color",
+      "path": "res://reference/flash/scripts/Code/Box2D/Common/b2Color.as"
+    },
+    {
+      "class": "Code.Box2D.Common.b2Settings",
+      "path": "res://reference/flash/scripts/Code/Box2D/Common/b2Settings.as"
+    },
+    {
+      "class": "Code.Box2D.Common.Math.b2Mat22",
+      "path": "res://reference/flash/scripts/Code/Box2D/Common/Math/b2Mat22.as"
+    },
+    {
+      "class": "Code.Box2D.Common.Math.b2Math",
+      "path": "res://reference/flash/scripts/Code/Box2D/Common/Math/b2Math.as"
+    },
+    {
+      "class": "Code.Box2D.Common.Math.b2Sweep",
+      "path": "res://reference/flash/scripts/Code/Box2D/Common/Math/b2Sweep.as"
+    },
+    {
+      "class": "Code.Box2D.Common.Math.b2Vec2",
+      "path": "res://reference/flash/scripts/Code/Box2D/Common/Math/b2Vec2.as"
+    },
+    {
+      "class": "Code.Box2D.Common.Math.b2XForm",
+      "path": "res://reference/flash/scripts/Code/Box2D/Common/Math/b2XForm.as"
+    },
+    {
+      "class": "Code.Box2D.Dynamics.b2Body",
+      "path": "res://reference/flash/scripts/Code/Box2D/Dynamics/b2Body.as"
+    },
+    {
+      "class": "Code.Box2D.Dynamics.b2BodyDef",
+      "path": "res://reference/flash/scripts/Code/Box2D/Dynamics/b2BodyDef.as"
+    },
+    {
+      "class": "Code.Box2D.Dynamics.b2BoundaryListener",
+      "path": "res://reference/flash/scripts/Code/Box2D/Dynamics/b2BoundaryListener.as"
+    },
+    {
+      "class": "Code.Box2D.Dynamics.b2ContactFilter",
+      "path": "res://reference/flash/scripts/Code/Box2D/Dynamics/b2ContactFilter.as"
+    },
+    {
+      "class": "Code.Box2D.Dynamics.b2ContactListener",
+      "path": "res://reference/flash/scripts/Code/Box2D/Dynamics/b2ContactListener.as"
+    },
+    {
+      "class": "Code.Box2D.Dynamics.b2ContactManager",
+      "path": "res://reference/flash/scripts/Code/Box2D/Dynamics/b2ContactManager.as"
+    },
+    {
+      "class": "Code.Box2D.Dynamics.b2DebugDraw",
+      "path": "res://reference/flash/scripts/Code/Box2D/Dynamics/b2DebugDraw.as"
+    },
+    {
+      "class": "Code.Box2D.Dynamics.b2DestructionListener",
+      "path": "res://reference/flash/scripts/Code/Box2D/Dynamics/b2DestructionListener.as"
+    },
+    {
+      "class": "Code.Box2D.Dynamics.b2Island",
+      "path": "res://reference/flash/scripts/Code/Box2D/Dynamics/b2Island.as"
+    },
+    {
+      "class": "Code.Box2D.Dynamics.b2TimeStep",
+      "path": "res://reference/flash/scripts/Code/Box2D/Dynamics/b2TimeStep.as"
+    },
+    {
+      "class": "Code.Box2D.Dynamics.b2World",
+      "path": "res://reference/flash/scripts/Code/Box2D/Dynamics/b2World.as"
+    },
+    {
+      "class": "Code.Box2D.Dynamics.Contacts.b2CircleContact",
+      "path": "res://reference/flash/scripts/Code/Box2D/Dynamics/Contacts/b2CircleContact.as"
+    },
+    {
+      "class": "Code.Box2D.Dynamics.Contacts.b2Contact",
+      "path": "res://reference/flash/scripts/Code/Box2D/Dynamics/Contacts/b2Contact.as"
+    },
+    {
+      "class": "Code.Box2D.Dynamics.Contacts.b2ContactConstraint",
+      "path": "res://reference/flash/scripts/Code/Box2D/Dynamics/Contacts/b2ContactConstraint.as"
+    },
+    {
+      "class": "Code.Box2D.Dynamics.Contacts.b2ContactConstraintPoint",
+      "path": "res://reference/flash/scripts/Code/Box2D/Dynamics/Contacts/b2ContactConstraintPoint.as"
+    },
+    {
+      "class": "Code.Box2D.Dynamics.Contacts.b2ContactEdge",
+      "path": "res://reference/flash/scripts/Code/Box2D/Dynamics/Contacts/b2ContactEdge.as"
+    },
+    {
+      "class": "Code.Box2D.Dynamics.Contacts.b2ContactRegister",
+      "path": "res://reference/flash/scripts/Code/Box2D/Dynamics/Contacts/b2ContactRegister.as"
+    },
+    {
+      "class": "Code.Box2D.Dynamics.Contacts.b2ContactResult",
+      "path": "res://reference/flash/scripts/Code/Box2D/Dynamics/Contacts/b2ContactResult.as"
+    },
+    {
+      "class": "Code.Box2D.Dynamics.Contacts.b2ContactSolver",
+      "path": "res://reference/flash/scripts/Code/Box2D/Dynamics/Contacts/b2ContactSolver.as"
+    },
+    {
+      "class": "Code.Box2D.Dynamics.Contacts.b2NullContact",
+      "path": "res://reference/flash/scripts/Code/Box2D/Dynamics/Contacts/b2NullContact.as"
+    },
+    {
+      "class": "Code.Box2D.Dynamics.Contacts.b2PolyAndCircleContact",
+      "path": "res://reference/flash/scripts/Code/Box2D/Dynamics/Contacts/b2PolyAndCircleContact.as"
+    },
+    {
+      "class": "Code.Box2D.Dynamics.Contacts.b2PolygonContact",
+      "path": "res://reference/flash/scripts/Code/Box2D/Dynamics/Contacts/b2PolygonContact.as"
+    },
+    {
+      "class": "Code.Box2D.Dynamics.Joints.b2DistanceJoint",
+      "path": "res://reference/flash/scripts/Code/Box2D/Dynamics/Joints/b2DistanceJoint.as"
+    },
+    {
+      "class": "Code.Box2D.Dynamics.Joints.b2DistanceJointDef",
+      "path": "res://reference/flash/scripts/Code/Box2D/Dynamics/Joints/b2DistanceJointDef.as"
+    },
+    {
+      "class": "Code.Box2D.Dynamics.Joints.b2GearJoint",
+      "path": "res://reference/flash/scripts/Code/Box2D/Dynamics/Joints/b2GearJoint.as"
+    },
+    {
+      "class": "Code.Box2D.Dynamics.Joints.b2GearJointDef",
+      "path": "res://reference/flash/scripts/Code/Box2D/Dynamics/Joints/b2GearJointDef.as"
+    },
+    {
+      "class": "Code.Box2D.Dynamics.Joints.b2Jacobian",
+      "path": "res://reference/flash/scripts/Code/Box2D/Dynamics/Joints/b2Jacobian.as"
+    },
+    {
+      "class": "Code.Box2D.Dynamics.Joints.b2Joint",
+      "path": "res://reference/flash/scripts/Code/Box2D/Dynamics/Joints/b2Joint.as"
+    },
+    {
+      "class": "Code.Box2D.Dynamics.Joints.b2JointDef",
+      "path": "res://reference/flash/scripts/Code/Box2D/Dynamics/Joints/b2JointDef.as"
+    },
+    {
+      "class": "Code.Box2D.Dynamics.Joints.b2JointEdge",
+      "path": "res://reference/flash/scripts/Code/Box2D/Dynamics/Joints/b2JointEdge.as"
+    },
+    {
+      "class": "Code.Box2D.Dynamics.Joints.b2MouseJoint",
+      "path": "res://reference/flash/scripts/Code/Box2D/Dynamics/Joints/b2MouseJoint.as"
+    },
+    {
+      "class": "Code.Box2D.Dynamics.Joints.b2MouseJointDef",
+      "path": "res://reference/flash/scripts/Code/Box2D/Dynamics/Joints/b2MouseJointDef.as"
+    },
+    {
+      "class": "Code.Box2D.Dynamics.Joints.b2PrismaticJoint",
+      "path": "res://reference/flash/scripts/Code/Box2D/Dynamics/Joints/b2PrismaticJoint.as"
+    },
+    {
+      "class": "Code.Box2D.Dynamics.Joints.b2PrismaticJointDef",
+      "path": "res://reference/flash/scripts/Code/Box2D/Dynamics/Joints/b2PrismaticJointDef.as"
+    },
+    {
+      "class": "Code.Box2D.Dynamics.Joints.b2PulleyJoint",
+      "path": "res://reference/flash/scripts/Code/Box2D/Dynamics/Joints/b2PulleyJoint.as"
+    },
+    {
+      "class": "Code.Box2D.Dynamics.Joints.b2PulleyJointDef",
+      "path": "res://reference/flash/scripts/Code/Box2D/Dynamics/Joints/b2PulleyJointDef.as"
+    },
+    {
+      "class": "Code.Box2D.Dynamics.Joints.b2RevoluteJoint",
+      "path": "res://reference/flash/scripts/Code/Box2D/Dynamics/Joints/b2RevoluteJoint.as"
+    },
+    {
+      "class": "Code.Box2D.Dynamics.Joints.b2RevoluteJointDef",
+      "path": "res://reference/flash/scripts/Code/Box2D/Dynamics/Joints/b2RevoluteJointDef.as"
+    },
+    {
+      "class": "Code.Data.BodyData",
+      "path": "res://reference/flash/scripts/Code/Data/BodyData.as"
+    },
+    {
+      "class": "Code.Data.BodyDataExplosiveBarrel",
+      "path": "res://reference/flash/scripts/Code/Data/BodyDataExplosiveBarrel.as"
+    },
+    {
+      "class": "Code.Data.ButtonData",
+      "path": "res://reference/flash/scripts/Code/Data/ButtonData.as"
+    },
+    {
+      "class": "Code.Data.Challenges",
+      "path": "res://reference/flash/scripts/Code/Data/Challenges.as"
+    },
+    {
+      "class": "Code.Data.ContactData",
+      "path": "res://reference/flash/scripts/Code/Data/ContactData.as"
+    },
+    {
+      "class": "Code.Data.ExplosionData",
+      "path": "res://reference/flash/scripts/Code/Data/ExplosionData.as"
+    },
+    {
+      "class": "Code.Data.FireNodeData",
+      "path": "res://reference/flash/scripts/Code/Data/FireNodeData.as"
+    },
+    {
+      "class": "Code.Data.GameMainData",
+      "path": "res://reference/flash/scripts/Code/Data/GameMainData.as"
+    },
+    {
+      "class": "Code.Data.MapGraphic",
+      "path": "res://reference/flash/scripts/Code/Data/MapGraphic.as"
+    },
+    {
+      "class": "Code.Data.MapLogic",
+      "path": "res://reference/flash/scripts/Code/Data/MapLogic.as"
+    },
+    {
+      "class": "Code.Data.MaterialData",
+      "path": "res://reference/flash/scripts/Code/Data/MaterialData.as"
+    },
+    {
+      "class": "Code.Data.MaterialsData",
+      "path": "res://reference/flash/scripts/Code/Data/MaterialsData.as"
+    },
+    {
+      "class": "Code.Data.Menu.bot_plate",
+      "path": "res://reference/flash/scripts/Code/Data/Menu/bot_plate.as"
+    },
+    {
+      "class": "Code.Data.Menu.bot_setup",
+      "path": "res://reference/flash/scripts/Code/Data/Menu/bot_setup.as"
+    },
+    {
+      "class": "Code.Data.Menu.challenge_selection",
+      "path": "res://reference/flash/scripts/Code/Data/Menu/challenge_selection.as"
+    },
+    {
+      "class": "Code.Data.Menu.confirm_delete",
+      "path": "res://reference/flash/scripts/Code/Data/Menu/confirm_delete.as"
+    },
+    {
+      "class": "Code.Data.Menu.first_choise",
+      "path": "res://reference/flash/scripts/Code/Data/Menu/first_choise.as"
+    },
+    {
+      "class": "Code.Data.Menu.map_selection",
+      "path": "res://reference/flash/scripts/Code/Data/Menu/map_selection.as"
+    },
+    {
+      "class": "Code.Data.Menu.MenuKey",
+      "path": "res://reference/flash/scripts/Code/Data/Menu/MenuKey.as"
+    },
+    {
+      "class": "Code.Data.Menu.mode_selection",
+      "path": "res://reference/flash/scripts/Code/Data/Menu/mode_selection.as"
+    },
+    {
+      "class": "Code.Data.Menu.no_bots",
+      "path": "res://reference/flash/scripts/Code/Data/Menu/no_bots.as"
+    },
+    {
+      "class": "Code.Data.Menu.player_plate",
+      "path": "res://reference/flash/scripts/Code/Data/Menu/player_plate.as"
+    },
+    {
+      "class": "Code.Data.Menu.set_up",
+      "path": "res://reference/flash/scripts/Code/Data/Menu/set_up.as"
+    },
+    {
+      "class": "Code.Data.Menu.set_up_main",
+      "path": "res://reference/flash/scripts/Code/Data/Menu/set_up_main.as"
+    },
+    {
+      "class": "Code.Data.Menu.submenu_base",
+      "path": "res://reference/flash/scripts/Code/Data/Menu/submenu_base.as"
+    },
+    {
+      "class": "Code.Data.Menu.vs_player_setup",
+      "path": "res://reference/flash/scripts/Code/Data/Menu/vs_player_setup.as"
+    },
+    {
+      "class": "Code.Data.MenuMainData",
+      "path": "res://reference/flash/scripts/Code/Data/MenuMainData.as"
+    },
+    {
+      "class": "Code.Data.NewGameData",
+      "path": "res://reference/flash/scripts/Code/Data/NewGameData.as"
+    },
+    {
+      "class": "Code.Data.PathBind",
+      "path": "res://reference/flash/scripts/Code/Data/PathBind.as"
+    },
+    {
+      "class": "Code.Data.PathNode",
+      "path": "res://reference/flash/scripts/Code/Data/PathNode.as"
+    },
+    {
+      "class": "Code.Data.PathResultNode",
+      "path": "res://reference/flash/scripts/Code/Data/PathResultNode.as"
+    },
+    {
+      "class": "Code.Data.PathWebNode",
+      "path": "res://reference/flash/scripts/Code/Data/PathWebNode.as"
+    },
+    {
+      "class": "Code.Data.Players.BotState",
+      "path": "res://reference/flash/scripts/Code/Data/Players/BotState.as"
+    },
+    {
+      "class": "Code.Data.Players.Player",
+      "path": "res://reference/flash/scripts/Code/Data/Players/Player.as"
+    },
+    {
+      "class": "Code.Data.Players.PlayerAnimation",
+      "path": "res://reference/flash/scripts/Code/Data/Players/PlayerAnimation.as"
+    },
+    {
+      "class": "Code.Data.Players.PlayerAreaData",
+      "path": "res://reference/flash/scripts/Code/Data/Players/PlayerAreaData.as"
+    },
+    {
+      "class": "Code.Data.Players.PlayerBars",
+      "path": "res://reference/flash/scripts/Code/Data/Players/PlayerBars.as"
+    },
+    {
+      "class": "Code.Data.Players.PlayerCharacter",
+      "path": "res://reference/flash/scripts/Code/Data/Players/PlayerCharacter.as"
+    },
+    {
+      "class": "Code.Data.Players.PlayerSetupData",
+      "path": "res://reference/flash/scripts/Code/Data/Players/PlayerSetupData.as"
+    },
+    {
+      "class": "Code.Data.Players.PlayersKeeperData",
+      "path": "res://reference/flash/scripts/Code/Data/Players/PlayersKeeperData.as"
+    },
+    {
+      "class": "Code.Data.Players.PlayerState",
+      "path": "res://reference/flash/scripts/Code/Data/Players/PlayerState.as"
+    },
+    {
+      "class": "Code.Data.Players.PlayerTeamColor",
+      "path": "res://reference/flash/scripts/Code/Data/Players/PlayerTeamColor.as"
+    },
+    {
+      "class": "Code.Data.PortalData",
+      "path": "res://reference/flash/scripts/Code/Data/PortalData.as"
+    },
+    {
+      "class": "Code.Data.ProjectileData",
+      "path": "res://reference/flash/scripts/Code/Data/ProjectileData.as"
+    },
+    {
+      "class": "Code.Data.ProjectileProperties",
+      "path": "res://reference/flash/scripts/Code/Data/ProjectileProperties.as"
+    },
+    {
+      "class": "Code.Data.ProjectilesUpdaterData",
+      "path": "res://reference/flash/scripts/Code/Data/ProjectilesUpdaterData.as"
+    },
+    {
+      "class": "Code.Data.Rope",
+      "path": "res://reference/flash/scripts/Code/Data/Rope.as"
+    },
+    {
+      "class": "Code.Data.ScoreboardTeam",
+      "path": "res://reference/flash/scripts/Code/Data/ScoreboardTeam.as"
+    },
+    {
+      "class": "Code.Data.SlowmoData",
+      "path": "res://reference/flash/scripts/Code/Data/SlowmoData.as"
+    },
+    {
+      "class": "Code.Data.SmokePackageDataDynamic",
+      "path": "res://reference/flash/scripts/Code/Data/SmokePackageDataDynamic.as"
+    },
+    {
+      "class": "Code.Data.SurvivalTimePackage",
+      "path": "res://reference/flash/scripts/Code/Data/SurvivalTimePackage.as"
+    },
+    {
+      "class": "Code.Data.Weapons.WeaponData",
+      "path": "res://reference/flash/scripts/Code/Data/Weapons/WeaponData.as"
+    },
+    {
+      "class": "Code.Data.Weapons.WeaponMeleeData",
+      "path": "res://reference/flash/scripts/Code/Data/Weapons/WeaponMeleeData.as"
+    },
+    {
+      "class": "Code.Data.Weapons.WeaponMeleeProperties",
+      "path": "res://reference/flash/scripts/Code/Data/Weapons/WeaponMeleeProperties.as"
+    },
+    {
+      "class": "Code.Data.Weapons.WeaponPowerupData",
+      "path": "res://reference/flash/scripts/Code/Data/Weapons/WeaponPowerupData.as"
+    },
+    {
+      "class": "Code.Data.Weapons.WeaponPowerupProperties",
+      "path": "res://reference/flash/scripts/Code/Data/Weapons/WeaponPowerupProperties.as"
+    },
+    {
+      "class": "Code.Data.Weapons.WeaponProperties",
+      "path": "res://reference/flash/scripts/Code/Data/Weapons/WeaponProperties.as"
+    },
+    {
+      "class": "Code.Data.Weapons.WeaponSequencePart",
+      "path": "res://reference/flash/scripts/Code/Data/Weapons/WeaponSequencePart.as"
+    },
+    {
+      "class": "Code.Data.Weapons.WeaponThrowableData",
+      "path": "res://reference/flash/scripts/Code/Data/Weapons/WeaponThrowableData.as"
+    },
+    {
+      "class": "Code.Data.Weapons.WeaponThrowableProperties",
+      "path": "res://reference/flash/scripts/Code/Data/Weapons/WeaponThrowableProperties.as"
+    },
+    {
+      "class": "Code.Data.WeaponSpawnData",
+      "path": "res://reference/flash/scripts/Code/Data/WeaponSpawnData.as"
+    },
+    {
+      "class": "Code.Handler.BasicOverlays",
+      "path": "res://reference/flash/scripts/Code/Handler/BasicOverlays.as"
+    },
+    {
+      "class": "Code.Handler.Box2DMouse",
+      "path": "res://reference/flash/scripts/Code/Handler/Box2DMouse.as"
+    },
+    {
+      "class": "Code.Handler.Cam",
+      "path": "res://reference/flash/scripts/Code/Handler/Cam.as"
+    },
+    {
+      "class": "Code.Handler.CommandList",
+      "path": "res://reference/flash/scripts/Code/Handler/CommandList.as"
+    },
+    {
+      "class": "Code.Handler.Deconstructer",
+      "path": "res://reference/flash/scripts/Code/Handler/Deconstructer.as"
+    },
+    {
+      "class": "Code.Handler.Effects",
+      "path": "res://reference/flash/scripts/Code/Handler/Effects.as"
+    },
+    {
+      "class": "Code.Handler.Explosions",
+      "path": "res://reference/flash/scripts/Code/Handler/Explosions.as"
+    },
+    {
+      "class": "Code.Handler.Fires",
+      "path": "res://reference/flash/scripts/Code/Handler/Fires.as"
+    },
+    {
+      "class": "Code.Handler.GameMain",
+      "path": "res://reference/flash/scripts/Code/Handler/GameMain.as"
+    },
+    {
+      "class": "Code.Handler.InputKeyboard",
+      "path": "res://reference/flash/scripts/Code/Handler/InputKeyboard.as"
+    },
+    {
+      "class": "Code.Handler.InputMouse",
+      "path": "res://reference/flash/scripts/Code/Handler/InputMouse.as"
+    },
+    {
+      "class": "Code.Handler.MapPremadeItems",
+      "path": "res://reference/flash/scripts/Code/Handler/MapPremadeItems.as"
+    },
+    {
+      "class": "Code.Handler.Maps",
+      "path": "res://reference/flash/scripts/Code/Handler/Maps.as"
+    },
+    {
+      "class": "Code.Handler.MenuMain",
+      "path": "res://reference/flash/scripts/Code/Handler/MenuMain.as"
+    },
+    {
+      "class": "Code.Handler.Options",
+      "path": "res://reference/flash/scripts/Code/Handler/Options.as"
+    },
+    {
+      "class": "Code.Handler.OutputTrace",
+      "path": "res://reference/flash/scripts/Code/Handler/OutputTrace.as"
+    },
+    {
+      "class": "Code.Handler.PathGrid",
+      "path": "res://reference/flash/scripts/Code/Handler/PathGrid.as"
+    },
+    {
+      "class": "Code.Handler.PlayersKeeper",
+      "path": "res://reference/flash/scripts/Code/Handler/PlayersKeeper.as"
+    },
+    {
+      "class": "Code.Handler.Portals",
+      "path": "res://reference/flash/scripts/Code/Handler/Portals.as"
+    },
+    {
+      "class": "Code.Handler.Projectiles",
+      "path": "res://reference/flash/scripts/Code/Handler/Projectiles.as"
+    },
+    {
+      "class": "Code.Handler.ProjectilesUpdater",
+      "path": "res://reference/flash/scripts/Code/Handler/ProjectilesUpdater.as"
+    },
+    {
+      "class": "Code.Handler.Scoreboard",
+      "path": "res://reference/flash/scripts/Code/Handler/Scoreboard.as"
+    },
+    {
+      "class": "Code.Handler.ScoreboardSurvival",
+      "path": "res://reference/flash/scripts/Code/Handler/ScoreboardSurvival.as"
+    },
+    {
+      "class": "Code.Handler.Shake",
+      "path": "res://reference/flash/scripts/Code/Handler/Shake.as"
+    },
+    {
+      "class": "Code.Handler.Slowmo",
+      "path": "res://reference/flash/scripts/Code/Handler/Slowmo.as"
+    },
+    {
+      "class": "Code.Handler.Sounds",
+      "path": "res://reference/flash/scripts/Code/Handler/Sounds.as"
+    },
+    {
+      "class": "Code.Handler.Weapons",
+      "path": "res://reference/flash/scripts/Code/Handler/Weapons.as"
+    },
+    {
+      "class": "Code.Handler.WeaponSpawn",
+      "path": "res://reference/flash/scripts/Code/Handler/WeaponSpawn.as"
+    },
+    {
+      "class": "Code.Main",
+      "path": "res://reference/flash/scripts/Code/Main.as"
+    },
+    {
+      "class": "Code.Particles.blood_gib_trace",
+      "path": "res://reference/flash/scripts/Code/Particles/blood_gib_trace.as"
+    },
+    {
+      "class": "Code.Particles.bullet_hitdefault",
+      "path": "res://reference/flash/scripts/Code/Particles/bullet_hitdefault.as"
+    },
+    {
+      "class": "Code.Particles.fire_effect",
+      "path": "res://reference/flash/scripts/Code/Particles/fire_effect.as"
+    },
+    {
+      "class": "Code.Particles.fire_effect_bazooka_rocket",
+      "path": "res://reference/flash/scripts/Code/Particles/fire_effect_bazooka_rocket.as"
+    },
+    {
+      "class": "Code.Particles.fire_effect_flamethrower",
+      "path": "res://reference/flash/scripts/Code/Particles/fire_effect_flamethrower.as"
+    },
+    {
+      "class": "Code.Particles.fire_effect_ground",
+      "path": "res://reference/flash/scripts/Code/Particles/fire_effect_ground.as"
+    },
+    {
+      "class": "Code.Particles.muzzle_weapon_smoke",
+      "path": "res://reference/flash/scripts/Code/Particles/muzzle_weapon_smoke.as"
+    },
+    {
+      "class": "Code.Particles.particle_base",
+      "path": "res://reference/flash/scripts/Code/Particles/particle_base.as"
+    },
+    {
+      "class": "Code.Particles.particle_blood",
+      "path": "res://reference/flash/scripts/Code/Particles/particle_blood.as"
+    },
+    {
+      "class": "Code.Particles.particle_bodyfall",
+      "path": "res://reference/flash/scripts/Code/Particles/particle_bodyfall.as"
+    },
+    {
+      "class": "Code.Particles.particle_data",
+      "path": "res://reference/flash/scripts/Code/Particles/particle_data.as"
+    },
+    {
+      "class": "Code.Particles.particle_impact_metal",
+      "path": "res://reference/flash/scripts/Code/Particles/particle_impact_metal.as"
+    },
+    {
+      "class": "Code.Particles.particle_impact_wood",
+      "path": "res://reference/flash/scripts/Code/Particles/particle_impact_wood.as"
+    },
+    {
+      "class": "Code.Particles.pickup_sign",
+      "path": "res://reference/flash/scripts/Code/Particles/pickup_sign.as"
+    },
+    {
+      "class": "Code.Particles.simple_effect",
+      "path": "res://reference/flash/scripts/Code/Particles/simple_effect.as"
+    },
+    {
+      "class": "Code.Particles.smoke_fire",
+      "path": "res://reference/flash/scripts/Code/Particles/smoke_fire.as"
+    },
+    {
+      "class": "Code.Particles.smoke_trace_effect",
+      "path": "res://reference/flash/scripts/Code/Particles/smoke_trace_effect.as"
+    },
+    {
+      "class": "com.adobe.crypto.MD5",
+      "path": "res://reference/flash/scripts/com/adobe/crypto/MD5.as"
+    },
+    {
+      "class": "com.adobe.images.PNGEncoder",
+      "path": "res://reference/flash/scripts/com/adobe/images/PNGEncoder.as"
+    },
+    {
+      "class": "com.adobe.serialization.json.JSON",
+      "path": "res://reference/flash/scripts/com/adobe/serialization/json/JSON.as"
+    },
+    {
+      "class": "com.adobe.serialization.json.JSONDecoder",
+      "path": "res://reference/flash/scripts/com/adobe/serialization/json/JSONDecoder.as"
+    },
+    {
+      "class": "com.adobe.serialization.json.JSONEncoder",
+      "path": "res://reference/flash/scripts/com/adobe/serialization/json/JSONEncoder.as"
+    },
+    {
+      "class": "com.adobe.serialization.json.JSONParseError",
+      "path": "res://reference/flash/scripts/com/adobe/serialization/json/JSONParseError.as"
+    },
+    {
+      "class": "com.adobe.serialization.json.JSONToken",
+      "path": "res://reference/flash/scripts/com/adobe/serialization/json/JSONToken.as"
+    },
+    {
+      "class": "com.adobe.serialization.json.JSONTokenizer",
+      "path": "res://reference/flash/scripts/com/adobe/serialization/json/JSONTokenizer.as"
+    },
+    {
+      "class": "com.adobe.serialization.json.JSONTokenType",
+      "path": "res://reference/flash/scripts/com/adobe/serialization/json/JSONTokenType.as"
+    },
+    {
+      "class": "com.adobe.utils.IntUtil",
+      "path": "res://reference/flash/scripts/com/adobe/utils/IntUtil.as"
+    },
+    {
+      "class": "com.newgrounds.API",
+      "path": "res://reference/flash/scripts/com/newgrounds/API.as"
+    },
+    {
+      "class": "com.newgrounds.APIError",
+      "path": "res://reference/flash/scripts/com/newgrounds/APIError.as"
+    },
+    {
+      "class": "com.newgrounds.APIEvent",
+      "path": "res://reference/flash/scripts/com/newgrounds/APIEvent.as"
+    },
+    {
+      "class": "com.newgrounds.BaseN",
+      "path": "res://reference/flash/scripts/com/newgrounds/BaseN.as"
+    },
+    {
+      "class": "com.newgrounds.Bridge",
+      "path": "res://reference/flash/scripts/com/newgrounds/Bridge.as"
+    },
+    {
+      "class": "com.newgrounds.components.APIConnector",
+      "path": "res://reference/flash/scripts/com/newgrounds/components/APIConnector.as"
+    },
+    {
+      "class": "com.newgrounds.components.FlashAd",
+      "path": "res://reference/flash/scripts/com/newgrounds/components/FlashAd.as"
+    },
+    {
+      "class": "com.newgrounds.components.MedalPopup",
+      "path": "res://reference/flash/scripts/com/newgrounds/components/MedalPopup.as"
+    },
+    {
+      "class": "com.newgrounds.Medal",
+      "path": "res://reference/flash/scripts/com/newgrounds/Medal.as"
+    },
+    {
+      "class": "com.newgrounds.RC4",
+      "path": "res://reference/flash/scripts/com/newgrounds/RC4.as"
+    },
+    {
+      "class": "com.newgrounds.SaveFile",
+      "path": "res://reference/flash/scripts/com/newgrounds/SaveFile.as"
+    },
+    {
+      "class": "com.newgrounds.SaveGroup",
+      "path": "res://reference/flash/scripts/com/newgrounds/SaveGroup.as"
+    },
+    {
+      "class": "com.newgrounds.SaveGroupQuery",
+      "path": "res://reference/flash/scripts/com/newgrounds/SaveGroupQuery.as"
+    },
+    {
+      "class": "com.newgrounds.SaveKey",
+      "path": "res://reference/flash/scripts/com/newgrounds/SaveKey.as"
+    },
+    {
+      "class": "com.newgrounds.SaveRating",
+      "path": "res://reference/flash/scripts/com/newgrounds/SaveRating.as"
+    },
+    {
+      "class": "com.newgrounds.Score",
+      "path": "res://reference/flash/scripts/com/newgrounds/Score.as"
+    },
+    {
+      "class": "com.newgrounds.ScoreBoard",
+      "path": "res://reference/flash/scripts/com/newgrounds/ScoreBoard.as"
+    },
+    {
+      "class": "com.newgrounds.ScoreBoardPeriod",
+      "path": "res://reference/flash/scripts/com/newgrounds/ScoreBoardPeriod.as"
+    },
+    {
+      "class": "com.newgrounds.SmartURLLoader",
+      "path": "res://reference/flash/scripts/com/newgrounds/SmartURLLoader.as"
+    },
+    {
+      "class": "comfy_chair",
+      "path": "res://reference/flash/scripts/comfy_chair.as"
+    },
+    {
+      "class": "comp",
+      "path": "res://reference/flash/scripts/comp.as"
+    },
+    {
+      "class": "comp_explode_01",
+      "path": "res://reference/flash/scripts/comp_explode_01.as"
+    },
+    {
+      "class": "comp_explode_02",
+      "path": "res://reference/flash/scripts/comp_explode_02.as"
+    },
+    {
+      "class": "comp_screen",
+      "path": "res://reference/flash/scripts/comp_screen.as"
+    },
+    {
+      "class": "crate_01",
+      "path": "res://reference/flash/scripts/crate_01.as"
+    },
+    {
+      "class": "crate_debris_01",
+      "path": "res://reference/flash/scripts/crate_debris_01.as"
+    },
+    {
+      "class": "crate_debris_02",
+      "path": "res://reference/flash/scripts/crate_debris_02.as"
+    },
+    {
+      "class": "crate_debris_03",
+      "path": "res://reference/flash/scripts/crate_debris_03.as"
+    },
+    {
+      "class": "crate_hanging",
+      "path": "res://reference/flash/scripts/crate_hanging.as"
+    },
+    {
+      "class": "crate_hanging_holder",
+      "path": "res://reference/flash/scripts/crate_hanging_holder.as"
+    },
+    {
+      "class": "cut00",
+      "path": "res://reference/flash/scripts/cut00.as"
+    },
+    {
+      "class": "cut01",
+      "path": "res://reference/flash/scripts/cut01.as"
+    },
+    {
+      "class": "cut02",
+      "path": "res://reference/flash/scripts/cut02.as"
+    },
+    {
+      "class": "desk",
+      "path": "res://reference/flash/scripts/desk.as"
+    },
+    {
+      "class": "desk_1",
+      "path": "res://reference/flash/scripts/desk_1.as"
+    },
+    {
+      "class": "dive_catch",
+      "path": "res://reference/flash/scripts/dive_catch.as"
+    },
+    {
+      "class": "electric_1",
+      "path": "res://reference/flash/scripts/electric_1.as"
+    },
+    {
+      "class": "electric_2",
+      "path": "res://reference/flash/scripts/electric_2.as"
+    },
+    {
+      "class": "electric_3",
+      "path": "res://reference/flash/scripts/electric_3.as"
+    },
+    {
+      "class": "elevator_01",
+      "path": "res://reference/flash/scripts/elevator_01.as"
+    },
+    {
+      "class": "empty_shell_big",
+      "path": "res://reference/flash/scripts/empty_shell_big.as"
+    },
+    {
+      "class": "empty_shell_shotgun",
+      "path": "res://reference/flash/scripts/empty_shell_shotgun.as"
+    },
+    {
+      "class": "empty_shell_small",
+      "path": "res://reference/flash/scripts/empty_shell_small.as"
+    },
+    {
+      "class": "error_mc",
+      "path": "res://reference/flash/scripts/error_mc.as"
+    },
+    {
+      "class": "explosion00",
+      "path": "res://reference/flash/scripts/explosion00.as"
+    },
+    {
+      "class": "explosion01",
+      "path": "res://reference/flash/scripts/explosion01.as"
+    },
+    {
+      "class": "explosion02",
+      "path": "res://reference/flash/scripts/explosion02.as"
+    },
+    {
+      "class": "explosion03",
+      "path": "res://reference/flash/scripts/explosion03.as"
+    },
+    {
+      "class": "explosion_circle",
+      "path": "res://reference/flash/scripts/explosion_circle.as"
+    },
+    {
+      "class": "filecab_01",
+      "path": "res://reference/flash/scripts/filecab_01.as"
+    },
+    {
+      "class": "fire_01",
+      "path": "res://reference/flash/scripts/fire_01.as"
+    },
+    {
+      "class": "fire_01_flamethrower",
+      "path": "res://reference/flash/scripts/fire_01_flamethrower.as"
+    },
+    {
+      "class": "fire_02",
+      "path": "res://reference/flash/scripts/fire_02.as"
+    },
+    {
+      "class": "fire_03",
+      "path": "res://reference/flash/scripts/fire_03.as"
+    },
+    {
+      "class": "fire_big",
+      "path": "res://reference/flash/scripts/fire_big.as"
+    },
+    {
+      "class": "fire_circle",
+      "path": "res://reference/flash/scripts/fire_circle.as"
+    },
+    {
+      "class": "fire_effect_air",
+      "path": "res://reference/flash/scripts/fire_effect_air.as"
+    },
+    {
+      "class": "fire_effect_flamethrower_air",
+      "path": "res://reference/flash/scripts/fire_effect_flamethrower_air.as"
+    },
+    {
+      "class": "fireplosion",
+      "path": "res://reference/flash/scripts/fireplosion.as"
+    },
+    {
+      "class": "fl.motion.Color",
+      "path": "res://reference/flash/scripts/fl/motion/Color.as"
+    },
+    {
+      "class": "FlashAd_fla.NewgroundsAPIAsset_FlashAd_Container_2",
+      "path": "res://reference/flash/scripts/FlashAd_fla/NewgroundsAPIAsset_FlashAd_Container_2.as"
+    },
+    {
+      "class": "FlashAd_fla.NewgroundsAPIAsset_Load_Indicator_5",
+      "path": "res://reference/flash/scripts/FlashAd_fla/NewgroundsAPIAsset_Load_Indicator_5.as"
+    },
+    {
+      "class": "gascan",
+      "path": "res://reference/flash/scripts/gascan.as"
+    },
+    {
+      "class": "get_ready_fight",
+      "path": "res://reference/flash/scripts/get_ready_fight.as"
+    },
+    {
+      "class": "getHealth_00",
+      "path": "res://reference/flash/scripts/getHealth_00.as"
+    },
+    {
+      "class": "gib_00",
+      "path": "res://reference/flash/scripts/gib_00.as"
+    },
+    {
+      "class": "gib_effect",
+      "path": "res://reference/flash/scripts/gib_effect.as"
+    },
+    {
+      "class": "glass_1",
+      "path": "res://reference/flash/scripts/glass_1.as"
+    },
+    {
+      "class": "glass_2",
+      "path": "res://reference/flash/scripts/glass_2.as"
+    },
+    {
+      "class": "glass_shard_1",
+      "path": "res://reference/flash/scripts/glass_shard_1.as"
+    },
+    {
+      "class": "grenade_marker",
+      "path": "res://reference/flash/scripts/grenade_marker.as"
+    },
+    {
+      "class": "grenade_safe",
+      "path": "res://reference/flash/scripts/grenade_safe.as"
+    },
+    {
+      "class": "groovy00",
+      "path": "res://reference/flash/scripts/groovy00.as"
+    },
+    {
+      "class": "gui_holder",
+      "path": "res://reference/flash/scripts/gui_holder.as"
+    },
+    {
+      "class": "gun00",
+      "path": "res://reference/flash/scripts/gun00.as"
+    },
+    {
+      "class": "gun01",
+      "path": "res://reference/flash/scripts/gun01.as"
+    },
+    {
+      "class": "gun02",
+      "path": "res://reference/flash/scripts/gun02.as"
+    },
+    {
+      "class": "gun03",
+      "path": "res://reference/flash/scripts/gun03.as"
+    },
+    {
+      "class": "hanging_lamp",
+      "path": "res://reference/flash/scripts/hanging_lamp.as"
+    },
+    {
+      "class": "heartbeat",
+      "path": "res://reference/flash/scripts/heartbeat.as"
+    },
+    {
+      "class": "hit_metal_1_1",
+      "path": "res://reference/flash/scripts/hit_metal_1_1.as"
+    },
+    {
+      "class": "hit_metal_1_2",
+      "path": "res://reference/flash/scripts/hit_metal_1_2.as"
+    },
+    {
+      "class": "hit_metal_2_1",
+      "path": "res://reference/flash/scripts/hit_metal_2_1.as"
+    },
+    {
+      "class": "hit_metal_2_2",
+      "path": "res://reference/flash/scripts/hit_metal_2_2.as"
+    },
+    {
+      "class": "hit_metal_3_1",
+      "path": "res://reference/flash/scripts/hit_metal_3_1.as"
+    },
+    {
+      "class": "hit_paper",
+      "path": "res://reference/flash/scripts/hit_paper.as"
+    },
+    {
+      "class": "jump_00",
+      "path": "res://reference/flash/scripts/jump_00.as"
+    },
+    {
+      "class": "katana_01",
+      "path": "res://reference/flash/scripts/katana_01.as"
+    },
+    {
+      "class": "lamp_1",
+      "path": "res://reference/flash/scripts/lamp_1.as"
+    },
+    {
+      "class": "lamp_1_b",
+      "path": "res://reference/flash/scripts/lamp_1_b.as"
+    },
+    {
+      "class": "lazersight",
+      "path": "res://reference/flash/scripts/lazersight.as"
+    },
+    {
+      "class": "levels",
+      "path": "res://reference/flash/scripts/levels.as"
+    },
+    {
+      "class": "levels_front",
+      "path": "res://reference/flash/scripts/levels_front.as"
+    },
+    {
+      "class": "lift_01",
+      "path": "res://reference/flash/scripts/lift_01.as"
+    },
+    {
+      "class": "lift_small_01",
+      "path": "res://reference/flash/scripts/lift_small_01.as"
+    },
+    {
+      "class": "magnum",
+      "path": "res://reference/flash/scripts/magnum.as"
+    },
+    {
+      "class": "main_menu_overlay",
+      "path": "res://reference/flash/scripts/main_menu_overlay.as"
+    },
+    {
+      "class": "muzzle_flash_bazooka",
+      "path": "res://reference/flash/scripts/muzzle_flash_bazooka.as"
+    },
+    {
+      "class": "muzzle_flash_pistol",
+      "path": "res://reference/flash/scripts/muzzle_flash_pistol.as"
+    },
+    {
+      "class": "muzzle_flash_rifle",
+      "path": "res://reference/flash/scripts/muzzle_flash_rifle.as"
+    },
+    {
+      "class": "muzzle_flash_shotgun",
+      "path": "res://reference/flash/scripts/muzzle_flash_shotgun.as"
+    },
+    {
+      "class": "muzzle_flash_sniper",
+      "path": "res://reference/flash/scripts/muzzle_flash_sniper.as"
+    },
+    {
+      "class": "NewgroundsAPIAsset_big_popup_background",
+      "path": "res://reference/flash/scripts/NewgroundsAPIAsset_big_popup_background.as"
+    },
+    {
+      "class": "outofammo_heavy",
+      "path": "res://reference/flash/scripts/outofammo_heavy.as"
+    },
+    {
+      "class": "outofammo_light",
+      "path": "res://reference/flash/scripts/outofammo_light.as"
+    },
+    {
+      "class": "paper",
+      "path": "res://reference/flash/scripts/paper.as"
+    },
+    {
+      "class": "platform_motor",
+      "path": "res://reference/flash/scripts/platform_motor.as"
+    },
+    {
+      "class": "player_agent",
+      "path": "res://reference/flash/scripts/player_agent.as"
+    },
+    {
+      "class": "player_aim",
+      "path": "res://reference/flash/scripts/player_aim.as"
+    },
+    {
+      "class": "player_billy",
+      "path": "res://reference/flash/scripts/player_billy.as"
+    },
+    {
+      "class": "player_blood",
+      "path": "res://reference/flash/scripts/player_blood.as"
+    },
+    {
+      "class": "player_boris",
+      "path": "res://reference/flash/scripts/player_boris.as"
+    },
+    {
+      "class": "player_burnt",
+      "path": "res://reference/flash/scripts/player_burnt.as"
+    },
+    {
+      "class": "player_funnyman",
+      "path": "res://reference/flash/scripts/player_funnyman.as"
+    },
+    {
+      "class": "player_hitarea",
+      "path": "res://reference/flash/scripts/player_hitarea.as"
+    },
+    {
+      "class": "player_jeff",
+      "path": "res://reference/flash/scripts/player_jeff.as"
+    },
+    {
+      "class": "player_johnny",
+      "path": "res://reference/flash/scripts/player_johnny.as"
+    },
+    {
+      "class": "player_mac",
+      "path": "res://reference/flash/scripts/player_mac.as"
+    },
+    {
+      "class": "player_scott",
+      "path": "res://reference/flash/scripts/player_scott.as"
+    },
+    {
+      "class": "player_sign",
+      "path": "res://reference/flash/scripts/player_sign.as"
+    },
+    {
+      "class": "pool_table_01",
+      "path": "res://reference/flash/scripts/pool_table_01.as"
+    },
+    {
+      "class": "press_space",
+      "path": "res://reference/flash/scripts/press_space.as"
+    },
+    {
+      "class": "punch00",
+      "path": "res://reference/flash/scripts/punch00.as"
+    },
+    {
+      "class": "punch01",
+      "path": "res://reference/flash/scripts/punch01.as"
+    },
+    {
+      "class": "punch02",
+      "path": "res://reference/flash/scripts/punch02.as"
+    },
+    {
+      "class": "punch03",
+      "path": "res://reference/flash/scripts/punch03.as"
+    },
+    {
+      "class": "ric00",
+      "path": "res://reference/flash/scripts/ric00.as"
+    },
+    {
+      "class": "rifle00",
+      "path": "res://reference/flash/scripts/rifle00.as"
+    },
+    {
+      "class": "rifle01",
+      "path": "res://reference/flash/scripts/rifle01.as"
+    },
+    {
+      "class": "rifle_draw",
+      "path": "res://reference/flash/scripts/rifle_draw.as"
+    },
+    {
+      "class": "roll",
+      "path": "res://reference/flash/scripts/roll.as"
+    },
+    {
+      "class": "rolling_pipe",
+      "path": "res://reference/flash/scripts/rolling_pipe.as"
+    },
+    {
+      "class": "rope_segment_01",
+      "path": "res://reference/flash/scripts/rope_segment_01.as"
+    },
+    {
+      "class": "round_winner",
+      "path": "res://reference/flash/scripts/round_winner.as"
+    },
+    {
+      "class": "score_info",
+      "path": "res://reference/flash/scripts/score_info.as"
+    },
+    {
+      "class": "score_team_plate",
+      "path": "res://reference/flash/scripts/score_team_plate.as"
+    },
+    {
+      "class": "shellbounce00",
+      "path": "res://reference/flash/scripts/shellbounce00.as"
+    },
+    {
+      "class": "shellbounce01",
+      "path": "res://reference/flash/scripts/shellbounce01.as"
+    },
+    {
+      "class": "shotgun00",
+      "path": "res://reference/flash/scripts/shotgun00.as"
+    },
+    {
+      "class": "shotgun01",
+      "path": "res://reference/flash/scripts/shotgun01.as"
+    },
+    {
+      "class": "shotgun02",
+      "path": "res://reference/flash/scripts/shotgun02.as"
+    },
+    {
+      "class": "shotgun_aim",
+      "path": "res://reference/flash/scripts/shotgun_aim.as"
+    },
+    {
+      "class": "shotgun_pump_p1",
+      "path": "res://reference/flash/scripts/shotgun_pump_p1.as"
+    },
+    {
+      "class": "shotgun_pump_p2",
+      "path": "res://reference/flash/scripts/shotgun_pump_p2.as"
+    },
+    {
+      "class": "smoke_trace_01",
+      "path": "res://reference/flash/scripts/smoke_trace_01.as"
+    },
+    {
+      "class": "smoke_trace_light_01",
+      "path": "res://reference/flash/scripts/smoke_trace_light_01.as"
+    },
+    {
+      "class": "smoke_weapon_muzzle",
+      "path": "res://reference/flash/scripts/smoke_weapon_muzzle.as"
+    },
+    {
+      "class": "sniper00",
+      "path": "res://reference/flash/scripts/sniper00.as"
+    },
+    {
+      "class": "sniper01",
+      "path": "res://reference/flash/scripts/sniper01.as"
+    },
+    {
+      "class": "spark",
+      "path": "res://reference/flash/scripts/spark.as"
+    },
+    {
+      "class": "statue",
+      "path": "res://reference/flash/scripts/statue.as"
+    },
+    {
+      "class": "statue_globe",
+      "path": "res://reference/flash/scripts/statue_globe.as"
+    },
+    {
+      "class": "Superfighters_fla.aim_bazooka_agent_429",
+      "path": "res://reference/flash/scripts/Superfighters_fla/aim_bazooka_agent_429.as"
+    },
+    {
+      "class": "Superfighters_fla.aim_bazooka_billy_506",
+      "path": "res://reference/flash/scripts/Superfighters_fla/aim_bazooka_billy_506.as"
+    },
+    {
+      "class": "Superfighters_fla.aim_bazooka_boris_284",
+      "path": "res://reference/flash/scripts/Superfighters_fla/aim_bazooka_boris_284.as"
+    },
+    {
+      "class": "Superfighters_fla.aim_bazooka_funnyman_635",
+      "path": "res://reference/flash/scripts/Superfighters_fla/aim_bazooka_funnyman_635.as"
+    },
+    {
+      "class": "Superfighters_fla.aim_bazooka_jeff_755",
+      "path": "res://reference/flash/scripts/Superfighters_fla/aim_bazooka_jeff_755.as"
+    },
+    {
+      "class": "Superfighters_fla.aim_bazooka_johnny_203",
+      "path": "res://reference/flash/scripts/Superfighters_fla/aim_bazooka_johnny_203.as"
+    },
+    {
+      "class": "Superfighters_fla.aim_bazooka_mac_695",
+      "path": "res://reference/flash/scripts/Superfighters_fla/aim_bazooka_mac_695.as"
+    },
+    {
+      "class": "Superfighters_fla.aim_bazooka_scott_566",
+      "path": "res://reference/flash/scripts/Superfighters_fla/aim_bazooka_scott_566.as"
+    },
+    {
+      "class": "Superfighters_fla.aim_flamethrower_agent_432",
+      "path": "res://reference/flash/scripts/Superfighters_fla/aim_flamethrower_agent_432.as"
+    },
+    {
+      "class": "Superfighters_fla.aim_flamethrower_billy_509",
+      "path": "res://reference/flash/scripts/Superfighters_fla/aim_flamethrower_billy_509.as"
+    },
+    {
+      "class": "Superfighters_fla.aim_flamethrower_boris_287",
+      "path": "res://reference/flash/scripts/Superfighters_fla/aim_flamethrower_boris_287.as"
+    },
+    {
+      "class": "Superfighters_fla.aim_flamethrower_funnyman_638",
+      "path": "res://reference/flash/scripts/Superfighters_fla/aim_flamethrower_funnyman_638.as"
+    },
+    {
+      "class": "Superfighters_fla.aim_flamethrower_jeff_758",
+      "path": "res://reference/flash/scripts/Superfighters_fla/aim_flamethrower_jeff_758.as"
+    },
+    {
+      "class": "Superfighters_fla.aim_flamethrower_johnny_206",
+      "path": "res://reference/flash/scripts/Superfighters_fla/aim_flamethrower_johnny_206.as"
+    },
+    {
+      "class": "Superfighters_fla.aim_flamethrower_mac_698",
+      "path": "res://reference/flash/scripts/Superfighters_fla/aim_flamethrower_mac_698.as"
+    },
+    {
+      "class": "Superfighters_fla.aim_flamethrower_scott_569",
+      "path": "res://reference/flash/scripts/Superfighters_fla/aim_flamethrower_scott_569.as"
+    },
+    {
+      "class": "Superfighters_fla.aim_magnum_agent_419",
+      "path": "res://reference/flash/scripts/Superfighters_fla/aim_magnum_agent_419.as"
+    },
+    {
+      "class": "Superfighters_fla.aim_magnum_billy_496",
+      "path": "res://reference/flash/scripts/Superfighters_fla/aim_magnum_billy_496.as"
+    },
+    {
+      "class": "Superfighters_fla.aim_magnum_boris_274",
+      "path": "res://reference/flash/scripts/Superfighters_fla/aim_magnum_boris_274.as"
+    },
+    {
+      "class": "Superfighters_fla.aim_magnum_funnyman_625",
+      "path": "res://reference/flash/scripts/Superfighters_fla/aim_magnum_funnyman_625.as"
+    },
+    {
+      "class": "Superfighters_fla.aim_magnum_jeff_745",
+      "path": "res://reference/flash/scripts/Superfighters_fla/aim_magnum_jeff_745.as"
+    },
+    {
+      "class": "Superfighters_fla.aim_magnum_johnny_193",
+      "path": "res://reference/flash/scripts/Superfighters_fla/aim_magnum_johnny_193.as"
+    },
+    {
+      "class": "Superfighters_fla.aim_magnum_mac_685",
+      "path": "res://reference/flash/scripts/Superfighters_fla/aim_magnum_mac_685.as"
+    },
+    {
+      "class": "Superfighters_fla.aim_magnum_scott_556",
+      "path": "res://reference/flash/scripts/Superfighters_fla/aim_magnum_scott_556.as"
+    },
+    {
+      "class": "Superfighters_fla.aim_pistol_agent_417",
+      "path": "res://reference/flash/scripts/Superfighters_fla/aim_pistol_agent_417.as"
+    },
+    {
+      "class": "Superfighters_fla.aim_pistol_billy_494",
+      "path": "res://reference/flash/scripts/Superfighters_fla/aim_pistol_billy_494.as"
+    },
+    {
+      "class": "Superfighters_fla.aim_pistol_boris_272",
+      "path": "res://reference/flash/scripts/Superfighters_fla/aim_pistol_boris_272.as"
+    },
+    {
+      "class": "Superfighters_fla.aim_pistol_funnyman_623",
+      "path": "res://reference/flash/scripts/Superfighters_fla/aim_pistol_funnyman_623.as"
+    },
+    {
+      "class": "Superfighters_fla.aim_pistol_jeff_743",
+      "path": "res://reference/flash/scripts/Superfighters_fla/aim_pistol_jeff_743.as"
+    },
+    {
+      "class": "Superfighters_fla.aim_pistol_johnny_190",
+      "path": "res://reference/flash/scripts/Superfighters_fla/aim_pistol_johnny_190.as"
+    },
+    {
+      "class": "Superfighters_fla.aim_pistol_mac_683",
+      "path": "res://reference/flash/scripts/Superfighters_fla/aim_pistol_mac_683.as"
+    },
+    {
+      "class": "Superfighters_fla.aim_pistol_scott_554",
+      "path": "res://reference/flash/scripts/Superfighters_fla/aim_pistol_scott_554.as"
+    },
+    {
+      "class": "Superfighters_fla.aim_rifle_agent_421",
+      "path": "res://reference/flash/scripts/Superfighters_fla/aim_rifle_agent_421.as"
+    },
+    {
+      "class": "Superfighters_fla.aim_rifle_billy_498",
+      "path": "res://reference/flash/scripts/Superfighters_fla/aim_rifle_billy_498.as"
+    },
+    {
+      "class": "Superfighters_fla.aim_rifle_boris_276",
+      "path": "res://reference/flash/scripts/Superfighters_fla/aim_rifle_boris_276.as"
+    },
+    {
+      "class": "Superfighters_fla.aim_rifle_funnyman_627",
+      "path": "res://reference/flash/scripts/Superfighters_fla/aim_rifle_funnyman_627.as"
+    },
+    {
+      "class": "Superfighters_fla.aim_rifle_jeff_747",
+      "path": "res://reference/flash/scripts/Superfighters_fla/aim_rifle_jeff_747.as"
+    },
+    {
+      "class": "Superfighters_fla.aim_rifle_johnny_195",
+      "path": "res://reference/flash/scripts/Superfighters_fla/aim_rifle_johnny_195.as"
+    },
+    {
+      "class": "Superfighters_fla.aim_rifle_mac_687",
+      "path": "res://reference/flash/scripts/Superfighters_fla/aim_rifle_mac_687.as"
+    },
+    {
+      "class": "Superfighters_fla.aim_rifle_scott_558",
+      "path": "res://reference/flash/scripts/Superfighters_fla/aim_rifle_scott_558.as"
+    },
+    {
+      "class": "Superfighters_fla.aim_shotgun_agent_425",
+      "path": "res://reference/flash/scripts/Superfighters_fla/aim_shotgun_agent_425.as"
+    },
+    {
+      "class": "Superfighters_fla.aim_shotgun_billy_502",
+      "path": "res://reference/flash/scripts/Superfighters_fla/aim_shotgun_billy_502.as"
+    },
+    {
+      "class": "Superfighters_fla.aim_shotgun_boris_280",
+      "path": "res://reference/flash/scripts/Superfighters_fla/aim_shotgun_boris_280.as"
+    },
+    {
+      "class": "Superfighters_fla.aim_shotgun_funnyman_631",
+      "path": "res://reference/flash/scripts/Superfighters_fla/aim_shotgun_funnyman_631.as"
+    },
+    {
+      "class": "Superfighters_fla.aim_shotgun_jeff_751",
+      "path": "res://reference/flash/scripts/Superfighters_fla/aim_shotgun_jeff_751.as"
+    },
+    {
+      "class": "Superfighters_fla.aim_shotgun_johnny_199",
+      "path": "res://reference/flash/scripts/Superfighters_fla/aim_shotgun_johnny_199.as"
+    },
+    {
+      "class": "Superfighters_fla.aim_shotgun_mac_691",
+      "path": "res://reference/flash/scripts/Superfighters_fla/aim_shotgun_mac_691.as"
+    },
+    {
+      "class": "Superfighters_fla.aim_shotgun_scott_562",
+      "path": "res://reference/flash/scripts/Superfighters_fla/aim_shotgun_scott_562.as"
+    },
+    {
+      "class": "Superfighters_fla.aim_sniper_agent_427",
+      "path": "res://reference/flash/scripts/Superfighters_fla/aim_sniper_agent_427.as"
+    },
+    {
+      "class": "Superfighters_fla.aim_sniper_billy_504",
+      "path": "res://reference/flash/scripts/Superfighters_fla/aim_sniper_billy_504.as"
+    },
+    {
+      "class": "Superfighters_fla.aim_sniper_boris_282",
+      "path": "res://reference/flash/scripts/Superfighters_fla/aim_sniper_boris_282.as"
+    },
+    {
+      "class": "Superfighters_fla.aim_sniper_funnyman_633",
+      "path": "res://reference/flash/scripts/Superfighters_fla/aim_sniper_funnyman_633.as"
+    },
+    {
+      "class": "Superfighters_fla.aim_sniper_jeff_753",
+      "path": "res://reference/flash/scripts/Superfighters_fla/aim_sniper_jeff_753.as"
+    },
+    {
+      "class": "Superfighters_fla.aim_sniper_johnny_201",
+      "path": "res://reference/flash/scripts/Superfighters_fla/aim_sniper_johnny_201.as"
+    },
+    {
+      "class": "Superfighters_fla.aim_sniper_mac_693",
+      "path": "res://reference/flash/scripts/Superfighters_fla/aim_sniper_mac_693.as"
+    },
+    {
+      "class": "Superfighters_fla.aim_sniper_scott_564",
+      "path": "res://reference/flash/scripts/Superfighters_fla/aim_sniper_scott_564.as"
+    },
+    {
+      "class": "Superfighters_fla.aim_throw_agent_434",
+      "path": "res://reference/flash/scripts/Superfighters_fla/aim_throw_agent_434.as"
+    },
+    {
+      "class": "Superfighters_fla.aim_throw_billy_511",
+      "path": "res://reference/flash/scripts/Superfighters_fla/aim_throw_billy_511.as"
+    },
+    {
+      "class": "Superfighters_fla.aim_throw_boris_289",
+      "path": "res://reference/flash/scripts/Superfighters_fla/aim_throw_boris_289.as"
+    },
+    {
+      "class": "Superfighters_fla.aim_throw_funnyman_640",
+      "path": "res://reference/flash/scripts/Superfighters_fla/aim_throw_funnyman_640.as"
+    },
+    {
+      "class": "Superfighters_fla.aim_throw_jeff_760",
+      "path": "res://reference/flash/scripts/Superfighters_fla/aim_throw_jeff_760.as"
+    },
+    {
+      "class": "Superfighters_fla.aim_throw_johnny_208",
+      "path": "res://reference/flash/scripts/Superfighters_fla/aim_throw_johnny_208.as"
+    },
+    {
+      "class": "Superfighters_fla.aim_throw_mac_700",
+      "path": "res://reference/flash/scripts/Superfighters_fla/aim_throw_mac_700.as"
+    },
+    {
+      "class": "Superfighters_fla.aim_throw_scott_571",
+      "path": "res://reference/flash/scripts/Superfighters_fla/aim_throw_scott_571.as"
+    },
+    {
+      "class": "Superfighters_fla.aim_uzi_agent_423",
+      "path": "res://reference/flash/scripts/Superfighters_fla/aim_uzi_agent_423.as"
+    },
+    {
+      "class": "Superfighters_fla.aim_uzi_billy_500",
+      "path": "res://reference/flash/scripts/Superfighters_fla/aim_uzi_billy_500.as"
+    },
+    {
+      "class": "Superfighters_fla.aim_uzi_boris_278",
+      "path": "res://reference/flash/scripts/Superfighters_fla/aim_uzi_boris_278.as"
+    },
+    {
+      "class": "Superfighters_fla.aim_uzi_funnyman_629",
+      "path": "res://reference/flash/scripts/Superfighters_fla/aim_uzi_funnyman_629.as"
+    },
+    {
+      "class": "Superfighters_fla.aim_uzi_jeff_749",
+      "path": "res://reference/flash/scripts/Superfighters_fla/aim_uzi_jeff_749.as"
+    },
+    {
+      "class": "Superfighters_fla.aim_uzi_johnny_197",
+      "path": "res://reference/flash/scripts/Superfighters_fla/aim_uzi_johnny_197.as"
+    },
+    {
+      "class": "Superfighters_fla.aim_uzi_mac_689",
+      "path": "res://reference/flash/scripts/Superfighters_fla/aim_uzi_mac_689.as"
+    },
+    {
+      "class": "Superfighters_fla.aim_uzi_scott_560",
+      "path": "res://reference/flash/scripts/Superfighters_fla/aim_uzi_scott_560.as"
+    },
+    {
+      "class": "Superfighters_fla.billboard_805",
+      "path": "res://reference/flash/scripts/Superfighters_fla/billboard_805.as"
+    },
+    {
+      "class": "Superfighters_fla.challenge_map_809",
+      "path": "res://reference/flash/scripts/Superfighters_fla/challenge_map_809.as"
+    },
+    {
+      "class": "Superfighters_fla.com_plate_793",
+      "path": "res://reference/flash/scripts/Superfighters_fla/com_plate_793.as"
+    },
+    {
+      "class": "Superfighters_fla.confirm_delete_814",
+      "path": "res://reference/flash/scripts/Superfighters_fla/confirm_delete_814.as"
+    },
+    {
+      "class": "Superfighters_fla.Container_4",
+      "path": "res://reference/flash/scripts/Superfighters_fla/Container_4.as"
+    },
+    {
+      "class": "Superfighters_fla.dive_agent_401",
+      "path": "res://reference/flash/scripts/Superfighters_fla/dive_agent_401.as"
+    },
+    {
+      "class": "Superfighters_fla.dive_billy_478",
+      "path": "res://reference/flash/scripts/Superfighters_fla/dive_billy_478.as"
+    },
+    {
+      "class": "Superfighters_fla.dive_blood_322",
+      "path": "res://reference/flash/scripts/Superfighters_fla/dive_blood_322.as"
+    },
+    {
+      "class": "Superfighters_fla.dive_boris_256",
+      "path": "res://reference/flash/scripts/Superfighters_fla/dive_boris_256.as"
+    },
+    {
+      "class": "Superfighters_fla.dive_funnyman_607",
+      "path": "res://reference/flash/scripts/Superfighters_fla/dive_funnyman_607.as"
+    },
+    {
+      "class": "Superfighters_fla.dive_hitclip_86",
+      "path": "res://reference/flash/scripts/Superfighters_fla/dive_hitclip_86.as"
+    },
+    {
+      "class": "Superfighters_fla.dive_jeff_727",
+      "path": "res://reference/flash/scripts/Superfighters_fla/dive_jeff_727.as"
+    },
+    {
+      "class": "Superfighters_fla.dive_johnny_174",
+      "path": "res://reference/flash/scripts/Superfighters_fla/dive_johnny_174.as"
+    },
+    {
+      "class": "Superfighters_fla.dive_mac_667",
+      "path": "res://reference/flash/scripts/Superfighters_fla/dive_mac_667.as"
+    },
+    {
+      "class": "Superfighters_fla.dive_scott_538",
+      "path": "res://reference/flash/scripts/Superfighters_fla/dive_scott_538.as"
+    },
+    {
+      "class": "Superfighters_fla.fall_b_agent_393",
+      "path": "res://reference/flash/scripts/Superfighters_fla/fall_b_agent_393.as"
+    },
+    {
+      "class": "Superfighters_fla.fall_b_billy_470",
+      "path": "res://reference/flash/scripts/Superfighters_fla/fall_b_billy_470.as"
+    },
+    {
+      "class": "Superfighters_fla.fall_b_blood_314",
+      "path": "res://reference/flash/scripts/Superfighters_fla/fall_b_blood_314.as"
+    },
+    {
+      "class": "Superfighters_fla.fall_b_boris_248",
+      "path": "res://reference/flash/scripts/Superfighters_fla/fall_b_boris_248.as"
+    },
+    {
+      "class": "Superfighters_fla.fall_b_burnt_451",
+      "path": "res://reference/flash/scripts/Superfighters_fla/fall_b_burnt_451.as"
+    },
+    {
+      "class": "Superfighters_fla.fall_b_funnyman_599",
+      "path": "res://reference/flash/scripts/Superfighters_fla/fall_b_funnyman_599.as"
+    },
+    {
+      "class": "Superfighters_fla.fall_b_hitclip_78",
+      "path": "res://reference/flash/scripts/Superfighters_fla/fall_b_hitclip_78.as"
+    },
+    {
+      "class": "Superfighters_fla.fall_b_jeff_719",
+      "path": "res://reference/flash/scripts/Superfighters_fla/fall_b_jeff_719.as"
+    },
+    {
+      "class": "Superfighters_fla.fall_b_johnny_166",
+      "path": "res://reference/flash/scripts/Superfighters_fla/fall_b_johnny_166.as"
+    },
+    {
+      "class": "Superfighters_fla.fall_b_mac_659",
+      "path": "res://reference/flash/scripts/Superfighters_fla/fall_b_mac_659.as"
+    },
+    {
+      "class": "Superfighters_fla.fall_b_scott_530",
+      "path": "res://reference/flash/scripts/Superfighters_fla/fall_b_scott_530.as"
+    },
+    {
+      "class": "Superfighters_fla.fall_f_agent_391",
+      "path": "res://reference/flash/scripts/Superfighters_fla/fall_f_agent_391.as"
+    },
+    {
+      "class": "Superfighters_fla.fall_f_billy_468",
+      "path": "res://reference/flash/scripts/Superfighters_fla/fall_f_billy_468.as"
+    },
+    {
+      "class": "Superfighters_fla.fall_f_blood_312",
+      "path": "res://reference/flash/scripts/Superfighters_fla/fall_f_blood_312.as"
+    },
+    {
+      "class": "Superfighters_fla.fall_f_boris_246",
+      "path": "res://reference/flash/scripts/Superfighters_fla/fall_f_boris_246.as"
+    },
+    {
+      "class": "Superfighters_fla.fall_f_burnt_449",
+      "path": "res://reference/flash/scripts/Superfighters_fla/fall_f_burnt_449.as"
+    },
+    {
+      "class": "Superfighters_fla.fall_f_funnyman_597",
+      "path": "res://reference/flash/scripts/Superfighters_fla/fall_f_funnyman_597.as"
+    },
+    {
+      "class": "Superfighters_fla.fall_f_hitclip_76",
+      "path": "res://reference/flash/scripts/Superfighters_fla/fall_f_hitclip_76.as"
+    },
+    {
+      "class": "Superfighters_fla.fall_f_jeff_717",
+      "path": "res://reference/flash/scripts/Superfighters_fla/fall_f_jeff_717.as"
+    },
+    {
+      "class": "Superfighters_fla.fall_f_johnny_164",
+      "path": "res://reference/flash/scripts/Superfighters_fla/fall_f_johnny_164.as"
+    },
+    {
+      "class": "Superfighters_fla.fall_f_mac_657",
+      "path": "res://reference/flash/scripts/Superfighters_fla/fall_f_mac_657.as"
+    },
+    {
+      "class": "Superfighters_fla.fall_f_scott_528",
+      "path": "res://reference/flash/scripts/Superfighters_fla/fall_f_scott_528.as"
+    },
+    {
+      "class": "Superfighters_fla.grabbed_agent_441",
+      "path": "res://reference/flash/scripts/Superfighters_fla/grabbed_agent_441.as"
+    },
+    {
+      "class": "Superfighters_fla.grabbed_billy_518",
+      "path": "res://reference/flash/scripts/Superfighters_fla/grabbed_billy_518.as"
+    },
+    {
+      "class": "Superfighters_fla.grabbed_blood_362",
+      "path": "res://reference/flash/scripts/Superfighters_fla/grabbed_blood_362.as"
+    },
+    {
+      "class": "Superfighters_fla.grabbed_boris_296",
+      "path": "res://reference/flash/scripts/Superfighters_fla/grabbed_boris_296.as"
+    },
+    {
+      "class": "Superfighters_fla.grabbed_burnt_454",
+      "path": "res://reference/flash/scripts/Superfighters_fla/grabbed_burnt_454.as"
+    },
+    {
+      "class": "Superfighters_fla.grabbed_funnyman_647",
+      "path": "res://reference/flash/scripts/Superfighters_fla/grabbed_funnyman_647.as"
+    },
+    {
+      "class": "Superfighters_fla.grabbed_hitclip_117",
+      "path": "res://reference/flash/scripts/Superfighters_fla/grabbed_hitclip_117.as"
+    },
+    {
+      "class": "Superfighters_fla.grabbed_jeff_767",
+      "path": "res://reference/flash/scripts/Superfighters_fla/grabbed_jeff_767.as"
+    },
+    {
+      "class": "Superfighters_fla.grabbed_johnny_215",
+      "path": "res://reference/flash/scripts/Superfighters_fla/grabbed_johnny_215.as"
+    },
+    {
+      "class": "Superfighters_fla.grabbed_mac_707",
+      "path": "res://reference/flash/scripts/Superfighters_fla/grabbed_mac_707.as"
+    },
+    {
+      "class": "Superfighters_fla.grabbed_scott_578",
+      "path": "res://reference/flash/scripts/Superfighters_fla/grabbed_scott_578.as"
+    },
+    {
+      "class": "Superfighters_fla.gui_player_819",
+      "path": "res://reference/flash/scripts/Superfighters_fla/gui_player_819.as"
+    },
+    {
+      "class": "Superfighters_fla.MainTimeline",
+      "path": "res://reference/flash/scripts/Superfighters_fla/MainTimeline.as"
+    },
+    {
+      "class": "Superfighters_fla.menu_bot_6_setup_795",
+      "path": "res://reference/flash/scripts/Superfighters_fla/menu_bot_6_setup_795.as"
+    },
+    {
+      "class": "Superfighters_fla.menu_bot_7_setup_791",
+      "path": "res://reference/flash/scripts/Superfighters_fla/menu_bot_7_setup_791.as"
+    },
+    {
+      "class": "Superfighters_fla.menu_first_choise_780",
+      "path": "res://reference/flash/scripts/Superfighters_fla/menu_first_choise_780.as"
+    },
+    {
+      "class": "Superfighters_fla.menu_map_selection_798",
+      "path": "res://reference/flash/scripts/Superfighters_fla/menu_map_selection_798.as"
+    },
+    {
+      "class": "Superfighters_fla.menu_mode_selection_783",
+      "path": "res://reference/flash/scripts/Superfighters_fla/menu_mode_selection_783.as"
+    },
+    {
+      "class": "Superfighters_fla.menu_no_bots_796",
+      "path": "res://reference/flash/scripts/Superfighters_fla/menu_no_bots_796.as"
+    },
+    {
+      "class": "Superfighters_fla.menu_set_up_815",
+      "path": "res://reference/flash/scripts/Superfighters_fla/menu_set_up_815.as"
+    },
+    {
+      "class": "Superfighters_fla.menu_set_up_816",
+      "path": "res://reference/flash/scripts/Superfighters_fla/menu_set_up_816.as"
+    },
+    {
+      "class": "Superfighters_fla.menu_stage_mode_808",
+      "path": "res://reference/flash/scripts/Superfighters_fla/menu_stage_mode_808.as"
+    },
+    {
+      "class": "Superfighters_fla.menu_vs_1p_setup_784",
+      "path": "res://reference/flash/scripts/Superfighters_fla/menu_vs_1p_setup_784.as"
+    },
+    {
+      "class": "Superfighters_fla.menu_vs_2p_setup_790",
+      "path": "res://reference/flash/scripts/Superfighters_fla/menu_vs_2p_setup_790.as"
+    },
+    {
+      "class": "Superfighters_fla.number_00_821",
+      "path": "res://reference/flash/scripts/Superfighters_fla/number_00_821.as"
+    },
+    {
+      "class": "Superfighters_fla.player_plate_785",
+      "path": "res://reference/flash/scripts/Superfighters_fla/player_plate_785.as"
+    },
+    {
+      "class": "Superfighters_fla.score_team_pics_826",
+      "path": "res://reference/flash/scripts/Superfighters_fla/score_team_pics_826.as"
+    },
+    {
+      "class": "Superfighters_fla.score_wins_loss_827",
+      "path": "res://reference/flash/scripts/Superfighters_fla/score_wins_loss_827.as"
+    },
+    {
+      "class": "Superfighters_fla.SoundContainer_834",
+      "path": "res://reference/flash/scripts/Superfighters_fla/SoundContainer_834.as"
+    },
+    {
+      "class": "Superfighters_fla.toggle_character_name_787",
+      "path": "res://reference/flash/scripts/Superfighters_fla/toggle_character_name_787.as"
+    },
+    {
+      "class": "Superfighters_fla.toggle_character_pic_788",
+      "path": "res://reference/flash/scripts/Superfighters_fla/toggle_character_pic_788.as"
+    },
+    {
+      "class": "Superfighters_fla.toggle_difficulty_794",
+      "path": "res://reference/flash/scripts/Superfighters_fla/toggle_difficulty_794.as"
+    },
+    {
+      "class": "Superfighters_fla.toggle_game_mode_800",
+      "path": "res://reference/flash/scripts/Superfighters_fla/toggle_game_mode_800.as"
+    },
+    {
+      "class": "Superfighters_fla.toggle_map_name_799",
+      "path": "res://reference/flash/scripts/Superfighters_fla/toggle_map_name_799.as"
+    },
+    {
+      "class": "Superfighters_fla.toggle_map_pic_801",
+      "path": "res://reference/flash/scripts/Superfighters_fla/toggle_map_pic_801.as"
+    },
+    {
+      "class": "Superfighters_fla.toggle_player_type_789",
+      "path": "res://reference/flash/scripts/Superfighters_fla/toggle_player_type_789.as"
+    },
+    {
+      "class": "Superfighters_fla.toggle_team_786",
+      "path": "res://reference/flash/scripts/Superfighters_fla/toggle_team_786.as"
+    },
+    {
+      "class": "Superfighters_fla.TutorialInstructions_832",
+      "path": "res://reference/flash/scripts/Superfighters_fla/TutorialInstructions_832.as"
+    },
+    {
+      "class": "Superfighters_fla.wpn_shine_38",
+      "path": "res://reference/flash/scripts/Superfighters_fla/wpn_shine_38.as"
+    },
+    {
+      "class": "superfighters_theme",
+      "path": "res://reference/flash/scripts/superfighters_theme.as"
+    },
+    {
+      "class": "survival_score",
+      "path": "res://reference/flash/scripts/survival_score.as"
+    },
+    {
+      "class": "survival_timer",
+      "path": "res://reference/flash/scripts/survival_timer.as"
+    },
+    {
+      "class": "svisch4",
+      "path": "res://reference/flash/scripts/svisch4.as"
+    },
+    {
+      "class": "svisch6",
+      "path": "res://reference/flash/scripts/svisch6.as"
+    },
+    {
+      "class": "table_01",
+      "path": "res://reference/flash/scripts/table_01.as"
+    },
+    {
+      "class": "table_debris_01",
+      "path": "res://reference/flash/scripts/table_debris_01.as"
+    },
+    {
+      "class": "table_debris_02",
+      "path": "res://reference/flash/scripts/table_debris_02.as"
+    },
+    {
+      "class": "table_debris_03",
+      "path": "res://reference/flash/scripts/table_debris_03.as"
+    },
+    {
+      "class": "table_small_01",
+      "path": "res://reference/flash/scripts/table_small_01.as"
+    },
+    {
+      "class": "tips",
+      "path": "res://reference/flash/scripts/tips.as"
+    },
+    {
+      "class": "trace_axe_01",
+      "path": "res://reference/flash/scripts/trace_axe_01.as"
+    },
+    {
+      "class": "trace_axe_02",
+      "path": "res://reference/flash/scripts/trace_axe_02.as"
+    },
+    {
+      "class": "trace_axe_03",
+      "path": "res://reference/flash/scripts/trace_axe_03.as"
+    },
+    {
+      "class": "trace_bazooka_rocket",
+      "path": "res://reference/flash/scripts/trace_bazooka_rocket.as"
+    },
+    {
+      "class": "trace_machete_01",
+      "path": "res://reference/flash/scripts/trace_machete_01.as"
+    },
+    {
+      "class": "trace_machete_02",
+      "path": "res://reference/flash/scripts/trace_machete_02.as"
+    },
+    {
+      "class": "trace_machete_03",
+      "path": "res://reference/flash/scripts/trace_machete_03.as"
+    },
+    {
+      "class": "trace_sword_01",
+      "path": "res://reference/flash/scripts/trace_sword_01.as"
+    },
+    {
+      "class": "trace_sword_02",
+      "path": "res://reference/flash/scripts/trace_sword_02.as"
+    },
+    {
+      "class": "trace_sword_03",
+      "path": "res://reference/flash/scripts/trace_sword_03.as"
+    },
+    {
+      "class": "trashcan",
+      "path": "res://reference/flash/scripts/trashcan.as"
+    },
+    {
+      "class": "tutorial_target",
+      "path": "res://reference/flash/scripts/tutorial_target.as"
+    },
+    {
+      "class": "tutorial_target_debris_01",
+      "path": "res://reference/flash/scripts/tutorial_target_debris_01.as"
+    },
+    {
+      "class": "tutorial_target_debris_02",
+      "path": "res://reference/flash/scripts/tutorial_target_debris_02.as"
+    },
+    {
+      "class": "tutorial_target_debris_03",
+      "path": "res://reference/flash/scripts/tutorial_target_debris_03.as"
+    },
+    {
+      "class": "uzi00",
+      "path": "res://reference/flash/scripts/uzi00.as"
+    },
+    {
+      "class": "uzi01",
+      "path": "res://reference/flash/scripts/uzi01.as"
+    },
+    {
+      "class": "voltage_02",
+      "path": "res://reference/flash/scripts/voltage_02.as"
+    },
+    {
+      "class": "wilhelm",
+      "path": "res://reference/flash/scripts/wilhelm.as"
+    },
+    {
+      "class": "windmill_propeller",
+      "path": "res://reference/flash/scripts/windmill_propeller.as"
+    },
+    {
+      "class": "window_seg",
+      "path": "res://reference/flash/scripts/window_seg.as"
+    },
+    {
+      "class": "wood_impact00",
+      "path": "res://reference/flash/scripts/wood_impact00.as"
+    },
+    {
+      "class": "wpn_axe",
+      "path": "res://reference/flash/scripts/wpn_axe.as"
+    },
+    {
+      "class": "wpn_bazooka",
+      "path": "res://reference/flash/scripts/wpn_bazooka.as"
+    },
+    {
+      "class": "wpn_flamethrower",
+      "path": "res://reference/flash/scripts/wpn_flamethrower.as"
+    },
+    {
+      "class": "wpn_grenade_thrown",
+      "path": "res://reference/flash/scripts/wpn_grenade_thrown.as"
+    },
+    {
+      "class": "wpn_grenades",
+      "path": "res://reference/flash/scripts/wpn_grenades.as"
+    },
+    {
+      "class": "wpn_machete",
+      "path": "res://reference/flash/scripts/wpn_machete.as"
+    },
+    {
+      "class": "wpn_magnum",
+      "path": "res://reference/flash/scripts/wpn_magnum.as"
+    },
+    {
+      "class": "wpn_medkit",
+      "path": "res://reference/flash/scripts/wpn_medkit.as"
+    },
+    {
+      "class": "wpn_molotov_thrown",
+      "path": "res://reference/flash/scripts/wpn_molotov_thrown.as"
+    },
+    {
+      "class": "wpn_molotovs",
+      "path": "res://reference/flash/scripts/wpn_molotovs.as"
+    },
+    {
+      "class": "wpn_pills",
+      "path": "res://reference/flash/scripts/wpn_pills.as"
+    },
+    {
+      "class": "wpn_pistol",
+      "path": "res://reference/flash/scripts/wpn_pistol.as"
+    },
+    {
+      "class": "wpn_rifle",
+      "path": "res://reference/flash/scripts/wpn_rifle.as"
+    },
+    {
+      "class": "wpn_shotgun",
+      "path": "res://reference/flash/scripts/wpn_shotgun.as"
+    },
+    {
+      "class": "wpn_slowmo_05",
+      "path": "res://reference/flash/scripts/wpn_slowmo_05.as"
+    },
+    {
+      "class": "wpn_slowmo_10",
+      "path": "res://reference/flash/scripts/wpn_slowmo_10.as"
+    },
+    {
+      "class": "wpn_sniper",
+      "path": "res://reference/flash/scripts/wpn_sniper.as"
+    },
+    {
+      "class": "wpn_sword",
+      "path": "res://reference/flash/scripts/wpn_sword.as"
+    },
+    {
+      "class": "wpn_uzi",
+      "path": "res://reference/flash/scripts/wpn_uzi.as"
+    }
+  ]
+}

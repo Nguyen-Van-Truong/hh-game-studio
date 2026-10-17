@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "url": "file:///ABSOLUTE/PATH/TO/8-9-hh3d-3/superagent/tools/y8rig/fixture/keyboard.html",
+  "focus_click": true,
+  "actions": [
+    {"type": "hold", "key": "ArrowRight", "duration_ms": 500},
+    {"type": "key_down", "key": "Space"},
+    {"type": "wait", "duration_ms": 120},
+    {"type": "key_up", "key": "Space"}
+  ]
+}

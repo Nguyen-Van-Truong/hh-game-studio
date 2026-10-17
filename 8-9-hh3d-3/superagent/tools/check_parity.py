@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Parity gates over the SA-01 reference ledger.
 
-``--inventory`` is the observation gate: every required row must have a real
-state/evidence record, so an all-UNVERIFIED seed cannot silently pass.
+``--inventory`` is the SA5 observation gate: every row must have a tier and the
+first six numeric groups must have measured samples; behavioral/random rows can
+remain open for the WP that uses them.
 ``--classic`` is the release gate: functional rows must be MATCHED or proven
 NOT_IN_CURRENT.  Presentation-only owner exemptions are explicitly marked in
 notes and never exempt a functional row.
@@ -18,6 +19,7 @@ try:
     from check_ledger import (
         Row,
         _is_nonfunctional_exemption,
+        _owner_approval_reference,
         load_ledger,
         validate_ledger,
     )
@@ -25,9 +27,24 @@ except ImportError:  # package invocation from repository root
     from tools.check_ledger import (
         Row,
         _is_nonfunctional_exemption,
+        _owner_approval_reference,
         load_ledger,
         validate_ledger,
     )
+
+try:
+    from measurement_gate import errors as measurement_errors
+except ImportError:  # package invocation from repository root
+    from tools.measurement_gate import errors as measurement_errors
+
+try:
+    from measurement_gate import ROW_TARGETS
+except ImportError:  # package invocation from repository root
+    from tools.measurement_gate import ROW_TARGETS
+
+
+REQUIRED_FIRST_MEASUREMENTS = [f"A{i:02d}" for i in range(1, 7)]
+DEFAULT_MEASUREMENTS = Path(__file__).resolve().parents[1] / "docs" / "measurements" / "core-measurements.json"
 
 
 def _functional(row: Row) -> bool:
@@ -35,19 +52,39 @@ def _functional(row: Row) -> bool:
     return not _is_nonfunctional_exemption(row)
 
 
-def inventory_errors(rows: list[Row]) -> list[str]:
-    errors: list[str] = []
+def _measurement_file(measurement_path: str | Path | None) -> Path:
+    return Path(measurement_path) if measurement_path is not None else DEFAULT_MEASUREMENTS
+
+
+def _numeric_groups(rows: list[Row]) -> list[str]:
+    """Map tier-A ledger rows to the numeric groups they claim."""
+    groups: set[str] = set()
     for row in rows:
-        if row.status == "UNVERIFIED":
-            errors.append(
-                f"line {row.line}: inventory row {row.id} is UNVERIFIED; "
-                "observe it or prove NOT_IN_CURRENT before the inventory gate"
-            )
+        # A numeric comparison proves a product claim.  NOT_IN_CURRENT and
+        # unresolved rows have no product value to compare.
+        if row.tier == "A" and row.status == "MATCHED":
+            groups.update(ROW_TARGETS.get(row.id, ()))
+    return sorted(groups)
+
+
+def inventory_errors(rows: list[Row], measurement_path: str | Path | None = None) -> list[str]:
+    errors: list[str] = []
+    errors.extend(measurement_errors(_measurement_file(measurement_path), REQUIRED_FIRST_MEASUREMENTS))
+    # SA5 inventory deliberately leaves unmeasurable behavioral and random
+    # rows open; their tier is recorded and the WP that uses them owns the
+    # follow-up. A01-A06 remain the numeric prerequisite for SA-03.
     return errors
 
 
-def classic_errors(rows: list[Row]) -> list[str]:
+def classic_errors(
+    rows: list[Row], measurement_path: str | Path | None = None
+) -> list[str]:
     errors: list[str] = []
+    numeric_groups = _numeric_groups(rows)
+    if numeric_groups:
+        errors.extend(
+            measurement_errors(_measurement_file(measurement_path), numeric_groups, compare=True)
+        )
     for row in rows:
         state = row.status
         if state == "EXEMPT_BY_OWNER" and _functional(row):
@@ -56,7 +93,12 @@ def classic_errors(rows: list[Row]) -> list[str]:
             )
             continue
         if _functional(row):
-            if state not in {"MATCHED", "NOT_IN_CURRENT"}:
+            if state == "APPROX" and row.tier == "C":
+                if not _owner_approval_reference(row.values.get("notes", "")):
+                    errors.append(
+                        f"line {row.line}: tier C APPROX requires notes owner_ok=<record>"
+                    )
+            elif state not in {"MATCHED", "NOT_IN_CURRENT"}:
                 errors.append(
                     f"line {row.line}: classic functional row {row.id} must be "
                     f"MATCHED or NOT_IN_CURRENT (got {state})"
@@ -69,12 +111,18 @@ def classic_errors(rows: list[Row]) -> list[str]:
     return errors
 
 
-def run(path: str | Path, mode: str) -> list[str]:
+def run(
+    path: str | Path,
+    mode: str,
+    measurement_path: str | Path | None = None,
+) -> list[str]:
     structural = validate_ledger(path)
     if structural:
         return structural
     rows, _ = load_ledger(path)
-    return inventory_errors(rows) if mode == "inventory" else classic_errors(rows)
+    if mode == "inventory":
+        return inventory_errors(rows, measurement_path)
+    return classic_errors(rows, measurement_path)
 
 
 def main(argv: Iterable[str] | None = None) -> int:
@@ -82,10 +130,11 @@ def main(argv: Iterable[str] | None = None) -> int:
     group = parser.add_mutually_exclusive_group()
     group.add_argument("--inventory", action="store_true", help="observation inventory gate")
     group.add_argument("--classic", action="store_true", help="Classic parity/release gate")
+    parser.add_argument("--measurements", default="docs/measurements/core-measurements.json", help="SA5 numeric measurement JSON")
     parser.add_argument("ledger", nargs="?", default="docs/reference-ledger.tsv")
     args = parser.parse_args(list(argv) if argv is not None else None)
     mode = "classic" if args.classic else "inventory"
-    errors = run(args.ledger, mode)
+    errors = run(args.ledger, mode, args.measurements)
     if errors:
         for error in errors:
             print(f"ERROR: {error}", file=sys.stderr)

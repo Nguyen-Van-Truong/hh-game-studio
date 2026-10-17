@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="theme-color" content="#070a18" />
+    <link rel="manifest" href="./manifest.webmanifest" />
     <meta name="description" content="Superagent: Neon Relay — a clean-room 2D arena shooter vertical slice." />
     <title>Superagent // Neon Relay</title>
   </head>
@@ -25,12 +26,17 @@
         </div>
         <div id="start-gate" class="start-gate">
           <div class="start-card">
-            <p class="eyebrow">SUPERAGENT // WEB VERTICAL SLICE</p>
+            <p class="eyebrow">SUPERAGENT // LOCAL 2P ARENA</p>
             <h1>NEON RELAY</h1>
-            <p class="start-copy">A fast two-lane arena duel. Grab the shard, break the cover, and own the relay.</p>
-            <button id="start-button" class="start-button">CLICK TO DEPLOY</button>
-            <p class="hint">P1: WASD + J/K/L · P2: arrows + Numpad 1–4 · P to pause</p>
+            <p class="start-copy">Two fighters. One relay. Break the cover, climb the yard, take the shard, and make the other player drop.</p>
+            <div class="mode-badge"><span class="mode-dot"></span> TWO PLAYERS · SAME KEYBOARD</div>
+            <button id="start-button" class="start-button">DEPLOY LOCAL 2P</button>
+            <p class="hint"><strong>P1</strong> WASD + Space/J/K/L/; · Q weapon · Shift roll<br /><strong>P2</strong> Arrows + Numpad 0/1/2/3/4/5 · Right Shift roll · P pause</p>
           </div>
+        </div>
+        <div class="accessibility-bar" aria-label="Presentation settings">
+          <button id="mute-toggle" type="button" aria-label="Toggle sound">Sound</button>
+          <button id="motion-toggle" type="button" aria-label="Toggle reduced motion">Motion</button>
         </div>
         <div id="status-line" role="status" aria-live="polite">Awaiting deployment</div>
       </div>

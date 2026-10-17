@@ -4,7 +4,7 @@ config_version=5
 
 [application]
 config/name="Superagent"
-config/description="Superagent Classic bootstrap (SA-01 input contract; gameplay follows observation)."
+config/description="Superagent Classic prototype (SA-04 implementation; parity and owner acceptance pending)."
 run/main_scene="res://main.tscn"
 
 [display]
@@ -38,6 +38,7 @@ p1_punch={"deadzone":0.5,"events":[Object(InputEventKey,"keycode":74)]}
 p1_shoot={"deadzone":0.5,"events":[Object(InputEventKey,"keycode":75)]}
 p1_throw={"deadzone":0.5,"events":[Object(InputEventKey,"keycode":76)]}
 p1_power={"deadzone":0.5,"events":[Object(InputEventKey,"keycode":59)]}
+p1_switch={"deadzone":0.5,"events":[Object(InputEventKey,"keycode":81)]}
 p2_left={"deadzone":0.5,"events":[Object(InputEventKey,"keycode":4194319)]}
 p2_right={"deadzone":0.5,"events":[Object(InputEventKey,"keycode":4194321)]}
 p2_up={"deadzone":0.5,"events":[Object(InputEventKey,"keycode":4194320)]}
@@ -46,3 +47,4 @@ p2_punch={"deadzone":0.5,"events":[Object(InputEventKey,"keycode":4194439)]}
 p2_shoot={"deadzone":0.5,"events":[Object(InputEventKey,"keycode":4194440)]}
 p2_throw={"deadzone":0.5,"events":[Object(InputEventKey,"keycode":4194441)]}
 p2_power={"deadzone":0.5,"events":[Object(InputEventKey,"keycode":4194442)]}
+p2_switch={"deadzone":0.5,"events":[Object(InputEventKey,"keycode":4194443)]}

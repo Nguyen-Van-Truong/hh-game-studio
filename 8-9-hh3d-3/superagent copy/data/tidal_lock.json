@@ -1,0 +1,31 @@
+{
+  "schema": "sa03.room.v1", "status": "PROVISIONAL_GREYBOX", "width": 1550, "height": 880,
+  "floor_y": 720, "pit_death_y": 980, "ladder_margin": 18,
+  "spawns": [{"player_id": 1, "x": 170, "y": 720}, {"player_id": 2, "x": 1380, "y": 720}],
+  "platforms": [
+    {"id": "lock_floor_west", "left": 90, "right": 600, "y": 720, "one_way": false},
+    {"id": "lock_floor_east", "left": 740, "right": 1460, "y": 720, "one_way": false},
+    {"id": "lock_west_deck", "left": 170, "right": 460, "y": 500, "one_way": true},
+    {"id": "lock_center_deck", "left": 560, "right": 1000, "y": 600, "one_way": true},
+    {"id": "lock_east_deck", "left": 1080, "right": 1400, "y": 460, "one_way": true}
+  ],
+  "solids": [
+    {"id": "lock_west_cover", "left": 270, "right": 350, "top": 656, "bottom": 720},
+    {"id": "lock_center_cover", "left": 740, "right": 820, "top": 656, "bottom": 720},
+    {"id": "lock_east_cover", "left": 1210, "right": 1290, "top": 656, "bottom": 720}
+  ],
+  "ladders": [{"id": "lock_west_ladder", "x": 400, "top": 500, "bottom": 720}, {"id": "lock_east_ladder", "x": 1180, "top": 460, "bottom": 720}],
+  "pits": [{"id": "lock_water_gap", "left": 600, "right": 740}],
+  "pickups": [
+    {"id": "lock_pistol", "kind": "pistol", "x": 430, "y": 720, "active": true},
+    {"id": "lock_grenades", "kind": "grenades", "x": 1150, "y": 460, "active": true},
+    {"id": "lock_medkit", "kind": "medkit", "x": 780, "y": 600, "active": true},
+    {"id": "lock_bullet_time", "kind": "bullet_time_10", "duration_ticks": 600, "x": 900, "y": 720, "active": true}
+  ],
+  "props": [
+    {"id": "lock_crate_west", "kind": "crate", "material": "wood", "health": 30, "x": 310, "y": 688},
+    {"id": "lock_barrel_center", "kind": "barrel", "material": "steel", "explosive": true, "health": 20, "x": 780, "y": 688},
+    {"id": "lock_glass_east", "kind": "glass", "material": "glass", "health": 10, "x": 1360, "y": 688}
+  ],
+  "notes": "Original lock layout with a central water gap and offset control decks."
+}

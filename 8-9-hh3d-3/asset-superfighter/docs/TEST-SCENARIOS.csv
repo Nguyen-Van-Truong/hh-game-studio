@@ -1,0 +1,26 @@
+scenario_id,category,setup,steps,expected_result,priority,ledger_rows,verification
+MOV-01,movement,2P VS REFMAP-06 zero bots,P1 tap Up once,airborne or jump pose,Y8-OBS,R02-02,screenshot
+MOV-02,movement,same,P1 double-tap Down on one-way platform,drop to lower platform,LEAD,R02-05,TIP-01
+MOV-03,movement,ladder center,P2 burst W on ladder,climbing pose higher,R02-04 partial,screenshot
+MOV-04,movement,flat floor,P1 Down+direction roll input,roll posture; optional dodge,LEAD,R02-06,WIKI Special Movements
+MOV-05,movement,sprint enabled if bound,sprint then Down,dive; no fall damage from high ledge,LEAD,TIP-17
+MOV-06,fire,fighter ignited (flamethrower or gas),perform 1-2 rolls,fire extinguished,TIP-06,R09-02,video
+MELEE-01,melee,empty hands,P1 tap N,punch animation; guns unchanged,Y8-OBS,R01-02,
+MELEE-02,melee,near kick range,tap kick key,opponent stagger short push,WIKI Kicks,R03-02,
+MELEE-03,melee,mid-air,tap kick,jump kick farther knockback; kneel on land,WIKI Kicks,TIP-13,
+MELEE-04,melee,opponent aiming gun,punch during aim,disarm; Y8 tip: gun disappears not pickup,TIP-07,R07-02,
+MELEE-05,melee,hold katana or fire axe,melee strike in range,HP damage per weapon stats,WIKI,,
+RNG-01,ranged,pistol 12 ammo,tap shoot until 00,counter decreases; empty state,R04-04 partial,Y8-OBS,
+RNG-02,ranged,pistol,hold aim then release,release-to-fire if implemented,UNVERIFIED,R04-01,
+RNG-03,ranged,flamethrower pickup,close spray,enemy ignites; DOT,WIKI Flamethrower,,
+RNG-04,ranged,grenades,tap throw,grenade count decreases; arc visible,Y8-OBS,R01-04,
+PROP-01,props,wooden crate,shoot or melee until break,debris; wood may burn,WIKI Wooden,TIP-10,
+PROP-02,props,explosive barrel,shoot once,explosion + fire; possible second wreck blast,WIKI Explosive Barrel,,
+PROP-03,props,gas can,shoot or explode nearby,fire patch; adjacent level-2 fire,WIKI Gas Can,TIP-08,
+PROP-04,props,glass panel,dive into glass,glass breaks,TIP-17,R09-03,
+PROP-05,props,chair on map,pick up / melee with chair,high damage then chair leg,WIKI Chair,,
+ITEM-01,pickup,walk over pill,contact,25% heal TIP-16,LEAD,R08-01,
+ITEM-02,pickup,walk over medkit,contact,50% heal TIP-16,LEAD,,
+ITEM-03,pickup,collect clock 5 or 10,activate power slot,slow-mo overlay TIP-04,Y8-OBS R01-05,
+TEAM-01,teams,2P same team,melee ally,no damage TIP-12,LEAD,R12-01,
+TEAM-02,teams,same,bullet ally,damage TIP-12,LEAD,,

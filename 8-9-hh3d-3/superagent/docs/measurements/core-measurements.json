@@ -1,0 +1,314 @@
+{
+  "schema": "sa5.measurements.v1",
+  "groups": {
+    "A01": {
+      "walk_speed": {
+        "unit": "H/s",
+        "reference": null,
+        "product": null
+      },
+      "acceleration_time": {
+        "unit": "s",
+        "reference": null,
+        "product": null
+      },
+      "braking_distance": {
+        "unit": "H",
+        "reference": null,
+        "product": null
+      }
+    },
+    "A02": {
+      "sprint_speed": {
+        "unit": "H/s",
+        "reference": null,
+        "product": null
+      },
+      "stamina_drain_time": {
+        "unit": "s",
+        "reference": null,
+        "product": null
+      },
+      "idle_refill_time": {
+        "unit": "s",
+        "reference": null,
+        "product": null
+      },
+      "walking_refill_time": {
+        "unit": "s",
+        "reference": null,
+        "product": null
+      }
+    },
+    "A03": {
+      "jump_height": {
+        "unit": "H",
+        "reference": null,
+        "product": null
+      },
+      "jump_airtime": {
+        "unit": "s",
+        "reference": null,
+        "product": null
+      },
+      "walking_jump_distance": {
+        "unit": "H",
+        "reference": null,
+        "product": null
+      },
+      "sprint_jump_distance": {
+        "unit": "H",
+        "reference": null,
+        "product": null
+      }
+    },
+    "A04": {
+      "terminal_fall_speed": {
+        "unit": "H/s",
+        "reference": null,
+        "product": null
+      },
+      "fall_damage_height": {
+        "unit": "H",
+        "reference": null,
+        "product": null
+      },
+      "fatal_fall_height": {
+        "unit": "H",
+        "reference": null,
+        "product": null
+      }
+    },
+    "A05": {
+      "climb_up_speed": {
+        "unit": "H/s",
+        "reference": null,
+        "product": null
+      },
+      "climb_down_speed": {
+        "unit": "H/s",
+        "reference": null,
+        "product": null
+      }
+    },
+    "A06": {
+      "roll_distance": {
+        "unit": "H",
+        "reference": null,
+        "product": null
+      },
+      "roll_duration": {
+        "unit": "s",
+        "reference": null,
+        "product": null
+      },
+      "dive_distance": {
+        "unit": "H",
+        "reference": null,
+        "product": null
+      },
+      "dive_duration": {
+        "unit": "s",
+        "reference": null,
+        "product": null
+      }
+    },
+    "A07": {
+      "punch_interval": {
+        "unit": "s",
+        "reference": null,
+        "product": null
+      },
+      "punches_to_defeat": {
+        "unit": "count",
+        "reference": null,
+        "product": null
+      }
+    },
+    "A08": {
+      "jump_kicks_to_defeat": {
+        "unit": "count",
+        "reference": null,
+        "product": null
+      },
+      "punch_knockback": {
+        "unit": "H",
+        "reference": null,
+        "product": null
+      },
+      "kick_knockback": {
+        "unit": "H",
+        "reference": null,
+        "product": null
+      }
+    },
+    "A09": {
+      "pistol_interval": {
+        "unit": "s",
+        "reference": null,
+        "product": null
+      },
+      "pistol_shots_to_defeat": {
+        "unit": "count",
+        "reference": null,
+        "product": null
+      },
+      "pistol_ammo": {
+        "unit": "count",
+        "reference": null,
+        "product": null
+      },
+      "pistol_bullet_speed": {
+        "unit": "H/s",
+        "reference": null,
+        "product": null
+      }
+    },
+    "A10": {
+      "gun_1_interval": {
+        "unit": "s",
+        "reference": null,
+        "product": null
+      },
+      "gun_1_shots_to_defeat": {
+        "unit": "count",
+        "reference": null,
+        "product": null
+      },
+      "gun_1_ammo": {
+        "unit": "count",
+        "reference": null,
+        "product": null
+      },
+      "gun_2_interval": {
+        "unit": "s",
+        "reference": null,
+        "product": null
+      },
+      "gun_2_shots_to_defeat": {
+        "unit": "count",
+        "reference": null,
+        "product": null
+      },
+      "gun_2_ammo": {
+        "unit": "count",
+        "reference": null,
+        "product": null
+      }
+    },
+    "A11": {
+      "grenade_fuse": {
+        "unit": "s",
+        "reference": null,
+        "product": null
+      },
+      "standing_throw_distance": {
+        "unit": "H",
+        "reference": null,
+        "product": null
+      },
+      "running_throw_distance": {
+        "unit": "H",
+        "reference": null,
+        "product": null
+      },
+      "blast_radius": {
+        "unit": "H",
+        "reference": null,
+        "product": null
+      },
+      "center_damage": {
+        "unit": "HP",
+        "reference": null,
+        "product": null
+      },
+      "starting_grenades": {
+        "unit": "count",
+        "reference": null,
+        "product": null
+      }
+    },
+    "A12": {
+      "knockdown_duration": {
+        "unit": "s",
+        "reference": null,
+        "product": null
+      },
+      "recovery_immunity": {
+        "unit": "s",
+        "reference": null,
+        "product": null
+      }
+    },
+    "A13": {
+      "vs_round_delay": {
+        "unit": "s",
+        "reference": null,
+        "product": null
+      },
+      "stage_round_delay": {
+        "unit": "s",
+        "reference": null,
+        "product": null
+      },
+      "survival_end_delay": {
+        "unit": "s",
+        "reference": null,
+        "product": null
+      }
+    },
+    "A14": {
+      "power_5_duration": {
+        "unit": "s",
+        "reference": null,
+        "product": null
+      },
+      "power_10_duration": {
+        "unit": "s",
+        "reference": null,
+        "product": null
+      },
+      "owner_time_ratio": {
+        "unit": "ratio",
+        "reference": null,
+        "product": null
+      },
+      "other_time_ratio": {
+        "unit": "ratio",
+        "reference": null,
+        "product": null
+      }
+    },
+    "A15": {
+      "pill_healing": {
+        "unit": "HP_ratio",
+        "reference": null,
+        "product": null
+      },
+      "medkit_healing": {
+        "unit": "HP_ratio",
+        "reference": null,
+        "product": null
+      }
+    },
+    "A16": {
+      "item_spawn_interval": {
+        "unit": "s",
+        "reference": null,
+        "product": null
+      }
+    },
+    "A17": {
+      "viewport_aspect": {
+        "unit": "ratio",
+        "reference": null,
+        "product": null
+      },
+      "character_view_height": {
+        "unit": "ratio",
+        "reference": null,
+        "product": null
+      }
+    }
+  }
+}

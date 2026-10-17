@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "HH Game Studio clean-room Y8 measurement scenario",
+  "type": "object",
+  "required": ["schema_version", "url", "actions"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {"const": 1},
+    "url": {"type": "string", "minLength": 1, "description": "Configured game URL, including its query string."},
+    "focus_click": {"type": "boolean", "default": true},
+    "actions": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {"type": "object", "required": ["type", "duration_ms"], "additionalProperties": false, "properties": {"type": {"const": "wait"}, "duration_ms": {"type": "number", "minimum": 0, "maximum": 3600000}}},
+          {"type": "object", "required": ["type", "key"], "additionalProperties": false, "properties": {"type": {"const": "key_down"}, "key": {"type": "string", "minLength": 1}}},
+          {"type": "object", "required": ["type", "key"], "additionalProperties": false, "properties": {"type": {"const": "key_up"}, "key": {"type": "string", "minLength": 1}}},
+          {"type": "object", "required": ["type", "key", "duration_ms"], "additionalProperties": false, "properties": {"type": {"const": "hold"}, "key": {"type": "string", "minLength": 1}, "duration_ms": {"type": "number", "minimum": 0, "maximum": 3600000}}},
+          {"type": "object", "required": ["type"], "additionalProperties": false, "properties": {"type": {"const": "click"}, "x": {"type": "number", "minimum": 0, "maximum": 1280}, "y": {"type": "number", "minimum": 0, "maximum": 720}}}
+        ]
+      }
+    }
+  }
+}

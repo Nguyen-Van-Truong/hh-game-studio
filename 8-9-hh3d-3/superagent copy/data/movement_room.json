@@ -1,0 +1,29 @@
+{
+  "schema": "sa03.room.v1",
+  "status": "ORIGINAL_TEST_GEOMETRY",
+  "width": 1600,
+  "height": 900,
+  "floor_y": 740,
+  "pit_death_y": 980,
+  "ladder_margin": 18,
+  "spawns": [{"player_id": 1, "x": 80, "y": 740}, {"player_id": 2, "x": 1360, "y": 740}],
+  "platforms": [
+    {"id": "floor_west", "left": 0, "right": 760, "y": 740, "one_way": false},
+    {"id": "floor_east", "left": 920, "right": 1600, "y": 740, "one_way": false},
+    {"id": "west_deck", "left": 580, "right": 720, "y": 520, "one_way": true},
+    {"id": "pit_bridge", "left": 760, "right": 920, "y": 580, "one_way": true},
+    {"id": "east_deck", "left": 1030, "right": 1370, "y": 572, "one_way": true}
+  ],
+  "solids": [
+    {"id": "step_1H", "left": 160, "right": 260, "top": 692, "bottom": 740},
+    {"id": "step_2H", "left": 300, "right": 400, "top": 644, "bottom": 740},
+    {"id": "step_3H", "left": 440, "right": 540, "top": 596, "bottom": 740},
+    {"id": "wall", "left": 1460, "right": 1500, "top": 500, "bottom": 740}
+  ],
+  "ladders": [
+    {"id": "west_ladder", "x": 620, "top": 520, "bottom": 740},
+    {"id": "east_ladder", "x": 1080, "top": 572, "bottom": 740}
+  ],
+  "pits": [{"id": "service_pit", "left": 760, "right": 920}],
+  "notes": "Original isolated calibration room; steps use seed H=48. Not a reference map or final art."
+}

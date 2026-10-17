@@ -1,7 +1,13 @@
 HH WORLD — PLAN 2/3: GAMEPLAY, SOCIAL MULTIPLAYER, VIỆT NAM
-Cập nhật 12-10-2026, Asia/Saigon | Revision S24 | TRIỂN KHAI THEO GATE | LANE THỬ PC O16
+Cập nhật 13-10-2026, Asia/Saigon | Revision S27 | KẾ HOẠCH NÂNG CHẤT LƯỢNG NHÂN VẬT | TRIỂN KHAI THEO GATE | LANE THỬ PC O16
 
-BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO GAME
+S26/S27 chỉ sửa thiết kế theo ảnh owner ngày 13-10, không nghiệm thu hoặc đổi bảng
+32 WP. Kết quả PC đang phát triển đọc ở TRIAL_ROOT/TRIAL_STATUS.md. Bản lane
+S25 đã có CANDIDATE và nhật ký mới hơn bản gốc S24; không chép đè tiến độ lane
+bằng bảng PLANNED bên dưới. Handoff S27 chỉ merge các yêu cầu art/verify mới,
+giữ nhật ký, trạng thái và quyền lane hiện hành. Xem mục S26/S27 và P05-C1/Q03-C.
+
+BẢNG 32 WP — BASELINE NGHIỆM THU; CANDIDATE LANE ĐỌC TRIAL_STATUS NHƯ ĐẦU FILE
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
 01 | H2-P0-01 | Nhận gói công cụ, khóa consumer version và runtime pin | GT-10 | PLANNED
 02 | H2-P0-02 | Thiết bị/preset, quality và security budgets | H2-P0-01 | PLANNED
@@ -45,13 +51,105 @@ RUNTIME_ACCEPTANCE=NONE
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/game-and-services
 PLAN_ROLE=GAME_SOURCE_OF_PROGRESS
-PLAN_REVISION=S24
+PLAN_REVISION=S27
+CHARACTER_QUALITY_TARGET=CHAR-V2.1-SMOOTH; DESIGN_ONLY; RUNTIME_NOT_VERIFIED
+S27_TRIAL_PLAN_SYNC=PENDING_WRITER_HANDOFF
 TRIAL_ROOT=8-9-hh3d-3/12-10-hh-world-grokdo
 TRIAL_STATUS=8-9-hh3d-3/12-10-hh-world-grokdo/TRIAL_STATUS.md
 REVIEW_BASE_COMMIT=b4195ca
 HISTORICAL_REJECTED_COMMIT=54d0c7c
 HISTORICAL_STUDIO_COMMIT=3cc7a85f730c99963a5a64079a0e02dc20edbd40
 HISTORICAL_SOCIAL_COMMIT=71629923641178171ec4339143b3cf1472618adc
+
+CẬP NHẬT S26 — 13-10-2026, CHARACTER QUALITY THEO ẢNH OWNER
+Yêu cầu lần này: nghiên cứu, đối chiếu agent đang làm và cải thiện plan; không
+tự triển khai model, đổi engine, mua asset, mở dịch vụ AI, hay ký nghiệm thu.
+Ảnh 1–2 là chất lượng đích: người low-poly faceted có tỷ lệ người trưởng thành,
+mặt/tóc/tay/giày được tạo hình và cử chỉ có khớp. Ảnh 3 là baseline prototype,
+không phải mẫu style cần tiếp tục nhân rộng. Không suy rig/topology/license của
+asset gốc từ chữ "RIGGED" trên ảnh. Xem nguồn S42–S52 và ledger ảnh ở P05-C.
+
+Ưu tiên khắc phục trong các WP hiện có (không tạo WP thứ 33):
+1. H2-P2-02: sửa phép đo budget, kiểm capability mesh/UV/weight của pipeline;
+    dựng MỘT hero CHAR-V2.1-SMOOTH và kiểm art runtime trước khi nhân preset/outfit.
+2. H2-P2-02 cùng phần liên quan P2-01/P2-03: rig/pose/walk-run-jump-land,
+   vẫy tay và cầm cần câu, wardrobe + reimport + save regression.
+3. H2-P5-01/P5-02: nhân biến thể đã đạt style; lighting/LOD/HUD gọn, review
+   trong game bằng ảnh cận + video, không chỉ thêm số item/tiếng hiệu ứng.
+4. H2-P5-03: đo lại Q01 với hero mới và 32 avatar đang animation; performance
+   trên primitive/nhân vật cũ không chứng minh chi phí content mới.
+Đây là remediation đề xuất cho PC candidate đang có, không đổi dependency,
+CURRENT_VALID_WP hoặc tự mở P6/Android/WAN/legal/release. Các nhãn PASS logic
+trước đây không đổi thành PASS art; giữ raw logs và liệt kê test bị ảnh hưởng.
+
+Audit đọc source 13-10 (không chạy engine trong lượt sửa plan):
+- tools/make_hero_recipe.py tạo cube torso/shirt, sphere head, cylinder limbs;
+  7 bones không có elbow/knee/wrist/finger chains. Chỉ tăng subdivisions hoặc
+  đổi màu không tạo được silhouette/khớp/mặt giống mức hoàn thiện ảnh 1–2.
+- docs/style-guide-v1.md vẫn khóa người 1.2 m/đầu lớn/chi ngắn, 3 materials,
+  2 outfits/state machine; catalog/source đã đi tiếp. Phải viết style guide v2
+  theo CHAR-V2.1-SMOOTH, không dùng guide primitive này làm chuẩn để tự chấm đẹp.
+- Catalog 3 preset hiện ánh xạ outfit; 6 outfit chủ yếu đổi shirt_rgb/bật nón.
+  Đó là functional catalog proof, chưa là 3 ngoại hình/6 thiết kế hoàn thiện.
+- S25/log nói hero 111 triangles. Đọc GLB index accessors tại hash
+  15bb9c1f94865b66ca11ca8fa109ecdc71e3d5f7d049ddc83fe1f8bdc45172f5:
+  Body=420/3=140, Shirt=36/3=12, Hat=42/3=14, tổng cả ba=166 triangles,
+  7 joints. Đây là static source count; rendered count còn tùy visibility/LOD.
+  budget.gd chia vertex_count/3 cho indexed mesh nên số 111/3552 không dùng
+  làm polygon proof; không sửa/xóa log cũ. Xem Q03-C/BUDGET_READBACK.
+- Budget material hiện đọc mesh materials trước outfit override và gộp theo
+  resource_name; chưa chứng minh ≤2 material thực lúc đội nón. Shader/material
+  resources, surface submissions và draw calls phải đo tách biệt.
+- shirt_hat_tris lấy get_faces()+global_transform, không deform theo skeleton;
+  số giao=0 là rest-pose check, không chứng minh áo/da/tay sạch khi cử động.
+- Far LOD hiện là tứ diện 4 triangles ở 14 m, về near ở 11 m; toggle đúng
+  không có nghĩa silhouette đẹp. Nameplate đã có sửa tiếp trong agent lane;
+  không ghi việc đó là thiếu mã nếu chưa đọc HEAD mới.
+- Mobile renderer, ambient energy 1.15 và key light 1.25 là baseline đọc từ
+  scene; ảnh 3 nhìn nhạt/khối phẳng nhưng nguyên nhân exposure/normal cụ thể
+  phải thử A/B, không chẩn đoán là lỗi engine chỉ từ một ảnh.
+Agent hiện có nhiều functional checks hữu ích (blend, equip/save, nameplate,
+input, catalog). Giữ chúng; điểm thiếu là vòng art iteration với bằng chứng
+hình ảnh và phép đo đúng. Bản sửa plan không chữa các lỗi code vừa nêu.
+
+Một writer/file: coordinator sửa bản gốc này. Bản S25 trong TRIAL_ROOT đang
+được agent khác cập nhật liên tục, nên S27 chưa được chép đè vào đó. Khi writer
+nhả lease, coordinator đọc lại HEAD/diff, merge có chọn lọc P05-C/P05-C1/Q03-C, Q02,
+P2-02/P5-01/P5-02/P5-03 và S42–S57, kiểm lại 32 WP/trạng thái; chỉ sau đó đổi
+S27_TRIAL_PLAN_SYNC. Không gộp nhật ký dài của S25 vào plan gốc hay sửa tiến độ
+chỉ để đồng bộ revision. Không thông báo giả rằng agent kia đã đọc/chấp nhận S27.
+
+CẬP NHẬT S27 — 13-10-2026, SMOOTHNESS LOOK-DEV THEO ẢNH TRIAL MỚI
+Ảnh trial mới không phải bằng chứng CHAR-V2.1-SMOOTH hoàn tất: đây là close-up debug của
+clay đang được lắp, còn UI/camera/ánh sáng và framing chưa phải capture sạch. Các
+entry PC_TRIAL-185..195 trong TRIAL_STATUS ghi char_v2.glb là candidate riêng,
+chưa thay live player; khoảng 628→726 indexed triangles, 26 bones, 2 materials,
+face còn block và hold pose chưa có grip ngón. Không được biến dải số đó thành
+đích chất lượng hoặc nói agent đã đạt ảnh tham chiếu.
+
+Ảnh owner mới thứ hai là mood/reference cho thân người mượt, không phải asset để
+trace, import hay ship. Độ mượt nhìn thấy của mẫu này phù hợp với tổ hợp topology liên tục
+và edge loops ở vai/khuỷu/gối, mật độ hình học phân bổ ở silhouette, smooth/custom
+normals và ánh sáng PBR có kiểm soát; không chỉ do tăng subdivisions, đổi màu hay
+bật post-process. HH World vẫn cần phong cách stylized nguyên bản, không cam kết
+photorealism hay sao chép mẫu ngoài.
+
+S27 bổ sung `CHAR-V2.1-SMOOTH` trong các WP đang có, không tạo WP thứ 33 và không
+đổi dependency/progress: (1) topology/edge-loop và khuôn mặt/tay phải qua clay
+turntable trước khi skin; (2) source bake Subdivision/crease có kiểm soát, smooth-by-
+angle/normal policy và GLB readback; (3) material/roughness/lighting/camera A/B;
+(4) posed deformation + grip/cloth intersection; (5) clean gameplay capture rồi
+mới thay live player và đo 32 avatar. Nếu pipeline không hỗ trợ semantic topology,
+UV, custom normals hoặc weights, mở H2-T03 change request/repro; không chữa bằng
+arbitrary eval hay nhận ảnh close-up làm DoD.
+
+Phân biệt hai lỗi trong triage: `GEOMETRY_GAP` nếu đầu/tay/khớp vẫn vuông hoặc
+silhouette gãy; `SHADING_PRESENTATION_GAP` nếu mesh đã đúng nhưng normals,
+roughness, exposure, camera clipping hoặc antialiasing làm ảnh xấu. A/B phải giữ
+nguyên mesh/camera/renderer khi đổi từng yếu tố; Mobile hỗ trợ MSAA 3D nhưng không
+có TAA/SSIL/SSAO như Forward+, vì vậy không dùng renderer effect để che geometry.
+Giữ `S27_TRIAL_PLAN_SYNC=PENDING_WRITER_HANDOFF` cho tới khi writer của trial nhả
+lease; root plan này không chép đè source/plan đang dirty trong TRIAL_ROOT.
 
 CẬP NHẬT S24 — 12-10-2026, LANE THỬ PC (OWNER O16)
 Công cụ: GT-01..GT-09 và GT-10-PC ACCEPTED (O14, kiểm ngắn); gamekit GT-11 ACCEPTED_O15_QUICK
@@ -370,6 +468,162 @@ UX nội bộ; quyền đưa Solo vào public phụ thuộc quyết định này
   camera shake mặc định thấp. Không dùng frame rate làm tốc độ đi/animation.
 - Asset placeholder phải được gắn nhãn nội bộ và có WP thay; screenshot
   placeholder không được coi là art nghiệm thu.
+
+### P05-C — CHARACTER_LOOKDEV_V2 (quality gate, không thêm WP)
+
+Ảnh owner là mood board cho tỷ lệ low-poly faceted và độ đọc hình, không phải
+asset/source/license. CHAR-V2.1-SMOOTH phải là mesh/texture/material tự làm hoặc CC0 đã
+ghi manifest; không trace, rip, bundle ảnh mẫu hay gắn thương hiệu. Một hero
+phải đọc được ở front/3-4/profile/back, thumbnail gameplay và cận mặt: plane
+mặt, tóc, cổ/vai/khuỷu/cổ tay/gối, bàn tay và giày tách silhouette; áo/quần có
+đường khối tối giản; palette tham khảo không khóa hình học.
+
+Pipeline bắt buộc: blockout tỷ lệ → head/hand/clothing look-dev → UV/vertex
+colour hoặc atlas → weight/pose test → GLB → Godot import/readback → wardrobe.
+Giữ một humanoid skeleton contract cho mọi preset; không root-motion. Style
+guide v2 ghi units/pivot/forward axis, naming bones, rest pose, normal policy,
+material roles, palette, camera distances, LOD policy và ảnh A/B lighting.
+Ảnh cận không có overlay DEV/diagnostics; still/video phải gắn run/source hash.
+
+### P05-C1 — CHAR-V2.1-SMOOTH surface/presentation gate (không thêm WP)
+
+Gate này tách “mượt” thành các nguyên nhân có thể sửa, không dùng một ảnh đẹp để
+đoán lỗi. `GEOMETRY_GAP`: primitive silhouette, mặt/tay vuông, thiếu edge loops,
+vai/khuỷu/gối gãy hoặc quần áo không có thickness/hem. `SHADING_GAP`: normals sai,
+smooth/crease policy không nhất quán, roughness/exposure/camera/AA làm bề mặt
+phẳng, cháy hoặc răng cưa. Chỉ đóng gate khi cả hai nhóm đều PASS.
+
+- TOPOLOGY: một clay hero liền khối với loop quanh mắt/mồm/hàm, vai/khuỷu/hông/gối
+  và bàn tay; phân polygon theo silhouette và vùng gập, không đều hóa bằng cách
+  subdivide mù. Subdivision Surface/crease được bake ở source nếu cần, có cap
+  triangle/index rõ trước GLB; không phụ thuộc subdivision runtime không deterministic.
+- NORMALS: recalculate/validate winding, dùng smooth-by-angle hoặc custom split
+  normals cho da/mặt; hard edge chỉ ở seam/quần áo có chủ ý. Weighted Normal chỉ
+  dùng cho phần cứng sau khi chứng minh exporter/importer giữ custom normals; nếu
+  không giữ được thì ưu tiên topology + normal policy, không dùng modifier để che
+  mesh lỗi. `Shade Smooth` không thay cho topology.
+- MATERIAL/LIGHT: StandardMaterial3D với palette/vertex colour hoặc atlas, skin/
+  cloth roughness cố định và A/B cùng exposure/tonemap; không tạo material mỗi
+  frame. Neutral stage dùng key/fill/rim nhẹ và contact shadow, sau đó kiểm plaza.
+  Mobile MSAA 2x/4x chỉ là knob đã benchmark; không bật post-process để giả thêm
+  hình học hoặc biến screenshot debug thành art evidence.
+- PRESENTATION: 1280x720 và 1920x1080, full body chiếm 70–85% khung, camera không
+  clip đầu/tay/chân, nền sạch, không HUD/notification/taskbar. Giữ cùng camera,
+  renderer và pose cho mọi A/B; ghi geometry/material/lighting/presentation gap
+  riêng. Ảnh cận debug có thể giữ làm progress, không làm DoD.
+- PASS: front/3-4/profile/back neutral clay + gameplay still đều không còn mảng
+  “cube” ngoài facet có chủ ý; đường cong đầu/thân/chi/liên kết khớp liên tục ở
+  thumbnail gameplay. Ít nhất một walk/run/emote và closed-grip pose vẫn giữ
+  silhouette, normals và không poke-through. Không yêu cầu photorealism; target là
+  stylized original có độ mượt nhìn thấy và nằm trong Q02.
+
+Budget làm việc đề xuất cho CHAR-V2.1-SMOOTH: hero near khoảng 3,000–6,000 triangles;
+giữ Q02 near ≤8,000, ≤2 active materials, ≤60 bones, texture mỗi map ưu tiên
+512/1024; LOD thấp ≤2,000 triangles. Đây là lựa chọn dự án, không phải số đo
+ảnh mẫu hay mức tối thiểu để đẹp. Không thêm polygon chỉ để đủ 3,000. Tổng tính
+cả body/hair/eyes/outfit/accessories đang hiện; báo riêng hidden geometry.
+Flat normals/UV seams có thể tăng số vertices xuất GLB; không lẫn vertices với
+triangles. Budget vẫn là guardrail cần review số đo theo Q02, không tự nâng
+trần hoặc biến cảnh báo thành PASS/FPS.
+
+Thiết kế và lộ trình thực hiện (các bước con, không là WP/checklist tiến độ mới):
+- CHAR-A0 / P2-02 — Chốt nguồn và capability trước authoring. Lưu reference
+  ledger + style-guide v2, silhouette front/side/back. Mục tiêu tỷ lệ người
+  stylized trưởng thành khoảng 7–7.5 đầu là starting point cần review, không
+  kế thừa hướng đầu to/chi ngắn của guide v1. Tỷ lệ hình học và chiều cao world
+  là hai việc khác nhau: fit visual vào capsule/pivot hiện tại trước; đổi scale
+  phải đo lại cửa/bậc/camera/reach, không tự tăng tốc/reach hay sửa save.
+  Xác minh pipeline có chỉnh vertex/face topology, UV/color attributes, explicit
+  skin weights, split normals và clip export. W8 recipe hiện thấy primitive/
+  modifier/import/armature/ARMATURE_AUTO, chưa có semantic op cho mesh/UV/weight
+  editing tinh. Thiếu capability → ghi H2-T03 change request với repro vào
+  docs/tool-gaps.md, coordinator tools xử lý đúng lease; không lách arbitrary
+  eval, sửa studio từ lane game hay nhận primitive là final. Gate này không
+  yêu cầu rebuild tools vô cớ nếu capability có sẵn và đã test được.
+  Tuyến chính: tự dựng mesh trong Blender qua authoring được phép. Tuyến CC0
+  có nguồn có thể dùng base mesh nhưng phải qua cùng fit/style/rig gate; không
+  mặc định người chibi Kenney là đúng tỷ lệ ảnh. AI image-to-3D/auto-rig chỉ là
+  phương án thử sau khi quyền dịch vụ/asset rõ: vẫn cần retopology, UV, skin,
+  kiểm rig/animation. Không upload ảnh owner, mua/download package hoặc mở
+  tài khoản trong lượt plan này; ảnh 2D sinh đẹp không là deliverable GLB.
+- CHAR-A1 / P2-02 — Một hero clay mesh trước. Tạo pelvis, vai, cổ, bắp tay/
+  cẳng tay, đùi/cẳng chân/giày với edge rings ở khớp và silhouette người. Head
+  có brow/eye socket/nose/cheek/jaw, mắt/lông mày/miệng và khối tóc có thiết kế;
+  không dùng sphere trống. Gần camera, bàn tay có palm/thumb và bốn ngón đọc
+  được khi vẫy/cầm; không cần rig ngón đầy đủ ở xa. Mặt/chi có facet chủ ý,
+  không smooth tất cả thành nhựa hoặc random-triangulate bề mặt. Model phải
+  đẹp ở untextured clay/front/side/back trước normal map/post-process.
+- CHAR-A2 / P2-02 — Một deformation skeleton thống nhất (gợi ý 24–50 bones,
+  không là hard minimum), có root/hips/spine/chest/neck/head; L/R clavicle,
+  upper/lower arm/hand, thigh/shin/foot/toe, finger groups khi cần. Chọn rest
+  A/T pose và export convention rõ; controller forward không mặc định giống
+  SkeletonProfileHumanoid. Retarget nếu dùng rig khác phải kiểm Bone Rest +
+  BoneMap, không chỉ rename. Weights normalized, không vertex vô chủ/NaN;
+  mục tiêu ≤4 influences/vertex, control/IK bones bake vào deform clips khi
+  export. Auto-weight là điểm đầu; sửa shoulder/elbow/hip/knee bằng pose tests.
+  Bàn tay/đế giày không rời thân, co gập không xẹp hoặc xoắn bất thường.
+- CHAR-A3 / P2-02 + regression P2-01/P2-03 — Dùng .blend nguồn → GLB đóng gói
+  → import trên pin hiện hành; không nâng Godot/Blender để làm art. Godot dùng
+  inherited/wrapper scene, không sửa dữ liệu generated .godot. AnimationTree
+  drive theo planar speed thật: Idle/Walk/Run, takeoff/in-air/Land và 6 emote.
+  Walk/Run loop, Land/emote one-shot theo thời lượng clip; không set mọi clip
+  LOOP_LINEAR hoặc timer 1.2 s cố định cho mọi animation. Giữ code/server
+  authority cho di chuyển (in-place clip), chỉnh cadence theo tốc độ thực,
+  test acceleration/turn/stop/wall và không phát bước chân khi chân không tiếp
+  đất. Cầm cần là pose cho activity có sẵn, không thêm minigame. Clip names và
+  track paths đổi cần mapping/migration rõ, không đứt save/outfit IDs cũ.
+- CHAR-A4 / P2-02→P5-01 — UV palette atlas hoặc vertex color + StandardMaterial3D
+  đủ cho phong cách này; opaque, metallic=0 cho vải/da, roughness có vai trò
+  riêng, normals không seam sáng/tối sai. Mắt/tóc không cần alpha hair cards.
+  Xác nhận màu linear/sRGB và active overrides giữ palette/mask sau equip.
+  Hai material không có nghĩa hai draw calls: nhiều mesh/surface/shadow/nameplate
+  vẫn có submission cost. Cache/shared material/palette khi phù hợp, không
+  tạo material mỗi frame. 3 preset phải khác diện mạo (mặt/tóc/palette), 6
+  outfit có thiết kế/chi tiết phối hợp nhìn ra được, không chỉ sáu hue cùng áo.
+  Giữ một skeleton, không sinh sáu bộ rig; không mở body morph tự do.
+- CHAR-A5 / P5-01/P5-02→P5-03 — Look-dev stage trung tính + plaza/nhà thực.
+  Thử key light + sky/ambient fill và contact shadow, kiểm bias/peter-panning,
+  mặt không cháy trắng hoặc đen bệt; A/B cùng mesh/camera để biết cải thiện do
+  geometry, material hay ánh sáng. Trên Mobile renderer hiện tại, ưu tiên
+  MSAA 2x/4x sau đo Q01; không phụ thuộc TAA/SSIL/SSAO không hỗ trợ Mobile.
+  Giữ exposure/tonemap cố định khi so ảnh, không coi bật bloom/GI là sửa mesh.
+  HUD thu gọn đúng P05, không chữ tràn mép/che hero; capture game viewport,
+  không notification/taskbar/secret. Đây là polish vùng thấy nhân vật, không
+  yêu cầu làm lại toàn map hay chuyển sang Unity/engine khác.
+
+LOD: số 11/14 m là baseline diagnostic, không quality target phải giữ. Khóa
+FOV/resolution và chọn ngưỡng theo kích thước avatar trên màn hình + số đo.
+Near/mid phải giữ đầu/thân/tay/chân; không đổi thành tứ diện trong khoảng còn
+đọc rõ người. Far proxy chỉ ở kích thước đủ nhỏ và có visual review; chuyển
+qua lại không pop mất silhouette, không mất pose khi animation wake. Nameplate/
+shadow/animation throttle có policy độc lập. Test tự động LOD trên GLB skinned
+trước khi tin auto-decimation; không tự cho rằng MultiMesh chia sẻ toàn bộ
+animation của 32 người. 32 gần phải có pose/phase/outfit khác nhau và cost thực.
+
+Ledger ảnh owner (13-10-2026; REFERENCE_ONLY, quyền ship asset gốc UNKNOWN):
+REF-CHAR-01: codex-clipboard-b61d394e-f090-4340-8c82-2fc6559c4435.png;
+  SHA256=0d9feacd7ab5457b654947c94cf351a2da10b5ae0774bceae6315c6df3d5d0a5;
+  front/side/back, tỷ lệ adult stylized, mặt/tóc/chi có plane, áo/quần/giày rõ.
+REF-CHAR-02: codex-clipboard-753dcd41-3849-479f-8593-a213de10f6ee.png;
+  SHA256=f9e92d20e3c168909a63b6579ab1f5484067e2f9dc722292a71f7204ec3a5bae;
+  pose đi/vẫy, khuỷu gập, ngón tay và biểu cảm đọc được. Không suy chất lượng
+  deformation thực từ ảnh quảng cáo hoặc sao chép title card.
+REF-CHAR-03: codex-clipboard-97793ff6-9971-4bfa-b1b1-da31bb920edc.png;
+  SHA256=3a2b63327dd9ea96256733693f78b02720b5579b24048348b280060651357d6e;
+  baseline do owner cung cấp, góc sau/hình nhỏ/UI che cạnh phải. Không phải
+  frozen-source runtime acceptance. Không bundle ảnh desktop vào sản phẩm.
+REF-CHAR-04: codex-clipboard-67fcf996-89e9-4be8-833f-0100bfb1cb8a.png;
+  SHA256=8dd9748bce18497cd6e10d13173fa852c981e9215eb5e38f96d62c319c874c2b;
+  clay/debug close-up do agent trial tạo; UI/camera gần, geometry còn block.
+  Không phải final art, không phải license/evidence, không bundle ảnh vào game.
+REF-CHAR-05: codex-clipboard-3c0e458c-7f18-427c-a3f0-be4ecdb28070.png;
+  SHA256=07d7cf3e72b57c0d1bd600c7031f9fcac165bce9c26beaad71505db26eefd9eb;
+  owner mood/reference cho smooth stylized-human surface; provenance/ship rights
+  UNKNOWN. Không trace/import/suy topology hoặc claim photorealism từ ảnh.
+
+Verify chi tiết nằm ở P05-C1 + Q03-C (LOOKDEV/POSED_CHECK/BUDGET_READBACK/LOD_READBACK/
+CLAIM_GUARD). Không lặp checklist để rồi hai bản khác nhau; CHAR-A0–A5 chỉ là
+thứ tự sửa trong WP hiện có, không cấp nghiệm thu hoặc mở dependency mới.
 
 ## P06 — Người dùng, moderation và dữ liệu
 
@@ -1238,8 +1492,11 @@ Các budget này là diagnostic guardrails; vượt cần review số đo, khôn
 
 - Android scene visible ~300k triangles, ~150 draw calls, ≤128 MB texture GPU
   cho slice, process working set mục tiêu ≤750 MB; phải xác định cách đo OS.
-- Avatar near mục tiêu ≤8k triangles, ≤2 materials, skeleton ≤60 bones;
-  LOD xa ≤2k triangles, giảm animation/nameplate/shadow. 32 near worst case phải đo.
+- Avatar near mục tiêu ≤8k triangles, ≤2 active runtime materials,
+  skeleton ≤60 bones; LOD thấp ≤2k triangles; far proxy/stand-in được báo riêng,
+  không tính look-dev. Đo cả một hero và 32 near worst case bằng cùng collector;
+  đếm index arrays, surface materials đang vẽ (kể cả override), texture dimensions,
+  bone count và draw calls. Không dùng `vertex_count/3` cho indexed mesh.
 - Props static dùng atlas/instances, culling theo chunk; texture ưu tiên 512/1K,
   chỉ dùng 2K khi rõ lợi ích. Mobile compression tested, không ship source PNG
   không nén thay imported export. Audio voices/pool và stream music có cap.
@@ -1266,6 +1523,73 @@ video 60–90 s có animation và scene transition; kiểm tra chữ Việt, cli
 silhouette, màu, lighting, feet sliding, costume intersection, safe area.
 Không kết luận “đẹp như Play Together” từ code hay một screenshot. Checklist
 phải chỉ ra artifact/runtime hash; tham chiếu style guide của mình.
+
+### Q03-C — Character look-dev/runtime claim guard
+
+`CHAR-V2.1-SMOOTH` phải qua P05-C1 rồi mới được đánh giá riêng với chức năng: 6 góc front/3-4/profile/back
+và high/low camera, thumbnail ở kích thước gameplay, video 60–90 s có
+Idle/Walk/Run/Jump/Land + 6 emote + cầm đạo cụ, posed skin/weight, mặt/tay/tóc,
+feet contact/slide, clipping, costume intersection, normals/shading, palette,
+lighting A/B, LOD pop và nameplate/safe-area. Mỗi artifact ghi source hash, GLB
+hash, import settings, run id, preset/outfit, camera và renderer. Screenshot
+tĩnh đơn lẻ, rest-pose/AABB-only, primitive body, proxy far hoặc catalog toggle
+chỉ là `LOOKDEV_INCOMPLETE`; không nâng claim art hay “đẹp hơn”. Video orbit
+tĩnh 24 frame không thay video gameplay có pose/transition.
+
+LOOKDEV: 6 góc hero thêm vào 6 góc player Q03-R, không thay plaza/house/shop/HUD.
+Ảnh neutral-stage full-body cao khoảng 70–85% khung, ảnh mặt/tay cận, và ảnh
+camera gameplay thực tại 1280x720/1920x1080. Ghi model height H, camera FOV,
+distance, screen-space height; không zoom/recolour một ảnh để giả runtime.
+Review riêng silhouette/anatomy, face-hair-hands, normals/materials, deformation,
+animation, readability-in-scene: mỗi mục PASS/GAP kèm crop/frame/timecode và
+nhận xét cụ thể so REF-CHAR-01/02/05. Đây là so style/readability, không phải
+đo topology hay quyền sử dụng; còn GAP trọng yếu không gọi look-dev xong.
+
+POSED_CHECK: ít nhất 10 phase mỗi Walk/Run và mỗi emote, takeoff/apex/landing,
+hai khuỷu gập 90/120 độ, hai gối 90 độ, giơ tay/vẫy/cầm cần; worst outfit/hat.
+Ảnh + mesh pose thực để phát hiện skin poke-through, khớp xẹp/xoắn, ngón/lòng
+bàn tay, seam và chân chìm/nổi. Da nằm trong áo là cố ý, không coi mọi overlap
+AABB/body-cloth là FAIL. Không xuyên áo ở phần nhìn thấy trong các pose đã khóa.
+Trên sàn chuẩn, đo 3 chu kỳ walk/run 60 Hz: foot contact interval rõ; starting
+targets foot slip mỗi stance ≤2% H và sole penetration ≤0.5% H. Chốt trong
+profile trước run, ghi max/timecode; không chỉnh threshold theo kết quả để qua.
+Các ngưỡng tỷ lệ là target dự án, không suy từ ảnh/nguồn web. Đo logic 30/60/120
+render caps riêng, giữ physics 60 Hz; nhiều physics tick rate không thay test này.
+
+`BUDGET_READBACK` đọc indexed `Mesh` surface arrays và
+`MeshInstance3D.get_active_material()` sau outfit override; `POSED_READBACK`
+dùng baked current skeleton pose hoặc equivalent deterministic pose, không dùng
+chỉ `get_faces()` ở rest pose. Kiểm GLB→Godot import, reimport, equip/unequip,
+save/relaunch và rollback cùng catalog/skeleton IDs. Godot khuyến nghị glTF/GLB
+cho scene 3D; BoneMap/SkeletonProfile và Bone Rest phải khớp trước khi chia sẻ
+animation giữa skeletons. LOD generated/imported có thể lỗi với skinned mesh,
+nên phải so still near/mid/far và đo pop; không mặc định tin LOD tự động.
+Triangle-list: index_count/3 nếu có indices, vertex_count/3 chỉ khi non-indexed;
+primitive modes khác phải phân loại/xử lý hoặc trả UNVERIFIED, không chia mù.
+So với GLB accessor count độc lập, báo source base vs visible base vs LOD drawn
+riêng. Negative fixtures: indexed quad 4 vertices/6 indices=2 triangles,
+hai materials trùng tên nhưng khác resource, và material_override khác source.
+Budget phải review SAU equip, đếm active resources/surfaces/texture memory,
+không gộp chỉ theo resource_name và không lấy material count suy draw calls.
+Skinned snapshot chỉ ở diagnostic renderer có skin đăng ký; nếu dùng API bake
+pose của Godot thì ghi rõ blend shapes bị bỏ qua, test phần đó riêng khi có.
+Bake cần GPU readback gây stall: không đưa vào official performance route.
+Nếu chưa có deformation readback hợp lệ ghi POSED_UNVERIFIED, không đổi tên
+rest pose test thành posed. Kiểm clean exit/no ObjectDB/RID leaks liên quan.
+
+LOD_READBACK: đi camera tới/lùi qua từng ngưỡng/hysteresis đã pin, giữ near/mid
+silhouette đầu/tay/chân; kiểm waking animation không reset cứng/pop. Test một
+hero rồi 0/8/32 với outfit/animation phase độc lập; 64 chỉ stress. Không lấy
+32 bản sao 166-triangle proxy để nghiệm thu hero mới. Q01-F release/profile và
+soak giữ nguyên, diagnostic window/headless không thay official device evidence.
+
+CLAIM_GUARD: source closure gồm .blend/recipe/imports/textures/GLB/.import/
+wrapper/animation/catalog/lighting/camera/HUD/quality profile; timestamp + hash
+và host exit thật. Old logs giữ nguyên, ghi invalidation do budget/asset đổi;
+chạy lại tests bị ảnh hưởng, không dựng lại backend đã chứng minh khi không
+liên quan. 3 preset/6 outfit không được tính final chỉ vì đủ ID hoặc đổi màu.
+Chỉ một hero sạch qua look-dev/rig gate mới nhân bulk content. Agent critic
+không ký thay owner về mỹ thuật, human usability hay Android/WAN/legal gate.
 ### Q03-H — Human usability
 
 Human usability theo P07: 5 người, 4/5 đạt hành trình và điều khiển. Không yêu
@@ -1531,15 +1855,18 @@ DoD: control video + snapshots, no inversion/slide/camera clipping tuyến chu�
 
 ### H2-P2-02 — Avatar pipeline
 ALLOWED: avatar source trong assets-src/, game assets/import/animation/data và tests.
-BUILD: style guide v1, font/stack đủ dấu tiếng Việt + license, hero rig,
-wardrobe slots, 6 emote, LOD pipeline và catalog IDs; trước
+BUILD: style guide v2 + CHAR-V2.1-SMOOTH, font/stack đủ dấu tiếng Việt + license, hero
+production rig (không dùng 111/166-triangle blockout làm DoD), wardrobe slots,
+6 emote, LOD pipeline và catalog IDs; trước
 bulk content có look-dev original đã review. Bắt đầu đủ biến thể để test mixing.
 Import hook cảnh báo asset vượt budget Q02 (triangles/bones/materials/texture)
 theo asset class, kèm naming convention từ gói GT-10; vượt cần review, không chặn ngầm.
-VERIFY: Q03-R look-dev/font runtime, GLB import, animation blending,
-costume intersections, LOD pop/skin,
-reset/equip/relaunch, reference/license manifest; bản ghi Q01-T-P2-02.
-DoD: 1 hero đạt style guide, catalog pipeline tái lập; bulk content đến P5-01.
+VERIFY: Q03-R + Q03-C, GLB import/readback, correct indexed triangle/material/
+texture/bone counts, AnimationTree blending, posed skin/weight test, costume
+intersection/feet, LOD pop/silhouette, reset/equip/relaunch/rollback, source-
+license manifest; bản ghi Q01-T-P2-02.
+DoD: 1 hero đạt style guide v2 + CHAR-V2.1-SMOOTH ở runtime, catalog pipeline tái lập,
+manifest/hash đầy đủ; primitive baseline chỉ là fixture, bulk content đến P5-01.
 
 ### H2-P2-03 — Activity loop
 CONTRACT/VERIFY: P08 activity/quest descriptor, mục3.5 Solo save/UX và EX09
@@ -1761,19 +2088,28 @@ DoD: technical flow tested; policies/real staffing remain P6-02; 2 critics.
 CONTRACT/VERIFY: P08 versioned balancing, worst outfit/pose mix, muted/touch cue fairness; original content đủ P03, EX44.
 ALLOWED: original assets/import/content catalogs/style guide updates từ P2-02.
 BUILD: đủ P03 3 avatar presets/6 outfits/6 emotes/12 furniture/6 collectible
-items, original plaza landmarks, ambient/SFX/music with manifests.
+items; 3 preset dùng cùng skeleton/animation contract và mỗi preset đạt CHAR-V2.1-SMOOTH,
+original plaza landmarks, ambient/SFX/music with manifests.
 Giao kit kiến trúc nguyên bản dùng lại cho P7-02: đường/lối đi và module mặt
 nhà, mái, cửa/điểm nối, props thuộc plaza/nội dung đã chốt; không thêm khu hoặc
 hệ gameplay. Owner art khóa version/hash, stable catalog IDs, source/license,
 units, pivot/attachment, phạm vi footprint/height và material/LOD/collision budget.
-VERIFY: Q03-R on devices, LOD/rig/font/audio pooling, license closure,
+VERIFY: Q03-R + Q03-C on devices, LOD/rig/font/audio pooling, character budget
+readback, posed wardrobe/reimport regression, license closure,
 no copyrighted reference assets; no placeholder counted final; bản ghi Q01-T-P5-01.
 Ráp kit trên fixture authored đại diện để kiểm seam/scale/pivot/material/collision
 và GLB→runtime readback; không cần dữ liệu địa lý thật trước P7.
-DoD: runtime art package 6 angles+video, kit manifest/version + assembly proof,
-signed critic notes (agent, not human owner). P7 thiếu module trả về owner P5.
+DoD: runtime art package 6 angles+video, character look-dev manifest/source
+hashes + kit manifest/version + assembly proof, signed critic notes (agent, not
+human owner). P7 thiếu module trả về owner P5; art không PASS nếu runtime/
+performance/source closure còn GAP.
 
 ### H2-P5-02 — Polish/streaming/accessibility
+CHAR-V2.1-SMOOTH integration: camera mặc định nhìn rõ body/head silhouette và chân;
+kiểm resize + 200% text, HUD thu gọn không che hero/interact target. Một bản
+capture gameplay sạch (không DEV overlay/taskbar/notification) và một bản
+diagnostic tách biệt; cùng hash. Lighting/material/AA chỉ chọn sau A/B và Q01,
+không thêm renderer-exclusive effect như điều kiện bắt buộc của Mobile.
 P5-02 accessibility acceptance enumerates supported Windows/Android assistive technology, minimum contrast and touch-target sizes, keyboard/touch remapping, screen-reader announcements for PENDING/UNKNOWN/REJECTED, 200% text and reduced-motion behavior. Each target has a human test matrix; unavailable platform capability is recorded as a visible fallback or GAP, never silently ignored.
 
 CONTRACT/VERIFY: mục3.5 UX/assistive tech/resource-bounded streaming, EX39; consume accepted release-profile-v1; UNKNOWN/expired/mismatched profile blocks public-profile UI and package outputs, UNKNOWN→history/support, no raw internal details.
@@ -1798,6 +2134,9 @@ expired, future or audience/channel-mismatched profiles before final package.
 BUILD: profile fixes only measured bottlenecks; no unrelated gameplay changes.
 VERIFY: Q01-F/Q02 with final content and Q03-A/Q03-R regression; Windows+Android
 matrix, 20-minute thermal, memory loops, 32 avatar worst-case/64 stress labels.
+S26/S27: thêm P05-C1 + Q03-C với hero/outfit mới, 32 animation riêng, runtime material count
+đúng, skin/animation CPU và GPU cost. Kết quả primitive cũ và short dev-window
+vẫn diagnostic; không dùng 111/3552 hay FPS proxy làm proof content final.
 DoD: 2 critics same final hash. Missing device/slow frames = GAP, not “probably PASS”.
 Sau hai lượt tối ưu thất bại → mục1 ADR scope/renderer, không hạ threshold để tick.
 
@@ -2726,6 +3065,60 @@ S09 https://docs.blender.org/api/current/info_gotchas_threading.html
   Blender Python threading constraints, không claim arbitrary background bpy.
 S10 https://docs.blender.org/manual/en/latest/advanced/command_line/arguments.html
   Background Python jobs/CLI; trusted scripts+scope là thiết kế bổ sung của mình.
+S42 https://docs.godotengine.org/en/stable/tutorials/assets_pipeline/retargeting_3d_skeletons.html
+  BoneMap/SkeletonProfile, Bone Rest, axis/rest-pose, position-track normalization
+  và retarget options; animation chia sẻ không chỉ dựa bone names.
+S43 https://docs.godotengine.org/en/stable/classes/class_bonemap.html
+  BoneMap maps source Skeleton3D names vào SkeletonProfile; mapping là readback
+  contract, không là bằng chứng asset đẹp.
+S44 https://docs.godotengine.org/en/stable/tutorials/animation/animation_tree.html
+  AnimationTree dùng AnimationPlayer clips và blend nodes/state machine; clip
+  tồn tại không chứng minh transition/pose runtime đúng.
+S45 https://docs.godotengine.org/en/stable/tutorials/3d/mesh_lod.html
+  Godot có mesh LOD import tự động cho glTF/.blend nhưng skinned LOD có thể
+  tạo rendering issue; phải kiểm trực quan và đo, không mặc định tin.
+S46 https://docs.godotengine.org/en/stable/tutorials/3d/visibility_ranges.html
+  Visibility ranges/HLOD là lựa chọn cho LOD artist-authored và distance policy.
+S47 https://docs.godotengine.org/en/stable/tutorials/3d/3d_antialiasing.html
+  MSAA/TAA/FSR2 có trade-off renderer; quality knob không thay topology/material
+  review và phải benchmark đúng renderer/device.
+S48 https://docs.godotengine.org/en/stable/tutorials/3d/environment_and_post_processing.html
+  SSAO/SSIL/glow là screen-space/renderer-dependent, có chi phí và giới hạn
+  visibility; không dùng post-process để che silhouette/lighting lỗi.
+S49 https://docs.blender.org/manual/sl/5.2/animation/armatures/skinning/parenting.html
+  Automatic Weights là khởi điểm; Blender cảnh báo overlap/complex mesh có thể
+  deform sai và cần chỉnh weight thủ công. Search index official 5.2 đã đọc;
+  full-page fetch trả 402, không claim đã đọc full manual hay đã test pin.
+S50 https://docs.godotengine.org/en/stable/classes/class_meshinstance3d.html
+  get_active_material đọc overrides; bake_mesh_from_current_skeleton_pose cần
+  registered skin, bỏ blend shapes và có GPU-readback stall. Chỉ diagnostic.
+S51 https://docs.blender.org/manual/en/5.3/addons/scene_gltf2.html
+  Official search excerpt: triangulation khi export; UV/hard-normal splits có
+  thể tăng vertices. Full fetch unavailable; đây là nguyên tắc tham khảo, không
+  cho phép nâng pin 5.2.1 hoặc suy mọi exporter option đã tương thích.
+S52 https://kenney.nl/assets/mini-characters
+  Trang tác giả ghi CC0 + animation; chỉ là ví dụ nguồn có license rõ, chưa
+  tải/inspect model, không cam kết style/deformation giống ảnh owner.
+S53 https://docs.blender.org/manual/en/5.4/modeling/modifiers/generate/subdivision_surface.html
+  Subdivision Surface tạo hình organic từ mesh ít vertex nhưng cần edge loops/
+  crease có chủ ý; mức cao tăng memory, không tự chứng minh model đẹp.
+S54 https://docs.blender.org/manual/en/4.5/modeling/modifiers/normals/smooth_by_angle.html
+  Smooth By Angle chọn cạnh smooth theo góc giữa face normals; đây là shading
+  policy, không thay topology hoặc weight/pose test.
+S55 https://docs.blender.org/manual/en/5.2/modeling/meshes/editing/mesh/normals.html
+  Custom split normals/normal averaging/Weighted Normal ảnh hưởng cách mặt phản
+  xạ ánh sáng; phải kiểm exporter/importer và không dùng để che silhouette lỗi.
+S56 https://docs.godotengine.org/en/stable/tutorials/rendering/renderers.html
+  Godot Mobile có MSAA 3D/FXAA/SMAA nhưng không có TAA/SSIL/SSAO như Forward+;
+  renderer choice/feature limits phải pin và benchmark, không đổi engine vì ảnh xấu.
+S57 https://docs.godotengine.org/en/latest/tutorials/3d/standard_material_3d.html
+  StandardMaterial3D cung cấp roughness/specular/normal material controls; normal
+  map chỉ đổi phản ứng ánh sáng, không tạo silhouette hay topology.
+Research CHAR-V2.1-SMOOTH đọc 13-10-2026: S07/S42–S48/S50/S52–S57 mở docs/page official;
+S49/S51 chỉ snippet search official như ghi trên. Docs /stable thay đổi theo
+thời gian; implementation phải kiểm trên tools/engine.lock.json thực của lane.
+Các budget/tỷ lệ/foot/smoothness thresholds của P05-C/P05-C1/Q03-C là đề xuất thiết kế, không
+phải benchmark hoặc giá trị do nhà cung cấp bảo đảm.
 S11 https://docs.godotengine.org/en/stable/classes/class_editorplugin.html
 S12 https://docs.godotengine.org/en/stable/classes/class_editorundoredomanager.html
   Public editor/undo APIs, không tự bảo đảm atomic đa ứng dụng/đa file.
@@ -2862,6 +3255,18 @@ claim runtime/human/rights acceptance; sửa tài liệu không là final critic
 S24 (12-10): ghi trạng thái công cụ (GT-10-PC, gamekit GT-11, GT-08B DEFERRED) và lane thử PC
 theo owner O16 trong 8-9-hh3d-3/12-10-hh-world-grokdo; không đổi 32 WP, dependency hay DoD, kết
 quả lane chỉ là CANDIDATE.
+S26 (13-10): owner yêu cầu nghiên cứu và nâng chuẩn hình ảnh avatar theo hai ảnh
+mood-board và ảnh runtime baseline. Bổ sung CHAR-V2/P05-C/Q03-C, budget/readback
+đúng indexed surfaces + active materials, posed-skin/LOD/reimport evidence,
+style-guide v2 và claim guard; không đổi 32 WP, dependency, runtime/human/legal
+acceptance hoặc trạng thái lane. Nguồn S42–S52 là docs kỹ thuật; ảnh owner chỉ
+là mood board, không phải asset/licence/evidence. Chưa có verdict critic cho S26.
+S27 (13-10): owner yêu cầu tiếp tục nâng độ mượt vì clay close-up vẫn block so với
+smooth-human reference. Bổ sung P05-C1/CHAR-V2.1-SMOOTH: topology/edge loops,
+source subdivision/crease có kiểm soát, smooth-by-angle/custom normals, material-
+lighting-camera A/B, clean framing và triage GEOMETRY_GAP versus SHADING_GAP.
+Giữ 32 WP/dependency/progress và candidate-only; không trace/import ảnh REF-CHAR-04/05,
+không mở engine mới. Nguồn S53–S57 là docs kỹ thuật; S27 chưa có verdict critic.
 
 9.3 Kiểm bàn giao và giới hạn
 Bảng32H2/32spec, dependency một chiều GT-10→H2-P0-01, không vòng; Q00–06,
@@ -2886,4 +3291,4 @@ rollback=quay về bản tốt đã kiểm, không đè thay đổi mới chưa 
 
 
 END_OF_GAME_PLAN
-DATE=2026-10-12 Asia/Saigon
+DATE=2026-10-13 Asia/Saigon

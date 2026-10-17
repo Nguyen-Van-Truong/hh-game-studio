@@ -1,0 +1,441 @@
+{
+  "schema_version": 2,
+  "character_id": "courier",
+  "atlas": "res://art/characters/courier/poses.png",
+  "source_sha256": "80e677c58c9c071b5b2b7f7ab5c4301ae5d15f086f0f7c604bf2afa1ae9e7f8f",
+  "source_kind": "OpenAI ImageGen original transparent pose sheet",
+  "standing_art_height": 276,
+  "frames": [
+    {
+      "region": [
+        85,
+        29,
+        136,
+        282
+      ],
+      "foot": [
+        68.0,
+        279
+      ],
+      "grip": [
+        116,
+        175
+      ]
+    },
+    {
+      "region": [
+        400,
+        49,
+        147,
+        262
+      ],
+      "foot": [
+        73.5,
+        259
+      ],
+      "grip": [
+        124,
+        150
+      ]
+    },
+    {
+      "region": [
+        687,
+        54,
+        197,
+        257
+      ],
+      "foot": [
+        98.5,
+        254
+      ],
+      "grip": [
+        141.8,
+        141.4
+      ]
+    },
+    {
+      "region": [
+        1021,
+        131,
+        155,
+        178
+      ],
+      "foot": [
+        77.5,
+        175
+      ],
+      "grip": [
+        111.6,
+        97.9
+      ]
+    },
+    {
+      "region": [
+        44,
+        350,
+        239,
+        259
+      ],
+      "foot": [
+        119.5,
+        256
+      ],
+      "grip": [
+        172.1,
+        142.5
+      ]
+    },
+    {
+      "region": [
+        389,
+        346,
+        182,
+        263
+      ],
+      "foot": [
+        91.0,
+        260
+      ],
+      "grip": [
+        131.0,
+        144.7
+      ]
+    },
+    {
+      "region": [
+        670,
+        348,
+        241,
+        261
+      ],
+      "foot": [
+        120.5,
+        258
+      ],
+      "grip": [
+        173.5,
+        143.6
+      ]
+    },
+    {
+      "region": [
+        981,
+        347,
+        245,
+        234
+      ],
+      "foot": [
+        122.5,
+        231
+      ],
+      "grip": [
+        176.4,
+        128.7
+      ]
+    },
+    {
+      "region": [
+        77,
+        634,
+        166,
+        226
+      ],
+      "foot": [
+        83.0,
+        223
+      ],
+      "grip": [
+        119.5,
+        124.3
+      ]
+    },
+    {
+      "region": [
+        397,
+        647,
+        166,
+        271
+      ],
+      "foot": [
+        83.0,
+        268
+      ],
+      "grip": [
+        119.5,
+        149.1
+      ]
+    },
+    {
+      "region": [
+        714,
+        631,
+        157,
+        310
+      ],
+      "foot": [
+        78.5,
+        307
+      ],
+      "grip": [
+        113.0,
+        170.5
+      ]
+    },
+    {
+      "region": [
+        1031,
+        635,
+        167,
+        306
+      ],
+      "foot": [
+        83.5,
+        303
+      ],
+      "grip": [
+        120.2,
+        168.3
+      ]
+    },
+    {
+      "region": [
+        46,
+        954,
+        250,
+        264
+      ],
+      "foot": [
+        125.0,
+        261
+      ],
+      "grip": [
+        180.0,
+        145.2
+      ]
+    },
+    {
+      "region": [
+        356,
+        959,
+        273,
+        192
+      ],
+      "foot": [
+        136.5,
+        189
+      ],
+      "grip": [
+        196.6,
+        105.6
+      ]
+    },
+    {
+      "region": [
+        631,
+        1031,
+        324,
+        125
+      ],
+      "foot": [
+        162.0,
+        122
+      ],
+      "grip": [
+        233.3,
+        68.8
+      ]
+    },
+    {
+      "region": [
+        938,
+        1137,
+        295,
+        75
+      ],
+      "foot": [
+        147.5,
+        72
+      ],
+      "grip": [
+        212.4,
+        41.2
+      ]
+    },
+    {
+      "region": [
+        38,
+        55,
+        348,
+        391
+      ],
+      "foot": [
+        174.0,
+        387
+      ],
+      "grip": [
+        323,
+        110
+      ],
+      "atlas_index": 1,
+      "standing_art_height": 390
+    },
+    {
+      "region": [
+        496,
+        75,
+        349,
+        373
+      ],
+      "foot": [
+        174.5,
+        369
+      ],
+      "grip": [
+        290,
+        86
+      ],
+      "atlas_index": 1,
+      "standing_art_height": 390
+    },
+    {
+      "region": [
+        926,
+        40,
+        353,
+        411
+      ],
+      "foot": [
+        176.5,
+        407
+      ],
+      "grip": [
+        98,
+        29
+      ],
+      "atlas_index": 1,
+      "standing_art_height": 390
+    },
+    {
+      "region": [
+        1345,
+        61,
+        411,
+        389
+      ],
+      "foot": [
+        205.5,
+        385
+      ],
+      "grip": [
+        387,
+        32
+      ],
+      "atlas_index": 1,
+      "standing_art_height": 390
+    }
+  ],
+  "clips": {
+    "idle": [
+      0,
+      1
+    ],
+    "ready": [
+      2
+    ],
+    "crouch": [
+      3
+    ],
+    "run": [
+      4,
+      5,
+      6,
+      7
+    ],
+    "jump": [
+      8
+    ],
+    "fall": [
+      9
+    ],
+    "climb": [
+      10,
+      11
+    ],
+    "punch": [
+      12,
+      2
+    ],
+    "jump_kick": [
+      13
+    ],
+    "dive": [
+      14
+    ],
+    "downed": [
+      15
+    ],
+    "aim": [
+      16
+    ],
+    "shoot": [
+      17,
+      16
+    ],
+    "throw": [
+      19,
+      2
+    ],
+    "power": [
+      2
+    ],
+    "hit": [
+      1
+    ],
+    "roll": [
+      3
+    ]
+  },
+  "limitations": [
+    "Pilot source is a generated raster; layered editable source and full in-between animation remain pending.",
+    "roll/hit/power use explicit fallback poses; angled aim arm articulation remains pending.",
+    "Left facing mirrors the original source.",
+    "Throw windup cell is reserved: current gameplay releases on press, so runtime begins at follow-through without delaying the projectile."
+  ],
+  "duration_ticks": {
+    "idle": 36,
+    "ready": 8,
+    "crouch": 8,
+    "run": 8,
+    "jump": 8,
+    "fall": 8,
+    "climb": 12,
+    "punch": 3,
+    "jump_kick": 8,
+    "dive": 8,
+    "downed": 8,
+    "aim": 8,
+    "shoot": 2,
+    "throw": 5,
+    "power": 8,
+    "hit": 8,
+    "roll": 8
+  },
+  "fallbacks": {
+    "power": "ready",
+    "hit": "braced idle",
+    "roll": "crouch"
+  },
+  "extra_atlases": [
+    "res://art/characters/shared/fire_throw_v2.png"
+  ],
+  "loop": {
+    "shoot": false,
+    "throw": false,
+    "punch": false,
+    "jump_kick": false,
+    "downed": false,
+    "hit": false
+  },
+  "action_source_sha256": "a3f86aaabe2cfed762cce54e4f9aa79de506c6f4f374b375686b23393a81d650"
+}

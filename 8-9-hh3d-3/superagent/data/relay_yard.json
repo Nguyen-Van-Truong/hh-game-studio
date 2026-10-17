@@ -1,0 +1,49 @@
+{
+  "schema": "sa03.room.v1",
+  "status": "PROVISIONAL_GREYBOX",
+  "width": 1600,
+  "height": 900,
+  "floor_y": 740,
+  "pit_death_y": 980,
+  "ladder_margin": 18,
+  "spawns": [
+    {"player_id": 1, "x": 200, "y": 740},
+    {"player_id": 2, "x": 1400, "y": 740}
+  ],
+  "platforms": [
+    {"id": "yard_floor", "left": 112, "right": 1488, "y": 740, "one_way": false},
+    {"id": "west_catwalk", "left": 300, "right": 610, "y": 548, "one_way": true},
+    {"id": "center_catwalk", "left": 690, "right": 910, "y": 610, "one_way": true},
+    {"id": "east_catwalk", "left": 990, "right": 1300, "y": 548, "one_way": true},
+    {"id": "service_bridge", "left": 44, "right": 150, "y": 676, "one_way": true}
+  ],
+  "solids": [
+    {"id": "west_crate_base", "left": 360, "right": 456, "top": 676, "bottom": 740},
+    {"id": "low_center_cover", "left": 756, "right": 844, "top": 680, "bottom": 740},
+    {"id": "east_crate_base", "left": 1144, "right": 1240, "top": 676, "bottom": 740},
+    {"id": "relay_tower", "left": 1470, "right": 1510, "top": 500, "bottom": 740}
+  ],
+  "ladders": [
+    {"id": "west_access", "x": 520, "top": 548, "bottom": 740},
+    {"id": "east_access", "x": 1080, "top": 548, "bottom": 740}
+  ],
+  "pits": [
+    {"id": "service_pit", "left": 0, "right": 112}
+  ],
+  "pickups": [
+    {"id": "yard_pistol_west", "kind": "pistol", "x": 470, "y": 740, "active": true},
+    {"id": "yard_shotgun_east", "kind": "shotgun", "x": 1130, "y": 740, "active": true},
+    {"id": "yard_pill_center", "kind": "pill", "x": 800, "y": 610, "active": true},
+    {"id": "yard_medkit_west", "kind": "medkit", "x": 350, "y": 548, "active": true},
+    {"id": "yard_grenades_east", "kind": "grenades", "x": 1240, "y": 548, "active": true},
+    {"id": "yard_bullet_time_center", "kind": "bullet_time_5", "duration_ticks": 300, "x": 900, "y": 610, "active": true},
+    {"id": "yard_bullet_time_west", "kind": "bullet_time_10", "duration_ticks": 600, "x": 650, "y": 740, "active": true}
+  ],
+  "props": [
+    {"id": "relay_crate_west", "kind": "crate", "material": "wood", "health": 30, "x": 408, "y": 708},
+    {"id": "relay_barrel_center", "kind": "barrel", "material": "steel", "explosive": true, "health": 20, "x": 800, "y": 708},
+    {"id": "relay_crate_east", "kind": "crate", "material": "wood", "health": 30, "x": 1192, "y": 708},
+    {"id": "relay_glass_east", "kind": "glass", "material": "glass", "health": 10, "x": 960, "y": 708}
+  ],
+  "notes": "Original relay-yard layout. Central floor lane remains continuous between the two spawns; the shallow service pit is isolated at the far west edge."
+}
