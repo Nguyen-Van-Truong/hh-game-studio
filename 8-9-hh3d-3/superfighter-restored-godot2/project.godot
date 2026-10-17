@@ -1,0 +1,31 @@
+; Engine configuration file.
+; Route pin: Godot 4.7.1-stable only. Do not open this folder with 4.7.2.
+config_version=5
+
+[application]
+
+config/name="Vault Fighters"
+config/description="Local restore lab for an arena platform shooter. NOT_Y8_PARITY=1. No owner acceptance."
+run/main_scene="res://main.tscn"
+config/features=PackedStringArray("4.7", "GL Compatibility")
+
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=720
+
+[physics]
+
+common/physics_ticks_per_second=60
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+
+[debug]
+
+gdscript/warnings/untyped_declaration=2
+gdscript/warnings/unsafe_method_access=2
+gdscript/warnings/unsafe_property_access=2
+gdscript/warnings/unsafe_cast=2

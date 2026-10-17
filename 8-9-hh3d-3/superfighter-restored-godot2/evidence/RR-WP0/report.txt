@@ -1,0 +1,28 @@
+WP=RR-WP0
+STATUS=PASS
+RUN_ID=RRWP0-20261017-ASIA-SAIGON-01
+COMMAND_ID=cmd.rr-wp0.shell.1
+SOURCE_HASH=7e25b155be8a16fa7b0db97f6f1776e50ba31419791d031784bdae7af32850e4
+RUNTIME_CLOSURE_HASH=7e25b155be8a16fa7b0db97f6f1776e50ba31419791d031784bdae7af32850e4
+ENGINE=Godot_4.7.1-stable official a13da4feb
+SEED=none
+MAP=none
+MODE=shell-smoke
+TRACE_HASH=none
+VERIFY_COMMAND=Godot_v4.7.1-stable_win64_console.exe --headless --path superfighter-restored-godot2
+ACTUAL_EXIT=0
+LEFTOVER_RESULT=no Godot 4.7.1 process after exit
+POSTCONDITIONS=stdout contains RRWP0_SMOKE title=Vault Fighters ticks=60; stderr empty
+EVIDENCE=evidence/RR-WP0/stdout.log evidence/RR-WP0/stderr.log evidence/RR-WP0/source-hashes.txt
+OPEN_GAPS=checkbox not ticked (CHECKBOX_AUTHORITY=0); no gameplay; no Y8 observation yet; critic TICK not collected
+NEXT_WP=RR-WP1
+NOT_Y8_PARITY=1
+BASELINE_STATUS=SHELL_SMOKE_PASS
+PARENT_GIT_HEAD_BEFORE_SHELL=0d47590a947f979f1815c7a41297434d2e9bd19b
+
+COORDINATOR_NOTE:
+Two grok-4.7 auditors. Infra: GO, 4.7.1 binary present, folder was empty.
+Plan text: REJECT, treating a 4.7.1 project inside the HH3D-3 tree as a forbidden engine mix.
+Decision: the folder plan pins 4.7.1 and the stop rule is against opening this path with 4.7.2.
+The 4.7.2 process on superfighter-restored-godot was left running and was not used here.
+No SWF, FFDec extract, sprite or audio was copied. Plan checkbox left unticked.
