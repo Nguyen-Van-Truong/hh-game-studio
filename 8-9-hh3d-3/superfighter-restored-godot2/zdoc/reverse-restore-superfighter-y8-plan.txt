@@ -1,0 +1,338 @@
+# REVERSE/RESTORE SUPERFIGHTER Y8 — LOCAL HANDOFF PLAN
+
+PLAN_ROLE=RESTORE_RESEARCH_HANDOFF
+PLAN_SCOPE=8-9-hh3d-3/superfighter-restored-godot2
+PLAN_FILE=zdoc/reverse-restore-superfighter-y8-plan.txt
+PRODUCT_NAME=Vault Fighters
+PRODUCT_PLAN_AUTHORITY=0
+CHECKBOX_AUTHORITY=0
+LOCAL_COORDINATOR_ONLY=1
+ENGINE=Godot_4.7.1-stable
+LANGUAGE=typed_GDScript
+PHYSICS=fixed_60Hz_Godot_2D_adapter
+REFERENCE_MODE=public_observation_only
+PROGRESS_AUTHORITY=0
+NOT_Y8_PARITY=1
+SIBLING_REFERENCE=8-9-hh3d-3/zdoc/18-9-superagent-2d-y8-plan.txt
+SIBLING_REFERENCE_POLICY=reference_only_do_not_tick_or_modify
+CURRENT_VALID_WP=RR-WP0
+STATUS=DRAFT_HANDOFF
+OWNER_ACCEPTANCE=NONE
+PARITY_CLAIM=UNVERIFIED
+BASELINE_STATUS=TARGET_EMPTY_UNCREATED
+
+## 0. Phạm vi, authority và mục tiêu
+
+Mục tiêu là phục hồi hành vi của một arena platform shooter kiểu Y8 bằng code mới, có thể sửa và kiểm thử lâu dài. Quan sát hành vi công khai của bản Y8 và tài liệu công khai chỉ dùng để lập observation ledger; không dùng SWF/FFDec extract, bytecode, HTML5 package hoặc ảnh chụp reference làm source, runtime hay evidence. Nếu các file đó đã có trên máy thì quarantine ngoài product root và không đưa vào source closure. Project phải giữ tên hiển thị `Vault Fighters`, dùng art/audio/layout nguyên bản và không đóng gói SWF, HTML5 package, bytecode, sprite/audio rip hoặc trademarked title card.
+
+Plan này chỉ điều phối thư mục `8-9-hh3d-3/superfighter-restored-godot2/`. Đây là handoff/lab cục bộ với `PRODUCT_PLAN_AUTHORITY=0` và `CHECKBOX_AUTHORITY=0`. Nó không thay thế, không sửa, không tick `8-9-hh3d-3/zdoc/18-9-superagent-2d-y8-plan.txt`, route Vault Fighters khác, platform closeout hoặc plan nào khác. Không tạo master plan thứ tư. Coordinator của thư mục này chỉ có thể đánh dấu trạng thái nội bộ sau khi dependency, DoD, verify và review đã đủ; owner acceptance và legal review vẫn tách riêng.
+
+Tên `superfighter-restored-godot2` là tên kỹ thuật của thư mục. Title, logo và metadata phát hành phải là `Vault Fighters`, trừ khi owner mở brand/legal gate riêng.
+
+## 1. Engine và kiến trúc bắt buộc
+
+- Dùng Godot stock 4.7.1-stable cho route này; không fork engine, sửa C++, GDExtension hoặc trộn phiên bản. Nếu preflight không xác nhận được executable, ghi `INFRA GAP` và dừng.
+- Dùng typed GDScript. Gameplay chạy fixed 60 Hz, có seed và input trace ổn định.
+- Tách state mô phỏng khỏi Godot nodes và presentation. Presentation, VFX, SFX, camera và HUD không ghi vào gameplay snapshot/hash.
+- Physics 2D nằm trong adapter riêng; object Godot chỉ được chạm trên main thread. Replay đọc state sau khi physics step hoàn tất.
+- Data map, weapon và tuning có schema version, validation, hash và save temp + atomic replace.
+
+
+## 1A. Invariants kế thừa cho project này
+
+Áp dụng các invariant product liên quan từ root: semantic command có schema và validate trước apply; mutation có unique `command_id` và dedup; ACK chỉ sau postcondition đọc lại; path allowlist dưới product root và chặn traversal/symlink; Godot object chỉ trên main thread; bridge/secret không vào log; một writer/file với lease owner/expiry/FIFO; checkpoint trước destructive change và rollback có verify; Play chạy từ immutable/snapshot; Pause/Stop drain an toàn; save temp + atomic replace có schema/hash; input fixed 60 Hz với pressed/held/released và seed; physics/combat deterministic với epsilon; typed GDScript và official run không warning/error chưa giải thích; evidence có timestamp, run/trace/source hash và repro command; không claim feature từ code/ảnh chưa chạy; claim tương đồng phải trỏ ledger và ghi uncertainty.
+Cấu trúc tối thiểu:
+
+```text
+superfighter-restored-godot2/
+  project.godot
+  README.md
+  zdoc/
+  game/
+    core/          # state, rules, input, replay, seed, snapshot
+    world/         # map, platform, ladder, pit, hazard, pickup spawn
+    fighter/       # intent, physics adapter, hitbox/hurtbox, state
+    combat/        # weapon, projectile, damage, fire, round rules
+    presentation/  # Sprite2D/AnimatedSprite2D, camera, HUD, VFX, audio
+    ui/            # menu, pause, restart, result flow
+  data/            # versioned map/tuning/weapon definitions
+  art/             # authored/licensed product art only
+  audio/           # authored/licensed product audio only
+  tests/
+  tools/
+  evidence/
+```
+
+## 2. Reference, provenance và clean-room
+
+- Chỉ quan sát hành vi công khai của bản Y8 hoặc nguồn công khai trong phiên được ghi rõ. SWF/FFDec content nếu tồn tại là quarantine-only; không tải, trace, reverse-engineer, copy, bundle, capture hoặc dùng nó làm runtime/evidence.
+- File ActionScript decompile hoặc SWF cũ chỉ là historical lead/quarantine nếu owner cung cấp để đọc; không dùng làm `OBSERVED`, `MATCHED`, evidence, source closure hay runtime, không dịch hoặc cố build lại 599 class timeline như một source tree.
+- Không copy `reference/flash/`, SWF, bytecode, HTML5 package, sprite, audio, screenshot hoặc title card vào product root hoặc release package.
+- Waiver `8-9-hh3d-3/zdoc/16-10-owner-reference-asset-waiver.txt` chỉ áp dụng cho `superagent/` và `asset-superfighter/`, không áp dụng cho thư mục này. Muốn mở waiver riêng phải dừng, ghi gap và chờ owner/legal.
+- Asset product phải authored hoặc có license/provenance trong manifest. Art phải có source path, tác giả/nguồn, license, hash và role. Screenshot/video của bản Y8 không commit hoặc bundle; chỉ capture runtime của product mới có thể vào evidence.
+- Observation ledger phải lưu URL/nguồn, timestamp, scenario, input, kết quả và uncertainty. Không biến suy đoán thành fact.
+
+## 3. Evidence contract
+
+Mỗi observation hoặc implementation row phải có:
+
+- `row_id`, `feature`, `tier` (`A` số đo, `B` hành vi, `C` suy luận), `status`.
+- `reference_source`, timestamp, scenario, input sequence và expected result.
+- `run_id`, unique `command_id`, seed, map, mode, input trace hash, source hash, engine/tool version.
+- `postcondition`, snapshot/hash nếu gameplay state thay đổi, raw stdout/stderr, actual process exit và leftover/cleanup result.
+- `tolerance` hoặc lý do chuyển sang `APPROX`.
+
+Trạng thái hợp lệ: `UNVERIFIED` → `IMPLEMENTED` → `OBSERVED`/`APPROX` → `MATCHED`. `MATCHED` chỉ dùng khi có observation hoặc đo cùng cách với reference và có tolerance. Không ghi `MATCHED` từ code inspection, ảnh placeholder, fixture-only, force-kill, timeout assumption, PASS banner hoặc caller-supplied exit/JSON. E2E phải đi qua menu và input thật; direct fixture chỉ bổ sung.
+
+Freeze manifest phải bao phủ toàn runtime closure, có hash trước official run. Packer phải fail closed với evidence thiếu, stale, mismatch, warning/error hoặc process exit không được host bắt thật. Chỉ chạy một Godot worker trên mỗi product path; không để run sau ghi đè evidence run trước.
+
+
+## 3A. Reference ledger và ngưỡng đo
+
+Ledger tối thiểu dùng các cột: `id`, `group`, `item`, `tier`, `source`, `observation`, `samples`, `error`, `tolerance`, `own_value`, `test`, `status`, 
+otes`.
+
+- Tier A: số đo cần ít nhất 3 mẫu; ghi đơn vị và phương pháp. Mặc định length/speed ±5%, time ±1 tick hoặc ±5%, count exact, angle ±3% nếu chưa có tolerance riêng.
+- Tier B: hành vi được ghi `OBSERVED` khi thấy qua input bình thường và có hậu quả runtime; cần replay test để chuyển sang `IMPLEMENTED`.
+- Tier C: công thức ẩn, spawn weight hoặc logic bot ghi `APPROX` kèm nguồn; không tự nâng thành `MATCHED`.
+- CUA/ảnh qualitative không phải A-tier. Không dùng devtools, DOM, network inspection hoặc memory inspection để tạo claim behavior.
+## 4. Work packages
+
+Mỗi WP có một writer, một checkpoint trước destructive change, report trong `evidence/<WP>/` và actual exit. Coordinator không tick WP nếu source đổi sau evidence, dependency thiếu hoặc còn GAP mở.
+
+### [ ] RR-WP0 — Governance, baseline và project shell
+
+Cần: không.
+
+DoD:
+
+- Tạo project Godot trong thư mục này, pin 4.7.1-stable, bật typed GDScript và fixed 60 Hz.
+- Có `README.md`, source allowlist, `.gitignore` cho `.godot/`, cache, build output, token và local evidence tạm.
+- Có lệnh smoke headless với actual exit và không warning/error chưa giải thích.
+- Ghi baseline commit/hash, engine path/version, process preflight, source ownership và `BASELINE_STATUS`.
+
+Verify: mở project headless, chạy smoke tối thiểu, lưu `evidence/RR-WP0/`.
+
+### [ ] RR-WP1 — Quarantine và reference inventory
+
+Cần: RR-WP0.
+
+DoD:
+
+- Tạo vùng ledger/reference metadata bên ngoài product runtime; không copy source/asset reference vào `art/` hoặc `audio/`.
+- Lập bảng nguồn cho menu, keymap, movement, jump, crouch, roll, ladder, drop-through, pit, pickup, weapon, projectile, fire, damage, death, result, pause/restart/quit.
+- Tách `OBSERVED`, `INFERRED`, `UNVERIFIED`; ghi nguồn, timestamp, scenario và uncertainty.
+
+Verify: checker từ chối row thiếu nguồn, scenario, trạng thái hoặc claim `MATCHED` không có evidence.
+
+### [ ] RR-WP2 — Observation rig và input trace
+
+Cần: RR-WP1.
+
+DoD:
+
+- Có rig ghi input P1/P2 theo `pressed/held/released` ở 60 Hz, seed, tick và trace hash.
+- Có format snapshot và replay versioned; có cách ghi observation thủ công khi không đo được pixel/physics.
+- Xác định keymap theo vai trò, không suy luận từ tên phím nếu reference chưa quan sát.
+
+Verify: replay cùng trace tạo cùng input frames và cùng hash; trace hỏng bị reject.
+
+### [ ] RR-WP3 — Runtime shell, menu và lifecycle
+
+Cần: RR-WP2.
+
+DoD:
+
+- Menu thật dẫn vào trận; pause, resume, restart, quit và result flow có state transition rõ.
+- Mỗi transition ghi snapshot/hash sau khi phase đích đã áp dụng.
+- Pause chứng minh simulation tick/body freeze trong khi UI/phase đổi đúng.
+
+Verify: E2E qua menu/input thật cho win, loss, tie, quit, restart và pause; host bắt actual exit.
+
+### [ ] RR-WP4 — World topology và traversal
+
+Cần: RR-WP3.
+
+DoD:
+
+- Có floor, platform, boundary, pit, cover, ladder hoặc traversal equivalent theo ledger.
+- Geometry, landmark và item placement là thiết kế mới nhưng giữ vai trò gameplay cần thiết.
+- Physics authority nằm ở adapter; state snapshot không bị presentation sửa.
+
+Verify: trace E2E cho đi, nhảy, rơi, ladder, drop-through, pit lose; kiểm collision và deterministic replay.
+
+### [ ] RR-WP5 — Fighter state và movement
+
+Cần: RR-WP4.
+
+DoD:
+
+- Có intent → physics step → readback → state transition.
+- Có movement, jump, crouch, roll/dive/sprint nếu ledger chứng minh có; mỗi hành vi có postcondition.
+- Hitbox/hurtbox và collider anchor được version hóa cùng tuning.
+
+Verify: visible run + headless trace cho từng transition, pause/restart regression và epsilon ghi rõ.
+
+### [ ] RR-WP6 — Combat và damage
+
+Cần: RR-WP5.
+
+DoD:
+
+- Có hitbox/hurtbox, sát thương, knockback, down/death và round outcome.
+- Mỗi hit đọc lại health, state, position/velocity và event result.
+- Không dùng force-kill hoặc teleport làm bằng chứng duy nhất.
+
+Verify: trace E2E qua menu từ attack đến damage/death/win-loss; no leaked node/resource.
+
+### [ ] RR-WP7 — Weapons, projectile, pickup và inventory
+
+Cần: RR-WP6.
+
+DoD:
+
+- Có pickup → inventory → use → projectile/hit với ammo/count postcondition.
+- World hit phải là collision thật; inventory setup không được tính là interaction.
+- Weapon data validate schema và reject malformed/duplicate id.
+
+Verify: live trace pickup/use/hit/reload hoặc throw; kiểm lifetime projectile, ammo và replay hash.
+
+### [ ] RR-WP8 — Props, materials và hazards
+
+Cần: RR-WP6; có thể làm song song với RR-WP7 sau khi interface ổn định.
+
+DoD:
+
+- Có fire/explosion/breakable/one-way/cover/hazard nếu ledger yêu cầu.
+- Hazard thay đổi gameplay state, không chỉ bật cờ hoặc đổi màu.
+- Material/prop event có postcondition và deterministic seed nếu random.
+
+Verify: world hit thật trong map, state transition, cleanup và regression sau pause/restart.
+
+### [ ] RR-WP9 — Modes, maps và round rules
+
+Cần: RR-WP7, RR-WP8.
+
+DoD:
+
+- VS hai người là mode đầu tiên; mode khác chỉ mở khi ledger và scope cho phép.
+- Map data có version/hash; load/cycle/wrap qua live menu path.
+- Win/loss/tie/quit/restart có snapshot đích và không phụ thuộc timeout assumption.
+
+Verify: map/mode matrix, malformed-data rejection, cycle wrap và source closure manifest.
+
+### [ ] RR-WP10 — Authored art, animation, audio và UI
+
+Cần: RR-WP4; gameplay interfaces đã ổn định.
+
+DoD:
+
+- Thay `ColorRect` placeholder bằng `Sprite2D`/`AnimatedSprite2D` hoặc atlas authored có frame, pivot, anchor và animation tag.
+- Manifest gồm path, dimensions, frame count, provenance/license, hash và expected role.
+- Test phát hiện ảnh/sheet sai như lỗi `731.png`; missing/duplicate/mismatch fail closed.
+- Camera, HUD, VFX, SFX nằm ngoài gameplay hash.
+
+Verify: visible still/video cho idle, move, hit, death, pickup; manifest checker; headless load không warning/error.
+
+### [ ] RR-WP11 — Bot và accessibility (chỉ khi được mở)
+
+Cần: RR-WP7, owner scope.
+
+DoD:
+
+- Bot dùng cùng input contract với người chơi; không gọi fixture/force-kill để chứng minh.
+- Difficulty, timeout, tie và key rebinding có ledger/evidence.
+- Classic P1/P2 regression vẫn xanh.
+
+Verify: live menu path cho bot match, replay deterministic và input matrix.
+
+### [ ] RR-WP12 — Web/Windows build và performance
+
+Cần: RR-WP9, RR-WP10.
+
+DoD:
+
+- Export target được xác định; build không chứa reference-only file, secret hoặc debug-only route.
+- Có bounded performance run, load/start/quit actual exit, no leftover process và log warnings/errors.
+- Web input, keyboard focus, resize và Windows input được kiểm riêng nếu target mở.
+
+Verify: clean checkout export, smoke trên từng target, manifest closure và reproducible command.
+
+### [ ] RR-WP13 — Freeze, full replay regression và review package
+
+Cần: RR-WP0–RR-WP10; RR-WP11/RR-WP12 nếu đã mở.
+
+DoD:
+
+- Freeze source closure đầy đủ; hash từng file runtime và manifest tổng.
+- Official run dùng một Godot worker, capture stdout/stderr, actual exit, cleanup/leftover và evidence timestamps.
+- Chạy full replay regression và map/mode matrix; stale/missing/mismatch evidence bị packer từ chối.
+- Hai critic độc lập đọc cùng frozen source hash và để lại `TICK=yes` hoặc `TICK=no`; coordinator giữ nguyên report.
+- Ghi rõ `NOT_Y8_PARITY=1` cho mọi phần chưa đo, smoke hoặc APPROX.
+
+Verify: giải nén review package ở clean path, chạy lại repro command, kiểm hash và kiểm không có warning/error/unproven row.
+
+### [ ] RR-WP14 — Owner/legal/release gate
+
+Cần: RR-WP13.
+
+DoD:
+
+- Owner review side-by-side và quyết định claim parity; human acceptance không suy ra từ test.
+- Legal/brand review xác nhận title, metadata, art/audio, map geometry và provenance.
+- Chỉ sau gate mới xem xét ký/publish; nếu không đạt thì giữ ở lab/research.
+
+Verify: lưu signed decision hoặc ghi `RELEASE_BLOCKED` cùng lý do; không tự phát hành.
+
+## 5. Report và handoff format
+
+Mỗi WP gửi một file report trong `evidence/<WP>/`:
+
+```text
+WP=
+STATUS=PASS|GAP|BLOCKED
+RUN_ID=
+COMMAND_ID=
+SOURCE_HASH=
+RUNTIME_CLOSURE_HASH=
+ENGINE=
+SEED=
+MAP=
+MODE=
+TRACE_HASH=
+VERIFY_COMMAND=
+ACTUAL_EXIT=
+LEFTOVER_RESULT=
+POSTCONDITIONS=
+EVIDENCE=
+OPEN_GAPS=
+NEXT_WP=
+```
+
+`STATUS=PASS` chỉ có nghĩa DoD của WP đã qua; không tự suy ra Y8 parity hoặc owner acceptance. Nếu source thay đổi sau report, report cũ bị stale và phải remint bằng run/command id mới.
+
+## 6. One-writer, checkpoint và rollback
+
+- Một writer cho mỗi file; lease record phải có `owner`, `acquired_at`, `expires_at`, heartbeat/abort và FIFO. Lease stale hoặc conflict phải fail closed và reconcile trước khi ghi. Coordinator khóa workload đo nặng khi có official/soak run.
+- Trước destructive change tạo checkpoint/commit và ghi baseline hash. Rollback phải restore được và chạy smoke lại.
+- Save dùng temp + atomic replace; không ghi đè evidence hoặc source bằng process sau.
+- Không commit `.godot/`, build output, secret, token, temporary capture hoặc reference asset chưa được gate.
+
+## 7. Known risks và stop conditions
+
+Rủi ro đã biết: asset reference nhầm vào runtime, `.godot` làm nhiễm hash, hai Godot process ghi đè evidence, presentation/audio làm đổi replay hash, thiếu runtime closure, timeout/hung process, path traversal/symlink, warning/error bị che bởi PASS banner, và nhầm version Godot giữa route root và HH3D-3.
+
+Dừng ngay và ghi gap report khi agent được yêu cầu rip/bundle asset hoặc SWF, fork/sửa engine, trộn engine version, bỏ fixed-step/replay contract, dùng fixture làm E2E duy nhất, chạy đồng thời hai worker, bỏ qua actual exit, ghi Superfighters vào metadata phát hành, tự tick plan route khác, hoặc nhận PASS chỉ từ banner/ảnh.
+
+## 8. Trạng thái ban đầu và log append-only
+
+RR-WP0 là WP đầu tiên chưa hoàn tất. Không bắt đầu RR-WP1 trước khi project shell, baseline và smoke verify của RR-WP0 tồn tại. Không mở bot, online, skin editor, hero mode hoặc biến thể trước khi Classic flow và evidence gate hoàn tất.
+
+LOG_APPEND_ONLY:
+
+- 2026-10-17 — Tạo handoff cục bộ và plan; target còn trống; chưa có implementation hoặc parity claim.
+
+
+
+
+
