@@ -121,3 +121,20 @@ old-data-from21-9-2026/
 # Diagnostic binaries and raw logs are not review source or bounded receipts.
 8-9-hh3d-3/zdoc/reviews/**/*.exe
 8-9-hh3d-3/zdoc/reviews/**/*.log
+
+# Superfighter extract caches. Keep one organized tree at
+# 8-9-hh3d-3/asset-superfighter/reference/src-superfighter/restored-project
+# (without SWF binaries, XFL bin cache, or Godot .import sidecars).
+8-9-hh3d-3/superagent copy/reference/
+8-9-hh3d-3/superfighter-restored-godot/reference/
+8-9-hh3d-3/asset-superfighter/reference/swf-extract/
+8-9-hh3d-3/asset-superfighter/reference/tools/
+8-9-hh3d-3/asset-superfighter/reference/y8-html5-bundle/
+8-9-hh3d-3/asset-superfighter/reference/src-superfighter/full-ffdec-575163/
+8-9-hh3d-3/asset-superfighter/reference/src-superfighter/full-ffdec-export/
+8-9-hh3d-3/asset-superfighter/reference/src-superfighter/mirrors/
+8-9-hh3d-3/asset-superfighter/reference/src-superfighter/decompiled/
+8-9-hh3d-3/asset-superfighter/reference/src-superfighter/ruffle/
+8-9-hh3d-3/**/reference/**/*.import
+8-9-hh3d-3/**/reference/**/*.swf
+8-9-hh3d-3/**/reference/**/bin/
