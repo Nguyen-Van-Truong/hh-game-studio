@@ -205,7 +205,7 @@ def main():
         nonlocal generator
         try:
             if generator is None:
-                check("actual_pinned_gui", not bpy.app.background and bpy.app.version[:3] == (5, 2, 1))
+                check("actual_pinned_gui", not bpy.app.background and bpy.app.version[:3] == (5, 2, 3))
                 check("actual_window_event_loop", threading.current_thread() is threading.main_thread() and len(bpy.context.window_manager.windows) == 1)
                 check("automatic_python_disabled", bpy.context.preferences.filepaths.use_scripts_auto_execute is False)
                 if args.phase != "edit":

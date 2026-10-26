@@ -51,7 +51,7 @@ its native checks remain unchanged.
 ## Main-thread UI API
 
 `ui_adapter.UIAdapter(owned_root=Path(...))` requires an exclusively owned fresh
-Blender 5.2.1 GUI session, one window with a VIEW_3D area, enabled global undo
+Blender 5.2.3 GUI session, one window with a VIEW_3D area, enabled global undo
 and at least 32 undo steps. `owned_root` is trusted host configuration, must be
 an existing empty directory without reparse ancestors, and can be omitted to
 disable saves. It is not a remote path parameter or a protected GT02 owner.
@@ -149,8 +149,8 @@ python 8-9-hh3d-3/studio/tests/blender/run_blender_probe.py --output 8-9-hh3d-3/
 
 Use a new output suffix for every attempt. The runner freezes all addon/test
 files plus the unchanged accepted `build/bootstrap/run_fixture.py` and
-toolchain lock. It checks Blender 5.2.1 executable SHA256
-`8f7a131ad8bc148edc218b334f07d92a57f5a357fa66d913b290537fd8353c06`
+toolchain lock. It checks Blender 5.2.3 executable SHA256
+`e546b2a0d81ae19bd5b306b668733102d91d23db2e2be02d68b7ecbe548af0a1`
 before and after, runs Python tests (30 seconds), then independent edit,
 final-file reopen, and checkpoint reopen processes (60 seconds each) using the
 existing gated Windows Job runner. Raw logs, actual exit/PID/Job-tree results,

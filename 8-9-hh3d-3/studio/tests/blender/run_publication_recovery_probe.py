@@ -339,7 +339,7 @@ def main():
     for case in cases:
         out=output/case;out.mkdir()
         record=owned.run_process([sys.executable,'-B',str(snapshot/'tests/blender/run_publication_recovery_probe.py'),
-            '--frozen-case',case,'--output',str(out),'--binary',str(STUDIO/'.local/tooling/blender-5.2.1-windows-x64/blender.exe')],
+            '--frozen-case',case,'--output',str(out),'--binary',str(STUDIO/'.local/tooling/blender-5.2.3-windows-x64/blender.exe')],
             cwd=snapshot,output=out,timeout=60,label='native')
         runs.append({'case':case,'process':record});write(output/(case+'-capture.json'),runs[-1])
         if record['exit_code']!=0 or record['wrapper_exit_code']!=0 or record['timed_out'] or not record['tree_verified']:break

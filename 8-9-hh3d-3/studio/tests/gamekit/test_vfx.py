@@ -239,6 +239,19 @@ class VfxTests(unittest.TestCase):
         self.assertEqual(bad["error"], "VALIDATION_FAILED")
         apply.assert_not_called()
 
+    def test_no_camera_and_doctor_lock_sync(self) -> None:
+        from studio.gamekit import doctor
+        built_2d = vfx.plan("sparks_2d", no_camera=True)
+        built_3d = vfx.plan("impact_3d", no_camera=True)
+        for built in (built_2d, built_3d):
+            names = [op.get("name") for op in built["ops"] if op.get("op") == "node.create"]
+            groups = [op.get("group") for op in built["ops"] if op.get("op") == "group.add"]
+            self.assertNotIn("PreviewCamera", names)
+            self.assertNotIn("hh_vfx_preview_camera", groups)
+        rep = doctor.run_doctor(verify_hashes=False)
+        self.assertEqual(rep["kind"], "doctor")
+        self.assertEqual(rep["pin"], {"godot": C.GODOT_VERSION, "blender": C.BLENDER_VERSION})
+
     def _assert_no_external_res(self, value: object) -> None:
         if isinstance(value, dict):
             self.assertNotIn("$res", value)

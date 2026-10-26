@@ -22,7 +22,7 @@ def safe_output(raw):
 
 
 def verify():
-    if bpy.app.version[:3] != (5, 2, 1):
+    if bpy.app.version[:3] != (5, 2, 3):
         raise RuntimeError("Blender pin mismatch")
     if len(bpy.data.objects) != 1 or len(bpy.data.meshes) != 1:
         raise RuntimeError("expected one original mesh")
@@ -54,8 +54,8 @@ def main():
     parser.add_argument("--output", required=True)
     args = parser.parse_args(sys.argv[sys.argv.index("--") + 1:])
     target = safe_output(args.output)
-    if not bpy.app.background or bpy.app.version[:3] != (5, 2, 1):
-        raise RuntimeError("requires background Blender5.2.1")
+    if not bpy.app.background or bpy.app.version[:3] != (5, 2, 3):
+        raise RuntimeError("requires background Blender5.2.3")
     # Invoked only with --factory-startup in an owned process.
     bpy.ops.wm.read_factory_settings(use_empty=True)
     # Factory brush assets are unnecessary for this source fixture; removing

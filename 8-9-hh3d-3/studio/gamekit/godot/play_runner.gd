@@ -78,6 +78,8 @@ func _initialize() -> void:
 		return
 	Engine.physics_ticks_per_second = 60
 	Engine.time_scale = 1.0
+	if DisplayServer.has_method("window_set_ime_active"):
+		DisplayServer.window_set_ime_active(false)
 	Input.set_use_accumulated_input(false)
 	seed(HH.variant_int(body.get("seed", 0)))
 	var loaded: Resource = load(scene_path)

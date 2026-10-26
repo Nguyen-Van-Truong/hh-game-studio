@@ -1,0 +1,54 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://game/fighter/fighter_controller.gd" id="1_ctrl"]
+[ext_resource type="Script" path="res://game/fighter/fighter_rig_view.gd" id="2_rig"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hit"]
+size = Vector2(12, 18)
+
+[node name="Fighter" type="CharacterBody2D"]
+texture_filter = 1
+script = ExtResource("1_ctrl")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -9)
+shape = SubResource("RectangleShape2D_hit")
+
+[node name="FighterRigView" type="Node2D" parent="."]
+texture_filter = 1
+script = ExtResource("2_rig")
+
+[node name="BodyPivot" type="Node2D" parent="FighterRigView"]
+position = Vector2(0, -9)
+
+[node name="BodySprite" type="Sprite2D" parent="FighterRigView/BodyPivot"]
+texture_filter = 1
+centered = false
+
+[node name="BloodOverlay" type="Sprite2D" parent="FighterRigView/BodyPivot"]
+visible = false
+texture_filter = 1
+centered = false
+
+[node name="AimPivot" type="Node2D" parent="FighterRigView"]
+visible = false
+position = Vector2(-3, -12)
+
+[node name="WeaponArmSprite" type="Sprite2D" parent="FighterRigView/AimPivot"]
+texture_filter = 1
+centered = false
+
+[node name="MuzzleSocket" type="Marker2D" parent="FighterRigView/AimPivot"]
+position = Vector2(12.5, -3.5)
+
+[node name="ShellSocket" type="Marker2D" parent="FighterRigView/AimPivot"]
+position = Vector2(6.55, -3.5)
+
+[node name="FireSocket" type="Marker2D" parent="FighterRigView/AimPivot"]
+position = Vector2(8.05, -3.5)
+
+[node name="LaserSight" type="Line2D" parent="FighterRigView/AimPivot"]
+visible = false
+points = PackedVector2Array(12.5, -3.5, 320, -3.5)
+width = 0.75
+default_color = Color(1, 0.12, 0.12, 0.85)

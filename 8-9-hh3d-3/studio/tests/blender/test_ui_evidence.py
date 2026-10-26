@@ -10,7 +10,7 @@ spec.loader.exec_module(runner)
 
 def fixture():
     return {"schema": "HH-GT04-UI-PROBE-1", "phase": "reopen", "actual_blender_gui": True,
-            "version": "5.2.1 LTS", "ok": True, "public_ack": False, "acceptance": False,
+            "version": "5.2.3 LTS", "ok": True, "public_ack": False, "acceptance": False,
             "checks": [{"label": label, "passed": True} for label in runner.REQUIRED["reopen"]]}
 
 

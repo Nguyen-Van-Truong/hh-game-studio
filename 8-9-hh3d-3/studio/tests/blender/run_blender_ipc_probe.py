@@ -217,7 +217,7 @@ def main():
     closure=runner.source_closure_sha256(original)
     (out/'source-closure.json').write_text(json.dumps({'files':original,'source_closure_sha256':closure},indent=2)+'\n',encoding='utf-8')
     owned=load(snapshot/'build/bootstrap/run_fixture.py')
-    binary=STUDIO/'.local/tooling/blender-5.2.1-windows-x64/blender.exe'
+    binary=STUDIO/'.local/tooling/blender-5.2.3-windows-x64/blender.exe'
     unit=owned.run_process([sys.executable,'-B','-m','unittest','discover','-s','tests/blender','-p','test_*.py','-v'],
         cwd=snapshot,output=out,timeout=30,label='unit')
     argv=[sys.executable,'-B',str(snapshot/'tests/blender/run_blender_ipc_probe.py'),

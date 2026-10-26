@@ -9,6 +9,13 @@ const MODE_RULES_SCRIPT = preload("res://game/core/classic_mode_rules.gd")
 const MAP_CATALOG_SCRIPT = preload("res://game/world/map_catalog.gd")
 const WEAPON_CATALOG_SCRIPT = preload("res://game/core/weapon_catalog.gd")
 
+# Values read from the restored Classic weapon/player data.  They stay here as
+# typed resolver constants because the Godot state machine exposes one queued
+# melee event per swing, while the source game stores the three hit frames in
+# its animation state.
+const CLASSIC_FIST_COMBO_DAMAGE: Array[int] = [6, 7, 8]
+const CLASSIC_KICK_DAMAGE: int = 4
+
 var opponent: StringName = &"two_player"
 var map_id: StringName = &"relay_yard"
 var map_path: String = MAP_PATH
@@ -17,10 +24,18 @@ var winner: int = 0
 var error: StringName = &""
 var melee_ids: Array[StringName] = [&"fists", &"fists"]
 var gun_ids: Array[StringName] = [&"pistol", &"pistol"]
+# Slot 2 is the throwable slot.  Keep the selected definition beside the
+# count so a molotov pickup behaves like a real classic throwable instead of
+# silently becoming a grenade with a different icon.
+var explosive_ids: Array[StringName] = [&"grenade", &"grenade"]
 var active_weapon_slots: Array[int] = [1, 1]
 var pickup_rows: Array[Dictionary] = []
 var prop_rows: Array[Dictionary] = []
 var shot_events: Array[Dictionary] = []
+# Ranged shots keep a small deterministic visual projectile row in addition to
+# the immediate combat result.  The hit resolver remains fixed-step and
+# deterministic; the row gives the player a readable, slower flight path.
+var projectile_rows: Array[Dictionary] = []
 var explosion_events: Array[Dictionary] = []
 var weapon_events: Array[Dictionary] = []
 var prop_events: Array[Dictionary] = []
@@ -99,6 +114,7 @@ func step(frame: InputFrame) -> bool:
 	var advanced: bool = super(frame)
 	if not advanced:
 		return false
+	_step_projectiles()
 	_configure_bullet_time_tempo()
 	for index: int in range(mini(prior_shot_count, shot_events.size())):
 		shot_events[index][&"ttl"] = int(shot_events[index].get(&"ttl", 0)) - 1
@@ -133,6 +149,7 @@ func continue_round() -> bool:
 		place_fighter(index, world.spawn_for_player(index + 1), Vector2.ZERO, true)
 	melee_ids = [&"fists", &"fists"]
 	gun_ids = [&"pistol", &"pistol"]
+	explosive_ids = [&"grenade", &"grenade"]
 	active_weapon_slots = [1, 1]
 	for fighter: FighterState in fighters:
 		fighter.active_weapon_slot = 1
@@ -140,6 +157,7 @@ func continue_round() -> bool:
 	pickup_rows = _reset_active_rows(pickup_rows)
 	prop_rows = _reset_prop_rows(prop_rows)
 	shot_events.clear()
+	projectile_rows.clear()
 	explosion_events.clear()
 	weapon_events.clear()
 	prop_events.clear()
@@ -177,6 +195,7 @@ func snapshot() -> Dictionary:
 		row[&"melee_id"] = melee_ids[index]
 		row[&"active_slot"] = active_weapon_slots[index]
 		row[&"active_weapon_id"] = _active_weapon_id(index)
+		row[&"explosive_id"] = explosive_ids[index]
 		row[&"aiming"] = fighters[index].aiming
 		row[&"aim_angle"] = fighters[index].aim_angle
 		row[&"burning_ticks"] = burning_ticks[index]
@@ -186,6 +205,7 @@ func snapshot() -> Dictionary:
 	fighter_rows.make_read_only()
 	var pickup_snapshot: Array[Dictionary] = _copy_rows(pickup_rows)
 	var shot_snapshot: Array[Dictionary] = _copy_rows(shot_events)
+	var projectile_snapshot: Array[Dictionary] = _copy_rows(projectile_rows)
 	var explosion_snapshot: Array[Dictionary] = _copy_rows(explosion_events)
 	var weapon_snapshot: Array[Dictionary] = _copy_rows(weapon_events)
 	var prop_snapshot: Array[Dictionary] = _copy_rows(prop_rows)
@@ -201,6 +221,7 @@ func snapshot() -> Dictionary:
 	result[&"error"] = error
 	result[&"pickups"] = pickup_snapshot
 	result[&"shot_events"] = shot_snapshot
+	result[&"projectiles"] = projectile_snapshot
 	result[&"explosions"] = explosion_snapshot
 	result[&"weapon_events"] = weapon_snapshot
 	result[&"props"] = prop_snapshot
@@ -244,7 +265,10 @@ func canonical_snapshot() -> String:
 		var from_point: Vector2 = Vector2(event.get(&"from", Vector2.ZERO))
 		var to_point: Vector2 = Vector2(event.get(&"to", Vector2.ZERO))
 		var target_point: Vector2 = Vector2(event.get(&"target", Vector2.ZERO))
-		shot_parts.append("%d,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.5f,%s,%d" % [int(event.get(&"attacker", 0)), from_point.x, from_point.y, to_point.x, to_point.y, target_point.x, target_point.y, float(event.get(&"angle", 0.0)), String(event.get(&"gun", &"")), int(event.get(&"ttl", 0))])
+		shot_parts.append("%d,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.5f,%s,%d,%d" % [int(event.get(&"attacker", 0)), from_point.x, from_point.y, to_point.x, to_point.y, target_point.x, target_point.y, float(event.get(&"angle", 0.0)), String(event.get(&"gun", &"")), int(event.get(&"pellets", 1)), int(event.get(&"ttl", 0))])
+	var projectile_parts: Array[String] = []
+	for projectile: Dictionary in projectile_rows:
+		projectile_parts.append("%d,%s,%s,%.3f,%.3f,%.3f,%.3f,%d,%d" % [int(projectile.get(&"owner", 0)), String(projectile.get(&"kind", &"bullet")), String(projectile.get(&"gun", &"pistol")), float(projectile.get(&"x", 0.0)), float(projectile.get(&"y", 0.0)), float(projectile.get(&"vx", 0.0)), float(projectile.get(&"vy", 0.0)), int(projectile.get(&"ttl", 0)), int(projectile.get(&"age", 0))])
 	var explosion_parts: Array[String] = []
 	for event: Dictionary in explosion_events:
 		explosion_parts.append("%.3f,%.3f,%.3f,%s,%d" % [float(event.get(&"x", 0.0)), float(event.get(&"y", 0.0)), float(event.get(&"radius", 0.0)), String(event.get(&"source", &"")), int(event.get(&"ttl", 0))])
@@ -257,7 +281,7 @@ func canonical_snapshot() -> String:
 	var fire_parts: Array[String] = []
 	for event: Dictionary in fire_events:
 		fire_parts.append("%s,%d,%d,%d,%d" % [String(event.get(&"kind", &"")), int(event.get(&"player", 0)), int(event.get(&"damage", 0)), int(event.get(&"health", -1)), int(event.get(&"ttl", 0))])
-	return "%s|map=%s,%s|catalog=%s|match=%s,%d,%s,%s|mode_rules=%s|melee=%s|guns=%s|slots=%s|pickups=%s|weapons=%s|shots=%s|explosions=%s|props=%s|prop_events=%s|burn=%d,%d,%d,%d|fire_events=%s|bullet=%d,%d,%d" % [base, String(map_id), map_path, weapon_catalog_fingerprint, String(phase), winner, String(opponent), String(error), mode_rules.canonical_snapshot(), ",".join(melee_ids.map(func(g: StringName) -> String: return String(g))), ",".join(gun_ids.map(func(g: StringName) -> String: return String(g))), ",".join(active_weapon_slots.map(func(slot: int) -> String: return str(slot))), ";".join(pickups), ";".join(weapon_parts), ";".join(shot_parts), ";".join(explosion_parts), ";".join(prop_parts), ";".join(prop_event_parts), burning_ticks[0], burning_ticks[1], burn_elapsed_ticks[0], burn_elapsed_ticks[1], ";".join(fire_parts), bullet_time_owner, bullet_time_ticks, bullet_time_duration_ticks]
+	return "%s|map=%s,%s|catalog=%s|match=%s,%d,%s,%s|mode_rules=%s|melee=%s|guns=%s|throwables=%s|slots=%s|pickups=%s|weapons=%s|shots=%s|projectiles=%s|explosions=%s|props=%s|prop_events=%s|burn=%d,%d,%d,%d|fire_events=%s|bullet=%d,%d,%d" % [base, String(map_id), map_path, weapon_catalog_fingerprint, String(phase), winner, String(opponent), String(error), mode_rules.canonical_snapshot(), ",".join(melee_ids.map(func(g: StringName) -> String: return String(g))), ",".join(gun_ids.map(func(g: StringName) -> String: return String(g))), ",".join(explosive_ids.map(func(g: StringName) -> String: return String(g))), ",".join(active_weapon_slots.map(func(slot: int) -> String: return str(slot))), ";".join(pickups), ";".join(weapon_parts), ";".join(shot_parts), ";".join(projectile_parts), ";".join(explosion_parts), ";".join(prop_parts), ";".join(prop_event_parts), burning_ticks[0], burning_ticks[1], burn_elapsed_ticks[0], burn_elapsed_ticks[1], ";".join(fire_parts), bullet_time_owner, bullet_time_ticks, bullet_time_duration_ticks]
 
 func _resolve_attacks() -> void:
 	var queued: Array[StringName] = []
@@ -271,6 +295,8 @@ func _resolve_attacks() -> void:
 		var target: FighterState = fighters[1 - index]
 		if attacker.health <= 0 or attacker.in_pit:
 			continue
+		var combo_step_for_attack: int = attacker.queued_combo_step
+		attacker.queued_combo_step = 0
 		if attack == &"power":
 			if bullet_time_owner == index:
 				_end_bullet_time()
@@ -281,10 +307,23 @@ func _resolve_attacks() -> void:
 				bullet_time_ticks = bullet_time_duration_ticks
 			continue
 		if attack == &"throw":
-			var grenade_definition: WeaponCatalog.WeaponDefinition = WEAPON_CATALOG_SCRIPT.definition_for(&"grenade")
-			if grenade_definition == null or not grenade_definition.is_explosive():
+			var throwable_id: StringName = explosive_ids[index] if index < explosive_ids.size() else &"grenade"
+			var grenade_definition: WeaponCatalog.WeaponDefinition = WEAPON_CATALOG_SCRIPT.definition_for(throwable_id)
+			if grenade_definition == null or not grenade_definition.is_explosive() or not grenade_definition.has_projectile():
 				continue
-			grenades.append({&"owner": attacker.player_id, &"x": attacker.position.x, &"y": attacker.position.y - 24.0, &"vx": attacker.facing * grenade_definition.projectile_speed, &"vy": -6.0, &"fuse": grenade_definition.fuse_ticks, &"radius": grenade_definition.explosion_radius, &"damage": grenade_definition.explosion_damage})
+			grenades.append({
+				&"owner": attacker.player_id,
+				&"kind": throwable_id,
+				&"x": attacker.position.x + float(attacker.facing) * 12.0,
+				&"y": attacker.position.y - 24.0,
+				&"vx": attacker.facing * grenade_definition.projectile_speed,
+				&"vy": -6.0,
+				&"gravity": grenade_definition.projectile_gravity_per_tick,
+				&"fuse": grenade_definition.fuse_ticks,
+				&"radius": grenade_definition.explosion_radius,
+				&"damage": grenade_definition.explosion_damage,
+				&"explosive": true,
+			})
 			continue
 		var fists_definition: WeaponCatalog.WeaponDefinition = WEAPON_CATALOG_SCRIPT.definition_for(&"fists")
 		if fists_definition == null:
@@ -303,14 +342,22 @@ func _resolve_attacks() -> void:
 		var range_limit: float = melee_definition.range_limit
 		var damage: int = melee_definition.melee_damage
 		var knockback: float = melee_definition.knockback
+		var firearm_definition: WeaponCatalog.WeaponDefinition = null
 		if attack == &"jump_kick":
-			damage = int(tuning[&"jump_kick_damage"])
+			damage = CLASSIC_KICK_DAMAGE
 			range_limit = float(tuning[&"punch_range"])
 		elif attack == &"punch_combo":
-			damage = int(tuning[&"punch_damage"]) + 3
+			# The second classic fist frame is seven damage.  Held melee weapons
+			# keep their authored base damage until their own combo table exists.
+			damage = CLASSIC_FIST_COMBO_DAMAGE[1] if melee_definition.id == &"fists" else melee_definition.melee_damage + 1
 		elif attack == &"kick":
-			range_limit = float(tuning.get(&"combo_kick_range", tuning[&"punch_range"]))
-			damage = int(tuning.get(&"combo_kick_damage", tuning[&"jump_kick_damage"]))
+			if combo_step_for_attack == 3:
+				# FighterState keeps the old `kick` action label for punch frame 3.
+				damage = CLASSIC_FIST_COMBO_DAMAGE[2] if melee_definition.id == &"fists" else melee_definition.melee_damage + 2
+				range_limit = float(tuning[&"punch_range"])
+			else:
+				range_limit = float(tuning.get(&"combo_kick_range", tuning[&"punch_range"]))
+				damage = CLASSIC_KICK_DAMAGE
 			knockback = float(tuning[&"melee_knockback"]) * 1.3
 		elif attack == &"dive":
 			range_limit = float(tuning[&"punch_range"]) + 12.0
@@ -331,11 +378,14 @@ func _resolve_attacks() -> void:
 			damage = int(tuning.get(&"grab_throw_damage", 6))
 			knockback = float(tuning[&"melee_knockback"]) * 2.25
 		elif attack == &"shoot":
-			var firearm_definition: WeaponCatalog.WeaponDefinition = WEAPON_CATALOG_SCRIPT.definition_for(gun_ids[index])
+			firearm_definition = WEAPON_CATALOG_SCRIPT.definition_for(gun_ids[index])
 			if firearm_definition == null or firearm_definition.is_melee() or not firearm_definition.has_projectile() or not firearm_definition.has_ammo():
 				continue
 			range_limit = firearm_definition.range_limit
-			damage = firearm_definition.damage
+			# A shotgun row stores per-pellet damage.  The classic blast emits four
+			# pellets, so a centered hit applies the deterministic sum while the
+			# event still exposes pellet_count for presentation/replay tooling.
+			damage = firearm_definition.pellet_damage * firearm_definition.pellet_count if firearm_definition.pellet_count > 1 else firearm_definition.damage
 			knockback = firearm_definition.knockback
 		var shot_origin := attacker.position + Vector2(float(attacker.facing) * 10.0, -float(tuning[&"char_height"]) * 0.5)
 		var target_point := target.position + Vector2(0.0, -float(tuning[&"char_height"]) * 0.5)
@@ -345,11 +395,35 @@ func _resolve_attacks() -> void:
 		var lateral_distance: float = absf(shot_direction.cross(target_delta))
 		var target_hit: bool = forward_distance >= 0.0 and forward_distance <= range_limit and lateral_distance <= float(tuning[&"char_height"]) * 0.5
 		if attack == &"shoot":
-			shot_events.append({&"attacker": attacker.player_id, &"from": shot_origin, &"to": shot_origin + shot_direction * range_limit, &"target": target.position, &"angle": attacker.aim_angle, &"ttl": 5, &"gun": gun_ids[index], &"recoil": 1.0 if gun_ids[index] == &"pistol" else 1.5, &"eject": gun_ids[index] == &"pistol"})
-		_resolve_prop_attack(index, attack, shot_origin, shot_direction, range_limit, damage)
+			shot_events.append({&"attacker": attacker.player_id, &"from": shot_origin, &"to": shot_origin + shot_direction * range_limit, &"target": target.position, &"angle": attacker.aim_angle, &"ttl": 5, &"gun": gun_ids[index], &"pellets": firearm_definition.pellet_count if firearm_definition != null else 1, &"recoil": 1.0 if gun_ids[index] == &"pistol" else 1.5, &"eject": gun_ids[index] == &"pistol", &"projectile_kind": firearm_definition.projectile_kind})
+			_add_visual_projectiles(attacker, firearm_definition, shot_origin, shot_direction)
+			# Rockets are physical projectiles.  Keep bullets/flames on the
+			# deterministic ray path, but defer rocket damage until the projectile
+			# reaches a fighter, prop, or its lifetime boundary.
+			if firearm_definition != null and firearm_definition.is_rocket():
+				grenades.append({
+					&"owner": attacker.player_id,
+					&"kind": &"rocket_launcher",
+					&"x": shot_origin.x,
+					&"y": shot_origin.y,
+					&"vx": shot_direction.x * firearm_definition.projectile_speed,
+					&"vy": shot_direction.y * firearm_definition.projectile_speed,
+					&"gravity": firearm_definition.projectile_gravity_per_tick,
+					&"fuse": firearm_definition.projectile_lifetime_ticks,
+					&"radius": firearm_definition.explosion_radius,
+					&"damage": firearm_definition.explosion_damage,
+					&"explosive": true,
+					&"rocket": true,
+				})
+				weapon_events.append({&"kind": &"rocket_launch", &"attacker": attacker.player_id, &"x": shot_origin.x, &"y": shot_origin.y, &"ttl": 12})
+				target_hit = false
+		if not (attack == &"shoot" and firearm_definition != null and firearm_definition.is_rocket()):
+			_resolve_prop_attack(index, attack, shot_origin, shot_direction, range_limit, damage)
 		if (attack == &"shoot" and target_hit) or (attack != &"shoot" and held_target) or (attack != &"shoot" and distance_x * attacker.facing > 0.0 and absf(target.position.y - attacker.position.y) <= float(tuning[&"char_height"]) and absf(distance_x) <= range_limit):
 			var knockdown: bool = attack == &"jump_kick" or attack == &"kick" or attack == &"dive" or attack == &"tackle" or attack == &"grab_throw" or (attack == &"shoot" and (world.rng_state % 4 == 0))
 			var hit_applied: bool = target.apply_hit(damage, attacker.facing * knockback, knockdown, attack, tuning)
+			if hit_applied and attack == &"shoot" and firearm_definition != null and firearm_definition.projectile_kind == &"flame":
+				_ignite_fighter(target.player_id)
 			if hit_applied and attack == &"tackle":
 				target.begin_grab(attacker.player_id, int(tuning.get(&"grab_duration_ticks", 18)))
 				attacker.begin_hold(target.player_id, int(tuning.get(&"grab_duration_ticks", 18)))
@@ -371,24 +445,88 @@ func _step_grenades() -> void:
 	for grenade: Dictionary in grenades:
 		grenade[&"x"] = float(grenade[&"x"]) + float(grenade[&"vx"])
 		grenade[&"y"] = float(grenade[&"y"]) + float(grenade[&"vy"])
-		grenade[&"vy"] = float(grenade[&"vy"]) + 1.0
-		if float(grenade[&"y"]) >= world.floor_y:
+		grenade[&"vy"] = float(grenade[&"vy"]) + float(grenade.get(&"gravity", 1.0))
+		var kind: StringName = StringName(grenade.get(&"kind", &"grenade"))
+		var rocket: bool = bool(grenade.get(&"rocket", false)) or kind == &"rocket_launcher"
+		if not rocket and float(grenade[&"y"]) >= world.floor_y:
 			grenade[&"y"] = world.floor_y
 			grenade[&"vy"] = 0.0
 		grenade[&"fuse"] = int(grenade[&"fuse"]) - 1
-		if int(grenade[&"fuse"]) > 0:
+		var impact: bool = false
+		if rocket:
+			# A rocket explodes on contact with a fighter or prop.  Ignore the
+			# launcher's spawn overlap for one tick, then use the same radius test
+			# as the fuse path so replay remains deterministic.
+			var age: int = int(grenade.get(&"age", 0)) + 1
+			grenade[&"age"] = age
+			if age > 1:
+				var point := Vector2(float(grenade[&"x"]), float(grenade[&"y"]))
+				for target: FighterState in fighters:
+					# FighterState positions are feet anchors, while a rocket travels
+					# through the torso.  Include the authored body height so a fast
+					# rocket cannot tunnel between 60-Hz samples.
+					if target.health > 0 and point.distance_to(target.position) <= float(tuning.get(&"char_height", 48.0)) * 0.75:
+						impact = true
+						break
+				if not impact:
+					for prop: Dictionary in prop_rows:
+						if bool(prop.get(&"active", false)) and point.distance_to(Vector2(float(prop.get(&"x", 0.0)), float(prop.get(&"y", 0.0)))) <= 24.0:
+							impact = true
+							break
+		if int(grenade[&"fuse"]) > 0 and not impact:
 			remaining.append(grenade)
 			continue
 		var center := Vector2(float(grenade[&"x"]), float(grenade[&"y"]))
 		var radius: float = float(grenade.get(&"radius", tuning[&"grenade_radius"]))
 		var damage: int = int(grenade.get(&"damage", tuning[&"grenade_damage"]))
-		explosion_events.append({&"x": center.x, &"y": center.y, &"radius": radius, &"ttl": 8})
-		_damage_props_at(center, radius, damage, 0, &"grenade")
+		explosion_events.append({&"x": center.x, &"y": center.y, &"radius": radius, &"ttl": 8, &"source": kind})
+		_damage_props_at(center, radius, damage, int(grenade.get(&"owner", 0)), kind)
 		for target: FighterState in fighters:
 			var delta: Vector2 = target.position - center
 			if delta.length_squared() <= radius * radius:
-				target.apply_hit(damage, 20.0 if delta.x >= 0.0 else -20.0, true, &"grenade", tuning)
+				var hit_kind: StringName = kind
+				target.apply_hit(damage, 20.0 if delta.x >= 0.0 else -20.0, true, hit_kind, tuning)
+				if kind == &"molotov":
+					_ignite_fighter(target.player_id)
+				weapon_events.append({&"kind": &"impact", &"weapon": kind, &"target": target.player_id, &"x": center.x, &"y": center.y, &"ttl": 12})
 	grenades = remaining
+
+func _add_visual_projectiles(attacker: FighterState, definition: WeaponCatalog.WeaponDefinition, origin: Vector2, direction: Vector2) -> void:
+	if definition == null or definition.projectile_kind not in [&"bullet", &"flame"]:
+		return
+	var count: int = maxi(1, definition.pellet_count)
+	var spread_radians: float = deg_to_rad(definition.spread_degrees)
+	# Keep the flight visible for several fixed ticks.  Combat damage is still
+	# resolved by the deterministic shot ray above; these rows are presentation
+	# state and never feed back into gameplay or replay outcomes.
+	var display_speed: float = maxf(4.0, definition.projectile_speed * 0.35)
+	var lifetime: int = maxi(4, definition.projectile_lifetime_ticks)
+	for pellet: int in range(count):
+		var centered: float = float(pellet) - float(count - 1) * 0.5
+		var pellet_direction: Vector2 = direction.rotated(centered * spread_radians).normalized()
+		projectile_rows.append({
+			&"owner": attacker.player_id,
+			&"kind": definition.projectile_kind,
+			&"gun": definition.id,
+			&"x": origin.x,
+			&"y": origin.y,
+			&"vx": pellet_direction.x * display_speed,
+			&"vy": pellet_direction.y * display_speed,
+			&"radius": definition.projectile_radius,
+			&"ttl": lifetime,
+			&"age": 0,
+		})
+
+func _step_projectiles() -> void:
+	var remaining: Array[Dictionary] = []
+	for projectile: Dictionary in projectile_rows:
+		projectile[&"x"] = float(projectile.get(&"x", 0.0)) + float(projectile.get(&"vx", 0.0))
+		projectile[&"y"] = float(projectile.get(&"y", 0.0)) + float(projectile.get(&"vy", 0.0))
+		projectile[&"ttl"] = int(projectile.get(&"ttl", 0)) - 1
+		projectile[&"age"] = int(projectile.get(&"age", 0)) + 1
+		if int(projectile[&"ttl"]) > 0:
+			remaining.append(projectile)
+	projectile_rows = remaining
 
 func _apply_weapon_switches(frame: InputFrame) -> void:
 	for index: int in range(fighters.size()):
@@ -418,7 +556,7 @@ func _slot_available(index: int, slot: int) -> bool:
 	if slot == 1:
 		return gun_ids[index] != &"none"
 	if slot == 2:
-		return fighters[index].grenades > 0
+		return fighters[index].grenades > 0 and index < explosive_ids.size() and explosive_ids[index] != &""
 	return fighters[index].power_charges > 0 or fighters[index].bullet_time_active
 
 func _active_weapon_id(index: int) -> StringName:
@@ -428,7 +566,7 @@ func _active_weapon_id(index: int) -> StringName:
 		1:
 			return gun_ids[index]
 		2:
-			return &"grenade"
+			return explosive_ids[index] if index < explosive_ids.size() else &"grenade"
 		3:
 			return &"bullet_time"
 	return &"fists"
@@ -448,6 +586,16 @@ func _step_airdrops() -> void:
 			{&"kind": &"knife", &"crate_type": &"melee"},
 			{&"kind": &"grenades", &"crate_type": &"explosive"},
 			{&"kind": &"bullet_time_10", &"crate_type": &"power"},
+			{&"kind": &"rifle", &"crate_type": &"firearm"},
+			{&"kind": &"uzi", &"crate_type": &"firearm"},
+			{&"kind": &"magnum", &"crate_type": &"firearm"},
+			{&"kind": &"sniper", &"crate_type": &"firearm"},
+			{&"kind": &"rocket_launcher", &"crate_type": &"firearm"},
+			{&"kind": &"flamethrower", &"crate_type": &"firearm"},
+			{&"kind": &"machete", &"crate_type": &"melee"},
+			{&"kind": &"axe", &"crate_type": &"melee"},
+			{&"kind": &"sword", &"crate_type": &"melee"},
+			{&"kind": &"molotov", &"crate_type": &"explosive"},
 		]
 		var slot: int = airdrop_serial % spawn_xs.size()
 		var drop: Dictionary = drop_cycle[airdrop_serial % drop_cycle.size()]
@@ -594,6 +742,12 @@ func _collect_pickups(frame: InputFrame) -> void:
 				fighters[index].health = mini(int(tuning[&"max_health"]), fighters[index].health + 50)
 			elif kind == &"grenades":
 				fighters[index].grenades += 2
+				explosive_ids[index] = &"grenade"
+				active_weapon_slots[index] = 2
+				fighters[index].active_weapon_slot = 2
+			elif pickup_definition != null and pickup_definition.slot == &"explosive":
+				explosive_ids[index] = kind
+				fighters[index].grenades = maxi(1, pickup_definition.starting_ammo)
 				active_weapon_slots[index] = 2
 				fighters[index].active_weapon_slot = 2
 			elif pickup_definition != null and (pickup_definition.is_melee() or pickup_definition.has_projectile()):

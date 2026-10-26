@@ -237,15 +237,24 @@ func _spawn_event(kind: StringName, row: Dictionary, snapshot: Dictionary) -> vo
 		var facing: int = 1 if to_point.x >= from_point.x else -1
 		var gun: StringName = StringName(row.get(&"gun", &"pistol"))
 		var tracer: Color = WEAPON_VISUALS.tracer_color(gun)
-		_add_effect(&"tracer", from_point, 0.13, tracer, 1.0, Vector2.ZERO, 0.0, from_point, to_point)
+		# Shotguns render one short tracer per pellet below.  Do not also add the
+		# generic center tracer or a four-pellet blast would show five rounds.  The
+		# full flight is drawn from MatchSession.projectiles; this muzzle segment
+		# only bridges the first frame instead of faking an instant full-range hit.
+		if gun != &"shotgun":
+			var shot_direction := (to_point - from_point).normalized()
+			_add_effect(&"tracer", from_point, 0.08, tracer, 0.86, Vector2.ZERO, 0.0, from_point, from_point + shot_direction * 28.0)
 		_add_effect(&"muzzle", from_point, 0.10, tracer.lightened(0.08), 1.0, Vector2.ZERO, 0.0, Vector2.ZERO, Vector2.ZERO, facing)
 		if bool(row.get(&"eject", false)):
 			_add_effect(&"casing", from_point + Vector2(0.0, -3.0), 0.34, Color("#e1b85b"), 0.9, Vector2(-float(facing) * 22.0, -34.0), 0.0)
 		if gun == &"shotgun":
 			var shot_direction := (to_point - from_point).normalized()
-			for pellet: int in range(1, 3):
-				var spread: Vector2 = shot_direction.rotated(0.08 * float(-1 if pellet == 1 else 1))
-				_add_effect(&"tracer", from_point + spread * 5.0, 0.10, Color("#ffd38a"), 0.62, Vector2.ZERO, 0.0, from_point + spread * 5.0, from_point + spread * 120.0)
+			var pellet_count: int = maxi(1, int(row.get(&"pellets", 4)))
+			for pellet: int in range(pellet_count):
+				var centered: float = float(pellet) - float(pellet_count - 1) * 0.5
+				var spread: Vector2 = shot_direction.rotated(centered * 0.075)
+				var pellet_origin := from_point + spread * 5.0
+				_add_effect(&"tracer", pellet_origin, 0.08, Color("#ffd38a"), 0.62, Vector2.ZERO, 0.0, pellet_origin, pellet_origin + spread * 34.0)
 		_emit_sound(StringName("shot_%s" % String(gun)), from_point, 0.95 + float(abs(int(row.get(&"attacker", 1)))) * 0.03)
 	elif kind == &"explosion":
 		var point := Vector2(float(row.get(&"x", 0.0)), float(row.get(&"y", 0.0)))

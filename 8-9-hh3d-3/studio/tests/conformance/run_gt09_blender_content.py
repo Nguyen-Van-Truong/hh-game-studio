@@ -118,7 +118,7 @@ def main(argv=None) -> int:
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--binary", type=Path,
                         default=STUDIO / ".local" / "tooling" /
-                        "blender-5.2.1-windows-x64" / "blender.exe")
+                        "blender-5.2.3-windows-x64" / "blender.exe")
     args = parser.parse_args(argv)
     try:
         report = run(run_id=args.run_id, output=args.output, binary=args.binary)

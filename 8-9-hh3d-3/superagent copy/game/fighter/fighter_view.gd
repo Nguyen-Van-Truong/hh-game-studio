@@ -91,14 +91,20 @@ func _draw() -> void:
 	var half_width: float = float(body_width) * 0.5
 	var outline := Color("#08121f")
 	var used_classic: bool = _draw_classic_fighter(visual_height)
+	if used_classic:
+		# Classic player clips contain a firearm only for their aim frames.  The
+		# idle/run clips are body-only, so render the matching classic weapon while
+		# the player is carrying it and is not already aiming with the clip art.
+		var classic_attack: StringName = StringName(_fighter.get(&"attack", &"none"))
+		var classic_aiming: bool = bool(_fighter.get(&"aiming", false)) or classic_attack == &"shoot"
+		if not classic_aiming and _weapon_action_visible(int(_fighter.get(&"active_slot", _fighter.get(&"active_weapon_slot", 1))), classic_attack, bool(_fighter.get(&"aiming", false))):
+			_draw_classic_weapon(visual_height)
 	if not used_classic:
 		if _has_authored_pose():
 			_draw_authored_pose()
 		else:
 			_draw_procedural_body(visual_height, half_width, outline, tint)
 		_draw_held_weapon(visual_height, tint)
-	elif not _classic_label().begins_with("AIM"):
-		_draw_classic_weapon(visual_height)
 	if not used_classic and int(_fighter.get(&"burning_ticks", 0)) > 0:
 		var flame_phase: float = float(int(_fighter.get(&"burning_ticks", 0)) % 6) * 1.5
 		draw_circle(Vector2(-7.0, -visual_height - 5.0 - flame_phase), 6.0, Color("#ff6b35"))
@@ -232,16 +238,21 @@ func _draw_authored_pose() -> void:
 func _draw_held_weapon(visual_height: float, team_tint: Color) -> void:
 	var active_slot: int = int(_fighter.get(&"active_slot", _fighter.get(&"active_weapon_slot", 1)))
 	var weapon_id: StringName = StringName(_fighter.get(&"gun_id", &"none"))
+	var attack: StringName = StringName(_fighter.get(&"attack", &"none"))
+	var aiming: bool = bool(_fighter.get(&"aiming", false)) or _clip == &"shoot"
+	if not _weapon_action_visible(active_slot, attack, aiming):
+		return
 	if active_slot == 0:
 		weapon_id = StringName(_fighter.get(&"melee_id", &"fists"))
+	elif active_slot == 2:
+		weapon_id = StringName(_fighter.get(&"explosive_id", &"grenade"))
 	elif active_slot != 1:
 		return
+	if attack in [&"throw", &"grab_throw"]:
+		weapon_id = StringName(_fighter.get(&"explosive_id", &"grenade"))
 	if weapon_id == &"none" or weapon_id == &"fists":
 		return
-	if _clip in [&"punch", &"punch_combo", &"kick", &"jump_kick", &"throw", &"downed", &"climb", &"roll", &"dive"] or StringName(_fighter.get(&"action", &"")) in [&"tackle", &"tackle_recover", &"grab", &"grabbed"]:
-		return
 	var facing: int = 1 if int(_fighter.get(&"facing", 1)) >= 0 else -1
-	var aiming: bool = bool(_fighter.get(&"aiming", false)) or _clip == &"shoot"
 	var aim_angle: float = float(_fighter.get(&"aim_angle", 0.0))
 	var direction: Vector2 = WEAPON_VISUALS.direction_for(facing, aim_angle, aiming)
 	var grip: Vector2 = WEAPON_VISUALS.grip_for(body_width, visual_height, facing, aiming)
@@ -255,7 +266,6 @@ func _draw_held_weapon(visual_height: float, team_tint: Color) -> void:
 		grip.x *= float(facing)
 		direction = WEAPON_VISUALS.direction_for(facing, aim_angle, aiming)
 		grip = grip.rotated(_frame_rotation) + _frame_offset
-	var attack: StringName = StringName(_fighter.get(&"attack", &"none"))
 	var timer: int = int(_fighter.get(&"attack_timer_ticks", 0))
 	var recoil: float = 0.0
 	if attack == &"shoot" and timer > 0 and not _has_authored_pose():
@@ -268,6 +278,16 @@ func _draw_held_weapon(visual_height: float, team_tint: Color) -> void:
 		var flash: float = clampf(float(timer) / 3.0, 0.0, 1.0)
 		draw_colored_polygon(PackedVector2Array([muzzle - direction * 2.0, muzzle + direction * 7.0 + normal * 5.0, muzzle + direction * 18.0, muzzle + direction * 7.0 - normal * 5.0]), Color(1.0, 0.78, 0.22, flash))
 		draw_line(muzzle, muzzle + direction * 12.0, Color(1.0, 0.98, 0.78, flash), 2.0)
+
+func _weapon_action_visible(active_slot: int, attack: StringName, aiming: bool) -> bool:
+	# Inventory is carried in the HUD/state, but the fighter only draws a held
+	# weapon during an intentional attack gesture.  Firearms appear while the
+	# aim key is held or during the release shot; melee appears for its swing.
+	if aiming or attack in [&"shoot", &"throw", &"grab_throw"]:
+		return true
+	if active_slot == 0 and attack in [&"punch", &"punch_combo", &"kick", &"jump_kick", &"dive", &"tackle", &"grab_punch"]:
+		return true
+	return false
 
 
 func _draw_action_feedback(visual_height: float, half_width: float, facing: int) -> void:
@@ -329,13 +349,27 @@ func _classic_label() -> String:
 	var attack: StringName = StringName(_fighter.get(&"attack", &"none"))
 	var gun: String = String(_fighter.get(&"gun_id", &"none"))
 	if bool(_fighter.get(&"aiming", false)) or attack == &"shoot" or _clip == &"shoot":
-		if gun == "shotgun":
-			return "AIM_SHOTGUN"
-		if gun == "rocket_launcher":
-			return "AIM_BAZOOKA"
-		if gun == "grenade" or gun == "grenades":
-			return "AIM_GRENADE"
-		return "AIM_PISTOL"
+		match gun:
+			"magnum":
+				return "AIM_MAGNUM"
+			"rifle":
+				return "AIM_RIFLE"
+			"uzi":
+				return "AIM_UZI"
+			"shotgun":
+				return "AIM_SHOTGUN"
+			"sniper":
+				return "AIM_SNIPER"
+			"rocket_launcher", "bazooka":
+				return "AIM_BAZOOKA"
+			"flamethrower":
+				return "AIM_FLAMETHROWER"
+			"grenade", "grenades":
+				return "AIM_GRENADE"
+			"molotov", "molotovs":
+				return "AIM_MOLOTOV"
+			_:
+				return "AIM_PISTOL"
 	match _clip:
 		&"run":
 			return "RUN"
@@ -355,6 +389,12 @@ func _classic_label() -> String:
 			return "KICK"
 		&"punch", &"punch_combo":
 			return "PUNCH_0%d" % (1 + _animation_phase % 3)
+		&"machete":
+			return "MACHETE_0%d" % (1 + _animation_phase % 3)
+		&"axe":
+			return "AXE_0%d" % (1 + _animation_phase % 3)
+		&"sword":
+			return "SWORD_0%d" % (1 + _animation_phase % 3)
 		&"throw":
 			return "THROW"
 		&"downed", &"hit":
@@ -364,10 +404,57 @@ func _classic_label() -> String:
 		_:
 			return "IDLE"
 
+func _sheet_clip_name() -> String:
+	var attack: StringName = StringName(_fighter.get(&"attack", &"none"))
+	var gun: String = String(_fighter.get(&"gun_id", &"none"))
+	if attack in [&"punch", &"punch_combo"]:
+		return "punch"
+	if attack in [&"kick", &"jump_kick"]:
+		return "kick"
+	if attack in [&"throw", &"grab_throw"]:
+		return "throw"
+	if bool(_fighter.get(&"aiming", false)) or attack == &"shoot" or _clip == &"shoot":
+		match gun:
+			"shotgun":
+				return "aim_shotgun"
+			"rocket_launcher", "bazooka":
+				return "aim_bazooka"
+			"rifle":
+				return "aim_rifle"
+			"uzi":
+				return "aim_uzi"
+			"magnum":
+				return "aim_magnum"
+			"sniper":
+				return "aim_sniper"
+			"flamethrower":
+				return "aim_flamethrower"
+			_:
+				return "aim_pistol"
+	match _clip:
+		&"run", &"sprint":
+			return "run"
+		&"jump":
+			return "jump"
+		&"fall":
+			return "fall"
+		&"climb":
+			return "climb"
+		&"roll", &"dive":
+			return "roll"
+		&"machete", &"axe", &"sword":
+			return "idle"
+		&"downed", &"hit":
+			return "knockdown"
+		_:
+			return "idle"
+
 func _draw_classic_fighter(visual_height: float) -> bool:
 	if not SF_BANK.available():
 		return false
-	var texture: Texture2D = SF_BANK.player_texture(player_id, _classic_label())
+	var texture: Texture2D = SF_BANK.sheet_frame(player_id, _sheet_clip_name(), int(_animation_phase / 5))
+	if texture == null:
+		texture = SF_BANK.player_texture(player_id, _classic_label())
 	if texture == null:
 		texture = SF_BANK.player_texture(player_id, "IDLE")
 	if texture == null:
@@ -375,7 +462,10 @@ func _draw_classic_fighter(visual_height: float) -> bool:
 	var facing: float = float(int(_fighter.get(&"facing", 1)))
 	if facing == 0.0:
 		facing = 1.0
-	var scale_factor: float = visual_height / float(texture.get_height())
+	var clip_name: String = _sheet_clip_name()
+	var low_pose: bool = clip_name in ["punch", "kick", "roll", "knockdown", "throw"]
+	var drawn_height: float = maxf(visual_height, 56.0 if low_pose else 108.0)
+	var scale_factor: float = drawn_height / float(texture.get_height())
 	var tint := Color(1.0, 1.0, 1.0, 0.42) if bool(_fighter.get(&"in_pit", false)) else Color.WHITE
 	draw_set_transform(Vector2.ZERO, 0.0, Vector2(facing * scale_factor, scale_factor))
 	draw_texture(texture, Vector2(-texture.get_width() * 0.5, -texture.get_height()), tint)
@@ -394,6 +484,10 @@ func _draw_classic_weapon(visual_height: float) -> void:
 	var weapon_id: StringName = StringName(_fighter.get(&"gun_id", &"none"))
 	if active_slot == 0:
 		weapon_id = StringName(_fighter.get(&"melee_id", &"fists"))
+	var attack: StringName = StringName(_fighter.get(&"attack", &"none"))
+	var aiming: bool = bool(_fighter.get(&"aiming", false))
+	if not _weapon_action_visible(active_slot, attack, aiming):
+		return
 	if weapon_id == &"none" or weapon_id == &"fists":
 		return
 	var texture: Texture2D = SF_BANK.weapon_texture(weapon_id)
@@ -402,8 +496,10 @@ func _draw_classic_weapon(visual_height: float) -> void:
 	var facing: float = float(int(_fighter.get(&"facing", 1)))
 	if facing == 0.0:
 		facing = 1.0
-	var scale_factor: float = clampf(visual_height / 48.0, 0.8, 2.2)
-	var grip := Vector2(facing * body_width * 0.35, -visual_height * 0.55)
+	var scale_factor: float = clampf(visual_height * 0.42 / float(texture.get_height()), 0.8, 6.0)
+	# Keep the external melee silhouette on the sprite's forward hand.  Classic
+	# firearm aim frames already contain their weapon and never reach this path.
+	var grip := Vector2(facing * maxf(8.0, body_width * 0.38), -visual_height * 0.52)
 	draw_set_transform(grip, 0.0, Vector2(facing * scale_factor, scale_factor))
 	draw_texture(texture, Vector2(0.0, -texture.get_height() * 0.5), Color.WHITE)
 	draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)

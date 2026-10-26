@@ -36,7 +36,7 @@ if errorlevel 1 (
 rem Always refresh the import cache: one sidecar cannot prove that all source
 rem textures and their .godot cache targets still exist or are current.
 echo Checking Godot assets before opening the match.
-  python tools\run_guarded.py --project-root . --timeout 180 --command-id "%IMPORT_COMMAND_ID%" --source . --mode manual-import -- "%GODOT%" --headless --editor --path . --quit
+  python tools\run_guarded.py --project-root . --timeout 180 --command-id "%IMPORT_COMMAND_ID%" --source . --mode manual-import -- "%GODOT%" --headless --import --path .
   if errorlevel 1 (
     echo Godot asset import failed. Details are in .local\runs.
     popd
@@ -48,7 +48,7 @@ echo Starting Relay Yard - two players on one keyboard.
 echo P1: WASD and J K L ; Q cycles slots    P2: arrows and Numpad 1 2 3 4 5, Num Lock on.
 echo Pick up weapons: hold Down + Punch.  Esc: pause.  Close the game window to exit.
 echo Keep this console open while playing. Session limit: four hours.
-python tools\run_guarded.py --project-root . --timeout 14400 --visible --command-id "%COMMAND_ID%" --source . --seed 1 --map relay_yard --mode two_player -- "%GODOT%" --path . --display-driver windows --rendering-method gl_compatibility --scene res://game/ui/match_room.tscn %*
+python tools\run_guarded.py --project-root . --timeout 14400 --visible --command-id "%COMMAND_ID%" --source . --seed 1 --map classic_rooftops --mode two_player -- "%GODOT%" --path . --display-driver windows --rendering-method gl_compatibility --scene res://game/ui/match_room.tscn --classic-rooftops %*
 set "EXIT_CODE=%ERRORLEVEL%"
 if not "%EXIT_CODE%"=="0" (
   echo The game stopped with code %EXIT_CODE%. Details are in .local\runs.

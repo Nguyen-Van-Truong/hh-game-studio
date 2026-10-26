@@ -15,7 +15,7 @@ def native_reopen(output):
     import bpy
     from studio.host.blender.publication_state import sha
     expected=json.loads((output/'reopen-expected.json').read_bytes());path=Path(expected['path'])
-    assert sha(path.read_bytes())==expected['sha256'] and bpy.app.background and bpy.app.version[:3]==(5,2,1)
+    assert sha(path.read_bytes())==expected['sha256'] and bpy.app.background and bpy.app.version[:3]==(5,2,3)
     assert bpy.ops.wm.open_mainfile(filepath=str(path),load_ui=False,use_scripts=False)=={'FINISHED'}
     profile=load(STUDIO/'blender-addon/export_profile.py');profile.preflight(bpy)
     adapter=load(STUDIO/'blender-addon/adapter.py');observed=adapter.FixtureAdapter().inspect()
@@ -156,7 +156,7 @@ def main():
     unit=owned.run_process([sys.executable,'-B','-m','unittest','discover','-s','tests/blender','-p','test_*.py','-v'],
         cwd=snapshot,output=out,timeout=30,label='unit')
     host=owned.run_process([sys.executable,'-B',str(snapshot/'tests/blender/run_publication_probe.py'),
-        '--frozen','--output',str(out),'--binary',str(STUDIO/'.local/tooling/blender-5.2.1-windows-x64/blender.exe')],
+        '--frozen','--output',str(out),'--binary',str(STUDIO/'.local/tooling/blender-5.2.3-windows-x64/blender.exe')],
         cwd=snapshot,output=out,timeout=90,label='native')
     value={'source_closure_sha256':closure,'unit':unit,'host':host,'candidate_only':True,'public_ack':False,
         'source_unchanged':sources(STUDIO)==original,'snapshot_unchanged':sources(snapshot)==original}

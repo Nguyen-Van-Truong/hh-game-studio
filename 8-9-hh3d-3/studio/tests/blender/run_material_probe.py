@@ -18,7 +18,7 @@ def reopen_native(output):
     expected=json.loads((output/'checkpoint-expected.json').read_bytes())
     path=Path(expected['path']);raw=path.read_bytes()
     assert hashlib.sha256(raw).hexdigest()==expected['sha256']
-    assert bpy.app.background and bpy.app.version[:3]==(5,2,1)
+    assert bpy.app.background and bpy.app.version[:3]==(5,2,3)
     assert bpy.ops.wm.open_mainfile(filepath=str(path),load_ui=False,use_scripts=False)=={'FINISHED'}
     adapter=load(STUDIO/'blender-addon/adapter.py');owner=adapter.FixtureAdapter()
     observed=owner.inspect();assert observed['snapshot']==expected['snapshot'] and observed['revision']==expected['revision']
@@ -122,7 +122,7 @@ def main():
     unit=owned.run_process([sys.executable,'-B','-m','unittest','discover','-s','tests/blender','-p','test_*.py','-v'],
         cwd=snapshot,output=out,timeout=30,label='unit')
     host=owned.run_process([sys.executable,'-B',str(snapshot/'tests/blender/run_material_probe.py'),
-        '--frozen','--output',str(out),'--binary',str(STUDIO/'.local/tooling/blender-5.2.1-windows-x64/blender.exe')],
+        '--frozen','--output',str(out),'--binary',str(STUDIO/'.local/tooling/blender-5.2.3-windows-x64/blender.exe')],
         cwd=snapshot,output=out,timeout=90,label='native')
     value={'source_closure_sha256':closure,'unit':unit,'host':host,'candidate_only':True,'public_ack':False,
         'source_unchanged':sources(STUDIO)==original,'snapshot_unchanged':sources(snapshot)==original}

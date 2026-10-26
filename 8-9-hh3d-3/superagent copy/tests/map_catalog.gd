@@ -8,7 +8,7 @@ var assertions: int = 0
 
 func _init() -> void:
 	var entries: Array[Dictionary] = MAP_SCRIPT.entries()
-	_expect(entries.size() == 6 and entries.is_read_only(), "catalog has six immutable entries")
+	_expect(entries.size() == 7 and entries.is_read_only(), "catalog has seven immutable entries including classic rooftops")
 	_expect(StringName(entries[0][&"id"]) == MAP_SCRIPT.default_id(), "relay yard is the default entry")
 	var seen_ids: Dictionary = {}
 	var seen_topologies: Dictionary = {}

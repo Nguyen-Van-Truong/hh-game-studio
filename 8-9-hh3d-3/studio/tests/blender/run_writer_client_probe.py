@@ -676,7 +676,7 @@ def main(argv=None):
     unit_ok, counts = unit_completion((output / "unit-stdout.txt").read_text(encoding="utf-8"))
     host = None
     if host_artifact_passed(output, unit) and unit_ok:
-        binary = args.binary or STUDIO / ".local/tooling/blender-5.2.1-windows-x64/blender.exe"
+        binary = args.binary or STUDIO / ".local/tooling/blender-5.2.3-windows-x64/blender.exe"
         host = runner.run_process([
             sys.executable, "-B", str(snapshot / "tests/blender/run_writer_client_probe.py"),
             "--frozen", "--output", str(output), "--run-id", args.run_id, "--binary", str(binary.resolve()), "--publication-profile", args.publication_profile,

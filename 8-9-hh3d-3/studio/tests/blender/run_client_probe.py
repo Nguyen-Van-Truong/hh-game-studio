@@ -308,7 +308,7 @@ sys.exit(not r.wasSuccessful())
     if passed(unit) and complete:
         host = runner.run_process([sys.executable, '-B', str(snapshot / 'tests/blender/run_client_probe.py'),
             '--frozen', '--output', str(output), '--binary',
-            str(STUDIO / '.local/tooling/blender-5.2.1-windows-x64/blender.exe')],
+            str(STUDIO / '.local/tooling/blender-5.2.3-windows-x64/blender.exe')],
             cwd=snapshot, output=output, timeout=90, label='native')
     native_complete = False
     if passed(host) and (output / 'native.json').is_file():

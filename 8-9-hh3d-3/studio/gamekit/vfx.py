@@ -296,6 +296,7 @@ def plan(
     lifetime: float | None = None,
     seed: int | None = None,
     scene: str | None = None,
+    no_camera: bool = False,
 ) -> dict[str, Any]:
     """Build scene-apply ops for one preset. Does not launch Godot or write a scene."""
     table, row = _preset(preset)
@@ -334,13 +335,16 @@ def plan(
             "props": {"current": True, "fov": 60.0, "position": [0.0, 0.55, 2.5], "rotation_degrees": [12, 0, 0]},
         }
     scene_path = scene or f"res://effects/{row['id']}.tscn"
-    ops = [
-        camera,
+    ops: list[dict[str, Any]] = []
+    if not no_camera:
+        ops.append(camera)
+    ops.extend([
         {"op": "node.create", "parent": ".", "name": particle_name, "type": particle_type, "props": props},
         {"op": "group.add", "path": particle_name, "group": "hh_vfx"},
         {"op": "group.add", "path": particle_name, "group": f"hh_vfx_{row['kind']}"},
-        {"op": "group.add", "path": "PreviewCamera", "group": "hh_vfx_preview_camera"},
-    ]
+    ])
+    if not no_camera:
+        ops.append({"op": "group.add", "path": "PreviewCamera", "group": "hh_vfx_preview_camera"})
     return {
         "preset": row["id"],
         "description": row["description"],
@@ -384,12 +388,13 @@ def create(
     color: str | None = None,
     lifetime: float | None = None,
     seed: int | None = None,
+    no_camera: bool = False,
 ) -> dict[str, Any]:
     """Create one packed scene. Validation failures return before ``scene.apply``."""
     command_id = C.validate_command_id(command_id)
     _check_scene(project, scene)
     built = plan(
-        preset, count=count, intensity=intensity, color=color, lifetime=lifetime, seed=seed, scene=scene,
+        preset, count=count, intensity=intensity, color=color, lifetime=lifetime, seed=seed, scene=scene, no_camera=no_camera,
     )
     catalog = S.load_catalog()
     if built["create"]["root_type"] not in catalog["classes"]:
@@ -480,6 +485,7 @@ def _cmd_create(a: argparse.Namespace) -> dict[str, Any]:
         color=a.color,
         lifetime=a.lifetime,
         seed=a.seed,
+        no_camera=bool(getattr(a, "no_camera", False)),
     )
 
 
@@ -498,4 +504,5 @@ def register(sub: argparse._SubParsersAction) -> None:
     make.add_argument("--color", default=None, help="#RRGGBB or #RRGGBBAA")
     make.add_argument("--lifetime", type=float, default=None, help="seconds, inside that preset's range")
     make.add_argument("--seed", type=int, default=None, help="unsigned 32-bit fixed particle seed")
+    make.add_argument("--no-camera", action="store_true", help="omit PreviewCamera so instancing in a game scene does not hijack the active camera")
     make.set_defaults(func=_cmd_create)

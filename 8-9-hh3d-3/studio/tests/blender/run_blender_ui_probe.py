@@ -36,7 +36,7 @@ REQUIRED = {
 
 def evaluate(phase, report, stdout):
     if (report.get("schema") != "HH-GT04-UI-PROBE-1" or report.get("phase") != phase or
-            report.get("actual_blender_gui") is not True or report.get("version") != "5.2.1 LTS" or
+            report.get("actual_blender_gui") is not True or report.get("version") != "5.2.3 LTS" or
             report.get("ok") is not True or report.get("public_ack") is not False or report.get("acceptance") is not False):
         raise ValueError("wrong native GUI result")
     expected = [{"label": label, "passed": True} for label in REQUIRED[phase]]
@@ -73,7 +73,7 @@ def main():
             raise ValueError("snapshot differs")
         frozen = bg.load(snapshot / "build/bootstrap/run_fixture.py")
         report.update(source_files=before, source_closure_sha256=frozen.source_closure_sha256(before))
-        binary = STUDIO / ".local/tooling/blender-5.2.1-windows-x64/blender.exe"
+        binary = STUDIO / ".local/tooling/blender-5.2.3-windows-x64/blender.exe"
         bootstrap._reject_reparse_ancestors(binary)
         if bg.sha(binary) != bg.BINARY_SHA256:
             raise ValueError("Blender executable pin mismatch")

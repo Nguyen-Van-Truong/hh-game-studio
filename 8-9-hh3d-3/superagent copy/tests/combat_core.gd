@@ -55,12 +55,12 @@ func _test_shot_and_knockdown() -> void:
 	var frame := TraceCore.build_frame(0, {}, {&"p1_shoot": true})
 	_expect(await PhysicsFixture.advance(sim, frame), "shot aim frame advances")
 	_expect(attacker.aiming, "held shoot enters aiming state")
-	_expect(attacker.ammo == 6, "aiming does not consume ammunition")
+	_expect(attacker.ammo == 12, "aiming does not consume ammunition")
 	var release_frame := TraceCore.build_frame(1, {&"p1_shoot": true}, {})
 	_expect(await PhysicsFixture.advance(sim, release_frame), "shot release frame advances")
 	_expect(target.last_hit_kind == &"shoot", "shot reports hit kind")
 	_expect(target.health == 100 - int(sim.tuning[&"shoot_damage"]), "shot damages aligned target in range")
-	_expect(attacker.ammo == 5, "shot consumes one ammunition")
+	_expect(attacker.ammo == 11, "shot consumes one ammunition")
 	# Seed the deterministic critical/knockdown branch explicitly.
 	sim.world.rng_state = 4
 	target.invulnerability_ticks = 0

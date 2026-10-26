@@ -1,77 +1,126 @@
-SUPERAGENT COPY — SHIP TOÀN BỘ ASSET + LOGIC SUPERFIGHTERS CLASSIC (SAC)
+SUPERAGENT COPY — DÙNG ASSET VÀ LOGIC SUPERFIGHTERS CLASSIC (SAC)
 Ngày: 2026-10-17
+PRODUCT_NAME=Superagent Copy
+PLAN_ROLE=SUPERAGENT_COPY_CLASSIC_ASSET_SOURCE
 PLAN_SCOPE=8-9-hh3d-3/superagent copy
+PLAN_REVISION=SAC-1-USE-CLASSIC-BUNDLE
+PARENT_SHAPE=../zdoc/18-9-superagent-2d-y8-plan.txt
 PARENT_WAIVER=../zdoc/16-10-owner-reference-asset-waiver.txt
-PARENT_SA_PLAN=../zdoc/18-9-superagent-2d-y8-plan.txt (tham chiếu parity; không tick thay plan chính)
-CURRENT_VALID_WP=SAC-WP0
-DISPATCHABLE=YES_OWNER_DIRECTIVE_2026_10_17
+CURRENT_VALID_WP=SAC-03
+EXECUTION_AUTHORIZATION=OWNER_2026_10_17_USE_CLASSIC_ASSETS_AND_LOGIC
+DISPATCHABLE=YES
+PRESENTATION_POLICY=CLASSIC_BUNDLE_FIRST_AUTHORED_FALLBACK_ONLY
+LOGIC_POLICY=PLAYERSTATE_AND_WEAPON_AS_FIRST
+CLASSIC_BUNDLE=reference/sf-classic-restored
+BUNDLE_KIND=JUNCTION_TO_ASSET_SUPERFIGHTER_RESTORED_PROJECT
+GUARD_RULE=reference/ is excluded from run_guarded source hash because its junctions leave this project root
+BRAND_RULE=shipping title stays Superagent; do not put Superfighters on the title card
+PARITY_CLAIM=NONE
 
-0. MỤC TIÊU OWNER
-- Gắn **toàn bộ** bundle khôi phục classic (599 AS3, XFL, ~5850 sprite PNG, sound, SWF) vào worktree
-  `superagent copy` để game Godot chạy được **trước**, retouch/replace **sau**.
-- Không thay thế Vault Fighters (`godot/dogfood/superfighters/`); SAC là sandbox riêng.
-- Ship/store metadata vẫn **không** dùng tên Superfighters (waiver §3).
+0. ĐỌC NHANH
+- Worktree này chơi bằng choigame.bat. Plan 18-9 vẫn là plan bản superagent chính; file này không tick checkbox bên đó.
+- Owner 17-10: nhân vật classic đã hiện đúng lúc chạy. Hướng tiếp là dùng hết tài nguyên và logic Superfighters classic, không giữ art/tuning tự tạo làm lớp chính.
+- Bundle: 599 class AS3, XFL, sprite PNG, MP3, SWF Newgrounds 575163. Nằm ở reference/sf-classic-restored (junction). Godot không import cả rừng vì reference/.gdignore; game đọc file lúc chạy qua game/presentation/sf_classic_bank.gd.
+- Đã gắn: người johnny/agent theo nhãn IDLE/RUN/AIM_*, súng/đồ/nổ/lửa, MP3 súng-đấm-nổ, số PlayerState run 1.7 / gravity 0.6 / jump 5 / jump-kick 4.
+- Chưa gắn: chu kỳ animation con bên trong mỗi nhãn, toàn bộ vũ khí AS, map Flash, vật thể/hazard đúng classic, bot và mode lấy từ script classic.
+- Lỗi choigame "source directory link escapes project root" là do junction. run_guarded bỏ qua thư mục reference khi hash nguồn.
 
-1. BUNDLE ĐÃ GẮN (SAC-WP0) [x]
-| Path trong superagent copy | Nguồn |
-|----------------------------|--------|
-| reference/sf-classic-restored/ | Junction → asset-superfighter/.../restored-project |
-| reference/sf-classic-ffdec-export/ | Junction → asset-superfighter/.../full-ffdec-export |
+NEXT
+1. SAC-03: port nốt số di chuyển/chiến đấu từ PlayerState.as vào data/tuning.json, chơi được trên map hiện tại.
+2. SAC-04: mọi nhãn người (đấm, đá, lăn, ngã, leo, ném) lấy frame classic; súng cầm và đồ nhặt lấy sprite classic, không vẽ hình chữ nhật tự tạo khi đã có PNG.
+3. SAC-05/06: lần lượt vũ khí, item, thùng, nổ, lửa theo file wpn_*.as và sprite cùng tên.
+4. SAC-09: map chơi lấy hình classic (nền, tile, prop) thay backdrop tự vẽ. Layout Godot chỉ giữ va chạm cho đến khi có map classic chạy được.
+5. Không mở SA-14, không sửa Vault Fighters, không tick plan 18-9.
 
-Nội dung restored: 01-actionscript … 10-morphshapes, xfl-export, 00-original.swf,
-package-index.json, play-local.html, chay-game.bat, README-RESTORED.md.
+1. MỤC TIÊU
+Bản trong superagent copy phải nhìn và đánh bằng tài nguyên Superfighters classic:
+- Hình người, súng, đồ, hiệu ứng, tiếng, nhạc lấy từ bundle.
+- Số chạy, nhảy, trọng lực, sát thương, đạn, thời gian cháy/ngã lấy từ ActionScript classic.
+- Art tự tạo (pose sheet, backdrop, FX/SFX procedural) chỉ còn khi một sprite/tiếng classic chưa load được.
+Phím giữ nguyên: P1 WASD + J/K/L/;/Q, P2 mũi tên + NumPad 1–5.
 
-Ghi chú: Junction = toàn bộ cây asset/logic **có trong project** không nhân đôi disk.
-Owner có thể yêu cầu SAC-WP0b robocopy vật lý nếu cần offline/USB (chưa chạy).
+2. NGUỒN VÀ THỨ TỰ THAY
+| Việc | Nguồn classic | Thay cho |
+|------|----------------|----------|
+| Người | DefineSprite player_johnny, player_agent, nhãn Symbol 731 | art/characters/*/poses.png |
+| Súng/đồ | wpn_*.as + DefineSprite wpn_* | WeaponVisuals hình vẽ |
+| Tiếng | 03-sounds/*.mp3 | CombatAudio WAV procedural |
+| Nổ/lửa/nòng súng | explosion_circle, fire_circle, muzzle_flash_* | ArenaFx polygon |
+| Logic người | Code/Data/Players/PlayerState.as, PlayerAnimation.as | số placeholder trong tuning.json |
+| Vũ khí | Code/Data/Weapons | weapon_catalog số tự đặt |
+| Map/prop | sprite map, crate, chair, glass, lamp | Relay Yard backdrop tự vẽ khi đã có frame classic dùng được |
 
-2. GIỚI HẠN KỸ THUẬT (đọc trước khi tick WP sau)
-- AS3 **không chạy** trong Godot → port sang GDScript theo từng module (SAC-WP3+).
-- PNG sprite Flash là **frame rời theo DefineSprite**, không phải atlas Godot sẵn →
-  cần rig/parser (SAC-WP2) trước khi gán vào fighter_view.
-- Import ~6000 PNG vào Godot cùng lúc → editor chậm → dùng .gdignore + import theo lô.
+AS3 không chạy trong Godot. Port là đọc số và frame, viết lại bằng GDScript. Mỗi nhãn movie clip cha hiện là một frame; chu kỳ chạy/đấm đầy đủ là việc SAC-04, không coi là xong chỉ vì IDLE đã hiện.
 
 3. WORK PACKAGES
 
-[ ] SAC-WP1 — Manifest & provenance
-- Tạo reference/sf-classic-restored/MANIFEST-SAC.json (hash 00-original.swf, đếm file).
-- Bổ sung art/LICENSES.tsv: một dòng bundle + từng lô import runtime (owner-waiver-reference).
-- reference/NOTICE-SF-REFERENCE.md (MythoLogic, decompile NG 575163, chỉ dev nội bộ).
+[x] SAC-01 Mở được trận và thấy người classic
+- SfClassicBank, FighterView, CombatAudio, trim vùng trong suốt.
+- Owner đã thấy đúng nhân vật Superfighters lúc chạy 17-10.
 
-[ ] SAC-WP2 — Asset bridge (tools)
-- tools/sf_bridge/parse_symbols.py — đọc 09-symbolClass/symbols.csv + package-index.json.
-- tools/sf_bridge/sprite_catalog.tsv — characterId, class, path PNG mẫu.
-- reference/.gdignore (Godot bỏ qua cả cây junction; load runtime qua tools/sf_bridge).
+[x] SAC-02 Launcher không chết vì junction
+- run_guarded.py không hash reference/.
+- choigame.bat import bằng `godot --headless --import` thay cho `--editor --quit` (lệnh cũ in "Parameter singleton is null" và bị guard tính là lỗi).
 
-[ ] SAC-WP3 — Logic port (ưu tiên)
-- Port constants + state từ Code/PlayerState.as, tuning vũ khí từ wpn_*.as → data/sf_tuning.json.
-- Map combat loop: beat, hurt, weapon pickup — đối chiếu game/ hiện có superagent copy.
+[ ] SAC-03 Di chuyển và combat theo PlayerState
+- Đối chiếu RunSpeed 1.7, sprint x2, gravity 0.6, jump -5, đấm/đá/lăn/cháy.
+- Ghi đơn vị: SWF 24 fps, sim Godot 60 Hz. Số đang gắn là hằng số classic trên mỗi tick 60 Hz, chưa phải quy đổi giây.
+- Test: vào trận, chạy, nhảy, bắn, không văng script.
 
-[ ] SAC-WP4 — Presentation hook
-- fighter_view.gd: mode `use_sf_reference_sprites` (dev flag) load subset catalog SAC-WP2.
-- Không xóa art authored HH; reference layer song song.
+[ ] SAC-04 Hình người và súng classic cho mọi hành động đang có
+- Bảng nhãn IDLE, RUN, JUMP, FALL, KNOCKDOWN, ROLL, KICK, PUNCH_01..03, AIM_*.
+- Không vẽ procedural body/weapon khi frame classic load được.
+- Hai người: johnny và agent.
 
-[ ] SAC-WP5 — Verify
-- Headless smoke + một scene P1/P2 với subset sprite (idle/run/jump/shoot).
-- Evidence: run_id, source hash manifest, screenshot — **không** claim Y8 parity (SA-02).
+[ ] SAC-05 Đủ vũ khí và item classic
+- pistol, magnum, rifle, uzi, shotgun, sniper, bazooka, flamethrower, grenade, molotov, sword, machete, axe, medkit, pills, slowmo.
+- Số đạn và sát thương lấy từ AS vũ khí tương ứng.
 
-[ ] SAC-WP6 — Replace track (sau khi chạy ổn)
-- Lịch thay từng nhóm asset reference → HH original; cập nhật LICENSES.tsv status.
+[ ] SAC-06 Vật thể, nổ, lửa, kính, thùng
+- Sprite và tiếng classic thay polygon khi file tồn tại.
+- Hành vi cháy/nổ đọc từ script classic, không chỉ đổi màu.
 
-4. KHÔNG LÀM TRONG SAC (trừ owner mở gate)
-- Merge SAC vào Vault Fighters product tree.
-- Commit binary hàng GB nếu owner chưa chọn physical mirror (junction đủ cho dev).
-- Tick checkbox plan 18-9-superagent-2d-y8-plan.txt từ SAC.
+[ ] SAC-07 Mode, menu, pause
+- Giữ VS / stage / survival đang có.
+- Chữ và icon HUD lấy asset classic khi có frame tương ứng.
 
-5. LỆNH THAM CHIẾU
-- Chơi SWF gốc trong bundle: reference/sf-classic-restored/chay-game.bat
-- Entry AS3: reference/sf-classic-restored/01-actionscript/Code/Main.as
-- XFL Animate: reference/sf-classic-restored/xfl-export/Superfighters/
+[ ] SAC-08 Bot
+- Giữ bot hiện tại cho đến khi luật classic được port. Không bịa parity.
+
+[ ] SAC-09 Map classic
+- Va chạm có thể tạm dùng room JSON hiện có.
+- Nền, prop, hazard vẽ bằng sprite classic. Bỏ backdrop tự tạo khi nền classic phủ được sàn đấu.
+
+[ ] SAC-10 Âm thanh đủ trận
+- Súng, đấm, nổ, nhảy, nhặt đồ, nhạc nền từ 03-sounds.
+- Procedural WAV chỉ khi thiếu file.
+
+[ ] SAC-11 Chơi Windows ổn
+- choigame.bat mở cửa sổ, không GUARD_ERROR.
+- Một trận 2P: di chuyển, nhặt, bắn, nổ, không lỗi script.
+
+[ ] SAC-12 Đối chiếu và sửa
+- Chơi song song với SWF reference/sf-classic-restored/chay-game.bat.
+- Ghi gap còn lại. Không ghi MATCHED nếu chưa chơi song song.
+
+4. KHÔNG LÀM
+- Không merge sang Vault Fighters.
+- Không tick plan 18-9.
+- Không nhân đôi hàng GB vào git. Junction là bản dev.
+- Không để junction nằm trong thư mục bị hash. reference/ đứng ngoài source hash.
+
+5. LỆNH
+- Chơi Godot: choigame.bat
+- Chơi SWF classic: reference/sf-classic-restored/chay-game.bat
+- Code người: reference/sf-classic-restored/01-actionscript/Code/Data/Players/PlayerState.as
+- XFL: reference/sf-classic-restored/xfl-export/Superfighters/
 
 6. TIẾN ĐỘ
-SAC-WP0 done 2026-10-17 (junction bundle).
-2026-10-17 runtime hook (chưa tick WP vì chưa đủ evidence SA-02):
-- game/presentation/sf_classic_bank.gd đọc sprite + mp3 từ bundle.
-- FighterView vẽ player_johnny / player_agent theo nhãn IDLE/RUN/AIM_*.
-- Pickup, đạo cụ, nổ, lửa, súng dùng PNG classic; CombatAudio ưu tiên MP3 classic.
-- data/tuning.json lấy run 1.7, gravity 0.6, jump 5, jump-kick 4 từ PlayerState.
-Giới hạn: mỗi nhãn animation là 1 frame export của movie clip cha, chưa phải full timeline con (chạy/đấm chưa đủ chu kỳ). Map Godot vẫn là layout Relay Yard, phủ prop classic chứ chưa phải layout map Flash.
+- 2026-10-17: junction bundle, bank runtime, người classic hiện trong trận. Owner xác nhận đúng nhân vật.
+- 2026-10-17: cắt vùng trong suốt để người/súng không còn vài pixel; bỏ ghế/cửa sổ xám rải sàn vì export là ô đặc.
+- 2026-10-17: sửa GUARD_ERROR bằng cách loại reference/ khỏi hash nguồn.
+- 2026-10-17: người chơi lấy sheet Bitmap 1911/1456 (cả người, có chạy/đấm/súng). Nền trận là map classic Bitmap 2219, chân đứng trên dải đất vàng. Ảnh xem .local/play-try/hero2.png.
+- 2026-10-17: port hình học GenerateMapRooftops từ `Maps.as` vào `data/classic_rooftops.json` (920x460 native canvas, solid/one-way/ladder/spawn/pickup/prop rows). Launcher `tools/play_two_player.bat` chọn map này bằng `--classic-rooftops`; Relay Yard vẫn giữ làm regression fixture.
+- 2026-10-17: classic bitmap tự vẽ floors/walls/ladders nên renderer không còn phủ các slab debug lên art; physics vẫn dùng topology JSON. `tests/classic_rooftops.gd` PASS 128 assertions.
+- 2026-10-17: rocket dùng projectile lifetime/impact/explosion; molotov/grenade giữ throwable identity, gravity/fuse và burn; shotgun tracer không còn dư tracer trung tâm.
+- WP hiện hành: SAC-03. Map va chạm vẫn là Relay Yard, chưa khớp hình tòa nhà bên phải.

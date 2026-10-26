@@ -198,7 +198,7 @@ class QualityCatalogTests(unittest.TestCase):
     def test_profiles_use_known_godot_47_settings(self) -> None:
         payload = Q.list_profiles()
         self.assertTrue(payload["ok"])
-        self.assertEqual(payload["pin"], {"godot": "4.7.2.stable", "blender": "5.2.1"})
+        self.assertEqual(payload["pin"], {"godot": "4.7.2.stable", "blender": "5.2.3"})
         self.assertFalse(payload["beauty_guarantee"])
         self.assertEqual(tuple(payload["managed_keys"]), EXPECTED_KEYS)
         self.assertEqual(Q.MANAGED_KEYS, EXPECTED_KEYS)

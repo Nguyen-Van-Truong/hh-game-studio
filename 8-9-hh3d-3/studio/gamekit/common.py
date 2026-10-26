@@ -12,6 +12,7 @@ import contextlib
 import contextvars
 import datetime as _dt
 import errno
+import functools
 import hashlib
 import json
 import os
@@ -32,13 +33,49 @@ STUDIO_DIR = GAMEKIT_DIR.parent
 BASE_DIR = STUDIO_DIR.parent
 TOOLING_DIR = STUDIO_DIR / ".local" / "tooling"
 GODOT_SCRIPTS_DIR = GAMEKIT_DIR / "godot"
-GODOT_VERSION = "4.7.2.stable"
-BLENDER_VERSION = "5.2.1"
+TOOLCHAIN_LOCK_PATH = STUDIO_DIR / "toolchain.lock.json"
+
+
+@functools.lru_cache(maxsize=1)
+def toolchain_lock() -> dict[str, Any]:
+    """Read the studio toolchain lock as the single source of truth for versions and hashes."""
+    raw = json.loads(TOOLCHAIN_LOCK_PATH.read_text(encoding="utf-8"))
+    if not isinstance(raw, dict) or raw.get("schema") != "HH-STUDIO-TOOLCHAIN-LOCK-2":
+        raise RuntimeError(f"invalid toolchain lock schema in {TOOLCHAIN_LOCK_PATH}")
+    return raw
+
+
+def _load_default_pins() -> tuple[str, str, Path, Path, str, str, str]:
+    lock = toolchain_lock()
+    godot = lock["godot"]
+    blender = lock["blender"]
+    godot_tag = str(godot["version"])
+    godot_ver = godot_tag.replace("-stable", ".stable")
+    blender_ver = str(blender["version"])
+    default_godot = TOOLING_DIR / f"godot-{godot_tag}" / str(godot["console_executable"])
+    default_blender = TOOLING_DIR / str(blender["binary_source_member"])
+    return (
+        godot_ver,
+        blender_ver,
+        default_godot,
+        default_blender,
+        str(godot["console_sha256"]),
+        str(godot["gui_sha256"]),
+        str(blender["executable_sha256"]),
+    )
+
+
+(
+    GODOT_VERSION,
+    BLENDER_VERSION,
+    _DEFAULT_GODOT,
+    _DEFAULT_BLENDER,
+    GODOT_CONSOLE_SHA256,
+    GODOT_GUI_SHA256,
+    BLENDER_EXE_SHA256,
+) = _load_default_pins()
 RESULT_MARKER = "HHGK_RESULT "
 TZ = _dt.timezone(_dt.timedelta(hours=7), "Asia/Saigon")
-
-_DEFAULT_GODOT = TOOLING_DIR / "godot-4.7.2-stable" / "Godot_v4.7.2-stable_win64_console.exe"
-_DEFAULT_BLENDER = TOOLING_DIR / "blender-5.2.1-windows-x64" / "blender.exe"
 
 # Out of HH Studio scope per the repository AGENTS.md files; gamekit refuses to register them.
 FORBIDDEN_PATH_PARTS = (

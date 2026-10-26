@@ -14,7 +14,7 @@ var _streams: Dictionary = {}
 var _active_players: Array[AudioStreamPlayer2D] = []
 
 func _ready() -> void:
-	if OS.has_feature("headless"):
+	if _headless_audio_disabled():
 		return
 	_ensure_sfx_bus()
 
@@ -36,12 +36,13 @@ func shutdown() -> void:
 			player.free()
 	_active_players.clear()
 	_streams.clear()
+	SF_BANK.release_audio()
 	var sfx_bus: int = AudioServer.get_bus_index(&"SFX")
 	if sfx_bus >= 0:
 		AudioServer.remove_bus(sfx_bus)
 
 func play_event(kind: StringName, position: Vector2, pitch_scale: float = 1.0) -> void:
-	if OS.has_feature("headless"):
+	if _headless_audio_disabled():
 		return
 	_prune_voices()
 	if _active_players.size() >= MAX_VOICES:
@@ -84,6 +85,19 @@ func _ensure_sfx_bus() -> void:
 		return
 	AudioServer.add_bus()
 	AudioServer.set_bus_name(AudioServer.get_bus_count() - 1, &"SFX")
+
+func _headless_audio_disabled() -> bool:
+	# Godot's Windows build can keep the "windows" DisplayServer name even
+	# with --headless.  Check the actual command line as well so test workers
+	# never create MP3 playback objects that outlive the process.
+	if OS.has_feature("headless"):
+		return true
+	if DisplayServer.get_name().to_lower() == "headless":
+		return true
+	for argument: String in OS.get_cmdline_args():
+		if argument == "--headless":
+			return true
+	return false
 
 func _stream_for(kind: StringName) -> AudioStreamWAV:
 	var cached: Variant = _streams.get(kind, null)

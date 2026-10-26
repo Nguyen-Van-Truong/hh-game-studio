@@ -74,7 +74,8 @@ func _test_window_and_same_tick() -> void:
 func _test_exhaustion_and_regeneration() -> void:
 	var sim := PhysicsFixture.create(self, 307, {&"max_stamina": 12})
 	var held: Dictionary = {}
-	for tick_value: int in range(9):
+	var exhaustion_ticks: int = int(sim.tuning[&"max_stamina"]) / maxi(1, int(sim.tuning[&"sprint_drain_per_tick"])) + 3
+	for tick_value: int in range(exhaustion_ticks):
 		held = await _step(sim, held, {&"p1_right": tick_value != 1})
 	_expect(sim.fighters[0].sprint.direction == 0, "exhaustion stops sprint despite held direction")
 	_expect(sim.fighters[0].sprint.stamina >= 0, "stamina never underflows")
@@ -83,8 +84,9 @@ func _test_exhaustion_and_regeneration() -> void:
 	_expect(sim.fighters[0].sprint.direction == 0, "regeneration alone does not restart a held sprint")
 	var idle := PhysicsFixture.create(self, 308)
 	var moving := PhysicsFixture.create(self, 308)
-	idle.fighters[0].sprint.stamina = 100
-	moving.fighters[0].sprint.stamina = 100
+	var recovery_start: int = maxi(1, int(idle.tuning[&"max_stamina"]) / 2)
+	idle.fighters[0].sprint.stamina = recovery_start
+	moving.fighters[0].sprint.stamina = recovery_start
 	var idle_held: Dictionary = {}
 	var moving_held: Dictionary = {}
 	for _tick: int in range(10):

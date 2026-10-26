@@ -195,7 +195,7 @@ def main():
     unit=owned.run_process([sys.executable,'-B','-m','unittest','discover','-s','tests/blender','-p','test_*.py','-v'],
         cwd=snapshot,output=out,timeout=30,label='unit')
     host=owned.run_process([sys.executable,'-B',str(snapshot/'tests/blender/run_durable_session_probe.py'),
-        '--frozen','--output',str(out),'--binary',str(STUDIO/'.local/tooling/blender-5.2.1-windows-x64/blender.exe')],
+        '--frozen','--output',str(out),'--binary',str(STUDIO/'.local/tooling/blender-5.2.3-windows-x64/blender.exe')],
         cwd=snapshot,output=out,timeout=100,label='native')
     value={'source_closure_sha256':closure,'unit':unit,'host':host,'candidate_only':True,'public_ack':False,
         'source_unchanged':sources(STUDIO)==original,'snapshot_unchanged':sources(snapshot)==original}

@@ -90,6 +90,9 @@ func place_fighter(index: int, at: Vector2, motion: Vector2 = Vector2.ZERO, on_f
 	fighter.attack_timer_ticks = 0
 	fighter.attack_cooldown_ticks = 0
 	fighter.queued_attack = &"none"
+	fighter.queued_combo_step = 0
+	fighter.combo_step = 0
+	fighter.combo_window_ticks = 0
 	fighter.aiming = false
 	fighter.aim_angle = 0.0
 	fighter.knockdown_ticks = 0
@@ -99,6 +102,7 @@ func place_fighter(index: int, at: Vector2, motion: Vector2 = Vector2.ZERO, on_f
 	fighter.sprint.reset(tuning)
 	if bodies.size() > index:
 		bodies[index].set_drop_through(false)
+		bodies[index].set_solid_collision_enabled(true)
 		bodies[index].set_posture_height(float(tuning[&"char_height"]))
 		bodies[index].sync_from_state(at, motion)
 
@@ -155,7 +159,10 @@ func canonical_snapshot() -> String:
 	fragments.append(world.canonical_fragment())
 	var grenade_parts: Array[String] = []
 	for grenade: Dictionary in grenades:
-		grenade_parts.append("%d,%.3f,%.3f,%.3f,%.3f,%d" % [int(grenade[&"owner"]), float(grenade[&"x"]), float(grenade[&"y"]), float(grenade[&"vx"]), float(grenade[&"vy"]), int(grenade[&"fuse"])])
+		# Throwable identity and projectile gravity are gameplay state.  Include
+		# them in replay hashes so a rocket/molotov cannot alias a grenade merely
+		# because the three objects share the same position and fuse tick.
+		grenade_parts.append("%d,%s,%.3f,%.3f,%.3f,%.3f,%d,%.3f,%d,%d" % [int(grenade.get(&"owner", 0)), String(grenade.get(&"kind", &"grenade")), float(grenade.get(&"x", 0.0)), float(grenade.get(&"y", 0.0)), float(grenade.get(&"vx", 0.0)), float(grenade.get(&"vy", 0.0)), int(grenade.get(&"fuse", 0)), float(grenade.get(&"gravity", 0.0)), int(bool(grenade.get(&"rocket", false))), int(grenade.get(&"age", 0))])
 	fragments.append("grenades=%s" % ";".join(grenade_parts))
 	for fighter: FighterState in fighters:
 		fragments.append(fighter.canonical_fragment())

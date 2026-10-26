@@ -371,7 +371,7 @@ def _run_authoring(output: Path, source_root: Path) -> dict:
                 "sha256": _sha(checkpoint), "template_id": template["template_id"]}
     (output / "expected.json").write_text(json.dumps(expected, indent=2, sort_keys=True) + "\n",
                                           encoding="utf-8")
-    report = {"schema": SCHEMA, "actual_blender": True, "version": "5.2.1",
+    report = {"schema": SCHEMA, "actual_blender": True, "version": "5.2.3",
               "runtime_authorized": False, "native_mutation": True, "formal_acceptance": False,
               "checks": rows, "failures": failures, "snapshot": expected["snapshot"],
               "checkpoint_sha256": expected["sha256"], "source_root": source_root.as_posix(),
@@ -403,7 +403,7 @@ def _run_reopen(output: Path) -> int:
     sprite_ok = sprite_ok and pixels == expected["sprite_sheet"]["pixels"] and pixels["passed"]
     if image is not None:
         bpy.data.images.remove(image)
-    report = {"schema": SCHEMA, "actual_blender": True, "version": "5.2.1",
+    report = {"schema": SCHEMA, "actual_blender": True, "version": "5.2.3",
               "runtime_authorized": False, "formal_acceptance": False,
               "reopened": observed == expected["snapshot"] and asset_ok and sprite_ok,
               "observed": observed,

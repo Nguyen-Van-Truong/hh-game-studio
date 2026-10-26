@@ -187,7 +187,7 @@ def main():
     parser.add_argument("--owned-root", required=True)
     args = parser.parse_args(sys.argv[sys.argv.index("--") + 1:])
     root = safe_root(args.owned_root)
-    check("actual_pinned_background", bpy.app.background and bpy.app.version[:3] == (5, 2, 1))
+    check("actual_pinned_background", bpy.app.background and bpy.app.version[:3] == (5, 2, 3))
     check("automatic_python_disabled", bpy.context.preferences.filepaths.use_scripts_auto_execute is False)
     result = edit(root) if args.phase == "edit" else reopen(root, args.phase == "checkpoint")
     report = {"schema": "HH-GT04-NATIVE-PROBE-1", "phase": args.phase, "version": bpy.app.version_string,

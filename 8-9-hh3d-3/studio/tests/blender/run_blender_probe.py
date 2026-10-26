@@ -13,7 +13,7 @@ import sys
 from datetime import datetime, timezone
 
 STUDIO = Path(__file__).resolve().parents[2]
-BINARY_SHA256 = "8f7a131ad8bc148edc218b334f07d92a57f5a357fa66d913b290537fd8353c06"
+BINARY_SHA256 = "e546b2a0d81ae19bd5b306b668733102d91d23db2e2be02d68b7ecbe548af0a1"
 REQUIRED = {
     "edit": ("actual_pinned_background", "automatic_python_disabled", "empty_owned_fixture", "fresh_checkpoint",
              "create_native_mesh", "create_preserves_empty_selection", "duplicate_create_original_receipt",
@@ -62,7 +62,7 @@ def require_host(run, output):
 
 def evaluate(phase, report, stdout):
     if (report.get("schema") != "HH-GT04-NATIVE-PROBE-1" or report.get("phase") != phase or
-            report.get("actual_blender") is not True or report.get("version") != "5.2.1 LTS" or
+            report.get("actual_blender") is not True or report.get("version") != "5.2.3 LTS" or
             report.get("ok") is not True or report.get("public_ack") is not False or report.get("acceptance") is not False):
         raise ValueError("wrong native result")
     expected = [{"label": label, "passed": True} for label in REQUIRED[phase]]
@@ -100,7 +100,7 @@ def main():
             raise ValueError("snapshot differs")
         frozen = load(snapshot / "build/bootstrap/run_fixture.py")
         report.update(source_files=before, source_closure_sha256=frozen.source_closure_sha256(before))
-        binary = STUDIO / ".local/tooling/blender-5.2.1-windows-x64/blender.exe"
+        binary = STUDIO / ".local/tooling/blender-5.2.3-windows-x64/blender.exe"
         bootstrap._reject_reparse_ancestors(binary)
         if sha(binary) != BINARY_SHA256:
             raise ValueError("Blender executable pin mismatch")

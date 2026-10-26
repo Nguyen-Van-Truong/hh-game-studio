@@ -19,7 +19,7 @@ from studio.host.core.safe_create import SafeCreateApi
 
 STUDIO=Path(__file__).resolve().parents[2]
 MAX_LOG=262144
-BLENDER_SHA256='8f7a131ad8bc148edc218b334f07d92a57f5a357fa66d913b290537fd8353c06'
+BLENDER_SHA256='e546b2a0d81ae19bd5b306b668733102d91d23db2e2be02d68b7ecbe548af0a1'
 
 
 def load(relative):
@@ -152,7 +152,7 @@ class BlenderUIHost:
                 need(address[0]=='127.0.0.1','BLENDER_LOOPBACK')
                 channel=ipc.Channel(sock,self._key,self._session,lane,'host'); self.channels[lane]=channel
                 hello=self._wait(channel,deadline)
-                need(hello['kind']=='hello' and hello['body']=={'pid':self.pid,'version':'5.2.1 LTS',
+                need(hello['kind']=='hello' and hello['body']=={'pid':self.pid,'version':'5.2.3 LTS',
                     'main_thread':True,'background':False,'python_threads':1,'public_ack':False},'BLENDER_HELLO')
                 (self.directory/(lane+'-hello.json')).write_bytes(canonical_bytes(hello['body']))
                 channel.queue('welcome',{'public_ack':False})

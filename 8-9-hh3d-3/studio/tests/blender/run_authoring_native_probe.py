@@ -9,7 +9,7 @@ import shutil
 import sys
 
 STUDIO = Path(__file__).resolve().parents[2]
-BLENDER_SHA256 = "8f7a131ad8bc148edc218b334f07d92a57f5a357fa66d913b290537fd8353c06"
+BLENDER_SHA256 = "e546b2a0d81ae19bd5b306b668733102d91d23db2e2be02d68b7ecbe548af0a1"
 
 
 def _load(path: Path):

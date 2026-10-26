@@ -1,0 +1,61 @@
+{
+  "schema": "sa03.room.v1",
+  "status": "CLASSIC_ROOFTOPS_GEOMETRY_PORT",
+  "width": 920,
+  "height": 460,
+  "floor_y": 400,
+  "pit_death_y": 560,
+  "ladder_margin": 12,
+  "spawns": [
+    {"player_id": 1, "x": 94, "y": 89},
+    {"player_id": 2, "x": 162, "y": 89}
+  ],
+  "platforms": [
+    {"id": "cloud_lower", "left": 187, "right": 214, "y": 219, "one_way": true},
+    {"id": "cloud_upper", "left": 206, "right": 325, "y": 82, "one_way": true}
+  ],
+  "solids": [
+    {"id": "roof_left_high", "left": 20, "right": 187, "top": 95, "bottom": 219},
+    {"id": "roof_left_tower", "left": 20, "right": 58, "top": 53, "bottom": 95},
+    {"id": "roof_left_cap", "left": 58, "right": 78, "top": 53, "bottom": 73},
+    {"id": "roof_left_step", "left": 20, "right": 67, "top": 219, "bottom": 255},
+    {"id": "roof_left_low", "left": 20, "right": 47, "top": 255, "bottom": 279},
+    {"id": "ground_left", "left": 20, "right": 187, "top": 278, "bottom": 360},
+    {"id": "ground_center", "left": 242, "right": 289, "top": 284, "bottom": 362},
+    {"id": "ground_right", "left": 318, "right": 541, "top": 302, "bottom": 362},
+    {"id": "tower_ladder_wall", "left": 174, "right": 187, "top": 219, "bottom": 243},
+    {"id": "upper_mid", "left": 242, "right": 307, "top": 194, "bottom": 207},
+    {"id": "mid_column", "left": 242, "right": 255, "top": 207, "bottom": 249},
+    {"id": "upper_right_a", "left": 368, "right": 392, "top": 194, "bottom": 207},
+    {"id": "upper_right_b", "left": 453, "right": 483, "top": 194, "bottom": 207},
+    {"id": "right_cap", "left": 483, "right": 503, "top": 152, "bottom": 172},
+    {"id": "right_tower", "left": 503, "right": 541, "top": 152, "bottom": 194},
+    {"id": "right_block", "left": 483, "right": 541, "top": 194, "bottom": 279},
+    {"id": "right_low", "left": 503, "right": 541, "top": 279, "bottom": 302},
+    {"id": "tiny_upper_a", "left": 331, "right": 344, "top": 194, "bottom": 200},
+    {"id": "tiny_upper_b", "left": 416, "right": 429, "top": 194, "bottom": 200},
+    {"id": "ground_extension_a", "left": 123, "right": 187, "top": 360, "bottom": 400},
+    {"id": "ground_extension_b", "left": 242, "right": 296, "top": 362, "bottom": 400}
+  ],
+  "ladders": [
+    {"id": "rooftop_ladder", "x": 194, "top": 86, "bottom": 201}
+  ],
+  "pits": [
+    {"id": "left_ground_gap", "left": 0, "right": 20},
+    {"id": "center_gap_a", "left": 187, "right": 242},
+    {"id": "center_gap_b", "left": 296, "right": 318},
+    {"id": "right_drop", "left": 541, "right": 920}
+  ],
+  "pickups": [
+    {"id": "rooftops_pistol", "kind": "pistol", "x": 235, "y": 278, "active": true},
+    {"id": "rooftops_shotgun", "kind": "shotgun", "x": 392, "y": 291, "active": true},
+    {"id": "rooftops_grenades", "kind": "grenades", "x": 449, "y": 290, "active": true},
+    {"id": "rooftops_medkit", "kind": "medkit", "x": 285, "y": 188, "active": true},
+    {"id": "rooftops_slowmo", "kind": "bullet_time_5", "duration_ticks": 300, "x": 274, "y": 279, "active": true}
+  ],
+  "props": [
+    {"id": "rooftops_crate", "kind": "crate", "material": "wood", "health": 30, "x": 224, "y": 278},
+    {"id": "rooftops_barrel", "kind": "barrel", "material": "steel", "explosive": true, "health": 20, "x": 269, "y": 187}
+  ],
+  "notes": "Port of classic GenerateMapRooftops geometry. Coordinates are the original stage pixel space; presentation uses the native 920x460 Bitmap 2219 canvas."
+}

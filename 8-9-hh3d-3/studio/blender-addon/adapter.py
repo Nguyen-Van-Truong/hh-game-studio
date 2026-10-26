@@ -31,7 +31,7 @@ class FixtureAdapter:
     def __init__(self):
         main_thread()
         import bpy
-        if bpy.app.version[:3] != (5, 2, 1) or not bpy.app.background:
+        if bpy.app.version[:3] != (5, 2, 3) or not bpy.app.background:
             raise Rejected("PINNED_BACKGROUND_FIXTURE_REQUIRED")
         self.bpy = bpy
         self._commands = {}

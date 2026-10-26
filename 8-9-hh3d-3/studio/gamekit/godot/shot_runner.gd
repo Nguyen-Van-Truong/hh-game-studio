@@ -53,6 +53,8 @@ func _initialize() -> void:
 	root.content_scale_factor = 1.0
 	root.size = Vector2i(_width, _height)
 	DisplayServer.window_set_size(Vector2i(_width, _height))
+	if DisplayServer.has_method("window_set_ime_active"):
+		DisplayServer.window_set_ime_active(false)
 	root.add_child(_scene_root)
 	current_scene = _scene_root
 	if req.has("seed"):

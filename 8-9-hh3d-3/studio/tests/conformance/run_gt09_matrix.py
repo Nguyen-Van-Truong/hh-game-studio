@@ -1396,7 +1396,7 @@ def final_matrix_orchestrated(*, output: Path, run_id: str, k13: Path | None,
     (output / "measure-window-preflight.json").write_bytes(_canonical(preflight))
     conformance = STUDIO / "tests" / "conformance" / "gt09_fixture_conformance.py"
     godot_gui = STUDIO / ".local" / "tooling" / "godot-4.7.2-stable" / "Godot_v4.7.2-stable_win64.exe"
-    blender_bin = STUDIO / ".local" / "tooling" / "blender-5.2.1-windows-x64" / "blender.exe"
+    blender_bin = STUDIO / ".local" / "tooling" / "blender-5.2.3-windows-x64" / "blender.exe"
     nonce = hashlib.sha256((run_id + ":" + closure).encode()).hexdigest()[:10]
     rows: list[dict[str, Any]] = []
     producer: dict[str, Any] = {

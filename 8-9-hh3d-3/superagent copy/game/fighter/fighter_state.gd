@@ -41,7 +41,10 @@ var aiming: bool = false
 var aim_angle: float = 0.0
 var knockdown_ticks: int = 0
 var invulnerability_ticks: int = 0
-var ammo: int = 6
+## Classic pistol starts with a twelve-round magazine. MatchSession replaces
+## this value from WeaponCatalog on construction and pickup; keeping the state
+## default aligned also makes the base Simulation fixture representative.
+var ammo: int = 12
 var grenades: int = 3
 var power_charges: int = 0
 var power_duration_ticks: int = 300
@@ -67,6 +70,10 @@ var hold_target: int = 0
 var combo_step: int = 0
 var combo_window_ticks: int = 0
 var combo_buffered: bool = false
+# The third classic punch is represented by the legacy `kick` action name in
+# this compact state machine. Keep its combo ordinal beside the queued event
+# so the resolver can distinguish it from Down+Punch's contextual kick.
+var queued_combo_step: int = 0
 var last_damage: int = 0
 var last_hit_kind: StringName = &"none"
 var sprint: SprintState = SPRINT_SCRIPT.new()
@@ -147,6 +154,7 @@ func step(actions: Dictionary, arena: ArenaState, tuning: Dictionary, body: Phys
 		knockdown_ticks -= 1
 		velocity.x = move_toward(velocity.x, 0.0, float(tuning[&"friction_per_tick"]))
 		velocity.y = minf(velocity.y + gravity, terminal_speed)
+		_sync_pit_collision(body, arena)
 		_move_body(body)
 		_update_locomotion(arena, tuning)
 		if locomotion != Locomotion.DOWNED:
@@ -181,6 +189,7 @@ func step(actions: Dictionary, arena: ArenaState, tuning: Dictionary, body: Phys
 	if entering_ladder:
 		down_tap_window_remaining = 0
 		drop_through_ticks = 0
+		body.set_solid_collision_enabled(true)
 		var ladder_top: float = arena.ladder_top_at(position.x, position.y)
 		var ladder_bottom: float = arena.ladder_bottom_at(position.x, position.y)
 		var climb_direction: float = -1.0 if _held(actions, &"up") else 1.0
@@ -214,6 +223,7 @@ func step(actions: Dictionary, arena: ArenaState, tuning: Dictionary, body: Phys
 		else:
 			down_tap_window_remaining = 0
 
+	_sync_pit_collision(body, arena)
 	_move_body(body)
 	_update_locomotion(arena, tuning)
 	if locomotion == Locomotion.DOWNED:
@@ -258,6 +268,7 @@ func _start_tackle(axis: int, arena: ArenaState, tuning: Dictionary, body: Physi
 	attack_cooldown_ticks = int(tuning.get(&"tackle_duration_ticks", 14))
 	action_name = &"tackle"
 	action_timer_ticks = tackle_ticks
+	_sync_pit_collision(body, arena)
 	_move_body(body)
 	_update_locomotion(arena, tuning)
 
@@ -266,6 +277,7 @@ func _step_tackle(arena: ArenaState, tuning: Dictionary, body: PhysicsFighter2D)
 	body.set_posture_height(float(tuning.get(&"tackle_height", tuning[&"roll_height"])))
 	velocity.x = float(tackle_direction) * float(tuning.get(&"tackle_speed", tuning[&"sprint_speed"]))
 	velocity.y = minf(velocity.y + float(tuning[&"gravity_per_tick"]), float(tuning[&"terminal_fall_speed"]))
+	_sync_pit_collision(body, arena)
 	_move_body(body)
 	action_name = &"tackle" if tackle_ticks > 0 else &"tackle_recover"
 	action_timer_ticks = tackle_ticks
@@ -346,6 +358,7 @@ func _start_roll(axis: int, arena: ArenaState, tuning: Dictionary, body: Physics
 	velocity = Vector2(float(roll_direction) * float(tuning[&"roll_speed"]), 0.0)
 	action_name = &"roll"
 	action_timer_ticks = roll_ticks
+	_sync_pit_collision(body, arena)
 	_move_body(body)
 	_update_locomotion(arena, tuning)
 
@@ -369,6 +382,7 @@ func _start_dive(axis: int, arena: ArenaState, tuning: Dictionary, body: Physics
 	attack_cooldown_ticks = int(tuning.get(&"attack_cooldown_ticks", 8))
 	action_name = &"dive"
 	action_timer_ticks = dive_ticks
+	_sync_pit_collision(body, arena)
 	_move_body(body)
 	_update_locomotion(arena, tuning)
 
@@ -377,6 +391,7 @@ func _step_dive(arena: ArenaState, tuning: Dictionary, body: PhysicsFighter2D) -
 	body.set_posture_height(float(tuning[&"dive_height"]))
 	velocity.x = float(dive_direction) * float(tuning[&"dive_speed"])
 	velocity.y = minf(velocity.y + float(tuning[&"gravity_per_tick"]), float(tuning[&"terminal_fall_speed"]))
+	_sync_pit_collision(body, arena)
 	_move_body(body)
 	action_name = &"dive" if dive_ticks > 0 else &"dive_recover"
 	action_timer_ticks = dive_ticks
@@ -404,6 +419,7 @@ func _step_roll(arena: ArenaState, tuning: Dictionary, body: PhysicsFighter2D) -
 	body.set_posture_height(float(tuning[&"roll_height"]))
 	velocity.x = float(roll_direction) * float(tuning[&"roll_speed"])
 	velocity.y = minf(velocity.y + float(tuning[&"gravity_per_tick"]), float(tuning[&"terminal_fall_speed"]))
+	_sync_pit_collision(body, arena)
 	_move_body(body)
 	in_pit = not grounded and arena.is_in_pit(position.x)
 	locomotion = FighterState.Locomotion.GROUNDED if grounded else FighterState.Locomotion.FALLING
@@ -432,7 +448,13 @@ func _maintain_roll_posture(body: PhysicsFighter2D, tuning: Dictionary) -> void:
 func _update_locomotion(arena: ArenaState, tuning: Dictionary) -> void:
 	in_pit = not grounded and arena.is_in_pit(position.x)
 	locomotion = Locomotion.GROUNDED if grounded else Locomotion.FALLING if velocity.y >= 0.0 else Locomotion.AIRBORNE
-	if position.y > arena.pit_death_y:
+	# The classic arena resolves a pit fall as soon as the fighter is clearly
+	# below the lip; waiting for the room's far below-screen sentinel leaves a
+	# rolling fighter suspended for too long and lets recovery input fire in the
+	# void.  Keep the authored sentinel for ordinary falls, with an earlier pit
+	# cutoff once the body has dropped one short character height below the floor.
+	var pit_fall_resolved: bool = in_pit and position.y > arena.floor_y + float(tuning.get(&"char_height", 48.0)) * 2.0
+	if position.y > arena.pit_death_y or pit_fall_resolved:
 		down_tap_window_remaining = 0
 		drop_through_ticks = 0
 		sprint.cancel_gesture()
@@ -444,6 +466,17 @@ func _update_locomotion(arena: ArenaState, tuning: Dictionary) -> void:
 		downed_ticks = int(tuning[&"respawn_delay_ticks"])
 		action_name = &"pit_fall"
 		action_timer_ticks = downed_ticks
+
+func _sync_pit_collision(body: PhysicsFighter2D, arena: ArenaState) -> void:
+	if body == null or arena == null:
+		return
+	# Test the current and predicted horizontal cell.  A split floor has a
+	# vertical edge at the pit lip; opening the solid mask for that crossing
+	# lets CharacterBody2D leave the floor naturally instead of stopping at the
+	# edge.  Restore it once both positions are back on solid ground.
+	var current_in_pit: bool = arena.is_in_pit(position.x)
+	var next_in_pit: bool = arena.is_in_pit(position.x + velocity.x)
+	body.set_solid_collision_enabled(not (current_in_pit or next_in_pit))
 
 func consume_attack() -> StringName:
 	var result: StringName = queued_attack
@@ -464,6 +497,9 @@ func apply_hit(damage: int, knockback: float, knockdown: bool, hit_kind: StringN
 	hold_ticks = 0
 	hold_target = 0
 	queued_attack = &"none"
+	queued_combo_step = 0
+	combo_buffered = false
+	combo_window_ticks = 0
 	health = maxi(0, health - maxi(0, damage))
 	velocity.x = knockback
 	hitstun_ticks = int(tuning[&"hitstun_duration_ticks"])
@@ -510,6 +546,9 @@ func apply_burn_damage(damage: int, tuning: Dictionary) -> bool:
 	dive_ticks = 0
 	dive_direction = 0
 	queued_attack = &"none"
+	queued_combo_step = 0
+	combo_buffered = false
+	combo_window_ticks = 0
 	health = maxi(0, health - maxi(0, damage))
 	if health == 0:
 		roll_low_posture = false
@@ -568,6 +607,7 @@ func snapshot() -> Dictionary:
 		&"combo_step": combo_step,
 		&"combo_window_ticks": combo_window_ticks,
 		&"combo_buffered": combo_buffered,
+		&"queued_combo_step": queued_combo_step,
 		&"ammo": ammo,
 		&"grenades": grenades,
 		&"power_charges": power_charges,
@@ -621,7 +661,7 @@ func canonical_fragment() -> String:
 		var pending: Dictionary = tempo_pending_actions.get(suffix, {})
 		if not pending.is_empty():
 			pending_parts.append("%s,%d,%d,%d" % [String(suffix), int(bool(pending.get(&"pressed", false))), int(bool(pending.get(&"released", false))), int(pending.get(&"press_count", 0))])
-	return "%s|slot=%d|power=%d,%d,%d,%d,%d|roll=%d,%d,%d,%d|dive=%d,%d,%d|tackle=%d,%d,%d|grab=%d,%d,%d,%d|combo=%d,%d,%d|pending=%s" % [base, active_weapon_slot, power_charges, power_duration_ticks, int(bullet_time_active), tempo_divisor, tempo_phase, roll_ticks, roll_recovery_ticks, roll_direction, int(roll_low_posture), dive_ticks, dive_direction, int(dive_low_posture), tackle_ticks, tackle_direction, int(tackle_low_posture), grabbed_ticks, grabbed_by, hold_ticks, hold_target, combo_step, combo_window_ticks, int(combo_buffered), ";".join(pending_parts)]
+	return "%s|slot=%d|power=%d,%d,%d,%d,%d|roll=%d,%d,%d,%d|dive=%d,%d,%d|tackle=%d,%d,%d|grab=%d,%d,%d,%d|combo=%d,%d,%d,%d|pending=%s" % [base, active_weapon_slot, power_charges, power_duration_ticks, int(bullet_time_active), tempo_divisor, tempo_phase, roll_ticks, roll_recovery_ticks, roll_direction, int(roll_low_posture), dive_ticks, dive_direction, int(dive_low_posture), tackle_ticks, tackle_direction, int(tackle_low_posture), grabbed_ticks, grabbed_by, hold_ticks, hold_target, combo_step, combo_window_ticks, int(combo_buffered), queued_combo_step, ";".join(pending_parts)]
 
 func _step_downed(arena: ArenaState, tuning: Dictionary) -> void:
 	if downed_ticks > 0:
@@ -639,7 +679,7 @@ func reset_for_round(tuning: Dictionary) -> void:
 	velocity = Vector2.ZERO
 	facing = 1
 	sprint.reset(tuning)
-	ammo = 6
+	ammo = 12
 	grenades = int(tuning.get(&"grenade_count", 3))
 	power_charges = 0
 	power_duration_ticks = 300
@@ -680,6 +720,7 @@ func reset_for_round(tuning: Dictionary) -> void:
 	combo_step = 0
 	combo_window_ticks = 0
 	combo_buffered = false
+	queued_combo_step = 0
 	grounded = true
 	in_pit = false
 	locomotion = Locomotion.GROUNDED
@@ -723,6 +764,7 @@ func _start_melee_attack(actions: Dictionary, tuning: Dictionary) -> void:
 	if not grounded:
 		combo_step = 0
 		combo_window_ticks = 0
+		queued_combo_step = 0
 		attack_name = &"jump_kick"
 		queued_attack = attack_name
 		attack_timer_ticks = 7
@@ -732,6 +774,7 @@ func _start_melee_attack(actions: Dictionary, tuning: Dictionary) -> void:
 	if _held(actions, &"down"):
 		combo_step = 0
 		combo_window_ticks = 0
+		queued_combo_step = 0
 		attack_name = &"kick"
 		queued_attack = attack_name
 		attack_timer_ticks = 7
@@ -739,6 +782,7 @@ func _start_melee_attack(actions: Dictionary, tuning: Dictionary) -> void:
 		action_name = attack_name
 		return
 	combo_step = 1 if combo_step <= 0 or combo_window_ticks <= 0 else mini(combo_step + 1, 3)
+	queued_combo_step = combo_step
 	combo_window_ticks = int(tuning.get(&"combo_window_ticks", 18))
 	attack_name = &"punch" if combo_step == 1 else &"punch_combo" if combo_step == 2 else &"kick"
 	queued_attack = attack_name

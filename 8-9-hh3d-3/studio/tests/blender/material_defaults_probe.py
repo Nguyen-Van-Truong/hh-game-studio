@@ -19,7 +19,7 @@ else:
     from run_blender_ipc_probe import load,STUDIO
     runner=load(STUDIO/'build/bootstrap/run_fixture.py')
     output=Path(sys.argv[1]).absolute();output.mkdir(exist_ok=False)
-    row=runner.run_process([str(STUDIO/'.local/tooling/blender-5.2.1-windows-x64/blender.exe'),
+    row=runner.run_process([str(STUDIO/'.local/tooling/blender-5.2.3-windows-x64/blender.exe'),
         '--background','--factory-startup','--disable-autoexec','--offline-mode','--threads','1',
         '--python-exit-code','17','--python',str(Path(__file__).resolve()),'--','--native'],
         cwd=STUDIO,output=output,timeout=20,label='defaults')

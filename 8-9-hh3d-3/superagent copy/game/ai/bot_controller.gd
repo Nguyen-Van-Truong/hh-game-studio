@@ -19,7 +19,7 @@ const PICKUP_RANGE: float = 30.0
 const VERTICAL_LANE: float = 58.0
 const LADDER_X_RANGE: float = 26.0
 const JUMP_VERTICAL_RANGE: float = 64.0
-const MAX_AMMO: int = 6
+const MAX_AMMO: int = 12
 const SHOOT_REPLAN_TICKS: int = 18
 const MELEE_REPLAN_TICKS: int = 10
 

@@ -160,7 +160,7 @@ def main():
     host=None
     if process_passed(unit):
         host=owned.run_process([sys.executable,'-B',str(snapshot/'tests/blender/run_checkpoint_recovery_probe.py'),
-            '--frozen','--output',str(out),'--binary',str(STUDIO/'.local/tooling/blender-5.2.1-windows-x64/blender.exe')],
+            '--frozen','--output',str(out),'--binary',str(STUDIO/'.local/tooling/blender-5.2.3-windows-x64/blender.exe')],
             cwd=snapshot,output=out,timeout=90,label='native')
     unit_log=(out/'unit-stderr.txt').read_text(encoding='utf-8')
     count=re.findall(r'^Ran (\d+) tests in [0-9.]+s$',unit_log,re.M)

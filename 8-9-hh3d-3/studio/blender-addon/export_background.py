@@ -28,7 +28,7 @@ def main():
     profile.need(not target.exists() and 0<source.stat().st_size<=profile.MAX_BLEND_BYTES,'EXPORT_INPUT_OR_SLOT')
     expected=json.loads(manifest.read_bytes())
     profile.need(hashlib.sha256(source.read_bytes()).hexdigest()==expected['input_sha256'],'EXPORT_INPUT_HASH')
-    profile.need(bpy.app.background and bpy.app.version[:3]==(5,2,1),'EXPORT_BACKGROUND_PIN')
+    profile.need(bpy.app.background and bpy.app.version[:3]==(5,2,3),'EXPORT_BACKGROUND_PIN')
     profile.need(bpy.ops.wm.open_mainfile(filepath=str(source),load_ui=False,use_scripts=False)=={'FINISHED'},'EXPORT_OPEN_FAILED')
     admitted=profile.preflight(bpy);owner=base.FixtureAdapter();before=owner.inspect()
     profile.need(before['snapshot']==expected['snapshot'] and before['revision']==expected['revision'],'EXPORT_REOPEN_READBACK')

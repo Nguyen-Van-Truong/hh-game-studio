@@ -35,7 +35,7 @@ def load_json(path):
 
 def pins(bpy):
     c.need(threading.current_thread() is threading.main_thread(), 'MAIN_THREAD_REQUIRED')
-    c.need(bpy.app.background and bpy.app.version[:3] == (5, 2, 1), 'PINNED_BACKGROUND_REQUIRED')
+    c.need(bpy.app.background and bpy.app.version[:3] == (5, 2, 3), 'PINNED_BACKGROUND_REQUIRED')
     c.need(not bpy.context.preferences.filepaths.use_scripts_auto_execute, 'AUTOEXEC_DISABLED_REQUIRED')
     toolchain = load_json(STUDIO/'toolchain.lock.json')
     binary = Path(bpy.app.binary_path)

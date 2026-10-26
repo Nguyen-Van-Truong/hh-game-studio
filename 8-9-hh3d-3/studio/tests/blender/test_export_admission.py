@@ -23,7 +23,7 @@ class UnreadableReference:
 class ExportAdmissionTests(unittest.TestCase):
     def check_dependency(self, kind, reference):
         resolver = Mock(side_effect=AssertionError('external path resolution'))
-        bpy = SimpleNamespace(app=SimpleNamespace(version=(5, 2, 1)),
+        bpy = SimpleNamespace(app=SimpleNamespace(version=(5, 2, 3)),
             context=SimpleNamespace(preferences=SimpleNamespace(
                 filepaths=SimpleNamespace(use_scripts_auto_execute=False))),
             data=SimpleNamespace(libraries=[reference] if kind == 'library' else [],

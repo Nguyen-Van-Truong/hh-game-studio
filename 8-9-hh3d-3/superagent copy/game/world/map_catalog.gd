@@ -10,6 +10,7 @@ const _ENTRIES: Array[Dictionary] = [
 	{&"id": &"ember_quarry", &"path": "res://data/ember_quarry.json", &"display_name": "Ember Quarry"},
 	{&"id": &"tidal_lock", &"path": "res://data/tidal_lock.json", &"display_name": "Tidal Lock"},
 	{&"id": &"glassway", &"path": "res://data/glassway.json", &"display_name": "Glassway"},
+	{&"id": &"classic_rooftops", &"path": "res://data/classic_rooftops.json", &"display_name": "Classic Rooftops"},
 ]
 
 static func entries() -> Array[Dictionary]:

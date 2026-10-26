@@ -152,7 +152,10 @@ def _hash_sources(paths: Sequence[Path], root: Path, command: Sequence[str] = ()
     del command  # Kept for callers of the earlier helper signature.
     digest = hashlib.sha256()
     files: set[Path] = set()
-    excluded = {".git", ".godot", ".local", "__pycache__"}
+    # reference/ holds owner classic junctions into asset-superfighter. Those
+    # links intentionally leave this project root, so they are not part of the
+    # source hash. Runtime still reads them from disk.
+    excluded = {".git", ".godot", ".local", "__pycache__", "reference"}
     # Godot sidecar imports are generated cache, just like .godot/imported.
     # They must not turn a successful first-launch import into a stale-source
     # failure or change the source hash used by a later run.

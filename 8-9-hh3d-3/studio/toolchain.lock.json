@@ -36,17 +36,17 @@
     "sha512": "ca4d71c4d7b81dfc15d1a98baa07534aa95b03fdda78a0075b06672e1648d2e5f40980c9adc28d23e1b92e732ee7bf3461997aa804af74ec2fcd7a93ccb84079"
   },
   "blender": {
-    "version": "5.2.1",
-    "archive": "studio/.local/tooling/blender-5.2.1-windows-x64.zip",
-    "sha256": "0e631dad7d0cad6d5d18abdd2e2550f6c0213215334eda00ddbd3d22b96ecb2c",
-    "source": "https://download.blender.org/release/Blender5.2/blender-5.2.1-windows-x64.zip",
+    "version": "5.2.3",
+    "archive": "studio/.local/tooling/blender-5.2.3-windows-x64.zip",
+    "sha256": "723f08a4401502561eb763cdeacf8745b31e5f3f154d287d3830d97cf75dc2fb",
+    "source": "https://download.blender.org/release/Blender5.2/blender-5.2.3-windows-x64.zip",
     "license": "GPL",
     "state": "ARCHIVE_AND_BINARY_VERIFIED_LOCAL",
     "required_before": "GT-04/GT-05",
     "executable": "blender.exe",
-    "executable_sha256": "8f7a131ad8bc148edc218b334f07d92a57f5a357fa66d913b290537fd8353c06",
-    "observed_version": "5.2.1",
-    "binary_source_member": "blender-5.2.1-windows-x64/blender.exe"
+    "executable_sha256": "e546b2a0d81ae19bd5b306b668733102d91d23db2e2be02d68b7ecbe548af0a1",
+    "observed_version": "5.2.3",
+    "binary_source_member": "blender-5.2.3-windows-x64/blender.exe"
   },
   "python": {
     "version": "3.11.9",

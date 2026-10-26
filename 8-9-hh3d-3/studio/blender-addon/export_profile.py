@@ -27,7 +27,7 @@ def exporter_files(base):
 
 def preflight(bpy):
     need(threading.current_thread() is threading.main_thread(),'EXPORT_MAIN_THREAD')
-    need(bpy.app.version[:3]==(5,2,1),'EXPORT_BLENDER_PIN')
+    need(bpy.app.version[:3]==(5,2,3),'EXPORT_BLENDER_PIN')
     need(not bpy.context.preferences.filepaths.use_scripts_auto_execute,'EXPORT_AUTOEXEC_ENABLED')
     # This profile has no library/image intake. Reject datablocks without
     # resolving or probing their filepaths: even is_file() may access a UNC

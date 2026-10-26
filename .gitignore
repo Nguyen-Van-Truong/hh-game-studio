@@ -138,3 +138,11 @@ old-data-from21-9-2026/
 8-9-hh3d-3/**/reference/**/*.import
 8-9-hh3d-3/**/reference/**/*.swf
 8-9-hh3d-3/**/reference/**/bin/
+# Ignore Godot .import/.uid sidecars and duplicate Oct-18 trial rebuild trees (containing 6,158 raw FFDEC dumps)
+8-9-hh3d-3/**/*.import
+8-9-hh3d-3/**/*.uid
+8-9-hh3d-3/superagent-classic-rebuild/
+8-9-hh3d-3/superagent-classic-rebuild+/
+8-9-hh3d-3/superfighter-rebuild/
+8-9-hh3d-3/superfighter-convert/
+8-9-hh3d-3/**/art/superfighter/

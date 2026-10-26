@@ -20,7 +20,7 @@ class UIAdapter(base.FixtureAdapter):
         if type(external_poll) is not bool:
             raise c.Rejected("BOOLEAN_POLL_OWNER_REQUIRED")
         import bpy
-        if (bpy.app.background or bpy.app.version[:3] != (5, 2, 1) or
+        if (bpy.app.background or bpy.app.version[:3] != (5, 2, 3) or
                 not bpy.context.preferences.edit.use_global_undo or
                 bpy.context.preferences.edit.undo_steps < 32 or _ACTIVE is not None):
             raise c.Rejected("PINNED_EXCLUSIVE_UI_UNDO_REQUIRED")

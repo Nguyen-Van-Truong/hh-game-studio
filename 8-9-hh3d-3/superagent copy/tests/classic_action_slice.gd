@@ -15,6 +15,7 @@ func _run() -> void:
 	await _test_tackle_and_grab()
 	await _test_grab_followups()
 	await _test_combo_and_kick()
+	await _test_classic_fist_combo_damage()
 	await _test_airdrop_cycle()
 	await _test_weapon_slots()
 	if failures == 0:
@@ -74,6 +75,7 @@ func _test_grab_followups() -> void:
 	var session := MatchSession.new(504, &"two_player")
 	get_root().add_child(session)
 	await process_frame
+
 	await physics_frame
 	session.place_fighter(0, Vector2(700.0, session.world.floor_y), Vector2.ZERO, true)
 	session.place_fighter(1, Vector2(740.0, session.world.floor_y), Vector2.ZERO, true)
@@ -107,6 +109,28 @@ func _test_grab_followups() -> void:
 	_expect(throw_session.fighters[1].health < thrown_health and throw_session.fighters[1].last_hit_kind == &"grab_throw", "grab throw damages and releases the target")
 	_expect(throw_session.fighters[1].grabbed_ticks == 0, "grab throw releases grabbed state")
 	throw_session.queue_free()
+	await process_frame
+
+func _test_classic_fist_combo_damage() -> void:
+	var session := MatchSession.new(507, &"two_player")
+	get_root().add_child(session)
+	await process_frame
+	await physics_frame
+	session.place_fighter(0, Vector2(700.0, session.world.floor_y), Vector2.ZERO, true)
+	session.place_fighter(1, Vector2(748.0, session.world.floor_y), Vector2.ZERO, true)
+	var health: int = session.fighters[1].health
+	_expect(await _step(session, 0, {}, {&"p1_punch": true}), "classic combo frame one advances")
+	_expect(session.fighters[1].health == health - 6, "classic fist frame one deals six")
+	for tick_value: int in range(1, 9):
+		await _step(session, tick_value, {}, {})
+	_expect(await _step(session, 9, {}, {&"p1_punch": true}), "classic combo frame two advances")
+	_expect(session.fighters[1].health == health - 6 - 7, "classic fist frame two deals seven")
+	for tick_value: int in range(10, 18):
+		await _step(session, tick_value, {}, {})
+	_expect(await _step(session, 18, {}, {&"p1_punch": true}), "classic combo frame three advances")
+	_expect(session.fighters[0].attack_name == &"kick", "legacy third combo uses the kick action label")
+	_expect(session.fighters[1].health == health - 6 - 7 - 8, "classic fist frame three deals eight")
+	session.queue_free()
 	await process_frame
 
 func _test_airdrop_cycle() -> void:

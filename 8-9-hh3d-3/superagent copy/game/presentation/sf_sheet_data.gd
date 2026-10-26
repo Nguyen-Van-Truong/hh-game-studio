@@ -1,0 +1,17 @@
+class_name SfSheetData
+extends RefCounted
+static var CELLS: PackedInt32Array = PackedInt32Array([24,11,14,21,48,11,14,21,72,11,14,21,92,11,16,21,117,11,9,21,132,11,15,21,152,11,18,21,174,11,17,21,198,11,13,21,218,11,14,21,240,11,15,21,261,11,21,21,288,11,13,21,304,11,14,21,322,11,13,21,338,11,14,21,355,11,17,21,375,11,17,21,396,11,14,21,414,11,19,21,437,11,19,21,462,11,13,21,482,11,16,21,502,11,17,21,525,11,16,21,545,11,15,21,23,43,18,19,49,43,15,19,68,43,16,19,88,43,13,19,106,43,16,19,128,43,16,19,149,43,16,19,170,43,12,19,188,43,15,19,292,43,13,19,310,43,13,19,328,43,13,19,350,43,12,19,28,80,11,19,44,80,13,19,60,80,16,19,78,80,16,19,121,80,18,19,32,107,10,24,47,107,16,24,67,107,11,24,84,107,22,24,109,107,10,24,124,107,20,24,147,107,31,24,181,107,25,24,217,107,10,24,230,107,23,24,257,107,11,24,271,107,21,24,296,107,10,24,311,107,18,24,349,107,12,24,384,107,10,24,403,107,17,24,23,140,16,36,43,140,32,36,78,140,22,36,105,140,24,36,131,140,27,36,162,140,142,36,18,185,21,24,51,185,22,24,75,185,15,24,95,185,30,24,129,185,24,24,157,185,28,24,189,185,28,24,280,185,23,24,22,218,17,28,41,218,40,28,86,218,30,28,123,218,25,28,154,218,28,28,187,218,20,28,211,218,28,28,241,218,28,28,301,218,18,28])
+static var IDLE: PackedInt32Array = PackedInt32Array([8])
+static var RUN: PackedInt32Array = PackedInt32Array([0,1,2,3])
+static var SPRINT: PackedInt32Array = PackedInt32Array([0,1,2,3])
+static var JUMP: PackedInt32Array = PackedInt32Array([5])
+static var FALL: PackedInt32Array = PackedInt32Array([16])
+static var KNOCKDOWN: PackedInt32Array = PackedInt32Array([18,19])
+static var ROLL: PackedInt32Array = PackedInt32Array([17])
+static var CLIMB: PackedInt32Array = PackedInt32Array([4])
+static var PUNCH: PackedInt32Array = PackedInt32Array([26,27,28])
+static var KICK: PackedInt32Array = PackedInt32Array([39,40,41])
+static var AIM_PISTOL: PackedInt32Array = PackedInt32Array([44])
+static var AIM_SHOTGUN: PackedInt32Array = PackedInt32Array([49])
+static var AIM_BAZOOKA: PackedInt32Array = PackedInt32Array([61])
+static var THROW: PackedInt32Array = PackedInt32Array([29])

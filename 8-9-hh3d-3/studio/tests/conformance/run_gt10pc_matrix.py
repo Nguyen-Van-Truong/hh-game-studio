@@ -586,7 +586,7 @@ def run_rehearsal(rows: list[str], *, output: Path, trust: Path,
             from studio.tests.conformance.gt10pc_p10 import verify as verify_p10
             tooling = ROOT / ".local" / "tooling"
             godot_root = tooling / "godot-4.7.2-stable"
-            blender = tooling / "blender-5.2.1-windows-x64" / "blender.exe"
+            blender = tooling / "blender-5.2.3-windows-x64" / "blender.exe"
             producers = []
             for phase, target, expected_row in (("gt08a", "Windows", "GT08A_PC"),
                                                 ("catalog", "Windows", "K8_K10"),

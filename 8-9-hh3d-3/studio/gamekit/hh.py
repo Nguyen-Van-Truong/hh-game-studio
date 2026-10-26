@@ -12,7 +12,7 @@ from typing import Any, Sequence
 from . import common as C
 
 # Each module exposes register(subparsers); modules that are not written yet are skipped.
-MODULES = ("scene", "inputmap", "play", "bot", "shot", "perf", "asset", "blender_recipe", "kit", "export", "quality", "sfx", "vfx")
+MODULES = ("scene", "inputmap", "play", "bot", "shot", "perf", "asset", "blender_recipe", "kit", "export", "doctor", "quality", "sfx", "vfx")
 
 
 def build_parser() -> argparse.ArgumentParser:

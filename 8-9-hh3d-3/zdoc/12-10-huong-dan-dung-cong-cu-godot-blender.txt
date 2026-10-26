@@ -15,7 +15,7 @@ Nếu file này lệch với code thì code và plan đúng; sửa file này tro
   không phải soak; maintenance mới nhất chỉ QUICK_VERIFIED.
   Chỉ PC (Windows, Linux, Linux-headless). Android hoãn (GT-08B).
 - Dùng ngay được trên project game của bạn:
-  a) Godot 4.7.2 và Blender 5.2.1 đã pin hash (mục 2).
+  a) Godot 4.7.2 và Blender 5.2.3 đã pin hash (mục 2).
   b) Cài, nâng cấp, rollback, gỡ addon hh_studio có receipt, không đụng source/save (mục 3).
   c) Thư viện lệnh: Request có command_id, journal, lease, đọc lại trước ACK (mục 5).
   d) Mẫu đã chạy thật để chép: catalog 27 class, Blender → GLB → Godot, trace input 60 Hz.
@@ -50,7 +50,7 @@ Nếu file này lệch với code thì code và plan đúng; sửa file này tro
     studio/.local/tooling/godot-4.7.2-stable/Godot_v4.7.2-stable_win64_console.exe
     studio/.local/tooling/godot-4.7.2-stable-linux/Godot_v4.7.2-stable_linux.x86_64
   Bản GUI dùng cho --editor theo các runner; bản console in log ra stdout.
-- Blender 5.2.1: studio/.local/tooling/blender-5.2.1-windows-x64/blender.exe
+- Blender 5.2.3: studio/.local/tooling/blender-5.2.3-windows-x64/blender.exe
 - Hash và chính sách: studio/toolchain.lock.json (offline-only, không tự lấy bản latest).
 - Python 3.11. Chạy từ 8-9-hh3d-3/, PYTHONPATH trỏ vào đó, cờ -B để không ghi .pyc:
     cd 8-9-hh3d-3

@@ -1,6 +1,6 @@
 # Original fixture producer
 
-`run_blender.py` is a trusted, background-only Blender 5.2.1 script. It generates
+`run_blender.py` is a trusted, background-only Blender 5.2.3 script. It generates
 original geometry and pixels, saves one compressed source, reopens that exact
 source with scripts disabled, reads the semantics again, and exports one GLB.
 It never accepts an existing Blender file, script, export setting or asset path.
@@ -64,7 +64,7 @@ Native pixel readback must match decoded source PNG; exported PNG must preserve
 the exact source bytes, decoded pixels, texture bindings and sampler. Complete
 independent bounded intake remains mandatory. No occlusion map is claimed.
 
-Pinned exporter 5.2.40 emits one known sampler warning for the standard MR graph:
+Pinned exporter 5.2.41 emits one known sampler warning for the standard MR graph:
 `material/texture.py:175` counts two socket traversals without deduplicating the
 same texture node. Metallic B and roughness G use one original image node, with
 identical Closest/Repeat settings. The exported postcondition verifies nearest

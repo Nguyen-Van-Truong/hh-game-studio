@@ -26,11 +26,12 @@ from typing import Any, Iterator, Sequence
 
 from . import common as C
 
-ARCHIVE_NAME = "Godot_v4.7.2-stable_export_templates.tpz"
-ARCHIVE_SHA256 = "f298490b8d44d934be425a5a65a51bf15f422428b229a06a6e11d9ffea248011"
-VERSION_TEXT = "4.7.2.stable"
-CACHE_NAME = "hh-archive-verify-4.7.2.stable.json"
-LOCK_NAME = "hh-install-4.7.2.stable.lock"
+_TEMPLATES_LOCK = C.toolchain_lock()["export_templates"]
+ARCHIVE_NAME = str(_TEMPLATES_LOCK["name"])
+ARCHIVE_SHA256 = str(_TEMPLATES_LOCK["sha256"])
+VERSION_TEXT = str(_TEMPLATES_LOCK["version"]).replace("-stable", ".stable")
+CACHE_NAME = f"hh-archive-verify-{VERSION_TEXT}.json"
+LOCK_NAME = f"hh-install-{VERSION_TEXT}.lock"
 
 PRESETS: dict[str, dict[str, str]] = {
     "windows": {"name": "HH Windows", "platform": "Windows Desktop"},

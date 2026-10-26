@@ -141,7 +141,7 @@ class Client:
         ports=settings['ports']
         exact(ports,('data','control'))
         need(all(type(port) is int and 1<=port<=65535 for port in ports.values()),'IPC_PORT')
-        need(not bpy.app.background and bpy.app.version[:3]==(5,2,1)
+        need(not bpy.app.background and bpy.app.version[:3]==(5,2,3)
              and not bpy.context.preferences.filepaths.use_scripts_auto_execute, 'IPC_PINNED_GUI')
         self.bpy=bpy; self.ui=load_ui(); self.owner=None; self.channels={}; self.welcomed=set()
         self.root=Path(settings['owned_root']); self.quitting=False; self.closed=False
@@ -187,7 +187,7 @@ class Client:
         need(descriptor_raw==canonical_bytes(value) and value['schema']=='HH-BLENDER-CHECKPOINT-RECOVERY-1'
             and value['readonly'] is True and value['public_ack'] is False
             and value['checkpoint_sha256']==request['checkpoint_sha256']
-            and value['binary_sha256']=='8f7a131ad8bc148edc218b334f07d92a57f5a357fa66d913b290537fd8353c06'
+            and value['binary_sha256']=='e546b2a0d81ae19bd5b306b668733102d91d23db2e2be02d68b7ecbe548af0a1'
             and value['context']['mode']=='OBJECT','IPC_RECOVERY_DESCRIPTOR')
         expected=parse_json(value['snapshot_native_json'].encode('ascii'))
         need(self.ui.c.canonical(expected).decode('ascii')==value['snapshot_native_json']

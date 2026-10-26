@@ -39,6 +39,13 @@ func set_drop_through(active: bool) -> void:
 	_drop_through = active
 	set_collision_mask_value(ONE_WAY_LAYER, not active)
 
+func set_solid_collision_enabled(enabled: bool) -> void:
+	## Pits are open floor gaps.  Disabling the solid mask while a body is
+	## crossing a pit edge prevents the vertical face of a split floor fixture
+	## from behaving like an invisible wall; the fighter then falls under the
+	## normal fixed-step gravity path.
+	set_collision_mask_value(SOLID_LAYER, enabled)
+
 
 func set_posture_height(height: float) -> void:
 	var rectangle: RectangleShape2D = _collision_shape.shape as RectangleShape2D

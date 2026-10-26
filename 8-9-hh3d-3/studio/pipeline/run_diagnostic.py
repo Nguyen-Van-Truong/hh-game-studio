@@ -79,7 +79,7 @@ def producer(run_id, variant):
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_bytes((STUDIO / name).read_bytes())
     lock = json.loads((STUDIO / 'toolchain.lock.json').read_bytes())
-    binary = STUDIO / '.local/tooling/blender-5.2.1-windows-x64/blender.exe'
+    binary = STUDIO / '.local/tooling/blender-5.2.3-windows-x64/blender.exe'
     argv = [str(binary), '--background', '--factory-startup', '--disable-autoexec',
             '--offline-mode', '--threads', '1', '--python-exit-code', '17',
             '--python', str(script), '--', str(fixture), variant]

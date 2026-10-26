@@ -82,6 +82,7 @@ GT-11 is ACCEPTED_O15_QUICK (plan S310; real-game dogfood recorded in S306): qui
 | Isolation and paths | per-run Godot user profile; nested scene dirs; no-follow junction checks | `selftest replay`; path/transaction/export units pass |
 | Strict regression | explicit `String` types in runner and consumed `store_string` result | `selftest strict` 20/20, 76.3 s |
 | Quality/effects S310-CR-02 | renderer profiles; deterministic WAV placeholder; seeded GPUParticles2D/3D presets with native readback | unit VFX/quality pass; `selftest quality` 9/9; `selftest effects` 41/41 |
+| Toolchain upgrade & hardening (25-10) | Blender upgraded to `5.2.3 LTS`; `common.py`/`export.py` read `toolchain.lock.json` directly; added `hh doctor [--verify-hashes]`, `hh vfx create --no-camera`, and Windows IME deactivation in `play`/`shot` runners | `hh doctor --verify-hashes` ok; 161/161 unit tests pass; `selftest clips w8 quality effects` pass |
 
 The maintenance run found and repaired a Windows dangling-junction WinError448
 before recording PASS. It did not run the long matrix, soak, Android or a new

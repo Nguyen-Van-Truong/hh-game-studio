@@ -57,6 +57,10 @@ var _camera_phase: float = 0.0
 
 func _ready() -> void:
 	set_process_input(true)
+	# The two-player launcher opts into the classic Rooftops topology.  Tests
+	# and callers that set superagent_map_id continue to select an explicit map.
+	if OS.get_cmdline_args().has("--classic-rooftops") and not get_tree().has_meta(&"superagent_map_id"):
+		map_id = &"classic_rooftops"
 	var selected_map: Variant = get_tree().get_meta(&"superagent_map_id", map_id)
 	if typeof(selected_map) == TYPE_STRING or typeof(selected_map) == TYPE_STRING_NAME:
 		map_id = StringName(selected_map)
@@ -367,24 +371,44 @@ func _update_camera() -> void:
 
 func _draw() -> void:
 	var floor_y: float = float(_world_snapshot.get(&"floor_y", _world_size.y - 160.0))
-	draw_rect(Rect2(Vector2.ZERO, _world_size), Color("#0b111a"), true)
-	draw_texture_rect(RELAY_YARD_BACKDROP, Rect2(Vector2.ZERO, _world_size), false)
-	_draw_classic_set_dressing(floor_y)
-	ARENA_SKIN.draw_foundation(self, _world_size, floor_y)
+	var classic_map: Texture2D = SF_BANK.map_texture()
+	draw_rect(Rect2(Vector2.ZERO, _world_size), Color("#6ea0c8") if classic_map != null else Color("#0b111a"), true)
+	if classic_map != null:
+		var map_height: float = _world_size.x * float(classic_map.get_height()) / float(classic_map.get_width())
+		var ground_ratio: float = 382.0 / 460.0
+		var map_y: float = floor_y - map_height * ground_ratio
+		draw_texture_rect(classic_map, Rect2(0.0, map_y, _world_size.x, map_height), false)
+	else:
+		draw_texture_rect(RELAY_YARD_BACKDROP, Rect2(Vector2.ZERO, _world_size), false)
+		ARENA_SKIN.draw_foundation(self, _world_size, floor_y)
 	_draw_world_geometry()
 	_draw_props()
 	_draw_pickups()
+	_draw_projectiles()
 	_draw_grenades()
 
 func _draw_world_geometry() -> void:
+	# Bitmap 2219 already contains the Rooftops art, including its floors,
+	# ladders and walls.  The JSON topology remains active for physics, but
+	# drawing its debug slabs over the classic bitmap makes the scene look like
+	# two maps stacked together.
+	if SF_BANK.map_texture() != null and String(map_id) == "classic_rooftops":
+		return
 	var floor_y: float = float(_world_snapshot.get(&"floor_y", _world_size.y - 160.0))
 	for platform_value: Variant in _world_snapshot.get(&"platforms", []):
 		var platform: Dictionary = platform_value
 		var rect := Rect2(float(platform[&"left"]), float(platform[&"y"]), float(platform[&"right"]) - float(platform[&"left"]), 12.0)
-		draw_rect(rect, Color("#344d5a"), true)
-		draw_rect(Rect2(rect.position + Vector2(0.0, 2.0), Vector2(rect.size.x, 3.0)), Color("#82b9ad"), true)
-		draw_rect(Rect2(rect.position + Vector2(0.0, 7.0), Vector2(rect.size.x, 5.0)), Color("#1b2b36"), true)
-		draw_line(Vector2(rect.position.x, rect.position.y), Vector2(rect.end.x, rect.position.y), Color("#d3f1d9"), 2.0)
+		var classic_map: Texture2D = SF_BANK.map_texture()
+		if classic_map != null and absf(float(platform[&"y"]) - floor_y) < 2.0:
+			continue
+		var slab: Color = Color("#b7b7b7") if classic_map != null else Color("#344d5a")
+		var slab_top: Color = Color("#f2f2f2") if classic_map != null else Color("#82b9ad")
+		var slab_shade: Color = Color("#6e6e6e") if classic_map != null else Color("#1b2b36")
+		var slab_edge: Color = Color("#ffffff") if classic_map != null else Color("#d3f1d9")
+		draw_rect(rect, slab, true)
+		draw_rect(Rect2(rect.position + Vector2(0.0, 2.0), Vector2(rect.size.x, 3.0)), slab_top, true)
+		draw_rect(Rect2(rect.position + Vector2(0.0, 7.0), Vector2(rect.size.x, 5.0)), slab_shade, true)
+		draw_line(Vector2(rect.position.x, rect.position.y), Vector2(rect.end.x, rect.position.y), slab_edge, 2.0)
 		for panel_x: float in range(rect.position.x + 12.0, rect.end.x - 4.0, 42.0):
 			draw_line(Vector2(panel_x, rect.position.y + 3.0), Vector2(panel_x + 7.0, rect.position.y + 3.0), Color(0.74, 0.91, 0.84, 0.55), 1.0)
 		for brace_x: float in range(rect.position.x + 24.0, rect.end.x, 56.0):
@@ -533,28 +557,12 @@ func _draw_ellipse_shadow(center: Vector2, radius_x: float, radius_y: float) -> 
 		points.append(center + Vector2(cos(angle) * radius_x, sin(angle) * radius_y))
 	draw_colored_polygon(points, Color(0.0, 0.0, 0.0, 0.26))
 
-func _draw_classic_set_dressing(floor_y: float) -> void:
-	if not SF_BANK.available():
-		return
-	var window_tex: Texture2D = SF_BANK.prop_texture(&"window")
-	var lamp_tex: Texture2D = SF_BANK.prop_texture(&"lamp")
-	var chair_tex: Texture2D = SF_BANK.prop_texture(&"chair")
-	var x: float = 180.0
-	while x < _world_size.x - 80.0:
-		if window_tex != null:
-			draw_texture_rect(window_tex, Rect2(Vector2(x, 80.0), window_tex.get_size() * 2.0), false)
-		if lamp_tex != null and int(x) % 360 < 180:
-			draw_texture_rect(lamp_tex, Rect2(Vector2(x + 40.0, 150.0), lamp_tex.get_size() * 2.0), false)
-		if chair_tex != null:
-			var chair_size: Vector2 = chair_tex.get_size() * 1.8
-			draw_texture_rect(chair_tex, Rect2(Vector2(x, floor_y - chair_size.y), chair_size), false)
-		x += 220.0
-
 func _draw_grenades() -> void:
 	for value: Variant in _snapshot.get(&"grenades", []):
 		var grenade: Dictionary = value
 		var point := Vector2(float(grenade.get(&"x", 0.0)), float(grenade.get(&"y", 0.0)))
-		var grenade_tex: Texture2D = SF_BANK.frame_texture("wpn_grenade_thrown", 1)
+		var kind: StringName = StringName(grenade.get(&"kind", &"grenade"))
+		var grenade_tex: Texture2D = SF_BANK.frame_texture("wpn_grenade_thrown", 1) if kind == &"grenade" else SF_BANK.weapon_texture(kind)
 		if grenade_tex == null:
 			grenade_tex = SF_BANK.weapon_texture(&"grenade")
 		if grenade_tex != null:
@@ -565,3 +573,24 @@ func _draw_grenades() -> void:
 			draw_circle(point, 8.0, Color("#1a2528"), false, 2.0)
 		var fuse: int = int(grenade.get(&"fuse", 0))
 		draw_line(point + Vector2(5.0, -5.0), point + Vector2(10.0, -10.0), Color("#ffaf7a"), 2.0 if fuse % 2 == 0 else 1.0)
+
+func _draw_projectiles() -> void:
+	# Ranged shots are deliberately readable for a few fixed ticks.  The
+	# projectile rows are presentation state emitted by MatchSession; damage was
+	# already resolved by its deterministic hit ray and is never recomputed here.
+	for value: Variant in _snapshot.get(&"projectiles", []):
+		if typeof(value) != TYPE_DICTIONARY:
+			continue
+		var projectile: Dictionary = value
+		var point := Vector2(float(projectile.get(&"x", 0.0)), float(projectile.get(&"y", 0.0)))
+		var velocity := Vector2(float(projectile.get(&"vx", 0.0)), float(projectile.get(&"vy", 0.0)))
+		var direction := velocity.normalized() if not velocity.is_zero_approx() else Vector2.RIGHT
+		var kind: StringName = StringName(projectile.get(&"kind", &"bullet"))
+		var radius: float = clampf(float(projectile.get(&"radius", 2.0)), 2.0, 7.0)
+		var tint: Color = Color("#ffbd5c") if kind == &"bullet" else Color("#ff6338")
+		var core: Color = Color("#fff3be") if kind == &"bullet" else Color("#ffe08b")
+		var trail_length: float = 10.0 if kind == &"bullet" else 14.0
+		draw_line(point - direction * trail_length, point, Color(tint, 0.42), radius * 2.4, true)
+		draw_line(point - direction * trail_length * 0.55, point, Color(core, 0.92), maxf(1.0, radius * 0.9), true)
+		draw_circle(point, radius, Color(core, 0.98))
+		draw_circle(point, radius * 1.8, Color(tint, 0.22))

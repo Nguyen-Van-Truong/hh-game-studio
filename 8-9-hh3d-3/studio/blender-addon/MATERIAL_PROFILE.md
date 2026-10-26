@@ -16,7 +16,7 @@ no-effect conflict. Updating that mesh's existing ID is supported.
 
 Each material contains exactly one Principled BSDF and one active Material
 Output, joined only by BSDF→Surface. All input sockets except Base Color,
-Metallic and Roughness equal pinned Blender 5.2.1 defaults recorded in
+Metallic and Roughness equal pinned Blender 5.2.3 defaults recorded in
 `material_profile.py`. Node types, properties, links, socket names, viewport
 PBR values and opaque alpha are validated. No textures, procedural nodes,
 groups, animation, drivers, transmission, coat, emission or custom shader

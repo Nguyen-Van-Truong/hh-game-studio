@@ -21,13 +21,13 @@ func _run() -> void:
 
 	var pistol := WeaponCatalogScript.get_weapon(&"pistol")
 	_expect(pistol != null and pistol.ammo_capacity == 12 and pistol.magazine_size == 12, "pistol carries a twelve-round magazine")
-	_expect(pistol != null and pistol.damage == 18 and is_equal_approx(pistol.knockback, 18.0), "pistol damage and knockback are authored")
+	_expect(pistol != null and pistol.damage == 10 and is_equal_approx(pistol.knockback, 15.0) and pistol.cooldown_ticks == 6, "classic pistol damage, push and cooldown are authored")
 	_expect(pistol != null and pistol.is_bullet() and pistol.projectile_kind == &"bullet" and pistol.projectile.get("kind") == "bullet", "pistol carries bullet metadata")
 	_expect(pistol != null and float(pistol.projectile.get("speed", 0.0)) > 0.0 and int(pistol.projectile.get("lifetime_ticks", 0)) > 0, "bullet metadata has speed and lifetime")
 
 	var shotgun := WeaponCatalogScript.get_weapon(&"shotgun")
-	_expect(shotgun != null and shotgun.ammo_capacity == 4 and shotgun.pellet_count == 6, "shotgun carries four shells and six pellets")
-	_expect(shotgun != null and shotgun.damage == 28 and is_equal_approx(shotgun.knockback, 24.0), "shotgun damage and knockback are distinct")
+	_expect(shotgun != null and shotgun.ammo_capacity == 4 and shotgun.pellet_count == 4, "classic shotgun carries four shells and four pellets")
+	_expect(shotgun != null and shotgun.damage == 6 and shotgun.pellet_damage == 6 and is_equal_approx(shotgun.knockback, 33.0) and shotgun.cooldown_ticks == 3, "classic shotgun pellet damage, push and cooldown are authored")
 	_expect(shotgun != null and float(shotgun.spread_degrees) > 0.0 and shotgun.projectile_kind == &"bullet", "shotgun exposes spread and bullet metadata")
 
 	var grenade := WeaponCatalogScript.get_weapon(&"grenade")
@@ -37,15 +37,19 @@ func _run() -> void:
 
 	var fists := WeaponCatalogScript.get_weapon(&"fists")
 	var pipe := WeaponCatalogScript.get_weapon(&"pipe")
-	_expect(fists != null and fists.is_melee() and fists.melee_reach == 56.0 and fists.melee_damage == 12, "fists expose melee reach and damage")
+	_expect(fists != null and fists.is_melee() and fists.melee_reach == 56.0 and fists.melee_damage == 6, "classic fists expose melee reach and damage")
 	_expect(pipe != null and pipe.is_melee() and pipe.melee_reach > fists.melee_reach and pipe.melee_damage > fists.melee_damage, "melee variants have distinct reach and damage")
 
 	var rocket := WeaponCatalogScript.get_weapon(&"rocket_launcher")
 	_expect(rocket != null and rocket.is_rocket() and rocket.projectile_kind == &"rocket" and rocket.projectile.get("kind") == "rocket", "rocket definition carries rocket metadata")
-	_expect(rocket != null and rocket.is_explosive() and rocket.explosion_radius > grenade.explosion_radius, "rocket exposes a larger blast than grenade")
+	_expect(rocket != null and rocket.is_explosive() and rocket.damage == 100 and rocket.cooldown_ticks == 10 and rocket.projectile_speed == 18.0 and rocket.explosion_radius > grenade.explosion_radius, "classic rocket exposes its authored blast and cadence")
+	var classic_ids: Array[StringName] = [&"rifle", &"uzi", &"magnum", &"sniper", &"flamethrower", &"machete", &"axe", &"sword", &"molotov"]
+	for classic_id: StringName in classic_ids:
+		var classic_weapon := WeaponCatalogScript.get_weapon(classic_id)
+		_expect(classic_weapon != null and (classic_weapon.has_ammo() or classic_weapon.is_melee()) and classic_weapon.cooldown_ticks > 0, "classic catalog includes %s" % String(classic_id))
 	_expect(WeaponCatalogScript.projectile_metadata(&"bullet").get("kind") == "bullet", "bullet metadata lookup is data-driven")
 	_expect(WeaponCatalogScript.get_projectile_metadata(&"rocket").get("explodes", false), "rocket metadata lookup reports explosion")
-	_expect(WeaponCatalogScript.projectile_metadata_for_weapon(&"shotgun").get("pellet_count", 0) == 6, "weapon-specific projectile metadata preserves shotgun pellets")
+	_expect(WeaponCatalogScript.projectile_metadata_for_weapon(&"shotgun").get("pellet_count", 0) == 4, "weapon-specific projectile metadata preserves shotgun pellets")
 
 	var row: Dictionary = pistol.to_dictionary()
 	_expect(row.is_read_only(), "definition snapshot is read-only")
@@ -94,7 +98,7 @@ func _test_live_match_authority(pistol: WeaponCatalog.WeaponDefinition, shotgun:
 	session.fighters[0].queued_attack = &"shoot"
 	session.fighters[1].health = 100
 	session._resolve_attacks()
-	_expect(session.fighters[1].health == 100 - shotgun.damage, "live shotgun hit uses catalog damage")
+	_expect(session.fighters[1].health == 100 - shotgun.damage * shotgun.pellet_count, "live shotgun hit applies the authored pellet sum")
 	session.place_fighter(1, Vector2(1000.0, session.world.floor_y))
 	session.fighters[0].queued_attack = &"throw"
 	session.fighters[0].facing = 1
