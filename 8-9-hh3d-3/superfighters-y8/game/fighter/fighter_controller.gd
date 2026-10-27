@@ -367,7 +367,13 @@ func _get_registry() -> Object:
 	return null
 
 
+var last_played_sfx: String = ""
+
+
 func _play_sfx(sound_id: String) -> void:
+	if sound_id.to_lower() == "jump":
+		return
+	last_played_sfx = sound_id
 	if DisplayServer.get_name() == "headless":
 		return
 	var tree: SceneTree = Engine.get_main_loop() as SceneTree
@@ -2182,11 +2188,10 @@ func _step_locomotion(step_24hz: float, inp: Dictionary, move_dir: int) -> void:
 			_ledge_grab_cooldown_frames = 14.0
 			facing = -facing
 			air_velocity = Vector2(float(facing) * WALL_JUMP_POWER_X_24HZ, WALL_JUMP_POWER_Y_24HZ)
-			_play_sfx("jump")
 			_set_state("JUMP", true)
 			return
-		var press_into_ledge: bool = (facing > 0 and bool(inp.get("right_just_pressed", false))) or (facing < 0 and bool(inp.get("left_just_pressed", false)))
-		if bool(inp.get("jump_just_pressed", false)) or bool(inp.get("up_just_pressed", false)) or press_into_ledge:
+		var press_into_ledge: bool = (facing > 0 and (bool(inp.get("right", false)) or bool(inp.get("right_just_pressed", false)))) or (facing < 0 and (bool(inp.get("left", false)) or bool(inp.get("left_just_pressed", false))))
+		if bool(inp.get("jump_just_pressed", false)) or bool(inp.get("up_just_pressed", false)) or bool(inp.get("jump", false)) or bool(inp.get("up", false)) or press_into_ledge:
 			# Deluxe Ledge Jump: jump smoothly up and over the ledge corner instead of teleporting instantaneously!
 			ledge_grabbing = false
 			_ledge_grab_cooldown_frames = 14.0
@@ -2195,7 +2200,6 @@ func _step_locomotion(step_24hz: float, inp: Dictionary, move_dir: int) -> void:
 			on_ground = false
 			_on_cloud_platform = false
 			air_velocity = Vector2(0.0, -4.7)
-			_play_sfx("jump")
 			_set_state("JUMP", true)
 			_step_airborne_movement(step_24hz, {}, move_dir, false)
 			return
@@ -2453,7 +2457,6 @@ func _step_airborne_movement(step_24hz: float, inp: Dictionary, move_dir: int, a
 		air_velocity.x = float(facing) * WALL_JUMP_POWER_X_24HZ
 		air_velocity.y = WALL_JUMP_POWER_Y_24HZ
 		_near_wall_dir = 0
-		_play_sfx("jump")
 		_set_state("JUMP", true)
 	elif move_dir != 0 and not falling:
 		var air_target_vx: float = float(move_dir) * (SPRINT_SPEED_24HZ if sprinting else RUN_SPEED_24HZ) * speed_mult
@@ -2745,7 +2748,6 @@ func _begin_jump(move_dir: int, step_24hz: float = 0.4) -> void:
 		air_velocity.x = float(facing) * SPRINT_SPEED_24HZ * speed_mult
 	elif move_dir != 0:
 		air_velocity.x = float(move_dir) * RUN_SPEED_24HZ * speed_mult
-	_play_sfx("jump")
 	_set_state("JUMP", true)
 	_step_airborne_movement(step_24hz, {}, move_dir, false)
 
@@ -2781,7 +2783,6 @@ func _start_dive(move_dir: int = 0, step_24hz: float = 0.4) -> void:
 	air_velocity.x = float(facing) * DIVE_SPEED_X_24HZ
 	air_velocity.y = DIVE_SPEED_Y_24HZ
 	body_rotation_deg = clampf(1.5 * maxf(step_24hz, 0.4), -15.0, 28.0)
-	_play_sfx("jump")
 	_set_state("DIVE", true)
 	_try_grab_nearby_target()
 	_update_dive_tackled_target()

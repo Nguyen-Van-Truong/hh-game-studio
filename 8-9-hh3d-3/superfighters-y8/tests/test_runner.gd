@@ -2990,6 +2990,67 @@ func _run_m7_e2e_match_simulation_suite() -> void:
 		"SF-M32.2: Kick launches props in weight-scaled parabolic hop (lift=" + str(snappedf(max_air_lift_px, 0.1)) + "px, gas=" + str(snappedf(gas_kick_dx, 0.1)) + "px > barrel=" + str(snappedf(barrel_kick_dx, 0.1)) + "px > fcab=" + str(snappedf(fcab_kick_dx, 0.1)) + "px > desk=" + str(snappedf(desk32_kick_dx, 0.1)) + "px) with 0.0px floor penetration (max_pen=" + str(snappedf(max_floor_penetration_px, 0.01)) + "px)"
 	)
 
+	# --- SF-M33 Upper-Level Melee Crossover on 'steel_harbor' (y=-108 & y=-52) + Silent Jump SFX ---
+	# 1. SF-M33.1: Fighter & Bot AI cross seamlessly between Left and Right sides via upper crane walkways (y=-108)
+	#    and mid-upper catwalks (y=-52, even with central glass shattered) for melee infiltration!
+	ml_m18.call("load_map", "steel_harbor")
+	sh_p1.call("setup_fighter", 0, "johnny", Vector2(-240.0, -108.0), false)
+	sh_p1.set("match_world", mc)
+	sh_p1.set("on_ground", true)
+	sh_p1.set("last_played_sfx", "")
+	for _cr108: int in range(300):
+		var px108: float = sh_p1.global_position.x
+		var on_g108: bool = bool(sh_p1.get("on_ground"))
+		var need_hop108: bool = on_g108 and ((px108 >= -106.0 and px108 <= -101.0) or (px108 >= 84.0 and px108 <= 89.0))
+		sh_p1.call("step_fighter", 1.0, {"right": true, "jump": need_hop108, "jump_just_pressed": need_hop108})
+		if sh_p1.global_position.x >= 240.0 and bool(sh_p1.get("on_ground")):
+			break
+	var end_x_108: float = sh_p1.global_position.x
+	var crossed_top_108_ok: bool = (end_x_108 >= 240.0 and absf(sh_p1.global_position.y - (-108.0)) <= 1.5 and bool(sh_p1.get("on_ground")))
+	var jump_remained_silent_ok: bool = (str(sh_p1.get("last_played_sfx")) == "")
+
+	# Break central glass skybridge [-14, 14] at y=-52 and verify crossing from Right Tower Roof (x=244, y=-56) to Left Tower Roof (x<=-240, y=-56) at y=-52!
+	if ml_m18.has_method("damage_glass_in_rect"):
+		ml_m18.call("damage_glass_in_rect", Rect2(-20.0, -58.0, 40.0, 12.0), 50.0, Vector2(0.0, 4.0))
+	sh_p1.call("setup_fighter", 0, "johnny", Vector2(244.0, -56.0), false)
+	sh_p1.set("match_world", mc)
+	sh_p1.set("on_ground", true)
+	for _cr52: int in range(320):
+		var px52: float = sh_p1.global_position.x
+		var on_g52: bool = bool(sh_p1.get("on_ground"))
+		var need_hop52: bool = on_g52 and (
+			(px52 <= 126.5 and px52 >= 121.5)
+			or (px52 <= 17.5 and px52 >= 12.5)
+			or (px52 <= -75.5 and px52 >= -80.5)
+			or (px52 <= -127.5 and px52 >= -132.5)
+		)
+		sh_p1.call("step_fighter", 1.0, {"left": true, "jump": need_hop52, "jump_just_pressed": need_hop52})
+		if sh_p1.global_position.x <= -240.0 and bool(sh_p1.get("on_ground")):
+			break
+	var end_x_52: float = sh_p1.global_position.x
+	var crossed_mid_52_ok: bool = (end_x_52 <= -240.0 and absf(sh_p1.global_position.y - (-56.0)) <= 2.5 and bool(sh_p1.get("on_ground")))
+
+	var bot_m33: Object = BotControllerScript.new()
+	var path_l_to_r: Array = bot_m33.call("find_path", Vector2(-276.0, 12.0), Vector2(276.0, 12.0), ml_m18) as Array
+	var path_r_to_l: Array = bot_m33.call("find_path", Vector2(276.0, 12.0), Vector2(-276.0, 12.0), ml_m18) as Array
+	var ai_crossover_ok: bool = (not path_l_to_r.is_empty() and not path_r_to_l.is_empty())
+	_check(
+		crossed_top_108_ok and crossed_mid_52_ok and ai_crossover_ok,
+		"SF-M33.1: 'steel_harbor' upper crossover infiltration verified at y=-108 (top_ok=" + str(crossed_top_108_ok) + ", end_x=" + str(snappedf(end_x_108, 0.1)) + "), y=-52 with broken glass (mid_ok=" + str(crossed_mid_52_ok) + ", end_x=" + str(snappedf(end_x_52, 0.1)) + "), and bidirectional Bot AI paths (L->R steps=" + str(path_l_to_r.size()) + ", R->L steps=" + str(path_r_to_l.size()) + ")"
+	)
+
+	# 2. SF-M33.2: Jumping, diving, wall-jumping, and ledge-jumping play ZERO jump sound effect while combat SFX still work
+	sh_p1.set("last_played_sfx", "")
+	sh_p1.call("_begin_jump", 1, 1.0)
+	sh_p1.call("_start_dive", 1, 1.0)
+	var silent_after_jump_and_dive: bool = (jump_remained_silent_ok and str(sh_p1.get("last_played_sfx")) == "")
+	sh_p1.call("_start_melee_combo_step", 1)
+	var combat_sfx_still_active: bool = (str(sh_p1.get("last_played_sfx")) == "swing")
+	_check(
+		silent_after_jump_and_dive and combat_sfx_still_active,
+		"SF-M33.2: Jump & Dive SFX completely removed (silent_jump=" + str(silent_after_jump_and_dive) + ", combat_sfx=" + str(sh_p1.get("last_played_sfx")) + ")"
+	)
+
 	mc.call("_clear_match_entities")
 	root.remove_child(mc)
 	mc.free()

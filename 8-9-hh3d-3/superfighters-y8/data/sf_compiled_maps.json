@@ -36119,6 +36119,42 @@
           ]
         },
         {
+          "x": 0.0,
+          "y": -108.0,
+          "mask": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
           "x": -128.0,
           "y": 76.0,
           "mask": [
@@ -36264,6 +36300,42 @@
         },
         {
           "x": -256.0,
+          "y": -108.0,
+          "mask": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "x": 256.0,
           "y": -108.0,
           "mask": [
             1,
@@ -36611,11 +36683,59 @@
           ]
         },
         {
+          "var_name": "catwalk_step_left",
+          "material": "Metal",
+          "x": -228.0,
+          "y": -52.0,
+          "w": 8.0,
+          "h": 4.0,
+          "angle": 0.0,
+          "tags": [
+            "CLOUD"
+          ]
+        },
+        {
+          "var_name": "catwalk_step_right",
+          "material": "Metal",
+          "x": 228.0,
+          "y": -52.0,
+          "w": 8.0,
+          "h": 4.0,
+          "angle": 0.0,
+          "tags": [
+            "CLOUD"
+          ]
+        },
+        {
           "var_name": "catwalk_left",
           "material": "Metal",
-          "x": -197.5,
+          "x": -194.5,
           "y": -50.0,
-          "w": 61.0,
+          "w": 59.0,
+          "h": 4.0,
+          "angle": 0.0,
+          "tags": [
+            "CLOUD"
+          ]
+        },
+        {
+          "var_name": "catwalk_lift_step",
+          "material": "Metal",
+          "x": -120.0,
+          "y": -50.0,
+          "w": 22.0,
+          "h": 4.0,
+          "angle": 0.0,
+          "tags": [
+            "CLOUD"
+          ]
+        },
+        {
+          "var_name": "catwalk_mid_left",
+          "material": "Metal",
+          "x": -46.5,
+          "y": -50.0,
+          "w": 65.0,
           "h": 4.0,
           "angle": 0.0,
           "tags": [
@@ -36625,9 +36745,21 @@
         {
           "var_name": "catwalk_right",
           "material": "Metal",
-          "x": 66.0,
+          "x": 53.0,
           "y": -50.0,
-          "w": 52.0,
+          "w": 78.0,
+          "h": 4.0,
+          "angle": 0.0,
+          "tags": [
+            "CLOUD"
+          ]
+        },
+        {
+          "var_name": "catwalk_right_outer",
+          "material": "Metal",
+          "x": 173.5,
+          "y": -50.0,
+          "w": 101.0,
           "h": 4.0,
           "angle": 0.0,
           "tags": [
@@ -36637,9 +36769,21 @@
         {
           "var_name": "crane_walk_left",
           "material": "Metal",
-          "x": -276.0,
+          "x": -229.0,
           "y": -106.0,
-          "w": 160.0,
+          "w": 254.0,
+          "h": 4.0,
+          "angle": 0.0,
+          "tags": [
+            "CLOUD"
+          ]
+        },
+        {
+          "var_name": "crane_walk_center",
+          "material": "Metal",
+          "x": 1.0,
+          "y": -106.0,
+          "w": 174.0,
           "h": 4.0,
           "angle": 0.0,
           "tags": [
@@ -36649,9 +36793,9 @@
         {
           "var_name": "crane_walk_right",
           "material": "Metal",
-          "x": 276.0,
+          "x": 230.0,
           "y": -106.0,
-          "w": 160.0,
+          "w": 252.0,
           "h": 4.0,
           "angle": 0.0,
           "tags": [
@@ -36767,7 +36911,7 @@
           "candidates": [
             "CRATE_HANGING"
           ],
-          "x": -112.0,
+          "x": -94.0,
           "y": -96.0,
           "angle": 0.0,
           "branch_group": 0,
@@ -36793,7 +36937,7 @@
           "candidates": [
             "BARREL_EXPLOSIVE"
           ],
-          "x": -112.0,
+          "x": -94.0,
           "y": 68.5,
           "angle": 0.0,
           "branch_group": 0,
@@ -36832,7 +36976,7 @@
           "candidates": [
             "BARREL"
           ],
-          "x": -92.0,
+          "x": -122.0,
           "y": 68.5,
           "angle": 0.0,
           "branch_group": 0,
@@ -37026,9 +37170,9 @@
       ],
       "glasses": [
         {
-          "x1": -40.0,
+          "x1": -14.0,
           "y1": -52.0,
-          "x2": 40.0,
+          "x2": 14.0,
           "y2": -52.0
         },
         {
@@ -37161,7 +37305,7 @@
           {
             "index": 14,
             "id": "n14",
-            "x": -196.0,
+            "x": -172.0,
             "y": -52.0,
             "tag": "",
             "body_ref": "null"
@@ -37177,7 +37321,7 @@
           {
             "index": 16,
             "id": "n16",
-            "x": 66.0,
+            "x": 87.0,
             "y": -52.0,
             "tag": "",
             "body_ref": "null"
@@ -37211,6 +37355,94 @@
             "id": "n20",
             "x": 298.0,
             "y": -56.0,
+            "tag": "",
+            "body_ref": "null"
+          },
+          {
+            "index": 21,
+            "id": "n21",
+            "x": -106.0,
+            "y": -108.0,
+            "tag": "",
+            "body_ref": "null"
+          },
+          {
+            "index": 22,
+            "id": "n22",
+            "x": -82.0,
+            "y": -108.0,
+            "tag": "",
+            "body_ref": "null"
+          },
+          {
+            "index": 23,
+            "id": "n23",
+            "x": 0.0,
+            "y": -108.0,
+            "tag": "",
+            "body_ref": "null"
+          },
+          {
+            "index": 24,
+            "id": "n24",
+            "x": 84.0,
+            "y": -108.0,
+            "tag": "",
+            "body_ref": "null"
+          },
+          {
+            "index": 25,
+            "id": "n25",
+            "x": 108.0,
+            "y": -108.0,
+            "tag": "",
+            "body_ref": "null"
+          },
+          {
+            "index": 26,
+            "id": "n26",
+            "x": -119.0,
+            "y": -52.0,
+            "tag": "",
+            "body_ref": "null"
+          },
+          {
+            "index": 27,
+            "id": "n27",
+            "x": -74.0,
+            "y": -52.0,
+            "tag": "",
+            "body_ref": "null"
+          },
+          {
+            "index": 28,
+            "id": "n28",
+            "x": -18.0,
+            "y": -52.0,
+            "tag": "",
+            "body_ref": "null"
+          },
+          {
+            "index": 29,
+            "id": "n29",
+            "x": 18.0,
+            "y": -52.0,
+            "tag": "",
+            "body_ref": "null"
+          },
+          {
+            "index": 30,
+            "id": "n30",
+            "x": 128.0,
+            "y": -52.0,
+            "tag": "",
+            "body_ref": "null"
+          },
+          {
+            "index": 31,
+            "id": "n31",
+            "x": 196.0,
+            "y": -52.0,
             "tag": "",
             "body_ref": "null"
           }
@@ -37372,7 +37604,49 @@
           },
           {
             "id": "",
+            "from": 27,
+            "to": 28,
+            "mode": "STATIC",
+            "action": "ROAD"
+          },
+          {
+            "id": "",
+            "from": 28,
+            "to": 27,
+            "mode": "STATIC",
+            "action": "ROAD"
+          },
+          {
+            "id": "",
+            "from": 28,
+            "to": 15,
+            "mode": "STATIC",
+            "action": "ROAD"
+          },
+          {
+            "id": "",
             "from": 15,
+            "to": 28,
+            "mode": "STATIC",
+            "action": "ROAD"
+          },
+          {
+            "id": "",
+            "from": 15,
+            "to": 29,
+            "mode": "STATIC",
+            "action": "ROAD"
+          },
+          {
+            "id": "",
+            "from": 29,
+            "to": 15,
+            "mode": "STATIC",
+            "action": "ROAD"
+          },
+          {
+            "id": "",
+            "from": 29,
             "to": 16,
             "mode": "STATIC",
             "action": "ROAD"
@@ -37380,7 +37654,91 @@
           {
             "id": "",
             "from": 16,
-            "to": 15,
+            "to": 29,
+            "mode": "STATIC",
+            "action": "ROAD"
+          },
+          {
+            "id": "",
+            "from": 30,
+            "to": 31,
+            "mode": "STATIC",
+            "action": "ROAD"
+          },
+          {
+            "id": "",
+            "from": 31,
+            "to": 30,
+            "mode": "STATIC",
+            "action": "ROAD"
+          },
+          {
+            "id": "",
+            "from": 31,
+            "to": 20,
+            "mode": "STATIC",
+            "action": "ROAD"
+          },
+          {
+            "id": "",
+            "from": 20,
+            "to": 31,
+            "mode": "STATIC",
+            "action": "ROAD"
+          },
+          {
+            "id": "",
+            "from": 17,
+            "to": 21,
+            "mode": "STATIC",
+            "action": "ROAD"
+          },
+          {
+            "id": "",
+            "from": 21,
+            "to": 17,
+            "mode": "STATIC",
+            "action": "ROAD"
+          },
+          {
+            "id": "",
+            "from": 22,
+            "to": 23,
+            "mode": "STATIC",
+            "action": "ROAD"
+          },
+          {
+            "id": "",
+            "from": 23,
+            "to": 22,
+            "mode": "STATIC",
+            "action": "ROAD"
+          },
+          {
+            "id": "",
+            "from": 23,
+            "to": 24,
+            "mode": "STATIC",
+            "action": "ROAD"
+          },
+          {
+            "id": "",
+            "from": 24,
+            "to": 23,
+            "mode": "STATIC",
+            "action": "ROAD"
+          },
+          {
+            "id": "",
+            "from": 25,
+            "to": 18,
+            "mode": "STATIC",
+            "action": "ROAD"
+          },
+          {
+            "id": "",
+            "from": 18,
+            "to": 25,
             "mode": "STATIC",
             "action": "ROAD"
           },
@@ -37470,29 +37828,113 @@
           },
           {
             "id": "",
-            "from": 4,
-            "to": 7,
+            "from": 0,
+            "to": 17,
+            "mode": "STATIC",
+            "action": "PORTAL"
+          },
+          {
+            "id": "",
+            "from": 17,
+            "to": 0,
+            "mode": "STATIC",
+            "action": "PORTAL"
+          },
+          {
+            "id": "",
+            "from": 9,
+            "to": 18,
+            "mode": "STATIC",
+            "action": "PORTAL"
+          },
+          {
+            "id": "",
+            "from": 18,
+            "to": 9,
+            "mode": "STATIC",
+            "action": "PORTAL"
+          },
+          {
+            "id": "",
+            "from": 21,
+            "to": 22,
+            "mode": "STATIC",
+            "action": "JUMP"
+          },
+          {
+            "id": "",
+            "from": 22,
+            "to": 21,
+            "mode": "STATIC",
+            "action": "JUMP"
+          },
+          {
+            "id": "",
+            "from": 24,
+            "to": 25,
+            "mode": "STATIC",
+            "action": "JUMP"
+          },
+          {
+            "id": "",
+            "from": 25,
+            "to": 24,
+            "mode": "STATIC",
+            "action": "JUMP"
+          },
+          {
+            "id": "",
+            "from": 26,
+            "to": 27,
+            "mode": "STATIC",
+            "action": "JUMP"
+          },
+          {
+            "id": "",
+            "from": 27,
+            "to": 26,
+            "mode": "STATIC",
+            "action": "JUMP"
+          },
+          {
+            "id": "",
+            "from": 28,
+            "to": 29,
+            "mode": "STATIC",
+            "action": "JUMP"
+          },
+          {
+            "id": "",
+            "from": 29,
+            "to": 28,
+            "mode": "STATIC",
+            "action": "JUMP"
+          },
+          {
+            "id": "",
+            "from": 14,
+            "to": 26,
             "mode": "STATIC",
             "action": "SPRINTJUMP"
           },
           {
             "id": "",
-            "from": 7,
-            "to": 4,
+            "from": 26,
+            "to": 14,
             "mode": "STATIC",
             "action": "SPRINTJUMP"
           },
           {
             "id": "",
-            "from": 5,
-            "to": 6,
+            "from": 16,
+            "to": 30,
             "mode": "STATIC",
             "action": "SPRINTJUMP"
           },
           {
             "id": "",
-            "from": 6,
-            "to": 5,
+            "from": 30,
+            "to": 16,
             "mode": "STATIC",
             "action": "SPRINTJUMP"
           },
@@ -37505,14 +37947,49 @@
           },
           {
             "id": "",
+            "from": 21,
+            "to": 27,
+            "mode": "STATIC",
+            "action": "DIVE"
+          },
+          {
+            "id": "",
+            "from": 23,
+            "to": 15,
+            "mode": "STATIC",
+            "action": "DIVE"
+          },
+          {
+            "id": "",
+            "from": 25,
+            "to": 30,
+            "mode": "STATIC",
+            "action": "DIVE"
+          },
+          {
+            "id": "",
             "from": 18,
-            "to": 12,
+            "to": 31,
+            "mode": "STATIC",
+            "action": "DIVE"
+          },
+          {
+            "id": "",
+            "from": 27,
+            "to": 1,
             "mode": "STATIC",
             "action": "DIVE"
           },
           {
             "id": "",
             "from": 16,
+            "to": 7,
+            "mode": "STATIC",
+            "action": "DIVE"
+          },
+          {
+            "id": "",
+            "from": 31,
             "to": 8,
             "mode": "STATIC",
             "action": "DIVE"

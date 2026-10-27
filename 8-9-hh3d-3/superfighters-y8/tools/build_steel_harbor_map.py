@@ -292,14 +292,23 @@ def generate_layers():
     draw_portal_doorway(mid_draw, 340.0, -144.0, 356.0, -108.0)
 
     # One-way steel catwalks (CLOUD tags, exact 4px thickness)
-    # catwalk_left: [-228, -52, -167, -48] -> stops at x = -167.0 so elevator shaft [-166.5, -129.5] is 100% unobstructed!
-    draw_steel_catwalk(mid_draw, mid, -228.0, -52.0, -167.0, -48.0, hazard_left=True, hazard_right=True)
-    # catwalk_right: [40, -52, 92, -48] -> right edge at x = 92.0 is the exact fulcrum for crate_hanging_2!
-    draw_steel_catwalk(mid_draw, mid, 40.0, -52.0, 92.0, -48.0, hazard_left=True, hazard_right=True)
-    # crane_walk_left: [-356, -108, -196, -104]
-    draw_steel_catwalk(mid_draw, mid, -356.0, -108.0, -196.0, -104.0, hazard_right=True)
-    # crane_walk_right: [196, -108, 356, -104]
-    draw_steel_catwalk(mid_draw, mid, 196.0, -108.0, 356.0, -104.0, hazard_left=True)
+    # 2px step transitions at tower roof edges ([-232, -224] and [224, 232] at top_y = -54.0) for smooth grounded step-up!
+    draw_steel_catwalk(mid_draw, mid, -232.0, -54.0, -224.0, -50.0)
+    draw_steel_catwalk(mid_draw, mid, 224.0, -54.0, 232.0, -50.0)
+    # catwalk_left: [-224, -52, -165, -48] -> stops at x = -165.0 so elevator shaft [-164.5, -131.5] is 100% unobstructed!
+    draw_steel_catwalk(mid_draw, mid, -224.0, -52.0, -165.0, -48.0, hazard_left=True, hazard_right=True)
+    # catwalk_lift_step: [-131, -52, -109, -48] -> stepping platform between elevator shaft and crate_hanging_1 drop lane!
+    draw_steel_catwalk(mid_draw, mid, -131.0, -52.0, -109.0, -48.0, hazard_left=True, hazard_right=True)
+    # catwalk_mid_left: [-79, -52, -14, -48] -> approaches central glass skybridge [-14, 14] while leaving [-109, -79] clear for crate_hanging_1!
+    draw_steel_catwalk(mid_draw, mid, -79.0, -52.0, -14.0, -48.0, hazard_left=True, hazard_right=True)
+    # catwalk_right: [14, -52, 92, -48] -> right edge at x = 92.0 is the exact fulcrum for crate_hanging_2!
+    draw_steel_catwalk(mid_draw, mid, 14.0, -52.0, 92.0, -48.0, hazard_left=True, hazard_right=True)
+    # catwalk_right_outer: [123, -52, 224, -48] -> connects right tower roof to catwalk_right across a 31px jumpable gap [92, 123]!
+    draw_steel_catwalk(mid_draw, mid, 123.0, -52.0, 224.0, -48.0, hazard_left=True, hazard_right=True)
+    # High crane walkways (y = -108.0) with 16px chain pass-through gaps at [-102, -86] and [88, 104] for fast upper infiltration!
+    draw_steel_catwalk(mid_draw, mid, -356.0, -108.0, -102.0, -104.0, hazard_right=True)
+    draw_steel_catwalk(mid_draw, mid, -86.0, -108.0, 88.0, -104.0, hazard_left=True, hazard_right=True)
+    draw_steel_catwalk(mid_draw, mid, 104.0, -108.0, 356.0, -104.0, hazard_left=True)
 
     # Ladders drawn ON TOP of the open hatch shafts, with top handrails extending 12px above top platforms!
     draw_ladder(mid_draw, -306.0, -120.0, -290.0, 12.0)   # ladder_left_upper (y: -120..12)
@@ -313,8 +322,8 @@ def generate_layers():
     draw_hatch_grating(mid_draw, -78.0, 76.0, -58.0, 80.0)
     draw_hatch_grating(mid_draw, 58.0, 76.0, 78.0, 80.0)
 
-    # Ceiling anchor brackets at x = -112.0 and x = 96.0 on ceiling_main bottom (y = -172.0)
-    for ax in [-112.0, 96.0]:
+    # Ceiling anchor brackets at x = -94.0 and x = 96.0 on ceiling_main bottom (y = -172.0)
+    for ax in [-94.0, 96.0]:
         apx = wx_to_px(ax)
         apy = wy_to_py(-172.0)
         mid_draw.rectangle((apx - 5, apy - 4, apx + 5, apy + 2), fill=(218, 172, 42, 255), outline=(40, 44, 52, 255))
@@ -360,14 +369,23 @@ def build_map_definition() -> dict:
         {"var_name": "tower_right_roof_l", "material": "Metal", "x": 260.0, "y": -52.0, "w": 56.0, "h": 8.0, "angle": 0.0, "tags": ["NONE"]},
         {"var_name": "tower_right_roof_r", "material": "Metal", "x": 332.0, "y": -52.0, "w": 48.0, "h": 8.0, "angle": 0.0, "tags": ["NONE"]},
         {"var_name": "hatch_tower_right", "material": "Metal", "x": 298.0, "y": -54.0, "w": 20.0, "h": 4.0, "angle": 0.0, "tags": ["CLOUD"]},
-        # One-way steel catwalks (CLOUD, top_y = -52.0)
-        # catwalk_left spans [-228.0, -167.0] so elevator `lift` [-166.5, -129.5] has 100% clear vertical travel!
-        {"var_name": "catwalk_left", "material": "Metal", "x": -197.5, "y": -50.0, "w": 61.0, "h": 4.0, "angle": 0.0, "tags": ["CLOUD"]},
-        # catwalk_right spans [40.0, 92.0] at top_y = -52.0 (right edge x = 92.0 is the fulcrum for crate_hanging_2!)
-        {"var_name": "catwalk_right", "material": "Metal", "x": 66.0, "y": -50.0, "w": 52.0, "h": 4.0, "angle": 0.0, "tags": ["CLOUD"]},
-        # High crane walkways (CLOUD, top_y = -108.0): [-356, -108, -196, -104] & [196, -108, 356, -104]
-        {"var_name": "crane_walk_left", "material": "Metal", "x": -276.0, "y": -106.0, "w": 160.0, "h": 4.0, "angle": 0.0, "tags": ["CLOUD"]},
-        {"var_name": "crane_walk_right", "material": "Metal", "x": 276.0, "y": -106.0, "w": 160.0, "h": 4.0, "angle": 0.0, "tags": ["CLOUD"]},
+        # One-way steel catwalks (CLOUD, top_y = -52.0 / -54.0)
+        {"var_name": "catwalk_step_left", "material": "Metal", "x": -228.0, "y": -52.0, "w": 8.0, "h": 4.0, "angle": 0.0, "tags": ["CLOUD"]},
+        {"var_name": "catwalk_step_right", "material": "Metal", "x": 228.0, "y": -52.0, "w": 8.0, "h": 4.0, "angle": 0.0, "tags": ["CLOUD"]},
+        # catwalk_left spans [-224.0, -165.0] so elevator `lift` shaft [-164.5, -131.5] has 100% clear vertical travel!
+        {"var_name": "catwalk_left", "material": "Metal", "x": -194.5, "y": -50.0, "w": 59.0, "h": 4.0, "angle": 0.0, "tags": ["CLOUD"]},
+        # catwalk_lift_step spans [-131.0, -109.0] between elevator shaft and crate_hanging_1 drop lane [-109.0, -79.0]
+        {"var_name": "catwalk_lift_step", "material": "Metal", "x": -120.0, "y": -50.0, "w": 22.0, "h": 4.0, "angle": 0.0, "tags": ["CLOUD"]},
+        # catwalk_mid_left spans [-79.0, -14.0] up to central glass skybridge [-14.0, 14.0]
+        {"var_name": "catwalk_mid_left", "material": "Metal", "x": -46.5, "y": -50.0, "w": 65.0, "h": 4.0, "angle": 0.0, "tags": ["CLOUD"]},
+        # catwalk_right spans [14.0, 92.0] at top_y = -52.0 (right edge x = 92.0 is the fulcrum for crate_hanging_2!)
+        {"var_name": "catwalk_right", "material": "Metal", "x": 53.0, "y": -50.0, "w": 78.0, "h": 4.0, "angle": 0.0, "tags": ["CLOUD"]},
+        # catwalk_right_outer spans [123.0, 224.0] at top_y = -52.0 (leaves 31px jumpable gap [92.0, 123.0] clear for crate_hanging_2!)
+        {"var_name": "catwalk_right_outer", "material": "Metal", "x": 173.5, "y": -50.0, "w": 101.0, "h": 4.0, "angle": 0.0, "tags": ["CLOUD"]},
+        # High crane walkways (CLOUD, top_y = -108.0): [-356, -102], [-86, 88], & [104, 356] (16px chain gaps at [-102, -86] & [88, 104])
+        {"var_name": "crane_walk_left", "material": "Metal", "x": -229.0, "y": -106.0, "w": 254.0, "h": 4.0, "angle": 0.0, "tags": ["CLOUD"]},
+        {"var_name": "crane_walk_center", "material": "Metal", "x": 1.0, "y": -106.0, "w": 174.0, "h": 4.0, "angle": 0.0, "tags": ["CLOUD"]},
+        {"var_name": "crane_walk_right", "material": "Metal", "x": 230.0, "y": -106.0, "w": 252.0, "h": 4.0, "angle": 0.0, "tags": ["CLOUD"]},
         # Ladders (top_y extends 12px above top platform, 0 solid NONE slabs intersecting shafts!)
         {"var_name": "ladder_left_upper", "material": "Metal", "x": -298.0, "y": -54.0, "w": 16.0, "h": 132.0, "angle": 0.0, "tags": ["LADDER"]},
         {"var_name": "ladder_right_upper", "material": "Metal", "x": 298.0, "y": -54.0, "w": 16.0, "h": 132.0, "angle": 0.0, "tags": ["LADDER"]},
@@ -412,17 +430,17 @@ def build_map_definition() -> dict:
         }
 
     premade_props = [
-        # Showcase #1: Open vertical drop lane on left side at x = -112.0 -> drops straight onto barrel_exp_drop on deck_left (y = 76.0)
-        make_prop("crate_hanging_1", "CRATE_HANGING", -112.0, -96.0),
+        # Showcase #1: Open vertical drop lane on left side at x = -94.0 -> drops straight onto barrel_exp_drop on deck_left (y = 76.0)
+        make_prop("crate_hanging_1", "CRATE_HANGING", -94.0, -96.0),
         # Showcase #2: Partial ledge strike on right side at x = 96.0 -> hits right edge of catwalk_right (x = 92.0, y = -52.0),
         # pivots clockwise on fulcrum (92.0, -52.0), slides off to the right, and settles flat (0 deg) on deck_right (y = 76.0)!
         make_prop("crate_hanging_2", "CRATE_HANGING", 96.0, -96.0),
         # Explosive barrel on deck_left directly below crate_hanging_1
-        make_prop("barrel_exp_drop", "BARREL_EXPLOSIVE", -112.0, 68.5),
+        make_prop("barrel_exp_drop", "BARREL_EXPLOSIVE", -94.0, 68.5),
         # Left deck cover & stacked crates (clear of stairs_left x=-164 and hatch_deck_left [-78, -58])
         make_prop("crate_deck_l1", "CRATE", -148.0, 68.0),
         make_prop("crate_deck_l2", "CRATE", -148.0, 52.0),
-        make_prop("barrel_deck_l", "BARREL", -92.0, 68.5),
+        make_prop("barrel_deck_l", "BARREL", -122.0, 68.5),
         make_prop("gascan_catwalk_l", "GASCAN", -196.0, -57.5),
         # Subdeck props (clear of ladder_pit_left [-76, -60] and ladder_pit_right [60, 76])
         make_prop("table_subdeck_l", "TABLE", -96.0, 135.0),
@@ -456,13 +474,26 @@ def build_map_definition() -> dict:
         {"index": 11, "id": "n11", "x": -298.0, "y": 12.0, "tag": "", "body_ref": "null"},
         {"index": 12, "id": "n12", "x": 228.0, "y": 12.0, "tag": "", "body_ref": "null"},
         {"index": 13, "id": "n13", "x": 298.0, "y": 12.0, "tag": "", "body_ref": "null"},
-        {"index": 14, "id": "n14", "x": -196.0, "y": -52.0, "tag": "", "body_ref": "null"},
+        {"index": 14, "id": "n14", "x": -172.0, "y": -52.0, "tag": "", "body_ref": "null"},
         {"index": 15, "id": "n15", "x": 0.0, "y": -52.0, "tag": "", "body_ref": "null"},
-        {"index": 16, "id": "n16", "x": 66.0, "y": -52.0, "tag": "", "body_ref": "null"},
+        {"index": 16, "id": "n16", "x": 87.0, "y": -52.0, "tag": "", "body_ref": "null"},
         {"index": 17, "id": "n17", "x": -298.0, "y": -108.0, "tag": "", "body_ref": "null"},
         {"index": 18, "id": "n18", "x": 298.0, "y": -108.0, "tag": "", "body_ref": "null"},
         {"index": 19, "id": "n19", "x": -298.0, "y": -56.0, "tag": "", "body_ref": "null"},
         {"index": 20, "id": "n20", "x": 298.0, "y": -56.0, "tag": "", "body_ref": "null"},
+        # Top crane walkway crossover nodes (y = -108.0)
+        {"index": 21, "id": "n21", "x": -106.0, "y": -108.0, "tag": "", "body_ref": "null"},
+        {"index": 22, "id": "n22", "x": -82.0, "y": -108.0, "tag": "", "body_ref": "null"},
+        {"index": 23, "id": "n23", "x": 0.0, "y": -108.0, "tag": "", "body_ref": "null"},
+        {"index": 24, "id": "n24", "x": 84.0, "y": -108.0, "tag": "", "body_ref": "null"},
+        {"index": 25, "id": "n25", "x": 108.0, "y": -108.0, "tag": "", "body_ref": "null"},
+        # Mid-upper catwalk crossover nodes (y = -52.0)
+        {"index": 26, "id": "n26", "x": -119.0, "y": -52.0, "tag": "", "body_ref": "null"},
+        {"index": 27, "id": "n27", "x": -74.0, "y": -52.0, "tag": "", "body_ref": "null"},
+        {"index": 28, "id": "n28", "x": -18.0, "y": -52.0, "tag": "", "body_ref": "null"},
+        {"index": 29, "id": "n29", "x": 18.0, "y": -52.0, "tag": "", "body_ref": "null"},
+        {"index": 30, "id": "n30", "x": 128.0, "y": -52.0, "tag": "", "body_ref": "null"},
+        {"index": 31, "id": "n31", "x": 196.0, "y": -52.0, "tag": "", "body_ref": "null"},
     ]
 
     def bind_pair(a: int, b: int, action: str = "ROAD"):
@@ -472,16 +503,23 @@ def build_map_definition() -> dict:
         ]
 
     ai_binds = []
-    for a, b in [(0, 11), (11, 10), (10, 2), (2, 3), (3, 1), (1, 4), (7, 8), (8, 12), (12, 13), (13, 9), (19, 14), (15, 16)]:
+    for a, b in [
+        (0, 11), (11, 10), (10, 2), (2, 3), (3, 1), (1, 4),
+        (7, 8), (8, 12), (12, 13), (13, 9),
+        (19, 14), (27, 28), (28, 15), (15, 29), (29, 16), (30, 31), (31, 20),
+        (17, 21), (22, 23), (23, 24), (25, 18),
+    ]:
         ai_binds.extend(bind_pair(a, b, "ROAD"))
     for a, b in [(4, 5), (6, 7), (11, 19), (19, 17), (13, 20), (20, 18)]:
         ai_binds.extend(bind_pair(a, b, "LADDER"))
-    ai_binds.extend(bind_pair(4, 7, "SPRINTJUMP"))
-    ai_binds.extend(bind_pair(5, 6, "SPRINTJUMP"))
-    ai_binds.append({"id": "", "from": 17, "to": 14, "mode": "STATIC", "action": "DIVE"})
-    ai_binds.append({"id": "", "from": 18, "to": 12, "mode": "STATIC", "action": "DIVE"})
-    ai_binds.append({"id": "", "from": 16, "to": 8, "mode": "STATIC", "action": "DIVE"})
-    ai_binds.append({"id": "", "from": 14, "to": 2, "mode": "STATIC", "action": "DIVE"})
+    for a, b in [(0, 17), (9, 18)]:
+        ai_binds.extend(bind_pair(a, b, "PORTAL"))
+    for a, b in [(21, 22), (24, 25), (26, 27), (28, 29)]:
+        ai_binds.extend(bind_pair(a, b, "JUMP"))
+    for a, b in [(14, 26), (16, 30)]:
+        ai_binds.extend(bind_pair(a, b, "SPRINTJUMP"))
+    for a, b in [(17, 14), (21, 27), (23, 15), (25, 30), (18, 31), (27, 1), (16, 7), (31, 8), (14, 2)]:
+        ai_binds.append({"id": "", "from": a, "to": b, "mode": "STATIC", "action": "DIVE"})
 
     return {
         "bounds_rect": [-380.0, -210.0, 760.0, 440.0],
@@ -499,11 +537,13 @@ def build_map_definition() -> dict:
         ],
         "weapon_spawns": [
             {"x": 0.0, "y": -52.0, "mask": full_weapon_mask},
+            {"x": 0.0, "y": -108.0, "mask": full_weapon_mask},
             {"x": -128.0, "y": 76.0, "mask": full_weapon_mask},
             {"x": 128.0, "y": 76.0, "mask": full_weapon_mask},
             {"x": -276.0, "y": 12.0, "mask": full_weapon_mask},
             {"x": 276.0, "y": 12.0, "mask": full_weapon_mask},
             {"x": -256.0, "y": -108.0, "mask": full_weapon_mask},
+            {"x": 256.0, "y": -108.0, "mask": full_weapon_mask},
         ],
         "portals": [
             {
@@ -556,7 +596,7 @@ def build_map_definition() -> dict:
             {"x": 276.0, "y": -172.0, "rope_length": 24.0},
         ],
         "glasses": [
-            {"x1": -40.0, "y1": -52.0, "x2": 40.0, "y2": -52.0},
+            {"x1": -14.0, "y1": -52.0, "x2": 14.0, "y2": -52.0},
             {"x1": -236.0, "y1": -48.0, "x2": -236.0, "y2": -18.0},
             {"x1": 236.0, "y1": -48.0, "x2": 236.0, "y2": -18.0},
         ],

@@ -276,8 +276,14 @@ func find_path(from_pos: Vector2, to_pos: Vector2, map_loader: Node2D) -> Array[
 	if nodes.is_empty():
 		return result
 
-	var start_idx: int = _find_closest_node_index(from_pos, nodes)
-	var goal_idx: int = _find_closest_node_index(to_pos, nodes)
+	var min_valid_x: float = 18.0
+	if map_loader.get("map_bounds") is Rect2:
+		var mb: Rect2 = map_loader.get("map_bounds") as Rect2
+		if mb.size.x > 0.0:
+			min_valid_x = mb.position.x + 18.0
+
+	var start_idx: int = _find_closest_node_index(from_pos, nodes, min_valid_x)
+	var goal_idx: int = _find_closest_node_index(to_pos, nodes, min_valid_x)
 	if start_idx < 0 or goal_idx < 0 or start_idx == goal_idx:
 		return result
 
@@ -364,6 +370,7 @@ func _reconstruct_path(
 		steps.push_front({
 			"from": prev,
 			"to": cur,
+			"from_pos": _node_pos(nodes, prev),
 			"target_pos": tpos,
 			"action": str(bind.get("action", "ROAD")),
 			"mode": str(bind.get("mode", "STATIC")),
@@ -373,13 +380,13 @@ func _reconstruct_path(
 	return steps
 
 
-func _find_closest_node_index(pos: Vector2, nodes: Array) -> int:
+func _find_closest_node_index(pos: Vector2, nodes: Array, min_valid_x: float = 18.0) -> int:
 	var best_idx: int = -1
 	var best_score: float = INF
 	for i: int in range(nodes.size()):
 		var npos: Vector2 = _node_pos(nodes, i)
 		# Skip virtual out-of-map portal dummy nodes (e.g. x < 15 or x > 590 on hazardous) as start/goal anchors
-		if npos.x < 18.0:
+		if npos.x < min_valid_x:
 			continue
 		var dx: float = absf(npos.x - pos.x)
 		var dy: float = absf(npos.y - pos.y)
@@ -420,17 +427,20 @@ func _follow_path_towards(
 		current_path_index = 0
 		_path_recalc_timer = float(max(6, update_delay * 3))
 
+	var step_from: Vector2 = my_pos
 	var step_target: Vector2 = goal_pos
 	var action: String = "ROAD"
 
 	if not current_path.is_empty() and current_path_index < current_path.size():
 		var step_data: Dictionary = current_path[current_path_index]
+		step_from = step_data.get("from_pos", my_pos) as Vector2
 		step_target = step_data.get("target_pos", goal_pos) as Vector2
 		action = str(step_data.get("action", "ROAD")).to_upper()
 		if absf(my_pos.x - step_target.x) <= 8.0 and absf(my_pos.y - step_target.y) <= 14.0:
 			current_path_index += 1
 			if current_path_index < current_path.size():
 				step_data = current_path[current_path_index]
+				step_from = step_data.get("from_pos", my_pos) as Vector2
 				step_target = step_data.get("target_pos", goal_pos) as Vector2
 				action = str(step_data.get("action", "ROAD")).to_upper()
 
@@ -457,14 +467,18 @@ func _follow_path_towards(
 				input["left"] = true
 			elif dx > 2.0:
 				input["right"] = true
-			input["jump"] = on_ground and _jump_pulse_toggle
+			var j_dir_x: float = signf(step_target.x - step_from.x)
+			var at_takeoff: bool = ((step_from.x - my_pos.x) * j_dir_x <= 5.0) if absf(j_dir_x) > 0.1 else (absf(my_pos.x - step_from.x) <= 8.0)
+			input["jump"] = on_ground and at_takeoff and _jump_pulse_toggle
 		"SPRINTJUMP":
 			if dx < -2.0:
 				input["left"] = true
 			elif dx > 2.0:
 				input["right"] = true
 			input["sprint"] = true
-			input["jump"] = on_ground and _jump_pulse_toggle
+			var sj_dir_x: float = signf(step_target.x - step_from.x)
+			var at_sj_takeoff: bool = ((step_from.x - my_pos.x) * sj_dir_x <= 6.0) if absf(sj_dir_x) > 0.1 else (absf(my_pos.x - step_from.x) <= 8.0)
+			input["jump"] = on_ground and at_sj_takeoff and _jump_pulse_toggle
 		"DIVE":
 			if dx < -2.0:
 				input["left"] = true
@@ -561,7 +575,7 @@ func _find_best_enemy(fighter: Node2D, match_world: Node2D) -> Node2D:
 	var best_score: float = INF
 
 	for f_var: Variant in fighters_var as Array:
-		if not (f_var is Node2D) or not is_instance_valid(f_var) or f_var == fighter:
+		if not is_instance_valid(f_var) or not (f_var is Node2D) or f_var == fighter:
 			continue
 		var other: Node2D = f_var as Node2D
 		if bool(other.get("is_dead")):
@@ -584,7 +598,7 @@ func _find_explosive_prop_near(target_pos: Vector2, match_world: Node2D, max_rad
 	var best_prop: Node2D = null
 	var best_dist: float = max_radius
 	for p_var: Variant in props_var as Array:
-		if not (p_var is Node2D) or not is_instance_valid(p_var):
+		if not is_instance_valid(p_var) or not (p_var is Node2D):
 			continue
 		var prop: Node2D = p_var as Node2D
 		if bool(prop.get("is_destroyed")):

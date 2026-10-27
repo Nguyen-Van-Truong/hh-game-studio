@@ -171,10 +171,12 @@ var _last_play_usec: Dictionary = {}
 
 
 func play_sfx(sound_id: String, volume_db: float = 0.0, pitch_scale: float = 1.0) -> void:
+	var key_u: String = sound_id.to_lower()
+	if key_u == "jump" or key_u == "jump_00":
+		return
 	if DisplayServer.get_name() == "headless":
 		return
 	var now_u: int = Time.get_ticks_usec()
-	var key_u: String = sound_id.to_lower()
 	if now_u - int(_last_play_usec.get(key_u, -100000)) < 28000:
 		return
 	_last_play_usec[key_u] = now_u
