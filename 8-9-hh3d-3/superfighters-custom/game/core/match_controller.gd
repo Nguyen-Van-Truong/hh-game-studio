@@ -1,0 +1,1616 @@
+class_name MatchController
+extends Node2D
+## Master Match Lifecycle & World Coordinator (SF-M4 / SF-M5).
+## Coordinates MapLoader, InteractiveProps, Weapon Pickups, Supply Parachute Crates,
+## FighterControllers (P1, P2, Bots), BotControllers, ProjectileManager, FireHazardSystem,
+## DynamicCamera, and MatchHudController across VS, Stage (12 Stages), and Survival modes.
+
+signal request_return_to_menu()
+
+const FLASH_FPS: float = 24.0
+const WEAPON_SPAWN_ORDER: Array[String] = [
+	"PISTOL",
+	"RIFLE",
+	"SHOTGUN",
+	"SNIPER",
+	"BAZOOKA",
+	"MOLOTOV",
+	"GRENADE",
+	"FLAMETHROWER",
+	"SWORD",
+	"MACHETE",
+	"AXE",
+	"SLOMO05",
+	"SLOMO10",
+	"PILLS",
+	"MEDKIT",
+	"MAGNUM",
+	"UZI",
+]
+const WEAPON_SPAWN_WEIGHTS: Array[int] = [11, 9, 7, 2, 2, 4, 6, 5, 2, 3, 3, 4, 3, 2, 2, 2, 6]
+
+const MapLoaderScript = preload("res://game/world/map_loader.gd")
+const InteractivePropScript = preload("res://game/world/interactive_prop.gd")
+const DynamicCameraScript = preload("res://game/world/dynamic_camera.gd")
+const BotControllerScript = preload("res://game/ai/bot_controller.gd")
+const MatchHudScript = preload("res://game/ui/match_hud_controller.gd")
+
+static var agent_unlocked: bool = false
+
+var map_loader: Node2D = null
+var projectile_manager: Node2D = null
+var fire_hazard_system: Node2D = null
+var dynamic_camera: Camera2D = null
+var hud_controller: CanvasLayer = null
+
+var fighters: Array[Node2D] = []
+var props: Array[Node2D] = []
+var pickups: Array[Dictionary] = []
+var floating_texts: Array[Dictionary] = []
+var bot_controllers: Dictionary = {} # instance_id -> BotController
+
+var match_config: Dictionary = {}
+var game_mode: String = "vs"
+var current_map_id: String = "rooftops"
+var two_player: bool = false
+var stage_level: int = 1
+var survival_wave: int = 1
+var survival_kills: int = 0
+
+var game_speed: float = 1.0
+var slowmo_timer: float = 0.0
+
+var round_state: String = "GET_READY" # "GET_READY", "FIGHT", "ROUND_OVER"
+var banner_text: String = "GET READY..."
+var banner_timer: float = 36.0
+var overhead_label_timer: float = 96.0
+var round_over_timer: float = 48.0
+var winner_text: String = ""
+var winner_slot: int = -1
+var winner_team: int = -1
+
+var _props_container: Node2D = null
+var _pickups_container: Node2D = null
+var _fighters_container: Node2D = null
+var _weapon_spawn_timer: float = 140.0
+var _supply_drop_timer: float = 280.0
+var _survival_spawn_timer: float = 120.0
+var _next_prop_id: int = 1
+
+
+# ------------------------------------------------------------------------------
+# Lightweight Fallback Implementations (used ONLY if sibling files are still WIP)
+# ------------------------------------------------------------------------------
+class FallbackFighterNode extends CharacterBody2D:
+	var slot_index: int = 0
+	var team_id: int = 0
+	var character_id: String = "johnny"
+	var display_name: String = "Johnny"
+	var is_bot: bool = false
+	var bot_difficulty: int = 2
+	var hp: float = 100.0
+	var max_hp: float = 100.0
+	var sprint_energy: float = 100.0
+	var max_sprint_energy: float = 100.0
+	var is_dead: bool = false
+	var is_gibbed: bool = false
+	var facing: int = 1
+	var current_state: String = "IDLE"
+	var on_ground: bool = true
+	var sprinting: bool = false
+	var kneeling: bool = false
+	var taking_cover: bool = false
+	var rolling: bool = false
+	var diving: bool = false
+	var climbing: bool = false
+	var falling: bool = false
+	var knockdowned: bool = false
+	var aiming: bool = false
+	var aim_mode: int = 0
+	var current_aim_pitch: float = 0.0
+	var burn_state: float = 0.0
+	var burned: bool = false
+	var cover_object_id: int = -1
+	var air_velocity: Vector2 = Vector2.ZERO
+	var inventory: Dictionary = {1: "FISTS", 2: "", 3: "", 4: "", 5: ""}
+	var inventory_ammo: Dictionary = {1: -1, 2: 0, 3: 0, 4: 0, 5: 0}
+	var active_gun_slot: int = 2
+	var rig_view: Node2D = null
+	var match_world: Node2D = null
+
+	func setup_fighter(p_slot: int, p_char_id: String, p_pos: Vector2, p_is_bot: bool = false, p_team: int = 0, p_diff: int = 2) -> void:
+		slot_index = p_slot
+		character_id = p_char_id.to_lower()
+		var cdata: Dictionary = MapLoaderScript.get_registry().call("get_character_data", character_id) as Dictionary
+		display_name = str(cdata.get("display_name", p_char_id.capitalize()))
+		global_position = p_pos
+		is_bot = p_is_bot
+		team_id = p_team
+		bot_difficulty = p_diff
+		hp = 100.0
+		max_hp = 100.0
+		sprint_energy = 100.0
+		max_sprint_energy = 100.0
+		is_dead = false
+		is_gibbed = false
+		burn_state = 0.0
+		burned = false
+		inventory = {1: "FISTS", 2: "", 3: "", 4: "", 5: ""}
+		inventory_ammo = {1: -1, 2: 0, 3: 0, 4: 0, 5: 0}
+
+	func step_fighter(step_24hz: float, input_state: Dictionary) -> void:
+		if is_dead:
+			return
+		var left: bool = bool(input_state.get("left", false))
+		var right: bool = bool(input_state.get("right", false))
+		var down: bool = bool(input_state.get("down", false))
+		var jump: bool = bool(input_state.get("jump", false))
+		var sprint: bool = bool(input_state.get("sprint", false))
+		var attack: bool = bool(input_state.get("attack", false))
+
+		sprinting = sprint and sprint_energy > 5.0
+		var spd: float = 3.4 if sprinting else 1.7
+		var move_x: float = 0.0
+		if left:
+			move_x = -spd
+			facing = -1
+		elif right:
+			move_x = spd
+			facing = 1
+
+		rolling = down and (left or right) and not sprinting
+		if rolling and burn_state > 0.0:
+			if burn_state < 100.0 and not burned:
+				burn_state = 0.0
+			else:
+				burn_state = 50.0
+				burned = false
+
+		if jump and on_ground:
+			air_velocity.y = -5.0
+			on_ground = false
+
+		if not on_ground:
+			air_velocity.y = minf(11.0, air_velocity.y + 0.6 * step_24hz)
+
+		global_position += Vector2(move_x, air_velocity.y) * step_24hz
+		if match_world != null and is_instance_valid(match_world):
+			var ml: Node2D = match_world.get("map_loader") as Node2D
+			if ml != null and ml.has_method("get_ground_y_below") and air_velocity.y >= 0.0:
+				var gy: float = float(ml.call("get_ground_y_below", global_position.x, global_position.y - 6.0, 14.0, true))
+				if gy < INF and global_position.y >= gy:
+					global_position.y = gy
+					air_velocity.y = 0.0
+					on_ground = true
+
+		aiming = attack
+		if burn_state >= 15.0:
+			hp -= (0.4 if burn_state >= 100.0 else 0.2) * step_24hz
+			if hp <= 0.0:
+				hp = 0.0
+				is_dead = true
+
+	func get_mid_pos() -> Vector2:
+		if diving:
+			return global_position
+		if knockdowned:
+			return global_position + Vector2(0.0, -3.0)
+		if kneeling or falling:
+			return global_position + Vector2(0.0, -6.0)
+		return global_position + Vector2(0.0, -8.0)
+
+	func get_hit_rect() -> Rect2:
+		var h: float = 12.0 if (kneeling or taking_cover or rolling) else 18.0
+		return Rect2(global_position.x - 6.0, global_position.y - h, 12.0, h)
+
+	func apply_bullet_hit(damage: float, _pushback: float, dir_x: int, _is_crit: bool, _hit_pos: Vector2, is_rocket: bool = false) -> bool:
+		if is_dead:
+			return false
+		if rolling or diving:
+			var dodge_chance: float = 0.5 if is_rocket else 0.9
+			if randf() < dodge_chance:
+				return false
+		hp = maxf(0.0, hp - damage)
+		air_velocity.x += float(dir_x) * 1.5
+		if hp <= 0.0:
+			is_dead = true
+			current_state = "DEAD"
+		return true
+
+	func apply_melee_hit(damage: float, dir_x: int, is_finisher: bool, _is_kick: bool, _is_jump_kick: bool, _attacker: Node2D = null) -> void:
+		if is_dead:
+			return
+		hp = maxf(0.0, hp - damage)
+		if is_finisher:
+			force_fall(float(dir_x) * 3.0, -2.5, true)
+		if hp <= 0.0:
+			is_dead = true
+			current_state = "DEAD"
+
+	func apply_explosion_hit(angle_rad: float, power: float, damage: float) -> void:
+		if is_dead:
+			return
+		hp = maxf(0.0, hp - damage)
+		force_fall(cos(angle_rad) * power, sin(angle_rad) * power - 2.0, true)
+		if hp <= 0.0:
+			is_dead = true
+			current_state = "DEAD"
+
+	func add_burn(amount: float, set_full: bool = false) -> void:
+		if set_full:
+			burn_state = 100.0
+			burned = true
+		else:
+			burn_state = clampf(burn_state + amount, 0.0, 100.0)
+			if burn_state >= 100.0:
+				burned = true
+
+	func force_fall(vx: float, vy: float, knockdown: bool = false) -> void:
+		air_velocity = Vector2(vx, vy)
+		falling = true
+		knockdowned = knockdown
+		on_ground = false
+
+	func equip_weapon(weapon_id: String, ammo_override: int = -999) -> void:
+		var wid: String = weapon_id.to_upper()
+		var wdata: Dictionary = MapLoaderScript.get_registry().call("get_weapon_data", wid) as Dictionary
+		var slot: int = int(wdata.get("slot", 2))
+		var ammo: int = ammo_override if ammo_override != -999 else int(wdata.get("ammo", 12))
+		inventory[slot] = wid
+		inventory_ammo[slot] = ammo
+		if slot in [2, 3]:
+			active_gun_slot = slot
+
+	func get_active_weapon_id() -> String:
+		if not str(inventory.get(active_gun_slot, "")).is_empty() and int(inventory_ammo.get(active_gun_slot, 0)) > 0:
+			return str(inventory[active_gun_slot])
+		if not str(inventory.get(3, "")).is_empty() and int(inventory_ammo.get(3, 0)) > 0:
+			return str(inventory[3])
+		if not str(inventory.get(2, "")).is_empty() and int(inventory_ammo.get(2, 0)) > 0:
+			return str(inventory[2])
+		return str(inventory.get(1, "FISTS"))
+
+	func get_active_weapon_ammo() -> int:
+		var wid: String = get_active_weapon_id()
+		for s: Variant in inventory.keys():
+			if str(inventory[s]) == wid:
+				return int(inventory_ammo.get(s, -1))
+		return -1
+
+
+class FallbackProjectileManager extends Node2D:
+	var match_world: Node2D = null
+	var active_bullets: Array[Dictionary] = []
+
+	func step_projectiles(_step_24hz: float) -> void:
+		pass
+
+	func spawn_bullet(_owner_fighter: Node2D, weapon_id: String, start_pos: Vector2, angle_deg: float, _ignore_cover_id: int = -1) -> void:
+		active_bullets.append({"weapon_id": weapon_id, "pos": start_pos, "angle": angle_deg})
+
+	func spawn_throwable(_owner_fighter: Node2D, _weapon_id: String, _start_pos: Vector2, _angle_deg: float, _remaining_fuse_frames: float = 72.0) -> void:
+		pass
+
+	func deflect_bullets_in_box(_deflector: Node2D, _rect: Rect2, _facing_dir: int) -> int:
+		return 0
+
+	func clear_all() -> void:
+		active_bullets.clear()
+
+
+class FallbackFireHazardSystem extends Node2D:
+	var match_world: Node2D = null
+	var explosion_count: int = 0
+	var fire_burst_count: int = 0
+	var glass_shard_bursts: int = 0
+
+	func step_hazards(_step_24hz: float) -> void:
+		pass
+
+	func trigger_explosion(world_pos: Vector2, base_radius: float = 33.0, player_damage: float = 20.0, player_power: float = 5.0, _source_fighter: Node2D = null) -> void:
+		explosion_count += 1
+		if match_world == null or not is_instance_valid(match_world):
+			return
+		var fighters_v: Variant = match_world.get("fighters")
+		if typeof(fighters_v) == TYPE_ARRAY:
+			for f_var: Variant in fighters_v as Array:
+				if f_var is Node2D and is_instance_valid(f_var):
+					var f: Node2D = f_var as Node2D
+					var d: float = f.global_position.distance_to(world_pos)
+					if d <= base_radius * 1.5 and f.has_method("apply_explosion_hit"):
+						var ang: float = (f.global_position - world_pos).angle()
+						f.call("apply_explosion_hit", ang, player_power, player_damage)
+
+	func trigger_fire_burst(_source_type: String, _world_pos: Vector2, _count: int = 18) -> void:
+		fire_burst_count += 1
+
+	func spawn_flamethrower_particle(_world_pos: Vector2, _angle_deg: float, _source_fighter: Node2D = null) -> void:
+		pass
+
+	func spawn_muzzle_flash(_world_pos: Vector2, _angle_deg: float, _weapon_id: String = "PISTOL") -> void:
+		pass
+
+	func spawn_shell_casing(_world_pos: Vector2, _eject_dir: int, _weapon_id: String = "PISTOL") -> void:
+		pass
+
+	func spawn_melee_trace(_world_pos: Vector2, _facing_dir: int, _weapon_id: String = "SWORD") -> void:
+		pass
+
+	func spawn_prop_debris(_prop_type: String, _world_pos: Vector2, _hit_dir: Vector2 = Vector2.UP, _count: int = 3) -> void:
+		pass
+
+	func spawn_smoke_puff(_world_pos: Vector2, _vel: Vector2 = Vector2(0.0, -0.35), _scale_val: float = 1.0) -> void:
+		pass
+
+	func spawn_ground_flame(_world_pos: Vector2, _duration: float = 95.0) -> void:
+		pass
+
+	func spawn_hit_sparks(_world_pos: Vector2, _is_blood: bool = false) -> void:
+		pass
+
+	func spawn_glass_shards(_p1: Vector2, _p2: Vector2, _impact_vel: Vector2) -> void:
+		glass_shard_bursts += 1
+
+	func spawn_gibs(_world_pos: Vector2, _impulse: Vector2) -> void:
+		pass
+
+	func clear_all() -> void:
+		explosion_count = 0
+		fire_burst_count = 0
+		glass_shard_bursts = 0
+
+
+# ------------------------------------------------------------------------------
+# MatchController Lifecycle
+# ------------------------------------------------------------------------------
+func _ready() -> void:
+	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	MapLoaderScript.get_registry()
+	MapLoaderScript.get_audio()
+	_ensure_subsystems()
+
+
+func _ensure_subsystems() -> void:
+	if map_loader == null or not is_instance_valid(map_loader):
+		var existing_ml: Node = get_node_or_null("MapLoader")
+		if existing_ml is Node2D:
+			map_loader = existing_ml as Node2D
+		else:
+			map_loader = MapLoaderScript.new()
+			map_loader.name = "MapLoader"
+			add_child(map_loader)
+	map_loader.set("match_world", self)
+
+	if _props_container == null or not is_instance_valid(_props_container):
+		_props_container = get_node_or_null("PropsContainer") as Node2D
+		if _props_container == null:
+			_props_container = Node2D.new()
+			_props_container.name = "PropsContainer"
+			_props_container.z_index = 2
+			add_child(_props_container)
+
+	if _pickups_container == null or not is_instance_valid(_pickups_container):
+		_pickups_container = get_node_or_null("PickupsContainer") as Node2D
+		if _pickups_container == null:
+			_pickups_container = Node2D.new()
+			_pickups_container.name = "PickupsContainer"
+			_pickups_container.z_index = 3
+			add_child(_pickups_container)
+
+	if _fighters_container == null or not is_instance_valid(_fighters_container):
+		_fighters_container = get_node_or_null("FightersContainer") as Node2D
+		if _fighters_container == null:
+			_fighters_container = Node2D.new()
+			_fighters_container.name = "FightersContainer"
+			_fighters_container.z_index = 5
+			add_child(_fighters_container)
+
+	if projectile_manager == null or not is_instance_valid(projectile_manager):
+		var existing_pm: Node = get_node_or_null("ProjectileManager")
+		if existing_pm is Node2D:
+			projectile_manager = existing_pm as Node2D
+		else:
+			projectile_manager = _instantiate_projectile_manager()
+			projectile_manager.name = "ProjectileManager"
+			projectile_manager.z_index = 6
+			add_child(projectile_manager)
+	projectile_manager.set("match_world", self)
+
+	if fire_hazard_system == null or not is_instance_valid(fire_hazard_system):
+		var existing_fhs: Node = get_node_or_null("FireHazardSystem")
+		if existing_fhs is Node2D:
+			fire_hazard_system = existing_fhs as Node2D
+		else:
+			fire_hazard_system = _instantiate_fire_hazard_system()
+			fire_hazard_system.name = "FireHazardSystem"
+			fire_hazard_system.z_index = 7
+			add_child(fire_hazard_system)
+	fire_hazard_system.set("match_world", self)
+
+	if dynamic_camera == null or not is_instance_valid(dynamic_camera):
+		var existing_cam: Node = get_node_or_null("DynamicCamera")
+		if existing_cam is Camera2D:
+			dynamic_camera = existing_cam as Camera2D
+		else:
+			dynamic_camera = DynamicCameraScript.new()
+			dynamic_camera.name = "DynamicCamera"
+			add_child(dynamic_camera)
+	dynamic_camera.set("match_world", self)
+
+	if hud_controller == null or not is_instance_valid(hud_controller):
+		var existing_hud: Node = get_node_or_null("MatchHud")
+		if existing_hud is CanvasLayer:
+			hud_controller = existing_hud as CanvasLayer
+		else:
+			hud_controller = MatchHudScript.new()
+			hud_controller.name = "MatchHud"
+			add_child(hud_controller)
+	hud_controller.set("match_world", self)
+
+
+func _instantiate_projectile_manager() -> Node2D:
+	var path: String = "res://game/world/projectile_manager.gd"
+	if ResourceLoader.exists(path):
+		var scr: Variant = load(path)
+		if scr is Script and (scr as Script).can_instantiate():
+			var inst: Variant = (scr as Script).new()
+			if inst is Node2D:
+				return inst as Node2D
+	return FallbackProjectileManager.new()
+
+
+func _instantiate_fire_hazard_system() -> Node2D:
+	var path: String = "res://game/world/fire_hazard_system.gd"
+	if ResourceLoader.exists(path):
+		var scr: Variant = load(path)
+		if scr is Script and (scr as Script).can_instantiate():
+			var inst: Variant = (scr as Script).new()
+			if inst is Node2D:
+				return inst as Node2D
+	return FallbackFireHazardSystem.new()
+
+
+func _instantiate_fighter_node() -> Node2D:
+	var scene_path: String = "res://scenes/fighter.tscn"
+	if ResourceLoader.exists(scene_path):
+		var packed: Resource = load(scene_path)
+		if packed is PackedScene:
+			var node: Node = (packed as PackedScene).instantiate()
+			if node is Node2D:
+				return node as Node2D
+	var scr_path: String = "res://game/fighter/fighter_controller.gd"
+	if ResourceLoader.exists(scr_path):
+		var scr: Variant = load(scr_path)
+		if scr is Script and (scr as Script).can_instantiate():
+			var inst: Variant = (scr as Script).new()
+			if inst is Node2D:
+				return inst as Node2D
+	return FallbackFighterNode.new()
+
+
+func _clear_match_entities() -> void:
+	for f: Node2D in fighters:
+		if is_instance_valid(f):
+			if f.get_parent() != null:
+				f.get_parent().remove_child(f)
+			f.free()
+	fighters.clear()
+	bot_controllers.clear()
+
+	for p: Node2D in props:
+		if is_instance_valid(p):
+			if p.get_parent() != null:
+				p.get_parent().remove_child(p)
+			p.free()
+	props.clear()
+
+	for pk: Dictionary in pickups:
+		var spr: Node2D = pk.get("node", null) as Node2D
+		if spr != null and is_instance_valid(spr):
+			if spr.get_parent() != null:
+				spr.get_parent().remove_child(spr)
+			spr.free()
+	pickups.clear()
+	floating_texts.clear()
+
+	if projectile_manager != null and is_instance_valid(projectile_manager) and projectile_manager.has_method("clear_all"):
+		projectile_manager.call("clear_all")
+	if fire_hazard_system != null and is_instance_valid(fire_hazard_system) and fire_hazard_system.has_method("clear_all"):
+		fire_hazard_system.call("clear_all")
+	if map_loader != null and is_instance_valid(map_loader) and map_loader.has_method("_clear_map_state"):
+		map_loader.call("_clear_map_state")
+
+
+func get_stage_definition(level: int) -> Dictionary:
+	var clamped_lvl: int = clampi(level, 1, 12)
+	var stages: Array[Dictionary] = [
+		{"stage": 1, "map_id": "storage", "bots": [{"char": "boris", "diff": 1}], "start_gun": "", "title": "STAGE 1: WAREHOUSE BRAWL"},
+		{"stage": 2, "map_id": "rooftops", "bots": [{"char": "ivan", "diff": 1}, {"char": "savage", "diff": 1}], "start_gun": "PISTOL", "title": "STAGE 2: ROOFTOP PATROL"},
+		{"stage": 3, "map_id": "backstreets", "bots": [{"char": "brody", "diff": 1}, {"char": "mac", "diff": 2}], "start_gun": "PISTOL", "title": "STAGE 3: BACKSTREET AMBUSH"},
+		{"stage": 4, "map_id": "subway", "bots": [{"char": "cruger", "diff": 2}, {"char": "savage", "diff": 2}], "start_gun": "UZI", "title": "STAGE 4: SUBWAY CROSSFIRE"},
+		{"stage": 5, "map_id": "police_station", "bots": [{"char": "hideki", "diff": 2}, {"char": "blaire", "diff": 2}], "start_gun": "SHOTGUN", "title": "STAGE 5: PRECINCT SIEGE"},
+		{"stage": 6, "map_id": "junkyard", "bots": [{"char": "boris", "diff": 2}, {"char": "ivan", "diff": 2}, {"char": "brody", "diff": 2}], "start_gun": "SHOTGUN", "title": "STAGE 6: JUNKYARD HAVOC"},
+		{"stage": 7, "map_id": "hazardous", "bots": [{"char": "cruger", "diff": 2}, {"char": "hideki", "diff": 2}, {"char": "savage", "diff": 2}], "start_gun": "RIFLE", "title": "STAGE 7: ACID REFINERY"},
+		{"stage": 8, "map_id": "cargo", "bots": [{"char": "blaire", "diff": 2}, {"char": "mac", "diff": 3}, {"char": "ivan", "diff": 2}], "start_gun": "TOMMY_GUN", "title": "STAGE 8: CARGO CONTAINMENT"},
+		{"stage": 9, "map_id": "tower", "bots": [{"char": "hideki", "diff": 3}, {"char": "cruger", "diff": 3}, {"char": "brody", "diff": 2}], "start_gun": "MAGNUM", "title": "STAGE 9: TOWER ASCENSION"},
+		{"stage": 10, "map_id": "testing_floor", "bots": [{"char": "blaire", "diff": 3}, {"char": "hideki", "diff": 3}, {"char": "mac", "diff": 3}], "start_gun": "SNIPER", "title": "STAGE 10: TESTING LAB"},
+		{"stage": 11, "map_id": "police_station", "bots": [{"char": "boris", "diff": 3}, {"char": "cruger", "diff": 3}, {"char": "savage", "diff": 3}, {"char": "ivan", "diff": 3}], "start_gun": "M60", "title": "STAGE 11: ELITE SQUADRON"},
+		{"stage": 12, "map_id": "rooftops", "bots": [{"char": "agent", "diff": 3}, {"char": "hideki", "diff": 3}, {"char": "blaire", "diff": 3}], "start_gun": "RIFLE", "title": "STAGE 12: FINAL BOSS — AGENT"},
+	]
+	return stages[clamped_lvl - 1]
+
+
+func start_match(config: Dictionary = {}) -> void:
+	_ensure_subsystems()
+	_clear_match_entities()
+
+	match_config = config.duplicate(true)
+	var raw_mode: String = str(config.get("mode", "vs")).to_lower()
+	if raw_mode == "vs_2p":
+		game_mode = "vs"
+		two_player = true
+	else:
+		game_mode = raw_mode if raw_mode in ["vs", "stage", "survival"] else "vs"
+		two_player = bool(config.get("two_player", false))
+
+	stage_level = clampi(int(config.get("stage_level", 1)), 1, 12)
+	survival_wave = 1
+	survival_kills = 0
+
+	var roster_pool: Array[String] = ["johnny", "boris", "agent", "hideki", "blaire", "savage", "cruger", "ivan", "brody", "mac", "funnyman", "jeff", "shinobi"]
+	var vs_map_pool: Array[String] = ["rooftops", "storage", "police_station", "hazardous", "subway", "tower", "junkyard", "cargo", "steel_harbor"]
+
+	var p1_char: String = str(config.get("p1_char", "johnny")).to_lower()
+	if p1_char == "random" or p1_char.is_empty():
+		p1_char = roster_pool[randi() % roster_pool.size()]
+	var p2_char: String = str(config.get("p2_char", "agent")).to_lower()
+	if p2_char == "random" or p2_char.is_empty():
+		p2_char = roster_pool[randi() % roster_pool.size()]
+	var bot_count: int = clampi(int(config.get("bot_count", 0 if two_player else 1)), 0, 7)
+	var bot_diff: int = clampi(int(config.get("bot_difficulty", 2)), 1, 4)
+
+	var stage_def: Dictionary = {}
+	if game_mode == "stage":
+		stage_def = get_stage_definition(stage_level)
+		current_map_id = str(stage_def.get("map_id", "rooftops"))
+		two_player = bool(config.get("two_player", false))
+	elif game_mode == "survival":
+		current_map_id = str(config.get("map_id", "survival"))
+	else:
+		current_map_id = str(config.get("map_id", "rooftops")).to_lower()
+		if current_map_id == "random" or current_map_id.is_empty():
+			current_map_id = vs_map_pool[randi() % vs_map_pool.size()]
+
+	# 1. Load Map
+	map_loader.load_map(current_map_id)
+
+	# 2. Spawn Premade Interactive Props from map data
+	_spawn_map_premade_props()
+
+	# 3. Spawn initial weapons at weapon_spawns
+	_spawn_initial_map_weapons()
+
+	# 4. Spawn Fighters (P1, P2, Bots)
+	# Prioritize static floor/cloud spawns before hanging-crate spawns so multi-bot matches spawn on solid ground first
+	var raw_spawns: Array[Vector2] = map_loader.player_spawns.duplicate()
+	var spawns: Array[Vector2] = []
+	var hanging_spawns: Array[Vector2] = []
+	for sp_cand: Vector2 in raw_spawns:
+		var has_Crate_below: bool = false
+		for pr: Node2D in props:
+			if is_instance_valid(pr) and bool(pr.get("is_hanging_crate")):
+				if absf(sp_cand.x - pr.global_position.x) <= 18.0 and absf(sp_cand.y - pr.global_position.y) <= 24.0:
+					has_Crate_below = true
+					break
+		if has_Crate_below:
+			hanging_spawns.append(sp_cand)
+		else:
+			spawns.append(sp_cand)
+	for hsp: Vector2 in hanging_spawns:
+		spawns.append(hsp)
+	if spawns.is_empty():
+		spawns = [Vector2(94.0, 89.0), Vector2(162.0, 89.0), Vector2(285.0, 188.0), Vector2(392.0, 291.0)]
+
+	var p1_team: int = int(config.get("p1_team", 1 if game_mode in ["stage", "survival"] else 0))
+	var p1_pos: Vector2 = spawns[0]
+	var p1_node: Node2D = _spawn_fighter_instance(0, p1_char, p1_pos, false, p1_team, bot_diff)
+
+	if game_mode == "stage":
+		var start_gun: String = str(stage_def.get("start_gun", ""))
+		if not start_gun.is_empty() and p1_node.has_method("equip_weapon"):
+			p1_node.call("equip_weapon", start_gun)
+		var slot_offset: int = 1
+		if two_player:
+			var p2_pos_st: Vector2 = spawns[1 % spawns.size()]
+			var p2_node_st: Node2D = _spawn_fighter_instance(1, p2_char, p2_pos_st, false, 1, bot_diff)
+			if not start_gun.is_empty() and p2_node_st.has_method("equip_weapon"):
+				p2_node_st.call("equip_weapon", start_gun)
+			slot_offset = 2
+		var stage_bots: Array = stage_def.get("bots", []) as Array
+		for i: int in range(stage_bots.size()):
+			var binfo: Dictionary = stage_bots[i] as Dictionary
+			var bpos: Vector2 = spawns[(i + slot_offset) % spawns.size()]
+			var bnode: Node2D = _spawn_fighter_instance(
+				i + slot_offset,
+				str(binfo.get("char", "boris")),
+				bpos,
+				true,
+				2,
+				int(binfo.get("diff", 2))
+			)
+			if not start_gun.is_empty() and bnode.has_method("equip_weapon"):
+				bnode.call("equip_weapon", start_gun)
+	elif game_mode == "survival":
+		if two_player:
+			var p2_pos_s: Vector2 = spawns[1 % spawns.size()]
+			_spawn_fighter_instance(1, p2_char, p2_pos_s, false, 1, bot_diff)
+		_spawn_survival_wave_enemies(2)
+	else:
+		# VS Mode (1P vs Bots or 2P Local + optional 0..7 Bots)
+		var next_slot: int = 1
+		if two_player:
+			var p2_team: int = int(config.get("p2_team", 0))
+			var p2_pos: Vector2 = spawns[1 % spawns.size()]
+			_spawn_fighter_instance(1, p2_char, p2_pos, false, p2_team, bot_diff)
+			next_slot = 2
+
+		var bot_cfgs_v: Variant = config.get("bot_configs", [])
+		var bot_cfgs: Array = bot_cfgs_v as Array if typeof(bot_cfgs_v) == TYPE_ARRAY else []
+		for b_i: int in range(bot_count):
+			var b_char: String = roster_pool[(b_i + next_slot) % roster_pool.size()]
+			var b_team: int = int(config.get("bot_team", 0))
+			var b_diff: int = bot_diff
+			if b_i < bot_cfgs.size() and typeof(bot_cfgs[b_i]) == TYPE_DICTIONARY:
+				var bc: Dictionary = bot_cfgs[b_i] as Dictionary
+				var raw_bchar: String = str(bc.get("char", "random")).to_lower()
+				if raw_bchar != "random" and not raw_bchar.is_empty():
+					b_char = raw_bchar
+				b_team = int(bc.get("team", b_team))
+				b_diff = clampi(int(bc.get("diff", b_diff)), 1, 4)
+			var b_pos: Vector2 = spawns[(next_slot + b_i) % spawns.size()]
+			_spawn_fighter_instance(next_slot + b_i, b_char, b_pos, true, b_team, b_diff)
+
+	# 5. Reset round banners, slow-mo, and camera
+	game_speed = 1.0
+	slowmo_timer = 0.0
+	round_state = "GET_READY"
+	banner_text = str(stage_def.get("title", "GET READY...")) if game_mode == "stage" else "GET READY..."
+	banner_timer = 32.0
+	overhead_label_timer = 96.0
+	round_over_timer = 48.0
+	winner_text = ""
+	winner_slot = -1
+	winner_team = -1
+	_weapon_spawn_timer = 72.0
+	_supply_drop_timer = 999999.0
+	_survival_spawn_timer = 120.0
+
+	dynamic_camera.reset_for_map(map_loader.map_bounds, p1_pos)
+	dynamic_camera.step_camera(4.0, fighters)
+	hud_controller.update_hud()
+
+	var audio: Node = MapLoaderScript.get_audio()
+	if audio != null and is_instance_valid(audio):
+		if audio.has_method("play_bgm"):
+			audio.call("play_bgm", "ambient_loop_1")
+		elif audio.has_method("play_music"):
+			audio.call("play_music", "ambient_loop_1", -6.0)
+
+
+func _spawn_fighter_instance(
+	slot_idx: int,
+	char_id: String,
+	pos: Vector2,
+	is_bot_flag: bool,
+	team: int,
+	diff: int
+) -> Node2D:
+	var spawn_pos: Vector2 = pos
+	if map_loader != null and is_instance_valid(map_loader) and map_loader.has_method("get_ground_y_below"):
+		var gy: float = float(map_loader.call("get_ground_y_below", pos.x, pos.y - 6.0, 26.0, true))
+		if gy < INF:
+			spawn_pos.y = gy
+
+	var fnode: Node2D = _instantiate_fighter_node()
+	fnode.name = ("Bot_" if is_bot_flag else "Player_") + str(slot_idx + 1)
+	fnode.set("match_world", self)
+	_fighters_container.add_child(fnode)
+	if fnode.has_method("setup_fighter"):
+		fnode.call("setup_fighter", slot_idx, char_id, spawn_pos, is_bot_flag, team, diff)
+	else:
+		fnode.global_position = spawn_pos
+		fnode.set("slot_index", slot_idx)
+		fnode.set("character_id", char_id)
+		fnode.set("is_bot", is_bot_flag)
+		fnode.set("team_id", team)
+		fnode.set("bot_difficulty", diff)
+
+	# Authentic Superfighters Y8 default loadout (Pistol 12 + 3 Grenades in VS/Survival modes)
+	var default_loadout_enabled: bool = bool(match_config.get("start_with_loadout", game_mode != "stage"))
+	if default_loadout_enabled and fnode.has_method("equip_default_loadout"):
+		fnode.call("equip_default_loadout")
+
+	if spawn_pos.x > map_loader.map_bounds.get_center().x:
+		fnode.set("facing", -1)
+	else:
+		fnode.set("facing", 1)
+	if fnode.has_method("_sync_rig_view"):
+		fnode.call("_sync_rig_view")
+
+	fighters.append(fnode)
+	if is_bot_flag:
+		bot_controllers[fnode.get_instance_id()] = BotControllerScript.new(diff)
+	return fnode
+
+
+func _spawn_map_premade_props() -> void:
+	_next_prop_id = 1
+	var hanging_crates: Array[Node2D] = []
+	var tabletop_types: Array[String] = ["COMP", "COMP_SCREEN", "PAPER", "LAMP_1", "CRATE_HANGING", "CRATE_HANGING_HOLDER"]
+
+	# 1. Collect all mutually-exclusive random if/else branch groups from Maps.as
+	var group_branches: Dictionary = {}
+	for pr_data: Dictionary in map_loader.premade_props_data:
+		var conds: Variant = pr_data.get("conditions", [])
+		if typeof(conds) == TYPE_ARRAY and not (conds as Array).is_empty():
+			for c_var: Variant in conds as Array:
+				var g_id: int = 0
+				var b_id: int = 0
+				if typeof(c_var) == TYPE_ARRAY and (c_var as Array).size() >= 2:
+					var ca: Array = c_var as Array
+					g_id = int(ca[0])
+					b_id = int(ca[1])
+				elif typeof(c_var) == TYPE_DICTIONARY:
+					var cd: Dictionary = c_var as Dictionary
+					g_id = int(cd.get("group", 0))
+					b_id = int(cd.get("branch", 0))
+				if g_id > 0:
+					if not group_branches.has(g_id):
+						group_branches[g_id] = []
+					var arr: Array = group_branches[g_id] as Array
+					if not arr.has(b_id):
+						arr.append(b_id)
+		else:
+			var bg: int = int(pr_data.get("branch_group", 0))
+			var bid: int = int(pr_data.get("branch_id", 0))
+			if bg > 0:
+				if not group_branches.has(bg):
+					group_branches[bg] = []
+				var arr2: Array = group_branches[bg] as Array
+				if not arr2.has(bid):
+					arr2.append(bid)
+
+	var winning_branches: Dictionary = {}
+	for g_key: Variant in group_branches.keys():
+		var b_list: Array = group_branches[g_key] as Array
+		if not b_list.is_empty():
+			winning_branches[g_key] = b_list[randi() % b_list.size()]
+
+	# 2. Spawn props from active branches with authentic random candidate selection
+	for pr_data: Dictionary in map_loader.premade_props_data:
+		var branch_active: bool = true
+		var conds_v: Variant = pr_data.get("conditions", [])
+		if typeof(conds_v) == TYPE_ARRAY and not (conds_v as Array).is_empty():
+			for c_var: Variant in conds_v as Array:
+				var g_id: int = 0
+				var b_id: int = 0
+				if typeof(c_var) == TYPE_ARRAY and (c_var as Array).size() >= 2:
+					var ca: Array = c_var as Array
+					g_id = int(ca[0])
+					b_id = int(ca[1])
+				elif typeof(c_var) == TYPE_DICTIONARY:
+					var cd: Dictionary = c_var as Dictionary
+					g_id = int(cd.get("group", 0))
+					b_id = int(cd.get("branch", 0))
+				if g_id > 0 and winning_branches.has(g_id) and int(winning_branches[g_id]) != b_id:
+					branch_active = false
+					break
+		else:
+			var bg: int = int(pr_data.get("branch_group", 0))
+			var bid: int = int(pr_data.get("branch_id", 0))
+			if bg > 0 and winning_branches.has(bg) and int(winning_branches[bg]) != bid:
+				branch_active = false
+		if not branch_active:
+			continue
+
+		var vname: String = str(pr_data.get("var_name", ""))
+		# Skip elevator bodies because MapLoader already constructs oscillating AnimatableBody2D for them
+		var is_elevator_body: bool = false
+		for el: Dictionary in map_loader.elevators:
+			if not vname.is_empty() and str(el.get("var_name", "")) == vname:
+				is_elevator_body = true
+				break
+		if is_elevator_body:
+			continue
+
+		var candidates: Array = pr_data.get("candidates", []) as Array
+		if candidates.is_empty():
+			continue
+		var chosen_type: String = str(candidates[randi() % candidates.size()]).to_upper().strip_edges()
+		if chosen_type == "NONE" or chosen_type.is_empty():
+			continue
+
+		var px: float = float(pr_data.get("x", 0.0))
+		var py: float = float(pr_data.get("y", 0.0))
+		var pang: float = float(pr_data.get("angle", 0.0))
+
+		# Guard against overlapping floor props from duplicate coordinates
+		if not (chosen_type in tabletop_types):
+			var overlaps_existing: bool = false
+			for existing_p: Node2D in props:
+				if not is_instance_valid(existing_p):
+					continue
+				var ex_type: String = str(existing_p.get("prop_type")).to_upper()
+				if ex_type in tabletop_types:
+					continue
+				if absf(px - existing_p.global_position.x) < 14.0 and absf(py - existing_p.global_position.y) < 12.0:
+					overlaps_existing = true
+					break
+			if overlaps_existing:
+				continue
+
+		var prop: Node2D = spawn_interactive_prop(chosen_type, Vector2(px, py), pang, vname)
+		if chosen_type == "CRATE_HANGING" and prop != null:
+			# AS3 Maps.as:441-442 vs 1118-1155, 2535-2559:
+			# Only CRATE_HANGING instances with var_name starting with "crate_hanging" have a suspended CRATE_HANGING_HOLDER & rope;
+			# unnamed CRATE_HANGING props (e.g. on testing_floor / tower trapdoors) are free dynamic heavy crates resting on the floor/stack!
+			if vname.begins_with("crate_hanging"):
+				hanging_crates.append(prop)
+			else:
+				prop.set("is_hanging_released", true)
+				prop.set("kinematic", false)
+
+	# Automatically create shootable CRATE_HANGING_HOLDER flush above every suspended CRATE_HANGING (Maps.as:1120, 2536)
+	for hcrate: Node2D in hanging_crates:
+		var h_height: float = float(hcrate.get("height"))
+		var holder_pos: Vector2 = hcrate.global_position + Vector2(0.0, -h_height * 0.5 - 3.5)
+		var holder: Node2D = spawn_interactive_prop("CRATE_HANGING_HOLDER", holder_pos, 0.0, str(hcrate.get("var_name")) + "_holder")
+		var anchor_y: float = _resolve_hanging_anchor_y(hcrate, holder_pos)
+		hcrate.call("link_hanging_holder", holder, anchor_y)
+
+	# Settle initial props onto floor / prop-stacks (bottom-to-top by Y)
+	var sorted_props: Array[Node2D] = props.duplicate()
+	sorted_props.sort_custom(func(a: Node2D, b: Node2D) -> bool: return a.global_position.y > b.global_position.y)
+	for _s: int in range(12):
+		for p: Node2D in sorted_props:
+			if is_instance_valid(p) and not bool(p.get("kinematic")):
+				if p.has_method("step_prop"):
+					p.call("step_prop", 1.0)
+
+
+func spawn_interactive_prop(
+	prop_type: String,
+	pos: Vector2,
+	angle: float = 0.0,
+	var_name: String = ""
+) -> Node2D:
+	var prop: Node2D = InteractivePropScript.new()
+	prop.name = prop_type + "_" + str(_next_prop_id)
+	prop.set("match_world", self)
+	prop.set("map_loader", map_loader)
+	_props_container.add_child(prop)
+	prop.call("setup_prop", prop_type, pos, angle, var_name, _next_prop_id)
+	_next_prop_id += 1
+	props.append(prop)
+	return prop
+
+
+func _resolve_hanging_anchor_y(hcrate: Node2D, holder_pos: Vector2) -> float:
+	var vn: String = str(hcrate.get("var_name"))
+	# Exact AS3 ceiling DistanceJoint anchors (Maps.as:1126-1137 for Hazardous/Cargo, Maps.as:2540-2543 for Storage/Junkyard)
+	if current_map_id in ["hazardous", "cargo"]:
+		if vn == "crate_hanging_1":
+			return 34.0
+		if vn == "crate_hanging_2":
+			return 128.0
+		if vn == "crate_hanging_3":
+			return 134.0
+	if current_map_id in ["storage", "junkyard"] and vn.begins_with("crate_hanging"):
+		return 51.0
+	if map_loader != null and is_instance_valid(map_loader):
+		var s_var: Variant = map_loader.get("solid_rects")
+		if typeof(s_var) == TYPE_ARRAY:
+			var best_ceil_y: float = -INF
+			var cx: float = hcrate.global_position.x
+			for sr_v: Variant in s_var as Array:
+				if sr_v is Rect2:
+					var sr: Rect2 = sr_v as Rect2
+					if cx >= sr.position.x - 2.0 and cx <= sr.end.x + 2.0 and sr.end.y <= holder_pos.y - 12.0:
+						if sr.end.y > best_ceil_y:
+							best_ceil_y = sr.end.y
+			if best_ceil_y > -INF:
+				return best_ceil_y
+	return minf(51.0, holder_pos.y - 36.0)
+
+
+func spawn_hanging_crate_pair(pos: Vector2, contained_wpn: String = "BAZOOKA") -> Dictionary:
+	var hcrate: Node2D = spawn_interactive_prop("CRATE_HANGING", pos, 0.0, "crate_hanging_custom")
+	hcrate.set("contained_weapon_id", contained_wpn)
+	var h_height: float = float(hcrate.get("height"))
+	var holder_pos: Vector2 = pos + Vector2(0.0, -h_height * 0.5 - 3.5)
+	var holder: Node2D = spawn_interactive_prop("CRATE_HANGING_HOLDER", holder_pos, 0.0, "crate_hanging_holder_custom")
+	var anchor_y: float = _resolve_hanging_anchor_y(hcrate, holder_pos)
+	hcrate.call("link_hanging_holder", holder, anchor_y)
+	return {"crate": hcrate, "holder": holder}
+
+
+func spawn_supply_parachute_crate(x_pos: float = -9999.0, weapon_id: String = "") -> Node2D:
+	var drop_x: float = x_pos
+	if drop_x <= -9000.0:
+		if not map_loader.weapon_spawns.is_empty():
+			var ws: Dictionary = map_loader.weapon_spawns[randi() % map_loader.weapon_spawns.size()]
+			drop_x = float(ws.get("x", 260.0))
+		elif not map_loader.player_spawns.is_empty():
+			var ps: Vector2 = map_loader.player_spawns[randi() % map_loader.player_spawns.size()]
+			drop_x = ps.x
+		else:
+			drop_x = map_loader.map_bounds.get_center().x
+
+	var drop_y: float = map_loader.map_bounds.position.y + 18.0
+	var crate: Node2D = InteractivePropScript.new()
+	crate.name = "SupplyParachuteCrate_" + str(_next_prop_id)
+	crate.set("match_world", self)
+	crate.set("map_loader", map_loader)
+	_props_container.add_child(crate)
+	crate.call("setup_supply_parachute_crate", Vector2(drop_x, drop_y), weapon_id, _next_prop_id)
+	_next_prop_id += 1
+	props.append(crate)
+	return crate
+
+
+class PickupVisualNode extends Node2D:
+	var weapon_tex: Texture2D = null
+	var highlighted: bool = false
+	var settled: bool = true
+
+	func _draw() -> void:
+		if weapon_tex != null:
+			var tsize: Vector2 = weapon_tex.get_size()
+			draw_texture(weapon_tex, Vector2(-tsize.x * 0.5, -tsize.y - 1.0))
+		# Draw authentic white 4-corner '[ ]' pickup_sign bracket (Symbol 427.xml Frame 1 / Frame 2)
+		var bw: float = 18.0 if not highlighted else 21.0
+		var bh: float = 10.0 if not highlighted else 12.5
+		var bx: float = -bw * 0.5
+		var by: float = -bh - 0.5
+		var arm: float = 3.2 if not highlighted else 4.2
+		var col: Color = Color(1.0, 1.0, 1.0, 0.9) if not highlighted else Color(1.0, 0.96, 0.52, 1.0)
+		var lw: float = 1.0 if not highlighted else 1.5
+		draw_line(Vector2(bx, by), Vector2(bx + arm, by), col, lw)
+		draw_line(Vector2(bx, by), Vector2(bx, by + arm), col, lw)
+		draw_line(Vector2(bx + bw - arm, by), Vector2(bx + bw, by), col, lw)
+		draw_line(Vector2(bx + bw, by), Vector2(bx + bw, by + arm), col, lw)
+		draw_line(Vector2(bx, by + bh - arm), Vector2(bx, by + bh), col, lw)
+		draw_line(Vector2(bx, by + bh), Vector2(bx + arm, by + bh), col, lw)
+		draw_line(Vector2(bx + bw - arm, by + bh), Vector2(bx + bw, by + bh), col, lw)
+		draw_line(Vector2(bx + bw, by + bh - arm), Vector2(bx + bw, by + bh), col, lw)
+
+
+func _spawn_initial_map_weapons() -> void:
+	var count: int = mini(3, map_loader.weapon_spawns.size())
+	for i: int in range(count):
+		var ws: Dictionary = map_loader.weapon_spawns[i]
+		var wx: float = float(ws.get("x", 260.0))
+		var wy: float = float(ws.get("y", 180.0))
+		var wid: String = _pick_weapon_from_mask(ws.get("mask", []) as Array, i)
+		spawn_weapon_pickup(wid, Vector2(wx, wy), -999, false, i)
+
+
+func _pick_weapon_from_mask(mask: Array, seed_idx: int = 0) -> String:
+	var weighted_pool: Array[String] = []
+	for i: int in range(WEAPON_SPAWN_ORDER.size()):
+		var enabled: bool = true
+		if i < mask.size():
+			enabled = int(mask[i]) != 0
+		if enabled:
+			var w: int = WEAPON_SPAWN_WEIGHTS[i] if i < WEAPON_SPAWN_WEIGHTS.size() else 2
+			for _k: int in range(maxi(1, w)):
+				weighted_pool.append(WEAPON_SPAWN_ORDER[i])
+	if weighted_pool.is_empty():
+		return WEAPON_SPAWN_ORDER[seed_idx % WEAPON_SPAWN_ORDER.size()]
+	return weighted_pool[(seed_idx * 7 + randi()) % weighted_pool.size()]
+
+
+func spawn_weapon_pickup(
+	weapon_id: String,
+	pos: Vector2,
+	ammo: int = -999,
+	from_sky_crate: bool = false,
+	spawn_point_idx: int = -1
+) -> void:
+	var reg: Node = MapLoaderScript.get_registry()
+	var wid: String = weapon_id.to_upper().strip_edges()
+	var wdata: Dictionary = reg.call("get_weapon_data", wid) as Dictionary
+	if wdata.is_empty():
+		wid = "PISTOL"
+		wdata = reg.call("get_weapon_data", "PISTOL") as Dictionary
+
+	var final_ammo: int = ammo if ammo != -999 else int(wdata.get("ammo", 12))
+	var snap_y: float = float(map_loader.call("get_ground_y_below", pos.x, pos.y - 8.0, 48.0, true))
+	var is_settled: bool = (not from_sky_crate) and (snap_y < INF)
+	var final_pos: Vector2 = Vector2(pos.x, snap_y if is_settled else pos.y)
+
+	# Enforce AS3 WeaponSpawn.as single-occupancy rule: a spawn point can hold at most ONE LinkedWeapon at a time!
+	if spawn_point_idx >= 0:
+		for i_ex: int in range(pickups.size() - 1, -1, -1):
+			var ex_pk: Dictionary = pickups[i_ex]
+			if int(ex_pk.get("spawn_point_idx", -1)) == spawn_point_idx:
+				var ex_node: Node2D = ex_pk.get("node", null) as Node2D
+				if ex_node != null and is_instance_valid(ex_node):
+					if ex_node.get_parent() != null:
+						ex_node.get_parent().remove_child(ex_node)
+					ex_node.free()
+				pickups.remove_at(i_ex)
+
+	var pnode: PickupVisualNode = PickupVisualNode.new()
+	pnode.name = "Pickup_" + wid
+	pnode.position = final_pos
+	pnode.settled = is_settled
+
+	var tex_path: String = str(wdata.get("pickup_texture", ""))
+	if tex_path.is_empty():
+		tex_path = str(wdata.get("dropped_texture", ""))
+	var tex: Texture2D = reg.call("load_cached_texture", tex_path) as Texture2D
+	pnode.weapon_tex = tex
+
+	_pickups_container.add_child(pnode)
+	pnode.queue_redraw()
+	pickups.append({
+		"weapon_id": wid,
+		"pos": final_pos,
+		"vel": Vector2.ZERO if is_settled else Vector2(0.0, 0.5),
+		"settled": is_settled,
+		"cooldown": 0.0,
+		"ammo": final_ammo,
+		"from_sky_crate": from_sky_crate,
+		"spawn_point_idx": spawn_point_idx,
+		"spawn_origin": Vector2(pos.x, snap_y if snap_y < INF else pos.y),
+		"despawn_timer": 480.0 if spawn_point_idx >= 0 else 0.0,
+		"node": pnode,
+	})
+
+
+func spawn_dropped_weapon(
+	weapon_id: String,
+	pos: Vector2,
+	ammo: int = -999,
+	init_vel: Vector2 = Vector2(0.0, -2.0)
+) -> void:
+	var reg: Node = MapLoaderScript.get_registry()
+	var wid: String = weapon_id.to_upper().strip_edges()
+	if wid.is_empty() or wid == "FISTS" or wid == "UNARMED":
+		return
+	var wdata: Dictionary = reg.call("get_weapon_data", wid) as Dictionary
+	if wdata.is_empty():
+		return
+	var final_ammo: int = ammo if ammo != -999 else int(wdata.get("ammo", 12))
+	if int(wdata.get("slot", 2)) in [2, 3, 4] and final_ammo <= 0:
+		return
+
+	var pnode: PickupVisualNode = PickupVisualNode.new()
+	pnode.name = "Dropped_" + wid
+	pnode.position = pos
+	pnode.settled = false
+
+	var tex_path: String = str(wdata.get("pickup_texture", ""))
+	if tex_path.is_empty():
+		tex_path = str(wdata.get("dropped_texture", ""))
+	var loaded_tex: Texture2D = reg.call("load_cached_texture", tex_path) as Texture2D
+	if loaded_tex == null:
+		var alt_path: String = str(wdata.get("dropped_texture", ""))
+		if not alt_path.is_empty():
+			loaded_tex = reg.call("load_cached_texture", alt_path) as Texture2D
+	pnode.weapon_tex = loaded_tex
+
+	_pickups_container.add_child(pnode)
+	pnode.queue_redraw()
+	pickups.append({
+		"weapon_id": wid,
+		"pos": pos,
+		"vel": init_vel,
+		"settled": false,
+		"cooldown": 18.0,
+		"ammo": final_ammo,
+		"from_sky_crate": false,
+		"node": pnode,
+	})
+
+
+func _step_pickups(step_24hz: float) -> void:
+	if pickups.is_empty():
+		return
+	var next_pickups: Array[Dictionary] = []
+	for pk: Dictionary in pickups:
+		var pnode: PickupVisualNode = pk.get("node", null) as PickupVisualNode
+		var cd: float = maxf(0.0, float(pk.get("cooldown", 0.0)) - step_24hz)
+		pk["cooldown"] = cd
+		var settled: bool = bool(pk.get("settled", true))
+		var ppos: Vector2 = pk.get("pos", Vector2.ZERO) as Vector2
+		var pvel: Vector2 = pk.get("vel", Vector2.ZERO) as Vector2
+
+		if not settled:
+			pvel.y = minf(9.0, pvel.y + 0.42 * step_24hz)
+			pvel.x *= pow(0.985, step_24hz)
+			var next_pos: Vector2 = ppos + pvel * step_24hz
+			if map_loader != null and is_instance_valid(map_loader):
+				if absf(pvel.x) > 0.01 and map_loader.has_method("is_point_solid"):
+					if bool(map_loader.call("is_point_solid", Vector2(next_pos.x + signf(pvel.x) * 4.0, ppos.y - 4.0))):
+						next_pos.x = ppos.x
+						pvel.x = -pvel.x * 0.6
+				if pvel.y >= 0.0 and map_loader.has_method("get_ground_y_below"):
+					var gy: float = float(map_loader.call("get_ground_y_below", next_pos.x, ppos.y - 4.0, absf(next_pos.y - ppos.y) + 10.0, true))
+					if gy < INF and next_pos.y >= gy:
+						next_pos.y = gy
+						if absf(pvel.y) >= 1.1:
+							pvel.y = -pvel.y * 0.42
+							pvel.x *= 0.72
+						elif absf(pvel.x) >= 0.45:
+							pvel.y = 0.0
+							pvel.x *= 0.80
+						else:
+							pvel = Vector2.ZERO
+							settled = true
+			ppos = next_pos
+			pk["pos"] = ppos
+			pk["vel"] = pvel
+			pk["settled"] = settled
+		else:
+			# Check if support under settled pickup disappeared (e.g. shattered glass skylight)
+			if map_loader != null and is_instance_valid(map_loader) and map_loader.has_method("get_ground_y_below"):
+				var gy_check: float = float(map_loader.call("get_ground_y_below", ppos.x, ppos.y - 4.0, 8.0, true))
+				if gy_check == INF:
+					pk["settled"] = false
+					pk["vel"] = Vector2(0.0, 0.6)
+
+		if pnode != null and is_instance_valid(pnode):
+			var new_settled: bool = bool(pk.get("settled", true))
+			var need_redraw: bool = (pnode.settled != new_settled) or pnode.highlighted
+			pnode.position = ppos
+			pnode.settled = new_settled
+			pnode.highlighted = false
+			if need_redraw:
+				pnode.queue_redraw()
+
+		# AS3 WeaponSpawn.as:123 & WeaponSpawnData.as:26-44:
+		# Spawn-point weapons despawn after 20s (480 ticks @ 24Hz), blinking during the final 8s (192 ticks) so a new weapon can replace them!
+		var sp_idx: int = int(pk.get("spawn_point_idx", -1))
+		if sp_idx >= 0:
+			var sp_origin: Vector2 = pk.get("spawn_origin", ppos) as Vector2
+			if bool(pk.get("settled", true)) and ppos.distance_to(sp_origin) > 16.0:
+				pk["spawn_point_idx"] = -1
+				pk["despawn_timer"] = 0.0
+				if pnode != null and is_instance_valid(pnode):
+					pnode.visible = true
+			elif bool(pk.get("settled", true)):
+				var dtimer: float = float(pk.get("despawn_timer", 480.0)) - step_24hz
+				pk["despawn_timer"] = dtimer
+				if dtimer <= 0.0:
+					if pnode != null and is_instance_valid(pnode):
+						if pnode.get_parent() != null:
+							pnode.get_parent().remove_child(pnode)
+						pnode.free()
+					continue
+				elif dtimer <= 192.0 and pnode != null and is_instance_valid(pnode):
+					pnode.visible = (int(floor(dtimer / 6.0)) % 2) == 0
+				elif pnode != null and is_instance_valid(pnode):
+					pnode.visible = true
+
+		if map_loader != null and is_instance_valid(map_loader):
+			if ppos.y > map_loader.map_bounds.end.y + 60.0:
+				if pnode != null and is_instance_valid(pnode):
+					if pnode.get_parent() != null:
+						pnode.get_parent().remove_child(pnode)
+					pnode.free()
+				continue
+		next_pickups.append(pk)
+	pickups = next_pickups
+
+
+func spawn_floating_text(world_pos: Vector2, text_str: String, col: Color = Color(1.0, 0.94, 0.42, 1.0)) -> void:
+	floating_texts.append({
+		"pos": world_pos,
+		"text": text_str,
+		"color": col,
+		"age": 0.0,
+		"max_age": 24.0,
+	})
+
+
+func try_pickup_near(fighter: Node2D) -> bool:
+	return update_fighter_weapon_grab(fighter, true)
+
+
+func update_fighter_weapon_grab(fighter: Node2D, want_manual_swap: bool) -> bool:
+	if fighter == null or not is_instance_valid(fighter):
+		return false
+	if bool(fighter.get("is_dead")) or bool(fighter.get("climbing")) or bool(fighter.get("ledge_grabbing")) or bool(fighter.get("diving")) or bool(fighter.get("falling")) or bool(fighter.get("knockdowned")):
+		return false
+	if not want_manual_swap:
+		if float(fighter.get("_stagger_frames")) > 0.0:
+			return false
+	var fpos: Vector2 = fighter.global_position
+
+	# Also check if fighter is standing near an intact SupplyParachuteCrate on the ground
+	if want_manual_swap:
+		for p_var: Variant in props:
+			if not (p_var is Node2D) or not is_instance_valid(p_var):
+				continue
+			var prop: Node2D = p_var as Node2D
+			if bool(prop.get("is_destroyed")) or not bool(prop.get("is_parachute_crate")):
+				continue
+			if fpos.distance_to(prop.global_position) <= 24.0 and prop.has_method("try_open_supply_crate"):
+				prop.call("try_open_supply_crate")
+				break
+
+	if pickups.is_empty():
+		return false
+	var best_idx: int = -1
+	var best_dist: float = 22.0
+
+	for i: int in range(pickups.size()):
+		var pk: Dictionary = pickups[i]
+		if float(pk.get("cooldown", 0.0)) > 0.0:
+			continue
+		if not want_manual_swap and not bool(pk.get("settled", true)):
+			continue
+		var ppos: Vector2 = pk.get("pos", Vector2.ZERO) as Vector2
+		var d: float = fpos.distance_to(ppos)
+		if d <= best_dist:
+			best_dist = d
+			best_idx = i
+
+	if best_idx < 0:
+		return false
+
+	var chosen: Dictionary = pickups[best_idx]
+	var wid: String = str(chosen.get("weapon_id", "PISTOL")).to_upper()
+	var ammo: int = int(chosen.get("ammo", -999))
+	var wdata: Dictionary = MapLoaderScript.get_registry().call("get_weapon_data", wid) as Dictionary
+	var category: String = str(wdata.get("category", ""))
+	var slot: int = int(wdata.get("slot", 2))
+	if slot == 3:
+		slot = 2
+	var w_display: String = str(wdata.get("display_name", wid)).to_upper()
+
+	# Determine if auto-pickup applies (Player.as:1236-1301 UpdateWeaponGrab):
+	# - Empty target slot -> auto-picks up on touch/walk/roll!
+	# - Occupied target slot -> highlights white '[ ]' bracket and requires Down + Attack (want_manual_swap)!
+	var slot_empty: bool = true
+	if fighter.has_method("is_weapon_slot_empty_for"):
+		slot_empty = bool(fighter.call("is_weapon_slot_empty_for", wid))
+	else:
+		var inv_v: Variant = fighter.get("inventory")
+		var am_v: Variant = fighter.get("inventory_ammo")
+		if typeof(inv_v) == TYPE_DICTIONARY and typeof(am_v) == TYPE_DICTIONARY:
+			var inv_d: Dictionary = inv_v as Dictionary
+			var am_d: Dictionary = am_v as Dictionary
+			if slot == 1:
+				var cur_m: String = str(inv_d.get(1, "FISTS")).to_upper()
+				slot_empty = cur_m.is_empty() or cur_m == "FISTS" or cur_m == "UNARMED"
+			elif slot == 2:
+				slot_empty = (str(inv_d.get(2, "")).is_empty() or int(am_d.get(2, 0)) <= 0) and (str(inv_d.get(3, "")).is_empty() or int(am_d.get(3, 0)) <= 0)
+			elif slot == 4:
+				slot_empty = str(inv_d.get(4, "")).is_empty() or int(am_d.get(4, 0)) <= 0
+			elif slot == 5:
+				if wid in ["MEDKIT", "PILLS"]:
+					slot_empty = float(fighter.get("hp")) < float(fighter.get("max_hp"))
+				else:
+					slot_empty = str(inv_d.get(5, "")).is_empty() or int(am_d.get(5, 0)) <= 0
+
+	if not slot_empty and not want_manual_swap:
+		var pnode_hl: PickupVisualNode = chosen.get("node", null) as PickupVisualNode
+		if pnode_hl != null and is_instance_valid(pnode_hl):
+			pnode_hl.highlighted = true
+			pnode_hl.queue_redraw()
+		return false
+
+	# If swapping an occupied weapon slot via Down + Attack, inspect current weapon in that slot
+	var old_wid: String = ""
+	var old_ammo: int = -1
+	if not slot_empty and want_manual_swap and wid not in ["MEDKIT", "PILLS"] and slot in [1, 2, 4, 5]:
+		var inv_swap: Variant = fighter.get("inventory")
+		var am_swap: Variant = fighter.get("inventory_ammo")
+		if typeof(inv_swap) == TYPE_DICTIONARY and typeof(am_swap) == TYPE_DICTIONARY:
+			var idict: Dictionary = inv_swap as Dictionary
+			var adict: Dictionary = am_swap as Dictionary
+			old_wid = str(idict.get(slot, "")).to_upper()
+			old_ammo = int(adict.get(slot, -1))
+			if slot == 2 and (old_wid.is_empty() or old_ammo <= 0):
+				old_wid = str(idict.get(3, "")).to_upper()
+				old_ammo = int(adict.get(3, -1))
+
+	var default_ammo: int = int(wdata.get("ammo", 12))
+	if wid in ["SHOTGUN", "SAWED_OFF"] and ammo == -999:
+		default_ammo = 8 if wid == "SHOTGUN" else 6
+	elif wid == "UZI" and ammo == -999:
+		default_ammo = 25
+	elif wid == "FLAMETHROWER" and ammo == -999:
+		default_ammo = 40
+	var pickup_ammo: int = ammo if ammo > 0 else default_ammo
+	var stacked_same_ammo: bool = (old_wid == wid and slot in [2, 4] and old_ammo > 0)
+
+	if category == "powerup" or int(wdata.get("slot", 0)) == 5:
+		if wid in ["MEDKIT", "PILLS"]:
+			var heal: float = float(wdata.get("heal_amount", 50.0))
+			var cur_hp: float = float(fighter.get("hp")) if fighter.get("hp") != null else 100.0
+			var max_hp: float = float(fighter.get("max_hp")) if fighter.get("max_hp") != null else 100.0
+			fighter.set("hp", minf(max_hp, cur_hp + heal))
+			fighter.set("burn_state", 0.0)
+			fighter.set("burned", false)
+			MapLoaderScript.play_sfx_at("powerup", fpos)
+			spawn_floating_text(fpos + Vector2(0.0, -20.0), "+HP", Color(0.35, 1.0, 0.45, 1.0))
+		elif wid in ["SLOMO05", "SLOMO10"]:
+			# Store SLOMO powerup in the 4th HUD box (inventory[5]); only activates when pressing Key 4 (powerup)!
+			if fighter.has_method("equip_weapon"):
+				fighter.call("equip_weapon", wid, 1)
+			MapLoaderScript.play_sfx_at("accept", fpos)
+			spawn_floating_text(fpos + Vector2(0.0, -20.0), w_display, Color(0.45, 0.9, 1.0, 1.0))
+		elif fighter.has_method("equip_weapon"):
+			fighter.call("equip_weapon", wid, pickup_ammo)
+			spawn_floating_text(fpos + Vector2(0.0, -20.0), w_display, Color(1.0, 0.94, 0.42, 1.0))
+	else:
+		if fighter.has_method("equip_weapon"):
+			if stacked_same_ammo:
+				fighter.call("equip_weapon", wid, old_ammo + pickup_ammo)
+			else:
+				fighter.call("equip_weapon", wid, pickup_ammo)
+		MapLoaderScript.play_sfx_at("accept", fpos)
+		var float_label: String = (w_display + " +" + str(pickup_ammo)) if stacked_same_ammo else w_display
+		spawn_floating_text(fpos + Vector2(0.0, -20.0), float_label, Color(1.0, 0.94, 0.42, 1.0))
+
+	var pnode: Node2D = chosen.get("node", null) as Node2D
+	if pnode != null and is_instance_valid(pnode):
+		if pnode.get_parent() != null:
+			pnode.get_parent().remove_child(pnode)
+		pnode.free()
+	pickups.remove_at(best_idx)
+
+	# Leave the old weapon on the ground when swapping for a different weapon OR when swapping a non-stacking melee/powerup of the same type
+	if not old_wid.is_empty() and old_wid != "FISTS" and old_wid != "UNARMED" and not stacked_same_ammo:
+		var f_dir: int = int(fighter.get("facing")) if fighter.get("facing") != null else 1
+		spawn_dropped_weapon(old_wid, fpos + Vector2(0.0, -5.0), old_ammo, Vector2(float(f_dir) * 1.1, -1.8))
+
+	return true
+
+
+func activate_slowmo(duration_frames: float = 120.0, speed_scale: float = 0.5) -> void:
+	slowmo_timer = maxf(slowmo_timer, duration_frames)
+	game_speed = speed_scale
+
+
+func _physics_process(delta: float) -> void:
+	_handle_match_hotkeys()
+	var step_24hz: float = delta * FLASH_FPS * game_speed
+	step_match(step_24hz)
+
+
+func step_match(step_24hz: float) -> void:
+	# 1. Update round banner & slow-motion timers
+	var raw_step: float = step_24hz / maxf(0.1, game_speed)
+	if overhead_label_timer > 0.0:
+		overhead_label_timer = maxf(0.0, overhead_label_timer - raw_step)
+
+	if round_state == "GET_READY":
+		banner_timer -= raw_step
+		if banner_timer <= 14.0 and banner_text != "FIGHT!":
+			banner_text = "FIGHT!"
+		if banner_timer <= 0.0:
+			round_state = "FIGHT"
+			banner_text = ""
+
+	if slowmo_timer > 0.0:
+		slowmo_timer -= raw_step
+		if slowmo_timer <= 0.0 and round_state != "ROUND_OVER":
+			game_speed = 1.0
+
+	if not floating_texts.is_empty():
+		var next_ft: Array[Dictionary] = []
+		for ft: Dictionary in floating_texts:
+			var f_age: float = float(ft.get("age", 0.0)) + raw_step
+			var f_max: float = float(ft.get("max_age", 24.0))
+			if f_age < f_max:
+				ft["age"] = f_age
+				ft["pos"] = (ft.get("pos", Vector2.ZERO) as Vector2) + Vector2(0.0, -0.65 * raw_step)
+				next_ft.append(ft)
+		floating_texts = next_ft
+
+	# 2. Step Map (elevators, portals, clouds, lamps) & Pickups
+	if map_loader != null and is_instance_valid(map_loader):
+		map_loader.step_map(step_24hz)
+	_step_pickups(step_24hz)
+
+	# 3. Step Interactive Props
+	for prop_var: Variant in props:
+		if prop_var is Node2D and is_instance_valid(prop_var) and (prop_var as Node2D).has_method("step_prop"):
+			(prop_var as Node2D).call("step_prop", step_24hz)
+
+	# 4. Step Fighters (P1, P2, and AI Bots)
+	for f_var: Variant in fighters:
+		if not (f_var is Node2D) or not is_instance_valid(f_var):
+			continue
+		var f: Node2D = f_var as Node2D
+		var is_dead_before: bool = bool(f.get("is_dead"))
+
+		# Pit / Acid kill check
+		var pit_limit_y: float = minf(map_loader.map_bounds.end.y + 45.0, map_loader.acid_kill_y)
+		if not is_dead_before and f.global_position.y >= pit_limit_y:
+			f.set("hp", 0.0)
+			f.set("is_dead", true)
+			f.set("current_state", "DEAD")
+			MapLoaderScript.get_audio().call("play_sfx_at", "wilhelm", f.global_position)
+			is_dead_before = true
+
+		var input_dict: Dictionary = {}
+		if round_state == "GET_READY":
+			input_dict = {"left": false, "right": false, "up": false, "down": false, "jump": false, "attack": false, "sprint": false}
+		elif bool(f.get("is_bot")):
+			var bctrl: RefCounted = bot_controllers.get(f.get_instance_id(), null) as RefCounted
+			if bctrl == null:
+				bctrl = BotControllerScript.new(int(f.get("bot_difficulty")) if f.get("bot_difficulty") != null else 2)
+				bot_controllers[f.get_instance_id()] = bctrl
+			input_dict = bctrl.call("compute_bot_input", f, self, step_24hz) as Dictionary
+
+		if f.has_method("step_fighter"):
+			f.call("step_fighter", step_24hz, input_dict)
+
+		if not bool(f.get("is_dead")):
+			var bot_manual_swap: bool = bool(f.get("is_bot")) and bool(input_dict.get("down", false)) and bool(input_dict.get("attack", false))
+			update_fighter_weapon_grab(f, bot_manual_swap)
+
+		# Count survival kills when a bot dies
+		if game_mode == "survival" and not is_dead_before and bool(f.get("is_dead")) and bool(f.get("is_bot")):
+			survival_kills += 1
+
+	# 5. Step Projectiles & Fire Hazards
+	if projectile_manager != null and is_instance_valid(projectile_manager) and projectile_manager.has_method("step_projectiles"):
+		projectile_manager.call("step_projectiles", step_24hz)
+	if fire_hazard_system != null and is_instance_valid(fire_hazard_system) and fire_hazard_system.has_method("step_hazards"):
+		fire_hazard_system.call("step_hazards", step_24hz)
+
+	# 6. Authentic periodic weapon & powerup spawns (WeaponSpawn.as: every 72 frames from unoccupied map weapon_spawns)
+	if round_state == "FIGHT":
+		_weapon_spawn_timer -= step_24hz
+		if _weapon_spawn_timer <= 0.0:
+			_weapon_spawn_timer = 72.0
+			if pickups.size() < 7 and not map_loader.weapon_spawns.is_empty():
+				var free_indices: Array[int] = []
+				for ws_i: int in range(map_loader.weapon_spawns.size()):
+					var ws_cand: Dictionary = map_loader.weapon_spawns[ws_i]
+					var ws_pos: Vector2 = Vector2(float(ws_cand.get("x", 260.0)), float(ws_cand.get("y", 180.0)))
+					var occupied: bool = false
+					for pk_ex: Dictionary in pickups:
+						if int(pk_ex.get("spawn_point_idx", -1)) == ws_i:
+							occupied = true
+							break
+						var pk_p: Vector2 = pk_ex.get("pos", Vector2.ZERO) as Vector2
+						if absf(pk_p.x - ws_pos.x) <= 14.0 and absf(pk_p.y - ws_pos.y) <= 28.0:
+							occupied = true
+							break
+					if not occupied:
+						free_indices.append(ws_i)
+				if not free_indices.is_empty():
+					var chosen_idx: int = free_indices[randi() % free_indices.size()]
+					var ws: Dictionary = map_loader.weapon_spawns[chosen_idx]
+					var wid: String = _pick_weapon_from_mask(ws.get("mask", []) as Array, randi())
+					spawn_weapon_pickup(wid, Vector2(float(ws.get("x", 260.0)), float(ws.get("y", 180.0))), -999, true, chosen_idx)
+
+		if game_mode == "survival":
+			_step_survival_spawner(step_24hz)
+
+	# 7. Evaluate survivor / round completion
+	if round_state != "ROUND_OVER":
+		_evaluate_round_completion()
+
+	# 8. Step Camera & HUD
+	if dynamic_camera != null and is_instance_valid(dynamic_camera):
+		dynamic_camera.step_camera(step_24hz, fighters)
+	if hud_controller != null and is_instance_valid(hud_controller):
+		hud_controller.update_hud()
+
+
+func _step_survival_spawner(step_24hz: float) -> void:
+	var alive_bots: int = 0
+	for f: Node2D in fighters:
+		if is_instance_valid(f) and bool(f.get("is_bot")) and not bool(f.get("is_dead")):
+			alive_bots += 1
+
+	_survival_spawn_timer -= step_24hz
+	if alive_bots == 0 or (_survival_spawn_timer <= 0.0 and alive_bots < 3):
+		survival_wave += 1
+		_survival_spawn_timer = 180.0
+		_spawn_survival_wave_enemies(mini(4, 1 + (survival_wave / 2)))
+
+
+func _spawn_survival_wave_enemies(count: int) -> void:
+	var spawns: Array[Vector2] = map_loader.player_spawns
+	if spawns.is_empty():
+		spawns = [Vector2(120.0, 90.0), Vector2(420.0, 180.0)]
+	var pool: Array[String] = ["boris", "savage", "ivan", "cruger", "hideki", "blaire", "brody", "mac", "agent"]
+	var diff: int = clampi(1 + survival_wave / 3, 1, 3)
+
+	for i: int in range(count):
+		var slot_idx: int = fighters.size()
+		var cid: String = pool[(survival_wave + i) % pool.size()]
+		var pos: Vector2 = spawns[(survival_wave + i) % spawns.size()]
+		var bnode: Node2D = _spawn_fighter_instance(slot_idx, cid, pos, true, 2, diff)
+		if survival_wave >= 2 and bnode.has_method("equip_weapon"):
+			var guns: Array[String] = ["PISTOL", "UZI", "SHOTGUN", "RIFLE", "MACHETE"]
+			bnode.call("equip_weapon", guns[(survival_wave + i) % guns.size()])
+
+
+func _evaluate_round_completion() -> void:
+	if fighters.size() <= 1:
+		return
+
+	var alive_fighters: Array[Node2D] = []
+	var alive_teams: Dictionary = {}
+	var human_alive: bool = false
+
+	for f: Node2D in fighters:
+		if is_instance_valid(f) and not bool(f.get("is_dead")):
+			alive_fighters.append(f)
+			var tid: int = int(f.get("team_id")) if f.get("team_id") != null else 0
+			if tid == 0:
+				# Free-for-all: treat each fighter as its own unique team key (-100 - slot)
+				var sidx: int = int(f.get("slot_index")) if f.get("slot_index") != null else f.get_instance_id()
+				alive_teams[-100 - sidx] = f
+			else:
+				alive_teams[tid] = f
+			if not bool(f.get("is_bot")):
+				human_alive = true
+
+	if game_mode == "survival":
+		if not human_alive:
+			_trigger_round_over("SURVIVAL OVER — KILLS: " + str(survival_kills), -1, 2)
+		return
+
+	if alive_fighters.is_empty():
+		_trigger_round_over("DRAW GAME!", -1, -1)
+	elif alive_teams.size() == 1:
+		var sole: Node2D = alive_fighters[0]
+		var s_slot: int = int(sole.get("slot_index")) if sole.get("slot_index") != null else 0
+		var s_team: int = int(sole.get("team_id")) if sole.get("team_id") != null else 0
+		var s_bot: bool = bool(sole.get("is_bot"))
+
+		if game_mode == "stage":
+			if not s_bot and s_slot == 0:
+				if stage_level >= 12:
+					agent_unlocked = true
+					_trigger_round_over("CAMPAIGN COMPLETE — AGENT UNLOCKED!", 0, 1)
+				else:
+					_trigger_round_over("STAGE CLEAR!", 0, 1)
+			else:
+				_trigger_round_over("STAGE FAILED!", s_slot, 2)
+		else:
+			if not s_bot and s_slot == 0:
+				_trigger_round_over("PLAYER 1 WINS!", 0, s_team)
+			elif not s_bot and s_slot == 1:
+				_trigger_round_over("PLAYER 2 WINS!", 1, s_team)
+			else:
+				var dname: String = str(sole.get("display_name")).to_upper()
+				_trigger_round_over(dname + " (BOT) WINS!", s_slot, s_team)
+
+
+func _trigger_round_over(result_banner: String, win_slot: int, win_team: int) -> void:
+	round_state = "ROUND_OVER"
+	winner_text = result_banner
+	banner_text = result_banner
+	banner_timer = 9999.0
+	winner_slot = win_slot
+	winner_team = win_team
+	# Cinematic Slow-Motion on final knockout blow!
+	game_speed = 0.25
+	slowmo_timer = 48.0
+	MapLoaderScript.play_sfx("groovy")
+
+
+func _handle_match_hotkeys() -> void:
+	if Input.is_key_pressed(KEY_ESCAPE):
+		game_speed = 1.0
+		request_return_to_menu.emit()
+		return
+
+	if round_state == "ROUND_OVER":
+		if Input.is_key_pressed(KEY_ENTER) or Input.is_key_pressed(KEY_KP_ENTER) or Input.is_key_pressed(KEY_SPACE):
+			if game_mode == "stage" and (winner_text == "STAGE CLEAR!" or winner_slot == 0) and stage_level < 12:
+				match_config["stage_level"] = stage_level + 1
+			start_match(match_config)
