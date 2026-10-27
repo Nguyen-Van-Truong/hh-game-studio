@@ -43,7 +43,6 @@ var can_burn: bool = true
 var bullet_resistance: float = 1.0
 var explosion_resistance: float = 1.0
 var player_fragile: bool = false
-var player_bounce: bool = false
 var allow_cover: bool = false
 var cover_level: int = 0
 var kick_power: float = 1.35
@@ -66,8 +65,9 @@ var blast_radius: float = 42.0
 var velocity: Vector2 = Vector2.ZERO
 var angular_velocity: float = 0.0
 var _target_rest_rot: float = 0.0
-var _tip_accum: float = 0.0
 var _ledge_overhang_dir: float = 0.0
+var _ledge_fulcrum_x: float = NAN
+var _ledge_fulcrum_y: float = INF
 var on_ground: bool = false
 var is_destroyed: bool = false
 
@@ -410,7 +410,6 @@ func setup_prop(
 		explosion_resistance = 0.0
 
 	player_fragile = prop_type in ["CRATE", "SUPPLY_CRATE", "TABLE", "TABLE_SMALL", "CHAIR", "CHAIR_R"]
-	player_bounce = prop_type in ["BARREL", "BARREL_EXPLOSIVE", "TRASHCAN", "FILECAB", "DESK", "DESK_1", "POOL_TABLE", "COMFY_CHAIR"]
 
 	if prop_type in ["CRATE", "CRATE_HANGING", "BARREL", "BARREL_EXPLOSIVE", "TRASHCAN", "TABLE", "TABLE_SMALL", "DESK", "DESK_1", "POOL_TABLE", "COMFY_CHAIR", "FILECAB", "STATUE"]:
 		allow_cover = true
@@ -490,8 +489,9 @@ func setup_prop(
 	base_width = width
 	base_height = height
 	_target_rest_rot = p_angle
-	_tip_accum = 0.0
 	_ledge_overhang_dir = 0.0
+	_ledge_fulcrum_x = NAN
+	_ledge_fulcrum_y = INF
 	_sync_rotated_dimensions()
 
 	var spr_path: String = str(def.get("sprite", "res://assets/sprites/props/obj_crate_01.png"))
@@ -529,7 +529,9 @@ func setup_supply_parachute_crate(p_pos: Vector2, p_weapon_id: String = "", p_id
 	base_width = 16.0
 	base_height = 16.0
 	_target_rest_rot = 0.0
-	_tip_accum = 0.0
+	_ledge_overhang_dir = 0.0
+	_ledge_fulcrum_x = NAN
+	_ledge_fulcrum_y = INF
 	allow_cover = true
 	if p_weapon_id.is_empty():
 		contained_weapon_id = SUPPLY_WEAPON_POOL[randi() % SUPPLY_WEAPON_POOL.size()]
@@ -591,26 +593,33 @@ func _is_tipped_on_side() -> bool:
 	if not _can_tip_horizontally():
 		return false
 	var crit: float = _get_critical_balance_angle()
-	return absf(rotation) >= crit or absf(sin(_target_rest_rot)) > 0.707
+	return absf(rotation) >= crit
+
+
+func get_obb_extents_at(rot: float) -> Vector2:
+	var c: float = absf(cos(rot))
+	var s: float = absf(sin(rot))
+	return Vector2(base_width * c + base_height * s, base_width * s + base_height * c)
 
 
 func _sync_rotated_dimensions(keep_bottom_y: float = INF) -> void:
 	if base_width <= 0.0 or base_height <= 0.0:
 		return
+	var obb_half_h: float = get_obb_extents_at(rotation).y * 0.5
 	var is_sideways: bool = _is_tipped_on_side()
 	var new_w: float = base_height if is_sideways else base_width
 	var new_h: float = base_width if is_sideways else base_height
 	if not is_equal_approx(width, new_w) or not is_equal_approx(height, new_h):
 		var old_w: float = width
-		var old_h: float = height
+		var anchor_bottom_y: float = keep_bottom_y if keep_bottom_y < INF else (global_position.y + obb_half_h)
 		width = new_w
 		height = new_h
-		if keep_bottom_y < INF:
-			global_position.y = keep_bottom_y - height * 0.5
-		elif on_ground:
-			global_position.y += (old_h - height) * 0.5
+		if keep_bottom_y < INF or on_ground:
+			global_position.y = anchor_bottom_y - obb_half_h
 		if new_w > old_w and map_loader != null and is_instance_valid(map_loader):
 			global_position.x = _clamp_x_against_walls(global_position.x, global_position.y, global_position.x)
+	elif keep_bottom_y < INF:
+		global_position.y = keep_bottom_y - obb_half_h
 
 
 func _step_rotational_balance(step_24hz: float, support_y: float = INF) -> void:
@@ -629,13 +638,13 @@ func _step_rotational_balance(step_24hz: float, support_y: float = INF) -> void:
 	if not _can_tip_horizontally():
 		_target_rest_rot = 0.0
 		if not on_ground or absf(_ledge_overhang_dir) > 0.01:
-			angular_velocity = clampf(angular_velocity * pow(0.96, step_24hz), -0.18, 0.18)
+			angular_velocity = clampf(angular_velocity * pow(0.96, step_24hz), -0.22, 0.22)
 			rotation = clampf(rotation + angular_velocity * step_24hz, -0.68, 0.68)
 		else:
 			if absf(rotation) > 0.0005 or absf(angular_velocity) > 0.0005:
 				var prev_rot_w: float = rotation
-				var restore_w: float = -signf(rotation) * (0.028 + absf(rotation) * 0.18) * step_24hz
-				angular_velocity = clampf((angular_velocity + restore_w) * pow(0.82, step_24hz), -0.18, 0.18)
+				var restore_w: float = -signf(rotation) * (0.045 + absf(rotation) * 0.22) * step_24hz
+				angular_velocity = clampf((angular_velocity + restore_w) * pow(0.80, step_24hz), -0.22, 0.22)
 				rotation += angular_velocity * step_24hz
 				if prev_rot_w * rotation <= 0.0 or (absf(rotation) < 0.015 and absf(angular_velocity) < 0.02):
 					rotation = 0.0
@@ -643,15 +652,13 @@ func _step_rotational_balance(step_24hz: float, support_y: float = INF) -> void:
 			else:
 				rotation = 0.0
 				angular_velocity = 0.0
+			if support_y < INF:
+				global_position.y = support_y - get_obb_extents_at(rotation).y * 0.5
 		if _sprite != null:
-			if (on_ground or absf(_ledge_overhang_dir) > 0.01) and absf(rotation) > 0.001:
-				var delta_w: float = minf(absf(rotation), 0.68)
-				var lift_w: float = maxf(0.0, 0.5 * (height * cos(delta_w) + width * sin(delta_w) - height))
-				_sprite.position = Vector2(0.0, -lift_w).rotated(-rotation)
-			else:
-				_sprite.position = Vector2.ZERO
+			_sprite.position = Vector2.ZERO
 		return
 
+	var prev_rot_bal: float = rotation
 	var crit_angle: float = _get_critical_balance_angle()
 	var abs_rot: float = absf(rotation)
 	var rot_sign: float = signf(rotation)
@@ -676,7 +683,6 @@ func _step_rotational_balance(step_24hz: float, support_y: float = INF) -> void:
 			if prev_rot * rotation < 0.0 or (absf(rotation) < 0.012 and absf(angular_velocity) < 0.016):
 				rotation = 0.0
 				angular_velocity = 0.0
-				_tip_accum = 0.0
 			elif absf(rotation) >= crit_angle:
 				_target_rest_rot = signf(rotation) * half_pi
 		else:
@@ -696,19 +702,17 @@ func _step_rotational_balance(step_24hz: float, support_y: float = INF) -> void:
 			rotation = side_sign * half_pi
 			angular_velocity = 0.0
 
-	_sync_rotated_dimensions(support_y)
+	# Corner-pivot horizontal translation: when tipping on floor support, pivoting around the bottom corner
+	# advances the center of mass forward in the direction of rotation rather than spinning in place.
+	var delta_rot_bal: float = rotation - prev_rot_bal
+	if support_y < INF and absf(delta_rot_bal) > 0.0005 and base_height > base_width:
+		var pivot_push: float = (delta_rot_bal / maxf(step_24hz, 0.01)) * (base_height * 0.12)
+		if signf(pivot_push) == signf(velocity.x) or absf(velocity.x) < 0.35:
+			velocity.x = clampf(velocity.x + pivot_push, -3.2, 3.2)
 
-	# Exact geometric corner-pivot lift while rocking so the bottom support corner stays flush on the floor
+	_sync_rotated_dimensions(support_y)
 	if _sprite != null:
-		if on_ground and absf(rotation) > 0.001 and absf(absf(rotation) - half_pi) > 0.001:
-			var delta_flat: float = minf(absf(rotation), absf(half_pi - absf(rotation)))
-			var lift_y: float = maxf(
-				0.0,
-				0.5 * (height * cos(delta_flat) + width * sin(delta_flat) - height)
-			)
-			_sprite.position = Vector2(0.0, -lift_y).rotated(-rotation)
-		else:
-			_sprite.position = Vector2.ZERO
+		_sprite.position = Vector2.ZERO
 
 
 func get_world_rect() -> Rect2:
@@ -725,7 +729,116 @@ func get_solid_support_rect() -> Rect2:
 
 
 func get_hit_rect() -> Rect2:
+	if is_hanging_holder:
+		# Compound Hitbox for CRATE_HANGING_HOLDER: covers the entire iron suspension chain from ceiling anchor
+		# down to 3.5px inside the top of CRATE_HANGING so aiming down while standing on the crate always hits!
+		var anchor_y: float = _hang_anchor.y if _hang_anchor != Vector2.ZERO else ceiling_anchor_y
+		var min_y: float = minf(anchor_y, global_position.y - height * 0.5 - 2.0)
+		var max_y: float = global_position.y + height * 0.5 + 3.5
+		var anchor_x: float = _hang_anchor.x if _hang_anchor != Vector2.ZERO else global_position.x
+		var min_x: float = minf(anchor_x, global_position.x) - 8.5
+		var max_x: float = maxf(anchor_x, global_position.x) + 8.5
+		return Rect2(min_x, min_y, max_x - min_x, max_y - min_y)
+	if absf(rotation) > 0.01:
+		var ext: Vector2 = get_obb_extents_at(rotation)
+		return Rect2(global_position.x - ext.x * 0.5, global_position.y - ext.y * 0.5, ext.x, ext.y)
 	return get_world_rect()
+
+
+func get_obb_top_y_at_x(qx: float, half_span: float = 3.5) -> float:
+	if not has_solid_hitbox or is_destroyed:
+		return INF
+	if absf(sin(rotation)) <= 0.015 or absf(cos(rotation)) <= 0.015:
+		var sr: Rect2 = get_solid_support_rect()
+		if sr.size.x > 0.0 and qx + half_span >= sr.position.x and qx - half_span <= sr.end.x:
+			return sr.position.y
+		return INF
+	var hw: float = (base_width if base_width > 0.0 else width) * 0.5
+	var hh: float = (base_height if base_height > 0.0 else height) * 0.5
+	var c0: Vector2 = global_position + Vector2(-hw, -hh).rotated(rotation)
+	var c1: Vector2 = global_position + Vector2(hw, -hh).rotated(rotation)
+	var c2: Vector2 = global_position + Vector2(hw, hh).rotated(rotation)
+	var c3: Vector2 = global_position + Vector2(-hw, hh).rotated(rotation)
+	var pts: Array[Vector2] = [c0, c1, c2, c3]
+	var min_qx: float = qx - half_span
+	var max_qx: float = qx + half_span
+	var best_top_y: float = INF
+	for p: Vector2 in pts:
+		if p.x >= min_qx and p.x <= max_qx and p.y < best_top_y:
+			best_top_y = p.y
+	for i: int in range(4):
+		var a: Vector2 = pts[i]
+		var b: Vector2 = pts[(i + 1) % 4]
+		var seg_min_x: float = minf(a.x, b.x)
+		var seg_max_x: float = maxf(a.x, b.x)
+		if seg_max_x < min_qx or seg_min_x > max_qx:
+			continue
+		var dx: float = b.x - a.x
+		if absf(dx) <= 0.0001:
+			best_top_y = minf(best_top_y, minf(a.y, b.y))
+		else:
+			var xa: float = clampf(min_qx, seg_min_x, seg_max_x)
+			var xb: float = clampf(max_qx, seg_min_x, seg_max_x)
+			var ya: float = lerpf(a.y, b.y, clampf((xa - a.x) / dx, 0.0, 1.0))
+			var yb: float = lerpf(a.y, b.y, clampf((xb - a.x) / dx, 0.0, 1.0))
+			best_top_y = minf(best_top_y, minf(ya, yb))
+	return best_top_y
+
+
+func _liang_barsky_local_rect_t(p1: Vector2, p2: Vector2, rect: Rect2) -> float:
+	if rect.has_point(p1):
+		return 0.0
+	var d: Vector2 = p2 - p1
+	var t_min: float = 0.0
+	var t_max: float = 1.0
+	var p_arr: Array[float] = [-d.x, d.x, -d.y, d.y]
+	var q_arr: Array[float] = [
+		p1.x - rect.position.x,
+		rect.end.x - p1.x,
+		p1.y - rect.position.y,
+		rect.end.y - p1.y,
+	]
+	for i: int in range(4):
+		var p_val: float = p_arr[i]
+		var q_val: float = q_arr[i]
+		if is_zero_approx(p_val):
+			if q_val < 0.0:
+				return INF
+		else:
+			var t: float = q_val / p_val
+			if p_val < 0.0:
+				if t > t_max:
+					return INF
+				if t > t_min:
+					t_min = t
+			else:
+				if t < t_min:
+					return INF
+				if t < t_max:
+					t_max = t
+	return t_min if t_min <= t_max else INF
+
+
+func check_segment_hit_obb(from_pt: Vector2, to_pt: Vector2) -> float:
+	if is_destroyed:
+		return INF
+	if is_hanging_holder:
+		var clasp_rect: Rect2 = Rect2(global_position.x - 8.5, global_position.y - height * 0.5 - 2.0, 17.0, height + 5.5)
+		var t_clasp: float = _liang_barsky_local_rect_t(from_pt, to_pt, clasp_rect)
+		var anchor_w: Vector2 = _hang_anchor if _hang_anchor != Vector2.ZERO else Vector2(global_position.x, ceiling_anchor_y)
+		var bottom_w: Vector2 = global_position + Vector2(0.0, height * 0.5 + 3.5)
+		var closest_pts: PackedVector2Array = Geometry2D.get_closest_points_between_segments(from_pt, to_pt, anchor_w, bottom_w)
+		var t_chain: float = INF
+		if closest_pts.size() >= 2 and closest_pts[0].distance_to(closest_pts[1]) <= 8.5:
+			var seg_len: float = from_pt.distance_to(to_pt)
+			t_chain = (from_pt.distance_to(closest_pts[0]) / seg_len) if seg_len > 0.001 else 0.0
+		return minf(t_clasp, t_chain)
+	if absf(rotation) > 0.01:
+		var local_from: Vector2 = (from_pt - global_position).rotated(-rotation)
+		var local_to: Vector2 = (to_pt - global_position).rotated(-rotation)
+		var local_rect: Rect2 = Rect2(-base_width * 0.5, -base_height * 0.5, base_width, base_height)
+		return _liang_barsky_local_rect_t(local_from, local_to, local_rect)
+	return _liang_barsky_local_rect_t(from_pt, to_pt, get_world_rect())
 
 
 func _spawn_debris_burst(hit_pos: Vector2, hit_dir: Vector2, count: int) -> void:
@@ -783,7 +896,7 @@ func _get_support_y_below(next_x: float, prev_bottom: float, next_bottom: float,
 		var props_var: Variant = match_world.get("props")
 		if typeof(props_var) == TYPE_ARRAY:
 			for p_var: Variant in props_var as Array:
-				if not (p_var is Node2D) or not is_instance_valid(p_var) or p_var == self:
+				if not is_instance_valid(p_var) or not (p_var is Node2D) or p_var == self:
 					continue
 				var other: Node2D = p_var as Node2D
 				var other_is_paper_support: bool = (prop_type == "PAPER" and str(other.get("prop_type")) == "PAPER")
@@ -807,6 +920,278 @@ func _get_support_y_below(next_x: float, prev_bottom: float, next_bottom: float,
 			best_y = minf(left_y, right_y)
 
 	return best_y
+
+
+func _query_ledge_contact_manifold(at_x: float, prev_bottom: float, next_bottom: float) -> Dictionary:
+	# 1D Sutherland-Hodgman Contact Manifold Clipping (Box2D b2CollidePolygon.as):
+	# Clips the prop's horizontal base interval [box_left, box_right] against all candidate support surfaces
+	# (solid_rects, cloud_rects, intact glass, elevators, and grounded/kinematic props) to compute the exact
+	# contact segment [c1, c2], fulcrum corner (fulcrum_x, fulcrum_y), and overhang direction (-1.0 left, +1.0 right).
+	var half_w: float = width * 0.5
+	var box_left: float = at_x - half_w + 0.5
+	var box_right: float = at_x + half_w - 0.5
+	var obb_extra_y: float = maxf(0.0, (get_obb_extents_at(rotation).y - height) * 0.5)
+	var tilt_lift: float = half_w * absf(sin(rotation))
+	var max_drop: float = maxf(10.0, next_bottom - prev_bottom + 8.0 + obb_extra_y)
+	var settle_pad: float = 8.5 if (_settling_frames > 0.0 or on_ground) else 2.5
+	var min_solid_y: float = prev_bottom - settle_pad - tilt_lift
+	var min_cloud_y: float = prev_bottom - (4.5 if (_settling_frames > 0.0 or on_ground) else 2.5) - tilt_lift
+	var max_surf_y: float = prev_bottom + max_drop
+	var min_contact_w: float = minf(2.2, width * 0.22)
+
+	var segs: Array[Vector3] = [] # Vector3(surf_y, c1, c2)
+	var best_y: float = INF
+
+	if map_loader != null and is_instance_valid(map_loader):
+		var s_var: Variant = map_loader.get("solid_rects")
+		if typeof(s_var) == TYPE_ARRAY:
+			for sr_v: Variant in s_var as Array:
+				if sr_v is Rect2:
+					var sr: Rect2 = sr_v as Rect2
+					if sr.size.x >= 1.0 and sr.position.y >= min_solid_y and sr.position.y <= max_surf_y:
+						var c1: float = maxf(box_left, sr.position.x)
+						var c2: float = minf(box_right, sr.end.x)
+						if c2 - c1 >= min_contact_w:
+							segs.append(Vector3(sr.position.y, c1, c2))
+							if sr.position.y < best_y:
+								best_y = sr.position.y
+
+		var c_var: Variant = map_loader.get("cloud_rects")
+		if typeof(c_var) == TYPE_ARRAY:
+			for cr_v: Variant in c_var as Array:
+				if cr_v is Rect2:
+					var cr: Rect2 = cr_v as Rect2
+					if cr.size.x >= 1.0 and cr.position.y >= min_cloud_y and cr.position.y <= max_surf_y:
+						var c1: float = maxf(box_left, cr.position.x)
+						var c2: float = minf(box_right, cr.end.x)
+						if c2 - c1 >= min_contact_w:
+							segs.append(Vector3(cr.position.y, c1, c2))
+							if cr.position.y < best_y:
+								best_y = cr.position.y
+
+		if map_loader.has_method("get_intact_horizontal_glass_rects"):
+			for gr: Rect2 in map_loader.call("get_intact_horizontal_glass_rects") as Array[Rect2]:
+				if gr.size.x >= 1.0 and gr.position.y >= min_solid_y and gr.position.y <= max_surf_y:
+					var c1: float = maxf(box_left, gr.position.x)
+					var c2: float = minf(box_right, gr.end.x)
+					if c2 - c1 >= min_contact_w:
+						segs.append(Vector3(gr.position.y, c1, c2))
+						if gr.position.y < best_y:
+							best_y = gr.position.y
+
+		var el_var: Variant = map_loader.get("elevators")
+		if typeof(el_var) == TYPE_ARRAY:
+			for e_v: Variant in el_var as Array:
+				if typeof(e_v) == TYPE_DICTIONARY:
+					var er_v: Variant = (e_v as Dictionary).get("rect")
+					if er_v is Rect2:
+						var er: Rect2 = er_v as Rect2
+						if er.size.x >= 1.0 and er.position.y >= min_solid_y and er.position.y <= max_surf_y:
+							var c1: float = maxf(box_left, er.position.x)
+							var c2: float = minf(box_right, er.end.x)
+							if c2 - c1 >= min_contact_w:
+								segs.append(Vector3(er.position.y, c1, c2))
+								if er.position.y < best_y:
+									best_y = er.position.y
+
+		var sp_var: Variant = map_loader.get("slope_polygons")
+		if typeof(sp_var) == TYPE_ARRAY and not (sp_var as Array).is_empty() and map_loader.has_method("get_slope_ground_y_below"):
+			var slope_y: float = float(map_loader.call("get_slope_ground_y_below", at_x, prev_bottom, 8.0, max_drop, true))
+			if slope_y < INF and slope_y <= max_surf_y:
+				segs.append(Vector3(slope_y, box_left, box_right))
+				if slope_y < best_y:
+					best_y = slope_y
+
+	if match_world != null and is_instance_valid(match_world):
+		var props_var: Variant = match_world.get("props")
+		if typeof(props_var) == TYPE_ARRAY:
+			for p_var: Variant in props_var as Array:
+				if not is_instance_valid(p_var) or not (p_var is Node2D) or p_var == self:
+					continue
+				var other: Node2D = p_var as Node2D
+				var other_is_paper_support: bool = (prop_type == "PAPER" and str(other.get("prop_type")) == "PAPER")
+				if bool(other.get("is_destroyed")) or bool(other.get("is_hanging_holder")) or (not bool(other.get("has_solid_hitbox")) and not other_is_paper_support):
+					continue
+				if not bool(other.get("on_ground")) and not bool(other.get("kinematic")):
+					continue
+				var ow: float = float(other.get("width")) if other.get("width") != null else 14.0
+				var oh: float = float(other.get("height")) if other.get("height") != null else 14.0
+				var other_top: float = other.global_position.y - oh * 0.5
+				if other_top >= prev_bottom - 2.5 and other_top <= max_surf_y:
+					var c1: float = maxf(box_left, other.global_position.x - ow * 0.5)
+					var c2: float = minf(box_right, other.global_position.x + ow * 0.5)
+					if c2 - c1 >= minf(3.0, ow * 0.25):
+						segs.append(Vector3(other_top, c1, c2))
+						if other_top < best_y:
+							best_y = other_top
+
+	if best_y == INF:
+		return {
+			"has_support": false,
+			"y": INF,
+			"c1": INF,
+			"c2": -INF,
+			"overhang_dir": 0.0,
+			"fulcrum_x": at_x,
+			"fulcrum_y": INF,
+			"com_supported": false,
+		}
+
+	var best_com_y: float = INF
+	for seg_c: Vector3 in segs:
+		if at_x >= seg_c.y - 0.5 and at_x <= seg_c.z + 0.5 and seg_c.x < best_com_y:
+			best_com_y = seg_c.x
+	if best_com_y < INF and best_com_y - best_y >= 4.0:
+		best_y = best_com_y
+
+	var min_c1: float = INF
+	var max_c2: float = -INF
+	for seg: Vector3 in segs:
+		if absf(seg.x - best_y) <= 2.0:
+			if seg.y < min_c1:
+				min_c1 = seg.y
+			if seg.z > max_c2:
+				max_c2 = seg.z
+
+	var open_right: bool = (max_c2 < box_right - 1.5)
+	var open_left: bool = (min_c1 > box_left + 1.5)
+	var is_past_com_right: bool = open_right and (at_x >= max_c2 - 0.15)
+	var is_past_com_left: bool = open_left and (at_x <= min_c1 + 0.15)
+	var can_tip_edge: bool = _can_tip_horizontally()
+	var is_near_edge_right: bool = (
+		can_tip_edge
+		and open_right
+		and _settling_frames <= 0.0
+		and at_x >= max_c2 - width * 0.10
+		and rotation >= -0.02
+		and (velocity.x > 0.02 or (angular_velocity > 0.005 and rotation >= 0.0) or rotation > 0.01)
+	)
+	var is_near_edge_left: bool = (
+		can_tip_edge
+		and open_left
+		and _settling_frames <= 0.0
+		and at_x <= min_c1 + width * 0.10
+		and rotation <= 0.02
+		and (velocity.x < -0.02 or (angular_velocity < -0.005 and rotation <= 0.0) or rotation < -0.01)
+	)
+
+	var overhang_dir: float = 0.0
+	var fulcrum_x: float = clampf(at_x, min_c1, max_c2)
+	var com_supported: bool = true
+
+	if (is_past_com_right or is_near_edge_right) and not is_past_com_left:
+		overhang_dir = 1.0
+		fulcrum_x = max_c2
+		com_supported = not is_past_com_right
+	elif is_past_com_left or is_near_edge_left:
+		overhang_dir = -1.0
+		fulcrum_x = min_c1
+		com_supported = not is_past_com_left
+
+	return {
+		"has_support": true,
+		"y": best_y,
+		"c1": min_c1,
+		"c2": max_c2,
+		"overhang_dir": overhang_dir,
+		"fulcrum_x": fulcrum_x,
+		"fulcrum_y": best_y,
+		"com_supported": com_supported,
+	}
+
+
+func _resolve_obb_world_sat_contacts(cand_pos: Vector2, prev_pos: Vector2) -> Vector2:
+	# 2D OBB-vs-AABB Separating Axis Theorem (SAT) Non-Penetration Solver (Box2D b2CollidePolygon.as):
+	# Prevents rotated props (especially falling/pivoting crates on ledges) from ever penetrating solid walls,
+	# floors, or one-way cloud platforms around a ledge fulcrum.
+	if map_loader == null or not is_instance_valid(map_loader):
+		return cand_pos
+
+	var rot: float = rotation
+	var c: float = absf(cos(rot))
+	var s: float = absf(sin(rot))
+	var cos_r: float = cos(rot)
+	var sin_r: float = sin(rot)
+	var hw: float = (base_width if base_width > 0.0 else width) * 0.5
+	var hh: float = (base_height if base_height > 0.0 else height) * 0.5
+	if absf(rot) <= 0.005:
+		hw = width * 0.5
+		hh = height * 0.5
+
+	var r_obb_x: float = hw * c + hh * s
+	var r_obb_y: float = hw * s + hh * c
+
+	var obstacles: Array[Rect2] = _get_solid_world_obstacles()
+	var c_var: Variant = map_loader.get("cloud_rects")
+	if typeof(c_var) == TYPE_ARRAY and _ledge_fulcrum_y < INF:
+		for cr_v: Variant in c_var as Array:
+			if cr_v is Rect2:
+				var cr: Rect2 = cr_v as Rect2
+				if absf(cr.position.y - _ledge_fulcrum_y) <= 2.5:
+					obstacles.append(cr)
+
+	for sr: Rect2 in obstacles:
+		if sr.size.x < 1.0 or sr.size.y < 1.5:
+			continue
+		var sc: Vector2 = sr.position + sr.size * 0.5
+		var sh: Vector2 = sr.size * 0.5
+		var d: Vector2 = cand_pos - sc
+
+		var pen_wx: float = (r_obb_x + sh.x) - absf(d.x)
+		if pen_wx <= 0.001:
+			continue
+		var pen_wy: float = (r_obb_y + sh.y) - absf(d.y)
+		if pen_wy <= 0.001:
+			continue
+
+		var proj_d_ux: float = d.x * cos_r + d.y * sin_r
+		var r_aabb_ux: float = sh.x * c + sh.y * s
+		var pen_ux: float = (hw + r_aabb_ux) - absf(proj_d_ux)
+		if pen_ux <= 0.001:
+			continue
+
+		var proj_d_uy: float = -d.x * sin_r + d.y * cos_r
+		var r_aabb_uy: float = sh.x * s + sh.y * c
+		var pen_uy: float = (hh + r_aabb_uy) - absf(proj_d_uy)
+		if pen_uy <= 0.001:
+			continue
+
+		# Special handling for a ledge fulcrum platform while the prop is overhanging and pivoting/sliding off its edge:
+		var is_fulcrum_plat: bool = (absf(sr.position.y - _ledge_fulcrum_y) <= 2.5)
+		if is_fulcrum_plat:
+			var c_local: Array[Vector2] = [
+				Vector2(-hw, -hh),
+				Vector2(hw, -hh),
+				Vector2(hw, hh),
+				Vector2(-hw, hh),
+			]
+			for lp: Vector2 in c_local:
+				var wp: Vector2 = cand_pos + lp.rotated(rot)
+				if wp.x > sr.position.x and wp.x < sr.end.x and wp.y > sr.position.y and wp.y < sr.end.y + 8.0:
+					var dx_edge: float = (wp.x - sr.position.x) if cand_pos.x < sr.position.x + sr.size.x * 0.5 else (sr.end.x - wp.x)
+					var dy_top: float = wp.y - sr.position.y
+					if cand_pos.y >= sr.position.y - 1.5 or dx_edge <= dy_top + 1.5:
+						var push_dir: float = -1.0 if cand_pos.x < sr.position.x + sr.size.x * 0.5 else 1.0
+						cand_pos.x += push_dir * (dx_edge + 0.15)
+					else:
+						cand_pos.y -= (dy_top + 0.15)
+			continue
+
+		# General Minimum Translation Vector (MTV) resolution across the 4 SAT axes
+		if pen_wx < pen_wy and pen_wx <= pen_ux + 0.5 and pen_wx <= pen_uy + 0.5:
+			var sx: float = 1.0 if d.x >= 0.0 else -1.0
+			cand_pos.x += sx * pen_wx
+		elif pen_wy <= pen_ux + 0.5 and pen_wy <= pen_uy + 0.5:
+			var sy: float = 1.0 if d.y >= 0.0 else -1.0
+			cand_pos.y += sy * pen_wy
+		elif pen_ux < pen_uy:
+			var sux: float = 1.0 if proj_d_ux >= 0.0 else -1.0
+			cand_pos += Vector2(cos_r, sin_r) * (sux * pen_ux)
+		else:
+			var suy: float = 1.0 if proj_d_uy >= 0.0 else -1.0
+			cand_pos += Vector2(-sin_r, cos_r) * (suy * pen_uy)
+
+	return cand_pos
 
 
 func _get_solid_world_obstacles() -> Array[Rect2]:
@@ -858,7 +1243,7 @@ func _clamp_x_against_other_props(cand_x: float, at_y: float, from_x: float = IN
 	var my_bottom: float = at_y + height * 0.5
 	var my_top: float = at_y - height * 0.5
 	for p_var: Variant in props_var as Array:
-		if not (p_var is Node2D) or not is_instance_valid(p_var) or p_var == self:
+		if not is_instance_valid(p_var) or not (p_var is Node2D) or p_var == self:
 			continue
 		var other: Node2D = p_var as Node2D
 		if bool(other.get("is_destroyed")) or bool(other.get("is_hanging_holder")) or not bool(other.get("has_solid_hitbox")):
@@ -901,7 +1286,7 @@ func _clamp_y_against_ceilings(cand_x: float, prev_y: float, cand_y: float) -> f
 		var props_var: Variant = match_world.get("props")
 		if typeof(props_var) == TYPE_ARRAY:
 			for p_var: Variant in props_var as Array:
-				if not (p_var is Node2D) or not is_instance_valid(p_var) or p_var == self:
+				if not is_instance_valid(p_var) or not (p_var is Node2D) or p_var == self:
 					continue
 				var other: Node2D = p_var as Node2D
 				if bool(other.get("is_destroyed")) or bool(other.get("is_hanging_holder")) or not bool(other.get("has_solid_hitbox")):
@@ -1049,65 +1434,51 @@ func step_prop(step_24hz: float) -> void:
 	var prev_pos: Vector2 = global_position
 	var can_tip: bool = _can_tip_horizontally()
 	var can_rot: bool = _can_rotate_dynamically()
-	if on_ground and _tip_accum != 0.0:
-		_tip_accum = move_toward(_tip_accum, 0.0, 0.04 * step_24hz)
 
 	_ledge_overhang_dir = 0.0
 	if on_ground and map_loader != null and is_instance_valid(map_loader):
-		var cur_bottom: float = prev_pos.y + height * 0.5
-		var center_sup: float = _get_support_y_below(prev_pos.x, cur_bottom, cur_bottom + 2.5, false)
-		# Compensate for map_loader.get_ground_y_below's +-2.0px pad to test exact geometric overhang:
-		# - right_com_sup / left_com_sup == INF means >50% of the prop's width hangs out in empty air (overhanging side is heavier!)
-		# - right_inner_sup / left_inner_sup == INF means >42% of the prop's width hangs out past the ledge corner bevel.
-		var right_com_sup: float = _get_support_y_below(prev_pos.x + 2.05, cur_bottom, cur_bottom + 3.0, false)
-		var left_com_sup: float = _get_support_y_below(prev_pos.x - 2.05, cur_bottom, cur_bottom + 3.0, false)
-		var right_inner_sup: float = _get_support_y_below(prev_pos.x + width * 0.08 + 2.05, cur_bottom, cur_bottom + 3.0, false)
-		var left_inner_sup: float = _get_support_y_below(prev_pos.x - width * 0.08 - 2.05, cur_bottom, cur_bottom + 3.0, false)
-		var left_tail_sup: float = _get_support_y_below(prev_pos.x - width * 0.42 + 2.0, cur_bottom, cur_bottom + 4.0, false)
-		var right_tail_sup: float = _get_support_y_below(prev_pos.x + width * 0.42 - 2.0, cur_bottom, cur_bottom + 4.0, false)
+		var cur_bottom: float = prev_pos.y + get_obb_extents_at(rotation).y * 0.5
+		var manifold_g: Dictionary = _query_ledge_contact_manifold(prev_pos.x, cur_bottom, cur_bottom + 3.0)
+		var has_sup_g: bool = bool(manifold_g.get("has_support", false))
+		var odir_g: float = float(manifold_g.get("overhang_dir", 0.0))
+		var sup_y_g: float = float(manifold_g.get("y", INF))
 
-		var overhang_right: bool = (
-			(right_com_sup == INF and left_tail_sup < INF)
-			or (_settling_frames <= 0.0 and right_inner_sup == INF and left_tail_sup < INF and (velocity.x > 0.02 or angular_velocity > 0.005 or rotation > 0.01))
-		)
-		var overhang_left: bool = (
-			(left_com_sup == INF and right_tail_sup < INF)
-			or (_settling_frames <= 0.0 and left_inner_sup == INF and right_tail_sup < INF and (velocity.x < -0.02 or angular_velocity < -0.005 or rotation < -0.01))
-		)
-
-		if overhang_right or overhang_left:
-			var odir: float = 1.0 if overhang_right else -1.0
-			_ledge_overhang_dir = odir
-			var is_past_com: bool = (right_com_sup == INF) if odir > 0.0 else (left_com_sup == INF)
-			var rot_accel: float = (0.135 if center_sup == INF else 0.105) if is_past_com else 0.070
-			var slide_accel: float = (0.34 if is_past_com else 0.22) + 1.10 * absf(sin(rotation))
+		var moving_onto_platform_g: bool = (velocity.x * odir_g < -0.02 and not is_hanging_crate)
+		if has_sup_g and absf(odir_g) > 0.01 and not moving_onto_platform_g:
+			_ledge_overhang_dir = odir_g
+			_ledge_fulcrum_x = float(manifold_g.get("fulcrum_x", prev_pos.x))
+			_ledge_fulcrum_y = float(manifold_g.get("fulcrum_y", sup_y_g))
+			var is_past_com: bool = not bool(manifold_g.get("com_supported", false))
+			var rot_accel: float = 0.135 if is_past_com else 0.075
+			var slide_accel: float = (0.38 if is_past_com else 0.22) + 1.15 * absf(sin(rotation))
 			if can_rot:
-				angular_velocity += odir * rot_accel * step_24hz
-			velocity.x += odir * slide_accel * step_24hz
-			if is_past_com and absf(velocity.x) < 0.38:
-				velocity.x = odir * 0.38
+				angular_velocity = clampf(angular_velocity + odir_g * rot_accel * step_24hz, -0.24, 0.24)
+			velocity.x += odir_g * slide_accel * step_24hz
+			if is_past_com and odir_g * velocity.x < 0.42:
+				velocity.x = odir_g * 0.42
 			if can_tip and absf(sin(_target_rest_rot)) < 0.5:
-				_target_rest_rot = odir * (PI * 0.5)
-			if is_past_com or absf(rotation) >= 0.12:
+				_target_rest_rot = odir_g * (PI * 0.5)
+			if is_past_com or absf(rotation) >= 0.08:
 				on_ground = false
-				var inner_tail_x: float = prev_pos.x - odir * maxf(1.0, width * 0.26 - 2.0)
-				var inner_tail_sup: float = _get_support_y_below(inner_tail_x, cur_bottom, cur_bottom + 4.0, false)
-				if inner_tail_sup < INF and absf(rotation) < 0.52:
-					# Fulcrum-guided corner descent while the tail pivots off the ledge corner
-					velocity.y = maxf(velocity.y, 0.35 + absf(sin(rotation)) * 2.2)
-		elif center_sup == INF:
+				velocity.y = maxf(velocity.y, 0.35 + absf(sin(rotation)) * 1.8)
+		elif has_sup_g and absf(odir_g) > 0.01 and moving_onto_platform_g:
+			# Prop is actively sliding ONTO the platform from a horizontal kick -> carry Center of Mass onto the platform!
+			prev_pos.x += signf(velocity.x) * 0.55 * step_24hz
+		elif not has_sup_g:
 			on_ground = false
+			_ledge_fulcrum_y = INF
 			if can_rot and absf(velocity.x) > 0.02:
 				var fall_dir: float = signf(velocity.x)
 				if can_tip and absf(sin(_target_rest_rot)) < 0.5:
 					_target_rest_rot = fall_dir * (PI * 0.5)
 				angular_velocity += fall_dir * 0.12 * step_24hz
 		else:
+			_ledge_fulcrum_y = INF
 			if velocity == Vector2.ZERO and is_zero_approx(angular_velocity) and absf(rotation - _target_rest_rot) <= 0.01 and not is_parachute_crate and _settling_frames <= 0.0:
 				# Fast-path for stationary settled props well inside their platform support
 				rotation = _target_rest_rot if can_tip else 0.0
 				angular_velocity = 0.0
-				_sync_rotated_dimensions(center_sup)
+				_sync_rotated_dimensions(sup_y_g)
 				return
 
 	if is_parachute_crate and parachute_attached and not on_ground:
@@ -1120,10 +1491,12 @@ func step_prop(step_24hz: float) -> void:
 			velocity.y = minf(TERMINAL_VELOCITY_Y, velocity.y + PROP_GRAVITY * step_24hz)
 			_step_rotational_balance(step_24hz)
 		else:
-			velocity.x *= pow(ground_friction_24hz, step_24hz)
+			var eff_friction: float = maxf(ground_friction_24hz, 0.80) if (can_tip and absf(angular_velocity) > 0.025) else ground_friction_24hz
+			velocity.x *= pow(eff_friction, step_24hz)
 			if absf(velocity.x) < 0.03:
 				velocity.x = 0.0
-			_step_rotational_balance(step_24hz, prev_pos.y + height * 0.5)
+			var sup_y_bal: float = prev_pos.y + get_obb_extents_at(rotation).y * 0.5
+			_step_rotational_balance(step_24hz, sup_y_bal)
 			prev_pos.y = global_position.y
 
 	var next_pos: Vector2 = prev_pos + velocity * step_24hz
@@ -1150,7 +1523,7 @@ func step_prop(step_24hz: float) -> void:
 		var props_var: Variant = match_world.get("props")
 		if typeof(props_var) == TYPE_ARRAY:
 			for p_var: Variant in props_var as Array:
-				if not (p_var is Node2D) or not is_instance_valid(p_var) or p_var == self:
+				if not is_instance_valid(p_var) or not (p_var is Node2D) or p_var == self:
 					continue
 				var other: Node2D = p_var as Node2D
 				if bool(other.get("is_destroyed")) or bool(other.get("is_hanging_holder")) or not bool(other.get("has_solid_hitbox")):
@@ -1173,6 +1546,14 @@ func step_prop(step_24hz: float) -> void:
 					var push_sign: float = 1.0 if dx_p >= 0.0 else -1.0
 					if absf(dx_p) < 0.01:
 						push_sign = 1.0 if prop_id > int(other.get("prop_id")) else -1.0
+					var omass_sep: float = maxf(0.4, float(other.get("mass")) if other.get("mass") != null else 1.0)
+					if not bool(other.get("kinematic")) and (absf(_ledge_overhang_dir) > 0.01 or mass >= omass_sep * 1.35):
+						var overlap_p: float = min_dx - absf(dx_p)
+						var share_o: float = 0.85 if absf(_ledge_overhang_dir) > 0.01 else (mass / (mass + omass_sep))
+						var other_pushed_x: float = other.global_position.x - push_sign * overlap_p * share_o
+						if other.has_method("_clamp_x_against_walls"):
+							other_pushed_x = float(other.call("_clamp_x_against_walls", other_pushed_x, other.global_position.y))
+						other.global_position.x = other_pushed_x
 					var cand_x: float = _clamp_x_against_walls(other.global_position.x + push_sign * min_dx, prev_pos.y)
 					if absf(cand_x - other.global_position.x) < min_dx - 0.1 and not bool(other.get("kinematic")):
 						# This prop is against a wall, so push `other` out instead of overlapping!
@@ -1193,14 +1574,15 @@ func step_prop(step_24hz: float) -> void:
 
 	# 5c. Horizontal Prop-vs-Fighter solid space occupancy (prevents props from phasing through standing/crouching/squeezed fighters!)
 	var is_high_speed_gibb_horizontal: bool = can_gibb and (absf(velocity.x) >= 1.6 or velocity.length() >= 2.1)
-	if has_solid_hitbox and not is_high_speed_gibb_horizontal and not (prop_type in ["TABLE", "TABLE_SMALL", "LAMP_1"] or (prop_type == "CRATE_HANGING" and not on_ground)) and velocity.length() <= 3.8 and match_world != null and is_instance_valid(match_world):
+	var is_falling_crush_descent: bool = (is_hanging_crate and is_hanging_released and not on_ground and velocity.y > 0.8)
+	if has_solid_hitbox and not is_high_speed_gibb_horizontal and not is_falling_crush_descent and not (prop_type in ["TABLE", "TABLE_SMALL", "LAMP_1"]) and velocity.length() <= 3.8 and match_world != null and is_instance_valid(match_world):
 		var fighters_s: Variant = match_world.get("fighters")
 		if typeof(fighters_s) == TYPE_ARRAY:
 			var my_top_s: float = next_pos.y - height * 0.5
 			var my_bot_s: float = next_pos.y + height * 0.5
 			var min_f_dx: float = width * 0.5 + 4.0
 			for fs_var: Variant in fighters_s as Array:
-				if not (fs_var is Node2D) or not is_instance_valid(fs_var):
+				if not is_instance_valid(fs_var) or not (fs_var is Node2D):
 					continue
 				var f_node: Node2D = fs_var as Node2D
 				if bool(f_node.get("is_dead")) or bool(f_node.get("climbing")) or bool(f_node.get("ledge_grabbing")):
@@ -1229,7 +1611,7 @@ func step_prop(step_24hz: float) -> void:
 		if (is_hanging_crate and is_hanging_released and not on_ground and velocity.y > 0.8) or (can_gibb and ((not on_ground and velocity.y > 1.4) or absf(velocity.x) >= 1.6)) or velocity.length() >= 2.1:
 			_check_fighter_impacts(prev_pos, next_pos)
 
-	# 7. Ground / Platform / Prop-stack landing & Ceiling collision check
+	# 7. Ground / Platform / Prop-stack landing, Ledge Fulcrum Corner Solver & Ceiling collision check
 	on_ground = false
 	if velocity.y < 0.0:
 		var clamped_ceil_y: float = _clamp_y_against_ceilings(next_pos.x, prev_pos.y, next_pos.y)
@@ -1237,35 +1619,81 @@ func step_prop(step_24hz: float) -> void:
 			next_pos.y = clamped_ceil_y
 			velocity.y = 0.0
 	elif map_loader != null and is_instance_valid(map_loader) and velocity.y >= 0.0:
-		var prev_bottom: float = prev_pos.y + height * 0.5
-		var next_bottom: float = next_pos.y + height * 0.5
-		var ground_y: float = _get_support_y_below(next_pos.x, prev_bottom, next_bottom, true)
-		if ground_y < INF and absf(_ledge_overhang_dir) > 0.01:
-			# Do NOT snap back up onto the upper ledge while the Center of Mass is still overhanging past the fulcrum!
-			var com_ground_y: float = _get_support_y_below(next_pos.x + _ledge_overhang_dir * 2.05, prev_bottom, next_bottom, false)
-			if com_ground_y == INF:
-				ground_y = INF
-		if ground_y < INF and next_bottom >= ground_y - 0.5:
+		var obb_half_h: float = get_obb_extents_at(rotation).y * 0.5
+		var eff_half_h: float = maxf(height * 0.5, obb_half_h)
+		var prev_bottom: float = prev_pos.y + obb_half_h
+		var next_obb_bottom: float = next_pos.y + eff_half_h
+		var manifold: Dictionary = _query_ledge_contact_manifold(next_pos.x, prev_bottom, next_obb_bottom)
+		var has_sup: bool = bool(manifold.get("has_support", false))
+		var ground_y: float = float(manifold.get("y", INF))
+		var odir: float = float(manifold.get("overhang_dir", 0.0))
+
+		var moving_onto_platform: bool = (velocity.x * odir < -0.05 and not is_hanging_crate)
+		if has_sup and absf(odir) > 0.01 and not moving_onto_platform and next_obb_bottom >= ground_y - 0.5:
+			# Case 7A: Partial Ledge Corner Strike / Fulcrum Slide (e.g. storage crate_hanging_1 at x=168 hitting Rect2(172, 166, 50, 2)):
+			# The overhanging side (odir = -1.0 LEFT or +1.0 RIGHT) has no support under the Center of Mass!
+			# The prop pivots around (fulcrum_x, fulcrum_y), tilts toward `odir`, and slides off `odir` with 0.0px platform penetration.
+			_ledge_overhang_dir = odir
+			_ledge_fulcrum_x = float(manifold.get("fulcrum_x", next_pos.x))
+			_ledge_fulcrum_y = float(manifold.get("fulcrum_y", ground_y))
+			var is_past_com: bool = not bool(manifold.get("com_supported", false))
+			var lever_ratio: float = clampf(absf(_ledge_fulcrum_x - next_pos.x) / maxf(4.0, width * 0.5), 0.18, 0.85)
+
+			if velocity.y > 0.45:
+				if can_rot:
+					var impact_spin: float = clampf(velocity.y * 0.060 * (0.65 + lever_ratio), 0.085, 0.22)
+					if odir * angular_velocity < impact_spin:
+						angular_velocity = odir * maxf(absf(angular_velocity), impact_spin)
+					if odir * rotation < 0.02:
+						rotation = odir * maxf(0.02, absf(angular_velocity) * step_24hz)
+				var deflect_vx: float = maxf(0.62, velocity.y * 0.34 * (0.55 + lever_ratio) + absf(sin(rotation)) * 1.20)
+				if odir * velocity.x < deflect_vx:
+					velocity.x = odir * deflect_vx
+				if can_tip and absf(sin(_target_rest_rot)) < 0.5:
+					_target_rest_rot = odir * (PI * 0.5)
+				if _settling_frames <= 0.0 and velocity.y >= 1.8:
+					MapLoaderScript.play_sfx_at("wood_impact" if prop_material == "Wood" else "metal_impact", Vector2(_ledge_fulcrum_x, _ledge_fulcrum_y))
+
+			if can_rot:
+				angular_velocity = clampf(angular_velocity + odir * (0.135 if is_past_com else 0.075) * step_24hz, -0.24, 0.24)
+			velocity.x += odir * ((0.38 if is_past_com else 0.22) + 1.15 * absf(sin(rotation))) * step_24hz
+			next_pos.x = _clamp_x_against_walls(prev_pos.x + velocity.x * step_24hz, prev_pos.y, prev_pos.x)
+			next_pos.x = _clamp_x_against_other_props(next_pos.x, prev_pos.y, prev_pos.x)
+
+			var rot_f: float = clampf(rotation, -1.15, 1.15)
+			var dx_f: float = _ledge_fulcrum_x - next_pos.x
+			var cos_r: float = maxf(0.38, cos(rot_f))
+			var fulcrum_tangent_y: float = _ledge_fulcrum_y - ((height * 0.5) + dx_f * sin(rot_f)) / cos_r
+			if next_pos.y > fulcrum_tangent_y:
+				next_pos.y = fulcrum_tangent_y
+				velocity.y = clampf((next_pos.y - prev_pos.y) / maxf(0.1, step_24hz), 0.35, 2.4)
+			on_ground = not is_past_com and absf(rotation) < 0.08
+		elif has_sup and next_obb_bottom >= ground_y - 0.5:
 			var impact_vy: float = velocity.y
-			next_pos.y = ground_y - height * 0.5
+			next_pos.y = ground_y - get_obb_extents_at(rotation).y * 0.5
+			if moving_onto_platform and not bool(manifold.get("com_supported", false)):
+				next_pos.x = _clamp_x_against_walls(next_pos.x + signf(velocity.x) * 0.65 * step_24hz, next_pos.y, prev_pos.x)
 			if (_settling_frames <= 0.0 or (is_hanging_crate and is_hanging_released)) and ((is_hanging_crate and is_hanging_released) or can_gibb) and impact_vy > 1.0:
 				# Final swept crush check right at the floor landing position (Player.as:6234-6286 CheckGibPlayer)
 				_check_fighter_impacts(prev_pos, next_pos)
 			velocity.y = 0.0
 			on_ground = true
 			_ledge_overhang_dir = 0.0
+			_ledge_fulcrum_y = INF
 			if can_tip:
 				if impact_vy >= 3.5 and absf(rotation - _target_rest_rot) > 0.45:
 					_target_rest_rot = clampf(round(rotation / (PI * 0.5)) * (PI * 0.5), -PI * 0.5, PI * 0.5)
 				_sync_rotated_dimensions(ground_y)
-				next_pos.y = ground_y - height * 0.5
+				next_pos.y = ground_y - get_obb_extents_at(rotation).y * 0.5
 			elif can_rot:
 				# Wide heavy props (CRATE_HANGING, DESK, TABLE) slap their wide base down toward 0 deg on landing impact
 				if absf(rotation) > 0.02:
-					angular_velocity = -signf(rotation) * maxf(absf(angular_velocity) * 0.5, 0.12)
+					angular_velocity = -signf(rotation) * maxf(absf(angular_velocity) * 0.5, 0.14)
+					next_pos.y = ground_y - get_obb_extents_at(rotation).y * 0.5
 				else:
 					rotation = 0.0
 					angular_velocity = 0.0
+					next_pos.y = ground_y - height * 0.5
 			else:
 				rotation = 0.0
 				angular_velocity = 0.0
@@ -1293,7 +1721,27 @@ func step_prop(step_24hz: float) -> void:
 				_trigger_barrel_phase_2_explosion()
 				return
 
+	# 8. 2D OBB-vs-AABB SAT Non-Penetration & Self-Healing Runtime Guardrails
+	if _ledge_fulcrum_y < INF:
+		var obb_ext_sat: Vector2 = get_obb_extents_at(rotation)
+		if on_ground or next_pos.y - obb_ext_sat.y * 0.5 > _ledge_fulcrum_y + 2.0 or (not is_nan(_ledge_fulcrum_x) and absf(next_pos.x - _ledge_fulcrum_x) > obb_ext_sat.x * 0.5 + 2.0):
+			_ledge_fulcrum_y = INF
+	if absf(_ledge_overhang_dir) > 0.01 or (_ledge_fulcrum_y < INF and absf(rotation) > 0.01):
+		next_pos = _resolve_obb_world_sat_contacts(next_pos, prev_pos)
+
+	if is_nan(next_pos.x) or is_nan(next_pos.y) or is_inf(next_pos.x) or is_inf(next_pos.y):
+		next_pos = prev_pos
+		velocity = Vector2.ZERO
+		angular_velocity = 0.0
+		rotation = 0.0
+	if is_nan(rotation) or is_inf(rotation):
+		rotation = 0.0
+		angular_velocity = 0.0
+
 	global_position = next_pos
+	if next_pos.y > 460.0 and not is_hanging_holder:
+		is_destroyed = true
+		visible = false
 
 
 func try_open_supply_crate() -> bool:
@@ -1321,7 +1769,7 @@ func _check_fighter_impacts(prev_pos: Vector2, at_pos: Vector2) -> void:
 	var is_gibb_prop: bool = can_gibb or (is_hanging_crate and is_hanging_released)
 
 	for f_var: Variant in fighters_var as Array:
-		if not (f_var is Node2D) or not is_instance_valid(f_var):
+		if not is_instance_valid(f_var) or not (f_var is Node2D):
 			continue
 		var f: Node2D = f_var as Node2D
 		if bool(f.get("is_gibbed")):
@@ -1453,9 +1901,11 @@ func apply_bullet_hit(
 		# AS3 Projectiles.as:48-138 & ProjectilesUpdater.as:601-610:
 		# Bullets apply a small horizontal impulse scaled by 1/mass without popping grounded props into the air,
 		# and cover tables (cover_level > 0) are not pushed by bullets!
-		var bullet_impulse: float = clampf((pushback * 0.025) / maxf(0.65, mass), 0.15, 0.85)
+		var min_b_imp: float = 0.04 if mass >= 3.0 else 0.15
+		var bullet_impulse: float = clampf((pushback * 0.025) / maxf(0.65, mass), min_b_imp, 0.85)
 		velocity.x = clampf(velocity.x + fdir * bullet_impulse, -2.2, 2.2)
-		angular_velocity += fdir * 0.03
+		if not is_hanging_crate:
+			angular_velocity += fdir * (0.004 if mass >= 3.0 else 0.03)
 
 	if _settling_frames <= 0.0:
 		if prop_material == "Metal":
@@ -1527,25 +1977,34 @@ func apply_melee_hit(damage: float, dir_x: int, is_kick: bool = false, _weapon_i
 		apply_pendulum_impulse(ang_imp)
 	elif not kinematic and kick_power > 0.0:
 		# AS3 Player.as:5731-5762 (Kick) & MapPremadeItems.as per-prop KickPower / KickWeightCalculation:
-		# Kicks & punches apply calibrated per-prop impulses so crates hop a short distance (~12-16px),
-		# barrels slide moderately (~9-12px), and heavy desks/file cabinets barely shift (~2-5px)!
+		# 1. Primary Center-of-Mass impulse + eccentric upward foot lift at (x + dir*4, y - 4) launches light/medium
+		#    props (BARREL, BARREL_EXPLOSIVE, TRASHCAN, GASCAN, CRATE, CHAIR, TABLE_SMALL) into a genuine airborne
+		#    parabolic hop proportional to KickPower and 1/mass (matching Image 1 of original Superfighters Y8).
+		# 2. Heavy props (FILECAB, TABLE, DESK, POOL_TABLE, CRATE_HANGING) scale inversely with mass so heavy furniture
+		#    shifts/rocks modestly without exceeding horizontal gibb thresholds.
 		var push_x: float = 1.0
 		var push_y: float = -1.0
-		if kick_weight_calculation:
-			push_x = clampf(kick_power * (0.95 + 0.35 / maxf(0.5, mass)), 0.75, 1.85)
-			push_y = clampf(-1.05 - kick_power * 0.45 / maxf(0.6, mass), -1.80, -0.90)
-		elif mass >= 3.0:
-			# Super-heavy props (CRATE_HANGING mass=4.2, POOL_TABLE mass=4.8) only nudge slightly along the floor when kicked/punched
-			push_x = clampf(kick_power * 0.75, 0.32, 0.72)
-			push_y = -0.22 if is_kick else 0.0
+		if is_kick:
+			if can_gibb or mass >= 3.0:
+				# Super-heavy props (CRATE_HANGING mass=3.8, DESK mass=3.2, POOL_TABLE mass=4.6) nudge along floor (< 1.6 gibb threshold)
+				push_x = clampf(kick_power * (0.48 + 0.55 / maxf(0.5, mass)), 0.32, 0.72)
+				push_y = -0.35 if mass <= 3.5 else -0.22
+			elif kick_weight_calculation or kick_power >= 0.85:
+				# Light & medium kickable props (CRATE, BARREL, BARREL_EXPLOSIVE, GASCAN, TRASHCAN, CHAIR, TABLE, TABLE_SMALL, COMP, PAPER):
+				# Authentic Box2D CoM launch + eccentric foot lift proportional to kick_power / mass!
+				push_x = clampf(kick_power * (1.12 + 0.68 / maxf(0.55, mass)), 1.25, 2.35)
+				push_y = -clampf(1.52 + 0.62 * kick_power / maxf(0.70, sqrt(mass)), 1.75, 2.35)
+			else:
+				# Heavy tall furniture (FILECAB mass=2.25, kick_power=0.80)
+				push_x = clampf(kick_power * (0.85 + 0.65 / maxf(0.5, mass)), 0.55, 1.35)
+				push_y = -clampf(0.55 + 0.75 * kick_power, 0.55, 1.25)
 		else:
-			push_x = clampf(kick_power * 0.85, 0.32, 1.10)
-			push_y = clampf(-kick_power * 0.90, -1.10, -0.40)
-
-		if not is_kick:
-			# Punches/melee swings push props noticeably less than kicks
-			push_x *= 0.55
-			push_y = -0.60 if mass <= 1.25 else 0.0
+			if can_gibb or mass >= 3.0:
+				push_x = clampf(kick_power * 0.42, 0.18, 0.45)
+				push_y = 0.0
+			else:
+				push_x = clampf(kick_power * (0.45 + 0.22 / maxf(0.55, mass)), 0.32, 0.95)
+				push_y = -0.60 if mass <= 1.25 else -0.25
 
 		var attacker_on_top: bool = (
 			attacker != null
@@ -1555,7 +2014,7 @@ func apply_melee_hit(damage: float, dir_x: int, is_kick: bool = false, _weapon_i
 		)
 		if attacker_on_top and is_kick:
 			# AS3 Player.as:5746-5762: when kicking a prop out from under the fighter's own feet, lever arm dx ~ 0 so the prop slides/hops out smoothly!
-			push_x *= 1.15
+			push_x *= 1.05
 			push_y = -0.45
 
 		velocity = Vector2(fdir * push_x, push_y)
@@ -1563,15 +2022,16 @@ func apply_melee_hit(damage: float, dir_x: int, is_kick: bool = false, _weapon_i
 			# Housner Inverted-Pendulum Corner-Rocking & Toppling Impulse (AS3 Player.as:5750-5762):
 			# - Light punches rock tall props to ~13 deg (1 punch) or ~28 deg (2 punches) within the sub-critical balance regime (|theta| < theta_crit),
 			#   allowing gravity's restoring torque to pull them back upright to 0 deg! Only 3 rapid consecutive punches cross theta_crit.
-			# - Kicking a tall slender prop (BARREL, BARREL_EXPLOSIVE, GASCAN, CHAIR, COMP: base_height >= base_width * 1.2) imparts ~0.178 rad/tick,
-			#   which visibly decelerates as the Center of Mass climbs past theta_crit (~36.25 deg) before gravity topples it onto its side at +-90 deg!
-			# - Kicking a heavy/wide-based prop (FILECAB mass=2.25, TRASHCAN) imparts ~0.118 rad/tick, rocking it to ~20 deg and falling back upright
+			# - Kicking a tall slender prop (BARREL, BARREL_EXPLOSIVE, GASCAN, CHAIR, COMP: base_height >= base_width * 1.2) launches it into an airborne
+			#   arc with a natural ~12-22 deg mid-air tilt (matching Image 1) before crossing theta_crit (~36.25 deg) and rolling onto its side at +-90 deg!
+			# - Kicking a heavy/wide-based prop (FILECAB mass=2.25) imparts ~0.118 rad/tick, rocking it to ~20 deg and falling back upright
 			#   on 1 kick, and only toppling on a 2nd consecutive kick while tilted!
 			if attacker_on_top:
 				angular_velocity = fdir * 0.05
 			elif _is_tipped_on_side():
 				var side_sign: float = signf(rotation) if absf(rotation) > 0.01 else fdir
-				angular_velocity = -side_sign * (0.045 if is_kick else 0.025)
+				var side_rock: float = (0.075 if is_kick else 0.032) / maxf(sqrt(mass), 0.75)
+				angular_velocity = clampf(angular_velocity - side_sign * side_rock, -0.14, 0.14)
 			elif base_height > base_width:
 				var rot_imp: float = 0.080
 				if is_kick:
@@ -1590,6 +2050,7 @@ func apply_melee_hit(damage: float, dir_x: int, is_kick: bool = false, _weapon_i
 			angular_velocity = fdir * (0.06 if is_kick else 0.03)
 		if push_y < -0.1:
 			on_ground = false
+			_settling_frames = 0.0
 		crushed_fighter_ids.clear()
 		if attacker != null and is_instance_valid(attacker):
 			crushed_fighter_ids[attacker.get_instance_id()] = true

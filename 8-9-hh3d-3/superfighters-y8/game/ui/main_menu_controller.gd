@@ -78,6 +78,7 @@ const VS_MAP_IDS: Array[String] = [
 	"tower",
 	"junkyard",
 	"cargo",
+	"steel_harbor",
 ]
 
 const MAP_CHOICES: Array[String] = [
@@ -90,6 +91,7 @@ const MAP_CHOICES: Array[String] = [
 	"tower",
 	"junkyard",
 	"cargo",
+	"steel_harbor",
 ]
 
 const MAP_DISPLAY_NAMES: Dictionary = {
@@ -102,6 +104,7 @@ const MAP_DISPLAY_NAMES: Dictionary = {
 	"tower": "TOWER",
 	"junkyard": "JUNKYARD",
 	"cargo": "CARGO",
+	"steel_harbor": "STEEL HARBOR (NEW)",
 	"backstreets": "BACKSTREETS",
 	"testing_floor": "TESTING FLOOR",
 	"survival": "SURVIVAL",
@@ -116,6 +119,7 @@ const MAP_THUMB_PATHS: Dictionary = {
 	"tower": "res://assets/sprites/ui/map_thumb_tower.png",
 	"junkyard": "res://assets/maps/Bitmap 2482.png",
 	"cargo": "res://assets/maps/Bitmap 2451.png",
+	"steel_harbor": "res://assets/maps/steel_harbor_bg.png",
 	"backstreets": "res://assets/maps/Bitmap 2233.png",
 	"testing_floor": "res://assets/maps/Bitmap 2221.png",
 	"survival": "res://assets/maps/Bitmap 2219.png",
@@ -151,7 +155,7 @@ var selected_mode_idx: int = 0 # 0: VS, 1: STAGE, 2: SURVIVAL
 # Player & Mode Setup State
 var vs_two_player: bool = false
 var selected_game_mode: String = "vs" # "vs", "stage", "survival"
-var vs_map_idx: int = 1 # Index into MAP_CHOICES (1 = rooftops, 0 = random)
+var vs_map_idx: int = 9 # Index into MAP_CHOICES (9 = steel_harbor NEW map default, 1 = rooftops, 0 = random)
 var vs_game_rule_idx: int = 0 # Index into GAME_MODE_RULES
 var vs_p1_char_idx: int = 1 # Index into CHAR_CHOICES (1 = johnny, 0 = random)
 var vs_p2_char_idx: int = 3 # Index into CHAR_CHOICES (3 = agent, 0 = random)

@@ -70,12 +70,6 @@ func get_state_frames(state_name: String) -> Array:
 	return frames as Array if typeof(frames) == TYPE_ARRAY else []
 
 
-func get_state_keyframes(state_name: String) -> Array:
-	var st: Dictionary = get_state_data(state_name)
-	var kfs: Variant = st.get("keyframes", st.get("frames", []))
-	return kfs as Array if typeof(kfs) == TYPE_ARRAY else []
-
-
 func get_character_data(char_id: String) -> Dictionary:
 	ensure_loaded()
 	var chars: Variant = rigs_data.get("characters", {})
@@ -88,16 +82,6 @@ func get_character_data(char_id: String) -> Dictionary:
 	if chars_dict.has("johnny"):
 		return chars_dict["johnny"] as Dictionary
 	return {}
-
-
-func get_character_ids() -> Array[String]:
-	ensure_loaded()
-	var out: Array[String] = []
-	var chars: Variant = rigs_data.get("characters", {})
-	if typeof(chars) == TYPE_DICTIONARY:
-		for k: Variant in (chars as Dictionary).keys():
-			out.append(str(k))
-	return out
 
 
 func get_character_sheet(char_id: String) -> Texture2D:
@@ -113,23 +97,6 @@ func get_blood_sheet() -> Texture2D:
 	if typeof(brig) == TYPE_DICTIONARY:
 		path = str((brig as Dictionary).get("sheet_path", path))
 	return load_cached_texture(path)
-
-
-func get_hitarea_box(posture: String = "standing") -> Rect2:
-	ensure_loaded()
-	var boxes: Variant = rigs_data.get("hitarea_boxes", {})
-	if typeof(boxes) == TYPE_DICTIONARY:
-		var bdict: Dictionary = boxes as Dictionary
-		var key: String = posture.to_lower()
-		if bdict.has(key):
-			var d: Dictionary = bdict[key] as Dictionary
-			return Rect2(
-				float(d.get("x", -6.5)),
-				float(d.get("y", -24.0)),
-				float(d.get("w", 13.0)),
-				float(d.get("h", 24.0))
-			)
-	return Rect2(-6.5, -24.0, 13.0, 24.0)
 
 
 func get_all_weapons() -> Dictionary:

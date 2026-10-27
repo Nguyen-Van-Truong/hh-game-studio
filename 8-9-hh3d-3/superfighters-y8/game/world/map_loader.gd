@@ -1412,11 +1412,15 @@ func get_ground_y_below(x: float, y_from: float, max_drop: float = 60.0, include
 					if p_var is Node2D and is_instance_valid(p_var):
 						var prop: Node2D = p_var as Node2D
 						if not bool(prop.get("is_destroyed")) and bool(prop.get("is_hanging_crate")) and (not bool(prop.get("is_hanging_released")) or bool(prop.get("on_ground"))):
-							var prect: Rect2 = prop.call("get_solid_support_rect") as Rect2 if prop.has_method("get_solid_support_rect") else Rect2()
-							if prect.size.x > 0.0 and x >= prect.position.x - 2.0 and x <= prect.end.x + 2.0:
-								var top_y: float = prect.position.y
-								if top_y >= y_from - 6.0 and top_y <= y_limit and top_y < best_y:
-									best_y = top_y
+							var top_y: float = INF
+							if prop.has_method("get_obb_top_y_at_x"):
+								top_y = float(prop.call("get_obb_top_y_at_x", x, 2.0))
+							else:
+								var prect: Rect2 = prop.call("get_solid_support_rect") as Rect2 if prop.has_method("get_solid_support_rect") else Rect2()
+								if prect.size.x > 0.0 and x >= prect.position.x - 2.0 and x <= prect.end.x + 2.0:
+									top_y = prect.position.y
+							if top_y < INF and top_y >= y_from - 6.0 and top_y <= y_limit and top_y < best_y:
+								best_y = top_y
 
 	for sp: Dictionary in slope_polygons:
 		var brect: Rect2 = sp.get("bounds_rect", Rect2()) as Rect2

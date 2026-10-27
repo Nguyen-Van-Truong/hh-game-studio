@@ -2498,6 +2498,498 @@ func _run_m7_e2e_match_simulation_suite() -> void:
 		"SF-M28.2: Overhanging CRATE_HANGING (>50% past ledge edge) tilts toward heavier side (max_tilt=" + str(snappedf(max_ledge_tilt_deg, 0.1)) + " deg) and slides/falls off ledge (pos=" + str(m28_ledge_crate.global_position.round()) + ")"
 	)
 
+	# --- SF-M29 Compound Chain Hitbox + Aim-Down Assist, 2D OBB Ledge Fulcrum & SAT Solver, and 4-Way Solid Prop Coupling ---
+	for old_p29a: Variant in (mc.get("props") as Array):
+		if is_instance_valid(old_p29a):
+			(old_p29a as Node2D).free()
+	(mc.get("props") as Array).clear()
+	ml_m11.call("load_map", "storage")
+	if pm_m12.has_method("clear_all"):
+		pm_m12.call("clear_all")
+
+	# 1. SF-M29.1 (Screenshot 1): Standing on top of suspended CRATE_HANGING and aiming/shooting downward hits CRATE_HANGING_HOLDER and drops the crate
+	var m29_hcrate1: Node2D = mc.call("spawn_interactive_prop", "CRATE_HANGING", Vector2(168.0, 131.0), 0.0, "crate_hanging_1") as Node2D
+	var m29_holder1: Node2D = mc.call("spawn_interactive_prop", "CRATE_HANGING_HOLDER", Vector2(168.0, 119.5), 0.0, "crate_hanging_1_holder") as Node2D
+	m29_hcrate1.call("link_hanging_holder", m29_holder1, 51.0)
+	m20_p1.set("local_solid_rects", [] as Array[Rect2])
+	m20_p1.call("setup_fighter", 0, "johnny", Vector2(164.0, 123.0), false)
+	m20_p1.set("match_world", mc)
+	m20_p1.set("on_ground", true)
+	m20_p1.set("facing", 1)
+	m20_p1.call("equip_weapon", "PISTOL", 12)
+	for _aim_d: int in range(6):
+		m20_p1.call("step_fighter", 1.0, {"aim": true, "down": true})
+	var aim_down_pitch_deg: float = float(m20_p1.get("current_aim_pitch"))
+	m20_p1.call("step_fighter", 1.0, {"aim": false, "aim_just_released": true, "down": true})
+	for _st_b: int in range(2):
+		pm_m12.call("step_projectiles", 1.0)
+	var holder_shot_from_top_ok: bool = (
+		aim_down_pitch_deg >= 25.0
+		and bool(m29_holder1.get("is_destroyed"))
+		and bool(m29_hcrate1.get("is_hanging_released"))
+	)
+	_check(
+		holder_shot_from_top_ok,
+		"SF-M29.1: Standing on CRATE_HANGING and shooting downward hits CRATE_HANGING_HOLDER chain/clasp and releases crate (pitch=" + str(snappedf(aim_down_pitch_deg, 0.1)) + " deg, holder_destroyed=" + str(bool(m29_holder1.get("is_destroyed"))) + ")"
+	)
+
+	# 2. SF-M29.2 (Screenshot 2): storage crate_hanging_1 (x=168, y=131, w=28) falling onto right white platform Rect2(172, 166, 50, 2)
+	# has 64.3% overhanging the left -> tilts LEFT (rotation < 0), slides LEFT (x < 158), and has 0.0px OBB penetration into Rect2(172, 166, 50, 2)!
+	var min_left_tilt_deg: float = 0.0
+	var max_right_tilt_before_floor_deg: float = 0.0
+	var zero_plat_penetration: bool = true
+	for _f29: int in range(28):
+		m29_hcrate1.call("step_prop", 1.0)
+		var rot_d: float = rad_to_deg(m29_hcrate1.rotation)
+		min_left_tilt_deg = minf(min_left_tilt_deg, rot_d)
+		if m29_hcrate1.global_position.y < 172.0:
+			max_right_tilt_before_floor_deg = maxf(max_right_tilt_before_floor_deg, rot_d)
+		# Check all 4 OBB corners against Rect2(172, 166, 50, 2) while crate center is above the ledge (y < 164.5)
+		if m29_hcrate1.global_position.y < 164.5:
+			var hw29: float = 14.0
+			var hh29: float = 8.0
+			var c_pts: Array[Vector2] = [
+				Vector2(-hw29, -hh29),
+				Vector2(hw29, -hh29),
+				Vector2(hw29, hh29),
+				Vector2(-hw29, hh29),
+			]
+			for lp: Vector2 in c_pts:
+				var wp: Vector2 = m29_hcrate1.global_position + lp.rotated(m29_hcrate1.rotation)
+				if wp.x > 172.5 and wp.x < 222.0 and wp.y > 166.5 and wp.y < 176.0:
+					zero_plat_penetration = false
+	var storage_fall_left_ok: bool = (
+		min_left_tilt_deg <= -12.0
+		and max_right_tilt_before_floor_deg <= 1.0
+		and m29_hcrate1.global_position.x < 160.0
+		and zero_plat_penetration
+	)
+	_check(
+		storage_fall_left_ok,
+		"SF-M29.2: Storage crate_hanging_1 tilts LEFT (min_rot=" + str(snappedf(min_left_tilt_deg, 0.1)) + " deg, max_right=" + str(snappedf(max_right_tilt_before_floor_deg, 0.1)) + " deg), slides LEFT (x=" + str(snappedf(m29_hcrate1.global_position.x, 0.1)) + "), zero_pen=" + str(zero_plat_penetration)
+	)
+
+	# 3. SF-M29.3 (Screenshot 3): 4-Way Solid Prop Coupling — jumping upward from underneath or horizontally into suspended CRATE_HANGING never phases inside
+	for old_p29b: Variant in (mc.get("props") as Array):
+		if is_instance_valid(old_p29b):
+			(old_p29b as Node2D).free()
+	(mc.get("props") as Array).clear()
+	var m29_susp_crate: Node2D = mc.call("spawn_interactive_prop", "CRATE_HANGING", Vector2(200.0, 150.0), 0.0, "crate_hanging_test") as Node2D
+	var m29_susp_holder: Node2D = mc.call("spawn_interactive_prop", "CRATE_HANGING_HOLDER", Vector2(200.0, 138.5), 0.0, "crate_hanging_test_holder") as Node2D
+	m29_susp_crate.call("link_hanging_holder", m29_susp_holder, 51.0)
+	# 3A: Jump straight upward from directly below suspended crate (bottom_y = 158.0 -> fighter head at y - 16.0 must stay >= 157.5)
+	m20_p1.call("setup_fighter", 0, "johnny", Vector2(200.0, 176.0), false)
+	m20_p1.set("match_world", mc)
+	m20_p1.set("on_ground", false)
+	m20_p1.set("air_velocity", Vector2(0.0, -5.0))
+	var min_head_y_under_crate: float = INF
+	for _ju29: int in range(8):
+		m20_p1.call("step_fighter", 1.0, {"up": true})
+		min_head_y_under_crate = minf(min_head_y_under_crate, m20_p1.global_position.y - 16.0)
+	# 3B: Jump horizontally into the left side of suspended crate (left_x = 186.0 -> fighter right edge at x + 4.0 must stay <= 186.5)
+	m20_p1.call("setup_fighter", 0, "johnny", Vector2(176.0, 156.0), false)
+	m20_p1.set("match_world", mc)
+	m20_p1.set("on_ground", false)
+	m20_p1.set("air_velocity", Vector2(3.4, -1.2))
+	var max_right_x_into_crate: float = -INF
+	for _jh29: int in range(8):
+		m20_p1.call("step_fighter", 1.0, {"right": true})
+		if m20_p1.global_position.y > 144.5 and m20_p1.global_position.y - 15.0 < 157.5:
+			max_right_x_into_crate = maxf(max_right_x_into_crate, m20_p1.global_position.x + 4.0)
+	var four_way_prop_solid_ok: bool = (min_head_y_under_crate >= 157.5 and max_right_x_into_crate <= 186.5)
+	_check(
+		four_way_prop_solid_ok,
+		"SF-M29.3: 4-way solid prop collision blocks upward jump head-bonk (min_head_y=" + str(snappedf(min_head_y_under_crate, 0.1)) + " >= 158.0) and side jump (max_right_x=" + str(snappedf(max_right_x_into_crate, 0.1)) + " <= 186.0)"
+	)
+
+	# --- SF-M30: Tilted Crate Flat-Floor Settlement (Image 1), Exact OBB Top Surface Standing (Image 2), and New Custom Map "steel_harbor" ---
+	# 1. SF-M30.1 (Screenshot 1): When storage `crate_hanging_1` tips off Rect2(172, 166, 50, 2) and lands next to a square `CRATE` on floor y = 183.0,
+	#    it NEVER freezes at a ~39 deg tilt in mid-air; it slaps completely flat (0.0 deg) onto y = 183.0 with on_ground == true!
+	ml_m18.call("load_map", "storage")
+	for old_p30: Variant in (mc.get("props") as Array):
+		if is_instance_valid(old_p30):
+			(old_p30 as Node2D).free()
+	(mc.get("props") as Array).clear()
+	var m30_floor_crate: Node2D = mc.call("spawn_interactive_prop", "CRATE", Vector2(132.0, 175.5), 0.0) as Node2D
+	m30_floor_crate.set("on_ground", true)
+	m30_floor_crate.set("_settling_frames", 0.0)
+	var m30_hcrate: Node2D = mc.call("spawn_interactive_prop", "CRATE_HANGING", Vector2(168.0, 131.0), 0.0, "crate_hanging_1") as Node2D
+	var m30_holder: Node2D = mc.call("spawn_interactive_prop", "CRATE_HANGING_HOLDER", Vector2(168.0, 119.5), 0.0, "crate_hanging_1_holder") as Node2D
+	m30_hcrate.call("link_hanging_holder", m30_holder, 51.0)
+	m30_hcrate.call("release_hanging_crate")
+	for _f30: int in range(95):
+		m30_floor_crate.call("step_prop", 1.0)
+		m30_hcrate.call("step_prop", 1.0)
+	var m30_rot_deg: float = rad_to_deg(m30_hcrate.rotation)
+	var m30_bot_y: float = m30_hcrate.global_position.y + float(m30_hcrate.get("height")) * 0.5
+	var m30_flat_settle_ok: bool = (
+		bool(m30_hcrate.get("on_ground"))
+		and absf(m30_rot_deg) <= 1.0
+		and absf(m30_bot_y - 183.0) <= 1.0
+	)
+	_check(
+		m30_flat_settle_ok,
+		"SF-M30.1: CRATE_HANGING landing next to CRATE on flat floor y=183 slaps completely flat (rot=" + str(snappedf(m30_rot_deg, 0.1)) + " deg, bottom_y=" + str(snappedf(m30_bot_y, 0.1)) + ", on_ground=" + str(bool(m30_hcrate.get("on_ground"))) + ")"
+	)
+
+	# 2. SF-M30.2 (Screenshot 2): Fighter standing on a tilted prop uses exact rotated OBB top surface `get_obb_top_y_at_x` so feet never sink inside the sprite
+	m30_hcrate.global_position = Vector2(150.0, 168.0)
+	m30_hcrate.rotation = deg_to_rad(-38.0)
+	m30_hcrate.set("kinematic", true)
+	m30_hcrate.set("on_ground", true)
+	var expected_obb_top: float = float(m30_hcrate.call("get_obb_top_y_at_x", 150.0, 3.5))
+	var unrotated_top: float = m30_hcrate.global_position.y - 8.0
+	m20_p1.call("setup_fighter", 0, "johnny", Vector2(150.0, expected_obb_top - 4.0), false)
+	m20_p1.set("match_world", mc)
+	for _st30: int in range(8):
+		m20_p1.call("step_fighter", 1.0, {})
+	var tilted_stand_ok: bool = (
+		expected_obb_top < unrotated_top - 4.5
+		and bool(m20_p1.get("on_ground"))
+		and m20_p1.global_position.y <= expected_obb_top + 0.5
+	)
+	_check(
+		tilted_stand_ok,
+		"SF-M30.2: Fighter standing on tilted prop rests on exact OBB top surface (foot_y=" + str(snappedf(m20_p1.global_position.y, 0.1)) + ", obb_top=" + str(snappedf(expected_obb_top, 0.1)) + " vs unrotated_top=" + str(snappedf(unrotated_top, 0.1)) + ")"
+	)
+
+	# 3. SF-M30.3: New Custom Physics-First Map "steel_harbor" ("STEEL HARBOR (NEW)") full match & ledge-pivot showcase verification
+	mc.call("start_match", {"mode": "vs", "map_id": "steel_harbor", "two_player": true, "bot_count": 2})
+	var sh_fighters: Array = mc.get("fighters") as Array
+	var sh_props: Array = mc.get("props") as Array
+	var sh_crate2: Node2D = null
+	for shp_v: Variant in sh_props:
+		if is_instance_valid(shp_v) and str((shp_v as Node2D).get("var_name")) == "crate_hanging_2":
+			sh_crate2 = shp_v as Node2D
+			break
+	var sh_max_right_tilt: float = 0.0
+	var sh_zero_pen: bool = true
+	if sh_crate2 != null:
+		sh_crate2.call("release_hanging_crate")
+		for _sh_step: int in range(95):
+			for shp_s: Variant in sh_props:
+				if is_instance_valid(shp_s) and (shp_s as Node2D).has_method("step_prop"):
+					(shp_s as Node2D).call("step_prop", 1.0)
+			sh_max_right_tilt = maxf(sh_max_right_tilt, rad_to_deg(sh_crate2.rotation))
+			for lp_sh: Vector2 in [Vector2(-14.0, -8.0), Vector2(14.0, -8.0), Vector2(14.0, 8.0), Vector2(-14.0, 8.0)]:
+				var wp_sh: Vector2 = sh_crate2.global_position + lp_sh.rotated(sh_crate2.rotation)
+				if wp_sh.x > 40.5 and wp_sh.x < 91.5 and wp_sh.y > -51.5 and wp_sh.y < -48.2:
+					sh_zero_pen = false
+	var sh_ok: bool = (
+		str(mc.get("current_map_id")) == "steel_harbor"
+		and sh_fighters.size() == 4
+		and sh_crate2 != null
+		and sh_max_right_tilt >= 12.0
+		and sh_zero_pen
+		and bool(sh_crate2.get("on_ground"))
+		and absf(rad_to_deg(sh_crate2.rotation)) <= 1.0
+		and absf((sh_crate2.global_position.y + 8.0) - 76.0) <= 1.0
+	)
+	_check(
+		sh_ok,
+		"SF-M30.3: New custom map 'steel_harbor' loads 4 fighters, crate_hanging_2 pivots off catwalk_right (max_rot=" + str(snappedf(sh_max_right_tilt, 0.1)) + " deg, zero_pen=" + str(sh_zero_pen) + ") and settles flat on deck_right y=76.0"
+	)
+
+	# --- SF-M31: Unblocked Ladder Hatch Shafts in 'steel_harbor', Ladder Entry/Dismount/Descent UX, & Automated 13-Map Geometry Validator ---
+	# 1. SF-M31.1 (Screenshot media_1793057925084_f4a8be1f.png): All 4 ladders in 'steel_harbor' climb smoothly from bottom to top,
+	#    step onto top/intermediate platforms, and climb/slide down from top platforms on Down press!
+	ml_m18.call("load_map", "steel_harbor")
+	for old_p31: Variant in (mc.get("props") as Array):
+		if is_instance_valid(old_p31):
+			(old_p31 as Node2D).free()
+	(mc.get("props") as Array).clear()
+	var sh_p1: Node2D = sh_fighters[0] as Node2D
+	var ladder_cases: Array[Dictionary] = [
+		{"cx": -298.0, "bot_y": 12.0, "top_y": -108.0},
+		{"cx": 298.0, "bot_y": 12.0, "top_y": -108.0},
+		{"cx": -68.0, "bot_y": 140.0, "top_y": 76.0},
+		{"cx": 68.0, "bot_y": 140.0, "top_y": 76.0},
+	]
+	var climbed_all_4_up: int = 0
+	for lcase: Dictionary in ladder_cases:
+		var lcx: float = float(lcase["cx"])
+		var lbot: float = float(lcase["bot_y"])
+		var ltop: float = float(lcase["top_y"])
+		sh_p1.call("setup_fighter", 0, "johnny", Vector2(lcx, lbot), false)
+		sh_p1.set("match_world", mc)
+		sh_p1.set("on_ground", true)
+		var grabbed_this_lad: bool = false
+		for _step_u: int in range(110):
+			# Alternate up_just_pressed every 6 frames to prove repeated W/Up taps never jump off mid-ladder!
+			var tap_u: bool = (_step_u == 0 or _step_u % 6 == 0)
+			sh_p1.call("step_fighter", 1.0, {"up": true, "up_just_pressed": tap_u, "jump": true, "jump_just_pressed": tap_u})
+			if bool(sh_p1.get("climbing")):
+				grabbed_this_lad = true
+			if grabbed_this_lad and bool(sh_p1.get("on_ground")) and absf(sh_p1.global_position.y - ltop) <= 1.5:
+				climbed_all_4_up += 1
+				break
+
+	# Test stepping onto intermediate floor hatch_tower_left (y = -56.0) when releasing Up at mid-ladder
+	sh_p1.call("setup_fighter", 0, "johnny", Vector2(-298.0, 12.0), false)
+	sh_p1.set("match_world", mc)
+	sh_p1.set("on_ground", true)
+	for _step_m: int in range(60):
+		var hold_u_mid: bool = (sh_p1.global_position.y > -54.5)
+		sh_p1.call("step_fighter", 1.0, {"up": hold_u_mid})
+		if not hold_u_mid and bool(sh_p1.get("on_ground")) and absf(sh_p1.global_position.y - (-56.0)) <= 1.5:
+			break
+	var stepped_onto_mid_hatch_ok: bool = (bool(sh_p1.get("on_ground")) and not bool(sh_p1.get("climbing")) and absf(sh_p1.global_position.y - (-56.0)) <= 1.5)
+
+	# Test climbing/sliding DOWN from top platform (y = -108.0 -> y = 12.0 and y = 76.0 -> y = 140.0) by pressing Down
+	sh_p1.call("setup_fighter", 0, "johnny", Vector2(-298.0, -108.0), false)
+	sh_p1.set("match_world", mc)
+	sh_p1.set("on_ground", true)
+	var grabbed_down_upper: bool = false
+	for _step_d1: int in range(60):
+		sh_p1.call("step_fighter", 1.0, {"down": true})
+		if bool(sh_p1.get("climbing")):
+			grabbed_down_upper = true
+		if grabbed_down_upper and bool(sh_p1.get("on_ground")) and absf(sh_p1.global_position.y - 12.0) <= 1.5:
+			break
+	var descended_upper_ok: bool = (grabbed_down_upper and bool(sh_p1.get("on_ground")) and absf(sh_p1.global_position.y - 12.0) <= 1.5)
+
+	sh_p1.call("setup_fighter", 0, "johnny", Vector2(-68.0, 76.0), false)
+	sh_p1.set("match_world", mc)
+	sh_p1.set("on_ground", true)
+	var grabbed_down_pit: bool = false
+	for _step_d2: int in range(40):
+		sh_p1.call("step_fighter", 1.0, {"down": true})
+		if bool(sh_p1.get("climbing")):
+			grabbed_down_pit = true
+		if grabbed_down_pit and bool(sh_p1.get("on_ground")) and absf(sh_p1.global_position.y - 140.0) <= 1.5:
+			break
+	var descended_pit_ok: bool = (grabbed_down_pit and bool(sh_p1.get("on_ground")) and absf(sh_p1.global_position.y - 140.0) <= 1.5)
+	_check(
+		climbed_all_4_up == 4 and stepped_onto_mid_hatch_ok and descended_upper_ok and descended_pit_ok,
+		"SF-M31.1: All 4 'steel_harbor' ladders climb bottom-to-top (" + str(climbed_all_4_up) + "/4), step onto intermediate hatch (y=-56, ok=" + str(stepped_onto_mid_hatch_ok) + "), and descend from top platforms on Down (upper=" + str(descended_upper_ok) + ", pit=" + str(descended_pit_ok) + ")"
+	)
+
+	# 2. SF-M31.2: Walking/running/jumping horizontally past a ladder NEVER triggers accidental climbing, and pressing Up on top platform jumps normally
+	sh_p1.call("setup_fighter", 0, "johnny", Vector2(-268.0, 12.0), false)
+	sh_p1.set("match_world", mc)
+	sh_p1.set("on_ground", true)
+	var accidental_climb_on_walk: bool = false
+	for _wk31: int in range(32):
+		sh_p1.call("step_fighter", 1.0, {"left": true})
+		if bool(sh_p1.get("climbing")):
+			accidental_climb_on_walk = true
+	var walked_past_ladder_ok: bool = (not accidental_climb_on_walk and sh_p1.global_position.x < -310.0 and bool(sh_p1.get("on_ground")))
+
+	# Running jump across ladder_left_upper (holding Left + Up/Jump) must perform a normal jump without grabbing the ladder!
+	sh_p1.call("setup_fighter", 0, "johnny", Vector2(-276.0, 12.0), false)
+	sh_p1.set("match_world", mc)
+	sh_p1.set("on_ground", true)
+	var accidental_climb_on_run_jump: bool = false
+	for _rj31: int in range(18):
+		var first_f: bool = (_rj31 == 0)
+		sh_p1.call("step_fighter", 1.0, {"left": true, "up": true, "up_just_pressed": first_f, "jump": true, "jump_just_pressed": first_f})
+		if bool(sh_p1.get("climbing")):
+			accidental_climb_on_run_jump = true
+	var run_jump_past_ladder_ok: bool = (not accidental_climb_on_run_jump and sh_p1.global_position.x < -306.0)
+
+	# Standing on top platform (crane_walk_left y = -108.0) at ladder_left_upper and pressing Up must JUMP (never get stuck grabbing ladder tip)
+	sh_p1.call("setup_fighter", 0, "johnny", Vector2(-298.0, -108.0), false)
+	sh_p1.set("match_world", mc)
+	sh_p1.set("on_ground", true)
+	sh_p1.call("step_fighter", 1.0, {"up": true, "up_just_pressed": true, "jump": true, "jump_just_pressed": true})
+	var top_platform_jump_ok: bool = (not bool(sh_p1.get("climbing")) and not bool(sh_p1.get("on_ground")) and (sh_p1.get("air_velocity") as Vector2).y < -4.0)
+	_check(
+		walked_past_ladder_ok and run_jump_past_ladder_ok and top_platform_jump_ok,
+		"SF-M31.2: Walking/running/jumping horizontally past ladders never triggers CLIMB (walk_ok=" + str(walked_past_ladder_ok) + ", run_jump_ok=" + str(run_jump_past_ladder_ok) + "), and pressing Up on top platform jumps cleanly (top_jump_ok=" + str(top_platform_jump_ok) + ")"
+	)
+
+	# 3. SF-M31.3: Automated Map Geometry & Navigation Invariant Validator across all 13 maps in sf_compiled_maps.json
+	var reg31: Node = MapLoaderScript.get_registry()
+	var all_maps_dict31: Dictionary = reg31.call("get_all_maps") as Dictionary
+	var vs_map_ids31: Array = reg31.call("get_vs_map_ids") as Array
+	var map_geom_errors: Array[String] = []
+	for map_id_v: Variant in all_maps_dict31.keys():
+		var mid31: String = str(map_id_v)
+		ml_m18.call("load_map", mid31)
+		var m_solids: Array = ml_m18.get("solid_rects") as Array
+		var m_clouds: Array = ml_m18.get("cloud_rects") as Array
+		var m_ladders: Array = ml_m18.get("ladder_rects") as Array
+		var m_elevs: Array = ml_m18.get("elevators") as Array
+		var m_spawns: Array = ml_m18.get("player_spawns") as Array
+		var m_slopes: Array = ml_m18.get("slope_polygons") as Array
+		var m_portals: Array = ml_m18.get("portals") as Array
+
+		# Invariant A: Every ladder shaft [x1+1..x2-1, y1-14..y2-4] has ZERO solid NONE ground_boxes blocking it,
+		# has a bottom floor within 32px, and has a reachable top platform (extending >= 8px above any platform spanning the ladder center)
+		for li: int in range(m_ladders.size()):
+			var lad_r: Rect2 = m_ladders[li] as Rect2
+			var shaft_r: Rect2 = Rect2(lad_r.position.x + 1.0, lad_r.position.y - 14.0, maxf(2.0, lad_r.size.x - 2.0), lad_r.size.y + 10.0)
+			for sr_v: Variant in m_solids:
+				var sr31: Rect2 = sr_v as Rect2
+				if shaft_r.intersects(sr31):
+					map_geom_errors.append(mid31 + ":ladder#" + str(li) + " blocked by solid " + str(sr31))
+			var bot_gy31: float = float(ml_m18.call("get_ground_y_below", lad_r.get_center().x, lad_r.end.y - 4.0, 32.0, true))
+			if bot_gy31 >= INF:
+				map_geom_errors.append(mid31 + ":ladder#" + str(li) + " missing bottom floor")
+			var has_top_plat: bool = false
+			var all_plats: Array = []
+			all_plats.append_array(m_solids)
+			all_plats.append_array(m_clouds)
+			for pr_v: Variant in all_plats:
+				var pr31: Rect2 = pr_v as Rect2
+				var x_gap: float = 0.0
+				if pr31.end.x < lad_r.position.x:
+					x_gap = lad_r.position.x - pr31.end.x
+				elif pr31.position.x > lad_r.end.x:
+					x_gap = pr31.position.x - lad_r.end.x
+				var dy_top31: float = pr31.position.y - lad_r.position.y
+				if x_gap <= 12.0 and dy_top31 >= -6.0 and dy_top31 <= 32.0:
+					has_top_plat = true
+					if pr31.position.x <= lad_r.get_center().x and pr31.end.x >= lad_r.get_center().x and dy_top31 <= 16.0 and dy_top31 < 8.0:
+						map_geom_errors.append(mid31 + ":ladder#" + str(li) + " top extension " + str(dy_top31) + "px < 8px")
+			if not has_top_plat:
+				map_geom_errors.append(mid31 + ":ladder#" + str(li) + " missing reachable top platform")
+
+		# Invariant B: Vertical elevator shafts in steel_harbor & VS maps must not be obstructed by static ground rects
+		if mid31 == "steel_harbor":
+			for ei: int in range(m_elevs.size()):
+				var ed: Dictionary = m_elevs[ei] as Dictionary
+				var er: Rect2 = ed.get("rect", Rect2()) as Rect2
+				var dist_e: float = absf(float(ed.get("distance", 128.0)))
+				var top_ey: float = er.position.y - dist_e
+				var elev_shaft: Rect2 = Rect2(er.position.x + 2.0, top_ey + 2.0, er.size.x - 4.0, dist_e - 4.0)
+				for cr_v: Variant in m_clouds:
+					if elev_shaft.intersects(cr_v as Rect2):
+						map_geom_errors.append(mid31 + ":elevator#" + str(ei) + " obstructed by cloud " + str(cr_v))
+				for sr_v2: Variant in m_solids:
+					if elev_shaft.intersects(sr_v2 as Rect2):
+						map_geom_errors.append(mid31 + ":elevator#" + str(ei) + " obstructed by solid " + str(sr_v2))
+
+			# Invariant C: All player_spawns in steel_harbor are grounded and not buried inside slope polygons
+			for si: int in range(m_spawns.size()):
+				var sp_pt: Vector2 = m_spawns[si] as Vector2
+				var sp_gy: float = float(ml_m18.call("get_ground_y_below", sp_pt.x, sp_pt.y - 6.0, 24.0, true))
+				if sp_gy >= INF:
+					map_geom_errors.append(mid31 + ":spawn#" + str(si) + " ungrounded at " + str(sp_pt))
+				for sl_v: Variant in m_slopes:
+					var sl_d: Dictionary = sl_v as Dictionary
+					var pts: PackedVector2Array = sl_d.get("points", PackedVector2Array()) as PackedVector2Array
+					if pts.size() >= 3 and Geometry2D.is_point_in_polygon(Vector2(sp_pt.x, sp_pt.y - 8.0), pts):
+						map_geom_errors.append(mid31 + ":spawn#" + str(si) + " buried inside slope polygon")
+
+			# Invariant D: All portals in steel_harbor have safe exit floor & >= 24px runway
+			for pi: int in range(m_portals.size()):
+				var pd: Dictionary = m_portals[pi] as Dictionary
+				var ex_r: Rect2 = pd.get("exit_rect", Rect2()) as Rect2
+				var pdir: Vector2 = pd.get("dir", Vector2.RIGHT) as Vector2
+				var exit_x: float = (ex_r.end.x + 2.0) if pdir.x < 0.0 else (ex_r.position.x - 2.0)
+				var run_dir: float = 1.0 if pdir.x < 0.0 else -1.0
+				var ex_gy0: float = float(ml_m18.call("get_ground_y_below", exit_x, ex_r.end.y - 8.0, 20.0, true))
+				var ex_gy1: float = float(ml_m18.call("get_ground_y_below", exit_x + run_dir * 24.0, ex_r.end.y - 8.0, 20.0, true))
+				if ex_gy0 >= INF or ex_gy1 >= INF:
+					map_geom_errors.append(mid31 + ":portal#" + str(pi) + " unsafe exit runway at x=" + str(exit_x))
+
+	_check(
+		all_maps_dict31.size() >= 13 and vs_map_ids31.has("steel_harbor") and map_geom_errors.is_empty(),
+		"SF-M31.3: Automated Map Geometry & Navigation Validator passed across all " + str(all_maps_dict31.size()) + " maps (19 ladders, elevators, spawns, portals; errors=" + str(map_geom_errors.size()) + ")"
+	)
+
+	# --- SF-M32 Full-Map Ballistic Range (Projectiles.as OutsideTheWorld) & Weight-Based Kick Launch + 0.0px OBB Floor Penetration ---
+	ml_m18.call("load_map", "steel_harbor")
+	for old_p32: Variant in (mc.get("props") as Array):
+		if is_instance_valid(old_p32):
+			(old_p32 as Node2D).free()
+	(mc.get("props") as Array).clear()
+	if pm_m12.has_method("clear_all"):
+		pm_m12.call("clear_all")
+	sh_p1.global_position = Vector2(-350.0, -168.0)
+
+	# 1. SF-M32.1: All firearms (PISTOL, UZI, SHOTGUN, RIFLE, M60, MAGNUM, SNIPER, BAZOOKA) travel across the entire 800px map
+	#    (>= 680px from x=-350 to x=+330+) without disappearing after 170-350px!
+	(ml_m18.get("solid_rects") as Array).clear()
+	(ml_m18.get("cloud_rects") as Array).clear()
+	(mc.get("fighters") as Array).clear()
+	var full_map_guns: Array[String] = ["PISTOL", "UZI", "SHOTGUN", "RIFLE", "M60", "MAGNUM", "SNIPER", "BAZOOKA"]
+	var guns_full_map_ok: int = 0
+	for g_id: String in full_map_guns:
+		pm_m12.call("clear_all")
+		pm_m12.call("spawn_bullet", sh_p1, g_id, Vector2(-350.0, 0.0), 0.0)
+		var max_b_traveled: float = 0.0
+		for _bs32: int in range(42):
+			pm_m12.call("step_projectiles", 1.0)
+			for b_var: Variant in (pm_m12.get("bullets") as Array):
+				var bd: Dictionary = b_var as Dictionary
+				bd["dir"] = Vector2.RIGHT
+				bd["vel"] = Vector2(float(bd.get("speed", 30.0)), 0.0)
+				bd["angle_deg"] = 0.0
+				max_b_traveled = maxf(max_b_traveled, float(bd.get("traveled", 0.0)))
+		if max_b_traveled >= 680.0:
+			guns_full_map_ok += 1
+	pm_m12.call("clear_all")
+	ml_m18.call("load_map", "steel_harbor")
+	_check(
+		guns_full_map_ok == full_map_guns.size(),
+		"SF-M32.1: All " + str(guns_full_map_ok) + "/" + str(full_map_guns.size()) + " firearms travel full map width (>680px across 800px 'steel_harbor') without premature disappearance"
+	)
+
+	# 2. SF-M32.2: Weight-based Kick Parabolic Launch Hop (Image 1) + 0.0px OBB Floor Penetration at ALL rotation angles (Image 2 & Image 3)
+	var m32_barrel: Node2D = mc.call("spawn_interactive_prop", "BARREL", Vector2(-140.0, 68.5)) as Node2D
+	m32_barrel.set("on_ground", true)
+	m32_barrel.set("_settling_frames", 0.0)
+	m32_barrel.call("apply_melee_hit", 6.0, 1, true, "FISTS", sh_p1)
+	var max_air_lift_px: float = 0.0
+	var max_floor_penetration_px: float = 0.0
+	for _kb32: int in range(18):
+		m32_barrel.call("step_prop", 1.0)
+		var b_rot: float = m32_barrel.rotation
+		var b_hw: float = float(m32_barrel.get("base_width")) * 0.5
+		var b_hh: float = float(m32_barrel.get("base_height")) * 0.5
+		var max_corner_y: float = -INF
+		for c_local: Vector2 in [Vector2(-b_hw, -b_hh), Vector2(b_hw, -b_hh), Vector2(b_hw, b_hh), Vector2(-b_hw, b_hh)]:
+			var c_world: Vector2 = m32_barrel.global_position + c_local.rotated(b_rot)
+			max_corner_y = maxf(max_corner_y, c_world.y)
+		max_air_lift_px = maxf(max_air_lift_px, 76.0 - max_corner_y)
+		max_floor_penetration_px = maxf(max_floor_penetration_px, max_corner_y - 76.0)
+	var barrel_kick_dx: float = m32_barrel.global_position.x - (-140.0)
+	(mc.get("props") as Array).clear()
+	m32_barrel.free()
+
+	# Verify weight hierarchy: GASCAN (m=1.05) > BARREL (m=1.85) > FILECAB (m=2.25) > DESK (m=3.20)
+	var m32_gas: Node2D = mc.call("spawn_interactive_prop", "GASCAN", Vector2(-140.0, 70.5)) as Node2D
+	m32_gas.set("on_ground", true)
+	m32_gas.set("_settling_frames", 0.0)
+	m32_gas.call("apply_melee_hit", 6.0, 1, true, "FISTS", sh_p1)
+	for _kg32: int in range(18):
+		m32_gas.call("step_prop", 1.0)
+	var gas_kick_dx: float = m32_gas.global_position.x - (-140.0)
+	(mc.get("props") as Array).clear()
+	m32_gas.free()
+
+	var m32_fcab: Node2D = mc.call("spawn_interactive_prop", "FILECAB", Vector2(-140.0, 68.5)) as Node2D
+	m32_fcab.set("on_ground", true)
+	m32_fcab.set("_settling_frames", 0.0)
+	m32_fcab.call("apply_melee_hit", 6.0, 1, true, "FISTS", sh_p1)
+	for _kf32: int in range(18):
+		m32_fcab.call("step_prop", 1.0)
+	var fcab_kick_dx: float = m32_fcab.global_position.x - (-140.0)
+	(mc.get("props") as Array).clear()
+	m32_fcab.free()
+
+	var m32_desk: Node2D = mc.call("spawn_interactive_prop", "DESK", Vector2(-140.0, 69.0)) as Node2D
+	m32_desk.set("on_ground", true)
+	m32_desk.set("_settling_frames", 0.0)
+	m32_desk.call("apply_melee_hit", 6.0, 1, true, "FISTS", sh_p1)
+	for _kd32: int in range(18):
+		m32_desk.call("step_prop", 1.0)
+	var desk32_kick_dx: float = m32_desk.global_position.x - (-140.0)
+	(mc.get("props") as Array).clear()
+	m32_desk.free()
+
+	_check(
+		max_air_lift_px >= 0.8
+		and max_floor_penetration_px <= 0.01
+		and barrel_kick_dx >= 12.0
+		and gas_kick_dx > barrel_kick_dx
+		and barrel_kick_dx > fcab_kick_dx
+		and fcab_kick_dx > desk32_kick_dx,
+		"SF-M32.2: Kick launches props in weight-scaled parabolic hop (lift=" + str(snappedf(max_air_lift_px, 0.1)) + "px, gas=" + str(snappedf(gas_kick_dx, 0.1)) + "px > barrel=" + str(snappedf(barrel_kick_dx, 0.1)) + "px > fcab=" + str(snappedf(fcab_kick_dx, 0.1)) + "px > desk=" + str(snappedf(desk32_kick_dx, 0.1)) + "px) with 0.0px floor penetration (max_pen=" + str(snappedf(max_floor_penetration_px, 0.01)) + "px)"
+	)
+
 	mc.call("_clear_match_entities")
 	root.remove_child(mc)
 	mc.free()

@@ -558,7 +558,7 @@ func start_match(config: Dictionary = {}) -> void:
 	survival_kills = 0
 
 	var roster_pool: Array[String] = ["johnny", "boris", "agent", "hideki", "blaire", "savage", "cruger", "ivan", "brody", "mac", "funnyman", "jeff", "shinobi"]
-	var vs_map_pool: Array[String] = ["rooftops", "storage", "police_station", "hazardous", "subway", "tower", "junkyard", "cargo"]
+	var vs_map_pool: Array[String] = ["rooftops", "storage", "police_station", "hazardous", "subway", "tower", "junkyard", "cargo", "steel_harbor"]
 
 	var p1_char: String = str(config.get("p1_char", "johnny")).to_lower()
 	if p1_char == "random" or p1_char.is_empty():

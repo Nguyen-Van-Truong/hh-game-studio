@@ -31,7 +31,6 @@ var current_path_index: int = 0
 var target_fighter: Node2D = null
 var target_hazard_prop: Node2D = null
 
-var _update_timer: float = 0.0
 var _aim_timer: float = 0.0
 var _path_recalc_timer: float = 0.0
 var _melee_combo_toggle: bool = false
@@ -155,8 +154,14 @@ func compute_bot_input(fighter: Node2D, match_world: Node2D, step_24hz: float = 
 
 	var has_los: bool = _has_line_of_sight(my_pos + Vector2(0.0, -10.0), aim_world_target, map_loader, int(fighter.get("cover_object_id")) if fighter.get("cover_object_id") != null else -1)
 
-	# 6. Ranged Gun Engagement
-	if has_gun and abs_dx >= 26.0 and abs_dx <= 340.0 and abs_dy <= 140.0 and has_los:
+	# 6. Ranged Gun Engagement (AS3 Weapons.as ShootRange: 140 for FLAMETHROWER, 400 for BAZOOKA, 900 for firearms)
+	var active_wid: String = str(fighter.call("get_active_weapon_id")).to_upper() if fighter.has_method("get_active_weapon_id") else ""
+	var max_shoot_dx: float = 900.0
+	if active_wid == "FLAMETHROWER":
+		max_shoot_dx = 140.0
+	elif active_wid == "BAZOOKA":
+		max_shoot_dx = 400.0
+	if has_gun and abs_dx >= 26.0 and abs_dx <= max_shoot_dx and abs_dy <= 160.0 and has_los:
 		current_phase = PHASE_AIM
 		_last_decision_summary = "SHOOT_BARREL" if target_hazard_prop != null else "RANGED_AIM_SHOOT"
 		return _execute_ranged_aim_and_shoot(fighter, aim_world_target, map_loader, step_24hz)
@@ -435,15 +440,18 @@ func _follow_path_towards(
 
 	match action:
 		"LADDER":
-			if absf(dx) > 4.0:
+			var is_climbing_now: bool = bool(fighter.get("climbing"))
+			var need_align_x: bool = (not is_climbing_now and absf(dx) > 4.0) or (is_climbing_now and absf(dy) <= 10.0 and absf(dx) > 3.0)
+			if need_align_x:
 				if dx < 0.0:
 					input["left"] = true
 				else:
 					input["right"] = true
-			if dy < -2.0:
-				input["up"] = true
-			elif dy > 2.0:
-				input["down"] = true
+			if not need_align_x or is_climbing_now:
+				if dy < -2.0:
+					input["up"] = true
+				elif dy > 2.0:
+					input["down"] = true
 		"JUMP":
 			if dx < -2.0:
 				input["left"] = true

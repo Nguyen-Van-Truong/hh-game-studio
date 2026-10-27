@@ -173,7 +173,7 @@ func _ensure_nodes() -> void:
 		laser_sight.name = "LaserSight"
 		laser_sight.width = 1.0
 		laser_sight.default_color = Color(1.0, 0.1, 0.1, 0.85)
-		laser_sight.points = PackedVector2Array([Vector2(12.5, -3.5), Vector2(320.0, -3.5)])
+		laser_sight.points = PackedVector2Array([Vector2(12.5, -3.5), Vector2(1000.0, -3.5)])
 		laser_sight.visible = false
 		aim_pivot.add_child(laser_sight)
 
@@ -469,7 +469,7 @@ func apply_rig_state(
 		if show_laser:
 			laser_sight.visible = true
 			var start_p: Vector2 = muzzle_socket.position
-			var line_len: float = _compute_laser_ray_length(420.0)
+			var line_len: float = _compute_laser_ray_length(1000.0)
 			laser_sight.width = 1.0
 			laser_sight.default_color = Color(1.0, 0.1, 0.1, 0.85)
 			laser_sight.points = PackedVector2Array([start_p, start_p + Vector2(line_len, 0.0)])
@@ -575,7 +575,7 @@ func _get_aim_reticle_texture(reg: Object) -> Texture2D:
 	return _fallback_aim_tex
 
 
-func _compute_laser_ray_length(max_len: float = 420.0) -> float:
+func _compute_laser_ray_length(max_len: float = 1000.0) -> float:
 	var parent_node: Node = get_parent()
 	if parent_node != null and parent_node.has_method("_get_map_loader"):
 		var ml: Object = parent_node.call("_get_map_loader")

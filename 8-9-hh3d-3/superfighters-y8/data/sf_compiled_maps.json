@@ -6,7 +6,7 @@
     "Symbol 2484.xml",
     "Symbol 2499.xml"
   ],
-  "map_count": 12,
+  "map_count": 13,
   "vs_map_ids": [
     "rooftops",
     "storage",
@@ -15,7 +15,8 @@
     "subway",
     "tower",
     "junkyard",
-    "cargo"
+    "cargo",
+    "steel_harbor"
   ],
   "original_as3_vs_map_ids": [
     "storage",
@@ -36036,6 +36037,1529 @@
           "y": 96.0
         }
       ]
+    },
+    "steel_harbor": {
+      "bounds_rect": [
+        -380.0,
+        -210.0,
+        760.0,
+        440.0
+      ],
+      "bg_color": "#0c121c",
+      "acid_kill_y": 215.0,
+      "player_spawns": [
+        [
+          -128.0,
+          76.0
+        ],
+        [
+          128.0,
+          76.0
+        ],
+        [
+          -276.0,
+          12.0
+        ],
+        [
+          276.0,
+          12.0
+        ],
+        [
+          -196.0,
+          -52.0
+        ],
+        [
+          66.0,
+          -52.0
+        ],
+        [
+          -256.0,
+          -108.0
+        ],
+        [
+          256.0,
+          -108.0
+        ]
+      ],
+      "weapon_spawns": [
+        {
+          "x": 0.0,
+          "y": -52.0,
+          "mask": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "x": -128.0,
+          "y": 76.0,
+          "mask": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "x": 128.0,
+          "y": 76.0,
+          "mask": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "x": -276.0,
+          "y": 12.0,
+          "mask": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "x": 276.0,
+          "y": 12.0,
+          "mask": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "x": -256.0,
+          "y": -108.0,
+          "mask": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "portals": [
+        {
+          "entry_rect": [
+            -356.0,
+            -24.0,
+            16.0,
+            36.0
+          ],
+          "exit_rect": [
+            -356.0,
+            -144.0,
+            16.0,
+            36.0
+          ],
+          "dir": [
+            -1.0,
+            0.0
+          ],
+          "door_open": true,
+          "ignore_vel": false
+        },
+        {
+          "entry_rect": [
+            -356.0,
+            -144.0,
+            16.0,
+            36.0
+          ],
+          "exit_rect": [
+            -356.0,
+            -24.0,
+            16.0,
+            36.0
+          ],
+          "dir": [
+            -1.0,
+            0.0
+          ],
+          "door_open": true,
+          "ignore_vel": false
+        },
+        {
+          "entry_rect": [
+            340.0,
+            -24.0,
+            16.0,
+            36.0
+          ],
+          "exit_rect": [
+            340.0,
+            -144.0,
+            16.0,
+            36.0
+          ],
+          "dir": [
+            1.0,
+            0.0
+          ],
+          "door_open": true,
+          "ignore_vel": false
+        },
+        {
+          "entry_rect": [
+            340.0,
+            -144.0,
+            16.0,
+            36.0
+          ],
+          "exit_rect": [
+            340.0,
+            -24.0,
+            16.0,
+            36.0
+          ],
+          "dir": [
+            1.0,
+            0.0
+          ],
+          "door_open": true,
+          "ignore_vel": false
+        }
+      ],
+      "ground_boxes": [
+        {
+          "var_name": "ceiling_main",
+          "material": "Metal",
+          "x": 0.0,
+          "y": -184.0,
+          "w": 760.0,
+          "h": 24.0,
+          "angle": 0.0,
+          "tags": [
+            "NONE"
+          ]
+        },
+        {
+          "var_name": "wall_left_outer",
+          "material": "Ground",
+          "x": -368.0,
+          "y": 12.0,
+          "w": 24.0,
+          "h": 416.0,
+          "angle": 0.0,
+          "tags": [
+            "NONE"
+          ]
+        },
+        {
+          "var_name": "wall_right_outer",
+          "material": "Ground",
+          "x": 368.0,
+          "y": 12.0,
+          "w": 24.0,
+          "h": 416.0,
+          "angle": 0.0,
+          "tags": [
+            "NONE"
+          ]
+        },
+        {
+          "var_name": "tower_left_floor",
+          "material": "Ground",
+          "x": -292.0,
+          "y": 60.0,
+          "w": 128.0,
+          "h": 96.0,
+          "angle": 0.0,
+          "tags": [
+            "NONE"
+          ]
+        },
+        {
+          "var_name": "tower_right_floor",
+          "material": "Ground",
+          "x": 292.0,
+          "y": 60.0,
+          "w": 128.0,
+          "h": 96.0,
+          "angle": 0.0,
+          "tags": [
+            "NONE"
+          ]
+        },
+        {
+          "var_name": "deck_left_outer",
+          "material": "Ground",
+          "x": -153.0,
+          "y": 92.0,
+          "w": 150.0,
+          "h": 32.0,
+          "angle": 0.0,
+          "tags": [
+            "NONE"
+          ]
+        },
+        {
+          "var_name": "deck_left_lip",
+          "material": "Ground",
+          "x": -53.0,
+          "y": 92.0,
+          "w": 10.0,
+          "h": 32.0,
+          "angle": 0.0,
+          "tags": [
+            "NONE"
+          ]
+        },
+        {
+          "var_name": "hatch_deck_left",
+          "material": "Metal",
+          "x": -68.0,
+          "y": 78.0,
+          "w": 20.0,
+          "h": 4.0,
+          "angle": 0.0,
+          "tags": [
+            "CLOUD"
+          ]
+        },
+        {
+          "var_name": "deck_right_lip",
+          "material": "Ground",
+          "x": 53.0,
+          "y": 92.0,
+          "w": 10.0,
+          "h": 32.0,
+          "angle": 0.0,
+          "tags": [
+            "NONE"
+          ]
+        },
+        {
+          "var_name": "deck_right_outer",
+          "material": "Ground",
+          "x": 153.0,
+          "y": 92.0,
+          "w": 150.0,
+          "h": 32.0,
+          "angle": 0.0,
+          "tags": [
+            "NONE"
+          ]
+        },
+        {
+          "var_name": "hatch_deck_right",
+          "material": "Metal",
+          "x": 68.0,
+          "y": 78.0,
+          "w": 20.0,
+          "h": 4.0,
+          "angle": 0.0,
+          "tags": [
+            "CLOUD"
+          ]
+        },
+        {
+          "var_name": "subdeck_center",
+          "material": "Metal",
+          "x": -88.0,
+          "y": 148.0,
+          "w": 80.0,
+          "h": 16.0,
+          "angle": 0.0,
+          "tags": [
+            "NONE"
+          ]
+        },
+        {
+          "var_name": "subdeck_right",
+          "material": "Metal",
+          "x": 88.0,
+          "y": 148.0,
+          "w": 80.0,
+          "h": 16.0,
+          "angle": 0.0,
+          "tags": [
+            "NONE"
+          ]
+        },
+        {
+          "var_name": "tower_left_roof_l",
+          "material": "Metal",
+          "x": -332.0,
+          "y": -52.0,
+          "w": 48.0,
+          "h": 8.0,
+          "angle": 0.0,
+          "tags": [
+            "NONE"
+          ]
+        },
+        {
+          "var_name": "tower_left_roof_r",
+          "material": "Metal",
+          "x": -260.0,
+          "y": -52.0,
+          "w": 56.0,
+          "h": 8.0,
+          "angle": 0.0,
+          "tags": [
+            "NONE"
+          ]
+        },
+        {
+          "var_name": "hatch_tower_left",
+          "material": "Metal",
+          "x": -298.0,
+          "y": -54.0,
+          "w": 20.0,
+          "h": 4.0,
+          "angle": 0.0,
+          "tags": [
+            "CLOUD"
+          ]
+        },
+        {
+          "var_name": "tower_right_roof_l",
+          "material": "Metal",
+          "x": 260.0,
+          "y": -52.0,
+          "w": 56.0,
+          "h": 8.0,
+          "angle": 0.0,
+          "tags": [
+            "NONE"
+          ]
+        },
+        {
+          "var_name": "tower_right_roof_r",
+          "material": "Metal",
+          "x": 332.0,
+          "y": -52.0,
+          "w": 48.0,
+          "h": 8.0,
+          "angle": 0.0,
+          "tags": [
+            "NONE"
+          ]
+        },
+        {
+          "var_name": "hatch_tower_right",
+          "material": "Metal",
+          "x": 298.0,
+          "y": -54.0,
+          "w": 20.0,
+          "h": 4.0,
+          "angle": 0.0,
+          "tags": [
+            "CLOUD"
+          ]
+        },
+        {
+          "var_name": "catwalk_left",
+          "material": "Metal",
+          "x": -197.5,
+          "y": -50.0,
+          "w": 61.0,
+          "h": 4.0,
+          "angle": 0.0,
+          "tags": [
+            "CLOUD"
+          ]
+        },
+        {
+          "var_name": "catwalk_right",
+          "material": "Metal",
+          "x": 66.0,
+          "y": -50.0,
+          "w": 52.0,
+          "h": 4.0,
+          "angle": 0.0,
+          "tags": [
+            "CLOUD"
+          ]
+        },
+        {
+          "var_name": "crane_walk_left",
+          "material": "Metal",
+          "x": -276.0,
+          "y": -106.0,
+          "w": 160.0,
+          "h": 4.0,
+          "angle": 0.0,
+          "tags": [
+            "CLOUD"
+          ]
+        },
+        {
+          "var_name": "crane_walk_right",
+          "material": "Metal",
+          "x": 276.0,
+          "y": -106.0,
+          "w": 160.0,
+          "h": 4.0,
+          "angle": 0.0,
+          "tags": [
+            "CLOUD"
+          ]
+        },
+        {
+          "var_name": "ladder_left_upper",
+          "material": "Metal",
+          "x": -298.0,
+          "y": -54.0,
+          "w": 16.0,
+          "h": 132.0,
+          "angle": 0.0,
+          "tags": [
+            "LADDER"
+          ]
+        },
+        {
+          "var_name": "ladder_right_upper",
+          "material": "Metal",
+          "x": 298.0,
+          "y": -54.0,
+          "w": 16.0,
+          "h": 132.0,
+          "angle": 0.0,
+          "tags": [
+            "LADDER"
+          ]
+        },
+        {
+          "var_name": "ladder_pit_left",
+          "material": "Metal",
+          "x": -68.0,
+          "y": 102.0,
+          "w": 16.0,
+          "h": 76.0,
+          "angle": 0.0,
+          "tags": [
+            "LADDER"
+          ]
+        },
+        {
+          "var_name": "ladder_pit_right",
+          "material": "Metal",
+          "x": 68.0,
+          "y": 102.0,
+          "w": 16.0,
+          "h": 76.0,
+          "angle": 0.0,
+          "tags": [
+            "LADDER"
+          ]
+        }
+      ],
+      "ground_polygons": [
+        {
+          "var_name": "stairs_left",
+          "material": "Metal",
+          "x": -196.0,
+          "y": 44.0,
+          "angle": 0.0,
+          "vertices": [
+            [
+              -32.0,
+              -32.0
+            ],
+            [
+              32.0,
+              32.0
+            ],
+            [
+              -32.0,
+              32.0
+            ]
+          ],
+          "tags": [
+            "NONE"
+          ],
+          "tilt_value": -2.0
+        },
+        {
+          "var_name": "stairs_right",
+          "material": "Metal",
+          "x": 196.0,
+          "y": 44.0,
+          "angle": 0.0,
+          "vertices": [
+            [
+              -32.0,
+              32.0
+            ],
+            [
+              32.0,
+              -32.0
+            ],
+            [
+              32.0,
+              32.0
+            ]
+          ],
+          "tags": [
+            "NONE"
+          ],
+          "tilt_value": 2.0
+        }
+      ],
+      "ground_circles": [],
+      "premade_props": [
+        {
+          "var_name": "crate_hanging_1",
+          "type": "CRATE_HANGING",
+          "candidates": [
+            "CRATE_HANGING"
+          ],
+          "x": -112.0,
+          "y": -96.0,
+          "angle": 0.0,
+          "branch_group": 0,
+          "branch_id": 0,
+          "conditions": []
+        },
+        {
+          "var_name": "crate_hanging_2",
+          "type": "CRATE_HANGING",
+          "candidates": [
+            "CRATE_HANGING"
+          ],
+          "x": 96.0,
+          "y": -96.0,
+          "angle": 0.0,
+          "branch_group": 0,
+          "branch_id": 0,
+          "conditions": []
+        },
+        {
+          "var_name": "barrel_exp_drop",
+          "type": "BARREL_EXPLOSIVE",
+          "candidates": [
+            "BARREL_EXPLOSIVE"
+          ],
+          "x": -112.0,
+          "y": 68.5,
+          "angle": 0.0,
+          "branch_group": 0,
+          "branch_id": 0,
+          "conditions": []
+        },
+        {
+          "var_name": "crate_deck_l1",
+          "type": "CRATE",
+          "candidates": [
+            "CRATE"
+          ],
+          "x": -148.0,
+          "y": 68.0,
+          "angle": 0.0,
+          "branch_group": 0,
+          "branch_id": 0,
+          "conditions": []
+        },
+        {
+          "var_name": "crate_deck_l2",
+          "type": "CRATE",
+          "candidates": [
+            "CRATE"
+          ],
+          "x": -148.0,
+          "y": 52.0,
+          "angle": 0.0,
+          "branch_group": 0,
+          "branch_id": 0,
+          "conditions": []
+        },
+        {
+          "var_name": "barrel_deck_l",
+          "type": "BARREL",
+          "candidates": [
+            "BARREL"
+          ],
+          "x": -92.0,
+          "y": 68.5,
+          "angle": 0.0,
+          "branch_group": 0,
+          "branch_id": 0,
+          "conditions": []
+        },
+        {
+          "var_name": "gascan_catwalk_l",
+          "type": "GASCAN",
+          "candidates": [
+            "GASCAN"
+          ],
+          "x": -196.0,
+          "y": -57.5,
+          "angle": 0.0,
+          "branch_group": 0,
+          "branch_id": 0,
+          "conditions": []
+        },
+        {
+          "var_name": "table_subdeck_l",
+          "type": "TABLE",
+          "candidates": [
+            "TABLE"
+          ],
+          "x": -96.0,
+          "y": 135.0,
+          "angle": 0.0,
+          "branch_group": 0,
+          "branch_id": 0,
+          "conditions": []
+        },
+        {
+          "var_name": "barrel_exp_sub_r",
+          "type": "BARREL_EXPLOSIVE",
+          "candidates": [
+            "BARREL_EXPLOSIVE"
+          ],
+          "x": 96.0,
+          "y": 132.5,
+          "angle": 0.0,
+          "branch_group": 0,
+          "branch_id": 0,
+          "conditions": []
+        },
+        {
+          "var_name": "desk_tower_l",
+          "type": "DESK",
+          "candidates": [
+            "DESK"
+          ],
+          "x": -268.0,
+          "y": 5.0,
+          "angle": 0.0,
+          "branch_group": 0,
+          "branch_id": 0,
+          "conditions": []
+        },
+        {
+          "var_name": "comp_tower_l",
+          "type": "COMP",
+          "candidates": [
+            "COMP"
+          ],
+          "x": -274.0,
+          "y": -8.0,
+          "angle": 0.0,
+          "branch_group": 0,
+          "branch_id": 0,
+          "conditions": []
+        },
+        {
+          "var_name": "screen_tower_l",
+          "type": "COMP_SCREEN",
+          "candidates": [
+            "COMP_SCREEN"
+          ],
+          "x": -262.0,
+          "y": -8.0,
+          "angle": 0.0,
+          "branch_group": 0,
+          "branch_id": 0,
+          "conditions": []
+        },
+        {
+          "var_name": "chair_tower_l",
+          "type": "CHAIR",
+          "candidates": [
+            "CHAIR"
+          ],
+          "x": -246.0,
+          "y": 6.0,
+          "angle": 0.0,
+          "branch_group": 0,
+          "branch_id": 0,
+          "conditions": []
+        },
+        {
+          "var_name": "filecab_tower_r",
+          "type": "FILECAB",
+          "candidates": [
+            "FILECAB"
+          ],
+          "x": 324.0,
+          "y": 4.5,
+          "angle": 0.0,
+          "branch_group": 0,
+          "branch_id": 0,
+          "conditions": []
+        },
+        {
+          "var_name": "table_tower_r",
+          "type": "TABLE",
+          "candidates": [
+            "TABLE"
+          ],
+          "x": 268.0,
+          "y": 7.0,
+          "angle": 0.0,
+          "branch_group": 0,
+          "branch_id": 0,
+          "conditions": []
+        },
+        {
+          "var_name": "chair_r_tower_r",
+          "type": "CHAIR_R",
+          "candidates": [
+            "CHAIR_R"
+          ],
+          "x": 248.0,
+          "y": 6.0,
+          "angle": 0.0,
+          "branch_group": 0,
+          "branch_id": 0,
+          "conditions": []
+        },
+        {
+          "var_name": "crate_crane_l",
+          "type": "CRATE",
+          "candidates": [
+            "CRATE"
+          ],
+          "x": -240.0,
+          "y": -116.0,
+          "angle": 0.0,
+          "branch_group": 0,
+          "branch_id": 0,
+          "conditions": []
+        },
+        {
+          "var_name": "gascan_crane_r",
+          "type": "GASCAN",
+          "candidates": [
+            "GASCAN"
+          ],
+          "x": 256.0,
+          "y": -113.5,
+          "angle": 0.0,
+          "branch_group": 0,
+          "branch_id": 0,
+          "conditions": []
+        }
+      ],
+      "elevators": [
+        {
+          "var_name": "lift",
+          "type": "LIFT_01",
+          "direction": "vertical",
+          "x": -148.0,
+          "y": 80.5,
+          "distance": 128.0,
+          "speed": 1.0
+        }
+      ],
+      "hanging_lamps": [
+        {
+          "x": -256.0,
+          "y": -172.0,
+          "rope_length": 24.0
+        },
+        {
+          "x": 0.0,
+          "y": -172.0,
+          "rope_length": 28.0
+        },
+        {
+          "x": 276.0,
+          "y": -172.0,
+          "rope_length": 24.0
+        }
+      ],
+      "glasses": [
+        {
+          "x1": -40.0,
+          "y1": -52.0,
+          "x2": 40.0,
+          "y2": -52.0
+        },
+        {
+          "x1": -236.0,
+          "y1": -48.0,
+          "x2": -236.0,
+          "y2": -18.0
+        },
+        {
+          "x1": 236.0,
+          "y1": -48.0,
+          "x2": 236.0,
+          "y2": -18.0
+        }
+      ],
+      "ai_path_grid": {
+        "nodes": [
+          {
+            "index": 0,
+            "id": "n0",
+            "x": -334.0,
+            "y": 12.0,
+            "tag": "",
+            "body_ref": "null"
+          },
+          {
+            "index": 1,
+            "id": "n1",
+            "x": -128.0,
+            "y": 76.0,
+            "tag": "",
+            "body_ref": "null"
+          },
+          {
+            "index": 2,
+            "id": "n2",
+            "x": -164.0,
+            "y": 76.0,
+            "tag": "",
+            "body_ref": "null"
+          },
+          {
+            "index": 3,
+            "id": "n_lift",
+            "x": -148.0,
+            "y": 76.0,
+            "tag": "",
+            "body_ref": "lift"
+          },
+          {
+            "index": 4,
+            "id": "n4",
+            "x": -68.0,
+            "y": 76.0,
+            "tag": "",
+            "body_ref": "null"
+          },
+          {
+            "index": 5,
+            "id": "n5",
+            "x": -68.0,
+            "y": 140.0,
+            "tag": "",
+            "body_ref": "null"
+          },
+          {
+            "index": 6,
+            "id": "n6",
+            "x": 68.0,
+            "y": 140.0,
+            "tag": "",
+            "body_ref": "null"
+          },
+          {
+            "index": 7,
+            "id": "n7",
+            "x": 68.0,
+            "y": 76.0,
+            "tag": "",
+            "body_ref": "null"
+          },
+          {
+            "index": 8,
+            "id": "n8",
+            "x": 164.0,
+            "y": 76.0,
+            "tag": "",
+            "body_ref": "null"
+          },
+          {
+            "index": 9,
+            "id": "n9",
+            "x": 334.0,
+            "y": 12.0,
+            "tag": "",
+            "body_ref": "null"
+          },
+          {
+            "index": 10,
+            "id": "n10",
+            "x": -228.0,
+            "y": 12.0,
+            "tag": "",
+            "body_ref": "null"
+          },
+          {
+            "index": 11,
+            "id": "n11",
+            "x": -298.0,
+            "y": 12.0,
+            "tag": "",
+            "body_ref": "null"
+          },
+          {
+            "index": 12,
+            "id": "n12",
+            "x": 228.0,
+            "y": 12.0,
+            "tag": "",
+            "body_ref": "null"
+          },
+          {
+            "index": 13,
+            "id": "n13",
+            "x": 298.0,
+            "y": 12.0,
+            "tag": "",
+            "body_ref": "null"
+          },
+          {
+            "index": 14,
+            "id": "n14",
+            "x": -196.0,
+            "y": -52.0,
+            "tag": "",
+            "body_ref": "null"
+          },
+          {
+            "index": 15,
+            "id": "n15",
+            "x": 0.0,
+            "y": -52.0,
+            "tag": "",
+            "body_ref": "null"
+          },
+          {
+            "index": 16,
+            "id": "n16",
+            "x": 66.0,
+            "y": -52.0,
+            "tag": "",
+            "body_ref": "null"
+          },
+          {
+            "index": 17,
+            "id": "n17",
+            "x": -298.0,
+            "y": -108.0,
+            "tag": "",
+            "body_ref": "null"
+          },
+          {
+            "index": 18,
+            "id": "n18",
+            "x": 298.0,
+            "y": -108.0,
+            "tag": "",
+            "body_ref": "null"
+          },
+          {
+            "index": 19,
+            "id": "n19",
+            "x": -298.0,
+            "y": -56.0,
+            "tag": "",
+            "body_ref": "null"
+          },
+          {
+            "index": 20,
+            "id": "n20",
+            "x": 298.0,
+            "y": -56.0,
+            "tag": "",
+            "body_ref": "null"
+          }
+        ],
+        "binds": [
+          {
+            "id": "",
+            "from": 0,
+            "to": 11,
+            "mode": "STATIC",
+            "action": "ROAD"
+          },
+          {
+            "id": "",
+            "from": 11,
+            "to": 0,
+            "mode": "STATIC",
+            "action": "ROAD"
+          },
+          {
+            "id": "",
+            "from": 11,
+            "to": 10,
+            "mode": "STATIC",
+            "action": "ROAD"
+          },
+          {
+            "id": "",
+            "from": 10,
+            "to": 11,
+            "mode": "STATIC",
+            "action": "ROAD"
+          },
+          {
+            "id": "",
+            "from": 10,
+            "to": 2,
+            "mode": "STATIC",
+            "action": "ROAD"
+          },
+          {
+            "id": "",
+            "from": 2,
+            "to": 10,
+            "mode": "STATIC",
+            "action": "ROAD"
+          },
+          {
+            "id": "",
+            "from": 2,
+            "to": 3,
+            "mode": "STATIC",
+            "action": "ROAD"
+          },
+          {
+            "id": "",
+            "from": 3,
+            "to": 2,
+            "mode": "STATIC",
+            "action": "ROAD"
+          },
+          {
+            "id": "",
+            "from": 3,
+            "to": 1,
+            "mode": "STATIC",
+            "action": "ROAD"
+          },
+          {
+            "id": "",
+            "from": 1,
+            "to": 3,
+            "mode": "STATIC",
+            "action": "ROAD"
+          },
+          {
+            "id": "",
+            "from": 1,
+            "to": 4,
+            "mode": "STATIC",
+            "action": "ROAD"
+          },
+          {
+            "id": "",
+            "from": 4,
+            "to": 1,
+            "mode": "STATIC",
+            "action": "ROAD"
+          },
+          {
+            "id": "",
+            "from": 7,
+            "to": 8,
+            "mode": "STATIC",
+            "action": "ROAD"
+          },
+          {
+            "id": "",
+            "from": 8,
+            "to": 7,
+            "mode": "STATIC",
+            "action": "ROAD"
+          },
+          {
+            "id": "",
+            "from": 8,
+            "to": 12,
+            "mode": "STATIC",
+            "action": "ROAD"
+          },
+          {
+            "id": "",
+            "from": 12,
+            "to": 8,
+            "mode": "STATIC",
+            "action": "ROAD"
+          },
+          {
+            "id": "",
+            "from": 12,
+            "to": 13,
+            "mode": "STATIC",
+            "action": "ROAD"
+          },
+          {
+            "id": "",
+            "from": 13,
+            "to": 12,
+            "mode": "STATIC",
+            "action": "ROAD"
+          },
+          {
+            "id": "",
+            "from": 13,
+            "to": 9,
+            "mode": "STATIC",
+            "action": "ROAD"
+          },
+          {
+            "id": "",
+            "from": 9,
+            "to": 13,
+            "mode": "STATIC",
+            "action": "ROAD"
+          },
+          {
+            "id": "",
+            "from": 19,
+            "to": 14,
+            "mode": "STATIC",
+            "action": "ROAD"
+          },
+          {
+            "id": "",
+            "from": 14,
+            "to": 19,
+            "mode": "STATIC",
+            "action": "ROAD"
+          },
+          {
+            "id": "",
+            "from": 15,
+            "to": 16,
+            "mode": "STATIC",
+            "action": "ROAD"
+          },
+          {
+            "id": "",
+            "from": 16,
+            "to": 15,
+            "mode": "STATIC",
+            "action": "ROAD"
+          },
+          {
+            "id": "",
+            "from": 4,
+            "to": 5,
+            "mode": "STATIC",
+            "action": "LADDER"
+          },
+          {
+            "id": "",
+            "from": 5,
+            "to": 4,
+            "mode": "STATIC",
+            "action": "LADDER"
+          },
+          {
+            "id": "",
+            "from": 6,
+            "to": 7,
+            "mode": "STATIC",
+            "action": "LADDER"
+          },
+          {
+            "id": "",
+            "from": 7,
+            "to": 6,
+            "mode": "STATIC",
+            "action": "LADDER"
+          },
+          {
+            "id": "",
+            "from": 11,
+            "to": 19,
+            "mode": "STATIC",
+            "action": "LADDER"
+          },
+          {
+            "id": "",
+            "from": 19,
+            "to": 11,
+            "mode": "STATIC",
+            "action": "LADDER"
+          },
+          {
+            "id": "",
+            "from": 19,
+            "to": 17,
+            "mode": "STATIC",
+            "action": "LADDER"
+          },
+          {
+            "id": "",
+            "from": 17,
+            "to": 19,
+            "mode": "STATIC",
+            "action": "LADDER"
+          },
+          {
+            "id": "",
+            "from": 13,
+            "to": 20,
+            "mode": "STATIC",
+            "action": "LADDER"
+          },
+          {
+            "id": "",
+            "from": 20,
+            "to": 13,
+            "mode": "STATIC",
+            "action": "LADDER"
+          },
+          {
+            "id": "",
+            "from": 20,
+            "to": 18,
+            "mode": "STATIC",
+            "action": "LADDER"
+          },
+          {
+            "id": "",
+            "from": 18,
+            "to": 20,
+            "mode": "STATIC",
+            "action": "LADDER"
+          },
+          {
+            "id": "",
+            "from": 4,
+            "to": 7,
+            "mode": "STATIC",
+            "action": "SPRINTJUMP"
+          },
+          {
+            "id": "",
+            "from": 7,
+            "to": 4,
+            "mode": "STATIC",
+            "action": "SPRINTJUMP"
+          },
+          {
+            "id": "",
+            "from": 5,
+            "to": 6,
+            "mode": "STATIC",
+            "action": "SPRINTJUMP"
+          },
+          {
+            "id": "",
+            "from": 6,
+            "to": 5,
+            "mode": "STATIC",
+            "action": "SPRINTJUMP"
+          },
+          {
+            "id": "",
+            "from": 17,
+            "to": 14,
+            "mode": "STATIC",
+            "action": "DIVE"
+          },
+          {
+            "id": "",
+            "from": 18,
+            "to": 12,
+            "mode": "STATIC",
+            "action": "DIVE"
+          },
+          {
+            "id": "",
+            "from": 16,
+            "to": 8,
+            "mode": "STATIC",
+            "action": "DIVE"
+          },
+          {
+            "id": "",
+            "from": 14,
+            "to": 2,
+            "mode": "STATIC",
+            "action": "DIVE"
+          }
+        ]
+      },
+      "bg_layers": [
+        {
+          "bitmap": "steel_harbor_bg.png",
+          "alias_bitmap": "steel_harbor_bg.png",
+          "path": "res://assets/maps/steel_harbor_bg.png",
+          "tx": -400.0,
+          "ty": -240.0,
+          "sx": 1.0,
+          "sy": 1.0,
+          "parallax": 1.0
+        },
+        {
+          "bitmap": "steel_harbor_mid.png",
+          "alias_bitmap": "steel_harbor_mid.png",
+          "path": "res://assets/maps/steel_harbor_mid.png",
+          "tx": -400.0,
+          "ty": -240.0,
+          "sx": 1.0,
+          "sy": 1.0,
+          "parallax": 1.0
+        }
+      ],
+      "fg_layers": [
+        {
+          "bitmap": "steel_harbor_fg.png",
+          "path": "res://assets/maps/steel_harbor_fg.png",
+          "tx": -400.0,
+          "ty": -240.0,
+          "sx": 1.0,
+          "sy": 1.0,
+          "mask_rects": []
+        }
+      ],
+      "animated_props": []
     }
   }
 }

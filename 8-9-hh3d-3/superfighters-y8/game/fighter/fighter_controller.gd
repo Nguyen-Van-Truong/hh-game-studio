@@ -5,8 +5,6 @@ extends CharacterBody2D
 
 const _PreloadMugenFighterAdapter = preload("res://game/fighter/mugen_fighter_adapter.gd")
 const _PreloadFighterRigView = preload("res://game/fighter/fighter_rig_view.gd")
-const _PreloadFireHazardSystem = preload("res://game/world/fire_hazard_system.gd")
-const _PreloadProjectileManager = preload("res://game/world/projectile_manager.gd")
 
 const RUN_SPEED_24HZ: float = 1.7
 const SPRINT_SPEED_24HZ: float = 3.4
@@ -120,12 +118,10 @@ var weapon_anim_frame_nr: int = 1
 var body_rotation_deg: float = 0.0
 var _anim_seq_idx: int = 0
 var _anim_tick_accum: float = 0.0
-var _state_lock_frames: float = 0.0
 var _roll_frames: float = 0.0
 var _roll_cooldown_frames: float = 0.0
 var _knockdown_frames: float = 0.0
 var _stagger_frames: float = 0.0
-var _jump_push_frames: float = 0.0
 var _cloud_drop_ignore_until_y: float = -99999.0
 var _near_wall_dir: int = 0
 var _on_cloud_platform: bool = false
@@ -166,7 +162,6 @@ var last_disarmed_weapon_id: String = ""
 # Dive-Grab / Throw state
 var grabbed_target: Node2D = null
 var grabbed_by: Node2D = null
-var _grab_timer: float = 0.0
 var _sideway_bounced: bool = false
 
 # Ranged FireSequence & Grenade Cooking state
@@ -457,12 +452,6 @@ func get_mugen_clsn1_world_boxes() -> Array[Rect2]:
 	return []
 
 
-func get_mugen_clsn2_world_boxes() -> Array[Rect2]:
-	if mugen_adapter != null:
-		return mugen_adapter.get_world_clsn2_boxes(current_state, anim_frame_idx, global_position, facing)
-	return [get_hit_rect()]
-
-
 func equip_weapon(weapon_id: String, ammo_override: int = -999) -> void:
 	var key: String = weapon_id.to_upper()
 	if key.is_empty():
@@ -616,10 +605,6 @@ func _poll_human_input() -> Dictionary:
 		"slot_3": _is_act_just_pressed(prefix + "slot_3"),
 		"slot_4": _is_act_just_pressed(prefix + "slot_4"),
 	}
-
-
-func _read_hardware_input() -> Dictionary:
-	return _poll_human_input()
 
 
 func _normalize_input(raw: Dictionary) -> Dictionary:
@@ -1381,7 +1366,8 @@ func has_kickable_target_nearby() -> bool:
 
 func _update_aim_pitch_from_input(step_24hz: float, inp: Dictionary) -> void:
 	# AS3 Player.as:6213-6232 (AimUp), 7233-7252 (AimDown) & 6199-6202 (AimIdle):
-	# Pitch speed starts at ±0.5 deg/tick on press and accelerates by ±2.0 deg/tick^2 while held; resets to 0 on release.
+	# Pitch speed starts at ±0.5 deg/tick on press (or +2.5 deg/tick when aiming downward so players standing on CRATE_HANGING can quickly aim down at the chain!)
+	# and accelerates while held; resets to 0 on release.
 	var pitch_dir: float = 0.0
 	if bool(inp.get("up", false)):
 		pitch_dir -= 1.0
@@ -1391,9 +1377,10 @@ func _update_aim_pitch_from_input(step_24hz: float, inp: Dictionary) -> void:
 		if _aim_pitch_speed * pitch_dir < 0.0:
 			_aim_pitch_speed = 0.0
 		if is_zero_approx(_aim_pitch_speed):
-			_aim_pitch_speed = pitch_dir * 0.5
+			_aim_pitch_speed = pitch_dir * (2.5 if pitch_dir > 0.0 else 0.5)
 		current_aim_pitch = clampf(current_aim_pitch + _aim_pitch_speed * step_24hz, -90.0, 90.0)
-		_aim_pitch_speed = clampf(_aim_pitch_speed + pitch_dir * 2.0 * step_24hz, -12.0, 12.0)
+		var pitch_accel: float = 2.6 if pitch_dir > 0.0 else 2.0
+		_aim_pitch_speed = clampf(_aim_pitch_speed + pitch_dir * pitch_accel * step_24hz, -12.0, 12.0)
 		_aim_pitch_hold_frames += step_24hz
 	else:
 		_aim_pitch_speed = 0.0
@@ -1691,13 +1678,6 @@ func _step_grenade_cooking(step_24hz: float, _inp: Dictionary) -> void:
 		var fhs: Object = _get_fire_hazard_system()
 		if fhs != null and fhs.has_method("trigger_explosion"):
 			fhs.call("trigger_explosion", get_mid_pos(), 33.0, 20.0, 5.0, self)
-
-
-func throw_equipped_item() -> bool:
-	var th_id: String = str(inventory.get(4, ""))
-	if th_id.is_empty() or int(inventory_ammo.get(4, 0)) <= 0:
-		return false
-	return _execute_throw()
 
 
 func _execute_throw() -> bool:
@@ -2133,18 +2113,6 @@ func _drop_dive_tackled_target() -> void:
 		victim.call("_sync_rig_view")
 
 
-func throw_grabbed_target() -> bool:
-	if not is_instance_valid(grabbed_target):
-		return false
-	var victim: Node2D = grabbed_target
-	grabbed_target = null
-	victim.set("grabbed_by", null)
-	if victim.has_method("force_fall"):
-		victim.call("force_fall", float(facing) * 4.5, -2.5, true)
-	_play_sfx("throw")
-	return true
-
-
 # --- Locomotion State Machine ---
 func _step_locomotion(step_24hz: float, inp: Dictionary, move_dir: int) -> void:
 	# 1. Double-tap Left/Right for Sprint (AS3 release-to-press <= 6.5 frames or press-to-press <= 10 frames)
@@ -2243,29 +2211,48 @@ func _step_locomotion(step_24hz: float, inp: Dictionary, move_dir: int) -> void:
 	# 4. Ladder Climbing & Sliding (AS3 Player.as:514-530, 7611-7689, 8019-8027: tests MidPosX(), MidPosY())
 	var ladder_rect: Rect2 = _find_ladder_at(get_mid_pos())
 	var just_grabbed_ladder: bool = false
-	if not climbing and not falling and not knockdowned and _ladder_regrab_cooldown_frames <= 0.0 and ladder_rect.size.x > 0.0 and (bool(inp.get("up", false)) or (bool(inp.get("down", false)) and not on_ground)):
-		climbing = true
-		just_grabbed_ladder = true
-		on_ground = false
-		falling = false
-		sprinting = false
-		air_velocity = Vector2.ZERO
-		global_position.x = clampf(global_position.x, ladder_rect.position.x + 2.0, ladder_rect.end.x - 2.0)
-		global_position.x = _clamp_x_against_solid_walls(global_position.x, global_position.y, _collect_solid_rects(), global_position.x)
-		_set_state("CLIMB", true)
+	if _can_grab_ladder_in_current_state():
+		var want_up: bool = bool(inp.get("up", false))
+		var want_down: bool = bool(inp.get("down", false))
+		if on_ground:
+			# Grounded UP grab: ONLY when not walking/running horizontally (move_dir == 0, so running + W/Up performs a normal running jump!)
+			# and ONLY when the ladder extends meaningfully upward above the fighter (so pressing W/Up on the top platform jumps instead of grabbing the ladder tip!)
+			if want_up and move_dir == 0 and ladder_rect.size.x > 0.0 and ladder_rect.position.y < global_position.y - 16.0:
+				_enter_ladder_climb(ladder_rect, false)
+				just_grabbed_ladder = true
+			# Grounded DOWN grab: standing on a platform/hatch at the top or middle of a ladder and pressing Down (with move_dir == 0)
+			elif want_down and move_dir == 0 and not sprinting:
+				var descent_lad: Rect2 = _find_ladder_for_descent()
+				if descent_lad.size.x > 0.0:
+					_enter_ladder_climb(descent_lad, true)
+					ladder_rect = descent_lad
+					just_grabbed_ladder = true
+		else:
+			# Airborne grab: prevent accidental snagging when jumping/moving horizontally across a ladder unless move_dir == 0 (or horizontal speed is very low)
+			var allow_air_grab: bool = (move_dir == 0 and absf(air_velocity.x) <= 0.85) or (bool(inp.get("up_just_pressed", false)) and move_dir == 0)
+			if allow_air_grab and ladder_rect.size.x > 0.0 and (want_up or want_down):
+				_enter_ladder_climb(ladder_rect, false)
+				just_grabbed_ladder = true
 
 	if climbing:
 		sprint_energy = minf(max_sprint_energy, sprint_energy + 1.0 * step_24hz)
 		var cur_lad: Rect2 = _find_ladder_at(get_mid_pos())
+		if cur_lad.size.x <= 0.0 and just_grabbed_ladder:
+			cur_lad = ladder_rect
 		if cur_lad.size.x <= 0.0:
 			climbing = false
 			_ladder_sliding = false
 		else:
 			var lad_solids: Array[Rect2] = _collect_solid_rects()
 			var near_ladder_top: bool = global_position.y <= cur_lad.position.y + 16.0
-			var want_ladder_jump: bool = (not just_grabbed_ladder and (bool(inp.get("jump_just_pressed", false)) or bool(inp.get("up_just_pressed", false))))
-			if near_ladder_top and bool(inp.get("up", false)) and (move_dir != 0 or global_position.y <= cur_lad.position.y + 8.5):
-				want_ladder_jump = true
+			# AS3 LadderJump (Player.as:7918-7926): tapping W/Up while climbing the body of the ladder must NEVER jump off the ladder!
+			# Only jump off when near the top of the ladder and holding Up + Left/Right (or at the very top when no platform is directly underfoot).
+			var want_ladder_jump: bool = (
+				not just_grabbed_ladder
+				and near_ladder_top
+				and bool(inp.get("up", false))
+				and move_dir != 0
+			)
 			if want_ladder_jump:
 				climbing = false
 				_ladder_sliding = false
@@ -2273,12 +2260,18 @@ func _step_locomotion(step_24hz: float, inp: Dictionary, move_dir: int) -> void:
 				_begin_jump(move_dir, step_24hz)
 				return
 
-			if move_dir != 0:
+			if move_dir != 0 and not bool(inp.get("down", false)):
+				facing = move_dir
 				var old_lad_x: float = global_position.x
 				var raw_lad_x: float = old_lad_x + float(move_dir) * CLIMB_SPEED_24HZ * step_24hz
 				var clamped_lad_x: float = _clamp_x_against_solid_walls(raw_lad_x, global_position.y, lad_solids, old_lad_x)
 				var blocked_by_wall: bool = absf(clamped_lad_x - raw_lad_x) > 0.01
 				global_position.x = clamped_lad_x
+				if _try_step_onto_adjacent_platform_from_ladder(move_dir):
+					climbing = false
+					_ladder_sliding = false
+					_ladder_regrab_cooldown_frames = 8.0
+					return
 				# AS3 Player.as:7667-7689: stepping horizontally outside the ladder dismounts onto adjacent platform or air (unless blocked by a solid wall!)
 				if _find_ladder_at(get_mid_pos()).size.x <= 0.0:
 					if blocked_by_wall:
@@ -2313,12 +2306,13 @@ func _step_locomotion(step_24hz: float, inp: Dictionary, move_dir: int) -> void:
 					climbing = false
 					_ladder_sliding = false
 					on_ground = true
+					_verify_ground_support()
 					return
 			elif bool(inp.get("up", false)):
 				_ladder_sliding = false
 				_set_state("CLIMB")
 				var old_lad_y2: float = global_position.y
-				var next_lad_y2: float = old_lad_y2 - CLIMB_SPEED_24HZ * step_24hz
+				var next_lad_y2: float = old_lad_y2 - CLIMB_SPEED_24HZ * speed_mult * step_24hz
 				for sr: Rect2 in lad_solids:
 					if sr.size.y >= 4.0 and global_position.x + 2.5 > sr.position.x and global_position.x - 2.5 < sr.end.x:
 						if old_lad_y2 - 16.0 >= sr.end.y - 2.0 and next_lad_y2 - 16.0 < sr.end.y:
@@ -2326,9 +2320,14 @@ func _step_locomotion(step_24hz: float, inp: Dictionary, move_dir: int) -> void:
 							break
 				global_position.y = next_lad_y2
 				global_position.x = _clamp_x_against_solid_walls(global_position.x, global_position.y, lad_solids, global_position.x)
+				# Check if reaching a top platform / hatch at the top of the ladder
+				if _try_step_onto_ladder_platform_at_height(cur_lad, old_lad_y2, global_position.y, move_dir, true):
+					return
 				var min_foot_y: float = cur_lad.position.y + 8.0
 				if global_position.y <= min_foot_y:
 					global_position.y = min_foot_y
+					if _try_step_onto_ladder_platform_at_height(cur_lad, old_lad_y2, global_position.y, move_dir, true):
+						return
 					climbing = false
 					_ladder_sliding = false
 					_ladder_regrab_cooldown_frames = 10.0
@@ -2336,6 +2335,8 @@ func _step_locomotion(step_24hz: float, inp: Dictionary, move_dir: int) -> void:
 					return
 			else:
 				_ladder_sliding = false
+				if _try_step_onto_ladder_platform_at_height(cur_lad, global_position.y, global_position.y, move_dir, false):
+					return
 				_set_state("CLIMB")
 			return
 
@@ -2520,6 +2521,112 @@ func _update_player_falling_on_player() -> void:
 			break
 
 
+func _can_grab_ladder_in_current_state() -> bool:
+	if is_dead or climbing or falling or knockdowned or rolling or diving or ledge_grabbing:
+		return false
+	if aiming or _cooking_grenade or _fire_seq_active or _mugen_state_active:
+		return false
+	if _melee_active_frames > 0.0 or _stagger_frames > 0.0:
+		return false
+	if grabbed_target != null or grabbed_by != null:
+		return false
+	return _ladder_regrab_cooldown_frames <= 0.0
+
+
+func _find_ladder_for_descent() -> Rect2:
+	var probes: Array[Vector2] = [
+		get_mid_pos(),
+		global_position + Vector2(0.0, 2.0),
+		global_position + Vector2(0.0, 10.0),
+	]
+	var solids: Array[Rect2] = _collect_solid_rects()
+	for pt: Vector2 in probes:
+		var lr: Rect2 = _find_ladder_at(pt)
+		if lr.size.x > 0.0 and lr.end.y > global_position.y + 12.0 and global_position.y >= lr.position.y - 10.0:
+			var cx: float = clampf(global_position.x, lr.position.x + 2.0, lr.end.x - 2.0)
+			if not _is_rect_point_solid(solids, Vector2(cx, global_position.y + 2.0)):
+				return lr
+	return Rect2()
+
+
+func _enter_ladder_climb(lad: Rect2, is_descent_from_ground: bool = false) -> void:
+	_abort_aiming_session()
+	climbing = true
+	_ladder_sliding = false
+	on_ground = false
+	_on_cloud_platform = false
+	falling = false
+	rolling = false
+	diving = false
+	sprinting = false
+	kneeling = false
+	taking_cover = false
+	cover_object_id = -1
+	ledge_grabbing = false
+	air_velocity = Vector2.ZERO
+	global_position.x = clampf(global_position.x, lad.position.x + 2.0, lad.end.x - 2.0)
+	var lad_solids: Array[Rect2] = _collect_solid_rects()
+	global_position.x = _clamp_x_against_solid_walls(global_position.x, global_position.y, lad_solids, global_position.x)
+	if is_descent_from_ground:
+		_cloud_drop_ignore_until_y = global_position.y + 10.0
+		global_position.y = maxf(global_position.y + 2.0, lad.position.y + 8.5)
+	_set_state("SLIDE" if is_descent_from_ground else "CLIMB", true)
+
+
+func _try_step_onto_ladder_platform_at_height(cur_lad: Rect2, old_y: float, new_y: float, move_dir: int, is_holding_up: bool) -> bool:
+	var solids: Array[Rect2] = _collect_solid_rects()
+	var clouds: Array[Rect2] = _collect_cloud_rects()
+	# 1. Check platform/hatch spanning the ladder at the fighter's X
+	for cr: Rect2 in clouds:
+		if global_position.x + 3.0 > cr.position.x and global_position.x - 3.0 < cr.end.x:
+			var is_top_hatch: bool = (cr.position.y >= cur_lad.position.y - 2.0 and cr.position.y <= cur_lad.position.y + 16.0)
+			var crossed_top: bool = is_holding_up and is_top_hatch and old_y >= cr.position.y - 1.5 and new_y <= cr.position.y + 1.5
+			var paused_on_hatch: bool = (not is_holding_up) and absf(new_y - cr.position.y) <= 3.5
+			if (crossed_top or paused_on_hatch) and can_fighter_stand_at_x(global_position.x, cr.position.y):
+				global_position.y = cr.position.y
+				climbing = false
+				_ladder_sliding = false
+				on_ground = true
+				_on_cloud_platform = true
+				_ladder_regrab_cooldown_frames = 8.0
+				air_velocity = Vector2.ZERO
+				_set_state("RUN" if move_dir != 0 else "IDLE")
+				return true
+
+	# 2. If at the top of the ladder, check adjacent left/right floor or cloud ledges at top height
+	if new_y <= cur_lad.position.y + 8.5:
+		var pref_dir: int = move_dir if move_dir != 0 else (facing if facing != 0 else 1)
+		for d: int in [pref_dir, -pref_dir]:
+			var side_x: float = (cur_lad.position.x - 5.0) if d < 0 else (cur_lad.end.x + 5.0)
+			for sr: Rect2 in solids:
+				if side_x + 3.0 > sr.position.x and side_x - 3.0 < sr.end.x:
+					if sr.position.y >= cur_lad.position.y - 2.0 and sr.position.y <= cur_lad.position.y + 16.0:
+						if can_fighter_stand_at_x(side_x, sr.position.y):
+							global_position = Vector2(side_x, sr.position.y)
+							climbing = false
+							_ladder_sliding = false
+							on_ground = true
+							_on_cloud_platform = false
+							_ladder_regrab_cooldown_frames = 8.0
+							air_velocity = Vector2.ZERO
+							_set_state("RUN" if move_dir != 0 else "IDLE")
+							return true
+			for cr2: Rect2 in clouds:
+				if side_x + 3.0 > cr2.position.x and side_x - 3.0 < cr2.end.x:
+					if cr2.position.y >= cur_lad.position.y - 2.0 and cr2.position.y <= cur_lad.position.y + 16.0:
+						if can_fighter_stand_at_x(side_x, cr2.position.y):
+							global_position = Vector2(side_x, cr2.position.y)
+							climbing = false
+							_ladder_sliding = false
+							on_ground = true
+							_on_cloud_platform = true
+							_ladder_regrab_cooldown_frames = 8.0
+							air_velocity = Vector2.ZERO
+							_set_state("RUN" if move_dir != 0 else "IDLE")
+							return true
+	return false
+
+
 func _try_step_onto_adjacent_platform_from_ladder(move_dir: int) -> bool:
 	var probe_x: float = global_position.x + float(move_dir) * 4.0
 	var solids: Array[Rect2] = _collect_solid_rects()
@@ -2631,7 +2738,8 @@ func _begin_jump(move_dir: int, step_24hz: float = 0.4) -> void:
 	_cloud_drop_ignore_until_y = -99999.0
 	kneeling = false
 	taking_cover = false
-	_jump_push_frames = 0.0
+	if move_dir != 0:
+		_ladder_regrab_cooldown_frames = maxf(_ladder_regrab_cooldown_frames, 6.0)
 	air_velocity.y = JUMP_POWER_24HZ
 	if sprinting:
 		air_velocity.x = float(facing) * SPRINT_SPEED_24HZ * speed_mult
@@ -2703,7 +2811,7 @@ func can_fighter_stand_at_x(cand_x: float, foot_y: float, ignore_prop: Node2D = 
 				if bool(prop.get("is_destroyed")) or not bool(prop.get("has_solid_hitbox")):
 					continue
 				var ptype: String = str(prop.get("prop_type")).to_upper()
-				if ptype in ["TABLE", "TABLE_SMALL", "LAMP_1"] or (ptype == "CRATE_HANGING" and not bool(prop.get("on_ground"))):
+				if ptype in ["TABLE", "TABLE_SMALL", "LAMP_1"] or (ptype == "CRATE_HANGING" and bool(prop.get("is_hanging_released")) and not bool(prop.get("on_ground"))):
 					continue
 				var prect: Rect2 = prop.call("get_world_rect") as Rect2 if prop.has_method("get_world_rect") else Rect2()
 				if prect.size.x > 0.0 and foot_y > prect.position.y + 2.5 and f_box.intersects(prect):
@@ -2743,7 +2851,7 @@ func _try_push_prop_chain(first_prop: Node2D, dir_sign: float, desired_dx: float
 					if op in chain_props or bool(op.get("is_destroyed")) or not bool(op.get("has_solid_hitbox")):
 						continue
 					var optype: String = str(op.get("prop_type")).to_upper()
-					if optype in ["TABLE", "TABLE_SMALL", "LAMP_1"] or (optype == "CRATE_HANGING" and not bool(op.get("on_ground"))):
+					if optype in ["TABLE", "TABLE_SMALL", "LAMP_1"] or (optype == "CRATE_HANGING" and bool(op.get("is_hanging_released")) and not bool(op.get("on_ground"))):
 						continue
 					var op_rect: Rect2 = op.call("get_world_rect") as Rect2 if op.has_method("get_world_rect") else Rect2()
 					if op_rect.size.x <= 0.0 or op_rect.end.y <= band_top or op_rect.position.y >= band_bot:
@@ -2830,12 +2938,24 @@ func _resolve_solid_prop_space() -> void:
 		if prop.get("last_attacker") == self and float(prop.get("_attacker_ignore_frames")) > 0.0:
 			continue
 		var ptype: String = str(prop.get("prop_type")).to_upper()
-		if ptype in ["TABLE", "TABLE_SMALL", "LAMP_1"] or (ptype == "CRATE_HANGING" and not bool(prop.get("on_ground"))):
+		if ptype in ["TABLE", "TABLE_SMALL", "LAMP_1"] or (ptype == "CRATE_HANGING" and bool(prop.get("is_hanging_released")) and not bool(prop.get("on_ground"))):
 			continue
 		var prect: Rect2 = prop.call("get_world_rect") as Rect2 if prop.has_method("get_world_rect") else Rect2()
+		var prop_top_y: float = float(prop.call("get_obb_top_y_at_x", global_position.x, 3.5)) if prop.has_method("get_obb_top_y_at_x") else prect.position.y
+		if on_ground and prop_top_y < INF and global_position.y <= prop_top_y + 5.5 and global_position.y >= prop_top_y - 3.5:
+			global_position.y = minf(global_position.y, prop_top_y)
+			f_box.position.y = global_position.y - 14.0
+			continue
 		if prect.size.x <= 0.0 or global_position.y <= prect.position.y + 2.5 or not f_box.intersects(prect):
 			continue
 		var p_center_x: float = prect.position.x + prect.size.x * 0.5
+		# If an airborne fighter's head is sticking up into the bottom of a suspended/kinematic prop (Screenshot 3), push them down out of its bottom!
+		if not on_ground and bool(prop.get("kinematic")) and global_position.y > prect.end.y + 1.5 and global_position.y - 15.5 < prect.end.y and absf(global_position.x - p_center_x) < prect.size.x * 0.5:
+			global_position.y = maxf(global_position.y, prect.end.y + 15.5)
+			f_box.position.y = global_position.y - 14.0
+			if air_velocity.y < 0.0:
+				air_velocity.y = 0.0
+			continue
 		var side_sign: float = -1.0 if global_position.x <= p_center_x else 1.0
 		var cand_x: float = (prect.position.x - 4.0) if side_sign < 0.0 else (prect.end.x + 4.0)
 		if can_fighter_stand_at_x(cand_x, global_position.y, prop):
@@ -2900,7 +3020,7 @@ func _apply_world_movement(delta_pos: Vector2, _step_24hz: float) -> void:
 				ml_glass.call("damage_glass_in_rect", sweep_rect, 10.0, impact_v)
 
 	var solids: Array[Rect2] = _collect_solid_rects()
-	var prop_solids: Array[Rect2] = _collect_solid_prop_rects()
+	var prop_solids: Array[Rect2] = _collect_solid_prop_rects(new_pos.x)
 	var clouds: Array[Rect2] = _collect_cloud_rects()
 
 	# 1. Horizontal wall check against solid_rects (matches AS3 PlayerEdgeDistance = 4.0)
@@ -2946,9 +3066,12 @@ func _apply_world_movement(delta_pos: Vector2, _step_24hz: float) -> void:
 				if bool(prop.get("is_destroyed")) or not bool(prop.get("has_solid_hitbox")):
 					continue
 				var ptype: String = str(prop.get("prop_type")).to_upper()
-				if ptype in ["TABLE", "TABLE_SMALL", "LAMP_1"] or (ptype == "CRATE_HANGING" and not bool(prop.get("on_ground"))):
+				if ptype in ["TABLE", "TABLE_SMALL", "LAMP_1"]:
 					continue
 				var prect: Rect2 = prop.call("get_world_rect") as Rect2 if prop.has_method("get_world_rect") else Rect2()
+				# Only skip horizontal separation for a released falling CRATE_HANGING when the fighter is directly underneath its descending bottom (so it crushes them!)
+				if ptype == "CRATE_HANGING" and bool(prop.get("is_hanging_released")) and not bool(prop.get("on_ground")) and old_pos.y > prect.end.y + 1.0:
+					continue
 				if prect.size.x > 0.0 and old_pos.y > prect.position.y + 2.5 and prop_hbox.intersects(prect):
 					if on_ground and not rolling and not diving and absf(delta_pos.x) > 0.01 and not bool(prop.get("kinematic")):
 						var dir_s: float = signf(delta_pos.x)
@@ -2996,7 +3119,7 @@ func _apply_world_movement(delta_pos: Vector2, _step_24hz: float) -> void:
 		# Check solid interactive prop tops (never ignored by _cloud_drop_ignore_until_y so players never drop inside crates/barrels/gascans!)
 		for pr: Rect2 in prop_solids:
 			if new_pos.x + 4.0 > pr.position.x and new_pos.x - 4.0 < pr.end.x:
-				if old_pos.y <= pr.position.y + 4.0 and new_pos.y >= pr.position.y:
+				if old_pos.y <= pr.position.y + 5.5 and new_pos.y >= pr.position.y:
 					if not landed or pr.position.y < land_y:
 						landed = true
 						landed_on_cloud = false
@@ -3034,11 +3157,17 @@ func _apply_world_movement(delta_pos: Vector2, _step_24hz: float) -> void:
 				landed_on_cloud = not clouds.is_empty()
 				land_y = default_floor_y
 	elif delta_pos.y < 0.0:
-		# Moving upward: check solid ceilings (narrowed to ±2.5 matching AS3 CollisionHead; thick solid platforms block upward passage from below)
+		# Moving upward: check solid ceilings AND solid props (CollisionHead; prevents jumping upward through the bottom of CRATE_HANGING / props!)
 		for sr: Rect2 in solids:
 			if sr.size.y >= 4.0 and new_pos.x + 2.5 > sr.position.x and new_pos.x - 2.5 < sr.end.x:
 				if old_pos.y > sr.position.y + 2.5 and new_pos.y - 16.0 < sr.end.y and new_pos.y - 2.0 > sr.position.y:
 					new_pos.y = minf(old_pos.y, maxf(new_pos.y, sr.end.y + 16.0))
+					air_velocity.y = 0.0
+					break
+		for pr: Rect2 in prop_solids:
+			if pr.size.y >= 8.0 and new_pos.x + 3.2 > pr.position.x and new_pos.x - 3.2 < pr.end.x:
+				if old_pos.y > pr.end.y - 1.5 and new_pos.y - 16.0 < pr.end.y and new_pos.y - 2.0 > pr.position.y:
+					new_pos.y = minf(old_pos.y, maxf(new_pos.y, pr.end.y + 16.0))
 					air_velocity.y = 0.0
 					break
 
@@ -3064,7 +3193,7 @@ func _apply_world_movement(delta_pos: Vector2, _step_24hz: float) -> void:
 				break
 		if not still_supported:
 			for pr: Rect2 in prop_solids:
-				if new_pos.x + 4.0 > pr.position.x and new_pos.x - 4.0 < pr.end.x and absf(new_pos.y - pr.position.y) <= 2.5:
+				if new_pos.x + 4.0 > pr.position.x and new_pos.x - 4.0 < pr.end.x and absf(new_pos.y - pr.position.y) <= 4.5:
 					new_pos.y = pr.position.y
 					still_supported = true
 					break
@@ -3108,7 +3237,7 @@ func _verify_ground_support() -> void:
 	if not on_ground or climbing or ledge_grabbing:
 		return
 	var solids: Array[Rect2] = _collect_solid_rects()
-	var prop_solids: Array[Rect2] = _collect_solid_prop_rects()
+	var prop_solids: Array[Rect2] = _collect_solid_prop_rects(global_position.x)
 	var clouds: Array[Rect2] = _collect_cloud_rects()
 	var pos: Vector2 = global_position
 	if _cloud_drop_ignore_until_y > -90000.0 and pos.y >= _cloud_drop_ignore_until_y:
@@ -3121,7 +3250,7 @@ func _verify_ground_support() -> void:
 			break
 	if not still_supported:
 		for pr: Rect2 in prop_solids:
-			if pos.x + 4.0 > pr.position.x and pos.x - 4.0 < pr.end.x and absf(pos.y - pr.position.y) <= 3.0:
+			if pos.x + 4.0 > pr.position.x and pos.x - 4.0 < pr.end.x and absf(pos.y - pr.position.y) <= 4.5:
 				still_supported = true
 				break
 	if not still_supported and pos.y >= _cloud_drop_ignore_until_y:
@@ -3285,8 +3414,9 @@ func _collect_cloud_rects() -> Array[Rect2]:
 	return out
 
 
-func _collect_solid_prop_rects() -> Array[Rect2]:
+func _collect_solid_prop_rects(at_x: float = NAN) -> Array[Rect2]:
 	var out: Array[Rect2] = []
+	var qx: float = global_position.x if is_nan(at_x) else at_x
 	# AS3 MapPremadeItems.as: solid props (CRATE, TABLE, BARREL, BARREL_EXPLOSIVE, GASCAN, DESK, FILECAB...) are solid standable objects!
 	if match_world != null:
 		var props_var: Variant = match_world.get("props")
@@ -3300,6 +3430,12 @@ func _collect_solid_prop_rects() -> Array[Rect2]:
 				if prop.has_method("get_solid_support_rect"):
 					var prect: Rect2 = prop.call("get_solid_support_rect") as Rect2
 					if prect.size.x > 0.0:
+						var rot: float = prop.rotation
+						if absf(sin(rot)) > 0.015 and absf(cos(rot)) > 0.015 and prop.has_method("get_obb_top_y_at_x"):
+							var hit_r: Rect2 = prop.call("get_hit_rect") as Rect2 if prop.has_method("get_hit_rect") else prect
+							var obb_top: float = float(prop.call("get_obb_top_y_at_x", qx, 3.5))
+							if obb_top < INF:
+								prect = Rect2(hit_r.position.x, obb_top, hit_r.size.x, maxf(4.0, hit_r.end.y - obb_top))
 						out.append(prect)
 	return out
 

@@ -12,20 +12,20 @@ const GRENADE_RESTITUTION: float = 0.35
 const GRENADE_FRICTION: float = 0.60
 
 const BALLISTIC_SPECS: Dictionary = {
-	"PISTOL": {"speed": 30.0, "range": 300.0, "damage": 10.0, "crit_chance": 0.05, "crit_dmg": 15.0, "pushback": 15.0, "spread": 1.0, "pellets": 1, "strength": 5},
-	"SILENCED_PISTOL": {"speed": 32.0, "range": 300.0, "damage": 9.0, "crit_chance": 0.10, "crit_dmg": 14.0, "pushback": 12.0, "spread": 0.8, "pellets": 1, "strength": 5},
-	"MAGNUM": {"speed": 40.0, "range": 350.0, "damage": 25.0, "crit_chance": 0.40, "crit_dmg": 35.0, "pushback": 50.0, "spread": 0.5, "pellets": 1, "strength": 15},
-	"UZI": {"speed": 30.0, "range": 200.0, "damage": 7.0, "crit_chance": 0.04, "crit_dmg": 10.0, "pushback": 10.0, "spread": 6.0, "pellets": 1, "strength": 5},
-	"FLARE_GUN": {"speed": 22.0, "range": 260.0, "damage": 8.0, "crit_chance": 0.0, "crit_dmg": 8.0, "pushback": 20.0, "spread": 1.5, "pellets": 1, "strength": 1, "is_flare": true},
-	"SHOTGUN": {"speed": 30.0, "range": 200.0, "damage": 6.0, "crit_chance": 0.0, "crit_dmg": 6.0, "pushback": 33.0, "spread": 4.3, "pellets": 4, "strength": 5},
-	"SAWED_OFF": {"speed": 28.0, "range": 170.0, "damage": 6.0, "crit_chance": 0.0, "crit_dmg": 6.0, "pushback": 35.0, "spread": 7.5, "pellets": 4, "strength": 5},
-	"RIFLE": {"speed": 35.0, "range": 300.0, "damage": 8.0, "crit_chance": 0.06, "crit_dmg": 10.0, "pushback": 20.0, "spread": 3.0, "pellets": 1, "strength": 5},
-	"TOMMY_GUN": {"speed": 32.0, "range": 240.0, "damage": 7.5, "crit_chance": 0.05, "crit_dmg": 11.0, "pushback": 15.0, "spread": 4.5, "pellets": 1, "strength": 5},
-	"SMG": {"speed": 32.0, "range": 240.0, "damage": 7.5, "crit_chance": 0.05, "crit_dmg": 11.0, "pushback": 15.0, "spread": 4.5, "pellets": 1, "strength": 5},
-	"M60": {"speed": 34.0, "range": 300.0, "damage": 9.0, "crit_chance": 0.08, "crit_dmg": 13.0, "pushback": 25.0, "spread": 4.0, "pellets": 1, "strength": 10},
-	"SNIPER": {"speed": 40.0, "range": 900.0, "damage": 30.0, "crit_chance": 0.75, "crit_dmg": 60.0, "pushback": 50.0, "spread": 0.0, "pellets": 1, "strength": 30},
-	"LASER_GUN": {"speed": 45.0, "range": 900.0, "damage": 42.0, "crit_chance": 0.25, "crit_dmg": 60.0, "pushback": 35.0, "spread": 0.0, "pellets": 1, "strength": 30},
-	"BAZOOKA": {"speed": 18.0, "range": 400.0, "damage": 20.0, "crit_chance": 0.0, "crit_dmg": 20.0, "pushback": 60.0, "spread": 2.0, "pellets": 1, "strength": 1, "is_rocket": true},
+	"PISTOL": {"speed": 30.0, "range": 1200.0, "damage": 10.0, "crit_chance": 0.05, "crit_dmg": 15.0, "pushback": 15.0, "spread": 1.0, "pellets": 1, "strength": 5},
+	"SILENCED_PISTOL": {"speed": 32.0, "range": 1200.0, "damage": 9.0, "crit_chance": 0.10, "crit_dmg": 14.0, "pushback": 12.0, "spread": 0.8, "pellets": 1, "strength": 5},
+	"MAGNUM": {"speed": 40.0, "range": 1200.0, "damage": 25.0, "crit_chance": 0.40, "crit_dmg": 35.0, "pushback": 50.0, "spread": 0.5, "pellets": 1, "strength": 15},
+	"UZI": {"speed": 30.0, "range": 1200.0, "damage": 7.0, "crit_chance": 0.04, "crit_dmg": 10.0, "pushback": 10.0, "spread": 6.0, "pellets": 1, "strength": 5},
+	"FLARE_GUN": {"speed": 22.0, "range": 1200.0, "damage": 8.0, "crit_chance": 0.0, "crit_dmg": 8.0, "pushback": 20.0, "spread": 1.5, "pellets": 1, "strength": 1, "is_flare": true},
+	"SHOTGUN": {"speed": 30.0, "range": 1200.0, "damage": 6.0, "crit_chance": 0.0, "crit_dmg": 6.0, "pushback": 33.0, "spread": 4.3, "pellets": 4, "strength": 5},
+	"SAWED_OFF": {"speed": 28.0, "range": 1200.0, "damage": 6.0, "crit_chance": 0.0, "crit_dmg": 6.0, "pushback": 35.0, "spread": 7.5, "pellets": 4, "strength": 5},
+	"RIFLE": {"speed": 35.0, "range": 1200.0, "damage": 8.0, "crit_chance": 0.06, "crit_dmg": 10.0, "pushback": 20.0, "spread": 3.0, "pellets": 1, "strength": 5},
+	"TOMMY_GUN": {"speed": 32.0, "range": 1200.0, "damage": 7.5, "crit_chance": 0.05, "crit_dmg": 11.0, "pushback": 15.0, "spread": 4.5, "pellets": 1, "strength": 5},
+	"SMG": {"speed": 32.0, "range": 1200.0, "damage": 7.5, "crit_chance": 0.05, "crit_dmg": 11.0, "pushback": 15.0, "spread": 4.5, "pellets": 1, "strength": 5},
+	"M60": {"speed": 34.0, "range": 1200.0, "damage": 9.0, "crit_chance": 0.08, "crit_dmg": 13.0, "pushback": 25.0, "spread": 4.0, "pellets": 1, "strength": 10},
+	"SNIPER": {"speed": 40.0, "range": 1200.0, "damage": 30.0, "crit_chance": 0.75, "crit_dmg": 60.0, "pushback": 50.0, "spread": 0.0, "pellets": 1, "strength": 30},
+	"LASER_GUN": {"speed": 45.0, "range": 1200.0, "damage": 42.0, "crit_chance": 0.25, "crit_dmg": 60.0, "pushback": 35.0, "spread": 0.0, "pellets": 1, "strength": 30},
+	"BAZOOKA": {"speed": 18.0, "range": 1200.0, "damage": 20.0, "crit_chance": 0.0, "crit_dmg": 20.0, "pushback": 60.0, "spread": 2.0, "pellets": 1, "strength": 1, "is_rocket": true},
 	"FLAMETHROWER": {"speed": 8.5, "range": 102.0, "damage": 1.2, "crit_chance": 0.0, "crit_dmg": 1.2, "pushback": 2.0, "spread": 4.5, "pellets": 1, "strength": 1, "is_flame": true},
 	"CHAKRA_WAVE": {"speed": 22.0, "range": 320.0, "damage": 20.0, "crit_chance": 0.0, "crit_dmg": 20.0, "pushback": 35.0, "spread": 0.0, "pellets": 1, "strength": 10, "is_mugen_wave": true},
 }
@@ -191,7 +191,7 @@ func spawn_bullet(
 	var pellets: int = int(spec.get("pellets", 1))
 	var spread_deg: float = float(spec.get("spread", 1.0))
 	var spd: float = float(spec.get("speed", 30.0))
-	var max_range: float = float(spec.get("range", 300.0))
+	var max_range: float = float(spec.get("range", 1200.0))
 	var base_dmg: float = float(spec.get("damage", 10.0))
 	var crit_chance: float = float(spec.get("crit_chance", 0.05))
 	var crit_dmg: float = float(spec.get("crit_dmg", 15.0))
@@ -215,12 +215,18 @@ func spawn_bullet(
 		var dir: Vector2 = Vector2(cos(rad), sin(rad)).normalized()
 		var is_crit: bool = (crit_chance > 0.0 and randf() < crit_chance)
 		var dmg: float = crit_dmg if is_crit else base_dmg
+		var origin_pos: Vector2 = start_pos
+		if is_instance_valid(owner_fighter):
+			var f_face: float = float(owner_fighter.get("facing")) if owner_fighter.get("facing") != null else 1.0
+			var shoulder_y: float = -8.5 if bool(owner_fighter.get("kneeling")) else -12.5
+			origin_pos = owner_fighter.global_position + Vector2(f_face * -2.5, shoulder_y)
 
 		bullets.append({
 			"owner": owner_fighter,
 			"weapon_id": key,
 			"pos": start_pos,
 			"prev_pos": start_pos,
+			"origin_pos": origin_pos,
 			"dir": dir,
 			"vel": dir * spd,
 			"angle_deg": final_deg,
@@ -613,6 +619,8 @@ func _step_bullets(step_24hz: float) -> void:
 		var prop_hit_pos: Vector2 = wall_hit_pos
 		var stopped_by_prop: bool = false
 		var pen_ids: Array = b.get("penetrated_prop_ids", []) as Array
+		var is_first_step: bool = (age <= step_24hz + 0.01)
+		var origin_pos: Vector2 = b.get("origin_pos", prev_pos) as Vector2
 		var prop_hits: Array[Dictionary] = []
 		for cp: Dictionary in cached_props:
 			var prop: Node2D = cp["node"] as Node2D
@@ -621,12 +629,32 @@ func _step_bullets(step_24hz: float) -> void:
 			var cp_id: int = int(cp["id"])
 			if cp_id == ignore_cover_id or pen_ids.has(cp_id):
 				continue
+			var is_holder: bool = bool(prop.get("is_hanging_holder"))
 			# AS3 ProjectilesUpdater.as:489-500 (CollisionObjectRocket -> DynamicHitBoxObjectList):
 			# Rockets only collide directly with props that have DrawHitBox = true (never with CRATE_HANGING_HOLDER)
-			if is_rocket and bool(prop.get("is_hanging_holder")):
+			if is_rocket and is_holder:
 				continue
 			var p_rect: Rect2 = cp["rect"] as Rect2
-			var hit_t: float = _segment_rect_entry_t(prev_pos, wall_hit_pos, p_rect)
+			var ray_start: Vector2 = origin_pos if (is_first_step and is_holder) else prev_pos
+			var hit_t: float = _segment_rect_entry_t(ray_start, wall_hit_pos, p_rect)
+			if hit_t <= 1.0 and prop.has_method("check_segment_hit_obb"):
+				hit_t = float(prop.call("check_segment_hit_obb", ray_start, wall_hit_pos))
+			elif is_holder and prop.has_method("check_segment_hit_obb"):
+				hit_t = float(prop.call("check_segment_hit_obb", ray_start, wall_hit_pos))
+
+			# Aim-Down Chain Assist (Screenshot 1): if the shooter is standing on top of the attached CRATE_HANGING
+			# and firing downward (dir.y > 0.18), ensure the bullet connects with CRATE_HANGING_HOLDER before the crate!
+			if hit_t > 1.0 and is_first_step and is_holder and is_instance_valid(owner_f) and dir.y > 0.18:
+				var att_crate: Node2D = prop.get("attached_hanging_crate") as Node2D
+				if is_instance_valid(att_crate) and not bool(att_crate.get("is_hanging_released")):
+					var cw: float = float(att_crate.get("width")) if att_crate.get("width") != null else 28.0
+					var ch: float = float(att_crate.get("height")) if att_crate.get("height") != null else 16.0
+					var crate_top: float = att_crate.global_position.y - ch * 0.5
+					if absf(owner_f.global_position.y - crate_top) <= 4.5 and absf(owner_f.global_position.x - att_crate.global_position.x) <= cw * 0.5 + 4.5:
+						var dx_holder: float = prop.global_position.x - owner_f.global_position.x
+						if absf(dx_holder) <= 13.5 and (absf(dir.x) <= 0.72 or dx_holder * dir.x >= -3.0):
+							hit_t = 0.0
+
 			if hit_t <= 1.0:
 				if is_flame:
 					# Flamethrower stream penetrates and ignites props
@@ -639,11 +667,18 @@ func _step_bullets(step_24hz: float) -> void:
 					"prop": prop,
 					"id": cp_id,
 					"t": hit_t,
-					"pos": prev_pos.lerp(wall_hit_pos, maxf(0.0, hit_t - 0.02)),
+					"is_holder": is_holder,
+					"pos": ray_start.lerp(wall_hit_pos, maxf(0.0, hit_t - 0.02)),
 				})
 
 		if prop_hits.size() > 1:
-			prop_hits.sort_custom(func(a: Dictionary, b_item: Dictionary) -> bool: return float(a["t"]) < float(b_item["t"]))
+			prop_hits.sort_custom(func(a: Dictionary, b_item: Dictionary) -> bool:
+				var a_h: bool = bool(a.get("is_holder", false))
+				var b_h: bool = bool(b_item.get("is_holder", false))
+				if a_h != b_h and absf(float(a["t"]) - float(b_item["t"])) <= 0.45:
+					return a_h
+				return float(a["t"]) < float(b_item["t"])
+			)
 
 		for ph: Dictionary in prop_hits:
 			var ph_t: float = float(ph["t"])
@@ -872,9 +907,12 @@ func _step_bullets(step_24hz: float) -> void:
 				rider_f.set("air_velocity", dir * spd * 0.5)
 
 		var traveled: float = float(b.get("traveled", 0.0)) + step_dist
-		if traveled >= float(b.get("max_range", 300.0)):
-			if is_rocket:
-				_detonate_rocket(b, next_pos, fhs)
+		if traveled >= float(b.get("max_range", 1200.0)) or _is_outside_world(next_pos, ml):
+			if is_rocket and is_instance_valid(rider_f):
+				if rider_f.has_method("end_rocket_ride"):
+					rider_f.call("end_rocket_ride")
+				if rider_f.has_method("gib_fighter"):
+					rider_f.call("gib_fighter", Vector2(dir.x * 5.0, -4.5))
 			continue
 
 		b["prev_pos"] = prev_pos
@@ -883,6 +921,14 @@ func _step_bullets(step_24hz: float) -> void:
 		next_bullets.append(b)
 
 	bullets = next_bullets
+
+
+func _is_outside_world(pt: Vector2, ml: Object) -> bool:
+	if ml != null and ml.get("map_bounds") != null:
+		var mb: Rect2 = ml.get("map_bounds") as Rect2
+		if mb.size.x > 10.0 and mb.size.y > 10.0:
+			return not mb.grow(48.0).has_point(pt)
+	return pt.x < -800.0 or pt.x > 1200.0 or pt.y < -600.0 or pt.y > 800.0
 
 
 func _detonate_rocket(b: Dictionary, pos: Vector2, fhs: Object) -> void:
