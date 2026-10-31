@@ -1,0 +1,660 @@
+{
+  "schema_version": 1,
+  "generation_id": "chibi_25head_r4_v1",
+  "style_id": "chibi_tactical_brawler_25head",
+  "golden_fighter_id": "johnny",
+  "source_concept_sha256": "77CA7A69E3E75388E1FE33C5973282FA11E005DBED1F8669E2C76271687933BB",
+  "calibration": {
+    "atlas_reference_body_px": 144,
+    "units_per_pixel": 0.125,
+    "neutral_height_world_units": 18.0,
+    "hair_crest_allowance_world_units": 2.0,
+    "head_ratio": 0.4,
+    "torso_ratio": 0.32,
+    "legs_ratio": 0.28,
+    "head_world_units": 7.2,
+    "torso_world_units": 5.76,
+    "legs_world_units": 5.04,
+    "glove_scale": 1.6,
+    "contact_fist_accent_max_scale": 1.45,
+    "head_pitch_factor": 0.4,
+    "head_pitch_clamp_deg": [
+      -28.0,
+      28.0
+    ],
+    "aim_pitch_clamp_deg": [
+      -90.0,
+      90.0
+    ],
+    "face_lod_min_screen_px": 16.0
+  },
+  "expressions": {
+    "KO_STARS": {
+      "priority": 6,
+      "min_hold_sec": 0.35,
+      "portrait_key": "ko_stars",
+      "allow_blink": false
+    },
+    "ECSTATIC_VICTORY_LAUGH": {
+      "priority": 5,
+      "min_hold_sec": 0.5,
+      "portrait_key": "ecstatic_victory_laugh",
+      "allow_blink": false
+    },
+    "DIZZY_SPIRAL_HURT": {
+      "priority": 4,
+      "min_hold_sec": 0.14,
+      "portrait_key": "dizzy_spiral_hurt",
+      "allow_blink": false
+    },
+    "WIDE_MOUTH_SHOUT": {
+      "priority": 3,
+      "min_hold_sec": 0.12,
+      "portrait_key": "wide_mouth_shout",
+      "allow_blink": false
+    },
+    "LOW_HP_SWEAT": {
+      "priority": 2,
+      "min_hold_sec": 0.25,
+      "enter_hp_ratio": 0.25,
+      "exit_hp_ratio": 0.3,
+      "portrait_key": "low_hp_sweat",
+      "allow_blink": true
+    },
+    "BLAZING_GLARE": {
+      "priority": 1,
+      "min_hold_sec": 0.1,
+      "portrait_key": "blazing_glare",
+      "allow_blink": false
+    },
+    "CHEEKY_SMIRK": {
+      "priority": 0,
+      "min_hold_sec": 0.0,
+      "portrait_key": "cheeky_smirk",
+      "allow_blink": true
+    }
+  },
+  "portraits": {
+    "cheeky_smirk": {
+      "res_path": "res://assets/portraits/chibi_expr_cheeky_smirk.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "76E4E0589EC02E994C2DDBDFD39C8FFC5116A94E34307956B4519A535D623FB6"
+    },
+    "blazing_glare": {
+      "res_path": "res://assets/portraits/chibi_expr_blazing_glare.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "44C80B53DB3ECC405619614ADE452FF6B9FC04D5A0B30761F11B5D0692E107D2"
+    },
+    "wide_mouth_shout": {
+      "res_path": "res://assets/portraits/chibi_expr_wide_mouth_shout.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "D8F3403DB7288020B4A50E38C3F38A79A9801AB2768311AA967B83461F7F128A"
+    },
+    "dizzy_spiral_hurt": {
+      "res_path": "res://assets/portraits/chibi_expr_dizzy_spiral_hurt.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "8951C2ACF2550BF5FC8A184EBC19B31140DDD3D09C8D476A06386D35265F6175"
+    },
+    "ecstatic_victory_laugh": {
+      "res_path": "res://assets/portraits/chibi_expr_ecstatic_victory_laugh.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "0B683FAE2C87780A88D702F3C73DA05C2419A67592B355B684D3F4119E1C5315"
+    },
+    "low_hp_sweat": {
+      "res_path": "res://assets/portraits/chibi_expr_low_hp_sweat.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "B08A7C65C24A9EC309ABBB5E73B9775E33E2970AD5EAFA2E85E13DD61331674A"
+    },
+    "ko_stars": {
+      "res_path": "res://assets/portraits/chibi_expr_ko_stars.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "14CEE430B08716FB9D0D0CA11353533F7B2069296EEE9A06E0894E5428E627C8"
+    }
+  },
+  "poses": {
+    "hero": {
+      "res_path": "res://assets/sprites/chibi_brawler/pose_hero.png",
+      "width": 218,
+      "height": 434,
+      "pivot_px": [
+        109.0,
+        430.0
+      ],
+      "units_per_pixel": 0.125,
+      "target_world_height": 18.0,
+      "vulnerable_core_mask": {
+        "head_ratio": 0.4,
+        "torso_ratio": 0.32,
+        "legs_ratio": 0.28
+      },
+      "sha256": "90569613E6DE5A5D2E8CB30B2AC7DA679AD682290997A1AC57DD4717347156FC"
+    },
+    "idle": {
+      "res_path": "res://assets/sprites/chibi_brawler/pose_idle.png",
+      "width": 119,
+      "height": 206,
+      "pivot_px": [
+        59.5,
+        202.0
+      ],
+      "units_per_pixel": 0.125,
+      "target_world_height": 18.0,
+      "vulnerable_core_mask": {
+        "head_ratio": 0.4,
+        "torso_ratio": 0.32,
+        "legs_ratio": 0.28
+      },
+      "sha256": "D23E673F9F4D8A7C31ED6502E3A1D4EE0D85B6581EBFF94001094385A63E40E9"
+    },
+    "run": {
+      "res_path": "res://assets/sprites/chibi_brawler/pose_run.png",
+      "width": 163,
+      "height": 195,
+      "pivot_px": [
+        81.5,
+        191.0
+      ],
+      "units_per_pixel": 0.125,
+      "target_world_height": 18.0,
+      "vulnerable_core_mask": {
+        "head_ratio": 0.4,
+        "torso_ratio": 0.32,
+        "legs_ratio": 0.28
+      },
+      "sha256": "9244FBE57949F1FC071E7833F5BB41CF603A441AB1767FA69F7EFF8D872914B4"
+    },
+    "jump": {
+      "res_path": "res://assets/sprites/chibi_brawler/pose_jump.png",
+      "width": 106,
+      "height": 222,
+      "pivot_px": [
+        53.0,
+        218.0
+      ],
+      "units_per_pixel": 0.125,
+      "target_world_height": 18.0,
+      "vulnerable_core_mask": {
+        "head_ratio": 0.4,
+        "torso_ratio": 0.32,
+        "legs_ratio": 0.28
+      },
+      "sha256": "1D78A47729D49E8E846E39BB427A22C8FC723BB47E23A1EF66997F4F22AAE512"
+    },
+    "punch": {
+      "res_path": "res://assets/sprites/chibi_brawler/pose_punch.png",
+      "width": 213,
+      "height": 235,
+      "pivot_px": [
+        106.5,
+        231.0
+      ],
+      "units_per_pixel": 0.125,
+      "target_world_height": 18.0,
+      "vulnerable_core_mask": {
+        "head_ratio": 0.4,
+        "torso_ratio": 0.32,
+        "legs_ratio": 0.28
+      },
+      "sha256": "FE8D27B2F67B5DE9DD3F95AD438945CE46F9AF1CEE4E17F78682D1CC78272772"
+    },
+    "aim": {
+      "res_path": "res://assets/sprites/chibi_brawler/pose_aim.png",
+      "width": 150,
+      "height": 208,
+      "pivot_px": [
+        75.0,
+        204.0
+      ],
+      "units_per_pixel": 0.125,
+      "target_world_height": 18.0,
+      "vulnerable_core_mask": {
+        "head_ratio": 0.4,
+        "torso_ratio": 0.32,
+        "legs_ratio": 0.28
+      },
+      "sha256": "94BBC5514A7DC3C7848B04413FE3F6655C0833B2D0B558B89D31F396807E3133"
+    },
+    "roll": {
+      "res_path": "res://assets/sprites/chibi_brawler/pose_roll.png",
+      "width": 186,
+      "height": 206,
+      "pivot_px": [
+        93.0,
+        202.0
+      ],
+      "units_per_pixel": 0.125,
+      "target_world_height": 14.0,
+      "vulnerable_core_mask": {
+        "head_ratio": 0.4,
+        "torso_ratio": 0.32,
+        "legs_ratio": 0.28
+      },
+      "sha256": "92C5DF579F9890CBBB8327A730A3318D461657DAD331C5DC0E52C1EC93046457"
+    }
+  },
+  "state_coverage_count": 83,
+  "state_coverage": {
+    "AIM_BAZOOKA": {
+      "source_id": "AIM_BAZOOKA",
+      "pose_layer": "aim",
+      "required": true
+    },
+    "AIM_CHAINSAW": {
+      "source_id": "AIM_CHAINSAW",
+      "pose_layer": "aim",
+      "required": true
+    },
+    "AIM_FISTS": {
+      "source_id": "AIM_FISTS",
+      "pose_layer": "aim",
+      "required": true
+    },
+    "AIM_FLAMETHROWER": {
+      "source_id": "AIM_FLAMETHROWER",
+      "pose_layer": "aim",
+      "required": true
+    },
+    "AIM_GRENADE": {
+      "source_id": "AIM_GRENADE",
+      "pose_layer": "aim",
+      "required": true
+    },
+    "AIM_HANDGUN": {
+      "source_id": "AIM_HANDGUN",
+      "pose_layer": "aim",
+      "required": true
+    },
+    "AIM_MAGNUM": {
+      "source_id": "AIM_MAGNUM",
+      "pose_layer": "aim",
+      "required": true
+    },
+    "AIM_MELEE_1H": {
+      "source_id": "AIM_MELEE_1H",
+      "pose_layer": "aim",
+      "required": true
+    },
+    "AIM_MELEE_2H": {
+      "source_id": "AIM_MELEE_2H",
+      "pose_layer": "aim",
+      "required": true
+    },
+    "AIM_MOLOTOV": {
+      "source_id": "AIM_MOLOTOV",
+      "pose_layer": "aim",
+      "required": true
+    },
+    "AIM_PISTOL": {
+      "source_id": "AIM_PISTOL",
+      "pose_layer": "aim",
+      "required": true
+    },
+    "AIM_RIFLE": {
+      "source_id": "AIM_RIFLE",
+      "pose_layer": "aim",
+      "required": true
+    },
+    "AIM_SELF": {
+      "source_id": "AIM_SELF",
+      "pose_layer": "aim",
+      "required": true
+    },
+    "AIM_SHOTGUN": {
+      "source_id": "AIM_SHOTGUN",
+      "pose_layer": "aim",
+      "required": true
+    },
+    "AIM_SNIPER": {
+      "source_id": "AIM_SNIPER",
+      "pose_layer": "aim",
+      "required": true
+    },
+    "AIM_THROW": {
+      "source_id": "AIM_THROW",
+      "pose_layer": "aim",
+      "required": true
+    },
+    "AIM_TURN": {
+      "source_id": "AIM_TURN",
+      "pose_layer": "aim",
+      "required": true
+    },
+    "AIM_UZI": {
+      "source_id": "AIM_UZI",
+      "pose_layer": "aim",
+      "required": true
+    },
+    "AXE_01": {
+      "source_id": "AXE_01",
+      "pose_layer": "punch",
+      "required": true
+    },
+    "AXE_02": {
+      "source_id": "AXE_02",
+      "pose_layer": "punch",
+      "required": true
+    },
+    "AXE_03": {
+      "source_id": "AXE_03",
+      "pose_layer": "punch",
+      "required": true
+    },
+    "CLIMB": {
+      "source_id": "CLIMB",
+      "pose_layer": "jump",
+      "required": true
+    },
+    "COVER": {
+      "source_id": "COVER",
+      "pose_layer": "idle",
+      "required": true
+    },
+    "CROUCH": {
+      "source_id": "CROUCH",
+      "pose_layer": "idle",
+      "required": true
+    },
+    "DEAD": {
+      "source_id": "DEAD",
+      "pose_layer": "idle",
+      "required": true
+    },
+    "DEATH_KNEEL": {
+      "source_id": "DEATH_KNEEL",
+      "pose_layer": "idle",
+      "required": true
+    },
+    "DIVE": {
+      "source_id": "DIVE",
+      "pose_layer": "roll",
+      "required": true
+    },
+    "EMPTY": {
+      "source_id": "EMPTY",
+      "pose_layer": "idle",
+      "required": true
+    },
+    "FALL_B": {
+      "source_id": "FALL_B",
+      "pose_layer": "jump",
+      "required": true
+    },
+    "FALL_F": {
+      "source_id": "FALL_F",
+      "pose_layer": "jump",
+      "required": true
+    },
+    "GRABBED": {
+      "source_id": "GRABBED",
+      "pose_layer": "idle",
+      "required": true
+    },
+    "IDLE": {
+      "source_id": "IDLE",
+      "pose_layer": "idle",
+      "required": true
+    },
+    "JUMP": {
+      "source_id": "JUMP",
+      "pose_layer": "jump",
+      "required": true
+    },
+    "JUMPKICK": {
+      "source_id": "JUMPKICK",
+      "pose_layer": "jump",
+      "required": true
+    },
+    "JUMP_ATT": {
+      "source_id": "JUMP_ATT",
+      "pose_layer": "idle",
+      "required": true
+    },
+    "KICK": {
+      "source_id": "KICK",
+      "pose_layer": "punch",
+      "required": true
+    },
+    "KNEEL": {
+      "source_id": "KNEEL",
+      "pose_layer": "idle",
+      "required": true
+    },
+    "KNOCKDOWN": {
+      "source_id": "KNOCKDOWN",
+      "pose_layer": "idle",
+      "required": true
+    },
+    "LAND_HEAVY": {
+      "source_id": "LAND_HEAVY",
+      "pose_layer": "idle",
+      "required": true
+    },
+    "MACHETE_01": {
+      "source_id": "MACHETE_01",
+      "pose_layer": "punch",
+      "required": true
+    },
+    "MACHETE_02": {
+      "source_id": "MACHETE_02",
+      "pose_layer": "punch",
+      "required": true
+    },
+    "MACHETE_03": {
+      "source_id": "MACHETE_03",
+      "pose_layer": "punch",
+      "required": true
+    },
+    "PUNCH_01": {
+      "source_id": "PUNCH_01",
+      "pose_layer": "punch",
+      "required": true
+    },
+    "PUNCH_02": {
+      "source_id": "PUNCH_02",
+      "pose_layer": "punch",
+      "required": true
+    },
+    "PUNCH_03": {
+      "source_id": "PUNCH_03",
+      "pose_layer": "punch",
+      "required": true
+    },
+    "ROCKET_RIDE_EMPTY": {
+      "source_id": "ROCKET_RIDE_EMPTY",
+      "pose_layer": "idle",
+      "required": true
+    },
+    "ROCKET_RIDE_L": {
+      "source_id": "ROCKET_RIDE_L",
+      "pose_layer": "idle",
+      "required": true
+    },
+    "ROCKET_RIDE_R": {
+      "source_id": "ROCKET_RIDE_R",
+      "pose_layer": "idle",
+      "required": true
+    },
+    "ROLL": {
+      "source_id": "ROLL",
+      "pose_layer": "roll",
+      "required": true
+    },
+    "RUN": {
+      "source_id": "RUN",
+      "pose_layer": "run",
+      "required": true
+    },
+    "SLIDE": {
+      "source_id": "SLIDE",
+      "pose_layer": "idle",
+      "required": true
+    },
+    "SPRINT": {
+      "source_id": "SPRINT",
+      "pose_layer": "run",
+      "required": true
+    },
+    "STAGGER": {
+      "source_id": "STAGGER",
+      "pose_layer": "idle",
+      "required": true
+    },
+    "START_BAZOOKA": {
+      "source_id": "START_BAZOOKA",
+      "pose_layer": "aim",
+      "required": true
+    },
+    "START_FLAMETHROWER": {
+      "source_id": "START_FLAMETHROWER",
+      "pose_layer": "aim",
+      "required": true
+    },
+    "START_HANDGUN": {
+      "source_id": "START_HANDGUN",
+      "pose_layer": "aim",
+      "required": true
+    },
+    "START_MAGNUM": {
+      "source_id": "START_MAGNUM",
+      "pose_layer": "aim",
+      "required": true
+    },
+    "START_MELEE_1H": {
+      "source_id": "START_MELEE_1H",
+      "pose_layer": "aim",
+      "required": true
+    },
+    "START_MELEE_2H": {
+      "source_id": "START_MELEE_2H",
+      "pose_layer": "aim",
+      "required": true
+    },
+    "START_PISTOL": {
+      "source_id": "START_PISTOL",
+      "pose_layer": "aim",
+      "required": true
+    },
+    "START_RIFLE": {
+      "source_id": "START_RIFLE",
+      "pose_layer": "aim",
+      "required": true
+    },
+    "START_SELF": {
+      "source_id": "START_SELF",
+      "pose_layer": "aim",
+      "required": true
+    },
+    "START_SHOTGUN": {
+      "source_id": "START_SHOTGUN",
+      "pose_layer": "aim",
+      "required": true
+    },
+    "START_SNIPER": {
+      "source_id": "START_SNIPER",
+      "pose_layer": "aim",
+      "required": true
+    },
+    "START_THROW": {
+      "source_id": "START_THROW",
+      "pose_layer": "aim",
+      "required": true
+    },
+    "START_UZI": {
+      "source_id": "START_UZI",
+      "pose_layer": "aim",
+      "required": true
+    },
+    "STUN_01": {
+      "source_id": "STUN_01",
+      "pose_layer": "idle",
+      "required": true
+    },
+    "STUN_02": {
+      "source_id": "STUN_02",
+      "pose_layer": "idle",
+      "required": true
+    },
+    "SWORD_01": {
+      "source_id": "SWORD_01",
+      "pose_layer": "punch",
+      "required": true
+    },
+    "SWORD_02": {
+      "source_id": "SWORD_02",
+      "pose_layer": "punch",
+      "required": true
+    },
+    "SWORD_03": {
+      "source_id": "SWORD_03",
+      "pose_layer": "punch",
+      "required": true
+    },
+    "THROW": {
+      "source_id": "THROW",
+      "pose_layer": "idle",
+      "required": true
+    },
+    "LEDGE_GRAB": {
+      "source_id": "LEDGE_GRAB",
+      "pose_layer": "jump",
+      "required": true
+    },
+    "SKILL_1": {
+      "source_id": "SKILL_1",
+      "pose_layer": "punch",
+      "required": true
+    },
+    "SKILL_2": {
+      "source_id": "SKILL_2",
+      "pose_layer": "punch",
+      "required": true
+    },
+    "SKILL_3": {
+      "source_id": "SKILL_3",
+      "pose_layer": "punch",
+      "required": true
+    },
+    "SKILL_4": {
+      "source_id": "SKILL_4",
+      "pose_layer": "punch",
+      "required": true
+    },
+    "MUGEN_ATTACK_1": {
+      "source_id": "MUGEN_ATTACK_1",
+      "pose_layer": "punch",
+      "required": true
+    },
+    "MUGEN_ATTACK_2": {
+      "source_id": "MUGEN_ATTACK_2",
+      "pose_layer": "punch",
+      "required": true
+    },
+    "MUGEN_SPECIAL": {
+      "source_id": "MUGEN_SPECIAL",
+      "pose_layer": "punch",
+      "required": true
+    },
+    "MUGEN_ULTIMATE": {
+      "source_id": "MUGEN_ULTIMATE",
+      "pose_layer": "punch",
+      "required": true
+    },
+    "WIN": {
+      "source_id": "WIN",
+      "pose_layer": "idle",
+      "required": true
+    },
+    "LAY": {
+      "source_id": "LAY",
+      "pose_layer": "idle",
+      "required": true
+    }
+  }
+}

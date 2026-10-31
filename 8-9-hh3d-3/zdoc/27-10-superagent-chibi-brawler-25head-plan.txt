@@ -1,0 +1,457 @@
+# KẾ HOẠCH #2 — SUPERAGENT / MẪU B: CHIBI-TACTICAL EXPRESSIVE BRAWLER 2.5 ĐẦU
+
+## R7 — NỐI LIỀN SILHOUETTE VAI/TAY/HÔNG/CHÂN (28/10/2026)
+
+Owner nhận xét các khớp rời, tham khảo ảnh MUGEN Goku/Gotenks. Không suy ra
+pipeline chính xác từ một screenshot. Root audit thấy mỗi bone được viền
+đen riêng, cap tròn chồng lên khuỷu/gối, chân trước đè viền hông, tay súng
+dùng một renderer capsule khác. Đây là lỗi cấu trúc vẽ, không chỉ chọn pose.
+
+Chọn continuous cel silhouette: hợp biên từng chuỗi chi, một đường viền ngoài,
+material/quần áo là lớp màu không viền khớp; pelvis che đầu chân; gốc vai được
+nhúng vào thân. Giữ Blender head atlas, mọi endpoint pose/gameplay, muzzle,
+hurtbox và timing. Không đổi sang full mesh3D hay chép sprite từ ảnh tham khảo.
+Ưu: sửa chung cho roster và cả ngắm súng; nhược: không tự đạt diễn xuất/foreshorten
+của animator vẽ nguyên từng frame. Đánh giá bằng viewport cùng pose/zoom,
+không lấy số checks làm chứng nhận mỹ thuật.
+
+Trạng thái: ĐÃ TRIỂN KHAI phần nối khớp; chưa nghiệm thu toàn bộ vì CPU gate
+SF-M36.4 còn FAIL. Không claim R7 "100%" hoặc đã hết lag.
+
+- Dùng chung ChibiLimbRenderer cho thân và tay súng, ChibiLimbGeometry cho
+  đường bao. Bỏ capsule/palm helpers cũ; bàn tay nhập cùng đường bao cánh tay.
+- Chân trước chuyển ra sau pelvis/thân; gốc vai mở viền; tay súng xuất phát
+  từ đúng cả hai vai. Áo gi/vest/hero suit có cổ và màu vải riêng.
+- Đồng bộ awake/clone/hitflash/charred trên tay súng; cache invalidation và
+  muzzle không đổi được kiểm bằng regression mới. Giữ đầu Blender.
+- Contour finite/triangulation, folded/collapsed, các frame pose và palm union
+  đã qua test; lỗi float ở tọa độ lớn được sửa, không bỏ test.
+- 12 pose sheet và48frame: root + subagent đọc ảnh thực ở zoom lớn/3.4x;
+  đường viền khớp rời đã hết trong mẫu được xem. Không coi đây là art approval.
+- Hai full run dừng đúng ở CPU: final1 rig1.22ms/step8.86ms; final2
+  rig0.87ms/step5.81ms (ngưỡng giữ1ms/5ms). 147/148 master pass ở hai lần.
+  Không chạy lại đến khi gặp PASS rồi bỏ qua FAIL. Các stage còn lại chạy riêng.
+- Đo callback painter8actor riêng: perf1 p50=6.104/p95=10.038ms; perf2
+  p50=5.547/p95=17.068ms. Baseline checkpoint p50=8.883/p95=32.374ms.
+  Phép đo có dao động lớn; chưa chứng minh speedup hoặc nguồn lag; không
+  bao gồm world/weapon/GPU, không phải FPS. Giữ hướng tối ưu cache có giới hạn
+  và bulk native geometry cho vòng profiling kế tiếp, chưa thêm cache phức tạp.
+- Verify cuối painter p50=7.967/p95=54.503ms: vẫn dao động, không giấu outlier.
+  14/15stage PASS từ full2 + các run riêng; master147/148 vì CPU. Geometry
+  127208/style29161 checks,49 PNG, runtime448checks/20cycles. Closure cuối
+  845E5A67291864928CEDBC2706A85676BB2DDDAFBC8F8820B563B0E5AB15CFF8.
+
+Chi tiết log/hash/repro, ảnh/video và giới hạn trong docs/chibi-r7/README.md.
+Scope chỉ superagent; checkpoint .local/checkpoints/chibi-r7-20261028.
+NEXT: owner xem mỹ thuật R7; profiling full-world/render trước khi chốt hiệu
+năng. Giữ hai residual cũ (malformed split data, chainsaw anchor) trong report,
+không sửa socket/gameplay ngoài phạm vi khớp nối và không claim bao phủ mọi lỗi.
+
+---
+
+## R6 — PHẢN HỒI OWNER: DÁNG TỰ NHIÊN VÀ KHE THANG THẬT (28/10/2026)
+
+Mục này ưu tiên hơn trạng thái R5 lịch sử bên dưới. Scope vẫn chỉ `8-9-hh3d-3/superagent`.
+Trạng thái: R6 đã triển khai, final5 PASS đủ13stages sau guard bot. Chưa nghiệm thu mỹ thuật; không claim đã hết lag.
+
+- Owner chỉ ra nhân vật luôn giơ tay, hiệu ứng/chuyển động chưa hợp lý.
+  Chọn tiếp tục dùng đầu Blender + thân khớp cel, sửa silhouette và cách diễn
+  từng trạng thái, không sinh lại hàng trăm ảnh gần giống nhau.
+- Đứng thả tay bất đối xứng; đi/chạy vung tay đối với chân; sprint có nhịp riêng.
+  Tách nhảy lên, đỉnh quỹ đạo, rơi xuống, rơi nhanh và ngã do trúng đòn bằng
+  vận tốc thật của controller. Chỉ dùng thế thủ khi đang thủ/đánh.
+- Tay nhỏ, có hướng lòng bàn tay; găng kín/găng hở/bàn tay trần theo nhân vật.
+  Không dùng nắm đấm tròn lớn cho toàn bộ 22 nhân vật. Tay cầm súng cùng style.
+- Khi cháy: phản ứng tay mở và nét mặt phù hợp; đòn đánh, ngắm bắn, mang vật,
+  leo, lăn, hurt/KO giữ ưu tiên. Lửa bám hông/chân đang chuyển động, giới hạn
+  kích thước để đọc được mặt. Giữ damage, mức cháy, truyền lửa và dập lửa.
+- Owner đã chọn rõ: **mở khe miệng thang để bom/đồ ném rơi xuống**. Áp dụng
+  Steel Harbor: khe 20u trên hai cầu trên và bỏ bốn tấm grating chắn miệng
+  thang tầng giữa/dưới; giữ sensor thang 16u, mép sàn và viền báo nguy hiểm.
+  Hình vẽ và collider phải thống nhất; đối xứng trái/phải, không đổi map khác.
+- Đạn thường giữ hướng bắn. Lựu đạn/Molotov/súng rơi chịu trọng lực, chạm
+  sàn thật thì nảy/vỡ; không đổi trọng lực để giả lập khe hở. Va chạm kiểm
+  đoạn di chuyển và điểm giao đầu tiên, không chỉ kiểm điểm cuối. Sàn một
+  chiều chỉ đỡ vật đi từ phía trên; không kéo vật đang dưới sàn ngược lên.
+- Kiểm thêm: cạnh hẹp, trần mỏng, sườn dốc một chiều, thang máy, vật cản
+  không solid, hỗ trợ biến mất, tái dùng fighter, pause/hitstop và corpse/gib.
+- Bot giữ route đến lúc leo ra sàn thật, không quay lại tâm khe. Một tick chỉ
+  advance một node; hold hủy khi đổi mục tiêu/mất sàn/bị đẩy lệch. Reverse
+  LADDER được test riêng bằng route fixture vì A* có thể chọn đường portal.
+
+| Gói R6 | Điều kiện chốt | Trạng thái |
+|---|---|---|
+| Poses + hands | Pose fixture + controller integration + ảnh/36 frame chuyển động | DIAGNOSTIC PASS (869 + 18 checks; 36 frames) |
+| Burn presentation | Anchor bám thân khi rơi/lăn; KO/gib/reset; không đổi damage | DIAGNOSTIC PASS (integration; gib puff guard) |
+| Ladder openings | Builder/data/art khớp; không đổi map khác; leo ra hai phía được | DIAGNOSTIC PASS (36 checks; master SF-M31) |
+| Ballistics + pickups | Đạn thẳng; bom/đồ rơi qua khe; thin-solid/one-way đúng | DIAGNOSTIC PASS (37 + 27 checks; lift cases) |
+| Final evidence | Log sạch, actual exits, source/output hash, audit độc lập | final5 PASS13/13,2031sourcefiles,45outputs,drift0,leftover0; README có hash/repro |
+| Lag / mỹ thuật | Runtime profiling + owner xem chuyển động | OPEN: CPU fixture dao động; không chứng minh GPU/FPS hay art acceptance |
+
+Không bỏ qua CPU-gate fail: final1 step p95=6.43ms, final2=10.39ms (>5ms).
+Ba recheck đạt4.26/2.81/3.89ms; final3 đạt4.31ms, final4 đạt3.29ms.
+Final5 đạt rig0.76ms và step4.09ms, hash8C9B5915...97219A10.
+Giữ nguyên ngưỡng, chưa xác định nguồn dao động bằng profiler. Đây chỉ là
+8 FighterController.step_fighter, không phải full-world/GPU frame time.
+
+Checkpoint: `superagent/.local/checkpoints/chibi-r6-20261028/`.
+Ảnh và báo cáo mới: `superagent/docs/chibi-r6/`.
+R5 đã qua diagnostic không chứng minh R6 hoặc mọi ngoại lệ/mọi trận dài.
+
+---
+
+## R5 — BÀN GIAO TRƯỚC PHẢN HỒI OWNER (LỊCH SỬ)
+
+- **Revision**: `R5` — corrective implementation, 28/10/2026 (Asia/Saigon). R4 completion claims are not acceptance.
+- **PLAN_SCOPE**: `8-9-hh3d-3/superagent`
+- **Canonical**: `zdoc/27-10-superagent-chibi-brawler-25head-plan.txt`
+- **Mirror**: `8-9-hh3d-3/zdoc/27-10-superagent-chibi-brawler-25head-plan.txt`
+- **Trạng thái**: R5 ĐÃ TRIỂN KHAI / FINAL DIAGNOSTIC PASS / CHỜ OWNER XEM MỸ THUẬT. R4's 148 checks do not prove 83 animations, visible guns, 22 distinct faces or all 60 exception guards.
+- **NEXT_CB_WP**: `Owner xem ảnh/chuyển động R5 và góp ý mỹ thuật`; retain R4 evidence as historical only. No automatic completion percentage.
+
+---
+
+## R5 — QUYẾT ĐỊNH HIỆN HÀNH, ƯU TIÊN CAO HƠN CÁC MỤC R4 BÊN DƯỚI
+
+### A. Audit báo cáo “100%”
+- Xác nhận lỗi bằng source: FighterRigView đã đặt alpha=0 cho weapon_arm thật; painter thay súng bằng draw_line và chấm cam thường trực.
+- Classic dùng 6 ảnh tĩnh cho toàn bộ vận động; PUNCH_01/02/03 đều pose_punch. Manifest83state chỉ là mapping, không phải83animation.
+- Bài test socket đọc tọa độ cũ không chứng minh nòng súng HIỂN THỊ. Các bài test CPU không phải GPU frame-time hoặc cảm giác chơi.
+- 22 character IDs không có nghĩa22thiết kế. Chân dung R4 của mọi người dùng chung mặt Johnny.
+- Claim “O(1) cho hàng triệu người dùng” không có ý nghĩa cho render trận local. Ngân sách theo số fighter/effects đang hiện, không số tài khoản.
+- 60EC dưới đây là DANH MỤC RỦI RO/ĐIỀU KIỆN, không phải60ca đã chạy. Chưa có oracle/log thì UNVERIFIED.
+- Checkpoint trước sửa: superagent/.local/checkpoints/chibi-r5-20261028/ (bao gồm plan-r4.txt). Không xóa art/source cũ của owner.
+
+### B. Phương án được chọn và trade-off
+1. Vũ khí: giữ compiled XFL shoulder/frame/socket metadata; ChibiWeaponView vẽ bitmap gun-only gốc và tay Chibi bám grip. Audit viewport phát hiện WeaponArmSprite compiled chứa cả đầu/da pixel cũ nên không thể bật nguyên lớp đó trên đầu Chibi. Lớp cũ được ẩn minh bạch cho các súng đã hỗ trợ. Recoil lấy delta pivot nguồn, chuyển thành xoay/co nhẹ quanh barrel tip để giữ muzzle gameplay; đây là adaptation, không claim tái dựng pixel từng frame XFL. Shotgun có support wrist pump frame3; chainsaw có prop riêng vì source pickup alias trỏ nhầm flamethrower. Ưu: đúng nhận diện từng súng, không chồng đầu cũ, socket ổn định; nhược: gun pixel và body cel khác mật độ, cần owner duyệt hòa hợp.
+2. Chuyển động: articulated cel-shaded body + pure ChibiActionPose, đầu/biểu cảm do Blender dựng thành atlas. Ưu: đổi pose thật, bám elapsed/source frame, chi phí thấp; nhược: chất lượng silhouette cần review ở zoom thật, không tự bằng animation hand-drawn.
+3. Blender bắt buộc cho nguồn head atlas và .blend editable; dùng flat emissive layered ink/cel, không bỏ Blender vì một lần prototype mesh chưa đẹp. Không chạy Blender trong game.
+4. Cutout concept chỉ giữ làm tài liệu thiết kế; không còn dùng ảnh aim/punch tĩnh làm animation runtime.
+5. Không đổi damage/range/physics/AI/map/engine pin. Cho phép sửa riêng clock trình bày (once-per-step, pause/hitstop/slowmo) không tạo event gameplay.
+6. Không chọn batch sinh toàn bộ full-body anime sprites mới mỗi lần: sẽ khó giữ consistency/rig/socket và khó sửa hàng trăm frame. Không chọn procedural primitive plastic3D làm art cuối.
+7. UI dùng đúng head atlas nhân vật/expression trong world/menu/HUD; không gán mặt Johnny cho cả roster. Giữ thông tin người chơi dễ đọc; không phóng to cut-in che combat.
+8. Pause bổ sung qua ESC/CANCEL (edge, không lặp khi giữ), ESC tiếp tục; SHIFT+ESC về menu; ESC ở ROUND_OVER vẫn về menu. Pause giữ speed và tất cả match-step timers; HUD có redraw banner. Đây là thay đổi UX có chủ đích vì R4 kiểm is_paused trên property không tồn tại. Menu fit cả hai chiều và input inverse dùng cùng transform.
+9. Neutral skull center y=-14.40625 cho skull-to-sole18u theo measured Blender92px skull. KNEEL/COVER có thân co và chân gập; bốn góc skull sau head tilt nằm trong12u. AIM giữ stance từ controller nếu taking_cover=true. Hair/hat là decorative, không tính vùng chịu đạn. Không đổi hurtbox để khớp hình sai.
+10. Nonloop animation clamp ở cuối keyframe; không quay lại đầu keyframe cuối khi ROLL/KNOCKDOWN còn giữ state. Hitstop gate chạy trước hit flash/powered cooldown timers. Test nguồn thời gian đi qua FighterController thật, không chỉ gọi sampler.
+11. Lifecycle: theme chỉ bootstrap khởi động. Mọi playback âm thanh được theo dõi bằng WeakRef ngay sau play, không giữ strong ref qua await. Khi thoát, chặn sound mới, stop/null player/cache và chờ playback hết với deadline1000ms; quá hạn báo lỗi/exit1. Không dùng sleep cố định hoặc che ObjectDB warning. `_exit_tree` chỉ là fallback đồng bộ. Match/runtime diagnostics cũng dùng teardown này.
+12. Hai lỗi hỗ trợ phát hiện lúc verify được sửa hẹp: particle floor phải đi qua mặt trên sàn/prop khi rơi, không dừng trong tường; sửa thứ tự `(world_pos,text,color)` khi ném súng hết đạn. Không đổi damage/range/balance. Cache node/registry/offset/texture và dừng cập nhật trail legacy ẩn; giữ compiled metadata và fallback còn caller.
+
+### C. Các gói khắc phục (không tự đánh dấu đạt trước khi chạy)
+| Gói | Thực hiện | Oracle bắt buộc | Trạng thái |
+|---|---|---|---|
+| R5-0 | Audit reference, checkpoint, tách writer | baseline + diffs không đụng sibling | DONE inspection |
+| R5-1 | Súng thật + ba đòn fist riêng có windup/contact/recovery | alpha/visibility/atlas/pivot; 3/3.5/4 source-frame contact; hai facing,5aim angles; ảnh viewport | IMPLEMENTED / diagnostic review |
+| R5-2 | Locomotion/roll/dive/climb/ledge/crouch/cover/carry/throw/hurt/dead/weapon melee/skill poses | pose coverage/finiteness, visual sheets, source clock, no phantom hit event | IMPLEMENTED / chưa exhaustive combat |
+| R5-3 | Blender heads22IDs×7expressions (+blink nếu có), retain .blend | real render + metadata + all IDs + dimensions/hash + no transparent-empty cell | RENDERED:24rows×8cells;22base+2awakened;owner art pending |
+| R5-4 | Menu/HUD identity, timer/prune fixes, readable player ability slots | real viewport960/1280, local vs bot labels, clone exclusion, pause/restart | IMPLEMENTED / runtime20cycles verified separately |
+| R5-5 | Regression + honest evidence + cleanup | captured actual exits, no unexplained script errors; pixel/capture check; source hashes | FINAL-27 DIAGNOSTIC PASS; không thay owner art acceptance |
+
+### D. Ngoại lệ bổ sung cần có test riêng
+- R5-EC61: sprite visible=true nhưng alpha=0: FAIL; không cho test ẩn sprite cũ để đạt.
+- R5-EC62: compiled frame_nr không phải elapsed/source time; sample lấy elapsed từ controller. Hitstop/pause giữ đúng pha, cancel không giữ smear.
+- R5-EC63: PUNCH01/02/03 cùng hình/pose hash: FAIL ở contact; yêu cầu silhouette khác và bàn tay thay đổi qua các pha.
+- R5-EC64: START/AIM đổi súng liên tiếp; frame shotgun recoil/pump, aim±90 cả hai facing; không dual gun / dot thường trực.
+- R5-EC65: BATON/PIPE/CHAINSAW runtime chưa có compiled full-body: explicit presentation family thay vì vô tình IDLE; không sửa balance.
+- R5-EC66: standalone Rig có parent Node thường không có fighter properties: null-safe, no bool(null).
+- R5-EC67: miss head atlas, duplicateID, wrongdimensions, unknownexpr: validator fail; runtime known procedural fallback, không crash.
+- R5-EC68: sync gọi nhiều lần trong tick không tăng cosmetic clock nhiều lần; thắng/thua chỉ mặt người thắng hợp lệ.
+- R5-EC69: head atlas/weapon atlas không load/tạo texture trong _draw; prewarm trước trận/menu; cached-only lookup.
+- R5-EC70: atlas manifest/source/render generation phải khớp; mirror plan SHA256 trùng; GPU sheet là diagnostic visual, không giả E2E.
+- R5-EC71: từng portrait/classic không còn cùng Johnny; Goku/Naruto awakened được ghi explicit nếu chưa có atlas variant.
+- R5-EC72: nút skill HUD không được mất khi crowd layout nhỏ; ghi rõ giới hạn viewport ngoài960x540 nếu chưa kiểm.
+
+### E. Bằng chứng và giới hạn
+- Bằng chứng R5 mới đặt superagent/docs/chibi-r5/, logs/receipts tại .local/reviews/chibi-r5-*.
+- Tests mới phải kiểm lớp runtime thật và contact poses, không chỉ đếm JSON keys. Các screenshot fixture ghi DIAGNOSTIC; cần bổ sung live match để đánh giá integration.
+- Không lấy ảnh tĩnh suy ra animation hay GPU FPS. Không benchmark cùng lúc Blender đang render.
+- Không tuyên bố đẹp nhất/100%/mọi ngoại lệ; nghiệm thu thẩm mỹ cần owner xem sản phẩm mới.
+- Public release/license không được suy ra từ quyền dùng local reference; không publish/package trong task này.
+- Giữ superagent-TacticalStriker và superfighters-y8 read-only. Không commit dirty tree của owner.
+
+### F. Bàn giao R5 và giới hạn kiểm chứng
+- Review package: `8-9-hh3d-3/superagent/docs/chibi-r5/README.md`; ảnh súng, ba đòn đánh GIF/MP4, action/roster, liveHUD960/1280 và runtime pause/menu cùng thư mục. GIF36frames là sampled source animation, không phải gameplay E2E.
+- Blender source: `superagent/art/chibi_r5/chibi_r5_heads.blend`; builder `tools/build_chibi_blender_heads.py`. Atlas1024x3072, generation`R5.blender.cel.heads.2`, SHA256`b09303d5e73656140c0e8a14638af4f6e67e3c113f7bc3ae86d47b6ef70412ee`. Actual Blender exit0; giữ source editable.
+- Host runner`tools/run_chibi_r5.ps1` v3: actual process exits + cleanlogs + completionmarkers + mỗi outputphải mới/không rỗng + source/evidencehash + leftover0. Canonicalsourcepaths dùng Ordinalsort để PS5/7 cùng hash. Không dùng ảnh cũ làm chứng minh lượt mới.
+- Giữ rawfailed`chibi-r5-final-20` (runtime MP3) và `chibi-r5-final-25` (match audio8Objects/4resources); không biến exit0 thành PASS nếu có warning. `runtime-26` sau drain:448checks/20cycles, exit0, stderr rỗng.
+- Final technical run `chibi-r5-final-27`, command `cmd.chibi-r5-final-27`, receipt v3 trong `.local/verification/chibi-r5-final-09/project/.local/reviews/`: **9/9 stages PASS, từng actual exit0, stderr rỗng, source drift0, leftover0**. Source closure `11DB628667FB18CF1B38F39F2942ED9C8B5933A5B6C068F4A4F5AFB92408739E`; đối chiếu 2016 source file với thư mục chính trùng SHA256. 51 PNG/JSON mới đã copy và kiểm lại hash.
+- Counts theo từng bài: regression4531, temporal50, pause fixture13, debris fixture23, master148, runtime448/20cycles. Capture4 sheets; match3 cấu hình ×420steps với7ảnh; animation36frames. Static `hh check`:37files,0error/0warning. Không cộng số check thành phần trăm hoàn thành sản phẩm.
+- CPU fixture8Chibi: rig p95=0.53ms, full_tick p95=3.22ms. Manual live CPUtick p95:2fighters1280=2.082ms;8fighters1280=5.640ms;8fighters960=3.206ms. Khác workload nên không so manual5.640ms với fixturegate5ms. GPU/FPS chưa đo.
+- Art ở zoom1.85..3.4 cần ownerduyệt; gunpixel/bodycel có khác mật độ. Luffy/Gear không có atlasrow chuyên biệt như Goku/Naruto. Không claim toàn bộ72EC hoặc mọi map/mode/combat đã E2E.
+- Atlas/manifest/.blend hiện publish từng file theo thứ tự sau render vào staging. Chưa có atomic multi-filegeneration swap. Chỉ build khi game đóng; giữ checkpoint; validator/fallback chặn sử dụng dữ liệu lỗi. Việc chạy build đồng thời game không nằm trong nghiệm thu R5.
+- CPUfixture/manualtick không phải GPUframetime/FPS; chưa có đo GPU. Không có số liệu before/after tương đương nên không gán phần trăm hết lag. Runtime20vòng chứng minh đường menu/Tutorial/pause/return và pruneHUD, không chứng minh không leak mọi phiên chơi dài.
+- Không thay canonicalplan của sibling/Vault/platform; không tick lại9WP R4; không giả ký nghiệm thu. Những R4 statements trái mụcR5 chỉ là lịch sử.
+
+
+---
+
+## 0. KIẾN TRÚC R4 LỊCH SỬ — R5 BÊN DƯỚI THAY THẾ CÁC QUYẾT ĐỊNH MÂU THUẪN
+
+1. **Quyết định Pipeline Mỹ Thuật & Hiển Thị (Khắc phục lỗ hổng Blender 3D CLI của bản R2)**:
+   - **GIẢI PHÁP CHỐT (`Hybrid Studio HD-2D Cutout + 2D Cel-Shaded Layered Atlas -> Godot 2D Presentation Adapter`)**:
+     - Kết hợp trực tiếp **Bộ Cutout HD-2D từ bảng thiết kế chuẩn `superagent_chibi_brawler_sheet_1793104764257.jpg`** (khử nền Flood-Fill + lọc thành phần liên thông `Connected-Component >= 250px` + đệm viền `>= 4 texels alpha extrusion`) với **Bộ Máy Kết Xuất Atlas 2D Cel-Shaded Tách 5 Lớp (`body-back`, `torso-legs`, `head-face`, `front-arm`, `weapon-VFX`)** ở mật độ chuẩn **`144px` chiều cao thân (`8 px / world unit` -> `18.0 world units`)**.
+     - **Lý do kỹ thuật không dùng `blender --background --python` để sinh mesh 3D tự động làm nguồn chính**: Khi AI Agent viết script Python tạo mesh 3D không giao diện trong Blender CLI, kết quả chỉ ghép được các khối hình học cơ bản (cầu/trụ/nón) tạo ra "búp bê nhựa 3D" (đã bị Owner bác bỏ ở lượt đầu), không thể đạt được đường nét vẽ 2D Anime bất đối xứng, mái tóc gai có lọn highlight cam `#FF7832` và 7 biểu cảm mặt 2D sắc sảo như bảng mẫu Mẫu B. Blender (nếu có) chỉ là công cụ tham khảo góc chiếu Orthographic tùy chọn, không khóa cứng pipeline vào việc sinh mesh 3D bằng script.
+2. **Ba Nguyên Tắc Cốt Lõi (Giữ trọn vẹn từ R2)**:
+   - **Đẹp và đọc rõ ở kích thước chơi thật (`Actual-Zoom Readability`)**: Kiểm tra trực tiếp qua `DynamicCamera` (`zoom 1.85x .. 3.40x`).
+   - **Không làm lệch Hitbox, Muzzle Socket hoặc nhịp độ chiến đấu (`Simulation Equivalence`)**: Chiều cao cơ thể neutral (từ đỉnh hộp sọ tới đế giày, chưa tính chỏm tóc/mũ) chốt ở **`18.0 world units`** (`Đầu 40% = 7.2u`, `Thân 32% = 5.76u`, `Chân 28% = 5.04u`) khớp với hurtbox đứng `12x18` và envelope của từng tư thế.
+   - **Tối ưu dựa trên số đo thực tế (`Measured Performance`)**: Tách biệt hoàn toàn việc cập nhật trạng thái/timer khỏi hàm `_draw()`, khóa bộ nhớ đệm theo `generation + visual_revision`.
+3. **Cô Lập Phạm Vi Tuyệt Đối**:
+   - Độc lập 100% với nhánh `8-9-hh3d-3/superagent-TacticalStriker/`; không ghi chéo, không symlink sang nhánh sibling.
+   - Không đổi vật lý, AI, bản đồ, cân bằng sát thương hay nâng cấp phiên bản Godot trong các WP mỹ thuật/hiển thị.
+
+---
+
+## 1. HIỆN TRẠNG MÃ NGUỒN ĐÃ KIỂM CHỨNG (BASELINE CODEBASE AUDIT)
+
+Các phát hiện kỹ thuật chính xác từ mã nguồn `8-9-hh3d-3/superagent/` phải được tuân thủ trong suốt quá trình triển khai:
+
+1. **Cấu hình cửa sổ & Camera động (`project.godot:25..31`, `game/world/dynamic_camera.gd:8..9`)**:
+   - Độ phân giải gốc `1280x720`, `stretch/mode="canvas_items"`, `aspect="expand"`.
+   - `DynamicCamera` biến thiên liên tục từ `MIN_ZOOM = 1.85` đến `MAX_ZOOM = 3.40` (không cố định ở `3.2x`). Ở mức zoom xa `1.85x`, nhân vật cao `18.0 world units` hiển thị cao `~33 screen px` và khuôn mặt chiếm `~13 screen px`.
+2. **Danh mục Trạng thái & Nhân vật (`data/sf_compiled_rigs.json`, `game/core/sf_data_registry.gd`)**:
+   - Có 72 State IDs gốc + các trạng thái mở rộng runtime (`LEDGE_GRAB`, trạng thái MUGEN và 4 kỹ năng cho mỗi tướng Siêu Năng Lực).
+   - Tổng cộng **22 Đấu Sĩ**: 14 tướng Classic (`johnny`, `boris`, `agent`, `hideki`, `blaire`, `savage`, `cruger`, `ivan`, `brody`, `mac`...) và 8 tướng Powered (`solaria`, `atlas`, `shinobi`, `tideweaver`, `goku`, `luffy`, `naruto`, `saitama`).
+3. **Hệ thống Phím Kỹ Năng Thực Tế (`sf_data_registry.gd:220..242`, `fighter_controller.gd:697..718`, `match_hud_controller.gd:626`)**:
+   - Trong code thực tế: **P1** dùng `KP_5..KP_8` kèm cụm phím số hàng trên `5..8`; **P2** dùng `U / I / O / P`. Khi chơi 1 người (`1P`), code cho phép P1 bấm cả hai cụm phím.
+   - Nhãn phím trên HUD phải đọc trực tiếp từ cấu hình binding thực của từng `local player slot` (`5/6/7/8` cho P1, `U/I/O/P` cho P2) và **không vẽ nhãn phím giả trên thẻ của Bot**.
+4. **Phân biệt rõ `KNEEL` và `COVER` (`fighter_controller.gd:2563..2601`)**:
+   - Bấm `Down / S` chuyển nhân vật vào trạng thái **`KNEEL`** (`kneeling = true`, `taking_cover = false`), kể cả khi đứng cạnh vật cản (`cover_object_id`).
+   - Nhấn phím di chuyển ngang (`Left / Right`) ép sát vào vật cản thấp khi không chạy nước rút mới chuyển vào trạng thái **`COVER`** (`taking_cover = true`). Cả hai trạng thái phải có tư thế hạ thấp đầu hợp lệ theo envelope vật lý (`height = 12.0`).
+5. **Tràn chiều ngang Top HUD khi đấu 8 người (`match_hud_controller.gd:145..157`)**:
+   - Hiện tại mỗi thẻ bị kẹp `min_width = 115.0 * ui_scale`. Ở `1280x720` (`ui_scale = 1.5`), 8 thẻ chiếm `2 * 15 + 8 * 172.5 + 7 * 12 = 1494px > 1280px` (tràn 214px). Bắt buộc giải quyết ở `CB-WP6` bằng 3 chế độ bố cục `Solo`, `TwoLocal`, `CompactCrowd`.
+6. **Đồng hồ nhịp độ trận đấu (`match_controller.gd:10, 1173..1182`)**:
+   - `FLASH_FPS = 28.0`, bước mô phỏng `step = delta * 28.0 * game_speed`. Không tự ý sửa `FLASH_FPS` thành `24` hay `60` trong quá trình nâng cấp hình ảnh.
+
+---
+
+## 2. 9 GÓI R4 ĐƯỢC MỞ LẠI ĐỂ KIỂM CHỨNG (KHÔNG THỪA KẾ TICK)
+
+| Mã WP | Phụ thuộc & Nội dung bàn giao cốt lõi | Điều kiện nghiệm thu (Verify / DoD) | Trạng thái |
+| :--- | :--- | :--- | :--- |
+| **CB-WP0** | Kiểm kê baseline source closure, danh mục 22 nhân vật, 72+ trạng thái, tọa độ socket (`muzzle`, `shell`, `fire`), chụp ảnh & đo frame-time baseline trước khi sửa. | Phân loại rõ baseline, xác nhận phiên bản Godot pin, 1 tiến trình duy nhất trên đường dẫn project. | `REOPENED: evidence required` |
+| **CB-WP1** | Xây dựng `tools/build_chibi_brawler_assets.py` + `chibi_atlas_manifest.json`: đóng gói Golden Fighter (`Agent Zero / johnny`) tỷ lệ 2.5 đầu (`144px` = `18.0 world units`), đủ **7 Portrait HD (`256x256`)** và **6+1 chuỗi Pose động tách lớp** (`idle`, `run`, `jump`, `punch`, `aim`, `roll`, `hero`). | Qua toàn bộ trình kiểm tra tài nguyên (`SF-M36.1`) & Automated Visual/Geometry Gate (tỷ lệ `7.2/5.76/5.04`, alpha sạch, độ tương phản ở zoom `1.85x..3.40x`). | `REOPENED: evidence required` |
+| **CB-WP2** | Xây dựng `ChibiBrawlerRigPainter`, tích hợp vào `FighterRigView` với bộ giải tọa độ `socket` độc lập khỏi biến dạng hình ảnh (`squash & stretch`). | Đạt **CB-EC-01 .. CB-EC-08** (`SF-M36.3`): khớp hurtbox theo từng state, sai số `muzzle_socket = 0.0 <= 1e-4`, kiểm tra góc ngắm `-90°..+90°` cả 2 hướng. | `REOPENED: evidence required` |
+| **CB-WP3** | Bộ điều khiển **7 Biểu Cảm Gương Mặt** (`KO_STARS`, `ECSTATIC_VICTORY_LAUGH`, `DIZZY_SPIRAL_HURT`, `WIDE_MOUTH_SHOUT`, `LOW_HP_SWEAT`, `BLAZING_GLARE`, `CHEEKY_SMIRK`) + Priority/Hold Hysteresis + Chớp mắt tự nhiên + Đồng bộ World & HUD. | Đạt **CB-EC-09 .. CB-EC-16** (`SF-M36.2`): bảng chân trị chuyển tiếp cảm xúc, không nhấp nháy ở ngưỡng máu `25%..30%`, dừng chuẩn khi Pause/Hitstop, đúng màu khi chết cháy (`charred`). | `REOPENED: evidence required` |
+| **CB-WP4** | Bao phủ đầy đủ **83 Trạng Thái & Động Học Chiến Đấu**: `KNEEL` vs `COVER`, leo thang, bê vật thể, lăn nhào lộn, cưỡi tên lửa, vệt đòn cận chiến 3 lớp và 4 kỹ năng Siêu Năng Lực. | Đạt **CB-EC-17 .. CB-EC-24**: đủ 83/83 state trong `chibi_atlas_manifest.json`, vệt đòn khớp hit window, tương đương mô phỏng (`Simulation Equivalence`). | `REOPENED: evidence required` |
+| **CB-WP5** | Mở rộng Khung Xương & Atlas Chibi 2.5 Đầu cho toàn bộ **22 Đấu Sĩ** (14 Classic có kiểu tóc/phụ kiện/bảng màu riêng + 4 tướng Nguyên Bản + 4 tướng Anime kèm trạng thái Biến Hình SSJ/Kurama). | Đạt **CB-EC-25 .. CB-EC-30**: kiểm chứng toàn bộ 22 nhân vật trên Menu & Sàn Đấu ở cả 2 hướng quay mặt, không dùng chung 1 mặt recolor. | `REOPENED: evidence required` |
+| **CB-WP6** | Nâng cấp **Adaptive HUD 3 Chế Độ (`Solo`, `TwoLocal`, `CompactCrowd`)**, Cut-In gọn trong dải thẻ trạng thái (`<= 0.42s`), chuẩn hóa nhãn phím `5..8` / `U/I/O/P`, đồng bộ Chibi Preview trên Main Menu. | Đạt **CB-EC-31 .. CB-EC-40, CB-EC-49..52** (`SF-M36.4`): kiểm chứng 1/2/4/8 đấu sĩ ở `1280x720` (`end=1271.0`) và `960x540` (`end=951.9`) không tràn viền (`intersection = 0`). | `REOPENED: evidence required` |
+| **CB-WP7** | Tối ưu đường nóng (`_draw` 0 cấp phát, bitwise state hash `O(1)`), chạy Benchmark đa kịch bản (`p95/p99`), kiểm tra giao dịch `atomic generation swap` và dọn code dư thừa an toàn. | Đạt **CB-EC-41 .. CB-EC-48, CB-EC-57..60** (`SF-M36.4`): CPU update 8 đấu sĩ Chibi Rig `rig_p95 = 0.6ms <= 1.0ms`, `full_tick_p95 = 3.0ms <= 5.0ms`. | `REOPENED: evidence required` |
+| **CB-WP8** | Chạy toàn bộ bộ kiểm thử hồi quy (`test_runner.gd` — `148/148 PASS`), xuất bộ sưu tập 10 ảnh chụp GPU thực tế (`1280x720`) và kiểm증 trực quan. | Toàn bộ cổng kiểm thử `148/148 PASS (Exit Code 0)`, 10/10 ảnh chụp GPU thực tế `1280x720` đạt chuẩn. | `REOPENED: evidence required` |
+
+---
+
+## 3. ART BIBLE, CHUẨN TỶ LỆ 2.5 ĐẦU & HỢP ĐỒNG TÀI NGUYÊN (ASSET CONTRACT)
+
+### 3.1. Nhân vật chuẩn (Golden Fighter: `Agent Zero` — ID `johnny`)
+- **Tham chiếu mỹ thuật gốc**: `superagent_chibi_brawler_sheet_1793104764257.jpg` (SHA256: `77CA7A69E3E75388E1FE33C5973282FA11E005DBED1F8669E2C76271687933BB`).
+- **Tỷ lệ giải phẫu 2.5 Đầu chuẩn xác (`18.0 world units` từ đỉnh hộp sọ tới đế giày)**:
+  - **Đầu (`40% = 7.2 world units = 58 texels`)**: Khuôn mặt tròn bầu bĩnh biểu cảm lớn, chiếm trọn chiều ngang thân để đọc rõ cảm xúc ngay trên sàn đấu.
+  - **Thân (`32% = 5.76 world units = 46 texels`)**: Áo khoác Hoodie chiến thuật tông Cam Năng Lượng (`#FF8024`) phối Xanh Đêm (`#222B3D`), khóa kéo bạc lớn.
+  - **Chân & Giày (`28% = 5.04 world units = 40 texels`)**: Quần short chiến thuật tối màu + giày Sneaker cổ cao đế trắng dày tạo thế đứng vững chãi.
+  - **Tóc & Phụ kiện**: Tóc nâu sẫm tỉa gai nhọn năng động với lọn highlight cam (`#FF7832`) nhô cao tối đa `+2.0 world units` ở tư thế đứng; phần đầu và thân nhận sát thương (`vulnerable_core_mask`) nằm gọn trong hurtbox, đảm bảo diện tích hurtbox trống (`phantom-vulnerable area`) **$\le 25\%$**.
+  - **Găng tay chiến thuật (`Oversized Tactical Gloves`)**: Kích thước `1.6x` bàn tay thường giúp đòn đấm/cầm súng cực kỳ rõ nét; khi tung đòn tiếp xúc (`contact frame`), cho phép phóng đại lớp hiển thị găng tay tối đa `1.45x` (chỉ áp dụng cho lớp hình ảnh, không làm lệch hộp va chạm hay che khuất súng ngắn).
+
+### 3.2. Cấu trúc Atlas Tách Lớp & Quy chuẩn Kỹ thuật (`tools/build_chibi_brawler_assets.py`)
+- **Độ phân giải & Tỷ lệ quy đổi (`Calibration`)**:
+  - Chiều cao thân trên Atlas: **`144px`** với hệ số **`units_per_pixel = 0.125 world/texel`** (`8 texels / world unit` -> `144 * 0.125 = 18.0 world units`).
+  - Chân dung biểu cảm HUD (`Portrait`): **`256x256 px`** (đủ 7 trạng thái biểu cảm đồng nhất nhận diện cho nhân vật chuẩn).
+  - Ảnh Cut-In tuyệt kỹ: **`768x256 px`**.
+- **Tách 5 Lớp Hiển Thị (`Layered RGBA Composition`)**:
+  1. `body_back`: Tay sau, áo choàng/khăn quàng sau lưng.
+  2. `torso_legs`: Thân áo hoodie, đai lưng, hai chân và giày sneaker.
+  3. `head_face`: Hộp sọ Chibi, mái tóc, mũ/băng trán và lớp biểu cảm mặt 7 trạng thái (xoay độc lập theo góc ngắm `head_pitch_deg`).
+  4. `front_arm`: Cánh tay trước và bàn tay cầm vũ khí.
+  5. `weapon_vfx`: Súng/kiếm định vị chính xác vào `muzzle_socket` và vệt chém/đấm (`smear arc`).
+- **Xử lý Lọc Ảnh & Chống Lem Viền (`Filtering & Bleed Prevention`)**:
+  - Bật `Linear + Mipmaps` được tạo sẵn trong bước build/import (tuyệt đối không gọi `generate_mipmaps()` hay `get_image()` trong lúc đang chiến đấu).
+  - Đệm viền màu (`Edge Extrusion >= 4 texels`) và khoảng cách giữa các ô (`gutter`) đủ rộng ở mọi mức mipmap để không xuất hiện viền đen/trắng ở mức zoom xa `1.85x`.
+- **Cơ chế Cổng Chất Lượng Tự Động & Mức Chi Tiết Theo Zoom (`Readability & Face LOD`)**:
+  - Khi chiều cao khuôn mặt trên màn hình **`< 16 screen px`** (ở mức zoom xa `1.85x`), tự động bật chế độ **Face LOD**: lược bỏ chi tiết đồng tử nhỏ dễ gây nhiễu hạt, tập trung độ tương phản cao vào đường chân mày, khuôn miệng và đồng bộ tức thời với ô Portrait `48px` trên HUD.
+
+---
+
+## 4. KIẾN TRÚC RUNTIME, ĐỒNG HỒ (CLOCKS) & BẢO TOÀN TỌA ĐỘ SOCKET
+
+1. **Luồng dữ liệu 1 chiều sạch sẽ**:
+   - `FighterController / MatchController` (Gameplay Snapshot & Events) $\rightarrow$ `ChibiPresentationState` (Bộ giải biểu cảm, pha hoạt ảnh, bộ đếm cosmetic) $\rightarrow$ `ChibiBrawlerRigPainter` & `MatchHudController`.
+   - Không nhồi thêm biến trạng thái mỹ thuật vào `fighter_controller.gd` (vốn đã dài hơn 4700 dòng).
+   - Không thực hiện bất kỳ lệnh tăng bộ đếm thời gian, cập nhật máu trễ (`_trailing_hp_by_id`), đọc file hay tạo Texture bên trong hàm `_draw()`.
+2. **Bảo toàn 100% Tọa độ Socket (`Muzzle / Shell / Fire`)**:
+   - Tính toán `get_muzzle_global_pos()`, `get_shell_global_pos()`, `get_fire_global_pos()` dựa trên dữ liệu tư thế gốc **trước khi** áp dụng phép co giãn `squash & stretch` hoặc nghiêng đầu.
+   - Góc ngắm súng `aim_pitch_deg` kẹp trong `[-90°, +90°]`; góc nghiêng đầu Chibi `head_pitch_deg = clampf(aim_pitch_deg * 0.40, -28.0, 28.0)`.
+   - Đầu nòng súng hiển thị (`visual barrel tip`) trùng khớp với `muzzle_socket` với sai số **$\le 10^{-4}$ world units** ở mọi góc ngắm (`-90°, -45°, 0°, +45°, +90°`) và cả hai hướng quay mặt.
+3. **Ba Đồng Hồ Thời Gian Tách Biệt**:
+   - **Simulation Clock**: Chạy theo tick mô phỏng của `MatchController` (`FLASH_FPS = 28.0`).
+   - **Presentation Game Clock**: Dừng khi `is_paused`, chạy chậm theo `slowmo` và dừng theo `hitstop` của nhân vật (dùng cho biểu cảm mặt, chớp mắt, vệt đòn).
+   - **UI Clock**: Dùng cho hiệu ứng trên Menu/Pause; riêng ô chân dung chiến đấu và Cut-In trên HUD phải đóng băng khi `is_paused == true`. Tuyệt đối không dùng `Time.get_ticks_msec()` cho chớp mắt hoặc thanh máu trễ.
+
+---
+
+## 5. HỆ THỐNG 7 BIỂU CẢM GƯƠNG MẶT, 72+ TRẠNG THÁI & 22 ĐẤU SĨ
+
+### 5.1. Bảng Thứ Tự Ưu Tiên 7 Biểu Cảm (`Priority & Hold Hysteresis`)
+
+| Thứ tự ưu tiên | Mã Biểu Cảm (`Expression ID`) | Điều kiện kích hoạt | Quy tắc giữ nhịp (`Hold`) & Hủy (`Cancel`) |
+| :--- | :--- | :--- | :--- |
+| **1 (Cao nhất)** | `KO_STARS` | `hp <= 0` hoặc trạng thái `DEAD / DEATH_KNEEL` (phân biệt với ngã tạm thời `KNOCKDOWN`). | Giữ nguyên đến khi hồi sinh; tắt chớp mắt; nếu bị chết cháy (`is_charred`) hoặc nổ xác (`gibbed`) thì lớp hiển thị cháy đen/ẩn xác được ưu tiên cao nhất. |
+| **2** | `ECSTATIC_VICTORY_LAUGH` | Kết thúc hiệp (`round_over`) và đấu sĩ là người chiến thắng còn sống (`hp > 0`). | Giữ đến khi sang hiệp mới; người thua cuộc tuyệt đối không hiển thị mặt cười chiến thắng. |
+| **3** | `DIZZY_SPIRAL_HURT` | Trúng đòn (`HURT`), choáng (`STUN_01/02`, `STAGGER`), ngã sàn (`KNOCKDOWN`, `FALL_F/B`) hoặc bị cuốn theo tên lửa (`ROCKET_RIDE`). | Giữ tối thiểu `0.12s` (chống nhấp nháy khi trúng đạn liên thanh); ngắt ngay lập tức nếu chuyển sang `KO_STARS`. |
+| **4** | `WIDE_MOUTH_SHOUT` | Đang trong pha tung đòn cận chiến (`PUNCH`, `KICK`, `MELEE`) hoặc thi triển kỹ năng hợp lệ (`SKILL_*`). | Giữ tối thiểu `0.10s`, kết thúc ngay khi hết pha thu đòn (`recovery`) hoặc bị đối phương đánh ngắt chiêu (`HURT`). |
+| **5** | `LOW_HP_SWEAT` | Máu hiện tại $\le 25\%$ máu tối đa (`hp <= 0.25 * max_hp`) và còn sống. | Áp dụng biên trễ (`Hysteresis`): chỉ thoát khỏi trạng thái này khi máu hồi phục lên **$> 30\%$**; giữ tối thiểu `0.25s`; nhường quyền hiển thị cho `SHOUT` / `HURT`. |
+| **6** | `BLAZING_GLARE` | Đang chạy nước rút (`SPRINT`), ngắm bắn (`AIM_*`, `START_*`) hoặc gồng năng lượng hợp lệ. | Giữ tối thiểu `0.10s`; không kích hoạt nếu kỹ năng bấm bị từ chối do thiếu năng lượng/đang hồi chiêu. |
+| **7 (Mặc định)** | `CHEEKY_SMIRK` | Đứng nghỉ (`IDLE`), đi bộ (`RUN`) và các trạng thái bình thường khác. | Chớp mắt tự nhiên (`0.10s – 0.12s`) mỗi `3.0s – 5.0s` theo bộ sinh số ngẫu nhiên mỹ thuật riêng (`cosmetic seed`). |
+
+### 5.2. Bao Phủ 72+ Trạng Thái & Toàn Bộ 22 Đấu Sĩ
+- **72+ Trạng thái động học**: Mọi trạng thái trong `sf_compiled_rigs.json` + `LEDGE_GRAB` + trạng thái MUGEN/Skills đều phải được ánh xạ tường minh trong `chibi_state_coverage_manifest.json` (gồm `IDLE/RUN/SPRINT`, `JUMP/FALL_F/FALL_B/LAND_HEAVY`, `KNEEL/CROUCH/COVER`, `CLIMB/SLIDE/LEDGE_GRAB`, `ROLL/DIVE`, `GRABBED/CARRY/THROW`, `PUNCH_01..03/KICK/JUMPKICK`, `MACHETE/AXE/SWORD/BAT/CHAINSAW`, `START/AIM` mọi loại súng, `STUN/KNOCKDOWN/DEAD`, `ROCKET_RIDE_R/L`).
+- **Cá nhân hóa 22 Đấu Sĩ trên tỷ lệ Chibi 2.5 Đầu**:
+  - **14 Tướng Classic**: Mỗi nhân vật có kiểu tóc/mũ/băng đô, bảng màu trang phục và điểm nhấn riêng biệt (không dùng 1 khuôn mặt chỉ đổi màu áo).
+  - **4 Tướng Nguyên Bản (`Solaria`, `Atlas`, `Shinobi`, `Tideweaver`)** & **4 Tướng Anime (`Goku`, `Luffy`, `Naruto`, `Saitama`)**: Thiết kế chuẩn nhận diện Chibi 2.5 đầu kèm đầy đủ hình thái biến hình (`Super Saiyan` cho Goku, `Kurama Chakra Mode` cho Naruto, `Gear` cho Luffy).
+
+---
+
+## 6. THIẾT KẾ UI/UX THÍCH ỨNG (ADAPTIVE HUD), INPUT & ACCESSIBILITY
+
+1. **Ba Chế Độ Bố Cục Top HUD (`Solo`, `TwoLocal`, `CompactCrowd`) — Xử lý triệt để lỗi tràn 1494px**:
+   - Neo theo `local player slot` thay vì chỉ số mảng:
+     - **Chế độ `Solo` (1P vs 1 Bot)**: Thẻ đầy đủ của P1 ở góc trái trên, thẻ đối thủ ở góc phải trên.
+     - **Chế độ `TwoLocal` (P1 vs P2)**: Hai thẻ đầy đủ ở hai góc cố định.
+     - **Chế độ `CompactCrowd` (3 – 8 Đấu sĩ)**: Ưu tiên hiển thị tối đa **2 Thẻ Đầy Đủ (`Full Cards`)** cho người chơi tại máy (Local P1/P2) với đầy đủ Portrait `48px`, thanh HP, thanh Resource và 4 ô kỹ năng (`32x32px`); tối đa **6 Thẻ Thu Gọn (`Compact Summaries`)** cho Bot/đối thủ còn lại để tổng chiều ngang luôn nằm gọn trong màn hình `1280x720` và `960x540` (`intersection_area == 0`).
+2. **Cut-In Tuyệt Kỹ Gọn Gàng & Chân Dung Động (`Non-Intrusive Cut-In & Live Portrait`)**:
+   - Cut-In hiển thị gọn trong dải trạng thái phía trên, tối đa 2 Cut-In đồng thời (khi 2 người tung chiêu cùng lúc), thời gian tồn tại `TTL <= 0.42s`, tuyệt đối không tạo dải băng đen che khuất tâm sàn đấu.
+   - Ô Portrait trên thẻ người chơi tự động đổi theo đúng 7 biểu cảm của nhân vật dưới sân và nảy nhẹ (`scale <= 1.06x` trong `0.16s` bên trong ô dự trữ, không làm xô lệch bố cục thẻ).
+3. **Chuẩn hóa Nhãn Phím & Phản hồi Từ Chối Kỹ Năng**:
+   - Hiển thị đúng nhãn phím thực tế (`5/6/7/8` hoặc `KP5..8` cho P1; `U/I/O/P` cho P2); ẩn nhãn phím trên thẻ Bot.
+   - Khi bấm kỹ năng chưa hồi xong hoặc thiếu năng lượng, hiển thị thông báo ngắn gọn (`"Đang hồi chiêu" / "Thiếu năng lượng" / "Đang bị khóa"`), giới hạn tần suất tối đa `1 thông báo / 0.5s / mỗi ô` để không gây nhiễu âm thanh và hình ảnh.
+
+---
+
+## 7. HIỆU NĂNG (PERFORMANCE), KIỂM TRA DỮ LIỆU (VALIDATION) & DỌN CODE AN TOÀN
+
+1. **Quy trình Đo Hiệu Năng 2 Tầng (Nhanh trong lúc phát triển, Toàn diện khi nghiệm thu)**:
+   - **Tầng 1 — Fast Automated Perf Gate (`< 15 giây`, chạy ở mỗi WP)**: Chạy 180 frames trận đấu hỗn chiến 8 đấu sĩ + hiệu ứng tối đa trong `test_runner.gd`; xác nhận thời gian CPU cập nhật của `HUD + Chibi Rig` đạt **`p95 <= 2.0 ms/frame`**, tổng bộ nhớ Texture Chibi thường trú **`<= 128 MiB`**, và `0` lượt đọc đĩa/tạo Texture trong `_draw()`.
+   - **Tầng 2 — Multi-Workload Benchmark (`CB-WP7`)**: Chạy 4 kịch bản chuẩn (`(a) 2 Normal`, `(b) 2 Powered + max clones/fire/explosions`, `(c) 8 Fighters mixed`, `(d) 20 lần Restart/Đổi tướng liên tiếp`), thu thập đầy đủ `median / p95 / p99`, kiểm tra mục tiêu `p95 <= 16.67ms`, `p99 <= 25.0ms` và xác nhận số lượng Node/Timer/Cache đi ngang (không rò rỉ) sau 20 lần khởi động lại trận đấu.
+2. **Kiểm tra tính hợp lệ của Tài nguyên & Giao dịch Nguyên tử (`Atomic Generation Swap`)**:
+   - Trình đóng gói kiểm tra toàn bộ `chibi_atlas_manifest.json` (schema, kích thước `> 0`, tọa độ pivot/socket hữu hạn, đủ 72+ state và 7 biểu cảm) trong thư mục tạm trước khi hoán đổi chỉ mục thế hệ (`active_generation`) nguyên tử.
+3. **Dọn dẹp Code dư thừa có Kiểm kê & Lưu vết (`Safe Cleanup`)**:
+   - Lập danh sách kiểm kê đầy đủ các tham chiếu trước khi dọn dẹp; giữ nguyên bộ giải tọa độ `socket` và dữ liệu va chạm gốc; không giữ sprite cũ vẽ chồng vô hình, đồng thời nâng cấp các bài test kiểm tra hiển thị (`art assertions`) sang kiểm tra trực tiếp lớp vẽ Chibi thực tế theo bảng đối chiếu (`Migration Ledger`).
+
+---
+
+## 8. MA TRẬN 60 TRƯỜNG HỢP NGOẠI LỆ & CHỐT CHẶN KIỂM CHỨNG (`CB-EC-01 .. CB-EC-60`)
+
+- **Phân bổ kiểm chứng theo từng WP**: `CB-WP2` (`01–08, 53–55`), `CB-WP3` (`09–16`), `CB-WP4` (`17–24`), `CB-WP5` (`25–30, 56`), `CB-WP6` (`31–40, 49–52`), `CB-WP7` (`41–48, 57–60`), `CB-WP8` (Hồi quy toàn bộ).
+
+| Mã EC | Tình huống ngoại lệ / Rủi ro thực tế | Cơ chế Chốt chặn & Tiêu chí Nghiệm thu (Oracle) |
+| :--- | :--- | :--- |
+| **CB-EC-01** | Tỷ lệ Chibi 2.5 đầu làm lệch hộp nhận sát thương (`Hurtbox`) ở các tư thế. | Giữ nguyên hộp va chạm gốc của từng state (`18/14/12/10/8`); phần hurtbox trống `phantom-vulnerable <= 25%`. |
+| **CB-EC-02** | Nhầm lẫn giữa `KNEEL` (bấm S) và `COVER` (ép vào vật cản thấp/cao/vỡ). | Tư thế `KNEEL` và `COVER` tách biệt theo hình học thực tế của prop; đầu hạ thấp gọn dưới mép thùng che chắn. |
+| **CB-EC-03** | Góc ngắm súng nhận giá trị `NaN/Inf`, góc cực đại `±90°` hoặc lật hướng quay mặt. | Loại bỏ giá trị vô효, kẹp góc ngắm `[-90°, +90°]`, nghiêng đầu `[-28°, +28°]`, sai số `muzzle_socket <= 1e-4`. |
+| **CB-EC-04** | Găng tay Chibi lớn (`1.6x`) che khuất súng ngắn (`Pistol / Magnum`). | Tinh chỉnh vị trí nắm tay (`grip variant`) để thân súng và đầu nòng súng lộ rõ ở cả 10 mẫu góc ngắm. |
+| **CB-EC-05** | Lăn (`ROLL`), bay người (`DIVE`), cưỡi tên lửa (`ROCKET_RIDE`) kết hợp đổi hướng. | Chỉ lật hướng (`flip`) đúng 1 lần; không bị xoay ngược kép hoặc lệch tâm socket. |
+| **CB-EC-06** | Leo thang (`CLIMB`), bám mép (`LEDGE_GRAB`) hoặc bê thùng (`CARRY`) ở lối đi hẹp. | Bàn tay bám đúng thanh thang/mép tường/vật thể mà không làm thay đổi hộp vật lý của vật đang bê. |
+| **CB-EC-07** | Camera zoom ra xa (`1.85x`) hoặc màn hình có tỷ lệ DPI lẻ (`fractional DPI`). | Không bị lem viền đen/trắng (`extrude >= 4 texels`); tự động bật `Face LOD` khi mặt `< 16 screen px`. |
+| **CB-EC-08** | Mã băm trạng thái (`_last_rig_hash`) không đổi nhưng nhân vật chớp mắt hoặc đổi biểu cảm. | Đưa `visual_revision` vào khóa kiểm tra vẽ lại để gương mặt cập nhật tức thời, không bị đơ mặt. |
+| **CB-EC-09** | Trúng đòn + Đang tung chiêu + Máu thấp (`<= 25%`) xảy ra trong cùng 1 tick. | Bộ giải biểu cảm trả về kết quả duy nhất theo bảng thứ tự ưu tiên (`DIZZY_SPIRAL_HURT` thắng). |
+| **CB-EC-10** | Bị hạ gục (`KO`) cùng lúc hiệp đấu kết thúc. | Biểu cảm `KO_STARS` / `is_charred` luôn thắng; nhân vật đã chết không bao giờ cười chiến thắng. |
+| **CB-EC-11** | Máu dao động liên tục quanh ngưỡng `24% – 31%` làm mặt nhấp nháy. | Áp dụng biên trễ (`Hysteresis`): kích hoạt ở `<= 25%`, chỉ thoát khi `> 30%` kèm thời gian giữ tối thiểu `0.25s`. |
+| **CB-EC-12** | Bộ đếm chớp mắt tự động điểm đúng lúc nhân vật đang hét, choáng hoặc KO. | Khóa hoàn toàn lớp chớp mắt khi biểu cảm là `SHOUT`, `HURT`, `KO` hoặc `VICTORY`. |
+| **CB-EC-13** | Tạm dừng trận đấu (`Pause`) rồi tiếp tục (`Resume`). | Đồng hồ biểu cảm và chớp mắt dừng chính xác khi Pause; giao diện Pause hoạt động bình thường. |
+| **CB-EC-14** | Quay chậm (`Slowmo`) + Khựng đòn (`Hitstop`) + Chớp trắng (`Hit-Flash`) chồng lên nhau. | Khử trùng lặp theo `event_id`, không làm nhân vật bị đóng băng kép. |
+| **CB-EC-15** | Nhân vật chết cháy (`is_charred`) hoặc nổ xác (`gibbed`). | Áp dụng lớp màu than đen lên toàn bộ các lớp Chibi (không để khuôn mặt sáng màu nổi trên xác cháy đen); ẩn ngay khi `gibbed`. |
+| **CB-EC-16** | Tái sử dụng ID đấu sĩ, tạo phân thân (`Clone`) hoặc hủy phân thân. | Khởi tạo lại trạng thái hiển thị theo `spawn_generation`, không rò rỉ biểu cảm hay màu sắc cũ. |
+| **CB-EC-17** | Gặp State ID lạ, `EMPTY` hoặc bí danh (`alias`) trong lúc chạy. | Ánh xạ đầy đủ trong manifest; nếu gặp state chưa khai báo ở bản build thì báo lỗi kiểm tra ngay. |
+| **CB-EC-18** | Bước thời gian (`delta`) lớn đột ngột làm nhảy vọt chỉ số frame hoạt ảnh. | Kẹp chỉ số frame hợp lệ theo chu kỳ loop/one-shot, không phát lại âm thanh hay sát thương hai lần. |
+| **CB-EC-19** | Đòn đánh bị ngắt (`Cancel`) hoặc nhân vật chết giữa lúc đang vung tay (`Windup`). | Xóa ngay lập tức vệt đòn (`smear arc`) và hiệu ứng đang dở dang. |
+| **CB-EC-20** | Tổ hợp Đấm + Bắn + Trúng đòn diễn ra liên tiếp. | Khung thời gian gây sát thương do `FighterController` quyết định; hoạt ảnh không tự sinh thêm sát thương. |
+| **CB-EC-21** | Vũ khí cận chiến dài (Katana/Axe) hoặc tay cao su Luffy vươn xa. | Vệt hiệu ứng bám sát vùng gây sát thương thực tế, không đánh lừa tầm đánh. |
+| **CB-EC-22** | Dịch chuyển tức thời qua cổng (`Portal`), thang máy hoặc kỹ năng biến mất. | Xóa sạch vệt tàn ảnh (`afterimage trail`) tại vị trí cũ, không kéo vệt dài xuyên bản đồ. |
+| **CB-EC-23** | Đạn hoặc hiệu ứng bay ra ngoài khung hình (`Off-screen culling`). | Chỉ ẩn lớp hạt mỹ thuật phụ; kết quả va chạm vật lý của đạn giữ nguyên 100%. |
+| **CB-EC-24** | Đổi súng nhanh, nạp đạn hoặc súng hết đạn (`ammo == 0`). | Cập nhật đúng lớp hình ảnh vũ khí theo thế hệ trang bị, không lưu bóng súng cũ. |
+| **CB-EC-25** | Trùng lặp hoặc thiếu ID nhân vật trong danh sách 22 đấu sĩ. | Trình kiểm tra từ chối ngay khi build, không ghi đè nhân vật. |
+| **CB-EC-26** | Thiếu tài nguyên biến hình/trang phục tùy chọn (`optional skin`). | Tự động quay về hình thái cơ bản (`base fallback`) + ghi log 1 lần, tuyệt đối không văng game. |
+| **CB-EC-27** | Chơi trận đấu tướng thường (`Normal`) ngay sau trận đấu tướng Siêu Năng Lực (`Powered`). | Dọn sạch thanh năng lượng, ô kỹ năng và hiệu ứng hào quang của trận trước. |
+| **CB-EC-28** | Phân thân (`Clone`) của Naruto/Shinobi biến mất hoặc bản thể bị hạ gục. | Phân thân không chiếm ô thẻ HUD của người chơi và không làm sai lệch biểu cảm của bản thể. |
+| **CB-EC-29** | Hai người chơi chọn cùng 1 nhân vật (`Mirror Match`). | Phân biệt rõ bằng chỉ báo P1/P2 và viền đội; vật liệu hiển thị tách riêng từng cá thể (không chớp trắng dây chuyền). |
+| **CB-EC-30** | Phân tách giữa bản nghiên cứu nội bộ (`Anime Study`) và bản xuất công khai (`Public Export`). | Quản lý bằng danh sách cho phép (`provenance allowlist`) trong manifest, không tự ý xóa tài nguyên của Owner. |
+| **CB-EC-31** | Hiển thị 1 / 2 / 4 / 8 thẻ đấu sĩ trên HUD kèm hiệu ứng nảy Portrait. | Nằm gọn 100% trong khung nhìn (`intersection == 0`), không cắt mất thanh máu hay 4 ô kỹ năng của người chơi. |
+| **CB-EC-32** | Thay đổi kích thước cửa sổ (`960x540`, `1280x720`, `1920x1080`, `4:3`, `21:9`, `DPI`). | Khung chiến đấu an toàn (`safe combat rect`) luôn hữu hạn và giữ nguyên trạng thái điều khiển. |
+| **CB-EC-33** | Tên nhân vật tiếng Việt dài hoặc thiếu ký tự font. | Tự động rút gọn có dấu `...` (`ellipsis`) trên thẻ nhỏ và hiển thị đầy đủ ở màn hình chọn tướng/Pause. |
+| **CB-EC-34** | Có hơn 2 chiêu cuối (`Ultimate Cut-In`) kích hoạt gần như cùng lúc. | Giới hạn tối đa 2 Cut-In trong dải trạng thái, gộp theo `event_id/slot`, không xếp hàng chờ quá hạn và không che sân đấu. |
+| **CB-EC-35** | Kỹ năng đang hồi chiêu, quá nhiệt (`Overheat`), thiếu năng lượng hoặc bị khóa. | Hiển thị đúng lý do từ chối và trạng thái khóa, không báo sáng nhầm là sẵn sàng. |
+| **CB-EC-36** | Chơi 1P (gộp 2 cụm phím) chuyển sang 2P (tách cụm phím) hoặc đang bật bộ gõ tiếng Việt (IME). | Mỗi lần nhấn chỉ tính 1 xung (`edge`), P1 không kích hoạt nhầm chiêu của P2, nhận phím vật lý ổn định. |
+| **CB-EC-37** | Bàn phím tắt `NumLock` hoặc Laptop không có bàn phím số phụ (`Numpad`). | Cụm phím số hàng trên `5..8` của P1 và `U/I/O/P` của P2 luôn hoạt động đầy đủ kèm nhãn chỉ dẫn rõ ràng. |
+| **CB-EC-38** | Giữ đè phím (`Key Repeat`), mất tiêu điểm cửa sổ (`Alt-Tab`), hoặc bật/tắt Pause. | Xóa sạch bộ đệm phím (`input buffer`) khi mất tiêu điểm/Pause; yêu cầu nhả phím trước khi tính lần nhấn mới. |
+| **CB-EC-39** | Đổi cấu hình phím (`Remap`) hoặc file cài đặt bị lỗi cú pháp. | Lưu nguyên tử (`atomic save`); nếu file lỗi thì khôi phục mặc định an toàn cho trường lỗi mà không làm mất dữ liệu khác. |
+| **CB-EC-40** | Người chơi bật chế độ Giảm chuyển động (`Reduced Motion`) / Giảm chớp sáng (`Reduced Flash`) hoặc mù màu. | Tắt rung lắc/chớp trắng gắt nhưng giữ nguyên biểu tượng, đường viền và âm thanh báo hiệu đòn đánh. |
+| **CB-EC-41** | Dữ liệu JSON lỗi, số `NaN`, kích thước ảnh vượt trần hoặc đường dẫn thoát khỏi thư mục dự án (`..`). | Bộ kiểm tra trả về mã lỗi khác 0 và chặn ngay lập tức. |
+| **CB-EC-42** | Chạy từ gói tài nguyên đã đóng gói (`.pck`) không còn file `.png` rời trên đĩa. | Sử dụng `ResourceLoader` chuẩn cho tài nguyên đã import, hoạt động trơn tru khi xuất bản. |
+| **CB-EC-43** | Quá trình build tài nguyên bị hủy giữa chừng hoặc lỗi ghi đĩa. | Giao dịch `atomic generation swap` giữ nguyên thế hệ tài nguyên cũ, không bao giờ để lại atlas lỗi một nửa. |
+| **CB-EC-44** | Cập nhật lại ảnh atlas trên cùng đường dẫn cũ. | Khóa bộ nhớ đệm kèm mã băm thế hệ (`generation hash`) để tự động làm mới, không hiển thị ảnh cũ trong bộ nhớ. |
+| **CB-EC-45** | Lần đầu tiên tung kỹ năng trong trận gây khựng khung hình (`Cold-start hitch`). | Tải trước (`Prewarm`) atlas và hiệu ứng của các đấu sĩ tham gia trận đấu ngay trước pha `GET_READY`. |
+| **CB-EC-46** | Trận đấu 8 người + phân thân + lửa cháy chạm ngưỡng trần hiệu ứng. | Tự động thu hồi các hạt trang trí (`cosmetic particles`) cũ nhất theo giới hạn, giữ nguyên 100% đạn và cảnh báo sát thương. |
+| **CB-EC-47** | Khởi động lại trận đấu và đổi nhân vật 20 lần liên tiếp (`20x Restart Soak`). | Số lượng Node, Timer, AudioStream và bộ nhớ Texture giữ mức ổn định (đi ngang), không rò rỉ đối tượng (`ObjectDB`). |
+| **CB-EC-48** | Dọn dẹp code/tài nguyên cũ làm ảnh hưởng tới tham chiếu động hoặc nhánh sibling. | Kiểm tra toàn bộ đường dẫn động trước khi xóa; nhánh `superagent-TacticalStriker` giữ nguyên 100% không bị tác động. |
+| **CB-EC-49** | Màn hình Chọn Tướng trên Menu chính (`main_menu_controller.gd`) vẫn hiển thị hình hộp `17x21` Y8 cũ thay vì hình ảnh Chibi 2.5 đầu mới. | Đồng bộ ô Preview nhân vật trên Menu chính sử dụng trực tiếp Portrait/Pose Chibi 2.5 đầu sắc nét để người dùng thấy ngay diện mạo mới từ lúc chọn tướng. |
+| **CB-EC-50** | Khi đấu 8 người (`CompactCrowd`), các thẻ Bot thu gọn nhưng vẫn làm xô lệch hoặc chồng lấn lên thẻ của người chơi (`Local P1/P2`). | Tính toán bố cục `compute_adaptive_card_rects()` tách bạch: tối đa 2 thẻ `Local Human` giữ kích thước chuẩn dễ đọc, các thẻ Bot tự động co gọn để tổng chiều ngang `< vp_size.x` (`intersection_area == 0`). |
+| **CB-EC-51** | Thanh máu trễ (`_trailing_hp_by_id`) và bộ đếm nảy chân dung (`_expr_pop_timer_by_id`) cập nhật bên trong `_draw()` làm tốc độ tụt máu phụ thuộc FPS và vẫn chạy khi Pause. | Chuyển toàn bộ logic cập nhật theo thời gian sang `_process(delta)` (dừng ngay khi `match_world.is_paused == true`); hàm `_draw()` chỉ đọc dữ liệu thuần túy. |
+| **CB-EC-52** | Thanh máu nhỏ trên đầu nhân vật (`overhead world-space bar`) đè vào chỏm tóc gai Chibi hoặc dính vào dải Top HUD khi nhảy cao. | Neo tọa độ thanh máu trên đầu theo `visual_bounds_top` (`y = -21.5`) và kẹp biên trên `screen_pt.y >= strip_h + 14.0 * ui_scale`. |
+| **CB-EC-53** | Khi cắt 6 tư thế từ bảng mẫu `superagent_chibi_brawler_sheet`, bị lẫn dòng chữ tiêu đề bên dưới hoặc vạch kẻ ngang dưới chân. | Lọc tọa độ vùng cắt chính xác phía trên vạch kẻ chân, kết hợp `Flood-Fill` + lọc thành phần liên thông (`Connected-Component >= 250px`) và đệm viền `>= 4px alpha edge extrusion`. |
+| **CB-EC-54** | Hiệu ứng co giãn `Squash & Stretch` khi nhảy/tiếp đất làm bóp méo khuôn mặt Chibi hoặc làm lệch điểm bắn đạn `muzzle_socket`. | Chỉ áp dụng `Squash & Stretch` (`[0.90, 1.10]`) quanh gốc bàn chân `(0, 0)` cho lớp hình ảnh; giữ nguyên 100% tọa độ `muzzle_socket` / `shell_socket` / `fire_socket` (`epsilon <= 1e-4`). |
+| **CB-EC-55** | Găng tay Chibi cỡ lớn (`1.6x`) che mất thân súng khi nhân vật chuyển sang trạng thái ngắm bắn (`AIM_*`). | Vẽ lớp vũ khí (`weapon_vfx`) ở lớp trên cùng nối từ tâm bàn tay trước tới đúng `muzzle_socket.position` kèm bàn tay nắm báng súng rõ ràng. |
+| **CB-EC-56** | Dàn 22 đấu sĩ (14 Classic + 8 Powered) thiếu bản sắc riêng trên tỷ lệ Chibi 2.5 đầu. | Cá nhân hóa toàn bộ 22 đấu sĩ với kiểu tóc/mũ/áo choàng/bảng màu/hình thái biến hình riêng biệt trên đúng chuẩn tỷ lệ Chibi 2.5 đầu (`18.0 world units`). |
+| **CB-EC-57** | Code dư thừa hoặc biến tạm không còn sử dụng trong `fighter_rig_view.gd` và `match_hud_controller.gd` gây khó bảo trì. | Dọn sạch các nhánh vẽ/biến thừa, chuẩn hóa kiểu dữ liệu tĩnh (`Strict GDScript Typing`) với 0 cảnh báo biên dịch. |
+| **CB-EC-58** | Đọc file ảnh hoặc giải mã JSON lặp lại trong trận đấu gây giật cục (`Frame Hitch`) khi triển khai cho lượng người dùng lớn. | Cache tĩnh (`O(1) Static Memory Cache`) toàn bộ 7 Portrait HD, 6 Pose Cutout HD và Manifest ngay lần khởi tạo đầu tiên; 0 lệnh đọc đĩa trong vòng lặp trận đấu. |
+| **CB-EC-59** | Thiếu cơ chế tự động kiểm tra tính toàn vẹn của `chibi_atlas_manifest.json` và 7 file Portrait + 6 file Pose khi khởi chạy test. | Tích hợp trình kiểm tra `ChibiBrawlerRigPainter.validate_chibi_assets()` vào `test_runner.gd` (`SF-M36.1`) để xác minh kích thước, alpha và schema tự động. |
+| **CB-EC-60** | Sửa đổi trên `8-9-hh3d-3/superagent/` vô tình làm thay đổi hoặc hỏng nhánh độc lập `8-9-hh3d-3/superagent-TacticalStriker/`. | Khóa chặt mọi thao tác đọc/ghi trong `8-9-hh3d-3/superagent/` và kiểm tra chéo cả hai nhánh sau khi hoàn tất. |
+
+---
+
+## 9. CÁC HỢP ĐỒNG ĐỊNH LƯỢNG BỔ SUNG (QUANTITATIVE CONTRACTS 10.1 – 10.5 TỪ R2)
+
+1. **Quy đổi Atlas $\rightarrow$ World $\rightarrow$ Screen (`Calibration 10.1`)**:
+   - Thân nhân vật trên Atlas cao `144px` $\times$ `units_per_pixel (0.125)` = **`18.0 world units`** (sai số cho phép `±0.1 world unit`).
+   - Tọa độ điểm trên màn hình: `screen_pt = viewport_canvas_transform * actor_transform * (atlas_pt - atlas_pivot) * 0.125`. Sai số khung bao hiển thị thực tế so với tính toán **$\le 1$ screen pixel** ở cả 3 mức zoom (`min / mid / max`).
+2. **Đối chiếu Hình bóng & Va chạm (`Silhouette vs Collision 10.2`)**:
+   - Mỗi tư thế ghi rõ `vulnerable_core_mask` (đầu + thân), `full_body_mask` và `cosmetic_mask` (tóc nhọn, mũ, vệt đòn).
+   - Phần đầu/thân nhận sát thương không nhô ra ngoài hurtbox của trạng thái đó quá `1.0 world unit`; phần diện tích hurtbox trống không có thân che phủ (`phantom-vulnerable area`) **$\le 25\%$** ở tư thế đứng và ngồi.
+3. **Đồng bộ Hoạt ảnh, Sự kiện & Đồng hồ (`Animation & Event Clock Oracle 10.3`)**:
+   - Pha hiển thị (`source_phase`) đọc một chiều từ trạng thái mô phỏng; tốc độ mẫu `12–24 fps` của hoạt ảnh chỉ là mật độ khung hình mỹ thuật, tuyệt đối không tạo đồng hồ mô phỏng thứ hai.
+   - Khử trùng lặp âm thanh và hiệu ứng theo `event_id` để `ChibiBrawlerRigPainter` không phát lặp lại tiếng đấm/tiếng súng mà `FighterController` đã phát.
+4. **Sức chứa HUD & Lưu trữ Cài đặt (`HUD Capacity & Settings 10.4`)**:
+   - Ở `1280x720`: Portrait người chơi `48px`, cỡ chữ chính `>= 14px`, ô kỹ năng `>= 32px`. Ở `960x540` (Compact): cỡ chữ chính `>= 12px`, ô kỹ năng `>= 24px`, dải HUD phía trên chiếm tối đa `<= 25%` chiều cao màn hình.
+   - Kiểm tra tự động xác nhận diện tích giao cắt (`intersection_area`) giữa các thẻ độc lập bằng **`0`**, chữ không bị cắt cụt và vùng Cut-In không đè lên tâm ngắm.
+5. **Giao dịch Thế hệ Tài nguyên & Khôi phục (`Generation Transaction & Rollback 10.5`)**:
+   - Mỗi lần build tài nguyên tạo một thư mục thế hệ kèm `generation_id` và mã băm SHA256 của toàn bộ file đầu ra. Chỉ khi toàn bộ bài kiểm tra hợp lệ mới cập nhật chỉ mục `active_generation` nguyên tử.
+
+---
+
+## 10. TÀI LIỆU THAM KHẢO CHÍNH THỨC
+
+1. **Godot Engine — General Optimization**: https://docs.godotengine.org/en/stable/tutorials/performance/general_optimization.html
+2. **Godot Engine — Custom Drawing in 2D (`queue_redraw` & Caching)**: https://docs.godotengine.org/en/stable/tutorials/2d/custom_drawing_in_2d.html
+3. **Godot Engine — Importing Images & Mipmaps**: https://docs.godotengine.org/en/stable/tutorials/assets_pipeline/importing_images.html
+4. **Godot Engine — Multiple Resolutions (`canvas_items` stretch mode)**: https://docs.godotengine.org/en/4.5/tutorials/rendering/multiple_resolutions.html
+5. **Orthographic Projection Reference**: https://docs.blender.org/manual/id/5.2/render/cameras.html
+
+---
+
+## 11. BÁO CÁO R4 DO AGENT TRƯỚC CUNG CẤP — LỊCH SỬ, KHÔNG LÀ NGHIỆM THU R5
+
+### 11.1. Kết quả Kiểm thử Tự động & Ảnh chụp GPU Thực tế
+1. **Master E2E Test Suite (`res://tests/test_runner.gd`)**:
+   - **Kết quả**: **`148 / 148 CHECKS PASSED (100% PASS, EXIT 0)`** (bao gồm toàn bộ 144 bài test hồi quy `SF-M1 .. SF-M35` + 4 bài test chuyên biệt `SF-M36.1 .. SF-M36.4` cho Chibi 2.5 Đầu).
+   - **`SF-M36.1`**: Xác nhận `res://data/chibi_atlas_manifest.json` (`83` states, `units_per_pixel = 0.125`), `7/7` Portrait Biểu cảm `256x256` (`chibi_expr_*.png`) và `7/7` Pose Cutout sạch nền (`pose_idle.png`, `pose_run.png`, `pose_jump.png`, `pose_punch.png`, `pose_aim.png`, `pose_roll.png`, `pose_hero.png`).
+   - **`SF-M36.2`**: Xác nhận bảng thứ tự ưu tiên 7 biểu cảm, bộ giữ nhịp (`Hold Timer 0.12s..0.50s`) và biên trễ máu thấp `LOW_HP_SWEAT` (`<= 25%` kích hoạt, `28%` giữ nguyên không nhấp nháy, `>= 30%` thoát ngay về `CHEEKY_SMIRK`).
+   - **`SF-M36.3`**: Xác nhận góc nghiêng đầu theo hướng ngắm `[-28°, +28°]`, bộ lọc `NaN/Inf` và độ chính xác tuyệt đối của `muzzle_socket` (`dist = 0.0 <= 1e-4`).
+   - **`SF-M36.4`**: Xác nhận Adaptive 8-Fighter HUD không tràn ngang ở cả `1280x720` (`end_x = 1271.0 <= 1280.0`) và `960x540` (`end_x = 951.9 <= 960.0`), `intersection_area = 0.0`, cùng hiệu năng 8 đấu sĩ Chibi 2.5 Đầu đạt **`rig_p95 = 0.6ms <= 1.0ms`** và **`full_tick_p95 = 3.0ms <= 5.0ms`**.
+2. **Real GPU Showcase Capture (`res://tests/visual_showcase_capture.gd`)**:
+   - Đã xuất thành công **10/10 ảnh chụp GPU thực tế `1280x720`** trong `8-9-hh3d-3/superagent/docs/showcase/01_main_menu.png .. 10_stage_mode_and_victory_slowmo.png` (Exit Code 0).
+
+### 11.2. Các Lưu Ý & Kinh Nghiệm Rút Ra Để Tránh Lặp Lại Lỗi Về Sau
+1. **Bảo vệ Đường Viền Đế Giày Khi Khử Nền (`Flood-Fill Border Seeding`)**:
+   - Trong bảng mẫu `superagent_chibi_brawler_sheet_1793104764257.jpg`, đường viền mực đen của đế giày nằm ở `y = 714` ngay sát vạch kẻ ngang màu xám ở `y = 715..716`. Nếu cắt cụt ở `y = 712` hoặc đặt hạt giống flood-fill ở giữa đáy ảnh, thuật toán khử nền sẽ tràn vào phần giày màu xanh đen. Giải pháp chuẩn là lấy `y1 = 720` và chỉ xóa vạch kẻ ngang ở các điểm ảnh không phải nét mực đen (`r >= 24`), giữ kín 100% đường viền đế giày.
+2. **Không Gọi `bool(node.get("prop"))` Khi Thuộc Tính Có Thể Trả Về `null` Trong GDScript 4**:
+   - Trong Godot 4.7, `bool(null)` phát sinh lỗi runtime `Invalid call. Nonexistent 'bool' constructor`. Luôn dùng phép so sánh tường minh `node.get("prop") == true` hoặc `str(node.get("round_state")) == "ROUND_OVER"`.
+3. **Tách Biệt Biên Trễ (`Hysteresis`) Và Bộ Đếm Giữ Nhịp (`Hold Timer`) Cho `LOW_HP_SWEAT`**:
+   - Biểu cảm `LOW_HP_SWEAT` đã có biên trễ `25%..30%` để chống nhấp nháy quanh ngưỡng máu thấp; do đó `hold` của `LOW_HP_SWEAT` phải đặt bằng `0.0` để ngay khi người chơi ăn bình máu (`Medkit/Pills`) vượt `30% HP`, gương mặt lập tức tươi tỉnh trở lại (`CHEEKY_SMIRK`).
+4. **Tối Ưu Hóa Hash Trạng Thái `O(1)` Không Cấp Phát Mảng Tạm**:
+   - Thay thế `hash([a, b, c, ...])` (vốn cấp phát một `Array` mới mỗi tick cho từng đấu sĩ) bằng phép băm bitwise nguyên thủy và không đưa biến đếm thời gian liên tục (`_expr_hold_timer`) vào khóa hash, giúp thời gian cập nhật 8 đấu sĩ Chibi giảm xuống chỉ còn `0.6ms` (`p95`).

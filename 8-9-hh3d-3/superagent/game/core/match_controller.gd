@@ -7,7 +7,7 @@ extends Node2D
 
 signal request_return_to_menu()
 
-const FLASH_FPS: float = 24.0
+const FLASH_FPS: float = 28.0
 const WEAPON_SPAWN_ORDER: Array[String] = [
 	"PISTOL",
 	"RIFLE",
@@ -46,6 +46,7 @@ var hud_controller: CanvasLayer = null
 var fighters: Array[Node2D] = []
 var props: Array[Node2D] = []
 var pickups: Array[Dictionary] = []
+var _last_pickup_elevator_motion_serial: int = -1
 var floating_texts: Array[Dictionary] = []
 var bot_controllers: Dictionary = {} # instance_id -> BotController
 
@@ -59,6 +60,8 @@ var survival_kills: int = 0
 
 var game_speed: float = 1.0
 var slowmo_timer: float = 0.0
+var is_paused: bool = false
+var _cancel_was_down: bool = false
 
 var round_state: String = "GET_READY" # "GET_READY", "FIGHT", "ROUND_OVER"
 var banner_text: String = "GET READY..."
@@ -76,288 +79,8 @@ var _weapon_spawn_timer: float = 140.0
 var _supply_drop_timer: float = 280.0
 var _survival_spawn_timer: float = 120.0
 var _next_prop_id: int = 1
-
-
-# ------------------------------------------------------------------------------
-# Lightweight Fallback Implementations (used ONLY if sibling files are still WIP)
-# ------------------------------------------------------------------------------
-class FallbackFighterNode extends CharacterBody2D:
-	var slot_index: int = 0
-	var team_id: int = 0
-	var character_id: String = "johnny"
-	var display_name: String = "Johnny"
-	var is_bot: bool = false
-	var bot_difficulty: int = 2
-	var hp: float = 100.0
-	var max_hp: float = 100.0
-	var sprint_energy: float = 100.0
-	var max_sprint_energy: float = 100.0
-	var is_dead: bool = false
-	var is_gibbed: bool = false
-	var facing: int = 1
-	var current_state: String = "IDLE"
-	var on_ground: bool = true
-	var sprinting: bool = false
-	var kneeling: bool = false
-	var taking_cover: bool = false
-	var rolling: bool = false
-	var diving: bool = false
-	var climbing: bool = false
-	var falling: bool = false
-	var knockdowned: bool = false
-	var aiming: bool = false
-	var aim_mode: int = 0
-	var current_aim_pitch: float = 0.0
-	var burn_state: float = 0.0
-	var burned: bool = false
-	var cover_object_id: int = -1
-	var air_velocity: Vector2 = Vector2.ZERO
-	var inventory: Dictionary = {1: "FISTS", 2: "", 3: "", 4: "", 5: ""}
-	var inventory_ammo: Dictionary = {1: -1, 2: 0, 3: 0, 4: 0, 5: 0}
-	var active_gun_slot: int = 2
-	var rig_view: Node2D = null
-	var match_world: Node2D = null
-
-	func setup_fighter(p_slot: int, p_char_id: String, p_pos: Vector2, p_is_bot: bool = false, p_team: int = 0, p_diff: int = 2) -> void:
-		slot_index = p_slot
-		character_id = p_char_id.to_lower()
-		var cdata: Dictionary = MapLoaderScript.get_registry().call("get_character_data", character_id) as Dictionary
-		display_name = str(cdata.get("display_name", p_char_id.capitalize()))
-		global_position = p_pos
-		is_bot = p_is_bot
-		team_id = p_team
-		bot_difficulty = p_diff
-		hp = 100.0
-		max_hp = 100.0
-		sprint_energy = 100.0
-		max_sprint_energy = 100.0
-		is_dead = false
-		is_gibbed = false
-		burn_state = 0.0
-		burned = false
-		inventory = {1: "FISTS", 2: "", 3: "", 4: "", 5: ""}
-		inventory_ammo = {1: -1, 2: 0, 3: 0, 4: 0, 5: 0}
-
-	func step_fighter(step_24hz: float, input_state: Dictionary) -> void:
-		if is_dead:
-			return
-		var left: bool = bool(input_state.get("left", false))
-		var right: bool = bool(input_state.get("right", false))
-		var down: bool = bool(input_state.get("down", false))
-		var jump: bool = bool(input_state.get("jump", false))
-		var sprint: bool = bool(input_state.get("sprint", false))
-		var attack: bool = bool(input_state.get("attack", false))
-
-		sprinting = sprint and sprint_energy > 5.0
-		var spd: float = 3.4 if sprinting else 1.7
-		var move_x: float = 0.0
-		if left:
-			move_x = -spd
-			facing = -1
-		elif right:
-			move_x = spd
-			facing = 1
-
-		rolling = down and (left or right) and not sprinting
-		if rolling and burn_state > 0.0:
-			if burn_state < 100.0 and not burned:
-				burn_state = 0.0
-			else:
-				burn_state = 50.0
-				burned = false
-
-		if jump and on_ground:
-			air_velocity.y = -5.0
-			on_ground = false
-
-		if not on_ground:
-			air_velocity.y = minf(11.0, air_velocity.y + 0.6 * step_24hz)
-
-		global_position += Vector2(move_x, air_velocity.y) * step_24hz
-		if match_world != null and is_instance_valid(match_world):
-			var ml: Node2D = match_world.get("map_loader") as Node2D
-			if ml != null and ml.has_method("get_ground_y_below") and air_velocity.y >= 0.0:
-				var gy: float = float(ml.call("get_ground_y_below", global_position.x, global_position.y - 6.0, 14.0, true))
-				if gy < INF and global_position.y >= gy:
-					global_position.y = gy
-					air_velocity.y = 0.0
-					on_ground = true
-
-		aiming = attack
-		if burn_state >= 15.0:
-			hp -= (0.4 if burn_state >= 100.0 else 0.2) * step_24hz
-			if hp <= 0.0:
-				hp = 0.0
-				is_dead = true
-
-	func get_mid_pos() -> Vector2:
-		if diving:
-			return global_position
-		if knockdowned:
-			return global_position + Vector2(0.0, -3.0)
-		if kneeling or falling:
-			return global_position + Vector2(0.0, -6.0)
-		return global_position + Vector2(0.0, -8.0)
-
-	func get_hit_rect() -> Rect2:
-		var h: float = 12.0 if (kneeling or taking_cover or rolling) else 18.0
-		return Rect2(global_position.x - 6.0, global_position.y - h, 12.0, h)
-
-	func apply_bullet_hit(damage: float, _pushback: float, dir_x: int, _is_crit: bool, _hit_pos: Vector2, is_rocket: bool = false) -> bool:
-		if is_dead:
-			return false
-		if rolling or diving:
-			var dodge_chance: float = 0.5 if is_rocket else 0.9
-			if randf() < dodge_chance:
-				return false
-		hp = maxf(0.0, hp - damage)
-		air_velocity.x += float(dir_x) * 1.5
-		if hp <= 0.0:
-			is_dead = true
-			current_state = "DEAD"
-		return true
-
-	func apply_melee_hit(damage: float, dir_x: int, is_finisher: bool, _is_kick: bool, _is_jump_kick: bool, _attacker: Node2D = null) -> void:
-		if is_dead:
-			return
-		hp = maxf(0.0, hp - damage)
-		if is_finisher:
-			force_fall(float(dir_x) * 3.0, -2.5, true)
-		if hp <= 0.0:
-			is_dead = true
-			current_state = "DEAD"
-
-	func apply_explosion_hit(angle_rad: float, power: float, damage: float) -> void:
-		if is_dead:
-			return
-		hp = maxf(0.0, hp - damage)
-		force_fall(cos(angle_rad) * power, sin(angle_rad) * power - 2.0, true)
-		if hp <= 0.0:
-			is_dead = true
-			current_state = "DEAD"
-
-	func add_burn(amount: float, set_full: bool = false) -> void:
-		if set_full:
-			burn_state = 100.0
-			burned = true
-		else:
-			burn_state = clampf(burn_state + amount, 0.0, 100.0)
-			if burn_state >= 100.0:
-				burned = true
-
-	func force_fall(vx: float, vy: float, knockdown: bool = false) -> void:
-		air_velocity = Vector2(vx, vy)
-		falling = true
-		knockdowned = knockdown
-		on_ground = false
-
-	func equip_weapon(weapon_id: String, ammo_override: int = -999) -> void:
-		var wid: String = weapon_id.to_upper()
-		var wdata: Dictionary = MapLoaderScript.get_registry().call("get_weapon_data", wid) as Dictionary
-		var slot: int = int(wdata.get("slot", 2))
-		var ammo: int = ammo_override if ammo_override != -999 else int(wdata.get("ammo", 12))
-		inventory[slot] = wid
-		inventory_ammo[slot] = ammo
-		if slot in [2, 3]:
-			active_gun_slot = slot
-
-	func get_active_weapon_id() -> String:
-		if not str(inventory.get(active_gun_slot, "")).is_empty() and int(inventory_ammo.get(active_gun_slot, 0)) > 0:
-			return str(inventory[active_gun_slot])
-		if not str(inventory.get(3, "")).is_empty() and int(inventory_ammo.get(3, 0)) > 0:
-			return str(inventory[3])
-		if not str(inventory.get(2, "")).is_empty() and int(inventory_ammo.get(2, 0)) > 0:
-			return str(inventory[2])
-		return str(inventory.get(1, "FISTS"))
-
-	func get_active_weapon_ammo() -> int:
-		var wid: String = get_active_weapon_id()
-		for s: Variant in inventory.keys():
-			if str(inventory[s]) == wid:
-				return int(inventory_ammo.get(s, -1))
-		return -1
-
-
-class FallbackProjectileManager extends Node2D:
-	var match_world: Node2D = null
-	var active_bullets: Array[Dictionary] = []
-
-	func step_projectiles(_step_24hz: float) -> void:
-		pass
-
-	func spawn_bullet(_owner_fighter: Node2D, weapon_id: String, start_pos: Vector2, angle_deg: float, _ignore_cover_id: int = -1) -> void:
-		active_bullets.append({"weapon_id": weapon_id, "pos": start_pos, "angle": angle_deg})
-
-	func spawn_throwable(_owner_fighter: Node2D, _weapon_id: String, _start_pos: Vector2, _angle_deg: float, _remaining_fuse_frames: float = 72.0) -> void:
-		pass
-
-	func deflect_bullets_in_box(_deflector: Node2D, _rect: Rect2, _facing_dir: int) -> int:
-		return 0
-
-	func clear_all() -> void:
-		active_bullets.clear()
-
-
-class FallbackFireHazardSystem extends Node2D:
-	var match_world: Node2D = null
-	var explosion_count: int = 0
-	var fire_burst_count: int = 0
-	var glass_shard_bursts: int = 0
-
-	func step_hazards(_step_24hz: float) -> void:
-		pass
-
-	func trigger_explosion(world_pos: Vector2, base_radius: float = 33.0, player_damage: float = 20.0, player_power: float = 5.0, _source_fighter: Node2D = null) -> void:
-		explosion_count += 1
-		if match_world == null or not is_instance_valid(match_world):
-			return
-		var fighters_v: Variant = match_world.get("fighters")
-		if typeof(fighters_v) == TYPE_ARRAY:
-			for f_var: Variant in fighters_v as Array:
-				if f_var is Node2D and is_instance_valid(f_var):
-					var f: Node2D = f_var as Node2D
-					var d: float = f.global_position.distance_to(world_pos)
-					if d <= base_radius * 1.5 and f.has_method("apply_explosion_hit"):
-						var ang: float = (f.global_position - world_pos).angle()
-						f.call("apply_explosion_hit", ang, player_power, player_damage)
-
-	func trigger_fire_burst(_source_type: String, _world_pos: Vector2, _count: int = 18) -> void:
-		fire_burst_count += 1
-
-	func spawn_flamethrower_particle(_world_pos: Vector2, _angle_deg: float, _source_fighter: Node2D = null) -> void:
-		pass
-
-	func spawn_muzzle_flash(_world_pos: Vector2, _angle_deg: float, _weapon_id: String = "PISTOL") -> void:
-		pass
-
-	func spawn_shell_casing(_world_pos: Vector2, _eject_dir: int, _weapon_id: String = "PISTOL") -> void:
-		pass
-
-	func spawn_melee_trace(_world_pos: Vector2, _facing_dir: int, _weapon_id: String = "SWORD") -> void:
-		pass
-
-	func spawn_prop_debris(_prop_type: String, _world_pos: Vector2, _hit_dir: Vector2 = Vector2.UP, _count: int = 3) -> void:
-		pass
-
-	func spawn_smoke_puff(_world_pos: Vector2, _vel: Vector2 = Vector2(0.0, -0.35), _scale_val: float = 1.0) -> void:
-		pass
-
-	func spawn_ground_flame(_world_pos: Vector2, _duration: float = 95.0) -> void:
-		pass
-
-	func spawn_hit_sparks(_world_pos: Vector2, _is_blood: bool = false) -> void:
-		pass
-
-	func spawn_glass_shards(_p1: Vector2, _p2: Vector2, _impact_vel: Vector2) -> void:
-		glass_shard_bursts += 1
-
-	func spawn_gibs(_world_pos: Vector2, _impulse: Vector2) -> void:
-		pass
-
-	func clear_all() -> void:
-		explosion_count = 0
-		fire_burst_count = 0
-		glass_shard_bursts = 0
+var active_cutin: Dictionary = {}
+var active_cutins: Array[Dictionary] = []
 
 
 # ------------------------------------------------------------------------------
@@ -456,7 +179,7 @@ func _instantiate_projectile_manager() -> Node2D:
 			var inst: Variant = (scr as Script).new()
 			if inst is Node2D:
 				return inst as Node2D
-	return FallbackProjectileManager.new()
+	return Node2D.new()
 
 
 func _instantiate_fire_hazard_system() -> Node2D:
@@ -467,7 +190,7 @@ func _instantiate_fire_hazard_system() -> Node2D:
 			var inst: Variant = (scr as Script).new()
 			if inst is Node2D:
 				return inst as Node2D
-	return FallbackFireHazardSystem.new()
+	return Node2D.new()
 
 
 func _instantiate_fighter_node() -> Node2D:
@@ -485,7 +208,7 @@ func _instantiate_fighter_node() -> Node2D:
 			var inst: Variant = (scr as Script).new()
 			if inst is Node2D:
 				return inst as Node2D
-	return FallbackFighterNode.new()
+	return CharacterBody2D.new()
 
 
 func _clear_match_entities() -> void:
@@ -496,6 +219,8 @@ func _clear_match_entities() -> void:
 			f.free()
 	fighters.clear()
 	bot_controllers.clear()
+	active_cutin.clear()
+	active_cutins.clear()
 
 	for p: Node2D in props:
 		if is_instance_valid(p):
@@ -543,6 +268,8 @@ func get_stage_definition(level: int) -> Dictionary:
 func start_match(config: Dictionary = {}) -> void:
 	_ensure_subsystems()
 	_clear_match_entities()
+	is_paused = false
+	_cancel_was_down = false
 
 	match_config = config.duplicate(true)
 	var raw_mode: String = str(config.get("mode", "vs")).to_lower()
@@ -557,7 +284,10 @@ func start_match(config: Dictionary = {}) -> void:
 	survival_wave = 1
 	survival_kills = 0
 
-	var roster_pool: Array[String] = ["johnny", "boris", "agent", "hideki", "blaire", "savage", "cruger", "ivan", "brody", "mac", "funnyman", "jeff", "shinobi"]
+	var roster_pool: Array[String] = [
+		"johnny", "boris", "agent", "hideki", "blaire", "savage", "cruger", "ivan", "brody", "mac", "funnyman", "jeff",
+		"solaria", "atlas", "shinobi", "tideweaver", "goku", "luffy", "naruto", "saitama"
+	]
 	var vs_map_pool: Array[String] = ["rooftops", "storage", "police_station", "hazardous", "subway", "tower", "junkyard", "cargo", "steel_harbor"]
 
 	var p1_char: String = str(config.get("p1_char", "johnny")).to_lower()
@@ -938,7 +668,14 @@ func spawn_supply_parachute_crate(x_pos: float = -9999.0, weapon_id: String = ""
 	var drop_x: float = x_pos
 	if drop_x <= -9000.0:
 		if not map_loader.weapon_spawns.is_empty():
-			var ws: Dictionary = map_loader.weapon_spawns[randi() % map_loader.weapon_spawns.size()]
+			var valid_ws: Array[Dictionary] = []
+			for ws_c: Dictionary in map_loader.weapon_spawns:
+				var cx: float = float(ws_c.get("x", 260.0))
+				var cy: float = float(ws_c.get("y", 180.0))
+				if float(map_loader.call("get_ground_y_below", cx, cy - 10.0, 220.0, true)) < INF:
+					valid_ws.append(ws_c)
+			var pool: Array = valid_ws if not valid_ws.is_empty() else map_loader.weapon_spawns
+			var ws: Dictionary = pool[randi() % pool.size()]
 			drop_x = float(ws.get("x", 260.0))
 		elif not map_loader.player_spawns.is_empty():
 			var ps: Vector2 = map_loader.player_spawns[randi() % map_loader.player_spawns.size()]
@@ -1027,7 +764,10 @@ func spawn_weapon_pickup(
 	var final_ammo: int = ammo if ammo != -999 else int(wdata.get("ammo", 12))
 	var snap_y: float = float(map_loader.call("get_ground_y_below", pos.x, pos.y - 8.0, 48.0, true))
 	var is_settled: bool = (not from_sky_crate) and (snap_y < INF)
-	var final_pos: Vector2 = Vector2(pos.x, snap_y if is_settled else pos.y)
+	var start_y: float = pos.y
+	if not is_settled and snap_y < INF and pos.y >= snap_y - 2.0:
+		start_y = snap_y - 2.0
+	var final_pos: Vector2 = Vector2(pos.x, snap_y if is_settled else start_y)
 
 	# Enforce AS3 WeaponSpawn.as single-occupancy rule: a spawn point can hold at most ONE LinkedWeapon at a time!
 	if spawn_point_idx >= 0:
@@ -1115,7 +855,74 @@ func spawn_dropped_weapon(
 	})
 
 
+func _find_pickup_ladder_shaft(from_pos: Vector2, to_pos: Vector2) -> Rect2:
+	if map_loader == null or not is_instance_valid(map_loader) or absf(to_pos.y - from_pos.y) <= 0.12 or map_loader.get("ladder_rects") == null:
+		return Rect2()
+	for lr_v: Variant in map_loader.get("ladder_rects") as Array:
+		var lr: Rect2 = lr_v as Rect2
+		var in_x: bool = (from_pos.x >= lr.position.x and from_pos.x <= lr.end.x) and (to_pos.x >= lr.position.x and to_pos.x <= lr.end.x)
+		if not in_x:
+			continue
+		var min_y: float = minf(from_pos.y, to_pos.y)
+		var max_y: float = maxf(from_pos.y, to_pos.y)
+		if max_y >= lr.position.y - 14.0 and min_y <= lr.end.y - 4.0:
+			return lr
+	return Rect2()
+
+
+func _has_prop_support_below_pickup(ppos: Vector2) -> bool:
+	for prop: Node2D in props:
+		if not is_instance_valid(prop) or prop.get("is_destroyed") == true or prop.get("has_solid_hitbox") != true:
+			continue
+		if not prop.has_method("get_solid_support_rect"):
+			continue
+		var rect: Rect2 = prop.call("get_solid_support_rect") as Rect2
+		if rect.size.x > 0.0 and ppos.x >= rect.position.x - 1.5 and ppos.x <= rect.end.x + 1.5 and absf(ppos.y - rect.position.y) <= 2.5:
+			return true
+	return false
+
+
+func _pickup_surface_hit(from_pos: Vector2, to_pos: Vector2, include_one_way: bool = true, sweep_elevator_motion: bool = false, allow_ladder_shaft: bool = false) -> Dictionary:
+	var best: Dictionary = {"hit": false}
+	var best_distance: float = INF
+	var shaft: Rect2 = _find_pickup_ladder_shaft(from_pos, to_pos) if allow_ladder_shaft else Rect2()
+	# Sweep the bottom and upper body of the dropped item. Endpoint probing
+	# missed thin ceilings and snapped items upward after entering a shaft side.
+	for offset: Vector2 in [Vector2.ZERO, Vector2(0.0, -4.0)]:
+		var hit: Dictionary = map_loader.call("raycast_solid", from_pos + offset, to_pos + offset, -1, false, false) as Dictionary
+		if bool(hit.get("hit", false)):
+			var point: Vector2 = (hit.get("pos", to_pos + offset) as Vector2) - offset
+			var distance: float = from_pos.distance_to(point)
+			if distance < best_distance:
+				best = {"hit": true, "pos": point, "normal": hit.get("normal", Vector2.UP)}
+				best_distance = distance
+	var one_way: Dictionary = map_loader.call("raycast_one_way", from_pos, to_pos, -1, sweep_elevator_motion) as Dictionary if include_one_way else {}
+	if bool(one_way.get("hit", false)):
+		var point: Vector2 = one_way["pos"]
+		var skip_ow: bool = (shaft.size.x > 0.0 and point.y < shaft.end.y - 6.0 and point.x >= shaft.position.x and point.x <= shaft.end.x)
+		if not skip_ow and from_pos.distance_to(point) < best_distance:
+			best = one_way
+			best_distance = from_pos.distance_to(point)
+	for prop: Node2D in props:
+		if not is_instance_valid(prop) or prop.get("is_destroyed") == true or prop.get("has_solid_hitbox") != true:
+			continue
+		if not prop.has_method("get_solid_support_rect"):
+			continue
+		var rect: Rect2 = prop.call("get_solid_support_rect") as Rect2
+		for offset: Vector2 in [Vector2.ZERO, Vector2(0.0, -4.0)]:
+			var hit: Dictionary = map_loader.call("_segment_vs_rect", from_pos + offset, to_pos + offset, rect) as Dictionary
+			if bool(hit.get("hit", false)):
+				var point: Vector2 = (hit["pos"] as Vector2) - offset
+				if from_pos.distance_to(point) < best_distance:
+					best = {"hit": true, "pos": point, "normal": hit.get("normal", Vector2.UP)}
+					best_distance = from_pos.distance_to(point)
+	return best
+
+
 func _step_pickups(step_24hz: float) -> void:
+	var elevator_serial: int = int(map_loader.get("_elevator_motion_serial")) if map_loader != null and is_instance_valid(map_loader) else -1
+	var new_elevator_motion: bool = elevator_serial != _last_pickup_elevator_motion_serial
+	_last_pickup_elevator_motion_serial = elevator_serial
 	if pickups.is_empty():
 		return
 	var next_pickups: Array[Dictionary] = []
@@ -1123,23 +930,58 @@ func _step_pickups(step_24hz: float) -> void:
 		var pnode: PickupVisualNode = pk.get("node", null) as PickupVisualNode
 		var cd: float = maxf(0.0, float(pk.get("cooldown", 0.0)) - step_24hz)
 		pk["cooldown"] = cd
+		var portal_cd: float = maxf(0.0, float(pk.get("portal_cd", 0.0)) - step_24hz)
+		pk["portal_cd"] = portal_cd
 		var settled: bool = bool(pk.get("settled", true))
 		var ppos: Vector2 = pk.get("pos", Vector2.ZERO) as Vector2
 		var pvel: Vector2 = pk.get("vel", Vector2.ZERO) as Vector2
+		var carry_from: Vector2 = pk.get("_elevator_pre_carry_pos", ppos) as Vector2
+		var was_carried: bool = pk.has("_elevator_pre_carry_pos")
+		pk.erase("_elevator_pre_carry_pos")
+		if settled and was_carried and is_instance_valid(map_loader):
+			# Carry already accounts for the supporting lift. Its t=0 contact
+			# must not mask a solid ceiling/wall crossed by the carried item.
+			var carry_hit: Dictionary = _pickup_surface_hit(carry_from, ppos, false)
+			if bool(carry_hit.get("hit", false)):
+				var carry_normal: Vector2 = carry_hit.get("normal", Vector2.UP) as Vector2
+				ppos = (carry_hit["pos"] as Vector2) + carry_normal * 0.02
+				if carry_normal.y >= -0.45:
+					settled = false
+				pk["pos"] = ppos
+				pk["settled"] = settled
+			carry_from = ppos
 
 		if not settled:
 			pvel.y = minf(9.0, pvel.y + 0.42 * step_24hz)
 			pvel.x *= pow(0.985, step_24hz)
 			var next_pos: Vector2 = ppos + pvel * step_24hz
 			if map_loader != null and is_instance_valid(map_loader):
-				if absf(pvel.x) > 0.01 and map_loader.has_method("is_point_solid"):
-					if bool(map_loader.call("is_point_solid", Vector2(next_pos.x + signf(pvel.x) * 4.0, ppos.y - 4.0))):
-						next_pos.x = ppos.x
-						pvel.x = -pvel.x * 0.6
-				if pvel.y >= 0.0 and map_loader.has_method("get_ground_y_below"):
-					var gy: float = float(map_loader.call("get_ground_y_below", next_pos.x, ppos.y - 4.0, absf(next_pos.y - ppos.y) + 10.0, true))
-					if gy < INF and next_pos.y >= gy:
-						next_pos.y = gy
+				if portal_cd <= 0.0 and map_loader.has_method("try_teleport_ballistic_segment"):
+					var tp_pk: Dictionary = map_loader.call("try_teleport_ballistic_segment", carry_from, next_pos, pvel, 3.0) as Dictionary
+					if bool(tp_pk.get("teleported", false)):
+						pvel = tp_pk.get("vel", pvel) as Vector2
+						var exit_pt: Vector2 = tp_pk.get("exit_origin", next_pos) as Vector2
+						var rem_t: float = float(tp_pk.get("remaining_ratio", 0.5))
+						carry_from = exit_pt
+						ppos = exit_pt
+						next_pos = exit_pt + pvel * (step_24hz * rem_t)
+						pk["pos"] = ppos
+						pk["vel"] = pvel
+						pk["portal_cd"] = 4.0
+				var can_pass_hatch: bool = not bool(pk.get("from_sky_crate", false)) and int(pk.get("spawn_point_idx", -1)) < 0 and absf(pvel.x) <= 0.6
+				var hit: Dictionary = _pickup_surface_hit(carry_from, next_pos, true, new_elevator_motion and not was_carried, can_pass_hatch)
+				if bool(hit.get("hit", false)):
+					var normal: Vector2 = hit.get("normal", Vector2.UP) as Vector2
+					var contact_pos: Vector2 = (hit["pos"] as Vector2) + normal * 0.02
+					var carry_remainder: Vector2 = hit.get("surface_remainder", Vector2.ZERO) as Vector2
+					next_pos = contact_pos + carry_remainder
+					if carry_remainder.length_squared() > 0.000001:
+						var remainder_hit: Dictionary = _pickup_surface_hit(contact_pos, next_pos, false)
+						if bool(remainder_hit.get("hit", false)):
+							var remainder_normal: Vector2 = remainder_hit.get("normal", Vector2.UP) as Vector2
+							next_pos = (remainder_hit["pos"] as Vector2) + remainder_normal * 0.02
+							normal = remainder_normal
+					if normal.y < -0.45 and pvel.y >= 0.0:
 						if absf(pvel.y) >= 1.1:
 							pvel.y = -pvel.y * 0.42
 							pvel.x *= 0.72
@@ -1149,6 +991,8 @@ func _step_pickups(step_24hz: float) -> void:
 						else:
 							pvel = Vector2.ZERO
 							settled = true
+					elif pvel.dot(normal) < 0.0:
+						pvel = pvel.bounce(normal) * 0.6
 			ppos = next_pos
 			pk["pos"] = ppos
 			pk["vel"] = pvel
@@ -1157,7 +1001,7 @@ func _step_pickups(step_24hz: float) -> void:
 			# Check if support under settled pickup disappeared (e.g. shattered glass skylight)
 			if map_loader != null and is_instance_valid(map_loader) and map_loader.has_method("get_ground_y_below"):
 				var gy_check: float = float(map_loader.call("get_ground_y_below", ppos.x, ppos.y - 4.0, 8.0, true))
-				if gy_check == INF:
+				if gy_check == INF and not _has_prop_support_below_pickup(ppos):
 					pk["settled"] = false
 					pk["vel"] = Vector2(0.0, 0.6)
 
@@ -1377,15 +1221,101 @@ func activate_slowmo(duration_frames: float = 120.0, speed_scale: float = 0.5) -
 	game_speed = speed_scale
 
 
+func trigger_ultimate_cutin(fighter: Node2D, sk_def: Dictionary) -> void:
+	if fighter == null or not is_instance_valid(fighter):
+		return
+	var cid: String = str(fighter.get("character_id")).to_lower()
+	var dname: String = str(fighter.get("display_name")).to_upper()
+	var sname: String = str(sk_def.get("name", "ULTIMATE")).to_upper()
+	var r_spec: Dictionary = fighter.get("resource_spec") as Dictionary if typeof(fighter.get("resource_spec")) == TYPE_DICTIONARY else {}
+	var col: Color = Color.from_string(str(r_spec.get("bar_color", "#FFCC22")), Color(1.0, 0.85, 0.25, 1.0))
+	var bpath: String = str(sk_def.get("cutin_banner", "res://assets/sprites/cutins/" + cid + "_cutin.png"))
+	var f_slot: int = int(fighter.get("slot_index")) if fighter.get("slot_index") != null else 0
+	var entry: Dictionary = {
+		"slot_index": f_slot,
+		"char_id": cid,
+		"char_name": dname,
+		"skill_name": sname,
+		"banner_path": bpath,
+		"color": col,
+		"timer": 0.42,
+		"max_timer": 0.42,
+	}
+	active_cutin = entry.duplicate()
+	# EC-32: Support Dual Clash Split Cut-In when 2 fighters cast Ultimate simultaneously!
+	for i: int in range(active_cutins.size() - 1, -1, -1):
+		if int(active_cutins[i].get("slot_index", -1)) == f_slot:
+			active_cutins.remove_at(i)
+	if active_cutins.size() >= 2:
+		active_cutins.pop_front()
+	active_cutins.append(entry)
+	# Brief dramatic anime cut-in time-dilation (0.35s)
+	slowmo_timer = maxf(slowmo_timer, 9.0)
+	game_speed = minf(game_speed, 0.45)
+	MapLoaderScript.play_sfx("explosion")
+
+
+func spawn_shadow_clone(owner_fighter: Node2D) -> Node2D:
+	if owner_fighter == null or not is_instance_valid(owner_fighter) or bool(owner_fighter.get("is_dead")):
+		return null
+	# EC-12: Cap active Shadow Clones per Naruto at 2; despawn oldest if exceeded
+	var active_clones: Array[Node2D] = []
+	for f: Node2D in fighters:
+		if is_instance_valid(f) and bool(f.get("is_summoned_clone")) and f.get("summon_owner") == owner_fighter and not bool(f.get("is_dead")):
+			active_clones.append(f)
+	while active_clones.size() >= 2:
+		var oldest: Node2D = active_clones.pop_front()
+		if is_instance_valid(oldest):
+			fighters.erase(oldest)
+			oldest.queue_free()
+
+	var f_dir: int = int(owner_fighter.get("facing")) if owner_fighter.get("facing") != null else 1
+	var raw_pos: Vector2 = owner_fighter.global_position + Vector2(float(f_dir) * 20.0, 0.0)
+	var spawn_pos: Vector2 = owner_fighter.call("resolve_safe_teleport_position", raw_pos) as Vector2 if owner_fighter.has_method("resolve_safe_teleport_position") else raw_pos
+	var o_team: int = int(owner_fighter.get("team_id")) if owner_fighter.get("team_id") != null else 0
+	if o_team == 0:
+		o_team = 10 + int(owner_fighter.get("slot_index"))
+		owner_fighter.set("team_id", o_team)
+
+	var clone_node: Node2D = _spawn_fighter_instance(fighters.size(), str(owner_fighter.get("character_id")), spawn_pos, true, o_team, 3)
+	clone_node.name = "ShadowClone_" + str(clone_node.get_instance_id())
+	clone_node.set("is_summoned_clone", true)
+	clone_node.set("summon_owner", owner_fighter)
+	clone_node.set("summon_lifetime_sec", 4.0)
+	clone_node.set("max_hp", 15.0)
+	clone_node.set("hp", 15.0)
+	clone_node.set("inventory", {1: "FISTS", 2: "", 3: "", 4: "", 5: ""})
+	clone_node.set("inventory_ammo", {1: -1, 2: 0, 3: 0, 4: 0, 5: 0})
+	return clone_node
+
+
 func _physics_process(delta: float) -> void:
 	_handle_match_hotkeys()
+	if is_paused:
+		return
 	var step_24hz: float = delta * FLASH_FPS * game_speed
 	step_match(step_24hz)
 
 
 func step_match(step_24hz: float) -> void:
+	if is_paused:
+		return
 	# 1. Update round banner & slow-motion timers
 	var raw_step: float = step_24hz / maxf(0.1, game_speed)
+	if not active_cutin.is_empty():
+		var ct: float = float(active_cutin.get("timer", 0.0)) - (raw_step / 24.0)
+		if ct <= 0.0:
+			active_cutin.clear()
+		else:
+			active_cutin["timer"] = ct
+	if not active_cutins.is_empty():
+		var next_cis: Array[Dictionary] = []
+		for ci_d: Dictionary in active_cutins:
+			var rem_ci: float = float(ci_d.get("timer", 0.0)) - (raw_step / 24.0)
+			if rem_ci > 0.0:
+				ci_d["timer"] = rem_ci
+				next_cis.append(ci_d)
+		active_cutins = next_cis
 	if overhead_label_timer > 0.0:
 		overhead_label_timer = maxf(0.0, overhead_label_timer - raw_step)
 
@@ -1423,8 +1353,14 @@ func step_match(step_24hz: float) -> void:
 		if prop_var is Node2D and is_instance_valid(prop_var) and (prop_var as Node2D).has_method("step_prop"):
 			(prop_var as Node2D).call("step_prop", step_24hz)
 
-	# 4. Step Fighters (P1, P2, and AI Bots)
+	# 4. Step Fighters (P1, P2, AI Bots, and Summoned Clones)
+	var valid_fighters: Array[Node2D] = []
 	for f_var: Variant in fighters:
+		if is_instance_valid(f_var) and f_var is Node2D:
+			valid_fighters.append(f_var as Node2D)
+	fighters = valid_fighters
+
+	for f_var: Variant in fighters.duplicate():
 		if not (f_var is Node2D) or not is_instance_valid(f_var):
 			continue
 		var f: Node2D = f_var as Node2D
@@ -1451,13 +1387,16 @@ func step_match(step_24hz: float) -> void:
 
 		if f.has_method("step_fighter"):
 			f.call("step_fighter", step_24hz, input_dict)
+		if not is_instance_valid(f):
+			fighters.erase(f)
+			continue
 
-		if not bool(f.get("is_dead")):
+		if not bool(f.get("is_dead")) and not bool(f.get("is_summoned_clone")):
 			var bot_manual_swap: bool = bool(f.get("is_bot")) and bool(input_dict.get("down", false)) and bool(input_dict.get("attack", false))
 			update_fighter_weapon_grab(f, bot_manual_swap)
 
-		# Count survival kills when a bot dies
-		if game_mode == "survival" and not is_dead_before and bool(f.get("is_dead")) and bool(f.get("is_bot")):
+		# Count survival kills when a non-clone bot dies
+		if game_mode == "survival" and not is_dead_before and bool(f.get("is_dead")) and bool(f.get("is_bot")) and not bool(f.get("is_summoned_clone")):
 			survival_kills += 1
 
 	# 5. Step Projectiles & Fire Hazards
@@ -1476,6 +1415,8 @@ func step_match(step_24hz: float) -> void:
 				for ws_i: int in range(map_loader.weapon_spawns.size()):
 					var ws_cand: Dictionary = map_loader.weapon_spawns[ws_i]
 					var ws_pos: Vector2 = Vector2(float(ws_cand.get("x", 260.0)), float(ws_cand.get("y", 180.0)))
+					if float(map_loader.call("get_ground_y_below", ws_pos.x, ws_pos.y - 10.0, 220.0, true)) >= INF:
+						continue
 					var occupied: bool = false
 					for pk_ex: Dictionary in pickups:
 						if int(pk_ex.get("spawn_point_idx", -1)) == ws_i:
@@ -1491,7 +1432,7 @@ func step_match(step_24hz: float) -> void:
 					var chosen_idx: int = free_indices[randi() % free_indices.size()]
 					var ws: Dictionary = map_loader.weapon_spawns[chosen_idx]
 					var wid: String = _pick_weapon_from_mask(ws.get("mask", []) as Array, randi())
-					spawn_weapon_pickup(wid, Vector2(float(ws.get("x", 260.0)), float(ws.get("y", 180.0))), -999, true, chosen_idx)
+					spawn_weapon_pickup(wid, Vector2(float(ws.get("x", 260.0)), float(ws.get("y", 180.0))), -999, false, chosen_idx)
 
 		if game_mode == "survival":
 			_step_survival_spawner(step_24hz)
@@ -1500,9 +1441,13 @@ func step_match(step_24hz: float) -> void:
 	if round_state != "ROUND_OVER":
 		_evaluate_round_completion()
 
-	# 8. Step Camera & HUD
+	# 8. Step Camera (excluding temporary summoned clones per EC-15) & HUD
 	if dynamic_camera != null and is_instance_valid(dynamic_camera):
-		dynamic_camera.step_camera(step_24hz, fighters)
+		var cam_fighters: Array[Node2D] = []
+		for cf: Node2D in fighters:
+			if is_instance_valid(cf) and not bool(cf.get("is_summoned_clone")):
+				cam_fighters.append(cf)
+		dynamic_camera.step_camera(step_24hz, cam_fighters)
 	if hud_controller != null and is_instance_valid(hud_controller):
 		hud_controller.update_hud()
 
@@ -1510,7 +1455,7 @@ func step_match(step_24hz: float) -> void:
 func _step_survival_spawner(step_24hz: float) -> void:
 	var alive_bots: int = 0
 	for f: Node2D in fighters:
-		if is_instance_valid(f) and bool(f.get("is_bot")) and not bool(f.get("is_dead")):
+		if is_instance_valid(f) and bool(f.get("is_bot")) and not bool(f.get("is_summoned_clone")) and not bool(f.get("is_dead")):
 			alive_bots += 1
 
 	_survival_spawn_timer -= step_24hz
@@ -1546,7 +1491,7 @@ func _evaluate_round_completion() -> void:
 	var human_alive: bool = false
 
 	for f: Node2D in fighters:
-		if is_instance_valid(f) and not bool(f.get("is_dead")):
+		if is_instance_valid(f) and not bool(f.get("is_dead")) and not bool(f.get("is_summoned_clone")):
 			alive_fighters.append(f)
 			var tid: int = int(f.get("team_id")) if f.get("team_id") != null else 0
 			if tid == 0:
@@ -1604,9 +1549,25 @@ func _trigger_round_over(result_banner: String, win_slot: int, win_team: int) ->
 
 
 func _handle_match_hotkeys() -> void:
-	if Input.is_key_pressed(KEY_ESCAPE):
-		game_speed = 1.0
-		request_return_to_menu.emit()
+	var cancel_down: bool = Input.is_key_pressed(KEY_ESCAPE) or Input.is_action_pressed("ui_cancel")
+	if cancel_down and not _cancel_was_down:
+		if round_state == "ROUND_OVER" or Input.is_key_pressed(KEY_SHIFT):
+			is_paused = false
+			game_speed = 1.0
+			request_return_to_menu.emit()
+			_cancel_was_down = true
+			return
+		is_paused = not is_paused
+		if hud_controller != null:
+			hud_controller.call("update_hud")
+		if is_paused:
+			for fighter: Node2D in fighters:
+				if is_instance_valid(fighter):
+					fighter.call("_notification", NOTIFICATION_PAUSED)
+		_cancel_was_down = cancel_down
+	if not cancel_down:
+		_cancel_was_down = false
+	if is_paused:
 		return
 
 	if round_state == "ROUND_OVER":

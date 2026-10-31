@@ -41,6 +41,7 @@ var slomo_rings: Array[Dictionary] = []
 
 var total_bullets_spawned: int = 0
 var total_throwables_spawned: int = 0
+var _last_elevator_motion_serial: int = -1
 
 var _textures_loaded: bool = false
 var _tex_rocket: Texture2D = null
@@ -314,12 +315,38 @@ func spawn_throwable(
 	if key == "C4" or key == "MINE":
 		vel = Vector2(cos(rad) * 5.0, sin(rad) * 5.0 - 1.8)
 
+	# When throwing upward near the bottom/body of a ladder shaft, ensure vertical impulse can reach the upper floor opening
+	var ml_sp: Object = _get_map_loader()
+	if ml_sp != null and sin(rad) < -0.5 and ml_sp.get("ladder_rects") != null:
+		for lr_v: Variant in ml_sp.get("ladder_rects") as Array:
+			var lr: Rect2 = lr_v as Rect2
+			var cx: float = lr.position.x + lr.size.x * 0.5
+			if absf(start_pos.x - cx) <= 28.0 and start_pos.y >= lr.position.y + 12.0 and start_pos.y <= lr.end.y + 28.0:
+				var target_top_y: float = lr.position.y - 18.0
+				var needed_rise: float = maxf(0.0, start_pos.y - target_top_y)
+				var min_up_vy: float = -sqrt(2.0 * THROWABLE_GRAVITY_24HZ * needed_rise) - 0.85
+				if vel.y > min_up_vy:
+					vel.y = min_up_vy
+				var exit_vx: float = cos(rad) * (3.2 if (key != "C4" and key != "MINE") else 2.4)
+				if absf(exit_vx) < 1.35:
+					exit_vx = (1.6 if cos(rad) >= 0.0 else -1.6)
+				var dx_to_shaft: float = cx - start_pos.x
+				var ticks_to_top: float = maxf(6.0, absf(vel.y) / THROWABLE_GRAVITY_24HZ)
+				vel.x = clampf(dx_to_shaft / ticks_to_top + exit_vx * 0.35, -2.8, 2.8)
+				break
+
+	var init_exit_vx: float = cos(rad) * (3.2 if (key != "C4" and key != "MINE") else 2.4)
+	if absf(init_exit_vx) < 1.2:
+		init_exit_vx = 1.5 if cos(rad) >= 0.0 else -1.5
+
 	throwables.append({
 		"owner": owner_fighter,
 		"weapon_id": key,
 		"pos": start_pos,
 		"prev_pos": start_pos,
 		"vel": vel,
+		"shaft_exit_vx": init_exit_vx,
+		"portal_cd": 0.0,
 		"rot": 0.0,
 		"rot_vel": 0.35 if vel.x >= 0.0 else -0.35,
 		"fuse_frames": clampf(remaining_fuse_frames, 1.0, 600.0),
@@ -546,42 +573,42 @@ func _step_bullets(step_24hz: float) -> void:
 		if ml != null and ml.has_method("check_and_break_glass_segment"):
 			ml.call("check_and_break_glass_segment", prev_pos, next_pos, vel_vec)
 
-		# 2. Portals: teleport bullet if entering portal
-		if ml != null:
-			var portals_var: Variant = ml.get("portals")
-			if typeof(portals_var) == TYPE_ARRAY:
-				for p_dict_v: Variant in portals_var as Array:
-					if typeof(p_dict_v) == TYPE_DICTIONARY:
-						var p_dict: Dictionary = p_dict_v as Dictionary
-						var er_v: Variant = p_dict.get("entry_rect")
-						var xr_v: Variant = p_dict.get("exit_rect")
-						var entry_r: Rect2 = Rect2()
-						var exit_r: Rect2 = Rect2()
-						if typeof(er_v) == TYPE_RECT2:
-							entry_r = er_v as Rect2
-						elif typeof(er_v) == TYPE_ARRAY and (er_v as Array).size() == 4:
-							var ea: Array = er_v as Array
-							entry_r = Rect2(float(ea[0]), float(ea[1]), float(ea[2]), float(ea[3]))
-						if typeof(xr_v) == TYPE_RECT2:
-							exit_r = xr_v as Rect2
-						elif typeof(xr_v) == TYPE_ARRAY and (xr_v as Array).size() == 4:
-							var xa: Array = xr_v as Array
-							exit_r = Rect2(float(xa[0]), float(xa[1]), float(xa[2]), float(xa[3]))
-						if entry_r.size.x > 0.0 and exit_r.size.x > 0.0:
-							if entry_r.has_point(next_pos) and not entry_r.has_point(prev_pos):
-								var dy: float = next_pos.y - entry_r.position.y
-								next_pos = Vector2(exit_r.position.x + exit_r.size.x * 0.5, exit_r.position.y + dy)
-								prev_pos = next_pos
-								break
+		# 2. Portals: teleport bullet if entering portal (top <-> bottom, flipping dir.x when flip_x == true)
+		if ml != null and not bool(b.get("teleported", false)) and ml.has_method("try_teleport_ballistic_segment"):
+			var tp_b: Dictionary = ml.call("try_teleport_ballistic_segment", prev_pos, next_pos, dir, 2.0) as Dictionary
+			if bool(tp_b.get("teleported", false)):
+				dir = (tp_b.get("vel", dir) as Vector2).normalized()
+				b["dir"] = dir
+				if bool(tp_b.get("flip_x", false)):
+					var v_b: Vector2 = b.get("vel", dir * spd) as Vector2
+					v_b.x = -v_b.x
+					b["vel"] = v_b
+					b["angle_deg"] = rad_to_deg(atan2(dir.y, dir.x))
+				prev_pos = tp_b.get("exit_origin", next_pos) as Vector2
+				var rem_step: float = maxf(2.0, step_dist * float(tp_b.get("remaining_ratio", 0.5)))
+				next_pos = prev_pos + dir * rem_step
+				b["pos"] = prev_pos
+				b["teleported"] = true
 
 		# 3. Solid wall/floor raycast (static map geometry only; props are checked in step 4)
 		var hit_wall: bool = false
 		var wall_hit_pos: Vector2 = next_pos
 		if ml != null and ml.has_method("raycast_solid"):
-			var ray_res: Dictionary = ml.call("raycast_solid", prev_pos, next_pos, ignore_cover_id, false) as Dictionary
+			# AS3 ordinary bullets penetrate CLOUD supports. Tilted CLOUD boxes
+			# must behave like the flat ones instead of becoming bullet walls.
+			var ray_res: Dictionary = ml.call("raycast_solid", prev_pos, next_pos, ignore_cover_id, false, false) as Dictionary
 			if bool(ray_res.get("hit", false)):
-				hit_wall = true
-				wall_hit_pos = ray_res.get("pos", next_pos) as Vector2
+				var cand_wall_pos: Vector2 = ray_res.get("pos", next_pos) as Vector2
+				var ignore_ladder_lip: bool = false
+				if absf(dir.y) > 0.15 and ml.get("ladder_rects") != null:
+					for lr_v: Variant in ml.get("ladder_rects") as Array:
+						var lr: Rect2 = lr_v as Rect2
+						if cand_wall_pos.x >= lr.position.x - 4.0 and cand_wall_pos.x <= lr.end.x + 4.0 and cand_wall_pos.y >= lr.position.y - 6.0 and cand_wall_pos.y <= lr.end.y - 6.0:
+							ignore_ladder_lip = true
+							break
+				if not ignore_ladder_lip:
+					hit_wall = true
+					wall_hit_pos = cand_wall_pos
 
 		# 4. Props collision & Overkill Penetration (ProjectilesUpdater.as:601-621 + Damage Attenuation)
 		var owner_f: Node2D = b.get("owner", null) as Node2D
@@ -1062,23 +1089,53 @@ func _ray_vs_expanded_rect(from_pt: Vector2, to_pt: Vector2, exp_rect: Rect2) ->
 	}
 
 
+func _find_active_ladder_shaft(ml: Object, from_pt: Vector2, to_pt: Vector2, vel: Vector2) -> Rect2:
+	if ml == null or absf(vel.y) <= 0.35 or ml.get("ladder_rects") == null:
+		return Rect2()
+	for lr_v: Variant in ml.get("ladder_rects") as Array:
+		var lr: Rect2 = lr_v as Rect2
+		var in_x: bool = (from_pt.x >= lr.position.x - 4.0 and from_pt.x <= lr.end.x + 4.0) or (to_pt.x >= lr.position.x - 4.0 and to_pt.x <= lr.end.x + 4.0)
+		if not in_x:
+			continue
+		var min_y: float = minf(from_pt.y, to_pt.y)
+		var max_y: float = maxf(from_pt.y, to_pt.y)
+		if max_y >= lr.position.y - 14.0 and min_y <= lr.end.y - 4.0:
+			return lr
+	return Rect2()
+
+
 func _step_throwables(step_24hz: float) -> void:
 	var ml: Object = _get_map_loader()
 	var fhs: Object = _get_fire_hazard_system()
 	var fighters: Array = _get_fighters()
 	var props: Array = _get_props()
+	var motion_serial: int = int(ml.get("_elevator_motion_serial")) if ml != null else -1
+	var sweep_elevator_motion: bool = motion_serial != _last_elevator_motion_serial
+	_last_elevator_motion_serial = motion_serial
 
 	var next_throwables: Array[Dictionary] = []
 	for th: Dictionary in throwables:
 		var wid: String = str(th.get("weapon_id", "GRENADE")).to_upper()
 		var pos: Vector2 = th.get("pos", Vector2.ZERO) as Vector2
+		var sweep_from: Vector2 = th.get("_elevator_pre_carry_pos", pos) as Vector2
+		var carried_elevator: int = int(th.get("_elevator_carried_index", -1)) if th.has("_elevator_pre_carry_pos") else -1
+		th.erase("_elevator_pre_carry_pos")
+		th.erase("_elevator_carried_index")
 		var vel: Vector2 = th.get("vel", Vector2.ZERO) as Vector2
 		var fuse: float = float(th.get("fuse_frames", 72.0)) - step_24hz
 		var age: float = float(th.get("age", 0.0)) + step_24hz
 		var owner_f: Node2D = th.get("owner", null) as Node2D
 		var ignore_cid: int = int(th.get("ignore_cover_id", -1))
 
-		vel.y += THROWABLE_GRAVITY_24HZ * step_24hz
+		if carried_elevator >= 0:
+			# MapLoader already supplied this tick's lift displacement. A resting
+			# grenade must not accumulate a second vertical motion into its lift.
+			vel.y = 0.0
+			th["settled"] = absf(vel.x) < 0.05
+		else:
+			vel.y += THROWABLE_GRAVITY_24HZ * step_24hz
+			if wid == "GRENADE":
+				th["settled"] = false
 		var next_pos: Vector2 = pos + vel * step_24hz
 
 		# Molotov in flight drops tiny fire sparks / smoke along its trajectory
@@ -1091,44 +1148,83 @@ func _step_throwables(step_24hz: float) -> void:
 			th["spark_accum"] = sp_acc
 
 		if ml != null and ml.has_method("check_and_break_glass_segment"):
-			ml.call("check_and_break_glass_segment", pos, next_pos, vel)
+			ml.call("check_and_break_glass_segment", sweep_from, next_pos, vel)
+
+		# 0. Portal Doorways: allow thrown bombs (GRENADE, MOLOTOV, C4, MINE) to traverse portals (top <-> bottom)
+		var portal_cd: float = maxf(0.0, float(th.get("portal_cd", 0.0)) - step_24hz)
+		th["portal_cd"] = portal_cd
+		if ml != null and portal_cd <= 0.0 and not bool(th.get("settled", false)) and ml.has_method("try_teleport_ballistic_segment"):
+			var tp_th: Dictionary = ml.call("try_teleport_ballistic_segment", sweep_from, next_pos, vel, 2.5) as Dictionary
+			if bool(tp_th.get("teleported", false)):
+				vel = tp_th.get("vel", vel) as Vector2
+				if bool(tp_th.get("flip_x", false)):
+					th["rot_vel"] = -float(th.get("rot_vel", 0.25))
+					th["shaft_exit_vx"] = -float(th.get("shaft_exit_vx", vel.x))
+				var exit_pt: Vector2 = tp_th.get("exit_origin", next_pos) as Vector2
+				var rem_t: float = float(tp_th.get("remaining_ratio", 0.5))
+				sweep_from = exit_pt
+				pos = exit_pt
+				next_pos = exit_pt + vel * (step_24hz * rem_t)
+				th["pos"] = pos
+				th["vel"] = vel
+				th["portal_cd"] = 4.0
+
+		# 0b. Ladder Hatch / Shaft Channeling (top -> bottom and bottom -> top)
+		var active_shaft: Rect2 = _find_active_ladder_shaft(ml, sweep_from, next_pos, vel)
+		if active_shaft.size.x > 0.0:
+			if absf(vel.x) > 0.05:
+				if not th.has("shaft_exit_vx") or absf(float(th.get("shaft_exit_vx", 0.0))) < 0.2:
+					th["shaft_exit_vx"] = signf(vel.x) * maxf(1.5, absf(vel.x))
+				if vel.y > 0.35 or (vel.y < -0.35 and next_pos.y > active_shaft.position.y - 2.0):
+					next_pos.x = clampf(next_pos.x, active_shaft.position.x + 1.5, active_shaft.end.x - 1.5)
+					vel.x *= 0.65
+			if vel.y < 0.0 and next_pos.y <= active_shaft.position.y - 2.0 and not bool(th.get("_shaft_top_cleared", false)):
+				th["_shaft_top_cleared"] = true
+				vel.x = float(th.get("shaft_exit_vx", 1.6))
 
 		var hit_surface: bool = false
 		var surface_pos: Vector2 = next_pos
 		var surface_normal: Vector2 = Vector2.UP
 		var best_hit_dist: float = INF
 		var hit_prop: Node2D = null
+		var surface_remainder: Vector2 = Vector2.ZERO
+		var moving_one_way: bool = false
+		var blocked_carry: bool = false
 
 		# 1. Static world geometry raycast (walls, floors, ceilings, slopes)
 		if ml != null and ml.has_method("raycast_solid"):
-			var r_hit: Dictionary = ml.call("raycast_solid", pos, next_pos, -1, false) as Dictionary
+			var r_hit: Dictionary = ml.call("raycast_solid", sweep_from, next_pos, -1, false, false) as Dictionary
 			if bool(r_hit.get("hit", false)):
-				hit_surface = true
-				surface_pos = r_hit.get("pos", next_pos) as Vector2
-				surface_normal = r_hit.get("normal", Vector2.UP) as Vector2
-				best_hit_dist = pos.distance_to(surface_pos)
-		elif next_pos.y >= default_floor_y:
+				var cand_spos: Vector2 = r_hit.get("pos", next_pos) as Vector2
+				var skip_shaft_wall: bool = (active_shaft.size.x > 0.0 and cand_spos.y < active_shaft.end.y - 6.0 and cand_spos.x >= active_shaft.position.x - 4.5 and cand_spos.x <= active_shaft.end.x + 4.5)
+				if not skip_shaft_wall:
+					hit_surface = true
+					surface_pos = cand_spos
+					surface_normal = r_hit.get("normal", Vector2.UP) as Vector2
+					best_hit_dist = sweep_from.distance_to(surface_pos)
+		elif sweep_from.y <= default_floor_y and next_pos.y >= default_floor_y and next_pos.y > sweep_from.y:
 			hit_surface = true
-			surface_pos = Vector2(next_pos.x, default_floor_y)
+			var floor_t: float = (default_floor_y - sweep_from.y) / (next_pos.y - sweep_from.y)
+			surface_pos = sweep_from.lerp(next_pos, floor_t)
 			surface_normal = Vector2.UP
-			best_hit_dist = pos.distance_to(surface_pos)
+			best_hit_dist = sweep_from.distance_to(surface_pos)
 
-		# 2. One-way cloud platforms when falling downward
-		if vel.y > 0.0 and ml != null:
-			var c_rects: Variant = ml.get("cloud_rects")
-			if typeof(c_rects) == TYPE_ARRAY:
-				for cr_v: Variant in c_rects as Array:
-					var cr: Rect2 = cr_v as Rect2
-					if pos.y <= cr.position.y + 2.5 and next_pos.y >= cr.position.y and next_pos.x >= cr.position.x and next_pos.x <= cr.end.x:
-						var c_pos: Vector2 = Vector2(next_pos.x, cr.position.y)
-						var c_dist: float = pos.distance_to(c_pos)
-						if c_dist < best_hit_dist:
-							hit_surface = true
-							surface_pos = c_pos
-							surface_normal = Vector2.UP
-							best_hit_dist = c_dist
-							hit_prop = null
-						break
+		# 2. Sweep the top surfaces of flat/tilted CLOUD platforms and lifts.
+		# Ladder rectangles are sensors and never participate in these queries.
+		if ml != null and ml.has_method("raycast_one_way"):
+			var c_hit: Dictionary = ml.call("raycast_one_way", sweep_from, next_pos, carried_elevator, sweep_elevator_motion) as Dictionary
+			if bool(c_hit.get("hit", false)):
+				var c_pos: Vector2 = c_hit.get("pos", next_pos) as Vector2
+				var skip_shaft_cloud: bool = (active_shaft.size.x > 0.0 and c_pos.y < active_shaft.end.y - 6.0 and c_pos.x >= active_shaft.position.x - 4.5 and c_pos.x <= active_shaft.end.x + 4.5)
+				var c_dist: float = sweep_from.distance_to(c_pos)
+				if not skip_shaft_cloud and c_dist < best_hit_dist:
+					hit_surface = true
+					surface_pos = c_pos
+					surface_normal = c_hit.get("normal", Vector2.UP) as Vector2
+					best_hit_dist = c_dist
+					hit_prop = null
+					surface_remainder = c_hit.get("surface_remainder", Vector2.ZERO) as Vector2
+					moving_one_way = bool(c_hit.get("moving_one_way", false))
 
 		# 3. Solid interactive props (AS3 MapPremadeItems.as:595,626 & b2FilterData.as:21-22: maskBits=65535 -> collides with all solid props!)
 		for p_var: Variant in props:
@@ -1146,16 +1242,32 @@ func _step_throwables(step_24hz: float) -> void:
 				continue
 			# Expand prop hitbox by 1.8px to account for the 5x5px octagon body of GRENADE_THROWN / MOLOTOV_THROWN
 			var exp_rect: Rect2 = p_rect.grow(1.8)
-			var p_hit: Dictionary = _ray_vs_expanded_rect(pos, next_pos, exp_rect)
+			var p_hit: Dictionary = _ray_vs_expanded_rect(sweep_from, next_pos, exp_rect)
 			if bool(p_hit.get("hit", false)):
 				var cand_pos: Vector2 = p_hit.get("pos", next_pos) as Vector2
-				var cand_dist: float = pos.distance_to(cand_pos)
+				var cand_dist: float = sweep_from.distance_to(cand_pos)
 				if cand_dist < best_hit_dist:
 					hit_surface = true
 					surface_pos = cand_pos
 					surface_normal = p_hit.get("normal", Vector2.UP) as Vector2
 					best_hit_dist = cand_dist
 					hit_prop = prop
+					surface_remainder = Vector2.ZERO
+					moving_one_way = false
+
+		# A moving lift can continue carrying an impact point after the first
+		# contact. Sweep that remainder as well, so it cannot pass a low ceiling
+		# or solid prop that lies beyond the first contact along this tick.
+		if hit_surface and wid != "MOLOTOV" and surface_remainder.length_squared() > 0.000001:
+			var carried_start: Vector2 = surface_pos + surface_normal * 0.5
+			var blocker: Dictionary = _throwable_carry_blocker(carried_start, carried_start + surface_remainder, ml, props, ignore_cid)
+			if bool(blocker.get("hit", false)):
+				surface_pos = blocker["pos"] as Vector2
+				surface_normal = blocker.get("normal", Vector2.UP) as Vector2
+				hit_prop = blocker.get("prop", null) as Node2D
+				surface_remainder = Vector2.ZERO
+				moving_one_way = false
+				blocked_carry = true
 
 		# Check direct contact with enemy fighters for MOLOTOV or proximity MINE
 		var touched_fighter: bool = false
@@ -1188,9 +1300,9 @@ func _step_throwables(step_24hz: float) -> void:
 					surface_normal = Vector2.UP
 				else:
 					surface_normal = surface_normal.normalized()
-				if surface_normal.dot(vel) > 0.0 and vel.length_squared() > 0.04:
+				if carried_elevator < 0 and not moving_one_way and not blocked_carry and surface_normal.dot(vel) > 0.0 and vel.length_squared() > 0.04:
 					surface_normal = -surface_normal
-				next_pos = surface_pos + surface_normal * 0.5
+				next_pos = surface_pos + surface_remainder + surface_normal * 0.5
 
 				# Transfer physical impact impulse to movable dynamic props when hit by a fast-moving grenade (b2ContactListener.as:50-114)
 				var prop_vel: Vector2 = Vector2.ZERO
@@ -1266,7 +1378,7 @@ func _step_throwables(step_24hz: float) -> void:
 					fhs.call("trigger_explosion", next_pos, 33.0, 20.0, 5.0, owner_f)
 				continue
 
-		th["prev_pos"] = pos
+		th["prev_pos"] = sweep_from
 		th["pos"] = next_pos
 		th["vel"] = vel
 		th["fuse_frames"] = fuse
@@ -1275,6 +1387,33 @@ func _step_throwables(step_24hz: float) -> void:
 		next_throwables.append(th)
 
 	throwables = next_throwables
+
+
+func _throwable_carry_blocker(from_pos: Vector2, to_pos: Vector2, ml: Object, props: Array, ignore_cover_id: int) -> Dictionary:
+	var best: Dictionary = {"hit": false}
+	var best_distance: float = INF
+	if ml != null and ml.has_method("raycast_solid"):
+		best = ml.call("raycast_solid", from_pos, to_pos, -1, false, false) as Dictionary
+		if bool(best.get("hit", false)):
+			best_distance = from_pos.distance_to(best["pos"] as Vector2)
+	for value: Variant in props:
+		if not is_instance_valid(value):
+			continue
+		var prop: Node2D = value as Node2D
+		if prop.get("is_destroyed") == true or prop.get("is_hanging_holder") == true or prop.get("has_solid_hitbox") != true:
+			continue
+		var prop_id: int = int(prop.get("prop_id")) if prop.get("prop_id") != null else prop.get_instance_id()
+		if ignore_cover_id != -1 and (prop_id == ignore_cover_id or prop.get_instance_id() == ignore_cover_id):
+			continue
+		var rect: Rect2 = prop.call("get_solid_support_rect") as Rect2 if prop.has_method("get_solid_support_rect") else Rect2()
+		if rect.size.x <= 0.0 or rect.size.y <= 0.0:
+			continue
+		var hit: Dictionary = _ray_vs_expanded_rect(from_pos, to_pos, rect.grow(1.8))
+		if bool(hit.get("hit", false)) and from_pos.distance_to(hit["pos"] as Vector2) < best_distance:
+			best = hit
+			best["prop"] = prop
+			best_distance = from_pos.distance_to(hit["pos"] as Vector2)
+	return best
 
 
 func _segment_rect_entry_t(p1: Vector2, p2: Vector2, rect: Rect2) -> float:

@@ -7,10 +7,20 @@ extends RefCounted
 
 const CUSTOM_FIGHTERS_DIR: String = "res://data/custom_fighters"
 const SHINOBI_JSON_PATH: String = "res://data/custom_fighters/hero_shinobi_mugen.json"
+const POWERED_HERO_IDS: Array[String] = [
+	"solaria", "atlas", "shinobi", "tideweaver",
+	"goku", "luffy", "naruto", "saitama"
+]
 
 var char_id: String = ""
 var display_name: String = ""
+var short_name: String = ""
+var subtitle: String = ""
+var roster_category: String = "ORIGINAL_POWERED"
+var is_powered_fighter: bool = true
 var sheet_path: String = ""
+var portrait_path: String = ""
+var cutin_path: String = ""
 var hp_mult: float = 1.0
 var speed_mult: float = 1.0
 var use_sf_split_rig_for_guns: bool = true
@@ -19,7 +29,43 @@ var mugen_data: Dictionary = {}
 var mugen_states: Dictionary = {}
 var cancel_table: Dictionary = {}
 var special_moves: Dictionary = {}
+var resource_spec: Dictionary = {}
+var skill_kit: Dictionary = {}
 var default_clsn2: Array[Rect2] = [Rect2(-6.0, -18.0, 12.0, 18.0)]
+
+static var _json_cache: Dictionary = {}
+static var _integrated_reg_ids: Dictionary = {}
+
+
+static func _normalize_resource_and_skills(rspec: Dictionary, skit: Dictionary) -> void:
+	var max_v: float = maxf(1.0, float(rspec.get("max_value", rspec.get("max", 100.0))))
+	var start_v: float = clampf(float(rspec.get("start_value", rspec.get("start", 50.0))), 0.0, max_v)
+	var pips_max: int = clampi(int(rspec.get("secondary_pips_max", rspec.get("secondary_pips", 0))), 0, 12)
+	rspec["max_value"] = max_v
+	rspec["max"] = max_v
+	rspec["start_value"] = start_v
+	rspec["start"] = start_v
+	rspec["secondary_pips_max"] = pips_max
+	rspec["secondary_pips"] = pips_max
+	rspec["segments"] = clampi(int(rspec.get("segments", 4)), 1, 10)
+	rspec["label"] = str(rspec.get("label", rspec.get("display_label", "ENERGY")))
+	rspec["bar_color"] = str(rspec.get("bar_color", rspec.get("bar_color_primary", "#FFCC22")))
+	rspec["on_hit_gain"] = float(rspec.get("on_hit_gain", rspec.get("on_hit_melee_gain", 0.0)))
+	var arch: String = str(rspec.get("archetype", rspec.get("type", "ENERGY"))).to_upper()
+	if "RUMBLE" in arch or "HEAT_OVERDRIVE" in arch:
+		rspec["type"] = "HEAT_RUMBLE"
+	elif "GEAR" in arch or "STEAM" in arch:
+		rspec["type"] = "GEAR_STEAM"
+	elif "SERIOUS" in arch or "ONEPUNCH" in arch:
+		rspec["type"] = "SERIOUS_ONEPUNCH"
+	else:
+		rspec["type"] = arch
+
+	for sk_k: Variant in skit.keys():
+		if typeof(skit[sk_k]) == TYPE_DICTIONARY:
+			var sd: Dictionary = skit[sk_k] as Dictionary
+			sd["cost"] = float(sd.get("cost", sd.get("resource_cost", 0.0)))
+			sd["gain"] = float(sd.get("gain", sd.get("resource_gain", 0.0)))
 
 
 static func ensure_registry_integration(registry: Object = null) -> void:
@@ -29,6 +75,9 @@ static func ensure_registry_integration(registry: Object = null) -> void:
 		if tree != null and tree.root != null:
 			reg = tree.root.get_node_or_null("SFDataRegistry")
 	if reg == null or not reg.has_method("ensure_loaded"):
+		return
+	var reg_iid: int = reg.get_instance_id()
+	if _integrated_reg_ids.has(reg_iid):
 		return
 	reg.call("ensure_loaded")
 	var rigs: Variant = reg.get("rigs_data")
@@ -60,29 +109,43 @@ static func ensure_registry_integration(registry: Object = null) -> void:
 				cloned["alias_of"] = src_k
 				states[alias_k] = cloned
 
-	# 2. Register Shinobi (and any custom fighter JSONs) into rigs_data["characters"]
+	# 2. Register all 8 Powered Fighters (and any custom fighter JSONs) into rigs_data["characters"]
 	var chars_var: Variant = rigs_dict.get("characters", {})
 	if typeof(chars_var) == TYPE_DICTIONARY:
 		var chars: Dictionary = chars_var as Dictionary
-		var shinobi_dict: Dictionary = _load_json_file(SHINOBI_JSON_PATH)
-		if not shinobi_dict.is_empty():
-			var cid: String = str(shinobi_dict.get("id", "shinobi")).to_lower()
+		for hero_id: String in POWERED_HERO_IDS:
+			var json_path: String = CUSTOM_FIGHTERS_DIR + "/hero_" + hero_id + "_mugen.json"
+			var hdict: Dictionary = _load_json_file(json_path)
+			if hdict.is_empty():
+				continue
+			var cid: String = str(hdict.get("id", hero_id)).to_lower()
+			var rspec_reg: Dictionary = (hdict.get("resource_spec", {}) as Dictionary).duplicate(true)
+			var skit_reg: Dictionary = (hdict.get("skill_kit", {}) as Dictionary).duplicate(true)
+			_normalize_resource_and_skills(rspec_reg, skit_reg)
 			chars[cid] = {
 				"id": cid,
-				"display_name": str(shinobi_dict.get("display_name", "Shinobi — MUGEN Hero")),
-				"symbol": "MUGEN_SHINOBI",
-				"linkage_class": "player_shinobi_mugen",
-				"sheet_bitmap": "hero_shinobi_mugen.png",
-				"sheet_path": str(shinobi_dict.get("sheet_path", "res://assets/sheets/hero_shinobi_mugen.png")),
-				"hp_mult": float(shinobi_dict.get("hp_mult", 1.05)),
-				"speed_mult": float(shinobi_dict.get("speed_mult", 1.12)),
+				"display_name": str(hdict.get("display_name", cid.capitalize())),
+				"short_name": str(hdict.get("short_name", cid.to_upper())),
+				"subtitle": str(hdict.get("subtitle", "Powered Fighter")),
+				"roster_category": str(hdict.get("roster_category", "ORIGINAL_POWERED")),
+				"is_powered_fighter": bool(hdict.get("is_powered_fighter", true)),
+				"symbol": "MUGEN_" + cid.to_upper(),
+				"linkage_class": "player_" + cid + "_mugen",
+				"sheet_bitmap": "hero_" + cid + "_mugen.png",
+				"sheet_path": str(hdict.get("sheet_path", "res://assets/sheets/hero_" + cid + "_mugen.png")),
+				"portrait_path": str(hdict.get("portrait_path", "res://assets/sprites/portraits/" + cid + "_splash.png")),
+				"cutin_path": str(hdict.get("cutin_path", "res://assets/sprites/cutins/" + cid + "_cutin.png")),
+				"hp_mult": float(hdict.get("hp_mult", 1.15)),
+				"speed_mult": float(hdict.get("speed_mult", 1.12)),
 				"is_mugen": true,
-				"mugen_json": SHINOBI_JSON_PATH,
+				"mugen_json": json_path,
+				"resource_spec": rspec_reg,
+				"skill_kit": skit_reg,
 			}
 			# Also register MUGEN state entries in states so SFDataRegistry.get_state_data() resolves them
 			if typeof(states_var) == TYPE_DICTIONARY:
 				var states: Dictionary = states_var as Dictionary
-				var m_states: Dictionary = shinobi_dict.get("mugen_states", {}) as Dictionary
+				var m_states: Dictionary = hdict.get("mugen_states", {}) as Dictionary
 				for m_key: Variant in m_states.keys():
 					var skey: String = str(m_key).to_upper()
 					var mdef: Dictionary = m_states[m_key] as Dictionary
@@ -95,11 +158,12 @@ static func ensure_registry_integration(registry: Object = null) -> void:
 							"frames": mdef.get("frames", []),
 							"keyframes": mdef.get("frames", []),
 						}
+		_integrated_reg_ids[reg_iid] = true
 
 
 static func is_mugen_character_id(p_char_id: String) -> bool:
 	var key: String = p_char_id.to_lower()
-	if key in ["shinobi", "hero_shinobi", "hero_shinobi_mugen"]:
+	if key in POWERED_HERO_IDS or key in ["hero_shinobi", "hero_shinobi_mugen"]:
 		return true
 	var custom_path: String = CUSTOM_FIGHTERS_DIR + "/" + key + ".json"
 	var hero_path: String = CUSTOM_FIGHTERS_DIR + "/hero_" + key + "_mugen.json"
@@ -107,13 +171,18 @@ static func is_mugen_character_id(p_char_id: String) -> bool:
 
 
 static func _load_json_file(path: String) -> Dictionary:
+	if _json_cache.has(path):
+		return _json_cache[path] as Dictionary
 	if not FileAccess.file_exists(path):
 		return {}
 	var text: String = FileAccess.get_file_as_string(path)
 	if text.is_empty():
 		return {}
 	var parsed: Variant = JSON.parse_string(text)
-	return parsed as Dictionary if typeof(parsed) == TYPE_DICTIONARY else {}
+	if typeof(parsed) == TYPE_DICTIONARY:
+		_json_cache[path] = parsed as Dictionary
+		return parsed as Dictionary
+	return {}
 
 
 func load_for_character(p_char_id: String, registry: Object = null) -> bool:
@@ -139,7 +208,13 @@ func load_for_character(p_char_id: String, registry: Object = null) -> bool:
 
 	char_id = str(mugen_data.get("id", key)).to_lower()
 	display_name = str(mugen_data.get("display_name", "Shinobi — MUGEN Hero"))
-	sheet_path = str(mugen_data.get("sheet_path", "res://assets/sheets/hero_shinobi_mugen.png"))
+	short_name = str(mugen_data.get("short_name", char_id.to_upper()))
+	subtitle = str(mugen_data.get("subtitle", "Powered Fighter"))
+	roster_category = str(mugen_data.get("roster_category", "ORIGINAL_POWERED"))
+	is_powered_fighter = bool(mugen_data.get("is_powered_fighter", true))
+	sheet_path = str(mugen_data.get("sheet_path", "res://assets/sheets/hero_" + char_id + "_mugen.png"))
+	portrait_path = str(mugen_data.get("portrait_path", "res://assets/sprites/portraits/" + char_id + "_splash.png"))
+	cutin_path = str(mugen_data.get("cutin_path", "res://assets/sprites/cutins/" + char_id + "_cutin.png"))
 	hp_mult = float(mugen_data.get("hp_mult", 1.05))
 	speed_mult = float(mugen_data.get("speed_mult", 1.12))
 	use_sf_split_rig_for_guns = bool(mugen_data.get("use_sf_split_rig_for_guns", true))
@@ -152,6 +227,12 @@ func load_for_character(p_char_id: String, registry: Object = null) -> bool:
 
 	var sm: Variant = mugen_data.get("special_moves", {})
 	special_moves = sm as Dictionary if typeof(sm) == TYPE_DICTIONARY else {}
+
+	var rspec: Variant = mugen_data.get("resource_spec", {})
+	resource_spec = (rspec as Dictionary).duplicate(true) if typeof(rspec) == TYPE_DICTIONARY else {}
+	var skit: Variant = mugen_data.get("skill_kit", {})
+	skill_kit = (skit as Dictionary).duplicate(true) if typeof(skit) == TYPE_DICTIONARY else {}
+	_normalize_resource_and_skills(resource_spec, skill_kit)
 
 	default_clsn2.clear()
 	var raw_c2: Variant = mugen_data.get("default_clsn2", [[-6.0, -18.0, 12.0, 18.0]])

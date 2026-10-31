@@ -35,7 +35,6 @@ const MELEE_SPECS: Dictionary = {
 }
 
 const BURST_WEAPONS: Array[String] = ["UZI", "RIFLE", "TOMMY_GUN", "SMG", "M60"]
-const AUTO_FIRE_WEAPONS: Array[String] = []
 const WEAPON_COOLDOWNS_24HZ: Dictionary = {
 	"PISTOL": 4.0,
 	"SILENCED_PISTOL": 4.0,
@@ -126,6 +125,7 @@ var _cloud_drop_ignore_until_y: float = -99999.0
 var _near_wall_dir: int = 0
 var _on_cloud_platform: bool = false
 var _ladder_sliding: bool = false
+var _ladder_moving: bool = false
 var _ladder_regrab_cooldown_frames: float = 0.0
 var ledge_grabbing: bool = false
 var _ledge_grab_cooldown_frames: float = 0.0
@@ -187,11 +187,54 @@ var _cooking_grenade: bool = false
 var _grenade_fuse_frames: float = 72.0
 var _grenade_tick_accum: float = 0.0
 
-# MUGEN special state
+# MUGEN & Powered Fighter (LoL Resource + 4-Skill Kit) state
+var is_powered_fighter: bool = false
+var roster_category: String = "CLASSIC"
+var is_summoned_clone: bool = false
+var summon_owner: Node2D = null
+var summon_lifetime_sec: float = 0.0
+var can_pickup_items: bool = true
+
+var resource_spec: Dictionary = {}
+var skill_kit: Dictionary = {}
+var resource_val: float = 0.0
+var resource_max: float = 100.0
+var secondary_pips: int = 0
+var secondary_pips_max: int = 0
+
+var skill_cooldowns: Dictionary = {1: 0.0, 2: 0.0, 3: 0.0, 4: 0.0}
+var skill_max_cooldowns: Dictionary = {1: 1.0, 2: 1.0, 3: 1.0, 4: 1.0}
+var awakening_timer: float = 0.0
+var overheat_timer: float = 0.0
+var bullet_deflect_timer: float = 0.0
+var invuln_timer: float = 0.0
+var hyper_armor_timer: float = 0.0
+var void_marked_target: Node2D = null
+var void_mark_timer: float = 0.0
+var _resource_idle_timer: float = 0.0
+var _kurama_dmg_accum: float = 0.0
+var active_vfx_overlays: Array[Dictionary] = []
+var _afterimage_trail: Array[Dictionary] = []
+var _hit_flash_timer: float = 0.0
+var _hitstop_ticks: int = 0
+var _presentation_step_seconds: float = 0.0
+var skill_deny_flash_timers: Dictionary = {1: 0.0, 2: 0.0, 3: 0.0, 4: 0.0}
+var _buffered_skill_slot: int = 0
+var _buffered_skill_timer: float = 0.0
+static var _last_sfx_ms_by_id: Dictionary = {}
+
 var _mugen_state_active: bool = false
 var _mugen_frame_timer: float = 0.0
+var _mugen_state_elapsed_sec: float = 0.0
 var _mugen_hit_applied: bool = false
 var _collision_shape: CollisionShape2D = null
+
+# Per-tick terrain rect caches (SA-WP2 Hotspot #2 fix)
+var _terrain_cache_tick: int = 0
+var _cached_solid_tick: int = -1
+var _cached_solid_rects: Array[Rect2] = []
+var _cached_cloud_tick: int = -1
+var _cached_cloud_rects: Array[Rect2] = []
 
 
 func _init() -> void:
@@ -251,12 +294,45 @@ func setup_fighter(
 		display_name = mugen_adapter.display_name
 		hp_Mult = mugen_adapter.hp_mult
 		speed_mult = mugen_adapter.speed_mult
+		is_powered_fighter = mugen_adapter.is_powered_fighter
+		resource_spec = mugen_adapter.resource_spec.duplicate(true)
+		skill_kit = mugen_adapter.skill_kit.duplicate(true)
 	else:
 		mugen_adapter = null
 		var cdata: Dictionary = reg.call("get_character_data", character_id) as Dictionary if reg != null else {}
 		display_name = str(cdata.get("display_name", character_id.capitalize()))
 		hp_Mult = float(cdata.get("hp_mult", 1.0))
 		speed_mult = float(cdata.get("speed_mult", 1.0))
+		is_powered_fighter = false
+		resource_spec = {}
+		skill_kit = {}
+
+	resource_max = maxf(1.0, float(resource_spec.get("max", 100.0)))
+	resource_val = clampf(float(resource_spec.get("start", 0.0)), 0.0, resource_max)
+	secondary_pips_max = maxi(0, int(resource_spec.get("secondary_pips", 0)))
+	secondary_pips = clampi(int(resource_spec.get("secondary_pips_start", 0)), 0, secondary_pips_max)
+	skill_cooldowns = {1: 0.0, 2: 0.0, 3: 0.0, 4: 0.0}
+	skill_max_cooldowns = {1: 1.0, 2: 1.0, 3: 1.0, 4: 1.0}
+	for s_idx: int in [1, 2, 3, 4]:
+		var sk_key: String = "skill_" + str(s_idx)
+		var sk_def: Dictionary = skill_kit.get(sk_key, {}) as Dictionary
+		skill_max_cooldowns[s_idx] = maxf(0.1, float(sk_def.get("cooldown_sec", 4.0)))
+	awakening_timer = 0.0
+	overheat_timer = 0.0
+	bullet_deflect_timer = 0.0
+	invuln_timer = 0.0
+	hyper_armor_timer = 0.0
+	active_vfx_overlays.clear()
+	_afterimage_trail.clear()
+	_hit_flash_timer = 0.0
+	_hitstop_ticks = 0
+	skill_deny_flash_timers = {1: 0.0, 2: 0.0, 3: 0.0, 4: 0.0}
+	_buffered_skill_slot = 0
+	_buffered_skill_timer = 0.0
+	void_marked_target = null
+	void_mark_timer = 0.0
+	_resource_idle_timer = 0.0
+	_kurama_dmg_accum = 0.0
 
 	if rig_view != null:
 		rig_view.visible = true
@@ -325,6 +401,7 @@ func setup_fighter(
 	grabbed_by = null
 	_mugen_state_active = false
 	_ladder_sliding = false
+	_ladder_moving = false
 	_ladder_regrab_cooldown_frames = 0.0
 	ledge_grabbing = false
 	_ledge_grab_cooldown_frames = 0.0
@@ -338,6 +415,9 @@ func setup_fighter(
 	moving_direction_inversed = 0
 
 	_set_state("IDLE", true)
+	_presentation_step_seconds = 0.0
+	if rig_view != null and rig_view.has_method("reset_presentation"):
+		rig_view.call("reset_presentation")
 	_sync_rig_view()
 
 
@@ -370,9 +450,23 @@ func _get_registry() -> Object:
 var last_played_sfx: String = ""
 
 
-func _play_sfx(sound_id: String) -> void:
-	if sound_id.to_lower() == "jump":
+func _notification(what: int) -> void:
+	# EC-39: Clear held/buffered skill inputs on window focus loss or pause so skills never get stuck
+	if what == NOTIFICATION_WM_WINDOW_FOCUS_OUT or what == NOTIFICATION_PAUSED:
+		_prev_input.clear()
+		_buffered_skill_slot = 0
+		_buffered_skill_timer = 0.0
+
+
+func _play_sfx(sound_id: String, force_allow: bool = false) -> void:
+	if sound_id.is_empty() or sound_id.to_lower() == "jump":
 		return
+	# EC-34: 45ms anti-clipping SFX gate so rapid multi-hit skills never clip audio output
+	var now_ms: int = Time.get_ticks_msec()
+	var prev_ms: int = int(_last_sfx_ms_by_id.get(sound_id, -999))
+	if not force_allow and (now_ms - prev_ms) >= 0 and (now_ms - prev_ms) < 45:
+		return
+	_last_sfx_ms_by_id[sound_id] = now_ms
 	last_played_sfx = sound_id
 	if DisplayServer.get_name() == "headless":
 		return
@@ -381,6 +475,19 @@ func _play_sfx(sound_id: String) -> void:
 		var audio: Node = tree.root.get_node_or_null("AudioManager")
 		if audio != null and audio.is_inside_tree() and audio.has_method("play_sfx_at"):
 			audio.call("play_sfx_at", sound_id, global_position)
+
+
+func _play_layered_skill_sfx(slot_num: int) -> void:
+	# SA-WP10: 3-Layer Composite Skill Audio (Whoosh + Element + Impact) using authentic Y8 SFX bank
+	_play_sfx("swing_1" if (slot_num % 2 == 1) else "swing_2", true)
+	if slot_num == 4:
+		_play_sfx("explosion", true)
+	elif character_id in ["solaria", "goku", "naruto", "luffy"]:
+		_play_sfx("flaregun", true)
+	elif character_id in ["shinobi", "tideweaver"]:
+		_play_sfx("sword_shing", true)
+	else:
+		_play_sfx("hit_heavy", true)
 
 
 func _get_map_loader() -> Object:
@@ -542,6 +649,14 @@ func _is_act_pressed(act: String) -> bool:
 			return Input.is_physical_key_pressed(KEY_KP_3)
 		"p1_powerup":
 			return Input.is_physical_key_pressed(KEY_KP_4)
+		"p1_skill_1":
+			return Input.is_physical_key_pressed(KEY_KP_5) or Input.is_physical_key_pressed(KEY_5)
+		"p1_skill_2":
+			return Input.is_physical_key_pressed(KEY_KP_6) or Input.is_physical_key_pressed(KEY_6)
+		"p1_skill_3":
+			return Input.is_physical_key_pressed(KEY_KP_7) or Input.is_physical_key_pressed(KEY_7)
+		"p1_skill_4":
+			return Input.is_physical_key_pressed(KEY_KP_8) or Input.is_physical_key_pressed(KEY_8)
 		"p2_left":
 			return Input.is_physical_key_pressed(KEY_A)
 		"p2_right":
@@ -558,6 +673,14 @@ func _is_act_pressed(act: String) -> bool:
 			return Input.is_physical_key_pressed(KEY_L)
 		"p2_powerup":
 			return Input.is_physical_key_pressed(KEY_SEMICOLON)
+		"p2_skill_1":
+			return Input.is_physical_key_pressed(KEY_U)
+		"p2_skill_2":
+			return Input.is_physical_key_pressed(KEY_I)
+		"p2_skill_3":
+			return Input.is_physical_key_pressed(KEY_O)
+		"p2_skill_4":
+			return Input.is_physical_key_pressed(KEY_P)
 	return false
 
 
@@ -590,6 +713,10 @@ func _poll_human_input() -> Dictionary:
 			"throw": _is_act_pressed("p1_throw") or _is_act_pressed("p2_throw"),
 			"sprint": _is_act_pressed("p1_sprint") or _is_act_pressed("p2_sprint"),
 			"powerup": _is_act_pressed("p1_powerup") or _is_act_pressed("p2_powerup"),
+			"skill_1": _is_act_pressed("p1_skill_1") or _is_act_pressed("p2_skill_1"),
+			"skill_2": _is_act_pressed("p1_skill_2") or _is_act_pressed("p2_skill_2"),
+			"skill_3": _is_act_pressed("p1_skill_3") or _is_act_pressed("p2_skill_3"),
+			"skill_4": _is_act_pressed("p1_skill_4") or _is_act_pressed("p2_skill_4"),
 			"slot_1": _is_act_just_pressed("p1_slot_1") or _is_act_just_pressed("p2_slot_1"),
 			"slot_2": _is_act_just_pressed("p1_slot_2") or _is_act_just_pressed("p2_slot_2"),
 			"slot_3": _is_act_just_pressed("p1_slot_3") or _is_act_just_pressed("p2_slot_3"),
@@ -606,6 +733,10 @@ func _poll_human_input() -> Dictionary:
 		"throw": _is_act_pressed(prefix + "throw"),
 		"sprint": _is_act_pressed(prefix + "sprint"),
 		"powerup": _is_act_pressed(prefix + "powerup"),
+		"skill_1": _is_act_pressed(prefix + "skill_1"),
+		"skill_2": _is_act_pressed(prefix + "skill_2"),
+		"skill_3": _is_act_pressed(prefix + "skill_3"),
+		"skill_4": _is_act_pressed(prefix + "skill_4"),
 		"slot_1": _is_act_just_pressed(prefix + "slot_1"),
 		"slot_2": _is_act_just_pressed(prefix + "slot_2"),
 		"slot_3": _is_act_just_pressed(prefix + "slot_3"),
@@ -648,6 +779,10 @@ func _normalize_input(raw: Dictionary) -> Dictionary:
 	var cur_aim: bool = bool(src.get("aim", src.get("shoot", false)))
 	var cur_throw: bool = bool(src.get("throw", false))
 	var cur_powerup: bool = bool(src.get("powerup", false))
+	var cur_sk1: bool = bool(src.get("skill_1", false))
+	var cur_sk2: bool = bool(src.get("skill_2", false))
+	var cur_sk3: bool = bool(src.get("skill_3", false))
+	var cur_sk4: bool = bool(src.get("skill_4", false))
 
 	var up_just_pressed: bool = bool(src.get("up_just_pressed", cur_up and not bool(_prev_input.get("up", false))))
 	var jump_just_pressed: bool = bool(src.get("jump_just_pressed", cur_jump and not bool(_prev_input.get("jump", false))))
@@ -665,6 +800,14 @@ func _normalize_input(raw: Dictionary) -> Dictionary:
 		"aim": cur_aim,
 		"throw": cur_throw,
 		"powerup": cur_powerup,
+		"skill_1": cur_sk1,
+		"skill_2": cur_sk2,
+		"skill_3": cur_sk3,
+		"skill_4": cur_sk4,
+		"skill_1_just_pressed": bool(src.get("skill_1_just_pressed", cur_sk1 and not bool(_prev_input.get("skill_1", false)))),
+		"skill_2_just_pressed": bool(src.get("skill_2_just_pressed", cur_sk2 and not bool(_prev_input.get("skill_2", false)))),
+		"skill_3_just_pressed": bool(src.get("skill_3_just_pressed", cur_sk3 and not bool(_prev_input.get("skill_3", false)))),
+		"skill_4_just_pressed": bool(src.get("skill_4_just_pressed", cur_sk4 and not bool(_prev_input.get("skill_4", false)))),
 		"kick": bool(src.get("kick", false)),
 		"roll": bool(src.get("roll", false)),
 		"dive": bool(src.get("dive", false)),
@@ -695,20 +838,65 @@ func _normalize_input(raw: Dictionary) -> Dictionary:
 		"aim": cur_aim,
 		"throw": cur_throw,
 		"powerup": cur_powerup,
+		"skill_1": cur_sk1,
+		"skill_2": cur_sk2,
+		"skill_3": cur_sk3,
+		"skill_4": cur_sk4,
 	}
 	return out
 
 
 func step_fighter(step_24hz: float, input_state: Dictionary = {}) -> void:
+	_presentation_step_seconds = 0.0
+	_terrain_cache_tick += 1
+	if is_summoned_clone:
+		summon_lifetime_sec -= step_24hz / 24.0
+		if summon_lifetime_sec <= 0.0 or (summon_owner != null and (not is_instance_valid(summon_owner) or bool(summon_owner.get("is_dead")))):
+			is_dead = true
+			if match_world != null and match_world.has_method("spawn_floating_text"):
+				match_world.call("spawn_floating_text", global_position + Vector2(0.0, -18.0), "POOF!", Color(0.85, 0.9, 1.0, 0.9))
+			queue_free()
+			return
+
 	if is_dead:
+		# A lethal hit also starts the impact flash. Let the corpse return to its
+		# KO palette instead of retaining that white flash for the whole round.
+		_hit_flash_timer = maxf(0.0, _hit_flash_timer - maxf(0.0, step_24hz / 24.0))
+		# Dead actors no longer enter the powered update. Cancel transient
+		# presentation here so a dash/awakening cannot leave permanent ghosts.
+		_afterimage_trail.clear()
+		active_vfx_overlays.clear()
+		awakening_timer = 0.0
+		overheat_timer = 0.0
+		bullet_deflect_timer = 0.0
+		_presentation_step_seconds = maxf(0.0, step_24hz / 28.0)
 		_step_dead_physics(step_24hz)
 		_advance_animation(step_24hz)
 		_sync_rig_view()
 		return
 
 	var inp: Dictionary = _normalize_input(input_state)
+	# EC-31: Local hitstop micro-freeze (2..3 ticks), suppressed if global Slow-Mo is active
+	if _hitstop_ticks > 0:
+		if match_world != null and match_world.get("slowmo_timer") != null and float(match_world.get("slowmo_timer")) > 0.0:
+			_hitstop_ticks = 0
+		else:
+			_hitstop_ticks -= 1
+			_sync_rig_view()
+			return
+
+	# Presentation and powered cooldown clocks advance only on an accepted
+	# simulation step. Keeping them below the hitstop gate prevents a frozen hit
+	# from consuming flash, stamina, cooldown or denied-input time.
+	if _hit_flash_timer > 0.0:
+		_hit_flash_timer = maxf(0.0, _hit_flash_timer - (step_24hz / 24.0))
+	if is_powered_fighter:
+		_step_powered_resources_and_skills(step_24hz, inp)
 
 	# 1. Timers, HP Regen & Burn DoT (PlayerState.as:725, 1138, Fires.as)
+	# Cosmetic time is consumed once per simulated tick, not once per sync call.
+	# 28 is the product's FLASH_FPS; changing this does not alter combat timers.
+	_presentation_step_seconds = maxf(0.0, step_24hz / 28.0)
 	if _hp_damage_timer > 0.0:
 		_hp_damage_timer = maxf(0.0, _hp_damage_timer - step_24hz)
 	elif hp < max_hp and burn_state < 15.0:
@@ -834,6 +1022,23 @@ func step_fighter(step_24hz: float, input_state: Dictionary = {}) -> void:
 			_aim_pitch_hold_frames = 0.0
 		facing = move_dir
 
+	if is_powered_fighter and not is_summoned_clone:
+		for sk_slot: int in [4, 3, 2, 1]:
+			if bool(inp.get("skill_" + str(sk_slot) + "_just_pressed", false)):
+				if try_activate_skill_slot(sk_slot, inp):
+					_buffered_skill_slot = 0
+					_buffered_skill_timer = 0.0
+					_sync_rig_view()
+					return
+		# EC-35: Consume 6-frame (0.10s) buffered skill input on the first actionable tick!
+		if _buffered_skill_slot > 0 and _buffered_skill_timer > 0.0:
+			var b_slot: int = _buffered_skill_slot
+			if try_activate_skill_slot(b_slot, inp):
+				_buffered_skill_slot = 0
+				_buffered_skill_timer = 0.0
+				_sync_rig_view()
+				return
+
 	var m_spec_req: String = str(inp.get("mugen_special", ""))
 	if mugen_adapter != null and not m_spec_req.is_empty():
 		if perform_mugen_special(m_spec_req):
@@ -864,10 +1069,10 @@ func _step_burn_damage(step_24hz: float) -> void:
 	elif burn_state >= 15.0:
 		# Stage 1 fire (FireRank1): 0.2 HP/frame.
 		# AS3 FireNodeData.as:400-402 & Player.as:2434: once burning (burn_state >= 15), fire NEVER decays by time!
-		# Instead, if the player does not Roll, Stage 1 escalates up to Stage 2 (burn_state = 100)!
+		# Instead, if the player does not Roll, Stage 1 escalates up to Stage 2 (burn_state = 100) in ~3 seconds!
 		_apply_raw_damage(0.2 * step_24hz)
 		if not is_dead and not rolling:
-			burn_state = minf(100.0, burn_state + 0.35 * step_24hz)
+			burn_state = minf(100.0, burn_state + 0.95 * step_24hz)
 	else:
 		# Pre-ignition smoke (< 15): cools down if not yet ignited
 		burn_state = maxf(0.0, burn_state - 1.2 * step_24hz)
@@ -1228,12 +1433,7 @@ func _handle_aim_and_combat_inputs(step_24hz: float, inp: Dictionary, move_dir: 
 		current_state = _get_aim_state_for_weapon(gun_to_show)
 		if not _fire_seq_active:
 			weapon_anim_frame_nr = 1
-			var is_auto_gun: bool = active_gun in AUTO_FIRE_WEAPONS
-			if is_auto_gun and _aim_hold_frames >= 1.0 and _fire_cooldown_frames <= 0.0:
-				if trigger_ranged_fire(active_gun):
-					_fired_during_current_aim = true
-					_fast_trigger_pending = false
-			elif bool(inp.get("attack", false)) and _fire_cooldown_frames <= 0.0:
+			if bool(inp.get("attack", false)) and _fire_cooldown_frames <= 0.0:
 				if trigger_ranged_fire(active_gun):
 					_fired_during_current_aim = true
 					_fast_trigger_pending = false
@@ -1245,7 +1445,7 @@ func _handle_aim_and_combat_inputs(step_24hz: float, inp: Dictionary, move_dir: 
 		_aim_hold_frames = 0.0
 		if not active_gun.is_empty():
 			_post_fire_aim_hold_frames = POST_FIRE_AIM_HOLD_FRAMES
-			var should_fire_on_release: bool = (not (active_gun in AUTO_FIRE_WEAPONS)) or (not _fired_during_current_aim)
+			var should_fire_on_release: bool = true
 			_fired_during_current_aim = false
 			if should_fire_on_release:
 				if _fire_cooldown_frames <= 0.0 and not _fire_seq_active:
@@ -1450,7 +1650,7 @@ func _throw_empty_gun(slot: int, wid: String) -> bool:
 			break
 
 	if match_world != null and match_world.has_method("spawn_floating_text"):
-		match_world.call("spawn_floating_text", wid + " EMPTY!", global_position + Vector2(0.0, -20.0), Color(1.0, 0.55, 0.3, 1.0))
+		match_world.call("spawn_floating_text", global_position + Vector2(0.0, -20.0), wid + " EMPTY!", Color(1.0, 0.55, 0.3, 1.0))
 	return false
 
 
@@ -1707,8 +1907,28 @@ func _execute_throw() -> bool:
 		world_angle_deg = (rig_view as _PreloadFighterRigView).get_aim_world_angle_deg()
 
 	# AS3 Player.as:2736-2743 (ReleaseThrowable): spawn at shoulder/head height and pass CoverObjectID only when actively in cover
-	var spawn_pos: Vector2 = global_position + Vector2(-float(facing) * 3.5, -15.0)
+	var rad_aim_th: float = deg_to_rad(world_angle_deg)
+	var spawn_off_x: float = -float(facing) * 3.5
+	var spawn_off_y: float = -15.0
+	if sin(rad_aim_th) > 0.42:
+		spawn_off_x = float(facing) * 6.5
+		spawn_off_y = -10.0
+	elif sin(rad_aim_th) < -0.55:
+		spawn_off_x = float(facing) * 4.5
+		spawn_off_y = -18.0
+	var spawn_pos: Vector2 = global_position + Vector2(spawn_off_x, spawn_off_y)
 	var ml_th: Object = _get_map_loader()
+	if ml_th != null and absf(sin(rad_aim_th)) > 0.42 and ml_th.get("ladder_rects") != null:
+		for lr_v: Variant in ml_th.get("ladder_rects") as Array:
+			var lr: Rect2 = lr_v as Rect2
+			var cx: float = lr.position.x + lr.size.x * 0.5
+			var dx_l: float = cx - global_position.x
+			if absf(dx_l) <= 22.0 and (absf(dx_l) <= 8.0 or dx_l * float(facing) >= -2.0):
+				if global_position.y >= lr.position.y - 16.0 and global_position.y <= lr.end.y + 24.0:
+					spawn_pos.x = clampf(spawn_pos.x, lr.position.x + 2.0, lr.end.x - 2.0)
+					if sin(rad_aim_th) > 0.42:
+						spawn_pos.y = maxf(spawn_pos.y, lr.position.y - 4.0)
+					break
 	if ml_th != null and ml_th.has_method("is_point_solid") and bool(ml_th.call("is_point_solid", spawn_pos, true)):
 		spawn_pos = global_position + Vector2(0.0, -15.0)
 	var ignore_cid_th: int = cover_object_id if (taking_cover and cover_object_id >= 0) else -1
@@ -1933,6 +2153,7 @@ func _perform_melee_hit_check() -> void:
 
 	if hit_anyone:
 		_play_sfx("punch" if (_melee_is_kick or w_id == "FISTS") else str(mspec.get("sfx_hit", "cut")))
+		_on_powered_hit_landed(dmg, is_finisher)
 		# Note: In AS3 Weapons.as, melee weapons (Machete, Axe, Sword) NEVER break or lose durability on hit!
 
 
@@ -1981,7 +2202,7 @@ func _step_mugen_active_state(step_24hz: float, inp: Dictionary) -> void:
 	if bool(inp.get("attack_just_pressed", false)):
 		_queued_next_combo = true
 
-	if st_type == "mugen_special_dash":
+	if st_type == "mugen_special_dash" or st_def.has("dash_speed_24hz"):
 		var dash_spd: float = float(st_def.get("dash_speed_24hz", 7.5))
 		_apply_world_movement(Vector2(float(facing) * dash_spd * step_24hz, 0.0), step_24hz)
 	elif st_type == "mugen_attack":
@@ -1991,11 +2212,11 @@ func _step_mugen_active_state(step_24hz: float, inp: Dictionary) -> void:
 	# Check Clsn1 red attack hitboxes on current frame
 	var clsn1_boxes: Array[Rect2] = get_mugen_clsn1_world_boxes()
 	if not _mugen_hit_applied and not clsn1_boxes.is_empty():
-		if st_type == "mugen_special_projectile":
+		if st_type == "mugen_special_projectile" or st_def.has("projectile_id"):
 			_mugen_hit_applied = true
 			var proj_id: String = str(st_def.get("projectile_id", "CHAKRA_WAVE"))
 			var proj_spd: float = float(st_def.get("projectile_speed_24hz", 22.0))
-			var proj_dmg: float = float(st_def.get("damage", 20.0))
+			var proj_dmg: float = float(st_def.get("damage", 20.0)) * (1.25 if awakening_timer > 0.0 else 1.0)
 			var proj_push: float = float(st_def.get("hit_force", 35.0))
 			var spawn_p: Vector2 = global_position + Vector2(float(facing) * 12.0, -10.0)
 			var pm: Object = _get_projectile_manager()
@@ -2004,17 +2225,24 @@ func _step_mugen_active_state(step_24hz: float, inp: Dictionary) -> void:
 			elif pm != null and pm.has_method("spawn_bullet"):
 				pm.call("spawn_bullet", self, proj_id, spawn_p, 0.0 if facing >= 0 else 180.0, -1)
 		else:
-			var m_dmg: float = float(st_def.get("damage", 10.0))
+			var m_dmg: float = float(st_def.get("damage", 10.0)) * (1.25 if awakening_timer > 0.0 else 1.0)
 			var m_kd: bool = bool(st_def.get("knockdown", false))
 			for f_var: Variant in _get_all_fighters():
 				var target: Node2D = f_var as Node2D
 				if bool(target.get("is_dead")):
 					continue
+				if team_id > 0 and int(target.get("team_id")) == team_id:
+					continue
 				var t_rect: Rect2 = target.call("get_hit_rect") as Rect2 if target.has_method("get_hit_rect") else Rect2(target.global_position.x - 6.0, target.global_position.y - 18.0, 12.0, 18.0)
 				for c1: Rect2 in clsn1_boxes:
 					if c1.intersects(t_rect):
+						var bonus_dmg: float = m_dmg
+						if character_id == "shinobi" and void_marked_target == target and void_mark_timer > 0.0:
+							bonus_dmg += 8.0
+							resource_val = minf(resource_max, resource_val + 50.0)
 						if target.has_method("apply_melee_hit"):
-							target.call("apply_melee_hit", m_dmg, facing, m_kd, false, false, self)
+							target.call("apply_melee_hit", bonus_dmg, facing, m_kd, false, false, self)
+						_on_powered_hit_landed(bonus_dmg, current_state == "MUGEN_COMBO_4" or m_kd)
 						_mugen_hit_applied = true
 						break
 
@@ -2289,6 +2517,7 @@ func _step_locomotion(step_24hz: float, inp: Dictionary, move_dir: int) -> void:
 						return
 			if bool(inp.get("down", false)):
 				_ladder_sliding = true
+				_ladder_moving = true
 				_set_state("SLIDE")
 				var old_lad_y: float = global_position.y
 				var next_lad_y: float = old_lad_y + SLIDE_SPEED_24HZ * step_24hz
@@ -2314,6 +2543,7 @@ func _step_locomotion(step_24hz: float, inp: Dictionary, move_dir: int) -> void:
 					return
 			elif bool(inp.get("up", false)):
 				_ladder_sliding = false
+				_ladder_moving = true
 				_set_state("CLIMB")
 				var old_lad_y2: float = global_position.y
 				var next_lad_y2: float = old_lad_y2 - CLIMB_SPEED_24HZ * speed_mult * step_24hz
@@ -2339,6 +2569,7 @@ func _step_locomotion(step_24hz: float, inp: Dictionary, move_dir: int) -> void:
 					return
 			else:
 				_ladder_sliding = false
+				_ladder_moving = (move_dir != 0)
 				if _try_step_onto_ladder_platform_at_height(cur_lad, global_position.y, global_position.y, move_dir, false):
 					return
 				_set_state("CLIMB")
@@ -2811,6 +3042,8 @@ func can_fighter_stand_at_x(cand_x: float, foot_y: float, ignore_prop: Node2D = 
 				var prop: Node2D = p_var as Node2D
 				if bool(prop.get("is_destroyed")) or not bool(prop.get("has_solid_hitbox")):
 					continue
+				if absf(prop.global_position.x - cand_x) > 36.0 or absf(prop.global_position.y - foot_y) > 48.0:
+					continue
 				var ptype: String = str(prop.get("prop_type")).to_upper()
 				if ptype in ["TABLE", "TABLE_SMALL", "LAMP_1"] or (ptype == "CRATE_HANGING" and bool(prop.get("is_hanging_released")) and not bool(prop.get("on_ground"))):
 					continue
@@ -2935,6 +3168,8 @@ func _resolve_solid_prop_space() -> void:
 			continue
 		var prop: Node2D = p_var as Node2D
 		if bool(prop.get("is_destroyed")) or not bool(prop.get("has_solid_hitbox")):
+			continue
+		if absf(prop.global_position.x - global_position.x) > 36.0 or absf(prop.global_position.y - global_position.y) > 48.0:
 			continue
 		if prop.get("last_attacker") == self and float(prop.get("_attacker_ignore_frames")) > 0.0:
 			continue
@@ -3065,6 +3300,8 @@ func _apply_world_movement(delta_pos: Vector2, _step_24hz: float) -> void:
 					continue
 				var prop: Node2D = p_var as Node2D
 				if bool(prop.get("is_destroyed")) or not bool(prop.get("has_solid_hitbox")):
+					continue
+				if absf(prop.global_position.x - new_pos.x) > 36.0 or absf(prop.global_position.y - old_pos.y) > 48.0:
 					continue
 				var ptype: String = str(prop.get("prop_type")).to_upper()
 				if ptype in ["TABLE", "TABLE_SMALL", "LAMP_1"]:
@@ -3238,8 +3475,6 @@ func _verify_ground_support() -> void:
 	if not on_ground or climbing or ledge_grabbing:
 		return
 	var solids: Array[Rect2] = _collect_solid_rects()
-	var prop_solids: Array[Rect2] = _collect_solid_prop_rects(global_position.x)
-	var clouds: Array[Rect2] = _collect_cloud_rects()
 	var pos: Vector2 = global_position
 	if _cloud_drop_ignore_until_y > -90000.0 and pos.y >= _cloud_drop_ignore_until_y:
 		_cloud_drop_ignore_until_y = -99999.0
@@ -3250,11 +3485,13 @@ func _verify_ground_support() -> void:
 			still_supported = true
 			break
 	if not still_supported:
+		var prop_solids: Array[Rect2] = _collect_solid_prop_rects(pos.x)
 		for pr: Rect2 in prop_solids:
 			if pos.x + 4.0 > pr.position.x and pos.x - 4.0 < pr.end.x and absf(pos.y - pr.position.y) <= 4.5:
 				still_supported = true
 				break
 	if not still_supported and pos.y >= _cloud_drop_ignore_until_y:
+		var clouds: Array[Rect2] = _collect_cloud_rects()
 		for cr: Rect2 in clouds:
 			if pos.x + 4.0 > cr.position.x and pos.x - 4.0 < cr.end.x and absf(pos.y - cr.position.y) <= 3.0:
 				still_supported = true
@@ -3306,11 +3543,7 @@ func _damage_props_under_landing(impact_vy: float) -> bool:
 
 func _on_land_ground(impact_vy: float) -> void:
 	body_rotation_deg = 0.0
-	if _hit_by_bazooka_blast:
-		_hit_by_bazooka_blast = false
-		if is_dead:
-			gib_fighter(Vector2(air_velocity.x, -maxf(2.5, absf(impact_vy) * 0.5)))
-			return
+	_hit_by_bazooka_blast = false
 
 	# AS3 Player.as:3255-3278, 3320-3381: diving or landing from free-fall onto fragile glass or props damages/breaks them!
 	if diving or falling or impact_vy >= FALL_TRIGGER_SPEED_24HZ:
@@ -3346,8 +3579,8 @@ func _on_land_ground(impact_vy: float) -> void:
 		# AS3 Player.as:3347, 3363: landing from a fall reduces burn_state just like rolling
 		if burn_state > 0.0:
 			_decrease_burn_state()
-		# Check AS3 SidewayBounce (Player.as:6435-6453): high horizontal velocity bounces once
-		if not _sideway_bounced and absf(air_velocity.x) >= 4.0 and absf(air_velocity.x) > absf(impact_vy):
+		# Check AS3 SidewayBounce (Player.as:6435-6453): high horizontal velocity bounces once (only for living fighters)
+		if not is_dead and not _sideway_bounced and absf(air_velocity.x) >= 4.0 and absf(air_velocity.x) > absf(impact_vy):
 			_sideway_bounced = true
 			var tot_vel: float = Vector2(air_velocity.x, impact_vy).length()
 			on_ground = false
@@ -3359,7 +3592,7 @@ func _on_land_ground(impact_vy: float) -> void:
 		falling = false
 		_sideway_bounced = false
 		var dmg: float = (absf(impact_vy) - 3.0) * 1.5
-		if dmg >= 3.0:
+		if dmg >= 3.0 and not is_dead:
 			_apply_raw_damage(dmg)
 		if not is_dead:
 			knockdowned = true
@@ -3367,18 +3600,38 @@ func _on_land_ground(impact_vy: float) -> void:
 			air_velocity.x *= 0.65
 			_play_sfx("body_fall")
 			_set_state("KNOCKDOWN", true)
+		else:
+			knockdowned = false
+			air_velocity.x *= 0.55
+			_play_sfx("body_fall")
+			if current_state not in ["DEATH_KNEEL", "DEAD", "LAY"]:
+				_set_state("DEATH_KNEEL", true)
 		return
 
 	air_velocity.x = 0.0
 	falling = false
 	_sideway_bounced = false
-	if current_state in ["JUMP", "FALL_F", "FALL_B", "JUMPKICK"]:
+	if is_dead:
+		knockdowned = false
+		if current_state not in ["DEATH_KNEEL", "DEAD", "LAY"]:
+			_set_state("DEATH_KNEEL", true)
+	elif current_state in ["JUMP", "FALL_F", "FALL_B", "JUMPKICK"]:
 		_set_state("IDLE")
 
 
 func _collect_solid_rects() -> Array[Rect2]:
-	var out: Array[Rect2] = local_solid_rects.duplicate()
+	if _cached_solid_tick == _terrain_cache_tick and not _cached_solid_rects.is_empty():
+		return _cached_solid_rects
 	var ml: Object = _get_map_loader()
+	if local_solid_rects.is_empty() and ml != null:
+		var s_var_fast: Variant = ml.get("solid_rects")
+		var h_gl_fast: Array = ml.call("get_intact_horizontal_glass_rects") as Array if ml.has_method("get_intact_horizontal_glass_rects") else []
+		var v_gl_fast: Array = ml.call("get_intact_vertical_glass_rects") as Array if ml.has_method("get_intact_vertical_glass_rects") else []
+		if typeof(s_var_fast) == TYPE_ARRAY and h_gl_fast.is_empty() and v_gl_fast.is_empty():
+			_cached_solid_rects = s_var_fast as Array[Rect2]
+			_cached_solid_tick = _terrain_cache_tick
+			return _cached_solid_rects
+	var out: Array[Rect2] = local_solid_rects.duplicate()
 	if ml != null:
 		var s_var: Variant = ml.get("solid_rects")
 		if typeof(s_var) == TYPE_ARRAY:
@@ -3394,12 +3647,23 @@ func _collect_solid_rects() -> Array[Rect2]:
 			if typeof(vg_rects) == TYPE_ARRAY:
 				for vgr_v: Variant in vg_rects as Array:
 					out.append(vgr_v as Rect2)
+	_cached_solid_rects = out
+	_cached_solid_tick = _terrain_cache_tick
 	return out
 
 
 func _collect_cloud_rects() -> Array[Rect2]:
-	var out: Array[Rect2] = local_cloud_rects.duplicate()
+	if _cached_cloud_tick == _terrain_cache_tick and not _cached_cloud_rects.is_empty():
+		return _cached_cloud_rects
 	var ml: Object = _get_map_loader()
+	if local_cloud_rects.is_empty() and ml != null:
+		var c_var_fast: Variant = ml.get("cloud_rects")
+		var el_var_fast: Variant = ml.get("elevators")
+		if typeof(c_var_fast) == TYPE_ARRAY and (typeof(el_var_fast) != TYPE_ARRAY or (el_var_fast as Array).is_empty()):
+			_cached_cloud_rects = c_var_fast as Array[Rect2]
+			_cached_cloud_tick = _terrain_cache_tick
+			return _cached_cloud_rects
+	var out: Array[Rect2] = local_cloud_rects.duplicate()
 	if ml != null:
 		var c_var: Variant = ml.get("cloud_rects")
 		if typeof(c_var) == TYPE_ARRAY:
@@ -3412,12 +3676,15 @@ func _collect_cloud_rects() -> Array[Rect2]:
 					var er_v: Variant = (e_v as Dictionary).get("rect")
 					if typeof(er_v) == TYPE_RECT2:
 						out.append(er_v as Rect2)
+	_cached_cloud_rects = out
+	_cached_cloud_tick = _terrain_cache_tick
 	return out
 
 
 func _collect_solid_prop_rects(at_x: float = NAN) -> Array[Rect2]:
 	var out: Array[Rect2] = []
 	var qx: float = global_position.x if is_nan(at_x) else at_x
+	var qy: float = global_position.y
 	# AS3 MapPremadeItems.as: solid props (CRATE, TABLE, BARREL, BARREL_EXPLOSIVE, GASCAN, DESK, FILECAB...) are solid standable objects!
 	if match_world != null:
 		var props_var: Variant = match_world.get("props")
@@ -3427,6 +3694,8 @@ func _collect_solid_prop_rects(at_x: float = NAN) -> Array[Rect2]:
 					continue
 				var prop: Node2D = p_var as Node2D
 				if bool(prop.get("is_destroyed")) or not bool(prop.get("has_solid_hitbox")):
+					continue
+				if absf(prop.global_position.x - qx) > 36.0 or absf(prop.global_position.y - qy) > 48.0:
 					continue
 				if prop.has_method("get_solid_support_rect"):
 					var prect: Rect2 = prop.call("get_solid_support_rect") as Rect2
@@ -3532,7 +3801,10 @@ func apply_bullet_hit(
 	_hit_pos: Vector2,
 	is_rocket: bool = false
 ) -> bool:
-	if is_dead:
+	if is_dead or invuln_timer > 0.0:
+		return false
+	if bullet_deflect_timer > 0.0:
+		_play_sfx("sword_deflect")
 		return false
 	if check_projectile_dodge(is_rocket):
 		return false
@@ -3542,9 +3814,15 @@ func apply_bullet_hit(
 	_check_aim_drop(push_dir, false)
 
 	_apply_raw_damage(damage)
-	_pushback_accum += pushback
+	if is_powered_fighter:
+		var hurt_gain: float = float(resource_spec.get("on_hurt_gain", 0.0))
+		if hurt_gain > 0.0:
+			resource_val = clampf(resource_val + hurt_gain, 0.0, resource_max)
+	var is_unfazed: bool = hyper_armor_timer > 0.0 or (character_id == "saitama" and resource_val >= 50.0 and damage < 28.0)
+	if not is_unfazed:
+		_pushback_accum += pushback
 
-	if not is_dead:
+	if not is_dead and not is_unfazed:
 		if _pushback_accum >= 100.0 or is_crit:
 			_pushback_accum = 0.0
 			force_fall(float(push_dir) * 2.0, -2.0, true)
@@ -3561,15 +3839,35 @@ func apply_melee_hit(
 	is_jump_kick: bool,
 	_attacker: Node2D = null
 ) -> void:
-	if is_dead:
+	if is_dead or invuln_timer > 0.0:
 		return
 	var push_dir: int = 1 if dir_x >= 0 else -1
 
 	# Disarm (CheckAimDrop): hitting a fighter with a melee attack while they are aiming a gun or throwable disarms/drops it!
 	_check_aim_drop(push_dir, true)
 
-	_apply_raw_damage(damage)
+	var final_dmg: float = damage
+	# Luffy Rubber Body passive: 25% damage reduction against blunt fists/kicks
+	if character_id == "luffy":
+		var att_wpn: String = str(_attacker.call("get_active_weapon_id")).to_upper() if (_attacker != null and _attacker.has_method("get_active_weapon_id")) else "FISTS"
+		if is_kick or is_jump_kick or att_wpn in ["FISTS", "BATON", "BASEBALL_BAT", ""]:
+			final_dmg *= 0.75
+
+	_apply_raw_damage(final_dmg)
+	if is_powered_fighter:
+		var hurt_gain: float = float(resource_spec.get("on_hurt_gain", 0.0))
+		if hurt_gain > 0.0:
+			resource_val = clampf(resource_val + hurt_gain, 0.0, resource_max)
+		if character_id == "naruto":
+			_kurama_dmg_accum += final_dmg
+			while _kurama_dmg_accum >= 20.0 and secondary_pips < secondary_pips_max:
+				_kurama_dmg_accum -= 20.0
+				secondary_pips += 1
 	if is_dead:
+		return
+
+	var is_unfazed: bool = hyper_armor_timer > 0.0 or (character_id == "saitama" and resource_val >= 50.0 and not is_finisher and not is_jump_kick)
+	if is_unfazed:
 		return
 
 	if is_kick or is_jump_kick:
@@ -3583,6 +3881,7 @@ func apply_melee_hit(
 		force_fall(air_velocity.x + float(push_dir) * 2.2, minf(air_velocity.y, -1.5), true)
 	else:
 		_stagger_frames = 8.0
+		active_vfx_overlays.clear()
 		_apply_world_movement(Vector2(float(push_dir) * 1.8, 0.0), 1.0)
 		_set_state("STAGGER", true)
 
@@ -3655,6 +3954,8 @@ func _disarm_active_gun(hit_dir_x: int) -> void:
 func gib_fighter(impulse: Vector2 = Vector2(0.0, -3.0)) -> void:
 	if is_gibbed:
 		return
+	active_vfx_overlays.clear()
+	_afterimage_trail.clear()
 	_check_aim_drop(1 if impulse.x >= 0.0 else -1)
 	if not is_dead:
 		_apply_raw_damage(max_hp + 999.0)
@@ -3687,10 +3988,9 @@ func apply_explosion_hit(angle_rad: float, power: float, damage: float) -> void:
 		_apply_raw_damage(damage * mult)
 	var vx: float = cos(angle_rad) * power
 	var vy: float = minf(-2.2, sin(angle_rad) * power - 1.5)
-	if is_dead and hp_before <= 22.0:
-		_hit_by_bazooka_blast = true
-	# Only gib (banh xác) when the fighter was already dead (corpse) or had low HP (<= 22.0) and died from the blast!
-	if (was_already_dead and damage >= 14.0) or (is_dead and hp_before <= 22.0 and damage >= 10.0) or damage >= 48.0:
+	_hit_by_bazooka_blast = false
+	# Never gib a fighter who is already dead or falling/airborne so corpses fall and land normally.
+	if not was_already_dead and on_ground and not falling and ((is_dead and hp_before <= 22.0 and damage >= 10.0) or damage >= 48.0):
 		gib_fighter(Vector2(vx, vy))
 		return
 	force_fall(vx, vy, true)
@@ -3710,6 +4010,10 @@ func add_burn(amount: float, set_full: bool = false) -> void:
 
 func force_fall(vx: float, vy: float, knockdown: bool = false) -> void:
 	_check_aim_drop(1 if vx >= 0.0 else -1)
+	# EC-33: Immediately clear active persistent VFX overlays when knocked into fall or knockdown
+	active_vfx_overlays.clear()
+	_buffered_skill_slot = 0
+	_buffered_skill_timer = 0.0
 	aiming = false
 	sprinting = false
 	rolling = false
@@ -3771,13 +4075,20 @@ func end_rocket_ride() -> void:
 
 
 func _apply_raw_damage(dmg: float) -> void:
-	if dmg <= 0.0 or is_dead:
+	if dmg <= 0.0 or is_dead or invuln_timer > 0.0:
 		return
 	_hp_damage_timer = 72.0
+	# SA-WP9: 1-frame white impact flash on hit
+	_hit_flash_timer = 0.045
+	if hyper_armor_timer > 0.0 and dmg < 45.0:
+		# EC-24: Burn DoT / chip damage cannot kill a fighter mid-Ultimate cast
+		hp = maxf(1.0, hp - dmg)
+		return
 	hp = maxf(0.0, hp - dmg)
 	if hp <= 0.0:
 		hp = 0.0
 		is_dead = true
+		active_vfx_overlays.clear()
 		_check_aim_drop(facing)
 		# AS3 Player.as:2443-2460: dying while burning (>= 15) turns the fighter into a charred black corpse (`player_burnt`)!
 		if burn_state >= 15.0:
@@ -3809,6 +4120,622 @@ func _step_dead_physics(step_24hz: float) -> void:
 			burn_state = maxf(0.0, minf(burn_state, 90.0) - 1.5 * step_24hz)
 
 
+# --- League of Legends (LoL) Bespoke Resource & 4-Skill System (U I O P / 5 6 7 8) ---
+func _step_powered_resources_and_skills(step_24hz: float, inp: Dictionary) -> void:
+	var dt_sec: float = step_24hz / 24.0
+	for s_idx: int in [1, 2, 3, 4]:
+		var cur_cd: float = float(skill_cooldowns.get(s_idx, 0.0))
+		if cur_cd > 0.0:
+			skill_cooldowns[s_idx] = maxf(0.0, cur_cd - dt_sec)
+		var cur_deny: float = float(skill_deny_flash_timers.get(s_idx, 0.0))
+		if cur_deny > 0.0:
+			skill_deny_flash_timers[s_idx] = maxf(0.0, cur_deny - dt_sec)
+
+	if _buffered_skill_timer > 0.0:
+		_buffered_skill_timer = maxf(0.0, _buffered_skill_timer - dt_sec)
+		if _buffered_skill_timer <= 0.0:
+			_buffered_skill_slot = 0
+
+	# EC-35 & EC-41: Check skill key presses for 6-frame buffering (when mid-swing/roll/stagger) or HUD Denial Flash (when on cooldown/low resource)
+	if not is_summoned_clone:
+		for sk_slot: int in [4, 3, 2, 1]:
+			if bool(inp.get("skill_" + str(sk_slot) + "_just_pressed", false)):
+				if not _has_skill_resource_and_off_cooldown(sk_slot):
+					skill_deny_flash_timers[sk_slot] = 0.25
+					_play_sfx("outofammo_light")
+				elif _melee_active_frames > 0.0 or _mugen_state_active or rolling or _stagger_frames > 0.0:
+					_buffered_skill_slot = sk_slot
+					_buffered_skill_timer = 0.12
+
+	if not _afterimage_trail.is_empty():
+		var next_trail: Array[Dictionary] = []
+		for td: Dictionary in _afterimage_trail:
+			var rem_tr: float = float(td.get("timer", 0.0)) - dt_sec
+			if rem_tr > 0.0:
+				td["timer"] = rem_tr
+				next_trail.append(td)
+		_afterimage_trail = next_trail
+		if is_instance_valid(rig_view):
+			rig_view.queue_redraw()
+
+	if awakening_timer > 0.0:
+		awakening_timer = maxf(0.0, awakening_timer - dt_sec)
+		if awakening_timer <= 0.0 and is_instance_valid(rig_view):
+			rig_view.queue_redraw()
+	if overheat_timer > 0.0:
+		overheat_timer = maxf(0.0, overheat_timer - dt_sec)
+		if overheat_timer <= 0.0 and is_instance_valid(rig_view):
+			rig_view.queue_redraw()
+	if invuln_timer > 0.0:
+		invuln_timer = maxf(0.0, invuln_timer - dt_sec)
+	if hyper_armor_timer > 0.0:
+		hyper_armor_timer = maxf(0.0, hyper_armor_timer - dt_sec)
+	if void_mark_timer > 0.0:
+		void_mark_timer = maxf(0.0, void_mark_timer - dt_sec)
+		if void_mark_timer <= 0.0 or not is_instance_valid(void_marked_target) or bool(void_marked_target.get("is_dead")):
+			void_marked_target = null
+			void_mark_timer = 0.0
+	if bullet_deflect_timer > 0.0:
+		bullet_deflect_timer = maxf(0.0, bullet_deflect_timer - dt_sec)
+		_reflect_projectiles_in_box(get_hit_rect().grow(14.0))
+		if is_instance_valid(rig_view):
+			rig_view.queue_redraw()
+
+	if not active_vfx_overlays.is_empty():
+		var next_vfx: Array[Dictionary] = []
+		for vd: Dictionary in active_vfx_overlays:
+			var rem_t: float = float(vd.get("timer", 0.0)) - dt_sec
+			if rem_t > 0.0:
+				vd["timer"] = rem_t
+				next_vfx.append(vd)
+		active_vfx_overlays = next_vfx
+		if is_instance_valid(rig_view):
+			rig_view.queue_redraw()
+
+	_resource_idle_timer += dt_sec
+	var rtype: String = str(resource_spec.get("type", "ENERGY"))
+	var regen_sec: float = float(resource_spec.get("regen_per_sec", 0.0))
+	var decay_sec: float = float(resource_spec.get("decay_per_sec", 0.0))
+
+	if rtype == "HEAT_RUMBLE":
+		if overheat_timer > 0.0:
+			resource_val = maxf(0.0, resource_val - 34.0 * dt_sec)
+		elif _resource_idle_timer >= 2.2 and decay_sec > 0.0:
+			resource_val = maxf(0.0, resource_val - decay_sec * dt_sec)
+	elif rtype == "GEAR_STEAM":
+		if decay_sec > 0.0 and resource_val > 0.0:
+			resource_val = maxf(0.0, resource_val - decay_sec * dt_sec)
+	elif rtype == "SERIOUS_ONEPUNCH":
+		var moving_bonus: float = 4.0 if (bool(inp.get("left", false)) or bool(inp.get("right", false))) else 0.0
+		resource_val = clampf(resource_val + (regen_sec + moving_bonus) * dt_sec, 0.0, resource_max)
+	else:
+		if regen_sec > 0.0:
+			resource_val = clampf(resource_val + regen_sec * dt_sec, 0.0, resource_max)
+		elif decay_sec > 0.0 and _resource_idle_timer >= 3.0:
+			resource_val = maxf(0.0, resource_val - decay_sec * dt_sec)
+
+
+func _on_powered_hit_landed(dealt_dmg: float, is_combo_finisher: bool) -> void:
+	if not is_powered_fighter:
+		return
+	_resource_idle_timer = 0.0
+	var rtype: String = str(resource_spec.get("type", "ENERGY"))
+	var hit_gain: float = float(resource_spec.get("on_hit_gain", 0.0))
+	if rtype == "HEAT_RUMBLE" and overheat_timer > 0.0:
+		# Overheated Atlas punches deal +35% bonus impact!
+		pass
+	elif hit_gain > 0.0:
+		resource_val = clampf(resource_val + hit_gain, 0.0, resource_max)
+
+	if character_id == "solaria" and is_combo_finisher and secondary_pips < secondary_pips_max:
+		secondary_pips = mini(secondary_pips_max, secondary_pips + 1)
+	elif character_id == "naruto":
+		_kurama_dmg_accum += dealt_dmg
+		while _kurama_dmg_accum >= 20.0 and secondary_pips < secondary_pips_max:
+			_kurama_dmg_accum -= 20.0
+			secondary_pips += 1
+
+
+func _has_skill_resource_and_off_cooldown(slot_num: int) -> bool:
+	if not is_powered_fighter or is_dead or is_summoned_clone:
+		return false
+	if float(skill_cooldowns.get(slot_num, 0.0)) > 0.0:
+		return false
+	var sk_key: String = "skill_" + str(slot_num)
+	var sk_def: Dictionary = skill_kit.get(sk_key, {}) as Dictionary
+	if sk_def.is_empty():
+		return false
+	var rtype: String = str(resource_spec.get("type", "ENERGY"))
+	if rtype == "HEAT_RUMBLE" and overheat_timer > 0.0 and slot_num != 4:
+		return false
+	var cost: float = float(sk_def.get("cost", 0.0))
+	if cost > 0.0 and resource_val + 0.01 < cost:
+		return false
+	return true
+
+
+func can_cast_skill_slot(slot_num: int) -> bool:
+	if not _has_skill_resource_and_off_cooldown(slot_num):
+		return false
+	if climbing or ledge_grabbing or knockdowned or falling or _rocket_riding:
+		return false
+	return true
+
+
+func _spawn_afterimage_trail(start_pos: Vector2, end_pos: Vector2, trail_col: Color) -> void:
+	# SA-WP9: Spawn 3 pixel-snapped ghost afterimages along the dash/teleport vector
+	_afterimage_trail.clear()
+	for i: int in range(3):
+		var frac: float = float(i) / 3.0
+		var gpos: Vector2 = start_pos.lerp(end_pos, frac).round()
+		_afterimage_trail.append({
+			"pos": gpos,
+			"world_pos": gpos,
+			"facing": facing,
+			"color": trail_col,
+			"timer": 0.18 + float(i) * 0.04,
+			"max_timer": 0.26,
+		})
+
+
+func try_activate_skill_slot(slot_num: int, inp: Dictionary = {}) -> bool:
+	if not can_cast_skill_slot(slot_num):
+		if is_powered_fighter and not is_dead and not is_summoned_clone and not _has_skill_resource_and_off_cooldown(slot_num):
+			skill_deny_flash_timers[slot_num] = 0.25
+			_play_sfx("outofammo_light")
+		return false
+	var sk_key: String = "skill_" + str(slot_num)
+	var sk_def: Dictionary = skill_kit.get(sk_key, {}) as Dictionary
+	var sk_name: String = str(sk_def.get("name", sk_key.to_upper()))
+	var cost: float = float(sk_def.get("cost", 0.0))
+	var gain: float = float(sk_def.get("gain", 0.0))
+	var heat_add: float = float(sk_def.get("heat_add", 0.0))
+	var steam_add: float = float(sk_def.get("steam_add", 0.0))
+	var cd_sec: float = maxf(0.2, float(sk_def.get("cooldown_sec", 4.0)))
+	if awakening_timer > 0.0:
+		cd_sec *= 0.70
+
+	# Cancel any active gun aiming or grenade cooking cleanly (EC-09 / EC-10)
+	if _cooking_grenade:
+		_drop_live_throwable()
+	_fire_seq_active = false
+	_cooking_grenade = false
+	_abort_aiming_session()
+	_resource_idle_timer = 0.0
+
+	# Apply LoL Resource Cost / Gain / Heat / Steam rules
+	var rtype: String = str(resource_spec.get("type", "ENERGY"))
+	var empowered_danger_zone: bool = (rtype == "HEAT_RUMBLE" and resource_val >= 50.0 and resource_val < 100.0)
+	if cost > 0.0:
+		resource_val = maxf(0.0, resource_val - cost)
+	if gain > 0.0:
+		resource_val = minf(resource_max, resource_val + gain)
+	if heat_add > 0.0:
+		resource_val = minf(resource_max, resource_val + heat_add)
+		if resource_val >= 100.0:
+			overheat_timer = 3.0
+			if match_world != null and match_world.has_method("spawn_floating_text"):
+				match_world.call("spawn_floating_text", global_position + Vector2(0.0, -26.0), "OVERHEAT!", Color(1.0, 0.32, 0.16, 1.0))
+	if steam_add > 0.0:
+		resource_val = minf(resource_max, resource_val + steam_add)
+		if resource_val >= 100.0:
+			awakening_timer = maxf(awakening_timer, 4.0)
+
+	skill_cooldowns[slot_num] = cd_sec
+	skill_max_cooldowns[slot_num] = cd_sec
+
+	# Trigger Ultimate Cut-In Banner on Slot 4 (P / Numpad 8)
+	if slot_num == 4:
+		hyper_armor_timer = maxf(hyper_armor_timer, 0.65)
+		invuln_timer = maxf(invuln_timer, 0.35)
+		if match_world != null and match_world.has_method("trigger_ultimate_cutin"):
+			match_world.call("trigger_ultimate_cutin", self, sk_def)
+
+	if match_world != null and match_world.has_method("spawn_floating_text"):
+		var bar_hex: String = str(resource_spec.get("bar_color", "#FFCC22"))
+		match_world.call("spawn_floating_text", global_position + Vector2(0.0, -22.0), sk_name.to_upper() + "!", Color.from_string(bar_hex, Color(1.0, 0.9, 0.3, 1.0)))
+
+	_play_layered_skill_sfx(slot_num)
+	_execute_powered_skill_effect(slot_num, sk_def, inp, empowered_danger_zone)
+	return true
+
+
+func _execute_powered_skill_effect(
+	slot_num: int,
+	sk_def: Dictionary,
+	inp: Dictionary,
+	empowered: bool = false
+) -> void:
+	var st_name: String = str(sk_def.get("state", "SHUNPO_SLASH")).to_upper()
+	var base_dmg: float = float(sk_def.get("damage", 16.0))
+	if empowered or awakening_timer > 0.0:
+		base_dmg *= 1.30
+	if character_id == "solaria" and secondary_pips > 0 and slot_num in [1, 3, 4]:
+		secondary_pips -= 1
+		base_dmg *= 1.35
+
+	var bar_hex: String = str(resource_spec.get("bar_color", "#FFCC22"))
+	var vfx_col: Color = Color.from_string(bar_hex, Color(1.0, 0.85, 0.25, 1.0))
+	var fhs: Object = _get_fire_hazard_system()
+	var pm: Object = _get_projectile_manager()
+
+	# Enter MUGEN animation state for visual responsiveness
+	if mugen_adapter != null and mugen_adapter.is_mugen_state(st_name):
+		_enter_mugen_state(st_name)
+		_mugen_hit_applied = true # We resolve custom skill hit/projectile right here so it never double-fires
+
+	match character_id:
+		"solaria":
+			if slot_num == 1:
+				active_vfx_overlays.append({"kind": "beam", "color": vfx_col, "length": 95.0, "timer": 0.24, "max_timer": 0.24})
+				if pm != null and pm.has_method("spawn_mugen_projectile"):
+					pm.call("spawn_mugen_projectile", self, "SOLAR_FLARE", global_position + Vector2(float(facing) * 12.0, -10.0), 0.0 if facing >= 0 else 180.0, 23.0, base_dmg, 36.0)
+			elif slot_num == 2:
+				bullet_deflect_timer = 0.55
+				secondary_pips = mini(secondary_pips_max, secondary_pips + 1)
+				active_vfx_overlays.append({"kind": "dome", "color": vfx_col, "radius": 20.0, "timer": 0.45, "max_timer": 0.45})
+				_reflect_projectiles_in_box(get_hit_rect().grow(18.0))
+			elif slot_num == 3:
+				active_vfx_overlays.append({"kind": "slash", "color": vfx_col, "length": 44.0, "timer": 0.25, "max_timer": 0.25})
+				var safe_dest: Vector2 = resolve_safe_teleport_position(global_position + Vector2(float(facing) * 64.0, -6.0))
+				_spawn_afterimage_trail(global_position, safe_dest, vfx_col)
+				_damage_enemies_in_rect(Rect2(minf(global_position.x, safe_dest.x) - 8.0, global_position.y - 24.0, absf(safe_dest.x - global_position.x) + 16.0, 28.0), base_dmg, true, true)
+				global_position = safe_dest
+			elif slot_num == 4:
+				active_vfx_overlays.append({"kind": "beam", "color": vfx_col, "length": 240.0, "timer": 0.48, "max_timer": 0.48})
+				var beam_rect: Rect2 = Rect2(global_position.x if facing >= 0 else (global_position.x - 240.0), global_position.y - 24.0, 240.0, 28.0)
+				_damage_enemies_in_rect(beam_rect, base_dmg, true, false, true)
+				if fhs != null and fhs.has_method("spawn_ground_flame"):
+					for b_i: int in range(1, 5):
+						fhs.call("spawn_ground_flame", global_position + Vector2(float(facing * b_i) * 32.0, 0.0), 65.0)
+
+		"atlas":
+			if slot_num == 1:
+				active_vfx_overlays.append({"kind": "shockwave", "color": vfx_col, "radius": 34.0, "timer": 0.28, "max_timer": 0.28})
+				var slam_rect: Rect2 = Rect2(global_position.x - 34.0, global_position.y - 22.0, 68.0, 26.0)
+				_damage_enemies_in_rect(slam_rect, base_dmg, true, true)
+				_launch_props_in_rect(slam_rect, Vector2(float(facing) * 5.2, -3.6), base_dmg)
+			elif slot_num == 2:
+				hyper_armor_timer = 0.65
+				bullet_deflect_timer = 0.45
+				active_vfx_overlays.append({"kind": "dome", "color": vfx_col, "radius": 22.0, "timer": 0.45, "max_timer": 0.45})
+			elif slot_num == 3:
+				hyper_armor_timer = 0.45
+				var rush_dest: Vector2 = resolve_safe_teleport_position(global_position + Vector2(float(facing) * 72.0, 0.0))
+				_spawn_afterimage_trail(global_position, rush_dest, vfx_col)
+				var rush_rect: Rect2 = Rect2(minf(global_position.x, rush_dest.x) - 8.0, global_position.y - 22.0, absf(rush_dest.x - global_position.x) + 16.0, 24.0)
+				_damage_enemies_in_rect(rush_rect, base_dmg, true, false)
+				_launch_props_in_rect(rush_rect, Vector2(float(facing) * 6.8, -2.8), base_dmg)
+				global_position = rush_dest
+			elif slot_num == 4:
+				resource_val = 0.0
+				overheat_timer = 0.0
+				active_vfx_overlays.append({"kind": "shockwave", "color": vfx_col, "radius": 78.0, "timer": 0.50, "max_timer": 0.50})
+				if fhs != null and fhs.has_method("trigger_explosion"):
+					fhs.call("trigger_explosion", global_position + Vector2(float(facing) * 28.0, -8.0), 42.0, base_dmg, 6.2, self)
+
+		"shinobi":
+			if slot_num == 1:
+				var nearest_en: Node2D = _find_nearest_enemy_within(180.0)
+				if nearest_en != null:
+					void_marked_target = nearest_en
+					void_mark_timer = 4.0
+				if pm != null and pm.has_method("spawn_mugen_projectile"):
+					for k_ang: float in [-8.0, 0.0, 8.0]:
+						var base_a: float = (0.0 if facing >= 0 else 180.0) + k_ang
+						pm.call("spawn_mugen_projectile", self, "VOID_KUNAI", global_position + Vector2(float(facing) * 10.0, -11.0), base_a, 25.0, base_dmg, 24.0)
+			elif slot_num == 2:
+				var blink_target: Vector2 = global_position + Vector2(float(facing) * 84.0, 0.0)
+				if is_instance_valid(void_marked_target) and not bool(void_marked_target.get("is_dead")):
+					var t_face: int = int(void_marked_target.get("facing")) if void_marked_target.get("facing") != null else 1
+					blink_target = void_marked_target.global_position + Vector2(float(-t_face) * 14.0, 0.0)
+					facing = t_face
+				var resolved_blink: Vector2 = resolve_safe_teleport_position(blink_target)
+				_spawn_afterimage_trail(global_position, resolved_blink, vfx_col)
+				global_position = resolved_blink
+				active_vfx_overlays.append({"kind": "slash", "color": vfx_col, "length": 36.0, "timer": 0.25, "max_timer": 0.25})
+				_damage_enemies_in_rect(get_hit_rect().grow(18.0), base_dmg, false, false)
+			elif slot_num == 3:
+				invuln_timer = 0.45
+				burn_state = 0.0
+				active_vfx_overlays.append({"kind": "dome", "color": vfx_col, "radius": 24.0, "timer": 0.35, "max_timer": 0.35})
+				if fhs != null and fhs.has_method("spawn_smoke_puff"):
+					fhs.call("spawn_smoke_puff", global_position + Vector2(0.0, -8.0), Vector2(0.0, -0.5), 1.6)
+			elif slot_num == 4:
+				active_vfx_overlays.append({"kind": "slash", "color": vfx_col, "length": 140.0, "timer": 0.45, "max_timer": 0.45})
+				var lotus_dest: Vector2 = resolve_safe_teleport_position(global_position + Vector2(float(facing) * 120.0, 0.0))
+				_spawn_afterimage_trail(global_position, lotus_dest, vfx_col)
+				var lotus_rect: Rect2 = Rect2(minf(global_position.x, lotus_dest.x) - 12.0, global_position.y - 28.0, absf(lotus_dest.x - global_position.x) + 24.0, 34.0)
+				_damage_enemies_in_rect(lotus_rect, base_dmg, true, true)
+				global_position = lotus_dest
+
+		"tideweaver":
+			var water_box: Rect2 = Rect2(global_position.x if facing >= 0 else (global_position.x - 110.0), global_position.y - 24.0, 110.0, 28.0)
+			_extinguish_fires_in_box(water_box.grow(24.0))
+			if slot_num == 1:
+				active_vfx_overlays.append({"kind": "whip", "color": vfx_col, "length": 88.0, "timer": 0.28, "max_timer": 0.28})
+				_damage_enemies_in_rect(water_box, base_dmg, false, false)
+				_launch_props_in_rect(water_box, Vector2(float(-facing) * 4.5, -2.2), 6.0)
+			elif slot_num == 2:
+				bullet_deflect_timer = 0.65
+				burn_state = 0.0
+				active_vfx_overlays.append({"kind": "dome", "color": vfx_col, "radius": 24.0, "timer": 0.50, "max_timer": 0.50})
+				_reflect_projectiles_in_box(get_hit_rect().grow(22.0))
+			elif slot_num == 3:
+				var surge_dest: Vector2 = resolve_safe_teleport_position(global_position + Vector2(float(facing) * 78.0, 0.0))
+				_spawn_afterimage_trail(global_position, surge_dest, vfx_col)
+				var surge_rect: Rect2 = Rect2(minf(global_position.x, surge_dest.x) - 8.0, global_position.y - 22.0, absf(surge_dest.x - global_position.x) + 16.0, 26.0)
+				_extinguish_fires_in_box(surge_rect.grow(16.0))
+				_damage_enemies_in_rect(surge_rect, base_dmg, true, true)
+				global_position = surge_dest
+			elif slot_num == 4:
+				active_vfx_overlays.append({"kind": "beam", "color": vfx_col, "length": 220.0, "timer": 0.50, "max_timer": 0.50})
+				var tsunami_rect: Rect2 = Rect2(global_position.x if facing >= 0 else (global_position.x - 220.0), global_position.y - 32.0, 220.0, 36.0)
+				_extinguish_fires_in_box(tsunami_rect.grow(30.0))
+				_damage_enemies_in_rect(tsunami_rect, base_dmg, true, true)
+				_launch_props_in_rect(tsunami_rect, Vector2(float(facing) * 7.5, -3.8), base_dmg)
+
+		"goku":
+			if slot_num == 1:
+				if pm != null and pm.has_method("spawn_mugen_projectile"):
+					for g_a: float in [-5.0, 5.0]:
+						pm.call("spawn_mugen_projectile", self, "KI_BLAST", global_position + Vector2(float(facing) * 12.0, -11.0), (0.0 if facing >= 0 else 180.0) + g_a, 24.0, base_dmg, 28.0)
+			elif slot_num == 2:
+				awakening_timer = maxf(awakening_timer, 6.0)
+				active_vfx_overlays.append({"kind": "shockwave", "color": vfx_col, "radius": 32.0, "timer": 0.38, "max_timer": 0.38})
+				_launch_props_in_rect(get_hit_rect().grow(28.0), Vector2(float(facing) * 4.5, -2.5), 5.0)
+			elif slot_num == 3:
+				var it_target: Vector2 = global_position + Vector2(float(facing) * 92.0, 0.0)
+				var en_goku: Node2D = _find_nearest_enemy_within(220.0)
+				if en_goku != null and not bool(inp.get("left", false)) and not bool(inp.get("right", false)):
+					var e_face: int = int(en_goku.get("facing")) if en_goku.get("facing") != null else 1
+					it_target = en_goku.global_position + Vector2(float(-e_face) * 14.0, 0.0)
+					facing = e_face
+				var resolved_it: Vector2 = resolve_safe_teleport_position(it_target)
+				_spawn_afterimage_trail(global_position, resolved_it, vfx_col)
+				global_position = resolved_it
+				active_vfx_overlays.append({"kind": "shockwave", "color": vfx_col, "radius": 24.0, "timer": 0.25, "max_timer": 0.25})
+				_damage_enemies_in_rect(get_hit_rect().grow(20.0), base_dmg, true, false)
+			elif slot_num == 4:
+				awakening_timer = maxf(awakening_timer, 8.0)
+				active_vfx_overlays.append({"kind": "beam", "color": Color(0.35, 0.88, 1.0, 1.0), "length": 280.0, "timer": 0.55, "max_timer": 0.55})
+				var kame_rect: Rect2 = Rect2(global_position.x if facing >= 0 else (global_position.x - 280.0), global_position.y - 24.0, 280.0, 28.0)
+				_damage_enemies_in_rect(kame_rect, base_dmg, true, true)
+				_launch_props_in_rect(kame_rect, Vector2(float(facing) * 8.5, -4.0), base_dmg)
+
+		"luffy":
+			if slot_num == 1:
+				active_vfx_overlays.append({"kind": "stretch_punch", "color": vfx_col, "length": 108.0, "timer": 0.26, "max_timer": 0.26})
+				var p_rect: Rect2 = Rect2(global_position.x if facing >= 0 else (global_position.x - 108.0), global_position.y - 20.0, 108.0, 22.0)
+				_damage_enemies_in_rect(p_rect, base_dmg, true, false)
+				_launch_props_in_rect(p_rect, Vector2(float(facing) * 6.0, -2.5), base_dmg)
+			elif slot_num == 2:
+				bullet_deflect_timer = 0.70
+				active_vfx_overlays.append({"kind": "dome", "color": vfx_col, "radius": 24.0, "timer": 0.50, "max_timer": 0.50})
+				_reflect_projectiles_in_box(get_hit_rect().grow(24.0))
+			elif slot_num == 3:
+				awakening_timer = maxf(awakening_timer, 5.0)
+				var jet_dest: Vector2 = resolve_safe_teleport_position(global_position + Vector2(float(facing) * 86.0, 0.0))
+				_spawn_afterimage_trail(global_position, jet_dest, vfx_col)
+				var jet_rect: Rect2 = Rect2(minf(global_position.x, jet_dest.x) - 8.0, global_position.y - 22.0, absf(jet_dest.x - global_position.x) + 16.0, 24.0)
+				_damage_enemies_in_rect(jet_rect, base_dmg, true, false)
+				global_position = jet_dest
+			elif slot_num == 4:
+				active_vfx_overlays.append({"kind": "stretch_punch", "color": Color(1.0, 0.38, 0.15, 1.0), "length": 150.0, "timer": 0.48, "max_timer": 0.48})
+				var roc_rect: Rect2 = Rect2(global_position.x if facing >= 0 else (global_position.x - 150.0), global_position.y - 28.0, 150.0, 32.0)
+				_damage_enemies_in_rect(roc_rect, base_dmg, true, true, true)
+				if fhs != null and fhs.has_method("trigger_explosion"):
+					fhs.call("trigger_explosion", global_position + Vector2(float(facing) * 72.0, -10.0), 38.0, base_dmg * 0.65, 6.0, self)
+
+		"naruto":
+			if slot_num == 1:
+				var ras_dest: Vector2 = resolve_safe_teleport_position(global_position + Vector2(float(facing) * 68.0, 0.0))
+				_spawn_afterimage_trail(global_position, ras_dest, vfx_col)
+				var ras_rect: Rect2 = Rect2(minf(global_position.x, ras_dest.x) - 10.0, global_position.y - 22.0, absf(ras_dest.x - global_position.x) + 20.0, 26.0)
+				active_vfx_overlays.append({"kind": "dome", "color": Color(0.25, 0.85, 1.0, 1.0), "radius": 22.0, "timer": 0.32, "max_timer": 0.32})
+				_damage_enemies_in_rect(ras_rect, base_dmg, true, true)
+				global_position = ras_dest
+			elif slot_num == 2:
+				if match_world != null and match_world.has_method("spawn_shadow_clone"):
+					match_world.call("spawn_shadow_clone", self)
+				if fhs != null and fhs.has_method("spawn_smoke_puff"):
+					fhs.call("spawn_smoke_puff", global_position + Vector2(float(facing) * 14.0, -8.0), Vector2(0.0, -0.4), 1.5)
+			elif slot_num == 3:
+				invuln_timer = 0.40
+				burn_state = 0.0
+				var sub_dest: Vector2 = resolve_safe_teleport_position(global_position + Vector2(float(-facing) * 56.0, -8.0))
+				_spawn_afterimage_trail(global_position, sub_dest, vfx_col)
+				if fhs != null and fhs.has_method("spawn_prop_debris"):
+					fhs.call("spawn_prop_debris", "CRATE", global_position + Vector2(0.0, -8.0), Vector2.UP, 3)
+				global_position = sub_dest
+			elif slot_num == 4:
+				if secondary_pips >= 3:
+					secondary_pips = maxi(0, secondary_pips - 3)
+					awakening_timer = maxf(awakening_timer, 7.0)
+				active_vfx_overlays.append({"kind": "beam", "color": Color(1.0, 0.52, 0.14, 1.0), "length": 230.0, "timer": 0.50, "max_timer": 0.50})
+				if fhs != null and fhs.has_method("trigger_explosion"):
+					fhs.call("trigger_explosion", global_position + Vector2(float(facing) * 88.0, -10.0), 46.0, base_dmg, 6.5, self)
+
+		"saitama":
+			if slot_num == 1:
+				active_vfx_overlays.append({"kind": "shockwave", "color": vfx_col, "radius": 38.0, "timer": 0.28, "max_timer": 0.28})
+				var punch_rect: Rect2 = Rect2(global_position.x if facing >= 0 else (global_position.x - 95.0), global_position.y - 24.0, 95.0, 28.0)
+				_damage_enemies_in_rect(punch_rect, base_dmg, true, false)
+				_launch_props_in_rect(punch_rect, Vector2(float(facing) * 7.2, -3.0), base_dmg)
+			elif slot_num == 2:
+				bullet_deflect_timer = 0.65
+				invuln_timer = 0.35
+				active_vfx_overlays.append({"kind": "shockwave", "color": vfx_col, "radius": 30.0, "timer": 0.38, "max_timer": 0.38})
+				_reflect_projectiles_in_box(get_hit_rect().grow(32.0))
+			elif slot_num == 3:
+				active_vfx_overlays.append({"kind": "shockwave", "color": vfx_col, "radius": 64.0, "timer": 0.42, "max_timer": 0.42})
+				_trigger_saitama_table_flip(base_dmg, 160.0)
+			elif slot_num == 4:
+				resource_val = maxf(0.0, resource_val - 60.0)
+				active_vfx_overlays.append({"kind": "beam", "color": Color(1.0, 0.92, 0.28, 1.0), "length": 360.0, "timer": 0.60, "max_timer": 0.60})
+				var sp_rect: Rect2 = Rect2(global_position.x if facing >= 0 else (global_position.x - 360.0), global_position.y - 36.0, 360.0, 44.0)
+				_damage_enemies_in_rect(sp_rect, base_dmg, true, true)
+				_launch_props_in_rect(sp_rect, Vector2(float(facing) * 11.0, -5.0), base_dmg * 1.5)
+				_reflect_projectiles_in_box(sp_rect)
+
+
+func resolve_safe_teleport_position(desired_pos: Vector2) -> Vector2:
+	# EC-06 & EC-07: Clamp inside map_bounds and step back if destination intersects a solid wall
+	var cand: Vector2 = desired_pos
+	var ml: Object = _get_map_loader()
+	if ml != null and ml.get("map_bounds") is Rect2:
+		var mb: Rect2 = ml.get("map_bounds") as Rect2
+		if mb.size.x > 0.0:
+			cand.x = clampf(cand.x, mb.position.x + 14.0, mb.end.x - 14.0)
+			var min_by: float = minf(global_position.y, mb.position.y + 20.0)
+			var max_by: float = maxf(global_position.y, minf(mb.end.y - 8.0, float(ml.get("acid_kill_y")) - 12.0 if ml.get("acid_kill_y") != null else (mb.end.y - 8.0)))
+			cand.y = clampf(cand.y, min_by, max_by)
+	var solids: Array[Rect2] = _collect_solid_rects()
+	var step_vec: Vector2 = (global_position - cand) / 8.0
+	for _i: int in range(8):
+		if not _does_body_intersect_wall_at(cand.x, cand.y, solids):
+			break
+		cand += step_vec
+	if ml != null and ml.has_method("get_ground_y_below"):
+		var gy: float = float(ml.call("get_ground_y_below", cand.x, cand.y - 14.0, 28.0, true))
+		if gy < INF and absf(gy - cand.y) <= 18.0 and not _does_body_intersect_wall_at(cand.x, gy, solids):
+			cand.y = gy
+			on_ground = true
+	return cand
+
+
+func _find_nearest_enemy_within(max_dist: float) -> Node2D:
+	var best: Node2D = null
+	var best_d: float = max_dist
+	for f_var: Variant in _get_all_fighters():
+		var other: Node2D = f_var as Node2D
+		if bool(other.get("is_dead")):
+			continue
+		if team_id > 0 and int(other.get("team_id")) == team_id:
+			continue
+		var d: float = global_position.distance_to(other.global_position)
+		if d <= best_d:
+			best_d = d
+			best = other
+	return best
+
+
+func _damage_enemies_in_rect(
+	area_rect: Rect2,
+	dmg: float,
+	knockdown: bool = true,
+	launch_up: bool = false,
+	add_fire: bool = false
+) -> int:
+	var hit_cnt: int = 0
+	for f_var: Variant in _get_all_fighters():
+		var target: Node2D = f_var as Node2D
+		if bool(target.get("is_dead")):
+			continue
+		if team_id > 0 and int(target.get("team_id")) == team_id:
+			continue
+		var t_rect: Rect2 = target.call("get_hit_rect") as Rect2 if target.has_method("get_hit_rect") else Rect2(target.global_position.x - 6.0, target.global_position.y - 18.0, 12.0, 18.0)
+		if area_rect.intersects(t_rect):
+			if add_fire and target.has_method("add_burn"):
+				target.call("add_burn", 35.0, false)
+			if target.has_method("apply_melee_hit"):
+				target.call("apply_melee_hit", dmg, facing, knockdown, launch_up, launch_up, self)
+			hit_cnt += 1
+	if hit_cnt > 0:
+		_on_powered_hit_landed(dmg, knockdown)
+		# EC-31: Apply local 2-tick hitstop on heavy skill hits unless global Slow-Mo is active
+		if dmg >= 14.0:
+			var global_slomo: bool = (match_world != null and match_world.get("slowmo_timer") != null and float(match_world.get("slowmo_timer")) > 0.0)
+			if not global_slomo:
+				_hitstop_ticks = 2
+	return hit_cnt
+
+
+func _launch_props_in_rect(area_rect: Rect2, impulse: Vector2, prop_dmg: float = 10.0) -> void:
+	if match_world == null:
+		return
+	var props_var: Variant = match_world.get("props")
+	if typeof(props_var) != TYPE_ARRAY:
+		return
+	for p_var: Variant in props_var as Array:
+		if not is_instance_valid(p_var):
+			continue
+		var prop: Node2D = p_var as Node2D
+		if bool(prop.get("is_destroyed")) or bool(prop.get("is_hanging_holder")):
+			continue
+		var p_rect: Rect2 = prop.call("get_world_rect") as Rect2 if prop.has_method("get_world_rect") else Rect2(prop.global_position.x - 8.0, prop.global_position.y - 8.0, 16.0, 16.0)
+		if area_rect.intersects(p_rect):
+			if prop.has_method("wake_up"):
+				prop.call("wake_up")
+			if prop.has_method("apply_kick_impulse"):
+				prop.call("apply_kick_impulse", impulse, self)
+			if prop_dmg > 0.0 and prop.has_method("take_damage"):
+				prop.call("take_damage", prop_dmg, impulse)
+
+
+func _trigger_saitama_table_flip(dmg: float, radius: float = 160.0) -> void:
+	# EC-19: Launch dynamic arena props within radius skyward and stun nearby enemies!
+	var flip_rect: Rect2 = Rect2(global_position.x - radius, global_position.y - 48.0, radius * 2.0, 64.0)
+	_damage_enemies_in_rect(flip_rect, dmg, true, true)
+	if match_world == null:
+		return
+	var props_var: Variant = match_world.get("props")
+	if typeof(props_var) != TYPE_ARRAY:
+		return
+	for p_var: Variant in props_var as Array:
+		if not is_instance_valid(p_var):
+			continue
+		var prop: Node2D = p_var as Node2D
+		if bool(prop.get("is_destroyed")) or bool(prop.get("kinematic")) or bool(prop.get("is_hanging_holder")):
+			continue
+		if absf(prop.global_position.x - global_position.x) <= radius and absf(prop.global_position.y - global_position.y) <= 56.0:
+			if prop.has_method("wake_up"):
+				prop.call("wake_up")
+			var dir_x: float = signf(prop.global_position.x - global_position.x)
+			if is_zero_approx(dir_x):
+				dir_x = float(facing)
+			if prop.has_method("apply_kick_impulse"):
+				prop.call("apply_kick_impulse", Vector2(dir_x * 4.2, -6.4), self)
+
+
+func _reflect_projectiles_in_box(box: Rect2) -> void:
+	# EC-17 & EC-18: Reflect bullets and kick/deflect live throwables in box
+	var pm: Object = _get_projectile_manager()
+	if pm == null:
+		return
+	if pm.has_method("deflect_bullets_in_box"):
+		pm.call("deflect_bullets_in_box", self, box, facing)
+	if pm.has_method("kick_throwables_in_rect"):
+		pm.call("kick_throwables_in_rect", box, facing, self)
+
+
+func _extinguish_fires_in_box(box: Rect2) -> void:
+	# EC-21: Tideweaver water skills douse burning fighters, burning props, and ground fire particles!
+	burn_state = 0.0
+	burned = false
+	for f_var: Variant in _get_all_fighters():
+		var other: Node2D = f_var as Node2D
+		if box.has_point(other.global_position) and not bool(other.get("is_dead")):
+			other.set("burn_state", 0.0)
+			other.set("burned", false)
+	if match_world != null:
+		var props_var: Variant = match_world.get("props")
+		if typeof(props_var) == TYPE_ARRAY:
+			for p_var: Variant in props_var as Array:
+				if is_instance_valid(p_var):
+					var prop: Node2D = p_var as Node2D
+					if box.has_point(prop.global_position) and prop.has_method("extinguish_fire"):
+						prop.call("extinguish_fire")
+	var fhs: Object = _get_fire_hazard_system()
+	if fhs != null and fhs.get("fire_particles") != null:
+		var fp_arr: Array = fhs.get("fire_particles") as Array
+		for i: int in range(fp_arr.size() - 1, -1, -1):
+			var fp: Dictionary = fp_arr[i] as Dictionary
+			var fpos: Vector2 = fp.get("pos", Vector2.ZERO) as Vector2
+			if box.has_point(fpos):
+				fp_arr.remove_at(i)
+
+
 # --- Animation Stepping & Rig Synchronization ---
 func _set_state(new_state: String, force_reset: bool = false) -> void:
 	var upper: String = new_state.to_upper()
@@ -3821,6 +4748,8 @@ func _set_state(new_state: String, force_reset: bool = false) -> void:
 
 
 func _advance_animation(step_24hz: float) -> void:
+	if climbing and current_state == "CLIMB" and not _ladder_moving:
+		return
 	var reg: Object = _get_registry()
 	if reg == null:
 		return
@@ -3847,6 +4776,9 @@ func _advance_animation(step_24hz: float) -> void:
 			if typeof(next_st) == TYPE_STRING and not str(next_st).is_empty() and current_state == "THROW":
 				_set_state(str(next_st))
 				return
+			# The last nonloop keyframe holds. Wrapping its fractional timer would
+			# rewind the articulated pose while the gameplay state still remains.
+			_anim_tick_accum = dur_24hz
 			break
 		cur_kf_idx = clampi(_anim_seq_idx, 0, keyframes.size() - 1)
 		cur_kf = keyframes[cur_kf_idx] as Dictionary
@@ -3882,3 +4814,10 @@ func _sync_rig_view() -> void:
 		burn_state,
 		is_dead and burned
 	)
+	var is_win_pose: bool = current_state == "WIN"
+	if match_world != null and str(match_world.get("round_state")) == "ROUND_OVER" and not is_dead and hp > 0.0:
+		is_win_pose = int(match_world.get("winner_slot")) == slot_index or (team_id > 0 and int(match_world.get("winner_team")) == team_id)
+	rv.step_expression_clock(_presentation_step_seconds, is_instance_valid(grabbed_target), is_win_pose)
+	_presentation_step_seconds = 0.0
+	if is_powered_fighter or not active_vfx_overlays.is_empty() or not _afterimage_trail.is_empty() or _hit_flash_timer > 0.0 or awakening_timer > 0.0 or overheat_timer > 0.0 or bullet_deflect_timer > 0.0:
+		rv.queue_redraw()

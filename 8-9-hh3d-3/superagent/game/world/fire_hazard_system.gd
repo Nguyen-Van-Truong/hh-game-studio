@@ -246,16 +246,36 @@ func _is_point_on_floor(pt: Vector2) -> bool:
 
 
 func _find_floor_y_between(prev_pt: Vector2, next_pt: Vector2) -> float:
-	if next_pt.y >= prev_pt.y:
-		var ml: Object = _get_map_loader()
-		if ml != null and ml.has_method("get_ground_y_below"):
-			var drop_dist: float = maxf(4.0, (next_pt.y - prev_pt.y) + 3.0)
-			var gy: float = float(ml.call("get_ground_y_below", next_pt.x, prev_pt.y - 2.0, drop_dist, true))
-			if gy < INF and next_pt.y >= gy - 0.5:
-				return gy
-	if _is_point_on_floor(next_pt):
-		return next_pt.y
-	return INF
+	if next_pt.y <= prev_pt.y:
+		return INF
+	var best_y: float = INF
+	var ml: Object = _get_map_loader()
+	if ml != null and ml.has_method("get_ground_y_below"):
+		var drop_dist: float = maxf(4.0, (next_pt.y - prev_pt.y) + 3.0)
+		var gy: float = float(ml.call("get_ground_y_below", next_pt.x, prev_pt.y - 2.0, drop_dist, true))
+		if _crosses_floor_top(prev_pt, next_pt, gy):
+			best_y = gy
+	elif _crosses_floor_top(prev_pt, next_pt, default_floor_y):
+		best_y = default_floor_y
+
+	if not _frame_support_cached:
+		_rebuild_support_rects_cache()
+	for pr: Rect2 in _frame_support_rects:
+		if not _crosses_floor_top(prev_pt, next_pt, pr.position.y):
+			continue
+		var crossing_t: float = (pr.position.y - 0.5 - prev_pt.y) / (next_pt.y - prev_pt.y)
+		var crossing_x: float = lerpf(prev_pt.x, next_pt.x, clampf(crossing_t, 0.0, 1.0))
+		if crossing_x >= pr.position.x and crossing_x < pr.end.x:
+			best_y = minf(best_y, pr.position.y)
+	# A solid endpoint can be a wall side/interior, not a downward top crossing.
+	# Returning next_pt.y for it made random gibs bounce and rest inside walls.
+	return best_y
+
+
+func _crosses_floor_top(prev_pt: Vector2, next_pt: Vector2, floor_y: float) -> bool:
+	# Particle centers stop half a pixel above the support surface in the callers.
+	var contact_y: float = floor_y - 0.5
+	return is_finite(floor_y) and prev_pt.y <= contact_y + 0.001 and next_pt.y >= contact_y
 
 
 func _segment_hits_rect(p1: Vector2, p2: Vector2, rect: Rect2) -> bool:
@@ -521,7 +541,11 @@ func trigger_fire_burst(source_type: String, world_pos: Vector2, count: int = 18
 			f_mid = f.call("get_mid_pos") as Vector2
 		if world_pos.distance_to(f_mid) <= instant_radius and not is_explosion_line_blocked(world_pos, f_mid, null):
 			if f.has_method("add_burn"):
-				f.call("add_burn", 100.0, true)
+				var cur_f_burn: float = float(f.get("burn_state")) if f.get("burn_state") != null else 0.0
+				if cur_f_burn >= 15.0 and world_pos.distance_to(f_mid) <= 10.0:
+					f.call("add_burn", 100.0, true)
+				else:
+					f.call("add_burn", 32.0, false)
 
 	var props: Array = _get_props()
 	for p_var: Variant in props:
@@ -810,6 +834,13 @@ func spawn_gibs(world_pos: Vector2, impulse: Vector2) -> void:
 
 func step_hazards(step_24hz: float) -> void:
 	_load_effect_textures()
+	var had_any_active: bool = (
+		not fire_particles.is_empty() or not flame_puffs.is_empty() or not explosions.is_empty()
+		or not smoke_puffs.is_empty() or not muzzle_flashes.is_empty() or not shell_casings.is_empty()
+		or not hit_sparks.is_empty() or not prop_debris.is_empty() or not electric_sparks.is_empty()
+		or not melee_traces.is_empty() or not glass_shards.is_empty() or not gibs.is_empty()
+		or not _fighter_burn_emit_state.is_empty()
+	)
 	_visual_tick += step_24hz
 	if _fire_sfx_cooldown > 0.0:
 		_fire_sfx_cooldown = maxf(0.0, _fire_sfx_cooldown - step_24hz)
@@ -843,6 +874,7 @@ func step_hazards(step_24hz: float) -> void:
 			"rect": f_rect,
 			"contact_rect": f_rect.grow_individual(3.5, 2.5, 3.5, 5.0),
 			"rolling": bool(f.get("rolling")),
+			"burn_added_this_tick": 0.0,
 		})
 
 	var cached_props: Array[Dictionary] = []
@@ -926,8 +958,14 @@ func step_hazards(step_24hz: float) -> void:
 			var contact_rect: Rect2 = cf["contact_rect"] as Rect2
 			if contact_rect.has_point(pos) or contact_rect.has_point(pos + Vector2(0.0, -5.0)):
 				if f.has_method("add_burn"):
-					var burn_add: float = (12.0 if src_type == "FLAMETHROWER" else 5.5) * step_24hz
-					f.call("add_burn", burn_add, false)
+					var cur_b: float = float(f.get("burn_state")) if f.get("burn_state") != null else 0.0
+					var added_so_far: float = float(cf.get("burn_added_this_tick", 0.0))
+					var max_tick_add: float = (12.0 if src_type == "FLAMETHROWER" else (18.0 if cur_b < 15.0 else 1.45)) * step_24hz
+					var raw_add: float = (12.0 if src_type == "FLAMETHROWER" else 5.5) * step_24hz
+					var burn_add: float = clampf(raw_add, 0.0, maxf(0.0, max_tick_add - added_so_far))
+					if burn_add > 0.0:
+						cf["burn_added_this_tick"] = added_so_far + burn_add
+						f.call("add_burn", burn_add, false)
 
 		# Check contact with props using pre-cached rects
 		for cp: Dictionary in cached_props:
@@ -981,7 +1019,9 @@ func step_hazards(step_24hz: float) -> void:
 				var o_rect: Rect2 = other_f.call("get_hit_rect") as Rect2 if other_f.has_method("get_hit_rect") else Rect2(other_f.global_position.x - 6.0, other_f.global_position.y - 18.0, 12.0, 18.0)
 				if f_fighter_rect.intersects(o_rect) and other_f.has_method("add_burn"):
 					other_f.call("add_burn", 2.4 * step_24hz, false)
-		if b_state >= 10.0:
+		# The body is gone after gibbing. Existing world puffs may finish, but
+		# do not create new torso emissions from an invisible fighter.
+		if b_state >= 10.0 and not bool(f.get("is_gibbed")):
 			var st: Dictionary = _fighter_burn_emit_state.get(fid, {"timer": 0.0, "last_pos": f.global_position}) as Dictionary
 			var b_timer: float = float(st.get("timer", 0.0)) - step_24hz
 			var last_p: Vector2 = st.get("last_pos", f.global_position) as Vector2
@@ -990,9 +1030,13 @@ func step_hazards(step_24hz: float) -> void:
 				b_timer = randf_range(2.0, 3.2)
 				last_p = f.global_position
 				var f_mid: Vector2 = f.global_position + Vector2(0.0, -10.0)
-				_emit_flame_puff(f_mid + Vector2(randf_range(-3.5, 3.5), randf_range(-4.0, 4.0)), false, 1.2)
+				var chibi_anchors: PackedVector2Array = _chibi_burn_anchors(f)
+				var chibi_fire: bool = not chibi_anchors.is_empty()
+				if chibi_fire:
+					f_mid = chibi_anchors[0]
+				_emit_flame_puff(f_mid + Vector2(randf_range(-3.5, 3.5), randf_range(-4.0, 4.0)), false, 0.48 if chibi_fire else 1.2)
 				if b_state >= 65.0 or bool(f.get("burned")):
-					_emit_flame_puff(f_mid + Vector2(randf_range(-4.5, 4.5), randf_range(-5.0, 3.0)), false, 1.3)
+					_emit_flame_puff(f_mid + Vector2(randf_range(-4.5, 4.5), randf_range(-5.0, 3.0)), false, 0.58 if chibi_fire else 1.3)
 					if randf() < 0.35:
 						smoke_puffs.append({
 							"pos": f_mid + Vector2(randf_range(-2.0, 2.0), -6.0),
@@ -1257,7 +1301,8 @@ func step_hazards(step_24hz: float) -> void:
 	gibs = next_gibs
 
 	if (
-		not fire_particles.is_empty() or not flame_puffs.is_empty() or not explosions.is_empty()
+		had_any_active
+		or not fire_particles.is_empty() or not flame_puffs.is_empty() or not explosions.is_empty()
 		or not smoke_puffs.is_empty() or not muzzle_flashes.is_empty() or not shell_casings.is_empty()
 		or not hit_sparks.is_empty() or not prop_debris.is_empty() or not electric_sparks.is_empty()
 		or not melee_traces.is_empty() or not glass_shards.is_empty() or not gibs.is_empty()
@@ -1297,6 +1342,125 @@ func _draw_tex_xform(tex: Texture2D, pos: Vector2, rot: float = 0.0, scale_vec: 
 	draw_set_transform(pos, rot, scale_vec)
 	draw_texture(tex, -Vector2(sz.x * pivot_ratio.x, sz.y * pivot_ratio.y), modulate_col)
 	draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+
+
+func _chibi_burn_anchors(fighter: Node2D) -> PackedVector2Array:
+	var view: Variant = fighter.get("rig_view")
+	if view is Node2D and is_instance_valid(view) and view.get("chibi_brawler_enabled") == true and view.has_method("get_chibi_burn_anchors"):
+		return view.call("get_chibi_burn_anchors") as PackedVector2Array
+	return PackedVector2Array()
+
+
+func get_chibi_burn_draw_specs(fighter: Node2D, intense: bool) -> Array[Dictionary]:
+	var specs: Array[Dictionary] = []
+	if fighter.get("is_gibbed") == true:
+		return specs
+	var anchors: PackedVector2Array = _chibi_burn_anchors(fighter)
+	for i: int in range(anchors.size()):
+		# Hip and boots keep the face/silhouette readable. Flames still rise
+		# vertically while their bases follow the rolling or falling body.
+		specs.append({"position": anchors[i] + Vector2(0.0, 0.8), "height": (7.2 if intense else 5.4) if i == 0 else (5.4 if intense else 3.4), "alpha": 0.77 if i == 0 else 0.62, "phase": i * 3})
+	return specs
+
+
+func _draw_stylized_flame_tongue(base: Vector2, h: float, w: float, sway: float, alpha: float) -> void:
+	var tip: Vector2 = base + Vector2(sway, -h)
+	# 0. Subtle Dark-Crimson Rim for crisp cel-shaded contrast against bright/dark backgrounds
+	var rim_w: float = w * 1.12
+	var rim_h: float = h * 1.05
+	var rim: PackedVector2Array = PackedVector2Array([
+		base + Vector2(-rim_w * 0.48, 0.5),
+		base + Vector2(-rim_w * 0.88 + sway * 0.16, -rim_h * 0.24),
+		base + Vector2(-rim_w * 0.64 + sway * 0.46, -rim_h * 0.56),
+		base + Vector2(-rim_w * 0.26 + sway * 0.78, -rim_h * 0.82),
+		base + Vector2(sway * 1.02, -rim_h),
+		base + Vector2(rim_w * 0.26 + sway * 0.78, -rim_h * 0.82),
+		base + Vector2(rim_w * 0.64 + sway * 0.46, -rim_h * 0.56),
+		base + Vector2(rim_w * 0.88 + sway * 0.16, -rim_h * 0.24),
+		base + Vector2(rim_w * 0.48, 0.5),
+	])
+	draw_colored_polygon(rim, Color(0.24, 0.05, 0.02, alpha * 0.78))
+	# 1. Outer Crimson-Orange S-Curve Flame Silhouette (#FF3D00)
+	var outer: PackedVector2Array = PackedVector2Array([
+		base + Vector2(-w * 0.46, 0.35),
+		base + Vector2(-w * 0.86 + sway * 0.18, -h * 0.25),
+		base + Vector2(-w * 0.60 + sway * 0.48, -h * 0.56),
+		base + Vector2(-w * 0.24 + sway * 0.78, -h * 0.82),
+		tip,
+		base + Vector2(w * 0.24 + sway * 0.78, -h * 0.82),
+		base + Vector2(w * 0.60 + sway * 0.48, -h * 0.56),
+		base + Vector2(w * 0.86 + sway * 0.18, -h * 0.25),
+		base + Vector2(w * 0.46, 0.35),
+	])
+	draw_colored_polygon(outer, Color(1.0, 0.26, 0.03, alpha * 0.94))
+	# 2. Mid Golden-Amber Flame Body (#FFB300)
+	var mid_h: float = h * 0.74
+	var mid_w: float = w * 0.62
+	var mid: PackedVector2Array = PackedVector2Array([
+		base + Vector2(-mid_w * 0.46, 0.2),
+		base + Vector2(-mid_w * 0.84 + sway * 0.16, -mid_h * 0.28),
+		base + Vector2(-mid_w * 0.48 + sway * 0.46, -mid_h * 0.64),
+		base + Vector2(sway * 0.68, -mid_h),
+		base + Vector2(mid_w * 0.48 + sway * 0.46, -mid_h * 0.64),
+		base + Vector2(mid_w * 0.84 + sway * 0.16, -mid_h * 0.28),
+		base + Vector2(mid_w * 0.46, 0.2),
+	])
+	draw_colored_polygon(mid, Color(1.0, 0.72, 0.06, minf(1.0, alpha * 1.04)))
+	# 3. Inner White-Hot Core (#FFF9C4)
+	var core_h: float = h * 0.44
+	var core_w: float = w * 0.34
+	var core: PackedVector2Array = PackedVector2Array([
+		base + Vector2(-core_w * 0.48, 0.0),
+		base + Vector2(-core_w * 0.78 + sway * 0.12, -core_h * 0.35),
+		base + Vector2(sway * 0.34, -core_h),
+		base + Vector2(core_w * 0.78 + sway * 0.12, -core_h * 0.35),
+		base + Vector2(core_w * 0.48, 0.0),
+	])
+	draw_colored_polygon(core, Color(1.0, 0.98, 0.80, minf(1.0, alpha * 1.12)))
+
+
+func _draw_chibi_burning(fighter: Node2D, intense: bool) -> void:
+	if _fire_01_seq.is_empty():
+		return
+	var specs: Array[Dictionary] = get_chibi_burn_draw_specs(fighter, intense)
+	if specs.is_empty():
+		return
+	var tick_f: float = float(_visual_tick)
+	for i: int in range(specs.size()):
+		var spec: Dictionary = specs[i]
+		var point: Vector2 = to_local(spec["position"] as Vector2)
+		var base_h: float = float(spec["height"]) * (1.16 if intense else 0.82)
+		var alpha: float = float(spec["alpha"])
+		var phase_f: float = float(spec["phase"])
+		var wave: float = sin(tick_f * (0.52 if intense else 0.36) + phase_f * 0.9)
+		var pulse: float = 0.92 + (0.16 if intense else 0.10) * cos(tick_f * 0.55 + phase_f * 1.3)
+		var h_main: float = base_h * pulse
+		var w_main: float = maxf(1.65, h_main * (0.38 if intense else 0.30))
+		if i == 0:
+			if intense:
+				# Stage 2 (Cháy to): Full roaring blaze enveloping flanks, shoulders, and torso core
+				draw_circle(point + Vector2(0.0, -2.5), 6.2, Color(1.0, 0.32, 0.04, alpha * 0.22))
+				_draw_stylized_flame_tongue(point + Vector2(-4.8, -1.0), h_main * 1.15, w_main * 0.90, -1.10 + wave * 0.85, alpha * 0.96)
+				_draw_stylized_flame_tongue(point + Vector2(4.8, -1.2), h_main * 1.12, w_main * 0.88, 1.10 - wave * 0.82, alpha * 0.95)
+				_draw_stylized_flame_tongue(point + Vector2(-2.2, 0.4), h_main * 0.92, w_main * 0.78, -0.45 + wave * 0.70, alpha * 0.92)
+				_draw_stylized_flame_tongue(point + Vector2(2.2, 0.4), h_main * 0.90, w_main * 0.78, 0.45 - wave * 0.68, alpha * 0.92)
+				_draw_stylized_flame_tongue(point + Vector2(0.0, 1.2), h_main * 0.78, w_main * 0.76, wave * 0.65, alpha * 0.90)
+			else:
+				# Stage 1 (Cháy nhỏ): Compact waist flame and small side lick
+				_draw_stylized_flame_tongue(point + Vector2(0.0, 1.0), h_main * 0.72, w_main * 0.74, wave * 0.55, alpha * 0.86)
+				_draw_stylized_flame_tongue(point + Vector2(-2.4, 0.4), h_main * 0.54, w_main * 0.62, -0.40 + wave * 0.45, alpha * 0.78)
+		else:
+			var side_offset: float = (-0.9 if i == 1 else 0.9)
+			var boot_h_scale: float = 1.05 if intense else 0.64
+			var boot_w_scale: float = 0.92 if intense else 0.68
+			_draw_stylized_flame_tongue(point + Vector2(side_offset, 0.4), h_main * boot_h_scale, w_main * boot_w_scale, wave * (1.15 if intense else 0.70), alpha * (0.94 if intense else 0.80))
+		# Rising glowing ember spark (Stage 1: single hip ember; Stage 2: all 3 anchors emit bright embers)
+		if intense or i == 0:
+			var ember_t: float = fposmod(tick_f * (0.16 if intense else 0.12) + float(i) * 0.37, 1.0)
+			var ember_pos: Vector2 = point + Vector2(sin(tick_f * 0.3 + float(i) * 2.1) * (4.6 if intense else 2.6), -h_main * (0.48 + ember_t * (0.75 if intense else 0.48)))
+			var ember_a: float = (1.0 - ember_t) * alpha
+			draw_circle(ember_pos, 1.15 if intense else 0.88, Color(1.0, 0.32, 0.04, ember_a * 0.85))
+			draw_circle(ember_pos, 0.64 if intense else 0.48, Color(1.0, 0.96, 0.68, ember_a))
 
 
 func _draw() -> void:
@@ -1420,6 +1584,9 @@ func _draw() -> void:
 		if b_state >= 15.0:
 			var f_pos: Vector2 = f.global_position
 			var is_stage_2: bool = (b_state >= 100.0) or (bool(f.get("is_dead")) and bool(f.get("burned")) and b_state >= 25.0)
+			if not _chibi_burn_anchors(f).is_empty():
+				_draw_chibi_burning(f, is_stage_2)
+				continue
 			if is_stage_2 and not _fire_big_seq.is_empty():
 				var b_idx: int = int(_visual_tick * 1.2) % _fire_big_seq.size()
 				_draw_tex_xform(_fire_big_seq[b_idx], f_pos + Vector2(0.0, -9.0), 0.0, Vector2(0.92, 0.96), Color(1.0, 0.68, 0.16, 0.78), Vector2(0.5, 0.78))

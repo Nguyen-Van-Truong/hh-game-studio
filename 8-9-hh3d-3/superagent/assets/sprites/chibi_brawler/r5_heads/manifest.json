@@ -1,0 +1,2523 @@
+{
+  "schema": "hh.chibi_blender_head_atlas.v1",
+  "revision": "R5",
+  "author": "HH Game Studio / Codex",
+  "geometry_authorship": "Original polygon/curve geometry authored by HH Game Studio / Codex",
+  "usage_scope": "Internal art study; recognizable third-party character designs have no assessed public-release clearance",
+  "authoring_tool": "Blender 5.2.3 LTS",
+  "medium": "Editable layered planar meshes, emission cel materials, orthographic render",
+  "source_blend": "res://art/chibi_r5/chibi_r5_heads.blend",
+  "atlas": "res://assets/sprites/chibi_brawler/r5_heads/head_atlas.png",
+  "image": "head_atlas.png",
+  "width": 1024,
+  "height": 3072,
+  "cell_size": 128,
+  "atlas_size": [
+    1024,
+    3072
+  ],
+  "columns": 8,
+  "rows": 24,
+  "generation": "R5.blender.cel.heads.2",
+  "expressions": [
+    "cheeky_smirk",
+    "blazing_glare",
+    "wide_mouth_shout",
+    "dizzy_spiral_hurt",
+    "ecstatic_victory_laugh",
+    "low_hp_sweat",
+    "ko_stars",
+    "blink"
+  ],
+  "characters": [
+    "johnny",
+    "boris",
+    "agent",
+    "hideki",
+    "blaire",
+    "savage",
+    "cruger",
+    "ivan",
+    "brody",
+    "mac",
+    "billy",
+    "scott",
+    "funnyman",
+    "jeff",
+    "solaria",
+    "atlas",
+    "shinobi",
+    "tideweaver",
+    "goku",
+    "luffy",
+    "naruto",
+    "saitama",
+    "goku_awakened",
+    "naruto_awakened"
+  ],
+  "character_order": [
+    "johnny",
+    "boris",
+    "agent",
+    "hideki",
+    "blaire",
+    "savage",
+    "cruger",
+    "ivan",
+    "brody",
+    "mac",
+    "billy",
+    "scott",
+    "funnyman",
+    "jeff",
+    "solaria",
+    "atlas",
+    "shinobi",
+    "tideweaver",
+    "goku",
+    "luffy",
+    "naruto",
+    "saitama",
+    "goku_awakened",
+    "naruto_awakened"
+  ],
+  "base_characters": [
+    "johnny",
+    "boris",
+    "agent",
+    "hideki",
+    "blaire",
+    "savage",
+    "cruger",
+    "ivan",
+    "brody",
+    "mac",
+    "billy",
+    "scott",
+    "funnyman",
+    "jeff",
+    "solaria",
+    "atlas",
+    "shinobi",
+    "tideweaver",
+    "goku",
+    "luffy",
+    "naruto",
+    "saitama"
+  ],
+  "transformation_rows": [
+    "goku_awakened",
+    "naruto_awakened"
+  ],
+  "facing": "right; runtime may mirror whole cell for left",
+  "units_per_pixel": 0.078125,
+  "pivot_px": [
+    64,
+    73
+  ],
+  "world_rect_relative_to_skull_center": [
+    -5,
+    -5.703125,
+    10,
+    10
+  ],
+  "skull_reference_rect_px": [
+    20,
+    27,
+    88,
+    92
+  ],
+  "skull_reference_height_world": 7.1875,
+  "neck_anchor_px": [
+    66,
+    119
+  ],
+  "hair_max_extension_world": 1.875,
+  "cells": {
+    "johnny": {
+      "cheeky_smirk": {
+        "rect": [
+          0,
+          0,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "blazing_glare": {
+        "rect": [
+          128,
+          0,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "wide_mouth_shout": {
+        "rect": [
+          256,
+          0,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "dizzy_spiral_hurt": {
+        "rect": [
+          384,
+          0,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "ecstatic_victory_laugh": {
+        "rect": [
+          512,
+          0,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "low_hp_sweat": {
+        "rect": [
+          640,
+          0,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "ko_stars": {
+        "rect": [
+          768,
+          0,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "blink": {
+        "rect": [
+          896,
+          0,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      }
+    },
+    "boris": {
+      "cheeky_smirk": {
+        "rect": [
+          0,
+          128,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "blazing_glare": {
+        "rect": [
+          128,
+          128,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "wide_mouth_shout": {
+        "rect": [
+          256,
+          128,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "dizzy_spiral_hurt": {
+        "rect": [
+          384,
+          128,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "ecstatic_victory_laugh": {
+        "rect": [
+          512,
+          128,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "low_hp_sweat": {
+        "rect": [
+          640,
+          128,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "ko_stars": {
+        "rect": [
+          768,
+          128,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "blink": {
+        "rect": [
+          896,
+          128,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      }
+    },
+    "agent": {
+      "cheeky_smirk": {
+        "rect": [
+          0,
+          256,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "blazing_glare": {
+        "rect": [
+          128,
+          256,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "wide_mouth_shout": {
+        "rect": [
+          256,
+          256,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "dizzy_spiral_hurt": {
+        "rect": [
+          384,
+          256,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "ecstatic_victory_laugh": {
+        "rect": [
+          512,
+          256,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "low_hp_sweat": {
+        "rect": [
+          640,
+          256,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "ko_stars": {
+        "rect": [
+          768,
+          256,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "blink": {
+        "rect": [
+          896,
+          256,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      }
+    },
+    "hideki": {
+      "cheeky_smirk": {
+        "rect": [
+          0,
+          384,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "blazing_glare": {
+        "rect": [
+          128,
+          384,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "wide_mouth_shout": {
+        "rect": [
+          256,
+          384,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "dizzy_spiral_hurt": {
+        "rect": [
+          384,
+          384,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "ecstatic_victory_laugh": {
+        "rect": [
+          512,
+          384,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "low_hp_sweat": {
+        "rect": [
+          640,
+          384,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "ko_stars": {
+        "rect": [
+          768,
+          384,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "blink": {
+        "rect": [
+          896,
+          384,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      }
+    },
+    "blaire": {
+      "cheeky_smirk": {
+        "rect": [
+          0,
+          512,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "blazing_glare": {
+        "rect": [
+          128,
+          512,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "wide_mouth_shout": {
+        "rect": [
+          256,
+          512,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "dizzy_spiral_hurt": {
+        "rect": [
+          384,
+          512,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "ecstatic_victory_laugh": {
+        "rect": [
+          512,
+          512,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "low_hp_sweat": {
+        "rect": [
+          640,
+          512,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "ko_stars": {
+        "rect": [
+          768,
+          512,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "blink": {
+        "rect": [
+          896,
+          512,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      }
+    },
+    "savage": {
+      "cheeky_smirk": {
+        "rect": [
+          0,
+          640,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "blazing_glare": {
+        "rect": [
+          128,
+          640,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "wide_mouth_shout": {
+        "rect": [
+          256,
+          640,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "dizzy_spiral_hurt": {
+        "rect": [
+          384,
+          640,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "ecstatic_victory_laugh": {
+        "rect": [
+          512,
+          640,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "low_hp_sweat": {
+        "rect": [
+          640,
+          640,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "ko_stars": {
+        "rect": [
+          768,
+          640,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "blink": {
+        "rect": [
+          896,
+          640,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      }
+    },
+    "cruger": {
+      "cheeky_smirk": {
+        "rect": [
+          0,
+          768,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "blazing_glare": {
+        "rect": [
+          128,
+          768,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "wide_mouth_shout": {
+        "rect": [
+          256,
+          768,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "dizzy_spiral_hurt": {
+        "rect": [
+          384,
+          768,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "ecstatic_victory_laugh": {
+        "rect": [
+          512,
+          768,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "low_hp_sweat": {
+        "rect": [
+          640,
+          768,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "ko_stars": {
+        "rect": [
+          768,
+          768,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "blink": {
+        "rect": [
+          896,
+          768,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      }
+    },
+    "ivan": {
+      "cheeky_smirk": {
+        "rect": [
+          0,
+          896,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "blazing_glare": {
+        "rect": [
+          128,
+          896,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "wide_mouth_shout": {
+        "rect": [
+          256,
+          896,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "dizzy_spiral_hurt": {
+        "rect": [
+          384,
+          896,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "ecstatic_victory_laugh": {
+        "rect": [
+          512,
+          896,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "low_hp_sweat": {
+        "rect": [
+          640,
+          896,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "ko_stars": {
+        "rect": [
+          768,
+          896,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "blink": {
+        "rect": [
+          896,
+          896,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      }
+    },
+    "brody": {
+      "cheeky_smirk": {
+        "rect": [
+          0,
+          1024,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "blazing_glare": {
+        "rect": [
+          128,
+          1024,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "wide_mouth_shout": {
+        "rect": [
+          256,
+          1024,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "dizzy_spiral_hurt": {
+        "rect": [
+          384,
+          1024,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "ecstatic_victory_laugh": {
+        "rect": [
+          512,
+          1024,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "low_hp_sweat": {
+        "rect": [
+          640,
+          1024,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "ko_stars": {
+        "rect": [
+          768,
+          1024,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "blink": {
+        "rect": [
+          896,
+          1024,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      }
+    },
+    "mac": {
+      "cheeky_smirk": {
+        "rect": [
+          0,
+          1152,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "blazing_glare": {
+        "rect": [
+          128,
+          1152,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "wide_mouth_shout": {
+        "rect": [
+          256,
+          1152,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "dizzy_spiral_hurt": {
+        "rect": [
+          384,
+          1152,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "ecstatic_victory_laugh": {
+        "rect": [
+          512,
+          1152,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "low_hp_sweat": {
+        "rect": [
+          640,
+          1152,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "ko_stars": {
+        "rect": [
+          768,
+          1152,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "blink": {
+        "rect": [
+          896,
+          1152,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      }
+    },
+    "billy": {
+      "cheeky_smirk": {
+        "rect": [
+          0,
+          1280,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "blazing_glare": {
+        "rect": [
+          128,
+          1280,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "wide_mouth_shout": {
+        "rect": [
+          256,
+          1280,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "dizzy_spiral_hurt": {
+        "rect": [
+          384,
+          1280,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "ecstatic_victory_laugh": {
+        "rect": [
+          512,
+          1280,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "low_hp_sweat": {
+        "rect": [
+          640,
+          1280,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "ko_stars": {
+        "rect": [
+          768,
+          1280,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "blink": {
+        "rect": [
+          896,
+          1280,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      }
+    },
+    "scott": {
+      "cheeky_smirk": {
+        "rect": [
+          0,
+          1408,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "blazing_glare": {
+        "rect": [
+          128,
+          1408,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "wide_mouth_shout": {
+        "rect": [
+          256,
+          1408,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "dizzy_spiral_hurt": {
+        "rect": [
+          384,
+          1408,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "ecstatic_victory_laugh": {
+        "rect": [
+          512,
+          1408,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "low_hp_sweat": {
+        "rect": [
+          640,
+          1408,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "ko_stars": {
+        "rect": [
+          768,
+          1408,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "blink": {
+        "rect": [
+          896,
+          1408,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      }
+    },
+    "funnyman": {
+      "cheeky_smirk": {
+        "rect": [
+          0,
+          1536,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "blazing_glare": {
+        "rect": [
+          128,
+          1536,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "wide_mouth_shout": {
+        "rect": [
+          256,
+          1536,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "dizzy_spiral_hurt": {
+        "rect": [
+          384,
+          1536,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "ecstatic_victory_laugh": {
+        "rect": [
+          512,
+          1536,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "low_hp_sweat": {
+        "rect": [
+          640,
+          1536,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "ko_stars": {
+        "rect": [
+          768,
+          1536,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "blink": {
+        "rect": [
+          896,
+          1536,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      }
+    },
+    "jeff": {
+      "cheeky_smirk": {
+        "rect": [
+          0,
+          1664,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "blazing_glare": {
+        "rect": [
+          128,
+          1664,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "wide_mouth_shout": {
+        "rect": [
+          256,
+          1664,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "dizzy_spiral_hurt": {
+        "rect": [
+          384,
+          1664,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "ecstatic_victory_laugh": {
+        "rect": [
+          512,
+          1664,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "low_hp_sweat": {
+        "rect": [
+          640,
+          1664,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "ko_stars": {
+        "rect": [
+          768,
+          1664,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "blink": {
+        "rect": [
+          896,
+          1664,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      }
+    },
+    "solaria": {
+      "cheeky_smirk": {
+        "rect": [
+          0,
+          1792,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "blazing_glare": {
+        "rect": [
+          128,
+          1792,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "wide_mouth_shout": {
+        "rect": [
+          256,
+          1792,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "dizzy_spiral_hurt": {
+        "rect": [
+          384,
+          1792,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "ecstatic_victory_laugh": {
+        "rect": [
+          512,
+          1792,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "low_hp_sweat": {
+        "rect": [
+          640,
+          1792,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "ko_stars": {
+        "rect": [
+          768,
+          1792,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "blink": {
+        "rect": [
+          896,
+          1792,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      }
+    },
+    "atlas": {
+      "cheeky_smirk": {
+        "rect": [
+          0,
+          1920,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "blazing_glare": {
+        "rect": [
+          128,
+          1920,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "wide_mouth_shout": {
+        "rect": [
+          256,
+          1920,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "dizzy_spiral_hurt": {
+        "rect": [
+          384,
+          1920,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "ecstatic_victory_laugh": {
+        "rect": [
+          512,
+          1920,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "low_hp_sweat": {
+        "rect": [
+          640,
+          1920,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "ko_stars": {
+        "rect": [
+          768,
+          1920,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "blink": {
+        "rect": [
+          896,
+          1920,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      }
+    },
+    "shinobi": {
+      "cheeky_smirk": {
+        "rect": [
+          0,
+          2048,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "blazing_glare": {
+        "rect": [
+          128,
+          2048,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "wide_mouth_shout": {
+        "rect": [
+          256,
+          2048,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "dizzy_spiral_hurt": {
+        "rect": [
+          384,
+          2048,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "ecstatic_victory_laugh": {
+        "rect": [
+          512,
+          2048,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "low_hp_sweat": {
+        "rect": [
+          640,
+          2048,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "ko_stars": {
+        "rect": [
+          768,
+          2048,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "blink": {
+        "rect": [
+          896,
+          2048,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      }
+    },
+    "tideweaver": {
+      "cheeky_smirk": {
+        "rect": [
+          0,
+          2176,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "blazing_glare": {
+        "rect": [
+          128,
+          2176,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "wide_mouth_shout": {
+        "rect": [
+          256,
+          2176,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "dizzy_spiral_hurt": {
+        "rect": [
+          384,
+          2176,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "ecstatic_victory_laugh": {
+        "rect": [
+          512,
+          2176,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "low_hp_sweat": {
+        "rect": [
+          640,
+          2176,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "ko_stars": {
+        "rect": [
+          768,
+          2176,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "blink": {
+        "rect": [
+          896,
+          2176,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      }
+    },
+    "goku": {
+      "cheeky_smirk": {
+        "rect": [
+          0,
+          2304,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "blazing_glare": {
+        "rect": [
+          128,
+          2304,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "wide_mouth_shout": {
+        "rect": [
+          256,
+          2304,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "dizzy_spiral_hurt": {
+        "rect": [
+          384,
+          2304,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "ecstatic_victory_laugh": {
+        "rect": [
+          512,
+          2304,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "low_hp_sweat": {
+        "rect": [
+          640,
+          2304,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "ko_stars": {
+        "rect": [
+          768,
+          2304,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "blink": {
+        "rect": [
+          896,
+          2304,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      }
+    },
+    "luffy": {
+      "cheeky_smirk": {
+        "rect": [
+          0,
+          2432,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "blazing_glare": {
+        "rect": [
+          128,
+          2432,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "wide_mouth_shout": {
+        "rect": [
+          256,
+          2432,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "dizzy_spiral_hurt": {
+        "rect": [
+          384,
+          2432,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "ecstatic_victory_laugh": {
+        "rect": [
+          512,
+          2432,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "low_hp_sweat": {
+        "rect": [
+          640,
+          2432,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "ko_stars": {
+        "rect": [
+          768,
+          2432,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "blink": {
+        "rect": [
+          896,
+          2432,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      }
+    },
+    "naruto": {
+      "cheeky_smirk": {
+        "rect": [
+          0,
+          2560,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "blazing_glare": {
+        "rect": [
+          128,
+          2560,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "wide_mouth_shout": {
+        "rect": [
+          256,
+          2560,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "dizzy_spiral_hurt": {
+        "rect": [
+          384,
+          2560,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "ecstatic_victory_laugh": {
+        "rect": [
+          512,
+          2560,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "low_hp_sweat": {
+        "rect": [
+          640,
+          2560,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "ko_stars": {
+        "rect": [
+          768,
+          2560,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "blink": {
+        "rect": [
+          896,
+          2560,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      }
+    },
+    "saitama": {
+      "cheeky_smirk": {
+        "rect": [
+          0,
+          2688,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "blazing_glare": {
+        "rect": [
+          128,
+          2688,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "wide_mouth_shout": {
+        "rect": [
+          256,
+          2688,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "dizzy_spiral_hurt": {
+        "rect": [
+          384,
+          2688,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "ecstatic_victory_laugh": {
+        "rect": [
+          512,
+          2688,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "low_hp_sweat": {
+        "rect": [
+          640,
+          2688,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "ko_stars": {
+        "rect": [
+          768,
+          2688,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "blink": {
+        "rect": [
+          896,
+          2688,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      }
+    },
+    "goku_awakened": {
+      "cheeky_smirk": {
+        "rect": [
+          0,
+          2816,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "blazing_glare": {
+        "rect": [
+          128,
+          2816,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "wide_mouth_shout": {
+        "rect": [
+          256,
+          2816,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "dizzy_spiral_hurt": {
+        "rect": [
+          384,
+          2816,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "ecstatic_victory_laugh": {
+        "rect": [
+          512,
+          2816,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "low_hp_sweat": {
+        "rect": [
+          640,
+          2816,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "ko_stars": {
+        "rect": [
+          768,
+          2816,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "blink": {
+        "rect": [
+          896,
+          2816,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      }
+    },
+    "naruto_awakened": {
+      "cheeky_smirk": {
+        "rect": [
+          0,
+          2944,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "blazing_glare": {
+        "rect": [
+          128,
+          2944,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "wide_mouth_shout": {
+        "rect": [
+          256,
+          2944,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "dizzy_spiral_hurt": {
+        "rect": [
+          384,
+          2944,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "ecstatic_victory_laugh": {
+        "rect": [
+          512,
+          2944,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "low_hp_sweat": {
+        "rect": [
+          640,
+          2944,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "ko_stars": {
+        "rect": [
+          768,
+          2944,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      },
+      "blink": {
+        "rect": [
+          896,
+          2944,
+          128,
+          128
+        ],
+        "pivot": [
+          64,
+          73
+        ]
+      }
+    }
+  },
+  "identity_topology": {
+    "johnny": "spikes",
+    "boris": "crop",
+    "agent": "slick",
+    "hideki": "tied",
+    "blaire": "bob",
+    "savage": "mohawk",
+    "cruger": "cap",
+    "ivan": "beard",
+    "brody": "visor",
+    "mac": "quiff",
+    "billy": "bandana",
+    "scott": "patrol",
+    "funnyman": "clown",
+    "jeff": "baldbeard",
+    "solaria": "sun",
+    "atlas": "tech",
+    "shinobi": "ninja",
+    "tideweaver": "wave",
+    "goku": "dragon",
+    "luffy": "straw",
+    "naruto": "fox",
+    "saitama": "bald",
+    "goku_awakened": "dragon",
+    "naruto_awakened": "fox"
+  },
+  "script_sha256": "e8e7c9b120b6ad3c31f1438abce716f44c4b3375257aa97e6c496b242f93f4b0",
+  "blend_sha256": "9e69ce4d869b8cfcc6e215019ef8f47078c26e6d2b0a3c793011d256e3b95b45",
+  "atlas_sha256": "b09303d5e73656140c0e8a14638af4f6e67e3c113f7bc3ae86d47b6ef70412ee",
+  "reference_sheet_sha256": "77ca7a69e3e75388e1fe33c5973282fa11e005dbed1f8669e2c76271687933bb",
+  "reference_use": "Visual art direction only; no pixels extracted or bundled in this atlas",
+  "render_elapsed_seconds": 9.698,
+  "art_acceptance": "Requires in-game size and human aesthetic review; render completion alone is not acceptance"
+}

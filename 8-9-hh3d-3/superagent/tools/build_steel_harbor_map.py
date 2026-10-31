@@ -117,18 +117,6 @@ def draw_hatch_shaft(draw: ImageDraw.ImageDraw, left: float, top: float, right: 
     draw.rectangle((x1 - 2, y0, x1 - 1, y1 - 1), fill=(122, 134, 148, 255))
 
 
-def draw_hatch_grating(draw: ImageDraw.ImageDraw, left: float, top: float, right: float, bottom: float):
-    """Draws a semi-open one-way (CLOUD) steel safety grating over a ladder hatch mouth."""
-    x0, y0 = wx_to_px(left), wy_to_py(top)
-    x1, y1 = wx_to_px(right), wy_to_py(bottom)
-    # Top/bottom thin steel frame bars
-    draw.line((x0, y0, x1 - 1, y0), fill=(224, 192, 68, 235))
-    draw.line((x0, y1 - 1, x1 - 1, y1 - 1), fill=(68, 78, 92, 220))
-    # Open grating bars every 4px so ladder rails/rungs remain clearly visible through the hatch
-    for gx in range(x0 + 2, x1 - 2, 4):
-        draw.line((gx, y0 + 1, gx, y1 - 2), fill=(148, 160, 176, 185))
-
-
 def draw_portal_doorway(draw: ImageDraw.ImageDraw, left: float, top: float, right: float, bottom: float):
     """Draws an industrial transit doorway at a map portal entry/exit."""
     x0, y0 = wx_to_px(left), wy_to_py(top)
@@ -305,22 +293,19 @@ def generate_layers():
     draw_steel_catwalk(mid_draw, mid, 14.0, -52.0, 92.0, -48.0, hazard_left=True, hazard_right=True)
     # catwalk_right_outer: [123, -52, 224, -48] -> connects right tower roof to catwalk_right across a 31px jumpable gap [92, 123]!
     draw_steel_catwalk(mid_draw, mid, 123.0, -52.0, 224.0, -48.0, hazard_left=True, hazard_right=True)
-    # High crane walkways (y = -108.0) with 16px chain pass-through gaps at [-102, -86] and [88, 104] for fast upper infiltration!
-    draw_steel_catwalk(mid_draw, mid, -356.0, -108.0, -102.0, -104.0, hazard_right=True)
+    # High crane walkways (y = -108.0) retain the chain gaps at [-102, -86] and
+    # [88, 104], and now open 20px ladder mouths at [-308, -288] / [288, 308].
+    draw_steel_catwalk(mid_draw, mid, -356.0, -108.0, -308.0, -104.0, hazard_right=True)
+    draw_steel_catwalk(mid_draw, mid, -288.0, -108.0, -102.0, -104.0, hazard_left=True, hazard_right=True)
     draw_steel_catwalk(mid_draw, mid, -86.0, -108.0, 88.0, -104.0, hazard_left=True, hazard_right=True)
-    draw_steel_catwalk(mid_draw, mid, 104.0, -108.0, 356.0, -104.0, hazard_left=True)
+    draw_steel_catwalk(mid_draw, mid, 104.0, -108.0, 288.0, -104.0, hazard_left=True, hazard_right=True)
+    draw_steel_catwalk(mid_draw, mid, 308.0, -108.0, 356.0, -104.0, hazard_left=True)
 
     # Ladders drawn ON TOP of the open hatch shafts, with top handrails extending 12px above top platforms!
     draw_ladder(mid_draw, -306.0, -120.0, -290.0, 12.0)   # ladder_left_upper (y: -120..12)
     draw_ladder(mid_draw, 290.0, -120.0, 306.0, 12.0)     # ladder_right_upper (y: -120..12)
     draw_ladder(mid_draw, -76.0, 64.0, -60.0, 140.0)      # ladder_pit_left (y: 64..140)
     draw_ladder(mid_draw, 60.0, 64.0, 76.0, 140.0)        # ladder_pit_right (y: 64..140)
-
-    # Semi-open one-way (CLOUD) steel safety gratings across the 4 ladder hatch mouths
-    draw_hatch_grating(mid_draw, -308.0, -56.0, -288.0, -52.0)
-    draw_hatch_grating(mid_draw, 288.0, -56.0, 308.0, -52.0)
-    draw_hatch_grating(mid_draw, -78.0, 76.0, -58.0, 80.0)
-    draw_hatch_grating(mid_draw, 58.0, 76.0, 78.0, 80.0)
 
     # Ceiling anchor brackets at x = -94.0 and x = 96.0 on ceiling_main bottom (y = -172.0)
     for ax in [-94.0, 96.0]:
@@ -352,23 +337,21 @@ def build_map_definition() -> dict:
         # Control tower foundations & floors (top_y = 12.0, bottom_y = 108.0): [-356, 12, -228, 108] & [228, 12, 356, 108]
         {"var_name": "tower_left_floor", "material": "Ground", "x": -292.0, "y": 60.0, "w": 128.0, "h": 96.0, "angle": 0.0, "tags": ["NONE"]},
         {"var_name": "tower_right_floor", "material": "Ground", "x": 292.0, "y": 60.0, "w": 128.0, "h": 96.0, "angle": 0.0, "tags": ["NONE"]},
-        # Main concrete harbor decks (top_y = 76.0..108.0), split around 20px ladder hatches [-78, -58] and [58, 78]
+        # Main concrete harbor decks (top_y = 76.0..108.0), split around 20px
+        # open ladder shafts [-78, -58] and [58, 78]
         {"var_name": "deck_left_outer", "material": "Ground", "x": -153.0, "y": 92.0, "w": 150.0, "h": 32.0, "angle": 0.0, "tags": ["NONE"]},
         {"var_name": "deck_left_lip", "material": "Ground", "x": -53.0, "y": 92.0, "w": 10.0, "h": 32.0, "angle": 0.0, "tags": ["NONE"]},
-        {"var_name": "hatch_deck_left", "material": "Metal", "x": -68.0, "y": 78.0, "w": 20.0, "h": 4.0, "angle": 0.0, "tags": ["CLOUD"]},
         {"var_name": "deck_right_lip", "material": "Ground", "x": 53.0, "y": 92.0, "w": 10.0, "h": 32.0, "angle": 0.0, "tags": ["NONE"]},
         {"var_name": "deck_right_outer", "material": "Ground", "x": 153.0, "y": 92.0, "w": 150.0, "h": 32.0, "angle": 0.0, "tags": ["NONE"]},
-        {"var_name": "hatch_deck_right", "material": "Metal", "x": 68.0, "y": 78.0, "w": 20.0, "h": 4.0, "angle": 0.0, "tags": ["CLOUD"]},
         # Lower maintenance subdecks (top_y = 140.0)
         {"var_name": "subdeck_center", "material": "Metal", "x": -88.0, "y": 148.0, "w": 80.0, "h": 16.0, "angle": 0.0, "tags": ["NONE"]},
         {"var_name": "subdeck_right", "material": "Metal", "x": 88.0, "y": 148.0, "w": 80.0, "h": 16.0, "angle": 0.0, "tags": ["NONE"]},
-        # Control tower roofs (top_y = -56.0, bottom_y = -48.0), split around 20px ladder hatches [-308, -288] and [288, 308]
+        # Control tower roofs (top_y = -56.0, bottom_y = -48.0), split around
+        # 20px open ladder shafts [-308, -288] and [288, 308]
         {"var_name": "tower_left_roof_l", "material": "Metal", "x": -332.0, "y": -52.0, "w": 48.0, "h": 8.0, "angle": 0.0, "tags": ["NONE"]},
         {"var_name": "tower_left_roof_r", "material": "Metal", "x": -260.0, "y": -52.0, "w": 56.0, "h": 8.0, "angle": 0.0, "tags": ["NONE"]},
-        {"var_name": "hatch_tower_left", "material": "Metal", "x": -298.0, "y": -54.0, "w": 20.0, "h": 4.0, "angle": 0.0, "tags": ["CLOUD"]},
         {"var_name": "tower_right_roof_l", "material": "Metal", "x": 260.0, "y": -52.0, "w": 56.0, "h": 8.0, "angle": 0.0, "tags": ["NONE"]},
         {"var_name": "tower_right_roof_r", "material": "Metal", "x": 332.0, "y": -52.0, "w": 48.0, "h": 8.0, "angle": 0.0, "tags": ["NONE"]},
-        {"var_name": "hatch_tower_right", "material": "Metal", "x": 298.0, "y": -54.0, "w": 20.0, "h": 4.0, "angle": 0.0, "tags": ["CLOUD"]},
         # One-way steel catwalks (CLOUD, top_y = -52.0 / -54.0)
         {"var_name": "catwalk_step_left", "material": "Metal", "x": -228.0, "y": -52.0, "w": 8.0, "h": 4.0, "angle": 0.0, "tags": ["CLOUD"]},
         {"var_name": "catwalk_step_right", "material": "Metal", "x": 228.0, "y": -52.0, "w": 8.0, "h": 4.0, "angle": 0.0, "tags": ["CLOUD"]},
@@ -382,10 +365,13 @@ def build_map_definition() -> dict:
         {"var_name": "catwalk_right", "material": "Metal", "x": 53.0, "y": -50.0, "w": 78.0, "h": 4.0, "angle": 0.0, "tags": ["CLOUD"]},
         # catwalk_right_outer spans [123.0, 224.0] at top_y = -52.0 (leaves 31px jumpable gap [92.0, 123.0] clear for crate_hanging_2!)
         {"var_name": "catwalk_right_outer", "material": "Metal", "x": 173.5, "y": -50.0, "w": 101.0, "h": 4.0, "angle": 0.0, "tags": ["CLOUD"]},
-        # High crane walkways (CLOUD, top_y = -108.0): [-356, -102], [-86, 88], & [104, 356] (16px chain gaps at [-102, -86] & [88, 104])
-        {"var_name": "crane_walk_left", "material": "Metal", "x": -229.0, "y": -106.0, "w": 254.0, "h": 4.0, "angle": 0.0, "tags": ["CLOUD"]},
+        # High crane walkways (CLOUD, top_y = -108.0): ladder mouths at
+        # [-308, -288] / [288, 308] and chain gaps at [-102, -86] / [88, 104].
+        {"var_name": "crane_walk_left", "material": "Metal", "x": -332.0, "y": -106.0, "w": 48.0, "h": 4.0, "angle": 0.0, "tags": ["CLOUD"]},
+        {"var_name": "crane_walk_left_inner", "material": "Metal", "x": -195.0, "y": -106.0, "w": 186.0, "h": 4.0, "angle": 0.0, "tags": ["CLOUD"]},
         {"var_name": "crane_walk_center", "material": "Metal", "x": 1.0, "y": -106.0, "w": 174.0, "h": 4.0, "angle": 0.0, "tags": ["CLOUD"]},
-        {"var_name": "crane_walk_right", "material": "Metal", "x": 230.0, "y": -106.0, "w": 252.0, "h": 4.0, "angle": 0.0, "tags": ["CLOUD"]},
+        {"var_name": "crane_walk_right_inner", "material": "Metal", "x": 196.0, "y": -106.0, "w": 184.0, "h": 4.0, "angle": 0.0, "tags": ["CLOUD"]},
+        {"var_name": "crane_walk_right", "material": "Metal", "x": 332.0, "y": -106.0, "w": 48.0, "h": 4.0, "angle": 0.0, "tags": ["CLOUD"]},
         # Ladders (top_y extends 12px above top platform, 0 solid NONE slabs intersecting shafts!)
         {"var_name": "ladder_left_upper", "material": "Metal", "x": -298.0, "y": -54.0, "w": 16.0, "h": 132.0, "angle": 0.0, "tags": ["LADDER"]},
         {"var_name": "ladder_right_upper", "material": "Metal", "x": 298.0, "y": -54.0, "w": 16.0, "h": 132.0, "angle": 0.0, "tags": ["LADDER"]},
@@ -437,7 +423,7 @@ def build_map_definition() -> dict:
         make_prop("crate_hanging_2", "CRATE_HANGING", 96.0, -96.0),
         # Explosive barrel on deck_left directly below crate_hanging_1
         make_prop("barrel_exp_drop", "BARREL_EXPLOSIVE", -94.0, 68.5),
-        # Left deck cover & stacked crates (clear of stairs_left x=-164 and hatch_deck_left [-78, -58])
+        # Left deck cover & stacked crates (clear of stairs_left x=-164 and the open shaft [-78, -58])
         make_prop("crate_deck_l1", "CRATE", -148.0, 68.0),
         make_prop("crate_deck_l2", "CRATE", -148.0, 52.0),
         make_prop("barrel_deck_l", "BARREL", -122.0, 68.5),

@@ -10,9 +10,11 @@ const MainMenuScene: PackedScene = preload("res://scenes/ui/main_menu.tscn")
 var menu_layer: CanvasLayer = null
 var main_menu: Control = null
 var match_world: Node2D = null
+var _quitting: bool = false
 
 
 func _ready() -> void:
+	get_tree().auto_accept_quit = false
 	MapLoaderScript.get_registry()
 	MapLoaderScript.get_audio()
 
@@ -23,6 +25,23 @@ func _ready() -> void:
 		_on_start_match_requested(cli_config)
 	else:
 		show_main_menu()
+
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_WM_CLOSE_REQUEST and is_inside_tree():
+		_quit_cleanly()
+
+
+func _quit_cleanly() -> void:
+	if _quitting:
+		return
+	_quitting = true
+	process_mode = Node.PROCESS_MODE_DISABLED
+	var audio: Node = get_node_or_null("/root/AudioManager")
+	var drained: bool = true
+	if audio != null and audio.has_method("stop_all_and_drain"):
+		drained = bool(await audio.call("stop_all_and_drain"))
+	get_tree().quit(0 if drained else 1)
 
 
 func _setup_menu_and_world() -> void:
@@ -94,6 +113,9 @@ func show_main_menu() -> void:
 	if match_world != null and is_instance_valid(match_world):
 		match_world.visible = false
 		match_world.process_mode = Node.PROCESS_MODE_DISABLED
+		var hud: CanvasLayer = match_world.get("hud_controller") as CanvasLayer
+		if hud != null:
+			hud.visible = false
 	if main_menu != null and is_instance_valid(main_menu):
 		main_menu.visible = true
 		main_menu.set("current_panel", "MAIN")
@@ -108,3 +130,6 @@ func _on_start_match_requested(config: Dictionary) -> void:
 		match_world.visible = true
 		match_world.process_mode = Node.PROCESS_MODE_INHERIT
 		match_world.call("start_match", config)
+		var hud: CanvasLayer = match_world.get("hud_controller") as CanvasLayer
+		if hud != null:
+			hud.visible = true

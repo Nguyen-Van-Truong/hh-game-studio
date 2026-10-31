@@ -37,6 +37,8 @@ var _melee_combo_toggle: bool = false
 var _jump_pulse_toggle: bool = false
 var _last_bot_pos: Vector2 = Vector2.ZERO
 var _last_decision_summary: String = "IDLE"
+var _ladder_exit_hold: bool = false
+var _ladder_exit_goal: Vector2 = Vector2.ZERO
 
 
 func _init(p_difficulty: int = DIFF_MEDIUM) -> void:
@@ -138,6 +140,13 @@ func compute_bot_input(fighter: Node2D, match_world: Node2D, step_24hz: float = 
 	var dy: float = enemy_pos.y - my_pos.y
 	var abs_dx: float = absf(dx)
 	var abs_dy: float = absf(dy)
+
+	# 3b. Powered Fighter AI Skill Casting (EC-27): bots playing any of the 8 Powered Fighters actively cast skills 1..4!
+	if bool(fighter.get("is_powered_fighter")) and not bool(fighter.get("is_summoned_clone")):
+		var sk_input: Dictionary = _evaluate_powered_bot_skills(fighter, target_fighter, abs_dx, abs_dy, dx)
+		if not sk_input.is_empty():
+			_last_decision_summary = "POWERED_SKILL"
+			return sk_input
 
 	# 4. Check if we have a loaded gun or throwable
 	var has_gun: bool = _fighter_has_loaded_gun(fighter)
@@ -414,6 +423,11 @@ func _follow_path_towards(
 	var input: Dictionary = _make_empty_input()
 	var my_pos: Vector2 = fighter.global_position
 	var on_ground: bool = bool(fighter.get("on_ground"))
+	if _ladder_exit_hold:
+		if bool(fighter.get("climbing")) or not on_ground or goal_pos.distance_to(_ladder_exit_goal) > 8.0 or absf(my_pos.y - _ladder_exit_goal.y) > 14.0 or absf(my_pos.x - _ladder_exit_goal.x) > 20.0:
+			_ladder_exit_hold = false
+		else:
+			return input
 
 	# Immediately invalidate path if teleported through a portal (position jumped > 32px)
 	if _last_bot_pos != Vector2.ZERO and my_pos.distance_to(_last_bot_pos) > 32.0:
@@ -422,27 +436,72 @@ func _follow_path_towards(
 	_last_bot_pos = my_pos
 
 	_path_recalc_timer -= step_24hz
-	if current_path.is_empty() or _path_recalc_timer <= 0.0 or current_path_index >= current_path.size():
+	# Do not replace an active ladder route while the fighter is climbing. A
+	# partial recalc can map the fighter's in-shaft position to no graph node,
+	# dropping the final LADDER edge and stopping the Up input before dismount.
+	var preserve_climb_route: bool = bool(fighter.get("climbing")) and not current_path.is_empty() and current_path_index < current_path.size()
+	if not preserve_climb_route and current_path_index < current_path.size() and current_path_index >= current_path.size() - 1:
+		var exit_step: Dictionary = current_path[current_path_index]
+		var exit_action: String = str(exit_step.get("action", "ROAD")).to_upper()
+		var exit_target: Vector2 = exit_step.get("target_pos", goal_pos) as Vector2
+		preserve_climb_route = exit_action == "LADDER" and not bool(fighter.get("climbing")) and absf(my_pos.x - exit_target.x) <= 16.0 and absf(my_pos.y - exit_target.y) <= 14.0
+	if (not preserve_climb_route and _path_recalc_timer <= 0.0) or current_path_index >= current_path.size():
 		current_path = find_path(my_pos, goal_pos, map_loader)
 		current_path_index = 0
-		_path_recalc_timer = float(max(6, update_delay * 3))
+		_path_recalc_timer = float(max(8, update_delay * 3))
 
 	var step_from: Vector2 = my_pos
 	var step_target: Vector2 = goal_pos
 	var action: String = "ROAD"
+	var advanced_this_tick: bool = false
 
 	if not current_path.is_empty() and current_path_index < current_path.size():
 		var step_data: Dictionary = current_path[current_path_index]
 		step_from = step_data.get("from_pos", my_pos) as Vector2
 		step_target = step_data.get("target_pos", goal_pos) as Vector2
 		action = str(step_data.get("action", "ROAD")).to_upper()
-		if absf(my_pos.x - step_target.x) <= 8.0 and absf(my_pos.y - step_target.y) <= 14.0:
+		# Keep the final LADDER edge active until the controller actually
+		# dismounts. Advancing while still climbing leaves an empty path on the
+		# next tick, which freezes the bot just below an open ladder mouth.
+		var holding_final_ladder: bool = action == "LADDER" and current_path_index >= current_path.size() - 1 and bool(fighter.get("climbing"))
+		var grounded_ladder_exit: bool = action == "LADDER" and on_ground and not bool(fighter.get("climbing"))
+		if not holding_final_ladder and not grounded_ladder_exit and absf(my_pos.x - step_target.x) <= 8.0 and absf(my_pos.y - step_target.y) <= 14.0:
 			current_path_index += 1
+			advanced_this_tick = true
 			if current_path_index < current_path.size():
 				step_data = current_path[current_path_index]
 				step_from = step_data.get("from_pos", my_pos) as Vector2
 				step_target = step_data.get("target_pos", goal_pos) as Vector2
 				action = str(step_data.get("action", "ROAD")).to_upper()
+	# An open ladder mouth has no center floor at its target Y. The controller
+	# intentionally dismounts onto a neighbouring slab (or starts falling), so
+	# do not steer back toward the missing center tile after the ladder action
+	# has reached its authored height.
+	if not advanced_this_tick and action == "LADDER" and not bool(fighter.get("climbing")) and on_ground and absf(my_pos.y - step_target.y) <= 14.0 and absf(my_pos.x - step_target.x) <= 16.0:
+		current_path_index += 1
+		if current_path_index < current_path.size():
+			var next_step: Dictionary = current_path[current_path_index]
+			step_from = next_step.get("from_pos", my_pos) as Vector2
+			step_target = next_step.get("target_pos", goal_pos) as Vector2
+			action = str(next_step.get("action", "ROAD")).to_upper()
+		else:
+			# The final ladder edge ended on a supported neighbouring slab. Treat
+			# that side dismount as route completion instead of steering back into
+			# the intentionally empty mouth center.
+			_ladder_exit_hold = true
+			_ladder_exit_goal = goal_pos
+			current_path.clear()
+			current_path_index = 0
+			return input
+	# A ladder that ends at an open mouth can dismount into air instead of a
+	# support slab. Keep the controller neutral during that short exit so a
+	# positive dy does not press Down and immediately re-grab the ladder.
+	if action == "LADDER" and not on_ground and not bool(fighter.get("climbing")) and step_target.y < step_from.y and current_path_index >= current_path.size() - 1 and absf(my_pos.x - step_target.x) <= 16.0 and my_pos.y <= step_target.y + 6.0:
+		_ladder_exit_hold = true
+		_ladder_exit_goal = goal_pos
+		current_path.clear()
+		current_path_index = 0
+		return input
 
 	var dx: float = step_target.x - my_pos.x
 	var dy: float = step_target.y - my_pos.y
@@ -458,7 +517,8 @@ func _follow_path_towards(
 				else:
 					input["right"] = true
 			if not need_align_x or is_climbing_now:
-				if dy < -2.0:
+				var hold_final_ladder_up: bool = is_climbing_now and current_path_index >= current_path.size() - 1 and step_target.y < step_from.y
+				if dy < -2.0 or hold_final_ladder_up:
 					input["up"] = true
 				elif dy > 2.0:
 					input["down"] = true
@@ -615,7 +675,7 @@ func _find_explosive_prop_near(target_pos: Vector2, match_world: Node2D, max_rad
 func _has_line_of_sight(from_pt: Vector2, to_pt: Vector2, map_loader: Node2D, ignore_cover_id: int = -1) -> bool:
 	if map_loader == null or not is_instance_valid(map_loader) or not map_loader.has_method("raycast_solid"):
 		return true
-	var hit: Dictionary = map_loader.call("raycast_solid", from_pt, to_pt, ignore_cover_id, false) as Dictionary
+	var hit: Dictionary = map_loader.call("raycast_solid", from_pt, to_pt, ignore_cover_id, false, false) as Dictionary
 	if not bool(hit.get("hit", false)):
 		return true
 	var hit_prop: Node2D = hit.get("prop", null) as Node2D
@@ -623,6 +683,55 @@ func _has_line_of_sight(from_pt: Vector2, to_pt: Vector2, map_loader: Node2D, ig
 		return true
 	var hit_pos: Vector2 = hit.get("pos", to_pt) as Vector2
 	return hit_pos.distance_to(to_pt) <= 14.0
+
+
+func _evaluate_powered_bot_skills(
+	fighter: Node2D,
+	enemy: Node2D,
+	abs_dx: float,
+	abs_dy: float,
+	dx: float
+) -> Dictionary:
+	if not fighter.has_method("can_cast_skill_slot"):
+		return {}
+	var face_left: bool = dx < 0.0
+	var face_right: bool = dx >= 0.0
+	# 1. Check Ultimate (Skill 4) when enemy is in range and aligned
+	if abs_dx <= 180.0 and abs_dy <= 42.0 and bool(fighter.call("can_cast_skill_slot", 4)):
+		if difficulty >= DIFF_MEDIUM or randf() < 0.35:
+			var inp4: Dictionary = _make_empty_input()
+			inp4["left"] = face_left
+			inp4["right"] = face_right
+			inp4["skill_4"] = true
+			inp4["skill_4_just_pressed"] = true
+			return inp4
+	# 2. Check Gap-closer / Summon / Mobility (Skill 3) when at medium-far distance
+	if abs_dx >= 48.0 and abs_dx <= 170.0 and abs_dy <= 55.0 and bool(fighter.call("can_cast_skill_slot", 3)):
+		if randf() < 0.45:
+			var inp3: Dictionary = _make_empty_input()
+			inp3["left"] = face_left
+			inp3["right"] = face_right
+			inp3["skill_3"] = true
+			inp3["skill_3_just_pressed"] = true
+			return inp3
+	# 3. Check Utility / Parry / Charge (Skill 2) when close or low resource
+	if abs_dx <= 95.0 and abs_dy <= 38.0 and bool(fighter.call("can_cast_skill_slot", 2)):
+		if randf() < 0.40:
+			var inp2: Dictionary = _make_empty_input()
+			inp2["left"] = face_left
+			inp2["right"] = face_right
+			inp2["skill_2"] = true
+			inp2["skill_2_just_pressed"] = true
+			return inp2
+	# 4. Check Primary Strike / Projectile (Skill 1)
+	if abs_dx <= 135.0 and abs_dy <= 36.0 and bool(fighter.call("can_cast_skill_slot", 1)):
+		var inp1: Dictionary = _make_empty_input()
+		inp1["left"] = face_left
+		inp1["right"] = face_right
+		inp1["skill_1"] = true
+		inp1["skill_1_just_pressed"] = true
+		return inp1
+	return {}
 
 
 func _make_empty_input() -> Dictionary:
@@ -635,6 +744,10 @@ func _make_empty_input() -> Dictionary:
 		"attack": false,
 		"sprint": false,
 		"powerup": false,
+		"skill_1": false,
+		"skill_2": false,
+		"skill_3": false,
+		"skill_4": false,
 		"slot_1": false,
 		"slot_2": false,
 		"slot_3": false,

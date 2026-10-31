@@ -70,6 +70,9 @@ var _ledge_fulcrum_x: float = NAN
 var _ledge_fulcrum_y: float = INF
 var on_ground: bool = false
 var is_destroyed: bool = false
+var is_sleeping: bool = false
+var _sleep_frames: float = 0.0
+var _sleep_glass_version: int = 0
 
 var is_burning: bool = false
 var burn_timer: float = 0.0
@@ -492,6 +495,8 @@ func setup_prop(
 	_ledge_overhang_dir = 0.0
 	_ledge_fulcrum_x = NAN
 	_ledge_fulcrum_y = INF
+	is_sleeping = false
+	_sleep_frames = 0.0
 	_sync_rotated_dimensions()
 
 	var spr_path: String = str(def.get("sprite", "res://assets/sprites/props/obj_crate_01.png"))
@@ -922,6 +927,41 @@ func _get_support_y_below(next_x: float, prev_bottom: float, next_bottom: float,
 	return best_y
 
 
+func _find_overlapping_ladder_hatch(at_x: float, at_y: float) -> Rect2:
+	if _settling_frames > 0.0 or is_hanging_crate or map_loader == null or not is_instance_valid(map_loader) or map_loader.get("ladder_rects") == null:
+		return Rect2()
+	var half_w: float = width * 0.5
+	for lr_v: Variant in map_loader.get("ladder_rects") as Array:
+		var lr: Rect2 = lr_v as Rect2
+		var cx: float = lr.position.x + lr.size.x * 0.5
+		var hatch_half: float = maxf(half_w * 0.55, lr.size.x * 0.5 + 1.5)
+		if absf(at_x - cx) <= hatch_half and at_y >= lr.position.y - height - 10.0 and at_y <= lr.end.y - 4.0:
+			return lr
+	return Rect2()
+
+
+func _append_clipped_support_seg(segs: Array[Vector3], surf_y: float, c1: float, c2: float, min_w: float, hatch_r: Rect2, half_w: float) -> float:
+	if hatch_r.size.x > 0.0 and surf_y < hatch_r.end.y - 6.0:
+		var cut_l: float = hatch_r.position.x - maxf(2.0, half_w - 2.0)
+		var cut_r: float = hatch_r.end.x + maxf(2.0, half_w - 2.0)
+		var best: float = INF
+		if c1 < cut_l:
+			var r1: float = minf(c2, cut_l)
+			if r1 - c1 >= min_w:
+				segs.append(Vector3(surf_y, c1, r1))
+				best = surf_y
+		if c2 > cut_r:
+			var l2: float = maxf(c1, cut_r)
+			if c2 - l2 >= min_w:
+				segs.append(Vector3(surf_y, l2, c2))
+				best = surf_y
+		return best
+	if c2 - c1 >= min_w:
+		segs.append(Vector3(surf_y, c1, c2))
+		return surf_y
+	return INF
+
+
 func _query_ledge_contact_manifold(at_x: float, prev_bottom: float, next_bottom: float) -> Dictionary:
 	# 1D Sutherland-Hodgman Contact Manifold Clipping (Box2D b2CollidePolygon.as):
 	# Clips the prop's horizontal base interval [box_left, box_right] against all candidate support surfaces
@@ -938,6 +978,7 @@ func _query_ledge_contact_manifold(at_x: float, prev_bottom: float, next_bottom:
 	var min_cloud_y: float = prev_bottom - (4.5 if (_settling_frames > 0.0 or on_ground) else 2.5) - tilt_lift
 	var max_surf_y: float = prev_bottom + max_drop
 	var min_contact_w: float = minf(2.2, width * 0.22)
+	var hatch_r: Rect2 = _find_overlapping_ladder_hatch(at_x, prev_bottom - height * 0.5)
 
 	var segs: Array[Vector3] = [] # Vector3(surf_y, c1, c2)
 	var best_y: float = INF
@@ -951,10 +992,9 @@ func _query_ledge_contact_manifold(at_x: float, prev_bottom: float, next_bottom:
 					if sr.size.x >= 1.0 and sr.position.y >= min_solid_y and sr.position.y <= max_surf_y:
 						var c1: float = maxf(box_left, sr.position.x)
 						var c2: float = minf(box_right, sr.end.x)
-						if c2 - c1 >= min_contact_w:
-							segs.append(Vector3(sr.position.y, c1, c2))
-							if sr.position.y < best_y:
-								best_y = sr.position.y
+						var sy: float = _append_clipped_support_seg(segs, sr.position.y, c1, c2, min_contact_w, hatch_r, half_w)
+						if sy < best_y:
+							best_y = sy
 
 		var c_var: Variant = map_loader.get("cloud_rects")
 		if typeof(c_var) == TYPE_ARRAY:
@@ -964,10 +1004,9 @@ func _query_ledge_contact_manifold(at_x: float, prev_bottom: float, next_bottom:
 					if cr.size.x >= 1.0 and cr.position.y >= min_cloud_y and cr.position.y <= max_surf_y:
 						var c1: float = maxf(box_left, cr.position.x)
 						var c2: float = minf(box_right, cr.end.x)
-						if c2 - c1 >= min_contact_w:
-							segs.append(Vector3(cr.position.y, c1, c2))
-							if cr.position.y < best_y:
-								best_y = cr.position.y
+						var cy: float = _append_clipped_support_seg(segs, cr.position.y, c1, c2, min_contact_w, hatch_r, half_w)
+						if cy < best_y:
+							best_y = cy
 
 		if map_loader.has_method("get_intact_horizontal_glass_rects"):
 			for gr: Rect2 in map_loader.call("get_intact_horizontal_glass_rects") as Array[Rect2]:
@@ -1130,8 +1169,11 @@ func _resolve_obb_world_sat_contacts(cand_pos: Vector2, prev_pos: Vector2) -> Ve
 				if absf(cr.position.y - _ledge_fulcrum_y) <= 2.5:
 					obstacles.append(cr)
 
+	var sat_hatch_r: Rect2 = _find_overlapping_ladder_hatch(cand_pos.x, cand_pos.y) if absf(velocity.y) > 0.12 else Rect2()
 	for sr: Rect2 in obstacles:
 		if sr.size.x < 1.0 or sr.size.y < 1.5:
+			continue
+		if _is_shaft_side_obstacle(sr, sat_hatch_r):
 			continue
 		var sc: Vector2 = sr.position + sr.size * 0.5
 		var sh: Vector2 = sr.size * 0.5
@@ -1212,6 +1254,15 @@ func _get_solid_world_obstacles() -> Array[Rect2]:
 	return out
 
 
+func _is_shaft_side_obstacle(sr: Rect2, hatch_r: Rect2) -> bool:
+	if hatch_r.size.x <= 0.0:
+		return false
+	if sr.position.y >= hatch_r.end.y - 6.0 or sr.end.y <= hatch_r.position.y - 8.0:
+		return false
+	var near_x: bool = (sr.end.x >= hatch_r.position.x - 18.0 and sr.position.x <= hatch_r.end.x + 18.0)
+	return near_x
+
+
 func _clamp_x_against_walls(cand_x: float, at_y: float, from_x: float = INF) -> float:
 	if map_loader == null or not is_instance_valid(map_loader):
 		return cand_x
@@ -1220,11 +1271,14 @@ func _clamp_x_against_walls(cand_x: float, at_y: float, from_x: float = INF) -> 
 	var half_h: float = height * 0.5
 	var top_y: float = at_y - half_h + 2.0
 	var bot_y: float = at_y + half_h - 2.0
+	var hatch_r: Rect2 = _find_overlapping_ladder_hatch(cand_x, at_y) if absf(velocity.y) > 0.12 else Rect2()
 
 	for sr: Rect2 in _get_solid_world_obstacles():
 		if sr.size.y < 3.0 or sr.size.x < 1.0:
 			continue
 		if bot_y <= sr.position.y or top_y >= sr.end.y:
+			continue
+		if _is_shaft_side_obstacle(sr, hatch_r):
 			continue
 		if prev_x + half_w <= sr.position.x + 3.5 and cand_x + half_w > sr.position.x:
 			cand_x = minf(cand_x, sr.position.x - half_w)
@@ -1274,9 +1328,12 @@ func _clamp_y_against_ceilings(cand_x: float, prev_y: float, cand_y: float) -> f
 	var right_x: float = cand_x + half_w - skin_x
 	var prev_top: float = prev_y - half_h
 	var cand_top: float = cand_y - half_h
+	var hatch_r: Rect2 = _find_overlapping_ladder_hatch(cand_x, cand_y)
 
 	for sr: Rect2 in _get_solid_world_obstacles():
 		if sr.size.y < 2.0 or right_x <= sr.position.x or left_x >= sr.end.x:
+			continue
+		if _is_shaft_side_obstacle(sr, hatch_r):
 			continue
 		if prev_top >= sr.end.y - 4.0 and cand_top < sr.end.y:
 			cand_y = maxf(cand_y, sr.end.y + half_h)
@@ -1301,9 +1358,65 @@ func _clamp_y_against_ceilings(cand_x: float, prev_y: float, cand_y: float) -> f
 	return cand_y
 
 
+func wake_up() -> void:
+	is_sleeping = false
+	_sleep_frames = 0.0
+
+
+func _wake_nearby_props(radius_pad: float = 28.0) -> void:
+	if match_world == null or not is_instance_valid(match_world):
+		return
+	var props_v: Variant = match_world.get("props")
+	if typeof(props_v) != TYPE_ARRAY:
+		return
+	var wake_rx: float = width * 0.5 + radius_pad
+	var wake_ry: float = height + radius_pad + 18.0
+	for p_v: Variant in props_v as Array:
+		if p_v is Node2D and is_instance_valid(p_v) and p_v != self:
+			var op: Node2D = p_v as Node2D
+			if bool(op.get("is_sleeping")):
+				if absf(op.global_position.x - global_position.x) <= wake_rx and absf(op.global_position.y - global_position.y) <= wake_ry:
+					if op.has_method("wake_up"):
+						op.call("wake_up")
+					else:
+						op.set("is_sleeping", false)
+
+
+func extinguish_fire() -> void:
+	if is_burning or _fire_heat > 0.0:
+		is_burning = false
+		_fire_heat = 0.0
+		burn_timer = 0.0
+		queue_redraw()
+
+
 func step_prop(step_24hz: float) -> void:
 	if is_destroyed:
 		return
+
+	if is_sleeping:
+		var glass_ver: int = int(map_loader.get("h_glass_break_version")) if (map_loader != null and is_instance_valid(map_loader) and map_loader.get("h_glass_break_version") != null) else 0
+		if (
+			not on_ground
+			or is_burning
+			or _fire_heat > 0.0
+			or barrel_phase != 0
+			or velocity.length_squared() >= 0.0025
+			or absf(angular_velocity) >= 0.002
+			or (is_hanging_crate and not is_hanging_released)
+			or (is_parachute_crate and parachute_attached)
+			or glass_ver != _sleep_glass_version
+		):
+			is_sleeping = false
+			_sleep_frames = 0.0
+		else:
+			if _settling_frames > 0.0:
+				_settling_frames = maxf(0.0, _settling_frames - step_24hz)
+			if _attacker_ignore_frames > 0.0:
+				_attacker_ignore_frames = maxf(0.0, _attacker_ignore_frames - step_24hz)
+				if _attacker_ignore_frames <= 0.0:
+					last_attacker = null
+			return
 
 	if _settling_frames > 0.0:
 		_settling_frames = maxf(0.0, _settling_frames - step_24hz)
@@ -1443,7 +1556,8 @@ func step_prop(step_24hz: float) -> void:
 		var odir_g: float = float(manifold_g.get("overhang_dir", 0.0))
 		var sup_y_g: float = float(manifold_g.get("y", INF))
 
-		var moving_onto_platform_g: bool = (velocity.x * odir_g < -0.02 and not is_hanging_crate)
+		var over_hatch_g: bool = _find_overlapping_ladder_hatch(prev_pos.x, prev_pos.y).size.x > 0.0
+		var moving_onto_platform_g: bool = (velocity.x * odir_g < -0.02 and not is_hanging_crate and not over_hatch_g)
 		if has_sup_g and absf(odir_g) > 0.01 and not moving_onto_platform_g:
 			_ledge_overhang_dir = odir_g
 			_ledge_fulcrum_x = float(manifold_g.get("fulcrum_x", prev_pos.x))
@@ -1505,6 +1619,22 @@ func step_prop(step_24hz: float) -> void:
 	if _settling_frames <= 0.0 and map_loader != null and is_instance_valid(map_loader) and velocity.length() > 0.8:
 		if map_loader.has_method("check_and_break_glass_segment"):
 			map_loader.call("check_and_break_glass_segment", prev_pos, next_pos, velocity)
+
+	# 4b. Portal Doorways & Ladder Shaft Channeling before solid wall clamp
+	if _settling_frames <= 0.0 and map_loader != null and is_instance_valid(map_loader):
+		if absf(velocity.x) > 0.12 and map_loader.has_method("try_teleport_entity"):
+			var saved_p: Vector2 = global_position
+			global_position = next_pos
+			if bool(map_loader.call("try_teleport_entity", self, signf(velocity.x))):
+				next_pos = global_position
+				prev_pos = next_pos
+			else:
+				global_position = saved_p
+		var active_hatch: Rect2 = _find_overlapping_ladder_hatch(next_pos.x, next_pos.y)
+		if active_hatch.size.x > 0.0 and absf(velocity.y) > 0.15 and next_pos.y < active_hatch.end.y - height * 0.5 - 4.0:
+			var h_cx: float = active_hatch.position.x + active_hatch.size.x * 0.5
+			next_pos.x = move_toward(next_pos.x, h_cx, 2.2 * step_24hz)
+			velocity.x *= 0.65
 
 	# 5. Horizontal wall collision & clamp (Swept AABB across full prop height)
 	if map_loader != null and is_instance_valid(map_loader):
@@ -1628,7 +1758,8 @@ func step_prop(step_24hz: float) -> void:
 		var ground_y: float = float(manifold.get("y", INF))
 		var odir: float = float(manifold.get("overhang_dir", 0.0))
 
-		var moving_onto_platform: bool = (velocity.x * odir < -0.05 and not is_hanging_crate)
+		var over_hatch_f: bool = _find_overlapping_ladder_hatch(next_pos.x, next_pos.y).size.x > 0.0
+		var moving_onto_platform: bool = (velocity.x * odir < -0.05 and not is_hanging_crate and not over_hatch_f)
 		if has_sup and absf(odir) > 0.01 and not moving_onto_platform and next_obb_bottom >= ground_y - 0.5:
 			# Case 7A: Partial Ledge Corner Strike / Fulcrum Slide (e.g. storage crate_hanging_1 at x=168 hitting Rect2(172, 166, 50, 2)):
 			# The overhanging side (odir = -1.0 LEFT or +1.0 RIGHT) has no support under the Center of Mass!
@@ -1738,10 +1869,35 @@ func step_prop(step_24hz: float) -> void:
 		rotation = 0.0
 		angular_velocity = 0.0
 
+	if next_pos.distance_squared_to(prev_pos) > 0.25:
+		_wake_nearby_props()
 	global_position = next_pos
 	if next_pos.y > 460.0 and not is_hanging_holder:
 		is_destroyed = true
 		visible = false
+		return
+
+	if (
+		on_ground
+		and not is_burning
+		and _fire_heat <= 0.0
+		and barrel_phase == 0
+		and not (is_hanging_crate and not is_hanging_released)
+		and not (is_parachute_crate and parachute_attached)
+		and velocity.length_squared() < 0.04
+		and absf(angular_velocity) < 0.01
+		and absf(rotation - _target_rest_rot) <= 0.01
+		and absf(_ledge_overhang_dir) <= 0.01
+	):
+		_sleep_frames += step_24hz
+		if _sleep_frames >= 12.0:
+			is_sleeping = true
+			velocity = Vector2.ZERO
+			angular_velocity = 0.0
+			_sleep_glass_version = int(map_loader.get("h_glass_break_version")) if (map_loader != null and is_instance_valid(map_loader) and map_loader.get("h_glass_break_version") != null) else 0
+	else:
+		_sleep_frames = 0.0
+		is_sleeping = false
 
 
 func try_open_supply_crate() -> bool:
@@ -1767,14 +1923,13 @@ func _check_fighter_impacts(prev_pos: Vector2, at_pos: Vector2) -> void:
 	var prev_bottom: float = prev_pos.y + height * 0.5
 	var at_bottom: float = at_pos.y + height * 0.5
 	var is_gibb_prop: bool = can_gibb or (is_hanging_crate and is_hanging_released)
+	var is_falling_hanging_crate: bool = is_hanging_crate and is_hanging_released and not on_ground
 
 	for f_var: Variant in fighters_var as Array:
 		if not is_instance_valid(f_var) or not (f_var is Node2D):
 			continue
 		var f: Node2D = f_var as Node2D
-		if bool(f.get("is_gibbed")):
-			continue
-		if bool(f.get("is_dead")) and not is_gibb_prop:
+		if bool(f.get("is_gibbed")) or bool(f.get("is_dead")):
 			continue
 		if f == last_attacker and _attacker_ignore_frames > 0.0:
 			continue
@@ -1791,16 +1946,19 @@ func _check_fighter_impacts(prev_pos: Vector2, at_pos: Vector2) -> void:
 			f_mid = f.call("get_mid_pos") as Vector2
 
 		# AS3 Player.as:2135-2262 (CheckCollisionWithBody) & 6259-6286 (CheckGibPlayer):
-		# 1. `falling_from_above`: prop's bottom edge descends from above the fighter's legs/waist with real downward speed (vy >= 2.0).
-		# 2. `crushing_downed_fighter`: heavy CanGibb prop lands onto a knocked-down fighter or corpse underneath its span (CheckGibPlayer).
+		# 1. `falling_from_above`: prop's bottom edge descends from above a grounded fighter's legs/waist with real downward speed (vy >= 2.0).
+		# 2. `crushing_downed_fighter`: released falling CRATE_HANGING lands from above onto a grounded knocked-down fighter underneath its span.
 		# 3. `moving_towards_x`: prop is sliding/flying horizontally into the fighter at speed (|vx| >= 1.6).
-		# Small nudges/hops on the same floor (|vx| < 1.6 and prev_bottom > foot_y - 4.5) only push the fighter aside in Step 5, NEVER gibbing them!
+		# A fighter who is already dead or falling from a height is NEVER gibbed into meat chunks!
+		var f_grounded_not_falling: bool = bool(f.get("on_ground")) and not bool(f.get("falling"))
 		var moving_towards_x: bool = (at_pos.x < f_mid.x and velocity.x >= 1.6) or (at_pos.x > f_mid.x and velocity.x <= -1.6)
-		var falling_from_above: bool = (prev_bottom <= f.global_position.y - 4.5 and velocity.y >= 2.0)
+		var falling_from_above: bool = f_grounded_not_falling and (prev_bottom <= f.global_position.y - 4.5 and velocity.y >= 2.0)
 		var crushing_downed_fighter: bool = (
-			is_gibb_prop
-			and (bool(f.get("knockdowned")) or bool(f.get("is_dead")))
-			and velocity.y >= 1.4
+			is_falling_hanging_crate
+			and f_grounded_not_falling
+			and bool(f.get("knockdowned"))
+			and prev_bottom <= f.global_position.y - 3.0
+			and velocity.y >= 1.8
 			and absf(f.global_position.x - at_pos.x) <= width * 0.5 + 2.0
 			and at_bottom >= f.global_position.y - 4.0
 		)
@@ -1814,13 +1972,14 @@ func _check_fighter_impacts(prev_pos: Vector2, at_pos: Vector2) -> void:
 		if my_rect.intersects(f_rect):
 			var hit_dir: int = 1 if (velocity.x > 0.1 or (absf(velocity.x) <= 0.1 and f.global_position.x >= at_pos.x)) else -1
 			var pinned_against_wall: bool = (
-				is_gibb_prop
+				is_falling_hanging_crate
+				and f_grounded_not_falling
 				and moving_towards_x
 				and (absf(velocity.x) >= 3.0 or velocity.length() >= 3.8)
 				and f.has_method("can_fighter_stand_at_x")
 				and not bool(f.call("can_fighter_stand_at_x", f.global_position.x + float(hit_dir) * 3.5, f.global_position.y, self))
 			)
-			if is_gibb_prop and (falling_from_above or crushing_downed_fighter or pinned_against_wall):
+			if is_falling_hanging_crate and (falling_from_above or crushing_downed_fighter or pinned_against_wall):
 				# AS3 Player.as:1948, 6234-6286 (CanGibb -> GibPlayer): heavy CRATE_HANGING / DESK / POOL_TABLE
 				# crushes a fighter when falling from above, landing on a knocked-down fighter, or blasting them into a solid wall!
 				crushed_fighter_ids[fid] = true
@@ -1857,6 +2016,8 @@ func _check_fighter_impacts(prev_pos: Vector2, at_pos: Vector2) -> void:
 func release_hanging_crate() -> void:
 	if not is_hanging_crate or is_hanging_released:
 		return
+	wake_up()
+	_wake_nearby_props()
 	is_hanging_released = true
 	kinematic = false
 	on_ground = false
@@ -1879,6 +2040,8 @@ func apply_bullet_hit(
 ) -> bool:
 	if is_destroyed:
 		return false
+	wake_up()
+	_wake_nearby_props()
 	var pushback: float = 15.0
 	var dir_x: int = 1
 	if typeof(pushback_or_vel) == TYPE_VECTOR2:
@@ -1958,6 +2121,8 @@ func apply_bullet_hit(
 func apply_melee_hit(damage: float, dir_x: int, is_kick: bool = false, _weapon_id: String = "FISTS", attacker: Node2D = null) -> void:
 	if is_destroyed:
 		return
+	wake_up()
+	_wake_nearby_props()
 	var fdir: float = 1.0 if dir_x >= 0 else -1.0
 	last_attacker = attacker
 	_attacker_ignore_frames = 24.0
@@ -2082,6 +2247,8 @@ var _ignoring_self_explosion: bool = false
 func apply_explosion_hit(angle_rad: float, power: float, damage: float) -> void:
 	if is_destroyed or _ignoring_self_explosion:
 		return
+	wake_up()
+	_wake_nearby_props()
 	if is_parachute_crate:
 		_open_supply_crate()
 		return
@@ -2114,6 +2281,7 @@ func apply_explosion_hit(angle_rad: float, power: float, damage: float) -> void:
 func add_fire_heat(amount: float) -> void:
 	if is_destroyed or is_burning or (not can_burn and barrel_phase == 0):
 		return
+	wake_up()
 	_fire_heat += amount
 	if _fire_heat >= 15.0:
 		ignite()
@@ -2122,6 +2290,7 @@ func add_fire_heat(amount: float) -> void:
 func ignite() -> void:
 	if is_destroyed or (not can_burn and barrel_phase == 0):
 		return
+	wake_up()
 	_fire_heat = 15.0
 	is_burning = true
 	queue_redraw()
@@ -2130,6 +2299,8 @@ func ignite() -> void:
 func apply_fall_impact_damage(damage: float, impulse: Vector2 = Vector2.ZERO, attacker: Node2D = null) -> bool:
 	if is_destroyed or is_hanging_holder or prop_type == "CRATE_HANGING_HOLDER" or not kickable or indestructible:
 		return false
+	wake_up()
+	_wake_nearby_props()
 	last_attacker = attacker
 	_attacker_ignore_frames = 18.0
 	if is_parachute_crate:
@@ -2152,6 +2323,7 @@ func apply_fall_impact_damage(damage: float, impulse: Vector2 = Vector2.ZERO, at
 func take_damage(amount: float, impulse: Vector2 = Vector2.ZERO) -> void:
 	if is_destroyed or _ignoring_self_explosion or indestructible:
 		return
+	wake_up()
 	if is_parachute_crate and amount > 0.0:
 		_open_supply_crate()
 		return
@@ -2301,6 +2473,7 @@ func _destroy_prop(_impulse: Vector2) -> void:
 	var was_burning: bool = is_burning
 	is_destroyed = true
 	visible = false
+	_wake_nearby_props()
 
 	_spawn_debris_burst(global_position + Vector2(0.0, -height * 0.5), Vector2(velocity.x, -2.5), 6)
 

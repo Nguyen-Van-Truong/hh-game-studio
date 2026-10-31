@@ -16,6 +16,7 @@ extends Control
 const MapLoaderScript = preload("res://game/world/map_loader.gd")
 const MatchControllerScript = preload("res://game/core/match_controller.gd")
 const _PreloadMugenFighterAdapter = preload("res://game/fighter/mugen_fighter_adapter.gd")
+const _PreloadChibiBrawlerRigPainter = preload("res://game/fighter/chibi_brawler_rig_painter.gd")
 
 signal start_match_requested(config: Dictionary)
 
@@ -48,6 +49,13 @@ const ROSTER_IDS: Array[String] = [
 	"funnyman",
 	"jeff",
 	"shinobi",
+	"solaria",
+	"atlas",
+	"tideweaver",
+	"goku",
+	"luffy",
+	"naruto",
+	"saitama",
 ]
 
 const CHAR_CHOICES: Array[String] = [
@@ -67,6 +75,13 @@ const CHAR_CHOICES: Array[String] = [
 	"funnyman",
 	"jeff",
 	"shinobi",
+	"solaria",
+	"atlas",
+	"tideweaver",
+	"goku",
+	"luffy",
+	"naruto",
+	"saitama",
 ]
 
 const VS_MAP_IDS: Array[String] = [
@@ -216,6 +231,7 @@ func _reset_bot_configs() -> void:
 
 
 func _ready() -> void:
+	preload("res://game/fighter/chibi_head_atlas.gd").prewarm()
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
@@ -224,7 +240,8 @@ func _ready() -> void:
 		_PreloadMugenFighterAdapter.ensure_registry_integration(reg)
 	MapLoaderScript.get_audio()
 	_load_menu_assets()
-	MapLoaderScript.get_audio().call("play_music", "superfighters_theme")
+	# MainBootstrap owns menu/music transitions. Starting the same MP3 here
+	# and again in show_main_menu() queued duplicate playback during startup.
 	set_process(true)
 	queue_redraw()
 
@@ -273,30 +290,37 @@ func _get_canvas_transform_params() -> Dictionary:
 	var vp: Vector2 = get_viewport_rect().size
 	if vp.x <= 0.0 or vp.y <= 0.0:
 		vp = Vector2(1280.0, 720.0)
-	var sc: float = vp.y / 600.0
+	# Fit the authored 800x600 menu into both landscape and narrow/portrait
+	# windows. Height-only scaling used to push the side plates off-screen on
+	# 540x960; letterbox the unused axis instead of clipping interactive cards.
+	var sc: float = minf(vp.y / 600.0, vp.x / 800.0)
 	var ox: float = (vp.x - 800.0 * sc) * 0.5
-	return {"vp": vp, "scale": sc, "ox": ox}
+	var oy: float = (vp.y - 600.0 * sc) * 0.5
+	return {"vp": vp, "scale": sc, "ox": ox, "oy": oy}
 
 
 func _rect800(x: float, y: float, w: float, h: float) -> Rect2:
 	var p: Dictionary = _get_canvas_transform_params()
 	var sc: float = float(p["scale"])
 	var ox: float = float(p["ox"])
-	return Rect2(ox + x * sc, y * sc, w * sc, h * sc)
+	var oy: float = float(p["oy"])
+	return Rect2(ox + x * sc, oy + y * sc, w * sc, h * sc)
 
 
 func _pt800(x: float, y: float) -> Vector2:
 	var p: Dictionary = _get_canvas_transform_params()
 	var sc: float = float(p["scale"])
 	var ox: float = float(p["ox"])
-	return Vector2(ox + x * sc, y * sc)
+	var oy: float = float(p["oy"])
+	return Vector2(ox + x * sc, oy + y * sc)
 
 
 func _to_canvas800(screen_pt: Vector2) -> Vector2:
 	var p: Dictionary = _get_canvas_transform_params()
 	var sc: float = maxf(0.001, float(p["scale"]))
 	var ox: float = float(p["ox"])
-	return Vector2((screen_pt.x - ox) / sc, screen_pt.y / sc)
+	var oy: float = float(p["oy"])
+	return Vector2((screen_pt.x - ox) / sc, (screen_pt.y - oy) / sc)
 
 
 # ------------------------------------------------------------------------------
@@ -1165,6 +1189,42 @@ func _draw_player_plates(font: Font, dimmed: bool) -> void:
 		var p1_dim_single: bool = dimmed
 		_draw_single_player_plate(font, 342.0, 123.0, 0, "PLAYER 1", TEAM_COLORS[1], vs_p1_char_idx, vs_p1_team, not p1_dim_single, p1_dim_single)
 
+	# Draw Powered Fighter Mini Kit Preview Card when selecting a Powered/Anime character in VS_PLAYER_SETUP
+	if current_panel in ["VS_PLAYER_SETUP", "VS_SETUP"] and not dimmed:
+		var focused_cidx: int = vs_p2_char_idx if (vs_two_player and active_player_plate == 1) else vs_p1_char_idx
+		var focused_cid: String = CHAR_CHOICES[clampi(focused_cidx, 0, CHAR_CHOICES.size() - 1)]
+		if _PreloadMugenFighterAdapter.is_mugen_character_id(focused_cid):
+			_draw_powered_kit_preview_box800(font, focused_cid, active_player_plate)
+
+
+func _draw_powered_kit_preview_box800(font: Font, char_id: String, plate_idx: int) -> void:
+	var reg: Node = MapLoaderScript.get_registry()
+	var adapt: _PreloadMugenFighterAdapter = _PreloadMugenFighterAdapter.new()
+	adapt.load_for_character(char_id, reg)
+	var r_spec: Dictionary = adapt.resource_spec
+	var sk_kit: Dictionary = adapt.skill_kit
+	var bar_col: Color = Color.from_string(str(r_spec.get("bar_color", "#FFCC22")), Color(1.0, 0.85, 0.25, 1.0))
+	var is_anime: bool = char_id in ["goku", "luffy", "naruto", "saitama"]
+	var cat_badge: String = "✦ ANIME POWERED" if is_anime else "★ ORIGINAL POWERED"
+
+	var kx: float = 210.0
+	var ky: float = 272.0
+	var kw: float = 380.0
+	var kh: float = 114.0
+	_draw_y8_box800(kx, ky, kw, kh, false)
+	_draw_text800(font, kx + 10.0, ky + 18.0, kw - 20.0, adapt.display_name.to_upper() + "  [" + cat_badge + "]", 8, bar_col, HORIZONTAL_ALIGNMENT_CENTER)
+	var res_label: String = "RESOURCE: " + str(r_spec.get("label", "ENERGY")).to_upper() + " (" + str(int(r_spec.get("max", 100))) + ")"
+	_draw_text800(font, kx + 10.0, ky + 34.0, kw - 20.0, res_label, 8, Color(0.85, 0.9, 0.98, 0.95), HORIZONTAL_ALIGNMENT_CENTER)
+
+	var keys_str: Array[String] = ["U", "I", "O", "P"] if plate_idx == 1 else ["5/U", "6/I", "7/O", "8/P"]
+	for s_i: int in range(4):
+		var sk_d: Dictionary = sk_kit.get("skill_" + str(s_i + 1), {}) as Dictionary
+		var s_name: String = str(sk_d.get("name", "SKILL " + str(s_i + 1))).to_upper()
+		var s_cd: String = str(int(roundf(float(sk_d.get("cooldown_sec", 4.0))))) + "S"
+		var row_y: float = ky + 52.0 + float(s_i) * 14.5
+		var line_txt: String = "[" + keys_str[s_i] + "] " + s_name + "  (CD " + s_cd + ")"
+		_draw_text800(font, kx + 18.0, row_y, kw - 36.0, line_txt, 8, Color.WHITE if s_i < 3 else bar_col, HORIZONTAL_ALIGNMENT_LEFT)
+
 
 func _draw_single_player_plate(
 	font: Font,
@@ -1221,29 +1281,33 @@ func _draw_character_preview_box800(font: Font, bx: float, by: float, char_id: S
 		_draw_text800(font, bx, by + 35.0, 54.0, "?", 16, Color.WHITE, HORIZONTAL_ALIGNMENT_CENTER)
 		return
 
-	var reg: Node = MapLoaderScript.get_registry()
-	if reg == null:
-		return
-	var sheet: Texture2D = reg.call("get_character_sheet", char_id) as Texture2D
-	if sheet == null:
-		return
-	var idle_frames: Array = reg.call("get_state_frames", "IDLE") as Array
-	if idle_frames.is_empty():
-		return
-	var f_idx: int = clampi(_idle_frame_idx - 1, 0, idle_frames.size() - 1)
-	var fd: Dictionary = idle_frames[f_idx] as Dictionary
-	var r_arr: Array = fd.get("rect", [46.0, 11.0, 17.0, 21.0]) as Array
-	var p_arr: Array = fd.get("pivot", [-10.0, -20.0]) as Array
-	var src_region: Rect2 = Rect2(float(r_arr[0]), float(r_arr[1]), float(r_arr[2]), float(r_arr[3]))
-	var piv: Vector2 = Vector2(float(p_arr[0]), float(p_arr[1]))
-
-	# In Symbol 2135.xml (character_pic), the character stands at local (27, 49) drawn at 2x scale
-	var dst_x800: float = bx + 27.0 + piv.x * 2.0
-	var dst_y800: float = by + 49.0 + piv.y * 2.0
-	var dst_w800: float = src_region.size.x * 2.0
-	var dst_h800: float = src_region.size.y * 2.0
-	var dst_rect: Rect2 = _rect800(dst_x800, dst_y800, dst_w800, dst_h800)
-	draw_texture_rect_region(sheet, dst_rect, src_region, Color.WHITE, false)
+	# CB-EC-49: Render the live Chibi 2.5-Head Expressive Brawler preview inside the 54x54 plate box
+	var foot_pt: Vector2 = Vector2(box_r.position.x + box_r.size.x * 0.5, box_r.position.y + box_r.size.y * 0.90)
+	var preview_scale: float = (box_r.size.y * 0.78) / 19.5
+	draw_set_transform(foot_pt, 0.0, Vector2(preview_scale, preview_scale))
+	_PreloadChibiBrawlerRigPainter.draw_chibi_brawler_rig(
+		self,
+		char_id,
+		"IDLE",
+		_idle_frame_idx,
+		0.0,
+		"CHEEKY_SMIRK",
+		0.0,
+		false,
+		false,
+		false,
+		false,
+		false,
+		false,
+		0.0,
+		Vector2(12.0, -12.0),
+		"",
+		2.8,
+		-1.0,
+		0.0,
+		Transform2D(0.0, Vector2(preview_scale, preview_scale), 0.0, foot_pt)
+	)
+	draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 
 
 # ------------------------------------------------------------------------------
@@ -1517,6 +1581,7 @@ func _draw_controls_box(font: Font) -> void:
 		"THROW GRENADE",
 		"POWERUP (SLOT 4)",
 		"SPRINT",
+		"SKILLS 1-4 (POWERED)",
 	]
 	var p1_keys: Array[String] = [
 		"LEFT ARROW",
@@ -1528,6 +1593,7 @@ func _draw_controls_box(font: Font) -> void:
 		"NUM 3 / ,",
 		"NUM 4 / .",
 		"SHIFT / NUM 0",
+		"5 6 7 8 / U I O P",
 	]
 	var p2_keys: Array[String] = [
 		"A",
@@ -1539,9 +1605,10 @@ func _draw_controls_box(font: Font) -> void:
 		"L",
 		";",
 		"G / SPACE",
+		"U I O P",
 	]
 	for i: int in range(actions.size()):
-		var ry: float = 212.0 + float(i) * 31.0
+		var ry: float = 208.0 + float(i) * 29.0
 		_draw_text800(font, 152.0, ry, 155.0, actions[i], 8, Color(0.75, 0.75, 0.75, 1.0))
 		_draw_text800(font, 305.0, ry, 105.0, p1_keys[i], 8, Color.WHITE)
 		_draw_text800(font, 430.0, ry, 155.0, actions[i], 8, Color(0.75, 0.75, 0.75, 1.0))

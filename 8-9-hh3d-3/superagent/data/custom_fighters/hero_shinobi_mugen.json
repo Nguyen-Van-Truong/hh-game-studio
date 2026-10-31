@@ -1,16 +1,22 @@
 {
-  "schema_version": "1.0.0",
-  "format": "mugen_fighter_v1",
+  "schema_version": "2.0.0",
+  "format": "mugen_fighter_v2",
   "id": "shinobi",
-  "display_name": "Shinobi — MUGEN Hero",
+  "display_name": "Shinobi — Void Assassin",
+  "short_name": "SHINOBI",
+  "subtitle": "Phantom Kunai Assassin",
+  "roster_category": "ORIGINAL_POWERED",
+  "is_powered_fighter": true,
   "author": "HH Game Studio",
   "sheet_path": "res://assets/sheets/hero_shinobi_mugen.png",
+  "portrait_path": "res://assets/sprites/portraits/shinobi_splash.png",
+  "cutin_path": "res://assets/sprites/cutins/shinobi_cutin.png",
   "sheet_size": [
     600,
     400
   ],
-  "hp_mult": 1.05,
-  "speed_mult": 1.12,
+  "hp_mult": 1.1,
+  "speed_mult": 1.22,
   "use_sf_split_rig_for_guns": true,
   "default_clsn2": [
     [
@@ -20,36 +26,144 @@
       18.0
     ]
   ],
+  "resource_spec": {
+    "resource_id": "VOID_ENERGY",
+    "display_label": "ENERGY",
+    "archetype": "ZED_AKALI_ENERGY",
+    "start_value": 200.0,
+    "max_value": 200.0,
+    "secondary_pips_max": 0,
+    "regen_per_sec": 25.0,
+    "on_hit_melee_gain": 20.0,
+    "on_hit_skill_gain": 15.0,
+    "on_hurt_gain": 0.0,
+    "decay_delay_sec": 0.0,
+    "decay_per_sec": 0.0,
+    "bar_color_primary": "#00F59B",
+    "bar_color_secondary": "#9D4EDD",
+    "bar_color_max_glow": "#95FF45",
+    "segments": 4,
+    "passive_id": "PASSIVE_KUNAI_RESONANCE",
+    "passive_desc": "200 Void Energy hoi nhanh (+25/s). Danh trung muc tieu co An Hu Khong no them sat thuong & hoan +40 Energy."
+  },
+  "skill_kit": {
+    "skill_1": {
+      "slot": 1,
+      "id": "SHUNPO_SLASH",
+      "name": "Toc Bien Hu Khong Tram (U/5)",
+      "state": "SHUNPO_SLASH",
+      "cooldown_sec": 3.0,
+      "resource_cost": 45.0,
+      "resource_gain": 0.0,
+      "damage": 22.0,
+      "hit_force": 32.0,
+      "dash_speed_24hz": 8.5,
+      "dash_distance": 95.0,
+      "knockdown": true,
+      "icon_color": "#9D4EDD",
+      "glyph": "Q",
+      "sfx": "swing_sword"
+    },
+    "skill_2": {
+      "slot": 2,
+      "id": "CHAKRA_WAVE",
+      "name": "Phi Tieu Doc Luc Giac (I/6)",
+      "state": "CHAKRA_WAVE",
+      "cooldown_sec": 3.5,
+      "resource_cost": 40.0,
+      "resource_gain": 0.0,
+      "damage": 20.0,
+      "hit_force": 28.0,
+      "projectile_id": "CHAKRA_WAVE",
+      "projectile_speed_24hz": 23.0,
+      "knockdown": false,
+      "icon_color": "#00F59B",
+      "glyph": "W",
+      "sfx": "swing_sword"
+    },
+    "skill_3": {
+      "slot": 3,
+      "id": "SKILL_3",
+      "name": "Phan Than Khoi Tim & Hoan Doi (O/7)",
+      "state": "SKILL_3",
+      "cooldown_sec": 6.5,
+      "resource_cost": 50.0,
+      "resource_gain": 0.0,
+      "damage": 21.0,
+      "hit_force": 30.0,
+      "teleport_behind": true,
+      "deflect_bullets": true,
+      "knockdown": true,
+      "icon_color": "#D04BA5",
+      "glyph": "E",
+      "sfx": "swing_sword"
+    },
+    "skill_4": {
+      "slot": 4,
+      "id": "SKILL_4",
+      "name": "ULT: An Tu Than Hu Khong (P/8)",
+      "state": "SKILL_4",
+      "cooldown_sec": 14.0,
+      "resource_cost": 70.0,
+      "resource_gain": 40.0,
+      "damage": 45.0,
+      "hit_force": 48.0,
+      "teleport_behind": true,
+      "is_ultimate": true,
+      "aoe_radius": 110.0,
+      "knockdown": true,
+      "icon_color": "#95FF45",
+      "glyph": "R",
+      "sfx": "explosion_large"
+    }
+  },
   "cancel_table": {
     "MUGEN_COMBO_1": [
       "MUGEN_COMBO_2",
       "SHUNPO_SLASH",
-      "CHAKRA_WAVE"
+      "CHAKRA_WAVE",
+      "SKILL_1",
+      "SKILL_2",
+      "SKILL_3",
+      "SKILL_4"
     ],
     "MUGEN_COMBO_2": [
       "MUGEN_COMBO_3",
       "SHUNPO_SLASH",
-      "CHAKRA_WAVE"
+      "CHAKRA_WAVE",
+      "SKILL_1",
+      "SKILL_2",
+      "SKILL_3",
+      "SKILL_4"
     ],
     "MUGEN_COMBO_3": [
       "MUGEN_COMBO_4",
       "SHUNPO_SLASH",
-      "CHAKRA_WAVE"
+      "CHAKRA_WAVE",
+      "SKILL_1",
+      "SKILL_2",
+      "SKILL_3",
+      "SKILL_4"
     ],
     "MUGEN_COMBO_4": [
       "SHUNPO_SLASH",
-      "CHAKRA_WAVE"
+      "CHAKRA_WAVE",
+      "SKILL_1",
+      "SKILL_2",
+      "SKILL_3",
+      "SKILL_4"
     ]
   },
   "special_moves": {
     "SHUNPO_SLASH": {
       "id": "SHUNPO_SLASH",
-      "display_name": "Shunpo Slash",
+      "display_name": "Toc Bien Hu Khong Tram (U/5)",
       "state": "SHUNPO_SLASH",
-      "command": "D, DF, F + attack | sprint + attack",
-      "energy_cost": 15.0,
-      "dash_speed_24hz": 7.5,
-      "dash_distance": 60.0,
+      "command": "U / Numpad 5 | D, DF, F + attack",
+      "energy_cost": 45.0,
+      "cooldown_sec": 3.0,
+      "dash_speed_24hz": 8.5,
+      "dash_distance": 95.0,
       "damage": 22.0,
       "hit_force": 32.0,
       "knockdown": true,
@@ -57,14 +171,15 @@
     },
     "CHAKRA_WAVE": {
       "id": "CHAKRA_WAVE",
-      "display_name": "Chakra Wave",
+      "display_name": "Phi Tieu Doc Luc Giac (I/6)",
       "state": "CHAKRA_WAVE",
-      "command": "D, DB, B + attack | up + attack",
-      "energy_cost": 12.0,
+      "command": "I / Numpad 6 | D, DB, B + attack",
+      "energy_cost": 40.0,
+      "cooldown_sec": 3.5,
       "projectile_id": "CHAKRA_WAVE",
-      "projectile_speed_24hz": 22.0,
+      "projectile_speed_24hz": 23.0,
       "projectile_damage": 20.0,
-      "projectile_pushback": 35.0,
+      "projectile_pushback": 28.0,
       "projectile_rect": [
         340.0,
         270.0,
@@ -72,6 +187,75 @@
         20.0
       ],
       "sfx": "swing_sword"
+    },
+    "SKILL_1": {
+      "slot": 1,
+      "id": "SHUNPO_SLASH",
+      "name": "Toc Bien Hu Khong Tram (U/5)",
+      "state": "SHUNPO_SLASH",
+      "cooldown_sec": 3.0,
+      "resource_cost": 45.0,
+      "resource_gain": 0.0,
+      "damage": 22.0,
+      "hit_force": 32.0,
+      "dash_speed_24hz": 8.5,
+      "dash_distance": 95.0,
+      "knockdown": true,
+      "icon_color": "#9D4EDD",
+      "glyph": "Q",
+      "sfx": "swing_sword"
+    },
+    "SKILL_2": {
+      "slot": 2,
+      "id": "CHAKRA_WAVE",
+      "name": "Phi Tieu Doc Luc Giac (I/6)",
+      "state": "CHAKRA_WAVE",
+      "cooldown_sec": 3.5,
+      "resource_cost": 40.0,
+      "resource_gain": 0.0,
+      "damage": 20.0,
+      "hit_force": 28.0,
+      "projectile_id": "CHAKRA_WAVE",
+      "projectile_speed_24hz": 23.0,
+      "knockdown": false,
+      "icon_color": "#00F59B",
+      "glyph": "W",
+      "sfx": "swing_sword"
+    },
+    "SKILL_3": {
+      "slot": 3,
+      "id": "SKILL_3",
+      "name": "Phan Than Khoi Tim & Hoan Doi (O/7)",
+      "state": "SKILL_3",
+      "cooldown_sec": 6.5,
+      "resource_cost": 50.0,
+      "resource_gain": 0.0,
+      "damage": 21.0,
+      "hit_force": 30.0,
+      "teleport_behind": true,
+      "deflect_bullets": true,
+      "knockdown": true,
+      "icon_color": "#D04BA5",
+      "glyph": "E",
+      "sfx": "swing_sword"
+    },
+    "SKILL_4": {
+      "slot": 4,
+      "id": "SKILL_4",
+      "name": "ULT: An Tu Than Hu Khong (P/8)",
+      "state": "SKILL_4",
+      "cooldown_sec": 14.0,
+      "resource_cost": 70.0,
+      "resource_gain": 40.0,
+      "damage": 45.0,
+      "hit_force": 48.0,
+      "teleport_behind": true,
+      "is_ultimate": true,
+      "aoe_radius": 110.0,
+      "knockdown": true,
+      "icon_color": "#95FF45",
+      "glyph": "R",
+      "sfx": "explosion_large"
     }
   },
   "mugen_states": {
@@ -81,23 +265,23 @@
       "next_state": "IDLE",
       "damage": 7.0,
       "hit_force": 14.0,
-      "range": 20.0,
-      "step_vel_x": 1.2,
+      "range": 22.0,
+      "step_vel_x": 1.3,
       "knockdown": false,
-      "sfx": "swing_sword",
+      "sfx": "punch_light",
       "frames": [
         {
           "frame_nr": 1,
           "duration": 2,
           "rect": [
             20.0,
-            270.0,
+            268.0,
             28.0,
-            20.0
+            24.0
           ],
           "pivot": [
             -9.0,
-            -19.0
+            -23.0
           ],
           "clsn2": [
             [
@@ -111,16 +295,16 @@
         },
         {
           "frame_nr": 2,
-          "duration": 4,
+          "duration": 3,
           "rect": [
             20.0,
-            270.0,
+            268.0,
             28.0,
-            20.0
+            24.0
           ],
           "pivot": [
-            -8.0,
-            -19.0
+            -9.0,
+            -23.0
           ],
           "clsn2": [
             [
@@ -133,7 +317,7 @@
           "clsn1": [
             [
               2.0,
-              -16.0,
+              -18.0,
               18.0,
               10.0
             ]
@@ -147,23 +331,23 @@
       "next_state": "IDLE",
       "damage": 8.0,
       "hit_force": 16.0,
-      "range": 21.0,
+      "range": 23.0,
       "step_vel_x": 1.5,
       "knockdown": false,
-      "sfx": "swing_sword",
+      "sfx": "punch_light",
       "frames": [
         {
           "frame_nr": 1,
           "duration": 2,
           "rect": [
             52.0,
-            270.0,
+            268.0,
             28.0,
-            20.0
+            24.0
           ],
           "pivot": [
             -9.0,
-            -19.0
+            -23.0
           ],
           "clsn2": [
             [
@@ -177,16 +361,16 @@
         },
         {
           "frame_nr": 2,
-          "duration": 4,
+          "duration": 3,
           "rect": [
             52.0,
-            270.0,
+            268.0,
             28.0,
-            20.0
+            24.0
           ],
           "pivot": [
-            -8.0,
-            -19.0
+            -9.0,
+            -23.0
           ],
           "clsn2": [
             [
@@ -200,7 +384,7 @@
             [
               2.0,
               -18.0,
-              19.0,
+              20.0,
               12.0
             ]
           ]
@@ -213,23 +397,23 @@
       "next_state": "IDLE",
       "damage": 10.0,
       "hit_force": 20.0,
-      "range": 22.0,
+      "range": 25.0,
       "step_vel_x": 1.8,
       "knockdown": false,
-      "sfx": "swing_sword",
+      "sfx": "punch_heavy",
       "frames": [
         {
           "frame_nr": 1,
           "duration": 2,
           "rect": [
             84.0,
-            270.0,
+            268.0,
             28.0,
-            20.0
+            24.0
           ],
           "pivot": [
             -9.0,
-            -19.0
+            -23.0
           ],
           "clsn2": [
             [
@@ -243,16 +427,16 @@
         },
         {
           "frame_nr": 2,
-          "duration": 4,
+          "duration": 3,
           "rect": [
             84.0,
-            270.0,
+            268.0,
             28.0,
-            20.0
+            24.0
           ],
           "pivot": [
-            -8.0,
-            -19.0
+            -9.0,
+            -23.0
           ],
           "clsn2": [
             [
@@ -265,8 +449,8 @@
           "clsn1": [
             [
               2.0,
-              -17.0,
-              20.0,
+              -18.0,
+              22.0,
               12.0
             ]
           ]
@@ -278,24 +462,24 @@
       "loop": false,
       "next_state": "IDLE",
       "damage": 14.0,
-      "hit_force": 28.0,
-      "range": 25.0,
+      "hit_force": 30.0,
+      "range": 28.0,
       "step_vel_x": 2.4,
       "knockdown": true,
-      "sfx": "swing_sword",
+      "sfx": "punch_heavy",
       "frames": [
         {
           "frame_nr": 1,
-          "duration": 3,
+          "duration": 2,
           "rect": [
             116.0,
-            270.0,
+            268.0,
             28.0,
-            20.0
+            24.0
           ],
           "pivot": [
             -9.0,
-            -19.0
+            -23.0
           ],
           "clsn2": [
             [
@@ -309,16 +493,16 @@
         },
         {
           "frame_nr": 2,
-          "duration": 6,
+          "duration": 3,
           "rect": [
             116.0,
-            270.0,
+            268.0,
             28.0,
-            20.0
+            24.0
           ],
           "pivot": [
-            -7.0,
-            -19.0
+            -9.0,
+            -23.0
           ],
           "clsn2": [
             [
@@ -331,22 +515,51 @@
           "clsn1": [
             [
               2.0,
-              -20.0,
-              23.0,
+              -18.0,
+              24.0,
+              14.0
+            ]
+          ]
+        },
+        {
+          "frame_nr": 3,
+          "duration": 2,
+          "rect": [
+            116.0,
+            268.0,
+            28.0,
+            24.0
+          ],
+          "pivot": [
+            -9.0,
+            -23.0
+          ],
+          "clsn2": [
+            [
+              -6.0,
+              -18.0,
+              12.0,
               18.0
+            ]
+          ],
+          "clsn1": [
+            [
+              2.0,
+              -18.0,
+              24.0,
+              14.0
             ]
           ]
         }
       ]
     },
     "SHUNPO_SLASH": {
-      "type": "mugen_special_dash",
+      "type": "mugen_special",
       "loop": false,
       "next_state": "IDLE",
       "damage": 22.0,
       "hit_force": 32.0,
-      "range": 28.0,
-      "dash_speed_24hz": 7.5,
+      "dash_speed_24hz": 8.5,
       "knockdown": true,
       "sfx": "swing_sword",
       "frames": [
@@ -355,73 +568,13 @@
           "duration": 2,
           "rect": [
             148.0,
-            270.0,
+            268.0,
             28.0,
-            20.0
+            24.0
           ],
           "pivot": [
-            -10.0,
-            -19.0
-          ],
-          "clsn2": [
-            [
-              -5.0,
-              -14.0,
-              10.0,
-              14.0
-            ]
-          ],
-          "clsn1": [
-            [
-              0.0,
-              -15.0,
-              22.0,
-              12.0
-            ]
-          ]
-        },
-        {
-          "frame_nr": 2,
-          "duration": 5,
-          "rect": [
-            180.0,
-            270.0,
-            28.0,
-            20.0
-          ],
-          "pivot": [
-            -8.0,
-            -19.0
-          ],
-          "clsn2": [
-            [
-              -5.0,
-              -14.0,
-              10.0,
-              14.0
-            ]
-          ],
-          "clsn1": [
-            [
-              -4.0,
-              -16.0,
-              28.0,
-              14.0
-            ]
-          ]
-        },
-        {
-          "frame_nr": 3,
-          "duration": 3,
-          "rect": [
-            212.0,
-            270.0,
-            28.0,
-            20.0
-          ],
-          "pivot": [
-            -8.0,
-            -19.0
+            -9.0,
+            -23.0
           ],
           "clsn2": [
             [
@@ -432,36 +585,91 @@
             ]
           ],
           "clsn1": []
+        },
+        {
+          "frame_nr": 2,
+          "duration": 3,
+          "rect": [
+            180.0,
+            268.0,
+            28.0,
+            24.0
+          ],
+          "pivot": [
+            -9.0,
+            -23.0
+          ],
+          "clsn2": [
+            [
+              -6.0,
+              -18.0,
+              12.0,
+              18.0
+            ]
+          ],
+          "clsn1": [
+            [
+              2.0,
+              -18.0,
+              32.0,
+              18.0
+            ]
+          ]
+        },
+        {
+          "frame_nr": 3,
+          "duration": 2,
+          "rect": [
+            212.0,
+            268.0,
+            28.0,
+            24.0
+          ],
+          "pivot": [
+            -9.0,
+            -23.0
+          ],
+          "clsn2": [
+            [
+              -6.0,
+              -18.0,
+              12.0,
+              18.0
+            ]
+          ],
+          "clsn1": [
+            [
+              2.0,
+              -18.0,
+              32.0,
+              18.0
+            ]
+          ]
         }
       ]
     },
-    "CHAKRA_WAVE": {
-      "type": "mugen_special_projectile",
+    "SKILL_1": {
+      "type": "mugen_special",
       "loop": false,
       "next_state": "IDLE",
-      "damage": 20.0,
-      "hit_force": 35.0,
-      "spawn_projectile_frame": 2,
-      "projectile_id": "CHAKRA_WAVE",
-      "projectile_speed_24hz": 22.0,
-      "projectile_offset": [
-        12.0,
-        -10.0
-      ],
+      "damage": 22.0,
+      "hit_force": 32.0,
+      "dash_speed_24hz": 8.5,
+      "knockdown": true,
       "sfx": "swing_sword",
       "frames": [
         {
           "frame_nr": 1,
-          "duration": 3,
+          "duration": 2,
           "rect": [
-            244.0,
-            270.0,
+            148.0,
+            268.0,
             28.0,
-            20.0
+            24.0
           ],
           "pivot": [
             -9.0,
-            -19.0
+            -23.0
           ],
           "clsn2": [
             [
@@ -475,16 +683,16 @@
         },
         {
           "frame_nr": 2,
-          "duration": 4,
+          "duration": 3,
           "rect": [
-            276.0,
-            270.0,
+            180.0,
+            268.0,
             28.0,
-            20.0
+            24.0
           ],
           "pivot": [
-            -8.0,
-            -19.0
+            -9.0,
+            -23.0
           ],
           "clsn2": [
             [
@@ -496,25 +704,70 @@
           ],
           "clsn1": [
             [
-              4.0,
-              -15.0,
-              14.0,
-              10.0
+              2.0,
+              -18.0,
+              32.0,
+              18.0
             ]
           ]
         },
         {
           "frame_nr": 3,
-          "duration": 4,
+          "duration": 2,
           "rect": [
-            308.0,
-            270.0,
+            212.0,
+            268.0,
             28.0,
-            20.0
+            24.0
           ],
           "pivot": [
-            -8.0,
-            -19.0
+            -9.0,
+            -23.0
+          ],
+          "clsn2": [
+            [
+              -6.0,
+              -18.0,
+              12.0,
+              18.0
+            ]
+          ],
+          "clsn1": [
+            [
+              2.0,
+              -18.0,
+              32.0,
+              18.0
+            ]
+          ]
+        }
+      ]
+    },
+    "CHAKRA_WAVE": {
+      "type": "mugen_special",
+      "loop": false,
+      "next_state": "IDLE",
+      "damage": 20.0,
+      "hit_force": 28.0,
+      "projectile_id": "CHAKRA_WAVE",
+      "projectile_speed_24hz": 23.0,
+      "projectile_damage": 20.0,
+      "projectile_pushback": 28.0,
+      "spawn_frame": 2,
+      "sfx": "swing_sword",
+      "frames": [
+        {
+          "frame_nr": 1,
+          "duration": 2,
+          "rect": [
+            244.0,
+            268.0,
+            28.0,
+            24.0
+          ],
+          "pivot": [
+            -9.0,
+            -23.0
           ],
           "clsn2": [
             [
@@ -525,6 +778,386 @@
             ]
           ],
           "clsn1": []
+        },
+        {
+          "frame_nr": 2,
+          "duration": 3,
+          "rect": [
+            276.0,
+            268.0,
+            28.0,
+            24.0
+          ],
+          "pivot": [
+            -9.0,
+            -23.0
+          ],
+          "clsn2": [
+            [
+              -6.0,
+              -18.0,
+              12.0,
+              18.0
+            ]
+          ],
+          "clsn1": [
+            [
+              2.0,
+              -18.0,
+              28.0,
+              16.0
+            ]
+          ]
+        },
+        {
+          "frame_nr": 3,
+          "duration": 2,
+          "rect": [
+            308.0,
+            268.0,
+            28.0,
+            24.0
+          ],
+          "pivot": [
+            -9.0,
+            -23.0
+          ],
+          "clsn2": [
+            [
+              -6.0,
+              -18.0,
+              12.0,
+              18.0
+            ]
+          ],
+          "clsn1": [
+            [
+              2.0,
+              -18.0,
+              28.0,
+              16.0
+            ]
+          ]
+        }
+      ]
+    },
+    "SKILL_2": {
+      "type": "mugen_special",
+      "loop": false,
+      "next_state": "IDLE",
+      "damage": 20.0,
+      "hit_force": 28.0,
+      "projectile_id": "CHAKRA_WAVE",
+      "projectile_speed_24hz": 23.0,
+      "projectile_damage": 20.0,
+      "projectile_pushback": 28.0,
+      "spawn_frame": 2,
+      "knockdown": false,
+      "sfx": "swing_sword",
+      "frames": [
+        {
+          "frame_nr": 1,
+          "duration": 2,
+          "rect": [
+            244.0,
+            268.0,
+            28.0,
+            24.0
+          ],
+          "pivot": [
+            -9.0,
+            -23.0
+          ],
+          "clsn2": [
+            [
+              -6.0,
+              -18.0,
+              12.0,
+              18.0
+            ]
+          ],
+          "clsn1": []
+        },
+        {
+          "frame_nr": 2,
+          "duration": 3,
+          "rect": [
+            276.0,
+            268.0,
+            28.0,
+            24.0
+          ],
+          "pivot": [
+            -9.0,
+            -23.0
+          ],
+          "clsn2": [
+            [
+              -6.0,
+              -18.0,
+              12.0,
+              18.0
+            ]
+          ],
+          "clsn1": [
+            [
+              2.0,
+              -18.0,
+              34.0,
+              18.0
+            ]
+          ]
+        },
+        {
+          "frame_nr": 3,
+          "duration": 2,
+          "rect": [
+            308.0,
+            268.0,
+            28.0,
+            24.0
+          ],
+          "pivot": [
+            -9.0,
+            -23.0
+          ],
+          "clsn2": [
+            [
+              -6.0,
+              -18.0,
+              12.0,
+              18.0
+            ]
+          ],
+          "clsn1": [
+            [
+              2.0,
+              -18.0,
+              34.0,
+              18.0
+            ]
+          ]
+        }
+      ]
+    },
+    "SKILL_3": {
+      "type": "mugen_special",
+      "loop": false,
+      "next_state": "IDLE",
+      "damage": 21.0,
+      "hit_force": 30.0,
+      "dash_speed_24hz": 7.5,
+      "knockdown": true,
+      "sfx": "swing_sword",
+      "frames": [
+        {
+          "frame_nr": 1,
+          "duration": 2,
+          "rect": [
+            20.0,
+            302.0,
+            28.0,
+            24.0
+          ],
+          "pivot": [
+            -9.0,
+            -23.0
+          ],
+          "clsn2": [
+            [
+              -6.0,
+              -18.0,
+              12.0,
+              18.0
+            ]
+          ],
+          "clsn1": []
+        },
+        {
+          "frame_nr": 2,
+          "duration": 3,
+          "rect": [
+            52.0,
+            302.0,
+            28.0,
+            24.0
+          ],
+          "pivot": [
+            -9.0,
+            -23.0
+          ],
+          "clsn2": [
+            [
+              -6.0,
+              -18.0,
+              12.0,
+              18.0
+            ]
+          ],
+          "clsn1": [
+            [
+              2.0,
+              -18.0,
+              38.0,
+              20.0
+            ]
+          ]
+        },
+        {
+          "frame_nr": 3,
+          "duration": 2,
+          "rect": [
+            84.0,
+            302.0,
+            28.0,
+            24.0
+          ],
+          "pivot": [
+            -9.0,
+            -23.0
+          ],
+          "clsn2": [
+            [
+              -6.0,
+              -18.0,
+              12.0,
+              18.0
+            ]
+          ],
+          "clsn1": [
+            [
+              2.0,
+              -18.0,
+              38.0,
+              20.0
+            ]
+          ]
+        }
+      ]
+    },
+    "SKILL_4": {
+      "type": "mugen_special",
+      "loop": false,
+      "next_state": "IDLE",
+      "damage": 45.0,
+      "hit_force": 48.0,
+      "dash_speed_24hz": 8.0,
+      "knockdown": true,
+      "is_ultimate": true,
+      "sfx": "explosion_large",
+      "frames": [
+        {
+          "frame_nr": 1,
+          "duration": 2,
+          "rect": [
+            116.0,
+            302.0,
+            28.0,
+            24.0
+          ],
+          "pivot": [
+            -9.0,
+            -23.0
+          ],
+          "clsn2": [
+            [
+              -6.0,
+              -18.0,
+              12.0,
+              18.0
+            ]
+          ],
+          "clsn1": []
+        },
+        {
+          "frame_nr": 2,
+          "duration": 3,
+          "rect": [
+            148.0,
+            302.0,
+            28.0,
+            24.0
+          ],
+          "pivot": [
+            -9.0,
+            -23.0
+          ],
+          "clsn2": [
+            [
+              -6.0,
+              -18.0,
+              12.0,
+              18.0
+            ]
+          ],
+          "clsn1": [
+            [
+              2.0,
+              -18.0,
+              56.0,
+              24.0
+            ]
+          ]
+        },
+        {
+          "frame_nr": 3,
+          "duration": 2,
+          "rect": [
+            180.0,
+            302.0,
+            28.0,
+            24.0
+          ],
+          "pivot": [
+            -9.0,
+            -23.0
+          ],
+          "clsn2": [
+            [
+              -6.0,
+              -18.0,
+              12.0,
+              18.0
+            ]
+          ],
+          "clsn1": [
+            [
+              2.0,
+              -18.0,
+              56.0,
+              24.0
+            ]
+          ]
+        },
+        {
+          "frame_nr": 4,
+          "duration": 2,
+          "rect": [
+            212.0,
+            302.0,
+            28.0,
+            24.0
+          ],
+          "pivot": [
+            -9.0,
+            -23.0
+          ],
+          "clsn2": [
+            [
+              -6.0,
+              -18.0,
+              12.0,
+              18.0
+            ]
+          ],
+          "clsn1": [
+            [
+              2.0,
+              -18.0,
+              56.0,
+              24.0
+            ]
+          ]
         }
       ]
     }

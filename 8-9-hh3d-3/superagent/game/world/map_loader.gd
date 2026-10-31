@@ -159,6 +159,7 @@ var _cloud_sprites: Array[Sprite2D] = []
 var _fan_nodes: Array[Node2D] = []
 var _portal_cooldowns: Dictionary = {} # instance_id -> remaining_frames_24hz
 var _lamp_swing_time: float = 0.0
+var _elevator_motion_serial: int = 0
 
 
 class MapFxOverlay extends Node2D:
@@ -798,6 +799,7 @@ func _build_spawns_and_ai(mdata: Dictionary) -> void:
 
 func step_map(step_24hz: float) -> void:
 	var dt_sec: float = step_24hz / 24.0
+	_elevator_motion_serial += 1
 
 	# 1. Drift clouds and spin background fans
 	for cspr: Sprite2D in _cloud_sprites:
@@ -836,13 +838,14 @@ func step_map(step_24hz: float) -> void:
 		var eh: float = float(el.get("h", 8.0))
 		var new_rect: Rect2 = Rect2(new_pos.x - ew * 0.5, new_pos.y - eh * 0.5, ew, eh)
 		var old_rect: Rect2 = el.get("rect", new_rect) as Rect2
+		el["old_rect"] = old_rect
 		el["rect"] = new_rect
 
 		var ebody: Node2D = el.get("body", null) as Node2D
 		if ebody != null and is_instance_valid(ebody):
 			ebody.position = new_pos
 
-		_carry_elevator_riders(old_rect, new_rect, delta_pos)
+		_carry_elevator_riders(old_rect, new_rect, delta_pos, i)
 
 		# Update dynamic AI path nodes bound to this elevator var_name
 		var vname: String = str(el.get("var_name", ""))
@@ -875,7 +878,7 @@ func step_map(step_24hz: float) -> void:
 		_fx_overlay_node.queue_redraw()
 
 
-func _carry_elevator_riders(old_rect: Rect2, new_rect: Rect2, delta_pos: Vector2) -> void:
+func _carry_elevator_riders(old_rect: Rect2, new_rect: Rect2, delta_pos: Vector2, elevator_index: int = -1) -> void:
 	if match_world == null or not is_instance_valid(match_world):
 		return
 	var top_old: float = old_rect.position.y
@@ -910,6 +913,41 @@ func _carry_elevator_riders(old_rect: Rect2, new_rect: Rect2, delta_pos: Vector2
 				if p.global_position.x >= min_x and p.global_position.x <= max_x and absf(bottom_y - top_old) <= 6.0:
 					p.global_position = Vector2(p.global_position.x + delta_pos.x, top_new - ph * 0.5)
 
+	# Loose items keep their own velocity; the lift contributes its displacement
+	# once here. The pre-carry point lets their later sweeps use the same old/new
+	# lift interval, including ceilings crossed during the carry.
+	var pickups_var: Variant = match_world.get("pickups")
+	if typeof(pickups_var) == TYPE_ARRAY:
+		for pickup: Dictionary in pickups_var as Array:
+			if bool(pickup.get("settled", false)):
+				_carry_elevator_loose_item(pickup, old_rect, delta_pos, 0.02, 0.08, elevator_index)
+	var manager: Variant = match_world.get("projectile_manager")
+	if manager is Node2D and is_instance_valid(manager):
+		var throwables_var: Variant = manager.get("throwables")
+		if typeof(throwables_var) == TYPE_ARRAY:
+			for throwable: Dictionary in throwables_var as Array:
+				if str(throwable.get("weapon_id", "")) != "GRENADE":
+					continue
+				var velocity: Vector2 = throwable.get("vel", Vector2.ZERO) as Vector2
+				# A bouncing/upward grenade is airborne, even close to the top.
+				if velocity.y >= 0.0 and velocity.y <= 0.65:
+					_carry_elevator_loose_item(throwable, old_rect, delta_pos, 0.5, 0.15, elevator_index)
+
+
+func _carry_elevator_loose_item(item: Dictionary, old_rect: Rect2, delta_pos: Vector2, separation: float, tolerance: float, elevator_index: int) -> void:
+	if int(item.get("_elevator_carry_serial", -1)) == _elevator_motion_serial:
+		return
+	var position: Vector2 = item.get("pos", Vector2.ZERO) as Vector2
+	if position.x < old_rect.position.x or position.x > old_rect.end.x:
+		return
+	# Never pull an item upward from the underside or from beside a lift.
+	if position.y > old_rect.position.y or absf(position.y - (old_rect.position.y - separation)) > tolerance:
+		return
+	item["_elevator_pre_carry_pos"] = position
+	item["_elevator_carried_index"] = elevator_index
+	item["_elevator_carry_serial"] = _elevator_motion_serial
+	item["pos"] = position + delta_pos
+
 
 func _step_portals() -> void:
 	if portals.is_empty() or match_world == null or not is_instance_valid(match_world):
@@ -941,11 +979,94 @@ func _infer_entity_portal_dir_x(entity: Node2D) -> float:
 		var av: Vector2 = av_var as Vector2
 		if absf(av.x) > 0.05:
 			return signf(av.x)
+	var vel_var: Variant = entity.get("velocity")
+	if typeof(vel_var) == TYPE_VECTOR2:
+		var pv: Vector2 = vel_var as Vector2
+		if absf(pv.x) > 0.05:
+			return signf(pv.x)
 	if entity is CharacterBody2D:
 		var cb: CharacterBody2D = entity as CharacterBody2D
 		if absf(cb.velocity.x) > 0.5:
 			return signf(cb.velocity.x)
 	return 0.0
+
+
+func try_teleport_ballistic_segment(
+	from_pt: Vector2,
+	to_pt: Vector2,
+	vel_or_dir: Vector2,
+	clearance_x: float = 2.0
+) -> Dictionary:
+	if portals.is_empty():
+		return {"teleported": false}
+	var seg_dx: float = to_pt.x - from_pt.x
+	var move_dir_x: float = vel_or_dir.x if absf(vel_or_dir.x) > 0.001 else seg_dx
+	for p_var: Variant in portals:
+		var p: Dictionary = p_var as Dictionary
+		var entry_r: Rect2 = p.get("entry_rect", Rect2()) as Rect2
+		var exit_r: Rect2 = p.get("exit_rect", Rect2()) as Rect2
+		var pdir: Vector2 = p.get("dir", Vector2.ZERO) as Vector2
+		var door_open: bool = bool(p.get("door_open", true))
+		if door_open and absf(pdir.x) > 0.1:
+			if move_dir_x * pdir.x <= 0.0:
+				continue
+		# Slight 2px vertical tolerance at portal floor/lintel so low-bouncing bombs and high arcs enter cleanly
+		var test_r: Rect2 = Rect2(entry_r.position.x, entry_r.position.y - 2.0, entry_r.size.x, entry_r.size.y + 4.0)
+		var hit_t: float = -1.0
+		if test_r.has_point(from_pt):
+			hit_t = 0.0
+		else:
+			var d: Vector2 = to_pt - from_pt
+			var t_min: float = 0.0
+			var t_max: float = 1.0
+			var ok: bool = true
+			for axis: int in range(2):
+				var o: float = from_pt[axis]
+				var v: float = d[axis]
+				var mn: float = test_r.position[axis]
+				var mx: float = test_r.end[axis]
+				if absf(v) < 0.00001:
+					if o < mn or o > mx:
+						ok = false
+						break
+				else:
+					var t1: float = (mn - o) / v
+					var t2: float = (mx - o) / v
+					if t1 > t2:
+						var tmp: float = t1
+						t1 = t2
+						t2 = tmp
+					t_min = maxf(t_min, t1)
+					t_max = minf(t_max, t2)
+					if t_min > t_max:
+						ok = false
+						break
+			if ok:
+				hit_t = t_min
+		if hit_t < 0.0:
+			continue
+		var entry_pt: Vector2 = from_pt.lerp(to_pt, clampf(hit_t, 0.0, 1.0))
+		var dy_from_bottom: float = clampf(entry_r.end.y - entry_pt.y, 1.5, maxf(2.0, entry_r.size.y - 1.5))
+		var new_y: float = clampf(exit_r.end.y - dy_from_bottom, exit_r.position.y + 2.0, exit_r.end.y - 1.5)
+		var new_x: float = exit_r.position.x + exit_r.size.x * 0.5
+		if door_open and absf(pdir.x) > 0.1:
+			if pdir.x > 0.0:
+				new_x = exit_r.position.x - maxf(1.5, clearance_x)
+			else:
+				new_x = exit_r.end.x + maxf(1.5, clearance_x)
+		var out_vel: Vector2 = vel_or_dir
+		var flip_x: bool = bool(p.get("flip_x", true))
+		if flip_x:
+			out_vel.x = -out_vel.x
+		var rem_ratio: float = clampf(1.0 - hit_t, 0.15, 1.0)
+		return {
+			"teleported": true,
+			"exit_origin": Vector2(new_x, new_y),
+			"vel": out_vel,
+			"flip_x": flip_x,
+			"remaining_ratio": rem_ratio,
+		}
+	return {"teleported": false}
 
 
 func try_teleport_entity(entity: Node2D, move_dir_x: float = 0.0) -> bool:
@@ -956,15 +1077,20 @@ func try_teleport_entity(entity: Node2D, move_dir_x: float = 0.0) -> bool:
 		return false
 
 	var pos: Vector2 = entity.global_position
-	var check_pt: Vector2 = Vector2(pos.x, pos.y - 6.0)
+	var is_prop_entity: bool = (entity.get("half_w") != null and entity.get("height") != null)
+	var prop_half_w: float = float(entity.get("half_w")) if is_prop_entity else 0.0
+	var prop_half_h: float = float(entity.get("height")) * 0.5 if is_prop_entity else 0.0
+	var check_pt: Vector2 = Vector2(pos.x, pos.y + prop_half_h - 3.0) if is_prop_entity else Vector2(pos.x, pos.y - 6.0)
+	var dir_x: float = move_dir_x if absf(move_dir_x) > 0.01 else _infer_entity_portal_dir_x(entity)
+	var lead_pt: Vector2 = Vector2(pos.x + signf(dir_x) * (prop_half_w + 1.5), check_pt.y) if is_prop_entity else check_pt
 
 	for p: Dictionary in portals:
 		var entry_rect: Rect2 = p.get("entry_rect", Rect2()) as Rect2
-		if not entry_rect.has_point(check_pt) and not entry_rect.has_point(pos):
+		var inside_entry: bool = entry_rect.has_point(check_pt) or entry_rect.has_point(pos) or (is_prop_entity and entry_rect.has_point(lead_pt))
+		if not inside_entry:
 			continue
 		var pdir: Vector2 = p.get("dir", Vector2(-1.0, 0.0)) as Vector2
 		var door_open: bool = bool(p.get("door_open", true))
-		var dir_x: float = move_dir_x if absf(move_dir_x) > 0.01 else _infer_entity_portal_dir_x(entity)
 		var dir_matches: bool = (
 			(pdir.x < 0.0 and (dir_x < 0.0 or (door_open and dir_x <= 0.0)))
 			or (pdir.x > 0.0 and (dir_x > 0.0 or (door_open and dir_x >= 0.0)))
@@ -975,18 +1101,20 @@ func try_teleport_entity(entity: Node2D, move_dir_x: float = 0.0) -> bool:
 
 		var exit_rect: Rect2 = p.get("exit_rect", Rect2()) as Rect2
 		var flip_x: bool = bool(p.get("flip_x", true))
-		var dy: float = pos.y - entry_rect.position.y
+		var exit_margin_x: float = (prop_half_w + 2.0) if is_prop_entity else 2.0
 		var new_x: float = exit_rect.position.x + exit_rect.size.x * 0.5
 		if door_open:
 			if pdir.x > 0.0:
-				new_x = exit_rect.position.x - 2.0
+				new_x = exit_rect.position.x - exit_margin_x
 			elif pdir.x < 0.0:
-				new_x = exit_rect.end.x + 2.0
-		var new_y: float = exit_rect.position.y + dy
+				new_x = exit_rect.end.x + exit_margin_x
+		var bottom_y: float = pos.y + prop_half_h
+		var dy_from_bot: float = clampf(entry_rect.end.y - bottom_y, 0.0, entry_rect.size.y)
+		var new_y: float = exit_rect.end.y - dy_from_bot - prop_half_h
 		if door_open and bool(entity.get("on_ground")):
 			var gy_exit: float = get_ground_y_below(new_x, exit_rect.end.y - 8.0, 16.0, true)
 			if gy_exit < INF:
-				new_y = gy_exit
+				new_y = gy_exit - prop_half_h
 		entity.global_position = Vector2(new_x, new_y)
 
 		var eff_entry_dir: int = int(signf(dir_x)) if absf(dir_x) > 0.01 else int(signf(pdir.x))
@@ -1002,6 +1130,8 @@ func try_teleport_entity(entity: Node2D, move_dir_x: float = 0.0) -> bool:
 			if typeof(vel_v) == TYPE_VECTOR2:
 				var vv: Vector2 = vel_v as Vector2
 				entity.set("velocity", Vector2(-vv.x, vv.y))
+			if is_prop_entity and entity.get("angular_velocity") != null:
+				entity.set("angular_velocity", -float(entity.get("angular_velocity")))
 		if entity.has_method("on_portal_teleported"):
 			entity.call("on_portal_teleported", flip_x, eff_entry_dir)
 
@@ -1162,7 +1292,7 @@ func check_and_break_glass_segment(from_pt: Vector2, to_pt: Vector2, impact_vel:
 const _EMPTY_RAY_HIT: Dictionary = {"hit": false}
 
 
-func raycast_solid(from_pt: Vector2, to_pt: Vector2, ignore_cover_id: int = -1, include_props: bool = true) -> Dictionary:
+func raycast_solid(from_pt: Vector2, to_pt: Vector2, ignore_cover_id: int = -1, include_props: bool = true, include_cloud_slopes: bool = true) -> Dictionary:
 	var best_t: float = INF
 	var best_pos: Vector2 = to_pt
 	var best_normal: Vector2 = Vector2.UP
@@ -1204,6 +1334,8 @@ func raycast_solid(from_pt: Vector2, to_pt: Vector2, ignore_cover_id: int = -1, 
 
 	# 2. Check slope polygons (with AABB bounds_rect pre-filter)
 	for sp: Dictionary in slope_polygons:
+		if bool(sp.get("is_cloud", false)) and not include_cloud_slopes:
+			continue
 		var sbounds: Rect2 = sp.get("bounds_rect", Rect2()) as Rect2
 		if seg_max_x < sbounds.position.x or seg_min_x > sbounds.end.x or seg_max_y < sbounds.position.y or seg_min_y > sbounds.end.y:
 			continue
@@ -1276,6 +1408,79 @@ func raycast_solid(from_pt: Vector2, to_pt: Vector2, ignore_cover_id: int = -1, 
 		"prop": best_prop,
 		"glass_idx": hit_glass_idx,
 	}
+
+
+func raycast_one_way(from_pt: Vector2, to_pt: Vector2, ignore_elevator_index: int = -1, sweep_elevator_motion: bool = false) -> Dictionary:
+	# Only a crossing from the open side onto a platform top is support. Use
+	# the crossing position, not the segment endpoint: the endpoint can already
+	# be beyond a narrow platform or inside the neighbouring ladder shaft.
+	var best_hit: Dictionary = _EMPTY_RAY_HIT
+	var best_t: float = INF
+	for cr: Rect2 in cloud_rects:
+		var hit: Dictionary = _segment_vs_one_way_edge(from_pt, to_pt, cr.position, Vector2(cr.end.x, cr.position.y))
+		if bool(hit.get("hit", false)) and float(hit["t"]) < best_t:
+			best_hit = hit
+			best_t = float(hit["t"])
+	for gr: Rect2 in get_intact_horizontal_glass_rects():
+		if gr.size.x >= gr.size.y:
+			var hit: Dictionary = _segment_vs_one_way_edge(from_pt, to_pt, gr.position, Vector2(gr.end.x, gr.position.y))
+			if bool(hit.get("hit", false)) and float(hit["t"]) < best_t:
+				best_hit = hit
+				best_t = float(hit["t"])
+	for elevator_index: int in range(elevators.size()):
+		if elevator_index == ignore_elevator_index:
+			continue
+		var elevator: Dictionary = elevators[elevator_index]
+		var er: Rect2 = elevator.get("rect", Rect2()) as Rect2
+		var old_rect: Rect2 = (elevator.get("old_rect", er) as Rect2) if sweep_elevator_motion else er
+		var motion: Vector2 = (elevator.get("delta_pos", Vector2.ZERO) as Vector2) if sweep_elevator_motion else Vector2.ZERO
+		# Map stepping moves the lift before loose-item stepping. Sweep in the
+		# lift's old coordinate frame, then return the true trajectory contact.
+		var hit: Dictionary = _segment_vs_one_way_edge(from_pt, to_pt - motion, old_rect.position, Vector2(old_rect.end.x, old_rect.position.y))
+		if bool(hit.get("hit", false)) and float(hit["t"]) < best_t:
+			var hit_t: float = float(hit["t"])
+			hit["pos"] = from_pt.lerp(to_pt, hit_t)
+			hit["surface_remainder"] = motion * (1.0 - hit_t)
+			hit["moving_one_way"] = motion.length_squared() > 0.000001
+			best_hit = hit
+			best_t = hit_t
+	for sp: Dictionary in slope_polygons:
+		if not bool(sp.get("is_cloud", false)):
+			continue
+		var points: PackedVector2Array = sp.get("world_points", PackedVector2Array()) as PackedVector2Array
+		var top_index: int = int(sp.get("top_edge_idx", -1))
+		if top_index < 0 or top_index >= points.size():
+			continue
+		var hit: Dictionary = _segment_vs_one_way_edge(from_pt, to_pt, points[top_index], points[(top_index + 1) % points.size()])
+		if bool(hit.get("hit", false)) and float(hit["t"]) < best_t:
+			best_hit = hit
+			best_t = float(hit["t"])
+	return best_hit
+
+
+func _segment_vs_one_way_edge(from_pt: Vector2, to_pt: Vector2, edge_from: Vector2, edge_to: Vector2) -> Dictionary:
+	var edge: Vector2 = edge_to - edge_from
+	if edge.length_squared() <= 0.000001:
+		return _EMPTY_RAY_HIT
+	var normal: Vector2 = Vector2(edge.y, -edge.x).normalized()
+	if normal.y > 0.0:
+		normal = -normal
+	var motion: Vector2 = to_pt - from_pt
+	var approach: float = motion.dot(normal)
+	if normal.y >= -0.0001 or approach >= -0.000001:
+		return _EMPTY_RAY_HIT
+	var start_distance: float = (from_pt - edge_from).dot(normal)
+	if start_distance < -0.0001:
+		return _EMPTY_RAY_HIT
+	var t: float = -start_distance / approach
+	if t < -0.0001 or t > 1.0:
+		return _EMPTY_RAY_HIT
+	t = clampf(t, 0.0, 1.0)
+	var hit_pos: Vector2 = from_pt.lerp(to_pt, t)
+	var edge_t: float = (hit_pos - edge_from).dot(edge) / edge.length_squared()
+	if edge_t < 0.0 or edge_t > 1.0:
+		return _EMPTY_RAY_HIT
+	return {"hit": true, "t": t, "pos": hit_pos, "normal": normal}
 
 
 func _segment_vs_rect(from_pt: Vector2, to_pt: Vector2, r: Rect2) -> Dictionary:

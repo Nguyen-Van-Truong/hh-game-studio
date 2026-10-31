@@ -11,11 +11,22 @@ var _sfx_pool: Array[AudioStreamPlayer] = []
 var _sfx_pool_idx: int = 0
 var _music_player: AudioStreamPlayer = null
 var _loaded: bool = false
+var _playback_refs: Array[WeakRef] = []
+var _draining_for_quit: bool = false
 
 
 func _ready() -> void:
 	ensure_loaded()
 	_init_players()
+
+
+func _exit_tree() -> void:
+	# Release active decoder/playback references before the autoload's child
+	# players leave the tree. In particular, the looping menu MP3 may still be
+	# playing when the user closes the game from the main menu.
+	stop_music()
+	_streams.clear()
+	_playback_refs.clear()
 
 
 func ensure_loaded() -> void:
@@ -171,6 +182,8 @@ var _last_play_usec: Dictionary = {}
 
 
 func play_sfx(sound_id: String, volume_db: float = 0.0, pitch_scale: float = 1.0) -> void:
+	if _draining_for_quit:
+		return
 	var key_u: String = sound_id.to_lower()
 	if key_u == "jump" or key_u == "jump_00":
 		return
@@ -191,6 +204,7 @@ func play_sfx(sound_id: String, volume_db: float = 0.0, pitch_scale: float = 1.0
 	player.volume_db = volume_db
 	player.pitch_scale = pitch_scale
 	player.play()
+	_remember_playback(player)
 
 
 func play_sfx_at(sound_id: String, _world_pos: Vector2, volume_db: float = 0.0) -> void:
@@ -202,6 +216,8 @@ func play_bgm(music_id: String = "superfighters_theme", volume_db: float = -4.0)
 
 
 func play_music(music_id: String = "superfighters_theme", volume_db: float = -4.0) -> void:
+	if _draining_for_quit:
+		return
 	if DisplayServer.get_name() == "headless":
 		return
 	ensure_loaded()
@@ -214,6 +230,7 @@ func play_music(music_id: String = "superfighters_theme", volume_db: float = -4.
 	_music_player.stream = stream
 	_music_player.volume_db = volume_db
 	_music_player.play()
+	_remember_playback(_music_player)
 
 
 func stop_music() -> void:
@@ -224,4 +241,33 @@ func stop_music() -> void:
 		if is_instance_valid(p):
 			p.stop()
 			p.stream = null
+
+
+func _prune_playback_refs() -> void:
+	for i: int in range(_playback_refs.size() - 1, -1, -1):
+		if _playback_refs[i].get_ref() == null:
+			_playback_refs.remove_at(i)
+
+
+func _remember_playback(player: AudioStreamPlayer) -> void:
+	_prune_playback_refs()
+	if player.has_stream_playback():
+		# Keep no strong playback reference: AudioServer retires stopped streams
+		# asynchronously, including ones detached by a later pool reassignment.
+		_playback_refs.append(weakref(player.get_stream_playback()))
+
+
+func stop_all_and_drain(timeout_ms: int = 1000) -> bool:
+	_draining_for_quit = true
+	stop_music()
+	_streams.clear()
+	_prune_playback_refs()
+	var deadline_ms: int = Time.get_ticks_msec() + clampi(timeout_ms, 0, 5000)
+	while not _playback_refs.is_empty():
+		if Time.get_ticks_msec() >= deadline_ms:
+			push_error("Audio shutdown timed out with " + str(_playback_refs.size()) + " pending playbacks")
+			return false
+		await get_tree().process_frame
+		_prune_playback_refs()
+	return true
 

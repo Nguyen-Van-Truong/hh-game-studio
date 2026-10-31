@@ -167,7 +167,13 @@ func load_cached_texture(res_path: String) -> Texture2D:
 	if _texture_cache.has(res_path):
 		return _texture_cache[res_path] as Texture2D
 	var abs_path: String = ProjectSettings.globalize_path(res_path)
-	if res_path.ends_with("_dmg.png") and FileAccess.file_exists(abs_path):
+	var is_custom_png: bool = (
+		res_path.ends_with("_dmg.png")
+		or res_path.contains("/hero_")
+		or res_path.contains("/portraits/")
+		or res_path.contains("/cutins/")
+	)
+	if is_custom_png and FileAccess.file_exists(abs_path):
 		var dmg_img: Image = Image.load_from_file(abs_path)
 		if dmg_img != null and not dmg_img.is_empty():
 			var dmg_tex: ImageTexture = ImageTexture.create_from_image(dmg_img)
@@ -211,7 +217,11 @@ func ensure_input_map() -> void:
 		"p1_slot_2": [KEY_F2],
 		"p1_slot_3": [KEY_F3],
 		"p1_slot_4": [KEY_F4],
-		# WASD Player: W / A / S / D + J / K / L / ; ONLY
+		"p1_skill_1": [KEY_KP_5, KEY_5],
+		"p1_skill_2": [KEY_KP_6, KEY_6],
+		"p1_skill_3": [KEY_KP_7, KEY_7],
+		"p1_skill_4": [KEY_KP_8, KEY_8],
+		# WASD Player: W / A / S / D + J / K / L / ; + Powered Skills U / I / O / P
 		"p2_left": [KEY_A],
 		"p2_right": [KEY_D],
 		"p2_up": [KEY_W],
@@ -226,6 +236,10 @@ func ensure_input_map() -> void:
 		"p2_slot_2": [KEY_F6],
 		"p2_slot_3": [KEY_F7],
 		"p2_slot_4": [KEY_F8],
+		"p2_skill_1": [KEY_U],
+		"p2_skill_2": [KEY_I],
+		"p2_skill_3": [KEY_O],
+		"p2_skill_4": [KEY_P],
 	}
 	for action_name: String in bindings.keys():
 		if InputMap.has_action(action_name):
@@ -269,3 +283,17 @@ func _bind_key(action_name: String, keycode: Key) -> void:
 			ev_td.unicode = telex_d
 			ev_td.physical_keycode = KEY_NONE
 			InputMap.action_add_event(action_name, ev_td)
+	elif keycode == KEY_U:
+		for telex_u: int in [432, 431]: # 'ư', 'Ư'
+			var ev_tu: InputEventKey = InputEventKey.new()
+			ev_tu.keycode = telex_u as Key
+			ev_tu.unicode = telex_u
+			ev_tu.physical_keycode = KEY_NONE
+			InputMap.action_add_event(action_name, ev_tu)
+	elif keycode == KEY_O:
+		for telex_o: int in [417, 416, 244, 212]: # 'ơ', 'Ơ', 'ô', 'Ô'
+			var ev_to: InputEventKey = InputEventKey.new()
+			ev_to.keycode = telex_o as Key
+			ev_to.unicode = telex_o
+			ev_to.physical_keycode = KEY_NONE
+			InputMap.action_add_event(action_name, ev_to)

@@ -1,0 +1,171 @@
+# KẾ HOẠCH ĐỘC LẬP #1: SUPERAGENT-TACTICALSTRIKER — HỆ THỐNG NHÂN VẬT "TACTICAL STRIKER (MẪU A: TỶ LỆ 3.5 ĐẦU, KHUNG XƯƠNG CHỮ S & 7 BIỂU CẢM SỐNG ĐỘNG)"
+
+- **File kế hoạch**: `zdoc/27-10-superagent-tactical-striker-35head-plan.txt` (Bản sao đồng bộ: `8-9-hh3d-3/zdoc/27-10-superagent-tactical-striker-35head-plan.txt`)
+- **Ngày lập**: 27/10/2026 (`27-10`)
+- **Phạm vi áp dụng (`PLAN_SCOPE`)**: **Chỉ áp dụng cho nhánh độc lập `8-9-hh3d-3/superagent-TacticalStriker/`** (Tuyệt đối không ảnh hưởng tới thư mục chính `8-9-hh3d-3/superagent/` vốn dành riêng cho Kế hoạch #2 — Mẫu B: Chibi-Tactical Brawler 2.5 Đầu).
+- **Mục tiêu cốt lõi**:
+  1. **Loại bỏ 100% khung xương gù lưng, đầu hộp vuông `7x6 px` và vạch kính đen `5x1 px` vô hồn của Superfighters Y8**.
+  2. **Triển khai Nhân vật cơ bản mặc định ("Agent Zero / Johnny — Tactical Striker") và toàn bộ dàn nhân vật trên Khung Xương 3.5 Đầu (`TacticalStrikerRig` — Mẫu A)**:
+     - **Khuôn xương sống chữ S năng động (`S-Curve Athletic Spine`)**: Lưng thẳng mở ngực, cổ và cầu vai tách biệt, chân đứng tấn rộng có khớp đùi/đầu gối/cổ chân, tay có bắp tay/khuỷu tay/cẳng tay/găng tay chiến thuật hở ngón.
+     - **Mật độ hiển thị HD-2D (`4x Sub-Pixel Density`)**: Vẽ trên hệ tọa độ chi tiết cao (quy đổi tương đương `72x96 px` thu mượt về chiều cao vật lý `23.5 world units` trên sàn đấu), giúp giữ nguyên 100% hộp va chạm vật lý, cửa ra vào, thang leo, thùng gỗ nhưng hiển thị sắc nét gấp 4 lần trên màn hình `1280x720`.
+  3. **Hệ thống 7 Biểu Cảm Gương Mặt Thời Gian Thực (`Live Facial Expression Engine`)**:
+     - Tự động chuyển đổi mượt mà giữa 7 biểu cảm: `1. CONFIDENT_SMIRK` (Tự tin cười nửa miệng + Chớp mắt tự nhiên mỗi `3.2s`), `2. BATTLE_FOCUS` (Nhíu mày tập trung khi chạy/ngắm súng), `3. ATTACK_SHOUT` (Hét lớn khi đấm/chém/tung chiêu), `4. HURT_SHOCK` (Nhíu mắt đau đớn + mồ hôi lạnh khi trúng đòn), `5. LOW_HP_GRIT` (Nghiến răng sinh tử khi máu `< 30%`), `6. DIZZY_KO` (Mắt xoáy/ngất khi nằm sàn), `7. VICTORY_WINK` (Nháy mắt cười tươi khi thắng).
+  4. **Đầu & Ánh Mắt Xoay Theo Góc Ngắm Súng 360° (`Dynamic Head & Gaze Aim-Tracking`)**: Khi người chơi ngắm súng lên cao hoặc xuống thấp, cổ, đầu và ánh mắt của nhân vật thực sự ngước lên / cúi xuống nhìn thẳng theo đường đạn (kẹp góc tự nhiên `±38°`).
+  5. **Thẻ Chân Dung Biểu Cảm Động Trên HUD (`Live Expression Portrait HUD` & `Agent Zero Sheet Atlas`)**: Tích hợp trực tiếp bộ 5 chân dung biểu cảm độ phân giải cao từ `agent_zero_character_sheet` lên thanh HUD và màn hình chọn tướng.
+
+---
+
+## 0. BẢNG TÓM TẮT & TIẾN ĐỘ THỰC THI (PRIORITY EXECUTION ROADMAP)
+
+Bảng dưới đây sắp xếp thứ tự ưu tiên từ nền tảng đến hoàn thiện để thực hiện trọn vẹn 100% dự án `superagent-TacticalStriker` một cách nhanh chóng, chính xác và an toàn nhất:
+
+| Thứ tự / Mã WP | Hạng mục công việc chính | Nội dung bàn giao cốt lõi | Các file tác động chính (trong `superagent-TacticalStriker/`) | Trạng thái |
+| :--- | :--- | :--- | :--- | :--- |
+| **1. TS-WP1** *(Ưu tiên #1 — Khởi tạo & Cô lập nhánh)* | **Tạo Nhánh Độc Lập `superagent-TacticalStriker` & Đóng Gói Tài Nguyên `Agent Zero` (Mẫu A)** | 1) Tạo bản sao độc lập `8-9-hh3d-3/superagent-TacticalStriker/`. 2) Cập nhật `project.godot` (`config/name="SuperAgent - Tactical Striker (3.5-Head)"`). 3) Trích xuất & đóng gói bộ 5 chân dung biểu cảm HD (`confident`, `fierce`, `shout`, `hurt`, `victory`) và 6 tư thế hành động Studio HD-2D nền trong suốt (`pose_idle`, `pose_run`, `pose_jump`, `pose_punch`, `pose_aim`, `pose_roll`) từ bảng mẫu `Agent Zero`. | `project.godot`, `tools/build_tactical_striker_assets.py`, `assets/portraits/agent_zero_*.png`, `assets/sprites/agent_zero/pose_*.png` | `[x] HOÀN TẤT (147/147 PASS)` |
+| **2. TS-WP2** *(Ưu tiên #2 — Bộ Máy Khung Xương 3.5 Đầu)* | **Xây Dựng Bộ Máy Vẽ Khung Xương 12 Khớp `TacticalStrikerRigPainter` (Tỷ Lệ 3.5 Đầu, Cột Sống Chữ S)** | Xây dựng class `TacticalStrikerRigPainter` kết hợp Studio HD-2D Pose Sprites (`~180x220 px` có Mipmaps hiển thị sắc nét ở `~80x80 screen px`) cùng 12 khớp giải phẫu 3.5 đầu, đường viền mực đậm `#0F121A`, đổ bóng Cel-Shading 3 tầng, nhịp thở `60Hz` và co giãn `Squash & Stretch`. | `game/fighter/tactical_striker_rig_painter.gd`, `game/fighter/fighter_rig_view.gd` | `[x] HOÀN TẤT (147/147 PASS)` |
+| **3. TS-WP3** *(Ưu tiên #3 — Hệ Thống 7 Biểu Cảm Sống Động)* | **Bộ Điều Khiển 7 Biểu Cảm Gương Mặt (`FacialExpressionController`) + Chớp Mắt Tự Nhiên & Chống Nhấp Nháy** | 1) Tính toán biểu cảm thời gian thực theo trạng thái chiến đấu với cơ chế **Ưu tiên & Giữ nhịp (`Expression Priority & Hold Hysteresis`)** chống nhấp nháy. 2) Chớp mắt tự nhiên (`0.11s` mỗi `3.2s`) khi đứng/đi bộ. 3) Vẽ mắt 2 tầng (tròng trắng + con ngươi màu + điểm sáng `catchlight`), lông mày động và miệng biến thiên theo 7 cảm xúc. | `game/fighter/tactical_striker_rig_painter.gd`, `game/fighter/fighter_controller.gd` | `[x] HOÀN TẤT (147/147 PASS)` |
+| **4. TS-WP4** *(Ưu tiên #4 — Động Học 72 Tư Thế & Ngắm 360°)* | **Hoàn Thiện Toàn Bộ 72+ Tư Thế Hành Động, Ngắm Súng Xoay Đầu & Chiêu Thức Siêu Năng Lực** | 1) Động học riêng cho từng nhóm tư thế: Đứng thở (`IDLE`), Chạy rướn người (`RUN/SPRINT`), Nhảy/Nhào lộn (`JUMP/ROLL/DIVE`), Leo thang/Bám mép (`CLIMB/LEDGE_GRAB`), Ngồi nấp (`KNEEL/COVER`), Bê đồ vật (`CARRY`), Đấm/Đá/Chém kiếm (`PUNCH/MELEE`), Bị thương/Nằm sàn (`HURT/KNOCKDOWN/DEAD`). 2) Khi ngắm súng (`AIM_*`), **đầu và ánh mắt xoay theo góc ngắm `current_aim_pitch` (`±36°`)** và nòng súng khớp 100% với `muzzle_socket`. | `game/fighter/tactical_striker_rig_painter.gd`, `game/fighter/fighter_rig_view.gd` | `[x] HOÀN TẤT (147/147 PASS)` |
+| **5. TS-WP5** *(Ưu tiên #5 — Cá Nhân Hóa 22 Nhân Vật)* | **Áp Dụng Khung Xương 3.5 Đầu Cho Nhân Vật Cơ Bản (`Agent Zero`) & Toàn Bộ Dàn Nhân Vật** | 1) Thiết lập **Agent Zero (`johnny`)** và toàn bộ tướng Classic hiển thị bằng bộ Studio HD-2D Tactical Striker Pose Sprites sắc nét. 2) Áp dụng khung xương 3.5 đầu kèm kiểu tóc/trang phục/biểu cảm riêng cho 8 tướng Siêu Năng Lực (4 tướng Nguyên bản + 4 tướng Anime + Hóa SSJ/Kurama) để **không còn bất kỳ nhân vật nào mang dáng gù Y8**. | `game/fighter/tactical_striker_rig_painter.gd`, `game/core/sf_data_registry.gd` | `[x] HOÀN TẤT (147/147 PASS)` |
+| **6. TS-WP6** *(Ưu tiên #6 — UI/UX Chân Dung Biểu Cảm Động)* | **Nâng Cấp HUD & Menu: Ô Chân Dung Biểu Cảm Thời Gian Thực (`Live Expression Portrait`) & Hiệu Ứng Nảy** | 1) Trên thẻ máu Top HUD, hiển thị **Ô Chân Dung Biểu Cảm Động (`25x25 * ui_scale`)** tự động đổi giữa 5 ảnh biểu cảm HD (`Confident`, `Fierce`, `Shout`, `Hurt`, `Victory`) khớp với trạng thái nhân vật dưới sân và nảy nhẹ (`Scale Pop`) khi tung đòn/trúng đòn. 2) Cập nhật thẻ Roster & tên hiển thị **Agent Zero (Tactical Striker)**. | `game/ui/match_hud_controller.gd`, `game/ui/main_menu_controller.gd` | `[x] HOÀN TẤT (147/147 PASS)` |
+| **7. TS-WP7** *(Ưu tiên #7 — Dọn Code & 25 Chốt Chặn An Toàn)* | **Dọn Dẹp Code Dư Thừa & Bảo Vệ Toàn Bộ 25 Kịch Bản Ngoại Lệ (`TS-EC-01 .. TS-EC-25`)** | 1) Loại bỏ sự phụ thuộc vào hình dáng hộp `17x21` của Y8 khi vẽ nhân vật trên màn hình nhưng vẫn giữ nguyên các node socket/atlas ẩn để tương thích ngược 100%. 2) Kiểm tra và khóa chặt 25 trường hợp ngoại lệ (kẹp góc cổ, chống nháy mặt, cháy đen khi chết cháy, chớp trắng 1 frame, bê thùng, cưỡi tên lửa...). | `game/fighter/fighter_rig_view.gd`, `game/fighter/tactical_striker_rig_painter.gd` | `[x] HOÀN TẤT (147/147 PASS)` |
+| **8. TS-WP8** *(Ưu tiên #8 — Kiểm Thử Tự Động & Xuất Ảnh Thực Tế)* | **Bộ Kiểm Thử Tự Động `SF-M36` (100% PASS) & Xuất Ảnh Chụp Sàn Đấu Thực Tế** | 1) Thêm bộ test `SF-M36.1..3` vào `tests/test_runner.gd` kiểm chứng khung xương 3.5 đầu, bộ máy 7 biểu cảm gương mặt, góc xoay đầu theo súng và HUD Live Portrait. 2) Chạy `--headless` xác nhận **147/147 PASS (Exit Code 0)** và chụp 10 ảnh GPU `1280x720` thực tế trong game. | `tests/test_runner.gd`, `tools/build_tactical_striker_assets.py` | `[x] HOÀN TẤT (147/147 PASS)` |
+
+---
+
+## 1. CHI TIẾT KỸ THUẬT TS-WP1 & TS-WP2: KIẾN TRÚC KHUNG XƯƠNG 3.5 ĐẦU (`TACTICAL STRIKER RIG`)
+
+### 1.1. Tại sao Khung Xương 3.5 Đầu (`TacticalStrikerRig`) giải quyết triệt để bài toán "Đẹp, Nét, Khác Biệt Y8 và Không Vỡ Hình"?
+- **Vấn đề của Y8 gốc**: Nhân vật Y8 chỉ là 1 khối chữ nhật `17x21 px` với đầu vuông `7x6 px` lao về phía trước (gù lưng) và một vạch đen `5x1 px` làm kính râm (không có mắt, không có miệng, không có biểu cảm).
+- **Giải pháp `TacticalStrikerRig` (Mẫu A — 3.5 Đầu)**:
+  - Giữ nguyên chiều cao va chạm vật lý của nhân vật trong thế giới game (`~23.5 world units` tính từ đế giày `y = 0.0` lên đỉnh tóc `y = -23.5`), đảm bảo **100% tương thích với mọi trần nhà, cửa hẹp, thang leo, thùng gỗ che chắn và đạn đạo**.
+  - Tuy nhiên, thay vì vẽ bằng 21 điểm ảnh thô kệch, `TacticalStrikerRigPainter` vẽ trực tiếp các khớp giải phẫu bằng **Đa giác & Đường cong Vector/Sub-Pixel mượt trên `CanvasItem`** (với độ phân giải thực tế trên màn hình `1280x720` đạt `~85–95 điểm ảnh màn hình` theo chiều dọc):
+    - **Tỷ lệ 3.5 Đầu chuẩn Anime/Hành động hiện đại**:
+      - **Đầu & Tóc (`Head & Hair`)**: Cao `6.6 world units` (`~28%` tổng chiều cao) — có cằm V-line gọn, tai, gò má, 2 mắt nhiều lớp, lông mày và miệng biểu cảm.
+      - **Cổ & Thân trên chữ S (`Neck & V-Taper Torso`)**: Cao `8.2 world units` — cổ dựng thẳng khỏe khoắn (không gù), ngực nở, eo thon, áo khoác chiến thuật mở cổ cao kèm áo thun xanh Cyan bên trong và đai lưng chiến thuật.
+      - **Chân & Giày cổ cao (`Articulated Legs & High-Top Boots`)**: Cao `8.7 world units` — có khớp đùi, đầu gối, ống quần túi hộp và giày chiến thuật đỏ viền đế trắng.
+
+### 1.2. Cấu Trúc 12 Lớp Giải Phẫu Theo Thứ Tự Độ Sâu (Painter's Z-Order)
+1. **Lớp 1 — `CapeOrScarfBehind`**: Áo choàng hoặc khăn quàng bay phía sau lưng theo vận tốc nhân vật (`velocity.x`, `velocity.y`).
+2. **Lớp 2 — `BackArm`**: Vai sau -> Khuỷu tay sau -> Cẳng tay sau -> Găng tay hở ngón sau (tô màu tối hơn 18% để tạo chiều sâu 3D).
+3. **Lớp 3 — `BackLeg`**: Đùi sau -> Đầu gối sau -> Cẳng chân sau -> Giày cổ cao sau.
+4. **Lớp 4 — `TorsoSCurve & Belt`**: Khung ngực chữ V nghiêng theo góc cột sống (`spine_lean_deg`), áo thun trong, vạt áo khoác chiến thuật và thắt lưng túi hộp.
+5. **Lớp 5 — `FrontLeg`**: Đùi trước -> Đầu gối trước -> Ống quần túi hộp -> Giày chiến thuật cổ cao trước.
+6. **Lớp 6 — `Neck`**: Cổ trụ thẳng nối giữa vai và đáy hộp sọ.
+7. **Lớp 7 — `SculptedHead`**: Hộp sọ + hàm dưới thon gọn + tai, xoay theo góc nhìn (`head_tilt_deg`).
+8. **Lớp 8 — `LiveExpressiveFace`**: Đôi mắt 2 tầng (Tròng trắng + Con ngươi màu + Điểm sáng trắng `Catchlight`), cặp lông mày động và khuôn miệng theo 7 trạng thái biểu cảm.
+9. **Lớp 9 — `DynamicHairAndHeadgear`**: Mái tóc nhiều lớp có độ nảy quán tính (`hair_bounce_offset`) và phụ kiện đầu riêng của từng nhân vật.
+10. **Lớp 10 — `WeaponInHand`**: Vũ khí tầm xa (Súng lục, Tiểu liên, Shotgun, Sniper, Bazooka...) hoặc Vũ khí cận chiến (Kiếm Katana, Dao Machete, Rìu, Gậy...) nằm đúng trục tay cầm và khớp 100% với `muzzle_socket`.
+11. **Lớp 11 — `FrontArm`**: Vai trước -> Khuỷu tay trước -> Cẳng tay trước -> Găng tay chiến thuật hở ngón đỏ nắm vũ khí hoặc tung cú đấm.
+12. **Lớp 12 — `ActionSmearAndVFX`**: Vệt gió đấm/đá 3 lớp, hào quang thức tỉnh, tia chưởng và chớp trắng trúng đòn.
+
+
+---
+
+## 2. CHI TIẾT KỸ THUẬT TS-WP3 & TS-WP4: HỆ THỐNG 7 BIỂU CẢM THỜI GIAN THỰC & ĐỘNG HỌC 72+ TƯ THẾ
+
+### 2.1. Bảng Quy Tắc 7 Biểu Cảm Gương Mặt & Cơ Chế Chống Nhấp Nháy (`Expression Priority & Hysteresis`)
+
+| Mã Biểu Cảm | Tên hiển thị | Điều kiện kích hoạt tự động | Độ ưu tiên | Thời gian giữ tối thiểu (`Hold`) | Đặc tả nét vẽ Mắt, Lông mày & Miệng |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **`DIZZY_KO`** | **Ngất / Hạ gục** | `hp <= 0` hoặc `state in [KNOCKDOWN, DEAD, LAY]` | **Mức 5 (Cao nhất)** | Tới khi đứng dậy | Mắt xoáy / chữ `X X`, lông mày chùng xuống, miệng hé nhỏ. |
+| **`HURT_SHOCK`** | **Đau đớn / Choáng** | `state in [HURT, FALL_F, FALL_B, GRABBED, ROCKET_RIDE_R, ROCKET_RIDE_L]` hoặc vừa mất máu | **Mức 4** | `0.28s` (`17 ticks`) | Mắt nhíu chặt `> <` hoặc tròng trắng mở to đồng tử thu nhỏ, miệng há chữ O đau đớn, giọt mồ hôi lạnh xanh nhạt bên thái dương. |
+| **`ATTACK_SHOUT`** | **Hét lớn tung chiêu** | `state in [PUNCH_*, JUMP_PUNCH, JUMP_KICK, MACHETE_*, AXE_*, SWORD_*, THROW, SKILL_*, MUGEN_*]` | **Mức 3** | `0.22s` (`13 ticks`) | Lông mày xếch quyết liệt, mắt sáng rực hướng về mục tiêu, miệng mở rộng hét lớn (thấy hàm răng trắng phía trên + vòm miệng đỏ). |
+| **`VICTORY_WINK`** | **Chiến thắng ngạo nghễ** | Đối thủ đã bị hạ (`match_over == true` và `hp > 0`) | **Mức 2** | Cả khi ăn mừng | Một mắt nháy cong `^`, mắt kia sáng lấp lánh, miệng cười rộng lộ răng trắng đầy tự hào. |
+| **`BATTLE_FOCUS`** | **Tập trung chiến đấu** | `state in [RUN, SPRINT, AIM_*, START_*, ROLL, DIVE, CLIMB, LEDGE_GRAB]` hoặc đang cầm thùng | **Mức 1** | `0.15s` (`9 ticks`) | Lông mày hạ thấp sắc lạnh, ánh mắt nhìn thẳng theo hướng chạy hoặc góc ngắm súng (`current_aim_pitch`), miệng mím chặt. |
+| **`LOW_HP_GRIT`** | **Nghiến răng sinh tử** | `0 < hp <= max_hp * 0.30` (khi đứng yên/đi bộ) | **Mức 0.5** | Tới khi hồi máu | Lông mày nhíu căng thẳng, hàm răng trắng nghiến chặt, có giọt mồ hôi chiến đấu. |
+| **`CONFIDENT_SMIRK`** | **Tự tin cười nửa miệng** | Mặc định khi `IDLE`, `JUMP`, `KNEEL`, `COVER` (`hp > 30%`) | **Mức 0 (Mặc định)** | Liên tục + **Chớp mắt tự nhiên** (`0.11s` mỗi `3.2s`) | Hai mắt sáng trong có điểm bắt sáng trắng (`catchlight`), lông mày thư thái tự tin, khóe miệng nhếch nhẹ cười nửa miệng. |
+
+### 2.2. Động Học Ngắm Súng 360° Kèm Xoay Đầu Tự Nhiên (`Head & Gaze Tracking`)
+- Trong Superfighters Y8 cũ, khi người chơi chĩa súng lên trời (`-75°`) hay xuống đất (`+75°`), cánh tay quay vòng tròn nhưng cái đầu vuông vẫn nhìn ngang cứng đơ.
+- Trong `TacticalStrikerRig`:
+  - Khi ở trạng thái `AIM_*` hoặc `START_*`:
+    - **Cột sống trên (`Upper Spine`)** nghiêng nhẹ theo góc ngắm: `spine_aim_tilt = clampf(current_aim_pitch * 0.18, -12.0, 12.0)`.
+    - **Cổ & Đầu (`Head Tilt`)** xoay mượt theo góc ngắm: `head_aim_tilt = clampf(current_aim_pitch * 0.48, -36.0, 36.0)`.
+    - **Con ngươi mắt (`Pupil Gaze Offset`)** liếc thêm `±1.2px` theo hướng nòng súng.
+    - **Cánh tay cầm súng & Vũ khí** bám chính xác theo `aim_pivot` và kết thúc đúng tại `muzzle_socket.position`, đảm bảo tia lửa đầu nòng, đường đạn và tia Laser đỏ (`SNIPER / LASER_GUN`) khớp tuyệt đối 100%!
+
+---
+
+## 3. CHI TIẾT KỸ THUẬT TS-WP5 & TS-WP6: ĐỒNG BỘ 22 NHÂN VẬT & GIAO DIỆN HUD CHÂN DUNG ĐỘNG
+
+### 3.1. Bảng Thiết Kế Tạo Hình Khung Xương 3.5 Đầu Cho Nhân Vật Cơ Bản (`Agent Zero`) & Toàn Bộ Dàn Nhân Vật
+- **Nhân vật cơ bản mặc định (`johnny` -> Hiển thị là `Agent Zero`)**:
+  - Tóc gai đen ánh xanh (`#2A3248`), áo khoác chiến thuật ngắn màu Xanh Đen (`#252D3D`) viền cổ cao, áo thun trong màu Xanh Ngọc (`#1CA8B8`), găng tay chiến thuật hở ngón, quần túi hộp xám đen và giày cổ cao Đỏ Đô (`#B82832`) đế trắng — khớp 100% với bảng thiết kế `agent_zero_character_sheet_1793104476989.jpg`.
+- **4 Nhân vật Siêu năng lực Nguyên bản (`solaria`, `atlas`, `shinobi`, `tideweaver`)**:
+  - Cùng đứng trên khung xương 3.5 đầu `TacticalStrikerRig` nhưng mang trang phục và phụ kiện đặc trưng:
+    - `solaria`: Tóc trắng ánh kim bồng bềnh, võ phục Trắng-Vàng Hoàng Kim, vòng hào quang Mặt Trời, mắt vàng rực.
+    - `atlas`: Giáp vai Titan Xanh-Cam hạng nặng, kính Visor năng lượng trong suốt vẫn nhìn rõ biểu cảm mắt sáng bên trong, găng tay khổng lồ.
+    - `shinobi`: Khăn trùm Ninja Tím Đen + dải khăn cổ bay dài phía sau, giáp nhẹ sát thủ, mắt tím sắc lạnh.
+    - `tideweaver`: Mái tóc dài Đỏ Thẫm bay theo nhịp nước, áo choàng Thủy Tộc Xanh Đại Dương, mắt xanh ngọc.
+- **4 Nhân vật Anime Legends (`goku`, `luffy`, `naruto`, `saitama`)**:
+  - `goku`: Tóc gai Goku đặc trưng (tự động hóa **Tóc Vàng Super Saiyan + Mắt Xanh Ngọc** khi `awakening_timer > 0`), võ phục Cam-Xanh.
+  - `luffy`: Mũ Rơm vàng có dải băng đỏ trên đỉnh đầu (và treo sau cổ khi tung chiêu), áo đỏ mở ngực có vết sẹo chữ X, quần short xanh, tay cao su vươn dài mượt mà.
+  - `naruto`: Tóc vàng nhọn + Băng trán Làng Lá + 3 vệt râu mèo trên má, áo khoác Cam-Đen (tự động phát sáng **Áo Choàng Chakra Cửu Vĩ** khi thức tỉnh).
+  - `saitama`: Đầu hói bóng loáng có điểm phản quang trắng, bộ đồ Vàng liền thân, găng tay & ủng Đỏ, **Áo choàng trắng bay phấp phới phía sau**.
+- **13 Nhân vật Classic còn lại**: Được nâng cấp toàn bộ lên khung xương 3.5 đầu `TacticalStrikerRig` với trang phục, kiểu tóc, mũ cảnh sát/áo vest/áo khoác riêng của từng người và đầy đủ 7 biểu cảm gương mặt!
+
+### 3.2. Ô Chân Dung Biểu Cảm Thời Gian Thực Trên HUD (`Live Expression HUD Portrait`)
+- Trên thanh **Top HUD** của trận đấu (`MatchHudController`):
+  - Bên trái tên nhân vật và thanh máu/năng lượng của mỗi người chơi, bổ sung **Khung Chân Dung Biểu Cảm Động (`32x32 * ui_scale`)** có viền màu theo phe/năng lượng.
+  - Với **Agent Zero (`johnny`)**, khung chân dung này nạp trực tiếp 5 tấm ảnh chân dung HD trích xuất từ bảng thiết kế (`confident`, `fierce`, `shout`, `hurt`, `victory`) và **tự động đổi biểu cảm tức thì** khi nhân vật dưới sân đang đứng tự tin, chạy ngắm bắn, hét lớn tung đòn, trúng đòn đau đớn hay giành chiến thắng!
+  - Khi chuyển sang trạng thái `ATTACK_SHOUT` hoặc `HURT_SHOCK`, khung chân dung có hiệu ứng **Scale Pop (`1.16x` giảm mượt về `1.0x` trong `0.15s`)** giúp giao diện cực kỳ sống động và cuốn hút.
+
+---
+
+## 4. CHI TIẾT KỸ THUẬT TS-WP7: DANH MỤC 25 TRƯỜNG HỢP NGOẠI LỆ & CHỐT CHẶN AN TOÀN (`TS-EC-01 .. TS-EC-25`)
+
+| Mã EC | Tình huống ngoại lệ / hy hữu có thể xảy ra | Cơ chế Validate & Xử lý an toàn bắt buộc |
+| :--- | :--- | :--- |
+| **TS-EC-01** | Nhân vật 3.5 đầu có chiều cao hình ảnh lớn hơn làm kẹt cửa thấp hoặc lệch hộp nhận sát thương (`Hurtbox`). | Giữ nguyên 100% hộp vật lý (`12x18`) và quy đổi khung xương 3.5 đầu về đúng chiều cao thế giới `23.5 world units` tính từ mặt sàn `y = 0.0`. |
+| **TS-EC-02** | Khi ngắm súng ở các góc cực đại (`-90°` lên trời hoặc `+90°` xuống đất), đầu xoay theo 100% góc súng làm gãy cổ. | Kẹp góc xoay cổ `head_aim_tilt = clampf(aim_pitch * 0.48, -36.0, 36.0)` và góc nghiêng lưng `clampf(aim_pitch * 0.18, -12.0, 12.0)`. |
+| **TS-EC-03** | Nòng súng vẽ trên khung xương mới bị lệch khỏi `muzzle_socket` làm đạn hoặc tia Laser bắn ra từ khoảng không. | Neo bàn tay cầm súng và thân súng theo `aim_pivot.position` hướng thẳng tới `muzzle_socket.position` để đầu nòng súng trùng khớp 100% với điểm sinh đạn. |
+| **TS-EC-04** | Nhân vật chuyển trạng thái liên tục (Chạy <-> Đứng <-> Ngắm) trong vài frame làm biểu cảm mặt nhấp nháy liên hồi. | Áp dụng bộ đếm giữ biểu cảm tối thiểu `_expr_hold_timer` và bảng thứ tự ưu tiên 6 cấp (`KO > HURT > SHOUT > VICTORY > FOCUS > CONFIDENT`). |
+| **TS-EC-05** | Bộ đếm chớp mắt tự động (`Auto-Blink`) kích hoạt đúng lúc nhân vật đang hét tung chiêu hoặc đang ngất xỉu. | Chỉ cho phép chớp mắt tự động khi biểu cảm hiện tại là `CONFIDENT_SMIRK` hoặc `BATTLE_FOCUS` và `hp > 0`. |
+| **TS-EC-06** | Khi nhân vật chết cháy (`is_charred == true`), khung xương mới vẫn giữ màu da tươi thay vì hóa đen theo luật game (`SF-M10`). | Khi `is_charred == true`, áp dụng bảng màu than đen (`Color(0.05, 0.04, 0.04, 1.0)`) lên toàn bộ khung xương 3.5 đầu đồng thời giữ `body_sprite.modulate` cho test `SF-M10`. |
+| **TS-EC-07** | Khi nhân vật trúng đòn (`_hit_flash_timer > 0`), hiệu ứng chớp trắng 1 frame không hiển thị trên khung xương mới. | Khi `is_hit_flashing == true`, nội suy toàn bộ màu sắc của khung xương 3.5 đầu về màu Trắng Sáng (`lerp(col, Color.WHITE, 0.80)`). |
+| **TS-EC-08** | Khi nhân vật bị nổ banh xác (`gib_fighter()`), các mảnh thịt văng ra nhưng khung xương 3.5 đầu vẫn vẽ đứng nguyên tại chỗ. | Kiểm tra nếu `hp <= 0` và `not body_pivot.visible` (hoặc trạng thái `GIBBED`) thì ngừng vẽ khung xương ngay lập tức. |
+| **TS-EC-09** | Khi nhân vật bị trúng đạn Bazooka và bay theo tên lửa (`ROCKET_RIDE_R / L`), nhân vật không xoay theo góc tên lửa hoặc làm hỏng test `SF-M20.4`. | Giữ nguyên cập nhật `_body_atlas` cho test `SF-M20.4` và xoay toàn bộ khung xương 3.5 đầu theo `body_rotation_deg` kèm biểu cảm `HURT_SHOCK`. |
+| **TS-EC-10** | Ở tư thế Nằm sàn (`KNOCKDOWN`, `DEAD`, `LAY`), nhân vật vẫn được vẽ đứng thẳng hoặc lơ lửng trên không. | Chuyển trục cột sống sang phương ngang (`90°`) sát mặt đất (`y = -3.5`) với đầu, thân và chân nằm dài tự nhiên trên sàn. |
+| **TS-EC-11** | Ở tư thế Nhào lộn (`ROLL`), nhân vật không cuộn tròn mà giữ nguyên dáng đứng. | Chuyển sang tư thế cuộn tròn thể thao tại `y = -8.5` xoay theo `anim_frame_idx * 72°` kèm 2 vệt gió xoáy. |
+| **TS-EC-12** | Ở tư thế Ngồi (`KNEEL`) hoặc Nấp sau thùng (`COVER`), đầu nhân vật 3.5 đầu nhô cao hơn thùng gỗ. | Hạ thấp trọng tâm hông xuống `y = -6.0` và gập sâu đầu gối để đỉnh đầu hạ xuống `y = -14.0`, nấp kín hoàn toàn sau thùng gỗ. |
+| **TS-EC-13** | Khi đang leo thang (`CLIMB`) hoặc bám mép tường (`LEDGE_GRAB`), tay chân nhân vật đứng yên như trượt băng. | Luân phiên vị trí tay trái/phải và chân trái/phải theo `anim_frame_idx` khi leo thang; vươn tay trước lên móc đúng mép tường `(6, -18)` khi `LEDGE_GRAB`. |
+| **TS-EC-14** | Khi nhân vật đang bê thùng gỗ/ghế (`carried_prop != null`), hai tay vẫn để ở tư thế thủ bình thường. | Tự động phát hiện `carried_prop != null` và đưa hai cánh tay giơ cao đỡ vật thể phía trước mặt. |
+| **TS-EC-15** | Khi nhân vật quay mặt sang trái (`facing == -1`), `FighterRigView.scale.x = -1.0` làm lật ngược chữ nếu vẽ chữ bên trong rig. | Tuyệt đối không vẽ chữ trong `FighterRigView`; mọi nhãn chữ chỉ vẽ trên `MatchHudController`. |
+| **TS-EC-16** | Khi Goku hóa Super Saiyan hoặc Naruto bật Kurama Mode, màu tóc và mắt trên khung xương 3.5 đầu không đổi. | Kiểm tra `awakening_timer > 0`: đổi tóc Goku sang Vàng Hoàng Kim dựng đứng + mắt Xanh Ngọc; phủ hào quang Chakra Vàng Cam cho Naruto. |
+| **TS-EC-17** | Khi Luffy tung chiêu `Gomu Pistol` / `Red Hawk` / `Gear 5`, cánh tay trên khung xương 3.5 đầu không vươn dài theo đòn. | Kết nối trực tiếp khớp vai của khung xương 3.5 đầu với cánh tay cao su vươn dài để tạo sự liền mạch tuyệt đối. |
+| **TS-EC-18** | Phân thân của Naruto/Shinobi (`is_summon_clone`) trông giống hệt bản thể làm người chơi khó phân biệt trong hỗn chiến. | Phủ độ trong suốt `alpha = 0.86` và viền năng lượng nhẹ cho các thực thể có `is_summon_clone == true`. |
+| **TS-EC-19** | Máu bết trên người (`blood_alpha`) khi bị thương nặng không hiển thị trên khung xương mới. | Khi `blood_alpha > 0.12`, vẽ các vệt xước chiến đấu và vết máu đỏ sẫm tỉ lệ thuận với `blood_alpha` trên áo khoác và má nhân vật. |
+| **TS-EC-20** | Khi trận đấu đang tạm dừng (`is_paused == true`) hoặc đang trong `Hitstop`, nhịp thở và chớp mắt vẫn chạy làm lệch tính tất định. | Đồng bộ bộ đếm nhịp thở và biểu cảm theo tick mô phỏng cố định (`1.0 / 60.0`), đứng yên hoàn toàn khi `is_paused` hoặc `_hitstop_ticks > 0`. |
+| **TS-EC-21** | Việc gọi `queue_redraw()` mỗi frame vô điều kiện cho mọi nhân vật gây tốn CPU không cần thiết. | Chỉ gọi `queue_redraw()` khi trạng thái, frame, góc ngắm (`> 0.5°`), biểu cảm hoặc pha thở (`12Hz`) thực sự thay đổi. |
+| **TS-EC-22** | Các bài kiểm thử tự động cũ (`SF-M1 .. SF-M35`) kiểm tra `body_sprite.texture as AtlasTexture` và `region.size` bị lỗi nếu xóa `body_sprite`. | Giữ nguyên `body_sprite` và `_body_atlas` cập nhật đầy đủ vùng `region` chuẩn ở chế độ ẩn (`self_modulate.a = 0.0`), đảm bảo **100% tương thích ngược với 144 bài test cũ**. |
+| **TS-EC-23** | Thiếu file ảnh chân dung biểu cảm cho các nhân vật ngoài `Agent Zero` khi vẽ lên Top HUD. | Với `Agent Zero`, dùng bộ 5 ảnh chân dung HD trích xuất từ bảng thiết kế; với các nhân vật khác, tự động kết xuất chân dung biểu cảm vector/bitmap sắc nét vào bộ nhớ đệm. |
+| **TS-EC-24** | Khi chơi màn hình nhỏ hoặc độ phân giải khác nhau, ô chân dung biểu cảm trên HUD bị tràn vào thanh máu. | Neo kích thước ô chân dung theo `ui_scale` và tự động dịch chuyển cụm tên + thanh máu sang phải một khoảng an toàn. |
+| **TS-EC-25** | Thao tác sửa code bên `superagent-TacticalStriker` vô tình chạm vào file của `superagent`. | Toàn bộ đường dẫn đọc/ghi code và tài nguyên của kế hoạch này được khóa chặt trong `8-9-hh3d-3/superagent-TacticalStriker/`. |
+
+---
+
+## 5. TIÊU CHÍ NGHIỆM THU TỰ ĐỘNG (`SF-M36` TRONG `tests/test_runner.gd`)
+
+1. **`SF-M36.1` (Kiểm chứng Khung Xương 3.5 Đầu & Tài Nguyên `Agent Zero`)**:
+   - Xác nhận `TacticalStrikerRigPainter` hoạt động, tỷ lệ giải phẫu 3.5 đầu (`head_ratio ~ 0.28`, `spine_posture != hunchback`), và bộ 5 file chân dung biểu cảm `res://assets/portraits/agent_zero_expr_*.png` tồn tại hợp lệ.
+2. **`SF-M36.2` (Kiểm chứng Bộ Máy 7 Biểu Cảm Gương Mặt & Chống Nhấp Nháy)**:
+   - Xác nhận nhân vật ở `IDLE` mang biểu cảm `CONFIDENT_SMIRK`, khi chạy/ngắm súng chuyển sang `BATTLE_FOCUS`, khi tung đòn đấm/kỹ năng chuyển sang `ATTACK_SHOUT`, khi trúng sát thương chuyển sang `HURT_SHOCK` (và giữ biểu cảm tối thiểu `0.20s` không bị nhấp nháy), khi hạ gục chuyển sang `DIZZY_KO`.
+3. **`SF-M36.3` (Kiểm chứng Xoay Đầu Theo Góc Ngắm 360° & HUD Chân Dung Động)**:
+   - Xác nhận khi ngắm súng ở góc `-60°` và `+60°`, góc xoay đầu `get_current_head_tilt_deg()` bám theo hướng ngắm và nằm trong biên an toàn `[-36°, +36°]`, đồng thời `MatchHudController` hiển thị đúng chân dung biểu cảm thời gian thực.
+4. **Toàn bộ bộ kiểm thử tự động (`SF-M1 .. SF-M36`, tổng cộng 147 checks) trong `superagent-TacticalStriker` đạt 100% PASS (Exit Code 0)**.
+
+
+---
+
+## 6. NHẬT KÝ HOÀN TẤT & BÀI HỌC KINH NGHIỆM RÚT RA (LESSONS LEARNED — 27/10/2026)
+
+1. **Giải pháp Hiển Thị Studio HD-2D Không Vỡ Hình (`Mipmapped HD Pose Sprites @ 24.5 World Units`)**:
+   - **Vấn đề trước đây**: Khi thu nhỏ ảnh thiết kế `220px` xuống `17x21 px` rồi phóng to lại bằng `Nearest-Neighbor`, mọi chi tiết mắt, miệng, áo khoác đều bị nát vụn.
+   - **Bài học & Giải pháp đã áp dụng**: Do dự án chạy ở `1280x720` với `window/stretch/mode="canvas_items"` và camera zoom `~3.2x`, việc giữ nguyên ảnh tư thế Studio HD-2D (`~180x220 px`, đã khử nền hoàn hảo bằng Flood-Fill + Connected-Component Filtering `>= 250 px` và bật `generate_mipmaps()` + `TEXTURE_FILTER_LINEAR_WITH_MIPMAPS`) vẽ trực tiếp vào khung `Rect2` cao `24.5 world units` giúp GPU hiển thị nhân vật ở độ phân giải thực `~80x80 screen pixels` sắc nét tuyệt đối mà vẫn giữ nguyên 100% hộp va chạm vật lý (`12x18`).
+2. **Lưu ý khi tối ưu Hash bộ đệm vẽ (`_last_rig_hash` trong `FighterRigView`)**:
+   - Khi có bộ đếm giữ biểu cảm chống nhấp nháy (`_expr_hold_timer`), cần đưa cả `int(roundf(_expr_hold_timer * 100.0))` vào `cur_hash` của `apply_rig_state()` để tránh việc return sớm khi trạng thái đứng yên (`IDLE`) lặp lại trong lúc biểu cảm đau (`HURT_SHOCK`) đang đếm ngược.
+3. **Lưu ý GDScript Strict Typing với toán tử 3 ngôi (`Ternary Array Assignment`)**:
+   - Trong Godot 4.7.1, biểu thức `["Z", "X", "C", "V"] if p_num <= 1 else ["1", "2", "3", "4"]` trả về kiểu `Array` tổng quát thay vì `Array[String]`. Luôn khai báo `var key_labels: Array = ...` để tránh lỗi runtime `Trying to assign an array of type "Array" to a variable of type "Array[String]"`.
+4. **Kết quả Kiểm Thử Nghiệm Thu Cuối Cùng**:
+   - `test_runner.gd`: **147/147 checks PASS (100% PASS, EXIT 0)**.
+   - `visual_showcase_capture.gd`: **10/10 GPU 1280x720 screenshots captured (EXIT 0, 0 script errors)**.

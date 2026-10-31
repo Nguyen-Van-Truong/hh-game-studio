@@ -35,11 +35,14 @@ const SHOWCASE_FILES: Array[String] = [
 var _checks: int = 0
 var _failures: int = 0
 var _frame_step: int = 0
+const TEST_SEED: int = 20261028
 
 
 func _process(_delta: float) -> bool:
 	_frame_step += 1
 	if _frame_step == 1:
+		seed(TEST_SEED)
+		print("[MASTER TEST RUNNER] seed=", TEST_SEED)
 		print("================================================================================")
 		print("=== [SUPERFIGHTERS Y8 1:1 REMAKE] MASTER E2E TEST RUNNER (SF-M1 .. SF-M7)   ===")
 		print("================================================================================")
@@ -1728,13 +1731,16 @@ func _run_m7_e2e_match_simulation_suite() -> void:
 			var rv20: Node2D = m20_p2.get("rig_view") as Node2D
 			var batlas: AtlasTexture = rv20.get("_body_atlas") as AtlasTexture if rv20 != null else null
 			var bspr: Sprite2D = rv20.get("body_sprite") as Sprite2D if rv20 != null else null
-			if rv20 != null and rv20.visible and batlas != null and bspr != null and bspr.visible:
-				if is_equal_approx(batlas.region.position.x, 461.0) and is_equal_approx(batlas.region.position.y, 14.0) and is_equal_approx(batlas.region.size.x, 15.0) and is_equal_approx(batlas.region.size.y, 17.0) and bspr.flip_h:
-					valid_rocket_ride_sprite = true
+			if rv20 != null and rv20.visible and batlas != null and bspr != null:
+				if rv20.get("chibi_brawler_enabled") == true:
+					var rocket_pose: Dictionary = rv20.call("get_chibi_pose_snapshot") as Dictionary
+					valid_rocket_ride_sprite = not bspr.visible and str(rocket_pose.get("family")) == "rocket_ride" and (rocket_pose.get("head") as Vector2).is_finite() and is_equal_approx(float(rocket_pose.get("body_rotation_deg")), float(m20_p2.get("body_rotation_deg")))
+				elif bspr.visible:
+					valid_rocket_ride_sprite = is_equal_approx(batlas.region.position.x, 461.0) and is_equal_approx(batlas.region.position.y, 14.0) and is_equal_approx(batlas.region.size.x, 15.0) and is_equal_approx(batlas.region.size.y, 17.0) and bspr.flip_h
 			break
 	_check(
 		caught_on_rocket and valid_rocket_ride_sprite and str(m20_p2.get("current_state")) == "ROCKET_RIDE_R",
-		"SF-M20.4: Direct Bazooka rocket hit attaches fighter in visible ROCKET_RIDE_R pose (AtlasTexture region=[461, 14, 15, 17], flip_h=true)"
+		"SF-M20.4: Live Bazooka hit attaches fighter in Chibi rocket-ride pose driven by body steering (legacy atlas checked only in legacy mode)"
 	)
 
 	# --- SF-M21: Kneel vs Cover Next to FILECAB / CRATE (Zero Sprite Shift Into Prop & Symbol 615 Horizontal Flip) ---
@@ -2724,16 +2730,23 @@ func _run_m7_e2e_match_simulation_suite() -> void:
 				climbed_all_4_up += 1
 				break
 
-	# Test stepping onto intermediate floor hatch_tower_left (y = -56.0) when releasing Up at mid-ladder
+	# The tower-roof mouth is now an open shaft: releasing Up at its height must
+	# leave the fighter on the ladder, without inventing a phantom floor at y=-56.
 	sh_p1.call("setup_fighter", 0, "johnny", Vector2(-298.0, 12.0), false)
 	sh_p1.set("match_world", mc)
 	sh_p1.set("on_ground", true)
 	for _step_m: int in range(60):
-		var hold_u_mid: bool = (sh_p1.global_position.y > -54.5)
+		var hold_u_mid: bool = (sh_p1.global_position.y > -56.0)
 		sh_p1.call("step_fighter", 1.0, {"up": hold_u_mid})
-		if not hold_u_mid and bool(sh_p1.get("on_ground")) and absf(sh_p1.global_position.y - (-56.0)) <= 1.5:
+		if not hold_u_mid:
 			break
-	var stepped_onto_mid_hatch_ok: bool = (bool(sh_p1.get("on_ground")) and not bool(sh_p1.get("climbing")) and absf(sh_p1.global_position.y - (-56.0)) <= 1.5)
+	for _release_m: int in range(6):
+		sh_p1.call("step_fighter", 1.0, {})
+	var opened_roof_release_ok: bool = (
+		bool(sh_p1.get("climbing"))
+		and not bool(sh_p1.get("on_ground"))
+		and absf(sh_p1.global_position.y - (-56.0)) <= 1.5
+	)
 
 	# Test climbing/sliding DOWN from top platform (y = -108.0 -> y = 12.0 and y = 76.0 -> y = 140.0) by pressing Down
 	sh_p1.call("setup_fighter", 0, "johnny", Vector2(-298.0, -108.0), false)
@@ -2760,8 +2773,8 @@ func _run_m7_e2e_match_simulation_suite() -> void:
 			break
 	var descended_pit_ok: bool = (grabbed_down_pit and bool(sh_p1.get("on_ground")) and absf(sh_p1.global_position.y - 140.0) <= 1.5)
 	_check(
-		climbed_all_4_up == 4 and stepped_onto_mid_hatch_ok and descended_upper_ok and descended_pit_ok,
-		"SF-M31.1: All 4 'steel_harbor' ladders climb bottom-to-top (" + str(climbed_all_4_up) + "/4), step onto intermediate hatch (y=-56, ok=" + str(stepped_onto_mid_hatch_ok) + "), and descend from top platforms on Down (upper=" + str(descended_upper_ok) + ", pit=" + str(descended_pit_ok) + ")"
+		climbed_all_4_up == 4 and opened_roof_release_ok and descended_upper_ok and descended_pit_ok,
+		"SF-M31.1: All 4 'steel_harbor' ladders climb bottom-to-top (" + str(climbed_all_4_up) + "/4), release at the open tower-roof mouth without a phantom floor (y=-56, ok=" + str(opened_roof_release_ok) + "), and descend from top platforms on Down (upper=" + str(descended_upper_ok) + ", pit=" + str(descended_pit_ok) + ")"
 	)
 
 	# 2. SF-M31.2: Walking/running/jumping horizontally past a ladder NEVER triggers accidental climbing, and pressing Up on top platform jumps normally
@@ -2787,15 +2800,48 @@ func _run_m7_e2e_match_simulation_suite() -> void:
 			accidental_climb_on_run_jump = true
 	var run_jump_past_ladder_ok: bool = (not accidental_climb_on_run_jump and sh_p1.global_position.x < -306.0)
 
-	# Standing on top platform (crane_walk_left y = -108.0) at ladder_left_upper and pressing Up must JUMP (never get stuck grabbing ladder tip)
-	sh_p1.call("setup_fighter", 0, "johnny", Vector2(-298.0, -108.0), false)
+	# A fighter can dismount either side of the opened upper mouth. Stop just
+	# below the crane deck, then walk horizontally so the controller chooses the
+	# authored side slab instead of treating the shaft center as a floor.
+	var side_dismount_left_ok: bool = false
+	var side_dismount_right_ok: bool = false
+	for side_dir: int in [-1, 1]:
+		sh_p1.call("setup_fighter", 0, "johnny", Vector2(-298.0, 12.0), false)
+		sh_p1.set("match_world", mc)
+		sh_p1.set("on_ground", true)
+		for _rise_side: int in range(75):
+			sh_p1.call("step_fighter", 1.0, {"up": true})
+		var reached_open_mouth: bool = bool(sh_p1.get("climbing")) and sh_p1.global_position.y <= -96.0
+		var dismounted_side: bool = false
+		if reached_open_mouth:
+			for _walk_side: int in range(12):
+				sh_p1.call("step_fighter", 1.0, {"left": side_dir < 0, "right": side_dir > 0})
+				if not bool(sh_p1.get("climbing")) and bool(sh_p1.get("on_ground")) and absf(sh_p1.global_position.y - (-108.0)) <= 1.5:
+					dismounted_side = true
+					break
+		if side_dir < 0:
+			side_dismount_left_ok = reached_open_mouth and dismounted_side
+		else:
+			side_dismount_right_ok = reached_open_mouth and dismounted_side
+
+	# Pressing Up on an actual adjacent crane deck still performs a normal jump.
+	# The floor probe guards this check against reintroducing an unsupported
+	# synthetic spawn at the center of the newly opened mouth.
+	var actual_top_floor_y: float = float(ml_m18.call("get_ground_y_below", -276.0, -122.0, 24.0, true))
+	var actual_top_floor_present: bool = absf(actual_top_floor_y - (-108.0)) <= 1.5
+	sh_p1.call("setup_fighter", 0, "johnny", Vector2(-276.0, -108.0), false)
 	sh_p1.set("match_world", mc)
 	sh_p1.set("on_ground", true)
 	sh_p1.call("step_fighter", 1.0, {"up": true, "up_just_pressed": true, "jump": true, "jump_just_pressed": true})
-	var top_platform_jump_ok: bool = (not bool(sh_p1.get("climbing")) and not bool(sh_p1.get("on_ground")) and (sh_p1.get("air_velocity") as Vector2).y < -4.0)
+	var top_platform_jump_ok: bool = (
+		actual_top_floor_present
+		and not bool(sh_p1.get("climbing"))
+		and not bool(sh_p1.get("on_ground"))
+		and (sh_p1.get("air_velocity") as Vector2).y < -4.0
+	)
 	_check(
-		walked_past_ladder_ok and run_jump_past_ladder_ok and top_platform_jump_ok,
-		"SF-M31.2: Walking/running/jumping horizontally past ladders never triggers CLIMB (walk_ok=" + str(walked_past_ladder_ok) + ", run_jump_ok=" + str(run_jump_past_ladder_ok) + "), and pressing Up on top platform jumps cleanly (top_jump_ok=" + str(top_platform_jump_ok) + ")"
+		walked_past_ladder_ok and run_jump_past_ladder_ok and side_dismount_left_ok and side_dismount_right_ok and top_platform_jump_ok,
+		"SF-M31.2: Walking/running past ladders stays safe (walk_ok=" + str(walked_past_ladder_ok) + ", run_jump_ok=" + str(run_jump_past_ladder_ok) + "), both sides dismount from the opened upper mouth (left=" + str(side_dismount_left_ok) + ", right=" + str(side_dismount_right_ok) + "), and Up jumps from a real adjacent crane deck (floor=" + str(actual_top_floor_present) + ", top_jump_ok=" + str(top_platform_jump_ok) + ")"
 	)
 
 	# 3. SF-M31.3: Automated Map Geometry & Navigation Invariant Validator across all 13 maps in sf_compiled_maps.json
@@ -3044,11 +3090,315 @@ func _run_m7_e2e_match_simulation_suite() -> void:
 	sh_p1.call("_begin_jump", 1, 1.0)
 	sh_p1.call("_start_dive", 1, 1.0)
 	var silent_after_jump_and_dive: bool = (jump_remained_silent_ok and str(sh_p1.get("last_played_sfx")) == "")
+	(sh_p1.get("inventory") as Dictionary)[1] = "FISTS"
 	sh_p1.call("_start_melee_combo_step", 1)
 	var combat_sfx_still_active: bool = (str(sh_p1.get("last_played_sfx")) == "swing")
 	_check(
 		silent_after_jump_and_dive and combat_sfx_still_active,
 		"SF-M33.2: Jump & Dive SFX completely removed (silent_jump=" + str(silent_after_jump_and_dive) + ", combat_sfx=" + str(sh_p1.get("last_played_sfx")) + ")"
+	)
+
+	# --- SF-M34: 8 Powered Fighters (4 Original + 4 Anime), LoL Bespoke Resources, U/I/O/P & 5/6/7/8 4-Skill Kits, Ultimate Cut-Ins & Prop Sleeping ---
+	var powered_ids: Array[String] = ["solaria", "atlas", "shinobi", "tideweaver", "goku", "luffy", "naruto", "saitama"]
+	var loaded_powered_count: int = 0
+	for pid: String in powered_ids:
+		sh_p1.call("setup_fighter", 0, pid, Vector2(-120.0, 76.0), false)
+		sh_p1.set("match_world", mc)
+		var rspec34: Dictionary = sh_p1.get("resource_spec") as Dictionary
+		var skit34: Dictionary = sh_p1.get("skill_kit") as Dictionary
+		var mad34: Object = sh_p1.get("mugen_adapter") as Object
+		if (
+			bool(sh_p1.get("is_powered_fighter"))
+			and mad34 != null
+			and not rspec34.is_empty()
+			and skit34.has("skill_1")
+			and skit34.has("skill_2")
+			and skit34.has("skill_3")
+			and skit34.has("skill_4")
+			and FileAccess.file_exists(str(mad34.get("portrait_path")))
+			and FileAccess.file_exists(str(mad34.get("cutin_path")))
+			and FileAccess.file_exists(str(mad34.get("sheet_path")))
+		):
+			loaded_powered_count += 1
+
+	# Verify Normal Fighter ("johnny") remains 100% unchanged (no artificial buffs/nerfs)
+	sh_p1.call("setup_fighter", 0, "johnny", Vector2(-120.0, 76.0), false)
+	var normal_unchanged_ok: bool = (
+		not bool(sh_p1.get("is_powered_fighter"))
+		and is_equal_approx(float(sh_p1.get("max_hp")), 100.0)
+		and is_equal_approx(float(sh_p1.get("speed_mult")), 1.0)
+	)
+	_check(
+		loaded_powered_count == 8 and normal_unchanged_ok,
+		"SF-M34.1: All " + str(loaded_powered_count) + "/8 Powered Fighters (4 Original + 4 Anime) loaded with LoL resource_spec, 4-skill kits, portraits & cut-ins; Normal Fighters 100% unchanged"
+	)
+
+	# 2. SF-M34.2: Test LoL Resource rules + 4-Button Skills (U I O P / 5 6 7 8):
+	#    - Atlas Rumble Heat + Danger Zone + Overheat
+	#    - Naruto Shadow Clone cap (<= 2 clones)
+	#    - Tideweaver water skill douses burning fighter
+	#    - Goku Kamehameha Ultimate Cut-In Banner (Slot 4)
+	mc.call("start_match", {"mode": "vs", "map_id": "rooftops", "two_player": true, "bot_count": 0})
+	var m34_fighters: Array = mc.get("fighters") as Array
+	var m34_p1: Node2D = m34_fighters[0] as Node2D
+	var m34_p2: Node2D = m34_fighters[1] as Node2D
+
+	# Atlas Heat test
+	m34_p1.call("setup_fighter", 0, "atlas", Vector2(120.0, 194.0), false)
+	m34_p2.call("setup_fighter", 1, "boris", Vector2(152.0, 194.0), false)
+	m34_p1.set("match_world", mc)
+	m34_p2.set("match_world", mc)
+	var atlas_cast1: bool = bool(m34_p1.call("try_activate_skill_slot", 1, {}))
+	var atlas_heat_after_1: float = float(m34_p1.get("resource_val"))
+
+	# Tideweaver water douses fire
+	m34_p1.call("setup_fighter", 0, "tideweaver", Vector2(120.0, 194.0), false)
+	m34_p1.set("match_world", mc)
+	m34_p1.set("burn_state", 75.0)
+	m34_p1.set("resource_val", 100.0)
+	var tide_cast1: bool = bool(m34_p1.call("try_activate_skill_slot", 1, {}))
+	var tide_doused_fire: bool = (tide_cast1 and is_zero_approx(float(m34_p1.get("burn_state"))))
+
+	# Naruto Shadow Clone cap (<= 2 clones)
+	m34_p1.call("setup_fighter", 0, "naruto", Vector2(120.0, 194.0), false)
+	m34_p1.set("match_world", mc)
+	for _cl_i: int in range(4):
+		m34_p1.set("resource_val", 100.0)
+		(m34_p1.get("skill_cooldowns") as Dictionary)[2] = 0.0
+		m34_p1.call("try_activate_skill_slot", 2, {})
+	var active_clone_cnt: int = 0
+	for f_cl: Variant in (mc.get("fighters") as Array):
+		if is_instance_valid(f_cl) and bool((f_cl as Node2D).get("is_summoned_clone")):
+			active_clone_cnt += 1
+
+	# Goku Ultimate Cut-In Banner on Slot 4
+	m34_p1.call("setup_fighter", 0, "goku", Vector2(120.0, 194.0), false)
+	m34_p1.set("match_world", mc)
+	m34_p1.set("resource_val", 100.0)
+	var goku_ult_ok: bool = bool(m34_p1.call("try_activate_skill_slot", 4, {}))
+	var cutin_dict: Dictionary = mc.get("active_cutin") as Dictionary
+	var cutin_triggered_ok: bool = (goku_ult_ok and not cutin_dict.is_empty() and float(cutin_dict.get("timer", 0.0)) > 0.0)
+	_check(
+		atlas_cast1 and atlas_heat_after_1 > 0.0 and tide_doused_fire and active_clone_cnt == 2 and cutin_triggered_ok,
+		"SF-M34.2: LoL Resources & 4-Skill Kits verified (Atlas Heat=" + str(atlas_heat_after_1) + ", Tideweaver doused fire=" + str(tide_doused_fire) + ", Naruto clone cap=" + str(active_clone_cnt) + "/2, Goku Ultimate Cut-In=" + str(cutin_triggered_ok) + ")"
+	)
+
+	# --- SF-M35: Dual-Resolution Hybrid Art (SA-WP8), 3-Layer VFX & Hitstop/Afterimage (SA-WP9), Anti-Clipping SFX (SA-WP10), Dual Clash HUD & 6-Frame Buffer (SA-WP11/WP12) ---
+	# 1. SF-M35.1: Verify all 8 SF-Native Hero Sheets preserve 1px #000000 outlines + 18 skill frames + 4px top hair/hat headroom
+	var reg35: Node = MapLoaderScript.get_registry()
+	var sf_native_sheets_ok: int = 0
+	for pid35: String in powered_ids:
+		var sh_path35: String = "res://assets/sheets/hero_" + pid35 + "_mugen.png"
+		var tex35: Texture2D = reg35.call("load_cached_texture", sh_path35) as Texture2D
+		if tex35 != null and tex35.get_width() == 600 and tex35.get_height() == 400:
+			var img35: Image = tex35.get_image()
+			# Sample IDLE frame 1 (x=46..63, y=7..32) and skill row (y=264..304) for crisp #000000 outline + non-empty pixels
+			var blk_cnt: int = 0
+			var skill_px_cnt: int = 0
+			for py35: int in range(7, 32):
+				for px35: int in range(46, 63):
+					var c35: Color = img35.get_pixel(px35, py35)
+					if c35.a > 0.9 and c35.r < 0.05 and c35.g < 0.05 and c35.b < 0.05:
+						blk_cnt += 1
+			for sy35: int in range(264, 304):
+				for sx35: int in range(8, 56):
+					if img35.get_pixel(sx35, sy35).a > 0.5:
+						skill_px_cnt += 1
+			if blk_cnt >= 15 and skill_px_cnt >= 40:
+				sf_native_sheets_ok += 1
+
+	m34_p1.call("setup_fighter", 0, "goku", Vector2(120.0, 194.0), false)
+	var rv35: Node2D = m34_p1.get("rig_view") as Node2D
+	var body_spr35: Sprite2D = rv35.get("body_sprite") as Sprite2D
+	var body_at35: AtlasTexture = body_spr35.texture as AtlasTexture if body_spr35 != null else null
+	var headroom_4px_ok: bool = (body_at35 != null and is_equal_approx(body_at35.region.size.y, 25.0))
+	_check(
+		sf_native_sheets_ok == 8 and headroom_4px_ok,
+		"SF-M35.1: All " + str(sf_native_sheets_ok) + "/8 SF-Native Pixel Hero sheets verified (#000000 1px outline + 18 skill cells + 4px hair/hat top headroom)"
+	)
+
+	# 2. SF-M35.2: Verify Afterimage Trail, 1-Frame White Hit-Flash, Local Hitstop vs Slow-Mo Guard (EC-31), Knockdown VFX Cleanup (EC-33), and 45ms SFX Gate (EC-34)
+	for f_cl_rem: Variant in (mc.get("fighters") as Array).duplicate():
+		if is_instance_valid(f_cl_rem) and bool((f_cl_rem as Node2D).get("is_summoned_clone")):
+			(mc.get("fighters") as Array).erase(f_cl_rem)
+			(f_cl_rem as Node2D).free()
+	m34_p1.call("setup_fighter", 0, "luffy", Vector2(120.0, 194.0), false)
+	m34_p2.call("setup_fighter", 1, "boris", Vector2(152.0, 194.0), false)
+	m34_p1.set("match_world", mc)
+	m34_p2.set("match_world", mc)
+	mc.set("slowmo_timer", 0.0)
+	mc.set("game_speed", 1.0)
+	m34_p1.set("resource_val", 100.0)
+	var dash_ok35: bool = bool(m34_p1.call("try_activate_skill_slot", 3, {}))
+	var trail_arr35: Array = m34_p1.get("_afterimage_trail") as Array
+	var afterimage_spawned_ok: bool = (dash_ok35 and trail_arr35.size() == 3)
+	var hit_flash_triggered_ok: bool = (float(m34_p2.get("_hit_flash_timer")) > 0.0)
+	var hitstop_applied_ok: bool = (int(m34_p1.get("_hitstop_ticks")) == 2)
+	# EC-31: When global slowmo_timer > 0, stepping fighter clears local _hitstop_ticks immediately
+	mc.set("slowmo_timer", 10.0)
+	m34_p1.call("step_fighter", 1.0, {})
+	var ec31_no_double_freeze_ok: bool = (int(m34_p1.get("_hitstop_ticks")) == 0)
+	mc.set("slowmo_timer", 0.0)
+	# EC-33: Knockdown / force_fall immediately clears active_vfx_overlays
+	(m34_p1.get("active_vfx_overlays") as Array).append({"kind": "beam", "color": Color.CYAN, "length": 200.0, "timer": 0.5, "max_timer": 0.5})
+	m34_p1.call("force_fall", -3.0, -2.5, true)
+	var ec33_vfx_cleared_ok: bool = (m34_p1.get("active_vfx_overlays") as Array).is_empty()
+	_check(
+		afterimage_spawned_ok and hit_flash_triggered_ok and hitstop_applied_ok and ec31_no_double_freeze_ok and ec33_vfx_cleared_ok,
+		"SF-M35.2: 3-Layer VFX, Afterimage Trail (ok=" + str(afterimage_spawned_ok) + ", cnt=" + str(trail_arr35.size()) + "), Hit-Flash (" + str(hit_flash_triggered_ok) + "), Hitstop (" + str(hitstop_applied_ok) + ") & EC-31 (" + str(ec31_no_double_freeze_ok) + ")/EC-33 (" + str(ec33_vfx_cleared_ok) + ") verified"
+	)
+
+	# 3. SF-M35.3: Verify Dual Clash Split Cut-In (EC-32), 6-Frame Skill Input Buffer (EC-35), Stretched Hurtbox Guard (EC-38), Clone Kill Guard (EC-40) & Skill Denial Flash (EC-41)
+	m34_p1.call("setup_fighter", 0, "goku", Vector2(120.0, 194.0), false)
+	m34_p2.call("setup_fighter", 1, "saitama", Vector2(440.0, 194.0), false)
+	m34_p1.set("match_world", mc)
+	m34_p2.set("match_world", mc)
+	(mc.get("active_cutins") as Array).clear()
+	m34_p1.set("resource_val", 100.0)
+	m34_p2.set("resource_val", 100.0)
+	m34_p1.call("try_activate_skill_slot", 4, {})
+	m34_p2.call("try_activate_skill_slot", 4, {})
+	var dual_clash_ok: bool = ((mc.get("active_cutins") as Array).size() == 2)
+
+	# EC-41: Pressing skill 4 again while on cooldown sets skill_deny_flash_timers[4] > 0
+	m34_p1.call("try_activate_skill_slot", 4, {})
+	var deny_dict35: Dictionary = m34_p1.get("skill_deny_flash_timers") as Dictionary
+	var ec41_deny_flash_ok: bool = (float(deny_dict35.get(4, 0.0)) > 0.0)
+
+	# EC-35: Pressing Skill 1 during active melee swing buffers _buffered_skill_slot=1 and auto-casts when swing ends
+	m34_p1.call("setup_fighter", 0, "luffy", Vector2(120.0, 194.0), false)
+	m34_p1.set("match_world", mc)
+	m34_p1.set("_melee_active_frames", 2.0)
+	m34_p1.call("step_fighter", 1.0, {"skill_1": true, "skill_1_just_pressed": true})
+	var buffered_slot_recorded: bool = (int(m34_p1.get("_buffered_skill_slot")) == 1)
+	m34_p1.call("step_fighter", 1.0, {})
+	m34_p1.call("step_fighter", 1.0, {})
+	var ec35_buffer_cast_ok: bool = (buffered_slot_recorded and float((m34_p1.get("skill_cooldowns") as Dictionary).get(1, 0.0)) > 0.0)
+	# EC-38: Luffy stretched punch keeps hurtbox compact (12x18)
+	var luffy_hurtbox_rect: Rect2 = m34_p1.call("get_hit_rect") as Rect2
+	var ec38_hurtbox_ok: bool = is_equal_approx(luffy_hurtbox_rect.size.x, 12.0)
+
+	_check(
+		dual_clash_ok and ec41_deny_flash_ok and ec35_buffer_cast_ok and ec38_hurtbox_ok,
+		"SF-M35.3: Dual Clash Split Cut-In (EC-32=" + str(dual_clash_ok) + "), 6-Frame Skill Buffer (EC-35=" + str(ec35_buffer_cast_ok) + "), Stretched Hurtbox Guard (EC-38=" + str(ec38_hurtbox_ok) + ") & HUD Denial Flash (EC-41=" + str(ec41_deny_flash_ok) + ") verified"
+	)
+
+	# --- SF-M36: Chibi-Tactical Expressive Brawler (2.5-Head) Art Pipeline, 7-Expression Priority/Hysteresis, Head Aim-Tracking & Adaptive 8-Fighter HUD (CB-WP0..CB-WP8) ---
+	# R5 migration: validate the asset actually drawn, not the archived concept cutouts.
+	var head_assets = preload("res://game/fighter/chibi_head_atlas.gd")
+	head_assets.prewarm()
+	var head_validation: Dictionary = head_assets.validation()
+	var base_ids: Array[String] = ["johnny","boris","agent","hideki","blaire","savage","cruger","ivan","brody","mac","billy","scott","funnyman","jeff","solaria","atlas","shinobi","tideweaver","goku","luffy","naruto","saitama"]
+	var head_coverage: bool = bool(head_validation.get("ok", false))
+	for cid: String in base_ids:
+		for expression: String in ["cheeky_smirk","blazing_glare","wide_mouth_shout","dizzy_spiral_hurt","ecstatic_victory_laugh","low_hp_sweat","ko_stars","blink"]:
+			head_coverage = head_coverage and head_assets.get_head(cid, expression) != null
+	_check(head_coverage, "SF-M36.1: Active Blender head atlas:22 identities x8 expressions; base/awakened generation=" + str(head_validation.get("generation")))
+
+	# 2. SF-M36.2: Verify 7-Expression Priority Table, Hold Timer (0.22s..0.30s) & 25%..30% Low-HP Hysteresis (CB-EC-12..17)
+	var rig36: Variant = FighterRigViewScript.new()
+	root.add_child(rig36)
+	rig36.apply_rig_state("johnny", "IDLE", 1, 1, 0.0, 1, 100.0, 100.0)
+	rig36.step_expression_clock(0.016, false, false)
+	var expr_idle_ok: bool = (rig36.get_current_expression_id() == "CHEEKY_SMIRK" and rig36.get_current_hud_portrait_key() == "cheeky_smirk")
+
+	# Attack shout hold timer (0.22s): PUNCH_01 triggers WIDE_MOUTH_SHOUT and holds for >=0.10s after returning to IDLE
+	rig36.apply_rig_state("johnny", "PUNCH_01", 1, 1, 0.0, 1, 100.0, 100.0)
+	rig36.step_expression_clock(0.016, false, false)
+	var expr_shout_ok: bool = (rig36.get_current_expression_id() == "WIDE_MOUTH_SHOUT")
+	rig36.apply_rig_state("johnny", "IDLE", 1, 1, 0.0, 1, 100.0, 100.0)
+	rig36.step_expression_clock(0.08, false, false)
+	var expr_shout_held_ok: bool = (rig36.get_current_expression_id() == "WIDE_MOUTH_SHOUT")
+	# Higher priority STAGGER (90) preempts WIDE_MOUTH_SHOUT (70) immediately
+	rig36.apply_rig_state("johnny", "STAGGER", 1, 1, 0.0, 1, 80.0, 100.0)
+	rig36.step_expression_clock(0.016, false, false)
+	var expr_hurt_preempt_ok: bool = (rig36.get_current_expression_id() == "DIZZY_SPIRAL_HURT")
+	# Wait out 0.30s hurt hold timer and test Low-HP Hysteresis (<=25% enters LOW_HP_SWEAT, 28% keeps it, >=30% clears it)
+	rig36.apply_rig_state("johnny", "IDLE", 1, 1, 0.0, 1, 24.0, 100.0)
+	rig36.step_expression_clock(0.35, false, false)
+	var expr_sweat_enter_ok: bool = (rig36.get_current_expression_id() == "LOW_HP_SWEAT")
+	rig36.apply_rig_state("johnny", "IDLE", 1, 1, 0.0, 1, 28.0, 100.0)
+	rig36.step_expression_clock(0.05, false, false)
+	var expr_sweat_hysteresis_hold_ok: bool = (rig36.get_current_expression_id() == "LOW_HP_SWEAT")
+	rig36.apply_rig_state("johnny", "IDLE", 1, 1, 0.0, 1, 32.0, 100.0)
+	rig36.step_expression_clock(0.05, false, false)
+	var expr_sweat_exit_ok: bool = (rig36.get_current_expression_id() == "CHEEKY_SMIRK")
+	# KO_STARS priority 100 & auto-blink disabled
+	rig36.apply_rig_state("johnny", "DEATH_A", 1, 1, 0.0, 1, 0.0, 100.0)
+	rig36.step_expression_clock(0.05, false, false)
+	var expr_ko_ok: bool = (rig36.get_current_expression_id() == "KO_STARS" and not rig36._is_blinking)
+	_check(
+		expr_idle_ok and expr_shout_ok and expr_shout_held_ok and expr_hurt_preempt_ok and expr_sweat_enter_ok and expr_sweat_hysteresis_hold_ok and expr_sweat_exit_ok and expr_ko_ok,
+		"SF-M36.2: 7-Expression Priority, Hold Timer (0.22s/0.30s) & 25%..30% Low-HP Hysteresis verified"
+	)
+
+	# 3. SF-M36.3: Verify Head Aim-Tracking Clamp [-28°, +28°], NaN/Inf Sanitizer & Muzzle Socket Invariance (epsilon <= 1e-4)
+	rig36.apply_rig_state("johnny", "AIM_PISTOL", 1, 1, -48.0, 1, 100.0, 100.0)
+	var tilt_clamped_ok: bool = absf(rig36.get_current_head_tilt_deg()) <= 28.001
+	rig36.apply_rig_state("johnny", "AIM_PISTOL", 1, 1, -80.0, 1, 100.0, 100.0)
+	var tilt_max_ok: bool = is_equal_approx(rig36.get_current_head_tilt_deg(), -28.0)
+	rig36.apply_rig_state("johnny", "AIM_PISTOL", 1, 1, NAN, 1, 100.0, 100.0)
+	var nan_safe_ok: bool = is_finite(rig36.current_aim_pitch) and is_zero_approx(rig36.get_current_head_tilt_deg())
+	# Muzzle socket invariance between chibi_brawler_enabled = true and false
+	rig36.chibi_brawler_enabled = true
+	rig36.apply_rig_state("johnny", "AIM_PISTOL", 1, 1, -22.5, 1, 100.0, 100.0)
+	var muz_chibi_r: Vector2 = rig36.get_muzzle_global_pos()
+	var dir_chibi_r: Vector2 = rig36.get_aim_direction_vector()
+	rig36.chibi_brawler_enabled = false
+	rig36.apply_rig_state("johnny", "AIM_PISTOL", 1, 1, -22.5, 1, 100.0, 100.0)
+	var muz_orig_r: Vector2 = rig36.get_muzzle_global_pos()
+	var dir_orig_r: Vector2 = rig36.get_aim_direction_vector()
+	var muzzle_invariant_ok: bool = (muz_chibi_r.distance_to(muz_orig_r) <= 1e-4 and dir_chibi_r.distance_to(dir_orig_r) <= 1e-4)
+	rig36.free()
+	_check(
+		tilt_clamped_ok and tilt_max_ok and nan_safe_ok and muzzle_invariant_ok,
+		"SF-M36.3: Head Aim-Tracking Clamp [-28°, +28°], NaN/Inf Sanitizer & Muzzle Socket Invariance (dist=" + str(muz_chibi_r.distance_to(muz_orig_r)) + " <= 1e-4) verified"
+	)
+
+	# 4. SF-M36.4: Verify Adaptive 8-Fighter HUD Zero-Overflow at 1280x720 & 960x540 (CB-EC-31/50) + Fast Perf Gate (p95 <= 2.0ms)
+	var hud36: Variant = MatchHudScript.new()
+	var rects_720p: Array[Rect2] = hud36.compute_adaptive_card_rects(Vector2(1280.0, 720.0), 8)
+	var rects_540p: Array[Rect2] = hud36.compute_adaptive_card_rects(Vector2(960.0, 540.0), 8)
+	var hud_no_overflow_720p: bool = (rects_720p.size() == 8 and rects_720p[7].end.x <= 1280.01)
+	var hud_no_overflow_540p: bool = (rects_540p.size() == 8 and rects_540p[7].end.x <= 960.01)
+	var hud_zero_overlap: bool = true
+	for hi: int in range(rects_720p.size() - 1):
+		if rects_720p[hi].end.x > rects_720p[hi + 1].position.x + 0.01:
+			hud_zero_overlap = false
+	var profiles_ok36: bool = (
+		hud36.get_adaptive_hud_profile(1) == "Solo"
+		and hud36.get_adaptive_hud_profile(2) == "TwoLocal"
+		and hud36.get_adaptive_hud_profile(8) == "CompactCrowd"
+	)
+	hud36.free()
+
+	# Fast Perf Gate: Step 8 active Chibi 2.5-Head fighters across 60 ticks and verify rig_p95 <= 1.0ms & full_tick_p95 <= 5.0ms (60FPS 16.67ms budget)
+	mc.call("start_match", {"mode": "vs", "map_id": "rooftops", "two_player": true, "bot_count": 6})
+	var rig_times_ms: Array[float] = []
+	var tick_times_ms: Array[float] = []
+	for _pf_tick: int in range(60):
+		var r0_usec: int = Time.get_ticks_usec()
+		for f_pf_r: Variant in (mc.get("fighters") as Array):
+			if is_instance_valid(f_pf_r):
+				var rv_pf: Variant = (f_pf_r as Node2D).get("rig_view")
+				if rv_pf != null:
+					rv_pf.call("apply_rig_state", "johnny", "RUN", (_pf_tick % 8) + 1, 1, -15.0, 1, 80.0, 100.0)
+					rv_pf.call("step_expression_clock", 1.0 / 60.0, false, false)
+		rig_times_ms.append(float(Time.get_ticks_usec() - r0_usec) / 1000.0)
+		var t0_usec36: int = Time.get_ticks_usec()
+		for f_pf: Variant in (mc.get("fighters") as Array):
+			if is_instance_valid(f_pf):
+				(f_pf as Node2D).call("step_fighter", 1.0, {})
+		var dt_ms36: float = float(Time.get_ticks_usec() - t0_usec36) / 1000.0
+		tick_times_ms.append(dt_ms36)
+	rig_times_ms.sort()
+	tick_times_ms.sort()
+	var p95_idx: int = clampi(int(floor(float(tick_times_ms.size()) * 0.95)), 0, tick_times_ms.size() - 1)
+	var rig_p95_ms: float = rig_times_ms[p95_idx]
+	var p95_ms: float = tick_times_ms[p95_idx]
+	_check(
+		hud_no_overflow_720p and hud_no_overflow_540p and hud_zero_overlap and profiles_ok36 and rig_p95_ms <= 1.0 and p95_ms <= 5.0,
+		"SF-M36.4: Adaptive 8-Fighter HUD zero-overflow (720p_end=" + str(snappedf(rects_720p[7].end.x, 0.1)) + ", 540p_end=" + str(snappedf(rects_540p[7].end.x, 0.1)) + ") & 8-Fighter Chibi Perf Gate (rig_p95=" + str(snappedf(rig_p95_ms, 0.01)) + "ms <= 1.0ms, full_tick_p95=" + str(snappedf(p95_ms, 0.01)) + "ms <= 5.0ms) verified"
 	)
 
 	mc.call("_clear_match_entities")

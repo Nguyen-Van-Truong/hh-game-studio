@@ -1,0 +1,500 @@
+# KẾ HOẠCH TỔNG THỂ: SUPERAGENT — HỆ THỐNG 8 NHÂN VẬT SIÊU NĂNG LỰC (LOL RESOURCE & 4 PHÍM CHIÊU U/I/O/P - 5/6/7/8), 4 PHƯƠNG ÁN TẠO HÌNH, UI/UX CUT-IN & TỐI ƯU 60FPS
+
+- **File kế hoạch**: `8-9-hh3d-3/zdoc/27-10-superagent-powered-fighters-and-optimization-plan.txt`
+- **Ngày lập**: 27/10/2026 (`27-10`)
+- **Phạm vi áp dụng (`PLAN_SCOPE`)**: `8-9-hh3d-3/superagent/` (Nhánh phát triển mở rộng độc lập; bản gốc `8-9-hh3d-3/superfighters-y8/` được giữ nguyên làm bản lưu trữ chuẩn 1:1 Y8).
+- **Định hướng cốt lõi của Owner**:
+  1. **Giữ nguyên 100% Nhân vật thường (14 Classic Fighters)**: Không chỉnh sửa hay buff nhân vật thường; để sự chênh lệch sức mạnh tự nhiên giữa Nhân vật thường và Siêu nhân nhằm tạo sự phấn khích tối đa. Tập trung vào chất lượng hành động, chiêu thức, tương tác vật lý và hiệu ứng mãn nhãn trước.
+  2. **Làm mẫu thực tế cả 4 Phương án Tạo hình Nhân vật (Phương án A, B, C, D)**: Xuất hình ảnh mẫu so sánh trực tiếp (cả ở độ phóng đại 4x/8x lẫn đặt trong bối cảnh sàn đấu thực tế 1x kèm Ultimate Cut-in từ ảnh `media_1793085946599_7b20e066.jpg`) để Owner xem và đánh giá trực quan.
+  3. **Hệ thống Năng lượng (Resource) riêng biệt kiểu Liên Minh Huyền Thoại (LoL)**: Mỗi nhân vật Siêu năng lực sở hữu cơ chế năng lượng, nội tại (Passive) và màu sắc/vạch chia thanh Resource riêng biệt (Solar Mantra + 3 Pips, Titan Heat Danger Zone/Overheat, Void Energy + Mark Refund, Tidal Flow, Saiyan Ki + SSJ Awakening, Gear Steam, Chakra + 9 Kurama Tails, Serious Meter).
+  4. **Đủ 8 Nhân vật Siêu năng lực để chơi thử và so sánh**:
+     - **4 Nhân vật Nguyên bản (Original Powered)**: `solaria` (Gold Striker Monk), `atlas` (Titan Gauntlet Brawler), `shinobi` (Void Kunai Assassin), `tideweaver` (Hydro Whip Caster) — khớp 100% với 4 nhân vật trong ảnh concept `media_1793085946599_7b20e066.jpg`.
+     - **4 Nhân vật Anime (Anime Legends)**: `goku` (Son Goku), `luffy` (Monkey D. Luffy), `naruto` (Naruto Uzumaki), `saitama` (Saitama - One Punch).
+  5. **Tối ưu tốc độ & Dọn dẹp code thừa**: Xử lý triệt để 4 điểm nghẽn CPU gây lag, tăng nhịp độ trận đấu mượt nhạy hơn, dọn sạch ~350 dòng dead code, và bảo vệ toàn bộ 30 kịch bản ngoại lệ/hy hữu (`EC-01..EC-30`).
+
+---
+
+## 0. BẢNG TÓM TẮT & TIẾN ĐỘ THỰC THI (PRIORITY EXECUTION ROADMAP)
+
+Bảng dưới đây sắp xếp thứ tự các hạng mục từ nền tảng đến hoàn thiện để thực hiện được nhiều việc nhất trong mỗi đợt mà game luôn hoạt động ổn định, không phát sinh lỗi dây chuyền:
+
+| Thứ tự / Mã WP | Hạng mục công việc chính | Nội dung bàn giao cốt lõi | Các file tác động chính | Trạng thái |
+| :--- | :--- | :--- | :--- | :--- |
+| **1. SA-WP1** *(Ưu tiên #1 — Làm ngay)* | **Bộ Mẫu Thực Tế 4 Phương Án Tạo Hình (A, B, C, D) & Ultimate Cut-In Preview** | Tạo script xuất 4 bảng mẫu thực tế cho cả 4 Phương án (A: Hybrid Split-Rig Pixel + Shader VFX; B: MUGEN/JUS Pocket-Anime 32px; C: AI High-Res Splash + Cutout/Outlined Rig + Ultimate Cut-in Banner từ ảnh 1; D: Blender 5.2.3 Toon Render từ mesh 3D `.glb` thật) đặt cạnh nhau trong bối cảnh sàn đấu Steel Harbor. | `tools/generate_4_art_pipeline_samples.py`, `assets/previews/art_pipelines_2026_10_27/*.png` | `[x] HOÀN TẤT` |
+| **2. SA-WP2** *(Ưu tiên #2 — Tối ưu & Làm sạch)* | **Xử Lý Triệt Để 4 Điểm Nghẽn Lag 60FPS, Tăng Nhịp Độ Game & Dọn Dead Code** | 1) Cơ chế ngủ `is_sleeping` cho đồ vật đứng yên (`-85%` CPU prop physics). 2) Cache mảng địa hình tĩnh/động mỗi tick (`-95%` cấp phát mảng `Rect2`). 3) Sửa lỗi Bot A* tính lại 60 lần/giây khi đứng cùng sàn. 4) Dirty-flag cho `queue_redraw()` của HUD/Map. 5) Tăng nhịp `FLASH_FPS` (`28.0Hz`) + tùy chọn tốc độ `1.0x / 1.2x / 1.35x`. 6) Xóa ~350 dòng Dead Code. | `game/world/interactive_prop.gd`, `game/fighter/fighter_controller.gd`, `game/ai/bot_controller.gd`, `game/ui/match_hud_controller.gd`, `game/core/match_controller.gd` | `[x] HOÀN TẤT` |
+| **3. SA-WP3** *(Ưu tiên #3 — Core Engine)* | **Hệ Thống 4 Phím Kỹ Năng (`U I O P` / `5 6 7 8`) & LoL Bespoke Resource Engine** | 1) Đăng ký InputMap `p1_skill_1..4` (`Numpad 5..8` + `Phím 5..8`) và `p2_skill_1..4` (`U I O P`), tự động gộp cả 2 cụm phím khi chơi 1P, chống kẹt bộ gõ Tiếng Việt Unikey/Telex qua `physical_keycode`. 2) Xây dựng bộ máy `ResourceSystem` chuẩn LoL trong `FighterController` & `MugenFighterAdapter` (`mugen_fighter_v2`). | `game/core/sf_data_registry.gd`, `game/fighter/fighter_controller.gd`, `game/fighter/mugen_fighter_adapter.gd` | `[x] HOÀN TẤT` |
+| **4. SA-WP4** *(Ưu tiên #4 — 4 Tướng Nguyên Bản)* | **4 Nhân Vật Siêu Năng Lực Nguyên Bản (`solaria`, `atlas`, `shinobi`, `tideweaver`)** | Triển khai trọn vẹn 4 nhân vật bước ra từ bức ảnh của Owner: **Solaria** (Solar Mantra + 3 Sun Pips), **Atlas** (Titan Heat Danger Zone/Overheat + Hút/Đấm thùng), **Void Shinobi** (Void Energy 200 + Phân thân hoán đổi + Ấn Hư Không), **Tideweaver** (Tidal Flow + Roi nước dập lửa/phản đạn/sóng thần). | `data/custom_fighters/hero_*.json`, `game/fighter/fighter_controller.gd`, `game/fighter/fighter_rig_view.gd`, `tools/import_mugen_character.py` | `[x] HOÀN TẤT` |
+| **5. SA-WP5** *(Ưu tiên #5 — 4 Tướng Anime)* | **4 Nhân Vật Siêu Năng Lực Anime (`goku`, `luffy`, `naruto`, `saitama`)** | Triển khai trọn vẹn 4 huyền thoại Anime: **Goku** (Gồng Ki, Dịch chuyển tức thời, Kamehameha + Hóa Super Saiyan), **Luffy** (Tay cao su co giãn, Bụng cao su phản đạn/tên lửa, Red Hawk, Gear 4/5 Giant Smash), **Naruto** (Triệu hồi Phân thân AI thực thụ trên sàn đấu, Rasenshuriken, Kurama Mode, Bijuudama), **Saitama** (Miễn khựng đạn, Đấm liên hoàn, Lật bàn hất tung toàn bộ đồ vật trong map, Đấm Nghiêm Túc rẽ đôi màn hình). | `data/custom_fighters/hero_*.json`, `game/fighter/fighter_controller.gd`, `game/core/projectile_manager.gd`, `game/core/match_controller.gd` | `[x] HOÀN TẤT` |
+| **6. SA-WP6** *(Ưu tiên #6 — UI/UX & Cut-In)* | **Giao Diện HUD Kiểu LoL, 4 Ô Skill Cooldown Sweep, Ultimate Cut-In Banner & Menu 3 Tab** | 1) Thanh Resource động đa phân đoạn + Pips ngay dưới thanh máu. 2) 4 ô Skill Icons (`13x13*s`) với quạt quay kim đồng hồ Cooldown, nhấp nháy khi hồi xong, viền lửa Ultimate và nhãn phím `U I O P` / `5 6 7 8`. 3) Dải **Anime Ultimate Cut-In Banner (0.35s)** trượt ngang kèm Speedlines (không làm đơ physics). 4) Menu Roster chia 3 Tab (`Classic`, `Original Powered`, `Anime Legends`) + Bảng xem trước chiêu thức. | `game/ui/match_hud_controller.gd`, `game/ui/main_menu_controller.gd` | `[x] HOÀN TẤT` |
+| **7. SA-WP7** *(Ưu tiên #7 — AI & Bảo Vệ Lỗi)* | **Bot AI Tung Chiêu Thông Minh & Kiểm Chứng 30 Kịch Bản Ngoại Lệ (`EC-01..EC-30`)** | 1) Nâng cấp `BotController` để Bot cầm tướng Siêu năng lực biết tự gồng Ki, phản đạn, triệu hồi phân thân và canh góc tung Ultimate. 2) Áp dụng toàn bộ 30 chốt chặn an toàn (`EC-01..EC-30`) và bộ test tự động kiểm chứng 100% PASS (`141/141`). | `game/ai/bot_controller.gd`, `tests/test_runner.gd` | `[x] HOÀN TẤT (141/141 PASS)` |
+| **8. SA-WP8** *(Ưu tiên #8 — CHỐT PHƯƠNG ÁN TẠO HÌNH TỐT NHẤT: E+F)* | **Tái Tạo Toàn Bộ 8 Sprite Sheet Chuẩn Pixel Art Y8 (`Head-Box Anchor` 72 Tư Thế + Frame Chiêu Pixel Thật)** | **Thay thế hoàn toàn hình vẽ hộp thô cũ (A/B/D) và ảnh cắt thu nhỏ bể nét (C)**: 1) Giữ nguyên 100% viền đen `1px` (`#000000`) và kính đen của Superfighters Y8. 2) Dùng thuật toán `Head-Box Anchor` gắn Tóc gai Goku, Mũ Rơm Luffy, Tóc vàng + Băng trán Naruto, Đầu hói + Áo choàng trắng Saitama, Tóc trắng Solaria, Kính Visor Atlas, Mũ trùm Ninja Shinobi, Tóc đỏ Tideweaver lên **toàn bộ 72 tư thế gốc** (đứng, chạy, nhảy, lăn, leo thang, bắn súng 360°, chém kiếm) kèm `+4px` Top Headroom chống cắt tóc. 3) Tạo mới 18 ô `SKILL_1..4` & `MUGEN_COMBO_1..4` bằng giải phẫu pixel Y8 thật + Pixel Smear 3 lớp. | `tools/generate_4_art_pipeline_samples.py`, `assets/sheets/hero_*_mugen.png`, `data/custom_fighters/hero_*_mugen.json`, `game/fighter/fighter_rig_view.gd` | `[x] HOÀN TẤT` |
+| **9. SA-WP9** *(Ưu tiên #9 — Nâng Cấp VFX 3 Lớp & Game-Feel "Juice")* | **Hệ Thống VFX Pixel 3 Lớp, Dư Ảnh Tốc Độ (Afterimage Trail), Hitstop 3–5f & Chớp Trắng Trúng Đòn** | 1) Nâng cấp `FighterRigView._draw()` từ hình chữ nhật phẳng sang **VFX 3 Lớp (Lõi trắng `#FFF` -> Giữa rực rỡ -> Viền đen `1px`)**: Tia chưởng Kamehameha/Serious Punch có cầu tụ lực + vòng xung kích, Tay cao su Luffy nối đốt + Nắm đấm Haki lửa khổng lồ, Roi nước S-Curve có bọt trắng, Nhát chém chữ X/Bán nguyệt. 2) Vẽ **3 bóng dư ảnh (Afterimage Ghosts)** khi lướt/dịch chuyển. 3) Thêm **Hitstop cục bộ 3–5 frame**, **Chớp trắng 1 frame (Hit-Flash)** trên mục tiêu trúng đòn và **Rung camera theo hướng đòn**. | `game/fighter/fighter_rig_view.gd`, `game/fighter/fighter_controller.gd`, `game/core/match_controller.gd` | `[x] HOÀN TẤT` |
+| **10. SA-WP10** *(Ưu tiên #10 — Âm Thanh Đa Lớp SFX)* | **Bộ Máy Âm Thanh Chiêu Thức Đa Lớp (3-Layer SFX), Biến Thiên Cao Độ & Chống Rè Âm** | 1) Kết hợp 3 lớp âm thanh cho từng chiêu (`Khởi chiêu/Lướt` + `Nguyên tố Lửa/Nước/Điện/Ki` + `Nổ va chạm trầm lực`). 2) Biến thiên cao độ ngẫu nhiên `pitch_scale = 0.94..1.06` để bấm chiêu liên tục luôn sống động. 3) Chốt chặn `45ms` chống chồng âm (Anti-Clipping Gate) cho các chiêu đánh liên hoàn (`Red Hawk Gatling`, `Đấm Thường Liên Hoàn`). | `game/fighter/fighter_controller.gd`, `game/core/match_controller.gd` | `[x] HOÀN TẤT` |
+| **11. SA-WP11** *(Ưu tiên #11 — Nâng Cấp UI/UX, Cut-In Chéo & Input Buffer)* | **Cut-In Anime Chéo Không Che Sân (`0.38s` + Dual Clash), Vệt Trắng Tụt Máu LoL, Báo Đỏ Ô Chiêu & Input Buffer 6 Frame** | 1) Đổi Cut-In sang **Dải Hình Bình Hành Chéo (`54px`) sát mép trên** (giữ 100% độ nét ảnh AI HD mà không che tâm sân đấu) + hỗ trợ **Dual Clash Split Cut-In** khi P1 và P2 cùng bấm Ultimate. 2) Thêm **Vệt trắng tụt máu mượt (`0.35s` LoL Damage Sub-Bar)** trên HUD và trên đầu nhân vật. 3) Nháy viền đỏ + rung nhẹ `2px` ô kỹ năng khi bấm lúc đang hồi chiêu/thiếu năng lượng. 4) Thêm **Input Buffer `6 frame` (`0.10s`)** để bấm chiêu trước khi tiếp đất tự động nổ chiêu ngay khi chạm sàn. | `game/ui/match_hud_controller.gd`, `game/fighter/fighter_controller.gd`, `game/core/match_controller.gd` | `[x] HOÀN TẤT` |
+| **12. SA-WP12** *(Ưu tiên #12 — Dọn Code Cũ & Kiểm Chứng 42 Ngoại Lệ)* | **Xóa Bỏ Hàm Vẽ Hộp Cũ, Bảo Vệ Đủ 42 Trường Hợp Ngoại Lệ (`EC-01..EC-42`) & Kiểm Thử Tự Động `SF-M35`** | 1) Xóa bỏ hoàn toàn hàm vẽ hộp thô `_draw_hero_action_pose` cũ và các đoạn code dư thừa. 2) Bổ sung 12 chốt chặn ngoại lệ mới (`EC-31..EC-42`: chống mất viền đen, chống lệch đầu khi giơ kiếm, tự hủy tia chưởng khi bị đánh bay, tự thả thùng gỗ khi bấm chiêu, chống đệ quy nổ thùng, không tính điểm Survival khi giết Phân thân, xóa phím giữ khi Alt-Tab...). 3) Thêm bộ kiểm thử tự động `SF-M35` kiểm chứng 100% PASS (`144/144`). | `tools/generate_4_art_pipeline_samples.py`, `game/fighter/fighter_controller.gd`, `tests/test_runner.gd` | `[x] HOÀN TẤT (144/144 PASS)` |
+
+---
+
+## 1. CHI TIẾT SA-WP1: GIẢI ĐÁP VỀ BỨC ẢNH 1 & LÀM MẪU THỰC TẾ CẢ 4 PHƯƠNG ÁN TẠO HÌNH (A, B, C, D)
+
+### 1.1. Phân tích Bức Ảnh 1 (`media_1793085946599_7b20e066.jpg` / `ai_original_archetypes_sheet.png`)
+- **Bức ảnh 1 có chỉ dùng làm ảnh nền thôi không? — KHÔNG! Có thể tận dụng tới 3 tầng giá trị trực tiếp trong game**:
+  1. **Tầng 1 — Thẻ Chọn Nhân Vật (Roster Splash Card)**: Bốn khung hình lớn phía trên (`Solaria`, `Atlas`, `Void Shinobi`, `Tideweaver`) có bố cục đứng chiến đấu cực đẹp, dùng trực tiếp làm ảnh đại diện độ phân giải cao trong Menu chọn tướng (`VS_PLAYER_SETUP` và tab `ROSTER`).
+  2. **Tầng 2 — Dải Băng Chiêu Cuối Toàn Màn Hình (Anime Ultimate Cut-In Banner)**: Bốn khung hình ngang phía dưới của bức ảnh (cận cảnh cú đấm sóng vàng của Solaria, cú đấm chấn địa xanh-cam của Atlas, phân thân lướt chớp tím-xanh của Shinobi, và vòng xoáy roi nước của Tideweaver) được vẽ **đúng chuẩn tỷ lệ Cut-In ngang của các game đối kháng AAA** (như *Guilty Gear Strive*, *Dragon Ball FighterZ*, *Naruto Ultimate Ninja Storm*). Khi người chơi bấm phím `P` / `Numpad 8` tung Ultimate, khung ảnh ngang này sẽ trượt vút ngang màn hình trong `0.35s` kèm hiệu ứng tia tốc độ (Speedlines)!
+  3. **Tầng 3 — Tách Nền & Chuyển Hóa Thành Nhân Vật Trong Trận (Phương án C)**: Nhờ nền của bức ảnh 1 là màu xanh đen đồng nhất (`#141923`), thuật toán tách nền tự động theo khoảng cách màu không gian Lab/RGB kết hợp cắt bộ phận (Cutout Rig) hoặc lượng tử hóa Pixel-Art kèm viền đen `1px` cho phép đưa chính các nhân vật trong bức ảnh này vào sàn đấu!
+
+### 1.2. Đặc tả Kỹ thuật 4 Phương Án Tạo Hình Mẫu (Thực hiện đầy đủ cả 4 để Owner so sánh)
+Để Owner dễ dàng đánh giá bằng mắt thường, hệ thống xuất ra **4 Bảng Mẫu Trực Quan (Visual Sample Sheets)** đặt trong cùng một bối cảnh sàn đấu `Steel Harbor` (có mặt sàn, thùng gỗ chuẩn của Superfighters, thanh máu/năng lượng HUD, khung phóng đại `6x` và khung kích thước thực tế `1x`):
+
+1. **Mẫu Phương Án A — Hybrid Split-Rig + Procedural Pixel-Art (`22–26px`) & Shader/Canvas VFX**:
+   - **Cách làm**: Kế thừa trực tiếp khung xương tách lớp của Superfighters (`BodyPivot` + `AimPivot` xoay súng 360°), vẽ thêm trang phục pixel-art sắc nét cho từng tướng, và dùng hệ thống vẽ `CanvasItem` / Shader để phủ hào quang năng lượng, vệt chém không gian, găng tay phát sáng và chùm tia Kamehameha/Serious Punch.
+   - **Điểm mạnh**: Đồng bộ 100% với 14 nhân vật sẵn có và mọi vũ khí/thùng gỗ trong game; cầm súng ngắm 360° mượt tuyệt đối.
+
+2. **Mẫu Phương Án B — MUGEN / JUS Pocket-Anime Sprite (`30–36px`, Tỷ lệ 2.5–3 đầu)**:
+   - **Cách làm**: Tạo sprite sheet theo chuẩn *Jump Ultimate Stars (JUS)* — tỷ lệ đầu/tóc lớn dễ nhận diện, viền đen `1px` tách biệt khỏi nền map tối, có đầy đủ khung hình Đứng (Idle), Chạy (Run), Đấm liên hoàn (Combo), Chưởng lực (Energy Wave) và Biến hình (Awakening).
+   - **Điểm mạnh**: Nhìn rõ mặt, kiểu tóc và thần thái nhân vật anime (`Goku`, `Luffy`, `Naruto`, `Saitama` và 4 tướng nguyên bản) ngay cả khi camera zoom xa.
+
+3. **Mẫu Phương Án C — High-Res AI Concept Art (`media_1793085946599_7b20e066.jpg`) -> Tách Nền Tự Động + Cutout/HD-to-Pixel Outlined Sprite + Ultimate Cut-In**:
+   - **Cách làm**:
+     - Cắt chính xác 4 khung trên (`256x590`) và 4 khung Cut-in dưới (`256x120`) từ ảnh `ai_original_archetypes_sheet.png` (và `ai_reference_concept_sheet.png` cho Goku/Luffy/Naruto/Saitama).
+     - Khử nền xanh đen `#141923` bằng bộ lọc flood-fill + chroma distance từ mép ảnh, giữ nguyên hào quang phát sáng.
+     - Tạo 2 biến thể trong trận: **C1 (HD Smooth Cutout Sprite)** giữ độ chi tiết cao của ảnh gốc và **C2 (Crispy Outlined Arena Sprite)** thu về kích thước sàn đấu kèm viền đen `1px` sắc nét + dải **Ultimate Cut-In Banner** chiếu ngang màn hình.
+
+4. **Mẫu Phương Án D — Mô Hình 3D `.glb` Thật (`avatar.glb`) -> Blender 5.2.3 Orthographic Cel-Shaded Toon Sprite Sheet**:
+   - **Cách làm**: Nạp trực tiếp file nhân vật 3D có gắn xương thật (`avatar.glb` sẵn có trong workspace, tuyệt đối không ghép hình cầu/hình nón bằng code Python), thiết lập camera trực giao (Orthographic) góc nhìn ngang trong Blender 5.2.3 headless, áp dụng Toon/Cel Shader 3 bậc sáng tối + viền đen Freestyle/Outline và xuất ra chuỗi khung hình 2D.
+
+---
+
+## 2. CHI TIẾT SA-WP2: TỐI ƯU HIỆU NĂNG 60FPS TRIỆT ĐỂ, TĂNG NHỊP ĐỘ TRẬN ĐẤU & DỌN DẸP DEAD CODE
+
+### 2.1. Sửa 4 Điểm Nghẽn CPU Gây Lag & Giật Khung Hình (60Hz Frame Budget Optimization)
+1. **Điểm nghẽn #1 — Cơ chế Ngủ (`is_sleeping`) cho Đồ vật Vật lý (`game/world/interactive_prop.gd:1430-1495`)**:
+   - **Hiện trạng gây lag**: Mỗi map có 18–25 đồ vật (`InteractiveProp`). Hiện tại ở dòng 1441 của `step_prop()`, tất cả đồ vật dù đang nằm im hoàn toàn vẫn phải gọi `_query_ledge_contact_manifold()` (duyệt vòng lặp $O(N^2)$ qua toàn bộ sàn và đồ vật khác, cấp phát hàng trăm `Dictionary`/`Array` mỗi giây) rồi tới dòng 1477 mới kiểm tra xem đồ vật có đứng yên hay không.
+   - **Giải pháp tối ưu**:
+     - Thêm biến `var is_sleeping: bool = false` và `var _sleep_frames: float = 0.0`.
+     - Khi đồ vật đã chạm đất (`grounded`), vận tốc tịnh tiến `linear_velocity.length_squared() < 0.04`, vận tốc góc `abs(angular_velocity) < 0.01`, và góc nghiêng ổn định trong `12` frames liên tiếp: đặt `is_sleeping = true`.
+     - Ngay đầu hàm `step_prop(step_24hz)`: nếu `is_sleeping == true`, kiểm tra nhanh xem đồ vật đỡ bên dưới (`_support_prop`) có còn hợp lệ/đứng yên không; nếu ổn định thì **return ngay lập tức**, bỏ qua 100% phép toán SAT/OBB manifold!
+     - Tự động đánh thức (`wake_up() -> is_sleeping = false`) khi: bị đạn bắn trúng, bị đấm/đá, bị nhân vật dẫm lên/va vào, bị vụ nổ hoặc kỹ năng siêu năng lực (như `Table Flip` của Saitama, `Magnetic Grapnel` của Atlas) tác động, hoặc khi đồ vật đỡ bên dưới nó di chuyển/vỡ.
+   - **Hiệu quả**: Giảm **85% – 90%** thời gian CPU của hệ thống đồ vật trong suốt trận đấu.
+
+2. **Điểm nghẽn #2 — Lưu Đệm (Cache) Mảng Địa Hình Tĩnh & Động Mỗi Tick (`game/fighter/fighter_controller.gd:3379-3441`)**:
+   - **Hiện trạng gây lag**: Các hàm `_collect_solid_rects()`, `_collect_cloud_rects()`, `_collect_solid_prop_rects()` tạo mới mảng `Array[Rect2]` và đọc Dictionary từ `MapLoader` tới **30–40 lần trong cùng 1 frame** cho mỗi nhân vật.
+   - **Giải pháp tối ưu**:
+     - Trong `MapLoader` (`game/world/map_loader.gd`), tạo mảng tĩnh `_cached_solid_rects: Array[Rect2]` và `_cached_cloud_rects: Array[Rect2]` một lần duy nhất khi load map (`load_map()`).
+     - Với các đồ vật chắn đường (`_collect_solid_prop_rects()`), lưu đệm theo số thứ tự tick `match_controller.tick_count` để chỉ tính 1 lần duy nhất mỗi tick vật lý cho toàn bộ các nhân vật.
+   - **Hiệu quả**: Loại bỏ >2,000 lần cấp phát mảng `Array[Rect2]` mỗi giây.
+
+3. **Điểm nghẽn #3 — Sửa Lỗi Bot AI Chạy Thuật Toán A* Liên Tục 60 Lần/Giây Khi Cùng Sàn (`game/ai/bot_controller.gd:425`)**:
+   - **Hiện trạng gây lag**: Khi Bot và mục tiêu đứng gần cùng một node (`start_idx == goal_idx`), `nav_graph.find_path()` trả về mảng rỗng `[]`. Ở frame kế tiếp, điều kiện `if current_path.is_empty():` tại dòng 425 lập tức bắt Bot chạy lại thuật toán tìm đường A* và quét raycast mỗi frame (60 lần/giây), phớt lờ hoàn toàn `_path_recalc_timer`!
+   - **Giải pháp tối ưu**: Thêm cờ `_at_goal_node: bool = false`. Khi `start_idx == goal_idx`, đặt `_at_goal_node = true` và giữ nguyên `_path_recalc_timer = 6.0` (0.25s) thay vì ép tính lại A* ở frame sau.
+
+4. **Điểm nghẽn #4 — Cơ chế Dirty-Flag Cho `queue_redraw()` Của HUD & Map (`game/ui/match_hud_controller.gd:61`, `game/world/map_loader.gd:875`)**:
+   - **Hiện trạng gây lag**: Gọi `queue_redraw()` vô điều kiện 60 lần/giây ngay cả khi không có kính vỡ và chỉ số HUD không đổi.
+   - **Giải pháp tối ưu**:
+     - Trong `MapLoader`: chỉ gọi `queue_redraw()` khi có mảnh kính đang rơi (`not _falling_shards.is_empty()`) hoặc vừa có ô kính bị vỡ.
+     - Trong `MatchHudController`: tính mã băm trạng thái hiển thị (`_hud_state_hash`) hoặc khi có hiệu ứng động (`_active_cutins`, thanh máu trên đầu di chuyển) mới vẽ lại các phần thay đổi.
+
+### 2.2. Nâng Cấp Nhịp Độ Trận Đấu (`Game Speed` / `FLASH_FPS`) Để Chuyển Động Nhanh Nhạy & Đã Tay
+- **Hiện trạng**: `FLASH_FPS = 24.0` trong `match_controller.gd:10` mô phỏng tốc độ Flash cũ khiến nhịp chạy, nhảy và ra đòn hơi chậm (~80% tốc độ game đối kháng hiện đại).
+- **Giải pháp**:
+  - Nâng nhịp mặc định của `superagent` lên **`BASE_SIM_HZ = 28.0`** (nhanh và nhạy hơn ~17% so với bản Flash cũ mà vẫn giữ nguyên độ cao nhảy, tầm đạn và tính tất định).
+  - Bổ sung tùy chọn **`GAME SPEED` (`1.0x CLASSIC` / `1.2x FAST [MẶC ĐỊNH]` / `1.35x TURBO`)** trong phần cài đặt trận đấu (`VS_SETTINGS`) để bạn có thể tùy chỉnh tốc độ nhanh chậm bất kỳ lúc nào.
+
+### 2.3. Danh Mục Dọn Dẹp Code Thừa (Dead Code Cleanup Inventory)
+1. **`game/core/match_controller.gd` (Dòng 84–361 & 426–445)**: Xóa 3 class giả lập cũ không còn dùng tới (`FallbackFighterNode`, `FallbackProjectileManager`, `FallbackFireHazardSystem` — tổng cộng **278 dòng code thừa**) và các hàm `_resolve_*_script()` thừa.
+2. **`game/fighter/fighter_controller.gd` (Dòng 38, 1231, 1248)**: Xóa hằng số rỗng `const AUTO_FIRE_WEAPONS: Array[String] = []` và các phép kiểm tra dư thừa.
+3. **`game/ui/main_menu_controller.gd` (Dòng 176, 1578)**: Xóa biến không dùng `var vs_setup_row: int = 0` và tham số `_hint_msg` không sử dụng trong `_draw_navigation_footer_box()`.
+4. **`game/ui/match_hud_controller.gd` (Dòng 67–111)**: Tinh gọn hàm tĩnh cũ `format_fighter_weapon_label()` không còn được gọi trong vòng lặp vẽ HUD.
+
+---
+
+## 3. CHI TIẾT SA-WP3 & SA-WP4: HỆ THỐNG PHÍM KỸ NĂNG (`U I O P` / `5 6 7 8`), LOL RESOURCE ENGINE & 4 NHÂN VẬT SIÊU NĂNG LỰC NGUYÊN BẢN
+
+### 3.1. Hệ Thống Điều Khiển 4 Phím Chiêu (`U I O P` & `5 6 7 8`) Chống Kẹt Bộ Gõ Tiếng Việt
+- **Đăng ký `InputMap` trong `game/core/sf_data_registry.gd:ensure_input_map()`**:
+  - **Cụm P1 (`p1_skill_1..4`)**: Gán đồng thời **Numpad `5`, `6`, `7`, `8`** (`KEY_KP_5..8`) VÀ **Hàng phím số trên `5`, `6`, `7`, `8`** (`KEY_5..8`) để máy tính xách tay không có bàn phím phụ hoặc quên bật NumLock vẫn bấm mượt 100%.
+  - **Cụm P2 (`p2_skill_1..4`)**: Gán **`U`, `I`, `O`, `P`** (`KEY_U`, `KEY_I`, `KEY_O`, `KEY_P`).
+  - **Chế độ 1 Người Chơi (`allow_both_clusters == true`)**: Người chơi 1 có thể bấm **bất kỳ bên nào** (`U I O P` hoặc `5 6 7 8` / `Numpad 5 6 7 8`) đều kích hoạt ngay kỹ năng `1..4`.
+  - **Chống kẹt bộ gõ Tiếng Việt (Unikey / Telex IME)**: Khi kiểm tra phím trong `_is_act_pressed()` và `_is_act_just_pressed()`, kiểm tra trực tiếp `physical_keycode` (`Input.is_physical_key_pressed()`) để việc gõ `U` -> `ư`, `O` -> `ơ` không bao giờ làm nuốt phím chiêu.
+
+### 3.2. Kiến Trúc Năng Lượng Riêng Biệt Kiểu Liên Minh Huyền Thoại (`ResourceSystem` — Schema `mugen_fighter_v2`)
+- **Nguyên tắc**:
+  - **Nhân vật thường (14 Classic Fighters)**: Giữ nguyên 100% thanh `sprint_energy` (`0..100`) cổ điển. Bấm `U I O P` / `5 6 7 8` không có tác dụng.
+  - **Nhân vật Siêu năng lực (8 Powered Fighters)**: Tách riêng `sprint_energy` (dùng để chạy/lăn cơ bản) và `resource_state` (thanh năng lượng siêu năng lực riêng biệt theo từng tướng).
+- **Cấu trúc `resource_spec` cho từng nhân vật**:
+  - `resource_id`, `display_label`, `archetype`, `start_value`, `max_value`, `secondary_pips_max` (ngọc/điểm nội tại phụ như Sun Pips của Solaria hoặc 9 Đuôi Kurama của Naruto).
+  - `regen_per_sec` (hồi tự nhiên mỗi giây), `on_hit_melee_gain` (hồi khi đánh trúng), `on_hurt_gain` (hồi khi nhận sát thương), `decay_delay_sec` & `decay_per_sec` (tự giảm khi rời giao tranh như Nhiệt của Rumble hay Nộ của Sett/Shyvana).
+  - `bar_color_primary`, `bar_color_secondary`, `bar_color_max_glow`, `segments` (số vạch chia trên thanh HUD).
+
+### 3.3. Đặc Tả Chi Tiết 4 Nhân Vật Siêu Năng Lực Nguyên Bản (Khớp 100% Ảnh 1 `ai_original_archetypes_sheet.png`)
+
+#### 1. `solaria` — **SOLARIA (Quyền Sư Hoàng Kim / Sunforge Striker Monk — Khung 1 Ảnh 1)**
+- **Cơ chế Năng lượng (LoL Riven Passive Pips + Sett/Lee Sin Flow)**:
+  - Thanh chính: **`SOLAR MANTRA` (`0..100`, 4 vạch cam vàng `#FFA822`)** + Thanh phụ: **3 Ngọc Ánh Dương (`Sun Pips` `#FFF380`)**.
+  - **Nội tại (`Sunforge Mantra`)**: Mỗi lần tung kỹ năng tích 1 Ngọc Ánh Dương (tối đa 3). Đòn đánh thường kế tiếp tiêu thụ 1 Ngọc để lướt nhẹ `18px`, gây thêm `+5` sát thương chuẩn và nạp `+12` Solar Mantra. Khi `Solar Mantra >= 50`, đôi găng phát sáng tăng `+20%` tốc độ đòn đánh.
+- **4 Kỹ năng (`U I O P` / `5 6 7 8`)**:
+  - **`U / 5` — Tam Liên Quyền Ánh Dương (Sunforge Triple Weave)**: Hồi chiêu `5.0s`, Giá `0`. Bấm tối đa 3 nhịp như Q của Riven (Nhịp 1 đấm lướt ngang `48px`, Nhịp 2 đấm móc xoáy, Nhịp 3 bật nhảy đập 2 găng vàng xuống sàn hất tung địch và phá vỡ thùng gỗ).
+  - **`I / 6` — Hộ Thể Hoàng Kim Chưởng (Aegis Haymaker)**: Hồi chiêu `7.0s`, Giá `25` Solar. Tạo giáp hấp thụ `35%` sát thương trong `0.6s` và đấm luồng sóng vàng hình nón dài `95px` (như khung Cut-in 1 của Ảnh 1), đẩy lùi địch `140px`.
+  - **`O / 7` — Cước Pháp Quang Tốc (Radiant Vault Kick)**: Hồi chiêu `6.0s`, Giá `20` Solar. Phóng cước ánh sáng `110px`; nếu trúng địch/thùng có thể bấm lại để đá bật ngược mục tiêu về phía sau.
+  - **`P / 8` (Ultimate) — Thái Dương Bạo Phá (Supernova Nirvana Breaker)**: Hồi chiêu `18.0s`, Giá `100` Solar. Chiếu Cut-in `0.35s`, lao tới tóm mục tiêu bay lên trần rồi nện thẳng xuống đất tạo vụ nổ ánh dương bán kính `96px` (`38 dmg`, đốt cháy sàn đấu `2.5s`).
+
+#### 2. `atlas` — **ATLAS (Thiết Quyền Địa Chấn / Titan Gauntlet Brawler — Khung 2 Ảnh 1)**
+- **Cơ chế Năng lượng (LoL Rumble Heat System — Ngưỡng Nguy Hiểm & Quá Tải)**:
+  - Thanh chính: **`TITAN HEAT` (`0..100`, đổi màu động: `0..49` Xanh Lục `#4CD964` -> `50..99` Cam Rực `#FF9500` [Danger Zone] -> `100` Đỏ Chớp `#FF2D55` [Overheat])**.
+  - **Nội tại (`Reactor Overdrive`)**: Tung kỹ năng `U/I/O` không tốn năng lượng mà **tăng `+20` Nhiệt**. Ở ngưỡng **Danger Zone (`50..99` Nhiệt)**: mọi kỹ năng mạnh hơn `+30%` và tạo giáp cơ khí `12 HP`. Khi chạm **`100` Nhiệt (Overheat)**: khóa chiêu `3.0s` để xả nhiệt nhưng đòn đấm thường rực lửa điện gây `x1.65` sát thương!
+- **4 Kỹ năng (`U I O P` / `5 6 7 8`)**:
+  - **`U / 5` — Thiết Quyền Xung Kích (Vault Breaker Charge)**: Hồi chiêu `4.5s`, `+20` Nhiệt. Húc găng tay cơ khí tới trước `125px` (`15 dmg`; ở Danger Zone kéo theo địch đâm vào tường gây choáng).
+  - **`I / 6` — Địa Chấn Tam Liên Cột (Seismic Tectonic Slam)**: Hồi chiêu `6.0s`, `+20` Nhiệt. Nện 2 găng xanh-cam xuống sàn phóng 3 cột đất đá trồi lên liên tiếp hất tung địch và thùng phuy.
+  - **`O / 7` — Xung Từ Trường Hút Đồ Vật (Magnetic Grapnel Repulsor)**: Hồi chiêu `7.0s`, `+20` Nhiệt. Hút 1 thùng nổ/hòm gỗ hoặc kẻ địch trong tầm `140px` bay thẳng về phía mình; nếu ở Danger Zone tự động đấm văng thùng đó đi như đạn đại bác (`22 dmg`).
+  - **`P / 8` (Ultimate) — Thiên Thạch Hủy Diệt (Meteor Core Cataclysm)**: Hồi chiêu `20.0s`, Yêu cầu `Nhiệt >= 60` (xả toàn bộ Nhiệt). Chiếu Cut-in `0.35s`, bật phản lực bay lên cao rồi lao đấm sập mặt đất tạo địa chấn `180px` cả 2 phía (`36 dmg`).
+
+#### 3. `shinobi` — **VOID SHINOBI (Ám Sát Hư Không / Phantom Kunai Assassin — Khung 3 Ảnh 1)**
+- **Cơ chế Năng lượng (LoL Zed / Akali Energy + Ấn Hư Không Hoàn Năng Lượng)**:
+  - Thanh chính: **`VOID ENERGY` (`0..200`, 4 vạch x 50 màu Xanh Lục Neon `#00F59B` / Tím `#9D4EDD`, tự hồi nhanh `+25/s`)**.
+  - **Nội tại (`Kunai Resonance`)**: Kỹ năng trúng đích khắc **Ấn Hư Không (Void Mark)** trong `4.0s`. Đánh thường hoặc lướt trúng mục tiêu có Ấn sẽ kích nổ thêm `+10 dmg` và **hoàn trả ngay `+40` Void Energy**.
+- **4 Kỹ năng (`U I O P` / `5 6 7 8`)**:
+  - **`U / 5` — Tốc Biến Hư Không Trảm (Shunpo Phantom Slash)**: Hồi chiêu `3.5s`, Giá `50` Energy. Lướt xuyên bóng tối `130px` để lại tàn ảnh tím-xanh (như khung Cut-in 3 của Ảnh 1), chém xuyên các mục tiêu (`14 dmg`) và khắc Ấn.
+  - **`I / 6` — Phi Tiêu Độc Lục Giác (Venom Shuriken Fan)**: Hồi chiêu `4.0s`, Giá `45` Energy. Phóng 3 phi tiêu năng lượng xanh lục theo hình quạt xuyên qua đồ vật mỏng.
+  - **`O / 7` — Phân Thân Khói Tím & Hoán Đổi (Umbral Smoke Clone)**: Hồi chiêu `8.0s`, Giá `60` Energy. Tạo khói tím né đạn `0.5s` và để lại Phân Thân Bóng Tối `3.5s`; bấm `O / 7` lần nữa để **đổi chỗ tức thì với Phân Thân** và chém xoay `360°`.
+  - **`P / 8` (Ultimate) — Ấn Tử Thần Hư Không (Death Mark Execution)**: Hồi chiêu `18.0s`, Giá `80` Energy. Chiếu Cut-in `0.35s`, dịch chuyển ra sau lưng kẻ địch, chém chữ X tím-xanh và đặt Ấn Tử Thần phát nổ sau `1.8s` dựa trên tổng sát thương đã gây ra.
+
+#### 4. `tideweaver` — **TIDEWEAVER (Thủy Tiên Roi Nước / Hydro Whip Caster — Khung 4 Ảnh 1)**
+- **Cơ chế Năng lượng (LoL Nilah / Vladimir — 5 Nấc Thủy Triều)**:
+  - Thanh chính: **`TIDAL FLOW` (`0..100`, 5 vạch x 20 màu Xanh Đại Dương `#00D2FF`, di chuyển càng nhiều hồi càng nhanh `+10/s`)**.
+  - **Nội tại (`Slipstream Lash`)**: Khi `Tidal Flow >= 80` (**Triều Cường**), đôi roi nước dài thêm `+35%`, chạy nhanh hơn `+18%` và kỹ năng kế tiếp tạo xoáy nước **dập tắt mọi đám lửa trên sàn đấu**!
+- **4 Kỹ năng (`U I O P` / `5 6 7 8`)**:
+  - **`U / 5` — Thủy Tiên Quất Kích (Crashing Whip Lash)**: Hồi chiêu `3.0s`, Giá `20` Flow. Quất đôi roi nước vươn dài `150px` kéo mục tiêu ở đầu ngọn roi về phía mình và dập lửa.
+  - **`I / 6` — Khiên Xoáy Nước Phản Đạn (Whirlpool Bubble Shield)**: Hồi chiêu `7.5s`, Giá `30` Flow. Xoay roi nước quanh người trong `1.2s` làm **bật ngược mọi viên đạn súng** bay tới và gây sát thương kẻ áp sát.
+  - **`O / 7` — Dây Nước Đu Bám (Aqua Tether Swing)**: Hồi chiêu `6.5s`, Giá `25` Flow. Phóng roi nước bám vào kẻ địch, thùng gỗ hoặc trần nhà phía trước `165px` để kéo bản thân bay vút tới đá sóng nước.
+  - **`P / 8` (Ultimate) — Đại Hồng Thủy Xoáy Kép (Maelstrom Tsunami Vortex)**: Hồi chiêu `19.0s`, Giá `60` Flow. Chiếu Cut-in `0.35s`, triệu hồi 2 luồng sóng thần xoắn kép dài `260px` cuốn mọi kẻ địch và đồ vật vào tâm xoáy rồi kích nổ cột nước (`36 dmg`).
+
+---
+
+## 4. CHI TIẾT SA-WP5: 4 NHÂN VẬT SIÊU NĂNG LỰC ANIME (`GOKU`, `LUFFY`, `NARUTO`, `SAITAMA`)
+
+### 4.1. `goku` — **SON GOKU (Chiến Binh Saiyan — Ki Charge & Super Saiyan Awakening)**
+- **Cơ chế Năng lượng (Thanh Ki 4 Vạch + Gồng Ki Chủ Động + Hóa Super Saiyan)**:
+  - Thanh chính: **`SAIYAN KI` (`0..100`, 4 vạch x 25 màu Xanh Lam `#38B6FF`; tự động đổi sang Vàng Kim `#FFD700` khi hóa Super Saiyan)**.
+  - **Nội tại (`Z-Fighter Ki & Super Saiyan`)**: Giữ `Cúi + Chạy` (hoặc giữ `U / 5` khi đứng yên) để **Gồng Ki (`+28 Ki/giây`)** phát hào quang rung chuyển mặt đất và đẩy lệch đạn nhỏ. Khi tung Ultimate `P / 8`, Goku biến hình **Super Saiyan** trong `8.0s` (tóc vàng dựng đứng, hào quang vàng rực, `+20%` tốc độ/sát thương, Ki tự hồi `+12/s`).
+- **4 Kỹ năng (`U I O P` / `5 6 7 8`)**:
+  - **`U / 5` — Đạn Khí Công Liên Hoàn / Gồng Ki (Ki Blast Barrage / Charge)**: Hồi chiêu `2.8s`, Giá `15` Ki. Bắn 3 quả cầu Ki liên tiếp nổ khi chạm địch/thùng. Nếu giữ nút khi cúi thì gồng nạp Ki.
+  - **`I / 6` — Dịch Chuyển Tức Thời (Instant Transmission Strike)**: Hồi chiêu `6.0s`, Giá `25` Ki. Biến mất với hiệu ứng 2 vạch đen DBZ, xuất hiện ngay sau lưng hoặc phía trên kẻ địch gần nhất (`220px`) và tung cú đá/đấm búa tạ đập mục tiêu xuống sàn (`16 dmg`).
+  - **`O / 7` — Kaioken Long Quyền (Dragon Fist Flurry)**: Hồi chiêu `5.5s`, Giá `30` Ki. Bật hào quang đỏ Kaioken lướt tới đấm liên hoàn 5 nhịp rồi thăng thiên bằng cú đấm Rồng Vàng (`22 dmg`).
+  - **`P / 8` (Ultimate) — Siêu Kamehameha & Hóa Super Saiyan (Super Kamehameha)**: Hồi chiêu `18.0s`, Giá `75` Ki. Chiếu Cut-in `0.35s`, bắn chùm tia năng lượng xanh-trắng khổng lồ xuyên suốt chiều ngang màn hình (`420px x 44px`, `42 dmg`, thổi bay mọi thùng gỗ/kẻ địch trên đường đi) và duy trì trạng thái **Super Saiyan** `8.0s`.
+
+### 4.2. `luffy` — **MONKEY D. LUFFY (Mũ Rơm Cao Su — Haki & Gear Steam)**
+- **Cơ chế Năng lượng (LoL Shyvana Fury / Kled Courage — Hơi Nước Gear & Cơ Thể Cao Su)**:
+  - Thanh chính: **`GEAR STEAM` (`0..100`, 4 vạch màu Đỏ Haki `#FF3B30` / Trắng Gear 5 `#FFFFFF`)**.
+  - **Nội tại (`Gomu Elastic Body`)**: Cơ thể cao su giảm `25%` sát thương đòn đấm/gậy và miễn sát thương rơi cao. Khi `Gear Steam >= 50`, người Luffy bốc hơi nước hồng **Gear Second** (`+15%` tốc độ chạy, `-20%` hồi chiêu).
+- **4 Kỹ năng (`U I O P` / `5 6 7 8`)**:
+  - **`U / 5` — Súng Cao Su Tầm Xa (Gomu Gomu no Pistol)**: Hồi chiêu `3.0s`, Giá `0` (Trúng nạp `+12` Steam). Cánh tay cao su vươn dài `185px` xuyên nửa màn hình đấm văng kẻ địch hoặc kéo bật mục tiêu lại gần (`15 dmg`).
+  - **`I / 6` — Bụng Cao Su Phản Đạn & Tên Lửa (Gomu Gomu no Fusen)**: Hồi chiêu `6.5s`, Giá `20` Steam. Phình bụng cao su trong `0.85s`, **bật ngược toàn bộ đạn súng, lựu đạn và tên lửa Bazooka** bay trả lại kẻ bắn với tốc độ `x1.25`!
+  - **`O / 7` — Liên Hoàn Đấm Lửa Haki (Red Hawk Gatling)**: Hồi chiêu `6.0s`, Giá `30` Steam. Tay bọc Haki đen bốc lửa đỏ, tung 8 cú đấm cao su liên hoàn tầm `135px` tạo bão lửa (`24 dmg` + gây cháy).
+  - **`P / 8` (Ultimate) — Cú Đấm Khổng Lồ Gear 4/5 (King Kong / Bajrang Smash)**: Hồi chiêu `20.0s`, Giá `80` Steam. Chiếu Cut-in `0.35s`, bật lên không thổi phồng nắm đấm Haki khổng lồ (`96x96px`) đấm sập xuống sàn đấu (`40 dmg`, làm toàn bộ kẻ địch và đồ vật trong bán kính `150px` nảy tưng lên trời).
+
+### 4.3. `naruto` — **NARUTO UZUMAKI (Hokage Cửu Vĩ — Chakra & 9 Đuôi Kurama + Phân Thân AI)**
+- **Cơ chế Năng lượng (Thanh Kép: Chakra Xanh + 9 Vạch Đuôi Cửu Vĩ Kurama)**:
+  - Thanh chính: **`CHAKRA` (`0..100`, màu Xanh `#00B4D8`, hồi `+10/s`)** + Thanh phụ: **9 Đuôi Kurama (`Kurama Tails` `#FF5400`, tăng 1 đuôi mỗi 20 sát thương gây ra/nhận vào)**.
+  - **Nội tại (`Nine-Tails Vessel`)**: Khi tích đủ 9 Đuôi (hoặc máu `< 35%`), Naruto khoác **Áo Choàng Chakra Cửu Vĩ Vàng Cam**, hồi ngay `40` Chakra và tăng `+25%` phạm vi mọi kỹ năng.
+- **4 Kỹ năng (`U I O P` / `5 6 7 8`)**:
+  - **`U / 5` — Thuật Phân Thân Chi Thuật (Kage Bunshin AI Summon)**: Hồi chiêu `8.0s`, Giá `35` Chakra. Bùng khói trắng triệu hồi **1 Phân Thân Naruto AI thực thụ** ngay trên sàn đấu (tối đa 2 phân thân cùng lúc, tồn tại `6.0s`, tự động chạy đi đấm/phóng phi tiêu vào kẻ địch và bùng khói biến mất khi trúng 1 đòn).
+  - **`I / 6` — Rasengan / Phong Độn: Rasenshuriken**: Hồi chiêu `5.0s`, Giá `30` Chakra. Bấm nhanh để lao tới đập cầu xoáy **Rasengan** (`18 dmg`); giữ nút hoặc khi đang bật Kurama Mode sẽ ném **Rasenshuriken** bay ngang `240px` nở thành lốc xoáy gió cắt liên tục (`24 dmg`).
+  - **`O / 7` — Vuốt Chakra Cửu Vĩ (Kurama Chakra Claw)**: Hồi chiêu `6.0s`, Giá `25` Chakra. Phóng bàn tay Chakra cam đỏ dài `150px` cào chấn động mặt đất hoặc tóm kẻ địch đập xuống sàn (`17 dmg`).
+  - **`P / 8` (Ultimate) — Bom Vĩ Thú Lục Đạo (Tailed Beast Bomb / Bijuudama)**: Hồi chiêu `20.0s`, Giá `70` Chakra. Chiếu Cut-in `0.35s`, hiện bóng Cửu Vĩ Kurama sau lưng, bắn quả cầu Bijuudama đen-vàng phát nổ bán kính `130px` (`42 dmg`, xóa sổ mọi đạn và đồ vật trong vùng nổ).
+
+### 4.4. `saitama` — **SAITAMA (Áo Choàng Hói — Serious Meter & One Punch Physics)**
+- **Cơ chế Năng lượng (LoL Sett Grit — Thanh Nghiêm Túc & Miễn Khựng Đạn)**:
+  - Thanh chính: **`SERIOUS METER` (`0..100`, màu Vàng `#FFE600` / Đỏ `#E61919`; bị đánh trúng càng nhiều thanh Nghiêm Túc lên càng nhanh `+16` mỗi lần trúng đòn)**.
+  - **Nội tại (`Unfazed Hero`)**: Khi `Serious Meter >= 50`, Saitama đứng tỉnh bơ **không bị khựng (no hitstun flinch) bởi đạn súng thường**, và mỗi 25 điểm Serious tăng `+20%` lực đấm bay.
+- **4 Kỹ năng (`U I O P` / `5 6 7 8`)**:
+  - **`U / 5` — Đấm Thường Liên Hoàn (Consecutive Normal Punches)**: Hồi chiêu `4.0s`, Giá `0` (Trúng nạp `+12` Serious). Tung hàng chục nắm đấm đỏ tạo bão tàn ảnh phía trước `120px` (`20 dmg`, phá nát mọi thùng gỗ/kính ngay lập tức).
+  - **`I / 6` — Bật Nhảy Ngang Tàn Ảnh (Serious Sideways Jumps)**: Hồi chiêu `5.5s`, Giá `20` Serious. Bật nhảy ngang để lại 4 tàn ảnh, tạo áp suất gió thổi bạt đạn/lựu đạn bay tới và húc văng kẻ địch (`14 dmg`, bất tử `0.35s`).
+  - **`O / 7` — Lật Bàn Sàn Đấu (Serious Table Flip)**: Hồi chiêu `7.5s`, Giá `30` Serious. Saitama thọc 2 tay xuống sàn hất tung mảng đất đá trước mặt (`18 dmg`) **đồng thời hất tung toàn bộ thùng gỗ, thùng nổ, bàn ghế trong bán kính `180px` bay vút lên trời như mưa thiên thạch**!
+  - **`P / 8` (Ultimate) — Đấm Nghiêm Túc Rẽ Đôi Bầu Trời (Serious Series: Serious Punch)**: Hồi chiêu `22.0s`, Giá `100` Serious Meter. Chiếu Cut-in `0.35s` (gương mặt Saitama đổ bóng sắc lạnh), tung 1 cú đấm duy nhất tạo luồng sóng xung kích chữ V khổng lồ xuyên toàn bộ chiều dài bản đồ (`600px x 140px`, gây **`55 dmg`** — kết liễu tức thì mục tiêu dưới 55% máu kèm hiệu ứng nổ tan xác!).
+
+---
+
+## 5. CHI TIẾT SA-WP6: THIẾT KẾ UI/UX, TOẠ ĐỘ HUD, QUẠT COOLDOWN, ULTIMATE CUT-IN BANNER & MENU 3 TAB
+
+### 5.1. Bố Cục Top Match HUD Cho Powered Fighters (`game/ui/match_hud_controller.gd`)
+- **Không che khuất sàn đấu**: Mở rộng nhẹ dải HUD trên cùng từ `42.0 * ui_scale` lên `52.0 * ui_scale` (chỉ thêm ~10px ở mép trên màn hình).
+- **Nhân vật thường (`!fighter.is_powered_fighter`)**: Giữ nguyên 100% khung thẻ cũ (HP + Stamina).
+- **Nhân vật Siêu năng lực (`fighter.is_powered_fighter == true`)**:
+  1. **Thanh Máu (HP Bar)**: `Rect2(bars_x, y + 12.0 * s, bars_w, 6.0 * s)`.
+  2. **Dải Ngọc Phụ (`Secondary Pips` — Sun Pips của Solaria / 9 Đuôi Kurama của Naruto)**: Dải mảnh `2.0 * s` ngay tại `y + 17.0 * s`.
+  3. **Thanh Resource Động Kiểu LoL (`LoL Resource Bar`)**: `Rect2(bars_x, y + 19.5 * s, bars_w, 5.0 * s)` với màu `bar_color_primary` riêng của từng tướng và các vạch chia đoạn đen sắc nét (`segments = 2, 4, 5`).
+  4. **Thanh Thể Lực Chạy/Lăn (`Sprint Stamina Micro-Bar`)**: `Rect2(bars_x, y + 25.5 * s, bars_w, 2.0 * s)`.
+  5. **4 Ô Biểu Tượng Kỹ Năng (`4 Compact Skill Icons` tại `y + 29.5 * s`, kích thước `13.0 * s x 13.0 * s`)**:
+     - **Lớp 1 (Nền & Biểu tượng)**: Màu đặc trưng của chiêu khi sẵn sàng; chuyển xám tối khi đang hồi chiêu hoặc thiếu năng lượng.
+     - **Lớp 2 (Quạt Quay Kim Đồng Hồ Cooldown — Radial Sweep)**: Quét đa giác quạt đen mờ `Color(0, 0, 0, 0.76)` theo tỷ lệ `cd_rem / cd_max` kèm số giây đếm ngược ở chính giữa.
+     - **Lớp 3 (Hiệu Ứng Lóe Sáng Khi Hồi Xong — Ready Flash)**: Khung sáng trắng-vàng bung nhẹ trong `0.35s` ngay khi chiêu vừa hồi xong.
+     - **Lớp 4 (Viền Lửa Chiêu Cuối — Awakening Glow)**: Ô thứ 4 (`P / 8`) phát viền sáng nhịp thở rực rỡ khi đủ năng lượng tung Ultimate.
+     - **Lớp 5 (Nhãn Phím Bấm Động — Keycap Badge)**: Hiển thị rõ `U` `I` `O` `P` hoặc `5` `6` `7` `8` ở góc dưới mỗi ô tùy theo vị trí người chơi.
+
+### 5.2. Thanh Năng Lượng Mini Trên Đầu Nhân Vật (World-Space Overhead Bar)
+- Ngay bên dưới thanh máu mini trên đầu nhân vật (`head_screen.y - 1.0`), hiển thị thêm thanh Resource `20x2px` mang màu đặc trưng của tướng (Vàng cho Solaria/Saitama, Cam/Lục cho Atlas, Tím/Lục cho Shinobi, Xanh biển cho Tideweaver/Goku/Naruto, Đỏ cho Luffy) để người chơi nhìn thấy ngay lượng năng lượng mà không cần liếc lên góc màn hình.
+
+### 5.3. Hoạt Ảnh Anime Ultimate Cut-In Banner (`0.35s` — Không Chặn Vật Lý)
+- Khi bấm phím `P / 8` tung Ultimate:
+  - Kích hoạt làm chậm thời gian nghệ thuật `slowmo_timer = 0.35s` (`game_speed = 0.25`) — không dùng `get_tree().paused` nên giữ nguyên tính tất định 100% và không làm mất phím bấm của người chơi kia.
+  - Phóng dải băng ngang cao `68.0 * ui_scale` tại `y = 22%` màn hình với 14 đường tia chớp tốc độ (Anime Speedlines), hiển thị **khung ảnh Cut-in cận cảnh của nhân vật** (cắt trực tiếp từ tầng dưới của bức ảnh `ai_original_archetypes_sheet.png` và `ai_reference_concept_sheet.png`) cùng tên chiêu thức cỡ lớn!
+  - Nếu cả 2 người chơi cùng tung Ultimate trong cùng 1 thời điểm: tự động chia đôi màn hình (**Dual Clash Split Cut-In**: P1 bên trái, P2 bên phải)!
+
+### 5.4. Nâng Cấp Menu Chọn Tướng (`VS_PLAYER_SETUP`) & Màn Hình `ROSTER` 3 Tab (`game/ui/main_menu_controller.gd`)
+1. **Nhãn Phân Loại Trên Thẻ Chọn Tướng (`134x138`)**:
+   - Hiển thị huy hiệu **`CLASSIC`**, **`★ POWERED`** (viền vàng kim), hoặc **`✦ ANIME`** (viền đỏ cam) ngay khi lướt qua từng nhân vật.
+2. **Bảng Tóm Tắt Bộ Chiêu Trực Tiếp (`Mini Kit Preview Card`)**:
+   - Khi đang chọn một nhân vật Siêu năng lực ở màn hình chuẩn bị trận đấu (`VS_PLAYER_SETUP`), hiển thị bảng tóm tắt Tên tướng, Cơ chế Năng lượng và tên 4 chiêu `U/5`, `I/6`, `O/7`, `P/8` ngay bên cạnh để người chơi biết ngay cách dùng.
+3. **Màn Hình `ROSTER` Chia 3 Tab Rõ Ràng**:
+   - **Tab 1**: `CLASSIC FIGHTERS (14)`
+   - **Tab 2**: `ORIGINAL POWERED (4)` (`Solaria`, `Atlas`, `Void Shinobi`, `Tideweaver`)
+   - **Tab 3**: `ANIME LEGENDS (4)` (`Goku`, `Luffy`, `Naruto`, `Saitama`)
+   - Kèm ảnh Splash Card lớn và mô tả chi tiết Nội tại + 4 chiêu thức.
+
+---
+
+## 6. CHI TIẾT SA-WP7: BOT AI SIÊU NĂNG LỰC & MA TRẬN BẢO VỆ 30 TRƯỜNG HỢP NGOẠI LỆ / HY HỮU (`EC-01..EC-30`)
+
+### 6.1. Bot AI Sử Dụng Bộ Kỹ Năng `U I O P` Thông Minh (`game/ai/bot_controller.gd`)
+- Khi một Bot cầm nhân vật Siêu năng lực (`fighter.is_powered_fighter == true`), hàm `_evaluate_powered_bot_skills()` tự động ra quyết định theo tình huống:
+  - **Tự nạp năng lượng**: Bot Goku biết tự gồng Ki khi đứng xa mục tiêu (`> 220px`) và không có đạn bay tới.
+  - **Phản xạ phòng thủ / Phản đạn**: Khi phát hiện có đạn hoặc tên lửa đang bay về phía mình trong khoảng `90px`, Bot Luffy (`Balloon Reflect`), Bot Tideweaver (`Whirlpool Shield`), Bot Saitama (`Sideways Jumps`), hoặc Bot Shinobi (`Smoke Clone`) tự động bật chiêu phản đạn/né đạn!
+  - **Triệu hồi & Khống chế tầm trung (`90..190px`)**: Bot Naruto tự gọi Phân Thân (`U`) và ném Rasenshuriken (`I`); Bot Atlas dùng xung từ trường hút thùng nổ ném vào người chơi (`O`).
+  - **Canh góc tung Chiêu Cuối (`P / 8`)**: Khi đủ năng lượng và mục tiêu nằm cùng trục ngang (`abs(dy) < 42px`, khoảng cách `< 260px`), Bot kích hoạt Ultimate tạo những màn đối đầu nảy lửa.
+
+### 6.2. Ma Trận 30 Trường Hợp Ngoại Lệ & Hy Hữu Cần Validate (`EC-01..EC-30`)
+
+| Mã EC | Tình huống ngoại lệ / hy hữu có thể xảy ra | Cơ chế Validate & Xử lý an toàn bắt buộc |
+| :--- | :--- | :--- |
+| **EC-01** | Đấu 2 người (2P) trên cùng bàn phím: P1 bấm `U/I/O/P` làm kích hoạt nhầm chiêu của P2 hoặc ngược lại. | Khi `has_human_p2 == true`, tách bạch tuyệt đối: P1 chỉ nhận `Numpad 5..8` / `Phím 5..8`, P2 chỉ nhận `U/I/O/P`. Khi chơi 1P (`has_human_p2 == false`), P1 nhận cả hai cụm. |
+| **EC-02** | Người chơi đang bật bộ gõ Tiếng Việt (Unikey/Telex): bấm `U`, `O`, `I`, `W` bị biến thành chữ `ư`, `ơ`, `ô` làm mất chiêu. | Kiểm tra trực tiếp mã phím vật lý `physical_keycode` (`Input.is_physical_key_pressed(KEY_U/I/O/P)`) bỏ qua bộ gõ IME. |
+| **EC-03** | Bàn phím rút gọn (TKL/Laptop) không có Numpad hoặc người chơi vô tình tắt NumLock làm `KP_5..8` biến thành phím mũi tên. | Gán song song hàng phím số phía trên `KEY_5`, `KEY_6`, `KEY_7`, `KEY_8` cho `p1_skill_1..4`. |
+| **EC-04** | Người chơi đập bàn phím bấm cùng lúc 2–3 nút chiêu (`U + I + P`) trong cùng 1 khung hình 60Hz. | Xét thứ tự ưu tiên `P > O > I > U`; ngay khi 1 chiêu kích hoạt thành công thì khóa kích hoạt các nút còn lại trong frame đó, không bao giờ trừ năng lượng 2 lần. |
+| **EC-05** | Bấm nút chiêu khi nhân vật đang bị choáng (`stun`), ngã (`knockdown`), bị tóm (`grabbed_by`), hoặc đang bám thang (`climbing`). | Chặn kích hoạt khi đang chết/choáng/ngã; nếu đang leo thang mà dùng chiêu được phép trên không (`air_ok`), tự động gọi `_detach_from_ladder()` trước khi tung chiêu. |
+| **EC-06** | Goku (`Instant Transmission`) hoặc Shinobi (`Shunpo`) dịch chuyển ra sau lưng kẻ địch đang đứng sát tường đặc, làm kẹt cứng trong tường. | Hàm `resolve_safe_teleport_position()` kiểm tra va chạm hộp AABB với mọi `solids`; nếu vướng tường thì tự động đặt ra phía trước/phía trên mục tiêu hoặc lùi về điểm an toàn gần nhất. |
+| **EC-07** | Dịch chuyển ra sau lưng kẻ địch đang rơi xuống hố tử thần / hồ axit dẫn đến tự sát oan. | Nếu tọa độ đích nằm trên hố sâu không có sàn đỡ bên dưới, tự động kẹp (clamp) vị trí dịch chuyển lại trên mép sàn an toàn gần nhất. |
+| **EC-08** | Lướt tốc độ cao (`Shunpo`, `Vault Breaker`, `Aqua Tether`) đi xuyên qua cổng dịch chuyển (`Portal`) hoặc sàn 1 chiều. | Bảo toàn trạng thái chiêu khi qua Portal và giữ cờ `pass_through_platform` khi lao từ dưới lên. |
+| **EC-09** | Vận tốc lướt hoặc lực đấm của Saitama quá lớn (`> 14px/tick`) làm nhân vật bay xuyên qua tường mỏng (Tunneling). | Chia nhỏ bước di chuyển thành các bước con (`substeps = ceili(abs(dx) / 10.0)`) để không bao giờ xuyên tường. |
+| **EC-10** | Đứng sát vách tường dùng đòn kéo/đấm tầm xa (`Gomu Pistol`, `Whip Lash`) xuyên qua tường bê tông sang phòng bên kia. | Kiểm tra tầm nhìn thẳng (`line_of_sight`) với các tường đặc cho đòn vật lý tầm xa (trừ các đại chiêu năng lượng xuyên bản đồ như `Kamehameha`, `Bijuudama`, `Serious Punch`). |
+| **EC-11** | Dữ liệu frame của chiêu bị cấu hình thời lượng `duration <= 0` làm nhân vật đứng đơ mãi mãi trong trạng thái tung chiêu. | Đặt bộ đếm bảo hiểm `watchdog = 3.5s`: bất kỳ chiêu nào kéo dài quá `3.5s` đều tự động thoát về trạng thái `IDLE`. |
+| **EC-12** | Phân Thân của Naruto (`Shadow Clone`) còn sống trên bản đồ khi Naruto thật đã chết làm hiệp đấu không kết thúc! | Gắn cờ `is_summon_clone = true`. Hàm `_evaluate_round_completion()` bỏ qua hoàn toàn các `is_summon_clone`; khi Naruto thật chết, mọi Phân Thân lập tức bùng khói biến mất. |
+| **EC-13** | Phân Thân của Naruto tự ý nhặt mất súng Bazooka hoặc hộp máu (Medkit) của người chơi rồi hết giờ biến mất. | Khóa hoàn toàn quyền nhặt đồ (`can_pickup_items = false`) đối với mọi `is_summon_clone`. |
+| **EC-14** | Người chơi tạo quá nhiều Phân Thân gây tụt FPS hoặc rò rỉ bộ nhớ (`ObjectDB Leak`) khi kết thúc trận. | Giới hạn cứng tối đa `2` Phân Thân mỗi người chơi; khi gọi Phân Thân thứ 3 thì Phân Thân cũ nhất tự nổ khói và giải phóng bộ nhớ `queue_free()`. |
+| **EC-15** | Camera tự động (`DynamicCamera`) zoom xa tít tắp vì cố gắng quay cả Phân Thân đang chạy ở góc map. | `DynamicCamera` chỉ lấy tọa độ của các nhân vật chính (`not f.is_summon_clone`). |
+| **EC-16** | Thanh HUD trên cùng vẽ thêm thẻ máu của Phân Thân làm tràn giao diện. | HUD trên cùng bỏ qua `is_summon_clone`, chỉ vẽ thanh máu nhỏ trên đầu Phân Thân trong sàn đấu. |
+| **EC-17** | Hai nhân vật Luffy (hoặc Tideweaver) đứng gần nhau cùng bật phản đạn làm viên đạn nảy qua lại vô tận (`Infinite Deflect Loop`) và tăng tốc lên vô cực. | Giới hạn mỗi viên đạn phản xạ tối đa `3` lần (`MAX_DEFLECT_COUNT = 3`), cách nhau tối thiểu `4` ticks, và kẹp tốc độ đạn tối đa `<= 28.0`. |
+| **EC-18** | Luffy dùng `Bụng Cao Su` phản lại tên lửa Bazooka đang có người cưỡi (`Rocket Riding`). | Ngắt trạng thái cưỡi tên lửa an toàn trước khi đảo chiều bay của tên lửa và lựu đạn. |
+| **EC-19** | Saitama dùng `Lật Bàn (Table Flip)` hất tung nhầm các vật thể nền cố định (`indestructible`, `kinematic`) hoặc móc treo cáp (`is_hanging_holder`). | Chỉ hất tung các đồ vật động; nếu gặp thùng đang treo cáp (`is_hanging_crate`) thì cắt cáp hợp lệ trước rồi mới truyền xung lực hất lên trời. |
+| **EC-20** | Atlas hút một thùng thuốc nổ đúng lúc thùng đó phát nổ ngay trên tay. | Kiểm tra `is_instance_valid(prop) and not prop.is_destroyed` ở mỗi frame; nếu thùng nổ thì thoát trạng thái giữ đồ vật an toàn. |
+| **EC-21** | Tideweaver dùng chiêu Nước đi qua đám lửa (`FireHazardSystem`) hoặc đồng đội đang bị cháy. | Tự động dập tắt các đốm lửa trên sàn trong vùng nước đi qua và xóa trạng thái cháy (`burn_state = 0`) cho bản thân/đồng đội. |
+| **EC-22** | Chưởng Kamehameha / Serious Punch phá vỡ cùng lúc 10 thùng gỗ làm các vũ khí rơi ra chồng khít lên nhau. | Phân tán vận tốc văng của vũ khí rơi ra bằng bộ sinh số ngẫu nhiên tất định (`deterministic_rng`). |
+| **EC-23** | Đang chiếu `Ultimate Cut-In Banner` và làm chậm thời gian (`slowmo_timer`) thì người chơi bấm `Pause`, `Restart` hoặc kết thúc hiệp. | Khi Restart, đổi màn hoặc kết thúc hiệp: lập tức xóa sạch `_active_cutins` và đưa `game_speed = 1.0`, `slowmo_timer = 0.0`. |
+| **EC-24** | Nhân vật còn 1 máu đang bị lửa đốt bấm Ultimate: chết ngay trong `0.35s` chiếu Cut-in trước khi chiêu kịp tung ra. | Cấp giáp bất tử tạm thời `0.40s` trong lúc khởi phát Ultimate (không bị chết bởi sát thương đốt/đạn lẻ cho tới khi tung xong đòn, trừ khi rơi xuống vực). |
+| **EC-25** | Cả P1 và P2 cùng bấm Ultimate (`P / 8`) trong cùng một thời điểm. | Hỗ trợ **Dual Split Cut-In**: chia đôi dải băng Cut-In (P1 bên trái, P2 bên phải) đối đầu nhau cực kỳ kịch tính thay vì ghi đè nhau. |
+| **EC-26** | Trạng thái biến hình (`Super Saiyan`, `Kurama Mode`, `Overheat`) bị giữ nguyên sang hiệp đấu mới gây mất cân bằng. | Khi bắt đầu hiệp mới (`Next Round`), khởi tạo lại năng lượng, hồi chiêu và trạng thái biến hình về mặc định ban đầu. |
+| **EC-27** | Bot AI cầm tướng Siêu năng lực nhưng chỉ đấm thường mà không biết dùng `U I O P`. | Tích hợp mô-đun AI đánh giá khoảng cách, lượng năng lượng và đạn bay tới để sử dụng cả 4 kỹ năng hợp lý theo độ khó. |
+| **EC-28** | File JSON cấu hình nhân vật bị thiếu trường hoặc `max_value = 0` gây lỗi chia cho 0 (`NaN`) khi vẽ thanh năng lượng. | Validate toàn bộ schema khi nạp file JSON (`max_value = maxf(1.0, val)`, kẹp `segments` từ `1..10`, điền giá trị mặc định an toàn). |
+| **EC-29** | Các nhân vật Siêu năng lực khó phân biệt nếu dùng chung hiệu ứng. | Mỗi nhân vật có bảng màu riêng, trang phục pixel-art riêng và lớp hiệu ứng đặc trưng riêng (Hào quang vàng/tóc dựng SSJ, Găng tay khổng lồ, Roi nước xoáy, Áo choàng trắng/Găng đỏ, Đuôi Cửu Vĩ, Tay cao su co giãn). |
+| **EC-30** | Chạy kiểm thử tự động ở chế độ không màn hình (`--headless`) bị lỗi do âm thanh hoặc hiệu ứng vẽ. | Toàn bộ hiệu ứng hình ảnh dùng API chuẩn `CanvasItem` và âm thanh có chốt chặn `headless`, đảm bảo `test_runner.gd` chạy `--headless` đạt 100% PASS (Exit 0). |
+
+---
+*Kế hoạch này là tài liệu chuẩn cho toàn bộ quá trình nâng cấp nhánh `8-9-hh3d-3/superagent/`.*
+
+
+---
+
+## 7. ĐÁNH GIÁ PHẢN BIỆN SÂU (DEEP CRITIC AUDIT) & LÝ DO CHỐT PHƯƠNG ÁN TỐT NHẤT (KIẾN TRÚC KÉP: PHƯƠNG ÁN E + F + G)
+
+Qua rà soát kỹ lưỡng toàn bộ mã nguồn hiện tại (`tools/generate_4_art_pipeline_samples.py`, `game/fighter/fighter_rig_view.gd`, `game/ui/match_hud_controller.gd`, `game/fighter/fighter_controller.gd`) và đối chiếu với phản hồi thực tế của Owner trên 4 bảng mẫu cũ (`A, B, C, D`), dưới đây là **5 điểm hạn chế cốt lõi của đợt 1** và **giải pháp tối ưu nhất được chốt để thay thế**:
+
+### 7.1. 5 Điểm Hạn Chế Của Đợt 1 Cần Khắc Phục Triệt Để
+1. **Lỗi 1 — Tại sao Cách C cũ đẹp ở ảnh lớn nhưng cắt vào trận lại bể nét và không hợp lý thực tế?**
+   - Ảnh AI gốc (`256x590`) có đổ bóng chuyển sắc mềm (gradient/anti-aliasing). Khi thu nhỏ `15–20 lần` xuống kích thước nhân vật trong sân đấu (`17x21` px), toàn bộ đường nét mắt, kính, cơ bắp bị bết thành đám pixel mờ nhòe; hơn nữa ảnh tĩnh cắt ra không thể xoay tay `360°` cầm súng, leo thang, lăn lộn hay chém kiếm mượt như khung xương 72 tư thế của Superfighters Y8.
+2. **Lỗi 2 — Tại sao Cách A, B, D cũ trong game lại xấu hơn cả nhân vật Superfighters Y8 hiện tại?**
+   - Trong `tools/generate_4_art_pipeline_samples.py` (dòng 741–877), hàm `_draw_hero_action_pose()` cũ vẽ các khung hình kỹ năng (`SKILL_1..4`) bằng các lệnh hình học thô (`ImageDraw.rectangle`, `ellipse`) khiến nhân vật biến thành hình hộp cứng nhắc khi tung chiêu!
+   - Nghiêm trọng hơn, ở dòng 898–913, vòng lặp đổi màu tấm sheet gốc (`if lum < 65:`) đã **vô tình tô đè lên đường viền đen `1px` (`#000000`) và mắt kính đen của nhân vật gốc**, làm mất độ tương phản sắc lạnh của Superfighters Y8; đồng thời 72 tư thế cơ bản (`IDLE`, `RUN`, `JUMP`, `AIM_PISTOL`...) chỉ được đổi màu áo chứ **chưa hề được vẽ Tóc gai Goku, Mũ Rơm Luffy, Tóc vàng + Băng trán Naruto, Áo choàng Saitama hay Mũ trùm Ninja Shinobi**!
+3. **Lỗi 3 — Hiệu ứng chiêu thức (VFX) trong `fighter_rig_view.gd` (dòng 646–669) còn đơn điệu:**
+   - Tia chưởng `"beam"` chỉ vẽ 2 hình chữ nhật phẳng; đòn tay cao su `"stretch_punch"` chỉ vẽ 1 thanh màu da phẳng và 2 hình tròn; roi nước `"whip"` chỉ nối 4 đoạn thẳng gấp khúc; hoàn toàn thiếu **cấu trúc VFX 3 lớp**, thiếu **bóng dư ảnh (Afterimage Ghosts)** khi lướt, thiếu **Hitstop cục bộ (khựng 3–5 frame khi trúng đòn nặng)** và **Chớp trắng 1 frame (Impact White Flash)**.
+4. **Lỗi 4 — Âm thanh chiêu thức (SFX) còn đơn lớp:**
+   - Các kỹ năng mới chỉ gọi 1 file âm thanh đơn lẻ (`punch_heavy`, `swing_sword`, `explosion_small`) với cao độ cố định `1.0`, chưa có sự kết hợp đa lớp (*Khởi chiêu + Nguyên tố + Va chạm*) và dễ bị chồng âm (clipping) khi dùng chiêu đánh liên hoàn nhiều nhịp.
+5. **Lỗi 5 — Giao diện Cut-In & Phản hồi UX trên HUD còn điểm cần tinh chỉnh:**
+   - Dải Cut-In cũ chiếm nguyên một băng chữ nhật ngang khá dày (`68px * ui_scale`) và chỉ lưu 1 biến `active_cutin: Dictionary` (nếu P1 và P2 cùng bấm Ultimate thì người bấm sau đè mất người bấm trước).
+   - Thanh máu chưa có **Vệt trắng tụt máu mượt (LoL Damage Sub-Bar Trail)**; 4 ô kỹ năng chưa có hiệu ứng **Rung + Nháy Đỏ báo lỗi** khi người chơi bấm lúc đang hồi chiêu/thiếu năng lượng; và chưa có **Input Buffer `6 frame`** để hỗ trợ bấm chiêu ngay trước khi chạm đất.
+
+### 7.2. Quyết Định Chốt Phương Án Tốt Nhất Cho Toàn Bộ Dự Án: KIẾN TRÚC KÉP (PHƯƠNG ÁN E + F + G)
+- **Tầng 1 — Nhân vật & Chiêu thức trong sân đấu (Phương Án E + F: Chuẩn 100% Pixel Rig Superfighters Y8 + Phụ Kiện Neo Theo Đầu + Frame Chiêu Pixel Thật)**:
+  - Tuyệt đối không dùng ảnh AI thu nhỏ làm sprite trong sân, và xóa bỏ hoàn toàn code vẽ hình hộp thô.
+  - Mọi nhân vật Siêu năng lực kế thừa trực tiếp **100% khung xương 72 tư thế và đường viền đen `1px` (`#000000`) của Superfighters Y8** (`Bitmap 591.png` / `Bitmap 1629.png`), kết hợp thuật toán **`Head-Box Anchor`** tự động nhận diện chính xác hộp sọ `5px` (`#sssss#`) trên từng khung hình để vẽ Tóc gai, Mũ Rơm, Băng trán, Mũ Ninja, Kính Visor, Khăn choàng và Áo choàng có viền đen `1px` sắc nét ở tất cả 72 động tác!
+- **Tầng 2 — Ảnh AI / Anime Độ Phân Giải Cao (Phương Án G: Giữ Nguyên Độ Nét HD 100% Trên UI & Dải Cut-In Chéo)**:
+  - Toàn bộ ảnh concept chất lượng cao (`ai_original_archetypes_sheet.png` và `ai_reference_concept_sheet.png`) chỉ xuất hiện ở nơi giữ nguyên độ phân giải HD sắc nét: **Thẻ Chọn Tướng (`VS_PLAYER_SETUP` / `ROSTER`)**, **Avatar HUD**, và **Dải Cut-In Hình Bình Hành Chéo (`0.38s`) sát mép trên màn hình**.
+
+---
+
+## 8. CHI TIẾT SA-WP8: TÁI TẠO TOÀN BỘ 8 SPRITE SHEET CHUẨN PIXEL ART Y8 (`HEAD-BOX ANCHOR` 72 TƯ THẾ + FRAME CHIÊU PIXEL THẬT)
+
+### 8.1. Thuật Toán Bảo Toàn Viền Đen `1px` & Nhận Diện Đầu (`_head_box`) Chính Xác Tuyệt Đối
+1. **Bảo toàn 100% viền đen `#000000` và mắt kính đen**:
+   - Khi ánh xạ bảng màu trang phục lên tấm sheet gốc (`600x400`), mọi điểm ảnh màu đen `#000000` được giữ nguyên tuyệt đối (không bao giờ nhân màu làm mờ viền).
+   - Điểm ảnh áo trắng `#FAFAFA` được chia thành: **Áo chính (`shirt`)**, **Áo lót/Viền cổ (`shirt2`)**, **Đai lưng (`belt` tại hàng trắng thấp nhất của thân áo)**, và **Áo khoác hở ngực (`open_vest` cho Luffy)**.
+   - Điểm ảnh màu da `#FFC0A0` được tách biệt tự động giữa **Vùng Đầu (`head_skin_set`)** và **Vùng Cánh Tay/Bàn Tay (`arm_pixels`)** để có thể đeo Găng tay đỏ cho Saitama, Giáp tay cơ khí phát sáng cho Atlas, hoặc Băng cổ tay xanh cho Goku mà không làm đổi màu mặt!
+2. **Thuật toán `_head_box(frame_img)` chống nhận diện nhầm vai/kiếm**:
+   - Quét từ đỉnh khung hình xuống để tìm hàng đầu tiên có dải `>= 4` điểm ảnh màu da liên tiếp (`#sssss#` — đặc trưng trán 5px của Superfighters nằm ngay trên hàng kính đen `#####`).
+   - Xác định khung hộp sọ chuẩn `(x0, y0, x1, bottom)` bao gồm cả viền đen `1px`. Nhờ đó ngay cả ở tư thế giơ kiếm cao (`SWORD_02`) hay đá bay (`KICK`), phụ kiện tóc/mũ luôn gắn chính xác tuyệt đối trên đầu!
+
+### 8.2. Thiết Kế Phụ Kiện Pixel Art Có Viền Đen `1px` Cho Đủ 8 Nhân Vật Trên Toàn Bộ 72 Tư Thế
+1. **`solaria` (Solaria)**: Tóc bạch kim buộc đuôi ngựa dài rủ xuống sau lưng + Áo võ phục trắng ngà phối lam ngọc + Đai lưng hoàng kim.
+2. **`atlas` (Atlas)**: Tóc húi cua đen + Kính chiến thuật Cyber Visor xanh ngọc (`#5FE6FF`) ngang mắt + Giáp vai/ngực xanh rêu + Găng tay thiết giáp xám viền năng lượng + Khăn choàng cam bay sau cổ.
+3. **`shinobi` (Void Shinobi)**: Mũ trùm đầu Ninja tím than + Khăn bịt mặt sát thủ + Độc nhãn phát sáng xanh lục neon (`#B6FF3A`) + Khăn choàng năng lượng sau gáy.
+4. **`tideweaver` (Tideweaver)**: Mái tóc dài đỏ rực (`#D0452A`) bay dọc lưng + Áo giáp thủy triều xanh hải quân phối kem + Đai lưng da.
+5. **`goku` (Son Goku)**: Mái tóc gai Saiyan đen ánh xanh đặc trưng tỏa sang hai bên (và tự động chuyển sang **Tóc Vàng Kim Super Saiyan** ở các frame Ultimate/Awakening!) + Võ phục cam Kame + Áo lót & đai lưng xanh dương.
+6. **`luffy` (Monkey D. Luffy)**: **Chiếc Mũ Rơm vàng có dải băng đỏ** viền đen `1px` chuẩn xác trên đầu + Áo ghi-lê đỏ hở ngực lộ cơ bụng + Đai lưng vàng + Quần short xanh.
+7. **`naruto` (Naruto Uzumaki)**: **Mái tóc gai vàng rực** + **Băng trán làng Lá (Konoha)** màu xanh đen có miếng kim loại bạc trước trán và dải dây bay sau gáy + Áo khoác cam cổ đen.
+8. **`saitama` (Saitama)**: **Đầu hói bóng loáng** (có điểm sáng phản quang `2px` trên đỉnh đầu) + Bộ đồ liền thân màu vàng tươi + Đai lưng đen + **Đôi găng tay đỏ & Giày bốt đỏ** + **Áo choàng trắng có viền đen `1px`** bay phía sau lưng ở mọi tư thế!
+
+### 8.3. Xây Dựng 18 Ô Frame Chiêu Đặc Trưng (`y = 270..340`) Bằng Giải Phẫu Pixel Y8 Thật
+- Thay vì vẽ hình hộp, mỗi ô `32x28` trong dải `mugen_cells[0..17]` được tổng hợp từ **tư thế giải phẫu thật của Superfighters** (`PUNCH_01`, `PUNCH_03`, `KICK`, `SWORD_02`, `JUMP`, `CROUCH`) đã gắn phụ kiện của tướng đó, kết hợp vẽ **Vệt Chiêu Pixel 3 Lớp (Pixel Smear Arcs)** ngay trong sprite:
+  - `MUGEN_COMBO_1..4`: Chuỗi 4 đòn liên hoàn có vệt chém/vệt quyền phong bán nguyệt 3 lớp màu.
+  - `SKILL_1..3` (`U / I / O`): Tư thế xuất chiêu đặc trưng (tay cao su vươn dài, hai tay tụ cầu Rasengan/Kamehameha, quất roi nước chữ S, đập đất trồi cột dung nham).
+  - `SKILL_4` (`P — Ultimate`): Tư thế bùng nổ hào quang cực đại (Goku tóc vàng SSJ tụ cầu sáng trắng, Saitama tung cú đấm Nghiêm Túc rách không gian, Luffy nắm đấm Haki khổng lồ, Naruto khoác áo choàng Cửu Vĩ).
+
+---
+
+## 9. CHI TIẾT SA-WP9: HỆ THỐNG VFX PIXEL 3 LỚP, DƯ ẢNH TỐC ĐỘ (AFTERIMAGE), HITSTOP 3–5F & CHỚP TRẮNG TRÚNG ĐÒN
+
+### 9.1. Quy Tắc Vẽ VFX 3 Lớp Trong `FighterRigView._draw()` (`game/fighter/fighter_rig_view.gd`)
+Mọi hiệu ứng kỹ năng trong `active_vfx_overlays` đều tuân thủ **Quy tắc 3 Lớp Tương Phản (3-Layer Pixel Readability Rule)**:
+- **Lớp Ngoài (Silhouette Outline)**: Viền đen/tối đậm (`#0A0E17`, độ dày `1.5–2.0px`) tách biệt hoàn toàn hiệu ứng khỏi mọi màu nền map.
+- **Lớp Giữa (Saturated Elemental Body)**: Màu nguyên tố rực rỡ đặc trưng của nhân vật (`#1E78FF` xanh dương Ki, `#FF3820` đỏ lửa Haki, `#FFC634` vàng Kim Quang, `#38C8FF` xanh đại dương, `#9B4DFF` tím hư không).
+- **Lớp Lõi (High-Energy White Core)**: Lõi trắng tinh khiết (`#FFFFFF`) ở tâm chùm tia/nắm đấm/lưỡi kiếm tạo cảm giác năng lượng cực mạnh.
+
+Cụ thể cho 5 nhóm hình thái VFX:
+1. **`"beam"` (Siêu Kamehameha / Đấm Nghiêm Túc / Bijuudama)**:
+   - Quả cầu tụ lực 3 lớp ngay tại hai bàn tay (`x = 6.0, y = -10.0`).
+   - Thân chùm tia gồm 4 dải đồng tâm: Viền đen ngoài cùng $\rightarrow$ Vỏ nguyên tố đậm $\rightarrow$ Thân nguyên tố sáng $\rightarrow$ Lõi trắng `#FFFFFF` co giãn nhịp nhàng theo hàm `sin(age * 45.0)`.
+   - 2 vòng nhẫn xung kích (Shockwave Rings) dựng đứng nơi đầu nguồn bắn và 6 tia lửa năng lượng bắn dọc theo thân tia.
+2. **`"stretch_punch"` (Tay Cao Su Luffy `Gomu Pistol` / `Red Hawk` / `Bajrang Smash`)**:
+   - Cánh tay vươn dài có **viền đen `1px` trên-dưới**, chia đốt cánh tay rõ ràng; nửa trước bọc **Haki Vũ Trang màu đỏ đen bóng (`#4A121B` / `#FF2A2A`)** khi dùng `Red Hawk` hoặc `Ultimate`.
+   - Đầu cánh tay là **Nắm Đấm Pixel Khổng Lồ** có viền đen, bọc lửa cam-vàng-trắng và vòng sóng va chạm ở điểm cuối.
+3. **`"whip"` (Đôi Roi Nước `Tideweaver` / Vuốt Chakra `Naruto`)**:
+   - Nội suy đường cong hình sin mượt mà (`16` điểm mẫu), vẽ 3 lớp: Viền đen `5.5px` $\rightarrow$ Thân nước xanh đậm `3.8px` $\rightarrow$ Sóng lục lam `2.2px` $\rightarrow$ Ngọn bọt trắng `1.0px` kèm các giọt nước bắn tung tóe ở đầu ngọn roi.
+4. **`"slash"` & `"crescent"` (Nhát Chém Hư Không `Shinobi` / Quyền Phong `Solaria` / Địa Chấn `Atlas`)**:
+   - Vẽ cung lưỡi liềm vuốt nhọn hai đầu (Tapered Crescent Arc) hoặc chữ X chéo 3 lớp màu (Viền tím/hổ phách $\rightarrow$ Thân xanh lục neon/vàng kim $\rightarrow$ Lõi trắng sắc bén).
+5. **`"shockwave"` & `"dome"` (Khiên Xoáy Nước / Bụng Cao Su / Nổ Thái Dương / Cột Dung Nham)**:
+   - Vòng sóng kép bung rộng kèm các cột năng lượng/dung nham thẳng đứng có lõi trắng và viền đen.
+
+### 9.2. Hệ Thống Bóng Dư Ảnh Tốc Độ (`afterimage_ghosts` — Speed Trail)
+- Khi nhân vật thực hiện kỹ năng lướt hoặc dịch chuyển (`dash_speed_24hz > 0` hoặc `Instant Transmission`, `Shunpo Slash`, `Serious Sideways Jumps`, `Radiant Kick`):
+  - Lưu lại tối đa `3` mốc vị trí & khung hình vừa đi qua (`_afterimage_trail: Array[Dictionary]`, mỗi mốc cách nhau `2 ticks`, tồn tại `0.18s`).
+  - Vẽ 3 bóng mờ của chính sprite nhân vật tại các tọa độ cũ trên sàn đấu với màu nguyên tố đặc trưng (Tím/Xanh lục cho Shinobi, Xanh lam/Vàng cho Goku, Đỏ/Vàng cho Saitama, Vàng kim cho Solaria) tạo cảm giác tốc độ siêu thanh!
+
+### 9.3. Nâng Cấp Cảm Giác Đánh ("Game-Feel / Juice"): Hitstop 3–5 Frame & Chớp Trắng 1 Frame
+1. **Chớp Trắng Trúng Đòn (`_hit_flash_timer: float`)**:
+   - Khi một nhân vật bị trúng kỹ năng hoặc đòn đánh nặng, đặt `_hit_flash_timer = 0.055` (`~1.5 frame`). Trong thời gian này, `FighterRigView` đẩy độ sáng `body_sprite.modulate = Color(2.4, 2.4, 2.4, 1.0)` làm mục tiêu lóe trắng sắc nét đúng chuẩn game thùng Arcade!
+2. **Khựng Khung Hình Cục Bộ Khi Trúng Đòn Nặng (`_hitstop_ticks: int`)**:
+   - Khi kỹ năng `U/I/O` trúng đích: tạo nhịp khựng uy lực `2 ticks` (`~0.07s`); khi Chiêu Cuối `P / 8` trúng đích: khựng `4 ticks` (`~0.14s`) kết hợp rung camera theo đúng hướng văng của đòn đánh (`trigger_directional_shake(dir, intensity)`), làm cú đấm Nghiêm Túc hay Kamehameha có sức nặng ngàn cân!
+
+
+---
+
+## 10. CHI TIẾT SA-WP10: BỘ MÁY ÂM THANH CHIÊU THỨC ĐA LỚP (3-LAYER COMPOSITE SFX), BIẾN THIÊN CAO ĐỘ & CHỐNG RÈ ÂM
+
+### 10.1. Kiến Trúc Phối Âm 3 Lớp Cho Kỹ Năng (`play_layered_skill_sfx()`)
+Thay vì chỉ phát 1 âm thanh đơn điệu, mỗi khi tung chiêu hoặc trúng chiêu, hệ thống âm thanh phối hợp 2–3 lớp âm thanh có sẵn trong kho SFX chuẩn của game với độ trễ và cao độ (`pitch_scale`) được tinh chỉnh theo từng nguyên tố:
+1. **Nhóm Quang Năng / Khí Công (`Solaria`, `Goku`)**:
+   - *Khi xuất chiêu*: Lớp 1 `swing_sword` (`pitch = 1.25`, tiếng xé gió nhanh) + Lớp 2 `explosion_small` (`pitch = 1.35, volume_db = -5.0`, tiếng bùng nổ năng lượng).
+   - *Khi Ultimate (`Kamehameha`, `Supernova`)*: Lớp 1 `explosion_large` (`pitch = 0.88`, âm trầm rung chuyển) + Lớp 2 `flamethrower_loop` / `explosion_small` (`pitch = 1.18`, tiếng gầm năng lượng).
+2. **Nhóm Thiết Giáp / Sức Mạnh Tuyệt Đối (`Atlas`, `Saitama`, `Luffy`)**:
+   - *Khi xuất chiêu*: Lớp 1 `punch_heavy` (`pitch = 0.85`, tiếng đấm nặng đục) + Lớp 2 `crate_break` / `explosion_small` (`pitch = 0.95`, tiếng nứt vỡ mặt đất).
+   - *Khi Ultimate (`Serious Punch`, `Bajrang Smash`, `Meteor Cataclysm`)*: Lớp 1 `explosion_large` (`pitch = 0.78`, siêu trầm) + Lớp 2 `punch_heavy` (`pitch = 0.72`).
+3. **Nhóm Ám Sát / Thủy Triều / Phong Độn (`Void Shinobi`, `Tideweaver`, `Naruto`)**:
+   - *Khi xuất chiêu*: Lớp 1 `swing_sword` (`pitch = 1.32`, tiếng lướt gió/roi quất sắc bén) + Lớp 2 `Splash` / `punch_light` (`pitch = 1.15`).
+
+### 10.2. Biến Thiên Cao Độ Tự Nhiên (`Pitch Jitter`) & Chốt Chặn Chống Chồng Âm (`Anti-Clipping Gate`)
+- **Pitch Jitter (`0.94 .. 1.06`)**: Mỗi lần phát âm thanh chiêu thức, nhân cao độ với hệ số ngẫu nhiên nhỏ trong khoảng `[0.94, 1.06]` để các đòn đánh liên tiếp (`Tam Liên Quyền`, `Đấm Thường Liên Hoàn`, `Red Hawk Gatling`) nghe tự nhiên, giàu lực và không bị cảm giác máy móc lặp lại.
+- **Anti-Clipping Gate (`45ms` Cooldown Per Sound ID)**: Lưu thời điểm phát gần nhất `_last_sfx_ms_by_id[sfx_id]`. Nếu cùng 1 hiệu ứng âm thanh được gọi lặp lại trong vòng `< 45ms` (ví dụ chưởng Kamehameha làm nổ 6 thùng gỗ cùng lúc hoặc đòn liên hoàn trúng 3 mục tiêu), hệ thống gộp thành 1 lần phát duy nhất, triệt tiêu hoàn toàn hiện tượng rè loa hay vọt âm lượng!
+
+---
+
+## 11. CHI TIẾT SA-WP11: NÂNG CẤP UI/UX, CUT-IN ANIME CHÉO KHÔNG CHE SÂN (`0.38S` + DUAL CLASH), VỆT TRẮNG TỤT MÁU LOL & INPUT BUFFER 6 FRAME
+
+### 11.1. Dải Cut-In Hình Bình Hành Chéo (`Diagonal Anime Cut-In Strip` — Không Che Tâm Sân Đấu)
+- **Vị trí & Kích thước tối ưu**:
+  - Đặt sát ngay dưới thanh HUD trên cùng (`c_y = strip_h + 6.0 * ui_scale`, chiều cao gọn `54.0 * ui_scale` thay vì `68.0 * ui_scale`), nằm hoàn toàn ở vùng trời phía trên nên **không bao giờ che khuất 2 nhân vật đang giao chiến ở giữa hay dưới sàn đấu**.
+- **Hình thức bắt mắt chuẩn Anime AAA**:
+  - Khung nền vát chéo hình bình hành (`draw_colored_polygon`) với viền trên màu trắng sáng, viền dưới màu nguyên tố của nhân vật, và các đường tia tốc độ chéo (`Angled Speedlines`).
+  - Hiệu ứng trượt vào cực nhanh trong `0.06s` đầu (`Slide-In Easing`), giữ nét căng ảnh Cut-In HD của nhân vật ở góc trái kèm tên Chiêu Cuối nổi bật.
+- **Hỗ trợ `Dual Clash Split Cut-In` (`active_cutins: Array[Dictionary]`)**:
+  - Nếu cả P1 và P2 cùng bấm Chiêu Cuối (`P` và `8`) trong khi dải Cut-In của người kia đang hiển thị: màn hình tự động chia đôi dải băng (**P1 trượt từ trái sang đến giữa màn hình, P2 trượt từ phải sang đến giữa màn hình kèm tia sét đối đầu ở tâm**)!
+
+### 11.2. Vệt Trắng Tụt Máu Mượt Kiểu Liên Minh Huyền Thoại (`LoL White Damage Sub-Bar Trail`)
+- Trên cả **Thẻ Máu Top HUD** và **Thanh Máu Mini Trên Đầu Nhân Vật**:
+  - Lưu thêm biến `_trailing_hp_by_id[fid]`. Khi máu thực tế (`cur_hp`) giảm đột ngột do trúng chiêu, `_trailing_hp` giữ lại mức máu cũ trong `0.12s` rồi tụt mượt về `cur_hp` với tốc độ `95.0 HP/giây`.
+  - Vẽ phần chênh lệch `(cur_hp .. _trailing_hp)` bằng màu **Trắng Sáng Cam (`Color(1.0, 0.96, 0.88, 0.92)`)** ngay bên phải phần máu đỏ còn lại — giúp người chơi nhìn thấy ngay độ "thốn" của từng cú Kamehameha hay Serious Punch!
+
+### 11.3. Phản Hồi UX Khi Bấm Kỹ Năng Đang Hồi Chiêu Hoặc Thiếu Năng Lượng (`Skill Denial Feedback`)
+- Khi người chơi bấm phím `U / I / O / P` (hoặc `5 / 6 / 7 / 8`) nhưng kỹ năng đó đang trong thời gian hồi (`cooldown > 0`) hoặc chưa đủ năng lượng (`resource_val < cost`):
+  - Ghi nhận `skill_deny_flash_timers[slot] = 0.22` trên nhân vật đó.
+  - Trên HUD, ô kỹ năng tương ứng lập tức **nháy viền Đỏ Tươi (`#FF3B30`)**, **rung nhẹ ngang `±2px`** và hiển thị chữ nhắc nhở ngắn (`"CD!"` hoặc `"NO KI!"`) trong `0.22s`, giúp người chơi hiểu ngay lý do mà không tưởng nhầm là bàn phím bị liệt!
+
+### 11.4. Bộ Đệm Phím Kỹ Năng 6 Khung Hình (`6-Frame Skill Input Buffer = 0.10s`)
+- Trong `FighterController`:
+  - Nếu người chơi bấm `U / I / O / P` khi nhân vật đang ở vài frame cuối của động tác lăn (`ROLL`), tiếp đất (`LAND`), hoặc đòn đánh trước đó: lưu `_buffered_skill_slot = slot` và `_buffered_skill_timer = 0.10` (`6 frames @ 60Hz`).
+  - Ngay ở frame đầu tiên nhân vật vừa thoát khỏi trạng thái khóa để về `IDLE / RUN`, hệ thống tự động kích hoạt ngay `_buffered_skill_slot`! Điều này làm cảm giác bấm combo nối chiêu mượt và nhạy gấp bội.
+
+---
+
+## 12. CHI TIẾT SA-WP12: DỌN SẠCH CODE THỪA & BỔ SUNG 12 KỊCH BẢN NGOẠI LỆ MỚI (`EC-31..EC-42`)
+
+### 12.1. Dọn Sạch Code Vẽ Hộp Cũ & Tối Ưu Hóa Tài Nguyên
+1. **Xóa bỏ hàm `_draw_hero_action_pose()` vẽ hình hộp cũ** trong `tools/generate_4_art_pipeline_samples.py`, thay thế hoàn toàn bằng bộ máy `SF-Native Head-Box Anchor + 3-Layer Pixel Smear` để mọi tấm sprite sheet sinh ra luôn đạt chuẩn pixel art sắc nét 100%.
+2. **Đảm bảo lọc `TEXTURE_FILTER_NEAREST` cho mọi SpriteSheet trong trận** và `TEXTURE_FILTER_LINEAR` mượt mà cho ảnh Portrait/Cut-In độ phân giải cao.
+
+### 12.2. Bổ Sung 12 Trường Hợp Ngoại Lệ & Hy Hữu Mới (`EC-31..EC-42` — Nâng Tổng Số Lên 42 Chốt Chặn An Toàn)
+
+| Mã EC | Tình huống ngoại lệ / hy hữu có thể xảy ra | Cơ chế Validate & Xử lý an toàn bắt buộc |
+| :--- | :--- | :--- |
+| **EC-31** | Thuật toán đổi màu trang phục vô tình tô đè lên đường viền đen `1px` (`#000000`) và mắt kính đen làm nhân vật bị chìm vào nền map tối. | Khóa cứng điều kiện bảo toàn `px == (0, 0, 0, 255)`: mọi điểm ảnh viền đen `1px` và kính đen của Superfighters Y8 được giữ nguyên 100%. |
+| **EC-32** | Ở tư thế vung kiếm cao (`SWORD_02`) hoặc đấm cao, cánh tay chạm vào vùng da mặt làm thuật toán tìm vùng da lớn nhất nhận nhầm vai/tay là đầu (vẽ tóc/mũ lệch xuống vai). | Nhận diện đầu bằng chữ ký trán `5px` (`#sssss#` nằm ngay trên hàng kính đen) quét từ đỉnh xuống, tách biệt chính xác 100% hộp sọ khỏi cánh tay trên mọi tư thế. |
+| **EC-33** | Nhân vật đang tung tia chưởng (`Kamehameha`) hoặc lướt thì bị nổ thùng/đánh bay hoặc rơi xuống vực làm tia chưởng đứng lơ lửng mồ côi trên bản đồ. | Khi chuyển sang trạng thái bị thương (`HURT`, `FALL_F`, `FALL_B`, `KNOCKDOWN`, `DEAD`), lập tức gọi `active_vfx_overlays.clear()` và hủy mọi kênh dẫn chiêu trong cùng tick. |
+| **EC-34** | Kỹ năng đánh liên hoàn (`Đấm Thường Liên Hoàn`, `Red Hawk Gatling`) hoặc tia chưởng phá 6 thùng gỗ cùng lúc gọi 8 âm thanh nổ đè lên nhau trong `0.05s` gây rè/vỡ tiếng. | Áp dụng cổng chặn `Anti-Clipping Gate 45ms` theo từng mã âm thanh kết hợp biến thiên cao độ `0.94..1.06`. |
+| **EC-35** | Người chơi bấm phím chiêu `U/I/O/P` sớm 2–3 frame trước khi nhân vật chạm đất hoặc vừa hết động tác lăn (`ROLL`) làm phím bấm bị nuốt mất. | Lưu phím bấm vào bộ đệm `_buffered_skill_slot` trong `0.10s` (`6 frames`) và tự động tung chiêu ngay ở frame đầu tiên nhân vật đứng dậy/chạm đất. |
+| **EC-36** | Nhân vật đang bê thùng gỗ/thùng thuốc nổ trên tay mà bấm phím chiêu `U/I/O/P` làm thùng gỗ dính chặt vào người trong lúc bay/dịch chuyển. | Trước khi khởi phát bất kỳ kỹ năng `U/I/O/P` nào, nếu đang cầm đồ vật (`carried_prop != null`) thì tự động thả hoặc ném nhẹ đồ vật ra trước một cách an toàn. |
+| **EC-37** | Cú đấm Nghiêm Túc của Saitama hoặc Kamehameha kích nổ cùng lúc một chuỗi 8 thùng thuốc nổ gần nhau gây đệ quy `explode()` làm khựng khung hình. | Đánh dấu cờ `_exploding_in_progress` cho từng thùng nổ và xử lý lan truyền theo hàng đợi không đệ quy sâu, giữ thời gian tick ổn định `< 2ms`. |
+| **EC-38** | Tay cao su của Luffy (`Gomu Pistol`) hoặc roi nước của Tideweaver vươn dài `150px` làm hộp nhận sát thương (`Clsn2` hurtbox) của bản thân bị kéo giãn vĩnh viễn sau khi thu tay. | Hộp tấn công (`Clsn1`) tách biệt hoàn toàn với hộp thân thể (`default_clsn2 = [-6, -18, 12, 18]`); khi kết thúc chiêu luôn khôi phục `Clsn2` chuẩn. |
+| **EC-39** | Người chơi đang giữ phím `U` để gồng Ki (Goku) thì bấm `Alt+Tab` ra ngoài cửa sổ hoặc bật menu `Pause`, làm kẹt trạng thái giữ phím vô tận. | Khi cửa sổ mất tiêu điểm (`NOTIFICATION_WM_WINDOW_FOCUS_OUT`) hoặc khi `is_paused == true`, tự động xóa mọi cờ giữ phím và dừng gồng Ki an toàn. |
+| **EC-40** | Trong chế độ `Survival`, người chơi tiêu diệt Phân Thân của Naruto (`is_summon_clone`) lại được cộng điểm hạ gục (`survival_kills`) hoặc kích hoạt qua màn sớm. | Chỉ tăng `survival_kills` và kiểm tra kết thúc đợt quái khi mục tiêu bị hạ có `not fighter.is_summon_clone`. |
+| **EC-41** | Khi bấm nút chiêu đang hồi (`Cooldown`) hoặc thiếu năng lượng, giao diện im lặng không phản hồi khiến người chơi tưởng game bị đơ phím. | Kích hoạt `skill_deny_flash_timers[slot] = 0.22s` làm ô kỹ năng đó nháy đỏ và lắc nhẹ `±2px` trên HUD để báo hiệu trực quan. |
+| **EC-42** | Sau khi cập nhật file ảnh `.png` mới cho 8 nhân vật, bộ nhớ đệm của `SFDataRegistry` hoặc `.import` cũ vẫn giữ ảnh cũ/lọc mờ (`Linear`). | Cung cấp hàm `SFDataRegistry.reload_custom_fighter_textures()` nạp trực tiếp `ImageTexture.create_from_image()` với `TEXTURE_FILTER_NEAREST` cho sprite sheet trong trận. |
+
+### 12.3. Tiêu Chí Nghiệm Thu Tự Động (`SF-M35` Trong `tests/test_runner.gd`)
+1. **Kiểm chứng Chất lượng Sprite Sheet (`SF-M35.1`)**: Xác nhận cả 8 file `assets/sheets/hero_<id>_mugen.png` (`600x400`) tồn tại, giữ nguyên điểm ảnh viền đen `#000000` trên các frame cơ bản, và có đầy đủ 18 ô hành động đặc trưng không rỗng tại `y = 270..340`.
+2. **Kiểm chứng VFX 3 Lớp, Hitstop, Hit-Flash & Afterimage (`SF-M35.2`)**: Xác nhận khi tung kỹ năng `U/I/O/P`, `active_vfx_overlays` và `_afterimage_trail` hoạt động đúng, mục tiêu trúng đòn kích hoạt `_hit_flash_timer > 0`, và tự động xóa sạch VFX khi nhân vật bị ngắt chiêu (`EC-33`).
+3. **Kiểm chứng UI/UX Cut-In Kép, Vệt Trắng Máu & Input Buffer (`SF-M35.3`)**: Xác nhận `active_cutins` hỗ trợ hiển thị đồng thời 2 người chơi (`Dual Clash`), `_trailing_hp_by_id` giảm mượt sau sát thương, `skill_deny_flash_timers` kích hoạt khi bấm chiêu đang hồi, và `_buffered_skill_slot` tự nổ chiêu khi vừa thoát trạng thái lăn (`EC-35`).
+4. **Toàn bộ bộ kiểm thử tự động (`SF-M1 .. SF-M35`) đạt 100% PASS (Exit Code 0) ở chế độ `--headless`**.
+
+
+---
+
+## 13. BÀI HỌC KINH NGHIỆM RÚT RA (LESSONS LEARNED) & LƯU Ý KỸ THUẬT CHO TƯƠNG LAI
+
+Từ quá trình đối chiếu 4 phương án đầu tiên (`A, B, C, D`) và hoàn thiện **Kiến Trúc Lai Đa Độ Phân Giải (`E + F + G`)**, dưới đây là 5 bài học xương máu đã được chuẩn hóa để tránh lặp lại sai lầm:
+
+1. **Không bao giờ thu nhỏ trực tiếp ảnh AI HD (`256x590`) xuống lưới Pixel nhỏ (`22x28`) để làm sprite trong trận**:
+   - **Vấn đề gặp phải**: Ở Phương án C ban đầu, việc tách nền và thu nhỏ trực tiếp ảnh AI xuống `28px` làm các đường nét mảnh (như ngón tay, mặt, tóc) bị gộp điểm ảnh dẫn đến răng cưa, mất viền đen `1px` và thiếu 72 khung chuyển động (leo thang, lăn, ngắm súng 360°).
+   - **Giải pháp chuẩn đã áp dụng (`E + F + G`)**: Tách bạch độ phân giải theo đúng mục đích hiển thị — Ảnh AI HD giữ nguyên độ phân giải gốc (`TEXTURE_FILTER_LINEAR`) cho **Thẻ chọn tướng Roster** và **Dải Cut-In Chéo 54px**; trong khi nhân vật trên sàn đấu dùng **Pixel Art Thuần Khiết (`TEXTURE_FILTER_NEAREST`)** kế thừa 100% giải phẫu và viền đen `#000000` của Superfighters Y8.
+
+2. **Không vẽ đè hình chữ nhật thô lên Sprite Sheet và phải mở rộng `+4px` Top Headroom**:
+   - **Vấn đề gặp phải**: Các hàm vẽ thủ công dạng hình hộp chữ nhật (`_draw_hero_action_pose` cũ) làm nhân vật trông cứng và kém chi tiết hơn cả nhân vật Superfighters Y8 gốc. Ngoài ra, khung cắt `rect` mặc định của Y8 cắt sát đỉnh đầu (`y = 11`), khiến tóc dựng đứng của Goku hay mũ rơm của Luffy bị cụt ngọn.
+   - **Giải pháp chuẩn đã áp dụng**: Xóa bỏ hoàn toàn hàm vẽ hộp cũ; dùng thuật toán `Head-Box Anchor` nhận diện chữ ký trán `5px` (`#sssss#`) để gắn tóc/mũ pixel lên toàn bộ 72 tư thế gốc và mở rộng `region_rect` lên phía trên `4px` (`pos_y - 4, h + 4`, bù `offset.y - 2.0`) trong `FighterRigView`.
+
+3. **VFX trong game Pixel 2D phải có cấu trúc 3 lớp màu (Viền Đen -> Thân Rực Rỡ -> Lõi Trắng) thay vì 1 khối màu phẳng**:
+   - **Vấn đề gặp phải**: Một dải `draw_rect` đơn sắc nhìn giống thanh nhựa đè lên màn hình.
+   - **Giải pháp chuẩn đã áp dụng**: Mọi tia chưởng (`beam`), nhát chém (`slash`), sóng xung kích (`shockwave`), tay cao su (`stretch_punch`) và roi nước (`whip`) đều vẽ theo 3 lớp đồng tâm (Viền ngoài đậm/đen `1px` -> Thân nguyên tố rực rỡ -> Lõi trắng `#FFFFFF` ở tâm) kết hợp 3 bóng dư ảnh (`_afterimage_trail`), chớp trắng `1 frame` (`_hit_flash_timer`) và `Hitstop 3–5 ticks`.
+
+4. **Lưu ý khi kiểm tra tọa độ dịch chuyển (`resolve_safe_teleport_position`) trên các bản đồ có sàn thấp hơn `map_bounds.end.y`**:
+   - **Vấn đề gặp phải**: Trên một số bản đồ (như `rooftops`), mặt sàn hợp lệ nằm ở `y = 194.0` trong khi `map_bounds.end.y` là `180.0`. Nếu kẹp cứng `cand.y <= map_bounds.end.y - 8.0` (`172.0`), thuật toán tìm điểm đáp sẽ đẩy tọa độ `y` ngược lên trên xuyên vào khối sàn đặc và từ chối dịch chuyển ngang.
+   - **Giải pháp chuẩn đã áp dụng**: Cho phép biên dọc `min_by / max_by` bao phủ cả `global_position.y` hiện tại của nhân vật (`maxf(global_position.y, mb.end.y - 8.0)`), giúp các chiêu lướt ngang (`Bậc Thầy Lướt Sóng`, `Thuấn Thân`, `Hoán Đổi Phân Thân`) hoạt động chính xác 100% ở mọi tầng địa hình.
+
+5. **Nạp trực tiếp Texture từ đĩa khi cập nhật Sprite Sheet bằng Script (`EC-42`)**:
+   - **Vấn đề gặp phải**: Khi script Python tái tạo file `.png` mới trong `assets/sheets/`, `ResourceLoader.load()` của Godot ở chế độ `--headless` có thể đọc lại file `.ctex` cũ trong `.godot/imported/`.
+   - **Giải pháp chuẩn đã áp dụng**: Trong `SFDataRegistry`, nạp trực tiếp `Image.load_from_file(ProjectSettings.globalize_path(tex_path))` và tạo `ImageTexture.create_from_image(img)` để luôn hiển thị đúng từng điểm ảnh mới nhất ngay lập tức.

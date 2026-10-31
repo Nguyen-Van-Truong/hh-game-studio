@@ -1,0 +1,1163 @@
+{
+  "schema_version": "2.0.0",
+  "format": "mugen_fighter_v2",
+  "id": "atlas",
+  "display_name": "Atlas — Titan Gauntlet",
+  "short_name": "ATLAS",
+  "subtitle": "Tectonic Reactor Brawler",
+  "roster_category": "ORIGINAL_POWERED",
+  "is_powered_fighter": true,
+  "author": "HH Game Studio",
+  "sheet_path": "res://assets/sheets/hero_atlas_mugen.png",
+  "portrait_path": "res://assets/sprites/portraits/atlas_splash.png",
+  "cutin_path": "res://assets/sprites/cutins/atlas_cutin.png",
+  "sheet_size": [
+    600,
+    400
+  ],
+  "hp_mult": 1.35,
+  "speed_mult": 1.04,
+  "use_sf_split_rig_for_guns": true,
+  "default_clsn2": [
+    [
+      -6.0,
+      -18.0,
+      12.0,
+      18.0
+    ]
+  ],
+  "resource_spec": {
+    "resource_id": "TITAN_HEAT",
+    "display_label": "HEAT",
+    "archetype": "RUMBLE_HEAT_OVERDRIVE",
+    "start_value": 0.0,
+    "max_value": 100.0,
+    "secondary_pips_max": 0,
+    "regen_per_sec": 0.0,
+    "on_hit_melee_gain": 8.0,
+    "on_hit_skill_gain": 0.0,
+    "on_hurt_gain": 6.0,
+    "decay_delay_sec": 4.0,
+    "decay_per_sec": 12.0,
+    "bar_color_primary": "#4CD964",
+    "bar_color_secondary": "#FF9500",
+    "bar_color_max_glow": "#FF2D55",
+    "segments": 2,
+    "passive_id": "PASSIVE_REACTOR_OVERDRIVE",
+    "passive_desc": "Tung chieu tang +20 Nhiet. Danger Zone (50-99): +30% suc manh & giap. 100 Nhiet: Cuong hoa dam thuong x1.65."
+  },
+  "skill_kit": {
+    "skill_1": {
+      "slot": 1,
+      "id": "SKILL_1",
+      "name": "Thiet Quyen Xung Kich (U/5)",
+      "state": "SKILL_1",
+      "cooldown_sec": 4.0,
+      "resource_cost": 0.0,
+      "resource_gain": 20.0,
+      "damage": 22.0,
+      "hit_force": 38.0,
+      "dash_speed_24hz": 7.2,
+      "dash_distance": 80.0,
+      "knockdown": true,
+      "icon_color": "#63FF9E",
+      "glyph": "Q",
+      "sfx": "punch_heavy"
+    },
+    "skill_2": {
+      "slot": 2,
+      "id": "SKILL_2",
+      "name": "Dia Chan Tam Lien Cot (I/6)",
+      "state": "SKILL_2",
+      "cooldown_sec": 5.5,
+      "resource_cost": 0.0,
+      "resource_gain": 20.0,
+      "damage": 25.0,
+      "hit_force": 42.0,
+      "shockwave_range": 120.0,
+      "knockdown": true,
+      "icon_color": "#FF9500",
+      "glyph": "W",
+      "sfx": "explosion_small"
+    },
+    "skill_3": {
+      "slot": 3,
+      "id": "SKILL_3",
+      "name": "Tu Truong Hut & Dam Thung (O/7)",
+      "state": "SKILL_3",
+      "cooldown_sec": 6.0,
+      "resource_cost": 0.0,
+      "resource_gain": 20.0,
+      "damage": 24.0,
+      "hit_force": 44.0,
+      "pull_props_range": 150.0,
+      "knockdown": true,
+      "icon_color": "#4CD964",
+      "glyph": "E",
+      "sfx": "metal_hit"
+    },
+    "skill_4": {
+      "slot": 4,
+      "id": "SKILL_4",
+      "name": "ULT: Thien Thach Huy Diet (P/8)",
+      "state": "SKILL_4",
+      "cooldown_sec": 15.0,
+      "resource_cost": 40.0,
+      "resource_gain": -100.0,
+      "damage": 48.0,
+      "hit_force": 60.0,
+      "dash_speed_24hz": 9.0,
+      "dash_distance": 90.0,
+      "knockdown": true,
+      "is_ultimate": true,
+      "aoe_radius": 150.0,
+      "icon_color": "#FF2D55",
+      "glyph": "R",
+      "sfx": "explosion_large"
+    }
+  },
+  "cancel_table": {
+    "MUGEN_COMBO_1": [
+      "MUGEN_COMBO_2",
+      "SHUNPO_SLASH",
+      "CHAKRA_WAVE",
+      "SKILL_1",
+      "SKILL_2",
+      "SKILL_3",
+      "SKILL_4"
+    ],
+    "MUGEN_COMBO_2": [
+      "MUGEN_COMBO_3",
+      "SHUNPO_SLASH",
+      "CHAKRA_WAVE",
+      "SKILL_1",
+      "SKILL_2",
+      "SKILL_3",
+      "SKILL_4"
+    ],
+    "MUGEN_COMBO_3": [
+      "MUGEN_COMBO_4",
+      "SHUNPO_SLASH",
+      "CHAKRA_WAVE",
+      "SKILL_1",
+      "SKILL_2",
+      "SKILL_3",
+      "SKILL_4"
+    ],
+    "MUGEN_COMBO_4": [
+      "SHUNPO_SLASH",
+      "CHAKRA_WAVE",
+      "SKILL_1",
+      "SKILL_2",
+      "SKILL_3",
+      "SKILL_4"
+    ]
+  },
+  "special_moves": {
+    "SHUNPO_SLASH": {
+      "id": "SHUNPO_SLASH",
+      "display_name": "Thiet Quyen Xung Kich (U/5)",
+      "state": "SKILL_1",
+      "command": "U / Numpad 5 | D, DF, F + attack",
+      "energy_cost": 0.0,
+      "cooldown_sec": 4.0,
+      "dash_speed_24hz": 7.2,
+      "dash_distance": 80.0,
+      "damage": 22.0,
+      "hit_force": 38.0,
+      "knockdown": true,
+      "sfx": "punch_heavy"
+    },
+    "CHAKRA_WAVE": {
+      "id": "CHAKRA_WAVE",
+      "display_name": "Dia Chan Tam Lien Cot (I/6)",
+      "state": "SKILL_2",
+      "command": "I / Numpad 6 | D, DB, B + attack",
+      "energy_cost": 0.0,
+      "cooldown_sec": 5.5,
+      "projectile_id": "CHAKRA_WAVE",
+      "projectile_speed_24hz": 22.0,
+      "projectile_damage": 25.0,
+      "projectile_pushback": 42.0,
+      "projectile_rect": [
+        340.0,
+        270.0,
+        28.0,
+        20.0
+      ],
+      "sfx": "explosion_small"
+    },
+    "SKILL_1": {
+      "slot": 1,
+      "id": "SKILL_1",
+      "name": "Thiet Quyen Xung Kich (U/5)",
+      "state": "SKILL_1",
+      "cooldown_sec": 4.0,
+      "resource_cost": 0.0,
+      "resource_gain": 20.0,
+      "damage": 22.0,
+      "hit_force": 38.0,
+      "dash_speed_24hz": 7.2,
+      "dash_distance": 80.0,
+      "knockdown": true,
+      "icon_color": "#63FF9E",
+      "glyph": "Q",
+      "sfx": "punch_heavy"
+    },
+    "SKILL_2": {
+      "slot": 2,
+      "id": "SKILL_2",
+      "name": "Dia Chan Tam Lien Cot (I/6)",
+      "state": "SKILL_2",
+      "cooldown_sec": 5.5,
+      "resource_cost": 0.0,
+      "resource_gain": 20.0,
+      "damage": 25.0,
+      "hit_force": 42.0,
+      "shockwave_range": 120.0,
+      "knockdown": true,
+      "icon_color": "#FF9500",
+      "glyph": "W",
+      "sfx": "explosion_small"
+    },
+    "SKILL_3": {
+      "slot": 3,
+      "id": "SKILL_3",
+      "name": "Tu Truong Hut & Dam Thung (O/7)",
+      "state": "SKILL_3",
+      "cooldown_sec": 6.0,
+      "resource_cost": 0.0,
+      "resource_gain": 20.0,
+      "damage": 24.0,
+      "hit_force": 44.0,
+      "pull_props_range": 150.0,
+      "knockdown": true,
+      "icon_color": "#4CD964",
+      "glyph": "E",
+      "sfx": "metal_hit"
+    },
+    "SKILL_4": {
+      "slot": 4,
+      "id": "SKILL_4",
+      "name": "ULT: Thien Thach Huy Diet (P/8)",
+      "state": "SKILL_4",
+      "cooldown_sec": 15.0,
+      "resource_cost": 40.0,
+      "resource_gain": -100.0,
+      "damage": 48.0,
+      "hit_force": 60.0,
+      "dash_speed_24hz": 9.0,
+      "dash_distance": 90.0,
+      "knockdown": true,
+      "is_ultimate": true,
+      "aoe_radius": 150.0,
+      "icon_color": "#FF2D55",
+      "glyph": "R",
+      "sfx": "explosion_large"
+    }
+  },
+  "mugen_states": {
+    "MUGEN_COMBO_1": {
+      "type": "mugen_attack",
+      "loop": false,
+      "next_state": "IDLE",
+      "damage": 7.0,
+      "hit_force": 14.0,
+      "range": 22.0,
+      "step_vel_x": 1.3,
+      "knockdown": false,
+      "sfx": "punch_light",
+      "frames": [
+        {
+          "frame_nr": 1,
+          "duration": 2,
+          "rect": [
+            20.0,
+            268.0,
+            28.0,
+            24.0
+          ],
+          "pivot": [
+            -9.0,
+            -23.0
+          ],
+          "clsn2": [
+            [
+              -6.0,
+              -18.0,
+              12.0,
+              18.0
+            ]
+          ],
+          "clsn1": []
+        },
+        {
+          "frame_nr": 2,
+          "duration": 3,
+          "rect": [
+            20.0,
+            268.0,
+            28.0,
+            24.0
+          ],
+          "pivot": [
+            -9.0,
+            -23.0
+          ],
+          "clsn2": [
+            [
+              -6.0,
+              -18.0,
+              12.0,
+              18.0
+            ]
+          ],
+          "clsn1": [
+            [
+              2.0,
+              -18.0,
+              18.0,
+              10.0
+            ]
+          ]
+        }
+      ]
+    },
+    "MUGEN_COMBO_2": {
+      "type": "mugen_attack",
+      "loop": false,
+      "next_state": "IDLE",
+      "damage": 8.0,
+      "hit_force": 16.0,
+      "range": 23.0,
+      "step_vel_x": 1.5,
+      "knockdown": false,
+      "sfx": "punch_light",
+      "frames": [
+        {
+          "frame_nr": 1,
+          "duration": 2,
+          "rect": [
+            52.0,
+            268.0,
+            28.0,
+            24.0
+          ],
+          "pivot": [
+            -9.0,
+            -23.0
+          ],
+          "clsn2": [
+            [
+              -6.0,
+              -18.0,
+              12.0,
+              18.0
+            ]
+          ],
+          "clsn1": []
+        },
+        {
+          "frame_nr": 2,
+          "duration": 3,
+          "rect": [
+            52.0,
+            268.0,
+            28.0,
+            24.0
+          ],
+          "pivot": [
+            -9.0,
+            -23.0
+          ],
+          "clsn2": [
+            [
+              -6.0,
+              -18.0,
+              12.0,
+              18.0
+            ]
+          ],
+          "clsn1": [
+            [
+              2.0,
+              -18.0,
+              20.0,
+              12.0
+            ]
+          ]
+        }
+      ]
+    },
+    "MUGEN_COMBO_3": {
+      "type": "mugen_attack",
+      "loop": false,
+      "next_state": "IDLE",
+      "damage": 10.0,
+      "hit_force": 20.0,
+      "range": 25.0,
+      "step_vel_x": 1.8,
+      "knockdown": false,
+      "sfx": "punch_heavy",
+      "frames": [
+        {
+          "frame_nr": 1,
+          "duration": 2,
+          "rect": [
+            84.0,
+            268.0,
+            28.0,
+            24.0
+          ],
+          "pivot": [
+            -9.0,
+            -23.0
+          ],
+          "clsn2": [
+            [
+              -6.0,
+              -18.0,
+              12.0,
+              18.0
+            ]
+          ],
+          "clsn1": []
+        },
+        {
+          "frame_nr": 2,
+          "duration": 3,
+          "rect": [
+            84.0,
+            268.0,
+            28.0,
+            24.0
+          ],
+          "pivot": [
+            -9.0,
+            -23.0
+          ],
+          "clsn2": [
+            [
+              -6.0,
+              -18.0,
+              12.0,
+              18.0
+            ]
+          ],
+          "clsn1": [
+            [
+              2.0,
+              -18.0,
+              22.0,
+              12.0
+            ]
+          ]
+        }
+      ]
+    },
+    "MUGEN_COMBO_4": {
+      "type": "mugen_attack",
+      "loop": false,
+      "next_state": "IDLE",
+      "damage": 14.0,
+      "hit_force": 30.0,
+      "range": 28.0,
+      "step_vel_x": 2.4,
+      "knockdown": true,
+      "sfx": "punch_heavy",
+      "frames": [
+        {
+          "frame_nr": 1,
+          "duration": 2,
+          "rect": [
+            116.0,
+            268.0,
+            28.0,
+            24.0
+          ],
+          "pivot": [
+            -9.0,
+            -23.0
+          ],
+          "clsn2": [
+            [
+              -6.0,
+              -18.0,
+              12.0,
+              18.0
+            ]
+          ],
+          "clsn1": []
+        },
+        {
+          "frame_nr": 2,
+          "duration": 3,
+          "rect": [
+            116.0,
+            268.0,
+            28.0,
+            24.0
+          ],
+          "pivot": [
+            -9.0,
+            -23.0
+          ],
+          "clsn2": [
+            [
+              -6.0,
+              -18.0,
+              12.0,
+              18.0
+            ]
+          ],
+          "clsn1": [
+            [
+              2.0,
+              -18.0,
+              24.0,
+              14.0
+            ]
+          ]
+        },
+        {
+          "frame_nr": 3,
+          "duration": 2,
+          "rect": [
+            116.0,
+            268.0,
+            28.0,
+            24.0
+          ],
+          "pivot": [
+            -9.0,
+            -23.0
+          ],
+          "clsn2": [
+            [
+              -6.0,
+              -18.0,
+              12.0,
+              18.0
+            ]
+          ],
+          "clsn1": [
+            [
+              2.0,
+              -18.0,
+              24.0,
+              14.0
+            ]
+          ]
+        }
+      ]
+    },
+    "SHUNPO_SLASH": {
+      "type": "mugen_special",
+      "loop": false,
+      "next_state": "IDLE",
+      "damage": 22.0,
+      "hit_force": 38.0,
+      "dash_speed_24hz": 7.2,
+      "knockdown": true,
+      "sfx": "punch_heavy",
+      "frames": [
+        {
+          "frame_nr": 1,
+          "duration": 2,
+          "rect": [
+            148.0,
+            268.0,
+            28.0,
+            24.0
+          ],
+          "pivot": [
+            -9.0,
+            -23.0
+          ],
+          "clsn2": [
+            [
+              -6.0,
+              -18.0,
+              12.0,
+              18.0
+            ]
+          ],
+          "clsn1": []
+        },
+        {
+          "frame_nr": 2,
+          "duration": 3,
+          "rect": [
+            180.0,
+            268.0,
+            28.0,
+            24.0
+          ],
+          "pivot": [
+            -9.0,
+            -23.0
+          ],
+          "clsn2": [
+            [
+              -6.0,
+              -18.0,
+              12.0,
+              18.0
+            ]
+          ],
+          "clsn1": [
+            [
+              2.0,
+              -18.0,
+              32.0,
+              18.0
+            ]
+          ]
+        },
+        {
+          "frame_nr": 3,
+          "duration": 2,
+          "rect": [
+            212.0,
+            268.0,
+            28.0,
+            24.0
+          ],
+          "pivot": [
+            -9.0,
+            -23.0
+          ],
+          "clsn2": [
+            [
+              -6.0,
+              -18.0,
+              12.0,
+              18.0
+            ]
+          ],
+          "clsn1": [
+            [
+              2.0,
+              -18.0,
+              32.0,
+              18.0
+            ]
+          ]
+        }
+      ]
+    },
+    "SKILL_1": {
+      "type": "mugen_special",
+      "loop": false,
+      "next_state": "IDLE",
+      "damage": 22.0,
+      "hit_force": 38.0,
+      "dash_speed_24hz": 7.2,
+      "knockdown": true,
+      "sfx": "punch_heavy",
+      "frames": [
+        {
+          "frame_nr": 1,
+          "duration": 2,
+          "rect": [
+            148.0,
+            268.0,
+            28.0,
+            24.0
+          ],
+          "pivot": [
+            -9.0,
+            -23.0
+          ],
+          "clsn2": [
+            [
+              -6.0,
+              -18.0,
+              12.0,
+              18.0
+            ]
+          ],
+          "clsn1": []
+        },
+        {
+          "frame_nr": 2,
+          "duration": 3,
+          "rect": [
+            180.0,
+            268.0,
+            28.0,
+            24.0
+          ],
+          "pivot": [
+            -9.0,
+            -23.0
+          ],
+          "clsn2": [
+            [
+              -6.0,
+              -18.0,
+              12.0,
+              18.0
+            ]
+          ],
+          "clsn1": [
+            [
+              2.0,
+              -18.0,
+              32.0,
+              18.0
+            ]
+          ]
+        },
+        {
+          "frame_nr": 3,
+          "duration": 2,
+          "rect": [
+            212.0,
+            268.0,
+            28.0,
+            24.0
+          ],
+          "pivot": [
+            -9.0,
+            -23.0
+          ],
+          "clsn2": [
+            [
+              -6.0,
+              -18.0,
+              12.0,
+              18.0
+            ]
+          ],
+          "clsn1": [
+            [
+              2.0,
+              -18.0,
+              32.0,
+              18.0
+            ]
+          ]
+        }
+      ]
+    },
+    "CHAKRA_WAVE": {
+      "type": "mugen_special",
+      "loop": false,
+      "next_state": "IDLE",
+      "damage": 25.0,
+      "hit_force": 42.0,
+      "projectile_id": "CHAKRA_WAVE",
+      "projectile_speed_24hz": 22.0,
+      "projectile_damage": 25.0,
+      "projectile_pushback": 42.0,
+      "spawn_frame": 2,
+      "sfx": "explosion_small",
+      "frames": [
+        {
+          "frame_nr": 1,
+          "duration": 2,
+          "rect": [
+            244.0,
+            268.0,
+            28.0,
+            24.0
+          ],
+          "pivot": [
+            -9.0,
+            -23.0
+          ],
+          "clsn2": [
+            [
+              -6.0,
+              -18.0,
+              12.0,
+              18.0
+            ]
+          ],
+          "clsn1": []
+        },
+        {
+          "frame_nr": 2,
+          "duration": 3,
+          "rect": [
+            276.0,
+            268.0,
+            28.0,
+            24.0
+          ],
+          "pivot": [
+            -9.0,
+            -23.0
+          ],
+          "clsn2": [
+            [
+              -6.0,
+              -18.0,
+              12.0,
+              18.0
+            ]
+          ],
+          "clsn1": [
+            [
+              2.0,
+              -18.0,
+              28.0,
+              16.0
+            ]
+          ]
+        },
+        {
+          "frame_nr": 3,
+          "duration": 2,
+          "rect": [
+            308.0,
+            268.0,
+            28.0,
+            24.0
+          ],
+          "pivot": [
+            -9.0,
+            -23.0
+          ],
+          "clsn2": [
+            [
+              -6.0,
+              -18.0,
+              12.0,
+              18.0
+            ]
+          ],
+          "clsn1": [
+            [
+              2.0,
+              -18.0,
+              28.0,
+              16.0
+            ]
+          ]
+        }
+      ]
+    },
+    "SKILL_2": {
+      "type": "mugen_special",
+      "loop": false,
+      "next_state": "IDLE",
+      "damage": 25.0,
+      "hit_force": 42.0,
+      "projectile_id": "",
+      "projectile_speed_24hz": 22.0,
+      "projectile_damage": 25.0,
+      "projectile_pushback": 42.0,
+      "spawn_frame": 2,
+      "knockdown": true,
+      "sfx": "explosion_small",
+      "frames": [
+        {
+          "frame_nr": 1,
+          "duration": 2,
+          "rect": [
+            244.0,
+            268.0,
+            28.0,
+            24.0
+          ],
+          "pivot": [
+            -9.0,
+            -23.0
+          ],
+          "clsn2": [
+            [
+              -6.0,
+              -18.0,
+              12.0,
+              18.0
+            ]
+          ],
+          "clsn1": []
+        },
+        {
+          "frame_nr": 2,
+          "duration": 3,
+          "rect": [
+            276.0,
+            268.0,
+            28.0,
+            24.0
+          ],
+          "pivot": [
+            -9.0,
+            -23.0
+          ],
+          "clsn2": [
+            [
+              -6.0,
+              -18.0,
+              12.0,
+              18.0
+            ]
+          ],
+          "clsn1": [
+            [
+              2.0,
+              -18.0,
+              34.0,
+              18.0
+            ]
+          ]
+        },
+        {
+          "frame_nr": 3,
+          "duration": 2,
+          "rect": [
+            308.0,
+            268.0,
+            28.0,
+            24.0
+          ],
+          "pivot": [
+            -9.0,
+            -23.0
+          ],
+          "clsn2": [
+            [
+              -6.0,
+              -18.0,
+              12.0,
+              18.0
+            ]
+          ],
+          "clsn1": [
+            [
+              2.0,
+              -18.0,
+              34.0,
+              18.0
+            ]
+          ]
+        }
+      ]
+    },
+    "SKILL_3": {
+      "type": "mugen_special",
+      "loop": false,
+      "next_state": "IDLE",
+      "damage": 24.0,
+      "hit_force": 44.0,
+      "dash_speed_24hz": 7.5,
+      "knockdown": true,
+      "sfx": "metal_hit",
+      "frames": [
+        {
+          "frame_nr": 1,
+          "duration": 2,
+          "rect": [
+            20.0,
+            302.0,
+            28.0,
+            24.0
+          ],
+          "pivot": [
+            -9.0,
+            -23.0
+          ],
+          "clsn2": [
+            [
+              -6.0,
+              -18.0,
+              12.0,
+              18.0
+            ]
+          ],
+          "clsn1": []
+        },
+        {
+          "frame_nr": 2,
+          "duration": 3,
+          "rect": [
+            52.0,
+            302.0,
+            28.0,
+            24.0
+          ],
+          "pivot": [
+            -9.0,
+            -23.0
+          ],
+          "clsn2": [
+            [
+              -6.0,
+              -18.0,
+              12.0,
+              18.0
+            ]
+          ],
+          "clsn1": [
+            [
+              2.0,
+              -18.0,
+              38.0,
+              20.0
+            ]
+          ]
+        },
+        {
+          "frame_nr": 3,
+          "duration": 2,
+          "rect": [
+            84.0,
+            302.0,
+            28.0,
+            24.0
+          ],
+          "pivot": [
+            -9.0,
+            -23.0
+          ],
+          "clsn2": [
+            [
+              -6.0,
+              -18.0,
+              12.0,
+              18.0
+            ]
+          ],
+          "clsn1": [
+            [
+              2.0,
+              -18.0,
+              38.0,
+              20.0
+            ]
+          ]
+        }
+      ]
+    },
+    "SKILL_4": {
+      "type": "mugen_special",
+      "loop": false,
+      "next_state": "IDLE",
+      "damage": 48.0,
+      "hit_force": 60.0,
+      "dash_speed_24hz": 9.0,
+      "knockdown": true,
+      "is_ultimate": true,
+      "sfx": "explosion_large",
+      "frames": [
+        {
+          "frame_nr": 1,
+          "duration": 2,
+          "rect": [
+            116.0,
+            302.0,
+            28.0,
+            24.0
+          ],
+          "pivot": [
+            -9.0,
+            -23.0
+          ],
+          "clsn2": [
+            [
+              -6.0,
+              -18.0,
+              12.0,
+              18.0
+            ]
+          ],
+          "clsn1": []
+        },
+        {
+          "frame_nr": 2,
+          "duration": 3,
+          "rect": [
+            148.0,
+            302.0,
+            28.0,
+            24.0
+          ],
+          "pivot": [
+            -9.0,
+            -23.0
+          ],
+          "clsn2": [
+            [
+              -6.0,
+              -18.0,
+              12.0,
+              18.0
+            ]
+          ],
+          "clsn1": [
+            [
+              2.0,
+              -18.0,
+              56.0,
+              24.0
+            ]
+          ]
+        },
+        {
+          "frame_nr": 3,
+          "duration": 2,
+          "rect": [
+            180.0,
+            302.0,
+            28.0,
+            24.0
+          ],
+          "pivot": [
+            -9.0,
+            -23.0
+          ],
+          "clsn2": [
+            [
+              -6.0,
+              -18.0,
+              12.0,
+              18.0
+            ]
+          ],
+          "clsn1": [
+            [
+              2.0,
+              -18.0,
+              56.0,
+              24.0
+            ]
+          ]
+        },
+        {
+          "frame_nr": 4,
+          "duration": 2,
+          "rect": [
+            212.0,
+            302.0,
+            28.0,
+            24.0
+          ],
+          "pivot": [
+            -9.0,
+            -23.0
+          ],
+          "clsn2": [
+            [
+              -6.0,
+              -18.0,
+              12.0,
+              18.0
+            ]
+          ],
+          "clsn1": [
+            [
+              2.0,
+              -18.0,
+              56.0,
+              24.0
+            ]
+          ]
+        }
+      ]
+    }
+  }
+}

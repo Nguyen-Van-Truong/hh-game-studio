@@ -36539,18 +36539,6 @@
           ]
         },
         {
-          "var_name": "hatch_deck_left",
-          "material": "Metal",
-          "x": -68.0,
-          "y": 78.0,
-          "w": 20.0,
-          "h": 4.0,
-          "angle": 0.0,
-          "tags": [
-            "CLOUD"
-          ]
-        },
-        {
           "var_name": "deck_right_lip",
           "material": "Ground",
           "x": 53.0,
@@ -36572,18 +36560,6 @@
           "angle": 0.0,
           "tags": [
             "NONE"
-          ]
-        },
-        {
-          "var_name": "hatch_deck_right",
-          "material": "Metal",
-          "x": 68.0,
-          "y": 78.0,
-          "w": 20.0,
-          "h": 4.0,
-          "angle": 0.0,
-          "tags": [
-            "CLOUD"
           ]
         },
         {
@@ -36635,18 +36611,6 @@
           ]
         },
         {
-          "var_name": "hatch_tower_left",
-          "material": "Metal",
-          "x": -298.0,
-          "y": -54.0,
-          "w": 20.0,
-          "h": 4.0,
-          "angle": 0.0,
-          "tags": [
-            "CLOUD"
-          ]
-        },
-        {
           "var_name": "tower_right_roof_l",
           "material": "Metal",
           "x": 260.0,
@@ -36668,18 +36632,6 @@
           "angle": 0.0,
           "tags": [
             "NONE"
-          ]
-        },
-        {
-          "var_name": "hatch_tower_right",
-          "material": "Metal",
-          "x": 298.0,
-          "y": -54.0,
-          "w": 20.0,
-          "h": 4.0,
-          "angle": 0.0,
-          "tags": [
-            "CLOUD"
           ]
         },
         {
@@ -36769,9 +36721,21 @@
         {
           "var_name": "crane_walk_left",
           "material": "Metal",
-          "x": -229.0,
+          "x": -332.0,
           "y": -106.0,
-          "w": 254.0,
+          "w": 48.0,
+          "h": 4.0,
+          "angle": 0.0,
+          "tags": [
+            "CLOUD"
+          ]
+        },
+        {
+          "var_name": "crane_walk_left_inner",
+          "material": "Metal",
+          "x": -195.0,
+          "y": -106.0,
+          "w": 186.0,
           "h": 4.0,
           "angle": 0.0,
           "tags": [
@@ -36791,11 +36755,23 @@
           ]
         },
         {
+          "var_name": "crane_walk_right_inner",
+          "material": "Metal",
+          "x": 196.0,
+          "y": -106.0,
+          "w": 184.0,
+          "h": 4.0,
+          "angle": 0.0,
+          "tags": [
+            "CLOUD"
+          ]
+        },
+        {
           "var_name": "crane_walk_right",
           "material": "Metal",
-          "x": 230.0,
+          "x": 332.0,
           "y": -106.0,
-          "w": 252.0,
+          "w": 48.0,
           "h": 4.0,
           "angle": 0.0,
           "tags": [
