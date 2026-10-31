@@ -1,0 +1,574 @@
+{
+  "schema_version": 1,
+  "review_status": "concept_review_only",
+  "runtime_integrated": false,
+  "reference_head": "9d4e26488ea4ab391013f5296479434a99566c6e",
+  "characters": [
+    "johnny",
+    "boris",
+    "agent",
+    "hideki",
+    "blaire"
+  ],
+  "groups": [
+    {
+      "id": "01-movement",
+      "title": "Di chuyển và né tránh",
+      "slots": [
+        {
+          "index": 1,
+          "label": "IDLE",
+          "intent": "relaxed idle threequarter view, open relaxed fingers, weight on one leg"
+        },
+        {
+          "index": 2,
+          "label": "WALK CONTACT",
+          "intent": "walking right, front heel on floor, rear toe on floor, clear split stride"
+        },
+        {
+          "index": 3,
+          "label": "WALK PASSING",
+          "intent": "walking right, planted support leg nearly straight, other bent foot passes next to support ankle beneath hips; NOT a split stride"
+        },
+        {
+          "index": 4,
+          "label": "RUN LEFT",
+          "intent": "running contact pose left leg forward planted, right knee folds behind, arms counterbalance"
+        },
+        {
+          "index": 5,
+          "label": "RUN RIGHT",
+          "intent": "running opposite contact pose right leg forward planted, left knee folds behind; visibly exchange arms and legs"
+        },
+        {
+          "index": 6,
+          "label": "SPRINT",
+          "intent": "fast forward lean and compact driving arms, human effort not supernatural flight"
+        },
+        {
+          "index": 7,
+          "label": "CROUCH",
+          "intent": "low compact crouch with folded knees and feet supported"
+        },
+        {
+          "index": 8,
+          "label": "COVER",
+          "intent": "crouched close behind a plain waist-high crate, cautious look over edge"
+        },
+        {
+          "index": 9,
+          "label": "JUMP UP",
+          "intent": "jump ascent with feet pushing upward, torso extended, arms counterbalance"
+        },
+        {
+          "index": 10,
+          "label": "JUMP APEX",
+          "intent": "jump apex, short legs tucked, relaxed arms, believable aerial balance"
+        },
+        {
+          "index": 11,
+          "label": "DESCEND",
+          "intent": "falling from jump, legs opening ready for feet-first landing"
+        },
+        {
+          "index": 12,
+          "label": "FREE FALL",
+          "intent": "uncontrolled feet-down fall with spread arms, alarmed not heroic"
+        },
+        {
+          "index": 13,
+          "label": "ROLL TUCK",
+          "intent": "entering forward defensive roll, chin tucked, knees drawn to chest"
+        },
+        {
+          "index": 14,
+          "label": "ROLL TURN",
+          "intent": "middle of floor roll, weight on curved back, hips up, head protected"
+        },
+        {
+          "index": 15,
+          "label": "ROLL EXIT",
+          "intent": "rising from roll onto one knee and supporting hand, beginning to regain balance"
+        },
+        {
+          "index": 16,
+          "label": "DIVE",
+          "intent": "horizontal low forward dive, both arms reach forward, short legs trail"
+        }
+      ]
+    },
+    {
+      "id": "02-traversal",
+      "title": "Leo trèo và tương tác",
+      "slots": [
+        {
+          "index": 1,
+          "label": "LADDER HOLD",
+          "intent": "back threequarter view holding simple ladder, both feet on rungs"
+        },
+        {
+          "index": 2,
+          "label": "CLIMB LEFT",
+          "intent": "back view ladder climb, LEFT hand above head and LEFT knee high, right hand lower/right leg extended"
+        },
+        {
+          "index": 3,
+          "label": "CLIMB RIGHT",
+          "intent": "back view ladder climb, RIGHT hand above head and RIGHT knee high, left hand lower/left leg extended; exact opposite leads of previous cell"
+        },
+        {
+          "index": 4,
+          "label": "LADDER SLIDE",
+          "intent": "sliding down ladder with hands on rails, legs near rails and bent knees"
+        },
+        {
+          "index": 5,
+          "label": "LADDER EXIT",
+          "intent": "stepping from ladder onto upper platform edge, one knee over lip"
+        },
+        {
+          "index": 6,
+          "label": "LEDGE CATCH",
+          "intent": "both hands catch platform edge, short arms extended, legs swing below"
+        },
+        {
+          "index": 7,
+          "label": "LEDGE HANG",
+          "intent": "hanging from edge, elbows bent slightly, tense shoulders and searching feet"
+        },
+        {
+          "index": 8,
+          "label": "LEDGE RELEASE",
+          "intent": "releasing ledge and dropping feet first, hands let go"
+        },
+        {
+          "index": 9,
+          "label": "ROCKET RIGHT",
+          "intent": "frightened chibi accidentally clinging to a small flying game rocket heading RIGHT, short exhaust; game slapstick mechanic, NOT person flying by power"
+        },
+        {
+          "index": 10,
+          "label": "ROCKET LEFT",
+          "intent": "same terrified clinging pose flying LEFT, preserve outfit asymmetry; no triumphant surfing"
+        },
+        {
+          "index": 11,
+          "label": "DIVE TACKLE",
+          "intent": "character horizontally tackles an anonymous grey chibi training dummy around torso, both full bodies visible, neither has injury"
+        },
+        {
+          "index": 12,
+          "label": "GRABBED",
+          "intent": "character is offbalance victim of a dive tackle by grey chibi training dummy, both bodies visible; not standing wrestler grab"
+        },
+        {
+          "index": 13,
+          "label": "PUSH",
+          "intent": "both palms push heavy simple barrel, feet firmly brace, body weight forward"
+        },
+        {
+          "index": 14,
+          "label": "PROP KICK",
+          "intent": "short front kick pushing a small plain box, support foot planted"
+        },
+        {
+          "index": 15,
+          "label": "PICKUP",
+          "intent": "crouching to retrieve small dropped pistol from floor, eyes down, grounded feet"
+        },
+        {
+          "index": 16,
+          "label": "VICTORY",
+          "intent": "relieved exhausted smile, modest one-arm celebration, loose shoulders, no powered pose"
+        }
+      ]
+    },
+    {
+      "id": "03-firearms",
+      "title": "Súng và đồ ném",
+      "slots": [
+        {
+          "index": 1,
+          "label": "PISTOL",
+          "intent": "standing ordinary compact black pistol aim right with aligned wrist"
+        },
+        {
+          "index": 2,
+          "label": "REVOLVER",
+          "intent": "standing grey revolver with visible cylinder, braced human stance"
+        },
+        {
+          "index": 3,
+          "label": "SMG",
+          "intent": "standing compact dark submachinegun, two short arms grip appropriately"
+        },
+        {
+          "index": 4,
+          "label": "RIFLE",
+          "intent": "standing conventional rifle stock against shoulder, support hand on foreend"
+        },
+        {
+          "index": 5,
+          "label": "SHOTGUN",
+          "intent": "standing conventional pump shotgun aim, stock shouldered, short arms work naturally"
+        },
+        {
+          "index": 6,
+          "label": "SNIPER",
+          "intent": "crouched scoped rifle aim right, elbows comfortable and feet grounded"
+        },
+        {
+          "index": 7,
+          "label": "LAUNCHER",
+          "intent": "plain green shoulder-fired tubular game launcher held with visible effort, NOT futuristic"
+        },
+        {
+          "index": 8,
+          "label": "FLAMETHROWER",
+          "intent": "utilitarian small backpack and hose-fed nozzle held with two hands; NO flame emitted, no magic"
+        },
+        {
+          "index": 9,
+          "label": "GRENADE READY",
+          "intent": "standing normal small olive grenade held ready beside shoulder, no release yet"
+        },
+        {
+          "index": 10,
+          "label": "BOTTLE READY",
+          "intent": "standing brown bottle with simple cloth wick held ready beside shoulder, not lit"
+        },
+        {
+          "index": 11,
+          "label": "GRENADE THROW",
+          "intent": "ordinary overarm grenade release, body turns, hand opens, item just leaving hand"
+        },
+        {
+          "index": 12,
+          "label": "BOTTLE THROW",
+          "intent": "ordinary bottle release, lead foot planted, eyes follow bottle, no flaming body"
+        },
+        {
+          "index": 13,
+          "label": "AIM UP",
+          "intent": "compact pistol aimed45degrees up, both feet planted, eyes follow direction"
+        },
+        {
+          "index": 14,
+          "label": "AIM DOWN",
+          "intent": "compact pistol aimed45degrees down, wrist straight, both feet planted"
+        },
+        {
+          "index": 15,
+          "label": "KNEEL AIM",
+          "intent": "one knee down aiming conventional rifle level, head clear of stock"
+        },
+        {
+          "index": 16,
+          "label": "COVER AIM",
+          "intent": "crouched aiming pistol around edge of simple crate, small exposed silhouette"
+        }
+      ]
+    },
+    {
+      "id": "04-melee",
+      "title": "Cận chiến và trọng lượng đòn",
+      "slots": [
+        {
+          "index": 1,
+          "label": "JAB PREP",
+          "intent": "ordinary compact boxing guard, left fist draws back slightly, weight braced"
+        },
+        {
+          "index": 2,
+          "label": "JAB CONTACT",
+          "intent": "straight lead jab to right, shoulder follows, wrist aligned, back hand protects"
+        },
+        {
+          "index": 3,
+          "label": "JAB RECOVERY",
+          "intent": "jab retracts to guard, elbow folds, weight settling"
+        },
+        {
+          "index": 4,
+          "label": "CROSS",
+          "intent": "rear-hand straight punch, visible hip/shoulder rotation, planted feet"
+        },
+        {
+          "index": 5,
+          "label": "HOOK",
+          "intent": "short third-punch hook, rounded elbow, body turns, not magical uppercut"
+        },
+        {
+          "index": 6,
+          "label": "FRONT KICK",
+          "intent": "short front kick at waist height, support knee soft, arms counterbalance"
+        },
+        {
+          "index": 7,
+          "label": "JUMP KICK",
+          "intent": "compact airborne forward kick, other short leg folded, natural alarm/exertion"
+        },
+        {
+          "index": 8,
+          "label": "MACHETE READY",
+          "intent": "ordinary short machete raised diagonally in one hand, no opponent and no blood"
+        },
+        {
+          "index": 9,
+          "label": "MACHETE SWING",
+          "intent": "short machete followthrough across body, ordinary restrained arc, no energy trail"
+        },
+        {
+          "index": 10,
+          "label": "AXE READY",
+          "intent": "small twohanded wood axe poised overhead with hands gripping handle"
+        },
+        {
+          "index": 11,
+          "label": "AXE SWING",
+          "intent": "wood axe swings downward, body follows weight, no impact victim"
+        },
+        {
+          "index": 12,
+          "label": "SWORD READY",
+          "intent": "plain modest unadorned steel sword held guarded at shoulder, no fantasy features"
+        },
+        {
+          "index": 13,
+          "label": "SWORD SWING",
+          "intent": "plain steel sword crossbody swing with clear waist twist, no glow"
+        },
+        {
+          "index": 14,
+          "label": "BATON",
+          "intent": "short plain dark baton swing, knuckles and elbow plausible"
+        },
+        {
+          "index": 15,
+          "label": "BASEBALL BAT",
+          "intent": "wooden baseball bat held twohanded mid-swing, weight transfer through hips"
+        },
+        {
+          "index": 16,
+          "label": "CHAINSAW",
+          "intent": "braced short legs and both hands on conventional chainsaw handles, saw held clear of body, no victim or blood"
+        }
+      ]
+    },
+    {
+      "id": "05-damage-fire",
+      "title": "Đau, ngã và bị cháy",
+      "slots": [
+        {
+          "index": 1,
+          "label": "HIT RECOIL",
+          "intent": "face winces and torso twists from a hit, hand opens involuntarily, no blood"
+        },
+        {
+          "index": 2,
+          "label": "STAGGER",
+          "intent": "stumbling one step, torso offcenter, hands seek balance, startled expression"
+        },
+        {
+          "index": 3,
+          "label": "FALL FORWARD",
+          "intent": "falling forward with hand extending to break fall, knees buckle"
+        },
+        {
+          "index": 4,
+          "label": "FALL BACK",
+          "intent": "falling backwards, torso curves and arms fling out, feet leave floor"
+        },
+        {
+          "index": 5,
+          "label": "HARD LANDING",
+          "intent": "heavy landing on bent knees, palm on ground, head lowered with pain"
+        },
+        {
+          "index": 6,
+          "label": "KNOCKDOWN",
+          "intent": "on side on floor, clothed, dazed, visibly breathing, no gore"
+        },
+        {
+          "index": 7,
+          "label": "GET UP",
+          "intent": "painful rise from floor, one hand/one knee supporting, weight not levitating"
+        },
+        {
+          "index": 8,
+          "label": "DEATH KNEEL",
+          "intent": "exhausted defeated collapse to knees, head and shoulders drop; no wound detail"
+        },
+        {
+          "index": 9,
+          "label": "DEAD",
+          "intent": "fully clothed motionless body lying on side, relaxed limp limbs, eyes closed, no blood"
+        },
+        {
+          "index": 10,
+          "label": "CHARRED",
+          "intent": "same clothed motionless body after fire: recognizable outfit now darkened soot and scorched hems, few smoke wisps; no exposed burns, no gore, NO flame aura"
+        },
+        {
+          "index": 11,
+          "label": "IGNITION",
+          "intent": "small accidental flame catches jacket/shirt hem, startled turn to look at it, open splayed hands"
+        },
+        {
+          "index": 12,
+          "label": "BURN FRONT",
+          "intent": "frightened recoil with shoulders hunched, face in pain, open hands trying to pat clothing flame; localized irregular orange flames on front hem/one sleeve and rising smoke, not aura"
+        },
+        {
+          "index": 13,
+          "label": "BURN BACK",
+          "intent": "twisting panicked body reacting to cloth fire at back/side, reaching toward it, never heroic standing with fists; irregular small flame and smoke"
+        },
+        {
+          "index": 14,
+          "label": "BURN RUN",
+          "intent": "panicked off-balance running to escape, hunched and grimacing, erratic open hands, flames trailing only from clothes, not a powered sprint"
+        },
+        {
+          "index": 15,
+          "label": "EXTINGUISH",
+          "intent": "rolling on floor to extinguish clothing fire, arms protect face, flames reduced and localized, no levitation"
+        },
+        {
+          "index": 16,
+          "label": "AFTER FIRE",
+          "intent": "coughing exhausted on one knee after flames are OUT, soot on face and clothes, head bowed, smoke wisp, distress not victory"
+        }
+      ]
+    },
+    {
+      "id": "06-variants",
+      "title": "Góc nhìn, vật cầm và biểu cảm",
+      "slots": [
+        {
+          "index": 1,
+          "label": "FRONT",
+          "intent": "full body true straight front neutral view, both hands relaxed, same proportions"
+        },
+        {
+          "index": 2,
+          "label": "SIDE",
+          "intent": "full body exact right profile idle, no change in hair or costume"
+        },
+        {
+          "index": 3,
+          "label": "REAR",
+          "intent": "full body exact back view, correct SAME hairstyle/outfit seen from behind"
+        },
+        {
+          "index": 4,
+          "label": "GUARD",
+          "intent": "full body compact unarmed guard, fists near chest, grounded feet"
+        },
+        {
+          "index": 5,
+          "label": "C4 HOLD",
+          "intent": "full body holding small inert unbranded rectangular game explosive pack with one plain strap; no schematic or wiring detail"
+        },
+        {
+          "index": 6,
+          "label": "MINE HOLD",
+          "intent": "full body holding small plain round inert game mine at waist, object only, no deployment instruction"
+        },
+        {
+          "index": 7,
+          "label": "GUN DROP",
+          "intent": "full body discarding empty conventional pistol from open hand, object below hand"
+        },
+        {
+          "index": 8,
+          "label": "SHOTGUN PUMP",
+          "intent": "full body pump-shotgun cycling pose, one hand on grip and other on sliding foreend"
+        },
+        {
+          "index": 9,
+          "label": "NEUTRAL FACE",
+          "intent": "large head-and-shoulders portrait, relaxed neutral adult chibi expression"
+        },
+        {
+          "index": 10,
+          "label": "FOCUS FACE",
+          "intent": "large head-and-shoulders portrait, concentrated eyes/brows and set jaw"
+        },
+        {
+          "index": 11,
+          "label": "ATTACK FACE",
+          "intent": "large head-and-shoulders portrait, ordinary effort/shout, no luminous eyes"
+        },
+        {
+          "index": 12,
+          "label": "HURT FACE",
+          "intent": "large head-and-shoulders portrait, wincing pain eyes narrowed, jaw clenched"
+        },
+        {
+          "index": 13,
+          "label": "PANIC FACE",
+          "intent": "large head-and-shoulders portrait, alarmed eyes and parted mouth, brows raised, no comedy tongue"
+        },
+        {
+          "index": 14,
+          "label": "TIRED FACE",
+          "intent": "large head-and-shoulders portrait, low health exhaustion/sweat and heavy eyelids"
+        },
+        {
+          "index": 15,
+          "label": "KO FACE",
+          "intent": "large head-and-shoulders portrait, eyes closed and relaxed defeated mouth, no gore"
+        },
+        {
+          "index": 16,
+          "label": "BLINK",
+          "intent": "large head-and-shoulders portrait, normal blink expression, same face"
+        }
+      ]
+    }
+  ],
+  "counts": {
+    "characters": 5,
+    "boards_per_character": 6,
+    "boards": 30,
+    "slots_per_board": 16,
+    "planned_slots": 480,
+    "portrait_slots": 40,
+    "fullbody_or_action_slots": 440,
+    "unique_animations": null
+  },
+  "semantics": {
+    "BURN": "Material/effect plus underlying ordinary pose; not independent source action state.",
+    "CARRY": "Dive-tackled opponent, not carrying a crate.",
+    "ROCKET_RIDE": "Existing base mechanic; not powered skill.",
+    "RUN_LEFT_RIGHT": "Intended leg-phase labels in initial prompt; generated samples are not validated alternating contacts. Blaire instead differs in facing.",
+    "GRABBED": "Paired tackle concept; actual live victim uses FALL_B. Not proof of standing grab combo.",
+    "START_AIM": "Related phases and aliases; concept samples do not cover every transition."
+  },
+  "excluded": [
+    "SKILL_*",
+    "MUGEN_*",
+    "SHUNPO_SLASH",
+    "CHAKRA_WAVE",
+    "powered transformations"
+  ],
+  "not_completed_for_runtime": [
+    "isolated transparent frames",
+    "exact 2.5-head calibration",
+    "walk/run opposite-step loops",
+    "all attack anticipation/contact/recovery phases",
+    "full left/right and aim-pitch variants",
+    "layers/rig/pivots/sockets/atlas timing metadata",
+    "muzzle-clearance and cover alignment",
+    "in-game visual and performance tests"
+  ],
+  "known_concept_limits": [
+    "Run A/B or left/right labels do not certify gait cycles.",
+    "Some WALK PASSING samples still resemble contact.",
+    "Some FRONT views retain slight three-quarter angle.",
+    "Hideki cover aim has ambiguous muzzle clearance.",
+    "Blaire hook resembles straight punch; axe-ready grip needs animator cleanup.",
+    "Agent blink visibility limited by sunglasses."
+  ]
+}

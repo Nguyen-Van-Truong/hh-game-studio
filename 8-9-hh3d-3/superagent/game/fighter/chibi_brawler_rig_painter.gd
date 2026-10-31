@@ -55,6 +55,15 @@ static func get_hud_portrait_key(expr_id: String) -> String:
 			return "cheeky_smirk"
 
 
+const EXPR_DICT_KO_STARS: Dictionary = {"id": "KO_STARS", "hold": 0.35}
+const EXPR_DICT_VICTORY_LAUGH: Dictionary = {"id": "ECSTATIC_VICTORY_LAUGH", "hold": 0.50}
+const EXPR_DICT_DIZZY_HURT: Dictionary = {"id": "DIZZY_SPIRAL_HURT", "hold": 0.14}
+const EXPR_DICT_SHOUT: Dictionary = {"id": "WIDE_MOUTH_SHOUT", "hold": 0.12}
+const EXPR_DICT_SWEAT: Dictionary = {"id": "LOW_HP_SWEAT", "hold": 0.0}
+const EXPR_DICT_GLARE: Dictionary = {"id": "BLAZING_GLARE", "hold": 0.10}
+const EXPR_DICT_SMIRK: Dictionary = {"id": "CHEEKY_SMIRK", "hold": 0.0}
+
+
 static func evaluate_target_expression(
 	state_name: String,
 	hp: float,
@@ -63,13 +72,13 @@ static func evaluate_target_expression(
 	is_victory: bool = false,
 	was_low_hp_sweat: bool = false
 ) -> Dictionary:
-	var st: String = state_name.to_upper()
+	var st: String = state_name if state_name == state_name.to_upper() else state_name.to_upper()
 	# Priority 6: Dead / KO (CB-EC-10: KO always beats victory/hurt; temporary KNOCKDOWN with hp > 0 is HURT)
 	if hp <= 0.0 or st in ["DEAD", "DEATH_KNEEL", "LAY"]:
-		return {"id": "KO_STARS", "hold": 0.35}
+		return EXPR_DICT_KO_STARS
 	# Priority 5: Round winner still alive (CB-EC-10)
 	if (is_victory or st == "WIN") and hp > 0.0:
-		return {"id": "ECSTATIC_VICTORY_LAUGH", "hold": 0.50}
+		return EXPR_DICT_VICTORY_LAUGH
 	# Priority 4: Hurt / Stun / Knockdown / Rocket Ride (CB-EC-09)
 	if st in [
 		"HURT",
@@ -83,7 +92,7 @@ static func evaluate_target_expression(
 		"ROCKET_RIDE_R",
 		"ROCKET_RIDE_L",
 	]:
-		return {"id": "DIZZY_SPIRAL_HURT", "hold": 0.14}
+		return EXPR_DICT_DIZZY_HURT
 	# Priority 3: Active Melee Attack or Skill Cast
 	if (
 		st.begins_with("PUNCH")
@@ -102,13 +111,13 @@ static func evaluate_target_expression(
 		or st.begins_with("MUGEN_")
 		or st in ["THROW", "GRAB_PUNCH", "SHUNPO_SLASH", "CHAKRA_WAVE"]
 	):
-		return {"id": "WIDE_MOUTH_SHOUT", "hold": 0.12}
+		return EXPR_DICT_SHOUT
 	# Priority 2: Low HP Sweat with Hysteresis (CB-EC-11: enters <= 25%, exits only > 30%)
 	var safe_max: float = maxf(1.0, max_hp)
 	var hp_ratio: float = hp / safe_max
 	var low_hp_threshold: float = 0.30 if was_low_hp_sweat else 0.25
 	if hp > 0.0 and hp_ratio <= low_hp_threshold:
-		return {"id": "LOW_HP_SWEAT", "hold": 0.0}
+		return EXPR_DICT_SWEAT
 	# Priority 1: Blazing Glare on Sprint / Aim / Roll / Dive / Climb / Carry
 	if (
 		st in ["SPRINT", "ROLL", "DIVE", "CLIMB", "SLIDE", "LEDGE_GRAB"]
@@ -116,9 +125,9 @@ static func evaluate_target_expression(
 		or st.begins_with("START_")
 		or is_carrying
 	):
-		return {"id": "BLAZING_GLARE", "hold": 0.10}
+		return EXPR_DICT_GLARE
 	# Priority 0: Cheeky Confident Smirk (default IDLE / RUN)
-	return {"id": "CHEEKY_SMIRK", "hold": 0.0}
+	return EXPR_DICT_SMIRK
 
 
 static func sanitize_aim_pitch_deg(raw_pitch_deg: float) -> float:

@@ -6,8 +6,10 @@ extends Node2D
 ## DynamicCamera, and MatchHudController across VS, Stage (12 Stages), and Survival modes.
 
 signal request_return_to_menu()
+signal request_open_setup(target_panel: String)
 
 const FLASH_FPS: float = 28.0
+const PAUSE_MENU_COUNT: int = 6
 const WEAPON_SPAWN_ORDER: Array[String] = [
 	"PISTOL",
 	"RIFLE",
@@ -62,6 +64,13 @@ var game_speed: float = 1.0
 var slowmo_timer: float = 0.0
 var is_paused: bool = false
 var _cancel_was_down: bool = false
+var pause_selected_index: int = 0
+var pause_audio_mode: int = 0 # 0 = ON 100%, 1 = LOW 50% (-6 dB), 2 = MUTE
+var pause_camera_wide: bool = false
+var _pause_key_was_down: Dictionary = {}
+var _round_over_confirm_was_down: bool = false
+var _resolved_p1_char: String = "johnny"
+var _resolved_p2_char: String = "agent"
 
 var round_state: String = "GET_READY" # "GET_READY", "FIGHT", "ROUND_OVER"
 var banner_text: String = "GET READY..."
@@ -270,6 +279,9 @@ func start_match(config: Dictionary = {}) -> void:
 	_clear_match_entities()
 	is_paused = false
 	_cancel_was_down = false
+	pause_selected_index = 0
+	_pause_key_was_down.clear()
+	_round_over_confirm_was_down = Input.is_key_pressed(KEY_ENTER) or Input.is_key_pressed(KEY_KP_ENTER) or Input.is_key_pressed(KEY_SPACE)
 
 	match_config = config.duplicate(true)
 	var raw_mode: String = str(config.get("mode", "vs")).to_lower()
@@ -296,6 +308,8 @@ func start_match(config: Dictionary = {}) -> void:
 	var p2_char: String = str(config.get("p2_char", "agent")).to_lower()
 	if p2_char == "random" or p2_char.is_empty():
 		p2_char = roster_pool[randi() % roster_pool.size()]
+	_resolved_p1_char = p1_char
+	_resolved_p2_char = p2_char
 	var bot_count: int = clampi(int(config.get("bot_count", 0 if two_player else 1)), 0, 7)
 	var bot_diff: int = clampi(int(config.get("bot_difficulty", 2)), 1, 4)
 
@@ -1548,30 +1562,223 @@ func _trigger_round_over(result_banner: String, win_slot: int, win_team: int) ->
 	MapLoaderScript.play_sfx("groovy")
 
 
+func restart_current_match() -> void:
+	var cfg: Dictionary = match_config.duplicate(true)
+	if not current_map_id.is_empty():
+		cfg["map_id"] = current_map_id
+	if not _resolved_p1_char.is_empty():
+		cfg["p1_char"] = _resolved_p1_char
+	if not _resolved_p2_char.is_empty():
+		cfg["p2_char"] = _resolved_p2_char
+	cfg["stage_level"] = stage_level
+	start_match(cfg)
+
+
+func _snapshot_pause_keys_down() -> void:
+	var tracked_keys: Array[Key] = [
+		KEY_UP, KEY_W, KEY_DOWN, KEY_S,
+		KEY_LEFT, KEY_A, KEY_RIGHT, KEY_D,
+		KEY_ENTER, KEY_KP_ENTER, KEY_SPACE,
+		KEY_R, KEY_C, KEY_TAB, KEY_M, KEY_Z, KEY_Q,
+	]
+	for k: Key in tracked_keys:
+		_pause_key_was_down[int(k)] = Input.is_key_pressed(k)
+
+
+func _is_pause_key_just_pressed(keys: Array[Key]) -> bool:
+	var any_down: bool = false
+	var was_any_down: bool = false
+	for k: Key in keys:
+		var down_now: bool = Input.is_key_pressed(k)
+		if down_now:
+			any_down = true
+		if bool(_pause_key_was_down.get(int(k), false)):
+			was_any_down = true
+		_pause_key_was_down[int(k)] = down_now
+	return any_down and not was_any_down
+
+
+func set_paused_state(paused_flag: bool) -> void:
+	if is_paused == paused_flag:
+		return
+	is_paused = paused_flag
+	_snapshot_pause_keys_down()
+	if is_paused:
+		pause_selected_index = 0
+		if dynamic_camera != null and is_instance_valid(dynamic_camera) and dynamic_camera.get("show_all") != null:
+			pause_camera_wide = bool(dynamic_camera.get("show_all"))
+		if AudioServer.get_bus_count() > 0:
+			if AudioServer.is_bus_mute(0):
+				pause_audio_mode = 2
+			elif AudioServer.get_bus_volume_db(0) <= -3.0:
+				pause_audio_mode = 1
+			else:
+				pause_audio_mode = 0
+		for fighter: Node2D in fighters:
+			if is_instance_valid(fighter):
+				fighter.call("_notification", NOTIFICATION_PAUSED)
+	else:
+		_round_over_confirm_was_down = Input.is_key_pressed(KEY_ENTER) or Input.is_key_pressed(KEY_KP_ENTER) or Input.is_key_pressed(KEY_SPACE)
+		for fighter: Node2D in fighters:
+			if is_instance_valid(fighter) and fighter.has_method("sync_input_baseline_on_unpause"):
+				fighter.call("sync_input_baseline_on_unpause")
+	if hud_controller != null and is_instance_valid(hud_controller):
+		hud_controller.call("update_hud")
+
+
+func execute_pause_menu_action(action_idx: int, dir: int = 1) -> void:
+	var idx: int = posmod(action_idx, PAUSE_MENU_COUNT)
+	if idx == 0:
+		# 0: RESUME MATCH
+		MapLoaderScript.play_sfx("accept")
+		set_paused_state(false)
+	elif idx == 1:
+		# 1: QUICK RESTART (same map, mode, fighters, and stage)
+		MapLoaderScript.play_sfx("accept")
+		restart_current_match()
+	elif idx == 2:
+		# 2: CHANGE MAP / SETUP
+		MapLoaderScript.play_sfx("accept")
+		set_paused_state(false)
+		game_speed = 1.0
+		var target_panel: String = "MAP_SELECTION"
+		if game_mode == "stage":
+			target_panel = "STAGE_SELECT"
+		elif game_mode == "survival":
+			target_panel = "VS_PLAYER_SETUP"
+		if get_signal_connection_list("request_open_setup").size() > 0:
+			request_open_setup.emit(target_panel)
+		else:
+			request_return_to_menu.emit()
+	elif idx == 3:
+		# 3: AUDIO: ON 100% / LOW 50% / MUTE
+		pause_audio_mode = posmod(pause_audio_mode + (1 if dir >= 0 else -1), 3)
+		if AudioServer.get_bus_count() > 0:
+			if pause_audio_mode == 0:
+				AudioServer.set_bus_mute(0, false)
+				AudioServer.set_bus_volume_db(0, 0.0)
+			elif pause_audio_mode == 1:
+				AudioServer.set_bus_mute(0, false)
+				AudioServer.set_bus_volume_db(0, -6.0)
+			else:
+				AudioServer.set_bus_mute(0, true)
+		if pause_audio_mode != 2:
+			MapLoaderScript.play_sfx("aim_small")
+		if hud_controller != null and is_instance_valid(hud_controller):
+			hud_controller.call("update_hud")
+	elif idx == 4:
+		# 4: CAMERA: AUTO ZOOM / WIDE ARENA
+		pause_camera_wide = not pause_camera_wide
+		if dynamic_camera != null and is_instance_valid(dynamic_camera):
+			dynamic_camera.set("show_all", pause_camera_wide)
+			var cam_fighters: Array[Node2D] = []
+			for cf: Node2D in fighters:
+				if is_instance_valid(cf) and not bool(cf.get("is_summoned_clone")):
+					cam_fighters.append(cf)
+			dynamic_camera.step_camera(24.0, cam_fighters)
+		MapLoaderScript.play_sfx("aim_small")
+		if hud_controller != null and is_instance_valid(hud_controller):
+			hud_controller.call("update_hud")
+	elif idx == 5:
+		# 5: MAIN MENU
+		MapLoaderScript.play_sfx("cancel")
+		set_paused_state(false)
+		game_speed = 1.0
+		request_return_to_menu.emit()
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if not is_paused or not visible or hud_controller == null or not is_instance_valid(hud_controller):
+		return
+	if not hud_controller.has_method("get_pause_item_rects"):
+		return
+	var vp_size: Vector2 = get_viewport_rect().size
+	var item_rects: Array[Rect2] = hud_controller.call("get_pause_item_rects", vp_size) as Array[Rect2]
+	if event is InputEventMouseMotion:
+		var mm: InputEventMouseMotion = event as InputEventMouseMotion
+		for i: int in range(item_rects.size()):
+			if item_rects[i].has_point(mm.position) and pause_selected_index != i:
+				pause_selected_index = i
+				hud_controller.call("update_hud")
+				break
+	elif event is InputEventMouseButton:
+		var mb: InputEventMouseButton = event as InputEventMouseButton
+		if mb.pressed and mb.button_index == MOUSE_BUTTON_LEFT:
+			for i: int in range(item_rects.size()):
+				if item_rects[i].has_point(mb.position):
+					pause_selected_index = i
+					execute_pause_menu_action(i, 1)
+					get_viewport().set_input_as_handled()
+					break
+
+
 func _handle_match_hotkeys() -> void:
 	var cancel_down: bool = Input.is_key_pressed(KEY_ESCAPE) or Input.is_action_pressed("ui_cancel")
 	if cancel_down and not _cancel_was_down:
 		if round_state == "ROUND_OVER" or Input.is_key_pressed(KEY_SHIFT):
-			is_paused = false
+			set_paused_state(false)
 			game_speed = 1.0
 			request_return_to_menu.emit()
 			_cancel_was_down = true
 			return
-		is_paused = not is_paused
-		if hud_controller != null:
-			hud_controller.call("update_hud")
-		if is_paused:
-			for fighter: Node2D in fighters:
-				if is_instance_valid(fighter):
-					fighter.call("_notification", NOTIFICATION_PAUSED)
+		set_paused_state(not is_paused)
 		_cancel_was_down = cancel_down
+		return
 	if not cancel_down:
 		_cancel_was_down = false
+
 	if is_paused:
+		if _is_pause_key_just_pressed([KEY_UP, KEY_W]):
+			pause_selected_index = posmod(pause_selected_index - 1, PAUSE_MENU_COUNT)
+			MapLoaderScript.play_sfx("aim_small")
+			if hud_controller != null and is_instance_valid(hud_controller):
+				hud_controller.call("update_hud")
+			return
+		if _is_pause_key_just_pressed([KEY_DOWN, KEY_S]):
+			pause_selected_index = posmod(pause_selected_index + 1, PAUSE_MENU_COUNT)
+			MapLoaderScript.play_sfx("aim_small")
+			if hud_controller != null and is_instance_valid(hud_controller):
+				hud_controller.call("update_hud")
+			return
+		if _is_pause_key_just_pressed([KEY_LEFT, KEY_A]):
+			if pause_selected_index in [3, 4]:
+				execute_pause_menu_action(pause_selected_index, -1)
+			return
+		if _is_pause_key_just_pressed([KEY_RIGHT, KEY_D]):
+			if pause_selected_index in [3, 4]:
+				execute_pause_menu_action(pause_selected_index, 1)
+			return
+		if _is_pause_key_just_pressed([KEY_ENTER, KEY_KP_ENTER, KEY_SPACE]):
+			execute_pause_menu_action(pause_selected_index, 1)
+			return
+		if _is_pause_key_just_pressed([KEY_R]):
+			pause_selected_index = 1
+			execute_pause_menu_action(1, 1)
+			return
+		if _is_pause_key_just_pressed([KEY_C, KEY_TAB]):
+			pause_selected_index = 2
+			execute_pause_menu_action(2, 1)
+			return
+		if _is_pause_key_just_pressed([KEY_M]):
+			pause_selected_index = 3
+			execute_pause_menu_action(3, 1)
+			return
+		if _is_pause_key_just_pressed([KEY_Z]):
+			pause_selected_index = 4
+			execute_pause_menu_action(4, 1)
+			return
+		if _is_pause_key_just_pressed([KEY_Q]):
+			pause_selected_index = 5
+			execute_pause_menu_action(5, 1)
+			return
 		return
 
 	if round_state == "ROUND_OVER":
-		if Input.is_key_pressed(KEY_ENTER) or Input.is_key_pressed(KEY_KP_ENTER) or Input.is_key_pressed(KEY_SPACE):
+		var confirm_down: bool = Input.is_key_pressed(KEY_ENTER) or Input.is_key_pressed(KEY_KP_ENTER) or Input.is_key_pressed(KEY_SPACE)
+		if confirm_down and not _round_over_confirm_was_down:
+			_round_over_confirm_was_down = true
 			if game_mode == "stage" and (winner_text == "STAGE CLEAR!" or winner_slot == 0) and stage_level < 12:
 				match_config["stage_level"] = stage_level + 1
 			start_match(match_config)
+		elif not confirm_down:
+			_round_over_confirm_was_down = false

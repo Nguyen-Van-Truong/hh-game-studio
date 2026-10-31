@@ -455,3 +455,59 @@ Các phát hiện kỹ thuật chính xác từ mã nguồn `8-9-hh3d-3/superage
    - Biểu cảm `LOW_HP_SWEAT` đã có biên trễ `25%..30%` để chống nhấp nháy quanh ngưỡng máu thấp; do đó `hold` của `LOW_HP_SWEAT` phải đặt bằng `0.0` để ngay khi người chơi ăn bình máu (`Medkit/Pills`) vượt `30% HP`, gương mặt lập tức tươi tỉnh trở lại (`CHEEKY_SMIRK`).
 4. **Tối Ưu Hóa Hash Trạng Thái `O(1)` Không Cấp Phát Mảng Tạm**:
    - Thay thế `hash([a, b, c, ...])` (vốn cấp phát một `Array` mới mỗi tick cho từng đấu sĩ) bằng phép băm bitwise nguyên thủy và không đưa biến đếm thời gian liên tục (`_expr_hold_timer`) vào khóa hash, giúp thời gian cập nhật 8 đấu sĩ Chibi giảm xuống chỉ còn `0.6ms` (`p95`).
+
+---
+
+## 12. GÓI CÔNG VIỆC BỔ SUNG SA-WP12: TACTICAL PAUSE MENU UX & VẬT LÝ VA CHẠM ĐÈ VỠ PROP-ON-PROP (`31/10/2026`)
+
+### 12.1. Thiết Kế Tactical Pause Menu UX (2-Column Interactive Overlay)
+1. **6 Tác Vụ Tương Tác Nhanh (Hỗ trợ Con trỏ `W/S`/`▲/▼` + `ENTER/SPACE`, Phím tắt 1 chạm, và Click chuột)**:
+   - **`0: RESUME MATCH [ESC / ENTER]`**: Tiếp tục trận đấu ngay lập tức, đồng bộ baseline input (`sync_input_baseline_on_unpause()`) để không rò rỉ lệnh nhảy/bắn ở frame đầu tiên sau khi unpause.
+   - **`1: QUICK RESTART [R]`**: Khởi động lại trận đấu tức thì (`restart_current_match()`) với đúng Map, Mode, Stage Level, cấu hình Bot và Nhân vật đã chọn (`_resolved_p1_char`, `_resolved_p2_char`), làm mới toàn bộ HP, vũ khí, prop, lửa và camera trong 1 phím bấm.
+   - **`2: CHANGE MAP / SETUP [C / TAB]`**: Phát tín hiệu `request_open_setup(target_panel)` mở thẳng màn hình chọn Map / Stage / Nhân vật của `MainMenu` (`MAP_SELECTION`, `STAGE_SELECT`, hoặc `VS_PLAYER_SETUP`).
+   - **`3: AUDIO: ON 100% / 50% / MUTE [M / ◄ ►]`**: Điều chỉnh nhanh âm lượng Master (`0 dB` / `-6 dB` / `Mute`) trực tiếp trên `AudioServer` bus `0`.
+   - **`4: CAMERA: AUTO ZOOM / WIDE [Z / ◄ ►]`**: Chuyển đổi chế độ góc nhìn `dynamic_camera.show_all` (`Auto Zoom` $\leftrightarrow$ `Wide Arena`) và cập nhật camera ngay trong lúc Pause để quan sát toàn cảnh bản đồ.
+   - **`5: MAIN MENU [Q / SHIFT+ESC]`**: Thoát trận đấu về màn hình chính `MAIN`.
+2. **Bảng Trạng Thái Trận Đấu & Sổ Tay Phím Bấm (Tactical Dashboard Column)**:
+   - Hiển thị thông tin Map/Mode/Stage/Wave, vũ khí đang cầm của P1/P2 và danh sách kỹ năng Powered Fighter (nếu có), kèm bảng đối chiếu phím điều khiển `P1 (ARROWS + NUM 1-4 / 5-8)` và `P2 (WASD + JKL; / UIOP)`.
+   - Vẽ hoàn toàn bằng `CanvasItem.draw_*` ở cuối `_draw_hud_surface()` trong `MatchHudController` (`0` node con phát sinh thêm, bảo toàn tuyệt đối `OBJECT_NODE_COUNT`, `OBJECT_ORPHAN_NODE_COUNT` và 5 dictionary `HUD_MAPS`).
+
+### 12.2. Mô Hình Vật Lý Va Chạm & Đè Bẹp Prop-on-Prop (Classical Mechanics Impact & Crush Model)
+1. **Khắc phục triệt để 3 nguyên nhân gốc khiến `CRATE_HANGING` rơi xuống không đè nổ `BARREL_EXPLOSIVE` (`steel_harbor`)**:
+   - **Chốt chặn Vertical Descent ở Bước 5b (`interactive_prop.gd`)**: Khi prop đang rơi từ trên xuống đỉnh prop khác (`not on_ground and velocity.y > 0.0 and prev_bottom <= other_top + 4.5`), tuyệt đối không chạy logic đẩy tách ngang tức thời (Teleport Shunt) của Bước 5b.
+   - **Giải quyết Va chạm Đè Dọc & Bay Ngang (`_check_prop_impacts`)**:
+     - Vận tốc va chạm pháp tuyến dọc $v_{n,y} = \max(0.0, v_{1,y} - v_{2,y})$ với ngưỡng đàn hồi kết cấu $v_{\text{min},y} = 2.15\text{ px/tick}$ (mọi va chạm nhẹ/xếp chồng tĩnh có $v_{n,y} \le 2.15$ gây `0` sát thương).
+     - Khi $v_{n,y} > v_{\text{min},y}$, sát thương đè lên prop dưới ($D_{\text{bottom}}$) và phản lực Định luật III Newton lên prop trên ($D_{\text{top}}$) được tính theo động năng tương đối, tỷ số khối lượng $(m_1 / m_2)^{0.65}$ và tỷ số độ cứng vật liệu $H_1 / H_2$:
+       $$D_{\text{bottom}} = \left(1.85 \cdot \frac{1}{2} m_1 (v_{n,y} - v_{\text{min},y})^2 \left(\frac{m_1}{m_2}\right)^{0.65} + B_{\text{heavy}}\right) \frac{H_1}{H_2} \eta_{\text{ov}}$$
+       $$D_{\text{top}} = \left(0.95 \cdot \frac{1}{2} \mu (v_{n,y} - v_{\text{min},y})^2 \left(\frac{m_2}{m_1}\right)^{0.55}\right) \frac{H_2}{H_1} \eta_{\text{ov}}$$
+     - Với va chạm ngang tốc độ cao ($v_{n,x} > 2.40\text{ px/tick}$), truyền xung lượng $J_x = (1 + e)\mu v_{n,x}$ và gây sát thương va chạm ngang tỷ lệ với $\frac{1}{2} \mu (v_{n,x} - 2.40)^2$.
+   - **Kích nổ tức thì khi bị đè bẹp (`Catastrophic Crush Detonation`) & Duy trì Động lượng rơi**:
+     - Khi vật nặng ($m_1 \ge 2.2$, $D_{\text{bottom}} \ge 50$) rơi đè lên `BARREL_EXPLOSIVE`, thùng nổ phát nổ hoàn toàn ngay tại chỗ (`_trigger_barrel_catastrophic_crush_explosion()`); khi đè vỡ `GASCAN`, can xăng bung 18 tia lửa (`_trigger_gascan_explosion()`).
+     - Khối vật nặng đang rơi bảo toàn động lượng đi xuống $v_{1,y}^{\text{after}} = \max(1.5, v_{1,y} \frac{m_1}{m_1 + 0.25 m_2})$, không bị sóng nổ dưới đáy hất ngược lên trời và tiếp tục rơi thẳng xuống đáp phẳng trên sàn.
+
+### 12.3. Quy Tắc Phân Loại Thực Thể Qua Cổng Dịch Chuyển (`Portal Doorway Entity Whitelist`)
+- **Đạn súng (`_step_bullets` trong `projectile_manager.gd`)**: **KHÔNG** đi xuyên qua cổng dịch chuyển (`Portal Doorway` trên $\leftrightarrow$ dưới). Đạn bắn vào cửa cổng sẽ dừng lại ở bức tường chắn phía sau cổng (`raycast_solid`).
+- **Đồ vật (`InteractiveProp`), Bom ném (`throwables`: `GRENADE`, `MOLOTOV`, `C4`, `MINE`), Vật phẩm rơi (`pickups`) và Đấu sĩ (`FighterController`)**: Đi xuyên qua cổng dịch chuyển 2 chiều (trên $\leftrightarrow$ dưới) mượt mà:
+  - Trong `map_loader.gd` (`try_teleport_entity`), nhận diện đầy đủ `InteractiveProp` theo `width`/`height` và `get_obb_extents_at(rotation)` để prop bị đá văng, trượt hoặc đẩy ngang chạm mép cổng trước khi đụng tường chắn sau cổng, dịch chuyển sang cổng đích với `exit_margin_x = prop_half_w + 2.0`, đáp phẳng trên sàn đích (`gy_exit - prop_half_h`), đánh thức prop (`is_sleeping = false`) và trượt thoát khỏi cửa cổng.
+  - Trong `fighter_controller.gd` (`_try_push_prop_chain`), kiểm tra `try_teleport_entity` cho prop dẫn đầu chuỗi đẩy trước và sau khi tịnh tiến ngang.
+
+### 12.4. Độ Bền Thùng Sắt Gia Cường (`BARREL` Reinforced Steel Drum) & Biến Dạng 3 Giai Đoạn (`SF-M37.5`)
+- **Độ cứng kết cấu & Đường cong hấp thụ va chạm (`> 2.5` lần rơi nặng mới vỡ, tức tối thiểu `3` lần rơi)**:
+  - Nâng độ bền thùng sắt `BARREL` (`hp = 140.0, max_hp = 140.0`, `explosion_resistance = 0.25`, `_get_structural_hardness() = 2.20`).
+  - Khi vật nặng nhất (`CRATE_HANGING`, $m_1 = 3.80$) rơi từ độ cao cực đại ($v_{n,y} \le 11.0$) trúng `BARREL`, vỏ thép hình trụ hấp thụ xung lực qua biến dạng dẻo (`dmg_to_other <= 0.37 * max_hp` $\approx 47.5..51.8\text{ HP/lần}$, tương đương `2.70..2.95` lần rơi đầy cây `> 2.5` lần):
+    - **Lần rơi 1 (`~63%..66% HP`)**: Thùng sắt sống sót (kể cả khi `BARREL_EXPLOSIVE` kế bên phát nổ cùng lúc trên `steel_harbor`), chuyển sang **Giai đoạn 1 (Móp nhẹ)**: `obj_barrel_dmg.png`, nén nhẹ `scale = Vector2(1.04, 0.96)` neo đáy, nảy tia lửa kim loại (`spawn_hit_sparks`) + rung chấn 5 frame (`_impact_shudder_frames = 5.0`), và đỡ vững `CRATE_HANGING` trên đỉnh nếu rơi trúng tâm (`com_over_other`).
+    - **Lần rơi 2 (`~26%..32% HP`)**: Thùng sắt vẫn trụ vững ở **Giai đoạn 2 (Móp nặng / Gấp nếp thân thùng)**: nén `scale = Vector2(1.10, 0.90)`, sẫm màu thép và vẽ thêm đường gân nứt/gấp nếp ngang eo thùng trong `_draw()`.
+    - **Lần rơi 3 (`0% HP`)**: Vỏ thép quá giới hạn bền và vỡ tung thành 6 mảnh thép văng kèm âm thanh `bullet_hitmetal`.
+- **Chống trừ máu kép trong cùng 1 cú rơi (`crushed_prop_ids`)**: Lưu `crushed_prop_ids[oid] = true` trong suốt một cú rơi dọc và chỉ xóa khi vật rơi đã dừng hẳn trên sàn (`on_ground and absf(velocity.x) < 0.25`).
+
+### 12.5. Bảng Edge Cases Bổ Sung (`CB-EC-61` .. `CB-EC-68`)
+| Mã | Tình huống / Ngoại lệ | Giải pháp Kỹ thuật |
+| :--- | :--- | :--- |
+| **CB-EC-61** | Giữ phím `W`/`UP`/`ENTER` khi thoát Pause làm đấu sĩ tự nhảy hoặc đánh ở frame đầu tiên. | Gọi `sync_input_baseline_on_unpause()` trên mọi đấu sĩ khi thoát Pause để đồng bộ `_prev_input` với trạng thái phím hiện tại và xóa bộ đệm kỹ năng. |
+| **CB-EC-62** | Bấm `QUICK RESTART [R]` trong trận dùng Map/Nhân vật `"random"` làm đổi sang Map/Nhân vật khác. | Lưu `_resolved_p1_char`, `_resolved_p2_char` và `current_map_id` thực tế khi khởi tạo trận để `restart_current_match()` giữ đúng cặp đấu và bản đồ. |
+| **CB-EC-63** | Thanh máu mini hoặc ký hiệu `1`/`2` trong world-space vẽ đè lên bảng Pause khi đấu sĩ nhảy cao. | Chuyển khối vẽ Pause Overlay xuống cuối hàm `_draw_hud_surface()` trong `MatchHudController`. |
+| **CB-EC-64** | Xếp chồng prop lúc khởi tạo map (`_settling_frames > 0`) hoặc đá prop nẩy nhẹ (`vy <= 1.75`) gây tự nổ/tự vỡ. | Khóa sát thương va chạm khi `_settling_frames > 0` (trừ `CRATE_HANGING` đã thả rơi) và áp dụng ngưỡng đàn hồi $v_{\text{min},y} = 2.15$, $v_{\text{min},x} = 2.40$. |
+| **CB-EC-65** | Hai prop va chạm gọi sát thương qua lại nhiều lần trong cùng một tick vật lý. | Ghi nhận cặp va chạm theo frame (`_prop_impact_frame_by_id`) để mỗi cặp prop chỉ giải quyết xung lượng và sát thương đúng 1 lần mỗi tick. |
+| **CB-EC-66** | Thùng nặng (`CRATE_HANGING`) rơi lệch tâm lên prop nhẹ (`BARREL_EXPLOSIVE`, `GASCAN`, `CHAIR`) bị trượt fulcrum sang bên thay vì đè vỡ. | Thực thi `_check_prop_impacts()` trước Bước 7 và không cho prop nhẹ ($m_1 \ge 1.8 m_2$) đóng vai trò làm điểm tựa cứng (fulcrum) hất văng vật nặng đang rơi. |
+| **CB-EC-67** | Đạn súng bắn xuyên qua cổng dịch chuyển (`Portal Doorway`) hoặc đồ vật (`InteractiveProp`) bị tường chắn sau cổng chặn trước khi kịp dịch chuyển (`SF-M37.4`). | Gỡ `try_teleport_ballistic_segment` khỏi `_step_bullets()` (chỉ giữ cho `_step_throwables()`); cập nhật `try_teleport_entity()` trong `map_loader.gd` tính đúng `width`/`height` + `get_obb_extents_at()` của `InteractiveProp` để đồ vật, bom ném, vật phẩm và đấu sĩ dịch chuyển 2 chiều trên $\leftrightarrow$ dưới chuẩn xác. |
+| **CB-EC-68** | Thùng sắt (`BARREL`) bị vỡ ngay sau 1 lần thùng gỗ nặng (`CRATE_HANGING`) rơi trúng hoặc bị đè nhiều hit trong cùng 1 cú rơi (`SF-M37.5`). | Tăng độ bền `BARREL` (`hp = 140`, `hardness = 2.20`, `explosion_resistance = 0.25`), giới hạn sát thương đè dọc mỗi lần rơi `<= 37% max_hp` (cần `> 2.5` lần rơi, tức 3 lần rơi mới bể), bổ sung biến dạng 3 giai đoạn (nguyên vẹn $\rightarrow$ móp nhẹ $\rightarrow$ gấp nếp nặng $\rightarrow$ vỡ) và khóa `crushed_prop_ids` chống trừ máu kép. |

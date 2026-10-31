@@ -91,6 +91,8 @@ var _hang_rope_len: float = 0.0
 var _hang_angle: float = 0.0
 var _hang_ang_vel: float = 0.0
 var crushed_fighter_ids: Dictionary = {}
+var crushed_prop_ids: Dictionary = {}
+var _prop_impact_cooldowns: Dictionary = {}
 
 var is_parachute_crate: bool = false
 var parachute_attached: bool = false
@@ -99,6 +101,8 @@ var _parachute_sway_time: float = 0.0
 
 var _settling_frames: float = 18.0
 var _is_damaged_visual: bool = false
+var _damage_visual_stage: int = 0
+var _impact_shudder_frames: float = 0.0
 var _fire_anim_frame: float = 0.0
 var _tex_fire_frames: Array[Texture2D] = []
 
@@ -161,7 +165,11 @@ func setup_prop(
 	parachute_attached = false
 	_settling_frames = 18.0
 	_is_damaged_visual = false
+	_damage_visual_stage = 0
+	_impact_shudder_frames = 0.0
 	crushed_fighter_ids.clear()
+	crushed_prop_ids.clear()
+	_prop_impact_cooldowns.clear()
 
 	var def: Dictionary = reg.call("get_premade_item_def", prop_type) as Dictionary
 	if def.is_empty():
@@ -210,8 +218,8 @@ func setup_prop(
 		ground_friction_24hz = 0.72
 		can_burn = false
 		ignites = false
-		hp = 110.0
-		max_hp = 110.0
+		hp = 140.0
+		max_hp = 140.0
 		bullet_resistance = 0.35
 		prop_material = "Metal"
 	elif prop_type == "BARREL_EXPLOSIVE":
@@ -407,7 +415,9 @@ func setup_prop(
 		explosion_resistance = 100.0
 		prop_material = "Glass"
 
-	if prop_type in ["BARREL", "TRASHCAN", "FILECAB", "DESK", "DESK_1", "POOL_TABLE"]:
+	if prop_type == "BARREL":
+		explosion_resistance = 0.25
+	elif prop_type in ["TRASHCAN", "FILECAB", "DESK", "DESK_1", "POOL_TABLE"]:
 		explosion_resistance = 0.50
 	elif prop_type == "CRATE_HANGING":
 		explosion_resistance = 0.0
@@ -511,6 +521,8 @@ func setup_prop(
 	_sprite.texture = tex
 	_sprite.modulate = Color.WHITE
 	_sprite.rotation_degrees = 0.0
+	_sprite.scale = Vector2.ONE
+	_sprite.position = Vector2.ZERO
 	if prop_type == "CHAIR_R":
 		_sprite.flip_h = true
 	else:
@@ -854,22 +866,62 @@ func _spawn_debris_burst(hit_pos: Vector2, hit_dir: Vector2, count: int) -> void
 		fhs.call("spawn_prop_debris", prop_type, hit_pos, hit_dir, count)
 
 
-func _update_damaged_visual(_hit_dir_x: float = 1.0) -> void:
-	if is_destroyed or hp <= 0.0 or hp >= max_hp * 0.65:
+func _apply_sprite_visual_transform() -> void:
+	if _sprite == null or not is_instance_valid(_sprite):
 		return
-	if _is_damaged_visual:
+	var base_scale: Vector2 = Vector2.ONE
+	var base_pos: Vector2 = Vector2.ZERO
+	if prop_type == "BARREL" and barrel_phase == 0:
+		if _damage_visual_stage == 1:
+			base_scale = Vector2(1.04, 0.96)
+			base_pos = Vector2(0.0, height * 0.02)
+		elif _damage_visual_stage >= 2:
+			base_scale = Vector2(1.10, 0.90)
+			base_pos = Vector2(0.0, height * 0.05)
+	if _impact_shudder_frames > 0.0:
+		var shudder_t: float = clampf(_impact_shudder_frames / 5.0, 0.0, 1.0)
+		var osc: float = sin(_impact_shudder_frames * 2.2) * 0.45 * shudder_t
+		var sq_x: float = 1.0 + 0.08 * shudder_t
+		var sq_y: float = 1.0 - 0.07 * shudder_t
+		_sprite.scale = Vector2(base_scale.x * sq_x, base_scale.y * sq_y)
+		_sprite.position = base_pos + Vector2(osc, height * 0.035 * shudder_t)
+	else:
+		_sprite.scale = base_scale
+		_sprite.position = base_pos
+
+
+func _update_damaged_visual(_hit_dir_x: float = 1.0) -> void:
+	if is_destroyed or hp <= 0.0:
+		return
+	if prop_type == "BARREL" and barrel_phase == 0:
+		var target_stage: int = 0
+		if hp <= max_hp * 0.42:
+			target_stage = 2
+		elif hp <= max_hp * 0.78:
+			target_stage = 1
+		if target_stage <= _damage_visual_stage:
+			_apply_sprite_visual_transform()
+			return
+		_damage_visual_stage = target_stage
+		_is_damaged_visual = true
+		_ensure_sprite()
+		var reg_b: Node = MapLoaderScript.get_registry()
+		var dtex_b: Texture2D = reg_b.call("load_cached_texture", "res://assets/sprites/props/obj_barrel_dmg.png") as Texture2D
+		if dtex_b != null:
+			_sprite.texture = dtex_b
+		_sprite.rotation_degrees = 0.0
+		_sprite.modulate = Color(0.75, 0.72, 0.70, 1.0) if target_stage >= 2 else Color(0.90, 0.88, 0.86, 1.0)
+		_apply_sprite_visual_transform()
+		queue_redraw()
+		return
+	if hp >= max_hp * 0.65 or _is_damaged_visual:
 		return
 	_is_damaged_visual = true
+	_damage_visual_stage = 1
 	_ensure_sprite()
 	var reg: Node = MapLoaderScript.get_registry()
 
-	if prop_type == "BARREL" and barrel_phase == 0:
-		var dtex: Texture2D = reg.call("load_cached_texture", "res://assets/sprites/props/obj_barrel_dmg.png") as Texture2D
-		if dtex != null:
-			_sprite.texture = dtex
-		_sprite.rotation_degrees = 0.0
-		_sprite.modulate = Color(0.84, 0.82, 0.80, 1.0)
-	elif prop_type == "BARREL_EXPLOSIVE" and barrel_phase == 0:
+	if prop_type == "BARREL_EXPLOSIVE" and barrel_phase == 0:
 		var wtex: Texture2D = reg.call("load_cached_texture", "res://assets/sprites/props/obj_barrel_wreck.png") as Texture2D
 		if wtex != null:
 			_sprite.texture = wtex
@@ -888,43 +940,6 @@ func _update_damaged_visual(_hit_dir_x: float = 1.0) -> void:
 	else:
 		_sprite.rotation_degrees = 0.0
 		_sprite.modulate = Color(0.84, 0.80, 0.76, 1.0)
-
-
-func _get_support_y_below(next_x: float, prev_bottom: float, next_bottom: float, check_span: bool = false) -> float:
-	var best_y: float = INF
-	var max_drop: float = maxf(10.0, next_bottom - prev_bottom + 8.0)
-	if map_loader != null and is_instance_valid(map_loader) and map_loader.has_method("get_ground_y_below"):
-		best_y = float(map_loader.call("get_ground_y_below", next_x, prev_bottom - 5.0, max_drop, true))
-
-	# Also check resting on top of other grounded, non-destroyed solid props (using exact top-edge span ow * 0.5 + 2.0)
-	if match_world != null and is_instance_valid(match_world):
-		var props_var: Variant = match_world.get("props")
-		if typeof(props_var) == TYPE_ARRAY:
-			for p_var: Variant in props_var as Array:
-				if not is_instance_valid(p_var) or not (p_var is Node2D) or p_var == self:
-					continue
-				var other: Node2D = p_var as Node2D
-				var other_is_paper_support: bool = (prop_type == "PAPER" and str(other.get("prop_type")) == "PAPER")
-				if bool(other.get("is_destroyed")) or bool(other.get("is_hanging_holder")) or (not bool(other.get("has_solid_hitbox")) and not other_is_paper_support):
-					continue
-				if not bool(other.get("on_ground")) and not bool(other.get("kinematic")):
-					continue
-				var ow: float = float(other.get("width")) if other.get("width") != null else 14.0
-				var oh: float = float(other.get("height")) if other.get("height") != null else 14.0
-				if absf(next_x - other.global_position.x) <= ow * 0.5 + 2.0:
-					var other_top: float = other.global_position.y - oh * 0.5
-					if other_top >= prev_bottom - 3.0 and other_top <= prev_bottom + max_drop and other_top < best_y:
-						best_y = other_top
-
-	# Only bridge across a gap when BOTH left and right ends have solid support (never when 1 side hangs over an abyss!)
-	if check_span and best_y == INF and width >= 12.0:
-		var span_dx: float = width * 0.30
-		var left_y: float = _get_support_y_below(next_x - span_dx, prev_bottom, next_bottom, false)
-		var right_y: float = _get_support_y_below(next_x + span_dx, prev_bottom, next_bottom, false)
-		if left_y < INF and right_y < INF:
-			best_y = minf(left_y, right_y)
-
-	return best_y
 
 
 func _find_overlapping_ladder_hatch(at_x: float, at_y: float) -> Rect2:
@@ -1059,6 +1074,12 @@ func _query_ledge_contact_manifold(at_x: float, prev_bottom: float, next_bottom:
 				if other_top >= prev_bottom - 2.5 and other_top <= max_surf_y:
 					var c1: float = maxf(box_left, other.global_position.x - ow * 0.5)
 					var c2: float = minf(box_right, other.global_position.x + ow * 0.5)
+					var omass_m: float = maxf(0.4, float(other.get("mass")) if other.get("mass") != null else 1.0)
+					# CB-EC-66: A heavy falling prop (m1 >= 1.8 * m2) striking a light prop off-center must never treat
+					# the light prop as an unyielding ledge fulcrum; instead it crushes or shoves the light prop aside.
+					var com_over_other: bool = (at_x >= c1 - 0.5 and at_x <= c2 + 0.5)
+					if not on_ground and velocity.y > 2.15 and mass >= omass_m * 1.8 and (not com_over_other or (c2 - c1) < minf(width * 0.55, ow * 0.75)):
+						continue
 					if c2 - c1 >= minf(3.0, ow * 0.25):
 						segs.append(Vector3(other_top, c1, c2))
 						if other_top < best_y:
@@ -1412,6 +1433,10 @@ func step_prop(step_24hz: float) -> void:
 		else:
 			if _settling_frames > 0.0:
 				_settling_frames = maxf(0.0, _settling_frames - step_24hz)
+			if _impact_shudder_frames > 0.0:
+				_impact_shudder_frames = maxf(0.0, _impact_shudder_frames - step_24hz)
+				_apply_sprite_visual_transform()
+				queue_redraw()
 			if _attacker_ignore_frames > 0.0:
 				_attacker_ignore_frames = maxf(0.0, _attacker_ignore_frames - step_24hz)
 				if _attacker_ignore_frames <= 0.0:
@@ -1420,10 +1445,24 @@ func step_prop(step_24hz: float) -> void:
 
 	if _settling_frames > 0.0:
 		_settling_frames = maxf(0.0, _settling_frames - step_24hz)
+	if _impact_shudder_frames > 0.0:
+		_impact_shudder_frames = maxf(0.0, _impact_shudder_frames - step_24hz)
+		_apply_sprite_visual_transform()
+		queue_redraw()
 	if _attacker_ignore_frames > 0.0:
 		_attacker_ignore_frames = maxf(0.0, _attacker_ignore_frames - step_24hz)
 		if _attacker_ignore_frames <= 0.0:
 			last_attacker = null
+	if not _prop_impact_cooldowns.is_empty():
+		var expired_oids: Array[int] = []
+		for oid_k: Variant in _prop_impact_cooldowns.keys():
+			var rem_cd: float = float(_prop_impact_cooldowns[oid_k]) - step_24hz
+			if rem_cd <= 0.0:
+				expired_oids.append(int(oid_k))
+			else:
+				_prop_impact_cooldowns[oid_k] = rem_cd
+		for ex_id: int in expired_oids:
+			_prop_impact_cooldowns.erase(ex_id)
 
 	# 1. Burning logic & Gradual Fire Contagion (Fires.as:142-182: gradual heat transfer to nearby fighters & adjacent flammable props)
 	if is_burning and not can_burn and barrel_phase == 0:
@@ -1622,7 +1661,7 @@ func step_prop(step_24hz: float) -> void:
 
 	# 4b. Portal Doorways & Ladder Shaft Channeling before solid wall clamp
 	if _settling_frames <= 0.0 and map_loader != null and is_instance_valid(map_loader):
-		if absf(velocity.x) > 0.12 and map_loader.has_method("try_teleport_entity"):
+		if absf(velocity.x) > 0.02 and map_loader.has_method("try_teleport_entity"):
 			var saved_p: Vector2 = global_position
 			global_position = next_pos
 			if bool(map_loader.call("try_teleport_entity", self, signf(velocity.x))):
@@ -1670,16 +1709,32 @@ func step_prop(step_24hz: float) -> void:
 				var my_top: float = next_pos.y - height * 0.5
 				if my_bottom <= other_top + 2.5 or other_bottom <= my_top + 2.5:
 					continue
+				# Vertical Descent Guard: if this prop was already horizontally overlapping `other` while descending from above,
+				# do NOT teleport/shunt either prop sideways in Step 5b; let Step 6b resolve the vertical top-down crush!
+				var prev_bottom_5b: float = prev_pos.y + height * 0.5
+				var prev_overlap_x: float = minf(prev_pos.x + width * 0.5, other.global_position.x + ow * 0.5) - maxf(prev_pos.x - width * 0.5, other.global_position.x - ow * 0.5)
+				if not on_ground and velocity.y > 0.25 and prev_bottom_5b <= other_top + 4.5 and prev_overlap_x >= 2.0:
+					continue
 				var min_dx: float = (width + ow) * 0.5
 				var dx_p: float = next_pos.x - other.global_position.x
 				if absf(dx_p) < min_dx:
 					var push_sign: float = 1.0 if dx_p >= 0.0 else -1.0
 					if absf(dx_p) < 0.01:
 						push_sign = 1.0 if prop_id > int(other.get("prop_id")) else -1.0
+					var ovel_pre: Vector2 = other.get("velocity") as Vector2 if other.get("velocity") != null else Vector2.ZERO
+					var v_rel_horiz: float = (velocity.x - ovel_pre.x) * (-push_sign)
+					if _settling_frames <= 0.0 and v_rel_horiz > 2.40:
+						_resolve_prop_collision_damage(other, v_rel_horiz, false, 1.0)
+						if is_destroyed:
+							return
+						if bool(other.get("is_destroyed")) or int(other.get("barrel_phase")) > 0:
+							var omass_br: float = maxf(0.4, float(other.get("mass")) if other.get("mass") != null else 1.0)
+							velocity.x *= (mass / (mass + 0.30 * omass_br))
+							continue
 					var omass_sep: float = maxf(0.4, float(other.get("mass")) if other.get("mass") != null else 1.0)
 					if not bool(other.get("kinematic")) and (absf(_ledge_overhang_dir) > 0.01 or mass >= omass_sep * 1.35):
 						var overlap_p: float = min_dx - absf(dx_p)
-						var share_o: float = 0.85 if absf(_ledge_overhang_dir) > 0.01 else (mass / (mass + omass_sep))
+						var share_o: float = 1.0 if (absf(_ledge_overhang_dir) > 0.01 or crushed_prop_ids.has(other.get_instance_id())) else (mass / (mass + omass_sep))
 						var other_pushed_x: float = other.global_position.x - push_sign * overlap_p * share_o
 						if other.has_method("_clamp_x_against_walls"):
 							other_pushed_x = float(other.call("_clamp_x_against_walls", other_pushed_x, other.global_position.y))
@@ -1736,10 +1791,14 @@ func step_prop(step_24hz: float) -> void:
 						next_pos.x = _clamp_x_against_walls(f_node.global_position.x - f_side * min_f_dx, prev_pos.y)
 						velocity.x = 0.0
 
-	# 6. Check falling crush / flying impact on fighters
+	# 6. Check falling crush / flying impact on fighters & props below/beside
 	if _settling_frames <= 0.0 or (is_hanging_crate and is_hanging_released):
 		if (is_hanging_crate and is_hanging_released and not on_ground and velocity.y > 0.8) or (can_gibb and ((not on_ground and velocity.y > 1.4) or absf(velocity.x) >= 1.6)) or velocity.length() >= 2.1:
 			_check_fighter_impacts(prev_pos, next_pos)
+	if ((_settling_frames <= 0.0 and not on_ground and velocity.y > 0.4) or (not on_ground and velocity.y > 2.15) or absf(velocity.x) > 2.40):
+		_check_prop_impacts(prev_pos, next_pos)
+		if is_destroyed:
+			return
 
 	# 7. Ground / Platform / Prop-stack landing, Ledge Fulcrum Corner Solver & Ceiling collision check
 	on_ground = false
@@ -1830,6 +1889,7 @@ func step_prop(step_24hz: float) -> void:
 				angular_velocity = 0.0
 			if absf(velocity.x) < 0.25:
 				crushed_fighter_ids.clear()
+				crushed_prop_ids.clear()
 
 			if is_parachute_crate and parachute_attached:
 				# Detach parachute and stay intact on ground until hit or opened by player
@@ -2013,6 +2073,202 @@ func _check_fighter_impacts(prev_pos: Vector2, at_pos: Vector2) -> void:
 					f.call("force_fall", float(hit_dir) * 2.6, -1.8, false)
 
 
+func _get_structural_hardness() -> float:
+	if indestructible or prop_type in ["CRATE_HANGING", "STATUE"]:
+		return 3.0
+	if prop_type == "BARREL":
+		return 2.20
+	if prop_type in ["FILECAB", "TRASHCAN"]:
+		return 1.65
+	if prop_type in ["DESK", "DESK_1", "POOL_TABLE"]:
+		return 1.25
+	if prop_type in ["BARREL_EXPLOSIVE", "BARREL_WRECK"]:
+		return 0.90
+	if prop_type in ["TABLE", "COMFY_CHAIR"]:
+		return 0.72
+	if prop_type in ["CHAIR", "CHAIR_R", "TABLE_SMALL", "GASCAN", "COMP", "COMP_SCREEN"]:
+		return 0.55
+	if prop_type in ["PAPER", "LAMP_1"]:
+		return 0.30
+	return 1.0
+
+
+func _resolve_prop_collision_damage(other: Node2D, v_rel: float, is_vertical: bool, overlap_ratio: float = 1.0) -> void:
+	if other == null or not is_instance_valid(other) or is_destroyed or bool(other.get("is_destroyed")):
+		return
+	var oid: int = other.get_instance_id()
+	if _prop_impact_cooldowns.has(oid) or (is_vertical and crushed_prop_ids.has(oid)):
+		return
+	var v_min: float = 2.15 if is_vertical else 2.40
+	if v_rel <= v_min:
+		return
+
+	var cd_ticks: float = 18.0 if is_vertical else 8.0
+	_prop_impact_cooldowns[oid] = cd_ticks
+	if is_vertical:
+		crushed_prop_ids[oid] = true
+	var other_cds: Variant = other.get("_prop_impact_cooldowns")
+	if typeof(other_cds) == TYPE_DICTIONARY:
+		(other_cds as Dictionary)[get_instance_id()] = cd_ticks
+
+	var m1: float = maxf(0.35, mass)
+	var m2: float = maxf(0.35, float(other.get("mass")) if other.get("mass") != null else 1.0)
+	var mu: float = (m1 * m2) / (m1 + m2)
+	var v_eff: float = v_rel - v_min
+	var h1: float = _get_structural_hardness()
+	var h2: float = float(other.call("_get_structural_hardness")) if other.has_method("_get_structural_hardness") else 1.0
+	var ov_factor: float = clampf(overlap_ratio / 0.45, 0.45, 1.0)
+
+	var dmg_to_other: float = 0.0
+	var dmg_to_self: float = 0.0
+
+	if is_vertical:
+		# Classical Overburden Crush Formula: E_crush = 1.85 * (0.5 * m1 * v_eff^2) * (m1 / m2)^0.65 + B_heavy
+		var ke_crush: float = 1.85 * (0.5 * m1 * v_eff * v_eff) * pow(m1 / m2, 0.65)
+		var heavy_bonus: float = 0.0
+		if crush_damage > 0.0:
+			heavy_bonus = crush_damage * clampf(v_rel / 4.5, 0.5, 2.0)
+		elif m1 > 1.5:
+			heavy_bonus = 8.0 * (m1 - 1.5) * v_eff
+		dmg_to_other = (ke_crush + heavy_bonus) * (h1 / maxf(0.2, h2)) * ov_factor
+		# Newton's 3rd Law upward normal reaction impulse on top prop
+		dmg_to_self = (0.95 * (0.5 * mu * v_eff * v_eff) * pow(m2 / m1, 0.55)) * (h2 / maxf(0.2, h1)) * ov_factor
+	else:
+		# Horizontal / Ballistic kinetic impact formula
+		var ke_horiz: float = 2.40 * (0.5 * mu * v_eff * v_eff) * sqrt(m1 / m2)
+		var horiz_bonus: float = (crush_damage * 0.45 * clampf(v_eff / 2.0, 0.25, 1.2)) if (can_gibb or crush_damage > 0.0) else 0.0
+		dmg_to_other = (ke_horiz + horiz_bonus) * (h1 / maxf(0.2, h2)) * ov_factor
+		dmg_to_self = (1.10 * (0.5 * mu * v_eff * v_eff) * sqrt(m2 / m1)) * (h2 / maxf(0.2, h1)) * ov_factor
+
+	if last_attacker != null and is_instance_valid(last_attacker):
+		other.set("last_attacker", last_attacker)
+		other.set("_attacker_ignore_frames", 18.0)
+
+	var other_type: String = str(other.get("prop_type")).to_upper()
+	var other_hp: float = float(other.get("hp")) if other.get("hp") != null else 25.0
+	var other_max_hp: float = float(other.get("max_hp")) if other.get("max_hp") != null else 25.0
+	var imp_vec: Vector2 = Vector2(velocity.x, velocity.y) if is_vertical else Vector2(velocity.x, -1.2)
+
+	# Reinforced Cylindrical Steel Drum Calibration (CB-EC-68 / SF-M37.5):
+	# Thick-walled steel drum (`BARREL`) absorbs vertical overburden impacts via progressive plastic buckling
+	# (Stage 1 dent -> Stage 2 heavy buckle -> Stage 3 rupture), requiring > 2.5 full-height heavy crate drops (3 hits) to break.
+	if other_type == "BARREL":
+		if is_vertical:
+			var barrel_crush_scale: float = clampf((m1 / 3.80) * (0.82 + 0.18 * clampf(v_eff / 8.85, 0.0, 1.0)), 0.15, 1.05)
+			dmg_to_other = minf(dmg_to_other * 0.14, other_max_hp * 0.37 * barrel_crush_scale * ov_factor)
+		else:
+			dmg_to_other = minf(dmg_to_other * 0.25, other_max_hp * 0.28 * ov_factor)
+
+	var other_mat: String = str(other.get("prop_material"))
+	if _settling_frames <= 0.0:
+		if prop_material == "Metal" or other_mat == "Metal":
+			MapLoaderScript.play_sfx_at("metal_impact", other.global_position)
+		else:
+			MapLoaderScript.play_sfx_at("wood_impact", other.global_position)
+		if (prop_material == "Metal" or other_mat == "Metal") and dmg_to_other >= 12.0 and match_world != null and is_instance_valid(match_world):
+			var fhs_sp: Variant = match_world.get("fire_hazard_system")
+			if fhs_sp != null and is_instance_valid(fhs_sp) and fhs_sp.has_method("spawn_hit_sparks"):
+				fhs_sp.call("spawn_hit_sparks", other.global_position + Vector2(0.0, -float(other.get("height")) * 0.45), false)
+
+	if dmg_to_other >= 1.0 and not bool(other.get("indestructible")):
+		if other.has_method("_spawn_debris_burst"):
+			other.call("_spawn_debris_burst", other.global_position + Vector2(0.0, -float(other.get("height")) * 0.4), Vector2(velocity.x * 0.4, -2.0), 2)
+		if is_vertical and other_type == "BARREL_EXPLOSIVE" and int(other.get("barrel_phase")) == 0 and m1 >= 2.2 and dmg_to_other >= 50.0:
+			# Catastrophic overburden crush: heavy falling prop flattens and detonates BARREL_EXPLOSIVE immediately on the spot!
+			if other.has_method("_trigger_barrel_catastrophic_crush_explosion"):
+				other.call("_trigger_barrel_catastrophic_crush_explosion")
+			else:
+				other.call("take_damage", dmg_to_other, imp_vec)
+		elif other.has_method("take_damage"):
+			other.call("take_damage", dmg_to_other, imp_vec)
+			# If a sub-lethal hard impact dents BARREL_EXPLOSIVE below 65% HP, ignite its fuse just like a bullet hit!
+			if not bool(other.get("is_destroyed")) and other_type == "BARREL_EXPLOSIVE" and int(other.get("barrel_phase")) == 0:
+				var rem_hp: float = float(other.get("hp")) if other.get("hp") != null else other_hp
+				if rem_hp <= other_max_hp * 0.65 and other.has_method("ignite"):
+					other.call("ignite")
+
+	if dmg_to_self >= 1.0 and not indestructible and not is_destroyed:
+		take_damage(dmg_to_self, -imp_vec * 0.5)
+
+
+func _check_prop_impacts(prev_pos: Vector2, at_pos: Vector2) -> void:
+	if match_world == null or not is_instance_valid(match_world):
+		return
+	var props_var: Variant = match_world.get("props")
+	if typeof(props_var) != TYPE_ARRAY:
+		return
+
+	var obb_half_h: float = maxf(height * 0.5, get_obb_extents_at(rotation).y * 0.5)
+	var prev_bottom: float = prev_pos.y + height * 0.5
+	var next_bottom: float = at_pos.y + obb_half_h
+	var my_left: float = minf(prev_pos.x, at_pos.x) - width * 0.5
+	var my_right: float = maxf(prev_pos.x, at_pos.x) + width * 0.5
+	var my_top: float = minf(prev_pos.y, at_pos.y) - height * 0.5
+
+	for p_var: Variant in props_var as Array:
+		if not is_instance_valid(p_var) or not (p_var is Node2D) or p_var == self:
+			continue
+		var other: Node2D = p_var as Node2D
+		if bool(other.get("is_destroyed")) or bool(other.get("is_hanging_holder")):
+			continue
+		var other_type: String = str(other.get("prop_type")).to_upper()
+		if other_type == "LAMP_1":
+			continue
+		if bool(other.get("is_hanging_crate")) and not bool(other.get("is_hanging_released")):
+			continue
+		var oid: int = other.get_instance_id()
+		if _prop_impact_cooldowns.has(oid):
+			continue
+
+		var ow: float = float(other.get("width")) if other.get("width") != null else 14.0
+		var oh: float = float(other.get("height")) if other.get("height") != null else 14.0
+		var o_left: float = other.global_position.x - ow * 0.5
+		var o_right: float = other.global_position.x + ow * 0.5
+		var other_top: float = other.global_position.y - oh * 0.5
+		var other_bottom: float = other.global_position.y + oh * 0.5
+		var overlap_x: float = minf(my_right, o_right) - maxf(my_left, o_left)
+		if overlap_x < 1.8:
+			continue
+
+		var ovel: Vector2 = other.get("velocity") as Vector2 if other.get("velocity") != null else Vector2.ZERO
+		var omass: float = maxf(0.4, float(other.get("mass")) if other.get("mass") != null else 1.0)
+
+		# 1. Vertical top-down crush impact
+		if not on_ground and velocity.y > 0.4 and prev_pos.y < other.global_position.y - 2.0 and prev_bottom <= other_top + oh * 0.65 + 2.0 and next_bottom >= other_top - 0.5:
+			var v_rel_y: float = velocity.y - ovel.y
+			var min_span: float = maxf(1.0, minf(width, ow))
+			if v_rel_y > 2.15:
+				_resolve_prop_collision_damage(other, v_rel_y, true, overlap_x / min_span)
+				if is_destroyed:
+					return
+				if bool(other.get("is_destroyed")) or int(other.get("barrel_phase")) > 0:
+					# Retain downward momentum after crushing/detonating the underlying prop
+					velocity.y = maxf(1.5, velocity.y * (mass / (mass + 0.22 * omass)))
+					continue
+			# If `other` survived and `self` is much heavier striking off-center, shove/tip `other` aside
+			var is_off_center_hit: bool = (overlap_x < min_span * 0.85 or absf(other.global_position.x - at_pos.x) > ow * 0.30)
+			if not bool(other.get("is_destroyed")) and not bool(other.get("kinematic")) and mass >= omass * 1.65 and is_off_center_hit:
+				var shove_dir: float = 1.0 if other.global_position.x >= at_pos.x else -1.0
+				var shove_vx: float = shove_dir * clampf(maxf(v_rel_y, 1.5) * 0.40 * (mass / (mass + omass)), 0.85, 2.5)
+				other.set("velocity", Vector2(shove_vx, ovel.y))
+				if other.get("angular_velocity") != null:
+					other.set("angular_velocity", shove_dir * 0.14)
+				if other.has_method("wake_up"):
+					other.call("wake_up")
+		# 2. High-speed horizontal smash against non-solid fragile props (CHAIR, COMP, PAPER)
+		elif not bool(other.get("has_solid_hitbox")) and absf(velocity.x) > 2.40 and next_bottom > other_top + 2.0 and my_top < other_bottom - 2.0:
+			var dir_to_other: float = 1.0 if other.global_position.x >= prev_pos.x else -1.0
+			var v_rel_x: float = (velocity.x - ovel.x) * dir_to_other
+			if v_rel_x > 2.40:
+				_resolve_prop_collision_damage(other, v_rel_x, false, 1.0)
+				if is_destroyed:
+					return
+				if not bool(other.get("is_destroyed")) and not bool(other.get("kinematic")):
+					other.set("velocity", Vector2(dir_to_other * clampf(v_rel_x * 0.55, 1.0, 2.8), -1.2))
+					if other.get("angular_velocity") != null:
+						other.set("angular_velocity", dir_to_other * 0.16)
+
+
 func release_hanging_crate() -> void:
 	if not is_hanging_crate or is_hanging_released:
 		return
@@ -2028,6 +2284,7 @@ func release_hanging_crate() -> void:
 	angular_velocity = -_hang_ang_vel * 0.5
 	_target_rest_rot = 0.0
 	crushed_fighter_ids.clear()
+	crushed_prop_ids.clear()
 	queue_redraw()
 
 
@@ -2217,6 +2474,7 @@ func apply_melee_hit(damage: float, dir_x: int, is_kick: bool = false, _weapon_i
 			on_ground = false
 			_settling_frames = 0.0
 		crushed_fighter_ids.clear()
+		crushed_prop_ids.clear()
 		if attacker != null and is_instance_valid(attacker):
 			crushed_fighter_ids[attacker.get_instance_id()] = true
 
@@ -2263,10 +2521,18 @@ func apply_explosion_hit(angle_rad: float, power: float, damage: float) -> void:
 		var p_swing: float = clampf(lat_factor * clampf(power, 2.0, 7.5) * 0.038, 0.08, 0.28)
 		apply_pendulum_impulse(swing_dir * p_swing)
 	elif not kinematic:
-		velocity = impulse
-		angular_velocity = signf(impulse.x) * 0.16
-		on_ground = false
+		if mass >= 3.0 and not on_ground and velocity.y > 0.8 and sin(angle_rad) < -0.20:
+			# Downward Momentum Shielding: a heavy falling prop (e.g. 3.8t CRATE_HANGING) crushing an explosive barrel
+			# underneath its base absorbs the upward shockwave and continues descending to the floor!
+			velocity.y = maxf(1.5, velocity.y * 0.72)
+			velocity.x = clampf(velocity.x + cos(angle_rad) * 0.12, -0.5, 0.5)
+			angular_velocity = clampf(angular_velocity * 0.5, -0.05, 0.05)
+		else:
+			velocity = impulse
+			angular_velocity = signf(impulse.x) * 0.16
+			on_ground = false
 		crushed_fighter_ids.clear()
+		crushed_prop_ids.clear()
 
 	if prop_type == "BARREL_EXPLOSIVE" and barrel_phase == 0:
 		_trigger_barrel_phase_1_explosion(impulse)
@@ -2329,7 +2595,11 @@ func take_damage(amount: float, impulse: Vector2 = Vector2.ZERO) -> void:
 		return
 	hp -= amount
 	if hp > 0.0:
+		if amount >= 10.0:
+			_impact_shudder_frames = 5.0
 		_update_damaged_visual(impulse.x)
+		_apply_sprite_visual_transform()
+		queue_redraw()
 		return
 	if prop_type == "BARREL_EXPLOSIVE" and barrel_phase == 0:
 		_trigger_barrel_phase_1_explosion(impulse)
@@ -2366,6 +2636,21 @@ func _trigger_explosive_prop_hit(impulse: Vector2) -> void:
 		_trigger_gascan_explosion()
 	else:
 		_destroy_prop(impulse)
+
+
+func _trigger_barrel_catastrophic_crush_explosion() -> void:
+	if is_destroyed:
+		return
+	var blast_pos: Vector2 = global_position
+	barrel_phase = 2
+	hp = 0.0
+	is_destroyed = true
+	visible = false
+	_wake_nearby_props()
+	_ignoring_self_explosion = true
+	_notify_explosion_and_fire(blast_pos, 38.0, 24.0, 5.0, "BARREL_EXPLOSIVE", 16)
+	_ignoring_self_explosion = false
+	_spawn_debris_burst(blast_pos + Vector2(0.0, -height * 0.5), Vector2(0.0, -3.2), 6)
 
 
 func _trigger_barrel_phase_1_explosion(_impulse: Vector2 = Vector2.ZERO) -> void:
@@ -2413,6 +2698,7 @@ func _trigger_barrel_phase_2_explosion() -> void:
 	barrel_phase = 2
 	is_destroyed = true
 	visible = false
+	_wake_nearby_props()
 
 	_notify_explosion_and_fire(blast_pos, 33.0, 20.0, 4.8, "BARREL_WRECK", 14)
 	_spawn_debris_burst(blast_pos + Vector2(0.0, -height * 0.5), Vector2(0.0, -3.2), 5)
@@ -2424,6 +2710,7 @@ func _trigger_gascan_explosion() -> void:
 	var blast_pos: Vector2 = global_position
 	is_destroyed = true
 	visible = false
+	_wake_nearby_props()
 
 	# AS3 MapPremadeItems.as:1668-1672 & Fires.as:517-523: GASCAN only bursts into 18 fire particles (TriggerFireAt("GASCAN")), NO explosion shockwave!
 	_spawn_debris_burst(blast_pos + Vector2(0.0, -height * 0.5), Vector2(0.0, -2.8), 4)
@@ -2503,6 +2790,14 @@ func _destroy_prop(_impulse: Vector2) -> void:
 func _draw() -> void:
 	if is_destroyed:
 		return
+
+	# Draw Stage 2 structural stress-creases / buckled waist rim on heavily dented steel barrel
+	if prop_type == "BARREL" and barrel_phase == 0 and _damage_visual_stage >= 2:
+		var crease_col: Color = Color(0.14, 0.15, 0.17, 0.88)
+		var hi_col: Color = Color(0.62, 0.64, 0.68, 0.55)
+		draw_line(Vector2(-width * 0.36, -1.5), Vector2(width * 0.12, 0.8), crease_col, 1.1)
+		draw_line(Vector2(-width * 0.10, 2.2), Vector2(width * 0.38, -0.8), crease_col, 1.1)
+		draw_line(Vector2(-width * 0.32, -2.4), Vector2(width * 0.10, -0.2), hi_col, 0.9)
 
 	# Draw suspension rope for hanging crate holder (connects from top of holder bracket to ceiling anchor)
 	if is_hanging_holder:

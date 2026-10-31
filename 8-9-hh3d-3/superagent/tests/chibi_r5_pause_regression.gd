@@ -72,6 +72,27 @@ func _run() -> void:
 	_check(float(_world.get("banner_timer")) < paused_timer, "resumed simulation timer advances")
 	_check(float(_world.get("banner_timer")) < timer_before, "pause/resume does not reset round timer")
 
+	# Verify Tactical Pause Menu layout, cursor navigation, camera/audio toggles, and Quick Restart (SA-WP12 / CB-EC-61..63)
+	if hud != null and hud.has_method("get_pause_item_rects"):
+		var item_rects: Array[Rect2] = hud.call("get_pause_item_rects", Vector2(1280.0, 720.0))
+		_check(item_rects.size() == 6, "Tactical Pause Menu exposes 6 interactive action rows")
+	_world.call("set_paused_state", true)
+	_check(bool(_world.get("is_paused")) and int(_world.get("pause_selected_index")) == 0, "set_paused_state(true) resets cursor to item 0 (RESUME)")
+	_world.call("execute_pause_menu_action", 4)
+	_check(bool(_world.get("pause_camera_wide")), "Pause action 4 toggles wide tactical camera overview")
+	_world.call("execute_pause_menu_action", 4)
+	_check(not bool(_world.get("pause_camera_wide")), "Pause action 4 toggles camera back to dynamic zoom")
+	if first != null:
+		first.set("hp", 42.0)
+	_world.call("execute_pause_menu_action", 1)
+	var restarted_first: Node2D = _first_fighter()
+	_check(
+		not bool(_world.get("is_paused"))
+		and restarted_first != null
+		and is_equal_approx(float(restarted_first.get("hp")), float(restarted_first.get("max_hp"))),
+		"Pause action 1 (RESTART MATCH) unpauses and restores full fighter HP on the active map"
+	)
+
 
 func _first_fighter_position() -> Vector2:
 	var first: Node2D = _first_fighter()

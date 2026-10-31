@@ -1077,16 +1077,25 @@ func try_teleport_entity(entity: Node2D, move_dir_x: float = 0.0) -> bool:
 		return false
 
 	var pos: Vector2 = entity.global_position
-	var is_prop_entity: bool = (entity.get("half_w") != null and entity.get("height") != null)
-	var prop_half_w: float = float(entity.get("half_w")) if is_prop_entity else 0.0
+	var is_prop_entity: bool = ((entity.get("width") != null or entity.get("half_w") != null) and entity.get("height") != null)
+	var prop_half_w: float = float(entity.get("width")) * 0.5 if entity.get("width") != null else (float(entity.get("half_w")) if entity.get("half_w") != null else 0.0)
 	var prop_half_h: float = float(entity.get("height")) * 0.5 if is_prop_entity else 0.0
+	if is_prop_entity and entity.has_method("get_obb_extents_at"):
+		var obb_ext: Vector2 = entity.call("get_obb_extents_at", entity.rotation) as Vector2
+		prop_half_w = maxf(prop_half_w, obb_ext.x * 0.5)
+		prop_half_h = maxf(prop_half_h, obb_ext.y * 0.5)
 	var check_pt: Vector2 = Vector2(pos.x, pos.y + prop_half_h - 3.0) if is_prop_entity else Vector2(pos.x, pos.y - 6.0)
 	var dir_x: float = move_dir_x if absf(move_dir_x) > 0.01 else _infer_entity_portal_dir_x(entity)
 	var lead_pt: Vector2 = Vector2(pos.x + signf(dir_x) * (prop_half_w + 1.5), check_pt.y) if is_prop_entity else check_pt
+	var lead_mid_pt: Vector2 = Vector2(lead_pt.x, pos.y) if is_prop_entity else check_pt
 
 	for p: Dictionary in portals:
 		var entry_rect: Rect2 = p.get("entry_rect", Rect2()) as Rect2
-		var inside_entry: bool = entry_rect.has_point(check_pt) or entry_rect.has_point(pos) or (is_prop_entity and entry_rect.has_point(lead_pt))
+		var inside_entry: bool = (
+			entry_rect.has_point(check_pt)
+			or entry_rect.has_point(pos)
+			or (is_prop_entity and (entry_rect.has_point(lead_pt) or entry_rect.has_point(lead_mid_pt)))
+		)
 		if not inside_entry:
 			continue
 		var pdir: Vector2 = p.get("dir", Vector2(-1.0, 0.0)) as Vector2
@@ -1111,7 +1120,7 @@ func try_teleport_entity(entity: Node2D, move_dir_x: float = 0.0) -> bool:
 		var bottom_y: float = pos.y + prop_half_h
 		var dy_from_bot: float = clampf(entry_rect.end.y - bottom_y, 0.0, entry_rect.size.y)
 		var new_y: float = exit_rect.end.y - dy_from_bot - prop_half_h
-		if door_open and bool(entity.get("on_ground")):
+		if door_open and (bool(entity.get("on_ground")) or (is_prop_entity and dy_from_bot <= 4.0)):
 			var gy_exit: float = get_ground_y_below(new_x, exit_rect.end.y - 8.0, 16.0, true)
 			if gy_exit < INF:
 				new_y = gy_exit - prop_half_h
@@ -1129,9 +1138,21 @@ func try_teleport_entity(entity: Node2D, move_dir_x: float = 0.0) -> bool:
 			var vel_v: Variant = entity.get("velocity")
 			if typeof(vel_v) == TYPE_VECTOR2:
 				var vv: Vector2 = vel_v as Vector2
-				entity.set("velocity", Vector2(-vv.x, vv.y))
+				var out_vx: float = -vv.x
+				if is_prop_entity and door_open and absf(pdir.x) > 0.1:
+					var exit_out_sign: float = -signf(pdir.x)
+					out_vx = exit_out_sign * maxf(absf(vv.x), 1.15)
+				entity.set("velocity", Vector2(out_vx, vv.y))
 			if is_prop_entity and entity.get("angular_velocity") != null:
 				entity.set("angular_velocity", -float(entity.get("angular_velocity")))
+		if is_prop_entity:
+			if entity.has_method("wake_up"):
+				entity.call("wake_up")
+			else:
+				if entity.get("is_sleeping") != null:
+					entity.set("is_sleeping", false)
+				if entity.get("_sleep_frames") != null:
+					entity.set("_sleep_frames", 0.0)
 		if entity.has_method("on_portal_teleported"):
 			entity.call("on_portal_teleported", flip_x, eff_entry_dir)
 

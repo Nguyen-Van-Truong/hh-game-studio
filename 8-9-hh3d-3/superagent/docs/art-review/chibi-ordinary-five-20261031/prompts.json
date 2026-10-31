@@ -1,0 +1,2170 @@
+{
+  "date": "2026-10-31",
+  "mode": "built-in imagegen",
+  "status": "review-only; no runtime integration",
+  "roster_prompt": "Use case: stylized-concept. Primary request: redraw ONLY the FIRST FIVE ordinary CHIBI characters from the reference game's roster as a polished, consistent premium hand-drawn 2D cel game-art lineup. Reference image 1 shows current in-game proportions and identities; preserve them and improve anatomy continuity, clothing construction and restrained human expressions. Do not draw other rows or superheroes.\nCRITICAL PROPORTIONS: all FIVE remain VERY COMPACT 2.5-HEADS-TALL chibi adults, not realistic adults. Skull-to-sole = 2.5 skull heights: enormous head 40% of figure height, short torso32%, VERY SHORT legs+shoes28%. Head almost as wide as shoulders, small torso, stubby but articulated arms/legs, substantial simple shoes. Small stylized ADULT people (not children), no long legs, no four/seven-heads-tall anatomy. Hair may add a little height but not change skull measurement.\nCanvas: landscape, dark slate (#172336) game-review backdrop, five equally spaced FULL BODY figures on one baseline, generous empty margins and no cropping, each large enough to evaluate. Neutral three-quarter-front stance with both hands relaxed beside body, no weapons, no fighting stance. Thin understated vertical separators. Title \"CHIBI / ORDINARY FIVE\". Clear names below: \"JOHNNY\", \"BORIS\", \"AGENT\", \"HIDEKI\", \"BLAIRE\".\nDesigns left to right (same current identities, elevated quality):\n1 JOHNNY: adult lean chibi man, short angular brown hair with subtle orange dyed lock (NOT FLAME), warm tan skin, orange-front and navy zip hoodie with muted slate sleeves, dark navy trousers, navy high-top sneakers with cream soles.\n2 BORIS: adult stockier chibi man, short grey/silver flat crop (NOT BALD), square face and subtle stubble, olive canvas utility/work jacket over dark shirt, charcoal trousers, practical dark boots. Broader torso but same2.5head height.\n3 AGENT: adult sleek chibi man, slick dark hair, ordinary opaque sunglasses, navy-charcoal suit jacket, white shirt, short burnt-orange necktie, dark trousers and black shoes. NOT armor, no visor or technology.\n4 HIDEKI: adult agile chibi man with East Asian features, short tied dark hair, simple red cloth headband, pale-blue wrap-front training shirt with offwhite inner panel and navy waist tie, dark trousers, flat dark shoes. Ordinary martial arts clothing, NOT ninja mask, not powered, no sword on belt.\n5 BLAIRE: adult chibi woman with a short dark purple/plum bob, teal utility jacket, light undershirt, charcoal trousers and simple dark boots. Modest practical silhouette, NOT blonde or ponytail, no exposed midriff.\nFinish: expressive but serious adult facial character, small readable pupils, confident not smug/smiling exaggerated; crisp organic dark outline, tasteful two/three-tone cel shading, large clean color masses readable at60px tall, natural elbows/wrists/knees integrated into limbs (no detached capsule joints), soft subtle fabric folds, flattering professional character design. Restrained palette; no photorealism, no gritty texture, no plastic3D, no neon, no logos, no superhero costumes, no powers, no auras. Original redraw of user's game characters. This is an art-direction review board, not a screenshot.",
+  "reference": "D:/dataDiskD/intellji/hoanhaosocial/hoanhaonew-20-6-2025/hh-game-studio/8-9-hh3d-3/superagent/docs/chibi-r5/04_roster_diagnostic.png",
+  "action_reference": "00-roster.png",
+  "jobs": [
+    {
+      "id": "johnny/01-movement",
+      "char": "johnny",
+      "group": "01-movement",
+      "poses": [
+        [
+          "IDLE",
+          "relaxed idle threequarter view, open relaxed fingers, weight on one leg"
+        ],
+        [
+          "WALK CONTACT",
+          "walking right, front heel on floor, rear toe on floor, clear split stride"
+        ],
+        [
+          "WALK PASSING",
+          "walking right, planted support leg nearly straight, other bent foot passes next to support ankle beneath hips; NOT a split stride"
+        ],
+        [
+          "RUN LEFT",
+          "running contact pose left leg forward planted, right knee folds behind, arms counterbalance"
+        ],
+        [
+          "RUN RIGHT",
+          "running opposite contact pose right leg forward planted, left knee folds behind; visibly exchange arms and legs"
+        ],
+        [
+          "SPRINT",
+          "fast forward lean and compact driving arms, human effort not supernatural flight"
+        ],
+        [
+          "CROUCH",
+          "low compact crouch with folded knees and feet supported"
+        ],
+        [
+          "COVER",
+          "crouched close behind a plain waist-high crate, cautious look over edge"
+        ],
+        [
+          "JUMP UP",
+          "jump ascent with feet pushing upward, torso extended, arms counterbalance"
+        ],
+        [
+          "JUMP APEX",
+          "jump apex, short legs tucked, relaxed arms, believable aerial balance"
+        ],
+        [
+          "DESCEND",
+          "falling from jump, legs opening ready for feet-first landing"
+        ],
+        [
+          "FREE FALL",
+          "uncontrolled feet-down fall with spread arms, alarmed not heroic"
+        ],
+        [
+          "ROLL TUCK",
+          "entering forward defensive roll, chin tucked, knees drawn to chest"
+        ],
+        [
+          "ROLL TURN",
+          "middle of floor roll, weight on curved back, hips up, head protected"
+        ],
+        [
+          "ROLL EXIT",
+          "rising from roll onto one knee and supporting hand, beginning to regain balance"
+        ],
+        [
+          "DIVE",
+          "horizontal low forward dive, both arms reach forward, short legs trail"
+        ]
+      ],
+      "prompt": "Use case: stylized-concept. Make a polished original 2D CHIBI action-art review sheet for user's arena game. Input image1 is the ONLY identity/proportion/style anchor, not a composition to copy.\nCRITICAL: preserve very compact about2.5-heads-tall CHIBI ADULT proportions of anchor: huge head40%, short torso32%, stubby short legs28%; head almost shoulders wide. NOT realistic adult anatomy, not long limbs, not3.5/7head figures. These are ordinary non-superpowered adults rendered CHIBI; acting and weight are natural, not anatomy photorealism.\nPremium clean organic ink outline, two/three-tone cel shading, tasteful simple folds, large readable colors, integrated elbows/knees, consistent facial construction and clothing. No 3D plastic, no photorealistic textures, no superhero powers, no aura, no magical attack arcs, no logo. Reference is proposed design, not yet owner-approved.\nComposition: high-resolution SQUARE 4x4 contact sheet with EXACTLY16 equal spacious cells. Prefer2048x2048 or larger; never make wide 4x3. Dark slate uniform backdrop matching anchor, subtle dividers, modest top header and small ivory all-caps numbered labels beneath each cell. Full body+objects contained in every cell EXCEPT last eight portrait cells of MODEL AND EXPRESSIONS which show head/shoulders intentionally. No duplicate/unrequested people except grey training dummy explicitly required. Same character16times, never include allfive. Mainly right-facing side/threequarter side action, natural perspective not foreshortened camera. Thin floor hint only where needed. No cropping hair/feet/weapons. Pose list rowmajor top-left to bottom-right:\n01 \"IDLE\" — relaxed idle threequarter view, open relaxed fingers, weight on one leg\n02 \"WALK CONTACT\" — walking right, front heel on floor, rear toe on floor, clear split stride\n03 \"WALK PASSING\" — walking right, planted support leg nearly straight, other bent foot passes next to support ankle beneath hips; NOT a split stride\n04 \"RUN LEFT\" — running contact pose left leg forward planted, right knee folds behind, arms counterbalance\n05 \"RUN RIGHT\" — running opposite contact pose right leg forward planted, left knee folds behind; visibly exchange arms and legs\n06 \"SPRINT\" — fast forward lean and compact driving arms, human effort not supernatural flight\n07 \"CROUCH\" — low compact crouch with folded knees and feet supported\n08 \"COVER\" — crouched close behind a plain waist-high crate, cautious look over edge\n09 \"JUMP UP\" — jump ascent with feet pushing upward, torso extended, arms counterbalance\n10 \"JUMP APEX\" — jump apex, short legs tucked, relaxed arms, believable aerial balance\n11 \"DESCEND\" — falling from jump, legs opening ready for feet-first landing\n12 \"FREE FALL\" — uncontrolled feet-down fall with spread arms, alarmed not heroic\n13 \"ROLL TUCK\" — entering forward defensive roll, chin tucked, knees drawn to chest\n14 \"ROLL TURN\" — middle of floor roll, weight on curved back, hips up, head protected\n15 \"ROLL EXIT\" — rising from roll onto one knee and supporting hand, beginning to regain balance\n16 \"DIVE\" — horizontal low forward dive, both arms reach forward, short legs trail\nHEADER \"JOHNNY / MOVEMENT\". Depict ONLY JOHNNY: brown angular hair with orange dyed lock, orange/navy zip hoodie with slate sleeves, navy cargo trousers, navy cream-soled high tops. Lock exactly that figure in reference1: face/hair/costume/proportions/materials/colors in everycell. For Agent keep normal sunglasses even during emotions, emote with brows/mouth/body. For Blaire preserve PURPLE BOB in rear view. All poses human acting within short chibi limbs. Conventional everyday/game weapons, no sci-fi rayguns or toy gadgets. Flames only on burning clothing where explicitly requested. This is representative keypose art, not a finished animation sequence."
+    },
+    {
+      "id": "johnny/02-traversal",
+      "char": "johnny",
+      "group": "02-traversal",
+      "poses": [
+        [
+          "LADDER HOLD",
+          "back threequarter view holding simple ladder, both feet on rungs"
+        ],
+        [
+          "CLIMB LEFT",
+          "back view ladder climb, LEFT hand above head and LEFT knee high, right hand lower/right leg extended"
+        ],
+        [
+          "CLIMB RIGHT",
+          "back view ladder climb, RIGHT hand above head and RIGHT knee high, left hand lower/left leg extended; exact opposite leads of previous cell"
+        ],
+        [
+          "LADDER SLIDE",
+          "sliding down ladder with hands on rails, legs near rails and bent knees"
+        ],
+        [
+          "LADDER EXIT",
+          "stepping from ladder onto upper platform edge, one knee over lip"
+        ],
+        [
+          "LEDGE CATCH",
+          "both hands catch platform edge, short arms extended, legs swing below"
+        ],
+        [
+          "LEDGE HANG",
+          "hanging from edge, elbows bent slightly, tense shoulders and searching feet"
+        ],
+        [
+          "LEDGE RELEASE",
+          "releasing ledge and dropping feet first, hands let go"
+        ],
+        [
+          "ROCKET RIGHT",
+          "frightened chibi accidentally clinging to a small flying game rocket heading RIGHT, short exhaust; game slapstick mechanic, NOT person flying by power"
+        ],
+        [
+          "ROCKET LEFT",
+          "same terrified clinging pose flying LEFT, preserve outfit asymmetry; no triumphant surfing"
+        ],
+        [
+          "DIVE TACKLE",
+          "character horizontally tackles an anonymous grey chibi training dummy around torso, both full bodies visible, neither has injury"
+        ],
+        [
+          "GRABBED",
+          "character is offbalance victim of a dive tackle by grey chibi training dummy, both bodies visible; not standing wrestler grab"
+        ],
+        [
+          "PUSH",
+          "both palms push heavy simple barrel, feet firmly brace, body weight forward"
+        ],
+        [
+          "PROP KICK",
+          "short front kick pushing a small plain box, support foot planted"
+        ],
+        [
+          "PICKUP",
+          "crouching to retrieve small dropped pistol from floor, eyes down, grounded feet"
+        ],
+        [
+          "VICTORY",
+          "relieved exhausted smile, modest one-arm celebration, loose shoulders, no powered pose"
+        ]
+      ],
+      "prompt": "Use case: stylized-concept. Make a polished original 2D CHIBI action-art review sheet for user's arena game. Input image1 is the ONLY identity/proportion/style anchor, not a composition to copy.\nCRITICAL: preserve very compact about2.5-heads-tall CHIBI ADULT proportions of anchor: huge head40%, short torso32%, stubby short legs28%; head almost shoulders wide. NOT realistic adult anatomy, not long limbs, not3.5/7head figures. These are ordinary non-superpowered adults rendered CHIBI; acting and weight are natural, not anatomy photorealism.\nPremium clean organic ink outline, two/three-tone cel shading, tasteful simple folds, large readable colors, integrated elbows/knees, consistent facial construction and clothing. No 3D plastic, no photorealistic textures, no superhero powers, no aura, no magical attack arcs, no logo. Reference is proposed design, not yet owner-approved.\nComposition: high-resolution SQUARE 4x4 contact sheet with EXACTLY16 equal spacious cells. Prefer2048x2048 or larger; never make wide 4x3. Dark slate uniform backdrop matching anchor, subtle dividers, modest top header and small ivory all-caps numbered labels beneath each cell. Full body+objects contained in every cell EXCEPT last eight portrait cells of MODEL AND EXPRESSIONS which show head/shoulders intentionally. No duplicate/unrequested people except grey training dummy explicitly required. Same character16times, never include allfive. Mainly right-facing side/threequarter side action, natural perspective not foreshortened camera. Thin floor hint only where needed. No cropping hair/feet/weapons. Pose list rowmajor top-left to bottom-right:\n01 \"LADDER HOLD\" — back threequarter view holding simple ladder, both feet on rungs\n02 \"CLIMB LEFT\" — back view ladder climb, LEFT hand above head and LEFT knee high, right hand lower/right leg extended\n03 \"CLIMB RIGHT\" — back view ladder climb, RIGHT hand above head and RIGHT knee high, left hand lower/left leg extended; exact opposite leads of previous cell\n04 \"LADDER SLIDE\" — sliding down ladder with hands on rails, legs near rails and bent knees\n05 \"LADDER EXIT\" — stepping from ladder onto upper platform edge, one knee over lip\n06 \"LEDGE CATCH\" — both hands catch platform edge, short arms extended, legs swing below\n07 \"LEDGE HANG\" — hanging from edge, elbows bent slightly, tense shoulders and searching feet\n08 \"LEDGE RELEASE\" — releasing ledge and dropping feet first, hands let go\n09 \"ROCKET RIGHT\" — frightened chibi accidentally clinging to a small flying game rocket heading RIGHT, short exhaust; game slapstick mechanic, NOT person flying by power\n10 \"ROCKET LEFT\" — same terrified clinging pose flying LEFT, preserve outfit asymmetry; no triumphant surfing\n11 \"DIVE TACKLE\" — character horizontally tackles an anonymous grey chibi training dummy around torso, both full bodies visible, neither has injury\n12 \"GRABBED\" — character is offbalance victim of a dive tackle by grey chibi training dummy, both bodies visible; not standing wrestler grab\n13 \"PUSH\" — both palms push heavy simple barrel, feet firmly brace, body weight forward\n14 \"PROP KICK\" — short front kick pushing a small plain box, support foot planted\n15 \"PICKUP\" — crouching to retrieve small dropped pistol from floor, eyes down, grounded feet\n16 \"VICTORY\" — relieved exhausted smile, modest one-arm celebration, loose shoulders, no powered pose\nHEADER \"JOHNNY / TRAVERSAL AND OBJECTS\". Depict ONLY JOHNNY: brown angular hair with orange dyed lock, orange/navy zip hoodie with slate sleeves, navy cargo trousers, navy cream-soled high tops. Lock exactly that figure in reference1: face/hair/costume/proportions/materials/colors in everycell. For Agent keep normal sunglasses even during emotions, emote with brows/mouth/body. For Blaire preserve PURPLE BOB in rear view. All poses human acting within short chibi limbs. Conventional everyday/game weapons, no sci-fi rayguns or toy gadgets. Flames only on burning clothing where explicitly requested. This is representative keypose art, not a finished animation sequence."
+    },
+    {
+      "id": "johnny/03-firearms",
+      "char": "johnny",
+      "group": "03-firearms",
+      "poses": [
+        [
+          "PISTOL",
+          "standing ordinary compact black pistol aim right with aligned wrist"
+        ],
+        [
+          "REVOLVER",
+          "standing grey revolver with visible cylinder, braced human stance"
+        ],
+        [
+          "SMG",
+          "standing compact dark submachinegun, two short arms grip appropriately"
+        ],
+        [
+          "RIFLE",
+          "standing conventional rifle stock against shoulder, support hand on foreend"
+        ],
+        [
+          "SHOTGUN",
+          "standing conventional pump shotgun aim, stock shouldered, short arms work naturally"
+        ],
+        [
+          "SNIPER",
+          "crouched scoped rifle aim right, elbows comfortable and feet grounded"
+        ],
+        [
+          "LAUNCHER",
+          "plain green shoulder-fired tubular game launcher held with visible effort, NOT futuristic"
+        ],
+        [
+          "FLAMETHROWER",
+          "utilitarian small backpack and hose-fed nozzle held with two hands; NO flame emitted, no magic"
+        ],
+        [
+          "GRENADE READY",
+          "standing normal small olive grenade held ready beside shoulder, no release yet"
+        ],
+        [
+          "BOTTLE READY",
+          "standing brown bottle with simple cloth wick held ready beside shoulder, not lit"
+        ],
+        [
+          "GRENADE THROW",
+          "ordinary overarm grenade release, body turns, hand opens, item just leaving hand"
+        ],
+        [
+          "BOTTLE THROW",
+          "ordinary bottle release, lead foot planted, eyes follow bottle, no flaming body"
+        ],
+        [
+          "AIM UP",
+          "compact pistol aimed45degrees up, both feet planted, eyes follow direction"
+        ],
+        [
+          "AIM DOWN",
+          "compact pistol aimed45degrees down, wrist straight, both feet planted"
+        ],
+        [
+          "KNEEL AIM",
+          "one knee down aiming conventional rifle level, head clear of stock"
+        ],
+        [
+          "COVER AIM",
+          "crouched aiming pistol around edge of simple crate, small exposed silhouette"
+        ]
+      ],
+      "prompt": "Use case: stylized-concept. Make a polished original 2D CHIBI action-art review sheet for user's arena game. Input image1 is the ONLY identity/proportion/style anchor, not a composition to copy.\nCRITICAL: preserve very compact about2.5-heads-tall CHIBI ADULT proportions of anchor: huge head40%, short torso32%, stubby short legs28%; head almost shoulders wide. NOT realistic adult anatomy, not long limbs, not3.5/7head figures. These are ordinary non-superpowered adults rendered CHIBI; acting and weight are natural, not anatomy photorealism.\nPremium clean organic ink outline, two/three-tone cel shading, tasteful simple folds, large readable colors, integrated elbows/knees, consistent facial construction and clothing. No 3D plastic, no photorealistic textures, no superhero powers, no aura, no magical attack arcs, no logo. Reference is proposed design, not yet owner-approved.\nComposition: high-resolution SQUARE 4x4 contact sheet with EXACTLY16 equal spacious cells. Prefer2048x2048 or larger; never make wide 4x3. Dark slate uniform backdrop matching anchor, subtle dividers, modest top header and small ivory all-caps numbered labels beneath each cell. Full body+objects contained in every cell EXCEPT last eight portrait cells of MODEL AND EXPRESSIONS which show head/shoulders intentionally. No duplicate/unrequested people except grey training dummy explicitly required. Same character16times, never include allfive. Mainly right-facing side/threequarter side action, natural perspective not foreshortened camera. Thin floor hint only where needed. No cropping hair/feet/weapons. Pose list rowmajor top-left to bottom-right:\n01 \"PISTOL\" — standing ordinary compact black pistol aim right with aligned wrist\n02 \"REVOLVER\" — standing grey revolver with visible cylinder, braced human stance\n03 \"SMG\" — standing compact dark submachinegun, two short arms grip appropriately\n04 \"RIFLE\" — standing conventional rifle stock against shoulder, support hand on foreend\n05 \"SHOTGUN\" — standing conventional pump shotgun aim, stock shouldered, short arms work naturally\n06 \"SNIPER\" — crouched scoped rifle aim right, elbows comfortable and feet grounded\n07 \"LAUNCHER\" — plain green shoulder-fired tubular game launcher held with visible effort, NOT futuristic\n08 \"FLAMETHROWER\" — utilitarian small backpack and hose-fed nozzle held with two hands; NO flame emitted, no magic\n09 \"GRENADE READY\" — standing normal small olive grenade held ready beside shoulder, no release yet\n10 \"BOTTLE READY\" — standing brown bottle with simple cloth wick held ready beside shoulder, not lit\n11 \"GRENADE THROW\" — ordinary overarm grenade release, body turns, hand opens, item just leaving hand\n12 \"BOTTLE THROW\" — ordinary bottle release, lead foot planted, eyes follow bottle, no flaming body\n13 \"AIM UP\" — compact pistol aimed45degrees up, both feet planted, eyes follow direction\n14 \"AIM DOWN\" — compact pistol aimed45degrees down, wrist straight, both feet planted\n15 \"KNEEL AIM\" — one knee down aiming conventional rifle level, head clear of stock\n16 \"COVER AIM\" — crouched aiming pistol around edge of simple crate, small exposed silhouette\nHEADER \"JOHNNY / RANGED AND THROWING\". Depict ONLY JOHNNY: brown angular hair with orange dyed lock, orange/navy zip hoodie with slate sleeves, navy cargo trousers, navy cream-soled high tops. Lock exactly that figure in reference1: face/hair/costume/proportions/materials/colors in everycell. For Agent keep normal sunglasses even during emotions, emote with brows/mouth/body. For Blaire preserve PURPLE BOB in rear view. All poses human acting within short chibi limbs. Conventional everyday/game weapons, no sci-fi rayguns or toy gadgets. Flames only on burning clothing where explicitly requested. This is representative keypose art, not a finished animation sequence."
+    },
+    {
+      "id": "johnny/04-melee",
+      "char": "johnny",
+      "group": "04-melee",
+      "poses": [
+        [
+          "JAB PREP",
+          "ordinary compact boxing guard, left fist draws back slightly, weight braced"
+        ],
+        [
+          "JAB CONTACT",
+          "straight lead jab to right, shoulder follows, wrist aligned, back hand protects"
+        ],
+        [
+          "JAB RECOVERY",
+          "jab retracts to guard, elbow folds, weight settling"
+        ],
+        [
+          "CROSS",
+          "rear-hand straight punch, visible hip/shoulder rotation, planted feet"
+        ],
+        [
+          "HOOK",
+          "short third-punch hook, rounded elbow, body turns, not magical uppercut"
+        ],
+        [
+          "FRONT KICK",
+          "short front kick at waist height, support knee soft, arms counterbalance"
+        ],
+        [
+          "JUMP KICK",
+          "compact airborne forward kick, other short leg folded, natural alarm/exertion"
+        ],
+        [
+          "MACHETE READY",
+          "ordinary short machete raised diagonally in one hand, no opponent and no blood"
+        ],
+        [
+          "MACHETE SWING",
+          "short machete followthrough across body, ordinary restrained arc, no energy trail"
+        ],
+        [
+          "AXE READY",
+          "small twohanded wood axe poised overhead with hands gripping handle"
+        ],
+        [
+          "AXE SWING",
+          "wood axe swings downward, body follows weight, no impact victim"
+        ],
+        [
+          "SWORD READY",
+          "plain modest unadorned steel sword held guarded at shoulder, no fantasy features"
+        ],
+        [
+          "SWORD SWING",
+          "plain steel sword crossbody swing with clear waist twist, no glow"
+        ],
+        [
+          "BATON",
+          "short plain dark baton swing, knuckles and elbow plausible"
+        ],
+        [
+          "BASEBALL BAT",
+          "wooden baseball bat held twohanded mid-swing, weight transfer through hips"
+        ],
+        [
+          "CHAINSAW",
+          "braced short legs and both hands on conventional chainsaw handles, saw held clear of body, no victim or blood"
+        ]
+      ],
+      "prompt": "Use case: stylized-concept. Make a polished original 2D CHIBI action-art review sheet for user's arena game. Input image1 is the ONLY identity/proportion/style anchor, not a composition to copy.\nCRITICAL: preserve very compact about2.5-heads-tall CHIBI ADULT proportions of anchor: huge head40%, short torso32%, stubby short legs28%; head almost shoulders wide. NOT realistic adult anatomy, not long limbs, not3.5/7head figures. These are ordinary non-superpowered adults rendered CHIBI; acting and weight are natural, not anatomy photorealism.\nPremium clean organic ink outline, two/three-tone cel shading, tasteful simple folds, large readable colors, integrated elbows/knees, consistent facial construction and clothing. No 3D plastic, no photorealistic textures, no superhero powers, no aura, no magical attack arcs, no logo. Reference is proposed design, not yet owner-approved.\nComposition: high-resolution SQUARE 4x4 contact sheet with EXACTLY16 equal spacious cells. Prefer2048x2048 or larger; never make wide 4x3. Dark slate uniform backdrop matching anchor, subtle dividers, modest top header and small ivory all-caps numbered labels beneath each cell. Full body+objects contained in every cell EXCEPT last eight portrait cells of MODEL AND EXPRESSIONS which show head/shoulders intentionally. No duplicate/unrequested people except grey training dummy explicitly required. Same character16times, never include allfive. Mainly right-facing side/threequarter side action, natural perspective not foreshortened camera. Thin floor hint only where needed. No cropping hair/feet/weapons. Pose list rowmajor top-left to bottom-right:\n01 \"JAB PREP\" — ordinary compact boxing guard, left fist draws back slightly, weight braced\n02 \"JAB CONTACT\" — straight lead jab to right, shoulder follows, wrist aligned, back hand protects\n03 \"JAB RECOVERY\" — jab retracts to guard, elbow folds, weight settling\n04 \"CROSS\" — rear-hand straight punch, visible hip/shoulder rotation, planted feet\n05 \"HOOK\" — short third-punch hook, rounded elbow, body turns, not magical uppercut\n06 \"FRONT KICK\" — short front kick at waist height, support knee soft, arms counterbalance\n07 \"JUMP KICK\" — compact airborne forward kick, other short leg folded, natural alarm/exertion\n08 \"MACHETE READY\" — ordinary short machete raised diagonally in one hand, no opponent and no blood\n09 \"MACHETE SWING\" — short machete followthrough across body, ordinary restrained arc, no energy trail\n10 \"AXE READY\" — small twohanded wood axe poised overhead with hands gripping handle\n11 \"AXE SWING\" — wood axe swings downward, body follows weight, no impact victim\n12 \"SWORD READY\" — plain modest unadorned steel sword held guarded at shoulder, no fantasy features\n13 \"SWORD SWING\" — plain steel sword crossbody swing with clear waist twist, no glow\n14 \"BATON\" — short plain dark baton swing, knuckles and elbow plausible\n15 \"BASEBALL BAT\" — wooden baseball bat held twohanded mid-swing, weight transfer through hips\n16 \"CHAINSAW\" — braced short legs and both hands on conventional chainsaw handles, saw held clear of body, no victim or blood\nHEADER \"JOHNNY / ORDINARY MELEE\". Depict ONLY JOHNNY: brown angular hair with orange dyed lock, orange/navy zip hoodie with slate sleeves, navy cargo trousers, navy cream-soled high tops. Lock exactly that figure in reference1: face/hair/costume/proportions/materials/colors in everycell. For Agent keep normal sunglasses even during emotions, emote with brows/mouth/body. For Blaire preserve PURPLE BOB in rear view. All poses human acting within short chibi limbs. Conventional everyday/game weapons, no sci-fi rayguns or toy gadgets. Flames only on burning clothing where explicitly requested. This is representative keypose art, not a finished animation sequence."
+    },
+    {
+      "id": "johnny/05-damage-fire",
+      "char": "johnny",
+      "group": "05-damage-fire",
+      "poses": [
+        [
+          "HIT RECOIL",
+          "face winces and torso twists from a hit, hand opens involuntarily, no blood"
+        ],
+        [
+          "STAGGER",
+          "stumbling one step, torso offcenter, hands seek balance, startled expression"
+        ],
+        [
+          "FALL FORWARD",
+          "falling forward with hand extending to break fall, knees buckle"
+        ],
+        [
+          "FALL BACK",
+          "falling backwards, torso curves and arms fling out, feet leave floor"
+        ],
+        [
+          "HARD LANDING",
+          "heavy landing on bent knees, palm on ground, head lowered with pain"
+        ],
+        [
+          "KNOCKDOWN",
+          "on side on floor, clothed, dazed, visibly breathing, no gore"
+        ],
+        [
+          "GET UP",
+          "painful rise from floor, one hand/one knee supporting, weight not levitating"
+        ],
+        [
+          "DEATH KNEEL",
+          "exhausted defeated collapse to knees, head and shoulders drop; no wound detail"
+        ],
+        [
+          "DEAD",
+          "fully clothed motionless body lying on side, relaxed limp limbs, eyes closed, no blood"
+        ],
+        [
+          "CHARRED",
+          "same clothed motionless body after fire: recognizable outfit now darkened soot and scorched hems, few smoke wisps; no exposed burns, no gore, NO flame aura"
+        ],
+        [
+          "IGNITION",
+          "small accidental flame catches jacket/shirt hem, startled turn to look at it, open splayed hands"
+        ],
+        [
+          "BURN FRONT",
+          "frightened recoil with shoulders hunched, face in pain, open hands trying to pat clothing flame; localized irregular orange flames on front hem/one sleeve and rising smoke, not aura"
+        ],
+        [
+          "BURN BACK",
+          "twisting panicked body reacting to cloth fire at back/side, reaching toward it, never heroic standing with fists; irregular small flame and smoke"
+        ],
+        [
+          "BURN RUN",
+          "panicked off-balance running to escape, hunched and grimacing, erratic open hands, flames trailing only from clothes, not a powered sprint"
+        ],
+        [
+          "EXTINGUISH",
+          "rolling on floor to extinguish clothing fire, arms protect face, flames reduced and localized, no levitation"
+        ],
+        [
+          "AFTER FIRE",
+          "coughing exhausted on one knee after flames are OUT, soot on face and clothes, head bowed, smoke wisp, distress not victory"
+        ]
+      ],
+      "prompt": "Use case: stylized-concept. Make a polished original 2D CHIBI action-art review sheet for user's arena game. Input image1 is the ONLY identity/proportion/style anchor, not a composition to copy.\nCRITICAL: preserve very compact about2.5-heads-tall CHIBI ADULT proportions of anchor: huge head40%, short torso32%, stubby short legs28%; head almost shoulders wide. NOT realistic adult anatomy, not long limbs, not3.5/7head figures. These are ordinary non-superpowered adults rendered CHIBI; acting and weight are natural, not anatomy photorealism.\nPremium clean organic ink outline, two/three-tone cel shading, tasteful simple folds, large readable colors, integrated elbows/knees, consistent facial construction and clothing. No 3D plastic, no photorealistic textures, no superhero powers, no aura, no magical attack arcs, no logo. Reference is proposed design, not yet owner-approved.\nComposition: high-resolution SQUARE 4x4 contact sheet with EXACTLY16 equal spacious cells. Prefer2048x2048 or larger; never make wide 4x3. Dark slate uniform backdrop matching anchor, subtle dividers, modest top header and small ivory all-caps numbered labels beneath each cell. Full body+objects contained in every cell EXCEPT last eight portrait cells of MODEL AND EXPRESSIONS which show head/shoulders intentionally. No duplicate/unrequested people except grey training dummy explicitly required. Same character16times, never include allfive. Mainly right-facing side/threequarter side action, natural perspective not foreshortened camera. Thin floor hint only where needed. No cropping hair/feet/weapons. Pose list rowmajor top-left to bottom-right:\n01 \"HIT RECOIL\" — face winces and torso twists from a hit, hand opens involuntarily, no blood\n02 \"STAGGER\" — stumbling one step, torso offcenter, hands seek balance, startled expression\n03 \"FALL FORWARD\" — falling forward with hand extending to break fall, knees buckle\n04 \"FALL BACK\" — falling backwards, torso curves and arms fling out, feet leave floor\n05 \"HARD LANDING\" — heavy landing on bent knees, palm on ground, head lowered with pain\n06 \"KNOCKDOWN\" — on side on floor, clothed, dazed, visibly breathing, no gore\n07 \"GET UP\" — painful rise from floor, one hand/one knee supporting, weight not levitating\n08 \"DEATH KNEEL\" — exhausted defeated collapse to knees, head and shoulders drop; no wound detail\n09 \"DEAD\" — fully clothed motionless body lying on side, relaxed limp limbs, eyes closed, no blood\n10 \"CHARRED\" — same clothed motionless body after fire: recognizable outfit now darkened soot and scorched hems, few smoke wisps; no exposed burns, no gore, NO flame aura\n11 \"IGNITION\" — small accidental flame catches jacket/shirt hem, startled turn to look at it, open splayed hands\n12 \"BURN FRONT\" — frightened recoil with shoulders hunched, face in pain, open hands trying to pat clothing flame; localized irregular orange flames on front hem/one sleeve and rising smoke, not aura\n13 \"BURN BACK\" — twisting panicked body reacting to cloth fire at back/side, reaching toward it, never heroic standing with fists; irregular small flame and smoke\n14 \"BURN RUN\" — panicked off-balance running to escape, hunched and grimacing, erratic open hands, flames trailing only from clothes, not a powered sprint\n15 \"EXTINGUISH\" — rolling on floor to extinguish clothing fire, arms protect face, flames reduced and localized, no levitation\n16 \"AFTER FIRE\" — coughing exhausted on one knee after flames are OUT, soot on face and clothes, head bowed, smoke wisp, distress not victory\nHEADER \"JOHNNY / HURT AND FIRE\". Depict ONLY JOHNNY: brown angular hair with orange dyed lock, orange/navy zip hoodie with slate sleeves, navy cargo trousers, navy cream-soled high tops. Lock exactly that figure in reference1: face/hair/costume/proportions/materials/colors in everycell. For Agent keep normal sunglasses even during emotions, emote with brows/mouth/body. For Blaire preserve PURPLE BOB in rear view. All poses human acting within short chibi limbs. Conventional everyday/game weapons, no sci-fi rayguns or toy gadgets. Flames only on burning clothing where explicitly requested. This is representative keypose art, not a finished animation sequence."
+    },
+    {
+      "id": "johnny/06-variants",
+      "char": "johnny",
+      "group": "06-variants",
+      "poses": [
+        [
+          "FRONT",
+          "full body true straight front neutral view, both hands relaxed, same proportions"
+        ],
+        [
+          "SIDE",
+          "full body exact right profile idle, no change in hair or costume"
+        ],
+        [
+          "REAR",
+          "full body exact back view, correct SAME hairstyle/outfit seen from behind"
+        ],
+        [
+          "GUARD",
+          "full body compact unarmed guard, fists near chest, grounded feet"
+        ],
+        [
+          "C4 HOLD",
+          "full body holding small inert unbranded rectangular game explosive pack with one plain strap; no schematic or wiring detail"
+        ],
+        [
+          "MINE HOLD",
+          "full body holding small plain round inert game mine at waist, object only, no deployment instruction"
+        ],
+        [
+          "GUN DROP",
+          "full body discarding empty conventional pistol from open hand, object below hand"
+        ],
+        [
+          "SHOTGUN PUMP",
+          "full body pump-shotgun cycling pose, one hand on grip and other on sliding foreend"
+        ],
+        [
+          "NEUTRAL FACE",
+          "large head-and-shoulders portrait, relaxed neutral adult chibi expression"
+        ],
+        [
+          "FOCUS FACE",
+          "large head-and-shoulders portrait, concentrated eyes/brows and set jaw"
+        ],
+        [
+          "ATTACK FACE",
+          "large head-and-shoulders portrait, ordinary effort/shout, no luminous eyes"
+        ],
+        [
+          "HURT FACE",
+          "large head-and-shoulders portrait, wincing pain eyes narrowed, jaw clenched"
+        ],
+        [
+          "PANIC FACE",
+          "large head-and-shoulders portrait, alarmed eyes and parted mouth, brows raised, no comedy tongue"
+        ],
+        [
+          "TIRED FACE",
+          "large head-and-shoulders portrait, low health exhaustion/sweat and heavy eyelids"
+        ],
+        [
+          "KO FACE",
+          "large head-and-shoulders portrait, eyes closed and relaxed defeated mouth, no gore"
+        ],
+        [
+          "BLINK",
+          "large head-and-shoulders portrait, normal blink expression, same face"
+        ]
+      ],
+      "prompt": "Use case: stylized-concept. Make a polished original 2D CHIBI action-art review sheet for user's arena game. Input image1 is the ONLY identity/proportion/style anchor, not a composition to copy.\nCRITICAL: preserve very compact about2.5-heads-tall CHIBI ADULT proportions of anchor: huge head40%, short torso32%, stubby short legs28%; head almost shoulders wide. NOT realistic adult anatomy, not long limbs, not3.5/7head figures. These are ordinary non-superpowered adults rendered CHIBI; acting and weight are natural, not anatomy photorealism.\nPremium clean organic ink outline, two/three-tone cel shading, tasteful simple folds, large readable colors, integrated elbows/knees, consistent facial construction and clothing. No 3D plastic, no photorealistic textures, no superhero powers, no aura, no magical attack arcs, no logo. Reference is proposed design, not yet owner-approved.\nComposition: high-resolution SQUARE 4x4 contact sheet with EXACTLY16 equal spacious cells. Prefer2048x2048 or larger; never make wide 4x3. Dark slate uniform backdrop matching anchor, subtle dividers, modest top header and small ivory all-caps numbered labels beneath each cell. Full body+objects contained in every cell EXCEPT last eight portrait cells of MODEL AND EXPRESSIONS which show head/shoulders intentionally. No duplicate/unrequested people except grey training dummy explicitly required. Same character16times, never include allfive. Mainly right-facing side/threequarter side action, natural perspective not foreshortened camera. Thin floor hint only where needed. No cropping hair/feet/weapons. Pose list rowmajor top-left to bottom-right:\n01 \"FRONT\" — full body true straight front neutral view, both hands relaxed, same proportions\n02 \"SIDE\" — full body exact right profile idle, no change in hair or costume\n03 \"REAR\" — full body exact back view, correct SAME hairstyle/outfit seen from behind\n04 \"GUARD\" — full body compact unarmed guard, fists near chest, grounded feet\n05 \"C4 HOLD\" — full body holding small inert unbranded rectangular game explosive pack with one plain strap; no schematic or wiring detail\n06 \"MINE HOLD\" — full body holding small plain round inert game mine at waist, object only, no deployment instruction\n07 \"GUN DROP\" — full body discarding empty conventional pistol from open hand, object below hand\n08 \"SHOTGUN PUMP\" — full body pump-shotgun cycling pose, one hand on grip and other on sliding foreend\n09 \"NEUTRAL FACE\" — large head-and-shoulders portrait, relaxed neutral adult chibi expression\n10 \"FOCUS FACE\" — large head-and-shoulders portrait, concentrated eyes/brows and set jaw\n11 \"ATTACK FACE\" — large head-and-shoulders portrait, ordinary effort/shout, no luminous eyes\n12 \"HURT FACE\" — large head-and-shoulders portrait, wincing pain eyes narrowed, jaw clenched\n13 \"PANIC FACE\" — large head-and-shoulders portrait, alarmed eyes and parted mouth, brows raised, no comedy tongue\n14 \"TIRED FACE\" — large head-and-shoulders portrait, low health exhaustion/sweat and heavy eyelids\n15 \"KO FACE\" — large head-and-shoulders portrait, eyes closed and relaxed defeated mouth, no gore\n16 \"BLINK\" — large head-and-shoulders portrait, normal blink expression, same face\nHEADER \"JOHNNY / MODEL AND EXPRESSIONS\". Depict ONLY JOHNNY: brown angular hair with orange dyed lock, orange/navy zip hoodie with slate sleeves, navy cargo trousers, navy cream-soled high tops. Lock exactly that figure in reference1: face/hair/costume/proportions/materials/colors in everycell. For Agent keep normal sunglasses even during emotions, emote with brows/mouth/body. For Blaire preserve PURPLE BOB in rear view. All poses human acting within short chibi limbs. Conventional everyday/game weapons, no sci-fi rayguns or toy gadgets. Flames only on burning clothing where explicitly requested. This is representative keypose art, not a finished animation sequence."
+    },
+    {
+      "id": "boris/01-movement",
+      "char": "boris",
+      "group": "01-movement",
+      "poses": [
+        [
+          "IDLE",
+          "relaxed idle threequarter view, open relaxed fingers, weight on one leg"
+        ],
+        [
+          "WALK CONTACT",
+          "walking right, front heel on floor, rear toe on floor, clear split stride"
+        ],
+        [
+          "WALK PASSING",
+          "walking right, planted support leg nearly straight, other bent foot passes next to support ankle beneath hips; NOT a split stride"
+        ],
+        [
+          "RUN LEFT",
+          "running contact pose left leg forward planted, right knee folds behind, arms counterbalance"
+        ],
+        [
+          "RUN RIGHT",
+          "running opposite contact pose right leg forward planted, left knee folds behind; visibly exchange arms and legs"
+        ],
+        [
+          "SPRINT",
+          "fast forward lean and compact driving arms, human effort not supernatural flight"
+        ],
+        [
+          "CROUCH",
+          "low compact crouch with folded knees and feet supported"
+        ],
+        [
+          "COVER",
+          "crouched close behind a plain waist-high crate, cautious look over edge"
+        ],
+        [
+          "JUMP UP",
+          "jump ascent with feet pushing upward, torso extended, arms counterbalance"
+        ],
+        [
+          "JUMP APEX",
+          "jump apex, short legs tucked, relaxed arms, believable aerial balance"
+        ],
+        [
+          "DESCEND",
+          "falling from jump, legs opening ready for feet-first landing"
+        ],
+        [
+          "FREE FALL",
+          "uncontrolled feet-down fall with spread arms, alarmed not heroic"
+        ],
+        [
+          "ROLL TUCK",
+          "entering forward defensive roll, chin tucked, knees drawn to chest"
+        ],
+        [
+          "ROLL TURN",
+          "middle of floor roll, weight on curved back, hips up, head protected"
+        ],
+        [
+          "ROLL EXIT",
+          "rising from roll onto one knee and supporting hand, beginning to regain balance"
+        ],
+        [
+          "DIVE",
+          "horizontal low forward dive, both arms reach forward, short legs trail"
+        ]
+      ],
+      "prompt": "Use case: stylized-concept. Make a polished original 2D CHIBI action-art review sheet for user's arena game. Input image1 is the ONLY identity/proportion/style anchor, not a composition to copy.\nCRITICAL: preserve very compact about2.5-heads-tall CHIBI ADULT proportions of anchor: huge head40%, short torso32%, stubby short legs28%; head almost shoulders wide. NOT realistic adult anatomy, not long limbs, not3.5/7head figures. These are ordinary non-superpowered adults rendered CHIBI; acting and weight are natural, not anatomy photorealism.\nPremium clean organic ink outline, two/three-tone cel shading, tasteful simple folds, large readable colors, integrated elbows/knees, consistent facial construction and clothing. No 3D plastic, no photorealistic textures, no superhero powers, no aura, no magical attack arcs, no logo. Reference is proposed design, not yet owner-approved.\nComposition: high-resolution SQUARE 4x4 contact sheet with EXACTLY16 equal spacious cells. Prefer2048x2048 or larger; never make wide 4x3. Dark slate uniform backdrop matching anchor, subtle dividers, modest top header and small ivory all-caps numbered labels beneath each cell. Full body+objects contained in every cell EXCEPT last eight portrait cells of MODEL AND EXPRESSIONS which show head/shoulders intentionally. No duplicate/unrequested people except grey training dummy explicitly required. Same character16times, never include allfive. Mainly right-facing side/threequarter side action, natural perspective not foreshortened camera. Thin floor hint only where needed. No cropping hair/feet/weapons. Pose list rowmajor top-left to bottom-right:\n01 \"IDLE\" — relaxed idle threequarter view, open relaxed fingers, weight on one leg\n02 \"WALK CONTACT\" — walking right, front heel on floor, rear toe on floor, clear split stride\n03 \"WALK PASSING\" — walking right, planted support leg nearly straight, other bent foot passes next to support ankle beneath hips; NOT a split stride\n04 \"RUN LEFT\" — running contact pose left leg forward planted, right knee folds behind, arms counterbalance\n05 \"RUN RIGHT\" — running opposite contact pose right leg forward planted, left knee folds behind; visibly exchange arms and legs\n06 \"SPRINT\" — fast forward lean and compact driving arms, human effort not supernatural flight\n07 \"CROUCH\" — low compact crouch with folded knees and feet supported\n08 \"COVER\" — crouched close behind a plain waist-high crate, cautious look over edge\n09 \"JUMP UP\" — jump ascent with feet pushing upward, torso extended, arms counterbalance\n10 \"JUMP APEX\" — jump apex, short legs tucked, relaxed arms, believable aerial balance\n11 \"DESCEND\" — falling from jump, legs opening ready for feet-first landing\n12 \"FREE FALL\" — uncontrolled feet-down fall with spread arms, alarmed not heroic\n13 \"ROLL TUCK\" — entering forward defensive roll, chin tucked, knees drawn to chest\n14 \"ROLL TURN\" — middle of floor roll, weight on curved back, hips up, head protected\n15 \"ROLL EXIT\" — rising from roll onto one knee and supporting hand, beginning to regain balance\n16 \"DIVE\" — horizontal low forward dive, both arms reach forward, short legs trail\nHEADER \"BORIS / MOVEMENT\". Depict ONLY BORIS: grey silver short crop, subtle stubble, stocky square face and torso, olive utility jacket/dark tee, charcoal cargo trousers, brown-black boots. Lock exactly that figure in reference1: face/hair/costume/proportions/materials/colors in everycell. For Agent keep normal sunglasses even during emotions, emote with brows/mouth/body. For Blaire preserve PURPLE BOB in rear view. All poses human acting within short chibi limbs. Conventional everyday/game weapons, no sci-fi rayguns or toy gadgets. Flames only on burning clothing where explicitly requested. This is representative keypose art, not a finished animation sequence."
+    },
+    {
+      "id": "boris/02-traversal",
+      "char": "boris",
+      "group": "02-traversal",
+      "poses": [
+        [
+          "LADDER HOLD",
+          "back threequarter view holding simple ladder, both feet on rungs"
+        ],
+        [
+          "CLIMB LEFT",
+          "back view ladder climb, LEFT hand above head and LEFT knee high, right hand lower/right leg extended"
+        ],
+        [
+          "CLIMB RIGHT",
+          "back view ladder climb, RIGHT hand above head and RIGHT knee high, left hand lower/left leg extended; exact opposite leads of previous cell"
+        ],
+        [
+          "LADDER SLIDE",
+          "sliding down ladder with hands on rails, legs near rails and bent knees"
+        ],
+        [
+          "LADDER EXIT",
+          "stepping from ladder onto upper platform edge, one knee over lip"
+        ],
+        [
+          "LEDGE CATCH",
+          "both hands catch platform edge, short arms extended, legs swing below"
+        ],
+        [
+          "LEDGE HANG",
+          "hanging from edge, elbows bent slightly, tense shoulders and searching feet"
+        ],
+        [
+          "LEDGE RELEASE",
+          "releasing ledge and dropping feet first, hands let go"
+        ],
+        [
+          "ROCKET RIGHT",
+          "frightened chibi accidentally clinging to a small flying game rocket heading RIGHT, short exhaust; game slapstick mechanic, NOT person flying by power"
+        ],
+        [
+          "ROCKET LEFT",
+          "same terrified clinging pose flying LEFT, preserve outfit asymmetry; no triumphant surfing"
+        ],
+        [
+          "DIVE TACKLE",
+          "character horizontally tackles an anonymous grey chibi training dummy around torso, both full bodies visible, neither has injury"
+        ],
+        [
+          "GRABBED",
+          "character is offbalance victim of a dive tackle by grey chibi training dummy, both bodies visible; not standing wrestler grab"
+        ],
+        [
+          "PUSH",
+          "both palms push heavy simple barrel, feet firmly brace, body weight forward"
+        ],
+        [
+          "PROP KICK",
+          "short front kick pushing a small plain box, support foot planted"
+        ],
+        [
+          "PICKUP",
+          "crouching to retrieve small dropped pistol from floor, eyes down, grounded feet"
+        ],
+        [
+          "VICTORY",
+          "relieved exhausted smile, modest one-arm celebration, loose shoulders, no powered pose"
+        ]
+      ],
+      "prompt": "Use case: stylized-concept. Make a polished original 2D CHIBI action-art review sheet for user's arena game. Input image1 is the ONLY identity/proportion/style anchor, not a composition to copy.\nCRITICAL: preserve very compact about2.5-heads-tall CHIBI ADULT proportions of anchor: huge head40%, short torso32%, stubby short legs28%; head almost shoulders wide. NOT realistic adult anatomy, not long limbs, not3.5/7head figures. These are ordinary non-superpowered adults rendered CHIBI; acting and weight are natural, not anatomy photorealism.\nPremium clean organic ink outline, two/three-tone cel shading, tasteful simple folds, large readable colors, integrated elbows/knees, consistent facial construction and clothing. No 3D plastic, no photorealistic textures, no superhero powers, no aura, no magical attack arcs, no logo. Reference is proposed design, not yet owner-approved.\nComposition: high-resolution SQUARE 4x4 contact sheet with EXACTLY16 equal spacious cells. Prefer2048x2048 or larger; never make wide 4x3. Dark slate uniform backdrop matching anchor, subtle dividers, modest top header and small ivory all-caps numbered labels beneath each cell. Full body+objects contained in every cell EXCEPT last eight portrait cells of MODEL AND EXPRESSIONS which show head/shoulders intentionally. No duplicate/unrequested people except grey training dummy explicitly required. Same character16times, never include allfive. Mainly right-facing side/threequarter side action, natural perspective not foreshortened camera. Thin floor hint only where needed. No cropping hair/feet/weapons. Pose list rowmajor top-left to bottom-right:\n01 \"LADDER HOLD\" — back threequarter view holding simple ladder, both feet on rungs\n02 \"CLIMB LEFT\" — back view ladder climb, LEFT hand above head and LEFT knee high, right hand lower/right leg extended\n03 \"CLIMB RIGHT\" — back view ladder climb, RIGHT hand above head and RIGHT knee high, left hand lower/left leg extended; exact opposite leads of previous cell\n04 \"LADDER SLIDE\" — sliding down ladder with hands on rails, legs near rails and bent knees\n05 \"LADDER EXIT\" — stepping from ladder onto upper platform edge, one knee over lip\n06 \"LEDGE CATCH\" — both hands catch platform edge, short arms extended, legs swing below\n07 \"LEDGE HANG\" — hanging from edge, elbows bent slightly, tense shoulders and searching feet\n08 \"LEDGE RELEASE\" — releasing ledge and dropping feet first, hands let go\n09 \"ROCKET RIGHT\" — frightened chibi accidentally clinging to a small flying game rocket heading RIGHT, short exhaust; game slapstick mechanic, NOT person flying by power\n10 \"ROCKET LEFT\" — same terrified clinging pose flying LEFT, preserve outfit asymmetry; no triumphant surfing\n11 \"DIVE TACKLE\" — character horizontally tackles an anonymous grey chibi training dummy around torso, both full bodies visible, neither has injury\n12 \"GRABBED\" — character is offbalance victim of a dive tackle by grey chibi training dummy, both bodies visible; not standing wrestler grab\n13 \"PUSH\" — both palms push heavy simple barrel, feet firmly brace, body weight forward\n14 \"PROP KICK\" — short front kick pushing a small plain box, support foot planted\n15 \"PICKUP\" — crouching to retrieve small dropped pistol from floor, eyes down, grounded feet\n16 \"VICTORY\" — relieved exhausted smile, modest one-arm celebration, loose shoulders, no powered pose\nHEADER \"BORIS / TRAVERSAL AND OBJECTS\". Depict ONLY BORIS: grey silver short crop, subtle stubble, stocky square face and torso, olive utility jacket/dark tee, charcoal cargo trousers, brown-black boots. Lock exactly that figure in reference1: face/hair/costume/proportions/materials/colors in everycell. For Agent keep normal sunglasses even during emotions, emote with brows/mouth/body. For Blaire preserve PURPLE BOB in rear view. All poses human acting within short chibi limbs. Conventional everyday/game weapons, no sci-fi rayguns or toy gadgets. Flames only on burning clothing where explicitly requested. This is representative keypose art, not a finished animation sequence."
+    },
+    {
+      "id": "boris/03-firearms",
+      "char": "boris",
+      "group": "03-firearms",
+      "poses": [
+        [
+          "PISTOL",
+          "standing ordinary compact black pistol aim right with aligned wrist"
+        ],
+        [
+          "REVOLVER",
+          "standing grey revolver with visible cylinder, braced human stance"
+        ],
+        [
+          "SMG",
+          "standing compact dark submachinegun, two short arms grip appropriately"
+        ],
+        [
+          "RIFLE",
+          "standing conventional rifle stock against shoulder, support hand on foreend"
+        ],
+        [
+          "SHOTGUN",
+          "standing conventional pump shotgun aim, stock shouldered, short arms work naturally"
+        ],
+        [
+          "SNIPER",
+          "crouched scoped rifle aim right, elbows comfortable and feet grounded"
+        ],
+        [
+          "LAUNCHER",
+          "plain green shoulder-fired tubular game launcher held with visible effort, NOT futuristic"
+        ],
+        [
+          "FLAMETHROWER",
+          "utilitarian small backpack and hose-fed nozzle held with two hands; NO flame emitted, no magic"
+        ],
+        [
+          "GRENADE READY",
+          "standing normal small olive grenade held ready beside shoulder, no release yet"
+        ],
+        [
+          "BOTTLE READY",
+          "standing brown bottle with simple cloth wick held ready beside shoulder, not lit"
+        ],
+        [
+          "GRENADE THROW",
+          "ordinary overarm grenade release, body turns, hand opens, item just leaving hand"
+        ],
+        [
+          "BOTTLE THROW",
+          "ordinary bottle release, lead foot planted, eyes follow bottle, no flaming body"
+        ],
+        [
+          "AIM UP",
+          "compact pistol aimed45degrees up, both feet planted, eyes follow direction"
+        ],
+        [
+          "AIM DOWN",
+          "compact pistol aimed45degrees down, wrist straight, both feet planted"
+        ],
+        [
+          "KNEEL AIM",
+          "one knee down aiming conventional rifle level, head clear of stock"
+        ],
+        [
+          "COVER AIM",
+          "crouched aiming pistol around edge of simple crate, small exposed silhouette"
+        ]
+      ],
+      "prompt": "Use case: stylized-concept. Make a polished original 2D CHIBI action-art review sheet for user's arena game. Input image1 is the ONLY identity/proportion/style anchor, not a composition to copy.\nCRITICAL: preserve very compact about2.5-heads-tall CHIBI ADULT proportions of anchor: huge head40%, short torso32%, stubby short legs28%; head almost shoulders wide. NOT realistic adult anatomy, not long limbs, not3.5/7head figures. These are ordinary non-superpowered adults rendered CHIBI; acting and weight are natural, not anatomy photorealism.\nPremium clean organic ink outline, two/three-tone cel shading, tasteful simple folds, large readable colors, integrated elbows/knees, consistent facial construction and clothing. No 3D plastic, no photorealistic textures, no superhero powers, no aura, no magical attack arcs, no logo. Reference is proposed design, not yet owner-approved.\nComposition: high-resolution SQUARE 4x4 contact sheet with EXACTLY16 equal spacious cells. Prefer2048x2048 or larger; never make wide 4x3. Dark slate uniform backdrop matching anchor, subtle dividers, modest top header and small ivory all-caps numbered labels beneath each cell. Full body+objects contained in every cell EXCEPT last eight portrait cells of MODEL AND EXPRESSIONS which show head/shoulders intentionally. No duplicate/unrequested people except grey training dummy explicitly required. Same character16times, never include allfive. Mainly right-facing side/threequarter side action, natural perspective not foreshortened camera. Thin floor hint only where needed. No cropping hair/feet/weapons. Pose list rowmajor top-left to bottom-right:\n01 \"PISTOL\" — standing ordinary compact black pistol aim right with aligned wrist\n02 \"REVOLVER\" — standing grey revolver with visible cylinder, braced human stance\n03 \"SMG\" — standing compact dark submachinegun, two short arms grip appropriately\n04 \"RIFLE\" — standing conventional rifle stock against shoulder, support hand on foreend\n05 \"SHOTGUN\" — standing conventional pump shotgun aim, stock shouldered, short arms work naturally\n06 \"SNIPER\" — crouched scoped rifle aim right, elbows comfortable and feet grounded\n07 \"LAUNCHER\" — plain green shoulder-fired tubular game launcher held with visible effort, NOT futuristic\n08 \"FLAMETHROWER\" — utilitarian small backpack and hose-fed nozzle held with two hands; NO flame emitted, no magic\n09 \"GRENADE READY\" — standing normal small olive grenade held ready beside shoulder, no release yet\n10 \"BOTTLE READY\" — standing brown bottle with simple cloth wick held ready beside shoulder, not lit\n11 \"GRENADE THROW\" — ordinary overarm grenade release, body turns, hand opens, item just leaving hand\n12 \"BOTTLE THROW\" — ordinary bottle release, lead foot planted, eyes follow bottle, no flaming body\n13 \"AIM UP\" — compact pistol aimed45degrees up, both feet planted, eyes follow direction\n14 \"AIM DOWN\" — compact pistol aimed45degrees down, wrist straight, both feet planted\n15 \"KNEEL AIM\" — one knee down aiming conventional rifle level, head clear of stock\n16 \"COVER AIM\" — crouched aiming pistol around edge of simple crate, small exposed silhouette\nHEADER \"BORIS / RANGED AND THROWING\". Depict ONLY BORIS: grey silver short crop, subtle stubble, stocky square face and torso, olive utility jacket/dark tee, charcoal cargo trousers, brown-black boots. Lock exactly that figure in reference1: face/hair/costume/proportions/materials/colors in everycell. For Agent keep normal sunglasses even during emotions, emote with brows/mouth/body. For Blaire preserve PURPLE BOB in rear view. All poses human acting within short chibi limbs. Conventional everyday/game weapons, no sci-fi rayguns or toy gadgets. Flames only on burning clothing where explicitly requested. This is representative keypose art, not a finished animation sequence."
+    },
+    {
+      "id": "boris/04-melee",
+      "char": "boris",
+      "group": "04-melee",
+      "poses": [
+        [
+          "JAB PREP",
+          "ordinary compact boxing guard, left fist draws back slightly, weight braced"
+        ],
+        [
+          "JAB CONTACT",
+          "straight lead jab to right, shoulder follows, wrist aligned, back hand protects"
+        ],
+        [
+          "JAB RECOVERY",
+          "jab retracts to guard, elbow folds, weight settling"
+        ],
+        [
+          "CROSS",
+          "rear-hand straight punch, visible hip/shoulder rotation, planted feet"
+        ],
+        [
+          "HOOK",
+          "short third-punch hook, rounded elbow, body turns, not magical uppercut"
+        ],
+        [
+          "FRONT KICK",
+          "short front kick at waist height, support knee soft, arms counterbalance"
+        ],
+        [
+          "JUMP KICK",
+          "compact airborne forward kick, other short leg folded, natural alarm/exertion"
+        ],
+        [
+          "MACHETE READY",
+          "ordinary short machete raised diagonally in one hand, no opponent and no blood"
+        ],
+        [
+          "MACHETE SWING",
+          "short machete followthrough across body, ordinary restrained arc, no energy trail"
+        ],
+        [
+          "AXE READY",
+          "small twohanded wood axe poised overhead with hands gripping handle"
+        ],
+        [
+          "AXE SWING",
+          "wood axe swings downward, body follows weight, no impact victim"
+        ],
+        [
+          "SWORD READY",
+          "plain modest unadorned steel sword held guarded at shoulder, no fantasy features"
+        ],
+        [
+          "SWORD SWING",
+          "plain steel sword crossbody swing with clear waist twist, no glow"
+        ],
+        [
+          "BATON",
+          "short plain dark baton swing, knuckles and elbow plausible"
+        ],
+        [
+          "BASEBALL BAT",
+          "wooden baseball bat held twohanded mid-swing, weight transfer through hips"
+        ],
+        [
+          "CHAINSAW",
+          "braced short legs and both hands on conventional chainsaw handles, saw held clear of body, no victim or blood"
+        ]
+      ],
+      "prompt": "Use case: stylized-concept. Make a polished original 2D CHIBI action-art review sheet for user's arena game. Input image1 is the ONLY identity/proportion/style anchor, not a composition to copy.\nCRITICAL: preserve very compact about2.5-heads-tall CHIBI ADULT proportions of anchor: huge head40%, short torso32%, stubby short legs28%; head almost shoulders wide. NOT realistic adult anatomy, not long limbs, not3.5/7head figures. These are ordinary non-superpowered adults rendered CHIBI; acting and weight are natural, not anatomy photorealism.\nPremium clean organic ink outline, two/three-tone cel shading, tasteful simple folds, large readable colors, integrated elbows/knees, consistent facial construction and clothing. No 3D plastic, no photorealistic textures, no superhero powers, no aura, no magical attack arcs, no logo. Reference is proposed design, not yet owner-approved.\nComposition: high-resolution SQUARE 4x4 contact sheet with EXACTLY16 equal spacious cells. Prefer2048x2048 or larger; never make wide 4x3. Dark slate uniform backdrop matching anchor, subtle dividers, modest top header and small ivory all-caps numbered labels beneath each cell. Full body+objects contained in every cell EXCEPT last eight portrait cells of MODEL AND EXPRESSIONS which show head/shoulders intentionally. No duplicate/unrequested people except grey training dummy explicitly required. Same character16times, never include allfive. Mainly right-facing side/threequarter side action, natural perspective not foreshortened camera. Thin floor hint only where needed. No cropping hair/feet/weapons. Pose list rowmajor top-left to bottom-right:\n01 \"JAB PREP\" — ordinary compact boxing guard, left fist draws back slightly, weight braced\n02 \"JAB CONTACT\" — straight lead jab to right, shoulder follows, wrist aligned, back hand protects\n03 \"JAB RECOVERY\" — jab retracts to guard, elbow folds, weight settling\n04 \"CROSS\" — rear-hand straight punch, visible hip/shoulder rotation, planted feet\n05 \"HOOK\" — short third-punch hook, rounded elbow, body turns, not magical uppercut\n06 \"FRONT KICK\" — short front kick at waist height, support knee soft, arms counterbalance\n07 \"JUMP KICK\" — compact airborne forward kick, other short leg folded, natural alarm/exertion\n08 \"MACHETE READY\" — ordinary short machete raised diagonally in one hand, no opponent and no blood\n09 \"MACHETE SWING\" — short machete followthrough across body, ordinary restrained arc, no energy trail\n10 \"AXE READY\" — small twohanded wood axe poised overhead with hands gripping handle\n11 \"AXE SWING\" — wood axe swings downward, body follows weight, no impact victim\n12 \"SWORD READY\" — plain modest unadorned steel sword held guarded at shoulder, no fantasy features\n13 \"SWORD SWING\" — plain steel sword crossbody swing with clear waist twist, no glow\n14 \"BATON\" — short plain dark baton swing, knuckles and elbow plausible\n15 \"BASEBALL BAT\" — wooden baseball bat held twohanded mid-swing, weight transfer through hips\n16 \"CHAINSAW\" — braced short legs and both hands on conventional chainsaw handles, saw held clear of body, no victim or blood\nHEADER \"BORIS / ORDINARY MELEE\". Depict ONLY BORIS: grey silver short crop, subtle stubble, stocky square face and torso, olive utility jacket/dark tee, charcoal cargo trousers, brown-black boots. Lock exactly that figure in reference1: face/hair/costume/proportions/materials/colors in everycell. For Agent keep normal sunglasses even during emotions, emote with brows/mouth/body. For Blaire preserve PURPLE BOB in rear view. All poses human acting within short chibi limbs. Conventional everyday/game weapons, no sci-fi rayguns or toy gadgets. Flames only on burning clothing where explicitly requested. This is representative keypose art, not a finished animation sequence."
+    },
+    {
+      "id": "boris/05-damage-fire",
+      "char": "boris",
+      "group": "05-damage-fire",
+      "poses": [
+        [
+          "HIT RECOIL",
+          "face winces and torso twists from a hit, hand opens involuntarily, no blood"
+        ],
+        [
+          "STAGGER",
+          "stumbling one step, torso offcenter, hands seek balance, startled expression"
+        ],
+        [
+          "FALL FORWARD",
+          "falling forward with hand extending to break fall, knees buckle"
+        ],
+        [
+          "FALL BACK",
+          "falling backwards, torso curves and arms fling out, feet leave floor"
+        ],
+        [
+          "HARD LANDING",
+          "heavy landing on bent knees, palm on ground, head lowered with pain"
+        ],
+        [
+          "KNOCKDOWN",
+          "on side on floor, clothed, dazed, visibly breathing, no gore"
+        ],
+        [
+          "GET UP",
+          "painful rise from floor, one hand/one knee supporting, weight not levitating"
+        ],
+        [
+          "DEATH KNEEL",
+          "exhausted defeated collapse to knees, head and shoulders drop; no wound detail"
+        ],
+        [
+          "DEAD",
+          "fully clothed motionless body lying on side, relaxed limp limbs, eyes closed, no blood"
+        ],
+        [
+          "CHARRED",
+          "same clothed motionless body after fire: recognizable outfit now darkened soot and scorched hems, few smoke wisps; no exposed burns, no gore, NO flame aura"
+        ],
+        [
+          "IGNITION",
+          "small accidental flame catches jacket/shirt hem, startled turn to look at it, open splayed hands"
+        ],
+        [
+          "BURN FRONT",
+          "frightened recoil with shoulders hunched, face in pain, open hands trying to pat clothing flame; localized irregular orange flames on front hem/one sleeve and rising smoke, not aura"
+        ],
+        [
+          "BURN BACK",
+          "twisting panicked body reacting to cloth fire at back/side, reaching toward it, never heroic standing with fists; irregular small flame and smoke"
+        ],
+        [
+          "BURN RUN",
+          "panicked off-balance running to escape, hunched and grimacing, erratic open hands, flames trailing only from clothes, not a powered sprint"
+        ],
+        [
+          "EXTINGUISH",
+          "rolling on floor to extinguish clothing fire, arms protect face, flames reduced and localized, no levitation"
+        ],
+        [
+          "AFTER FIRE",
+          "coughing exhausted on one knee after flames are OUT, soot on face and clothes, head bowed, smoke wisp, distress not victory"
+        ]
+      ],
+      "prompt": "Use case: stylized-concept. Make a polished original 2D CHIBI action-art review sheet for user's arena game. Input image1 is the ONLY identity/proportion/style anchor, not a composition to copy.\nCRITICAL: preserve very compact about2.5-heads-tall CHIBI ADULT proportions of anchor: huge head40%, short torso32%, stubby short legs28%; head almost shoulders wide. NOT realistic adult anatomy, not long limbs, not3.5/7head figures. These are ordinary non-superpowered adults rendered CHIBI; acting and weight are natural, not anatomy photorealism.\nPremium clean organic ink outline, two/three-tone cel shading, tasteful simple folds, large readable colors, integrated elbows/knees, consistent facial construction and clothing. No 3D plastic, no photorealistic textures, no superhero powers, no aura, no magical attack arcs, no logo. Reference is proposed design, not yet owner-approved.\nComposition: high-resolution SQUARE 4x4 contact sheet with EXACTLY16 equal spacious cells. Prefer2048x2048 or larger; never make wide 4x3. Dark slate uniform backdrop matching anchor, subtle dividers, modest top header and small ivory all-caps numbered labels beneath each cell. Full body+objects contained in every cell EXCEPT last eight portrait cells of MODEL AND EXPRESSIONS which show head/shoulders intentionally. No duplicate/unrequested people except grey training dummy explicitly required. Same character16times, never include allfive. Mainly right-facing side/threequarter side action, natural perspective not foreshortened camera. Thin floor hint only where needed. No cropping hair/feet/weapons. Pose list rowmajor top-left to bottom-right:\n01 \"HIT RECOIL\" — face winces and torso twists from a hit, hand opens involuntarily, no blood\n02 \"STAGGER\" — stumbling one step, torso offcenter, hands seek balance, startled expression\n03 \"FALL FORWARD\" — falling forward with hand extending to break fall, knees buckle\n04 \"FALL BACK\" — falling backwards, torso curves and arms fling out, feet leave floor\n05 \"HARD LANDING\" — heavy landing on bent knees, palm on ground, head lowered with pain\n06 \"KNOCKDOWN\" — on side on floor, clothed, dazed, visibly breathing, no gore\n07 \"GET UP\" — painful rise from floor, one hand/one knee supporting, weight not levitating\n08 \"DEATH KNEEL\" — exhausted defeated collapse to knees, head and shoulders drop; no wound detail\n09 \"DEAD\" — fully clothed motionless body lying on side, relaxed limp limbs, eyes closed, no blood\n10 \"CHARRED\" — same clothed motionless body after fire: recognizable outfit now darkened soot and scorched hems, few smoke wisps; no exposed burns, no gore, NO flame aura\n11 \"IGNITION\" — small accidental flame catches jacket/shirt hem, startled turn to look at it, open splayed hands\n12 \"BURN FRONT\" — frightened recoil with shoulders hunched, face in pain, open hands trying to pat clothing flame; localized irregular orange flames on front hem/one sleeve and rising smoke, not aura\n13 \"BURN BACK\" — twisting panicked body reacting to cloth fire at back/side, reaching toward it, never heroic standing with fists; irregular small flame and smoke\n14 \"BURN RUN\" — panicked off-balance running to escape, hunched and grimacing, erratic open hands, flames trailing only from clothes, not a powered sprint\n15 \"EXTINGUISH\" — rolling on floor to extinguish clothing fire, arms protect face, flames reduced and localized, no levitation\n16 \"AFTER FIRE\" — coughing exhausted on one knee after flames are OUT, soot on face and clothes, head bowed, smoke wisp, distress not victory\nHEADER \"BORIS / HURT AND FIRE\". Depict ONLY BORIS: grey silver short crop, subtle stubble, stocky square face and torso, olive utility jacket/dark tee, charcoal cargo trousers, brown-black boots. Lock exactly that figure in reference1: face/hair/costume/proportions/materials/colors in everycell. For Agent keep normal sunglasses even during emotions, emote with brows/mouth/body. For Blaire preserve PURPLE BOB in rear view. All poses human acting within short chibi limbs. Conventional everyday/game weapons, no sci-fi rayguns or toy gadgets. Flames only on burning clothing where explicitly requested. This is representative keypose art, not a finished animation sequence."
+    },
+    {
+      "id": "boris/06-variants",
+      "char": "boris",
+      "group": "06-variants",
+      "poses": [
+        [
+          "FRONT",
+          "full body true straight front neutral view, both hands relaxed, same proportions"
+        ],
+        [
+          "SIDE",
+          "full body exact right profile idle, no change in hair or costume"
+        ],
+        [
+          "REAR",
+          "full body exact back view, correct SAME hairstyle/outfit seen from behind"
+        ],
+        [
+          "GUARD",
+          "full body compact unarmed guard, fists near chest, grounded feet"
+        ],
+        [
+          "C4 HOLD",
+          "full body holding small inert unbranded rectangular game explosive pack with one plain strap; no schematic or wiring detail"
+        ],
+        [
+          "MINE HOLD",
+          "full body holding small plain round inert game mine at waist, object only, no deployment instruction"
+        ],
+        [
+          "GUN DROP",
+          "full body discarding empty conventional pistol from open hand, object below hand"
+        ],
+        [
+          "SHOTGUN PUMP",
+          "full body pump-shotgun cycling pose, one hand on grip and other on sliding foreend"
+        ],
+        [
+          "NEUTRAL FACE",
+          "large head-and-shoulders portrait, relaxed neutral adult chibi expression"
+        ],
+        [
+          "FOCUS FACE",
+          "large head-and-shoulders portrait, concentrated eyes/brows and set jaw"
+        ],
+        [
+          "ATTACK FACE",
+          "large head-and-shoulders portrait, ordinary effort/shout, no luminous eyes"
+        ],
+        [
+          "HURT FACE",
+          "large head-and-shoulders portrait, wincing pain eyes narrowed, jaw clenched"
+        ],
+        [
+          "PANIC FACE",
+          "large head-and-shoulders portrait, alarmed eyes and parted mouth, brows raised, no comedy tongue"
+        ],
+        [
+          "TIRED FACE",
+          "large head-and-shoulders portrait, low health exhaustion/sweat and heavy eyelids"
+        ],
+        [
+          "KO FACE",
+          "large head-and-shoulders portrait, eyes closed and relaxed defeated mouth, no gore"
+        ],
+        [
+          "BLINK",
+          "large head-and-shoulders portrait, normal blink expression, same face"
+        ]
+      ],
+      "prompt": "Use case: stylized-concept. Make a polished original 2D CHIBI action-art review sheet for user's arena game. Input image1 is the ONLY identity/proportion/style anchor, not a composition to copy.\nCRITICAL: preserve very compact about2.5-heads-tall CHIBI ADULT proportions of anchor: huge head40%, short torso32%, stubby short legs28%; head almost shoulders wide. NOT realistic adult anatomy, not long limbs, not3.5/7head figures. These are ordinary non-superpowered adults rendered CHIBI; acting and weight are natural, not anatomy photorealism.\nPremium clean organic ink outline, two/three-tone cel shading, tasteful simple folds, large readable colors, integrated elbows/knees, consistent facial construction and clothing. No 3D plastic, no photorealistic textures, no superhero powers, no aura, no magical attack arcs, no logo. Reference is proposed design, not yet owner-approved.\nComposition: high-resolution SQUARE 4x4 contact sheet with EXACTLY16 equal spacious cells. Prefer2048x2048 or larger; never make wide 4x3. Dark slate uniform backdrop matching anchor, subtle dividers, modest top header and small ivory all-caps numbered labels beneath each cell. Full body+objects contained in every cell EXCEPT last eight portrait cells of MODEL AND EXPRESSIONS which show head/shoulders intentionally. No duplicate/unrequested people except grey training dummy explicitly required. Same character16times, never include allfive. Mainly right-facing side/threequarter side action, natural perspective not foreshortened camera. Thin floor hint only where needed. No cropping hair/feet/weapons. Pose list rowmajor top-left to bottom-right:\n01 \"FRONT\" — full body true straight front neutral view, both hands relaxed, same proportions\n02 \"SIDE\" — full body exact right profile idle, no change in hair or costume\n03 \"REAR\" — full body exact back view, correct SAME hairstyle/outfit seen from behind\n04 \"GUARD\" — full body compact unarmed guard, fists near chest, grounded feet\n05 \"C4 HOLD\" — full body holding small inert unbranded rectangular game explosive pack with one plain strap; no schematic or wiring detail\n06 \"MINE HOLD\" — full body holding small plain round inert game mine at waist, object only, no deployment instruction\n07 \"GUN DROP\" — full body discarding empty conventional pistol from open hand, object below hand\n08 \"SHOTGUN PUMP\" — full body pump-shotgun cycling pose, one hand on grip and other on sliding foreend\n09 \"NEUTRAL FACE\" — large head-and-shoulders portrait, relaxed neutral adult chibi expression\n10 \"FOCUS FACE\" — large head-and-shoulders portrait, concentrated eyes/brows and set jaw\n11 \"ATTACK FACE\" — large head-and-shoulders portrait, ordinary effort/shout, no luminous eyes\n12 \"HURT FACE\" — large head-and-shoulders portrait, wincing pain eyes narrowed, jaw clenched\n13 \"PANIC FACE\" — large head-and-shoulders portrait, alarmed eyes and parted mouth, brows raised, no comedy tongue\n14 \"TIRED FACE\" — large head-and-shoulders portrait, low health exhaustion/sweat and heavy eyelids\n15 \"KO FACE\" — large head-and-shoulders portrait, eyes closed and relaxed defeated mouth, no gore\n16 \"BLINK\" — large head-and-shoulders portrait, normal blink expression, same face\nHEADER \"BORIS / MODEL AND EXPRESSIONS\". Depict ONLY BORIS: grey silver short crop, subtle stubble, stocky square face and torso, olive utility jacket/dark tee, charcoal cargo trousers, brown-black boots. Lock exactly that figure in reference1: face/hair/costume/proportions/materials/colors in everycell. For Agent keep normal sunglasses even during emotions, emote with brows/mouth/body. For Blaire preserve PURPLE BOB in rear view. All poses human acting within short chibi limbs. Conventional everyday/game weapons, no sci-fi rayguns or toy gadgets. Flames only on burning clothing where explicitly requested. This is representative keypose art, not a finished animation sequence."
+    },
+    {
+      "id": "agent/01-movement",
+      "char": "agent",
+      "group": "01-movement",
+      "poses": [
+        [
+          "IDLE",
+          "relaxed idle threequarter view, open relaxed fingers, weight on one leg"
+        ],
+        [
+          "WALK CONTACT",
+          "walking right, front heel on floor, rear toe on floor, clear split stride"
+        ],
+        [
+          "WALK PASSING",
+          "walking right, planted support leg nearly straight, other bent foot passes next to support ankle beneath hips; NOT a split stride"
+        ],
+        [
+          "RUN LEFT",
+          "running contact pose left leg forward planted, right knee folds behind, arms counterbalance"
+        ],
+        [
+          "RUN RIGHT",
+          "running opposite contact pose right leg forward planted, left knee folds behind; visibly exchange arms and legs"
+        ],
+        [
+          "SPRINT",
+          "fast forward lean and compact driving arms, human effort not supernatural flight"
+        ],
+        [
+          "CROUCH",
+          "low compact crouch with folded knees and feet supported"
+        ],
+        [
+          "COVER",
+          "crouched close behind a plain waist-high crate, cautious look over edge"
+        ],
+        [
+          "JUMP UP",
+          "jump ascent with feet pushing upward, torso extended, arms counterbalance"
+        ],
+        [
+          "JUMP APEX",
+          "jump apex, short legs tucked, relaxed arms, believable aerial balance"
+        ],
+        [
+          "DESCEND",
+          "falling from jump, legs opening ready for feet-first landing"
+        ],
+        [
+          "FREE FALL",
+          "uncontrolled feet-down fall with spread arms, alarmed not heroic"
+        ],
+        [
+          "ROLL TUCK",
+          "entering forward defensive roll, chin tucked, knees drawn to chest"
+        ],
+        [
+          "ROLL TURN",
+          "middle of floor roll, weight on curved back, hips up, head protected"
+        ],
+        [
+          "ROLL EXIT",
+          "rising from roll onto one knee and supporting hand, beginning to regain balance"
+        ],
+        [
+          "DIVE",
+          "horizontal low forward dive, both arms reach forward, short legs trail"
+        ]
+      ],
+      "prompt": "Use case: stylized-concept. Make a polished original 2D CHIBI action-art review sheet for user's arena game. Input image1 is the ONLY identity/proportion/style anchor, not a composition to copy.\nCRITICAL: preserve very compact about2.5-heads-tall CHIBI ADULT proportions of anchor: huge head40%, short torso32%, stubby short legs28%; head almost shoulders wide. NOT realistic adult anatomy, not long limbs, not3.5/7head figures. These are ordinary non-superpowered adults rendered CHIBI; acting and weight are natural, not anatomy photorealism.\nPremium clean organic ink outline, two/three-tone cel shading, tasteful simple folds, large readable colors, integrated elbows/knees, consistent facial construction and clothing. No 3D plastic, no photorealistic textures, no superhero powers, no aura, no magical attack arcs, no logo. Reference is proposed design, not yet owner-approved.\nComposition: high-resolution SQUARE 4x4 contact sheet with EXACTLY16 equal spacious cells. Prefer2048x2048 or larger; never make wide 4x3. Dark slate uniform backdrop matching anchor, subtle dividers, modest top header and small ivory all-caps numbered labels beneath each cell. Full body+objects contained in every cell EXCEPT last eight portrait cells of MODEL AND EXPRESSIONS which show head/shoulders intentionally. No duplicate/unrequested people except grey training dummy explicitly required. Same character16times, never include allfive. Mainly right-facing side/threequarter side action, natural perspective not foreshortened camera. Thin floor hint only where needed. No cropping hair/feet/weapons. Pose list rowmajor top-left to bottom-right:\n01 \"IDLE\" — relaxed idle threequarter view, open relaxed fingers, weight on one leg\n02 \"WALK CONTACT\" — walking right, front heel on floor, rear toe on floor, clear split stride\n03 \"WALK PASSING\" — walking right, planted support leg nearly straight, other bent foot passes next to support ankle beneath hips; NOT a split stride\n04 \"RUN LEFT\" — running contact pose left leg forward planted, right knee folds behind, arms counterbalance\n05 \"RUN RIGHT\" — running opposite contact pose right leg forward planted, left knee folds behind; visibly exchange arms and legs\n06 \"SPRINT\" — fast forward lean and compact driving arms, human effort not supernatural flight\n07 \"CROUCH\" — low compact crouch with folded knees and feet supported\n08 \"COVER\" — crouched close behind a plain waist-high crate, cautious look over edge\n09 \"JUMP UP\" — jump ascent with feet pushing upward, torso extended, arms counterbalance\n10 \"JUMP APEX\" — jump apex, short legs tucked, relaxed arms, believable aerial balance\n11 \"DESCEND\" — falling from jump, legs opening ready for feet-first landing\n12 \"FREE FALL\" — uncontrolled feet-down fall with spread arms, alarmed not heroic\n13 \"ROLL TUCK\" — entering forward defensive roll, chin tucked, knees drawn to chest\n14 \"ROLL TURN\" — middle of floor roll, weight on curved back, hips up, head protected\n15 \"ROLL EXIT\" — rising from roll onto one knee and supporting hand, beginning to regain balance\n16 \"DIVE\" — horizontal low forward dive, both arms reach forward, short legs trail\nHEADER \"AGENT / MOVEMENT\". Depict ONLY AGENT: slick dark hair, normal dark sunglasses, charcoal navy suit, white shirt, orange short tie, dark trousers and black shoes. Lock exactly that figure in reference1: face/hair/costume/proportions/materials/colors in everycell. For Agent keep normal sunglasses even during emotions, emote with brows/mouth/body. For Blaire preserve PURPLE BOB in rear view. All poses human acting within short chibi limbs. Conventional everyday/game weapons, no sci-fi rayguns or toy gadgets. Flames only on burning clothing where explicitly requested. This is representative keypose art, not a finished animation sequence."
+    },
+    {
+      "id": "agent/02-traversal",
+      "char": "agent",
+      "group": "02-traversal",
+      "poses": [
+        [
+          "LADDER HOLD",
+          "back threequarter view holding simple ladder, both feet on rungs"
+        ],
+        [
+          "CLIMB LEFT",
+          "back view ladder climb, LEFT hand above head and LEFT knee high, right hand lower/right leg extended"
+        ],
+        [
+          "CLIMB RIGHT",
+          "back view ladder climb, RIGHT hand above head and RIGHT knee high, left hand lower/left leg extended; exact opposite leads of previous cell"
+        ],
+        [
+          "LADDER SLIDE",
+          "sliding down ladder with hands on rails, legs near rails and bent knees"
+        ],
+        [
+          "LADDER EXIT",
+          "stepping from ladder onto upper platform edge, one knee over lip"
+        ],
+        [
+          "LEDGE CATCH",
+          "both hands catch platform edge, short arms extended, legs swing below"
+        ],
+        [
+          "LEDGE HANG",
+          "hanging from edge, elbows bent slightly, tense shoulders and searching feet"
+        ],
+        [
+          "LEDGE RELEASE",
+          "releasing ledge and dropping feet first, hands let go"
+        ],
+        [
+          "ROCKET RIGHT",
+          "frightened chibi accidentally clinging to a small flying game rocket heading RIGHT, short exhaust; game slapstick mechanic, NOT person flying by power"
+        ],
+        [
+          "ROCKET LEFT",
+          "same terrified clinging pose flying LEFT, preserve outfit asymmetry; no triumphant surfing"
+        ],
+        [
+          "DIVE TACKLE",
+          "character horizontally tackles an anonymous grey chibi training dummy around torso, both full bodies visible, neither has injury"
+        ],
+        [
+          "GRABBED",
+          "character is offbalance victim of a dive tackle by grey chibi training dummy, both bodies visible; not standing wrestler grab"
+        ],
+        [
+          "PUSH",
+          "both palms push heavy simple barrel, feet firmly brace, body weight forward"
+        ],
+        [
+          "PROP KICK",
+          "short front kick pushing a small plain box, support foot planted"
+        ],
+        [
+          "PICKUP",
+          "crouching to retrieve small dropped pistol from floor, eyes down, grounded feet"
+        ],
+        [
+          "VICTORY",
+          "relieved exhausted smile, modest one-arm celebration, loose shoulders, no powered pose"
+        ]
+      ],
+      "prompt": "Use case: stylized-concept. Make a polished original 2D CHIBI action-art review sheet for user's arena game. Input image1 is the ONLY identity/proportion/style anchor, not a composition to copy.\nCRITICAL: preserve very compact about2.5-heads-tall CHIBI ADULT proportions of anchor: huge head40%, short torso32%, stubby short legs28%; head almost shoulders wide. NOT realistic adult anatomy, not long limbs, not3.5/7head figures. These are ordinary non-superpowered adults rendered CHIBI; acting and weight are natural, not anatomy photorealism.\nPremium clean organic ink outline, two/three-tone cel shading, tasteful simple folds, large readable colors, integrated elbows/knees, consistent facial construction and clothing. No 3D plastic, no photorealistic textures, no superhero powers, no aura, no magical attack arcs, no logo. Reference is proposed design, not yet owner-approved.\nComposition: high-resolution SQUARE 4x4 contact sheet with EXACTLY16 equal spacious cells. Prefer2048x2048 or larger; never make wide 4x3. Dark slate uniform backdrop matching anchor, subtle dividers, modest top header and small ivory all-caps numbered labels beneath each cell. Full body+objects contained in every cell EXCEPT last eight portrait cells of MODEL AND EXPRESSIONS which show head/shoulders intentionally. No duplicate/unrequested people except grey training dummy explicitly required. Same character16times, never include allfive. Mainly right-facing side/threequarter side action, natural perspective not foreshortened camera. Thin floor hint only where needed. No cropping hair/feet/weapons. Pose list rowmajor top-left to bottom-right:\n01 \"LADDER HOLD\" — back threequarter view holding simple ladder, both feet on rungs\n02 \"CLIMB LEFT\" — back view ladder climb, LEFT hand above head and LEFT knee high, right hand lower/right leg extended\n03 \"CLIMB RIGHT\" — back view ladder climb, RIGHT hand above head and RIGHT knee high, left hand lower/left leg extended; exact opposite leads of previous cell\n04 \"LADDER SLIDE\" — sliding down ladder with hands on rails, legs near rails and bent knees\n05 \"LADDER EXIT\" — stepping from ladder onto upper platform edge, one knee over lip\n06 \"LEDGE CATCH\" — both hands catch platform edge, short arms extended, legs swing below\n07 \"LEDGE HANG\" — hanging from edge, elbows bent slightly, tense shoulders and searching feet\n08 \"LEDGE RELEASE\" — releasing ledge and dropping feet first, hands let go\n09 \"ROCKET RIGHT\" — frightened chibi accidentally clinging to a small flying game rocket heading RIGHT, short exhaust; game slapstick mechanic, NOT person flying by power\n10 \"ROCKET LEFT\" — same terrified clinging pose flying LEFT, preserve outfit asymmetry; no triumphant surfing\n11 \"DIVE TACKLE\" — character horizontally tackles an anonymous grey chibi training dummy around torso, both full bodies visible, neither has injury\n12 \"GRABBED\" — character is offbalance victim of a dive tackle by grey chibi training dummy, both bodies visible; not standing wrestler grab\n13 \"PUSH\" — both palms push heavy simple barrel, feet firmly brace, body weight forward\n14 \"PROP KICK\" — short front kick pushing a small plain box, support foot planted\n15 \"PICKUP\" — crouching to retrieve small dropped pistol from floor, eyes down, grounded feet\n16 \"VICTORY\" — relieved exhausted smile, modest one-arm celebration, loose shoulders, no powered pose\nHEADER \"AGENT / TRAVERSAL AND OBJECTS\". Depict ONLY AGENT: slick dark hair, normal dark sunglasses, charcoal navy suit, white shirt, orange short tie, dark trousers and black shoes. Lock exactly that figure in reference1: face/hair/costume/proportions/materials/colors in everycell. For Agent keep normal sunglasses even during emotions, emote with brows/mouth/body. For Blaire preserve PURPLE BOB in rear view. All poses human acting within short chibi limbs. Conventional everyday/game weapons, no sci-fi rayguns or toy gadgets. Flames only on burning clothing where explicitly requested. This is representative keypose art, not a finished animation sequence."
+    },
+    {
+      "id": "agent/03-firearms",
+      "char": "agent",
+      "group": "03-firearms",
+      "poses": [
+        [
+          "PISTOL",
+          "standing ordinary compact black pistol aim right with aligned wrist"
+        ],
+        [
+          "REVOLVER",
+          "standing grey revolver with visible cylinder, braced human stance"
+        ],
+        [
+          "SMG",
+          "standing compact dark submachinegun, two short arms grip appropriately"
+        ],
+        [
+          "RIFLE",
+          "standing conventional rifle stock against shoulder, support hand on foreend"
+        ],
+        [
+          "SHOTGUN",
+          "standing conventional pump shotgun aim, stock shouldered, short arms work naturally"
+        ],
+        [
+          "SNIPER",
+          "crouched scoped rifle aim right, elbows comfortable and feet grounded"
+        ],
+        [
+          "LAUNCHER",
+          "plain green shoulder-fired tubular game launcher held with visible effort, NOT futuristic"
+        ],
+        [
+          "FLAMETHROWER",
+          "utilitarian small backpack and hose-fed nozzle held with two hands; NO flame emitted, no magic"
+        ],
+        [
+          "GRENADE READY",
+          "standing normal small olive grenade held ready beside shoulder, no release yet"
+        ],
+        [
+          "BOTTLE READY",
+          "standing brown bottle with simple cloth wick held ready beside shoulder, not lit"
+        ],
+        [
+          "GRENADE THROW",
+          "ordinary overarm grenade release, body turns, hand opens, item just leaving hand"
+        ],
+        [
+          "BOTTLE THROW",
+          "ordinary bottle release, lead foot planted, eyes follow bottle, no flaming body"
+        ],
+        [
+          "AIM UP",
+          "compact pistol aimed45degrees up, both feet planted, eyes follow direction"
+        ],
+        [
+          "AIM DOWN",
+          "compact pistol aimed45degrees down, wrist straight, both feet planted"
+        ],
+        [
+          "KNEEL AIM",
+          "one knee down aiming conventional rifle level, head clear of stock"
+        ],
+        [
+          "COVER AIM",
+          "crouched aiming pistol around edge of simple crate, small exposed silhouette"
+        ]
+      ],
+      "prompt": "Use case: stylized-concept. Make a polished original 2D CHIBI action-art review sheet for user's arena game. Input image1 is the ONLY identity/proportion/style anchor, not a composition to copy.\nCRITICAL: preserve very compact about2.5-heads-tall CHIBI ADULT proportions of anchor: huge head40%, short torso32%, stubby short legs28%; head almost shoulders wide. NOT realistic adult anatomy, not long limbs, not3.5/7head figures. These are ordinary non-superpowered adults rendered CHIBI; acting and weight are natural, not anatomy photorealism.\nPremium clean organic ink outline, two/three-tone cel shading, tasteful simple folds, large readable colors, integrated elbows/knees, consistent facial construction and clothing. No 3D plastic, no photorealistic textures, no superhero powers, no aura, no magical attack arcs, no logo. Reference is proposed design, not yet owner-approved.\nComposition: high-resolution SQUARE 4x4 contact sheet with EXACTLY16 equal spacious cells. Prefer2048x2048 or larger; never make wide 4x3. Dark slate uniform backdrop matching anchor, subtle dividers, modest top header and small ivory all-caps numbered labels beneath each cell. Full body+objects contained in every cell EXCEPT last eight portrait cells of MODEL AND EXPRESSIONS which show head/shoulders intentionally. No duplicate/unrequested people except grey training dummy explicitly required. Same character16times, never include allfive. Mainly right-facing side/threequarter side action, natural perspective not foreshortened camera. Thin floor hint only where needed. No cropping hair/feet/weapons. Pose list rowmajor top-left to bottom-right:\n01 \"PISTOL\" — standing ordinary compact black pistol aim right with aligned wrist\n02 \"REVOLVER\" — standing grey revolver with visible cylinder, braced human stance\n03 \"SMG\" — standing compact dark submachinegun, two short arms grip appropriately\n04 \"RIFLE\" — standing conventional rifle stock against shoulder, support hand on foreend\n05 \"SHOTGUN\" — standing conventional pump shotgun aim, stock shouldered, short arms work naturally\n06 \"SNIPER\" — crouched scoped rifle aim right, elbows comfortable and feet grounded\n07 \"LAUNCHER\" — plain green shoulder-fired tubular game launcher held with visible effort, NOT futuristic\n08 \"FLAMETHROWER\" — utilitarian small backpack and hose-fed nozzle held with two hands; NO flame emitted, no magic\n09 \"GRENADE READY\" — standing normal small olive grenade held ready beside shoulder, no release yet\n10 \"BOTTLE READY\" — standing brown bottle with simple cloth wick held ready beside shoulder, not lit\n11 \"GRENADE THROW\" — ordinary overarm grenade release, body turns, hand opens, item just leaving hand\n12 \"BOTTLE THROW\" — ordinary bottle release, lead foot planted, eyes follow bottle, no flaming body\n13 \"AIM UP\" — compact pistol aimed45degrees up, both feet planted, eyes follow direction\n14 \"AIM DOWN\" — compact pistol aimed45degrees down, wrist straight, both feet planted\n15 \"KNEEL AIM\" — one knee down aiming conventional rifle level, head clear of stock\n16 \"COVER AIM\" — crouched aiming pistol around edge of simple crate, small exposed silhouette\nHEADER \"AGENT / RANGED AND THROWING\". Depict ONLY AGENT: slick dark hair, normal dark sunglasses, charcoal navy suit, white shirt, orange short tie, dark trousers and black shoes. Lock exactly that figure in reference1: face/hair/costume/proportions/materials/colors in everycell. For Agent keep normal sunglasses even during emotions, emote with brows/mouth/body. For Blaire preserve PURPLE BOB in rear view. All poses human acting within short chibi limbs. Conventional everyday/game weapons, no sci-fi rayguns or toy gadgets. Flames only on burning clothing where explicitly requested. This is representative keypose art, not a finished animation sequence."
+    },
+    {
+      "id": "agent/04-melee",
+      "char": "agent",
+      "group": "04-melee",
+      "poses": [
+        [
+          "JAB PREP",
+          "ordinary compact boxing guard, left fist draws back slightly, weight braced"
+        ],
+        [
+          "JAB CONTACT",
+          "straight lead jab to right, shoulder follows, wrist aligned, back hand protects"
+        ],
+        [
+          "JAB RECOVERY",
+          "jab retracts to guard, elbow folds, weight settling"
+        ],
+        [
+          "CROSS",
+          "rear-hand straight punch, visible hip/shoulder rotation, planted feet"
+        ],
+        [
+          "HOOK",
+          "short third-punch hook, rounded elbow, body turns, not magical uppercut"
+        ],
+        [
+          "FRONT KICK",
+          "short front kick at waist height, support knee soft, arms counterbalance"
+        ],
+        [
+          "JUMP KICK",
+          "compact airborne forward kick, other short leg folded, natural alarm/exertion"
+        ],
+        [
+          "MACHETE READY",
+          "ordinary short machete raised diagonally in one hand, no opponent and no blood"
+        ],
+        [
+          "MACHETE SWING",
+          "short machete followthrough across body, ordinary restrained arc, no energy trail"
+        ],
+        [
+          "AXE READY",
+          "small twohanded wood axe poised overhead with hands gripping handle"
+        ],
+        [
+          "AXE SWING",
+          "wood axe swings downward, body follows weight, no impact victim"
+        ],
+        [
+          "SWORD READY",
+          "plain modest unadorned steel sword held guarded at shoulder, no fantasy features"
+        ],
+        [
+          "SWORD SWING",
+          "plain steel sword crossbody swing with clear waist twist, no glow"
+        ],
+        [
+          "BATON",
+          "short plain dark baton swing, knuckles and elbow plausible"
+        ],
+        [
+          "BASEBALL BAT",
+          "wooden baseball bat held twohanded mid-swing, weight transfer through hips"
+        ],
+        [
+          "CHAINSAW",
+          "braced short legs and both hands on conventional chainsaw handles, saw held clear of body, no victim or blood"
+        ]
+      ],
+      "prompt": "Use case: stylized-concept. Make a polished original 2D CHIBI action-art review sheet for user's arena game. Input image1 is the ONLY identity/proportion/style anchor, not a composition to copy.\nCRITICAL: preserve very compact about2.5-heads-tall CHIBI ADULT proportions of anchor: huge head40%, short torso32%, stubby short legs28%; head almost shoulders wide. NOT realistic adult anatomy, not long limbs, not3.5/7head figures. These are ordinary non-superpowered adults rendered CHIBI; acting and weight are natural, not anatomy photorealism.\nPremium clean organic ink outline, two/three-tone cel shading, tasteful simple folds, large readable colors, integrated elbows/knees, consistent facial construction and clothing. No 3D plastic, no photorealistic textures, no superhero powers, no aura, no magical attack arcs, no logo. Reference is proposed design, not yet owner-approved.\nComposition: high-resolution SQUARE 4x4 contact sheet with EXACTLY16 equal spacious cells. Prefer2048x2048 or larger; never make wide 4x3. Dark slate uniform backdrop matching anchor, subtle dividers, modest top header and small ivory all-caps numbered labels beneath each cell. Full body+objects contained in every cell EXCEPT last eight portrait cells of MODEL AND EXPRESSIONS which show head/shoulders intentionally. No duplicate/unrequested people except grey training dummy explicitly required. Same character16times, never include allfive. Mainly right-facing side/threequarter side action, natural perspective not foreshortened camera. Thin floor hint only where needed. No cropping hair/feet/weapons. Pose list rowmajor top-left to bottom-right:\n01 \"JAB PREP\" — ordinary compact boxing guard, left fist draws back slightly, weight braced\n02 \"JAB CONTACT\" — straight lead jab to right, shoulder follows, wrist aligned, back hand protects\n03 \"JAB RECOVERY\" — jab retracts to guard, elbow folds, weight settling\n04 \"CROSS\" — rear-hand straight punch, visible hip/shoulder rotation, planted feet\n05 \"HOOK\" — short third-punch hook, rounded elbow, body turns, not magical uppercut\n06 \"FRONT KICK\" — short front kick at waist height, support knee soft, arms counterbalance\n07 \"JUMP KICK\" — compact airborne forward kick, other short leg folded, natural alarm/exertion\n08 \"MACHETE READY\" — ordinary short machete raised diagonally in one hand, no opponent and no blood\n09 \"MACHETE SWING\" — short machete followthrough across body, ordinary restrained arc, no energy trail\n10 \"AXE READY\" — small twohanded wood axe poised overhead with hands gripping handle\n11 \"AXE SWING\" — wood axe swings downward, body follows weight, no impact victim\n12 \"SWORD READY\" — plain modest unadorned steel sword held guarded at shoulder, no fantasy features\n13 \"SWORD SWING\" — plain steel sword crossbody swing with clear waist twist, no glow\n14 \"BATON\" — short plain dark baton swing, knuckles and elbow plausible\n15 \"BASEBALL BAT\" — wooden baseball bat held twohanded mid-swing, weight transfer through hips\n16 \"CHAINSAW\" — braced short legs and both hands on conventional chainsaw handles, saw held clear of body, no victim or blood\nHEADER \"AGENT / ORDINARY MELEE\". Depict ONLY AGENT: slick dark hair, normal dark sunglasses, charcoal navy suit, white shirt, orange short tie, dark trousers and black shoes. Lock exactly that figure in reference1: face/hair/costume/proportions/materials/colors in everycell. For Agent keep normal sunglasses even during emotions, emote with brows/mouth/body. For Blaire preserve PURPLE BOB in rear view. All poses human acting within short chibi limbs. Conventional everyday/game weapons, no sci-fi rayguns or toy gadgets. Flames only on burning clothing where explicitly requested. This is representative keypose art, not a finished animation sequence."
+    },
+    {
+      "id": "agent/05-damage-fire",
+      "char": "agent",
+      "group": "05-damage-fire",
+      "poses": [
+        [
+          "HIT RECOIL",
+          "face winces and torso twists from a hit, hand opens involuntarily, no blood"
+        ],
+        [
+          "STAGGER",
+          "stumbling one step, torso offcenter, hands seek balance, startled expression"
+        ],
+        [
+          "FALL FORWARD",
+          "falling forward with hand extending to break fall, knees buckle"
+        ],
+        [
+          "FALL BACK",
+          "falling backwards, torso curves and arms fling out, feet leave floor"
+        ],
+        [
+          "HARD LANDING",
+          "heavy landing on bent knees, palm on ground, head lowered with pain"
+        ],
+        [
+          "KNOCKDOWN",
+          "on side on floor, clothed, dazed, visibly breathing, no gore"
+        ],
+        [
+          "GET UP",
+          "painful rise from floor, one hand/one knee supporting, weight not levitating"
+        ],
+        [
+          "DEATH KNEEL",
+          "exhausted defeated collapse to knees, head and shoulders drop; no wound detail"
+        ],
+        [
+          "DEAD",
+          "fully clothed motionless body lying on side, relaxed limp limbs, eyes closed, no blood"
+        ],
+        [
+          "CHARRED",
+          "same clothed motionless body after fire: recognizable outfit now darkened soot and scorched hems, few smoke wisps; no exposed burns, no gore, NO flame aura"
+        ],
+        [
+          "IGNITION",
+          "small accidental flame catches jacket/shirt hem, startled turn to look at it, open splayed hands"
+        ],
+        [
+          "BURN FRONT",
+          "frightened recoil with shoulders hunched, face in pain, open hands trying to pat clothing flame; localized irregular orange flames on front hem/one sleeve and rising smoke, not aura"
+        ],
+        [
+          "BURN BACK",
+          "twisting panicked body reacting to cloth fire at back/side, reaching toward it, never heroic standing with fists; irregular small flame and smoke"
+        ],
+        [
+          "BURN RUN",
+          "panicked off-balance running to escape, hunched and grimacing, erratic open hands, flames trailing only from clothes, not a powered sprint"
+        ],
+        [
+          "EXTINGUISH",
+          "rolling on floor to extinguish clothing fire, arms protect face, flames reduced and localized, no levitation"
+        ],
+        [
+          "AFTER FIRE",
+          "coughing exhausted on one knee after flames are OUT, soot on face and clothes, head bowed, smoke wisp, distress not victory"
+        ]
+      ],
+      "prompt": "Use case: stylized-concept. Make a polished original 2D CHIBI action-art review sheet for user's arena game. Input image1 is the ONLY identity/proportion/style anchor, not a composition to copy.\nCRITICAL: preserve very compact about2.5-heads-tall CHIBI ADULT proportions of anchor: huge head40%, short torso32%, stubby short legs28%; head almost shoulders wide. NOT realistic adult anatomy, not long limbs, not3.5/7head figures. These are ordinary non-superpowered adults rendered CHIBI; acting and weight are natural, not anatomy photorealism.\nPremium clean organic ink outline, two/three-tone cel shading, tasteful simple folds, large readable colors, integrated elbows/knees, consistent facial construction and clothing. No 3D plastic, no photorealistic textures, no superhero powers, no aura, no magical attack arcs, no logo. Reference is proposed design, not yet owner-approved.\nComposition: high-resolution SQUARE 4x4 contact sheet with EXACTLY16 equal spacious cells. Prefer2048x2048 or larger; never make wide 4x3. Dark slate uniform backdrop matching anchor, subtle dividers, modest top header and small ivory all-caps numbered labels beneath each cell. Full body+objects contained in every cell EXCEPT last eight portrait cells of MODEL AND EXPRESSIONS which show head/shoulders intentionally. No duplicate/unrequested people except grey training dummy explicitly required. Same character16times, never include allfive. Mainly right-facing side/threequarter side action, natural perspective not foreshortened camera. Thin floor hint only where needed. No cropping hair/feet/weapons. Pose list rowmajor top-left to bottom-right:\n01 \"HIT RECOIL\" — face winces and torso twists from a hit, hand opens involuntarily, no blood\n02 \"STAGGER\" — stumbling one step, torso offcenter, hands seek balance, startled expression\n03 \"FALL FORWARD\" — falling forward with hand extending to break fall, knees buckle\n04 \"FALL BACK\" — falling backwards, torso curves and arms fling out, feet leave floor\n05 \"HARD LANDING\" — heavy landing on bent knees, palm on ground, head lowered with pain\n06 \"KNOCKDOWN\" — on side on floor, clothed, dazed, visibly breathing, no gore\n07 \"GET UP\" — painful rise from floor, one hand/one knee supporting, weight not levitating\n08 \"DEATH KNEEL\" — exhausted defeated collapse to knees, head and shoulders drop; no wound detail\n09 \"DEAD\" — fully clothed motionless body lying on side, relaxed limp limbs, eyes closed, no blood\n10 \"CHARRED\" — same clothed motionless body after fire: recognizable outfit now darkened soot and scorched hems, few smoke wisps; no exposed burns, no gore, NO flame aura\n11 \"IGNITION\" — small accidental flame catches jacket/shirt hem, startled turn to look at it, open splayed hands\n12 \"BURN FRONT\" — frightened recoil with shoulders hunched, face in pain, open hands trying to pat clothing flame; localized irregular orange flames on front hem/one sleeve and rising smoke, not aura\n13 \"BURN BACK\" — twisting panicked body reacting to cloth fire at back/side, reaching toward it, never heroic standing with fists; irregular small flame and smoke\n14 \"BURN RUN\" — panicked off-balance running to escape, hunched and grimacing, erratic open hands, flames trailing only from clothes, not a powered sprint\n15 \"EXTINGUISH\" — rolling on floor to extinguish clothing fire, arms protect face, flames reduced and localized, no levitation\n16 \"AFTER FIRE\" — coughing exhausted on one knee after flames are OUT, soot on face and clothes, head bowed, smoke wisp, distress not victory\nHEADER \"AGENT / HURT AND FIRE\". Depict ONLY AGENT: slick dark hair, normal dark sunglasses, charcoal navy suit, white shirt, orange short tie, dark trousers and black shoes. Lock exactly that figure in reference1: face/hair/costume/proportions/materials/colors in everycell. For Agent keep normal sunglasses even during emotions, emote with brows/mouth/body. For Blaire preserve PURPLE BOB in rear view. All poses human acting within short chibi limbs. Conventional everyday/game weapons, no sci-fi rayguns or toy gadgets. Flames only on burning clothing where explicitly requested. This is representative keypose art, not a finished animation sequence."
+    },
+    {
+      "id": "agent/06-variants",
+      "char": "agent",
+      "group": "06-variants",
+      "poses": [
+        [
+          "FRONT",
+          "full body true straight front neutral view, both hands relaxed, same proportions"
+        ],
+        [
+          "SIDE",
+          "full body exact right profile idle, no change in hair or costume"
+        ],
+        [
+          "REAR",
+          "full body exact back view, correct SAME hairstyle/outfit seen from behind"
+        ],
+        [
+          "GUARD",
+          "full body compact unarmed guard, fists near chest, grounded feet"
+        ],
+        [
+          "C4 HOLD",
+          "full body holding small inert unbranded rectangular game explosive pack with one plain strap; no schematic or wiring detail"
+        ],
+        [
+          "MINE HOLD",
+          "full body holding small plain round inert game mine at waist, object only, no deployment instruction"
+        ],
+        [
+          "GUN DROP",
+          "full body discarding empty conventional pistol from open hand, object below hand"
+        ],
+        [
+          "SHOTGUN PUMP",
+          "full body pump-shotgun cycling pose, one hand on grip and other on sliding foreend"
+        ],
+        [
+          "NEUTRAL FACE",
+          "large head-and-shoulders portrait, relaxed neutral adult chibi expression"
+        ],
+        [
+          "FOCUS FACE",
+          "large head-and-shoulders portrait, concentrated eyes/brows and set jaw"
+        ],
+        [
+          "ATTACK FACE",
+          "large head-and-shoulders portrait, ordinary effort/shout, no luminous eyes"
+        ],
+        [
+          "HURT FACE",
+          "large head-and-shoulders portrait, wincing pain eyes narrowed, jaw clenched"
+        ],
+        [
+          "PANIC FACE",
+          "large head-and-shoulders portrait, alarmed eyes and parted mouth, brows raised, no comedy tongue"
+        ],
+        [
+          "TIRED FACE",
+          "large head-and-shoulders portrait, low health exhaustion/sweat and heavy eyelids"
+        ],
+        [
+          "KO FACE",
+          "large head-and-shoulders portrait, eyes closed and relaxed defeated mouth, no gore"
+        ],
+        [
+          "BLINK",
+          "large head-and-shoulders portrait, normal blink expression, same face"
+        ]
+      ],
+      "prompt": "Use case: stylized-concept. Make a polished original 2D CHIBI action-art review sheet for user's arena game. Input image1 is the ONLY identity/proportion/style anchor, not a composition to copy.\nCRITICAL: preserve very compact about2.5-heads-tall CHIBI ADULT proportions of anchor: huge head40%, short torso32%, stubby short legs28%; head almost shoulders wide. NOT realistic adult anatomy, not long limbs, not3.5/7head figures. These are ordinary non-superpowered adults rendered CHIBI; acting and weight are natural, not anatomy photorealism.\nPremium clean organic ink outline, two/three-tone cel shading, tasteful simple folds, large readable colors, integrated elbows/knees, consistent facial construction and clothing. No 3D plastic, no photorealistic textures, no superhero powers, no aura, no magical attack arcs, no logo. Reference is proposed design, not yet owner-approved.\nComposition: high-resolution SQUARE 4x4 contact sheet with EXACTLY16 equal spacious cells. Prefer2048x2048 or larger; never make wide 4x3. Dark slate uniform backdrop matching anchor, subtle dividers, modest top header and small ivory all-caps numbered labels beneath each cell. Full body+objects contained in every cell EXCEPT last eight portrait cells of MODEL AND EXPRESSIONS which show head/shoulders intentionally. No duplicate/unrequested people except grey training dummy explicitly required. Same character16times, never include allfive. Mainly right-facing side/threequarter side action, natural perspective not foreshortened camera. Thin floor hint only where needed. No cropping hair/feet/weapons. Pose list rowmajor top-left to bottom-right:\n01 \"FRONT\" — full body true straight front neutral view, both hands relaxed, same proportions\n02 \"SIDE\" — full body exact right profile idle, no change in hair or costume\n03 \"REAR\" — full body exact back view, correct SAME hairstyle/outfit seen from behind\n04 \"GUARD\" — full body compact unarmed guard, fists near chest, grounded feet\n05 \"C4 HOLD\" — full body holding small inert unbranded rectangular game explosive pack with one plain strap; no schematic or wiring detail\n06 \"MINE HOLD\" — full body holding small plain round inert game mine at waist, object only, no deployment instruction\n07 \"GUN DROP\" — full body discarding empty conventional pistol from open hand, object below hand\n08 \"SHOTGUN PUMP\" — full body pump-shotgun cycling pose, one hand on grip and other on sliding foreend\n09 \"NEUTRAL FACE\" — large head-and-shoulders portrait, relaxed neutral adult chibi expression\n10 \"FOCUS FACE\" — large head-and-shoulders portrait, concentrated eyes/brows and set jaw\n11 \"ATTACK FACE\" — large head-and-shoulders portrait, ordinary effort/shout, no luminous eyes\n12 \"HURT FACE\" — large head-and-shoulders portrait, wincing pain eyes narrowed, jaw clenched\n13 \"PANIC FACE\" — large head-and-shoulders portrait, alarmed eyes and parted mouth, brows raised, no comedy tongue\n14 \"TIRED FACE\" — large head-and-shoulders portrait, low health exhaustion/sweat and heavy eyelids\n15 \"KO FACE\" — large head-and-shoulders portrait, eyes closed and relaxed defeated mouth, no gore\n16 \"BLINK\" — large head-and-shoulders portrait, normal blink expression, same face\nHEADER \"AGENT / MODEL AND EXPRESSIONS\". Depict ONLY AGENT: slick dark hair, normal dark sunglasses, charcoal navy suit, white shirt, orange short tie, dark trousers and black shoes. Lock exactly that figure in reference1: face/hair/costume/proportions/materials/colors in everycell. For Agent keep normal sunglasses even during emotions, emote with brows/mouth/body. For Blaire preserve PURPLE BOB in rear view. All poses human acting within short chibi limbs. Conventional everyday/game weapons, no sci-fi rayguns or toy gadgets. Flames only on burning clothing where explicitly requested. This is representative keypose art, not a finished animation sequence."
+    },
+    {
+      "id": "hideki/01-movement",
+      "char": "hideki",
+      "group": "01-movement",
+      "poses": [
+        [
+          "IDLE",
+          "relaxed idle threequarter view, open relaxed fingers, weight on one leg"
+        ],
+        [
+          "WALK CONTACT",
+          "walking right, front heel on floor, rear toe on floor, clear split stride"
+        ],
+        [
+          "WALK PASSING",
+          "walking right, planted support leg nearly straight, other bent foot passes next to support ankle beneath hips; NOT a split stride"
+        ],
+        [
+          "RUN LEFT",
+          "running contact pose left leg forward planted, right knee folds behind, arms counterbalance"
+        ],
+        [
+          "RUN RIGHT",
+          "running opposite contact pose right leg forward planted, left knee folds behind; visibly exchange arms and legs"
+        ],
+        [
+          "SPRINT",
+          "fast forward lean and compact driving arms, human effort not supernatural flight"
+        ],
+        [
+          "CROUCH",
+          "low compact crouch with folded knees and feet supported"
+        ],
+        [
+          "COVER",
+          "crouched close behind a plain waist-high crate, cautious look over edge"
+        ],
+        [
+          "JUMP UP",
+          "jump ascent with feet pushing upward, torso extended, arms counterbalance"
+        ],
+        [
+          "JUMP APEX",
+          "jump apex, short legs tucked, relaxed arms, believable aerial balance"
+        ],
+        [
+          "DESCEND",
+          "falling from jump, legs opening ready for feet-first landing"
+        ],
+        [
+          "FREE FALL",
+          "uncontrolled feet-down fall with spread arms, alarmed not heroic"
+        ],
+        [
+          "ROLL TUCK",
+          "entering forward defensive roll, chin tucked, knees drawn to chest"
+        ],
+        [
+          "ROLL TURN",
+          "middle of floor roll, weight on curved back, hips up, head protected"
+        ],
+        [
+          "ROLL EXIT",
+          "rising from roll onto one knee and supporting hand, beginning to regain balance"
+        ],
+        [
+          "DIVE",
+          "horizontal low forward dive, both arms reach forward, short legs trail"
+        ]
+      ],
+      "prompt": "Use case: stylized-concept. Make a polished original 2D CHIBI action-art review sheet for user's arena game. Input image1 is the ONLY identity/proportion/style anchor, not a composition to copy.\nCRITICAL: preserve very compact about2.5-heads-tall CHIBI ADULT proportions of anchor: huge head40%, short torso32%, stubby short legs28%; head almost shoulders wide. NOT realistic adult anatomy, not long limbs, not3.5/7head figures. These are ordinary non-superpowered adults rendered CHIBI; acting and weight are natural, not anatomy photorealism.\nPremium clean organic ink outline, two/three-tone cel shading, tasteful simple folds, large readable colors, integrated elbows/knees, consistent facial construction and clothing. No 3D plastic, no photorealistic textures, no superhero powers, no aura, no magical attack arcs, no logo. Reference is proposed design, not yet owner-approved.\nComposition: high-resolution SQUARE 4x4 contact sheet with EXACTLY16 equal spacious cells. Prefer2048x2048 or larger; never make wide 4x3. Dark slate uniform backdrop matching anchor, subtle dividers, modest top header and small ivory all-caps numbered labels beneath each cell. Full body+objects contained in every cell EXCEPT last eight portrait cells of MODEL AND EXPRESSIONS which show head/shoulders intentionally. No duplicate/unrequested people except grey training dummy explicitly required. Same character16times, never include allfive. Mainly right-facing side/threequarter side action, natural perspective not foreshortened camera. Thin floor hint only where needed. No cropping hair/feet/weapons. Pose list rowmajor top-left to bottom-right:\n01 \"IDLE\" — relaxed idle threequarter view, open relaxed fingers, weight on one leg\n02 \"WALK CONTACT\" — walking right, front heel on floor, rear toe on floor, clear split stride\n03 \"WALK PASSING\" — walking right, planted support leg nearly straight, other bent foot passes next to support ankle beneath hips; NOT a split stride\n04 \"RUN LEFT\" — running contact pose left leg forward planted, right knee folds behind, arms counterbalance\n05 \"RUN RIGHT\" — running opposite contact pose right leg forward planted, left knee folds behind; visibly exchange arms and legs\n06 \"SPRINT\" — fast forward lean and compact driving arms, human effort not supernatural flight\n07 \"CROUCH\" — low compact crouch with folded knees and feet supported\n08 \"COVER\" — crouched close behind a plain waist-high crate, cautious look over edge\n09 \"JUMP UP\" — jump ascent with feet pushing upward, torso extended, arms counterbalance\n10 \"JUMP APEX\" — jump apex, short legs tucked, relaxed arms, believable aerial balance\n11 \"DESCEND\" — falling from jump, legs opening ready for feet-first landing\n12 \"FREE FALL\" — uncontrolled feet-down fall with spread arms, alarmed not heroic\n13 \"ROLL TUCK\" — entering forward defensive roll, chin tucked, knees drawn to chest\n14 \"ROLL TURN\" — middle of floor roll, weight on curved back, hips up, head protected\n15 \"ROLL EXIT\" — rising from roll onto one knee and supporting hand, beginning to regain balance\n16 \"DIVE\" — horizontal low forward dive, both arms reach forward, short legs trail\nHEADER \"HIDEKI / MOVEMENT\". Depict ONLY HIDEKI: dark swept/tied short hair, red cloth headband, light blue wrap shirt with white inner panel/navy waist tie, dark short loose trousers, flat navy shoes. Lock exactly that figure in reference1: face/hair/costume/proportions/materials/colors in everycell. For Agent keep normal sunglasses even during emotions, emote with brows/mouth/body. For Blaire preserve PURPLE BOB in rear view. All poses human acting within short chibi limbs. Conventional everyday/game weapons, no sci-fi rayguns or toy gadgets. Flames only on burning clothing where explicitly requested. This is representative keypose art, not a finished animation sequence."
+    },
+    {
+      "id": "hideki/02-traversal",
+      "char": "hideki",
+      "group": "02-traversal",
+      "poses": [
+        [
+          "LADDER HOLD",
+          "back threequarter view holding simple ladder, both feet on rungs"
+        ],
+        [
+          "CLIMB LEFT",
+          "back view ladder climb, LEFT hand above head and LEFT knee high, right hand lower/right leg extended"
+        ],
+        [
+          "CLIMB RIGHT",
+          "back view ladder climb, RIGHT hand above head and RIGHT knee high, left hand lower/left leg extended; exact opposite leads of previous cell"
+        ],
+        [
+          "LADDER SLIDE",
+          "sliding down ladder with hands on rails, legs near rails and bent knees"
+        ],
+        [
+          "LADDER EXIT",
+          "stepping from ladder onto upper platform edge, one knee over lip"
+        ],
+        [
+          "LEDGE CATCH",
+          "both hands catch platform edge, short arms extended, legs swing below"
+        ],
+        [
+          "LEDGE HANG",
+          "hanging from edge, elbows bent slightly, tense shoulders and searching feet"
+        ],
+        [
+          "LEDGE RELEASE",
+          "releasing ledge and dropping feet first, hands let go"
+        ],
+        [
+          "ROCKET RIGHT",
+          "frightened chibi accidentally clinging to a small flying game rocket heading RIGHT, short exhaust; game slapstick mechanic, NOT person flying by power"
+        ],
+        [
+          "ROCKET LEFT",
+          "same terrified clinging pose flying LEFT, preserve outfit asymmetry; no triumphant surfing"
+        ],
+        [
+          "DIVE TACKLE",
+          "character horizontally tackles an anonymous grey chibi training dummy around torso, both full bodies visible, neither has injury"
+        ],
+        [
+          "GRABBED",
+          "character is offbalance victim of a dive tackle by grey chibi training dummy, both bodies visible; not standing wrestler grab"
+        ],
+        [
+          "PUSH",
+          "both palms push heavy simple barrel, feet firmly brace, body weight forward"
+        ],
+        [
+          "PROP KICK",
+          "short front kick pushing a small plain box, support foot planted"
+        ],
+        [
+          "PICKUP",
+          "crouching to retrieve small dropped pistol from floor, eyes down, grounded feet"
+        ],
+        [
+          "VICTORY",
+          "relieved exhausted smile, modest one-arm celebration, loose shoulders, no powered pose"
+        ]
+      ],
+      "prompt": "Use case: stylized-concept. Make a polished original 2D CHIBI action-art review sheet for user's arena game. Input image1 is the ONLY identity/proportion/style anchor, not a composition to copy.\nCRITICAL: preserve very compact about2.5-heads-tall CHIBI ADULT proportions of anchor: huge head40%, short torso32%, stubby short legs28%; head almost shoulders wide. NOT realistic adult anatomy, not long limbs, not3.5/7head figures. These are ordinary non-superpowered adults rendered CHIBI; acting and weight are natural, not anatomy photorealism.\nPremium clean organic ink outline, two/three-tone cel shading, tasteful simple folds, large readable colors, integrated elbows/knees, consistent facial construction and clothing. No 3D plastic, no photorealistic textures, no superhero powers, no aura, no magical attack arcs, no logo. Reference is proposed design, not yet owner-approved.\nComposition: high-resolution SQUARE 4x4 contact sheet with EXACTLY16 equal spacious cells. Prefer2048x2048 or larger; never make wide 4x3. Dark slate uniform backdrop matching anchor, subtle dividers, modest top header and small ivory all-caps numbered labels beneath each cell. Full body+objects contained in every cell EXCEPT last eight portrait cells of MODEL AND EXPRESSIONS which show head/shoulders intentionally. No duplicate/unrequested people except grey training dummy explicitly required. Same character16times, never include allfive. Mainly right-facing side/threequarter side action, natural perspective not foreshortened camera. Thin floor hint only where needed. No cropping hair/feet/weapons. Pose list rowmajor top-left to bottom-right:\n01 \"LADDER HOLD\" — back threequarter view holding simple ladder, both feet on rungs\n02 \"CLIMB LEFT\" — back view ladder climb, LEFT hand above head and LEFT knee high, right hand lower/right leg extended\n03 \"CLIMB RIGHT\" — back view ladder climb, RIGHT hand above head and RIGHT knee high, left hand lower/left leg extended; exact opposite leads of previous cell\n04 \"LADDER SLIDE\" — sliding down ladder with hands on rails, legs near rails and bent knees\n05 \"LADDER EXIT\" — stepping from ladder onto upper platform edge, one knee over lip\n06 \"LEDGE CATCH\" — both hands catch platform edge, short arms extended, legs swing below\n07 \"LEDGE HANG\" — hanging from edge, elbows bent slightly, tense shoulders and searching feet\n08 \"LEDGE RELEASE\" — releasing ledge and dropping feet first, hands let go\n09 \"ROCKET RIGHT\" — frightened chibi accidentally clinging to a small flying game rocket heading RIGHT, short exhaust; game slapstick mechanic, NOT person flying by power\n10 \"ROCKET LEFT\" — same terrified clinging pose flying LEFT, preserve outfit asymmetry; no triumphant surfing\n11 \"DIVE TACKLE\" — character horizontally tackles an anonymous grey chibi training dummy around torso, both full bodies visible, neither has injury\n12 \"GRABBED\" — character is offbalance victim of a dive tackle by grey chibi training dummy, both bodies visible; not standing wrestler grab\n13 \"PUSH\" — both palms push heavy simple barrel, feet firmly brace, body weight forward\n14 \"PROP KICK\" — short front kick pushing a small plain box, support foot planted\n15 \"PICKUP\" — crouching to retrieve small dropped pistol from floor, eyes down, grounded feet\n16 \"VICTORY\" — relieved exhausted smile, modest one-arm celebration, loose shoulders, no powered pose\nHEADER \"HIDEKI / TRAVERSAL AND OBJECTS\". Depict ONLY HIDEKI: dark swept/tied short hair, red cloth headband, light blue wrap shirt with white inner panel/navy waist tie, dark short loose trousers, flat navy shoes. Lock exactly that figure in reference1: face/hair/costume/proportions/materials/colors in everycell. For Agent keep normal sunglasses even during emotions, emote with brows/mouth/body. For Blaire preserve PURPLE BOB in rear view. All poses human acting within short chibi limbs. Conventional everyday/game weapons, no sci-fi rayguns or toy gadgets. Flames only on burning clothing where explicitly requested. This is representative keypose art, not a finished animation sequence."
+    },
+    {
+      "id": "hideki/03-firearms",
+      "char": "hideki",
+      "group": "03-firearms",
+      "poses": [
+        [
+          "PISTOL",
+          "standing ordinary compact black pistol aim right with aligned wrist"
+        ],
+        [
+          "REVOLVER",
+          "standing grey revolver with visible cylinder, braced human stance"
+        ],
+        [
+          "SMG",
+          "standing compact dark submachinegun, two short arms grip appropriately"
+        ],
+        [
+          "RIFLE",
+          "standing conventional rifle stock against shoulder, support hand on foreend"
+        ],
+        [
+          "SHOTGUN",
+          "standing conventional pump shotgun aim, stock shouldered, short arms work naturally"
+        ],
+        [
+          "SNIPER",
+          "crouched scoped rifle aim right, elbows comfortable and feet grounded"
+        ],
+        [
+          "LAUNCHER",
+          "plain green shoulder-fired tubular game launcher held with visible effort, NOT futuristic"
+        ],
+        [
+          "FLAMETHROWER",
+          "utilitarian small backpack and hose-fed nozzle held with two hands; NO flame emitted, no magic"
+        ],
+        [
+          "GRENADE READY",
+          "standing normal small olive grenade held ready beside shoulder, no release yet"
+        ],
+        [
+          "BOTTLE READY",
+          "standing brown bottle with simple cloth wick held ready beside shoulder, not lit"
+        ],
+        [
+          "GRENADE THROW",
+          "ordinary overarm grenade release, body turns, hand opens, item just leaving hand"
+        ],
+        [
+          "BOTTLE THROW",
+          "ordinary bottle release, lead foot planted, eyes follow bottle, no flaming body"
+        ],
+        [
+          "AIM UP",
+          "compact pistol aimed45degrees up, both feet planted, eyes follow direction"
+        ],
+        [
+          "AIM DOWN",
+          "compact pistol aimed45degrees down, wrist straight, both feet planted"
+        ],
+        [
+          "KNEEL AIM",
+          "one knee down aiming conventional rifle level, head clear of stock"
+        ],
+        [
+          "COVER AIM",
+          "crouched aiming pistol around edge of simple crate, small exposed silhouette"
+        ]
+      ],
+      "prompt": "Use case: stylized-concept. Make a polished original 2D CHIBI action-art review sheet for user's arena game. Input image1 is the ONLY identity/proportion/style anchor, not a composition to copy.\nCRITICAL: preserve very compact about2.5-heads-tall CHIBI ADULT proportions of anchor: huge head40%, short torso32%, stubby short legs28%; head almost shoulders wide. NOT realistic adult anatomy, not long limbs, not3.5/7head figures. These are ordinary non-superpowered adults rendered CHIBI; acting and weight are natural, not anatomy photorealism.\nPremium clean organic ink outline, two/three-tone cel shading, tasteful simple folds, large readable colors, integrated elbows/knees, consistent facial construction and clothing. No 3D plastic, no photorealistic textures, no superhero powers, no aura, no magical attack arcs, no logo. Reference is proposed design, not yet owner-approved.\nComposition: high-resolution SQUARE 4x4 contact sheet with EXACTLY16 equal spacious cells. Prefer2048x2048 or larger; never make wide 4x3. Dark slate uniform backdrop matching anchor, subtle dividers, modest top header and small ivory all-caps numbered labels beneath each cell. Full body+objects contained in every cell EXCEPT last eight portrait cells of MODEL AND EXPRESSIONS which show head/shoulders intentionally. No duplicate/unrequested people except grey training dummy explicitly required. Same character16times, never include allfive. Mainly right-facing side/threequarter side action, natural perspective not foreshortened camera. Thin floor hint only where needed. No cropping hair/feet/weapons. Pose list rowmajor top-left to bottom-right:\n01 \"PISTOL\" — standing ordinary compact black pistol aim right with aligned wrist\n02 \"REVOLVER\" — standing grey revolver with visible cylinder, braced human stance\n03 \"SMG\" — standing compact dark submachinegun, two short arms grip appropriately\n04 \"RIFLE\" — standing conventional rifle stock against shoulder, support hand on foreend\n05 \"SHOTGUN\" — standing conventional pump shotgun aim, stock shouldered, short arms work naturally\n06 \"SNIPER\" — crouched scoped rifle aim right, elbows comfortable and feet grounded\n07 \"LAUNCHER\" — plain green shoulder-fired tubular game launcher held with visible effort, NOT futuristic\n08 \"FLAMETHROWER\" — utilitarian small backpack and hose-fed nozzle held with two hands; NO flame emitted, no magic\n09 \"GRENADE READY\" — standing normal small olive grenade held ready beside shoulder, no release yet\n10 \"BOTTLE READY\" — standing brown bottle with simple cloth wick held ready beside shoulder, not lit\n11 \"GRENADE THROW\" — ordinary overarm grenade release, body turns, hand opens, item just leaving hand\n12 \"BOTTLE THROW\" — ordinary bottle release, lead foot planted, eyes follow bottle, no flaming body\n13 \"AIM UP\" — compact pistol aimed45degrees up, both feet planted, eyes follow direction\n14 \"AIM DOWN\" — compact pistol aimed45degrees down, wrist straight, both feet planted\n15 \"KNEEL AIM\" — one knee down aiming conventional rifle level, head clear of stock\n16 \"COVER AIM\" — crouched aiming pistol around edge of simple crate, small exposed silhouette\nHEADER \"HIDEKI / RANGED AND THROWING\". Depict ONLY HIDEKI: dark swept/tied short hair, red cloth headband, light blue wrap shirt with white inner panel/navy waist tie, dark short loose trousers, flat navy shoes. Lock exactly that figure in reference1: face/hair/costume/proportions/materials/colors in everycell. For Agent keep normal sunglasses even during emotions, emote with brows/mouth/body. For Blaire preserve PURPLE BOB in rear view. All poses human acting within short chibi limbs. Conventional everyday/game weapons, no sci-fi rayguns or toy gadgets. Flames only on burning clothing where explicitly requested. This is representative keypose art, not a finished animation sequence."
+    },
+    {
+      "id": "hideki/04-melee",
+      "char": "hideki",
+      "group": "04-melee",
+      "poses": [
+        [
+          "JAB PREP",
+          "ordinary compact boxing guard, left fist draws back slightly, weight braced"
+        ],
+        [
+          "JAB CONTACT",
+          "straight lead jab to right, shoulder follows, wrist aligned, back hand protects"
+        ],
+        [
+          "JAB RECOVERY",
+          "jab retracts to guard, elbow folds, weight settling"
+        ],
+        [
+          "CROSS",
+          "rear-hand straight punch, visible hip/shoulder rotation, planted feet"
+        ],
+        [
+          "HOOK",
+          "short third-punch hook, rounded elbow, body turns, not magical uppercut"
+        ],
+        [
+          "FRONT KICK",
+          "short front kick at waist height, support knee soft, arms counterbalance"
+        ],
+        [
+          "JUMP KICK",
+          "compact airborne forward kick, other short leg folded, natural alarm/exertion"
+        ],
+        [
+          "MACHETE READY",
+          "ordinary short machete raised diagonally in one hand, no opponent and no blood"
+        ],
+        [
+          "MACHETE SWING",
+          "short machete followthrough across body, ordinary restrained arc, no energy trail"
+        ],
+        [
+          "AXE READY",
+          "small twohanded wood axe poised overhead with hands gripping handle"
+        ],
+        [
+          "AXE SWING",
+          "wood axe swings downward, body follows weight, no impact victim"
+        ],
+        [
+          "SWORD READY",
+          "plain modest unadorned steel sword held guarded at shoulder, no fantasy features"
+        ],
+        [
+          "SWORD SWING",
+          "plain steel sword crossbody swing with clear waist twist, no glow"
+        ],
+        [
+          "BATON",
+          "short plain dark baton swing, knuckles and elbow plausible"
+        ],
+        [
+          "BASEBALL BAT",
+          "wooden baseball bat held twohanded mid-swing, weight transfer through hips"
+        ],
+        [
+          "CHAINSAW",
+          "braced short legs and both hands on conventional chainsaw handles, saw held clear of body, no victim or blood"
+        ]
+      ],
+      "prompt": "Use case: stylized-concept. Make a polished original 2D CHIBI action-art review sheet for user's arena game. Input image1 is the ONLY identity/proportion/style anchor, not a composition to copy.\nCRITICAL: preserve very compact about2.5-heads-tall CHIBI ADULT proportions of anchor: huge head40%, short torso32%, stubby short legs28%; head almost shoulders wide. NOT realistic adult anatomy, not long limbs, not3.5/7head figures. These are ordinary non-superpowered adults rendered CHIBI; acting and weight are natural, not anatomy photorealism.\nPremium clean organic ink outline, two/three-tone cel shading, tasteful simple folds, large readable colors, integrated elbows/knees, consistent facial construction and clothing. No 3D plastic, no photorealistic textures, no superhero powers, no aura, no magical attack arcs, no logo. Reference is proposed design, not yet owner-approved.\nComposition: high-resolution SQUARE 4x4 contact sheet with EXACTLY16 equal spacious cells. Prefer2048x2048 or larger; never make wide 4x3. Dark slate uniform backdrop matching anchor, subtle dividers, modest top header and small ivory all-caps numbered labels beneath each cell. Full body+objects contained in every cell EXCEPT last eight portrait cells of MODEL AND EXPRESSIONS which show head/shoulders intentionally. No duplicate/unrequested people except grey training dummy explicitly required. Same character16times, never include allfive. Mainly right-facing side/threequarter side action, natural perspective not foreshortened camera. Thin floor hint only where needed. No cropping hair/feet/weapons. Pose list rowmajor top-left to bottom-right:\n01 \"JAB PREP\" — ordinary compact boxing guard, left fist draws back slightly, weight braced\n02 \"JAB CONTACT\" — straight lead jab to right, shoulder follows, wrist aligned, back hand protects\n03 \"JAB RECOVERY\" — jab retracts to guard, elbow folds, weight settling\n04 \"CROSS\" — rear-hand straight punch, visible hip/shoulder rotation, planted feet\n05 \"HOOK\" — short third-punch hook, rounded elbow, body turns, not magical uppercut\n06 \"FRONT KICK\" — short front kick at waist height, support knee soft, arms counterbalance\n07 \"JUMP KICK\" — compact airborne forward kick, other short leg folded, natural alarm/exertion\n08 \"MACHETE READY\" — ordinary short machete raised diagonally in one hand, no opponent and no blood\n09 \"MACHETE SWING\" — short machete followthrough across body, ordinary restrained arc, no energy trail\n10 \"AXE READY\" — small twohanded wood axe poised overhead with hands gripping handle\n11 \"AXE SWING\" — wood axe swings downward, body follows weight, no impact victim\n12 \"SWORD READY\" — plain modest unadorned steel sword held guarded at shoulder, no fantasy features\n13 \"SWORD SWING\" — plain steel sword crossbody swing with clear waist twist, no glow\n14 \"BATON\" — short plain dark baton swing, knuckles and elbow plausible\n15 \"BASEBALL BAT\" — wooden baseball bat held twohanded mid-swing, weight transfer through hips\n16 \"CHAINSAW\" — braced short legs and both hands on conventional chainsaw handles, saw held clear of body, no victim or blood\nHEADER \"HIDEKI / ORDINARY MELEE\". Depict ONLY HIDEKI: dark swept/tied short hair, red cloth headband, light blue wrap shirt with white inner panel/navy waist tie, dark short loose trousers, flat navy shoes. Lock exactly that figure in reference1: face/hair/costume/proportions/materials/colors in everycell. For Agent keep normal sunglasses even during emotions, emote with brows/mouth/body. For Blaire preserve PURPLE BOB in rear view. All poses human acting within short chibi limbs. Conventional everyday/game weapons, no sci-fi rayguns or toy gadgets. Flames only on burning clothing where explicitly requested. This is representative keypose art, not a finished animation sequence."
+    },
+    {
+      "id": "hideki/05-damage-fire",
+      "char": "hideki",
+      "group": "05-damage-fire",
+      "poses": [
+        [
+          "HIT RECOIL",
+          "face winces and torso twists from a hit, hand opens involuntarily, no blood"
+        ],
+        [
+          "STAGGER",
+          "stumbling one step, torso offcenter, hands seek balance, startled expression"
+        ],
+        [
+          "FALL FORWARD",
+          "falling forward with hand extending to break fall, knees buckle"
+        ],
+        [
+          "FALL BACK",
+          "falling backwards, torso curves and arms fling out, feet leave floor"
+        ],
+        [
+          "HARD LANDING",
+          "heavy landing on bent knees, palm on ground, head lowered with pain"
+        ],
+        [
+          "KNOCKDOWN",
+          "on side on floor, clothed, dazed, visibly breathing, no gore"
+        ],
+        [
+          "GET UP",
+          "painful rise from floor, one hand/one knee supporting, weight not levitating"
+        ],
+        [
+          "DEATH KNEEL",
+          "exhausted defeated collapse to knees, head and shoulders drop; no wound detail"
+        ],
+        [
+          "DEAD",
+          "fully clothed motionless body lying on side, relaxed limp limbs, eyes closed, no blood"
+        ],
+        [
+          "CHARRED",
+          "same clothed motionless body after fire: recognizable outfit now darkened soot and scorched hems, few smoke wisps; no exposed burns, no gore, NO flame aura"
+        ],
+        [
+          "IGNITION",
+          "small accidental flame catches jacket/shirt hem, startled turn to look at it, open splayed hands"
+        ],
+        [
+          "BURN FRONT",
+          "frightened recoil with shoulders hunched, face in pain, open hands trying to pat clothing flame; localized irregular orange flames on front hem/one sleeve and rising smoke, not aura"
+        ],
+        [
+          "BURN BACK",
+          "twisting panicked body reacting to cloth fire at back/side, reaching toward it, never heroic standing with fists; irregular small flame and smoke"
+        ],
+        [
+          "BURN RUN",
+          "panicked off-balance running to escape, hunched and grimacing, erratic open hands, flames trailing only from clothes, not a powered sprint"
+        ],
+        [
+          "EXTINGUISH",
+          "rolling on floor to extinguish clothing fire, arms protect face, flames reduced and localized, no levitation"
+        ],
+        [
+          "AFTER FIRE",
+          "coughing exhausted on one knee after flames are OUT, soot on face and clothes, head bowed, smoke wisp, distress not victory"
+        ]
+      ],
+      "prompt": "Use case: stylized-concept. Make a polished original 2D CHIBI action-art review sheet for user's arena game. Input image1 is the ONLY identity/proportion/style anchor, not a composition to copy.\nCRITICAL: preserve very compact about2.5-heads-tall CHIBI ADULT proportions of anchor: huge head40%, short torso32%, stubby short legs28%; head almost shoulders wide. NOT realistic adult anatomy, not long limbs, not3.5/7head figures. These are ordinary non-superpowered adults rendered CHIBI; acting and weight are natural, not anatomy photorealism.\nPremium clean organic ink outline, two/three-tone cel shading, tasteful simple folds, large readable colors, integrated elbows/knees, consistent facial construction and clothing. No 3D plastic, no photorealistic textures, no superhero powers, no aura, no magical attack arcs, no logo. Reference is proposed design, not yet owner-approved.\nComposition: high-resolution SQUARE 4x4 contact sheet with EXACTLY16 equal spacious cells. Prefer2048x2048 or larger; never make wide 4x3. Dark slate uniform backdrop matching anchor, subtle dividers, modest top header and small ivory all-caps numbered labels beneath each cell. Full body+objects contained in every cell EXCEPT last eight portrait cells of MODEL AND EXPRESSIONS which show head/shoulders intentionally. No duplicate/unrequested people except grey training dummy explicitly required. Same character16times, never include allfive. Mainly right-facing side/threequarter side action, natural perspective not foreshortened camera. Thin floor hint only where needed. No cropping hair/feet/weapons. Pose list rowmajor top-left to bottom-right:\n01 \"HIT RECOIL\" — face winces and torso twists from a hit, hand opens involuntarily, no blood\n02 \"STAGGER\" — stumbling one step, torso offcenter, hands seek balance, startled expression\n03 \"FALL FORWARD\" — falling forward with hand extending to break fall, knees buckle\n04 \"FALL BACK\" — falling backwards, torso curves and arms fling out, feet leave floor\n05 \"HARD LANDING\" — heavy landing on bent knees, palm on ground, head lowered with pain\n06 \"KNOCKDOWN\" — on side on floor, clothed, dazed, visibly breathing, no gore\n07 \"GET UP\" — painful rise from floor, one hand/one knee supporting, weight not levitating\n08 \"DEATH KNEEL\" — exhausted defeated collapse to knees, head and shoulders drop; no wound detail\n09 \"DEAD\" — fully clothed motionless body lying on side, relaxed limp limbs, eyes closed, no blood\n10 \"CHARRED\" — same clothed motionless body after fire: recognizable outfit now darkened soot and scorched hems, few smoke wisps; no exposed burns, no gore, NO flame aura\n11 \"IGNITION\" — small accidental flame catches jacket/shirt hem, startled turn to look at it, open splayed hands\n12 \"BURN FRONT\" — frightened recoil with shoulders hunched, face in pain, open hands trying to pat clothing flame; localized irregular orange flames on front hem/one sleeve and rising smoke, not aura\n13 \"BURN BACK\" — twisting panicked body reacting to cloth fire at back/side, reaching toward it, never heroic standing with fists; irregular small flame and smoke\n14 \"BURN RUN\" — panicked off-balance running to escape, hunched and grimacing, erratic open hands, flames trailing only from clothes, not a powered sprint\n15 \"EXTINGUISH\" — rolling on floor to extinguish clothing fire, arms protect face, flames reduced and localized, no levitation\n16 \"AFTER FIRE\" — coughing exhausted on one knee after flames are OUT, soot on face and clothes, head bowed, smoke wisp, distress not victory\nHEADER \"HIDEKI / HURT AND FIRE\". Depict ONLY HIDEKI: dark swept/tied short hair, red cloth headband, light blue wrap shirt with white inner panel/navy waist tie, dark short loose trousers, flat navy shoes. Lock exactly that figure in reference1: face/hair/costume/proportions/materials/colors in everycell. For Agent keep normal sunglasses even during emotions, emote with brows/mouth/body. For Blaire preserve PURPLE BOB in rear view. All poses human acting within short chibi limbs. Conventional everyday/game weapons, no sci-fi rayguns or toy gadgets. Flames only on burning clothing where explicitly requested. This is representative keypose art, not a finished animation sequence."
+    },
+    {
+      "id": "hideki/06-variants",
+      "char": "hideki",
+      "group": "06-variants",
+      "poses": [
+        [
+          "FRONT",
+          "full body true straight front neutral view, both hands relaxed, same proportions"
+        ],
+        [
+          "SIDE",
+          "full body exact right profile idle, no change in hair or costume"
+        ],
+        [
+          "REAR",
+          "full body exact back view, correct SAME hairstyle/outfit seen from behind"
+        ],
+        [
+          "GUARD",
+          "full body compact unarmed guard, fists near chest, grounded feet"
+        ],
+        [
+          "C4 HOLD",
+          "full body holding small inert unbranded rectangular game explosive pack with one plain strap; no schematic or wiring detail"
+        ],
+        [
+          "MINE HOLD",
+          "full body holding small plain round inert game mine at waist, object only, no deployment instruction"
+        ],
+        [
+          "GUN DROP",
+          "full body discarding empty conventional pistol from open hand, object below hand"
+        ],
+        [
+          "SHOTGUN PUMP",
+          "full body pump-shotgun cycling pose, one hand on grip and other on sliding foreend"
+        ],
+        [
+          "NEUTRAL FACE",
+          "large head-and-shoulders portrait, relaxed neutral adult chibi expression"
+        ],
+        [
+          "FOCUS FACE",
+          "large head-and-shoulders portrait, concentrated eyes/brows and set jaw"
+        ],
+        [
+          "ATTACK FACE",
+          "large head-and-shoulders portrait, ordinary effort/shout, no luminous eyes"
+        ],
+        [
+          "HURT FACE",
+          "large head-and-shoulders portrait, wincing pain eyes narrowed, jaw clenched"
+        ],
+        [
+          "PANIC FACE",
+          "large head-and-shoulders portrait, alarmed eyes and parted mouth, brows raised, no comedy tongue"
+        ],
+        [
+          "TIRED FACE",
+          "large head-and-shoulders portrait, low health exhaustion/sweat and heavy eyelids"
+        ],
+        [
+          "KO FACE",
+          "large head-and-shoulders portrait, eyes closed and relaxed defeated mouth, no gore"
+        ],
+        [
+          "BLINK",
+          "large head-and-shoulders portrait, normal blink expression, same face"
+        ]
+      ],
+      "prompt": "Use case: stylized-concept. Make a polished original 2D CHIBI action-art review sheet for user's arena game. Input image1 is the ONLY identity/proportion/style anchor, not a composition to copy.\nCRITICAL: preserve very compact about2.5-heads-tall CHIBI ADULT proportions of anchor: huge head40%, short torso32%, stubby short legs28%; head almost shoulders wide. NOT realistic adult anatomy, not long limbs, not3.5/7head figures. These are ordinary non-superpowered adults rendered CHIBI; acting and weight are natural, not anatomy photorealism.\nPremium clean organic ink outline, two/three-tone cel shading, tasteful simple folds, large readable colors, integrated elbows/knees, consistent facial construction and clothing. No 3D plastic, no photorealistic textures, no superhero powers, no aura, no magical attack arcs, no logo. Reference is proposed design, not yet owner-approved.\nComposition: high-resolution SQUARE 4x4 contact sheet with EXACTLY16 equal spacious cells. Prefer2048x2048 or larger; never make wide 4x3. Dark slate uniform backdrop matching anchor, subtle dividers, modest top header and small ivory all-caps numbered labels beneath each cell. Full body+objects contained in every cell EXCEPT last eight portrait cells of MODEL AND EXPRESSIONS which show head/shoulders intentionally. No duplicate/unrequested people except grey training dummy explicitly required. Same character16times, never include allfive. Mainly right-facing side/threequarter side action, natural perspective not foreshortened camera. Thin floor hint only where needed. No cropping hair/feet/weapons. Pose list rowmajor top-left to bottom-right:\n01 \"FRONT\" — full body true straight front neutral view, both hands relaxed, same proportions\n02 \"SIDE\" — full body exact right profile idle, no change in hair or costume\n03 \"REAR\" — full body exact back view, correct SAME hairstyle/outfit seen from behind\n04 \"GUARD\" — full body compact unarmed guard, fists near chest, grounded feet\n05 \"C4 HOLD\" — full body holding small inert unbranded rectangular game explosive pack with one plain strap; no schematic or wiring detail\n06 \"MINE HOLD\" — full body holding small plain round inert game mine at waist, object only, no deployment instruction\n07 \"GUN DROP\" — full body discarding empty conventional pistol from open hand, object below hand\n08 \"SHOTGUN PUMP\" — full body pump-shotgun cycling pose, one hand on grip and other on sliding foreend\n09 \"NEUTRAL FACE\" — large head-and-shoulders portrait, relaxed neutral adult chibi expression\n10 \"FOCUS FACE\" — large head-and-shoulders portrait, concentrated eyes/brows and set jaw\n11 \"ATTACK FACE\" — large head-and-shoulders portrait, ordinary effort/shout, no luminous eyes\n12 \"HURT FACE\" — large head-and-shoulders portrait, wincing pain eyes narrowed, jaw clenched\n13 \"PANIC FACE\" — large head-and-shoulders portrait, alarmed eyes and parted mouth, brows raised, no comedy tongue\n14 \"TIRED FACE\" — large head-and-shoulders portrait, low health exhaustion/sweat and heavy eyelids\n15 \"KO FACE\" — large head-and-shoulders portrait, eyes closed and relaxed defeated mouth, no gore\n16 \"BLINK\" — large head-and-shoulders portrait, normal blink expression, same face\nHEADER \"HIDEKI / MODEL AND EXPRESSIONS\". Depict ONLY HIDEKI: dark swept/tied short hair, red cloth headband, light blue wrap shirt with white inner panel/navy waist tie, dark short loose trousers, flat navy shoes. Lock exactly that figure in reference1: face/hair/costume/proportions/materials/colors in everycell. For Agent keep normal sunglasses even during emotions, emote with brows/mouth/body. For Blaire preserve PURPLE BOB in rear view. All poses human acting within short chibi limbs. Conventional everyday/game weapons, no sci-fi rayguns or toy gadgets. Flames only on burning clothing where explicitly requested. This is representative keypose art, not a finished animation sequence."
+    },
+    {
+      "id": "blaire/01-movement",
+      "char": "blaire",
+      "group": "01-movement",
+      "poses": [
+        [
+          "IDLE",
+          "relaxed idle threequarter view, open relaxed fingers, weight on one leg"
+        ],
+        [
+          "WALK CONTACT",
+          "walking right, front heel on floor, rear toe on floor, clear split stride"
+        ],
+        [
+          "WALK PASSING",
+          "walking right, planted support leg nearly straight, other bent foot passes next to support ankle beneath hips; NOT a split stride"
+        ],
+        [
+          "RUN LEFT",
+          "running contact pose left leg forward planted, right knee folds behind, arms counterbalance"
+        ],
+        [
+          "RUN RIGHT",
+          "running opposite contact pose right leg forward planted, left knee folds behind; visibly exchange arms and legs"
+        ],
+        [
+          "SPRINT",
+          "fast forward lean and compact driving arms, human effort not supernatural flight"
+        ],
+        [
+          "CROUCH",
+          "low compact crouch with folded knees and feet supported"
+        ],
+        [
+          "COVER",
+          "crouched close behind a plain waist-high crate, cautious look over edge"
+        ],
+        [
+          "JUMP UP",
+          "jump ascent with feet pushing upward, torso extended, arms counterbalance"
+        ],
+        [
+          "JUMP APEX",
+          "jump apex, short legs tucked, relaxed arms, believable aerial balance"
+        ],
+        [
+          "DESCEND",
+          "falling from jump, legs opening ready for feet-first landing"
+        ],
+        [
+          "FREE FALL",
+          "uncontrolled feet-down fall with spread arms, alarmed not heroic"
+        ],
+        [
+          "ROLL TUCK",
+          "entering forward defensive roll, chin tucked, knees drawn to chest"
+        ],
+        [
+          "ROLL TURN",
+          "middle of floor roll, weight on curved back, hips up, head protected"
+        ],
+        [
+          "ROLL EXIT",
+          "rising from roll onto one knee and supporting hand, beginning to regain balance"
+        ],
+        [
+          "DIVE",
+          "horizontal low forward dive, both arms reach forward, short legs trail"
+        ]
+      ],
+      "prompt": "Use case: stylized-concept. Make a polished original 2D CHIBI action-art review sheet for user's arena game. Input image1 is the ONLY identity/proportion/style anchor, not a composition to copy.\nCRITICAL: preserve very compact about2.5-heads-tall CHIBI ADULT proportions of anchor: huge head40%, short torso32%, stubby short legs28%; head almost shoulders wide. NOT realistic adult anatomy, not long limbs, not3.5/7head figures. These are ordinary non-superpowered adults rendered CHIBI; acting and weight are natural, not anatomy photorealism.\nPremium clean organic ink outline, two/three-tone cel shading, tasteful simple folds, large readable colors, integrated elbows/knees, consistent facial construction and clothing. No 3D plastic, no photorealistic textures, no superhero powers, no aura, no magical attack arcs, no logo. Reference is proposed design, not yet owner-approved.\nComposition: high-resolution SQUARE 4x4 contact sheet with EXACTLY16 equal spacious cells. Prefer2048x2048 or larger; never make wide 4x3. Dark slate uniform backdrop matching anchor, subtle dividers, modest top header and small ivory all-caps numbered labels beneath each cell. Full body+objects contained in every cell EXCEPT last eight portrait cells of MODEL AND EXPRESSIONS which show head/shoulders intentionally. No duplicate/unrequested people except grey training dummy explicitly required. Same character16times, never include allfive. Mainly right-facing side/threequarter side action, natural perspective not foreshortened camera. Thin floor hint only where needed. No cropping hair/feet/weapons. Pose list rowmajor top-left to bottom-right:\n01 \"IDLE\" — relaxed idle threequarter view, open relaxed fingers, weight on one leg\n02 \"WALK CONTACT\" — walking right, front heel on floor, rear toe on floor, clear split stride\n03 \"WALK PASSING\" — walking right, planted support leg nearly straight, other bent foot passes next to support ankle beneath hips; NOT a split stride\n04 \"RUN LEFT\" — running contact pose left leg forward planted, right knee folds behind, arms counterbalance\n05 \"RUN RIGHT\" — running opposite contact pose right leg forward planted, left knee folds behind; visibly exchange arms and legs\n06 \"SPRINT\" — fast forward lean and compact driving arms, human effort not supernatural flight\n07 \"CROUCH\" — low compact crouch with folded knees and feet supported\n08 \"COVER\" — crouched close behind a plain waist-high crate, cautious look over edge\n09 \"JUMP UP\" — jump ascent with feet pushing upward, torso extended, arms counterbalance\n10 \"JUMP APEX\" — jump apex, short legs tucked, relaxed arms, believable aerial balance\n11 \"DESCEND\" — falling from jump, legs opening ready for feet-first landing\n12 \"FREE FALL\" — uncontrolled feet-down fall with spread arms, alarmed not heroic\n13 \"ROLL TUCK\" — entering forward defensive roll, chin tucked, knees drawn to chest\n14 \"ROLL TURN\" — middle of floor roll, weight on curved back, hips up, head protected\n15 \"ROLL EXIT\" — rising from roll onto one knee and supporting hand, beginning to regain balance\n16 \"DIVE\" — horizontal low forward dive, both arms reach forward, short legs trail\nHEADER \"BLAIRE / MOVEMENT\". Depict ONLY BLAIRE: adult woman, short purple/plum BOB hair in every angle, teal utility jacket/light shirt, charcoal cargo trousers, dark boots. Lock exactly that figure in reference1: face/hair/costume/proportions/materials/colors in everycell. For Agent keep normal sunglasses even during emotions, emote with brows/mouth/body. For Blaire preserve PURPLE BOB in rear view. All poses human acting within short chibi limbs. Conventional everyday/game weapons, no sci-fi rayguns or toy gadgets. Flames only on burning clothing where explicitly requested. This is representative keypose art, not a finished animation sequence."
+    },
+    {
+      "id": "blaire/02-traversal",
+      "char": "blaire",
+      "group": "02-traversal",
+      "poses": [
+        [
+          "LADDER HOLD",
+          "back threequarter view holding simple ladder, both feet on rungs"
+        ],
+        [
+          "CLIMB LEFT",
+          "back view ladder climb, LEFT hand above head and LEFT knee high, right hand lower/right leg extended"
+        ],
+        [
+          "CLIMB RIGHT",
+          "back view ladder climb, RIGHT hand above head and RIGHT knee high, left hand lower/left leg extended; exact opposite leads of previous cell"
+        ],
+        [
+          "LADDER SLIDE",
+          "sliding down ladder with hands on rails, legs near rails and bent knees"
+        ],
+        [
+          "LADDER EXIT",
+          "stepping from ladder onto upper platform edge, one knee over lip"
+        ],
+        [
+          "LEDGE CATCH",
+          "both hands catch platform edge, short arms extended, legs swing below"
+        ],
+        [
+          "LEDGE HANG",
+          "hanging from edge, elbows bent slightly, tense shoulders and searching feet"
+        ],
+        [
+          "LEDGE RELEASE",
+          "releasing ledge and dropping feet first, hands let go"
+        ],
+        [
+          "ROCKET RIGHT",
+          "frightened chibi accidentally clinging to a small flying game rocket heading RIGHT, short exhaust; game slapstick mechanic, NOT person flying by power"
+        ],
+        [
+          "ROCKET LEFT",
+          "same terrified clinging pose flying LEFT, preserve outfit asymmetry; no triumphant surfing"
+        ],
+        [
+          "DIVE TACKLE",
+          "character horizontally tackles an anonymous grey chibi training dummy around torso, both full bodies visible, neither has injury"
+        ],
+        [
+          "GRABBED",
+          "character is offbalance victim of a dive tackle by grey chibi training dummy, both bodies visible; not standing wrestler grab"
+        ],
+        [
+          "PUSH",
+          "both palms push heavy simple barrel, feet firmly brace, body weight forward"
+        ],
+        [
+          "PROP KICK",
+          "short front kick pushing a small plain box, support foot planted"
+        ],
+        [
+          "PICKUP",
+          "crouching to retrieve small dropped pistol from floor, eyes down, grounded feet"
+        ],
+        [
+          "VICTORY",
+          "relieved exhausted smile, modest one-arm celebration, loose shoulders, no powered pose"
+        ]
+      ],
+      "prompt": "Use case: stylized-concept. Make a polished original 2D CHIBI action-art review sheet for user's arena game. Input image1 is the ONLY identity/proportion/style anchor, not a composition to copy.\nCRITICAL: preserve very compact about2.5-heads-tall CHIBI ADULT proportions of anchor: huge head40%, short torso32%, stubby short legs28%; head almost shoulders wide. NOT realistic adult anatomy, not long limbs, not3.5/7head figures. These are ordinary non-superpowered adults rendered CHIBI; acting and weight are natural, not anatomy photorealism.\nPremium clean organic ink outline, two/three-tone cel shading, tasteful simple folds, large readable colors, integrated elbows/knees, consistent facial construction and clothing. No 3D plastic, no photorealistic textures, no superhero powers, no aura, no magical attack arcs, no logo. Reference is proposed design, not yet owner-approved.\nComposition: high-resolution SQUARE 4x4 contact sheet with EXACTLY16 equal spacious cells. Prefer2048x2048 or larger; never make wide 4x3. Dark slate uniform backdrop matching anchor, subtle dividers, modest top header and small ivory all-caps numbered labels beneath each cell. Full body+objects contained in every cell EXCEPT last eight portrait cells of MODEL AND EXPRESSIONS which show head/shoulders intentionally. No duplicate/unrequested people except grey training dummy explicitly required. Same character16times, never include allfive. Mainly right-facing side/threequarter side action, natural perspective not foreshortened camera. Thin floor hint only where needed. No cropping hair/feet/weapons. Pose list rowmajor top-left to bottom-right:\n01 \"LADDER HOLD\" — back threequarter view holding simple ladder, both feet on rungs\n02 \"CLIMB LEFT\" — back view ladder climb, LEFT hand above head and LEFT knee high, right hand lower/right leg extended\n03 \"CLIMB RIGHT\" — back view ladder climb, RIGHT hand above head and RIGHT knee high, left hand lower/left leg extended; exact opposite leads of previous cell\n04 \"LADDER SLIDE\" — sliding down ladder with hands on rails, legs near rails and bent knees\n05 \"LADDER EXIT\" — stepping from ladder onto upper platform edge, one knee over lip\n06 \"LEDGE CATCH\" — both hands catch platform edge, short arms extended, legs swing below\n07 \"LEDGE HANG\" — hanging from edge, elbows bent slightly, tense shoulders and searching feet\n08 \"LEDGE RELEASE\" — releasing ledge and dropping feet first, hands let go\n09 \"ROCKET RIGHT\" — frightened chibi accidentally clinging to a small flying game rocket heading RIGHT, short exhaust; game slapstick mechanic, NOT person flying by power\n10 \"ROCKET LEFT\" — same terrified clinging pose flying LEFT, preserve outfit asymmetry; no triumphant surfing\n11 \"DIVE TACKLE\" — character horizontally tackles an anonymous grey chibi training dummy around torso, both full bodies visible, neither has injury\n12 \"GRABBED\" — character is offbalance victim of a dive tackle by grey chibi training dummy, both bodies visible; not standing wrestler grab\n13 \"PUSH\" — both palms push heavy simple barrel, feet firmly brace, body weight forward\n14 \"PROP KICK\" — short front kick pushing a small plain box, support foot planted\n15 \"PICKUP\" — crouching to retrieve small dropped pistol from floor, eyes down, grounded feet\n16 \"VICTORY\" — relieved exhausted smile, modest one-arm celebration, loose shoulders, no powered pose\nHEADER \"BLAIRE / TRAVERSAL AND OBJECTS\". Depict ONLY BLAIRE: adult woman, short purple/plum BOB hair in every angle, teal utility jacket/light shirt, charcoal cargo trousers, dark boots. Lock exactly that figure in reference1: face/hair/costume/proportions/materials/colors in everycell. For Agent keep normal sunglasses even during emotions, emote with brows/mouth/body. For Blaire preserve PURPLE BOB in rear view. All poses human acting within short chibi limbs. Conventional everyday/game weapons, no sci-fi rayguns or toy gadgets. Flames only on burning clothing where explicitly requested. This is representative keypose art, not a finished animation sequence."
+    },
+    {
+      "id": "blaire/03-firearms",
+      "char": "blaire",
+      "group": "03-firearms",
+      "poses": [
+        [
+          "PISTOL",
+          "standing ordinary compact black pistol aim right with aligned wrist"
+        ],
+        [
+          "REVOLVER",
+          "standing grey revolver with visible cylinder, braced human stance"
+        ],
+        [
+          "SMG",
+          "standing compact dark submachinegun, two short arms grip appropriately"
+        ],
+        [
+          "RIFLE",
+          "standing conventional rifle stock against shoulder, support hand on foreend"
+        ],
+        [
+          "SHOTGUN",
+          "standing conventional pump shotgun aim, stock shouldered, short arms work naturally"
+        ],
+        [
+          "SNIPER",
+          "crouched scoped rifle aim right, elbows comfortable and feet grounded"
+        ],
+        [
+          "LAUNCHER",
+          "plain green shoulder-fired tubular game launcher held with visible effort, NOT futuristic"
+        ],
+        [
+          "FLAMETHROWER",
+          "utilitarian small backpack and hose-fed nozzle held with two hands; NO flame emitted, no magic"
+        ],
+        [
+          "GRENADE READY",
+          "standing normal small olive grenade held ready beside shoulder, no release yet"
+        ],
+        [
+          "BOTTLE READY",
+          "standing brown bottle with simple cloth wick held ready beside shoulder, not lit"
+        ],
+        [
+          "GRENADE THROW",
+          "ordinary overarm grenade release, body turns, hand opens, item just leaving hand"
+        ],
+        [
+          "BOTTLE THROW",
+          "ordinary bottle release, lead foot planted, eyes follow bottle, no flaming body"
+        ],
+        [
+          "AIM UP",
+          "compact pistol aimed45degrees up, both feet planted, eyes follow direction"
+        ],
+        [
+          "AIM DOWN",
+          "compact pistol aimed45degrees down, wrist straight, both feet planted"
+        ],
+        [
+          "KNEEL AIM",
+          "one knee down aiming conventional rifle level, head clear of stock"
+        ],
+        [
+          "COVER AIM",
+          "crouched aiming pistol around edge of simple crate, small exposed silhouette"
+        ]
+      ],
+      "prompt": "Use case: stylized-concept. Make a polished original 2D CHIBI action-art review sheet for user's arena game. Input image1 is the ONLY identity/proportion/style anchor, not a composition to copy.\nCRITICAL: preserve very compact about2.5-heads-tall CHIBI ADULT proportions of anchor: huge head40%, short torso32%, stubby short legs28%; head almost shoulders wide. NOT realistic adult anatomy, not long limbs, not3.5/7head figures. These are ordinary non-superpowered adults rendered CHIBI; acting and weight are natural, not anatomy photorealism.\nPremium clean organic ink outline, two/three-tone cel shading, tasteful simple folds, large readable colors, integrated elbows/knees, consistent facial construction and clothing. No 3D plastic, no photorealistic textures, no superhero powers, no aura, no magical attack arcs, no logo. Reference is proposed design, not yet owner-approved.\nComposition: high-resolution SQUARE 4x4 contact sheet with EXACTLY16 equal spacious cells. Prefer2048x2048 or larger; never make wide 4x3. Dark slate uniform backdrop matching anchor, subtle dividers, modest top header and small ivory all-caps numbered labels beneath each cell. Full body+objects contained in every cell EXCEPT last eight portrait cells of MODEL AND EXPRESSIONS which show head/shoulders intentionally. No duplicate/unrequested people except grey training dummy explicitly required. Same character16times, never include allfive. Mainly right-facing side/threequarter side action, natural perspective not foreshortened camera. Thin floor hint only where needed. No cropping hair/feet/weapons. Pose list rowmajor top-left to bottom-right:\n01 \"PISTOL\" — standing ordinary compact black pistol aim right with aligned wrist\n02 \"REVOLVER\" — standing grey revolver with visible cylinder, braced human stance\n03 \"SMG\" — standing compact dark submachinegun, two short arms grip appropriately\n04 \"RIFLE\" — standing conventional rifle stock against shoulder, support hand on foreend\n05 \"SHOTGUN\" — standing conventional pump shotgun aim, stock shouldered, short arms work naturally\n06 \"SNIPER\" — crouched scoped rifle aim right, elbows comfortable and feet grounded\n07 \"LAUNCHER\" — plain green shoulder-fired tubular game launcher held with visible effort, NOT futuristic\n08 \"FLAMETHROWER\" — utilitarian small backpack and hose-fed nozzle held with two hands; NO flame emitted, no magic\n09 \"GRENADE READY\" — standing normal small olive grenade held ready beside shoulder, no release yet\n10 \"BOTTLE READY\" — standing brown bottle with simple cloth wick held ready beside shoulder, not lit\n11 \"GRENADE THROW\" — ordinary overarm grenade release, body turns, hand opens, item just leaving hand\n12 \"BOTTLE THROW\" — ordinary bottle release, lead foot planted, eyes follow bottle, no flaming body\n13 \"AIM UP\" — compact pistol aimed45degrees up, both feet planted, eyes follow direction\n14 \"AIM DOWN\" — compact pistol aimed45degrees down, wrist straight, both feet planted\n15 \"KNEEL AIM\" — one knee down aiming conventional rifle level, head clear of stock\n16 \"COVER AIM\" — crouched aiming pistol around edge of simple crate, small exposed silhouette\nHEADER \"BLAIRE / RANGED AND THROWING\". Depict ONLY BLAIRE: adult woman, short purple/plum BOB hair in every angle, teal utility jacket/light shirt, charcoal cargo trousers, dark boots. Lock exactly that figure in reference1: face/hair/costume/proportions/materials/colors in everycell. For Agent keep normal sunglasses even during emotions, emote with brows/mouth/body. For Blaire preserve PURPLE BOB in rear view. All poses human acting within short chibi limbs. Conventional everyday/game weapons, no sci-fi rayguns or toy gadgets. Flames only on burning clothing where explicitly requested. This is representative keypose art, not a finished animation sequence."
+    },
+    {
+      "id": "blaire/04-melee",
+      "char": "blaire",
+      "group": "04-melee",
+      "poses": [
+        [
+          "JAB PREP",
+          "ordinary compact boxing guard, left fist draws back slightly, weight braced"
+        ],
+        [
+          "JAB CONTACT",
+          "straight lead jab to right, shoulder follows, wrist aligned, back hand protects"
+        ],
+        [
+          "JAB RECOVERY",
+          "jab retracts to guard, elbow folds, weight settling"
+        ],
+        [
+          "CROSS",
+          "rear-hand straight punch, visible hip/shoulder rotation, planted feet"
+        ],
+        [
+          "HOOK",
+          "short third-punch hook, rounded elbow, body turns, not magical uppercut"
+        ],
+        [
+          "FRONT KICK",
+          "short front kick at waist height, support knee soft, arms counterbalance"
+        ],
+        [
+          "JUMP KICK",
+          "compact airborne forward kick, other short leg folded, natural alarm/exertion"
+        ],
+        [
+          "MACHETE READY",
+          "ordinary short machete raised diagonally in one hand, no opponent and no blood"
+        ],
+        [
+          "MACHETE SWING",
+          "short machete followthrough across body, ordinary restrained arc, no energy trail"
+        ],
+        [
+          "AXE READY",
+          "small twohanded wood axe poised overhead with hands gripping handle"
+        ],
+        [
+          "AXE SWING",
+          "wood axe swings downward, body follows weight, no impact victim"
+        ],
+        [
+          "SWORD READY",
+          "plain modest unadorned steel sword held guarded at shoulder, no fantasy features"
+        ],
+        [
+          "SWORD SWING",
+          "plain steel sword crossbody swing with clear waist twist, no glow"
+        ],
+        [
+          "BATON",
+          "short plain dark baton swing, knuckles and elbow plausible"
+        ],
+        [
+          "BASEBALL BAT",
+          "wooden baseball bat held twohanded mid-swing, weight transfer through hips"
+        ],
+        [
+          "CHAINSAW",
+          "braced short legs and both hands on conventional chainsaw handles, saw held clear of body, no victim or blood"
+        ]
+      ],
+      "prompt": "Use case: stylized-concept. Make a polished original 2D CHIBI action-art review sheet for user's arena game. Input image1 is the ONLY identity/proportion/style anchor, not a composition to copy.\nCRITICAL: preserve very compact about2.5-heads-tall CHIBI ADULT proportions of anchor: huge head40%, short torso32%, stubby short legs28%; head almost shoulders wide. NOT realistic adult anatomy, not long limbs, not3.5/7head figures. These are ordinary non-superpowered adults rendered CHIBI; acting and weight are natural, not anatomy photorealism.\nPremium clean organic ink outline, two/three-tone cel shading, tasteful simple folds, large readable colors, integrated elbows/knees, consistent facial construction and clothing. No 3D plastic, no photorealistic textures, no superhero powers, no aura, no magical attack arcs, no logo. Reference is proposed design, not yet owner-approved.\nComposition: high-resolution SQUARE 4x4 contact sheet with EXACTLY16 equal spacious cells. Prefer2048x2048 or larger; never make wide 4x3. Dark slate uniform backdrop matching anchor, subtle dividers, modest top header and small ivory all-caps numbered labels beneath each cell. Full body+objects contained in every cell EXCEPT last eight portrait cells of MODEL AND EXPRESSIONS which show head/shoulders intentionally. No duplicate/unrequested people except grey training dummy explicitly required. Same character16times, never include allfive. Mainly right-facing side/threequarter side action, natural perspective not foreshortened camera. Thin floor hint only where needed. No cropping hair/feet/weapons. Pose list rowmajor top-left to bottom-right:\n01 \"JAB PREP\" — ordinary compact boxing guard, left fist draws back slightly, weight braced\n02 \"JAB CONTACT\" — straight lead jab to right, shoulder follows, wrist aligned, back hand protects\n03 \"JAB RECOVERY\" — jab retracts to guard, elbow folds, weight settling\n04 \"CROSS\" — rear-hand straight punch, visible hip/shoulder rotation, planted feet\n05 \"HOOK\" — short third-punch hook, rounded elbow, body turns, not magical uppercut\n06 \"FRONT KICK\" — short front kick at waist height, support knee soft, arms counterbalance\n07 \"JUMP KICK\" — compact airborne forward kick, other short leg folded, natural alarm/exertion\n08 \"MACHETE READY\" — ordinary short machete raised diagonally in one hand, no opponent and no blood\n09 \"MACHETE SWING\" — short machete followthrough across body, ordinary restrained arc, no energy trail\n10 \"AXE READY\" — small twohanded wood axe poised overhead with hands gripping handle\n11 \"AXE SWING\" — wood axe swings downward, body follows weight, no impact victim\n12 \"SWORD READY\" — plain modest unadorned steel sword held guarded at shoulder, no fantasy features\n13 \"SWORD SWING\" — plain steel sword crossbody swing with clear waist twist, no glow\n14 \"BATON\" — short plain dark baton swing, knuckles and elbow plausible\n15 \"BASEBALL BAT\" — wooden baseball bat held twohanded mid-swing, weight transfer through hips\n16 \"CHAINSAW\" — braced short legs and both hands on conventional chainsaw handles, saw held clear of body, no victim or blood\nHEADER \"BLAIRE / ORDINARY MELEE\". Depict ONLY BLAIRE: adult woman, short purple/plum BOB hair in every angle, teal utility jacket/light shirt, charcoal cargo trousers, dark boots. Lock exactly that figure in reference1: face/hair/costume/proportions/materials/colors in everycell. For Agent keep normal sunglasses even during emotions, emote with brows/mouth/body. For Blaire preserve PURPLE BOB in rear view. All poses human acting within short chibi limbs. Conventional everyday/game weapons, no sci-fi rayguns or toy gadgets. Flames only on burning clothing where explicitly requested. This is representative keypose art, not a finished animation sequence."
+    },
+    {
+      "id": "blaire/05-damage-fire",
+      "char": "blaire",
+      "group": "05-damage-fire",
+      "poses": [
+        [
+          "HIT RECOIL",
+          "face winces and torso twists from a hit, hand opens involuntarily, no blood"
+        ],
+        [
+          "STAGGER",
+          "stumbling one step, torso offcenter, hands seek balance, startled expression"
+        ],
+        [
+          "FALL FORWARD",
+          "falling forward with hand extending to break fall, knees buckle"
+        ],
+        [
+          "FALL BACK",
+          "falling backwards, torso curves and arms fling out, feet leave floor"
+        ],
+        [
+          "HARD LANDING",
+          "heavy landing on bent knees, palm on ground, head lowered with pain"
+        ],
+        [
+          "KNOCKDOWN",
+          "on side on floor, clothed, dazed, visibly breathing, no gore"
+        ],
+        [
+          "GET UP",
+          "painful rise from floor, one hand/one knee supporting, weight not levitating"
+        ],
+        [
+          "DEATH KNEEL",
+          "exhausted defeated collapse to knees, head and shoulders drop; no wound detail"
+        ],
+        [
+          "DEAD",
+          "fully clothed motionless body lying on side, relaxed limp limbs, eyes closed, no blood"
+        ],
+        [
+          "CHARRED",
+          "same clothed motionless body after fire: recognizable outfit now darkened soot and scorched hems, few smoke wisps; no exposed burns, no gore, NO flame aura"
+        ],
+        [
+          "IGNITION",
+          "small accidental flame catches jacket/shirt hem, startled turn to look at it, open splayed hands"
+        ],
+        [
+          "BURN FRONT",
+          "frightened recoil with shoulders hunched, face in pain, open hands trying to pat clothing flame; localized irregular orange flames on front hem/one sleeve and rising smoke, not aura"
+        ],
+        [
+          "BURN BACK",
+          "twisting panicked body reacting to cloth fire at back/side, reaching toward it, never heroic standing with fists; irregular small flame and smoke"
+        ],
+        [
+          "BURN RUN",
+          "panicked off-balance running to escape, hunched and grimacing, erratic open hands, flames trailing only from clothes, not a powered sprint"
+        ],
+        [
+          "EXTINGUISH",
+          "rolling on floor to extinguish clothing fire, arms protect face, flames reduced and localized, no levitation"
+        ],
+        [
+          "AFTER FIRE",
+          "coughing exhausted on one knee after flames are OUT, soot on face and clothes, head bowed, smoke wisp, distress not victory"
+        ]
+      ],
+      "prompt": "Use case: stylized-concept. Make a polished original 2D CHIBI action-art review sheet for user's arena game. Input image1 is the ONLY identity/proportion/style anchor, not a composition to copy.\nCRITICAL: preserve very compact about2.5-heads-tall CHIBI ADULT proportions of anchor: huge head40%, short torso32%, stubby short legs28%; head almost shoulders wide. NOT realistic adult anatomy, not long limbs, not3.5/7head figures. These are ordinary non-superpowered adults rendered CHIBI; acting and weight are natural, not anatomy photorealism.\nPremium clean organic ink outline, two/three-tone cel shading, tasteful simple folds, large readable colors, integrated elbows/knees, consistent facial construction and clothing. No 3D plastic, no photorealistic textures, no superhero powers, no aura, no magical attack arcs, no logo. Reference is proposed design, not yet owner-approved.\nComposition: high-resolution SQUARE 4x4 contact sheet with EXACTLY16 equal spacious cells. Prefer2048x2048 or larger; never make wide 4x3. Dark slate uniform backdrop matching anchor, subtle dividers, modest top header and small ivory all-caps numbered labels beneath each cell. Full body+objects contained in every cell EXCEPT last eight portrait cells of MODEL AND EXPRESSIONS which show head/shoulders intentionally. No duplicate/unrequested people except grey training dummy explicitly required. Same character16times, never include allfive. Mainly right-facing side/threequarter side action, natural perspective not foreshortened camera. Thin floor hint only where needed. No cropping hair/feet/weapons. Pose list rowmajor top-left to bottom-right:\n01 \"HIT RECOIL\" — face winces and torso twists from a hit, hand opens involuntarily, no blood\n02 \"STAGGER\" — stumbling one step, torso offcenter, hands seek balance, startled expression\n03 \"FALL FORWARD\" — falling forward with hand extending to break fall, knees buckle\n04 \"FALL BACK\" — falling backwards, torso curves and arms fling out, feet leave floor\n05 \"HARD LANDING\" — heavy landing on bent knees, palm on ground, head lowered with pain\n06 \"KNOCKDOWN\" — on side on floor, clothed, dazed, visibly breathing, no gore\n07 \"GET UP\" — painful rise from floor, one hand/one knee supporting, weight not levitating\n08 \"DEATH KNEEL\" — exhausted defeated collapse to knees, head and shoulders drop; no wound detail\n09 \"DEAD\" — fully clothed motionless body lying on side, relaxed limp limbs, eyes closed, no blood\n10 \"CHARRED\" — same clothed motionless body after fire: recognizable outfit now darkened soot and scorched hems, few smoke wisps; no exposed burns, no gore, NO flame aura\n11 \"IGNITION\" — small accidental flame catches jacket/shirt hem, startled turn to look at it, open splayed hands\n12 \"BURN FRONT\" — frightened recoil with shoulders hunched, face in pain, open hands trying to pat clothing flame; localized irregular orange flames on front hem/one sleeve and rising smoke, not aura\n13 \"BURN BACK\" — twisting panicked body reacting to cloth fire at back/side, reaching toward it, never heroic standing with fists; irregular small flame and smoke\n14 \"BURN RUN\" — panicked off-balance running to escape, hunched and grimacing, erratic open hands, flames trailing only from clothes, not a powered sprint\n15 \"EXTINGUISH\" — rolling on floor to extinguish clothing fire, arms protect face, flames reduced and localized, no levitation\n16 \"AFTER FIRE\" — coughing exhausted on one knee after flames are OUT, soot on face and clothes, head bowed, smoke wisp, distress not victory\nHEADER \"BLAIRE / HURT AND FIRE\". Depict ONLY BLAIRE: adult woman, short purple/plum BOB hair in every angle, teal utility jacket/light shirt, charcoal cargo trousers, dark boots. Lock exactly that figure in reference1: face/hair/costume/proportions/materials/colors in everycell. For Agent keep normal sunglasses even during emotions, emote with brows/mouth/body. For Blaire preserve PURPLE BOB in rear view. All poses human acting within short chibi limbs. Conventional everyday/game weapons, no sci-fi rayguns or toy gadgets. Flames only on burning clothing where explicitly requested. This is representative keypose art, not a finished animation sequence."
+    },
+    {
+      "id": "blaire/06-variants",
+      "char": "blaire",
+      "group": "06-variants",
+      "poses": [
+        [
+          "FRONT",
+          "full body true straight front neutral view, both hands relaxed, same proportions"
+        ],
+        [
+          "SIDE",
+          "full body exact right profile idle, no change in hair or costume"
+        ],
+        [
+          "REAR",
+          "full body exact back view, correct SAME hairstyle/outfit seen from behind"
+        ],
+        [
+          "GUARD",
+          "full body compact unarmed guard, fists near chest, grounded feet"
+        ],
+        [
+          "C4 HOLD",
+          "full body holding small inert unbranded rectangular game explosive pack with one plain strap; no schematic or wiring detail"
+        ],
+        [
+          "MINE HOLD",
+          "full body holding small plain round inert game mine at waist, object only, no deployment instruction"
+        ],
+        [
+          "GUN DROP",
+          "full body discarding empty conventional pistol from open hand, object below hand"
+        ],
+        [
+          "SHOTGUN PUMP",
+          "full body pump-shotgun cycling pose, one hand on grip and other on sliding foreend"
+        ],
+        [
+          "NEUTRAL FACE",
+          "large head-and-shoulders portrait, relaxed neutral adult chibi expression"
+        ],
+        [
+          "FOCUS FACE",
+          "large head-and-shoulders portrait, concentrated eyes/brows and set jaw"
+        ],
+        [
+          "ATTACK FACE",
+          "large head-and-shoulders portrait, ordinary effort/shout, no luminous eyes"
+        ],
+        [
+          "HURT FACE",
+          "large head-and-shoulders portrait, wincing pain eyes narrowed, jaw clenched"
+        ],
+        [
+          "PANIC FACE",
+          "large head-and-shoulders portrait, alarmed eyes and parted mouth, brows raised, no comedy tongue"
+        ],
+        [
+          "TIRED FACE",
+          "large head-and-shoulders portrait, low health exhaustion/sweat and heavy eyelids"
+        ],
+        [
+          "KO FACE",
+          "large head-and-shoulders portrait, eyes closed and relaxed defeated mouth, no gore"
+        ],
+        [
+          "BLINK",
+          "large head-and-shoulders portrait, normal blink expression, same face"
+        ]
+      ],
+      "prompt": "Use case: stylized-concept. Make a polished original 2D CHIBI action-art review sheet for user's arena game. Input image1 is the ONLY identity/proportion/style anchor, not a composition to copy.\nCRITICAL: preserve very compact about2.5-heads-tall CHIBI ADULT proportions of anchor: huge head40%, short torso32%, stubby short legs28%; head almost shoulders wide. NOT realistic adult anatomy, not long limbs, not3.5/7head figures. These are ordinary non-superpowered adults rendered CHIBI; acting and weight are natural, not anatomy photorealism.\nPremium clean organic ink outline, two/three-tone cel shading, tasteful simple folds, large readable colors, integrated elbows/knees, consistent facial construction and clothing. No 3D plastic, no photorealistic textures, no superhero powers, no aura, no magical attack arcs, no logo. Reference is proposed design, not yet owner-approved.\nComposition: high-resolution SQUARE 4x4 contact sheet with EXACTLY16 equal spacious cells. Prefer2048x2048 or larger; never make wide 4x3. Dark slate uniform backdrop matching anchor, subtle dividers, modest top header and small ivory all-caps numbered labels beneath each cell. Full body+objects contained in every cell EXCEPT last eight portrait cells of MODEL AND EXPRESSIONS which show head/shoulders intentionally. No duplicate/unrequested people except grey training dummy explicitly required. Same character16times, never include allfive. Mainly right-facing side/threequarter side action, natural perspective not foreshortened camera. Thin floor hint only where needed. No cropping hair/feet/weapons. Pose list rowmajor top-left to bottom-right:\n01 \"FRONT\" — full body true straight front neutral view, both hands relaxed, same proportions\n02 \"SIDE\" — full body exact right profile idle, no change in hair or costume\n03 \"REAR\" — full body exact back view, correct SAME hairstyle/outfit seen from behind\n04 \"GUARD\" — full body compact unarmed guard, fists near chest, grounded feet\n05 \"C4 HOLD\" — full body holding small inert unbranded rectangular game explosive pack with one plain strap; no schematic or wiring detail\n06 \"MINE HOLD\" — full body holding small plain round inert game mine at waist, object only, no deployment instruction\n07 \"GUN DROP\" — full body discarding empty conventional pistol from open hand, object below hand\n08 \"SHOTGUN PUMP\" — full body pump-shotgun cycling pose, one hand on grip and other on sliding foreend\n09 \"NEUTRAL FACE\" — large head-and-shoulders portrait, relaxed neutral adult chibi expression\n10 \"FOCUS FACE\" — large head-and-shoulders portrait, concentrated eyes/brows and set jaw\n11 \"ATTACK FACE\" — large head-and-shoulders portrait, ordinary effort/shout, no luminous eyes\n12 \"HURT FACE\" — large head-and-shoulders portrait, wincing pain eyes narrowed, jaw clenched\n13 \"PANIC FACE\" — large head-and-shoulders portrait, alarmed eyes and parted mouth, brows raised, no comedy tongue\n14 \"TIRED FACE\" — large head-and-shoulders portrait, low health exhaustion/sweat and heavy eyelids\n15 \"KO FACE\" — large head-and-shoulders portrait, eyes closed and relaxed defeated mouth, no gore\n16 \"BLINK\" — large head-and-shoulders portrait, normal blink expression, same face\nHEADER \"BLAIRE / MODEL AND EXPRESSIONS\". Depict ONLY BLAIRE: adult woman, short purple/plum BOB hair in every angle, teal utility jacket/light shirt, charcoal cargo trousers, dark boots. Lock exactly that figure in reference1: face/hair/costume/proportions/materials/colors in everycell. For Agent keep normal sunglasses even during emotions, emote with brows/mouth/body. For Blaire preserve PURPLE BOB in rear view. All poses human acting within short chibi limbs. Conventional everyday/game weapons, no sci-fi rayguns or toy gadgets. Flames only on burning clothing where explicitly requested. This is representative keypose art, not a finished animation sequence."
+    }
+  ]
+}

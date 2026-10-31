@@ -80,6 +80,17 @@ static var _blood_sheet_cache: Texture2D = null
 static var _state_data_cache: Dictionary = {}
 var _pose_cache_key: int = 0
 var _pose_cache_dict: Dictionary = {}
+var _cached_actor: Node = null
+var _cached_actor_checked: bool = false
+var _cached_actor_is_fighter: bool = false
+var _last_eval_state: String = ""
+var _last_eval_hp_i: int = -999999
+var _last_eval_burn: bool = false
+var _last_eval_carry: bool = false
+var _last_eval_win: bool = false
+var _motion_burning: bool = false
+var _motion_grounded: bool = true
+var _motion_velocity: Vector2 = Vector2.ZERO
 
 
 func _init() -> void:
@@ -116,7 +127,21 @@ func step_expression_clock(dt: float, is_carrying: bool = false, is_victory: boo
 		if _expr_hold_timer <= 0.001:
 			hold_just_expired = true
 
-	if hold_just_expired or is_carrying or is_victory or _expr_hold_timer <= 0.001:
+	var hp_i: int = int(roundf(hp))
+	var burn_now: bool = _motion_burning
+	var state_dirty: bool = (
+		current_state != _last_eval_state
+		or hp_i != _last_eval_hp_i
+		or burn_now != _last_eval_burn
+		or is_carrying != _last_eval_carry
+		or is_victory != _last_eval_win
+	)
+	if hold_just_expired or state_dirty:
+		_last_eval_state = current_state
+		_last_eval_hp_i = hp_i
+		_last_eval_burn = burn_now
+		_last_eval_carry = is_carrying
+		_last_eval_win = is_victory
 		var target: Dictionary = _PreloadChibiBrawlerRigPainter.evaluate_target_expression(
 			current_state,
 			hp,
@@ -161,9 +186,11 @@ func get_current_hud_portrait_key() -> String:
 
 
 func get_authored_head_identity() -> String:
-	var actor: Node = get_parent()
-	if actor != null and actor.get("awakening_timer") != null and float(actor.get("awakening_timer")) > 0.0 and character_id in ["goku", "naruto"]:
-		return character_id + "_awakened"
+	var actor: Node = _get_actor()
+	if actor != null and _cached_actor_is_fighter and character_id in ["goku", "naruto"]:
+		var awk_v: Variant = actor.get("awakening_timer")
+		if awk_v != null and float(awk_v) > 0.0:
+			return character_id + "_awakened"
 	return character_id
 
 
@@ -180,6 +207,11 @@ func reset_presentation() -> void:
 	source_motion_frame = 0.0
 	chibi_stance = ""
 	chibi_motion.clear()
+	_last_eval_state = ""
+	_last_eval_hp_i = -999999
+	_last_eval_burn = false
+	_last_eval_carry = false
+	_last_eval_win = false
 	_visual_revision += 1
 	_last_rig_hash = 0
 	queue_redraw()
@@ -190,8 +222,8 @@ func get_current_head_tilt_deg() -> float:
 
 
 func get_chibi_pose_snapshot() -> Dictionary:
-	var actor: Node = get_parent()
-	var carrying: bool = actor != null and is_instance_valid(actor.get("grabbed_target"))
+	var actor: Node = _get_actor()
+	var carrying: bool = actor != null and _cached_actor_is_fighter and is_instance_valid(actor.get("grabbed_target"))
 	var burn_flag: int = 1 if bool(chibi_motion.get("burning", false)) else 0
 	var gnd_flag: int = 1 if bool(chibi_motion.get("grounded", true)) else 0
 	var vel_v: Vector2 = chibi_motion.get("velocity", Vector2.ZERO) as Vector2
@@ -227,25 +259,41 @@ func get_chibi_burn_anchors() -> PackedVector2Array:
 	return result
 
 
+func _get_actor() -> Node:
+	var p: Node = get_parent()
+	if p != _cached_actor or not _cached_actor_checked:
+		_cached_actor = p
+		_cached_actor_checked = true
+		_cached_actor_is_fighter = (p != null and p.has_method("step_fighter"))
+	return _cached_actor
+
+
 func _sync_motion_context(actor: Node, supplied: Dictionary, burning: bool, next_state: String) -> void:
-	var prev_burning: bool = bool(chibi_motion.get("burning", false))
-	var prev_grounded: bool = bool(chibi_motion.get("grounded", true))
-	var prev_vel: Vector2 = chibi_motion.get("velocity", Vector2.ZERO) as Vector2
+	var was_empty: bool = chibi_motion.is_empty()
+	var prev_burning: bool = false if was_empty else _motion_burning
+	var prev_grounded: bool = true if was_empty else _motion_grounded
+	var prev_vel: Vector2 = Vector2.ZERO if was_empty else _motion_velocity
 	var new_vel: Vector2 = prev_vel
-	var v: Variant = supplied.get("velocity", actor.get("air_velocity") if actor != null else null)
+	var has_supplied: bool = not supplied.is_empty()
+	var v: Variant = supplied.get("velocity") if (has_supplied and supplied.has("velocity")) else (actor.get("air_velocity") if (actor != null and _cached_actor_is_fighter) else null)
 	if v is Vector2:
 		var clean: Vector2 = v as Vector2
 		new_vel = clean.clamp(Vector2(-100.0, -100.0), Vector2(100.0, 100.0)) if clean.is_finite() else Vector2.ZERO
 	var new_grounded: bool = prev_grounded
-	var grounded: Variant = supplied.get("grounded", actor.get("on_ground") if actor != null else null)
+	var grounded: Variant = supplied.get("grounded") if (has_supplied and supplied.has("grounded")) else (actor.get("on_ground") if (actor != null and _cached_actor_is_fighter) else null)
 	if grounded is bool:
 		new_grounded = grounded as bool
-	elif not chibi_motion.has("grounded"):
+	elif was_empty:
 		new_grounded = true
-	var was_empty: bool = chibi_motion.is_empty()
-	chibi_motion["burning"] = burning
-	chibi_motion["velocity"] = new_vel
-	chibi_motion["grounded"] = new_grounded
+	if was_empty or prev_burning != burning:
+		_motion_burning = burning
+		chibi_motion["burning"] = burning
+	if was_empty or new_vel != prev_vel:
+		_motion_velocity = new_vel
+		chibi_motion["velocity"] = new_vel
+	if was_empty or prev_grounded != new_grounded:
+		_motion_grounded = new_grounded
+		chibi_motion["grounded"] = new_grounded
 	var uses_air_vel: bool = next_state in ["JUMP", "FALL", "FALL_F", "FALL_B"]
 	if was_empty or prev_burning != burning or prev_grounded != new_grounded or (uses_air_vel and not prev_vel.is_equal_approx(new_vel)):
 		_visual_revision += 1
@@ -253,8 +301,8 @@ func _sync_motion_context(actor: Node, supplied: Dictionary, burning: bool, next
 
 
 func _with_burning_expression(target: Dictionary) -> Dictionary:
-	if bool(chibi_motion.get("burning", false)) and _PreloadChibiBrawlerRigPainter.get_expression_priority(str(target.get("id", ""))) < 3:
-		return {"id": "WIDE_MOUTH_SHOUT", "hold": 0.12}
+	if _motion_burning and _PreloadChibiBrawlerRigPainter.get_expression_priority(str(target.get("id", ""))) < 3:
+		return _PreloadChibiBrawlerRigPainter.EXPR_DICT_SHOUT
 	return target
 
 
@@ -390,15 +438,31 @@ func _get_registry() -> Object:
 
 
 func set_facing(p_facing: int) -> void:
-	facing = -1 if p_facing < 0 else 1
-	scale.x = -1.0 if facing < 0 else 1.0
+	var nf: int = -1 if p_facing < 0 else 1
+	var target_sx: float = -1.0 if nf < 0 else 1.0
+	if facing == nf and is_equal_approx(scale.x, target_sx):
+		return
+	facing = nf
+	scale.x = target_sx
 	scale.y = 1.0
 
 
 func set_aim_pitch(p_pitch_deg: float) -> void:
-	current_aim_pitch = _PreloadChibiBrawlerRigPainter.sanitize_aim_pitch_deg(p_pitch_deg)
+	var cp: float = _PreloadChibiBrawlerRigPainter.sanitize_aim_pitch_deg(p_pitch_deg)
+	if is_equal_approx(current_aim_pitch, cp):
+		return
+	current_aim_pitch = cp
+	if aim_pivot != null and aim_pivot.visible:
+		var target_rad: float = deg_to_rad(current_aim_pitch)
+		if not is_equal_approx(aim_pivot.rotation, target_rad):
+			aim_pivot.rotation = target_rad
+
+
+func _sync_aim_pivot_rotation() -> void:
 	if aim_pivot != null:
-		aim_pivot.rotation = deg_to_rad(current_aim_pitch)
+		var target_rad: float = deg_to_rad(current_aim_pitch)
+		if not is_equal_approx(aim_pivot.rotation, target_rad):
+			aim_pivot.rotation = target_rad
 
 
 func get_aim_direction_vector() -> Vector2:
@@ -418,6 +482,7 @@ func get_aim_world_angle_deg() -> float:
 
 func get_muzzle_global_pos() -> Vector2:
 	_ensure_nodes()
+	_sync_aim_pivot_rotation()
 	if is_inside_tree():
 		return muzzle_socket.global_position
 	return global_position + _local_socket_to_char_offset(muzzle_socket.position)
@@ -425,6 +490,7 @@ func get_muzzle_global_pos() -> Vector2:
 
 func get_shell_global_pos() -> Vector2:
 	_ensure_nodes()
+	_sync_aim_pivot_rotation()
 	if is_inside_tree():
 		return shell_socket.global_position
 	return global_position + _local_socket_to_char_offset(shell_socket.position)
@@ -432,6 +498,7 @@ func get_shell_global_pos() -> Vector2:
 
 func get_fire_global_pos() -> Vector2:
 	_ensure_nodes()
+	_sync_aim_pivot_rotation()
 	if is_inside_tree():
 		return fire_socket.global_position
 	return global_position + _local_socket_to_char_offset(fire_socket.position)
@@ -449,8 +516,10 @@ var _last_rig_hash: int = 0
 func _read_source_motion_frame(state_name: String, frame_nr: int, explicit_frame: float) -> float:
 	if is_finite(explicit_frame) and explicit_frame >= 0.0:
 		return explicit_frame
-	var actor: Node = get_parent()
-	if actor == null or not actor.has_method("step_fighter"):
+	var actor: Node = _get_actor()
+	if actor == null or not _cached_actor_is_fighter:
+		return float(maxi(0, frame_nr - 1))
+	if state_name != str(actor.get("current_state")):
 		return float(maxi(0, frame_nr - 1))
 	if actor.get("_mugen_state_active") == true and mugen_adapter != null:
 		var elapsed: float = 0.0
@@ -463,7 +532,10 @@ func _read_source_motion_frame(state_name: String, frame_nr: int, explicit_frame
 	var remaining: float = float(actor.get("_melee_active_frames"))
 	if remaining > 0.0:
 		return maxf(0.0, float(actor.get("_melee_total_frames")) - remaining)
-	if not _source_frame_offsets.has(state_name):
+	var starts: PackedFloat32Array
+	if _source_frame_offsets.has(state_name):
+		starts = _source_frame_offsets[state_name]
+	else:
 		var reg: Object = _get_registry()
 		if reg == null:
 			return float(maxi(0, frame_nr - 1))
@@ -474,7 +546,7 @@ func _read_source_motion_frame(state_name: String, frame_nr: int, explicit_frame
 			offsets.append(elapsed)
 			elapsed += maxf(0.5, float((value as Dictionary).get("duration", 1.0)))
 		_source_frame_offsets[state_name] = offsets
-	var starts: PackedFloat32Array = _source_frame_offsets.get(state_name, PackedFloat32Array())
+		starts = offsets
 	var seq: int = int(actor.get("_anim_seq_idx"))
 	var tick: float = float(actor.get("_anim_tick_accum"))
 	var base: float = starts[clampi(seq, 0, starts.size() - 1)] if not starts.is_empty() else float(maxi(0, frame_nr - 1))
@@ -508,22 +580,40 @@ func apply_rig_state(
 	if chibi_brawler_enabled and not is_equal_approx(source_motion_frame, previous_motion_frame):
 		queue_redraw()
 	var is_charred: bool = p_is_burnt_corpse or (p_hp <= 0.0 and p_burn_state >= 15.0)
-	var pnode_rv: Node = get_parent()
-	_sync_motion_context(pnode_rv, p_motion, p_hp > 0.0 and p_burn_state >= 15.0, next_state)
-	chibi_stance = "COVER" if pnode_rv != null and pnode_rv.get("taking_cover") == true else ("KNEEL" if pnode_rv != null and pnode_rv.get("kneeling") == true else "")
-	var hit_flash_t: float = float(pnode_rv.get("_hit_flash_timer")) if (pnode_rv != null and pnode_rv.get("_hit_flash_timer") != null) else 0.0
+	var pnode_rv: Node = _cached_actor
+	var is_burning_alive: bool = p_hp > 0.0 and p_burn_state >= 15.0
+	_sync_motion_context(pnode_rv, p_motion, is_burning_alive, next_state)
+	var hit_flash_t: float = 0.0
+	var is_awakened_rv: bool = false
+	var is_clone_rv: bool = false
+	if pnode_rv != null and _cached_actor_is_fighter:
+		chibi_stance = "COVER" if pnode_rv.get("taking_cover") == true else ("KNEEL" if pnode_rv.get("kneeling") == true else "")
+		var hf_v: Variant = pnode_rv.get("_hit_flash_timer")
+		if hf_v != null:
+			hit_flash_t = float(hf_v)
+		var awk_v: Variant = pnode_rv.get("awakening_timer")
+		if awk_v != null:
+			is_awakened_rv = float(awk_v) > 0.0
+		is_clone_rv = pnode_rv.get("is_summoned_clone") == true
+	else:
+		chibi_stance = ""
 	var is_hit_flashing: bool = (hit_flash_t > 0.0) and not is_charred
-	var is_awakened_rv: bool = pnode_rv != null and pnode_rv.get("awakening_timer") != null and float(pnode_rv.get("awakening_timer")) > 0.0
-	var is_clone_rv: bool = pnode_rv != null and pnode_rv.get("is_summoned_clone") == true
 	var clean_pitch_deg: float = _PreloadChibiBrawlerRigPainter.sanitize_aim_pitch_deg(p_aim_pitch_deg)
-	if next_state != current_state or int(roundf(p_hp)) != int(roundf(hp)) or (p_burn_state >= 15.0) != (burn_state >= 15.0):
-		var is_carrying_rv: bool = (pnode_rv != null and pnode_rv.get("grabbed_target") != null)
+	var hp_i_now: int = int(roundf(p_hp))
+	if next_state != current_state or hp_i_now != int(roundf(hp)) or is_burning_alive != (burn_state >= 15.0):
+		var is_carrying_rv: bool = (pnode_rv != null and _cached_actor_is_fighter and pnode_rv.get("grabbed_target") != null)
+		var is_win_rv: bool = (next_state == "WIN")
+		_last_eval_state = next_state
+		_last_eval_hp_i = hp_i_now
+		_last_eval_burn = is_burning_alive
+		_last_eval_carry = is_carrying_rv
+		_last_eval_win = is_win_rv
 		var eval_expr: Dictionary = _PreloadChibiBrawlerRigPainter.evaluate_target_expression(
 			next_state,
 			p_hp,
 			p_max_hp,
 			is_carrying_rv,
-			next_state == "WIN",
+			is_win_rv,
 			_current_expr_id == "LOW_HP_SWEAT"
 		)
 		eval_expr = _with_burning_expression(eval_expr)
@@ -577,6 +667,37 @@ func apply_rig_state(
 	set_aim_pitch(clean_pitch_deg)
 	queue_redraw()
 
+	# Fast path for Chibi locomotion states when legacy XFL body_sprite is already initialized & hidden:
+	# avoids triggering AtlasTexture.changed and C++ CanvasItem redraw notifications on hidden Sprite2Ds every tick.
+	if (
+		chibi_brawler_enabled
+		and current_state in ["IDLE", "RUN", "SPRINT", "JUMP", "FALL", "WALK", "LAND", "CROUCH", "ROLL"]
+		and not is_charred
+		and not is_hit_flashing
+		and body_sprite.texture != null
+		and not (mugen_adapter != null and current_state == "IDLE" and anim_frame_idx == 1)
+	):
+		current_rig_type = "full_body"
+		if body_sprite.modulate != Color.WHITE:
+			body_sprite.modulate = Color.WHITE
+		if aim_pivot.visible:
+			aim_pivot.visible = false
+		if laser_sight.visible:
+			laser_sight.visible = false
+		if aim_reticle_sprite.visible:
+			aim_reticle_sprite.visible = false
+		if melee_trace_sprite.visible:
+			melee_trace_sprite.visible = false
+		if body_sprite.visible:
+			body_sprite.visible = false
+		if blood_overlay.visible:
+			blood_overlay.visible = false
+		if chibi_weapon_view.visible:
+			chibi_weapon_view.visible = false
+		if not is_equal_approx(body_pivot.rotation, 0.0):
+			body_pivot.rotation = 0.0
+		return
+
 	var reg: Object = _runtime_registry if is_instance_valid(_runtime_registry) else _get_registry()
 	if reg == null:
 		return
@@ -584,6 +705,16 @@ func apply_rig_state(
 		_PreloadMugenFighterAdapter.ensure_registry_integration(reg)
 		_runtime_registry = reg
 		_registry_integrated = true
+
+	var st_data: Dictionary
+	if _state_data_cache.has(current_state):
+		st_data = _state_data_cache[current_state] as Dictionary
+	else:
+		st_data = reg.call("get_state_data", current_state) as Dictionary
+		_state_data_cache[current_state] = st_data
+	if st_data.is_empty():
+		st_data = reg.call("get_state_data", "IDLE") as Dictionary
+	var st_type: String = str(st_data.get("type", "full_body"))
 
 	var char_sheet: Texture2D = _character_sheet_cache.get(character_id) as Texture2D
 	if char_sheet == null:
@@ -664,15 +795,6 @@ func apply_rig_state(
 			else:
 				blood_overlay.visible = false
 		return
-
-	var st_data: Dictionary = _state_data_cache.get(current_state, {}) as Dictionary
-	if st_data.is_empty():
-		st_data = reg.call("get_state_data", current_state) as Dictionary
-		_state_data_cache[current_state] = st_data
-	if st_data.is_empty():
-		st_data = reg.call("get_state_data", "IDLE") as Dictionary
-
-	var st_type: String = str(st_data.get("type", "full_body"))
 
 	# Split-rig only when in START_* or AIM_* states with split_rig_aim / split_rig_start
 	if st_type == "split_rig_aim" or st_type == "split_rig_start":

@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="description" content="Bộ xem thiết kế Chibi cho Johnny, Boris, Agent, Hideki và Blaire. Chỉ dùng review mỹ thuật; chưa gắn vào game.">
+  <title>Chibi · Ordinary Five — Bộ xem thiết kế</title>
+  <style>
+    :root { color-scheme: dark; --bg: #101a29; --panel: #172336; --panel-soft: #1d2b40; --line: #34445c; --text: #f1eee5; --muted: #b0bed0; --accent: #e8bc78; --blue: #96cbd7; }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 6rem; }
+    body { margin: 0; color: var(--text); background: var(--bg); font: 16px/1.65 system-ui, -apple-system, "Segoe UI", sans-serif; }
+    a { color: var(--blue); text-underline-offset: .22em; }
+    a:hover { color: var(--text); }
+    a:focus-visible, summary:focus-visible { outline: 3px solid var(--accent); outline-offset: 5px; }
+    .wrap { width: min(1440px, calc(100% - 64px)); margin-inline: auto; }
+    .topbar { position: sticky; top: 0; z-index: 10; background: #101a29f2; border-bottom: 1px solid var(--line); backdrop-filter: blur(14px); }
+    .topbar-inner { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: .6rem 2rem; padding-block: .85rem; }
+    .brand { color: var(--text); text-decoration: none; font-size: .8rem; font-weight: 750; letter-spacing: .14em; }
+    .topnav { display: flex; flex-wrap: wrap; gap: .3rem 1.1rem; font-size: .84rem; }
+    .topnav a { color: var(--muted); text-decoration: none; }
+    .topnav a:hover { color: var(--accent); }
+    header { padding-block: 4.5rem 2rem; }
+    .eyebrow { margin: 0 0 .7rem; color: var(--accent); font-size: .76rem; letter-spacing: .16em; font-weight: 750; text-transform: uppercase; }
+    h1 { max-width: 1050px; margin: 0; font-size: clamp(2.7rem, 6vw, 5.7rem); font-weight: 650; line-height: 1.04; letter-spacing: -.055em; }
+    h1 span { color: var(--muted); }
+    .intro { max-width: 800px; margin: 1.5rem 0 0; color: var(--muted); font-size: 1.1rem; }
+    .badges { display: flex; flex-wrap: wrap; gap: .6rem; margin: 1.8rem 0; }
+    .badge { padding: .3rem .7rem; border: 1px solid var(--line); border-radius: 100px; font-size: .78rem; color: var(--muted); }
+    .badge.primary { border-color: #705b3b; color: var(--accent); background: #e8bc780a; }
+    .notice { padding: 1.1rem 1.3rem; border-left: 3px solid var(--accent); background: var(--panel); border-radius: 0 8px 8px 0; font-size: .92rem; }
+    .notice p { margin: .35rem 0; }
+    .notice strong { color: var(--accent); }
+    .notice .muted { color: var(--muted); }
+    .stats { display: grid; grid-template-columns: repeat(3, 1fr); margin-block: 2rem 3.5rem; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .stat { padding: 1.1rem 0; }
+    .stat + .stat { padding-left: 2rem; border-left: 1px solid var(--line); }
+    .stat b { font-size: 1.8rem; line-height: 1.2; font-weight: 600; }
+    .stat span { display: block; color: var(--muted); font-size: .82rem; }
+    h2 { margin: 0; font-size: clamp(1.7rem, 3vw, 2.5rem); line-height: 1.15; letter-spacing: -.03em; font-weight: 600; }
+    .section-copy { color: var(--muted); margin: .8rem 0 1.5rem; max-width: 880px; }
+    figure { margin: 0; }
+    .image-link { display: block; border-radius: 9px; overflow: hidden; background: var(--panel); border: 1px solid var(--line); }
+    .image-link:hover { border-color: var(--accent); }
+    .image-link img { display: block; width: 100%; height: auto; color: var(--muted); font-size: .9rem; }
+    .roster { margin-bottom: 3.5rem; }
+    .roster figcaption { padding-top: .7rem; font-size: .85rem; color: var(--muted); }
+    .group-index { margin-block: 0 4.5rem; padding: 1.5rem; border: 1px solid var(--line); border-radius: 12px; background: var(--panel); }
+    .group-index h2 { font-size: 1.3rem; margin-bottom: 1rem; }
+    .index-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.4rem; }
+    .index-group { scroll-margin-top: 7rem; }
+    .index-group h3 { margin: 0 0 .45rem; font-size: .9rem; font-weight: 650; }
+    .index-group h3 span { color: var(--accent); font-size: .74rem; margin-right: .45rem; }
+    .index-links { display: flex; flex-wrap: wrap; gap: .25rem .8rem; font-size: .8rem; }
+    .index-links a { color: var(--muted); }
+    .character { padding-block: .8rem 4rem; margin-bottom: 2rem; border-bottom: 1px solid var(--line); }
+    .character-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem 2rem; }
+    .character-number { color: var(--accent); font-size: .8rem; letter-spacing: .12em; margin-bottom: .5rem; }
+    .character-head p { margin: .75rem 0 0; color: var(--muted); max-width: 750px; }
+    .back { flex-shrink: 0; font-size: .82rem; }
+    .localnav { display: flex; flex-wrap: wrap; gap: .45rem; margin: 1.4rem 0 1.6rem; }
+    .localnav a { padding: .35rem .65rem; border: 1px solid var(--line); border-radius: 6px; color: var(--muted); text-decoration: none; font-size: .78rem; }
+    .localnav a:hover { color: var(--accent); border-color: var(--accent); }
+    .boards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.6rem 1.4rem; }
+    .board { min-width: 0; scroll-margin-top: 7rem; }
+    .board figcaption { padding: .8rem .1rem .3rem; }
+    .board h3 { display: flex; justify-content: space-between; align-items: baseline; gap: .7rem; margin: 0; font-size: 1rem; font-weight: 600; }
+    .board h3 span { color: var(--muted); font-size: .74rem; font-weight: 400; white-space: nowrap; }
+    .board p { color: var(--muted); font-size: .83rem; margin: .25rem 0 0; }
+    .notes { margin-bottom: 3rem; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 1.6rem; }
+    .notes h2 { font-size: 1.4rem; }
+    .notes ul { margin: 1rem 0; padding-left: 1.2rem; color: var(--muted); }
+    .notes li + li { margin-top: .5rem; }
+    .notes p { margin-bottom: 0; font-size: .9rem; }
+    footer { padding-block: 0 2.5rem; color: var(--muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: .7rem 2rem; font-size: .78rem; }
+    @media (min-width: 1700px) { .wrap { width: min(1680px, calc(100% - 96px)); } }
+    @media (max-width: 850px) { .wrap { width: calc(100% - 36px); } header { padding-top: 3rem; } .index-grid { grid-template-columns: repeat(2, 1fr); } .character-head { align-items: flex-start; } .boards { gap: 1.4rem .9rem; } .board h3 { display: block; } .board h3 span { display: block; margin-top: .15rem; } }
+    @media (max-width: 560px) { html { scroll-padding-top: 8rem; } .topbar-inner { gap: .6rem; } .topnav { font-size: .76rem; gap: .3rem .75rem; } header { padding-top: 2.3rem; } h1 { font-size: 3rem; } .intro { font-size: 1rem; } .stat + .stat { padding-left: .8rem; } .stat b { font-size: 1.4rem; } .stat span { font-size: .7rem; } .index-grid { grid-template-columns: 1fr; } .group-index { padding: 1.1rem; } .character-head { display: block; } .back { display: inline-block; margin-top: .9rem; } .boards { grid-template-columns: 1fr; } .board h3 { display: flex; } .board h3 span { display: inline; } .notice { padding: .9rem 1rem; } }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+    @media print { .topbar { position: static; } .localnav, .back { display: none; } .board { break-inside: avoid; } }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="wrap topbar-inner">
+      <a class="brand" href="#top">CHIBI / ORDINARY FIVE</a>
+      <nav class="topnav" aria-label="Đi đến nhân vật">
+        <a href="#roster">Tổng quan</a><a href="#johnny">Johnny</a><a href="#boris">Boris</a><a href="#agent">Agent</a><a href="#hideki">Hideki</a><a href="#blaire">Blaire</a><a href="#groups">6 nhóm</a>
+      </nav>
+    </div>
+  </div>
+  <main class="wrap" id="top">
+    <header>
+      <p class="eyebrow">Superagent · Bộ xem mỹ thuật · 31.10.2026</p>
+      <h1>Năm nhân vật.<br><span>Một hướng Chibi.</span></h1>
+      <p class="intro">Johnny, Boris, Agent, Hideki và Blaire — giữ nhận diện nhân vật thường của game hiện tại, thử cách diễn xuất tự nhiên trong hình dáng Chibi gọn. Mở từng bảng để xem tư thế, trang phục và biểu cảm ở kích thước gốc.</p>
+      <div class="badges"><span class="badge primary">Chỉ dùng review</span><span class="badge">Chưa gắn vào game</span><span class="badge">Built-in imagegen</span><span class="badge">Mục tiêu ≈ 2,5 đầu · chưa đo</span></div>
+      <div class="notice">
+        <p><strong>Đây là đề xuất mỹ thuật, chưa phải tài nguyên sẵn sàng chạy trong game.</strong> Các bảng thể hiện tư thế đại diện; chưa xác minh chuỗi frame, timing, lớp tách, alpha hoặc socket.</p>
+        <p class="muted">Bộ người thường theo tỉ lệ thực cũ trong <code>ordinary-five-20261031</code> đã được thay thế về hướng thiết kế và không được hiển thị ở đây. 31 ảnh được chọn đã có trên đĩa; manifest ghi kích thước và SHA-256. Bản nháp cũ không được chọn trong gallery.</p>
+      </div>
+      <div class="stats" aria-label="Quy mô bộ duyệt">
+        <div class="stat"><b>05</b><span>nhân vật thường</span></div>
+        <div class="stat"><b>06</b><span>bảng × 16 ô / nhân vật</span></div>
+        <div class="stat"><b>480</b><span>ô concept · không phải 480 animation</span></div>
+      </div>
+    </header>
+
+    <section class="roster" id="roster" aria-labelledby="roster-title">
+      <p class="eyebrow">00 / Nhận diện chung</p><h2 id="roster-title">Cùng tỉ lệ, riêng tính cách</h2>
+      <p class="section-copy">Một bảng đội hình để đối chiếu màu sắc và silhouette của cả năm. Mục tiêu khoảng 2,5 đầu là chỉ dẫn tạo ảnh, chưa phải số đo đã kiểm chứng trên kết quả.</p>
+      <figure><a class="image-link" href="00-roster.png" target="_blank" rel="noopener" aria-label="Mở bảng đội hình năm nhân vật ở kích thước gốc"><img src="00-roster.png" alt="Bảng đề xuất đội hình Chibi: Johnny, Boris, Agent, Hideki và Blaire" decoding="async"></a><figcaption>00-roster.png · Nhấn ảnh để mở bản gốc. Bảng đội hình nằm ngoài 30 bảng / 480 ô concept.</figcaption></figure>
+    </section>
+
+    <section class="group-index" id="groups" aria-labelledby="groups-title">
+      <h2 id="groups-title">Đi theo nhóm tư thế</h2>
+      <div class="index-grid">
+        <div class="index-group" id="group-movement"><h3><span>01</span>Di chuyển</h3><div class="index-links"><a href="#johnny-movement">Johnny</a><a href="#boris-movement">Boris</a><a href="#agent-movement">Agent</a><a href="#hideki-movement">Hideki</a><a href="#blaire-movement">Blaire</a></div></div>
+        <div class="index-group" id="group-traversal"><h3><span>02</span>Leo trèo &amp; vật thể</h3><div class="index-links"><a href="#johnny-traversal">Johnny</a><a href="#boris-traversal">Boris</a><a href="#agent-traversal">Agent</a><a href="#hideki-traversal">Hideki</a><a href="#blaire-traversal">Blaire</a></div></div>
+        <div class="index-group" id="group-firearms"><h3><span>03</span>Súng &amp; đồ ném</h3><div class="index-links"><a href="#johnny-firearms">Johnny</a><a href="#boris-firearms">Boris</a><a href="#agent-firearms">Agent</a><a href="#hideki-firearms">Hideki</a><a href="#blaire-firearms">Blaire</a></div></div>
+        <div class="index-group" id="group-melee"><h3><span>04</span>Cận chiến</h3><div class="index-links"><a href="#johnny-melee">Johnny</a><a href="#boris-melee">Boris</a><a href="#agent-melee">Agent</a><a href="#hideki-melee">Hideki</a><a href="#blaire-melee">Blaire</a></div></div>
+        <div class="index-group" id="group-damage-fire"><h3><span>05</span>Trúng đòn &amp; lửa</h3><div class="index-links"><a href="#johnny-damage-fire">Johnny</a><a href="#boris-damage-fire">Boris</a><a href="#agent-damage-fire">Agent</a><a href="#hideki-damage-fire">Hideki</a><a href="#blaire-damage-fire">Blaire</a></div></div>
+        <div class="index-group" id="group-variants"><h3><span>06</span>Góc nhìn &amp; biểu cảm</h3><div class="index-links"><a href="#johnny-variants">Johnny</a><a href="#boris-variants">Boris</a><a href="#agent-variants">Agent</a><a href="#hideki-variants">Hideki</a><a href="#blaire-variants">Blaire</a></div></div>
+      </div>
+    </section>
+
+    <section class="character" id="johnny" aria-labelledby="johnny-title">
+      <div class="character-head"><div><div class="character-number">01 / JOHNNY</div><h2 id="johnny-title">Johnny</h2><p>Tóc nâu với lọn nhuộm cam; hoodie cam–navy, tay áo màu slate và giày đế kem. Một người thường, không có hiệu ứng siêu năng.</p></div><a class="back" href="#groups">↑ Chỉ mục nhóm</a></div>
+      <nav class="localnav" aria-label="Các bảng Johnny"><a href="#johnny-movement">01 · Di chuyển</a><a href="#johnny-traversal">02 · Leo trèo</a><a href="#johnny-firearms">03 · Súng</a><a href="#johnny-melee">04 · Cận chiến</a><a href="#johnny-damage-fire">05 · Trúng đòn / lửa</a><a href="#johnny-variants">06 · Biểu cảm</a></nav>
+      <div class="boards">
+        <figure class="board" id="johnny-movement"><a class="image-link" href="johnny/01-movement-v2.png" target="_blank" rel="noopener"><img src="johnny/01-movement-v2.png" loading="lazy" decoding="async" alt="Johnny — bảng 01 Di chuyển, 16 ô tư thế concept"></a><figcaption><h3>01 · Di chuyển <span>16 ô concept</span></h3><p>Đứng, đi, chạy, nép, nhảy, rơi, lăn và lao người.</p></figcaption></figure>
+        <figure class="board" id="johnny-traversal"><a class="image-link" href="johnny/02-traversal-v2.png" target="_blank" rel="noopener"><img src="johnny/02-traversal-v2.png" loading="lazy" decoding="async" alt="Johnny — bảng 02 Leo trèo và vật thể, 16 ô tư thế concept"></a><figcaption><h3>02 · Leo trèo &amp; vật thể <span>16 ô concept</span></h3><p>Thang, mép bục, rocket, tackle, đẩy đồ, nhặt đồ và ăn mừng.</p></figcaption></figure>
+        <figure class="board" id="johnny-firearms"><a class="image-link" href="johnny/03-firearms-v2.png" target="_blank" rel="noopener"><img src="johnny/03-firearms-v2.png" loading="lazy" decoding="async" alt="Johnny — bảng 03 Súng và đồ ném, 16 ô tư thế concept"></a><figcaption><h3>03 · Súng &amp; đồ ném <span>16 ô concept</span></h3><p>Cầm súng thường, ngắm theo góc, ném lựu đạn và chai.</p></figcaption></figure>
+        <figure class="board" id="johnny-melee"><a class="image-link" href="johnny/04-melee-v2.png" target="_blank" rel="noopener"><img src="johnny/04-melee-v2.png" loading="lazy" decoding="async" alt="Johnny — bảng 04 Cận chiến, 16 ô tư thế concept"></a><figcaption><h3>04 · Cận chiến <span>16 ô concept</span></h3><p>Nhịp đấm, đá và cách cầm vũ khí cận chiến có trọng lượng.</p></figcaption></figure>
+        <figure class="board" id="johnny-damage-fire"><a class="image-link" href="johnny/05-damage-fire.png" target="_blank" rel="noopener"><img src="johnny/05-damage-fire.png" loading="lazy" decoding="async" alt="Johnny — bảng 05 Trúng đòn và lửa, 16 ô tư thế concept"></a><figcaption><h3>05 · Trúng đòn &amp; lửa <span>16 ô concept</span></h3><p>Đau, mất thăng bằng, ngã, gục và hoảng loạn khi quần áo bén lửa.</p></figcaption></figure>
+        <figure class="board" id="johnny-variants"><a class="image-link" href="johnny/06-variants.png" target="_blank" rel="noopener"><img src="johnny/06-variants.png" loading="lazy" decoding="async" alt="Johnny — bảng 06 Góc nhìn và biểu cảm, 8 ô toàn thân và 8 chân dung"></a><figcaption><h3>06 · Góc nhìn &amp; biểu cảm <span>16 ô concept</span></h3><p>8 ô toàn thân / biến thể; 8 ô chân dung, gồm biểu cảm và chớp mắt.</p></figcaption></figure>
+      </div>
+    </section>
+
+    <section class="character" id="boris" aria-labelledby="boris-title">
+      <div class="character-head"><div><div class="character-number">02 / BORIS</div><h2 id="boris-title">Boris</h2><p>Tóc ngắn bạc xám, râu lún phún; áo khoác lao động olive, quần than và bốt tối. Thân chắc hơn nhưng giữ cùng mục tiêu tỉ lệ Chibi.</p></div><a class="back" href="#groups">↑ Chỉ mục nhóm</a></div>
+      <nav class="localnav" aria-label="Các bảng Boris"><a href="#boris-movement">01 · Di chuyển</a><a href="#boris-traversal">02 · Leo trèo</a><a href="#boris-firearms">03 · Súng</a><a href="#boris-melee">04 · Cận chiến</a><a href="#boris-damage-fire">05 · Trúng đòn / lửa</a><a href="#boris-variants">06 · Biểu cảm</a></nav>
+      <div class="boards">
+        <figure class="board" id="boris-movement"><a class="image-link" href="boris/01-movement.png" target="_blank" rel="noopener"><img src="boris/01-movement.png" loading="lazy" decoding="async" alt="Boris — bảng 01 Di chuyển, 16 ô tư thế concept"></a><figcaption><h3>01 · Di chuyển <span>16 ô concept</span></h3><p>Đứng, đi, chạy, nép, nhảy, rơi, lăn và lao người.</p></figcaption></figure>
+        <figure class="board" id="boris-traversal"><a class="image-link" href="boris/02-traversal-v2.png" target="_blank" rel="noopener"><img src="boris/02-traversal-v2.png" loading="lazy" decoding="async" alt="Boris — bảng 02 Leo trèo và vật thể, 16 ô tư thế concept"></a><figcaption><h3>02 · Leo trèo &amp; vật thể <span>16 ô concept</span></h3><p>Thang, mép bục, rocket, tackle, đẩy đồ, nhặt đồ và ăn mừng.</p></figcaption></figure>
+        <figure class="board" id="boris-firearms"><a class="image-link" href="boris/03-firearms.png" target="_blank" rel="noopener"><img src="boris/03-firearms.png" loading="lazy" decoding="async" alt="Boris — bảng 03 Súng và đồ ném, 16 ô tư thế concept"></a><figcaption><h3>03 · Súng &amp; đồ ném <span>16 ô concept</span></h3><p>Cầm súng thường, ngắm theo góc, ném lựu đạn và chai.</p></figcaption></figure>
+        <figure class="board" id="boris-melee"><a class="image-link" href="boris/04-melee.png" target="_blank" rel="noopener"><img src="boris/04-melee.png" loading="lazy" decoding="async" alt="Boris — bảng 04 Cận chiến, 16 ô tư thế concept"></a><figcaption><h3>04 · Cận chiến <span>16 ô concept</span></h3><p>Nhịp đấm, đá và cách cầm vũ khí cận chiến có trọng lượng.</p></figcaption></figure>
+        <figure class="board" id="boris-damage-fire"><a class="image-link" href="boris/05-damage-fire.png" target="_blank" rel="noopener"><img src="boris/05-damage-fire.png" loading="lazy" decoding="async" alt="Boris — bảng 05 Trúng đòn và lửa, 16 ô tư thế concept"></a><figcaption><h3>05 · Trúng đòn &amp; lửa <span>16 ô concept</span></h3><p>Đau, mất thăng bằng, ngã, gục và hoảng loạn khi quần áo bén lửa.</p></figcaption></figure>
+        <figure class="board" id="boris-variants"><a class="image-link" href="boris/06-variants-v2.png" target="_blank" rel="noopener"><img src="boris/06-variants-v2.png" loading="lazy" decoding="async" alt="Boris — bảng 06 Góc nhìn và biểu cảm, 8 ô toàn thân và 8 chân dung"></a><figcaption><h3>06 · Góc nhìn &amp; biểu cảm <span>16 ô concept</span></h3><p>8 ô toàn thân / biến thể; 8 ô chân dung, gồm biểu cảm và chớp mắt.</p></figcaption></figure>
+      </div>
+    </section>
+
+    <section class="character" id="agent" aria-labelledby="agent-title">
+      <div class="character-head"><div><div class="character-number">03 / AGENT</div><h2 id="agent-title">Agent</h2><p>Tóc đen vuốt gọn, kính râm thường, suit navy–than, sơ mi trắng và cà vạt cam cháy. Biểu cảm đi qua nét mày, miệng và cơ thể.</p></div><a class="back" href="#groups">↑ Chỉ mục nhóm</a></div>
+      <nav class="localnav" aria-label="Các bảng Agent"><a href="#agent-movement">01 · Di chuyển</a><a href="#agent-traversal">02 · Leo trèo</a><a href="#agent-firearms">03 · Súng</a><a href="#agent-melee">04 · Cận chiến</a><a href="#agent-damage-fire">05 · Trúng đòn / lửa</a><a href="#agent-variants">06 · Biểu cảm</a></nav>
+      <div class="boards">
+        <figure class="board" id="agent-movement"><a class="image-link" href="agent/01-movement.png" target="_blank" rel="noopener"><img src="agent/01-movement.png" loading="lazy" decoding="async" alt="Agent — bảng 01 Di chuyển, 16 ô tư thế concept"></a><figcaption><h3>01 · Di chuyển <span>16 ô concept</span></h3><p>Đứng, đi, chạy, nép, nhảy, rơi, lăn và lao người.</p></figcaption></figure>
+        <figure class="board" id="agent-traversal"><a class="image-link" href="agent/02-traversal-v2.png" target="_blank" rel="noopener"><img src="agent/02-traversal-v2.png" loading="lazy" decoding="async" alt="Agent — bảng 02 Leo trèo và vật thể, 16 ô tư thế concept"></a><figcaption><h3>02 · Leo trèo &amp; vật thể <span>16 ô concept</span></h3><p>Thang, mép bục, rocket, tackle, đẩy đồ, nhặt đồ và ăn mừng.</p></figcaption></figure>
+        <figure class="board" id="agent-firearms"><a class="image-link" href="agent/03-firearms-v2.png" target="_blank" rel="noopener"><img src="agent/03-firearms-v2.png" loading="lazy" decoding="async" alt="Agent — bảng 03 Súng và đồ ném, 16 ô tư thế concept"></a><figcaption><h3>03 · Súng &amp; đồ ném <span>16 ô concept</span></h3><p>Cầm súng thường, ngắm theo góc, ném lựu đạn và chai.</p></figcaption></figure>
+        <figure class="board" id="agent-melee"><a class="image-link" href="agent/04-melee.png" target="_blank" rel="noopener"><img src="agent/04-melee.png" loading="lazy" decoding="async" alt="Agent — bảng 04 Cận chiến, 16 ô tư thế concept"></a><figcaption><h3>04 · Cận chiến <span>16 ô concept</span></h3><p>Nhịp đấm, đá và cách cầm vũ khí cận chiến có trọng lượng.</p></figcaption></figure>
+        <figure class="board" id="agent-damage-fire"><a class="image-link" href="agent/05-damage-fire.png" target="_blank" rel="noopener"><img src="agent/05-damage-fire.png" loading="lazy" decoding="async" alt="Agent — bảng 05 Trúng đòn và lửa, 16 ô tư thế concept"></a><figcaption><h3>05 · Trúng đòn &amp; lửa <span>16 ô concept</span></h3><p>Đau, mất thăng bằng, ngã, gục và hoảng loạn khi quần áo bén lửa.</p></figcaption></figure>
+        <figure class="board" id="agent-variants"><a class="image-link" href="agent/06-variants.png" target="_blank" rel="noopener"><img src="agent/06-variants.png" loading="lazy" decoding="async" alt="Agent — bảng 06 Góc nhìn và biểu cảm, 8 ô toàn thân và 8 chân dung"></a><figcaption><h3>06 · Góc nhìn &amp; biểu cảm <span>16 ô concept</span></h3><p>8 ô toàn thân / biến thể; 8 ô chân dung, gồm biểu cảm và chớp mắt.</p></figcaption></figure>
+      </div>
+    </section>
+
+    <section class="character" id="hideki" aria-labelledby="hideki-title">
+      <div class="character-head"><div><div class="character-number">04 / HIDEKI</div><h2 id="hideki-title">Hideki</h2><p>Tóc đen buộc ngắn, băng trán vải đỏ; áo tập vạt chéo xanh nhạt, lớp trong trắng ngà, đai navy và giày thấp. Trang phục võ thuật thông thường.</p></div><a class="back" href="#groups">↑ Chỉ mục nhóm</a></div>
+      <nav class="localnav" aria-label="Các bảng Hideki"><a href="#hideki-movement">01 · Di chuyển</a><a href="#hideki-traversal">02 · Leo trèo</a><a href="#hideki-firearms">03 · Súng</a><a href="#hideki-melee">04 · Cận chiến</a><a href="#hideki-damage-fire">05 · Trúng đòn / lửa</a><a href="#hideki-variants">06 · Biểu cảm</a></nav>
+      <div class="boards">
+        <figure class="board" id="hideki-movement"><a class="image-link" href="hideki/01-movement.png" target="_blank" rel="noopener"><img src="hideki/01-movement.png" loading="lazy" decoding="async" alt="Hideki — bảng 01 Di chuyển, 16 ô tư thế concept"></a><figcaption><h3>01 · Di chuyển <span>16 ô concept</span></h3><p>Đứng, đi, chạy, nép, nhảy, rơi, lăn và lao người.</p></figcaption></figure>
+        <figure class="board" id="hideki-traversal"><a class="image-link" href="hideki/02-traversal-v2.png" target="_blank" rel="noopener"><img src="hideki/02-traversal-v2.png" loading="lazy" decoding="async" alt="Hideki — bảng 02 Leo trèo và vật thể, 16 ô tư thế concept"></a><figcaption><h3>02 · Leo trèo &amp; vật thể <span>16 ô concept</span></h3><p>Thang, mép bục, rocket, tackle, đẩy đồ, nhặt đồ và ăn mừng.</p></figcaption></figure>
+        <figure class="board" id="hideki-firearms"><a class="image-link" href="hideki/03-firearms.png" target="_blank" rel="noopener"><img src="hideki/03-firearms.png" loading="lazy" decoding="async" alt="Hideki — bảng 03 Súng và đồ ném, 16 ô tư thế concept"></a><figcaption><h3>03 · Súng &amp; đồ ném <span>16 ô concept</span></h3><p>Cầm súng thường, ngắm theo góc, ném lựu đạn và chai.</p></figcaption></figure>
+        <figure class="board" id="hideki-melee"><a class="image-link" href="hideki/04-melee.png" target="_blank" rel="noopener"><img src="hideki/04-melee.png" loading="lazy" decoding="async" alt="Hideki — bảng 04 Cận chiến, 16 ô tư thế concept"></a><figcaption><h3>04 · Cận chiến <span>16 ô concept</span></h3><p>Nhịp đấm, đá và cách cầm vũ khí cận chiến có trọng lượng.</p></figcaption></figure>
+        <figure class="board" id="hideki-damage-fire"><a class="image-link" href="hideki/05-damage-fire.png" target="_blank" rel="noopener"><img src="hideki/05-damage-fire.png" loading="lazy" decoding="async" alt="Hideki — bảng 05 Trúng đòn và lửa, 16 ô tư thế concept"></a><figcaption><h3>05 · Trúng đòn &amp; lửa <span>16 ô concept</span></h3><p>Đau, mất thăng bằng, ngã, gục và hoảng loạn khi quần áo bén lửa.</p></figcaption></figure>
+        <figure class="board" id="hideki-variants"><a class="image-link" href="hideki/06-variants-v2.png" target="_blank" rel="noopener"><img src="hideki/06-variants-v2.png" loading="lazy" decoding="async" alt="Hideki — bảng 06 Góc nhìn và biểu cảm, 8 ô toàn thân và 8 chân dung"></a><figcaption><h3>06 · Góc nhìn &amp; biểu cảm <span>16 ô concept</span></h3><p>8 ô toàn thân / biến thể; 8 ô chân dung, gồm biểu cảm và chớp mắt.</p></figcaption></figure>
+      </div>
+    </section>
+
+    <section class="character" id="blaire" aria-labelledby="blaire-title">
+      <div class="character-head"><div><div class="character-number">05 / BLAIRE</div><h2 id="blaire-title">Blaire</h2><p>Tóc bob ngắn tím mận, áo khoác tiện dụng teal, áo trong sáng, quần than và bốt tối. Giữ kiểu bob nhất quán cả khi nhìn từ phía sau.</p></div><a class="back" href="#groups">↑ Chỉ mục nhóm</a></div>
+      <nav class="localnav" aria-label="Các bảng Blaire"><a href="#blaire-movement">01 · Di chuyển</a><a href="#blaire-traversal">02 · Leo trèo</a><a href="#blaire-firearms">03 · Súng</a><a href="#blaire-melee">04 · Cận chiến</a><a href="#blaire-damage-fire">05 · Trúng đòn / lửa</a><a href="#blaire-variants">06 · Biểu cảm</a></nav>
+      <div class="boards">
+        <figure class="board" id="blaire-movement"><a class="image-link" href="blaire/01-movement.png" target="_blank" rel="noopener"><img src="blaire/01-movement.png" loading="lazy" decoding="async" alt="Blaire — bảng 01 Di chuyển, 16 ô tư thế concept"></a><figcaption><h3>01 · Di chuyển <span>16 ô concept</span></h3><p>Đứng, đi, chạy, nép, nhảy, rơi, lăn và lao người.</p></figcaption></figure>
+        <figure class="board" id="blaire-traversal"><a class="image-link" href="blaire/02-traversal-v2.png" target="_blank" rel="noopener"><img src="blaire/02-traversal-v2.png" loading="lazy" decoding="async" alt="Blaire — bảng 02 Leo trèo và vật thể, 16 ô tư thế concept"></a><figcaption><h3>02 · Leo trèo &amp; vật thể <span>16 ô concept</span></h3><p>Thang, mép bục, rocket, tackle, đẩy đồ, nhặt đồ và ăn mừng.</p></figcaption></figure>
+        <figure class="board" id="blaire-firearms"><a class="image-link" href="blaire/03-firearms-v2.png" target="_blank" rel="noopener"><img src="blaire/03-firearms-v2.png" loading="lazy" decoding="async" alt="Blaire — bảng 03 Súng và đồ ném, 16 ô tư thế concept"></a><figcaption><h3>03 · Súng &amp; đồ ném <span>16 ô concept</span></h3><p>Cầm súng thường, ngắm theo góc, ném lựu đạn và chai.</p></figcaption></figure>
+        <figure class="board" id="blaire-melee"><a class="image-link" href="blaire/04-melee.png" target="_blank" rel="noopener"><img src="blaire/04-melee.png" loading="lazy" decoding="async" alt="Blaire — bảng 04 Cận chiến, 16 ô tư thế concept"></a><figcaption><h3>04 · Cận chiến <span>16 ô concept</span></h3><p>Nhịp đấm, đá và cách cầm vũ khí cận chiến có trọng lượng.</p></figcaption></figure>
+        <figure class="board" id="blaire-damage-fire"><a class="image-link" href="blaire/05-damage-fire.png" target="_blank" rel="noopener"><img src="blaire/05-damage-fire.png" loading="lazy" decoding="async" alt="Blaire — bảng 05 Trúng đòn và lửa, 16 ô tư thế concept"></a><figcaption><h3>05 · Trúng đòn &amp; lửa <span>16 ô concept</span></h3><p>Đau, mất thăng bằng, ngã, gục và hoảng loạn khi quần áo bén lửa.</p></figcaption></figure>
+        <figure class="board" id="blaire-variants"><a class="image-link" href="blaire/06-variants-v2.png" target="_blank" rel="noopener"><img src="blaire/06-variants-v2.png" loading="lazy" decoding="async" alt="Blaire — bảng 06 Góc nhìn và biểu cảm, 8 ô toàn thân và 8 chân dung"></a><figcaption><h3>06 · Góc nhìn &amp; biểu cảm <span>16 ô concept</span></h3><p>8 ô toàn thân / biến thể; 8 ô chân dung, gồm biểu cảm và chớp mắt.</p></figcaption></figure>
+      </div>
+    </section>
+
+    <section class="notes" id="qa-summary"><h2>Ghi chú trước khi duyệt</h2><p><strong>Đã có 31 ảnh được chọn: 1 roster + 30 bảng.</strong> Đây là 480 ô tư thế/biến thể/chân dung, không phải 480 animation độc lập. Các bản sửa v2 đã được chọn tự động trong trang này.</p><p>Một số pha đi/chạy còn gần nhau; nhãn RUN LEFT/RIGHT không được xem là chu kỳ đối chân chuẩn. Góc ngắm, grip và muzzle/cover cần dựng lại khi sản xuất sprite. Mục tiêu 2,5 đầu chưa phải phép đo calibration. Đọc <a href="QA.md">QA và hạn chế cụ thể</a> · <a href="README.md">Phạm vi / nguồn tham khảo</a> · <a href="manifest.json">Manifest ảnh</a>.</p></section>
+    <section class="notes" id="notes" aria-labelledby="notes-title">
+      <h2 id="notes-title">Cách đọc bộ xem này</h2>
+      <ul>
+        <li>30 bảng × 16 ô = 480 ô concept. Có chân dung, biến thể, góc nhìn và tư thế lặp để so sánh; con số này không tương đương số animation hoặc frame dùng trong game.</li>
+        <li>Mỗi bảng theo bố cục 4 × 4 trong prompt. Nhấn ảnh để mở file gốc và xem từng ô. Mỗi bảng có 16 ô đã được xem; số ô không chứng minh mọi pha chuyển động hay chi tiết kỹ thuật đã đúng.</li>
+        <li>Đối chiếu nhận diện, tỉ lệ đầu–thân, độ liền khớp, hướng tay/chân, điểm tì, cách cầm đồ và cảm giác đau/hoảng loạn. Đặc biệt kiểm tra tư thế trái/phải không chỉ là ảnh lặp.</li>
+        <li>Chưa xác minh frame nối tiếp, timing, layer, nền alpha, pivot, hurtbox hoặc socket cầm súng/đầu nòng. Chưa có tích hợp hay kiểm chứng trong runtime.</li>
+        <li>Mục tiêu khoảng 2,5 đầu là định hướng Chibi cho người trưởng thành. Cần đo và duyệt trên ảnh đầu ra trước khi chuyển sang sản xuất tài nguyên game.</li>
+      </ul>
+      <p>Nguồn tạo ảnh: <strong>built-in imagegen</strong>. Xem yêu cầu gốc, danh sách 30 job và 16 tư thế của mỗi bảng trong <a href="prompts.json" target="_blank" rel="noopener">prompts.json</a>.</p>
+    </section>
+  </main>
+  <footer class="wrap"><span>SUPERAGENT · CHIBI / ORDINARY FIVE · 31.10.2026</span><span>Review mỹ thuật · chưa gắn vào game · <a href="#top">Về đầu trang ↑</a></span></footer>
+</body>
+</html>

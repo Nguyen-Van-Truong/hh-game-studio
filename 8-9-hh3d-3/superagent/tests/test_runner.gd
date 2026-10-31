@@ -3401,6 +3401,291 @@ func _run_m7_e2e_match_simulation_suite() -> void:
 		"SF-M36.4: Adaptive 8-Fighter HUD zero-overflow (720p_end=" + str(snappedf(rects_720p[7].end.x, 0.1)) + ", 540p_end=" + str(snappedf(rects_540p[7].end.x, 0.1)) + ") & 8-Fighter Chibi Perf Gate (rig_p95=" + str(snappedf(rig_p95_ms, 0.01)) + "ms <= 1.0ms, full_tick_p95=" + str(snappedf(p95_ms, 0.01)) + "ms <= 5.0ms) verified"
 	)
 
+	# --- SF-M37: Tactical Pause Menu UX & Classical Mechanics Prop-on-Prop Crush Physics (SA-WP12 / CB-EC-61..66) ---
+	# 1. SF-M37.1 (Screenshots 2, 3, 4): On 'steel_harbor', releasing 'crate_hanging_1' (x=-94.0, y=-118.0, mass=3.80)
+	#    falls directly onto 'barrel_exp_drop' (BARREL_EXPLOSIVE at x=-94.0, y=68.5, mass=1.95), catastrophically crushes/detonates
+	#    the barrel (is_destroyed=true, barrel_phase=2), and continues downward with momentum shielding to settle flat on deck_left (y=76.0)!
+	mc.call("start_match", {"mode": "vs", "map_id": "steel_harbor", "two_player": true, "bot_count": 0})
+	var m37_props: Array = mc.get("props") as Array
+	var m37_crate1: Node2D = null
+	var m37_barrel_drop: Node2D = null
+	for p37_v: Variant in m37_props:
+		if is_instance_valid(p37_v):
+			var p37_n: Node2D = p37_v as Node2D
+			var vn37: String = str(p37_n.get("var_name"))
+			if vn37 == "crate_hanging_1":
+				m37_crate1 = p37_n
+			elif vn37 == "barrel_exp_drop":
+				m37_barrel_drop = p37_n
+	if m37_crate1 != null:
+		m37_crate1.call("release_hanging_crate")
+		for _st37: int in range(70):
+			for p37_step: Variant in m37_props:
+				if is_instance_valid(p37_step) and (p37_step as Node2D).has_method("step_prop"):
+					(p37_step as Node2D).call("step_prop", 1.0)
+	var m37_crate1_bot_y: float = (m37_crate1.global_position.y + 8.0) if m37_crate1 != null else 0.0
+	var m37_crate1_rot_deg: float = rad_to_deg(m37_crate1.rotation) if m37_crate1 != null else 999.0
+	var m37_harbor_crush_ok: bool = (
+		m37_crate1 != null
+		and m37_barrel_drop != null
+		and bool(m37_barrel_drop.get("is_destroyed"))
+		and int(m37_barrel_drop.get("barrel_phase")) == 2
+		and not bool(m37_crate1.get("is_destroyed"))
+		and bool(m37_crate1.get("on_ground"))
+		and absf(m37_crate1_bot_y - 76.0) <= 1.0
+		and absf(m37_crate1_rot_deg) <= 1.0
+		and absf(m37_crate1.global_position.x - (-94.0)) <= 4.0
+	)
+	_check(
+		m37_harbor_crush_ok,
+		"SF-M37.1: 'steel_harbor' crate_hanging_1 crushes & detonates barrel_exp_drop underneath it (barrel_destroyed=" + str(m37_barrel_drop != null and bool(m37_barrel_drop.get("is_destroyed"))) + ") and settles flat on deck_left (x=" + str(snappedf(m37_crate1.global_position.x if m37_crate1 != null else 0.0, 0.1)) + ", bot_y=" + str(snappedf(m37_crate1_bot_y, 0.1)) + ", rot=" + str(snappedf(m37_crate1_rot_deg, 0.1)) + " deg)"
+	)
+
+	# 2. SF-M37.2: Classical Mechanics Prop-on-Prop Crush Hierarchy (DESK crushes CHAIR, CRATE_HANGING detonates GASCAN, resting stacked CRATE takes 0 damage)
+	for old_p37: Variant in (mc.get("props") as Array):
+		if is_instance_valid(old_p37):
+			(old_p37 as Node2D).free()
+	(mc.get("props") as Array).clear()
+	var m37_chair: Node2D = mc.call("spawn_interactive_prop", "CHAIR", Vector2(-140.0, 69.0)) as Node2D
+	m37_chair.set("on_ground", true)
+	var m37_desk_fall: Node2D = mc.call("spawn_interactive_prop", "DESK", Vector2(-140.0, -20.0)) as Node2D
+	m37_desk_fall.set("on_ground", false)
+	m37_desk_fall.set("velocity", Vector2(0.0, 6.2))
+
+	var m37_gascan: Node2D = mc.call("spawn_interactive_prop", "GASCAN", Vector2(140.0, 70.5)) as Node2D
+	m37_gascan.set("on_ground", true)
+	var m37_heavy_crate: Node2D = mc.call("spawn_interactive_prop", "CRATE_HANGING", Vector2(140.0, -20.0)) as Node2D
+	m37_heavy_crate.set("is_hanging_released", true)
+	m37_heavy_crate.set("kinematic", false)
+	m37_heavy_crate.set("on_ground", false)
+	m37_heavy_crate.set("velocity", Vector2(0.0, 6.5))
+
+	var m37_stack_bot: Node2D = mc.call("spawn_interactive_prop", "CRATE", Vector2(0.0, 68.5)) as Node2D
+	m37_stack_bot.set("on_ground", true)
+	var m37_stack_top: Node2D = mc.call("spawn_interactive_prop", "CRATE", Vector2(0.0, 52.5)) as Node2D
+	m37_stack_top.set("on_ground", false)
+	m37_stack_top.set("velocity", Vector2(0.0, 0.5))
+	var stack_bot_hp_before: float = float(m37_stack_bot.get("hp"))
+
+	for _st37b: int in range(36):
+		for p37b: Variant in (mc.get("props") as Array):
+			if is_instance_valid(p37b) and (p37b as Node2D).has_method("step_prop"):
+				(p37b as Node2D).call("step_prop", 1.0)
+	var m37_physics_hierarchy_ok: bool = (
+		bool(m37_chair.get("is_destroyed"))
+		and not bool(m37_desk_fall.get("is_destroyed"))
+		and bool(m37_gascan.get("is_destroyed"))
+		and not bool(m37_stack_bot.get("is_destroyed"))
+		and is_equal_approx(float(m37_stack_bot.get("hp")), stack_bot_hp_before)
+	)
+	_check(
+		m37_physics_hierarchy_ok,
+		"SF-M37.2: Classical mechanics prop crush hierarchy verified (DESK crushed CHAIR=" + str(bool(m37_chair.get("is_destroyed"))) + ", CRATE_HANGING detonated GASCAN=" + str(bool(m37_gascan.get("is_destroyed"))) + ", resting stack HP unchanged=" + str(is_equal_approx(float(m37_stack_bot.get("hp")), stack_bot_hp_before)) + ")"
+	)
+
+	# 3. SF-M37.3 (Screenshot 1): Tactical Pause Menu layout, non-overlapping action buttons & Quick Restart map/roster preservation (CB-EC-61..63)
+	var hud37: Node = mc.get("hud_controller") as Node
+	var pause_rects37: Array = hud37.call("get_pause_item_rects", Vector2(1280.0, 720.0)) as Array if hud37 != null else []
+	var pause_layout37: Dictionary = hud37.call("get_pause_panel_layout", Vector2(1280.0, 720.0)) as Dictionary if hud37 != null else {}
+	var panel_rect37: Rect2 = pause_layout37.get("panel", Rect2()) as Rect2
+	var pause_rects_valid: bool = (pause_rects37.size() == 6 and panel_rect37.size.x >= 420.0)
+	for pri: int in range(pause_rects37.size()):
+		var cur_pr: Rect2 = pause_rects37[pri] as Rect2
+		if not panel_rect37.encloses(cur_pr):
+			pause_rects_valid = false
+		if pri + 1 < pause_rects37.size() and cur_pr.end.y > (pause_rects37[pri + 1] as Rect2).position.y + 0.01:
+			pause_rects_valid = false
+	mc.call("start_match", {"mode": "vs", "map_id": "random", "two_player": true, "p1_char": "random", "p2_char": "random", "bot_count": 0})
+	var resolved_map_before: String = str(mc.get("current_map_id"))
+	var resolved_p1_before: String = str(mc.get("_resolved_p1_char"))
+	var resolved_p2_before: String = str(mc.get("_resolved_p2_char"))
+	var f37_0: Node2D = (mc.get("fighters") as Array)[0] as Node2D
+	f37_0.set("hp", 35.0)
+	mc.call("set_paused_state", true)
+	mc.call("execute_pause_menu_action", 1) # Quick Restart
+	var f37_after: Node2D = (mc.get("fighters") as Array)[0] as Node2D
+	var pause_restart_ok: bool = (
+		pause_rects_valid
+		and not bool(mc.get("is_paused"))
+		and str(mc.get("current_map_id")) == resolved_map_before
+		and str(mc.get("_resolved_p1_char")) == resolved_p1_before
+		and str(mc.get("_resolved_p2_char")) == resolved_p2_before
+		and is_equal_approx(float(f37_after.get("hp")), float(f37_after.get("max_hp")))
+	)
+	_check(
+		pause_restart_ok,
+		"SF-M37.3: Tactical Pause Menu 6-button layout & Quick Restart verified (rects_valid=" + str(pause_rects_valid) + ", map_kept=" + str(str(mc.get("current_map_id")) == resolved_map_before) + ", hp_reset=" + str(snappedf(float(f37_after.get("hp")), 0.1)) + ")"
+	)
+
+	# 4. SF-M37.4: Portal Doorway Entity Whitelist (CB-EC-67):
+	#    On 'steel_harbor', bullets fired into upper/lower portal doorways NEVER teleport (stopped by doorway backstop wall),
+	#    whereas InteractiveProps (CRATE), Thrown Bombs (GRENADE), Weapon Pickups, and Fighters cleanly teleport between floors!
+	mc.call("start_match", {"mode": "vs", "map_id": "steel_harbor", "two_player": true, "bot_count": 0})
+	var pm37: Node = mc.get("projectile_manager") as Node
+	if pm37 != null and pm37.has_method("clear_all"):
+		pm37.call("clear_all")
+	var f37_p1: Node2D = (mc.get("fighters") as Array)[0] as Node2D
+	f37_p1.global_position = Vector2(-320.0, -108.0)
+
+	# (a) Bullets (PISTOL, RIFLE, SNIPER) fired left into upper-left portal Rect2(-356, -144, 16, 36) NEVER teleport to lower floor (y > -50.0)
+	var bullet_ever_teleported: bool = false
+	for b_wid37: String in ["PISTOL", "RIFLE", "SNIPER"]:
+		pm37.call("clear_all")
+		pm37.call("spawn_bullet", f37_p1, b_wid37, Vector2(-330.0, -122.0), 180.0)
+		for _bs37: int in range(8):
+			pm37.call("step_projectiles", 1.0)
+			for b37_v: Variant in (pm37.get("bullets") as Array):
+				var b37_d: Dictionary = b37_v as Dictionary
+				var b37_pos: Vector2 = b37_d.get("pos", Vector2.ZERO) as Vector2
+				if bool(b37_d.get("teleported", false)) or b37_pos.y > -50.0:
+					bullet_ever_teleported = true
+	pm37.call("clear_all")
+
+	# (b) Thrown bomb (GRENADE) thrown left into upper-left portal Rect2(-356, -144, 16, 36) teleports down to lower-left portal Rect2(-356, -24, 16, 36) (y > -30.0)
+	pm37.call("spawn_throwable", f37_p1, "GRENADE", Vector2(-334.0, -124.0), 175.0, 72.0)
+	var grenade_teleported_ok: bool = false
+	for _gs37: int in range(12):
+		pm37.call("step_projectiles", 1.0)
+		for th37_v: Variant in (pm37.get("throwables") as Array):
+			var th37_d: Dictionary = th37_v as Dictionary
+			var th37_pos: Vector2 = th37_d.get("pos", Vector2.ZERO) as Vector2
+			if th37_pos.y > -30.0 and float(th37_d.get("portal_cd", 0.0)) > 0.0:
+				grenade_teleported_ok = true
+	pm37.call("clear_all")
+
+	# (c) InteractiveProp (CRATE) sliding left into upper-left portal doorway (y=-115.5 on crane_walk_left y=-108.0) teleports down to lower-left tower floor (y ~ 4.5 on y=12.0)
+	var m37_portal_crate: Node2D = mc.call("spawn_interactive_prop", "CRATE", Vector2(-330.0, -115.5)) as Node2D
+	m37_portal_crate.set("on_ground", true)
+	m37_portal_crate.set("_settling_frames", 0.0)
+	m37_portal_crate.set("velocity", Vector2(-3.2, 0.0))
+	var prop_teleported_ok: bool = false
+	for _ps37: int in range(12):
+		m37_portal_crate.call("step_prop", 1.0)
+		if m37_portal_crate.global_position.y > -30.0:
+			prop_teleported_ok = true
+			break
+	var crate_tp_y: float = m37_portal_crate.global_position.y
+	(mc.get("props") as Array).erase(m37_portal_crate)
+	m37_portal_crate.free()
+
+	# (d) Thrown/sliding Weapon Pickup entering lower-left portal Rect2(-356, -24, 16, 36) teleports up to upper-left portal Rect2(-356, -144, 16, 36) (y < -90.0)
+	(mc.get("pickups") as Array).clear()
+	mc.call("spawn_dropped_weapon", "PISTOL", Vector2(-336.0, 4.0), 12, Vector2(-3.5, -1.0))
+	var pickup_teleported_ok: bool = false
+	for _pks37: int in range(12):
+		mc.call("_step_pickups", 1.0)
+		for pk37_v: Variant in (mc.get("pickups") as Array):
+			var pk37_d: Dictionary = pk37_v as Dictionary
+			var pk37_pos: Vector2 = pk37_d.get("pos", Vector2.ZERO) as Vector2
+			if pk37_pos.y < -90.0:
+				pickup_teleported_ok = true
+
+	_check(
+		not bullet_ever_teleported and grenade_teleported_ok and prop_teleported_ok and pickup_teleported_ok,
+		"SF-M37.4: Portal Doorways block bullets (bullet_tp=" + str(bullet_ever_teleported) + ") while teleporting bombs (grenade_tp=" + str(grenade_teleported_ok) + "), props (prop_tp=" + str(prop_teleported_ok) + ", y=" + str(snappedf(crate_tp_y, 0.1)) + ") & pickups (pickup_tp=" + str(pickup_teleported_ok) + ")"
+	)
+
+	# 5. SF-M37.5: Reinforced Cylindrical Steel Barrel ('BARREL') Durability & 3-Stage Progressive Buckling (CB-EC-68):
+	#    (a) On 'steel_harbor', when steel BARREL ('barrel_deck_l') is next to 'barrel_exp_drop' under 'crate_hanging_1' (as in Screenshot),
+	#        dropping 'crate_hanging_1' (m=3.80) detonates 'barrel_exp_drop' in 1 hit while steel BARREL survives both the heavy drop
+	#        AND the adjacent explosion (~62% HP, Stage 1 dent)!
+	#    (b) Dropping CRATE_HANGING at full terminal velocity (v_y=11.0) onto steel BARREL requires > 2.5 full drops (3 drops):
+	#        - Drop 1: BARREL survives at ~63% HP (_damage_visual_stage == 1, CRATE_HANGING supported on top of BARREL at y=53.0)
+	#        - Drop 2: BARREL survives at ~26% HP (_damage_visual_stage == 2, heavy buckled waist)
+	#        - Drop 3: BARREL ruptures & breaks (is_destroyed == true)
+	mc.call("start_match", {"mode": "vs", "map_id": "steel_harbor", "two_player": true, "bot_count": 0})
+	var sh37_crate_h1: Node2D = null
+	var sh37_barrel_1: Node2D = null
+	var sh37_expl_1: Node2D = null
+	for p37_sh: Variant in (mc.get("props") as Array):
+		if not is_instance_valid(p37_sh):
+			continue
+		var pn37: Node2D = p37_sh as Node2D
+		var vn37: String = str(pn37.get("var_name"))
+		if vn37 == "crate_hanging_1":
+			sh37_crate_h1 = pn37
+		elif vn37 == "barrel_deck_l":
+			sh37_barrel_1 = pn37
+		elif vn37 == "barrel_exp_drop":
+			sh37_expl_1 = pn37
+	if sh37_barrel_1 != null:
+		sh37_barrel_1.global_position = Vector2(-105.0, 68.5)
+		sh37_barrel_1.set("on_ground", true)
+		sh37_barrel_1.set("_settling_frames", 0.0)
+	if sh37_crate_h1 != null:
+		sh37_crate_h1.call("release_hanging_crate")
+	for _sh_step: int in range(52):
+		for p37_s: Variant in (mc.get("props") as Array):
+			if is_instance_valid(p37_s) and (p37_s as Node2D).has_method("step_prop"):
+				(p37_s as Node2D).call("step_prop", 1.0)
+	var sh_expl_detonated: bool = (sh37_expl_1 != null and (bool(sh37_expl_1.get("is_destroyed")) or int(sh37_expl_1.get("barrel_phase")) > 0))
+	var sh_barrel_survived_drop1: bool = (
+		sh37_barrel_1 != null
+		and not bool(sh37_barrel_1.get("is_destroyed"))
+		and float(sh37_barrel_1.get("hp")) >= 75.0
+		and int(sh37_barrel_1.get("_damage_visual_stage")) == 1
+	)
+
+	# Direct terminal-velocity (v_y=11.0) multi-drop endurance test on BARREL on 'steel_harbor' deck_left (floor y=76.0, barrel y=68.5, top y=61.0):
+	for p_clr37: Variant in (mc.get("props") as Array):
+		if is_instance_valid(p_clr37):
+			(p_clr37 as Node2D).free()
+	(mc.get("props") as Array).clear()
+	var test_barrel37: Node2D = mc.call("spawn_interactive_prop", "BARREL", Vector2(-94.0, 68.5)) as Node2D
+	test_barrel37.set("on_ground", true)
+	test_barrel37.set("_settling_frames", 0.0)
+	var test_heavy37: Node2D = mc.call("spawn_interactive_prop", "CRATE_HANGING", Vector2(-94.0, 18.0)) as Node2D
+	test_heavy37.set("is_hanging_released", true)
+	test_heavy37.set("kinematic", false)
+	test_heavy37.set("on_ground", false)
+	test_heavy37.set("_settling_frames", 0.0)
+	test_heavy37.set("velocity", Vector2(0.0, 11.0))
+
+	# Drop 1
+	for _d1_step: int in range(12):
+		test_heavy37.call("step_prop", 1.0)
+		test_barrel37.call("step_prop", 1.0)
+	var hp_after_drop1: float = float(test_barrel37.get("hp"))
+	var stage_after_drop1: int = int(test_barrel37.get("_damage_visual_stage"))
+	var alive_after_drop1: bool = (not bool(test_barrel37.get("is_destroyed")) and hp_after_drop1 > 75.0 and stage_after_drop1 == 1)
+	var supported_on_barrel_ok: bool = (bool(test_heavy37.get("on_ground")) and absf(test_heavy37.global_position.y - 53.0) <= 1.5)
+
+	# Reset heavy crate for Drop 2
+	(test_heavy37.get("crushed_prop_ids") as Dictionary).clear()
+	(test_heavy37.get("_prop_impact_cooldowns") as Dictionary).clear()
+	(test_barrel37.get("_prop_impact_cooldowns") as Dictionary).clear()
+	test_heavy37.global_position = Vector2(-94.0, 18.0)
+	test_heavy37.set("on_ground", false)
+	test_heavy37.set("velocity", Vector2(0.0, 11.0))
+	for _d2_step: int in range(12):
+		test_heavy37.call("step_prop", 1.0)
+		test_barrel37.call("step_prop", 1.0)
+	var hp_after_drop2: float = float(test_barrel37.get("hp"))
+	var stage_after_drop2: int = int(test_barrel37.get("_damage_visual_stage"))
+	var alive_after_drop2: bool = (not bool(test_barrel37.get("is_destroyed")) and hp_after_drop2 > 20.0 and stage_after_drop2 == 2)
+
+	# Reset heavy crate for Drop 3 (must finally break BARREL!)
+	(test_heavy37.get("crushed_prop_ids") as Dictionary).clear()
+	(test_heavy37.get("_prop_impact_cooldowns") as Dictionary).clear()
+	(test_barrel37.get("_prop_impact_cooldowns") as Dictionary).clear()
+	test_heavy37.global_position = Vector2(-94.0, 18.0)
+	test_heavy37.set("on_ground", false)
+	test_heavy37.set("velocity", Vector2(0.0, 11.0))
+	for _d3_step: int in range(12):
+		test_heavy37.call("step_prop", 1.0)
+		test_barrel37.call("step_prop", 1.0)
+	var broke_on_drop3: bool = bool(test_barrel37.get("is_destroyed"))
+
+	_check(
+		sh_expl_detonated
+		and sh_barrel_survived_drop1
+		and alive_after_drop1
+		and supported_on_barrel_ok
+		and alive_after_drop2
+		and broke_on_drop3,
+		"SF-M37.5: Reinforced steel BARREL requires >2.5 full heavy drops (3 hits) to break (sh_survived=" + str(sh_barrel_survived_drop1) + ", drop1_hp=" + str(snappedf(hp_after_drop1, 0.1)) + "/stage=" + str(stage_after_drop1) + ", supported=" + str(supported_on_barrel_ok) + ", drop2_hp=" + str(snappedf(hp_after_drop2, 0.1)) + "/stage=" + str(stage_after_drop2) + ", drop3_broke=" + str(broke_on_drop3) + ")"
+	)
+
 	mc.call("_clear_match_entities")
 	root.remove_child(mc)
 	mc.free()

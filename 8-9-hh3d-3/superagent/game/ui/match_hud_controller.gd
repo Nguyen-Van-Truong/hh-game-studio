@@ -300,12 +300,6 @@ func _draw_hud_surface(canvas: Control) -> void:
 	var fighters: Array = fighters_var as Array if typeof(fighters_var) == TYPE_ARRAY else []
 	var ui_scale: float = clampf(vp_size.y / 400.0, 1.0, 1.5)
 	var strip_h: float = 74.0 * ui_scale
-	if match_world.get("is_paused") == true:
-		var pause_box := Rect2(vp_size.x * 0.5 - 130.0 * ui_scale, strip_h + 28.0 * ui_scale, 260.0 * ui_scale, 58.0 * ui_scale)
-		canvas.draw_rect(pause_box, Color(0.03, 0.04, 0.08, 0.94), true)
-		canvas.draw_rect(pause_box, Color(0.95, 0.77, 0.26, 0.95), false, 2.0)
-		canvas.draw_string(font, Vector2(pause_box.position.x, pause_box.position.y + 25.0 * ui_scale), "PAUSED", HORIZONTAL_ALIGNMENT_CENTER, pause_box.size.x, maxi(14, int(17.0 * ui_scale)), Color("ffe5a1"))
-		canvas.draw_string(font, Vector2(pause_box.position.x, pause_box.position.y + 45.0 * ui_scale), "ESC RESUME / SHIFT+ESC MENU", HORIZONTAL_ALIGNMENT_CENTER, pause_box.size.x, maxi(10, int(9.0 * ui_scale)), Color("b8c9e4"))
 
 	# 1. Top status strip background
 	canvas.draw_rect(Rect2(0.0, 0.0, vp_size.x, strip_h), Color(0.05, 0.05, 0.07, 0.84), true)
@@ -599,6 +593,296 @@ func _draw_hud_surface(canvas: Control) -> void:
 				int(8.0 * ui_scale),
 				Color(0.8, 0.88, 0.98, 0.95)
 			)
+
+	# 6. Interactive Tactical Pause Overlay (drawn last so world-space bars never overlap the pause panel)
+	if match_world.get("is_paused") == true:
+		_draw_pause_overlay(canvas, font, vp_size, ui_scale, strip_h, hud_fighters)
+
+
+func get_pause_panel_layout(vp_size: Vector2) -> Dictionary:
+	var safe_vp: Vector2 = vp_size if (vp_size.is_finite() and vp_size.x > 0.0 and vp_size.y > 0.0) else Vector2(960.0, 540.0)
+	var ui_scale: float = clampf(safe_vp.y / 400.0, 1.0, 1.5)
+	var strip_h: float = 74.0 * ui_scale
+	var panel_w: float = minf(safe_vp.x - 24.0 * ui_scale, 516.0 * ui_scale)
+	var panel_h: float = minf(safe_vp.y - strip_h - 16.0 * ui_scale, 252.0 * ui_scale)
+	var panel_x: float = (safe_vp.x - panel_w) * 0.5
+	var panel_y: float = strip_h + maxf(8.0 * ui_scale, (safe_vp.y - strip_h - panel_h) * 0.46)
+	var panel_rect := Rect2(panel_x, panel_y, panel_w, panel_h)
+
+	var header_h: float = 30.0 * ui_scale
+	var footer_h: float = 22.0 * ui_scale
+	var body_y: float = panel_y + header_h + 6.0 * ui_scale
+	var body_h: float = maxf(60.0, panel_h - header_h - footer_h - 12.0 * ui_scale)
+	var pad_x: float = 10.0 * ui_scale
+	var col_gap: float = 10.0 * ui_scale
+	var left_w: float = (panel_w - pad_x * 2.0 - col_gap) * 0.52
+	var right_w: float = panel_w - pad_x * 2.0 - col_gap - left_w
+	var left_x: float = panel_x + pad_x
+	var right_x: float = left_x + left_w + col_gap
+
+	var item_count: int = 6
+	var item_gap: float = 3.0 * ui_scale
+	var item_h: float = (body_h - item_gap * float(item_count - 1)) / float(item_count)
+	var item_rects: Array[Rect2] = []
+	for i: int in range(item_count):
+		item_rects.append(Rect2(left_x, body_y + float(i) * (item_h + item_gap), left_w, item_h))
+
+	return {
+		"panel": panel_rect,
+		"header": Rect2(panel_x, panel_y, panel_w, header_h),
+		"footer": Rect2(panel_x, panel_y + panel_h - footer_h, panel_w, footer_h),
+		"left_col": Rect2(left_x, body_y, left_w, body_h),
+		"right_col": Rect2(right_x, body_y, right_w, body_h),
+		"items": item_rects,
+	}
+
+
+func get_pause_item_rects(vp_size: Vector2) -> Array[Rect2]:
+	var layout: Dictionary = get_pause_panel_layout(vp_size)
+	return layout.get("items", []) as Array[Rect2]
+
+
+func _draw_pause_overlay(
+	canvas: Control,
+	font: Font,
+	vp_size: Vector2,
+	ui_scale: float,
+	strip_h: float,
+	hud_fighters: Array[Node2D]
+) -> void:
+	# 1. Dim the arena below the top HUD strip so player status cards remain bright & readable
+	canvas.draw_rect(Rect2(0.0, strip_h, vp_size.x, maxf(0.0, vp_size.y - strip_h)), Color(0.02, 0.03, 0.06, 0.72), true)
+
+	var layout: Dictionary = get_pause_panel_layout(vp_size)
+	var panel_rect: Rect2 = layout["panel"] as Rect2
+	var header_rect: Rect2 = layout["header"] as Rect2
+	var footer_rect: Rect2 = layout["footer"] as Rect2
+	var right_col: Rect2 = layout["right_col"] as Rect2
+	var item_rects: Array[Rect2] = layout["items"] as Array[Rect2]
+
+	# 2. Outer shadow, dark slate body, and gold tactical border
+	canvas.draw_rect(Rect2(panel_rect.position + Vector2(4.0, 5.0) * ui_scale, panel_rect.size), Color(0.0, 0.0, 0.0, 0.55), true)
+	canvas.draw_rect(panel_rect, Color(0.04, 0.05, 0.09, 0.96), true)
+	canvas.draw_rect(header_rect, Color(0.08, 0.10, 0.16, 0.98), true)
+	canvas.draw_rect(footer_rect, Color(0.06, 0.08, 0.13, 0.98), true)
+	canvas.draw_rect(panel_rect, Color(0.95, 0.77, 0.26, 0.95), false, 2.0)
+	canvas.draw_line(
+		Vector2(panel_rect.position.x + 1.0, header_rect.end.y),
+		Vector2(panel_rect.end.x - 1.0, header_rect.end.y),
+		Color(0.95, 0.77, 0.26, 0.55),
+		1.2
+	)
+	canvas.draw_line(
+		Vector2(panel_rect.position.x + 1.0, footer_rect.position.y),
+		Vector2(panel_rect.end.x - 1.0, footer_rect.position.y),
+		Color(0.36, 0.44, 0.58, 0.55),
+		1.0
+	)
+
+	# 3. Header: Title + Active Match Badge (Map & Mode)
+	var title_fs: int = maxi(12, int(13.0 * ui_scale))
+	var badge_fs: int = maxi(8, int(8.0 * ui_scale))
+	canvas.draw_string(
+		font,
+		Vector2(header_rect.position.x + 12.0 * ui_scale, header_rect.position.y + 20.5 * ui_scale),
+		"PAUSED  //  TACTICAL MENU",
+		HORIZONTAL_ALIGNMENT_LEFT,
+		header_rect.size.x * 0.55,
+		title_fs,
+		Color("ffe5a1")
+	)
+
+	var map_name: String = str(match_world.get("current_map_id")).to_upper().replace("_", " ")
+	if map_name.is_empty():
+		map_name = "ARENA"
+	var gmode: String = str(match_world.get("game_mode")).to_lower()
+	var mode_tag: String = "VS BRAWL"
+	if gmode == "stage":
+		mode_tag = "STAGE " + str(int(match_world.get("stage_level"))) + "/12"
+	elif gmode == "survival":
+		mode_tag = "SURVIVAL W" + str(int(match_world.get("survival_wave")))
+	elif bool(match_world.get("two_player")):
+		mode_tag = "2P LOCAL VS"
+	var header_badge: String = "MAP: " + map_name + "  •  " + mode_tag
+	canvas.draw_string(
+		font,
+		Vector2(header_rect.position.x + header_rect.size.x * 0.42, header_rect.position.y + 19.5 * ui_scale),
+		header_badge,
+		HORIZONTAL_ALIGNMENT_RIGHT,
+		header_rect.size.x * 0.58 - 12.0 * ui_scale,
+		badge_fs,
+		Color(0.68, 0.84, 1.0, 0.96)
+	)
+
+	# 4. Left Column: 6 Interactive Command Rows with Instant Hotkey Badges
+	var sel_idx: int = int(match_world.get("pause_selected_index")) if match_world.get("pause_selected_index") != null else 0
+	var audio_mode: int = int(match_world.get("pause_audio_mode")) if match_world.get("pause_audio_mode") != null else 0
+	var cam_wide: bool = bool(match_world.get("pause_camera_wide")) if match_world.get("pause_camera_wide") != null else false
+
+	var audio_label: String = "AUDIO: ON (100%)"
+	if audio_mode == 1:
+		audio_label = "AUDIO: LOW (50%)"
+	elif audio_mode == 2:
+		audio_label = "AUDIO: MUTED"
+	var cam_label: String = "CAMERA: WIDE ARENA" if cam_wide else "CAMERA: AUTO ZOOM"
+
+	var row_labels: Array[String] = [
+		"RESUME MATCH",
+		"QUICK RESTART",
+		"CHANGE MAP / SETUP",
+		audio_label,
+		cam_label,
+		"MAIN MENU",
+	]
+	var row_hotkeys: Array[String] = [
+		"ESC / ENTER",
+		"R",
+		"C / TAB",
+		"M / ◄ ►",
+		"Z / ◄ ►",
+		"Q / SHIFT+ESC",
+	]
+
+	var row_fs: int = maxi(8, int(8.5 * ui_scale))
+	var key_fs: int = maxi(7, int(7.5 * ui_scale))
+	for i: int in range(item_rects.size()):
+		var r: Rect2 = item_rects[i]
+		var is_sel: bool = (i == sel_idx)
+		var bg_col: Color = Color(0.16, 0.21, 0.32, 0.96) if is_sel else Color(0.07, 0.09, 0.14, 0.90)
+		var border_col: Color = Color(0.96, 0.78, 0.26, 0.95) if is_sel else Color(0.24, 0.30, 0.42, 0.75)
+		canvas.draw_rect(r, bg_col, true)
+		canvas.draw_rect(r, border_col, false, 1.4 if is_sel else 1.0)
+		if is_sel:
+			canvas.draw_rect(Rect2(r.position.x, r.position.y, 3.5 * ui_scale, r.size.y), Color(1.0, 0.80, 0.22, 1.0), true)
+
+		var prefix: String = "▸ " if is_sel else "  "
+		var txt_col: Color = Color("ffe5a1") if is_sel else Color(0.84, 0.90, 0.98, 0.95)
+		var text_y: float = r.position.y + r.size.y * 0.66
+		canvas.draw_string(
+			font,
+			Vector2(r.position.x + 7.0 * ui_scale, text_y),
+			prefix + row_labels[i],
+			HORIZONTAL_ALIGNMENT_LEFT,
+			r.size.x * 0.66,
+			row_fs,
+			txt_col
+		)
+
+		var hk_str: String = "[" + row_hotkeys[i] + "]"
+		var pill_w: float = minf(r.size.x * 0.36, (float(hk_str.length()) * 4.8 + 10.0) * ui_scale)
+		var pill_h: float = maxf(12.0 * ui_scale, r.size.y - 6.0 * ui_scale)
+		var pill_rect := Rect2(r.end.x - pill_w - 5.0 * ui_scale, r.position.y + (r.size.y - pill_h) * 0.5, pill_w, pill_h)
+		canvas.draw_rect(pill_rect, Color(0.04, 0.05, 0.08, 0.92), true)
+		canvas.draw_rect(pill_rect, Color(0.95, 0.77, 0.26, 0.75) if is_sel else Color(0.32, 0.40, 0.54, 0.65), false, 1.0)
+		canvas.draw_string(
+			font,
+			Vector2(pill_rect.position.x + 2.0, pill_rect.position.y + pill_rect.size.y * 0.70),
+			hk_str,
+			HORIZONTAL_ALIGNMENT_CENTER,
+			pill_rect.size.x - 4.0,
+			key_fs,
+			Color(0.98, 0.86, 0.42, 1.0) if is_sel else Color(0.68, 0.78, 0.92, 0.92)
+		)
+
+	# 5. Right Column: Active Fighter Status + P1/P2 Quick Controls Cheatsheet
+	canvas.draw_rect(right_col, Color(0.06, 0.08, 0.13, 0.92), true)
+	canvas.draw_rect(right_col, Color(0.26, 0.33, 0.46, 0.80), false, 1.0)
+
+	var rc_pad: float = 8.0 * ui_scale
+	var rc_x: float = right_col.position.x + rc_pad
+	var rc_w: float = right_col.size.x - rc_pad * 2.0
+	var cur_y: float = right_col.position.y + 13.0 * ui_scale
+	var sec_fs: int = maxi(8, int(8.0 * ui_scale))
+	var sub_fs: int = maxi(7, int(7.2 * ui_scale))
+
+	canvas.draw_string(
+		font,
+		Vector2(rc_x, cur_y),
+		"ACTIVE COMBATANTS",
+		HORIZONTAL_ALIGNMENT_LEFT,
+		rc_w,
+		sec_fs,
+		Color(0.98, 0.84, 0.36, 0.98)
+	)
+	cur_y += 12.0 * ui_scale
+
+	var shown_humans: int = 0
+	for hf: Node2D in hud_fighters:
+		if not is_instance_valid(hf) or shown_humans >= 2:
+			continue
+		if shown_humans > 0 and bool(hf.get("is_bot")) and hud_fighters.size() > 2:
+			continue
+		var tag_prefix: String = ("P" + str(int(hf.get("slot_index")) + 1) + ": ") if not bool(hf.get("is_bot")) else "BOT: "
+		var w_line: String = tag_prefix + format_fighter_weapon_label(hf)
+		var f_hp: int = int( round(maxf(0.0, float(hf.get("hp")) if hf.get("hp") != null else 100.0)) )
+		var f_col: Color = Color(0.55, 0.95, 0.62, 0.98) if not bool(hf.get("is_bot")) else Color(0.95, 0.72, 0.62, 0.95)
+		canvas.draw_string(
+			font,
+			Vector2(rc_x, cur_y),
+			_fit_card_name(font, w_line + " (" + str(f_hp) + " HP)", rc_w, sub_fs),
+			HORIZONTAL_ALIGNMENT_LEFT,
+			rc_w,
+			sub_fs,
+			f_col
+		)
+		cur_y += 11.5 * ui_scale
+		shown_humans += 1
+
+	cur_y += 3.0 * ui_scale
+	canvas.draw_line(Vector2(rc_x, cur_y - 6.0 * ui_scale), Vector2(rc_x + rc_w, cur_y - 6.0 * ui_scale), Color(0.28, 0.35, 0.48, 0.65), 1.0)
+	canvas.draw_string(
+		font,
+		Vector2(rc_x, cur_y + 4.0 * ui_scale),
+		"CONTROLS QUICK-GUIDE (P1 / P2)",
+		HORIZONTAL_ALIGNMENT_LEFT,
+		rc_w,
+		sec_fs,
+		Color(0.98, 0.84, 0.36, 0.98)
+	)
+	cur_y += 15.5 * ui_scale
+
+	var guide_rows: Array[Array] = [
+		["MOVE / AIM", "ARROWS / WASD"],
+		["ROLL / DROP", "DOWN + L/R / JUMP"],
+		["MELEE / SWAP", "NUM 1 (Z) / J"],
+		["SHOOT (HOLD)", "NUM 2 (X) / K"],
+		["GRENADE", "NUM 3 (C) / L"],
+		["POWERUP", "NUM 4 (V) / ;"],
+		["SKILLS 1-4", "5 6 7 8 / U I O P"],
+	]
+	var row_step_y: float = minf(12.2 * ui_scale, (right_col.end.y - cur_y - 4.0 * ui_scale) / float(guide_rows.size()))
+	for gr: Array in guide_rows:
+		canvas.draw_string(
+			font,
+			Vector2(rc_x, cur_y),
+			str(gr[0]),
+			HORIZONTAL_ALIGNMENT_LEFT,
+			rc_w * 0.46,
+			sub_fs,
+			Color(0.74, 0.82, 0.94, 0.94)
+		)
+		canvas.draw_string(
+			font,
+			Vector2(rc_x + rc_w * 0.44, cur_y),
+			str(gr[1]),
+			HORIZONTAL_ALIGNMENT_RIGHT,
+			rc_w * 0.56,
+			sub_fs,
+			Color(0.96, 0.92, 0.76, 0.96)
+		)
+		cur_y += row_step_y
+
+	# 6. Footer Prompt (preserves exact "ESC RESUME / SHIFT+ESC MENU" substring for regression compatibility)
+	var foot_fs: int = maxi(8, int(8.0 * ui_scale))
+	canvas.draw_string(
+		font,
+		Vector2(footer_rect.position.x + 8.0 * ui_scale, footer_rect.position.y + 15.0 * ui_scale),
+		"W/S or ▲/▼: SELECT  •  ENTER: CONFIRM  •  R: RESTART  •  ESC RESUME / SHIFT+ESC MENU",
+		HORIZONTAL_ALIGNMENT_CENTER,
+		footer_rect.size.x - 16.0 * ui_scale,
+		foot_fs,
+		Color("b8c9e4")
+	)
 
 
 func _draw_fighter_card(

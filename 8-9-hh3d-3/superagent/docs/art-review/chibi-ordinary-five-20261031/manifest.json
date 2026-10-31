@@ -1,0 +1,409 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-10-31T03:30:50.412Z",
+  "product_scope": "8-9-hh3d-3/superagent",
+  "purpose": "owner_art_review",
+  "generation_mode": "built-in imagegen",
+  "runtime_ready": false,
+  "runtime_changes_by_this_task": false,
+  "reference_head": "9d4e26488ea4ab391013f5296479434a99566c6e",
+  "reference_tree_was_dirty": true,
+  "roster": "00-roster.png",
+  "characters": [
+    {
+      "id": "johnny",
+      "name": "JOHNNY",
+      "desc": "brown angular hair with orange dyed lock, orange/navy zip hoodie with slate sleeves, navy cargo trousers, navy cream-soled high tops"
+    },
+    {
+      "id": "boris",
+      "name": "BORIS",
+      "desc": "grey silver short crop, subtle stubble, stocky square face and torso, olive utility jacket/dark tee, charcoal cargo trousers, brown-black boots"
+    },
+    {
+      "id": "agent",
+      "name": "AGENT",
+      "desc": "slick dark hair, normal dark sunglasses, charcoal navy suit, white shirt, orange short tie, dark trousers and black shoes"
+    },
+    {
+      "id": "hideki",
+      "name": "HIDEKI",
+      "desc": "dark swept/tied short hair, red cloth headband, light blue wrap shirt with white inner panel/navy waist tie, dark short loose trousers, flat navy shoes"
+    },
+    {
+      "id": "blaire",
+      "name": "BLAIRE",
+      "desc": "adult woman, short purple/plum BOB hair in every angle, teal utility jacket/light shirt, charcoal cargo trousers, dark boots"
+    }
+  ],
+  "counts": {
+    "selected_png": 31,
+    "action_boards": 30,
+    "board_slots": 480,
+    "unique_animations": null
+  },
+  "selected_images": [
+    {
+      "file": "00-roster.png",
+      "width": 1983,
+      "height": 793,
+      "sha256": "63bb2696c74024e06700578474f43e203f94e33d083bf769dbeb15986574c7fa",
+      "bytes": 1641133,
+      "generation_source": "C:\\Users\\truon\\.codex\\generated_images\\01a18c9f-7ab4-7b62-b683-e1218ed7a109\\exec-e32b936c-1b1b-48d4-96f3-cc8aacd2cbff.png"
+    },
+    {
+      "file": "johnny/01-movement-v2.png",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "a8f79621fa95bff5912dc56925192d22fda2ae3439a9bc20600e9abb3309bb7f",
+      "bytes": 1972252,
+      "generation_source": "C:\\Users\\truon\\.codex\\generated_images\\01a18c9f-7ab4-7b62-b683-e1218ed7a109\\exec-c3e3dac8-9be1-4d52-a48a-3f6ad41913d4.png"
+    },
+    {
+      "file": "johnny/02-traversal-v2.png",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "5f04cee022acf4a540029f901ba98f6bc5ad01bafb3c6b7afe6f66039a301551",
+      "bytes": 1965773,
+      "generation_source": "C:\\Users\\truon\\.codex\\generated_images\\01a18c9f-7ab4-7b62-b683-e1218ed7a109\\exec-cbd9a59a-4f35-4157-ba3e-addeb52cf92d.png"
+    },
+    {
+      "file": "johnny/03-firearms-v2.png",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "1f348009ea3ad8db5d01acd8b2a243b9ac13203734ec08023fc8d265cc7b5699",
+      "bytes": 2009929,
+      "generation_source": "C:\\Users\\truon\\.codex\\generated_images\\01a18c9f-7ab4-7b62-b683-e1218ed7a109\\exec-85d9588b-4e26-426c-8df3-f259af3e58b5.png"
+    },
+    {
+      "file": "johnny/04-melee-v2.png",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "98ca005a2b9c43c3775eef150b9579af4003e83a1b96d55ac3bb83d039bcb998",
+      "bytes": 1960368,
+      "generation_source": "C:\\Users\\truon\\.codex\\generated_images\\01a18c9f-7ab4-7b62-b683-e1218ed7a109\\exec-37b7266d-f5a0-450d-b3f0-761b71a083a5.png"
+    },
+    {
+      "file": "johnny/05-damage-fire.png",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "13d668d289c819f45325a9393e8d46f77e950e868e8f78e67f4cd15fe7625e95",
+      "bytes": 2002370,
+      "generation_source": "C:\\Users\\truon\\.codex\\generated_images\\01a18c9f-7ab4-7b62-b683-e1218ed7a109\\exec-cd391039-899e-4622-9043-69db797af0ec.png"
+    },
+    {
+      "file": "johnny/06-variants.png",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "3842e12a3d389dd1fc5e8264218983f4334f87c3f25c7f1098f1b6837b5bd6ff",
+      "bytes": 1927830,
+      "generation_source": "C:\\Users\\truon\\.codex\\generated_images\\01a18c9f-7ab4-7b62-b683-e1218ed7a109\\exec-63db5868-6cc3-49d3-9de2-2e245b7eaa17.png"
+    },
+    {
+      "file": "boris/01-movement.png",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "64bf240f18fa8807d7698f487083aa8658b0ac9e2bbf1abff8f7e1eba94d9de6",
+      "bytes": 1899723,
+      "generation_source": "C:\\Users\\truon\\.codex\\generated_images\\01a18c9f-7ab4-7b62-b683-e1218ed7a109\\exec-cbd63a5c-6e39-4839-9399-5b1104049135.png"
+    },
+    {
+      "file": "boris/02-traversal-v2.png",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "e06c71e47967689a52b9ac2a93f3e88c770fc9addcb7eb20923f5563d7f5ca04",
+      "bytes": 1854617,
+      "generation_source": "C:\\Users\\truon\\.codex\\generated_images\\01a18c9f-7ab4-7b62-b683-e1218ed7a109\\exec-9cc90864-f296-46b1-a41a-73ee866568d4.png"
+    },
+    {
+      "file": "boris/03-firearms.png",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "810f955e6cff5b9446c2c302f156232d167cf6eb996c5a6b437774dd2ebc4666",
+      "bytes": 1976249,
+      "generation_source": "C:\\Users\\truon\\.codex\\generated_images\\01a18c9f-7ab4-7b62-b683-e1218ed7a109\\exec-496a75a8-efdf-4dbd-830e-2b2376ff3434.png"
+    },
+    {
+      "file": "boris/04-melee.png",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "47061f7546ba27b2937350868b5e68739f4c33ecf0ecef8460f96a31e422e33a",
+      "bytes": 2076469,
+      "generation_source": "C:\\Users\\truon\\.codex\\generated_images\\01a18c9f-7ab4-7b62-b683-e1218ed7a109\\exec-ed3f5bdf-4c42-4331-bb3c-4e847656d69b.png"
+    },
+    {
+      "file": "boris/05-damage-fire.png",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "f8a1fa684668f565fc297d95883d4acd63c611666868d7ccf05ef08d99299187",
+      "bytes": 1997574,
+      "generation_source": "C:\\Users\\truon\\.codex\\generated_images\\01a18c9f-7ab4-7b62-b683-e1218ed7a109\\exec-ebf2cb29-3057-4019-b906-232b3e9e10cc.png"
+    },
+    {
+      "file": "boris/06-variants-v2.png",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "c9394c75c59b01b49980de9445451701f835eda41a87c7d15cdb7e7157c272f6",
+      "bytes": 2004850,
+      "generation_source": "C:\\Users\\truon\\.codex\\generated_images\\01a18c9f-7ab4-7b62-b683-e1218ed7a109\\exec-7702fac6-3270-401e-91e3-123491dcb229.png"
+    },
+    {
+      "file": "agent/01-movement.png",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "e356cba55a82f49d6006a2feda6c2f1310d440c6ffd549af10da7770458139df",
+      "bytes": 1921013,
+      "generation_source": "C:\\Users\\truon\\.codex\\generated_images\\01a18c9f-7ab4-7b62-b683-e1218ed7a109\\exec-800dea82-aa2a-47c3-8edc-2883ae89343e.png"
+    },
+    {
+      "file": "agent/02-traversal-v2.png",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "95617c623aa9fa883870108e0e4030ccb1d7f727f50134ea697d2681f8a2c1be",
+      "bytes": 1890056,
+      "generation_source": "C:\\Users\\truon\\.codex\\generated_images\\01a18c9f-7ab4-7b62-b683-e1218ed7a109\\exec-4e95913f-50cf-462b-827d-19b1ea96e6c8.png"
+    },
+    {
+      "file": "agent/03-firearms-v2.png",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "f80cc28e76b8669fb4ec232fdc217032258965d50e6a20ce39a0fc28ae739270",
+      "bytes": 1965273,
+      "generation_source": "C:\\Users\\truon\\.codex\\generated_images\\01a18c9f-7ab4-7b62-b683-e1218ed7a109\\exec-48711e75-4d56-4587-9cba-23b4f65815e0.png"
+    },
+    {
+      "file": "agent/04-melee.png",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "c4b2e4ddff513bf9c201b52126cb6cab4a960974804f758b5164eeb1191c9aaf",
+      "bytes": 1876696,
+      "generation_source": "C:\\Users\\truon\\.codex\\generated_images\\01a18c9f-7ab4-7b62-b683-e1218ed7a109\\exec-153ad8e6-cc2b-42fe-804a-82498ed41715.png"
+    },
+    {
+      "file": "agent/05-damage-fire.png",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "9f3ef9c4da7d946662ecbff5fae24a85b884f9d3ee935d9a6e215a63d9eaaa8a",
+      "bytes": 1906378,
+      "generation_source": "C:\\Users\\truon\\.codex\\generated_images\\01a18c9f-7ab4-7b62-b683-e1218ed7a109\\exec-ead19a00-a8ad-4d88-ba74-06566ed3336c.png"
+    },
+    {
+      "file": "agent/06-variants.png",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "424fba55bf0221a549d539fec2e1a37fed2b132d0130e5a2888ba56315e3c53d",
+      "bytes": 1956186,
+      "generation_source": "C:\\Users\\truon\\.codex\\generated_images\\01a18c9f-7ab4-7b62-b683-e1218ed7a109\\exec-e24e7fed-0c4e-45c7-8b09-165ae22d3305.png"
+    },
+    {
+      "file": "hideki/01-movement.png",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "b325f4394cd8bcdf660777296e7e22aa088fc41a36b177e57a1d433b6962a931",
+      "bytes": 2001436,
+      "generation_source": "C:\\Users\\truon\\.codex\\generated_images\\01a18c9f-7ab4-7b62-b683-e1218ed7a109\\exec-099b2a2f-449d-4e67-a8b1-48550cd78881.png"
+    },
+    {
+      "file": "hideki/02-traversal-v2.png",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "7d4ef0bbc1f8d021d8d7ba57a93c6a575c3e6c3da9c53ce2b2db4a96996d7b03",
+      "bytes": 1978834,
+      "generation_source": "C:\\Users\\truon\\.codex\\generated_images\\01a18c9f-7ab4-7b62-b683-e1218ed7a109\\exec-871ccd23-3742-4055-8d6e-4af5aee8c8cd.png"
+    },
+    {
+      "file": "hideki/03-firearms.png",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "293ddebc98d1f557b3263aede526c622e19a2c8418776bcb6cc0a910dc89d98f",
+      "bytes": 1971325,
+      "generation_source": "C:\\Users\\truon\\.codex\\generated_images\\01a18c9f-7ab4-7b62-b683-e1218ed7a109\\exec-b9fa649d-f41b-4ca1-bda7-0867c65300be.png"
+    },
+    {
+      "file": "hideki/04-melee.png",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "e563eae7a4d9efc7f680ec750922d88aafb8a86755a58c621e2b42d4cd288280",
+      "bytes": 2028590,
+      "generation_source": "C:\\Users\\truon\\.codex\\generated_images\\01a18c9f-7ab4-7b62-b683-e1218ed7a109\\exec-e3690701-b743-4dec-baf9-1d03c04eaa3b.png"
+    },
+    {
+      "file": "hideki/05-damage-fire.png",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "f74aaa7a8b6489e5b57a2ba53b8f27236d5b2dc4aa58cca9cdb03047bb2701d9",
+      "bytes": 2009712,
+      "generation_source": "C:\\Users\\truon\\.codex\\generated_images\\01a18c9f-7ab4-7b62-b683-e1218ed7a109\\exec-b454e2f5-a483-4f53-8684-ed12b8d14dc3.png"
+    },
+    {
+      "file": "hideki/06-variants-v2.png",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "a6616d9c8ee891682fa54ddda1d2cf34722ff7203840349720e3b5dae474f106",
+      "bytes": 2038935,
+      "generation_source": "C:\\Users\\truon\\.codex\\generated_images\\01a18c9f-7ab4-7b62-b683-e1218ed7a109\\exec-dd036dbb-ad43-4e4f-b43f-6755175b7349.png"
+    },
+    {
+      "file": "blaire/01-movement.png",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "7fb8f51620ba5cfc9e4d6ef0361f01ecfb7fcb0488045b672852410139ba96f7",
+      "bytes": 2051080,
+      "generation_source": "C:\\Users\\truon\\.codex\\generated_images\\01a18c9f-7ab4-7b62-b683-e1218ed7a109\\exec-58cefdaf-5974-44e7-a2a2-b57ecfbd4d1a.png"
+    },
+    {
+      "file": "blaire/02-traversal-v2.png",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "8210f2978b8096792893a6a3dc2e247a5222f6dfeed1e92fe3ecb5b02a370071",
+      "bytes": 2004448,
+      "generation_source": "C:\\Users\\truon\\.codex\\generated_images\\01a18c9f-7ab4-7b62-b683-e1218ed7a109\\exec-3026e2e0-d44e-4bd7-956c-c5f8efc594d2.png"
+    },
+    {
+      "file": "blaire/03-firearms-v2.png",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "59a1761bcc77580fc94b8e48f202236a116319d5cd252dd84f331f89475df548",
+      "bytes": 2004736,
+      "generation_source": "C:\\Users\\truon\\.codex\\generated_images\\01a18c9f-7ab4-7b62-b683-e1218ed7a109\\exec-e4ae860b-0469-486e-9af6-21e2cdc62942.png"
+    },
+    {
+      "file": "blaire/04-melee.png",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "f2edff66556472daaae34059627dc45bd27424c02c3dc8333895a182719298ad",
+      "bytes": 1949839,
+      "generation_source": "C:\\Users\\truon\\.codex\\generated_images\\01a18c9f-7ab4-7b62-b683-e1218ed7a109\\exec-6364d6fb-ed9a-46f7-8b33-8201eaedc540.png"
+    },
+    {
+      "file": "blaire/05-damage-fire.png",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "1d888b4387f9cb4ab07e35b02ec2e703afd5eb48dab9deaa4f2027443c1e14fb",
+      "bytes": 2042784,
+      "generation_source": "C:\\Users\\truon\\.codex\\generated_images\\01a18c9f-7ab4-7b62-b683-e1218ed7a109\\exec-b745e019-7ec4-41ca-8cd5-4f6da863d2fd.png"
+    },
+    {
+      "file": "blaire/06-variants-v2.png",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "31ad4912c48f1913487065ddd08f048a205802e0918462ee0a5b312c7ba5d4c1",
+      "bytes": 2033009,
+      "generation_source": "C:\\Users\\truon\\.codex\\generated_images\\01a18c9f-7ab4-7b62-b683-e1218ed7a109\\exec-84cafd1e-f057-433f-bca4-38cda212e0c5.png"
+    }
+  ],
+  "superseded_images": [
+    {
+      "file": "agent/02-traversal.png",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "2dbf38815253c05f6d6fb1526673c250df025402ca1c77fea34ff46e84b55291",
+      "bytes": 1885150,
+      "status": "superseded_by_v2_not_in_gallery"
+    },
+    {
+      "file": "agent/03-firearms.png",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "30a2ade3af8a3a84b6774bf690b3e357cf104a75eea94b978fed0f860dba815b",
+      "bytes": 1939306,
+      "status": "superseded_by_v2_not_in_gallery"
+    },
+    {
+      "file": "blaire/02-traversal.png",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "e8b13e16ac2a71b73697e32d9785126bdfa314d70eab098156fec0e516c832ae",
+      "bytes": 1921024,
+      "status": "superseded_by_v2_not_in_gallery"
+    },
+    {
+      "file": "blaire/03-firearms.png",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "41c73bd4fb17c021685f6f0b6e94d960e901aac1dcb5baaf104392c5c8dedb93",
+      "bytes": 2026790,
+      "status": "superseded_by_v2_not_in_gallery"
+    },
+    {
+      "file": "blaire/06-variants.png",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "4cda4b6bcf01a8ad780500f316e48f443df2cb68576d500bd2fabe4511a3d40b",
+      "bytes": 2063973,
+      "status": "superseded_by_v2_not_in_gallery"
+    },
+    {
+      "file": "boris/02-traversal.png",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "b17649ab481727760cbaf870f33c05f619a85e428e177f41ec6de6f9b056a8df",
+      "bytes": 1954851,
+      "status": "superseded_by_v2_not_in_gallery"
+    },
+    {
+      "file": "boris/06-variants.png",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "1676a519bcdb90a7a2c43679094170da61708113b7070ef758a32f46cdc0d1b9",
+      "bytes": 2020142,
+      "status": "superseded_by_v2_not_in_gallery"
+    },
+    {
+      "file": "hideki/02-traversal.png",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "d5c5e4abe33003f8754f46075b8db44f9a36b647bb0f82dab49a2ac430a53b6d",
+      "bytes": 1987016,
+      "status": "superseded_by_v2_not_in_gallery"
+    },
+    {
+      "file": "hideki/06-variants.png",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "f1324eb1e43baeb76ec91ada3aa9ad213a020609e3a8907210d7c1723edc19ac",
+      "bytes": 2057498,
+      "status": "superseded_by_v2_not_in_gallery"
+    },
+    {
+      "file": "johnny/01-movement.png",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "0e4f61c289549966d6b0ce66296c778d477ca2a70c03c08cc53ad4f152f16d6f",
+      "bytes": 1924350,
+      "status": "superseded_by_v2_not_in_gallery"
+    },
+    {
+      "file": "johnny/02-traversal.png",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "aeeb228d3740a61700fe2eb99213d8ca1b6b927a31732c5a95af8b47708f8f8e",
+      "bytes": 1943736,
+      "status": "superseded_by_v2_not_in_gallery"
+    },
+    {
+      "file": "johnny/03-firearms.png",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "49c69acdde6d2c3abe0d839e7a08ddbd6e0a4babc7da2102e2b0f35f163fe55c",
+      "bytes": 2017235,
+      "status": "superseded_by_v2_not_in_gallery"
+    },
+    {
+      "file": "johnny/04-melee.png",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "d8ca83979ff2778205fed55aa58a887f71b59f88ff0b2150bead50d458abb6f9",
+      "bytes": 1970629,
+      "status": "superseded_by_v2_not_in_gallery"
+    }
+  ],
+  "limitations": "See QA.md and coverage.json. Static key poses, not frame loops or ready sprites.",
+  "prompt_files": [
+    "prompts.json",
+    "executed-generation-prompts.json",
+    "revision-prompts.json",
+    "revision-prompts-2.json",
+    "revision-prompts-3.json"
+  ]
+}

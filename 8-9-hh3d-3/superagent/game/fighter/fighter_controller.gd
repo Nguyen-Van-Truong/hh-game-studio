@@ -458,6 +458,18 @@ func _notification(what: int) -> void:
 		_buffered_skill_timer = 0.0
 
 
+func sync_input_baseline_on_unpause() -> void:
+	# CB-EC-61: Snapshot current physical key state into `_prev_input` on unpause so keys held
+	# during Pause Menu navigation (W, UP, S, DOWN, ENTER, etc.) do not trigger `just_pressed` jumps/attacks.
+	_buffered_skill_slot = 0
+	_buffered_skill_timer = 0.0
+	if is_bot:
+		_prev_input.clear()
+		return
+	var cur_raw: Dictionary = _poll_human_input()
+	_prev_input = cur_raw.duplicate()
+
+
 func _play_sfx(sound_id: String, force_allow: bool = false) -> void:
 	if sound_id.is_empty() or sound_id.to_lower() == "jump":
 		return
@@ -688,7 +700,51 @@ func _is_act_just_pressed(act: String) -> bool:
 	return InputMap.has_action(act) and Input.is_action_just_pressed(act)
 
 
+const _IDLE_NORM_INPUT: Dictionary = {
+	"left": false,
+	"right": false,
+	"up": false,
+	"down": false,
+	"attack": false,
+	"jump": false,
+	"sprint": false,
+	"aim": false,
+	"throw": false,
+	"powerup": false,
+	"skill_1": false,
+	"skill_2": false,
+	"skill_3": false,
+	"skill_4": false,
+	"skill_1_just_pressed": false,
+	"skill_2_just_pressed": false,
+	"skill_3_just_pressed": false,
+	"skill_4_just_pressed": false,
+	"kick": false,
+	"roll": false,
+	"dive": false,
+	"mugen_special": "",
+	"left_just_pressed": false,
+	"right_just_pressed": false,
+	"left_just_released": false,
+	"right_just_released": false,
+	"up_just_pressed": false,
+	"down_just_pressed": false,
+	"attack_just_pressed": false,
+	"jump_just_pressed": false,
+	"aim_just_released": false,
+	"throw_just_released": false,
+	"slot_1": false,
+	"slot_2": false,
+	"slot_3": false,
+	"slot_4": false,
+}
+var _prev_input_any_active: bool = false
+static var _anim_state_data_cache: Dictionary = {}
+
+
 func _poll_human_input() -> Dictionary:
+	if not Input.is_anything_pressed():
+		return {}
 	var prefix: String = "p1_" if slot_index == 0 else "p2_"
 	var has_human_p2: bool = false
 	if match_world != null:
@@ -751,6 +807,8 @@ func _normalize_input(raw: Dictionary) -> Dictionary:
 			src = bot_brain_input
 		else:
 			src = _poll_human_input()
+	if src.is_empty() and moving_direction_inversed == 0 and not _prev_input_any_active and _prev_input.is_empty():
+		return _IDLE_NORM_INPUT
 
 	var raw_left: bool = bool(src.get("left", false))
 	var raw_right: bool = bool(src.get("right", false))
@@ -827,22 +885,30 @@ func _normalize_input(raw: Dictionary) -> Dictionary:
 		"slot_3": bool(src.get("slot_3", false)),
 		"slot_4": bool(src.get("slot_4", false)),
 	}
-	_prev_input = {
-		"left": cur_left,
-		"right": cur_right,
-		"up": cur_up,
-		"down": cur_down,
-		"attack": cur_attack,
-		"jump": cur_jump,
-		"sprint": cur_sprint,
-		"aim": cur_aim,
-		"throw": cur_throw,
-		"powerup": cur_powerup,
-		"skill_1": cur_sk1,
-		"skill_2": cur_sk2,
-		"skill_3": cur_sk3,
-		"skill_4": cur_sk4,
-	}
+	_prev_input_any_active = (
+		cur_left or cur_right or cur_up or cur_down or cur_attack or cur_jump
+		or cur_sprint or cur_aim or cur_throw or cur_powerup
+		or cur_sk1 or cur_sk2 or cur_sk3 or cur_sk4
+	)
+	if _prev_input_any_active:
+		_prev_input = {
+			"left": cur_left,
+			"right": cur_right,
+			"up": cur_up,
+			"down": cur_down,
+			"attack": cur_attack,
+			"jump": cur_jump,
+			"sprint": cur_sprint,
+			"aim": cur_aim,
+			"throw": cur_throw,
+			"powerup": cur_powerup,
+			"skill_1": cur_sk1,
+			"skill_2": cur_sk2,
+			"skill_3": cur_sk3,
+			"skill_4": cur_sk4,
+		}
+	elif not _prev_input.is_empty():
+		_prev_input.clear()
 	return out
 
 
@@ -2441,11 +2507,13 @@ func _step_locomotion(step_24hz: float, inp: Dictionary, move_dir: int) -> void:
 		return
 
 	# 4. Ladder Climbing & Sliding (AS3 Player.as:514-530, 7611-7689, 8019-8027: tests MidPosX(), MidPosY())
-	var ladder_rect: Rect2 = _find_ladder_at(get_mid_pos())
+	var want_up_lad: bool = bool(inp.get("up", false))
+	var want_down_lad: bool = bool(inp.get("down", false))
+	var ladder_rect: Rect2 = _find_ladder_at(get_mid_pos()) if (climbing or want_up_lad or want_down_lad) else Rect2()
 	var just_grabbed_ladder: bool = false
-	if _can_grab_ladder_in_current_state():
-		var want_up: bool = bool(inp.get("up", false))
-		var want_down: bool = bool(inp.get("down", false))
+	if (want_up_lad or want_down_lad) and _can_grab_ladder_in_current_state():
+		var want_up: bool = want_up_lad
+		var want_down: bool = want_down_lad
 		if on_ground:
 			# Grounded UP grab: ONLY when not walking/running horizontally (move_dir == 0, so running + W/Up performs a normal running jump!)
 			# and ONLY when the ladder extends meaningfully upward above the fighter (so pressing W/Up on the top platform jumps instead of grabbing the ladder tip!)
@@ -3120,6 +3188,15 @@ func _try_push_prop_chain(first_prop: Node2D, dir_sign: float, desired_dx: float
 		if not extended:
 			break
 
+	# If the front prop of the chain is entering a portal doorway, teleport it before the doorway backstop wall blocks the push
+	var ml_push: Node = match_world.get("map_loader") as Node if (match_world != null and is_instance_valid(match_world)) else null
+	if ml_push != null and ml_push.has_method("try_teleport_entity") and not chain_props.is_empty():
+		var lead_prop: Node2D = chain_props[chain_props.size() - 1]
+		if is_instance_valid(lead_prop) and bool(ml_push.call("try_teleport_entity", lead_prop, dir_sign)):
+			chain_props.remove_at(chain_props.size() - 1)
+			if chain_props.is_empty() and chain_fighters.is_empty():
+				return clampf(absf(desired_dx) * 0.5, 0.03, absf(desired_dx) * 0.72)
+
 	# Final wall check at the front of the chain
 	var end_probe: Rect2 = Rect2(front_x if dir_sign > 0.0 else (front_x - 2.0), band_top, 2.0, maxf(2.0, band_bot - band_top))
 	for sr: Rect2 in solids:
@@ -3142,6 +3219,8 @@ func _try_push_prop_chain(first_prop: Node2D, dir_sign: float, desired_dx: float
 			var cp_vel: Vector2 = cp.get("velocity") as Vector2
 			cp_vel.x = dir_sign * clampf(push_dist * 0.45, 0.03, 0.55)
 			cp.set("velocity", cp_vel)
+		if ml_push != null and ml_push.has_method("try_teleport_entity"):
+			ml_push.call("try_teleport_entity", cp, dir_sign)
 
 	return push_dist
 
@@ -3162,14 +3241,16 @@ func _resolve_solid_prop_space() -> void:
 	var props_var: Variant = match_world.get("props")
 	if typeof(props_var) != TYPE_ARRAY:
 		return
-	var f_box: Rect2 = Rect2(global_position.x - 4.0, global_position.y - 14.0, 8.0, 12.0)
+	var fx: float = global_position.x
+	var fy: float = global_position.y
+	var f_box: Rect2 = Rect2(fx - 4.0, fy - 14.0, 8.0, 12.0)
 	for p_var: Variant in props_var as Array:
 		if not is_instance_valid(p_var):
 			continue
 		var prop: Node2D = p_var as Node2D
-		if bool(prop.get("is_destroyed")) or not bool(prop.get("has_solid_hitbox")):
+		if absf(prop.global_position.x - fx) > 36.0 or absf(prop.global_position.y - fy) > 48.0:
 			continue
-		if absf(prop.global_position.x - global_position.x) > 36.0 or absf(prop.global_position.y - global_position.y) > 48.0:
+		if bool(prop.get("is_destroyed")) or not bool(prop.get("has_solid_hitbox")):
 			continue
 		if prop.get("last_attacker") == self and float(prop.get("_attacker_ignore_frames")) > 0.0:
 			continue
@@ -3474,10 +3555,17 @@ func _apply_world_movement(delta_pos: Vector2, _step_24hz: float) -> void:
 func _verify_ground_support() -> void:
 	if not on_ground or climbing or ledge_grabbing:
 		return
-	var solids: Array[Rect2] = _collect_solid_rects()
 	var pos: Vector2 = global_position
 	if _cloud_drop_ignore_until_y > -90000.0 and pos.y >= _cloud_drop_ignore_until_y:
 		_cloud_drop_ignore_until_y = -99999.0
+	var ml_fast: Object = _get_map_loader()
+	if not _on_cloud_platform and local_solid_rects.is_empty() and ml_fast != null:
+		var s_fast_v: Variant = ml_fast.get("solid_rects")
+		if typeof(s_fast_v) == TYPE_ARRAY:
+			for sr_f: Rect2 in s_fast_v as Array[Rect2]:
+				if pos.x + 4.0 > sr_f.position.x and pos.x - 4.0 < sr_f.end.x and absf(pos.y - sr_f.position.y) <= 2.5:
+					return
+	var solids: Array[Rect2] = _collect_solid_rects()
 	var still_supported: bool = false
 	var support_cloud: bool = false
 	for sr: Rect2 in solids:
@@ -3623,10 +3711,10 @@ func _collect_solid_rects() -> Array[Rect2]:
 	if _cached_solid_tick == _terrain_cache_tick and not _cached_solid_rects.is_empty():
 		return _cached_solid_rects
 	var ml: Object = _get_map_loader()
+	var h_gl_fast: Array = ml.call("get_intact_horizontal_glass_rects") as Array if (ml != null and ml.has_method("get_intact_horizontal_glass_rects")) else []
+	var v_gl_fast: Array = ml.call("get_intact_vertical_glass_rects") as Array if (ml != null and ml.has_method("get_intact_vertical_glass_rects")) else []
 	if local_solid_rects.is_empty() and ml != null:
 		var s_var_fast: Variant = ml.get("solid_rects")
-		var h_gl_fast: Array = ml.call("get_intact_horizontal_glass_rects") as Array if ml.has_method("get_intact_horizontal_glass_rects") else []
-		var v_gl_fast: Array = ml.call("get_intact_vertical_glass_rects") as Array if ml.has_method("get_intact_vertical_glass_rects") else []
 		if typeof(s_var_fast) == TYPE_ARRAY and h_gl_fast.is_empty() and v_gl_fast.is_empty():
 			_cached_solid_rects = s_var_fast as Array[Rect2]
 			_cached_solid_tick = _terrain_cache_tick
@@ -3637,16 +3725,10 @@ func _collect_solid_rects() -> Array[Rect2]:
 		if typeof(s_var) == TYPE_ARRAY:
 			for r_v: Variant in s_var as Array:
 				out.append(r_v as Rect2)
-		if ml.has_method("get_intact_horizontal_glass_rects"):
-			var g_rects: Variant = ml.call("get_intact_horizontal_glass_rects")
-			if typeof(g_rects) == TYPE_ARRAY:
-				for gr_v: Variant in g_rects as Array:
-					out.append(gr_v as Rect2)
-		if ml.has_method("get_intact_vertical_glass_rects"):
-			var vg_rects: Variant = ml.call("get_intact_vertical_glass_rects")
-			if typeof(vg_rects) == TYPE_ARRAY:
-				for vgr_v: Variant in vg_rects as Array:
-					out.append(vgr_v as Rect2)
+		for gr_v: Variant in h_gl_fast:
+			out.append(gr_v as Rect2)
+		for vgr_v: Variant in v_gl_fast:
+			out.append(vgr_v as Rect2)
 	_cached_solid_rects = out
 	_cached_solid_tick = _terrain_cache_tick
 	return out
@@ -4750,10 +4832,16 @@ func _set_state(new_state: String, force_reset: bool = false) -> void:
 func _advance_animation(step_24hz: float) -> void:
 	if climbing and current_state == "CLIMB" and not _ladder_moving:
 		return
-	var reg: Object = _get_registry()
-	if reg == null:
-		return
-	var st_data: Dictionary = reg.call("get_state_data", current_state) as Dictionary
+	var st_data: Dictionary
+	if _anim_state_data_cache.has(current_state):
+		st_data = _anim_state_data_cache[current_state] as Dictionary
+	else:
+		var reg: Object = _get_registry()
+		if reg == null:
+			return
+		st_data = reg.call("get_state_data", current_state) as Dictionary
+		if not st_data.is_empty():
+			_anim_state_data_cache[current_state] = st_data
 	if st_data.is_empty():
 		return
 	var keyframes: Array = st_data.get("keyframes", []) as Array

@@ -52,6 +52,8 @@ func _setup_menu_and_world() -> void:
 		match_world.process_mode = Node.PROCESS_MODE_DISABLED
 		if match_world.has_signal("request_return_to_menu"):
 			match_world.connect("request_return_to_menu", show_main_menu)
+		if match_world.has_signal("request_open_setup"):
+			match_world.connect("request_open_setup", show_setup_from_match)
 		add_child(match_world)
 
 	if menu_layer == null or not is_instance_valid(menu_layer):
@@ -110,6 +112,10 @@ func _parse_cli_launch_args() -> Dictionary:
 
 
 func show_main_menu() -> void:
+	show_setup_from_match("MAIN")
+
+
+func show_setup_from_match(target_panel: String = "MAIN") -> void:
 	if match_world != null and is_instance_valid(match_world):
 		match_world.visible = false
 		match_world.process_mode = Node.PROCESS_MODE_DISABLED
@@ -118,7 +124,10 @@ func show_main_menu() -> void:
 			hud.visible = false
 	if main_menu != null and is_instance_valid(main_menu):
 		main_menu.visible = true
-		main_menu.set("current_panel", "MAIN")
+		var panel_to_open: String = target_panel if not target_panel.is_empty() else "MAIN"
+		main_menu.set("current_panel", panel_to_open)
+		if panel_to_open == "MAP_SELECTION" and main_menu.get("map_select_row") != null:
+			main_menu.set("map_select_row", 1)
 		main_menu.queue_redraw()
 	MapLoaderScript.get_audio().call("play_music", "superfighters_theme")
 

@@ -1,0 +1,22 @@
+[
+  {
+    "id": "agent/02-traversal",
+    "prompt": "Use case: precise-object-edit. Inputimage1 edit target16cell chibi traversal board. Keep whole sheet exactly unchanged except02. In02 CLIMB LEFT swap hand placement: viewerLEFT hand onTOP rung abovehead, viewerRIGHT hand LOWER atchest rung; preserve two natural arms, shortchibibody and existinglegs. Cell03 unchanged, resulting pair has opposite highhands.  No extra hands. Keepface/hair/outfit/colors/layout/allothercells and labels."
+  },
+  {
+    "id": "blaire/02-traversal",
+    "prompt": "Use case: precise-object-edit. Inputimage1 edit target16cell chibi traversal board. Keep whole sheet exactly unchanged except02and08. In02 CLIMB LEFT swap hand placement: viewerLEFT hand onTOP rung abovehead, viewerRIGHT hand LOWER atchest rung; preserve two natural arms, shortchibibody and existinglegs. Cell03 unchanged, resulting pair has opposite highhands. In08 LEDGE RELEASE both hands must be OPEN and detached from ledge, small gap clearly visible abovehands. Pose is falling away from ledge, not hanging. Keep exactlytwoarms/twohands. No extra hands. Keepface/hair/outfit/colors/layout/allothercells and labels."
+  },
+  {
+    "id": "blaire/03-firearms",
+    "prompt": "Use case: precise-object-edit and identity-preserve. Inputimage1 edit target:16cell BLAIRE sheet. Inputimage2 identityreference: fivepersonlineup; BLAIRE is the woman atfarRIGHT, teal jacket/purplebob and TEAL EYES, NO GLASSES. Fix this sheet by REMOVING ALL SUNGLASSES from ALL Blaire faces, restoring her natural large expressive tealeyes matchingreference2. Do NOT put glasses on forehead/head or anywhere else. Every face should haveNOglasses. Keep allposes,short2.5headproportions,hair,outfit,objects,weapons,cellgrid,labels,background/render unchanged.  This correction is ONLY eyewear/eyes; no newaccessories."
+  },
+  {
+    "id": "blaire/06-variants",
+    "prompt": "Use case: precise-object-edit and identity-preserve. Inputimage1 edit target:16cell BLAIRE sheet. Inputimage2 identityreference: fivepersonlineup; BLAIRE is the woman atfarRIGHT, teal jacket/purplebob and TEAL EYES, NO GLASSES. Fix this sheet by REMOVING ALL SUNGLASSES from ALL Blaire faces, restoring her natural large expressive tealeyes matchingreference2. Do NOT put glasses on forehead/head or anywhere else. Every face should haveNOglasses. Keep allposes,short2.5headproportions,hair,outfit,objects,weapons,cellgrid,labels,background/render unchanged. Portrait cells09neutral,10focus,11attack,12hurt,13panic,14tired,15KOeyesclosed,16BLINKbothclosed; match each named expression naturally. This correction is ONLY eyewear/eyes; no newaccessories."
+  },
+  {
+    "id": "agent/03-firearms",
+    "prompt": "Use case: precise-object-edit. Inputimage1 is the edit target16cell Agent chibi ranged sheet. This is ordinary adult character game concept artwork, not training/instruction. Preserve every Agent body/pose/face/sunglasses/suit/colors,16celllayout. Correct props and labels to consistent fictional conventional modern weapons shown in the othercharacters, NOT foam toys.\nHeader exactly \"AGENT / RANGED AND THROWING\".\nLabels rowmajor exactly:\n01 PISTOL; 02 REVOLVER; 03 SMG; 04 RIFLE; 05 SHOTGUN; 06 SNIPER; 07 LAUNCHER; 08 FLAMETHROWER; 09 GRENADE READY; 10 BOTTLE READY; 11 GRENADE THROW; 12 BOTTLE THROW; 13 AIM UP; 14 AIM DOWN; 15 KNEEL AIM; 16 COVER AIM.\nKeep black firearm silhouettes in01-06and13-16. In07 draw a plain olive tubular shoulderlauncher with grip held atshoulder by bothhands. In08 replace orange hose prop with utilitarian dark metal flamethrower nozzle and backpackhose, no flame. In09and11 object must be same small ordinary olive oval grenade, not toy ball. In16 plain wooden crate rather than cardboard. No mechanism diagrams/technicaldimensions, no shotsfired, noinjuries. Preserve chibi2.5headshortlimbs and entirefullbody inallcells."
+  }
+]

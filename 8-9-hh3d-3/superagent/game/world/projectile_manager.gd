@@ -8,8 +8,6 @@ extends Node2D
 ## wpn_grenade_thrown, wpn_molotov_thrown).
 
 const THROWABLE_GRAVITY_24HZ: float = 0.45
-const GRENADE_RESTITUTION: float = 0.35
-const GRENADE_FRICTION: float = 0.60
 
 const BALLISTIC_SPECS: Dictionary = {
 	"PISTOL": {"speed": 30.0, "range": 1200.0, "damage": 10.0, "crit_chance": 0.05, "crit_dmg": 15.0, "pushback": 15.0, "spread": 1.0, "pellets": 1, "strength": 5},
@@ -573,22 +571,8 @@ func _step_bullets(step_24hz: float) -> void:
 		if ml != null and ml.has_method("check_and_break_glass_segment"):
 			ml.call("check_and_break_glass_segment", prev_pos, next_pos, vel_vec)
 
-		# 2. Portals: teleport bullet if entering portal (top <-> bottom, flipping dir.x when flip_x == true)
-		if ml != null and not bool(b.get("teleported", false)) and ml.has_method("try_teleport_ballistic_segment"):
-			var tp_b: Dictionary = ml.call("try_teleport_ballistic_segment", prev_pos, next_pos, dir, 2.0) as Dictionary
-			if bool(tp_b.get("teleported", false)):
-				dir = (tp_b.get("vel", dir) as Vector2).normalized()
-				b["dir"] = dir
-				if bool(tp_b.get("flip_x", false)):
-					var v_b: Vector2 = b.get("vel", dir * spd) as Vector2
-					v_b.x = -v_b.x
-					b["vel"] = v_b
-					b["angle_deg"] = rad_to_deg(atan2(dir.y, dir.x))
-				prev_pos = tp_b.get("exit_origin", next_pos) as Vector2
-				var rem_step: float = maxf(2.0, step_dist * float(tp_b.get("remaining_ratio", 0.5)))
-				next_pos = prev_pos + dir * rem_step
-				b["pos"] = prev_pos
-				b["teleported"] = true
+		# 2. Portals: Bullets NEVER teleport through portal doorways (only fighters, props, throwable bombs, and pickups can traverse portals).
+		# Bullets fired into a portal doorway hit the doorway backstop wall in step 3.
 
 		# 3. Solid wall/floor raycast (static map geometry only; props are checked in step 4)
 		var hit_wall: bool = false
@@ -644,7 +628,6 @@ func _step_bullets(step_24hz: float) -> void:
 
 		var hit_prop: Node2D = null
 		var prop_hit_pos: Vector2 = wall_hit_pos
-		var stopped_by_prop: bool = false
 		var pen_ids: Array = b.get("penetrated_prop_ids", []) as Array
 		var is_first_step: bool = (age <= step_24hz + 0.01)
 		var origin_pos: Vector2 = b.get("origin_pos", prev_pos) as Vector2
@@ -775,7 +758,6 @@ func _step_bullets(step_24hz: float) -> void:
 			else:
 				hit_prop = p_node
 				prop_hit_pos = p_pos
-				stopped_by_prop = true
 				break
 
 		# 4b. Active throwables collision (ProjectilesUpdater.as:597-623: shooting a grenade/molotov/mine/C4 detonates it immediately!)
@@ -907,8 +889,6 @@ func _step_bullets(step_24hz: float) -> void:
 					var r_dir_x: float = 1.0 if dir.x >= -0.01 else -1.0
 					hit_prop.call("apply_pendulum_impulse", r_dir_x * 0.16)
 				_detonate_rocket(b, prop_hit_pos, fhs)
-			elif stopped_by_prop:
-				pass
 			continue
 
 		if hit_wall:
